@@ -6,6 +6,12 @@ Process rule:
 
 - follow [Development_Guardrails.md](../Development_Guardrails.md)
 
+Document class:
+
+- generated operational ledger
+- completion model: truthful when regenerated from current archive manifests, not when frozen as a one-time closeout file
+- taxonomy: [Documentation_Taxonomy.md](../Documentation_Taxonomy.md)
+
 Purpose:
 
 - index durable theme-recovery review records stored under the repo archive root

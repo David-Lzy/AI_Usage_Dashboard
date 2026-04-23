@@ -21,7 +21,7 @@ Important scope note:
 
 As of 2026-04-24:
 
-- the numbered phase queue is now completed through `Phase 131`
+- the numbered phase queue is now completed through `Phase 133`
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
 - `Phase 42` has packaged `0.1.0-rc.2` and closed the release-closeout track for the narrowed RC
 - `Phase 43` completed the first `Direction 02` slice by productizing source-fidelity semantics in the side panel
@@ -114,7 +114,9 @@ As of 2026-04-24:
 - `Phase 130` completed the next `Direction 06` slice by replacing the last static popup contract explainer with one stateful `Surface roles` note, and adding one repeatable width review for that lower popup story layer
 - `Phase 131` completed one build-and-workflow hardening slice by stabilizing unpacked-extension build entry names and formalizing the `commit / push / rebuild` closeout rule plus the RDP Chrome reload rule
 - `Phase 132` completed one documentation-only slice by auditing current documentation completion truth and adding three sharper roadmap directions for doc completion, i18n bootstrap, and toolbar competitive fit
-- the numbered phase queue is now completed through `Phase 131`, but the broader `Doc/` tree is not "fully done" because roadmap, request, archive-index, and reference docs remain living docs by design
+- `Phase 133` completed the first executable `Direction 08` slice by shipping a project-level documentation taxonomy, guardrail rules for doc classes, and explicit `generated operational ledger` labeling for the repo-backed request and archive indexes
+- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 133`, because roadmap, request, archive-index, and reference docs remain living docs by design
+- the numbered phase queue is now completed through `Phase 133`, and the repo now has one explicit documentation-class vocabulary for answering whether a given doc is complete, living, generated, or maintained
 - `Codex` personal support is already shipped as a `session_page` path, but it currently exposes usage-window percentages and reset timing, not one absolute remaining credit balance
 - `Cursor` personal support is already shipped as a `session_page` path, but it currently exposes billing-period usage context, not one exact remaining included-request counter
 - the extension action now opens a compact popup on click, the popup makes cached snapshot freshness explicit, and the badge shows the count of visible providers needing attention
@@ -183,7 +185,7 @@ As of 2026-04-24:
 
 1. [Direction 08 - Documentation Completion And Truth Audit](./08_Direction_Documentation_Completion_And_Truth_Audit.md)
    Why first among the new requests:
-   the numbered phase queue is closed through `Phase 131`, but the repo still lacks one explicit documentation taxonomy that distinguishes archived evidence from open roadmap and request docs.
+   the numbered phase queue is closed through `Phase 133`, and the repo now has one explicit documentation taxonomy; the next work is to keep that model visible and consistent across indexes and reference docs.
 
 2. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why second among the new requests:

@@ -1,0 +1,132 @@
+# Documentation Taxonomy
+
+Date: 2026-04-24
+
+Process rule:
+
+- follow [Development_Guardrails.md](./Development_Guardrails.md)
+
+Purpose:
+
+- define the project's documentation classes
+- define what "complete" means for each class
+- reduce ambiguity when contributors ask whether the docs are already done
+
+## Document Classes
+
+### 1. Closed Evidence
+
+Meaning:
+
+- fixed evidence of completed work
+- should remain readable after closeout
+- should not remain in the active execution path
+
+Typical examples:
+
+- archived numbered phase files under [Doc/TODOs/Archive](./TODOs/Archive/README.md)
+- fixed phase testing reports under `Doc/testing/Phase_*.md`
+
+Completion model:
+
+- can be complete
+- should be archived or left as fixed evidence
+- should not be treated as open roadmap work
+
+### 2. Living Strategy
+
+Meaning:
+
+- strategy, prioritization, or future-direction documents that are expected to evolve
+
+Typical examples:
+
+- roadmap direction files under `Doc/Roadmap/`
+- roadmap child TODO files under `Doc/Roadmap/`
+
+Completion model:
+
+- not "done forever" unless explicitly closed, superseded, or folded into completed release work
+- should carry clear status notes when possible
+
+### 3. Generated Operational Ledger
+
+Meaning:
+
+- generated indexes or ledgers that summarize current operational truth from manifests or archive records
+
+Typical examples:
+
+- request indexes
+- archive indexes
+- machine-readable ledgers rendered as markdown summaries
+
+Current examples:
+
+- [Interaction_Audit_Review_Requests.md](./testing/Interaction_Audit_Review_Requests.md)
+- [Interaction_Audit_Review_Archive.md](./testing/Interaction_Audit_Review_Archive.md)
+- [Theme_Recovery_Review_Requests.md](./testing/Theme_Recovery_Review_Requests.md)
+- [Theme_Recovery_Review_Archive.md](./testing/Theme_Recovery_Review_Archive.md)
+
+Completion model:
+
+- never "complete" in the same sense as archived phase files
+- truthful when they correctly reflect current manifests and archive records
+- should be regenerated, not hand-closed
+
+### 4. Maintained Reference
+
+Meaning:
+
+- durable reference documentation that should track current repo truth and process rules
+
+Typical examples:
+
+- guardrails
+- provider notes
+- release packaging guide
+- benchmark matrices
+- runbooks
+
+Completion model:
+
+- maintained, not frozen
+- can be current or stale
+- should be refreshed when the underlying truth changes
+
+## Default Folder Mapping
+
+These defaults are conventions, not hard absolutes:
+
+- `Doc/TODOs/Archive/` -> closed evidence
+- `Doc/testing/Phase_*.md` -> closed evidence
+- `Doc/Roadmap/` -> living strategy
+- generated request and archive indexes under `Doc/testing/` -> generated operational ledger
+- `Doc/provider_notes/` -> maintained reference
+- `Doc/Development_Guardrails.md` -> maintained reference
+- `Doc/Release_Packaging_Guide.md` -> maintained reference
+
+## How To Answer "Are The Docs Done?"
+
+Use this sequence:
+
+1. check whether the numbered phase queue is archived and current
+2. identify whether the doc in question is evidence, strategy, ledger, or reference
+3. answer completion according to that class
+
+Examples:
+
+- archived phase docs through `Phase 133` are complete evidence
+- roadmap files are open by design unless explicitly closed
+- request and archive indexes are truthful ledgers, not incomplete implementation work
+- provider notes are maintained references, not one-time closeout docs
+
+## Maintenance Rule
+
+When a new document could easily be misread, state its class explicitly inside the file.
+
+This is especially important for:
+
+- generated request and archive indexes
+- one-off benchmark snapshots
+- runbooks that may drift over time

@@ -5,7 +5,7 @@ Date: 2026-04-24
 Status note:
 
 - direction created on `2026-04-24`
-- no executable phase has started yet
+- `Phase 133` completed the first executable slice on `2026-04-24` by shipping one project-level taxonomy, one guardrail update for doc classes, and one generated-ledger labeling pass across request plus archive indexes
 
 Process rule:
 

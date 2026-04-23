@@ -16,7 +16,7 @@ Purpose:
 
 Short answer:
 
-- the numbered phase documentation is complete through `Phase 131`
+- the numbered phase documentation is complete through `Phase 133`
 - the full `Doc/` tree is not "all completed"
 
 That is not a contradiction.
@@ -24,7 +24,7 @@ It means different document classes have different completion rules.
 
 Current truthful state:
 
-- numbered phase files are archived through [131_Phase_Extension_Build_Output_Stability_And_Git_Closeout_Rule.md](./TODOs/Archive/131_Phase_Extension_Build_Output_Stability_And_Git_Closeout_Rule.md)
+- numbered phase files are archived through [133_Phase_Documentation_Taxonomy_And_Operational_Ledger_Labeling.md](./TODOs/Archive/133_Phase_Documentation_Taxonomy_And_Operational_Ledger_Labeling.md)
 - there is no active numbered phase file in [00_Phase_Index.md](./TODOs/00_Phase_Index.md)
 - roadmap directions remain open by design, especially:
   - [04_Direction_Material_Motion_And_Responsive_Hardening.md](./Roadmap/04_Direction_Material_Motion_And_Responsive_Hardening.md)
@@ -40,6 +40,7 @@ Current truthful state:
   - [provider_notes/Claude.md](./provider_notes/Claude.md)
   - [provider_notes/Gemini.md](./provider_notes/Gemini.md)
   - [provider_notes/JetBrains.md](./provider_notes/JetBrains.md)
+- the project now also has one explicit status vocabulary in [Documentation_Taxonomy.md](./Documentation_Taxonomy.md)
 
 ## What Is Complete
 
@@ -47,7 +48,7 @@ Current truthful state:
 
 This part is complete through the latest archived slice:
 
-- [00_Phase_Index.md](./TODOs/00_Phase_Index.md) points at `Phase 131`
+- [00_Phase_Index.md](./TODOs/00_Phase_Index.md) points at `Phase 133`
 - completed numbered phases have been moved into [TODOs/Archive](./TODOs/Archive/README.md)
 - there is no orphaned active phase markdown outside the archive queue
 
@@ -60,6 +61,7 @@ The current release and build-closeout story is documented:
 - [README.md](../README.md)
 - [Release_Packaging_Guide.md](./Release_Packaging_Guide.md)
 - [131_Phase_Extension_Build_Output_Stability_And_Git_Closeout_Rule.md](./TODOs/Archive/131_Phase_Extension_Build_Output_Stability_And_Git_Closeout_Rule.md)
+- [133_Phase_Documentation_Taxonomy_And_Operational_Ledger_Labeling.md](./TODOs/Archive/133_Phase_Documentation_Taxonomy_And_Operational_Ledger_Labeling.md)
 
 ### 3. Historical Testing Evidence
 
@@ -130,7 +132,7 @@ To avoid future ambiguity, the project should treat docs in four classes:
 If the question is:
 
 - "have the previous numbered implementation phases been completed?"
-  - yes, through `Phase 131`
+  - yes, through `Phase 133`
 
 If the question is:
 

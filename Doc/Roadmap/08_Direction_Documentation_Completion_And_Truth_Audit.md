@@ -4,7 +4,7 @@ Date: 2026-04-24
 
 Execution note:
 
-- no executable slice has shipped yet
+- first executable slice landed on `2026-04-24` through `Phase 133`
 
 Process rule:
 
@@ -35,12 +35,13 @@ Today the truthful answer is "some are complete, some are intentionally living,"
 
 As of 2026-04-24:
 
-- numbered phase docs are archived through `Phase 131`
+- numbered phase docs are archived through `Phase 133`
 - there is no active numbered phase file in [00_Phase_Index.md](../TODOs/00_Phase_Index.md)
 - roadmap directions remain open by design
 - interaction-audit request docs still show `1 pending / 0 fulfilled`
 - theme-recovery request docs still show `1 pending / 0 fulfilled`
 - provider notes, runbooks, benchmark docs, and guardrails are maintained reference docs, not one-time closeout docs
+- the project now also ships one explicit taxonomy reference plus guardrail rules for documentation classes
 
 This means:
 
@@ -95,6 +96,8 @@ Recommended rollout:
 2. ship one documentation audit report
 3. patch stale indexes and stale priority notes
 4. optionally add one repeatable doc-consistency checklist or script
+
+`Phase 133` completed the first executable part of steps `1` and `2` by shipping one project-level taxonomy, updating the guardrails, and labeling the generated request plus archive ledgers explicitly.
 
 ## References
 

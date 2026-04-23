@@ -107,6 +107,11 @@ describe("interaction audit review archive index helpers", () => {
     const indexJson = JSON.parse(await readFile(indexJsonPath, "utf8"));
 
     expect(result.recordCount).toBe(1);
+    expect(indexMarkdown).toContain("Document class:");
+    expect(indexMarkdown).toContain("- generated operational ledger");
+    expect(indexMarkdown).toContain(
+      "- taxonomy: [Documentation_Taxonomy.md](../Documentation_Taxonomy.md)",
+    );
     expect(indexMarkdown).toContain(
       "source request: [2026-04-24-traceable-operator-review-request]",
     );

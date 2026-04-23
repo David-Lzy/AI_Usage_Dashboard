@@ -20,6 +20,38 @@ Without a fixed completion protocol, phases are easy to leave half-done:
 
 These guardrails exist to prevent that.
 
+## 1.1 Documentation Classes
+
+The repo now uses four documentation classes:
+
+- `closed evidence`
+- `living strategy`
+- `generated operational ledger`
+- `maintained reference`
+
+Reference:
+
+- [Documentation_Taxonomy.md](./Documentation_Taxonomy.md)
+
+Rule:
+
+- do not judge every markdown file by the same completion standard
+- archived numbered phase files and fixed phase reports are `closed evidence`
+- roadmap files are `living strategy`
+- generated request and archive indexes are `generated operational ledger`
+- guardrails, provider notes, runbooks, benchmark docs, and release guides are `maintained reference`
+
+Meaning:
+
+- `closed evidence` can be complete and archived
+- `living strategy` remains open until explicitly closed or superseded
+- `generated operational ledger` is truthful when it matches current manifests and archive records, not when it is "finished forever"
+- `maintained reference` is healthy when current, not when frozen
+
+New-doc rule:
+
+- when a new markdown file could easily be mistaken for the wrong class, state its document class explicitly inside the file
+
 ## 2. Phase Completion Rules
 
 Every phase must follow this closeout sequence before it is considered complete.
@@ -55,6 +87,7 @@ Minimum required updates:
 - the phase file itself
 - the phase index if the phase state changed
 - any major design or TODO document whose assumptions changed
+- any generated operational ledger or maintained reference doc whose current truth changed
 
 ## 2.3 Archive Completed Phase Files
 
@@ -186,6 +219,21 @@ Reason:
 - documentation, pushed source, and built extension output should not drift apart
 - the RDP Chrome unpacked extension depends on a truthful `dist/` directory
 - the repo should not accumulate large unpushed local phase batches by accident
+
+## 2.9 Generated Operational Ledger Rule
+
+Generated request and archive indexes are not one-time closeout docs.
+
+Rule:
+
+1. prefer updating the generator or refresh command over hand-editing the generated markdown
+2. if a generated ledger needs a wording or structure change, make that change in the generating script when practical
+3. after changing a generated-ledger script, rerun the corresponding refresh command and commit the regenerated markdown
+
+Reason:
+
+- generated ledgers should remain reproducible
+- hand-edited generated docs drift quickly and confuse later audits
 
 ## 3. Required Fields For A Completed Phase File
 

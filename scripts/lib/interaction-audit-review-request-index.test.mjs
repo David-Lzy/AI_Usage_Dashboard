@@ -285,6 +285,11 @@ describe("interaction audit review request index helpers", () => {
     expect(result.recordCount).toBe(4);
     expect(result.pendingRequestCount).toBe(2);
     expect(result.fulfilledRequestCount).toBe(1);
+    expect(indexMarkdown).toContain("Document class:");
+    expect(indexMarkdown).toContain("- generated operational ledger");
+    expect(indexMarkdown).toContain(
+      "- taxonomy: [Documentation_Taxonomy.md](../Documentation_Taxonomy.md)",
+    );
     expect(indexMarkdown).toContain("## Pending Requests");
     expect(indexMarkdown).toContain("## Fulfilled Requests");
     expect(indexMarkdown).toContain("## Other Request States");
