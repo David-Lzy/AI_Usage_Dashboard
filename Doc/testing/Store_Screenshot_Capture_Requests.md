@@ -56,15 +56,16 @@ npm run store:refresh-screenshot-capture-request-packages
 
 ## Pending Requests
 
+- no pending store screenshot capture requests are recorded yet
+
+## Fulfilled Requests
+
 - [2026-04-24-first-real-store-screenshot-capture-request](./store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/README.md)
-  - status: `pending_operator_capture`
+  - status: `fulfilled_operator_capture`
   - created on 2026-04-23
   - runtime source: `RDP Chrome unpacked extension`
   - sizes: preferred `1280x800` · fallback `640x400`
   - required screenshots: `5`
   - baseline pack: `Doc/testing/store_screenshot_capture_packs/2026-04-24-toolbar-storyboard-baseline/README.md`
-  - capture notes: `0/5` reviewed · truth boundaries `0`
-
-## Fulfilled Requests
-
-- no fulfilled store screenshot capture requests are recorded yet
+  - capture notes: `5/5` reviewed · truth boundaries `5`
+  - archive: `2026-04-24-first-real-store-screenshot-capture-request-archive` · `Doc/testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md`

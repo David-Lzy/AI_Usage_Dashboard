@@ -40,9 +40,9 @@ Security posture for this track:
 
 Next execution queue:
 
-1. continue [Direction 06 - Toolbar Product Benchmark And Discoverability](./Doc/Roadmap/06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md)
-2. continue [Direction 05 - Adaptive Theming And Color Modes](./Doc/Roadmap/05_Direction_Adaptive_Theming_And_Color_Modes.md) for remaining operator evidence and recovery verification
-3. continue [Direction 04 - Material, Motion, And Responsive Hardening](./Doc/Roadmap/04_Direction_Material_Motion_And_Responsive_Hardening.md) for remaining real-browser interaction QA and compact-width verification
+1. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
+2. continue [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
+3. continue [Direction 08 - Documentation Completion And Truth Audit](./Doc/Roadmap/08_Direction_Documentation_Completion_And_Truth_Audit.md) in maintenance mode only when new doc families drift
 
 ## Source Labels
 
@@ -173,6 +173,7 @@ The Chrome action now opens a compact popup first:
   - `Popup stays quick glance`
 - the repo now also ships one repeatable `360px` plus `420px` popup width review for no-visible, mixed-setup, policy-only, and healthy setup stages
 - the repo now also ships one request-bound store-screenshot seed plus RDP capture-runner workflow, so truthful store assets can be collected from the real unpacked extension runtime without pretending the first real screenshot archive already exists
+- the repo now also ships the first real archived store screenshot set, captured from `RDP Chrome` and archived with request-bound truth notes instead of preview-only mocks
 - the badge shows the number of visible providers currently needing attention
 - the side panel remains the canonical surface for settings, source diagnostics, and provider detail
 

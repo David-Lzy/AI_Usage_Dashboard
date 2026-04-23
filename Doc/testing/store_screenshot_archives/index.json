@@ -1,6 +1,27 @@
 {
-  "generatedAt": "2026-04-23T19:00:07.927Z",
+  "generatedAt": "2026-04-23T20:00:18.890Z",
   "archiveRoot": "Doc/testing/store_screenshot_archives",
-  "recordCount": 0,
-  "records": []
+  "recordCount": 1,
+  "records": [
+    {
+      "archiveId": "2026-04-24-first-real-store-screenshot-capture-request-archive",
+      "archivedAt": "2026-04-23T20:00:18.890Z",
+      "runtimeSource": "RDP Chrome unpacked extension",
+      "preferredSize": "1280x800",
+      "fallbackSize": "640x400",
+      "screenshotCount": 5,
+      "captureNotesPath": "Doc/testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/capture-notes.json",
+      "captureNotesSummary": {
+        "noteCount": 5,
+        "reviewedScreenshotCount": 5,
+        "truthBoundaryCount": 5
+      },
+      "sourceRequest": {
+        "requestId": "2026-04-24-first-real-store-screenshot-capture-request",
+        "requestReadmePath": "Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/README.md"
+      },
+      "readmePath": "Doc/testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md",
+      "manifestPath": "Doc/testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/capture-archive.json"
+    }
+  ]
 }

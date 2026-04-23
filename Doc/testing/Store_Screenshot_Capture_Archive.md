@@ -38,4 +38,10 @@ npm run store:refresh-screenshot-capture-archive-index
 
 ## Archived Screenshot Sets
 
-- no archived store screenshot capture sets are recorded yet
+- [2026-04-24-first-real-store-screenshot-capture-request-archive](./store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md)
+  - archived on 2026-04-23
+  - runtime source: `RDP Chrome unpacked extension`
+  - sizes: preferred `1280x800` · fallback `640x400`
+  - screenshot count: `5`
+  - capture notes: `5/5` reviewed · truth boundaries `5`
+  - source request: `2026-04-24-first-real-store-screenshot-capture-request` · `Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/README.md`

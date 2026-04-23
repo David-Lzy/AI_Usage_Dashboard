@@ -16,8 +16,8 @@ Freshness model:
 
 Status note:
 
-- this request package is a pending operator capture workflow, not a completed screenshot set
-- refresh or regenerate it through the request command instead of treating it as one free-standing authored plan
+- this request package has been fulfilled by one archived screenshot set
+- keep using the archive package as the durable evidence source rather than reinterpreting this request README as the final record
 
 ## Request Scope
 
@@ -26,7 +26,7 @@ Status note:
 - created at:
   - `2026-04-23T18:20:45.169Z`
 - status:
-  - `pending_operator_capture`
+  - `fulfilled_operator_capture`
 - runtime source:
   - `RDP Chrome unpacked extension`
 - preferred size:
@@ -85,3 +85,30 @@ Allowed `captureTruth` values:
 - A pending screenshot-capture request package is not a completed screenshot set.
 - The baseline capture pack defines the expected runtime order, not a finished store-submission artifact.
 - Do not claim multilingual or unsupported provider coverage in screenshots before the product actually ships it.
+
+## Fulfillment
+
+- fulfilled at:
+  - `2026-04-23T20:00:18.890Z`
+- archive id:
+  - `2026-04-24-first-real-store-screenshot-capture-request-archive`
+- archive README:
+  - `Doc/testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md`
+- archive manifest:
+  - `Doc/testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/capture-archive.json`
+- source capture dir:
+  - `Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/captures`
+- source notes:
+  - `Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/capture-notes.json`
+- archive notes:
+  - `Doc/testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/capture-notes.json`
+- reviewed screenshots:
+  - `5`
+- truth-boundary screenshots:
+  - `5`
+- archived screenshots:
+  - `01-toolbar-first-quick-glance.png`
+  - `02-setup-guidance.png`
+  - `03-honest-contract-or-policy-only.png`
+  - `04-settings-and-setup-depth.png`
+  - `05-provider-or-dashboard-depth.png`

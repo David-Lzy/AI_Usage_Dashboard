@@ -1,7 +1,7 @@
 {
   "requestId": "2026-04-24-first-real-store-screenshot-capture-request",
   "createdAt": "2026-04-23T18:20:45.169Z",
-  "status": "pending_operator_capture",
+  "status": "fulfilled_operator_capture",
   "sourceTemplate": "fixtures/store-screenshot/operator-capture-request-template.fixture.json",
   "storyboardPath": "Doc/Store_Screenshot_Storyboard.md",
   "baselinePackReadme": "Doc/testing/store_screenshot_capture_packs/2026-04-24-toolbar-storyboard-baseline/README.md",
@@ -28,5 +28,22 @@
     "The baseline capture pack defines the expected runtime order, not a finished store-submission artifact.",
     "Do not claim multilingual or unsupported provider coverage in screenshots before the product actually ships it."
   ],
-  "fulfillment": null
+  "fulfillment": {
+    "fulfilledAt": "2026-04-23T20:00:18.890Z",
+    "sourceCaptureDir": "Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/captures",
+    "sourceNotesPath": "Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/capture-notes.json",
+    "archiveId": "2026-04-24-first-real-store-screenshot-capture-request-archive",
+    "archiveReadmePath": "Doc/testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md",
+    "archiveManifestPath": "Doc/testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/capture-archive.json",
+    "archiveNotesPath": "Doc/testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/capture-notes.json",
+    "screenshotFilenames": [
+      "01-toolbar-first-quick-glance.png",
+      "02-setup-guidance.png",
+      "03-honest-contract-or-policy-only.png",
+      "04-settings-and-setup-depth.png",
+      "05-provider-or-dashboard-depth.png"
+    ],
+    "reviewedScreenshotCount": 5,
+    "truthBoundaryCount": 5
+  }
 }

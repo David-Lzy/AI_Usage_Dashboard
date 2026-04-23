@@ -10,9 +10,8 @@ Freshness model:
 
 Status note:
 
-- place truthful extension-mode screenshots here using the exact filenames listed below, or pass another capture directory to the completion command
-- this folder is a staging area, not a completed archive
-- keep `../capture-notes.json` in sync with the runtime state of every screenshot before completion
+- this request has already been fulfilled
+- durable archived evidence now lives in `Doc/testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md`
 
 ## Expected Filenames
 

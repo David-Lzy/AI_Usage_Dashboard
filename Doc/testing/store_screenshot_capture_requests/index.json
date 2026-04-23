@@ -1,20 +1,33 @@
 {
-  "generatedAt": "2026-04-23T19:04:00.641Z",
+  "generatedAt": "2026-04-23T20:00:18.890Z",
   "requestRoot": "Doc/testing/store_screenshot_capture_requests",
   "recordCount": 1,
-  "pendingRequestCount": 1,
-  "fulfilledRequestCount": 0,
+  "pendingRequestCount": 0,
+  "fulfilledRequestCount": 1,
   "records": [
     {
       "requestId": "2026-04-24-first-real-store-screenshot-capture-request",
       "createdAt": "2026-04-23T18:20:45.169Z",
-      "status": "pending_operator_capture",
+      "status": "fulfilled_operator_capture",
       "runtimeSource": "RDP Chrome unpacked extension",
       "preferredSize": "1280x800",
       "fallbackSize": "640x400",
       "storyboardPath": "Doc/Store_Screenshot_Storyboard.md",
       "baselinePackReadme": "Doc/testing/store_screenshot_capture_packs/2026-04-24-toolbar-storyboard-baseline/README.md",
-      "fulfillment": null,
+      "fulfillment": {
+        "fulfilledAt": "2026-04-23T20:00:18.890Z",
+        "archiveId": "2026-04-24-first-real-store-screenshot-capture-request-archive",
+        "archiveReadmePath": "Doc/testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md",
+        "archiveManifestPath": "Doc/testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/capture-archive.json",
+        "sourceCaptureDir": "Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/captures",
+        "screenshotFilenames": [
+          "01-toolbar-first-quick-glance.png",
+          "02-setup-guidance.png",
+          "03-honest-contract-or-policy-only.png",
+          "04-settings-and-setup-depth.png",
+          "05-provider-or-dashboard-depth.png"
+        ]
+      },
       "requiredScreenshotFilenames": [
         "01-toolbar-first-quick-glance.png",
         "02-setup-guidance.png",
@@ -25,9 +38,9 @@
       "captureNotesPath": "Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/capture-notes.json",
       "captureNotesSummary": {
         "noteCount": 5,
-        "reviewedScreenshotCount": 0,
-        "pendingReviewCount": 5,
-        "truthBoundaryCount": 0
+        "reviewedScreenshotCount": 5,
+        "pendingReviewCount": 0,
+        "truthBoundaryCount": 5
       },
       "readmePath": "Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/README.md",
       "manifestPath": "Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/capture-request.json"

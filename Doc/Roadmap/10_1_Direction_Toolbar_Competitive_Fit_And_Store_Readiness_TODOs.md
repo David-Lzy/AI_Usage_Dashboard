@@ -17,6 +17,7 @@ Status note:
 - `Phase 146` completed the next executable slice on `2026-04-24` by adding request-bound capture notes plus archive-preserved truth-note metadata for the future first real screenshot set
 - `Phase 147` completed the next executable slice on `2026-04-24` by shipping one request-bound screenshot seed plus runtime-lock workflow and one RDP capture runner for the future first real screenshot set
 - `Phase 148` completed the next executable slice on `2026-04-24` by shipping one fast-fail timeout plus stale-probe cleanup path for failed RDP capture attempts
+- `Phase 149` completed the next executable slice on `2026-04-24` by fulfilling and archiving the first real RDP Chrome screenshot set
 
 Process rule:
 
@@ -67,6 +68,7 @@ Parent direction:
 - `Phase 146` completed the next executable slice here by making capture notes request-bound and archive-preserved, so future real captures can keep truthful omission, approximation, and fallback notes through completion
 - `Phase 147` completed the next executable slice here by making screenshot seeds request-bound plus runtime-locked and by shipping one RDP capture runner that applies those seeds before each requested screenshot
 - `Phase 148` completed the next executable slice here by making failed X11 capture probes fast-fail plus cleanable, so the next real screenshot pass can retry without leaving stale helper processes behind
+- `Phase 149` completed the next executable slice here by using that request-bound runtime path to fulfill and archive the first real screenshot set, so the direction now has one durable archived proof instead of only pending workflow
 
 ### D. Store Readiness Pack
 
@@ -81,6 +83,7 @@ Parent direction:
 - `Phase 142` completed the next executable slice here by shipping one concrete capture-pack workflow that turns the storyboard into named runtime capture tasks
 - `Phase 144` completed the next executable slice here by shipping one empty-but-truthful archive ledger plus one completion command, so completed screenshot sets now have a durable storage path
 - `Phase 146` completed the next executable slice here by extending that future storage path with durable truth-note metadata, so archived screenshot sets can record exactly where a store-facing image used omission, approximation, or fallback
+- `Phase 149` completed the next executable slice here by creating the first real archive package, so listing-copy and screenshot-pack follow-up can now build on archived extension-mode evidence instead of only storyboard intent
 
 ### E. Listing And Localization Coordination
 
