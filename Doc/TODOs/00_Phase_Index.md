@@ -22,7 +22,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [131_Phase_Extension_Build_Output_Stability_And_Git_Closeout_Rule.md](./Archive/131_Phase_Extension_Build_Output_Stability_And_Git_Closeout_Rule.md)
+- latest completed slice: [132_Phase_Documentation_Audit_And_Strategic_Directions_Refresh.md](./Archive/132_Phase_Documentation_Audit_And_Strategic_Directions_Refresh.md)
 
 Completed phases should be moved to:
 
@@ -165,6 +165,7 @@ Completed phases should be moved to:
 - [129_Phase_Popup_Featured_Card_Density_And_Contract_Compression.md](./Archive/129_Phase_Popup_Featured_Card_Density_And_Contract_Compression.md) - completed and archived on 2026-04-23
 - [130_Phase_Popup_Surface_Roles_And_Contract_Note_Compression.md](./Archive/130_Phase_Popup_Surface_Roles_And_Contract_Note_Compression.md) - completed and archived on 2026-04-23
 - [131_Phase_Extension_Build_Output_Stability_And_Git_Closeout_Rule.md](./Archive/131_Phase_Extension_Build_Output_Stability_And_Git_Closeout_Rule.md) - completed and archived on 2026-04-24
+- [132_Phase_Documentation_Audit_And_Strategic_Directions_Refresh.md](./Archive/132_Phase_Documentation_Audit_And_Strategic_Directions_Refresh.md) - completed and archived on 2026-04-24
 
 ## Dependency Notes
 
@@ -203,6 +204,7 @@ Completed phases should be moved to:
 - `Branch B` was selected on 2026-04-23, so JetBrains was removed from the active RC support promise and retained only as a deferred repo path
 - phase 42 now packages the narrowed RC that matches the resolved `Phase 41.2` gate
 - the 2026-04-23 `Phase 42` closeout produced `release/ai-usage-dashboard-0.1.0-rc.2.zip` and closed the numbered release queue for the narrowed RC
+- phase 132 is a documentation-only strategic-refresh slice that audited current documentation completion truth and added sharper roadmap follow-up directions for doc status, i18n bootstrap, and toolbar competitive fit
 - phase 43 depends on phase 42 because the first personal-semantics UI slice should begin only after the release-closeout truth is stable
 - the 2026-04-23 `Phase 43` closeout productized fidelity semantics in the side panel and started `Direction 02`
 - phase 44 depends on phase 43 because the trust-boundary UI should build on top of the already-shipped source-fidelity semantics

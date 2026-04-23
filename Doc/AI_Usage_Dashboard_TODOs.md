@@ -171,6 +171,7 @@ Phase status update:
 - `Phase 129` completed the next executable `Direction 06` slice and turned popup featured-provider cards into a lower-density popup contract, cutting chip count and replacing longer healthy/contract-only contract prose with shorter availability summaries
 - `Phase 130` completed the next executable `Direction 06` slice and turned the last static popup contract footer into one lighter `Surface roles` note, so the lower popup explainer now changes honestly between setup ownership, contract review ownership, provider review ownership, and quick-glance context
 - `Phase 131` completed one build-and-workflow hardening slice and stabilized extension build output names for unpacked Chrome use, while also formalizing the `commit / push / rebuild` closeout rule and the RDP Chrome unpacked-extension rule in the guardrails
+- `Phase 132` completed one documentation-only slice and shipped a repo-wide documentation completion audit plus three sharper roadmap directions for doc truth, i18n bootstrap, and toolbar competitive fit
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
 - the split `Phase 41` release gate cleared the old runtime-parity ambiguity and re-proved the live `Codex` plus `Cursor` personal session-page paths in real Chrome
 - `2026-04-23`: `Branch B` was selected for the current RC, so JetBrains is now a retained repo path rather than part of the active release promise

@@ -1,6 +1,6 @@
 # Strategic Directions Index
 
-Date: 2026-04-23
+Date: 2026-04-24
 
 Process rule:
 
@@ -19,9 +19,9 @@ Important scope note:
 
 ## Current Truth Snapshot
 
-As of 2026-04-23:
+As of 2026-04-24:
 
-- the numbered phase queue is completed through `Phase 42`
+- the numbered phase queue is now completed through `Phase 131`
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
 - `Phase 42` has packaged `0.1.0-rc.2` and closed the release-closeout track for the narrowed RC
 - `Phase 43` completed the first `Direction 02` slice by productizing source-fidelity semantics in the side panel
@@ -112,6 +112,9 @@ As of 2026-04-23:
 - `Phase 128` completed the next `Direction 06` slice by making popup featured-provider CTA routing stateful, and adding one repeatable featured-card action review
 - `Phase 129` completed the next `Direction 06` slice by reducing popup featured-provider density through fewer chips and shorter healthy or contract-only secondary copy, and adding one repeatable featured-card density review
 - `Phase 130` completed the next `Direction 06` slice by replacing the last static popup contract explainer with one stateful `Surface roles` note, and adding one repeatable width review for that lower popup story layer
+- `Phase 131` completed one build-and-workflow hardening slice by stabilizing unpacked-extension build entry names and formalizing the `commit / push / rebuild` closeout rule plus the RDP Chrome reload rule
+- `Phase 132` completed one documentation-only slice by auditing current documentation completion truth and adding three sharper roadmap directions for doc completion, i18n bootstrap, and toolbar competitive fit
+- the numbered phase queue is now completed through `Phase 131`, but the broader `Doc/` tree is not "fully done" because roadmap, request, archive-index, and reference docs remain living docs by design
 - `Codex` personal support is already shipped as a `session_page` path, but it currently exposes usage-window percentages and reset timing, not one absolute remaining credit balance
 - `Cursor` personal support is already shipped as a `session_page` path, but it currently exposes billing-period usage context, not one exact remaining included-request counter
 - the extension action now opens a compact popup on click, the popup makes cached snapshot freshness explicit, and the badge shows the count of visible providers needing attention
@@ -133,6 +136,20 @@ As of 2026-04-23:
 - the current extension remains effectively English-only because the repo does not yet ship `_locales/`, `default_locale`, or a runtime app localization layer
 
 ## Priority Order
+
+### 2026-04-24 strategic refresh
+
+1. [Direction 08 - Documentation Completion And Truth Audit](./08_Direction_Documentation_Completion_And_Truth_Audit.md)
+   Why first now:
+   this direction answers the current ambiguity about whether previous documentation work is actually "finished" and creates one shared status model before more roadmap expansion.
+
+2. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
+   Why second now:
+   the popup is already materially productized, so the next high-leverage local work is competitive fit, truthful extension-mode screenshots, and store-readiness rather than more shell redesign.
+
+3. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
+   Why third now:
+   internationalization is important and feasible, but it should begin with architecture and pilot locales, not an immediate ten-language dump into an English-only runtime.
 
 ### Active continuation order
 
@@ -161,6 +178,20 @@ As of 2026-04-23:
 3. [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md)
    Why third among the new requests:
    full multi-language support is feasible, but it is broad, cross-cutting, and should follow one real localization architecture instead of a rushed ten-language text dump.
+
+### Additional requested directions from 2026-04-24
+
+1. [Direction 08 - Documentation Completion And Truth Audit](./08_Direction_Documentation_Completion_And_Truth_Audit.md)
+   Why first among the new requests:
+   the numbered phase queue is closed through `Phase 131`, but the repo still lacks one explicit documentation taxonomy that distinguishes archived evidence from open roadmap and request docs.
+
+2. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
+   Why second among the new requests:
+   the popup already has real onboarding and stateful CTA behavior, so the next high-value step is competitive fit plus store-readiness, not popup shell invention.
+
+3. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
+   Why third among the new requests:
+   the project is still effectively English-only, but the safe next move is architecture plus pilot locales before promising a full ten-language rollout.
 
 Completed first:
 
@@ -217,3 +248,9 @@ These links informed the roadmap decisions:
 - [06_1_Direction_Toolbar_Product_Benchmark_And_Discoverability_TODOs.md](./06_1_Direction_Toolbar_Product_Benchmark_And_Discoverability_TODOs.md)
 - [07_Direction_Internationalization_And_Localization.md](./07_Direction_Internationalization_And_Localization.md)
 - [07_1_Direction_Internationalization_And_Localization_TODOs.md](./07_1_Direction_Internationalization_And_Localization_TODOs.md)
+- [08_Direction_Documentation_Completion_And_Truth_Audit.md](./08_Direction_Documentation_Completion_And_Truth_Audit.md)
+- [08_1_Direction_Documentation_Completion_And_Truth_Audit_TODOs.md](./08_1_Direction_Documentation_Completion_And_Truth_Audit_TODOs.md)
+- [09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
+- [09_1_Direction_Internationalization_Bootstrap_And_Pilot_Locales_TODOs.md](./09_1_Direction_Internationalization_Bootstrap_And_Pilot_Locales_TODOs.md)
+- [10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
+- [10_1_Direction_Toolbar_Competitive_Fit_And_Store_Readiness_TODOs.md](./10_1_Direction_Toolbar_Competitive_Fit_And_Store_Readiness_TODOs.md)
