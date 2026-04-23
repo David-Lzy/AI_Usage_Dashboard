@@ -41,7 +41,10 @@ export function ProviderCard({
             : `Usage unknown · ${provider.quotaUnit}`;
 
   return (
-    <article className={`provider-card provider-card--${provider.displayTone}`}>
+    <article
+      className={`provider-card provider-card--${provider.displayTone}`}
+      data-provider-id={provider.providerId}
+    >
       <div className="provider-card__header">
         <div>
           <p className="provider-card__provider">{provider.providerLabel}</p>

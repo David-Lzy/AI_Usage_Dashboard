@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 
 import type { AppState, ProviderId } from "../providers/types";
 import { sendAppMessage } from "../shared/app-client";
+import { DEFAULT_THEME_SETTINGS, startThemeSettingsSync } from "../shared/theme";
 import { SummaryStrip } from "../sidepanel/components/SummaryStrip";
 import { StatusBadge } from "../sidepanel/components/StatusBadge";
 import {
   buildSidePanelHash,
   type SidePanelRouteState,
 } from "../sidepanel/route-state";
-import { buildPopupViewModel } from "./view-models";
+import { buildPopupViewModel, type PopupGuidanceAction } from "./view-models";
 
 type PopupLoadState =
   | { status: "loading" }
@@ -79,6 +80,22 @@ async function openProviderDetail(providerId: ProviderId) {
   await openSidePanelRoute({ name: "provider-detail", providerId });
 }
 
+async function handleGuidanceAction(action: PopupGuidanceAction) {
+  if (action.kind === "settings") {
+    await openSettings();
+    return;
+  }
+
+  if (action.kind === "dashboard") {
+    await openFullDashboard();
+    return;
+  }
+
+  if (action.kind === "provider-detail" && action.providerId) {
+    await openProviderDetail(action.providerId);
+  }
+}
+
 export function PopupApp() {
   const [loadState, setLoadState] = useState<PopupLoadState>({
     status: "loading",
@@ -109,6 +126,19 @@ export function PopupApp() {
       disposed = true;
     };
   }, []);
+
+  useEffect(() => {
+    if (typeof document === "undefined" || typeof window === "undefined") {
+      return undefined;
+    }
+
+    const themeSettings =
+      loadState.status === "ready"
+        ? loadState.appState.settings
+        : DEFAULT_THEME_SETTINGS;
+
+    return startThemeSettingsSync(themeSettings, document.documentElement, window);
+  }, [loadState]);
 
   async function handleRefresh() {
     setIsRefreshing(true);
@@ -174,17 +204,17 @@ export function PopupApp() {
   }
 
   const popupModel = buildPopupViewModel(loadState.appState);
+  const guidanceCard = popupModel.guidanceCard;
 
   return (
     <main className="app-shell popup-shell">
       <section className="status-card popup-header">
         <div>
-          <p className="section-label">Toolbar Popup</p>
-          <h1 className="section-title">Quick glance</h1>
-          <p className="supporting-copy">
-            Use the popup for fast triage, then jump into the right detailed
-            surface without re-navigating the whole extension.
+          <p className="section-label" data-theme-local-surface="popup-header-label">
+            Toolbar Popup
           </p>
+          <h1 className="section-title">Quick glance</h1>
+          <p className="supporting-copy">{popupModel.headerDetail}</p>
         </div>
         <div className="popup-actions">
           <button
@@ -198,131 +228,236 @@ export function PopupApp() {
         </div>
       </section>
 
-      <SummaryStrip items={popupModel.summaryItems} />
+      <SummaryStrip ariaLabel="Popup top summary" items={popupModel.summaryItems} />
+
+      {guidanceCard ? (
+        <section
+          className={`status-card${
+            guidanceCard.tone === "neutral"
+              ? ""
+              : ` status-card--${guidanceCard.tone}`
+          }`}
+          data-theme-local-surface="popup-guidance-card"
+        >
+          <div className="status-card__header">
+            <div>
+              <p className="section-label">Popup Guidance</p>
+              <h2 className="section-title">{guidanceCard.headline}</h2>
+            </div>
+            <StatusBadge
+              label={guidanceCard.label}
+              tone={guidanceCard.tone}
+            />
+          </div>
+          <p className="supporting-copy">{guidanceCard.detail}</p>
+          <div className="popup-actions">
+            <button
+              className="text-button"
+              data-theme-local-surface="popup-guidance-action"
+              type="button"
+              onClick={() => {
+                void handleGuidanceAction(guidanceCard.action);
+              }}
+            >
+              {guidanceCard.action.label}
+            </button>
+          </div>
+        </section>
+      ) : null}
 
       <section
-        className={`status-card${
-          popupModel.snapshotStatus.tone === "neutral"
-            ? ""
-            : ` status-card--${popupModel.snapshotStatus.tone}`
-        }`}
+        className="status-card popup-setup-coverage"
+        data-theme-local-surface="popup-setup-coverage-card"
       >
         <div className="status-card__header">
           <div>
-            <p className="section-label">Snapshot Status</p>
-            <h2 className="section-title">{popupModel.snapshotStatus.headline}</h2>
+            <p
+              className="section-label"
+              data-theme-local-surface="popup-setup-coverage-label"
+            >
+              {popupModel.setupCoverage.label}
+            </p>
+            <h2 className="section-title">{popupModel.setupCoverage.headline}</h2>
           </div>
-          <StatusBadge
-            label={popupModel.snapshotStatus.label}
-            tone={popupModel.snapshotStatus.tone}
+          <div data-popup-setup-coverage-stage>
+            <StatusBadge
+              label={popupModel.setupCoverage.statusLabel}
+              tone={popupModel.setupCoverage.tone}
+            />
+          </div>
+        </div>
+        <p className="supporting-copy" data-popup-setup-coverage-detail>
+          {popupModel.setupCoverage.detail}
+        </p>
+        <div data-popup-setup-coverage-grid>
+          <SummaryStrip
+            ariaLabel="Popup setup coverage"
+            items={popupModel.setupCoverage.items}
           />
         </div>
-        <p className="supporting-copy">{popupModel.snapshotStatus.detail}</p>
       </section>
 
-      <section className="status-card">
-        <p className="section-label">Quick Actions</p>
-        <p className="supporting-copy">
-          Open the dashboard for the full multi-provider overview, or jump
-          straight into settings when you need provider toggles, permissions, or
-          source controls.
+      {popupModel.showSnapshotStatus ? (
+        <section
+          className={`status-card${
+            popupModel.snapshotStatus.tone === "neutral"
+              ? ""
+              : ` status-card--${popupModel.snapshotStatus.tone}`
+          }`}
+          data-theme-local-surface="popup-snapshot-status-card"
+        >
+          <div className="status-card__header">
+            <div>
+              <p className="section-label">Snapshot Status</p>
+              <h2 className="section-title">{popupModel.snapshotStatus.headline}</h2>
+            </div>
+            <StatusBadge
+              label={popupModel.snapshotStatus.label}
+              tone={popupModel.snapshotStatus.tone}
+            />
+          </div>
+          <p className="supporting-copy">{popupModel.snapshotStatus.detail}</p>
+        </section>
+      ) : null}
+
+      <section
+        className="status-card"
+        data-theme-local-surface="popup-actions-card"
+      >
+        <p className="section-label" data-theme-local-surface="popup-actions-label">
+          {popupModel.actionSection.label}
         </p>
+        <p className="supporting-copy">{popupModel.actionSection.detail}</p>
         <div className="popup-actions">
-          <button
-            className="text-button"
-            type="button"
-            onClick={() => {
-              void openFullDashboard();
-            }}
-          >
-            Open dashboard
-          </button>
-          <button
-            className="text-button"
-            type="button"
-            onClick={() => {
-              void openSettings();
-            }}
-          >
-            Open settings
-          </button>
+          {popupModel.actionSection.actions.map((action) => (
+            <button
+              key={`${action.kind}-${action.providerId ?? "root"}`}
+              className="text-button"
+              data-theme-local-surface={
+                action.kind === "dashboard" ? "popup-open-dashboard" : undefined
+              }
+              type="button"
+              onClick={() => {
+                void handleGuidanceAction(action);
+              }}
+            >
+              {action.label}
+            </button>
+          ))}
         </div>
       </section>
 
-      <section className="status-card">
-        <p className="section-label">Popup Contract</p>
-        <p className="supporting-copy">
-          This popup shows the shared cached dashboard state for a quick glance.
-          Use dashboard for broad status, settings for provider controls, and
-          provider detail for one provider's current source contract and health.
+      <section
+        className="status-card"
+        data-theme-local-surface="popup-contract-card"
+      >
+        <p className="section-label">{popupModel.surfaceRolesCard.label}</p>
+        <h2
+          className="section-title"
+          data-popup-surface-roles-headline="true"
+        >
+          {popupModel.surfaceRolesCard.headline}
+        </h2>
+        <p className="supporting-copy" data-popup-surface-roles-detail="true">
+          {popupModel.surfaceRolesCard.detail}
         </p>
       </section>
 
       <section className="dashboard-section">
         <div className="dashboard-section__header">
           <div>
-            <p className="section-label">Needs Attention</p>
-            <h2 className="section-title">Featured providers</h2>
-          </div>
-          <p className="supporting-copy">
-            The popup shows up to three providers, preferring the ones that are
-            currently blocked, warning, or otherwise not fully ready.
-          </p>
-        </div>
-
-        <div className="popup-provider-list" aria-label="Popup featured providers">
-          {popupModel.featuredProviders.map((provider) => (
-            <article
-              key={provider.providerId}
-              className={`popup-provider-card popup-provider-card--${provider.displayTone}`}
+            <p
+              className="section-label"
+              data-theme-local-surface="popup-featured-section-label"
             >
-              <div className="popup-provider-card__header">
-                <div>
-                  <p className="popup-provider-card__provider">
-                    {provider.providerLabel}
-                  </p>
-                  <p className="popup-provider-card__plan">{provider.planName}</p>
-                </div>
-                <StatusBadge
-                  label={
-                    provider.permissionStatus === "missing"
-                      ? "Needs access"
-                      : provider.displaySyncStatus === "ok"
-                        ? "Healthy"
-                        : provider.displaySyncStatus === "warning"
-                          ? "Warning"
-                          : "Sync issue"
-                  }
-                  tone={provider.displayTone}
-                />
-              </div>
-
-              <div className="popup-provider-card__chips">
-                <span className="meta-chip">{provider.currentSourceContractLabel}</span>
-                <span className="meta-chip">{provider.currentSourceFidelityLabel}</span>
-                <span className="meta-chip">{provider.lastSyncLabel}</span>
-              </div>
-
-              <p className="supporting-copy">{provider.currentSourceContractDetail}</p>
-              <p className="supporting-copy">
-                {provider.warningReason ??
-                  provider.currentSourceStateDetail ??
-                  provider.currentSourceAvailabilitySummary}
-              </p>
-              <div className="popup-actions">
-                <button
-                  className="text-button"
-                  type="button"
-                  onClick={() => {
-                    void openProviderDetail(provider.providerId);
-                  }}
-                >
-                  Open detail
-                </button>
-              </div>
-            </article>
-          ))}
+              {popupModel.featuredSection.label}
+            </p>
+            <h2 className="section-title">{popupModel.featuredSection.headline}</h2>
+          </div>
+          <p className="supporting-copy">{popupModel.featuredSection.detail}</p>
         </div>
+
+        {popupModel.featuredProviderCards.length > 0 ? (
+          <div className="popup-provider-list" aria-label="Popup featured providers">
+            {popupModel.featuredProviderCards.map((card, index) => {
+              const { provider } = card;
+
+              return (
+              <article
+                key={provider.providerId}
+                className={`popup-provider-card popup-provider-card--${provider.displayTone}`}
+                data-theme-local-surface={
+                  index === 0 ? "popup-first-provider-card" : undefined
+                }
+              >
+                <div className="popup-provider-card__header">
+                  <div>
+                    <p className="popup-provider-card__provider">
+                      {provider.providerLabel}
+                    </p>
+                    <p className="popup-provider-card__plan">{provider.planName}</p>
+                  </div>
+                  <div data-popup-featured-status={index === 0 ? "true" : undefined}>
+                    <StatusBadge
+                      label={card.statusLabel}
+                      tone={provider.displayTone}
+                    />
+                  </div>
+                </div>
+
+                <div
+                  className="popup-provider-card__chips"
+                  data-popup-featured-chips={index === 0 ? "true" : undefined}
+                >
+                  {card.metaChips.map((chipLabel) => (
+                    <span key={chipLabel} className="meta-chip">
+                      {chipLabel}
+                    </span>
+                  ))}
+                </div>
+
+                <p
+                  className="supporting-copy"
+                  data-popup-featured-primary={index === 0 ? "true" : undefined}
+                >
+                  {card.primaryDetail}
+                </p>
+                <p
+                  className="supporting-copy"
+                  data-popup-featured-secondary={index === 0 ? "true" : undefined}
+                >
+                  {card.secondaryDetail}
+                </p>
+                <div className="popup-actions">
+                  <button
+                    className="text-button"
+                    data-theme-local-surface={
+                      index === 0 ? "popup-first-open-detail" : undefined
+                    }
+                    data-popup-featured-action={index === 0 ? "true" : undefined}
+                    type="button"
+                    onClick={() => {
+                      void handleGuidanceAction(card.action);
+                    }}
+                  >
+                    {card.action.label}
+                  </button>
+                </div>
+              </article>
+              );
+            })}
+          </div>
+        ) : (
+          <section className="status-card" data-theme-local-surface="popup-empty-state-card">
+            <p className="section-label">Popup Triage</p>
+            <h3 className="section-title">
+              {popupModel.featuredSection.emptyStateHeadline}
+            </h3>
+            <p className="supporting-copy">
+              {popupModel.featuredSection.emptyStateDetail}
+            </p>
+          </section>
+        )}
       </section>
     </main>
   );

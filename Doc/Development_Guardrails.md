@@ -145,6 +145,48 @@ Reason:
 - the user should be able to inspect the latest UI state after each previewable phase
 - restarting avoids accidental inspection of stale output
 
+## 2.7 RDP Chrome Unpacked Extension Rule
+
+When using the RDP Chrome profile for real extension review:
+
+1. run a fresh `vite build` first
+2. go to `chrome://extensions`
+3. manually reload the unpacked extension that points at `dist/`
+4. close any already-open popup or side-panel extension pages
+5. reopen the extension surfaces after the reload
+
+Reason:
+
+- the unpacked extension serves built files from `dist/`
+- popup and side-panel HTML files reference hashed asset filenames under `dist/assets/`
+- after a new build, those hashed JS filenames can change
+- if Chrome is still holding an older unpacked extension package, the extension page can degrade into "background color only" because CSS may still load while the old JS entry no longer matches the current build output
+
+Working assumption for this project:
+
+- the preview server at `127.0.0.1:4173` is for fast UI inspection
+- the RDP Chrome unpacked extension is the truthful runtime for extension-mode validation
+- do not treat an unpacked-extension blank page as a styling bug until the extension has been reloaded after the latest build
+
+## 2.8 Git Closeout Rule
+
+After a completed phase or documentation-backed closeout:
+
+1. stage the relevant changes
+2. create one intentional git commit
+3. push the current branch to the configured remote
+4. run a fresh build so `dist/` matches the pushed source state
+
+Default expectation:
+
+- do this after each completed markdown-backed closeout unless the user explicitly pauses or overrides that workflow
+
+Reason:
+
+- documentation, pushed source, and built extension output should not drift apart
+- the RDP Chrome unpacked extension depends on a truthful `dist/` directory
+- the repo should not accumulate large unpushed local phase batches by accident
+
 ## 3. Required Fields For A Completed Phase File
 
 Before moving a phase file into the archive, make sure it includes:

@@ -5,8 +5,16 @@ import { SAMPLE_APP_STATE } from "./constants";
 import { readAppState, writeAppState } from "./storage";
 
 function createLegacyState(): AppState {
+  const {
+    themeMode: _themeMode,
+    themePreset: _themePreset,
+    themeCustomSeedHex: _themeCustomSeedHex,
+    ...legacySettings
+  } = SAMPLE_APP_STATE.settings;
+
   return {
     ...SAMPLE_APP_STATE,
+    settings: legacySettings as AppState["settings"],
     providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => {
       const {
         hostOrigins: _hostOrigins,
@@ -98,6 +106,9 @@ describe("storage normalization", () => {
       matchedTitle: null,
       updatedAt: null,
     });
+    expect(state?.settings.themeMode).toBe("system");
+    expect(state?.settings.themePreset).toBe("default");
+    expect(state?.settings.themeCustomSeedHex).toBeNull();
   });
 
   it("upgrades stale static provider metadata to the current sample schema", async () => {

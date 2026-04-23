@@ -44,6 +44,8 @@ Scope:
 - when the imported payload came from a repo-backed request template or export, confirm the audit-hub session summary also restores the same request binding instead of dropping it
 - reload the audit hub after a successful import and confirm the imported signoff state persists even though the paste textarea resets
 - after filling the review-session fields, confirm the live signoff draft and session summary both show the same reviewer, session label, and reviewed-at values
+- switch `Theme mode` and `Accent preset` in the embedded Settings audit frame and confirm the parent audit hub updates its own labels and chips without requiring a manual reload
+- confirm the audit-hub root keeps the same `themeMode`, `themePreset`, and resolved theme state shown by the embedded Settings surface instead of drifting to an older saved value
 - confirm the audit hub now also exposes a handoff summary with explicit `Ready for signoff`, `Follow-up surfaces`, `Not reviewed`, and `Pending checks` counts
 - after changing or importing workspace state, confirm the handoff summary lists update coherently for follow-up surfaces, not-reviewed surfaces, and pending manual checks
 - open `Current handoff summary` and confirm the preview reads like a real unresolved-work summary instead of repeating the full workspace draft verbatim
@@ -121,6 +123,118 @@ Scope:
 ## 4. Settings Checks
 
 - open Settings and confirm the page uses the same Material 3 visual language as the dashboard
+- confirm `Theme mode` exposes exactly `System`, `Light`, and `Dark`
+- confirm `Accent preset` exposes `Default Blue`, `Meadow`, `Sunset`, and `Custom Seed`
+- confirm `Custom seed color` accepts one validated `#RRGGBB` value instead of pretending to support arbitrary per-token editing
+- switch `Theme mode` to `Light` and confirm the side panel stays in the light palette after a reload
+- switch `Theme mode` to `Dark` and confirm the side panel plus popup both use the dark palette instead of only changing one surface
+- switch `Theme mode` back to `System` and confirm the current browser or OS `prefers-color-scheme` value drives the rendered mode
+- switch `Accent preset` to `Meadow` and confirm the Settings overview section label, dashboard hero chip, and popup header label all change away from the default blue accent roles
+- switch `Accent preset` to `Sunset` and confirm those same accent surfaces move to the sunset palette instead of staying on the meadow or default palette
+- enter a valid custom seed such as `#4F46E5`, apply it, and confirm the side panel, popup, and audit hub all switch to the same `Custom Seed` accent roles instead of keeping the last shipped preset colors
+- after applying that same custom seed, confirm the Settings preview swatches match the currently active primary, secondary-container, and tertiary roles instead of showing a disconnected preview palette
+- switch the custom seed theme from `Light` to `Dark` and confirm the same saved seed stays bound while the generated accent roles adapt to the dark palette instead of staying on the light values
+- after applying a custom seed, confirm the popup header label, popup quick-actions label, and popup featured-section label all follow the current tertiary role instead of staying on the old preset color
+- after applying a custom seed, confirm the popup `Open dashboard` and `Open detail` buttons plus the audit-hub `Open settings` link follow the current primary role instead of falling back to the default blue link treatment
+- after applying a custom seed, confirm the audit-hub hero chip still follows the current secondary-container role instead of drifting away from the rest of the saved theme
+- after applying a custom seed within the same explicit theme mode, confirm the popup `Snapshot Status`, `Quick Actions`, and `Popup Contract` cards keep the same neutral or warning surface treatment they had under the default preset
+- after applying a custom seed within the same explicit theme mode, confirm the first popup warning provider card keeps the same warning surface treatment it had under the default preset
+- after applying a custom seed within the same explicit theme mode, confirm the audit-hub `Request Scope`, `Review Queue`, `Workspace state`, first queue item, signoff-preview surface, and warning `Outstanding review work` note keep the same neutral, supporting, or warning surface treatment they had under the default preset
+- after applying a custom seed within the same explicit theme mode, confirm the dashboard error summary pill plus the Claude warning or error card and Gemini warning card keep the same warning or error surface treatment they had under the default preset
+- after applying a custom seed within the same explicit theme mode, confirm the Claude error status chip, error meta chip, and error progress surfaces plus the Gemini warning status chip, warning meta chip, and warning progress surfaces keep the same state-colored treatments they had under the default preset
+- after applying a custom seed within the same explicit theme mode, confirm the Settings theme-customization card plus the Cursor source card keep the same neutral surface treatment they had under the default preset
+- after applying a custom seed within the same explicit theme mode, confirm the Settings Cursor operational note and session note keep the same warning or supporting surface treatment they had under the default preset
+- after applying a custom seed within the same explicit theme mode, confirm the provider-detail sync-status and usage cards keep the same neutral surface treatment they had under the default preset
+- after applying a custom seed within the same explicit theme mode, confirm the provider-detail fidelity, contract, and trust notes keep the same warning or supporting surface treatment they had under the default preset
+- after applying a custom seed within the same explicit theme mode, confirm the Codex healthy status chip and Codex neutral usage-progress fill move with the active accent roles, while the Codex neutral progress track plus fidelity and warning notes keep the same neutral or warning treatments they had under the default preset
+- under the seeded recovered-state review, confirm Cursor and Codex session-page cards move from `Needs access` warning treatments back to neutral `Healthy` treatments after host access is restored, while keeping the same custom-seed palette roles in both states
+- under that same seeded recovered-state review, confirm popup `Snapshot Status` moves from warning `Mixed state` to neutral `Aligned`, and the first featured provider card moves from warning to neutral without theme drift
+- under the preview-interaction recovered-state review, use Settings host-access controls in browser preview mode and confirm Cursor plus Codex permission prompts move from `Host access missing` with `Request access` to `Host access granted` with `Remove access`
+- under that same preview-interaction recovered-state review, confirm dashboard cards, provider detail, and popup surfaces recover from `Needs access` plus `Mixed state` back to neutral `Healthy` plus `Aligned` without changing the saved custom-seed palette roles
+- run `npm run phase111:review` and confirm the extension-mode recovered-state review uses the real unpacked MV3 runtime instead of preview localStorage only
+- under that same extension-mode recovered-state review, confirm degraded badge text is `2`, recovered badge text is cleared, degraded popup snapshot is `Mixed state`, and recovered popup snapshot is `Aligned`
+- under that same extension-mode recovered-state review, confirm recovered `Cursor` detail shows `Apr 1 - Apr 30` while recovered `Codex` detail shows `3% used · 97% remaining` and `2026-04-23 19:45`, proving the synthetic session-page DOM was actually parsed by the extension runtime
+- disable every visible provider in Settings, open the popup, and confirm the new popup guidance card says `Enable a provider in settings` with an `Open settings` action instead of only showing lower-level status cards
+- leave one visible provider enabled but remove its host access, open the popup, and confirm the guidance card points back to Settings instead of forcing the user to infer the next step from featured-provider detail alone
+- keep one credential-backed provider visible, force it into a real `credential missing` state, and confirm the popup guidance card says `Add credentials ...` with an `Open settings` action instead of sending the user to provider detail
+- keep providers visible, then reproduce one blocked-provider state that is not a host-access prompt and confirm the popup guidance card routes to the matching provider detail instead of only showing generic quick actions
+- with mixed visible providers, confirm the popup `Setup coverage` card splits the current state into `Live ready`, `Host access`, `Credentials`, and `Policy-only` counts instead of forcing the user to infer setup breadth from the featured-provider list alone
+- with no visible, mixed-setup, policy-only, and healthy popup states, confirm the `Setup coverage` card now also carries the matching setup-stage label instead of leaving the user to infer stage only from the count grid:
+  - `Start setup`
+  - `Needs setup`
+  - `Contract-only`
+  - `Ready`
+- reproduce one post-setup provider issue and confirm the same `Setup coverage` card can switch to `Needs review` instead of collapsing all non-ready states back into `Needs setup`
+- with no visible providers, confirm the popup no longer keeps a redundant empty `Snapshot Status` card below `Setup coverage`
+- with mixed-setup, policy-only, and healthy popup states, confirm `Snapshot Status` now talks about freshness only and does not repeat setup or review guidance that is already explained by the guidance card or setup-stage card
+- when a popup guidance card is visible, confirm the lower actions card no longer repeats that same primary action label unchanged
+- confirm the lower actions card now switches to one clearly secondary label in guided states instead of continuing to present itself as the same-level primary CTA area
+- in no-visible and mixed-setup states, confirm `Open settings` appears only in the guidance card and `Open dashboard` remains the only lower secondary route
+- in policy-only states, confirm `Open dashboard` stays in the guidance card while the lower secondary route becomes only `Open settings`
+- in healthy states with no guidance card, confirm the lower actions card returns to the original two-button `Quick Actions` role
+- confirm the popup header supporting line now changes by state instead of staying one generic sentence for all toolbar states
+- confirm the popup top summary now reads `Visible / Live ready / Setup blockers / Policy-only` instead of the broader dashboard-style `Healthy / Needs Access / Needs Attention`
+- in no-visible, mixed-setup, policy-only, and healthy states, confirm that top summary values match the current popup story before you read deeper cards
+- in mixed-setup, needs-review, policy-only, and healthy popup states, confirm the first featured-provider card now uses popup-specific badge labels such as `Needs setup`, `Needs review`, `Contract-only`, and `Healthy` instead of falling back to generic sync-only language
+- in those same states, confirm the first featured-provider card now leads with one state-first sentence and only then falls back to detailed contract or warning context, instead of opening directly with long side-panel contract prose
+- in mixed-setup states, confirm the first featured-provider card CTA now routes to `Open settings` instead of repeating `Open detail`
+- in needs-review states, confirm the first featured-provider card CTA now routes to `Review detail`
+- in policy-only states, confirm the first featured-provider card CTA now routes to `Open dashboard`
+- in healthy states, confirm the first featured-provider card keeps the lighter `Open detail` CTA
+- in mixed-setup, needs-review, policy-only, and healthy popup states, confirm the first featured-provider card now keeps exactly 2 chips instead of 3
+- in healthy and policy-only popup states, confirm the first featured-provider card second line no longer starts with the longer `Current shipped contract ...` prose and instead uses a shorter availability-summary sentence
+- in no-visible and mixed-setup popup states, confirm the lower popup footer now says `Surface roles` with `Settings owns setup` instead of replaying one static `Popup Contract` explainer
+- in needs-review, policy-only, and healthy popup states, confirm the same `Surface roles` footer switches honestly between `Provider detail owns review`, `Dashboard owns contract review`, and `Popup stays quick glance`
+- at `360px` and `420px` popup widths, confirm the guidance card, setup-coverage card, snapshot-status card, and featured-provider area still read cleanly without horizontal overflow in no-visible, mixed-setup, and healthy states
+- at `360px` and `420px` popup widths, confirm the same setup-stage header still reads cleanly in no-visible, mixed-setup, policy-only, and healthy popup states
+- when no visible providers are enabled, confirm the featured-provider area no longer says `Needs attention`; it should instead show `Nothing to triage yet` plus an explicit empty-state card
+- when visible providers are healthy, confirm the featured-provider area switches to `All clear / Healthy providers` instead of reusing the warning-oriented hierarchy
+- when all visible providers are policy-only, confirm the featured-provider area switches to `Current contract / Policy-only providers` instead of implying immediate action is required
+- open `http://127.0.0.1:4173/src/sidepanel/index.html#debug-theme-recovery-review` and confirm the workspace exposes theme mode, resolved mode, accent preset, custom seed, popup snapshot, scope-isolation label, and action-badge summary in one route
+- on that same workspace, confirm the quick links stay bound to the shipped extension routes plus the real Cursor and Codex session-page URLs instead of stale placeholders
+- run `npm run phase112:review` and confirm the workspace truthfully distinguishes all three seeded cases:
+  - `Needs access`
+  - `Recovered`
+  - `Needs scope cleanup`
+- on that same `phase112` review, confirm the summary draft reflects the same review stage and vendor links shown by the visible workspace
+- on that same workspace, confirm `Download summary` and `Download JSON` are available next to the existing copy actions
+- run `npm run phase113:review` and confirm the seeded archive workflow produces:
+  - one stable summary filename: `theme-recovery-summary-2026-04-23-light-needs-access-custom.md`
+  - one stable export filename: `theme-recovery-export-2026-04-23-light-needs-access-custom.json`
+  - one durable seeded archive directory under `Doc/testing/theme_recovery_reviews/2026-04-23-theme-recovery-seeded-archive-baseline/`
+- open [Theme_Recovery_Review_Archive.md](./Theme_Recovery_Review_Archive.md) and confirm the current truthful state is:
+  - one seeded baseline listed
+  - no real operator theme-recovery sessions archived yet
+- open the seeded archive README and confirm it keeps the degraded review stage `Needs access` instead of rewriting the baseline into a claimed pass
+- run `npm run theme-recovery:create-review-request -- --request-id 2026-04-23-first-real-theme-recovery-review-request` and confirm it writes one pending request package under `Doc/testing/theme_recovery_review_requests/`
+- open [Theme_Recovery_Review_Requests.md](./Theme_Recovery_Review_Requests.md) and confirm the current truthful state is:
+  - one pending theme-recovery review request listed
+  - no fulfilled theme-recovery review requests recorded yet
+- open that request package README and confirm it preserves:
+  - the fixed `#debug-theme-recovery-review` workspace route
+  - one request-bound workspace route containing `themeRecoveryRequestId` and `themeRecoveryRequestCreatedAt`
+  - the current seeded reference stage `Needs access`
+  - the current seeded reference popup snapshot `Mixed state`
+  - the completion command `npm run theme-recovery:complete-review-request -- --request-id 2026-04-23-first-real-theme-recovery-review-request --input tmp/theme-recovery-review-export.json`
+- run `npm run phase114:review` and confirm the generated request package plus generated request index remain truthful about pending status instead of claiming a completed operator pass
+- run `npm run phase115:review` and confirm the repo-backed completion flow can move one temporary request from pending to fulfilled while preserving the exported `Needs access` stage instead of rewriting it into a pass
+- under that same `phase115` review, confirm the temporary request index moves to `pending=0 fulfilled=1`, the temporary archive index moves to `seeded=0 operator=1`, and the temporary archive manifest preserves the `sourceRequest` link back to the fulfilled request
+- open the bound workspace route from the pending request package and confirm the page shows `Request scope` with the same request id and created-at timestamp
+- under that same bound workspace route, confirm the JSON export includes `requestContext` and the downloaded JSON filename gains one `request-...` suffix
+- run `npm run phase116:review` and confirm a mismatched `requestId` inside a bound export is rejected while the pending request remains `pending_operator_review`
+- run `npm run theme-recovery:preflight-review-request -- --request-id 2026-04-23-first-real-theme-recovery-review-request --input tmp/theme-recovery-review-export.json` against one bound export and confirm it reports `eligible=yes` without mutating request or archive state
+- run `npm run phase117:review` and confirm theme-recovery preflight now proves both paths:
+  - a matching bound export reports `eligible=yes`
+  - a mismatched bound export reports `eligible=no`
+  - the temporary request still remains `pending_operator_review`
+- at `360px` width with a saved custom seed, confirm dashboard, Settings, provider detail, and popup all remain free of horizontal overflow
+- at `420px` width with a saved custom seed, confirm dashboard, Settings, provider detail, and popup all remain free of horizontal overflow
+- at those same compact widths, confirm Settings still keeps the sticky top bar anchored after scrolling instead of losing the action row off-screen
+- at those same compact widths, confirm the saved custom seed and resolved theme mode remain identical across dashboard, Settings, provider detail, and popup instead of one route reverting to an older preset
+- use `Reset to default` and confirm both the saved custom seed and the active preset return to the default accent path
+- in `Dark` mode, confirm warning and error provider cards remain visually distinct from neutral cards instead of collapsing into the same dark surface
+- in `Dark` mode, confirm warning and error detail notes remain readable and still differ from neutral supporting notes
+- in `Dark` mode, confirm expanded diagnostic groups remain visually distinct from the outer source card and warning progress tracks remain distinct from neutral progress tracks
 - change the sync interval and warning threshold, then confirm a save toast appears
 - toggle provider visibility off and confirm the provider disappears from the dashboard
 - toggle provider visibility back on and confirm the provider returns in severity order
@@ -177,6 +291,8 @@ Scope:
   - `Open the JetBrains Console Users and licensing page...` when no usable org page is available
   - an account-scope failure such as `Error 400: Bad Request` should be treated as `JetBrains org access unavailable`, not as a generic "page not open" hint
 - confirm settings changes persist after a preview page reload
+- after a preview page reload, confirm the last saved `Theme mode` also persists instead of snapping back to `System`
+- after a preview page reload, confirm the last saved `Accent preset` also persists instead of snapping back to `Default Blue`
 
 ## 5. Provider-Specific Matrix
 
@@ -223,6 +339,17 @@ Scope:
 - run `npx -y node@22 ./scripts/phase78-interaction-audit-review-archive-review.mjs`
 - run `npx -y node@22 ./scripts/phase79-interaction-audit-review-archive-index-review.mjs`
 - run `npx -y node@22 ./scripts/phase80-interaction-audit-review-request-review.mjs`
+- run `npx -y node@22 ./scripts/phase99-theme-mode-review.mjs`
+- run `npx -y node@22 ./scripts/phase100-dark-theme-surface-review.mjs`
+- run `npx -y node@22 ./scripts/phase101-theme-preset-review.mjs`
+- run `npx -y node@22 ./scripts/phase102-interaction-audit-theme-alignment-review.mjs`
+- run `npx -y node@22 ./scripts/phase103-custom-seed-theme-review.mjs`
+- run `npx -y node@22 ./scripts/phase104-custom-seed-local-surface-review.mjs`
+- run `npx -y node@22 ./scripts/phase105-custom-seed-surface-stability-review.mjs`
+- run `npx -y node@22 ./scripts/phase106-custom-seed-main-surface-stability-review.mjs`
+- run `npx -y node@22 ./scripts/phase107-custom-seed-compact-width-review.mjs`
+- run `npx -y node@22 ./scripts/phase108-custom-seed-provider-state-review.mjs`
+- run `npx -y node@22 ./scripts/phase109-custom-seed-recovered-state-review.mjs`
 - review the generated screenshots and `phase55-results.json` under `tmp/phase55-visual-review/`
 - review the generated screenshots and `phase60-results.json` under `tmp/phase60-compact-settings-review/`
 - review the generated screenshots and `phase61-results.json` under `tmp/phase61-interaction-state-review/`
@@ -250,6 +377,17 @@ Scope:
 - review `Doc/testing/Interaction_Audit_Review_Requests.md` and confirm the pending non-seeded operator request is listed there
 - review `Doc/testing/operator_review_requests/index.json` and confirm the machine-readable request catalog matches the markdown request index
 - review `phase80-results.json` and the generated temporary request package under `tmp/phase80-interaction-audit-review-request-review/`
+- review the screenshots and `phase99-results.json` under `tmp/phase99-theme-mode-review/`
+- review the screenshots and `phase100-results.json` under `tmp/phase100-dark-theme-surface-review/`
+- review the screenshots and `phase101-results.json` under `tmp/phase101-theme-preset-review/`
+- review the screenshots and `phase102-results.json` under `tmp/phase102-interaction-audit-theme-alignment-review/`
+- review the screenshots and `phase103-results.json` under `tmp/phase103-custom-seed-theme-review/`
+- review the popup and audit screenshots plus `phase104-results.json` under `tmp/phase104-custom-seed-local-surface-review/`
+- review the popup and audit screenshots plus `phase105-results.json` under `tmp/phase105-custom-seed-surface-stability-review/`
+- review the dashboard, settings, and provider-detail screenshots plus `phase106-results.json` under `tmp/phase106-custom-seed-main-surface-stability-review/`
+- review the compact-width dashboard, settings, provider-detail, and popup screenshots plus `phase107-results.json` under `tmp/phase107-custom-seed-compact-width-review/`
+- review the dashboard, popup, and provider-detail provider-state screenshots plus `phase108-results.json` under `tmp/phase108-custom-seed-provider-state-review/`
+- review the dashboard, popup, and provider-detail recovered-state screenshots plus `phase109-results.json` under `tmp/phase109-custom-seed-recovered-state-review/`
 - confirm the preview URL still answers with HTTP 200 after the latest build
 
 Exit criteria:

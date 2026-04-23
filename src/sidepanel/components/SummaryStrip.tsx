@@ -15,6 +15,7 @@ export function SummaryStrip({
         <article
           key={item.label}
           className={`summary-pill summary-pill--${item.tone}`}
+          data-summary-tone={item.tone}
         >
           <p className="summary-pill__label">{item.label}</p>
           <p className="summary-pill__value">{item.value}</p>

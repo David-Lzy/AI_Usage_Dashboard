@@ -136,7 +136,41 @@ Phase status update:
 - `Phase 94` completed the next executable `Direction 04` slice and preserved request binding plus request revision through generated handoff bundles, durable archives, and the generated archive index
 - `Phase 95` completed the next executable `Direction 04` slice and preserved evidence source plus integrity summary through generated handoff bundles, durable archives, and the generated archive index
 - `Phase 96` completed the next executable `Direction 04` slice and preserved fulfillment receipt metadata inside fulfilled request manifests, request README output, and the generated request index
-- `2026-04-23`: additional strategic directions are now tracked for adaptive theming plus dark mode, toolbar product benchmark plus discoverability, and staged internationalization plus localization
+- `Phase 97` completed a documentation-only slice and added strategic roadmap directions for adaptive theming, toolbar benchmark plus discoverability, and staged internationalization
+- `Phase 98` completed the first executable `Direction 05` slice and shipped shared theme-mode persistence plus the first dark-token foundation across the side panel and popup
+- `Phase 99` completed the next executable `Direction 05` slice and shipped a repeatable cross-surface theme review baseline for explicit light/dark override plus system-follow behavior
+- `Phase 100` completed the next executable `Direction 05` slice and shipped a repeatable dark-surface review baseline for warning, error, progress, and supporting-surface states
+- `Phase 101` completed the next executable `Direction 05` slice and shipped the first preset accent system with `Default Blue`, `Meadow`, and `Sunset`, plus a repeatable preset-theme review baseline across settings, dashboard, and popup
+- `Phase 102` completed the next executable `Direction 05` slice and aligned the audit hub to the same persisted theme runtime, plus a repeatable review baseline for initial hydration and live theme updates from the embedded Settings frame
+- `Phase 103` completed the next executable `Direction 05` slice and shipped the first validated `Custom Seed` input with preview plus reset actions, plus a repeatable cross-surface review baseline for custom-seed propagation
+- `Phase 104` completed the next executable `Direction 05` slice and shipped a repeatable popup-local plus audit-local custom-seed review baseline while normalizing themed `text-button` rendering for those local surfaces
+- `Phase 105` completed the next executable `Direction 05` slice and shipped a repeatable popup plus audit non-accent surface-stability review baseline, proving custom-seed changes do not silently perturb neutral, supporting, or warning surfaces there
+- `Phase 106` completed the next executable `Direction 05` slice and shipped a repeatable dashboard plus Settings plus provider-detail non-accent surface-stability review baseline, proving custom-seed changes do not silently perturb the main product surfaces there
+- `Phase 107` completed the next executable `Direction 05` slice and shipped a repeatable compact-width custom-seed review baseline, proving dashboard, Settings, provider detail, and popup remain overflow-free while preserving the same saved theme state
+- `Phase 108` completed the next executable `Direction 05` slice and shipped a repeatable provider-state-specific custom-seed review baseline, proving Claude and Gemini warning or error surfaces stay state-colored while Codex neutral status-chip and progress-fill surfaces still follow the active accent roles
+- `Phase 109` completed the next executable `Direction 05` slice and shipped a repeatable seeded recovered-state review baseline, proving Cursor and Codex session-page surfaces recover from host-access warning treatments back to neutral healthy treatments under the same saved custom seed
+- `Phase 110` completed the next executable `Direction 05` slice and shipped a repeatable preview-interaction recovered-state review baseline, proving the shipped Settings host-access controls can drive that same Cursor and Codex recovery path without losing the saved custom-seed palette
+- `Phase 111` completed the next executable `Direction 05` slice and shipped a repeatable extension-mode recovered-state review baseline, proving the real unpacked MV3 runtime can carry that same Cursor and Codex recovery path with pre-granted host access plus synthetic vendor tabs
+- `Phase 112` completed the next executable `Direction 05` slice and shipped one dedicated theme-recovery operator workspace plus runbook, turning the remaining native-prompt or real-session gap into an evidence-collection task instead of a tooling gap
+- `Phase 113` completed the next executable `Direction 05` slice and shipped direct theme-recovery downloads plus one durable seeded archive workflow and generated archive index, turning repo-backed recovery evidence from ad-hoc `tmp/` files into one truthful baseline archive
+- `Phase 114` completed the next executable `Direction 05` slice and shipped one repo-backed theme-recovery review-request workflow plus generated request index, turning the first real operator pass into a durable pending request instead of only a manual note
+- `Phase 115` completed the next executable `Direction 05` slice and shipped one repo-backed theme-recovery request-completion workflow plus archive traceability, turning future real operator exports into archive-linked fulfilled receipts instead of detached manual archives
+- `Phase 116` completed the next executable `Direction 05` slice and shipped request-bound theme-recovery exports plus mismatch rejection, turning future real operator exports into request-identified artifacts instead of interchangeable ad-hoc files
+- `Phase 117` completed the next executable `Direction 05` slice and shipped one no-mutation theme-recovery preflight workflow, turning future real operator exports into precheckable candidates before any archive-linked completion happens
+- `Phase 118` completed the first executable `Direction 06` slice and shipped one toolbar benchmark matrix plus one compact popup `Start here / Next step` guidance card, turning popup onboarding into a productized surface instead of only an implied quick-glance shell
+- `Phase 119` completed the next executable `Direction 06` slice and shipped one truthful popup triage hierarchy plus one explicit featured empty-state, turning the featured-provider area from one fixed shell into a real stateful toolbar story
+- `Phase 120` completed the next executable `Direction 06` slice and shipped one credential-missing popup onboarding branch, turning credential-backed setup states into explicit Settings handoffs instead of generic blocked-provider triage
+- `Phase 121` completed the next executable `Direction 06` slice and shipped one compact popup setup-coverage summary, turning visible-provider readiness, access gaps, credential gaps, and policy-only coverage into one scannable onboarding layer
+- `Phase 122` completed the next executable `Direction 06` slice and shipped one tighter popup setup-summary plus one repeatable width-range review, turning the new onboarding stack into a compact surface that is verified at realistic popup widths
+- `Phase 123` completed the next executable `Direction 06` slice and shipped one explicit popup setup-stage hierarchy plus one repeatable width-range review for first-run setup states, turning setup coverage from a pure count grid into a clearer onboarding status layer
+- `Phase 124` completed the next executable `Direction 06` slice and trimmed popup top-stack repetition, turning snapshot status into a freshness-only layer while removing the empty snapshot card from no-provider states
+- `Phase 125` completed the next executable `Direction 06` slice and turned popup quick actions into a clearly secondary layer whenever guidance is present, removing duplicated primary CTAs while keeping broader navigation available
+- `Phase 126` completed the next executable `Direction 06` slice and turned popup header copy plus top-summary labels into a popup-specific setup story, removing the remaining dashboard-style summary language from first-run toolbar states
+- `Phase 127` completed the next executable `Direction 06` slice and turned popup featured-provider badges plus supporting copy into popup-specific story layers, keeping lower provider cards aligned with the same setup and review vocabulary already established by the toolbar header and setup stack
+- `Phase 128` completed the next executable `Direction 06` slice and turned popup featured-provider CTAs into stateful routes, so setup blockers, contract-only cards, review states, and healthy states no longer all claim the same generic detail path
+- `Phase 129` completed the next executable `Direction 06` slice and turned popup featured-provider cards into a lower-density popup contract, cutting chip count and replacing longer healthy/contract-only contract prose with shorter availability summaries
+- `Phase 130` completed the next executable `Direction 06` slice and turned the last static popup contract footer into one lighter `Surface roles` note, so the lower popup explainer now changes honestly between setup ownership, contract review ownership, provider review ownership, and quick-glance context
+- `Phase 131` completed one build-and-workflow hardening slice and stabilized extension build output names for unpacked Chrome use, while also formalizing the `commit / push / rebuild` closeout rule and the RDP Chrome unpacked-extension rule in the guardrails
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
 - the split `Phase 41` release gate cleared the old runtime-parity ambiguity and re-proved the live `Codex` plus `Cursor` personal session-page paths in real Chrome
 - `2026-04-23`: `Branch B` was selected for the current RC, so JetBrains is now a retained repo path rather than part of the active release promise
@@ -208,8 +242,8 @@ Security rule for this track:
 - create a Material Design 3 token foundation for the side panel
 - decide how tokens map into React components
 - define provider card, detail page, and settings page in Material component terms
-- keep light mode as the first shipped theme
-- add dark mode only after the base theme is stable
+- keep light mode as the safe default theme
+- preserve dark-mode and preset-theme QA before adding any seed-color personalization
 
 ### 3.3 Extension TODO
 

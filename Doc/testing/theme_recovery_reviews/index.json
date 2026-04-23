@@ -1,0 +1,91 @@
+{
+  "generatedAt": "2026-04-23T11:51:50.199Z",
+  "archiveRoot": "Doc/testing/theme_recovery_reviews",
+  "recordCount": 1,
+  "seededRecordCount": 1,
+  "operatorRecordCount": 0,
+  "records": [
+    {
+      "archiveId": "2026-04-23-theme-recovery-seeded-archive-baseline",
+      "archivedAt": "2026-04-23T11:51:50.081Z",
+      "seeded": true,
+      "sourceReviewExport": "tmp/phase113-theme-recovery-archive-workflow-review/downloads/theme-recovery-export-2026-04-23-light-needs-access-custom.json",
+      "sourceRequest": null,
+      "review": {
+        "generatedAt": "2026-04-23T11:51:48.414Z",
+        "requestContext": null,
+        "themeMode": "light",
+        "themePreset": "custom",
+        "themeResolved": "light",
+        "themeCustomSeedHex": "#4F46E5",
+        "popupSnapshotLabel": "Mixed state",
+        "popupSnapshotTone": "warning",
+        "popupSnapshotHeadline": "Synced 1m ago",
+        "popupSnapshotDetail": "Visible providers still need review. All 2 visible providers share the same cached snapshot window.",
+        "computedActionBadge": {
+          "text": "2",
+          "title": "AI Usage Dashboard: 2 visible providers need attention"
+        },
+        "scopeIsolationLabel": "Cursor + Codex isolated",
+        "scopeIsolationDetail": "Only the target session-page providers are visible, so popup alignment and action-badge recovery can be interpreted directly.",
+        "missingTargetProviderIds": [],
+        "extraVisibleProviderLabels": [],
+        "overallStage": "needs_access",
+        "overallLabel": "Needs access",
+        "overallTone": "warning",
+        "overallDetail": "At least one target provider still needs host access before this recovery pass can be considered complete.",
+        "targetProviders": [
+          {
+            "providerId": "cursor",
+            "providerLabel": "Cursor",
+            "visible": true,
+            "displaySyncStatus": "warning",
+            "permissionStatus": "missing",
+            "currentSourceLabel": "Session page",
+            "currentSourceStateKind": "host_access_missing",
+            "currentSourceStateLabel": "Host access missing",
+            "currentSourceStateDetail": "Host access missing for the personal usage page.",
+            "currentSourceStateTone": "warning",
+            "lastSyncLabel": "Synced 1m ago",
+            "recoveryLabel": "Needs access",
+            "recoveryTone": "warning",
+            "recoveryDetail": "Grant the required host access in Settings or through the native prompt before treating this provider as recovered.",
+            "hostAccessLabel": "Missing",
+            "isRecovered": false
+          },
+          {
+            "providerId": "codex",
+            "providerLabel": "Codex",
+            "visible": true,
+            "displaySyncStatus": "warning",
+            "permissionStatus": "missing",
+            "currentSourceLabel": "Session page",
+            "currentSourceStateKind": "host_access_missing",
+            "currentSourceStateLabel": "Host access missing",
+            "currentSourceStateDetail": "Host access missing for the personal usage page.",
+            "currentSourceStateTone": "warning",
+            "lastSyncLabel": "Synced 1m ago",
+            "recoveryLabel": "Needs access",
+            "recoveryTone": "warning",
+            "recoveryDetail": "Grant the required host access in Settings or through the native prompt before treating this provider as recovered.",
+            "hostAccessLabel": "Missing",
+            "isRecovered": false
+          }
+        ],
+        "liveActionBadge": null
+      },
+      "summary": {
+        "recoveredProviderCount": 0,
+        "needsAccessProviderCount": 2,
+        "syncIssueProviderCount": 0,
+        "targetProviderCount": 2,
+        "overallStage": "needs_access",
+        "overallLabel": "Needs access",
+        "scopeIsolationLabel": "Cursor + Codex isolated",
+        "popupSnapshotLabel": "Mixed state"
+      },
+      "readmePath": "Doc/testing/theme_recovery_reviews/2026-04-23-theme-recovery-seeded-archive-baseline/README.md",
+      "manifestPath": "Doc/testing/theme_recovery_reviews/2026-04-23-theme-recovery-seeded-archive-baseline/review-archive.json"
+    }
+  ]
+}

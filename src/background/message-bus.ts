@@ -95,7 +95,21 @@ export async function handleAppMessage(
       }));
       await ensurePeriodicSyncAlarm(state.settings);
 
-      return { ok: true, state };
+      return {
+        ok: true,
+        state,
+        notice:
+          typeof message.settings.themeMode === "string" ||
+          typeof message.settings.themePreset === "string" ||
+          "themeCustomSeedHex" in message.settings
+            ? {
+                tone: "success",
+                title: "Theme preferences updated",
+                message:
+                  "The shared theme preferences now apply across the side panel, popup, and audit hub.",
+              }
+            : undefined,
+      };
     }
 
     case "app:set-provider-enabled": {

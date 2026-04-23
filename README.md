@@ -40,8 +40,9 @@ Security posture for this track:
 
 Next execution queue:
 
-1. continue [Direction 04 - Material, Motion, And Responsive Hardening](./Doc/Roadmap/04_Direction_Material_Motion_And_Responsive_Hardening.md)
-2. continue [Direction 03 - Toolbar Popup And Badge Entry](./Doc/Roadmap/03_Direction_Toolbar_Popup_And_Badge_Entry.md) only for remaining popup-specific QA and width-range hardening
+1. continue [Direction 06 - Toolbar Product Benchmark And Discoverability](./Doc/Roadmap/06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md)
+2. continue [Direction 05 - Adaptive Theming And Color Modes](./Doc/Roadmap/05_Direction_Adaptive_Theming_And_Color_Modes.md) for remaining operator evidence and recovery verification
+3. continue [Direction 04 - Material, Motion, And Responsive Hardening](./Doc/Roadmap/04_Direction_Material_Motion_And_Responsive_Hardening.md) for remaining real-browser interaction QA and compact-width verification
 
 ## Source Labels
 
@@ -141,6 +142,36 @@ The Chrome action now opens a compact popup first:
 - the popup includes an `Open dashboard` action that opens the side panel
 - featured popup providers can now deep-link into the matching side-panel detail route
 - the popup now also exposes direct quick actions for dashboard and settings
+- the popup now also exposes one compact `Start here / Next step` guidance card so `no providers`, `missing access`, `blocked provider`, and `policy-only` states point at the right follow-up surface immediately
+- the popup featured-provider area now switches honestly between `Needs attention`, `All clear`, `Current contract`, and `Nothing to triage yet` instead of labeling every state as attention
+- the popup now also routes `credential missing` setup states back to Settings directly instead of treating them as generic provider-detail triage
+- the popup now also exposes one compact `Setup coverage` summary so visible providers are split into `Live ready`, `Host access`, `Credentials`, and `Policy-only` counts before the user drills into one next step
+- the popup setup-coverage summary now also carries one explicit stage label:
+  - `Start setup`
+  - `Needs setup`
+  - `Needs review`
+  - `Contract-only`
+  - `Ready`
+- the popup now hides the empty snapshot-status card when no provider is visible, and when snapshot status is shown it stays focused on freshness instead of repeating setup or action guidance
+- the popup actions card now also becomes secondary whenever a guidance card is present, so the primary next step is not duplicated in the lower action row
+- the popup header and top summary are now also popup-specific:
+  - the header supporting line changes by state instead of staying generic
+  - the top summary now reads `Visible / Live ready / Setup blockers / Policy-only` instead of reusing the dashboard-flavored summary labels
+- the popup featured-provider cards now also use popup-specific status labels plus a state-first lead line, so setup, review, contract-only, and healthy cards stay aligned with the toolbar story before falling back to detailed contract context
+- the popup featured-provider cards now also use stateful CTAs:
+  - setup blockers route to `Settings`
+  - contract-only cards route to `Dashboard`
+  - review states route to `Provider detail`
+  - healthy cards keep the lighter `Open detail` path
+- the popup featured-provider cards now also run on a lower-density contract:
+  - chips are reduced to `current contract + freshness`
+  - healthy and contract-only cards now use a shorter availability-summary second line instead of repeating the longer `Current shipped contract ...` prose
+- the popup footer note now also uses one stateful `Surface roles` treatment:
+  - `Settings owns setup`
+  - `Dashboard owns contract review`
+  - `Provider detail owns review`
+  - `Popup stays quick glance`
+- the repo now also ships one repeatable `360px` plus `420px` popup width review for no-visible, mixed-setup, policy-only, and healthy setup stages
 - the badge shows the number of visible providers currently needing attention
 - the side panel remains the canonical surface for settings, source diagnostics, and provider detail
 
@@ -194,6 +225,34 @@ The Settings screen now starts with a compact overview and section-jump area:
 - request-bound handoff bundles and durable archives now also preserve request binding plus request revision, so repo-backed review history keeps the same request identity through bundle output, archive manifests, archive README files, and the generated archive index
 - generated handoff bundles and durable archives now also preserve evidence source plus integrity summary, so repo-backed review history no longer reduces completion provenance to one path string alone
 - fulfilled request records now also preserve a concrete completion receipt, including completion review-session metadata, request revision, evidence provenance, and export digest, so request-side audit checks do not always require archive drill-down
+
+## Theme Modes
+
+The side panel, popup, and audit hub now share one persisted theme preference:
+
+- shipped theme modes are `System`, `Light`, and `Dark`
+- shipped accent presets are `Default Blue`, `Meadow`, and `Sunset`
+- shipped custom accent mode is one validated `Custom Seed`
+- Settings now exposes both `Theme mode` and `Accent preset`
+- Settings now also exposes one validated `#RRGGBB` custom-seed input with preview plus reset-to-default actions
+- `System` follows `prefers-color-scheme` and resolves at runtime across the side panel, popup, and audit hub
+- the repo now also ships a repeatable theme review baseline that verifies `Light`, `Dark`, and `System` behavior across settings, dashboard, and popup, including explicit-mode override of the browser theme
+- the repo now also ships a repeatable dark-surface review baseline for warning, error, progress, and supporting surfaces across dashboard, settings, and provider detail
+- the repo now also ships a repeatable preset-theme review baseline that verifies the shipped accent presets propagate coherently across settings, dashboard, and popup in both light and dark modes
+- the repo now also ships a repeatable audit-hub theme-alignment review baseline that verifies initial theme hydration plus live theme updates from the embedded Settings frame
+- the repo now also ships a repeatable custom-seed review baseline that verifies one saved `#RRGGBB` seed propagates coherently across settings, dashboard, popup, and audit hub in both light and dark modes
+- the repo now also ships a repeatable custom-seed local-surface review baseline that verifies popup-local labels plus action buttons and audit-hub-local labels plus hero-chip surfaces keep following the same saved seed in both light and dark modes
+- the repo now also ships a repeatable custom-seed surface-stability review baseline that proves popup and audit-hub neutral, supporting, and warning surfaces stay stable while only the accent roles change
+- the repo now also ships a repeatable custom-seed main-surface stability review baseline that proves dashboard, Settings, and provider-detail neutral, supporting, and warning surfaces stay stable while only the accent roles change
+- the repo now also ships a repeatable compact-width custom-seed review baseline that verifies dashboard, Settings, provider detail, and popup stay overflow-free at `360px` and `420px` while preserving the same saved seed state
+- the repo now also ships a repeatable provider-state-specific custom-seed review baseline that proves Claude and Gemini warning or error surfaces stay state-colored while Codex neutral status-chip and progress-fill surfaces keep following the active accent roles
+- the repo now also ships a repeatable seeded recovered-state review baseline that proves Cursor and Codex session-page surfaces move from host-access-missing warning treatments back to neutral healthy treatments under the same saved custom seed
+- the repo now also ships a repeatable preview-interaction recovered-state review baseline that uses Settings host-access controls in browser preview mode to move Cursor and Codex from `Needs access` back to `Healthy` while keeping the same saved custom-seed palette across settings, dashboard, popup, and provider detail
+- the repo now also ships a repeatable extension-mode recovered-state review baseline that uses the real unpacked MV3 runtime plus pre-granted optional host access and synthetic vendor tabs to move Cursor and Codex from `Needs access` back to `Healthy` while keeping the same saved custom-seed palette across settings, dashboard, popup, provider detail, and action badge
+- the repo now also ships one dedicated `#debug-theme-recovery-review` operator workspace plus runbook so native-prompt or real-session follow-up can use one fixed route, one fixed summary, and one fixed set of quick links without pretending a human pass already happened
+- the repo now also ships direct summary and JSON downloads from that theme-recovery workspace, plus one repo-backed `theme-recovery:archive` flow with a clearly labeled seeded baseline under `Doc/testing/theme_recovery_reviews/` and a generated archive index at [Theme_Recovery_Review_Archive.md](./Doc/testing/Theme_Recovery_Review_Archive.md)
+- the repo now also ships one repo-backed `theme-recovery:create-review-request` plus `theme-recovery:complete-review-request` lifecycle and a generated request index at [Theme_Recovery_Review_Requests.md](./Doc/testing/Theme_Recovery_Review_Requests.md), and those request packages now preserve one request-bound workspace route so exported summary and JSON artifacts carry the same request identity instead of remaining fungible ad-hoc files
+- arbitrary per-token color editing, dual light-dark seed personalization, and real fulfilled operator or native-prompt recovery archives remain future work
 
 Hybrid-source preference behavior:
 
@@ -299,6 +358,29 @@ npm run interaction-audit:refresh-archive-index
 ```
 
 The archive command writes a durable review record under `Doc/testing/operator_reviews/` and refreshes the generated archive index automatically. `interaction-audit:refresh-archive-index` is available when you need to rebuild the index and machine-readable catalog after manual archive changes. Request-linked archives now preserve both the higher-level `sourceRequest` link and the request-bound export context that was actually fulfilled, including `Request binding` plus `Request revision`, inside archive manifests, archive README output, and the generated archive index. Archives now also preserve evidence source plus integrity summary, so completion provenance stays truthful even when the archive is reviewed later without reopening the original request package. The current archive index lives in [Interaction_Audit_Review_Archive.md](./Doc/testing/Interaction_Audit_Review_Archive.md).
+
+Theme recovery review archive:
+
+```bash
+npm run phase112:review
+npm run phase113:review
+npm run theme-recovery:archive -- --input tmp/theme-recovery-review-export.json
+npm run theme-recovery:refresh-archive-index
+```
+
+The theme-recovery workspace at `#debug-theme-recovery-review` now supports direct summary and JSON downloads with stable filenames derived from the current review stage. The archive command writes a durable theme-recovery record under `Doc/testing/theme_recovery_reviews/` and refreshes the generated archive index automatically. The current repo-backed baseline is a seeded internal archive at `Doc/testing/theme_recovery_reviews/2026-04-23-theme-recovery-seeded-archive-baseline/`, and it is intentionally truthful about unresolved access state instead of pretending a completed human recovery pass. The current archive index lives in [Theme_Recovery_Review_Archive.md](./Doc/testing/Theme_Recovery_Review_Archive.md).
+
+Theme recovery review request:
+
+```bash
+npm run theme-recovery:create-review-request -- --request-id 2026-04-23-first-real-theme-recovery-review-request
+npm run theme-recovery:preflight-review-request -- --request-id 2026-04-23-first-real-theme-recovery-review-request --input tmp/theme-recovery-review-export.json
+npm run theme-recovery:complete-review-request -- --request-id 2026-04-23-first-real-theme-recovery-review-request --input tmp/theme-recovery-review-export.json
+npm run theme-recovery:refresh-review-request-index
+```
+
+The create command writes a pending request package under `Doc/testing/theme_recovery_review_requests/`. That package preserves the workspace route, the expected target providers, the expected custom-seed theme state, and one copied seeded reference export from the durable baseline archive. The preflight command is the no-mutation gate for a future real operator export: it validates request binding, bound workspace route, target providers, preset, and seed without touching request or archive records. The complete command is the truthful fulfillment path for that same package: it writes one non-seeded durable archive, links that archive back into the request receipt, and refreshes both generated indexes automatically. The current generated request index lives in [Theme_Recovery_Review_Requests.md](./Doc/testing/Theme_Recovery_Review_Requests.md), and its current truthful state is still `1` pending request plus `0` fulfilled requests because no real operator theme-recovery export has been archived yet.
+When the workspace is opened through that request package's bound route, the exported summary and JSON now also preserve `requestId + requestCreatedAt`, and the downloaded filenames carry the bound request id as a suffix. Preflight and completion both reject one export whose bound request identity does not match the target pending request.
 
 Pending operator review request:
 

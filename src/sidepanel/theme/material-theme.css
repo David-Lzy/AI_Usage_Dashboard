@@ -675,10 +675,13 @@ summary:focus-visible {
   justify-content: center;
   min-height: 36px;
   padding: 0 12px;
+  appearance: none;
+  -webkit-appearance: none;
   border: 1px solid transparent;
   border-radius: var(--md-sys-shape-corner-full);
   background: transparent;
   color: var(--md-sys-color-primary);
+  text-decoration: none;
   font-family: var(--md-sys-typescale-label-large-font);
   font-size: var(--md-sys-typescale-label-large-size);
   font-weight: var(--md-sys-typescale-label-large-weight);
@@ -692,6 +695,11 @@ summary:focus-visible {
     box-shadow var(--app-motion-duration-fast) var(--app-motion-easing-standard),
     border-color var(--app-motion-duration-fast)
       var(--app-motion-easing-standard);
+}
+
+a.text-button:link,
+a.text-button:visited {
+  color: var(--md-sys-color-primary);
 }
 
 .text-button:disabled {
@@ -1215,6 +1223,63 @@ select.form-field__control {
   cursor: pointer;
 }
 
+.theme-customization-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-3);
+  margin-top: var(--app-space-4);
+  padding: var(--app-space-4);
+  border: 1px solid var(--app-supporting-surface-border);
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--app-supporting-surface-background);
+}
+
+.theme-customization-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-3);
+}
+
+.theme-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--app-space-3);
+}
+
+.theme-preview-swatch {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-2);
+  min-width: 0;
+}
+
+.theme-preview-swatch__color {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 0 var(--app-space-3);
+  border: 1px solid color-mix(
+    in srgb,
+    var(--md-sys-color-outline-variant) 86%,
+    white 14%
+  );
+  border-radius: var(--md-sys-shape-corner-large);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  line-height: var(--md-sys-typescale-label-large-line-height);
+}
+
+.theme-preview-swatch__label {
+  margin: 0;
+  color: var(--md-sys-color-on-surface);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  line-height: var(--md-sys-typescale-label-large-line-height);
+}
+
 .switch-row {
   display: flex;
   align-items: center;
@@ -1593,6 +1658,15 @@ select.form-field__control {
   gap: var(--app-space-2);
 }
 
+.popup-setup-coverage .summary-strip {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--app-space-2);
+}
+
+.popup-setup-coverage .summary-pill {
+  padding: var(--app-space-3);
+}
+
 .popup-provider-list {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -1824,6 +1898,31 @@ select.form-field__control {
   color: var(--app-toned-on);
 }
 
+.theme-recovery-shell,
+.theme-recovery-provider-list,
+.theme-recovery-link-groups,
+.theme-recovery-link-group,
+.theme-recovery-export-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-3);
+}
+
+.theme-recovery-checklist {
+  display: grid;
+  gap: var(--app-space-2);
+}
+
+.theme-recovery-copy-actions {
+  flex-wrap: wrap;
+}
+
+.theme-recovery-export-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--app-space-3);
+}
+
 @media (max-width: 720px) {
   .interaction-audit-grid {
     grid-template-columns: minmax(0, 1fr);
@@ -1864,8 +1963,10 @@ select.form-field__control {
   }
 
   .settings-grid,
+  .theme-preview-grid,
   .detail-grid,
-  .source-card__summary-grid {
+  .source-card__summary-grid,
+  .theme-recovery-export-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1911,6 +2012,11 @@ select.form-field__control {
 
   .summary-strip {
     grid-template-columns: 1fr;
+  }
+
+  .theme-recovery-copy-actions .text-button {
+    width: 100%;
+    justify-content: center;
   }
 
   .popup-shell {

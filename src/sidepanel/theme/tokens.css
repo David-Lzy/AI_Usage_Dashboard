@@ -268,6 +268,408 @@
   --app-space-6: 24px;
 }
 
+:root[data-theme-resolved="dark"] {
+  color-scheme: dark;
+
+  --md-sys-color-primary: #adc7ff;
+  --md-sys-color-on-primary: #002e69;
+  --md-sys-color-primary-container: #004494;
+  --md-sys-color-on-primary-container: #d7e3ff;
+
+  --md-sys-color-secondary: #bcc7dc;
+  --md-sys-color-on-secondary: #263141;
+  --md-sys-color-secondary-container: #3c4758;
+  --md-sys-color-on-secondary-container: #d7e3f8;
+
+  --md-sys-color-tertiary: #d6bee4;
+  --md-sys-color-on-tertiary: #3b2948;
+  --md-sys-color-tertiary-container: #523f5f;
+  --md-sys-color-on-tertiary-container: #f3daff;
+
+  --md-sys-color-surface: #121316;
+  --md-sys-color-surface-dim: #121316;
+  --md-sys-color-surface-bright: #38393d;
+  --md-sys-color-surface-container-lowest: #0d0e11;
+  --md-sys-color-surface-container-low: #1a1c20;
+  --md-sys-color-surface-container: #1f2125;
+  --md-sys-color-surface-container-high: #2a2d31;
+  --md-sys-color-surface-container-highest: #35383c;
+  --md-sys-color-on-surface: #e2e2e9;
+  --md-sys-color-on-surface-variant: #c4c6cf;
+
+  --md-sys-color-outline: #8e9099;
+  --md-sys-color-outline-variant: #44474f;
+  --md-sys-color-shadow: rgba(0, 0, 0, 0.38);
+
+  --app-color-success: #7ad88e;
+  --app-color-success-container: #163822;
+  --app-color-warning: #ffb77a;
+  --app-color-warning-container: #4a2800;
+  --app-color-error: #ffb4ab;
+  --app-color-error-container: #601410;
+  --app-surface-success-background: color-mix(
+    in srgb,
+    var(--app-color-success-container) 82%,
+    var(--md-sys-color-surface) 18%
+  );
+  --app-surface-success-border: color-mix(
+    in srgb,
+    var(--app-color-success) 30%,
+    var(--md-sys-color-outline-variant) 70%
+  );
+  --app-surface-success-on: color-mix(
+    in srgb,
+    var(--app-color-success) 88%,
+    white 12%
+  );
+  --app-surface-success-on-muted: color-mix(
+    in srgb,
+    var(--app-color-success) 72%,
+    white 28%
+  );
+  --app-surface-warning-background: color-mix(
+    in srgb,
+    var(--app-color-warning-container) 84%,
+    var(--md-sys-color-surface) 16%
+  );
+  --app-surface-warning-border: color-mix(
+    in srgb,
+    var(--app-color-warning) 32%,
+    var(--md-sys-color-outline-variant) 68%
+  );
+  --app-surface-warning-on: color-mix(
+    in srgb,
+    var(--app-color-warning) 90%,
+    white 10%
+  );
+  --app-surface-warning-on-muted: color-mix(
+    in srgb,
+    var(--app-color-warning) 74%,
+    white 26%
+  );
+  --app-surface-error-background: color-mix(
+    in srgb,
+    var(--app-color-error-container) 86%,
+    var(--md-sys-color-surface) 14%
+  );
+  --app-surface-error-border: color-mix(
+    in srgb,
+    var(--app-color-error) 34%,
+    var(--md-sys-color-outline-variant) 66%
+  );
+  --app-surface-error-on: color-mix(
+    in srgb,
+    var(--app-color-error) 90%,
+    white 10%
+  );
+  --app-surface-error-on-muted: color-mix(
+    in srgb,
+    var(--app-color-error) 76%,
+    white 24%
+  );
+
+  --app-chip-neutral-background: var(--md-sys-color-surface-container-high);
+  --app-chip-neutral-border: color-mix(
+    in srgb,
+    var(--md-sys-color-outline-variant) 88%,
+    black 12%
+  );
+  --app-chip-neutral-on: var(--md-sys-color-on-surface-variant);
+
+  --app-progress-track-neutral: var(--md-sys-color-surface-container-high);
+  --app-progress-track-border: color-mix(
+    in srgb,
+    var(--md-sys-color-outline-variant) 82%,
+    black 18%
+  );
+  --app-progress-indeterminate-stripe: rgba(255, 255, 255, 0.24);
+
+  --app-supporting-surface-background: color-mix(
+    in srgb,
+    var(--md-sys-color-surface-container-low) 92%,
+    black 8%
+  );
+  --app-supporting-surface-border: color-mix(
+    in srgb,
+    var(--md-sys-color-outline-variant) 84%,
+    black 16%
+  );
+  --app-supporting-surface-strong-background: color-mix(
+    in srgb,
+    var(--md-sys-color-surface-container-high) 88%,
+    black 12%
+  );
+  --app-supporting-surface-strong-border: color-mix(
+    in srgb,
+    var(--md-sys-color-outline-variant) 92%,
+    black 8%
+  );
+
+  --app-elevation-2: 0 10px 26px rgba(0, 0, 0, 0.28);
+
+  --app-state-layer-primary-hover: color-mix(
+    in srgb,
+    var(--md-sys-color-primary-container) 76%,
+    black 24%
+  );
+  --app-state-layer-primary-press: color-mix(
+    in srgb,
+    var(--md-sys-color-primary-container) 86%,
+    black 14%
+  );
+  --app-state-layer-neutral-hover: color-mix(
+    in srgb,
+    var(--md-sys-color-surface-container) 82%,
+    black 18%
+  );
+  --app-state-layer-neutral-press: color-mix(
+    in srgb,
+    var(--md-sys-color-surface-container-high) 88%,
+    black 12%
+  );
+  --app-focus-ring-color: color-mix(
+    in srgb,
+    var(--md-sys-color-primary) 34%,
+    black 66%
+  );
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme-resolved]) {
+    color-scheme: dark;
+
+    --md-sys-color-primary: #adc7ff;
+    --md-sys-color-on-primary: #002e69;
+    --md-sys-color-primary-container: #004494;
+    --md-sys-color-on-primary-container: #d7e3ff;
+
+    --md-sys-color-secondary: #bcc7dc;
+    --md-sys-color-on-secondary: #263141;
+    --md-sys-color-secondary-container: #3c4758;
+    --md-sys-color-on-secondary-container: #d7e3f8;
+
+    --md-sys-color-tertiary: #d6bee4;
+    --md-sys-color-on-tertiary: #3b2948;
+    --md-sys-color-tertiary-container: #523f5f;
+    --md-sys-color-on-tertiary-container: #f3daff;
+
+    --md-sys-color-surface: #121316;
+    --md-sys-color-surface-dim: #121316;
+    --md-sys-color-surface-bright: #38393d;
+    --md-sys-color-surface-container-lowest: #0d0e11;
+    --md-sys-color-surface-container-low: #1a1c20;
+    --md-sys-color-surface-container: #1f2125;
+    --md-sys-color-surface-container-high: #2a2d31;
+    --md-sys-color-surface-container-highest: #35383c;
+    --md-sys-color-on-surface: #e2e2e9;
+    --md-sys-color-on-surface-variant: #c4c6cf;
+
+    --md-sys-color-outline: #8e9099;
+    --md-sys-color-outline-variant: #44474f;
+    --md-sys-color-shadow: rgba(0, 0, 0, 0.38);
+
+    --app-color-success: #7ad88e;
+    --app-color-success-container: #163822;
+    --app-color-warning: #ffb77a;
+    --app-color-warning-container: #4a2800;
+    --app-color-error: #ffb4ab;
+    --app-color-error-container: #601410;
+    --app-surface-success-background: color-mix(
+      in srgb,
+      var(--app-color-success-container) 82%,
+      var(--md-sys-color-surface) 18%
+    );
+    --app-surface-success-border: color-mix(
+      in srgb,
+      var(--app-color-success) 30%,
+      var(--md-sys-color-outline-variant) 70%
+    );
+    --app-surface-success-on: color-mix(
+      in srgb,
+      var(--app-color-success) 88%,
+      white 12%
+    );
+    --app-surface-success-on-muted: color-mix(
+      in srgb,
+      var(--app-color-success) 72%,
+      white 28%
+    );
+    --app-surface-warning-background: color-mix(
+      in srgb,
+      var(--app-color-warning-container) 84%,
+      var(--md-sys-color-surface) 16%
+    );
+    --app-surface-warning-border: color-mix(
+      in srgb,
+      var(--app-color-warning) 32%,
+      var(--md-sys-color-outline-variant) 68%
+    );
+    --app-surface-warning-on: color-mix(
+      in srgb,
+      var(--app-color-warning) 90%,
+      white 10%
+    );
+    --app-surface-warning-on-muted: color-mix(
+      in srgb,
+      var(--app-color-warning) 74%,
+      white 26%
+    );
+    --app-surface-error-background: color-mix(
+      in srgb,
+      var(--app-color-error-container) 86%,
+      var(--md-sys-color-surface) 14%
+    );
+    --app-surface-error-border: color-mix(
+      in srgb,
+      var(--app-color-error) 34%,
+      var(--md-sys-color-outline-variant) 66%
+    );
+    --app-surface-error-on: color-mix(
+      in srgb,
+      var(--app-color-error) 90%,
+      white 10%
+    );
+    --app-surface-error-on-muted: color-mix(
+      in srgb,
+      var(--app-color-error) 76%,
+      white 24%
+    );
+
+    --app-chip-neutral-background: var(--md-sys-color-surface-container-high);
+    --app-chip-neutral-border: color-mix(
+      in srgb,
+      var(--md-sys-color-outline-variant) 88%,
+      black 12%
+    );
+    --app-chip-neutral-on: var(--md-sys-color-on-surface-variant);
+
+    --app-progress-track-neutral: var(--md-sys-color-surface-container-high);
+    --app-progress-track-border: color-mix(
+      in srgb,
+      var(--md-sys-color-outline-variant) 82%,
+      black 18%
+    );
+    --app-progress-indeterminate-stripe: rgba(255, 255, 255, 0.24);
+
+    --app-supporting-surface-background: color-mix(
+      in srgb,
+      var(--md-sys-color-surface-container-low) 92%,
+      black 8%
+    );
+    --app-supporting-surface-border: color-mix(
+      in srgb,
+      var(--md-sys-color-outline-variant) 84%,
+      black 16%
+    );
+    --app-supporting-surface-strong-background: color-mix(
+      in srgb,
+      var(--md-sys-color-surface-container-high) 88%,
+      black 12%
+    );
+    --app-supporting-surface-strong-border: color-mix(
+      in srgb,
+      var(--md-sys-color-outline-variant) 92%,
+      black 8%
+    );
+
+    --app-elevation-2: 0 10px 26px rgba(0, 0, 0, 0.28);
+
+    --app-state-layer-primary-hover: color-mix(
+      in srgb,
+      var(--md-sys-color-primary-container) 76%,
+      black 24%
+    );
+    --app-state-layer-primary-press: color-mix(
+      in srgb,
+      var(--md-sys-color-primary-container) 86%,
+      black 14%
+    );
+    --app-state-layer-neutral-hover: color-mix(
+      in srgb,
+      var(--md-sys-color-surface-container) 82%,
+      black 18%
+    );
+    --app-state-layer-neutral-press: color-mix(
+      in srgb,
+      var(--md-sys-color-surface-container-high) 88%,
+      black 12%
+    );
+    --app-focus-ring-color: color-mix(
+      in srgb,
+      var(--md-sys-color-primary) 34%,
+      black 66%
+    );
+  }
+}
+
+:root[data-theme-preset="meadow"] {
+  --md-sys-color-primary: #2a6a31;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #acf2ab;
+  --md-sys-color-on-primary-container: #06210a;
+
+  --md-sys-color-secondary: #4c6350;
+  --md-sys-color-on-secondary: #ffffff;
+  --md-sys-color-secondary-container: #cfe8d0;
+  --md-sys-color-on-secondary-container: #0f1f12;
+
+  --md-sys-color-tertiary: #39656a;
+  --md-sys-color-on-tertiary: #ffffff;
+  --md-sys-color-tertiary-container: #bcebf0;
+  --md-sys-color-on-tertiary-container: #062024;
+}
+
+:root[data-theme-preset="sunset"] {
+  --md-sys-color-primary: #9a4d00;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #ffdcc1;
+  --md-sys-color-on-primary-container: #311300;
+
+  --md-sys-color-secondary: #77574a;
+  --md-sys-color-on-secondary: #ffffff;
+  --md-sys-color-secondary-container: #ffdccd;
+  --md-sys-color-on-secondary-container: #2c160d;
+
+  --md-sys-color-tertiary: #6d5b91;
+  --md-sys-color-on-tertiary: #ffffff;
+  --md-sys-color-tertiary-container: #ebdcff;
+  --md-sys-color-on-tertiary-container: #26153d;
+}
+
+:root[data-theme-resolved="dark"][data-theme-preset="meadow"] {
+  --md-sys-color-primary: #90d58f;
+  --md-sys-color-on-primary: #0b200d;
+  --md-sys-color-primary-container: #27522c;
+  --md-sys-color-on-primary-container: #acf2ab;
+
+  --md-sys-color-secondary: #b2ccb3;
+  --md-sys-color-on-secondary: #1e3521;
+  --md-sys-color-secondary-container: #364b38;
+  --md-sys-color-on-secondary-container: #cfe8d0;
+
+  --md-sys-color-tertiary: #9fd0d5;
+  --md-sys-color-on-tertiary: #00363c;
+  --md-sys-color-tertiary-container: #204d52;
+  --md-sys-color-on-tertiary-container: #bcebf0;
+}
+
+:root[data-theme-resolved="dark"][data-theme-preset="sunset"] {
+  --md-sys-color-primary: #ffb784;
+  --md-sys-color-on-primary: #532200;
+  --md-sys-color-primary-container: #7a3900;
+  --md-sys-color-on-primary-container: #ffdcc1;
+
+  --md-sys-color-secondary: #e8bfb0;
+  --md-sys-color-on-secondary: #442a20;
+  --md-sys-color-secondary-container: #5d4034;
+  --md-sys-color-on-secondary-container: #ffdccd;
+
+  --md-sys-color-tertiary: #cfbee8;
+  --md-sys-color-on-tertiary: #382a4f;
+  --md-sys-color-tertiary-container: #514268;
+  --md-sys-color-on-tertiary-container: #ebdcff;
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --app-motion-duration-fast: 0ms;

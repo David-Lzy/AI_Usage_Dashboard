@@ -73,7 +73,10 @@ export function ProviderDetailPage({
         onPrimaryAction={() => onRefresh(provider.providerId)}
       />
 
-      <section className="status-card">
+      <section
+        className="status-card"
+        data-theme-stability-surface="provider-detail-sync-status-card"
+      >
         <p className="section-label">Sync Status</p>
         <StatusBadge
           label={
@@ -99,7 +102,10 @@ export function ProviderDetailPage({
         </p>
       </section>
 
-      <section className="status-card">
+      <section
+        className="status-card"
+        data-theme-stability-surface="provider-detail-usage-card"
+      >
         <p className="section-label">Usage</p>
         <div className="detail-grid">
           <div className="detail-field">
@@ -304,12 +310,16 @@ export function ProviderDetailPage({
 
         <div
           className={`detail-note ${fidelityNoteToneClassName}`}
+          data-theme-stability-surface="provider-detail-fidelity-note"
         >
           <p className="detail-note__label">Source fidelity</p>
           <p className="supporting-copy">{provider.currentSourceFidelityDetail}</p>
         </div>
 
-        <div className="detail-note detail-note--neutral">
+        <div
+          className="detail-note detail-note--neutral"
+          data-theme-stability-surface="provider-detail-contract-note"
+        >
           <p className="detail-note__label">Product contract</p>
           <p className="supporting-copy">
             {provider.currentSourceContractDetail}
@@ -333,7 +343,10 @@ export function ProviderDetailPage({
           ) : null}
         </div>
 
-        <div className="detail-note detail-note--neutral">
+        <div
+          className="detail-note detail-note--neutral"
+          data-theme-stability-surface="provider-detail-trust-note"
+        >
           <p className="detail-note__label">Trust boundary</p>
           <p className="supporting-copy">{provider.currentAccessModelDetail}</p>
           <p className="supporting-copy">{provider.credentialPersistenceDetail}</p>

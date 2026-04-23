@@ -903,16 +903,21 @@ export function InteractionAuditPage() {
         }}
       />
 
-      <section className="hero-card">
-        <p className="section-label">Audit Hub</p>
+      <section className="hero-card" data-theme-local-surface="audit-hero-card">
+        <p className="section-label" data-theme-local-surface="audit-hero-label">
+          Audit Hub
+        </p>
         <h2 className="display-headline">Manual interaction review without repeated resizing</h2>
         <p className="body-copy">
           This page embeds the real shipped dashboard, settings, provider-detail,
           and popup surfaces inside fixed-width frames so real-browser review can
           focus on hover, focus, pressed, and compact-width behavior instead of
-          repeatedly reopening routes.
+          repeatedly reopening routes. The audit hub now follows the same shared
+          theme preferences as the shipped side panel and popup.
         </p>
-        <span className="token-chip">Manual QA · Fixed-width frames</span>
+        <span className="token-chip" data-theme-local-surface="audit-hero-chip">
+          Manual QA · Fixed-width frames
+        </span>
       </section>
 
       <section className="status-card">
@@ -949,6 +954,7 @@ export function InteractionAuditPage() {
             href={buildAuditUrl("./index.html#settings")}
             rel="noreferrer"
             target="_blank"
+            data-theme-local-surface="audit-open-settings-link"
           >
             Open settings
           </a>

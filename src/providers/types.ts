@@ -57,6 +57,9 @@ export type SyncTrigger = "manual" | "alarm" | "bootstrap";
 
 export type ProviderPageBindingStatus = "unbound" | "bound" | "stale";
 
+export type ThemeMode = "system" | "light" | "dark";
+export type ThemePreset = "default" | "meadow" | "sunset" | "custom";
+
 export type ProviderPageBinding = {
   mode: "auto" | "bound";
   status: ProviderPageBindingStatus;
@@ -134,6 +137,9 @@ export type ProviderSyncOutcome = {
 export type AppSettings = {
   syncIntervalMinutes: number;
   warningThresholdPercent: number;
+  themeMode: ThemeMode;
+  themePreset: ThemePreset;
+  themeCustomSeedHex: string | null;
 };
 
 export type SummaryItem = {

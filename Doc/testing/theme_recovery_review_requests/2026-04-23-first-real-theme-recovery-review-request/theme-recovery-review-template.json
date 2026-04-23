@@ -1,0 +1,25 @@
+{
+  "workspaceRoute": "http://127.0.0.1:4173/src/sidepanel/index.html#debug-theme-recovery-review",
+  "targetProviderIds": [
+    "cursor",
+    "codex"
+  ],
+  "expectedThemePreset": "custom",
+  "expectedCustomSeedHex": "#4F46E5",
+  "recommendedDownloads": [
+    "summary",
+    "json"
+  ],
+  "workflow": [
+    "Open the theme-recovery workspace and confirm the current theme mode, resolved mode, preset, and custom seed.",
+    "Keep only Cursor and Codex visible before trusting popup alignment or action-badge recovery.",
+    "Capture the degraded state first if host access or a real session is still missing.",
+    "Grant host access through the native prompt or restore the real vendor session, then refresh the workspace and verify the recovery stage.",
+    "Download the summary and JSON export after the operator pass, then archive the exported JSON through the repo command."
+  ],
+  "truthRules": [
+    "Needs access, Needs scope cleanup, and Mixed state are valid outcomes and must not be rewritten into a pass claim.",
+    "The seeded archive is only a baseline reference and does not count as a real operator recovery session.",
+    "A pending review request package is not a completed human review."
+  ]
+}

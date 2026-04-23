@@ -3,16 +3,24 @@ import { useEffect, useState } from "react";
 import type { AppMessage } from "../background/message-bus";
 import type {
   ApiKeyProviderId,
+  AppSettings,
   AppState,
   ProviderId,
   ProviderSourcePreference,
   ProviderSetting,
 } from "../providers/types";
 import { sendAppMessage } from "../shared/app-client";
+import { APP_STATE_STORAGE_KEY } from "../shared/constants";
 import {
   clearPageBinding,
   createPageBindingFromTab,
 } from "../shared/page-bindings";
+import {
+  DEFAULT_THEME_SETTINGS,
+  normalizeThemeSettings,
+  startThemeSettingsSync,
+  type ThemeSettings,
+} from "../shared/theme";
 import {
   getOpenableRouteHint,
   getSessionPagePlan,
@@ -25,6 +33,7 @@ import { InteractionAuditPage } from "./routes/InteractionAuditPage";
 import { JetBrainsFixtureCapturePage } from "./routes/JetBrainsFixtureCapturePage";
 import { ProviderDetailPage } from "./routes/ProviderDetailPage";
 import { SettingsPage } from "./routes/SettingsPage";
+import { ThemeRecoveryReviewPage } from "./routes/ThemeRecoveryReviewPage";
 import {
   buildSidePanelHash,
   parseSidePanelHash,
@@ -41,6 +50,58 @@ type AppToast = {
   title: string;
   message: string;
 };
+
+type SpecialSidePanelRoute =
+  | "debug-capture-codex"
+  | "debug-capture-cursor"
+  | "debug-capture-jetbrains"
+  | "debug-interaction-audit"
+  | "debug-theme-recovery-review";
+
+type StandardAppProps = {
+  locationHash: string;
+};
+
+function getSpecialSidePanelRoute(
+  locationHash: string,
+): SpecialSidePanelRoute | null {
+  switch (locationHash) {
+    case "#debug-capture-codex":
+      return "debug-capture-codex";
+    case "#debug-capture-cursor":
+      return "debug-capture-cursor";
+    case "#debug-capture-jetbrains":
+      return "debug-capture-jetbrains";
+    case "#debug-interaction-audit":
+      return "debug-interaction-audit";
+    case "#debug-theme-recovery-review":
+      return "debug-theme-recovery-review";
+    default:
+      return null;
+  }
+}
+
+function readThemeSettingsFromStoredAppState(value: unknown): ThemeSettings {
+  if (!value || typeof value !== "object" || !("settings" in value)) {
+    return DEFAULT_THEME_SETTINGS;
+  }
+
+  return normalizeThemeSettings(
+    (value as { settings?: Partial<AppSettings> | null }).settings,
+  );
+}
+
+function parseStoredThemeSettings(rawValue: string | null): ThemeSettings {
+  if (!rawValue) {
+    return DEFAULT_THEME_SETTINGS;
+  }
+
+  try {
+    return readThemeSettingsFromStoredAppState(JSON.parse(rawValue) as unknown);
+  } catch {
+    return DEFAULT_THEME_SETTINGS;
+  }
+}
 
 function getProviderLabel(
   providerSettings: ProviderSetting[],
@@ -80,43 +141,115 @@ function sortTabsByPriority(tabs: chrome.tabs.Tab[]): chrome.tabs.Tab[] {
   return [...tabs].sort((left, right) => scoreTab(right) - scoreTab(left));
 }
 
-export function App() {
-  const [locationHash, setLocationHash] = useState(() =>
-    typeof window !== "undefined" ? window.location.hash : "",
-  );
+function SpecialRouteApp({
+  route,
+}: {
+  route: SpecialSidePanelRoute;
+}) {
+  const [themeSettings, setThemeSettings] =
+    useState<ThemeSettings>(DEFAULT_THEME_SETTINGS);
+
+  useEffect(() => {
+    let disposed = false;
+
+    async function hydrateThemeSettings() {
+      const response = await sendAppMessage({ type: "app:read-state" });
+
+      if (disposed || !response.ok) {
+        return;
+      }
+
+      setThemeSettings(normalizeThemeSettings(response.state.settings));
+    }
+
+    void hydrateThemeSettings();
+
+    return () => {
+      disposed = true;
+    };
+  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") {
       return undefined;
     }
 
-    const handleHashChange = () => {
-      setLocationHash(window.location.hash);
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key !== APP_STATE_STORAGE_KEY) {
+        return;
+      }
+
+      setThemeSettings(parseStoredThemeSettings(event.newValue));
     };
 
-    window.addEventListener("hashchange", handleHashChange);
+    window.addEventListener("storage", handleStorage);
+
+    let removeChromeStorageListener = () => {};
+
+    if (
+      typeof chrome !== "undefined" &&
+      typeof chrome.storage?.onChanged?.addListener === "function"
+    ) {
+      const handleChromeStorageChange = (
+        changes: Record<string, chrome.storage.StorageChange>,
+        areaName: string,
+      ) => {
+        if (areaName !== "local" || !(APP_STATE_STORAGE_KEY in changes)) {
+          return;
+        }
+
+        setThemeSettings(
+          readThemeSettingsFromStoredAppState(
+            changes[APP_STATE_STORAGE_KEY]?.newValue,
+          ),
+        );
+      };
+
+      chrome.storage.onChanged.addListener(handleChromeStorageChange);
+      removeChromeStorageListener = () => {
+        chrome.storage.onChanged.removeListener(handleChromeStorageChange);
+      };
+    }
 
     return () => {
-      window.removeEventListener("hashchange", handleHashChange);
+      window.removeEventListener("storage", handleStorage);
+      removeChromeStorageListener();
     };
   }, []);
 
-  if (locationHash === "#debug-capture-codex") {
-    return <CodexFixtureCapturePage />;
-  }
+  useEffect(() => {
+    if (typeof document === "undefined" || typeof window === "undefined") {
+      return undefined;
+    }
 
-  if (locationHash === "#debug-capture-cursor") {
-    return <CursorFixtureCapturePage />;
-  }
+    return startThemeSettingsSync(
+      themeSettings,
+      document.documentElement,
+      window,
+    );
+  }, [
+    themeSettings.themeCustomSeedHex,
+    themeSettings.themeMode,
+    themeSettings.themePreset,
+  ]);
 
-  if (locationHash === "#debug-capture-jetbrains") {
-    return <JetBrainsFixtureCapturePage />;
+  switch (route) {
+    case "debug-capture-codex":
+      return <CodexFixtureCapturePage />;
+    case "debug-capture-cursor":
+      return <CursorFixtureCapturePage />;
+    case "debug-capture-jetbrains":
+      return <JetBrainsFixtureCapturePage />;
+    case "debug-interaction-audit":
+      return <InteractionAuditPage />;
+    case "debug-theme-recovery-review":
+      return <ThemeRecoveryReviewPage />;
+    default:
+      return null;
   }
+}
 
-  if (locationHash === "#debug-interaction-audit") {
-    return <InteractionAuditPage />;
-  }
-
+function StandardApp({ locationHash }: StandardAppProps) {
   const [appState, setAppState] = useState<AppState | null>(null);
   const [toast, setToast] = useState<AppToast | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -127,12 +260,10 @@ export function App() {
     const nextHash = buildSidePanelHash(nextRoute);
 
     if (typeof window === "undefined") {
-      setLocationHash(nextHash);
       return;
     }
 
     if (window.location.hash === nextHash) {
-      setLocationHash(nextHash);
       return;
     }
 
@@ -172,6 +303,22 @@ export function App() {
       disposed = true;
     };
   }, []);
+
+  useEffect(() => {
+    if (typeof document === "undefined" || typeof window === "undefined") {
+      return undefined;
+    }
+
+    return startThemeSettingsSync(
+      normalizeThemeSettings(appState?.settings),
+      document.documentElement,
+      window,
+    );
+  }, [
+    appState?.settings.themeCustomSeedHex,
+    appState?.settings.themeMode,
+    appState?.settings.themePreset,
+  ]);
 
   useEffect(() => {
     if (
@@ -250,10 +397,7 @@ export function App() {
     );
   }
 
-  function handleUpdateSettings(partialSettings: {
-    syncIntervalMinutes?: number;
-    warningThresholdPercent?: number;
-  }) {
+  function handleUpdateSettings(partialSettings: Partial<AppSettings>) {
     void applyMessage({
       type: "app:update-settings",
       settings: partialSettings,
@@ -675,6 +819,24 @@ export function App() {
           onWarningThresholdChange={(percent) =>
             handleUpdateSettings({ warningThresholdPercent: percent })
           }
+          onThemeModeChange={(themeMode) =>
+            handleUpdateSettings({ themeMode })
+          }
+          onThemePresetChange={(themePreset) =>
+            handleUpdateSettings({ themePreset })
+          }
+          onSaveThemeCustomSeed={(themeCustomSeedHex) =>
+            handleUpdateSettings({
+              themePreset: "custom",
+              themeCustomSeedHex,
+            })
+          }
+          onResetThemeCustomSeed={() =>
+            handleUpdateSettings({
+              themePreset: "default",
+              themeCustomSeedHex: null,
+            })
+          }
           onToggleProvider={handleToggleProvider}
           onTogglePermission={handleTogglePermission}
           onSetSourcePreference={handleSetSourcePreference}
@@ -715,4 +877,34 @@ export function App() {
       ) : null}
     </>
   );
+}
+
+export function App() {
+  const [locationHash, setLocationHash] = useState(() =>
+    typeof window !== "undefined" ? window.location.hash : "",
+  );
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+
+    const handleHashChange = () => {
+      setLocationHash(window.location.hash);
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+    };
+  }, []);
+
+  const specialRoute = getSpecialSidePanelRoute(locationHash);
+
+  if (specialRoute) {
+    return <SpecialRouteApp route={specialRoute} />;
+  }
+
+  return <StandardApp locationHash={locationHash} />;
 }

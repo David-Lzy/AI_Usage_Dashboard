@@ -1,4 +1,4 @@
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useEffect, useState } from "react";
 
 import type {
   ApiKeyProviderId,
@@ -7,11 +7,19 @@ import type {
   ProviderSourcePreference,
   ProviderSetting,
   ProviderSnapshot,
+  ThemeMode,
+  ThemePreset,
 } from "../../providers/types";
 import {
   buildProviderSourceDisplay,
   getSourcePreferenceLabel,
 } from "../../shared/provider-sources";
+import {
+  THEME_PRESET_OPTIONS,
+  buildCustomThemePalette,
+  normalizeThemeCustomSeedHex,
+  resolveThemeMode,
+} from "../../shared/theme";
 
 import { PermissionPrompt } from "../components/PermissionPrompt";
 import { SummaryStrip } from "../components/SummaryStrip";
@@ -49,6 +57,10 @@ type SettingsPageProps = {
   onSavePreferences: () => void;
   onSyncIntervalChange: (minutes: number) => void;
   onWarningThresholdChange: (percent: number) => void;
+  onThemeModeChange: (themeMode: ThemeMode) => void;
+  onThemePresetChange: (themePreset: ThemePreset) => void;
+  onSaveThemeCustomSeed: (themeCustomSeedHex: string) => void;
+  onResetThemeCustomSeed: () => void;
   onToggleProvider: (providerId: ProviderId) => void;
   onTogglePermission: (providerId: ProviderId) => void;
   onSetSourcePreference: (
@@ -80,6 +92,10 @@ export function SettingsPage({
   onSavePreferences,
   onSyncIntervalChange,
   onWarningThresholdChange,
+  onThemeModeChange,
+  onThemePresetChange,
+  onSaveThemeCustomSeed,
+  onResetThemeCustomSeed,
   onToggleProvider,
   onTogglePermission,
   onSetSourcePreference,
@@ -132,6 +148,22 @@ export function SettingsPage({
     ) ?? null;
   const [codexAnalyticsApiKeyInput, setCodexAnalyticsApiKeyInput] = useState("");
   const [codexWorkspaceIdInput, setCodexWorkspaceIdInput] = useState("");
+  const [themeCustomSeedDraft, setThemeCustomSeedDraft] = useState(
+    settings.themeCustomSeedHex ?? "",
+  );
+  const normalizedThemeCustomSeedDraft =
+    normalizeThemeCustomSeedHex(themeCustomSeedDraft);
+  const resolvedThemeMode = resolveThemeMode(
+    settings.themeMode,
+    typeof window !== "undefined" ? window : undefined,
+  );
+  const customThemePreviewPalette = normalizedThemeCustomSeedDraft
+    ? buildCustomThemePalette(normalizedThemeCustomSeedDraft, resolvedThemeMode)
+    : null;
+
+  useEffect(() => {
+    setThemeCustomSeedDraft(settings.themeCustomSeedHex ?? "");
+  }, [settings.themeCustomSeedHex]);
 
   if (cursorProvider) {
     credentialProviders.push({
@@ -219,6 +251,22 @@ export function SettingsPage({
     setCodexAnalyticsApiKeyInput("");
     setCodexWorkspaceIdInput("");
     onClearCodexWorkspaceConfig();
+  }
+
+  function handleApplyThemeCustomSeed(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (!normalizedThemeCustomSeedDraft) {
+      return;
+    }
+
+    onSaveThemeCustomSeed(normalizedThemeCustomSeedDraft);
+    setThemeCustomSeedDraft(normalizedThemeCustomSeedDraft);
+  }
+
+  function handleResetThemeCustomSeed() {
+    setThemeCustomSeedDraft("");
+    onResetThemeCustomSeed();
   }
 
   return (
@@ -325,6 +373,160 @@ export function SettingsPage({
               <option value="90">90%</option>
             </select>
           </label>
+
+          <label className="form-field">
+            <span className="form-field__label">Theme mode</span>
+            <select
+              className="form-field__control"
+              value={settings.themeMode}
+              onChange={(event) =>
+                onThemeModeChange(event.target.value as ThemeMode)
+              }
+            >
+              <option value="system">System</option>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </label>
+
+          <label className="form-field">
+            <span className="form-field__label">Accent preset</span>
+            <select
+              className="form-field__control"
+              value={settings.themePreset}
+              onChange={(event) =>
+                onThemePresetChange(event.target.value as ThemePreset)
+              }
+            >
+              {THEME_PRESET_OPTIONS.map((preset) => (
+                <option key={preset.value} value={preset.value}>
+                  {preset.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        <div
+          className="theme-customization-card"
+          data-theme-stability-surface="settings-theme-customization-card"
+        >
+          <div className="dashboard-section__header">
+            <div>
+              <p className="section-label">Custom Seed</p>
+              <h2 className="section-title">Validated accent seed</h2>
+            </div>
+            <p className="supporting-copy">
+              Use one validated <code>#RRGGBB</code> seed instead of editing
+              individual theme tokens. The generated accent roles stay shared
+              across the side panel, popup, and audit hub.
+            </p>
+          </div>
+
+          <form
+            className="theme-customization-form"
+            onSubmit={handleApplyThemeCustomSeed}
+          >
+            <label className="form-field">
+              <span className="form-field__label">Custom seed color</span>
+              <input
+                className="form-field__control"
+                type="text"
+                inputMode="text"
+                autoComplete="off"
+                spellCheck={false}
+                value={themeCustomSeedDraft}
+                placeholder="#4F46E5"
+                onChange={(event) => setThemeCustomSeedDraft(event.target.value)}
+              />
+            </label>
+
+            <div className="credential-actions">
+              <button
+                className="text-button"
+                type="submit"
+                disabled={!normalizedThemeCustomSeedDraft}
+              >
+                Apply custom seed
+              </button>
+              <button
+                className="text-button"
+                type="button"
+                disabled={settings.themeCustomSeedHex === null}
+                onClick={handleResetThemeCustomSeed}
+              >
+                Reset to default
+              </button>
+            </div>
+          </form>
+
+          <p className="supporting-copy">
+            {normalizedThemeCustomSeedDraft
+              ? `Previewing ${normalizedThemeCustomSeedDraft} for the current ${resolvedThemeMode} palette. Apply it to switch the accent preset to Custom Seed.`
+              : settings.themePreset === "custom"
+                ? "Custom Seed is selected, but no valid saved seed is available yet. The default accent roles stay active until you apply a valid #RRGGBB value."
+                : "Enter a valid #RRGGBB value to generate a custom accent palette without opening raw token editing."}
+          </p>
+
+          {customThemePreviewPalette ? (
+            <div className="theme-preview-grid" aria-label="Custom seed preview">
+              <div className="theme-preview-swatch">
+                <span
+                  className="theme-preview-swatch__color"
+                  style={{
+                    backgroundColor: customThemePreviewPalette.primary,
+                    color: customThemePreviewPalette.onPrimary,
+                  }}
+                >
+                  Aa
+                </span>
+                <div>
+                  <p className="theme-preview-swatch__label">Primary</p>
+                  <p className="supporting-copy">
+                    {customThemePreviewPalette.primary}
+                  </p>
+                </div>
+              </div>
+
+              <div className="theme-preview-swatch">
+                <span
+                  className="theme-preview-swatch__color"
+                  style={{
+                    backgroundColor: customThemePreviewPalette.secondaryContainer,
+                    color: customThemePreviewPalette.onSecondaryContainer,
+                  }}
+                >
+                  Aa
+                </span>
+                <div>
+                  <p className="theme-preview-swatch__label">
+                    Secondary container
+                  </p>
+                  <p className="supporting-copy">
+                    {customThemePreviewPalette.secondaryContainer}
+                  </p>
+                </div>
+              </div>
+
+              <div className="theme-preview-swatch">
+                <span
+                  className="theme-preview-swatch__color"
+                  style={{
+                    backgroundColor: customThemePreviewPalette.tertiary,
+                    color: customThemePreviewPalette.onTertiary,
+                  }}
+                >
+                  Aa
+                </span>
+                <div>
+                  <p className="theme-preview-swatch__label">Tertiary</p>
+                  <p className="supporting-copy">
+                    {customThemePreviewPalette.tertiary}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : null}
         </div>
       </section>
 
@@ -335,7 +537,12 @@ export function SettingsPage({
         <p className="section-label">Provider Visibility</p>
         <div className="settings-list">
           {providers.map((provider) => (
-            <label key={provider.id} className="switch-row">
+            <label
+              key={provider.id}
+              className="switch-row"
+              data-visibility-provider-id={provider.id}
+              data-visibility-enabled={provider.enabled ? "true" : "false"}
+            >
               <div>
                 <p className="switch-row__title">{provider.label}</p>
                 <p className="supporting-copy">
@@ -348,6 +555,7 @@ export function SettingsPage({
                 className="switch-row__control"
                 type="checkbox"
                 checked={provider.enabled}
+                data-visibility-toggle={provider.id}
                 onChange={() => onToggleProvider(provider.id)}
               />
             </label>
@@ -584,7 +792,11 @@ export function SettingsPage({
               sessionPagePlan?.rolloutStage === "shipped";
 
             return (
-              <article key={provider.id} className="source-card">
+              <article
+                key={provider.id}
+                className="source-card"
+                data-provider-id={provider.id}
+              >
                 <div className="source-card__header">
                   <div>
                     <p className="source-card__provider">{provider.label}</p>
@@ -654,6 +866,11 @@ export function SettingsPage({
                   {sourceCardModel.summaryNoteLines.length > 0 ? (
                     <div
                       className={`detail-note ${sourceCardModel.summaryNoteTone === "error" ? "detail-note--error" : sourceCardModel.summaryNoteTone === "warning" ? "detail-note--warning" : "detail-note--neutral"}`.trim()}
+                      data-theme-stability-surface={
+                        provider.id === "cursor"
+                          ? "settings-cursor-operational-note"
+                          : undefined
+                      }
                     >
                       <p className="detail-note__label">Operational note</p>
                       {sourceCardModel.summaryNoteLines.map((line) => (
@@ -704,6 +921,11 @@ export function SettingsPage({
                       {sourceCardModel.sessionTrack?.noteLines.length ? (
                         <div
                           className={`detail-note ${sourceCardModel.sessionTrack.noteTone === "warning" ? "detail-note--warning" : sourceCardModel.sessionTrack.noteTone === "error" ? "detail-note--error" : "detail-note--neutral"}`.trim()}
+                          data-theme-stability-surface={
+                            provider.id === "cursor"
+                              ? "settings-cursor-session-note"
+                              : undefined
+                          }
                         >
                           <p className="detail-note__label">Session-page note</p>
                           {sourceCardModel.sessionTrack.noteLines.map((line) => (
@@ -823,6 +1045,7 @@ export function SettingsPage({
           {providers.map((provider) => (
             <PermissionPrompt
               key={provider.id}
+              providerId={provider.id}
               providerLabel={provider.label}
               description={provider.description}
               hostsLabel={provider.hostsLabel}

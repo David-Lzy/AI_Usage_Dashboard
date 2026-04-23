@@ -1,4 +1,5 @@
 type PermissionPromptProps = {
+  providerId: string;
   providerLabel: string;
   description: string;
   hostsLabel: string;
@@ -8,6 +9,7 @@ type PermissionPromptProps = {
 };
 
 export function PermissionPrompt({
+  providerId,
   providerLabel,
   description,
   hostsLabel,
@@ -31,7 +33,12 @@ export function PermissionPrompt({
     requiresHostAccess && !isGranted ? " permission-prompt--warning" : "";
 
   return (
-    <article className={`permission-prompt${toneClassName}`}>
+    <article
+      className={`permission-prompt${toneClassName}`}
+      data-provider-id={providerId}
+      data-permission-status={status}
+      data-requires-host-access={requiresHostAccess ? "true" : "false"}
+    >
       <div className="permission-prompt__header">
         <div>
           <p className="permission-prompt__provider">{providerLabel}</p>
@@ -54,6 +61,10 @@ export function PermissionPrompt({
           type="button"
           onClick={onToggle}
           disabled={isActionDisabled}
+          data-provider-id={providerId}
+          data-permission-action={
+            !requiresHostAccess ? "none" : isGranted ? "remove" : "request"
+          }
         >
           {actionLabel}
         </button>

@@ -1,6 +1,6 @@
 # Strategic Directions Index
 
-Date: 2026-04-22
+Date: 2026-04-23
 
 Process rule:
 
@@ -78,11 +78,57 @@ As of 2026-04-23:
 - `Phase 94` completed the next `Direction 04` slice by preserving request binding plus request revision through generated handoff bundles, durable archives, and the generated archive index
 - `Phase 95` completed the next `Direction 04` slice by preserving evidence source plus integrity summary through generated handoff bundles, durable archives, and the generated archive index
 - `Phase 96` completed the next `Direction 04` slice by preserving fulfillment receipt metadata inside fulfilled request manifests, request README output, and the generated request index
+- `Phase 97` completed a documentation-only slice that expanded the roadmap for adaptive theming, toolbar product benchmark work, and staged internationalization
+- `Phase 98` completed the first `Direction 05` slice by shipping shared `System / Light / Dark` theme-mode support plus the first dark-token foundation
+- `Phase 99` completed the next `Direction 05` slice by shipping a repeatable theme review baseline for explicit-mode override plus `System` follow behavior across settings, dashboard, and popup
+- `Phase 100` completed the next `Direction 05` slice by shipping a repeatable dark-surface review baseline for warning, error, progress, and supporting surfaces across dashboard, settings, and provider detail
+- `Phase 101` completed the next `Direction 05` slice by shipping the first preset accent system with `Default Blue`, `Meadow`, and `Sunset`, plus a repeatable preset-theme review baseline across settings, dashboard, and popup
+- `Phase 102` completed the next `Direction 05` slice by aligning the audit hub to the same persisted theme runtime and by shipping a repeatable review baseline for initial theme hydration plus live updates from the embedded Settings frame
+- `Phase 103` completed the next `Direction 05` slice by shipping the first validated custom-seed input with preview plus reset actions and by shipping a repeatable cross-surface review baseline for custom-seed propagation
+- `Phase 104` completed the next `Direction 05` slice by shipping a repeatable popup-local plus audit-local custom-seed review baseline and by normalizing themed text-button rendering so local accent surfaces no longer fall back to default blue
+- `Phase 105` completed the next `Direction 05` slice by shipping a repeatable popup plus audit non-accent surface-stability review baseline so custom-seed changes do not silently perturb neutral, supporting, or warning surfaces
+- `Phase 106` completed the next `Direction 05` slice by shipping a repeatable dashboard plus Settings plus provider-detail non-accent surface-stability review baseline so custom-seed changes do not silently perturb the main product surfaces
+- `Phase 107` completed the next `Direction 05` slice by shipping a repeatable compact-width custom-seed review baseline so dashboard, Settings, provider detail, and popup stay overflow-free while preserving the same saved theme state
+- `Phase 108` completed the next `Direction 05` slice by shipping a repeatable provider-state-specific custom-seed review baseline so warning or error treatments stay state-colored while neutral accent-bound surfaces still follow the active seed
+- `Phase 109` completed the next `Direction 05` slice by shipping a repeatable seeded recovered-state review baseline so Cursor and Codex session-page surfaces can be proven to recover from host-access warnings back to neutral healthy treatments under the same saved seed
+- `Phase 110` completed the next `Direction 05` slice by shipping a repeatable preview-interaction recovered-state review baseline so the shipped Settings host-access controls can drive that same Cursor and Codex recovery path without theme drift
+- `Phase 111` completed the next `Direction 05` slice by shipping a repeatable extension-mode recovered-state review baseline so the real unpacked MV3 runtime can carry that same Cursor and Codex recovery path with pre-granted host access plus synthetic vendor tabs
+- `Phase 112` completed the next `Direction 05` slice by shipping one dedicated theme-recovery operator workspace plus runbook so the remaining native-prompt or real-session gap is now about human evidence, not missing review tooling
+- `Phase 113` completed the next `Direction 05` slice by shipping direct theme-recovery downloads plus a durable seeded archive workflow and generated archive index so recovery evidence no longer has to stay only in `tmp/`
+- `Phase 114` completed the next `Direction 05` slice by shipping one repo-backed theme-recovery review-request workflow and generated request index so the first real operator pass now has a durable pending request package
+- `Phase 115` completed the next `Direction 05` slice by shipping one repo-backed theme-recovery request-completion workflow and archive traceability so a future real operator export can now fulfill that pending request into one durable archive-linked receipt
+- `Phase 116` completed the next `Direction 05` slice by shipping request-bound theme-recovery exports plus mismatch rejection so future real operator exports now preserve explicit request identity instead of remaining interchangeable
+- `Phase 117` completed the next `Direction 05` slice by shipping one no-mutation theme-recovery preflight workflow so future real operator exports can now be checked safely before the archive-linked completion step
+- `Phase 118` completed the first `Direction 06` slice by shipping one toolbar benchmark matrix plus one compact popup next-step guidance card for no-provider, missing-access, blocked-provider, and policy-only states
+- `Phase 119` completed the next `Direction 06` slice by making the popup featured-provider area switch honestly between attention, healthy, policy-only, and empty states instead of keeping one fixed hierarchy
+- `Phase 120` completed the next `Direction 06` slice by routing credential-backed setup states back to Settings directly from the popup instead of falling through to generic blocked-provider guidance
+- `Phase 121` completed the next `Direction 06` slice by adding one compact popup setup-coverage summary so visible-provider breadth is scannable before the user drills into one next step
+- `Phase 122` completed the next `Direction 06` slice by tightening popup setup-summary copy and adding one repeatable `360px` plus `420px` width review for the onboarding stack
+- `Phase 123` completed the next `Direction 06` slice by making popup setup coverage itself stateful through one explicit stage hierarchy and adding one repeatable `360px` plus `420px` width review for those first-run setup states
+- `Phase 124` completed the next `Direction 06` slice by suppressing the empty popup snapshot card for no-provider states and adding one repeatable `360px` plus `420px` width review for top-stack density
+- `Phase 125` completed the next `Direction 06` slice by making popup quick actions explicitly secondary when a guidance card already provides the primary next step, and adding one repeatable action-hierarchy review
+- `Phase 126` completed the next `Direction 06` slice by making popup header copy and top-summary labels specific to toolbar setup story, and adding one repeatable header-plus-summary review
+- `Phase 127` completed the next `Direction 06` slice by making popup featured-provider badges plus supporting copy popup-specific, and adding one repeatable featured-card story review
+- `Phase 128` completed the next `Direction 06` slice by making popup featured-provider CTA routing stateful, and adding one repeatable featured-card action review
+- `Phase 129` completed the next `Direction 06` slice by reducing popup featured-provider density through fewer chips and shorter healthy or contract-only secondary copy, and adding one repeatable featured-card density review
+- `Phase 130` completed the next `Direction 06` slice by replacing the last static popup contract explainer with one stateful `Surface roles` note, and adding one repeatable width review for that lower popup story layer
 - `Codex` personal support is already shipped as a `session_page` path, but it currently exposes usage-window percentages and reset timing, not one absolute remaining credit balance
 - `Cursor` personal support is already shipped as a `session_page` path, but it currently exposes billing-period usage context, not one exact remaining included-request counter
 - the extension action now opens a compact popup on click, the popup makes cached snapshot freshness explicit, and the badge shows the count of visible providers needing attention
+- the popup now also includes one compact `Start here / Next step` guidance card, so the current toolbar-first story is no longer only freshness plus featured-provider cards
+- the popup setup-coverage card now also carries one explicit stage hierarchy, so first-run setup state is visible before the user has to interpret individual counts
+- the popup snapshot-status layer now also stays narrower in scope, so freshness stops repeating setup or action guidance already carried by the other top-stack cards
+- the popup action row now also has a clearer hierarchy, so guidance owns the primary CTA and lower actions stay supplemental
+- the popup header and top summary now also communicate setup state more directly, so first-run toolbar states stop borrowing broader dashboard summary language
+- the popup featured-provider cards now also use popup-specific status labels plus a state-first lead line, so lower provider cards stop jumping back into side-panel contract prose immediately after the popup top story establishes setup context
+- the popup featured-provider cards now also use stateful CTA routing, so setup blockers and contract-only states stop implying that provider detail is always the next surface
+- the popup featured-provider cards now also use a lower-density chip and secondary-copy contract, so popup cards stop carrying three chips plus long side-panel contract prose in healthy and contract-only states
+- the popup featured-provider area now also changes hierarchy honestly, so healthy and empty states no longer masquerade as `Needs attention`
+- the popup now also distinguishes missing stored credentials from generic blocked-provider states, so credential-backed setup work now routes directly to Settings
+- the popup now also exposes one compact setup-coverage summary, so users can see visible-provider readiness, access gaps, credential gaps, and policy-only coverage at a glance
+- the popup onboarding stack now also has one repeatable width-range proof, so the newer guidance plus setup-summary layers are checked at realistic compact popup widths instead of only in one default preview size
 - the UI uses a Material-like token system, now has a small reduced-motion-safe motion baseline, and also has an intermediate `720px` responsive collapse point, a more scannable Settings entry, a less repetitive source-card summary pattern, clearer grouped diagnostics inside disclosure, a compact session-track layout, consistent keyboard-focus treatment on the main interactive controls, harmonized status surfaces across the main warning/error/success states, clearer toned-surface text hierarchy, explicit pressed states on the remaining Settings pointer controls, a more coherent compact chip system, honest indeterminate progress treatment for unknown values, a clearer supporting-surface hierarchy across provider detail and expanded Settings diagnostics, one dedicated fixed-width interaction-audit hub for the main shipped surfaces, preset-driven shortcuts plus visible expectation copy plus visible manual checks plus a persistent signoff workspace plus signoff-import handoff support plus a visible handoff summary plus an explicit operator workflow and reusable bundle-builder path for the main manual review states, and repeatable width plus compact-height plus keyboard-interaction plus pointer-interaction plus status-surface plus toned-content plus chip-progress plus supporting-surface plus audit-hub plus audit-preset plus evidence-pack plus signoff-pack plus signoff-workspace plus signoff-import plus handoff-bundle plus operator-bundle review baselines
-- the current theme foundation is still light-only, still lacks user theme selection, and still does not ship dark mode or a validated user color-personalization path
+- the current theme foundation now ships shared `System / Light / Dark` mode selection, the first shipped preset accents, one validated custom-seed path, one repeatable explicit-override plus system-follow QA baseline, one repeatable dark-surface review baseline, one repeatable preset-theme review baseline, one repeatable audit-hub theme-alignment review baseline, one repeatable custom-seed review baseline, one repeatable popup-local plus audit-local custom-seed review baseline, one repeatable popup plus audit non-accent surface-stability review baseline, one repeatable dashboard plus Settings plus provider-detail non-accent surface-stability review baseline, one repeatable compact-width custom-seed review baseline, one repeatable provider-state-specific custom-seed review baseline, one repeatable seeded recovered-state review baseline, one repeatable preview-interaction recovered-state review baseline, one repeatable extension-mode recovered-state review baseline, one dedicated theme-recovery operator workspace plus runbook, one durable seeded theme-recovery archive workflow plus generated archive index, and one durable pending theme-recovery request workflow plus generated request index, but it still lacks any real fulfilled operator or native-prompt recovery archive and any decision on dual light-dark seeds
 - the current popup architecture is already shipped, which means future toolbar work should focus on competitive product fit, onboarding, and store discoverability rather than restarting popup shell design
 - the current extension remains effectively English-only because the repo does not yet ship `_locales/`, `default_locale`, or a runtime app localization layer
 
@@ -90,27 +136,27 @@ As of 2026-04-23:
 
 ### Active continuation order
 
-1. [Direction 02 - Personal User Product Semantics](./02_Direction_Personal_User_Product_Semantics.md)
+1. [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md)
    Why first now:
-   the main product value is increasingly on personal accounts, but the current support levels differ sharply by provider and need clearer contracts.
+   `Direction 05` is now close to an honest human-evidence boundary, while the popup has just started its benchmark and onboarding track and offers a higher-leverage product surface for the next fully local slices.
 
-2. [Direction 03 - Toolbar Popup And Badge Entry](./03_Direction_Toolbar_Popup_And_Badge_Entry.md)
+2. [Direction 05 - Adaptive Theming And Color Modes](./05_Direction_Adaptive_Theming_And_Color_Modes.md)
    Why second now:
-   market examples show that "one click from the toolbar" is now a strong expectation, and Chrome supports adding that without abandoning the side panel.
+   the current theme system is mature and truthful, but its next highest-value step now depends more on real operator evidence than on more local tooling.
 
 3. [Direction 04 - Material, Motion, And Responsive Hardening](./04_Direction_Material_Motion_And_Responsive_Hardening.md)
    Why third now:
-   the current UI is serviceable, but it is still closer to a release-candidate shell than a fully polished product surface.
+   the interaction-audit and operator-review workflow is mature, but it still needs real-browser review closure beyond the tooling layers.
 
 ### Additional requested directions from 2026-04-23
 
-1. [Direction 05 - Adaptive Theming And Color Modes](./05_Direction_Adaptive_Theming_And_Color_Modes.md)
+1. [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md)
    Why first among the new requests:
-   the current token system is a strong foundation, but the shipped UI is still light-only and lacks dark mode plus safe theme personalization.
+   the popup already exists, and `Phase 118` has now started the benchmark plus onboarding track with a fully local product slice that does not depend on future operator evidence.
 
-2. [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md)
+2. [Direction 05 - Adaptive Theming And Color Modes](./05_Direction_Adaptive_Theming_And_Color_Modes.md)
    Why second among the new requests:
-   the popup already exists, so the next opportunity is improving toolbar competitiveness, onboarding clarity, and store-facing product fit.
+   the theme system is strong and truthful, but its next most valuable slice is increasingly tied to real operator recovery evidence rather than more local-only tooling.
 
 3. [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md)
    Why third among the new requests:

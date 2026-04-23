@@ -1,0 +1,39 @@
+{
+  "generatedAt": "2026-04-23T11:50:06.651Z",
+  "requestRoot": "Doc/testing/theme_recovery_review_requests",
+  "recordCount": 1,
+  "pendingRequestCount": 1,
+  "fulfilledRequestCount": 0,
+  "records": [
+    {
+      "requestId": "2026-04-23-first-real-theme-recovery-review-request",
+      "createdAt": "2026-04-23T11:13:03.801Z",
+      "status": "pending_operator_review",
+      "workspaceRoute": "http://127.0.0.1:4173/src/sidepanel/index.html#debug-theme-recovery-review",
+      "sourceTemplate": "fixtures/theme-recovery/operator-review-request-template.fixture.json",
+      "sourceSeedArchiveReadme": "Doc/testing/theme_recovery_reviews/2026-04-23-theme-recovery-seeded-archive-baseline/README.md",
+      "sourceSeedReviewExport": "Doc/testing/theme_recovery_reviews/2026-04-23-theme-recovery-seeded-archive-baseline/theme-recovery-review-export.json",
+      "seedReferenceSummary": {
+        "overallStage": "needs_access",
+        "overallLabel": "Needs access",
+        "popupSnapshotLabel": "Mixed state",
+        "scopeIsolationLabel": "Cursor + Codex isolated",
+        "themeMode": "light",
+        "themePreset": "custom",
+        "themeResolved": "light",
+        "themeCustomSeedHex": "#4F46E5",
+        "targetProviderIds": [
+          "cursor",
+          "codex"
+        ],
+        "targetProviderLabels": [
+          "Cursor",
+          "Codex"
+        ]
+      },
+      "fulfillment": null,
+      "readmePath": "Doc/testing/theme_recovery_review_requests/2026-04-23-first-real-theme-recovery-review-request/README.md",
+      "manifestPath": "Doc/testing/theme_recovery_review_requests/2026-04-23-first-real-theme-recovery-review-request/review-request.json"
+    }
+  ]
+}

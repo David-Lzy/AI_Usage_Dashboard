@@ -7,6 +7,11 @@ import type {
 import { APP_STATE_STORAGE_KEY, SAMPLE_APP_STATE } from "./constants";
 import { normalizePageBinding } from "./page-bindings";
 import { normalizeSourcePreference } from "./provider-sources";
+import {
+  normalizeThemeCustomSeedHex,
+  normalizeThemeMode,
+  normalizeThemePreset,
+} from "./theme";
 
 let memoryFallbackState: AppState | null = null;
 
@@ -114,6 +119,11 @@ function normalizeAppState(state: AppState): AppState {
     settings: {
       ...SAMPLE_APP_STATE.settings,
       ...state.settings,
+      themeMode: normalizeThemeMode(state.settings?.themeMode),
+      themePreset: normalizeThemePreset(state.settings?.themePreset),
+      themeCustomSeedHex: normalizeThemeCustomSeedHex(
+        state.settings?.themeCustomSeedHex,
+      ),
     },
   };
 }

@@ -437,5 +437,8 @@ export const SAMPLE_APP_STATE: AppState = {
   settings: {
     syncIntervalMinutes: 30,
     warningThresholdPercent: 80,
+    themeMode: "system",
+    themePreset: "default",
+    themeCustomSeedHex: null,
   },
 };

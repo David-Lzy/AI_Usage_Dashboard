@@ -22,7 +22,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [97_Phase_Strategic_Roadmap_Expansion_For_Theming_Benchmark_And_i18n.md](./Archive/97_Phase_Strategic_Roadmap_Expansion_For_Theming_Benchmark_And_i18n.md)
+- latest completed slice: [131_Phase_Extension_Build_Output_Stability_And_Git_Closeout_Rule.md](./Archive/131_Phase_Extension_Build_Output_Stability_And_Git_Closeout_Rule.md)
 
 Completed phases should be moved to:
 
@@ -131,6 +131,40 @@ Completed phases should be moved to:
 - [95_Phase_Interaction_Audit_Evidence_Provenance_In_Bundles_And_Archives.md](./Archive/95_Phase_Interaction_Audit_Evidence_Provenance_In_Bundles_And_Archives.md) - completed and archived on 2026-04-23
 - [96_Phase_Interaction_Audit_Request_Fulfillment_Receipt_Metadata.md](./Archive/96_Phase_Interaction_Audit_Request_Fulfillment_Receipt_Metadata.md) - completed and archived on 2026-04-23
 - [97_Phase_Strategic_Roadmap_Expansion_For_Theming_Benchmark_And_i18n.md](./Archive/97_Phase_Strategic_Roadmap_Expansion_For_Theming_Benchmark_And_i18n.md) - completed and archived on 2026-04-23
+- [98_Phase_Theme_Mode_And_Dark_Mode_Foundation.md](./Archive/98_Phase_Theme_Mode_And_Dark_Mode_Foundation.md) - completed and archived on 2026-04-23
+- [99_Phase_Theme_Mode_Review_And_Cross_Surface_QA.md](./Archive/99_Phase_Theme_Mode_Review_And_Cross_Surface_QA.md) - completed and archived on 2026-04-23
+- [100_Phase_Dark_Theme_Surface_Review.md](./Archive/100_Phase_Dark_Theme_Surface_Review.md) - completed and archived on 2026-04-23
+- [101_Phase_Preset_Theme_Accents.md](./Archive/101_Phase_Preset_Theme_Accents.md) - completed and archived on 2026-04-23
+- [102_Phase_Interaction_Audit_Theme_Alignment.md](./Archive/102_Phase_Interaction_Audit_Theme_Alignment.md) - completed and archived on 2026-04-23
+- [103_Phase_Custom_Seed_Theme_Input_And_Review.md](./Archive/103_Phase_Custom_Seed_Theme_Input_And_Review.md) - completed and archived on 2026-04-23
+- [104_Phase_Custom_Seed_Local_Surface_Review.md](./Archive/104_Phase_Custom_Seed_Local_Surface_Review.md) - completed and archived on 2026-04-23
+- [105_Phase_Custom_Seed_Surface_Stability_Review.md](./Archive/105_Phase_Custom_Seed_Surface_Stability_Review.md) - completed and archived on 2026-04-23
+- [106_Phase_Custom_Seed_Main_Surface_Stability_Review.md](./Archive/106_Phase_Custom_Seed_Main_Surface_Stability_Review.md) - completed and archived on 2026-04-23
+- [107_Phase_Custom_Seed_Compact_Width_Review.md](./Archive/107_Phase_Custom_Seed_Compact_Width_Review.md) - completed and archived on 2026-04-23
+- [108_Phase_Custom_Seed_Provider_State_Review.md](./Archive/108_Phase_Custom_Seed_Provider_State_Review.md) - completed and archived on 2026-04-23
+- [109_Phase_Custom_Seed_Recovered_State_Review.md](./Archive/109_Phase_Custom_Seed_Recovered_State_Review.md) - completed and archived on 2026-04-23
+- [110_Phase_Custom_Seed_Preview_Interaction_Recovery_Review.md](./Archive/110_Phase_Custom_Seed_Preview_Interaction_Recovery_Review.md) - completed and archived on 2026-04-23
+- [111_Phase_Custom_Seed_Extension_Mode_Recovered_State_Review.md](./Archive/111_Phase_Custom_Seed_Extension_Mode_Recovered_State_Review.md) - completed and archived on 2026-04-23
+- [112_Phase_Theme_Recovery_Review_Workspace.md](./Archive/112_Phase_Theme_Recovery_Review_Workspace.md) - completed and archived on 2026-04-23
+- [113_Phase_Theme_Recovery_Downloadable_Exports_And_Archive_Workflow.md](./Archive/113_Phase_Theme_Recovery_Downloadable_Exports_And_Archive_Workflow.md) - completed and archived on 2026-04-23
+- [114_Phase_Theme_Recovery_Operator_Review_Request.md](./Archive/114_Phase_Theme_Recovery_Operator_Review_Request.md) - completed and archived on 2026-04-23
+- [115_Phase_Theme_Recovery_Review_Request_Completion_Workflow.md](./Archive/115_Phase_Theme_Recovery_Review_Request_Completion_Workflow.md) - completed and archived on 2026-04-23
+- [116_Phase_Theme_Recovery_Request_Bound_Exports_And_Mismatch_Gate.md](./Archive/116_Phase_Theme_Recovery_Request_Bound_Exports_And_Mismatch_Gate.md) - completed and archived on 2026-04-23
+- [117_Phase_Theme_Recovery_Request_Preflight_Workflow.md](./Archive/117_Phase_Theme_Recovery_Request_Preflight_Workflow.md) - completed and archived on 2026-04-23
+- [118_Phase_Toolbar_Benchmark_And_Popup_Next_Step_Guidance.md](./Archive/118_Phase_Toolbar_Benchmark_And_Popup_Next_Step_Guidance.md) - completed and archived on 2026-04-23
+- [119_Phase_Popup_Triage_Hierarchy_And_Empty_State_Review.md](./Archive/119_Phase_Popup_Triage_Hierarchy_And_Empty_State_Review.md) - completed and archived on 2026-04-23
+- [120_Phase_Popup_Credential_Missing_Onboarding_Guidance.md](./Archive/120_Phase_Popup_Credential_Missing_Onboarding_Guidance.md) - completed and archived on 2026-04-23
+- [121_Phase_Popup_Setup_Coverage_Summary.md](./Archive/121_Phase_Popup_Setup_Coverage_Summary.md) - completed and archived on 2026-04-23
+- [122_Phase_Popup_Setup_Coverage_Compression_And_Width_Review.md](./Archive/122_Phase_Popup_Setup_Coverage_Compression_And_Width_Review.md) - completed and archived on 2026-04-23
+- [123_Phase_Popup_Setup_Stage_Hierarchy_And_Width_Review.md](./Archive/123_Phase_Popup_Setup_Stage_Hierarchy_And_Width_Review.md) - completed and archived on 2026-04-23
+- [124_Phase_Popup_Top_Stack_Density_And_Snapshot_Copy_Review.md](./Archive/124_Phase_Popup_Top_Stack_Density_And_Snapshot_Copy_Review.md) - completed and archived on 2026-04-23
+- [125_Phase_Popup_Action_Hierarchy_And_Secondary_Routes.md](./Archive/125_Phase_Popup_Action_Hierarchy_And_Secondary_Routes.md) - completed and archived on 2026-04-23
+- [126_Phase_Popup_Header_And_Top_Summary_Story.md](./Archive/126_Phase_Popup_Header_And_Top_Summary_Story.md) - completed and archived on 2026-04-23
+- [127_Phase_Popup_Featured_Card_Story_Alignment.md](./Archive/127_Phase_Popup_Featured_Card_Story_Alignment.md) - completed and archived on 2026-04-23
+- [128_Phase_Popup_Featured_Card_Action_Hierarchy.md](./Archive/128_Phase_Popup_Featured_Card_Action_Hierarchy.md) - completed and archived on 2026-04-23
+- [129_Phase_Popup_Featured_Card_Density_And_Contract_Compression.md](./Archive/129_Phase_Popup_Featured_Card_Density_And_Contract_Compression.md) - completed and archived on 2026-04-23
+- [130_Phase_Popup_Surface_Roles_And_Contract_Note_Compression.md](./Archive/130_Phase_Popup_Surface_Roles_And_Contract_Note_Compression.md) - completed and archived on 2026-04-23
+- [131_Phase_Extension_Build_Output_Stability_And_Git_Closeout_Rule.md](./Archive/131_Phase_Extension_Build_Output_Stability_And_Git_Closeout_Rule.md) - completed and archived on 2026-04-24
 
 ## Dependency Notes
 
@@ -277,6 +311,73 @@ Completed phases should be moved to:
 - the 2026-04-23 `Phase 95` closeout preserved evidence source plus integrity summary through handoff bundle JSON plus markdown, archive manifest plus README output, and the generated archive index, then added a repeatable provenance review pass
 - phase 96 depends on phase 95 because fulfilled-request receipt metadata only becomes useful after request and archive artifacts already preserve the richer request identity plus evidence provenance that the request-side receipt can summarize
 - the 2026-04-23 `Phase 96` closeout preserved completion receipt metadata inside fulfilled request manifests, request README output, and the generated request index, then added a repeatable fulfilled-request receipt review pass
+- phase 97 depends on phases 96 and the then-current roadmap state because direction expansion only becomes useful after the operator-review and release-closeout truth is already stable enough to plan against honestly
+- the 2026-04-23 `Phase 97` closeout expanded the strategic roadmap for adaptive theming, toolbar benchmarking plus discoverability, and staged internationalization
+- phase 98 depends on phase 97 because the first theming implementation slice should follow the explicitly documented Direction 05 plan instead of reopening theme scope ad hoc
+- the 2026-04-23 `Phase 98` closeout shipped shared theme-mode persistence plus the first dark-token foundation for the side panel and popup
+- phase 99 depends on phase 98 because cross-surface theme QA only becomes meaningful after the first shared theme-mode runtime already exists
+- the 2026-04-23 `Phase 99` closeout added a repeatable theme review baseline for explicit light or dark override plus system-follow behavior across settings, dashboard, and popup
+- phase 100 depends on phase 99 because dark-surface-specific review only becomes useful after the first mode-resolution runtime is already stable enough to inspect visually
+- the 2026-04-23 `Phase 100` closeout added a repeatable dark-surface review baseline for warning, error, progress, and supporting surfaces across dashboard, settings, and provider detail
+- phase 101 depends on phases 98 through 100 because preset accents only become worth shipping after the base mode runtime and its first dark-surface QA baselines already exist
+- the 2026-04-23 `Phase 101` closeout shipped the first preset accent system with `Default Blue`, `Meadow`, and `Sunset`, then added a repeatable preset-theme review baseline across settings, dashboard, and popup
+- phase 102 depends on phase 101 because audit-hub theme alignment only becomes meaningful after the shared theme runtime, dark QA, and preset accents are already stable on the main shipped surfaces
+- the 2026-04-23 `Phase 102` closeout aligned the audit hub to the same persisted theme runtime as the side panel and popup, then added a repeatable review baseline for initial hydration plus live embedded-settings theme updates
+- phase 103 depends on phase 102 because a real custom-seed path only becomes worth shipping after the shared theme runtime already covers the audit hub and the main shipped surfaces are theme-aligned
+- the 2026-04-23 `Phase 103` closeout shipped the first validated custom-seed input with preview plus reset actions, then added a repeatable cross-surface review baseline for custom-seed propagation across settings, dashboard, popup, and audit hub
+- phase 104 depends on phase 103 because popup-local and audit-local custom-seed review only becomes meaningful after the saved custom seed itself is already shipped and proven across the main shared surfaces
+- the 2026-04-23 `Phase 104` closeout added a repeatable popup-local plus audit-local custom-seed review baseline, then normalized themed `text-button` rendering so local accent surfaces no longer fall back to the default blue link treatment
+- phase 105 depends on phase 104 because non-accent surface-stability review only becomes meaningful after the popup-local and audit-local accent surfaces are already stably covered and the local button rendering has been normalized
+- the 2026-04-23 `Phase 105` closeout added a repeatable popup plus audit non-accent surface-stability review baseline, proving the saved custom seed changes accent roles without perturbing popup or audit neutral, supporting, and warning surfaces
+- phase 106 depends on phase 105 because main-product non-accent surface-stability review only becomes meaningful after the popup and audit shell surfaces are already stably covered and the custom-seed contract is proven locally
+- the 2026-04-23 `Phase 106` closeout added a repeatable dashboard plus Settings plus provider-detail non-accent surface-stability review baseline, proving the saved custom seed changes accent roles without perturbing the main product's neutral, supporting, and warning surfaces
+- phase 107 depends on phase 106 because compact-width custom-seed regression review only becomes meaningful after the main-product surface-stability proof already exists at normal widths
+- the 2026-04-23 `Phase 107` closeout added a repeatable compact-width custom-seed review baseline, proving dashboard, Settings, provider detail, and popup remain overflow-free while preserving the same saved theme state
+- phase 108 depends on phase 107 because provider-state-specific custom-seed review only becomes honest after the shipped compact-width path and the earlier non-accent stability proofs already show the broader theme contract is stable
+- the 2026-04-23 `Phase 108` closeout added a repeatable provider-state-specific custom-seed review baseline, proving Claude and Gemini warning or error surfaces remain state-colored while Codex neutral status-chip and progress-fill surfaces intentionally follow the active accent roles
+- phase 109 depends on phase 108 because a seeded recovered-state review only becomes meaningful after the static provider-state custom-seed contract is already honest about which warning or error surfaces stay state-colored and which neutral surfaces are accent-bound
+- the 2026-04-23 `Phase 109` closeout added a repeatable seeded recovered-state review baseline, proving Cursor and Codex session-page surfaces recover from `host_access_missing` warning treatments back to neutral healthy treatments under the same saved custom seed
+- phase 110 depends on phase 109 because a preview-interaction recovered-state review only becomes meaningful after the seeded recovered-state contract already proves the same warning-to-healthy transition can hold under the saved custom seed
+- the 2026-04-23 `Phase 110` closeout added a repeatable preview-interaction recovered-state review baseline, proving the shipped Settings host-access controls can drive the Cursor and Codex recovery path from warning treatments back to neutral healthy treatments without theme drift
+- phase 111 depends on phase 110 because an extension-mode recovered-state review only becomes meaningful after the preview-interaction baseline already proves the same custom-seed recovery path through shipped Settings controls
+- the 2026-04-23 `Phase 111` closeout added a repeatable extension-mode recovered-state review baseline, proving the real unpacked MV3 runtime can carry that same Cursor and Codex recovery path with pre-granted host access, synthetic vendor tabs, and truthful action-badge updates
+- phase 112 depends on phase 111 because one dedicated operator-facing theme-recovery workspace only becomes honest after the synthetic extension-mode runtime baseline already proves the shipped recovery path through real MV3 APIs
+- the 2026-04-23 `Phase 112` closeout added one dedicated theme-recovery operator workspace plus runbook, proving the remaining theming gap is now real human evidence collection rather than missing recovery-review tooling
+- phase 113 depends on phase 112 because durable theme-recovery exports and repo-backed archives only become honest after the operator workspace already exposes one fixed summary and one fixed JSON export instead of ad-hoc scratch notes
+- the 2026-04-23 `Phase 113` closeout added direct theme-recovery downloads plus one durable seeded archive workflow and generated archive index, proving the repo can now preserve truthful recovery baselines without claiming a real operator pass
+- phase 114 depends on phase 113 because a repo-backed theme-recovery request package only becomes honest after the workspace already has one durable seeded archive baseline and one stable downloadable export shape
+- the 2026-04-23 `Phase 114` closeout added one repo-backed theme-recovery review-request workflow and generated request index, proving the first real operator pass can now start from one durable pending request package instead of only a runbook
+- the 2026-04-23 `Phase 115` closeout added the matching request-completion workflow plus archive traceability, proving future real operator exports can now fulfill that pending request into one archive-linked receipt without manual manifest edits
+- the 2026-04-23 `Phase 116` closeout bound the theme-recovery workspace export to that same request lifecycle, proving future real operator exports can now preserve explicit request identity and be rejected if they target the wrong pending request
+- the 2026-04-23 `Phase 117` closeout added the matching no-mutation preflight workflow, proving future real operator exports can now be eligibility-checked before any request or archive mutation happens
+- phase 118 depends on the already-shipped popup shell from phases 48 through 52 because benchmark-informed onboarding only makes sense after the popup entry, quick actions, featured-provider routing, and snapshot-freshness story already exist
+- the 2026-04-23 `Phase 118` closeout started `Direction 06` by shipping one toolbar benchmark matrix plus one compact popup next-step guidance card for no-provider, missing-access, blocked-provider, and policy-only states
+- phase 119 depends on phase 118 because a truthful popup triage hierarchy only becomes meaningful after the first benchmark-informed guidance card already clarifies where users should go next
+- the 2026-04-23 `Phase 119` closeout made the popup featured-provider area switch honestly between attention, healthy, policy-only, and empty states instead of keeping one fixed `Needs attention` shell
+- phase 120 depends on phase 118 because credential-backed onboarding only becomes meaningful after the popup already has one explicit next-step card and no longer treats every state as generic quick-glance output
+- the 2026-04-23 `Phase 120` closeout made missing stored credentials route back to Settings directly from the popup instead of falling through to generic blocked-provider guidance
+- phase 121 depends on phases 119 and 120 because one truthful setup-coverage summary only becomes useful after the popup already distinguishes empty, healthy, policy-only, missing-access, and credential-backed onboarding states instead of flattening them into one shell
+- the 2026-04-23 `Phase 121` closeout added one compact popup setup-coverage summary for live-ready, host-access, credentials, and policy-only counts, so visible-provider breadth no longer needs to be inferred from scattered cards
+- phase 122 depends on phase 121 because copy compression and width-range review only become meaningful after the popup already has one real setup-coverage layer to tighten and verify
+- the 2026-04-23 `Phase 122` closeout shortened popup setup-summary copy and added one repeatable `360px` plus `420px` width review for no-visible, mixed-setup, and healthy popup states
+- phase 123 depends on phases 121 and 122 because one explicit popup setup-stage hierarchy only becomes worth shipping after the setup-coverage layer already exists and its supporting copy is compact enough to survive an extra status badge in the same header
+- the 2026-04-23 `Phase 123` closeout made the popup setup-coverage card itself stateful through `Start setup`, `Needs setup`, `Needs review`, `Contract-only`, and `Ready`, then added one repeatable `360px` plus `420px` width review for the first-run setup stages that are actually reachable in preview mode
+- phase 124 depends on phase 123 because top-stack copy compression only becomes meaningful after the setup-stage hierarchy already exists and the popup can distinguish first-run setup from freshness at a glance
+- the 2026-04-23 `Phase 124` closeout hid the empty snapshot-status card for no-provider states and kept remaining snapshot copy focused on freshness, then added one repeatable `360px` plus `420px` width review for popup top-stack density
+- phase 125 depends on phases 118 through 124 because action-hierarchy cleanup only becomes meaningful after the popup already has a real guidance card, setup-stage layer, and slimmer top-stack copy instead of one undifferentiated quick-glance shell
+- the 2026-04-23 `Phase 125` closeout made popup quick actions explicitly secondary whenever a guidance card is visible, then added one repeatable action-hierarchy review so the primary CTA is no longer duplicated in the lower action row
+- phase 126 depends on phases 121 through 125 because popup-specific top-summary wording only becomes meaningful after setup coverage, setup-stage hierarchy, top-stack density, and action hierarchy are already stable enough to describe honestly
+- the 2026-04-23 `Phase 126` closeout made popup header copy and top-summary labels specific to toolbar setup story, then added one repeatable `360px` plus `420px` review for that header-plus-summary contract
+- phase 127 depends on phases 121 through 126 because popup-specific featured-provider story only becomes meaningful after the top stack, setup coverage, and action hierarchy already speak the same toolbar-first language
+- the 2026-04-23 `Phase 127` closeout made popup featured-provider badges plus supporting copy popup-specific, then added one repeatable featured-card story review
+- phase 128 depends on phase 127 because featured-card CTA routing only becomes meaningful after the card itself already presents a popup-specific setup, review, or contract story
+- the 2026-04-23 `Phase 128` closeout made featured-provider CTA routing stateful, then added one repeatable featured-card action review
+- phase 129 depends on phase 128 because featured-card density compression only becomes meaningful after each card's CTA contract is already honest about the next route
+- the 2026-04-23 `Phase 129` closeout reduced featured-provider density through fewer chips and shorter healthy or contract-only secondary copy, then added one repeatable featured-card density review
+- phase 130 depends on phases 124 through 129 because the lower popup footer only becomes worth compressing after snapshot copy, action hierarchy, header story, and featured-provider story have already stopped fighting for the same explanatory job
+- the 2026-04-23 `Phase 130` closeout replaced the last static popup contract explainer with one lighter stateful `Surface roles` note, then added one repeatable `360px` plus `420px` review for no-visible, mixed-setup, needs-review, policy-only, and healthy footer-note states
+- phase 131 depends on phase 130 because extension build-output stabilization and git closeout discipline only become worth formalizing after the popup shell is already stable enough that RDP Chrome extension-mode review is part of the normal workflow
+- the 2026-04-24 `Phase 131` closeout stabilized popup, side-panel, shared chunk, CSS, and service-worker asset names in `dist/`, then formalized the `commit / push / rebuild` closeout rule plus the RDP Chrome unpacked-extension rule in the project guardrails
 
 ## Delivery Standard For Each Phase
 
