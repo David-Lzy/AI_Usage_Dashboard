@@ -36,6 +36,12 @@ Refresh only the generated request index and machine-readable catalog:
 npm run store:refresh-screenshot-capture-request-index
 ```
 
+Complete a pending request and archive one real screenshot set:
+
+```bash
+npm run store:complete-screenshot-capture-request -- --request-id 2026-04-24-first-real-store-screenshot-capture-request --captures-dir Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/captures
+```
+
 ## Truth Rules
 
 - a pending screenshot-capture request package is not a completed screenshot set

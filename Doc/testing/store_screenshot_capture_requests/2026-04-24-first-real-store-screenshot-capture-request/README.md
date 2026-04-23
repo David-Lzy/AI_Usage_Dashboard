@@ -64,4 +64,3 @@ Status note:
 - A pending screenshot-capture request package is not a completed screenshot set.
 - The baseline capture pack defines the expected runtime order, not a finished store-submission artifact.
 - Do not claim multilingual or unsupported provider coverage in screenshots before the product actually ships it.
-

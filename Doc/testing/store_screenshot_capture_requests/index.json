@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-23T18:20:45.169Z",
+  "generatedAt": "2026-04-23T18:29:36.640Z",
   "requestRoot": "Doc/testing/store_screenshot_capture_requests",
   "recordCount": 1,
   "pendingRequestCount": 1,
@@ -14,6 +14,7 @@
       "fallbackSize": "640x400",
       "storyboardPath": "Doc/Store_Screenshot_Storyboard.md",
       "baselinePackReadme": "Doc/testing/store_screenshot_capture_packs/2026-04-24-toolbar-storyboard-baseline/README.md",
+      "fulfillment": null,
       "requiredScreenshotFilenames": [
         "01-toolbar-first-quick-glance.png",
         "02-setup-guidance.png",

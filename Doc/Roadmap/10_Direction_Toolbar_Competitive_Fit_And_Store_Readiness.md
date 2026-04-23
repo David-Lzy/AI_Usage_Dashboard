@@ -15,6 +15,7 @@ Execution note:
 - first executable slice landed on `2026-04-24` through `Phase 141`
 - second executable slice landed on `2026-04-24` through `Phase 142`
 - third executable slice landed on `2026-04-24` through `Phase 143`
+- fourth executable slice landed on `2026-04-24` through `Phase 144`
 - this direction sharpens [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md) into a more explicit next-stage productization track
 
 Process rule:
@@ -62,9 +63,12 @@ As of 2026-04-24:
   - [Store_Screenshot_Capture_Packs.md](../testing/Store_Screenshot_Capture_Packs.md)
 - the repo now also ships one pending screenshot-capture request workflow:
   - [Store_Screenshot_Capture_Requests.md](../testing/Store_Screenshot_Capture_Requests.md)
+- the repo now also ships one completion and archive workflow for future real screenshot sets:
+  - [Store_Screenshot_Capture_Archive.md](../testing/Store_Screenshot_Capture_Archive.md)
 - the popup still has some remaining overlap between top story, featured card, and lower surface-role explanation
 - the repo still does not yet ship a full store-readiness pack for listing copy hierarchy and localized listing variants
 - the project now has an RDP Chrome environment available for truthful extension-mode capture and review
+- the repo still does not yet ship one fulfilled screenshot archive; the current screenshot state remains `1 pending request / 0 archived sets`
 
 External signals:
 
@@ -127,6 +131,8 @@ Recommended rollout:
 
 `Phase 143` completed the next executable part of step `3` by shipping one pending screenshot-capture request workflow, so the first real RDP Chrome store-capture pass now has one durable request package instead of only a runbook.
 
+`Phase 144` completed the next executable part of step `3` by shipping one completion plus archive workflow for store screenshot capture, so the first future real screenshot set now has a truthful repo-backed way to move from `pending request` to `archived evidence`.
+
 ## References
 
 - Chrome `action` API:
@@ -146,6 +152,7 @@ Recommended rollout:
 - [Store_Screenshot_Capture_Runbook.md](../testing/Store_Screenshot_Capture_Runbook.md)
 - [Store_Screenshot_Capture_Packs.md](../testing/Store_Screenshot_Capture_Packs.md)
 - [Store_Screenshot_Capture_Requests.md](../testing/Store_Screenshot_Capture_Requests.md)
+- [Store_Screenshot_Capture_Archive.md](../testing/Store_Screenshot_Capture_Archive.md)
 
 ## Child TODO
 

@@ -12,6 +12,7 @@ Status note:
 - `Phase 141` completed the first executable slice on `2026-04-24` by shipping one explicit competitive-fit decision matrix plus one maintained screenshot storyboard pack for truthful extension-mode capture
 - `Phase 142` completed the next executable slice on `2026-04-24` by shipping one maintained screenshot-capture runbook plus one generator-backed baseline capture pack for truthful extension-mode runtime capture
 - `Phase 143` completed the next executable slice on `2026-04-24` by shipping one pending screenshot-capture request workflow for the first real RDP Chrome operator pass
+- `Phase 144` completed the next executable slice on `2026-04-24` by shipping one completion plus archive workflow for future real screenshot sets while truthfully keeping the repo at `1 pending / 0 archived`
 
 Process rule:
 
@@ -57,6 +58,7 @@ Parent direction:
 - document the reload and screenshot workflow so store assets come from truthful runtime state
 - `Phase 142` completed the first executable slice here by shipping one explicit screenshot-capture runbook and one generator-backed baseline capture pack
 - `Phase 143` completed the next executable slice here by shipping one pending request package so the first real operator capture pass now has a durable repo-backed handoff target
+- `Phase 144` completed the next executable slice here by shipping the completion and archive workflow that future real captures will use after the first operator pass finishes
 
 ### D. Store Readiness Pack
 
@@ -69,6 +71,7 @@ Parent direction:
   - honesty around provider coverage
 - `Phase 141` completed the first executable slice here by shipping one maintained screenshot storyboard pack; listing-copy hierarchy is still open
 - `Phase 142` completed the next executable slice here by shipping one concrete capture-pack workflow that turns the storyboard into named runtime capture tasks
+- `Phase 144` completed the next executable slice here by shipping one empty-but-truthful archive ledger plus one completion command, so completed screenshot sets now have a durable storage path
 
 ### E. Listing And Localization Coordination
 

@@ -1,7 +1,10 @@
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-import { STORE_SCREENSHOT_CAPTURE_REQUEST_PENDING_STATUS } from "./store-screenshot-capture-request.mjs";
+import {
+  STORE_SCREENSHOT_CAPTURE_REQUEST_FULFILLED_STATUS,
+  STORE_SCREENSHOT_CAPTURE_REQUEST_PENDING_STATUS,
+} from "./store-screenshot-capture-request.mjs";
 
 function normalizeRecord(record, manifestPath, projectRoot) {
   return {
@@ -20,6 +23,36 @@ function normalizeRecord(record, manifestPath, projectRoot) {
       typeof record?.baselinePackReadme === "string"
         ? record.baselinePackReadme
         : "",
+    fulfillment:
+      record?.fulfillment && typeof record.fulfillment === "object"
+        ? {
+            fulfilledAt:
+              typeof record.fulfillment.fulfilledAt === "string"
+                ? record.fulfillment.fulfilledAt
+                : "",
+            archiveId:
+              typeof record.fulfillment.archiveId === "string"
+                ? record.fulfillment.archiveId
+                : "",
+            archiveReadmePath:
+              typeof record.fulfillment.archiveReadmePath === "string"
+                ? record.fulfillment.archiveReadmePath
+                : "",
+            archiveManifestPath:
+              typeof record.fulfillment.archiveManifestPath === "string"
+                ? record.fulfillment.archiveManifestPath
+                : "",
+            sourceCaptureDir:
+              typeof record.fulfillment.sourceCaptureDir === "string"
+                ? record.fulfillment.sourceCaptureDir
+                : "",
+            screenshotFilenames: Array.isArray(
+              record.fulfillment.screenshotFilenames,
+            )
+              ? record.fulfillment.screenshotFilenames
+              : [],
+          }
+        : null,
     requiredScreenshotFilenames: Array.isArray(record?.requiredScreenshotFilenames)
       ? record.requiredScreenshotFilenames
       : [],
@@ -62,6 +95,11 @@ function buildSectionLines(records, emptyMessage) {
     lines.push(
       `  - baseline pack: \`${record.baselinePackReadme || "not set"}\``,
     );
+    if (record.status === STORE_SCREENSHOT_CAPTURE_REQUEST_FULFILLED_STATUS) {
+      lines.push(
+        `  - archive: \`${record.fulfillment?.archiveId || "not set"}\`${record.fulfillment?.archiveReadmePath ? ` · \`${record.fulfillment.archiveReadmePath}\`` : ""}`,
+      );
+    }
   }
 
   lines.push("");
@@ -116,6 +154,12 @@ export function buildStoreScreenshotCaptureRequestIndexMarkdown({
     "",
     "```bash",
     "npm run store:refresh-screenshot-capture-request-index",
+    "```",
+    "",
+    "Complete a pending request and archive one real screenshot set:",
+    "",
+    "```bash",
+    "npm run store:complete-screenshot-capture-request -- --request-id 2026-04-24-first-real-store-screenshot-capture-request --captures-dir Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/captures",
     "```",
     "",
     "## Truth Rules",
@@ -184,7 +228,7 @@ export async function writeStoreScreenshotCaptureRequestIndex({
       (record) => record.status === STORE_SCREENSHOT_CAPTURE_REQUEST_PENDING_STATUS,
     ).length,
     fulfilledRequestCount: records.filter(
-      (record) => record.status !== STORE_SCREENSHOT_CAPTURE_REQUEST_PENDING_STATUS,
+      (record) => record.status === STORE_SCREENSHOT_CAPTURE_REQUEST_FULFILLED_STATUS,
     ).length,
     records,
   };

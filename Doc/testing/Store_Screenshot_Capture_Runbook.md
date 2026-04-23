@@ -112,9 +112,16 @@ Each pack contains:
    - [Store_Screenshot_Storyboard.md](../Store_Screenshot_Storyboard.md)
    - the capture pack generator
    - this runbook
+4. Once the real extension-mode screenshots are ready, complete the pending request and archive the set:
+
+```bash
+npm run store:complete-screenshot-capture-request -- --request-id 2026-04-24-first-real-store-screenshot-capture-request --captures-dir Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/captures
+```
 
 ## Related Docs
 
 - [Store_Screenshot_Storyboard.md](../Store_Screenshot_Storyboard.md)
 - [Store_Screenshot_Capture_Packs.md](./Store_Screenshot_Capture_Packs.md)
+- [Store_Screenshot_Capture_Requests.md](./Store_Screenshot_Capture_Requests.md)
+- [Store_Screenshot_Capture_Archive.md](./Store_Screenshot_Capture_Archive.md)
 - [Direction 10 - Toolbar Competitive Fit And Store Readiness](../Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
