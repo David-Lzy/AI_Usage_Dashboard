@@ -16,6 +16,7 @@ Status note:
 - `Phase 145` completed the next executable slice on `2026-04-24` by verifying real RDP Chrome runtime capture for popup and sidepanel windows, so extension-mode screenshot collection is now a proven path
 - `Phase 146` completed the next executable slice on `2026-04-24` by adding request-bound capture notes plus archive-preserved truth-note metadata for the future first real screenshot set
 - `Phase 147` completed the next executable slice on `2026-04-24` by shipping one request-bound screenshot seed plus runtime-lock workflow and one RDP capture runner for the future first real screenshot set
+- `Phase 148` completed the next executable slice on `2026-04-24` by shipping one fast-fail timeout plus stale-probe cleanup path for failed RDP capture attempts
 
 Process rule:
 
@@ -65,6 +66,7 @@ Parent direction:
 - `Phase 145` completed the next executable slice here by proving that the current RDP Chrome profile can open and capture popup plus sidepanel runtime windows directly
 - `Phase 146` completed the next executable slice here by making capture notes request-bound and archive-preserved, so future real captures can keep truthful omission, approximation, and fallback notes through completion
 - `Phase 147` completed the next executable slice here by making screenshot seeds request-bound plus runtime-locked and by shipping one RDP capture runner that applies those seeds before each requested screenshot
+- `Phase 148` completed the next executable slice here by making failed X11 capture probes fast-fail plus cleanable, so the next real screenshot pass can retry without leaving stale helper processes behind
 
 ### D. Store Readiness Pack
 

@@ -19,6 +19,7 @@ Execution note:
 - fifth executable slice landed on `2026-04-24` through `Phase 145`
 - sixth executable slice landed on `2026-04-24` through `Phase 146`
 - seventh executable slice landed on `2026-04-24` through `Phase 147`
+- eighth executable slice landed on `2026-04-24` through `Phase 148`
 - this direction sharpens [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md) into a more explicit next-stage productization track
 
 Process rule:
@@ -71,6 +72,7 @@ As of 2026-04-24:
 - the repo now also ships request-bound capture notes plus archive-preserved truth-note metadata for future real screenshot sets
 - the repo now also ships one verified RDP Chrome runtime-capture helper for popup and sidepanel smoke captures
 - the repo now also ships one request-bound screenshot-seed route plus one RDP capture runner that can apply stable storyboard states to the real unpacked extension runtime before each requested capture
+- the repo now also ships one fast-fail timeout plus stale-probe cleanup path for RDP capture commands, so failed X11 probes do not leave the workflow hanging indefinitely
 - the popup still has some remaining overlap between top story, featured card, and lower surface-role explanation
 - the repo still does not yet ship a full store-readiness pack for listing copy hierarchy and localized listing variants
 - the project now has an RDP Chrome environment available for truthful extension-mode capture and review
@@ -144,6 +146,8 @@ Recommended rollout:
 `Phase 146` completed the next executable part of step `3` by adding request-bound capture notes plus archive-preserved truth-note metadata, so the first future real screenshot archive can now record omissions, approximations, and fallback contract states without losing them between request and archive.
 
 `Phase 147` completed the next executable part of step `3` by shipping one request-bound screenshot seed plus runtime-lock workflow and one RDP capture runner, so the first future real screenshot archive can now reproduce the storyboard states in the real unpacked extension runtime without those states being silently overwritten by normal background sync.
+
+`Phase 148` completed the next executable part of step `3` by adding fast-fail X11 command timeouts plus one stale-probe cleanup command for the RDP capture workflow, so failed capture attempts now terminate clearly instead of hanging the shell indefinitely.
 
 ## References
 

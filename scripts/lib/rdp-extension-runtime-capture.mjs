@@ -5,6 +5,7 @@ import { execFile, spawn } from "node:child_process";
 import { promisify } from "node:util";
 
 const execFileAsync = promisify(execFile);
+const DEFAULT_X11_COMMAND_TIMEOUT_MS = 8000;
 
 function assert(condition, message) {
   if (!condition) {
@@ -20,6 +21,17 @@ function sleep(ms) {
 
 function parseHexWindowId(value) {
   return Number.parseInt(value, 16);
+}
+
+function getX11CommandTimeoutMs() {
+  const rawTimeout = Number.parseInt(
+    process.env.RDP_CHROME_X11_COMMAND_TIMEOUT_MS ?? "",
+    10,
+  );
+
+  return Number.isFinite(rawTimeout) && rawTimeout > 0
+    ? rawTimeout
+    : DEFAULT_X11_COMMAND_TIMEOUT_MS;
 }
 
 function parseWindowTree(rawOutput) {
@@ -117,18 +129,40 @@ export async function detectLoadedExtensionId({ projectRoot }) {
   );
 }
 
-async function listChromeWindows({ display, xauthority }) {
-  const { stdout } = await execFileAsync(
-    "xwininfo",
-    ["-root", "-tree"],
-    {
+async function runX11Command({
+  command,
+  args,
+  runtime,
+  label,
+  timeoutMs = getX11CommandTimeoutMs(),
+}) {
+  try {
+    return await execFileAsync(command, args, {
       env: {
         ...process.env,
-        DISPLAY: display,
-        XAUTHORITY: xauthority,
+        DISPLAY: runtime.display,
+        XAUTHORITY: runtime.xauthority,
       },
-    },
-  );
+      timeout: timeoutMs,
+      killSignal: "SIGKILL",
+      maxBuffer: 10 * 1024 * 1024,
+    });
+  } catch (error) {
+    const details =
+      error instanceof Error && error.message.length > 0
+        ? error.message
+        : String(error);
+    throw new Error(`${label} failed within ${timeoutMs}ms: ${details}`);
+  }
+}
+
+async function listChromeWindows(runtime) {
+  const { stdout } = await runX11Command({
+    command: "xwininfo",
+    args: ["-root", "-tree"],
+    runtime,
+    label: "xwininfo window-tree probe",
+  });
 
   return parseWindowTree(stdout);
 }
@@ -243,17 +277,15 @@ export async function captureRdpExtensionWindow({
   });
 
   await mkdir(path.dirname(outputPath), { recursive: true });
-  await execFileAsync(
-    "import",
-    ["-window", windowInfo.windowId, outputPath],
-    {
-      env: {
-        ...process.env,
-        DISPLAY: windowInfo.display,
-        XAUTHORITY: windowInfo.xauthority,
-      },
+  await runX11Command({
+    command: "import",
+    args: ["-window", windowInfo.windowId, outputPath],
+    runtime: {
+      display: windowInfo.display,
+      xauthority: windowInfo.xauthority,
     },
-  );
+    label: "ImageMagick window capture",
+  });
 
   return {
     extensionId: windowInfo.extensionId,

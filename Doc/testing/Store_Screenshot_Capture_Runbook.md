@@ -125,6 +125,17 @@ Truth note:
 - it also updates the request-bound `capture-notes.json` with the current reviewed truth statuses and operator notes
 - it does not mark the request fulfilled by itself; completion still requires the normal archive command
 
+If an RDP capture attempt hangs on `xwininfo` or `import`, clean the stale probe processes before retrying:
+
+```bash
+npm run store:cleanup-rdp-capture-probes
+```
+
+Truth note:
+
+- this cleanup command only removes stale helper processes from failed capture attempts
+- it does not fabricate screenshots or mark any request fulfilled
+
 ## Capture Workflow
 
 1. Open the generated pack README and follow the screenshot order.

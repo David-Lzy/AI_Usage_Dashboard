@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [147_Phase_Store_Screenshot_Seed_Lock_And_Request_Bound_RDP_Capture.md](./Archive/147_Phase_Store_Screenshot_Seed_Lock_And_Request_Bound_RDP_Capture.md)
+- latest completed slice: [148_Phase_RDP_Capture_Timeout_Hardening_And_Probe_Cleanup.md](./Archive/148_Phase_RDP_Capture_Timeout_Hardening_And_Probe_Cleanup.md)
 
 Completed phases should be moved to:
 
@@ -194,6 +194,7 @@ Completed phases should be moved to:
 - [145_Phase_RDP_Extension_Runtime_Capture_Probe.md](./Archive/145_Phase_RDP_Extension_Runtime_Capture_Probe.md) - completed and archived on 2026-04-24
 - [146_Phase_Store_Screenshot_Capture_Truth_Notes_And_Archive_Metadata.md](./Archive/146_Phase_Store_Screenshot_Capture_Truth_Notes_And_Archive_Metadata.md) - completed and archived on 2026-04-24
 - [147_Phase_Store_Screenshot_Seed_Lock_And_Request_Bound_RDP_Capture.md](./Archive/147_Phase_Store_Screenshot_Seed_Lock_And_Request_Bound_RDP_Capture.md) - completed and archived on 2026-04-24
+- [148_Phase_RDP_Capture_Timeout_Hardening_And_Probe_Cleanup.md](./Archive/148_Phase_RDP_Capture_Timeout_Hardening_And_Probe_Cleanup.md) - completed and archived on 2026-04-24
 
 ## Dependency Notes
 

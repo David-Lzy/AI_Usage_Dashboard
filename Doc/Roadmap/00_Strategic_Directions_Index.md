@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-04-24:
 
-- the numbered phase queue is now completed through `Phase 147`
+- the numbered phase queue is now completed through `Phase 148`
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
 - `Phase 42` has packaged `0.1.0-rc.2` and closed the release-closeout track for the narrowed RC
 - `Phase 43` completed the first `Direction 02` slice by productizing source-fidelity semantics in the side panel
@@ -138,6 +138,7 @@ As of 2026-04-24:
 - `Phase 145` completed the next executable `Direction 10` slice by proving that the current RDP Chrome profile can open and capture real popup plus sidepanel runtime windows for future truthful store assets
 - `Phase 146` completed the next executable `Direction 10` slice and added request-bound capture notes plus archive-preserved truth-note metadata, so future real screenshot sets can durably record omission, approximation, and fallback boundaries
 - `Phase 147` completed the next executable `Direction 10` slice and added one request-bound screenshot seed plus runtime-lock workflow and one RDP capture runner, so future real screenshot sets can now reproduce stable storyboard states inside the real unpacked extension runtime before capture
+- `Phase 148` completed the next executable `Direction 10` slice and added one fast-fail timeout plus stale-probe cleanup path for RDP capture commands, so failed X11 probes no longer hang the shell indefinitely before the next real screenshot attempt
 - the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 140`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
 - the numbered phase queue is now completed through `Phase 140`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
 - `Codex` personal support is already shipped as a `session_page` path, but it currently exposes usage-window percentages and reset timing, not one absolute remaining credit balance
