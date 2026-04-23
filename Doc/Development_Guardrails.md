@@ -69,6 +69,16 @@ New-doc rule:
 - when a new markdown file could easily be mistaken for the wrong class, state its document class explicitly inside the file
 - this now also applies to roadmap direction files whenever folder-only semantics would make status ambiguous
 
+Convention-only boundary:
+
+- some evidence docs still intentionally rely on folder plus filename convention instead of inline labels
+- current examples:
+  - `Doc/TODOs/Archive/*.md`
+  - `Doc/testing/Phase_*.md`
+  - `Doc/testing/operator_reviews/*/interaction-audit-handoff-bundle.md`
+  - `Doc/testing/theme_recovery_reviews/*/theme-recovery-summary.md`
+- if one of these patterns starts causing status ambiguity, update the taxonomy and checker instead of continuing to rely on the old convention silently
+
 ## 1.2 Documentation Freshness Labels
 
 Some docs need one more layer beyond class:

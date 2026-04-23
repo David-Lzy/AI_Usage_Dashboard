@@ -191,6 +191,7 @@ Phase status update:
 - `Phase 136` completed the next executable `Direction 08` slice and shipped one lightweight `docs:check` consistency pass plus explicit labeling for the top-level backlog and index docs
 - `Phase 137` completed the next executable `Direction 08` slice and shipped one package-level taxonomy pass across generated request/archive READMEs, plus one refresh command and one checker extension that now covers those package docs too
 - `Phase 138` completed the next executable `Direction 08` slice and shipped one explicit `living strategy` labeling pass across the remaining roadmap direction files, plus one checker extension that now covers the full roadmap set
+- `Phase 139` completed the next executable `Direction 08` slice and made the remaining convention-only doc boundary explicit, so unlabeled fixed evidence artifacts are now a documented scope choice instead of an implicit omission
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
 - the split `Phase 41` release gate cleared the old runtime-parity ambiguity and re-proved the live `Codex` plus `Cursor` personal session-page paths in real Chrome
 - `2026-04-23`: `Branch B` was selected for the current RC, so JetBrains is now a retained repo path rather than part of the active release promise

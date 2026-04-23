@@ -1,6 +1,13 @@
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 
+export const DOC_TAXONOMY_CONVENTION_ONLY_PATTERNS = [
+  "Doc/TODOs/Archive/*.md",
+  "Doc/testing/Phase_*.md",
+  "Doc/testing/operator_reviews/*/interaction-audit-handoff-bundle.md",
+  "Doc/testing/theme_recovery_reviews/*/theme-recovery-summary.md",
+];
+
 export function parsePhaseTupleFromFilename(filename) {
   const match = filename.match(/^(\d+)(?:_(\d+))?_Phase_/);
 
@@ -279,6 +286,7 @@ export async function runDocTaxonomyCheck(projectRoot) {
     checkedFileCount: results.length,
     latestCompletedSliceFilename,
     latestArchivedPhaseFilename,
+    conventionOnlyPatterns: DOC_TAXONOMY_CONVENTION_ONLY_PATTERNS,
     results,
     issues,
   };

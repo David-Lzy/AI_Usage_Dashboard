@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   comparePhaseTuples,
+  DOC_TAXONOMY_CONVENTION_ONLY_PATTERNS,
   evaluateDocLabels,
   extractLatestCompletedSlicePath,
   parsePhaseTupleFromFilename,
@@ -40,6 +41,15 @@ describe("doc taxonomy check helpers", () => {
       "Doc/example.md is missing `Document class:`.",
       "Doc/example.md is missing `Freshness model:`.",
       "Doc/example.md is missing `Status note:`.",
+    ]);
+  });
+
+  it("exposes the intentional convention-only taxonomy boundary", () => {
+    expect(DOC_TAXONOMY_CONVENTION_ONLY_PATTERNS).toEqual([
+      "Doc/TODOs/Archive/*.md",
+      "Doc/testing/Phase_*.md",
+      "Doc/testing/operator_reviews/*/interaction-audit-handoff-bundle.md",
+      "Doc/testing/theme_recovery_reviews/*/theme-recovery-summary.md",
     ]);
   });
 });

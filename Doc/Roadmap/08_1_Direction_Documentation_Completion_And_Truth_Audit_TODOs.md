@@ -15,6 +15,7 @@ Status note:
 - `Phase 136` completed the next executable slice on `2026-04-24` by shipping explicit backlog plus index labeling and one lightweight repeatable doc-taxonomy consistency check
 - `Phase 137` completed the next executable slice on `2026-04-24` by shipping explicit class plus status labels for generated request/archive package READMEs, one package-readme refresh command, and one checker extension that now covers those generated package docs too
 - `Phase 138` completed the next executable slice on `2026-04-24` by shipping explicit `living strategy` labels across the remaining roadmap direction files and by extending the checker to cover the full roadmap set
+- `Phase 139` completed the next executable slice on `2026-04-24` by defining the current convention-only boundary explicitly and surfacing that same boundary in checker output
 
 Process rule:
 
@@ -85,6 +86,7 @@ Parent direction:
   - stale roadmap dates
 - the repo now ships one first lightweight check for label presence on high-value docs plus latest-slice alignment in the phase index
 - that lightweight check now also covers generated request/archive package READMEs, not only top-level indexes and maintained references
+- that lightweight check now also exposes the current convention-only boundary so remaining unlabeled evidence artifacts are documented as policy, not drift
 
 ## Out Of Scope
 

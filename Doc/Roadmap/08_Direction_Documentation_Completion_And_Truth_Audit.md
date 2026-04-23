@@ -18,6 +18,7 @@ Execution note:
 - fourth executable slice landed on `2026-04-24` through `Phase 136`
 - fifth executable slice landed on `2026-04-24` through `Phase 137`
 - sixth executable slice landed on `2026-04-24` through `Phase 138`
+- seventh executable slice landed on `2026-04-24` through `Phase 139`
 
 Process rule:
 
@@ -60,6 +61,7 @@ As of 2026-04-24:
 - the repo now also has one lightweight executable taxonomy check for the highest-value maintained-reference, generated-ledger, and index docs
 - the generated repo-backed request and archive package READMEs now also carry explicit taxonomy labels and can be refreshed through one dedicated package-readme refresh command
 - the remaining roadmap direction files now also carry explicit `living strategy` labels instead of relying only on folder-level semantics
+- the repo now also records which remaining doc patterns are intentionally convention-only instead of leaving that boundary implicit
 
 This means:
 
@@ -132,6 +134,8 @@ Recommended rollout:
 `Phase 137` completed the next executable part of optional step `4` by labeling the generated request plus archive package READMEs, refreshing the current repo packages through their generators, and extending the taxonomy check to cover those package-level docs.
 
 `Phase 138` completed the next executable part of optional step `4` by labeling the remaining roadmap direction files as explicit `living strategy` docs and extending the taxonomy check to cover the full `Doc/Roadmap/` set instead of only the strategic index.
+
+`Phase 139` completed the next executable part of optional step `4` by defining the current convention-only boundary explicitly and carrying that boundary into the checker output, so remaining unlabeled evidence artifacts are now an explicit policy choice instead of an accidental gap.
 
 ## References
 

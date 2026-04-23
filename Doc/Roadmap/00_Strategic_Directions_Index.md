@@ -31,7 +31,7 @@ Important scope note:
 As of 2026-04-24:
 
 - the numbered phase queue is now completed through `Phase 136`
-- the numbered phase queue is now completed through `Phase 138`
+- the numbered phase queue is now completed through `Phase 139`
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
 - `Phase 42` has packaged `0.1.0-rc.2` and closed the release-closeout track for the narrowed RC
 - `Phase 43` completed the first `Direction 02` slice by productizing source-fidelity semantics in the side panel
@@ -130,8 +130,9 @@ As of 2026-04-24:
 - `Phase 136` completed the next executable `Direction 08` slice by labeling the remaining ambiguity-prone backlog plus index docs and by adding one lightweight executable taxonomy consistency check
 - `Phase 137` completed the next executable `Direction 08` slice by labeling generated request/archive package READMEs, refreshing the current repo packages through generator-driven output, and extending the taxonomy consistency check to package-level docs
 - `Phase 138` completed the next executable `Direction 08` slice by labeling the remaining roadmap direction files as explicit `living strategy` docs and extending the taxonomy consistency check to the full roadmap set
-- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 138`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
-- the numbered phase queue is now completed through `Phase 138`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs and the full roadmap set
+- `Phase 139` completed the next executable `Direction 08` slice by making the remaining convention-only doc boundary explicit and surfacing that policy through checker output
+- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 139`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
+- the numbered phase queue is now completed through `Phase 139`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
 - `Codex` personal support is already shipped as a `session_page` path, but it currently exposes usage-window percentages and reset timing, not one absolute remaining credit balance
 - `Cursor` personal support is already shipped as a `session_page` path, but it currently exposes billing-period usage context, not one exact remaining included-request counter
 - the extension action now opens a compact popup on click, the popup makes cached snapshot freshness explicit, and the badge shows the count of visible providers needing attention
@@ -200,7 +201,7 @@ As of 2026-04-24:
 
 1. [Direction 08 - Documentation Completion And Truth Audit](./08_Direction_Documentation_Completion_And_Truth_Audit.md)
    Why first among the new requests:
-   the numbered phase queue is closed through `Phase 138`, and the repo now has one explicit documentation taxonomy plus one freshness-label model plus one lightweight consistency check that reaches package-level generated docs and the full roadmap set; the next work is to decide whether any lower-priority living docs should remain folder-implied by convention.
+   the numbered phase queue is closed through `Phase 139`, and the repo now has one explicit documentation taxonomy plus one freshness-label model plus one lightweight consistency check that reaches package-level generated docs, the full roadmap set, and the current convention-only boundary; the next work is to decide whether any remaining low-value docs still need promotion into explicit labeling.
 
 2. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why second among the new requests:

@@ -183,3 +183,25 @@ Recommended inline pattern:
 - `Document class:`
 - `Freshness model:`
 - `Status note:`
+
+## Intentional Convention-Only Boundary
+
+Not every markdown file needs an explicit inline label.
+
+Some docs are intentionally still classified by stable folder plus filename convention.
+
+Current convention-only set:
+
+- archived numbered phase files under `Doc/TODOs/Archive/`
+- fixed phase testing reports under `Doc/testing/Phase_*.md`
+- generated interaction-audit handoff bundle markdown inside dated archive directories
+- generated theme-recovery summary markdown inside dated archive directories
+
+Reason:
+
+- these files already live inside strongly classed locations and are primarily consumed as companion evidence artifacts, not as ambiguous top-level references
+- the labeled README or index that points at them should carry the higher-level class semantics instead
+
+Rule:
+
+- when one of these convention-only patterns becomes ambiguous in practice, promote it into explicit labeling or checker coverage instead of assuming the old boundary is still sufficient
