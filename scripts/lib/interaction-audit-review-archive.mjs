@@ -230,6 +230,17 @@ export function buildInteractionAuditReviewArchiveRecord({
   const readmeLines = [
     "# Interaction Audit Review Archive",
     "",
+    "Document class:",
+    "",
+    "- closed evidence",
+    "",
+    "Status note:",
+    "",
+    "- this package README is generated from one archived review record and should be regenerated from the archive record if rendering rules change, not hand-edited to alter the archived outcome",
+    seeded
+      ? "- this specific archive is a seeded internal baseline and does not claim a completed human operator signoff"
+      : "- this specific archive mirrors one archived exported workspace state only and does not rewrite unresolved follow-up or not-reviewed work into a pass claim",
+    "",
     `Archive ID: \`${archiveId}\``,
     `Archived at: ${archivedAt}`,
     `Source signoff export: \`${sourceSignoffExport}\``,

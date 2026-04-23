@@ -1,5 +1,14 @@
 # Theme Recovery Review Archive
 
+Document class:
+
+- closed evidence
+
+Status note:
+
+- this package README is generated from one archived theme-recovery record and should be regenerated from the archive record if rendering rules change, not hand-edited to alter the archived outcome
+- this specific archive is a seeded internal baseline and does not claim a completed human operator pass
+
 Archive ID: `2026-04-23-theme-recovery-seeded-archive-baseline`
 Archived at: 2026-04-23T11:51:50.081Z
 Source export: `tmp/phase113-theme-recovery-archive-workflow-review/downloads/theme-recovery-export-2026-04-23-light-needs-access-custom.json`

@@ -1,5 +1,14 @@
 # Theme Recovery Review Request
 
+Document class:
+
+- generated operational ledger
+
+Status note:
+
+- this package README is generated from one repo-backed theme-recovery request manifest and should be refreshed through the request generator or refresh workflow, not hand-edited
+- it preserves current request-package truth only and does not claim that a human review has already happened
+
 Request ID: `2026-04-23-first-real-theme-recovery-review-request`
 Created at: 2026-04-23T11:13:03.801Z
 Status: `pending_operator_review`

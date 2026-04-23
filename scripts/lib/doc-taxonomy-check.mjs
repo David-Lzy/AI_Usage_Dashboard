@@ -71,6 +71,30 @@ async function buildDocRequirements(projectRoot) {
       needsFreshness: true,
       needsStatus: true,
     }));
+  const generatedPackageReadmeDirs = [
+    "Doc/testing/operator_review_requests",
+    "Doc/testing/operator_reviews",
+    "Doc/testing/theme_recovery_review_requests",
+    "Doc/testing/theme_recovery_reviews",
+  ];
+  const generatedPackageReadmeRequirements = [];
+
+  for (const relativeDir of generatedPackageReadmeDirs) {
+    const absoluteDir = path.join(projectRoot, relativeDir);
+    const entries = (await readdir(absoluteDir, { withFileTypes: true }))
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => entry.name)
+      .sort();
+
+    for (const entry of entries) {
+      generatedPackageReadmeRequirements.push({
+        relativePath: `${relativeDir}/${entry}/README.md`,
+        needsClass: true,
+        needsFreshness: false,
+        needsStatus: true,
+      });
+    }
+  }
 
   return [
     {
@@ -176,6 +200,7 @@ async function buildDocRequirements(projectRoot) {
       needsFreshness: false,
       needsStatus: false,
     },
+    ...generatedPackageReadmeRequirements,
   ];
 }
 

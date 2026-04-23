@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [136_Phase_Doc_Taxonomy_Consistency_Check_And_Index_Labeling.md](./Archive/136_Phase_Doc_Taxonomy_Consistency_Check_And_Index_Labeling.md)
+- latest completed slice: [137_Phase_Generated_Request_And_Archive_Package_Readme_Labeling.md](./Archive/137_Phase_Generated_Request_And_Archive_Package_Readme_Labeling.md)
 
 Completed phases should be moved to:
 
@@ -183,6 +183,7 @@ Completed phases should be moved to:
 - [134_Phase_Documentation_Freshness_Labels_And_Reference_Status.md](./Archive/134_Phase_Documentation_Freshness_Labels_And_Reference_Status.md) - completed and archived on 2026-04-24
 - [135_Phase_Provider_Notes_And_Fixture_Reference_Labeling.md](./Archive/135_Phase_Provider_Notes_And_Fixture_Reference_Labeling.md) - completed and archived on 2026-04-24
 - [136_Phase_Doc_Taxonomy_Consistency_Check_And_Index_Labeling.md](./Archive/136_Phase_Doc_Taxonomy_Consistency_Check_And_Index_Labeling.md) - completed and archived on 2026-04-24
+- [137_Phase_Generated_Request_And_Archive_Package_Readme_Labeling.md](./Archive/137_Phase_Generated_Request_And_Archive_Package_Readme_Labeling.md) - completed and archived on 2026-04-24
 
 ## Dependency Notes
 

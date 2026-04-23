@@ -349,6 +349,15 @@ function buildThemeRecoveryReviewRequestReadme({
 
   return `# Theme Recovery Review Request
 
+Document class:
+
+- generated operational ledger
+
+Status note:
+
+- this package README is generated from one repo-backed theme-recovery request manifest and should be refreshed through the request generator or refresh workflow, not hand-edited
+- it preserves current request-package truth only and does not claim that a human review has already happened
+
 Request ID: \`${requestId}\`
 Created at: ${createdAt}
 Status: \`${status}\`

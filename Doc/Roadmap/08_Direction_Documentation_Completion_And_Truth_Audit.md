@@ -8,6 +8,7 @@ Execution note:
 - second executable slice landed on `2026-04-24` through `Phase 134`
 - third executable slice landed on `2026-04-24` through `Phase 135`
 - fourth executable slice landed on `2026-04-24` through `Phase 136`
+- fifth executable slice landed on `2026-04-24` through `Phase 137`
 
 Process rule:
 
@@ -38,7 +39,7 @@ Today the truthful answer is "some are complete, some are intentionally living,"
 
 As of 2026-04-24:
 
-- numbered phase docs are archived through `Phase 134`
+- numbered phase docs are archived through `Phase 137`
 - there is no active numbered phase file in [00_Phase_Index.md](../TODOs/00_Phase_Index.md)
 - roadmap directions remain open by design
 - interaction-audit request docs still show `1 pending / 0 fulfilled`
@@ -48,6 +49,7 @@ As of 2026-04-24:
 - the most ambiguity-prone maintained-reference docs now also carry explicit freshness labels so readers can distinguish current references from dated snapshots or historical design baselines
 - provider notes and fixture-convention guidance now also carry explicit maintained-reference plus freshness labels instead of reading like unlabeled historical research notes
 - the repo now also has one lightweight executable taxonomy check for the highest-value maintained-reference, generated-ledger, and index docs
+- the generated repo-backed request and archive package READMEs now also carry explicit taxonomy labels and can be refreshed through one dedicated package-readme refresh command
 
 This means:
 
@@ -69,6 +71,12 @@ Make documentation status legible enough that the repo can answer three differen
 
 2. Treat generated request and archive indexes as operational ledgers.
    They should never be judged by the same "done" rule as archived phase files.
+
+2.1 Treat repo-backed request package READMEs as generated operational ledgers.
+   They reflect current request-manifest truth and should be refreshed, not hand-authored.
+
+2.2 Treat dated archive package READMEs as closed evidence.
+   They are generated renderings of one archived record, not living dashboards.
 
 3. Treat roadmap files as living strategy docs.
    They should carry explicit state like `active`, `deferred`, `superseded`, or `closed`.
@@ -110,6 +118,8 @@ Recommended rollout:
 `Phase 135` completed the next executable part of step `4` by extending that same maintained-reference and freshness labeling into the provider notes plus the page-session fixture conventions doc.
 
 `Phase 136` completed the first executable part of optional step `4` by labeling the remaining ambiguity-prone backlog plus index docs and shipping one lightweight repeatable taxonomy consistency check.
+
+`Phase 137` completed the next executable part of optional step `4` by labeling the generated request plus archive package READMEs, refreshing the current repo packages through their generators, and extending the taxonomy check to cover those package-level docs.
 
 ## References
 

@@ -39,6 +39,7 @@ Typical examples:
 
 - archived numbered phase files under [Doc/TODOs/Archive](./TODOs/Archive/README.md)
 - fixed phase testing reports under `Doc/testing/Phase_*.md`
+- generated archive-package `README.md` files inside dated review archive directories
 
 Completion model:
 
@@ -73,6 +74,7 @@ Typical examples:
 - request indexes
 - archive indexes
 - machine-readable ledgers rendered as markdown summaries
+- generated repo-backed review-request package `README.md` files that reflect current request-manifest truth
 
 Current examples:
 
@@ -137,8 +139,10 @@ These defaults are conventions, not hard absolutes:
 
 - `Doc/TODOs/Archive/` -> closed evidence
 - `Doc/testing/Phase_*.md` -> closed evidence
+- generated archive-package `README.md` files inside dated review archive directories -> closed evidence
 - `Doc/Roadmap/` -> living strategy
 - generated request and archive indexes under `Doc/testing/` -> generated operational ledger
+- generated request-package `README.md` files inside repo-backed review-request directories -> generated operational ledger
 - `Doc/provider_notes/` -> maintained reference
 - `Doc/Development_Guardrails.md` -> maintained reference
 - `Doc/Release_Packaging_Guide.md` -> maintained reference
@@ -154,9 +158,11 @@ Use this sequence:
 
 Examples:
 
-- archived phase docs through `Phase 133` are complete evidence
+- archived phase docs through `Phase 137` are complete evidence
 - roadmap files are open by design unless explicitly closed
 - request and archive indexes are truthful ledgers, not incomplete implementation work
+- request-package READMEs are generated ledgers for one current request record, not proof that a human pass is complete
+- archive-package READMEs are closed evidence for one archived record, not living status dashboards
 - provider notes are maintained references, not one-time closeout docs
 
 ## Maintenance Rule
@@ -166,6 +172,7 @@ When a new document could easily be misread, state its class explicitly inside t
 This is especially important for:
 
 - generated request and archive indexes
+- generated request and archive package READMEs
 - one-off benchmark snapshots
 - runbooks that may drift over time
 - older design-baseline docs that still live outside the archive queue

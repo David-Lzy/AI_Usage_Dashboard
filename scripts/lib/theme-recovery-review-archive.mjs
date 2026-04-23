@@ -250,6 +250,15 @@ function buildArchiveMarkdown(
 
   return `# Theme Recovery Review Archive
 
+Document class:
+
+- closed evidence
+
+Status note:
+
+- this package README is generated from one archived theme-recovery record and should be regenerated from the archive record if rendering rules change, not hand-edited to alter the archived outcome
+${seeded ? "- this specific archive is a seeded internal baseline and does not claim a completed human operator pass" : "- this specific archive mirrors one archived exported theme-recovery state only and does not rewrite unresolved access or scope issues into a pass claim"}
+
 Archive ID: \`${archiveId}\`
 Archived at: ${archivedAt}
 Source export: \`${sourceReviewExport}\`

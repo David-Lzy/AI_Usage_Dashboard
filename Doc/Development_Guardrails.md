@@ -52,6 +52,8 @@ Rule:
 - archived numbered phase files and fixed phase reports are `closed evidence`
 - roadmap files are `living strategy`
 - generated request and archive indexes are `generated operational ledger`
+- generated repo-backed request-package READMEs are also `generated operational ledger`
+- generated archive-package READMEs inside dated review archive directories are `closed evidence`
 - guardrails, provider notes, runbooks, benchmark docs, and release guides are `maintained reference`
 
 Meaning:
@@ -60,6 +62,7 @@ Meaning:
 - `living strategy` remains open until explicitly closed or superseded
 - `generated operational ledger` is truthful when it matches current manifests and archive records, not when it is "finished forever"
 - `maintained reference` is healthy when current, not when frozen
+- generated package READMEs should be refreshed through their generators or refresh commands, not hand-edited as if they were standalone authored docs
 
 New-doc rule:
 

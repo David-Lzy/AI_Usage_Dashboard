@@ -1,5 +1,14 @@
 # Interaction Audit Review Archive
 
+Document class:
+
+- closed evidence
+
+Status note:
+
+- this package README is generated from one archived review record and should be regenerated from the archive record if rendering rules change, not hand-edited to alter the archived outcome
+- this specific archive is a seeded internal baseline and does not claim a completed human operator signoff
+
 Archive ID: `2026-04-23-codex-seeded-review-archive-baseline`
 Archived at: 2026-04-22T23:27:20.398Z
 Source signoff export: `fixtures/interaction-audit/codex-seeded-review-archive-baseline.fixture.json`
@@ -9,6 +18,11 @@ Review session:
 - Reviewer: Codex seeded review
 - Session: codex seeded review archive baseline
 - Reviewed at: 2026-04-23T23:15:00.000Z
+- Request binding: none
+- Request revision: not recorded
+- Evidence source: not recorded
+- Evidence items: 0
+- Evidence integrity: not recorded
 
 Ready for signoff: no
 Reviewed surfaces: 3 / 5

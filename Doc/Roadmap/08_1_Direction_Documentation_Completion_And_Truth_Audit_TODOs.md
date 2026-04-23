@@ -9,6 +9,7 @@ Status note:
 - `Phase 134` completed the next executable slice on `2026-04-24` by shipping explicit freshness labels for benchmark, audit, design-baseline, runbook, checklist, and release-reference docs
 - `Phase 135` completed the next executable slice on `2026-04-24` by shipping explicit maintained-reference and freshness labels for provider notes plus the page-session fixture conventions doc
 - `Phase 136` completed the next executable slice on `2026-04-24` by shipping explicit backlog plus index labeling and one lightweight repeatable doc-taxonomy consistency check
+- `Phase 137` completed the next executable slice on `2026-04-24` by shipping explicit class plus status labels for generated request/archive package READMEs, one package-readme refresh command, and one checker extension that now covers those generated package docs too
 
 Process rule:
 
@@ -55,6 +56,8 @@ Parent direction:
   - seeded baseline docs
   - fulfilled operator records
 - ensure these docs are not misread as incomplete implementation work
+- distinguish package-level request READMEs from package-level archive READMEs instead of treating both as one generic generated-doc bucket
+- keep generated package README refresh flows generator-driven instead of hand-editing dated package docs in place
 
 ### E. Reference-Doc Maintenance Rules
 
@@ -75,6 +78,7 @@ Parent direction:
   - presence of child TODO links
   - stale roadmap dates
 - the repo now ships one first lightweight check for label presence on high-value docs plus latest-slice alignment in the phase index
+- that lightweight check now also covers generated request/archive package READMEs, not only top-level indexes and maintained references
 
 ## Out Of Scope
 
