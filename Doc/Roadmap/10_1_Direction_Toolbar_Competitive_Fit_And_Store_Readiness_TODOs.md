@@ -19,6 +19,7 @@ Status note:
 - `Phase 148` completed the next executable slice on `2026-04-24` by shipping one fast-fail timeout plus stale-probe cleanup path for failed RDP capture attempts
 - `Phase 149` completed the next executable slice on `2026-04-24` by fulfilling and archiving the first real RDP Chrome screenshot set
 - `Phase 150` completed the next executable slice on `2026-04-24` by shipping one maintained store-listing copy pack anchored to that first archived screenshot set
+- `Phase 151` completed the next executable slice on `2026-04-24` by shipping one maintained store-listing localization source pack anchored to the manifest, maintained listing-copy pack, and first archived screenshot set
 
 Process rule:
 
@@ -92,6 +93,7 @@ Parent direction:
 - decide which listing claims are valid today
 - plan listing localization separately from in-product localization
 - ensure store screenshots and translated listings remain aligned with real product states
+- `Phase 151` completed the first executable slice here by turning the current English listing copy into one stable localization source pack with string ids, truth anchors, and translation guardrails for future store-localization work
 
 ### F. Verification
 

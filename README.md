@@ -175,6 +175,7 @@ The Chrome action now opens a compact popup first:
 - the repo now also ships one request-bound store-screenshot seed plus RDP capture-runner workflow, so truthful store assets can be collected from the real unpacked extension runtime without pretending the first real screenshot archive already exists
 - the repo now also ships the first real archived store screenshot set, captured from `RDP Chrome` and archived with request-bound truth notes instead of preview-only mocks
 - the repo now also ships one maintained store-listing copy pack anchored to that first real screenshot archive, including the preferred short description, overview paragraph, feature bullets, screenshot captions, and claim guardrails
+- the repo now also ships one maintained store-listing localization source pack anchored to the current manifest, maintained listing-copy pack, and first archived screenshot set, so future translated store listings can stay aligned with the same truth boundary
 - the badge shows the number of visible providers currently needing attention
 - the side panel remains the canonical surface for settings, source diagnostics, and provider detail
 

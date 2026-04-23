@@ -122,4 +122,5 @@ Purpose:
 
 - use this pack as the source document for future store listing updates
 - use this pack as the English source for future listing-localization work
+- keep the localization handoff aligned with [Store_Listing_Localization_Source_Pack.md](./Store_Listing_Localization_Source_Pack.md)
 - refresh this pack whenever a future screenshot archive replaces the current first archived set

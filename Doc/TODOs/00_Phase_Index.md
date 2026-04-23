@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [150_Phase_Store_Listing_Copy_Pack_From_First_Archive.md](./Archive/150_Phase_Store_Listing_Copy_Pack_From_First_Archive.md)
+- latest completed slice: [151_Phase_Store_Listing_Localization_Source_Pack.md](./Archive/151_Phase_Store_Listing_Localization_Source_Pack.md)
 
 Completed phases should be moved to:
 
@@ -197,6 +197,7 @@ Completed phases should be moved to:
 - [148_Phase_RDP_Capture_Timeout_Hardening_And_Probe_Cleanup.md](./Archive/148_Phase_RDP_Capture_Timeout_Hardening_And_Probe_Cleanup.md) - completed and archived on 2026-04-24
 - [149_Phase_First_Real_Store_Screenshot_Archive.md](./Archive/149_Phase_First_Real_Store_Screenshot_Archive.md) - completed and archived on 2026-04-24
 - [150_Phase_Store_Listing_Copy_Pack_From_First_Archive.md](./Archive/150_Phase_Store_Listing_Copy_Pack_From_First_Archive.md) - completed and archived on 2026-04-24
+- [151_Phase_Store_Listing_Localization_Source_Pack.md](./Archive/151_Phase_Store_Listing_Localization_Source_Pack.md) - completed and archived on 2026-04-24
 
 ## Dependency Notes
 

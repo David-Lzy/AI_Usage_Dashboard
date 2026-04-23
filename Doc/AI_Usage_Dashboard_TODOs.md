@@ -203,6 +203,7 @@ Phase status update:
 - `Phase 148` completed the next executable `Direction 10` slice and added one fast-fail timeout plus stale-probe cleanup path for failed RDP capture attempts, so the next real screenshot pass can retry cleanly instead of leaving hung X11 helper processes behind
 - `Phase 149` completed the next executable `Direction 10` slice and archived the first real RDP Chrome screenshot set, so the store-readiness track now has one durable archived screenshot evidence package instead of only a pending request workflow
 - `Phase 150` completed the next executable `Direction 10` slice and added one maintained store-listing copy pack anchored to that first archived screenshot set, so screenshot evidence and store copy can now evolve from the same truthful source
+- `Phase 151` completed the next executable `Direction 10` slice and added one maintained store-listing localization source pack anchored to the manifest, maintained listing-copy pack, and first archived screenshot set, so future translated store listings can stay aligned with the same truthful source set
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
 - the split `Phase 41` release gate cleared the old runtime-parity ambiguity and re-proved the live `Codex` plus `Cursor` personal session-page paths in real Chrome
 - `2026-04-23`: `Branch B` was selected for the current RC, so JetBrains is now a retained repo path rather than part of the active release promise
