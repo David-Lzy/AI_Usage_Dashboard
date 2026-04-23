@@ -1,0 +1,403 @@
+# Codex Provider Note
+
+Date: 2026-04-21
+
+Process rule:
+
+- follow [Development_Guardrails.md](../Development_Guardrails.md)
+
+## 1. Decision
+
+Selected MVP source path:
+
+- `A2`: official Codex Analytics API for Enterprise workspaces
+
+Selected MVP support scope:
+
+- ChatGPT Enterprise workspaces with Codex enabled
+- Codex Cloud enabled in the workspace
+- analytics-capable API access for the workspace
+
+Deferred from MVP:
+
+- ChatGPT Plus / Pro / Go / Free personal plans
+- ChatGPT Business workspace billing page parsing
+- workspace credit-balance scraping from the ChatGPT billing UI
+- local-only Codex usage as a primary source
+
+Reason:
+
+- the OpenAI governance docs now make the Enterprise analytics path explicit enough to support a defensible live integration
+- the analytics path exposes real daily usage metrics programmatically
+- the analytics path still does not expose exact remaining workspace credits, so the adapter must stay analytics-only and keep `remaining` as `null`
+
+## 2. Official Sources Reviewed
+
+Reviewed on 2026-04-21 using official OpenAI documentation:
+
+- Governance:
+  - https://developers.openai.com/codex/enterprise/governance
+- Using Codex with your ChatGPT plan:
+  - https://help.openai.com/en/articles/11369540-using-codex-with-your-chatgpt-plan/
+- Flexible pricing for the Enterprise, Edu, and Business plans:
+  - https://help.openai.com/en/articles/11487671-flexible-pricing-for-the-enterprise-edu-and-team-plans
+- ChatGPT Enterprise overview:
+  - https://help.openai.com/en/articles/8265053-what-is-chatgpt-enterprise
+
+## 3. Selected Source Path
+
+Chosen source surface:
+
+- `GET https://api.chatgpt.com/v1/analytics/codex/workspaces/{workspace_id}/usage`
+
+Headers and access assumptions:
+
+- `Authorization: Bearer <analytics_api_key>`
+- workspace-scoped analytics key
+- `api.chatgpt.com` extension host access
+
+Why this is the MVP path:
+
+- governance docs describe an Analytics API specifically for Codex
+- the documented analytics scope includes daily totals for `threads`, `turns`, and `credits`
+- the help article explicitly says Codex Enterprise Analytics is available for Enterprise workspaces with Codex enabled
+
+Why Business parsing is deferred:
+
+- flexible pricing and billing surfaces are documented, but the current docs do not provide a stable public JSON contract for the billing UI
+- the analytics API is narrower, but materially more stable and easier to defend long term
+
+## 4. What The Official Docs Say
+
+Analytics coverage:
+
+- Codex offers three governance surfaces:
+  - analytics dashboard
+  - analytics API
+  - compliance API
+- the Analytics API provides daily time-series metrics for a workspace
+- the documented metrics include:
+  - daily totals for `threads`
+  - daily totals for `turns`
+  - daily totals for `credits`
+- results are daily, time-windowed, and paginated
+
+Plan and access scope:
+
+- Codex Enterprise Analytics is available to Enterprise workspaces with Codex enabled
+- workspace administrators may also use the analytics dashboard for self-serve monitoring
+- flexible pricing articles still point workspace owners to Settings > Billing for remaining credits and usage reports
+
+What remains unavailable in this adapter:
+
+- exact remaining workspace credits from the analytics endpoint
+- a documented public contract for personal-plan remaining usage
+- local-only usage as part of Enterprise analytics totals
+
+## 5. What This Means For MVP
+
+Best-supported first Codex account type:
+
+- Enterprise workspace with Codex enabled and analytics access
+
+What the shipped adapter returns:
+
+- `used`: latest available daily `credits` total, if present
+- `warningReason`: latest available daily `credits`, `threads`, and `turns`
+- `remaining`: `null`
+- `total`: `null`
+- `quotaWindow`: `daily`
+
+Important honesty constraint:
+
+- the adapter must not invent remaining workspace credits
+- users still need the ChatGPT billing UI for live credit balance checks
+
+Inference from sources:
+
+- the Analytics API is suitable for programmatic adoption and cost-monitoring snapshots
+- the Billing UI remains the better source for live remaining-credit questions
+
+## 6. Fixtures
+
+Docs-derived fixtures now used in this provider:
+
+- [analytics-api.fixture.json](/nfs/server1/disk1/Project/personal_project/AI_Usage_Dashboard/fixtures/codex/analytics-api.fixture.json:1)
+- [workspace-usage-surfaces.fixture.json](/nfs/server1/disk1/Project/personal_project/AI_Usage_Dashboard/fixtures/codex/workspace-usage-surfaces.fixture.json:1)
+- [rate-card-summary.fixture.json](/nfs/server1/disk1/Project/personal_project/AI_Usage_Dashboard/fixtures/codex/rate-card-summary.fixture.json:1)
+
+Fixture note:
+
+- the analytics fixture is sanitized scaffolding derived from the documented daily metrics model
+- it is not a capture from a production Enterprise workspace
+
+## 7. Open Validation Items
+
+Still needs real customer validation:
+
+- confirm the exact production response shape from a live Enterprise workspace analytics key
+- confirm whether pagination uses `cursor`, `page`, or another server-side token name in the live API
+- confirm whether additional query parameters are needed to scope the export window in production
+- confirm which admin role can retrieve workspace analytics keys and IDs in the customer environment
+
+## 8. Research Result
+
+This phase selects:
+
+- Enterprise Analytics API live wiring as the shipped Codex MVP path
+
+This phase does not select:
+
+- personal plan support
+- Business billing-page parsing
+- fake remaining-credit estimates
+
+## 9. Phase 30 Personal-User Spike
+
+Observed in the current local Chrome profile on 2026-04-21:
+
+- `https://chatgpt.com/codex/settings/usage`
+- `https://chatgpt.com/codex/cloud/settings/usage`
+- `https://chatgpt.com/codex/cloud/settings/analytics#usage`
+
+Observed in the live session set, not just browser history:
+
+- `https://chatgpt.com/codex/settings/usage`
+- `https://chatgpt.com/codex/cloud/settings/analytics#usage`
+
+Observed route titles:
+
+- all three routes were stored by Chrome as `Codex`
+
+## 10. Personal-User Decision
+
+Chosen personal-user candidate path:
+
+- primary: `https://chatgpt.com/codex/settings/usage`
+- secondary: `https://chatgpt.com/codex/cloud/settings/usage`
+- analytics-only fallback for comparison: `https://chatgpt.com/codex/cloud/settings/analytics#usage`
+
+Why `codex/settings/usage` is the primary candidate:
+
+- it is the least workspace-specific route
+- it matches the personal-user expansion goal better than the `cloud` namespace
+- the `analytics` route is more likely to mirror workspace or reporting surfaces than a direct personal remaining-usage panel
+
+What is still unknown after the spike:
+
+- whether the primary page exposes exact remaining usage
+- whether it exposes only window status or warning copy
+- whether the actual data is easiest to read from DOM, boot data, or same-origin network responses
+
+## 11. Authentication And Security Findings
+
+Observed ChatGPT session artifacts in the live Chrome profile:
+
+- split `__Secure-next-auth.session-token.*` cookies
+- `cf_clearance`
+- `oai-client-auth-info`
+- `oai-sc`
+- `_puid`
+
+Important implementation result:
+
+- copied profile automation is not a reliable path for Codex personal support
+
+What failed during the spike:
+
+- a partial copied profile hit a Cloudflare managed challenge on both candidate routes
+- a fuller profile clone with a backed-up cookie database still redirected to logged-out `https://chatgpt.com/`
+
+Inference from these local probes:
+
+- the extension should not attempt to support Codex personal pages by cloning the browser profile
+- the extension should not store or import raw ChatGPT cookies
+- the extractor must attach to the already-running logged-in ChatGPT tab in the user's browser context
+
+## 12. Chosen Extraction Plan
+
+Selected next implementation step:
+
+- use the shared page-session framework against the user's already-open ChatGPT tab
+
+Required extension change before a live fixture capture:
+
+- add optional host access for `https://chatgpt.com/*`
+
+Preferred extraction order:
+
+1. inspect boot data or preloaded route state
+2. inspect same-origin network responses from the page context
+3. fall back to stable DOM fields only if the first two surfaces are unavailable
+
+Enterprise coexistence rule:
+
+- keep the shipped Enterprise analytics adapter unchanged
+- treat the personal-page path as a separate `session_page` source
+- do not merge personal-page numbers into the Enterprise analytics semantics
+
+## 13. Personal Fixtures
+
+Phase 30 added one non-sensitive evidence fixture:
+
+- [personal-page-route-evidence.fixture.json](/nfs/server1/disk1/Project/personal_project/AI_Usage_Dashboard/fixtures/codex/personal-page-route-evidence.fixture.json:1)
+
+Why this fixture exists:
+
+- it records the observed route inventory and auth constraints without storing cookie values
+- it documents why copied-session automation was rejected
+
+## 14. Phase 30 Research Result
+
+This phase selects:
+
+- a live-tab `session_page` path as the only defensible personal Codex direction
+- `https://chatgpt.com/codex/settings/usage` as the primary candidate route
+
+This phase does not yet prove:
+
+- exact remaining usage for personal users
+- whether `codex/cloud/settings/usage` is a better extraction surface than the non-cloud route
+
+## 15. Phase 30.1 Live Tab Capture
+
+Observed in the live Chrome extension session on 2026-04-21:
+
+- the extension successfully requested optional host access for `https://chatgpt.com/*`
+- the debug capture page attached to the already-open logged-in ChatGPT tab set
+- the first successful live fixture matched `https://chatgpt.com/codex/cloud/settings/analytics#usage`
+- the matched page title was `Codex`
+- the matched page heading was `Codex 分析`
+- the matched page exposed visible DOM snippets including:
+  - `5 小时使用限额`
+  - `92%`
+  - `剩余`
+  - `重置时间：2026年4月22日 1:11`
+  - `每周使用限额`
+  - `97%`
+  - `GPT-5.3-Codex-Spark 5 小时使用限额`
+  - `100%`
+- the capture summary reported:
+  - `recommendedSurface = dom`
+  - `hasNextDataScript = false`
+  - `hasNextFlightStream = false`
+  - `hasCloudflareChallenge = false`
+
+What did not match in this live capture:
+
+- `https://chatgpt.com/codex/settings/usage`
+- `https://chatgpt.com/codex/cloud/settings/usage`
+
+Inference from the captured page:
+
+- the live `cloud/settings/analytics#usage` route exposes exact remaining percentages directly in rendered DOM
+- the same page also exposes explicit reset timestamps for at least the captured usage windows
+- the personal-user expansion can now rely on one proven `session_page` surface without exporting cookies or cloning the browser profile
+
+## 16. Personal-User Capture Decision
+
+Selected first proven personal-user extraction surface:
+
+- route: `https://chatgpt.com/codex/cloud/settings/analytics#usage`
+- surface: `dom`
+- extraction mode observed in the live fixture: `dom`
+
+Current honesty boundary:
+
+- the extension can now defend exact remaining percentages and reset timestamps when this live analytics page is present
+- the extension still cannot claim that `https://chatgpt.com/codex/settings/usage` is the better source until a real fixture exists for that route
+- the extension should treat the non-cloud route as an observed but unproven candidate, not as the primary proven surface
+
+Important parser constraint:
+
+- the captured page was in Chinese, so the personal-page parser should not assume English-only copy
+- route identity and stable card structure should be preferred over hard-coded locale strings wherever possible
+
+## 17. Personal Fixtures
+
+Phase 30.1 added one live redacted fixture:
+
+- [personal-page-live.fixture.json](/nfs/server1/disk1/Project/personal_project/AI_Usage_Dashboard/fixtures/codex/personal-page-live.fixture.json:1)
+
+Why this fixture matters:
+
+- it is the first proof that a real logged-in personal-adjacent Codex page exposes exact remaining values in the browser DOM
+- it records the chosen route and extraction surface without retaining cookies or raw full-page dumps
+
+## 18. Phase 35 Personal Snapshot Parser
+
+Phase 35 turns the redacted live fixture into a parser contract, without wiring it into the shipped sync engine yet.
+
+Parser target:
+
+- consume the captured `CodexPersonalLiveFixture`
+- pick the matched route chosen by the live capture decision
+- parse visible usage-window snippets into structured window snapshots
+
+Current parser contract:
+
+- measurement kind:
+  - `window_percent`
+- supported window fields:
+  - window label
+  - normalized window label
+  - remaining percent
+  - used percent
+  - reset timestamp when the page exposes one
+- supported window classes:
+  - general `5-hour` usage window
+  - `weekly` usage window
+  - model-specific `5-hour` usage window
+
+Current honesty boundary:
+
+- the parser can defend exact remaining percentages and reset timestamps for the visible usage windows on the proven `cloud/settings/analytics#usage` page
+- the parser does not claim absolute remaining credits, remaining dollars, or a unified single numeric quota across all windows
+- if the matched page no longer exposes parseable usage windows, the parser must fail as `route_drift` instead of inventing data
+
+Failure classes selected in this phase:
+
+- `open_page_required`
+- `logged_out`
+- `route_drift`
+
+Why this matters for the next phase:
+
+- `Phase 36` can now wire Codex personal live refresh around a tested parser instead of reparsing raw fixture snippets inside the adapter
+
+## 19. Phase 36 Personal Live Wiring
+
+Phase 36 ships the personal Codex page as a real adapter path.
+
+Current temporary source-selection rule:
+
+- if a Codex analytics API key and workspace ID are configured, the provider keeps using the Enterprise analytics API path
+- otherwise, the provider uses the logged-in ChatGPT Codex usage page path
+
+What this shipped:
+
+- the Codex adapter now supports a `session_page` live path built on the personal-page parser
+- preview mode falls back to the redacted live fixture instead of crashing when `chrome.tabs` and `chrome.scripting` are unavailable
+- the settings page now treats Codex Enterprise analytics config as optional rather than mandatory for every Codex user
+- the `Source Connections` section now exposes a shipped `Find or open page` helper for Codex
+
+Current personal-user semantics:
+
+- primary proven live route:
+  - `https://chatgpt.com/codex/cloud/settings/analytics#usage`
+- normalized primary metric:
+  - visible usage-window percentages
+- reset behavior:
+  - explicit reset timestamps when the page exposes them
+- not supported:
+  - a single absolute remaining-credit balance across all visible windows
+
+Current honesty boundary:
+
+- the personal path reports percentages and visible reset times
+- the Enterprise path still reports daily analytics rows without exact remaining credits
+- these two paths are intentionally not merged into one fake universal Codex quota number
+
+Next remaining gap:
+
+- source preference and fallback rules are still heuristic in this phase and will be formalized later in the dedicated hybrid-source selection phase

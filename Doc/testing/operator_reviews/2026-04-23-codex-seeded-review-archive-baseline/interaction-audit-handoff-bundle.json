@@ -1,0 +1,188 @@
+{
+  "generatedAt": "2026-04-22T23:27:20.398Z",
+  "sourceSignoffExport": "fixtures/interaction-audit/codex-seeded-review-archive-baseline.fixture.json",
+  "sourceEvidencePack": "tmp/phase69-interaction-audit-evidence-pack/phase69-results.json",
+  "reviewSession": {
+    "reviewerName": "Codex seeded review",
+    "sessionLabel": "codex seeded review archive baseline",
+    "reviewedAt": "2026-04-23T23:15:00.000Z"
+  },
+  "summary": {
+    "readyForSignoff": false,
+    "totalSurfaceCount": 5,
+    "reviewedSurfaceCount": 3,
+    "passSurfaceCount": 2,
+    "followUpSurfaceCount": 1,
+    "notReviewedSurfaceCount": 2,
+    "completedManualCheckCount": 6,
+    "totalManualCheckCount": 11,
+    "pendingManualCheckCount": 5
+  },
+  "handoffSummaryMarkdown": "# Interaction Audit Handoff Summary\n\nThis summary reflects the exported audit-hub workspace state and highlights what still blocks final operator signoff.\n\nReview session:\n- Reviewer: Codex seeded review\n- Session: codex seeded review archive baseline\n- Reviewed at: 2026-04-23T23:15:00.000Z\n\nReady for signoff: no\nReviewed surfaces: 3 / 5\nPass: 2\nFollow-up required: 1\nNot reviewed: 2\nPending checks: 5 / 11\n\n## Follow-up required\n\n### Settings\n\n- Pending checks: 1 / 3\n- Notes: Seeded baseline: sticky shell and grouped diagnostics stayed stable, but compact select emphasis should still be revisited in a real human pass.\n\n## Not reviewed\n\n- Provider Detail · Codex (2 pending checks)\n- Toolbar Popup (2 pending checks)\n\n## Pending manual checks\n\n### Settings\n\n- Confirm the focused source-preference select stays visually explicit without overpowering the surrounding source-card summary.\n\n- Notes: Seeded baseline: sticky shell and grouped diagnostics stayed stable, but compact select emphasis should still be revisited in a real human pass.\n\n### Provider Detail · Codex\n\n- Confirm fidelity and graduation-gate notes remain easy to distinguish from regular supporting fields at the shipped 420px detail width.\n- Confirm dense hybrid-source supporting text still reads cleanly without overflow or flattened hierarchy after the note jump.\n\n- Notes: none yet\n\n### Toolbar Popup\n\n- Confirm quick actions and featured-provider actions still feel readable and comfortably tappable at the shipped 360px popup width.\n- Confirm the focused popup actions preserve compact spacing instead of collapsing the snapshot-status and featured-card rhythm.\n\n- Notes: none yet\n",
+  "surfaces": [
+    {
+      "id": "dashboard-360",
+      "title": "Dashboard",
+      "description": "Use this frame to inspect summary pills, provider-card density, and the main top-bar action row at a realistic narrow side-panel width.",
+      "signoffStatus": "pass",
+      "operatorNotes": "Seeded baseline: provider action focus and provider-card density looked coherent in the prepared dashboard audit state.",
+      "completedManualCheckCount": 2,
+      "totalManualCheckCount": 2,
+      "pendingManualChecks": [],
+      "manualChecks": [
+        {
+          "label": "Confirm the focused Open action still feels visually coherent with the hover treatment on nearby dashboard controls.",
+          "completed": true
+        },
+        {
+          "label": "Confirm provider-card summary density remains readable at the shipped 360px audit width without chip or text collisions.",
+          "completed": true
+        }
+      ],
+      "linkedEvidence": [
+        {
+          "label": "Focus first provider action",
+          "expectation": "The first provider card should place visible keyboard focus on its Open action so hover-versus-focus parity can be checked.",
+          "screenshot": "tmp/phase69-interaction-audit-evidence-pack/01-dashboard-360-focus-first-provider-open.png",
+          "auditStatus": "Focused the first provider action button."
+        }
+      ]
+    },
+    {
+      "id": "settings-420",
+      "title": "Settings",
+      "description": "Review sticky actions, section-jump chips, disclosure density, selects, switch rows, and compact source-card readability in one wider audit frame.",
+      "signoffStatus": "follow_up",
+      "operatorNotes": "Seeded baseline: sticky shell and grouped diagnostics stayed stable, but compact select emphasis should still be revisited in a real human pass.",
+      "completedManualCheckCount": 2,
+      "totalManualCheckCount": 3,
+      "pendingManualChecks": [
+        "Confirm the focused source-preference select stays visually explicit without overpowering the surrounding source-card summary."
+      ],
+      "manualChecks": [
+        {
+          "label": "Confirm the sticky top bar and section-jump shell still feel stable after the diagnostics disclosure and focused select are prepared.",
+          "completed": true
+        },
+        {
+          "label": "Confirm the expanded diagnostics groups remain scannable and do not introduce horizontal overflow at the shipped 420px audit width.",
+          "completed": true
+        },
+        {
+          "label": "Confirm the focused source-preference select stays visually explicit without overpowering the surrounding source-card summary.",
+          "completed": false
+        }
+      ],
+      "linkedEvidence": [
+        {
+          "label": "Open first diagnostics",
+          "expectation": "The first Source Connections disclosure should open and keep its summary toggle focused for grouped-diagnostics review.",
+          "screenshot": "tmp/phase69-interaction-audit-evidence-pack/02-settings-420-open-first-diagnostics.png",
+          "auditStatus": "Opened the first source diagnostics disclosure."
+        },
+        {
+          "label": "Focus source preference",
+          "expectation": "The first source-preference select inside Source Connections should receive focus for keyboard-state review.",
+          "screenshot": "tmp/phase69-interaction-audit-evidence-pack/03-settings-420-focus-first-source-preference.png",
+          "auditStatus": "Focused the first source-preference select."
+        }
+      ]
+    },
+    {
+      "id": "cursor-detail-360",
+      "title": "Provider Detail · Cursor",
+      "description": "Inspect long-value wrapping, neutral note hierarchy, status surfaces, and progress honesty on a compact provider-detail route.",
+      "signoffStatus": "pass",
+      "operatorNotes": "Seeded baseline: note hierarchy and long-value wrapping stayed readable in the compact Cursor detail route.",
+      "completedManualCheckCount": 2,
+      "totalManualCheckCount": 2,
+      "pendingManualChecks": [],
+      "manualChecks": [
+        {
+          "label": "Confirm the first note remains visually distinct from the lighter detail-field tiles instead of blending into the parent surface.",
+          "completed": true
+        },
+        {
+          "label": "Confirm long supporting values and labels still wrap cleanly at the shipped 360px compact detail width.",
+          "completed": true
+        }
+      ],
+      "linkedEvidence": [
+        {
+          "label": "Jump to first note",
+          "expectation": "The first detail note block should be brought into view so note hierarchy and dense supporting content can be reviewed quickly.",
+          "screenshot": "tmp/phase69-interaction-audit-evidence-pack/04-cursor-detail-360-jump-first-note.png",
+          "auditStatus": "Scrolled the detail frame to the first note block."
+        }
+      ]
+    },
+    {
+      "id": "codex-detail-420",
+      "title": "Provider Detail · Codex",
+      "description": "Use this frame for the denser hybrid-source detail path, especially fidelity notes, graduation gates, and supporting-surface hierarchy.",
+      "signoffStatus": "not_reviewed",
+      "operatorNotes": "",
+      "completedManualCheckCount": 0,
+      "totalManualCheckCount": 2,
+      "pendingManualChecks": [
+        "Confirm fidelity and graduation-gate notes remain easy to distinguish from regular supporting fields at the shipped 420px detail width.",
+        "Confirm dense hybrid-source supporting text still reads cleanly without overflow or flattened hierarchy after the note jump."
+      ],
+      "manualChecks": [
+        {
+          "label": "Confirm fidelity and graduation-gate notes remain easy to distinguish from regular supporting fields at the shipped 420px detail width.",
+          "completed": false
+        },
+        {
+          "label": "Confirm dense hybrid-source supporting text still reads cleanly without overflow or flattened hierarchy after the note jump.",
+          "completed": false
+        }
+      ],
+      "linkedEvidence": [
+        {
+          "label": "Jump to first note",
+          "expectation": "The first detail note block should be brought into view so fidelity and graduation-gate note treatment can be reviewed quickly.",
+          "screenshot": "tmp/phase69-interaction-audit-evidence-pack/05-codex-detail-420-jump-first-note.png",
+          "auditStatus": "Scrolled the detail frame to the first note block."
+        }
+      ]
+    },
+    {
+      "id": "popup-360",
+      "title": "Toolbar Popup",
+      "description": "Review quick actions, snapshot-status tone, featured provider cards, and compact popup spacing without opening the browser action repeatedly.",
+      "signoffStatus": "not_reviewed",
+      "operatorNotes": "",
+      "completedManualCheckCount": 0,
+      "totalManualCheckCount": 2,
+      "pendingManualChecks": [
+        "Confirm quick actions and featured-provider actions still feel readable and comfortably tappable at the shipped 360px popup width.",
+        "Confirm the focused popup actions preserve compact spacing instead of collapsing the snapshot-status and featured-card rhythm."
+      ],
+      "manualChecks": [
+        {
+          "label": "Confirm quick actions and featured-provider actions still feel readable and comfortably tappable at the shipped 360px popup width.",
+          "completed": false
+        },
+        {
+          "label": "Confirm the focused popup actions preserve compact spacing instead of collapsing the snapshot-status and featured-card rhythm.",
+          "completed": false
+        }
+      ],
+      "linkedEvidence": [
+        {
+          "label": "Focus dashboard action",
+          "expectation": "The popup Quick Actions row should place visible focus on Open dashboard for keyboard and compact-spacing review.",
+          "screenshot": "tmp/phase69-interaction-audit-evidence-pack/06-popup-360-focus-open-dashboard.png",
+          "auditStatus": "Focused the popup dashboard action."
+        },
+        {
+          "label": "Focus featured detail action",
+          "expectation": "The first featured-provider card should place visible focus on Open detail for compact action density review.",
+          "screenshot": "tmp/phase69-interaction-audit-evidence-pack/07-popup-360-focus-first-detail.png",
+          "auditStatus": "Focused the first featured-provider detail action."
+        }
+      ]
+    }
+  ]
+}

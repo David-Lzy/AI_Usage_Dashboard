@@ -1,0 +1,53 @@
+{
+  "generatedAt": "2026-04-23T03:12:03.875Z",
+  "archiveRoot": "Doc/testing/operator_reviews",
+  "records": [
+    {
+      "archiveId": "2026-04-23-codex-seeded-review-archive-baseline",
+      "archivedAt": "2026-04-22T23:27:20.398Z",
+      "seeded": true,
+      "sourceSignoffExport": "fixtures/interaction-audit/codex-seeded-review-archive-baseline.fixture.json",
+      "sourceEvidencePack": "tmp/phase69-interaction-audit-evidence-pack/phase69-results.json",
+      "sourceRequest": {
+        "requestId": "",
+        "requestReadmePath": "",
+        "requestManifestPath": ""
+      },
+      "requestContext": {
+        "requestId": "",
+        "requestCreatedAt": "",
+        "requestRevisionSha256": ""
+      },
+      "evidenceContext": {
+        "source": "",
+        "sourceLabel": "",
+        "selectedPath": "",
+        "evidenceItemCount": 0,
+        "integrityOk": false,
+        "integrityState": "",
+        "expectedSha256": "",
+        "actualSha256": "",
+        "expectedSizeBytes": 0,
+        "actualSizeBytes": 0
+      },
+      "reviewSession": {
+        "reviewerName": "Codex seeded review",
+        "sessionLabel": "codex seeded review archive baseline",
+        "reviewedAt": "2026-04-23T23:15:00.000Z"
+      },
+      "summary": {
+        "readyForSignoff": false,
+        "totalSurfaceCount": 5,
+        "reviewedSurfaceCount": 3,
+        "passSurfaceCount": 2,
+        "followUpSurfaceCount": 1,
+        "notReviewedSurfaceCount": 2,
+        "completedManualCheckCount": 6,
+        "totalManualCheckCount": 11,
+        "pendingManualCheckCount": 5
+      },
+      "readmePath": "Doc/testing/operator_reviews/2026-04-23-codex-seeded-review-archive-baseline/README.md",
+      "manifestPath": "Doc/testing/operator_reviews/2026-04-23-codex-seeded-review-archive-baseline/review-archive.json"
+    }
+  ]
+}

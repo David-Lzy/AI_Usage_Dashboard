@@ -1,0 +1,26 @@
+{
+  "date": "2026-04-19T00:00:00Z",
+  "customerType": "api",
+  "totals": {
+    "sessions": 5,
+    "linesAdded": 530,
+    "linesRemoved": 140,
+    "commitsByClaudeCode": 3,
+    "pullRequestsByClaudeCode": 1,
+    "estimatedCostUsdCents": 1845
+  },
+  "members": [
+    {
+      "email": "alex@company.com",
+      "sessions": 3,
+      "linesAdded": 420,
+      "estimatedCostUsdCents": 1260
+    },
+    {
+      "email": "morgan@company.com",
+      "sessions": 2,
+      "linesAdded": 110,
+      "estimatedCostUsdCents": 585
+    }
+  ]
+}

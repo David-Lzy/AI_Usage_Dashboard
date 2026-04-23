@@ -1,0 +1,40 @@
+{
+  "supportedScope": "business_or_enterprise_workspace",
+  "sourceSurfaces": [
+    {
+      "surface": "Workspace settings -> Billing",
+      "signals": [
+        "credit balance",
+        "automatic recharge threshold",
+        "automatic recharge target balance",
+        "monthly recharge limit",
+        "workspace-level limits and analytics"
+      ]
+    },
+    {
+      "surface": "Codex settings -> Usage panel",
+      "signals": [
+        "workspace token usage",
+        "workspace-level Codex consumption visibility",
+        "rate-card context"
+      ]
+    },
+    {
+      "surface": "Enterprise analytics / API access",
+      "signals": [
+        "enterprise-only analytics availability",
+        "cloud usage visibility when Codex Cloud is enabled"
+      ]
+    }
+  ],
+  "requirements": [
+    "Codex enabled in the workspace",
+    "workspace credits for usage-based Codex activity",
+    "billing-capable role for credit management",
+    "Codex Cloud enabled for enterprise analytics access"
+  ],
+  "unsupportedSignals": [
+    "local-only Codex usage in Compliance API",
+    "exact remaining usage for personal plans"
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "capturedAt": "2026-04-21T23:30:00+09:30",
+  "captureMethod": "manual_live_page_plus_view_source",
+  "route": {
+    "url": "https://cursor.com/cn/dashboard/usage",
+    "title": "Cursor - The best way",
+    "pathLocalePrefix": "cn",
+    "sourceHtmlLang": "zh-CN",
+    "renderedCopyLanguage": "mostly_en"
+  },
+  "visiblePageSignals": {
+    "textSnippets": [
+      "Usage",
+      "Pro",
+      "Pro+",
+      "Ultra",
+      "On-Demand Usage is Off",
+      "Your Usage",
+      "Your usage per day across this billing period",
+      "By Model",
+      "Spend",
+      "Export CSV",
+      "Mar 23 - Apr 21"
+    ],
+    "exactRemainingCounterVisible": false,
+    "currentBillingPeriodUsageVisible": true,
+    "planMetadataVisible": true,
+    "exportControlVisible": true
+  },
+  "sourceSignals": {
+    "hasNextDataScript": false,
+    "hasNextFlightStream": true,
+    "nextFlightMatchCount": 41,
+    "hasBuildManifest": false,
+    "hasVisibleUsageStringsInSource": true,
+    "matchedStrings": [
+      "Upgrade to Pro+",
+      "On-Demand Usage is Off",
+      "Export CSV"
+    ]
+  },
+  "decision": {
+    "recommendedSurface": "boot_data",
+    "domFallback": true,
+    "usedAvailability": "window_only",
+    "remainingAvailability": "unavailable",
+    "resetAvailability": "window_only",
+    "rationale": "The live source is backed by repeated Next flight payloads and the visible page exposes current billing-period usage, but it does not expose an exact remaining included-request counter."
+  },
+  "notes": [
+    "The rendered page copy was mostly English even though the route used the /cn prefix.",
+    "This fixture intentionally records page architecture and visible product signals rather than the full HTML source.",
+    "The hidden extension debug route exists, but the GUI host-permission request remained inconsistent in the current desktop session, so this fixture was finalized from direct live-page and view-source inspection."
+  ]
+}

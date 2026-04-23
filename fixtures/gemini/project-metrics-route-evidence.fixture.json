@@ -1,0 +1,29 @@
+{
+  "capturedAt": "2026-04-22T02:40:00+09:30",
+  "source": "chrome_session_metadata",
+  "matchedUrl": "https://console.cloud.google.com/gemini-code-assist/metrics?project=sincere-office-460607-g9",
+  "matchedTitle": "Gemini Code Assist Metrics",
+  "scopeAssessment": {
+    "scope": "project",
+    "evidence": [
+      "The route includes the explicit query parameter `project=sincere-office-460607-g9`.",
+      "The same Chrome session also recorded the companion overview route `https://console.cloud.google.com/gemini-code-assist/overview?hl=zh-cn&pli=1&project=sincere-office-460607-g9`."
+    ]
+  },
+  "sessionMarkers": {
+    "hasDynamicFrameMarkers": true,
+    "bscframeUrl": "https://console.cloud.google.com/p/bscframe",
+    "pangolinIframeUrl": "https://console.cloud.google.com/pangolin/iframe.html?cb=5688675119956372&authuser=0",
+    "rotateCookiesOrigin": "https://accounts.google.com/RotateCookiesPage?origin=https%3A%2F%2Fconsole.cloud.google.com&hfcr_pid=1&rot=3"
+  },
+  "publicRouteProbe": {
+    "unauthenticatedBehavior": "redirects to Google Cloud sign-in",
+    "finalService": "cloudconsole"
+  },
+  "extractionAssessment": {
+    "dom": "unproven and likely fragile because the Chrome session points to a dynamic Google Cloud console surface rather than a simple rendered usage page",
+    "bootData": "not proven; no Next.js-style boot payload was observed",
+    "networkObserver": "most plausible future path if the product explicitly adds bound-tab project metrics support",
+    "recommendedDecision": "unsupported_for_personal_track"
+  }
+}

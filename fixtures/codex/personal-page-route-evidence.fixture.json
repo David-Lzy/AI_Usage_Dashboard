@@ -1,0 +1,72 @@
+{
+  "capturedAt": "2026-04-21",
+  "scope": "codex personal usage page spike",
+  "observedRoutes": [
+    {
+      "url": "https://chatgpt.com/codex/settings/usage",
+      "source": ["live_session", "browser_history"],
+      "title": "Codex",
+      "visitCount": 19,
+      "classification": "personal_usage_candidate",
+      "currentlyOpenInLiveChrome": true
+    },
+    {
+      "url": "https://chatgpt.com/codex/cloud/settings/usage",
+      "source": ["browser_history"],
+      "title": "Codex",
+      "visitCount": 21,
+      "classification": "cloud_usage_candidate",
+      "currentlyOpenInLiveChrome": false
+    },
+    {
+      "url": "https://chatgpt.com/codex/cloud/settings/analytics#usage",
+      "source": ["live_session", "browser_history"],
+      "title": "Codex",
+      "visitCount": 9,
+      "classification": "analytics_candidate",
+      "currentlyOpenInLiveChrome": true
+    }
+  ],
+  "observedAuthArtifacts": {
+    "cookieNames": [
+      "__Secure-next-auth.session-token.0",
+      "__Secure-next-auth.session-token.1",
+      "_puid",
+      "cf_clearance",
+      "oai-client-auth-info",
+      "oai-sc"
+    ],
+    "notes": [
+      "Only cookie names were retained in this fixture.",
+      "Cookie values were intentionally excluded."
+    ]
+  },
+  "copySessionProbes": [
+    {
+      "probe": "partial profile clone with Playwright",
+      "result": "blocked_by_cloudflare_challenge",
+      "evidence": {
+        "route": "https://chatgpt.com/codex/settings/usage",
+        "title": "请稍候…"
+      }
+    },
+    {
+      "probe": "full profile clone with backed-up cookie database",
+      "result": "redirected_to_logged_out_chatgpt_home",
+      "evidence": {
+        "route": "https://chatgpt.com/codex/settings/usage",
+        "finalUrl": "https://chatgpt.com/",
+        "title": "ChatGPT"
+      }
+    }
+  ],
+  "decision": {
+    "primaryCandidateRoute": "https://chatgpt.com/codex/settings/usage",
+    "secondaryCandidateRoutes": [
+      "https://chatgpt.com/codex/cloud/settings/usage",
+      "https://chatgpt.com/codex/cloud/settings/analytics#usage"
+    ],
+    "copySessionStrategy": "rejected",
+    "requiredExtractionSurface": "already-open logged-in ChatGPT tab"
+  }
+}

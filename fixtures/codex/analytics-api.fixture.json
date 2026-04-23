@@ -1,0 +1,29 @@
+{
+  "data": [
+    {
+      "date": "2026-04-20T00:00:00Z",
+      "client": "cli",
+      "credits": 120.5,
+      "threads": 14,
+      "turns": 48
+    },
+    {
+      "date": "2026-04-20T00:00:00Z",
+      "client": "vscode",
+      "metrics": {
+        "credits": 24.5,
+        "threads": 4,
+        "turns": 13
+      }
+    },
+    {
+      "date": "2026-04-19T00:00:00Z",
+      "client": "cloud",
+      "credits": 80,
+      "threads": 9,
+      "turns": 30
+    }
+  ],
+  "has_more": false,
+  "next_cursor": null
+}

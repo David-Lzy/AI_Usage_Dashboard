@@ -1,0 +1,40 @@
+{
+  "capturedAt": "2026-04-22T00:00:00+09:30",
+  "captureMethod": "manual_live_page",
+  "requestedRoute": "https://claude.ai/settings/usage",
+  "finalRoute": "https://claude.ai/upgrade",
+  "accountState": "free_or_upgrade_only",
+  "routeState": "redirected_or_gated",
+  "visiblePageSignals": {
+    "heading": "Plans that grow with you",
+    "planTabs": [
+      "Individual",
+      "Team and Enterprise"
+    ],
+    "planCards": [
+      "Free",
+      "Pro",
+      "Max"
+    ],
+    "priceSnippets": [
+      "A$0",
+      "A$29 AUD / month billed annually (includes GST)",
+      "From A$169.99 AUD / month billed monthly (includes GST)"
+    ],
+    "usageMeterVisible": false,
+    "remainingCounterVisible": false,
+    "resetTimeVisible": false,
+    "usageHistoryVisible": false
+  },
+  "decision": {
+    "supportDecision": "unsupported_for_now",
+    "usedAvailability": "unavailable",
+    "remainingAvailability": "unavailable",
+    "resetAvailability": "unavailable",
+    "rationale": "The current logged-in browser session reaches an upgrade page instead of a usable personal usage surface."
+  },
+  "notes": [
+    "This evidence fixture captures the free-account redirect outcome only.",
+    "A later revisit should happen only after capturing a real Pro or Max usage page, if such a page exists."
+  ]
+}

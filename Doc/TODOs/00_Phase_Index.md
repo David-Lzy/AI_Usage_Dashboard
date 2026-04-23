@@ -1,0 +1,291 @@
+# Phase Index
+
+Date: 2026-04-23
+
+Process rule:
+
+- follow [Development_Guardrails.md](../Development_Guardrails.md)
+
+Purpose:
+
+- break the project into small phases
+- keep each phase narrow enough to finish in one focused Codex turn
+- make provider work incremental instead of all-at-once
+
+Execution rule:
+
+- finish one phase completely before starting the next dependent phase
+- do not start a provider adapter phase before its research phase is done
+- keep the UI on Material Design 3 for every phase that touches the side panel
+- if a phase becomes too large, split it into subphases such as `16.1`, `16.2`, then update this index
+
+## Sequence
+
+- active phase file: none currently; see latest completed slice below
+- latest completed slice: [97_Phase_Strategic_Roadmap_Expansion_For_Theming_Benchmark_And_i18n.md](./Archive/97_Phase_Strategic_Roadmap_Expansion_For_Theming_Benchmark_And_i18n.md)
+
+Completed phases should be moved to:
+
+- [Archive/README.md](./Archive/README.md)
+
+## Completed Phases
+
+- [01_Phase_Project_Baseline.md](./Archive/01_Phase_Project_Baseline.md) - completed and archived on 2026-04-20
+- [02_Phase_Material_Theme_Foundation.md](./Archive/02_Phase_Material_Theme_Foundation.md) - completed and archived on 2026-04-20
+- [03_Phase_SidePanel_App_Shell.md](./Archive/03_Phase_SidePanel_App_Shell.md) - completed and archived on 2026-04-20
+- [04_Phase_Provider_Cards_And_Detail_Route.md](./Archive/04_Phase_Provider_Cards_And_Detail_Route.md) - completed and archived on 2026-04-20
+- [05_Phase_Settings_And_Permission_UX.md](./Archive/05_Phase_Settings_And_Permission_UX.md) - completed and archived on 2026-04-20
+- [06_Phase_Storage_Sample_State_MessageBus.md](./Archive/06_Phase_Storage_Sample_State_MessageBus.md) - completed and archived on 2026-04-20
+- [07_Phase_Sync_Engine_And_Alarms.md](./Archive/07_Phase_Sync_Engine_And_Alarms.md) - completed and archived on 2026-04-20
+- [08_Phase_Cursor_Research.md](./Archive/08_Phase_Cursor_Research.md) - completed and archived on 2026-04-20
+- [09_Phase_Cursor_Adapter.md](./Archive/09_Phase_Cursor_Adapter.md) - completed and archived on 2026-04-20
+- [10_Phase_JetBrains_Research.md](./Archive/10_Phase_JetBrains_Research.md) - completed and archived on 2026-04-20
+- [11_Phase_JetBrains_Adapter.md](./Archive/11_Phase_JetBrains_Adapter.md) - completed and archived on 2026-04-20
+- [12_Phase_Claude_Research.md](./Archive/12_Phase_Claude_Research.md) - completed and archived on 2026-04-20
+- [13_Phase_Claude_Adapter.md](./Archive/13_Phase_Claude_Adapter.md) - completed and archived on 2026-04-20
+- [14_Phase_Gemini_Static_Quota.md](./Archive/14_Phase_Gemini_Static_Quota.md) - completed and archived on 2026-04-20
+- [15_Phase_Codex_Research.md](./Archive/15_Phase_Codex_Research.md) - completed and archived on 2026-04-20
+- [16_Phase_Codex_Adapter_Spike.md](./Archive/16_Phase_Codex_Adapter_Spike.md) - completed and archived on 2026-04-20
+- [17_Phase_Integration_QA_And_Polish.md](./Archive/17_Phase_Integration_QA_And_Polish.md) - completed and archived on 2026-04-20
+- [18_Phase_Chrome_Permissions_Wiring.md](./Archive/18_Phase_Chrome_Permissions_Wiring.md) - completed and archived on 2026-04-20
+- [19_Phase_Full_Verification_And_Unpacked_QA.md](./Archive/19_Phase_Full_Verification_And_Unpacked_QA.md) - completed and archived on 2026-04-20
+- [20_Phase_Cursor_Live_Wiring.md](./Archive/20_Phase_Cursor_Live_Wiring.md) - completed and archived on 2026-04-20
+- [21_Phase_JetBrains_Live_Wiring.md](./Archive/21_Phase_JetBrains_Live_Wiring.md) - completed and archived on 2026-04-20
+- [22_Phase_Claude_Live_Wiring.md](./Archive/22_Phase_Claude_Live_Wiring.md) - completed and archived on 2026-04-20
+- [23_Phase_Gemini_Live_Wiring.md](./Archive/23_Phase_Gemini_Live_Wiring.md) - completed and archived on 2026-04-21
+- [24_Phase_Codex_Workspace_Live_Wiring.md](./Archive/24_Phase_Codex_Workspace_Live_Wiring.md) - completed and archived on 2026-04-21
+- [25_Phase_Release_Assets_And_Branding.md](./Archive/25_Phase_Release_Assets_And_Branding.md) - completed and archived on 2026-04-21
+- [26_Phase_Release_Versioning_Packaging_Install_Docs.md](./Archive/26_Phase_Release_Versioning_Packaging_Install_Docs.md) - completed and archived on 2026-04-21
+- [27_Phase_Chrome_Real_Device_Verification.md](./Archive/27_Phase_Chrome_Real_Device_Verification.md) - completed and archived on 2026-04-21
+- [27_1_Phase_Operator_GUI_Permission_Pass.md](./Archive/27_1_Phase_Operator_GUI_Permission_Pass.md) - completed and archived on 2026-04-21
+- [28_Phase_Hybrid_Source_Model_Design.md](./Archive/28_Phase_Hybrid_Source_Model_Design.md) - completed and archived on 2026-04-21
+- [29_Phase_Page_Session_Adapter_Framework.md](./Archive/29_Phase_Page_Session_Adapter_Framework.md) - completed and archived on 2026-04-21
+- [30_Phase_Codex_Personal_Usage_Page_Spike.md](./Archive/30_Phase_Codex_Personal_Usage_Page_Spike.md) - completed and archived on 2026-04-21
+- [30_1_Phase_Codex_Live_Tab_Fixture_Capture.md](./Archive/30_1_Phase_Codex_Live_Tab_Fixture_Capture.md) - completed and archived on 2026-04-21
+- [31_Phase_Cursor_Personal_Usage_Page_Spike.md](./Archive/31_Phase_Cursor_Personal_Usage_Page_Spike.md) - completed and archived on 2026-04-21
+- [32_Phase_Claude_Personal_Usage_Page_Spike.md](./Archive/32_Phase_Claude_Personal_Usage_Page_Spike.md) - completed and archived on 2026-04-22
+- [33_Phase_Gemini_Project_Metrics_Page_Spike.md](./Archive/33_Phase_Gemini_Project_Metrics_Page_Spike.md) - completed and archived on 2026-04-22
+- [34_Phase_Hybrid_Source_UX_And_QA.md](./Archive/34_Phase_Hybrid_Source_UX_And_QA.md) - completed and archived on 2026-04-22
+- [35_Phase_Codex_Personal_Snapshot_Parser.md](./Archive/35_Phase_Codex_Personal_Snapshot_Parser.md) - completed and archived on 2026-04-22
+- [36_Phase_Codex_Personal_Live_Wiring.md](./Archive/36_Phase_Codex_Personal_Live_Wiring.md) - completed and archived on 2026-04-22
+- [37_Phase_Cursor_Personal_Snapshot_Parser.md](./Archive/37_Phase_Cursor_Personal_Snapshot_Parser.md) - completed and archived on 2026-04-22
+- [38_Phase_Cursor_Personal_Live_Wiring.md](./Archive/38_Phase_Cursor_Personal_Live_Wiring.md) - completed and archived on 2026-04-22
+- [39_Phase_Hybrid_Source_Selection_And_Fallback.md](./Archive/39_Phase_Hybrid_Source_Selection_And_Fallback.md) - completed and archived on 2026-04-22
+- [40_Phase_Page_Binding_Persistence_And_Reconnect.md](./Archive/40_Phase_Page_Binding_Persistence_And_Reconnect.md) - completed and archived on 2026-04-22
+- [41_1_Phase_Real_Chrome_Runtime_Parity_And_Profile_Audit.md](./Archive/41_1_Phase_Real_Chrome_Runtime_Parity_And_Profile_Audit.md) - completed and archived on 2026-04-23
+- [41_2_Phase_Final_Mixed_Source_Real_Chrome_Pass.md](./Archive/41_2_Phase_Final_Mixed_Source_Real_Chrome_Pass.md) - completed and archived on 2026-04-23
+- [41_Phase_Personal_Mixed_Source_Real_Chrome_Verification.md](./Archive/41_Phase_Personal_Mixed_Source_Real_Chrome_Verification.md) - completed and archived on 2026-04-23
+- [42_Phase_RC2_Packaging_And_Release_Docs.md](./Archive/42_Phase_RC2_Packaging_And_Release_Docs.md) - completed and archived on 2026-04-23
+- [43_Phase_Personal_Fidelity_Semantics_And_UI.md](./Archive/43_Phase_Personal_Fidelity_Semantics_And_UI.md) - completed and archived on 2026-04-23
+- [44_Phase_Trust_Boundary_And_Access_Semantics.md](./Archive/44_Phase_Trust_Boundary_And_Access_Semantics.md) - completed and archived on 2026-04-23
+- [45_Phase_Provider_Contract_Semantics.md](./Archive/45_Phase_Provider_Contract_Semantics.md) - completed and archived on 2026-04-23
+- [46_Phase_Dashboard_Contract_Visibility.md](./Archive/46_Phase_Dashboard_Contract_Visibility.md) - completed and archived on 2026-04-23
+- [47_Phase_Deferred_Contract_Graduation_Gates.md](./Archive/47_Phase_Deferred_Contract_Graduation_Gates.md) - completed and archived on 2026-04-23
+- [48_Phase_Toolbar_Popup_Quick_Glance.md](./Archive/48_Phase_Toolbar_Popup_Quick_Glance.md) - completed and archived on 2026-04-23
+- [49_Phase_Action_Badge_Attention_Count.md](./Archive/49_Phase_Action_Badge_Attention_Count.md) - completed and archived on 2026-04-23
+- [50_Phase_Popup_Sidepanel_Deep_Link_Handoff.md](./Archive/50_Phase_Popup_Sidepanel_Deep_Link_Handoff.md) - completed and archived on 2026-04-23
+- [51_Phase_Popup_Settings_Handoff_And_Quick_Actions.md](./Archive/51_Phase_Popup_Settings_Handoff_And_Quick_Actions.md) - completed and archived on 2026-04-23
+- [52_Phase_Popup_Snapshot_Status.md](./Archive/52_Phase_Popup_Snapshot_Status.md) - completed and archived on 2026-04-23
+- [53_Phase_Settings_Overview_And_Responsive_Navigation.md](./Archive/53_Phase_Settings_Overview_And_Responsive_Navigation.md) - completed and archived on 2026-04-23
+- [54_Phase_Settings_Source_Card_Progressive_Disclosure.md](./Archive/54_Phase_Settings_Source_Card_Progressive_Disclosure.md) - completed and archived on 2026-04-23
+- [55_Phase_Multi_Width_Visual_Review.md](./Archive/55_Phase_Multi_Width_Visual_Review.md) - completed and archived on 2026-04-23
+- [56_Phase_Motion_Foundation_And_Reduced_Motion.md](./Archive/56_Phase_Motion_Foundation_And_Reduced_Motion.md) - completed and archived on 2026-04-23
+- [57_Phase_Settings_Source_Card_Summary_Compression.md](./Archive/57_Phase_Settings_Source_Card_Summary_Compression.md) - completed and archived on 2026-04-23
+- [58_Phase_Settings_Diagnostics_Grouping.md](./Archive/58_Phase_Settings_Diagnostics_Grouping.md) - completed and archived on 2026-04-23
+- [59_Phase_Settings_Session_Track_Compression.md](./Archive/59_Phase_Settings_Session_Track_Compression.md) - completed and archived on 2026-04-23
+- [60_Phase_Compact_Settings_QA_And_Reduced_Motion_Review.md](./Archive/60_Phase_Compact_Settings_QA_And_Reduced_Motion_Review.md) - completed and archived on 2026-04-23
+- [61_Phase_Form_Control_And_Focus_State_Polish.md](./Archive/61_Phase_Form_Control_And_Focus_State_Polish.md) - completed and archived on 2026-04-23
+- [62_Phase_Status_Surface_Harmonization.md](./Archive/62_Phase_Status_Surface_Harmonization.md) - completed and archived on 2026-04-23
+- [63_Phase_Toned_Surface_Content_Hierarchy.md](./Archive/63_Phase_Toned_Surface_Content_Hierarchy.md) - completed and archived on 2026-04-23
+- [64_Phase_Pointer_State_Review_And_Press_Polish.md](./Archive/64_Phase_Pointer_State_Review_And_Press_Polish.md) - completed and archived on 2026-04-23
+- [65_Phase_Progress_Honesty_And_Chip_Audit.md](./Archive/65_Phase_Progress_Honesty_And_Chip_Audit.md) - completed and archived on 2026-04-23
+- [66_Phase_Supporting_Surface_Hierarchy_And_Detail_Review.md](./Archive/66_Phase_Supporting_Surface_Hierarchy_And_Detail_Review.md) - completed and archived on 2026-04-23
+- [67_Phase_Interaction_Audit_Hub_And_Runbook.md](./Archive/67_Phase_Interaction_Audit_Hub_And_Runbook.md) - completed and archived on 2026-04-23
+- [68_Phase_Audit_Hub_State_Presets_And_QA.md](./Archive/68_Phase_Audit_Hub_State_Presets_And_QA.md) - completed and archived on 2026-04-23
+- [69_Phase_Interaction_Audit_Evidence_Pack.md](./Archive/69_Phase_Interaction_Audit_Evidence_Pack.md) - completed and archived on 2026-04-23
+- [70_Phase_Interaction_Audit_Manual_Signoff_Pack.md](./Archive/70_Phase_Interaction_Audit_Manual_Signoff_Pack.md) - completed and archived on 2026-04-23
+- [71_Phase_Interaction_Audit_Signoff_Workspace.md](./Archive/71_Phase_Interaction_Audit_Signoff_Workspace.md) - completed and archived on 2026-04-23
+- [72_Phase_Interaction_Audit_Signoff_Import_And_Handoff.md](./Archive/72_Phase_Interaction_Audit_Signoff_Import_And_Handoff.md) - completed and archived on 2026-04-23
+- [73_Phase_Interaction_Audit_Handoff_Summary_And_Bundle.md](./Archive/73_Phase_Interaction_Audit_Handoff_Summary_And_Bundle.md) - completed and archived on 2026-04-23
+- [74_Phase_Interaction_Audit_Operator_Workflow_And_Bundle_Builder.md](./Archive/74_Phase_Interaction_Audit_Operator_Workflow_And_Bundle_Builder.md) - completed and archived on 2026-04-23
+- [75_Phase_Interaction_Audit_Review_Session_Metadata.md](./Archive/75_Phase_Interaction_Audit_Review_Session_Metadata.md) - completed and archived on 2026-04-23
+- [76_Phase_Interaction_Audit_Downloadable_Exports.md](./Archive/76_Phase_Interaction_Audit_Downloadable_Exports.md) - completed and archived on 2026-04-23
+- [77_Phase_Interaction_Audit_Review_Queue.md](./Archive/77_Phase_Interaction_Audit_Review_Queue.md) - completed and archived on 2026-04-23
+- [78_Phase_Interaction_Audit_Review_Archive_Workflow.md](./Archive/78_Phase_Interaction_Audit_Review_Archive_Workflow.md) - completed and archived on 2026-04-23
+- [79_Phase_Interaction_Audit_Review_Archive_Index.md](./Archive/79_Phase_Interaction_Audit_Review_Archive_Index.md) - completed and archived on 2026-04-23
+- [80_Phase_Interaction_Audit_Operator_Review_Request.md](./Archive/80_Phase_Interaction_Audit_Operator_Review_Request.md) - completed and archived on 2026-04-23
+- [81_Phase_Interaction_Audit_Review_Request_Lifecycle.md](./Archive/81_Phase_Interaction_Audit_Review_Request_Lifecycle.md) - completed and archived on 2026-04-23
+- [82_Phase_Interaction_Audit_Request_Archive_Traceability.md](./Archive/82_Phase_Interaction_Audit_Request_Archive_Traceability.md) - completed and archived on 2026-04-23
+- [83_Phase_Interaction_Audit_Request_Completion_Integrity.md](./Archive/83_Phase_Interaction_Audit_Request_Completion_Integrity.md) - completed and archived on 2026-04-23
+- [84_Phase_Interaction_Audit_Request_Bound_Export_Context.md](./Archive/84_Phase_Interaction_Audit_Request_Bound_Export_Context.md) - completed and archived on 2026-04-23
+- [85_Phase_Interaction_Audit_Request_Template_Drift_Gate.md](./Archive/85_Phase_Interaction_Audit_Request_Template_Drift_Gate.md) - completed and archived on 2026-04-23
+- [86_Phase_Interaction_Audit_Request_Regeneration_Workflow.md](./Archive/86_Phase_Interaction_Audit_Request_Regeneration_Workflow.md) - completed and archived on 2026-04-23
+- [87_Phase_Interaction_Audit_Request_Completion_Preflight.md](./Archive/87_Phase_Interaction_Audit_Request_Completion_Preflight.md) - completed and archived on 2026-04-23
+- [88_Phase_Interaction_Audit_Request_Scope_Visibility_And_Exports.md](./Archive/88_Phase_Interaction_Audit_Request_Scope_Visibility_And_Exports.md) - completed and archived on 2026-04-23
+- [89_Phase_Interaction_Audit_Request_Evidence_Resolution_And_Preflight.md](./Archive/89_Phase_Interaction_Audit_Request_Evidence_Resolution_And_Preflight.md) - completed and archived on 2026-04-23
+- [90_Phase_Interaction_Audit_Request_Evidence_Snapshot_Packaging.md](./Archive/90_Phase_Interaction_Audit_Request_Evidence_Snapshot_Packaging.md) - completed and archived on 2026-04-23
+- [91_Phase_Interaction_Audit_Request_Evidence_Snapshot_Integrity_Gate.md](./Archive/91_Phase_Interaction_Audit_Request_Evidence_Snapshot_Integrity_Gate.md) - completed and archived on 2026-04-23
+- [92_Phase_Interaction_Audit_Request_Revision_Bound_Exports.md](./Archive/92_Phase_Interaction_Audit_Request_Revision_Bound_Exports.md) - completed and archived on 2026-04-23
+- [93_Phase_Interaction_Audit_Request_Revision_Visibility_And_Downloads.md](./Archive/93_Phase_Interaction_Audit_Request_Revision_Visibility_And_Downloads.md) - completed and archived on 2026-04-23
+- [94_Phase_Interaction_Audit_Request_Context_In_Bundles_And_Archives.md](./Archive/94_Phase_Interaction_Audit_Request_Context_In_Bundles_And_Archives.md) - completed and archived on 2026-04-23
+- [95_Phase_Interaction_Audit_Evidence_Provenance_In_Bundles_And_Archives.md](./Archive/95_Phase_Interaction_Audit_Evidence_Provenance_In_Bundles_And_Archives.md) - completed and archived on 2026-04-23
+- [96_Phase_Interaction_Audit_Request_Fulfillment_Receipt_Metadata.md](./Archive/96_Phase_Interaction_Audit_Request_Fulfillment_Receipt_Metadata.md) - completed and archived on 2026-04-23
+- [97_Phase_Strategic_Roadmap_Expansion_For_Theming_Benchmark_And_i18n.md](./Archive/97_Phase_Strategic_Roadmap_Expansion_For_Theming_Benchmark_And_i18n.md) - completed and archived on 2026-04-23
+
+## Dependency Notes
+
+- phases 01 to 07 are the product foundation
+- phase 09 depends on phase 08
+- phase 11 depends on phase 10
+- phase 13 depends on phase 12
+- phase 16 depends on phase 15
+- phase 17 depends on at least one real provider adapter being complete
+- phase 19 depends on phase 18
+- phase 21 should start only after Cursor live wiring is stable enough to serve as the reference provider-credential flow
+- phase 22 should start only after the JetBrains page-capture flow is stable enough to serve as the reference host-page path
+- phase 23 should start only after the shared provider-credential flow is stable across at least Cursor and Claude
+- phase 24 should start only after the Gemini provider has an explicit shipped decision, even if that decision is `policy_only`
+- phases 20 to 24 should run in provider order, one provider at a time
+- phases 25 to 27 should only start after the provider wiring queue is stable enough for release work
+- phase 28 starts the post-release-candidate personal-user expansion track
+- phase 29 depends on phase 28 because the framework should follow the product and security model, not invent it
+- phase 30 depends on phases 15 and 24 so the new personal Codex path does not conflict with the shipped Enterprise analytics path
+- phase 30.1 depends on phase 30 because the route inventory and security decision should be explicit before host-page capture work begins
+- phase 31 depends on phases 08 and 20 so the personal Cursor path is designed alongside, not instead of, the existing team Admin API path
+- phase 32 depends on phases 12 and 22 so Claude personal-user assumptions stay aligned with the shipped organization analytics path
+- phase 33 depends on phases 14 and 23 so Gemini page work starts from the explicit `policy_only` baseline instead of pretending a live source already exists
+- phase 34 should start only after the framework and all personal-page spikes have explicit go or no-go decisions
+- phase 35 depends on phases 29, 30, 30.1, and 34 because the parser should start from the proven live fixture and shipped hybrid-source contracts
+- phase 36 depends on phases 24, 34, and 35 so the Codex personal live path ships alongside, not instead of, the existing Enterprise analytics path
+- phase 37 depends on phases 29, 31, and 34 because the Cursor personal parser should start from the captured live route evidence and shipped session-page framework
+- phase 38 depends on phases 20, 34, and 37 so the Cursor personal live path can coexist with the shipped team Admin API path
+- phase 39 depends on phases 36 and 38 because explicit source selection rules matter only after both hybrid providers have two real source paths
+- phase 40 depends on phase 39 because reconnect behavior should be built on top of final source-selection semantics, not temporary heuristics
+- phase 41 depends on phase 40 because real-Chrome mixed-source verification should cover the final reconnect and fallback behavior
+- phase 41 was split on 2026-04-23 after the first operator-profile pass exposed a runtime-parity blocker in the long-lived Chrome profile
+- phase 41.1 audited the active profile, captured the current blocked state, and tightened the checklist before the final gate
+- phase 41.2 depends on phase 41.1 because the final mixed-source gate should run only after runtime parity is checked explicitly
+- the 2026-04-23 rerun cleared the earlier `Cursor` runtime-parity blocker and re-proved the live `Codex` plus `Cursor` personal session-page paths
+- `Branch B` was selected on 2026-04-23, so JetBrains was removed from the active RC support promise and retained only as a deferred repo path
+- phase 42 now packages the narrowed RC that matches the resolved `Phase 41.2` gate
+- the 2026-04-23 `Phase 42` closeout produced `release/ai-usage-dashboard-0.1.0-rc.2.zip` and closed the numbered release queue for the narrowed RC
+- phase 43 depends on phase 42 because the first personal-semantics UI slice should begin only after the release-closeout truth is stable
+- the 2026-04-23 `Phase 43` closeout productized fidelity semantics in the side panel and started `Direction 02`
+- phase 44 depends on phase 43 because the trust-boundary UI should build on top of the already-shipped source-fidelity semantics
+- the 2026-04-23 `Phase 44` closeout made provider access model, host access, credential persistence, and cookie bans visible in the UI
+- phase 45 depends on phase 44 because explicit provider-contract labels build on top of the already-visible fidelity and trust-boundary semantics
+- the 2026-04-23 `Phase 45` closeout made shipped, deferred, and policy-only provider contracts visible in Settings and provider detail
+- phase 46 depends on phase 45 because dashboard-level contract visibility should reuse the already-defined contract semantics instead of inventing a second summary vocabulary
+- the 2026-04-23 `Phase 46` closeout made current and retained session-page contracts visible on dashboard cards
+- phase 47 depends on phase 46 because deferred graduation gates build on top of the already-shipped contract vocabulary
+- the 2026-04-23 `Phase 47` closeout made deferred-contract graduation gates visible in Settings and provider detail
+- phase 48 depends on phase 47 because the popup quick-glance entry should reuse the already-settled contract and graduation-gate vocabulary instead of inventing popup-only semantics
+- the 2026-04-23 `Phase 48` closeout shipped the first popup-first toolbar entry and changed the action handoff into the side panel
+- phase 49 depends on phase 48 because the badge should follow the popup-first action model and reuse the same shared provider-health semantics
+- the 2026-04-23 `Phase 49` closeout shipped a count-based action badge for visible providers needing attention
+- phase 50 depends on phase 49 because popup deep links should build on top of the already-shipped popup entry and badge semantics rather than introducing another navigation shell
+- the 2026-04-23 `Phase 50` closeout shipped hash-based side-panel routes and popup handoff into provider detail
+- phase 51 depends on phase 50 because popup settings handoff should reuse the route-based popup-to-sidepanel handoff instead of inventing a second navigation path
+- the 2026-04-23 `Phase 51` closeout shipped popup quick actions for dashboard and settings
+- phase 52 depends on phase 51 because popup freshness should reuse the already-shipped quick-glance shell instead of adding another popup-only sync path
+- the 2026-04-23 `Phase 52` closeout made cached popup snapshot freshness explicit
+- phase 53 depends on phase 52 because the first responsive-hardening slice should start only after the popup quick-entry track has a stable product shell
+- the 2026-04-23 `Phase 53` closeout started `Direction 04` and made the Settings screen easier to scan and navigate
+- phase 54 depends on phase 53 because source-card progressive disclosure should build on the already-shipped Settings overview and navigation shell
+- the 2026-04-23 `Phase 54` closeout made Settings source-card diagnostics opt-in instead of always expanded
+- phase 55 depends on phase 54 because multi-width review should validate the current Settings disclosure model instead of an older denser layout
+- the 2026-04-23 `Phase 55` closeout added repeatable multi-width screenshot review and fixed the real narrow Settings overflow it exposed
+- phase 56 depends on phase 55 because motion should ship only after the current narrow-width layout baseline is verified and stable
+- the 2026-04-23 `Phase 56` closeout added the first reduced-motion-safe motion baseline for the side panel without regressing the Phase 55 width-review checks
+- phase 57 depends on phase 56 because source-card compression should build on the already-shipped motion and width-review baseline instead of changing both at once
+- the 2026-04-23 `Phase 57` closeout compressed visible Settings source-card summaries without regressing the Phase 55 responsive review baseline
+- phase 58 depends on phase 57 because disclosure-density cleanup should build on the already-shipped compressed summary model instead of changing summary and disclosure structure together
+- the 2026-04-23 `Phase 58` closeout grouped expanded Settings diagnostics into clearer sections without regressing the Phase 55 responsive review baseline
+- phase 59 depends on phase 58 because session-track compression should build on the already-grouped diagnostics model instead of changing both disclosure and session-track layout together
+- the 2026-04-23 `Phase 59` closeout compressed session-page track blocks without regressing the Phase 55 responsive review baseline
+- phase 60 depends on phase 59 because compact-state QA should review the latest source-card layout, not an older pre-compression Settings state
+- the 2026-04-23 `Phase 60` closeout added compact Settings and reduced-motion review without regressing the existing previewable UI baselines
+- phase 61 depends on phase 60 because interaction-state polish should build on the already-verified compact and reduced-motion Settings baseline instead of an older pre-review shell
+- the 2026-04-23 `Phase 61` closeout unified focus-visible plus interaction-state treatment across the main Settings and popup controls and added a repeatable keyboard interaction review baseline
+- phase 62 depends on phase 61 because status-surface harmonization should build on the already-shipped interaction-state system instead of reworking status cards and prompts in a pre-polish UI shell
+- the 2026-04-23 `Phase 62` closeout harmonized warning, error, and success surfaces across dashboard, settings, popup, and toast feedback and added a repeatable status-surface review baseline
+- phase 63 depends on phase 62 because toned-content hierarchy should build on the already-harmonized status surfaces instead of styling content colors against an older mixed surface system
+- the 2026-04-23 `Phase 63` closeout harmonized text hierarchy inside toned warning, error, and success surfaces and added a repeatable toned-content review baseline
+- phase 64 depends on phases 61 and 63 because pointer pressed-state polish should build on the already-shipped interaction vocabulary and toned-surface hierarchy instead of introducing another one-off control treatment
+- the 2026-04-23 `Phase 64` closeout added explicit pressed states for Settings selects and visibility rows, plus a repeatable pointer hover and press review baseline
+- phase 65 depends on phases 62, 63, and 64 because chip and progress cleanup should build on the already-harmonized surfaces, toned content hierarchy, and pointer-state vocabulary instead of introducing one more mixed component language
+- the 2026-04-23 `Phase 65` closeout made unknown progress explicitly indeterminate, tightened compact chip tokens, and added a repeatable chip-and-progress review baseline
+- phase 66 depends on phases 62, 63, and 65 because supporting-surface cleanup should build on the already-harmonized tonal surfaces, clearer toned-content hierarchy, and newer chip-and-progress baseline instead of reintroducing ad-hoc neutral card fills
+- the 2026-04-23 `Phase 66` closeout unified provider-detail fields, neutral detail notes, and Settings diagnostic groups onto one clearer supporting-surface hierarchy, then added a repeatable provider-detail plus Settings review baseline
+- phase 67 depends on phases 61 through 66 because a real-browser interaction-audit hub is only useful after the current keyboard, pointer, compact-width, supporting-surface, and status baselines are already stable enough to review together
+- the 2026-04-23 `Phase 67` closeout added a fixed-width interaction-audit hub route for dashboard, settings, detail, and popup surfaces, then added a repeatable audit-hub review baseline
+- phase 68 depends on phase 67 because preset-driven operator shortcuts only make sense after the fixed-width audit hub itself exists and is already stable enough to verify
+- the 2026-04-23 `Phase 68` closeout added preset actions plus inline status feedback to the audit hub, then added a repeatable audit-preset review baseline
+- phase 69 depends on phase 68 because evidence-pack capture is only meaningful after the preset-driven audit shortcuts already exist and are stable enough to verify in sequence
+- the 2026-04-23 `Phase 69` closeout added visible preset expectations plus an ordered screenshot-and-status evidence pack baseline for later operator signoff
+- phase 70 depends on phase 69 because a reusable manual signoff pack is only meaningful after the ordered preset evidence already exists and can be linked into the generated checklist
+- the 2026-04-23 `Phase 70` closeout added visible manual checks to each audit surface, then generated a reusable markdown signoff pack from those checks plus the latest evidence artifacts
+- phase 71 depends on phase 70 because a persistent in-browser signoff workspace is only meaningful after the reusable signoff pack and visible manual checks already define what the operator is supposed to capture
+- the 2026-04-23 `Phase 71` closeout added per-surface persistent signoff controls, live draft plus JSON export actions, and a repeatable persistence review baseline
+- phase 72 depends on phase 71 because explicit signoff import and handoff only make sense after the workspace state already has a stable local export shape and persistence model
+- the 2026-04-23 `Phase 72` closeout added local signoff import for exported workspace JSON, explicit invalid-input feedback, and a repeatable restoration review baseline
+- phase 73 depends on phases 69 through 72 because a current-state handoff bundle only makes sense after preset evidence, visible manual checks, a persistent workspace, and local import plus restore are all already stable
+- the 2026-04-23 `Phase 73` closeout added a visible handoff summary for unresolved review state and a repeatable current-state bundle baseline linked to the latest preset evidence
+- phase 74 depends on phases 69 through 73 because a reusable operator bundle-builder only makes sense after the audit hub already has preset evidence, manual checks, exportable workspace state, import, and handoff summary layers
+- the 2026-04-23 `Phase 74` closeout added an explicit operator workflow note plus a reusable command that turns exported signoff JSON into current-state bundle artifacts
+- phase 75 depends on phases 71 through 74 because review-session metadata only becomes valuable after the audit hub already has a persistent workspace, import plus restore, a current-state handoff summary, and a reusable operator bundle path
+- the 2026-04-23 `Phase 75` closeout added explicit review-session metadata for reviewer, session label, and reviewed-at time, then proved that metadata survives export, reload, reset, reimport, and generated handoff bundles
+- phase 76 depends on phases 74 and 75 because direct local downloads only become useful after the audit hub already has an explicit operator workflow and stable review-session metadata to preserve inside file contents and filenames
+- the 2026-04-23 `Phase 76` closeout added direct downloadable signoff plus handoff artifacts with metadata-aware filenames, then proved those files preserve the current review-session metadata during local operator handoff
+- phase 77 depends on phases 68 through 76 because a real review queue only makes sense after the audit hub already has preset navigation, preserved workspace state, import and export flows, plus the current handoff summary vocabulary
+- the 2026-04-23 `Phase 77` closeout added a live review queue with next-target guidance and jump-to-surface actions, then tightened audit-hub frame readiness so preset actions wait for real embedded route content instead of `about:blank`
+- phase 78 depends on phases 69 through 77 because repo-backed review archives only make sense after the audit hub already has stable evidence-pack output, a reusable bundle path, persistent workspace state, direct exports, and queue-guided review flow
+- the 2026-04-23 `Phase 78` closeout added a durable review-archive command plus a clearly labeled seeded baseline archive record under `Doc/testing/operator_reviews/`
+- phase 79 depends on phase 78 because archive index automation only makes sense after the durable review-record layout and the first seeded baseline archive already exist
+- the 2026-04-23 `Phase 79` closeout made the durable review archive self-indexing and added a machine-readable archive catalog alongside the generated markdown index
+- phase 80 depends on phase 79 because the first real operator request should start only after the durable review archive and its self-indexing flow are already truthful and stable
+- the 2026-04-23 `Phase 80` closeout added a repo-backed pending operator review-request flow plus the first non-seeded request package under `Doc/testing/operator_review_requests/`
+- phase 81 depends on phase 80 because request fulfillment only makes sense after the repo already has a truthful pending-request package and one durable archive flow to link it to
+- the 2026-04-23 `Phase 81` closeout made the request flow self-indexing, added a reusable completion command for pending request packages, and added a repeatable lifecycle review that rejects seeded inputs and proves request-to-archive linkage
+- phase 82 depends on phase 81 because bidirectional request-to-archive traceability only makes sense after request fulfillment already exists and the archive index is already generated from durable manifests
+- the 2026-04-23 `Phase 82` closeout added source-request metadata to request-linked archives, surfaced that link in the generated archive index, and added a repeatable traceability review
+- phase 83 depends on phase 82 because request-template integrity checks only become meaningful after request and archive records are already linked and traceable in both directions
+- the 2026-04-23 `Phase 83` closeout added expected-shape metadata to pending requests, rejected mismatched exported workspace shapes at completion time, and added a repeatable integrity review
+- phase 84 depends on phase 83 because request-bound export context only becomes meaningful after request completion already rejects malformed or mismatched checklist shapes and only same-shape wrong-request exports remain
+- the 2026-04-23 `Phase 84` closeout bound pending-request templates to explicit request context, preserved that binding through audit-hub import and export, rejected wrong-request exports at completion time, and added a repeatable request-binding review
+- phase 85 depends on phase 84 because template-drift gating only becomes meaningful after request completion already rejects malformed shapes and wrong pending-request bindings, leaving stale current-template drift as the next remaining honesty gap
+- the 2026-04-23 `Phase 85` closeout surfaced template-drift state in the generated request index, rejected stale request packages during completion, and added a repeatable drift-gate review
+- phase 86 depends on phase 85 because stale-request regeneration only makes sense after the repo can already detect and reject drifted pending requests instead of silently treating them as current review scope
+- the 2026-04-23 `Phase 86` closeout added a regenerate workflow that supersedes stale pending requests, writes one aligned replacement request, and proves only the replacement request can complete end to end
+- phase 87 depends on phase 86 because completion preflight only becomes useful after the repo can already reject stale requests, recover them through regeneration, and keep one truthful request lifecycle for the eventual real export
+- the 2026-04-23 `Phase 87` closeout added a no-side-effect completion preflight that reuses the same truth gates as request completion while keeping the pending request unchanged
+- phase 88 depends on phase 87 because request-scope UI and request-aware export naming only become meaningful after the repo-backed preflight plus completion path is already truthful and stable
+- the 2026-04-23 `Phase 88` closeout made repo-backed request scope visible inside the audit hub and carried that identity into downloaded artifact filenames
+- phase 89 depends on phases 87 and 88 because request-bound evidence truth only becomes worth tightening after the repo-backed request lifecycle is both preflightable at the CLI layer and visibly distinguishable inside the audit hub
+- the 2026-04-23 `Phase 89` closeout made preflight explicit about request evidence readiness and made completion preserve the actual evidence path used when archiving one request-bound export
+- phase 90 depends on phase 89 because self-contained request packaging only becomes worth adding after request-bound evidence resolution is already truthful about which evidence path preflight and completion actually use
+- the 2026-04-23 `Phase 90` closeout snapshot the request evidence pack into each repo-backed package, backfilled the shipped pending request into that same self-contained shape, and proved preflight plus completion still work after the original external evidence file is removed
+- phase 91 depends on phase 90 because request-package integrity gating only becomes meaningful after repo-backed requests already carry their own packaged evidence snapshot instead of one external-only evidence dependency
+- the 2026-04-23 `Phase 91` closeout recorded snapshot digests in request manifests, made preflight plus completion reject tampered packaged evidence, and backfilled the shipped pending request into that same tamper-evident shape
+- phase 92 depends on phase 91 because rejecting stale exports by request revision only becomes meaningful after one pending request package is already self-contained, request-bound, and tamper-evident inside the repo
+- the 2026-04-23 `Phase 92` closeout recorded request-package revision digests, made preflight plus completion reject exports bound to older revisions of the same pending request, and backfilled the shipped pending request into that same revision-bound shape
+- phase 93 depends on phase 92 because request revision visibility in the audit hub and bound downloads only becomes meaningful after stale exports are already rejected by one explicit request-revision gate
+- the 2026-04-23 `Phase 93` closeout surfaced request revisions in the audit hub, preserved them in bound download filenames plus handoff text, and added a repeatable revision-visibility review pass
+- phase 94 depends on phases 74, 78, and 93 because preserving request-bound identity in bundles and durable archives only becomes meaningful after both the handoff plus archive infrastructure already exists and request revisions are already visible in local exports
+- the 2026-04-23 `Phase 94` closeout preserved request binding plus request revision through handoff bundle JSON plus markdown, archive manifest plus README output, and the generated archive index, then added a repeatable bundle-and-archive review pass
+- phase 95 depends on phases 89 and 94 because evidence provenance only becomes worth carrying into bundles and archives after evidence resolution is already truthful at completion time and request-bound identity is already preserved through those later artifact layers
+- the 2026-04-23 `Phase 95` closeout preserved evidence source plus integrity summary through handoff bundle JSON plus markdown, archive manifest plus README output, and the generated archive index, then added a repeatable provenance review pass
+- phase 96 depends on phase 95 because fulfilled-request receipt metadata only becomes useful after request and archive artifacts already preserve the richer request identity plus evidence provenance that the request-side receipt can summarize
+- the 2026-04-23 `Phase 96` closeout preserved completion receipt metadata inside fulfilled request manifests, request README output, and the generated request index, then added a repeatable fulfilled-request receipt review pass
+
+## Delivery Standard For Each Phase
+
+Every phase should define:
+
+- a single goal
+- a tight file scope
+- a short task list
+- clear done criteria
+- explicit out-of-scope boundaries
+
+If a phase turns out to be too large during implementation, split it into subphases and keep the parent phase as an umbrella note.

@@ -1,0 +1,271 @@
+# Development Guardrails
+
+Date: 2026-04-20
+
+Process rule:
+
+- this file is the source of truth for the project workflow
+- every markdown file in `Doc/` and `Doc/TODOs/` must follow this guardrail
+
+## 1. Why These Guardrails Exist
+
+The project is intentionally split into many small phases.
+
+Without a fixed completion protocol, phases are easy to leave half-done:
+
+- code changes land without verification
+- docs stop matching reality
+- phase status becomes unclear
+- the TODO area accumulates stale files
+
+These guardrails exist to prevent that.
+
+## 2. Phase Completion Rules
+
+Every phase must follow this closeout sequence before it is considered complete.
+
+### 2.1 Verification First
+
+If the phase includes executable code changes:
+
+- run unit tests for the changed code
+- if no unit test exists yet, add one when practical
+- if a unit test cannot be added in the phase, record the reason explicitly in the phase update
+
+If the phase is research-only, planning-only, or documentation-only:
+
+- run a validation checklist instead of a unit test
+- validation can include link checking, fixture review, selector verification, or manual review against source material
+
+Rule:
+
+- a phase is not complete until it has a verification record
+
+## 2.2 Documentation Update Required
+
+After finishing a phase:
+
+- update the relevant markdown files
+- update any design or TODO document affected by the work
+- update the phase status
+- update cross-links if file locations changed
+
+Minimum required updates:
+
+- the phase file itself
+- the phase index if the phase state changed
+- any major design or TODO document whose assumptions changed
+
+## 2.3 Archive Completed Phase Files
+
+When a phase is completed:
+
+1. set the phase status to completed
+2. add a short completion summary
+3. record the verification performed
+4. move the completed phase markdown file into `Doc/TODOs/Archive/`
+5. update the phase index so it no longer appears as an active phase file
+
+Reason:
+
+- active TODO files should only contain work that is still open
+- completed work should remain readable, but out of the active execution path
+
+## 2.4 Splitting An Oversized Phase
+
+If a phase turns out to be too large during implementation, it may and should be split into smaller subphases.
+
+Examples:
+
+- `16` can be split into `16.1`, `16.2`, `16.3`
+- `09` can be split into `09.1`, `09.2`
+
+Use this rule when:
+
+- the phase cannot realistically be finished in one focused implementation turn
+- the phase mixes unrelated deliverables
+- the verification scope becomes unclear
+- the file scope becomes too broad to review safely
+
+Rule:
+
+- split before continuing major implementation work
+- do not keep a knowingly oversized phase as one file just to preserve the original numbering
+
+## 2.5 Rules For Subphase Files
+
+When splitting a phase:
+
+1. keep the parent phase file as the umbrella or tracking file
+2. create child subphase files for the actual executable slices
+3. update the phase index to include the new subphases
+4. update dependencies if the new subphases must run in sequence
+
+Recommended convention:
+
+- visible phase label inside the file: `Phase 16.1`
+- filename: `16_1_Phase_Codex_...md`
+
+Reason:
+
+- this keeps sorting predictable on disk
+- this avoids ambiguity with the final `.md` extension
+
+Parent phase rule:
+
+- if all work moves into subphases, the parent phase file should become a short index or umbrella note
+- the parent should not duplicate detailed TODO items already moved into child files
+
+## 2.6 Preview Service Rule
+
+If a completed phase changes something that can be previewed in a browser or client UI, a preview service should be started or restarted as part of phase closeout.
+
+Examples:
+
+- side panel UI phases
+- settings and navigation phases
+- state-management phases that change visible behavior
+
+Required behavior:
+
+1. if a preview server is already running, restart it
+2. bind it to a network-visible host when practical, typically `0.0.0.0`
+3. report the access URL or host and port in the phase closeout summary
+4. record the preview command used
+5. keep the preview service running after phase closeout so the latest UI remains available for LAN or remote client review
+6. prefer a stable port when practical so the inspection URL does not change every phase
+
+Project convention:
+
+- preview PID file: `.preview-server.pid`
+- preview log file: `preview.log`
+
+Reason:
+
+- the user should be able to inspect the latest UI state after each previewable phase
+- restarting avoids accidental inspection of stale output
+
+## 3. Required Fields For A Completed Phase File
+
+Before moving a phase file into the archive, make sure it includes:
+
+- final status
+- completion date
+- short summary of what was done
+- verification performed
+- follow-up items, if any
+
+Suggested completion footer:
+
+```md
+Completion date: YYYY-MM-DD
+
+Completion summary:
+
+- item 1
+- item 2
+
+Verification:
+
+- unit tests: ...
+- manual checks: ...
+
+Follow-up:
+
+- none
+```
+
+## 4. Rules For Verification
+
+### 4.1 Code Phases
+
+For code phases, prefer:
+
+- unit tests
+- type checks
+- build checks
+- small manual smoke tests in Chrome extension mode
+
+Minimum expectation:
+
+- at least one automated verification step must run
+
+### 4.2 Research And Documentation Phases
+
+For research or documentation phases, acceptable verification includes:
+
+- verifying official source links
+- verifying fixture files match the selected source path
+- verifying the documented account-type decision is explicit
+- verifying all affected docs were updated
+
+Reason:
+
+- requiring fake unit tests for non-code phases would create meaningless work
+
+## 5. Rules For Status
+
+Allowed active statuses:
+
+- `not started`
+- `in progress`
+- `blocked`
+
+Allowed completed status:
+
+- `completed`
+
+Rule:
+
+- do not leave a finished phase at `not started` or `in progress`
+
+## 6. Archive Rules
+
+Archive location:
+
+- `Doc/TODOs/Archive/`
+
+Archive naming rule:
+
+- keep the original filename
+- do not rename the phase number unless there is a strong reason
+- subphase files should preserve their parent-child numbering when archived
+
+Archive purpose:
+
+- preserve delivery history
+- keep active TODO folders small
+- make completed work auditable
+
+## 7. Update Rules For The Phase Index
+
+Whenever a phase is completed:
+
+- remove it from the active sequence list or mark it as archived
+- add a link to the archived file if it still needs to be discoverable
+- keep dependency notes current
+
+Whenever a phase is split into subphases:
+
+- add the new subphases to the active sequence list
+- update the parent phase entry so it is clearly an umbrella or split phase
+- make the execution order explicit if `16.2` depends on `16.1`
+
+## 8. My Recommendation On Your Proposal
+
+Your proposal is reasonable, with one refinement:
+
+- "finish a phase, then do unit testing" is correct for code phases
+- for research-only or doc-only phases, replace unit testing with a required validation checklist
+
+This refinement avoids forcing fake tests where no runnable code exists.
+
+## 9. Additional Recommendations
+
+- keep each phase small enough that one working session can finish it
+- avoid starting the next provider before archiving the previous finished phase
+- for provider integrations, save sanitized fixtures during the research phase so the adapter phase is faster
+- add a short "verification" section to every completion note, even if the check was only a build and smoke test
+- prefer one source of truth per rule, which is why this file should remain the workflow authority
+- if a phase feels uncomfortable to finish in one turn, split it immediately instead of carrying the complexity forward
+- if a phase changes the visible UI, treat preview restart as part of completion, not as an optional extra

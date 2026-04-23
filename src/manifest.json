@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "AI Usage Dashboard",
+  "version": "0.1.0.2",
+  "version_name": "0.1.0-rc.2",
+  "description": "Track usage, credits, and sync health across AI coding tools.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "permissions": [
+    "alarms",
+    "sidePanel",
+    "storage",
+    "scripting",
+    "tabs"
+  ],
+  "optional_host_permissions": [
+    "https://api.cursor.com/*",
+    "https://cursor.com/*",
+    "https://account.jetbrains.com/*",
+    "https://*.jetbrains.com/*",
+    "https://api.anthropic.com/*",
+    "https://platform.claude.com/*",
+    "https://api.chatgpt.com/*",
+    "https://chatgpt.com/*"
+  ],
+  "background": {
+    "service_worker": "src/background/service-worker.ts",
+    "type": "module"
+  },
+  "side_panel": {
+    "default_path": "src/sidepanel/index.html"
+  },
+  "action": {
+    "default_title": "AI Usage Dashboard",
+    "default_popup": "src/popup/index.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png"
+    }
+  }
+}

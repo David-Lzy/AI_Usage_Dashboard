@@ -1,0 +1,86 @@
+{
+  "capturedAt": "2026-04-21T11:53:28.698Z",
+  "extractionMode": "dom",
+  "primaryCandidateRoute": "https://chatgpt.com/codex/settings/usage",
+  "routes": [
+    {
+      "routeKey": "personal_usage",
+      "pageLabel": "Codex personal usage page",
+      "urlPatterns": [
+        "https://chatgpt.com/codex/settings/usage*"
+      ],
+      "status": "not_found",
+      "attempts": [],
+      "matchedUrl": null,
+      "matchedTitle": null,
+      "summary": null
+    },
+    {
+      "routeKey": "cloud_usage",
+      "pageLabel": "Codex cloud usage page",
+      "urlPatterns": [
+        "https://chatgpt.com/codex/cloud/settings/usage*"
+      ],
+      "status": "not_found",
+      "attempts": [],
+      "matchedUrl": null,
+      "matchedTitle": null,
+      "summary": null
+    },
+    {
+      "routeKey": "cloud_analytics",
+      "pageLabel": "Codex cloud analytics page",
+      "urlPatterns": [
+        "https://chatgpt.com/codex/cloud/settings/analytics*"
+      ],
+      "status": "matched",
+      "attempts": [
+        {
+          "tabId": 1160629285,
+          "bindingMode": "auto",
+          "status": "matched",
+          "url": "https://chatgpt.com/codex/cloud/settings/analytics#usage",
+          "title": "Codex"
+        }
+      ],
+      "matchedUrl": "https://chatgpt.com/codex/cloud/settings/analytics#usage",
+      "matchedTitle": "Codex",
+      "summary": {
+        "url": "https://chatgpt.com/codex/cloud/settings/analytics#usage",
+        "title": "Codex",
+        "heading": "Codex 分析",
+        "recommendedSurface": "dom",
+        "textSnippets": [
+          "7天",
+          "1个月",
+          "使用情况",
+          "5 小时使用限额",
+          "92%",
+          "剩余",
+          "重置时间：2026年4月22日 1:11",
+          "每周使用限额",
+          "97%",
+          "重置时间：2026年4月28日 9:15",
+          "GPT-5.3-Codex-Spark 5 小时使用限额",
+          "100%"
+        ],
+        "scriptMarkers": {
+          "hasNextDataScript": false,
+          "hasNextFlightStream": false,
+          "hasCloudflareChallenge": false
+        },
+        "keywordSignals": {
+          "hasUsageSignal": true,
+          "hasRemainingSignal": true,
+          "hasCreditSignal": true,
+          "hasResetSignal": true
+        }
+      }
+    }
+  ],
+  "decision": {
+    "chosenRoute": "https://chatgpt.com/codex/cloud/settings/analytics#usage",
+    "chosenSurface": "dom",
+    "rationale": "Selected the highest-priority matched Codex page from the current live ChatGPT tabs."
+  }
+}

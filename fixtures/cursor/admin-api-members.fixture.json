@@ -1,0 +1,19 @@
+{
+  "teamMembers": [
+    {
+      "name": "Alex",
+      "email": "developer@company.com",
+      "role": "member"
+    },
+    {
+      "name": "Sam",
+      "email": "admin@company.com",
+      "role": "owner"
+    },
+    {
+      "name": "Taylor",
+      "email": "finance@company.com",
+      "role": "free-owner"
+    }
+  ]
+}

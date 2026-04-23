@@ -1,0 +1,50 @@
+{
+  "effectiveDate": "2026-04-02",
+  "pricingModes": [
+    {
+      "mode": "token_based",
+      "appliesTo": [
+        "new and existing ChatGPT Business customers",
+        "new Enterprise customers",
+        "new and existing Plus and Pro customers"
+      ],
+      "models": {
+        "gpt-5.4": {
+          "inputCreditsPer1M": 62.5,
+          "cachedInputCreditsPer1M": 6.25,
+          "outputCreditsPer1M": 375
+        },
+        "gpt-5.3-codex": {
+          "inputCreditsPer1M": 43.75,
+          "cachedInputCreditsPer1M": 4.375,
+          "outputCreditsPer1M": 350
+        }
+      }
+    },
+    {
+      "mode": "legacy",
+      "appliesTo": [
+        "existing Enterprise and Edu customers until migration"
+      ],
+      "examples": {
+        "localTasks": {
+          "gpt-5.4": 7,
+          "gpt-5.3-codex": 5,
+          "gpt-5.1-codex-mini": 1
+        },
+        "cloudTasks": {
+          "gpt-5.4": 34,
+          "gpt-5.3-codex": 25
+        },
+        "codeReview": {
+          "gpt-5.4": 34,
+          "gpt-5.3-codex": 25
+        }
+      }
+    }
+  ],
+  "notes": [
+    "Codex-only seats have no rate limits and usage is billed on token consumption.",
+    "The applicable rate card depends on workspace migration status."
+  ]
+}

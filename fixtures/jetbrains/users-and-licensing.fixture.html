@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>JetBrains Users and Licensing Fixture</title>
+  </head>
+  <body>
+    <main data-page="users-and-licensing">
+      <header>
+        <h1>Users and licensing</h1>
+      </header>
+
+      <section aria-label="Users licensed for AI" data-card="users-licensed-for-ai">
+        <h2>Users licensed for AI</h2>
+        <p data-field="licensed-users-count">12</p>
+        <a href="#almost-out" data-action="users-almost-out-of-ai-credits">
+          Users almost out of AI Credits
+          <span data-field="users-almost-out-of-ai-credits-count">2</span>
+        </a>
+      </section>
+
+      <section
+        aria-label="Top-up AI Credits available"
+        data-card="top-up-ai-credits-available"
+      >
+        <h2>Top-up AI Credits available</h2>
+        <p data-field="top-up-ai-credits-available">145</p>
+      </section>
+
+      <table aria-label="AI users table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Licenses and quotas</th>
+            <th>Balance used</th>
+            <th>Top-up usage</th>
+            <th>Top-up limit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-user-row="1">
+            <td data-field="name">Alex</td>
+            <td data-field="email">alex@company.com</td>
+            <td data-field="licenses-and-quotas">
+              <ul>
+                <li data-license-name="AI Pro">AI Pro: <span data-field="used">8</span> / <span data-field="included">20</span></li>
+                <li data-license-name="All Products Pack">All Products Pack: <span data-field="used">4</span> / <span data-field="included">20</span></li>
+              </ul>
+            </td>
+            <td data-field="balance-used-percent">54%</td>
+            <td data-field="top-up-usage">2</td>
+            <td data-field="top-up-limit">10</td>
+          </tr>
+          <tr data-user-row="2">
+            <td data-field="name">Morgan</td>
+            <td data-field="email">morgan@company.com</td>
+            <td data-field="licenses-and-quotas">
+              <ul>
+                <li data-license-name="AI Ultimate">AI Ultimate: <span data-field="used">60</span> / <span data-field="included">70</span></li>
+              </ul>
+            </td>
+            <td data-field="balance-used-percent">86%</td>
+            <td data-field="top-up-usage">0</td>
+            <td data-field="top-up-limit">15</td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+  </body>
+</html>

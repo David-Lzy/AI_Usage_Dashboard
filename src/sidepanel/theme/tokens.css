@@ -1,0 +1,279 @@
+:root {
+  color-scheme: light;
+
+  /* Material-like system colors */
+  --md-sys-color-primary: #005ac1;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #d7e3ff;
+  --md-sys-color-on-primary-container: #001b3f;
+
+  --md-sys-color-secondary: #535f70;
+  --md-sys-color-on-secondary: #ffffff;
+  --md-sys-color-secondary-container: #d7e3f8;
+  --md-sys-color-on-secondary-container: #101c2b;
+
+  --md-sys-color-tertiary: #6b5778;
+  --md-sys-color-on-tertiary: #ffffff;
+  --md-sys-color-tertiary-container: #f3daff;
+  --md-sys-color-on-tertiary-container: #251431;
+
+  --md-sys-color-surface: #f8f9ff;
+  --md-sys-color-surface-dim: #d9d9e0;
+  --md-sys-color-surface-bright: #f8f9ff;
+  --md-sys-color-surface-container-lowest: #ffffff;
+  --md-sys-color-surface-container-low: #f2f3fa;
+  --md-sys-color-surface-container: #eceef4;
+  --md-sys-color-surface-container-high: #e6e8ef;
+  --md-sys-color-surface-container-highest: #e1e2e9;
+  --md-sys-color-on-surface: #1a1c20;
+  --md-sys-color-on-surface-variant: #44474e;
+
+  --md-sys-color-outline: #74777f;
+  --md-sys-color-outline-variant: #c4c6d0;
+  --md-sys-color-shadow: rgba(16, 24, 40, 0.12);
+
+  /* Material-like status colors for future cards */
+  --app-color-success: #196c2e;
+  --app-color-success-container: #c8f2d0;
+  --app-color-warning: #8f4c00;
+  --app-color-warning-container: #ffddb9;
+  --app-color-error: #ba1a1a;
+  --app-color-error-container: #ffdad6;
+  --app-surface-success-background: color-mix(
+    in srgb,
+    var(--app-color-success-container) 72%,
+    white 28%
+  );
+  --app-surface-success-border: color-mix(
+    in srgb,
+    var(--app-color-success) 30%,
+    var(--md-sys-color-outline-variant) 70%
+  );
+  --app-surface-success-on: color-mix(
+    in srgb,
+    var(--app-color-success) 88%,
+    black 12%
+  );
+  --app-surface-success-on-muted: color-mix(
+    in srgb,
+    var(--app-color-success) 74%,
+    black 26%
+  );
+  --app-surface-warning-background: color-mix(
+    in srgb,
+    var(--app-color-warning-container) 58%,
+    white 42%
+  );
+  --app-surface-warning-border: color-mix(
+    in srgb,
+    var(--app-color-warning) 30%,
+    var(--md-sys-color-outline-variant) 70%
+  );
+  --app-surface-warning-on: color-mix(
+    in srgb,
+    var(--app-color-warning) 88%,
+    black 12%
+  );
+  --app-surface-warning-on-muted: color-mix(
+    in srgb,
+    var(--app-color-warning) 72%,
+    black 28%
+  );
+  --app-surface-error-background: color-mix(
+    in srgb,
+    var(--app-color-error-container) 62%,
+    white 38%
+  );
+  --app-surface-error-border: color-mix(
+    in srgb,
+    var(--app-color-error) 32%,
+    var(--md-sys-color-outline-variant) 68%
+  );
+  --app-surface-error-on: color-mix(
+    in srgb,
+    var(--app-color-error) 90%,
+    black 10%
+  );
+  --app-surface-error-on-muted: color-mix(
+    in srgb,
+    var(--app-color-error) 76%,
+    black 24%
+  );
+
+  /* Compact chip roles */
+  --app-chip-accent-background: var(--md-sys-color-secondary-container);
+  --app-chip-accent-border: color-mix(
+    in srgb,
+    var(--md-sys-color-secondary) 24%,
+    var(--md-sys-color-outline-variant) 76%
+  );
+  --app-chip-accent-on: var(--md-sys-color-on-secondary-container);
+  --app-chip-neutral-background: var(--md-sys-color-surface-container-high);
+  --app-chip-neutral-border: color-mix(
+    in srgb,
+    var(--md-sys-color-outline-variant) 88%,
+    white 12%
+  );
+  --app-chip-neutral-on: var(--md-sys-color-on-surface-variant);
+  --app-chip-success-background: var(--app-surface-success-background);
+  --app-chip-success-border: var(--app-surface-success-border);
+  --app-chip-success-on: var(--app-surface-success-on);
+  --app-chip-warning-background: var(--app-surface-warning-background);
+  --app-chip-warning-border: var(--app-surface-warning-border);
+  --app-chip-warning-on: var(--app-surface-warning-on);
+  --app-chip-error-background: var(--app-surface-error-background);
+  --app-chip-error-border: var(--app-surface-error-border);
+  --app-chip-error-on: var(--app-surface-error-on);
+
+  /* Progress indicators */
+  --app-progress-track-neutral: var(--md-sys-color-surface-container-high);
+  --app-progress-track-warning: color-mix(
+    in srgb,
+    var(--app-color-warning-container) 65%,
+    white 35%
+  );
+  --app-progress-track-error: color-mix(
+    in srgb,
+    var(--app-color-error-container) 70%,
+    white 30%
+  );
+  --app-progress-track-border: color-mix(
+    in srgb,
+    var(--md-sys-color-outline-variant) 90%,
+    white 10%
+  );
+  --app-progress-fill-neutral: var(--md-sys-color-primary);
+  --app-progress-fill-warning: var(--app-color-warning);
+  --app-progress-fill-error: var(--app-color-error);
+  --app-progress-indeterminate-stripe: rgba(255, 255, 255, 0.58);
+
+  /* Supporting inset surfaces */
+  --app-supporting-surface-background: color-mix(
+    in srgb,
+    var(--md-sys-color-surface-container-low) 94%,
+    white 6%
+  );
+  --app-supporting-surface-border: color-mix(
+    in srgb,
+    var(--md-sys-color-outline-variant) 86%,
+    white 14%
+  );
+  --app-supporting-surface-strong-background: color-mix(
+    in srgb,
+    var(--md-sys-color-surface-container-high) 92%,
+    white 8%
+  );
+  --app-supporting-surface-strong-border: color-mix(
+    in srgb,
+    var(--md-sys-color-outline-variant) 92%,
+    white 8%
+  );
+
+  /* Typography */
+  --md-sys-typescale-display-small-font: "Roboto Flex", "Roboto", "Segoe UI",
+    sans-serif;
+  --md-sys-typescale-title-large-font: "Roboto Flex", "Roboto", "Segoe UI",
+    sans-serif;
+  --md-sys-typescale-title-medium-font: "Roboto Flex", "Roboto", "Segoe UI",
+    sans-serif;
+  --md-sys-typescale-body-large-font: "Roboto Flex", "Roboto", "Segoe UI",
+    sans-serif;
+  --md-sys-typescale-body-medium-font: "Roboto Flex", "Roboto", "Segoe UI",
+    sans-serif;
+  --md-sys-typescale-label-large-font: "Roboto Flex", "Roboto", "Segoe UI",
+    sans-serif;
+  --md-sys-typescale-label-medium-font: "Roboto Flex", "Roboto", "Segoe UI",
+    sans-serif;
+
+  --md-sys-typescale-display-small-size: 2rem;
+  --md-sys-typescale-title-large-size: 1.375rem;
+  --md-sys-typescale-title-medium-size: 1rem;
+  --md-sys-typescale-body-large-size: 1rem;
+  --md-sys-typescale-body-medium-size: 0.875rem;
+  --md-sys-typescale-label-large-size: 0.875rem;
+  --md-sys-typescale-label-medium-size: 0.75rem;
+
+  --md-sys-typescale-display-small-line-height: 2.5rem;
+  --md-sys-typescale-title-large-line-height: 1.75rem;
+  --md-sys-typescale-title-medium-line-height: 1.5rem;
+  --md-sys-typescale-body-large-line-height: 1.5rem;
+  --md-sys-typescale-body-medium-line-height: 1.25rem;
+  --md-sys-typescale-label-large-line-height: 1.25rem;
+  --md-sys-typescale-label-medium-line-height: 1rem;
+
+  --md-sys-typescale-display-small-weight: 600;
+  --md-sys-typescale-title-large-weight: 600;
+  --md-sys-typescale-title-medium-weight: 600;
+  --md-sys-typescale-body-large-weight: 400;
+  --md-sys-typescale-body-medium-weight: 400;
+  --md-sys-typescale-label-large-weight: 600;
+  --md-sys-typescale-label-medium-weight: 700;
+
+  /* Shape */
+  --md-sys-shape-corner-none: 0;
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 18px;
+  --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-full: 999px;
+
+  /* Elevation */
+  --app-elevation-1: 0 1px 2px var(--md-sys-color-shadow);
+  --app-elevation-2: 0 6px 18px rgba(16, 24, 40, 0.08);
+
+  /* Motion */
+  --app-motion-duration-fast: 140ms;
+  --app-motion-duration-medium: 220ms;
+  --app-motion-duration-slow: 320ms;
+  --app-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --app-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --app-motion-distance-1: 6px;
+  --app-motion-distance-2: 12px;
+
+  /* Interaction states */
+  --app-state-layer-primary-hover: color-mix(
+    in srgb,
+    var(--md-sys-color-primary-container) 58%,
+    white 42%
+  );
+  --app-state-layer-primary-press: color-mix(
+    in srgb,
+    var(--md-sys-color-primary-container) 72%,
+    white 28%
+  );
+  --app-state-layer-neutral-hover: color-mix(
+    in srgb,
+    var(--md-sys-color-surface-container) 74%,
+    white 26%
+  );
+  --app-state-layer-neutral-press: color-mix(
+    in srgb,
+    var(--md-sys-color-surface-container-high) 82%,
+    white 18%
+  );
+  --app-focus-ring-color: color-mix(
+    in srgb,
+    var(--md-sys-color-primary) 24%,
+    white 76%
+  );
+  --app-focus-ring-shadow: 0 0 0 3px var(--app-focus-ring-color);
+
+  /* Spacing */
+  --app-space-1: 4px;
+  --app-space-2: 8px;
+  --app-space-3: 12px;
+  --app-space-4: 16px;
+  --app-space-5: 20px;
+  --app-space-6: 24px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --app-motion-duration-fast: 0ms;
+    --app-motion-duration-medium: 0ms;
+    --app-motion-duration-slow: 0ms;
+    --app-motion-distance-1: 0px;
+    --app-motion-distance-2: 0px;
+  }
+}

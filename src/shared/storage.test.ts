@@ -1,0 +1,132 @@
+import { beforeEach, describe, expect, it } from "vitest";
+
+import type { AppState } from "../providers/types";
+import { SAMPLE_APP_STATE } from "./constants";
+import { readAppState, writeAppState } from "./storage";
+
+function createLegacyState(): AppState {
+  return {
+    ...SAMPLE_APP_STATE,
+    providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => {
+      const {
+        hostOrigins: _hostOrigins,
+        credentialStatus: _credentialStatus,
+        sourcePreference: _sourcePreference,
+        pageBinding: _pageBinding,
+        ...legacyProvider
+      } = provider;
+      return legacyProvider as AppState["providerSettings"][number];
+    }),
+  };
+}
+
+function createStaleSchemaState(): AppState {
+  return {
+    ...SAMPLE_APP_STATE,
+    providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => {
+      if (provider.id === "cursor") {
+        return {
+          ...provider,
+          hostsLabel: "api.cursor.com",
+          hostOrigins: ["https://api.cursor.com/*"],
+          description: "Needed for Cursor Team Admin API requests.",
+        };
+      }
+
+      if (provider.id === "codex") {
+        return {
+          ...provider,
+          hostsLabel: "api.chatgpt.com",
+          hostOrigins: ["https://api.chatgpt.com/*"],
+          description:
+            "Targets the Codex Enterprise analytics API with a workspace-scoped analytics key and workspace ID.",
+        };
+      }
+
+      return provider;
+    }),
+  };
+}
+
+describe("storage normalization", () => {
+  beforeEach(async () => {
+    await writeAppState(SAMPLE_APP_STATE);
+  });
+
+  it("fills missing provider setting fields from the sample schema", async () => {
+    await writeAppState(createLegacyState());
+
+    const state = await readAppState();
+
+    expect(state).not.toBeNull();
+    expect(
+      state?.providerSettings.find((provider) => provider.id === "cursor")
+        ?.credentialStatus,
+    ).toBe("missing");
+    expect(
+      state?.providerSettings.find((provider) => provider.id === "claude-code")
+        ?.credentialStatus,
+    ).toBe("missing");
+    expect(
+      state?.providerSettings.find((provider) => provider.id === "codex")
+        ?.credentialStatus,
+    ).toBe("missing");
+    expect(
+      state?.providerSettings.find((provider) => provider.id === "jetbrains")
+        ?.hostOrigins,
+    ).toEqual(["https://account.jetbrains.com/*", "https://*.jetbrains.com/*"]);
+    expect(
+      state?.providerSettings.find((provider) => provider.id === "gemini")
+        ?.hostOrigins,
+    ).toEqual([]);
+    expect(
+      state?.providerSettings.find((provider) => provider.id === "gemini")
+        ?.credentialStatus,
+    ).toBe("not_required");
+    expect(
+      state?.providerSettings.find((provider) => provider.id === "cursor")
+        ?.sourcePreference,
+    ).toBe("auto");
+    expect(
+      state?.providerSettings.find((provider) => provider.id === "cursor")
+        ?.pageBinding,
+    ).toEqual({
+      mode: "auto",
+      status: "unbound",
+      tabId: null,
+      matchedUrl: null,
+      matchedTitle: null,
+      updatedAt: null,
+    });
+  });
+
+  it("upgrades stale static provider metadata to the current sample schema", async () => {
+    await writeAppState(createStaleSchemaState());
+
+    const state = await readAppState();
+
+    expect(state).not.toBeNull();
+    expect(
+      state?.providerSettings.find((provider) => provider.id === "cursor")
+        ?.hostsLabel,
+    ).toBe("api.cursor.com · cursor.com");
+    expect(
+      state?.providerSettings.find((provider) => provider.id === "cursor")
+        ?.hostOrigins,
+    ).toEqual(["https://api.cursor.com/*", "https://cursor.com/*"]);
+    expect(
+      state?.providerSettings.find((provider) => provider.id === "cursor")
+        ?.description,
+    ).toBe(
+      "Uses the team Admin API when a key is configured, or the logged-in personal usage page when no key is stored.",
+    );
+    expect(
+      state?.providerSettings.find((provider) => provider.id === "codex")
+        ?.hostsLabel,
+    ).toBe("api.chatgpt.com + chatgpt.com");
+    expect(
+      state?.providerSettings.find((provider) => provider.id === "codex")
+        ?.hostOrigins,
+    ).toEqual(["https://api.chatgpt.com/*", "https://chatgpt.com/*"]);
+  });
+});

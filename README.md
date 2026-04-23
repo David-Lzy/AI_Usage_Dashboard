@@ -1,0 +1,411 @@
+# AI Usage Dashboard
+
+Chrome side-panel extension for tracking usage, credits, and sync health across AI coding tools.
+
+Current release candidate:
+
+- package version: `0.1.0-rc.2`
+- Chrome manifest version: `0.1.0.2`
+- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.2.zip`
+
+## Current RC Matrix
+
+| Provider | Shipped source path | Live support status | What stays unavailable |
+| --- | --- | --- | --- |
+| Cursor | Team Admin API or logged-in personal dashboard page | live | exact remaining included requests on the personal page |
+| JetBrains AI | retained repo path for the logged-in Console page | deferred from the active RC promise | current RC does not promise JetBrains until a real org-visible `Users and licensing` session is reverified |
+| Claude Code | Admin Analytics API | live | exact remaining included quota |
+| Gemini Code Assist | documented quota policy | policy only | live per-user usage |
+| Codex | Enterprise Analytics API or logged-in personal usage page | live | a single absolute remaining-credit balance across all visible usage windows |
+
+## Hybrid Personal-User Status
+
+Post-RC work now runs on shipped hybrid provider sources, not raw credential export.
+
+Current personal-user paths:
+
+| Provider | Current personal-user path | Current design note |
+| --- | --- | --- |
+| Codex | `chatgpt.com/codex/cloud/settings/analytics#usage` first, with `chatgpt.com/codex/settings/usage` still under observation | shipped as a logged-in session-page path; the proven live surface already exposes remaining percentage and reset timing in the current usage windows |
+| Cursor | `cursor.com/dashboard/usage` | shipped as a logged-in session-page path for billing-period usage context, not exact remaining included requests |
+| Claude Code | `claude.ai/settings/usage` | 2026-04-22 live spike redirected the current free account to `claude.ai/upgrade`; defer until a real Pro or Max usage page is captured |
+| Gemini Code Assist | Google Cloud Gemini metrics page | 2026-04-22 spike confirmed a project-scoped Google Cloud console route; defer from the personal-user track unless product support expands to explicit project metrics |
+
+Security posture for this track:
+
+- do not persist raw cookies in extension storage
+- do not ask the user to manually copy cookies or auth headers
+- prefer granted host access plus page-context extraction inside already logged-in tabs
+- store normalized usage snapshots, not exported session credentials
+
+Next execution queue:
+
+1. continue [Direction 04 - Material, Motion, And Responsive Hardening](./Doc/Roadmap/04_Direction_Material_Motion_And_Responsive_Hardening.md)
+2. continue [Direction 03 - Toolbar Popup And Badge Entry](./Doc/Roadmap/03_Direction_Toolbar_Popup_And_Badge_Entry.md) only for remaining popup-specific QA and width-range hardening
+
+## Source Labels
+
+The dashboard now labels every provider with one of these source types:
+
+- `Official API`
+  - live data comes from a vendor API or admin analytics endpoint
+- `Session page`
+  - live data comes from a logged-in browser tab that stays open
+- `Policy only`
+  - the extension shows documented quota policy, not live usage
+
+## Source Fidelity
+
+The side panel now also labels how complete the current provider values are:
+
+- `Exact vendor value`
+  - the active path exposes vendor-reported usage and remaining values directly
+- `Window-only vendor value`
+  - the active path exposes the current usage window or partial context, not one absolute remaining balance
+- `Analytics snapshot`
+  - the active path exposes aggregated analytics, not a live remaining counter
+- `Documented policy`
+  - the extension is showing vendor policy, not live synced usage
+- `Local estimate`
+  - reserved for future explicit opt-in work; not shipped in the current RC
+
+## Trust Boundary
+
+The side panel now also shows how each provider accesses data:
+
+- `Stored credential`
+  - live sync runs from the extension with a credential saved in extension-managed local storage
+- `Logged-in page session`
+  - live sync attaches to an already logged-in browser tab in the current browser session
+- `No live connection`
+  - the extension is showing documented policy only
+
+Current trust rules:
+
+- raw cookies are not persisted in extension storage
+- manual cookie or auth-header paste is forbidden
+- host access is requested only for the explicit provider origins needed by the shipped contract
+- credential-backed providers keep credentials in extension-managed local storage only on the current browser profile
+
+## Product Contract
+
+The side panel now also labels what the product is actually promising for each provider path:
+
+- `Shipped admin analytics`
+  - a live admin analytics path is supported, but it is not a personal quota page
+- `Shipped enterprise analytics`
+  - a live enterprise workspace analytics path is supported, but it is not one absolute remaining personal balance
+- `Shipped personal partial`
+  - a live logged-in personal page is supported, but only for the fields the vendor currently exposes
+- `Shipped policy only`
+  - the product intentionally shows documented vendor policy instead of claiming live sync
+- `Deferred personal page`
+  - a personal route was investigated, but the current product does not promise it yet
+- `Deferred project metrics`
+  - an observed route is project-scoped and is not presented as a simple personal quota page
+- `Deferred org console path`
+  - an org-console path remains in the repo, but it is outside the current RC promise until reverified
+
+## Deferred Graduation Gates
+
+Deferred paths now also carry explicit graduation gates in the UI:
+
+- `Claude`
+  - graduate only after a real Pro or Max usage page is captured instead of an upgrade redirect
+- `Gemini`
+  - graduate only if the product explicitly accepts bound-tab project metrics as a supported contract
+- `JetBrains`
+  - graduate only after a real `Users and licensing` org session is reverified in the active Chrome profile
+
+Current honesty boundaries:
+
+- JetBrains AI remains implemented in the repo, but it is hidden by default and deferred from the active RC support promise until a real org-visible `Users and licensing` session is reverified
+- Codex now ships a real `Session page` path for personal users and an `Official API` path for Enterprise workspace analytics
+- Cursor now ships a real `Session page` path for personal users and an `Official API` path for team admins, but the personal path still only exposes billing-period usage context
+- Codex personal usage-page sync is now explicitly labeled as `Window-only vendor value` even though the page exposes exact percentages for visible windows, because it still does not represent one absolute remaining balance across all usage windows
+- Cursor personal usage-page sync is now explicitly labeled as `Window-only vendor value`
+- Gemini remains `Policy only`; the observed Google Cloud metrics route is project-scoped and not treated as personal quota
+- the UI now makes the trust boundary explicit in Settings and provider detail, including host-access requirements, credential persistence, and the fact that cookies stay forbidden
+- the UI now makes the provider contract explicit in Settings and provider detail, including when the current live path and the retained session-page track represent different promises
+- dashboard cards now also expose the current provider contract and, when relevant, the retained session-page contract so the main overview stays honest without extra drilling
+- deferred tracks now also expose explicit graduation gates in Settings and provider detail so the product states what concrete evidence is still missing
+- shipped session-page providers now persist safe page-binding metadata, reconnect to matching tabs across refresh or relaunch, and surface `Attached`, `Stale binding`, and `Not bound` states in the UI
+
+## Toolbar Entry
+
+The Chrome action now opens a compact popup first:
+
+- the popup shows cached shared dashboard state for a quick glance
+- the popup now also surfaces cached snapshot freshness so users can see whether the visible provider state is aligned or mixed
+- the popup can trigger an on-demand refresh
+- the popup includes an `Open dashboard` action that opens the side panel
+- featured popup providers can now deep-link into the matching side-panel detail route
+- the popup now also exposes direct quick actions for dashboard and settings
+- the badge shows the number of visible providers currently needing attention
+- the side panel remains the canonical surface for settings, source diagnostics, and provider detail
+
+## Settings Experience
+
+The Settings screen now starts with a compact overview and section-jump area:
+
+- the top of Settings now summarizes visible providers, stored secrets, bound pages, and access gaps
+- the Settings top bar now stays sticky so `Back` and `Save` remain reachable while scrolling
+- long Settings content now exposes direct jump controls for preferences, visibility, credentials, sources, and permissions
+- the side-panel CSS now collapses key grids earlier at `720px` instead of waiting for the old `480px` breakpoint alone
+- `Source Connections` cards now keep their contract summary visible by default and move dense diagnostics behind an explicit expandable section
+- the repo now includes a repeatable `360 / 420 / 720` screenshot review pass for dashboard and settings, and that pass drove a real `360px` overflow fix in Settings
+- the side panel now ships a small motion baseline for surface entry, toast feedback, and source-card disclosure, while `prefers-reduced-motion` disables non-essential animation
+- Settings section jumps now scroll smoothly by default and fall back to instant jumps when reduced motion is requested
+- source-card header chips now carry the current path, contract, fidelity, and state labels so the visible summary tiles can stay focused on preference, access model, fallback, and availability instead of repeating the same facts twice
+- source-card body notes now stay hidden unless fallback or operational state needs explanation
+- expanded source-card diagnostics now read as grouped sections for source decision, value semantics, and trust boundary instead of one flat field wall
+- session-page track blocks now use a compact `title + chips + fields + conditional note` layout so shipped and deferred page routes stay honest without the earlier paragraph stack
+- the repo now also includes a compact Settings QA pass at `360x740` and `420x900`, in both motion-safe and reduced-motion scenarios
+- top-bar buttons, text buttons, Settings nav chips, selects, switch rows, and source-card disclosure toggles now share one keyboard-focus and state-layer language instead of mixed per-component treatments
+- the repo now also includes a repeatable keyboard interaction review for Settings and popup surfaces
+- warning and error cards now use one harmonized tonal-surface system across dashboard, settings, and popup, and success toast feedback now uses the same shared status language
+- toned warning, error, and success surfaces now also use a clearer text hierarchy, so titles, metrics, and supporting copy no longer all inherit the same neutral content color
+- Settings selects and visibility rows now also expose explicit pressed states, and the repo now includes a repeatable pointer hover plus press review for the main Settings and popup controls
+- compact chip roles now use a clearer shared token baseline, and unknown progress now renders as an explicit indeterminate state instead of a fake fixed percentage fill
+- provider-detail fields, neutral detail notes, and expanded Settings diagnostic groups now use a clearer supporting-surface hierarchy, and compact detail values wrap explicitly instead of risking narrow-width overflow
+- the repo now also exposes a dedicated `#debug-interaction-audit` route with fixed-width embedded dashboard, settings, provider-detail, and popup surfaces so real-browser manual QA no longer depends on repeated tab resizing
+- that audit route now also exposes per-surface preset actions and inline audit-state feedback, so reviewers can jump directly to source diagnostics, source-preference focus, detail-note positions, and popup actions from the parent QA page
+- that audit route now also shows a visible expectation line for every preset, and the repo now has an evidence-pack review pass that saves ordered preset screenshots plus matching audit-state output
+- that audit route now also shows explicit per-surface manual checks, and the repo can generate a reusable markdown signoff pack that combines those checks with the latest preset evidence
+- that audit route now also includes a persistent signoff workspace with per-check completion, reviewer notes, pass versus follow-up state, and live draft plus JSON copy actions
+- that audit route now also lets a reviewer paste exported signoff JSON back into the workspace so a saved local review state can be restored during handoff without inventing server sync
+- that audit route now also preserves a repo-backed request binding across import, local workspace edits, drafts, and exported signoff JSON so one valid review export cannot accidentally fulfill a different pending request
+- the repo-backed request flow now also surfaces source-template drift for pending requests, so stale request packages can be regenerated before anyone tries to complete them as if they still matched current review scope
+- the repo-backed request flow now also ships an explicit regenerate command that supersedes one drifted request and writes one aligned replacement request instead of relying on manual repo edits
+- that audit route now also shows a handoff summary with ready, follow-up, not-reviewed, and pending-check counts, and the repo can generate a current-state handoff bundle that links the workspace to the latest preset evidence
+- that audit route now also shows the operator handoff workflow directly, and the repo now ships a reusable `interaction-audit:bundle` command for exported signoff JSON
+- that audit route now also stores explicit review-session metadata for reviewer, session label, and reviewed-at time, and exported signoff JSON plus generated bundles now preserve that metadata during reset, import, and handoff
+- that audit route now also offers direct downloads for signoff draft, signoff JSON, and handoff summary artifacts, with metadata-aware local filenames so operator handoff no longer depends only on clipboard copy
+- that audit route now also exposes a live `Review Queue` with one next target plus per-surface jump actions, so human review can move through unresolved work without scanning the whole page manually
+- the repo now also ships a reusable `interaction-audit:archive` command that turns exported signoff JSON into a durable review record under `Doc/testing/operator_reviews/`, and the first archived record is a clearly labeled seeded baseline instead of a claimed human signoff
+- the durable archive index is now generated from archive manifests, and the default archive command refreshes that index automatically when it writes a repo-backed review record
+- the repo now also ships an `interaction-audit:create-review-request` command that creates a pending non-seeded operator review package with a blank importable signoff template, so the first real human pass can start from a repo-backed request instead of an ad-hoc scratch file
+- that request flow is now also self-indexing, and the repo now ships an `interaction-audit:complete-review-request` command that fulfills a pending request by linking it to one archived exported signoff session instead of relying on hand-edited request docs
+- archives created through that completion flow now also preserve a source-request link, so request and archive records can trace each other in both directions without outside notes
+- pending request manifests now also preserve an expected audit shape, and the completion command rejects exported workspace shapes that do not match the request template
+- the repo-backed request flow now also resolves source evidence truthfully, so preflight checks the request package evidence path explicitly and completion defaults to that request-bound evidence unless an explicit CLI override is supplied
+- repo-backed request packages are now also self-contained: each request snapshots its evidence pack into the request directory, so default request completion no longer depends on a `tmp/` evidence file staying available after the package is created
+- repo-backed request packages now also record a digest for that local evidence snapshot, and preflight plus completion reject a request whose packaged evidence was modified after the request was created
+- request-bound handoff bundles and durable archives now also preserve request binding plus request revision, so repo-backed review history keeps the same request identity through bundle output, archive manifests, archive README files, and the generated archive index
+- generated handoff bundles and durable archives now also preserve evidence source plus integrity summary, so repo-backed review history no longer reduces completion provenance to one path string alone
+- fulfilled request records now also preserve a concrete completion receipt, including completion review-session metadata, request revision, evidence provenance, and export digest, so request-side audit checks do not always require archive drill-down
+
+Hybrid-source preference behavior:
+
+- `Codex` and `Cursor` now expose an explicit source preference in Settings:
+  - `Auto`
+  - `Official API`
+  - `Session page`
+- the active provider snapshot now records:
+  - which source was actually used
+  - why that source was selected
+  - whether a fallback happened because the preferred source was unavailable
+- current fallback rules are deterministic:
+  - missing credential: may fall back to the other shipped source
+  - open page required or logged-out page: may fall back to the other shipped source
+  - sync error on the preferred source: may fall back to the other shipped source
+  - missing host access: no fallback; the provider stays blocked until permissions are granted
+
+## Prerequisites
+
+- Node `22` or newer
+- `npm`
+- `zip` for release packaging
+- Chrome or Chromium for unpacked-extension testing
+
+The repo includes `.nvmrc` with `22`.
+
+## Development
+
+```bash
+nvm use
+npm install
+npm run typecheck
+npm run test
+npm run build
+```
+
+Portable Node 22 fallback if `nvm` is unavailable:
+
+```bash
+npx -y node@22 ./node_modules/typescript/bin/tsc --noEmit
+npx -y node@22 ./node_modules/vitest/vitest.mjs run
+npx -y node@22 ./node_modules/vite/bin/vite.js build
+```
+
+Responsive and interaction review:
+
+```bash
+npm run phase55:review
+npm run phase60:review
+npm run phase61:review
+npm run phase62:review
+npm run phase63:review
+npm run phase64:review
+npm run phase65:review
+npm run phase66:review
+npm run phase67:review
+npm run phase68:review
+npm run phase69:review
+npm run phase70:review
+npm run phase71:review
+npm run phase72:review
+npm run phase73:review
+npm run phase74:review
+npm run phase75:review
+npm run phase76:review
+npm run phase77:review
+npm run phase78:review
+npm run phase79:review
+npm run phase80:review
+npm run phase81:review
+npm run phase82:review
+npm run phase83:review
+npm run phase84:review
+npm run phase85:review
+npm run phase86:review
+npm run phase87:review
+npm run phase88:review
+npm run phase89:review
+npm run phase90:review
+npm run phase91:review
+npm run phase92:review
+npm run phase93:review
+npm run phase94:review
+npm run phase95:review
+npm run phase96:review
+```
+
+Operator handoff bundle:
+
+```bash
+npm run interaction-audit:bundle -- --input tmp/operator-signoff-export.json --output-dir tmp/operator-handoff-bundle
+```
+
+The exported signoff JSON now preserves the audit workspace `Reviewer`, `Session`, and `Reviewed at` fields, and the generated bundle carries that same review-session metadata into both markdown and JSON outputs. The generated bundle now also preserves evidence source plus integrity summary, and when the current workspace is bound to one repo-backed request it also preserves `Request binding` plus `Request revision` instead of dropping request identity after export.
+
+The audit hub now also exposes direct file downloads for the current signoff draft, signoff JSON, and handoff summary, and those downloaded filenames include the current review date plus a sanitized session label. When the current workspace is bound to a repo-backed request, those downloaded filenames now also include the bound request id.
+
+Repo-backed review archive:
+
+```bash
+npm run interaction-audit:archive -- --input tmp/operator-signoff-export.json
+npm run interaction-audit:refresh-archive-index
+```
+
+The archive command writes a durable review record under `Doc/testing/operator_reviews/` and refreshes the generated archive index automatically. `interaction-audit:refresh-archive-index` is available when you need to rebuild the index and machine-readable catalog after manual archive changes. Request-linked archives now preserve both the higher-level `sourceRequest` link and the request-bound export context that was actually fulfilled, including `Request binding` plus `Request revision`, inside archive manifests, archive README output, and the generated archive index. Archives now also preserve evidence source plus integrity summary, so completion provenance stays truthful even when the archive is reviewed later without reopening the original request package. The current archive index lives in [Interaction_Audit_Review_Archive.md](./Doc/testing/Interaction_Audit_Review_Archive.md).
+
+Pending operator review request:
+
+```bash
+npm run interaction-audit:create-review-request -- --request-id 2026-04-23-first-real-operator-review-request
+npm run interaction-audit:preflight-review-request -- --request-id 2026-04-23-first-real-operator-review-request --input tmp/operator-signoff-export.json
+npm run interaction-audit:complete-review-request -- --request-id 2026-04-23-first-real-operator-review-request --input tmp/operator-signoff-export.json
+npm run interaction-audit:regenerate-review-request -- --request-id 2026-04-23-first-real-operator-review-request
+npm run interaction-audit:refresh-review-request-index
+```
+
+The create command writes a pending request package under `Doc/testing/operator_review_requests/`. That request manifest now preserves both the expected audit shape derived from the blank template and a request-bound context copied into the pending template itself. Each request package now also snapshots its evidence pack into `interaction-audit-evidence-pack.json`, so the package remains self-contained after creation while still preserving the original source evidence seed path for provenance. Each package now also records the packaged snapshot digest in the request manifest and README, so preflight plus completion can reject a request whose local evidence snapshot was modified after packaging. The audit hub now preserves that bound `requestId + requestCreatedAt` context across import, local workspace state, draft generation, exported signoff JSON, request-scope guidance, and downloaded artifact filenames. The same request package now also records a `requestRevisionSha256`, so preflight plus completion can reject one export that is still bound to an older revision of the same pending request after that request package has been refreshed in place. That revision is now visible in the audit hub `Request Scope`, carried into signoff draft plus handoff summary text, preserved in bound download filenames as a short `rev-...` segment, and now also preserved through generated handoff bundles plus request-linked durable archives. Completion archives now also preserve evidence source plus integrity summary in addition to the selected evidence path, so later repo review can still tell whether the archive used a verified request snapshot or another explicit evidence source. Fulfilled request records now also preserve a compact completion receipt, including completion review-session metadata, completion request revision, completion evidence provenance, and completed export digest, so request-side audit checks can stay useful without always jumping straight to the archive. The generated request index now also surfaces whether a pending request is still aligned with the current source template or has drifted out of date. The preflight command evaluates seeded-state rejection, request binding, workspace shape, current-template drift, and the request package evidence snapshot without mutating request or archive records. The complete command reuses those same gate checks, so it will reject exported workspace state whose request binding or workspace shape does not match the target pending request, and it will also reject a stale request package whose current source template has drifted and needs regeneration first. When `--evidence` is omitted, completion now uses the pending request package's evidence snapshot by default; if you intentionally pass `--evidence`, the archive preserves that actual override path instead. The regenerate command supersedes that stale request and writes one aligned replacement request from the current source template instead of leaving request recovery as a manual repo edit, and the replacement request also snapshots its evidence pack into the new request directory. When completion succeeds, it archives the export and refreshes both the request index and archive index automatically. Archives created through that completion path also preserve the source request id and request paths inside the archive manifest and generated archive index. The current generated request index lives in [Interaction_Audit_Review_Requests.md](./Doc/testing/Interaction_Audit_Review_Requests.md), and the machine-readable request catalog lives at `Doc/testing/operator_review_requests/index.json`.
+
+Static preview from the built extension:
+
+```bash
+npm run preview:dist
+```
+
+Preview URL:
+
+- local: `http://127.0.0.1:4173/src/sidepanel/index.html`
+- LAN: `http://10.10.2.202:4173/src/sidepanel/index.html`
+- audit local: `http://127.0.0.1:4173/src/sidepanel/index.html#debug-interaction-audit`
+- popup local: `http://127.0.0.1:4173/src/popup/index.html`
+- popup LAN: `http://10.10.2.202:4173/src/popup/index.html`
+
+## Install As Unpacked Extension
+
+1. Build the extension with `npm run build`.
+2. Open `chrome://extensions`.
+3. Enable `Developer mode`.
+4. Click `Load unpacked`.
+5. Select the repo `dist/` directory.
+6. Click the toolbar action to open the popup, review the snapshot-status card if needed, then use `Open dashboard` or `Open settings` to jump into the side panel.
+7. If you rebuild and keep using the same Chrome profile, go back to `chrome://extensions` and reload or update the unpacked extension before rerunning operator verification.
+
+## Provider Credentials And Permissions
+
+| Provider | Required credential | Required host access |
+| --- | --- | --- |
+| Cursor | optional Admin API key for the team path; none for the personal dashboard page | `https://api.cursor.com/*`, `https://cursor.com/*` |
+| JetBrains AI | none | `https://account.jetbrains.com/*`, `https://*.jetbrains.com/*` |
+| Claude Code | Admin API key | `https://api.anthropic.com/*`, `https://platform.claude.com/*` |
+| Gemini Code Assist | none | none |
+| Codex | none for personal usage pages; analytics API key + workspace ID for Enterprise analytics | `https://api.chatgpt.com/*`, `https://chatgpt.com/*` |
+
+For shipped session-page providers, use `Settings -> Source Connections` to find or open the required logged-in browser page before refreshing. The same section now shows whether the provider page is attached, stale, or unbound, and lets you disconnect a saved binding explicitly.
+
+If you are using a long-lived Chrome profile for release verification, run `npx -y node@22 ./scripts/phase41-profile-audit.mjs` after reloading the unpacked extension so the runtime host grants and stored extension state are visible before the final pass. In the narrowed RC selected on `2026-04-23`, JetBrains is retained in the repo but not part of the active release promise.
+
+## Release Flow
+
+Verify the release candidate:
+
+```bash
+nvm use
+npm run release:check
+npm run phase27:check
+```
+
+Package the already-built extension:
+
+```bash
+nvm use
+npm run release:package
+```
+
+Run the full release flow in one command:
+
+```bash
+nvm use
+npm run release
+```
+
+Output artifact:
+
+- `release/ai-usage-dashboard-0.1.0-rc.2.zip`
+
+The packaging script checks that:
+
+- `package.json` and `manifest.json` are version-aligned
+- `dist/` exists
+- the built manifest, side-panel entry, and icon set are present
+
+If your shell defaults to Node older than `22`, use `nvm use` first. On this workstation the default `node` is still `v20`, which is below the project's engine floor.
+
+Portable fallback on the same workstation:
+
+```bash
+npx -y node@22 ./scripts/phase27-real-profile-check.mjs
+npx -y node@22 ./scripts/package-release.mjs
+```
+
+## Docs
+
+- [Strategic Directions Index](./Doc/Roadmap/00_Strategic_Directions_Index.md)
+- [Release Packaging Guide](./Doc/Release_Packaging_Guide.md)
+- [Manual Test Checklist](./Doc/testing/Manual_Test_Checklist.md)
+- [Phase 27 Verification Report](./Doc/testing/Phase_27_Real_Device_Verification_Report.md)
+- [Phase 41.1 Runtime Parity Report](./Doc/testing/Phase_41_1_Real_Chrome_Runtime_Parity_Report.md)
+- [Phase 41.2 Final Mixed-Source Report](./Doc/testing/Phase_41_2_Final_Mixed_Source_Real_Chrome_Report.md)
+- [Phase 69 Interaction Audit Evidence Pack](./Doc/testing/Phase_69_Interaction_Audit_Evidence_Pack.md)
+- [Phase 70 Interaction Audit Manual Signoff Pack](./Doc/testing/Phase_70_Interaction_Audit_Manual_Signoff_Pack.md)
+- [Phase 71 Interaction Audit Signoff Workspace](./Doc/testing/Phase_71_Interaction_Audit_Signoff_Workspace.md)
+- [Cursor Note](./Doc/provider_notes/Cursor.md)
+- [JetBrains Note](./Doc/provider_notes/JetBrains.md)
+- [Claude Note](./Doc/provider_notes/Claude.md)
+- [Gemini Note](./Doc/provider_notes/Gemini.md)
+- [Codex Note](./Doc/provider_notes/Codex.md)

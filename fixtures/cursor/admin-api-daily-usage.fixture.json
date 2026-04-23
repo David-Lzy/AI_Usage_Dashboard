@@ -1,0 +1,60 @@
+{
+  "data": [
+    {
+      "date": 1710720000000,
+      "isActive": true,
+      "totalLinesAdded": 1543,
+      "totalLinesDeleted": 892,
+      "acceptedLinesAdded": 1102,
+      "acceptedLinesDeleted": 645,
+      "totalApplies": 87,
+      "totalAccepts": 73,
+      "totalRejects": 14,
+      "totalTabsShown": 342,
+      "totalTabsAccepted": 289,
+      "composerRequests": 45,
+      "chatRequests": 128,
+      "agentRequests": 12,
+      "cmdkUsages": 67,
+      "subscriptionIncludedReqs": 180,
+      "apiKeyReqs": 0,
+      "usageBasedReqs": 5,
+      "bugbotUsages": 3,
+      "mostUsedModel": "gpt-4",
+      "applyMostUsedExtension": ".tsx",
+      "tabMostUsedExtension": ".ts",
+      "clientVersion": "0.25.1",
+      "email": "developer@company.com"
+    },
+    {
+      "date": 1710806400000,
+      "isActive": true,
+      "totalLinesAdded": 2104,
+      "totalLinesDeleted": 1203,
+      "acceptedLinesAdded": 1876,
+      "acceptedLinesDeleted": 987,
+      "totalApplies": 102,
+      "totalAccepts": 91,
+      "totalRejects": 11,
+      "totalTabsShown": 456,
+      "totalTabsAccepted": 398,
+      "composerRequests": 67,
+      "chatRequests": 156,
+      "agentRequests": 23,
+      "cmdkUsages": 89,
+      "subscriptionIncludedReqs": 320,
+      "apiKeyReqs": 15,
+      "usageBasedReqs": 0,
+      "bugbotUsages": 5,
+      "mostUsedModel": "claude-3-opus",
+      "applyMostUsedExtension": ".py",
+      "tabMostUsedExtension": ".py",
+      "clientVersion": "0.25.1",
+      "email": "developer@company.com"
+    }
+  ],
+  "period": {
+    "startDate": 1710720000000,
+    "endDate": 1710892800000
+  }
+}
