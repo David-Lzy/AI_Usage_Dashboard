@@ -9,6 +9,7 @@ Document class:
 Status note:
 
 - this file is a living roadmap direction and should be refreshed when direction state, priority, or completed slices change
+- this direction is now in maintenance mode after `Phase 140`; refresh it when new doc families, checker coverage, or taxonomy boundaries materially change
 
 Execution note:
 
@@ -19,6 +20,7 @@ Execution note:
 - fifth executable slice landed on `2026-04-24` through `Phase 137`
 - sixth executable slice landed on `2026-04-24` through `Phase 138`
 - seventh executable slice landed on `2026-04-24` through `Phase 139`
+- eighth executable slice landed on `2026-04-24` through `Phase 140`
 
 Process rule:
 
@@ -26,7 +28,7 @@ Process rule:
 
 Priority:
 
-- `P4`
+- `P7`
 
 ## Why This Direction Exists
 
@@ -49,7 +51,7 @@ Today the truthful answer is "some are complete, some are intentionally living,"
 
 As of 2026-04-24:
 
-- numbered phase docs are archived through `Phase 138`
+- numbered phase docs are archived through `Phase 140`
 - there is no active numbered phase file in [00_Phase_Index.md](../TODOs/00_Phase_Index.md)
 - roadmap directions remain open by design
 - interaction-audit request docs still show `1 pending / 0 fulfilled`
@@ -62,11 +64,13 @@ As of 2026-04-24:
 - the generated repo-backed request and archive package READMEs now also carry explicit taxonomy labels and can be refreshed through one dedicated package-readme refresh command
 - the remaining roadmap direction files now also carry explicit `living strategy` labels instead of relying only on folder-level semantics
 - the repo now also records which remaining doc patterns are intentionally convention-only instead of leaving that boundary implicit
+- this direction is now sufficiently complete for maintenance mode, so the default next work should shift to toolbar competitive fit and internationalization bootstrap instead of more taxonomy expansion
 
 This means:
 
 - "phase history complete" is true
 - "all docs finished forever" is false
+- "Direction 08 needs more default label expansion right now" is also false
 
 ## Direction Goal
 
@@ -122,6 +126,7 @@ Recommended rollout:
 2. ship one documentation audit report
 3. patch stale indexes and stale priority notes
 4. optionally add one repeatable doc-consistency checklist or script
+5. then transition the direction into maintenance mode instead of widening labeling scope by default
 
 `Phase 133` completed the first executable part of steps `1` and `2` by shipping one project-level taxonomy, updating the guardrails, and labeling the generated request plus archive ledgers explicitly.
 
@@ -136,6 +141,8 @@ Recommended rollout:
 `Phase 138` completed the next executable part of optional step `4` by labeling the remaining roadmap direction files as explicit `living strategy` docs and extending the taxonomy check to cover the full `Doc/Roadmap/` set instead of only the strategic index.
 
 `Phase 139` completed the next executable part of optional step `4` by defining the current convention-only boundary explicitly and carrying that boundary into the checker output, so remaining unlabeled evidence artifacts are now an explicit policy choice instead of an accidental gap.
+
+`Phase 140` completed step `5` by moving this direction into maintenance mode, lowering its strategic priority, and handing default next-step emphasis back to `Direction 10` and `Direction 09`.
 
 ## References
 

@@ -30,8 +30,7 @@ Important scope note:
 
 As of 2026-04-24:
 
-- the numbered phase queue is now completed through `Phase 136`
-- the numbered phase queue is now completed through `Phase 139`
+- the numbered phase queue is now completed through `Phase 140`
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
 - `Phase 42` has packaged `0.1.0-rc.2` and closed the release-closeout track for the narrowed RC
 - `Phase 43` completed the first `Direction 02` slice by productizing source-fidelity semantics in the side panel
@@ -131,8 +130,9 @@ As of 2026-04-24:
 - `Phase 137` completed the next executable `Direction 08` slice by labeling generated request/archive package READMEs, refreshing the current repo packages through generator-driven output, and extending the taxonomy consistency check to package-level docs
 - `Phase 138` completed the next executable `Direction 08` slice by labeling the remaining roadmap direction files as explicit `living strategy` docs and extending the taxonomy consistency check to the full roadmap set
 - `Phase 139` completed the next executable `Direction 08` slice by making the remaining convention-only doc boundary explicit and surfacing that policy through checker output
-- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 139`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
-- the numbered phase queue is now completed through `Phase 139`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
+- `Phase 140` completed the next executable `Direction 08` slice by moving the documentation-completion line into maintenance mode and handing default strategic follow-up back to `Direction 10` and `Direction 09`
+- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 140`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
+- the numbered phase queue is now completed through `Phase 140`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
 - `Codex` personal support is already shipped as a `session_page` path, but it currently exposes usage-window percentages and reset timing, not one absolute remaining credit balance
 - `Cursor` personal support is already shipped as a `session_page` path, but it currently exposes billing-period usage context, not one exact remaining included-request counter
 - the extension action now opens a compact popup on click, the popup makes cached snapshot freshness explicit, and the badge shows the count of visible providers needing attention
@@ -157,17 +157,17 @@ As of 2026-04-24:
 
 ### 2026-04-24 strategic refresh
 
-1. [Direction 08 - Documentation Completion And Truth Audit](./08_Direction_Documentation_Completion_And_Truth_Audit.md)
+1. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why first now:
-   this direction answers the current ambiguity about whether previous documentation work is actually "finished" and creates one shared status model before more roadmap expansion.
+   `Direction 08` is now in maintenance mode, while the popup is already materially productized and offers the highest-leverage local product work through competitive fit, truthful extension-mode screenshots, and store-readiness.
 
-2. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
+2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second now:
-   the popup is already materially productized, so the next high-leverage local work is competitive fit, truthful extension-mode screenshots, and store-readiness rather than more shell redesign.
-
-3. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
-   Why third now:
    internationalization is important and feasible, but it should begin with architecture and pilot locales, not an immediate ten-language dump into an English-only runtime.
+
+3. [Direction 08 - Documentation Completion And Truth Audit](./08_Direction_Documentation_Completion_And_Truth_Audit.md)
+   Why third now:
+   the repo now has one explicit taxonomy, one freshness model, one checker, and one convention-only boundary, so this direction should stay in maintenance mode unless new doc families or checker drift justify reopening it.
 
 ### Active continuation order
 
@@ -199,17 +199,17 @@ As of 2026-04-24:
 
 ### Additional requested directions from 2026-04-24
 
-1. [Direction 08 - Documentation Completion And Truth Audit](./08_Direction_Documentation_Completion_And_Truth_Audit.md)
+1. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why first among the new requests:
-   the numbered phase queue is closed through `Phase 139`, and the repo now has one explicit documentation taxonomy plus one freshness-label model plus one lightweight consistency check that reaches package-level generated docs, the full roadmap set, and the current convention-only boundary; the next work is to decide whether any remaining low-value docs still need promotion into explicit labeling.
-
-2. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
-   Why second among the new requests:
    the popup already has real onboarding and stateful CTA behavior, so the next high-value step is competitive fit plus store-readiness, not popup shell invention.
 
-3. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
-   Why third among the new requests:
+2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
+   Why second among the new requests:
    the project is still effectively English-only, but the safe next move is architecture plus pilot locales before promising a full ten-language rollout.
+
+3. [Direction 08 - Documentation Completion And Truth Audit](./08_Direction_Documentation_Completion_And_Truth_Audit.md)
+   Why third among the new requests:
+   the numbered phase queue is now closed through `Phase 140`, and the repo now has one explicit documentation taxonomy plus one freshness-label model plus one lightweight consistency check that reaches package-level generated docs, the full roadmap set, and the current convention-only boundary; this direction is now maintenance work, not the next default expansion line.
 
 Completed first:
 

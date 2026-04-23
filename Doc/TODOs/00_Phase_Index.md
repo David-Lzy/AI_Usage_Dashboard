@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [139_Phase_Doc_Taxonomy_Boundary_And_Convention_Only_Policy.md](./Archive/139_Phase_Doc_Taxonomy_Boundary_And_Convention_Only_Policy.md)
+- latest completed slice: [140_Phase_Direction_08_Maintenance_Transition_And_Strategic_Reprioritization.md](./Archive/140_Phase_Direction_08_Maintenance_Transition_And_Strategic_Reprioritization.md)
 
 Completed phases should be moved to:
 
@@ -186,6 +186,7 @@ Completed phases should be moved to:
 - [137_Phase_Generated_Request_And_Archive_Package_Readme_Labeling.md](./Archive/137_Phase_Generated_Request_And_Archive_Package_Readme_Labeling.md) - completed and archived on 2026-04-24
 - [138_Phase_Roadmap_Living_Strategy_Labeling_And_Check_Coverage.md](./Archive/138_Phase_Roadmap_Living_Strategy_Labeling_And_Check_Coverage.md) - completed and archived on 2026-04-24
 - [139_Phase_Doc_Taxonomy_Boundary_And_Convention_Only_Policy.md](./Archive/139_Phase_Doc_Taxonomy_Boundary_And_Convention_Only_Policy.md) - completed and archived on 2026-04-24
+- [140_Phase_Direction_08_Maintenance_Transition_And_Strategic_Reprioritization.md](./Archive/140_Phase_Direction_08_Maintenance_Transition_And_Strategic_Reprioritization.md) - completed and archived on 2026-04-24
 
 ## Dependency Notes
 

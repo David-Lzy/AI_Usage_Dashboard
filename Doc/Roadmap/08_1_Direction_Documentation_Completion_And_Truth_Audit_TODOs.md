@@ -16,6 +16,7 @@ Status note:
 - `Phase 137` completed the next executable slice on `2026-04-24` by shipping explicit class plus status labels for generated request/archive package READMEs, one package-readme refresh command, and one checker extension that now covers those generated package docs too
 - `Phase 138` completed the next executable slice on `2026-04-24` by shipping explicit `living strategy` labels across the remaining roadmap direction files and by extending the checker to cover the full roadmap set
 - `Phase 139` completed the next executable slice on `2026-04-24` by defining the current convention-only boundary explicitly and surfacing that same boundary in checker output
+- `Phase 140` completed the next executable slice on `2026-04-24` by transitioning this direction into maintenance mode and explicitly reprioritizing the strategic index toward `Direction 10` then `Direction 09`
 
 Process rule:
 
@@ -87,6 +88,10 @@ Parent direction:
 - the repo now ships one first lightweight check for label presence on high-value docs plus latest-slice alignment in the phase index
 - that lightweight check now also covers generated request/archive package READMEs, not only top-level indexes and maintained references
 - that lightweight check now also exposes the current convention-only boundary so remaining unlabeled evidence artifacts are documented as policy, not drift
+- future work should now be maintenance-only:
+  - reopen this direction when a new doc family does not fit the current taxonomy
+  - reopen this direction when checker coverage drifts behind high-value docs
+  - do not widen explicit labeling just to chase low-value convention-only artifacts
 
 ## Out Of Scope
 

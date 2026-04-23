@@ -89,6 +89,7 @@
     "phase137:review": "node ./scripts/phase137-generated-package-readme-review.mjs",
     "phase138:review": "node ./scripts/phase138-roadmap-living-strategy-review.mjs",
     "phase139:review": "node ./scripts/phase139-doc-taxonomy-boundary-review.mjs",
+    "phase140:review": "node ./scripts/phase140-doc-direction-maintenance-review.mjs",
     "interaction-audit:bundle": "node ./scripts/build-interaction-audit-handoff-bundle.mjs",
     "interaction-audit:archive": "node ./scripts/archive-interaction-audit-review.mjs",
     "interaction-audit:refresh-archive-index": "node ./scripts/build-interaction-audit-review-archive-index.mjs",
