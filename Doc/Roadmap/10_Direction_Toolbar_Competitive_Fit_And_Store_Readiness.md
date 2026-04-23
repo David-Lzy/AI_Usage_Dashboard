@@ -21,6 +21,7 @@ Execution note:
 - seventh executable slice landed on `2026-04-24` through `Phase 147`
 - eighth executable slice landed on `2026-04-24` through `Phase 148`
 - ninth executable slice landed on `2026-04-24` through `Phase 149`
+- tenth executable slice landed on `2026-04-24` through `Phase 150`
 - this direction sharpens [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md) into a more explicit next-stage productization track
 
 Process rule:
@@ -75,6 +76,7 @@ As of 2026-04-24:
 - the repo now also ships one request-bound screenshot-seed route plus one RDP capture runner that can apply stable storyboard states to the real unpacked extension runtime before each requested capture
 - the repo now also ships one fast-fail timeout plus stale-probe cleanup path for RDP capture commands, so failed X11 probes do not leave the workflow hanging indefinitely
 - the repo now also ships the first real archived screenshot set produced from the current request/archive workflow
+- the repo now also ships one maintained store-listing copy pack anchored to that archived screenshot set
 - the popup still has some remaining overlap between top story, featured card, and lower surface-role explanation
 - the repo still does not yet ship a full store-readiness pack for listing copy hierarchy and localized listing variants
 - the project now has an RDP Chrome environment available for truthful extension-mode capture and review
@@ -152,6 +154,8 @@ Recommended rollout:
 `Phase 148` completed the next executable part of step `3` by adding fast-fail X11 command timeouts plus one stale-probe cleanup command for the RDP capture workflow, so failed capture attempts now terminate clearly instead of hanging the shell indefinitely.
 
 `Phase 149` completed the next executable part of step `3` by capturing and archiving the first real RDP Chrome screenshot set, turning the screenshot workflow from a prepared lifecycle into one proven archived evidence path.
+
+`Phase 150` completed the next executable part of step `4` by turning that first archived screenshot set into one maintained listing-copy pack, so the store-readiness line now has a truthful title/summary/caption source instead of only screenshots plus storyboard notes.
 
 ## References
 

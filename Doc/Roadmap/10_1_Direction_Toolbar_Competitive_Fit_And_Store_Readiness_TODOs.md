@@ -18,6 +18,7 @@ Status note:
 - `Phase 147` completed the next executable slice on `2026-04-24` by shipping one request-bound screenshot seed plus runtime-lock workflow and one RDP capture runner for the future first real screenshot set
 - `Phase 148` completed the next executable slice on `2026-04-24` by shipping one fast-fail timeout plus stale-probe cleanup path for failed RDP capture attempts
 - `Phase 149` completed the next executable slice on `2026-04-24` by fulfilling and archiving the first real RDP Chrome screenshot set
+- `Phase 150` completed the next executable slice on `2026-04-24` by shipping one maintained store-listing copy pack anchored to that first archived screenshot set
 
 Process rule:
 
@@ -84,6 +85,7 @@ Parent direction:
 - `Phase 144` completed the next executable slice here by shipping one empty-but-truthful archive ledger plus one completion command, so completed screenshot sets now have a durable storage path
 - `Phase 146` completed the next executable slice here by extending that future storage path with durable truth-note metadata, so archived screenshot sets can record exactly where a store-facing image used omission, approximation, or fallback
 - `Phase 149` completed the next executable slice here by creating the first real archive package, so listing-copy and screenshot-pack follow-up can now build on archived extension-mode evidence instead of only storyboard intent
+- `Phase 150` completed the next executable slice here by turning that archived extension-mode evidence into one maintained listing-copy pack, so future store updates and localization work now have one truthful source document
 
 ### E. Listing And Localization Coordination
 
