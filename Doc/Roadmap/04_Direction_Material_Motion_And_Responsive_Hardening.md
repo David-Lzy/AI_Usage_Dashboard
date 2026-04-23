@@ -2,6 +2,14 @@
 
 Date: 2026-04-22
 
+Document class:
+
+- living strategy
+
+Status note:
+
+- this file is a living roadmap direction and should be refreshed when direction state, priority, or completed slices change
+
 Execution note:
 
 - the latest executable slice landed on `2026-04-23` through `Phase 96`

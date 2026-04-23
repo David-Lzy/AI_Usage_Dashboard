@@ -2,6 +2,10 @@
 
 Date: 2026-04-23
 
+Document class:
+
+- living strategy
+
 Status note:
 
 - direction created on `2026-04-23`

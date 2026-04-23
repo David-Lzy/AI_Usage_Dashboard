@@ -67,6 +67,7 @@ Meaning:
 New-doc rule:
 
 - when a new markdown file could easily be mistaken for the wrong class, state its document class explicitly inside the file
+- this now also applies to roadmap direction files whenever folder-only semantics would make status ambiguous
 
 ## 1.2 Documentation Freshness Labels
 

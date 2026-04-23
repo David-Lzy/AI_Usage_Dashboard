@@ -2,6 +2,10 @@
 
 Date: 2026-04-22
 
+Document class:
+
+- living strategy
+
 Status note:
 
 - `Phase 43` completed the first executable slice on `2026-04-23` by shipping the visible fidelity vocabulary and field-level source availability labels in the side panel

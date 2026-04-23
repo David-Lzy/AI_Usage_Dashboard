@@ -2,6 +2,14 @@
 
 Date: 2026-04-22
 
+Document class:
+
+- living strategy
+
+Status note:
+
+- this file is a living roadmap direction and should be refreshed when direction state, priority, or completed slices change
+
 Status: completed
 
 Completion date: 2026-04-23

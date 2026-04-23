@@ -2,6 +2,10 @@
 
 Date: 2026-04-24
 
+Document class:
+
+- living strategy
+
 Status note:
 
 - direction created on `2026-04-24`
@@ -10,6 +14,7 @@ Status note:
 - `Phase 135` completed the next executable slice on `2026-04-24` by shipping explicit maintained-reference and freshness labels for provider notes plus the page-session fixture conventions doc
 - `Phase 136` completed the next executable slice on `2026-04-24` by shipping explicit backlog plus index labeling and one lightweight repeatable doc-taxonomy consistency check
 - `Phase 137` completed the next executable slice on `2026-04-24` by shipping explicit class plus status labels for generated request/archive package READMEs, one package-readme refresh command, and one checker extension that now covers those generated package docs too
+- `Phase 138` completed the next executable slice on `2026-04-24` by shipping explicit `living strategy` labels across the remaining roadmap direction files and by extending the checker to cover the full roadmap set
 
 Process rule:
 
@@ -47,6 +52,7 @@ Parent direction:
 - keep roadmap priority order aligned with actual active follow-up
 - identify any stale dated benchmark or runbook docs that should be labeled as snapshots
 - keep maintained-reference docs from silently reading like frozen historical snapshots
+- keep roadmap direction docs from relying only on folder-level semantics when explicit class lines now exist across the roadmap set
 
 ### D. Operational Ledger Rules
 

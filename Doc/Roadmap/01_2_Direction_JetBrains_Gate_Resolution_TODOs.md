@@ -2,6 +2,10 @@
 
 Date: 2026-04-23
 
+Document class:
+
+- living strategy
+
 Status note:
 
 - `Branch B` was completed for the current narrowed RC on `2026-04-23`

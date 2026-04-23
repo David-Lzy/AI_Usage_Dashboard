@@ -71,6 +71,17 @@ async function buildDocRequirements(projectRoot) {
       needsFreshness: true,
       needsStatus: true,
     }));
+  const roadmapDir = path.join(projectRoot, "Doc/Roadmap");
+  const roadmapFiles = (await readdir(roadmapDir))
+    .filter((entry) => entry.endsWith(".md"))
+    .filter((entry) => entry !== "00_Strategic_Directions_Index.md")
+    .sort()
+    .map((entry) => ({
+      relativePath: `Doc/Roadmap/${entry}`,
+      needsClass: true,
+      needsFreshness: false,
+      needsStatus: true,
+    }));
   const generatedPackageReadmeDirs = [
     "Doc/testing/operator_review_requests",
     "Doc/testing/operator_reviews",
@@ -139,6 +150,7 @@ async function buildDocRequirements(projectRoot) {
       needsFreshness: false,
       needsStatus: true,
     },
+    ...roadmapFiles,
     {
       relativePath: "Doc/TODOs/00_Phase_Index.md",
       needsClass: true,

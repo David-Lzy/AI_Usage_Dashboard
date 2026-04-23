@@ -2,6 +2,14 @@
 
 Date: 2026-04-24
 
+Document class:
+
+- living strategy
+
+Status note:
+
+- this file is a living roadmap direction and should be refreshed when direction state, priority, or completed slices change
+
 Execution note:
 
 - first executable slice landed on `2026-04-24` through `Phase 133`
@@ -9,6 +17,7 @@ Execution note:
 - third executable slice landed on `2026-04-24` through `Phase 135`
 - fourth executable slice landed on `2026-04-24` through `Phase 136`
 - fifth executable slice landed on `2026-04-24` through `Phase 137`
+- sixth executable slice landed on `2026-04-24` through `Phase 138`
 
 Process rule:
 
@@ -39,7 +48,7 @@ Today the truthful answer is "some are complete, some are intentionally living,"
 
 As of 2026-04-24:
 
-- numbered phase docs are archived through `Phase 137`
+- numbered phase docs are archived through `Phase 138`
 - there is no active numbered phase file in [00_Phase_Index.md](../TODOs/00_Phase_Index.md)
 - roadmap directions remain open by design
 - interaction-audit request docs still show `1 pending / 0 fulfilled`
@@ -50,6 +59,7 @@ As of 2026-04-24:
 - provider notes and fixture-convention guidance now also carry explicit maintained-reference plus freshness labels instead of reading like unlabeled historical research notes
 - the repo now also has one lightweight executable taxonomy check for the highest-value maintained-reference, generated-ledger, and index docs
 - the generated repo-backed request and archive package READMEs now also carry explicit taxonomy labels and can be refreshed through one dedicated package-readme refresh command
+- the remaining roadmap direction files now also carry explicit `living strategy` labels instead of relying only on folder-level semantics
 
 This means:
 
@@ -120,6 +130,8 @@ Recommended rollout:
 `Phase 136` completed the first executable part of optional step `4` by labeling the remaining ambiguity-prone backlog plus index docs and shipping one lightweight repeatable taxonomy consistency check.
 
 `Phase 137` completed the next executable part of optional step `4` by labeling the generated request plus archive package READMEs, refreshing the current repo packages through their generators, and extending the taxonomy check to cover those package-level docs.
+
+`Phase 138` completed the next executable part of optional step `4` by labeling the remaining roadmap direction files as explicit `living strategy` docs and extending the taxonomy check to cover the full `Doc/Roadmap/` set instead of only the strategic index.
 
 ## References
 

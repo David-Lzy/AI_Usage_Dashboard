@@ -158,7 +158,7 @@ Use this sequence:
 
 Examples:
 
-- archived phase docs through `Phase 137` are complete evidence
+- archived phase docs through `Phase 138` are complete evidence
 - roadmap files are open by design unless explicitly closed
 - request and archive indexes are truthful ledgers, not incomplete implementation work
 - request-package READMEs are generated ledgers for one current request record, not proof that a human pass is complete
@@ -173,6 +173,7 @@ This is especially important for:
 
 - generated request and archive indexes
 - generated request and archive package READMEs
+- living-strategy direction files that would otherwise rely only on folder semantics
 - one-off benchmark snapshots
 - runbooks that may drift over time
 - older design-baseline docs that still live outside the archive queue

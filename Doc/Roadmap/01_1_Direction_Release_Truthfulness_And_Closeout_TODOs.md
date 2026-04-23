@@ -2,6 +2,10 @@
 
 Date: 2026-04-22
 
+Document class:
+
+- living strategy
+
 Status note:
 
 - completed on `2026-04-23` through the narrowed-RC `Phase 41` plus `Phase 42` closeout
