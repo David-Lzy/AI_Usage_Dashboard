@@ -94,6 +94,29 @@ Completion model:
 - can be current or stale
 - should be refreshed when the underlying truth changes
 
+## Freshness Models
+
+Freshness models are not new document classes.
+
+They are small labels used inside a file when the class alone is not enough to explain whether the doc is meant to stay current or stay historically fixed.
+
+Recommended vocabulary:
+
+- `maintained current reference`
+  - use for docs that should track current repo truth and process rules
+- `dated snapshot`
+  - use for one-off benchmark or audit snapshots that are intentionally time-bound
+- `historical design baseline`
+  - use for older design intent docs that still explain original framing but no longer define shipped product truth
+
+Examples:
+
+- operator runbooks -> `maintained current reference`
+- release packaging guide -> `maintained current reference`
+- dated benchmark matrix -> `dated snapshot`
+- one-off documentation audit -> `dated snapshot`
+- early MVP design doc -> `historical design baseline`
+
 ## Default Folder Mapping
 
 These defaults are conventions, not hard absolutes:
@@ -130,3 +153,10 @@ This is especially important for:
 - generated request and archive indexes
 - one-off benchmark snapshots
 - runbooks that may drift over time
+- older design-baseline docs that still live outside the archive queue
+
+Recommended inline pattern:
+
+- `Document class:`
+- `Freshness model:`
+- `Status note:`

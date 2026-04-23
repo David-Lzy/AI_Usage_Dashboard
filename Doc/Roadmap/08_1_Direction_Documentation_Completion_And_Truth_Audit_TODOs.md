@@ -6,6 +6,7 @@ Status note:
 
 - direction created on `2026-04-24`
 - `Phase 133` completed the first executable slice on `2026-04-24` by shipping one project-level taxonomy, one guardrail update for doc classes, and one generated-ledger labeling pass across request plus archive indexes
+- `Phase 134` completed the next executable slice on `2026-04-24` by shipping explicit freshness labels for benchmark, audit, design-baseline, runbook, checklist, and release-reference docs
 
 Process rule:
 
@@ -42,6 +43,7 @@ Parent direction:
 - keep `latest completed slice` in sync across phase and strategic indexes
 - keep roadmap priority order aligned with actual active follow-up
 - identify any stale dated benchmark or runbook docs that should be labeled as snapshots
+- keep maintained-reference docs from silently reading like frozen historical snapshots
 
 ### D. Operational Ledger Rules
 
@@ -60,6 +62,7 @@ Parent direction:
   - release packaging guide
   - runbooks
 - decide which reference docs should carry explicit "last audited" dates
+- distinguish maintained current references from dated snapshots and historical design baselines when class alone is not clear
 
 ### F. Optional Automation
 

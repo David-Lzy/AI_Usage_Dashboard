@@ -1,6 +1,6 @@
 # Phase Index
 
-Date: 2026-04-23
+Date: 2026-04-24
 
 Process rule:
 
@@ -22,7 +22,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [133_Phase_Documentation_Taxonomy_And_Operational_Ledger_Labeling.md](./Archive/133_Phase_Documentation_Taxonomy_And_Operational_Ledger_Labeling.md)
+- latest completed slice: [134_Phase_Documentation_Freshness_Labels_And_Reference_Status.md](./Archive/134_Phase_Documentation_Freshness_Labels_And_Reference_Status.md)
 
 Completed phases should be moved to:
 
@@ -167,6 +167,7 @@ Completed phases should be moved to:
 - [131_Phase_Extension_Build_Output_Stability_And_Git_Closeout_Rule.md](./Archive/131_Phase_Extension_Build_Output_Stability_And_Git_Closeout_Rule.md) - completed and archived on 2026-04-24
 - [132_Phase_Documentation_Audit_And_Strategic_Directions_Refresh.md](./Archive/132_Phase_Documentation_Audit_And_Strategic_Directions_Refresh.md) - completed and archived on 2026-04-24
 - [133_Phase_Documentation_Taxonomy_And_Operational_Ledger_Labeling.md](./Archive/133_Phase_Documentation_Taxonomy_And_Operational_Ledger_Labeling.md) - completed and archived on 2026-04-24
+- [134_Phase_Documentation_Freshness_Labels_And_Reference_Status.md](./Archive/134_Phase_Documentation_Freshness_Labels_And_Reference_Status.md) - completed and archived on 2026-04-24
 
 ## Dependency Notes
 
@@ -207,6 +208,7 @@ Completed phases should be moved to:
 - the 2026-04-23 `Phase 42` closeout produced `release/ai-usage-dashboard-0.1.0-rc.2.zip` and closed the numbered release queue for the narrowed RC
 - phase 132 is a documentation-only strategic-refresh slice that audited current documentation completion truth and added sharper roadmap follow-up directions for doc status, i18n bootstrap, and toolbar competitive fit
 - phase 133 is the first executable `Direction 08` slice and formalizes the documentation taxonomy plus generated-ledger labeling rules for repo-backed request and archive indexes
+- phase 134 is the next executable `Direction 08` slice and makes freshness semantics explicit across the most ambiguity-prone benchmark, audit, design-baseline, runbook, checklist, and release-reference docs
 - phase 43 depends on phase 42 because the first personal-semantics UI slice should begin only after the release-closeout truth is stable
 - the 2026-04-23 `Phase 43` closeout productized fidelity semantics in the side panel and started `Direction 02`
 - phase 44 depends on phase 43 because the trust-boundary UI should build on top of the already-shipped source-fidelity semantics

@@ -6,6 +6,19 @@ Process rule:
 
 - follow [Development_Guardrails.md](./Development_Guardrails.md)
 
+Document class:
+
+- maintained reference
+
+Freshness model:
+
+- dated snapshot
+
+Status note:
+
+- this file captures the toolbar benchmark view from `2026-04-23`
+- it is useful as a historical benchmark snapshot, but it should not be mistaken for a continuously refreshed current-state competitor audit
+
 Purpose:
 
 - capture the current toolbar-first product expectations around popup clarity, onboarding, and store-facing discoverability

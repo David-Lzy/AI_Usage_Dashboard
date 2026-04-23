@@ -6,6 +6,19 @@ Process rule:
 
 - follow [Development_Guardrails.md](./Development_Guardrails.md)
 
+Document class:
+
+- closed evidence
+
+Freshness model:
+
+- dated snapshot
+
+Status note:
+
+- this file is a fixed documentation-truth audit captured on `2026-04-24`
+- newer documentation policy should be read from [Documentation_Taxonomy.md](./Documentation_Taxonomy.md), [Development_Guardrails.md](./Development_Guardrails.md), and the latest phase plus roadmap indexes
+
 Purpose:
 
 - answer the specific question "is `Doc/` fully completed now?"

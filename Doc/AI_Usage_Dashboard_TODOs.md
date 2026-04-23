@@ -173,6 +173,7 @@ Phase status update:
 - `Phase 131` completed one build-and-workflow hardening slice and stabilized extension build output names for unpacked Chrome use, while also formalizing the `commit / push / rebuild` closeout rule and the RDP Chrome unpacked-extension rule in the guardrails
 - `Phase 132` completed one documentation-only slice and shipped a repo-wide documentation completion audit plus three sharper roadmap directions for doc truth, i18n bootstrap, and toolbar competitive fit
 - `Phase 133` completed the first executable `Direction 08` slice and shipped one project-level documentation taxonomy plus explicit generated-ledger labeling for the repo-backed request and archive indexes
+- `Phase 134` completed the next executable `Direction 08` slice and shipped one explicit freshness-label pass across the benchmark snapshot, documentation audit snapshot, historical MVP design baseline, current runbooks, maintained manual checklist, and maintained release guide
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
 - the split `Phase 41` release gate cleared the old runtime-parity ambiguity and re-proved the live `Codex` plus `Cursor` personal session-page paths in real Chrome
 - `2026-04-23`: `Branch B` was selected for the current RC, so JetBrains is now a retained repo path rather than part of the active release promise

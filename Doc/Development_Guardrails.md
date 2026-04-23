@@ -52,6 +52,32 @@ New-doc rule:
 
 - when a new markdown file could easily be mistaken for the wrong class, state its document class explicitly inside the file
 
+## 1.2 Documentation Freshness Labels
+
+Some docs need one more layer beyond class:
+
+- `maintained current reference`
+- `dated snapshot`
+- `historical design baseline`
+
+Use these labels when a reader might otherwise confuse:
+
+- a current runbook with a one-time audit snapshot
+- a current release guide with an old benchmark capture
+- an original design baseline with the shipped product contract
+
+Rule:
+
+- use `Document class:` to state the class
+- use `Freshness model:` when class alone is not enough
+- use `Status note:` when the doc has one important truth boundary that should be obvious near the top
+
+Default expectation:
+
+- runbooks, checklists, and release guides should usually read as `maintained current reference`
+- dated benchmark matrices and dated documentation audits should usually read as `dated snapshot`
+- older design-baseline docs should usually read as `historical design baseline`
+
 ## 2. Phase Completion Rules
 
 Every phase must follow this closeout sequence before it is considered complete.

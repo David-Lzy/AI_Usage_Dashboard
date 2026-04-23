@@ -1,10 +1,23 @@
 # Manual Test Checklist
 
-Date: 2026-04-20
+Date: 2026-04-24
 
 Process rule:
 
 - follow [Development_Guardrails.md](../Development_Guardrails.md)
+
+Document class:
+
+- maintained reference
+
+Freshness model:
+
+- maintained current reference
+
+Status note:
+
+- this checklist is a maintained manual-QA reference, not a frozen historical report
+- refresh it whenever shipped surfaces, debug routes, request flows, or repeated review commands change
 
 Purpose:
 

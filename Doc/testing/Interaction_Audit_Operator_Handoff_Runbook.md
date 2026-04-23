@@ -1,10 +1,23 @@
 # Interaction Audit Operator Handoff Runbook
 
-Date: 2026-04-23
+Date: 2026-04-24
 
 Process rule:
 
 - follow [Development_Guardrails.md](../Development_Guardrails.md)
+
+Document class:
+
+- maintained reference
+
+Freshness model:
+
+- maintained current reference
+
+Status note:
+
+- this runbook should track the current repo-backed interaction-audit workflow
+- refresh it whenever request, preflight, completion, bundle, or archive commands change
 
 Purpose:
 

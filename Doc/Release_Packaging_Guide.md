@@ -1,8 +1,23 @@
 # Release Packaging Guide
 
+Date: 2026-04-24
+
 Process rule:
 
 - follow [Development_Guardrails.md](./Development_Guardrails.md)
+
+Document class:
+
+- maintained reference
+
+Freshness model:
+
+- maintained current reference
+
+Status note:
+
+- this guide should track the current shipped release process and version truth
+- refresh it whenever package versions, build outputs, packaging commands, or active support boundaries change
 
 ## Purpose
 

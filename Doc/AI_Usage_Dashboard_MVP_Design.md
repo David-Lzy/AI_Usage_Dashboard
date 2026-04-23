@@ -6,6 +6,19 @@ Process rule:
 
 - follow [Development_Guardrails.md](./Development_Guardrails.md)
 
+Document class:
+
+- closed evidence
+
+Freshness model:
+
+- historical design baseline
+
+Status note:
+
+- this file records the original MVP framing from `2026-04-20`
+- current shipped product truth should be taken from [README.md](../README.md), current roadmap directions, and the latest numbered phase closeouts rather than from this baseline alone
+
 ## 1. Goal
 
 Build a Chrome extension that gives one unified view of AI coding tool usage and quota status.
