@@ -12,7 +12,7 @@ Status note:
 
 Execution note:
 
-- no executable slice has shipped yet
+- first executable slice landed on `2026-04-24` through `Phase 141`
 - this direction sharpens [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md) into a more explicit next-stage productization track
 
 Process rule:
@@ -51,8 +51,12 @@ As of 2026-04-24:
 - the popup already has a compact setup story, featured-provider story, and stateful CTA hierarchy
 - one toolbar benchmark matrix already exists:
   - [Toolbar_Product_Benchmark_Matrix_2026-04-23.md](../Toolbar_Product_Benchmark_Matrix_2026-04-23.md)
+- the repo now also ships one explicit competitive-fit decision matrix:
+  - [Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md](../Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md)
+- the repo now also ships one maintained screenshot storyboard pack for truthful store captures:
+  - [Store_Screenshot_Storyboard.md](../Store_Screenshot_Storyboard.md)
 - the popup still has some remaining overlap between top story, featured card, and lower surface-role explanation
-- the repo does not yet ship a store-readiness pack for screenshots, titles, description hierarchy, and localized listing variants
+- the repo still does not yet ship a full store-readiness pack for listing copy hierarchy and localized listing variants
 - the project now has an RDP Chrome environment available for truthful extension-mode capture and review
 
 External signals:
@@ -110,6 +114,8 @@ Recommended rollout:
 4. draft one truthful store-copy hierarchy
 5. only then prepare broader listing-localization work
 
+`Phase 141` completed the first executable part of steps `1` and `3` by shipping one current competitive-fit decision matrix with explicit `adopt / adapt / reject` outcomes and one maintained screenshot storyboard pack for truthful extension-mode capture.
+
 ## References
 
 - Chrome `action` API:
@@ -124,6 +130,8 @@ Recommended rollout:
   https://chrome-stats.com/d/jjlkgogdgdflbifbmojbmleifblpekid
 - `QuotaMeter` listing:
   https://chromewebstore.google.com/detail/quotameter/mbbkamghkbadgggdnjpflfobkfaepbbo
+- [Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md](../Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md)
+- [Store_Screenshot_Storyboard.md](../Store_Screenshot_Storyboard.md)
 
 ## Child TODO
 

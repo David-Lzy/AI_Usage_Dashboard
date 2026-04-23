@@ -9,7 +9,7 @@ Document class:
 Status note:
 
 - direction created on `2026-04-24`
-- no executable phase has started yet
+- `Phase 141` completed the first executable slice on `2026-04-24` by shipping one explicit competitive-fit decision matrix plus one maintained screenshot storyboard pack for truthful extension-mode capture
 
 Process rule:
 
@@ -29,6 +29,7 @@ Parent direction:
   - adapt
   - reject
 - keep privacy and trust-boundary notes explicit for every adopted pattern
+- `Phase 141` completed the first executable slice here by turning the older dated benchmark into one current decision matrix with explicit `adopt / adapt / reject` outcomes
 
 ### B. Popup Last-Mile Productization
 
@@ -62,6 +63,7 @@ Parent direction:
   - setup guidance
   - side-panel depth
   - honesty around provider coverage
+- `Phase 141` completed the first executable slice here by shipping one maintained screenshot storyboard pack; listing-copy hierarchy is still open
 
 ### E. Listing And Localization Coordination
 
