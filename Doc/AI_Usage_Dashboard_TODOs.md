@@ -197,6 +197,7 @@ Phase status update:
 - `Phase 142` completed the next executable `Direction 10` slice and shipped one maintained screenshot-capture runbook plus one generator-backed baseline capture pack, so truthful RDP Chrome store capture is now a concrete workflow instead of only a storyboard
 - `Phase 143` completed the next executable `Direction 10` slice and shipped one pending screenshot-capture request workflow, so the first real RDP Chrome store capture pass now has a durable repo-backed handoff package
 - `Phase 144` completed the next executable `Direction 10` slice and shipped one completion plus archive workflow, so future real screenshot sets now have a durable repo-backed evidence path while the current repo truth remains `1 pending request / 0 archived screenshot sets`
+- `Phase 145` completed the next executable `Direction 10` slice and verified that the current RDP Chrome profile can open and capture real popup plus sidepanel runtime windows, so the remaining blocker to the first archived screenshot set is truthful state selection rather than GUI uncertainty
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
 - the split `Phase 41` release gate cleared the old runtime-parity ambiguity and re-proved the live `Codex` plus `Cursor` personal session-page paths in real Chrome
 - `2026-04-23`: `Branch B` was selected for the current RC, so JetBrains is now a retained repo path rather than part of the active release promise

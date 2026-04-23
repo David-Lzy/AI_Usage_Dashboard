@@ -74,6 +74,27 @@ Each pack contains:
 - `capture-plan.json`
 - `captures/README.md`
 
+## Optional RDP Runtime Smoke Capture
+
+When you need to prove that the real RDP Chrome profile can still open and render the unpacked extension pages before a full screenshot pass, use:
+
+```bash
+npm run store:capture-rdp-extension-window -- --route popup --output tmp/store-rdp-popup.png
+npm run store:capture-rdp-extension-window -- --route settings --output tmp/store-rdp-settings.png
+```
+
+Supported route keys are currently:
+
+- `popup`
+- `dashboard`
+- `settings`
+- `provider-detail-codex`
+
+Truth note:
+
+- this helper captures real extension runtime windows from the existing RDP Chrome session
+- it is a smoke-capture tool, not a substitute for the full storyboard review and archive flow
+
 ## Capture Workflow
 
 1. Open the generated pack README and follow the screenshot order.

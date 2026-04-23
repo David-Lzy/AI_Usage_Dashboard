@@ -13,6 +13,7 @@ Status note:
 - `Phase 142` completed the next executable slice on `2026-04-24` by shipping one maintained screenshot-capture runbook plus one generator-backed baseline capture pack for truthful extension-mode runtime capture
 - `Phase 143` completed the next executable slice on `2026-04-24` by shipping one pending screenshot-capture request workflow for the first real RDP Chrome operator pass
 - `Phase 144` completed the next executable slice on `2026-04-24` by shipping one completion plus archive workflow for future real screenshot sets while truthfully keeping the repo at `1 pending / 0 archived`
+- `Phase 145` completed the next executable slice on `2026-04-24` by verifying real RDP Chrome runtime capture for popup and sidepanel windows, so extension-mode screenshot collection is now a proven path
 
 Process rule:
 
@@ -59,6 +60,7 @@ Parent direction:
 - `Phase 142` completed the first executable slice here by shipping one explicit screenshot-capture runbook and one generator-backed baseline capture pack
 - `Phase 143` completed the next executable slice here by shipping one pending request package so the first real operator capture pass now has a durable repo-backed handoff target
 - `Phase 144` completed the next executable slice here by shipping the completion and archive workflow that future real captures will use after the first operator pass finishes
+- `Phase 145` completed the next executable slice here by proving that the current RDP Chrome profile can open and capture popup plus sidepanel runtime windows directly
 
 ### D. Store Readiness Pack
 
