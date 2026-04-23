@@ -8,10 +8,12 @@ import {
 } from "./lib/store-screenshot-capture-archive.mjs";
 import { writeStoreScreenshotCaptureArchiveIndex } from "./lib/store-screenshot-capture-archive-index.mjs";
 import {
+  buildStoreScreenshotCaptureNotesSummary,
   buildStoreScreenshotCaptureRequestFulfillment,
   STORE_SCREENSHOT_CAPTURE_REQUEST_FULFILLED_STATUS,
   STORE_SCREENSHOT_CAPTURE_REQUEST_PENDING_STATUS,
   updateStoreScreenshotCaptureRequest,
+  validateStoreScreenshotCaptureNotesDocument,
 } from "./lib/store-screenshot-capture-request.mjs";
 import { writeStoreScreenshotCaptureRequestIndex } from "./lib/store-screenshot-capture-request-index.mjs";
 
@@ -62,6 +64,7 @@ function parseArgs(argv) {
     requestRoot: defaultRequestRoot,
     archiveRoot: defaultArchiveRoot,
     archiveId: "",
+    notesFile: "",
   };
 
   for (let index = 0; index < argv.length; index += 1) {
@@ -93,6 +96,12 @@ function parseArgs(argv) {
 
     if (arg === "--archive-id") {
       options.archiveId = argv[index + 1] ?? "";
+      index += 1;
+      continue;
+    }
+
+    if (arg === "--notes-file") {
+      options.notesFile = argv[index + 1] ?? "";
       index += 1;
     }
   }
@@ -135,9 +144,19 @@ async function run() {
   const requestDir = path.join(requestRoot, options.requestId);
   const capturesDir = path.resolve(projectRoot, options.capturesDir);
   const requestManifestPath = path.join(requestDir, "capture-request.json");
+  const notesFilePath = path.resolve(
+    projectRoot,
+    options.notesFile.length > 0
+      ? options.notesFile
+      : path.join(requestDir, "capture-notes.json"),
+  );
   const requestManifest = await readJson(
     requestManifestPath,
     "Store screenshot capture request manifest",
+  );
+  const captureNotes = await readJson(
+    notesFilePath,
+    "Store screenshot capture notes",
   );
 
   assert(
@@ -148,6 +167,17 @@ async function run() {
   await assertCaptureFiles(
     capturesDir,
     requestManifest.requiredScreenshotFilenames ?? [],
+  );
+  const notesValidation = validateStoreScreenshotCaptureNotesDocument({
+    notesDocument: captureNotes,
+    requestId: requestManifest.requestId,
+    requestCreatedAt: requestManifest.createdAt,
+    requiredScreenshotFilenames: requestManifest.requiredScreenshotFilenames ?? [],
+  });
+
+  assert(
+    notesValidation.issues.length === 0,
+    `Store screenshot capture notes did not pass validation:\n${notesValidation.issues.map((item) => `- ${item}`).join("\n")}`,
   );
 
   const fulfilledAt = new Date().toISOString();
@@ -164,11 +194,17 @@ async function run() {
     requestDir,
     capturesDir,
     captureFiles: requestManifest.requiredScreenshotFilenames,
+    notesDocument: notesValidation.normalized,
+    notesFilePath,
   });
+  const notesSummary = buildStoreScreenshotCaptureNotesSummary(
+    notesValidation.normalized,
+  );
 
   const fulfillment = buildStoreScreenshotCaptureRequestFulfillment({
     fulfilledAt,
     sourceCaptureDir: path.relative(projectRoot, capturesDir),
+    sourceNotesPath: path.relative(projectRoot, notesFilePath),
     archiveId,
     archiveReadmePath: path.relative(
       projectRoot,
@@ -178,7 +214,13 @@ async function run() {
       projectRoot,
       path.join(archiveResult.archiveDir, "capture-archive.json"),
     ),
+    archiveNotesPath: path.relative(
+      projectRoot,
+      path.join(archiveResult.archiveDir, "capture-notes.json"),
+    ),
     screenshotFilenames: requestManifest.requiredScreenshotFilenames,
+    reviewedScreenshotCount: notesSummary.reviewedScreenshotCount,
+    truthBoundaryCount: notesSummary.truthBoundaryCount,
   });
 
   await updateStoreScreenshotCaptureRequest({
@@ -190,6 +232,7 @@ async function run() {
     sourceTemplate: requestManifest.sourceTemplate,
     status: STORE_SCREENSHOT_CAPTURE_REQUEST_FULFILLED_STATUS,
     fulfillment,
+    notesDocument: notesValidation.normalized,
   });
 
   const requestIndexMarkdownPath =
@@ -226,6 +269,9 @@ async function run() {
 
   console.log(
     `store-screenshot: completed request ${requestManifest.requestId} -> archive ${archiveId}`,
+  );
+  console.log(
+    `store-screenshot: notes reviewed=${notesSummary.reviewedScreenshotCount}/${notesSummary.noteCount} truth_boundaries=${notesSummary.truthBoundaryCount}`,
   );
   console.log(
     `store-screenshot: request index refreshed pending=${requestIndexResult.pendingRequestCount} fulfilled=${requestIndexResult.fulfilledRequestCount}`,

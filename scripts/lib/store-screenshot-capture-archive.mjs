@@ -1,6 +1,8 @@
 import { copyFile, mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
+import { buildStoreScreenshotCaptureNotesSummary } from "./store-screenshot-capture-request.mjs";
+
 function sanitizeSegment(value) {
   return String(value ?? "")
     .trim()
@@ -64,14 +66,43 @@ Status note:
   - \`${manifest.sourceRequest.requestReadmePath}\`
 - request manifest:
   - \`${manifest.sourceRequest.requestManifestPath}\`
+- request notes:
+  - \`${manifest.sourceRequest.requestNotesPath}\`
 - source capture dir:
   - \`${manifest.sourceCaptureDir}\`
+- source notes:
+  - \`${manifest.sourceNotesPath}\`
 - storyboard:
   - \`${manifest.storyboardPath}\`
 - baseline pack README:
   - \`${manifest.baselinePackReadme}\`
 - baseline pack plan:
   - \`${manifest.baselinePackPlan}\`
+
+## Capture Notes
+
+- archive notes file:
+  - \`${manifest.captureNotesPath}\`
+- reviewed screenshots:
+  - \`${manifest.captureNotesSummary.reviewedScreenshotCount}/${manifest.captureNotesSummary.noteCount}\`
+- truth-boundary screenshots:
+  - \`${manifest.captureNotesSummary.truthBoundaryCount}\`
+
+${manifest.captureNotes
+  .map((item) => {
+    const lines = [
+      `- \`${item.filename}\``,
+      `  - capture truth: \`${item.captureTruth}\``,
+      `  - state summary: ${item.stateSummary}`,
+    ];
+
+    if (item.operatorNote.trim().length > 0) {
+      lines.push(`  - operator note: ${item.operatorNote}`);
+    }
+
+    return lines.join("\n");
+  })
+  .join("\n")}
 
 ## Archived Screenshots
 
@@ -85,6 +116,7 @@ ${manifest.screenshots
 ## Truth Note
 
 - this archive preserves one real screenshot-capture set exactly as provided to the completion command
+- it also preserves the operator truth notes that describe approximation, omission, fallback, or exact-runtime boundaries for each screenshot
 - it does not claim store submission, localization completeness, or broader provider support beyond what the screenshots actually show
 `;
 }
@@ -106,9 +138,12 @@ export async function writeStoreScreenshotCaptureArchive({
   requestDir,
   capturesDir,
   captureFiles,
+  notesDocument,
+  notesFilePath,
 }) {
   const archiveDir = path.join(archiveRoot, archiveId);
   const screenshotsDir = path.join(archiveDir, "screenshots");
+  const archiveNotesPath = path.join(archiveDir, "capture-notes.json");
   const sourceRequest = {
     requestId: requestManifest.requestId,
     requestReadmePath: path.relative(projectRoot, path.join(requestDir, "README.md")),
@@ -116,11 +151,18 @@ export async function writeStoreScreenshotCaptureArchive({
       projectRoot,
       path.join(requestDir, "capture-request.json"),
     ),
+    requestNotesPath: path.relative(
+      projectRoot,
+      path.join(requestDir, "capture-notes.json"),
+    ),
   };
 
   await mkdir(screenshotsDir, { recursive: true });
 
   const screenshots = [];
+  const captureNotesSummary = buildStoreScreenshotCaptureNotesSummary(
+    notesDocument,
+  );
 
   for (const filename of captureFiles) {
     const sourcePath = path.join(capturesDir, filename);
@@ -133,11 +175,18 @@ export async function writeStoreScreenshotCaptureArchive({
     });
   }
 
+  await writeFile(
+    archiveNotesPath,
+    `${JSON.stringify(notesDocument, null, 2)}\n`,
+    "utf8",
+  );
+
   const manifest = {
     archiveId,
     archivedAt,
     sourceRequest,
     sourceCaptureDir: path.relative(projectRoot, capturesDir),
+    sourceNotesPath: path.relative(projectRoot, notesFilePath),
     requestCreatedAt: requestManifest.createdAt,
     runtimeSource: requestManifest.runtimeSource,
     preferredSize: requestManifest.preferredSize,
@@ -146,6 +195,9 @@ export async function writeStoreScreenshotCaptureArchive({
     baselinePackReadme: requestManifest.baselinePackReadme,
     baselinePackPlan: requestManifest.baselinePackPlan,
     requiredScreenshotFilenames: requestManifest.requiredScreenshotFilenames,
+    captureNotesPath: path.relative(projectRoot, archiveNotesPath),
+    captureNotesSummary,
+    captureNotes: notesDocument.notes,
     screenshots,
     screenshotCount: screenshots.length,
     captureDate: normalizeDate(archivedAt, archivedAt),
@@ -156,7 +208,11 @@ export async function writeStoreScreenshotCaptureArchive({
     `${JSON.stringify(manifest, null, 2)}\n`,
     "utf8",
   );
-  await writeFile(path.join(archiveDir, "README.md"), `${buildArchiveMarkdown(manifest)}\n`, "utf8");
+  await writeFile(
+    path.join(archiveDir, "README.md"),
+    `${buildArchiveMarkdown(manifest)}\n`,
+    "utf8",
+  );
 
   return {
     archiveDir,

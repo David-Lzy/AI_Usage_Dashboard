@@ -20,7 +20,7 @@
     "Run a fresh build and reload the unpacked extension in chrome://extensions before trusting any capture state.",
     "Use the current baseline capture pack and follow the screenshot order exactly.",
     "Capture all screenshots from the real extension runtime in RDP Chrome, not from preview-only pages.",
-    "Keep truthful notes if a runtime state needs omission, approximation, or a contract-only fallback.",
+    "Review and complete capture-notes.json so every screenshot has one truthful state summary and one explicit boundary note when needed.",
     "Treat the request package as pending until the real screenshots are captured and archived."
   ],
   "truthRules": [

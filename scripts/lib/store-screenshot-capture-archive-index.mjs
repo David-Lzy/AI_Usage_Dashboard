@@ -13,6 +13,30 @@ function normalizeRecord(record, manifestPath, projectRoot) {
       typeof record?.fallbackSize === "string" ? record.fallbackSize : "",
     screenshotCount:
       typeof record?.screenshotCount === "number" ? record.screenshotCount : 0,
+    captureNotesPath:
+      typeof record?.captureNotesPath === "string" ? record.captureNotesPath : "",
+    captureNotesSummary:
+      record?.captureNotesSummary && typeof record.captureNotesSummary === "object"
+        ? {
+            noteCount:
+              typeof record.captureNotesSummary.noteCount === "number"
+                ? record.captureNotesSummary.noteCount
+                : 0,
+            reviewedScreenshotCount:
+              typeof record.captureNotesSummary.reviewedScreenshotCount ===
+              "number"
+                ? record.captureNotesSummary.reviewedScreenshotCount
+                : 0,
+            truthBoundaryCount:
+              typeof record.captureNotesSummary.truthBoundaryCount === "number"
+                ? record.captureNotesSummary.truthBoundaryCount
+                : 0,
+          }
+        : {
+            noteCount: 0,
+            reviewedScreenshotCount: 0,
+            truthBoundaryCount: 0,
+          },
     sourceRequest:
       record?.sourceRequest && typeof record.sourceRequest === "object"
         ? {
@@ -59,6 +83,9 @@ function buildSectionLines(records, emptyMessage) {
       `  - sizes: preferred \`${record.preferredSize || "not set"}\` · fallback \`${record.fallbackSize || "not set"}\``,
     );
     lines.push(`  - screenshot count: \`${record.screenshotCount}\``);
+    lines.push(
+      `  - capture notes: \`${record.captureNotesSummary.reviewedScreenshotCount}/${record.captureNotesSummary.noteCount}\` reviewed · truth boundaries \`${record.captureNotesSummary.truthBoundaryCount}\``,
+    );
     if (record.sourceRequest?.requestId) {
       lines.push(
         `  - source request: \`${record.sourceRequest.requestId}\`${record.sourceRequest.requestReadmePath ? ` · \`${record.sourceRequest.requestReadmePath}\`` : ""}`,

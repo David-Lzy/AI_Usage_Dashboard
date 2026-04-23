@@ -42,6 +42,12 @@ Complete a pending request and archive one real screenshot set:
 npm run store:complete-screenshot-capture-request -- --request-id 2026-04-24-first-real-store-screenshot-capture-request --captures-dir Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/captures
 ```
 
+Refresh generated request packages after generator changes:
+
+```bash
+npm run store:refresh-screenshot-capture-request-packages
+```
+
 ## Truth Rules
 
 - a pending screenshot-capture request package is not a completed screenshot set
@@ -57,6 +63,7 @@ npm run store:complete-screenshot-capture-request -- --request-id 2026-04-24-fir
   - sizes: preferred `1280x800` · fallback `640x400`
   - required screenshots: `5`
   - baseline pack: `Doc/testing/store_screenshot_capture_packs/2026-04-24-toolbar-storyboard-baseline/README.md`
+  - capture notes: `0/5` reviewed · truth boundaries `0`
 
 ## Fulfilled Requests
 

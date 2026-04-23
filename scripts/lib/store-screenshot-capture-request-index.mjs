@@ -2,11 +2,13 @@ import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import {
+  buildStoreScreenshotCaptureNotesSummary,
+  normalizeStoreScreenshotCaptureNotesDocument,
   STORE_SCREENSHOT_CAPTURE_REQUEST_FULFILLED_STATUS,
   STORE_SCREENSHOT_CAPTURE_REQUEST_PENDING_STATUS,
 } from "./store-screenshot-capture-request.mjs";
 
-function normalizeRecord(record, manifestPath, projectRoot) {
+function normalizeRecord(record, manifestPath, projectRoot, notesSummary) {
   return {
     requestId: typeof record?.requestId === "string" ? record.requestId : "",
     createdAt: typeof record?.createdAt === "string" ? record.createdAt : "",
@@ -56,6 +58,11 @@ function normalizeRecord(record, manifestPath, projectRoot) {
     requiredScreenshotFilenames: Array.isArray(record?.requiredScreenshotFilenames)
       ? record.requiredScreenshotFilenames
       : [],
+    captureNotesPath: path.relative(
+      projectRoot,
+      path.join(path.dirname(manifestPath), "capture-notes.json"),
+    ),
+    captureNotesSummary: notesSummary,
     readmePath: path.relative(
       projectRoot,
       path.join(path.dirname(manifestPath), "README.md"),
@@ -94,6 +101,9 @@ function buildSectionLines(records, emptyMessage) {
     );
     lines.push(
       `  - baseline pack: \`${record.baselinePackReadme || "not set"}\``,
+    );
+    lines.push(
+      `  - capture notes: \`${record.captureNotesSummary.reviewedScreenshotCount}/${record.captureNotesSummary.noteCount}\` reviewed · truth boundaries \`${record.captureNotesSummary.truthBoundaryCount}\``,
     );
     if (record.status === STORE_SCREENSHOT_CAPTURE_REQUEST_FULFILLED_STATUS) {
       lines.push(
@@ -162,6 +172,12 @@ export function buildStoreScreenshotCaptureRequestIndexMarkdown({
     "npm run store:complete-screenshot-capture-request -- --request-id 2026-04-24-first-real-store-screenshot-capture-request --captures-dir Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/captures",
     "```",
     "",
+    "Refresh generated request packages after generator changes:",
+    "",
+    "```bash",
+    "npm run store:refresh-screenshot-capture-request-packages",
+    "```",
+    "",
     "## Truth Rules",
     "",
     "- a pending screenshot-capture request package is not a completed screenshot set",
@@ -206,7 +222,24 @@ export async function writeStoreScreenshotCaptureRequestIndex({
     try {
       const raw = await readFile(manifestPath, "utf8");
       const parsed = JSON.parse(raw);
-      records.push(normalizeRecord(parsed, manifestPath, projectRoot));
+      const notesPath = path.join(path.dirname(manifestPath), "capture-notes.json");
+      let notesSummary = {
+        noteCount: 0,
+        reviewedScreenshotCount: 0,
+        pendingReviewCount: 0,
+        truthBoundaryCount: 0,
+      };
+
+      try {
+        const notesRaw = await readFile(notesPath, "utf8");
+        notesSummary = buildStoreScreenshotCaptureNotesSummary(
+          normalizeStoreScreenshotCaptureNotesDocument(JSON.parse(notesRaw)),
+        );
+      } catch {
+        // Leave notes summary at zero when the notes file is missing or invalid.
+      }
+
+      records.push(normalizeRecord(parsed, manifestPath, projectRoot, notesSummary));
     } catch {
       // Ignore directories without a valid manifest.
     }

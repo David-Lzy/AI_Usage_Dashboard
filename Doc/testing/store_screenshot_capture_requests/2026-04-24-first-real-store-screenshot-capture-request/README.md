@@ -33,6 +33,8 @@ Status note:
   - `1280x800`
 - fallback size:
   - `640x400`
+- capture notes:
+  - `capture-notes.json`
 
 ## Source References
 
@@ -51,12 +53,31 @@ Status note:
 - `04-settings-and-setup-depth.png`
 - `05-provider-or-dashboard-depth.png`
 
+## Capture Notes
+
+- notes file:
+  - `capture-notes.json`
+- completion requires one reviewed note per screenshot
+- every note must include:
+  - one non-placeholder `captureTruth`
+  - one short `stateSummary`
+  - one non-empty `operatorNote` when the screenshot uses approximation, omission, or a fallback contract state
+
+Allowed `captureTruth` values:
+
+- `not_reviewed`
+- `exact_runtime_capture`
+- `approximated_runtime_state`
+- `policy_only_fallback`
+- `provider_omitted`
+- `other_truth_boundary`
+
 ## Workflow
 
 1. Run a fresh build and reload the unpacked extension in chrome://extensions before trusting any capture state.
 2. Use the current baseline capture pack and follow the screenshot order exactly.
 3. Capture all screenshots from the real extension runtime in RDP Chrome, not from preview-only pages.
-4. Keep truthful notes if a runtime state needs omission, approximation, or a contract-only fallback.
+4. Review and complete capture-notes.json so every screenshot has one truthful state summary and one explicit boundary note when needed.
 5. Treat the request package as pending until the real screenshots are captured and archived.
 
 ## Truth Rules

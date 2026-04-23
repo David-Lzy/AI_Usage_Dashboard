@@ -14,6 +14,7 @@ Status note:
 - `Phase 143` completed the next executable slice on `2026-04-24` by shipping one pending screenshot-capture request workflow for the first real RDP Chrome operator pass
 - `Phase 144` completed the next executable slice on `2026-04-24` by shipping one completion plus archive workflow for future real screenshot sets while truthfully keeping the repo at `1 pending / 0 archived`
 - `Phase 145` completed the next executable slice on `2026-04-24` by verifying real RDP Chrome runtime capture for popup and sidepanel windows, so extension-mode screenshot collection is now a proven path
+- `Phase 146` completed the next executable slice on `2026-04-24` by adding request-bound capture notes plus archive-preserved truth-note metadata for the future first real screenshot set
 
 Process rule:
 
@@ -61,6 +62,7 @@ Parent direction:
 - `Phase 143` completed the next executable slice here by shipping one pending request package so the first real operator capture pass now has a durable repo-backed handoff target
 - `Phase 144` completed the next executable slice here by shipping the completion and archive workflow that future real captures will use after the first operator pass finishes
 - `Phase 145` completed the next executable slice here by proving that the current RDP Chrome profile can open and capture popup plus sidepanel runtime windows directly
+- `Phase 146` completed the next executable slice here by making capture notes request-bound and archive-preserved, so future real captures can keep truthful omission, approximation, and fallback notes through completion
 
 ### D. Store Readiness Pack
 
@@ -74,6 +76,7 @@ Parent direction:
 - `Phase 141` completed the first executable slice here by shipping one maintained screenshot storyboard pack; listing-copy hierarchy is still open
 - `Phase 142` completed the next executable slice here by shipping one concrete capture-pack workflow that turns the storyboard into named runtime capture tasks
 - `Phase 144` completed the next executable slice here by shipping one empty-but-truthful archive ledger plus one completion command, so completed screenshot sets now have a durable storage path
+- `Phase 146` completed the next executable slice here by extending that future storage path with durable truth-note metadata, so archived screenshot sets can record exactly where a store-facing image used omission, approximation, or fallback
 
 ### E. Listing And Localization Coordination
 

@@ -5,6 +5,41 @@ export const STORE_SCREENSHOT_CAPTURE_REQUEST_PENDING_STATUS =
   "pending_operator_capture";
 export const STORE_SCREENSHOT_CAPTURE_REQUEST_FULFILLED_STATUS =
   "fulfilled_operator_capture";
+export const STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_NOT_REVIEWED =
+  "not_reviewed";
+export const STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_EXACT_RUNTIME_CAPTURE =
+  "exact_runtime_capture";
+export const STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_APPROXIMATED_RUNTIME_STATE =
+  "approximated_runtime_state";
+export const STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_POLICY_ONLY_FALLBACK =
+  "policy_only_fallback";
+export const STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_PROVIDER_OMITTED =
+  "provider_omitted";
+export const STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_OTHER_TRUTH_BOUNDARY =
+  "other_truth_boundary";
+export const STORE_SCREENSHOT_CAPTURE_NOTE_STATUSES = [
+  STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_NOT_REVIEWED,
+  STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_EXACT_RUNTIME_CAPTURE,
+  STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_APPROXIMATED_RUNTIME_STATE,
+  STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_POLICY_ONLY_FALLBACK,
+  STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_PROVIDER_OMITTED,
+  STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_OTHER_TRUTH_BOUNDARY,
+];
+
+const STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_DESCRIPTIONS = {
+  [STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_NOT_REVIEWED]:
+    "placeholder state; replace it before completing the request",
+  [STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_EXACT_RUNTIME_CAPTURE]:
+    "the screenshot is an exact extension-mode runtime capture with no special truth boundary to record",
+  [STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_APPROXIMATED_RUNTIME_STATE]:
+    "the screenshot used an approximated runtime state that still needs an explicit operator note",
+  [STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_POLICY_ONLY_FALLBACK]:
+    "the screenshot truthfully relies on a policy-only or contract-only fallback and must say so explicitly",
+  [STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_PROVIDER_OMITTED]:
+    "the screenshot intentionally omits one or more providers and must explain that omission",
+  [STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_OTHER_TRUTH_BOUNDARY]:
+    "the screenshot has another truthful boundary that needs an explicit operator note",
+};
 
 function sanitizeSegment(value) {
   return String(value ?? "")
@@ -19,6 +54,152 @@ function normalizeStringArray(value) {
   return Array.isArray(value)
     ? value.filter((item) => typeof item === "string" && item.trim().length > 0)
     : [];
+}
+
+function normalizeCaptureTruth(value) {
+  return STORE_SCREENSHOT_CAPTURE_NOTE_STATUSES.includes(value)
+    ? value
+    : STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_NOT_REVIEWED;
+}
+
+function normalizeCaptureNoteEntry(entry) {
+  return {
+    filename: typeof entry?.filename === "string" ? entry.filename : "",
+    captureTruth: normalizeCaptureTruth(entry?.captureTruth),
+    stateSummary:
+      typeof entry?.stateSummary === "string" ? entry.stateSummary : "",
+    operatorNote:
+      typeof entry?.operatorNote === "string" ? entry.operatorNote : "",
+  };
+}
+
+export function normalizeStoreScreenshotCaptureNotesDocument(value) {
+  return {
+    requestId: typeof value?.requestId === "string" ? value.requestId : "",
+    requestCreatedAt:
+      typeof value?.requestCreatedAt === "string" ? value.requestCreatedAt : "",
+    notesSchemaVersion: value?.notesSchemaVersion === 1 ? 1 : 1,
+    captureTruthLegend:
+      value?.captureTruthLegend && typeof value.captureTruthLegend === "object"
+        ? value.captureTruthLegend
+        : STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_DESCRIPTIONS,
+    notes: Array.isArray(value?.notes)
+      ? value.notes.map((item) => normalizeCaptureNoteEntry(item))
+      : [],
+  };
+}
+
+export function buildStoreScreenshotCaptureNotesSummary(notesDocument) {
+  const normalized = normalizeStoreScreenshotCaptureNotesDocument(notesDocument);
+  const reviewedScreenshotCount = normalized.notes.filter(
+    (note) =>
+      note.captureTruth !== STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_NOT_REVIEWED,
+  ).length;
+  const truthBoundaryCount = normalized.notes.filter(
+    (note) =>
+      note.captureTruth !== STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_NOT_REVIEWED &&
+      note.captureTruth !== STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_EXACT_RUNTIME_CAPTURE,
+  ).length;
+
+  return {
+    noteCount: normalized.notes.length,
+    reviewedScreenshotCount,
+    pendingReviewCount: normalized.notes.length - reviewedScreenshotCount,
+    truthBoundaryCount,
+  };
+}
+
+export function buildStoreScreenshotCaptureNotesDocument({
+  requestId,
+  requestCreatedAt,
+  requiredScreenshotFilenames,
+}) {
+  return {
+    requestId,
+    requestCreatedAt,
+    notesSchemaVersion: 1,
+    captureTruthLegend: STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_DESCRIPTIONS,
+    notes: normalizeStringArray(requiredScreenshotFilenames).map((filename) => ({
+      filename,
+      captureTruth: STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_NOT_REVIEWED,
+      stateSummary: "",
+      operatorNote: "",
+    })),
+  };
+}
+
+export function validateStoreScreenshotCaptureNotesDocument({
+  notesDocument,
+  requestId,
+  requestCreatedAt,
+  requiredScreenshotFilenames,
+}) {
+  const issues = [];
+  const normalized = normalizeStoreScreenshotCaptureNotesDocument(notesDocument);
+  const requiredFilenames = normalizeStringArray(requiredScreenshotFilenames);
+  const notesByFilename = new Map(
+    normalized.notes.map((note) => [note.filename, note]),
+  );
+  const extraFilenames = normalized.notes
+    .map((note) => note.filename)
+    .filter((filename) => !requiredFilenames.includes(filename));
+
+  if (normalized.requestId !== requestId) {
+    issues.push(
+      `Capture notes request id \`${normalized.requestId || "missing"}\` did not match request \`${requestId}\`.`,
+    );
+  }
+
+  if (normalized.requestCreatedAt !== requestCreatedAt) {
+    issues.push(
+      `Capture notes requestCreatedAt \`${normalized.requestCreatedAt || "missing"}\` did not match request \`${requestCreatedAt}\`.`,
+    );
+  }
+
+  if (extraFilenames.length > 0) {
+    issues.push(
+      `Capture notes included unexpected screenshot entries: ${extraFilenames.map((item) => `\`${item}\``).join(", ")}.`,
+    );
+  }
+
+  for (const filename of requiredFilenames) {
+    const note = notesByFilename.get(filename);
+
+    if (!note) {
+      issues.push(`Capture notes were missing an entry for \`${filename}\`.`);
+      continue;
+    }
+
+    if (
+      note.captureTruth === STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_NOT_REVIEWED
+    ) {
+      issues.push(
+        `Capture notes for \`${filename}\` were still \`not_reviewed\`.`,
+      );
+    }
+
+    if (note.stateSummary.trim().length === 0) {
+      issues.push(
+        `Capture notes for \`${filename}\` were missing \`stateSummary\`.`,
+      );
+    }
+
+    if (
+      note.captureTruth !== STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_NOT_REVIEWED &&
+      note.captureTruth !== STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_EXACT_RUNTIME_CAPTURE &&
+      note.operatorNote.trim().length === 0
+    ) {
+      issues.push(
+        `Capture notes for \`${filename}\` need \`operatorNote\` when \`captureTruth\` is \`${note.captureTruth}\`.`,
+      );
+    }
+  }
+
+  return {
+    issues,
+    normalized,
+    summary: buildStoreScreenshotCaptureNotesSummary(normalized),
+  };
 }
 
 function normalizeFulfillment(value) {
@@ -38,6 +219,8 @@ function normalizeFulfillment(value) {
     fulfilledAt,
     sourceCaptureDir:
       typeof value.sourceCaptureDir === "string" ? value.sourceCaptureDir : "",
+    sourceNotesPath:
+      typeof value.sourceNotesPath === "string" ? value.sourceNotesPath : "",
     archiveId,
     archiveReadmePath:
       typeof value.archiveReadmePath === "string" ? value.archiveReadmePath : "",
@@ -45,7 +228,15 @@ function normalizeFulfillment(value) {
       typeof value.archiveManifestPath === "string"
         ? value.archiveManifestPath
         : "",
+    archiveNotesPath:
+      typeof value.archiveNotesPath === "string" ? value.archiveNotesPath : "",
     screenshotFilenames: normalizeStringArray(value.screenshotFilenames),
+    reviewedScreenshotCount:
+      typeof value.reviewedScreenshotCount === "number"
+        ? value.reviewedScreenshotCount
+        : 0,
+    truthBoundaryCount:
+      typeof value.truthBoundaryCount === "number" ? value.truthBoundaryCount : 0,
   };
 }
 
@@ -86,6 +277,7 @@ function buildCapturesReadme({
       ? [
           "- place truthful extension-mode screenshots here using the exact filenames listed below, or pass another capture directory to the completion command",
           "- this folder is a staging area, not a completed archive",
+          "- keep `../capture-notes.json` in sync with the runtime state of every screenshot before completion",
         ]
       : [
           "- this request has already been fulfilled",
@@ -109,6 +301,10 @@ ${pendingNote.join("\n")}
 ## Expected Filenames
 
 ${requiredScreenshotFilenames.map((item) => `- \`${item}\``).join("\n")}
+
+## Notes File
+
+- update \`../capture-notes.json\` for every required screenshot before running the completion command
 `;
 }
 
@@ -153,6 +349,14 @@ function buildReadme({
   - \`${fulfillment.archiveManifestPath}\`
 - source capture dir:
   - \`${fulfillment.sourceCaptureDir}\`
+- source notes:
+  - \`${fulfillment.sourceNotesPath}\`
+- archive notes:
+  - \`${fulfillment.archiveNotesPath}\`
+- reviewed screenshots:
+  - \`${fulfillment.reviewedScreenshotCount}\`
+- truth-boundary screenshots:
+  - \`${fulfillment.truthBoundaryCount}\`
 - archived screenshots:
 ${fulfillment.screenshotFilenames.map((item) => `  - \`${item}\``).join("\n")}
 `;
@@ -191,6 +395,8 @@ ${statusNote.join("\n")}
   - \`${preferredSize}\`
 - fallback size:
   - \`${fallbackSize}\`
+- capture notes:
+  - \`capture-notes.json\`
 
 ## Source References
 
@@ -204,6 +410,25 @@ ${statusNote.join("\n")}
 ## Required Screenshot Filenames
 
 ${requiredScreenshotFilenames.map((item) => `- \`${item}\``).join("\n")}
+
+## Capture Notes
+
+- notes file:
+  - \`capture-notes.json\`
+- completion requires one reviewed note per screenshot
+- every note must include:
+  - one non-placeholder \`captureTruth\`
+  - one short \`stateSummary\`
+  - one non-empty \`operatorNote\` when the screenshot uses approximation, omission, or a fallback contract state
+
+Allowed \`captureTruth\` values:
+
+- \`${STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_NOT_REVIEWED}\`
+- \`${STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_EXACT_RUNTIME_CAPTURE}\`
+- \`${STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_APPROXIMATED_RUNTIME_STATE}\`
+- \`${STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_POLICY_ONLY_FALLBACK}\`
+- \`${STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_PROVIDER_OMITTED}\`
+- \`${STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_OTHER_TRUTH_BOUNDARY}\`
 
 ## Workflow
 
@@ -234,24 +459,33 @@ export function buildStoreScreenshotCaptureRequestId({ requestId, createdAt }) {
 export function buildStoreScreenshotCaptureRequestFulfillment({
   fulfilledAt,
   sourceCaptureDir,
+  sourceNotesPath,
   archiveId,
   archiveReadmePath,
   archiveManifestPath,
+  archiveNotesPath,
   screenshotFilenames,
+  reviewedScreenshotCount,
+  truthBoundaryCount,
 }) {
   return normalizeFulfillment({
     fulfilledAt,
     sourceCaptureDir,
+    sourceNotesPath,
     archiveId,
     archiveReadmePath,
     archiveManifestPath,
+    archiveNotesPath,
     screenshotFilenames,
+    reviewedScreenshotCount,
+    truthBoundaryCount,
   });
 }
 
 async function writeRequestFiles({
   requestDir,
   manifest,
+  notesDocument,
 }) {
   const capturesDir = path.join(requestDir, "captures");
 
@@ -263,8 +497,13 @@ async function writeRequestFiles({
     "utf8",
   );
   await writeFile(
+    path.join(requestDir, "capture-notes.json"),
+    `${JSON.stringify(notesDocument, null, 2)}\n`,
+    "utf8",
+  );
+  await writeFile(
     path.join(requestDir, "README.md"),
-    `${buildReadme(manifest)}\n`,
+    `${buildReadme(manifest).trimEnd()}\n`,
     "utf8",
   );
   await writeFile(
@@ -274,7 +513,7 @@ async function writeRequestFiles({
       status: manifest.status,
       fulfillment: manifest.fulfillment,
       requiredScreenshotFilenames: manifest.requiredScreenshotFilenames,
-    })}\n`,
+    }).trimEnd()}\n`,
     "utf8",
   );
 }
@@ -286,10 +525,19 @@ export async function writeStoreScreenshotCaptureRequest({
   createdAt,
   requestTemplate,
   sourceTemplate,
+  notesDocument,
 }) {
   const normalizedTemplate = normalizeTemplate(requestTemplate);
   const requestDir = path.join(requestRoot, requestId);
   const requestDirRelative = path.relative(projectRoot, requestDir);
+  const normalizedNotes = normalizeStoreScreenshotCaptureNotesDocument(
+    notesDocument ??
+      buildStoreScreenshotCaptureNotesDocument({
+        requestId,
+        requestCreatedAt: createdAt,
+        requiredScreenshotFilenames: normalizedTemplate.requiredScreenshotFilenames,
+      }),
+  );
   const manifest = {
     requestId,
     createdAt,
@@ -310,6 +558,7 @@ export async function writeStoreScreenshotCaptureRequest({
   await writeRequestFiles({
     requestDir,
     manifest,
+    notesDocument: normalizedNotes,
   });
 
   return {
@@ -328,8 +577,17 @@ export async function updateStoreScreenshotCaptureRequest({
   sourceTemplate,
   status,
   fulfillment,
+  notesDocument,
 }) {
   const normalizedTemplate = normalizeTemplate(requestTemplate);
+  const normalizedNotes = normalizeStoreScreenshotCaptureNotesDocument(
+    notesDocument ??
+      buildStoreScreenshotCaptureNotesDocument({
+        requestId,
+        requestCreatedAt: createdAt,
+        requiredScreenshotFilenames: normalizedTemplate.requiredScreenshotFilenames,
+      }),
+  );
   const manifest = {
     requestId,
     createdAt,
@@ -350,6 +608,7 @@ export async function updateStoreScreenshotCaptureRequest({
   await writeRequestFiles({
     requestDir,
     manifest,
+    notesDocument: normalizedNotes,
   });
 
   return manifest;

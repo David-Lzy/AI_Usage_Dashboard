@@ -17,6 +17,7 @@ Execution note:
 - third executable slice landed on `2026-04-24` through `Phase 143`
 - fourth executable slice landed on `2026-04-24` through `Phase 144`
 - fifth executable slice landed on `2026-04-24` through `Phase 145`
+- sixth executable slice landed on `2026-04-24` through `Phase 146`
 - this direction sharpens [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md) into a more explicit next-stage productization track
 
 Process rule:
@@ -66,6 +67,7 @@ As of 2026-04-24:
   - [Store_Screenshot_Capture_Requests.md](../testing/Store_Screenshot_Capture_Requests.md)
 - the repo now also ships one completion and archive workflow for future real screenshot sets:
   - [Store_Screenshot_Capture_Archive.md](../testing/Store_Screenshot_Capture_Archive.md)
+- the repo now also ships request-bound capture notes plus archive-preserved truth-note metadata for future real screenshot sets
 - the repo now also ships one verified RDP Chrome runtime-capture helper for popup and sidepanel smoke captures
 - the popup still has some remaining overlap between top story, featured card, and lower surface-role explanation
 - the repo still does not yet ship a full store-readiness pack for listing copy hierarchy and localized listing variants
@@ -136,6 +138,8 @@ Recommended rollout:
 `Phase 144` completed the next executable part of step `3` by shipping one completion plus archive workflow for store screenshot capture, so the first future real screenshot set now has a truthful repo-backed way to move from `pending request` to `archived evidence`.
 
 `Phase 145` completed the next executable part of step `3` by verifying that the real RDP Chrome session can open and capture popup plus sidepanel runtime windows directly, so the remaining blocker to the first real screenshot archive is now truthful state selection rather than unknown GUI plumbing.
+
+`Phase 146` completed the next executable part of step `3` by adding request-bound capture notes plus archive-preserved truth-note metadata, so the first future real screenshot archive can now record omissions, approximations, and fallback contract states without losing them between request and archive.
 
 ## References
 

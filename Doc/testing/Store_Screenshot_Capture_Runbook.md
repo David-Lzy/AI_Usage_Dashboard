@@ -104,10 +104,14 @@ Truth note:
    - capture the screenshot at `1280x800` when practical
    - fall back to `640x400` only if the real extension surface cannot be shown honestly at `1280x800`
 3. Save each file using the exact filenames from `capture-plan.json`.
-4. Record any truth boundary directly in the pack README:
-   - if a screenshot used `policy-only`
-   - if a provider was intentionally omitted
-   - if a healthy state was approximated rather than fully live
+4. Update the request-bound `capture-notes.json` file:
+   - set one reviewed `captureTruth` for every screenshot
+   - write one short `stateSummary` for every screenshot
+   - add one `operatorNote` whenever the screenshot used:
+     - `policy_only_fallback`
+     - `provider_omitted`
+     - `approximated_runtime_state`
+     - `other_truth_boundary`
 5. Do not crop out context in a way that changes the product story.
 
 ## Do Not Capture
@@ -129,14 +133,21 @@ Truth note:
 
 1. Review the screenshot order against the storyboard.
 2. Confirm the filenames still match the pack manifest.
-3. If the runtime story has changed enough that the pack no longer fits, update:
+3. Confirm `capture-notes.json` no longer contains any `not_reviewed` entries.
+4. If the runtime story has changed enough that the pack no longer fits, update:
    - [Store_Screenshot_Storyboard.md](../Store_Screenshot_Storyboard.md)
    - the capture pack generator
    - this runbook
-4. Once the real extension-mode screenshots are ready, complete the pending request and archive the set:
+5. Once the real extension-mode screenshots are ready, complete the pending request and archive the set:
 
 ```bash
 npm run store:complete-screenshot-capture-request -- --request-id 2026-04-24-first-real-store-screenshot-capture-request --captures-dir Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/captures
+```
+
+6. If the request package template changed and the existing pending request needs the newest generated README or notes scaffolding first, run:
+
+```bash
+npm run store:refresh-screenshot-capture-request-packages
 ```
 
 ## Related Docs

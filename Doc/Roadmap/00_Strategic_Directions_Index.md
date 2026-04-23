@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-04-24:
 
-- the numbered phase queue is now completed through `Phase 145`
+- the numbered phase queue is now completed through `Phase 146`
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
 - `Phase 42` has packaged `0.1.0-rc.2` and closed the release-closeout track for the narrowed RC
 - `Phase 43` completed the first `Direction 02` slice by productizing source-fidelity semantics in the side panel
@@ -136,6 +136,7 @@ As of 2026-04-24:
 - `Phase 143` completed the next executable `Direction 10` slice by shipping one pending screenshot-capture request workflow for the first real RDP Chrome operator pass
 - `Phase 144` completed the next executable `Direction 10` slice by shipping one screenshot completion plus archive workflow while truthfully keeping the repo at `1 pending request / 0 archived screenshot sets`
 - `Phase 145` completed the next executable `Direction 10` slice by proving that the current RDP Chrome profile can open and capture real popup plus sidepanel runtime windows for future truthful store assets
+- `Phase 146` completed the next executable `Direction 10` slice and added request-bound capture notes plus archive-preserved truth-note metadata, so future real screenshot sets can durably record omission, approximation, and fallback boundaries
 - the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 140`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
 - the numbered phase queue is now completed through `Phase 140`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
 - `Codex` personal support is already shipped as a `session_page` path, but it currently exposes usage-window percentages and reset timing, not one absolute remaining credit balance

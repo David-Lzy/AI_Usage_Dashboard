@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-23T18:29:36.640Z",
+  "generatedAt": "2026-04-23T19:04:00.641Z",
   "requestRoot": "Doc/testing/store_screenshot_capture_requests",
   "recordCount": 1,
   "pendingRequestCount": 1,
@@ -22,6 +22,13 @@
         "04-settings-and-setup-depth.png",
         "05-provider-or-dashboard-depth.png"
       ],
+      "captureNotesPath": "Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/capture-notes.json",
+      "captureNotesSummary": {
+        "noteCount": 5,
+        "reviewedScreenshotCount": 0,
+        "pendingReviewCount": 5,
+        "truthBoundaryCount": 0
+      },
       "readmePath": "Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/README.md",
       "manifestPath": "Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/capture-request.json"
     }
