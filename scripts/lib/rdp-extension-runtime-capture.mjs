@@ -35,48 +35,61 @@ function parseWindowTree(rawOutput) {
 }
 
 export async function detectChromeRuntimeEnvironment() {
-  const { stdout } = await execFileAsync("pgrep", [
-    "-af",
-    "/opt/google/chrome/chrome --profile-directory=Default",
-  ]);
-  const lines = stdout
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line.length > 0);
-  const primaryLine =
-    lines.find((line) => !line.includes(" --type=")) ?? lines.at(0) ?? "";
-  const pid = primaryLine.split(" ")[0] ?? "";
+  try {
+    const { stdout } = await execFileAsync("pgrep", [
+      "-af",
+      "/opt/google/chrome/chrome --profile-directory=Default",
+    ]);
+    const lines = stdout
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0);
+    const primaryLine =
+      lines.find((line) => !line.includes(" --type=")) ?? lines.at(0) ?? "";
+    const pid = primaryLine.split(" ")[0] ?? "";
 
-  assert(pid.length > 0, "Could not find the primary Chrome profile process.");
+    assert(pid.length > 0, "Could not find the primary Chrome profile process.");
 
-  const envBuffer = await readFile(`/proc/${pid}/environ`);
-  const entries = envBuffer
-    .toString("utf8")
-    .split("\u0000")
-    .filter((entry) => entry.length > 0);
-  const envMap = new Map(
-    entries.map((entry) => {
-      const separatorIndex = entry.indexOf("=");
-      return [
-        entry.slice(0, separatorIndex),
-        separatorIndex === -1 ? "" : entry.slice(separatorIndex + 1),
-      ];
-    }),
-  );
-  const display = envMap.get("DISPLAY") ?? "";
-  const xauthority = envMap.get("XAUTHORITY") ?? "";
+    const envBuffer = await readFile(`/proc/${pid}/environ`);
+    const entries = envBuffer
+      .toString("utf8")
+      .split("\u0000")
+      .filter((entry) => entry.length > 0);
+    const envMap = new Map(
+      entries.map((entry) => {
+        const separatorIndex = entry.indexOf("=");
+        return [
+          entry.slice(0, separatorIndex),
+          separatorIndex === -1 ? "" : entry.slice(separatorIndex + 1),
+        ];
+      }),
+    );
+    const display = envMap.get("DISPLAY") ?? "";
+    const xauthority = envMap.get("XAUTHORITY") ?? "";
 
-  assert(display.length > 0, "Could not detect DISPLAY from the running Chrome process.");
-  assert(
-    xauthority.length > 0,
-    "Could not detect XAUTHORITY from the running Chrome process.",
-  );
+    assert(display.length > 0, "Could not detect DISPLAY from the running Chrome process.");
+    assert(
+      xauthority.length > 0,
+      "Could not detect XAUTHORITY from the running Chrome process.",
+    );
 
-  return {
-    pid,
-    display,
-    xauthority,
-  };
+    return {
+      pid,
+      display,
+      xauthority,
+    };
+  } catch {
+    const display = process.env.RDP_CHROME_DISPLAY ?? ":10.0";
+    const xauthority =
+      process.env.RDP_CHROME_XAUTHORITY ??
+      path.join(process.env.HOME ?? "/home/davidli", ".Xauthority");
+
+    return {
+      pid: "",
+      display,
+      xauthority,
+    };
+  }
 }
 
 export async function detectLoadedExtensionId({ projectRoot }) {
@@ -142,11 +155,10 @@ function spawnChromeAppWindow({ display, xauthority, url, width, height }) {
   child.unref();
 }
 
-export async function captureRdpExtensionWindow({
+export async function openRdpExtensionWindow({
   projectRoot,
   routePath,
   expectedTitle,
-  outputPath,
   width,
   height,
   waitMs = 3000,
@@ -198,25 +210,57 @@ export async function captureRdpExtensionWindow({
     `Could not locate a Chrome window titled "${expectedTitle}" after opening ${url}.`,
   );
 
-  await mkdir(path.dirname(outputPath), { recursive: true });
-  await execFileAsync(
-    "import",
-    ["-window", targetWindow.id, outputPath],
-    {
-      env: {
-        ...process.env,
-        DISPLAY: runtime.display,
-        XAUTHORITY: runtime.xauthority,
-      },
-    },
-  );
-
   return {
     extensionId,
     url,
     windowId: targetWindow.id,
     title: targetWindow.title,
     display: runtime.display,
+    xauthority: runtime.xauthority,
+  };
+}
+
+export async function captureRdpExtensionWindow({
+  projectRoot,
+  routePath,
+  expectedTitle,
+  outputPath,
+  width,
+  height,
+  waitMs = 3000,
+  pollMs = 400,
+  timeoutMs = 8000,
+}) {
+  const windowInfo = await openRdpExtensionWindow({
+    projectRoot,
+    routePath,
+    expectedTitle,
+    width,
+    height,
+    waitMs,
+    pollMs,
+    timeoutMs,
+  });
+
+  await mkdir(path.dirname(outputPath), { recursive: true });
+  await execFileAsync(
+    "import",
+    ["-window", windowInfo.windowId, outputPath],
+    {
+      env: {
+        ...process.env,
+        DISPLAY: windowInfo.display,
+        XAUTHORITY: windowInfo.xauthority,
+      },
+    },
+  );
+
+  return {
+    extensionId: windowInfo.extensionId,
+    url: windowInfo.url,
+    windowId: windowInfo.windowId,
+    title: windowInfo.title,
+    display: windowInfo.display,
     outputPath,
   };
 }

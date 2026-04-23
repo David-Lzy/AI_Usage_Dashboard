@@ -5,6 +5,7 @@ import type {
   ProviderSetting,
 } from "../providers/types";
 import { seedAppStateIfEmpty, writeAppState } from "../shared/storage";
+import { readStoreScreenshotRuntimeLock } from "../shared/store-screenshot-runtime-lock";
 
 export type PermissionNotice = {
   tone: "success" | "error";
@@ -88,6 +89,11 @@ export async function reconcileProviderPermissions(
 
 export async function syncStoredProviderPermissions(): Promise<AppState> {
   const current = await seedAppStateIfEmpty();
+
+  if (await readStoreScreenshotRuntimeLock()) {
+    return current;
+  }
+
   return reconcileProviderPermissions(current);
 }
 

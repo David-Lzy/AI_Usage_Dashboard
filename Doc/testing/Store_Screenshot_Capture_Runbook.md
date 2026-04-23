@@ -95,6 +95,36 @@ Truth note:
 - this helper captures real extension runtime windows from the existing RDP Chrome session
 - it is a smoke-capture tool, not a substitute for the full storyboard review and archive flow
 
+## Request-Bound Seed And Capture Helpers
+
+When the request needs one stable seeded runtime pass before manual review or archival, use:
+
+```bash
+npm run store:apply-rdp-screenshot-seed -- --preset toolbar-first-quick-glance
+```
+
+Supported presets currently include:
+
+- `toolbar-first-quick-glance`
+- `setup-guidance`
+- `honest-contract-or-policy-only`
+- `settings-and-setup-depth`
+- `provider-or-dashboard-depth`
+- `unlock`
+
+When you want the current pending request package filled in one pass from the real extension runtime, use:
+
+```bash
+npm run store:capture-screenshot-request-from-rdp -- --request-id 2026-04-24-first-real-store-screenshot-capture-request
+```
+
+Truth note:
+
+- this runner captures from the real unpacked extension runtime, not preview-only pages
+- it applies one request-bound screenshot seed plus a runtime lock before each capture, then restores the pre-seed baseline on `unlock`
+- it also updates the request-bound `capture-notes.json` with the current reviewed truth statuses and operator notes
+- it does not mark the request fulfilled by itself; completion still requires the normal archive command
+
 ## Capture Workflow
 
 1. Open the generated pack README and follow the screenshot order.
@@ -112,6 +142,7 @@ Truth note:
      - `provider_omitted`
      - `approximated_runtime_state`
      - `other_truth_boundary`
+   - or let the request-bound RDP capture runner prefill those reviewed note entries when its seeded runtime plan matches the current storyboard
 5. Do not crop out context in a way that changes the product story.
 
 ## Do Not Capture

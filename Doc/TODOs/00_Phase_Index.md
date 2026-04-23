@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [146_Phase_Store_Screenshot_Capture_Truth_Notes_And_Archive_Metadata.md](./Archive/146_Phase_Store_Screenshot_Capture_Truth_Notes_And_Archive_Metadata.md)
+- latest completed slice: [147_Phase_Store_Screenshot_Seed_Lock_And_Request_Bound_RDP_Capture.md](./Archive/147_Phase_Store_Screenshot_Seed_Lock_And_Request_Bound_RDP_Capture.md)
 
 Completed phases should be moved to:
 
@@ -193,6 +193,7 @@ Completed phases should be moved to:
 - [144_Phase_Store_Screenshot_Capture_Archive_And_Completion_Workflow.md](./Archive/144_Phase_Store_Screenshot_Capture_Archive_And_Completion_Workflow.md) - completed and archived on 2026-04-24
 - [145_Phase_RDP_Extension_Runtime_Capture_Probe.md](./Archive/145_Phase_RDP_Extension_Runtime_Capture_Probe.md) - completed and archived on 2026-04-24
 - [146_Phase_Store_Screenshot_Capture_Truth_Notes_And_Archive_Metadata.md](./Archive/146_Phase_Store_Screenshot_Capture_Truth_Notes_And_Archive_Metadata.md) - completed and archived on 2026-04-24
+- [147_Phase_Store_Screenshot_Seed_Lock_And_Request_Bound_RDP_Capture.md](./Archive/147_Phase_Store_Screenshot_Seed_Lock_And_Request_Bound_RDP_Capture.md) - completed and archived on 2026-04-24
 
 ## Dependency Notes
 

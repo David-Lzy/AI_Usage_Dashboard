@@ -189,6 +189,20 @@ export async function writeAppState(state: AppState): Promise<AppState> {
   return clonedState;
 }
 
+export async function clearAppState(): Promise<void> {
+  if (hasChromeStorage()) {
+    await chrome.storage.local.remove(APP_STATE_STORAGE_KEY);
+    return;
+  }
+
+  if (hasLocalStorage()) {
+    globalThis.localStorage.removeItem(APP_STATE_STORAGE_KEY);
+    return;
+  }
+
+  memoryFallbackState = null;
+}
+
 export async function seedAppStateIfEmpty(): Promise<AppState> {
   const existing = await readAppState();
 

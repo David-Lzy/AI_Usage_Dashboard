@@ -12,6 +12,7 @@ import {
 } from "../shared/provider-secrets";
 import { clearPageBinding, normalizePageBinding } from "../shared/page-bindings";
 import { seedAppStateIfEmpty, updateAppState } from "../shared/storage";
+import { readStoreScreenshotRuntimeLock } from "../shared/store-screenshot-runtime-lock";
 import { ensurePeriodicSyncAlarm } from "./alarms";
 import { syncStoredProviderCredentials } from "./provider-credentials";
 import {
@@ -64,8 +65,16 @@ export type AppMessageResponse =
 export async function handleAppMessage(
   message: AppMessage,
 ): Promise<AppMessageResponse> {
+  const isStoreScreenshotRuntimeLocked = await readStoreScreenshotRuntimeLock();
+
   switch (message.type) {
     case "app:init": {
+      if (isStoreScreenshotRuntimeLocked) {
+        const state = await seedAppStateIfEmpty();
+        await ensurePeriodicSyncAlarm(state.settings);
+        return { ok: true, state };
+      }
+
       await syncStoredProviderPermissions();
       await syncStoredProviderCredentials();
       const state = await runSyncEngine({
@@ -76,6 +85,12 @@ export async function handleAppMessage(
     }
 
     case "app:read-state": {
+      if (isStoreScreenshotRuntimeLocked) {
+        const state = await seedAppStateIfEmpty();
+        await ensurePeriodicSyncAlarm(state.settings);
+        return { ok: true, state };
+      }
+
       await syncStoredProviderPermissions();
       await syncStoredProviderCredentials();
       const state = await seedAppStateIfEmpty();

@@ -4,9 +4,19 @@ import { handleAppMessage, type AppMessage } from "./message-bus";
 import { syncStoredProviderCredentials } from "./provider-credentials";
 import { syncStoredProviderPermissions } from "./provider-permissions";
 import { runSyncEngine } from "./sync-engine";
+import { seedAppStateIfEmpty } from "../shared/storage";
+import { readStoreScreenshotRuntimeLock } from "../shared/store-screenshot-runtime-lock";
 
 async function bootstrapBackground() {
   await chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: false });
+
+  if (await readStoreScreenshotRuntimeLock()) {
+    const state = await seedAppStateIfEmpty();
+    await ensurePeriodicSyncAlarm(state.settings);
+    await syncActionBadgeFromState(state);
+    return;
+  }
+
   await syncStoredProviderPermissions();
   const state = await syncStoredProviderCredentials();
   await ensurePeriodicSyncAlarm(state.settings);
@@ -23,11 +33,18 @@ chrome.runtime.onStartup.addListener(() => {
 
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (isPeriodicSyncAlarm(alarm)) {
-    void syncStoredProviderPermissions()
-      .then(() => syncStoredProviderCredentials())
-      .then(() => runSyncEngine({ trigger: "alarm" }))
-      .then((state) => syncActionBadgeFromState(state))
-      .catch(() => undefined);
+    void (async () => {
+      if (await readStoreScreenshotRuntimeLock()) {
+        const state = await seedAppStateIfEmpty();
+        await syncActionBadgeFromState(state);
+        return;
+      }
+
+      await syncStoredProviderPermissions();
+      await syncStoredProviderCredentials();
+      const state = await runSyncEngine({ trigger: "alarm" });
+      await syncActionBadgeFromState(state);
+    })().catch(() => undefined);
   }
 });
 

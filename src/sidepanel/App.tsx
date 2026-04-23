@@ -33,12 +33,14 @@ import { InteractionAuditPage } from "./routes/InteractionAuditPage";
 import { JetBrainsFixtureCapturePage } from "./routes/JetBrainsFixtureCapturePage";
 import { ProviderDetailPage } from "./routes/ProviderDetailPage";
 import { SettingsPage } from "./routes/SettingsPage";
+import { StoreScreenshotSeedPage } from "./routes/StoreScreenshotSeedPage";
 import { ThemeRecoveryReviewPage } from "./routes/ThemeRecoveryReviewPage";
 import {
   buildSidePanelHash,
   parseSidePanelHash,
   type SidePanelRouteState,
 } from "./route-state";
+import { isStoreScreenshotSeedLockEnabled } from "./store-screenshot-seed";
 import {
   buildSummaryItems,
   getProviderViewModel,
@@ -56,6 +58,7 @@ type SpecialSidePanelRoute =
   | "debug-capture-cursor"
   | "debug-capture-jetbrains"
   | "debug-interaction-audit"
+  | "debug-store-screenshot-seed"
   | "debug-theme-recovery-review";
 
 type StandardAppProps = {
@@ -74,6 +77,8 @@ function getSpecialSidePanelRoute(
       return "debug-capture-jetbrains";
     case "#debug-interaction-audit":
       return "debug-interaction-audit";
+    case "#debug-store-screenshot-seed":
+      return "debug-store-screenshot-seed";
     case "#debug-theme-recovery-review":
       return "debug-theme-recovery-review";
     default:
@@ -150,6 +155,10 @@ function SpecialRouteApp({
     useState<ThemeSettings>(DEFAULT_THEME_SETTINGS);
 
   useEffect(() => {
+    if (route === "debug-store-screenshot-seed") {
+      return undefined;
+    }
+
     let disposed = false;
 
     async function hydrateThemeSettings() {
@@ -242,11 +251,22 @@ function SpecialRouteApp({
       return <JetBrainsFixtureCapturePage />;
     case "debug-interaction-audit":
       return <InteractionAuditPage />;
+    case "debug-store-screenshot-seed":
+      return <StoreScreenshotSeedPage />;
     case "debug-theme-recovery-review":
       return <ThemeRecoveryReviewPage />;
     default:
       return null;
   }
+}
+
+function getStandardAppBootstrapMessage(): Extract<
+  AppMessage,
+  { type: "app:init" } | { type: "app:read-state" }
+> {
+  return isStoreScreenshotSeedLockEnabled()
+    ? { type: "app:read-state" }
+    : { type: "app:init" };
 }
 
 function StandardApp({ locationHash }: StandardAppProps) {
@@ -276,7 +296,7 @@ function StandardApp({ locationHash }: StandardAppProps) {
     async function initializeApp() {
       setIsLoading(true);
 
-      const response = await sendAppMessage({ type: "app:init" });
+      const response = await sendAppMessage(getStandardAppBootstrapMessage());
 
       if (disposed) {
         return;
@@ -366,7 +386,7 @@ function StandardApp({ locationHash }: StandardAppProps) {
     setIsLoading(true);
 
     void applyMessage(
-      { type: "app:init" },
+      getStandardAppBootstrapMessage(),
       {
         tone: "success",
         title: "State reloaded",
