@@ -176,6 +176,7 @@ The Chrome action now opens a compact popup first:
 - the repo now also ships the first real archived store screenshot set, captured from `RDP Chrome` and archived with request-bound truth notes instead of preview-only mocks
 - the repo now also ships one maintained store-listing copy pack anchored to that first real screenshot archive, including the preferred short description, overview paragraph, feature bullets, screenshot captions, and claim guardrails
 - the repo now also ships one maintained store-listing localization source pack anchored to the current manifest, maintained listing-copy pack, and first archived screenshot set, so future translated store listings can stay aligned with the same truth boundary
+- the popup runtime now also ships one explicit host-width contract for real Chrome action-popup rendering, so the browser no longer has to guess popup width from the document body
 - the badge shows the number of visible providers currently needing attention
 - the side panel remains the canonical surface for settings, source diagnostics, and provider detail
 

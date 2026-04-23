@@ -266,6 +266,11 @@
   --app-space-4: 16px;
   --app-space-5: 20px;
   --app-space-6: 24px;
+
+  /* Popup sizing */
+  --app-popup-width-min: 360px;
+  --app-popup-width-preferred: 392px;
+  --app-popup-width-max: 420px;
 }
 
 :root[data-theme-resolved="dark"] {

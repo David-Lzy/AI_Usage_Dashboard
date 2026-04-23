@@ -20,6 +20,7 @@ Status note:
 - `Phase 149` completed the next executable slice on `2026-04-24` by fulfilling and archiving the first real RDP Chrome screenshot set
 - `Phase 150` completed the next executable slice on `2026-04-24` by shipping one maintained store-listing copy pack anchored to that first archived screenshot set
 - `Phase 151` completed the next executable slice on `2026-04-24` by shipping one maintained store-listing localization source pack anchored to the manifest, maintained listing-copy pack, and first archived screenshot set
+- `Phase 152` completed the next executable slice on `2026-04-24` by shipping one explicit popup host-width contract plus one repeatable width review for real Chrome action-popup rendering
 
 Process rule:
 
@@ -53,6 +54,7 @@ Parent direction:
   - mixed setup blockers
   - policy-only
   - healthy
+- `Phase 152` completed the next executable slice here by turning the popup host width into one explicit runtime contract instead of leaving action-popup sizing to browser guesswork
 
 ### C. RDP Chrome Extension-Mode Review
 

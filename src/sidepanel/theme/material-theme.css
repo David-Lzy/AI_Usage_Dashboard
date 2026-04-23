@@ -10,6 +10,27 @@ body,
   min-height: 100vh;
 }
 
+html.popup-page,
+body.popup-page,
+#root.popup-page-root {
+  min-height: 0;
+}
+
+html.popup-page,
+body.popup-page {
+  width: var(--app-popup-width-preferred);
+  min-width: var(--app-popup-width-min);
+  max-width: var(--app-popup-width-max);
+}
+
+body.popup-page {
+  overflow-x: hidden;
+}
+
+#root.popup-page-root {
+  width: 100%;
+}
+
 body {
   margin: 0;
   background: linear-gradient(
@@ -1643,9 +1664,15 @@ select.form-field__control {
 }
 
 .popup-shell {
+  width: 100%;
   min-width: 360px;
   max-width: 420px;
   gap: var(--app-space-3);
+}
+
+body.popup-page .popup-shell {
+  min-width: 0;
+  max-width: none;
 }
 
 .popup-header {
@@ -2021,6 +2048,14 @@ select.form-field__control {
 
   .popup-shell {
     min-width: auto;
+  }
+
+  html.popup-page,
+  body.popup-page,
+  #root.popup-page-root {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
   }
 
   .interaction-audit-frame-shell {

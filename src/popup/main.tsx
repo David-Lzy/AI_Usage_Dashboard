@@ -5,7 +5,13 @@ import { PopupApp } from "./PopupApp";
 import "../sidepanel/theme/tokens.css";
 import "../sidepanel/theme/material-theme.css";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+const rootElement = document.getElementById("root");
+
+document.documentElement.classList.add("popup-page");
+document.body.classList.add("popup-page");
+rootElement?.classList.add("popup-page-root");
+
+ReactDOM.createRoot(rootElement!).render(
   <React.StrictMode>
     <PopupApp />
   </React.StrictMode>,
