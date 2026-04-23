@@ -14,6 +14,7 @@ Execution note:
 
 - first executable slice landed on `2026-04-24` through `Phase 141`
 - second executable slice landed on `2026-04-24` through `Phase 142`
+- third executable slice landed on `2026-04-24` through `Phase 143`
 - this direction sharpens [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md) into a more explicit next-stage productization track
 
 Process rule:
@@ -59,6 +60,8 @@ As of 2026-04-24:
 - the repo now also ships one maintained screenshot-capture runbook plus one generator-backed baseline capture pack:
   - [Store_Screenshot_Capture_Runbook.md](../testing/Store_Screenshot_Capture_Runbook.md)
   - [Store_Screenshot_Capture_Packs.md](../testing/Store_Screenshot_Capture_Packs.md)
+- the repo now also ships one pending screenshot-capture request workflow:
+  - [Store_Screenshot_Capture_Requests.md](../testing/Store_Screenshot_Capture_Requests.md)
 - the popup still has some remaining overlap between top story, featured card, and lower surface-role explanation
 - the repo still does not yet ship a full store-readiness pack for listing copy hierarchy and localized listing variants
 - the project now has an RDP Chrome environment available for truthful extension-mode capture and review
@@ -122,6 +125,8 @@ Recommended rollout:
 
 `Phase 142` completed the next executable part of step `3` by shipping one maintained screenshot-capture runbook, one generator-backed baseline capture pack, and one repeatable review pass for the store screenshot workflow.
 
+`Phase 143` completed the next executable part of step `3` by shipping one pending screenshot-capture request workflow, so the first real RDP Chrome store-capture pass now has one durable request package instead of only a runbook.
+
 ## References
 
 - Chrome `action` API:
@@ -140,6 +145,7 @@ Recommended rollout:
 - [Store_Screenshot_Storyboard.md](../Store_Screenshot_Storyboard.md)
 - [Store_Screenshot_Capture_Runbook.md](../testing/Store_Screenshot_Capture_Runbook.md)
 - [Store_Screenshot_Capture_Packs.md](../testing/Store_Screenshot_Capture_Packs.md)
+- [Store_Screenshot_Capture_Requests.md](../testing/Store_Screenshot_Capture_Requests.md)
 
 ## Child TODO
 

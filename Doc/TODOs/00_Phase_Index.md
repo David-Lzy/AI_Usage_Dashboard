@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [142_Phase_Store_Screenshot_Capture_Workflow_And_Baseline_Pack.md](./Archive/142_Phase_Store_Screenshot_Capture_Workflow_And_Baseline_Pack.md)
+- latest completed slice: [143_Phase_Store_Screenshot_Capture_Request_Workflow.md](./Archive/143_Phase_Store_Screenshot_Capture_Request_Workflow.md)
 
 Completed phases should be moved to:
 
@@ -189,6 +189,7 @@ Completed phases should be moved to:
 - [140_Phase_Direction_08_Maintenance_Transition_And_Strategic_Reprioritization.md](./Archive/140_Phase_Direction_08_Maintenance_Transition_And_Strategic_Reprioritization.md) - completed and archived on 2026-04-24
 - [141_Phase_Toolbar_Competitive_Fit_Decision_Matrix_And_Storyboard.md](./Archive/141_Phase_Toolbar_Competitive_Fit_Decision_Matrix_And_Storyboard.md) - completed and archived on 2026-04-24
 - [142_Phase_Store_Screenshot_Capture_Workflow_And_Baseline_Pack.md](./Archive/142_Phase_Store_Screenshot_Capture_Workflow_And_Baseline_Pack.md) - completed and archived on 2026-04-24
+- [143_Phase_Store_Screenshot_Capture_Request_Workflow.md](./Archive/143_Phase_Store_Screenshot_Capture_Request_Workflow.md) - completed and archived on 2026-04-24
 
 ## Dependency Notes
 

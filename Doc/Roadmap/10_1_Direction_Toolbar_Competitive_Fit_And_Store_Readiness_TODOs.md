@@ -11,6 +11,7 @@ Status note:
 - direction created on `2026-04-24`
 - `Phase 141` completed the first executable slice on `2026-04-24` by shipping one explicit competitive-fit decision matrix plus one maintained screenshot storyboard pack for truthful extension-mode capture
 - `Phase 142` completed the next executable slice on `2026-04-24` by shipping one maintained screenshot-capture runbook plus one generator-backed baseline capture pack for truthful extension-mode runtime capture
+- `Phase 143` completed the next executable slice on `2026-04-24` by shipping one pending screenshot-capture request workflow for the first real RDP Chrome operator pass
 
 Process rule:
 
@@ -55,6 +56,7 @@ Parent direction:
   - healthy state
 - document the reload and screenshot workflow so store assets come from truthful runtime state
 - `Phase 142` completed the first executable slice here by shipping one explicit screenshot-capture runbook and one generator-backed baseline capture pack
+- `Phase 143` completed the next executable slice here by shipping one pending request package so the first real operator capture pass now has a durable repo-backed handoff target
 
 ### D. Store Readiness Pack
 
