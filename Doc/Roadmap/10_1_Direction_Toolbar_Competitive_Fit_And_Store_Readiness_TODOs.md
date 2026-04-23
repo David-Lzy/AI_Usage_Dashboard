@@ -10,6 +10,7 @@ Status note:
 
 - direction created on `2026-04-24`
 - `Phase 141` completed the first executable slice on `2026-04-24` by shipping one explicit competitive-fit decision matrix plus one maintained screenshot storyboard pack for truthful extension-mode capture
+- `Phase 142` completed the next executable slice on `2026-04-24` by shipping one maintained screenshot-capture runbook plus one generator-backed baseline capture pack for truthful extension-mode runtime capture
 
 Process rule:
 
@@ -53,6 +54,7 @@ Parent direction:
   - policy-only coverage
   - healthy state
 - document the reload and screenshot workflow so store assets come from truthful runtime state
+- `Phase 142` completed the first executable slice here by shipping one explicit screenshot-capture runbook and one generator-backed baseline capture pack
 
 ### D. Store Readiness Pack
 
@@ -64,6 +66,7 @@ Parent direction:
   - side-panel depth
   - honesty around provider coverage
 - `Phase 141` completed the first executable slice here by shipping one maintained screenshot storyboard pack; listing-copy hierarchy is still open
+- `Phase 142` completed the next executable slice here by shipping one concrete capture-pack workflow that turns the storyboard into named runtime capture tasks
 
 ### E. Listing And Localization Coordination
 

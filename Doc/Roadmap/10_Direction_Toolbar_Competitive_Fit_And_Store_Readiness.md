@@ -13,6 +13,7 @@ Status note:
 Execution note:
 
 - first executable slice landed on `2026-04-24` through `Phase 141`
+- second executable slice landed on `2026-04-24` through `Phase 142`
 - this direction sharpens [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md) into a more explicit next-stage productization track
 
 Process rule:
@@ -55,6 +56,9 @@ As of 2026-04-24:
   - [Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md](../Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md)
 - the repo now also ships one maintained screenshot storyboard pack for truthful store captures:
   - [Store_Screenshot_Storyboard.md](../Store_Screenshot_Storyboard.md)
+- the repo now also ships one maintained screenshot-capture runbook plus one generator-backed baseline capture pack:
+  - [Store_Screenshot_Capture_Runbook.md](../testing/Store_Screenshot_Capture_Runbook.md)
+  - [Store_Screenshot_Capture_Packs.md](../testing/Store_Screenshot_Capture_Packs.md)
 - the popup still has some remaining overlap between top story, featured card, and lower surface-role explanation
 - the repo still does not yet ship a full store-readiness pack for listing copy hierarchy and localized listing variants
 - the project now has an RDP Chrome environment available for truthful extension-mode capture and review
@@ -116,6 +120,8 @@ Recommended rollout:
 
 `Phase 141` completed the first executable part of steps `1` and `3` by shipping one current competitive-fit decision matrix with explicit `adopt / adapt / reject` outcomes and one maintained screenshot storyboard pack for truthful extension-mode capture.
 
+`Phase 142` completed the next executable part of step `3` by shipping one maintained screenshot-capture runbook, one generator-backed baseline capture pack, and one repeatable review pass for the store screenshot workflow.
+
 ## References
 
 - Chrome `action` API:
@@ -132,6 +138,8 @@ Recommended rollout:
   https://chromewebstore.google.com/detail/quotameter/mbbkamghkbadgggdnjpflfobkfaepbbo
 - [Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md](../Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md)
 - [Store_Screenshot_Storyboard.md](../Store_Screenshot_Storyboard.md)
+- [Store_Screenshot_Capture_Runbook.md](../testing/Store_Screenshot_Capture_Runbook.md)
+- [Store_Screenshot_Capture_Packs.md](../testing/Store_Screenshot_Capture_Packs.md)
 
 ## Child TODO
 

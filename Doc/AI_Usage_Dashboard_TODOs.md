@@ -194,6 +194,7 @@ Phase status update:
 - `Phase 139` completed the next executable `Direction 08` slice and made the remaining convention-only doc boundary explicit, so unlabeled fixed evidence artifacts are now a documented scope choice instead of an implicit omission
 - `Phase 140` completed the next executable `Direction 08` slice and moved the documentation-completion track into maintenance mode, so the default next strategic push now shifts back to `Direction 10` and then `Direction 09`
 - `Phase 141` completed the first executable `Direction 10` slice and shipped one explicit competitive-fit decision matrix plus one maintained screenshot storyboard pack, so toolbar/store work now has one truthful behavior contract before more popup or listing polish
+- `Phase 142` completed the next executable `Direction 10` slice and shipped one maintained screenshot-capture runbook plus one generator-backed baseline capture pack, so truthful RDP Chrome store capture is now a concrete workflow instead of only a storyboard
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
 - the split `Phase 41` release gate cleared the old runtime-parity ambiguity and re-proved the live `Codex` plus `Cursor` personal session-page paths in real Chrome
 - `2026-04-23`: `Branch B` was selected for the current RC, so JetBrains is now a retained repo path rather than part of the active release promise

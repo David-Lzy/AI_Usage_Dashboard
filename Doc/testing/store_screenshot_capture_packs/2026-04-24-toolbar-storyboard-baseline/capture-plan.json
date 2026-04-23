@@ -1,0 +1,38 @@
+{
+  "packId": "2026-04-24-toolbar-storyboard-baseline",
+  "runtimeSource": "RDP Chrome unpacked extension",
+  "preferredSize": "1280x800",
+  "fallbackSize": "640x400",
+  "screenshots": [
+    {
+      "filename": "01-toolbar-first-quick-glance.png",
+      "surface": "popup",
+      "runtimeState": "healthy or near-healthy visible-provider state",
+      "claim": "one click gives a compact, readable AI usage snapshot"
+    },
+    {
+      "filename": "02-setup-guidance.png",
+      "surface": "popup",
+      "runtimeState": "mixed setup blockers",
+      "claim": "the product tells the user what to do next instead of only showing raw usage cards"
+    },
+    {
+      "filename": "03-honest-contract-or-policy-only.png",
+      "surface": "popup",
+      "runtimeState": "policy-only or contract-only provider mix",
+      "claim": "the extension is honest about provider coverage and does not fake live precision"
+    },
+    {
+      "filename": "04-settings-and-setup-depth.png",
+      "surface": "sidepanel-settings",
+      "runtimeState": "real setup-oriented state",
+      "claim": "setup ownership lives in Settings, not in a bloated popup"
+    },
+    {
+      "filename": "05-provider-or-dashboard-depth.png",
+      "surface": "sidepanel-dashboard-or-detail",
+      "runtimeState": "truthful detail-review state",
+      "claim": "the side panel owns deeper review, contract context, and provider detail"
+    }
+  ]
+}
