@@ -7,6 +7,19 @@ Process rule:
 - this file is the source of truth for the project workflow
 - every markdown file in `Doc/` and `Doc/TODOs/` must follow this guardrail
 
+Document class:
+
+- maintained reference
+
+Freshness model:
+
+- maintained current reference
+
+Status note:
+
+- this file should track the current project workflow rules
+- refresh it whenever closeout rules, documentation policy, verification policy, or preview/runtime guardrails change
+
 ## 1. Why These Guardrails Exist
 
 The project is intentionally split into many small phases.

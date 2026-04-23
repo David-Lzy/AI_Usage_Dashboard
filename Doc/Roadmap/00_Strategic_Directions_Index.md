@@ -6,6 +6,15 @@ Process rule:
 
 - follow [Development_Guardrails.md](../Development_Guardrails.md)
 
+Document class:
+
+- living strategy
+
+Status note:
+
+- this file is the current strategic priority index for roadmap directions
+- refresh it whenever latest completed slices or direction-priority ordering changes
+
 Purpose:
 
 - capture the next high-level product directions after the currently queued release work
@@ -21,7 +30,7 @@ Important scope note:
 
 As of 2026-04-24:
 
-- the numbered phase queue is now completed through `Phase 135`
+- the numbered phase queue is now completed through `Phase 136`
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
 - `Phase 42` has packaged `0.1.0-rc.2` and closed the release-closeout track for the narrowed RC
 - `Phase 43` completed the first `Direction 02` slice by productizing source-fidelity semantics in the side panel
@@ -117,8 +126,9 @@ As of 2026-04-24:
 - `Phase 133` completed the first executable `Direction 08` slice by shipping a project-level documentation taxonomy, guardrail rules for doc classes, and explicit `generated operational ledger` labeling for the repo-backed request and archive indexes
 - `Phase 134` completed the next executable `Direction 08` slice by shipping explicit freshness labels for the benchmark snapshot, documentation audit snapshot, historical MVP design baseline, current runbooks, the maintained manual checklist, and the maintained release guide
 - `Phase 135` completed the next executable `Direction 08` slice by extending those explicit maintained-reference and freshness labels into all provider notes plus the page-session fixture conventions doc
-- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 135`, because roadmap, request, archive-index, and reference docs remain living docs by design
-- the numbered phase queue is now completed through `Phase 135`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary for answering whether a given doc is current reference, dated snapshot, historical baseline, or generated current truth
+- `Phase 136` completed the next executable `Direction 08` slice by labeling the remaining ambiguity-prone backlog plus index docs and by adding one lightweight executable taxonomy consistency check
+- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 136`, because roadmap, request, archive-index, and reference docs remain living docs by design
+- the numbered phase queue is now completed through `Phase 136`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check for high-value doc-status rules
 - `Codex` personal support is already shipped as a `session_page` path, but it currently exposes usage-window percentages and reset timing, not one absolute remaining credit balance
 - `Cursor` personal support is already shipped as a `session_page` path, but it currently exposes billing-period usage context, not one exact remaining included-request counter
 - the extension action now opens a compact popup on click, the popup makes cached snapshot freshness explicit, and the badge shows the count of visible providers needing attention
@@ -187,7 +197,7 @@ As of 2026-04-24:
 
 1. [Direction 08 - Documentation Completion And Truth Audit](./08_Direction_Documentation_Completion_And_Truth_Audit.md)
    Why first among the new requests:
-   the numbered phase queue is closed through `Phase 135`, and the repo now has one explicit documentation taxonomy plus one freshness-label model; the next work is to keep that model visible and consistent across indexes, reference docs, and older snapshot-style files.
+   the numbered phase queue is closed through `Phase 136`, and the repo now has one explicit documentation taxonomy plus one freshness-label model plus one lightweight consistency check; the next work is to decide how far explicit labeling should extend into the remaining living-strategy docs.
 
 2. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why second among the new requests:

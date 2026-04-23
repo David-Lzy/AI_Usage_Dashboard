@@ -6,6 +6,19 @@ Process rule:
 
 - follow [Development_Guardrails.md](./Development_Guardrails.md)
 
+Document class:
+
+- maintained reference
+
+Freshness model:
+
+- maintained current reference
+
+Status note:
+
+- this file is the current taxonomy reference for documentation classes and freshness models
+- refresh it whenever the project changes how document classes or freshness semantics should be interpreted
+
 Purpose:
 
 - define the project's documentation classes

@@ -8,6 +8,7 @@ Status note:
 - `Phase 133` completed the first executable slice on `2026-04-24` by shipping one project-level taxonomy, one guardrail update for doc classes, and one generated-ledger labeling pass across request plus archive indexes
 - `Phase 134` completed the next executable slice on `2026-04-24` by shipping explicit freshness labels for benchmark, audit, design-baseline, runbook, checklist, and release-reference docs
 - `Phase 135` completed the next executable slice on `2026-04-24` by shipping explicit maintained-reference and freshness labels for provider notes plus the page-session fixture conventions doc
+- `Phase 136` completed the next executable slice on `2026-04-24` by shipping explicit backlog plus index labeling and one lightweight repeatable doc-taxonomy consistency check
 
 Process rule:
 
@@ -73,6 +74,7 @@ Parent direction:
   - strategic index priority order
   - presence of child TODO links
   - stale roadmap dates
+- the repo now ships one first lightweight check for label presence on high-value docs plus latest-slice alignment in the phase index
 
 ## Out Of Scope
 

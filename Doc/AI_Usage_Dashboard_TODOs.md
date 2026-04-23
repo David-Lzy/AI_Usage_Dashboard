@@ -6,6 +6,19 @@ Process rule:
 
 - follow [Development_Guardrails.md](./Development_Guardrails.md)
 
+Document class:
+
+- maintained reference
+
+Freshness model:
+
+- maintained current reference
+
+Status note:
+
+- this file is the maintained top-level project backlog reference, not a frozen historical plan
+- refresh it whenever current execution priorities or completed-direction summaries materially change
+
 Related doc:
 
 - [AI_Usage_Dashboard_MVP_Design.md](./AI_Usage_Dashboard_MVP_Design.md)
@@ -175,6 +188,7 @@ Phase status update:
 - `Phase 133` completed the first executable `Direction 08` slice and shipped one project-level documentation taxonomy plus explicit generated-ledger labeling for the repo-backed request and archive indexes
 - `Phase 134` completed the next executable `Direction 08` slice and shipped one explicit freshness-label pass across the benchmark snapshot, documentation audit snapshot, historical MVP design baseline, current runbooks, maintained manual checklist, and maintained release guide
 - `Phase 135` completed the next executable `Direction 08` slice and shipped one maintained-reference labeling pass across the provider notes and the page-session fixture conventions doc
+- `Phase 136` completed the next executable `Direction 08` slice and shipped one lightweight `docs:check` consistency pass plus explicit labeling for the top-level backlog and index docs
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
 - the split `Phase 41` release gate cleared the old runtime-parity ambiguity and re-proved the live `Codex` plus `Cursor` personal session-page paths in real Chrome
 - `2026-04-23`: `Branch B` was selected for the current RC, so JetBrains is now a retained repo path rather than part of the active release promise

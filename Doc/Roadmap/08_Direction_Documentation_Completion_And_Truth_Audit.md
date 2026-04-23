@@ -7,6 +7,7 @@ Execution note:
 - first executable slice landed on `2026-04-24` through `Phase 133`
 - second executable slice landed on `2026-04-24` through `Phase 134`
 - third executable slice landed on `2026-04-24` through `Phase 135`
+- fourth executable slice landed on `2026-04-24` through `Phase 136`
 
 Process rule:
 
@@ -46,6 +47,7 @@ As of 2026-04-24:
 - the project now also ships one explicit taxonomy reference plus guardrail rules for documentation classes
 - the most ambiguity-prone maintained-reference docs now also carry explicit freshness labels so readers can distinguish current references from dated snapshots or historical design baselines
 - provider notes and fixture-convention guidance now also carry explicit maintained-reference plus freshness labels instead of reading like unlabeled historical research notes
+- the repo now also has one lightweight executable taxonomy check for the highest-value maintained-reference, generated-ledger, and index docs
 
 This means:
 
@@ -106,6 +108,8 @@ Recommended rollout:
 `Phase 134` completed the next executable part of steps `3` and `4` by defining explicit freshness vocabulary, labeling the most ambiguity-prone maintained-reference plus snapshot docs, and correcting the latest completed slice across the active indexes.
 
 `Phase 135` completed the next executable part of step `4` by extending that same maintained-reference and freshness labeling into the provider notes plus the page-session fixture conventions doc.
+
+`Phase 136` completed the first executable part of optional step `4` by labeling the remaining ambiguity-prone backlog plus index docs and shipping one lightweight repeatable taxonomy consistency check.
 
 ## References
 
