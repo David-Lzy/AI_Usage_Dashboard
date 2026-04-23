@@ -7,6 +7,7 @@ Status note:
 - direction created on `2026-04-24`
 - `Phase 133` completed the first executable slice on `2026-04-24` by shipping one project-level taxonomy, one guardrail update for doc classes, and one generated-ledger labeling pass across request plus archive indexes
 - `Phase 134` completed the next executable slice on `2026-04-24` by shipping explicit freshness labels for benchmark, audit, design-baseline, runbook, checklist, and release-reference docs
+- `Phase 135` completed the next executable slice on `2026-04-24` by shipping explicit maintained-reference and freshness labels for provider notes plus the page-session fixture conventions doc
 
 Process rule:
 
@@ -63,6 +64,7 @@ Parent direction:
   - runbooks
 - decide which reference docs should carry explicit "last audited" dates
 - distinguish maintained current references from dated snapshots and historical design baselines when class alone is not clear
+- keep fixture-convention guidance aligned with the same maintained-reference model used by provider notes
 
 ### F. Optional Automation
 

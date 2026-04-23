@@ -22,7 +22,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [134_Phase_Documentation_Freshness_Labels_And_Reference_Status.md](./Archive/134_Phase_Documentation_Freshness_Labels_And_Reference_Status.md)
+- latest completed slice: [135_Phase_Provider_Notes_And_Fixture_Reference_Labeling.md](./Archive/135_Phase_Provider_Notes_And_Fixture_Reference_Labeling.md)
 
 Completed phases should be moved to:
 
@@ -168,6 +168,7 @@ Completed phases should be moved to:
 - [132_Phase_Documentation_Audit_And_Strategic_Directions_Refresh.md](./Archive/132_Phase_Documentation_Audit_And_Strategic_Directions_Refresh.md) - completed and archived on 2026-04-24
 - [133_Phase_Documentation_Taxonomy_And_Operational_Ledger_Labeling.md](./Archive/133_Phase_Documentation_Taxonomy_And_Operational_Ledger_Labeling.md) - completed and archived on 2026-04-24
 - [134_Phase_Documentation_Freshness_Labels_And_Reference_Status.md](./Archive/134_Phase_Documentation_Freshness_Labels_And_Reference_Status.md) - completed and archived on 2026-04-24
+- [135_Phase_Provider_Notes_And_Fixture_Reference_Labeling.md](./Archive/135_Phase_Provider_Notes_And_Fixture_Reference_Labeling.md) - completed and archived on 2026-04-24
 
 ## Dependency Notes
 
@@ -209,6 +210,7 @@ Completed phases should be moved to:
 - phase 132 is a documentation-only strategic-refresh slice that audited current documentation completion truth and added sharper roadmap follow-up directions for doc status, i18n bootstrap, and toolbar competitive fit
 - phase 133 is the first executable `Direction 08` slice and formalizes the documentation taxonomy plus generated-ledger labeling rules for repo-backed request and archive indexes
 - phase 134 is the next executable `Direction 08` slice and makes freshness semantics explicit across the most ambiguity-prone benchmark, audit, design-baseline, runbook, checklist, and release-reference docs
+- phase 135 is the next executable `Direction 08` slice and extends maintained-reference plus freshness labeling into the provider notes and page-session fixture conventions doc
 - phase 43 depends on phase 42 because the first personal-semantics UI slice should begin only after the release-closeout truth is stable
 - the 2026-04-23 `Phase 43` closeout productized fidelity semantics in the side panel and started `Direction 02`
 - phase 44 depends on phase 43 because the trust-boundary UI should build on top of the already-shipped source-fidelity semantics

@@ -6,6 +6,19 @@ Process rule:
 
 - follow [Development_Guardrails.md](../Development_Guardrails.md)
 
+Document class:
+
+- maintained reference
+
+Freshness model:
+
+- maintained current reference
+
+Status note:
+
+- this provider note should track the current policy-only support boundary and official-source basis for Gemini Code Assist
+- refresh it whenever the chosen source path, active release promise, or relevant official docs change
+
 ## 1. Decision
 
 Selected MVP source path:

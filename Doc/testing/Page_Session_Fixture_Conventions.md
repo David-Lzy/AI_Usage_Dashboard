@@ -4,6 +4,19 @@ Process rule:
 
 - follow [Development_Guardrails.md](../Development_Guardrails.md)
 
+Document class:
+
+- maintained reference
+
+Freshness model:
+
+- maintained current reference
+
+Status note:
+
+- this file is a maintained fixture-safety reference, not a one-time capture note
+- refresh it whenever page-session fixture structure, redaction rules, or provider-note capture conventions change
+
 Purpose:
 
 - keep page-sourced provider fixtures safe, small, and reusable

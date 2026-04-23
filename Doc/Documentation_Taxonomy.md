@@ -87,6 +87,7 @@ Typical examples:
 - release packaging guide
 - benchmark matrices
 - runbooks
+- fixture-convention references
 
 Completion model:
 
@@ -128,6 +129,7 @@ These defaults are conventions, not hard absolutes:
 - `Doc/provider_notes/` -> maintained reference
 - `Doc/Development_Guardrails.md` -> maintained reference
 - `Doc/Release_Packaging_Guide.md` -> maintained reference
+- `Doc/testing/Page_Session_Fixture_Conventions.md` -> maintained reference
 
 ## How To Answer "Are The Docs Done?"
 

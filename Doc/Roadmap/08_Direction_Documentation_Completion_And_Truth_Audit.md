@@ -6,6 +6,7 @@ Execution note:
 
 - first executable slice landed on `2026-04-24` through `Phase 133`
 - second executable slice landed on `2026-04-24` through `Phase 134`
+- third executable slice landed on `2026-04-24` through `Phase 135`
 
 Process rule:
 
@@ -44,6 +45,7 @@ As of 2026-04-24:
 - provider notes, runbooks, benchmark docs, and guardrails are maintained reference docs, not one-time closeout docs
 - the project now also ships one explicit taxonomy reference plus guardrail rules for documentation classes
 - the most ambiguity-prone maintained-reference docs now also carry explicit freshness labels so readers can distinguish current references from dated snapshots or historical design baselines
+- provider notes and fixture-convention guidance now also carry explicit maintained-reference plus freshness labels instead of reading like unlabeled historical research notes
 
 This means:
 
@@ -102,6 +104,8 @@ Recommended rollout:
 `Phase 133` completed the first executable part of steps `1` and `2` by shipping one project-level taxonomy, updating the guardrails, and labeling the generated request plus archive ledgers explicitly.
 
 `Phase 134` completed the next executable part of steps `3` and `4` by defining explicit freshness vocabulary, labeling the most ambiguity-prone maintained-reference plus snapshot docs, and correcting the latest completed slice across the active indexes.
+
+`Phase 135` completed the next executable part of step `4` by extending that same maintained-reference and freshness labeling into the provider notes plus the page-session fixture conventions doc.
 
 ## References
 

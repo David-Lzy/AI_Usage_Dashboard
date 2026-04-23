@@ -6,6 +6,19 @@ Process rule:
 
 - follow [Development_Guardrails.md](../Development_Guardrails.md)
 
+Document class:
+
+- maintained reference
+
+Freshness model:
+
+- maintained current reference
+
+Status note:
+
+- this provider note should track the retained JetBrains source-path truth even while JetBrains stays outside the active narrowed RC promise
+- refresh it whenever the chosen source path, active release promise, or relevant official docs change
+
 ## 1. Decision
 
 Selected MVP source path:
