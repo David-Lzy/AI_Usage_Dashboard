@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-04-24:
 
-- the numbered phase queue is now completed through `Phase 167`
+- the numbered phase queue is now completed through `Phase 168`
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -50,6 +50,7 @@ As of 2026-04-24:
 - `Phase 165` completed the next `Direction 10.3` slice by shipping one dedicated manual screenshot handoff and archive-readiness preflight, so the refreshed pending request now exposes the remaining manual popup work through generated handoff files instead of only through the larger request README
 - `Phase 166` completed the next `Direction 10.3` slice by shipping one manual screenshot import workflow, so the refreshed pending request now exposes one repo-backed way to copy real native-toolbar popup captures plus optional popup-note overlays back into the request package before archive completion
 - `Phase 167` completed the next `Direction 10.3` slice by shipping one generated popup-notes overlay template plus one popup-capture checklist, so the refreshed pending request now carries the last missing generated inputs for the final manual popup pass
+- `Phase 168` completed the next `Direction 10.3` slice by shipping one request-bound completion default path, so once the real popup files are imported back into the pending request, archive completion no longer needs a separate `--captures-dir` argument
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
 - `Phase 42` has packaged `0.1.0-rc.2` and closed the release-closeout track for the narrowed RC
 - `Phase 43` completed the first `Direction 02` slice by productizing source-fidelity semantics in the side panel
@@ -176,6 +177,7 @@ As of 2026-04-24:
 - `Phase 165` completed the next `Direction 10.3` slice by generating one dedicated manual screenshot handoff plus archive-readiness preflight, so the refreshed pending request now exposes remaining popup work in a smaller operator-facing bundle
 - `Phase 166` completed the next `Direction 10.3` slice by adding one supported manual screenshot import workflow, so a real native-toolbar popup pass can now be copied back into the pending request without hand-editing the generated package files
 - `Phase 167` completed the next `Direction 10.3` slice by generating one request-bound popup-notes overlay template plus one popup-capture checklist, so the final manual popup pass no longer needs ad-hoc note scaffolding
+- `Phase 168` completed the next `Direction 10.3` slice by making archive completion default to the request package itself once popup files are imported, so the last remaining real-world step is now the actual popup capture rather than another manual path handoff
 - the immediate next executable work is now the real manual native-toolbar popup capture plus import/archive completion path for that refreshed screenshot request under `10_3_Store_Asset_Pack_And_Submission_TODOs.md`
 - the next major architecture line after that is Direction 09 runtime i18n bootstrap, captured in `09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md`
 - the remaining high-value work in Direction 05 and Direction 04 is now evidence closure, not more tool-building:
@@ -186,8 +188,8 @@ As of 2026-04-24:
   - Claude personal support is not yet graduated
   - Gemini remains policy-only
   - Codex and Cursor personal support remain partial, not absolute-remaining-balance claims
-- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 167`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
-- the numbered phase queue is now completed through `Phase 167`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
+- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 168`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
+- the numbered phase queue is now completed through `Phase 168`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
 - `Codex` personal support is already shipped as a `session_page` path, but it currently exposes usage-window percentages and reset timing, not one absolute remaining credit balance
 - `Cursor` personal support is already shipped as a `session_page` path, but it currently exposes billing-period usage context, not one exact remaining included-request counter
 - the extension action now opens a compact popup on click, the popup makes cached snapshot freshness explicit, and the badge shows the count of visible providers needing attention

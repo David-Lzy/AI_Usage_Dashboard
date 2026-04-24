@@ -614,7 +614,7 @@ Allowed \`captureTruth\` values:
 
 ${workflow.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
-${handoffDocument?.summary?.manualEntryCount > 0 ? `## Manual Popup Intake\n\n- popup notes template:\n  - \`${handoffDocument.manualNotesTemplatePath}\`\n- popup capture checklist:\n  - \`${handoffDocument.manualChecklistPath}\`\n- popup import command:\n  - \`${handoffDocument.manualImportCommand}\`\n- popup import with notes command:\n  - \`${handoffDocument.manualImportWithNotesCommand}\`\n\n` : ""}## Truth Rules
+${manualHandoffDocument?.summary?.manualEntryCount > 0 ? `## Manual Popup Intake\n\n- popup notes template:\n  - \`${manualHandoffDocument.manualNotesTemplatePath}\`\n- popup capture checklist:\n  - \`${manualHandoffDocument.manualChecklistPath}\`\n- popup import command:\n  - \`${manualHandoffDocument.manualImportCommand}\`\n- popup import with notes command:\n  - \`${manualHandoffDocument.manualImportWithNotesCommand}\`\n\n` : ""}## Truth Rules
 
 ${truthRules.map((item) => `- ${item}`).join("\n")}
 ${fulfillmentSection}

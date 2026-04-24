@@ -198,6 +198,10 @@ The Chrome action now opens a compact popup first:
   - the pending request package now includes `manual-popup-notes-overlay.template.json` and `manual-popup-capture-checklist.md`
   - the notes-import command now points at the request-bound template path instead of a generic placeholder
   - the real manual popup capture pass now has one clearer `capture -> edit template -> import -> refresh handoff -> archive` path
+- the repo now also ships one request-bound screenshot completion default path:
+  - `store:complete-screenshot-capture-request` now defaults to the request package `captures/` directory when `--captures-dir` is omitted
+  - once real popup files are imported into the pending request, completion can run with only `--request-id` instead of another manual path argument
+  - the real repo still remains `1 pending request / 1 archived set`; this slice only proved that the final completion path works on a temp request-bound review fixture
 - the popup runtime now also ships one explicit host-width contract for real Chrome action-popup rendering, so the browser no longer has to guess popup width from the document body
 - the popup runtime now also ships one static bootstrap width contract in [src/popup/index.html](./src/popup/index.html), and repo-backed tool commands now prefer the local Node runtime through [scripts/with-preferred-node.sh](./scripts/with-preferred-node.sh) instead of relying on the older Cursor-bundled `node`
 - the repo now also ships one shared route-entry contract for the future full-page shell through `src/sidepanel/index.html?surface=full-page#...`, so popup and sidebar expand controls can target one route-preserving tab surface without duplicating the main app entry

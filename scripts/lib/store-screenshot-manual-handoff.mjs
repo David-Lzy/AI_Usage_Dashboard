@@ -98,8 +98,8 @@ function isNoteComplete(note) {
   return true;
 }
 
-function buildCompletionCommand({ requestId, capturesDirRelative }) {
-  return `npm run store:complete-screenshot-capture-request -- --request-id ${requestId} --captures-dir ${capturesDirRelative}`;
+function buildCompletionCommand({ requestId }) {
+  return `npm run store:complete-screenshot-capture-request -- --request-id ${requestId}`;
 }
 
 function buildManualImportCommand({ requestId }) {
@@ -304,7 +304,6 @@ export function buildStoreScreenshotManualCaptureHandoffDocument({
     status,
     completionCommand: buildCompletionCommand({
       requestId,
-      capturesDirRelative,
     }),
     manualImportCommand: buildManualImportCommand({
       requestId,

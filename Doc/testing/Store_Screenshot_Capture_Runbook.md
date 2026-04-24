@@ -194,6 +194,7 @@ Truth note:
 - the optional `--notes-file` overlay merges popup-note updates into `capture-notes.json` without requiring manual JSON editing
 - it does not fabricate popup screenshots or fulfill/archive the request by itself
 - after `Phase 166`, this is the supported repo-backed path for turning a real native-toolbar popup pass into one request package that can eventually report `archiveReady = true`
+- after `Phase 168`, once those popup files are imported, the final archive command can run with only `--request-id` because completion now defaults to the request package `captures/` directory
 
 Current generated helper files for that refreshed request:
 

@@ -39,6 +39,7 @@ Execution note:
 - twenty-fourth executable slice landed on `2026-04-24` through `Phase 165`
 - twenty-fifth executable slice landed on `2026-04-24` through `Phase 166`
 - twenty-sixth executable slice landed on `2026-04-24` through `Phase 167`
+- twenty-seventh executable slice landed on `2026-04-24` through `Phase 168`
 - this direction sharpens [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md) into a more explicit next-stage productization track
 
 Process rule:
@@ -262,7 +263,9 @@ Recommended rollout:
 
 `Phase 166` completed the next `Direction 10.3` slice by turning that manual handoff into one repo-backed import workflow. The refreshed pending request now exposes `manualImportCommand` plus `manualImportWithNotesCommand`, one operator can copy real native-toolbar popup files and an optional popup-note overlay back into the request package without hand-editing the generated files, and the handoff can now refresh its own `manualCaptureMissingCount`, `manualNoteIncompleteCount`, `manualReadyCount`, and `archiveReady` state after a real popup-capture pass.
 
-`Phase 167` completed the next `Direction 10.3` slice by turning that import path into one fuller manual-popup intake bundle. The refreshed pending request now also generates a request-bound `manual-popup-notes-overlay.template.json` plus `manual-popup-capture-checklist.md`, and the notes-import command now points at that generated template path instead of only a generic placeholder. The next product slice remains the actual manual popup capture plus import/archive completion path, but the repo now ships the last missing generated inputs for that operator pass.
+`Phase 167` completed the next `Direction 10.3` slice by turning that import path into one fuller manual-popup intake bundle. The refreshed pending request now also generates a request-bound `manual-popup-notes-overlay.template.json` plus `manual-popup-capture-checklist.md`, and the notes-import command now points at that generated template path instead of only a generic placeholder.
+
+`Phase 168` completed the next `Direction 10.3` slice by turning screenshot-request completion into one request-bound default path. Once real popup captures have been imported back into the pending request package, completion no longer needs a separate `--captures-dir` argument; the repo now proves through a temp review fixture that `store:complete-screenshot-capture-request -- --request-id ...` can archive directly from the request package itself. The real repo still remains `1 pending request / 1 archived set`, so the next product slice is still the actual manual popup capture plus import/archive completion path rather than further workflow invention.
 
 ## References
 

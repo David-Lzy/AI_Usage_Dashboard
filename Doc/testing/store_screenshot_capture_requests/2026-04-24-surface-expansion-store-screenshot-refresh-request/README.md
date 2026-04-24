@@ -118,6 +118,17 @@ Allowed `captureTruth` values:
 6. Review and complete capture-notes.json so every screenshot has one truthful state summary and one explicit boundary note when needed.
 7. Treat the request package as pending until the real refreshed screenshots are captured and archived.
 
+## Manual Popup Intake
+
+- popup notes template:
+  - `Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/manual-popup-notes-overlay.template.json`
+- popup capture checklist:
+  - `Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/manual-popup-capture-checklist.md`
+- popup import command:
+  - `npm run store:import-manual-screenshot-captures -- --request-id 2026-04-24-surface-expansion-store-screenshot-refresh-request --source-dir <native-toolbar-popup-capture-dir>`
+- popup import with notes command:
+  - `npm run store:import-manual-screenshot-captures -- --request-id 2026-04-24-surface-expansion-store-screenshot-refresh-request --source-dir <native-toolbar-popup-capture-dir> --notes-file Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/manual-popup-notes-overlay.template.json`
+
 ## Truth Rules
 
 - A pending screenshot-capture request package is not a completed screenshot set.

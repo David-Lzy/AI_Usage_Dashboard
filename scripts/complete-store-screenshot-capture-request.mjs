@@ -133,22 +133,27 @@ async function assertCaptureFiles(capturesDir, filenames) {
   }
 }
 
-async function run() {
-  const options = parseArgs(process.argv.slice(2));
+export async function completeStoreScreenshotCaptureRequest({
+  requestId,
+  capturesDir = "",
+  requestRoot = defaultRequestRoot,
+  archiveRoot = defaultArchiveRoot,
+  archiveId: requestedArchiveId = "",
+  notesFile = "",
+}) {
+  assert(requestId.length > 0, "Pass `--request-id <pending-request-id>`.");
 
-  assert(options.requestId.length > 0, "Pass `--request-id <pending-request-id>`.");
-  assert(options.capturesDir.length > 0, "Pass `--captures-dir <directory-with-captured-pngs>`.");
-
-  const requestRoot = path.resolve(projectRoot, options.requestRoot);
-  const archiveRoot = path.resolve(projectRoot, options.archiveRoot);
-  const requestDir = path.join(requestRoot, options.requestId);
-  const capturesDir = path.resolve(projectRoot, options.capturesDir);
+  const resolvedRequestRoot = path.resolve(projectRoot, requestRoot);
+  const resolvedArchiveRoot = path.resolve(projectRoot, archiveRoot);
+  const requestDir = path.join(resolvedRequestRoot, requestId);
+  const resolvedCapturesDir =
+    typeof capturesDir === "string" && capturesDir.length > 0
+      ? path.resolve(projectRoot, capturesDir)
+      : path.join(requestDir, "captures");
   const requestManifestPath = path.join(requestDir, "capture-request.json");
   const notesFilePath = path.resolve(
     projectRoot,
-    options.notesFile.length > 0
-      ? options.notesFile
-      : path.join(requestDir, "capture-notes.json"),
+    notesFile.length > 0 ? notesFile : path.join(requestDir, "capture-notes.json"),
   );
   const requestManifest = await readJson(
     requestManifestPath,
@@ -161,11 +166,11 @@ async function run() {
 
   assert(
     requestManifest.status === STORE_SCREENSHOT_CAPTURE_REQUEST_PENDING_STATUS,
-    `Store screenshot capture request \`${requestManifest.requestId || options.requestId}\` is not pending.`,
+    `Store screenshot capture request \`${requestManifest.requestId || requestId}\` is not pending.`,
   );
 
   await assertCaptureFiles(
-    capturesDir,
+    resolvedCapturesDir,
     requestManifest.requiredScreenshotFilenames ?? [],
   );
   const notesValidation = validateStoreScreenshotCaptureNotesDocument({
@@ -181,18 +186,18 @@ async function run() {
   );
 
   const fulfilledAt = new Date().toISOString();
-  const archiveId = buildStoreScreenshotCaptureArchiveId({
+  const resolvedArchiveId = buildStoreScreenshotCaptureArchiveId({
     requestId: requestManifest.requestId,
-    archiveId: options.archiveId,
+    archiveId: requestedArchiveId,
   });
   const archiveResult = await writeStoreScreenshotCaptureArchive({
     projectRoot,
-    archiveRoot,
-    archiveId,
+    archiveRoot: resolvedArchiveRoot,
+    archiveId: resolvedArchiveId,
     archivedAt: fulfilledAt,
     requestManifest,
     requestDir,
-    capturesDir,
+    capturesDir: resolvedCapturesDir,
     captureFiles: requestManifest.requiredScreenshotFilenames,
     notesDocument: notesValidation.normalized,
     notesFilePath,
@@ -203,9 +208,9 @@ async function run() {
 
   const fulfillment = buildStoreScreenshotCaptureRequestFulfillment({
     fulfilledAt,
-    sourceCaptureDir: path.relative(projectRoot, capturesDir),
+    sourceCaptureDir: path.relative(projectRoot, resolvedCapturesDir),
     sourceNotesPath: path.relative(projectRoot, notesFilePath),
-    archiveId,
+    archiveId: resolvedArchiveId,
     archiveReadmePath: path.relative(
       projectRoot,
       path.join(archiveResult.archiveDir, "README.md"),
@@ -254,21 +259,21 @@ async function run() {
 
   const requestIndexResult = await writeStoreScreenshotCaptureRequestIndex({
     projectRoot,
-    requestRoot,
+    requestRoot: resolvedRequestRoot,
     generatedAt: fulfilledAt,
     indexMarkdownPath: requestIndexMarkdownPath,
     indexJsonPath: requestIndexJsonPath,
   });
   const archiveIndexResult = await writeStoreScreenshotCaptureArchiveIndex({
     projectRoot,
-    archiveRoot,
+    archiveRoot: resolvedArchiveRoot,
     generatedAt: fulfilledAt,
     indexMarkdownPath: archiveIndexMarkdownPath,
     indexJsonPath: archiveIndexJsonPath,
   });
 
   console.log(
-    `store-screenshot: completed request ${requestManifest.requestId} -> archive ${archiveId}`,
+    `store-screenshot: completed request ${requestManifest.requestId} -> archive ${resolvedArchiveId}`,
   );
   console.log(
     `store-screenshot: notes reviewed=${notesSummary.reviewedScreenshotCount}/${notesSummary.noteCount} truth_boundaries=${notesSummary.truthBoundaryCount}`,
@@ -279,10 +284,36 @@ async function run() {
   console.log(
     `store-screenshot: archive index refreshed recordCount=${archiveIndexResult.recordCount}`,
   );
+
+  return {
+    requestId: requestManifest.requestId,
+    archiveId: resolvedArchiveId,
+    requestIndexResult,
+    archiveIndexResult,
+    notesSummary,
+  };
 }
 
-void run().catch((error) => {
-  console.error("store-screenshot: failed to complete capture request");
-  console.error(error);
-  process.exitCode = 1;
-});
+async function run() {
+  const options = parseArgs(process.argv.slice(2));
+
+  await completeStoreScreenshotCaptureRequest({
+    requestId: options.requestId,
+    capturesDir: options.capturesDir,
+    requestRoot: options.requestRoot,
+    archiveRoot: options.archiveRoot,
+    archiveId: options.archiveId,
+    notesFile: options.notesFile,
+  });
+}
+
+const executedAsScript =
+  process.argv[1] && path.resolve(process.argv[1]) === new URL(import.meta.url).pathname;
+
+if (executedAsScript) {
+  void run().catch((error) => {
+    console.error("store-screenshot: failed to complete capture request");
+    console.error(error);
+    process.exitCode = 1;
+  });
+}
