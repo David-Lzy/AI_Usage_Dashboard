@@ -16,6 +16,7 @@ Execution note:
 - first executable slice landed on `2026-04-24` through `Phase 170`
 - second executable slice landed on `2026-04-24` through `Phase 171`
 - third executable slice landed on `2026-04-24` through `Phase 172`
+- fourth executable slice landed on `2026-04-24` through `Phase 173`
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
 Process rule:
@@ -32,7 +33,7 @@ Internationalization is now one of the clearest product gaps.
 
 The current extension:
 
-- already has manifest localization plus the first runtime shell slice
+- already has manifest localization plus an early runtime pilot
 - still has much more explanatory English copy than an early prototype
 - already has popup, setup, contract, and review language that will stay expensive to retrofit later
 
@@ -52,9 +53,17 @@ As of 2026-04-24:
 - the repo ships `_locales/en` plus `_locales/zh_CN` for manifest-level Chrome surfaces
 - the runtime app now ships one shared localization helper in `src/shared/i18n.ts`
 - locale preference now persists in `AppSettings.locale` with current values `system | en | zh-CN`
-- the current shipped runtime localized slice covers popup shell plus dashboard shell strings and shared quick theme-toggle labels
+- the current shipped runtime localized slice covers popup shell, dashboard shell, and the first settings-shell slice
+- the settings-shell slice now includes:
+  - settings top bar and actions
+  - settings overview card
+  - settings section navigation
+  - settings summary-strip labels
+  - global preferences labels, locale selector labels, and theme preset labels
+  - top-level credentials, sources, and permissions section headings
+  - the preferences-saved toast
 - the runtime app now also formats generated counts, percentages, and parseable timestamp primitives per locale
-- the runtime app still does not yet localize most settings copy, provider-detail copy, popup explanatory cards, or operator workspaces
+- the runtime app still does not yet localize most provider-detail copy, most popup explanatory cards, deeper settings helper copy, or operator workspaces
 - localized durations, relative-time phrasing, and broader body-copy rollout still remain future work
 - popup compact widths are already tight in English, so longer translated strings still need explicit QA before the broader runtime rollout
 - the repo ships maintained i18n references:
@@ -120,8 +129,9 @@ Recommended rollout:
 2. manifest localization plumbing - shipped in `Phase 170`
 3. runtime localization layer first shell slice - shipped in `Phase 171`
 4. locale-aware formatting for counts, percentages, and parseable timestamp primitives - shipped in `Phase 172`
-5. broader `en` plus `zh_CN` runtime pilot rollout - next
-6. compact-width, duration-format, and RTL hardening
+5. settings-shell pilot rollout plus locale selector - shipped in `Phase 173`
+6. provider-detail, popup explanatory, and deeper settings-copy rollout - next
+7. compact-width, duration-format, and RTL hardening
 
 ## References
 

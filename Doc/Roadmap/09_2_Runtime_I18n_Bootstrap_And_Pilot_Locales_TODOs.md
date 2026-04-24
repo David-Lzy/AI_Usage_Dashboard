@@ -12,6 +12,7 @@ Status note:
 - first executable phase landed on `2026-04-24` through `Phase 170`
 - second executable phase landed on `2026-04-24` through `Phase 171`
 - third executable phase landed on `2026-04-24` through `Phase 172`
+- fourth executable phase landed on `2026-04-24` through `Phase 173`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -39,14 +40,14 @@ Build one maintainable localization architecture that can support manifest strin
   - review workspaces
   - runbook-adjacent runtime copy that later appears in screenshots
 - distinguish stable product-contract strings from more change-prone helper copy
-- baseline shipped in `Phase 170`, then refreshed in `Phase 171` to reflect the first runtime shell slice
+- baseline shipped in `Phase 170`, then refreshed in `Phase 171` and `Phase 173` as the runtime localized slice grew
 
 ### B. Stable Message-ID Policy
 
 - define one message-id naming scheme
 - keep manifest IDs and runtime IDs aligned where they represent the same product concept
 - define how future copy edits preserve ID stability
-- baseline shipped in `Phase 170`; first runtime ids landed in `Phase 171`
+- baseline shipped in `Phase 170`; runtime ids expanded in `Phase 171` and `Phase 173`
 
 ### C. Manifest Localization Plumbing
 
@@ -68,7 +69,7 @@ Build one maintainable localization architecture that can support manifest strin
   - popup shell plus dashboard shell localization
   - shared quick theme-toggle localization
 - remaining work:
-  - settings body copy
+  - deeper settings helper copy
   - provider-detail body copy
   - popup explanatory cards
   - operator workspaces
@@ -89,6 +90,25 @@ Build one maintainable localization architecture that can support manifest strin
   - localized durations
   - relative freshness phrasing
   - compact popup QA for longer localized value strings
+
+### E.1 Settings-Shell Pilot Rollout
+
+- broader runtime pilot rollout started in `Phase 173`
+- shipped settings-surface scope now includes:
+  - top bar title plus actions
+  - settings overview card
+  - section navigation
+  - summary-strip labels
+  - global preferences labels
+  - locale selector
+  - theme mode and accent preset labels
+  - top-level credentials, sources, and permissions section headings
+  - preferences-saved toast copy
+- truth boundary preserved in `Phase 173`:
+  - deeper source-card diagnostics remain English
+  - credential help paragraphs remain English
+  - provider-detail and most popup explanatory copy remain English
+  - localized durations still remain future work
 
 ### F. Pilot Locales
 
@@ -115,8 +135,9 @@ Build one maintainable localization architecture that can support manifest strin
 2. manifest `_locales` plus `default_locale` - completed in `Phase 170`
 3. runtime localization layer first shell slice - completed in `Phase 171`
 4. locale-aware formatting for generated counts, percentages, and parseable timestamp primitives - completed in `Phase 172`
-5. broader `en` plus `zh_CN` runtime pilot rollout - next
-6. locale-aware durations plus compact-width and RTL hardening
+5. settings shell, overview, and locale selector rollout - completed in `Phase 173`
+6. provider-detail, popup explanatory, and deeper settings-copy rollout - next
+7. locale-aware durations plus compact-width and RTL hardening
 
 ## Out Of Scope
 

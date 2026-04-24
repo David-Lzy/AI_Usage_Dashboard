@@ -22,6 +22,27 @@ describe("settings view models", () => {
     ]);
   });
 
+  it("accepts localized labels and formatted values for the settings summary", () => {
+    const items = buildSettingsSummaryItems(
+      SAMPLE_APP_STATE.providerSettings,
+      SAMPLE_APP_STATE.providers,
+      {
+        visible: "可见",
+        storedSecrets: "已存密钥",
+        boundPages: "已绑定页面",
+        needsAccess: "需授权",
+      },
+      (value) => `#${value}`,
+    );
+
+    expect(items).toEqual([
+      { label: "可见", value: "#4", tone: "neutral" },
+      { label: "已存密钥", value: "#0", tone: "neutral" },
+      { label: "已绑定页面", value: "#0", tone: "neutral" },
+      { label: "需授权", value: "#0", tone: "neutral" },
+    ]);
+  });
+
   it("counts only enabled access gaps and configured local secrets", () => {
     const items = buildSettingsSummaryItems(
       SAMPLE_APP_STATE.providerSettings.map((provider) => {

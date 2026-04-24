@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  buildSettingsSummaryLabels,
   createRuntimeI18n,
   getQuickThemeToggleCopy,
   normalizeAppLocalePreference,
@@ -60,4 +61,18 @@ describe("runtime i18n", () => {
     expect(formattedUtc?.endsWith("UTC")).toBe(true);
     expect(i18n.formatTemporalValue("Current billing period")).toBeNull();
   });
+
+  it("returns translated settings-shell labels for the first settings runtime slice", () => {
+    const i18n = createRuntimeI18n("zh-CN");
+
+    expect(i18n.t("settings.topbar.title")).toBe("设置");
+    expect(i18n.t("common.actions.save")).toBe("保存");
+    expect(buildSettingsSummaryLabels(i18n)).toEqual({
+      visible: "可见",
+      storedSecrets: "已存密钥",
+      boundPages: "已绑定页面",
+      needsAccess: "需授权",
+    });
+  });
+
 });

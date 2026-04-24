@@ -20,7 +20,9 @@ type RuntimeMessageId =
   | "common.actions.open_dashboard"
   | "common.actions.open_settings"
   | "common.actions.open_dashboard_tab"
+  | "common.actions.open_settings_tab"
   | "common.actions.tab"
+  | "common.actions.save"
   | "common.theme.toggle_to_dark_label"
   | "common.theme.toggle_to_dark_title"
   | "common.theme.toggle_to_light_label"
@@ -61,7 +63,64 @@ type RuntimeMessageId =
   | "popup.summary.visible"
   | "popup.summary.live_ready"
   | "popup.summary.setup_blockers"
-  | "popup.summary.policy_only";
+  | "popup.summary.policy_only"
+  | "settings.topbar.title"
+  | "settings.topbar.subtitle"
+  | "settings.overview.eyebrow"
+  | "settings.overview.title"
+  | "settings.overview.detail"
+  | "settings.overview.aria"
+  | "settings.sections.aria"
+  | "settings.sections.preferences"
+  | "settings.sections.visibility"
+  | "settings.sections.credentials"
+  | "settings.sections.sources"
+  | "settings.sections.permissions"
+  | "settings.summary.visible"
+  | "settings.summary.stored_secrets"
+  | "settings.summary.bound_pages"
+  | "settings.summary.needs_access"
+  | "settings.preferences.eyebrow"
+  | "settings.preferences.sync_interval_label"
+  | "settings.preferences.warning_threshold_label"
+  | "settings.preferences.locale_label"
+  | "settings.preferences.theme_mode_label"
+  | "settings.preferences.accent_preset_label"
+  | "settings.preferences.minutes"
+  | "settings.preferences.locale.system"
+  | "settings.preferences.locale.en"
+  | "settings.preferences.locale.zh_cn"
+  | "settings.preferences.theme_mode.system"
+  | "settings.preferences.theme_mode.light"
+  | "settings.preferences.theme_mode.dark"
+  | "settings.preferences.theme_preset.default"
+  | "settings.preferences.theme_preset.meadow"
+  | "settings.preferences.theme_preset.sunset"
+  | "settings.preferences.theme_preset.custom"
+  | "settings.theme_customization.eyebrow"
+  | "settings.theme_customization.title"
+  | "settings.theme_customization.detail"
+  | "settings.theme_customization.seed_label"
+  | "settings.theme_customization.apply"
+  | "settings.theme_customization.reset"
+  | "settings.theme_customization.preview.aria"
+  | "settings.theme_customization.preview.primary"
+  | "settings.theme_customization.preview.secondary_container"
+  | "settings.theme_customization.preview.tertiary"
+  | "settings.visibility.eyebrow"
+  | "settings.visibility.enabled_detail"
+  | "settings.visibility.disabled_detail"
+  | "settings.credentials.eyebrow"
+  | "settings.credentials.title"
+  | "settings.credentials.detail"
+  | "settings.sources.eyebrow"
+  | "settings.sources.title"
+  | "settings.sources.detail"
+  | "settings.permissions.eyebrow"
+  | "settings.permissions.title"
+  | "settings.permissions.detail"
+  | "settings.toast.preferences_saved_title"
+  | "settings.toast.preferences_saved_detail";
 
 type RuntimeMessages = Record<RuntimeMessageId, string>;
 
@@ -95,7 +154,9 @@ const RUNTIME_MESSAGES: Record<ResolvedAppLocale, RuntimeMessages> = {
     "common.actions.open_dashboard": "Open dashboard",
     "common.actions.open_settings": "Open settings",
     "common.actions.open_dashboard_tab": "Open dashboard tab",
+    "common.actions.open_settings_tab": "Open settings tab",
     "common.actions.tab": "Tab",
+    "common.actions.save": "Save",
     "common.theme.toggle_to_dark_label": "Dark",
     "common.theme.toggle_to_dark_title": "Switch to dark mode",
     "common.theme.toggle_to_light_label": "Light",
@@ -137,6 +198,63 @@ const RUNTIME_MESSAGES: Record<ResolvedAppLocale, RuntimeMessages> = {
     "popup.summary.live_ready": "Live ready",
     "popup.summary.setup_blockers": "Setup blockers",
     "popup.summary.policy_only": "Policy-only",
+    "settings.topbar.title": "Settings",
+    "settings.topbar.subtitle": "Dashboard preferences and access",
+    "settings.overview.eyebrow": "Settings Overview",
+    "settings.overview.title": "Control surface summary",
+    "settings.overview.detail": "Use this screen to manage visibility, permissions, credentials, and hybrid source controls. Jump directly to the section you need instead of scanning the full page top to bottom.",
+    "settings.overview.aria": "Settings overview",
+    "settings.sections.aria": "Settings sections",
+    "settings.sections.preferences": "Preferences",
+    "settings.sections.visibility": "Visibility",
+    "settings.sections.credentials": "Credentials",
+    "settings.sections.sources": "Sources",
+    "settings.sections.permissions": "Permissions",
+    "settings.summary.visible": "Visible",
+    "settings.summary.stored_secrets": "Stored Secrets",
+    "settings.summary.bound_pages": "Bound Pages",
+    "settings.summary.needs_access": "Needs Access",
+    "settings.preferences.eyebrow": "Global Preferences",
+    "settings.preferences.sync_interval_label": "Default sync interval",
+    "settings.preferences.warning_threshold_label": "Warning threshold",
+    "settings.preferences.locale_label": "App language",
+    "settings.preferences.theme_mode_label": "Theme mode",
+    "settings.preferences.accent_preset_label": "Accent preset",
+    "settings.preferences.minutes": "minutes",
+    "settings.preferences.locale.system": "System",
+    "settings.preferences.locale.en": "English",
+    "settings.preferences.locale.zh_cn": "Simplified Chinese",
+    "settings.preferences.theme_mode.system": "System",
+    "settings.preferences.theme_mode.light": "Light",
+    "settings.preferences.theme_mode.dark": "Dark",
+    "settings.preferences.theme_preset.default": "Default Blue",
+    "settings.preferences.theme_preset.meadow": "Meadow",
+    "settings.preferences.theme_preset.sunset": "Sunset",
+    "settings.preferences.theme_preset.custom": "Custom Seed",
+    "settings.theme_customization.eyebrow": "Custom Seed",
+    "settings.theme_customization.title": "Validated accent seed",
+    "settings.theme_customization.detail": "Use one validated #RRGGBB seed instead of editing individual theme tokens. The generated accent roles stay shared across the side panel, popup, and audit hub.",
+    "settings.theme_customization.seed_label": "Custom seed color",
+    "settings.theme_customization.apply": "Apply custom seed",
+    "settings.theme_customization.reset": "Reset to default",
+    "settings.theme_customization.preview.aria": "Custom seed preview",
+    "settings.theme_customization.preview.primary": "Primary",
+    "settings.theme_customization.preview.secondary_container": "Secondary container",
+    "settings.theme_customization.preview.tertiary": "Tertiary",
+    "settings.visibility.eyebrow": "Provider Visibility",
+    "settings.visibility.enabled_detail": "Visible in the dashboard.",
+    "settings.visibility.disabled_detail": "Hidden from the dashboard.",
+    "settings.credentials.eyebrow": "Credentials",
+    "settings.credentials.title": "Stored secrets and workspace config",
+    "settings.credentials.detail": "These cards manage extension-local secrets for supported admin and enterprise paths. Personal session-page routes still avoid cookie export and do not ask for manual auth-header paste.",
+    "settings.sources.eyebrow": "Source Connections",
+    "settings.sources.title": "Hybrid source contracts",
+    "settings.sources.detail": "These cards explain whether each provider currently syncs from an official API, a logged-in page session, or documented quota policy, plus the explicit shipped or deferred product contract for each path.",
+    "settings.permissions.eyebrow": "Host Access",
+    "settings.permissions.title": "Permission controls",
+    "settings.permissions.detail": "In extension mode these actions use chrome.permissions. In browser preview mode they fall back to local state simulation.",
+    "settings.toast.preferences_saved_title": "Preferences saved",
+    "settings.toast.preferences_saved_detail": "Settings are now persisted in local dashboard state for the preview.",
   },
   "zh-CN": {
     "app.loading.eyebrow": "加载中",
@@ -153,7 +271,9 @@ const RUNTIME_MESSAGES: Record<ResolvedAppLocale, RuntimeMessages> = {
     "common.actions.open_dashboard": "打开仪表板",
     "common.actions.open_settings": "打开设置",
     "common.actions.open_dashboard_tab": "打开仪表板标签页",
+    "common.actions.open_settings_tab": "打开设置标签页",
     "common.actions.tab": "标签页",
+    "common.actions.save": "保存",
     "common.theme.toggle_to_dark_label": "夜间",
     "common.theme.toggle_to_dark_title": "切换到夜间模式",
     "common.theme.toggle_to_light_label": "白天",
@@ -195,6 +315,63 @@ const RUNTIME_MESSAGES: Record<ResolvedAppLocale, RuntimeMessages> = {
     "popup.summary.live_ready": "可实时同步",
     "popup.summary.setup_blockers": "配置阻塞",
     "popup.summary.policy_only": "仅策略",
+    "settings.topbar.title": "设置",
+    "settings.topbar.subtitle": "仪表板偏好与访问控制",
+    "settings.overview.eyebrow": "设置概览",
+    "settings.overview.title": "控制面摘要",
+    "settings.overview.detail": "用这个页面管理可见性、权限、凭据和混合 source 控制。直接跳到你需要的部分，而不是从上到下通读整页。",
+    "settings.overview.aria": "设置概览",
+    "settings.sections.aria": "设置分区",
+    "settings.sections.preferences": "偏好",
+    "settings.sections.visibility": "可见性",
+    "settings.sections.credentials": "凭据",
+    "settings.sections.sources": "来源",
+    "settings.sections.permissions": "权限",
+    "settings.summary.visible": "可见",
+    "settings.summary.stored_secrets": "已存密钥",
+    "settings.summary.bound_pages": "已绑定页面",
+    "settings.summary.needs_access": "需授权",
+    "settings.preferences.eyebrow": "全局偏好",
+    "settings.preferences.sync_interval_label": "默认同步间隔",
+    "settings.preferences.warning_threshold_label": "告警阈值",
+    "settings.preferences.locale_label": "应用语言",
+    "settings.preferences.theme_mode_label": "主题模式",
+    "settings.preferences.accent_preset_label": "强调色预设",
+    "settings.preferences.minutes": "分钟",
+    "settings.preferences.locale.system": "跟随系统",
+    "settings.preferences.locale.en": "英语",
+    "settings.preferences.locale.zh_cn": "简体中文",
+    "settings.preferences.theme_mode.system": "跟随系统",
+    "settings.preferences.theme_mode.light": "白天",
+    "settings.preferences.theme_mode.dark": "夜间",
+    "settings.preferences.theme_preset.default": "默认蓝",
+    "settings.preferences.theme_preset.meadow": "草地",
+    "settings.preferences.theme_preset.sunset": "日落",
+    "settings.preferences.theme_preset.custom": "自定义种子",
+    "settings.theme_customization.eyebrow": "自定义种子",
+    "settings.theme_customization.title": "已校验的强调色种子",
+    "settings.theme_customization.detail": "使用一个经过校验的 #RRGGBB 种子，而不是直接编辑单个主题 token。生成出的强调色角色会在侧栏、popup 和 audit hub 中共享。",
+    "settings.theme_customization.seed_label": "自定义种子颜色",
+    "settings.theme_customization.apply": "应用自定义种子",
+    "settings.theme_customization.reset": "恢复默认",
+    "settings.theme_customization.preview.aria": "自定义种子预览",
+    "settings.theme_customization.preview.primary": "主色",
+    "settings.theme_customization.preview.secondary_container": "次级容器",
+    "settings.theme_customization.preview.tertiary": "第三色",
+    "settings.visibility.eyebrow": "Provider 可见性",
+    "settings.visibility.enabled_detail": "在仪表板中可见。",
+    "settings.visibility.disabled_detail": "已从仪表板隐藏。",
+    "settings.credentials.eyebrow": "凭据",
+    "settings.credentials.title": "已存密钥与工作区配置",
+    "settings.credentials.detail": "这些卡片管理扩展本地保存的 admin 和 enterprise 路径凭据。个人 session-page 路径仍然避免 cookie 导出，也不会要求手动粘贴 auth header。",
+    "settings.sources.eyebrow": "来源连接",
+    "settings.sources.title": "混合来源合同",
+    "settings.sources.detail": "这些卡片说明每个 provider 当前是通过官方 API、已登录页面会话，还是文档化 quota policy 同步，同时明确每条路径当前是 shipped 还是 deferred 的产品合同。",
+    "settings.permissions.eyebrow": "Host 访问",
+    "settings.permissions.title": "权限控制",
+    "settings.permissions.detail": "在扩展模式下，这些操作使用 chrome.permissions；在浏览器预览模式下，它们会回退到本地状态模拟。",
+    "settings.toast.preferences_saved_title": "偏好已保存",
+    "settings.toast.preferences_saved_detail": "当前预览的设置已经持久化到本地仪表板状态。",
   },
 };
 
@@ -378,6 +555,15 @@ export function buildPopupSummaryLabels(i18n: RuntimeI18n) {
     liveReady: i18n.t("popup.summary.live_ready"),
     setupBlockers: i18n.t("popup.summary.setup_blockers"),
     policyOnly: i18n.t("popup.summary.policy_only"),
+  } as const;
+}
+
+export function buildSettingsSummaryLabels(i18n: RuntimeI18n) {
+  return {
+    visible: i18n.t("settings.summary.visible"),
+    storedSecrets: i18n.t("settings.summary.stored_secrets"),
+    boundPages: i18n.t("settings.summary.bound_pages"),
+    needsAccess: i18n.t("settings.summary.needs_access"),
   } as const;
 }
 

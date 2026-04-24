@@ -35,6 +35,25 @@ export type SettingsSessionTrackModel = {
   noteTone: ProviderTone | null;
 };
 
+export type SettingsSummaryLabels = {
+  visible: string;
+  storedSecrets: string;
+  boundPages: string;
+  needsAccess: string;
+};
+
+const DEFAULT_SETTINGS_SUMMARY_LABELS: SettingsSummaryLabels = {
+  visible: "Visible",
+  storedSecrets: "Stored Secrets",
+  boundPages: "Bound Pages",
+  needsAccess: "Needs Access",
+};
+
+type SettingsValueFormatter = (value: number) => string;
+
+const DEFAULT_SETTINGS_VALUE_FORMATTER: SettingsValueFormatter = (value) =>
+  String(value);
+
 export type SettingsSourceCardModel = {
   primaryFields: SettingsSourceField[];
   summaryNoteLines: string[];
@@ -149,6 +168,8 @@ function buildSessionTrackModel(
 export function buildSettingsSummaryItems(
   providers: ProviderSetting[],
   _snapshots: ProviderSnapshot[],
+  labels: SettingsSummaryLabels = DEFAULT_SETTINGS_SUMMARY_LABELS,
+  formatValue: SettingsValueFormatter = DEFAULT_SETTINGS_VALUE_FORMATTER,
 ): SummaryItem[] {
   const visibleCount = providers.filter((provider) => provider.enabled).length;
   const storedSecretsCount = providers.filter(
@@ -163,23 +184,23 @@ export function buildSettingsSummaryItems(
 
   return [
     {
-      label: "Visible",
-      value: String(visibleCount),
+      label: labels.visible,
+      value: formatValue(visibleCount),
       tone: "neutral",
     },
     {
-      label: "Stored Secrets",
-      value: String(storedSecretsCount),
+      label: labels.storedSecrets,
+      value: formatValue(storedSecretsCount),
       tone: "neutral",
     },
     {
-      label: "Bound Pages",
-      value: String(boundPageCount),
+      label: labels.boundPages,
+      value: formatValue(boundPageCount),
       tone: "neutral",
     },
     {
-      label: "Needs Access",
-      value: String(accessGapCount),
+      label: labels.needsAccess,
+      value: formatValue(accessGapCount),
       tone: accessGapCount > 0 ? "warning" : "neutral",
     },
   ];

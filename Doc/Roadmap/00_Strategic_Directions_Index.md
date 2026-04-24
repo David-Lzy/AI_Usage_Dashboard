@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-04-24:
 
-- the numbered phase queue is now completed through `Phase 172`
+- the numbered phase queue is now completed through `Phase 173`
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -55,6 +55,7 @@ As of 2026-04-24:
 - `Phase 170` completed the first `Direction 09` slice by shipping one manifest i18n bootstrap baseline: `default_locale = en`, `_locales/en`, `_locales/zh_CN`, one message-id contract, and one baseline string inventory
 - `Phase 171` completed the next `Direction 09` slice by shipping one shared runtime i18n helper, persisted locale normalization, and the first localized popup/dashboard shell slice while keeping broader settings, provider-detail, popup body copy, and operator workspaces English for now
 - `Phase 172` completed the next `Direction 09` slice by shipping locale-aware formatting for generated counts, percentages, and parseable timestamp primitives across popup, dashboard, and provider-detail surfaces while keeping most deeper runtime body copy and durations outside the localized rollout for now
+- `Phase 173` completed the next `Direction 09` slice by shipping the first settings-shell localization rollout, including the locale selector, top-level settings headings, summary labels, and localized preferences-saved feedback while keeping deeper settings helper copy, provider-detail copy, and popup explanatory copy outside the localized slice for now
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
 - `Phase 42` has packaged `0.1.0-rc.2` and closed the release-closeout track for the narrowed RC
 - `Phase 43` completed the first `Direction 02` slice by productizing source-fidelity semantics in the side panel
@@ -193,8 +194,8 @@ As of 2026-04-24:
   - Claude personal support is not yet graduated
   - Gemini remains policy-only
   - Codex and Cursor personal support remain partial, not absolute-remaining-balance claims
-- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 168`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
-- the numbered phase queue is now completed through `Phase 172`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
+- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 173`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
+- the numbered phase queue is now completed through `Phase 173`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
 - `Codex` personal support is already shipped as a `session_page` path, but it currently exposes usage-window percentages and reset timing, not one absolute remaining credit balance
 - `Cursor` personal support is already shipped as a `session_page` path, but it currently exposes billing-period usage context, not one exact remaining included-request counter
 - the extension action now opens a compact popup on click, the popup makes cached snapshot freshness explicit, and the badge shows the count of visible providers needing attention
@@ -213,7 +214,7 @@ As of 2026-04-24:
 - the UI uses a Material-like token system, now has a small reduced-motion-safe motion baseline, and also has an intermediate `720px` responsive collapse point, a more scannable Settings entry, a less repetitive source-card summary pattern, clearer grouped diagnostics inside disclosure, a compact session-track layout, consistent keyboard-focus treatment on the main interactive controls, harmonized status surfaces across the main warning/error/success states, clearer toned-surface text hierarchy, explicit pressed states on the remaining Settings pointer controls, a more coherent compact chip system, honest indeterminate progress treatment for unknown values, a clearer supporting-surface hierarchy across provider detail and expanded Settings diagnostics, one dedicated fixed-width interaction-audit hub for the main shipped surfaces, preset-driven shortcuts plus visible expectation copy plus visible manual checks plus a persistent signoff workspace plus signoff-import handoff support plus a visible handoff summary plus an explicit operator workflow and reusable bundle-builder path for the main manual review states, and repeatable width plus compact-height plus keyboard-interaction plus pointer-interaction plus status-surface plus toned-content plus chip-progress plus supporting-surface plus audit-hub plus audit-preset plus evidence-pack plus signoff-pack plus signoff-workspace plus signoff-import plus handoff-bundle plus operator-bundle review baselines
 - the current theme foundation now ships shared `System / Light / Dark` mode selection, the first shipped preset accents, one validated custom-seed path, one repeatable explicit-override plus system-follow QA baseline, one repeatable dark-surface review baseline, one repeatable preset-theme review baseline, one repeatable audit-hub theme-alignment review baseline, one repeatable custom-seed review baseline, one repeatable popup-local plus audit-local custom-seed review baseline, one repeatable popup plus audit non-accent surface-stability review baseline, one repeatable dashboard plus Settings plus provider-detail non-accent surface-stability review baseline, one repeatable compact-width custom-seed review baseline, one repeatable provider-state-specific custom-seed review baseline, one repeatable seeded recovered-state review baseline, one repeatable preview-interaction recovered-state review baseline, one repeatable extension-mode recovered-state review baseline, one dedicated theme-recovery operator workspace plus runbook, one durable seeded theme-recovery archive workflow plus generated archive index, and one durable pending theme-recovery request workflow plus generated request index, but it still lacks any real fulfilled operator or native-prompt recovery archive and any decision on dual light-dark seeds
 - the current popup architecture is already shipped, which means future toolbar work should focus on competitive product fit, onboarding, and store discoverability rather than restarting popup shell design
-- the current extension now has manifest localization plus a narrow popup/dashboard shell slice in `en` and `zh_CN`, and it also formats generated counts, percentages, and parseable timestamp primitives per locale, but most runtime copy still remains English
+- the current extension now has manifest localization plus a partial runtime pilot slice in `en` and `zh_CN`, covering popup/dashboard shells, the first settings-shell rollout, and locale-aware generated values; most provider-detail copy, most popup explanatory copy, deeper settings helper copy, and operator workspaces still remain English
 
 ## Priority Order
 
@@ -243,7 +244,7 @@ As of 2026-04-24:
 
 1. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why first now:
-   manifest localization, the first runtime shell slice, and locale-aware value formatting are now shipped, so the next fully repo-owned engineering work is the broader `en` plus `zh_CN` runtime pilot rollout.
+   manifest localization, the first runtime shell slice, locale-aware value formatting, and the first settings-shell pilot are now shipped, so the next fully repo-owned engineering work is the broader provider-detail and popup explanatory rollout for the `en` plus `zh_CN` pilot.
 
 2. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why second now:

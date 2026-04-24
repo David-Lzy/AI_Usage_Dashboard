@@ -30,7 +30,7 @@ Keep manifest and runtime localization on one stable naming contract so later co
 - use dot-separated runtime ids for React surfaces:
   - `popup.header.title`
   - `dashboard.summary.visible`
-  - `settings.theme.mode_label`
+  - `settings.preferences.theme_mode_label`
 - keep one id stable when the product concept stays the same and only wording changes
 - create a new id only when the UI meaning changes enough that old translations would become misleading
 
@@ -43,9 +43,9 @@ Keep manifest and runtime localization on one stable naming contract so later co
 - `manifest_action_default_title`
   - maps to manifest `action.default_title`
 
-## Shipped Runtime IDs In Phase 171
+## Shipped Runtime IDs Through Phase 173
 
-Runtime localization now exists for one narrow popup plus dashboard shell slice. Current shipped groups are:
+Runtime localization now exists for one narrow manifest plus runtime pilot slice. Current shipped groups are:
 
 - app shell status ids:
   - `app.loading.*`
@@ -56,16 +56,28 @@ Runtime localization now exists for one narrow popup plus dashboard shell slice.
   - `common.theme.toggle_to_light_*`
 - dashboard shell ids:
   - `dashboard.topbar.*`
-  - `dashboard.hero.title` and the rest of `dashboard.hero.*`
+  - `dashboard.hero.*`
   - `dashboard.providers.*`
   - `dashboard.empty.*`
   - `dashboard.summary.*`
 - popup shell ids:
   - `popup.loading.*`
   - `popup.error.*`
-  - `popup.header.title` and the rest of `popup.header.*`
+  - `popup.header.*`
   - `popup.summary.*`
   - narrow static shell labels such as `popup.guidance.eyebrow`, `popup.snapshot_status.eyebrow`, and `popup.triage.eyebrow`
+- settings-shell ids shipped in `Phase 173`:
+  - `settings.topbar.*`
+  - `settings.overview.*`
+  - `settings.sections.*`
+  - `settings.summary.*`
+  - `settings.preferences.*`
+  - `settings.theme_customization.*`
+  - `settings.visibility.*`
+  - `settings.credentials.*`
+  - `settings.sources.*`
+  - `settings.permissions.*`
+  - `settings.toast.*`
 
 ## Locale Preference Contract
 
@@ -80,8 +92,18 @@ Runtime localization now exists for one narrow popup plus dashboard shell slice.
 ## Runtime Direction
 
 - runtime React localization is now partially shipped, not fully rolled out
-- the current localized slice covers popup shell and dashboard shell strings plus shared quick theme-toggle labels
-- settings body copy, provider-detail body copy, most popup view-model copy, and operator workspaces still remain outside the shipped localized slice
+- the current localized slice covers popup shell, dashboard shell, the first settings-shell slice, and shared quick theme-toggle labels
+- the settings-shell slice now includes:
+  - top bar title and actions
+  - overview card
+  - section navigation
+  - summary-strip labels
+  - global preferences labels
+  - locale selector labels
+  - theme mode and theme preset labels
+  - top-level credentials, sources, and permissions section headings
+  - preferences-saved toast copy
+- deeper settings helper copy, provider-detail body copy, most popup explanatory copy, and operator workspaces still remain outside the shipped localized slice
 - vendor-owned provider-page text stays outside the managed localization catalog
 - locale-aware formatting also stays outside raw message ids so generated values can be formatted per locale without multiplying message ids
 

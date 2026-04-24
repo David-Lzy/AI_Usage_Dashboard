@@ -213,7 +213,8 @@ The Chrome action now opens a compact popup first:
   - `src/shared/i18n.ts` now resolves `system | en | zh-CN` locale preference for runtime surfaces
   - popup and dashboard shell strings plus quick theme-toggle labels now localize to `en` and `zh_CN`
   - generated counts, percentages, and parseable reset/sync timestamp primitives now also format per locale across popup, dashboard, and provider-detail surfaces
-  - most settings, provider-detail, popup explanatory copy, localized durations, and operator workspaces still remain English
+  - the first settings-shell pilot slice now also localizes the settings top bar, overview card, section navigation, summary-strip labels, global-preferences labels, locale selector, theme preset labels, top-level section headings, and preferences-saved toast
+  - most provider-detail copy, most popup explanatory copy, deeper settings helper copy, localized durations, and operator workspaces still remain English
 - the popup runtime now also ships one explicit host-width contract for real Chrome action-popup rendering, so the browser no longer has to guess popup width from the document body
 - the popup runtime now also ships one static bootstrap width contract in [src/popup/index.html](./src/popup/index.html), and repo-backed tool commands now prefer the local Node runtime through [scripts/with-preferred-node.sh](./scripts/with-preferred-node.sh) instead of relying on the older Cursor-bundled `node`
 - the repo now also ships one shared route-entry contract for the future full-page shell through `src/sidepanel/index.html?surface=full-page#...`, so popup and sidebar expand controls can target one route-preserving tab surface without duplicating the main app entry

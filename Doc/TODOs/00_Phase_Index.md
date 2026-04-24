@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [172_Phase_Locale_Aware_Runtime_Value_Formatting.md](./Archive/172_Phase_Locale_Aware_Runtime_Value_Formatting.md)
+- latest completed slice: [173_Phase_Settings_Shell_Localization_And_Locale_Selector.md](./Archive/173_Phase_Settings_Shell_Localization_And_Locale_Selector.md)
 
 Completed phases should be moved to:
 
@@ -219,6 +219,7 @@ Completed phases should be moved to:
 - [170_Phase_Manifest_Locale_Bootstrap_And_Message_ID_Contract.md](./Archive/170_Phase_Manifest_Locale_Bootstrap_And_Message_ID_Contract.md) - completed and archived on 2026-04-24
 - [171_Phase_Runtime_Localization_Layer_And_First_Shell_Strings.md](./Archive/171_Phase_Runtime_Localization_Layer_And_First_Shell_Strings.md) - completed and archived on 2026-04-24
 - [172_Phase_Locale_Aware_Runtime_Value_Formatting.md](./Archive/172_Phase_Locale_Aware_Runtime_Value_Formatting.md) - completed and archived on 2026-04-24
+- [173_Phase_Settings_Shell_Localization_And_Locale_Selector.md](./Archive/173_Phase_Settings_Shell_Localization_And_Locale_Selector.md) - completed and archived on 2026-04-24
 
 ## Dependency Notes
 
@@ -444,6 +445,8 @@ Completed phases should be moved to:
 - the 2026-04-24 `Phase 171` closeout shipped one shared runtime i18n helper, persisted locale normalization, and the first localized popup/dashboard shell slice while keeping most deeper runtime copy English
 - phase 172 depends on phase 171 because generated counts, percentages, and parseable timestamp primitives needed the shipped runtime i18n helper plus persisted locale preference before popup, dashboard, and provider-detail surfaces could format values per locale
 - the 2026-04-24 `Phase 172` closeout shipped locale-aware formatting for generated counts, percentages, and parseable timestamp primitives while keeping most deeper body copy English and localized durations pending
+- phase 173 depends on phase 172 because the first settings-shell rollout needed both the shared runtime i18n layer and locale-aware generated-value formatting before the locale selector and localized summary strip could land cleanly
+- the 2026-04-24 `Phase 173` closeout localized the first settings-shell slice, added the persisted locale selector, and kept deeper settings helper copy plus provider-detail and popup explanatory copy outside the shipped runtime pilot boundary
 
 ## Delivery Standard For Each Phase
 

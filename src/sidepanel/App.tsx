@@ -701,9 +701,8 @@ function StandardApp({ locationHash }: StandardAppProps) {
   function handleSavePreferences() {
     setToast({
       tone: "success",
-      title: "Preferences saved",
-      message:
-        "Settings are now persisted in local dashboard state for the preview.",
+      title: runtimeI18n.t("settings.toast.preferences_saved_title"),
+      message: runtimeI18n.t("settings.toast.preferences_saved_detail"),
     });
   }
 
@@ -909,6 +908,9 @@ function StandardApp({ locationHash }: StandardAppProps) {
       {route.name === "settings" ? (
         <SettingsPage
           onBack={() => navigateToRoute({ name: "dashboard" })}
+          onLocalePreferenceChange={(locale) =>
+            handleUpdateSettings({ locale })
+          }
           themeActionLabel={quickThemeToggleCopy.label}
           themeActionTitle={quickThemeToggleCopy.title}
           onToggleThemeMode={() =>

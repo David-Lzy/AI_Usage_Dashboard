@@ -2,6 +2,7 @@ import { type FormEvent, useEffect, useState } from "react";
 
 import type {
   ApiKeyProviderId,
+  AppLocalePreference,
   AppSettings,
   ProviderId,
   ProviderSourcePreference,
@@ -14,6 +15,10 @@ import {
   buildProviderSourceDisplay,
   getSourcePreferenceLabel,
 } from "../../shared/provider-sources";
+import {
+  buildSettingsSummaryLabels,
+  createRuntimeI18n,
+} from "../../shared/i18n";
 import {
   THEME_PRESET_OPTIONS,
   buildCustomThemePalette,
@@ -60,6 +65,7 @@ type SettingsPageProps = {
   onDismissToast: () => void;
   onSavePreferences: () => void;
   onSyncIntervalChange: (minutes: number) => void;
+  onLocalePreferenceChange: (locale: AppLocalePreference) => void;
   onWarningThresholdChange: (percent: number) => void;
   onThemeModeChange: (themeMode: ThemeMode) => void;
   onThemePresetChange: (themePreset: ThemePreset) => void;
@@ -99,6 +105,7 @@ export function SettingsPage({
   onDismissToast,
   onSavePreferences,
   onSyncIntervalChange,
+  onLocalePreferenceChange,
   onWarningThresholdChange,
   onThemeModeChange,
   onThemePresetChange,
@@ -165,6 +172,10 @@ export function SettingsPage({
     settings.themeMode,
     typeof window !== "undefined" ? window : undefined,
   );
+  const i18n = createRuntimeI18n(
+    settings.locale,
+    typeof window !== "undefined" ? window : undefined,
+  );
   const customThemePreviewPalette = normalizedThemeCustomSeedDraft
     ? buildCustomThemePalette(normalizedThemeCustomSeedDraft, resolvedThemeMode)
     : null;
@@ -201,7 +212,23 @@ export function SettingsPage({
     });
   }
 
-  const settingsSummaryItems = buildSettingsSummaryItems(providers, snapshots);
+  const settingsSummaryItems = buildSettingsSummaryItems(
+    providers,
+    snapshots,
+    buildSettingsSummaryLabels(i18n),
+    i18n.formatNumber,
+  );
+  const themePresetOptionLabels: Record<ThemePreset, string> = {
+    default: i18n.t("settings.preferences.theme_preset.default"),
+    meadow: i18n.t("settings.preferences.theme_preset.meadow"),
+    sunset: i18n.t("settings.preferences.theme_preset.sunset"),
+    custom: i18n.t("settings.preferences.theme_preset.custom"),
+  };
+  const localeOptions: Array<{ value: AppLocalePreference; label: string }> = [
+    { value: "system", label: i18n.t("settings.preferences.locale.system") },
+    { value: "en", label: i18n.t("settings.preferences.locale.en") },
+    { value: "zh-CN", label: i18n.t("settings.preferences.locale.zh_cn") },
+  ];
 
   function scrollToSection(sectionId: string) {
     if (typeof document === "undefined") {
@@ -280,14 +307,14 @@ export function SettingsPage({
   return (
     <main className="app-shell settings-shell">
       <TopBar
-        title="Settings"
-        subtitle="Dashboard preferences and access"
+        title={i18n.t("settings.topbar.title")}
+        subtitle={i18n.t("settings.topbar.subtitle")}
         themeActionLabel={themeActionLabel}
         themeActionTitle={themeActionTitle}
-        expandActionLabel="Tab"
-        expandActionTitle="Open settings tab"
-        secondaryActionLabel="Back"
-        primaryActionLabel="Save"
+        expandActionLabel={i18n.t("common.actions.tab")}
+        expandActionTitle={i18n.t("common.actions.open_settings_tab")}
+        secondaryActionLabel={i18n.t("common.actions.back")}
+        primaryActionLabel={i18n.t("common.actions.save")}
         sticky
         onThemeAction={onToggleThemeMode}
         onExpandAction={onOpenFullPage}
@@ -298,56 +325,52 @@ export function SettingsPage({
       <section className="status-card settings-overview">
         <div className="dashboard-section__header">
           <div>
-            <p className="section-label">Settings Overview</p>
-            <h2 className="section-title">Control surface summary</h2>
+            <p className="section-label">{i18n.t("settings.overview.eyebrow")}</p>
+            <h2 className="section-title">{i18n.t("settings.overview.title")}</h2>
           </div>
-          <p className="supporting-copy">
-            Use this screen to manage visibility, permissions, credentials, and
-            hybrid source controls. Jump directly to the section you need
-            instead of scanning the full page top to bottom.
-          </p>
+          <p className="supporting-copy">{i18n.t("settings.overview.detail")}</p>
         </div>
 
         <SummaryStrip
-          ariaLabel="Settings overview"
+          ariaLabel={i18n.t("settings.overview.aria")}
           items={settingsSummaryItems}
         />
 
-        <div className="settings-section-nav" aria-label="Settings sections">
+        <div className="settings-section-nav" aria-label={i18n.t("settings.sections.aria")}>
           <button
             className="settings-nav-chip"
             type="button"
             onClick={() => scrollToSection(SETTINGS_SECTION_IDS.preferences)}
           >
-            Preferences
+            {i18n.t("settings.sections.preferences")}
           </button>
           <button
             className="settings-nav-chip"
             type="button"
             onClick={() => scrollToSection(SETTINGS_SECTION_IDS.visibility)}
           >
-            Visibility
+            {i18n.t("settings.sections.visibility")}
           </button>
           <button
             className="settings-nav-chip"
             type="button"
             onClick={() => scrollToSection(SETTINGS_SECTION_IDS.credentials)}
           >
-            Credentials
+            {i18n.t("settings.sections.credentials")}
           </button>
           <button
             className="settings-nav-chip"
             type="button"
             onClick={() => scrollToSection(SETTINGS_SECTION_IDS.sources)}
           >
-            Sources
+            {i18n.t("settings.sections.sources")}
           </button>
           <button
             className="settings-nav-chip"
             type="button"
             onClick={() => scrollToSection(SETTINGS_SECTION_IDS.permissions)}
           >
-            Permissions
+            {i18n.t("settings.sections.permissions")}
           </button>
         </div>
       </section>
@@ -356,10 +379,10 @@ export function SettingsPage({
         className="status-card settings-section-anchor"
         id={SETTINGS_SECTION_IDS.preferences}
       >
-        <p className="section-label">Global Preferences</p>
+        <p className="section-label">{i18n.t("settings.preferences.eyebrow")}</p>
         <div className="settings-grid">
           <label className="form-field">
-            <span className="form-field__label">Default sync interval</span>
+            <span className="form-field__label">{i18n.t("settings.preferences.sync_interval_label")}</span>
             <select
               className="form-field__control"
               value={String(settings.syncIntervalMinutes)}
@@ -367,14 +390,14 @@ export function SettingsPage({
                 onSyncIntervalChange(Number(event.target.value))
               }
             >
-              <option value="15">15 minutes</option>
-              <option value="30">30 minutes</option>
-              <option value="60">60 minutes</option>
+              <option value="15">{`${i18n.formatNumber(15)} ${i18n.t("settings.preferences.minutes")}`}</option>
+              <option value="30">{`${i18n.formatNumber(30)} ${i18n.t("settings.preferences.minutes")}`}</option>
+              <option value="60">{`${i18n.formatNumber(60)} ${i18n.t("settings.preferences.minutes")}`}</option>
             </select>
           </label>
 
           <label className="form-field">
-            <span className="form-field__label">Warning threshold</span>
+            <span className="form-field__label">{i18n.t("settings.preferences.warning_threshold_label")}</span>
             <select
               className="form-field__control"
               value={String(settings.warningThresholdPercent)}
@@ -389,7 +412,24 @@ export function SettingsPage({
           </label>
 
           <label className="form-field">
-            <span className="form-field__label">Theme mode</span>
+            <span className="form-field__label">{i18n.t("settings.preferences.locale_label")}</span>
+            <select
+              className="form-field__control"
+              value={settings.locale}
+              onChange={(event) =>
+                onLocalePreferenceChange(event.target.value as AppLocalePreference)
+              }
+            >
+              {localeOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="form-field">
+            <span className="form-field__label">{i18n.t("settings.preferences.theme_mode_label")}</span>
             <select
               className="form-field__control"
               value={settings.themeMode}
@@ -397,14 +437,14 @@ export function SettingsPage({
                 onThemeModeChange(event.target.value as ThemeMode)
               }
             >
-              <option value="system">System</option>
-              <option value="light">Light</option>
-              <option value="dark">Dark</option>
+              <option value="system">{i18n.t("settings.preferences.theme_mode.system")}</option>
+              <option value="light">{i18n.t("settings.preferences.theme_mode.light")}</option>
+              <option value="dark">{i18n.t("settings.preferences.theme_mode.dark")}</option>
             </select>
           </label>
 
           <label className="form-field">
-            <span className="form-field__label">Accent preset</span>
+            <span className="form-field__label">{i18n.t("settings.preferences.accent_preset_label")}</span>
             <select
               className="form-field__control"
               value={settings.themePreset}
@@ -414,7 +454,7 @@ export function SettingsPage({
             >
               {THEME_PRESET_OPTIONS.map((preset) => (
                 <option key={preset.value} value={preset.value}>
-                  {preset.label}
+                  {themePresetOptionLabels[preset.value]}
                 </option>
               ))}
             </select>
@@ -427,14 +467,10 @@ export function SettingsPage({
         >
           <div className="dashboard-section__header">
             <div>
-              <p className="section-label">Custom Seed</p>
-              <h2 className="section-title">Validated accent seed</h2>
+              <p className="section-label">{i18n.t("settings.theme_customization.eyebrow")}</p>
+              <h2 className="section-title">{i18n.t("settings.theme_customization.title")}</h2>
             </div>
-            <p className="supporting-copy">
-              Use one validated <code>#RRGGBB</code> seed instead of editing
-              individual theme tokens. The generated accent roles stay shared
-              across the side panel, popup, and audit hub.
-            </p>
+            <p className="supporting-copy">{i18n.t("settings.theme_customization.detail")}</p>
           </div>
 
           <form
@@ -442,7 +478,7 @@ export function SettingsPage({
             onSubmit={handleApplyThemeCustomSeed}
           >
             <label className="form-field">
-              <span className="form-field__label">Custom seed color</span>
+              <span className="form-field__label">{i18n.t("settings.theme_customization.seed_label")}</span>
               <input
                 className="form-field__control"
                 type="text"
@@ -461,7 +497,7 @@ export function SettingsPage({
                 type="submit"
                 disabled={!normalizedThemeCustomSeedDraft}
               >
-                Apply custom seed
+                {i18n.t("settings.theme_customization.apply")}
               </button>
               <button
                 className="text-button"
@@ -469,7 +505,7 @@ export function SettingsPage({
                 disabled={settings.themeCustomSeedHex === null}
                 onClick={handleResetThemeCustomSeed}
               >
-                Reset to default
+                {i18n.t("settings.theme_customization.reset")}
               </button>
             </div>
           </form>
@@ -483,7 +519,7 @@ export function SettingsPage({
           </p>
 
           {customThemePreviewPalette ? (
-            <div className="theme-preview-grid" aria-label="Custom seed preview">
+            <div className="theme-preview-grid" aria-label={i18n.t("settings.theme_customization.preview.aria")}>
               <div className="theme-preview-swatch">
                 <span
                   className="theme-preview-swatch__color"
@@ -495,7 +531,7 @@ export function SettingsPage({
                   Aa
                 </span>
                 <div>
-                  <p className="theme-preview-swatch__label">Primary</p>
+                  <p className="theme-preview-swatch__label">{i18n.t("settings.theme_customization.preview.primary")}</p>
                   <p className="supporting-copy">
                     {customThemePreviewPalette.primary}
                   </p>
@@ -514,7 +550,7 @@ export function SettingsPage({
                 </span>
                 <div>
                   <p className="theme-preview-swatch__label">
-                    Secondary container
+                    {i18n.t("settings.theme_customization.preview.secondary_container")}
                   </p>
                   <p className="supporting-copy">
                     {customThemePreviewPalette.secondaryContainer}
@@ -533,7 +569,7 @@ export function SettingsPage({
                   Aa
                 </span>
                 <div>
-                  <p className="theme-preview-swatch__label">Tertiary</p>
+                  <p className="theme-preview-swatch__label">{i18n.t("settings.theme_customization.preview.tertiary")}</p>
                   <p className="supporting-copy">
                     {customThemePreviewPalette.tertiary}
                   </p>
@@ -548,7 +584,7 @@ export function SettingsPage({
         className="status-card settings-section-anchor"
         id={SETTINGS_SECTION_IDS.visibility}
       >
-        <p className="section-label">Provider Visibility</p>
+        <p className="section-label">{i18n.t("settings.visibility.eyebrow")}</p>
         <div className="settings-list">
           {providers.map((provider) => (
             <label
@@ -561,8 +597,8 @@ export function SettingsPage({
                 <p className="switch-row__title">{provider.label}</p>
                 <p className="supporting-copy">
                   {provider.enabled
-                    ? "Visible in the dashboard."
-                    : "Hidden from the dashboard."}
+                    ? i18n.t("settings.visibility.enabled_detail")
+                    : i18n.t("settings.visibility.disabled_detail")}
                 </p>
               </div>
               <input
@@ -584,14 +620,10 @@ export function SettingsPage({
         >
           <div className="dashboard-section__header">
             <div>
-              <p className="section-label">Credentials</p>
-              <h2 className="section-title">Stored secrets and workspace config</h2>
+              <p className="section-label">{i18n.t("settings.credentials.eyebrow")}</p>
+              <h2 className="section-title">{i18n.t("settings.credentials.title")}</h2>
             </div>
-            <p className="supporting-copy">
-              These cards manage extension-local secrets for supported admin and
-              enterprise paths. Personal session-page routes still avoid cookie
-              export and do not ask for manual auth-header paste.
-            </p>
+            <p className="supporting-copy">{i18n.t("settings.credentials.detail")}</p>
           </div>
 
           <div className="provider-shell-list">
@@ -780,15 +812,10 @@ export function SettingsPage({
       >
         <div className="dashboard-section__header">
           <div>
-            <p className="section-label">Source Connections</p>
-            <h2 className="section-title">Hybrid source contracts</h2>
+            <p className="section-label">{i18n.t("settings.sources.eyebrow")}</p>
+            <h2 className="section-title">{i18n.t("settings.sources.title")}</h2>
           </div>
-          <p className="supporting-copy">
-            These cards explain whether each provider currently syncs from an
-            official API, a logged-in page session, or documented quota policy,
-            plus the explicit shipped or deferred product contract for each
-            path.
-          </p>
+          <p className="supporting-copy">{i18n.t("settings.sources.detail")}</p>
         </div>
 
         <div className="provider-shell-list">
@@ -1046,13 +1073,10 @@ export function SettingsPage({
       >
         <div className="dashboard-section__header">
           <div>
-            <p className="section-label">Host Access</p>
-            <h2 className="section-title">Permission controls</h2>
+            <p className="section-label">{i18n.t("settings.permissions.eyebrow")}</p>
+            <h2 className="section-title">{i18n.t("settings.permissions.title")}</h2>
           </div>
-          <p className="supporting-copy">
-            In extension mode these actions use `chrome.permissions`. In
-            browser preview mode they fall back to local state simulation.
-          </p>
+          <p className="supporting-copy">{i18n.t("settings.permissions.detail")}</p>
         </div>
 
         <div className="provider-shell-list">
