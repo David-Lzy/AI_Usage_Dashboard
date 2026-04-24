@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import type { AppState, ProviderId } from "../providers/types";
 import { sendAppMessage } from "../shared/app-client";
+import { storePendingFullPageEntry } from "../shared/extension-surface-entry";
 import {
   buildFullPageExtensionPath,
   buildFullPagePreviewUrl,
@@ -15,7 +16,7 @@ import {
 } from "../shared/theme";
 import { SummaryStrip } from "../sidepanel/components/SummaryStrip";
 import { StatusBadge } from "../sidepanel/components/StatusBadge";
-import { type SidePanelRouteState } from "../sidepanel/route-state";
+import { buildSidePanelHash, type SidePanelRouteState } from "../sidepanel/route-state";
 import { buildPopupViewModel, type PopupGuidanceAction } from "./view-models";
 
 type PopupLoadState =
@@ -70,6 +71,14 @@ async function openSidePanelRoute(route: SidePanelRouteState) {
 
 async function openFullPageRoute(route: SidePanelRouteState) {
   const path = buildFullPageExtensionPath(route);
+
+  if (typeof window !== "undefined") {
+    storePendingFullPageEntry(
+      "popup-expand",
+      buildSidePanelHash(route),
+      window.localStorage,
+    );
+  }
 
   if (
     typeof chrome !== "undefined" &&

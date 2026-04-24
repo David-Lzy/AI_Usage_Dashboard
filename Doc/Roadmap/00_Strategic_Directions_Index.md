@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-04-24:
 
-- the numbered phase queue is now completed through `Phase 158`
+- the numbered phase queue is now completed through `Phase 159`
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -41,6 +41,7 @@ As of 2026-04-24:
 - `Phase 156` completed the next runtime slice under that same Direction 10.2 plan by shipping one compact popup-header expand control that opens the dashboard full-page tab through the shared route-entry contract
 - `Phase 157` completed the next runtime slice under that same Direction 10.2 plan by shipping one compact sidepanel top-bar expand control that preserves the current dashboard, settings, or provider-detail route when opening the shared full-page shell
 - `Phase 158` completed the next runtime slice under that same Direction 10.2 plan by shipping one popup plus sidebar quick light-dark toggle that also carries into the standard full-page shell without changing preset or custom-seed state
+- `Phase 159` completed the next runtime slice under that same Direction 10.2 plan by shipping short-lived popup-expand and sidepanel-expand entry hints, plus restrained source-aware full-page entry motion that stays disabled under reduced-motion mode
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
 - `Phase 42` has packaged `0.1.0-rc.2` and closed the release-closeout track for the narrowed RC
 - `Phase 43` completed the first `Direction 02` slice by productizing source-fidelity semantics in the side panel

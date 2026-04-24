@@ -117,6 +117,7 @@
     "phase156:review": "./scripts/with-preferred-node.sh node ./scripts/phase156-popup-expand-fullpage-review.mjs",
     "phase157:review": "./scripts/with-preferred-node.sh node ./scripts/phase157-sidebar-expand-route-preserving-review.mjs",
     "phase158:review": "./scripts/with-preferred-node.sh node ./scripts/phase158-popup-sidebar-theme-toggle-review.mjs",
+    "phase159:review": "./scripts/with-preferred-node.sh node ./scripts/phase159-full-page-entry-motion-review.mjs",
     "interaction-audit:bundle": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-handoff-bundle.mjs",
     "interaction-audit:archive": "./scripts/with-preferred-node.sh node ./scripts/archive-interaction-audit-review.mjs",
     "interaction-audit:refresh-archive-index": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-review-archive-index.mjs",

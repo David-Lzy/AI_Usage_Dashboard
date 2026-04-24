@@ -13,6 +13,7 @@ Status note:
 - second executable slice landed on `2026-04-24` through `Phase 156`
 - third executable slice landed on `2026-04-24` through `Phase 157`
 - fourth executable slice landed on `2026-04-24` through `Phase 158`
+- fifth executable slice landed on `2026-04-24` through `Phase 159`
 - this child TODO turns the agreed popup / sidebar / full-page expansion contract into the next executable `Direction 10` track
 
 Process rule:
@@ -133,6 +134,17 @@ Related design contract:
 - do not fake true cross-window shared-element motion
 - prefer one lightweight continuity treatment that feels intentional without becoming brittle
 - preserve reduced-motion behavior
+- `Phase 159` completed this motion-polish slice by shipping:
+  - one short-lived full-page entry helper that records whether the new tab came from popup expand or sidepanel expand
+  - one full-page boot hook that consumes that entry hint once and exposes it as a runtime dataset marker
+  - one restrained source-aware motion treatment for popup-driven and sidepanel-driven full-page entry
+  - one reduced-motion guard that keeps those entry animations disabled when motion reduction is requested
+  - one repeatable review for popup-expand, sidepanel-expand, and reduced-motion full-page entry behavior
+- current boundary after `Phase 159`:
+  - popup expand now seeds a popup-specific full-page entry hint before opening the dashboard tab
+  - sidepanel expand now seeds a sidepanel-specific full-page entry hint before opening the route-preserving full-page shell
+  - standard full-page routes now use restrained source-aware entry motion while reduced-motion mode keeps the full-page shell animation-free
+  - the next runtime slice is the RDP extension-mode QA refresh for popup, sidepanel, and full-page captures after the shipped expand, theme, and motion work
 
 ### F. RDP Extension-Mode QA Refresh
 
@@ -167,8 +179,8 @@ Related design contract:
 2. popup expand CTA to dashboard full-page tab - completed in `Phase 156`
 3. sidebar expand CTA to route-preserving full-page shell - completed in `Phase 157`
 4. popup plus sidebar light-dark toggle button - completed in `Phase 158`
-5. animation and motion polish for expand/open transitions - next
-6. RDP Chrome runtime QA and screenshot refresh
+5. animation and motion polish for expand/open transitions - completed in `Phase 159`
+6. RDP Chrome runtime QA and screenshot refresh - next
 
 ## Out Of Scope
 

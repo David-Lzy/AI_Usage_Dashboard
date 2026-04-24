@@ -96,6 +96,30 @@ body {
   }
 }
 
+@keyframes app-full-page-enter-from-popup {
+  from {
+    opacity: 0;
+    transform: translateY(var(--app-motion-distance-3)) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes app-full-page-enter-from-sidebar {
+  from {
+    opacity: 0;
+    transform: translateX(var(--app-motion-distance-3)) scale(0.992);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
 @keyframes app-progress-indeterminate-shift {
   from {
     background-position: 0 0;
@@ -138,6 +162,18 @@ summary:focus-visible {
   width: min(100%, 1440px);
   margin-inline: auto;
   padding: var(--app-space-5);
+}
+
+html[data-full-page-entry="popup-expand"] .app-shell {
+  animation: app-full-page-enter-from-popup var(--app-motion-duration-medium)
+    var(--app-motion-easing-emphasized) both;
+  transform-origin: top center;
+}
+
+html[data-full-page-entry="sidebar-expand"] .app-shell {
+  animation: app-full-page-enter-from-sidebar var(--app-motion-duration-medium)
+    var(--app-motion-easing-emphasized) both;
+  transform-origin: center left;
 }
 
 .app-shell > * {
@@ -1895,6 +1931,9 @@ body.popup-page .popup-shell {
 
 @media (prefers-reduced-motion: reduce) {
   .app-shell > *,
+  .full-page-shell .app-shell,
+  html[data-full-page-entry="popup-expand"] .app-shell,
+  html[data-full-page-entry="sidebar-expand"] .app-shell,
   .source-card__details[open] .source-card__details-body,
   .toast {
     animation: none;

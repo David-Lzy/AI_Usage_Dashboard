@@ -18,6 +18,7 @@ Status note:
 - `Phase 156` has now added the first popup-side runtime action on top of that baseline by shipping one compact popup-header expand control that opens the dashboard full-page tab
 - `Phase 157` has now added one route-preserving sidepanel expand control for dashboard, settings, and provider-detail routes
 - `Phase 158` has now added one popup plus sidebar quick light-dark toggle that also carries into the standard full-page shell
+- `Phase 159` has now added one restrained source-aware full-page entry motion layer for popup-expand and sidepanel-expand flows while keeping reduced-motion mode animation-free
 
 Process rule:
 
@@ -113,6 +114,11 @@ Define one stable contract for the next productization slices and keep it aligne
   - sidebar expand
   - full-page shell entry
 - reduced-motion support remains mandatory
+- current implementation note:
+  - popup expand now writes one short-lived full-page entry hint that drives a restrained top-centered entry treatment on dashboard-tab open
+  - sidepanel expand now writes one short-lived full-page entry hint that drives a restrained left-origin entry treatment on standard full-page entry
+  - the hint is consumed once on full-page boot, so later reloads do not pretend the route always came from a fresh expand action
+  - reduced-motion mode disables those entry animations entirely
 
 ## QA Notes From Current RDP Review
 

@@ -186,6 +186,10 @@ The Chrome action now opens a compact popup first:
   - when the saved mode is `system`, the first click moves into the opposite explicit mode of the currently resolved runtime theme
   - full-page shell inherits the same top-bar control
   - preset accents and custom-seed state remain unchanged
+- the standard full-page shell now also uses one restrained source-aware entry-motion hint:
+  - popup expand drives one top-centered scale-plus-rise treatment on dashboard-tab open
+  - side-panel expand drives one left-origin slide-plus-scale treatment on route-preserving full-page entry
+  - reduced-motion mode disables those entry animations entirely
 - the badge shows the number of visible providers currently needing attention
 - the side panel remains the canonical surface for settings, source diagnostics, and provider detail
 

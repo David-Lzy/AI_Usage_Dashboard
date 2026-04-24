@@ -11,6 +11,7 @@ import type {
 } from "../providers/types";
 import { sendAppMessage } from "../shared/app-client";
 import { APP_STATE_STORAGE_KEY } from "../shared/constants";
+import { storePendingFullPageEntry } from "../shared/extension-surface-entry";
 import {
   buildFullPageExtensionPath,
   buildFullPagePreviewUrl,
@@ -154,6 +155,14 @@ function sortTabsByPriority(tabs: chrome.tabs.Tab[]): chrome.tabs.Tab[] {
 
 async function openFullPageRoute(route: SidePanelRouteState) {
   const path = buildFullPageExtensionPath(route);
+
+  if (typeof window !== "undefined") {
+    storePendingFullPageEntry(
+      "sidebar-expand",
+      buildSidePanelHash(route),
+      window.localStorage,
+    );
+  }
 
   if (
     typeof chrome !== "undefined" &&

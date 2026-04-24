@@ -211,7 +211,8 @@ Phase status update:
 - `Phase 156` completed the popup expand CTA to the dashboard full-page tab while intentionally keeping existing popup quick actions on their current sidepanel handoff contract
 - `Phase 157` completed the sidebar expand CTA to the route-preserving full-page shell across dashboard, settings, and provider-detail routes while hiding that expand control once the runtime is already in full-page mode
 - `Phase 158` completed the popup plus sidebar light-dark toggle button and carried that same quick control into the standard full-page shell without replacing Settings as the advanced theme surface
-- the immediate next executable work is now motion polish for expand/open transitions inside the Direction 10 surface-expansion plus ambient-theme line captured in `Doc/Roadmap/10_2_Surface_Expansion_And_Ambient_Theme_Controls_TODOs.md`
+- `Phase 159` completed motion polish for popup-expand and sidepanel-expand full-page entry by adding short-lived entry hints plus restrained source-aware full-page shell entry motion that stays disabled when reduced motion is requested
+- the immediate next executable work is now the RDP Chrome runtime QA refresh for popup, sidepanel, and full-page captures inside the Direction 10 surface-expansion plus ambient-theme line captured in `Doc/Roadmap/10_2_Surface_Expansion_And_Ambient_Theme_Controls_TODOs.md`
 - the next major architecture line after that is the Direction 09 runtime i18n bootstrap captured in `Doc/Roadmap/09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete

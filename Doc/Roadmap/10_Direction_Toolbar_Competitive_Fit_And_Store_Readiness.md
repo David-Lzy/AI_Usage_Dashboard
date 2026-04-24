@@ -30,6 +30,7 @@ Execution note:
 - fifteenth executable slice landed on `2026-04-24` through `Phase 156`
 - sixteenth executable slice landed on `2026-04-24` through `Phase 157`
 - seventeenth executable slice landed on `2026-04-24` through `Phase 158`
+- eighteenth executable slice landed on `2026-04-24` through `Phase 159`
 - this direction sharpens [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md) into a more explicit next-stage productization track
 
 Process rule:
@@ -113,12 +114,16 @@ As of 2026-04-24:
   - sidepanel and standard full-page routes inherit the shared top-bar toggle
   - the toggle moves `system` mode into the opposite explicit mode of the currently resolved runtime theme
   - preset accents and custom-seed state remain unchanged
+- the standard full-page shell now also carries one restrained source-aware entry-motion hint:
+  - popup expand drives one top-centered scale-plus-rise treatment on dashboard-tab open
+  - sidepanel expand drives one left-origin slide-plus-scale treatment on route-preserving full-page entry
+  - reduced-motion mode disables those entry animations entirely
 - the current boundary is now explicit:
   - popup header expand owns the full-page dashboard jump
   - sidepanel top-bar expand owns route-preserving full-page shell entry for standard operational routes
   - quick theme toggle owns explicit light-dark flips only
   - full theme configuration still belongs to Settings
-  - the next runtime slice is now motion polish for expand/open transitions
+  - the next runtime slice is now the RDP Chrome QA refresh for popup, sidepanel, and full-page captures after the shipped expand, theme, and motion work
 - the repo still does not yet ship localized listing variants or a submitted store asset pack beyond the first archived evidence plus English source documents
 - the project now has an RDP Chrome environment available for truthful extension-mode capture and review
 - the current screenshot state is now `0 pending requests / 1 archived set`
@@ -212,7 +217,9 @@ Recommended rollout:
 
 `Phase 157` completed the next product slice by shipping one compact sidepanel top-bar expand control that preserves the current dashboard, settings, or provider-detail route when opening the shared full-page shell, while hiding that control when the runtime is already in full-page mode.
 
-`Phase 158` completed the next product slice by shipping one popup plus sidebar ambient light-dark toggle that also carries into the standard full-page shell, while keeping `system`, preset accents, and custom-seed configuration inside Settings as the only advanced theme surface. The next product slice is now motion polish for expand/open transitions.
+`Phase 158` completed the next product slice by shipping one popup plus sidebar ambient light-dark toggle that also carries into the standard full-page shell, while keeping `system`, preset accents, and custom-seed configuration inside Settings as the only advanced theme surface.
+
+`Phase 159` completed the next product slice by turning popup-expand and sidepanel-expand into source-aware full-page entry motion hints, so the standard full-page shell now gets one restrained continuity treatment without pretending to ship a brittle true shared-element transition. Reduced-motion mode keeps those full-page entry animations disabled. The next product slice is now the RDP Chrome runtime QA refresh for popup, sidepanel, and full-page captures after the shipped expand, theme, and motion work.
 
 ## References
 
