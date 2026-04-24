@@ -25,6 +25,7 @@ Execution note:
 - eleventh executable slice landed on `2026-04-24` through `Phase 151`
 - twelfth executable slice landed on `2026-04-24` through `Phase 152`
 - thirteenth executable slice landed on `2026-04-24` through `Phase 153`
+- documentation-only planning expansion landed on `2026-04-24` through `Phase 154` by formalizing the next Direction 10 execution map into explicit child TODO docs for surface expansion plus ambient theme controls and store asset-pack follow-through
 - this direction sharpens [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md) into a more explicit next-stage productization track
 
 Process rule:
@@ -33,7 +34,7 @@ Process rule:
 
 Priority:
 
-- `P5`
+- `P1`
 
 ## Why This Direction Exists
 
@@ -84,7 +85,17 @@ As of 2026-04-24:
 - the popup runtime now also ships one explicit host-width contract for real Chrome action-popup rendering instead of depending on browser-guessed document width
 - the popup runtime now also ships one static bootstrap width contract in `src/popup/index.html`, so the real action popup can claim its intended width before React boot and before runtime class mutation
 - repo-backed tool commands now also prefer one local current Node runtime through `scripts/with-preferred-node.sh`, so `npm run build`, `npm run typecheck`, and `npm run test` no longer depend on the older Cursor-bundled `node`
-- the popup still has some remaining overlap between top story, featured card, and lower surface-role explanation
+- the popup has now recovered from the earlier narrow-width action-popup failure in real Chrome, but current RDP review still shows it as visually sparse and vertically card-heavy
+- the user has now explicitly fixed the next product contract:
+  - popup stays compact and task-focused
+  - side panel stays richer and operational
+  - full-page shell becomes a separate extension surface
+  - popup and side panel both get one near-surface light-dark toggle
+- the repo now also ships one maintained implementation contract for that next surface work:
+  - [Surface_Expansion_And_Ambient_Theme_Controls.md](../Surface_Expansion_And_Ambient_Theme_Controls.md)
+- the repo now also ships two execution-ready child TODO docs for the next Direction 10 work:
+  - [10_2_Surface_Expansion_And_Ambient_Theme_Controls_TODOs.md](./10_2_Surface_Expansion_And_Ambient_Theme_Controls_TODOs.md)
+  - [10_3_Store_Asset_Pack_And_Submission_TODOs.md](./10_3_Store_Asset_Pack_And_Submission_TODOs.md)
 - the repo still does not yet ship localized listing variants or a submitted store asset pack beyond the first archived evidence plus English source documents
 - the project now has an RDP Chrome environment available for truthful extension-mode capture and review
 - the current screenshot state is now `0 pending requests / 1 archived set`
@@ -134,15 +145,15 @@ Turn the current popup from "already shipped and increasingly polished" into one
 
 ## Recommendation
 
-This direction is feasible and should continue after the current popup IA work.
+This direction is feasible and is now the immediate next execution line.
 
 Recommended rollout:
 
-1. refresh competitive benchmark with accept or reject conclusions
-2. tighten popup story overlap using the real extension runtime
-3. define one screenshot storyboard pack
-4. draft one truthful store-copy hierarchy
-5. only then prepare broader listing-localization work
+1. implement popup plus sidepanel plus full-page surface expansion and ambient theme controls
+2. refresh RDP Chrome runtime QA after those new surfaces land
+3. refresh screenshot selection and screenshot ordering against the new surfaces
+4. tighten the store asset pack and submission checklist around the refreshed runtime evidence
+5. only then move broader listing-localization work forward
 
 `Phase 141` completed the first executable part of steps `1` and `3` by shipping one current competitive-fit decision matrix with explicit `adopt / adapt / reject` outcomes and one maintained screenshot storyboard pack for truthful extension-mode capture.
 
@@ -170,6 +181,8 @@ Recommended rollout:
 
 `Phase 153` completed the next executable part of step `2` by moving that popup width contract into the static popup HTML bootstrap and by routing repo-backed commands through one preferred local Node wrapper, so the real action popup no longer depends on post-boot class mutation and the build no longer depends on the older bundled runtime.
 
+`Phase 154` then formalized the next execution map by turning the agreed popup plus sidepanel plus full-page contract and the next store-asset follow-through into explicit TODO docs instead of leaving those next slices implicit.
+
 ## References
 
 - Chrome `action` API:
@@ -194,3 +207,5 @@ Recommended rollout:
 ## Child TODO
 
 - [10_1_Direction_Toolbar_Competitive_Fit_And_Store_Readiness_TODOs.md](./10_1_Direction_Toolbar_Competitive_Fit_And_Store_Readiness_TODOs.md)
+- [10_2_Surface_Expansion_And_Ambient_Theme_Controls_TODOs.md](./10_2_Surface_Expansion_And_Ambient_Theme_Controls_TODOs.md)
+- [10_3_Store_Asset_Pack_And_Submission_TODOs.md](./10_3_Store_Asset_Pack_And_Submission_TODOs.md)

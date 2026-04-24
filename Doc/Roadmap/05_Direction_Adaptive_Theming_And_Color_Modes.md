@@ -1,6 +1,6 @@
 # Direction 05 - Adaptive Theming And Color Modes
 
-Date: 2026-04-23
+Date: 2026-04-24
 
 Document class:
 
@@ -13,6 +13,7 @@ Status note:
 Execution note:
 
 - latest executable slice landed on `2026-04-23` through `Phase 117`
+- documentation-only planning expansion landed on `2026-04-24` through `Phase 154` by turning the remaining real-operator closure line into one explicit child TODO and by cross-linking near-surface light-dark controls to Direction 10
 
 Process rule:
 
@@ -20,7 +21,7 @@ Process rule:
 
 Priority:
 
-- `P4`
+- `P3`
 
 ## Why This Direction Exists
 
@@ -86,6 +87,9 @@ As of 2026-04-23:
   - `Accent preset`
   - one validated `#RRGGBB` custom-seed input with preview plus reset-to-default actions
 - the popup, side panel, and audit hub now share the same visual token language, which is the right foundation for one cross-surface theme state
+- the repo now also ships one explicit child TODO for the remaining real-operator evidence gap:
+  - [05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md](./05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md)
+- popup plus sidepanel ambient light-dark controls are now intentionally planned under Direction 10 surface expansion, but they still depend on this direction's shipped shared theme runtime and persisted theme-mode semantics
 - arbitrary per-token color editing, dual light-dark seed personalization, and real fulfilled operator or native-prompt recovery archives are still not shipped
 
 External platform and design constraints:
@@ -173,6 +177,9 @@ It should start with:
 
 It should not start with a wide-open per-token theme editor.
 
+The highest-value remaining work is now evidence closure, not more theme-tooling layers.
+The next missing proof is still the first real operator theme-recovery archive.
+
 ## References
 
 - Material Web theming:
@@ -185,3 +192,4 @@ It should not start with a wide-open per-token theme editor.
 ## Child TODO
 
 - [05_1_Direction_Adaptive_Theming_And_Color_Modes_TODOs.md](./05_1_Direction_Adaptive_Theming_And_Color_Modes_TODOs.md)
+- [05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md](./05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md)

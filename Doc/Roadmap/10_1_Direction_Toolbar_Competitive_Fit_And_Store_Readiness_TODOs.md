@@ -22,6 +22,7 @@ Status note:
 - `Phase 151` completed the next executable slice on `2026-04-24` by shipping one maintained store-listing localization source pack anchored to the manifest, maintained listing-copy pack, and first archived screenshot set
 - `Phase 152` completed the next executable slice on `2026-04-24` by shipping one explicit popup host-width contract plus one repeatable width review for real Chrome action-popup rendering
 - `Phase 153` completed the next executable slice on `2026-04-24` by moving popup width control into the static popup bootstrap and by routing repo-backed commands through one preferred local Node wrapper
+- `Phase 154` completed one documentation-only planning slice on `2026-04-24` by splitting the next Direction 10 work into one surface-expansion plus ambient-theme child TODO and one store-asset-pack child TODO
 
 Process rule:
 
@@ -30,6 +31,14 @@ Process rule:
 Parent direction:
 
 - [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
+
+## Follow-On Execution Map
+
+- the immediate next executable work for `Direction 10` is now tracked in:
+  - [10_2_Surface_Expansion_And_Ambient_Theme_Controls_TODOs.md](./10_2_Surface_Expansion_And_Ambient_Theme_Controls_TODOs.md)
+- the next store-readiness follow-through after those surface changes is now tracked in:
+  - [10_3_Store_Asset_Pack_And_Submission_TODOs.md](./10_3_Store_Asset_Pack_And_Submission_TODOs.md)
+- this file remains the broader parent TODO for benchmark fit, popup contract history, RDP runtime review, and store-readiness intent
 
 ## Detailed TODOs
 

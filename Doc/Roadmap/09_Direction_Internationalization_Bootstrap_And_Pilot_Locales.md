@@ -13,6 +13,7 @@ Status note:
 Execution note:
 
 - no executable slice has shipped yet
+- documentation-only planning expansion landed on `2026-04-24` through `Phase 154` by turning the next i18n bootstrap line into one explicit child TODO doc
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
 Process rule:
@@ -21,7 +22,7 @@ Process rule:
 
 Priority:
 
-- `P6`
+- `P2`
 
 ## Why This Direction Exists
 
@@ -50,6 +51,9 @@ As of 2026-04-24:
 - the runtime app does not yet use a shared localization layer
 - the extension does not yet offer locale-aware number, date, or duration formatting
 - the popup's compact widths are already tight in English, so longer translated strings will need explicit QA
+- the repo now also ships one execution-ready child TODO for the next i18n architecture pass:
+  - [09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md](./09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md)
+- this direction is intentionally sequenced after the current Direction 10 surface-expansion work so the first runtime i18n pass does not start against still-moving popup plus full-page contracts
 
 External platform constraints and product signals:
 
@@ -100,7 +104,7 @@ Ship one localization architecture that can start with a small pilot set and the
 
 ## Recommendation
 
-This direction is feasible, but the first real slice should be architectural, not linguistic.
+This direction is feasible and should become the next major architecture track after the current Direction 10 surface work settles.
 
 Recommended rollout:
 
@@ -123,3 +127,4 @@ Recommended rollout:
 ## Child TODO
 
 - [09_1_Direction_Internationalization_Bootstrap_And_Pilot_Locales_TODOs.md](./09_1_Direction_Internationalization_Bootstrap_And_Pilot_Locales_TODOs.md)
+- [09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md](./09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md)

@@ -1,6 +1,6 @@
 # Direction 05.1 - Adaptive Theming And Color Modes TODOs
 
-Date: 2026-04-23
+Date: 2026-04-24
 
 Document class:
 
@@ -29,6 +29,7 @@ Status note:
 - `Phase 115` completed the next executable slice on `2026-04-23` by adding one repo-backed theme-recovery request-completion workflow plus archive traceability for future real operator exports
 - `Phase 116` completed the next executable slice on `2026-04-23` by binding theme-recovery workspace exports to one explicit request identity plus mismatch rejection, so future real operator exports can no longer fulfill the wrong pending request
 - `Phase 117` completed the next executable slice on `2026-04-23` by adding one no-mutation theme-recovery preflight workflow, so future real operator exports can now be checked for eligibility before any request or archive mutation happens
+- `Phase 154` completed one documentation-only planning slice on `2026-04-24` by splitting the remaining real-operator closure work into one explicit child TODO and by cross-linking the near-surface light-dark toggle work to Direction 10
 
 Process rule:
 
@@ -37,6 +38,14 @@ Process rule:
 Parent direction:
 
 - [Direction 05 - Adaptive Theming And Color Modes](./05_Direction_Adaptive_Theming_And_Color_Modes.md)
+
+## Follow-On Execution Map
+
+- the remaining real-operator evidence closure line for this direction is now tracked in:
+  - [05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md](./05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md)
+- the near-surface light-dark toggle requested for popup, side panel, and the future full-page shell is now intentionally tracked under:
+  - [10_2_Surface_Expansion_And_Ambient_Theme_Controls_TODOs.md](./10_2_Surface_Expansion_And_Ambient_Theme_Controls_TODOs.md)
+- this file remains the theme-runtime and QA history for the shipped adaptive-theme system itself
 
 ## Detailed TODOs
 

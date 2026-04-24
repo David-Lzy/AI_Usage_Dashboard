@@ -1,6 +1,6 @@
 # Direction 04 - Material, Motion, And Responsive Hardening
 
-Date: 2026-04-22
+Date: 2026-04-24
 
 Document class:
 
@@ -13,6 +13,7 @@ Status note:
 Execution note:
 
 - the latest executable slice landed on `2026-04-23` through `Phase 96`
+- documentation-only planning expansion landed on `2026-04-24` through `Phase 154` by turning the remaining real-operator closure line into one explicit child TODO doc
 
 Process rule:
 
@@ -20,7 +21,7 @@ Process rule:
 
 Priority:
 
-- `P3`
+- `P4`
 
 ## Why This Direction Exists
 
@@ -38,6 +39,9 @@ They are system-level UX gaps:
 
 As of 2026-04-23:
 
+- the interaction-audit tooling line is now mature enough that the highest remaining value is real operator evidence closure rather than more request or archive plumbing
+- the repo now also ships one explicit child TODO for that closure line:
+  - [04_2_Interaction_Audit_Real_Operator_Closure_TODOs.md](./04_2_Interaction_Audit_Real_Operator_Closure_TODOs.md)
 - the UI uses Material-like color, type, shape, and card roles through custom CSS tokens
 - the side panel now has a small motion baseline for surface entry, toast feedback, source-card disclosure, and Settings section jumps
 - `prefers-reduced-motion` is now honored for section-jump scrolling and non-essential UI animation
@@ -119,3 +123,4 @@ Turn the existing UI from "Material-like and functional" into "Material-led, com
 ## Child TODO
 
 - [04_1_Direction_Material_Motion_And_Responsive_Hardening_TODOs.md](./04_1_Direction_Material_Motion_And_Responsive_Hardening_TODOs.md)
+- [04_2_Interaction_Audit_Real_Operator_Closure_TODOs.md](./04_2_Interaction_Audit_Real_Operator_Closure_TODOs.md)

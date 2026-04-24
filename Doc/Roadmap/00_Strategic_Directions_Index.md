@@ -30,7 +30,13 @@ Important scope note:
 
 As of 2026-04-24:
 
-- the numbered phase queue is now completed through `Phase 153`
+- the numbered phase queue is now completed through `Phase 154`
+- `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
+  - Direction 10 surface expansion plus ambient theme controls
+  - Direction 10 store asset pack plus submission readiness
+  - Direction 09 runtime i18n bootstrap plus pilot locales
+  - Direction 05 theme-recovery real-operator closure
+  - Direction 04 interaction-audit real-operator closure
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
 - `Phase 42` has packaged `0.1.0-rc.2` and closed the release-closeout track for the narrowed RC
 - `Phase 43` completed the first `Direction 02` slice by productizing source-fidelity semantics in the side panel
@@ -144,8 +150,18 @@ As of 2026-04-24:
 - `Phase 151` completed the next executable `Direction 10` slice and added one maintained store-listing localization source pack anchored to the manifest, maintained listing-copy pack, and first archived screenshot set, so future translated store listings can stay aligned with the same truthful evidence package
 - `Phase 152` completed the next executable `Direction 10` slice and added one explicit popup host-width contract plus one repeatable width review for real Chrome action-popup rendering, so last-mile popup runtime verification no longer depends on browser-guessed document width
 - `Phase 153` completed the next executable `Direction 10` slice and moved the popup width contract into the static popup bootstrap while routing repo-backed commands through one preferred local Node wrapper, so first-paint popup sizing and build/runtime verification no longer depend on post-boot class mutation or the older bundled Node runtime
-- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 140`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
-- the numbered phase queue is now completed through `Phase 140`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
+- the immediate next executable work is now the Direction 10 surface-expansion plus ambient-theme line captured in `10_2_Surface_Expansion_And_Ambient_Theme_Controls_TODOs.md`
+- the next major architecture line after that is Direction 09 runtime i18n bootstrap, captured in `09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md`
+- the remaining high-value work in Direction 05 and Direction 04 is now evidence closure, not more tool-building:
+  - `05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md`
+  - `04_2_Interaction_Audit_Real_Operator_Closure_TODOs.md`
+- provider coverage gaps still remain truthful and unchanged:
+  - JetBrains stays deferred for the active promise
+  - Claude personal support is not yet graduated
+  - Gemini remains policy-only
+  - Codex and Cursor personal support remain partial, not absolute-remaining-balance claims
+- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 154`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
+- the numbered phase queue is now completed through `Phase 154`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
 - `Codex` personal support is already shipped as a `session_page` path, but it currently exposes usage-window percentages and reset timing, not one absolute remaining credit balance
 - `Cursor` personal support is already shipped as a `session_page` path, but it currently exposes billing-period usage context, not one exact remaining included-request counter
 - the extension action now opens a compact popup on click, the popup makes cached snapshot freshness explicit, and the badge shows the count of visible providers needing attention
@@ -172,29 +188,45 @@ As of 2026-04-24:
 
 1. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why first now:
-   `Direction 08` is now in maintenance mode, while the popup is already materially productized and offers the highest-leverage local product work through competitive fit, truthful extension-mode screenshots, and store-readiness.
+   the immediate next local product work is the newly formalized popup plus sidepanel plus full-page surface-expansion track with ambient theme controls, and the store-readiness line already has truthful screenshot and listing evidence to build on.
 
 2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second now:
-   internationalization is important and feasible, but it should begin with architecture and pilot locales, not an immediate ten-language dump into an English-only runtime.
+   internationalization remains one of the clearest product gaps, but it should begin as one architecture pass after the current Direction 10 surface contract settles.
 
-3. [Direction 08 - Documentation Completion And Truth Audit](./08_Direction_Documentation_Completion_And_Truth_Audit.md)
+3. [Direction 05 - Adaptive Theming And Color Modes](./05_Direction_Adaptive_Theming_And_Color_Modes.md)
    Why third now:
+   the shared theme runtime is already strong, so the highest-value remaining work is now the first real operator recovery archive rather than more local-only theme tooling.
+
+4. [Direction 04 - Material, Motion, And Responsive Hardening](./04_Direction_Material_Motion_And_Responsive_Hardening.md)
+   Why fourth now:
+   the interaction-audit line is now mature enough that the best remaining work is real operator closure rather than more request/archive mechanism building.
+
+5. [Direction 08 - Documentation Completion And Truth Audit](./08_Direction_Documentation_Completion_And_Truth_Audit.md)
+   Why fifth now:
    the repo now has one explicit taxonomy, one freshness model, one checker, and one convention-only boundary, so this direction should stay in maintenance mode unless new doc families or checker drift justify reopening it.
 
 ### Active continuation order
 
-1. [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md)
+1. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why first now:
-   `Direction 05` is now close to an honest human-evidence boundary, while the popup has just started its benchmark and onboarding track and offers a higher-leverage product surface for the next fully local slices.
+   the next fully local product work is now the explicit popup plus sidepanel plus full-page surface-expansion line, followed by the refreshed store asset pack built on the existing screenshot/archive evidence.
 
-2. [Direction 05 - Adaptive Theming And Color Modes](./05_Direction_Adaptive_Theming_And_Color_Modes.md)
+2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second now:
-   the current theme system is mature and truthful, but its next highest-value step now depends more on real operator evidence than on more local tooling.
+   the project is still effectively English-only, and the new i18n bootstrap TODO now makes the architecture-first start clear enough to begin as soon as Direction 10 surface work stabilizes.
 
-3. [Direction 04 - Material, Motion, And Responsive Hardening](./04_Direction_Material_Motion_And_Responsive_Hardening.md)
+3. [Direction 05 - Adaptive Theming And Color Modes](./05_Direction_Adaptive_Theming_And_Color_Modes.md)
    Why third now:
-   the interaction-audit and operator-review workflow is mature, but it still needs real-browser review closure beyond the tooling layers.
+   the current theme system is mature and truthful, but its highest-value remaining step is now real operator evidence closure rather than more theme tooling.
+
+4. [Direction 04 - Material, Motion, And Responsive Hardening](./04_Direction_Material_Motion_And_Responsive_Hardening.md)
+   Why fourth now:
+   the interaction-audit and operator-review workflow is similarly mature, so the remaining value is first real operator signoff rather than more lifecycle machinery.
+
+5. [Direction 08 - Documentation Completion And Truth Audit](./08_Direction_Documentation_Completion_And_Truth_Audit.md)
+   Why fifth now:
+   the documentation-governance line is already in maintenance mode and should now stay behind product, architecture, and evidence-closure work unless checker drift forces it back open.
 
 ### Additional requested directions from 2026-04-23
 
