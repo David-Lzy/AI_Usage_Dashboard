@@ -5,6 +5,7 @@ import process from "node:process";
 import {
   buildStoreScreenshotCaptureNotesDocument,
   normalizeStoreScreenshotCaptureNotesDocument,
+  STORE_SCREENSHOT_CAPTURE_REQUEST_PENDING_STATUS,
   updateStoreScreenshotCaptureRequest,
 } from "./lib/store-screenshot-capture-request.mjs";
 import { writeStoreScreenshotCaptureRequestIndex } from "./lib/store-screenshot-capture-request-index.mjs";
@@ -70,6 +71,7 @@ async function run() {
     try {
       const manifest = await readJson(manifestPath);
       const requestTemplate =
+        manifest.status === STORE_SCREENSHOT_CAPTURE_REQUEST_PENDING_STATUS &&
         typeof manifest.sourceTemplate === "string" &&
         manifest.sourceTemplate.length > 0
           ? await readJson(path.resolve(projectRoot, manifest.sourceTemplate)).catch(

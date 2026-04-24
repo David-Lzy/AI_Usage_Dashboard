@@ -5,6 +5,10 @@ export const STORE_SCREENSHOT_CAPTURE_REQUEST_PENDING_STATUS =
   "pending_operator_capture";
 export const STORE_SCREENSHOT_CAPTURE_REQUEST_FULFILLED_STATUS =
   "fulfilled_operator_capture";
+export const STORE_SCREENSHOT_CAPTURE_AUTOMATION_MODE_REQUEST_BOUND_RDP_RUNNER =
+  "request_bound_rdp_runner";
+export const STORE_SCREENSHOT_CAPTURE_AUTOMATION_MODE_MANUAL_CAPTURE_REQUIRED =
+  "manual_capture_required";
 export const STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_NOT_REVIEWED =
   "not_reviewed";
 export const STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_EXACT_RUNTIME_CAPTURE =
@@ -244,6 +248,10 @@ function normalizeTemplate(template) {
   return {
     storyboardPath:
       typeof template?.storyboardPath === "string" ? template.storyboardPath : "",
+    selectionPackPath:
+      typeof template?.selectionPackPath === "string"
+        ? template.selectionPackPath
+        : "",
     baselinePackReadme:
       typeof template?.baselinePackReadme === "string"
         ? template.baselinePackReadme
@@ -252,12 +260,21 @@ function normalizeTemplate(template) {
       typeof template?.baselinePackPlan === "string"
         ? template.baselinePackPlan
         : "",
+    baselineArchiveReadme:
+      typeof template?.baselineArchiveReadme === "string"
+        ? template.baselineArchiveReadme
+        : "",
     preferredSize:
       typeof template?.preferredSize === "string" ? template.preferredSize : "",
     fallbackSize:
       typeof template?.fallbackSize === "string" ? template.fallbackSize : "",
     runtimeSource:
       typeof template?.runtimeSource === "string" ? template.runtimeSource : "",
+    captureAutomationMode:
+      template?.captureAutomationMode ===
+        STORE_SCREENSHOT_CAPTURE_AUTOMATION_MODE_MANUAL_CAPTURE_REQUIRED
+        ? STORE_SCREENSHOT_CAPTURE_AUTOMATION_MODE_MANUAL_CAPTURE_REQUIRED
+        : STORE_SCREENSHOT_CAPTURE_AUTOMATION_MODE_REQUEST_BOUND_RDP_RUNNER,
     requiredScreenshotFilenames: normalizeStringArray(
       template?.requiredScreenshotFilenames,
     ),
@@ -312,9 +329,12 @@ function buildReadme({
   requestId,
   createdAt,
   storyboardPath,
+  selectionPackPath,
   baselinePackReadme,
   baselinePackPlan,
+  baselineArchiveReadme,
   runtimeSource,
+  captureAutomationMode,
   preferredSize,
   fallbackSize,
   requiredScreenshotFilenames,
@@ -391,6 +411,8 @@ ${statusNote.join("\n")}
   - \`${status}\`
 - runtime source:
   - \`${runtimeSource}\`
+- capture automation mode:
+  - \`${captureAutomationMode}\`
 - preferred size:
   - \`${preferredSize}\`
 - fallback size:
@@ -402,7 +424,11 @@ ${statusNote.join("\n")}
 
 - storyboard:
   - \`${storyboardPath}\`
-- baseline pack README:
+${selectionPackPath ? `- selection pack:
+  - \`${selectionPackPath}\`
+` : ""}${baselineArchiveReadme ? `- baseline archive README:
+  - \`${baselineArchiveReadme}\`
+` : ""}- baseline pack README:
   - \`${baselinePackReadme}\`
 - baseline pack plan:
   - \`${baselinePackPlan}\`
@@ -544,9 +570,12 @@ export async function writeStoreScreenshotCaptureRequest({
     status: STORE_SCREENSHOT_CAPTURE_REQUEST_PENDING_STATUS,
     sourceTemplate,
     storyboardPath: normalizedTemplate.storyboardPath,
+    selectionPackPath: normalizedTemplate.selectionPackPath,
     baselinePackReadme: normalizedTemplate.baselinePackReadme,
     baselinePackPlan: normalizedTemplate.baselinePackPlan,
+    baselineArchiveReadme: normalizedTemplate.baselineArchiveReadme,
     runtimeSource: normalizedTemplate.runtimeSource,
+    captureAutomationMode: normalizedTemplate.captureAutomationMode,
     preferredSize: normalizedTemplate.preferredSize,
     fallbackSize: normalizedTemplate.fallbackSize,
     requiredScreenshotFilenames: normalizedTemplate.requiredScreenshotFilenames,
@@ -594,9 +623,12 @@ export async function updateStoreScreenshotCaptureRequest({
     status,
     sourceTemplate,
     storyboardPath: normalizedTemplate.storyboardPath,
+    selectionPackPath: normalizedTemplate.selectionPackPath,
     baselinePackReadme: normalizedTemplate.baselinePackReadme,
     baselinePackPlan: normalizedTemplate.baselinePackPlan,
+    baselineArchiveReadme: normalizedTemplate.baselineArchiveReadme,
     runtimeSource: normalizedTemplate.runtimeSource,
+    captureAutomationMode: normalizedTemplate.captureAutomationMode,
     preferredSize: normalizedTemplate.preferredSize,
     fallbackSize: normalizedTemplate.fallbackSize,
     requiredScreenshotFilenames: normalizedTemplate.requiredScreenshotFilenames,

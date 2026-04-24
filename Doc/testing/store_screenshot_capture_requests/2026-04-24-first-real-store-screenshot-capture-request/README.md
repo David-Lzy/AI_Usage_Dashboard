@@ -29,6 +29,8 @@ Status note:
   - `fulfilled_operator_capture`
 - runtime source:
   - `RDP Chrome unpacked extension`
+- capture automation mode:
+  - `request_bound_rdp_runner`
 - preferred size:
   - `1280x800`
 - fallback size:

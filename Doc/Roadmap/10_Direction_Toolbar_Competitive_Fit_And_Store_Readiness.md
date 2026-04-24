@@ -33,6 +33,7 @@ Execution note:
 - eighteenth executable slice landed on `2026-04-24` through `Phase 159`
 - nineteenth executable slice landed on `2026-04-24` through `Phase 160`
 - twentieth executable slice landed on `2026-04-24` through `Phase 161`
+- twenty-first executable slice landed on `2026-04-24` through `Phase 162`
 - this direction sharpens [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md) into a more explicit next-stage productization track
 
 Process rule:
@@ -132,8 +133,12 @@ As of 2026-04-24:
   - the next execution line now moves to `Direction 10.3` store asset-pack refresh after the updated runtime evidence
 - the repo still does not yet ship localized listing variants or a submitted store asset pack beyond the first archived evidence plus English source documents
 - the first screenshot archive plus current listing-copy docs now serve as a pre-refresh baseline rather than the final store-submission pack after `Phase 161`
+- the repo now also ships one refreshed pending screenshot-capture request package for the post-surface-expansion store asset set:
+  - [2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md](../testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md)
+  - slots `1` through `3` require native toolbar-bubble popup capture
+  - slots `4` and `5` require full-page-shell depth capture
 - the project now has an RDP Chrome environment available for truthful extension-mode capture and review
-- the current screenshot state is now `0 pending requests / 1 archived set`
+- the current screenshot state is now `1 pending request / 1 archived set`
 
 External signals:
 
@@ -230,7 +235,9 @@ Recommended rollout:
 
 `Phase 160` completed the next product slice by refreshing real RDP runtime captures for popup, sidepanel settings, and standard full-page dashboard/settings/provider-detail surfaces while adding runtime-window cleanup into the helper workflow. That keeps the current QA evidence aligned with the shipped expand, quick-theme, and motion work and reduces repeat-capture OOM risk.
 
-`Phase 161` completed the first `Direction 10.3` slice by turning the first screenshot archive into an explicit selection and stale-review pack, updating the storyboard to prefer native toolbar-bubble popup capture plus full-page-shell depth capture, and marking the current listing-copy documents as pre-refresh baselines rather than the final submission pack. The next product slice is now one refreshed screenshot-capture request for store-ready surfaces.
+`Phase 161` completed the first `Direction 10.3` slice by turning the first screenshot archive into an explicit selection and stale-review pack, updating the storyboard to prefer native toolbar-bubble popup capture plus full-page-shell depth capture, and marking the current listing-copy documents as pre-refresh baselines rather than the final submission pack.
+
+`Phase 162` completed the next `Direction 10.3` slice by turning that stale-review decision into one refreshed pending screenshot-capture request, tightening the request generator around `manual_capture_required` popup slots, and preserving fulfilled historical request semantics during package refresh. The next product slice is now fulfilling that refreshed request into one new archive before screenshot ordering and caption tightening continue.
 
 ## References
 

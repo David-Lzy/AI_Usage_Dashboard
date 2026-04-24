@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [161_Phase_Store_Screenshot_Selection_And_Stale_Review.md](./Archive/161_Phase_Store_Screenshot_Selection_And_Stale_Review.md)
+- latest completed slice: [162_Phase_Refreshed_Store_Screenshot_Capture_Request.md](./Archive/162_Phase_Refreshed_Store_Screenshot_Capture_Request.md)
 
 Completed phases should be moved to:
 
@@ -208,6 +208,7 @@ Completed phases should be moved to:
 - [159_Phase_Full_Page_Entry_Motion_Polish.md](./Archive/159_Phase_Full_Page_Entry_Motion_Polish.md) - completed and archived on 2026-04-24
 - [160_Phase_RDP_Runtime_Surface_Refresh_And_Window_Cleanup.md](./Archive/160_Phase_RDP_Runtime_Surface_Refresh_And_Window_Cleanup.md) - completed and archived on 2026-04-24
 - [161_Phase_Store_Screenshot_Selection_And_Stale_Review.md](./Archive/161_Phase_Store_Screenshot_Selection_And_Stale_Review.md) - completed and archived on 2026-04-24
+- [162_Phase_Refreshed_Store_Screenshot_Capture_Request.md](./Archive/162_Phase_Refreshed_Store_Screenshot_Capture_Request.md) - completed and archived on 2026-04-24
 
 ## Dependency Notes
 

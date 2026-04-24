@@ -120,7 +120,7 @@ Supported presets currently include:
 When you want the current pending request package filled in one pass from the real extension runtime, use:
 
 ```bash
-npm run store:capture-screenshot-request-from-rdp -- --request-id 2026-04-24-first-real-store-screenshot-capture-request
+npm run store:capture-screenshot-request-from-rdp -- --request-id <auto-rdp-request-id>
 ```
 
 Truth note:
@@ -128,6 +128,9 @@ Truth note:
 - this runner captures from the real unpacked extension runtime, not preview-only pages
 - it applies one request-bound screenshot seed plus a runtime lock before each capture, then restores the pre-seed baseline on `unlock`
 - it also updates the request-bound `capture-notes.json` with the current reviewed truth statuses and operator notes
+- it only works for requests whose manifest keeps `captureAutomationMode` on the request-bound runner path
+- if the current request requires native toolbar-bubble popup capture or other manual-only proof, the command will reject that request instead of silently producing the wrong asset set
+- the current refreshed request package is [2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md](./store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md), and it stays `manual_capture_required` because slots `1` through `3` now need native toolbar-bubble capture while slots `4` and `5` move to the full-page shell
 - it does not mark the request fulfilled by itself; completion still requires the normal archive command
 
 If an RDP capture attempt leaves stale AI Usage Dashboard popup or extension windows behind, close them before retrying:
@@ -195,7 +198,7 @@ Truth note:
 5. Once the real extension-mode screenshots are ready, complete the pending request and archive the set:
 
 ```bash
-npm run store:complete-screenshot-capture-request -- --request-id 2026-04-24-first-real-store-screenshot-capture-request --captures-dir Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/captures
+npm run store:complete-screenshot-capture-request -- --request-id 2026-04-24-surface-expansion-store-screenshot-refresh-request --captures-dir Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/captures
 ```
 
 6. If the request package template changed and the existing pending request needs the newest generated README or notes scaffolding first, run:
@@ -203,6 +206,11 @@ npm run store:complete-screenshot-capture-request -- --request-id 2026-04-24-fir
 ```bash
 npm run store:refresh-screenshot-capture-request-packages
 ```
+
+Truth note:
+
+- pending requests refresh from the current request template so the latest selection-pack and workflow notes stay visible
+- fulfilled requests now refresh from their recorded manifest state instead, so historical automation mode and fulfillment semantics are not silently rewritten by later template changes
 
 ## Related Docs
 

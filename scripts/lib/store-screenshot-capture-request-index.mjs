@@ -21,10 +21,20 @@ function normalizeRecord(record, manifestPath, projectRoot, notesSummary) {
       typeof record?.fallbackSize === "string" ? record.fallbackSize : "",
     storyboardPath:
       typeof record?.storyboardPath === "string" ? record.storyboardPath : "",
+    selectionPackPath:
+      typeof record?.selectionPackPath === "string" ? record.selectionPackPath : "",
     baselinePackReadme:
       typeof record?.baselinePackReadme === "string"
         ? record.baselinePackReadme
         : "",
+    baselineArchiveReadme:
+      typeof record?.baselineArchiveReadme === "string"
+        ? record.baselineArchiveReadme
+        : "",
+    captureAutomationMode:
+      typeof record?.captureAutomationMode === "string"
+        ? record.captureAutomationMode
+        : "request_bound_rdp_runner",
     fulfillment:
       record?.fulfillment && typeof record.fulfillment === "object"
         ? {
@@ -100,7 +110,13 @@ function buildSectionLines(records, emptyMessage) {
       `  - required screenshots: \`${record.requiredScreenshotFilenames.length}\``,
     );
     lines.push(
+      `  - selection pack: \`${record.selectionPackPath || "not set"}\``,
+    );
+    lines.push(
       `  - baseline pack: \`${record.baselinePackReadme || "not set"}\``,
+    );
+    lines.push(
+      `  - automation mode: \`${record.captureAutomationMode || "not set"}\``,
     );
     lines.push(
       `  - capture notes: \`${record.captureNotesSummary.reviewedScreenshotCount}/${record.captureNotesSummary.noteCount}\` reviewed · truth boundaries \`${record.captureNotesSummary.truthBoundaryCount}\``,
@@ -144,8 +160,8 @@ export function buildStoreScreenshotCaptureRequestIndexMarkdown({
     "",
     "Purpose:",
     "",
-    "- track repo-backed store screenshot capture requests before the first real operator screenshot set exists",
-    "- distinguish pending screenshot capture packages from any future fulfilled store-asset records",
+    "- track repo-backed store screenshot capture requests across the current pending-to-fulfilled lifecycle",
+    "- distinguish pending screenshot capture packages from fulfilled request records and archived screenshot evidence",
     "",
     "Managed note:",
     "",
@@ -157,7 +173,7 @@ export function buildStoreScreenshotCaptureRequestIndexMarkdown({
     "Create a new pending store screenshot capture request:",
     "",
     "```bash",
-    "npm run store:create-screenshot-capture-request -- --request-id 2026-04-24-first-real-store-screenshot-capture-request",
+    "npm run store:create-screenshot-capture-request -- --request-id <request-id>",
     "```",
     "",
     "Refresh only the generated request index and machine-readable catalog:",
@@ -169,7 +185,7 @@ export function buildStoreScreenshotCaptureRequestIndexMarkdown({
     "Complete a pending request and archive one real screenshot set:",
     "",
     "```bash",
-    "npm run store:complete-screenshot-capture-request -- --request-id 2026-04-24-first-real-store-screenshot-capture-request --captures-dir Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/captures",
+    "npm run store:complete-screenshot-capture-request -- --request-id <pending-request-id> --captures-dir Doc/testing/store_screenshot_capture_requests/<pending-request-id>/captures",
     "```",
     "",
     "Refresh generated request packages after generator changes:",
@@ -182,6 +198,7 @@ export function buildStoreScreenshotCaptureRequestIndexMarkdown({
     "",
     "- a pending screenshot-capture request package is not a completed screenshot set",
     "- the baseline storyboard pack copied into a request package is only a baseline reference, not a finished store pack",
+    "- manual-only requests must stay manual-only; do not run them through the request-bound RDP runner just to fill files faster",
     "- future real screenshot archives should remain truthful extension-mode captures, not preview-only mocks",
     "",
     "## Pending Requests",

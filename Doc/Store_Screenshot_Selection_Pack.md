@@ -50,7 +50,7 @@ Purpose:
   - `04-settings-and-setup-depth.png`
   - `05-provider-or-dashboard-depth.png`
 - immediate next action:
-  - create one refreshed screenshot-capture request for the post-`Phase 160` surface contract
+  - fulfill the refreshed screenshot-capture request [2026-04-24-surface-expansion-store-screenshot-refresh-request](./testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md) for the post-`Phase 160` surface contract
 
 ## Slot Decisions
 

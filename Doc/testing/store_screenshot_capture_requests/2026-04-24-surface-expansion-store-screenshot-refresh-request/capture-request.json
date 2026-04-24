@@ -1,13 +1,17 @@
 {
+  "requestId": "2026-04-24-surface-expansion-store-screenshot-refresh-request",
+  "createdAt": "2026-04-24T08:50:12.783Z",
+  "status": "pending_operator_capture",
+  "sourceTemplate": "fixtures/store-screenshot/operator-capture-request-template.fixture.json",
   "storyboardPath": "Doc/Store_Screenshot_Storyboard.md",
   "selectionPackPath": "Doc/Store_Screenshot_Selection_Pack.md",
   "baselinePackReadme": "Doc/testing/store_screenshot_capture_packs/2026-04-24-toolbar-storyboard-baseline/README.md",
   "baselinePackPlan": "Doc/testing/store_screenshot_capture_packs/2026-04-24-toolbar-storyboard-baseline/capture-plan.json",
   "baselineArchiveReadme": "Doc/testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md",
-  "preferredSize": "1280x800",
-  "fallbackSize": "640x400",
   "runtimeSource": "RDP Chrome unpacked extension",
   "captureAutomationMode": "manual_capture_required",
+  "preferredSize": "1280x800",
+  "fallbackSize": "640x400",
   "requiredScreenshotFilenames": [
     "01-toolbar-first-quick-glance.png",
     "02-setup-guidance.png",
@@ -29,5 +33,6 @@
     "The selection pack defines which screenshot slots are stale and why; do not silently reuse the first archive as if it were the final submission pack.",
     "Do not use popup app-window smoke capture as the final replacement for the native toolbar bubble.",
     "Do not claim multilingual or unsupported provider coverage in screenshots before the product actually ships it."
-  ]
+  ],
+  "fulfillment": null
 }

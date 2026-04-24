@@ -10,6 +10,7 @@ Status note:
 
 - direction created on `2026-04-24`
 - first executable slice landed on `2026-04-24` through `Phase 161`
+- second executable slice landed on `2026-04-24` through `Phase 162`
 - this child TODO now becomes the next active `Direction 10` line after `Phase 160` refreshed the current popup / sidepanel / full-page runtime evidence
 - this child TODO assumes the current first real screenshot archive already exists and focuses on store-ready asset preparation after the surface-expansion workstream landed
 
@@ -40,10 +41,11 @@ Turn the current storyboard, screenshot workflow, first real archive, and listin
   - one maintained [Store_Screenshot_Selection_Pack.md](../Store_Screenshot_Selection_Pack.md)
   - one explicit stale-review pass across the first screenshot archive, current storyboard, current listing-copy pack, and current localization source pack
   - one rule that treats popup app-window smoke capture as QA evidence only, not as the final submission replacement for the native toolbar bubble
-- current boundary after `Phase 161`:
+- current boundary after `Phase 162`:
   - the first archived screenshot set remains truthful historical evidence
-  - zero archived screenshots are currently marked as final submission-ready after the popup/full-page surface-expansion line
-  - the next slice must create one refreshed screenshot capture request that targets the updated selection pack instead of reusing the first archive blindly
+  - one refreshed pending request now exists: [2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md](../testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md)
+  - that request is explicitly `manual_capture_required` because popup slots `1` through `3` now need native toolbar-bubble capture while slots `4` and `5` move to the full-page shell
+  - the next slice must fulfill and archive the refreshed screenshot set rather than generating another ad-hoc request
 
 ### B. Final Screenshot Ordering
 
@@ -80,10 +82,11 @@ Turn the current storyboard, screenshot workflow, first real archive, and listin
 ## Planned Numbered Slices
 
 1. screenshot selection and stale-archive review after new surfaces land - completed in `Phase 161`
-2. refreshed screenshot capture request for store-ready surfaces - next
-3. final screenshot ordering and caption contract
-4. listing-copy tightening against refreshed archives
-5. submission checklist and store-pack closeout
+2. refreshed screenshot capture request for store-ready surfaces - completed in `Phase 162`
+3. refreshed screenshot capture and archive against the current pending request - next
+4. final screenshot ordering and caption contract
+5. listing-copy tightening against refreshed archives
+6. submission checklist and store-pack closeout
 
 ## Out Of Scope
 

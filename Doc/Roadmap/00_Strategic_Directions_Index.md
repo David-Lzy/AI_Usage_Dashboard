@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-04-24:
 
-- the numbered phase queue is now completed through `Phase 161`
+- the numbered phase queue is now completed through `Phase 162`
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -44,6 +44,7 @@ As of 2026-04-24:
 - `Phase 159` completed the next runtime slice under that same Direction 10.2 plan by shipping short-lived popup-expand and sidepanel-expand entry hints, plus restrained source-aware full-page entry motion that stays disabled under reduced-motion mode
 - `Phase 160` completed the next runtime slice under that same Direction 10.2 plan by refreshing real RDP runtime captures for popup, sidepanel settings, and standard full-page routes while adding runtime-window cleanup into the helper workflow
 - `Phase 161` completed the first `Direction 10.3` slice by shipping one screenshot selection/stale-review pack, updating the storyboard toward native toolbar-bubble popup capture plus full-page depth capture, and marking the first screenshot archive as a historical baseline rather than the final submission pack
+- `Phase 162` completed the next `Direction 10.3` slice by shipping one refreshed pending screenshot-capture request, tightening request-generation truth rules for manual popup capture, and preserving fulfilled historical request semantics during package refresh
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
 - `Phase 42` has packaged `0.1.0-rc.2` and closed the release-closeout track for the narrowed RC
 - `Phase 43` completed the first `Direction 02` slice by productizing source-fidelity semantics in the side panel
@@ -161,7 +162,11 @@ As of 2026-04-24:
 - `Phase 156` completed the popup expand CTA to the dashboard full-page tab without changing the current popup quick-action sidepanel handoff semantics
 - `Phase 157` completed the sidebar expand CTA to the route-preserving full-page shell across dashboard, settings, and provider-detail routes while hiding that expand control inside the full-page surface itself
 - `Phase 158` completed the popup plus sidebar light-dark toggle button and carried that same quick control into the standard full-page shell without replacing Settings as the advanced theme surface
-- the immediate next executable work is now motion polish for expand/open transitions within the Direction 10 surface-expansion plus ambient-theme line captured in `10_2_Surface_Expansion_And_Ambient_Theme_Controls_TODOs.md`
+- `Phase 159` completed motion polish for popup-expand and sidepanel-expand full-page entry by adding short-lived entry hints plus restrained source-aware full-page shell entry motion that stays disabled when reduced motion is requested
+- `Phase 160` completed the RDP Chrome runtime QA refresh by refreshing popup, sidepanel-settings, and standard full-page dashboard/settings/provider-detail captures while adding runtime-window cleanup into the helper workflow
+- `Phase 161` completed the first `Direction 10.3` slice by turning the first screenshot archive into an explicit selection/stale-review pack and by updating the storyboard toward native toolbar-bubble popup capture plus full-page depth capture
+- `Phase 162` completed the next `Direction 10.3` slice by creating one refreshed pending screenshot-capture request whose popup slots stay manual-only and whose deeper slots now target the full-page shell
+- the immediate next executable work is now fulfilling and archiving that refreshed store screenshot request under `10_3_Store_Asset_Pack_And_Submission_TODOs.md`
 - the next major architecture line after that is Direction 09 runtime i18n bootstrap, captured in `09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md`
 - the remaining high-value work in Direction 05 and Direction 04 is now evidence closure, not more tool-building:
   - `05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md`
@@ -171,8 +176,8 @@ As of 2026-04-24:
   - Claude personal support is not yet graduated
   - Gemini remains policy-only
   - Codex and Cursor personal support remain partial, not absolute-remaining-balance claims
-- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 158`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
-- the numbered phase queue is now completed through `Phase 158`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
+- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 162`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
+- the numbered phase queue is now completed through `Phase 162`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
 - `Codex` personal support is already shipped as a `session_page` path, but it currently exposes usage-window percentages and reset timing, not one absolute remaining credit balance
 - `Cursor` personal support is already shipped as a `session_page` path, but it currently exposes billing-period usage context, not one exact remaining included-request counter
 - the extension action now opens a compact popup on click, the popup makes cached snapshot freshness explicit, and the badge shows the count of visible providers needing attention

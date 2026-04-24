@@ -16,6 +16,7 @@ import {
 } from "./lib/store-screenshot-rdp-capture.mjs";
 import {
   normalizeStoreScreenshotCaptureNotesDocument,
+  STORE_SCREENSHOT_CAPTURE_AUTOMATION_MODE_MANUAL_CAPTURE_REQUIRED,
   STORE_SCREENSHOT_CAPTURE_REQUEST_PENDING_STATUS,
   validateStoreScreenshotCaptureNotesDocument,
 } from "./lib/store-screenshot-capture-request.mjs";
@@ -132,6 +133,11 @@ async function run() {
   assert(
     requestManifest.status === STORE_SCREENSHOT_CAPTURE_REQUEST_PENDING_STATUS,
     `Store screenshot request \`${requestManifest.requestId || options.requestId}\` is not pending.`,
+  );
+  assert(
+    requestManifest.captureAutomationMode !==
+      STORE_SCREENSHOT_CAPTURE_AUTOMATION_MODE_MANUAL_CAPTURE_REQUIRED,
+    `Store screenshot request \`${requestManifest.requestId || options.requestId}\` requires manual capture and cannot use the request-bound RDP runner.`,
   );
 
   const originalNotesDocument = normalizeStoreScreenshotCaptureNotesDocument(
