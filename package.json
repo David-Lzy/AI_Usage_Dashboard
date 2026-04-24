@@ -113,6 +113,7 @@
     "phase151:review": "./scripts/with-preferred-node.sh node ./scripts/phase151-store-listing-localization-source-review.mjs",
     "phase152:review": "./scripts/with-preferred-node.sh node ./scripts/phase152-popup-action-width-contract-review.mjs",
     "phase153:review": "./scripts/with-preferred-node.sh node ./scripts/phase153-popup-bootstrap-width-and-node-runtime-review.mjs",
+    "phase155:review": "./scripts/with-preferred-node.sh node ./scripts/phase155-full-page-shell-entry-review.mjs",
     "interaction-audit:bundle": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-handoff-bundle.mjs",
     "interaction-audit:archive": "./scripts/with-preferred-node.sh node ./scripts/archive-interaction-audit-review.mjs",
     "interaction-audit:refresh-archive-index": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-review-archive-index.mjs",

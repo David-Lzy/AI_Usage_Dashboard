@@ -14,6 +14,7 @@ Status note:
 
 - this file records the agreed implementation contract for popup, sidebar, and future full-page shell expansion plus near-surface theme controls
 - refresh it whenever the expansion target, route behavior, theme-toggle semantics, or RDP review expectations change
+- `Phase 155` has now started the runtime line by shipping a shared sidepanel entry plus explicit `?surface=full-page` query contract for route-preserving full-page state
 
 Process rule:
 
@@ -21,7 +22,7 @@ Process rule:
 
 ## Purpose
 
-Define one stable contract for the next productization slices before runtime implementation begins.
+Define one stable contract for the next productization slices and keep it aligned as those runtime slices start landing.
 
 ## Surface Responsibilities
 
@@ -47,6 +48,9 @@ Define one stable contract for the next productization slices before runtime imp
 - not a preview-only fallback
 - not an external web page
 - should feel like an expanded view of extension state, not a separate product
+- current implementation baseline:
+  - route-preserving full-page state is now carried through the shared sidepanel entry with the explicit `?surface=full-page` query contract
+  - later slices can add dedicated expand buttons without inventing a second route model
 
 ## Expansion Entry Contract
 

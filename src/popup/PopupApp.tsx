@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 
 import type { AppState, ProviderId } from "../providers/types";
 import { sendAppMessage } from "../shared/app-client";
+import {
+  buildSidePanelExtensionPath,
+  buildSidePanelPreviewUrl,
+} from "../shared/extension-surface-paths";
 import { DEFAULT_THEME_SETTINGS, startThemeSettingsSync } from "../shared/theme";
 import { SummaryStrip } from "../sidepanel/components/SummaryStrip";
 import { StatusBadge } from "../sidepanel/components/StatusBadge";
-import {
-  buildSidePanelHash,
-  type SidePanelRouteState,
-} from "../sidepanel/route-state";
+import { type SidePanelRouteState } from "../sidepanel/route-state";
 import { buildPopupViewModel, type PopupGuidanceAction } from "./view-models";
 
 type PopupLoadState =
@@ -16,15 +17,8 @@ type PopupLoadState =
   | { status: "ready"; appState: AppState }
   | { status: "error"; message: string };
 
-function getSidePanelPreviewUrl(route: SidePanelRouteState): string {
-  return new URL(
-    `../sidepanel/index.html${buildSidePanelHash(route)}`,
-    window.location.href,
-  ).toString();
-}
-
 async function openSidePanelRoute(route: SidePanelRouteState) {
-  const path = `src/sidepanel/index.html${buildSidePanelHash(route)}`;
+  const path = buildSidePanelExtensionPath(route);
 
   if (
     typeof chrome !== "undefined" &&
@@ -62,7 +56,7 @@ async function openSidePanelRoute(route: SidePanelRouteState) {
   }
 
   window.open(
-    getSidePanelPreviewUrl(route),
+    buildSidePanelPreviewUrl(route, window.location.href),
     "_blank",
     "noopener,noreferrer",
   );

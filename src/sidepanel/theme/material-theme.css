@@ -16,6 +16,12 @@ body.popup-page,
   min-height: 0;
 }
 
+html.full-page-shell,
+body.full-page-shell,
+#root.full-page-shell-root {
+  min-height: 100vh;
+}
+
 html.popup-page,
 body.popup-page {
   width: min(
@@ -30,8 +36,17 @@ body.popup-page {
   overflow-x: hidden;
 }
 
+body.full-page-shell {
+  overflow-x: hidden;
+}
+
 #root.popup-page-root {
   width: 100%;
+}
+
+#root.full-page-shell-root {
+  width: 100%;
+  min-height: 100vh;
 }
 
 body {
@@ -117,6 +132,12 @@ summary:focus-visible {
   grid-template-columns: minmax(0, 1fr);
   gap: var(--app-space-4);
   padding: var(--app-space-4);
+}
+
+.full-page-shell .app-shell {
+  width: min(100%, 1440px);
+  margin-inline: auto;
+  padding: var(--app-space-5);
 }
 
 .app-shell > * {

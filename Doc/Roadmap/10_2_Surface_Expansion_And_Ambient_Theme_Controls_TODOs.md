@@ -9,7 +9,7 @@ Document class:
 Status note:
 
 - direction created on `2026-04-24`
-- no executable phase has started yet
+- first executable slice landed on `2026-04-24` through `Phase 155`
 - this child TODO turns the agreed popup / sidebar / full-page expansion contract into the next executable `Direction 10` track
 
 Process rule:
@@ -68,6 +68,10 @@ Related design contract:
 - define how popup opens dashboard there
 - define how sidebar opens the current route there
 - verify the shell preserves shared data state and theme state
+- `Phase 155` completed the first shared route-entry contract by shipping:
+  - one shared sidepanel/full-page path helper
+  - one explicit `?surface=full-page` route contract
+  - one repeatable preview review for dashboard, settings, and provider-detail full-page states
 
 ### B. Popup Expand CTA
 
@@ -130,8 +134,8 @@ Related design contract:
 
 ## Planned Numbered Slices
 
-1. full-page shell route and extension entry plumbing
-2. popup expand CTA to dashboard full-page tab
+1. full-page shell route and extension entry plumbing - completed in `Phase 155`
+2. popup expand CTA to dashboard full-page tab - next
 3. sidebar expand CTA to route-preserving full-page shell
 4. popup plus sidebar light-dark toggle button
 5. animation and motion polish for expand/open transitions

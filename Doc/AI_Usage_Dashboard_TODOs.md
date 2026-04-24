@@ -1,6 +1,6 @@
 # AI Usage Dashboard TODOs
 
-Date: 2026-04-20
+Date: 2026-04-24
 
 Process rule:
 
@@ -207,7 +207,8 @@ Phase status update:
 - `Phase 152` completed the next executable `Direction 10` slice and added one explicit popup host-width contract plus one repeatable width review for real Chrome action-popup rendering, so the popup no longer depends on browser-guessed body width in last-mile runtime use
 - `Phase 153` completed the next executable `Direction 10` slice and moved that popup width contract into the static popup bootstrap while routing repo-backed commands through one preferred local Node wrapper, so first-paint popup sizing and build/runtime verification no longer depend on post-boot class mutation or the older bundled Node runtime
 - `Phase 154` completed one documentation-only planning slice and turned the agreed next work into explicit TODO docs for Direction 10 surface expansion plus ambient theme controls, Direction 10 store asset-pack follow-through, Direction 09 runtime i18n bootstrap, Direction 05 theme-recovery operator closure, and Direction 04 interaction-audit operator closure
-- the immediate next executable work is now the Direction 10 surface-expansion plus ambient-theme line captured in `Doc/Roadmap/10_2_Surface_Expansion_And_Ambient_Theme_Controls_TODOs.md`
+- `Phase 155` completed the first runtime slice under that new Direction 10.2 plan and turned the future full-page shell into a real shared route-entry contract through `src/sidepanel/index.html?surface=full-page#...`
+- the immediate next executable work is now the popup expand CTA to the dashboard full-page tab inside the Direction 10 surface-expansion plus ambient-theme line captured in `Doc/Roadmap/10_2_Surface_Expansion_And_Ambient_Theme_Controls_TODOs.md`
 - the next major architecture line after that is the Direction 09 runtime i18n bootstrap captured in `Doc/Roadmap/09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
