@@ -150,6 +150,19 @@ Truth note:
 - the current refreshed request package is [2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md](./store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md), and it stays `manual_capture_required` because slots `1` through `3` now need native toolbar-bubble capture while slots `4` and `5` move to the full-page shell
 - it does not mark the request fulfilled by itself; completion still requires the normal archive command
 
+When a pending request mixes manual popup slots with request-bound full-page depth slots, use the hybrid runner instead:
+
+```bash
+npm run store:capture-hybrid-screenshot-request-from-rdp -- --request-id 2026-04-24-surface-expansion-store-screenshot-refresh-request
+```
+
+Truth note:
+
+- this runner refreshes `capture-plan.json` and captures only the request-bound entries whose `captureMode` stays on the RDP runner path
+- it updates `capture-notes.json` for the staged full-page entries only and leaves manual popup entries unresolved
+- it does not fulfill or archive the request; the package stays pending until the remaining manual toolbar-bubble screenshots are captured
+- after `Phase 164`, the current refreshed request already uses this path to stage full-page slots `4` and `5` while popup slots `1` through `3` still require manual native-toolbar capture
+
 If an RDP capture attempt leaves stale AI Usage Dashboard popup or extension windows behind, close them before retrying:
 
 ```bash

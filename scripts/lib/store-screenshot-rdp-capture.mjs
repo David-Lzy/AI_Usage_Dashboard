@@ -51,28 +51,28 @@ export const STORE_SCREENSHOT_RUNTIME_CAPTURE_PLAN = [
   {
     filename: "04-settings-and-setup-depth.png",
     preset: "settings-and-setup-depth",
-    routePath: "src/sidepanel/index.html#settings",
+    routePath: "src/sidepanel/index.html?surface=full-page#settings",
     expectedTitle: "AI Usage Dashboard",
     width: 1280,
     height: 800,
     captureTruth: "approximated_runtime_state",
     stateSummary:
-      "Settings shows setup ownership in the deeper workspace with the same mixed blockers carried over from the popup story.",
+      "Full-page Settings shows setup ownership in the deeper workspace with the same mixed blockers carried over from the popup story.",
     operatorNote:
-      "This is a real side-panel runtime capture from a request-bound seeded state used to keep the Settings setup story consistent during store screenshot review.",
+      "This is a real full-page shell capture from a request-bound seeded state used to keep the Settings setup story consistent during refreshed store screenshot review.",
   },
   {
     filename: "05-provider-or-dashboard-depth.png",
     preset: "provider-or-dashboard-depth",
-    routePath: "src/sidepanel/index.html#provider-detail/codex",
+    routePath: "src/sidepanel/index.html?surface=full-page#provider-detail/codex",
     expectedTitle: "AI Usage Dashboard",
     width: 1280,
     height: 800,
     captureTruth: "approximated_runtime_state",
     stateSummary:
-      "Codex provider detail shows a truthful warning-state review surface beyond the popup.",
+      "Full-page Codex provider detail shows a truthful warning-state review surface beyond the popup.",
     operatorNote:
-      "This screenshot uses a request-bound seeded Codex warning state so the side panel can show deeper contract context without claiming it came from a current live analytics session.",
+      "This screenshot uses a request-bound seeded Codex warning state so the full-page shell can show deeper contract context without claiming it came from a current live analytics session.",
   },
 ];
 

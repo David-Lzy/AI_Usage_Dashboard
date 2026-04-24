@@ -1,6 +1,10 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
+import {
+  buildStoreScreenshotCapturePlanDocument,
+} from "./store-screenshot-capture-plan.mjs";
+
 export const STORE_SCREENSHOT_CAPTURE_REQUEST_PENDING_STATUS =
   "pending_operator_capture";
 export const STORE_SCREENSHOT_CAPTURE_REQUEST_FULFILLED_STATUS =
@@ -288,6 +292,7 @@ function buildCapturesReadme({
   status,
   fulfillment,
   requiredScreenshotFilenames,
+  capturePlanDocument,
 }) {
   const pendingNote =
     status === STORE_SCREENSHOT_CAPTURE_REQUEST_PENDING_STATUS
@@ -300,6 +305,9 @@ function buildCapturesReadme({
           "- this request has already been fulfilled",
           `- durable archived evidence now lives in \`${fulfillment?.archiveReadmePath || "archive not recorded"}\``,
         ];
+  const capturePlanEntries = Array.isArray(capturePlanDocument?.entries)
+    ? capturePlanDocument.entries
+    : [];
 
   return `# Store Screenshot Capture Files - ${requestId}
 
@@ -318,6 +326,31 @@ ${pendingNote.join("\n")}
 ## Expected Filenames
 
 ${requiredScreenshotFilenames.map((item) => `- \`${item}\``).join("\n")}
+
+## Capture Plan
+
+- plan file:
+  - \`../capture-plan.json\`
+
+${capturePlanEntries
+  .map((item) => {
+    const lines = [
+      `- \`${item.filename}\``,
+      `  - mode: \`${item.captureMode}\``,
+      `  - surface: \`${item.requestedSurface}\``,
+    ];
+
+    if (typeof item.routePath === "string" && item.routePath.length > 0) {
+      lines.push(`  - route path: \`${item.routePath}\``);
+    }
+
+    if (typeof item.manualReason === "string" && item.manualReason.length > 0) {
+      lines.push(`  - manual note: ${item.manualReason}`);
+    }
+
+    return lines.join("\n");
+  })
+  .join("\n")}
 
 ## Notes File
 
@@ -342,6 +375,7 @@ function buildReadme({
   truthRules,
   status,
   fulfillment,
+  capturePlanDocument,
 }) {
   const statusNote =
     status === STORE_SCREENSHOT_CAPTURE_REQUEST_PENDING_STATUS
@@ -380,6 +414,9 @@ function buildReadme({
 - archived screenshots:
 ${fulfillment.screenshotFilenames.map((item) => `  - \`${item}\``).join("\n")}
 `;
+  const capturePlanEntries = Array.isArray(capturePlanDocument?.entries)
+    ? capturePlanDocument.entries
+    : [];
 
   return `# Store Screenshot Capture Request - ${requestId}
 
@@ -419,6 +456,8 @@ ${statusNote.join("\n")}
   - \`${fallbackSize}\`
 - capture notes:
   - \`capture-notes.json\`
+- capture plan:
+  - \`capture-plan.json\`
 
 ## Source References
 
@@ -436,6 +475,33 @@ ${selectionPackPath ? `- selection pack:
 ## Required Screenshot Filenames
 
 ${requiredScreenshotFilenames.map((item) => `- \`${item}\``).join("\n")}
+
+## Capture Plan Summary
+
+- request-bound runner slots:
+  - \`${capturePlanDocument?.summary?.requestBoundRunnerCount ?? 0}\`
+- manual operator slots:
+  - \`${capturePlanDocument?.summary?.manualOperatorCount ?? 0}\`
+
+${capturePlanEntries
+  .map((item) => {
+    const lines = [
+      `- \`${item.filename}\``,
+      `  - mode: \`${item.captureMode}\``,
+      `  - surface: \`${item.requestedSurface}\``,
+    ];
+
+    if (typeof item.routePath === "string" && item.routePath.length > 0) {
+      lines.push(`  - route path: \`${item.routePath}\``);
+    }
+
+    if (typeof item.manualReason === "string" && item.manualReason.length > 0) {
+      lines.push(`  - manual note: ${item.manualReason}`);
+    }
+
+    return lines.join("\n");
+  })
+  .join("\n")}
 
 ## Capture Notes
 
@@ -514,22 +580,37 @@ async function writeRequestFiles({
   notesDocument,
 }) {
   const capturesDir = path.join(requestDir, "captures");
+  const capturePlanDocument = buildStoreScreenshotCapturePlanDocument({
+    requestId: manifest.requestId,
+    requestCreatedAt: manifest.createdAt,
+    captureAutomationMode: manifest.captureAutomationMode,
+    requiredScreenshotFilenames: manifest.requiredScreenshotFilenames,
+  });
 
   await mkdir(requestDir, { recursive: true });
   await mkdir(capturesDir, { recursive: true });
   await writeFile(
     path.join(requestDir, "capture-request.json"),
-    `${JSON.stringify(manifest, null, 2)}\n`,
+    `${JSON.stringify(manifest, null, 2)}
+`,
+    "utf8",
+  );
+  await writeFile(
+    path.join(requestDir, "capture-plan.json"),
+    `${JSON.stringify(capturePlanDocument, null, 2)}
+`,
     "utf8",
   );
   await writeFile(
     path.join(requestDir, "capture-notes.json"),
-    `${JSON.stringify(notesDocument, null, 2)}\n`,
+    `${JSON.stringify(notesDocument, null, 2)}
+`,
     "utf8",
   );
   await writeFile(
     path.join(requestDir, "README.md"),
-    `${buildReadme(manifest).trimEnd()}\n`,
+    `${buildReadme({ ...manifest, capturePlanDocument }).trimEnd()}
+`,
     "utf8",
   );
   await writeFile(
@@ -539,7 +620,9 @@ async function writeRequestFiles({
       status: manifest.status,
       fulfillment: manifest.fulfillment,
       requiredScreenshotFilenames: manifest.requiredScreenshotFilenames,
-    }).trimEnd()}\n`,
+      capturePlanDocument,
+    }).trimEnd()}
+`,
     "utf8",
   );
 }

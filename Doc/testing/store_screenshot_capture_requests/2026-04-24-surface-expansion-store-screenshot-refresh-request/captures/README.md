@@ -22,6 +22,32 @@ Status note:
 - `04-settings-and-setup-depth.png`
 - `05-provider-or-dashboard-depth.png`
 
+## Capture Plan
+
+- plan file:
+  - `../capture-plan.json`
+
+- `01-toolbar-first-quick-glance.png`
+  - mode: `manual_operator_capture`
+  - surface: `native_toolbar_popup`
+  - manual note: This refreshed store slot must be captured from the native Chrome toolbar action bubble instead of the popup app-window helper.
+- `02-setup-guidance.png`
+  - mode: `manual_operator_capture`
+  - surface: `native_toolbar_popup`
+  - manual note: This refreshed store slot must be captured from the native Chrome toolbar action bubble instead of the popup app-window helper.
+- `03-honest-contract-or-policy-only.png`
+  - mode: `manual_operator_capture`
+  - surface: `native_toolbar_popup`
+  - manual note: This refreshed store slot must be captured from the native Chrome toolbar action bubble instead of the popup app-window helper.
+- `04-settings-and-setup-depth.png`
+  - mode: `request_bound_rdp_runner`
+  - surface: `full_page_shell`
+  - route path: `src/sidepanel/index.html?surface=full-page#settings`
+- `05-provider-or-dashboard-depth.png`
+  - mode: `request_bound_rdp_runner`
+  - surface: `full_page_shell`
+  - route path: `src/sidepanel/index.html?surface=full-page#provider-detail/codex`
+
 ## Notes File
 
 - update `../capture-notes.json` for every required screenshot before running the completion command

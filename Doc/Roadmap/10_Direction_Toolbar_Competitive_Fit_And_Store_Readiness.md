@@ -35,6 +35,7 @@ Execution note:
 - twentieth executable slice landed on `2026-04-24` through `Phase 161`
 - twenty-first executable slice landed on `2026-04-24` through `Phase 162`
 - twenty-second executable slice landed on `2026-04-24` through `Phase 163`
+- twenty-third executable slice landed on `2026-04-24` through `Phase 164`
 - this direction sharpens [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md) into a more explicit next-stage productization track
 
 Process rule:
@@ -141,8 +142,12 @@ As of 2026-04-24:
 - the repo now also ships one native-toolbar popup probe result:
   - current `RDP Chrome` does not expose the real popup bubble as one separate capturable X11 top-level window
   - helper-window evidence is valid for diagnosis, not as the final store popup screenshot replacement
+- the repo now also ships one hybrid refreshed-request staging path:
+  - the current pending request now includes one generated `capture-plan.json`
+  - popup slots `1` through `3` remain manual native-toolbar capture
+  - full-page slots `4` and `5` are already staged as request-bound full-page-shell captures inside the pending request package
 - the project now has an RDP Chrome environment available for truthful extension-mode capture and review
-- the current screenshot state is now `1 pending request / 1 archived set`
+- the current screenshot state is now `1 pending request / 1 archived set`, with the pending request already carrying `2` staged full-page captures and `3` remaining manual popup slots
 
 External signals:
 
@@ -241,9 +246,11 @@ Recommended rollout:
 
 `Phase 161` completed the first `Direction 10.3` slice by turning the first screenshot archive into an explicit selection and stale-review pack, updating the storyboard to prefer native toolbar-bubble popup capture plus full-page-shell depth capture, and marking the current listing-copy documents as pre-refresh baselines rather than the final submission pack.
 
-`Phase 162` completed the next `Direction 10.3` slice by turning that stale-review decision into one refreshed pending screenshot-capture request, tightening the request generator around `manual_capture_required` popup slots, and preserving fulfilled historical request semantics during package refresh. The next product slice is now fulfilling that refreshed request into one new archive before screenshot ordering and caption tightening continue.
+`Phase 162` completed the next `Direction 10.3` slice by turning that stale-review decision into one refreshed pending screenshot-capture request, tightening the request generator around `manual_capture_required` popup slots, and preserving fulfilled historical request semantics during package refresh. The next product slice was then to probe popup automation boundaries and stage only the remaining request-bound depth captures before final archive completion.
 
 `Phase 163` completed the next `Direction 10.3` slice by turning native-toolbar popup uncertainty into one truthful probe result: the current `RDP Chrome` runtime does not expose the real toolbar bubble as a separate capturable X11 top-level window, so the repo now keeps one helper-window evidence path instead of pretending popup automation is already solved. That keeps slots `1` through `3` manual in the refreshed request while leaving the deeper full-page slots ready for the next archive slice.
+
+`Phase 164` completed the next `Direction 10.3` slice by adding one generated `capture-plan.json` plus one hybrid request-bound capture runner that stages only the full-page-shell depth slots inside the refreshed pending request. The repo now keeps slots `1` through `3` manual native-toolbar popup capture, stages slots `4` and `5` as truthful request-bound full-page-shell evidence, and leaves the request pending until the remaining manual popup captures are assembled into the next archive. The next product slice is now completing those manual popup captures and then archiving the refreshed set before screenshot ordering and caption tightening continue.
 
 ## References
 

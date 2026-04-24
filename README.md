@@ -182,6 +182,10 @@ The Chrome action now opens a compact popup first:
   - current `RDP Chrome` does not expose the native popup as a separate capturable X11 top-level window
   - the probe can capture one truthful helper-window screenshot that documents the environment boundary
   - popup slots `1` through `3` in the refreshed request therefore remain manual native-toolbar captures rather than silently falling back to the wrong surface
+- the repo now also ships one hybrid request-bound full-page staging pass for that refreshed screenshot request:
+  - generated `capture-plan.json` now marks popup slots `1` through `3` as manual native-toolbar capture and depth slots `4` and `5` as request-bound full-page-shell capture
+  - the pending request package now already includes staged full-page captures for slots `4` and `5`
+  - screenshot truth therefore still remains `1 pending request / 1 archived set` until the remaining manual popup captures are completed and archived
 - the popup runtime now also ships one explicit host-width contract for real Chrome action-popup rendering, so the browser no longer has to guess popup width from the document body
 - the popup runtime now also ships one static bootstrap width contract in [src/popup/index.html](./src/popup/index.html), and repo-backed tool commands now prefer the local Node runtime through [scripts/with-preferred-node.sh](./scripts/with-preferred-node.sh) instead of relying on the older Cursor-bundled `node`
 - the repo now also ships one shared route-entry contract for the future full-page shell through `src/sidepanel/index.html?surface=full-page#...`, so popup and sidebar expand controls can target one route-preserving tab surface without duplicating the main app entry

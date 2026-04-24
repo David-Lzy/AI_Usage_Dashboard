@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [163_Phase_Native_Toolbar_Popup_Probe.md](./Archive/163_Phase_Native_Toolbar_Popup_Probe.md)
+- latest completed slice: [164_Phase_Hybrid_Request_Bound_Full_Page_Capture.md](./Archive/164_Phase_Hybrid_Request_Bound_Full_Page_Capture.md)
 
 Completed phases should be moved to:
 
@@ -209,6 +209,8 @@ Completed phases should be moved to:
 - [160_Phase_RDP_Runtime_Surface_Refresh_And_Window_Cleanup.md](./Archive/160_Phase_RDP_Runtime_Surface_Refresh_And_Window_Cleanup.md) - completed and archived on 2026-04-24
 - [161_Phase_Store_Screenshot_Selection_And_Stale_Review.md](./Archive/161_Phase_Store_Screenshot_Selection_And_Stale_Review.md) - completed and archived on 2026-04-24
 - [162_Phase_Refreshed_Store_Screenshot_Capture_Request.md](./Archive/162_Phase_Refreshed_Store_Screenshot_Capture_Request.md) - completed and archived on 2026-04-24
+- [163_Phase_Native_Toolbar_Popup_Probe.md](./Archive/163_Phase_Native_Toolbar_Popup_Probe.md) - completed and archived on 2026-04-24
+- [164_Phase_Hybrid_Request_Bound_Full_Page_Capture.md](./Archive/164_Phase_Hybrid_Request_Bound_Full_Page_Capture.md) - completed and archived on 2026-04-24
 
 ## Dependency Notes
 
