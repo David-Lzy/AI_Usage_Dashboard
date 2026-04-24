@@ -178,6 +178,10 @@ The Chrome action now opens a compact popup first:
 - the repo now also ships one maintained store-listing localization source pack anchored to the current manifest, maintained listing-copy pack, and first archived screenshot set, so future translated store listings can stay aligned with the same truth boundary
 - the repo now also ships one maintained screenshot selection pack that marks the first screenshot archive as a historical baseline after the popup/full-page surface-expansion line, so refreshed store-ready capture is now driven by an explicit stale-review instead of guesswork
 - the repo now also ships one refreshed pending screenshot-capture request for that post-surface-expansion asset set, so current screenshot truth is now `1 pending request / 1 archived set` instead of treating the first archive as the final submission pack
+- the repo now also ships one native toolbar-popup probe plus helper-window evidence review:
+  - current `RDP Chrome` does not expose the native popup as a separate capturable X11 top-level window
+  - the probe can capture one truthful helper-window screenshot that documents the environment boundary
+  - popup slots `1` through `3` in the refreshed request therefore remain manual native-toolbar captures rather than silently falling back to the wrong surface
 - the popup runtime now also ships one explicit host-width contract for real Chrome action-popup rendering, so the browser no longer has to guess popup width from the document body
 - the popup runtime now also ships one static bootstrap width contract in [src/popup/index.html](./src/popup/index.html), and repo-backed tool commands now prefer the local Node runtime through [scripts/with-preferred-node.sh](./scripts/with-preferred-node.sh) instead of relying on the older Cursor-bundled `node`
 - the repo now also ships one shared route-entry contract for the future full-page shell through `src/sidepanel/index.html?surface=full-page#...`, so popup and sidebar expand controls can target one route-preserving tab surface without duplicating the main app entry

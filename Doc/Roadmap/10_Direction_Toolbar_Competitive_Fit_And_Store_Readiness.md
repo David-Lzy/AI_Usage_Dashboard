@@ -34,6 +34,7 @@ Execution note:
 - nineteenth executable slice landed on `2026-04-24` through `Phase 160`
 - twentieth executable slice landed on `2026-04-24` through `Phase 161`
 - twenty-first executable slice landed on `2026-04-24` through `Phase 162`
+- twenty-second executable slice landed on `2026-04-24` through `Phase 163`
 - this direction sharpens [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md) into a more explicit next-stage productization track
 
 Process rule:
@@ -137,6 +138,9 @@ As of 2026-04-24:
   - [2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md](../testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md)
   - slots `1` through `3` require native toolbar-bubble popup capture
   - slots `4` and `5` require full-page-shell depth capture
+- the repo now also ships one native-toolbar popup probe result:
+  - current `RDP Chrome` does not expose the real popup bubble as one separate capturable X11 top-level window
+  - helper-window evidence is valid for diagnosis, not as the final store popup screenshot replacement
 - the project now has an RDP Chrome environment available for truthful extension-mode capture and review
 - the current screenshot state is now `1 pending request / 1 archived set`
 
@@ -238,6 +242,8 @@ Recommended rollout:
 `Phase 161` completed the first `Direction 10.3` slice by turning the first screenshot archive into an explicit selection and stale-review pack, updating the storyboard to prefer native toolbar-bubble popup capture plus full-page-shell depth capture, and marking the current listing-copy documents as pre-refresh baselines rather than the final submission pack.
 
 `Phase 162` completed the next `Direction 10.3` slice by turning that stale-review decision into one refreshed pending screenshot-capture request, tightening the request generator around `manual_capture_required` popup slots, and preserving fulfilled historical request semantics during package refresh. The next product slice is now fulfilling that refreshed request into one new archive before screenshot ordering and caption tightening continue.
+
+`Phase 163` completed the next `Direction 10.3` slice by turning native-toolbar popup uncertainty into one truthful probe result: the current `RDP Chrome` runtime does not expose the real toolbar bubble as a separate capturable X11 top-level window, so the repo now keeps one helper-window evidence path instead of pretending popup automation is already solved. That keeps slots `1` through `3` manual in the refreshed request while leaving the deeper full-page slots ready for the next archive slice.
 
 ## References
 

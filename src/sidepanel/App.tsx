@@ -40,6 +40,7 @@ import { InteractionAuditPage } from "./routes/InteractionAuditPage";
 import { JetBrainsFixtureCapturePage } from "./routes/JetBrainsFixtureCapturePage";
 import { ProviderDetailPage } from "./routes/ProviderDetailPage";
 import { SettingsPage } from "./routes/SettingsPage";
+import { StoreScreenshotNativePopupProbePage } from "./routes/StoreScreenshotNativePopupProbePage";
 import { StoreScreenshotSeedPage } from "./routes/StoreScreenshotSeedPage";
 import { ThemeRecoveryReviewPage } from "./routes/ThemeRecoveryReviewPage";
 import {
@@ -66,6 +67,7 @@ type SpecialSidePanelRoute =
   | "debug-capture-jetbrains"
   | "debug-interaction-audit"
   | "debug-store-screenshot-seed"
+  | "debug-native-popup-probe"
   | "debug-theme-recovery-review";
 
 type StandardAppProps = {
@@ -86,6 +88,8 @@ function getSpecialSidePanelRoute(
       return "debug-interaction-audit";
     case "#debug-store-screenshot-seed":
       return "debug-store-screenshot-seed";
+    case "#debug-native-popup-probe":
+      return "debug-native-popup-probe";
     case "#debug-theme-recovery-review":
       return "debug-theme-recovery-review";
     default:
@@ -295,6 +299,8 @@ function SpecialRouteApp({
       return <InteractionAuditPage />;
     case "debug-store-screenshot-seed":
       return <StoreScreenshotSeedPage />;
+    case "debug-native-popup-probe":
+      return <StoreScreenshotNativePopupProbePage />;
     case "debug-theme-recovery-review":
       return <ThemeRecoveryReviewPage />;
     default:

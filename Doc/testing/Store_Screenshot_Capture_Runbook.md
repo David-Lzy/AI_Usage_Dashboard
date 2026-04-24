@@ -100,6 +100,23 @@ Truth note:
 - the popup route still opens as its own extension app window here, so it is useful for runtime QA but not a pixel-identical replacement for the true toolbar action bubble
 - it is a smoke-capture tool, not a substitute for the full storyboard review and archive flow
 
+## Native Toolbar Popup Probe
+
+When you need to verify whether the current `RDP Chrome` session exposes the native toolbar popup as a separately capturable top-level X11 window, use:
+
+```bash
+npm run store:probe-native-toolbar-popup
+```
+
+Truth note:
+
+- this probe opens one dedicated helper route inside the real unpacked extension runtime and attempts to trigger the real action popup from there
+- if the current environment exposes one separate popup window, the probe records it
+- if the current environment does not expose one separate popup window, the probe still records one helper-window screenshot plus one results JSON file instead of silently pretending the helper window is the final popup asset
+- the current truthful result after `Phase 163` is that `RDP Chrome` does not expose the native toolbar bubble as one separate capturable X11 top-level window in this environment
+- because of that boundary, popup slots `1` through `3` in [2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md](./store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md) remain manual native-toolbar captures
+- helper-window evidence from this probe is valid for runtime diagnosis and truth-boundary documentation, not as the final Chrome Web Store popup screenshot replacement
+
 ## Request-Bound Seed And Capture Helpers
 
 When the request needs one stable seeded runtime pass before manual review or archival, use:

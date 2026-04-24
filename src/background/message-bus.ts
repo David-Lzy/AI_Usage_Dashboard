@@ -48,7 +48,8 @@ export type AppMessage =
       workspaceId: string | null;
     }
   | { type: "app:toggle-provider-permission"; providerId: ProviderId }
-  | { type: "app:request-refresh"; providerId?: ProviderId };
+  | { type: "app:request-refresh"; providerId?: ProviderId }
+  | { type: "app:open-action-popup" };
 
 export type AppMessageResponse =
   | {
@@ -311,6 +312,42 @@ export async function handleAppMessage(
       });
 
       return { ok: true, state };
+    }
+
+    case "app:open-action-popup": {
+      const state = await seedAppStateIfEmpty();
+      await ensurePeriodicSyncAlarm(state.settings);
+
+      if (typeof chrome.action?.openPopup !== "function") {
+        return {
+          ok: false,
+          error:
+            "The current Chrome runtime does not expose chrome.action.openPopup for the native popup probe.",
+        };
+      }
+
+      try {
+        await chrome.action.openPopup();
+      } catch (error) {
+        return {
+          ok: false,
+          error:
+            error instanceof Error
+              ? error.message
+              : "The native popup probe could not open the action popup.",
+        };
+      }
+
+      return {
+        ok: true,
+        state,
+        notice: {
+          tone: "success",
+          title: "Native popup requested",
+          message:
+            "The background service worker asked Chrome to open the toolbar action popup.",
+        },
+      };
     }
 
     default: {
