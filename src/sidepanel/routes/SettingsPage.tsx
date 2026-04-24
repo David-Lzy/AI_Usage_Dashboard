@@ -49,6 +49,9 @@ type CredentialProviderSection = {
 
 type SettingsPageProps = {
   onBack: () => void;
+  themeActionLabel?: string;
+  themeActionTitle?: string;
+  onToggleThemeMode?: () => void;
   onOpenFullPage?: () => void;
   settings: AppSettings;
   providers: ProviderSetting[];
@@ -85,6 +88,9 @@ type SettingsPageProps = {
 
 export function SettingsPage({
   onBack,
+  themeActionLabel,
+  themeActionTitle,
+  onToggleThemeMode,
   onOpenFullPage,
   settings,
   providers,
@@ -276,11 +282,14 @@ export function SettingsPage({
       <TopBar
         title="Settings"
         subtitle="Dashboard preferences and access"
+        themeActionLabel={themeActionLabel}
+        themeActionTitle={themeActionTitle}
         expandActionLabel="Tab"
         expandActionTitle="Open settings tab"
         secondaryActionLabel="Back"
         primaryActionLabel="Save"
         sticky
+        onThemeAction={onToggleThemeMode}
         onExpandAction={onOpenFullPage}
         onSecondaryAction={onBack}
         onPrimaryAction={onSavePreferences}

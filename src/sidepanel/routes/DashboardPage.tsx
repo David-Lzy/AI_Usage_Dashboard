@@ -8,6 +8,9 @@ type DashboardPageProps = {
   summaryItems: SummaryItem[];
   providers: ProviderViewModel[];
   onOpenProvider: (providerId: ProviderId) => void;
+  themeActionLabel?: string;
+  themeActionTitle?: string;
+  onToggleThemeMode?: () => void;
   onOpenFullPage?: () => void;
   onOpenSettings: () => void;
   onRefreshProvider: (providerId: ProviderId) => void;
@@ -18,6 +21,9 @@ export function DashboardPage({
   summaryItems,
   providers,
   onOpenProvider,
+  themeActionLabel,
+  themeActionTitle,
+  onToggleThemeMode,
   onOpenFullPage,
   onOpenSettings,
   onRefreshProvider,
@@ -28,10 +34,13 @@ export function DashboardPage({
       <TopBar
         title="AI Usage Dashboard"
         subtitle="Usage, credits, and sync health"
+        themeActionLabel={themeActionLabel}
+        themeActionTitle={themeActionTitle}
         expandActionLabel="Tab"
         expandActionTitle="Open dashboard tab"
         secondaryActionLabel="Refresh All"
         primaryActionLabel="Settings"
+        onThemeAction={onToggleThemeMode}
         onExpandAction={onOpenFullPage}
         onSecondaryAction={onRefreshAll}
         onPrimaryAction={onOpenSettings}

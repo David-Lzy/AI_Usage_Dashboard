@@ -481,6 +481,21 @@ export function resolveThemeMode(
   return reader?.matchMedia?.(DARK_COLOR_SCHEME_QUERY).matches ? "dark" : "light";
 }
 
+export function buildQuickThemeToggle(
+  themeMode: ThemeMode,
+  reader?: MatchMediaReader,
+): { nextMode: ResolvedThemeMode; label: "Light" | "Dark"; title: string } {
+  const resolvedThemeMode = resolveThemeMode(themeMode, reader);
+  const nextMode = resolvedThemeMode === "dark" ? "light" : "dark";
+  const label = nextMode === "dark" ? "Dark" : "Light";
+
+  return {
+    nextMode,
+    label,
+    title: `Switch to ${nextMode} mode`,
+  };
+}
+
 export function applyThemeMode(
   themeMode: ThemeMode,
   root: ThemeRoot,

@@ -181,6 +181,11 @@ The Chrome action now opens a compact popup first:
 - the repo now also ships one shared route-entry contract for the future full-page shell through `src/sidepanel/index.html?surface=full-page#...`, so popup and sidebar expand controls can target one route-preserving tab surface without duplicating the main app entry
 - the popup header now also ships one compact `Tab` expand control that opens the full-page dashboard tab through that shared route-entry contract, while the existing popup quick actions still keep their current sidepanel handoff semantics
 - the side-panel top bars now also ship one compact `Tab` expand control that preserves the current `dashboard`, `settings`, or `provider-detail` route when opening the shared full-page shell, and that expand control now stays hidden once the runtime is already inside `?surface=full-page`
+- the popup header and standard side-panel top bars now also ship one near-surface `Light / Dark` quick toggle:
+  - it flips between explicit `light` and `dark` only
+  - when the saved mode is `system`, the first click moves into the opposite explicit mode of the currently resolved runtime theme
+  - full-page shell inherits the same top-bar control
+  - preset accents and custom-seed state remain unchanged
 - the badge shows the number of visible providers currently needing attention
 - the side panel remains the canonical surface for settings, source diagnostics, and provider detail
 

@@ -12,6 +12,7 @@ Status note:
 - first executable slice landed on `2026-04-24` through `Phase 155`
 - second executable slice landed on `2026-04-24` through `Phase 156`
 - third executable slice landed on `2026-04-24` through `Phase 157`
+- fourth executable slice landed on `2026-04-24` through `Phase 158`
 - this child TODO turns the agreed popup / sidebar / full-page expansion contract into the next executable `Direction 10` track
 
 Process rule:
@@ -115,6 +116,16 @@ Related design contract:
 - make full-page shell inherit the sidebar control
 - define explicit behavior when the saved theme mode is currently `system`
 - keep Settings as the authoritative advanced theme surface
+- `Phase 158` completed this ambient theme slice by shipping:
+  - one shared quick-toggle helper that flips between explicit light and dark from the current resolved mode
+  - one popup-header quick theme toggle
+  - one shared sidepanel/full-page top-bar quick theme toggle across standard operational routes
+  - one repeatable popup plus sidebar plus full-page runtime review for the quick toggle
+- current boundary after `Phase 158`:
+  - popup expand and sidebar expand are both in place
+  - popup and sidepanel quick theme toggles now ship for standard operational surfaces
+  - full-page shell inherits that same top-bar toggle
+  - the next runtime slice is motion polish for expand/open transitions
 
 ### E. Motion Polish
 
@@ -155,8 +166,8 @@ Related design contract:
 1. full-page shell route and extension entry plumbing - completed in `Phase 155`
 2. popup expand CTA to dashboard full-page tab - completed in `Phase 156`
 3. sidebar expand CTA to route-preserving full-page shell - completed in `Phase 157`
-4. popup plus sidebar light-dark toggle button - next
-5. animation and motion polish for expand/open transitions
+4. popup plus sidebar light-dark toggle button - completed in `Phase 158`
+5. animation and motion polish for expand/open transitions - next
 6. RDP Chrome runtime QA and screenshot refresh
 
 ## Out Of Scope

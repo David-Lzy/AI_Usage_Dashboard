@@ -8,7 +8,11 @@ import {
   buildSidePanelExtensionPath,
   buildSidePanelPreviewUrl,
 } from "../shared/extension-surface-paths";
-import { DEFAULT_THEME_SETTINGS, startThemeSettingsSync } from "../shared/theme";
+import {
+  buildQuickThemeToggle,
+  DEFAULT_THEME_SETTINGS,
+  startThemeSettingsSync,
+} from "../shared/theme";
 import { SummaryStrip } from "../sidepanel/components/SummaryStrip";
 import { StatusBadge } from "../sidepanel/components/StatusBadge";
 import { type SidePanelRouteState } from "../sidepanel/route-state";
@@ -125,6 +129,7 @@ export function PopupApp() {
     status: "loading",
   });
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isThemeTogglePending, setIsThemeTogglePending] = useState(false);
 
   useEffect(() => {
     let disposed = false;
@@ -178,6 +183,31 @@ export function PopupApp() {
     setIsRefreshing(false);
   }
 
+  async function handleToggleThemeMode() {
+    if (loadState.status !== "ready") {
+      return;
+    }
+
+    setIsThemeTogglePending(true);
+    const quickThemeToggle = buildQuickThemeToggle(
+      loadState.appState.settings.themeMode,
+      typeof window !== "undefined" ? window : undefined,
+    );
+    const response = await sendAppMessage({
+      type: "app:update-settings",
+      settings: { themeMode: quickThemeToggle.nextMode },
+    });
+
+    if (!response.ok) {
+      setLoadState({ status: "error", message: response.error });
+      setIsThemeTogglePending(false);
+      return;
+    }
+
+    setLoadState({ status: "ready", appState: response.state });
+    setIsThemeTogglePending(false);
+  }
+
   if (loadState.status === "loading") {
     return (
       <main className="app-shell popup-shell">
@@ -229,6 +259,10 @@ export function PopupApp() {
 
   const popupModel = buildPopupViewModel(loadState.appState);
   const guidanceCard = popupModel.guidanceCard;
+  const quickThemeToggle = buildQuickThemeToggle(
+    loadState.appState.settings.themeMode,
+    typeof window !== "undefined" ? window : undefined,
+  );
 
   return (
     <main className="app-shell popup-shell">
@@ -248,6 +282,20 @@ export function PopupApp() {
             onClick={handleRefresh}
           >
             {isRefreshing ? "Refreshing" : "Refresh"}
+          </button>
+          <button
+            className="icon-button"
+            data-popup-toggle-theme-mode="true"
+            data-theme-local-surface="popup-toggle-theme-mode"
+            type="button"
+            aria-label={quickThemeToggle.title}
+            title={quickThemeToggle.title}
+            disabled={isThemeTogglePending}
+            onClick={() => {
+              void handleToggleThemeMode();
+            }}
+          >
+            {quickThemeToggle.label}
           </button>
           <button
             className="icon-button"

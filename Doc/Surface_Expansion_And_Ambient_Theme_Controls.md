@@ -16,6 +16,8 @@ Status note:
 - refresh it whenever the expansion target, route behavior, theme-toggle semantics, or RDP review expectations change
 - `Phase 155` has now started the runtime line by shipping a shared sidepanel entry plus explicit `?surface=full-page` query contract for route-preserving full-page state
 - `Phase 156` has now added the first popup-side runtime action on top of that baseline by shipping one compact popup-header expand control that opens the dashboard full-page tab
+- `Phase 157` has now added one route-preserving sidepanel expand control for dashboard, settings, and provider-detail routes
+- `Phase 158` has now added one popup plus sidebar quick light-dark toggle that also carries into the standard full-page shell
 
 Process rule:
 
@@ -69,6 +71,9 @@ Define one stable contract for the next productization slices and keep it aligne
 - sidebar expand opens one route-preserving full-page shell
 - it should preserve the current route when that route is supported in full-page mode
 - unsupported routes should fall back explicitly and truthfully instead of silently dropping state
+- current implementation note:
+  - dashboard, settings, and provider detail now ship one compact top-bar `Tab` action
+  - that action stays hidden once the runtime is already inside `?surface=full-page`
 
 ## Route Preservation Rules
 
@@ -88,6 +93,10 @@ Define one stable contract for the next productization slices and keep it aligne
   - preset accents
   - custom seed
 - quick toggle must not wipe or mutate preset/custom-seed configuration
+- current implementation note:
+  - popup header now ships one quick light-dark toggle
+  - standard sidepanel and full-page top bars now ship the same quick toggle
+  - the toggle only rewrites `themeMode`, never `themePreset` or `themeCustomSeedHex`
 
 ### `system` Mode Semantics
 

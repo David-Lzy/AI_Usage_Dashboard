@@ -5,6 +5,7 @@ import {
   buildCustomThemePalette,
   applyThemeSettings,
   applyThemeMode,
+  buildQuickThemeToggle,
   normalizeThemeCustomSeedHex,
   normalizeThemeSettings,
   normalizeThemePreset,
@@ -81,6 +82,37 @@ describe("theme helpers", () => {
         matchMedia: () => ({ matches: false }),
       }),
     ).toBe("light");
+  });
+
+  it("builds a quick light-dark toggle from the current resolved mode", () => {
+    expect(buildQuickThemeToggle("light")).toEqual({
+      nextMode: "dark",
+      label: "Dark",
+      title: "Switch to dark mode",
+    });
+    expect(buildQuickThemeToggle("dark")).toEqual({
+      nextMode: "light",
+      label: "Light",
+      title: "Switch to light mode",
+    });
+    expect(
+      buildQuickThemeToggle("system", {
+        matchMedia: () => ({ matches: false }),
+      }),
+    ).toEqual({
+      nextMode: "dark",
+      label: "Dark",
+      title: "Switch to dark mode",
+    });
+    expect(
+      buildQuickThemeToggle("system", {
+        matchMedia: () => ({ matches: true }),
+      }),
+    ).toEqual({
+      nextMode: "light",
+      label: "Light",
+      title: "Switch to light mode",
+    });
   });
 
   it("applies explicit theme metadata to the root", () => {

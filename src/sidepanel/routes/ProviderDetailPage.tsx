@@ -7,6 +7,9 @@ import type { ProviderViewModel } from "../view-models";
 type ProviderDetailPageProps = {
   provider: ProviderViewModel;
   onBack: () => void;
+  themeActionLabel?: string;
+  themeActionTitle?: string;
+  onToggleThemeMode?: () => void;
   onOpenFullPage?: () => void;
   onRefresh: (providerId: ProviderId) => void;
 };
@@ -14,6 +17,9 @@ type ProviderDetailPageProps = {
 export function ProviderDetailPage({
   provider,
   onBack,
+  themeActionLabel,
+  themeActionTitle,
+  onToggleThemeMode,
   onOpenFullPage,
   onRefresh,
 }: ProviderDetailPageProps) {
@@ -69,10 +75,13 @@ export function ProviderDetailPage({
       <TopBar
         title={provider.providerLabel}
         subtitle="Current provider source snapshot"
+        themeActionLabel={themeActionLabel}
+        themeActionTitle={themeActionTitle}
         expandActionLabel="Tab"
         expandActionTitle={`Open ${provider.providerLabel} detail tab`}
         secondaryActionLabel="Back"
         primaryActionLabel="Refresh"
+        onThemeAction={onToggleThemeMode}
         onExpandAction={onOpenFullPage}
         onSecondaryAction={onBack}
         onPrimaryAction={() => onRefresh(provider.providerId)}

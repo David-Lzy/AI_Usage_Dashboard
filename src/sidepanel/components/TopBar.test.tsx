@@ -4,26 +4,33 @@ import { describe, expect, it } from "vitest";
 import { TopBar } from "./TopBar";
 
 describe("TopBar", () => {
-  it("renders the optional full-page expand action ahead of the standard actions", () => {
+  it("renders optional theme and full-page actions ahead of the standard actions", () => {
     const html = renderToStaticMarkup(
       <TopBar
         title="AI Usage Dashboard"
         subtitle="Usage, credits, and sync health"
+        themeActionLabel="Dark"
+        themeActionTitle="Switch to dark mode"
         expandActionLabel="Tab"
         expandActionTitle="Open dashboard tab"
         secondaryActionLabel="Refresh All"
         primaryActionLabel="Settings"
+        onThemeAction={() => {}}
         onExpandAction={() => {}}
         onSecondaryAction={() => {}}
         onPrimaryAction={() => {}}
       />,
     );
 
+    expect(html).toContain('data-topbar-toggle-theme-mode="true"');
+    expect(html).toContain('aria-label="Switch to dark mode"');
     expect(html).toContain('data-topbar-open-full-page="true"');
     expect(html).toContain('aria-label="Open dashboard tab"');
+    expect(html).toContain(">Dark<");
     expect(html).toContain(">Tab<");
     expect(html).toContain(">Refresh All<");
     expect(html).toContain(">Settings<");
+    expect(html.indexOf(">Dark<")).toBeLessThan(html.indexOf(">Tab<"));
     expect(html.indexOf(">Tab<")).toBeLessThan(html.indexOf(">Refresh All<"));
   });
 

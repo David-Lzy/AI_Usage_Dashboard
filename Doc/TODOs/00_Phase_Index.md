@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [157_Phase_Sidebar_Expand_CTA_To_Route_Preserving_Full_Page_Shell.md](./Archive/157_Phase_Sidebar_Expand_CTA_To_Route_Preserving_Full_Page_Shell.md)
+- latest completed slice: [158_Phase_Popup_And_Sidebar_Light_Dark_Toggle.md](./Archive/158_Phase_Popup_And_Sidebar_Light_Dark_Toggle.md)
 
 Completed phases should be moved to:
 
@@ -204,6 +204,7 @@ Completed phases should be moved to:
 - [155_Phase_Full_Page_Shell_Route_And_Entry_Plumbing.md](./Archive/155_Phase_Full_Page_Shell_Route_And_Entry_Plumbing.md) - completed and archived on 2026-04-24
 - [156_Phase_Popup_Expand_CTA_To_Full_Page_Dashboard_Tab.md](./Archive/156_Phase_Popup_Expand_CTA_To_Full_Page_Dashboard_Tab.md) - completed and archived on 2026-04-24
 - [157_Phase_Sidebar_Expand_CTA_To_Route_Preserving_Full_Page_Shell.md](./Archive/157_Phase_Sidebar_Expand_CTA_To_Route_Preserving_Full_Page_Shell.md) - completed and archived on 2026-04-24
+- [158_Phase_Popup_And_Sidebar_Light_Dark_Toggle.md](./Archive/158_Phase_Popup_And_Sidebar_Light_Dark_Toggle.md) - completed and archived on 2026-04-24
 
 ## Dependency Notes
 

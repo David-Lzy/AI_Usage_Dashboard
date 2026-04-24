@@ -21,6 +21,7 @@ import {
   createPageBindingFromTab,
 } from "../shared/page-bindings";
 import {
+  buildQuickThemeToggle,
   DEFAULT_THEME_SETTINGS,
   normalizeThemeSettings,
   startThemeSettingsSync,
@@ -864,12 +865,21 @@ function StandardApp({ locationHash }: StandardAppProps) {
     route.name === "provider-detail"
       ? getProviderViewModel(appState, route.providerId)
       : null;
+  const quickThemeToggle = buildQuickThemeToggle(
+    appState.settings.themeMode,
+    typeof window !== "undefined" ? window : undefined,
+  );
 
   return (
     <>
       {route.name === "settings" ? (
         <SettingsPage
           onBack={() => navigateToRoute({ name: "dashboard" })}
+          themeActionLabel={quickThemeToggle.label}
+          themeActionTitle={quickThemeToggle.title}
+          onToggleThemeMode={() =>
+            handleUpdateSettings({ themeMode: quickThemeToggle.nextMode })
+          }
           onOpenFullPage={
             isFullPageSurface ? undefined : handleOpenCurrentRouteInFullPage
           }
@@ -918,6 +928,11 @@ function StandardApp({ locationHash }: StandardAppProps) {
         <ProviderDetailPage
           provider={selectedProvider}
           onBack={() => navigateToRoute({ name: "dashboard" })}
+          themeActionLabel={quickThemeToggle.label}
+          themeActionTitle={quickThemeToggle.title}
+          onToggleThemeMode={() =>
+            handleUpdateSettings({ themeMode: quickThemeToggle.nextMode })
+          }
           onOpenFullPage={
             isFullPageSurface ? undefined : handleOpenCurrentRouteInFullPage
           }
@@ -929,6 +944,11 @@ function StandardApp({ locationHash }: StandardAppProps) {
           providers={visibleProviders}
           onOpenProvider={(providerId) =>
             navigateToRoute({ name: "provider-detail", providerId })
+          }
+          themeActionLabel={quickThemeToggle.label}
+          themeActionTitle={quickThemeToggle.title}
+          onToggleThemeMode={() =>
+            handleUpdateSettings({ themeMode: quickThemeToggle.nextMode })
           }
           onOpenFullPage={
             isFullPageSurface ? undefined : handleOpenCurrentRouteInFullPage
