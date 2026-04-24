@@ -196,6 +196,24 @@ Truth note:
 - after `Phase 166`, this is the supported repo-backed path for turning a real native-toolbar popup pass into one request package that can eventually report `archiveReady = true`
 - after `Phase 168`, once those popup files are imported, the final archive command can run with only `--request-id` because completion now defaults to the request package `captures/` directory
 
+When you want one repo-backed command to import manual popup files, validate archive readiness, and complete the request in one pass, use:
+
+```bash
+npm run store:finalize-manual-screenshot-request -- --request-id 2026-04-24-surface-expansion-store-screenshot-refresh-request --source-dir <native-toolbar-popup-capture-dir>
+```
+
+If popup-note review was recorded in the generated overlay template, use:
+
+```bash
+npm run store:finalize-manual-screenshot-request -- --request-id 2026-04-24-surface-expansion-store-screenshot-refresh-request --source-dir <native-toolbar-popup-capture-dir> --notes-file Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/manual-popup-notes-overlay.template.json
+```
+
+Truth note:
+
+- this command first runs the manual import path, then checks archive readiness, and only then completes the archive
+- if popup files or popup notes are still incomplete, it fails with the remaining request-bound issues instead of silently archiving a partial set
+- it shortens the operator path to `capture -> edit template -> finalize` without pretending the native-toolbar popup capture itself is automated
+
 Current generated helper files for that refreshed request:
 
 - notes overlay template:

@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [168_Phase_Request_Bound_Store_Screenshot_Completion_Defaults.md](./Archive/168_Phase_Request_Bound_Store_Screenshot_Completion_Defaults.md)
+- latest completed slice: [169_Phase_Request_Bound_Manual_Screenshot_Finalize_Command.md](./Archive/169_Phase_Request_Bound_Manual_Screenshot_Finalize_Command.md)
 
 Completed phases should be moved to:
 

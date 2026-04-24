@@ -42,7 +42,7 @@ Status note:
 - archive ready:
   - `yes`
 
-## Manual Import Commands
+## Manual Import And Finalize Commands
 
 - popup notes template:
   - `Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/manual-popup-notes-overlay.template.json`
@@ -52,6 +52,10 @@ Status note:
   - `npm run store:import-manual-screenshot-captures -- --request-id 2026-04-24-first-real-store-screenshot-capture-request --source-dir <native-toolbar-popup-capture-dir>`
 - copy popup captures plus popup note overlay:
   - `npm run store:import-manual-screenshot-captures -- --request-id 2026-04-24-first-real-store-screenshot-capture-request --source-dir <native-toolbar-popup-capture-dir> --notes-file Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/manual-popup-notes-overlay.template.json`
+- finalize popup import plus archive when ready:
+  - `npm run store:finalize-manual-screenshot-request -- --request-id 2026-04-24-first-real-store-screenshot-capture-request --source-dir <native-toolbar-popup-capture-dir>`
+- finalize popup import plus popup note overlay plus archive when ready:
+  - `npm run store:finalize-manual-screenshot-request -- --request-id 2026-04-24-first-real-store-screenshot-capture-request --source-dir <native-toolbar-popup-capture-dir> --notes-file Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/manual-popup-notes-overlay.template.json`
 - completion command:
   - `npm run store:complete-screenshot-capture-request -- --request-id 2026-04-24-first-real-store-screenshot-capture-request`
 

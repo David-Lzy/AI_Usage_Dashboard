@@ -115,6 +115,19 @@ function buildManualImportWithNotesCommand({ requestId, manualNotesTemplatePath 
   return `npm run store:import-manual-screenshot-captures -- --request-id ${requestId} --source-dir <native-toolbar-popup-capture-dir> --notes-file ${notesFile}`;
 }
 
+function buildManualFinalizeCommand({ requestId }) {
+  return `npm run store:finalize-manual-screenshot-request -- --request-id ${requestId} --source-dir <native-toolbar-popup-capture-dir>`;
+}
+
+function buildManualFinalizeWithNotesCommand({ requestId, manualNotesTemplatePath }) {
+  const notesFile =
+    typeof manualNotesTemplatePath === "string" && manualNotesTemplatePath.length > 0
+      ? manualNotesTemplatePath
+      : "<manual-popup-notes-overlay.json>";
+
+  return `npm run store:finalize-manual-screenshot-request -- --request-id ${requestId} --source-dir <native-toolbar-popup-capture-dir> --notes-file ${notesFile}`;
+}
+
 function buildManualNotesTemplatePath({ requestDirRelative }) {
   if (typeof requestDirRelative !== "string" || requestDirRelative.length === 0) {
     return "";
@@ -312,6 +325,13 @@ export function buildStoreScreenshotManualCaptureHandoffDocument({
       requestId,
       manualNotesTemplatePath,
     }),
+    manualFinalizeCommand: buildManualFinalizeCommand({
+      requestId,
+    }),
+    manualFinalizeWithNotesCommand: buildManualFinalizeWithNotesCommand({
+      requestId,
+      manualNotesTemplatePath,
+    }),
     manualNotesTemplatePath,
     manualChecklistPath,
     summary: {
@@ -403,7 +423,7 @@ Status note:
 - archive ready:
   - \`${handoffDocument.summary.archiveReady ? "yes" : "no"}\`
 
-## Manual Import Commands
+## Manual Import And Finalize Commands
 
 - popup notes template:
   - \`${handoffDocument.manualNotesTemplatePath || "not generated"}\`
@@ -413,6 +433,10 @@ Status note:
   - \`${handoffDocument.manualImportCommand}\`
 - copy popup captures plus popup note overlay:
   - \`${handoffDocument.manualImportWithNotesCommand}\`
+- finalize popup import plus archive when ready:
+  - \`${handoffDocument.manualFinalizeCommand}\`
+- finalize popup import plus popup note overlay plus archive when ready:
+  - \`${handoffDocument.manualFinalizeWithNotesCommand}\`
 - completion command:
   - \`${handoffDocument.completionCommand}\`
 

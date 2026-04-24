@@ -40,6 +40,7 @@ Execution note:
 - twenty-fifth executable slice landed on `2026-04-24` through `Phase 166`
 - twenty-sixth executable slice landed on `2026-04-24` through `Phase 167`
 - twenty-seventh executable slice landed on `2026-04-24` through `Phase 168`
+- twenty-eighth executable slice landed on `2026-04-24` through `Phase 169`
 - this direction sharpens [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md) into a more explicit next-stage productization track
 
 Process rule:
@@ -265,7 +266,9 @@ Recommended rollout:
 
 `Phase 167` completed the next `Direction 10.3` slice by turning that import path into one fuller manual-popup intake bundle. The refreshed pending request now also generates a request-bound `manual-popup-notes-overlay.template.json` plus `manual-popup-capture-checklist.md`, and the notes-import command now points at that generated template path instead of only a generic placeholder.
 
-`Phase 168` completed the next `Direction 10.3` slice by turning screenshot-request completion into one request-bound default path. Once real popup captures have been imported back into the pending request package, completion no longer needs a separate `--captures-dir` argument; the repo now proves through a temp review fixture that `store:complete-screenshot-capture-request -- --request-id ...` can archive directly from the request package itself. The real repo still remains `1 pending request / 1 archived set`, so the next product slice is still the actual manual popup capture plus import/archive completion path rather than further workflow invention.
+`Phase 168` completed the next `Direction 10.3` slice by turning screenshot-request completion into one request-bound default path. Once real popup captures have been imported back into the pending request package, completion no longer needs a separate `--captures-dir` argument; the repo now proves through a temp review fixture that `store:complete-screenshot-capture-request -- --request-id ...` can archive directly from the request package itself.
+
+`Phase 169` completed the next `Direction 10.3` slice by turning that import-plus-complete chain into one request-bound finalize command. The refreshed pending request now exposes `manualFinalizeCommand` plus `manualFinalizeWithNotesCommand`, so once the real native-toolbar popup files exist the operator can import them, validate archive readiness, and complete the request in one repo-backed step. The real repo still remains `1 pending request / 1 archived set`, so the next product slice is still the actual popup capture itself rather than another workflow invention.
 
 ## References
 
