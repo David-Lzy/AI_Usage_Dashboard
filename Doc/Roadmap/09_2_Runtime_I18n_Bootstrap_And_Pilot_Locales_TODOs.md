@@ -9,7 +9,7 @@ Document class:
 Status note:
 
 - direction created on `2026-04-24`
-- no executable phase has started yet
+- first executable phase landed on `2026-04-24` through `Phase 170`
 - this child TODO turns `Direction 09` into the next major architecture track after the current `Direction 10` surface-expansion work
 
 Process rule:
@@ -89,9 +89,9 @@ Build one maintainable localization architecture that can support manifest strin
 
 ## Planned Numbered Slices
 
-1. string inventory and message-id contract
-2. manifest `_locales` plus `default_locale`
-3. runtime localization layer
+1. string inventory and message-id contract - completed in `Phase 170`
+2. manifest `_locales` plus `default_locale` - completed in `Phase 170`
+3. runtime localization layer - next
 4. locale-aware formatting
 5. `en` plus `zh_CN` pilot rollout
 6. compact-width and RTL hardening

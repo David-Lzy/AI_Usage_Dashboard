@@ -1,0 +1,14 @@
+{
+  "manifest_ext_name": {
+    "message": "AI Usage Dashboard",
+    "description": "Extension display name shown in Chrome surfaces and the Chrome Web Store."
+  },
+  "manifest_ext_description": {
+    "message": "Track usage, setup blockers, and sync health across AI coding tools.",
+    "description": "Manifest short description shown in extension listings and Chrome extension management surfaces."
+  },
+  "manifest_action_default_title": {
+    "message": "AI Usage Dashboard",
+    "description": "Default title shown for the toolbar action and popup trigger."
+  }
+}

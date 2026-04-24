@@ -1,0 +1,14 @@
+{
+  "manifest_ext_name": {
+    "message": "AI 使用仪表盘",
+    "description": "扩展在 Chrome 界面和 Chrome Web Store 中显示的名称。"
+  },
+  "manifest_ext_description": {
+    "message": "跟踪 AI 编码工具的使用情况、配置阻塞和同步健康状态。",
+    "description": "扩展列表和 Chrome 扩展管理页中显示的简短描述。"
+  },
+  "manifest_action_default_title": {
+    "message": "AI 使用仪表盘",
+    "description": "工具栏按钮和 popup 触发器显示的默认标题。"
+  }
+}

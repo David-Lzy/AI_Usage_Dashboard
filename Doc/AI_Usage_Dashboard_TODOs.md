@@ -222,8 +222,9 @@ Phase status update:
 - `Phase 167` completed the next `Direction 10.3` slice by generating one request-bound popup-notes overlay template plus one popup-capture checklist, so the final manual popup pass now has repo-backed note scaffolding instead of ad-hoc prep work
 - `Phase 168` completed the next `Direction 10.3` slice by making request completion default to the request package `captures/` directory after popup import, so the next real-world step is the popup capture itself instead of another path-resolution step
 - `Phase 169` completed the next `Direction 10.3` slice by adding one request-bound manual finalize command plus handoff update, so popup import, archive-readiness validation, and request completion can now run in one repo-backed step once the real native-toolbar popup files exist
-- the immediate next executable work is now the real manual native-toolbar popup capture plus finalize/archive completion path for that refreshed screenshot request under `Doc/Roadmap/10_3_Store_Asset_Pack_And_Submission_TODOs.md`
-- the next major architecture line after that is the Direction 09 runtime i18n bootstrap captured in `Doc/Roadmap/09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md`
+- the store-asset line still retains one real manual native-toolbar popup capture dependency under `Doc/Roadmap/10_3_Store_Asset_Pack_And_Submission_TODOs.md`
+- `Phase 170` completed the first `Direction 09` slice by shipping one manifest locale bootstrap baseline plus one message-id contract and one string inventory while keeping the runtime app truthfully English-only for now
+- the immediate next repo-owned engineering work is now the runtime localization layer under `Doc/Roadmap/09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
 - the split `Phase 41` release gate cleared the old runtime-parity ambiguity and re-proved the live `Codex` plus `Cursor` personal session-page paths in real Chrome
