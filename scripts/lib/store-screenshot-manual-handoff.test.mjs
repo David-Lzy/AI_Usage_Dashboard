@@ -53,6 +53,7 @@ describe("store screenshot manual handoff helpers", () => {
         "04-settings-and-setup-depth.png": true,
       },
       capturesDirRelative: "Doc/testing/store_screenshot_capture_requests/request-1/captures",
+      requestDirRelative: "Doc/testing/store_screenshot_capture_requests/request-1",
     });
 
     expect(handoff.summary).toEqual({
@@ -71,6 +72,12 @@ describe("store screenshot manual handoff helpers", () => {
       "store:import-manual-screenshot-captures",
     );
     expect(handoff.manualImportWithNotesCommand).toContain("--notes-file");
+    expect(handoff.manualNotesTemplatePath).toBe(
+      "Doc/testing/store_screenshot_capture_requests/request-1/manual-popup-notes-overlay.template.json",
+    );
+    expect(handoff.manualChecklistPath).toBe(
+      "Doc/testing/store_screenshot_capture_requests/request-1/manual-popup-capture-checklist.md",
+    );
     expect(handoff.remainingManualEntries[0]).toMatchObject({
       filename: "01-toolbar-first-quick-glance.png",
       storyboardClaim: "one click gives a compact, readable AI usage snapshot",
@@ -113,6 +120,7 @@ describe("store screenshot manual handoff helpers", () => {
         "01-toolbar-first-quick-glance.png": true,
       },
       capturesDirRelative: "Doc/testing/store_screenshot_capture_requests/request-1/captures",
+      requestDirRelative: "Doc/testing/store_screenshot_capture_requests/request-1",
     });
 
     expect(handoff.summary.archiveReady).toBe(true);

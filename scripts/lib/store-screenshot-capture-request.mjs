@@ -1,4 +1,4 @@
-import { mkdir, stat, writeFile } from "node:fs/promises";
+import { mkdir, stat, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import {
@@ -291,6 +291,88 @@ function normalizeTemplate(template) {
   };
 }
 
+
+function buildManualPopupNotesOverlayTemplate({
+  requestId,
+  requestCreatedAt,
+  manualEntries,
+}) {
+  return {
+    requestId,
+    requestCreatedAt,
+    notesSchemaVersion: 1,
+    captureTruthLegend: STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_DESCRIPTIONS,
+    notes: manualEntries.map((entry) => ({
+      filename: entry.filename,
+      captureTruth: STORE_SCREENSHOT_CAPTURE_NOTE_STATUS_NOT_REVIEWED,
+      stateSummary: "",
+      operatorNote: "",
+    })),
+  };
+}
+
+function buildManualPopupCaptureChecklistMarkdown({ handoffDocument }) {
+  const manualSection =
+    handoffDocument.manualEntries.length === 0
+      ? "- no manual popup slots remain for this request."
+      : handoffDocument.manualEntries
+          .map(
+            (entry) => `- \`${entry.filename}\`
+  - slot: ${entry.storyboardLabel}
+  - claim: ${entry.storyboardClaim}
+  - must show: ${entry.mustShow}
+  - preferred size: \`${entry.preferredSize || "n/a"}\`
+  - fallback size: \`${entry.fallbackSize || "n/a"}\``,
+          )
+          .join("\n");
+
+  return `# Manual Popup Capture Checklist - ${handoffDocument.requestId}
+
+Date: ${handoffDocument.requestCreatedAt.slice(0, 10)}
+
+Process rule:
+
+- follow [Development_Guardrails.md](../../../Development_Guardrails.md)
+
+Document class:
+
+- generated operational ledger
+
+Freshness model:
+
+- maintained current reference
+
+Status note:
+
+- this file is the current popup-capture checklist for one manual screenshot request
+- refresh or regenerate it through the request refresh path instead of editing it by hand
+
+## Request-Bound Paths
+
+- notes overlay template:
+  - \`${handoffDocument.manualNotesTemplatePath || "not generated"}\`
+- handoff:
+  - \`manual-capture-handoff.md\`
+- popup import command:
+  - \`${handoffDocument.manualImportCommand}\`
+- popup import with notes command:
+  - \`${handoffDocument.manualImportWithNotesCommand}\`
+- completion command:
+  - \`${handoffDocument.completionCommand}\`
+
+## Manual Popup Slots
+
+${manualSection}
+
+## Operator Checklist
+
+1. Capture the three native-toolbar popup screenshots using the exact filenames listed above.
+2. Edit the generated popup-notes overlay template in place and replace every placeholder \`not_reviewed\` note with truthful popup-specific note content.
+3. Run the popup import command with \`--notes-file\` pointing at that edited template.
+4. Refresh the handoff and verify \`manualCaptureMissingCount = 0\`, \`manualNoteIncompleteCount = 0\`, and \`archiveReady = yes\` before completing the request.
+`;
+}
+
 function buildCapturesReadme({
   requestId,
   status,
@@ -532,7 +614,7 @@ Allowed \`captureTruth\` values:
 
 ${workflow.map((item, index) => `${index + 1}. ${item}`).join("\n")}
 
-## Truth Rules
+${handoffDocument?.summary?.manualEntryCount > 0 ? `## Manual Popup Intake\n\n- popup notes template:\n  - \`${handoffDocument.manualNotesTemplatePath}\`\n- popup capture checklist:\n  - \`${handoffDocument.manualChecklistPath}\`\n- popup import command:\n  - \`${handoffDocument.manualImportCommand}\`\n- popup import with notes command:\n  - \`${handoffDocument.manualImportWithNotesCommand}\`\n\n` : ""}## Truth Rules
 
 ${truthRules.map((item) => `- ${item}`).join("\n")}
 ${fulfillmentSection}
@@ -605,6 +687,15 @@ async function writeRequestFiles({
     captureAutomationMode: manifest.captureAutomationMode,
     requiredScreenshotFilenames: manifest.requiredScreenshotFilenames,
   });
+  const requestDirRelative = path.relative(projectRoot, requestDir);
+  const manualNotesTemplatePath = path.join(
+    requestDir,
+    "manual-popup-notes-overlay.template.json",
+  );
+  const manualChecklistPath = path.join(
+    requestDir,
+    "manual-popup-capture-checklist.md",
+  );
 
   await mkdir(requestDir, { recursive: true });
   await mkdir(capturesDir, { recursive: true });
@@ -621,6 +712,7 @@ async function writeRequestFiles({
     notesDocument,
     capturePresenceByFilename,
     capturesDirRelative: path.relative(projectRoot, capturesDir),
+    requestDirRelative,
   });
   await writeFile(
     path.join(requestDir, "capture-request.json"),
@@ -646,6 +738,28 @@ async function writeRequestFiles({
 `,
     "utf8",
   );
+  if (manualHandoffDocument.summary.manualEntryCount > 0) {
+    const manualNotesTemplateDocument = buildManualPopupNotesOverlayTemplate({
+      requestId: manifest.requestId,
+      requestCreatedAt: manifest.createdAt,
+      manualEntries: manualHandoffDocument.manualEntries,
+    });
+    await writeFile(
+      manualNotesTemplatePath,
+      `${JSON.stringify(manualNotesTemplateDocument, null, 2)}
+`,
+      "utf8",
+    );
+    await writeFile(
+      manualChecklistPath,
+      `${buildManualPopupCaptureChecklistMarkdown({ handoffDocument: manualHandoffDocument }).trimEnd()}
+`,
+      "utf8",
+    );
+  } else {
+    await unlink(manualNotesTemplatePath).catch(() => {});
+    await unlink(manualChecklistPath).catch(() => {});
+  }
   await writeFile(
     path.join(requestDir, "capture-notes.json"),
     `${JSON.stringify(notesDocument, null, 2)}

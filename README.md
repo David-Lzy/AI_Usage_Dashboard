@@ -194,6 +194,10 @@ The Chrome action now opens a compact popup first:
   - generated handoff files now expose `manualImportCommand` and `manualImportWithNotesCommand`
   - one repo-backed command can copy real native-toolbar popup captures and an optional popup-note overlay back into the pending request package without hand-editing `capture-notes.json`
   - screenshot truth still remains `1 pending request / 1 archived set` until the imported popup captures are actually completed and archived
+- the repo now also ships one generated popup-notes template plus popup-capture checklist for that same refreshed request:
+  - the pending request package now includes `manual-popup-notes-overlay.template.json` and `manual-popup-capture-checklist.md`
+  - the notes-import command now points at the request-bound template path instead of a generic placeholder
+  - the real manual popup capture pass now has one clearer `capture -> edit template -> import -> refresh handoff -> archive` path
 - the popup runtime now also ships one explicit host-width contract for real Chrome action-popup rendering, so the browser no longer has to guess popup width from the document body
 - the popup runtime now also ships one static bootstrap width contract in [src/popup/index.html](./src/popup/index.html), and repo-backed tool commands now prefer the local Node runtime through [scripts/with-preferred-node.sh](./scripts/with-preferred-node.sh) instead of relying on the older Cursor-bundled `node`
 - the repo now also ships one shared route-entry contract for the future full-page shell through `src/sidepanel/index.html?surface=full-page#...`, so popup and sidebar expand controls can target one route-preserving tab surface without duplicating the main app entry

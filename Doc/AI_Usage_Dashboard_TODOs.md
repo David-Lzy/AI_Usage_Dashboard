@@ -219,6 +219,7 @@ Phase status update:
 - `Phase 164` completed the next `Direction 10.3` slice by generating one hybrid capture plan and auto-staging full-page slots `4` and `5` inside the refreshed pending request while keeping popup slots `1` through `3` manual native-toolbar capture
 - `Phase 165` completed the next `Direction 10.3` slice by turning that pending request into one dedicated manual screenshot handoff and archive-readiness preflight, so the remaining popup work is now explicit instead of being buried inside the larger request package
 - `Phase 166` completed the next `Direction 10.3` slice by adding one supported manual screenshot import workflow, so a real native-toolbar popup pass can now be copied back into the pending request without hand-editing the generated package files
+- `Phase 167` completed the next `Direction 10.3` slice by generating one request-bound popup-notes overlay template plus one popup-capture checklist, so the final manual popup pass now has repo-backed note scaffolding instead of ad-hoc prep work
 - the immediate next executable work is now the real manual native-toolbar popup capture plus import/archive completion path for that refreshed screenshot request under `Doc/Roadmap/10_3_Store_Asset_Pack_And_Submission_TODOs.md`
 - the next major architecture line after that is the Direction 09 runtime i18n bootstrap captured in `Doc/Roadmap/09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling

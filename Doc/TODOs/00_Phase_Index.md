@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [166_Phase_Manual_Store_Screenshot_Import_And_Request_Refresh.md](./Archive/166_Phase_Manual_Store_Screenshot_Import_And_Request_Refresh.md)
+- latest completed slice: [167_Phase_Generated_Manual_Popup_Notes_Template_And_Checklist.md](./Archive/167_Phase_Generated_Manual_Popup_Notes_Template_And_Checklist.md)
 
 Completed phases should be moved to:
 
@@ -213,6 +213,7 @@ Completed phases should be moved to:
 - [164_Phase_Hybrid_Request_Bound_Full_Page_Capture.md](./Archive/164_Phase_Hybrid_Request_Bound_Full_Page_Capture.md) - completed and archived on 2026-04-24
 - [165_Phase_Manual_Store_Screenshot_Handoff_And_Archive_Preflight.md](./Archive/165_Phase_Manual_Store_Screenshot_Handoff_And_Archive_Preflight.md) - completed and archived on 2026-04-24
 - [166_Phase_Manual_Store_Screenshot_Import_And_Request_Refresh.md](./Archive/166_Phase_Manual_Store_Screenshot_Import_And_Request_Refresh.md) - completed and archived on 2026-04-24
+- [167_Phase_Generated_Manual_Popup_Notes_Template_And_Checklist.md](./Archive/167_Phase_Generated_Manual_Popup_Notes_Template_And_Checklist.md) - completed and archived on 2026-04-24
 
 ## Dependency Notes
 

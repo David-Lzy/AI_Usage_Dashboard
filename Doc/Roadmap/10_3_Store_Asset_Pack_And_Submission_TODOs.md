@@ -15,6 +15,7 @@ Status note:
 - fourth executable slice landed on `2026-04-24` through `Phase 164`
 - fifth executable slice landed on `2026-04-24` through `Phase 165`
 - sixth executable slice landed on `2026-04-24` through `Phase 166`
+- seventh executable slice landed on `2026-04-24` through `Phase 167`
 - this child TODO now becomes the next active `Direction 10` line after `Phase 160` refreshed the current popup / sidepanel / full-page runtime evidence
 - this child TODO assumes the current first real screenshot archive already exists and focuses on store-ready asset preparation after the surface-expansion workstream landed
 
@@ -45,7 +46,7 @@ Turn the current storyboard, screenshot workflow, first real archive, and listin
   - one maintained [Store_Screenshot_Selection_Pack.md](../Store_Screenshot_Selection_Pack.md)
   - one explicit stale-review pass across the first screenshot archive, current storyboard, current listing-copy pack, and current localization source pack
   - one rule that treats popup app-window smoke capture as QA evidence only, not as the final submission replacement for the native toolbar bubble
-- current boundary after `Phase 166`:
+- current boundary after `Phase 167`:
   - the first archived screenshot set remains truthful historical evidence
   - one refreshed pending request now exists: [2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md](../testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md)
   - that request is explicitly `manual_capture_required` because popup slots `1` through `3` still need native toolbar-bubble capture while slots `4` and `5` move to the full-page shell
@@ -53,7 +54,8 @@ Turn the current storyboard, screenshot workflow, first real archive, and listin
   - the refreshed request now also ships one generated `capture-plan.json` that marks three manual popup slots and two request-bound full-page-shell slots
   - full-page slots `4` and `5` are now already staged inside the pending request package through the hybrid request-bound runner
   - the pending request now also ships one dedicated `manual-capture-handoff.md` and `manual-capture-handoff.json` that summarize the remaining manual popup work and current archive-readiness status
-  - that handoff now also exposes one supported manual import path for real popup assets through `manualImportCommand` and `manualImportWithNotesCommand`
+  - the pending request now also ships one request-bound `manual-popup-notes-overlay.template.json` plus `manual-popup-capture-checklist.md`
+  - the notes-import command now points at that generated template path, so the real popup pass has one clear `capture -> edit template -> import -> refresh handoff` workflow
   - current screenshot truth therefore still remains `1 pending request / 1 archived set` until the operator actually imports the final popup captures and archives the refreshed request
 
 ### B. Final Screenshot Ordering
@@ -96,10 +98,11 @@ Turn the current storyboard, screenshot workflow, first real archive, and listin
 4. hybrid request-bound full-page staging for the refreshed pending request - completed in `Phase 164`
 5. manual native-toolbar popup handoff plus archive-readiness preflight - completed in `Phase 165`
 6. manual native-toolbar popup import workflow and request refresh - completed in `Phase 166`
-7. manual native-toolbar popup capture plus archive completion - next
-8. final screenshot ordering and caption contract
-9. listing-copy tightening against refreshed archives
-10. submission checklist and store-pack closeout
+7. generated popup-notes template plus popup checklist for the remaining manual slots - completed in `Phase 167`
+8. manual native-toolbar popup capture plus archive completion - next
+9. final screenshot ordering and caption contract
+10. listing-copy tightening against refreshed archives
+11. submission checklist and store-pack closeout
 
 ## Out Of Scope
 

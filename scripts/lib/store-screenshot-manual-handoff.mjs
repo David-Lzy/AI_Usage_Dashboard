@@ -106,8 +106,29 @@ function buildManualImportCommand({ requestId }) {
   return `npm run store:import-manual-screenshot-captures -- --request-id ${requestId} --source-dir <native-toolbar-popup-capture-dir>`;
 }
 
-function buildManualImportWithNotesCommand({ requestId }) {
-  return `npm run store:import-manual-screenshot-captures -- --request-id ${requestId} --source-dir <native-toolbar-popup-capture-dir> --notes-file <manual-popup-notes-overlay.json>`;
+function buildManualImportWithNotesCommand({ requestId, manualNotesTemplatePath }) {
+  const notesFile =
+    typeof manualNotesTemplatePath === "string" && manualNotesTemplatePath.length > 0
+      ? manualNotesTemplatePath
+      : "<manual-popup-notes-overlay.json>";
+
+  return `npm run store:import-manual-screenshot-captures -- --request-id ${requestId} --source-dir <native-toolbar-popup-capture-dir> --notes-file ${notesFile}`;
+}
+
+function buildManualNotesTemplatePath({ requestDirRelative }) {
+  if (typeof requestDirRelative !== "string" || requestDirRelative.length === 0) {
+    return "";
+  }
+
+  return `${requestDirRelative}/manual-popup-notes-overlay.template.json`;
+}
+
+function buildManualChecklistPath({ requestDirRelative }) {
+  if (typeof requestDirRelative !== "string" || requestDirRelative.length === 0) {
+    return "";
+  }
+
+  return `${requestDirRelative}/manual-popup-capture-checklist.md`;
 }
 
 function buildArchiveReadinessIssues({ entries, notesByFilename, capturePresenceByFilename }) {
@@ -194,6 +215,7 @@ export function buildStoreScreenshotManualCaptureHandoffDocument({
   notesDocument,
   capturePresenceByFilename,
   capturesDirRelative,
+  requestDirRelative = "",
 }) {
   const normalizedNotes = normalizeStoreScreenshotCaptureNotesDocument(notesDocument);
   const notesByFilename = new Map(
@@ -268,6 +290,12 @@ export function buildStoreScreenshotManualCaptureHandoffDocument({
     notesByFilename,
     capturePresenceByFilename: presenceMap,
   });
+  const manualNotesTemplatePath = buildManualNotesTemplatePath({
+    requestDirRelative,
+  });
+  const manualChecklistPath = buildManualChecklistPath({
+    requestDirRelative,
+  });
 
   return {
     requestId,
@@ -283,7 +311,10 @@ export function buildStoreScreenshotManualCaptureHandoffDocument({
     }),
     manualImportWithNotesCommand: buildManualImportWithNotesCommand({
       requestId,
+      manualNotesTemplatePath,
     }),
+    manualNotesTemplatePath,
+    manualChecklistPath,
     summary: {
       entryCount: planEntries.length,
       manualEntryCount: manualEntries.length,
@@ -375,6 +406,10 @@ Status note:
 
 ## Manual Import Commands
 
+- popup notes template:
+  - \`${handoffDocument.manualNotesTemplatePath || "not generated"}\`
+- popup capture checklist:
+  - \`${handoffDocument.manualChecklistPath || "not generated"}\`
 - copy popup captures only:
   - \`${handoffDocument.manualImportCommand}\`
 - copy popup captures plus popup note overlay:

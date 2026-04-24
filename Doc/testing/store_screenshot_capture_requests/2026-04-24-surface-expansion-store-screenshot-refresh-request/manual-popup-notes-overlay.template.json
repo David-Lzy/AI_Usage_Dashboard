@@ -1,0 +1,33 @@
+{
+  "requestId": "2026-04-24-surface-expansion-store-screenshot-refresh-request",
+  "requestCreatedAt": "2026-04-24T08:50:12.783Z",
+  "notesSchemaVersion": 1,
+  "captureTruthLegend": {
+    "not_reviewed": "placeholder state; replace it before completing the request",
+    "exact_runtime_capture": "the screenshot is an exact extension-mode runtime capture with no special truth boundary to record",
+    "approximated_runtime_state": "the screenshot used an approximated runtime state that still needs an explicit operator note",
+    "policy_only_fallback": "the screenshot truthfully relies on a policy-only or contract-only fallback and must say so explicitly",
+    "provider_omitted": "the screenshot intentionally omits one or more providers and must explain that omission",
+    "other_truth_boundary": "the screenshot has another truthful boundary that needs an explicit operator note"
+  },
+  "notes": [
+    {
+      "filename": "01-toolbar-first-quick-glance.png",
+      "captureTruth": "not_reviewed",
+      "stateSummary": "",
+      "operatorNote": ""
+    },
+    {
+      "filename": "02-setup-guidance.png",
+      "captureTruth": "not_reviewed",
+      "stateSummary": "",
+      "operatorNote": ""
+    },
+    {
+      "filename": "03-honest-contract-or-policy-only.png",
+      "captureTruth": "not_reviewed",
+      "stateSummary": "",
+      "operatorNote": ""
+    }
+  ]
+}

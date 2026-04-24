@@ -195,6 +195,18 @@ Truth note:
 - it does not fabricate popup screenshots or fulfill/archive the request by itself
 - after `Phase 166`, this is the supported repo-backed path for turning a real native-toolbar popup pass into one request package that can eventually report `archiveReady = true`
 
+Current generated helper files for that refreshed request:
+
+- notes overlay template:
+  - `Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/manual-popup-notes-overlay.template.json`
+- popup capture checklist:
+  - `Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/manual-popup-capture-checklist.md`
+
+Truth note:
+
+- after `Phase 167`, the repo now generates those two request-bound files for the remaining popup slots instead of asking the operator to invent a notes overlay from scratch
+- the checklist is not archive evidence; it is only the current operator aid for the final popup capture pass
+
 If an RDP capture attempt leaves stale AI Usage Dashboard popup or extension windows behind, close them before retrying:
 
 ```bash

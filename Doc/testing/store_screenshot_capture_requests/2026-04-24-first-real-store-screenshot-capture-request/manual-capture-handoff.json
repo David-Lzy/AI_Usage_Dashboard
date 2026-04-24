@@ -5,7 +5,9 @@
   "status": "fulfilled_operator_capture",
   "completionCommand": "npm run store:complete-screenshot-capture-request -- --request-id 2026-04-24-first-real-store-screenshot-capture-request --captures-dir Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/captures",
   "manualImportCommand": "npm run store:import-manual-screenshot-captures -- --request-id 2026-04-24-first-real-store-screenshot-capture-request --source-dir <native-toolbar-popup-capture-dir>",
-  "manualImportWithNotesCommand": "npm run store:import-manual-screenshot-captures -- --request-id 2026-04-24-first-real-store-screenshot-capture-request --source-dir <native-toolbar-popup-capture-dir> --notes-file <manual-popup-notes-overlay.json>",
+  "manualImportWithNotesCommand": "npm run store:import-manual-screenshot-captures -- --request-id 2026-04-24-first-real-store-screenshot-capture-request --source-dir <native-toolbar-popup-capture-dir> --notes-file Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/manual-popup-notes-overlay.template.json",
+  "manualNotesTemplatePath": "Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/manual-popup-notes-overlay.template.json",
+  "manualChecklistPath": "Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/manual-popup-capture-checklist.md",
   "summary": {
     "entryCount": 5,
     "manualEntryCount": 0,
