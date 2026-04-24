@@ -13,6 +13,7 @@ Status note:
 - second executable slice landed on `2026-04-24` through `Phase 162`
 - third executable slice landed on `2026-04-24` through `Phase 163`
 - fourth executable slice landed on `2026-04-24` through `Phase 164`
+- fifth executable slice landed on `2026-04-24` through `Phase 165`
 - this child TODO now becomes the next active `Direction 10` line after `Phase 160` refreshed the current popup / sidepanel / full-page runtime evidence
 - this child TODO assumes the current first real screenshot archive already exists and focuses on store-ready asset preparation after the surface-expansion workstream landed
 
@@ -43,13 +44,14 @@ Turn the current storyboard, screenshot workflow, first real archive, and listin
   - one maintained [Store_Screenshot_Selection_Pack.md](../Store_Screenshot_Selection_Pack.md)
   - one explicit stale-review pass across the first screenshot archive, current storyboard, current listing-copy pack, and current localization source pack
   - one rule that treats popup app-window smoke capture as QA evidence only, not as the final submission replacement for the native toolbar bubble
-- current boundary after `Phase 164`:
+- current boundary after `Phase 165`:
   - the first archived screenshot set remains truthful historical evidence
   - one refreshed pending request now exists: [2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md](../testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md)
   - that request is explicitly `manual_capture_required` because popup slots `1` through `3` still need native toolbar-bubble capture while slots `4` and `5` move to the full-page shell
   - one native-toolbar popup probe now exists and confirms the current `RDP Chrome` session does not expose the real popup bubble as a separate capturable X11 top-level window
   - the refreshed request now also ships one generated `capture-plan.json` that marks three manual popup slots and two request-bound full-page-shell slots
   - full-page slots `4` and `5` are now already staged inside the pending request package through the hybrid request-bound runner
+  - the pending request now also ships one dedicated `manual-capture-handoff.md` and `manual-capture-handoff.json` that summarize the remaining manual popup work and current archive-readiness status
   - popup slots `1` through `3` remain manual native-toolbar capture and the request still stays `pending_operator_capture` until those final popup assets are collected
 
 ### B. Final Screenshot Ordering
@@ -90,10 +92,11 @@ Turn the current storyboard, screenshot workflow, first real archive, and listin
 2. refreshed screenshot capture request for store-ready surfaces - completed in `Phase 162`
 3. native toolbar popup probe and automation-boundary confirmation - completed in `Phase 163`
 4. hybrid request-bound full-page staging for the refreshed pending request - completed in `Phase 164`
-5. manual native-toolbar popup capture plus archive completion - next
-6. final screenshot ordering and caption contract
-7. listing-copy tightening against refreshed archives
-8. submission checklist and store-pack closeout
+5. manual native-toolbar popup handoff plus archive-readiness preflight - completed in `Phase 165`
+6. manual native-toolbar popup capture plus archive completion - next
+7. final screenshot ordering and caption contract
+8. listing-copy tightening against refreshed archives
+9. submission checklist and store-pack closeout
 
 ## Out Of Scope
 

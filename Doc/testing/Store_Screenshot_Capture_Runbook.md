@@ -163,6 +163,19 @@ Truth note:
 - it does not fulfill or archive the request; the package stays pending until the remaining manual toolbar-bubble screenshots are captured
 - after `Phase 164`, the current refreshed request already uses this path to stage full-page slots `4` and `5` while popup slots `1` through `3` still require manual native-toolbar capture
 
+Before and after the remaining popup captures, refresh the dedicated manual handoff bundle with:
+
+```bash
+npm run store:prepare-manual-screenshot-handoff -- --request-id 2026-04-24-surface-expansion-store-screenshot-refresh-request
+```
+
+Truth note:
+
+- this command rewrites `manual-capture-handoff.md` plus `manual-capture-handoff.json` inside the request package
+- it keeps the remaining manual popup filenames, staged full-page captures, and archive-readiness state visible in one place
+- it does not fabricate popup screenshots or mark the request fulfilled by itself
+- after `Phase 165`, the refreshed request uses this handoff path to show that `3` popup slots still remain manual while `2` full-page depth slots are already staged
+
 If an RDP capture attempt leaves stale AI Usage Dashboard popup or extension windows behind, close them before retrying:
 
 ```bash

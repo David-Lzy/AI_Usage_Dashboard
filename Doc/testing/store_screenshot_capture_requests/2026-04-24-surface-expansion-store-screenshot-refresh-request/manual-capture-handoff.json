@@ -1,0 +1,182 @@
+{
+  "requestId": "2026-04-24-surface-expansion-store-screenshot-refresh-request",
+  "requestCreatedAt": "2026-04-24T08:50:12.783Z",
+  "handoffSchemaVersion": 1,
+  "status": "pending_operator_capture",
+  "completionCommand": "npm run store:complete-screenshot-capture-request -- --request-id 2026-04-24-surface-expansion-store-screenshot-refresh-request --captures-dir Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/captures",
+  "summary": {
+    "entryCount": 5,
+    "manualEntryCount": 3,
+    "remainingManualCount": 3,
+    "stagedRequestBoundCount": 2,
+    "stagedReadyCount": 2,
+    "stagedPendingCount": 0,
+    "archiveReady": false
+  },
+  "manualEntries": [
+    {
+      "filename": "01-toolbar-first-quick-glance.png",
+      "requestedSurface": "native_toolbar_popup",
+      "capturePresent": false,
+      "noteStatus": "not_reviewed",
+      "noteStateSummary": "",
+      "noteOperatorNote": "",
+      "noteComplete": false,
+      "storyboardLabel": "Toolbar-first quick glance",
+      "storyboardClaim": "one click gives a compact, readable AI usage snapshot",
+      "mustShow": "popup header, top summary, setup coverage, featured provider, and badge-compatible quick-glance framing",
+      "preferredSize": "640x400",
+      "fallbackSize": "640x400",
+      "manualReason": "This refreshed store slot must be captured from the native Chrome toolbar action bubble instead of the popup app-window helper."
+    },
+    {
+      "filename": "02-setup-guidance.png",
+      "requestedSurface": "native_toolbar_popup",
+      "capturePresent": false,
+      "noteStatus": "not_reviewed",
+      "noteStateSummary": "",
+      "noteOperatorNote": "",
+      "noteComplete": false,
+      "storyboardLabel": "Setup guidance",
+      "storyboardClaim": "the product tells the user what to do next instead of only showing raw usage cards",
+      "mustShow": "guidance card, setup stage, and stateful CTA",
+      "preferredSize": "640x400",
+      "fallbackSize": "640x400",
+      "manualReason": "This refreshed store slot must be captured from the native Chrome toolbar action bubble instead of the popup app-window helper."
+    },
+    {
+      "filename": "03-honest-contract-or-policy-only.png",
+      "requestedSurface": "native_toolbar_popup",
+      "capturePresent": false,
+      "noteStatus": "not_reviewed",
+      "noteStateSummary": "",
+      "noteOperatorNote": "",
+      "noteComplete": false,
+      "storyboardLabel": "Honest contract-only or policy-only state",
+      "storyboardClaim": "the extension is honest about provider coverage and does not fake live precision",
+      "mustShow": "setup or contract story without pretending unsupported live data exists",
+      "preferredSize": "640x400",
+      "fallbackSize": "640x400",
+      "manualReason": "This refreshed store slot must be captured from the native Chrome toolbar action bubble instead of the popup app-window helper."
+    }
+  ],
+  "remainingManualEntries": [
+    {
+      "filename": "01-toolbar-first-quick-glance.png",
+      "requestedSurface": "native_toolbar_popup",
+      "capturePresent": false,
+      "noteStatus": "not_reviewed",
+      "noteStateSummary": "",
+      "noteOperatorNote": "",
+      "noteComplete": false,
+      "storyboardLabel": "Toolbar-first quick glance",
+      "storyboardClaim": "one click gives a compact, readable AI usage snapshot",
+      "mustShow": "popup header, top summary, setup coverage, featured provider, and badge-compatible quick-glance framing",
+      "preferredSize": "640x400",
+      "fallbackSize": "640x400",
+      "manualReason": "This refreshed store slot must be captured from the native Chrome toolbar action bubble instead of the popup app-window helper."
+    },
+    {
+      "filename": "02-setup-guidance.png",
+      "requestedSurface": "native_toolbar_popup",
+      "capturePresent": false,
+      "noteStatus": "not_reviewed",
+      "noteStateSummary": "",
+      "noteOperatorNote": "",
+      "noteComplete": false,
+      "storyboardLabel": "Setup guidance",
+      "storyboardClaim": "the product tells the user what to do next instead of only showing raw usage cards",
+      "mustShow": "guidance card, setup stage, and stateful CTA",
+      "preferredSize": "640x400",
+      "fallbackSize": "640x400",
+      "manualReason": "This refreshed store slot must be captured from the native Chrome toolbar action bubble instead of the popup app-window helper."
+    },
+    {
+      "filename": "03-honest-contract-or-policy-only.png",
+      "requestedSurface": "native_toolbar_popup",
+      "capturePresent": false,
+      "noteStatus": "not_reviewed",
+      "noteStateSummary": "",
+      "noteOperatorNote": "",
+      "noteComplete": false,
+      "storyboardLabel": "Honest contract-only or policy-only state",
+      "storyboardClaim": "the extension is honest about provider coverage and does not fake live precision",
+      "mustShow": "setup or contract story without pretending unsupported live data exists",
+      "preferredSize": "640x400",
+      "fallbackSize": "640x400",
+      "manualReason": "This refreshed store slot must be captured from the native Chrome toolbar action bubble instead of the popup app-window helper."
+    }
+  ],
+  "stagedEntries": [
+    {
+      "filename": "04-settings-and-setup-depth.png",
+      "requestedSurface": "full_page_shell",
+      "capturePresent": true,
+      "noteStatus": "approximated_runtime_state",
+      "noteStateSummary": "Full-page Settings shows setup ownership in the deeper workspace with the same mixed blockers carried over from the popup story.",
+      "noteOperatorNote": "This is a real full-page shell capture from a request-bound seeded state used to keep the Settings setup story consistent during refreshed store screenshot review.",
+      "noteComplete": true,
+      "storyboardLabel": "Settings and setup depth",
+      "storyboardClaim": "setup ownership lives in the deeper workspace instead of a bloated popup",
+      "mustShow": "theme and source/setup controls with enough surrounding context to read as an expanded extension workspace",
+      "routePath": "src/sidepanel/index.html?surface=full-page#settings",
+      "capturePath": "Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/captures/04-settings-and-setup-depth.png"
+    },
+    {
+      "filename": "05-provider-or-dashboard-depth.png",
+      "requestedSurface": "full_page_shell",
+      "capturePresent": true,
+      "noteStatus": "approximated_runtime_state",
+      "noteStateSummary": "Full-page Codex provider detail shows a truthful warning-state review surface beyond the popup.",
+      "noteOperatorNote": "This screenshot uses a request-bound seeded Codex warning state so the full-page shell can show deeper contract context without claiming it came from a current live analytics session.",
+      "noteComplete": true,
+      "storyboardLabel": "Provider or dashboard depth",
+      "storyboardClaim": "the expanded workspace owns deeper review, contract context, and provider detail",
+      "mustShow": "one deeper inspection surface that clearly extends beyond the popup quick-glance role",
+      "routePath": "src/sidepanel/index.html?surface=full-page#provider-detail/codex",
+      "capturePath": "Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/captures/05-provider-or-dashboard-depth.png"
+    }
+  ],
+  "stagedReadyEntries": [
+    {
+      "filename": "04-settings-and-setup-depth.png",
+      "requestedSurface": "full_page_shell",
+      "capturePresent": true,
+      "noteStatus": "approximated_runtime_state",
+      "noteStateSummary": "Full-page Settings shows setup ownership in the deeper workspace with the same mixed blockers carried over from the popup story.",
+      "noteOperatorNote": "This is a real full-page shell capture from a request-bound seeded state used to keep the Settings setup story consistent during refreshed store screenshot review.",
+      "noteComplete": true,
+      "storyboardLabel": "Settings and setup depth",
+      "storyboardClaim": "setup ownership lives in the deeper workspace instead of a bloated popup",
+      "mustShow": "theme and source/setup controls with enough surrounding context to read as an expanded extension workspace",
+      "routePath": "src/sidepanel/index.html?surface=full-page#settings",
+      "capturePath": "Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/captures/04-settings-and-setup-depth.png"
+    },
+    {
+      "filename": "05-provider-or-dashboard-depth.png",
+      "requestedSurface": "full_page_shell",
+      "capturePresent": true,
+      "noteStatus": "approximated_runtime_state",
+      "noteStateSummary": "Full-page Codex provider detail shows a truthful warning-state review surface beyond the popup.",
+      "noteOperatorNote": "This screenshot uses a request-bound seeded Codex warning state so the full-page shell can show deeper contract context without claiming it came from a current live analytics session.",
+      "noteComplete": true,
+      "storyboardLabel": "Provider or dashboard depth",
+      "storyboardClaim": "the expanded workspace owns deeper review, contract context, and provider detail",
+      "mustShow": "one deeper inspection surface that clearly extends beyond the popup quick-glance role",
+      "routePath": "src/sidepanel/index.html?surface=full-page#provider-detail/codex",
+      "capturePath": "Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/captures/05-provider-or-dashboard-depth.png"
+    }
+  ],
+  "stagedPendingEntries": [],
+  "archiveReadinessIssues": [
+    "Capture file is still missing for `01-toolbar-first-quick-glance.png`.",
+    "Capture notes are still `not_reviewed` for `01-toolbar-first-quick-glance.png`.",
+    "Capture notes are missing `stateSummary` for `01-toolbar-first-quick-glance.png`.",
+    "Capture file is still missing for `02-setup-guidance.png`.",
+    "Capture notes are still `not_reviewed` for `02-setup-guidance.png`.",
+    "Capture notes are missing `stateSummary` for `02-setup-guidance.png`.",
+    "Capture file is still missing for `03-honest-contract-or-policy-only.png`.",
+    "Capture notes are still `not_reviewed` for `03-honest-contract-or-policy-only.png`.",
+    "Capture notes are missing `stateSummary` for `03-honest-contract-or-policy-only.png`."
+  ]
+}

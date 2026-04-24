@@ -186,6 +186,10 @@ The Chrome action now opens a compact popup first:
   - generated `capture-plan.json` now marks popup slots `1` through `3` as manual native-toolbar capture and depth slots `4` and `5` as request-bound full-page-shell capture
   - the pending request package now already includes staged full-page captures for slots `4` and `5`
   - screenshot truth therefore still remains `1 pending request / 1 archived set` until the remaining manual popup captures are completed and archived
+- the repo now also ships one manual screenshot handoff plus archive-readiness preflight for that same refreshed request:
+  - the request package now generates `manual-capture-handoff.md` and `manual-capture-handoff.json`
+  - those files make the remaining three native-toolbar popup slots explicit and confirm that the two full-page depth slots are already staged
+  - the request still stays pending until those remaining manual popup captures are added and archived
 - the popup runtime now also ships one explicit host-width contract for real Chrome action-popup rendering, so the browser no longer has to guess popup width from the document body
 - the popup runtime now also ships one static bootstrap width contract in [src/popup/index.html](./src/popup/index.html), and repo-backed tool commands now prefer the local Node runtime through [scripts/with-preferred-node.sh](./scripts/with-preferred-node.sh) instead of relying on the older Cursor-bundled `node`
 - the repo now also ships one shared route-entry contract for the future full-page shell through `src/sidepanel/index.html?surface=full-page#...`, so popup and sidebar expand controls can target one route-preserving tab surface without duplicating the main app entry

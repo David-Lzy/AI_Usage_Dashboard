@@ -1,9 +1,13 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import {
   buildStoreScreenshotCapturePlanDocument,
 } from "./store-screenshot-capture-plan.mjs";
+import {
+  buildStoreScreenshotManualCaptureHandoffDocument,
+  buildStoreScreenshotManualCaptureHandoffMarkdown,
+} from "./store-screenshot-manual-handoff.mjs";
 
 export const STORE_SCREENSHOT_CAPTURE_REQUEST_PENDING_STATUS =
   "pending_operator_capture";
@@ -293,6 +297,7 @@ function buildCapturesReadme({
   fulfillment,
   requiredScreenshotFilenames,
   capturePlanDocument,
+  manualHandoffDocument,
 }) {
   const pendingNote =
     status === STORE_SCREENSHOT_CAPTURE_REQUEST_PENDING_STATUS
@@ -376,6 +381,7 @@ function buildReadme({
   status,
   fulfillment,
   capturePlanDocument,
+  manualHandoffDocument,
 }) {
   const statusNote =
     status === STORE_SCREENSHOT_CAPTURE_REQUEST_PENDING_STATUS
@@ -548,6 +554,18 @@ export function buildStoreScreenshotCaptureRequestId({ requestId, createdAt }) {
   return sanitizeSegment(`${datePrefix}-store-screenshot-capture-request`);
 }
 
+async function buildCapturePresenceByFilename(capturesDir, filenames) {
+  const presence = {};
+
+  for (const filename of normalizeStringArray(filenames)) {
+    const filePath = path.join(capturesDir, filename);
+    const fileStat = await stat(filePath).catch(() => null);
+    presence[filename] = fileStat !== null && fileStat.isFile();
+  }
+
+  return presence;
+}
+
 export function buildStoreScreenshotCaptureRequestFulfillment({
   fulfilledAt,
   sourceCaptureDir,
@@ -575,6 +593,7 @@ export function buildStoreScreenshotCaptureRequestFulfillment({
 }
 
 async function writeRequestFiles({
+  projectRoot,
   requestDir,
   manifest,
   notesDocument,
@@ -589,6 +608,20 @@ async function writeRequestFiles({
 
   await mkdir(requestDir, { recursive: true });
   await mkdir(capturesDir, { recursive: true });
+
+  const capturePresenceByFilename = await buildCapturePresenceByFilename(
+    capturesDir,
+    manifest.requiredScreenshotFilenames,
+  );
+  const manualHandoffDocument = buildStoreScreenshotManualCaptureHandoffDocument({
+    requestId: manifest.requestId,
+    requestCreatedAt: manifest.createdAt,
+    status: manifest.status,
+    capturePlanDocument,
+    notesDocument,
+    capturePresenceByFilename,
+    capturesDirRelative: path.relative(projectRoot, capturesDir),
+  });
   await writeFile(
     path.join(requestDir, "capture-request.json"),
     `${JSON.stringify(manifest, null, 2)}
@@ -602,6 +635,18 @@ async function writeRequestFiles({
     "utf8",
   );
   await writeFile(
+    path.join(requestDir, "manual-capture-handoff.json"),
+    `${JSON.stringify(manualHandoffDocument, null, 2)}
+`,
+    "utf8",
+  );
+  await writeFile(
+    path.join(requestDir, "manual-capture-handoff.md"),
+    `${buildStoreScreenshotManualCaptureHandoffMarkdown(manualHandoffDocument).trimEnd()}
+`,
+    "utf8",
+  );
+  await writeFile(
     path.join(requestDir, "capture-notes.json"),
     `${JSON.stringify(notesDocument, null, 2)}
 `,
@@ -609,7 +654,7 @@ async function writeRequestFiles({
   );
   await writeFile(
     path.join(requestDir, "README.md"),
-    `${buildReadme({ ...manifest, capturePlanDocument }).trimEnd()}
+    `${buildReadme({ ...manifest, capturePlanDocument, manualHandoffDocument }).trimEnd()}
 `,
     "utf8",
   );
@@ -621,6 +666,7 @@ async function writeRequestFiles({
       fulfillment: manifest.fulfillment,
       requiredScreenshotFilenames: manifest.requiredScreenshotFilenames,
       capturePlanDocument,
+      manualHandoffDocument,
     }).trimEnd()}
 `,
     "utf8",
@@ -668,6 +714,7 @@ export async function writeStoreScreenshotCaptureRequest({
   };
 
   await writeRequestFiles({
+    projectRoot,
     requestDir,
     manifest,
     notesDocument: normalizedNotes,
@@ -721,6 +768,7 @@ export async function updateStoreScreenshotCaptureRequest({
   };
 
   await writeRequestFiles({
+    projectRoot,
     requestDir,
     manifest,
     notesDocument: normalizedNotes,

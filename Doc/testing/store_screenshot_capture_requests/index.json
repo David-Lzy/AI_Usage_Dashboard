@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-24T09:38:43.106Z",
+  "generatedAt": "2026-04-24T10:05:41.270Z",
   "requestRoot": "Doc/testing/store_screenshot_capture_requests",
   "recordCount": 2,
   "pendingRequestCount": 1,
@@ -28,9 +28,9 @@
       "captureNotesPath": "Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/capture-notes.json",
       "captureNotesSummary": {
         "noteCount": 5,
-        "reviewedScreenshotCount": 0,
-        "pendingReviewCount": 5,
-        "truthBoundaryCount": 0
+        "reviewedScreenshotCount": 2,
+        "pendingReviewCount": 3,
+        "truthBoundaryCount": 2
       },
       "readmePath": "Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md",
       "manifestPath": "Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/capture-request.json"

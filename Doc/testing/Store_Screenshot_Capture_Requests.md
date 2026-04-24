@@ -66,7 +66,7 @@ npm run store:refresh-screenshot-capture-request-packages
   - selection pack: `Doc/Store_Screenshot_Selection_Pack.md`
   - baseline pack: `Doc/testing/store_screenshot_capture_packs/2026-04-24-toolbar-storyboard-baseline/README.md`
   - automation mode: `manual_capture_required`
-  - capture notes: `0/5` reviewed · truth boundaries `0`
+  - capture notes: `2/5` reviewed · truth boundaries `2`
 
 ## Fulfilled Requests
 

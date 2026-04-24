@@ -36,6 +36,7 @@ Execution note:
 - twenty-first executable slice landed on `2026-04-24` through `Phase 162`
 - twenty-second executable slice landed on `2026-04-24` through `Phase 163`
 - twenty-third executable slice landed on `2026-04-24` through `Phase 164`
+- twenty-fourth executable slice landed on `2026-04-24` through `Phase 165`
 - this direction sharpens [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md) into a more explicit next-stage productization track
 
 Process rule:
@@ -146,6 +147,9 @@ As of 2026-04-24:
   - the current pending request now includes one generated `capture-plan.json`
   - popup slots `1` through `3` remain manual native-toolbar capture
   - full-page slots `4` and `5` are already staged as request-bound full-page-shell captures inside the pending request package
+- the repo now also ships one manual screenshot handoff path for that refreshed request:
+  - the current pending request now includes `manual-capture-handoff.md` plus `manual-capture-handoff.json`
+  - those generated handoff files now summarize `3` remaining manual popup slots, `2` staged full-page slots, and one explicit archive-readiness state
 - the project now has an RDP Chrome environment available for truthful extension-mode capture and review
 - the current screenshot state is now `1 pending request / 1 archived set`, with the pending request already carrying `2` staged full-page captures and `3` remaining manual popup slots
 
@@ -250,7 +254,9 @@ Recommended rollout:
 
 `Phase 163` completed the next `Direction 10.3` slice by turning native-toolbar popup uncertainty into one truthful probe result: the current `RDP Chrome` runtime does not expose the real toolbar bubble as a separate capturable X11 top-level window, so the repo now keeps one helper-window evidence path instead of pretending popup automation is already solved. That keeps slots `1` through `3` manual in the refreshed request while leaving the deeper full-page slots ready for the next archive slice.
 
-`Phase 164` completed the next `Direction 10.3` slice by adding one generated `capture-plan.json` plus one hybrid request-bound capture runner that stages only the full-page-shell depth slots inside the refreshed pending request. The repo now keeps slots `1` through `3` manual native-toolbar popup capture, stages slots `4` and `5` as truthful request-bound full-page-shell evidence, and leaves the request pending until the remaining manual popup captures are assembled into the next archive. The next product slice is now completing those manual popup captures and then archiving the refreshed set before screenshot ordering and caption tightening continue.
+`Phase 164` completed the next `Direction 10.3` slice by adding one generated `capture-plan.json` plus one hybrid request-bound capture runner that stages only the full-page-shell depth slots inside the refreshed pending request. The repo now keeps slots `1` through `3` manual native-toolbar popup capture, stages slots `4` and `5` as truthful request-bound full-page-shell evidence, and leaves the request pending until the remaining manual popup captures are assembled into the next archive.
+
+`Phase 165` completed the next `Direction 10.3` slice by turning that pending request into one explicit manual-capture handoff plus archive-readiness preflight. The refreshed request package now generates one dedicated `manual-capture-handoff.md` and `manual-capture-handoff.json`, one operator-facing command can refresh that handoff in place, and the repo now keeps the remaining popup work honest as `3` unresolved manual native-toolbar slots instead of burying it inside the larger pending package. The next product slice is now completing those manual popup captures and then archiving the refreshed set before screenshot ordering and caption tightening continue.
 
 ## References
 
