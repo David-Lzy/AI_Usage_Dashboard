@@ -32,6 +32,7 @@ Execution note:
 - seventeenth executable slice landed on `2026-04-24` through `Phase 158`
 - eighteenth executable slice landed on `2026-04-24` through `Phase 159`
 - nineteenth executable slice landed on `2026-04-24` through `Phase 160`
+- twentieth executable slice landed on `2026-04-24` through `Phase 161`
 - this direction sharpens [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md) into a more explicit next-stage productization track
 
 Process rule:
@@ -130,6 +131,7 @@ As of 2026-04-24:
   - full theme configuration still belongs to Settings
   - the next execution line now moves to `Direction 10.3` store asset-pack refresh after the updated runtime evidence
 - the repo still does not yet ship localized listing variants or a submitted store asset pack beyond the first archived evidence plus English source documents
+- the first screenshot archive plus current listing-copy docs now serve as a pre-refresh baseline rather than the final store-submission pack after `Phase 161`
 - the project now has an RDP Chrome environment available for truthful extension-mode capture and review
 - the current screenshot state is now `0 pending requests / 1 archived set`
 
@@ -226,7 +228,9 @@ Recommended rollout:
 
 `Phase 159` completed the next product slice by turning popup-expand and sidepanel-expand into source-aware full-page entry motion hints, so the standard full-page shell now gets one restrained continuity treatment without pretending to ship a brittle true shared-element transition. Reduced-motion mode keeps those full-page entry animations disabled.
 
-`Phase 160` completed the next product slice by refreshing real RDP runtime captures for popup, sidepanel settings, and standard full-page dashboard/settings/provider-detail surfaces while adding runtime-window cleanup into the helper workflow. That keeps the current QA evidence aligned with the shipped expand, quick-theme, and motion work and reduces repeat-capture OOM risk. The next product slice now moves to `Direction 10.3` store asset-pack refresh on top of that newer runtime evidence.
+`Phase 160` completed the next product slice by refreshing real RDP runtime captures for popup, sidepanel settings, and standard full-page dashboard/settings/provider-detail surfaces while adding runtime-window cleanup into the helper workflow. That keeps the current QA evidence aligned with the shipped expand, quick-theme, and motion work and reduces repeat-capture OOM risk.
+
+`Phase 161` completed the first `Direction 10.3` slice by turning the first screenshot archive into an explicit selection and stale-review pack, updating the storyboard to prefer native toolbar-bubble popup capture plus full-page-shell depth capture, and marking the current listing-copy documents as pre-refresh baselines rather than the final submission pack. The next product slice is now one refreshed screenshot-capture request for store-ready surfaces.
 
 ## References
 

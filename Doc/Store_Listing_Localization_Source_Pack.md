@@ -17,7 +17,8 @@ Freshness model:
 Status note:
 
 - this file is the current English source pack for future Chrome Web Store listing localization work
-- refresh it when the maintained store-listing copy pack, the first archived screenshot set, or the shipped truth boundary changes materially
+- after `Phase 161`, treat it as a pre-refresh localization baseline anchored to the first screenshot archive rather than the final submission source pack
+- refresh it when the maintained store-listing copy pack, screenshot selection pack, refreshed screenshot archive, or shipped truth boundary changes materially
 
 Purpose:
 
@@ -33,6 +34,8 @@ Purpose:
   - [2026-04-24-first-real-store-screenshot-capture-request-archive/README.md](./testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md)
 - screenshot storyboard:
   - [Store_Screenshot_Storyboard.md](./Store_Screenshot_Storyboard.md)
+- screenshot selection pack:
+  - [Store_Screenshot_Selection_Pack.md](./Store_Screenshot_Selection_Pack.md)
 - current extension manifest:
   - [src/manifest.json](../src/manifest.json)
 
@@ -109,6 +112,12 @@ Purpose:
   - evidence anchor: `04-settings-and-setup-depth.png`
 - `store.screenshot_caption.05_provider_or_dashboard_depth`
   - evidence anchor: `05-provider-or-dashboard-depth.png`
+
+## Current Asset Boundary
+
+- the current string ids still map truthfully to the maintained listing-copy pack and first screenshot archive
+- after `Phase 161`, this source pack is a historical baseline for localization handoff, not the final submission-ready source set
+- refresh localized listing work only after a new screenshot archive and refreshed English copy pack replace the current first-archive baseline
 
 ## Translation Guardrails
 

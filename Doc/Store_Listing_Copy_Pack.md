@@ -17,7 +17,8 @@ Freshness model:
 Status note:
 
 - this file is the current maintained Chrome Web Store copy pack for the shipped extension scope
-- refresh it when the popup story, provider truth boundary, first archived screenshot set, or store positioning changes materially
+- after `Phase 161`, treat it as a pre-refresh English claim baseline anchored to the first screenshot archive rather than the final submission pack
+- refresh it when the popup story, provider truth boundary, screenshot selection pack, or refreshed screenshot archive changes materially
 
 Purpose:
 
@@ -31,6 +32,8 @@ Purpose:
   - [2026-04-24-first-real-store-screenshot-capture-request-archive/README.md](./testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md)
 - screenshot storyboard:
   - [Store_Screenshot_Storyboard.md](./Store_Screenshot_Storyboard.md)
+- screenshot selection pack:
+  - [Store_Screenshot_Selection_Pack.md](./Store_Screenshot_Selection_Pack.md)
 - toolbar competitive-fit decisions:
   - [Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md](./Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md)
 - current extension manifest:
@@ -109,6 +112,12 @@ Purpose:
   - `Open deeper provider review when the popup needs more context.`
 - claim:
   - detailed provider and contract review belongs to the side panel
+
+## Current Asset Boundary
+
+- the current title, overview, feature bullets, and captions still map truthfully to the first archived screenshot set
+- after `Phase 161`, this pack is no longer the final submission pack because the underlying screenshot set is now treated as a historical baseline after the popup/full-page surface-expansion line
+- tighten this pack only after a refreshed screenshot archive replaces the first archived set
 
 ## Claim Guardrails
 

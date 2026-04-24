@@ -9,9 +9,9 @@ Document class:
 Status note:
 
 - direction created on `2026-04-24`
-- no executable phase has started yet
+- first executable slice landed on `2026-04-24` through `Phase 161`
 - this child TODO now becomes the next active `Direction 10` line after `Phase 160` refreshed the current popup / sidepanel / full-page runtime evidence
-- this child TODO assumes the current first real screenshot archive already exists and focuses on store-ready asset preparation after the next surface-expansion workstream lands
+- this child TODO assumes the current first real screenshot archive already exists and focuses on store-ready asset preparation after the surface-expansion workstream landed
 
 Process rule:
 
@@ -36,6 +36,14 @@ Turn the current storyboard, screenshot workflow, first real archive, and listin
 - select which archived screenshots are still valid after surface-expansion work lands
 - identify which screenshots must be recaptured because popup, sidebar, or full-page shell changed materially
 - keep one truthful mapping from each chosen screenshot to one concrete runtime state
+- `Phase 161` completed this first store-asset slice by shipping:
+  - one maintained [Store_Screenshot_Selection_Pack.md](../Store_Screenshot_Selection_Pack.md)
+  - one explicit stale-review pass across the first screenshot archive, current storyboard, current listing-copy pack, and current localization source pack
+  - one rule that treats popup app-window smoke capture as QA evidence only, not as the final submission replacement for the native toolbar bubble
+- current boundary after `Phase 161`:
+  - the first archived screenshot set remains truthful historical evidence
+  - zero archived screenshots are currently marked as final submission-ready after the popup/full-page surface-expansion line
+  - the next slice must create one refreshed screenshot capture request that targets the updated selection pack instead of reusing the first archive blindly
 
 ### B. Final Screenshot Ordering
 
@@ -71,8 +79,8 @@ Turn the current storyboard, screenshot workflow, first real archive, and listin
 
 ## Planned Numbered Slices
 
-1. screenshot selection and stale-archive review after new surfaces land
-2. refreshed screenshot capture request for store-ready surfaces
+1. screenshot selection and stale-archive review after new surfaces land - completed in `Phase 161`
+2. refreshed screenshot capture request for store-ready surfaces - next
 3. final screenshot ordering and caption contract
 4. listing-copy tightening against refreshed archives
 5. submission checklist and store-pack closeout

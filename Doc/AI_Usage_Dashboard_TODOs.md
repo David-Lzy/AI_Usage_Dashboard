@@ -213,7 +213,8 @@ Phase status update:
 - `Phase 158` completed the popup plus sidebar light-dark toggle button and carried that same quick control into the standard full-page shell without replacing Settings as the advanced theme surface
 - `Phase 159` completed motion polish for popup-expand and sidepanel-expand full-page entry by adding short-lived entry hints plus restrained source-aware full-page shell entry motion that stays disabled when reduced motion is requested
 - `Phase 160` completed the RDP Chrome runtime QA refresh by refreshing popup, sidepanel-settings, and standard full-page dashboard/settings/provider-detail captures while adding runtime-window cleanup into the helper workflow
-- the immediate next executable work now moves to `Direction 10.3` store asset-pack refresh on top of the updated runtime evidence captured after the surface-expansion line
+- `Phase 161` completed the first `Direction 10.3` slice by turning the first screenshot archive into an explicit selection/stale-review pack and by updating the storyboard toward native toolbar-bubble popup capture plus full-page depth capture
+- the immediate next executable work is now a refreshed screenshot-capture request for store-ready surfaces under `Doc/Roadmap/10_3_Store_Asset_Pack_And_Submission_TODOs.md`
 - the next major architecture line after that is the Direction 09 runtime i18n bootstrap captured in `Doc/Roadmap/09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
