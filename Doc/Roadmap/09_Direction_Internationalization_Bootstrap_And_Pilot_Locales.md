@@ -18,6 +18,7 @@ Execution note:
 - third executable slice landed on `2026-04-24` through `Phase 172`
 - fourth executable slice landed on `2026-04-24` through `Phase 173`
 - fifth executable slice landed on `2026-04-24` through `Phase 174`
+- sixth executable slice landed on `2026-04-24` through `Phase 175`
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
 Process rule:
@@ -60,6 +61,7 @@ As of 2026-04-24:
   - popup explanatory copy
   - dashboard shell
   - the first settings-shell slice
+  - deeper settings helper copy
   - provider-detail shell and static copy
   - shared quick theme-toggle labels
 - the current settings-shell slice includes:
@@ -71,7 +73,12 @@ As of 2026-04-24:
   - top-level section headings
   - the preferences-saved toast
 - the runtime app now also formats generated counts, percentages, and parseable `resetAt / syncedAt` timestamp values per locale
-- the runtime app still does not yet localize deeper settings helper copy, localized durations, operator workspaces, or raw provider source-truth detail strings that intentionally remain closer to the underlying source contract
+- the deeper settings helper slice now also localizes:
+  - theme-customization status messaging
+  - credential-card section labels, state chips, help copy, footer copy, placeholders, and action labels
+  - source-card preference labels, session-track labels, diagnostics disclosure labels, and diagnostic group and field labels
+  - permission-prompt status and action labels
+- the runtime app still does not yet localize localized durations, operator workspaces, or raw provider source-truth detail strings that intentionally remain closer to the underlying source contract
 - popup compact widths are already tight in English, so longer translated strings still need explicit QA before the broader runtime rollout
 - the repo ships maintained i18n references:
   - [I18n_Message_ID_Contract.md](../I18n_Message_ID_Contract.md)
@@ -138,7 +145,8 @@ Recommended rollout:
 4. locale-aware formatting for counts, percentages, and parseable timestamp primitives - shipped in `Phase 172`
 5. settings-shell pilot rollout plus locale selector - shipped in `Phase 173`
 6. popup explanatory copy plus provider-detail shell/static copy rollout - shipped in `Phase 174`
-7. deeper settings helper copy plus duration/RTL hardening - next
+7. deeper settings helper copy rollout - shipped in `Phase 175`
+8. locale-aware durations plus compact-width and RTL hardening - next
 
 ## References
 

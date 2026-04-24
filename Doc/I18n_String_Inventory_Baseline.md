@@ -21,7 +21,7 @@ Status note:
 
 ## Current Localized Scope
 
-Localized through `Phase 170`, `Phase 171`, `Phase 172`, `Phase 173`, and `Phase 174`:
+Localized through `Phase 170`, `Phase 171`, `Phase 172`, `Phase 173`, `Phase 174`, and `Phase 175`:
 
 - manifest `name`
 - manifest `description`
@@ -40,6 +40,11 @@ Localized through `Phase 170`, `Phase 171`, `Phase 172`, `Phase 173`, and `Phase
 - settings shell, overview, section navigation, and locale selector
 - settings global-preferences labels, theme preset labels, summary-strip labels, and top-level section headings
 - settings preferences-saved toast copy
+- deeper settings helper copy:
+  - theme-customization status messaging
+  - credential-card section labels, state chips, help copy, footer copy, placeholders, and action labels
+  - source-card preference labels, session-track labels, diagnostics disclosure labels, and diagnostic group and field labels
+  - permission-prompt status and action labels
 - provider-detail shell plus popup explanatory copy
 - provider-detail static shell copy:
   - top bar subtitle and actions
@@ -65,9 +70,7 @@ These now ship through:
 
 The following surfaces still need broader runtime localization work:
 
-- deeper settings setup guidance, credential help copy, and source-card diagnostics
 - raw provider source-truth detail strings that still intentionally surface current contract or vendor wording without translation
-- settings custom-seed status messaging
 - interaction-audit workspace
 - theme-recovery workspace
 - store-facing runtime captions and screenshot-adjacent helper copy
@@ -77,15 +80,15 @@ The following surfaces still need broader runtime localization work:
 
 Recommended next extraction order:
 
-1. deeper settings setup and source/credential helper copy
-2. locale-aware durations and relative freshness phrases
+1. locale-aware durations and relative freshness phrases
+2. compact-width and RTL QA hardening for the existing `en + zh_CN` pilot
 3. audit and recovery workspace copy
 4. store-facing runtime helper copy that later appears in screenshots or submission support material
 
 ## Truth Boundary
 
 - the extension is no longer manifest-English-only after `Phase 170`
-- the runtime app now has a broader but still partial localized slice plus locale-aware formatting after `Phase 174`, not a full translated rollout
-- `en` and `zh_CN` currently cover manifest surfaces plus popup/dashboard shell strings, popup explanatory copy, the first settings-shell slice, provider-detail shell/static copy, quick theme-toggle labels, generated counts, percentages, and parseable timestamp primitives
-- deeper settings helper copy, raw provider source-truth detail strings, localized durations, and operator workspaces still remain outside the shipped pilot
+- the runtime app now has a broader but still partial localized slice plus locale-aware formatting after `Phase 175`, not a full translated rollout
+- `en` and `zh_CN` currently cover manifest surfaces plus popup/dashboard shell strings, popup explanatory copy, the first settings-shell slice, deeper settings helper copy, provider-detail shell/static copy, quick theme-toggle labels, generated counts, percentages, and parseable timestamp primitives
+- raw provider source-truth detail strings, localized durations, and operator workspaces still remain outside the shipped pilot
 - non-parseable vendor-owned window labels such as `Mar 23 - Apr 21` still remain raw strings until a later explicit product decision localizes them

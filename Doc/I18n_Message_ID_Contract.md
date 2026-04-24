@@ -44,7 +44,7 @@ Keep manifest and runtime localization on one stable naming contract so later co
 - `manifest_action_default_title`
   - maps to manifest `action.default_title`
 
-## Shipped Runtime IDs Through Phase 174
+## Shipped Runtime IDs Through Phase 175
 
 Runtime localization now exists for one broader but still partial manifest plus runtime pilot slice. Current shipped groups are:
 
@@ -80,9 +80,9 @@ Runtime localization now exists for one broader but still partial manifest plus 
   - `settings.permissions.*`
   - `settings.toast.*`
 
-## Structured Runtime Copy Through Phase 174
+## Structured Runtime Copy Through Phase 175
 
-`Phase 174` deliberately did not explode the runtime id list with one message id per popup sentence or per provider-detail field label.
+`Phase 174` and `Phase 175` deliberately did not explode the runtime id list with one message id per popup sentence, provider-detail field label, or settings helper paragraph.
 
 Instead, these localized surfaces now ship through shared structured builders in [src/shared/localized-copy.ts](../src/shared/localized-copy.ts):
 
@@ -103,6 +103,11 @@ Instead, these localized surfaces now ship through shared structured builders in
   - localized status badge labels
   - localized helper value labels such as `Granted`, `Missing`, and `Unknown`
   - the provider-detail hero explanatory paragraph
+- deeper settings helper copy:
+  - theme-customization status messaging
+  - credential-card section labels, state chips, help copy, footer copy, placeholders, and action labels
+  - source-card preference labels, session-track labels, diagnostics disclosure labels, and diagnostic group and field labels
+  - permission-prompt status and action labels
 
 This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still making the broader `en + zh-CN` pilot executable.
 
@@ -124,9 +129,10 @@ This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still maki
   - popup explanatory copy
   - dashboard shell
   - the first settings-shell slice
+  - deeper settings helper copy
   - provider-detail shell and static copy
   - shared quick theme-toggle labels
-- deeper settings helper copy, raw provider source-truth detail strings, localized durations, and operator workspaces still remain outside the shipped localized slice
+- raw provider source-truth detail strings, localized durations, and operator workspaces still remain outside the shipped localized slice
 - vendor-owned provider-page text stays outside the managed localization catalog
 - locale-aware formatting also stays outside raw message ids so generated values can be formatted per locale without multiplying message ids
 

@@ -1,4 +1,5 @@
 import type {
+  ProviderSourceKind,
   ProviderTone,
   ProviderSetting,
   ProviderSnapshot,
@@ -7,7 +8,6 @@ import type {
 import {
   getOpenableRouteHint,
   getRolloutStageLabel,
-  getSourceKindLabel,
   type ProviderSourceDisplay,
 } from "../shared/provider-sources";
 
@@ -42,11 +42,87 @@ export type SettingsSummaryLabels = {
   needsAccess: string;
 };
 
+export type SettingsSourceCardLabels = {
+  primary: {
+    accessModel: string;
+    availabilitySummary: string;
+    fallback: string;
+    noneFallback: string;
+    route: string;
+    availability: string;
+    graduationGate: string;
+    selectionReason: string;
+    fallbackReason: string;
+    readinessDetail: string;
+    fidelityDetail: string;
+    usedValue: string;
+    remainingValue: string;
+    resetValue: string;
+    credentialPersistence: string;
+    cookieStorage: string;
+    manualCookieImport: string;
+    hostAccess: string;
+    pageBinding: string;
+    bindingMode: string;
+    bindingDetail: string;
+  };
+  groups: {
+    sourceDecision: string;
+    valueSemantics: string;
+    trustBoundary: string;
+  };
+  notes: {
+    graduationGatePrefix: string;
+  };
+  sourceKindLabels?: Record<ProviderSourceKind, string>;
+  routeFallback?: string;
+};
+
 const DEFAULT_SETTINGS_SUMMARY_LABELS: SettingsSummaryLabels = {
   visible: "Visible",
   storedSecrets: "Stored Secrets",
   boundPages: "Bound Pages",
   needsAccess: "Needs Access",
+};
+
+const DEFAULT_SETTINGS_SOURCE_CARD_LABELS: SettingsSourceCardLabels = {
+  primary: {
+    accessModel: "Access model",
+    availabilitySummary: "Availability summary",
+    fallback: "Fallback",
+    noneFallback: "None",
+    route: "Route",
+    availability: "Availability",
+    graduationGate: "Graduation gate",
+    selectionReason: "Selection reason",
+    fallbackReason: "Fallback reason",
+    readinessDetail: "Readiness detail",
+    fidelityDetail: "Fidelity detail",
+    usedValue: "Used value",
+    remainingValue: "Remaining value",
+    resetValue: "Reset value",
+    credentialPersistence: "Credential persistence",
+    cookieStorage: "Cookie storage",
+    manualCookieImport: "Manual cookie import",
+    hostAccess: "Host access",
+    pageBinding: "Page binding",
+    bindingMode: "Binding mode",
+    bindingDetail: "Binding detail",
+  },
+  groups: {
+    sourceDecision: "Source decision",
+    valueSemantics: "Value semantics",
+    trustBoundary: "Trust boundary",
+  },
+  notes: {
+    graduationGatePrefix: "Graduation gate: ",
+  },
+  sourceKindLabels: {
+    official_api: "Official API",
+    session_page: "Session page",
+    policy_only: "Policy only",
+  },
+  routeFallback: "Open from provider settings",
 };
 
 type SettingsValueFormatter = (value: number) => string;
@@ -101,6 +177,7 @@ function buildDiagnosticGroup(
 
 function buildSessionTrackModel(
   sourceDisplay: ProviderSourceDisplay,
+  labels: SettingsSourceCardLabels = DEFAULT_SETTINGS_SOURCE_CARD_LABELS,
 ): SettingsSessionTrackModel | null {
   const sessionPagePlan = sourceDisplay.sessionPagePlan;
 
@@ -134,16 +211,16 @@ function buildSessionTrackModel(
   ].filter((chip): chip is SettingsSourceChip => chip !== null);
 
   const fields = [
-    buildField("Route", routeHint ?? "Open from provider settings"),
-    buildField("Availability", sourceDisplay.sessionPageAvailabilitySummary),
-    buildField("Graduation gate", sourceDisplay.sessionPageGraduationGateLabel),
+    buildField(labels.primary.route, routeHint ?? labels.routeFallback ?? DEFAULT_SETTINGS_SOURCE_CARD_LABELS.routeFallback),
+    buildField(labels.primary.availability, sourceDisplay.sessionPageAvailabilitySummary),
+    buildField(labels.primary.graduationGate, sourceDisplay.sessionPageGraduationGateLabel),
   ].filter((field): field is SettingsSourceField => field !== null);
 
   const noteLines = [
     sourceDisplay.sessionPageContractDetail,
     sourceDisplay.sessionPageFidelityDetail,
     sourceDisplay.sessionPageGraduationGateDetail
-      ? `Graduation gate: ${sourceDisplay.sessionPageGraduationGateDetail}`
+      ? `${labels.notes.graduationGatePrefix}${sourceDisplay.sessionPageGraduationGateDetail}`
       : null,
   ].filter((line, index, lines): line is string => {
     const normalizedLine = line?.trim();
@@ -208,18 +285,19 @@ export function buildSettingsSummaryItems(
 
 export function buildSettingsSourceCardModel(
   sourceDisplay: ProviderSourceDisplay,
+  labels: SettingsSourceCardLabels = DEFAULT_SETTINGS_SOURCE_CARD_LABELS,
 ): SettingsSourceCardModel {
+  const fallbackValue =
+    sourceDisplay.fallbackPlans.length > 0
+      ? sourceDisplay.fallbackPlans
+          .map((plan) => ((labels.sourceKindLabels ?? DEFAULT_SETTINGS_SOURCE_CARD_LABELS.sourceKindLabels!)[plan.kind] ?? plan.kind))
+          .join(" · ")
+      : labels.primary.noneFallback;
+
   const primaryFields = [
-    buildField("Access model", sourceDisplay.accessModelLabel),
-    buildField("Availability summary", sourceDisplay.availabilitySummary),
-    buildField(
-      "Fallback",
-      sourceDisplay.fallbackPlans.length > 0
-        ? sourceDisplay.fallbackPlans
-            .map((plan) => getSourceKindLabel(plan.kind))
-            .join(" · ")
-        : "None",
-    ),
+    buildField(labels.primary.accessModel, sourceDisplay.accessModelLabel),
+    buildField(labels.primary.availabilitySummary, sourceDisplay.availabilitySummary),
+    buildField(labels.primary.fallback, fallbackValue),
   ].filter((field): field is SettingsSourceField => field !== null);
 
   const summaryNoteLines = [
@@ -243,47 +321,47 @@ export function buildSettingsSourceCardModel(
 
   const diagnosticGroups = [
     buildDiagnosticGroup(
-      "Source decision",
+      labels.groups.sourceDecision,
       [
-        buildField("Selection reason", sourceDisplay.sourceSelectionReason),
-        buildField("Fallback reason", sourceDisplay.sourceFallbackReason),
-        buildField("Readiness detail", sourceDisplay.stateDetail),
-        buildField("Graduation gate", sourceDisplay.currentGraduationGateLabel),
+        buildField(labels.primary.selectionReason, sourceDisplay.sourceSelectionReason),
+        buildField(labels.primary.fallbackReason, sourceDisplay.sourceFallbackReason),
+        buildField(labels.primary.readinessDetail, sourceDisplay.stateDetail),
+        buildField(labels.primary.graduationGate, sourceDisplay.currentGraduationGateLabel),
       ],
       [
         sourceDisplay.currentGraduationGateDetail
-          ? `Graduation gate: ${sourceDisplay.currentGraduationGateDetail}`
+          ? `${labels.notes.graduationGatePrefix}${sourceDisplay.currentGraduationGateDetail}`
           : null,
         sourceDisplay.currentPlan.note,
       ],
     ),
     buildDiagnosticGroup(
-      "Value semantics",
+      labels.groups.valueSemantics,
       [
-        buildField("Fidelity detail", sourceDisplay.fidelityDetail),
-        buildField("Used value", sourceDisplay.usedAvailabilityLabel),
-        buildField("Remaining value", sourceDisplay.remainingAvailabilityLabel),
-        buildField("Reset value", sourceDisplay.resetAvailabilityLabel),
+        buildField(labels.primary.fidelityDetail, sourceDisplay.fidelityDetail),
+        buildField(labels.primary.usedValue, sourceDisplay.usedAvailabilityLabel),
+        buildField(labels.primary.remainingValue, sourceDisplay.remainingAvailabilityLabel),
+        buildField(labels.primary.resetValue, sourceDisplay.resetAvailabilityLabel),
       ],
       [],
     ),
     buildDiagnosticGroup(
-      "Trust boundary",
+      labels.groups.trustBoundary,
       [
-        buildField("Access model", sourceDisplay.accessModelLabel),
+        buildField(labels.primary.accessModel, sourceDisplay.accessModelLabel),
         buildField(
-          "Credential persistence",
+          labels.primary.credentialPersistence,
           sourceDisplay.credentialPersistenceLabel,
         ),
-        buildField("Cookie storage", sourceDisplay.cookiePolicyLabel),
+        buildField(labels.primary.cookieStorage, sourceDisplay.cookiePolicyLabel),
         buildField(
-          "Manual cookie import",
+          labels.primary.manualCookieImport,
           sourceDisplay.manualCookieImportLabel,
         ),
-        buildField("Host access", sourceDisplay.hostAccessLabel),
-        buildField("Page binding", sourceDisplay.pageBindingLabel),
-        buildField("Binding mode", sourceDisplay.pageBindingModeLabel),
-        buildField("Binding detail", sourceDisplay.pageBindingDetail),
+        buildField(labels.primary.hostAccess, sourceDisplay.hostAccessLabel),
+        buildField(labels.primary.pageBinding, sourceDisplay.pageBindingLabel),
+        buildField(labels.primary.bindingMode, sourceDisplay.pageBindingModeLabel),
+        buildField(labels.primary.bindingDetail, sourceDisplay.pageBindingDetail),
       ],
       [
         sourceDisplay.accessModelDetail,
@@ -306,7 +384,7 @@ export function buildSettingsSourceCardModel(
     primaryFields,
     summaryNoteLines,
     summaryNoteTone,
-    sessionTrack: buildSessionTrackModel(sourceDisplay),
+    sessionTrack: buildSessionTrackModel(sourceDisplay, labels),
     diagnosticGroups,
     diagnosticsCount,
   };

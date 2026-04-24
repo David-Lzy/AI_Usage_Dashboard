@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [174_Phase_Popup_Explanatory_Copy_And_Provider_Detail_Shell_Localization.md](./Archive/174_Phase_Popup_Explanatory_Copy_And_Provider_Detail_Shell_Localization.md)
+- latest completed slice: [175_Phase_Deeper_Settings_Helper_Localization.md](./Archive/175_Phase_Deeper_Settings_Helper_Localization.md)
 
 Completed phases should be moved to:
 
@@ -221,6 +221,7 @@ Completed phases should be moved to:
 - [172_Phase_Locale_Aware_Runtime_Value_Formatting.md](./Archive/172_Phase_Locale_Aware_Runtime_Value_Formatting.md) - completed and archived on 2026-04-24
 - [173_Phase_Settings_Shell_Localization_And_Locale_Selector.md](./Archive/173_Phase_Settings_Shell_Localization_And_Locale_Selector.md) - completed and archived on 2026-04-24
 - [174_Phase_Popup_Explanatory_Copy_And_Provider_Detail_Shell_Localization.md](./Archive/174_Phase_Popup_Explanatory_Copy_And_Provider_Detail_Shell_Localization.md) - completed and archived on 2026-04-24
+- [175_Phase_Deeper_Settings_Helper_Localization.md](./Archive/175_Phase_Deeper_Settings_Helper_Localization.md) - completed and archived on 2026-04-24
 
 ## Dependency Notes
 
@@ -255,6 +256,7 @@ Completed phases should be moved to:
 - phase 41 was split on 2026-04-23 after the first operator-profile pass exposed a runtime-parity blocker in the long-lived Chrome profile
 - phase 41.1 audited the active profile, captured the current blocked state, and tightened the checklist before the final gate
 - phase 41.2 depends on phase 41.1 because the final mixed-source gate should run only after runtime parity is checked explicitly
+- phase 175 depends on phase 174 because deeper settings helper copy should extend the existing shared runtime i18n and localized-copy contract instead of creating one parallel Settings-only localization path
 - the 2026-04-23 rerun cleared the earlier `Cursor` runtime-parity blocker and re-proved the live `Codex` plus `Cursor` personal session-page paths
 - `Branch B` was selected on 2026-04-23, so JetBrains was removed from the active RC support promise and retained only as a deferred repo path
 - phase 42 now packages the narrowed RC that matches the resolved `Phase 41.2` gate

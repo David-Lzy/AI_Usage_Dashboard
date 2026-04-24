@@ -10,6 +10,7 @@ import {
 import {
   buildPopupLocalizedCopy,
   buildProviderDetailLocalizedCopy,
+  buildSettingsLocalizedCopy,
 } from "./localized-copy";
 
 describe("runtime i18n", () => {
@@ -89,6 +90,18 @@ describe("runtime i18n", () => {
     expect(popupCopy.featuredCard.statusNeedsAccess).toBe("需授权");
     expect(providerDetailCopy.sections.providerDetail).toBe("Provider 详情");
     expect(providerDetailCopy.notes.accessStatus).toBe("访问状态");
+  });
+
+  it("returns zh-CN structured settings helper copy builders", () => {
+    const i18n = createRuntimeI18n("zh-CN");
+    const settingsCopy = buildSettingsLocalizedCopy(i18n);
+
+    expect(settingsCopy.themeCustomization.enterValidSeed).toContain(
+      "输入有效的 #RRGGBB 值",
+    );
+    expect(settingsCopy.credentials.saveKey).toBe("保存密钥");
+    expect(settingsCopy.sources.preferenceLabel).toBe("偏好");
+    expect(settingsCopy.permissions.requestAccess).toBe("请求授权");
   });
 
 });

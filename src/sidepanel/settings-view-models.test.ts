@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import { SAMPLE_APP_STATE } from "../shared/constants";
+import { createRuntimeI18n } from "../shared/i18n";
+import { buildSettingsLocalizedCopy } from "../shared/localized-copy";
 import { buildProviderSourceDisplay } from "../shared/provider-sources";
 import {
   buildSettingsSourceCardModel,
@@ -223,4 +225,32 @@ describe("settings view models", () => {
     ).toBe(true);
     expect(sourceCardModel.sessionTrack?.noteTone).toBe("warning");
   });
+  it("accepts localized labels for deeper settings helper copy", () => {
+    const provider =
+      SAMPLE_APP_STATE.providers.find((entry) => entry.providerId === "codex") ??
+      null;
+    const setting =
+      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "codex") ??
+      null;
+
+    expect(provider).not.toBeNull();
+    expect(setting).not.toBeNull();
+
+    const settingsCopy = buildSettingsLocalizedCopy(createRuntimeI18n("zh-CN"));
+    const sourceCardModel = buildSettingsSourceCardModel(
+      buildProviderSourceDisplay(provider!, setting!),
+      settingsCopy.sources.cardLabels,
+    );
+
+    expect(sourceCardModel.primaryFields[0]).toMatchObject({
+      label: "访问模型",
+    });
+    expect(sourceCardModel.primaryFields[1]).toMatchObject({
+      label: "可用性摘要",
+    });
+    expect(
+      sourceCardModel.diagnosticGroups.map((group) => group.title),
+    ).toEqual(["来源决策", "值语义", "信任边界"]);
+  });
+
 });

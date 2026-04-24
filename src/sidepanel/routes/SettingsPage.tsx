@@ -13,12 +13,15 @@ import type {
 } from "../../providers/types";
 import {
   buildProviderSourceDisplay,
-  getSourcePreferenceLabel,
 } from "../../shared/provider-sources";
 import {
   buildSettingsSummaryLabels,
   createRuntimeI18n,
 } from "../../shared/i18n";
+import {
+  buildSettingsLocalizedCopy,
+  getSettingsSourcePreferenceLabel,
+} from "../../shared/localized-copy";
 import {
   THEME_PRESET_OPTIONS,
   buildCustomThemePalette,
@@ -176,6 +179,7 @@ export function SettingsPage({
     settings.locale,
     typeof window !== "undefined" ? window : undefined,
   );
+  const settingsCopy = buildSettingsLocalizedCopy(i18n);
   const customThemePreviewPalette = normalizedThemeCustomSeedDraft
     ? buildCustomThemePalette(normalizedThemeCustomSeedDraft, resolvedThemeMode)
     : null;
@@ -187,28 +191,24 @@ export function SettingsPage({
   if (cursorProvider) {
     credentialProviders.push({
       provider: cursorProvider,
-      title: "Cursor Team Admin API key",
-      inputLabel: "Admin API key",
-      helpText:
-        "Stored only in extension-managed local storage on this browser profile. Optional: use it for the team-admin API path, or leave it empty and use the logged-in personal usage page instead.",
-      footerText:
-        "Team-admin scope only. When configured, requests are sent from the background worker to `https://api.cursor.com` with Basic auth. Personal usage-page sync does not require this key.",
-      placeholderMissing: "Paste a Cursor Admin API key",
-      placeholderConfigured: "Configured locally. Enter a new key to replace it.",
+      title: settingsCopy.credentials.cursorTitle,
+      inputLabel: settingsCopy.credentials.adminApiKeyLabel,
+      helpText: settingsCopy.credentials.cursorHelpText,
+      footerText: settingsCopy.credentials.cursorFooterText,
+      placeholderMissing: settingsCopy.credentials.cursorPlaceholderMissing,
+      placeholderConfigured: settingsCopy.credentials.cursorPlaceholderConfigured,
     });
   }
 
   if (claudeProvider) {
     credentialProviders.push({
       provider: claudeProvider,
-      title: "Claude Code Analytics Admin API key",
-      inputLabel: "Admin API key",
-      helpText:
-        "Stored only in extension-managed local storage on this browser profile. Required for the supported v1 Claude organization analytics path.",
-      footerText:
-        "Admin API scope only. Requests are sent from the background worker to `https://api.anthropic.com/v1/organizations/usage_report/claude_code` with `x-api-key` and `anthropic-version` headers.",
-      placeholderMissing: "Paste an Anthropic Admin API key",
-      placeholderConfigured: "Configured locally. Enter a new key to replace it.",
+      title: settingsCopy.credentials.claudeTitle,
+      inputLabel: settingsCopy.credentials.adminApiKeyLabel,
+      helpText: settingsCopy.credentials.claudeHelpText,
+      footerText: settingsCopy.credentials.claudeFooterText,
+      placeholderMissing: settingsCopy.credentials.claudePlaceholderMissing,
+      placeholderConfigured: settingsCopy.credentials.claudePlaceholderConfigured,
     });
   }
 
@@ -512,10 +512,13 @@ export function SettingsPage({
 
           <p className="supporting-copy">
             {normalizedThemeCustomSeedDraft
-              ? `Previewing ${normalizedThemeCustomSeedDraft} for the current ${resolvedThemeMode} palette. Apply it to switch the accent preset to Custom Seed.`
+              ? settingsCopy.themeCustomization.previewingSeed(
+                  normalizedThemeCustomSeedDraft,
+                  resolvedThemeMode,
+                )
               : settings.themePreset === "custom"
-                ? "Custom Seed is selected, but no valid saved seed is available yet. The default accent roles stay active until you apply a valid #RRGGBB value."
-                : "Enter a valid #RRGGBB value to generate a custom accent palette without opening raw token editing."}
+                ? settingsCopy.themeCustomization.customSeedMissing
+                : settingsCopy.themeCustomization.enterValidSeed}
           </p>
 
           {customThemePreviewPalette ? (
@@ -637,16 +640,16 @@ export function SettingsPage({
                   <div className="dashboard-section__header">
                     <div>
                       <p className="section-label">
-                        {index === 0
-                          ? "Provider Credentials"
-                          : "Provider Credential"}
+                        {settingsCopy.credentials.sectionLabel}
                       </p>
                       <h2 className="section-title">{item.title}</h2>
                     </div>
                     <p
                       className={`credential-state ${isConfigured ? "credential-state--configured" : "credential-state--missing"}`}
                     >
-                      {isConfigured ? "Configured" : "Missing"}
+                      {isConfigured
+                        ? settingsCopy.credentials.configured
+                        : settingsCopy.credentials.missing}
                     </p>
                   </div>
 
@@ -687,7 +690,7 @@ export function SettingsPage({
                           type="submit"
                           disabled={!trimmedInput}
                         >
-                          Save key
+                          {settingsCopy.credentials.saveKey}
                         </button>
                         <button
                           className="text-button"
@@ -695,7 +698,7 @@ export function SettingsPage({
                           disabled={!isConfigured}
                           onClick={() => handleClearProviderApiKey(item.provider.id)}
                         >
-                          Clear stored key
+                          {settingsCopy.credentials.clearStoredKey}
                         </button>
                       </div>
                     </form>
@@ -710,31 +713,28 @@ export function SettingsPage({
               <article className="status-card">
                 <div className="dashboard-section__header">
                   <div>
-                    <p className="section-label">Provider Credential</p>
+                    <p className="section-label">{settingsCopy.credentials.sectionLabel}</p>
                     <h2 className="section-title">
-                      Codex Enterprise analytics config
+                      {settingsCopy.credentials.codexTitle}
                     </h2>
                   </div>
                   <p
                     className={`credential-state ${codexProvider.credentialStatus === "configured" ? "credential-state--configured" : "credential-state--missing"}`}
                   >
                     {codexProvider.credentialStatus === "configured"
-                      ? "Configured"
-                      : "Missing"}
+                      ? settingsCopy.credentials.configured
+                      : settingsCopy.credentials.missing}
                   </p>
                 </div>
 
                 <div className="credential-card">
                   <p className="supporting-copy">
-                    Stored only in extension-managed local storage on this browser
-                    profile. This is optional and only needed for the Enterprise
-                    analytics path. Personal Codex usage-page sync does not require
-                    an analytics key or workspace ID.
+                    {settingsCopy.credentials.codexHelpText}
                   </p>
 
                   <form className="credential-form" onSubmit={handleSaveCodexConfig}>
                     <label className="form-field">
-                      <span className="form-field__label">Analytics API key</span>
+                      <span className="form-field__label">{settingsCopy.credentials.analyticsApiKeyLabel}</span>
                       <input
                         className="form-field__control"
                         type="password"
@@ -743,8 +743,8 @@ export function SettingsPage({
                         value={codexAnalyticsApiKeyInput}
                         placeholder={
                           codexProvider.credentialStatus === "configured"
-                            ? "Configured locally. Enter a new analytics key to replace it."
-                            : "Paste a Codex analytics API key"
+                            ? settingsCopy.credentials.codexAnalyticsPlaceholderConfigured
+                            : settingsCopy.credentials.codexAnalyticsPlaceholderMissing
                         }
                         onChange={(event) =>
                           setCodexAnalyticsApiKeyInput(event.target.value)
@@ -753,7 +753,7 @@ export function SettingsPage({
                     </label>
 
                     <label className="form-field">
-                      <span className="form-field__label">Workspace ID</span>
+                      <span className="form-field__label">{settingsCopy.credentials.workspaceIdLabel}</span>
                       <input
                         className="form-field__control"
                         type="text"
@@ -762,8 +762,8 @@ export function SettingsPage({
                         value={codexWorkspaceIdInput}
                         placeholder={
                           codexProvider.credentialStatus === "configured"
-                            ? "Configured locally. Enter a new workspace ID to replace it."
-                            : "Paste the Codex workspace ID"
+                            ? settingsCopy.credentials.codexWorkspacePlaceholderConfigured
+                            : settingsCopy.credentials.codexWorkspacePlaceholderMissing
                         }
                         onChange={(event) =>
                           setCodexWorkspaceIdInput(event.target.value)
@@ -780,7 +780,7 @@ export function SettingsPage({
                           !codexWorkspaceIdInput.trim()
                         }
                       >
-                        Save config
+                        {settingsCopy.credentials.saveConfig}
                       </button>
                       <button
                         className="text-button"
@@ -788,16 +788,13 @@ export function SettingsPage({
                         disabled={codexProvider.credentialStatus !== "configured"}
                         onClick={handleClearCodexConfig}
                       >
-                        Clear stored config
+                        {settingsCopy.credentials.clearStoredConfig}
                       </button>
                     </div>
                   </form>
 
                   <p className="supporting-copy">
-                    Use a Platform API key scoped for Codex analytics and the
-                    workspace ID from the ChatGPT admin console only if you want the
-                    Enterprise workspace path. Requests go to
-                    `https://api.chatgpt.com/v1/analytics/codex`.
+                    {settingsCopy.credentials.codexFooterText}
                   </p>
                 </div>
               </article>
@@ -827,7 +824,10 @@ export function SettingsPage({
             }
 
             const sourceDisplay = buildProviderSourceDisplay(snapshot, provider);
-            const sourceCardModel = buildSettingsSourceCardModel(sourceDisplay);
+            const sourceCardModel = buildSettingsSourceCardModel(
+              sourceDisplay,
+              settingsCopy.sources.cardLabels,
+            );
             const sessionPagePlan = sourceDisplay.sessionPagePlan;
             const canUseSessionPageAction =
               sessionPagePlan?.rolloutStage === "shipped";
@@ -868,7 +868,7 @@ export function SettingsPage({
                 <div className="source-card__body">
                   <div className="source-card__summary-grid">
                     <div className="source-card__field">
-                      <p className="source-card__label">Preference</p>
+                      <p className="source-card__label">{settingsCopy.sources.preferenceLabel}</p>
                       {sourceDisplay.sourcePreferenceOptions.length > 1 ? (
                         <label className="form-field">
                           <select
@@ -884,7 +884,10 @@ export function SettingsPage({
                             {sourceDisplay.sourcePreferenceOptions.map(
                               (preference) => (
                                 <option key={preference} value={preference}>
-                                  {getSourcePreferenceLabel(preference)}
+                                  {getSettingsSourcePreferenceLabel(
+                                    preference,
+                                    settingsCopy,
+                                  )}
                                 </option>
                               ),
                             )}
@@ -892,7 +895,10 @@ export function SettingsPage({
                         </label>
                       ) : (
                         <p className="source-card__value">
-                          {sourceDisplay.sourcePreferenceLabel}
+                          {getSettingsSourcePreferenceLabel(
+                            sourceDisplay.sourcePreference,
+                            settingsCopy,
+                          )}
                         </p>
                       )}
                     </div>
@@ -913,7 +919,7 @@ export function SettingsPage({
                           : undefined
                       }
                     >
-                      <p className="detail-note__label">Operational note</p>
+                      <p className="detail-note__label">{settingsCopy.sources.operationalNoteLabel}</p>
                       {sourceCardModel.summaryNoteLines.map((line) => (
                         <p key={line} className="supporting-copy">
                           {line}
@@ -927,7 +933,7 @@ export function SettingsPage({
                       <div className="source-card__session-header">
                         <div>
                           <p className="source-card__label">
-                            Session-page track
+                            {settingsCopy.sources.sessionPageTrackLabel}
                           </p>
                           <p className="source-card__value">
                             {sourceCardModel.sessionTrack?.title ?? sessionPagePlan.label}
@@ -968,7 +974,7 @@ export function SettingsPage({
                               : undefined
                           }
                         >
-                          <p className="detail-note__label">Session-page note</p>
+                          <p className="detail-note__label">{settingsCopy.sources.sessionPageNoteLabel}</p>
                           {sourceCardModel.sessionTrack.noteLines.map((line) => (
                             <p key={line} className="supporting-copy">
                               {line}
@@ -986,8 +992,8 @@ export function SettingsPage({
                             onClick={() => onOpenSessionPage(provider.id)}
                           >
                             {sessionPageNavigationAvailable
-                              ? "Find or open page"
-                              : "Extension mode only"}
+                              ? settingsCopy.sources.findOrOpenPage
+                              : settingsCopy.sources.extensionModeOnly}
                           </button>
                           <button
                             className="text-button"
@@ -998,7 +1004,7 @@ export function SettingsPage({
                             }
                             onClick={() => onClearPageBinding(provider.id)}
                           >
-                            Disconnect binding
+                            {settingsCopy.sources.disconnectBinding}
                           </button>
                         </div>
                       ) : null}
@@ -1007,9 +1013,11 @@ export function SettingsPage({
 
                   <details className="source-card__details">
                     <summary className="source-card__details-toggle">
-                      <span>Detailed diagnostics</span>
+                      <span>{settingsCopy.sources.detailedDiagnostics}</span>
                       <span className="meta-chip">
-                        {sourceCardModel.diagnosticsCount} items
+                        {settingsCopy.sources.itemCount(
+                          sourceCardModel.diagnosticsCount,
+                        )}
                       </span>
                     </summary>
 
@@ -1024,7 +1032,9 @@ export function SettingsPage({
                               {group.title}
                             </p>
                             <span className="meta-chip">
-                              {group.fields.length + group.noteLines.length} items
+                              {settingsCopy.sources.itemCount(
+                                group.fields.length + group.noteLines.length,
+                              )}
                             </span>
                           </div>
 
@@ -1089,6 +1099,7 @@ export function SettingsPage({
               hostsLabel={provider.hostsLabel}
               requiresHostAccess={(provider.hostOrigins?.length ?? 0) > 0}
               status={provider.status}
+              labels={settingsCopy.permissions}
               onToggle={() => onTogglePermission(provider.id)}
             />
           ))}

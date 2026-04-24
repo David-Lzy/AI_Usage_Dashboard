@@ -14,6 +14,7 @@ Status note:
 - third executable phase landed on `2026-04-24` through `Phase 172`
 - fourth executable phase landed on `2026-04-24` through `Phase 173`
 - fifth executable phase landed on `2026-04-24` through `Phase 174`
+- sixth executable phase landed on `2026-04-24` through `Phase 175`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -74,7 +75,6 @@ Build one maintainable localization architecture that can support manifest strin
 - settings-shell slice shipped in `Phase 173`
 - popup explanatory plus provider-detail shell/static slice shipped in `Phase 174`
 - remaining work:
-  - deeper settings helper copy
   - raw provider source-truth detail strings that should stay explicit but still need a deliberate localization policy
   - operator workspaces
 
@@ -129,6 +129,19 @@ Build one maintainable localization architecture that can support manifest strin
   - localized durations still remain future work
   - operator workspaces remain English
 
+### E.3 Deeper Settings Helper Rollout
+
+- broader runtime pilot rollout continued in `Phase 175`
+- shipped settings-helper scope now includes:
+  - theme-customization status messaging
+  - credential-card section labels, state chips, help copy, footer copy, placeholders, and action labels
+  - source-card preference labels, session-track labels, diagnostics disclosure labels, and diagnostic group and field labels
+  - permission-prompt status and action labels
+- truth boundary preserved in `Phase 175`:
+  - raw provider source-truth detail strings still intentionally remain closer to underlying source output
+  - localized durations still remain future work
+  - operator workspaces remain English
+
 ### F. Pilot Locales
 
 - first pilot:
@@ -156,7 +169,8 @@ Build one maintainable localization architecture that can support manifest strin
 4. locale-aware formatting for generated counts, percentages, and parseable timestamp primitives - completed in `Phase 172`
 5. settings shell, overview, and locale selector rollout - completed in `Phase 173`
 6. popup explanatory copy plus provider-detail shell/static rollout - completed in `Phase 174`
-7. deeper settings helper copy plus locale-aware durations, compact-width review, and RTL hardening - next
+7. deeper settings helper copy rollout - completed in `Phase 175`
+8. locale-aware durations, compact-width review, and RTL hardening - next
 
 ## Out Of Scope
 

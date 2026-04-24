@@ -1,3 +1,12 @@
+type PermissionPromptLabels = {
+  noHostAccessRequired: string;
+  hostAccessGranted: string;
+  hostAccessMissing: string;
+  noActionNeeded: string;
+  removeAccess: string;
+  requestAccess: string;
+};
+
 type PermissionPromptProps = {
   providerId: string;
   providerLabel: string;
@@ -5,6 +14,7 @@ type PermissionPromptProps = {
   hostsLabel: string;
   requiresHostAccess: boolean;
   status: "granted" | "missing";
+  labels: PermissionPromptLabels;
   onToggle: () => void;
 };
 
@@ -15,20 +25,21 @@ export function PermissionPrompt({
   hostsLabel,
   requiresHostAccess,
   status,
+  labels,
   onToggle,
 }: PermissionPromptProps) {
   const isGranted = status === "granted";
   const isActionDisabled = !requiresHostAccess;
   const statusLabel = !requiresHostAccess
-    ? "No host access required"
+    ? labels.noHostAccessRequired
     : isGranted
-      ? "Host access granted"
-      : "Host access missing";
+      ? labels.hostAccessGranted
+      : labels.hostAccessMissing;
   const actionLabel = !requiresHostAccess
-    ? "No action needed"
+    ? labels.noActionNeeded
     : isGranted
-      ? "Remove access"
-      : "Request access";
+      ? labels.removeAccess
+      : labels.requestAccess;
   const toneClassName =
     requiresHostAccess && !isGranted ? " permission-prompt--warning" : "";
 
