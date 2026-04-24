@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="popup-page">
   <head>
     <meta charset="UTF-8" />
     <meta
@@ -7,9 +7,23 @@
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
     <title>AI Usage Dashboard Popup</title>
+    <style>
+      html.popup-page,
+      body.popup-page,
+      #root.popup-page-root {
+        margin: 0;
+        width: min(392px, max(360px, 100vw));
+        min-width: 360px;
+        max-width: 420px;
+      }
+
+      body.popup-page {
+        overflow-x: hidden;
+      }
+    </style>
   </head>
-  <body>
-    <div id="root"></div>
+  <body class="popup-page">
+    <div id="root" class="popup-page-root"></div>
     <script type="module" src="./main.tsx"></script>
   </body>
 </html>

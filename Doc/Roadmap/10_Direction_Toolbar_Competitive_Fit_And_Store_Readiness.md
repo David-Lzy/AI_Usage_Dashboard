@@ -24,6 +24,7 @@ Execution note:
 - tenth executable slice landed on `2026-04-24` through `Phase 150`
 - eleventh executable slice landed on `2026-04-24` through `Phase 151`
 - twelfth executable slice landed on `2026-04-24` through `Phase 152`
+- thirteenth executable slice landed on `2026-04-24` through `Phase 153`
 - this direction sharpens [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md) into a more explicit next-stage productization track
 
 Process rule:
@@ -81,6 +82,8 @@ As of 2026-04-24:
 - the repo now also ships one maintained store-listing copy pack anchored to that archived screenshot set
 - the repo now also ships one maintained store-listing localization source pack anchored to the current manifest, maintained listing-copy pack, and first archived screenshot set
 - the popup runtime now also ships one explicit host-width contract for real Chrome action-popup rendering instead of depending on browser-guessed document width
+- the popup runtime now also ships one static bootstrap width contract in `src/popup/index.html`, so the real action popup can claim its intended width before React boot and before runtime class mutation
+- repo-backed tool commands now also prefer one local current Node runtime through `scripts/with-preferred-node.sh`, so `npm run build`, `npm run typecheck`, and `npm run test` no longer depend on the older Cursor-bundled `node`
 - the popup still has some remaining overlap between top story, featured card, and lower surface-role explanation
 - the repo still does not yet ship localized listing variants or a submitted store asset pack beyond the first archived evidence plus English source documents
 - the project now has an RDP Chrome environment available for truthful extension-mode capture and review
@@ -164,6 +167,8 @@ Recommended rollout:
 `Phase 151` completed the first executable part of step `5` by turning that maintained English listing copy into one stable localization source pack with string ids, truth anchors, and translation guardrails, so future listing-localization work now has a truthful source document that stays separate from in-product i18n claims.
 
 `Phase 152` completed the next executable part of step `2` by locking the popup host-width contract to the real action-popup surface, so last-mile runtime review no longer depends on Chrome guessing the popup body's preferred width.
+
+`Phase 153` completed the next executable part of step `2` by moving that popup width contract into the static popup HTML bootstrap and by routing repo-backed commands through one preferred local Node wrapper, so the real action popup no longer depends on post-boot class mutation and the build no longer depends on the older bundled runtime.
 
 ## References
 

@@ -18,7 +18,10 @@ body.popup-page,
 
 html.popup-page,
 body.popup-page {
-  width: var(--app-popup-width-preferred);
+  width: min(
+    var(--app-popup-width-preferred),
+    max(var(--app-popup-width-min), 100vw)
+  );
   min-width: var(--app-popup-width-min);
   max-width: var(--app-popup-width-max);
 }
@@ -2049,15 +2052,6 @@ body.popup-page .popup-shell {
   .popup-shell {
     min-width: auto;
   }
-
-  html.popup-page,
-  body.popup-page,
-  #root.popup-page-root {
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-  }
-
   .interaction-audit-frame-shell {
     padding: var(--app-space-2);
   }

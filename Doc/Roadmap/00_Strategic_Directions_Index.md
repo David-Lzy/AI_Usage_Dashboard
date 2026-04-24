@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-04-24:
 
-- the numbered phase queue is now completed through `Phase 152`
+- the numbered phase queue is now completed through `Phase 153`
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
 - `Phase 42` has packaged `0.1.0-rc.2` and closed the release-closeout track for the narrowed RC
 - `Phase 43` completed the first `Direction 02` slice by productizing source-fidelity semantics in the side panel
@@ -143,6 +143,7 @@ As of 2026-04-24:
 - `Phase 150` completed the next executable `Direction 10` slice and added one maintained store-listing copy pack anchored to that first archived screenshot set, so truthful screenshot evidence now has one matching copy hierarchy for future store updates
 - `Phase 151` completed the next executable `Direction 10` slice and added one maintained store-listing localization source pack anchored to the manifest, maintained listing-copy pack, and first archived screenshot set, so future translated store listings can stay aligned with the same truthful evidence package
 - `Phase 152` completed the next executable `Direction 10` slice and added one explicit popup host-width contract plus one repeatable width review for real Chrome action-popup rendering, so last-mile popup runtime verification no longer depends on browser-guessed document width
+- `Phase 153` completed the next executable `Direction 10` slice and moved the popup width contract into the static popup bootstrap while routing repo-backed commands through one preferred local Node wrapper, so first-paint popup sizing and build/runtime verification no longer depend on post-boot class mutation or the older bundled Node runtime
 - the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 140`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
 - the numbered phase queue is now completed through `Phase 140`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
 - `Codex` personal support is already shipped as a `session_page` path, but it currently exposes usage-window percentages and reset timing, not one absolute remaining credit balance

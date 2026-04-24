@@ -177,6 +177,7 @@ The Chrome action now opens a compact popup first:
 - the repo now also ships one maintained store-listing copy pack anchored to that first real screenshot archive, including the preferred short description, overview paragraph, feature bullets, screenshot captions, and claim guardrails
 - the repo now also ships one maintained store-listing localization source pack anchored to the current manifest, maintained listing-copy pack, and first archived screenshot set, so future translated store listings can stay aligned with the same truth boundary
 - the popup runtime now also ships one explicit host-width contract for real Chrome action-popup rendering, so the browser no longer has to guess popup width from the document body
+- the popup runtime now also ships one static bootstrap width contract in [src/popup/index.html](./src/popup/index.html), and repo-backed tool commands now prefer the local Node runtime through [scripts/with-preferred-node.sh](./scripts/with-preferred-node.sh) instead of relying on the older Cursor-bundled `node`
 - the badge shows the number of visible providers currently needing attention
 - the side panel remains the canonical surface for settings, source diagnostics, and provider detail
 
@@ -293,6 +294,8 @@ npm run typecheck
 npm run test
 npm run build
 ```
+
+Repo-backed scripts already prefer `${HOME}/.local/node-current/bin/node` through [scripts/with-preferred-node.sh](./scripts/with-preferred-node.sh) when that runtime exists.
 
 Portable Node 22 fallback if `nvm` is unavailable:
 
@@ -435,7 +438,7 @@ Preview URL:
 
 For shipped session-page providers, use `Settings -> Source Connections` to find or open the required logged-in browser page before refreshing. The same section now shows whether the provider page is attached, stale, or unbound, and lets you disconnect a saved binding explicitly.
 
-If you are using a long-lived Chrome profile for release verification, run `npx -y node@22 ./scripts/phase41-profile-audit.mjs` after reloading the unpacked extension so the runtime host grants and stored extension state are visible before the final pass. In the narrowed RC selected on `2026-04-23`, JetBrains is retained in the repo but not part of the active release promise.
+If you are using a long-lived Chrome profile for release verification, run `./scripts/with-preferred-node.sh node ./scripts/phase41-profile-audit.mjs` after reloading the unpacked extension so the runtime host grants and stored extension state are visible before the final pass. In the narrowed RC selected on `2026-04-23`, JetBrains is retained in the repo but not part of the active release promise.
 
 ## Release Flow
 
@@ -471,7 +474,7 @@ The packaging script checks that:
 - `dist/` exists
 - the built manifest, side-panel entry, and icon set are present
 
-If your shell defaults to Node older than `22`, use `nvm use` first. On this workstation the default `node` is still `v20`, which is below the project's engine floor.
+If your interactive shell still resolves `node` to an older runtime, use `nvm use` first. Repo-backed `npm run ...` commands now prefer `${HOME}/.local/node-current/bin/node` through [scripts/with-preferred-node.sh](./scripts/with-preferred-node.sh) so Vite, TypeScript, and Vitest do not fall back to the older Cursor-bundled runtime.
 
 Portable fallback on the same workstation:
 

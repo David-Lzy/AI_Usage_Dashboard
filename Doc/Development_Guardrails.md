@@ -244,9 +244,9 @@ When using the RDP Chrome profile for real extension review:
 Reason:
 
 - the unpacked extension serves built files from `dist/`
-- popup and side-panel HTML files reference hashed asset filenames under `dist/assets/`
-- after a new build, those hashed JS filenames can change
-- if Chrome is still holding an older unpacked extension package, the extension page can degrade into "background color only" because CSS may still load while the old JS entry no longer matches the current build output
+- popup and side-panel HTML files still depend on the current built JS entry points under `dist/`
+- after a new build, the unpacked extension can still be out of sync with the latest pushed source and rebuilt output until Chrome reloads it
+- if Chrome is still holding an older unpacked extension package, the extension page can degrade into "background color only" or partial layout because CSS may load while the active JS entry no longer matches the current build output
 
 Working assumption for this project:
 
@@ -287,6 +287,22 @@ Reason:
 
 - generated ledgers should remain reproducible
 - hand-edited generated docs drift quickly and confuse later audits
+
+## 2.10 Preferred Node Runtime Rule
+
+This workstation may expose multiple `node` binaries, including bundled app runtimes that are older than the repo's supported floor.
+
+Rule:
+
+1. prefer `scripts/with-preferred-node.sh` for repo-backed `npm`, `node`, `vite`, `tsc`, and `vitest` commands
+2. if `${HOME}/.local/node-current/bin/node` exists, let that runtime win over bundled editor runtimes
+3. keep `package.json` scripts aligned with that wrapper when the preferred-node policy changes
+
+Reason:
+
+- Vite and the current toolchain require a supported Node runtime
+- the local workstation may still have an older app-bundled `node` earlier in `PATH`
+- repo-backed scripts should behave consistently across shell sessions, Codex runs, and RDP validation flows
 
 ## 3. Required Fields For A Completed Phase File
 

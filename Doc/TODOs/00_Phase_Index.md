@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [152_Phase_Popup_Action_Width_Contract.md](./Archive/152_Phase_Popup_Action_Width_Contract.md)
+- latest completed slice: [153_Phase_Popup_Bootstrap_Width_And_Preferred_Node_Runtime.md](./Archive/153_Phase_Popup_Bootstrap_Width_And_Preferred_Node_Runtime.md)
 
 Completed phases should be moved to:
 
@@ -199,6 +199,7 @@ Completed phases should be moved to:
 - [150_Phase_Store_Listing_Copy_Pack_From_First_Archive.md](./Archive/150_Phase_Store_Listing_Copy_Pack_From_First_Archive.md) - completed and archived on 2026-04-24
 - [151_Phase_Store_Listing_Localization_Source_Pack.md](./Archive/151_Phase_Store_Listing_Localization_Source_Pack.md) - completed and archived on 2026-04-24
 - [152_Phase_Popup_Action_Width_Contract.md](./Archive/152_Phase_Popup_Action_Width_Contract.md) - completed and archived on 2026-04-24
+- [153_Phase_Popup_Bootstrap_Width_And_Preferred_Node_Runtime.md](./Archive/153_Phase_Popup_Bootstrap_Width_And_Preferred_Node_Runtime.md) - completed and archived on 2026-04-24
 
 ## Dependency Notes
 
