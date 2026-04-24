@@ -15,6 +15,7 @@ Status note:
 - this file records the agreed implementation contract for popup, sidebar, and future full-page shell expansion plus near-surface theme controls
 - refresh it whenever the expansion target, route behavior, theme-toggle semantics, or RDP review expectations change
 - `Phase 155` has now started the runtime line by shipping a shared sidepanel entry plus explicit `?surface=full-page` query contract for route-preserving full-page state
+- `Phase 156` has now added the first popup-side runtime action on top of that baseline by shipping one compact popup-header expand control that opens the dashboard full-page tab
 
 Process rule:
 
@@ -59,6 +60,9 @@ Define one stable contract for the next productization slices and keep it aligne
 - popup expand opens the dashboard full-page tab
 - it does not try to preserve popup-local state as if popup were a deep navigation surface
 - it should feel like moving from quick glance into full workspace context
+- current implementation note:
+  - the popup-header expand control now owns this full-page dashboard jump
+  - existing popup quick actions still keep their sidepanel handoff semantics in this slice
 
 ### Sidebar Expansion
 

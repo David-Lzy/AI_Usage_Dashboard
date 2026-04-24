@@ -27,6 +27,7 @@ Execution note:
 - thirteenth executable slice landed on `2026-04-24` through `Phase 153`
 - documentation-only planning expansion landed on `2026-04-24` through `Phase 154` by formalizing the next Direction 10 execution map into explicit child TODO docs for surface expansion plus ambient theme controls and store asset-pack follow-through
 - fourteenth executable slice landed on `2026-04-24` through `Phase 155`
+- fifteenth executable slice landed on `2026-04-24` through `Phase 156`
 - this direction sharpens [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md) into a more explicit next-stage productization track
 
 Process rule:
@@ -101,6 +102,10 @@ As of 2026-04-24:
   - sidepanel and future full-page tab routes now share one helper-backed path model
   - route-preserving full-page state is now carried through `src/sidepanel/index.html?surface=full-page#...`
   - the current preview review now covers dashboard, settings, and provider-detail full-page states without duplicating the main app entry
+- the popup now also ships one compact header expand control that opens the dashboard full-page tab through that shared full-page contract
+- the current boundary is now explicit:
+  - popup header expand owns the full-page dashboard jump
+  - existing popup quick actions still own the current sidepanel handoff semantics
 - the repo still does not yet ship localized listing variants or a submitted store asset pack beyond the first archived evidence plus English source documents
 - the project now has an RDP Chrome environment available for truthful extension-mode capture and review
 - the current screenshot state is now `0 pending requests / 1 archived set`
@@ -154,7 +159,7 @@ This direction is feasible and is now the immediate next execution line.
 
 Recommended rollout:
 
-1. continue popup plus sidepanel plus full-page surface expansion from the now-shipped full-page route-entry baseline
+1. continue popup plus sidepanel plus full-page surface expansion from the now-shipped full-page route-entry baseline and popup-header expand slice
 2. refresh RDP Chrome runtime QA after the new expand plus theme controls land
 3. refresh screenshot selection and screenshot ordering against the new surfaces
 4. tighten the store asset pack and submission checklist around the refreshed runtime evidence
@@ -189,6 +194,8 @@ Recommended rollout:
 `Phase 154` then formalized the next execution map by turning the agreed popup plus sidepanel plus full-page contract and the next store-asset follow-through into explicit TODO docs instead of leaving those next slices implicit.
 
 `Phase 155` completed the first runtime slice under that new plan by shipping a shared route-entry contract for full-page shell state through the existing sidepanel entry, plus one repeatable review for dashboard, settings, and provider-detail full-page preview states. The next product slice is now the actual popup expand CTA to the dashboard full-page tab.
+
+`Phase 156` completed that popup expansion slice by shipping one compact popup-header expand control that opens the dashboard full-page tab through the shared full-page route contract, while intentionally leaving the existing popup quick-action sidepanel handoff semantics unchanged. The next product slice is now the sidebar expand CTA to the route-preserving full-page shell.
 
 ## References
 

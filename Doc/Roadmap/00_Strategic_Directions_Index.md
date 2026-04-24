@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-04-24:
 
-- the numbered phase queue is now completed through `Phase 155`
+- the numbered phase queue is now completed through `Phase 156`
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -38,6 +38,7 @@ As of 2026-04-24:
   - Direction 05 theme-recovery real-operator closure
   - Direction 04 interaction-audit real-operator closure
 - `Phase 155` completed the first runtime slice under that new Direction 10.2 plan by shipping a shared route-entry contract for route-preserving full-page shell state through the existing sidepanel entry, plus one repeatable review for dashboard, settings, and provider-detail full-page preview states
+- `Phase 156` completed the next runtime slice under that same Direction 10.2 plan by shipping one compact popup-header expand control that opens the dashboard full-page tab through the shared route-entry contract
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
 - `Phase 42` has packaged `0.1.0-rc.2` and closed the release-closeout track for the narrowed RC
 - `Phase 43` completed the first `Direction 02` slice by productizing source-fidelity semantics in the side panel
@@ -152,7 +153,8 @@ As of 2026-04-24:
 - `Phase 152` completed the next executable `Direction 10` slice and added one explicit popup host-width contract plus one repeatable width review for real Chrome action-popup rendering, so last-mile popup runtime verification no longer depends on browser-guessed document width
 - `Phase 153` completed the next executable `Direction 10` slice and moved the popup width contract into the static popup bootstrap while routing repo-backed commands through one preferred local Node wrapper, so first-paint popup sizing and build/runtime verification no longer depend on post-boot class mutation or the older bundled Node runtime
 - `Phase 155` completed the first executable runtime part of that Direction 10.2 line by proving a shared route-preserving full-page shell contract through the existing sidepanel entry and explicit `?surface=full-page` query state
-- the immediate next executable work is now the popup expand CTA to the dashboard full-page tab within the Direction 10 surface-expansion plus ambient-theme line captured in `10_2_Surface_Expansion_And_Ambient_Theme_Controls_TODOs.md`
+- `Phase 156` completed the popup expand CTA to the dashboard full-page tab without changing the current popup quick-action sidepanel handoff semantics
+- the immediate next executable work is now the sidebar expand CTA to the route-preserving full-page shell within the Direction 10 surface-expansion plus ambient-theme line captured in `10_2_Surface_Expansion_And_Ambient_Theme_Controls_TODOs.md`
 - the next major architecture line after that is Direction 09 runtime i18n bootstrap, captured in `09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md`
 - the remaining high-value work in Direction 05 and Direction 04 is now evidence closure, not more tool-building:
   - `05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md`
@@ -162,8 +164,8 @@ As of 2026-04-24:
   - Claude personal support is not yet graduated
   - Gemini remains policy-only
   - Codex and Cursor personal support remain partial, not absolute-remaining-balance claims
-- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 155`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
-- the numbered phase queue is now completed through `Phase 155`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
+- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 156`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
+- the numbered phase queue is now completed through `Phase 156`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
 - `Codex` personal support is already shipped as a `session_page` path, but it currently exposes usage-window percentages and reset timing, not one absolute remaining credit balance
 - `Cursor` personal support is already shipped as a `session_page` path, but it currently exposes billing-period usage context, not one exact remaining included-request counter
 - the extension action now opens a compact popup on click, the popup makes cached snapshot freshness explicit, and the badge shows the count of visible providers needing attention

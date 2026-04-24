@@ -10,6 +10,7 @@ Status note:
 
 - direction created on `2026-04-24`
 - first executable slice landed on `2026-04-24` through `Phase 155`
+- second executable slice landed on `2026-04-24` through `Phase 156`
 - this child TODO turns the agreed popup / sidebar / full-page expansion contract into the next executable `Direction 10` track
 
 Process rule:
@@ -79,6 +80,13 @@ Related design contract:
 - keep it visually secondary to the primary setup / refresh action
 - route it to the dashboard full-page tab
 - re-review popup density after the new top action lands
+- `Phase 156` completed this popup-only expansion slice by shipping:
+  - one compact popup-header expand control
+  - one dashboard full-page tab opener for popup runtime
+  - one repeatable popup-expand review for the full-page dashboard target
+- current boundary after `Phase 156`:
+  - popup header expand now opens the full-page dashboard tab
+  - existing popup quick actions still keep their current sidepanel handoff contract in this slice
 
 ### C. Sidebar Expand CTA
 
@@ -135,8 +143,8 @@ Related design contract:
 ## Planned Numbered Slices
 
 1. full-page shell route and extension entry plumbing - completed in `Phase 155`
-2. popup expand CTA to dashboard full-page tab - next
-3. sidebar expand CTA to route-preserving full-page shell
+2. popup expand CTA to dashboard full-page tab - completed in `Phase 156`
+3. sidebar expand CTA to route-preserving full-page shell - next
 4. popup plus sidebar light-dark toggle button
 5. animation and motion polish for expand/open transitions
 6. RDP Chrome runtime QA and screenshot refresh

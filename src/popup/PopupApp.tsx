@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import type { AppState, ProviderId } from "../providers/types";
 import { sendAppMessage } from "../shared/app-client";
 import {
+  buildFullPageExtensionPath,
+  buildFullPagePreviewUrl,
   buildSidePanelExtensionPath,
   buildSidePanelPreviewUrl,
 } from "../shared/extension-surface-paths";
@@ -62,8 +64,36 @@ async function openSidePanelRoute(route: SidePanelRouteState) {
   );
 }
 
+async function openFullPageRoute(route: SidePanelRouteState) {
+  const path = buildFullPageExtensionPath(route);
+
+  if (
+    typeof chrome !== "undefined" &&
+    Boolean(chrome.runtime?.id) &&
+    typeof chrome.runtime?.getURL === "function" &&
+    typeof chrome.tabs?.create === "function"
+  ) {
+    await chrome.tabs.create({
+      url: chrome.runtime.getURL(path),
+      active: true,
+    });
+    window.close();
+    return;
+  }
+
+  window.open(
+    buildFullPagePreviewUrl(route, window.location.href),
+    "_blank",
+    "noopener,noreferrer",
+  );
+}
+
 async function openFullDashboard() {
   await openSidePanelRoute({ name: "dashboard" });
+}
+
+async function openFullDashboardTab() {
+  await openFullPageRoute({ name: "dashboard" });
 }
 
 async function openSettings() {
@@ -218,6 +248,19 @@ export function PopupApp() {
             onClick={handleRefresh}
           >
             {isRefreshing ? "Refreshing" : "Refresh"}
+          </button>
+          <button
+            className="icon-button"
+            data-popup-open-dashboard-tab="true"
+            data-theme-local-surface="popup-open-dashboard-tab"
+            type="button"
+            aria-label="Open dashboard tab"
+            title="Open dashboard tab"
+            onClick={() => {
+              void openFullDashboardTab();
+            }}
+          >
+            Tab
           </button>
         </div>
       </section>
