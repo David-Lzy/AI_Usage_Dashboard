@@ -102,6 +102,14 @@ function buildCompletionCommand({ requestId, capturesDirRelative }) {
   return `npm run store:complete-screenshot-capture-request -- --request-id ${requestId} --captures-dir ${capturesDirRelative}`;
 }
 
+function buildManualImportCommand({ requestId }) {
+  return `npm run store:import-manual-screenshot-captures -- --request-id ${requestId} --source-dir <native-toolbar-popup-capture-dir>`;
+}
+
+function buildManualImportWithNotesCommand({ requestId }) {
+  return `npm run store:import-manual-screenshot-captures -- --request-id ${requestId} --source-dir <native-toolbar-popup-capture-dir> --notes-file <manual-popup-notes-overlay.json>`;
+}
+
 function buildArchiveReadinessIssues({ entries, notesByFilename, capturePresenceByFilename }) {
   const issues = [];
 
@@ -240,6 +248,15 @@ export function buildStoreScreenshotManualCaptureHandoffDocument({
   const remainingManualEntries = manualEntries.filter(
     (entry) => !entry.capturePresent || !entry.noteComplete,
   );
+  const manualCaptureMissingEntries = manualEntries.filter(
+    (entry) => !entry.capturePresent,
+  );
+  const manualNoteIncompleteEntries = manualEntries.filter(
+    (entry) => !entry.noteComplete,
+  );
+  const manualReadyEntries = manualEntries.filter(
+    (entry) => entry.capturePresent && entry.noteComplete,
+  );
   const stagedReadyEntries = stagedEntries.filter(
     (entry) => entry.capturePresent && entry.noteComplete,
   );
@@ -261,10 +278,19 @@ export function buildStoreScreenshotManualCaptureHandoffDocument({
       requestId,
       capturesDirRelative,
     }),
+    manualImportCommand: buildManualImportCommand({
+      requestId,
+    }),
+    manualImportWithNotesCommand: buildManualImportWithNotesCommand({
+      requestId,
+    }),
     summary: {
       entryCount: planEntries.length,
       manualEntryCount: manualEntries.length,
       remainingManualCount: remainingManualEntries.length,
+      manualCaptureMissingCount: manualCaptureMissingEntries.length,
+      manualNoteIncompleteCount: manualNoteIncompleteEntries.length,
+      manualReadyCount: manualReadyEntries.length,
       stagedRequestBoundCount: stagedEntries.length,
       stagedReadyCount: stagedReadyEntries.length,
       stagedPendingCount: stagedPendingEntries.length,
@@ -334,12 +360,25 @@ Status note:
   - \`${handoffDocument.summary.manualEntryCount}\`
 - remaining manual slots:
   - \`${handoffDocument.summary.remainingManualCount}\`
+- manual captures still missing:
+  - \`${handoffDocument.summary.manualCaptureMissingCount}\`
+- manual notes still incomplete:
+  - \`${handoffDocument.summary.manualNoteIncompleteCount}\`
+- manual slots already ready:
+  - \`${handoffDocument.summary.manualReadyCount}\`
 - staged request-bound slots:
   - \`${handoffDocument.summary.stagedRequestBoundCount}\`
 - staged ready slots:
   - \`${handoffDocument.summary.stagedReadyCount}\`
 - archive ready:
   - \`${handoffDocument.summary.archiveReady ? "yes" : "no"}\`
+
+## Manual Import Commands
+
+- copy popup captures only:
+  - \`${handoffDocument.manualImportCommand}\`
+- copy popup captures plus popup note overlay:
+  - \`${handoffDocument.manualImportWithNotesCommand}\`
 - completion command:
   - \`${handoffDocument.completionCommand}\`
 

@@ -59,11 +59,18 @@ describe("store screenshot manual handoff helpers", () => {
       entryCount: 2,
       manualEntryCount: 1,
       remainingManualCount: 1,
+      manualCaptureMissingCount: 1,
+      manualNoteIncompleteCount: 1,
+      manualReadyCount: 0,
       stagedRequestBoundCount: 1,
       stagedReadyCount: 1,
       stagedPendingCount: 0,
       archiveReady: false,
     });
+    expect(handoff.manualImportCommand).toContain(
+      "store:import-manual-screenshot-captures",
+    );
+    expect(handoff.manualImportWithNotesCommand).toContain("--notes-file");
     expect(handoff.remainingManualEntries[0]).toMatchObject({
       filename: "01-toolbar-first-quick-glance.png",
       storyboardClaim: "one click gives a compact, readable AI usage snapshot",
@@ -110,6 +117,9 @@ describe("store screenshot manual handoff helpers", () => {
 
     expect(handoff.summary.archiveReady).toBe(true);
     expect(handoff.summary.remainingManualCount).toBe(0);
+    expect(handoff.summary.manualCaptureMissingCount).toBe(0);
+    expect(handoff.summary.manualNoteIncompleteCount).toBe(0);
+    expect(handoff.summary.manualReadyCount).toBe(1);
     expect(handoff.archiveReadinessIssues).toEqual([]);
   });
 });

@@ -29,12 +29,25 @@ Status note:
   - `0`
 - remaining manual slots:
   - `0`
+- manual captures still missing:
+  - `0`
+- manual notes still incomplete:
+  - `0`
+- manual slots already ready:
+  - `0`
 - staged request-bound slots:
   - `5`
 - staged ready slots:
   - `5`
 - archive ready:
   - `yes`
+
+## Manual Import Commands
+
+- copy popup captures only:
+  - `npm run store:import-manual-screenshot-captures -- --request-id 2026-04-24-first-real-store-screenshot-capture-request --source-dir <native-toolbar-popup-capture-dir>`
+- copy popup captures plus popup note overlay:
+  - `npm run store:import-manual-screenshot-captures -- --request-id 2026-04-24-first-real-store-screenshot-capture-request --source-dir <native-toolbar-popup-capture-dir> --notes-file <manual-popup-notes-overlay.json>`
 - completion command:
   - `npm run store:complete-screenshot-capture-request -- --request-id 2026-04-24-first-real-store-screenshot-capture-request --captures-dir Doc/testing/store_screenshot_capture_requests/2026-04-24-first-real-store-screenshot-capture-request/captures`
 

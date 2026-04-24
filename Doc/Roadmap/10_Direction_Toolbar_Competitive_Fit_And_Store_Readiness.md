@@ -37,6 +37,7 @@ Execution note:
 - twenty-second executable slice landed on `2026-04-24` through `Phase 163`
 - twenty-third executable slice landed on `2026-04-24` through `Phase 164`
 - twenty-fourth executable slice landed on `2026-04-24` through `Phase 165`
+- twenty-fifth executable slice landed on `2026-04-24` through `Phase 166`
 - this direction sharpens [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md) into a more explicit next-stage productization track
 
 Process rule:
@@ -256,7 +257,9 @@ Recommended rollout:
 
 `Phase 164` completed the next `Direction 10.3` slice by adding one generated `capture-plan.json` plus one hybrid request-bound capture runner that stages only the full-page-shell depth slots inside the refreshed pending request. The repo now keeps slots `1` through `3` manual native-toolbar popup capture, stages slots `4` and `5` as truthful request-bound full-page-shell evidence, and leaves the request pending until the remaining manual popup captures are assembled into the next archive.
 
-`Phase 165` completed the next `Direction 10.3` slice by turning that pending request into one explicit manual-capture handoff plus archive-readiness preflight. The refreshed request package now generates one dedicated `manual-capture-handoff.md` and `manual-capture-handoff.json`, one operator-facing command can refresh that handoff in place, and the repo now keeps the remaining popup work honest as `3` unresolved manual native-toolbar slots instead of burying it inside the larger pending package. The next product slice is now completing those manual popup captures and then archiving the refreshed set before screenshot ordering and caption tightening continue.
+`Phase 165` completed the next `Direction 10.3` slice by turning that pending request into one explicit manual-capture handoff plus archive-readiness preflight. The refreshed request package now generates one dedicated `manual-capture-handoff.md` and `manual-capture-handoff.json`, one operator-facing command can refresh that handoff in place, and the repo now keeps the remaining popup work honest as `3` unresolved manual native-toolbar slots instead of burying it inside the larger pending package.
+
+`Phase 166` completed the next `Direction 10.3` slice by turning that manual handoff into one repo-backed import workflow. The refreshed pending request now exposes `manualImportCommand` plus `manualImportWithNotesCommand`, one operator can copy real native-toolbar popup files and an optional popup-note overlay back into the request package without hand-editing the generated files, and the handoff can now refresh its own `manualCaptureMissingCount`, `manualNoteIncompleteCount`, `manualReadyCount`, and `archiveReady` state after a real popup-capture pass. The next product slice is now the real manual popup capture plus archive completion path that uses those import commands rather than further planning.
 
 ## References
 

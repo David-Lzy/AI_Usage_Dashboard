@@ -176,6 +176,25 @@ Truth note:
 - it does not fabricate popup screenshots or mark the request fulfilled by itself
 - after `Phase 165`, the refreshed request uses this handoff path to show that `3` popup slots still remain manual while `2` full-page depth slots are already staged
 
+Once real native-toolbar popup files exist outside the repo, import them back into the pending request with:
+
+```bash
+npm run store:import-manual-screenshot-captures -- --request-id 2026-04-24-surface-expansion-store-screenshot-refresh-request --source-dir <native-toolbar-popup-capture-dir>
+```
+
+If popup-note review was recorded in a separate overlay file, merge it during import with:
+
+```bash
+npm run store:import-manual-screenshot-captures -- --request-id 2026-04-24-surface-expansion-store-screenshot-refresh-request --source-dir <native-toolbar-popup-capture-dir> --notes-file <manual-popup-notes-overlay.json>
+```
+
+Truth note:
+
+- this command copies any matching popup files into the request package `captures/` directory and then refreshes the request README plus manual handoff in place
+- the optional `--notes-file` overlay merges popup-note updates into `capture-notes.json` without requiring manual JSON editing
+- it does not fabricate popup screenshots or fulfill/archive the request by itself
+- after `Phase 166`, this is the supported repo-backed path for turning a real native-toolbar popup pass into one request package that can eventually report `archiveReady = true`
+
 If an RDP capture attempt leaves stale AI Usage Dashboard popup or extension windows behind, close them before retrying:
 
 ```bash
