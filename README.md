@@ -180,6 +180,7 @@ The Chrome action now opens a compact popup first:
 - the popup runtime now also ships one static bootstrap width contract in [src/popup/index.html](./src/popup/index.html), and repo-backed tool commands now prefer the local Node runtime through [scripts/with-preferred-node.sh](./scripts/with-preferred-node.sh) instead of relying on the older Cursor-bundled `node`
 - the repo now also ships one shared route-entry contract for the future full-page shell through `src/sidepanel/index.html?surface=full-page#...`, so popup and sidebar expand controls can target one route-preserving tab surface without duplicating the main app entry
 - the popup header now also ships one compact `Tab` expand control that opens the full-page dashboard tab through that shared route-entry contract, while the existing popup quick actions still keep their current sidepanel handoff semantics
+- the side-panel top bars now also ship one compact `Tab` expand control that preserves the current `dashboard`, `settings`, or `provider-detail` route when opening the shared full-page shell, and that expand control now stays hidden once the runtime is already inside `?surface=full-page`
 - the badge shows the number of visible providers currently needing attention
 - the side panel remains the canonical surface for settings, source diagnostics, and provider detail
 

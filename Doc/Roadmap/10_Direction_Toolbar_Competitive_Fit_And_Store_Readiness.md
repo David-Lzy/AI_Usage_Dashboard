@@ -28,6 +28,7 @@ Execution note:
 - documentation-only planning expansion landed on `2026-04-24` through `Phase 154` by formalizing the next Direction 10 execution map into explicit child TODO docs for surface expansion plus ambient theme controls and store asset-pack follow-through
 - fourteenth executable slice landed on `2026-04-24` through `Phase 155`
 - fifteenth executable slice landed on `2026-04-24` through `Phase 156`
+- sixteenth executable slice landed on `2026-04-24` through `Phase 157`
 - this direction sharpens [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md) into a more explicit next-stage productization track
 
 Process rule:
@@ -103,9 +104,13 @@ As of 2026-04-24:
   - route-preserving full-page state is now carried through `src/sidepanel/index.html?surface=full-page#...`
   - the current preview review now covers dashboard, settings, and provider-detail full-page states without duplicating the main app entry
 - the popup now also ships one compact header expand control that opens the dashboard full-page tab through that shared full-page contract
+- the sidepanel now also ships one compact top-bar expand control across dashboard, settings, and provider-detail routes:
+  - it opens the shared full-page shell while preserving the current route
+  - it stays hidden once the runtime is already inside `?surface=full-page`
 - the current boundary is now explicit:
   - popup header expand owns the full-page dashboard jump
-  - existing popup quick actions still own the current sidepanel handoff semantics
+  - sidepanel top-bar expand owns route-preserving full-page shell entry for standard operational routes
+  - the next runtime slice is now the ambient popup plus sidebar light-dark toggle
 - the repo still does not yet ship localized listing variants or a submitted store asset pack beyond the first archived evidence plus English source documents
 - the project now has an RDP Chrome environment available for truthful extension-mode capture and review
 - the current screenshot state is now `0 pending requests / 1 archived set`
@@ -195,7 +200,9 @@ Recommended rollout:
 
 `Phase 155` completed the first runtime slice under that new plan by shipping a shared route-entry contract for full-page shell state through the existing sidepanel entry, plus one repeatable review for dashboard, settings, and provider-detail full-page preview states. The next product slice is now the actual popup expand CTA to the dashboard full-page tab.
 
-`Phase 156` completed that popup expansion slice by shipping one compact popup-header expand control that opens the dashboard full-page tab through the shared full-page route contract, while intentionally leaving the existing popup quick-action sidepanel handoff semantics unchanged. The next product slice is now the sidebar expand CTA to the route-preserving full-page shell.
+`Phase 156` completed that popup expansion slice by shipping one compact popup-header expand control that opens the dashboard full-page tab through the shared full-page route contract, while intentionally leaving the existing popup quick-action sidepanel handoff semantics unchanged.
+
+`Phase 157` completed the next product slice by shipping one compact sidepanel top-bar expand control that preserves the current dashboard, settings, or provider-detail route when opening the shared full-page shell, while hiding that control when the runtime is already in full-page mode. The next product slice is now the popup plus sidepanel ambient light-dark toggle.
 
 ## References
 

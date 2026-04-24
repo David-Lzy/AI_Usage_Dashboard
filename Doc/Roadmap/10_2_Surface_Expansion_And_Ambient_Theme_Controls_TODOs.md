@@ -11,6 +11,7 @@ Status note:
 - direction created on `2026-04-24`
 - first executable slice landed on `2026-04-24` through `Phase 155`
 - second executable slice landed on `2026-04-24` through `Phase 156`
+- third executable slice landed on `2026-04-24` through `Phase 157`
 - this child TODO turns the agreed popup / sidebar / full-page expansion contract into the next executable `Direction 10` track
 
 Process rule:
@@ -97,6 +98,15 @@ Related design contract:
   - provider detail
   - future debug or review surfaces only if intentionally supported
 - define what happens when the current route is not valid for full-page mode
+- `Phase 157` completed this route-preserving sidebar expansion slice by shipping:
+  - one optional top-bar `Tab` control across dashboard, settings, and provider-detail routes
+  - one shared current-route full-page opener inside the standard sidepanel app
+  - one rule that hides the expand control once the runtime is already inside `?surface=full-page`
+  - one repeatable preview review for dashboard, settings, and provider-detail route-preserving expand targets
+- current boundary after `Phase 157`:
+  - popup expand opens the dashboard full-page tab
+  - sidebar expand preserves dashboard, settings, and provider-detail routes into the full-page shell
+  - the next runtime slice is the ambient popup plus sidebar light-dark toggle
 
 ### D. Ambient Theme Toggle Wiring
 
@@ -144,8 +154,8 @@ Related design contract:
 
 1. full-page shell route and extension entry plumbing - completed in `Phase 155`
 2. popup expand CTA to dashboard full-page tab - completed in `Phase 156`
-3. sidebar expand CTA to route-preserving full-page shell - next
-4. popup plus sidebar light-dark toggle button
+3. sidebar expand CTA to route-preserving full-page shell - completed in `Phase 157`
+4. popup plus sidebar light-dark toggle button - next
 5. animation and motion polish for expand/open transitions
 6. RDP Chrome runtime QA and screenshot refresh
 

@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [156_Phase_Popup_Expand_CTA_To_Full_Page_Dashboard_Tab.md](./Archive/156_Phase_Popup_Expand_CTA_To_Full_Page_Dashboard_Tab.md)
+- latest completed slice: [157_Phase_Sidebar_Expand_CTA_To_Route_Preserving_Full_Page_Shell.md](./Archive/157_Phase_Sidebar_Expand_CTA_To_Route_Preserving_Full_Page_Shell.md)
 
 Completed phases should be moved to:
 
@@ -203,6 +203,7 @@ Completed phases should be moved to:
 - [154_Phase_Plan_Expansion_Into_TODO_Docs.md](./Archive/154_Phase_Plan_Expansion_Into_TODO_Docs.md) - completed and archived on 2026-04-24
 - [155_Phase_Full_Page_Shell_Route_And_Entry_Plumbing.md](./Archive/155_Phase_Full_Page_Shell_Route_And_Entry_Plumbing.md) - completed and archived on 2026-04-24
 - [156_Phase_Popup_Expand_CTA_To_Full_Page_Dashboard_Tab.md](./Archive/156_Phase_Popup_Expand_CTA_To_Full_Page_Dashboard_Tab.md) - completed and archived on 2026-04-24
+- [157_Phase_Sidebar_Expand_CTA_To_Route_Preserving_Full_Page_Shell.md](./Archive/157_Phase_Sidebar_Expand_CTA_To_Route_Preserving_Full_Page_Shell.md) - completed and archived on 2026-04-24
 
 ## Dependency Notes
 

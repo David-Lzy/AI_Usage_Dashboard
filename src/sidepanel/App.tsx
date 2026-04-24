@@ -12,6 +12,11 @@ import type {
 import { sendAppMessage } from "../shared/app-client";
 import { APP_STATE_STORAGE_KEY } from "../shared/constants";
 import {
+  buildFullPageExtensionPath,
+  buildFullPagePreviewUrl,
+  isFullPageSurfaceSearch,
+} from "../shared/extension-surface-paths";
+import {
   clearPageBinding,
   createPageBindingFromTab,
 } from "../shared/page-bindings";
@@ -146,6 +151,33 @@ function sortTabsByPriority(tabs: chrome.tabs.Tab[]): chrome.tabs.Tab[] {
   return [...tabs].sort((left, right) => scoreTab(right) - scoreTab(left));
 }
 
+async function openFullPageRoute(route: SidePanelRouteState) {
+  const path = buildFullPageExtensionPath(route);
+
+  if (
+    typeof chrome !== "undefined" &&
+    Boolean(chrome.runtime?.id) &&
+    typeof chrome.runtime?.getURL === "function" &&
+    typeof chrome.tabs?.create === "function"
+  ) {
+    await chrome.tabs.create({
+      url: chrome.runtime.getURL(path),
+      active: true,
+    });
+    return;
+  }
+
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.open(
+    buildFullPagePreviewUrl(route, window.location.href),
+    "_blank",
+    "noopener,noreferrer",
+  );
+}
+
 function SpecialRouteApp({
   route,
 }: {
@@ -275,6 +307,9 @@ function StandardApp({ locationHash }: StandardAppProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const route = parseSidePanelHash(locationHash) ?? { name: "dashboard" };
+  const isFullPageSurface =
+    typeof window !== "undefined" &&
+    isFullPageSurfaceSearch(window.location.search);
 
   function navigateToRoute(nextRoute: SidePanelRouteState) {
     const nextHash = buildSidePanelHash(nextRoute);
@@ -415,6 +450,14 @@ function StandardApp({ locationHash }: StandardAppProps) {
           "The provider state was refreshed through the shared sync flow.",
       },
     );
+  }
+
+  function handleOpenCurrentRouteInFullPage() {
+    if (isFullPageSurface) {
+      return;
+    }
+
+    void openFullPageRoute(route);
   }
 
   function handleUpdateSettings(partialSettings: Partial<AppSettings>) {
@@ -827,6 +870,9 @@ function StandardApp({ locationHash }: StandardAppProps) {
       {route.name === "settings" ? (
         <SettingsPage
           onBack={() => navigateToRoute({ name: "dashboard" })}
+          onOpenFullPage={
+            isFullPageSurface ? undefined : handleOpenCurrentRouteInFullPage
+          }
           settings={appState.settings}
           providers={appState.providerSettings}
           snapshots={appState.providers}
@@ -872,6 +918,9 @@ function StandardApp({ locationHash }: StandardAppProps) {
         <ProviderDetailPage
           provider={selectedProvider}
           onBack={() => navigateToRoute({ name: "dashboard" })}
+          onOpenFullPage={
+            isFullPageSurface ? undefined : handleOpenCurrentRouteInFullPage
+          }
           onRefresh={handleRefresh}
         />
       ) : (
@@ -880,6 +929,9 @@ function StandardApp({ locationHash }: StandardAppProps) {
           providers={visibleProviders}
           onOpenProvider={(providerId) =>
             navigateToRoute({ name: "provider-detail", providerId })
+          }
+          onOpenFullPage={
+            isFullPageSurface ? undefined : handleOpenCurrentRouteInFullPage
           }
           onOpenSettings={() => navigateToRoute({ name: "settings" })}
           onRefreshProvider={handleRefresh}

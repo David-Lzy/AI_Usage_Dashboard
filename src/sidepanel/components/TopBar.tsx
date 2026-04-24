@@ -1,9 +1,12 @@
 type TopBarProps = {
   title: string;
   subtitle: string;
+  expandActionLabel?: string;
+  expandActionTitle?: string;
   secondaryActionLabel?: string;
   primaryActionLabel?: string;
   sticky?: boolean;
+  onExpandAction?: () => void;
   onSecondaryAction?: () => void;
   onPrimaryAction?: () => void;
 };
@@ -11,9 +14,12 @@ type TopBarProps = {
 export function TopBar({
   title,
   subtitle,
+  expandActionLabel = "Tab",
+  expandActionTitle = "Open full-page tab",
   secondaryActionLabel = "Refresh",
   primaryActionLabel = "Settings",
   sticky = false,
+  onExpandAction,
   onSecondaryAction,
   onPrimaryAction,
 }: TopBarProps) {
@@ -25,6 +31,18 @@ export function TopBar({
       </div>
 
       <div className="top-app-bar__actions" aria-label="Toolbar actions">
+        {onExpandAction ? (
+          <button
+            className="icon-button"
+            data-topbar-open-full-page="true"
+            type="button"
+            aria-label={expandActionTitle}
+            title={expandActionTitle}
+            onClick={onExpandAction}
+          >
+            {expandActionLabel}
+          </button>
+        ) : null}
         <button className="icon-button" type="button" onClick={onSecondaryAction}>
           {secondaryActionLabel}
         </button>

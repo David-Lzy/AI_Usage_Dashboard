@@ -8,6 +8,7 @@ type DashboardPageProps = {
   summaryItems: SummaryItem[];
   providers: ProviderViewModel[];
   onOpenProvider: (providerId: ProviderId) => void;
+  onOpenFullPage?: () => void;
   onOpenSettings: () => void;
   onRefreshProvider: (providerId: ProviderId) => void;
   onRefreshAll: () => void;
@@ -17,6 +18,7 @@ export function DashboardPage({
   summaryItems,
   providers,
   onOpenProvider,
+  onOpenFullPage,
   onOpenSettings,
   onRefreshProvider,
   onRefreshAll,
@@ -26,8 +28,11 @@ export function DashboardPage({
       <TopBar
         title="AI Usage Dashboard"
         subtitle="Usage, credits, and sync health"
+        expandActionLabel="Tab"
+        expandActionTitle="Open dashboard tab"
         secondaryActionLabel="Refresh All"
         primaryActionLabel="Settings"
+        onExpandAction={onOpenFullPage}
         onSecondaryAction={onRefreshAll}
         onPrimaryAction={onOpenSettings}
       />

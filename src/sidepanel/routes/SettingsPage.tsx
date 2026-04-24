@@ -49,6 +49,7 @@ type CredentialProviderSection = {
 
 type SettingsPageProps = {
   onBack: () => void;
+  onOpenFullPage?: () => void;
   settings: AppSettings;
   providers: ProviderSetting[];
   snapshots: ProviderSnapshot[];
@@ -84,6 +85,7 @@ type SettingsPageProps = {
 
 export function SettingsPage({
   onBack,
+  onOpenFullPage,
   settings,
   providers,
   snapshots,
@@ -274,9 +276,12 @@ export function SettingsPage({
       <TopBar
         title="Settings"
         subtitle="Dashboard preferences and access"
+        expandActionLabel="Tab"
+        expandActionTitle="Open settings tab"
         secondaryActionLabel="Back"
         primaryActionLabel="Save"
         sticky
+        onExpandAction={onOpenFullPage}
         onSecondaryAction={onBack}
         onPrimaryAction={onSavePreferences}
       />

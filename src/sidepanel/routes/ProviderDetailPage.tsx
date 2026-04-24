@@ -7,12 +7,14 @@ import type { ProviderViewModel } from "../view-models";
 type ProviderDetailPageProps = {
   provider: ProviderViewModel;
   onBack: () => void;
+  onOpenFullPage?: () => void;
   onRefresh: (providerId: ProviderId) => void;
 };
 
 export function ProviderDetailPage({
   provider,
   onBack,
+  onOpenFullPage,
   onRefresh,
 }: ProviderDetailPageProps) {
   const showSessionPageContract =
@@ -67,8 +69,11 @@ export function ProviderDetailPage({
       <TopBar
         title={provider.providerLabel}
         subtitle="Current provider source snapshot"
+        expandActionLabel="Tab"
+        expandActionTitle={`Open ${provider.providerLabel} detail tab`}
         secondaryActionLabel="Back"
         primaryActionLabel="Refresh"
+        onExpandAction={onOpenFullPage}
         onSecondaryAction={onBack}
         onPrimaryAction={() => onRefresh(provider.providerId)}
       />
