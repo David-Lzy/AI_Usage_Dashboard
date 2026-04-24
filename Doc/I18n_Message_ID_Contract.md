@@ -27,9 +27,9 @@ Keep manifest and runtime localization on one stable naming contract so later co
 
 - use lowercase snake_case for manifest-owned message ids
 - reserve the `manifest_` prefix for strings consumed directly by `src/manifest.json`
-- use dot-separated runtime ids for React surfaces in future phases:
+- use dot-separated runtime ids for React surfaces:
   - `popup.header.title`
-  - `dashboard.summary.visible_label`
+  - `dashboard.summary.visible`
   - `settings.theme.mode_label`
 - keep one id stable when the product concept stays the same and only wording changes
 - create a new id only when the UI meaning changes enough that old translations would become misleading
@@ -43,12 +43,47 @@ Keep manifest and runtime localization on one stable naming contract so later co
 - `manifest_action_default_title`
   - maps to manifest `action.default_title`
 
+## Shipped Runtime IDs In Phase 171
+
+Runtime localization now exists for one narrow popup plus dashboard shell slice. Current shipped groups are:
+
+- app shell status ids:
+  - `app.loading.*`
+  - `app.error.*`
+- shared action and theme ids:
+  - `common.actions.*`
+  - `common.theme.toggle_to_dark_*`
+  - `common.theme.toggle_to_light_*`
+- dashboard shell ids:
+  - `dashboard.topbar.*`
+  - `dashboard.hero.title` and the rest of `dashboard.hero.*`
+  - `dashboard.providers.*`
+  - `dashboard.empty.*`
+  - `dashboard.summary.*`
+- popup shell ids:
+  - `popup.loading.*`
+  - `popup.error.*`
+  - `popup.header.title` and the rest of `popup.header.*`
+  - `popup.summary.*`
+  - narrow static shell labels such as `popup.guidance.eyebrow`, `popup.snapshot_status.eyebrow`, and `popup.triage.eyebrow`
+
+## Locale Preference Contract
+
+- runtime locale preference now persists in `AppSettings.locale`
+- shipped values are:
+  - `system`
+  - `en`
+  - `zh-CN`
+- `system` resolves from Chrome UI language first, then browser navigator language
+- any current `zh*` UI language resolves into the shipped `zh-CN` catalog tier for now
+
 ## Runtime Direction
 
-- runtime React localization has not shipped yet
-- future runtime ids should group by surface and role instead of by English wording
+- runtime React localization is now partially shipped, not fully rolled out
+- the current localized slice covers popup shell and dashboard shell strings plus shared quick theme-toggle labels
+- settings body copy, provider-detail body copy, most popup view-model copy, and operator workspaces still remain outside the shipped localized slice
 - vendor-owned provider-page text stays outside the managed localization catalog
-- locale-aware formatting should also stay outside raw message ids so counts, dates, and durations can be formatted per locale
+- locale-aware formatting also stays outside raw message ids so counts, dates, and durations can be formatted per locale in later phases
 
 ## Translation Tiers
 

@@ -6,6 +6,7 @@ import { readAppState, writeAppState } from "./storage";
 
 function createLegacyState(): AppState {
   const {
+    locale: _locale,
     themeMode: _themeMode,
     themePreset: _themePreset,
     themeCustomSeedHex: _themeCustomSeedHex,
@@ -106,6 +107,7 @@ describe("storage normalization", () => {
       matchedTitle: null,
       updatedAt: null,
     });
+    expect(state?.settings.locale).toBe("system");
     expect(state?.settings.themeMode).toBe("system");
     expect(state?.settings.themePreset).toBe("default");
     expect(state?.settings.themeCustomSeedHex).toBeNull();

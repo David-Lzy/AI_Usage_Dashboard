@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [170_Phase_Manifest_Locale_Bootstrap_And_Message_ID_Contract.md](./Archive/170_Phase_Manifest_Locale_Bootstrap_And_Message_ID_Contract.md)
+- latest completed slice: [171_Phase_Runtime_Localization_Layer_And_First_Shell_Strings.md](./Archive/171_Phase_Runtime_Localization_Layer_And_First_Shell_Strings.md)
 
 Completed phases should be moved to:
 
@@ -433,6 +433,11 @@ Completed phases should be moved to:
 - the 2026-04-23 `Phase 130` closeout replaced the last static popup contract explainer with one lighter stateful `Surface roles` note, then added one repeatable `360px` plus `420px` review for no-visible, mixed-setup, needs-review, policy-only, and healthy footer-note states
 - phase 131 depends on phase 130 because extension build-output stabilization and git closeout discipline only become worth formalizing after the popup shell is already stable enough that RDP Chrome extension-mode review is part of the normal workflow
 - the 2026-04-24 `Phase 131` closeout stabilized popup, side-panel, shared chunk, CSS, and service-worker asset names in `dist/`, then formalized the `commit / push / rebuild` closeout rule plus the RDP Chrome unpacked-extension rule in the project guardrails
+
+- phase 170 depends on the Direction 09 inventory and manifest-contract groundwork because `default_locale`, `_locales/`, and stable message ids had to land before runtime React strings could share the same localization model
+- the 2026-04-24 `Phase 170` closeout localized manifest-owned Chrome surfaces and formalized the maintained message-id contract plus baseline string inventory for future runtime extraction work
+- phase 171 depends on phase 170 because the first runtime shell localization pass needed the shipped manifest locale baseline plus stable runtime message ids before popup and dashboard shell strings could move under one shared helper
+- the 2026-04-24 `Phase 171` closeout shipped one shared runtime i18n helper, persisted locale normalization, and the first localized popup/dashboard shell slice while keeping most deeper runtime copy English
 
 ## Delivery Standard For Each Phase
 

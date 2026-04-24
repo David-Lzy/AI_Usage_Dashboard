@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
 
-import type { AppState, ProviderId } from "../providers/types";
+import type { AppLocalePreference, AppState, ProviderId } from "../providers/types";
 import { sendAppMessage } from "../shared/app-client";
 import { storePendingFullPageEntry } from "../shared/extension-surface-entry";
+import {
+  buildPopupSummaryLabels,
+  createRuntimeI18n,
+  DEFAULT_APP_LOCALE_PREFERENCE,
+  getQuickThemeToggleCopy,
+} from "../shared/i18n";
 import {
   buildFullPageExtensionPath,
   buildFullPagePreviewUrl,
@@ -192,6 +198,15 @@ export function PopupApp() {
     setIsRefreshing(false);
   }
 
+  const localePreference: AppLocalePreference =
+    loadState.status === "ready"
+      ? loadState.appState.settings.locale
+      : DEFAULT_APP_LOCALE_PREFERENCE;
+  const runtimeI18n = createRuntimeI18n(
+    localePreference,
+    typeof window !== "undefined" ? window : undefined,
+  );
+
   async function handleToggleThemeMode() {
     if (loadState.status !== "ready") {
       return;
@@ -221,11 +236,9 @@ export function PopupApp() {
     return (
       <main className="app-shell popup-shell">
         <section className="status-card">
-          <p className="section-label">Toolbar Popup</p>
-          <h1 className="section-title">Loading cached dashboard state</h1>
-          <p className="supporting-copy">
-            Preparing the shared quota snapshot for this browser profile.
-          </p>
+          <p className="section-label">{runtimeI18n.t("popup.loading.eyebrow")}</p>
+          <h1 className="section-title">{runtimeI18n.t("popup.loading.title")}</h1>
+          <p className="supporting-copy">{runtimeI18n.t("popup.loading.detail")}</p>
         </section>
       </main>
     );
@@ -235,12 +248,12 @@ export function PopupApp() {
     return (
       <main className="app-shell popup-shell">
         <section className="status-card">
-          <p className="section-label">Toolbar Popup</p>
-          <h1 className="section-title">Popup load failed</h1>
+          <p className="section-label">{runtimeI18n.t("popup.error.eyebrow")}</p>
+          <h1 className="section-title">{runtimeI18n.t("popup.error.title")}</h1>
           <p className="supporting-copy">{loadState.message}</p>
           <div className="popup-actions">
             <button className="text-button" type="button" onClick={handleRefresh}>
-              Retry
+              {runtimeI18n.t("common.actions.retry")}
             </button>
             <button
               className="text-button"
@@ -249,7 +262,7 @@ export function PopupApp() {
                 void openFullDashboard();
               }}
             >
-              Open dashboard
+              {runtimeI18n.t("common.actions.open_dashboard")}
             </button>
             <button
               className="text-button"
@@ -258,7 +271,7 @@ export function PopupApp() {
                 void openSettings();
               }}
             >
-              Open settings
+              {runtimeI18n.t("common.actions.open_settings")}
             </button>
           </div>
         </section>
@@ -266,11 +279,18 @@ export function PopupApp() {
     );
   }
 
-  const popupModel = buildPopupViewModel(loadState.appState);
+  const popupModel = buildPopupViewModel(
+    loadState.appState,
+    buildPopupSummaryLabels(runtimeI18n),
+  );
   const guidanceCard = popupModel.guidanceCard;
   const quickThemeToggle = buildQuickThemeToggle(
     loadState.appState.settings.themeMode,
     typeof window !== "undefined" ? window : undefined,
+  );
+  const quickThemeToggleCopy = getQuickThemeToggleCopy(
+    quickThemeToggle.nextMode,
+    runtimeI18n,
   );
 
   return (
@@ -278,9 +298,9 @@ export function PopupApp() {
       <section className="status-card popup-header">
         <div>
           <p className="section-label" data-theme-local-surface="popup-header-label">
-            Toolbar Popup
+            {runtimeI18n.t("popup.header.eyebrow")}
           </p>
-          <h1 className="section-title">Quick glance</h1>
+          <h1 className="section-title">{runtimeI18n.t("popup.header.title")}</h1>
           <p className="supporting-copy">{popupModel.headerDetail}</p>
         </div>
         <div className="popup-actions">
@@ -290,39 +310,39 @@ export function PopupApp() {
             disabled={isRefreshing}
             onClick={handleRefresh}
           >
-            {isRefreshing ? "Refreshing" : "Refresh"}
+            {isRefreshing ? runtimeI18n.t("popup.actions.refreshing") : runtimeI18n.t("popup.actions.refresh")}
           </button>
           <button
             className="icon-button"
             data-popup-toggle-theme-mode="true"
             data-theme-local-surface="popup-toggle-theme-mode"
             type="button"
-            aria-label={quickThemeToggle.title}
-            title={quickThemeToggle.title}
+            aria-label={quickThemeToggleCopy.title}
+            title={quickThemeToggleCopy.title}
             disabled={isThemeTogglePending}
             onClick={() => {
               void handleToggleThemeMode();
             }}
           >
-            {quickThemeToggle.label}
+            {quickThemeToggleCopy.label}
           </button>
           <button
             className="icon-button"
             data-popup-open-dashboard-tab="true"
             data-theme-local-surface="popup-open-dashboard-tab"
             type="button"
-            aria-label="Open dashboard tab"
-            title="Open dashboard tab"
+            aria-label={runtimeI18n.t("common.actions.open_dashboard_tab")}
+            title={runtimeI18n.t("common.actions.open_dashboard_tab")}
             onClick={() => {
               void openFullDashboardTab();
             }}
           >
-            Tab
+            {runtimeI18n.t("common.actions.tab")}
           </button>
         </div>
       </section>
 
-      <SummaryStrip ariaLabel="Popup top summary" items={popupModel.summaryItems} />
+      <SummaryStrip ariaLabel={runtimeI18n.t("popup.summary.aria")} items={popupModel.summaryItems} />
 
       {guidanceCard ? (
         <section
@@ -335,7 +355,7 @@ export function PopupApp() {
         >
           <div className="status-card__header">
             <div>
-              <p className="section-label">Popup Guidance</p>
+              <p className="section-label">{runtimeI18n.t("popup.guidance.eyebrow")}</p>
               <h2 className="section-title">{guidanceCard.headline}</h2>
             </div>
             <StatusBadge
@@ -402,7 +422,7 @@ export function PopupApp() {
         >
           <div className="status-card__header">
             <div>
-              <p className="section-label">Snapshot Status</p>
+              <p className="section-label">{runtimeI18n.t("popup.snapshot_status.eyebrow")}</p>
               <h2 className="section-title">{popupModel.snapshotStatus.headline}</h2>
             </div>
             <StatusBadge
@@ -543,7 +563,7 @@ export function PopupApp() {
           </div>
         ) : (
           <section className="status-card" data-theme-local-surface="popup-empty-state-card">
-            <p className="section-label">Popup Triage</p>
+            <p className="section-label">{runtimeI18n.t("popup.triage.eyebrow")}</p>
             <h3 className="section-title">
               {popupModel.featuredSection.emptyStateHeadline}
             </h3>

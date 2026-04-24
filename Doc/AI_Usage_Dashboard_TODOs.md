@@ -223,7 +223,8 @@ Phase status update:
 - `Phase 168` completed the next `Direction 10.3` slice by making request completion default to the request package `captures/` directory after popup import, so the next real-world step is the popup capture itself instead of another path-resolution step
 - `Phase 169` completed the next `Direction 10.3` slice by adding one request-bound manual finalize command plus handoff update, so popup import, archive-readiness validation, and request completion can now run in one repo-backed step once the real native-toolbar popup files exist
 - the store-asset line still retains one real manual native-toolbar popup capture dependency under `Doc/Roadmap/10_3_Store_Asset_Pack_And_Submission_TODOs.md`
-- `Phase 170` completed the first `Direction 09` slice by shipping one manifest locale bootstrap baseline plus one message-id contract and one string inventory while keeping the runtime app truthfully English-only for now
+- `Phase 170` completed the first `Direction 09` slice by shipping one manifest locale bootstrap baseline plus one message-id contract and one string inventory
+- `Phase 171` completed the next `Direction 09` slice by shipping one shared runtime i18n helper, persisted locale normalization, and the first localized popup/dashboard shell slice while keeping broader settings, provider-detail, popup body copy, and operator workspaces English for now
 - the immediate next repo-owned engineering work is now the runtime localization layer under `Doc/Roadmap/09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete

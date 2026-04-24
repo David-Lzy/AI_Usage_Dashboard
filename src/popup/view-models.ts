@@ -92,6 +92,20 @@ type PopupSetupCoverageStats = {
   providersNeedingReview: ProviderViewModel[];
 };
 
+export type PopupSummaryLabels = {
+  visible: string;
+  liveReady: string;
+  setupBlockers: string;
+  policyOnly: string;
+};
+
+const DEFAULT_POPUP_SUMMARY_LABELS: PopupSummaryLabels = {
+  visible: "Visible",
+  liveReady: "Live ready",
+  setupBlockers: "Setup blockers",
+  policyOnly: "Policy-only",
+};
+
 function pluralize(count: number, singular: string, plural = `${singular}s`) {
   return count === 1 ? singular : plural;
 }
@@ -684,6 +698,7 @@ function buildPopupHeaderDetail(
 function buildPopupSummaryItems(
   visibleProviders: ProviderViewModel[],
   setupCoverage: PopupSetupCoverage,
+  labels: PopupSummaryLabels = DEFAULT_POPUP_SUMMARY_LABELS,
 ): SummaryItem[] {
   const stats = buildSetupCoverageStats(visibleProviders);
   const setupBlockerCount =
@@ -691,7 +706,7 @@ function buildPopupSummaryItems(
 
   return [
     {
-      label: "Visible",
+      label: labels.visible,
       value: String(stats.providerCount),
       tone: "neutral",
     },
@@ -706,7 +721,7 @@ function buildPopupSummaryItems(
           : "warning",
     },
     {
-      label: "Setup blockers",
+      label: labels.setupBlockers,
       value: String(setupBlockerCount),
       tone: setupBlockerCount > 0 ? "warning" : "neutral",
     },
@@ -813,7 +828,10 @@ function buildSurfaceRolesCard(
   };
 }
 
-export function buildPopupViewModel(state: AppState): PopupViewModel {
+export function buildPopupViewModel(
+  state: AppState,
+  summaryLabels: PopupSummaryLabels = DEFAULT_POPUP_SUMMARY_LABELS,
+): PopupViewModel {
   const visibleProviders = getVisibleProviders(state);
   const attentionProviders = visibleProviders.filter(needsAttention);
   const guidanceCard = buildGuidanceCard(visibleProviders);
@@ -825,7 +843,7 @@ export function buildPopupViewModel(state: AppState): PopupViewModel {
 
   return {
     headerDetail: buildPopupHeaderDetail(visibleProviders, setupCoverage),
-    summaryItems: buildPopupSummaryItems(visibleProviders, setupCoverage),
+    summaryItems: buildPopupSummaryItems(visibleProviders, setupCoverage, summaryLabels),
     visibleProviders,
     featuredProviderCards: popupProviders.map(buildPopupFeaturedProviderCard),
     showSnapshotStatus: visibleProviders.length > 0,

@@ -1,10 +1,16 @@
-import type { ProviderId, SummaryItem } from "../../providers/types";
+import type {
+  AppLocalePreference,
+  ProviderId,
+  SummaryItem,
+} from "../../providers/types";
+import { createRuntimeI18n } from "../../shared/i18n";
 import { ProviderCard } from "../components/ProviderCard";
 import { SummaryStrip } from "../components/SummaryStrip";
 import { TopBar } from "../components/TopBar";
 import type { ProviderViewModel } from "../view-models";
 
 type DashboardPageProps = {
+  localePreference: AppLocalePreference;
   summaryItems: SummaryItem[];
   providers: ProviderViewModel[];
   onOpenProvider: (providerId: ProviderId) => void;
@@ -18,6 +24,7 @@ type DashboardPageProps = {
 };
 
 export function DashboardPage({
+  localePreference,
   summaryItems,
   providers,
   onOpenProvider,
@@ -29,17 +36,22 @@ export function DashboardPage({
   onRefreshProvider,
   onRefreshAll,
 }: DashboardPageProps) {
+  const i18n = createRuntimeI18n(
+    localePreference,
+    typeof window !== "undefined" ? window : undefined,
+  );
+
   return (
     <main className="app-shell">
       <TopBar
-        title="AI Usage Dashboard"
-        subtitle="Usage, credits, and sync health"
+        title={i18n.t("dashboard.topbar.title")}
+        subtitle={i18n.t("dashboard.topbar.subtitle")}
         themeActionLabel={themeActionLabel}
         themeActionTitle={themeActionTitle}
-        expandActionLabel="Tab"
-        expandActionTitle="Open dashboard tab"
-        secondaryActionLabel="Refresh All"
-        primaryActionLabel="Settings"
+        expandActionLabel={i18n.t("common.actions.tab")}
+        expandActionTitle={i18n.t("common.actions.open_dashboard_tab")}
+        secondaryActionLabel={i18n.t("common.actions.refresh_all")}
+        primaryActionLabel={i18n.t("common.actions.settings")}
         onThemeAction={onToggleThemeMode}
         onExpandAction={onOpenFullPage}
         onSecondaryAction={onRefreshAll}
@@ -47,33 +59,25 @@ export function DashboardPage({
       />
 
       <section className="hero-card">
-        <p className="section-label">Overview</p>
-        <h2 className="display-headline">One panel for AI coding quotas</h2>
-        <p className="body-copy">
-          Official APIs, documented quota policies, and guarded page-parse
-          sources are collected into one release-ready dashboard for refreshes,
-          settings, and provider drill-downs.
-        </p>
-        <span className="token-chip">Material 3 · Release Candidate</span>
+        <p className="section-label">{i18n.t("dashboard.hero.eyebrow")}</p>
+        <h2 className="display-headline">{i18n.t("dashboard.hero.title")}</h2>
+        <p className="body-copy">{i18n.t("dashboard.hero.detail")}</p>
+        <span className="token-chip">{i18n.t("dashboard.hero.release_chip")}</span>
       </section>
 
-      <SummaryStrip items={summaryItems} />
+      <SummaryStrip ariaLabel={i18n.t("dashboard.summary.aria")} items={summaryItems} />
 
       <section className="dashboard-section">
         <div className="dashboard-section__header">
           <div>
-            <p className="section-label">Providers</p>
-            <h2 className="section-title">Provider cards</h2>
+            <p className="section-label">{i18n.t("dashboard.providers.eyebrow")}</p>
+            <h2 className="section-title">{i18n.t("dashboard.providers.title")}</h2>
           </div>
-          <p className="supporting-copy">
-            Cards are ordered by severity first, then current access gaps, so
-            the highest-risk providers stay at the top of the dashboard while
-            still exposing the current product contract at a glance.
-          </p>
+          <p className="supporting-copy">{i18n.t("dashboard.providers.detail")}</p>
         </div>
 
         {providers.length > 0 ? (
-          <div className="provider-shell-list" aria-label="Provider cards">
+          <div className="provider-shell-list" aria-label={i18n.t("dashboard.providers.aria")}>
             {providers.map((provider) => (
               <ProviderCard
                 key={provider.providerId}
@@ -85,11 +89,8 @@ export function DashboardPage({
           </div>
         ) : (
           <section className="status-card" aria-live="polite">
-            <p className="section-label">No Visible Providers</p>
-            <p className="body-copy">
-              Enable at least one provider in Settings to restore the dashboard
-              feed.
-            </p>
+            <p className="section-label">{i18n.t("dashboard.empty.eyebrow")}</p>
+            <p className="body-copy">{i18n.t("dashboard.empty.detail")}</p>
           </section>
         )}
       </section>

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import type { AppMessage } from "../background/message-bus";
 import type {
   ApiKeyProviderId,
+  AppLocalePreference,
   AppSettings,
   AppState,
   ProviderId,
@@ -11,6 +12,12 @@ import type {
 } from "../providers/types";
 import { sendAppMessage } from "../shared/app-client";
 import { APP_STATE_STORAGE_KEY } from "../shared/constants";
+import {
+  buildDashboardSummaryLabels,
+  createRuntimeI18n,
+  DEFAULT_APP_LOCALE_PREFERENCE,
+  getQuickThemeToggleCopy,
+} from "../shared/i18n";
 import { storePendingFullPageEntry } from "../shared/extension-surface-entry";
 import {
   buildFullPageExtensionPath,
@@ -827,15 +834,20 @@ function StandardApp({ locationHash }: StandardAppProps) {
     })();
   }
 
+  const localePreference: AppLocalePreference =
+    appState?.settings.locale ?? DEFAULT_APP_LOCALE_PREFERENCE;
+  const runtimeI18n = createRuntimeI18n(
+    localePreference,
+    typeof window !== "undefined" ? window : undefined,
+  );
+
   if (isLoading && !appState) {
     return (
       <main className="app-shell">
         <section className="hero-card">
-          <p className="section-label">Loading</p>
-          <h1 className="display-headline">Preparing dashboard state</h1>
-          <p className="body-copy">
-            Initializing the dashboard store and message bus.
-          </p>
+          <p className="section-label">{runtimeI18n.t("app.loading.eyebrow")}</p>
+          <h1 className="display-headline">{runtimeI18n.t("app.loading.title")}</h1>
+          <p className="body-copy">{runtimeI18n.t("app.loading.detail")}</p>
         </section>
       </main>
     );
@@ -846,18 +858,17 @@ function StandardApp({ locationHash }: StandardAppProps) {
       <>
         <main className="app-shell">
           <section className="status-card">
-            <p className="section-label">State Unavailable</p>
-            <h1 className="section-title">Initialization did not complete</h1>
+            <p className="section-label">{runtimeI18n.t("app.error.eyebrow")}</p>
+            <h1 className="section-title">{runtimeI18n.t("app.error.title")}</h1>
             <p className="body-copy">
-              {loadError ??
-                "The app state could not be loaded from extension storage or local preview storage."}
+              {loadError ?? runtimeI18n.t("app.error.detail_fallback")}
             </p>
             <button
               className="text-button"
               type="button"
               onClick={handleRetryInitialization}
             >
-              Retry
+              {runtimeI18n.t("common.actions.retry")}
             </button>
           </section>
         </main>
@@ -874,7 +885,10 @@ function StandardApp({ locationHash }: StandardAppProps) {
     );
   }
 
-  const summaryItems = buildSummaryItems(appState);
+  const summaryItems = buildSummaryItems(
+    appState,
+    buildDashboardSummaryLabels(runtimeI18n),
+  );
   const visibleProviders = getVisibleProviders(appState);
   const selectedProvider =
     route.name === "provider-detail"
@@ -884,14 +898,18 @@ function StandardApp({ locationHash }: StandardAppProps) {
     appState.settings.themeMode,
     typeof window !== "undefined" ? window : undefined,
   );
+  const quickThemeToggleCopy = getQuickThemeToggleCopy(
+    quickThemeToggle.nextMode,
+    runtimeI18n,
+  );
 
   return (
     <>
       {route.name === "settings" ? (
         <SettingsPage
           onBack={() => navigateToRoute({ name: "dashboard" })}
-          themeActionLabel={quickThemeToggle.label}
-          themeActionTitle={quickThemeToggle.title}
+          themeActionLabel={quickThemeToggleCopy.label}
+          themeActionTitle={quickThemeToggleCopy.title}
           onToggleThemeMode={() =>
             handleUpdateSettings({ themeMode: quickThemeToggle.nextMode })
           }
@@ -943,8 +961,8 @@ function StandardApp({ locationHash }: StandardAppProps) {
         <ProviderDetailPage
           provider={selectedProvider}
           onBack={() => navigateToRoute({ name: "dashboard" })}
-          themeActionLabel={quickThemeToggle.label}
-          themeActionTitle={quickThemeToggle.title}
+          themeActionLabel={quickThemeToggleCopy.label}
+          themeActionTitle={quickThemeToggleCopy.title}
           onToggleThemeMode={() =>
             handleUpdateSettings({ themeMode: quickThemeToggle.nextMode })
           }
@@ -955,13 +973,14 @@ function StandardApp({ locationHash }: StandardAppProps) {
         />
       ) : (
         <DashboardPage
+          localePreference={localePreference}
           summaryItems={summaryItems}
           providers={visibleProviders}
           onOpenProvider={(providerId) =>
             navigateToRoute({ name: "provider-detail", providerId })
           }
-          themeActionLabel={quickThemeToggle.label}
-          themeActionTitle={quickThemeToggle.title}
+          themeActionLabel={quickThemeToggleCopy.label}
+          themeActionTitle={quickThemeToggleCopy.title}
           onToggleThemeMode={() =>
             handleUpdateSettings({ themeMode: quickThemeToggle.nextMode })
           }

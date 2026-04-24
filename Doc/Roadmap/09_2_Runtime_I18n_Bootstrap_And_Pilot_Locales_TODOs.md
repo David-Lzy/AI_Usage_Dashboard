@@ -10,7 +10,8 @@ Status note:
 
 - direction created on `2026-04-24`
 - first executable phase landed on `2026-04-24` through `Phase 170`
-- this child TODO turns `Direction 09` into the next major architecture track after the current `Direction 10` surface-expansion work
+- second executable phase landed on `2026-04-24` through `Phase 171`
+- this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
 
@@ -37,12 +38,14 @@ Build one maintainable localization architecture that can support manifest strin
   - review workspaces
   - runbook-adjacent runtime copy that later appears in screenshots
 - distinguish stable product-contract strings from more change-prone helper copy
+- baseline shipped in `Phase 170`, then refreshed in `Phase 171` to reflect the first runtime shell slice
 
 ### B. Stable Message-ID Policy
 
 - define one message-id naming scheme
 - keep manifest IDs and runtime IDs aligned where they represent the same product concept
 - define how future copy edits preserve ID stability
+- baseline shipped in `Phase 170`; first runtime ids landed in `Phase 171`
 
 ### C. Manifest Localization Plumbing
 
@@ -50,6 +53,7 @@ Build one maintainable localization architecture that can support manifest strin
 - add `_locales/`
 - define the first baseline catalog shape
 - keep the manifest contract aligned with the runtime localization model
+- completed in `Phase 170`
 
 ### D. Runtime App Localization Layer
 
@@ -57,6 +61,16 @@ Build one maintainable localization architecture that can support manifest strin
 - decide how React surfaces consume localized messages
 - keep vendor-owned live data outside the localized message catalog
 - define locale persistence and startup hydration behavior
+- first shell slice shipped in `Phase 171` through:
+  - `src/shared/i18n.ts`
+  - persisted `AppSettings.locale`
+  - popup shell plus dashboard shell localization
+  - shared quick theme-toggle localization
+- remaining work:
+  - settings body copy
+  - provider-detail body copy
+  - popup explanatory cards
+  - operator workspaces
 
 ### E. Locale-Aware Formatting
 
@@ -67,6 +81,7 @@ Build one maintainable localization architecture that can support manifest strin
   - times
   - durations
 - define how compact popup states handle longer localized formats
+- this is now the next repo-owned engineering slice after `Phase 171`
 
 ### F. Pilot Locales
 
@@ -91,9 +106,9 @@ Build one maintainable localization architecture that can support manifest strin
 
 1. string inventory and message-id contract - completed in `Phase 170`
 2. manifest `_locales` plus `default_locale` - completed in `Phase 170`
-3. runtime localization layer - next
-4. locale-aware formatting
-5. `en` plus `zh_CN` pilot rollout
+3. runtime localization layer first shell slice - completed in `Phase 171`
+4. locale-aware formatting - next
+5. broader `en` plus `zh_CN` runtime pilot rollout
 6. compact-width and RTL hardening
 
 ## Out Of Scope

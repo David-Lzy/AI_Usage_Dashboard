@@ -12,8 +12,9 @@ Status note:
 
 Execution note:
 
+- documentation-only planning expansion landed on `2026-04-24` through `Phase 154`
 - first executable slice landed on `2026-04-24` through `Phase 170`
-- documentation-only planning expansion landed on `2026-04-24` through `Phase 154` by turning the next i18n bootstrap line into one explicit child TODO doc
+- second executable slice landed on `2026-04-24` through `Phase 171`
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
 Process rule:
@@ -22,7 +23,7 @@ Process rule:
 
 Priority:
 
-- `P2`
+- `P1`
 
 ## Why This Direction Exists
 
@@ -30,9 +31,9 @@ Internationalization is now one of the clearest product gaps.
 
 The current extension:
 
-- is effectively English-only
-- has much more explanatory copy than an early prototype
-- already has popup, setup, contract, and review language that will be expensive to retrofit later
+- already has manifest localization plus the first runtime shell slice
+- still has much more explanatory English copy than an early prototype
+- already has popup, setup, contract, and review language that will stay expensive to retrofit later
 
 At the same time, the user explicitly wants broad language support.
 
@@ -46,17 +47,19 @@ It is:
 
 As of 2026-04-24:
 
-- the manifest now defines `default_locale = en`
-- the repo now ships `_locales/en` plus `_locales/zh_CN` for manifest-level Chrome surfaces
-- the runtime app still does not yet use a shared localization layer
-- the extension does not yet offer locale-aware number, date, or duration formatting
-- the popup's compact widths are already tight in English, so longer translated strings will need explicit QA
-- the repo now also ships one maintained message-id contract and one baseline string inventory:
+- the manifest defines `default_locale = en`
+- the repo ships `_locales/en` plus `_locales/zh_CN` for manifest-level Chrome surfaces
+- the runtime app now ships one shared localization helper in `src/shared/i18n.ts`
+- locale preference now persists in `AppSettings.locale` with current values `system | en | zh-CN`
+- the current shipped runtime localized slice covers popup shell plus dashboard shell strings and shared quick theme-toggle labels
+- the runtime app still does not yet localize most settings copy, provider-detail copy, popup explanatory cards, or operator workspaces
+- the extension still does not yet offer locale-aware number, date, or duration formatting
+- popup compact widths are already tight in English, so longer translated strings still need explicit QA before the broader runtime rollout
+- the repo ships maintained i18n references:
   - [I18n_Message_ID_Contract.md](../I18n_Message_ID_Contract.md)
   - [I18n_String_Inventory_Baseline.md](../I18n_String_Inventory_Baseline.md)
-- the repo now also ships one execution-ready child TODO for the next i18n architecture pass:
+- the repo also ships the execution-ready child TODO for the remaining i18n track:
   - [09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md](./09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md)
-- this direction is intentionally sequenced after the current Direction 10 surface-expansion work so the first runtime i18n pass does not start against still-moving popup plus full-page contracts
 
 External platform constraints and product signals:
 
@@ -100,22 +103,22 @@ Ship one localization architecture that can start with a small pilot set and the
 
 ## Main Risks
 
-- translating before popup and setup copy stabilizes
+- translating before popup, settings, and provider-detail copy stabilizes
 - creating separate manifest and runtime catalogs with drifting IDs
 - promising ten polished locales before width and RTL QA exists
 - translating every string manually without a maintainable workflow
 
 ## Recommendation
 
-This direction is feasible and should become the next major architecture track after the current Direction 10 surface work settles.
+This direction is now active repo-owned engineering work, not future planning.
 
 Recommended rollout:
 
-1. manifest string inventory plus stable message IDs - baseline shipped in `Phase 170`
-2. manifest localization plumbing - baseline shipped in `Phase 170`
-3. runtime localization layer
-4. locale-aware formatting
-5. `en` and `zh_CN` runtime pilot rollout
+1. manifest string inventory plus stable message IDs - shipped in `Phase 170`
+2. manifest localization plumbing - shipped in `Phase 170`
+3. runtime localization layer first shell slice - shipped in `Phase 171`
+4. locale-aware formatting - next
+5. broader `en` plus `zh_CN` runtime pilot rollout
 6. compact-width and RTL hardening
 
 ## References

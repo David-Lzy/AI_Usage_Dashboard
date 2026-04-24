@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-04-24:
 
-- the numbered phase queue is now completed through `Phase 170`
+- the numbered phase queue is now completed through `Phase 171`
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -52,7 +52,8 @@ As of 2026-04-24:
 - `Phase 167` completed the next `Direction 10.3` slice by shipping one generated popup-notes overlay template plus one popup-capture checklist, so the refreshed pending request now carries the last missing generated inputs for the final manual popup pass
 - `Phase 168` completed the next `Direction 10.3` slice by shipping one request-bound completion default path, so once the real popup files are imported back into the pending request, archive completion no longer needs a separate `--captures-dir` argument
 - `Phase 169` completed the next `Direction 10.3` slice by shipping one request-bound manual finalize command, so popup import, archive-readiness validation, and request completion can now run through one repo-backed operator step once the real native-toolbar popup files exist
-- `Phase 170` completed the first `Direction 09` slice by shipping one manifest i18n bootstrap baseline: `default_locale = en`, `_locales/en`, `_locales/zh_CN`, one message-id contract, and one baseline string inventory while keeping the runtime app truthfully English-only for now
+- `Phase 170` completed the first `Direction 09` slice by shipping one manifest i18n bootstrap baseline: `default_locale = en`, `_locales/en`, `_locales/zh_CN`, one message-id contract, and one baseline string inventory
+- `Phase 171` completed the next `Direction 09` slice by shipping one shared runtime i18n helper, persisted locale normalization, and the first localized popup/dashboard shell slice while keeping broader settings, provider-detail, popup body copy, and operator workspaces English for now
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
 - `Phase 42` has packaged `0.1.0-rc.2` and closed the release-closeout track for the narrowed RC
 - `Phase 43` completed the first `Direction 02` slice by productizing source-fidelity semantics in the side panel
@@ -182,7 +183,7 @@ As of 2026-04-24:
 - `Phase 168` completed the next `Direction 10.3` slice by making archive completion default to the request package itself once popup files are imported, so the last remaining real-world step is now the actual popup capture rather than another manual path handoff
 - `Phase 169` completed the next `Direction 10.3` slice by adding one request-bound manual finalize command plus handoff update, so the remaining real-world work is now the popup capture itself instead of popup capture plus extra repo bookkeeping
 - the current store-asset line still retains one real-world manual popup-capture dependency under `10_3_Store_Asset_Pack_And_Submission_TODOs.md`
-- the next repo-owned engineering slice now moves to Direction 09 runtime i18n bootstrap, captured in `09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md`
+- the next repo-owned engineering slice now moves to locale-aware formatting under Direction 09, captured in `09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md`
 - the remaining high-value work in Direction 05 and Direction 04 is now evidence closure, not more tool-building:
   - `05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md`
   - `04_2_Interaction_Audit_Real_Operator_Closure_TODOs.md`
@@ -192,7 +193,7 @@ As of 2026-04-24:
   - Gemini remains policy-only
   - Codex and Cursor personal support remain partial, not absolute-remaining-balance claims
 - the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 168`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
-- the numbered phase queue is now completed through `Phase 170`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
+- the numbered phase queue is now completed through `Phase 171`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
 - `Codex` personal support is already shipped as a `session_page` path, but it currently exposes usage-window percentages and reset timing, not one absolute remaining credit balance
 - `Cursor` personal support is already shipped as a `session_page` path, but it currently exposes billing-period usage context, not one exact remaining included-request counter
 - the extension action now opens a compact popup on click, the popup makes cached snapshot freshness explicit, and the badge shows the count of visible providers needing attention
@@ -211,7 +212,7 @@ As of 2026-04-24:
 - the UI uses a Material-like token system, now has a small reduced-motion-safe motion baseline, and also has an intermediate `720px` responsive collapse point, a more scannable Settings entry, a less repetitive source-card summary pattern, clearer grouped diagnostics inside disclosure, a compact session-track layout, consistent keyboard-focus treatment on the main interactive controls, harmonized status surfaces across the main warning/error/success states, clearer toned-surface text hierarchy, explicit pressed states on the remaining Settings pointer controls, a more coherent compact chip system, honest indeterminate progress treatment for unknown values, a clearer supporting-surface hierarchy across provider detail and expanded Settings diagnostics, one dedicated fixed-width interaction-audit hub for the main shipped surfaces, preset-driven shortcuts plus visible expectation copy plus visible manual checks plus a persistent signoff workspace plus signoff-import handoff support plus a visible handoff summary plus an explicit operator workflow and reusable bundle-builder path for the main manual review states, and repeatable width plus compact-height plus keyboard-interaction plus pointer-interaction plus status-surface plus toned-content plus chip-progress plus supporting-surface plus audit-hub plus audit-preset plus evidence-pack plus signoff-pack plus signoff-workspace plus signoff-import plus handoff-bundle plus operator-bundle review baselines
 - the current theme foundation now ships shared `System / Light / Dark` mode selection, the first shipped preset accents, one validated custom-seed path, one repeatable explicit-override plus system-follow QA baseline, one repeatable dark-surface review baseline, one repeatable preset-theme review baseline, one repeatable audit-hub theme-alignment review baseline, one repeatable custom-seed review baseline, one repeatable popup-local plus audit-local custom-seed review baseline, one repeatable popup plus audit non-accent surface-stability review baseline, one repeatable dashboard plus Settings plus provider-detail non-accent surface-stability review baseline, one repeatable compact-width custom-seed review baseline, one repeatable provider-state-specific custom-seed review baseline, one repeatable seeded recovered-state review baseline, one repeatable preview-interaction recovered-state review baseline, one repeatable extension-mode recovered-state review baseline, one dedicated theme-recovery operator workspace plus runbook, one durable seeded theme-recovery archive workflow plus generated archive index, and one durable pending theme-recovery request workflow plus generated request index, but it still lacks any real fulfilled operator or native-prompt recovery archive and any decision on dual light-dark seeds
 - the current popup architecture is already shipped, which means future toolbar work should focus on competitive product fit, onboarding, and store discoverability rather than restarting popup shell design
-- the current extension remains effectively English-only because the repo does not yet ship `_locales/`, `default_locale`, or a runtime app localization layer
+- the current extension now has manifest localization plus a narrow popup/dashboard shell slice in `en` and `zh_CN`, but most runtime copy still remains English and locale-aware formatting has not landed yet
 
 ## Priority Order
 
@@ -245,7 +246,7 @@ As of 2026-04-24:
 
 2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second now:
-   the project is still effectively English-only, and the new i18n bootstrap TODO now makes the architecture-first start clear enough to begin as soon as Direction 10 surface work stabilizes.
+   the project now has a narrow manifest plus popup/dashboard shell localization baseline, and the next safe move is locale-aware formatting before the broader runtime rollout.
 
 3. [Direction 05 - Adaptive Theming And Color Modes](./05_Direction_Adaptive_Theming_And_Color_Modes.md)
    Why third now:
@@ -281,7 +282,7 @@ As of 2026-04-24:
 
 2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second among the new requests:
-   the project is still effectively English-only, but the safe next move is architecture plus pilot locales before promising a full ten-language rollout.
+   the project now has a narrow manifest plus popup/dashboard shell localization baseline, but the safe next move is still formatting plus pilot-hardening before promising a full ten-language rollout.
 
 3. [Direction 08 - Documentation Completion And Truth Audit](./08_Direction_Documentation_Completion_And_Truth_Audit.md)
    Why third among the new requests:

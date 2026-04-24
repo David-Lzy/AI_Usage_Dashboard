@@ -66,6 +66,20 @@ export type ProviderViewModel = ProviderSnapshot & {
   pageBindingDetail: string | null;
 };
 
+export type DashboardSummaryLabels = {
+  visible: string;
+  healthy: string;
+  needsAccess: string;
+  needsAttention: string;
+};
+
+const DEFAULT_DASHBOARD_SUMMARY_LABELS: DashboardSummaryLabels = {
+  visible: "Visible",
+  healthy: "Healthy",
+  needsAccess: "Needs Access",
+  needsAttention: "Needs Attention",
+};
+
 const SYNC_STATUS_PRIORITY: Record<SyncStatus, number> = {
   error: 0,
   warning: 1,
@@ -256,7 +270,10 @@ export function getProviderViewModel(
   );
 }
 
-export function buildSummaryItems(state: AppState): SummaryItem[] {
+export function buildSummaryItems(
+  state: AppState,
+  labels: DashboardSummaryLabels = DEFAULT_DASHBOARD_SUMMARY_LABELS,
+): SummaryItem[] {
   const visibleProviders = getVisibleProviders(state);
   const healthyCount = visibleProviders.filter(
     (provider) =>
@@ -272,22 +289,22 @@ export function buildSummaryItems(state: AppState): SummaryItem[] {
 
   return [
     {
-      label: "Visible",
+      label: labels.visible,
       value: String(visibleProviders.length),
       tone: "neutral",
     },
     {
-      label: "Healthy",
+      label: labels.healthy,
       value: String(healthyCount),
       tone: healthyCount > 0 ? "neutral" : "warning",
     },
     {
-      label: "Needs Access",
+      label: labels.needsAccess,
       value: String(accessGapCount),
       tone: accessGapCount > 0 ? "warning" : "neutral",
     },
     {
-      label: "Needs Attention",
+      label: labels.needsAttention,
       value: String(attentionCount),
       tone: attentionCount > 0 ? "error" : "neutral",
     },

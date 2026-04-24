@@ -7,6 +7,7 @@ import type {
 import { APP_STATE_STORAGE_KEY, SAMPLE_APP_STATE } from "./constants";
 import { normalizePageBinding } from "./page-bindings";
 import { normalizeSourcePreference } from "./provider-sources";
+import { normalizeAppLocalePreference } from "./i18n";
 import {
   normalizeThemeCustomSeedHex,
   normalizeThemeMode,
@@ -119,6 +120,7 @@ function normalizeAppState(state: AppState): AppState {
     settings: {
       ...SAMPLE_APP_STATE.settings,
       ...state.settings,
+      locale: normalizeAppLocalePreference(state.settings?.locale),
       themeMode: normalizeThemeMode(state.settings?.themeMode),
       themePreset: normalizeThemePreset(state.settings?.themePreset),
       themeCustomSeedHex: normalizeThemeCustomSeedHex(

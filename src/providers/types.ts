@@ -59,6 +59,7 @@ export type ProviderPageBindingStatus = "unbound" | "bound" | "stale";
 
 export type ThemeMode = "system" | "light" | "dark";
 export type ThemePreset = "default" | "meadow" | "sunset" | "custom";
+export type AppLocalePreference = "system" | "en" | "zh-CN";
 
 export type ProviderPageBinding = {
   mode: "auto" | "bound";
@@ -137,6 +138,7 @@ export type ProviderSyncOutcome = {
 export type AppSettings = {
   syncIntervalMinutes: number;
   warningThresholdPercent: number;
+  locale: AppLocalePreference;
   themeMode: ThemeMode;
   themePreset: ThemePreset;
   themeCustomSeedHex: string | null;
