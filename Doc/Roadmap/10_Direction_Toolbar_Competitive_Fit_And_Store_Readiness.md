@@ -31,6 +31,7 @@ Execution note:
 - sixteenth executable slice landed on `2026-04-24` through `Phase 157`
 - seventeenth executable slice landed on `2026-04-24` through `Phase 158`
 - eighteenth executable slice landed on `2026-04-24` through `Phase 159`
+- nineteenth executable slice landed on `2026-04-24` through `Phase 160`
 - this direction sharpens [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md) into a more explicit next-stage productization track
 
 Process rule:
@@ -118,12 +119,16 @@ As of 2026-04-24:
   - popup expand drives one top-centered scale-plus-rise treatment on dashboard-tab open
   - sidepanel expand drives one left-origin slide-plus-scale treatment on route-preserving full-page entry
   - reduced-motion mode disables those entry animations entirely
+- the repo now also ships one runtime-window cleanup helper plus one refreshed real RDP runtime surface review:
+  - popup, sidepanel settings, and full-page dashboard/settings/provider-detail now have one current extension-mode QA capture set after the shipped expand, theme, and motion slices
+  - the RDP helpers now close the extension windows they opened, reducing repeated-capture OOM risk
+  - popup smoke capture remains QA-only evidence because the helper opens the popup route in its own extension app window rather than the native toolbar bubble
 - the current boundary is now explicit:
   - popup header expand owns the full-page dashboard jump
   - sidepanel top-bar expand owns route-preserving full-page shell entry for standard operational routes
   - quick theme toggle owns explicit light-dark flips only
   - full theme configuration still belongs to Settings
-  - the next runtime slice is now the RDP Chrome QA refresh for popup, sidepanel, and full-page captures after the shipped expand, theme, and motion work
+  - the next execution line now moves to `Direction 10.3` store asset-pack refresh after the updated runtime evidence
 - the repo still does not yet ship localized listing variants or a submitted store asset pack beyond the first archived evidence plus English source documents
 - the project now has an RDP Chrome environment available for truthful extension-mode capture and review
 - the current screenshot state is now `0 pending requests / 1 archived set`
@@ -219,7 +224,9 @@ Recommended rollout:
 
 `Phase 158` completed the next product slice by shipping one popup plus sidebar ambient light-dark toggle that also carries into the standard full-page shell, while keeping `system`, preset accents, and custom-seed configuration inside Settings as the only advanced theme surface.
 
-`Phase 159` completed the next product slice by turning popup-expand and sidepanel-expand into source-aware full-page entry motion hints, so the standard full-page shell now gets one restrained continuity treatment without pretending to ship a brittle true shared-element transition. Reduced-motion mode keeps those full-page entry animations disabled. The next product slice is now the RDP Chrome runtime QA refresh for popup, sidepanel, and full-page captures after the shipped expand, theme, and motion work.
+`Phase 159` completed the next product slice by turning popup-expand and sidepanel-expand into source-aware full-page entry motion hints, so the standard full-page shell now gets one restrained continuity treatment without pretending to ship a brittle true shared-element transition. Reduced-motion mode keeps those full-page entry animations disabled.
+
+`Phase 160` completed the next product slice by refreshing real RDP runtime captures for popup, sidepanel settings, and standard full-page dashboard/settings/provider-detail surfaces while adding runtime-window cleanup into the helper workflow. That keeps the current QA evidence aligned with the shipped expand, quick-theme, and motion work and reduces repeat-capture OOM risk. The next product slice now moves to `Direction 10.3` store asset-pack refresh on top of that newer runtime evidence.
 
 ## References
 

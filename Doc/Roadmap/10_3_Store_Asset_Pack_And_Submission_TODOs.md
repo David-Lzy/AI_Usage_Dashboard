@@ -10,6 +10,7 @@ Status note:
 
 - direction created on `2026-04-24`
 - no executable phase has started yet
+- this child TODO now becomes the next active `Direction 10` line after `Phase 160` refreshed the current popup / sidepanel / full-page runtime evidence
 - this child TODO assumes the current first real screenshot archive already exists and focuses on store-ready asset preparation after the next surface-expansion workstream lands
 
 Process rule:

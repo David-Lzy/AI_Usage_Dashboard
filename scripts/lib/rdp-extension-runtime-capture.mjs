@@ -167,6 +167,15 @@ async function listChromeWindows(runtime) {
   return parseWindowTree(stdout);
 }
 
+async function closeChromeWindow(runtime, windowId) {
+  await runX11Command({
+    command: "xkill",
+    args: ["-id", windowId],
+    runtime,
+    label: `xkill close-window ${windowId}`,
+  });
+}
+
 function spawnChromeAppWindow({ display, xauthority, url, width, height }) {
   const child = spawn(
     "/opt/google/chrome/chrome",
@@ -254,6 +263,43 @@ export async function openRdpExtensionWindow({
   };
 }
 
+export async function closeRdpExtensionWindow({
+  windowId,
+  display,
+  xauthority,
+  waitMs = 400,
+}) {
+  await closeChromeWindow({ display, xauthority }, windowId);
+  if (waitMs > 0) {
+    await sleep(waitMs);
+  }
+}
+
+export async function closeRdpExtensionWindows({
+  runtime,
+  titles = ["AI Usage Dashboard", "AI Usage Dashboard Popup"],
+  waitMs = 400,
+}) {
+  const resolvedRuntime = runtime ?? (await detectChromeRuntimeEnvironment());
+  const windows = (await listChromeWindows(resolvedRuntime)).filter((windowInfo) =>
+    titles.includes(windowInfo.title),
+  );
+
+  for (const windowInfo of windows.sort((left, right) => right.numericId - left.numericId)) {
+    await closeChromeWindow(resolvedRuntime, windowInfo.id);
+    if (waitMs > 0) {
+      await sleep(waitMs);
+    }
+  }
+
+  return {
+    closedCount: windows.length,
+    windows,
+    display: resolvedRuntime.display,
+    xauthority: resolvedRuntime.xauthority,
+  };
+}
+
 export async function captureRdpExtensionWindow({
   projectRoot,
   routePath,
@@ -264,6 +310,7 @@ export async function captureRdpExtensionWindow({
   waitMs = 3000,
   pollMs = 400,
   timeoutMs = 8000,
+  closeAfterCapture = false,
 }) {
   const windowInfo = await openRdpExtensionWindow({
     projectRoot,
@@ -286,6 +333,14 @@ export async function captureRdpExtensionWindow({
     },
     label: "ImageMagick window capture",
   });
+
+  if (closeAfterCapture) {
+    await closeRdpExtensionWindow({
+      windowId: windowInfo.windowId,
+      display: windowInfo.display,
+      xauthority: windowInfo.xauthority,
+    });
+  }
 
   return {
     extensionId: windowInfo.extensionId,

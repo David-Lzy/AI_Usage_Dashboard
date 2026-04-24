@@ -190,6 +190,10 @@ The Chrome action now opens a compact popup first:
   - popup expand drives one top-centered scale-plus-rise treatment on dashboard-tab open
   - side-panel expand drives one left-origin slide-plus-scale treatment on route-preserving full-page entry
   - reduced-motion mode disables those entry animations entirely
+- the repo now also ships one real RDP runtime surface refresh review plus one runtime-window cleanup helper:
+  - popup, side-panel settings, and standard full-page dashboard/settings/provider-detail now have one current extension-mode QA capture set after the shipped expand, quick-theme, and motion slices
+  - the capture helpers now close the extension windows they open, reducing repeated-capture OOM risk
+  - popup smoke capture remains QA-only evidence because it opens the popup route in its own extension app window rather than the native toolbar bubble
 - the badge shows the number of visible providers currently needing attention
 - the side panel remains the canonical surface for settings, source diagnostics, and provider detail
 

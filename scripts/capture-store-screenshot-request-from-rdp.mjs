@@ -2,7 +2,12 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 
-import { captureRdpExtensionWindow, openRdpExtensionWindow } from "./lib/rdp-extension-runtime-capture.mjs";
+import {
+  captureRdpExtensionWindow,
+  closeRdpExtensionWindow,
+  closeRdpExtensionWindows,
+  openRdpExtensionWindow,
+} from "./lib/rdp-extension-runtime-capture.mjs";
 import {
   getStoreScreenshotCapturePlanEntry,
   buildStoreScreenshotSeedRoutePath,
@@ -82,7 +87,7 @@ async function applyScreenshotSeed(preset) {
       ? STORE_SCREENSHOT_SEED_CLEARED_TITLE
       : STORE_SCREENSHOT_SEED_APPLIED_TITLE;
 
-  return openRdpExtensionWindow({
+  const windowInfo = await openRdpExtensionWindow({
     projectRoot,
     routePath: buildStoreScreenshotSeedRoutePath(preset),
     expectedTitle,
@@ -90,6 +95,12 @@ async function applyScreenshotSeed(preset) {
     height: 720,
     waitMs: 2000,
     timeoutMs: 12000,
+  });
+
+  await closeRdpExtensionWindow({
+    windowId: windowInfo.windowId,
+    display: windowInfo.display,
+    xauthority: windowInfo.xauthority,
   });
 }
 
@@ -135,6 +146,7 @@ async function run() {
   await mkdir(capturesDir, { recursive: true });
 
   try {
+    await closeRdpExtensionWindows({});
     await applyScreenshotSeed("unlock");
 
     for (const filename of requestManifest.requiredScreenshotFilenames ?? []) {
@@ -145,6 +157,7 @@ async function run() {
         `No RDP screenshot capture plan entry exists for \`${filename}\`.`,
       );
 
+      await closeRdpExtensionWindows({});
       await applyScreenshotSeed(capturePlan.preset);
 
       const captureResult = await captureRdpExtensionWindow({
@@ -156,6 +169,7 @@ async function run() {
         waitMs: 2500,
         timeoutMs: 12000,
         outputPath: path.join(capturesDir, filename),
+        closeAfterCapture: true,
       });
 
       const noteIndex = updatedNotesDocument.notes.findIndex(
@@ -183,7 +197,9 @@ async function run() {
     }
   } finally {
     try {
+      await closeRdpExtensionWindows({});
       await applyScreenshotSeed("unlock");
+      await closeRdpExtensionWindows({});
     } catch (error) {
       console.error("store-screenshot: warning: failed to unlock screenshot seed");
       console.error(error);

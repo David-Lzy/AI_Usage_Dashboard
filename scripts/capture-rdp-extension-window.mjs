@@ -28,6 +28,24 @@ const ROUTES = {
     width: 1280,
     height: 800,
   },
+  "full-page-dashboard": {
+    routePath: "src/sidepanel/index.html?surface=full-page#dashboard",
+    expectedTitle: "AI Usage Dashboard",
+    width: 1280,
+    height: 800,
+  },
+  "full-page-settings": {
+    routePath: "src/sidepanel/index.html?surface=full-page#settings",
+    expectedTitle: "AI Usage Dashboard",
+    width: 1280,
+    height: 800,
+  },
+  "full-page-provider-detail-codex": {
+    routePath: "src/sidepanel/index.html?surface=full-page#provider-detail/codex",
+    expectedTitle: "AI Usage Dashboard",
+    width: 1280,
+    height: 800,
+  },
 };
 
 function parseArgs(argv) {
@@ -62,7 +80,7 @@ function assert(condition, message) {
 
 async function run() {
   const options = parseArgs(process.argv.slice(2));
-  assert(options.route.length > 0, "Pass `--route <popup|dashboard|settings|provider-detail-codex>`.");
+  assert(options.route.length > 0, "Pass `--route <popup|dashboard|settings|provider-detail-codex|full-page-dashboard|full-page-settings|full-page-provider-detail-codex>`.");
   assert(options.output.length > 0, "Pass `--output <path-to-png>`.");
   assert(options.route in ROUTES, `Unsupported route key: ${options.route}`);
 
@@ -74,6 +92,7 @@ async function run() {
     width: routeConfig.width,
     height: routeConfig.height,
     outputPath: path.resolve(process.cwd(), options.output),
+    closeAfterCapture: true,
   });
 
   console.log(

@@ -89,10 +89,15 @@ Supported route keys are currently:
 - `dashboard`
 - `settings`
 - `provider-detail-codex`
+- `full-page-dashboard`
+- `full-page-settings`
+- `full-page-provider-detail-codex`
 
 Truth note:
 
 - this helper captures real extension runtime windows from the existing RDP Chrome session
+- it now closes the extension window it opened after saving the screenshot
+- the popup route still opens as its own extension app window here, so it is useful for runtime QA but not a pixel-identical replacement for the true toolbar action bubble
 - it is a smoke-capture tool, not a substitute for the full storyboard review and archive flow
 
 ## Request-Bound Seed And Capture Helpers
@@ -125,6 +130,12 @@ Truth note:
 - it also updates the request-bound `capture-notes.json` with the current reviewed truth statuses and operator notes
 - it does not mark the request fulfilled by itself; completion still requires the normal archive command
 
+If an RDP capture attempt leaves stale AI Usage Dashboard popup or extension windows behind, close them before retrying:
+
+```bash
+npm run store:cleanup-rdp-runtime-windows
+```
+
 If an RDP capture attempt hangs on `xwininfo` or `import`, clean the stale probe processes before retrying:
 
 ```bash
@@ -133,8 +144,9 @@ npm run store:cleanup-rdp-capture-probes
 
 Truth note:
 
-- this cleanup command only removes stale helper processes from failed capture attempts
-- it does not fabricate screenshots or mark any request fulfilled
+- the runtime-window cleanup command only closes currently open AI Usage Dashboard popup or extension windows in the RDP Chrome session
+- the probe-cleanup command only removes stale helper processes from failed capture attempts
+- neither command fabricates screenshots or marks any request fulfilled
 
 ## Capture Workflow
 

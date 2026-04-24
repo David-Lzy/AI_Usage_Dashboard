@@ -19,6 +19,7 @@ Status note:
 - `Phase 157` has now added one route-preserving sidepanel expand control for dashboard, settings, and provider-detail routes
 - `Phase 158` has now added one popup plus sidebar quick light-dark toggle that also carries into the standard full-page shell
 - `Phase 159` has now added one restrained source-aware full-page entry motion layer for popup-expand and sidepanel-expand flows while keeping reduced-motion mode animation-free
+- `Phase 160` has now refreshed real RDP runtime captures for popup, sidepanel, and full-page surfaces while teaching the capture workflow to close the extension windows it opens
 
 Process rule:
 
@@ -125,6 +126,8 @@ Define one stable contract for the next productization slices and keep it aligne
 - popup is currently functional but visually sparse
 - sidebar already reads as a mature workspace and should not be collapsed into popup-like behavior
 - new controls should strengthen the top action density instead of adding more long vertical cards
+- current full-page dashboard and full-page settings captures read as stable, intentional workspace surfaces after the shipped expand, quick-theme, and motion slices
+- current popup smoke capture remains useful as runtime QA evidence but is visually wider than the true toolbar bubble because the helper opens the popup route in its own extension app window
 - RDP runtime capture should close old popup windows and tabs between attempts to reduce session buildup and OOM risk
 
 ## Acceptance Boundary

@@ -14,6 +14,7 @@ Status note:
 - third executable slice landed on `2026-04-24` through `Phase 157`
 - fourth executable slice landed on `2026-04-24` through `Phase 158`
 - fifth executable slice landed on `2026-04-24` through `Phase 159`
+- sixth executable slice landed on `2026-04-24` through `Phase 160`
 - this child TODO turns the agreed popup / sidebar / full-page expansion contract into the next executable `Direction 10` track
 
 Process rule:
@@ -152,6 +153,16 @@ Related design contract:
 - capture sidebar after the new expand and theme controls land
 - capture the full-page shell in dashboard and route-preserving states
 - close popup or tabs between captures to avoid session buildup and OOM in RDP Chrome
+- `Phase 160` completed this runtime QA refresh slice by shipping:
+  - one runtime-window cleanup helper that closes stale AI Usage Dashboard popup and extension windows in the RDP Chrome session
+  - one upgraded smoke-capture helper that now supports popup, standard sidepanel, and full-page dashboard/settings/provider-detail routes
+  - one hygiene update for the request-bound RDP screenshot runner so seed windows and captured runtime windows do not accumulate between screenshots
+  - one repeatable real RDP runtime review that refreshed popup, sidepanel-settings, full-page-dashboard, full-page-settings, and full-page-provider-detail captures from the unpacked extension
+- current boundary after `Phase 160`:
+  - RDP runtime refresh now has current evidence for popup, sidepanel, and standard full-page surfaces after the shipped expand, quick-theme, and motion slices
+  - the helper now closes the extension windows it opens, so repeated runtime QA passes no longer depend on manual cleanup alone
+  - popup app-window smoke capture remains QA-only evidence and is not a pixel-identical replacement for the true toolbar action bubble
+  - the next execution line now moves to `Direction 10.3` store asset-pack refresh on top of the updated runtime evidence
 
 ## Acceptance Criteria
 
@@ -180,7 +191,7 @@ Related design contract:
 3. sidebar expand CTA to route-preserving full-page shell - completed in `Phase 157`
 4. popup plus sidebar light-dark toggle button - completed in `Phase 158`
 5. animation and motion polish for expand/open transitions - completed in `Phase 159`
-6. RDP Chrome runtime QA and screenshot refresh - next
+6. RDP Chrome runtime QA and screenshot refresh - completed in `Phase 160`
 
 ## Out Of Scope
 
