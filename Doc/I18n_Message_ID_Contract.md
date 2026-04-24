@@ -44,7 +44,7 @@ Keep manifest and runtime localization on one stable naming contract so later co
 - `manifest_action_default_title`
   - maps to manifest `action.default_title`
 
-## Shipped Runtime IDs Through Phase 175
+## Shipped Runtime IDs Through Phase 176
 
 Runtime localization now exists for one broader but still partial manifest plus runtime pilot slice. Current shipped groups are:
 
@@ -80,7 +80,7 @@ Runtime localization now exists for one broader but still partial manifest plus 
   - `settings.permissions.*`
   - `settings.toast.*`
 
-## Structured Runtime Copy Through Phase 175
+## Structured Runtime Copy Through Phase 176
 
 `Phase 174` and `Phase 175` deliberately did not explode the runtime id list with one message id per popup sentence, provider-detail field label, or settings helper paragraph.
 
@@ -132,20 +132,24 @@ This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still maki
   - deeper settings helper copy
   - provider-detail shell and static copy
   - shared quick theme-toggle labels
-- raw provider source-truth detail strings, localized durations, and operator workspaces still remain outside the shipped localized slice
+- raw provider source-truth detail strings and operator workspaces still remain outside the shipped localized slice
 - vendor-owned provider-page text stays outside the managed localization catalog
 - locale-aware formatting also stays outside raw message ids so generated values can be formatted per locale without multiplying message ids
 
 ## Locale-Aware Formatting Contract
 
 - locale-aware value formatting now ships through `src/shared/i18n.ts`, not through new message ids
-- the current shipped formatting slice covers generated counts, percentages, and parseable timestamp primitives
+- the current shipped formatting slice covers generated counts, percentages, parseable timestamp primitives, and duration-bearing runtime freshness/reset labels
+- the current shipped duration/freshness slice covers:
+  - popup snapshot-status freshness labels
+  - popup featured-provider freshness chips
+  - dashboard provider-card freshness and duration-bearing reset labels
 - the current parseable timestamp inputs are limited to:
   - `YYYY-MM-DD`
   - `YYYY-MM-DD HH:mm`
   - those same forms with an explicit trailing `UTC`
 - non-parseable vendor-owned strings such as billing-window labels remain source-truthful raw values for now
-- localized duration and relative-time phrasing still remains future work under `Direction 09`
+- compact-width and RTL hardening plus any broader relative-time rollout still remains future work under `Direction 09`
 
 ## Translation Tiers
 

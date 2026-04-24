@@ -104,4 +104,24 @@ describe("runtime i18n", () => {
     expect(settingsCopy.permissions.requestAccess).toBe("请求授权");
   });
 
+  it("localizes runtime duration and freshness labels for zh-CN", () => {
+    const i18n = createRuntimeI18n("zh-CN");
+
+    expect(i18n.localizeRelativeRuntimeLabel("Synced 2m ago")).toBe(
+      "2分钟前同步",
+    );
+    expect(
+      i18n.localizeRelativeRuntimeLabel("Analytics snapshot 34m ago"),
+    ).toBe("34分钟前的分析快照");
+    expect(
+      i18n.localizeRelativeRuntimeLabel("Cached snapshot stale by 4h"),
+    ).toBe("缓存快照已滞后4小时");
+    expect(i18n.localizeResetRuntimeLabel("Resets in 6 days")).toBe(
+      "6天后重置",
+    );
+    expect(
+      i18n.localizeResetRuntimeLabel("Monthly AI quota renews every 30 days"),
+    ).toBe("Monthly AI 配额每30天续期一次");
+  });
+
 });

@@ -19,6 +19,7 @@ Execution note:
 - fourth executable slice landed on `2026-04-24` through `Phase 173`
 - fifth executable slice landed on `2026-04-24` through `Phase 174`
 - sixth executable slice landed on `2026-04-24` through `Phase 175`
+- seventh executable slice landed on `2026-04-24` through `Phase 176`
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
 Process rule:
@@ -78,7 +79,8 @@ As of 2026-04-24:
   - credential-card section labels, state chips, help copy, footer copy, placeholders, and action labels
   - source-card preference labels, session-track labels, diagnostics disclosure labels, and diagnostic group and field labels
   - permission-prompt status and action labels
-- the runtime app still does not yet localize localized durations, operator workspaces, or raw provider source-truth detail strings that intentionally remain closer to the underlying source contract
+- the runtime app now also localizes duration-bearing freshness and reset labels across popup snapshot status, popup featured-provider freshness chips, and dashboard provider cards
+- operator workspaces and raw provider source-truth detail strings that intentionally remain closer to the underlying source contract still remain outside the localized pilot
 - popup compact widths are already tight in English, so longer translated strings still need explicit QA before the broader runtime rollout
 - the repo ships maintained i18n references:
   - [I18n_Message_ID_Contract.md](../I18n_Message_ID_Contract.md)
@@ -146,7 +148,8 @@ Recommended rollout:
 5. settings-shell pilot rollout plus locale selector - shipped in `Phase 173`
 6. popup explanatory copy plus provider-detail shell/static copy rollout - shipped in `Phase 174`
 7. deeper settings helper copy rollout - shipped in `Phase 175`
-8. locale-aware durations plus compact-width and RTL hardening - next
+8. locale-aware durations and freshness labels - shipped in `Phase 176`
+9. compact-width and RTL hardening - next
 
 ## References
 

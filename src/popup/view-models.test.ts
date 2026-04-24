@@ -990,4 +990,12 @@ describe("popup view models", () => {
     });
   });
 
+  it("localizes popup freshness labels for the zh-CN pilot rollout", () => {
+    const i18n = createRuntimeI18n("zh-CN");
+    const model = localizePopupViewModel(buildPopupViewModel(SAMPLE_APP_STATE), i18n);
+
+    expect(model.snapshotStatus.headline).toBe("2分钟前同步");
+    expect(model.snapshotStatus.detail).toContain("34分钟前的分析快照");
+    expect(model.featuredProviderCards[0]?.metaChips[1]).toBe("34分钟前的分析快照");
+  });
 });

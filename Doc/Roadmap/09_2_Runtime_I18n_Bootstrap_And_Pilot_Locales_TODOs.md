@@ -15,6 +15,7 @@ Status note:
 - fourth executable phase landed on `2026-04-24` through `Phase 173`
 - fifth executable phase landed on `2026-04-24` through `Phase 174`
 - sixth executable phase landed on `2026-04-24` through `Phase 175`
+- seventh executable phase landed on `2026-04-24` through `Phase 176`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -90,10 +91,14 @@ Build one maintainable localization architecture that can support manifest strin
   - generated counts
   - percentages
   - parseable timestamp primitives
+- `Phase 176` extended that formatting slice to:
+  - popup snapshot-status freshness labels
+  - popup featured-provider freshness chips
+  - dashboard provider-card freshness and duration-bearing reset labels
 - remaining formatting work still includes:
-  - localized durations
-  - relative freshness phrasing
-  - compact popup QA for longer localized value strings
+  - compact popup QA for longer localized duration-bearing value strings
+  - deliberate policy for any broader relative-time rollout beyond the currently shipped surfaces
+  - deliberate handling for non-parseable vendor-owned raw window labels
 
 ### E.1 Settings-Shell Pilot Rollout
 
@@ -126,7 +131,6 @@ Build one maintainable localization architecture that can support manifest strin
 - truth boundary preserved in `Phase 174`:
   - deeper settings helper copy remains English
   - raw provider source-truth detail strings still intentionally remain closer to underlying source output
-  - localized durations still remain future work
   - operator workspaces remain English
 
 ### E.3 Deeper Settings Helper Rollout
@@ -139,8 +143,19 @@ Build one maintainable localization architecture that can support manifest strin
   - permission-prompt status and action labels
 - truth boundary preserved in `Phase 175`:
   - raw provider source-truth detail strings still intentionally remain closer to underlying source output
-  - localized durations still remain future work
   - operator workspaces remain English
+
+### E.4 Duration And Freshness Label Rollout
+
+- broader runtime pilot rollout continued in `Phase 176`
+- shipped duration/freshness scope now includes:
+  - popup snapshot-status freshness labels
+  - popup featured-provider freshness chips
+  - dashboard provider-card freshness and duration-bearing reset labels
+- truth boundary preserved in `Phase 176`:
+  - raw provider source-truth detail strings still intentionally remain closer to underlying source output
+  - operator workspaces remain English
+  - compact-width and RTL hardening still remain next before any broader locale-tier expansion
 
 ### F. Pilot Locales
 
@@ -170,7 +185,8 @@ Build one maintainable localization architecture that can support manifest strin
 5. settings shell, overview, and locale selector rollout - completed in `Phase 173`
 6. popup explanatory copy plus provider-detail shell/static rollout - completed in `Phase 174`
 7. deeper settings helper copy rollout - completed in `Phase 175`
-8. locale-aware durations, compact-width review, and RTL hardening - next
+8. locale-aware durations and freshness label rollout - completed in `Phase 176`
+9. compact-width review and RTL hardening - next
 
 ## Out Of Scope
 

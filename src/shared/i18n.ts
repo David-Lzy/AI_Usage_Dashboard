@@ -136,6 +136,8 @@ export type RuntimeI18n = {
   formatNumber: (value: number) => string;
   formatPercentValue: (value: number) => string;
   formatTemporalValue: (rawValue: string) => string | null;
+  localizeRelativeRuntimeLabel: (rawValue: string) => string;
+  localizeResetRuntimeLabel: (rawValue: string) => string;
 };
 
 const RUNTIME_MESSAGES: Record<ResolvedAppLocale, RuntimeMessages> = {
@@ -500,6 +502,185 @@ function formatTemporalValue(
   return parsedValue.utcExplicit ? `${formattedValue} UTC` : formattedValue;
 }
 
+type DurationUnit = "minute" | "hour" | "day";
+
+type ParsedDurationToken = {
+  value: number;
+  unit: DurationUnit;
+};
+
+function parseDurationToken(rawValue: string): ParsedDurationToken | null {
+  const normalizedValue = rawValue.trim();
+  let match = /^(\d+)(m|h|d)$/i.exec(normalizedValue);
+
+  if (match) {
+    return {
+      value: Number(match[1]),
+      unit:
+        match[2].toLowerCase() === "m"
+          ? "minute"
+          : match[2].toLowerCase() === "h"
+            ? "hour"
+            : "day",
+    };
+  }
+
+  match = /^(\d+)\s+(minute|minutes|hour|hours|day|days)$/i.exec(
+    normalizedValue,
+  );
+
+  if (!match) {
+    return null;
+  }
+
+  const unit = match[2].toLowerCase();
+
+  return {
+    value: Number(match[1]),
+    unit:
+      unit.startsWith("minute")
+        ? "minute"
+        : unit.startsWith("hour")
+          ? "hour"
+          : "day",
+  };
+}
+
+function formatDurationToken(
+  locale: ResolvedAppLocale,
+  duration: ParsedDurationToken,
+): string {
+  const formattedNumber = new Intl.NumberFormat(locale).format(duration.value);
+
+  if (locale === "zh-CN") {
+    const unitLabel =
+      duration.unit === "minute"
+        ? "分钟"
+        : duration.unit === "hour"
+          ? "小时"
+          : "天";
+
+    return `${formattedNumber}${unitLabel}`;
+  }
+
+  const singularLabel =
+    duration.unit === "minute"
+      ? "minute"
+      : duration.unit === "hour"
+        ? "hour"
+        : "day";
+  const pluralLabel =
+    duration.unit === "minute"
+      ? "minutes"
+      : duration.unit === "hour"
+        ? "hours"
+        : "days";
+
+  return `${formattedNumber} ${duration.value === 1 ? singularLabel : pluralLabel}`;
+}
+
+function localizeRelativeRuntimeLabel(
+  locale: ResolvedAppLocale,
+  rawValue: string,
+): string {
+  const normalizedValue = rawValue.trim();
+
+  if (normalizedValue.length === 0 || locale === "en") {
+    return normalizedValue;
+  }
+
+  if (normalizedValue === "Synced just now") {
+    return "刚刚同步";
+  }
+
+  let match = /^Synced (\d+[mhd]) ago$/i.exec(normalizedValue);
+
+  if (match) {
+    const duration = parseDurationToken(match[1]);
+
+    return duration ? `${formatDurationToken(locale, duration)}前同步` : normalizedValue;
+  }
+
+  match = /^Analytics snapshot (\d+[mhd]) ago$/i.exec(normalizedValue);
+
+  if (match) {
+    const duration = parseDurationToken(match[1]);
+
+    return duration
+      ? `${formatDurationToken(locale, duration)}前的分析快照`
+      : normalizedValue;
+  }
+
+  match = /^Documented quota snapshot (\d+[mhd]) ago$/i.exec(normalizedValue);
+
+  if (match) {
+    const duration = parseDurationToken(match[1]);
+
+    return duration
+      ? `${formatDurationToken(locale, duration)}前的文档配额快照`
+      : normalizedValue;
+  }
+
+  match = /^Last failed sync (\d+[mhd]) ago$/i.exec(normalizedValue);
+
+  if (match) {
+    const duration = parseDurationToken(match[1]);
+
+    return duration
+      ? `上次失败同步于${formatDurationToken(locale, duration)}前`
+      : normalizedValue;
+  }
+
+  match = /^Cached snapshot stale by (\d+[mhd])$/i.exec(normalizedValue);
+
+  if (match) {
+    const duration = parseDurationToken(match[1]);
+
+    return duration
+      ? `缓存快照已滞后${formatDurationToken(locale, duration)}`
+      : normalizedValue;
+  }
+
+  return normalizedValue;
+}
+
+function localizeResetRuntimeLabel(
+  locale: ResolvedAppLocale,
+  rawValue: string,
+): string {
+  const normalizedValue = rawValue.trim();
+
+  if (normalizedValue.length === 0 || locale === "en") {
+    return normalizedValue;
+  }
+
+  let match = /^Resets in (\d+)\s+(minutes?|hours?|days?)$/i.exec(
+    normalizedValue,
+  );
+
+  if (match) {
+    const duration = parseDurationToken(`${match[1]} ${match[2]}`);
+
+    return duration
+      ? `${formatDurationToken(locale, duration)}后重置`
+      : normalizedValue;
+  }
+
+  match = /^Monthly AI quota renews every (\d+)\s+(minutes?|hours?|days?)$/i.exec(
+    normalizedValue,
+  );
+
+  if (match) {
+    const duration = parseDurationToken(`${match[1]} ${match[2]}`);
+
+    return duration
+      ? `Monthly AI 配额每${formatDurationToken(locale, duration)}续期一次`
+      : normalizedValue;
+  }
+
+  return normalizedValue;
+}
+
 export function normalizeAppLocalePreference(value: unknown): AppLocalePreference {
   return value === "system" || value === "en" || value === "zh-CN"
     ? value
@@ -537,6 +718,10 @@ export function createRuntimeI18n(
         maximumFractionDigits: 0,
       }).format(value / 100),
     formatTemporalValue: (rawValue) => formatTemporalValue(resolvedLocale, rawValue),
+    localizeRelativeRuntimeLabel: (rawValue) =>
+      localizeRelativeRuntimeLabel(resolvedLocale, rawValue),
+    localizeResetRuntimeLabel: (rawValue) =>
+      localizeResetRuntimeLabel(resolvedLocale, rawValue),
   };
 }
 

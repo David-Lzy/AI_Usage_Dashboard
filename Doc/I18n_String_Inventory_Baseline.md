@@ -21,7 +21,7 @@ Status note:
 
 ## Current Localized Scope
 
-Localized through `Phase 170`, `Phase 171`, `Phase 172`, `Phase 173`, `Phase 174`, and `Phase 175`:
+Localized through `Phase 170`, `Phase 171`, `Phase 172`, `Phase 173`, `Phase 174`, `Phase 175`, and `Phase 176`:
 
 - manifest `name`
 - manifest `description`
@@ -57,6 +57,10 @@ Localized through `Phase 170`, `Phase 171`, `Phase 172`, `Phase 173`, `Phase 174
 - shared quick theme-toggle labels for popup and standard sidepanel/full-page top bars
 - generated dashboard and popup summary counts
 - generated provider-card and provider-detail numeric values plus parseable reset/sync timestamps
+- duration-bearing runtime labels:
+  - popup snapshot-status freshness labels
+  - popup featured-provider freshness chips
+  - dashboard provider-card freshness and duration-bearing reset labels
 
 These now ship through:
 
@@ -74,21 +78,20 @@ The following surfaces still need broader runtime localization work:
 - interaction-audit workspace
 - theme-recovery workspace
 - store-facing runtime captions and screenshot-adjacent helper copy
-- localized durations and relative freshness phrasing
+- compact-width and RTL hardening for the longer localized duration phrases
 
 ## Runtime Inventory Buckets
 
 Recommended next extraction order:
 
-1. locale-aware durations and relative freshness phrases
-2. compact-width and RTL QA hardening for the existing `en + zh_CN` pilot
-3. audit and recovery workspace copy
-4. store-facing runtime helper copy that later appears in screenshots or submission support material
+1. compact-width and RTL QA hardening for the existing `en + zh_CN` pilot
+2. audit and recovery workspace copy
+3. store-facing runtime helper copy that later appears in screenshots or submission support material
 
 ## Truth Boundary
 
 - the extension is no longer manifest-English-only after `Phase 170`
-- the runtime app now has a broader but still partial localized slice plus locale-aware formatting after `Phase 175`, not a full translated rollout
-- `en` and `zh_CN` currently cover manifest surfaces plus popup/dashboard shell strings, popup explanatory copy, the first settings-shell slice, deeper settings helper copy, provider-detail shell/static copy, quick theme-toggle labels, generated counts, percentages, and parseable timestamp primitives
-- raw provider source-truth detail strings, localized durations, and operator workspaces still remain outside the shipped pilot
+- the runtime app now has a broader but still partial localized slice plus locale-aware formatting after `Phase 176`, not a full translated rollout
+- `en` and `zh_CN` currently cover manifest surfaces plus popup/dashboard shell strings, popup explanatory copy, the first settings-shell slice, deeper settings helper copy, provider-detail shell/static copy, quick theme-toggle labels, generated counts, percentages, parseable timestamp primitives, and duration-bearing runtime freshness/reset labels
+- raw provider source-truth detail strings and operator workspaces still remain outside the shipped pilot
 - non-parseable vendor-owned window labels such as `Mar 23 - Apr 21` still remain raw strings until a later explicit product decision localizes them

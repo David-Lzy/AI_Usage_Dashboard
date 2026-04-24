@@ -452,6 +452,16 @@ function buildPopupFeaturedMetaChips(provider: ProviderViewModel): string[] {
   return [provider.currentSourceContractLabel, provider.lastSyncLabel];
 }
 
+function buildLocalizedPopupFeaturedMetaChips(
+  provider: ProviderViewModel,
+  i18n: RuntimeI18n,
+): string[] {
+  return [
+    provider.currentSourceContractLabel,
+    i18n.localizeRelativeRuntimeLabel(provider.lastSyncLabel),
+  ];
+}
+
 function buildPopupFeaturedProviderCard(
   provider: ProviderViewModel,
 ): PopupFeaturedProviderCard {
@@ -838,6 +848,7 @@ function buildSurfaceRolesCard(
 
 function buildLocalizedSnapshotStatus(
   visibleProviders: ProviderViewModel[],
+  i18n: RuntimeI18n,
   copy: ReturnType<typeof buildPopupLocalizedCopy>,
 ): PopupSnapshotStatus {
   if (visibleProviders.length === 0) {
@@ -880,20 +891,26 @@ function buildLocalizedSnapshotStatus(
     : hasWarnings || !isAligned
       ? "warning"
       : "neutral";
+  const newestLastSyncLabel = i18n.localizeRelativeRuntimeLabel(
+    newestProvider.lastSyncLabel,
+  );
+  const oldestLastSyncLabel = i18n.localizeRelativeRuntimeLabel(
+    oldestProvider.lastSyncLabel,
+  );
 
   return {
     label,
     tone,
-    headline: newestProvider.lastSyncLabel,
+    headline: newestLastSyncLabel,
     detail: isAligned
       ? visibleProviders.length === 1
         ? copy.snapshotStatus.alignedSingleDetail
         : copy.snapshotStatus.alignedManyDetail(visibleProviders.length)
       : copy.snapshotStatus.mixedDetail(
           newestProvider.providerLabel,
-          newestProvider.lastSyncLabel,
+          newestLastSyncLabel,
           oldestProvider.providerLabel,
-          oldestProvider.lastSyncLabel,
+          oldestLastSyncLabel,
         ),
   };
 }
@@ -1137,7 +1154,7 @@ function buildLocalizedFeaturedProviderCard(
   return {
     provider,
     statusLabel: buildLocalizedFeaturedStatusLabel(provider, copy),
-    metaChips: buildPopupFeaturedMetaChips(provider),
+    metaChips: buildLocalizedPopupFeaturedMetaChips(provider, i18n),
     primaryDetail: buildLocalizedFeaturedPrimaryDetail(provider, copy),
     secondaryDetail: buildPopupFeaturedSecondaryDetail(provider),
     action:
@@ -1420,7 +1437,7 @@ export function localizePopupViewModel(
         label: i18n.t("popup.summary.policy_only"),
       },
     ],
-    snapshotStatus: buildLocalizedSnapshotStatus(visibleProviders, copy),
+    snapshotStatus: buildLocalizedSnapshotStatus(visibleProviders, i18n, copy),
     guidanceCard,
     setupCoverage,
     actionSection: buildLocalizedActionSection(guidanceCard, i18n, copy),

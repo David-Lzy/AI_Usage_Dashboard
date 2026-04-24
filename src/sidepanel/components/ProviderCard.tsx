@@ -24,6 +24,10 @@ export function ProviderCard({
   const showSessionPageContract =
     provider.sessionPageContractLabel !== null &&
     provider.sessionPageContractLabel !== provider.currentSourceContractLabel;
+  const localizedResetLabel = i18n.localizeResetRuntimeLabel(provider.resetLabel);
+  const localizedLastSyncLabel = i18n.localizeRelativeRuntimeLabel(
+    provider.lastSyncLabel,
+  );
   const fidelityChipClassName =
     provider.currentSourceFidelityTone === "error"
       ? "meta-chip meta-chip--error"
@@ -73,7 +77,7 @@ export function ProviderCard({
 
       <div className="provider-card__body">
         <p className="body-copy">{usageLabel}</p>
-        <p className="supporting-copy">{provider.resetLabel}</p>
+        <p className="supporting-copy">{localizedResetLabel}</p>
         <p className="supporting-copy">{provider.currentSourceContractDetail}</p>
 
         <UsageProgress
@@ -89,7 +93,7 @@ export function ProviderCard({
           <span className={fidelityChipClassName}>
             {provider.currentSourceFidelityLabel}
           </span>
-          <span className="meta-chip">{provider.lastSyncLabel}</span>
+          <span className="meta-chip">{localizedLastSyncLabel}</span>
           {provider.currentSourceStateKind === "credential_missing" ||
           provider.currentSourceStateKind === "open_page_required" ||
           provider.currentSourceStateKind === "logged_out" ? (

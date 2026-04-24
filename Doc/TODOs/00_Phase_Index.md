@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [175_Phase_Deeper_Settings_Helper_Localization.md](./Archive/175_Phase_Deeper_Settings_Helper_Localization.md)
+- latest completed slice: [176_Phase_Locale_Aware_Duration_And_Freshness_Labels.md](./Archive/176_Phase_Locale_Aware_Duration_And_Freshness_Labels.md)
 
 Completed phases should be moved to:
 
@@ -222,6 +222,7 @@ Completed phases should be moved to:
 - [173_Phase_Settings_Shell_Localization_And_Locale_Selector.md](./Archive/173_Phase_Settings_Shell_Localization_And_Locale_Selector.md) - completed and archived on 2026-04-24
 - [174_Phase_Popup_Explanatory_Copy_And_Provider_Detail_Shell_Localization.md](./Archive/174_Phase_Popup_Explanatory_Copy_And_Provider_Detail_Shell_Localization.md) - completed and archived on 2026-04-24
 - [175_Phase_Deeper_Settings_Helper_Localization.md](./Archive/175_Phase_Deeper_Settings_Helper_Localization.md) - completed and archived on 2026-04-24
+- [176_Phase_Locale_Aware_Duration_And_Freshness_Labels.md](./Archive/176_Phase_Locale_Aware_Duration_And_Freshness_Labels.md) - completed and archived on 2026-04-24
 
 ## Dependency Notes
 
@@ -447,11 +448,13 @@ Completed phases should be moved to:
 - phase 171 depends on phase 170 because the first runtime shell localization pass needed the shipped manifest locale baseline plus stable runtime message ids before popup and dashboard shell strings could move under one shared helper
 - the 2026-04-24 `Phase 171` closeout shipped one shared runtime i18n helper, persisted locale normalization, and the first localized popup/dashboard shell slice while keeping most deeper runtime copy English
 - phase 172 depends on phase 171 because generated counts, percentages, and parseable timestamp primitives needed the shipped runtime i18n helper plus persisted locale preference before popup, dashboard, and provider-detail surfaces could format values per locale
-- the 2026-04-24 `Phase 172` closeout shipped locale-aware formatting for generated counts, percentages, and parseable timestamp primitives while keeping most deeper body copy English and localized durations pending
+- the 2026-04-24 `Phase 172` closeout shipped locale-aware formatting for generated counts, percentages, and parseable timestamp primitives while keeping most deeper body copy English and duration-bearing freshness/reset labels pending
 - phase 173 depends on phase 172 because the first settings-shell rollout needed both the shared runtime i18n layer and locale-aware generated-value formatting before the locale selector and localized summary strip could land cleanly
 - the 2026-04-24 `Phase 173` closeout localized the first settings-shell slice, added the persisted locale selector, and kept deeper settings helper copy plus provider-detail and popup explanatory copy outside the shipped runtime pilot boundary
 - phase 174 depends on phase 173 because popup explanatory copy plus provider-detail shell/static localization needed the persisted locale selector, shared runtime i18n layer, and locale-aware formatting before the broader `en + zh_CN` pilot could move one level deeper cleanly
 - the 2026-04-24 `Phase 174` closeout localized popup explanatory copy plus provider-detail shell/static copy while keeping deeper settings helper copy, raw provider source-truth detail strings, localized durations, and operator workspaces outside the shipped runtime pilot boundary
+- phase 176 depends on phase 175 because duration-bearing freshness/reset labels needed the broader shared runtime i18n plus structured localized-copy pilot surfaces already wired before popup and dashboard freshness phrasing could localize honestly
+- the 2026-04-24 `Phase 176` closeout localized duration-bearing freshness and reset labels across popup snapshot status, popup featured-provider freshness chips, and dashboard provider cards while keeping compact-width plus RTL hardening, raw provider source-truth detail strings, and operator workspaces outside the next shipped boundary
 
 ## Delivery Standard For Each Phase
 
