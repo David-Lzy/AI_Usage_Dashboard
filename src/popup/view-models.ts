@@ -106,6 +106,10 @@ const DEFAULT_POPUP_SUMMARY_LABELS: PopupSummaryLabels = {
   policyOnly: "Policy-only",
 };
 
+type PopupValueFormatter = (value: number) => string;
+
+const DEFAULT_POPUP_VALUE_FORMATTER: PopupValueFormatter = (value) => String(value);
+
 function pluralize(count: number, singular: string, plural = `${singular}s`) {
   return count === 1 ? singular : plural;
 }
@@ -555,6 +559,7 @@ function buildSetupBlockerSentence(
 
 function buildSetupCoverage(
   visibleProviders: ProviderViewModel[],
+  formatValue: PopupValueFormatter = DEFAULT_POPUP_VALUE_FORMATTER,
 ): PopupSetupCoverage {
   const {
     providerCount,
@@ -576,22 +581,22 @@ function buildSetupCoverage(
       items: [
         {
           label: "Live ready",
-          value: "0",
+          value: formatValue(0),
           tone: "neutral",
         },
         {
           label: "Host access",
-          value: "0",
+          value: formatValue(0),
           tone: "neutral",
         },
         {
           label: "Credentials",
-          value: "0",
+          value: formatValue(0),
           tone: "neutral",
         },
         {
           label: "Policy-only",
-          value: "0",
+          value: formatValue(0),
           tone: "neutral",
         },
       ],
@@ -649,23 +654,23 @@ function buildSetupCoverage(
     items: [
       {
         label: "Live ready",
-        value: String(liveReadyProviders.length),
+        value: formatValue(liveReadyProviders.length),
         tone: liveReadyProviders.length > 0 ? "neutral" : "warning",
       },
       {
         label: "Host access",
-        value: String(providersNeedingAccess.length),
+        value: formatValue(providersNeedingAccess.length),
         tone: providersNeedingAccess.length > 0 ? "warning" : "neutral",
       },
       {
         label: "Credentials",
-        value: String(providersNeedingCredentials.length),
+        value: formatValue(providersNeedingCredentials.length),
         tone:
           providersNeedingCredentials.length > 0 ? "warning" : "neutral",
       },
       {
         label: "Policy-only",
-        value: String(policyOnlyProviders.length),
+        value: formatValue(policyOnlyProviders.length),
         tone: "neutral",
       },
     ],
@@ -699,6 +704,7 @@ function buildPopupSummaryItems(
   visibleProviders: ProviderViewModel[],
   setupCoverage: PopupSetupCoverage,
   labels: PopupSummaryLabels = DEFAULT_POPUP_SUMMARY_LABELS,
+  formatValue: PopupValueFormatter = DEFAULT_POPUP_VALUE_FORMATTER,
 ): SummaryItem[] {
   const stats = buildSetupCoverageStats(visibleProviders);
   const setupBlockerCount =
@@ -707,12 +713,12 @@ function buildPopupSummaryItems(
   return [
     {
       label: labels.visible,
-      value: String(stats.providerCount),
+      value: formatValue(stats.providerCount),
       tone: "neutral",
     },
     {
-      label: "Live ready",
-      value: String(stats.liveReadyProviders.length),
+      label: labels.liveReady,
+      value: formatValue(stats.liveReadyProviders.length),
       tone:
         stats.liveReadyProviders.length > 0 ||
         setupCoverage.statusLabel === "Contract-only" ||
@@ -722,12 +728,12 @@ function buildPopupSummaryItems(
     },
     {
       label: labels.setupBlockers,
-      value: String(setupBlockerCount),
+      value: formatValue(setupBlockerCount),
       tone: setupBlockerCount > 0 ? "warning" : "neutral",
     },
     {
-      label: "Policy-only",
-      value: String(stats.policyOnlyProviders.length),
+      label: labels.policyOnly,
+      value: formatValue(stats.policyOnlyProviders.length),
       tone: "neutral",
     },
   ];
@@ -831,11 +837,12 @@ function buildSurfaceRolesCard(
 export function buildPopupViewModel(
   state: AppState,
   summaryLabels: PopupSummaryLabels = DEFAULT_POPUP_SUMMARY_LABELS,
+  formatValue: PopupValueFormatter = DEFAULT_POPUP_VALUE_FORMATTER,
 ): PopupViewModel {
   const visibleProviders = getVisibleProviders(state);
   const attentionProviders = visibleProviders.filter(needsAttention);
   const guidanceCard = buildGuidanceCard(visibleProviders);
-  const setupCoverage = buildSetupCoverage(visibleProviders);
+  const setupCoverage = buildSetupCoverage(visibleProviders, formatValue);
   const popupProviders =
     attentionProviders.length > 0
       ? attentionProviders.slice(0, 3)
@@ -843,7 +850,7 @@ export function buildPopupViewModel(
 
   return {
     headerDetail: buildPopupHeaderDetail(visibleProviders, setupCoverage),
-    summaryItems: buildPopupSummaryItems(visibleProviders, setupCoverage, summaryLabels),
+    summaryItems: buildPopupSummaryItems(visibleProviders, setupCoverage, summaryLabels, formatValue),
     visibleProviders,
     featuredProviderCards: popupProviders.map(buildPopupFeaturedProviderCard),
     showSnapshotStatus: visibleProviders.length > 0,

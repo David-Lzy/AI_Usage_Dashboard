@@ -83,7 +83,18 @@ Runtime localization now exists for one narrow popup plus dashboard shell slice.
 - the current localized slice covers popup shell and dashboard shell strings plus shared quick theme-toggle labels
 - settings body copy, provider-detail body copy, most popup view-model copy, and operator workspaces still remain outside the shipped localized slice
 - vendor-owned provider-page text stays outside the managed localization catalog
-- locale-aware formatting also stays outside raw message ids so counts, dates, and durations can be formatted per locale in later phases
+- locale-aware formatting also stays outside raw message ids so generated values can be formatted per locale without multiplying message ids
+
+## Locale-Aware Formatting Contract
+
+- locale-aware value formatting now ships through `src/shared/i18n.ts`, not through new message ids
+- the current shipped formatting slice covers generated counts, percentages, and parseable timestamp primitives
+- the current parseable timestamp inputs are limited to:
+  - `YYYY-MM-DD`
+  - `YYYY-MM-DD HH:mm`
+  - those same forms with an explicit trailing `UTC`
+- non-parseable vendor-owned strings such as billing-window labels remain source-truthful raw values for now
+- localized duration and relative-time phrasing still remains future work under `Direction 09`
 
 ## Translation Tiers
 

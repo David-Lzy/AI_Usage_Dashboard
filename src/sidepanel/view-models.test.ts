@@ -57,6 +57,22 @@ describe("sidepanel view models", () => {
     ]);
   });
 
+
+  it("accepts a custom formatter for dashboard summary values", () => {
+    const summaryItems = buildSummaryItems(
+      createState(),
+      undefined,
+      (value) => `#${value}`,
+    );
+
+    expect(summaryItems).toEqual([
+      { label: "Visible", value: "#4", tone: "neutral" },
+      { label: "Healthy", value: "#1", tone: "neutral" },
+      { label: "Needs Access", value: "#0", tone: "neutral" },
+      { label: "Needs Attention", value: "#3", tone: "error" },
+    ]);
+  });
+
   it("maps provider snapshots to user-facing source labels", () => {
     const codex = getProviderViewModel(createState(), "codex");
     const cursor = getProviderViewModel(createState(), "cursor");

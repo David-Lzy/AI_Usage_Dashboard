@@ -11,6 +11,7 @@ Status note:
 - direction created on `2026-04-24`
 - first executable phase landed on `2026-04-24` through `Phase 170`
 - second executable phase landed on `2026-04-24` through `Phase 171`
+- third executable phase landed on `2026-04-24` through `Phase 172`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -80,8 +81,14 @@ Build one maintainable localization architecture that can support manifest strin
   - dates
   - times
   - durations
-- define how compact popup states handle longer localized formats
-- this is now the next repo-owned engineering slice after `Phase 171`
+- first shipped formatting slice landed in `Phase 172` for:
+  - generated counts
+  - percentages
+  - parseable timestamp primitives
+- remaining formatting work still includes:
+  - localized durations
+  - relative freshness phrasing
+  - compact popup QA for longer localized value strings
 
 ### F. Pilot Locales
 
@@ -107,9 +114,9 @@ Build one maintainable localization architecture that can support manifest strin
 1. string inventory and message-id contract - completed in `Phase 170`
 2. manifest `_locales` plus `default_locale` - completed in `Phase 170`
 3. runtime localization layer first shell slice - completed in `Phase 171`
-4. locale-aware formatting - next
-5. broader `en` plus `zh_CN` runtime pilot rollout
-6. compact-width and RTL hardening
+4. locale-aware formatting for generated counts, percentages, and parseable timestamp primitives - completed in `Phase 172`
+5. broader `en` plus `zh_CN` runtime pilot rollout - next
+6. locale-aware durations plus compact-width and RTL hardening
 
 ## Out Of Scope
 

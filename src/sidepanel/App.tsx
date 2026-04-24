@@ -888,6 +888,7 @@ function StandardApp({ locationHash }: StandardAppProps) {
   const summaryItems = buildSummaryItems(
     appState,
     buildDashboardSummaryLabels(runtimeI18n),
+    runtimeI18n.formatNumber,
   );
   const visibleProviders = getVisibleProviders(appState);
   const selectedProvider =
@@ -959,6 +960,7 @@ function StandardApp({ locationHash }: StandardAppProps) {
         />
       ) : route.name === "provider-detail" && selectedProvider ? (
         <ProviderDetailPage
+          localePreference={localePreference}
           provider={selectedProvider}
           onBack={() => navigateToRoute({ name: "dashboard" })}
           themeActionLabel={quickThemeToggleCopy.label}

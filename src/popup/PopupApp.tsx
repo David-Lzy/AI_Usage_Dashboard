@@ -282,6 +282,7 @@ export function PopupApp() {
   const popupModel = buildPopupViewModel(
     loadState.appState,
     buildPopupSummaryLabels(runtimeI18n),
+    runtimeI18n.formatNumber,
   );
   const guidanceCard = popupModel.guidanceCard;
   const quickThemeToggle = buildQuickThemeToggle(

@@ -81,6 +81,7 @@ export function DashboardPage({
             {providers.map((provider) => (
               <ProviderCard
                 key={provider.providerId}
+                localePreference={localePreference}
                 provider={provider}
                 onOpen={onOpenProvider}
                 onRefresh={onRefreshProvider}

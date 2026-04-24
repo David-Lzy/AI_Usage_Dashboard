@@ -15,6 +15,7 @@ Execution note:
 - documentation-only planning expansion landed on `2026-04-24` through `Phase 154`
 - first executable slice landed on `2026-04-24` through `Phase 170`
 - second executable slice landed on `2026-04-24` through `Phase 171`
+- third executable slice landed on `2026-04-24` through `Phase 172`
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
 Process rule:
@@ -52,8 +53,9 @@ As of 2026-04-24:
 - the runtime app now ships one shared localization helper in `src/shared/i18n.ts`
 - locale preference now persists in `AppSettings.locale` with current values `system | en | zh-CN`
 - the current shipped runtime localized slice covers popup shell plus dashboard shell strings and shared quick theme-toggle labels
+- the runtime app now also formats generated counts, percentages, and parseable timestamp primitives per locale
 - the runtime app still does not yet localize most settings copy, provider-detail copy, popup explanatory cards, or operator workspaces
-- the extension still does not yet offer locale-aware number, date, or duration formatting
+- localized durations, relative-time phrasing, and broader body-copy rollout still remain future work
 - popup compact widths are already tight in English, so longer translated strings still need explicit QA before the broader runtime rollout
 - the repo ships maintained i18n references:
   - [I18n_Message_ID_Contract.md](../I18n_Message_ID_Contract.md)
@@ -117,9 +119,9 @@ Recommended rollout:
 1. manifest string inventory plus stable message IDs - shipped in `Phase 170`
 2. manifest localization plumbing - shipped in `Phase 170`
 3. runtime localization layer first shell slice - shipped in `Phase 171`
-4. locale-aware formatting - next
-5. broader `en` plus `zh_CN` runtime pilot rollout
-6. compact-width and RTL hardening
+4. locale-aware formatting for counts, percentages, and parseable timestamp primitives - shipped in `Phase 172`
+5. broader `en` plus `zh_CN` runtime pilot rollout - next
+6. compact-width, duration-format, and RTL hardening
 
 ## References
 

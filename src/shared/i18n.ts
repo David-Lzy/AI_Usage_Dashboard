@@ -75,6 +75,8 @@ export type RuntimeI18n = {
   resolvedLocale: ResolvedAppLocale;
   t: (id: RuntimeMessageId) => string;
   formatNumber: (value: number) => string;
+  formatPercentValue: (value: number) => string;
+  formatTemporalValue: (rawValue: string) => string | null;
 };
 
 const RUNTIME_MESSAGES: Record<ResolvedAppLocale, RuntimeMessages> = {
@@ -220,6 +222,107 @@ function readUiLanguage(reader?: LocaleReader): string | undefined {
   return reader?.navigator?.language ?? (typeof navigator !== "undefined" ? navigator.language : undefined);
 }
 
+type ParsedTemporalValue = {
+  date: Date;
+  mode: "date" | "date-time";
+  utcExplicit: boolean;
+};
+
+function buildUtcDate(
+  year: number,
+  month: number,
+  day: number,
+  hour: number = 0,
+  minute: number = 0,
+): Date {
+  return new Date(Date.UTC(year, month - 1, day, hour, minute));
+}
+
+function parseTemporalValue(rawValue: string): ParsedTemporalValue | null {
+  const normalizedValue = rawValue.trim();
+  let match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(normalizedValue);
+
+  if (match) {
+    return {
+      date: buildUtcDate(Number(match[1]), Number(match[2]), Number(match[3])),
+      mode: "date",
+      utcExplicit: false,
+    };
+  }
+
+  match = /^(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2})$/.exec(normalizedValue);
+
+  if (match) {
+    return {
+      date: buildUtcDate(
+        Number(match[1]),
+        Number(match[2]),
+        Number(match[3]),
+        Number(match[4]),
+        Number(match[5]),
+      ),
+      mode: "date-time",
+      utcExplicit: false,
+    };
+  }
+
+  match = /^(\d{4})-(\d{2})-(\d{2})\s+UTC$/.exec(normalizedValue);
+
+  if (match) {
+    return {
+      date: buildUtcDate(Number(match[1]), Number(match[2]), Number(match[3])),
+      mode: "date",
+      utcExplicit: true,
+    };
+  }
+
+  match = /^(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2})\s+UTC$/.exec(normalizedValue);
+
+  if (match) {
+    return {
+      date: buildUtcDate(
+        Number(match[1]),
+        Number(match[2]),
+        Number(match[3]),
+        Number(match[4]),
+        Number(match[5]),
+      ),
+      mode: "date-time",
+      utcExplicit: true,
+    };
+  }
+
+  return null;
+}
+
+function formatTemporalValue(
+  locale: ResolvedAppLocale,
+  rawValue: string,
+): string | null {
+  const parsedValue = parseTemporalValue(rawValue);
+
+  if (!parsedValue) {
+    return null;
+  }
+
+  const options =
+    parsedValue.mode === "date"
+      ? {
+          dateStyle: "medium" as const,
+          timeZone: "UTC",
+        }
+      : {
+          dateStyle: "medium" as const,
+          timeStyle: "short" as const,
+          timeZone: "UTC",
+        };
+  const formattedValue = new Intl.DateTimeFormat(locale, options).format(
+    parsedValue.date,
+  );
+
+  return parsedValue.utcExplicit ? `${formattedValue} UTC` : formattedValue;
+}
+
 export function normalizeAppLocalePreference(value: unknown): AppLocalePreference {
   return value === "system" || value === "en" || value === "zh-CN"
     ? value
@@ -251,6 +354,12 @@ export function createRuntimeI18n(
     resolvedLocale,
     t: (id) => RUNTIME_MESSAGES[resolvedLocale][id] ?? RUNTIME_MESSAGES.en[id],
     formatNumber: (value) => new Intl.NumberFormat(resolvedLocale).format(value),
+    formatPercentValue: (value) =>
+      new Intl.NumberFormat(resolvedLocale, {
+        style: "percent",
+        maximumFractionDigits: 0,
+      }).format(value / 100),
+    formatTemporalValue: (rawValue) => formatTemporalValue(resolvedLocale, rawValue),
   };
 }
 

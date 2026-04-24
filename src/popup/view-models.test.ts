@@ -59,6 +59,29 @@ describe("popup view models", () => {
     expect(model.showSnapshotStatus).toBe(true);
   });
 
+
+  it("applies localized summary labels and custom formatting to popup counts", () => {
+    const model = buildPopupViewModel(
+      SAMPLE_APP_STATE,
+      {
+        visible: "可见",
+        liveReady: "可实时同步",
+        setupBlockers: "配置阻塞",
+        policyOnly: "仅策略",
+      },
+      (value) => `#${value}`,
+    );
+
+    expect(model.summaryItems.map((item) => item.label)).toEqual([
+      "可见",
+      "可实时同步",
+      "配置阻塞",
+      "仅策略",
+    ]);
+    expect(model.summaryItems.every((item) => item.value.startsWith("#"))).toBe(true);
+    expect(model.setupCoverage.items.every((item) => item.value.startsWith("#"))).toBe(true);
+  });
+
   it("marks aligned popup snapshots when visible providers share one fresh state", () => {
     const model = buildPopupViewModel({
       ...SAMPLE_APP_STATE,

@@ -225,7 +225,8 @@ Phase status update:
 - the store-asset line still retains one real manual native-toolbar popup capture dependency under `Doc/Roadmap/10_3_Store_Asset_Pack_And_Submission_TODOs.md`
 - `Phase 170` completed the first `Direction 09` slice by shipping one manifest locale bootstrap baseline plus one message-id contract and one string inventory
 - `Phase 171` completed the next `Direction 09` slice by shipping one shared runtime i18n helper, persisted locale normalization, and the first localized popup/dashboard shell slice while keeping broader settings, provider-detail, popup body copy, and operator workspaces English for now
-- the immediate next repo-owned engineering work is now the runtime localization layer under `Doc/Roadmap/09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md`
+- `Phase 172` completed the next `Direction 09` slice by shipping locale-aware formatting for generated counts, percentages, and parseable timestamp primitives across popup, dashboard, and provider-detail surfaces while keeping most deeper body copy and durations pending
+- the immediate next repo-owned engineering work is now the broader `en` plus `zh_CN` runtime pilot rollout under `Doc/Roadmap/09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
 - the split `Phase 41` release gate cleared the old runtime-parity ambiguity and re-proved the live `Codex` plus `Cursor` personal session-page paths in real Chrome

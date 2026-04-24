@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [171_Phase_Runtime_Localization_Layer_And_First_Shell_Strings.md](./Archive/171_Phase_Runtime_Localization_Layer_And_First_Shell_Strings.md)
+- latest completed slice: [172_Phase_Locale_Aware_Runtime_Value_Formatting.md](./Archive/172_Phase_Locale_Aware_Runtime_Value_Formatting.md)
 
 Completed phases should be moved to:
 
@@ -215,6 +215,10 @@ Completed phases should be moved to:
 - [166_Phase_Manual_Store_Screenshot_Import_And_Request_Refresh.md](./Archive/166_Phase_Manual_Store_Screenshot_Import_And_Request_Refresh.md) - completed and archived on 2026-04-24
 - [167_Phase_Generated_Manual_Popup_Notes_Template_And_Checklist.md](./Archive/167_Phase_Generated_Manual_Popup_Notes_Template_And_Checklist.md) - completed and archived on 2026-04-24
 - [168_Phase_Request_Bound_Store_Screenshot_Completion_Defaults.md](./Archive/168_Phase_Request_Bound_Store_Screenshot_Completion_Defaults.md) - completed and archived on 2026-04-24
+- [169_Phase_Request_Bound_Manual_Screenshot_Finalize_Command.md](./Archive/169_Phase_Request_Bound_Manual_Screenshot_Finalize_Command.md) - completed and archived on 2026-04-24
+- [170_Phase_Manifest_Locale_Bootstrap_And_Message_ID_Contract.md](./Archive/170_Phase_Manifest_Locale_Bootstrap_And_Message_ID_Contract.md) - completed and archived on 2026-04-24
+- [171_Phase_Runtime_Localization_Layer_And_First_Shell_Strings.md](./Archive/171_Phase_Runtime_Localization_Layer_And_First_Shell_Strings.md) - completed and archived on 2026-04-24
+- [172_Phase_Locale_Aware_Runtime_Value_Formatting.md](./Archive/172_Phase_Locale_Aware_Runtime_Value_Formatting.md) - completed and archived on 2026-04-24
 
 ## Dependency Notes
 
@@ -438,6 +442,8 @@ Completed phases should be moved to:
 - the 2026-04-24 `Phase 170` closeout localized manifest-owned Chrome surfaces and formalized the maintained message-id contract plus baseline string inventory for future runtime extraction work
 - phase 171 depends on phase 170 because the first runtime shell localization pass needed the shipped manifest locale baseline plus stable runtime message ids before popup and dashboard shell strings could move under one shared helper
 - the 2026-04-24 `Phase 171` closeout shipped one shared runtime i18n helper, persisted locale normalization, and the first localized popup/dashboard shell slice while keeping most deeper runtime copy English
+- phase 172 depends on phase 171 because generated counts, percentages, and parseable timestamp primitives needed the shipped runtime i18n helper plus persisted locale preference before popup, dashboard, and provider-detail surfaces could format values per locale
+- the 2026-04-24 `Phase 172` closeout shipped locale-aware formatting for generated counts, percentages, and parseable timestamp primitives while keeping most deeper body copy English and localized durations pending
 
 ## Delivery Standard For Each Phase
 

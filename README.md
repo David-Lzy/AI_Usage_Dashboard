@@ -40,8 +40,8 @@ Security posture for this track:
 
 Next execution queue:
 
-1. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
-2. continue [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
+1. continue [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
+2. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining manual store-popup capture dependency
 3. continue [Direction 08 - Documentation Completion And Truth Audit](./Doc/Roadmap/08_Direction_Documentation_Completion_And_Truth_Audit.md) in maintenance mode only when new doc families drift
 
 ## Source Labels
@@ -209,10 +209,11 @@ The Chrome action now opens a compact popup first:
 - the repo now also ships one manifest-level i18n bootstrap baseline:
   - `src/manifest.json` now uses `default_locale = en` plus `__MSG_...__` keys for extension name, description, and action title
   - `public/_locales/en/messages.json` and `public/_locales/zh_CN/messages.json` now ship the first manifest catalogs
-- the repo now also ships the first runtime i18n shell slice:
+- the repo now also ships the first runtime i18n shell slice plus the first locale-aware formatting slice:
   - `src/shared/i18n.ts` now resolves `system | en | zh-CN` locale preference for runtime surfaces
   - popup and dashboard shell strings plus quick theme-toggle labels now localize to `en` and `zh_CN`
-  - most settings, provider-detail, popup explanatory copy, and operator workspaces still remain English
+  - generated counts, percentages, and parseable reset/sync timestamp primitives now also format per locale across popup, dashboard, and provider-detail surfaces
+  - most settings, provider-detail, popup explanatory copy, localized durations, and operator workspaces still remain English
 - the popup runtime now also ships one explicit host-width contract for real Chrome action-popup rendering, so the browser no longer has to guess popup width from the document body
 - the popup runtime now also ships one static bootstrap width contract in [src/popup/index.html](./src/popup/index.html), and repo-backed tool commands now prefer the local Node runtime through [scripts/with-preferred-node.sh](./scripts/with-preferred-node.sh) instead of relying on the older Cursor-bundled `node`
 - the repo now also ships one shared route-entry contract for the future full-page shell through `src/sidepanel/index.html?surface=full-page#...`, so popup and sidebar expand controls can target one route-preserving tab surface without duplicating the main app entry

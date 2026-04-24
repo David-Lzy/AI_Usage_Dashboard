@@ -1,19 +1,26 @@
-import type { ProviderId } from "../../providers/types";
+import type { AppLocalePreference, ProviderId } from "../../providers/types";
+import { createRuntimeI18n } from "../../shared/i18n";
 import type { ProviderViewModel } from "../view-models";
 import { StatusBadge } from "./StatusBadge";
 import { UsageProgress } from "./UsageProgress";
 
 type ProviderCardProps = {
+  localePreference: AppLocalePreference;
   provider: ProviderViewModel;
   onOpen: (providerId: ProviderId) => void;
   onRefresh: (providerId: ProviderId) => void;
 };
 
 export function ProviderCard({
+  localePreference,
   provider,
   onOpen,
   onRefresh,
 }: ProviderCardProps) {
+  const i18n = createRuntimeI18n(
+    localePreference,
+    typeof window !== "undefined" ? window : undefined,
+  );
   const showSessionPageContract =
     provider.sessionPageContractLabel !== null &&
     provider.sessionPageContractLabel !== provider.currentSourceContractLabel;
@@ -26,18 +33,18 @@ export function ProviderCard({
   const usageLabel =
     provider.quotaUnit === "percent"
       ? provider.used !== null && provider.remaining !== null
-        ? `${provider.used}% used · ${provider.remaining}% remaining`
+        ? `${i18n.formatPercentValue(provider.used)} used · ${i18n.formatPercentValue(provider.remaining)} remaining`
         : provider.used !== null
-          ? `${provider.used}% used`
+          ? `${i18n.formatPercentValue(provider.used)} used`
           : provider.remaining !== null
-            ? `${provider.remaining}% remaining`
+            ? `${i18n.formatPercentValue(provider.remaining)} remaining`
             : "Usage window percent unavailable"
       : provider.used !== null && provider.total !== null
-        ? `${provider.used} / ${provider.total} ${provider.quotaUnit}`
+        ? `${i18n.formatNumber(provider.used)} / ${i18n.formatNumber(provider.total)} ${provider.quotaUnit}`
         : provider.used !== null
-          ? `${provider.used} ${provider.quotaUnit} tracked`
+          ? `${i18n.formatNumber(provider.used)} ${provider.quotaUnit} tracked`
           : provider.total !== null
-            ? `Unknown / ${provider.total} ${provider.quotaUnit}`
+            ? `Unknown / ${i18n.formatNumber(provider.total)} ${provider.quotaUnit}`
             : `Usage unknown · ${provider.quotaUnit}`;
 
   return (

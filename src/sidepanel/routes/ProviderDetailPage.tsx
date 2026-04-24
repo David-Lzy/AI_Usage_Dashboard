@@ -1,10 +1,12 @@
-import type { ProviderId } from "../../providers/types";
+import type { AppLocalePreference, ProviderId } from "../../providers/types";
+import { createRuntimeI18n } from "../../shared/i18n";
 import { StatusBadge } from "../components/StatusBadge";
 import { TopBar } from "../components/TopBar";
 import { UsageProgress } from "../components/UsageProgress";
 import type { ProviderViewModel } from "../view-models";
 
 type ProviderDetailPageProps = {
+  localePreference: AppLocalePreference;
   provider: ProviderViewModel;
   onBack: () => void;
   themeActionLabel?: string;
@@ -15,6 +17,7 @@ type ProviderDetailPageProps = {
 };
 
 export function ProviderDetailPage({
+  localePreference,
   provider,
   onBack,
   themeActionLabel,
@@ -23,6 +26,10 @@ export function ProviderDetailPage({
   onOpenFullPage,
   onRefresh,
 }: ProviderDetailPageProps) {
+  const i18n = createRuntimeI18n(
+    localePreference,
+    typeof window !== "undefined" ? window : undefined,
+  );
   const showSessionPageContract =
     provider.sessionPageContractLabel !== null &&
     (provider.sessionPageContractLabel !== provider.currentSourceContractLabel ||
@@ -37,28 +44,30 @@ export function ProviderDetailPage({
   const usageValue =
     provider.quotaUnit === "percent"
       ? provider.used !== null && provider.remaining !== null
-        ? `${provider.used}% used · ${provider.remaining}% remaining`
+        ? `${i18n.formatPercentValue(provider.used)} used · ${i18n.formatPercentValue(provider.remaining)} remaining`
         : provider.used !== null
-          ? `${provider.used}% used`
+          ? `${i18n.formatPercentValue(provider.used)} used`
           : provider.remaining !== null
-            ? `${provider.remaining}% remaining`
+            ? `${i18n.formatPercentValue(provider.remaining)} remaining`
             : "Unknown usage-window percentage"
       : provider.used !== null && provider.total !== null
-        ? `${provider.used} / ${provider.total} ${provider.quotaUnit}`
+        ? `${i18n.formatNumber(provider.used)} / ${i18n.formatNumber(provider.total)} ${provider.quotaUnit}`
         : provider.used !== null
-          ? `${provider.used} ${provider.quotaUnit} tracked`
+          ? `${i18n.formatNumber(provider.used)} ${provider.quotaUnit} tracked`
           : provider.total !== null
-            ? `Unknown / ${provider.total} ${provider.quotaUnit}`
+            ? `Unknown / ${i18n.formatNumber(provider.total)} ${provider.quotaUnit}`
             : `Unknown ${provider.quotaUnit}`;
 
   const remainingValue =
     provider.quotaUnit === "percent" && provider.remaining !== null
-      ? `${provider.remaining}% remaining`
+      ? `${i18n.formatPercentValue(provider.remaining)} remaining`
       : provider.remaining !== null
-      ? `${provider.remaining} ${provider.quotaUnit}`
+      ? `${i18n.formatNumber(provider.remaining)} ${provider.quotaUnit}`
       : provider.used !== null && provider.total === null
         ? "Not available from this source"
       : "Unknown";
+  const formattedResetAt = i18n.formatTemporalValue(provider.resetAt) ?? provider.resetAt;
+  const formattedSyncedAt = i18n.formatTemporalValue(provider.syncedAt) ?? provider.syncedAt;
   const fidelityNoteToneClassName =
     provider.currentSourceFidelityTone === "error"
       ? "detail-note--error"
@@ -146,7 +155,7 @@ export function ProviderDetailPage({
           </div>
           <div className="detail-field">
             <p className="detail-field__label">Reset time</p>
-            <p className="detail-field__value">{provider.resetAt}</p>
+            <p className="detail-field__value">{formattedResetAt}</p>
           </div>
           <div className="detail-field">
             <p className="detail-field__label">Source preference</p>
@@ -276,7 +285,7 @@ export function ProviderDetailPage({
           </div>
           <div className="detail-field">
             <p className="detail-field__label">Last sync</p>
-            <p className="detail-field__value">{provider.syncedAt}</p>
+            <p className="detail-field__value">{formattedSyncedAt}</p>
           </div>
           <div className="detail-field">
             <p className="detail-field__label">Host access</p>

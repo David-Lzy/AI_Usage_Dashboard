@@ -40,4 +40,24 @@ describe("runtime i18n", () => {
       title: "切换到白天模式",
     });
   });
+
+
+  it("formats percentages and parseable temporal primitives per locale", () => {
+    const i18n = createRuntimeI18n("zh-CN");
+
+    expect(i18n.formatPercentValue(62)).toBe("62%");
+    expect(i18n.formatTemporalValue("2026-04-26 09:00")).not.toBe(
+      "2026-04-26 09:00",
+    );
+    expect(i18n.formatTemporalValue("2026-04-26 09:00")).toContain("2026");
+  });
+
+  it("preserves explicit UTC markers and rejects non-parseable temporal strings", () => {
+    const i18n = createRuntimeI18n("en");
+    const formattedUtc = i18n.formatTemporalValue("2026-04-20 UTC");
+
+    expect(formattedUtc).toContain("2026");
+    expect(formattedUtc?.endsWith("UTC")).toBe(true);
+    expect(i18n.formatTemporalValue("Current billing period")).toBeNull();
+  });
 });

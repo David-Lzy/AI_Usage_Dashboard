@@ -80,6 +80,11 @@ const DEFAULT_DASHBOARD_SUMMARY_LABELS: DashboardSummaryLabels = {
   needsAttention: "Needs Attention",
 };
 
+type SummaryValueFormatter = (value: number) => string;
+
+const DEFAULT_SUMMARY_VALUE_FORMATTER: SummaryValueFormatter = (value) =>
+  String(value);
+
 const SYNC_STATUS_PRIORITY: Record<SyncStatus, number> = {
   error: 0,
   warning: 1,
@@ -273,6 +278,7 @@ export function getProviderViewModel(
 export function buildSummaryItems(
   state: AppState,
   labels: DashboardSummaryLabels = DEFAULT_DASHBOARD_SUMMARY_LABELS,
+  formatValue: SummaryValueFormatter = DEFAULT_SUMMARY_VALUE_FORMATTER,
 ): SummaryItem[] {
   const visibleProviders = getVisibleProviders(state);
   const healthyCount = visibleProviders.filter(
@@ -290,22 +296,22 @@ export function buildSummaryItems(
   return [
     {
       label: labels.visible,
-      value: String(visibleProviders.length),
+      value: formatValue(visibleProviders.length),
       tone: "neutral",
     },
     {
       label: labels.healthy,
-      value: String(healthyCount),
+      value: formatValue(healthyCount),
       tone: healthyCount > 0 ? "neutral" : "warning",
     },
     {
       label: labels.needsAccess,
-      value: String(accessGapCount),
+      value: formatValue(accessGapCount),
       tone: accessGapCount > 0 ? "warning" : "neutral",
     },
     {
       label: labels.needsAttention,
-      value: String(attentionCount),
+      value: formatValue(attentionCount),
       tone: attentionCount > 0 ? "error" : "neutral",
     },
   ];
