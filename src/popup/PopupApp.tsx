@@ -9,6 +9,7 @@ import {
   DEFAULT_APP_LOCALE_PREFERENCE,
   getQuickThemeToggleCopy,
 } from "../shared/i18n";
+import { buildPopupLocalizedCopy } from "../shared/localized-copy";
 import {
   buildFullPageExtensionPath,
   buildFullPagePreviewUrl,
@@ -23,7 +24,11 @@ import {
 import { SummaryStrip } from "../sidepanel/components/SummaryStrip";
 import { StatusBadge } from "../sidepanel/components/StatusBadge";
 import { buildSidePanelHash, type SidePanelRouteState } from "../sidepanel/route-state";
-import { buildPopupViewModel, type PopupGuidanceAction } from "./view-models";
+import {
+  buildPopupViewModel,
+  localizePopupViewModel,
+  type PopupGuidanceAction,
+} from "./view-models";
 
 type PopupLoadState =
   | { status: "loading" }
@@ -279,10 +284,14 @@ export function PopupApp() {
     );
   }
 
-  const popupModel = buildPopupViewModel(
-    loadState.appState,
-    buildPopupSummaryLabels(runtimeI18n),
-    runtimeI18n.formatNumber,
+  const popupCopy = buildPopupLocalizedCopy(runtimeI18n);
+  const popupModel = localizePopupViewModel(
+    buildPopupViewModel(
+      loadState.appState,
+      buildPopupSummaryLabels(runtimeI18n),
+      runtimeI18n.formatNumber,
+    ),
+    runtimeI18n,
   );
   const guidanceCard = popupModel.guidanceCard;
   const quickThemeToggle = buildQuickThemeToggle(
@@ -406,7 +415,7 @@ export function PopupApp() {
         </p>
         <div data-popup-setup-coverage-grid>
           <SummaryStrip
-            ariaLabel="Popup setup coverage"
+            ariaLabel={popupCopy.aria.setupCoverage}
             items={popupModel.setupCoverage.items}
           />
         </div>
@@ -493,7 +502,7 @@ export function PopupApp() {
         </div>
 
         {popupModel.featuredProviderCards.length > 0 ? (
-          <div className="popup-provider-list" aria-label="Popup featured providers">
+          <div className="popup-provider-list" aria-label={popupCopy.aria.featuredProviders}>
             {popupModel.featuredProviderCards.map((card, index) => {
               const { provider } = card;
 

@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [173_Phase_Settings_Shell_Localization_And_Locale_Selector.md](./Archive/173_Phase_Settings_Shell_Localization_And_Locale_Selector.md)
+- latest completed slice: [174_Phase_Popup_Explanatory_Copy_And_Provider_Detail_Shell_Localization.md](./Archive/174_Phase_Popup_Explanatory_Copy_And_Provider_Detail_Shell_Localization.md)
 
 Completed phases should be moved to:
 
@@ -220,6 +220,7 @@ Completed phases should be moved to:
 - [171_Phase_Runtime_Localization_Layer_And_First_Shell_Strings.md](./Archive/171_Phase_Runtime_Localization_Layer_And_First_Shell_Strings.md) - completed and archived on 2026-04-24
 - [172_Phase_Locale_Aware_Runtime_Value_Formatting.md](./Archive/172_Phase_Locale_Aware_Runtime_Value_Formatting.md) - completed and archived on 2026-04-24
 - [173_Phase_Settings_Shell_Localization_And_Locale_Selector.md](./Archive/173_Phase_Settings_Shell_Localization_And_Locale_Selector.md) - completed and archived on 2026-04-24
+- [174_Phase_Popup_Explanatory_Copy_And_Provider_Detail_Shell_Localization.md](./Archive/174_Phase_Popup_Explanatory_Copy_And_Provider_Detail_Shell_Localization.md) - completed and archived on 2026-04-24
 
 ## Dependency Notes
 
@@ -447,6 +448,8 @@ Completed phases should be moved to:
 - the 2026-04-24 `Phase 172` closeout shipped locale-aware formatting for generated counts, percentages, and parseable timestamp primitives while keeping most deeper body copy English and localized durations pending
 - phase 173 depends on phase 172 because the first settings-shell rollout needed both the shared runtime i18n layer and locale-aware generated-value formatting before the locale selector and localized summary strip could land cleanly
 - the 2026-04-24 `Phase 173` closeout localized the first settings-shell slice, added the persisted locale selector, and kept deeper settings helper copy plus provider-detail and popup explanatory copy outside the shipped runtime pilot boundary
+- phase 174 depends on phase 173 because popup explanatory copy plus provider-detail shell/static localization needed the persisted locale selector, shared runtime i18n layer, and locale-aware formatting before the broader `en + zh_CN` pilot could move one level deeper cleanly
+- the 2026-04-24 `Phase 174` closeout localized popup explanatory copy plus provider-detail shell/static copy while keeping deeper settings helper copy, raw provider source-truth detail strings, localized durations, and operator workspaces outside the shipped runtime pilot boundary
 
 ## Delivery Standard For Each Phase
 

@@ -17,6 +17,7 @@ Execution note:
 - second executable slice landed on `2026-04-24` through `Phase 171`
 - third executable slice landed on `2026-04-24` through `Phase 172`
 - fourth executable slice landed on `2026-04-24` through `Phase 173`
+- fifth executable slice landed on `2026-04-24` through `Phase 174`
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
 Process rule:
@@ -52,19 +53,25 @@ As of 2026-04-24:
 - the manifest defines `default_locale = en`
 - the repo ships `_locales/en` plus `_locales/zh_CN` for manifest-level Chrome surfaces
 - the runtime app now ships one shared localization helper in `src/shared/i18n.ts`
+- the runtime app now also ships one shared structured-copy helper in `src/shared/localized-copy.ts`
 - locale preference now persists in `AppSettings.locale` with current values `system | en | zh-CN`
-- the current shipped runtime localized slice covers popup shell, dashboard shell, and the first settings-shell slice
-- the settings-shell slice now includes:
+- the current shipped runtime localized slice covers:
+  - popup shell
+  - popup explanatory copy
+  - dashboard shell
+  - the first settings-shell slice
+  - provider-detail shell and static copy
+  - shared quick theme-toggle labels
+- the current settings-shell slice includes:
   - settings top bar and actions
   - settings overview card
   - settings section navigation
   - settings summary-strip labels
   - global preferences labels, locale selector labels, and theme preset labels
-  - top-level credentials, sources, and permissions section headings
+  - top-level section headings
   - the preferences-saved toast
-- the runtime app now also formats generated counts, percentages, and parseable timestamp primitives per locale
-- the runtime app still does not yet localize most provider-detail copy, most popup explanatory cards, deeper settings helper copy, or operator workspaces
-- localized durations, relative-time phrasing, and broader body-copy rollout still remain future work
+- the runtime app now also formats generated counts, percentages, and parseable `resetAt / syncedAt` timestamp values per locale
+- the runtime app still does not yet localize deeper settings helper copy, localized durations, operator workspaces, or raw provider source-truth detail strings that intentionally remain closer to the underlying source contract
 - popup compact widths are already tight in English, so longer translated strings still need explicit QA before the broader runtime rollout
 - the repo ships maintained i18n references:
   - [I18n_Message_ID_Contract.md](../I18n_Message_ID_Contract.md)
@@ -130,8 +137,8 @@ Recommended rollout:
 3. runtime localization layer first shell slice - shipped in `Phase 171`
 4. locale-aware formatting for counts, percentages, and parseable timestamp primitives - shipped in `Phase 172`
 5. settings-shell pilot rollout plus locale selector - shipped in `Phase 173`
-6. provider-detail, popup explanatory, and deeper settings-copy rollout - next
-7. compact-width, duration-format, and RTL hardening
+6. popup explanatory copy plus provider-detail shell/static copy rollout - shipped in `Phase 174`
+7. deeper settings helper copy plus duration/RTL hardening - next
 
 ## References
 

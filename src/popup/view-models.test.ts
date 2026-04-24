@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import { SAMPLE_APP_STATE } from "../shared/constants";
-import { buildPopupViewModel } from "./view-models";
+import { createRuntimeI18n } from "../shared/i18n";
+import { buildPopupViewModel, localizePopupViewModel } from "./view-models";
 
 describe("popup view models", () => {
   it("prioritizes providers needing attention in the compact popup list", () => {
@@ -906,4 +907,87 @@ describe("popup view models", () => {
       },
     });
   });
+
+  it("localizes popup explanatory copy for the zh-CN pilot rollout", () => {
+    const i18n = createRuntimeI18n("zh-CN");
+    const model = localizePopupViewModel(
+      buildPopupViewModel({
+        ...SAMPLE_APP_STATE,
+        providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
+          ...provider,
+          enabled: false,
+        })),
+      }),
+      i18n,
+    );
+
+    expect(model.guidanceCard).toEqual({
+      label: "从这里开始",
+      tone: "warning",
+      headline: "先在设置里启用一个 provider",
+      detail:
+        "至少有一个 provider 可见之后，这个 popup 才真正有用。先去设置里启用，再回来做一键状态检查和分诊。",
+      action: {
+        kind: "settings",
+        label: "打开设置",
+      },
+    });
+    expect(model.setupCoverage).toEqual({
+      label: "配置覆盖面",
+      statusLabel: "开始配置",
+      tone: "warning",
+      headline: "还没有可见 provider 已配置",
+      detail:
+        "先在设置里启用一个 provider。之后这张卡会显示当前可见 provider 是 live-ready、被配置阻塞，还是仅策略。",
+      items: [
+        {
+          label: "可实时同步",
+          value: "0",
+          tone: "neutral",
+        },
+        {
+          label: "Host access",
+          value: "0",
+          tone: "neutral",
+        },
+        {
+          label: "凭据",
+          value: "0",
+          tone: "neutral",
+        },
+        {
+          label: "仅策略",
+          value: "0",
+          tone: "neutral",
+        },
+      ],
+    });
+    expect(model.actionSection).toEqual({
+      label: "其他入口",
+      detail:
+        "主要下一步已经在上面。若你想先看更完整的多 provider 视图，再去 dashboard。",
+      actions: [
+        {
+          kind: "dashboard",
+          label: "打开仪表板",
+        },
+      ],
+    });
+    expect(model.surfaceRolesCard).toEqual({
+      label: "Surface roles",
+      headline: "Settings 负责配置",
+      detail:
+        "用 settings 启用 provider、授予 host access、补充凭据。至少有一个 provider 可见之后，dashboard 才真正开始有意义。",
+    });
+    expect(model.featuredSection).toEqual({
+      label: "Provider 分诊",
+      headline: "还没有可分诊内容",
+      detail:
+        "至少有一个 provider 在设置里可见之后，这个区域才会变得可操作。",
+      emptyStateHeadline: "还没有 provider 卡片",
+      emptyStateDetail:
+        "先在设置里启用一个 provider，再回来做一键 provider 分诊。",
+    });
+  });
+
 });

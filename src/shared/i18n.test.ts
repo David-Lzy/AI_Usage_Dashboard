@@ -7,6 +7,10 @@ import {
   normalizeAppLocalePreference,
   resolveAppLocale,
 } from "./i18n";
+import {
+  buildPopupLocalizedCopy,
+  buildProviderDetailLocalizedCopy,
+} from "./localized-copy";
 
 describe("runtime i18n", () => {
   it("normalizes unknown locale preferences back to system", () => {
@@ -73,6 +77,18 @@ describe("runtime i18n", () => {
       boundPages: "已绑定页面",
       needsAccess: "需授权",
     });
+  });
+
+
+  it("returns zh-CN structured popup and provider-detail copy builders", () => {
+    const i18n = createRuntimeI18n("zh-CN");
+    const popupCopy = buildPopupLocalizedCopy(i18n);
+    const providerDetailCopy = buildProviderDetailLocalizedCopy(i18n);
+
+    expect(popupCopy.actionSection.otherRouteLabel).toBe("其他入口");
+    expect(popupCopy.featuredCard.statusNeedsAccess).toBe("需授权");
+    expect(providerDetailCopy.sections.providerDetail).toBe("Provider 详情");
+    expect(providerDetailCopy.notes.accessStatus).toBe("访问状态");
   });
 
 });

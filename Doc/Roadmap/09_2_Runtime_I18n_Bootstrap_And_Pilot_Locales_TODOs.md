@@ -13,6 +13,7 @@ Status note:
 - second executable phase landed on `2026-04-24` through `Phase 171`
 - third executable phase landed on `2026-04-24` through `Phase 172`
 - fourth executable phase landed on `2026-04-24` through `Phase 173`
+- fifth executable phase landed on `2026-04-24` through `Phase 174`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -40,14 +41,16 @@ Build one maintainable localization architecture that can support manifest strin
   - review workspaces
   - runbook-adjacent runtime copy that later appears in screenshots
 - distinguish stable product-contract strings from more change-prone helper copy
-- baseline shipped in `Phase 170`, then refreshed in `Phase 171` and `Phase 173` as the runtime localized slice grew
+- baseline shipped in `Phase 170`, then refreshed in `Phase 171`, `Phase 173`, and `Phase 174` as the runtime localized slice grew
 
 ### B. Stable Message-ID Policy
 
 - define one message-id naming scheme
 - keep manifest IDs and runtime IDs aligned where they represent the same product concept
 - define how future copy edits preserve ID stability
-- baseline shipped in `Phase 170`; runtime ids expanded in `Phase 171` and `Phase 173`
+- baseline shipped in `Phase 170`
+- runtime shell ids expanded in `Phase 171` and `Phase 173`
+- `Phase 174` kept runtime id growth intentionally narrow by moving popup/provider-detail explanatory copy under one structured localized-copy helper instead of creating one id per sentence
 
 ### C. Manifest Localization Plumbing
 
@@ -68,10 +71,11 @@ Build one maintainable localization architecture that can support manifest strin
   - persisted `AppSettings.locale`
   - popup shell plus dashboard shell localization
   - shared quick theme-toggle localization
+- settings-shell slice shipped in `Phase 173`
+- popup explanatory plus provider-detail shell/static slice shipped in `Phase 174`
 - remaining work:
   - deeper settings helper copy
-  - provider-detail body copy
-  - popup explanatory cards
+  - raw provider source-truth detail strings that should stay explicit but still need a deliberate localization policy
   - operator workspaces
 
 ### E. Locale-Aware Formatting
@@ -104,11 +108,26 @@ Build one maintainable localization architecture that can support manifest strin
   - theme mode and accent preset labels
   - top-level credentials, sources, and permissions section headings
   - preferences-saved toast copy
-- truth boundary preserved in `Phase 173`:
-  - deeper source-card diagnostics remain English
-  - credential help paragraphs remain English
-  - provider-detail and most popup explanatory copy remain English
+
+### E.2 Popup Explanatory And Provider-Detail Shell Rollout
+
+- broader runtime pilot rollout continued in `Phase 174`
+- shipped popup/provider-detail scope now includes:
+  - popup guidance-card copy
+  - popup setup-coverage labels and detail
+  - popup snapshot-status copy
+  - popup featured-section and featured-card story copy
+  - popup action-section detail and surface-roles copy
+  - popup explanatory aria labels
+  - provider-detail top bar subtitle and expand title
+  - provider-detail section labels, field labels, note labels, note prefixes, and helper value labels
+  - provider-detail localized status badge and localized helper values such as granted/missing/unknown
+  - provider-detail hero explanatory paragraph
+- truth boundary preserved in `Phase 174`:
+  - deeper settings helper copy remains English
+  - raw provider source-truth detail strings still intentionally remain closer to underlying source output
   - localized durations still remain future work
+  - operator workspaces remain English
 
 ### F. Pilot Locales
 
@@ -136,8 +155,8 @@ Build one maintainable localization architecture that can support manifest strin
 3. runtime localization layer first shell slice - completed in `Phase 171`
 4. locale-aware formatting for generated counts, percentages, and parseable timestamp primitives - completed in `Phase 172`
 5. settings shell, overview, and locale selector rollout - completed in `Phase 173`
-6. provider-detail, popup explanatory, and deeper settings-copy rollout - next
-7. locale-aware durations plus compact-width and RTL hardening
+6. popup explanatory copy plus provider-detail shell/static rollout - completed in `Phase 174`
+7. deeper settings helper copy plus locale-aware durations, compact-width review, and RTL hardening - next
 
 ## Out Of Scope
 

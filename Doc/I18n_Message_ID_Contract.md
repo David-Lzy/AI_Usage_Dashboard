@@ -33,6 +33,7 @@ Keep manifest and runtime localization on one stable naming contract so later co
   - `settings.preferences.theme_mode_label`
 - keep one id stable when the product concept stays the same and only wording changes
 - create a new id only when the UI meaning changes enough that old translations would become misleading
+- keep generated runtime explanatory copy grouped behind stable structured builders when a surface would otherwise require dozens of one-off sentence ids
 
 ## Current Manifest IDs
 
@@ -43,9 +44,9 @@ Keep manifest and runtime localization on one stable naming contract so later co
 - `manifest_action_default_title`
   - maps to manifest `action.default_title`
 
-## Shipped Runtime IDs Through Phase 173
+## Shipped Runtime IDs Through Phase 174
 
-Runtime localization now exists for one narrow manifest plus runtime pilot slice. Current shipped groups are:
+Runtime localization now exists for one broader but still partial manifest plus runtime pilot slice. Current shipped groups are:
 
 - app shell status ids:
   - `app.loading.*`
@@ -65,8 +66,8 @@ Runtime localization now exists for one narrow manifest plus runtime pilot slice
   - `popup.error.*`
   - `popup.header.*`
   - `popup.summary.*`
-  - narrow static shell labels such as `popup.guidance.eyebrow`, `popup.snapshot_status.eyebrow`, and `popup.triage.eyebrow`
-- settings-shell ids shipped in `Phase 173`:
+  - narrow shell labels such as `popup.guidance.eyebrow`, `popup.snapshot_status.eyebrow`, and `popup.triage.eyebrow`
+- settings-shell ids shipped through `Phase 173`:
   - `settings.topbar.*`
   - `settings.overview.*`
   - `settings.sections.*`
@@ -78,6 +79,32 @@ Runtime localization now exists for one narrow manifest plus runtime pilot slice
   - `settings.sources.*`
   - `settings.permissions.*`
   - `settings.toast.*`
+
+## Structured Runtime Copy Through Phase 174
+
+`Phase 174` deliberately did not explode the runtime id list with one message id per popup sentence or per provider-detail field label.
+
+Instead, these localized surfaces now ship through shared structured builders in [src/shared/localized-copy.ts](../src/shared/localized-copy.ts):
+
+- popup explanatory copy:
+  - snapshot-status copy
+  - guidance-card copy
+  - featured-section copy
+  - featured-card status and primary-detail copy
+  - setup-coverage labels and explanatory detail
+  - action-section detail
+  - surface-roles copy
+  - popup-specific aria labels for explanatory sections
+- provider-detail shell and static copy:
+  - top-bar subtitle and expand title
+  - section labels
+  - field labels
+  - note labels and prefixes
+  - localized status badge labels
+  - localized helper value labels such as `Granted`, `Missing`, and `Unknown`
+  - the provider-detail hero explanatory paragraph
+
+This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still making the broader `en + zh-CN` pilot executable.
 
 ## Locale Preference Contract
 
@@ -92,18 +119,14 @@ Runtime localization now exists for one narrow manifest plus runtime pilot slice
 ## Runtime Direction
 
 - runtime React localization is now partially shipped, not fully rolled out
-- the current localized slice covers popup shell, dashboard shell, the first settings-shell slice, and shared quick theme-toggle labels
-- the settings-shell slice now includes:
-  - top bar title and actions
-  - overview card
-  - section navigation
-  - summary-strip labels
-  - global preferences labels
-  - locale selector labels
-  - theme mode and theme preset labels
-  - top-level credentials, sources, and permissions section headings
-  - preferences-saved toast copy
-- deeper settings helper copy, provider-detail body copy, most popup explanatory copy, and operator workspaces still remain outside the shipped localized slice
+- the current localized slice covers:
+  - popup shell
+  - popup explanatory copy
+  - dashboard shell
+  - the first settings-shell slice
+  - provider-detail shell and static copy
+  - shared quick theme-toggle labels
+- deeper settings helper copy, raw provider source-truth detail strings, localized durations, and operator workspaces still remain outside the shipped localized slice
 - vendor-owned provider-page text stays outside the managed localization catalog
 - locale-aware formatting also stays outside raw message ids so generated values can be formatted per locale without multiplying message ids
 

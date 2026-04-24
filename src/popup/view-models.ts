@@ -4,6 +4,8 @@ import type {
   ProviderTone,
   SummaryItem,
 } from "../providers/types";
+import type { RuntimeI18n } from "../shared/i18n";
+import { buildPopupLocalizedCopy } from "../shared/localized-copy";
 import {
   getVisibleProviders,
   type ProviderViewModel,
@@ -833,6 +835,611 @@ function buildSurfaceRolesCard(
       "Use dashboard for broader multi-provider context, settings for controls, and provider detail only when you need one provider's deeper contract and health.",
   };
 }
+
+function buildLocalizedSnapshotStatus(
+  visibleProviders: ProviderViewModel[],
+  copy: ReturnType<typeof buildPopupLocalizedCopy>,
+): PopupSnapshotStatus {
+  if (visibleProviders.length === 0) {
+    return {
+      label: copy.snapshotStatus.noProvidersLabel,
+      tone: "warning",
+      headline: copy.snapshotStatus.noProvidersHeadline,
+      detail: copy.snapshotStatus.noProvidersDetail,
+    };
+  }
+
+  const newestProvider = getNewestVisibleProvider(visibleProviders);
+  const oldestProvider = getOldestVisibleProvider(visibleProviders);
+
+  if (!newestProvider || !oldestProvider) {
+    return {
+      label: copy.snapshotStatus.noProvidersLabel,
+      tone: "warning",
+      headline: copy.snapshotStatus.noProvidersHeadline,
+      detail: copy.snapshotStatus.noProvidersDetail,
+    };
+  }
+
+  const hasError = visibleProviders.some(
+    (provider) => provider.displaySyncStatus === "error",
+  );
+  const hasWarnings = visibleProviders.some(
+    (provider) =>
+      provider.displaySyncStatus === "warning" ||
+      provider.permissionStatus === "missing",
+  );
+  const isAligned = newestProvider.syncedAt === oldestProvider.syncedAt;
+  const label = hasError
+    ? copy.snapshotStatus.syncIssueLabel
+    : hasWarnings || !isAligned
+      ? copy.snapshotStatus.mixedStateLabel
+      : copy.snapshotStatus.alignedLabel;
+  const tone: ProviderTone = hasError
+    ? "error"
+    : hasWarnings || !isAligned
+      ? "warning"
+      : "neutral";
+
+  return {
+    label,
+    tone,
+    headline: newestProvider.lastSyncLabel,
+    detail: isAligned
+      ? visibleProviders.length === 1
+        ? copy.snapshotStatus.alignedSingleDetail
+        : copy.snapshotStatus.alignedManyDetail(visibleProviders.length)
+      : copy.snapshotStatus.mixedDetail(
+          newestProvider.providerLabel,
+          newestProvider.lastSyncLabel,
+          oldestProvider.providerLabel,
+          oldestProvider.lastSyncLabel,
+        ),
+  };
+}
+
+function buildLocalizedGuidanceCard(
+  visibleProviders: ProviderViewModel[],
+  i18n: RuntimeI18n,
+  copy: ReturnType<typeof buildPopupLocalizedCopy>,
+): PopupGuidanceCard | null {
+  if (visibleProviders.length === 0) {
+    return {
+      label: copy.guidance.startHereLabel,
+      tone: "warning",
+      headline: copy.guidance.enableProviderHeadline,
+      detail: copy.guidance.enableProviderDetail,
+      action: {
+        kind: "settings",
+        label: i18n.t("common.actions.open_settings"),
+      },
+    };
+  }
+
+  const providersMissingAccess = visibleProviders.filter(
+    (provider) => provider.permissionStatus === "missing",
+  );
+
+  if (providersMissingAccess.length > 0) {
+    const firstProvider = providersMissingAccess[0];
+
+    return {
+      label: copy.guidance.nextStepLabel,
+      tone: "warning",
+      headline:
+        providersMissingAccess.length === 1
+          ? copy.guidance.grantAccessSingleHeadline(firstProvider.providerLabel)
+          : copy.guidance.grantAccessManyHeadline,
+      detail:
+        providersMissingAccess.length === 1
+          ? copy.guidance.singleMissingAccessDetail(
+              firstProvider.providerLabel,
+              firstProvider.hostAccessRequirementDetail ||
+                firstProvider.currentSourceStateDetail ||
+                `${firstProvider.providerLabel} still needs optional host access before the popup can report a healthy live state.`,
+            )
+          : copy.guidance.multipleMissingAccessDetail(
+              providersMissingAccess.length,
+            ),
+      action: {
+        kind: "settings",
+        label: i18n.t("common.actions.open_settings"),
+      },
+    };
+  }
+
+  const providersMissingCredential = visibleProviders.filter(
+    (provider) => provider.currentSourceStateKind === "credential_missing",
+  );
+
+  if (providersMissingCredential.length > 0) {
+    const firstProvider = providersMissingCredential[0];
+
+    return {
+      label: copy.guidance.nextStepLabel,
+      tone: "warning",
+      headline:
+        providersMissingCredential.length === 1
+          ? copy.guidance.addCredentialsSingleHeadline(firstProvider.providerLabel)
+          : copy.guidance.addCredentialsManyHeadline,
+      detail:
+        providersMissingCredential.length === 1
+          ? copy.guidance.singleMissingCredentialDetail(
+              firstProvider.providerLabel,
+              firstProvider.currentSourceStateDetail ||
+                `${firstProvider.providerLabel} still needs a configured credential before this path can run live sync.`,
+            )
+          : copy.guidance.multipleMissingCredentialDetail(
+              providersMissingCredential.length,
+            ),
+      action: {
+        kind: "settings",
+        label: i18n.t("common.actions.open_settings"),
+      },
+    };
+  }
+
+  const firstBlockedProvider = visibleProviders.find(
+    (provider) =>
+      provider.displaySyncStatus !== "ok" ||
+      (provider.currentSourceStateKind !== "ready" &&
+        provider.currentSourceStateKind !== "policy_only"),
+  );
+
+  if (firstBlockedProvider) {
+    return {
+      label: copy.guidance.nextStepLabel,
+      tone: firstBlockedProvider.displayTone,
+      headline: copy.guidance.reviewProviderHeadline(
+        firstBlockedProvider.providerLabel,
+      ),
+      detail:
+        firstBlockedProvider.warningReason ??
+        firstBlockedProvider.currentSourceStateDetail ??
+        firstBlockedProvider.currentSourceAvailabilitySummary,
+      action: {
+        kind: "provider-detail",
+        label: copy.guidance.openDetail,
+        providerId: firstBlockedProvider.providerId,
+      },
+    };
+  }
+
+  const allPolicyOnly = visibleProviders.every(
+    (provider) => provider.currentSourceStateKind === "policy_only",
+  );
+
+  if (allPolicyOnly) {
+    return {
+      label: copy.guidance.currentContractLabel,
+      tone: "neutral",
+      headline: copy.guidance.policyOnlyHeadline,
+      detail: copy.guidance.policyOnlyDetail,
+      action: {
+        kind: "dashboard",
+        label: i18n.t("common.actions.open_dashboard"),
+      },
+    };
+  }
+
+  return null;
+}
+
+function buildLocalizedFeaturedSection(
+  visibleProviders: ProviderViewModel[],
+  attentionProviders: ProviderViewModel[],
+  copy: ReturnType<typeof buildPopupLocalizedCopy>,
+): PopupFeaturedSection {
+  if (visibleProviders.length === 0) {
+    return {
+      label: copy.featuredSection.providerTriageLabel,
+      headline: copy.featuredSection.nothingToTriageHeadline,
+      detail: copy.featuredSection.actionableAfterVisibleDetail,
+      emptyStateHeadline: copy.featuredSection.noProviderCardsYetHeadline,
+      emptyStateDetail: copy.featuredSection.enableProviderComeBackDetail,
+    };
+  }
+
+  if (attentionProviders.length > 0) {
+    return {
+      label: copy.featuredSection.needsAttentionLabel,
+      headline: copy.featuredSection.featuredProvidersHeadline,
+      detail: copy.featuredSection.needsAttentionDetail,
+      emptyStateHeadline: null,
+      emptyStateDetail: null,
+    };
+  }
+
+  const allPolicyOnly = visibleProviders.every(
+    (provider) => provider.currentSourceStateKind === "policy_only",
+  );
+
+  if (allPolicyOnly) {
+    return {
+      label: copy.featuredSection.currentContractLabel,
+      headline: copy.featuredSection.policyOnlyProvidersHeadline,
+      detail: copy.featuredSection.policyOnlyProvidersDetail,
+      emptyStateHeadline: null,
+      emptyStateDetail: null,
+    };
+  }
+
+  return {
+    label: copy.featuredSection.allClearLabel,
+    headline: copy.featuredSection.healthyProvidersHeadline,
+    detail: copy.featuredSection.healthyProvidersDetail,
+    emptyStateHeadline: null,
+    emptyStateDetail: null,
+  };
+}
+
+function buildLocalizedFeaturedStatusLabel(
+  provider: ProviderViewModel,
+  copy: ReturnType<typeof buildPopupLocalizedCopy>,
+): string {
+  if (provider.permissionStatus === "missing") {
+    return copy.featuredCard.statusNeedsAccess;
+  }
+
+  switch (provider.currentSourceStateKind) {
+    case "credential_missing":
+      return copy.featuredCard.statusNeedsSetup;
+    case "open_page_required":
+      return copy.featuredCard.statusOpenPage;
+    case "logged_out":
+      return copy.featuredCard.statusSignIn;
+    case "sync_error":
+      return copy.featuredCard.statusNeedsReview;
+    case "policy_only":
+      return copy.featuredCard.statusContractOnly;
+    case "ready":
+      return provider.displaySyncStatus === "ok"
+        ? copy.featuredCard.statusHealthy
+        : provider.displaySyncStatus === "warning"
+          ? copy.featuredCard.statusWarning
+          : copy.featuredCard.statusSyncIssue;
+  }
+
+  return copy.featuredCard.statusHealthy;
+}
+
+function buildLocalizedFeaturedPrimaryDetail(
+  provider: ProviderViewModel,
+  copy: ReturnType<typeof buildPopupLocalizedCopy>,
+): string {
+  if (provider.permissionStatus === "missing") {
+    return copy.featuredCard.primaryBlockedHostAccess;
+  }
+
+  switch (provider.currentSourceStateKind) {
+    case "credential_missing":
+      return copy.featuredCard.primaryNeedsCredentials;
+    case "open_page_required":
+      return copy.featuredCard.primaryNeedsLivePage;
+    case "logged_out":
+      return copy.featuredCard.primaryNeedsSignedInPage;
+    case "sync_error":
+      return copy.featuredCard.primaryNeedsReview;
+    case "policy_only":
+      return copy.featuredCard.primaryPolicyOnly;
+    case "ready":
+      return copy.featuredCard.primaryLiveReady;
+  }
+
+  return copy.featuredCard.primaryLiveReady;
+}
+
+function buildLocalizedFeaturedProviderCard(
+  provider: ProviderViewModel,
+  i18n: RuntimeI18n,
+  copy: ReturnType<typeof buildPopupLocalizedCopy>,
+): PopupFeaturedProviderCard {
+  return {
+    provider,
+    statusLabel: buildLocalizedFeaturedStatusLabel(provider, copy),
+    metaChips: buildPopupFeaturedMetaChips(provider),
+    primaryDetail: buildLocalizedFeaturedPrimaryDetail(provider, copy),
+    secondaryDetail: buildPopupFeaturedSecondaryDetail(provider),
+    action:
+      provider.permissionStatus === "missing" ||
+      provider.currentSourceStateKind === "credential_missing"
+        ? {
+            kind: "settings",
+            label: i18n.t("common.actions.open_settings"),
+          }
+        : provider.currentSourceStateKind === "policy_only"
+          ? {
+              kind: "dashboard",
+              label: i18n.t("common.actions.open_dashboard"),
+            }
+          : provider.currentSourceStateKind !== "ready" ||
+              provider.displaySyncStatus !== "ok"
+            ? {
+                kind: "provider-detail",
+                label: copy.featuredCard.reviewDetailAction,
+                providerId: provider.providerId,
+              }
+            : {
+                kind: "provider-detail",
+                label: copy.featuredCard.openDetailAction,
+                providerId: provider.providerId,
+              },
+  };
+}
+
+function buildLocalizedSetupCoverage(
+  visibleProviders: ProviderViewModel[],
+  existingItems: SummaryItem[],
+  copy: ReturnType<typeof buildPopupLocalizedCopy>,
+): PopupSetupCoverage {
+  const {
+    providerCount,
+    liveReadyProviders,
+    providersNeedingAccess,
+    providersNeedingCredentials,
+    policyOnlyProviders,
+    providersNeedingReview,
+  } = buildSetupCoverageStats(visibleProviders);
+
+  if (visibleProviders.length === 0) {
+    return {
+      label: copy.setupCoverage.label,
+      statusLabel: copy.setupCoverage.statusStartSetup,
+      tone: "warning",
+      headline: copy.setupCoverage.noVisibleHeadline,
+      detail: copy.setupCoverage.noVisibleDetail,
+      items: [
+        {
+          ...existingItems[0],
+          label: copy.setupCoverage.liveReadyItemLabel,
+        },
+        {
+          ...existingItems[1],
+          label: copy.setupCoverage.hostAccessItemLabel,
+        },
+        {
+          ...existingItems[2],
+          label: copy.setupCoverage.credentialsItemLabel,
+        },
+        {
+          ...existingItems[3],
+          label: copy.setupCoverage.policyOnlyItemLabel,
+        },
+      ],
+    };
+  }
+
+  const setupBlockerCount =
+    providersNeedingAccess.length + providersNeedingCredentials.length;
+  const allPolicyOnly = policyOnlyProviders.length === providerCount;
+
+  let statusLabel = copy.setupCoverage.statusReady;
+  let tone: ProviderTone = "neutral";
+  let detail = copy.setupCoverage.readyDetail;
+
+  if (setupBlockerCount > 0) {
+    statusLabel = copy.setupCoverage.statusNeedsSetup;
+    tone = "warning";
+    detail = copy.setupCoverage.needsSetupDetail(
+      copy.setupCoverage.buildSetupBlockerSentence(
+        providersNeedingAccess.length,
+        providersNeedingCredentials.length,
+      ),
+    );
+  } else if (providersNeedingReview.length > 0) {
+    statusLabel = copy.setupCoverage.statusNeedsReview;
+    tone = providersNeedingReview.some(
+      (provider) => provider.displaySyncStatus === "error",
+    )
+      ? "error"
+      : "warning";
+    detail = copy.setupCoverage.needsReviewDetail(providersNeedingReview.length);
+  } else if (allPolicyOnly) {
+    statusLabel = copy.setupCoverage.statusContractOnly;
+    tone = "neutral";
+    detail = copy.setupCoverage.contractOnlyDetail;
+  } else if (policyOnlyProviders.length > 0) {
+    detail = copy.setupCoverage.mixedReadyPolicyDetail(
+      liveReadyProviders.length,
+      policyOnlyProviders.length,
+    );
+  }
+
+  return {
+    label: copy.setupCoverage.label,
+    statusLabel,
+    tone,
+    headline: copy.setupCoverage.visibleProvidersHeadline(providerCount),
+    detail,
+    items: [
+      {
+        ...existingItems[0],
+        label: copy.setupCoverage.liveReadyItemLabel,
+      },
+      {
+        ...existingItems[1],
+        label: copy.setupCoverage.hostAccessItemLabel,
+      },
+      {
+        ...existingItems[2],
+        label: copy.setupCoverage.credentialsItemLabel,
+      },
+      {
+        ...existingItems[3],
+        label: copy.setupCoverage.policyOnlyItemLabel,
+      },
+    ],
+  };
+}
+
+function buildLocalizedHeaderDetail(
+  visibleProviders: ProviderViewModel[],
+  setupCoverage: PopupSetupCoverage,
+  copy: ReturnType<typeof buildPopupLocalizedCopy>,
+) {
+  if (visibleProviders.length === 0) {
+    return copy.header.noVisible;
+  }
+
+  if (setupCoverage.statusLabel === copy.setupCoverage.statusNeedsSetup) {
+    return copy.header.needsSetup;
+  }
+
+  if (setupCoverage.statusLabel === copy.setupCoverage.statusContractOnly) {
+    return copy.header.contractOnly;
+  }
+
+  if (setupCoverage.statusLabel === copy.setupCoverage.statusNeedsReview) {
+    return copy.header.needsReview;
+  }
+
+  return copy.header.ready;
+}
+
+function buildLocalizedActionSection(
+  guidanceCard: PopupGuidanceCard | null,
+  i18n: RuntimeI18n,
+  copy: ReturnType<typeof buildPopupLocalizedCopy>,
+): PopupActionSection {
+  const dashboardAction: PopupGuidanceAction = {
+    kind: "dashboard",
+    label: i18n.t("common.actions.open_dashboard"),
+  };
+  const settingsAction: PopupGuidanceAction = {
+    kind: "settings",
+    label: i18n.t("common.actions.open_settings"),
+  };
+
+  if (!guidanceCard) {
+    return {
+      label: copy.actionSection.quickActionsLabel,
+      detail: copy.actionSection.detailBroaderSurface,
+      actions: [dashboardAction, settingsAction],
+    };
+  }
+
+  if (guidanceCard.action.kind === "settings") {
+    return {
+      label: copy.actionSection.otherRouteLabel,
+      detail: copy.actionSection.detailDashboardFirst,
+      actions: [dashboardAction],
+    };
+  }
+
+  if (guidanceCard.action.kind === "dashboard") {
+    return {
+      label: copy.actionSection.otherRouteLabel,
+      detail: copy.actionSection.detailSettingsFirst,
+      actions: [settingsAction],
+    };
+  }
+
+  return {
+    label: copy.actionSection.secondaryActionsLabel,
+    detail: copy.actionSection.detailBroaderSurface,
+    actions: [dashboardAction, settingsAction],
+  };
+}
+
+function buildLocalizedSurfaceRolesCard(
+  visibleProviders: ProviderViewModel[],
+  guidanceCard: PopupGuidanceCard | null,
+  copy: ReturnType<typeof buildPopupLocalizedCopy>,
+): PopupSurfaceRolesCard {
+  if (visibleProviders.length === 0) {
+    return {
+      label: copy.surfaceRoles.label,
+      headline: copy.surfaceRoles.settingsOwnsSetupHeadline,
+      detail: copy.surfaceRoles.settingsOwnsSetupNoVisibleDetail,
+    };
+  }
+
+  if (guidanceCard?.action.kind === "settings") {
+    return {
+      label: copy.surfaceRoles.label,
+      headline: copy.surfaceRoles.settingsOwnsSetupHeadline,
+      detail: copy.surfaceRoles.settingsOwnsSetupDetail,
+    };
+  }
+
+  if (guidanceCard?.action.kind === "dashboard") {
+    return {
+      label: copy.surfaceRoles.label,
+      headline: copy.surfaceRoles.dashboardOwnsContractReviewHeadline,
+      detail: copy.surfaceRoles.dashboardOwnsContractReviewDetail,
+    };
+  }
+
+  if (guidanceCard?.action.kind === "provider-detail") {
+    return {
+      label: copy.surfaceRoles.label,
+      headline: copy.surfaceRoles.providerDetailOwnsReviewHeadline,
+      detail: copy.surfaceRoles.providerDetailOwnsReviewDetail,
+    };
+  }
+
+  return {
+    label: copy.surfaceRoles.label,
+    headline: copy.surfaceRoles.popupQuickGlanceHeadline,
+    detail: copy.surfaceRoles.popupQuickGlanceDetail,
+  };
+}
+
+export function localizePopupViewModel(
+  model: PopupViewModel,
+  i18n: RuntimeI18n,
+): PopupViewModel {
+  const copy = buildPopupLocalizedCopy(i18n);
+  const visibleProviders = model.visibleProviders;
+  const attentionProviders = visibleProviders.filter(needsAttention);
+  const guidanceCard = buildLocalizedGuidanceCard(visibleProviders, i18n, copy);
+  const setupCoverage = buildLocalizedSetupCoverage(
+    visibleProviders,
+    model.setupCoverage.items,
+    copy,
+  );
+
+  return {
+    ...model,
+    headerDetail: buildLocalizedHeaderDetail(visibleProviders, setupCoverage, copy),
+    summaryItems: [
+      {
+        ...model.summaryItems[0],
+        label: i18n.t("popup.summary.visible"),
+      },
+      {
+        ...model.summaryItems[1],
+        label: i18n.t("popup.summary.live_ready"),
+      },
+      {
+        ...model.summaryItems[2],
+        label: i18n.t("popup.summary.setup_blockers"),
+      },
+      {
+        ...model.summaryItems[3],
+        label: i18n.t("popup.summary.policy_only"),
+      },
+    ],
+    snapshotStatus: buildLocalizedSnapshotStatus(visibleProviders, copy),
+    guidanceCard,
+    setupCoverage,
+    actionSection: buildLocalizedActionSection(guidanceCard, i18n, copy),
+    surfaceRolesCard: buildLocalizedSurfaceRolesCard(
+      visibleProviders,
+      guidanceCard,
+      copy,
+    ),
+    featuredSection: buildLocalizedFeaturedSection(
+      visibleProviders,
+      attentionProviders,
+      copy,
+    ),
+    featuredProviderCards: model.featuredProviders.map((provider) =>
+      buildLocalizedFeaturedProviderCard(provider, i18n, copy),
+    ),
+  };
+}
+
 
 export function buildPopupViewModel(
   state: AppState,
