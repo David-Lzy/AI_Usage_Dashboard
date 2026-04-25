@@ -18,6 +18,11 @@ import {
   type SourceAttemptFailure,
 } from "../../shared/source-selection";
 import {
+  createNoLiveSourceFallbackDiagnostic,
+  createSourceFallbackDiagnostic,
+  createSourceSelectionDiagnostic,
+} from "../diagnostics";
+import {
   createCodexAnalyticsClient,
   type CodexAnalyticsUsageRecord,
 } from "./official";
@@ -211,17 +216,36 @@ function finalizeCodexSnapshot(
   selectedKind: ProviderSourceKind,
   fallbackFailure: SourceAttemptFailure | null,
 ): ProviderSnapshot {
+  const sourceSelectionReason = buildSourceSelectionReason(
+    "codex",
+    sourcePreference,
+    selectedKind,
+    fallbackFailure !== null,
+  );
+  const sourceFallbackReason = fallbackFailure
+    ? buildSourceFallbackReason(fallbackFailure)
+    : null;
+
   return {
     ...snapshot,
-    sourceSelectionReason: buildSourceSelectionReason(
-      "codex",
+    sourceSelectionReason,
+    sourceFallbackReason,
+    sourceSelectionDiagnostic: createSourceSelectionDiagnostic({
+      providerId: "codex",
       sourcePreference,
       selectedKind,
-      fallbackFailure !== null,
-    ),
-    sourceFallbackReason: fallbackFailure
-      ? buildSourceFallbackReason(fallbackFailure)
-      : null,
+      hadFallback: fallbackFailure !== null,
+      rawMessage: sourceSelectionReason,
+    }),
+    sourceFallbackDiagnostic:
+      fallbackFailure && sourceFallbackReason
+        ? createSourceFallbackDiagnostic({
+            providerId: "codex",
+            sourcePreference,
+            failure: fallbackFailure,
+            rawMessage: sourceFallbackReason,
+          })
+        : null,
   };
 }
 
@@ -230,13 +254,25 @@ function finalizeCodexNoSourceSnapshot(
   sourcePreference: ProviderSetting["sourcePreference"],
   failures: SourceAttemptFailure[],
 ): ProviderSnapshot {
+  const sourceSelectionReason = buildNoSourceAvailableReason(sourcePreference);
+  const sourceFallbackReason =
+    failures.length > 1
+      ? failures.map((failure) => buildSourceFallbackReason(failure)).join(" · ")
+      : null;
+
   return {
     ...snapshot,
-    sourceSelectionReason: buildNoSourceAvailableReason(sourcePreference),
-    sourceFallbackReason:
-      failures.length > 1
-        ? failures.map((failure) => buildSourceFallbackReason(failure)).join(" · ")
-        : null,
+    sourceSelectionReason,
+    sourceFallbackReason,
+    sourceSelectionDiagnostic: null,
+    sourceFallbackDiagnostic: sourceFallbackReason
+      ? createNoLiveSourceFallbackDiagnostic({
+          providerId: "codex",
+          sourcePreference,
+          failureCount: failures.length,
+          rawMessage: sourceFallbackReason,
+        })
+      : null,
   };
 }
 

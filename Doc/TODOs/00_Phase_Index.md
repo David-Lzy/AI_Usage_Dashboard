@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [186_Phase_Source_Selection_And_Fallback_Diagnostic_Builders.md](./Archive/186_Phase_Source_Selection_And_Fallback_Diagnostic_Builders.md)
+- latest completed slice: [187_Phase_Codex_Source_Selection_And_Fallback_Diagnostic_Builders.md](./Archive/187_Phase_Codex_Source_Selection_And_Fallback_Diagnostic_Builders.md)
 
 Completed phases should be moved to:
 
@@ -233,6 +233,7 @@ Completed phases should be moved to:
 - [184_Phase_Adapter_Diagnostic_Reason_Code_Plan.md](./Archive/184_Phase_Adapter_Diagnostic_Reason_Code_Plan.md) - completed and archived on 2026-04-25
 - [185_Phase_Type_Only_Additive_Diagnostic_Model.md](./Archive/185_Phase_Type_Only_Additive_Diagnostic_Model.md) - completed and archived on 2026-04-25
 - [186_Phase_Source_Selection_And_Fallback_Diagnostic_Builders.md](./Archive/186_Phase_Source_Selection_And_Fallback_Diagnostic_Builders.md) - completed and archived on 2026-04-25
+- [187_Phase_Codex_Source_Selection_And_Fallback_Diagnostic_Builders.md](./Archive/187_Phase_Codex_Source_Selection_And_Fallback_Diagnostic_Builders.md) - completed and archived on 2026-04-25
 
 ## Dependency Notes
 
@@ -485,6 +486,8 @@ Completed phases should be moved to:
 - the 2026-04-25 `Phase 185` closeout added optional typed diagnostic fields, known diagnostic code categories, raw-message fallback helpers, and focused tests while preserving raw diagnostic strings and rendered UI behavior
 - phase 186 depends on phase 185 because source-selection and fallback diagnostic builders should populate real adapter metadata only after the additive diagnostic model exists
 - the 2026-04-25 `Phase 186` closeout added shared source-selection/fallback diagnostic builders and populated Cursor typed source diagnostics while preserving raw source-selection/fallback strings and rendered UI behavior
+- phase 187 depends on phase 186 because Codex should reuse the shared source-selection/fallback diagnostic builders after they are proven on Cursor
+- the 2026-04-25 `Phase 187` closeout populated Codex typed source diagnostics while preserving raw source-selection/fallback strings and rendered UI behavior
 
 ## Delivery Standard For Each Phase
 

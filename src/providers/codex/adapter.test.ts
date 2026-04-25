@@ -148,9 +148,33 @@ describe("syncCodexProvider", () => {
     expect(snapshot.tone).toBe("neutral");
     expect(snapshot.lastSyncLabel).toBe("Codex personal fixture loaded");
     expect(snapshot.sourceSelectionReason).toBe("Auto fell back to Session page.");
+    expect(snapshot.sourceSelectionDiagnostic).toMatchObject({
+      code: "source.auto_selected_session_page",
+      category: "source_selection",
+      severity: "info",
+      rawMessage: snapshot.sourceSelectionReason,
+      params: {
+        providerId: "codex",
+        sourcePreference: "auto",
+        selectedKind: "session_page",
+        hadFallback: true,
+      },
+    });
     expect(snapshot.sourceFallbackReason).toBe(
       "Official API unavailable: Codex analytics API key and workspace ID are not both configured.",
     );
+    expect(snapshot.sourceFallbackDiagnostic).toMatchObject({
+      code: "source.official_api_missing_credential",
+      category: "source_fallback",
+      severity: "warning",
+      rawMessage: snapshot.sourceFallbackReason,
+      params: {
+        providerId: "codex",
+        sourcePreference: "auto",
+        failedSourceKind: "official_api",
+        failureCode: "credential_missing",
+      },
+    });
     expect(createCodexAnalyticsClientMock).not.toHaveBeenCalled();
     expect(createCodexPersonalPageClientMock).toHaveBeenCalled();
   });
@@ -224,7 +248,20 @@ describe("syncCodexProvider", () => {
     );
     expect(snapshot.lastSyncLabel).toBe("Codex Analytics API synced just now");
     expect(snapshot.sourceSelectionReason).toBe("Auto selected Official API.");
+    expect(snapshot.sourceSelectionDiagnostic).toMatchObject({
+      code: "source.auto_selected_official_api",
+      category: "source_selection",
+      severity: "info",
+      rawMessage: snapshot.sourceSelectionReason,
+      params: {
+        providerId: "codex",
+        sourcePreference: "auto",
+        selectedKind: "official_api",
+        hadFallback: false,
+      },
+    });
     expect(snapshot.sourceFallbackReason).toBeNull();
+    expect(snapshot.sourceFallbackDiagnostic).toBeNull();
     expect(snapshot.syncedAt).toBe("2026-04-21 11:08");
     expect(createCodexPersonalPageClientMock).not.toHaveBeenCalled();
   });
@@ -250,6 +287,8 @@ describe("syncCodexProvider", () => {
     expect(snapshot.sourceSelectionReason).toBe(
       "Auto could not find an available live source.",
     );
+    expect(snapshot.sourceSelectionDiagnostic).toBeNull();
+    expect(snapshot.sourceFallbackDiagnostic).toBeNull();
   });
 
   it("surfaces open-page-required states from the Codex personal parser", async () => {
@@ -284,6 +323,17 @@ describe("syncCodexProvider", () => {
     expect(snapshot.sourceFallbackReason).toContain(
       "Session page unavailable: Open the logged-in Codex usage page",
     );
+    expect(snapshot.sourceFallbackDiagnostic).toMatchObject({
+      code: "source.no_live_path",
+      category: "source_fallback",
+      severity: "error",
+      rawMessage: snapshot.sourceFallbackReason,
+      params: {
+        providerId: "codex",
+        sourcePreference: "auto",
+        failureCount: 2,
+      },
+    });
   });
 
   it("falls back to the personal page when Official API is preferred but Enterprise analytics config is missing", async () => {
@@ -345,9 +395,23 @@ describe("syncCodexProvider", () => {
     expect(snapshot.sourceSelectionReason).toBe(
       "Official API preference fell back to Session page.",
     );
+    expect(snapshot.sourceSelectionDiagnostic).toMatchObject({
+      code: "source.preference_selected_session_page",
+      rawMessage: snapshot.sourceSelectionReason,
+      params: {
+        providerId: "codex",
+        sourcePreference: "official_api",
+        selectedKind: "session_page",
+        hadFallback: true,
+      },
+    });
     expect(snapshot.sourceFallbackReason).toBe(
       "Official API unavailable: Codex analytics API key and workspace ID are not both configured.",
     );
+    expect(snapshot.sourceFallbackDiagnostic).toMatchObject({
+      code: "source.official_api_missing_credential",
+      rawMessage: snapshot.sourceFallbackReason,
+    });
   });
 
   it("falls back to Official API when Session page is preferred but the usage page is not open", async () => {
@@ -400,8 +464,30 @@ describe("syncCodexProvider", () => {
     expect(snapshot.sourceSelectionReason).toBe(
       "Session page preference fell back to Official API.",
     );
+    expect(snapshot.sourceSelectionDiagnostic).toMatchObject({
+      code: "source.preference_selected_official_api",
+      rawMessage: snapshot.sourceSelectionReason,
+      params: {
+        providerId: "codex",
+        sourcePreference: "session_page",
+        selectedKind: "official_api",
+        hadFallback: true,
+      },
+    });
     expect(snapshot.sourceFallbackReason).toBe(
       "Session page unavailable: Open the logged-in Codex usage page in ChatGPT before refreshing personal usage capture.",
     );
+    expect(snapshot.sourceFallbackDiagnostic).toMatchObject({
+      code: "source.session_page_unavailable",
+      category: "source_fallback",
+      severity: "error",
+      rawMessage: snapshot.sourceFallbackReason,
+      params: {
+        providerId: "codex",
+        sourcePreference: "session_page",
+        failedSourceKind: "session_page",
+        failureCode: "open_page_required",
+      },
+    });
   });
 });

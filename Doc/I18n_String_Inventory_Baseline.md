@@ -122,6 +122,8 @@ That reference defines the additive typed diagnostic model that should exist bef
 
 `Phase 186` populated Cursor source-selection and fallback diagnostics beside the existing raw strings. The shared diagnostic builders now map stable source metadata into typed codes while preserving Cursor raw source-selection and fallback output exactly.
 
+`Phase 187` populated Codex source-selection and fallback diagnostics through the same builders while preserving Codex raw source-selection and fallback output exactly.
+
 ## Runtime Surfaces Still Mostly English
 
 The following surfaces still need broader runtime localization work:
@@ -134,7 +136,7 @@ The following surfaces still need broader runtime localization work:
 
 Recommended next extraction order:
 
-1. Codex source selection and fallback builders
+1. credential and host-access diagnostics
 2. revisit deeper operator-workspace evidence copy only after archive-compatibility rules are explicit
 3. revisit generated store-listing source localization only after refreshed screenshot assets replace the historical baseline
 
@@ -145,5 +147,5 @@ Recommended next extraction order:
 - `en` and `zh_CN` currently cover manifest surfaces plus popup/dashboard shell strings, popup explanatory copy, the first settings-shell slice, deeper settings helper copy, provider-detail shell/static copy, provider-source display wrappers, quick theme-toggle labels, generated counts, percentages, parseable timestamp primitives, duration-bearing runtime freshness/reset labels, operator-workspace shell copy, store-screenshot runtime helper copy plus seed-route submission-support captions, and one first compact-width plus RTL hardening pass
 - runtime document roots now sync `lang` and `dir`, and preview/QA can now force `?app-dir=rtl` while the shipped locale set still resolves to `ltr`
 - raw provider source-truth detail strings and deeper operator evidence payloads still remain outside the shipped pilot, but operator-workspace boundaries are now explicitly documented after `Phase 178` and the shell slice is shipped after `Phase 179`
-- provider source-truth values now have an explicit policy boundary after `Phase 182`, provider-source display wrappers are localized after `Phase 183`, typed adapter diagnostic planning is documented after `Phase 184`, the type-only additive model exists after `Phase 185`, and Cursor source-selection/fallback diagnostics are populated after `Phase 186`; the next safe work is the Codex source-selection/fallback builder pass, not translating raw adapter diagnostics directly
+- provider source-truth values now have an explicit policy boundary after `Phase 182`, provider-source display wrappers are localized after `Phase 183`, typed adapter diagnostic planning is documented after `Phase 184`, the type-only additive model exists after `Phase 185`, Cursor source-selection/fallback diagnostics are populated after `Phase 186`, and Codex source-selection/fallback diagnostics are populated after `Phase 187`; the next safe work is credential and host-access diagnostic typing, not translating raw adapter diagnostics directly
 - non-parseable vendor-owned window labels such as `Mar 23 - Apr 21` still remain raw strings until a later explicit product decision localizes them

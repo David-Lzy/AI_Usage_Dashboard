@@ -151,6 +151,7 @@
     "phase184:review": "./scripts/with-preferred-node.sh node ./scripts/phase184-adapter-diagnostic-reason-code-plan-review.mjs",
     "phase185:review": "./scripts/with-preferred-node.sh node ./scripts/phase185-type-only-diagnostic-model-review.mjs",
     "phase186:review": "./scripts/with-preferred-node.sh node ./scripts/phase186-source-selection-fallback-diagnostic-builders-review.mjs",
+    "phase187:review": "./scripts/with-preferred-node.sh node ./scripts/phase187-codex-source-diagnostic-builders-review.mjs",
     "interaction-audit:bundle": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-handoff-bundle.mjs",
     "interaction-audit:archive": "./scripts/with-preferred-node.sh node ./scripts/archive-interaction-audit-review.mjs",
     "interaction-audit:refresh-archive-index": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-review-archive-index.mjs",

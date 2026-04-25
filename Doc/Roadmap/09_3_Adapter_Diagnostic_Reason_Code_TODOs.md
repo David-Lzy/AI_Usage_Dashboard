@@ -15,6 +15,7 @@ Status note:
 - created in `Phase 184`
 - type-only additive model completed in `Phase 185`
 - Cursor source-selection and fallback diagnostic builders completed in `Phase 186`
+- Codex source-selection and fallback diagnostic builders completed in `Phase 187`
 - this child TODO turns the adapter diagnostic reason-code plan into executable follow-up slices
 - refresh it when typed diagnostic coverage, provider adapter behavior, or archive compatibility rules change
 
@@ -34,7 +35,7 @@ The goal is not to translate raw provider evidence immediately. The goal is to m
 
 ## Current Truth
 
-As of `Phase 186`:
+As of `Phase 187`:
 
 - provider-source display wrappers are localized through `ProviderSourceDisplayCopy`
 - raw provider source-truth fields still pass through unchanged
@@ -42,6 +43,7 @@ As of `Phase 186`:
 - `src/providers/diagnostics.ts` provides known diagnostic code categories and raw-message fallback helpers
 - `src/providers/diagnostics.ts` now also provides reusable source-selection, source-fallback, and no-live-source diagnostic builders
 - the Cursor adapter populates typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` metadata beside existing raw source-selection and fallback strings
+- the Codex adapter populates typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` metadata beside existing raw source-selection and fallback strings
 - `ProviderSnapshot.warningReason` remains the primary raw warning body
 - `ProviderSnapshot.sourceSelectionReason` remains the primary raw source-selection explanation
 - `ProviderSnapshot.sourceFallbackReason` remains the primary raw fallback explanation
@@ -70,16 +72,17 @@ As of `Phase 186`:
 
 ### B. Source Selection And Fallback Builders
 
-- partially completed in `Phase 186` for Cursor
+- completed for Cursor and Codex in `Phase 186` and `Phase 187`
 - add helper builders for source-selection and fallback diagnostics
 - start with Cursor and Codex because those adapters already have explicit source attempt order logic
 - Cursor now uses the shared builders without changing raw string output
-- Codex remains the next provider path to wire through the same builders
+- Codex now uses the same shared builders without changing raw string output
 - preserve existing source-selection and fallback strings exactly
 - add tests that compare raw string output before and after typing
 
 ### C. Credential And Host-Access Diagnostics
 
+- next recommended slice
 - map missing admin API key, missing workspace config, and host-access blockers into typed diagnostics
 - keep provider settings and host labels raw
 - make source-state classification prefer typed categories where available
@@ -112,16 +115,16 @@ As of `Phase 186`:
 
 ## First Implementation Candidate
 
-The next runtime phase should implement the Codex half of `B. Source Selection And Fallback Builders`.
+The next runtime phase should implement the first narrow slice of `C. Credential And Host-Access Diagnostics`.
 
 Recommended scope:
 
-- `src/providers/codex/adapter.ts`
-- `src/providers/codex/adapter.test.ts`
-- reuse the shared builders already added in `src/providers/diagnostics.ts`
+- start with Cursor and Codex because both now have typed source diagnostics and explicit credential or host-access blockers
+- populate `warningDiagnostic` for missing credential or missing host-access states without changing raw `warningReason`
+- keep source-state classification raw-string fallback intact until typed coverage is broader
 - no UI rendering changes
 - no source-selection or fallback-order behavior changes
-- preserve exact raw `sourceSelectionReason` and `sourceFallbackReason` strings
+- preserve exact raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings
 
 ## Acceptance Criteria
 

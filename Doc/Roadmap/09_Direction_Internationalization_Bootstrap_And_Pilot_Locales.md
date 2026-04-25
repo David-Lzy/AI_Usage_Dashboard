@@ -30,6 +30,7 @@ Execution note:
 - fifteenth executable slice landed on `2026-04-25` through `Phase 184`
 - sixteenth executable slice landed on `2026-04-25` through `Phase 185`
 - seventeenth executable slice landed on `2026-04-25` through `Phase 186`
+- eighteenth executable slice landed on `2026-04-25` through `Phase 187`
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
 Process rule:
@@ -107,6 +108,7 @@ As of 2026-04-25:
 - adapter diagnostic reason-code planning now has one maintained reference:
   - [I18n_Adapter_Diagnostic_Reason_Code_Plan.md](../I18n_Adapter_Diagnostic_Reason_Code_Plan.md)
 - Cursor source-selection and fallback diagnostics now have typed metadata beside the existing raw adapter strings
+- Codex source-selection and fallback diagnostics now have typed metadata beside the existing raw adapter strings
 - the repo ships one store helper i18n boundary reference:
   - [I18n_Store_Runtime_Helper_Copy.md](../I18n_Store_Runtime_Helper_Copy.md)
 - the repo ships maintained i18n references:
@@ -186,7 +188,8 @@ Recommended rollout:
 16. adapter diagnostic typed reason-code plan - shipped in `Phase 184`
 17. type-only additive diagnostic model - shipped in `Phase 185`
 18. Cursor source selection and fallback builders - shipped in `Phase 186`
-19. Codex source selection and fallback builders - next
+19. Codex source selection and fallback builders - shipped in `Phase 187`
+20. credential and host-access diagnostics - next
 
 ## References
 

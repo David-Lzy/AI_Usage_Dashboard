@@ -19,6 +19,7 @@ Status note:
 - this file records the `Phase 184` adapter diagnostic reason-code plan
 - `Phase 185` implemented the type-only additive diagnostic model in `src/providers/types.ts` and `src/providers/diagnostics.ts`
 - `Phase 186` populated Cursor source-selection and source-fallback typed diagnostics through reusable builders while preserving raw strings
+- `Phase 187` populated Codex source-selection and source-fallback typed diagnostics through the same reusable builders while preserving raw strings
 - refresh it when provider adapters, source-selection behavior, provider snapshot fields, archive evidence schemas, or runtime i18n boundaries change materially
 
 ## Goal
@@ -135,7 +136,7 @@ After typed diagnostics exist:
 ## Migration Ladder
 
 1. Add types and helpers without changing UI behavior - completed in `Phase 185`.
-2. Populate source-selection and source-fallback diagnostics for Cursor and Codex because those adapters already have source attempt order helpers. Cursor completed in `Phase 186`; Codex remains next.
+2. Populate source-selection and source-fallback diagnostics for Cursor and Codex because those adapters already have source attempt order helpers. Cursor completed in `Phase 186`; Codex completed in `Phase 187`.
 3. Populate credential, host-access, and page-session diagnostics for provider adapters.
 4. Populate usage-threshold and policy-only diagnostics for shared normalization and Gemini policy output.
 5. Populate sync-stale diagnostics in the sync engine.
@@ -181,6 +182,14 @@ Before any runtime implementation lands:
 - no rendered UI behavior changes
 - no raw diagnostic string rewrites
 
+`Phase 187` populated the second explicit source-order adapter path:
+
+- Codex `sourceSelectionDiagnostic` metadata beside existing `sourceSelectionReason`
+- Codex `sourceFallbackDiagnostic` metadata beside existing `sourceFallbackReason`
+- the same shared builders used for Cursor
+- no rendered UI behavior changes
+- no raw diagnostic string rewrites
+
 ## Next Executable Slice
 
-The next safe implementation slice should populate the same source-selection and source-fallback diagnostics for Codex while preserving exact raw strings and rendered UI behavior.
+The next safe implementation slice should populate credential and host-access diagnostics while preserving exact raw strings and rendered UI behavior.
