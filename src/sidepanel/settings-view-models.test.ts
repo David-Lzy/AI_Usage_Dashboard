@@ -2,7 +2,10 @@ import { describe, expect, it } from "vitest";
 
 import { SAMPLE_APP_STATE } from "../shared/constants";
 import { createRuntimeI18n } from "../shared/i18n";
-import { buildSettingsLocalizedCopy } from "../shared/localized-copy";
+import {
+  buildProviderSourceDisplayLocalizedCopy,
+  buildSettingsLocalizedCopy,
+} from "../shared/localized-copy";
 import { buildProviderSourceDisplay } from "../shared/provider-sources";
 import {
   buildSettingsSourceCardModel,
@@ -237,17 +240,35 @@ describe("settings view models", () => {
     expect(setting).not.toBeNull();
 
     const settingsCopy = buildSettingsLocalizedCopy(createRuntimeI18n("zh-CN"));
+    const providerSourceDisplayCopy = buildProviderSourceDisplayLocalizedCopy(
+      createRuntimeI18n("zh-CN"),
+    );
     const sourceCardModel = buildSettingsSourceCardModel(
-      buildProviderSourceDisplay(provider!, setting!),
-      settingsCopy.sources.cardLabels,
+      buildProviderSourceDisplay(provider!, setting!, providerSourceDisplayCopy),
+      {
+        ...settingsCopy.sources.cardLabels,
+        sourceKindLabels: settingsCopy.sources.sourceKindLabels,
+        routeFallback: settingsCopy.sources.routeFallback,
+      },
     );
 
-    expect(sourceCardModel.primaryFields[0]).toMatchObject({
+    expect(sourceCardModel.primaryFields[0]).toEqual({
       label: "访问模型",
+      value: "已存凭据",
     });
-    expect(sourceCardModel.primaryFields[1]).toMatchObject({
+    expect(sourceCardModel.primaryFields[1]).toEqual({
       label: "可用性摘要",
+      value: "已用：分析 · 剩余：不可用 · 重置：仅窗口",
     });
+    expect(sourceCardModel.primaryFields[2]).toEqual({
+      label: "回退",
+      value: "会话页面",
+    });
+    expect(sourceCardModel.sessionTrack?.chips.map((chip) => chip.label)).toEqual([
+      "已发布",
+      "已发布 personal partial",
+      "仅窗口供应商值",
+    ]);
     expect(
       sourceCardModel.diagnosticGroups.map((group) => group.title),
     ).toEqual(["来源决策", "值语义", "信任边界"]);

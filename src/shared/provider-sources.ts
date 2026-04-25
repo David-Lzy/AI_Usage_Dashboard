@@ -33,12 +33,14 @@ export type ProviderSourceDisplay = {
   currentKind: ProviderSourceKind;
   currentLabel: string;
   currentPlan: ProviderSourcePlan;
+  currentRolloutStageLabel: string;
   currentContractLabel: string;
   currentContractDetail: string;
   currentGraduationGateLabel: string | null;
   currentGraduationGateDetail: string | null;
   fallbackPlans: ProviderSourcePlan[];
   sessionPagePlan: ProviderSourcePlan | null;
+  sessionPageRolloutStageLabel: string | null;
   sessionPageContractLabel: string | null;
   sessionPageContractDetail: string | null;
   sessionPageGraduationGateLabel: string | null;
@@ -65,6 +67,7 @@ export type ProviderSourceDisplay = {
   availabilitySummary: string;
   sessionPageFidelityLabel: string | null;
   sessionPageFidelityDetail: string | null;
+  sessionPageFidelityTone: ProviderTone | null;
   sessionPageAvailabilitySummary: string | null;
   accessModelLabel: string;
   accessModelDetail: string;
@@ -76,6 +79,83 @@ export type ProviderSourceDisplay = {
   manualCookieImportDetail: string;
   hostAccessLabel: string;
   hostAccessDetail: string;
+};
+
+export type ProviderSourceDisplayCopy = {
+  sourceKindLabels: Record<ProviderSourceKind, string>;
+  sourcePreferenceLabels: Record<ProviderSourcePreference, string>;
+  rolloutStageLabels: Record<SourceRolloutStage, string>;
+  fieldAvailabilityLabels: Record<FieldAvailability, string>;
+  sourceFidelity: Record<
+    ProviderSourceFidelityKind,
+    {
+      label: string;
+      detail: string;
+    }
+  >;
+  connectionMode: Record<
+    SourceConnectionMode,
+    {
+      label: string;
+      detail: string;
+    }
+  >;
+  sourceContractLabels: Record<ProviderSourceContractKind, string>;
+  credentialPersistence: {
+    extensionLocalOnlyLabel: string;
+    extensionLocalOnlyDetail: string;
+    notApplicableLabel: string;
+    notApplicableDetail: string;
+  };
+  cookiePolicy: {
+    forbiddenLabel: string;
+    forbiddenDetail: string;
+  };
+  manualCookieImport: {
+    forbiddenLabel: string;
+    forbiddenDetail: string;
+  };
+  hostAccess: {
+    notRequiredLabel: string;
+    notRequiredDetail: string;
+    requiredLabel: string;
+    requiredDetail: (hostsLabel: string) => string;
+  };
+  sourceState: {
+    readyLabel: string;
+    policyOnlyLabel: string;
+    hostAccessMissingLabel: string;
+    hostAccessMissingFallbackDetail: string;
+    credentialMissingLabel: string;
+    credentialMissingFallbackDetail: string;
+    loggedOutLabel: string;
+    loggedOutFallbackDetail: string;
+    openPageRequiredLabel: string;
+    openPageRequiredFallbackDetail: string;
+    syncErrorLabel: string;
+    syncErrorFallbackDetail: string;
+  };
+  pageBinding: {
+    boundTabLabel: string;
+    autoReconnectLabel: string;
+    targetFallback: string;
+    lastAttachedSuffix: (updatedAt: string) => string;
+    attachedLabel: string;
+    attachedDetail: (
+      modeLabel: string,
+      targetLabel: string,
+      lastSeenSuffix: string,
+    ) => string;
+    staleLabel: string;
+    staleDetail: (
+      modeLabel: string,
+      targetLabel: string,
+      lastSeenSuffix: string,
+    ) => string;
+    notBoundLabel: string;
+    notBoundDetail: string;
+  };
+  availabilitySummary: (used: string, remaining: string, reset: string) => string;
 };
 
 const SOURCE_KIND_LABELS: Record<ProviderSourceKind, string> = {
@@ -128,6 +208,125 @@ const SOURCE_CONTRACT_LABELS: Record<ProviderSourceContractKind, string> = {
   deferred_org_console: "Deferred org console path",
 };
 
+export const DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY: ProviderSourceDisplayCopy = {
+  sourceKindLabels: SOURCE_KIND_LABELS,
+  sourcePreferenceLabels: SOURCE_PREFERENCE_LABELS,
+  rolloutStageLabels: ROLLOUT_STAGE_LABELS,
+  fieldAvailabilityLabels: FIELD_AVAILABILITY_LABELS,
+  sourceFidelity: {
+    exact: {
+      label: SOURCE_FIDELITY_LABELS.exact,
+      detail:
+        "This path exposes vendor-reported values directly for the tracked usage and remaining balance.",
+    },
+    window_only: {
+      label: SOURCE_FIDELITY_LABELS.window_only,
+      detail:
+        "This path exposes vendor-reported values for the active window or partial context, not one absolute remaining balance.",
+    },
+    analytics_only: {
+      label: SOURCE_FIDELITY_LABELS.analytics_only,
+      detail:
+        "This path exposes aggregated analytics or snapshot values, not a live remaining counter.",
+    },
+    policy_only: {
+      label: SOURCE_FIDELITY_LABELS.policy_only,
+      detail:
+        "This path is documented policy only. No live page session or live API source is selected.",
+    },
+    local_estimate: {
+      label: SOURCE_FIDELITY_LABELS.local_estimate,
+      detail:
+        "This path would rely on locally inferred counters instead of vendor-reported live usage.",
+    },
+  },
+  connectionMode: {
+    credential: {
+      label: CONNECTION_MODE_LABELS.credential,
+      detail:
+        "This path runs from the extension using a credential saved in extension-managed local storage.",
+    },
+    page_session: {
+      label: CONNECTION_MODE_LABELS.page_session,
+      detail:
+        "This path attaches to an already logged-in browser tab and reads normalized page data inside the current session.",
+    },
+    none: {
+      label: CONNECTION_MODE_LABELS.none,
+      detail:
+        "This path does not use a live credential or page session. The extension shows documented policy only.",
+    },
+  },
+  sourceContractLabels: SOURCE_CONTRACT_LABELS,
+  credentialPersistence: {
+    extensionLocalOnlyLabel: "Extension local only",
+    extensionLocalOnlyDetail:
+      "Any configured credential stays in extension-managed local storage on this browser profile only.",
+    notApplicableLabel: "Not applicable",
+    notApplicableDetail: "No credential is stored for this provider's shipped contract.",
+  },
+  cookiePolicy: {
+    forbiddenLabel: "Forbidden",
+    forbiddenDetail: "Raw cookies are not persisted in extension storage.",
+  },
+  manualCookieImport: {
+    forbiddenLabel: "Forbidden",
+    forbiddenDetail:
+      "The product does not ask the user to paste cookies or auth headers into extension settings.",
+  },
+  hostAccess: {
+    notRequiredLabel: "Not required",
+    notRequiredDetail:
+      "No optional host permission is required for this provider's shipped contract.",
+    requiredLabel: "Required",
+    requiredDetail: (hostsLabel: string) =>
+      `Live access depends on Chrome host permission for ${hostsLabel}.`,
+  },
+  sourceState: {
+    readyLabel: "Ready to sync",
+    policyOnlyLabel: "No live sync",
+    hostAccessMissingLabel: "Host access missing",
+    hostAccessMissingFallbackDetail:
+      "Grant the required host access before live sync can run.",
+    credentialMissingLabel: "Credential missing",
+    credentialMissingFallbackDetail:
+      "Add the required provider credential before live sync can run.",
+    loggedOutLabel: "Logged-out page",
+    loggedOutFallbackDetail:
+      "Log in on the provider page again before refreshing the dashboard.",
+    openPageRequiredLabel: "Open page required",
+    openPageRequiredFallbackDetail:
+      "Open the required logged-in provider page, then refresh again.",
+    syncErrorLabel: "Sync issue",
+    syncErrorFallbackDetail:
+      "The current provider source failed unexpectedly during refresh.",
+  },
+  pageBinding: {
+    boundTabLabel: "Bound tab",
+    autoReconnectLabel: "Auto reconnect",
+    targetFallback: "the last matched provider page",
+    lastAttachedSuffix: (updatedAt: string) => ` Last attached ${updatedAt}.`,
+    attachedLabel: "Attached",
+    attachedDetail: (
+      modeLabel: string,
+      targetLabel: string,
+      lastSeenSuffix: string,
+    ) => `${modeLabel} is currently tracking ${targetLabel}.${lastSeenSuffix}`,
+    staleLabel: "Stale binding",
+    staleDetail: (
+      modeLabel: string,
+      targetLabel: string,
+      lastSeenSuffix: string,
+    ) =>
+      `${modeLabel} last pointed to ${targetLabel}, but the current session no longer exposes a usable page there.${lastSeenSuffix}`,
+    notBoundLabel: "Not bound",
+    notBoundDetail:
+      "No provider page is pinned yet. Auto discovery can still search current tabs, or you can use Find or open page to attach one explicitly.",
+  },
+  availabilitySummary: (used: string, remaining: string, reset: string) =>
+    `Used: ${used} · Remaining: ${remaining} · Reset: ${reset}`,
+};
+
 function lower(value: string | null | undefined): string {
   return (value ?? "").toLowerCase();
 }
@@ -136,40 +335,53 @@ function includesAny(value: string, patterns: string[]): boolean {
   return patterns.some((pattern) => value.includes(pattern));
 }
 
-export function getSourceKindLabel(kind: ProviderSourceKind): string {
-  return SOURCE_KIND_LABELS[kind];
+export function getSourceKindLabel(
+  kind: ProviderSourceKind,
+  copy: ProviderSourceDisplayCopy = DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY,
+): string {
+  return copy.sourceKindLabels[kind];
 }
 
 export function getSourcePreferenceLabel(
   preference: ProviderSourcePreference,
+  copy: ProviderSourceDisplayCopy = DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY,
 ): string {
-  return SOURCE_PREFERENCE_LABELS[preference];
+  return copy.sourcePreferenceLabels[preference];
 }
 
-export function getRolloutStageLabel(stage: SourceRolloutStage): string {
-  return ROLLOUT_STAGE_LABELS[stage];
+export function getRolloutStageLabel(
+  stage: SourceRolloutStage,
+  copy: ProviderSourceDisplayCopy = DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY,
+): string {
+  return copy.rolloutStageLabels[stage];
 }
 
 export function getFieldAvailabilityLabel(
   availability: FieldAvailability,
+  copy: ProviderSourceDisplayCopy = DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY,
 ): string {
-  return FIELD_AVAILABILITY_LABELS[availability];
+  return copy.fieldAvailabilityLabels[availability];
 }
 
 export function getSourceFidelityLabel(
   kind: ProviderSourceFidelityKind,
+  copy: ProviderSourceDisplayCopy = DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY,
 ): string {
-  return SOURCE_FIDELITY_LABELS[kind];
+  return copy.sourceFidelity[kind].label;
 }
 
-export function getConnectionModeLabel(mode: SourceConnectionMode): string {
-  return CONNECTION_MODE_LABELS[mode];
+export function getConnectionModeLabel(
+  mode: SourceConnectionMode,
+  copy: ProviderSourceDisplayCopy = DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY,
+): string {
+  return copy.connectionMode[mode].label;
 }
 
 export function getSourceContractLabel(
   kind: ProviderSourceContractKind,
+  copy: ProviderSourceDisplayCopy = DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY,
 ): string {
-  return SOURCE_CONTRACT_LABELS[kind];
+  return copy.sourceContractLabels[kind];
 }
 
 export function getProviderSourceBlueprint(providerId: ProviderId) {
@@ -334,46 +546,36 @@ function inferSourceFidelityKind(
 
 function buildSourceFidelityDetail(
   kind: ProviderSourceFidelityKind,
+  copy: ProviderSourceDisplayCopy = DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY,
 ): string {
-  switch (kind) {
-    case "exact":
-      return "This path exposes vendor-reported values directly for the tracked usage and remaining balance.";
-    case "window_only":
-      return "This path exposes vendor-reported values for the active window or partial context, not one absolute remaining balance.";
-    case "analytics_only":
-      return "This path exposes aggregated analytics or snapshot values, not a live remaining counter.";
-    case "policy_only":
-      return "This path is documented policy only. No live page session or live API source is selected.";
-    case "local_estimate":
-      return "This path would rely on locally inferred counters instead of vendor-reported live usage.";
-  }
+  return copy.sourceFidelity[kind].detail;
 }
 
 function getFidelityTone(kind: ProviderSourceFidelityKind): ProviderTone {
   return kind === "exact" ? "neutral" : "warning";
 }
 
-function formatAvailabilitySummary(sourcePlan: ProviderSourcePlan): string {
-  return [
-    `Used: ${getFieldAvailabilityLabel(sourcePlan.usedAvailability)}`,
-    `Remaining: ${getFieldAvailabilityLabel(sourcePlan.remainingAvailability)}`,
-    `Reset: ${getFieldAvailabilityLabel(sourcePlan.resetAvailability)}`,
-  ].join(" · ");
+function formatAvailabilitySummary(
+  sourcePlan: ProviderSourcePlan,
+  copy: ProviderSourceDisplayCopy = DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY,
+): string {
+  return copy.availabilitySummary(
+    getFieldAvailabilityLabel(sourcePlan.usedAvailability, copy),
+    getFieldAvailabilityLabel(sourcePlan.remainingAvailability, copy),
+    getFieldAvailabilityLabel(sourcePlan.resetAvailability, copy),
+  );
 }
 
-function buildAccessModelDetail(mode: SourceConnectionMode): string {
-  switch (mode) {
-    case "credential":
-      return "This path runs from the extension using a credential saved in extension-managed local storage.";
-    case "page_session":
-      return "This path attaches to an already logged-in browser tab and reads normalized page data inside the current session.";
-    case "none":
-      return "This path does not use a live credential or page session. The extension shows documented policy only.";
-  }
+function buildAccessModelDetail(
+  mode: SourceConnectionMode,
+  copy: ProviderSourceDisplayCopy = DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY,
+): string {
+  return copy.connectionMode[mode].detail;
 }
 
 function buildCredentialPersistenceDisplay(
   providerId: ProviderId,
+  copy: ProviderSourceDisplayCopy = DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY,
 ): {
   label: string;
   detail: string;
@@ -382,54 +584,58 @@ function buildCredentialPersistenceDisplay(
 
   if (blueprint.credentialPersistence === "extension_local_only") {
     return {
-      label: "Extension local only",
-      detail:
-        "Any configured credential stays in extension-managed local storage on this browser profile only.",
+      label: copy.credentialPersistence.extensionLocalOnlyLabel,
+      detail: copy.credentialPersistence.extensionLocalOnlyDetail,
     };
   }
 
   return {
-    label: "Not applicable",
-    detail: "No credential is stored for this provider's shipped contract.",
+    label: copy.credentialPersistence.notApplicableLabel,
+    detail: copy.credentialPersistence.notApplicableDetail,
   };
 }
 
-function buildCookiePolicyDisplay(): {
+function buildCookiePolicyDisplay(
+  copy: ProviderSourceDisplayCopy = DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY,
+): {
   label: string;
   detail: string;
 } {
   return {
-    label: "Forbidden",
-    detail: "Raw cookies are not persisted in extension storage.",
+    label: copy.cookiePolicy.forbiddenLabel,
+    detail: copy.cookiePolicy.forbiddenDetail,
   };
 }
 
-function buildManualCookieImportDisplay(): {
+function buildManualCookieImportDisplay(
+  copy: ProviderSourceDisplayCopy = DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY,
+): {
   label: string;
   detail: string;
 } {
   return {
-    label: "Forbidden",
-    detail:
-      "The product does not ask the user to paste cookies or auth headers into extension settings.",
+    label: copy.manualCookieImport.forbiddenLabel,
+    detail: copy.manualCookieImport.forbiddenDetail,
   };
 }
 
-function buildHostAccessDisplay(setting: ProviderSetting): {
+function buildHostAccessDisplay(
+  setting: ProviderSetting,
+  copy: ProviderSourceDisplayCopy = DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY,
+): {
   label: string;
   detail: string;
 } {
   if ((setting.hostOrigins?.length ?? 0) === 0) {
     return {
-      label: "Not required",
-      detail:
-        "No optional host permission is required for this provider's shipped contract.",
+      label: copy.hostAccess.notRequiredLabel,
+      detail: copy.hostAccess.notRequiredDetail,
     };
   }
 
   return {
-    label: "Required",
-    detail: `Live access depends on Chrome host permission for ${setting.hostsLabel}.`,
+    label: copy.hostAccess.requiredLabel,
+    detail: copy.hostAccess.requiredDetail(setting.hostsLabel),
   };
 }
 
@@ -437,6 +643,7 @@ function classifySourceState(
   provider: ProviderSnapshot,
   setting: ProviderSetting,
   currentPlan: ProviderSourcePlan,
+  copy: ProviderSourceDisplayCopy = DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY,
 ): {
   kind: ProviderSourceStateKind;
   label: string;
@@ -450,7 +657,7 @@ function classifySourceState(
   if (currentPlan.kind === "policy_only") {
     return {
       kind: "policy_only",
-      label: "No live sync",
+      label: copy.sourceState.policyOnlyLabel,
       tone: "warning",
       detail: currentPlan.note,
     };
@@ -467,10 +674,10 @@ function classifySourceState(
   ) {
     return {
       kind: "host_access_missing",
-      label: "Host access missing",
+      label: copy.sourceState.hostAccessMissingLabel,
       tone: "warning",
       detail:
-        warningReason || "Grant the required host access before live sync can run.",
+        warningReason || copy.sourceState.hostAccessMissingFallbackDetail,
     };
   }
 
@@ -487,11 +694,11 @@ function classifySourceState(
   ) {
     return {
       kind: "credential_missing",
-      label: "Credential missing",
+      label: copy.sourceState.credentialMissingLabel,
       tone: "error",
       detail:
         warningReason ||
-        "Add the required provider credential before live sync can run.",
+        copy.sourceState.credentialMissingFallbackDetail,
     };
   }
 
@@ -506,11 +713,11 @@ function classifySourceState(
   ) {
     return {
       kind: "logged_out",
-      label: "Logged-out page",
+      label: copy.sourceState.loggedOutLabel,
       tone: "warning",
       detail:
         warningReason ||
-        "Log in on the provider page again before refreshing the dashboard.",
+        copy.sourceState.loggedOutFallbackDetail,
     };
   }
 
@@ -526,28 +733,28 @@ function classifySourceState(
   ) {
     return {
       kind: "open_page_required",
-      label: "Open page required",
+      label: copy.sourceState.openPageRequiredLabel,
       tone: "warning",
       detail:
         warningReason ||
-        "Open the required logged-in provider page, then refresh again.",
+        copy.sourceState.openPageRequiredFallbackDetail,
     };
   }
 
   if (provider.syncStatus === "error") {
     return {
       kind: "sync_error",
-      label: "Sync issue",
+      label: copy.sourceState.syncErrorLabel,
       tone: "error",
       detail:
         warningReason ||
-        "The current provider source failed unexpectedly during refresh.",
+        copy.sourceState.syncErrorFallbackDetail,
     };
   }
 
   return {
     kind: "ready",
-    label: "Ready to sync",
+    label: copy.sourceState.readyLabel,
     tone: "neutral",
     detail: currentPlan.note,
   };
@@ -556,6 +763,7 @@ function classifySourceState(
 function buildPageBindingDisplay(
   setting: ProviderSetting,
   sessionPagePlan: ProviderSourcePlan | null,
+  copy: ProviderSourceDisplayCopy = DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY,
 ): {
   label: string | null;
   modeLabel: string | null;
@@ -570,42 +778,52 @@ function buildPageBindingDisplay(
   }
 
   const modeLabel =
-    setting.pageBinding.mode === "bound" ? "Bound tab" : "Auto reconnect";
+    setting.pageBinding.mode === "bound"
+      ? copy.pageBinding.boundTabLabel
+      : copy.pageBinding.autoReconnectLabel;
   const targetLabel =
     setting.pageBinding.matchedTitle ??
     setting.pageBinding.matchedUrl ??
-    "the last matched provider page";
+    copy.pageBinding.targetFallback;
   const lastSeenSuffix = setting.pageBinding.updatedAt
-    ? ` Last attached ${setting.pageBinding.updatedAt}.`
+    ? copy.pageBinding.lastAttachedSuffix(setting.pageBinding.updatedAt)
     : "";
 
   if (setting.pageBinding.status === "bound") {
     return {
-      label: "Attached",
+      label: copy.pageBinding.attachedLabel,
       modeLabel,
-      detail: `${modeLabel} is currently tracking ${targetLabel}.${lastSeenSuffix}`,
+      detail: copy.pageBinding.attachedDetail(
+        modeLabel,
+        targetLabel,
+        lastSeenSuffix,
+      ),
     };
   }
 
   if (setting.pageBinding.status === "stale") {
     return {
-      label: "Stale binding",
+      label: copy.pageBinding.staleLabel,
       modeLabel,
-      detail: `${modeLabel} last pointed to ${targetLabel}, but the current session no longer exposes a usable page there.${lastSeenSuffix}`,
+      detail: copy.pageBinding.staleDetail(
+        modeLabel,
+        targetLabel,
+        lastSeenSuffix,
+      ),
     };
   }
 
   return {
-    label: "Not bound",
+    label: copy.pageBinding.notBoundLabel,
     modeLabel,
-    detail:
-      "No provider page is pinned yet. Auto discovery can still search current tabs, or you can use Find or open page to attach one explicitly.",
+    detail: copy.pageBinding.notBoundDetail,
   };
 }
 
 export function buildProviderSourceDisplay(
   provider: ProviderSnapshot,
   setting: ProviderSetting,
+  copy: ProviderSourceDisplayCopy = DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY,
 ): ProviderSourceDisplay {
   const blueprint = getProviderSourceBlueprint(provider.providerId);
   const currentKind = inferCurrentSourceKind(provider);
@@ -618,40 +836,51 @@ export function buildProviderSourceDisplay(
   const fallbackPlans = blueprint.fallbackOrder
     .filter((kind) => kind !== currentKind)
     .map((kind) => getProviderSourcePlan(provider.providerId, kind));
-  const state = classifySourceState(provider, setting, currentPlan);
-  const pageBinding = buildPageBindingDisplay(setting, sessionPagePlan);
+  const state = classifySourceState(provider, setting, currentPlan, copy);
+  const pageBinding = buildPageBindingDisplay(setting, sessionPagePlan, copy);
   const fidelityKind = inferSourceFidelityKind(currentPlan);
-  const fidelityLabel = getSourceFidelityLabel(fidelityKind);
-  const fidelityDetail = buildSourceFidelityDetail(fidelityKind);
+  const fidelityLabel = getSourceFidelityLabel(fidelityKind, copy);
+  const fidelityDetail = buildSourceFidelityDetail(fidelityKind, copy);
   const sessionPageFidelityKind = sessionPagePlan
     ? inferSourceFidelityKind(sessionPagePlan)
     : null;
   const credentialPersistence = buildCredentialPersistenceDisplay(
     provider.providerId,
+    copy,
   );
-  const cookiePolicy = buildCookiePolicyDisplay();
-  const manualCookieImport = buildManualCookieImportDisplay();
-  const hostAccess = buildHostAccessDisplay(setting);
+  const cookiePolicy = buildCookiePolicyDisplay(copy);
+  const manualCookieImport = buildManualCookieImportDisplay(copy);
+  const hostAccess = buildHostAccessDisplay(setting, copy);
 
   return {
     currentKind,
-    currentLabel: getSourceKindLabel(currentKind),
+    currentLabel: getSourceKindLabel(currentKind, copy),
     currentPlan,
-    currentContractLabel: getSourceContractLabel(currentPlan.contractKind),
+    currentRolloutStageLabel: getRolloutStageLabel(
+      currentPlan.rolloutStage,
+      copy,
+    ),
+    currentContractLabel: getSourceContractLabel(
+      currentPlan.contractKind,
+      copy,
+    ),
     currentContractDetail: currentPlan.contractDetail,
     currentGraduationGateLabel: currentPlan.graduationGateLabel,
     currentGraduationGateDetail: currentPlan.graduationGateDetail,
     fallbackPlans,
     sessionPagePlan,
+    sessionPageRolloutStageLabel: sessionPagePlan
+      ? getRolloutStageLabel(sessionPagePlan.rolloutStage, copy)
+      : null,
     sessionPageContractLabel: sessionPagePlan
-      ? getSourceContractLabel(sessionPagePlan.contractKind)
+      ? getSourceContractLabel(sessionPagePlan.contractKind, copy)
       : null,
     sessionPageContractDetail: sessionPagePlan?.contractDetail ?? null,
     sessionPageGraduationGateLabel: sessionPagePlan?.graduationGateLabel ?? null,
     sessionPageGraduationGateDetail:
       sessionPagePlan?.graduationGateDetail ?? null,
     sourcePreference,
-    sourcePreferenceLabel: getSourcePreferenceLabel(sourcePreference),
+    sourcePreferenceLabel: getSourcePreferenceLabel(sourcePreference, copy),
     sourcePreferenceOptions: getSourcePreferenceOptions(provider.providerId),
     sourceSelectionReason: provider.sourceSelectionReason,
     sourceFallbackReason: provider.sourceFallbackReason,
@@ -666,23 +895,33 @@ export function buildProviderSourceDisplay(
     fidelityLabel,
     fidelityDetail,
     fidelityTone: getFidelityTone(fidelityKind),
-    usedAvailabilityLabel: getFieldAvailabilityLabel(currentPlan.usedAvailability),
+    usedAvailabilityLabel: getFieldAvailabilityLabel(
+      currentPlan.usedAvailability,
+      copy,
+    ),
     remainingAvailabilityLabel: getFieldAvailabilityLabel(
       currentPlan.remainingAvailability,
+      copy,
     ),
-    resetAvailabilityLabel: getFieldAvailabilityLabel(currentPlan.resetAvailability),
-    availabilitySummary: formatAvailabilitySummary(currentPlan),
+    resetAvailabilityLabel: getFieldAvailabilityLabel(
+      currentPlan.resetAvailability,
+      copy,
+    ),
+    availabilitySummary: formatAvailabilitySummary(currentPlan, copy),
     sessionPageFidelityLabel: sessionPageFidelityKind
-      ? getSourceFidelityLabel(sessionPageFidelityKind)
+      ? getSourceFidelityLabel(sessionPageFidelityKind, copy)
       : null,
     sessionPageFidelityDetail: sessionPageFidelityKind
-      ? buildSourceFidelityDetail(sessionPageFidelityKind)
+      ? buildSourceFidelityDetail(sessionPageFidelityKind, copy)
+      : null,
+    sessionPageFidelityTone: sessionPageFidelityKind
+      ? getFidelityTone(sessionPageFidelityKind)
       : null,
     sessionPageAvailabilitySummary: sessionPagePlan
-      ? formatAvailabilitySummary(sessionPagePlan)
+      ? formatAvailabilitySummary(sessionPagePlan, copy)
       : null,
-    accessModelLabel: getConnectionModeLabel(currentPlan.connectionMode),
-    accessModelDetail: buildAccessModelDetail(currentPlan.connectionMode),
+    accessModelLabel: getConnectionModeLabel(currentPlan.connectionMode, copy),
+    accessModelDetail: buildAccessModelDetail(currentPlan.connectionMode, copy),
     credentialPersistenceLabel: credentialPersistence.label,
     credentialPersistenceDetail: credentialPersistence.detail,
     cookiePolicyLabel: cookiePolicy.label,

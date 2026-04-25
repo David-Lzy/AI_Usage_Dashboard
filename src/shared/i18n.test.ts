@@ -13,6 +13,7 @@ import {
   buildOperatorWorkspaceLocalizedCopy,
   buildPopupLocalizedCopy,
   buildProviderDetailLocalizedCopy,
+  buildProviderSourceDisplayLocalizedCopy,
   buildSettingsLocalizedCopy,
   buildStoreWorkflowLocalizedCopy,
 } from "./localized-copy";
@@ -143,6 +144,19 @@ describe("runtime i18n", () => {
     expect(settingsCopy.credentials.saveKey).toBe("保存密钥");
     expect(settingsCopy.sources.preferenceLabel).toBe("偏好");
     expect(settingsCopy.permissions.requestAccess).toBe("请求授权");
+  });
+
+  it("returns zh-CN provider-source display wrapper copy", () => {
+    const providerSourceCopy = buildProviderSourceDisplayLocalizedCopy(
+      createRuntimeI18n("zh-CN"),
+    );
+
+    expect(providerSourceCopy.sourceKindLabels.session_page).toBe("会话页面");
+    expect(providerSourceCopy.fieldAvailabilityLabels.window_only).toBe("仅窗口");
+    expect(providerSourceCopy.connectionMode.credential.label).toBe("已存凭据");
+    expect(
+      providerSourceCopy.availabilitySummary("分析", "不可用", "仅窗口"),
+    ).toBe("已用：分析 · 剩余：不可用 · 重置：仅窗口");
   });
 
   it("returns zh-CN structured operator workspace shell copy builders", () => {

@@ -16,7 +16,7 @@ Freshness model:
 
 Status note:
 
-- this file records the `Phase 182` localization boundary for provider source-truth strings
+- this file records the provider source-truth localization boundary after `Phase 183`
 - refresh it when provider source display helpers, adapter reason fields, provider-source blueprints, or runtime i18n scope changes materially
 
 ## Goal
@@ -53,7 +53,7 @@ These fields remain raw source-truth values until a later phase introduces typed
 
 ## Presentation-Only Candidates
 
-These are safe candidates for the next runtime localization slice because they are derived from typed enums or helper state, not raw adapter evidence:
+These were localized in `Phase 183` because they are derived from typed enums or helper state, not raw adapter evidence:
 
 - source kind labels:
   - `Official API`
@@ -81,6 +81,19 @@ These are safe candidates for the next runtime localization slice because they a
 - `classifySourceState` labels and fallback details when they are generated from state, not copied from `warningReason`
 - availability summaries generated from typed field availability values
 
+## Localized Display Wrappers
+
+`Phase 183` moved the presentation-only bucket into the runtime pilot through `ProviderSourceDisplayCopy` and `buildProviderSourceDisplayLocalizedCopy`.
+
+The localized wrappers now include:
+
+- source kind and source preference labels
+- rollout, availability, fidelity, connection, and contract labels
+- generated fidelity, access-model, credential, cookie, manual-cookie-import, host-access, page-binding, and fallback source-state helper descriptions
+- generated availability summaries
+
+The raw fields in [Current Raw Fields](#current-raw-fields) still pass through unchanged. For example, a localized Settings source card may show a localized `Fallback reason` field label while preserving the English raw fallback body emitted by the provider adapter.
+
 ## Implementation Rule
 
 Future localization should prefer this order:
@@ -102,12 +115,6 @@ Future localization should prefer this order:
 
 ## Next Executable Slice
 
-The next safe engineering slice should localize provider-source display wrappers that are already derived from enums or helper state:
+The next safe engineering slice should plan typed adapter diagnostic reason codes before any localization of raw adapter diagnostic bodies.
 
-- source kind and source preference labels
-- rollout, availability, fidelity, connection, and contract labels
-- credential/cookie/host-access helper labels
-- page-binding helper labels
-- generated availability summaries
-
-It should not translate raw provider source-truth fields listed above.
+It should not translate raw provider source-truth fields listed above until that typed compatibility layer exists.

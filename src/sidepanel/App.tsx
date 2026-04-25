@@ -36,6 +36,7 @@ import {
   startThemeSettingsSync,
   type ThemeSettings,
 } from "../shared/theme";
+import { buildProviderSourceDisplayLocalizedCopy } from "../shared/localized-copy";
 import {
   getOpenableRouteHint,
   getSessionPagePlan,
@@ -955,10 +956,19 @@ function StandardApp({ locationHash }: StandardAppProps) {
     buildDashboardSummaryLabels(runtimeI18n),
     runtimeI18n.formatNumber,
   );
-  const visibleProviders = getVisibleProviders(appState);
+  const providerSourceDisplayCopy =
+    buildProviderSourceDisplayLocalizedCopy(runtimeI18n);
+  const visibleProviders = getVisibleProviders(
+    appState,
+    providerSourceDisplayCopy,
+  );
   const selectedProvider =
     route.name === "provider-detail"
-      ? getProviderViewModel(appState, route.providerId)
+      ? getProviderViewModel(
+          appState,
+          route.providerId,
+          providerSourceDisplayCopy,
+        )
       : null;
   const quickThemeToggle = buildQuickThemeToggle(
     appState.settings.themeMode,

@@ -7,7 +7,6 @@ import type {
 } from "../providers/types";
 import {
   getOpenableRouteHint,
-  getRolloutStageLabel,
   type ProviderSourceDisplay,
 } from "../shared/provider-sources";
 
@@ -188,7 +187,9 @@ function buildSessionTrackModel(
   const routeHint = getOpenableRouteHint(sessionPagePlan.routeHints);
   const chips = [
     {
-      label: getRolloutStageLabel(sessionPagePlan.rolloutStage),
+      label:
+        sourceDisplay.sessionPageRolloutStageLabel ??
+        sessionPagePlan.rolloutStage,
       tone:
         sessionPagePlan.rolloutStage === "shipped" ? "neutral" : "warning",
     },
@@ -202,10 +203,7 @@ function buildSessionTrackModel(
     sourceDisplay.sessionPageFidelityLabel
       ? {
           label: sourceDisplay.sessionPageFidelityLabel,
-          tone:
-            sourceDisplay.sessionPageFidelityLabel === "Exact vendor value"
-              ? "neutral"
-              : "warning",
+          tone: sourceDisplay.sessionPageFidelityTone ?? "warning",
         }
       : null,
   ].filter((chip): chip is SettingsSourceChip => chip !== null);

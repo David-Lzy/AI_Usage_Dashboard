@@ -6,6 +6,7 @@ import type {
 } from "../providers/types";
 import type { RuntimeI18n } from "../shared/i18n";
 import { buildPopupLocalizedCopy } from "../shared/localized-copy";
+import type { ProviderSourceDisplayCopy } from "../shared/provider-sources";
 import {
   getVisibleProviders,
   type ProviderViewModel,
@@ -1462,8 +1463,9 @@ export function buildPopupViewModel(
   state: AppState,
   summaryLabels: PopupSummaryLabels = DEFAULT_POPUP_SUMMARY_LABELS,
   formatValue: PopupValueFormatter = DEFAULT_POPUP_VALUE_FORMATTER,
+  sourceDisplayCopy?: ProviderSourceDisplayCopy,
 ): PopupViewModel {
-  const visibleProviders = getVisibleProviders(state);
+  const visibleProviders = getVisibleProviders(state, sourceDisplayCopy);
   const attentionProviders = visibleProviders.filter(needsAttention);
   const guidanceCard = buildGuidanceCard(visibleProviders);
   const setupCoverage = buildSetupCoverage(visibleProviders, formatValue);

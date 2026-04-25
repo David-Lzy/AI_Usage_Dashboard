@@ -21,7 +21,7 @@ Status note:
 
 ## Current Localized Scope
 
-Localized through `Phase 170`, `Phase 171`, `Phase 172`, `Phase 173`, `Phase 174`, `Phase 175`, `Phase 176`, `Phase 177`, `Phase 179`, `Phase 180`, and `Phase 181`.
+Localized through `Phase 170`, `Phase 171`, `Phase 172`, `Phase 173`, `Phase 174`, `Phase 175`, `Phase 176`, `Phase 177`, `Phase 179`, `Phase 180`, `Phase 181`, and `Phase 183`.
 
 Boundary-reviewed through `Phase 182`:
 
@@ -74,6 +74,11 @@ Localized runtime surfaces:
   - screenshot seed helper headings, status copy, preset-applied helper copy, and route-contract copy
   - screenshot seed submission-support captions that map current preset ids to localized store-caption guidance
   - native toolbar popup probe headings, status copy, accepted-state helper copy, and route-contract copy
+- provider-source display wrapper copy:
+  - source kind and preference labels
+  - rollout, availability, fidelity, connection, and contract labels
+  - generated fidelity, access-model, credential, cookie, manual-cookie-import, host-access, page-binding, and fallback source-state helper descriptions
+  - generated availability summaries
 
 These now ship through:
 
@@ -105,7 +110,7 @@ That reference covers the interaction-audit and theme-recovery workspaces. It se
 
 - [I18n_Raw_Provider_Source_Truth_Policy.md](./I18n_Raw_Provider_Source_Truth_Policy.md)
 
-That reference protects raw `warningReason`, `sourceSelectionReason`, `sourceFallbackReason`, provider-source contract evidence, non-parseable vendor or policy labels, provider identifiers, host labels, route hints, URLs, and API names. It also defines the next safe localizable bucket: provider-source display wrappers generated from enums or helper state.
+That reference protects raw `warningReason`, `sourceSelectionReason`, `sourceFallbackReason`, provider-source contract evidence, non-parseable vendor or policy labels, provider identifiers, host labels, route hints, URLs, and API names. `Phase 183` localized the safe provider-source display wrappers generated from enums or helper state while keeping those raw evidence fields unchanged.
 
 ## Runtime Surfaces Still Mostly English
 
@@ -119,16 +124,16 @@ The following surfaces still need broader runtime localization work:
 
 Recommended next extraction order:
 
-1. provider-source display wrapper localization
+1. adapter diagnostic typed reason-code plan
 2. revisit deeper operator-workspace evidence copy only after archive-compatibility rules are explicit
 3. revisit generated store-listing source localization only after refreshed screenshot assets replace the historical baseline
 
 ## Truth Boundary
 
 - the extension is no longer manifest-English-only after `Phase 170`
-- the runtime app now has a broader but still partial localized slice plus locale-aware formatting after `Phase 181`, not a full translated rollout
-- `en` and `zh_CN` currently cover manifest surfaces plus popup/dashboard shell strings, popup explanatory copy, the first settings-shell slice, deeper settings helper copy, provider-detail shell/static copy, quick theme-toggle labels, generated counts, percentages, parseable timestamp primitives, duration-bearing runtime freshness/reset labels, operator-workspace shell copy, store-screenshot runtime helper copy plus seed-route submission-support captions, and one first compact-width plus RTL hardening pass
+- the runtime app now has a broader but still partial localized slice plus locale-aware formatting after `Phase 183`, not a full translated rollout
+- `en` and `zh_CN` currently cover manifest surfaces plus popup/dashboard shell strings, popup explanatory copy, the first settings-shell slice, deeper settings helper copy, provider-detail shell/static copy, provider-source display wrappers, quick theme-toggle labels, generated counts, percentages, parseable timestamp primitives, duration-bearing runtime freshness/reset labels, operator-workspace shell copy, store-screenshot runtime helper copy plus seed-route submission-support captions, and one first compact-width plus RTL hardening pass
 - runtime document roots now sync `lang` and `dir`, and preview/QA can now force `?app-dir=rtl` while the shipped locale set still resolves to `ltr`
 - raw provider source-truth detail strings and deeper operator evidence payloads still remain outside the shipped pilot, but operator-workspace boundaries are now explicitly documented after `Phase 178` and the shell slice is shipped after `Phase 179`
-- provider source-truth values now have an explicit policy boundary after `Phase 182`; the next safe work is wrapper localization, not translating raw adapter diagnostics
+- provider source-truth values now have an explicit policy boundary after `Phase 182`, and provider-source display wrappers are localized after `Phase 183`; the next safe work is typed adapter diagnostic reason-code planning, not translating raw adapter diagnostics directly
 - non-parseable vendor-owned window labels such as `Mar 23 - Apr 21` still remain raw strings until a later explicit product decision localizes them

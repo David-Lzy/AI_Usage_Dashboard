@@ -22,6 +22,7 @@ Status note:
 - eleventh executable phase landed on `2026-04-25` through `Phase 180`
 - twelfth executable phase landed on `2026-04-25` through `Phase 181`
 - thirteenth executable phase landed on `2026-04-25` through `Phase 182`
+- fourteenth executable phase landed on `2026-04-25` through `Phase 183`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -82,8 +83,8 @@ Build one maintainable localization architecture that can support manifest strin
 - settings-shell slice shipped in `Phase 173`
 - popup explanatory plus provider-detail shell/static slice shipped in `Phase 174`
 - remaining work:
-  - raw provider source-truth detail strings that should stay explicit but still need a deliberate localization policy
   - deeper operator evidence/export payload copy that should stay explicit until archive compatibility is reviewed
+  - adapter diagnostic bodies that need typed reason codes before localization can be safe
 
 ### E. Locale-Aware Formatting
 
@@ -253,8 +254,8 @@ Build one maintainable localization architecture that can support manifest strin
 
 ### K. Provider-Source Display Wrapper Localization
 
-- next recommended slice
-- localize presentation-only provider-source display wrappers:
+- shipped in `Phase 183`
+- localized presentation-only provider-source display wrappers:
   - source kind labels
   - source preference labels
   - rollout stage labels
@@ -266,6 +267,14 @@ Build one maintainable localization architecture that can support manifest strin
   - generated availability summaries
 - preserve raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` values unchanged
 - preserve source-contract evidence fields until a later stable message-id model exists
+
+### L. Adapter Diagnostic Reason-Code Plan
+
+- next recommended slice
+- design typed reason codes for adapter-generated diagnostics before localizing diagnostic bodies
+- keep current raw adapter strings visible for evidence and archive compatibility during the transition
+- decide whether reason-code payloads need parameterized values, provider-specific fallback text, or a compatibility map for historical archives
+- do not use this slice to change provider coverage claims, fallback order, or source-selection behavior
 
 ## Planned Numbered Slices
 
@@ -283,7 +292,8 @@ Build one maintainable localization architecture that can support manifest strin
 12. store-facing runtime helper copy - completed in `Phase 180`
 13. screenshot-adjacent captions inside actual product screenshot surfaces or submission-support UI - completed in `Phase 181`
 14. raw provider source-truth localization policy and presentation-only wrapper review - completed in `Phase 182`
-15. provider-source display wrapper localization - next
+15. provider-source display wrapper localization - completed in `Phase 183`
+16. adapter diagnostic typed reason-code plan - next
 
 ## Out Of Scope
 
@@ -292,5 +302,5 @@ Build one maintainable localization architecture that can support manifest strin
 - shipping Arabic before explicit RTL review exists
 - localizing operator evidence schemas or archive-facing generated strings before archive compatibility is reviewed
 - translating generated store-listing source docs inside runtime code unless that copy is shown by the extension
-- translating raw provider source-truth strings outside the `Phase 182` policy boundary
+- translating raw provider source-truth strings outside the `Phase 182` and `Phase 183` policy boundary
 - localizing adapter diagnostics before typed reason codes exist

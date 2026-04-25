@@ -131,21 +131,22 @@ If one of these categories is localized later, the implementation must first dec
 
 ## Current Boundary
 
-As of `Phase 182`:
+As of `Phase 183`:
 
 - the runtime app already localizes the main product surfaces in `en + zh_CN`
 - the operator workspaces now have shell-localized navigation and helper copy
 - store helper routes now have localized helper copy plus helper-only submission-support captions
 - raw provider source-truth strings now have a maintained policy boundary
+- provider-source display wrappers now localize enum/helper-state labels and descriptions without translating raw adapter evidence
 - archive payload semantics remain English and unchanged
 - the repo has a maintained extraction boundary for deeper operator-workspace localization decisions
 - the next implementation step should avoid evidence-schema changes unless a dedicated archive-compatibility review lands first
 
 ## Follow-Up
 
-The next `Direction 09` implementation slice should move to provider-source display wrapper localization:
+The next `Direction 09` implementation slice should move to adapter diagnostic typed reason-code planning:
 
-- localize enum-derived provider-source labels and helper descriptions
+- design typed diagnostic reasons before localizing adapter diagnostic bodies
 - keep raw provider `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` values unchanged
 - keep generated store-listing source docs out of runtime code unless that copy is shown by the extension
 

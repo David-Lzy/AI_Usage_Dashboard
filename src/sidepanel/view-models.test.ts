@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import type { AppState } from "../providers/types";
 import { SAMPLE_APP_STATE } from "../shared/constants";
+import { createRuntimeI18n } from "../shared/i18n";
+import { buildProviderSourceDisplayLocalizedCopy } from "../shared/localized-copy";
 import {
   buildSummaryItems,
   getProviderViewModel,
@@ -104,5 +106,23 @@ describe("sidepanel view models", () => {
       "Reverify org-visible Console session",
     );
     expect(jetbrains?.currentSourceFidelityLabel).toBe("Exact vendor value");
+  });
+
+  it("accepts localized provider-source display copy while preserving raw diagnostics", () => {
+    const cursor = getProviderViewModel(
+      createState(),
+      "cursor",
+      buildProviderSourceDisplayLocalizedCopy(createRuntimeI18n("zh-CN")),
+    );
+
+    expect(cursor).not.toBeNull();
+    expect(cursor?.currentSourceLabel).toBe("会话页面");
+    expect(cursor?.currentSourceContractLabel).toBe("已发布 personal partial");
+    expect(cursor?.currentSourceAvailabilitySummary).toBe(
+      "已用：仅窗口 · 剩余：不可用 · 重置：仅窗口",
+    );
+    expect(cursor?.sourceFallbackReason).toBe(
+      "Official API unavailable: no Cursor Admin API key is stored.",
+    );
   });
 });

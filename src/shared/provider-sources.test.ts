@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import { SAMPLE_APP_STATE } from "./constants";
+import { createRuntimeI18n } from "./i18n";
+import { buildProviderSourceDisplayLocalizedCopy } from "./localized-copy";
 import {
   buildProviderSourceDisplay,
   getSourceAttemptOrder,
@@ -101,6 +103,28 @@ describe("provider source helpers", () => {
     expect(display.sessionPageAvailabilitySummary).toBe(
       "Used: Window only · Remaining: Exact · Reset: Exact",
     );
+  });
+
+  it("localizes provider-source wrapper labels without rewriting raw source-truth reasons", () => {
+    const { provider, setting } = findProviderState("codex");
+    const display = buildProviderSourceDisplay(
+      provider,
+      setting,
+      buildProviderSourceDisplayLocalizedCopy(createRuntimeI18n("zh-CN")),
+    );
+
+    expect(display.currentLabel).toBe("官方 API");
+    expect(display.currentContractLabel).toBe("已发布 enterprise analytics");
+    expect(display.fidelityLabel).toBe("分析快照");
+    expect(display.accessModelLabel).toBe("已存凭据");
+    expect(display.availabilitySummary).toBe(
+      "已用：分析 · 剩余：不可用 · 重置：仅窗口",
+    );
+    expect(display.sessionPageAvailabilitySummary).toBe(
+      "已用：仅窗口 · 剩余：精确 · 重置：精确",
+    );
+    expect(display.sourceSelectionReason).toBe("Auto selected Official API.");
+    expect(display.sourceFallbackReason).toBeNull();
   });
 
   it("classifies the retained JetBrains session-page path as exact vendor values", () => {

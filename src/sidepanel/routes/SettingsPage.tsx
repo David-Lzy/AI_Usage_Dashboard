@@ -20,6 +20,7 @@ import {
 } from "../../shared/i18n";
 import {
   buildSettingsLocalizedCopy,
+  buildProviderSourceDisplayLocalizedCopy,
   getSettingsSourcePreferenceLabel,
 } from "../../shared/localized-copy";
 import {
@@ -180,6 +181,13 @@ export function SettingsPage({
     typeof window !== "undefined" ? window : undefined,
   );
   const settingsCopy = buildSettingsLocalizedCopy(i18n);
+  const providerSourceDisplayCopy =
+    buildProviderSourceDisplayLocalizedCopy(i18n);
+  const settingsSourceCardLabels = {
+    ...settingsCopy.sources.cardLabels,
+    sourceKindLabels: settingsCopy.sources.sourceKindLabels,
+    routeFallback: settingsCopy.sources.routeFallback,
+  };
   const customThemePreviewPalette = normalizedThemeCustomSeedDraft
     ? buildCustomThemePalette(normalizedThemeCustomSeedDraft, resolvedThemeMode)
     : null;
@@ -823,10 +831,14 @@ export function SettingsPage({
               return null;
             }
 
-            const sourceDisplay = buildProviderSourceDisplay(snapshot, provider);
+            const sourceDisplay = buildProviderSourceDisplay(
+              snapshot,
+              provider,
+              providerSourceDisplayCopy,
+            );
             const sourceCardModel = buildSettingsSourceCardModel(
               sourceDisplay,
-              settingsCopy.sources.cardLabels,
+              settingsSourceCardLabels,
             );
             const sessionPagePlan = sourceDisplay.sessionPagePlan;
             const canUseSessionPageAction =

@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [182_Phase_Raw_Provider_Source_Truth_Localization_Policy.md](./Archive/182_Phase_Raw_Provider_Source_Truth_Localization_Policy.md)
+- latest completed slice: [183_Phase_Provider_Source_Display_Wrapper_Localization.md](./Archive/183_Phase_Provider_Source_Display_Wrapper_Localization.md)
 
 Completed phases should be moved to:
 
@@ -229,6 +229,7 @@ Completed phases should be moved to:
 - [180_Phase_Store_Runtime_Helper_Localization.md](./Archive/180_Phase_Store_Runtime_Helper_Localization.md) - completed and archived on 2026-04-25
 - [181_Phase_Screenshot_Caption_Support_Localization.md](./Archive/181_Phase_Screenshot_Caption_Support_Localization.md) - completed and archived on 2026-04-25
 - [182_Phase_Raw_Provider_Source_Truth_Localization_Policy.md](./Archive/182_Phase_Raw_Provider_Source_Truth_Localization_Policy.md) - completed and archived on 2026-04-25
+- [183_Phase_Provider_Source_Display_Wrapper_Localization.md](./Archive/183_Phase_Provider_Source_Display_Wrapper_Localization.md) - completed and archived on 2026-04-25
 
 ## Dependency Notes
 
@@ -473,6 +474,8 @@ Completed phases should be moved to:
 - the 2026-04-25 `Phase 181` closeout localized screenshot-adjacent submission-support captions inside the store seed helper route while keeping final popup, side-panel, and full-page screenshot surfaces unchanged
 - phase 182 depends on phase 181 because raw provider source-truth policy should be settled after the store helper caption boundary closes the previous screenshot-adjacent i18n slice
 - the 2026-04-25 `Phase 182` closeout added a maintained raw provider source-truth localization policy, protected adapter evidence fields, and identified provider-source display wrappers as the next safe localized bucket
+- phase 183 depends on phase 182 because provider-source display wrapper localization should only move after raw adapter evidence fields are explicitly protected
+- the 2026-04-25 `Phase 183` closeout localized provider-source display wrappers while preserving raw `warningReason`, `sourceSelectionReason`, `sourceFallbackReason`, provider source contract details, notes, and graduation-gate evidence unchanged
 
 ## Delivery Standard For Each Phase
 

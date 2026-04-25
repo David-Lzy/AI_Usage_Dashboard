@@ -9,7 +9,10 @@ import type {
   SummaryItem,
   SyncStatus,
 } from "../providers/types";
-import { buildProviderSourceDisplay } from "../shared/provider-sources";
+import {
+  buildProviderSourceDisplay,
+  type ProviderSourceDisplayCopy,
+} from "../shared/provider-sources";
 import { createEmptyPageBinding } from "../shared/page-bindings";
 
 export type ProviderViewModel = ProviderSnapshot & {
@@ -139,6 +142,7 @@ function getUsageRatio(provider: ProviderSnapshot): number {
 function toProviderViewModel(
   provider: ProviderSnapshot,
   setting: ProviderSetting | null,
+  sourceDisplayCopy?: ProviderSourceDisplayCopy,
 ): ProviderViewModel {
   const permissionStatus = setting?.status ?? "missing";
   const sourceDisplay = buildProviderSourceDisplay(
@@ -155,6 +159,7 @@ function toProviderViewModel(
       hostOrigins: [],
       description: "No provider configuration available.",
     },
+    sourceDisplayCopy,
   );
 
   return {
@@ -243,7 +248,10 @@ function compareProviders(
   return left.providerLabel.localeCompare(right.providerLabel);
 }
 
-export function getVisibleProviders(state: AppState): ProviderViewModel[] {
+export function getVisibleProviders(
+  state: AppState,
+  sourceDisplayCopy?: ProviderSourceDisplayCopy,
+): ProviderViewModel[] {
   return state.providers
     .filter((provider) => {
       const setting = findProviderSetting(state.providerSettings, provider.providerId);
@@ -253,6 +261,7 @@ export function getVisibleProviders(state: AppState): ProviderViewModel[] {
       toProviderViewModel(
         provider,
         findProviderSetting(state.providerSettings, provider.providerId),
+        sourceDisplayCopy,
       ),
     )
     .sort(compareProviders);
@@ -261,6 +270,7 @@ export function getVisibleProviders(state: AppState): ProviderViewModel[] {
 export function getProviderViewModel(
   state: AppState,
   providerId: ProviderId,
+  sourceDisplayCopy?: ProviderSourceDisplayCopy,
 ): ProviderViewModel | null {
   const provider =
     state.providers.find((entry) => entry.providerId === providerId) ?? null;
@@ -272,6 +282,7 @@ export function getProviderViewModel(
   return toProviderViewModel(
     provider,
     findProviderSetting(state.providerSettings, providerId),
+    sourceDisplayCopy,
   );
 }
 

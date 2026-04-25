@@ -10,7 +10,10 @@ import {
   getQuickThemeToggleCopy,
   syncRuntimeLocaleAttributes,
 } from "../shared/i18n";
-import { buildPopupLocalizedCopy } from "../shared/localized-copy";
+import {
+  buildPopupLocalizedCopy,
+  buildProviderSourceDisplayLocalizedCopy,
+} from "../shared/localized-copy";
 import {
   buildFullPageExtensionPath,
   buildFullPagePreviewUrl,
@@ -303,6 +306,7 @@ export function PopupApp() {
       loadState.appState,
       buildPopupSummaryLabels(runtimeI18n),
       runtimeI18n.formatNumber,
+      buildProviderSourceDisplayLocalizedCopy(runtimeI18n),
     ),
     runtimeI18n,
   );

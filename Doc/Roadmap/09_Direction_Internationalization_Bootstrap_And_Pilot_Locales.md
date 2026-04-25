@@ -26,6 +26,7 @@ Execution note:
 - eleventh executable slice landed on `2026-04-25` through `Phase 180`
 - twelfth executable slice landed on `2026-04-25` through `Phase 181`
 - thirteenth executable slice landed on `2026-04-25` through `Phase 182`
+- fourteenth executable slice landed on `2026-04-25` through `Phase 183`
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
 Process rule:
@@ -73,6 +74,7 @@ As of 2026-04-25:
   - operator-workspace shell copy for interaction-audit and theme-recovery
   - store-screenshot runtime helper copy for the seed route and native popup probe route
   - store-screenshot seed-route submission-support captions that map screenshot presets to localized store-caption guidance
+  - provider-source display wrapper labels and helper descriptions generated from typed source/fidelity/availability/connection state
   - shared quick theme-toggle labels
 - the current settings-shell slice includes:
   - settings top bar and actions
@@ -174,7 +176,8 @@ Recommended rollout:
 12. store-facing runtime helper copy - shipped in `Phase 180`
 13. screenshot-adjacent captions inside actual product screenshot surfaces or submission-support UI - shipped in `Phase 181`
 14. raw provider source-truth localization policy and presentation-only wrapper review - shipped in `Phase 182`
-15. provider-source display wrapper localization - next
+15. provider-source display wrapper localization - shipped in `Phase 183`
+16. adapter diagnostic typed reason-code plan - next
 
 ## References
 
