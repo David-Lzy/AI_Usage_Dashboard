@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [203_Phase_Cursor_Personal_Billing_Period_Context_Surfacing.md](./Archive/203_Phase_Cursor_Personal_Billing_Period_Context_Surfacing.md)
+- latest completed slice: [204_Phase_Diagnostic_Raw_Fallback_Regression.md](./Archive/204_Phase_Diagnostic_Raw_Fallback_Regression.md)
 
 Completed phases should be moved to:
 
@@ -250,6 +250,7 @@ Completed phases should be moved to:
 - [201_Phase_Codex_Personal_Flex_Credit_Balance_Surfacing.md](./Archive/201_Phase_Codex_Personal_Flex_Credit_Balance_Surfacing.md) - completed and archived on 2026-04-25
 - [202_Phase_Codex_Usage_Context_Extension_Mode_Review.md](./Archive/202_Phase_Codex_Usage_Context_Extension_Mode_Review.md) - completed and archived on 2026-04-25
 - [203_Phase_Cursor_Personal_Billing_Period_Context_Surfacing.md](./Archive/203_Phase_Cursor_Personal_Billing_Period_Context_Surfacing.md) - completed and archived on 2026-04-25
+- [204_Phase_Diagnostic_Raw_Fallback_Regression.md](./Archive/204_Phase_Diagnostic_Raw_Fallback_Regression.md) - completed and archived on 2026-04-25
 
 ## Dependency Notes
 

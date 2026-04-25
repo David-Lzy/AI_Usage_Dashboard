@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-04-25:
 
-- the numbered phase queue is now completed through `Phase 203`
+- the numbered phase queue is now completed through `Phase 204`
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -86,6 +86,7 @@ As of 2026-04-25:
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without changing the primary percentage-window quota model
 - `Phase 202` completed repeatable unpacked-extension verification for Codex personal multi-window plus flex-balance context, while fixing DOM capture so repeated percentages and single-character balance values are not lost before parsing
 - `Phase 203` completed Cursor personal billing-period usage-summary surfacing across dashboard, provider detail, and popup while preserving that the personal page does not expose exact remaining included requests
+- `Phase 204` completed adapter diagnostic raw fallback regression coverage, proving unknown or absent typed diagnostics still fall back to raw evidence in source-state, Settings, Provider Detail inputs, and localized presentation boundaries without changing runtime product behavior
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
 - `Phase 42` has packaged `0.1.0-rc.2` and closed the release-closeout track for the narrowed RC
 - `Phase 43` completed the first `Direction 02` slice by productizing source-fidelity semantics in the side panel

@@ -257,8 +257,8 @@ Phase status update:
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without treating them as the primary plan-wide quota
 - `Phase 202` completed repeatable unpacked-extension verification for Codex multi-window plus flex-balance context, and fixed DOM capture so repeated percentages plus single-character balance values survive live-page summarization
 - `Phase 203` completed Cursor personal billing-period usage-summary surfacing across dashboard, provider detail, and popup while preserving the exact-remaining unavailable boundary
-- the immediate next repo-owned engineering default was adapter diagnostic raw fallback regression review under `Doc/Roadmap/09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`, but current execution should still prefer functional provider work while Codex budget is constrained
-- the recommended next functional work is a real authenticated Codex or Cursor operator pass if that page is available; otherwise return to adapter diagnostic raw fallback regression before store screenshots or operator evidence closure
+- `Phase 204` completed adapter diagnostic raw fallback regression coverage, proving unknown or absent typed diagnostics still fall back to raw evidence without changing runtime behavior
+- the recommended next functional work is a real authenticated Codex or Cursor operator pass if that page is available; otherwise prefer narrow verification or release-readiness work before store screenshots or operator evidence closure
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
 - the split `Phase 41` release gate cleared the old runtime-parity ambiguity and re-proved the live `Codex` plus `Cursor` personal session-page paths in real Chrome

@@ -5,6 +5,7 @@ import {
   createSourceSelectionDiagnostic,
   createUsageThresholdDiagnostic,
 } from "../providers/diagnostics";
+import type { ProviderDiagnostic } from "../providers/types";
 import { SAMPLE_APP_STATE } from "../shared/constants";
 import { createRuntimeI18n } from "../shared/i18n";
 import {
@@ -341,6 +342,86 @@ describe("settings view models", () => {
         },
       ]),
     );
+  });
+
+  it("keeps raw settings evidence visible when typed diagnostic presentation is absent", () => {
+    const provider =
+      SAMPLE_APP_STATE.providers.find((entry) => entry.providerId === "cursor") ??
+      null;
+    const setting =
+      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "cursor") ??
+      null;
+
+    expect(provider).not.toBeNull();
+    expect(setting).not.toBeNull();
+
+    const rawWarningReason =
+      "No Cursor Admin API key is stored; add an API key before official sync can run.";
+    const rawSelectionReason =
+      "Auto selected Session page after an unavailable official source.";
+    const rawFallbackReason =
+      "Official API unavailable: no Cursor Admin API key is stored.";
+    const unknownWarningDiagnostic: ProviderDiagnostic = {
+      code: "future.cursor_credential_hint",
+      category: "adapter_error",
+      severity: "warning",
+      rawMessage: rawWarningReason,
+    };
+    const unknownSelectionDiagnostic: ProviderDiagnostic = {
+      code: "future.cursor_selection_hint",
+      category: "source_selection",
+      severity: "info",
+      rawMessage: rawSelectionReason,
+    };
+    const unknownFallbackDiagnostic: ProviderDiagnostic = {
+      code: "future.cursor_fallback_hint",
+      category: "source_fallback",
+      severity: "warning",
+      rawMessage: rawFallbackReason,
+    };
+    const i18n = createRuntimeI18n("zh-CN");
+    const settingsCopy = buildSettingsLocalizedCopy(i18n);
+    const sourceCardModel = buildSettingsSourceCardModel(
+      buildProviderSourceDisplay(
+        {
+          ...provider!,
+          warningReason: rawWarningReason,
+          warningDiagnostic: unknownWarningDiagnostic,
+          sourceSelectionReason: rawSelectionReason,
+          sourceSelectionDiagnostic: unknownSelectionDiagnostic,
+          sourceFallbackReason: rawFallbackReason,
+          sourceFallbackDiagnostic: unknownFallbackDiagnostic,
+        },
+        setting!,
+        buildProviderSourceDisplayLocalizedCopy(i18n),
+      ),
+      {
+        ...settingsCopy.sources.cardLabels,
+        sourceKindLabels: settingsCopy.sources.sourceKindLabels,
+        routeFallback: settingsCopy.sources.routeFallback,
+      },
+    );
+    const sourceDecisionGroup = sourceCardModel.diagnosticGroups.find(
+      (group) => group.title === "来源决策",
+    );
+
+    expect(sourceCardModel.summaryNoteLines).toEqual([
+      rawFallbackReason,
+      rawWarningReason,
+    ]);
+    expect(sourceDecisionGroup?.fields).toEqual(
+      expect.arrayContaining([
+        { label: "选择原因", value: rawSelectionReason },
+        { label: "回退原因", value: rawFallbackReason },
+        { label: "就绪详情", value: rawWarningReason },
+      ]),
+    );
+    expect(
+      sourceDecisionGroup?.fields.some((field) => field.label === "选择诊断"),
+    ).toBe(false);
+    expect(
+      sourceDecisionGroup?.fields.some((field) => field.label === "回退诊断"),
+    ).toBe(false);
   });
 
   it("builds a compact deferred session-track model with a graduation gate", () => {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import type { AppState } from "../providers/types";
+import type { AppState, ProviderDiagnostic } from "../providers/types";
 import { SAMPLE_APP_STATE } from "../shared/constants";
 import { createRuntimeI18n } from "../shared/i18n";
 import { buildProviderSourceDisplayLocalizedCopy } from "../shared/localized-copy";
@@ -124,5 +124,44 @@ describe("sidepanel view models", () => {
     expect(cursor?.sourceFallbackReason).toBe(
       "Official API unavailable: no Cursor Admin API key is stored.",
     );
+  });
+
+  it("keeps provider-detail input raw evidence when typed diagnostics are unknown", () => {
+    const warningReason =
+      "No Cursor Admin API key is stored; add an API key before official sync can run.";
+    const sourceFallbackReason =
+      "Official API unavailable: no Cursor Admin API key is stored.";
+    const unknownWarningDiagnostic: ProviderDiagnostic = {
+      code: "future.cursor_credential_hint",
+      category: "adapter_error",
+      severity: "warning",
+      rawMessage: warningReason,
+    };
+    const unknownFallbackDiagnostic: ProviderDiagnostic = {
+      code: "future.cursor_source_fallback",
+      category: "source_fallback",
+      severity: "warning",
+      rawMessage: sourceFallbackReason,
+    };
+    const state = createState({
+      providers: SAMPLE_APP_STATE.providers.map((provider) =>
+        provider.providerId === "cursor"
+          ? {
+              ...provider,
+              warningReason,
+              warningDiagnostic: unknownWarningDiagnostic,
+              sourceFallbackReason,
+              sourceFallbackDiagnostic: unknownFallbackDiagnostic,
+            }
+          : provider,
+      ),
+    });
+
+    const cursor = getProviderViewModel(state, "cursor");
+
+    expect(cursor?.warningReason).toBe(warningReason);
+    expect(cursor?.sourceFallbackReason).toBe(sourceFallbackReason);
+    expect(cursor?.currentSourceStateKind).toBe("credential_missing");
+    expect(cursor?.currentSourceStateDetail).toBe(warningReason);
   });
 });

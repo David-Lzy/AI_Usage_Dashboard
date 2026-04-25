@@ -331,6 +331,19 @@ describe("provider source helpers", () => {
     expect(display.stateDetail).toBe(warningReason);
   });
 
+  it("keeps raw warning fallback when typed diagnostics are absent", () => {
+    const warningReason =
+      "No Cursor Admin API key is stored; add an API key before official sync can run.";
+    const { provider, setting } = buildProviderState("cursor", {
+      warningReason,
+      warningDiagnostic: null,
+    });
+    const display = buildProviderSourceDisplay(provider, setting);
+
+    expect(display.stateKind).toBe("credential_missing");
+    expect(display.stateDetail).toBe(warningReason);
+  });
+
   it("classifies the retained JetBrains session-page path as exact vendor values", () => {
     const { provider, setting } = findProviderState("jetbrains");
     const display = buildProviderSourceDisplay(provider, setting);

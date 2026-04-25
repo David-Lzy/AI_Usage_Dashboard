@@ -28,9 +28,10 @@ Status note:
 - diagnostic archive and export compatibility review completed in `Phase 197`
 - sample and store seed diagnostic metadata alignment completed in `Phase 198`
 - diagnostic fixture and historical evidence alignment review completed in `Phase 199`
-- `Phase 200` and `Phase 201` intentionally paused this diagnostic follow-up line for functional Codex personal usage-context surfacing slices
+- `Phase 200` through `Phase 203` intentionally paused this diagnostic follow-up line for functional Codex and Cursor personal usage-context surfacing slices
+- adapter diagnostic raw fallback regression review completed in `Phase 204`
 - this child TODO turns the adapter diagnostic reason-code plan into executable follow-up slices
-- adapter diagnostic raw fallback regression review remains valid, but it is no longer more urgent than functional provider work while Codex budget is constrained
+- the diagnostic raw fallback safety line is now closed at the regression-test level; future diagnostic-body localization must keep this compatibility boundary intact
 - refresh it when typed diagnostic coverage, provider adapter behavior, or archive compatibility rules change
 
 Parent direction:
@@ -51,7 +52,7 @@ The goal is not to translate raw provider evidence immediately. The goal is to m
 
 ## Current Truth
 
-As of `Phase 201`:
+As of `Phase 204`:
 
 - provider-source display wrappers are localized through `ProviderSourceDisplayCopy`
 - raw provider source-truth fields still pass through unchanged
@@ -70,7 +71,11 @@ As of `Phase 201`:
 - `npm run phase198:review` now verifies maintained sample and store seed typed diagnostic metadata alignment while keeping raw diagnostic strings unchanged
 - `Phase 199` added fixture and historical evidence alignment for diagnostic fields
 - `Phase 200` and `Phase 201` added Codex personal multi-window and flex-balance usage-context surfacing outside this diagnostic track
+- `Phase 202` added repeatable Codex personal extension-mode verification outside this diagnostic track
+- `Phase 203` added Cursor personal billing-period usage-context surfacing outside this diagnostic track
+- `Phase 204` added regression coverage and a static review proving unknown or absent typed diagnostics still fall back to raw evidence in source-state classification, Settings source cards, Provider Detail inputs, and localized diagnostic presentation boundaries
 - `npm run phase199:review` now verifies fixture, request/handoff, and frozen archive boundaries for diagnostic evidence alignment
+- `npm run phase204:review` now verifies the raw-fallback regression markers without changing provider coverage, source-selection behavior, or archive schemas
 - `Doc/I18n_Diagnostic_Archive_Export_Compatibility.md` now records that localized diagnostic presentation is not an archive schema
 - `Doc/I18n_Diagnostic_Fixture_And_Historical_Evidence_Alignment.md` now records which fixture and evidence scopes are mutable versus frozen
 - the Cursor adapter populates typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` metadata beside existing raw source-selection and fallback strings
@@ -89,6 +94,7 @@ As of `Phase 201`:
 - `ProviderSnapshot.warningReason` remains the primary raw warning body
 - `ProviderSnapshot.sourceSelectionReason` remains the primary raw source-selection explanation
 - `ProviderSnapshot.sourceFallbackReason` remains the primary raw fallback explanation
+- raw diagnostic string fields remain the compatibility source of truth whenever typed diagnostic fields are unknown, absent, or intentionally raw-only
 - provider state classification still uses some English raw-string pattern checks as compatibility fallback
 - archives, requests, screenshot seed states, and tests still depend on raw diagnostic text
 
@@ -217,7 +223,7 @@ As of `Phase 201`:
 
 ### O. Adapter Diagnostic Raw Fallback Regression Review
 
-- next recommended slice
+- completed in `Phase 204`
 - add or expand regression coverage proving absent, unknown, and intentionally raw-only typed diagnostics still fall back to raw evidence
 - cover source-state classification, localized diagnostic presentation, and evidence-oriented detail surfaces
 - keep provider coverage, source-selection behavior, and archive schemas unchanged
@@ -225,14 +231,14 @@ As of `Phase 201`:
 
 ## First Implementation Candidate
 
-The next runtime phase should implement the first narrow slice of `O. Adapter Diagnostic Raw Fallback Regression Review`.
+`Phase 204` implemented the first narrow slice of `O. Adapter Diagnostic Raw Fallback Regression Review`.
 
-Recommended scope:
+Completed scope:
 
-- inventory existing unknown-code and raw-only fallback tests
-- add focused regression coverage for source-state, Settings diagnostic presentation, and Provider Detail diagnostic presentation where raw fallback still matters
-- document raw fallback behavior as a compatibility requirement before any deeper diagnostic-body localization
-- avoid translating raw diagnostics, changing provider coverage, or rewriting historical archives
+- inventoried and expanded unknown-code and raw-only fallback tests
+- added focused regression coverage for source-state classification, Settings diagnostic presentation fallback, and Provider Detail raw-evidence inputs where raw fallback still matters
+- documented raw fallback behavior as a compatibility requirement before any deeper diagnostic-body localization
+- avoided translating raw diagnostics, changing provider coverage, or rewriting historical archives
 
 ## Acceptance Criteria
 
@@ -240,6 +246,7 @@ Recommended scope:
 - typed diagnostic fields are optional and backward-compatible
 - unknown or absent typed diagnostics fall back to raw strings
 - docs and tests state that diagnostic typing does not imply translated diagnostic bodies yet
+- `npm run phase204:review` verifies the regression-test, runtime-surface, and closeout-document markers for this boundary
 - provider coverage truth remains unchanged:
   - JetBrains stays deferred for the active promise
   - Claude personal support is not yet graduated

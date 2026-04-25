@@ -270,6 +270,39 @@ describe("runtime i18n", () => {
     ).toBeNull();
   });
 
+  it("keeps unknown source and adapter diagnostics presentation-only", () => {
+    const diagnostics: ProviderDiagnostic[] = [
+      {
+        code: "future.source_selection",
+        category: "source_selection",
+        severity: "info",
+        rawMessage: "Future source selection body remains raw evidence.",
+      },
+      {
+        code: "future.source_fallback",
+        category: "source_fallback",
+        severity: "warning",
+        rawMessage: "Future fallback body remains raw evidence.",
+      },
+      {
+        code: "future.adapter_error",
+        category: "adapter_error",
+        severity: "error",
+        rawMessage: "Future adapter body remains untranslated.",
+      },
+    ];
+
+    for (const diagnostic of diagnostics) {
+      expect(
+        getProviderDiagnosticPresentation(diagnostic, createRuntimeI18n("en")),
+      ).toBeNull();
+      expect(
+        getProviderDiagnosticPresentation(diagnostic, createRuntimeI18n("zh-CN")),
+      ).toBeNull();
+      expect(diagnostic.rawMessage).toContain("Future");
+    }
+  });
+
   it("returns zh-CN structured operator workspace shell copy builders", () => {
     const i18n = createRuntimeI18n("zh-CN");
     const operatorCopy = buildOperatorWorkspaceLocalizedCopy(i18n);

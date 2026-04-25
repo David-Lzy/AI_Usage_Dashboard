@@ -227,7 +227,8 @@ Recommended rollout:
 29. diagnostic archive and export compatibility review - shipped in `Phase 197`
 30. sample and store seed diagnostic metadata alignment - shipped in `Phase 198`
 31. diagnostic fixture and historical evidence alignment review - shipped in `Phase 199`
-32. adapter diagnostic raw fallback regression review - queued after the current functionality-first provider work
+32. adapter diagnostic raw fallback regression review - shipped in `Phase 204`
+33. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact
 
 ## References
 

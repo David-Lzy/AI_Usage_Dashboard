@@ -40,8 +40,8 @@ Security posture for this track:
 
 Next execution queue:
 
-1. continue functional provider work first while Codex budget is constrained; after `Phase 203`, the best next slice is a real authenticated Codex or Cursor operator pass if available, otherwise return to adapter diagnostic raw fallback regression
-2. continue [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) with adapter diagnostic raw fallback regression review after the functional quota-display line is stable
+1. continue functional provider work first while Codex budget is constrained; after `Phase 204`, the best next slice is a real authenticated Codex or Cursor operator pass if available
+2. keep [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) in maintenance mode unless a concrete diagnostic-body localization need appears
 3. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining manual store-popup capture dependency
 
 ## Source Labels
