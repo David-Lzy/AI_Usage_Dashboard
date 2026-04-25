@@ -146,6 +146,7 @@ describe("syncCodexProvider", () => {
     expect(snapshot.resetLabel).toContain("5-hour usage window resets at");
     expect(snapshot.syncStatus).toBe("ok");
     expect(snapshot.tone).toBe("neutral");
+    expect(snapshot.warningDiagnostic).toBeNull();
     expect(snapshot.lastSyncLabel).toBe("Codex personal fixture loaded");
     expect(snapshot.sourceSelectionReason).toBe("Auto fell back to Session page.");
     expect(snapshot.sourceSelectionDiagnostic).toMatchObject({
@@ -246,6 +247,7 @@ describe("syncCodexProvider", () => {
     expect(snapshot.warningReason).toBe(
       "145 credits · 18 threads · 55 turns · on 2026-04-20 UTC. Aggregated from 2 analytics rows for that day.",
     );
+    expect(snapshot.warningDiagnostic).toBeNull();
     expect(snapshot.lastSyncLabel).toBe("Codex Analytics API synced just now");
     expect(snapshot.sourceSelectionReason).toBe("Auto selected Official API.");
     expect(snapshot.sourceSelectionDiagnostic).toMatchObject({
@@ -283,6 +285,17 @@ describe("syncCodexProvider", () => {
     expect(snapshot.syncStatus).toBe("warning");
     expect(snapshot.tone).toBe("warning");
     expect(snapshot.warningReason).toContain("Host access missing");
+    expect(snapshot.warningDiagnostic).toMatchObject({
+      code: "host_access.missing",
+      category: "host_access",
+      severity: "warning",
+      rawMessage: snapshot.warningReason,
+      params: {
+        providerId: "codex",
+        sourceKind: "official_api",
+        hostLabel: "api.chatgpt.com + chatgpt.com",
+      },
+    });
     expect(snapshot.lastSyncLabel).toBe("Codex analytics API access required");
     expect(snapshot.sourceSelectionReason).toBe(
       "Auto could not find an available live source.",
@@ -319,6 +332,16 @@ describe("syncCodexProvider", () => {
     expect(snapshot.warningReason).toContain(
       "Codex analytics API key and workspace ID are not both configured.",
     );
+    expect(snapshot.warningDiagnostic).toMatchObject({
+      code: "credential.workspace_config_missing",
+      category: "credential",
+      severity: "error",
+      rawMessage: snapshot.warningReason,
+      params: {
+        providerId: "codex",
+        credentialKind: "workspace_config",
+      },
+    });
     expect(snapshot.lastSyncLabel).toBe("Codex analytics config required");
     expect(snapshot.sourceFallbackReason).toContain(
       "Session page unavailable: Open the logged-in Codex usage page",
@@ -392,6 +415,7 @@ describe("syncCodexProvider", () => {
     });
 
     expect(snapshot.syncSource).toBe("page_parse");
+    expect(snapshot.warningDiagnostic).toBeNull();
     expect(snapshot.sourceSelectionReason).toBe(
       "Official API preference fell back to Session page.",
     );

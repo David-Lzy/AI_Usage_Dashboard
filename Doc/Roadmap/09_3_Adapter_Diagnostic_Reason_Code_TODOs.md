@@ -16,6 +16,7 @@ Status note:
 - type-only additive model completed in `Phase 185`
 - Cursor source-selection and fallback diagnostic builders completed in `Phase 186`
 - Codex source-selection and fallback diagnostic builders completed in `Phase 187`
+- credential and host-access diagnostics for Cursor and Codex completed in `Phase 188`
 - this child TODO turns the adapter diagnostic reason-code plan into executable follow-up slices
 - refresh it when typed diagnostic coverage, provider adapter behavior, or archive compatibility rules change
 
@@ -35,7 +36,7 @@ The goal is not to translate raw provider evidence immediately. The goal is to m
 
 ## Current Truth
 
-As of `Phase 187`:
+As of `Phase 188`:
 
 - provider-source display wrappers are localized through `ProviderSourceDisplayCopy`
 - raw provider source-truth fields still pass through unchanged
@@ -44,6 +45,7 @@ As of `Phase 187`:
 - `src/providers/diagnostics.ts` now also provides reusable source-selection, source-fallback, and no-live-source diagnostic builders
 - the Cursor adapter populates typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` metadata beside existing raw source-selection and fallback strings
 - the Codex adapter populates typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` metadata beside existing raw source-selection and fallback strings
+- Cursor and Codex now populate typed `warningDiagnostic` metadata for missing credential and missing host-access blockers
 - `ProviderSnapshot.warningReason` remains the primary raw warning body
 - `ProviderSnapshot.sourceSelectionReason` remains the primary raw source-selection explanation
 - `ProviderSnapshot.sourceFallbackReason` remains the primary raw fallback explanation
@@ -82,7 +84,7 @@ As of `Phase 187`:
 
 ### C. Credential And Host-Access Diagnostics
 
-- next recommended slice
+- completed in `Phase 188` for Cursor and Codex
 - map missing admin API key, missing workspace config, and host-access blockers into typed diagnostics
 - keep provider settings and host labels raw
 - make source-state classification prefer typed categories where available
@@ -90,6 +92,7 @@ As of `Phase 187`:
 
 ### D. Page-Session Diagnostics
 
+- next recommended slice
 - map open-page-required, logged-out, stale binding, and capture-unavailable states into typed diagnostics
 - keep vendor-owned page wording raw
 - avoid changing page-binding behavior
@@ -115,12 +118,12 @@ As of `Phase 187`:
 
 ## First Implementation Candidate
 
-The next runtime phase should implement the first narrow slice of `C. Credential And Host-Access Diagnostics`.
+The next runtime phase should implement the first narrow slice of `D. Page-Session Diagnostics`.
 
 Recommended scope:
 
-- start with Cursor and Codex because both now have typed source diagnostics and explicit credential or host-access blockers
-- populate `warningDiagnostic` for missing credential or missing host-access states without changing raw `warningReason`
+- start with Cursor and Codex because both have typed source diagnostics and explicit page-session blocker states
+- populate `warningDiagnostic` for open-page-required, logged-out, and parser/capture unavailable states without changing raw `warningReason`
 - keep source-state classification raw-string fallback intact until typed coverage is broader
 - no UI rendering changes
 - no source-selection or fallback-order behavior changes

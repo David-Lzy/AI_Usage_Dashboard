@@ -136,6 +136,7 @@ describe("syncCursorProvider", () => {
     expect(snapshot.syncStatus).toBe("ok");
     expect(snapshot.tone).toBe("neutral");
     expect(snapshot.warningReason).toBe("On-demand usage is off.");
+    expect(snapshot.warningDiagnostic).toBeNull();
     expect(snapshot.lastSyncLabel).toBe("Cursor personal fixture loaded");
     expect(snapshot.sourceSelectionReason).toBe("Auto fell back to Session page.");
     expect(snapshot.sourceSelectionDiagnostic).toMatchObject({
@@ -259,6 +260,7 @@ describe("syncCursorProvider", () => {
     expect(snapshot.warningReason).toBe(
       "15 pay-per-use requests recorded this cycle",
     );
+    expect(snapshot.warningDiagnostic).toBeNull();
     expect(snapshot.lastSyncLabel).toBe("Cursor Admin API synced just now");
     expect(snapshot.sourceSelectionReason).toBe("Auto selected Official API.");
     expect(snapshot.sourceSelectionDiagnostic).toMatchObject({
@@ -296,6 +298,17 @@ describe("syncCursorProvider", () => {
     expect(snapshot.syncStatus).toBe("warning");
     expect(snapshot.tone).toBe("warning");
     expect(snapshot.warningReason).toContain("Host access missing");
+    expect(snapshot.warningDiagnostic).toMatchObject({
+      code: "host_access.missing",
+      category: "host_access",
+      severity: "warning",
+      rawMessage: snapshot.warningReason,
+      params: {
+        providerId: "cursor",
+        sourceKind: "official_api",
+        hostLabel: "api.cursor.com · cursor.com",
+      },
+    });
     expect(snapshot.lastSyncLabel).toBe("Cursor Admin API access required");
     expect(snapshot.sourceSelectionReason).toBe(
       "Auto could not find an available live source.",
@@ -332,6 +345,16 @@ describe("syncCursorProvider", () => {
     expect(snapshot.warningReason).toContain(
       "No Cursor Admin API key is stored.",
     );
+    expect(snapshot.warningDiagnostic).toMatchObject({
+      code: "credential.admin_api_key_missing",
+      category: "credential",
+      severity: "error",
+      rawMessage: snapshot.warningReason,
+      params: {
+        providerId: "cursor",
+        credentialKind: "admin_api_key",
+      },
+    });
     expect(snapshot.lastSyncLabel).toBe("Cursor Admin API key required");
     expect(snapshot.sourceFallbackReason).toContain(
       "Session page unavailable: Open the logged-in Cursor dashboard usage page",
@@ -392,6 +415,7 @@ describe("syncCursorProvider", () => {
     });
 
     expect(snapshot.syncSource).toBe("page_parse");
+    expect(snapshot.warningDiagnostic).toBeNull();
     expect(snapshot.sourceSelectionReason).toBe(
       "Official API preference fell back to Session page.",
     );

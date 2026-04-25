@@ -131,7 +131,7 @@ If one of these categories is localized later, the implementation must first dec
 
 ## Current Boundary
 
-As of `Phase 187`:
+As of `Phase 188`:
 
 - the runtime app already localizes the main product surfaces in `en + zh_CN`
 - the operator workspaces now have shell-localized navigation and helper copy
@@ -142,15 +142,16 @@ As of `Phase 187`:
 - the type-only additive diagnostic model now exists without changing rendered UI behavior
 - Cursor source-selection and fallback typed diagnostics now exist beside raw adapter strings
 - Codex source-selection and fallback typed diagnostics now exist beside raw adapter strings
+- Cursor and Codex credential plus host-access typed diagnostics now exist beside raw adapter warning strings
 - archive payload semantics remain English and unchanged
 - the repo has a maintained extraction boundary for deeper operator-workspace localization decisions
 - the next implementation step should avoid evidence-schema changes unless a dedicated archive-compatibility review lands first
 
 ## Follow-Up
 
-The next `Direction 09` implementation slice should move to credential and host-access diagnostics:
+The next `Direction 09` implementation slice should move to page-session diagnostics:
 
-- populate typed missing-credential and host-access blocker diagnostics in narrow provider paths
+- populate typed page-session blocker diagnostics in narrow provider paths
 - keep raw provider `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` values unchanged
 - keep generated store-listing source docs out of runtime code unless that copy is shown by the extension
 

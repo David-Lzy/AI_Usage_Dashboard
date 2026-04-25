@@ -27,6 +27,7 @@ Status note:
 - sixteenth executable phase landed on `2026-04-25` through `Phase 185`
 - seventeenth executable phase landed on `2026-04-25` through `Phase 186`
 - eighteenth executable phase landed on `2026-04-25` through `Phase 187`
+- nineteenth executable phase landed on `2026-04-25` through `Phase 188`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -312,12 +313,21 @@ Build one maintainable localization architecture that can support manifest strin
 
 ### P. Credential And Host-Access Diagnostics
 
-- next recommended slice
+- completed in `Phase 188`
 - populate typed `warningDiagnostic` metadata for missing credential and missing host-access states
 - start with Cursor and Codex because source diagnostics now exist there and both adapters have explicit credential or host-access blockers
 - preserve raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings exactly
 - keep rendered UI behavior unchanged
 - keep raw English source-state classification fallback until typed warning coverage is broader
+
+### Q. Page-Session Diagnostics
+
+- next recommended slice
+- populate typed `warningDiagnostic` metadata for open-page-required, logged-out, parser failure, and capture-unavailable page-session states
+- start with Cursor and Codex because both have explicit personal page parser result states
+- preserve raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings exactly
+- keep rendered UI behavior unchanged
+- keep source-state classification raw-string fallback until typed coverage is broad enough to switch safely
 
 ## Planned Numbered Slices
 
@@ -340,7 +350,8 @@ Build one maintainable localization architecture that can support manifest strin
 17. type-only additive diagnostic model - completed in `Phase 185`
 18. Cursor source selection and fallback builders - completed in `Phase 186`
 19. Codex source selection and fallback builders - completed in `Phase 187`
-20. credential and host-access diagnostics - next
+20. credential and host-access diagnostics - completed in `Phase 188`
+21. page-session diagnostics - next
 
 ## Out Of Scope
 

@@ -15,6 +15,8 @@ type SourceAttemptFailureDiagnosticInput = {
   detail: string;
 };
 
+type CredentialDiagnosticKind = "admin_api_key" | "workspace_config";
+
 export const PROVIDER_DIAGNOSTIC_CODE_CATEGORIES = {
   "source.auto_selected_official_api": "source_selection",
   "source.auto_selected_session_page": "source_selection",
@@ -105,6 +107,14 @@ function getSourceFallbackDiagnosticCode(
   return "source.no_live_path";
 }
 
+function getCredentialDiagnosticCode(
+  credentialKind: CredentialDiagnosticKind,
+): KnownProviderDiagnosticCode {
+  return credentialKind === "workspace_config"
+    ? "credential.workspace_config_missing"
+    : "credential.admin_api_key_missing";
+}
+
 export function createSourceSelectionDiagnostic({
   providerId,
   sourcePreference,
@@ -171,6 +181,44 @@ export function createNoLiveSourceFallbackDiagnostic({
     providerId,
     sourcePreference,
     failureCount,
+  });
+}
+
+export function createCredentialDiagnostic({
+  providerId,
+  credentialKind,
+  rawMessage,
+}: {
+  providerId: ProviderId;
+  credentialKind: CredentialDiagnosticKind;
+  rawMessage: string;
+}): ProviderDiagnostic {
+  return createProviderDiagnostic(
+    getCredentialDiagnosticCode(credentialKind),
+    "error",
+    rawMessage,
+    {
+      providerId,
+      credentialKind,
+    },
+  );
+}
+
+export function createHostAccessDiagnostic({
+  providerId,
+  sourceKind,
+  hostLabel,
+  rawMessage,
+}: {
+  providerId: ProviderId;
+  sourceKind: ProviderSourceKind;
+  hostLabel: string;
+  rawMessage: string;
+}): ProviderDiagnostic {
+  return createProviderDiagnostic("host_access.missing", "warning", rawMessage, {
+    providerId,
+    sourceKind,
+    hostLabel,
   });
 }
 

@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import { SAMPLE_APP_STATE } from "../shared/constants";
 import {
+  createCredentialDiagnostic,
+  createHostAccessDiagnostic,
   createProviderDiagnostic,
   createSourceFallbackDiagnostic,
   createSourceSelectionDiagnostic,
@@ -113,6 +115,50 @@ describe("provider diagnostics", () => {
         sourcePreference: "official_api",
         failedSourceKind: "official_api",
         failureCode: "credential_missing",
+      },
+    });
+  });
+
+  it("builds credential diagnostics without rewriting raw warning messages", () => {
+    const diagnostic = createCredentialDiagnostic({
+      providerId: "codex",
+      credentialKind: "workspace_config",
+      rawMessage:
+        "Codex analytics API key and workspace ID are not both configured.",
+    });
+
+    expect(diagnostic).toMatchObject({
+      code: "credential.workspace_config_missing",
+      category: "credential",
+      severity: "error",
+      rawMessage:
+        "Codex analytics API key and workspace ID are not both configured.",
+      params: {
+        providerId: "codex",
+        credentialKind: "workspace_config",
+      },
+    });
+  });
+
+  it("builds host-access diagnostics without rewriting raw warning messages", () => {
+    const diagnostic = createHostAccessDiagnostic({
+      providerId: "cursor",
+      sourceKind: "official_api",
+      hostLabel: "api.cursor.com · cursor.com",
+      rawMessage:
+        "Host access missing; grant Cursor access for api.cursor.com and cursor.com before live sync can run.",
+    });
+
+    expect(diagnostic).toMatchObject({
+      code: "host_access.missing",
+      category: "host_access",
+      severity: "warning",
+      rawMessage:
+        "Host access missing; grant Cursor access for api.cursor.com and cursor.com before live sync can run.",
+      params: {
+        providerId: "cursor",
+        sourceKind: "official_api",
+        hostLabel: "api.cursor.com · cursor.com",
       },
     });
   });

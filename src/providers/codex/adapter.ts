@@ -18,6 +18,8 @@ import {
   type SourceAttemptFailure,
 } from "../../shared/source-selection";
 import {
+  createCredentialDiagnostic,
+  createHostAccessDiagnostic,
   createNoLiveSourceFallbackDiagnostic,
   createSourceFallbackDiagnostic,
   createSourceSelectionDiagnostic,
@@ -288,6 +290,9 @@ async function tryCodexOfficialSource({
   setting: ProviderSetting;
 }): Promise<CodexSourceAttemptResult> {
   if (setting.status === "missing") {
+    const warningReason =
+      "Host access missing; grant Codex access for api.chatgpt.com and chatgpt.com before live sync can run.";
+
     return {
       ok: false,
       failure: {
@@ -302,8 +307,13 @@ async function tryCodexOfficialSource({
         syncSource: "official",
         syncStatus: "warning",
         tone: "warning",
-        warningReason:
-          "Host access missing; grant Codex access for api.chatgpt.com and chatgpt.com before live sync can run.",
+        warningReason,
+        warningDiagnostic: createHostAccessDiagnostic({
+          providerId: "codex",
+          sourceKind: "official_api",
+          hostLabel: setting.hostsLabel,
+          rawMessage: warningReason,
+        }),
         lastSyncLabel: "Codex analytics API access required",
         resetLabel: "Grant Codex host access to sync Enterprise analytics",
       },
@@ -311,6 +321,9 @@ async function tryCodexOfficialSource({
   }
 
   if (!hasCodexAnalyticsConfig(secrets)) {
+    const warningReason =
+      "Codex analytics API key and workspace ID are not both configured. Add the Enterprise config or switch the source preference to Session page.";
+
     return {
       ok: false,
       failure: {
@@ -327,8 +340,12 @@ async function tryCodexOfficialSource({
         syncSource: "official",
         syncStatus: "error",
         tone: "error",
-        warningReason:
-          "Codex analytics API key and workspace ID are not both configured. Add the Enterprise config or switch the source preference to Session page.",
+        warningReason,
+        warningDiagnostic: createCredentialDiagnostic({
+          providerId: "codex",
+          credentialKind: "workspace_config",
+          rawMessage: warningReason,
+        }),
         lastSyncLabel: "Codex analytics config required",
         resetLabel:
           "Store both the analytics API key and workspace ID to use the Enterprise source",
@@ -369,6 +386,7 @@ async function tryCodexOfficialSource({
           tone: "warning",
           warningReason:
             "Analytics API returned no Codex workspace activity in the current export window.",
+          warningDiagnostic: null,
           lastSyncLabel: buildCodexRefreshLabel(),
         },
       };
@@ -405,6 +423,7 @@ async function tryCodexOfficialSource({
         syncStatus: "warning",
         tone: "warning",
         warningReason: `${warningParts.join(" · ")}.${breakdownSuffix}`,
+        warningDiagnostic: null,
         lastSyncLabel: buildCodexRefreshLabel(),
       },
     };
@@ -428,6 +447,7 @@ async function tryCodexOfficialSource({
         syncStatus: "error",
         tone: "error",
         warningReason: detail,
+        warningDiagnostic: null,
         lastSyncLabel: "Codex analytics sync failed just now",
         resetLabel:
           "Retry after checking Codex Enterprise analytics access and workspace configuration",
@@ -448,6 +468,9 @@ async function tryCodexPersonalSource({
   warningThresholdPercent: number;
 }): Promise<CodexSourceAttemptResult> {
   if (setting.status === "missing") {
+    const warningReason =
+      "Host access missing; grant Codex access for api.chatgpt.com and chatgpt.com before live sync can run.";
+
     return {
       ok: false,
       failure: {
@@ -462,8 +485,13 @@ async function tryCodexPersonalSource({
         syncSource: "page_parse",
         syncStatus: "warning",
         tone: "warning",
-        warningReason:
-          "Host access missing; grant Codex access for api.chatgpt.com and chatgpt.com before live sync can run.",
+        warningReason,
+        warningDiagnostic: createHostAccessDiagnostic({
+          providerId: "codex",
+          sourceKind: "session_page",
+          hostLabel: setting.hostsLabel,
+          rawMessage: warningReason,
+        }),
         lastSyncLabel: "Codex usage page access required",
         resetLabel:
           "Grant Codex host access to read the logged-in ChatGPT usage page",
@@ -523,6 +551,7 @@ async function tryCodexPersonalSource({
           syncStatus: isRecoverable ? "warning" : "error",
           tone: isRecoverable ? "warning" : "error",
           warningReason: result.reason,
+          warningDiagnostic: null,
           lastSyncLabel:
             result.status === "logged_out"
               ? "Codex usage page session missing"
@@ -566,6 +595,7 @@ async function tryCodexPersonalSource({
         syncStatus: usedPercent >= warningThresholdPercent ? "warning" : "ok",
         tone: usedPercent >= warningThresholdPercent ? "warning" : "neutral",
         warningReason,
+        warningDiagnostic: null,
         lastSyncLabel: buildCodexPersonalRefreshLabel(personalSource),
       },
       setting: nextSetting,
@@ -590,6 +620,7 @@ async function tryCodexPersonalSource({
         syncStatus: "error",
         tone: "error",
         warningReason: detail,
+        warningDiagnostic: null,
         lastSyncLabel: "Codex personal usage page sync failed just now",
         resetLabel:
           "Retry after checking the logged-in Codex page and parser assumptions",
@@ -667,6 +698,7 @@ export async function syncCodexProvider({
         syncStatus: "error",
         tone: "error",
         warningReason: "Codex source selection could not resolve a live path.",
+        warningDiagnostic: null,
         lastSyncLabel: "Codex source selection failed just now",
         resetLabel: "Check Codex source preferences and live prerequisites",
       },

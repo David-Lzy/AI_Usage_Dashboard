@@ -23,6 +23,8 @@ import {
   type SourceAttemptFailure,
 } from "../../shared/source-selection";
 import {
+  createCredentialDiagnostic,
+  createHostAccessDiagnostic,
   createNoLiveSourceFallbackDiagnostic,
   createSourceFallbackDiagnostic,
   createSourceSelectionDiagnostic,
@@ -157,6 +159,9 @@ async function tryCursorOfficialSource({
   now: Date;
 }): Promise<CursorSourceAttemptResult> {
   if (setting.status === "missing") {
+    const warningReason =
+      "Host access missing; grant Cursor access for api.cursor.com and cursor.com before live sync can run.";
+
     return {
       ok: false,
       failure: {
@@ -171,8 +176,13 @@ async function tryCursorOfficialSource({
         syncSource: "official",
         syncStatus: "warning",
         tone: "warning",
-        warningReason:
-          "Host access missing; grant Cursor access for api.cursor.com and cursor.com before live sync can run.",
+        warningReason,
+        warningDiagnostic: createHostAccessDiagnostic({
+          providerId: "cursor",
+          sourceKind: "official_api",
+          hostLabel: setting.hostsLabel,
+          rawMessage: warningReason,
+        }),
         lastSyncLabel: "Cursor Admin API access required",
         resetLabel: "Grant Cursor host access to sync the Admin API path",
       },
@@ -180,6 +190,9 @@ async function tryCursorOfficialSource({
   }
 
   if (!hasCursorAdminApiKey(secrets)) {
+    const warningReason =
+      "No Cursor Admin API key is stored. Add a key or switch the source preference to Session page.";
+
     return {
       ok: false,
       failure: {
@@ -195,8 +208,12 @@ async function tryCursorOfficialSource({
         syncSource: "official",
         syncStatus: "error",
         tone: "error",
-        warningReason:
-          "No Cursor Admin API key is stored. Add a key or switch the source preference to Session page.",
+        warningReason,
+        warningDiagnostic: createCredentialDiagnostic({
+          providerId: "cursor",
+          credentialKind: "admin_api_key",
+          rawMessage: warningReason,
+        }),
         lastSyncLabel: "Cursor Admin API key required",
         resetLabel: "Store a Cursor Admin API key to use the official team source",
       },
@@ -262,6 +279,7 @@ async function tryCursorOfficialSource({
         syncStatus: usageSignal.syncStatus,
         tone: usageSignal.tone,
         warningReason: usageSignal.warningReason,
+        warningDiagnostic: null,
         lastSyncLabel: buildCursorRefreshLabel(),
       },
     };
@@ -285,6 +303,7 @@ async function tryCursorOfficialSource({
         syncStatus: "error",
         tone: "error",
         warningReason: detail,
+        warningDiagnostic: null,
         lastSyncLabel: "Cursor sync failed just now",
         resetLabel: "Retry after checking the Cursor Admin API configuration",
       },
@@ -302,6 +321,9 @@ async function tryCursorPersonalSource({
   setting: ProviderSetting;
 }): Promise<CursorSourceAttemptResult> {
   if (setting.status === "missing") {
+    const warningReason =
+      "Host access missing; grant Cursor access for api.cursor.com and cursor.com before live sync can run.";
+
     return {
       ok: false,
       failure: {
@@ -316,8 +338,13 @@ async function tryCursorPersonalSource({
         syncSource: "page_parse",
         syncStatus: "warning",
         tone: "warning",
-        warningReason:
-          "Host access missing; grant Cursor access for api.cursor.com and cursor.com before live sync can run.",
+        warningReason,
+        warningDiagnostic: createHostAccessDiagnostic({
+          providerId: "cursor",
+          sourceKind: "session_page",
+          hostLabel: setting.hostsLabel,
+          rawMessage: warningReason,
+        }),
         lastSyncLabel: "Cursor personal usage page access required",
         resetLabel: "Grant Cursor host access to read the logged-in personal usage page",
       },
@@ -376,6 +403,7 @@ async function tryCursorPersonalSource({
           syncStatus: isRecoverable ? "warning" : "error",
           tone: isRecoverable ? "warning" : "error",
           warningReason: result.reason,
+          warningDiagnostic: null,
           lastSyncLabel:
             result.status === "logged_out"
               ? "Cursor usage page session missing"
@@ -425,6 +453,7 @@ async function tryCursorPersonalSource({
         syncStatus: "ok",
         tone: "neutral",
         warningReason,
+        warningDiagnostic: null,
         lastSyncLabel: buildCursorPersonalRefreshLabel(personalSource),
       },
       setting: nextSetting,
@@ -449,6 +478,7 @@ async function tryCursorPersonalSource({
         syncStatus: "error",
         tone: "error",
         warningReason: detail,
+        warningDiagnostic: null,
         lastSyncLabel: "Cursor personal usage page sync failed just now",
         resetLabel:
           "Retry after checking the Cursor dashboard page and parser assumptions",
@@ -527,6 +557,7 @@ export async function syncCursorProvider({
         syncStatus: "error",
         tone: "error",
         warningReason: "Cursor source selection could not resolve a live path.",
+        warningDiagnostic: null,
         lastSyncLabel: "Cursor source selection failed just now",
         resetLabel: "Check Cursor source preferences and live prerequisites",
       },
