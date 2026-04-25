@@ -131,7 +131,7 @@ If one of these categories is localized later, the implementation must first dec
 
 ## Current Boundary
 
-As of `Phase 196`:
+As of `Phase 197`:
 
 - the runtime app already localizes the main product surfaces in `en + zh_CN`
 - the operator workspaces now have shell-localized navigation and helper copy
@@ -151,16 +151,17 @@ As of `Phase 196`:
 - source diagnostic presentation now localizes known typed source-selection and fallback labels and summaries while keeping raw source bodies available
 - adapter-error diagnostic presentation now localizes known typed `adapter.*` labels and summaries while keeping raw adapter warning bodies available
 - compact diagnostic presentation QA now verifies localized summaries and raw evidence bodies together at narrow Settings and Provider Detail widths
+- diagnostic archive/export compatibility review now records that localized diagnostic presentation is not an operator evidence schema
 - archive payload semantics remain English and unchanged
 - the repo has a maintained extraction boundary for deeper operator-workspace localization decisions
-- the next implementation step should avoid evidence-schema changes unless a dedicated archive-compatibility review lands first
+- the next implementation step should avoid evidence-schema changes unless a later dedicated compatibility review explicitly approves them
 
 ## Follow-Up
 
-The next `Direction 09` implementation slice should move to diagnostic archive and export compatibility review:
+The next `Direction 09` implementation slice should move to sample and store seed diagnostic metadata alignment:
 
 - keep raw source-selection, fallback, warning, and adapter-error diagnostic bodies available for provider detail, exports, and archive evidence
-- inventory archive, request, screenshot seed, and export consumers before deeper diagnostic localization
+- align maintained sample and seed typed metadata only where stable codes already match raw evidence
 - keep raw provider `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` values unchanged
 - keep generated store-listing source docs out of runtime code unless that copy is shown by the extension
 

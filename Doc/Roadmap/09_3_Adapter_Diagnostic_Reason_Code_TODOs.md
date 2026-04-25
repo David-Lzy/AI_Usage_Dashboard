@@ -25,6 +25,7 @@ Status note:
 - source diagnostic presentation completed in `Phase 194`
 - adapter-error diagnostics and presentation boundary completed in `Phase 195`
 - diagnostic presentation compact-width and evidence QA completed in `Phase 196`
+- diagnostic archive and export compatibility review completed in `Phase 197`
 - this child TODO turns the adapter diagnostic reason-code plan into executable follow-up slices
 - refresh it when typed diagnostic coverage, provider adapter behavior, or archive compatibility rules change
 
@@ -35,6 +36,7 @@ Parent direction:
 Maintained reference:
 
 - [I18n_Adapter_Diagnostic_Reason_Code_Plan.md](../I18n_Adapter_Diagnostic_Reason_Code_Plan.md)
+- [I18n_Diagnostic_Archive_Export_Compatibility.md](../I18n_Diagnostic_Archive_Export_Compatibility.md)
 
 ## Goal
 
@@ -44,7 +46,7 @@ The goal is not to translate raw provider evidence immediately. The goal is to m
 
 ## Current Truth
 
-As of `Phase 196`:
+As of `Phase 197`:
 
 - provider-source display wrappers are localized through `ProviderSourceDisplayCopy`
 - raw provider source-truth fields still pass through unchanged
@@ -59,6 +61,8 @@ As of `Phase 196`:
 - Settings and Provider Detail now render localized labels and short summaries for known `adapter.*` diagnostics while keeping raw adapter warning bodies visible
 - `src/providers/diagnostics.ts` now provides a reusable adapter-error diagnostic builder for unexpected adapter failures, unsupported responses, and parser failures
 - `npm run phase196:review` now seeds a compact diagnostic stress state and verifies localized summaries plus raw evidence bodies at `420px` Settings and `360px` Provider Detail widths
+- `npm run phase197:review` now verifies archive/export compatibility markers for raw diagnostic fields, typed diagnostic fields, app-state storage, store screenshot seed/archives, theme-recovery exports, and interaction-audit exports
+- `Doc/I18n_Diagnostic_Archive_Export_Compatibility.md` now records that localized diagnostic presentation is not an archive schema
 - the Cursor adapter populates typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` metadata beside existing raw source-selection and fallback strings
 - the Codex adapter populates typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` metadata beside existing raw source-selection and fallback strings
 - Cursor and Codex now populate typed `warningDiagnostic` metadata for missing credential and missing host-access blockers
@@ -177,22 +181,30 @@ As of `Phase 196`:
 
 ### L. Diagnostic Archive And Export Compatibility Review
 
-- next recommended slice
+- completed in `Phase 197`
 - inventory archive, request, screenshot seed, and export surfaces that still carry raw diagnostic strings
 - decide which diagnostic fields are presentation-only and which remain evidence schema
 - keep raw diagnostic payload keys and generated evidence strings stable unless a dedicated migration is explicitly approved
 - do not localize deeper diagnostic bodies until archive compatibility and export semantics are documented
 
+### M. Sample And Store Seed Diagnostic Metadata Alignment
+
+- next recommended slice
+- add or align typed diagnostic metadata for maintained sample and store seed states where the raw diagnostic body already has stable repo-owned semantics
+- keep raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings unchanged
+- prevent seed states from implying new provider coverage or new source-selection behavior
+- add focused tests or a static review proving sample/seed typed diagnostics remain additive
+
 ## First Implementation Candidate
 
-The next runtime phase should implement the first narrow slice of `L. Diagnostic Archive And Export Compatibility Review`.
+The next runtime phase should implement the first narrow slice of `M. Sample And Store Seed Diagnostic Metadata Alignment`.
 
 Recommended scope:
 
-- inventory current archive/export/request paths that read or preserve diagnostic strings
-- document which diagnostic surfaces can receive localized presentation and which must stay raw evidence
-- add a static review gate for raw diagnostic payload key stability where practical
-- avoid changing archive schemas, generated filenames, source-selection behavior, or provider coverage
+- inventory current `SAMPLE_APP_STATE` and store screenshot seed warning/source reason strings
+- add typed diagnostic metadata only where a stable existing code already matches the raw body
+- clear or omit typed metadata where a seed intentionally uses raw-only evidence copy
+- avoid changing provider coverage, source-selection behavior, screenshots, or archive schemas
 
 ## Acceptance Criteria
 

@@ -40,7 +40,7 @@ Security posture for this track:
 
 Next execution queue:
 
-1. continue [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) with diagnostic archive and export compatibility review after `Phase 196` proved compact diagnostic presentation plus raw evidence visibility
+1. continue [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) with sample and store seed diagnostic metadata alignment after `Phase 197` locked the archive/export compatibility boundary
 2. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining manual store-popup capture dependency
 3. continue [Direction 08 - Documentation Completion And Truth Audit](./Doc/Roadmap/08_Direction_Documentation_Completion_And_Truth_Audit.md) in maintenance mode only when new doc families drift
 

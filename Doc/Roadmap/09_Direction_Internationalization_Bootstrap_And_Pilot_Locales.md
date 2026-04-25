@@ -40,6 +40,7 @@ Execution note:
 - twenty-fifth executable slice landed on `2026-04-25` through `Phase 194`
 - twenty-sixth executable slice landed on `2026-04-25` through `Phase 195`
 - twenty-seventh executable slice landed on `2026-04-25` through `Phase 196`
+- twenty-eighth executable slice landed on `2026-04-25` through `Phase 197`
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
 Process rule:
@@ -217,7 +218,8 @@ Recommended rollout:
 26. source-selection and fallback diagnostic presentation expansion - shipped in `Phase 194`
 27. adapter-error diagnostic builders and presentation boundary - shipped in `Phase 195`
 28. diagnostic presentation compact-width and evidence QA - shipped in `Phase 196`
-29. diagnostic archive and export compatibility review - next
+29. diagnostic archive and export compatibility review - shipped in `Phase 197`
+30. sample and store seed diagnostic metadata alignment - next
 
 ## References
 

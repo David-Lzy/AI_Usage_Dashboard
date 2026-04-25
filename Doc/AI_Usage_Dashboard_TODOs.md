@@ -250,7 +250,8 @@ Phase status update:
 - `Phase 194` completed the next `Direction 09` slice by adding localized source diagnostic presentation in Settings and Provider Detail while preserving raw source-selection/fallback strings
 - `Phase 195` completed the next `Direction 09` slice by adding adapter-error diagnostic builders, stable adapter-error population for Cursor/Codex/Claude Code failure paths, and localized adapter-error presentation while preserving raw adapter warning bodies
 - `Phase 196` completed the next `Direction 09` slice by adding repeatable compact-width diagnostic-presentation QA for Settings and Provider Detail, proving localized warning/source/adapter summaries and raw evidence bodies remain visible together
-- the immediate next repo-owned engineering work is now diagnostic archive and export compatibility review under `Doc/Roadmap/09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`
+- `Phase 197` completed the next `Direction 09` slice by adding diagnostic archive/export compatibility review and a maintained reference that keeps localized diagnostic presentation out of archive/export schemas
+- the immediate next repo-owned engineering work is now sample and store seed diagnostic metadata alignment under `Doc/Roadmap/09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
 - the split `Phase 41` release gate cleared the old runtime-parity ambiguity and re-proved the live `Codex` plus `Cursor` personal session-page paths in real Chrome

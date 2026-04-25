@@ -23,7 +23,7 @@ Status note:
 
 Localized through `Phase 170`, `Phase 171`, `Phase 172`, `Phase 173`, `Phase 174`, `Phase 175`, `Phase 176`, `Phase 177`, `Phase 179`, `Phase 180`, `Phase 181`, `Phase 183`, `Phase 193`, `Phase 194`, and `Phase 195`.
 
-Compact diagnostic presentation QA shipped in `Phase 196`.
+Compact diagnostic presentation QA shipped in `Phase 196`. Diagnostic archive/export compatibility review shipped in `Phase 197`.
 
 Boundary-reviewed through `Phase 182`:
 
@@ -156,6 +156,8 @@ That reference defines the additive typed diagnostic model that should exist bef
 
 `Phase 196` added compact-width QA for the combined warning/source/adapter diagnostic presentation stack while preserving raw diagnostic evidence visibility.
 
+`Phase 197` added [I18n_Diagnostic_Archive_Export_Compatibility.md](./I18n_Diagnostic_Archive_Export_Compatibility.md), confirming that archive/export schemas keep raw diagnostic evidence fields stable and treat localized diagnostic presentation as UI output.
+
 ## Runtime Surfaces Still Mostly English
 
 The following surfaces still need broader runtime localization work:
@@ -168,7 +170,7 @@ The following surfaces still need broader runtime localization work:
 
 Recommended next extraction order:
 
-1. diagnostic archive and export compatibility review
+1. sample and store seed diagnostic metadata alignment
 2. revisit deeper operator-workspace evidence copy only after archive-compatibility rules are explicit
 3. revisit generated store-listing source localization only after refreshed screenshot assets replace the historical baseline
 
@@ -179,5 +181,5 @@ Recommended next extraction order:
 - `en` and `zh_CN` currently cover manifest surfaces plus popup/dashboard shell strings, popup explanatory copy, the first settings-shell slice, deeper settings helper copy, provider-detail shell/static copy, provider-source display wrappers, quick theme-toggle labels, generated counts, percentages, parseable timestamp primitives, duration-bearing runtime freshness/reset labels, operator-workspace shell copy, store-screenshot runtime helper copy plus seed-route submission-support captions, and one first compact-width plus RTL hardening pass
 - runtime document roots now sync `lang` and `dir`, and preview/QA can now force `?app-dir=rtl` while the shipped locale set still resolves to `ltr`
 - raw provider source-truth detail strings and deeper operator evidence payloads still remain outside the shipped pilot, but operator-workspace boundaries are now explicitly documented after `Phase 178` and the shell slice is shipped after `Phase 179`
-- provider source-truth values now have an explicit policy boundary after `Phase 182`, provider-source display wrappers are localized after `Phase 183`, typed adapter diagnostic planning is documented after `Phase 184`, the type-only additive model exists after `Phase 185`, Cursor source-selection/fallback diagnostics are populated after `Phase 186`, Codex source-selection/fallback diagnostics are populated after `Phase 187`, Cursor/Codex credential plus host-access diagnostics are populated after `Phase 188`, Cursor/Codex page-session diagnostics are populated after `Phase 189`, usage-threshold plus policy-only diagnostics are populated after `Phase 190`, sync-stale diagnostics are populated after `Phase 191`, source-state classification prefers typed warning diagnostics after `Phase 192`, localized warning diagnostic presentation ships after `Phase 193`, localized source diagnostic presentation ships after `Phase 194`, adapter-error diagnostic presentation ships after `Phase 195`, and compact diagnostic presentation QA ships after `Phase 196`; the next safe work is archive/export compatibility review for diagnostic fields, not translating raw adapter diagnostics directly
+- provider source-truth values now have an explicit policy boundary after `Phase 182`, provider-source display wrappers are localized after `Phase 183`, typed adapter diagnostic planning is documented after `Phase 184`, the type-only additive model exists after `Phase 185`, Cursor source-selection/fallback diagnostics are populated after `Phase 186`, Codex source-selection/fallback diagnostics are populated after `Phase 187`, Cursor/Codex credential plus host-access diagnostics are populated after `Phase 188`, Cursor/Codex page-session diagnostics are populated after `Phase 189`, usage-threshold plus policy-only diagnostics are populated after `Phase 190`, sync-stale diagnostics are populated after `Phase 191`, source-state classification prefers typed warning diagnostics after `Phase 192`, localized warning diagnostic presentation ships after `Phase 193`, localized source diagnostic presentation ships after `Phase 194`, adapter-error diagnostic presentation ships after `Phase 195`, compact diagnostic presentation QA ships after `Phase 196`, and archive/export compatibility review ships after `Phase 197`; the next safe work is sample and store seed diagnostic metadata alignment, not translating raw adapter diagnostics directly
 - non-parseable vendor-owned window labels such as `Mar 23 - Apr 21` still remain raw strings until a later explicit product decision localizes them

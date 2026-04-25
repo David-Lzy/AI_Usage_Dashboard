@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [196_Phase_Diagnostic_Presentation_Compact_Evidence_QA.md](./Archive/196_Phase_Diagnostic_Presentation_Compact_Evidence_QA.md)
+- latest completed slice: [197_Phase_Diagnostic_Archive_Export_Compatibility_Review.md](./Archive/197_Phase_Diagnostic_Archive_Export_Compatibility_Review.md)
 
 Completed phases should be moved to:
 
@@ -243,6 +243,7 @@ Completed phases should be moved to:
 - [194_Phase_Source_Diagnostic_Presentation.md](./Archive/194_Phase_Source_Diagnostic_Presentation.md) - completed and archived on 2026-04-25
 - [195_Phase_Adapter_Error_Diagnostics.md](./Archive/195_Phase_Adapter_Error_Diagnostics.md) - completed and archived on 2026-04-25
 - [196_Phase_Diagnostic_Presentation_Compact_Evidence_QA.md](./Archive/196_Phase_Diagnostic_Presentation_Compact_Evidence_QA.md) - completed and archived on 2026-04-25
+- [197_Phase_Diagnostic_Archive_Export_Compatibility_Review.md](./Archive/197_Phase_Diagnostic_Archive_Export_Compatibility_Review.md) - completed and archived on 2026-04-25
 
 ## Dependency Notes
 
@@ -515,6 +516,8 @@ Completed phases should be moved to:
 - the 2026-04-25 `Phase 195` closeout added adapter-error diagnostic builders, stable adapter-error population for Cursor/Codex/Claude Code failure paths, and localized adapter-error presentation while preserving raw adapter warning bodies and rendered evidence boundaries
 - phase 196 depends on phase 195 because compact-width diagnostic presentation QA should review the combined warning, source-selection, fallback, and adapter-error summary stack after adapter-error presentation is already shipped
 - the 2026-04-25 `Phase 196` closeout added repeatable Settings and Provider Detail compact-width QA for localized diagnostic summaries beside raw warning, source-selection, and fallback evidence bodies
+- phase 197 depends on phase 196 because archive/export compatibility should be reviewed only after the combined localized diagnostic presentation stack is already visible and compact-width verified
+- the 2026-04-25 `Phase 197` closeout added a maintained diagnostic archive/export compatibility reference plus a static review for raw diagnostic fields, typed diagnostic fields, storage, screenshot seed/archive, theme-recovery export, and interaction-audit export boundaries
 
 ## Delivery Standard For Each Phase
 
