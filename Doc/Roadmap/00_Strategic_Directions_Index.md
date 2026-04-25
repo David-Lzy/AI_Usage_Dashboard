@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-04-25:
 
-- the numbered phase queue is now completed through `Phase 183`
+- the numbered phase queue is now completed through `Phase 184`
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -66,6 +66,7 @@ As of 2026-04-25:
 - `Phase 181` completed the next `Direction 09` slice by adding localized screenshot-adjacent submission-support captions to the store seed helper route while keeping final popup, side-panel, and full-page screenshot surfaces unchanged
 - `Phase 182` completed the next `Direction 09` slice by adding a maintained raw provider source-truth localization policy that protects adapter evidence fields while identifying provider-source display wrappers as the next safe localized bucket
 - `Phase 183` completed the next `Direction 09` slice by localizing provider-source display wrappers for source labels, availability/fidelity/connection labels, helper descriptions, and generated availability summaries while preserving raw adapter evidence strings unchanged
+- `Phase 184` completed the next `Direction 09` slice by adding a maintained adapter diagnostic reason-code plan plus one `09.3` child TODO, so raw adapter diagnostics now have a type-first migration path before any diagnostic-body localization
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
 - `Phase 42` has packaged `0.1.0-rc.2` and closed the release-closeout track for the narrowed RC
 - `Phase 43` completed the first `Direction 02` slice by productizing source-fidelity semantics in the side panel
@@ -195,7 +196,7 @@ As of 2026-04-25:
 - `Phase 168` completed the next `Direction 10.3` slice by making archive completion default to the request package itself once popup files are imported, so the last remaining real-world step is now the actual popup capture rather than another manual path handoff
 - `Phase 169` completed the next `Direction 10.3` slice by adding one request-bound manual finalize command plus handoff update, so the remaining real-world work is now the popup capture itself instead of popup capture plus extra repo bookkeeping
 - the current store-asset line still retains one real-world manual popup-capture dependency under `10_3_Store_Asset_Pack_And_Submission_TODOs.md`
-- the next repo-owned engineering slice now moves to adapter diagnostic typed reason-code planning for the shipped `en + zh_CN` runtime pilot under Direction 09, captured in `09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md`
+- the next repo-owned engineering slice now moves to a type-only additive diagnostic model for the shipped `en + zh_CN` runtime pilot under Direction 09, captured in `09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`
 - the remaining high-value work in Direction 05 and Direction 04 is now evidence closure, not more tool-building:
   - `05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md`
   - `04_2_Interaction_Audit_Real_Operator_Closure_TODOs.md`
@@ -204,8 +205,8 @@ As of 2026-04-25:
   - Claude personal support is not yet graduated
   - Gemini remains policy-only
   - Codex and Cursor personal support remain partial, not absolute-remaining-balance claims
-- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 183`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
-- the numbered phase queue is now completed through `Phase 183`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
+- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 184`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
+- the numbered phase queue is now completed through `Phase 184`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
 - `Codex` personal support is already shipped as a `session_page` path, but it currently exposes usage-window percentages and reset timing, not one absolute remaining credit balance
 - `Cursor` personal support is already shipped as a `session_page` path, but it currently exposes billing-period usage context, not one exact remaining included-request counter
 - the extension action now opens a compact popup on click, the popup makes cached snapshot freshness explicit, and the badge shows the count of visible providers needing attention
@@ -254,7 +255,7 @@ As of 2026-04-25:
 
 1. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why first now:
-   manifest localization, the first runtime shell slice, locale-aware value formatting, the first settings-shell pilot, the popup/provider-detail pilot rollout, the deeper settings-helper rollout, duration-bearing freshness/reset labels, the first compact-width plus RTL hardening pass, the operator-workspace boundary review, first operator-workspace shell localization, store-screenshot helper localization, screenshot-adjacent submission-support caption localization, the raw provider source-truth policy, and provider-source display wrapper localization are now shipped, so the next fully repo-owned engineering work is adapter diagnostic typed reason-code planning for the `en` plus `zh_CN` pilot.
+   manifest localization, the first runtime shell slice, locale-aware value formatting, the first settings-shell pilot, the popup/provider-detail pilot rollout, the deeper settings-helper rollout, duration-bearing freshness/reset labels, the first compact-width plus RTL hardening pass, the operator-workspace boundary review, first operator-workspace shell localization, store-screenshot helper localization, screenshot-adjacent submission-support caption localization, the raw provider source-truth policy, provider-source display wrapper localization, and adapter diagnostic reason-code planning are now shipped, so the next fully repo-owned engineering work is a type-only additive diagnostic model for the `en` plus `zh_CN` pilot.
 
 2. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why second now:

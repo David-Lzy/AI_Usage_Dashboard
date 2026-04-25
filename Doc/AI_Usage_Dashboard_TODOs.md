@@ -237,7 +237,8 @@ Phase status update:
 - `Phase 181` completed the next `Direction 09` slice by localizing screenshot-adjacent submission-support captions inside the store seed helper route while keeping final popup, side-panel, and full-page screenshot surfaces unchanged
 - `Phase 182` completed the next `Direction 09` slice by adding one maintained raw provider source-truth localization policy and identifying provider-source display wrappers as the next safe localized bucket
 - `Phase 183` completed the next `Direction 09` slice by localizing provider-source display wrappers for source labels, availability/fidelity/connection labels, helper descriptions, and generated availability summaries while preserving raw adapter evidence strings
-- the immediate next repo-owned engineering work is now adapter diagnostic typed reason-code planning under `Doc/Roadmap/09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md`
+- `Phase 184` completed the next `Direction 09` slice by adding one maintained adapter diagnostic reason-code plan and one `09.3` child TODO before any diagnostic-body localization
+- the immediate next repo-owned engineering work is now a type-only additive diagnostic model under `Doc/Roadmap/09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
 - the split `Phase 41` release gate cleared the old runtime-parity ambiguity and re-proved the live `Codex` plus `Cursor` personal session-page paths in real Chrome

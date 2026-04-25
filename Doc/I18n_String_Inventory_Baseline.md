@@ -112,6 +112,12 @@ That reference covers the interaction-audit and theme-recovery workspaces. It se
 
 That reference protects raw `warningReason`, `sourceSelectionReason`, `sourceFallbackReason`, provider-source contract evidence, non-parseable vendor or policy labels, provider identifiers, host labels, route hints, URLs, and API names. `Phase 183` localized the safe provider-source display wrappers generated from enums or helper state while keeping those raw evidence fields unchanged.
 
+`Phase 184` added the maintained adapter diagnostic reason-code plan:
+
+- [I18n_Adapter_Diagnostic_Reason_Code_Plan.md](./I18n_Adapter_Diagnostic_Reason_Code_Plan.md)
+
+That reference defines the additive typed diagnostic model that should exist before any raw adapter diagnostic bodies are localized.
+
 ## Runtime Surfaces Still Mostly English
 
 The following surfaces still need broader runtime localization work:
@@ -124,7 +130,7 @@ The following surfaces still need broader runtime localization work:
 
 Recommended next extraction order:
 
-1. adapter diagnostic typed reason-code plan
+1. type-only additive diagnostic model
 2. revisit deeper operator-workspace evidence copy only after archive-compatibility rules are explicit
 3. revisit generated store-listing source localization only after refreshed screenshot assets replace the historical baseline
 
@@ -135,5 +141,5 @@ Recommended next extraction order:
 - `en` and `zh_CN` currently cover manifest surfaces plus popup/dashboard shell strings, popup explanatory copy, the first settings-shell slice, deeper settings helper copy, provider-detail shell/static copy, provider-source display wrappers, quick theme-toggle labels, generated counts, percentages, parseable timestamp primitives, duration-bearing runtime freshness/reset labels, operator-workspace shell copy, store-screenshot runtime helper copy plus seed-route submission-support captions, and one first compact-width plus RTL hardening pass
 - runtime document roots now sync `lang` and `dir`, and preview/QA can now force `?app-dir=rtl` while the shipped locale set still resolves to `ltr`
 - raw provider source-truth detail strings and deeper operator evidence payloads still remain outside the shipped pilot, but operator-workspace boundaries are now explicitly documented after `Phase 178` and the shell slice is shipped after `Phase 179`
-- provider source-truth values now have an explicit policy boundary after `Phase 182`, and provider-source display wrappers are localized after `Phase 183`; the next safe work is typed adapter diagnostic reason-code planning, not translating raw adapter diagnostics directly
+- provider source-truth values now have an explicit policy boundary after `Phase 182`, provider-source display wrappers are localized after `Phase 183`, and typed adapter diagnostic planning is documented after `Phase 184`; the next safe work is the type-only additive diagnostic model, not translating raw adapter diagnostics directly
 - non-parseable vendor-owned window labels such as `Mar 23 - Apr 21` still remain raw strings until a later explicit product decision localizes them

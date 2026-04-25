@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [183_Phase_Provider_Source_Display_Wrapper_Localization.md](./Archive/183_Phase_Provider_Source_Display_Wrapper_Localization.md)
+- latest completed slice: [184_Phase_Adapter_Diagnostic_Reason_Code_Plan.md](./Archive/184_Phase_Adapter_Diagnostic_Reason_Code_Plan.md)
 
 Completed phases should be moved to:
 
@@ -230,6 +230,7 @@ Completed phases should be moved to:
 - [181_Phase_Screenshot_Caption_Support_Localization.md](./Archive/181_Phase_Screenshot_Caption_Support_Localization.md) - completed and archived on 2026-04-25
 - [182_Phase_Raw_Provider_Source_Truth_Localization_Policy.md](./Archive/182_Phase_Raw_Provider_Source_Truth_Localization_Policy.md) - completed and archived on 2026-04-25
 - [183_Phase_Provider_Source_Display_Wrapper_Localization.md](./Archive/183_Phase_Provider_Source_Display_Wrapper_Localization.md) - completed and archived on 2026-04-25
+- [184_Phase_Adapter_Diagnostic_Reason_Code_Plan.md](./Archive/184_Phase_Adapter_Diagnostic_Reason_Code_Plan.md) - completed and archived on 2026-04-25
 
 ## Dependency Notes
 
@@ -476,6 +477,8 @@ Completed phases should be moved to:
 - the 2026-04-25 `Phase 182` closeout added a maintained raw provider source-truth localization policy, protected adapter evidence fields, and identified provider-source display wrappers as the next safe localized bucket
 - phase 183 depends on phase 182 because provider-source display wrapper localization should only move after raw adapter evidence fields are explicitly protected
 - the 2026-04-25 `Phase 183` closeout localized provider-source display wrappers while preserving raw `warningReason`, `sourceSelectionReason`, `sourceFallbackReason`, provider source contract details, notes, and graduation-gate evidence unchanged
+- phase 184 depends on phase 183 because adapter diagnostic-body localization should only be planned after presentation-only provider-source wrappers are already localized and raw evidence boundaries remain clear
+- the 2026-04-25 `Phase 184` closeout added a maintained adapter diagnostic reason-code plan, a `09.3` child TODO, and a type-only additive model as the next safe implementation slice
 
 ## Delivery Standard For Each Phase
 

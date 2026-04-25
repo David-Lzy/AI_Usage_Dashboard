@@ -23,6 +23,7 @@ Status note:
 - twelfth executable phase landed on `2026-04-25` through `Phase 181`
 - thirteenth executable phase landed on `2026-04-25` through `Phase 182`
 - fourteenth executable phase landed on `2026-04-25` through `Phase 183`
+- fifteenth executable phase landed on `2026-04-25` through `Phase 184`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -270,11 +271,23 @@ Build one maintainable localization architecture that can support manifest strin
 
 ### L. Adapter Diagnostic Reason-Code Plan
 
-- next recommended slice
+- completed in `Phase 184`
+- maintained reference:
+  - [I18n_Adapter_Diagnostic_Reason_Code_Plan.md](../I18n_Adapter_Diagnostic_Reason_Code_Plan.md)
+- child TODO:
+  - [09_3_Adapter_Diagnostic_Reason_Code_TODOs.md](./09_3_Adapter_Diagnostic_Reason_Code_TODOs.md)
 - design typed reason codes for adapter-generated diagnostics before localizing diagnostic bodies
 - keep current raw adapter strings visible for evidence and archive compatibility during the transition
 - decide whether reason-code payloads need parameterized values, provider-specific fallback text, or a compatibility map for historical archives
 - do not use this slice to change provider coverage claims, fallback order, or source-selection behavior
+
+### M. Type-Only Additive Diagnostic Model
+
+- next recommended slice
+- add optional typed diagnostic fields beside current raw diagnostic string fields
+- add helper types and narrow builders without changing rendered UI behavior
+- prove raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` fields still pass through unchanged
+- keep localized diagnostic bodies out of scope until typed coverage and compatibility fallback tests exist
 
 ## Planned Numbered Slices
 
@@ -293,7 +306,8 @@ Build one maintainable localization architecture that can support manifest strin
 13. screenshot-adjacent captions inside actual product screenshot surfaces or submission-support UI - completed in `Phase 181`
 14. raw provider source-truth localization policy and presentation-only wrapper review - completed in `Phase 182`
 15. provider-source display wrapper localization - completed in `Phase 183`
-16. adapter diagnostic typed reason-code plan - next
+16. adapter diagnostic typed reason-code plan - completed in `Phase 184`
+17. type-only additive diagnostic model - next
 
 ## Out Of Scope
 

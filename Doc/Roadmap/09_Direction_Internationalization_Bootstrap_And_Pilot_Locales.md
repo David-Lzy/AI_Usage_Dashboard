@@ -27,6 +27,7 @@ Execution note:
 - twelfth executable slice landed on `2026-04-25` through `Phase 181`
 - thirteenth executable slice landed on `2026-04-25` through `Phase 182`
 - fourteenth executable slice landed on `2026-04-25` through `Phase 183`
+- fifteenth executable slice landed on `2026-04-25` through `Phase 184`
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
 Process rule:
@@ -101,6 +102,8 @@ As of 2026-04-25:
 - store-screenshot helper routes now route visible helper copy and screenshot-adjacent submission-support captions through `buildStoreWorkflowLocalizedCopy` while keeping automation titles, preset ids, route hashes, final screenshot surfaces, and native-toolbar popup capture truth boundaries stable
 - raw provider source-truth localization now has one maintained policy reference:
   - [I18n_Raw_Provider_Source_Truth_Policy.md](../I18n_Raw_Provider_Source_Truth_Policy.md)
+- adapter diagnostic reason-code planning now has one maintained reference:
+  - [I18n_Adapter_Diagnostic_Reason_Code_Plan.md](../I18n_Adapter_Diagnostic_Reason_Code_Plan.md)
 - the repo ships one store helper i18n boundary reference:
   - [I18n_Store_Runtime_Helper_Copy.md](../I18n_Store_Runtime_Helper_Copy.md)
 - the repo ships maintained i18n references:
@@ -177,7 +180,8 @@ Recommended rollout:
 13. screenshot-adjacent captions inside actual product screenshot surfaces or submission-support UI - shipped in `Phase 181`
 14. raw provider source-truth localization policy and presentation-only wrapper review - shipped in `Phase 182`
 15. provider-source display wrapper localization - shipped in `Phase 183`
-16. adapter diagnostic typed reason-code plan - next
+16. adapter diagnostic typed reason-code plan - shipped in `Phase 184`
+17. type-only additive diagnostic model - next
 
 ## References
 
@@ -193,3 +197,4 @@ Recommended rollout:
 
 - [09_1_Direction_Internationalization_Bootstrap_And_Pilot_Locales_TODOs.md](./09_1_Direction_Internationalization_Bootstrap_And_Pilot_Locales_TODOs.md)
 - [09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md](./09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md)
+- [09_3_Adapter_Diagnostic_Reason_Code_TODOs.md](./09_3_Adapter_Diagnostic_Reason_Code_TODOs.md)

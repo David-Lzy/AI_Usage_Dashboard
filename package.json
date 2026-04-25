@@ -148,6 +148,7 @@
     "phase181:review": "./scripts/with-preferred-node.sh node ./scripts/phase181-screenshot-caption-support-localization-review.mjs",
     "phase182:review": "./scripts/with-preferred-node.sh node ./scripts/phase182-provider-source-truth-policy-review.mjs",
     "phase183:review": "./scripts/with-preferred-node.sh node ./scripts/phase183-provider-source-display-wrapper-localization-review.mjs",
+    "phase184:review": "./scripts/with-preferred-node.sh node ./scripts/phase184-adapter-diagnostic-reason-code-plan-review.mjs",
     "interaction-audit:bundle": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-handoff-bundle.mjs",
     "interaction-audit:archive": "./scripts/with-preferred-node.sh node ./scripts/archive-interaction-audit-review.mjs",
     "interaction-audit:refresh-archive-index": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-review-archive-index.mjs",
