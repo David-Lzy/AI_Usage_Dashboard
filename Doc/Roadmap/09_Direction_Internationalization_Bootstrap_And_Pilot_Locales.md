@@ -36,6 +36,7 @@ Execution note:
 - twenty-first executable slice landed on `2026-04-25` through `Phase 190`
 - twenty-second executable slice landed on `2026-04-25` through `Phase 191`
 - twenty-third executable slice landed on `2026-04-25` through `Phase 192`
+- twenty-fourth executable slice landed on `2026-04-25` through `Phase 193`
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
 Process rule:
@@ -119,6 +120,7 @@ As of 2026-04-25:
 - Cursor and Codex usage-threshold diagnostics plus Gemini policy-only diagnostics now have typed metadata beside the existing raw warning strings
 - sync-engine stale cached-state and automatic-sync-overdue diagnostics now have typed metadata beside the raw sync-engine stale warning strings
 - source-state classification now prefers typed warning diagnostics while preserving raw English warning-pattern fallback for older snapshots and unknown codes
+- Settings and Provider Detail now show localized labels and short summaries for known typed warning diagnostics while preserving raw diagnostic bodies
 - the repo ships one store helper i18n boundary reference:
   - [I18n_Store_Runtime_Helper_Copy.md](../I18n_Store_Runtime_Helper_Copy.md)
 - the repo ships maintained i18n references:
@@ -204,7 +206,8 @@ Recommended rollout:
 22. usage-threshold and policy-only diagnostics - shipped in `Phase 190`
 23. sync-stale diagnostics - shipped in `Phase 191`
 24. source-state classification typed-diagnostic fallback - shipped in `Phase 192`
-25. localized diagnostic presentation follow-up - next
+25. localized warning diagnostic presentation - shipped in `Phase 193`
+26. source-selection and fallback diagnostic presentation expansion - next
 
 ## References
 

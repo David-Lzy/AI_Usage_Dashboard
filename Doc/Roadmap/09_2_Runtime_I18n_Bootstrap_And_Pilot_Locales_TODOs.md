@@ -32,6 +32,7 @@ Status note:
 - twenty-first executable phase landed on `2026-04-25` through `Phase 190`
 - twenty-second executable phase landed on `2026-04-25` through `Phase 191`
 - twenty-third executable phase landed on `2026-04-25` through `Phase 192`
+- twenty-fourth executable phase landed on `2026-04-25` through `Phase 193`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -361,11 +362,19 @@ Build one maintainable localization architecture that can support manifest strin
 
 ### U. Localized Diagnostic Presentation Follow-Up
 
-- next recommended slice
+- completed in `Phase 193`
 - render short localized diagnostic labels or summaries from typed diagnostic codes and params
 - keep raw diagnostic bodies visible where evidence, details, exports, or archive compatibility still need the source-truth wording
 - add unknown-code fallback tests that preserve raw diagnostic strings
 - avoid translating raw adapter or sync-engine diagnostic bodies directly
+
+### V. Source-Selection And Fallback Diagnostic Presentation Expansion
+
+- next recommended slice
+- render localized labels or short summaries from typed source-selection and fallback diagnostic codes
+- keep raw `sourceSelectionReason` and `sourceFallbackReason` bodies visible for details, exports, and archive compatibility
+- add unknown-code fallback tests that preserve raw source diagnostic strings
+- avoid changing source-selection order, fallback behavior, or provider coverage claims
 
 ## Planned Numbered Slices
 
@@ -393,7 +402,8 @@ Build one maintainable localization architecture that can support manifest strin
 22. usage-threshold and policy-only diagnostics - completed in `Phase 190`
 23. sync-stale diagnostics - completed in `Phase 191`
 24. source-state classification typed-diagnostic fallback - completed in `Phase 192`
-25. localized diagnostic presentation follow-up - next
+25. localized warning diagnostic presentation - completed in `Phase 193`
+26. source-selection and fallback diagnostic presentation expansion - next
 
 ## Out Of Scope
 

@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 
+import { createUsageThresholdDiagnostic } from "../providers/diagnostics";
+import type { ProviderDiagnostic } from "../providers/types";
 import {
   buildSettingsSummaryLabels,
   createRuntimeI18n,
@@ -16,6 +18,7 @@ import {
   buildProviderSourceDisplayLocalizedCopy,
   buildSettingsLocalizedCopy,
   buildStoreWorkflowLocalizedCopy,
+  getProviderDiagnosticPresentation,
 } from "./localized-copy";
 
 describe("runtime i18n", () => {
@@ -157,6 +160,41 @@ describe("runtime i18n", () => {
     expect(
       providerSourceCopy.availabilitySummary("分析", "不可用", "仅窗口"),
     ).toBe("已用：分析 · 剩余：不可用 · 重置：仅窗口");
+  });
+
+  it("builds localized diagnostic presentation from typed codes and params", () => {
+    const diagnostic = createUsageThresholdDiagnostic({
+      providerId: "codex",
+      usageThresholdKind: "threshold_warning",
+      rawMessage: "5-hour usage window: 7% remaining",
+      usagePercent: 93,
+      thresholdPercent: 80,
+      unitLabel: "percent",
+    });
+
+    expect(getProviderDiagnosticPresentation(diagnostic, createRuntimeI18n("en"))).toEqual({
+      label: "Usage threshold",
+      summary: "Usage is at 93%, reaching the 80% warning threshold.",
+    });
+    expect(
+      getProviderDiagnosticPresentation(diagnostic, createRuntimeI18n("zh-CN")),
+    ).toEqual({
+      label: "用量阈值",
+      summary: "当前用量 93%，已达到 80% 告警阈值。",
+    });
+  });
+
+  it("returns no localized presentation for unknown diagnostic codes", () => {
+    const diagnostic: ProviderDiagnostic = {
+      code: "future.experimental_code",
+      category: "adapter_error",
+      severity: "warning",
+      rawMessage: "Future diagnostic body remains raw.",
+    };
+
+    expect(
+      getProviderDiagnosticPresentation(diagnostic, createRuntimeI18n("zh-CN")),
+    ).toBeNull();
   });
 
   it("returns zh-CN structured operator workspace shell copy builders", () => {

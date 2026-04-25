@@ -9,6 +9,7 @@ import {
   getOpenableRouteHint,
   type ProviderSourceDisplay,
 } from "../shared/provider-sources";
+import type { ProviderDiagnosticPresentation } from "../shared/localized-copy";
 
 export type SettingsSourceField = {
   label: string;
@@ -52,6 +53,8 @@ export type SettingsSourceCardLabels = {
     graduationGate: string;
     selectionReason: string;
     fallbackReason: string;
+    diagnostic: string;
+    diagnosticSummary: string;
     readinessDetail: string;
     fidelityDetail: string;
     usedValue: string;
@@ -95,6 +98,8 @@ const DEFAULT_SETTINGS_SOURCE_CARD_LABELS: SettingsSourceCardLabels = {
     graduationGate: "Graduation gate",
     selectionReason: "Selection reason",
     fallbackReason: "Fallback reason",
+    diagnostic: "Diagnostic",
+    diagnosticSummary: "Diagnostic summary",
     readinessDetail: "Readiness detail",
     fidelityDetail: "Fidelity detail",
     usedValue: "Used value",
@@ -284,6 +289,7 @@ export function buildSettingsSummaryItems(
 export function buildSettingsSourceCardModel(
   sourceDisplay: ProviderSourceDisplay,
   labels: SettingsSourceCardLabels = DEFAULT_SETTINGS_SOURCE_CARD_LABELS,
+  warningDiagnosticPresentation: ProviderDiagnosticPresentation | null = null,
 ): SettingsSourceCardModel {
   const fallbackValue =
     sourceDisplay.fallbackPlans.length > 0
@@ -323,6 +329,14 @@ export function buildSettingsSourceCardModel(
       [
         buildField(labels.primary.selectionReason, sourceDisplay.sourceSelectionReason),
         buildField(labels.primary.fallbackReason, sourceDisplay.sourceFallbackReason),
+        buildField(
+          labels.primary.diagnostic,
+          warningDiagnosticPresentation?.label,
+        ),
+        buildField(
+          labels.primary.diagnosticSummary,
+          warningDiagnosticPresentation?.summary,
+        ),
         buildField(labels.primary.readinessDetail, sourceDisplay.stateDetail),
         buildField(labels.primary.graduationGate, sourceDisplay.currentGraduationGateLabel),
       ],

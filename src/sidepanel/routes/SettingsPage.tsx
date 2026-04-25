@@ -21,6 +21,7 @@ import {
 import {
   buildSettingsLocalizedCopy,
   buildProviderSourceDisplayLocalizedCopy,
+  getProviderDiagnosticPresentation,
   getSettingsSourcePreferenceLabel,
 } from "../../shared/localized-copy";
 import {
@@ -839,6 +840,10 @@ export function SettingsPage({
             const sourceCardModel = buildSettingsSourceCardModel(
               sourceDisplay,
               settingsSourceCardLabels,
+              getProviderDiagnosticPresentation(
+                snapshot.warningDiagnostic,
+                i18n,
+              ),
             );
             const sessionPagePlan = sourceDisplay.sessionPagePlan;
             const canUseSessionPageAction =

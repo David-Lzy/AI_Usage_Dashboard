@@ -2,6 +2,7 @@ import type { AppLocalePreference, ProviderId } from "../../providers/types";
 import { createRuntimeI18n } from "../../shared/i18n";
 import {
   buildProviderDetailLocalizedCopy,
+  getProviderDiagnosticPresentation,
   getPermissionStatusLabel,
   getProviderDetailStatusBadgeLabel,
 } from "../../shared/localized-copy";
@@ -99,6 +100,16 @@ export function ProviderDetailPage({
     provider.permissionStatus,
     copy,
   );
+  const warningDiagnosticPresentation = getProviderDiagnosticPresentation(
+    provider.warningDiagnostic,
+    i18n,
+  );
+  const diagnosticNoteToneClassName =
+    provider.warningDiagnostic?.severity === "error"
+      ? "detail-note--error"
+      : provider.warningDiagnostic?.severity === "warning"
+        ? "detail-note--warning"
+        : "detail-note--neutral";
 
   return (
     <main className="app-shell">
@@ -391,6 +402,18 @@ export function ProviderDetailPage({
           >
             <p className="detail-note__label">{copy.notes.pageBinding}</p>
             <p className="supporting-copy">{provider.pageBindingDetail}</p>
+          </div>
+        ) : null}
+
+        {warningDiagnosticPresentation ? (
+          <div className={`detail-note ${diagnosticNoteToneClassName}`}>
+            <p className="detail-note__label">{copy.notes.diagnosticSummary}</p>
+            <p className="supporting-copy">
+              {warningDiagnosticPresentation.label}
+            </p>
+            <p className="supporting-copy">
+              {warningDiagnosticPresentation.summary}
+            </p>
           </div>
         ) : null}
 

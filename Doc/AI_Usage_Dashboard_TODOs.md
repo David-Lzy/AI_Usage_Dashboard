@@ -246,7 +246,8 @@ Phase status update:
 - `Phase 190` completed the next `Direction 09` slice by populating usage-threshold and policy-only typed warning diagnostics while preserving raw adapter strings and rendered UI behavior
 - `Phase 191` completed the next `Direction 09` slice by populating sync-engine stale cached-state and automatic-sync-overdue typed diagnostics while preserving raw stale warning strings and rendered UI behavior
 - `Phase 192` completed the next `Direction 09` slice by making source-state classification prefer typed warning diagnostics while preserving raw English warning-pattern fallback for older snapshots and unknown codes
-- the immediate next repo-owned engineering work is now localized diagnostic presentation follow-up under `Doc/Roadmap/09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`
+- `Phase 193` completed the next `Direction 09` slice by adding localized warning diagnostic presentation in Settings and Provider Detail while preserving raw warning/source strings
+- the immediate next repo-owned engineering work is now source-selection and fallback diagnostic presentation expansion under `Doc/Roadmap/09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
 - the split `Phase 41` release gate cleared the old runtime-parity ambiguity and re-proved the live `Codex` plus `Cursor` personal session-page paths in real Chrome

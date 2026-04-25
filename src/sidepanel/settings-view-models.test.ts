@@ -1,10 +1,12 @@
 import { describe, expect, it } from "vitest";
 
+import { createUsageThresholdDiagnostic } from "../providers/diagnostics";
 import { SAMPLE_APP_STATE } from "../shared/constants";
 import { createRuntimeI18n } from "../shared/i18n";
 import {
   buildProviderSourceDisplayLocalizedCopy,
   buildSettingsLocalizedCopy,
+  getProviderDiagnosticPresentation,
 } from "../shared/localized-copy";
 import { buildProviderSourceDisplay } from "../shared/provider-sources";
 import {
@@ -198,6 +200,64 @@ describe("settings view models", () => {
             "Official API unavailable: no Cursor Admin API key is stored.",
       ),
     ).toBe(true);
+  });
+
+  it("adds localized typed diagnostic presentation without hiding raw diagnostics", () => {
+    const provider =
+      SAMPLE_APP_STATE.providers.find((entry) => entry.providerId === "codex") ??
+      null;
+    const setting =
+      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "codex") ??
+      null;
+
+    expect(provider).not.toBeNull();
+    expect(setting).not.toBeNull();
+
+    const i18n = createRuntimeI18n("zh-CN");
+    const settingsCopy = buildSettingsLocalizedCopy(i18n);
+    const diagnostic = createUsageThresholdDiagnostic({
+      providerId: "codex",
+      usageThresholdKind: "threshold_warning",
+      rawMessage: "5-hour usage window: 7% remaining",
+      usagePercent: 93,
+      thresholdPercent: 80,
+      unitLabel: "percent",
+    });
+    const sourceCardModel = buildSettingsSourceCardModel(
+      buildProviderSourceDisplay(
+        {
+          ...provider!,
+          warningReason: diagnostic.rawMessage,
+          warningDiagnostic: diagnostic,
+        },
+        setting!,
+        buildProviderSourceDisplayLocalizedCopy(i18n),
+      ),
+      {
+        ...settingsCopy.sources.cardLabels,
+        sourceKindLabels: settingsCopy.sources.sourceKindLabels,
+        routeFallback: settingsCopy.sources.routeFallback,
+      },
+      getProviderDiagnosticPresentation(diagnostic, i18n),
+    );
+    const sourceDecisionGroup = sourceCardModel.diagnosticGroups.find(
+      (group) => group.title === "来源决策",
+    );
+
+    expect(sourceDecisionGroup?.fields).toEqual(
+      expect.arrayContaining([
+        { label: "诊断", value: "用量阈值" },
+        {
+          label: "诊断摘要",
+          value: "当前用量 93%，已达到 80% 告警阈值。",
+        },
+        {
+          label: "就绪详情",
+          value:
+            "Current release path for Enterprise workspaces. Exact remaining workspace credits are not exposed.",
+        },
+      ]),
+    );
   });
 
   it("builds a compact deferred session-track model with a graduation gate", () => {

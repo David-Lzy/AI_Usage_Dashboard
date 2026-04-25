@@ -21,6 +21,7 @@ Status note:
 - usage-threshold and policy-only diagnostics completed in `Phase 190`
 - sync-stale diagnostics completed in `Phase 191`
 - source-state classification typed-diagnostic fallback completed in `Phase 192`
+- localized warning diagnostic presentation completed in `Phase 193`
 - this child TODO turns the adapter diagnostic reason-code plan into executable follow-up slices
 - refresh it when typed diagnostic coverage, provider adapter behavior, or archive compatibility rules change
 
@@ -40,7 +41,7 @@ The goal is not to translate raw provider evidence immediately. The goal is to m
 
 ## Current Truth
 
-As of `Phase 192`:
+As of `Phase 193`:
 
 - provider-source display wrappers are localized through `ProviderSourceDisplayCopy`
 - raw provider source-truth fields still pass through unchanged
@@ -50,6 +51,7 @@ As of `Phase 192`:
 - `src/providers/normalize.ts` now returns usage-threshold diagnostics from shared usage-signal normalization when a provider id is supplied
 - the sync engine now populates typed sync-stale `warningDiagnostic` metadata only when it is the component generating the stale raw warning body
 - source-state classification now prefers typed warning diagnostic categories where available and keeps raw English warning-pattern matching as compatibility fallback
+- Settings and Provider Detail now render localized labels and a short diagnostic summary from known typed `warningDiagnostic` codes and params
 - the Cursor adapter populates typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` metadata beside existing raw source-selection and fallback strings
 - the Codex adapter populates typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` metadata beside existing raw source-selection and fallback strings
 - Cursor and Codex now populate typed `warningDiagnostic` metadata for missing credential and missing host-access blockers
@@ -133,20 +135,28 @@ As of `Phase 192`:
 
 ### H. Localized Presentation Follow-Up
 
-- next recommended slice
+- first warning-diagnostic presentation slice completed in `Phase 193`
 - render localized diagnostic summaries from codes and params
 - keep raw diagnostic bodies accessible in details, exports, or evidence views
 - add unknown-code fallback tests
 
+### I. Source Selection And Fallback Diagnostic Presentation Expansion
+
+- next recommended slice
+- render localized presentation for typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` values
+- keep raw source-selection and fallback bodies visible for evidence-oriented surfaces
+- add unknown-code fallback tests for both source diagnostic fields
+- avoid changing source-selection order or fallback behavior
+
 ## First Implementation Candidate
 
-The next runtime phase should implement the first narrow slice of `H. Localized Presentation Follow-Up`.
+The next runtime phase should implement the first narrow slice of `I. Source Selection And Fallback Diagnostic Presentation Expansion`.
 
 Recommended scope:
 
-- start with diagnostic labels or short summaries generated from typed codes and params
-- keep raw diagnostic bodies visible in provider detail and evidence-oriented surfaces
-- unknown typed diagnostic codes must fall back to raw diagnostic strings
+- start with localized source-selection and fallback labels or short summaries generated from typed codes and params
+- keep raw source-selection and fallback bodies visible in Settings, Provider Detail, exports, and evidence-oriented surfaces
+- unknown typed source diagnostic codes must fall back to raw diagnostic strings
 - do not translate raw adapter or sync-engine diagnostic bodies directly
 - preserve exact raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings
 
