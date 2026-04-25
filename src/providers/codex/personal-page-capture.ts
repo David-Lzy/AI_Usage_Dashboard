@@ -113,7 +113,7 @@ function toTextLines(html: string): string[] {
 
 function pickInterestingTextSnippets(lines: string[]): string[] {
   const snippets = lines.filter((line) => {
-    if (line.length < 2 || line.length > 180) {
+    if ((line.length < 2 && !/^\d$/.test(line)) || line.length > 180) {
       return false;
     }
 
@@ -122,7 +122,7 @@ function pickInterestingTextSnippets(lines: string[]): string[] {
     );
   });
 
-  return [...new Set(snippets)].slice(0, 24);
+  return snippets.slice(0, 24);
 }
 
 function isLoggedOutChatGptPage(page: PageSessionCapturedPage): boolean {

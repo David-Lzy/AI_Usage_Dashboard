@@ -40,7 +40,7 @@ Security posture for this track:
 
 Next execution queue:
 
-1. continue functional provider work first while Codex budget is constrained; after `Phase 201`, the best next slice is real-Chrome Codex personal multi-window plus flex-balance verification or another live provider-source slice
+1. continue functional provider work first while Codex budget is constrained; after `Phase 202`, the best next slice is another live provider-source slice, preferably Cursor personal display parity or a real authenticated Codex operator pass
 2. continue [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) with adapter diagnostic raw fallback regression review after the functional quota-display line is stable
 3. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining manual store-popup capture dependency
 
