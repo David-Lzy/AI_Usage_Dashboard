@@ -41,6 +41,14 @@ export type PopupFeaturedSection = {
   emptyStateDetail: string | null;
 };
 
+export type PopupUsageProgressCircle = {
+  label: string;
+  valueLabel: string;
+  ariaLabel: string;
+  remainingPercent: number;
+  tone: ProviderTone;
+};
+
 export type PopupSetupCoverage = {
   label: string;
   statusLabel: string;
@@ -68,6 +76,7 @@ export type PopupFeaturedProviderCard = {
   metaChips: string[];
   primaryDetail: string;
   secondaryDetail: string;
+  usageProgressCircles: PopupUsageProgressCircle[];
   action: PopupGuidanceAction;
 };
 
@@ -498,6 +507,45 @@ function buildPopupCompactUsageContextDetail(
   return usageParts.length > 0 ? usageParts.join(" · ") : null;
 }
 
+function getPopupUsageProgressTone(remainingPercent: number): ProviderTone {
+  if (remainingPercent <= 30) {
+    return "error";
+  }
+
+  if (remainingPercent <= 50) {
+    return "warning";
+  }
+
+  return "neutral";
+}
+
+function buildPopupUsageProgressCircles(
+  provider: ProviderViewModel,
+  i18n?: RuntimeI18n,
+): PopupUsageProgressCircle[] {
+  const remainingLabel = i18n?.resolvedLocale === "zh-CN" ? "剩余" : "remaining";
+
+  return (provider.usageWindows ?? [])
+    .filter((window) => window.remaining !== null)
+    .map((window) => {
+      const remainingPercent = Math.min(
+        100,
+        Math.max(0, window.remaining ?? 0),
+      );
+      const valueLabel = i18n
+        ? i18n.formatPercentValue(remainingPercent)
+        : `${remainingPercent}%`;
+
+      return {
+        label: window.normalizedLabel,
+        valueLabel,
+        ariaLabel: `${window.normalizedLabel}: ${valueLabel} ${remainingLabel}`,
+        remainingPercent,
+        tone: getPopupUsageProgressTone(remainingPercent),
+      };
+    });
+}
+
 function buildPopupFeaturedSecondaryDetail(
   provider: ProviderViewModel,
   i18n?: RuntimeI18n,
@@ -551,6 +599,7 @@ function buildPopupFeaturedProviderCard(
     metaChips: buildPopupFeaturedMetaChips(provider),
     primaryDetail: buildPopupFeaturedPrimaryDetail(provider),
     secondaryDetail: buildPopupFeaturedSecondaryDetail(provider),
+    usageProgressCircles: buildPopupUsageProgressCircles(provider),
     action: buildPopupFeaturedAction(provider),
   };
 }
@@ -1237,6 +1286,7 @@ function buildLocalizedFeaturedProviderCard(
     metaChips: buildLocalizedPopupFeaturedMetaChips(provider, i18n),
     primaryDetail: buildLocalizedFeaturedPrimaryDetail(provider, copy),
     secondaryDetail: buildPopupFeaturedSecondaryDetail(provider, i18n),
+    usageProgressCircles: buildPopupUsageProgressCircles(provider, i18n),
     action:
       provider.permissionStatus === "missing" ||
       provider.currentSourceStateKind === "credential_missing"

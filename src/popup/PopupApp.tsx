@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 
 import type { AppLocalePreference, AppState, ProviderId } from "../providers/types";
 import { sendAppMessage } from "../shared/app-client";
@@ -38,6 +38,10 @@ type PopupLoadState =
   | { status: "loading" }
   | { status: "ready"; appState: AppState }
   | { status: "error"; message: string };
+
+type PopupProgressRingStyle = CSSProperties & {
+  "--popup-ring-percent": string;
+};
 
 async function openSidePanelRoute(route: SidePanelRouteState) {
   const path = buildSidePanelExtensionPath(route);
@@ -522,6 +526,8 @@ export function PopupApp() {
           <div className="popup-provider-list" aria-label={popupCopy.aria.featuredProviders}>
             {popupModel.featuredProviderCards.map((card, index) => {
               const { provider } = card;
+              const hasUsageProgressCircles =
+                card.usageProgressCircles.length > 0;
 
               return (
               <article
@@ -563,12 +569,51 @@ export function PopupApp() {
                 >
                   {card.primaryDetail}
                 </p>
-                <p
-                  className="supporting-copy"
-                  data-popup-featured-secondary={index === 0 ? "true" : undefined}
-                >
-                  {card.secondaryDetail}
-                </p>
+                {hasUsageProgressCircles ? (
+                  <div
+                    className="popup-progress-ring-list"
+                    aria-label={`${provider.providerLabel} usage progress`}
+                    data-popup-featured-progress={
+                      index === 0 ? "true" : undefined
+                    }
+                  >
+                    {card.usageProgressCircles.map((circle, circleIndex) => (
+                      <div
+                        key={`${circle.label}-${circleIndex}`}
+                        className={`popup-progress-ring popup-progress-ring--${circle.tone}`}
+                      >
+                        <div
+                          className="popup-progress-ring__meter"
+                          role="progressbar"
+                          aria-label={circle.ariaLabel}
+                          aria-valuemin={0}
+                          aria-valuemax={100}
+                          aria-valuenow={circle.remainingPercent}
+                          aria-valuetext={circle.ariaLabel}
+                          style={
+                            {
+                              "--popup-ring-percent": `${circle.remainingPercent}%`,
+                            } as PopupProgressRingStyle
+                          }
+                        >
+                          <span className="popup-progress-ring__value">
+                            {circle.valueLabel}
+                          </span>
+                        </div>
+                        <p className="popup-progress-ring__label">{circle.label}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p
+                    className="supporting-copy"
+                    data-popup-featured-secondary={
+                      index === 0 ? "true" : undefined
+                    }
+                  >
+                    {card.secondaryDetail}
+                  </p>
+                )}
                 <div className="popup-actions">
                   <button
                     className="text-button"

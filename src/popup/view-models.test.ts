@@ -642,7 +642,7 @@ describe("popup view models", () => {
     });
   });
 
-  it("compresses structured personal usage context for popup provider cards", () => {
+  it("builds circular usage progress for structured popup provider cards", () => {
     const longUsageSummary =
       "Visible Codex usage: 5-hour usage window: 100% remaining · Weekly usage window: 32% remaining · GPT-5.3-Codex-Spark 每周使用限额: 100% remaining · Flex credit balance: 0 credits";
     const model = buildPopupViewModel({
@@ -718,14 +718,33 @@ describe("popup view models", () => {
       createRuntimeI18n("zh-CN"),
     );
 
-    expect(model.featuredProviderCards[0]?.secondaryDetail).toBe(
-      "Weekly usage window: 32% remaining · Flex credit balance: 0 credits",
-    );
+    expect(model.featuredProviderCards[0]?.usageProgressCircles).toEqual([
+      {
+        label: "5-hour usage window",
+        valueLabel: "100%",
+        ariaLabel: "5-hour usage window: 100% remaining",
+        remainingPercent: 100,
+        tone: "neutral",
+      },
+      {
+        label: "Weekly usage window",
+        valueLabel: "32%",
+        ariaLabel: "Weekly usage window: 32% remaining",
+        remainingPercent: 32,
+        tone: "warning",
+      },
+    ]);
     expect(model.featuredProviderCards[0]?.secondaryDetail).not.toBe(
       longUsageSummary,
     );
-    expect(localizedModel.featuredProviderCards[0]?.secondaryDetail).toBe(
-      "Weekly usage window: 32% 剩余 · Flex credit balance: 0 积分",
+    expect(localizedModel.featuredProviderCards[0]?.usageProgressCircles[1]).toEqual(
+      {
+        label: "Weekly usage window",
+        valueLabel: "32%",
+        ariaLabel: "Weekly usage window: 32% 剩余",
+        remainingPercent: 32,
+        tone: "warning",
+      },
     );
   });
 

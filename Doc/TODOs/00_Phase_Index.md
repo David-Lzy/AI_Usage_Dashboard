@@ -1,6 +1,6 @@
 # Phase Index
 
-Date: 2026-04-25
+Date: 2026-04-26
 
 Process rule:
 
@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [208_Phase_Usage_Window_Progress_Bars.md](./Archive/208_Phase_Usage_Window_Progress_Bars.md)
+- latest completed slice: [209_Phase_Popup_Circular_Usage_Progress.md](./Archive/209_Phase_Popup_Circular_Usage_Progress.md)
 
 Completed phases should be moved to:
 
@@ -252,6 +252,10 @@ Completed phases should be moved to:
 - [203_Phase_Cursor_Personal_Billing_Period_Context_Surfacing.md](./Archive/203_Phase_Cursor_Personal_Billing_Period_Context_Surfacing.md) - completed and archived on 2026-04-25
 - [204_Phase_Diagnostic_Raw_Fallback_Regression.md](./Archive/204_Phase_Diagnostic_Raw_Fallback_Regression.md) - completed and archived on 2026-04-25
 - [205_Phase_Popup_Personal_Usage_Context_Compression.md](./Archive/205_Phase_Popup_Personal_Usage_Context_Compression.md) - completed and archived on 2026-04-25
+- [206_Phase_Codex_Inline_Remaining_Percent_Parser.md](./Archive/206_Phase_Codex_Inline_Remaining_Percent_Parser.md) - completed and archived on 2026-04-25
+- [207_Phase_Codex_Merged_Window_Label_Parser.md](./Archive/207_Phase_Codex_Merged_Window_Label_Parser.md) - completed and archived on 2026-04-25
+- [208_Phase_Usage_Window_Progress_Bars.md](./Archive/208_Phase_Usage_Window_Progress_Bars.md) - completed and archived on 2026-04-25
+- [209_Phase_Popup_Circular_Usage_Progress.md](./Archive/209_Phase_Popup_Circular_Usage_Progress.md) - completed and archived on 2026-04-26
 
 ## Dependency Notes
 
@@ -548,6 +552,8 @@ Completed phases should be moved to:
 - the 2026-04-25 `Phase 207` closeout hardened Codex personal parsing for merged usage-window label and remaining-percent snippets while preserving the visible-window truth boundary
 - phase 208 depends on phases 200 through 207 because all visible usage windows must already be represented as structured snapshot data before dashboard/detail can render each one as a progress bar
 - the 2026-04-25 `Phase 208` closeout rendered all visible structured usage windows as remaining progress bars in dashboard provider cards and provider detail while keeping popup compact
+- phase 209 depends on phase 208 because the popup should reuse already-normalized structured usage-window percentages while choosing a compact circular presentation instead of dashboard-style bars
+- the 2026-04-26 `Phase 209` closeout rendered popup structured usage windows as circular remaining progress indicators while preserving dashboard/provider-detail bars and summary-only popup fallbacks
 
 ## Delivery Standard For Each Phase
 
