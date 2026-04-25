@@ -18,6 +18,7 @@ Status note:
 - seventh executable phase landed on `2026-04-24` through `Phase 176`
 - eighth executable phase landed on `2026-04-25` through `Phase 177`
 - ninth executable phase landed on `2026-04-25` through `Phase 178`
+- tenth executable phase landed on `2026-04-25` through `Phase 179`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -79,7 +80,7 @@ Build one maintainable localization architecture that can support manifest strin
 - popup explanatory plus provider-detail shell/static slice shipped in `Phase 174`
 - remaining work:
   - raw provider source-truth detail strings that should stay explicit but still need a deliberate localization policy
-  - operator workspaces
+  - deeper operator evidence/export payload copy that should stay explicit until archive compatibility is reviewed
 
 ### E. Locale-Aware Formatting
 
@@ -203,6 +204,20 @@ Build one maintainable localization architecture that can support manifest strin
   - vendor-owned strings and raw provider source-truth wording
   - status terms already used as source-truth evidence labels in archives or request manifests
 
+### H.1 Operator Workspace Shell Localization
+
+- first shell localization slice shipped in `Phase 179`
+- implementation scope:
+  - `buildOperatorWorkspaceLocalizedCopy` in [localized-copy.ts](../../src/shared/localized-copy.ts)
+  - interaction-audit top bar, hero, guidance, signoff summary labels, request-scope labels, and shell helper copy
+  - theme-recovery top bar, hero, loading/error labels, current-truth labels, theme-state labels, request-scope labels, workflow helper copy, extension/vendor quick-link labels, output action labels, and generic feedback messages
+  - special debug routes now receive the same runtime i18n from [App.tsx](../../src/sidepanel/App.tsx)
+- truth boundary preserved:
+  - exported JSON field names remain English
+  - generated evidence markdown remains English
+  - request ids, archive ids, revision strings, fixture ids, filenames, provider source-truth values, and vendor-owned wording remain unchanged
+  - deeper operator evidence copy now needs archive-compatibility review before any future localization
+
 ## Planned Numbered Slices
 
 1. string inventory and message-id contract - completed in `Phase 170`
@@ -215,10 +230,12 @@ Build one maintainable localization architecture that can support manifest strin
 8. locale-aware durations and freshness label rollout - completed in `Phase 176`
 9. compact-width review and RTL hardening - completed in `Phase 177`
 10. audit and recovery workspace localization boundary and first extraction review - completed in `Phase 178`
-11. first operator-workspace shell localization slice - next
+11. first operator-workspace shell localization slice - completed in `Phase 179`
+12. store-facing runtime helper copy and screenshot-adjacent captions - next
 
 ## Out Of Scope
 
 - translating vendor-owned provider-page text
 - promising all ten languages in the first runtime slice
 - shipping Arabic before explicit RTL review exists
+- localizing operator evidence schemas or archive-facing generated strings before archive compatibility is reviewed

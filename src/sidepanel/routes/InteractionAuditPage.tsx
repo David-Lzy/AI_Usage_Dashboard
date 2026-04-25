@@ -1,6 +1,12 @@
 import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
 
+import {
+  createRuntimeI18n,
+  DEFAULT_APP_LOCALE_PREFERENCE,
+  type RuntimeI18n,
+} from "../../shared/i18n";
+import { buildOperatorWorkspaceLocalizedCopy } from "../../shared/localized-copy";
 import { TopBar } from "../components/TopBar";
 import { buildInteractionAuditExportFilename } from "../interaction-audit-export-files";
 import { buildInteractionAuditReviewQueue } from "../interaction-audit-review-queue";
@@ -300,9 +306,11 @@ function runAuditPreset(
       const quickActions = Array.from(
         document.querySelectorAll(".popup-actions .text-button"),
       );
-      const dashboardButton = quickActions.find((button) =>
-        button.textContent?.includes("Open dashboard"),
-      );
+      const dashboardButton = quickActions.find((button) => {
+        const text = button.textContent ?? "";
+
+        return text.includes("Open dashboard") || text.includes("打开 dashboard");
+      });
 
       if (!isHtmlElementLike(dashboardButton)) {
         return {
@@ -400,7 +408,21 @@ function downloadTextFile(
   }
 }
 
-export function InteractionAuditPage() {
+type InteractionAuditPageProps = {
+  i18n?: RuntimeI18n;
+};
+
+function createDefaultOperatorRuntimeI18n(): RuntimeI18n {
+  return createRuntimeI18n(
+    DEFAULT_APP_LOCALE_PREFERENCE,
+    typeof window !== "undefined" ? window : undefined,
+  );
+}
+
+export function InteractionAuditPage({
+  i18n = createDefaultOperatorRuntimeI18n(),
+}: InteractionAuditPageProps = {}) {
+  const copy = buildOperatorWorkspaceLocalizedCopy(i18n).interactionAudit;
   const auditFrameRefs = useRef<Record<string, HTMLIFrameElement | null>>({});
   const auditCardRefs = useRef<Record<string, HTMLElement | null>>({});
   const [loadedSurfaces, setLoadedSurfaces] = useState<Record<string, boolean>>(
@@ -565,8 +587,8 @@ export function InteractionAuditPage() {
   const boundRequestId = signoffRequestContext.requestId.trim();
   const hasBoundRequest = boundRequestId.length > 0;
   const requestScopeLabel = hasBoundRequest
-    ? "Repo-backed request"
-    : "Ad-hoc audit workspace";
+    ? copy.signoff.repoBackedRequest
+    : copy.signoff.adHocWorkspace;
   const requestPreflightCommand = hasBoundRequest
     ? `npm run interaction-audit:preflight-review-request -- --request-id ${boundRequestId} --input tmp/operator-signoff-export.json`
     : "";
@@ -891,10 +913,10 @@ export function InteractionAuditPage() {
   return (
     <main className="app-shell interaction-audit-shell">
       <TopBar
-        title="Interaction Audit"
-        subtitle="Real-browser QA hub"
-        secondaryActionLabel="Open dashboard"
-        primaryActionLabel="Open settings"
+        title={copy.topbar.title}
+        subtitle={copy.topbar.subtitle}
+        secondaryActionLabel={copy.topbar.openDashboard}
+        primaryActionLabel={copy.topbar.openSettings}
         onSecondaryAction={() => {
           openAuditSurface("./index.html#dashboard");
         }}
@@ -905,39 +927,28 @@ export function InteractionAuditPage() {
 
       <section className="hero-card" data-theme-local-surface="audit-hero-card">
         <p className="section-label" data-theme-local-surface="audit-hero-label">
-          Audit Hub
+          {copy.hero.eyebrow}
         </p>
-        <h2 className="display-headline">Manual interaction review without repeated resizing</h2>
-        <p className="body-copy">
-          This page embeds the real shipped dashboard, settings, provider-detail,
-          and popup surfaces inside fixed-width frames so real-browser review can
-          focus on hover, focus, pressed, and compact-width behavior instead of
-          repeatedly reopening routes. The audit hub now follows the same shared
-          theme preferences as the shipped side panel and popup.
-        </p>
+        <h2 className="display-headline">{copy.hero.title}</h2>
+        <p className="body-copy">{copy.hero.detail}</p>
         <span className="token-chip" data-theme-local-surface="audit-hero-chip">
-          Manual QA · Fixed-width frames
+          {copy.hero.chip}
         </span>
       </section>
 
       <section className="status-card">
         <div className="dashboard-section__header">
           <div>
-            <p className="section-label">How To Use</p>
-            <h2 className="section-title">Review guidance</h2>
+            <p className="section-label">{copy.guidance.eyebrow}</p>
+            <h2 className="section-title">{copy.guidance.title}</h2>
           </div>
-          <p className="supporting-copy">
-            Open this route in a normal browser tab or extension page when you
-            want a human pass after the automated review scripts. The embedded
-            frames preserve representative widths even when the outer browser
-            window is larger.
-          </p>
+          <p className="supporting-copy">{copy.guidance.detail}</p>
         </div>
 
         <ul className="feature-list interaction-audit__checklist">
-          <li>Hover interactive controls and confirm the state layer still feels coherent across pages.</li>
-          <li>Use keyboard tab focus across the embedded surfaces and confirm focus visibility stays explicit.</li>
-          <li>Use the preset actions below to open disclosures, focus controls, or reveal lower detail notes before signing off a UI slice.</li>
+          {copy.guidance.checks.map((check) => (
+            <li key={check}>{check}</li>
+          ))}
         </ul>
 
         <div className="interaction-audit__actions">
@@ -947,7 +958,7 @@ export function InteractionAuditPage() {
             rel="noreferrer"
             target="_blank"
           >
-            Open dashboard
+            {copy.guidance.openDashboard}
           </a>
           <a
             className="text-button interaction-audit__open-link"
@@ -956,7 +967,7 @@ export function InteractionAuditPage() {
             target="_blank"
             data-theme-local-surface="audit-open-settings-link"
           >
-            Open settings
+            {copy.guidance.openSettings}
           </a>
           <a
             className="text-button interaction-audit__open-link"
@@ -964,7 +975,7 @@ export function InteractionAuditPage() {
             rel="noreferrer"
             target="_blank"
           >
-            Open popup
+            {copy.guidance.openPopup}
           </a>
         </div>
       </section>
@@ -975,14 +986,10 @@ export function InteractionAuditPage() {
       >
         <div className="status-card__header">
           <div>
-            <p className="section-label">Signoff Workspace</p>
-            <h2 className="section-title">Current operator draft</h2>
+            <p className="section-label">{copy.signoff.eyebrow}</p>
+            <h2 className="section-title">{copy.signoff.title}</h2>
           </div>
-          <p className="supporting-copy">
-            Use the controls inside each audit surface to record check progress,
-            reviewer notes, and pass-versus-follow-up state. The draft below
-            updates live from the current workspace state.
-          </p>
+          <p className="supporting-copy">{copy.signoff.detail}</p>
         </div>
 
         <div className="interaction-audit__signoff-summary">
@@ -990,14 +997,14 @@ export function InteractionAuditPage() {
             className="source-card__field"
             data-audit-signoff-summary-id="reviewed-surfaces"
           >
-            <p className="source-card__label">Reviewed surfaces</p>
+            <p className="source-card__label">{copy.signoff.reviewedSurfaces}</p>
             <p className="source-card__value" data-audit-signoff-summary-value>
               {signoffSummary.reviewedSurfaceCount} /{" "}
               {INTERACTION_AUDIT_SIGNOFF_SURFACES.length}
             </p>
           </div>
           <div className="source-card__field" data-audit-signoff-summary-id="pass">
-            <p className="source-card__label">Pass</p>
+            <p className="source-card__label">{copy.signoff.pass}</p>
             <p className="source-card__value" data-audit-signoff-summary-value>
               {signoffSummary.passSurfaceCount}
             </p>
@@ -1006,7 +1013,7 @@ export function InteractionAuditPage() {
             className="source-card__field"
             data-audit-signoff-summary-id="follow-up"
           >
-            <p className="source-card__label">Follow-up</p>
+            <p className="source-card__label">{copy.signoff.followUp}</p>
             <p className="source-card__value" data-audit-signoff-summary-value>
               {signoffSummary.followUpSurfaceCount}
             </p>
@@ -1015,7 +1022,7 @@ export function InteractionAuditPage() {
             className="source-card__field"
             data-audit-signoff-summary-id="completed-checks"
           >
-            <p className="source-card__label">Completed checks</p>
+            <p className="source-card__label">{copy.signoff.completedChecks}</p>
             <p className="source-card__value" data-audit-signoff-summary-value>
               {signoffSummary.completedManualCheckCount} /{" "}
               {signoffSummary.totalManualCheckCount}
@@ -1025,11 +1032,11 @@ export function InteractionAuditPage() {
 
         <div className="interaction-audit__signoff-fields">
           <label className="form-field">
-            <span className="form-field__label">Reviewer name</span>
+            <span className="form-field__label">{copy.signoff.reviewerName}</span>
             <input
               className="form-field__control"
               data-audit-session-reviewer
-              placeholder="Record the reviewer or operator name."
+              placeholder={copy.signoff.reviewerPlaceholder}
               type="text"
               value={signoffMetadata.reviewerName}
               onChange={(event) => {
@@ -1039,11 +1046,11 @@ export function InteractionAuditPage() {
           </label>
 
           <label className="form-field">
-            <span className="form-field__label">Session label</span>
+            <span className="form-field__label">{copy.signoff.sessionLabel}</span>
             <input
               className="form-field__control"
               data-audit-session-label
-              placeholder="Label this pass, for example Compact QA Pass."
+              placeholder={copy.signoff.sessionPlaceholder}
               type="text"
               value={signoffMetadata.sessionLabel}
               onChange={(event) => {
@@ -1053,11 +1060,11 @@ export function InteractionAuditPage() {
           </label>
 
           <label className="form-field">
-            <span className="form-field__label">Reviewed at</span>
+            <span className="form-field__label">{copy.signoff.reviewedAt}</span>
             <input
               className="form-field__control"
               data-audit-session-reviewed-at
-              placeholder="Use ISO-8601 time or stamp the current review moment."
+              placeholder={copy.signoff.reviewedAtPlaceholder}
               type="text"
               value={signoffMetadata.reviewedAt}
               onChange={(event) => {
@@ -1076,7 +1083,7 @@ export function InteractionAuditPage() {
               handleStampReviewedAt();
             }}
           >
-            Stamp current time
+            {copy.signoff.stampCurrentTime}
           </button>
         </div>
 
@@ -1084,28 +1091,28 @@ export function InteractionAuditPage() {
           className="detail-note detail-note--neutral"
           data-audit-session-summary
         >
-          <p className="detail-note__label">Review session</p>
+          <p className="detail-note__label">{copy.signoff.reviewSession}</p>
           <p className="supporting-copy">
-            Reviewer:{" "}
+            {copy.signoff.reviewerPrefix}:{" "}
             {signoffMetadata.reviewerName.trim().length > 0
               ? signoffMetadata.reviewerName.trim()
-              : "not set"}
-            {" · "}Session:{" "}
+              : copy.signoff.notSet}
+            {" · "}{copy.signoff.sessionPrefix}:{" "}
             {signoffMetadata.sessionLabel.trim().length > 0
               ? signoffMetadata.sessionLabel.trim()
-              : "not set"}
-            {" · "}Reviewed at:{" "}
+              : copy.signoff.notSet}
+            {" · "}{copy.signoff.reviewedAtPrefix}:{" "}
             {signoffMetadata.reviewedAt.trim().length > 0
               ? signoffMetadata.reviewedAt.trim()
-              : "not set"}
+              : copy.signoff.notSet}
           </p>
           <p
             className="supporting-copy"
             data-audit-request-binding-summary
           >
-            Request binding:{" "}
+            {copy.signoff.requestBindingPrefix}:{" "}
             {formatInteractionAuditSignoffRequestBinding(signoffRequestContext)}
-            {" · "}Request revision:{" "}
+            {" · "}{copy.signoff.requestRevisionPrefix}:{" "}
             {formatInteractionAuditSignoffRequestRevision(signoffRequestContext)}
           </p>
         </div>
@@ -1117,14 +1124,14 @@ export function InteractionAuditPage() {
         >
           <div className="interaction-audit__request-scope-header">
             <div>
-              <p className="detail-note__label">Request Scope</p>
+              <p className="detail-note__label">{copy.signoff.requestScope}</p>
               <p
                 className="supporting-copy"
                 data-audit-request-scope-copy
               >
                 {hasBoundRequest
-                  ? "This workspace is bound to one repo-backed pending request. Use preflight and completion against that request instead of the ad-hoc archive path."
-                  : "This workspace is not bound to a repo-backed request. Use the archive path unless a pending request template is imported first."}
+                  ? copy.signoff.boundRequestDetail
+                  : copy.signoff.adHocDetail}
               </p>
             </div>
             <span className="meta-chip" data-audit-request-scope-label>
@@ -1137,7 +1144,7 @@ export function InteractionAuditPage() {
               className="source-card__field"
               data-audit-request-scope-summary="binding"
             >
-              <p className="source-card__label">Binding</p>
+              <p className="source-card__label">{copy.signoff.binding}</p>
               <p className="source-card__value">
                 {formatInteractionAuditSignoffRequestBinding(signoffRequestContext)}
               </p>
@@ -1146,7 +1153,7 @@ export function InteractionAuditPage() {
               className="source-card__field"
               data-audit-request-scope-summary="revision"
             >
-              <p className="source-card__label">Request revision</p>
+              <p className="source-card__label">{copy.signoff.requestRevision}</p>
               <p className="source-card__value">
                 {formatInteractionAuditSignoffRequestRevision(signoffRequestContext)}
               </p>
@@ -1155,11 +1162,11 @@ export function InteractionAuditPage() {
               className="source-card__field"
               data-audit-request-scope-summary="downloads"
             >
-              <p className="source-card__label">Download identity</p>
+              <p className="source-card__label">{copy.signoff.downloadIdentity}</p>
               <p className="source-card__value">
                 {hasBoundRequest
-                  ? "Downloads include the bound request id and request revision."
-                  : "Downloads stay session-scoped only."}
+                  ? copy.signoff.downloadsBound
+                  : copy.signoff.downloadsAdHoc}
               </p>
             </div>
           </div>

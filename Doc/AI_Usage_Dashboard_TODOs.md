@@ -232,7 +232,8 @@ Phase status update:
 - `Phase 176` completed the next `Direction 09` slice by localizing duration-bearing freshness and reset labels across popup snapshot status, popup featured-provider freshness chips, and dashboard provider cards while keeping raw provider source-truth detail strings and operator workspaces outside the shipped pilot
 - `Phase 177` completed the next `Direction 09` slice by shipping runtime `lang` and `dir` sync, one preview `app-dir` override, one first logical-CSS hardening pass, and tighter compact-width action behavior for the current `en` plus `zh_CN` pilot
 - `Phase 178` completed the next `Direction 09` slice by adding one maintained operator-workspace localization boundary plus one repeatable extraction review for interaction-audit and theme-recovery workspaces
-- the immediate next repo-owned engineering work is now the first operator-workspace shell localization pass for the `en` plus `zh_CN` runtime pilot under `Doc/Roadmap/09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md`
+- `Phase 179` completed the next `Direction 09` slice by localizing interaction-audit and theme-recovery workspace shell/navigation/helper copy for `en` plus `zh_CN` while keeping evidence payloads, export schemas, request identifiers, fixture ids, filenames, and source-truth labels English
+- the immediate next repo-owned engineering work is now store-facing runtime helper copy and screenshot-adjacent captions for the `en` plus `zh_CN` runtime pilot under `Doc/Roadmap/09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
 - the split `Phase 41` release gate cleared the old runtime-parity ambiguity and re-proved the live `Codex` plus `Cursor` personal session-page paths in real Chrome

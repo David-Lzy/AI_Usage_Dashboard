@@ -10,6 +10,7 @@ import {
   syncRuntimeLocaleAttributes,
 } from "./i18n";
 import {
+  buildOperatorWorkspaceLocalizedCopy,
   buildPopupLocalizedCopy,
   buildProviderDetailLocalizedCopy,
   buildSettingsLocalizedCopy,
@@ -141,6 +142,15 @@ describe("runtime i18n", () => {
     expect(settingsCopy.credentials.saveKey).toBe("保存密钥");
     expect(settingsCopy.sources.preferenceLabel).toBe("偏好");
     expect(settingsCopy.permissions.requestAccess).toBe("请求授权");
+  });
+
+  it("returns zh-CN structured operator workspace shell copy builders", () => {
+    const i18n = createRuntimeI18n("zh-CN");
+    const operatorCopy = buildOperatorWorkspaceLocalizedCopy(i18n);
+
+    expect(operatorCopy.interactionAudit.topbar.title).toBe("交互审计");
+    expect(operatorCopy.themeRecovery.topbar.title).toBe("主题恢复审核");
+    expect(operatorCopy.themeRecovery.links.sidePanel.settings).toBe("打开设置");
   });
 
   it("localizes runtime duration and freshness labels for zh-CN", () => {

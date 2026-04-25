@@ -220,7 +220,8 @@ The Chrome action now opens a compact popup first:
   - popup, sidepanel, and full-page roots now sync runtime `lang` plus `dir`, and preview or QA can force `?app-dir=rtl` or `?app-dir=ltr` without claiming one shipped RTL locale
   - one first compact-width plus RTL hardening pass now ships for the current `en + zh_CN` runtime pilot
   - operator workspaces now have one maintained i18n boundary and extraction review in [I18n_Operator_Workspace_Boundary_And_Extraction.md](./Doc/I18n_Operator_Workspace_Boundary_And_Extraction.md)
-  - raw provider source-truth detail strings and operator workspaces still remain outside the shipped pilot
+  - interaction-audit and theme-recovery workspace shell/navigation/helper copy now localizes through the same runtime pilot
+  - raw provider source-truth detail strings plus deeper operator evidence/export payload copy still remain outside the shipped pilot
 - the popup runtime now also ships one explicit host-width contract for real Chrome action-popup rendering, so the browser no longer has to guess popup width from the document body
 - the popup runtime now also ships one static bootstrap width contract in [src/popup/index.html](./src/popup/index.html), and repo-backed tool commands now prefer the local Node runtime through [scripts/with-preferred-node.sh](./scripts/with-preferred-node.sh) instead of relying on the older Cursor-bundled `node`
 - the repo now also ships one shared route-entry contract for the future full-page shell through `src/sidepanel/index.html?surface=full-page#...`, so popup and sidebar expand controls can target one route-preserving tab surface without duplicating the main app entry

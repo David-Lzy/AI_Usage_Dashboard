@@ -44,7 +44,7 @@ Keep manifest and runtime localization on one stable naming contract so later co
 - `manifest_action_default_title`
   - maps to manifest `action.default_title`
 
-## Shipped Runtime IDs Through Phase 177
+## Shipped Runtime IDs Through Phase 179
 
 Runtime localization now exists for one broader but still partial manifest plus runtime pilot slice. Current shipped groups are:
 
@@ -80,7 +80,7 @@ Runtime localization now exists for one broader but still partial manifest plus 
   - `settings.permissions.*`
   - `settings.toast.*`
 
-## Structured Runtime Copy Through Phase 177
+## Structured Runtime Copy Through Phase 179
 
 `Phase 174` and `Phase 175` deliberately did not explode the runtime id list with one message id per popup sentence, provider-detail field label, or settings helper paragraph.
 
@@ -108,6 +108,9 @@ Instead, these localized surfaces now ship through shared structured builders in
   - credential-card section labels, state chips, help copy, footer copy, placeholders, and action labels
   - source-card preference labels, session-track labels, diagnostics disclosure labels, and diagnostic group and field labels
   - permission-prompt status and action labels
+- operator-workspace shell copy:
+  - interaction-audit top bar, hero, guidance, signoff-summary labels, and request-scope shell labels
+  - theme-recovery top bar, hero, current-truth labels, theme-state labels, request-scope labels, workflow steps, quick-link labels, output action labels, and generic feedback messages
 
 This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still making the broader `en + zh-CN` pilot executable.
 
@@ -134,11 +137,12 @@ This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still maki
   - the first settings-shell slice
   - deeper settings helper copy
   - provider-detail shell and static copy
+  - operator-workspace shell copy
   - shared quick theme-toggle labels
-- raw provider source-truth detail strings and operator workspaces still remain outside the shipped localized slice
+- raw provider source-truth detail strings and deeper operator evidence/export payload copy still remain outside the shipped localized slice
 - vendor-owned provider-page text stays outside the managed localization catalog
 - locale-aware formatting also stays outside raw message ids so generated values can be formatted per locale without multiplying message ids
-- operator workspace copy remains governed by [I18n_Operator_Workspace_Boundary_And_Extraction.md](./I18n_Operator_Workspace_Boundary_And_Extraction.md) until its first shell-localization slice lands
+- operator workspace copy remains governed by [I18n_Operator_Workspace_Boundary_And_Extraction.md](./I18n_Operator_Workspace_Boundary_And_Extraction.md); `Phase 179` localizes shell/navigation/helper copy while preserving English evidence payloads
 
 ## Locale-Aware Formatting Contract
 

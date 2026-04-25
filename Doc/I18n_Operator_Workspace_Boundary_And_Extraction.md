@@ -17,7 +17,7 @@ Freshness model:
 Status note:
 
 - this file records the current localization boundary for operator-only review workspaces
-- refresh it when interaction-audit or theme-recovery workspace copy moves under the runtime i18n pilot
+- refresh it when interaction-audit or theme-recovery workspace copy moves further under the runtime i18n pilot
 
 ## Goal
 
@@ -64,7 +64,7 @@ Current role:
 
 ## First Extraction Review
 
-`Phase 178` does not translate these pages yet. It makes their first extraction review repeatable.
+`Phase 178` did not translate these pages. It made their first extraction review repeatable.
 
 The repeatable review script is:
 
@@ -75,6 +75,28 @@ The script verifies that both workspaces still contain the expected operator mar
 - `tmp/phase178-operator-workspace-i18n-boundary-review/operator-workspace-copy-inventory.json`
 
 That snapshot is evidence for the scale and categories of copy still outside the pilot, not a committed translation catalog.
+
+## Phase 179 Shell Localization
+
+`Phase 179` shipped the first operator-workspace shell-localized slice for `en + zh_CN`.
+
+The runtime implementation lives in:
+
+- [localized-copy.ts](../src/shared/localized-copy.ts)
+- [InteractionAuditPage.tsx](../src/sidepanel/routes/InteractionAuditPage.tsx)
+- [ThemeRecoveryReviewPage.tsx](../src/sidepanel/routes/ThemeRecoveryReviewPage.tsx)
+- [App.tsx](../src/sidepanel/App.tsx)
+
+The localized scope is intentionally presentation-only:
+
+- workspace top bar titles and subtitles
+- primary navigation labels
+- hero cards
+- top-level guidance sections
+- theme-recovery workflow and quick-link labels
+- copy/download action labels and generic feedback messages
+
+Evidence payloads remain English. Export schemas, request bindings, generated filenames, archive-facing status values, fixture ids, provider source-truth values, and vendor-owned text remain outside this shipped shell slice.
 
 ## Candidate Localizable Copy
 
@@ -109,20 +131,20 @@ If one of these categories is localized later, the implementation must first dec
 
 ## Current Boundary
 
-As of `Phase 178`:
+As of `Phase 179`:
 
 - the runtime app already localizes the main product surfaces in `en + zh_CN`
-- the operator workspaces remain English by design
-- the repo now has a maintained extraction boundary for those workspaces
-- the next implementation step can localize a narrow operator shell without changing archive payload semantics
+- the operator workspaces now have shell-localized navigation and helper copy
+- archive payload semantics remain English and unchanged
+- the repo has a maintained extraction boundary for deeper operator-workspace localization decisions
+- the next implementation step should avoid evidence-schema changes unless a dedicated archive-compatibility review lands first
 
 ## Follow-Up
 
-The next `Direction 09` implementation slice should localize the operator-workspace shell only:
+The next `Direction 09` implementation slice should move to store-facing runtime helper copy:
 
-- top bar title and subtitle
-- section labels and section titles
-- primary navigation and copy/download action labels
-- generic helper copy that does not appear in request or archive payloads
+- screenshot-adjacent helper copy
+- store-submission support copy that appears inside runtime surfaces
+- any remaining runtime captions that should match the maintained store-listing source pack
 
-Archive payload fields, request identifiers, and generated evidence strings should remain out of scope until a dedicated archive-compatibility review says otherwise.
+Operator evidence payload fields, request identifiers, and generated evidence strings should remain out of scope until a dedicated archive-compatibility review says otherwise.

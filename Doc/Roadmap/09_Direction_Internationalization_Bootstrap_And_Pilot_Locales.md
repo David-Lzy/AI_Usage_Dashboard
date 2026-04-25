@@ -22,6 +22,7 @@ Execution note:
 - seventh executable slice landed on `2026-04-24` through `Phase 176`
 - eighth executable slice landed on `2026-04-25` through `Phase 177`
 - ninth executable slice landed on `2026-04-25` through `Phase 178`
+- tenth executable slice landed on `2026-04-25` through `Phase 179`
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
 Process rule:
@@ -66,6 +67,7 @@ As of 2026-04-25:
   - the first settings-shell slice
   - deeper settings helper copy
   - provider-detail shell and static copy
+  - operator-workspace shell copy for interaction-audit and theme-recovery
   - shared quick theme-toggle labels
 - the current settings-shell slice includes:
   - settings top bar and actions
@@ -82,12 +84,13 @@ As of 2026-04-25:
   - source-card preference labels, session-track labels, diagnostics disclosure labels, and diagnostic group and field labels
   - permission-prompt status and action labels
 - the runtime app now also localizes duration-bearing freshness and reset labels across popup snapshot status, popup featured-provider freshness chips, and dashboard provider cards
-- operator workspaces and raw provider source-truth detail strings that intentionally remain closer to the underlying source contract still remain outside the localized pilot
+- deeper operator evidence/export payload copy and raw provider source-truth detail strings that intentionally remain closer to the underlying source contract still remain outside the localized pilot
 - popup compact widths were already tight in English, so `Phase 177` shipped one explicit compact-width hardening pass for the current localized pilot
 - runtime roots now sync `lang` and `dir` attributes from the shared runtime i18n layer
 - preview and QA can now force `?app-dir=rtl` or `?app-dir=ltr` without pretending Arabic already ships
 - operator workspaces now have one maintained localization boundary and first extraction review:
   - [I18n_Operator_Workspace_Boundary_And_Extraction.md](../I18n_Operator_Workspace_Boundary_And_Extraction.md)
+- the first operator-workspace shell localization slice now routes interaction-audit and theme-recovery shell/navigation/helper copy through `buildOperatorWorkspaceLocalizedCopy` while keeping evidence payloads English
 - the repo ships maintained i18n references:
   - [I18n_Message_ID_Contract.md](../I18n_Message_ID_Contract.md)
   - [I18n_String_Inventory_Baseline.md](../I18n_String_Inventory_Baseline.md)
@@ -157,7 +160,8 @@ Recommended rollout:
 8. locale-aware durations and freshness labels - shipped in `Phase 176`
 9. compact-width and RTL hardening - shipped in `Phase 177`
 10. audit and recovery workspace localization boundary and first extraction review - shipped in `Phase 178`
-11. first operator-workspace shell localization slice - next
+11. first operator-workspace shell localization slice - shipped in `Phase 179`
+12. store-facing runtime helper copy and screenshot-adjacent captions - next
 
 ## References
 

@@ -115,6 +115,21 @@ function readThemeSettingsFromStoredAppState(value: unknown): ThemeSettings {
   );
 }
 
+function readLocalePreferenceFromStoredAppState(
+  value: unknown,
+): AppLocalePreference {
+  if (!value || typeof value !== "object" || !("settings" in value)) {
+    return DEFAULT_APP_LOCALE_PREFERENCE;
+  }
+
+  const locale = (value as { settings?: Partial<AppSettings> | null }).settings
+    ?.locale;
+
+  return locale === "system" || locale === "en" || locale === "zh-CN"
+    ? locale
+    : DEFAULT_APP_LOCALE_PREFERENCE;
+}
+
 function parseStoredThemeSettings(rawValue: string | null): ThemeSettings {
   if (!rawValue) {
     return DEFAULT_THEME_SETTINGS;
@@ -124,6 +139,18 @@ function parseStoredThemeSettings(rawValue: string | null): ThemeSettings {
     return readThemeSettingsFromStoredAppState(JSON.parse(rawValue) as unknown);
   } catch {
     return DEFAULT_THEME_SETTINGS;
+  }
+}
+
+function parseStoredLocalePreference(rawValue: string | null): AppLocalePreference {
+  if (!rawValue) {
+    return DEFAULT_APP_LOCALE_PREFERENCE;
+  }
+
+  try {
+    return readLocalePreferenceFromStoredAppState(JSON.parse(rawValue) as unknown);
+  } catch {
+    return DEFAULT_APP_LOCALE_PREFERENCE;
   }
 }
 
@@ -207,6 +234,13 @@ function SpecialRouteApp({
 }) {
   const [themeSettings, setThemeSettings] =
     useState<ThemeSettings>(DEFAULT_THEME_SETTINGS);
+  const [localePreference, setLocalePreference] = useState<AppLocalePreference>(
+    DEFAULT_APP_LOCALE_PREFERENCE,
+  );
+  const runtimeI18n = createRuntimeI18n(
+    localePreference,
+    typeof window !== "undefined" ? window : undefined,
+  );
 
   useEffect(() => {
     if (route === "debug-store-screenshot-seed") {
@@ -223,6 +257,7 @@ function SpecialRouteApp({
       }
 
       setThemeSettings(normalizeThemeSettings(response.state.settings));
+      setLocalePreference(response.state.settings.locale);
     }
 
     void hydrateThemeSettings();
@@ -243,6 +278,7 @@ function SpecialRouteApp({
       }
 
       setThemeSettings(parseStoredThemeSettings(event.newValue));
+      setLocalePreference(parseStoredLocalePreference(event.newValue));
     };
 
     window.addEventListener("storage", handleStorage);
@@ -263,6 +299,11 @@ function SpecialRouteApp({
 
         setThemeSettings(
           readThemeSettingsFromStoredAppState(
+            changes[APP_STATE_STORAGE_KEY]?.newValue,
+          ),
+        );
+        setLocalePreference(
+          readLocalePreferenceFromStoredAppState(
             changes[APP_STATE_STORAGE_KEY]?.newValue,
           ),
         );
@@ -296,6 +337,18 @@ function SpecialRouteApp({
     themeSettings.themePreset,
   ]);
 
+  useEffect(() => {
+    if (typeof document === "undefined") {
+      return;
+    }
+
+    syncRuntimeLocaleAttributes(
+      runtimeI18n,
+      document.documentElement,
+      document.body,
+    );
+  }, [runtimeI18n.resolvedLocale, runtimeI18n.resolvedTextDirection]);
+
   switch (route) {
     case "debug-capture-codex":
       return <CodexFixtureCapturePage />;
@@ -304,13 +357,13 @@ function SpecialRouteApp({
     case "debug-capture-jetbrains":
       return <JetBrainsFixtureCapturePage />;
     case "debug-interaction-audit":
-      return <InteractionAuditPage />;
+      return <InteractionAuditPage i18n={runtimeI18n} />;
     case "debug-store-screenshot-seed":
       return <StoreScreenshotSeedPage />;
     case "debug-native-popup-probe":
       return <StoreScreenshotNativePopupProbePage />;
     case "debug-theme-recovery-review":
-      return <ThemeRecoveryReviewPage />;
+      return <ThemeRecoveryReviewPage i18n={runtimeI18n} />;
     default:
       return null;
   }
