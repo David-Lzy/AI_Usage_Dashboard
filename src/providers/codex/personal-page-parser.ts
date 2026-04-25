@@ -62,7 +62,8 @@ export type CodexPersonalParseResult =
       }>;
     };
 
-const PERCENT_PATTERN = /^(\d{1,3})%$/;
+const STANDALONE_PERCENT_PATTERN = /^(\d{1,3})\s*[%％]$/;
+const INLINE_PERCENT_PATTERN = /(\d{1,3})\s*[%％]/;
 const WINDOW_LABEL_PATTERN =
   /(?:usage limit|usage window|weekly|week|5\s*hour|5小时|5 小时|每周|限额)/i;
 const MODEL_PATTERN = /(gpt[-\w.]+)/i;
@@ -77,15 +78,29 @@ function normalizeWhitespace(value: string): string {
   return value.replace(/\s+/g, " ").trim();
 }
 
-function parsePercent(value: string): number | null {
-  const matched = normalizeWhitespace(value).match(PERCENT_PATTERN);
-
-  if (!matched) {
+function parsePercentValue(rawValue: string | undefined): number | null {
+  if (!rawValue) {
     return null;
   }
 
-  const parsed = Number(matched[1]);
+  const parsed = Number(rawValue);
   return Number.isFinite(parsed) ? parsed : null;
+}
+
+function parsePercent(value: string): number | null {
+  const normalizedValue = normalizeWhitespace(value);
+  const standaloneMatch = normalizedValue.match(STANDALONE_PERCENT_PATTERN);
+
+  if (standaloneMatch) {
+    return parsePercentValue(standaloneMatch[1]);
+  }
+
+  if (!REMAINING_MARKER_PATTERN.test(normalizedValue)) {
+    return null;
+  }
+
+  const inlineMatch = normalizedValue.match(INLINE_PERCENT_PATTERN);
+  return parsePercentValue(inlineMatch?.[1]);
 }
 
 function parseBalanceNumber(value: string): number | null {

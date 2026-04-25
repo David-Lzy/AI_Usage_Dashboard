@@ -40,7 +40,7 @@ Security posture for this track:
 
 Next execution queue:
 
-1. continue functional provider work first while Codex budget is constrained; after `Phase 205`, the best next slice is a real authenticated Codex or Cursor operator pass if available
+1. continue functional provider work first while Codex budget is constrained; after `Phase 206`, the best next slice is a real authenticated Codex or Cursor operator pass if available
 2. keep [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) in maintenance mode unless a concrete diagnostic-body localization need appears
 3. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining manual store-popup capture dependency
 
@@ -124,6 +124,7 @@ Current honesty boundaries:
 - Codex now ships a real `Session page` path for personal users and an `Official API` path for Enterprise workspace analytics
 - Cursor now ships a real `Session page` path for personal users and an `Official API` path for team admins, but the personal path still only exposes billing-period usage context
 - Codex personal usage-page sync is now explicitly labeled as `Window-only vendor value` even though the page exposes exact percentages for visible windows and may expose a flex credit balance card, because it still does not represent one full plan-wide absolute remaining balance
+- Codex personal parsing now tolerates merged remaining-percentage snippets such as `32% remaining` and `100% 剩余`, but that only hardens the visible-window path rather than changing the product claim
 - Cursor personal usage-page sync is now explicitly labeled as `Window-only vendor value`
 - Gemini remains `Policy only`; the observed Google Cloud metrics route is project-scoped and not treated as personal quota
 - the UI now makes the trust boundary explicit in Settings and provider detail, including host-access requirements, credential persistence, and the fact that cookies stay forbidden

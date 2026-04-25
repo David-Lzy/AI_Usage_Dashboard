@@ -259,6 +259,7 @@ Phase status update:
 - `Phase 203` completed Cursor personal billing-period usage-summary surfacing across dashboard, provider detail, and popup while preserving the exact-remaining unavailable boundary
 - `Phase 204` completed adapter diagnostic raw fallback regression coverage, proving unknown or absent typed diagnostics still fall back to raw evidence without changing runtime behavior
 - `Phase 205` compressed structured personal usage context in popup featured-provider cards so Codex-style windows and balances show the most useful compact signal while dashboard and provider detail keep the fuller context
+- `Phase 206` hardened Codex personal usage parsing for merged DOM text such as inline remaining percentages and full-width percent text while preserving the visible-window truth boundary
 - the recommended next functional work is a real authenticated Codex or Cursor operator pass if that page is available; otherwise prefer narrow verification or release-readiness work before store screenshots or operator evidence closure
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete

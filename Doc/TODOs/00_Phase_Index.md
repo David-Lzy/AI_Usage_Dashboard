@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [205_Phase_Popup_Personal_Usage_Context_Compression.md](./Archive/205_Phase_Popup_Personal_Usage_Context_Compression.md)
+- latest completed slice: [206_Phase_Codex_Inline_Remaining_Percent_Parser.md](./Archive/206_Phase_Codex_Inline_Remaining_Percent_Parser.md)
 
 Completed phases should be moved to:
 
@@ -542,6 +542,8 @@ Completed phases should be moved to:
 - the 2026-04-25 `Phase 204` closeout added regression coverage proving unknown or absent typed diagnostics still fall back to raw evidence without changing runtime behavior
 - phase 205 depends on phases 200 through 203 because popup usage-context compression should happen only after Codex and Cursor personal usage context are already represented in provider snapshots and richer surfaces
 - the 2026-04-25 `Phase 205` closeout compressed structured personal usage context inside popup featured-provider cards while preserving fuller dashboard and provider-detail context
+- phase 206 depends on phase 202 because inline remaining-percent parser hardening should preserve the proven repeated-percentage and balance-value capture fixes
+- the 2026-04-25 `Phase 206` closeout hardened Codex personal parsing for merged DOM snippets such as inline remaining percentages and full-width percent text without changing provider coverage claims
 
 ## Delivery Standard For Each Phase
 
