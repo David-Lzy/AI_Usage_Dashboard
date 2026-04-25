@@ -34,6 +34,7 @@ Execution note:
 - nineteenth executable slice landed on `2026-04-25` through `Phase 188`
 - twentieth executable slice landed on `2026-04-25` through `Phase 189`
 - twenty-first executable slice landed on `2026-04-25` through `Phase 190`
+- twenty-second executable slice landed on `2026-04-25` through `Phase 191`
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
 Process rule:
@@ -115,6 +116,7 @@ As of 2026-04-25:
 - Cursor and Codex credential and host-access diagnostics now have typed metadata beside the existing raw adapter warning strings
 - Cursor and Codex page-session diagnostics now have typed metadata beside the existing raw adapter warning strings
 - Cursor and Codex usage-threshold diagnostics plus Gemini policy-only diagnostics now have typed metadata beside the existing raw warning strings
+- sync-engine stale cached-state and automatic-sync-overdue diagnostics now have typed metadata beside the raw sync-engine stale warning strings
 - the repo ships one store helper i18n boundary reference:
   - [I18n_Store_Runtime_Helper_Copy.md](../I18n_Store_Runtime_Helper_Copy.md)
 - the repo ships maintained i18n references:
@@ -198,7 +200,8 @@ Recommended rollout:
 20. credential and host-access diagnostics - shipped in `Phase 188`
 21. page-session diagnostics - shipped in `Phase 189`
 22. usage-threshold and policy-only diagnostics - shipped in `Phase 190`
-23. sync-stale diagnostics - next
+23. sync-stale diagnostics - shipped in `Phase 191`
+24. source-state classification typed-diagnostic fallback - next
 
 ## References
 

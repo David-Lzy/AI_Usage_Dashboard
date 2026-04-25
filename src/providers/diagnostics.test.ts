@@ -9,6 +9,7 @@ import {
   createProviderDiagnostic,
   createSourceFallbackDiagnostic,
   createSourceSelectionDiagnostic,
+  createSyncStaleDiagnostic,
   createUsageThresholdDiagnostic,
   getProviderDiagnosticRawMessage,
   isKnownProviderDiagnosticCode,
@@ -246,6 +247,29 @@ describe("provider diagnostics", () => {
       params: {
         providerId: "gemini",
         policyOnlyKind: "documented_limit_only",
+      },
+    });
+  });
+
+  it("builds sync-stale diagnostics without rewriting raw warning messages", () => {
+    const diagnostic = createSyncStaleDiagnostic({
+      providerId: "cursor",
+      syncStaleKind: "cached_state_stale",
+      rawMessage: "Automatic refresh is overdue; showing cached data.",
+      ageMinutes: 240,
+      staleAfterMinutes: 60,
+    });
+
+    expect(diagnostic).toMatchObject({
+      code: "sync.cached_state_stale",
+      category: "sync_stale",
+      severity: "warning",
+      rawMessage: "Automatic refresh is overdue; showing cached data.",
+      params: {
+        providerId: "cursor",
+        syncStaleKind: "cached_state_stale",
+        ageMinutes: 240,
+        staleAfterMinutes: 60,
       },
     });
   });

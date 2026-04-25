@@ -1,3 +1,4 @@
+import { createSyncStaleDiagnostic } from "../providers/diagnostics";
 import { getProviderSyncAdapter } from "../providers/registry";
 import type {
   AppState,
@@ -58,22 +59,47 @@ function markProviderStale(
   }
 
   if (provider.syncStatus === "error") {
+    const warningReason =
+      provider.warningReason ??
+      "Automatic sync is overdue; cached state may be stale.";
+    const warningDiagnostic = provider.warningReason
+      ? provider.warningDiagnostic
+      : createSyncStaleDiagnostic({
+          providerId: provider.providerId,
+          syncStaleKind: "automatic_sync_overdue",
+          rawMessage: warningReason,
+          ageMinutes,
+          staleAfterMinutes,
+        });
+
     return {
       ...provider,
       lastSyncLabel: `Last failed sync ${formatAge(ageMinutes)} ago`,
-      warningReason:
-        provider.warningReason ?? "Automatic sync is overdue; cached state may be stale.",
+      warningReason,
+      ...(warningDiagnostic !== undefined ? { warningDiagnostic } : {}),
       tone: "error",
     };
   }
+
+  const warningReason =
+    provider.warningReason ?? "Automatic refresh is overdue; showing cached data.";
+  const warningDiagnostic = provider.warningReason
+    ? provider.warningDiagnostic
+    : createSyncStaleDiagnostic({
+        providerId: provider.providerId,
+        syncStaleKind: "cached_state_stale",
+        rawMessage: warningReason,
+        ageMinutes,
+        staleAfterMinutes,
+      });
 
   return {
     ...provider,
     syncStatus: "warning",
     tone: "warning",
     lastSyncLabel: `Cached snapshot stale by ${formatAge(ageMinutes)}`,
-    warningReason:
-      provider.warningReason ?? "Automatic refresh is overdue; showing cached data.",
+    warningReason,
+    ...(warningDiagnostic !== undefined ? { warningDiagnostic } : {}),
   };
 }
 

@@ -30,6 +30,7 @@ Status note:
 - nineteenth executable phase landed on `2026-04-25` through `Phase 188`
 - twentieth executable phase landed on `2026-04-25` through `Phase 189`
 - twenty-first executable phase landed on `2026-04-25` through `Phase 190`
+- twenty-second executable phase landed on `2026-04-25` through `Phase 191`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -342,12 +343,20 @@ Build one maintainable localization architecture that can support manifest strin
 
 ### S. Sync-Stale Diagnostics
 
-- next recommended slice
+- completed in `Phase 191`
 - populate typed `warningDiagnostic` metadata for stale cached-state and overdue automatic-sync states
 - start with sync-engine generated stale warnings because those strings are local, stable, and already separate from provider-owned source text
 - preserve raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings exactly
 - keep rendered UI behavior unchanged
 - keep source-state classification raw-string fallback until typed coverage is broad enough to switch safely
+
+### T. Source-State Classification Typed Diagnostic Fallback
+
+- next recommended slice
+- make provider source-state classification prefer typed diagnostic categories where available
+- keep raw English `warningReason` matching as the compatibility fallback for older stored snapshots, screenshot seeds, and archives
+- preserve rendered labels, state tones, and raw diagnostic strings unless a typed diagnostic already maps to the same current state
+- add tests for typed policy-only, host-access, credential, page-session, usage-threshold, and sync-stale inputs plus absent/unknown diagnostic fallback
 
 ## Planned Numbered Slices
 
@@ -373,7 +382,8 @@ Build one maintainable localization architecture that can support manifest strin
 20. credential and host-access diagnostics - completed in `Phase 188`
 21. page-session diagnostics - completed in `Phase 189`
 22. usage-threshold and policy-only diagnostics - completed in `Phase 190`
-23. sync-stale diagnostics - next
+23. sync-stale diagnostics - completed in `Phase 191`
+24. source-state classification typed-diagnostic fallback - next
 
 ## Out Of Scope
 

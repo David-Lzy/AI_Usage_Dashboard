@@ -23,6 +23,7 @@ Status note:
 - `Phase 188` populated Cursor and Codex credential and host-access warning diagnostics while preserving raw strings
 - `Phase 189` populated Cursor and Codex page-session warning diagnostics while preserving raw strings
 - `Phase 190` populated usage-threshold and policy-only warning diagnostics while preserving raw strings
+- `Phase 191` populated sync-stale warning diagnostics while preserving raw sync-engine stale strings
 - refresh it when provider adapters, source-selection behavior, provider snapshot fields, archive evidence schemas, or runtime i18n boundaries change materially
 
 ## Goal
@@ -50,7 +51,7 @@ These fields stay source-truthful while the typed model is populated:
 | `ProviderSnapshot.warningReason` | human-readable warning or error detail | keep raw; add optional typed diagnostic beside it |
 | `ProviderSnapshot.sourceSelectionReason` | source-selection explanation | keep raw; add optional typed source-selection diagnostic beside it |
 | `ProviderSnapshot.sourceFallbackReason` | fallback explanation | keep raw; add optional typed fallback diagnostic beside it |
-| sync-engine stale warning strings | generated cache freshness evidence | keep raw until stale diagnostics have typed codes |
+| sync-engine stale warning strings | generated cache freshness evidence | keep raw; typed sync-stale diagnostics are additive metadata |
 | seeded store screenshot warnings | screenshot storyboard evidence | keep raw unless the seed explicitly opts into typed diagnostics |
 | sample-state warning strings | test and preview evidence | keep raw until all affected assertions are migrated |
 
@@ -142,7 +143,7 @@ After typed diagnostics exist:
 2. Populate source-selection and source-fallback diagnostics for Cursor and Codex because those adapters already have source attempt order helpers. Cursor completed in `Phase 186`; Codex completed in `Phase 187`.
 3. Populate credential, host-access, and page-session diagnostics for provider adapters. Credential and host-access coverage for Cursor and Codex completed in `Phase 188`; page-session diagnostics for Cursor and Codex completed in `Phase 189`.
 4. Populate usage-threshold and policy-only diagnostics for shared normalization and Gemini policy output - completed in `Phase 190`.
-5. Populate sync-stale diagnostics in the sync engine.
+5. Populate sync-stale diagnostics in the sync engine - completed in `Phase 191`.
 6. Update source-state classification to prefer typed diagnostics, with raw English pattern matching kept only as a compatibility fallback.
 7. Localize presentation generated from diagnostic codes after typed coverage and compatibility tests pass.
 
@@ -220,6 +221,15 @@ Before any runtime implementation lands:
 - no rendered UI behavior changes
 - no raw diagnostic string rewrites
 
+`Phase 191` populated the sync-stale warning diagnostic family:
+
+- reusable sync-stale diagnostic builder in `src/providers/diagnostics.ts`
+- sync-engine generated stale cached-state `warningDiagnostic` metadata
+- sync-engine generated automatic-sync-overdue `warningDiagnostic` metadata
+- existing provider warning diagnostics are not overwritten when the sync engine only updates freshness labels
+- no rendered UI behavior changes
+- no raw diagnostic string rewrites
+
 ## Next Executable Slice
 
-The next safe implementation slice should populate sync-stale diagnostics while preserving exact raw strings and rendered UI behavior.
+The next safe implementation slice should update source-state classification to prefer typed diagnostic categories while preserving exact raw strings, current labels, and raw English fallback behavior for older snapshots.

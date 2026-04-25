@@ -131,7 +131,7 @@ If one of these categories is localized later, the implementation must first dec
 
 ## Current Boundary
 
-As of `Phase 190`:
+As of `Phase 191`:
 
 - the runtime app already localizes the main product surfaces in `en + zh_CN`
 - the operator workspaces now have shell-localized navigation and helper copy
@@ -145,15 +145,17 @@ As of `Phase 190`:
 - Cursor and Codex credential plus host-access typed diagnostics now exist beside raw adapter warning strings
 - Cursor and Codex page-session typed diagnostics now exist beside raw adapter warning strings
 - Cursor and Codex usage-threshold typed diagnostics plus Gemini policy-only typed diagnostics now exist beside raw adapter warning strings
+- sync-engine stale cached-state and automatic-sync-overdue typed diagnostics now exist beside raw sync-engine warning strings
 - archive payload semantics remain English and unchanged
 - the repo has a maintained extraction boundary for deeper operator-workspace localization decisions
 - the next implementation step should avoid evidence-schema changes unless a dedicated archive-compatibility review lands first
 
 ## Follow-Up
 
-The next `Direction 09` implementation slice should move to sync-stale diagnostics:
+The next `Direction 09` implementation slice should move to source-state classification typed-diagnostic fallback:
 
-- populate typed sync-stale diagnostics in the sync engine
+- prefer typed diagnostic categories when classifying provider source state
+- keep raw English warning-pattern checks for compatibility with older snapshots and archive evidence
 - keep raw provider `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` values unchanged
 - keep generated store-listing source docs out of runtime code unless that copy is shown by the extension
 

@@ -27,6 +27,9 @@ type UsageThresholdDiagnosticKind =
 type PolicyOnlyDiagnosticKind =
   | "live_source_unavailable"
   | "documented_limit_only";
+type SyncStaleDiagnosticKind =
+  | "automatic_sync_overdue"
+  | "cached_state_stale";
 
 export const PROVIDER_DIAGNOSTIC_CODE_CATEGORIES = {
   "source.auto_selected_official_api": "source_selection",
@@ -160,6 +163,14 @@ function getPolicyOnlyDiagnosticCode(
   return policyOnlyKind === "live_source_unavailable"
     ? "policy.live_source_unavailable"
     : "policy.documented_limit_only";
+}
+
+function getSyncStaleDiagnosticCode(
+  syncStaleKind: SyncStaleDiagnosticKind,
+): KnownProviderDiagnosticCode {
+  return syncStaleKind === "automatic_sync_overdue"
+    ? "sync.automatic_sync_overdue"
+    : "sync.cached_state_stale";
 }
 
 export function createSourceSelectionDiagnostic({
@@ -352,6 +363,40 @@ export function createPolicyOnlyDiagnostic({
       providerId,
       policyOnlyKind,
     },
+  );
+}
+
+export function createSyncStaleDiagnostic({
+  providerId,
+  syncStaleKind,
+  rawMessage,
+  ageMinutes = null,
+  staleAfterMinutes = null,
+}: {
+  providerId: ProviderId;
+  syncStaleKind: SyncStaleDiagnosticKind;
+  rawMessage: string;
+  ageMinutes?: number | null;
+  staleAfterMinutes?: number | null;
+}): ProviderDiagnostic {
+  const params: ProviderDiagnosticParams = {
+    providerId,
+    syncStaleKind,
+  };
+
+  if (ageMinutes !== null) {
+    params.ageMinutes = ageMinutes;
+  }
+
+  if (staleAfterMinutes !== null) {
+    params.staleAfterMinutes = staleAfterMinutes;
+  }
+
+  return createProviderDiagnostic(
+    getSyncStaleDiagnosticCode(syncStaleKind),
+    "warning",
+    rawMessage,
+    params,
   );
 }
 
