@@ -3,6 +3,7 @@ import { createRuntimeI18n } from "../../shared/i18n";
 import type { ProviderViewModel } from "../view-models";
 import { StatusBadge } from "./StatusBadge";
 import { UsageProgress } from "./UsageProgress";
+import { UsageWindowProgressList } from "./UsageWindowProgressList";
 
 type ProviderCardProps = {
   localePreference: AppLocalePreference;
@@ -10,25 +11,6 @@ type ProviderCardProps = {
   onOpen: (providerId: ProviderId) => void;
   onRefresh: (providerId: ProviderId) => void;
 };
-
-function formatUsageWindowChip(
-  provider: ProviderViewModel,
-  window: NonNullable<ProviderViewModel["usageWindows"]>[number],
-  i18n: ReturnType<typeof createRuntimeI18n>,
-): string {
-  const remaining =
-    window.remaining === null
-      ? null
-      : provider.quotaUnit === "percent"
-        ? i18n.formatPercentValue(window.remaining)
-        : i18n.formatNumber(window.remaining);
-
-  const remainingLabel = i18n.resolvedLocale === "zh-CN" ? "剩余" : "remaining";
-
-  return remaining
-    ? `${window.normalizedLabel}: ${remaining} ${remainingLabel}`
-    : window.normalizedLabel;
-}
 
 function formatUsageBalanceChip(
   balance: NonNullable<ProviderViewModel["usageBalances"]>[number],
@@ -59,6 +41,7 @@ export function ProviderCard({
   const hasStructuredUsageContext =
     (provider.usageWindows?.length ?? 0) > 0 ||
     (provider.usageBalances?.length ?? 0) > 0;
+  const hasUsageWindowProgress = (provider.usageWindows?.length ?? 0) > 0;
   const showUsageSummary =
     !hasStructuredUsageContext && Boolean(provider.usageSummary);
   const localizedResetLabel = i18n.localizeResetRuntimeLabel(provider.resetLabel);
@@ -117,12 +100,22 @@ export function ProviderCard({
         <p className="supporting-copy">{localizedResetLabel}</p>
         <p className="supporting-copy">{provider.currentSourceContractDetail}</p>
 
-        <UsageProgress
-          used={provider.used}
-          total={provider.total}
-          tone={provider.displayTone}
-          label={`${provider.quotaWindow} ${provider.quotaUnit}`}
-        />
+        {!hasUsageWindowProgress ? (
+          <UsageProgress
+            used={provider.used}
+            total={provider.total}
+            tone={provider.displayTone}
+            label={`${provider.quotaWindow} ${provider.quotaUnit}`}
+          />
+        ) : null}
+
+        {hasUsageWindowProgress && provider.usageWindows ? (
+          <UsageWindowProgressList
+            windows={provider.usageWindows}
+            i18n={i18n}
+            density="compact"
+          />
+        ) : null}
 
         <div className="provider-card__meta">
           <span className="meta-chip">{provider.currentSourceLabel}</span>
@@ -145,14 +138,6 @@ export function ProviderCard({
               Host access missing
             </span>
           ) : null}
-          {provider.usageWindows?.slice(0, 3).map((usageWindow) => (
-            <span
-              key={`${usageWindow.normalizedLabel}-${usageWindow.remaining ?? "unknown"}`}
-              className="meta-chip"
-            >
-              {formatUsageWindowChip(provider, usageWindow, i18n)}
-            </span>
-          ))}
           {provider.usageBalances?.slice(0, 2).map((usageBalance) => (
             <span
               key={`${usageBalance.normalizedLabel}-${usageBalance.remaining ?? "unknown"}`}

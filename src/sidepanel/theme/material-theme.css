@@ -717,6 +717,10 @@ html[data-app-direction="rtl"][data-full-page-entry="sidebar-expand"] .app-shell
   color: var(--md-sys-color-on-surface-variant);
 }
 
+.usage-progress__detail {
+  margin: 0;
+}
+
 .usage-progress__track {
   --app-progress-track-color: var(--app-progress-track-neutral);
   --app-progress-fill-color: var(--app-progress-fill-neutral);
@@ -736,6 +740,10 @@ html[data-app-direction="rtl"][data-full-page-entry="sidebar-expand"] .app-shell
 .usage-progress__track--error {
   --app-progress-track-color: var(--app-progress-track-error);
   --app-progress-fill-color: var(--app-progress-fill-error);
+}
+
+.usage-progress--remaining .usage-progress__track--neutral {
+  --app-progress-fill-color: var(--app-color-success);
 }
 
 .usage-progress__fill {
@@ -758,6 +766,31 @@ html[data-app-direction="rtl"][data-full-page-entry="sidebar-expand"] .app-shell
 
 .usage-progress__fill--indeterminate {
   opacity: 0.96;
+}
+
+.usage-window-progress-list {
+  display: grid;
+  gap: var(--app-space-3);
+}
+
+.usage-window-progress-list--compact {
+  gap: var(--app-space-2);
+}
+
+.usage-window-progress-list__item {
+  display: grid;
+  gap: var(--app-space-2);
+  padding: var(--app-space-3);
+  border: 1px solid var(--app-supporting-surface-border);
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--app-supporting-surface-background);
+}
+
+.provider-card__body > .usage-window-progress-list
+  .usage-window-progress-list__item {
+  padding: 0;
+  border: 0;
+  background: transparent;
 }
 
 .text-button {

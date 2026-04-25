@@ -9,42 +9,8 @@ import {
 import { StatusBadge } from "../components/StatusBadge";
 import { TopBar } from "../components/TopBar";
 import { UsageProgress } from "../components/UsageProgress";
+import { UsageWindowProgressList } from "../components/UsageWindowProgressList";
 import type { ProviderViewModel } from "../view-models";
-
-function formatUsageWindowDetail(
-  provider: ProviderViewModel,
-  window: NonNullable<ProviderViewModel["usageWindows"]>[number],
-  i18n: ReturnType<typeof createRuntimeI18n>,
-): string {
-  const remaining =
-    window.remaining === null
-      ? null
-      : provider.quotaUnit === "percent"
-        ? i18n.formatPercentValue(window.remaining)
-        : i18n.formatNumber(window.remaining);
-  const used =
-    window.used === null
-      ? null
-      : provider.quotaUnit === "percent"
-        ? i18n.formatPercentValue(window.used)
-        : i18n.formatNumber(window.used);
-  const remainingLabel = i18n.resolvedLocale === "zh-CN" ? "剩余" : "remaining";
-  const usedLabel = i18n.resolvedLocale === "zh-CN" ? "已用" : "used";
-  const resetLabel =
-    i18n.resolvedLocale === "zh-CN" ? "重置" : "resets";
-  const resetAt = window.resetAt
-    ? (i18n.formatTemporalValue(window.resetAt) ?? window.resetAt)
-    : null;
-  const usageParts = [
-    remaining ? `${remaining} ${remainingLabel}` : null,
-    used ? `${used} ${usedLabel}` : null,
-    resetAt ? `${resetLabel} ${resetAt}` : null,
-  ].filter(Boolean);
-
-  return usageParts.length > 0
-    ? `${window.normalizedLabel}: ${usageParts.join(" · ")}`
-    : window.normalizedLabel;
-}
 
 function formatUsageBalanceDetail(
   balance: NonNullable<ProviderViewModel["usageBalances"]>[number],
@@ -102,8 +68,9 @@ export function ProviderDetailPage({
       provider.sessionPageGraduationGateDetail !==
         provider.currentSourceGraduationGateDetail);
   const hasStructuredUsageContext =
-    (provider.usageWindows?.length ?? 0) > 1 ||
+    (provider.usageWindows?.length ?? 0) > 0 ||
     (provider.usageBalances?.length ?? 0) > 0;
+  const hasUsageWindowProgress = (provider.usageWindows?.length ?? 0) > 0;
   const showUsageSummary =
     !hasStructuredUsageContext && Boolean(provider.usageSummary);
   const hasUsageContext = hasStructuredUsageContext || showUsageSummary;
@@ -429,12 +396,14 @@ export function ProviderDetailPage({
           ) : null}
         </div>
 
-        <UsageProgress
-          used={provider.used}
-          total={provider.total}
-          tone={provider.displayTone}
-          label={copy.progressLabel(provider.providerLabel)}
-        />
+        {!hasUsageWindowProgress ? (
+          <UsageProgress
+            used={provider.used}
+            total={provider.total}
+            tone={provider.displayTone}
+            label={copy.progressLabel(provider.providerLabel)}
+          />
+        ) : null}
 
         {hasUsageContext ? (
           <div className="detail-note detail-note--neutral">
@@ -442,14 +411,12 @@ export function ProviderDetailPage({
             {showUsageSummary ? (
               <p className="supporting-copy">{provider.usageSummary}</p>
             ) : null}
-            {provider.usageWindows?.slice(0, 5).map((usageWindow) => (
-              <p
-                key={`${usageWindow.normalizedLabel}-${usageWindow.remaining ?? "unknown"}`}
-                className="supporting-copy"
-              >
-                {formatUsageWindowDetail(provider, usageWindow, i18n)}
-              </p>
-            ))}
+            {hasUsageWindowProgress && provider.usageWindows ? (
+              <UsageWindowProgressList
+                windows={provider.usageWindows}
+                i18n={i18n}
+              />
+            ) : null}
             {provider.usageBalances?.slice(0, 3).map((usageBalance) => (
               <p
                 key={`${usageBalance.normalizedLabel}-${usageBalance.remaining ?? "unknown"}`}

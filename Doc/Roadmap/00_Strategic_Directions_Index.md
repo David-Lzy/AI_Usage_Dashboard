@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-04-25:
 
-- the numbered phase queue is now completed through `Phase 207`
+- the numbered phase queue is now completed through `Phase 208`
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -90,6 +90,7 @@ As of 2026-04-25:
 - `Phase 205` compressed structured personal usage context inside popup featured-provider cards, keeping the popup focused on the most-constrained visible usage window plus one visible balance while preserving fuller dashboard and provider-detail context
 - `Phase 206` hardened Codex personal parsing for merged DOM snippets such as inline remaining percentages and full-width percent text while preserving the visible-window and supplemental-balance truth boundary
 - `Phase 207` hardened Codex personal parsing for merged usage-window label/value snippets while keeping normalized labels free of runtime percentages and preserving the same visible-window truth boundary
+- `Phase 208` rendered every visible structured usage window as a remaining progress bar on dashboard and provider-detail surfaces, including weekly and model-specific Codex windows, while keeping popup compact
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
 - `Phase 42` has packaged `0.1.0-rc.2` and closed the release-closeout track for the narrowed RC
 - `Phase 43` completed the first `Direction 02` slice by productizing source-fidelity semantics in the side panel
@@ -229,8 +230,8 @@ As of 2026-04-25:
   - Claude personal support is not yet graduated
   - Gemini remains policy-only
   - Codex and Cursor personal support remain partial, not absolute-remaining-balance claims
-- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 207`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
-- the numbered phase queue is now completed through `Phase 207`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
+- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 208`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
+- the numbered phase queue is now completed through `Phase 208`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
 - `Codex` personal support is already shipped as a `session_page` path, but it currently exposes usage-window percentages and reset timing, not one absolute remaining credit balance
 - `Cursor` personal support is already shipped as a `session_page` path, but it currently exposes billing-period usage context, not one exact remaining included-request counter
 - the extension action now opens a compact popup on click, the popup makes cached snapshot freshness explicit, and the badge shows the count of visible providers needing attention

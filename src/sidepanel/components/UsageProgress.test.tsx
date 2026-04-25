@@ -40,4 +40,28 @@ describe("UsageProgress", () => {
     expect(html).toContain(">Unknown<");
     expect(html).not.toContain("22%");
   });
+
+  it("renders remaining-mode progress semantics when remaining percent is known", () => {
+    const html = renderToStaticMarkup(
+      <UsageProgress
+        used={72}
+        remaining={28}
+        total={100}
+        tone="error"
+        label="Weekly usage window"
+        valueKind="remaining"
+        valueLabel="28% remaining"
+        valueText="Weekly usage window: 28% remaining"
+        detail="resets 2026-04-29 04:00"
+      />,
+    );
+
+    expect(html).toContain("usage-progress--remaining");
+    expect(html).toContain('aria-valuenow="28"');
+    expect(html).toContain('aria-valuetext="Weekly usage window: 28% remaining"');
+    expect(html).toContain("usage-progress__track--error");
+    expect(html).toContain('style="width:28%"');
+    expect(html).toContain(">28% remaining<");
+    expect(html).toContain("resets 2026-04-29 04:00");
+  });
 });

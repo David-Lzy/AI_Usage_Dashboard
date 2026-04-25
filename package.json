@@ -170,6 +170,7 @@
     "phase205:review": "./scripts/with-preferred-node.sh node ./scripts/phase205-popup-personal-usage-context-review.mjs",
     "phase206:review": "./scripts/with-preferred-node.sh node ./scripts/phase206-codex-inline-remaining-percent-review.mjs",
     "phase207:review": "./scripts/with-preferred-node.sh node ./scripts/phase207-codex-merged-window-label-review.mjs",
+    "phase208:review": "./scripts/with-preferred-node.sh node ./scripts/phase208-usage-window-progress-bars-review.mjs",
     "interaction-audit:bundle": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-handoff-bundle.mjs",
     "interaction-audit:archive": "./scripts/with-preferred-node.sh node ./scripts/archive-interaction-audit-review.mjs",
     "interaction-audit:refresh-archive-index": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-review-archive-index.mjs",
