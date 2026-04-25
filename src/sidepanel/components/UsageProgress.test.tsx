@@ -64,4 +64,27 @@ describe("UsageProgress", () => {
     expect(html).toContain(">28% remaining<");
     expect(html).toContain("resets 2026-04-29 04:00");
   });
+
+  it("renders circular progress semantics when requested", () => {
+    const html = renderToStaticMarkup(
+      <UsageProgress
+        used={65}
+        remaining={35}
+        total={100}
+        tone="warning"
+        label="Weekly usage window"
+        displayStyle="circle"
+        valueKind="remaining"
+        valueText="Weekly usage window: 35% remaining"
+      />,
+    );
+
+    expect(html).toContain("usage-progress--circle");
+    expect(html).toContain("usage-progress__ring--warning");
+    expect(html).toContain('aria-valuenow="35"');
+    expect(html).toContain('aria-valuetext="Weekly usage window: 35% remaining"');
+    expect(html).toContain("--usage-progress-percent:35%");
+    expect(html).toContain(">35%<");
+    expect(html).not.toContain("usage-progress__track");
+  });
 });

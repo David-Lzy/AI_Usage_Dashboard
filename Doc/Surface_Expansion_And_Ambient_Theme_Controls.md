@@ -21,6 +21,7 @@ Status note:
 - `Phase 159` has now added one restrained source-aware full-page entry motion layer for popup-expand and sidepanel-expand flows while keeping reduced-motion mode animation-free
 - `Phase 160` has now refreshed real RDP runtime captures for popup, sidepanel, and full-page surfaces while teaching the capture workflow to close the extension windows it opens
 - `Phase 209` has now improved compact popup density by showing structured usage-window progress as circular remaining indicators instead of another long vertical text block
+- `Phase 210` has now made quota progress style selectable per popup, sidebar, and full-page tab surface while moving popup quota cards above nonessential summary/explanation cards
 
 Process rule:
 
@@ -124,7 +125,7 @@ Define one stable contract for the next productization slices and keep it aligne
 
 ## QA Notes From Current RDP Review
 
-- popup is currently functional and now has compact circular usage progress for structured usage windows, but it still needs real native-toolbar visual review after the next authenticated provider capture
+- popup is currently functional, quota-first when provider cards exist, and has compact circular usage progress by default, but it still needs real native-toolbar visual review after the next authenticated provider capture
 - sidebar already reads as a mature workspace and should not be collapsed into popup-like behavior
 - new controls should strengthen the top action density instead of adding more long vertical cards
 - current full-page dashboard and full-page settings captures read as stable, intentional workspace surfaces after the shipped expand, quick-theme, and motion slices

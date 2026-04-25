@@ -978,6 +978,9 @@ function StandardApp({ locationHash }: StandardAppProps) {
     quickThemeToggle.nextMode,
     runtimeI18n,
   );
+  const progressDisplayStyle = isFullPageSurface
+    ? appState.settings.fullPageProgressStyle
+    : appState.settings.sidebarProgressStyle;
 
   return (
     <>
@@ -1013,6 +1016,15 @@ function StandardApp({ locationHash }: StandardAppProps) {
           onThemePresetChange={(themePreset) =>
             handleUpdateSettings({ themePreset })
           }
+          onPopupProgressStyleChange={(popupProgressStyle) =>
+            handleUpdateSettings({ popupProgressStyle })
+          }
+          onSidebarProgressStyleChange={(sidebarProgressStyle) =>
+            handleUpdateSettings({ sidebarProgressStyle })
+          }
+          onFullPageProgressStyleChange={(fullPageProgressStyle) =>
+            handleUpdateSettings({ fullPageProgressStyle })
+          }
           onSaveThemeCustomSeed={(themeCustomSeedHex) =>
             handleUpdateSettings({
               themePreset: "custom",
@@ -1039,6 +1051,7 @@ function StandardApp({ locationHash }: StandardAppProps) {
       ) : route.name === "provider-detail" && selectedProvider ? (
         <ProviderDetailPage
           localePreference={localePreference}
+          progressDisplayStyle={progressDisplayStyle}
           provider={selectedProvider}
           onBack={() => navigateToRoute({ name: "dashboard" })}
           themeActionLabel={quickThemeToggleCopy.label}
@@ -1054,6 +1067,7 @@ function StandardApp({ locationHash }: StandardAppProps) {
       ) : (
         <DashboardPage
           localePreference={localePreference}
+          progressDisplayStyle={progressDisplayStyle}
           summaryItems={summaryItems}
           providers={visibleProviders}
           onOpenProvider={(providerId) =>

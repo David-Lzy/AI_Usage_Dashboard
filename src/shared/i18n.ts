@@ -87,6 +87,11 @@ type RuntimeMessageId =
   | "settings.preferences.locale_label"
   | "settings.preferences.theme_mode_label"
   | "settings.preferences.accent_preset_label"
+  | "settings.preferences.popup_progress_style_label"
+  | "settings.preferences.sidebar_progress_style_label"
+  | "settings.preferences.full_page_progress_style_label"
+  | "settings.preferences.progress_style.line"
+  | "settings.preferences.progress_style.circle"
   | "settings.preferences.minutes"
   | "settings.preferences.locale.system"
   | "settings.preferences.locale.en"
@@ -231,6 +236,11 @@ const RUNTIME_MESSAGES: Record<ResolvedAppLocale, RuntimeMessages> = {
     "settings.preferences.locale_label": "App language",
     "settings.preferences.theme_mode_label": "Theme mode",
     "settings.preferences.accent_preset_label": "Accent preset",
+    "settings.preferences.popup_progress_style_label": "Popup quota style",
+    "settings.preferences.sidebar_progress_style_label": "Sidebar quota style",
+    "settings.preferences.full_page_progress_style_label": "Tab quota style",
+    "settings.preferences.progress_style.line": "Line",
+    "settings.preferences.progress_style.circle": "Circle",
     "settings.preferences.minutes": "minutes",
     "settings.preferences.locale.system": "System",
     "settings.preferences.locale.en": "English",
@@ -348,6 +358,11 @@ const RUNTIME_MESSAGES: Record<ResolvedAppLocale, RuntimeMessages> = {
     "settings.preferences.locale_label": "应用语言",
     "settings.preferences.theme_mode_label": "主题模式",
     "settings.preferences.accent_preset_label": "强调色预设",
+    "settings.preferences.popup_progress_style_label": "Popup 额度样式",
+    "settings.preferences.sidebar_progress_style_label": "侧栏额度样式",
+    "settings.preferences.full_page_progress_style_label": "标签页额度样式",
+    "settings.preferences.progress_style.line": "直线",
+    "settings.preferences.progress_style.circle": "圆圈",
     "settings.preferences.minutes": "分钟",
     "settings.preferences.locale.system": "跟随系统",
     "settings.preferences.locale.en": "英语",

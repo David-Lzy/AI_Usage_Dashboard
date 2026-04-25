@@ -1,9 +1,14 @@
+import type { CSSProperties } from "react";
+
+import type { ProgressDisplayStyle } from "../../providers/types";
+
 type UsageProgressProps = {
   used: number | null;
   remaining?: number | null;
   total: number | null;
   tone: "neutral" | "warning" | "error";
   label: string;
+  displayStyle?: ProgressDisplayStyle;
   valueKind?: "used" | "remaining";
   valueLabel?: string;
   valueText?: string;
@@ -16,6 +21,7 @@ export function UsageProgress({
   total,
   tone,
   label,
+  displayStyle = "line",
   valueKind = "used",
   valueLabel,
   valueText,
@@ -35,11 +41,46 @@ export function UsageProgress({
   const progressValueLabel = isIndeterminate
     ? "Unknown"
     : (valueLabel ??
-      (valueKind === "remaining" ? `${roundedPercent}% remaining` : `${roundedPercent}%`));
+      (displayStyle === "circle"
+        ? `${roundedPercent}%`
+        : valueKind === "remaining"
+          ? `${roundedPercent}% remaining`
+          : `${roundedPercent}%`));
   const progressValueText = isIndeterminate
     ? "Usage percentage unavailable"
     : (valueText ??
       `${roundedPercent}% ${valueKind === "remaining" ? "remaining" : "used"}`);
+  const progressStyle =
+    roundedPercent === null
+      ? undefined
+      : ({
+          "--usage-progress-percent": `${roundedPercent}%`,
+        } as CSSProperties & { "--usage-progress-percent": string });
+
+  if (displayStyle === "circle") {
+    return (
+      <div
+        className={`usage-progress usage-progress--${valueKind} usage-progress--circle${isIndeterminate ? " usage-progress--indeterminate" : ""}`}
+      >
+        <div
+          role="progressbar"
+          aria-label={label}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={roundedPercent ?? undefined}
+          aria-valuetext={progressValueText}
+          className={`usage-progress__ring usage-progress__ring--${tone}${isIndeterminate ? " usage-progress__ring--indeterminate" : ""}`}
+          style={progressStyle}
+        >
+          <span className="usage-progress__ring-value">
+            {progressValueLabel}
+          </span>
+        </div>
+        <p className="usage-progress__ring-label">{label}</p>
+        {detail ? <p className="supporting-copy usage-progress__detail">{detail}</p> : null}
+      </div>
+    );
+  }
 
   return (
     <div

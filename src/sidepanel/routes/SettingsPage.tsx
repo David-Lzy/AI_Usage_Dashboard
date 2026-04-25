@@ -4,6 +4,7 @@ import type {
   ApiKeyProviderId,
   AppLocalePreference,
   AppSettings,
+  ProgressDisplayStyle,
   ProviderId,
   ProviderSourcePreference,
   ProviderSetting,
@@ -30,6 +31,7 @@ import {
   normalizeThemeCustomSeedHex,
   resolveThemeMode,
 } from "../../shared/theme";
+import { PROGRESS_DISPLAY_STYLE_OPTIONS } from "../../shared/progress-display";
 
 import { PermissionPrompt } from "../components/PermissionPrompt";
 import { SummaryStrip } from "../components/SummaryStrip";
@@ -74,6 +76,9 @@ type SettingsPageProps = {
   onWarningThresholdChange: (percent: number) => void;
   onThemeModeChange: (themeMode: ThemeMode) => void;
   onThemePresetChange: (themePreset: ThemePreset) => void;
+  onPopupProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
+  onSidebarProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
+  onFullPageProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onSaveThemeCustomSeed: (themeCustomSeedHex: string) => void;
   onResetThemeCustomSeed: () => void;
   onToggleProvider: (providerId: ProviderId) => void;
@@ -114,6 +119,9 @@ export function SettingsPage({
   onWarningThresholdChange,
   onThemeModeChange,
   onThemePresetChange,
+  onPopupProgressStyleChange,
+  onSidebarProgressStyleChange,
+  onFullPageProgressStyleChange,
   onSaveThemeCustomSeed,
   onResetThemeCustomSeed,
   onToggleProvider,
@@ -232,6 +240,10 @@ export function SettingsPage({
     meadow: i18n.t("settings.preferences.theme_preset.meadow"),
     sunset: i18n.t("settings.preferences.theme_preset.sunset"),
     custom: i18n.t("settings.preferences.theme_preset.custom"),
+  };
+  const progressDisplayStyleOptionLabels: Record<ProgressDisplayStyle, string> = {
+    line: i18n.t("settings.preferences.progress_style.line"),
+    circle: i18n.t("settings.preferences.progress_style.circle"),
   };
   const localeOptions: Array<{ value: AppLocalePreference; label: string }> = [
     { value: "system", label: i18n.t("settings.preferences.locale.system") },
@@ -464,6 +476,57 @@ export function SettingsPage({
               {THEME_PRESET_OPTIONS.map((preset) => (
                 <option key={preset.value} value={preset.value}>
                   {themePresetOptionLabels[preset.value]}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="form-field">
+            <span className="form-field__label">{i18n.t("settings.preferences.popup_progress_style_label")}</span>
+            <select
+              className="form-field__control"
+              value={settings.popupProgressStyle}
+              onChange={(event) =>
+                onPopupProgressStyleChange(event.target.value as ProgressDisplayStyle)
+              }
+            >
+              {PROGRESS_DISPLAY_STYLE_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {progressDisplayStyleOptionLabels[option.value]}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="form-field">
+            <span className="form-field__label">{i18n.t("settings.preferences.sidebar_progress_style_label")}</span>
+            <select
+              className="form-field__control"
+              value={settings.sidebarProgressStyle}
+              onChange={(event) =>
+                onSidebarProgressStyleChange(event.target.value as ProgressDisplayStyle)
+              }
+            >
+              {PROGRESS_DISPLAY_STYLE_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {progressDisplayStyleOptionLabels[option.value]}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="form-field">
+            <span className="form-field__label">{i18n.t("settings.preferences.full_page_progress_style_label")}</span>
+            <select
+              className="form-field__control"
+              value={settings.fullPageProgressStyle}
+              onChange={(event) =>
+                onFullPageProgressStyleChange(event.target.value as ProgressDisplayStyle)
+              }
+            >
+              {PROGRESS_DISPLAY_STYLE_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {progressDisplayStyleOptionLabels[option.value]}
                 </option>
               ))}
             </select>

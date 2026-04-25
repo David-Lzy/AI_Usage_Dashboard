@@ -16,6 +16,7 @@ Status note:
 - fifth executable slice landed on `2026-04-24` through `Phase 159`
 - sixth executable slice landed on `2026-04-24` through `Phase 160`
 - compact popup progress-density follow-up landed on `2026-04-26` through `Phase 209`
+- per-surface progress-style preference follow-up landed on `2026-04-26` through `Phase 210`
 - this child TODO turns the agreed popup / sidebar / full-page expansion contract into the next executable `Direction 10` track
 
 Process rule:
@@ -169,6 +170,7 @@ Related design contract:
 
 - popup remains compact and readable after expand plus theme controls are added
 - structured popup usage windows render as compact circular progress rather than more long quota text
+- popup, sidebar, and full-page tab can independently choose line or circle quota progress
 - sidebar still reads as the operational surface rather than a stretched popup
 - popup expand always opens the dashboard full-page tab
 - sidebar expand preserves the current route when full-page mode supports it

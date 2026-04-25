@@ -697,6 +697,18 @@ html[data-app-direction="rtl"][data-full-page-entry="sidebar-expand"] .app-shell
   gap: var(--app-space-2);
 }
 
+.usage-progress--circle {
+  --usage-progress-ring-fill: var(--app-color-success);
+  --usage-progress-ring-track: var(--app-progress-track-neutral);
+  justify-items: center;
+  gap: var(--app-space-2);
+  min-width: 0;
+}
+
+.usage-progress--circle .usage-progress__detail {
+  text-align: center;
+}
+
 .usage-progress__meta {
   display: flex;
   align-items: center;
@@ -746,6 +758,68 @@ html[data-app-direction="rtl"][data-full-page-entry="sidebar-expand"] .app-shell
   --app-progress-fill-color: var(--app-color-success);
 }
 
+.usage-progress__ring {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  aspect-ratio: 1;
+  border: 1px solid var(--app-progress-track-border);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: conic-gradient(
+    var(--usage-progress-ring-fill) var(--usage-progress-percent),
+    var(--usage-progress-ring-track) 0
+  );
+  box-shadow: inset 0 0 0 1px var(--md-sys-color-surface-container-high);
+}
+
+.usage-progress__ring--warning {
+  --usage-progress-ring-fill: var(--app-progress-fill-warning);
+  --usage-progress-ring-track: var(--app-progress-track-warning);
+}
+
+.usage-progress__ring--error {
+  --usage-progress-ring-fill: var(--app-progress-fill-error);
+  --usage-progress-ring-track: var(--app-progress-track-error);
+}
+
+.usage-progress__ring--indeterminate {
+  background: repeating-linear-gradient(
+    135deg,
+    var(--usage-progress-ring-track) 0 12px,
+    var(--app-progress-indeterminate-stripe) 12px 18px
+  );
+}
+
+.usage-progress__ring::before {
+  position: absolute;
+  inset: 9px;
+  border-radius: inherit;
+  background: var(--md-sys-color-surface-container-lowest);
+  content: "";
+}
+
+.usage-progress__ring-value {
+  position: relative;
+  z-index: 1;
+  color: var(--md-sys-color-on-surface);
+  font-family: var(--md-sys-typescale-title-medium-font);
+  font-size: var(--md-sys-typescale-title-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-weight);
+  line-height: var(--md-sys-typescale-title-medium-line-height);
+}
+
+.usage-progress__ring-label {
+  margin: 0;
+  color: var(--md-sys-color-on-surface-variant);
+  font-family: var(--md-sys-typescale-label-medium-font);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: var(--md-sys-typescale-label-medium-weight);
+  line-height: var(--md-sys-typescale-label-medium-line-height);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
 .usage-progress__fill {
   height: 100%;
   border-radius: inherit;
@@ -771,6 +845,11 @@ html[data-app-direction="rtl"][data-full-page-entry="sidebar-expand"] .app-shell
 .usage-window-progress-list {
   display: grid;
   gap: var(--app-space-3);
+}
+
+.usage-window-progress-list--circle {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
 }
 
 .usage-window-progress-list--compact {
@@ -1773,6 +1852,10 @@ select.form-field__control {
   gap: var(--app-space-3);
 }
 
+.popup-shell--quota-first {
+  gap: var(--app-space-2);
+}
+
 body.popup-page .popup-shell {
   min-width: 0;
   max-width: none;
@@ -1780,6 +1863,10 @@ body.popup-page .popup-shell {
 
 .popup-header {
   gap: var(--app-space-2);
+}
+
+.popup-shell--quota-first .popup-header {
+  padding: var(--app-space-3);
 }
 
 .popup-actions {
@@ -1803,6 +1890,11 @@ body.popup-page .popup-shell {
   gap: var(--app-space-2);
 }
 
+.popup-quota-section {
+  display: grid;
+  gap: var(--app-space-2);
+}
+
 .popup-provider-card {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -1812,6 +1904,11 @@ body.popup-page .popup-shell {
   border-radius: var(--md-sys-shape-corner-large);
   background: var(--md-sys-color-surface-container-lowest);
   box-shadow: var(--app-elevation-1);
+}
+
+.popup-provider-card--quota-first {
+  gap: var(--app-space-3);
+  padding: var(--app-space-3);
 }
 
 .popup-provider-card--warning {
@@ -1839,6 +1936,25 @@ body.popup-page .popup-shell {
   display: flex;
   flex-wrap: wrap;
   gap: var(--app-space-2);
+}
+
+.popup-provider-card__progress {
+  display: grid;
+  gap: var(--app-space-2);
+}
+
+.popup-provider-card__progress .usage-window-progress-list {
+  gap: var(--app-space-2);
+}
+
+.popup-provider-card__progress .usage-window-progress-list__item {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.popup-provider-card__progress--circle .usage-window-progress-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .popup-progress-ring-list {

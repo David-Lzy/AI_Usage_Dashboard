@@ -117,6 +117,7 @@ export type ProviderPageBindingStatus = "unbound" | "bound" | "stale";
 export type ThemeMode = "system" | "light" | "dark";
 export type ThemePreset = "default" | "meadow" | "sunset" | "custom";
 export type AppLocalePreference = "system" | "en" | "zh-CN";
+export type ProgressDisplayStyle = "line" | "circle";
 
 export type ProviderPageBinding = {
   mode: "auto" | "bound";
@@ -233,6 +234,9 @@ export type AppSettings = {
   themeMode: ThemeMode;
   themePreset: ThemePreset;
   themeCustomSeedHex: string | null;
+  popupProgressStyle: ProgressDisplayStyle;
+  sidebarProgressStyle: ProgressDisplayStyle;
+  fullPageProgressStyle: ProgressDisplayStyle;
 };
 
 export type SummaryItem = {

@@ -1,5 +1,6 @@
 import type {
   AppLocalePreference,
+  ProgressDisplayStyle,
   ProviderId,
   SummaryItem,
 } from "../../providers/types";
@@ -11,6 +12,7 @@ import type { ProviderViewModel } from "../view-models";
 
 type DashboardPageProps = {
   localePreference: AppLocalePreference;
+  progressDisplayStyle: ProgressDisplayStyle;
   summaryItems: SummaryItem[];
   providers: ProviderViewModel[];
   onOpenProvider: (providerId: ProviderId) => void;
@@ -25,6 +27,7 @@ type DashboardPageProps = {
 
 export function DashboardPage({
   localePreference,
+  progressDisplayStyle,
   summaryItems,
   providers,
   onOpenProvider,
@@ -82,6 +85,7 @@ export function DashboardPage({
               <ProviderCard
                 key={provider.providerId}
                 localePreference={localePreference}
+                progressDisplayStyle={progressDisplayStyle}
                 provider={provider}
                 onOpen={onOpenProvider}
                 onRefresh={onRefreshProvider}

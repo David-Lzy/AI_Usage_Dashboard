@@ -1,4 +1,8 @@
-import type { AppLocalePreference, ProviderId } from "../../providers/types";
+import type {
+  AppLocalePreference,
+  ProgressDisplayStyle,
+  ProviderId,
+} from "../../providers/types";
 import { createRuntimeI18n } from "../../shared/i18n";
 import {
   buildProviderDetailLocalizedCopy,
@@ -32,6 +36,7 @@ function formatUsageBalanceDetail(
 
 type ProviderDetailPageProps = {
   localePreference: AppLocalePreference;
+  progressDisplayStyle: ProgressDisplayStyle;
   provider: ProviderViewModel;
   onBack: () => void;
   themeActionLabel?: string;
@@ -43,6 +48,7 @@ type ProviderDetailPageProps = {
 
 export function ProviderDetailPage({
   localePreference,
+  progressDisplayStyle,
   provider,
   onBack,
   themeActionLabel,
@@ -399,9 +405,12 @@ export function ProviderDetailPage({
         {!hasUsageWindowProgress ? (
           <UsageProgress
             used={provider.used}
+            remaining={provider.remaining}
             total={provider.total}
             tone={provider.displayTone}
             label={copy.progressLabel(provider.providerLabel)}
+            displayStyle={progressDisplayStyle}
+            valueKind={provider.remaining !== null ? "remaining" : "used"}
           />
         ) : null}
 
@@ -415,6 +424,7 @@ export function ProviderDetailPage({
               <UsageWindowProgressList
                 windows={provider.usageWindows}
                 i18n={i18n}
+                displayStyle={progressDisplayStyle}
               />
             ) : null}
             {provider.usageBalances?.slice(0, 3).map((usageBalance) => (

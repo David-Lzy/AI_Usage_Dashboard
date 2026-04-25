@@ -5,6 +5,11 @@ import type {
   ProviderSourceBlueprint,
 } from "../providers/types";
 import {
+  DEFAULT_FULL_PAGE_PROGRESS_STYLE,
+  DEFAULT_POPUP_PROGRESS_STYLE,
+  DEFAULT_SIDEBAR_PROGRESS_STYLE,
+} from "./progress-display";
+import {
   createPolicyOnlyDiagnostic,
   createSourceFallbackDiagnostic,
   createSourceSelectionDiagnostic,
@@ -491,5 +496,8 @@ export const SAMPLE_APP_STATE: AppState = {
     themeMode: "system",
     themePreset: "default",
     themeCustomSeedHex: null,
+    popupProgressStyle: DEFAULT_POPUP_PROGRESS_STYLE,
+    sidebarProgressStyle: DEFAULT_SIDEBAR_PROGRESS_STYLE,
+    fullPageProgressStyle: DEFAULT_FULL_PAGE_PROGRESS_STYLE,
   },
 };

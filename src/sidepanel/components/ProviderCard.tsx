@@ -1,4 +1,8 @@
-import type { AppLocalePreference, ProviderId } from "../../providers/types";
+import type {
+  AppLocalePreference,
+  ProgressDisplayStyle,
+  ProviderId,
+} from "../../providers/types";
 import { createRuntimeI18n } from "../../shared/i18n";
 import type { ProviderViewModel } from "../view-models";
 import { StatusBadge } from "./StatusBadge";
@@ -7,6 +11,7 @@ import { UsageWindowProgressList } from "./UsageWindowProgressList";
 
 type ProviderCardProps = {
   localePreference: AppLocalePreference;
+  progressDisplayStyle: ProgressDisplayStyle;
   provider: ProviderViewModel;
   onOpen: (providerId: ProviderId) => void;
   onRefresh: (providerId: ProviderId) => void;
@@ -27,6 +32,7 @@ function formatUsageBalanceChip(
 
 export function ProviderCard({
   localePreference,
+  progressDisplayStyle,
   provider,
   onOpen,
   onRefresh,
@@ -103,9 +109,12 @@ export function ProviderCard({
         {!hasUsageWindowProgress ? (
           <UsageProgress
             used={provider.used}
+            remaining={provider.remaining}
             total={provider.total}
             tone={provider.displayTone}
             label={`${provider.quotaWindow} ${provider.quotaUnit}`}
+            displayStyle={progressDisplayStyle}
+            valueKind={provider.remaining !== null ? "remaining" : "used"}
           />
         ) : null}
 
@@ -114,6 +123,7 @@ export function ProviderCard({
             windows={provider.usageWindows}
             i18n={i18n}
             density="compact"
+            displayStyle={progressDisplayStyle}
           />
         ) : null}
 

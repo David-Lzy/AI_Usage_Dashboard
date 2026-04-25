@@ -10,6 +10,9 @@ function createLegacyState(): AppState {
     themeMode: _themeMode,
     themePreset: _themePreset,
     themeCustomSeedHex: _themeCustomSeedHex,
+    popupProgressStyle: _popupProgressStyle,
+    sidebarProgressStyle: _sidebarProgressStyle,
+    fullPageProgressStyle: _fullPageProgressStyle,
     ...legacySettings
   } = SAMPLE_APP_STATE.settings;
 
@@ -111,6 +114,9 @@ describe("storage normalization", () => {
     expect(state?.settings.themeMode).toBe("system");
     expect(state?.settings.themePreset).toBe("default");
     expect(state?.settings.themeCustomSeedHex).toBeNull();
+    expect(state?.settings.popupProgressStyle).toBe("circle");
+    expect(state?.settings.sidebarProgressStyle).toBe("line");
+    expect(state?.settings.fullPageProgressStyle).toBe("line");
   });
 
   it("upgrades stale static provider metadata to the current sample schema", async () => {

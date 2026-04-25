@@ -1,3 +1,4 @@
+import type { ProgressDisplayStyle } from "../../providers/types";
 import type { RuntimeI18n } from "../../shared/i18n";
 import type { ProviderViewModel } from "../view-models";
 import { UsageProgress } from "./UsageProgress";
@@ -6,6 +7,7 @@ type UsageWindowProgressListProps = {
   windows: NonNullable<ProviderViewModel["usageWindows"]>;
   i18n: RuntimeI18n;
   density?: "compact" | "detail";
+  displayStyle?: ProgressDisplayStyle;
 };
 
 function getUsageWindowProgressTone(
@@ -29,9 +31,14 @@ function getUsageWindowProgressTone(
 function formatRemainingValue(
   window: NonNullable<ProviderViewModel["usageWindows"]>[number],
   i18n: RuntimeI18n,
+  displayStyle: ProgressDisplayStyle,
 ): string | undefined {
   if (window.remaining === null) {
     return undefined;
+  }
+
+  if (displayStyle === "circle") {
+    return i18n.formatPercentValue(window.remaining);
   }
 
   const remainingLabel = i18n.resolvedLocale === "zh-CN" ? "剩余" : "remaining";
@@ -70,6 +77,7 @@ export function UsageWindowProgressList({
   windows,
   i18n,
   density = "detail",
+  displayStyle = "line",
 }: UsageWindowProgressListProps) {
   if (windows.length === 0) {
     return null;
@@ -77,7 +85,7 @@ export function UsageWindowProgressList({
 
   return (
     <div
-      className={`usage-window-progress-list usage-window-progress-list--${density}`}
+      className={`usage-window-progress-list usage-window-progress-list--${density} usage-window-progress-list--${displayStyle}`}
       data-usage-window-progress-list=""
     >
       {windows.map((usageWindow) => (
@@ -91,8 +99,9 @@ export function UsageWindowProgressList({
             total={usageWindow.total ?? 100}
             tone={getUsageWindowProgressTone(usageWindow)}
             label={usageWindow.normalizedLabel}
+            displayStyle={displayStyle}
             valueKind="remaining"
-            valueLabel={formatRemainingValue(usageWindow, i18n)}
+            valueLabel={formatRemainingValue(usageWindow, i18n, displayStyle)}
             valueText={formatRemainingText(usageWindow, i18n)}
             detail={formatWindowResetDetail(usageWindow, i18n)}
           />

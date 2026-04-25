@@ -13,6 +13,12 @@ import {
   normalizeThemeMode,
   normalizeThemePreset,
 } from "./theme";
+import {
+  DEFAULT_FULL_PAGE_PROGRESS_STYLE,
+  DEFAULT_POPUP_PROGRESS_STYLE,
+  DEFAULT_SIDEBAR_PROGRESS_STYLE,
+  normalizeProgressDisplayStyle,
+} from "./progress-display";
 
 let memoryFallbackState: AppState | null = null;
 
@@ -125,6 +131,18 @@ function normalizeAppState(state: AppState): AppState {
       themePreset: normalizeThemePreset(state.settings?.themePreset),
       themeCustomSeedHex: normalizeThemeCustomSeedHex(
         state.settings?.themeCustomSeedHex,
+      ),
+      popupProgressStyle: normalizeProgressDisplayStyle(
+        state.settings?.popupProgressStyle,
+        DEFAULT_POPUP_PROGRESS_STYLE,
+      ),
+      sidebarProgressStyle: normalizeProgressDisplayStyle(
+        state.settings?.sidebarProgressStyle,
+        DEFAULT_SIDEBAR_PROGRESS_STYLE,
+      ),
+      fullPageProgressStyle: normalizeProgressDisplayStyle(
+        state.settings?.fullPageProgressStyle,
+        DEFAULT_FULL_PAGE_PROGRESS_STYLE,
       ),
     },
   };
