@@ -104,6 +104,14 @@ export function ProviderDetailPage({
     provider.warningDiagnostic,
     i18n,
   );
+  const sourceSelectionDiagnosticPresentation = getProviderDiagnosticPresentation(
+    provider.sourceSelectionDiagnostic,
+    i18n,
+  );
+  const sourceFallbackDiagnosticPresentation = getProviderDiagnosticPresentation(
+    provider.sourceFallbackDiagnostic,
+    i18n,
+  );
   const diagnosticNoteToneClassName =
     provider.warningDiagnostic?.severity === "error"
       ? "detail-note--error"
@@ -290,11 +298,51 @@ export function ProviderDetailPage({
             <p className="detail-field__label">{copy.fieldLabels.selectionReason}</p>
             <p className="detail-field__value">{provider.sourceSelectionReason}</p>
           </div>
+          {sourceSelectionDiagnosticPresentation ? (
+            <>
+              <div className="detail-field">
+                <p className="detail-field__label">
+                  {copy.fieldLabels.selectionDiagnostic}
+                </p>
+                <p className="detail-field__value">
+                  {sourceSelectionDiagnosticPresentation.label}
+                </p>
+              </div>
+              <div className="detail-field">
+                <p className="detail-field__label">
+                  {copy.fieldLabels.selectionDiagnosticSummary}
+                </p>
+                <p className="detail-field__value">
+                  {sourceSelectionDiagnosticPresentation.summary}
+                </p>
+              </div>
+            </>
+          ) : null}
           {provider.sourceFallbackReason ? (
             <div className="detail-field">
               <p className="detail-field__label">{copy.fieldLabels.fallbackReason}</p>
               <p className="detail-field__value">{provider.sourceFallbackReason}</p>
             </div>
+          ) : null}
+          {sourceFallbackDiagnosticPresentation ? (
+            <>
+              <div className="detail-field">
+                <p className="detail-field__label">
+                  {copy.fieldLabels.fallbackDiagnostic}
+                </p>
+                <p className="detail-field__value">
+                  {sourceFallbackDiagnosticPresentation.label}
+                </p>
+              </div>
+              <div className="detail-field">
+                <p className="detail-field__label">
+                  {copy.fieldLabels.fallbackDiagnosticSummary}
+                </p>
+                <p className="detail-field__value">
+                  {sourceFallbackDiagnosticPresentation.summary}
+                </p>
+              </div>
+            </>
           ) : null}
           <div className="detail-field">
             <p className="detail-field__label">{copy.fieldLabels.sourceNote}</p>

@@ -131,7 +131,7 @@ If one of these categories is localized later, the implementation must first dec
 
 ## Current Boundary
 
-As of `Phase 193`:
+As of `Phase 194`:
 
 - the runtime app already localizes the main product surfaces in `en + zh_CN`
 - the operator workspaces now have shell-localized navigation and helper copy
@@ -148,16 +148,17 @@ As of `Phase 193`:
 - sync-engine stale cached-state and automatic-sync-overdue typed diagnostics now exist beside raw sync-engine warning strings
 - source-state classification now prefers typed warning diagnostics while keeping raw English warning-pattern matching for compatibility
 - warning diagnostic presentation now localizes known typed warning labels and summaries while keeping raw warning bodies available
+- source diagnostic presentation now localizes known typed source-selection and fallback labels and summaries while keeping raw source bodies available
 - archive payload semantics remain English and unchanged
 - the repo has a maintained extraction boundary for deeper operator-workspace localization decisions
 - the next implementation step should avoid evidence-schema changes unless a dedicated archive-compatibility review lands first
 
 ## Follow-Up
 
-The next `Direction 09` implementation slice should move to source-selection and fallback diagnostic presentation expansion:
+The next `Direction 09` implementation slice should move to adapter-error diagnostic builders and presentation boundary:
 
-- generate localized labels or summaries from typed source-selection and fallback diagnostic codes and params
-- keep raw source-selection, fallback, and warning diagnostic bodies available for provider detail, exports, and archive evidence
+- inventory current adapter-error and parser-failure raw message paths before adding presentation
+- keep raw source-selection, fallback, warning, and adapter-error diagnostic bodies available for provider detail, exports, and archive evidence
 - keep raw provider `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` values unchanged
 - keep generated store-listing source docs out of runtime code unless that copy is shown by the extension
 

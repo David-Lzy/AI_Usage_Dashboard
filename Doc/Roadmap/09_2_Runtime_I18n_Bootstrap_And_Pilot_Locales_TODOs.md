@@ -33,6 +33,7 @@ Status note:
 - twenty-second executable phase landed on `2026-04-25` through `Phase 191`
 - twenty-third executable phase landed on `2026-04-25` through `Phase 192`
 - twenty-fourth executable phase landed on `2026-04-25` through `Phase 193`
+- twenty-fifth executable phase landed on `2026-04-25` through `Phase 194`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -370,11 +371,19 @@ Build one maintainable localization architecture that can support manifest strin
 
 ### V. Source-Selection And Fallback Diagnostic Presentation Expansion
 
-- next recommended slice
+- completed in `Phase 194`
 - render localized labels or short summaries from typed source-selection and fallback diagnostic codes
 - keep raw `sourceSelectionReason` and `sourceFallbackReason` bodies visible for details, exports, and archive compatibility
 - add unknown-code fallback tests that preserve raw source diagnostic strings
 - avoid changing source-selection order, fallback behavior, or provider coverage claims
+
+### W. Adapter-Error Diagnostic Builders And Presentation Boundary
+
+- next recommended slice
+- inventory current adapter-error and parser-failure raw message paths
+- populate typed adapter-error diagnostics only where repo-generated errors already have stable meaning
+- keep raw adapter-error bodies visible for details, exports, and archive compatibility
+- avoid changing provider coverage claims or fallback behavior
 
 ## Planned Numbered Slices
 
@@ -403,7 +412,8 @@ Build one maintainable localization architecture that can support manifest strin
 23. sync-stale diagnostics - completed in `Phase 191`
 24. source-state classification typed-diagnostic fallback - completed in `Phase 192`
 25. localized warning diagnostic presentation - completed in `Phase 193`
-26. source-selection and fallback diagnostic presentation expansion - next
+26. source-selection and fallback diagnostic presentation expansion - completed in `Phase 194`
+27. adapter-error diagnostic builders and presentation boundary - next
 
 ## Out Of Scope
 

@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [193_Phase_Localized_Warning_Diagnostic_Presentation.md](./Archive/193_Phase_Localized_Warning_Diagnostic_Presentation.md)
+- latest completed slice: [194_Phase_Source_Diagnostic_Presentation.md](./Archive/194_Phase_Source_Diagnostic_Presentation.md)
 
 Completed phases should be moved to:
 
@@ -240,6 +240,7 @@ Completed phases should be moved to:
 - [191_Phase_Sync_Stale_Diagnostics.md](./Archive/191_Phase_Sync_Stale_Diagnostics.md) - completed and archived on 2026-04-25
 - [192_Phase_Source_State_Typed_Diagnostic_Fallback.md](./Archive/192_Phase_Source_State_Typed_Diagnostic_Fallback.md) - completed and archived on 2026-04-25
 - [193_Phase_Localized_Warning_Diagnostic_Presentation.md](./Archive/193_Phase_Localized_Warning_Diagnostic_Presentation.md) - completed and archived on 2026-04-25
+- [194_Phase_Source_Diagnostic_Presentation.md](./Archive/194_Phase_Source_Diagnostic_Presentation.md) - completed and archived on 2026-04-25
 
 ## Dependency Notes
 
@@ -506,6 +507,8 @@ Completed phases should be moved to:
 - the 2026-04-25 `Phase 192` closeout made source-state classification prefer typed warning diagnostics while preserving raw English warning-pattern fallback and rendered UI behavior
 - phase 193 depends on phase 192 because localized warning diagnostic presentation should be generated from typed diagnostic metadata only after classification can already consume that metadata and raw fallback behavior is proven
 - the 2026-04-25 `Phase 193` closeout added localized warning diagnostic labels and a diagnostic summary layer while preserving raw warning/source strings and rendered evidence boundaries
+- phase 194 depends on phase 193 because source-selection and fallback diagnostic presentation should reuse the same typed-code localization path after warning diagnostic presentation proves the raw evidence boundary
+- the 2026-04-25 `Phase 194` closeout added localized source diagnostic labels and summaries while preserving raw source-selection/fallback strings and rendered evidence boundaries
 
 ## Delivery Standard For Each Phase
 

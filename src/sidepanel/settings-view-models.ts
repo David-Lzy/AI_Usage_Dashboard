@@ -53,6 +53,10 @@ export type SettingsSourceCardLabels = {
     graduationGate: string;
     selectionReason: string;
     fallbackReason: string;
+    selectionDiagnostic: string;
+    selectionDiagnosticSummary: string;
+    fallbackDiagnostic: string;
+    fallbackDiagnosticSummary: string;
     diagnostic: string;
     diagnosticSummary: string;
     readinessDetail: string;
@@ -98,6 +102,10 @@ const DEFAULT_SETTINGS_SOURCE_CARD_LABELS: SettingsSourceCardLabels = {
     graduationGate: "Graduation gate",
     selectionReason: "Selection reason",
     fallbackReason: "Fallback reason",
+    selectionDiagnostic: "Selection diagnostic",
+    selectionDiagnosticSummary: "Selection summary",
+    fallbackDiagnostic: "Fallback diagnostic",
+    fallbackDiagnosticSummary: "Fallback summary",
     diagnostic: "Diagnostic",
     diagnosticSummary: "Diagnostic summary",
     readinessDetail: "Readiness detail",
@@ -290,6 +298,8 @@ export function buildSettingsSourceCardModel(
   sourceDisplay: ProviderSourceDisplay,
   labels: SettingsSourceCardLabels = DEFAULT_SETTINGS_SOURCE_CARD_LABELS,
   warningDiagnosticPresentation: ProviderDiagnosticPresentation | null = null,
+  sourceSelectionDiagnosticPresentation: ProviderDiagnosticPresentation | null = null,
+  sourceFallbackDiagnosticPresentation: ProviderDiagnosticPresentation | null = null,
 ): SettingsSourceCardModel {
   const fallbackValue =
     sourceDisplay.fallbackPlans.length > 0
@@ -328,7 +338,23 @@ export function buildSettingsSourceCardModel(
       labels.groups.sourceDecision,
       [
         buildField(labels.primary.selectionReason, sourceDisplay.sourceSelectionReason),
+        buildField(
+          labels.primary.selectionDiagnostic,
+          sourceSelectionDiagnosticPresentation?.label,
+        ),
+        buildField(
+          labels.primary.selectionDiagnosticSummary,
+          sourceSelectionDiagnosticPresentation?.summary,
+        ),
         buildField(labels.primary.fallbackReason, sourceDisplay.sourceFallbackReason),
+        buildField(
+          labels.primary.fallbackDiagnostic,
+          sourceFallbackDiagnosticPresentation?.label,
+        ),
+        buildField(
+          labels.primary.fallbackDiagnosticSummary,
+          sourceFallbackDiagnosticPresentation?.summary,
+        ),
         buildField(
           labels.primary.diagnostic,
           warningDiagnosticPresentation?.label,

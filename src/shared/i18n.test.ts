@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { createUsageThresholdDiagnostic } from "../providers/diagnostics";
+import {
+  createSourceFallbackDiagnostic,
+  createSourceSelectionDiagnostic,
+  createUsageThresholdDiagnostic,
+} from "../providers/diagnostics";
 import type { ProviderDiagnostic } from "../providers/types";
 import {
   buildSettingsSummaryLabels,
@@ -181,6 +185,44 @@ describe("runtime i18n", () => {
     ).toEqual({
       label: "用量阈值",
       summary: "当前用量 93%，已达到 80% 告警阈值。",
+    });
+  });
+
+  it("builds localized source diagnostic presentation from typed codes and params", () => {
+    const selectionDiagnostic = createSourceSelectionDiagnostic({
+      providerId: "cursor",
+      sourcePreference: "auto",
+      selectedKind: "session_page",
+      hadFallback: true,
+      rawMessage: "Auto fell back to Session page.",
+    });
+    const fallbackDiagnostic = createSourceFallbackDiagnostic({
+      providerId: "cursor",
+      sourcePreference: "auto",
+      failure: {
+        kind: "official_api",
+        code: "credential_missing",
+        detail: "No Cursor Admin API key is stored.",
+      },
+      rawMessage: "Official API unavailable: no Cursor Admin API key is stored.",
+    });
+
+    expect(selectionDiagnostic).not.toBeNull();
+    expect(
+      getProviderDiagnosticPresentation(
+        selectionDiagnostic,
+        createRuntimeI18n("zh-CN"),
+      ),
+    ).toEqual({
+      label: "自动回退到会话页面",
+      summary: "自动偏好在前置来源不可用后选择了会话页面。",
+    });
+    expect(
+      getProviderDiagnosticPresentation(fallbackDiagnostic, createRuntimeI18n("en")),
+    ).toEqual({
+      label: "Official API credential missing",
+      summary:
+        "The Official API source could not run because its required credential is missing.",
     });
   });
 

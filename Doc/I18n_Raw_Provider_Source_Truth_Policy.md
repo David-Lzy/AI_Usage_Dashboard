@@ -27,6 +27,7 @@ Status note:
 - `Phase 191` populated sync-stale typed diagnostics while preserving raw sync-engine `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings
 - `Phase 192` made source-state classification prefer typed diagnostics while preserving raw English warning-pattern fallback for older snapshots and unknown diagnostic codes
 - `Phase 193` added localized warning diagnostic presentation while preserving raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings
+- `Phase 194` added localized source diagnostic presentation while preserving raw `sourceSelectionReason` and `sourceFallbackReason` strings
 - refresh it when provider source display helpers, adapter reason fields, provider-source blueprints, or runtime i18n scope changes materially
 
 ## Goal
@@ -114,6 +115,7 @@ Future localization should prefer this order:
 4. Only after that, introduce typed reason codes for adapter-generated diagnostics if the product needs localized diagnostic bodies.
 5. Only after typed reason codes exist, consider localizing adapter diagnostics from code plus data instead of translating raw strings directly.
 6. After `Phase 193`, warning diagnostics may expose localized presentation generated from typed metadata, but the raw warning body remains visible for evidence.
+7. After `Phase 194`, source-selection and fallback diagnostics may expose localized presentation generated from typed metadata, but the raw source bodies remain visible for evidence.
 
 ## Out Of Scope
 
@@ -126,6 +128,6 @@ Future localization should prefer this order:
 
 ## Next Executable Slice
 
-The next safe engineering slice should expand localized diagnostic presentation to typed source-selection and fallback diagnostics while preserving raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings plus the current raw English fallback path.
+The next safe engineering slice should inventory adapter-error raw message paths and add typed adapter-error builders only where the repo already owns stable raw error semantics.
 
 It should not translate raw provider source-truth fields listed above directly; localized output should be generated from typed diagnostics and must keep raw bodies available for evidence surfaces.

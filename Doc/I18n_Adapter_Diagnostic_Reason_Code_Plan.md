@@ -26,6 +26,7 @@ Status note:
 - `Phase 191` populated sync-stale warning diagnostics while preserving raw sync-engine stale strings
 - `Phase 192` made source-state classification prefer typed warning diagnostics while preserving raw English fallback behavior
 - `Phase 193` added localized warning diagnostic presentation while preserving raw diagnostic strings
+- `Phase 194` added localized source diagnostic presentation while preserving raw source-selection and fallback strings
 - refresh it when provider adapters, source-selection behavior, provider snapshot fields, archive evidence schemas, or runtime i18n boundaries change materially
 
 ## Goal
@@ -148,7 +149,8 @@ After typed diagnostics exist:
 5. Populate sync-stale diagnostics in the sync engine - completed in `Phase 191`.
 6. Update source-state classification to prefer typed diagnostics, with raw English pattern matching kept as a compatibility fallback - completed in `Phase 192`.
 7. Localize warning presentation generated from typed warning diagnostic codes after typed coverage and compatibility tests pass - completed in `Phase 193`.
-8. Localize source-selection and fallback presentation generated from typed source diagnostic codes after warning presentation proves the raw-evidence boundary.
+8. Localize source-selection and fallback presentation generated from typed source diagnostic codes after warning presentation proves the raw-evidence boundary - completed in `Phase 194`.
+9. Populate adapter-error diagnostics only after the raw adapter-error boundary is explicit.
 
 ## Compatibility Rules
 
@@ -249,6 +251,14 @@ Before any runtime implementation lands:
 - unknown typed warning codes return no presentation so raw fallback behavior remains available
 - no raw diagnostic string rewrites
 
+`Phase 194` expanded localized presentation to source diagnostics:
+
+- known `sourceSelectionDiagnostic` codes now produce localized labels and short summaries
+- known `sourceFallbackDiagnostic` codes now produce localized labels and short summaries
+- Settings source-card diagnostics and Provider Detail show the localized source diagnostic presentation beside raw source-selection and fallback reason fields
+- no source-selection or fallback behavior changed
+- no raw diagnostic string rewrites
+
 ## Next Executable Slice
 
-The next safe implementation slice should expand localized diagnostic presentation to typed source-selection and fallback diagnostics while preserving raw source-selection and fallback bodies for details, exports, and archive compatibility.
+The next safe implementation slice should inventory adapter-error raw message paths and add typed adapter-error builders only where repo-generated errors already have stable meaning. Raw adapter-error bodies should remain visible for details, exports, and archive compatibility.

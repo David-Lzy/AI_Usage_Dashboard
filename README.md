@@ -40,7 +40,7 @@ Security posture for this track:
 
 Next execution queue:
 
-1. continue [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) with source-selection and fallback diagnostic presentation after `Phase 193` shipped localized warning diagnostic presentation
+1. continue [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) with adapter-error diagnostic builders and presentation boundary after `Phase 194` shipped localized source diagnostic presentation
 2. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining manual store-popup capture dependency
 3. continue [Direction 08 - Documentation Completion And Truth Audit](./Doc/Roadmap/08_Direction_Documentation_Completion_And_Truth_Audit.md) in maintenance mode only when new doc families drift
 

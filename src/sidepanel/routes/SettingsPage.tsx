@@ -844,6 +844,14 @@ export function SettingsPage({
                 snapshot.warningDiagnostic,
                 i18n,
               ),
+              getProviderDiagnosticPresentation(
+                snapshot.sourceSelectionDiagnostic,
+                i18n,
+              ),
+              getProviderDiagnosticPresentation(
+                snapshot.sourceFallbackDiagnostic,
+                i18n,
+              ),
             );
             const sessionPagePlan = sourceDisplay.sessionPagePlan;
             const canUseSessionPageAction =

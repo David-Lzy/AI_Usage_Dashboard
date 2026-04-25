@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { createUsageThresholdDiagnostic } from "../providers/diagnostics";
+import {
+  createSourceFallbackDiagnostic,
+  createSourceSelectionDiagnostic,
+  createUsageThresholdDiagnostic,
+} from "../providers/diagnostics";
 import { SAMPLE_APP_STATE } from "../shared/constants";
 import { createRuntimeI18n } from "../shared/i18n";
 import {
@@ -255,6 +259,85 @@ describe("settings view models", () => {
           label: "就绪详情",
           value:
             "Current release path for Enterprise workspaces. Exact remaining workspace credits are not exposed.",
+        },
+      ]),
+    );
+  });
+
+  it("adds localized source diagnostic presentation without hiding raw source reasons", () => {
+    const provider =
+      SAMPLE_APP_STATE.providers.find((entry) => entry.providerId === "cursor") ??
+      null;
+    const setting =
+      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "cursor") ??
+      null;
+
+    expect(provider).not.toBeNull();
+    expect(setting).not.toBeNull();
+
+    const i18n = createRuntimeI18n("zh-CN");
+    const settingsCopy = buildSettingsLocalizedCopy(i18n);
+    const sourceSelectionDiagnostic = createSourceSelectionDiagnostic({
+      providerId: "cursor",
+      sourcePreference: "auto",
+      selectedKind: "session_page",
+      hadFallback: true,
+      rawMessage: "Auto fell back to Session page.",
+    });
+    const sourceFallbackDiagnostic = createSourceFallbackDiagnostic({
+      providerId: "cursor",
+      sourcePreference: "auto",
+      failure: {
+        kind: "official_api",
+        code: "credential_missing",
+        detail: "No Cursor Admin API key is stored.",
+      },
+      rawMessage: "Official API unavailable: no Cursor Admin API key is stored.",
+    });
+
+    expect(sourceSelectionDiagnostic).not.toBeNull();
+
+    const sourceCardModel = buildSettingsSourceCardModel(
+      buildProviderSourceDisplay(
+        {
+          ...provider!,
+          sourceSelectionReason: sourceSelectionDiagnostic!.rawMessage,
+          sourceFallbackReason: sourceFallbackDiagnostic.rawMessage,
+          sourceSelectionDiagnostic,
+          sourceFallbackDiagnostic,
+        },
+        setting!,
+        buildProviderSourceDisplayLocalizedCopy(i18n),
+      ),
+      {
+        ...settingsCopy.sources.cardLabels,
+        sourceKindLabels: settingsCopy.sources.sourceKindLabels,
+        routeFallback: settingsCopy.sources.routeFallback,
+      },
+      null,
+      getProviderDiagnosticPresentation(sourceSelectionDiagnostic, i18n),
+      getProviderDiagnosticPresentation(sourceFallbackDiagnostic, i18n),
+    );
+    const sourceDecisionGroup = sourceCardModel.diagnosticGroups.find(
+      (group) => group.title === "来源决策",
+    );
+
+    expect(sourceDecisionGroup?.fields).toEqual(
+      expect.arrayContaining([
+        { label: "选择原因", value: "Auto fell back to Session page." },
+        { label: "选择诊断", value: "自动回退到会话页面" },
+        {
+          label: "选择摘要",
+          value: "自动偏好在前置来源不可用后选择了会话页面。",
+        },
+        {
+          label: "回退原因",
+          value: "Official API unavailable: no Cursor Admin API key is stored.",
+        },
+        { label: "回退诊断", value: "官方 API 缺少凭据" },
+        {
+          label: "回退摘要",
+          value: "官方 API 来源缺少所需凭据，无法运行。",
         },
       ]),
     );
