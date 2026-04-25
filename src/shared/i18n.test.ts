@@ -162,6 +162,9 @@ describe("runtime i18n", () => {
     expect(storeCopy.screenshotSeed.presetHeadline("unlock", "")).toBe(
       "截图 seed lock 已清除",
     );
+    expect(storeCopy.screenshotSeed.submissionCaption("setup-guidance")).toBe(
+      "当访问权限或凭据缺失时，明确下一步配置动作。",
+    );
     expect(storeCopy.nativePopupProbe.requestedTitle).toBe("已请求原生 popup");
   });
 

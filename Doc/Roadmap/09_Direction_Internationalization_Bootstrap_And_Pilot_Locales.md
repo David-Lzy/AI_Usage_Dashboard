@@ -1,6 +1,6 @@
 # Direction 09 - Internationalization Bootstrap And Pilot Locales
 
-Date: 2026-04-24
+Date: 2026-04-25
 
 Document class:
 
@@ -24,6 +24,7 @@ Execution note:
 - ninth executable slice landed on `2026-04-25` through `Phase 178`
 - tenth executable slice landed on `2026-04-25` through `Phase 179`
 - eleventh executable slice landed on `2026-04-25` through `Phase 180`
+- twelfth executable slice landed on `2026-04-25` through `Phase 181`
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
 Process rule:
@@ -70,6 +71,7 @@ As of 2026-04-25:
   - provider-detail shell and static copy
   - operator-workspace shell copy for interaction-audit and theme-recovery
   - store-screenshot runtime helper copy for the seed route and native popup probe route
+  - store-screenshot seed-route submission-support captions that map screenshot presets to localized store-caption guidance
   - shared quick theme-toggle labels
 - the current settings-shell slice includes:
   - settings top bar and actions
@@ -93,7 +95,7 @@ As of 2026-04-25:
 - operator workspaces now have one maintained localization boundary and first extraction review:
   - [I18n_Operator_Workspace_Boundary_And_Extraction.md](../I18n_Operator_Workspace_Boundary_And_Extraction.md)
 - the first operator-workspace shell localization slice now routes interaction-audit and theme-recovery shell/navigation/helper copy through `buildOperatorWorkspaceLocalizedCopy` while keeping evidence payloads English
-- store-screenshot helper routes now route visible helper copy through `buildStoreWorkflowLocalizedCopy` while keeping automation titles, preset ids, route hashes, and native-toolbar popup capture truth boundaries stable
+- store-screenshot helper routes now route visible helper copy and screenshot-adjacent submission-support captions through `buildStoreWorkflowLocalizedCopy` while keeping automation titles, preset ids, route hashes, final screenshot surfaces, and native-toolbar popup capture truth boundaries stable
 - the repo ships one store helper i18n boundary reference:
   - [I18n_Store_Runtime_Helper_Copy.md](../I18n_Store_Runtime_Helper_Copy.md)
 - the repo ships maintained i18n references:
@@ -167,7 +169,8 @@ Recommended rollout:
 10. audit and recovery workspace localization boundary and first extraction review - shipped in `Phase 178`
 11. first operator-workspace shell localization slice - shipped in `Phase 179`
 12. store-facing runtime helper copy - shipped in `Phase 180`
-13. screenshot-adjacent captions inside actual product screenshot surfaces or submission-support UI - next
+13. screenshot-adjacent captions inside actual product screenshot surfaces or submission-support UI - shipped in `Phase 181`
+14. raw provider source-truth localization policy and presentation-only wrapper review - next
 
 ## References
 

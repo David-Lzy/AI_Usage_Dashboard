@@ -1,6 +1,6 @@
 # Direction 09.2 - Runtime I18n Bootstrap And Pilot Locales TODOs
 
-Date: 2026-04-24
+Date: 2026-04-25
 
 Document class:
 
@@ -20,6 +20,7 @@ Status note:
 - ninth executable phase landed on `2026-04-25` through `Phase 178`
 - tenth executable phase landed on `2026-04-25` through `Phase 179`
 - eleventh executable phase landed on `2026-04-25` through `Phase 180`
+- twelfth executable phase landed on `2026-04-25` through `Phase 181`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -222,11 +223,13 @@ Build one maintainable localization architecture that can support manifest strin
 ### I. Store Runtime Helper Copy
 
 - first store-helper localization slice shipped in `Phase 180`
+- screenshot-adjacent submission-support caption slice shipped in `Phase 181`
 - maintained boundary reference:
   - [I18n_Store_Runtime_Helper_Copy.md](../I18n_Store_Runtime_Helper_Copy.md)
 - implementation scope:
   - `buildStoreWorkflowLocalizedCopy` in [localized-copy.ts](../../src/shared/localized-copy.ts)
   - screenshot seed route labels, headings, preset-applied helper copy, and route-contract copy
+  - screenshot seed route preset-to-caption support copy that helps the operator match a preset to the store-listing story
   - native toolbar popup probe route labels, headings, accepted-state helper copy, and route-contract copy
   - special debug routes now receive runtime i18n from [App.tsx](../../src/sidepanel/App.tsx)
 - preserved automation and truth boundary:
@@ -234,7 +237,16 @@ Build one maintainable localization architecture that can support manifest strin
   - screenshot preset ids remain unchanged
   - debug route hashes remain unchanged
   - helper pages still explicitly state they are not final store screenshot surfaces
+  - submission-support captions are not injected into final popup, side-panel, or full-page screenshots
   - manual native-toolbar popup capture remains a real `Direction 10.3` dependency
+
+### J. Raw Provider Source-Truth Policy
+
+- next recommended slice
+- define which remaining English provider detail strings are source-truth evidence and must stay raw
+- define which surrounding provider explanations are presentation-only wrappers that can safely enter structured runtime copy
+- keep vendor-owned wording and generated evidence payloads out of the translated catalog unless an explicit compatibility review approves them
+- do not use this slice to rewrite provider coverage claims; current provider coverage gaps still remain truthful and unchanged
 
 ## Planned Numbered Slices
 
@@ -250,7 +262,8 @@ Build one maintainable localization architecture that can support manifest strin
 10. audit and recovery workspace localization boundary and first extraction review - completed in `Phase 178`
 11. first operator-workspace shell localization slice - completed in `Phase 179`
 12. store-facing runtime helper copy - completed in `Phase 180`
-13. screenshot-adjacent captions inside actual product screenshot surfaces or submission-support UI - next
+13. screenshot-adjacent captions inside actual product screenshot surfaces or submission-support UI - completed in `Phase 181`
+14. raw provider source-truth localization policy and presentation-only wrapper review - next
 
 ## Out Of Scope
 
@@ -259,3 +272,4 @@ Build one maintainable localization architecture that can support manifest strin
 - shipping Arabic before explicit RTL review exists
 - localizing operator evidence schemas or archive-facing generated strings before archive compatibility is reviewed
 - translating generated store-listing source docs inside runtime code unless that copy is shown by the extension
+- translating raw provider source-truth strings before the next policy slice separates evidence from presentation-only wrapper copy

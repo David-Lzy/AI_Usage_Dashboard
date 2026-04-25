@@ -131,20 +131,21 @@ If one of these categories is localized later, the implementation must first dec
 
 ## Current Boundary
 
-As of `Phase 179`:
+As of `Phase 181`:
 
 - the runtime app already localizes the main product surfaces in `en + zh_CN`
 - the operator workspaces now have shell-localized navigation and helper copy
+- store helper routes now have localized helper copy plus helper-only submission-support captions
 - archive payload semantics remain English and unchanged
 - the repo has a maintained extraction boundary for deeper operator-workspace localization decisions
 - the next implementation step should avoid evidence-schema changes unless a dedicated archive-compatibility review lands first
 
 ## Follow-Up
 
-The next `Direction 09` implementation slice should move to store-facing runtime helper copy:
+The next `Direction 09` implementation slice should move to raw provider source-truth localization policy:
 
-- screenshot-adjacent helper copy
-- store-submission support copy that appears inside runtime surfaces
-- any remaining runtime captions that should match the maintained store-listing source pack
+- identify source-truth provider strings that must remain raw
+- identify presentation-only provider wrappers that can safely enter structured runtime copy
+- keep generated store-listing source docs out of runtime code unless that copy is shown by the extension
 
 Operator evidence payload fields, request identifiers, and generated evidence strings should remain out of scope until a dedicated archive-compatibility review says otherwise.

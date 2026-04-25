@@ -145,6 +145,7 @@
     "phase178:review": "./scripts/with-preferred-node.sh node ./scripts/phase178-operator-workspace-i18n-boundary-review.mjs",
     "phase179:review": "./scripts/with-preferred-node.sh node ./scripts/phase179-operator-workspace-shell-localization-review.mjs",
     "phase180:review": "./scripts/with-preferred-node.sh node ./scripts/phase180-store-runtime-helper-localization-review.mjs",
+    "phase181:review": "./scripts/with-preferred-node.sh node ./scripts/phase181-screenshot-caption-support-localization-review.mjs",
     "interaction-audit:bundle": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-handoff-bundle.mjs",
     "interaction-audit:archive": "./scripts/with-preferred-node.sh node ./scripts/archive-interaction-audit-review.mjs",
     "interaction-audit:refresh-archive-index": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-review-archive-index.mjs",

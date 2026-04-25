@@ -18,6 +18,7 @@ Status note:
 
 - this file records the localization boundary for store-screenshot helper runtime routes
 - refresh it when store screenshot helper routes, capture automation signals, or screenshot-adjacent runtime captions change
+- `Phase 181` adds localized submission-support captions to the seed helper route while keeping final screenshot surfaces unchanged
 
 ## Goal
 
@@ -32,7 +33,7 @@ These routes are internal helpers. They can appear during store screenshot captu
 
 ## Localized Scope
 
-`Phase 180` localizes:
+`Phase 180` and `Phase 181` localize:
 
 - helper route section labels
 - helper route headings
@@ -40,6 +41,8 @@ These routes are internal helpers. They can appear during store screenshot captu
 - route-contract explanatory copy
 - native popup probe status copy
 - generic success copy shown to the operator
+- submission-support captions mapped from screenshot preset ids
+- helper-only caption boundary copy that states the caption is not injected into final popup, side-panel, or full-page screenshots
 
 Implementation lives in:
 
@@ -69,7 +72,10 @@ The localized copy must continue to say:
 - the native popup probe only checks whether RDP Chrome exposes the real toolbar bubble
 - popup app-window smoke evidence is not a replacement for native toolbar-bubble submission capture
 - the real store-asset line still retains the manual native-toolbar popup capture dependency
+- submission-support captions are operator aids only and are not injected into final popup, side-panel, or full-page screenshots
 
 ## Follow-Up
 
-The next i18n work should move from helper routes to store-facing runtime captions that can appear inside actual screenshot surfaces or submission-support material. Generated store-listing source docs remain maintained separately and should not be translated inside runtime code unless the text is shown by the extension.
+`Phase 181` closes the first screenshot-adjacent submission-support caption slice by showing localized preset-to-caption guidance inside the seed helper route. Generated store-listing source docs remain maintained separately and should not be translated inside runtime code unless the text is shown by the extension.
+
+The next i18n work should move to the raw provider source-truth detail policy: decide which remaining English provider strings are source evidence that must stay raw, and which are presentation-only wrappers that can safely enter the localized runtime pilot.

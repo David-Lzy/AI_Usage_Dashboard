@@ -188,6 +188,16 @@ export function StoreScreenshotSeedPage({
       : seedState.status === "done"
         ? `${copy.presetDetail(seedState.preset, seedState.detail)} ${copy.temporaryLockActiveDetail}`
         : "";
+  const currentPreset =
+    seedState.status === "running"
+      ? seedState.preset
+      : seedState.status === "done"
+        ? seedState.preset
+        : null;
+  const submissionCaption =
+    currentPreset && currentPreset !== "unlock"
+      ? copy.submissionCaption(currentPreset)
+      : "";
 
   return (
     <main className="app-shell">
@@ -208,6 +218,14 @@ export function StoreScreenshotSeedPage({
               : seedState.message}
         </p>
       </section>
+
+      {submissionCaption ? (
+        <section className="status-card">
+          <p className="section-label">{copy.submissionCaptionLabel}</p>
+          <h2 className="section-title">{submissionCaption}</h2>
+          <p className="body-copy">{copy.submissionCaptionDetail}</p>
+        </section>
+      ) : null}
 
       <section className="status-card">
         <p className="section-label">{copy.routeContractLabel}</p>

@@ -767,6 +767,18 @@ export function buildStoreWorkflowLocalizedCopy(i18n: RuntimeI18n) {
       unlock:
         "临时 store-screenshot seed lock 已移除。下一次正常打开 side panel 会回到常规 init flow。",
     };
+    const submissionCaptions: Record<string, string> = {
+      "toolbar-first-quick-glance":
+        "在一个快速 popup 概览中查看可见 AI 工具状态。",
+      "setup-guidance":
+        "当访问权限或凭据缺失时，明确下一步配置动作。",
+      "honest-contract-or-policy-only":
+        "真实展示 provider 覆盖范围，不伪造不支持的 live usage。",
+      "settings-and-setup-depth":
+        "用 side panel 承担配置所有权和更深控制。",
+      "provider-or-dashboard-depth":
+        "当 popup 需要更多上下文时，打开更深的 provider 复查。",
+    };
 
     return {
       screenshotSeed: {
@@ -786,10 +798,15 @@ export function buildStoreWorkflowLocalizedCopy(i18n: RuntimeI18n) {
           "截图 seed lock 已清除，之前的扩展运行时状态也已恢复。",
         unlockNoBackupDetail:
           "临时 store-screenshot seed lock 已移除，但没有可恢复的 pre-seed 运行时状态，因此只清除了临时 lock。",
+        submissionCaptionLabel: "提交支撑 caption",
+        submissionCaptionDetail:
+          "这个 caption 只帮助操作员确认当前 preset 对应的 store-listing story；它不会被注入最终 popup、side panel 或 full-page 截图。",
         presetHeadline: (preset: string, fallback: string) =>
           presetHeadlines[preset] ?? fallback,
         presetDetail: (preset: string, fallback: string) =>
           presetDetails[preset] ?? fallback,
+        submissionCaption: (preset: string) =>
+          submissionCaptions[preset] ?? "",
         routeFailedFallback: "截图 seed route 意外失败。",
       },
       nativePopupProbe: {
@@ -832,6 +849,18 @@ export function buildStoreWorkflowLocalizedCopy(i18n: RuntimeI18n) {
     unlock:
       "The temporary store-screenshot seed lock was removed. The next normal side-panel open will re-enter the regular init flow.",
   };
+  const submissionCaptions: Record<string, string> = {
+    "toolbar-first-quick-glance":
+      "Check visible AI tool status in one quick popup glance.",
+    "setup-guidance":
+      "Know the next setup step when access or credentials are missing.",
+    "honest-contract-or-policy-only":
+      "See honest provider coverage without faking unsupported live usage.",
+    "settings-and-setup-depth":
+      "Use the side panel for setup ownership and deeper controls.",
+    "provider-or-dashboard-depth":
+      "Open deeper provider review when the popup needs more context.",
+  };
 
   return {
     screenshotSeed: {
@@ -851,10 +880,15 @@ export function buildStoreWorkflowLocalizedCopy(i18n: RuntimeI18n) {
         "The screenshot seed lock was cleared and the previous extension runtime state was restored.",
       unlockNoBackupDetail:
         "The temporary store-screenshot seed lock was removed. No stored pre-seed runtime state was available to restore, so only the temporary lock was cleared.",
+      submissionCaptionLabel: "Submission-support caption",
+      submissionCaptionDetail:
+        "This caption only helps the operator match the current preset to the store-listing story. It is not injected into the final popup, side-panel, or full-page screenshot.",
       presetHeadline: (preset: string, fallback: string) =>
         presetHeadlines[preset] ?? fallback,
       presetDetail: (preset: string, fallback: string) =>
         presetDetails[preset] ?? fallback,
+      submissionCaption: (preset: string) =>
+        submissionCaptions[preset] ?? "",
       routeFailedFallback: "The screenshot seed route failed unexpectedly.",
     },
     nativePopupProbe: {

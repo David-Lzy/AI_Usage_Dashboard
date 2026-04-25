@@ -1,6 +1,6 @@
 # AI Usage Dashboard TODOs
 
-Date: 2026-04-24
+Date: 2026-04-25
 
 Process rule:
 
@@ -234,7 +234,8 @@ Phase status update:
 - `Phase 178` completed the next `Direction 09` slice by adding one maintained operator-workspace localization boundary plus one repeatable extraction review for interaction-audit and theme-recovery workspaces
 - `Phase 179` completed the next `Direction 09` slice by localizing interaction-audit and theme-recovery workspace shell/navigation/helper copy for `en` plus `zh_CN` while keeping evidence payloads, export schemas, request identifiers, fixture ids, filenames, and source-truth labels English
 - `Phase 180` completed the next `Direction 09` slice by localizing store-screenshot seed and native popup probe helper-route copy while preserving automation titles, preset ids, route hashes, and the manual native-toolbar popup capture truth boundary
-- the immediate next repo-owned engineering work is now screenshot-adjacent captions inside actual product screenshot surfaces or submission-support UI for the `en` plus `zh_CN` runtime pilot under `Doc/Roadmap/09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md`
+- `Phase 181` completed the next `Direction 09` slice by localizing screenshot-adjacent submission-support captions inside the store seed helper route while keeping final popup, side-panel, and full-page screenshot surfaces unchanged
+- the immediate next repo-owned engineering work is now raw provider source-truth localization policy and presentation-only wrapper review for the `en` plus `zh_CN` runtime pilot under `Doc/Roadmap/09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
 - the split `Phase 41` release gate cleared the old runtime-parity ambiguity and re-proved the live `Codex` plus `Cursor` personal session-page paths in real Chrome
