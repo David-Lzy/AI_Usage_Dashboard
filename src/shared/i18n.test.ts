@@ -14,6 +14,7 @@ import {
   buildPopupLocalizedCopy,
   buildProviderDetailLocalizedCopy,
   buildSettingsLocalizedCopy,
+  buildStoreWorkflowLocalizedCopy,
 } from "./localized-copy";
 
 describe("runtime i18n", () => {
@@ -151,6 +152,17 @@ describe("runtime i18n", () => {
     expect(operatorCopy.interactionAudit.topbar.title).toBe("交互审计");
     expect(operatorCopy.themeRecovery.topbar.title).toBe("主题恢复审核");
     expect(operatorCopy.themeRecovery.links.sidePanel.settings).toBe("打开设置");
+  });
+
+  it("returns zh-CN structured store workflow helper copy builders", () => {
+    const i18n = createRuntimeI18n("zh-CN");
+    const storeCopy = buildStoreWorkflowLocalizedCopy(i18n);
+
+    expect(storeCopy.screenshotSeed.sectionLabel).toBe("Store Screenshot 调试路由");
+    expect(storeCopy.screenshotSeed.presetHeadline("unlock", "")).toBe(
+      "截图 seed lock 已清除",
+    );
+    expect(storeCopy.nativePopupProbe.requestedTitle).toBe("已请求原生 popup");
   });
 
   it("localizes runtime duration and freshness labels for zh-CN", () => {

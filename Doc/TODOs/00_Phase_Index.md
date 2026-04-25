@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [179_Phase_Operator_Workspace_Shell_Localization.md](./Archive/179_Phase_Operator_Workspace_Shell_Localization.md)
+- latest completed slice: [180_Phase_Store_Runtime_Helper_Localization.md](./Archive/180_Phase_Store_Runtime_Helper_Localization.md)
 
 Completed phases should be moved to:
 
@@ -226,6 +226,7 @@ Completed phases should be moved to:
 - [177_Phase_Compact_Width_And_RTL_Hardening.md](./Archive/177_Phase_Compact_Width_And_RTL_Hardening.md) - completed and archived on 2026-04-25
 - [178_Phase_Operator_Workspace_I18n_Boundary_And_Extraction.md](./Archive/178_Phase_Operator_Workspace_I18n_Boundary_And_Extraction.md) - completed and archived on 2026-04-25
 - [179_Phase_Operator_Workspace_Shell_Localization.md](./Archive/179_Phase_Operator_Workspace_Shell_Localization.md) - completed and archived on 2026-04-25
+- [180_Phase_Store_Runtime_Helper_Localization.md](./Archive/180_Phase_Store_Runtime_Helper_Localization.md) - completed and archived on 2026-04-25
 
 ## Dependency Notes
 
@@ -464,6 +465,8 @@ Completed phases should be moved to:
 - the 2026-04-25 `Phase 178` closeout added one maintained operator-workspace localization boundary plus one repeatable extraction review for interaction-audit and theme-recovery workspaces while keeping archive payload semantics English for now
 - phase 179 depends on phase 178 because interaction-audit and theme-recovery shell localization should only move after the evidence-preserving boundary is explicit
 - the 2026-04-25 `Phase 179` closeout localized operator-workspace shell/navigation/helper copy for `en + zh_CN` while keeping evidence payloads, export schemas, request identifiers, fixture ids, filenames, and source-truth labels English
+- phase 180 depends on phase 179 because store helper localization should reuse the same structured runtime i18n path after the operator shell boundary proved how to preserve automation and evidence semantics
+- the 2026-04-25 `Phase 180` closeout localized store-screenshot seed and native popup probe helper-route copy while preserving automation titles, preset ids, route hashes, and the manual native-toolbar popup capture truth boundary
 
 ## Delivery Standard For Each Phase
 

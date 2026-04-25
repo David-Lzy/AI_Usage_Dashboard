@@ -21,7 +21,7 @@ Status note:
 
 ## Current Localized Scope
 
-Localized through `Phase 170`, `Phase 171`, `Phase 172`, `Phase 173`, `Phase 174`, `Phase 175`, `Phase 176`, `Phase 177`, and `Phase 179`:
+Localized through `Phase 170`, `Phase 171`, `Phase 172`, `Phase 173`, `Phase 174`, `Phase 175`, `Phase 176`, `Phase 177`, `Phase 179`, and `Phase 180`:
 
 - manifest `name`
 - manifest `description`
@@ -64,6 +64,9 @@ Localized through `Phase 170`, `Phase 171`, `Phase 172`, `Phase 173`, `Phase 174
 - operator-workspace shell copy:
   - interaction-audit top bar, hero, guidance, signoff summary labels, request-scope labels, and shell helper copy
   - theme-recovery top bar, hero, loading/error labels, current-truth section labels, theme-state labels, request-scope labels, workflow helper copy, quick-link labels, output action labels, and generic feedback messages
+- store-screenshot runtime helper copy:
+  - screenshot seed helper headings, status copy, preset-applied helper copy, and route-contract copy
+  - native toolbar popup probe headings, status copy, accepted-state helper copy, and route-contract copy
 
 These now ship through:
 
@@ -72,6 +75,14 @@ These now ship through:
 - `public/_locales/zh_CN/messages.json`
 - `src/shared/i18n.ts`
 - `src/shared/localized-copy.ts`
+
+## Store Runtime Helper Boundary
+
+`Phase 180` added a maintained store-runtime helper copy reference:
+
+- [I18n_Store_Runtime_Helper_Copy.md](./I18n_Store_Runtime_Helper_Copy.md)
+
+That reference covers the `#debug-store-screenshot-seed` and `#debug-native-popup-probe` helper routes. It localizes visible operator helper copy while preserving automation titles, preset ids, route hashes, and the truth boundary that helper pages are not final store screenshot surfaces.
 
 ## Operator Workspace Boundary
 
@@ -88,21 +99,21 @@ The following surfaces still need broader runtime localization work:
 - raw provider source-truth detail strings that still intentionally surface current contract or vendor wording without translation
 - deeper interaction-audit evidence, preset, queue, import, and export payload copy
 - deeper theme-recovery evidence summary and provider source-truth copy
-- store-facing runtime captions and screenshot-adjacent helper copy
+- screenshot-adjacent captions that appear inside actual product screenshot surfaces or submission-support UI
 
 ## Runtime Inventory Buckets
 
 Recommended next extraction order:
 
-1. store-facing runtime helper copy that later appears in screenshots or submission support material
+1. screenshot-adjacent captions that appear inside actual product screenshot surfaces or submission-support UI
 2. revisit deeper operator-workspace evidence copy only after archive-compatibility rules are explicit
 3. revisit the remaining raw provider source-truth detail policy after the broader runtime pilot stabilizes
 
 ## Truth Boundary
 
 - the extension is no longer manifest-English-only after `Phase 170`
-- the runtime app now has a broader but still partial localized slice plus locale-aware formatting after `Phase 179`, not a full translated rollout
-- `en` and `zh_CN` currently cover manifest surfaces plus popup/dashboard shell strings, popup explanatory copy, the first settings-shell slice, deeper settings helper copy, provider-detail shell/static copy, quick theme-toggle labels, generated counts, percentages, parseable timestamp primitives, duration-bearing runtime freshness/reset labels, operator-workspace shell copy, and one first compact-width plus RTL hardening pass
+- the runtime app now has a broader but still partial localized slice plus locale-aware formatting after `Phase 180`, not a full translated rollout
+- `en` and `zh_CN` currently cover manifest surfaces plus popup/dashboard shell strings, popup explanatory copy, the first settings-shell slice, deeper settings helper copy, provider-detail shell/static copy, quick theme-toggle labels, generated counts, percentages, parseable timestamp primitives, duration-bearing runtime freshness/reset labels, operator-workspace shell copy, store-screenshot runtime helper copy, and one first compact-width plus RTL hardening pass
 - runtime document roots now sync `lang` and `dir`, and preview/QA can now force `?app-dir=rtl` while the shipped locale set still resolves to `ltr`
 - raw provider source-truth detail strings and deeper operator evidence payloads still remain outside the shipped pilot, but operator-workspace boundaries are now explicitly documented after `Phase 178` and the shell slice is shipped after `Phase 179`
 - non-parseable vendor-owned window labels such as `Mar 23 - Apr 21` still remain raw strings until a later explicit product decision localizes them

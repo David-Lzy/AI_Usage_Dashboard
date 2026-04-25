@@ -221,6 +221,7 @@ The Chrome action now opens a compact popup first:
   - one first compact-width plus RTL hardening pass now ships for the current `en + zh_CN` runtime pilot
   - operator workspaces now have one maintained i18n boundary and extraction review in [I18n_Operator_Workspace_Boundary_And_Extraction.md](./Doc/I18n_Operator_Workspace_Boundary_And_Extraction.md)
   - interaction-audit and theme-recovery workspace shell/navigation/helper copy now localizes through the same runtime pilot
+  - store-screenshot seed and native popup probe helper-route copy now localizes through the same runtime pilot while preserving automation titles and screenshot truth boundaries
   - raw provider source-truth detail strings plus deeper operator evidence/export payload copy still remain outside the shipped pilot
 - the popup runtime now also ships one explicit host-width contract for real Chrome action-popup rendering, so the browser no longer has to guess popup width from the document body
 - the popup runtime now also ships one static bootstrap width contract in [src/popup/index.html](./src/popup/index.html), and repo-backed tool commands now prefer the local Node runtime through [scripts/with-preferred-node.sh](./scripts/with-preferred-node.sh) instead of relying on the older Cursor-bundled `node`

@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
 
+import {
+  createRuntimeI18n,
+  DEFAULT_APP_LOCALE_PREFERENCE,
+  type RuntimeI18n,
+} from "../../shared/i18n";
+import { buildStoreWorkflowLocalizedCopy } from "../../shared/localized-copy";
 import { clearAppState, readAppState, writeAppState } from "../../shared/storage";
 import { writeStoreScreenshotRuntimeLock } from "../../shared/store-screenshot-runtime-lock";
 import {
@@ -13,7 +19,13 @@ import {
 
 type SeedState =
   | { status: "running"; preset: string }
-  | { status: "done"; headline: string; detail: string }
+  | {
+      status: "done";
+      preset: StoreScreenshotSeedPreset;
+      headline: string;
+      detail: string;
+      restoredBackup: boolean | null;
+    }
   | { status: "error"; message: string };
 
 const VALID_PRESETS: StoreScreenshotSeedPreset[] = [
@@ -42,7 +54,21 @@ function readPresetFromLocation(): StoreScreenshotSeedPreset {
   return preset as StoreScreenshotSeedPreset;
 }
 
-export function StoreScreenshotSeedPage() {
+type StoreScreenshotSeedPageProps = {
+  i18n?: RuntimeI18n;
+};
+
+function createDefaultStoreRuntimeI18n(): RuntimeI18n {
+  return createRuntimeI18n(
+    DEFAULT_APP_LOCALE_PREFERENCE,
+    typeof window !== "undefined" ? window : undefined,
+  );
+}
+
+export function StoreScreenshotSeedPage({
+  i18n = createDefaultStoreRuntimeI18n(),
+}: StoreScreenshotSeedPageProps = {}) {
+  const copy = buildStoreWorkflowLocalizedCopy(i18n).screenshotSeed;
   const [seedState, setSeedState] = useState<SeedState>({
     status: "running",
     preset:
@@ -77,10 +103,10 @@ export function StoreScreenshotSeedPage() {
           if (!disposed) {
             setSeedState({
               status: "done",
+              preset,
               headline: definition.headline,
-              detail: backup.hasBackup
-                ? "The screenshot seed lock was cleared and the previous extension runtime state was restored."
-                : `${definition.detail} No stored pre-seed runtime state was available to restore, so only the temporary lock was cleared.`,
+              detail: definition.detail,
+              restoredBackup: backup.hasBackup,
             });
           }
 
@@ -104,8 +130,10 @@ export function StoreScreenshotSeedPage() {
         if (!disposed) {
           setSeedState({
             status: "done",
+            preset,
             headline: definition.headline,
-            detail: `${definition.detail} The temporary side-panel seed lock is active until the unlock preset runs.`,
+            detail: definition.detail,
+            restoredBackup: null,
           });
         }
       } catch (error) {
@@ -119,7 +147,7 @@ export function StoreScreenshotSeedPage() {
             message:
               error instanceof Error
                 ? error.message
-                : "The screenshot seed route failed unexpectedly.",
+                : copy.routeFailedFallback,
           });
         }
       }
@@ -139,7 +167,7 @@ export function StoreScreenshotSeedPage() {
     }
 
     if (seedState.status === "done") {
-      document.title = seedState.headline.includes("cleared")
+      document.title = seedState.preset === "unlock"
         ? "AI Usage Dashboard Screenshot Seed Cleared"
         : "AI Usage Dashboard Screenshot Seed Applied";
       return;
@@ -148,38 +176,47 @@ export function StoreScreenshotSeedPage() {
     document.title = "AI Usage Dashboard Screenshot Seed Failed";
   }, [seedState]);
 
+  const doneHeadline =
+    seedState.status === "done"
+      ? copy.presetHeadline(seedState.preset, seedState.headline)
+      : "";
+  const doneDetail =
+    seedState.status === "done" && seedState.preset === "unlock"
+      ? seedState.restoredBackup
+        ? copy.unlockRestoredDetail
+        : copy.unlockNoBackupDetail
+      : seedState.status === "done"
+        ? `${copy.presetDetail(seedState.preset, seedState.detail)} ${copy.temporaryLockActiveDetail}`
+        : "";
+
   return (
     <main className="app-shell">
       <section className="hero-card">
-        <p className="section-label">Store Screenshot Debug Route</p>
+        <p className="section-label">{copy.sectionLabel}</p>
         <h1 className="display-headline">
           {seedState.status === "running"
-            ? "Applying screenshot preset"
+            ? copy.applyingTitle
             : seedState.status === "done"
-              ? seedState.headline
-              : "Screenshot preset failed"}
+              ? doneHeadline
+              : copy.failedTitle}
         </h1>
         <p className="body-copy">
           {seedState.status === "running"
-            ? `The extension is applying the request-bound screenshot preset \`${seedState.preset}\` to real runtime storage now.`
+            ? copy.applyingDetail(seedState.preset)
             : seedState.status === "done"
-              ? seedState.detail
+              ? doneDetail
               : seedState.message}
         </p>
       </section>
 
       <section className="status-card">
-        <p className="section-label">Route Contract</p>
+        <p className="section-label">{copy.routeContractLabel}</p>
         <h2 className="section-title">
           {seedState.status === "error"
-            ? "Seed route failed"
-            : "Internal tooling only"}
+            ? copy.seedRouteFailedTitle
+            : copy.internalToolingOnlyTitle}
         </h2>
-        <p className="body-copy">
-          This page exists only to seed truthful extension-mode runtime states
-          before capturing popup or side-panel screenshots. It is not itself a
-          store-facing screenshot surface.
-        </p>
+        <p className="body-copy">{copy.contractDetail}</p>
       </section>
     </main>
   );

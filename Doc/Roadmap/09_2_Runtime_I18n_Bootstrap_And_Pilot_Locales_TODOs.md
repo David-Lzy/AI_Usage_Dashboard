@@ -19,6 +19,7 @@ Status note:
 - eighth executable phase landed on `2026-04-25` through `Phase 177`
 - ninth executable phase landed on `2026-04-25` through `Phase 178`
 - tenth executable phase landed on `2026-04-25` through `Phase 179`
+- eleventh executable phase landed on `2026-04-25` through `Phase 180`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -218,6 +219,23 @@ Build one maintainable localization architecture that can support manifest strin
   - request ids, archive ids, revision strings, fixture ids, filenames, provider source-truth values, and vendor-owned wording remain unchanged
   - deeper operator evidence copy now needs archive-compatibility review before any future localization
 
+### I. Store Runtime Helper Copy
+
+- first store-helper localization slice shipped in `Phase 180`
+- maintained boundary reference:
+  - [I18n_Store_Runtime_Helper_Copy.md](../I18n_Store_Runtime_Helper_Copy.md)
+- implementation scope:
+  - `buildStoreWorkflowLocalizedCopy` in [localized-copy.ts](../../src/shared/localized-copy.ts)
+  - screenshot seed route labels, headings, preset-applied helper copy, and route-contract copy
+  - native toolbar popup probe route labels, headings, accepted-state helper copy, and route-contract copy
+  - special debug routes now receive runtime i18n from [App.tsx](../../src/sidepanel/App.tsx)
+- preserved automation and truth boundary:
+  - `document.title` automation signals remain English and stable
+  - screenshot preset ids remain unchanged
+  - debug route hashes remain unchanged
+  - helper pages still explicitly state they are not final store screenshot surfaces
+  - manual native-toolbar popup capture remains a real `Direction 10.3` dependency
+
 ## Planned Numbered Slices
 
 1. string inventory and message-id contract - completed in `Phase 170`
@@ -231,7 +249,8 @@ Build one maintainable localization architecture that can support manifest strin
 9. compact-width review and RTL hardening - completed in `Phase 177`
 10. audit and recovery workspace localization boundary and first extraction review - completed in `Phase 178`
 11. first operator-workspace shell localization slice - completed in `Phase 179`
-12. store-facing runtime helper copy and screenshot-adjacent captions - next
+12. store-facing runtime helper copy - completed in `Phase 180`
+13. screenshot-adjacent captions inside actual product screenshot surfaces or submission-support UI - next
 
 ## Out Of Scope
 
@@ -239,3 +258,4 @@ Build one maintainable localization architecture that can support manifest strin
 - promising all ten languages in the first runtime slice
 - shipping Arabic before explicit RTL review exists
 - localizing operator evidence schemas or archive-facing generated strings before archive compatibility is reviewed
+- translating generated store-listing source docs inside runtime code unless that copy is shown by the extension

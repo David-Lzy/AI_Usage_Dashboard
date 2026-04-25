@@ -359,9 +359,9 @@ function SpecialRouteApp({
     case "debug-interaction-audit":
       return <InteractionAuditPage i18n={runtimeI18n} />;
     case "debug-store-screenshot-seed":
-      return <StoreScreenshotSeedPage />;
+      return <StoreScreenshotSeedPage i18n={runtimeI18n} />;
     case "debug-native-popup-probe":
-      return <StoreScreenshotNativePopupProbePage />;
+      return <StoreScreenshotNativePopupProbePage i18n={runtimeI18n} />;
     case "debug-theme-recovery-review":
       return <ThemeRecoveryReviewPage i18n={runtimeI18n} />;
     default:

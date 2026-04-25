@@ -23,6 +23,7 @@ Execution note:
 - eighth executable slice landed on `2026-04-25` through `Phase 177`
 - ninth executable slice landed on `2026-04-25` through `Phase 178`
 - tenth executable slice landed on `2026-04-25` through `Phase 179`
+- eleventh executable slice landed on `2026-04-25` through `Phase 180`
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
 Process rule:
@@ -68,6 +69,7 @@ As of 2026-04-25:
   - deeper settings helper copy
   - provider-detail shell and static copy
   - operator-workspace shell copy for interaction-audit and theme-recovery
+  - store-screenshot runtime helper copy for the seed route and native popup probe route
   - shared quick theme-toggle labels
 - the current settings-shell slice includes:
   - settings top bar and actions
@@ -91,6 +93,9 @@ As of 2026-04-25:
 - operator workspaces now have one maintained localization boundary and first extraction review:
   - [I18n_Operator_Workspace_Boundary_And_Extraction.md](../I18n_Operator_Workspace_Boundary_And_Extraction.md)
 - the first operator-workspace shell localization slice now routes interaction-audit and theme-recovery shell/navigation/helper copy through `buildOperatorWorkspaceLocalizedCopy` while keeping evidence payloads English
+- store-screenshot helper routes now route visible helper copy through `buildStoreWorkflowLocalizedCopy` while keeping automation titles, preset ids, route hashes, and native-toolbar popup capture truth boundaries stable
+- the repo ships one store helper i18n boundary reference:
+  - [I18n_Store_Runtime_Helper_Copy.md](../I18n_Store_Runtime_Helper_Copy.md)
 - the repo ships maintained i18n references:
   - [I18n_Message_ID_Contract.md](../I18n_Message_ID_Contract.md)
   - [I18n_String_Inventory_Baseline.md](../I18n_String_Inventory_Baseline.md)
@@ -161,7 +166,8 @@ Recommended rollout:
 9. compact-width and RTL hardening - shipped in `Phase 177`
 10. audit and recovery workspace localization boundary and first extraction review - shipped in `Phase 178`
 11. first operator-workspace shell localization slice - shipped in `Phase 179`
-12. store-facing runtime helper copy and screenshot-adjacent captions - next
+12. store-facing runtime helper copy - shipped in `Phase 180`
+13. screenshot-adjacent captions inside actual product screenshot surfaces or submission-support UI - next
 
 ## References
 

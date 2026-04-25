@@ -1,15 +1,35 @@
 import { useEffect, useState } from "react";
 
 import { sendAppMessage } from "../../shared/app-client";
+import {
+  createRuntimeI18n,
+  DEFAULT_APP_LOCALE_PREFERENCE,
+  type RuntimeI18n,
+} from "../../shared/i18n";
+import { buildStoreWorkflowLocalizedCopy } from "../../shared/localized-copy";
 
 type ProbeState =
   | { status: "opening" }
-  | { status: "done"; message: string }
+  | { status: "done" }
   | { status: "error"; message: string };
 
 const PROBE_TITLE = "AI Usage Dashboard Native Popup Probe";
 
-export function StoreScreenshotNativePopupProbePage() {
+type StoreScreenshotNativePopupProbePageProps = {
+  i18n?: RuntimeI18n;
+};
+
+function createDefaultStoreRuntimeI18n(): RuntimeI18n {
+  return createRuntimeI18n(
+    DEFAULT_APP_LOCALE_PREFERENCE,
+    typeof window !== "undefined" ? window : undefined,
+  );
+}
+
+export function StoreScreenshotNativePopupProbePage({
+  i18n = createDefaultStoreRuntimeI18n(),
+}: StoreScreenshotNativePopupProbePageProps = {}) {
+  const copy = buildStoreWorkflowLocalizedCopy(i18n).nativePopupProbe;
   const [probeState, setProbeState] = useState<ProbeState>({
     status: "opening",
   });
@@ -25,8 +45,6 @@ export function StoreScreenshotNativePopupProbePage() {
           if (!disposed) {
             setProbeState({
               status: "done",
-              message:
-                "Chrome accepted the native toolbar action-popup request. Keep this probe window open only long enough for the RDP helper to detect and capture the popup.",
             });
           }
           return;
@@ -51,8 +69,6 @@ export function StoreScreenshotNativePopupProbePage() {
 
       setProbeState({
         status: "done",
-        message:
-          "Chrome accepted the native toolbar action-popup request. Keep this probe window open only long enough for the RDP helper to detect and capture the popup.",
       });
     }
 
@@ -74,33 +90,31 @@ export function StoreScreenshotNativePopupProbePage() {
   return (
     <main className="app-shell">
       <section className="hero-card">
-        <p className="section-label">Store Screenshot Debug Route</p>
+        <p className="section-label">{copy.sectionLabel}</p>
         <h1 className="display-headline">
           {probeState.status === "opening"
-            ? "Opening native toolbar popup"
+            ? copy.openingTitle
             : probeState.status === "done"
-              ? "Native popup requested"
-              : "Native popup probe failed"}
+              ? copy.requestedTitle
+              : copy.failedTitle}
         </h1>
         <p className="body-copy">
           {probeState.status === "opening"
-            ? "This helper page asks the background service worker to call chrome.action.openPopup so RDP Chrome can expose the real toolbar bubble instead of the popup app-window smoke helper."
-            : probeState.message}
+            ? copy.openingDetail
+            : probeState.status === "done"
+              ? copy.acceptedMessage
+              : probeState.message}
         </p>
       </section>
 
       <section className="status-card">
-        <p className="section-label">Route Contract</p>
+        <p className="section-label">{copy.routeContractLabel}</p>
         <h2 className="section-title">
           {probeState.status === "error"
-            ? "Native popup did not open"
-            : "Internal tooling only"}
+            ? copy.didNotOpenTitle
+            : copy.internalToolingOnlyTitle}
         </h2>
-        <p className="body-copy">
-          This page exists only for truthful RDP Chrome popup probing. It is not
-          itself a store-facing screenshot surface and should be closed once the
-          native toolbar bubble is captured or rejected.
-        </p>
+        <p className="body-copy">{copy.contractDetail}</p>
       </section>
     </main>
   );
