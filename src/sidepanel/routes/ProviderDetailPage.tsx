@@ -11,6 +11,41 @@ import { TopBar } from "../components/TopBar";
 import { UsageProgress } from "../components/UsageProgress";
 import type { ProviderViewModel } from "../view-models";
 
+function formatUsageWindowDetail(
+  provider: ProviderViewModel,
+  window: NonNullable<ProviderViewModel["usageWindows"]>[number],
+  i18n: ReturnType<typeof createRuntimeI18n>,
+): string {
+  const remaining =
+    window.remaining === null
+      ? null
+      : provider.quotaUnit === "percent"
+        ? i18n.formatPercentValue(window.remaining)
+        : i18n.formatNumber(window.remaining);
+  const used =
+    window.used === null
+      ? null
+      : provider.quotaUnit === "percent"
+        ? i18n.formatPercentValue(window.used)
+        : i18n.formatNumber(window.used);
+  const remainingLabel = i18n.resolvedLocale === "zh-CN" ? "剩余" : "remaining";
+  const usedLabel = i18n.resolvedLocale === "zh-CN" ? "已用" : "used";
+  const resetLabel =
+    i18n.resolvedLocale === "zh-CN" ? "重置" : "resets";
+  const resetAt = window.resetAt
+    ? (i18n.formatTemporalValue(window.resetAt) ?? window.resetAt)
+    : null;
+  const usageParts = [
+    remaining ? `${remaining} ${remainingLabel}` : null,
+    used ? `${used} ${usedLabel}` : null,
+    resetAt ? `${resetLabel} ${resetAt}` : null,
+  ].filter(Boolean);
+
+  return usageParts.length > 0
+    ? `${window.normalizedLabel}: ${usageParts.join(" · ")}`
+    : window.normalizedLabel;
+}
+
 type ProviderDetailPageProps = {
   localePreference: AppLocalePreference;
   provider: ProviderViewModel;
@@ -376,6 +411,20 @@ export function ProviderDetailPage({
           tone={provider.displayTone}
           label={copy.progressLabel(provider.providerLabel)}
         />
+
+        {provider.usageWindows && provider.usageWindows.length > 1 ? (
+          <div className="detail-note detail-note--neutral">
+            <p className="detail-note__label">{copy.notes.usageWindows}</p>
+            {provider.usageWindows.slice(0, 5).map((usageWindow) => (
+              <p
+                key={`${usageWindow.normalizedLabel}-${usageWindow.remaining ?? "unknown"}`}
+                className="supporting-copy"
+              >
+                {formatUsageWindowDetail(provider, usageWindow, i18n)}
+              </p>
+            ))}
+          </div>
+        ) : null}
 
         {provider.permissionStatus === "missing" ? (
           <div className="detail-note detail-note--warning">

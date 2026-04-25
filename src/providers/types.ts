@@ -174,7 +174,27 @@ export type ProviderSnapshot = {
   warningDiagnostic?: ProviderDiagnostic | null;
   sourceSelectionDiagnostic?: ProviderDiagnostic | null;
   sourceFallbackDiagnostic?: ProviderDiagnostic | null;
+  usageWindows?: ProviderUsageWindow[];
+  usageSummary?: string | null;
   tone: ProviderTone;
+};
+
+export type ProviderUsageWindow = {
+  label: string;
+  normalizedLabel: string;
+  kind:
+    | "rolling_5h"
+    | "weekly"
+    | "model_rolling_5h"
+    | "model_weekly"
+    | "unknown";
+  modelLabel: string | null;
+  quotaUnit: "percent";
+  used: number | null;
+  remaining: number | null;
+  total: number | null;
+  resetAt: string | null;
+  resetLabel: string | null;
 };
 
 export type ProviderSetting = {

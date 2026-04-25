@@ -126,7 +126,24 @@ describe("syncCodexProvider", () => {
     });
 
     const { snapshot } = await syncCodexProvider({
-      provider: baseProvider,
+      provider: {
+        ...baseProvider,
+        usageWindows: [
+          {
+            label: "stale",
+            normalizedLabel: "stale",
+            kind: "unknown",
+            modelLabel: null,
+            quotaUnit: "percent",
+            used: 99,
+            remaining: 1,
+            total: 100,
+            resetAt: null,
+            resetLabel: null,
+          },
+        ],
+        usageSummary: "stale personal summary",
+      },
       secrets: emptySecrets,
       setting: grantedSetting,
       warningThresholdPercent: 80,
@@ -147,6 +164,13 @@ describe("syncCodexProvider", () => {
     expect(snapshot.syncStatus).toBe("ok");
     expect(snapshot.tone).toBe("neutral");
     expect(snapshot.warningDiagnostic).toBeNull();
+    expect(snapshot.usageWindows).toEqual([
+      expect.objectContaining({
+        normalizedLabel: "5-hour usage window",
+        remaining: 92,
+      }),
+    ]);
+    expect(snapshot.usageSummary).toBeNull();
     expect(snapshot.lastSyncLabel).toBe("Codex personal fixture loaded");
     expect(snapshot.sourceSelectionReason).toBe("Auto fell back to Session page.");
     expect(snapshot.sourceSelectionDiagnostic).toMatchObject({
@@ -257,6 +281,114 @@ describe("syncCodexProvider", () => {
     );
   });
 
+  it("uses the most constrained visible personal usage window for Codex dashboard values", async () => {
+    const attemptedAt = new Date(2026, 3, 25, 16, 20);
+    const personalResult: CodexPersonalParseResult = {
+      status: "ok",
+      snapshot: {
+        providerId: "codex",
+        providerLabel: "Codex",
+        measurementKind: "window_percent",
+        routeKey: "cloud_analytics",
+        sourceUrl: "https://chatgpt.com/codex/cloud/settings/analytics#usage",
+        sourceHeading: "Codex 分析",
+        primaryWindow: {
+          label: "5 小时使用限额",
+          normalizedLabel: "5-hour usage window",
+          kind: "rolling_5h",
+          modelLabel: null,
+          remainingPercent: 100,
+          usedPercent: 0,
+          totalPercent: 100,
+          resetAt: null,
+          resetText: null,
+        },
+        windows: [
+          {
+            label: "5 小时使用限额",
+            normalizedLabel: "5-hour usage window",
+            kind: "rolling_5h",
+            modelLabel: null,
+            remainingPercent: 100,
+            usedPercent: 0,
+            totalPercent: 100,
+            resetAt: null,
+            resetText: null,
+          },
+          {
+            label: "每周使用限额",
+            normalizedLabel: "Weekly usage window",
+            kind: "weekly",
+            modelLabel: null,
+            remainingPercent: 32,
+            usedPercent: 68,
+            totalPercent: 100,
+            resetAt: "2026-04-29 04:00",
+            resetText: "2026年4月29日 4:00",
+          },
+          {
+            label: "GPT-5.3-Codex-Spark 每周使用限额",
+            normalizedLabel: "GPT-5.3-Codex-Spark 每周使用限额",
+            kind: "model_weekly",
+            modelLabel: "GPT-5.3-Codex-Spark",
+            remainingPercent: 100,
+            usedPercent: 0,
+            totalPercent: 100,
+            resetAt: null,
+            resetText: null,
+          },
+        ],
+        note: "Personal usage window snapshot",
+      },
+    };
+    createCodexPersonalPageClientMock.mockReturnValue({
+      getUsageSnapshot: vi.fn(async () =>
+        buildCodexPersonalPageResponse(personalResult),
+      ),
+    });
+
+    const { snapshot } = await syncCodexProvider({
+      provider: baseProvider,
+      secrets: emptySecrets,
+      setting: {
+        ...grantedSetting,
+        sourcePreference: "session_page",
+      },
+      warningThresholdPercent: 80,
+      now: attemptedAt,
+    });
+
+    expect(snapshot.planName).toBe(
+      "Codex Personal Usage Page (Weekly usage window)",
+    );
+    expect(snapshot.used).toBe(68);
+    expect(snapshot.remaining).toBe(32);
+    expect(snapshot.resetAt).toBe("2026-04-29 04:00");
+    expect(snapshot.syncStatus).toBe("ok");
+    expect(snapshot.tone).toBe("neutral");
+    expect(snapshot.warningReason).toBeNull();
+    expect(snapshot.warningDiagnostic).toBeNull();
+    expect(snapshot.usageSummary).toBe(
+      "Visible Codex windows: 5-hour usage window: 100% remaining · Weekly usage window: 32% remaining · GPT-5.3-Codex-Spark 每周使用限额: 100% remaining",
+    );
+    expect(snapshot.usageWindows).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          normalizedLabel: "Weekly usage window",
+          kind: "weekly",
+          remaining: 32,
+          used: 68,
+          resetAt: "2026-04-29 04:00",
+        }),
+        expect.objectContaining({
+          kind: "model_weekly",
+          modelLabel: "GPT-5.3-Codex-Spark",
+          remaining: 100,
+        }),
+      ]),
+    );
+  });
+
   it("normalizes the latest daily analytics rows without inventing remaining credits", async () => {
     const attemptedAt = new Date(2026, 3, 21, 11, 8);
     createCodexAnalyticsClientMock.mockReturnValue({
@@ -292,7 +424,24 @@ describe("syncCodexProvider", () => {
     });
 
     const { snapshot } = await syncCodexProvider({
-      provider: baseProvider,
+      provider: {
+        ...baseProvider,
+        usageWindows: [
+          {
+            label: "stale",
+            normalizedLabel: "stale",
+            kind: "unknown",
+            modelLabel: null,
+            quotaUnit: "percent",
+            used: 99,
+            remaining: 1,
+            total: 100,
+            resetAt: null,
+            resetLabel: null,
+          },
+        ],
+        usageSummary: "stale personal summary",
+      },
       secrets: {
         ...emptySecrets,
         codex: {
@@ -325,6 +474,8 @@ describe("syncCodexProvider", () => {
       "145 credits · 18 threads · 55 turns · on 2026-04-20 UTC. Aggregated from 2 analytics rows for that day.",
     );
     expect(snapshot.warningDiagnostic).toBeNull();
+    expect(snapshot.usageWindows).toBeUndefined();
+    expect(snapshot.usageSummary).toBeNull();
     expect(snapshot.lastSyncLabel).toBe("Codex Analytics API synced just now");
     expect(snapshot.sourceSelectionReason).toBe("Auto selected Official API.");
     expect(snapshot.sourceSelectionDiagnostic).toMatchObject({

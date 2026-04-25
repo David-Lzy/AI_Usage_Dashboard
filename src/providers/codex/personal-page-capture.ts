@@ -122,7 +122,7 @@ function pickInterestingTextSnippets(lines: string[]): string[] {
     );
   });
 
-  return [...new Set(snippets)].slice(0, 12);
+  return [...new Set(snippets)].slice(0, 24);
 }
 
 function isLoggedOutChatGptPage(page: PageSessionCapturedPage): boolean {

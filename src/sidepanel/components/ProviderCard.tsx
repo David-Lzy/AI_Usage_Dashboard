@@ -11,6 +11,25 @@ type ProviderCardProps = {
   onRefresh: (providerId: ProviderId) => void;
 };
 
+function formatUsageWindowChip(
+  provider: ProviderViewModel,
+  window: NonNullable<ProviderViewModel["usageWindows"]>[number],
+  i18n: ReturnType<typeof createRuntimeI18n>,
+): string {
+  const remaining =
+    window.remaining === null
+      ? null
+      : provider.quotaUnit === "percent"
+        ? i18n.formatPercentValue(window.remaining)
+        : i18n.formatNumber(window.remaining);
+
+  const remainingLabel = i18n.resolvedLocale === "zh-CN" ? "剩余" : "remaining";
+
+  return remaining
+    ? `${window.normalizedLabel}: ${remaining} ${remainingLabel}`
+    : window.normalizedLabel;
+}
+
 export function ProviderCard({
   localePreference,
   provider,
@@ -108,6 +127,14 @@ export function ProviderCard({
               Host access missing
             </span>
           ) : null}
+          {provider.usageWindows?.slice(0, 3).map((usageWindow) => (
+            <span
+              key={`${usageWindow.normalizedLabel}-${usageWindow.remaining ?? "unknown"}`}
+              className="meta-chip"
+            >
+              {formatUsageWindowChip(provider, usageWindow, i18n)}
+            </span>
+          ))}
           {provider.warningReason ? (
             <span className="meta-chip meta-chip--warning">
               {provider.warningReason}

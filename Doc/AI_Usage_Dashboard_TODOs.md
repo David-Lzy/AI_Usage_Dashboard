@@ -253,7 +253,9 @@ Phase status update:
 - `Phase 197` completed the next `Direction 09` slice by adding diagnostic archive/export compatibility review and a maintained reference that keeps localized diagnostic presentation out of archive/export schemas
 - `Phase 198` completed the next `Direction 09` slice by aligning maintained sample and store seed typed diagnostic metadata where stable existing codes match raw evidence strings, without changing raw diagnostic strings or provider coverage claims
 - `Phase 199` completed the next `Direction 09` slice by adding diagnostic fixture and historical evidence alignment review, separating mutable maintained fixtures from generated request/handoff packages and frozen historical archives
-- the immediate next repo-owned engineering work is now adapter diagnostic raw fallback regression review under `Doc/Roadmap/09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`
+- `Phase 200` completed a functionality-first Codex personal slice by preserving multiple visible usage windows and surfacing the most constrained visible percentage window in dashboard, detail, and popup paths
+- the immediate next repo-owned engineering default was adapter diagnostic raw fallback regression review under `Doc/Roadmap/09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`, but current execution should prefer functional provider work while Codex budget is constrained
+- the recommended next functional work is Codex personal multi-window real-Chrome verification or another live provider-source slice before returning to store screenshots or operator evidence closure
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
 - the split `Phase 41` release gate cleared the old runtime-parity ambiguity and re-proved the live `Codex` plus `Cursor` personal session-page paths in real Chrome

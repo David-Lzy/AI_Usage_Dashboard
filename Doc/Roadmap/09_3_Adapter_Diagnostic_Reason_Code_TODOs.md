@@ -28,7 +28,9 @@ Status note:
 - diagnostic archive and export compatibility review completed in `Phase 197`
 - sample and store seed diagnostic metadata alignment completed in `Phase 198`
 - diagnostic fixture and historical evidence alignment review completed in `Phase 199`
+- `Phase 200` intentionally paused this diagnostic follow-up line for one functional Codex personal multi-window quota surfacing slice
 - this child TODO turns the adapter diagnostic reason-code plan into executable follow-up slices
+- adapter diagnostic raw fallback regression review remains valid, but it is no longer more urgent than functional provider work while Codex budget is constrained
 - refresh it when typed diagnostic coverage, provider adapter behavior, or archive compatibility rules change
 
 Parent direction:
@@ -49,7 +51,7 @@ The goal is not to translate raw provider evidence immediately. The goal is to m
 
 ## Current Truth
 
-As of `Phase 199`:
+As of `Phase 200`:
 
 - provider-source display wrappers are localized through `ProviderSourceDisplayCopy`
 - raw provider source-truth fields still pass through unchanged
@@ -66,6 +68,8 @@ As of `Phase 199`:
 - `npm run phase196:review` now seeds a compact diagnostic stress state and verifies localized summaries plus raw evidence bodies at `420px` Settings and `360px` Provider Detail widths
 - `npm run phase197:review` now verifies archive/export compatibility markers for raw diagnostic fields, typed diagnostic fields, app-state storage, store screenshot seed/archives, theme-recovery exports, and interaction-audit exports
 - `npm run phase198:review` now verifies maintained sample and store seed typed diagnostic metadata alignment while keeping raw diagnostic strings unchanged
+- `Phase 199` added fixture and historical evidence alignment for diagnostic fields
+- `Phase 200` added Codex personal multi-window quota surfacing outside this diagnostic track
 - `npm run phase199:review` now verifies fixture, request/handoff, and frozen archive boundaries for diagnostic evidence alignment
 - `Doc/I18n_Diagnostic_Archive_Export_Compatibility.md` now records that localized diagnostic presentation is not an archive schema
 - `Doc/I18n_Diagnostic_Fixture_And_Historical_Evidence_Alignment.md` now records which fixture and evidence scopes are mutable versus frozen

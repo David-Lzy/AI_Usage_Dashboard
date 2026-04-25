@@ -4,6 +4,7 @@ import type {
   ProviderSnapshot,
   ProviderSourceKind,
   ProviderSyncOutcome,
+  ProviderUsageWindow,
 } from "../types";
 import { formatSyncTimestamp } from "../normalize";
 import {
@@ -89,20 +90,64 @@ function getCodexPageSessionDiagnosticKind(
   return "capture_unavailable";
 }
 
-function buildAdditionalWindowsSummary(
+function toProviderUsageWindow(
+  window: CodexPersonalUsageWindow,
+): ProviderUsageWindow {
+  return {
+    label: window.label,
+    normalizedLabel: window.normalizedLabel,
+    kind: window.kind,
+    modelLabel: window.modelLabel,
+    quotaUnit: "percent",
+    used: window.usedPercent,
+    remaining: window.remainingPercent,
+    total: window.totalPercent,
+    resetAt: window.resetAt,
+    resetLabel: window.resetAt
+      ? `${window.normalizedLabel} resets at ${window.resetAt}`
+      : window.resetText,
+  };
+}
+
+function buildCodexUsageWindows(
   windows: CodexPersonalUsageWindow[],
-  primaryWindow: CodexPersonalUsageWindow,
-): string | null {
-  const additionalWindows = windows
-    .filter((window) => window.label !== primaryWindow.label)
+): ProviderUsageWindow[] {
+  return windows
     .filter((window) => window.remainingPercent !== null)
-    .slice(0, 2)
+    .map(toProviderUsageWindow);
+}
+
+function chooseMostConstrainedWindow(
+  windows: CodexPersonalUsageWindow[],
+  fallbackWindow: CodexPersonalUsageWindow,
+): CodexPersonalUsageWindow {
+  return windows
+    .filter((window) => window.remainingPercent !== null)
+    .reduce((mostConstrained, window) => {
+      const currentRemaining = window.remainingPercent ?? Number.POSITIVE_INFINITY;
+      const lowestRemaining =
+        mostConstrained.remainingPercent ?? Number.POSITIVE_INFINITY;
+
+      if (currentRemaining < lowestRemaining) {
+        return window;
+      }
+
+      return mostConstrained;
+    }, fallbackWindow);
+}
+
+function buildPersonalUsageSummary(
+  windows: CodexPersonalUsageWindow[],
+): string | null {
+  const summaries = windows
+    .filter((window) => window.remainingPercent !== null)
+    .slice(0, 4)
     .map((window) => {
       const remainingPercent = window.remainingPercent ?? 0;
       return `${window.normalizedLabel}: ${remainingPercent}% remaining`;
     });
 
-  return additionalWindows.length > 0 ? additionalWindows.join(" · ") : null;
+  return summaries.length > 1 ? `Visible Codex windows: ${summaries.join(" · ")}` : null;
 }
 
 function getMetricValue(
@@ -209,7 +254,6 @@ function formatMetric(value: number | null): string {
 function buildPersonalWarningReason(
   primaryWindow: CodexPersonalUsageWindow,
   warningThresholdPercent: number,
-  windows: CodexPersonalUsageWindow[],
 ): string | null {
   const usedPercent = primaryWindow.usedPercent ?? null;
   const remainingPercent = primaryWindow.remainingPercent ?? null;
@@ -222,7 +266,7 @@ function buildPersonalWarningReason(
     return `${primaryWindow.normalizedLabel}: ${remainingPercent}% remaining`;
   }
 
-  return buildAdditionalWindowsSummary(windows, primaryWindow);
+  return null;
 }
 
 function finalizeCodexSnapshot(
@@ -327,6 +371,8 @@ async function tryCodexOfficialSource({
           hostLabel: setting.hostsLabel,
           rawMessage: warningReason,
         }),
+        usageWindows: undefined,
+        usageSummary: null,
         lastSyncLabel: "Codex analytics API access required",
         resetLabel: "Grant Codex host access to sync Enterprise analytics",
       },
@@ -359,6 +405,8 @@ async function tryCodexOfficialSource({
           credentialKind: "workspace_config",
           rawMessage: warningReason,
         }),
+        usageWindows: undefined,
+        usageSummary: null,
         lastSyncLabel: "Codex analytics config required",
         resetLabel:
           "Store both the analytics API key and workspace ID to use the Enterprise source",
@@ -400,6 +448,8 @@ async function tryCodexOfficialSource({
           warningReason:
             "Analytics API returned no Codex workspace activity in the current export window.",
           warningDiagnostic: null,
+          usageWindows: undefined,
+          usageSummary: null,
           lastSyncLabel: buildCodexRefreshLabel(),
         },
       };
@@ -437,6 +487,8 @@ async function tryCodexOfficialSource({
         tone: "warning",
         warningReason: `${warningParts.join(" · ")}.${breakdownSuffix}`,
         warningDiagnostic: null,
+        usageWindows: undefined,
+        usageSummary: null,
         lastSyncLabel: buildCodexRefreshLabel(),
       },
     };
@@ -468,6 +520,8 @@ async function tryCodexOfficialSource({
           parserStage: "analytics_api",
           rawMessage: detail,
         }),
+        usageWindows: undefined,
+        usageSummary: null,
         lastSyncLabel: "Codex analytics sync failed just now",
         resetLabel:
           "Retry after checking Codex Enterprise analytics access and workspace configuration",
@@ -512,6 +566,8 @@ async function tryCodexPersonalSource({
           hostLabel: setting.hostsLabel,
           rawMessage: warningReason,
         }),
+        usageWindows: undefined,
+        usageSummary: null,
         lastSyncLabel: "Codex usage page access required",
         resetLabel:
           "Grant Codex host access to read the logged-in ChatGPT usage page",
@@ -588,6 +644,8 @@ async function tryCodexPersonalSource({
                   ),
                   rawMessage: result.reason,
                 }),
+          usageWindows: undefined,
+          usageSummary: null,
           lastSyncLabel:
             result.status === "logged_out"
               ? "Codex usage page session missing"
@@ -600,14 +658,17 @@ async function tryCodexPersonalSource({
     }
 
     const primaryWindow = result.snapshot.primaryWindow;
-    const warningReason = buildPersonalWarningReason(
-      primaryWindow,
-      warningThresholdPercent,
+    const displayWindow = chooseMostConstrainedWindow(
       result.snapshot.windows,
+      primaryWindow,
     );
-    const used = primaryWindow.usedPercent ?? null;
-    const remaining = primaryWindow.remainingPercent ?? null;
-    const total = primaryWindow.totalPercent ?? 100;
+    const warningReason = buildPersonalWarningReason(
+      displayWindow,
+      warningThresholdPercent,
+    );
+    const used = displayWindow.usedPercent ?? null;
+    const remaining = displayWindow.remainingPercent ?? null;
+    const total = displayWindow.totalPercent ?? 100;
     const usedPercent = used ?? 0;
     const usageThresholdDiagnostic =
       used !== null && usedPercent >= warningThresholdPercent && warningReason
@@ -627,22 +688,24 @@ async function tryCodexPersonalSource({
       snapshot: {
         ...provider,
         providerLabel: "Codex",
-        planName: `Codex Personal Usage Page (${primaryWindow.normalizedLabel})`,
+        planName: `Codex Personal Usage Page (${displayWindow.normalizedLabel})`,
         quotaUnit: "percent",
         quotaWindow: "rolling",
         used,
         remaining,
         total,
-        resetAt: primaryWindow.resetAt ?? "Visible usage-window reset time",
-        resetLabel: primaryWindow.resetAt
-          ? `${primaryWindow.normalizedLabel} resets at ${primaryWindow.resetAt}`
-          : `${primaryWindow.normalizedLabel} reset time is visible only inside the current page session`,
+        resetAt: displayWindow.resetAt ?? "Visible usage-window reset time",
+        resetLabel: displayWindow.resetAt
+          ? `${displayWindow.normalizedLabel} resets at ${displayWindow.resetAt}`
+          : `${displayWindow.normalizedLabel} reset time is visible only inside the current page session`,
         syncedAt,
         syncSource: "page_parse",
         syncStatus: usedPercent >= warningThresholdPercent ? "warning" : "ok",
         tone: usedPercent >= warningThresholdPercent ? "warning" : "neutral",
         warningReason,
         warningDiagnostic: usageThresholdDiagnostic,
+        usageWindows: buildCodexUsageWindows(result.snapshot.windows),
+        usageSummary: buildPersonalUsageSummary(result.snapshot.windows),
         lastSyncLabel: buildCodexPersonalRefreshLabel(personalSource),
       },
       setting: nextSetting,
@@ -675,6 +738,8 @@ async function tryCodexPersonalSource({
           parserStage: "personal_usage_page",
           rawMessage: detail,
         }),
+        usageWindows: undefined,
+        usageSummary: null,
         lastSyncLabel: "Codex personal usage page sync failed just now",
         resetLabel:
           "Retry after checking the logged-in Codex page and parser assumptions",

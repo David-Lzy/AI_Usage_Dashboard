@@ -39,6 +39,7 @@ Status note:
 - twenty-eighth executable phase landed on `2026-04-25` through `Phase 197`
 - twenty-ninth executable phase landed on `2026-04-25` through `Phase 198`
 - thirtieth executable phase landed on `2026-04-25` through `Phase 199`
+- `Phase 200` paused this line for a functionality-first Codex personal multi-window quota surfacing slice because current execution should prioritize user-visible provider value while Codex budget is constrained
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -462,7 +463,7 @@ Build one maintainable localization architecture that can support manifest strin
 29. diagnostic archive and export compatibility review - completed in `Phase 197`
 30. sample and store seed diagnostic metadata alignment - completed in `Phase 198`
 31. diagnostic fixture and historical evidence alignment review - completed in `Phase 199`
-32. adapter diagnostic raw fallback regression review - next
+32. adapter diagnostic raw fallback regression review - queued after the current functionality-first provider work
 
 ## Out Of Scope
 

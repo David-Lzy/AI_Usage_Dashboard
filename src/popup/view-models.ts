@@ -439,7 +439,7 @@ function buildPopupFeaturedSecondaryDetail(provider: ProviderViewModel): string 
     provider.currentSourceStateKind === "policy_only" ||
     provider.currentSourceStateKind === "ready"
   ) {
-    return provider.currentSourceAvailabilitySummary;
+    return provider.usageSummary ?? provider.currentSourceAvailabilitySummary;
   }
 
   return (

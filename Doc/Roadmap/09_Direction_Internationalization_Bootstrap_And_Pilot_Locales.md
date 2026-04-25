@@ -43,6 +43,7 @@ Execution note:
 - twenty-eighth executable slice landed on `2026-04-25` through `Phase 197`
 - twenty-ninth executable slice landed on `2026-04-25` through `Phase 198`
 - thirtieth executable slice landed on `2026-04-25` through `Phase 199`
+- `Phase 200` intentionally paused this i18n/diagnostic follow-up line for a functionality-first Codex personal multi-window quota surfacing slice while Codex budget is constrained
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
 Process rule:
@@ -226,7 +227,7 @@ Recommended rollout:
 29. diagnostic archive and export compatibility review - shipped in `Phase 197`
 30. sample and store seed diagnostic metadata alignment - shipped in `Phase 198`
 31. diagnostic fixture and historical evidence alignment review - shipped in `Phase 199`
-32. adapter diagnostic raw fallback regression review - next
+32. adapter diagnostic raw fallback regression review - queued after the current functionality-first provider work
 
 ## References
 

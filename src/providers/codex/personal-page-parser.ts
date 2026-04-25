@@ -9,6 +9,7 @@ export type CodexPersonalWindowKind =
   | "rolling_5h"
   | "weekly"
   | "model_rolling_5h"
+  | "model_weekly"
   | "unknown";
 
 export type CodexPersonalUsageWindow = {
@@ -100,9 +101,15 @@ function classifyWindowKind(label: string): CodexPersonalWindowKind {
   const lowerLabel = label.toLowerCase();
 
   if (MODEL_PATTERN.test(label)) {
-    return /5\s*hour|5小时|5 小时/i.test(label)
-      ? "model_rolling_5h"
-      : "unknown";
+    if (/5\s*hour|5小时|5 小时/i.test(label)) {
+      return "model_rolling_5h";
+    }
+
+    if (/每周|weekly|week/i.test(lowerLabel)) {
+      return "model_weekly";
+    }
+
+    return "unknown";
   }
 
   if (/每周|weekly|week/i.test(lowerLabel)) {
