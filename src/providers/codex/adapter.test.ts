@@ -359,6 +359,56 @@ describe("syncCodexProvider", () => {
     });
   });
 
+  it("keeps logged-out page-session diagnostics visible when Session page is preferred and no fallback source succeeds", async () => {
+    const attemptedAt = new Date(2026, 3, 21, 11, 8);
+    createCodexPersonalPageClientMock.mockReturnValue({
+      getUsageSnapshot: vi.fn(async () =>
+        buildCodexPersonalPageResponse({
+          status: "logged_out",
+          reason:
+            "The current ChatGPT tab matched a logged-out state instead of a usable Codex usage page.",
+          chosenRoute: null,
+          routeStatuses: [],
+        }),
+      ),
+    });
+
+    const { snapshot } = await syncCodexProvider({
+      provider: baseProvider,
+      secrets: emptySecrets,
+      setting: {
+        ...grantedSetting,
+        sourcePreference: "session_page",
+      },
+      warningThresholdPercent: 80,
+      now: attemptedAt,
+    });
+
+    expect(snapshot.syncSource).toBe("page_parse");
+    expect(snapshot.warningReason).toBe(
+      "The current ChatGPT tab matched a logged-out state instead of a usable Codex usage page.",
+    );
+    expect(snapshot.warningDiagnostic).toMatchObject({
+      code: "page_session.logged_out",
+      category: "page_session",
+      severity: "warning",
+      rawMessage: snapshot.warningReason,
+      params: {
+        providerId: "codex",
+        pageSessionKind: "logged_out",
+      },
+    });
+    expect(snapshot.sourceSelectionReason).toBe(
+      "Session page preference could not find an available live source.",
+    );
+    expect(snapshot.sourceFallbackReason).toContain(
+      "Session page unavailable: The current ChatGPT tab matched a logged-out state",
+    );
+    expect(snapshot.sourceFallbackReason).toContain(
+      "Official API unavailable: Codex analytics API key and workspace ID are not both configured.",
+    );
+  });
+
   it("falls back to the personal page when Official API is preferred but Enterprise analytics config is missing", async () => {
     const attemptedAt = new Date(2026, 3, 21, 11, 8);
     const personalResult: CodexPersonalParseResult = {

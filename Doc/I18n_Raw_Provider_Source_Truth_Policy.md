@@ -22,6 +22,7 @@ Status note:
 - `Phase 186` populated Cursor source-selection and fallback typed diagnostics while preserving raw `sourceSelectionReason` and `sourceFallbackReason` strings
 - `Phase 187` populated Codex source-selection and fallback typed diagnostics while preserving raw `sourceSelectionReason` and `sourceFallbackReason` strings
 - `Phase 188` populated Cursor and Codex credential and host-access typed diagnostics while preserving raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings
+- `Phase 189` populated Cursor and Codex page-session typed diagnostics while preserving raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings
 - refresh it when provider source display helpers, adapter reason fields, provider-source blueprints, or runtime i18n scope changes materially
 
 ## Goal
@@ -120,6 +121,6 @@ Future localization should prefer this order:
 
 ## Next Executable Slice
 
-The next safe engineering slice should populate page-session diagnostics while preserving raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings.
+The next safe engineering slice should populate usage-threshold and policy-only diagnostics while preserving raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings.
 
 It should not translate raw provider source-truth fields listed above until that typed compatibility layer exists.

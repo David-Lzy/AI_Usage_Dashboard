@@ -16,6 +16,10 @@ type SourceAttemptFailureDiagnosticInput = {
 };
 
 type CredentialDiagnosticKind = "admin_api_key" | "workspace_config";
+type PageSessionDiagnosticKind =
+  | "open_page_required"
+  | "logged_out"
+  | "capture_unavailable";
 
 export const PROVIDER_DIAGNOSTIC_CODE_CATEGORIES = {
   "source.auto_selected_official_api": "source_selection",
@@ -113,6 +117,20 @@ function getCredentialDiagnosticCode(
   return credentialKind === "workspace_config"
     ? "credential.workspace_config_missing"
     : "credential.admin_api_key_missing";
+}
+
+function getPageSessionDiagnosticCode(
+  pageSessionKind: PageSessionDiagnosticKind,
+): KnownProviderDiagnosticCode {
+  if (pageSessionKind === "open_page_required") {
+    return "page_session.open_page_required";
+  }
+
+  if (pageSessionKind === "logged_out") {
+    return "page_session.logged_out";
+  }
+
+  return "page_session.capture_unavailable";
 }
 
 export function createSourceSelectionDiagnostic({
@@ -220,6 +238,26 @@ export function createHostAccessDiagnostic({
     sourceKind,
     hostLabel,
   });
+}
+
+export function createPageSessionDiagnostic({
+  providerId,
+  pageSessionKind,
+  rawMessage,
+}: {
+  providerId: ProviderId;
+  pageSessionKind: PageSessionDiagnosticKind;
+  rawMessage: string;
+}): ProviderDiagnostic {
+  return createProviderDiagnostic(
+    getPageSessionDiagnosticCode(pageSessionKind),
+    pageSessionKind === "capture_unavailable" ? "error" : "warning",
+    rawMessage,
+    {
+      providerId,
+      pageSessionKind,
+    },
+  );
 }
 
 export function getProviderDiagnosticRawMessage(

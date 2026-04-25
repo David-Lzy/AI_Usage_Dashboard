@@ -4,6 +4,7 @@ import { SAMPLE_APP_STATE } from "../shared/constants";
 import {
   createCredentialDiagnostic,
   createHostAccessDiagnostic,
+  createPageSessionDiagnostic,
   createProviderDiagnostic,
   createSourceFallbackDiagnostic,
   createSourceSelectionDiagnostic,
@@ -159,6 +160,46 @@ describe("provider diagnostics", () => {
         providerId: "cursor",
         sourceKind: "official_api",
         hostLabel: "api.cursor.com · cursor.com",
+      },
+    });
+  });
+
+  it("builds page-session diagnostics without rewriting raw warning messages", () => {
+    const diagnostic = createPageSessionDiagnostic({
+      providerId: "cursor",
+      pageSessionKind: "open_page_required",
+      rawMessage:
+        "Open the logged-in Cursor dashboard usage page before refreshing personal usage capture.",
+    });
+
+    expect(diagnostic).toMatchObject({
+      code: "page_session.open_page_required",
+      category: "page_session",
+      severity: "warning",
+      rawMessage:
+        "Open the logged-in Cursor dashboard usage page before refreshing personal usage capture.",
+      params: {
+        providerId: "cursor",
+        pageSessionKind: "open_page_required",
+      },
+    });
+  });
+
+  it("marks capture-unavailable page-session diagnostics as errors", () => {
+    const diagnostic = createPageSessionDiagnostic({
+      providerId: "codex",
+      pageSessionKind: "capture_unavailable",
+      rawMessage: "Codex personal usage page sync failed unexpectedly.",
+    });
+
+    expect(diagnostic).toMatchObject({
+      code: "page_session.capture_unavailable",
+      category: "page_session",
+      severity: "error",
+      rawMessage: "Codex personal usage page sync failed unexpectedly.",
+      params: {
+        providerId: "codex",
+        pageSessionKind: "capture_unavailable",
       },
     });
   });

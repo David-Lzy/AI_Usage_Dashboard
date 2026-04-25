@@ -372,6 +372,56 @@ describe("syncCursorProvider", () => {
     });
   });
 
+  it("keeps page-session diagnostics visible when Session page is preferred and no fallback source succeeds", async () => {
+    const attemptedAt = new Date(2026, 3, 20, 14, 18);
+    createCursorPersonalPageClientMock.mockReturnValue({
+      getUsageSnapshot: vi.fn(async () =>
+        buildCursorPersonalPageResponse({
+          status: "open_page_required",
+          reason:
+            "Open the logged-in Cursor dashboard usage page before refreshing personal usage capture.",
+          chosenRoute: null,
+          routeStatuses: [],
+        }),
+      ),
+    });
+
+    const { snapshot } = await syncCursorProvider({
+      provider: baseProvider,
+      secrets: emptySecrets,
+      setting: {
+        ...grantedSetting,
+        sourcePreference: "session_page",
+      },
+      warningThresholdPercent: 80,
+      now: attemptedAt,
+    });
+
+    expect(snapshot.syncSource).toBe("page_parse");
+    expect(snapshot.warningReason).toBe(
+      "Open the logged-in Cursor dashboard usage page before refreshing personal usage capture.",
+    );
+    expect(snapshot.warningDiagnostic).toMatchObject({
+      code: "page_session.open_page_required",
+      category: "page_session",
+      severity: "warning",
+      rawMessage: snapshot.warningReason,
+      params: {
+        providerId: "cursor",
+        pageSessionKind: "open_page_required",
+      },
+    });
+    expect(snapshot.sourceSelectionReason).toBe(
+      "Session page preference could not find an available live source.",
+    );
+    expect(snapshot.sourceFallbackReason).toContain(
+      "Session page unavailable: Open the logged-in Cursor dashboard usage page",
+    );
+    expect(snapshot.sourceFallbackReason).toContain(
+      "Official API unavailable: No Cursor Admin API key is stored.",
+    );
+  });
+
   it("falls back to the personal page when Official API is preferred but the Admin API key is missing", async () => {
     const attemptedAt = new Date(2026, 3, 20, 14, 18);
     const personalResult: CursorPersonalParseResult = {

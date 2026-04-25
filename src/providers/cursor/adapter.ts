@@ -26,6 +26,7 @@ import {
   createCredentialDiagnostic,
   createHostAccessDiagnostic,
   createNoLiveSourceFallbackDiagnostic,
+  createPageSessionDiagnostic,
   createSourceFallbackDiagnostic,
   createSourceSelectionDiagnostic,
 } from "../diagnostics";
@@ -75,6 +76,16 @@ function canUseLiveCursorPersonalPage(): boolean {
     typeof chrome.tabs?.query === "function" &&
     typeof chrome.scripting?.executeScript === "function"
   );
+}
+
+function getCursorPageSessionDiagnosticKind(
+  status: "logged_out" | "open_page_required" | "route_drift",
+): "logged_out" | "open_page_required" | "capture_unavailable" {
+  if (status === "logged_out" || status === "open_page_required") {
+    return status;
+  }
+
+  return "capture_unavailable";
 }
 
 function finalizeCursorSnapshot(
@@ -403,7 +414,11 @@ async function tryCursorPersonalSource({
           syncStatus: isRecoverable ? "warning" : "error",
           tone: isRecoverable ? "warning" : "error",
           warningReason: result.reason,
-          warningDiagnostic: null,
+          warningDiagnostic: createPageSessionDiagnostic({
+            providerId: "cursor",
+            pageSessionKind: getCursorPageSessionDiagnosticKind(result.status),
+            rawMessage: result.reason,
+          }),
           lastSyncLabel:
             result.status === "logged_out"
               ? "Cursor usage page session missing"
@@ -478,7 +493,11 @@ async function tryCursorPersonalSource({
         syncStatus: "error",
         tone: "error",
         warningReason: detail,
-        warningDiagnostic: null,
+        warningDiagnostic: createPageSessionDiagnostic({
+          providerId: "cursor",
+          pageSessionKind: "capture_unavailable",
+          rawMessage: detail,
+        }),
         lastSyncLabel: "Cursor personal usage page sync failed just now",
         resetLabel:
           "Retry after checking the Cursor dashboard page and parser assumptions",

@@ -21,6 +21,7 @@ import {
   createCredentialDiagnostic,
   createHostAccessDiagnostic,
   createNoLiveSourceFallbackDiagnostic,
+  createPageSessionDiagnostic,
   createSourceFallbackDiagnostic,
   createSourceSelectionDiagnostic,
 } from "../diagnostics";
@@ -74,6 +75,16 @@ function canUseLiveCodexPersonalPage(): boolean {
     typeof chrome.tabs?.query === "function" &&
     typeof chrome.scripting?.executeScript === "function"
   );
+}
+
+function getCodexPageSessionDiagnosticKind(
+  status: "logged_out" | "open_page_required" | "route_drift",
+): "logged_out" | "open_page_required" | "capture_unavailable" {
+  if (status === "logged_out" || status === "open_page_required") {
+    return status;
+  }
+
+  return "capture_unavailable";
 }
 
 function buildAdditionalWindowsSummary(
@@ -551,7 +562,11 @@ async function tryCodexPersonalSource({
           syncStatus: isRecoverable ? "warning" : "error",
           tone: isRecoverable ? "warning" : "error",
           warningReason: result.reason,
-          warningDiagnostic: null,
+          warningDiagnostic: createPageSessionDiagnostic({
+            providerId: "codex",
+            pageSessionKind: getCodexPageSessionDiagnosticKind(result.status),
+            rawMessage: result.reason,
+          }),
           lastSyncLabel:
             result.status === "logged_out"
               ? "Codex usage page session missing"
@@ -620,7 +635,11 @@ async function tryCodexPersonalSource({
         syncStatus: "error",
         tone: "error",
         warningReason: detail,
-        warningDiagnostic: null,
+        warningDiagnostic: createPageSessionDiagnostic({
+          providerId: "codex",
+          pageSessionKind: "capture_unavailable",
+          rawMessage: detail,
+        }),
         lastSyncLabel: "Codex personal usage page sync failed just now",
         resetLabel:
           "Retry after checking the logged-in Codex page and parser assumptions",

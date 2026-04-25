@@ -126,6 +126,8 @@ That reference defines the additive typed diagnostic model that should exist bef
 
 `Phase 188` populated Cursor and Codex credential and host-access diagnostics while preserving raw warning output exactly.
 
+`Phase 189` populated Cursor and Codex page-session diagnostics while preserving raw warning output exactly.
+
 ## Runtime Surfaces Still Mostly English
 
 The following surfaces still need broader runtime localization work:
@@ -138,7 +140,7 @@ The following surfaces still need broader runtime localization work:
 
 Recommended next extraction order:
 
-1. page-session diagnostics
+1. usage-threshold and policy-only diagnostics
 2. revisit deeper operator-workspace evidence copy only after archive-compatibility rules are explicit
 3. revisit generated store-listing source localization only after refreshed screenshot assets replace the historical baseline
 
@@ -149,5 +151,5 @@ Recommended next extraction order:
 - `en` and `zh_CN` currently cover manifest surfaces plus popup/dashboard shell strings, popup explanatory copy, the first settings-shell slice, deeper settings helper copy, provider-detail shell/static copy, provider-source display wrappers, quick theme-toggle labels, generated counts, percentages, parseable timestamp primitives, duration-bearing runtime freshness/reset labels, operator-workspace shell copy, store-screenshot runtime helper copy plus seed-route submission-support captions, and one first compact-width plus RTL hardening pass
 - runtime document roots now sync `lang` and `dir`, and preview/QA can now force `?app-dir=rtl` while the shipped locale set still resolves to `ltr`
 - raw provider source-truth detail strings and deeper operator evidence payloads still remain outside the shipped pilot, but operator-workspace boundaries are now explicitly documented after `Phase 178` and the shell slice is shipped after `Phase 179`
-- provider source-truth values now have an explicit policy boundary after `Phase 182`, provider-source display wrappers are localized after `Phase 183`, typed adapter diagnostic planning is documented after `Phase 184`, the type-only additive model exists after `Phase 185`, Cursor source-selection/fallback diagnostics are populated after `Phase 186`, Codex source-selection/fallback diagnostics are populated after `Phase 187`, and Cursor/Codex credential plus host-access diagnostics are populated after `Phase 188`; the next safe work is page-session diagnostic typing, not translating raw adapter diagnostics directly
+- provider source-truth values now have an explicit policy boundary after `Phase 182`, provider-source display wrappers are localized after `Phase 183`, typed adapter diagnostic planning is documented after `Phase 184`, the type-only additive model exists after `Phase 185`, Cursor source-selection/fallback diagnostics are populated after `Phase 186`, Codex source-selection/fallback diagnostics are populated after `Phase 187`, Cursor/Codex credential plus host-access diagnostics are populated after `Phase 188`, and Cursor/Codex page-session diagnostics are populated after `Phase 189`; the next safe work is usage-threshold plus policy-only diagnostic typing, not translating raw adapter diagnostics directly
 - non-parseable vendor-owned window labels such as `Mar 23 - Apr 21` still remain raw strings until a later explicit product decision localizes them

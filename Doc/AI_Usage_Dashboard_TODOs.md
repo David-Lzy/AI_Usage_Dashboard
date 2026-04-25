@@ -242,7 +242,8 @@ Phase status update:
 - `Phase 186` completed the next `Direction 09` slice by populating Cursor source-selection and fallback typed diagnostics through shared builders while preserving raw adapter strings and rendered UI behavior
 - `Phase 187` completed the next `Direction 09` slice by populating Codex source-selection and fallback typed diagnostics through the same shared builders while preserving raw adapter strings and rendered UI behavior
 - `Phase 188` completed the next `Direction 09` slice by populating Cursor and Codex credential plus host-access typed warning diagnostics while preserving raw adapter strings and rendered UI behavior
-- the immediate next repo-owned engineering work is now source selection and fallback builders under `Doc/Roadmap/09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`
+- `Phase 189` completed the next `Direction 09` slice by populating Cursor and Codex page-session typed warning diagnostics while preserving raw adapter strings and rendered UI behavior
+- the immediate next repo-owned engineering work is now usage-threshold and policy-only diagnostics under `Doc/Roadmap/09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
 - the split `Phase 41` release gate cleared the old runtime-parity ambiguity and re-proved the live `Codex` plus `Cursor` personal session-page paths in real Chrome

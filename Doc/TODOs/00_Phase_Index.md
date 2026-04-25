@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [188_Phase_Credential_And_Host_Access_Diagnostics.md](./Archive/188_Phase_Credential_And_Host_Access_Diagnostics.md)
+- latest completed slice: [189_Phase_Page_Session_Diagnostics.md](./Archive/189_Phase_Page_Session_Diagnostics.md)
 
 Completed phases should be moved to:
 
@@ -235,6 +235,7 @@ Completed phases should be moved to:
 - [186_Phase_Source_Selection_And_Fallback_Diagnostic_Builders.md](./Archive/186_Phase_Source_Selection_And_Fallback_Diagnostic_Builders.md) - completed and archived on 2026-04-25
 - [187_Phase_Codex_Source_Selection_And_Fallback_Diagnostic_Builders.md](./Archive/187_Phase_Codex_Source_Selection_And_Fallback_Diagnostic_Builders.md) - completed and archived on 2026-04-25
 - [188_Phase_Credential_And_Host_Access_Diagnostics.md](./Archive/188_Phase_Credential_And_Host_Access_Diagnostics.md) - completed and archived on 2026-04-25
+- [189_Phase_Page_Session_Diagnostics.md](./Archive/189_Phase_Page_Session_Diagnostics.md) - completed and archived on 2026-04-25
 
 ## Dependency Notes
 
@@ -491,6 +492,8 @@ Completed phases should be moved to:
 - the 2026-04-25 `Phase 187` closeout populated Codex typed source diagnostics while preserving raw source-selection/fallback strings and rendered UI behavior
 - phase 188 depends on phases 186 and 187 because credential and host-access warning diagnostics should land after Cursor and Codex already have typed source diagnostics
 - the 2026-04-25 `Phase 188` closeout populated Cursor and Codex typed credential plus host-access warning diagnostics while preserving raw warning/source strings and rendered UI behavior
+- phase 189 depends on phase 188 because page-session warning diagnostics should land after the typed warning diagnostic path is proven on credential and host-access blockers
+- the 2026-04-25 `Phase 189` closeout populated Cursor and Codex typed page-session warning diagnostics while preserving raw warning/source strings and rendered UI behavior
 
 ## Delivery Standard For Each Phase
 
