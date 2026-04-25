@@ -31,6 +31,7 @@ Status note:
 - `Phase 195` added typed adapter-error diagnostics and localized adapter-error presentation while preserving raw adapter `warningReason` strings
 - `Phase 196` added compact-width diagnostic presentation QA while preserving raw diagnostic evidence visibility
 - `Phase 197` added diagnostic archive/export compatibility review while preserving raw diagnostic evidence schema fields
+- `Phase 198` aligned maintained sample and store seed typed diagnostic metadata while preserving raw diagnostic evidence strings
 - refresh it when provider source display helpers, adapter reason fields, provider-source blueprints, or runtime i18n scope changes materially
 
 ## Goal
@@ -122,6 +123,7 @@ Future localization should prefer this order:
 8. After `Phase 195`, adapter-error diagnostics may expose localized presentation generated from typed metadata, but raw adapter error bodies remain visible for evidence.
 9. After `Phase 196`, compact-width QA must keep localized diagnostic summaries and raw evidence bodies visible together.
 10. After `Phase 197`, archive and export compatibility reviews must treat localized diagnostic presentation as UI output, not as a replacement for raw diagnostic evidence fields.
+11. After `Phase 198`, maintained sample and store seed typed metadata may be aligned where stable codes already match raw strings, but frozen historical evidence must not be rewritten.
 
 ## Out Of Scope
 
@@ -134,6 +136,6 @@ Future localization should prefer this order:
 
 ## Next Executable Slice
 
-The next safe engineering slice should align sample and store seed typed diagnostic metadata where stable codes already match raw sample evidence.
+The next safe engineering slice should review diagnostic fixtures and historical evidence references before any deeper diagnostic-body localization.
 
-It should not translate raw provider source-truth fields listed above directly; localized output should be generated from typed diagnostics and must keep raw bodies available for evidence surfaces.
+It should not translate raw provider source-truth fields listed above directly; localized output should be generated from typed diagnostics and must keep raw bodies available for evidence surfaces. Maintained fixtures can be aligned only where raw strings already have stable codes; archived evidence should remain unchanged.

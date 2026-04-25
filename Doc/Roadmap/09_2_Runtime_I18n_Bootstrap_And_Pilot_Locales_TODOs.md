@@ -37,6 +37,7 @@ Status note:
 - twenty-sixth executable phase landed on `2026-04-25` through `Phase 195`
 - twenty-seventh executable phase landed on `2026-04-25` through `Phase 196`
 - twenty-eighth executable phase landed on `2026-04-25` through `Phase 197`
+- twenty-ninth executable phase landed on `2026-04-25` through `Phase 198`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -406,10 +407,18 @@ Build one maintainable localization architecture that can support manifest strin
 
 ### Z. Sample And Store Seed Diagnostic Metadata Alignment
 
-- next recommended slice
+- completed in `Phase 198`
 - align maintained sample and store seed typed diagnostic metadata only where stable codes already match raw evidence strings
 - keep raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` unchanged
 - avoid changing provider coverage, source-selection behavior, screenshot truth notes, or archive schemas
+
+### AA. Diagnostic Fixture And Historical Evidence Alignment Review
+
+- next recommended slice
+- inventory maintained fixtures, generated-package templates, and historical evidence references that still carry raw diagnostic strings
+- separate mutable maintained fixtures from frozen archives that must not be rewritten
+- add review gates only where the fixture is maintained source
+- avoid translating raw adapter diagnostics or changing provider coverage claims
 
 ## Planned Numbered Slices
 
@@ -442,7 +451,8 @@ Build one maintainable localization architecture that can support manifest strin
 27. adapter-error diagnostic builders and presentation boundary - completed in `Phase 195`
 28. diagnostic presentation compact-width and evidence QA - completed in `Phase 196`
 29. diagnostic archive and export compatibility review - completed in `Phase 197`
-30. sample and store seed diagnostic metadata alignment - next
+30. sample and store seed diagnostic metadata alignment - completed in `Phase 198`
+31. diagnostic fixture and historical evidence alignment review - next
 
 ## Out Of Scope
 

@@ -166,6 +166,7 @@ This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still maki
 - adapter diagnostic body localization remains governed by [I18n_Adapter_Diagnostic_Reason_Code_Plan.md](./I18n_Adapter_Diagnostic_Reason_Code_Plan.md); `Phase 184` defines the typed reason-code plan, `Phase 185` ships the type-only additive model, `Phase 186` populates Cursor source-selection/fallback diagnostics, `Phase 187` populates Codex source-selection/fallback diagnostics, `Phase 188` populates Cursor/Codex credential plus host-access diagnostics, `Phase 189` populates Cursor/Codex page-session diagnostics, `Phase 190` populates usage-threshold plus policy-only diagnostics, `Phase 191` populates sync-stale diagnostics, `Phase 192` makes source-state classification prefer typed diagnostics, `Phase 193` ships localized warning diagnostic presentation, `Phase 194` ships localized source diagnostic presentation, and `Phase 195` ships adapter-error diagnostic presentation while keeping raw adapter bodies outside translated message ids
 - `Phase 196` adds compact-width QA for localized diagnostic presentation stacks and keeps raw diagnostic bodies outside translated message ids
 - `Phase 197` adds diagnostic archive/export compatibility review and keeps localized diagnostic presentation out of archive/export schema message ids
+- `Phase 198` aligns maintained sample and store seed typed diagnostic metadata while keeping raw diagnostic strings outside translated message ids
 
 ## Locale-Aware Formatting Contract
 

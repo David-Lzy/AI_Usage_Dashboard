@@ -4,6 +4,12 @@ import type {
   ProviderSecrets,
   ProviderSourceBlueprint,
 } from "../providers/types";
+import {
+  createPolicyOnlyDiagnostic,
+  createSourceFallbackDiagnostic,
+  createSourceSelectionDiagnostic,
+  createUsageThresholdDiagnostic,
+} from "../providers/diagnostics";
 import { createEmptyPageBinding } from "./page-bindings";
 
 export const APP_STATE_STORAGE_KEY = "ai-usage-dashboard.app-state";
@@ -267,9 +273,32 @@ export const SAMPLE_APP_STATE: AppState = {
       syncSource: "page_parse",
       syncStatus: "ok",
       warningReason: "On-demand usage is off.",
+      warningDiagnostic: createUsageThresholdDiagnostic({
+        providerId: "cursor",
+        usageThresholdKind: "on_demand_off",
+        rawMessage: "On-demand usage is off.",
+        unitLabel: "requests",
+      }),
       lastSyncLabel: "Synced 2m ago",
       sourceSelectionReason: "Auto selected Session page.",
+      sourceSelectionDiagnostic: createSourceSelectionDiagnostic({
+        providerId: "cursor",
+        sourcePreference: "auto",
+        selectedKind: "session_page",
+        hadFallback: true,
+        rawMessage: "Auto selected Session page.",
+      }),
       sourceFallbackReason: "Official API unavailable: no Cursor Admin API key is stored.",
+      sourceFallbackDiagnostic: createSourceFallbackDiagnostic({
+        providerId: "cursor",
+        sourcePreference: "auto",
+        failure: {
+          kind: "official_api",
+          code: "credential_missing",
+          detail: "no Cursor Admin API key is stored",
+        },
+        rawMessage: "Official API unavailable: no Cursor Admin API key is stored.",
+      }),
       tone: "neutral",
     },
     {
@@ -287,6 +316,14 @@ export const SAMPLE_APP_STATE: AppState = {
       syncSource: "page_parse",
       syncStatus: "warning",
       warningReason: "80% of included credits consumed",
+      warningDiagnostic: createUsageThresholdDiagnostic({
+        providerId: "jetbrains",
+        usageThresholdKind: "threshold_warning",
+        rawMessage: "80% of included credits consumed",
+        usagePercent: 80,
+        thresholdPercent: 80,
+        unitLabel: "credits",
+      }),
       lastSyncLabel: "Synced 4m ago",
       sourceSelectionReason:
         "JetBrains session-page sync is retained in the repo, but deferred from the active RC surface until a real org-visible Console session is reverified.",
@@ -332,6 +369,12 @@ export const SAMPLE_APP_STATE: AppState = {
       syncStatus: "warning",
       warningReason:
         "120/min and 2000/day per user for Gemini CLI and agent mode. No stable official per-user live usage source is documented.",
+      warningDiagnostic: createPolicyOnlyDiagnostic({
+        providerId: "gemini",
+        policyOnlyKind: "documented_limit_only",
+        rawMessage:
+          "120/min and 2000/day per user for Gemini CLI and agent mode. No stable official per-user live usage source is documented.",
+      }),
       lastSyncLabel: "Documented quota snapshot 30m ago",
       sourceSelectionReason:
         "Policy only is the only shipped source for Gemini Code Assist.",
@@ -357,6 +400,13 @@ export const SAMPLE_APP_STATE: AppState = {
         "Enterprise analytics API selected. Exact remaining workspace credits are not exposed by the analytics endpoint.",
       lastSyncLabel: "Analytics snapshot 24m ago",
       sourceSelectionReason: "Auto selected Official API.",
+      sourceSelectionDiagnostic: createSourceSelectionDiagnostic({
+        providerId: "codex",
+        sourcePreference: "auto",
+        selectedKind: "official_api",
+        hadFallback: false,
+        rawMessage: "Auto selected Official API.",
+      }),
       sourceFallbackReason: null,
       tone: "warning",
     },

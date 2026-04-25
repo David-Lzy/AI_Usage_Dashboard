@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [197_Phase_Diagnostic_Archive_Export_Compatibility_Review.md](./Archive/197_Phase_Diagnostic_Archive_Export_Compatibility_Review.md)
+- latest completed slice: [198_Phase_Sample_Store_Seed_Diagnostic_Metadata_Alignment.md](./Archive/198_Phase_Sample_Store_Seed_Diagnostic_Metadata_Alignment.md)
 
 Completed phases should be moved to:
 
@@ -244,6 +244,7 @@ Completed phases should be moved to:
 - [195_Phase_Adapter_Error_Diagnostics.md](./Archive/195_Phase_Adapter_Error_Diagnostics.md) - completed and archived on 2026-04-25
 - [196_Phase_Diagnostic_Presentation_Compact_Evidence_QA.md](./Archive/196_Phase_Diagnostic_Presentation_Compact_Evidence_QA.md) - completed and archived on 2026-04-25
 - [197_Phase_Diagnostic_Archive_Export_Compatibility_Review.md](./Archive/197_Phase_Diagnostic_Archive_Export_Compatibility_Review.md) - completed and archived on 2026-04-25
+- [198_Phase_Sample_Store_Seed_Diagnostic_Metadata_Alignment.md](./Archive/198_Phase_Sample_Store_Seed_Diagnostic_Metadata_Alignment.md) - completed and archived on 2026-04-25
 
 ## Dependency Notes
 
@@ -518,6 +519,8 @@ Completed phases should be moved to:
 - the 2026-04-25 `Phase 196` closeout added repeatable Settings and Provider Detail compact-width QA for localized diagnostic summaries beside raw warning, source-selection, and fallback evidence bodies
 - phase 197 depends on phase 196 because archive/export compatibility should be reviewed only after the combined localized diagnostic presentation stack is already visible and compact-width verified
 - the 2026-04-25 `Phase 197` closeout added a maintained diagnostic archive/export compatibility reference plus a static review for raw diagnostic fields, typed diagnostic fields, storage, screenshot seed/archive, theme-recovery export, and interaction-audit export boundaries
+- phase 198 depends on phase 197 because maintained sample and store seed typed metadata should align only after archive/export compatibility makes the raw evidence boundary explicit
+- the 2026-04-25 `Phase 198` closeout aligned maintained sample and store seed typed diagnostic metadata while preserving raw diagnostic strings, provider coverage claims, source-selection behavior, and archive schemas
 
 ## Delivery Standard For Each Phase
 

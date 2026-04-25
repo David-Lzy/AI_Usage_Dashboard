@@ -26,6 +26,7 @@ Status note:
 - adapter-error diagnostics and presentation boundary completed in `Phase 195`
 - diagnostic presentation compact-width and evidence QA completed in `Phase 196`
 - diagnostic archive and export compatibility review completed in `Phase 197`
+- sample and store seed diagnostic metadata alignment completed in `Phase 198`
 - this child TODO turns the adapter diagnostic reason-code plan into executable follow-up slices
 - refresh it when typed diagnostic coverage, provider adapter behavior, or archive compatibility rules change
 
@@ -46,7 +47,7 @@ The goal is not to translate raw provider evidence immediately. The goal is to m
 
 ## Current Truth
 
-As of `Phase 197`:
+As of `Phase 198`:
 
 - provider-source display wrappers are localized through `ProviderSourceDisplayCopy`
 - raw provider source-truth fields still pass through unchanged
@@ -62,6 +63,7 @@ As of `Phase 197`:
 - `src/providers/diagnostics.ts` now provides a reusable adapter-error diagnostic builder for unexpected adapter failures, unsupported responses, and parser failures
 - `npm run phase196:review` now seeds a compact diagnostic stress state and verifies localized summaries plus raw evidence bodies at `420px` Settings and `360px` Provider Detail widths
 - `npm run phase197:review` now verifies archive/export compatibility markers for raw diagnostic fields, typed diagnostic fields, app-state storage, store screenshot seed/archives, theme-recovery exports, and interaction-audit exports
+- `npm run phase198:review` now verifies maintained sample and store seed typed diagnostic metadata alignment while keeping raw diagnostic strings unchanged
 - `Doc/I18n_Diagnostic_Archive_Export_Compatibility.md` now records that localized diagnostic presentation is not an archive schema
 - the Cursor adapter populates typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` metadata beside existing raw source-selection and fallback strings
 - the Codex adapter populates typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` metadata beside existing raw source-selection and fallback strings
@@ -74,6 +76,8 @@ As of `Phase 197`:
 - Cursor and Codex now populate typed `adapter.parse_failed` metadata for personal-page parser route drift
 - Cursor and Codex now populate typed `adapter.unexpected_error` metadata for official and personal adapter catch paths
 - Claude Code now populates typed `adapter.unexpected_error` metadata for analytics API catch paths
+- `SAMPLE_APP_STATE` now carries typed metadata for stable Cursor, JetBrains, Gemini, and Codex sample diagnostic strings where existing codes already match the raw bodies
+- store screenshot seed states now clear stale typed metadata for raw-only storyboard copy and populate typed metadata for stable host-access, credential, and source-selection seed diagnostics
 - `ProviderSnapshot.warningReason` remains the primary raw warning body
 - `ProviderSnapshot.sourceSelectionReason` remains the primary raw source-selection explanation
 - `ProviderSnapshot.sourceFallbackReason` remains the primary raw fallback explanation
@@ -189,22 +193,30 @@ As of `Phase 197`:
 
 ### M. Sample And Store Seed Diagnostic Metadata Alignment
 
-- next recommended slice
+- completed in `Phase 198`
 - add or align typed diagnostic metadata for maintained sample and store seed states where the raw diagnostic body already has stable repo-owned semantics
 - keep raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings unchanged
 - prevent seed states from implying new provider coverage or new source-selection behavior
 - add focused tests or a static review proving sample/seed typed diagnostics remain additive
 
+### N. Diagnostic Fixture And Historical Evidence Alignment Review
+
+- next recommended slice
+- inventory remaining fixtures, generated review packages, archived evidence notes, and operator handoff files that intentionally preserve raw diagnostic strings
+- identify any maintained fixture that can safely gain typed diagnostic metadata without rewriting historical archive truth
+- keep this as review and alignment work, not as a translation or provider-coverage slice
+- add static checks only where a fixture is maintained source, not frozen historical evidence
+
 ## First Implementation Candidate
 
-The next runtime phase should implement the first narrow slice of `M. Sample And Store Seed Diagnostic Metadata Alignment`.
+The next runtime phase should implement the first narrow slice of `N. Diagnostic Fixture And Historical Evidence Alignment Review`.
 
 Recommended scope:
 
-- inventory current `SAMPLE_APP_STATE` and store screenshot seed warning/source reason strings
-- add typed diagnostic metadata only where a stable existing code already matches the raw body
-- clear or omit typed metadata where a seed intentionally uses raw-only evidence copy
-- avoid changing provider coverage, source-selection behavior, screenshots, or archive schemas
+- inventory maintained fixtures and generated-package templates that mention diagnostic strings
+- separate mutable maintained seeds from frozen historical archive evidence
+- add static review coverage for the remaining raw-only diagnostic evidence boundary
+- avoid translating raw diagnostics, changing provider coverage, or rewriting historical archives
 
 ## Acceptance Criteria
 

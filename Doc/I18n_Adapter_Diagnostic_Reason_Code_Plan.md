@@ -30,6 +30,7 @@ Status note:
 - `Phase 195` added adapter-error diagnostics and localized adapter-error presentation while preserving raw adapter warning bodies
 - `Phase 196` added compact-width evidence QA for combined diagnostic presentation stacks
 - `Phase 197` added diagnostic archive and export compatibility review
+- `Phase 198` aligned maintained sample and store seed typed diagnostic metadata while preserving raw diagnostic strings
 - refresh it when provider adapters, source-selection behavior, provider snapshot fields, archive evidence schemas, or runtime i18n boundaries change materially
 
 ## Goal
@@ -156,7 +157,8 @@ After typed diagnostics exist:
 9. Populate adapter-error diagnostics only after the raw adapter-error boundary is explicit - completed in `Phase 195`.
 10. Review diagnostic presentation density after warning, source, and adapter-error summaries are all visible - completed in `Phase 196`.
 11. Review archive and export compatibility before localizing deeper diagnostic bodies or evidence payloads - completed in `Phase 197`.
-12. Align sample and store seed typed diagnostic metadata after archive/export compatibility is explicit.
+12. Align sample and store seed typed diagnostic metadata after archive/export compatibility is explicit - completed in `Phase 198`.
+13. Review diagnostic fixtures and historical evidence references before deeper diagnostic-body localization.
 
 ## Compatibility Rules
 
@@ -290,6 +292,14 @@ Before any runtime implementation lands:
 - localized diagnostic presentation remains separate from archive and export schemas
 - no historical archives, provider coverage, source-selection behavior, or fallback order changed
 
+`Phase 198` aligned maintained sample and store seed diagnostic metadata:
+
+- `SAMPLE_APP_STATE` now carries typed diagnostic metadata for stable Cursor, JetBrains, Gemini, and Codex sample diagnostic strings where current codes already match the raw evidence bodies
+- store screenshot seeds now populate typed metadata for stable host-access, workspace-credential, and source-selection seed diagnostics
+- raw-only store storyboard copy explicitly clears typed metadata where a stable diagnostic code would be misleading
+- `npm run phase198:review` verifies the additive metadata markers plus closeout docs
+- raw diagnostic strings, provider coverage claims, source-selection behavior, archive schemas, and screenshot assets remain unchanged
+
 ## Next Executable Slice
 
-The next safe implementation slice should align sample and store seed diagnostic metadata where stable typed codes already match raw sample evidence. Raw diagnostic bodies should remain visible for details, exports, and archive compatibility.
+The next safe implementation slice should review diagnostic fixtures and historical evidence references. Mutable maintained fixtures can gain typed metadata only where stable codes already match raw evidence; frozen archives should remain unchanged.

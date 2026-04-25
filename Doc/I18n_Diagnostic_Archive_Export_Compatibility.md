@@ -17,6 +17,7 @@ Freshness model:
 Status note:
 
 - this file records the `Phase 197` compatibility boundary for diagnostic fields in archives, requests, screenshot seeds, and operator exports
+- `Phase 198` confirmed maintained sample/store seed typed metadata can be additive without changing raw diagnostic evidence strings
 - refresh it when diagnostic payload fields, archive schemas, request manifests, screenshot seed states, or operator export shapes change materially
 
 ## Goal
@@ -76,4 +77,6 @@ The review writes:
 
 No archive or export schema migration is required before continuing localized diagnostic presentation work, as long as raw evidence fields remain present and typed diagnostic payloads stay additive.
 
-The next safe runtime slice is sample and store seed diagnostic metadata alignment. That work can add typed diagnostics to maintained sample or seed states, but it must keep raw diagnostic strings unchanged.
+`Phase 198` completed the sample and store seed diagnostic metadata alignment. Maintained sample or seed states can add typed diagnostics where stable codes already match raw strings, and raw diagnostic strings must remain unchanged.
+
+The next safe runtime slice is diagnostic fixture and historical evidence alignment review. That work should separate mutable maintained fixtures from frozen archives before adding any further typed metadata.

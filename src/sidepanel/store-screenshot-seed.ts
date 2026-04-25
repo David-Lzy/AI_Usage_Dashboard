@@ -1,4 +1,9 @@
 import type { AppState, ProviderId, ProviderSetting, ProviderSnapshot } from "../providers/types";
+import {
+  createCredentialDiagnostic,
+  createHostAccessDiagnostic,
+  createSourceSelectionDiagnostic,
+} from "../providers/diagnostics";
 import { SAMPLE_APP_STATE } from "../shared/constants";
 
 export type StoreScreenshotSeedPreset =
@@ -93,6 +98,8 @@ function buildToolbarFirstQuickGlanceState(): AppState {
       syncStatus: "ok",
       tone: "neutral",
       warningReason: null,
+      warningDiagnostic: null,
+      sourceFallbackDiagnostic: null,
       syncedAt: "2026-04-24 19:40",
       lastSyncLabel: "Synced 2m ago",
     });
@@ -121,7 +128,15 @@ function buildToolbarFirstQuickGlanceState(): AppState {
     resetLabel: "62% remaining in the current visible usage window",
     syncSource: "page_parse",
     sourceSelectionReason: "Auto selected Session page.",
+    sourceSelectionDiagnostic: createSourceSelectionDiagnostic({
+      providerId: "codex",
+      sourcePreference: "auto",
+      selectedKind: "session_page",
+      hadFallback: false,
+      rawMessage: "Auto selected Session page.",
+    }),
     sourceFallbackReason: "Official API is available but this store capture keeps the personal usage-page story in frame.",
+    sourceFallbackDiagnostic: null,
   });
 
   return state;
@@ -141,8 +156,15 @@ function buildSetupGuidanceState(): AppState {
     syncStatus: "warning",
     tone: "warning",
     warningReason: "Grant access to cursor.com before live sync can run.",
+    warningDiagnostic: createHostAccessDiagnostic({
+      providerId: "cursor",
+      sourceKind: "session_page",
+      hostLabel: "cursor.com",
+      rawMessage: "Grant access to cursor.com before live sync can run.",
+    }),
     syncedAt: "2026-04-24 19:42",
     lastSyncLabel: "Needs host access",
+    sourceFallbackDiagnostic: null,
   });
 
   patchProviderSetting(state, "codex", {
@@ -154,6 +176,11 @@ function buildSetupGuidanceState(): AppState {
     syncStatus: "error",
     tone: "error",
     warningReason: "Workspace id config required before live sync can run.",
+    warningDiagnostic: createCredentialDiagnostic({
+      providerId: "codex",
+      credentialKind: "workspace_config",
+      rawMessage: "Workspace id config required before live sync can run.",
+    }),
     syncedAt: "2026-04-24 19:41",
     lastSyncLabel: "Credential missing",
   });
@@ -194,6 +221,7 @@ function buildProviderOrDashboardDepthState(): AppState {
     tone: "warning",
     warningReason:
       "Enterprise analytics API selected. Exact remaining workspace credits are not exposed by the analytics endpoint.",
+    warningDiagnostic: null,
     syncedAt: "2026-04-24 19:38",
     lastSyncLabel: "Analytics snapshot 4m ago",
   });
