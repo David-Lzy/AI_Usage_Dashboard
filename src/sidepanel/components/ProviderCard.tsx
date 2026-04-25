@@ -30,6 +30,19 @@ function formatUsageWindowChip(
     : window.normalizedLabel;
 }
 
+function formatUsageBalanceChip(
+  balance: NonNullable<ProviderViewModel["usageBalances"]>[number],
+  i18n: ReturnType<typeof createRuntimeI18n>,
+): string {
+  const remaining =
+    balance.remaining === null ? null : i18n.formatNumber(balance.remaining);
+  const unitLabel = i18n.resolvedLocale === "zh-CN" ? "积分" : balance.quotaUnit;
+
+  return remaining
+    ? `${balance.normalizedLabel}: ${remaining} ${unitLabel}`
+    : balance.normalizedLabel;
+}
+
 export function ProviderCard({
   localePreference,
   provider,
@@ -133,6 +146,14 @@ export function ProviderCard({
               className="meta-chip"
             >
               {formatUsageWindowChip(provider, usageWindow, i18n)}
+            </span>
+          ))}
+          {provider.usageBalances?.slice(0, 2).map((usageBalance) => (
+            <span
+              key={`${usageBalance.normalizedLabel}-${usageBalance.remaining ?? "unknown"}`}
+              className="meta-chip"
+            >
+              {formatUsageBalanceChip(usageBalance, i18n)}
             </span>
           ))}
           {provider.warningReason ? (

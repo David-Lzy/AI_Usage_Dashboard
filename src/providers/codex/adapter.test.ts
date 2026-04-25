@@ -116,6 +116,7 @@ describe("syncCodexProvider", () => {
             resetText: "2026年4月22日 1:11",
           },
         ],
+        balances: [],
         note: "Personal usage window snapshot",
       },
     };
@@ -140,6 +141,17 @@ describe("syncCodexProvider", () => {
             total: 100,
             resetAt: null,
             resetLabel: null,
+          },
+        ],
+        usageBalances: [
+          {
+            label: "stale balance",
+            normalizedLabel: "stale balance",
+            kind: "unknown",
+            quotaUnit: "credits",
+            remaining: 99,
+            total: null,
+            detail: null,
           },
         ],
         usageSummary: "stale personal summary",
@@ -170,6 +182,7 @@ describe("syncCodexProvider", () => {
         remaining: 92,
       }),
     ]);
+    expect(snapshot.usageBalances).toEqual([]);
     expect(snapshot.usageSummary).toBeNull();
     expect(snapshot.lastSyncLabel).toBe("Codex personal fixture loaded");
     expect(snapshot.sourceSelectionReason).toBe("Auto fell back to Session page.");
@@ -239,6 +252,7 @@ describe("syncCodexProvider", () => {
             resetText: "April 22, 2026 1:11",
           },
         ],
+        balances: [],
         note: "Personal usage window snapshot",
       },
     };
@@ -338,6 +352,16 @@ describe("syncCodexProvider", () => {
             resetText: null,
           },
         ],
+        balances: [
+          {
+            label: "余额额度",
+            normalizedLabel: "Flex credit balance",
+            kind: "flex_credit_balance",
+            remainingCredits: 0,
+            totalCredits: null,
+            detail: "使用积分可在超出套餐限制后继续使用 Codex",
+          },
+        ],
         note: "Personal usage window snapshot",
       },
     };
@@ -369,7 +393,7 @@ describe("syncCodexProvider", () => {
     expect(snapshot.warningReason).toBeNull();
     expect(snapshot.warningDiagnostic).toBeNull();
     expect(snapshot.usageSummary).toBe(
-      "Visible Codex windows: 5-hour usage window: 100% remaining · Weekly usage window: 32% remaining · GPT-5.3-Codex-Spark 每周使用限额: 100% remaining",
+      "Visible Codex usage: 5-hour usage window: 100% remaining · Weekly usage window: 32% remaining · GPT-5.3-Codex-Spark 每周使用限额: 100% remaining · Flex credit balance: 0 credits",
     );
     expect(snapshot.usageWindows).toEqual(
       expect.arrayContaining([
@@ -387,6 +411,15 @@ describe("syncCodexProvider", () => {
         }),
       ]),
     );
+    expect(snapshot.usageBalances).toEqual([
+      expect.objectContaining({
+        normalizedLabel: "Flex credit balance",
+        kind: "flex_credit_balance",
+        remaining: 0,
+        total: null,
+        detail: "使用积分可在超出套餐限制后继续使用 Codex",
+      }),
+    ]);
   });
 
   it("normalizes the latest daily analytics rows without inventing remaining credits", async () => {
@@ -440,6 +473,17 @@ describe("syncCodexProvider", () => {
             resetLabel: null,
           },
         ],
+        usageBalances: [
+          {
+            label: "stale balance",
+            normalizedLabel: "stale balance",
+            kind: "unknown",
+            quotaUnit: "credits",
+            remaining: 99,
+            total: null,
+            detail: null,
+          },
+        ],
         usageSummary: "stale personal summary",
       },
       secrets: {
@@ -475,6 +519,7 @@ describe("syncCodexProvider", () => {
     );
     expect(snapshot.warningDiagnostic).toBeNull();
     expect(snapshot.usageWindows).toBeUndefined();
+    expect(snapshot.usageBalances).toBeUndefined();
     expect(snapshot.usageSummary).toBeNull();
     expect(snapshot.lastSyncLabel).toBe("Codex Analytics API synced just now");
     expect(snapshot.sourceSelectionReason).toBe("Auto selected Official API.");
@@ -720,6 +765,7 @@ describe("syncCodexProvider", () => {
             resetText: "2026年4月22日 1:11",
           },
         ],
+        balances: [],
         note: "Personal usage window snapshot",
       },
     };

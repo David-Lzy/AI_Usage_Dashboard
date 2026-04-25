@@ -44,6 +44,7 @@ describe("parseCodexPersonalLiveFixture", () => {
         }),
       ]),
     );
+    expect(result.snapshot.balances).toEqual([]);
     expect(result.snapshot.note).toContain("remaining percentages");
   });
 
@@ -133,6 +134,15 @@ describe("parseCodexPersonalLiveFixture", () => {
         }),
       ]),
     );
+    expect(result.snapshot.balances).toEqual([
+      expect.objectContaining({
+        normalizedLabel: "Flex credit balance",
+        kind: "flex_credit_balance",
+        remainingCredits: 0,
+        totalCredits: null,
+        detail: "使用积分可在超出套餐限制后继续使用 Codex",
+      }),
+    ]);
   });
 
   it("returns open_page_required when no live Codex page was captured", () => {

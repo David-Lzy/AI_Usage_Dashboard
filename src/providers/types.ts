@@ -175,6 +175,7 @@ export type ProviderSnapshot = {
   sourceSelectionDiagnostic?: ProviderDiagnostic | null;
   sourceFallbackDiagnostic?: ProviderDiagnostic | null;
   usageWindows?: ProviderUsageWindow[];
+  usageBalances?: ProviderUsageBalance[];
   usageSummary?: string | null;
   tone: ProviderTone;
 };
@@ -195,6 +196,16 @@ export type ProviderUsageWindow = {
   total: number | null;
   resetAt: string | null;
   resetLabel: string | null;
+};
+
+export type ProviderUsageBalance = {
+  label: string;
+  normalizedLabel: string;
+  kind: "flex_credit_balance" | "unknown";
+  quotaUnit: "credits";
+  remaining: number | null;
+  total: number | null;
+  detail: string | null;
 };
 
 export type ProviderSetting = {

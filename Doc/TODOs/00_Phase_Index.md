@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [200_Phase_Codex_Personal_Multi_Window_Usage_Surfacing.md](./Archive/200_Phase_Codex_Personal_Multi_Window_Usage_Surfacing.md)
+- latest completed slice: [201_Phase_Codex_Personal_Flex_Credit_Balance_Surfacing.md](./Archive/201_Phase_Codex_Personal_Flex_Credit_Balance_Surfacing.md)
 
 Completed phases should be moved to:
 
@@ -247,6 +247,7 @@ Completed phases should be moved to:
 - [198_Phase_Sample_Store_Seed_Diagnostic_Metadata_Alignment.md](./Archive/198_Phase_Sample_Store_Seed_Diagnostic_Metadata_Alignment.md) - completed and archived on 2026-04-25
 - [199_Phase_Diagnostic_Fixture_And_Historical_Evidence_Alignment_Review.md](./Archive/199_Phase_Diagnostic_Fixture_And_Historical_Evidence_Alignment_Review.md) - completed and archived on 2026-04-25
 - [200_Phase_Codex_Personal_Multi_Window_Usage_Surfacing.md](./Archive/200_Phase_Codex_Personal_Multi_Window_Usage_Surfacing.md) - completed and archived on 2026-04-25
+- [201_Phase_Codex_Personal_Flex_Credit_Balance_Surfacing.md](./Archive/201_Phase_Codex_Personal_Flex_Credit_Balance_Surfacing.md) - completed and archived on 2026-04-25
 
 ## Dependency Notes
 
@@ -527,6 +528,8 @@ Completed phases should be moved to:
 - the 2026-04-25 `Phase 199` closeout added a maintained fixture/historical evidence boundary and a static review for mutable fixtures, generated request/handoff packages, and frozen historical archives
 - phase 200 intentionally overrides the previous diagnostic-follow-up queue because the current constraint is Codex budget and functional provider value; it keeps the existing diagnostic line intact while prioritizing real Codex personal quota clarity
 - the 2026-04-25 `Phase 200` closeout added Codex personal multi-window usage surfacing so a lower weekly window can become the primary visible quota value even when the 5-hour window is full
+- phase 201 depends on phase 200 because flex credit balance cards should be carried only after the visible percentage-window model already exists
+- the 2026-04-25 `Phase 201` closeout added Codex personal flex credit balance surfacing as supplemental usage context while preserving the most-constrained percentage window as the primary displayed quota
 
 ## Delivery Standard For Each Phase
 

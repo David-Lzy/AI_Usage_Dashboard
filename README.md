@@ -16,7 +16,7 @@ Current release candidate:
 | JetBrains AI | retained repo path for the logged-in Console page | deferred from the active RC promise | current RC does not promise JetBrains until a real org-visible `Users and licensing` session is reverified |
 | Claude Code | Admin Analytics API | live | exact remaining included quota |
 | Gemini Code Assist | documented quota policy | policy only | live per-user usage |
-| Codex | Enterprise Analytics API or logged-in personal usage page | live | a single absolute remaining-credit balance across all visible usage windows |
+| Codex | Enterprise Analytics API or logged-in personal usage page | live | one full plan-wide absolute remaining-credit value; flex credit balance cards are supplemental context only |
 
 ## Hybrid Personal-User Status
 
@@ -40,7 +40,7 @@ Security posture for this track:
 
 Next execution queue:
 
-1. continue functional provider work first while Codex budget is constrained; after `Phase 200`, the best next slice is real-Chrome Codex personal multi-window verification or another live provider-source slice
+1. continue functional provider work first while Codex budget is constrained; after `Phase 201`, the best next slice is real-Chrome Codex personal multi-window plus flex-balance verification or another live provider-source slice
 2. continue [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) with adapter diagnostic raw fallback regression review after the functional quota-display line is stable
 3. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining manual store-popup capture dependency
 
@@ -123,7 +123,7 @@ Current honesty boundaries:
 - JetBrains AI remains implemented in the repo, but it is hidden by default and deferred from the active RC support promise until a real org-visible `Users and licensing` session is reverified
 - Codex now ships a real `Session page` path for personal users and an `Official API` path for Enterprise workspace analytics
 - Cursor now ships a real `Session page` path for personal users and an `Official API` path for team admins, but the personal path still only exposes billing-period usage context
-- Codex personal usage-page sync is now explicitly labeled as `Window-only vendor value` even though the page exposes exact percentages for visible windows, because it still does not represent one absolute remaining balance across all usage windows
+- Codex personal usage-page sync is now explicitly labeled as `Window-only vendor value` even though the page exposes exact percentages for visible windows and may expose a flex credit balance card, because it still does not represent one full plan-wide absolute remaining balance
 - Cursor personal usage-page sync is now explicitly labeled as `Window-only vendor value`
 - Gemini remains `Policy only`; the observed Google Cloud metrics route is project-scoped and not treated as personal quota
 - the UI now makes the trust boundary explicit in Settings and provider detail, including host-access requirements, credential persistence, and the fact that cookies stay forbidden

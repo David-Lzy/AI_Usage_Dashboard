@@ -43,7 +43,7 @@ Execution note:
 - twenty-eighth executable slice landed on `2026-04-25` through `Phase 197`
 - twenty-ninth executable slice landed on `2026-04-25` through `Phase 198`
 - thirtieth executable slice landed on `2026-04-25` through `Phase 199`
-- `Phase 200` intentionally paused this i18n/diagnostic follow-up line for a functionality-first Codex personal multi-window quota surfacing slice while Codex budget is constrained
+- `Phase 200` and `Phase 201` intentionally paused this i18n/diagnostic follow-up line for functionality-first Codex personal usage-context surfacing while Codex budget is constrained
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
 Process rule:

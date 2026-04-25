@@ -24,6 +24,15 @@ export type CodexPersonalUsageWindow = {
   resetText: string | null;
 };
 
+export type CodexPersonalUsageBalance = {
+  label: string;
+  normalizedLabel: string;
+  kind: "flex_credit_balance" | "unknown";
+  remainingCredits: number | null;
+  totalCredits: number | null;
+  detail: string | null;
+};
+
 export type CodexPersonalUsageSnapshot = {
   providerId: "codex";
   providerLabel: "Codex";
@@ -33,6 +42,7 @@ export type CodexPersonalUsageSnapshot = {
   sourceHeading: string | null;
   primaryWindow: CodexPersonalUsageWindow;
   windows: CodexPersonalUsageWindow[];
+  balances: CodexPersonalUsageBalance[];
   note: string;
 };
 
@@ -58,6 +68,10 @@ const WINDOW_LABEL_PATTERN =
 const MODEL_PATTERN = /(gpt[-\w.]+)/i;
 const REMAINING_MARKER_PATTERN = /(?:remaining|left|available|剩余|可用)/i;
 const RESET_LINE_PATTERN = /(?:重置时间|reset(?: time)?|renews?)(?:[:：]\s*)?(.+)/i;
+const BALANCE_LABEL_PATTERN =
+  /(?:余额额度|credit balance|credits balance|remaining credits|usage credits|flex credits)/i;
+const BALANCE_DETAIL_PATTERN =
+  /(?:使用积分|超出套餐|continue using codex|beyond.*plan|over.*limit|credit|credits|积分|套餐|Codex)/i;
 
 function normalizeWhitespace(value: string): string {
   return value.replace(/\s+/g, " ").trim();
@@ -71,6 +85,27 @@ function parsePercent(value: string): number | null {
   }
 
   const parsed = Number(matched[1]);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function parseBalanceNumber(value: string): number | null {
+  const normalizedValue = normalizeWhitespace(value);
+
+  if (!normalizedValue || normalizedValue.includes("%")) {
+    return null;
+  }
+
+  const labelValueMatch = normalizedValue.match(
+    /(?:余额额度|credit balance|credits balance|remaining credits|usage credits|flex credits)[^\d]*(\d+(?:[.,]\d+)?)/i,
+  );
+  const exactValueMatch = normalizedValue.match(/^(\d+(?:[.,]\d+)?)$/);
+  const matchedValue = labelValueMatch?.[1] ?? exactValueMatch?.[1] ?? null;
+
+  if (!matchedValue) {
+    return null;
+  }
+
+  const parsed = Number(matchedValue.replace(/,/g, ""));
   return Number.isFinite(parsed) ? parsed : null;
 }
 
@@ -147,6 +182,16 @@ function isWindowLabel(value: string): boolean {
   return WINDOW_LABEL_PATTERN.test(value);
 }
 
+function isBalanceLabel(value: string): boolean {
+  return BALANCE_LABEL_PATTERN.test(value);
+}
+
+function normalizeBalanceLabel(label: string): string {
+  return BALANCE_LABEL_PATTERN.test(label)
+    ? "Flex credit balance"
+    : normalizeWhitespace(label);
+}
+
 function extractResetText(value: string): string | null {
   const matched = normalizeWhitespace(value).match(RESET_LINE_PATTERN);
   return matched?.[1] ? normalizeWhitespace(matched[1]) : null;
@@ -220,6 +265,86 @@ function buildWindows(summary: CodexPersonalPageSummary): CodexPersonalUsageWind
 
   finalizeWindow(currentWindow, windows);
   return windows.filter((window) => window.remainingPercent !== null);
+}
+
+function buildBalances(
+  summary: CodexPersonalPageSummary,
+): CodexPersonalUsageBalance[] {
+  const snippets = summary.textSnippets.map(normalizeWhitespace).filter(Boolean);
+  const balances: CodexPersonalUsageBalance[] = [];
+
+  for (let index = 0; index < snippets.length; index += 1) {
+    const snippet = snippets[index]!;
+
+    if (!isBalanceLabel(snippet)) {
+      continue;
+    }
+
+    let remainingCredits = parseBalanceNumber(snippet);
+    let valueIndex = index;
+
+    if (remainingCredits === null) {
+      for (
+        let candidateIndex = index + 1;
+        candidateIndex < Math.min(index + 5, snippets.length);
+        candidateIndex += 1
+      ) {
+        const candidate = snippets[candidateIndex]!;
+
+        if (isWindowLabel(candidate) || isBalanceLabel(candidate)) {
+          break;
+        }
+
+        const parsedValue = parseBalanceNumber(candidate);
+
+        if (parsedValue !== null) {
+          remainingCredits = parsedValue;
+          valueIndex = candidateIndex;
+          break;
+        }
+      }
+    }
+
+    if (remainingCredits === null) {
+      continue;
+    }
+
+    let detail: string | null = null;
+
+    for (
+      let candidateIndex = valueIndex + 1;
+      candidateIndex < Math.min(valueIndex + 4, snippets.length);
+      candidateIndex += 1
+    ) {
+      const candidate = snippets[candidateIndex]!;
+
+      if (isWindowLabel(candidate) || isBalanceLabel(candidate)) {
+        break;
+      }
+
+      if (parsePercent(candidate) !== null || parseBalanceNumber(candidate) !== null) {
+        continue;
+      }
+
+      if (BALANCE_DETAIL_PATTERN.test(candidate)) {
+        detail = candidate;
+        break;
+      }
+    }
+
+    balances.push({
+      label: snippet,
+      normalizedLabel: normalizeBalanceLabel(snippet),
+      kind: BALANCE_LABEL_PATTERN.test(snippet)
+        ? "flex_credit_balance"
+        : "unknown",
+      remainingCredits,
+      totalCredits: null,
+      detail,
+    });
+  }
+
+  return balances;
 }
 
 function chooseMatchedRoute(
@@ -299,6 +424,7 @@ export function parseCodexPersonalLiveFixture(
   }
 
   const windows = buildWindows(matchedRoute.summary);
+  const balances = buildBalances(matchedRoute.summary);
   const primaryWindow = choosePrimaryWindow(windows);
 
   if (!primaryWindow) {
@@ -320,8 +446,9 @@ export function parseCodexPersonalLiveFixture(
       sourceHeading: matchedRoute.summary.heading,
       primaryWindow,
       windows,
+      balances,
       note:
-        "Personal Codex session-page data currently exposes exact remaining percentages and reset timestamps for visible usage windows, not absolute workspace credits.",
+        "Personal Codex session-page data currently exposes exact remaining percentages, reset timestamps, and optional flex credit balance cards for visible usage context, not one absolute workspace-wide remaining limit.",
     },
   };
 }

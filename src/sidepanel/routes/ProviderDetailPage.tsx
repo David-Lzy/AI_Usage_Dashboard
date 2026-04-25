@@ -46,6 +46,24 @@ function formatUsageWindowDetail(
     : window.normalizedLabel;
 }
 
+function formatUsageBalanceDetail(
+  balance: NonNullable<ProviderViewModel["usageBalances"]>[number],
+  i18n: ReturnType<typeof createRuntimeI18n>,
+): string {
+  const remaining =
+    balance.remaining === null ? null : i18n.formatNumber(balance.remaining);
+  const unitLabel = i18n.resolvedLocale === "zh-CN" ? "积分" : balance.quotaUnit;
+  const remainingLabel = i18n.resolvedLocale === "zh-CN" ? "剩余" : "remaining";
+  const balanceValue = remaining
+    ? `${remaining} ${unitLabel} ${remainingLabel}`
+    : null;
+  const usageParts = [balanceValue, balance.detail].filter(Boolean);
+
+  return usageParts.length > 0
+    ? `${balance.normalizedLabel}: ${usageParts.join(" · ")}`
+    : balance.normalizedLabel;
+}
+
 type ProviderDetailPageProps = {
   localePreference: AppLocalePreference;
   provider: ProviderViewModel;
@@ -83,6 +101,9 @@ export function ProviderDetailPage({
         provider.currentSourceGraduationGateLabel ||
       provider.sessionPageGraduationGateDetail !==
         provider.currentSourceGraduationGateDetail);
+  const hasUsageContext =
+    (provider.usageWindows?.length ?? 0) > 1 ||
+    (provider.usageBalances?.length ?? 0) > 0;
   const usageValue =
     provider.quotaUnit === "percent"
       ? provider.used !== null && provider.remaining !== null
@@ -412,15 +433,23 @@ export function ProviderDetailPage({
           label={copy.progressLabel(provider.providerLabel)}
         />
 
-        {provider.usageWindows && provider.usageWindows.length > 1 ? (
+        {hasUsageContext ? (
           <div className="detail-note detail-note--neutral">
             <p className="detail-note__label">{copy.notes.usageWindows}</p>
-            {provider.usageWindows.slice(0, 5).map((usageWindow) => (
+            {provider.usageWindows?.slice(0, 5).map((usageWindow) => (
               <p
                 key={`${usageWindow.normalizedLabel}-${usageWindow.remaining ?? "unknown"}`}
                 className="supporting-copy"
               >
                 {formatUsageWindowDetail(provider, usageWindow, i18n)}
+              </p>
+            ))}
+            {provider.usageBalances?.slice(0, 3).map((usageBalance) => (
+              <p
+                key={`${usageBalance.normalizedLabel}-${usageBalance.remaining ?? "unknown"}`}
+                className="supporting-copy"
+              >
+                {formatUsageBalanceDetail(usageBalance, i18n)}
               </p>
             ))}
           </div>

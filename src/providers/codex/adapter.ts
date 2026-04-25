@@ -4,6 +4,7 @@ import type {
   ProviderSnapshot,
   ProviderSourceKind,
   ProviderSyncOutcome,
+  ProviderUsageBalance,
   ProviderUsageWindow,
 } from "../types";
 import { formatSyncTimestamp } from "../normalize";
@@ -33,7 +34,10 @@ import {
   type CodexAnalyticsUsageRecord,
 } from "./official";
 import { createCodexPersonalPageClient } from "./personal-page-client";
-import type { CodexPersonalUsageWindow } from "./personal-page-parser";
+import type {
+  CodexPersonalUsageBalance,
+  CodexPersonalUsageWindow,
+} from "./personal-page-parser";
 
 type CodexAdapterContext = {
   provider: ProviderSnapshot;
@@ -117,6 +121,28 @@ function buildCodexUsageWindows(
     .map(toProviderUsageWindow);
 }
 
+function toProviderUsageBalance(
+  balance: CodexPersonalUsageBalance,
+): ProviderUsageBalance {
+  return {
+    label: balance.label,
+    normalizedLabel: balance.normalizedLabel,
+    kind: balance.kind,
+    quotaUnit: "credits",
+    remaining: balance.remainingCredits,
+    total: balance.totalCredits,
+    detail: balance.detail,
+  };
+}
+
+function buildCodexUsageBalances(
+  balances: CodexPersonalUsageBalance[],
+): ProviderUsageBalance[] {
+  return balances
+    .filter((balance) => balance.remainingCredits !== null)
+    .map(toProviderUsageBalance);
+}
+
 function chooseMostConstrainedWindow(
   windows: CodexPersonalUsageWindow[],
   fallbackWindow: CodexPersonalUsageWindow,
@@ -138,16 +164,30 @@ function chooseMostConstrainedWindow(
 
 function buildPersonalUsageSummary(
   windows: CodexPersonalUsageWindow[],
+  balances: CodexPersonalUsageBalance[],
 ): string | null {
-  const summaries = windows
+  const windowSummaries = windows
     .filter((window) => window.remainingPercent !== null)
     .slice(0, 4)
     .map((window) => {
       const remainingPercent = window.remainingPercent ?? 0;
       return `${window.normalizedLabel}: ${remainingPercent}% remaining`;
     });
+  const balanceSummaries = balances
+    .filter((balance) => balance.remainingCredits !== null)
+    .slice(0, 2)
+    .map((balance) => {
+      const remainingCredits = balance.remainingCredits ?? 0;
+      return `${balance.normalizedLabel}: ${formatMetric(remainingCredits)} credits`;
+    });
 
-  return summaries.length > 1 ? `Visible Codex windows: ${summaries.join(" · ")}` : null;
+  if (balanceSummaries.length === 0) {
+    return windowSummaries.length > 1
+      ? `Visible Codex windows: ${windowSummaries.join(" · ")}`
+      : null;
+  }
+
+  return `Visible Codex usage: ${[...windowSummaries, ...balanceSummaries].join(" · ")}`;
 }
 
 function getMetricValue(
@@ -372,6 +412,7 @@ async function tryCodexOfficialSource({
           rawMessage: warningReason,
         }),
         usageWindows: undefined,
+        usageBalances: undefined,
         usageSummary: null,
         lastSyncLabel: "Codex analytics API access required",
         resetLabel: "Grant Codex host access to sync Enterprise analytics",
@@ -406,6 +447,7 @@ async function tryCodexOfficialSource({
           rawMessage: warningReason,
         }),
         usageWindows: undefined,
+        usageBalances: undefined,
         usageSummary: null,
         lastSyncLabel: "Codex analytics config required",
         resetLabel:
@@ -449,6 +491,7 @@ async function tryCodexOfficialSource({
             "Analytics API returned no Codex workspace activity in the current export window.",
           warningDiagnostic: null,
           usageWindows: undefined,
+          usageBalances: undefined,
           usageSummary: null,
           lastSyncLabel: buildCodexRefreshLabel(),
         },
@@ -488,6 +531,7 @@ async function tryCodexOfficialSource({
         warningReason: `${warningParts.join(" · ")}.${breakdownSuffix}`,
         warningDiagnostic: null,
         usageWindows: undefined,
+        usageBalances: undefined,
         usageSummary: null,
         lastSyncLabel: buildCodexRefreshLabel(),
       },
@@ -521,6 +565,7 @@ async function tryCodexOfficialSource({
           rawMessage: detail,
         }),
         usageWindows: undefined,
+        usageBalances: undefined,
         usageSummary: null,
         lastSyncLabel: "Codex analytics sync failed just now",
         resetLabel:
@@ -567,6 +612,7 @@ async function tryCodexPersonalSource({
           rawMessage: warningReason,
         }),
         usageWindows: undefined,
+        usageBalances: undefined,
         usageSummary: null,
         lastSyncLabel: "Codex usage page access required",
         resetLabel:
@@ -645,6 +691,7 @@ async function tryCodexPersonalSource({
                   rawMessage: result.reason,
                 }),
           usageWindows: undefined,
+          usageBalances: undefined,
           usageSummary: null,
           lastSyncLabel:
             result.status === "logged_out"
@@ -705,7 +752,11 @@ async function tryCodexPersonalSource({
         warningReason,
         warningDiagnostic: usageThresholdDiagnostic,
         usageWindows: buildCodexUsageWindows(result.snapshot.windows),
-        usageSummary: buildPersonalUsageSummary(result.snapshot.windows),
+        usageBalances: buildCodexUsageBalances(result.snapshot.balances),
+        usageSummary: buildPersonalUsageSummary(
+          result.snapshot.windows,
+          result.snapshot.balances,
+        ),
         lastSyncLabel: buildCodexPersonalRefreshLabel(personalSource),
       },
       setting: nextSetting,
@@ -739,6 +790,7 @@ async function tryCodexPersonalSource({
           rawMessage: detail,
         }),
         usageWindows: undefined,
+        usageBalances: undefined,
         usageSummary: null,
         lastSyncLabel: "Codex personal usage page sync failed just now",
         resetLabel:
@@ -818,6 +870,9 @@ export async function syncCodexProvider({
         tone: "error",
         warningReason: "Codex source selection could not resolve a live path.",
         warningDiagnostic: null,
+        usageWindows: undefined,
+        usageBalances: undefined,
+        usageSummary: null,
         lastSyncLabel: "Codex source selection failed just now",
         resetLabel: "Check Codex source preferences and live prerequisites",
       },
