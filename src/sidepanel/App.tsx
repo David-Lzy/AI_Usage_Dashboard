@@ -17,6 +17,7 @@ import {
   createRuntimeI18n,
   DEFAULT_APP_LOCALE_PREFERENCE,
   getQuickThemeToggleCopy,
+  syncRuntimeLocaleAttributes,
 } from "../shared/i18n";
 import { storePendingFullPageEntry } from "../shared/extension-surface-entry";
 import {
@@ -839,6 +840,18 @@ function StandardApp({ locationHash }: StandardAppProps) {
     localePreference,
     typeof window !== "undefined" ? window : undefined,
   );
+
+  useEffect(() => {
+    if (typeof document === "undefined") {
+      return;
+    }
+
+    syncRuntimeLocaleAttributes(
+      runtimeI18n,
+      document.documentElement,
+      document.body,
+    );
+  }, [runtimeI18n.resolvedLocale, runtimeI18n.resolvedTextDirection]);
 
   if (isLoading && !appState) {
     return (

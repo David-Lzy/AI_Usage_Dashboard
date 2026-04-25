@@ -217,6 +217,8 @@ The Chrome action now opens a compact popup first:
   - popup explanatory copy plus provider-detail shell/static copy now also localize through one shared structured-copy helper
   - deeper settings helper copy now also localizes theme-customization status messaging, credential cards, source-card diagnostics/session-track helper copy, and permission prompts
   - duration-bearing runtime freshness and reset labels now also localize across popup snapshot status, popup featured-provider freshness chips, and dashboard provider cards
+  - popup, sidepanel, and full-page roots now sync runtime `lang` plus `dir`, and preview or QA can force `?app-dir=rtl` or `?app-dir=ltr` without claiming one shipped RTL locale
+  - one first compact-width plus RTL hardening pass now ships for the current `en + zh_CN` runtime pilot
   - raw provider source-truth detail strings and operator workspaces still remain outside the shipped pilot
 - the popup runtime now also ships one explicit host-width contract for real Chrome action-popup rendering, so the browser no longer has to guess popup width from the document body
 - the popup runtime now also ships one static bootstrap width contract in [src/popup/index.html](./src/popup/index.html), and repo-backed tool commands now prefer the local Node runtime through [scripts/with-preferred-node.sh](./scripts/with-preferred-node.sh) instead of relying on the older Cursor-bundled `node`

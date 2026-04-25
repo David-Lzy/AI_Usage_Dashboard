@@ -21,7 +21,7 @@ Status note:
 
 ## Current Localized Scope
 
-Localized through `Phase 170`, `Phase 171`, `Phase 172`, `Phase 173`, `Phase 174`, `Phase 175`, and `Phase 176`:
+Localized through `Phase 170`, `Phase 171`, `Phase 172`, `Phase 173`, `Phase 174`, `Phase 175`, `Phase 176`, and `Phase 177`:
 
 - manifest `name`
 - manifest `description`
@@ -78,20 +78,20 @@ The following surfaces still need broader runtime localization work:
 - interaction-audit workspace
 - theme-recovery workspace
 - store-facing runtime captions and screenshot-adjacent helper copy
-- compact-width and RTL hardening for the longer localized duration phrases
 
 ## Runtime Inventory Buckets
 
 Recommended next extraction order:
 
-1. compact-width and RTL QA hardening for the existing `en + zh_CN` pilot
-2. audit and recovery workspace copy
-3. store-facing runtime helper copy that later appears in screenshots or submission support material
+1. audit and recovery workspace localization boundary and first extraction review
+2. store-facing runtime helper copy that later appears in screenshots or submission support material
+3. revisit the remaining raw provider source-truth detail policy after the broader runtime pilot stabilizes
 
 ## Truth Boundary
 
 - the extension is no longer manifest-English-only after `Phase 170`
-- the runtime app now has a broader but still partial localized slice plus locale-aware formatting after `Phase 176`, not a full translated rollout
-- `en` and `zh_CN` currently cover manifest surfaces plus popup/dashboard shell strings, popup explanatory copy, the first settings-shell slice, deeper settings helper copy, provider-detail shell/static copy, quick theme-toggle labels, generated counts, percentages, parseable timestamp primitives, and duration-bearing runtime freshness/reset labels
+- the runtime app now has a broader but still partial localized slice plus locale-aware formatting after `Phase 177`, not a full translated rollout
+- `en` and `zh_CN` currently cover manifest surfaces plus popup/dashboard shell strings, popup explanatory copy, the first settings-shell slice, deeper settings helper copy, provider-detail shell/static copy, quick theme-toggle labels, generated counts, percentages, parseable timestamp primitives, duration-bearing runtime freshness/reset labels, and one first compact-width plus RTL hardening pass
+- runtime document roots now sync `lang` and `dir`, and preview/QA can now force `?app-dir=rtl` while the shipped locale set still resolves to `ltr`
 - raw provider source-truth detail strings and operator workspaces still remain outside the shipped pilot
 - non-parseable vendor-owned window labels such as `Mar 23 - Apr 21` still remain raw strings until a later explicit product decision localizes them

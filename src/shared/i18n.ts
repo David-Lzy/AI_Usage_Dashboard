@@ -2,6 +2,7 @@ import type { AppLocalePreference } from "../providers/types";
 import type { ResolvedThemeMode } from "./theme";
 
 export type ResolvedAppLocale = "en" | "zh-CN";
+export type ResolvedTextDirection = "ltr" | "rtl";
 
 export const DEFAULT_APP_LOCALE_PREFERENCE: AppLocalePreference = "system";
 
@@ -127,11 +128,19 @@ type RuntimeMessages = Record<RuntimeMessageId, string>;
 type LocaleReader = {
   navigator?: { language?: string | undefined } | undefined;
   chrome?: { i18n?: { getUILanguage?: (() => string) | undefined } | undefined } | undefined;
+  location?: { search?: string | undefined } | undefined;
+};
+
+type RuntimeLocaleAttributeTarget = {
+  lang: string;
+  dir: string;
+  dataset?: DOMStringMap | Record<string, string | undefined> | undefined;
 };
 
 export type RuntimeI18n = {
   localePreference: AppLocalePreference;
   resolvedLocale: ResolvedAppLocale;
+  resolvedTextDirection: ResolvedTextDirection;
   t: (id: RuntimeMessageId) => string;
   formatNumber: (value: number) => string;
   formatPercentValue: (value: number) => string;
@@ -700,16 +709,56 @@ export function resolveAppLocale(
   return mapLanguageToLocale(readUiLanguage(reader));
 }
 
+function readDirectionOverride(
+  reader?: LocaleReader,
+): ResolvedTextDirection | null {
+  const search = reader?.location?.search;
+
+  if (typeof search !== "string" || search.length === 0) {
+    return null;
+  }
+
+  const appDirection = new URLSearchParams(search).get("app-dir");
+
+  return appDirection === "rtl" || appDirection === "ltr"
+    ? appDirection
+    : null;
+}
+
+function mapLocaleToTextDirection(
+  _locale: ResolvedAppLocale,
+): ResolvedTextDirection {
+  return "ltr";
+}
+
+export function resolveAppTextDirection(
+  localePreference: AppLocalePreference,
+  reader?: LocaleReader,
+): ResolvedTextDirection {
+  const directionOverride = readDirectionOverride(reader);
+
+  if (directionOverride) {
+    return directionOverride;
+  }
+
+  return mapLocaleToTextDirection(resolveAppLocale(localePreference, reader));
+}
+
 export function createRuntimeI18n(
   localePreference: AppLocalePreference,
   reader?: LocaleReader,
 ): RuntimeI18n {
   const normalizedPreference = normalizeAppLocalePreference(localePreference);
   const resolvedLocale = resolveAppLocale(normalizedPreference, reader);
+  const resolvedTextDirection = resolveAppTextDirection(
+    normalizedPreference,
+    reader,
+  );
 
   return {
     localePreference: normalizedPreference,
     resolvedLocale,
+    resolvedTextDirection,
     t: (id) => RUNTIME_MESSAGES[resolvedLocale][id] ?? RUNTIME_MESSAGES.en[id],
     formatNumber: (value) => new Intl.NumberFormat(resolvedLocale).format(value),
     formatPercentValue: (value) =>
@@ -723,6 +772,28 @@ export function createRuntimeI18n(
     localizeResetRuntimeLabel: (rawValue) =>
       localizeResetRuntimeLabel(resolvedLocale, rawValue),
   };
+}
+
+export function syncRuntimeLocaleAttributes(
+  i18n: RuntimeI18n,
+  root?: RuntimeLocaleAttributeTarget | null,
+  body?: RuntimeLocaleAttributeTarget | null,
+) {
+  const resolvedLang = i18n.resolvedLocale === "zh-CN" ? "zh-CN" : "en";
+
+  for (const target of [root, body]) {
+    if (!target) {
+      continue;
+    }
+
+    target.lang = resolvedLang;
+    target.dir = i18n.resolvedTextDirection;
+
+    if (target.dataset) {
+      target.dataset.appLocale = i18n.resolvedLocale;
+      target.dataset.appDirection = i18n.resolvedTextDirection;
+    }
+  }
 }
 
 export function buildDashboardSummaryLabels(i18n: RuntimeI18n) {

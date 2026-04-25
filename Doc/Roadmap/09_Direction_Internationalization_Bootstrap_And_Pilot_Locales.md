@@ -20,6 +20,7 @@ Execution note:
 - fifth executable slice landed on `2026-04-24` through `Phase 174`
 - sixth executable slice landed on `2026-04-24` through `Phase 175`
 - seventh executable slice landed on `2026-04-24` through `Phase 176`
+- eighth executable slice landed on `2026-04-25` through `Phase 177`
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
 Process rule:
@@ -50,7 +51,7 @@ It is:
 
 ## Current Truth
 
-As of 2026-04-24:
+As of 2026-04-25:
 
 - the manifest defines `default_locale = en`
 - the repo ships `_locales/en` plus `_locales/zh_CN` for manifest-level Chrome surfaces
@@ -81,7 +82,9 @@ As of 2026-04-24:
   - permission-prompt status and action labels
 - the runtime app now also localizes duration-bearing freshness and reset labels across popup snapshot status, popup featured-provider freshness chips, and dashboard provider cards
 - operator workspaces and raw provider source-truth detail strings that intentionally remain closer to the underlying source contract still remain outside the localized pilot
-- popup compact widths are already tight in English, so longer translated strings still need explicit QA before the broader runtime rollout
+- popup compact widths were already tight in English, so `Phase 177` shipped one explicit compact-width hardening pass for the current localized pilot
+- runtime roots now sync `lang` and `dir` attributes from the shared runtime i18n layer
+- preview and QA can now force `?app-dir=rtl` or `?app-dir=ltr` without pretending Arabic already ships
 - the repo ships maintained i18n references:
   - [I18n_Message_ID_Contract.md](../I18n_Message_ID_Contract.md)
   - [I18n_String_Inventory_Baseline.md](../I18n_String_Inventory_Baseline.md)
@@ -149,7 +152,8 @@ Recommended rollout:
 6. popup explanatory copy plus provider-detail shell/static copy rollout - shipped in `Phase 174`
 7. deeper settings helper copy rollout - shipped in `Phase 175`
 8. locale-aware durations and freshness labels - shipped in `Phase 176`
-9. compact-width and RTL hardening - next
+9. compact-width and RTL hardening - shipped in `Phase 177`
+10. audit and recovery workspace localization boundary and first extraction review - next
 
 ## References
 

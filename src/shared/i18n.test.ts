@@ -6,6 +6,8 @@ import {
   getQuickThemeToggleCopy,
   normalizeAppLocalePreference,
   resolveAppLocale,
+  resolveAppTextDirection,
+  syncRuntimeLocaleAttributes,
 } from "./i18n";
 import {
   buildPopupLocalizedCopy,
@@ -25,6 +27,43 @@ describe("runtime i18n", () => {
         navigator: { language: "zh-TW" },
       }),
     ).toBe("zh-CN");
+  });
+
+  it("defaults runtime text direction to ltr for shipped locales and honors preview overrides", () => {
+    expect(resolveAppTextDirection("zh-CN")).toBe("ltr");
+    expect(
+      createRuntimeI18n("en", { location: { search: "?app-dir=rtl" } })
+        .resolvedTextDirection,
+    ).toBe("rtl");
+  });
+
+  it("syncs runtime lang and dir attributes onto document roots", () => {
+    const i18n = createRuntimeI18n("zh-CN", {
+      location: { search: "?app-dir=rtl" },
+    });
+    const root = {
+      lang: "",
+      dir: "",
+      dataset: {} as Record<string, string | undefined>,
+    };
+    const body = {
+      lang: "",
+      dir: "",
+      dataset: {} as Record<string, string | undefined>,
+    };
+
+    syncRuntimeLocaleAttributes(i18n, root, body);
+
+    expect(root).toMatchObject({
+      lang: "zh-CN",
+      dir: "rtl",
+      dataset: { appLocale: "zh-CN", appDirection: "rtl" },
+    });
+    expect(body).toMatchObject({
+      lang: "zh-CN",
+      dir: "rtl",
+      dataset: { appLocale: "zh-CN", appDirection: "rtl" },
+    });
   });
 
   it("returns translated runtime strings for the first zh-CN shell slice", () => {

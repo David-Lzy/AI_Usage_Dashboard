@@ -16,6 +16,7 @@ Status note:
 - fifth executable phase landed on `2026-04-24` through `Phase 174`
 - sixth executable phase landed on `2026-04-24` through `Phase 175`
 - seventh executable phase landed on `2026-04-24` through `Phase 176`
+- eighth executable phase landed on `2026-04-25` through `Phase 177`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -155,7 +156,7 @@ Build one maintainable localization architecture that can support manifest strin
 - truth boundary preserved in `Phase 176`:
   - raw provider source-truth detail strings still intentionally remain closer to underlying source output
   - operator workspaces remain English
-  - compact-width and RTL hardening still remain next before any broader locale-tier expansion
+  - compact-width and RTL hardening still remained next before any broader locale-tier expansion
 
 ### F. Pilot Locales
 
@@ -171,10 +172,14 @@ Build one maintainable localization architecture that can support manifest strin
 
 ### G. Compact-Width And RTL QA Gates
 
-- add popup compact-width translation review
-- add sidebar and settings translation review
-- define one explicit RTL checklist before `ar`
-- identify where icons, padding, alignment, and disclosure direction need mirroring
+- first hardening slice shipped in `Phase 177` through:
+  - runtime `lang` and `dir` sync on popup, sidepanel, and full-page roots
+  - preview `?app-dir=rtl` and `?app-dir=ltr` overrides for route-by-route QA without claiming one shipped RTL locale
+  - logical-property hardening for list padding, inline button padding, checklist padding, and disclosure chevrons
+  - tighter compact-width action sizing for top-app-bar actions plus popup action rows
+- remaining gate work still includes:
+  - broader route-by-route compact-width review under the localized pilot
+  - Arabic-specific mirrored icon and disclosure validation before any shipped RTL locale tier
 
 ## Planned Numbered Slices
 
@@ -186,7 +191,8 @@ Build one maintainable localization architecture that can support manifest strin
 6. popup explanatory copy plus provider-detail shell/static rollout - completed in `Phase 174`
 7. deeper settings helper copy rollout - completed in `Phase 175`
 8. locale-aware durations and freshness label rollout - completed in `Phase 176`
-9. compact-width review and RTL hardening - next
+9. compact-width review and RTL hardening - completed in `Phase 177`
+10. audit and recovery workspace localization boundary and first extraction review - next
 
 ## Out Of Scope
 

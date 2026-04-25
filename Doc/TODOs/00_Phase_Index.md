@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [176_Phase_Locale_Aware_Duration_And_Freshness_Labels.md](./Archive/176_Phase_Locale_Aware_Duration_And_Freshness_Labels.md)
+- latest completed slice: [177_Phase_Compact_Width_And_RTL_Hardening.md](./Archive/177_Phase_Compact_Width_And_RTL_Hardening.md)
 
 Completed phases should be moved to:
 
@@ -223,6 +223,7 @@ Completed phases should be moved to:
 - [174_Phase_Popup_Explanatory_Copy_And_Provider_Detail_Shell_Localization.md](./Archive/174_Phase_Popup_Explanatory_Copy_And_Provider_Detail_Shell_Localization.md) - completed and archived on 2026-04-24
 - [175_Phase_Deeper_Settings_Helper_Localization.md](./Archive/175_Phase_Deeper_Settings_Helper_Localization.md) - completed and archived on 2026-04-24
 - [176_Phase_Locale_Aware_Duration_And_Freshness_Labels.md](./Archive/176_Phase_Locale_Aware_Duration_And_Freshness_Labels.md) - completed and archived on 2026-04-24
+- [177_Phase_Compact_Width_And_RTL_Hardening.md](./Archive/177_Phase_Compact_Width_And_RTL_Hardening.md) - completed and archived on 2026-04-25
 
 ## Dependency Notes
 
@@ -455,6 +456,8 @@ Completed phases should be moved to:
 - the 2026-04-24 `Phase 174` closeout localized popup explanatory copy plus provider-detail shell/static copy while keeping deeper settings helper copy, raw provider source-truth detail strings, localized durations, and operator workspaces outside the shipped runtime pilot boundary
 - phase 176 depends on phase 175 because duration-bearing freshness/reset labels needed the broader shared runtime i18n plus structured localized-copy pilot surfaces already wired before popup and dashboard freshness phrasing could localize honestly
 - the 2026-04-24 `Phase 176` closeout localized duration-bearing freshness and reset labels across popup snapshot status, popup featured-provider freshness chips, and dashboard provider cards while keeping compact-width plus RTL hardening, raw provider source-truth detail strings, and operator workspaces outside the next shipped boundary
+- phase 177 depends on phase 176 because compact-width and RTL hardening only became honest after the longer localized duration-bearing freshness/reset labels had already shipped into popup and dashboard surfaces
+- the 2026-04-25 `Phase 177` closeout shipped runtime `lang` and `dir` sync, one preview `app-dir` override, one first logical CSS hardening pass, and tighter compact-width action behavior while keeping raw provider source-truth detail strings and operator workspaces outside the shipped localized pilot
 
 ## Delivery Standard For Each Phase
 

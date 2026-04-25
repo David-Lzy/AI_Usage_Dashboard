@@ -44,7 +44,7 @@ Keep manifest and runtime localization on one stable naming contract so later co
 - `manifest_action_default_title`
   - maps to manifest `action.default_title`
 
-## Shipped Runtime IDs Through Phase 176
+## Shipped Runtime IDs Through Phase 177
 
 Runtime localization now exists for one broader but still partial manifest plus runtime pilot slice. Current shipped groups are:
 
@@ -80,7 +80,7 @@ Runtime localization now exists for one broader but still partial manifest plus 
   - `settings.permissions.*`
   - `settings.toast.*`
 
-## Structured Runtime Copy Through Phase 176
+## Structured Runtime Copy Through Phase 177
 
 `Phase 174` and `Phase 175` deliberately did not explode the runtime id list with one message id per popup sentence, provider-detail field label, or settings helper paragraph.
 
@@ -120,10 +120,13 @@ This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still maki
   - `zh-CN`
 - `system` resolves from Chrome UI language first, then browser navigator language
 - any current `zh*` UI language resolves into the shipped `zh-CN` catalog tier for now
+- runtime document roots now sync `lang` and `dir` from the shared runtime i18n layer
+- preview and QA can now force `?app-dir=rtl` or `?app-dir=ltr` without implying that a shipped RTL locale already exists
 
 ## Runtime Direction
 
 - runtime React localization is now partially shipped, not fully rolled out
+- runtime document roots now sync `lang` and `dir` for popup, sidepanel, and full-page surfaces
 - the current localized slice covers:
   - popup shell
   - popup explanatory copy
@@ -149,7 +152,8 @@ This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still maki
   - `YYYY-MM-DD HH:mm`
   - those same forms with an explicit trailing `UTC`
 - non-parseable vendor-owned strings such as billing-window labels remain source-truthful raw values for now
-- compact-width and RTL hardening plus any broader relative-time rollout still remains future work under `Direction 09`
+- compact-width and RTL hardening now ships through document `lang` and `dir` sync, one preview `app-dir` override, and one first logical-CSS review pass under `Phase 177`
+- any broader relative-time rollout still remains future work under `Direction 09`
 
 ## Translation Tiers
 

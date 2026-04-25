@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-04-24:
 
-- the numbered phase queue is now completed through `Phase 176`
+- the numbered phase queue is now completed through `Phase 177`
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -59,6 +59,7 @@ As of 2026-04-24:
 - `Phase 174` completed the next `Direction 09` slice by localizing popup explanatory copy plus provider-detail shell/static copy under one shared structured-copy helper while keeping deeper settings helper copy, raw provider source-truth detail strings, localized durations, and operator workspaces outside the shipped pilot for now
 - `Phase 175` completed the next `Direction 09` slice by localizing deeper settings helper copy across theme-customization status messaging, credential cards, source-card diagnostics/session-track helper copy, and permission prompts while keeping localized durations, operator workspaces, and raw provider source-truth detail strings outside the shipped pilot for now
 - `Phase 176` completed the next `Direction 09` slice by localizing duration-bearing freshness and reset labels across popup snapshot status, popup featured-provider freshness chips, and dashboard provider cards while keeping raw provider source-truth detail strings and operator workspaces outside the shipped pilot and moving compact-width plus RTL hardening next
+- `Phase 177` completed the next `Direction 09` slice by shipping runtime `lang` and `dir` sync, one preview `app-dir` override, one first logical-CSS hardening pass, and tighter compact-width action behavior for the current `en + zh_CN` pilot while keeping raw provider source-truth detail strings and operator workspaces outside the shipped pilot
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
 - `Phase 42` has packaged `0.1.0-rc.2` and closed the release-closeout track for the narrowed RC
 - `Phase 43` completed the first `Direction 02` slice by productizing source-fidelity semantics in the side panel
@@ -188,7 +189,7 @@ As of 2026-04-24:
 - `Phase 168` completed the next `Direction 10.3` slice by making archive completion default to the request package itself once popup files are imported, so the last remaining real-world step is now the actual popup capture rather than another manual path handoff
 - `Phase 169` completed the next `Direction 10.3` slice by adding one request-bound manual finalize command plus handoff update, so the remaining real-world work is now the popup capture itself instead of popup capture plus extra repo bookkeeping
 - the current store-asset line still retains one real-world manual popup-capture dependency under `10_3_Store_Asset_Pack_And_Submission_TODOs.md`
-- the next repo-owned engineering slice now moves to compact-width and RTL hardening for the shipped `en + zh_CN` runtime pilot under Direction 09, captured in `09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md`
+- the next repo-owned engineering slice now moves to audit and recovery workspace localization boundary review for the shipped `en + zh_CN` runtime pilot under Direction 09, captured in `09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md`
 - the remaining high-value work in Direction 05 and Direction 04 is now evidence closure, not more tool-building:
   - `05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md`
   - `04_2_Interaction_Audit_Real_Operator_Closure_TODOs.md`
@@ -197,8 +198,8 @@ As of 2026-04-24:
   - Claude personal support is not yet graduated
   - Gemini remains policy-only
   - Codex and Cursor personal support remain partial, not absolute-remaining-balance claims
-- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 176`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
-- the numbered phase queue is now completed through `Phase 176`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
+- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 177`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
+- the numbered phase queue is now completed through `Phase 177`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
 - `Codex` personal support is already shipped as a `session_page` path, but it currently exposes usage-window percentages and reset timing, not one absolute remaining credit balance
 - `Cursor` personal support is already shipped as a `session_page` path, but it currently exposes billing-period usage context, not one exact remaining included-request counter
 - the extension action now opens a compact popup on click, the popup makes cached snapshot freshness explicit, and the badge shows the count of visible providers needing attention
@@ -217,7 +218,7 @@ As of 2026-04-24:
 - the UI uses a Material-like token system, now has a small reduced-motion-safe motion baseline, and also has an intermediate `720px` responsive collapse point, a more scannable Settings entry, a less repetitive source-card summary pattern, clearer grouped diagnostics inside disclosure, a compact session-track layout, consistent keyboard-focus treatment on the main interactive controls, harmonized status surfaces across the main warning/error/success states, clearer toned-surface text hierarchy, explicit pressed states on the remaining Settings pointer controls, a more coherent compact chip system, honest indeterminate progress treatment for unknown values, a clearer supporting-surface hierarchy across provider detail and expanded Settings diagnostics, one dedicated fixed-width interaction-audit hub for the main shipped surfaces, preset-driven shortcuts plus visible expectation copy plus visible manual checks plus a persistent signoff workspace plus signoff-import handoff support plus a visible handoff summary plus an explicit operator workflow and reusable bundle-builder path for the main manual review states, and repeatable width plus compact-height plus keyboard-interaction plus pointer-interaction plus status-surface plus toned-content plus chip-progress plus supporting-surface plus audit-hub plus audit-preset plus evidence-pack plus signoff-pack plus signoff-workspace plus signoff-import plus handoff-bundle plus operator-bundle review baselines
 - the current theme foundation now ships shared `System / Light / Dark` mode selection, the first shipped preset accents, one validated custom-seed path, one repeatable explicit-override plus system-follow QA baseline, one repeatable dark-surface review baseline, one repeatable preset-theme review baseline, one repeatable audit-hub theme-alignment review baseline, one repeatable custom-seed review baseline, one repeatable popup-local plus audit-local custom-seed review baseline, one repeatable popup plus audit non-accent surface-stability review baseline, one repeatable dashboard plus Settings plus provider-detail non-accent surface-stability review baseline, one repeatable compact-width custom-seed review baseline, one repeatable provider-state-specific custom-seed review baseline, one repeatable seeded recovered-state review baseline, one repeatable preview-interaction recovered-state review baseline, one repeatable extension-mode recovered-state review baseline, one dedicated theme-recovery operator workspace plus runbook, one durable seeded theme-recovery archive workflow plus generated archive index, and one durable pending theme-recovery request workflow plus generated request index, but it still lacks any real fulfilled operator or native-prompt recovery archive and any decision on dual light-dark seeds
 - the current popup architecture is already shipped, which means future toolbar work should focus on competitive product fit, onboarding, and store discoverability rather than restarting popup shell design
-- the current extension now has manifest localization plus a broader runtime pilot slice in `en` and `zh_CN`, covering popup/dashboard shells, popup explanatory copy, the first settings-shell rollout, deeper settings helper copy, provider-detail shell/static copy, locale-aware generated values, and duration-bearing runtime freshness/reset labels; raw provider source-truth detail strings and operator workspaces still remain outside the shipped pilot
+- the current extension now has manifest localization plus a broader runtime pilot slice in `en` and `zh_CN`, covering popup/dashboard shells, popup explanatory copy, the first settings-shell rollout, deeper settings helper copy, provider-detail shell/static copy, locale-aware generated values, duration-bearing runtime freshness/reset labels, one first compact-width plus RTL hardening pass, and runtime root `lang` plus `dir` sync with one preview `app-dir` override; raw provider source-truth detail strings and operator workspaces still remain outside the shipped pilot
 
 ## Priority Order
 
@@ -247,7 +248,7 @@ As of 2026-04-24:
 
 1. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why first now:
-   manifest localization, the first runtime shell slice, locale-aware value formatting, the first settings-shell pilot, the popup/provider-detail pilot rollout, the deeper settings-helper rollout, and duration-bearing freshness/reset labels are now shipped, so the next fully repo-owned engineering work is compact-width and RTL hardening for the `en` plus `zh_CN` pilot.
+   manifest localization, the first runtime shell slice, locale-aware value formatting, the first settings-shell pilot, the popup/provider-detail pilot rollout, the deeper settings-helper rollout, duration-bearing freshness/reset labels, and the first compact-width plus RTL hardening pass are now shipped, so the next fully repo-owned engineering work is the audit and recovery workspace localization boundary for the `en` plus `zh_CN` pilot.
 
 2. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why second now:
