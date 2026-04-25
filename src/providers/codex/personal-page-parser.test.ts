@@ -230,6 +230,92 @@ describe("parseCodexPersonalLiveFixture", () => {
     ]);
   });
 
+  it("parses Codex window labels when label and remaining percent are merged", () => {
+    const fixture: CodexPersonalLiveFixture = {
+      capturedAt: "2026-04-25T00:00:00.000Z",
+      extractionMode: "dom",
+      primaryCandidateRoute: "https://chatgpt.com/codex/settings/usage",
+      routes: [
+        {
+          routeKey: "cloud_analytics",
+          pageLabel: "Codex cloud analytics page",
+          urlPatterns: ["https://chatgpt.com/codex/cloud/settings/analytics*"],
+          status: "matched",
+          attempts: [],
+          matchedUrl: "https://chatgpt.com/codex/cloud/settings/analytics#usage",
+          matchedTitle: "Codex",
+          summary: {
+            url: "https://chatgpt.com/codex/cloud/settings/analytics#usage",
+            title: "Codex",
+            heading: "Codex 分析",
+            recommendedSurface: "dom",
+            textSnippets: [
+              "5 小时使用限额 100% 剩余",
+              "每周使用限额 32% 剩余 重置时间：2026年4月29日 4:00",
+              "GPT-5.3-Codex-Spark 每周使用限额 100％ 剩余",
+              "余额额度",
+              "0",
+            ],
+            scriptMarkers: {
+              hasNextDataScript: false,
+              hasNextFlightStream: false,
+              hasCloudflareChallenge: false,
+            },
+            keywordSignals: {
+              hasUsageSignal: true,
+              hasRemainingSignal: true,
+              hasCreditSignal: true,
+              hasResetSignal: true,
+            },
+          },
+        },
+      ],
+      decision: {
+        chosenRoute: "https://chatgpt.com/codex/cloud/settings/analytics#usage",
+        chosenSurface: "dom",
+        rationale: "Matched merged label and value text nodes.",
+      },
+    };
+
+    const result = parseCodexPersonalLiveFixture(fixture);
+
+    expect(result.status).toBe("ok");
+
+    if (result.status !== "ok") {
+      throw new Error("expected ok result");
+    }
+
+    expect(result.snapshot.primaryWindow.normalizedLabel).toBe(
+      "5-hour usage window",
+    );
+    expect(result.snapshot.primaryWindow.remainingPercent).toBe(100);
+    expect(result.snapshot.windows).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          label: "每周使用限额",
+          normalizedLabel: "Weekly usage window",
+          kind: "weekly",
+          remainingPercent: 32,
+          usedPercent: 68,
+          resetAt: "2026-04-29 04:00",
+        }),
+        expect.objectContaining({
+          label: "GPT-5.3-Codex-Spark 每周使用限额",
+          normalizedLabel: "GPT-5.3-Codex-Spark 每周使用限额",
+          kind: "model_weekly",
+          modelLabel: "GPT-5.3-Codex-Spark",
+          remainingPercent: 100,
+        }),
+      ]),
+    );
+    expect(result.snapshot.balances).toEqual([
+      expect.objectContaining({
+        normalizedLabel: "Flex credit balance",
+        remainingCredits: 0,
+      }),
+    ]);
+  });
+
   it("returns open_page_required when no live Codex page was captured", () => {
     const routeEvidenceFixture =
       personalPageRouteEvidenceFixture as typeof personalPageRouteEvidenceFixture;

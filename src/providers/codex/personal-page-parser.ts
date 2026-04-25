@@ -103,6 +103,13 @@ function parsePercent(value: string): number | null {
   return parsePercentValue(inlineMatch?.[1]);
 }
 
+function parseInlineWindowPercent(value: string): number | null {
+  const normalizedValue = normalizeWhitespace(value);
+  const matched = normalizedValue.match(INLINE_PERCENT_PATTERN);
+
+  return parsePercentValue(matched?.[1]);
+}
+
 function parseBalanceNumber(value: string): number | null {
   const normalizedValue = normalizeWhitespace(value);
 
@@ -188,6 +195,22 @@ function normalizeWindowLabel(
   return normalizeWhitespace(label);
 }
 
+function stripInlineWindowRuntimeValues(label: string): string {
+  const stripped = normalizeWhitespace(label)
+    .replace(
+      /\s*(?:重置时间|reset(?: time)?|renews?)(?:[:：]\s*)?.*$/i,
+      " ",
+    )
+    .replace(
+      /\s*[\(（]?\d{1,3}\s*[%％]\s*(?:remaining|left|available|剩余|可用)?[\)）]?/gi,
+      " ",
+    )
+    .replace(/\b(?:remaining|left|available)\b|(?:剩余|可用)/gi, " ")
+    .replace(/\s*[·,，;；|/-]\s*$/g, " ");
+
+  return normalizeWhitespace(stripped);
+}
+
 function extractModelLabel(label: string): string | null {
   const matched = label.match(MODEL_PATTERN);
   return matched ? matched[1] : null;
@@ -237,18 +260,22 @@ function buildWindows(summary: CodexPersonalPageSummary): CodexPersonalUsageWind
 
     if (isWindowLabel(snippet)) {
       currentWindow = finalizeWindow(currentWindow, windows);
-      const kind = classifyWindowKind(snippet);
+      const label = stripInlineWindowRuntimeValues(snippet) || snippet;
+      const kind = classifyWindowKind(label);
+      const remainingPercent = parseInlineWindowPercent(snippet);
+      const resetText = extractResetText(snippet);
 
       currentWindow = {
-        label: snippet,
-        normalizedLabel: normalizeWindowLabel(snippet, kind),
+        label,
+        normalizedLabel: normalizeWindowLabel(label, kind),
         kind,
-        modelLabel: extractModelLabel(snippet),
-        remainingPercent: null,
-        usedPercent: null,
-        totalPercent: null,
-        resetAt: null,
-        resetText: null,
+        modelLabel: extractModelLabel(label),
+        remainingPercent,
+        usedPercent:
+          remainingPercent === null ? null : Math.max(0, 100 - remainingPercent),
+        totalPercent: remainingPercent === null ? null : 100,
+        resetAt: resetText ? normalizeResetAt(resetText) : null,
+        resetText,
       };
       continue;
     }

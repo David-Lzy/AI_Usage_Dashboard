@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [206_Phase_Codex_Inline_Remaining_Percent_Parser.md](./Archive/206_Phase_Codex_Inline_Remaining_Percent_Parser.md)
+- latest completed slice: [207_Phase_Codex_Merged_Window_Label_Parser.md](./Archive/207_Phase_Codex_Merged_Window_Label_Parser.md)
 
 Completed phases should be moved to:
 
@@ -544,6 +544,8 @@ Completed phases should be moved to:
 - the 2026-04-25 `Phase 205` closeout compressed structured personal usage context inside popup featured-provider cards while preserving fuller dashboard and provider-detail context
 - phase 206 depends on phase 202 because inline remaining-percent parser hardening should preserve the proven repeated-percentage and balance-value capture fixes
 - the 2026-04-25 `Phase 206` closeout hardened Codex personal parsing for merged DOM snippets such as inline remaining percentages and full-width percent text without changing provider coverage claims
+- phase 207 depends on phase 206 because merged label/value parsing builds on the inline remaining-percent parser path
+- the 2026-04-25 `Phase 207` closeout hardened Codex personal parsing for merged usage-window label and remaining-percent snippets while preserving the visible-window truth boundary
 
 ## Delivery Standard For Each Phase
 
