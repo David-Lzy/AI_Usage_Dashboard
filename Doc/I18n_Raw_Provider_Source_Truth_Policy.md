@@ -18,6 +18,7 @@ Status note:
 
 - this file records the provider source-truth localization boundary after `Phase 183`
 - `Phase 184` added [I18n_Adapter_Diagnostic_Reason_Code_Plan.md](./I18n_Adapter_Diagnostic_Reason_Code_Plan.md) as the maintained plan for typed adapter diagnostics
+- `Phase 185` added optional typed diagnostic fields while keeping raw provider source-truth fields unchanged
 - refresh it when provider source display helpers, adapter reason fields, provider-source blueprints, or runtime i18n scope changes materially
 
 ## Goal
@@ -35,7 +36,7 @@ Some strings are normal product labels and can be localized safely. Other string
 
 ## Current Raw Fields
 
-These fields remain raw source-truth values until a later phase implements the type-only additive model from [I18n_Adapter_Diagnostic_Reason_Code_Plan.md](./I18n_Adapter_Diagnostic_Reason_Code_Plan.md) or a dedicated compatibility review:
+These fields remain raw source-truth values while typed diagnostics are populated and reviewed:
 
 | Field | Source | Current policy |
 | --- | --- | --- |
@@ -116,6 +117,6 @@ Future localization should prefer this order:
 
 ## Next Executable Slice
 
-The next safe engineering slice should implement the type-only additive model defined in [I18n_Adapter_Diagnostic_Reason_Code_Plan.md](./I18n_Adapter_Diagnostic_Reason_Code_Plan.md).
+The next safe engineering slice should populate source-selection and source-fallback diagnostics for one narrow provider path.
 
 It should not translate raw provider source-truth fields listed above until that typed compatibility layer exists.

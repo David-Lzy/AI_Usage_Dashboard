@@ -13,6 +13,7 @@ Document class:
 Status note:
 
 - created in `Phase 184`
+- type-only additive model completed in `Phase 185`
 - this child TODO turns the adapter diagnostic reason-code plan into executable follow-up slices
 - refresh it when typed diagnostic coverage, provider adapter behavior, or archive compatibility rules change
 
@@ -32,10 +33,12 @@ The goal is not to translate raw provider evidence immediately. The goal is to m
 
 ## Current Truth
 
-As of `Phase 184`:
+As of `Phase 185`:
 
 - provider-source display wrappers are localized through `ProviderSourceDisplayCopy`
 - raw provider source-truth fields still pass through unchanged
+- `ProviderSnapshot` has optional typed diagnostic fields beside the raw strings
+- `src/providers/diagnostics.ts` provides known diagnostic code categories and raw-message fallback helpers
 - `ProviderSnapshot.warningReason` remains the primary raw warning body
 - `ProviderSnapshot.sourceSelectionReason` remains the primary raw source-selection explanation
 - `ProviderSnapshot.sourceFallbackReason` remains the primary raw fallback explanation
@@ -55,6 +58,7 @@ As of `Phase 184`:
 
 ### A. Type-Only Additive Model
 
+- completed in `Phase 185`
 - add diagnostic type definitions
 - define code, category, severity, raw message, and optional params
 - add optional fields beside existing raw string fields
@@ -63,6 +67,7 @@ As of `Phase 184`:
 
 ### B. Source Selection And Fallback Builders
 
+- next recommended slice
 - add helper builders for source-selection and fallback diagnostics
 - start with Cursor and Codex because those adapters already have explicit source attempt order logic
 - preserve existing source-selection and fallback strings exactly

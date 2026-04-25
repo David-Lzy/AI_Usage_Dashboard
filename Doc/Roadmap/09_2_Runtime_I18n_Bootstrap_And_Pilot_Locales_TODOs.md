@@ -24,6 +24,7 @@ Status note:
 - thirteenth executable phase landed on `2026-04-25` through `Phase 182`
 - fourteenth executable phase landed on `2026-04-25` through `Phase 183`
 - fifteenth executable phase landed on `2026-04-25` through `Phase 184`
+- sixteenth executable phase landed on `2026-04-25` through `Phase 185`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -283,11 +284,19 @@ Build one maintainable localization architecture that can support manifest strin
 
 ### M. Type-Only Additive Diagnostic Model
 
-- next recommended slice
+- completed in `Phase 185`
 - add optional typed diagnostic fields beside current raw diagnostic string fields
 - add helper types and narrow builders without changing rendered UI behavior
 - prove raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` fields still pass through unchanged
 - keep localized diagnostic bodies out of scope until typed coverage and compatibility fallback tests exist
+
+### N. Source Selection And Fallback Builders
+
+- next recommended slice
+- populate typed source-selection and source-fallback diagnostics in one narrow provider path
+- preserve raw `sourceSelectionReason` and `sourceFallbackReason` strings exactly
+- keep rendered UI behavior unchanged
+- prefer Cursor or Codex because those adapters already have source attempt order helpers
 
 ## Planned Numbered Slices
 
@@ -307,7 +316,8 @@ Build one maintainable localization architecture that can support manifest strin
 14. raw provider source-truth localization policy and presentation-only wrapper review - completed in `Phase 182`
 15. provider-source display wrapper localization - completed in `Phase 183`
 16. adapter diagnostic typed reason-code plan - completed in `Phase 184`
-17. type-only additive diagnostic model - next
+17. type-only additive diagnostic model - completed in `Phase 185`
+18. source selection and fallback builders - next
 
 ## Out Of Scope
 

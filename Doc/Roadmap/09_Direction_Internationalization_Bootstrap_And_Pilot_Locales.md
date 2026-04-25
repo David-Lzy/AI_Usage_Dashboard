@@ -28,6 +28,7 @@ Execution note:
 - thirteenth executable slice landed on `2026-04-25` through `Phase 182`
 - fourteenth executable slice landed on `2026-04-25` through `Phase 183`
 - fifteenth executable slice landed on `2026-04-25` through `Phase 184`
+- sixteenth executable slice landed on `2026-04-25` through `Phase 185`
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
 Process rule:
@@ -181,7 +182,8 @@ Recommended rollout:
 14. raw provider source-truth localization policy and presentation-only wrapper review - shipped in `Phase 182`
 15. provider-source display wrapper localization - shipped in `Phase 183`
 16. adapter diagnostic typed reason-code plan - shipped in `Phase 184`
-17. type-only additive diagnostic model - next
+17. type-only additive diagnostic model - shipped in `Phase 185`
+18. source selection and fallback builders - next
 
 ## References
 

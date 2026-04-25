@@ -17,6 +17,7 @@ Freshness model:
 Status note:
 
 - this file records the `Phase 184` adapter diagnostic reason-code plan
+- `Phase 185` implemented the type-only additive diagnostic model in `src/providers/types.ts` and `src/providers/diagnostics.ts`
 - refresh it when provider adapters, source-selection behavior, provider snapshot fields, archive evidence schemas, or runtime i18n boundaries change materially
 
 ## Goal
@@ -37,7 +38,7 @@ Localizing those bodies directly would make evidence harder to compare and could
 
 ## Current Raw Diagnostic Fields
 
-These fields stay source-truthful until the typed model is implemented:
+These fields stay source-truthful while the typed model is populated:
 
 | Field | Current role | Migration rule |
 | --- | --- | --- |
@@ -50,7 +51,7 @@ These fields stay source-truthful until the typed model is implemented:
 
 ## Proposed Additive Runtime Contract
 
-The first runtime implementation should be additive. It should not remove or rename the existing raw string fields.
+The first runtime implementation is additive. It does not remove or rename the existing raw string fields.
 
 Recommended additions:
 
@@ -132,7 +133,7 @@ After typed diagnostics exist:
 
 ## Migration Ladder
 
-1. Add types and helpers without changing UI behavior.
+1. Add types and helpers without changing UI behavior - completed in `Phase 185`.
 2. Populate source-selection and source-fallback diagnostics for Cursor and Codex because those adapters already have source attempt order helpers.
 3. Populate credential, host-access, and page-session diagnostics for provider adapters.
 4. Populate usage-threshold and policy-only diagnostics for shared normalization and Gemini policy output.
@@ -159,12 +160,18 @@ Before any runtime implementation lands:
 - add tests proving unknown codes fall back to raw text
 - update [I18n_Raw_Provider_Source_Truth_Policy.md](./I18n_Raw_Provider_Source_Truth_Policy.md) when typed coverage changes the boundary
 
+## Current Implementation
+
+`Phase 185` shipped the type-only additive model:
+
+- `ProviderDiagnosticSeverity`
+- `ProviderDiagnosticCategory`
+- `KnownProviderDiagnosticCode`
+- `ProviderDiagnostic`
+- optional `ProviderSnapshot` typed diagnostic fields
+- known-code category mapping
+- raw-message fallback helper
+
 ## Next Executable Slice
 
-The next safe implementation slice should be type-only and additive:
-
-- add the diagnostic types
-- add helper builders for source selection and fallback
-- populate one narrow provider path if the helper is low-risk
-- leave rendered UI behavior unchanged
-- keep raw strings unchanged
+The next safe implementation slice should populate source-selection and source-fallback diagnostics for one narrow provider path while preserving exact raw strings and rendered UI behavior.

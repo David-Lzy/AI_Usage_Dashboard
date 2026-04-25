@@ -25,6 +25,63 @@ export type ProviderSourcePreference =
   | "official_api"
   | "session_page";
 
+export type ProviderDiagnosticSeverity = "info" | "warning" | "error";
+
+export type ProviderDiagnosticCategory =
+  | "source_selection"
+  | "source_fallback"
+  | "credential"
+  | "host_access"
+  | "page_session"
+  | "usage_threshold"
+  | "policy_only"
+  | "sync_stale"
+  | "adapter_error";
+
+export type KnownProviderDiagnosticCode =
+  | "source.auto_selected_official_api"
+  | "source.auto_selected_session_page"
+  | "source.preference_selected_official_api"
+  | "source.preference_selected_session_page"
+  | "source.official_api_missing_credential"
+  | "source.official_api_failed"
+  | "source.session_page_unavailable"
+  | "source.no_live_path"
+  | "credential.admin_api_key_missing"
+  | "credential.workspace_config_missing"
+  | "host_access.missing"
+  | "host_access.required_for_live_sync"
+  | "page_session.open_page_required"
+  | "page_session.logged_out"
+  | "page_session.capture_unavailable"
+  | "usage.threshold_warning"
+  | "usage.overage_detected"
+  | "usage.on_demand_off"
+  | "policy.live_source_unavailable"
+  | "policy.documented_limit_only"
+  | "sync.automatic_sync_overdue"
+  | "sync.cached_state_stale"
+  | "adapter.unexpected_error"
+  | "adapter.unsupported_response"
+  | "adapter.parse_failed";
+
+export type ProviderDiagnosticCode =
+  | KnownProviderDiagnosticCode
+  | (string & {});
+
+export type ProviderDiagnosticParams = Record<
+  string,
+  string | number | boolean | null
+>;
+
+export type ProviderDiagnostic = {
+  code: ProviderDiagnosticCode;
+  category: ProviderDiagnosticCategory;
+  severity: ProviderDiagnosticSeverity;
+  rawMessage: string;
+  params?: ProviderDiagnosticParams;
+};
+
 export type SourceRolloutStage = "shipped" | "planned" | "deferred";
 
 export type SourceConnectionMode = "credential" | "page_session" | "none";
@@ -114,6 +171,9 @@ export type ProviderSnapshot = {
   lastSyncLabel: string;
   sourceSelectionReason: string;
   sourceFallbackReason: string | null;
+  warningDiagnostic?: ProviderDiagnostic | null;
+  sourceSelectionDiagnostic?: ProviderDiagnostic | null;
+  sourceFallbackDiagnostic?: ProviderDiagnostic | null;
   tone: ProviderTone;
 };
 
