@@ -47,4 +47,43 @@ describe("summarizeCursorPersonalPage", () => {
     expect(summary.keywordSignals.hasRequestSignal).toBe(true);
     expect(summary.keywordSignals.hasResetSignal).toBe(true);
   });
+
+  it("keeps short Cursor usage labels needed by the personal display summary", () => {
+    const summary = summarizeCursorPersonalPage({
+      url: "https://cursor.com/dashboard/usage",
+      title: "Cursor - Usage",
+      heading: "Usage",
+      html: `
+        <html>
+          <body>
+            <h1>Usage</h1>
+            <p>Pro</p>
+            <p>Pro+</p>
+            <p>Ultra</p>
+            <p>On-Demand Usage is Off</p>
+            <p>Your Usage</p>
+            <p>Your usage per day across this billing period</p>
+            <p>By Model</p>
+            <p>Spend</p>
+            <p>Export CSV</p>
+            <p>Mar 23 - Apr 21</p>
+          </body>
+        </html>
+      `,
+    });
+
+    expect(summary.textSnippets).toEqual([
+      "Usage",
+      "Pro",
+      "Pro+",
+      "Ultra",
+      "On-Demand Usage is Off",
+      "Your Usage",
+      "Your usage per day across this billing period",
+      "By Model",
+      "Spend",
+      "Export CSV",
+      "Mar 23 - Apr 21",
+    ]);
+  });
 });

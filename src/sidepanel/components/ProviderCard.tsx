@@ -56,6 +56,11 @@ export function ProviderCard({
   const showSessionPageContract =
     provider.sessionPageContractLabel !== null &&
     provider.sessionPageContractLabel !== provider.currentSourceContractLabel;
+  const hasStructuredUsageContext =
+    (provider.usageWindows?.length ?? 0) > 0 ||
+    (provider.usageBalances?.length ?? 0) > 0;
+  const showUsageSummary =
+    !hasStructuredUsageContext && Boolean(provider.usageSummary);
   const localizedResetLabel = i18n.localizeResetRuntimeLabel(provider.resetLabel);
   const localizedLastSyncLabel = i18n.localizeRelativeRuntimeLabel(
     provider.lastSyncLabel,
@@ -163,6 +168,9 @@ export function ProviderCard({
           ) : null}
         </div>
         <p className="supporting-copy">{provider.currentSourceAvailabilitySummary}</p>
+        {showUsageSummary ? (
+          <p className="supporting-copy">{provider.usageSummary}</p>
+        ) : null}
         {showSessionPageContract ? (
           <p className="supporting-copy">
             Session-page track: {provider.sessionPageContractLabel}

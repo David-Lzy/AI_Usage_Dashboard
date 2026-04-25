@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [202_Phase_Codex_Usage_Context_Extension_Mode_Review.md](./Archive/202_Phase_Codex_Usage_Context_Extension_Mode_Review.md)
+- latest completed slice: [203_Phase_Cursor_Personal_Billing_Period_Context_Surfacing.md](./Archive/203_Phase_Cursor_Personal_Billing_Period_Context_Surfacing.md)
 
 Completed phases should be moved to:
 
@@ -249,6 +249,7 @@ Completed phases should be moved to:
 - [200_Phase_Codex_Personal_Multi_Window_Usage_Surfacing.md](./Archive/200_Phase_Codex_Personal_Multi_Window_Usage_Surfacing.md) - completed and archived on 2026-04-25
 - [201_Phase_Codex_Personal_Flex_Credit_Balance_Surfacing.md](./Archive/201_Phase_Codex_Personal_Flex_Credit_Balance_Surfacing.md) - completed and archived on 2026-04-25
 - [202_Phase_Codex_Usage_Context_Extension_Mode_Review.md](./Archive/202_Phase_Codex_Usage_Context_Extension_Mode_Review.md) - completed and archived on 2026-04-25
+- [203_Phase_Cursor_Personal_Billing_Period_Context_Surfacing.md](./Archive/203_Phase_Cursor_Personal_Billing_Period_Context_Surfacing.md) - completed and archived on 2026-04-25
 
 ## Dependency Notes
 
@@ -533,6 +534,8 @@ Completed phases should be moved to:
 - the 2026-04-25 `Phase 201` closeout added Codex personal flex credit balance surfacing as supplemental usage context while preserving the most-constrained percentage window as the primary displayed quota
 - phase 202 depends on phases 200 and 201 because extension-mode verification should run only after both the visible window model and balance-card model are implemented
 - the 2026-04-25 `Phase 202` closeout added repeatable unpacked-extension verification for Codex multi-window plus flex-balance context, and fixed DOM capture so repeated percentages and single-character balance values survive live-page summarization
+- phase 203 depends on phases 37 and 38 because Cursor personal billing-period context should build on the existing parser and live session-page wiring rather than inventing a new source path
+- the 2026-04-25 `Phase 203` closeout added Cursor personal billing-period usage-summary surfacing across dashboard, provider detail, and popup while preserving the truth boundary that exact remaining included requests are unavailable on the personal page
 
 ## Delivery Standard For Each Phase
 

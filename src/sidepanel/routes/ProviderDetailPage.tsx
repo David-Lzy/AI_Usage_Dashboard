@@ -101,9 +101,12 @@ export function ProviderDetailPage({
         provider.currentSourceGraduationGateLabel ||
       provider.sessionPageGraduationGateDetail !==
         provider.currentSourceGraduationGateDetail);
-  const hasUsageContext =
+  const hasStructuredUsageContext =
     (provider.usageWindows?.length ?? 0) > 1 ||
     (provider.usageBalances?.length ?? 0) > 0;
+  const showUsageSummary =
+    !hasStructuredUsageContext && Boolean(provider.usageSummary);
+  const hasUsageContext = hasStructuredUsageContext || showUsageSummary;
   const usageValue =
     provider.quotaUnit === "percent"
       ? provider.used !== null && provider.remaining !== null
@@ -436,6 +439,9 @@ export function ProviderDetailPage({
         {hasUsageContext ? (
           <div className="detail-note detail-note--neutral">
             <p className="detail-note__label">{copy.notes.usageWindows}</p>
+            {showUsageSummary ? (
+              <p className="supporting-copy">{provider.usageSummary}</p>
+            ) : null}
             {provider.usageWindows?.slice(0, 5).map((usageWindow) => (
               <p
                 key={`${usageWindow.normalizedLabel}-${usageWindow.remaining ?? "unknown"}`}

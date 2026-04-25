@@ -34,6 +34,7 @@ import {
 } from "../diagnostics";
 import { createCursorOfficialClient } from "./official";
 import { createCursorPersonalPageClient } from "./personal-page-client";
+import type { CursorPersonalUsageSnapshot } from "./personal-page-parser";
 
 type CursorAdapterContext = {
   provider: ProviderSnapshot;
@@ -65,6 +66,30 @@ function buildCursorPersonalRefreshLabel(source: "fixture" | "live"): string {
   return source === "fixture"
     ? "Cursor personal fixture loaded"
     : "Cursor personal usage page synced just now";
+}
+
+function buildCursorPersonalUsageSummary(
+  snapshot: CursorPersonalUsageSnapshot,
+): string | null {
+  const summaryParts = [
+    snapshot.billingPeriodLabel
+      ? `Billing period: ${snapshot.billingPeriodLabel}`
+      : null,
+    snapshot.usageSeriesLabel,
+    snapshot.visiblePlanLabels.length > 0
+      ? `Visible plans: ${snapshot.visiblePlanLabels.join(" · ")}`
+      : null,
+    snapshot.onDemandUsageState !== null
+      ? `On-demand usage is ${snapshot.onDemandUsageState}.`
+      : null,
+    snapshot.exportCsvAvailable ? "CSV export available" : null,
+  ].filter(Boolean);
+
+  if (summaryParts.length === 0) {
+    return null;
+  }
+
+  return `Visible Cursor usage: ${summaryParts.join(" · ")}`;
 }
 
 function hasCursorAdminApiKey(secrets: ProviderSecrets): boolean {
@@ -108,6 +133,12 @@ function finalizeCursorSnapshot(
 
   return {
     ...snapshot,
+    usageWindows:
+      selectedKind === "session_page" ? snapshot.usageWindows : undefined,
+    usageBalances:
+      selectedKind === "session_page" ? snapshot.usageBalances : undefined,
+    usageSummary:
+      selectedKind === "session_page" ? (snapshot.usageSummary ?? null) : null,
     sourceSelectionReason,
     sourceFallbackReason,
     sourceSelectionDiagnostic: createSourceSelectionDiagnostic({
@@ -142,6 +173,9 @@ function finalizeCursorNoSourceSnapshot(
 
   return {
     ...snapshot,
+    usageWindows: undefined,
+    usageBalances: undefined,
+    usageSummary: null,
     sourceSelectionReason,
     sourceFallbackReason,
     sourceSelectionDiagnostic: null,
@@ -453,6 +487,7 @@ async function tryCursorPersonalSource({
     }
 
     const snapshot = result.snapshot;
+    const usageSummary = buildCursorPersonalUsageSummary(snapshot);
     const visiblePlanLabel =
       snapshot.visiblePlanLabels.length > 0
         ? `Visible plans: ${snapshot.visiblePlanLabels.join(" · ")}`
@@ -499,6 +534,9 @@ async function tryCursorPersonalSource({
                 unitLabel: "requests",
               })
             : null,
+        usageWindows: undefined,
+        usageBalances: undefined,
+        usageSummary,
         lastSyncLabel: buildCursorPersonalRefreshLabel(personalSource),
       },
       setting: nextSetting,

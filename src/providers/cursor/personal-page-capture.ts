@@ -81,6 +81,8 @@ const REMAINING_SIGNAL_PATTERN = /remaining|left|available|剩余|可用/i;
 const REQUEST_SIGNAL_PATTERN = /request|requests|premium|fast|included|请求|次数/i;
 const RESET_SIGNAL_PATTERN = /reset|renews|period|cycle|刷新|重置|周期/i;
 const PLAN_SIGNAL_PATTERN = /pro|ultra|hobby|business|team|plan|计划/i;
+const CURSOR_USAGE_UI_LABEL_PATTERN =
+  /^(hobby|pro|pro\+|ultra|business|team|usage|your usage|by model|spend|export csv)$/i;
 const LOCALE_PREFIX_PATTERN = /^[a-z]{2}(?:-[a-z]{2})?$/i;
 
 function decodeEntities(value: string): string {
@@ -112,7 +114,9 @@ function pickInterestingTextSnippets(lines: string[]): string[] {
     }
 
     return (
-      TEXT_SIGNAL_PATTERN.test(line) || (/\d/.test(line) && line.length <= 120)
+      TEXT_SIGNAL_PATTERN.test(line) ||
+      CURSOR_USAGE_UI_LABEL_PATTERN.test(line) ||
+      (/\d/.test(line) && line.length <= 120)
     );
   });
 

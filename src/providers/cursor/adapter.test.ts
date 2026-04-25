@@ -147,6 +147,11 @@ describe("syncCursorProvider", () => {
         unitLabel: "requests",
       },
     });
+    expect(snapshot.usageWindows).toBeUndefined();
+    expect(snapshot.usageBalances).toBeUndefined();
+    expect(snapshot.usageSummary).toBe(
+      "Visible Cursor usage: Billing period: Mar 23 - Apr 21 · Your usage per day across this billing period · Visible plans: Pro · Pro+ · Ultra · On-demand usage is off. · CSV export available",
+    );
     expect(snapshot.lastSyncLabel).toBe("Cursor personal fixture loaded");
     expect(snapshot.sourceSelectionReason).toBe("Auto fell back to Session page.");
     expect(snapshot.sourceSelectionDiagnostic).toMatchObject({
@@ -270,6 +275,9 @@ describe("syncCursorProvider", () => {
     expect(snapshot.warningReason).toBe(
       "15 pay-per-use requests recorded this cycle",
     );
+    expect(snapshot.usageWindows).toBeUndefined();
+    expect(snapshot.usageBalances).toBeUndefined();
+    expect(snapshot.usageSummary).toBeNull();
     expect(snapshot.warningDiagnostic).toMatchObject({
       code: "usage.overage_detected",
       category: "usage_threshold",
@@ -377,6 +385,7 @@ describe("syncCursorProvider", () => {
       },
     });
     expect(snapshot.lastSyncLabel).toBe("Cursor Admin API key required");
+    expect(snapshot.usageSummary).toBeNull();
     expect(snapshot.sourceFallbackReason).toContain(
       "Session page unavailable: Open the logged-in Cursor dashboard usage page",
     );
@@ -545,6 +554,9 @@ describe("syncCursorProvider", () => {
         unitLabel: "requests",
       },
     });
+    expect(snapshot.usageSummary).toBe(
+      "Visible Cursor usage: Billing period: Mar 23 - Apr 21 · Your usage per day across this billing period · Visible plans: Pro · Pro+ · Ultra · On-demand usage is off. · CSV export available",
+    );
     expect(snapshot.sourceSelectionReason).toBe(
       "Official API preference fell back to Session page.",
     );
