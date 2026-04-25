@@ -642,6 +642,123 @@ describe("popup view models", () => {
     });
   });
 
+  it("compresses structured personal usage context for popup provider cards", () => {
+    const longUsageSummary =
+      "Visible Codex usage: 5-hour usage window: 100% remaining · Weekly usage window: 32% remaining · GPT-5.3-Codex-Spark 每周使用限额: 100% remaining · Flex credit balance: 0 credits";
+    const model = buildPopupViewModel({
+      ...SAMPLE_APP_STATE,
+      providers: SAMPLE_APP_STATE.providers.map((provider) =>
+        provider.providerId === "codex"
+          ? {
+              ...provider,
+              planName: "Codex Personal Usage Page (Weekly usage window)",
+              quotaUnit: "percent" as const,
+              quotaWindow: "rolling" as const,
+              used: 68,
+              remaining: 32,
+              total: 100,
+              resetAt: "2026-04-29 04:00",
+              resetLabel: "Resets in 4 days",
+              syncSource: "page_parse" as const,
+              syncStatus: "ok" as const,
+              tone: "neutral" as const,
+              warningReason: null,
+              lastSyncLabel: "Synced just now",
+              usageSummary: longUsageSummary,
+              usageWindows: [
+                {
+                  label: "5-hour usage window",
+                  normalizedLabel: "5-hour usage window",
+                  kind: "rolling_5h" as const,
+                  modelLabel: null,
+                  quotaUnit: "percent" as const,
+                  used: 0,
+                  remaining: 100,
+                  total: 100,
+                  resetAt: "2026-04-25 17:00",
+                  resetLabel: "Resets soon",
+                },
+                {
+                  label: "Weekly usage window",
+                  normalizedLabel: "Weekly usage window",
+                  kind: "weekly" as const,
+                  modelLabel: null,
+                  quotaUnit: "percent" as const,
+                  used: 68,
+                  remaining: 32,
+                  total: 100,
+                  resetAt: "2026-04-29 04:00",
+                  resetLabel: "Resets in 4 days",
+                },
+              ],
+              usageBalances: [
+                {
+                  label: "Flex credit balance",
+                  normalizedLabel: "Flex credit balance",
+                  kind: "flex_credit_balance" as const,
+                  quotaUnit: "credits" as const,
+                  remaining: 0,
+                  total: null,
+                  detail: null,
+                },
+              ],
+            }
+          : provider,
+      ),
+      providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
+        ...provider,
+        enabled: provider.id === "codex",
+        status: provider.id === "codex" ? "granted" : provider.status,
+        credentialStatus:
+          provider.id === "codex" ? "missing" : provider.credentialStatus,
+      })),
+    });
+    const localizedModel = localizePopupViewModel(
+      model,
+      createRuntimeI18n("zh-CN"),
+    );
+
+    expect(model.featuredProviderCards[0]?.secondaryDetail).toBe(
+      "Weekly usage window: 32% remaining · Flex credit balance: 0 credits",
+    );
+    expect(model.featuredProviderCards[0]?.secondaryDetail).not.toBe(
+      longUsageSummary,
+    );
+    expect(localizedModel.featuredProviderCards[0]?.secondaryDetail).toBe(
+      "Weekly usage window: 32% 剩余 · Flex credit balance: 0 积分",
+    );
+  });
+
+  it("keeps summary-only personal usage context visible in popup provider cards", () => {
+    const cursorUsageSummary =
+      "Visible Cursor usage: Billing period: Mar 23 - Apr 21 · Visible plans: Pro · Pro+ · Ultra · CSV export available";
+    const model = buildPopupViewModel({
+      ...SAMPLE_APP_STATE,
+      providers: SAMPLE_APP_STATE.providers.map((provider) =>
+        provider.providerId === "cursor"
+          ? {
+              ...provider,
+              syncStatus: "ok" as const,
+              tone: "neutral" as const,
+              warningReason: null,
+              usageWindows: undefined,
+              usageBalances: undefined,
+              usageSummary: cursorUsageSummary,
+            }
+          : provider,
+      ),
+      providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
+        ...provider,
+        enabled: provider.id === "cursor",
+        status: provider.id === "cursor" ? "granted" : provider.status,
+      })),
+    });
+
+    expect(model.featuredProviderCards[0]?.secondaryDetail).toBe(
+      cursorUsageSummary,
+    );
+  });
+
   it("switches the featured section to policy-only language when every visible provider is policy-only", () => {
     const model = buildPopupViewModel({
       ...SAMPLE_APP_STATE,

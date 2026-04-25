@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [204_Phase_Diagnostic_Raw_Fallback_Regression.md](./Archive/204_Phase_Diagnostic_Raw_Fallback_Regression.md)
+- latest completed slice: [205_Phase_Popup_Personal_Usage_Context_Compression.md](./Archive/205_Phase_Popup_Personal_Usage_Context_Compression.md)
 
 Completed phases should be moved to:
 
@@ -251,6 +251,7 @@ Completed phases should be moved to:
 - [202_Phase_Codex_Usage_Context_Extension_Mode_Review.md](./Archive/202_Phase_Codex_Usage_Context_Extension_Mode_Review.md) - completed and archived on 2026-04-25
 - [203_Phase_Cursor_Personal_Billing_Period_Context_Surfacing.md](./Archive/203_Phase_Cursor_Personal_Billing_Period_Context_Surfacing.md) - completed and archived on 2026-04-25
 - [204_Phase_Diagnostic_Raw_Fallback_Regression.md](./Archive/204_Phase_Diagnostic_Raw_Fallback_Regression.md) - completed and archived on 2026-04-25
+- [205_Phase_Popup_Personal_Usage_Context_Compression.md](./Archive/205_Phase_Popup_Personal_Usage_Context_Compression.md) - completed and archived on 2026-04-25
 
 ## Dependency Notes
 
@@ -537,6 +538,10 @@ Completed phases should be moved to:
 - the 2026-04-25 `Phase 202` closeout added repeatable unpacked-extension verification for Codex multi-window plus flex-balance context, and fixed DOM capture so repeated percentages and single-character balance values survive live-page summarization
 - phase 203 depends on phases 37 and 38 because Cursor personal billing-period context should build on the existing parser and live session-page wiring rather than inventing a new source path
 - the 2026-04-25 `Phase 203` closeout added Cursor personal billing-period usage-summary surfacing across dashboard, provider detail, and popup while preserving the truth boundary that exact remaining included requests are unavailable on the personal page
+- phase 204 depends on phases 193 through 199 because raw fallback regression should close only after localized diagnostic presentation and archive/export compatibility are already explicit
+- the 2026-04-25 `Phase 204` closeout added regression coverage proving unknown or absent typed diagnostics still fall back to raw evidence without changing runtime behavior
+- phase 205 depends on phases 200 through 203 because popup usage-context compression should happen only after Codex and Cursor personal usage context are already represented in provider snapshots and richer surfaces
+- the 2026-04-25 `Phase 205` closeout compressed structured personal usage context inside popup featured-provider cards while preserving fuller dashboard and provider-detail context
 
 ## Delivery Standard For Each Phase
 

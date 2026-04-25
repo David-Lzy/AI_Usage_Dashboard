@@ -426,7 +426,82 @@ function buildPopupFeaturedPrimaryDetail(provider: ProviderViewModel): string {
   return "Current path is live-ready in this profile.";
 }
 
-function buildPopupFeaturedSecondaryDetail(provider: ProviderViewModel): string {
+function formatPopupUsageWindowDetail(
+  window: NonNullable<ProviderViewModel["usageWindows"]>[number],
+  i18n?: RuntimeI18n,
+): string {
+  const remaining =
+    window.remaining === null
+      ? null
+      : i18n
+        ? i18n.formatPercentValue(window.remaining)
+        : `${window.remaining}%`;
+  const remainingLabel = i18n?.resolvedLocale === "zh-CN" ? "剩余" : "remaining";
+
+  return remaining
+    ? `${window.normalizedLabel}: ${remaining} ${remainingLabel}`
+    : window.normalizedLabel;
+}
+
+function formatPopupUsageBalanceDetail(
+  balance: NonNullable<ProviderViewModel["usageBalances"]>[number],
+  i18n?: RuntimeI18n,
+): string {
+  const remaining =
+    balance.remaining === null
+      ? null
+      : i18n
+        ? i18n.formatNumber(balance.remaining)
+        : String(balance.remaining);
+  const unitLabel = i18n?.resolvedLocale === "zh-CN" ? "积分" : balance.quotaUnit;
+
+  return remaining
+    ? `${balance.normalizedLabel}: ${remaining} ${unitLabel}`
+    : balance.normalizedLabel;
+}
+
+function getMostConstrainedUsageWindow(provider: ProviderViewModel) {
+  const windows = provider.usageWindows ?? [];
+  const windowsWithRemaining = windows.filter(
+    (window) => window.remaining !== null,
+  );
+
+  if (windowsWithRemaining.length === 0) {
+    return windows[0] ?? null;
+  }
+
+  return windowsWithRemaining.reduce((mostConstrained, window) => {
+    const mostConstrainedRemaining =
+      mostConstrained.remaining ?? Number.POSITIVE_INFINITY;
+    const currentRemaining = window.remaining ?? Number.POSITIVE_INFINITY;
+
+    return currentRemaining < mostConstrainedRemaining
+      ? window
+      : mostConstrained;
+  });
+}
+
+function buildPopupCompactUsageContextDetail(
+  provider: ProviderViewModel,
+  i18n?: RuntimeI18n,
+): string | null {
+  const usageWindow = getMostConstrainedUsageWindow(provider);
+  const usageBalance =
+    provider.usageBalances?.find((balance) => balance.remaining !== null) ??
+    provider.usageBalances?.[0] ??
+    null;
+  const usageParts = [
+    usageWindow ? formatPopupUsageWindowDetail(usageWindow, i18n) : null,
+    usageBalance ? formatPopupUsageBalanceDetail(usageBalance, i18n) : null,
+  ].filter((part): part is string => Boolean(part));
+
+  return usageParts.length > 0 ? usageParts.join(" · ") : null;
+}
+
+function buildPopupFeaturedSecondaryDetail(
+  provider: ProviderViewModel,
+  i18n?: RuntimeI18n,
+): string {
   if (provider.permissionStatus === "missing") {
     return (
       provider.hostAccessRequirementDetail ||
@@ -439,7 +514,11 @@ function buildPopupFeaturedSecondaryDetail(provider: ProviderViewModel): string 
     provider.currentSourceStateKind === "policy_only" ||
     provider.currentSourceStateKind === "ready"
   ) {
-    return provider.usageSummary ?? provider.currentSourceAvailabilitySummary;
+    return (
+      buildPopupCompactUsageContextDetail(provider, i18n) ??
+      provider.usageSummary ??
+      provider.currentSourceAvailabilitySummary
+    );
   }
 
   return (
@@ -1157,7 +1236,7 @@ function buildLocalizedFeaturedProviderCard(
     statusLabel: buildLocalizedFeaturedStatusLabel(provider, copy),
     metaChips: buildLocalizedPopupFeaturedMetaChips(provider, i18n),
     primaryDetail: buildLocalizedFeaturedPrimaryDetail(provider, copy),
-    secondaryDetail: buildPopupFeaturedSecondaryDetail(provider),
+    secondaryDetail: buildPopupFeaturedSecondaryDetail(provider, i18n),
     action:
       provider.permissionStatus === "missing" ||
       provider.currentSourceStateKind === "credential_missing"
