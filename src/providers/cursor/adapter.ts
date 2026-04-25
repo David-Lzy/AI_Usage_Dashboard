@@ -22,6 +22,11 @@ import {
   shouldAttemptFallback,
   type SourceAttemptFailure,
 } from "../../shared/source-selection";
+import {
+  createNoLiveSourceFallbackDiagnostic,
+  createSourceFallbackDiagnostic,
+  createSourceSelectionDiagnostic,
+} from "../diagnostics";
 import { createCursorOfficialClient } from "./official";
 import { createCursorPersonalPageClient } from "./personal-page-client";
 
@@ -76,17 +81,36 @@ function finalizeCursorSnapshot(
   selectedKind: ProviderSourceKind,
   fallbackFailure: SourceAttemptFailure | null,
 ): ProviderSnapshot {
+  const sourceSelectionReason = buildSourceSelectionReason(
+    "cursor",
+    sourcePreference,
+    selectedKind,
+    fallbackFailure !== null,
+  );
+  const sourceFallbackReason = fallbackFailure
+    ? buildSourceFallbackReason(fallbackFailure)
+    : null;
+
   return {
     ...snapshot,
-    sourceSelectionReason: buildSourceSelectionReason(
-      "cursor",
+    sourceSelectionReason,
+    sourceFallbackReason,
+    sourceSelectionDiagnostic: createSourceSelectionDiagnostic({
+      providerId: "cursor",
       sourcePreference,
       selectedKind,
-      fallbackFailure !== null,
-    ),
-    sourceFallbackReason: fallbackFailure
-      ? buildSourceFallbackReason(fallbackFailure)
-      : null,
+      hadFallback: fallbackFailure !== null,
+      rawMessage: sourceSelectionReason,
+    }),
+    sourceFallbackDiagnostic:
+      fallbackFailure && sourceFallbackReason
+        ? createSourceFallbackDiagnostic({
+            providerId: "cursor",
+            sourcePreference,
+            failure: fallbackFailure,
+            rawMessage: sourceFallbackReason,
+          })
+        : null,
   };
 }
 
@@ -95,13 +119,25 @@ function finalizeCursorNoSourceSnapshot(
   sourcePreference: ProviderSetting["sourcePreference"],
   failures: SourceAttemptFailure[],
 ): ProviderSnapshot {
+  const sourceSelectionReason = buildNoSourceAvailableReason(sourcePreference);
+  const sourceFallbackReason =
+    failures.length > 1
+      ? failures.map((failure) => buildSourceFallbackReason(failure)).join(" · ")
+      : null;
+
   return {
     ...snapshot,
-    sourceSelectionReason: buildNoSourceAvailableReason(sourcePreference),
-    sourceFallbackReason:
-      failures.length > 1
-        ? failures.map((failure) => buildSourceFallbackReason(failure)).join(" · ")
-        : null,
+    sourceSelectionReason,
+    sourceFallbackReason,
+    sourceSelectionDiagnostic: null,
+    sourceFallbackDiagnostic: sourceFallbackReason
+      ? createNoLiveSourceFallbackDiagnostic({
+          providerId: "cursor",
+          sourcePreference,
+          failureCount: failures.length,
+          rawMessage: sourceFallbackReason,
+        })
+      : null,
   };
 }
 

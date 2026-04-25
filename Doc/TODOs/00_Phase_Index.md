@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [185_Phase_Type_Only_Additive_Diagnostic_Model.md](./Archive/185_Phase_Type_Only_Additive_Diagnostic_Model.md)
+- latest completed slice: [186_Phase_Source_Selection_And_Fallback_Diagnostic_Builders.md](./Archive/186_Phase_Source_Selection_And_Fallback_Diagnostic_Builders.md)
 
 Completed phases should be moved to:
 
@@ -232,6 +232,7 @@ Completed phases should be moved to:
 - [183_Phase_Provider_Source_Display_Wrapper_Localization.md](./Archive/183_Phase_Provider_Source_Display_Wrapper_Localization.md) - completed and archived on 2026-04-25
 - [184_Phase_Adapter_Diagnostic_Reason_Code_Plan.md](./Archive/184_Phase_Adapter_Diagnostic_Reason_Code_Plan.md) - completed and archived on 2026-04-25
 - [185_Phase_Type_Only_Additive_Diagnostic_Model.md](./Archive/185_Phase_Type_Only_Additive_Diagnostic_Model.md) - completed and archived on 2026-04-25
+- [186_Phase_Source_Selection_And_Fallback_Diagnostic_Builders.md](./Archive/186_Phase_Source_Selection_And_Fallback_Diagnostic_Builders.md) - completed and archived on 2026-04-25
 
 ## Dependency Notes
 
@@ -482,6 +483,8 @@ Completed phases should be moved to:
 - the 2026-04-25 `Phase 184` closeout added a maintained adapter diagnostic reason-code plan, a `09.3` child TODO, and a type-only additive model as the next safe implementation slice
 - phase 185 depends on phase 184 because the type-only additive model should follow the maintained reason-code plan before any adapter diagnostic population or localization
 - the 2026-04-25 `Phase 185` closeout added optional typed diagnostic fields, known diagnostic code categories, raw-message fallback helpers, and focused tests while preserving raw diagnostic strings and rendered UI behavior
+- phase 186 depends on phase 185 because source-selection and fallback diagnostic builders should populate real adapter metadata only after the additive diagnostic model exists
+- the 2026-04-25 `Phase 186` closeout added shared source-selection/fallback diagnostic builders and populated Cursor typed source diagnostics while preserving raw source-selection/fallback strings and rendered UI behavior
 
 ## Delivery Standard For Each Phase
 

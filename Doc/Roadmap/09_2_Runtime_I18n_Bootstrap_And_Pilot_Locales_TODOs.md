@@ -25,6 +25,7 @@ Status note:
 - fourteenth executable phase landed on `2026-04-25` through `Phase 183`
 - fifteenth executable phase landed on `2026-04-25` through `Phase 184`
 - sixteenth executable phase landed on `2026-04-25` through `Phase 185`
+- seventeenth executable phase landed on `2026-04-25` through `Phase 186`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -292,11 +293,21 @@ Build one maintainable localization architecture that can support manifest strin
 
 ### N. Source Selection And Fallback Builders
 
-- next recommended slice
+- partially completed in `Phase 186`
 - populate typed source-selection and source-fallback diagnostics in one narrow provider path
+- Cursor now populates typed source-selection and fallback diagnostics beside raw adapter strings
 - preserve raw `sourceSelectionReason` and `sourceFallbackReason` strings exactly
 - keep rendered UI behavior unchanged
-- prefer Cursor or Codex because those adapters already have source attempt order helpers
+- Codex remains the next provider path because it already has source attempt order helpers
+
+### O. Codex Source Selection And Fallback Builders
+
+- next recommended slice
+- reuse the shared source-selection and fallback diagnostic builders
+- populate Codex typed source-selection and fallback diagnostics beside raw adapter strings
+- preserve exact raw `sourceSelectionReason` and `sourceFallbackReason` strings
+- keep rendered UI behavior unchanged
+- do not change source-selection order, fallback order, provider coverage claims, or personal-usage fidelity semantics
 
 ## Planned Numbered Slices
 
@@ -317,7 +328,8 @@ Build one maintainable localization architecture that can support manifest strin
 15. provider-source display wrapper localization - completed in `Phase 183`
 16. adapter diagnostic typed reason-code plan - completed in `Phase 184`
 17. type-only additive diagnostic model - completed in `Phase 185`
-18. source selection and fallback builders - next
+18. Cursor source selection and fallback builders - completed in `Phase 186`
+19. Codex source selection and fallback builders - next
 
 ## Out Of Scope
 

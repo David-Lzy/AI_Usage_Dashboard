@@ -19,6 +19,7 @@ Status note:
 - this file records the provider source-truth localization boundary after `Phase 183`
 - `Phase 184` added [I18n_Adapter_Diagnostic_Reason_Code_Plan.md](./I18n_Adapter_Diagnostic_Reason_Code_Plan.md) as the maintained plan for typed adapter diagnostics
 - `Phase 185` added optional typed diagnostic fields while keeping raw provider source-truth fields unchanged
+- `Phase 186` populated Cursor source-selection and fallback typed diagnostics while preserving raw `sourceSelectionReason` and `sourceFallbackReason` strings
 - refresh it when provider source display helpers, adapter reason fields, provider-source blueprints, or runtime i18n scope changes materially
 
 ## Goal
@@ -117,6 +118,6 @@ Future localization should prefer this order:
 
 ## Next Executable Slice
 
-The next safe engineering slice should populate source-selection and source-fallback diagnostics for one narrow provider path.
+The next safe engineering slice should populate Codex source-selection and source-fallback diagnostics with the same shared builders now proven on Cursor.
 
 It should not translate raw provider source-truth fields listed above until that typed compatibility layer exists.

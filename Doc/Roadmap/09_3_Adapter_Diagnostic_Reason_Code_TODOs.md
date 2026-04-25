@@ -14,6 +14,7 @@ Status note:
 
 - created in `Phase 184`
 - type-only additive model completed in `Phase 185`
+- Cursor source-selection and fallback diagnostic builders completed in `Phase 186`
 - this child TODO turns the adapter diagnostic reason-code plan into executable follow-up slices
 - refresh it when typed diagnostic coverage, provider adapter behavior, or archive compatibility rules change
 
@@ -33,12 +34,14 @@ The goal is not to translate raw provider evidence immediately. The goal is to m
 
 ## Current Truth
 
-As of `Phase 185`:
+As of `Phase 186`:
 
 - provider-source display wrappers are localized through `ProviderSourceDisplayCopy`
 - raw provider source-truth fields still pass through unchanged
 - `ProviderSnapshot` has optional typed diagnostic fields beside the raw strings
 - `src/providers/diagnostics.ts` provides known diagnostic code categories and raw-message fallback helpers
+- `src/providers/diagnostics.ts` now also provides reusable source-selection, source-fallback, and no-live-source diagnostic builders
+- the Cursor adapter populates typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` metadata beside existing raw source-selection and fallback strings
 - `ProviderSnapshot.warningReason` remains the primary raw warning body
 - `ProviderSnapshot.sourceSelectionReason` remains the primary raw source-selection explanation
 - `ProviderSnapshot.sourceFallbackReason` remains the primary raw fallback explanation
@@ -67,9 +70,11 @@ As of `Phase 185`:
 
 ### B. Source Selection And Fallback Builders
 
-- next recommended slice
+- partially completed in `Phase 186` for Cursor
 - add helper builders for source-selection and fallback diagnostics
 - start with Cursor and Codex because those adapters already have explicit source attempt order logic
+- Cursor now uses the shared builders without changing raw string output
+- Codex remains the next provider path to wire through the same builders
 - preserve existing source-selection and fallback strings exactly
 - add tests that compare raw string output before and after typing
 
@@ -107,15 +112,16 @@ As of `Phase 185`:
 
 ## First Implementation Candidate
 
-The next runtime phase should implement only `A. Type-Only Additive Model`.
+The next runtime phase should implement the Codex half of `B. Source Selection And Fallback Builders`.
 
 Recommended scope:
 
-- `src/providers/types.ts`
-- one small shared helper file, for example `src/providers/diagnostics.ts`
-- focused tests for type guards or helper builders
+- `src/providers/codex/adapter.ts`
+- `src/providers/codex/adapter.test.ts`
+- reuse the shared builders already added in `src/providers/diagnostics.ts`
 - no UI rendering changes
-- no adapter behavior changes unless a helper can preserve exact raw strings
+- no source-selection or fallback-order behavior changes
+- preserve exact raw `sourceSelectionReason` and `sourceFallbackReason` strings
 
 ## Acceptance Criteria
 

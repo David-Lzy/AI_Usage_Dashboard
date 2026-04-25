@@ -4,7 +4,16 @@ import type {
   ProviderDiagnosticCategory,
   ProviderDiagnosticParams,
   ProviderDiagnosticSeverity,
+  ProviderId,
+  ProviderSourceKind,
+  ProviderSourcePreference,
 } from "./types";
+
+type SourceAttemptFailureDiagnosticInput = {
+  kind: ProviderSourceKind;
+  code: string;
+  detail: string;
+};
 
 export const PROVIDER_DIAGNOSTIC_CODE_CATEGORIES = {
   "source.auto_selected_official_api": "source_selection",
@@ -59,6 +68,110 @@ export function createProviderDiagnostic(
     rawMessage,
     ...(params ? { params } : {}),
   };
+}
+
+function getSourceSelectionDiagnosticCode(
+  sourcePreference: ProviderSourcePreference,
+  selectedKind: ProviderSourceKind,
+): KnownProviderDiagnosticCode | null {
+  if (selectedKind === "official_api") {
+    return sourcePreference === "auto"
+      ? "source.auto_selected_official_api"
+      : "source.preference_selected_official_api";
+  }
+
+  if (selectedKind === "session_page") {
+    return sourcePreference === "auto"
+      ? "source.auto_selected_session_page"
+      : "source.preference_selected_session_page";
+  }
+
+  return null;
+}
+
+function getSourceFallbackDiagnosticCode(
+  failure: SourceAttemptFailureDiagnosticInput,
+): KnownProviderDiagnosticCode {
+  if (failure.kind === "official_api") {
+    return failure.code === "credential_missing"
+      ? "source.official_api_missing_credential"
+      : "source.official_api_failed";
+  }
+
+  if (failure.kind === "session_page") {
+    return "source.session_page_unavailable";
+  }
+
+  return "source.no_live_path";
+}
+
+export function createSourceSelectionDiagnostic({
+  providerId,
+  sourcePreference,
+  selectedKind,
+  hadFallback,
+  rawMessage,
+}: {
+  providerId: ProviderId;
+  sourcePreference: ProviderSourcePreference;
+  selectedKind: ProviderSourceKind;
+  hadFallback: boolean;
+  rawMessage: string;
+}): ProviderDiagnostic | null {
+  const code = getSourceSelectionDiagnosticCode(sourcePreference, selectedKind);
+
+  if (!code) {
+    return null;
+  }
+
+  return createProviderDiagnostic(code, "info", rawMessage, {
+    providerId,
+    sourcePreference,
+    selectedKind,
+    hadFallback,
+  });
+}
+
+export function createSourceFallbackDiagnostic({
+  providerId,
+  sourcePreference,
+  failure,
+  rawMessage,
+}: {
+  providerId: ProviderId;
+  sourcePreference: ProviderSourcePreference;
+  failure: SourceAttemptFailureDiagnosticInput;
+  rawMessage: string;
+}): ProviderDiagnostic {
+  return createProviderDiagnostic(
+    getSourceFallbackDiagnosticCode(failure),
+    failure.code === "credential_missing" ? "warning" : "error",
+    rawMessage,
+    {
+      providerId,
+      sourcePreference,
+      failedSourceKind: failure.kind,
+      failureCode: failure.code,
+    },
+  );
+}
+
+export function createNoLiveSourceFallbackDiagnostic({
+  providerId,
+  sourcePreference,
+  failureCount,
+  rawMessage,
+}: {
+  providerId: ProviderId;
+  sourcePreference: ProviderSourcePreference;
+  failureCount: number;
+  rawMessage: string;
+}): ProviderDiagnostic {
+  return createProviderDiagnostic("source.no_live_path", "error", rawMessage, {
+    providerId,
+    sourcePreference,
+    failureCount,
+  });
 }
 
 export function getProviderDiagnosticRawMessage(
