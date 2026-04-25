@@ -31,6 +31,7 @@ Status note:
 - `Phase 196` added compact-width evidence QA for combined diagnostic presentation stacks
 - `Phase 197` added diagnostic archive and export compatibility review
 - `Phase 198` aligned maintained sample and store seed typed diagnostic metadata while preserving raw diagnostic strings
+- `Phase 199` added diagnostic fixture and historical evidence alignment review
 - refresh it when provider adapters, source-selection behavior, provider snapshot fields, archive evidence schemas, or runtime i18n boundaries change materially
 
 ## Goal
@@ -158,7 +159,8 @@ After typed diagnostics exist:
 10. Review diagnostic presentation density after warning, source, and adapter-error summaries are all visible - completed in `Phase 196`.
 11. Review archive and export compatibility before localizing deeper diagnostic bodies or evidence payloads - completed in `Phase 197`.
 12. Align sample and store seed typed diagnostic metadata after archive/export compatibility is explicit - completed in `Phase 198`.
-13. Review diagnostic fixtures and historical evidence references before deeper diagnostic-body localization.
+13. Review diagnostic fixtures and historical evidence references before deeper diagnostic-body localization - completed in `Phase 199`.
+14. Expand raw fallback regression coverage before any deeper diagnostic-body localization.
 
 ## Compatibility Rules
 
@@ -300,6 +302,14 @@ Before any runtime implementation lands:
 - `npm run phase198:review` verifies the additive metadata markers plus closeout docs
 - raw diagnostic strings, provider coverage claims, source-selection behavior, archive schemas, and screenshot assets remain unchanged
 
+`Phase 199` added diagnostic fixture and historical evidence alignment review:
+
+- `Doc/I18n_Diagnostic_Fixture_And_Historical_Evidence_Alignment.md` records which fixture and evidence scopes are mutable versus frozen
+- `npm run phase199:review` verifies maintained fixture paths, runtime seed paths, generated request/handoff package indexes, and frozen archive indexes
+- generated request/handoff packages and frozen archives are checked for accidental typed diagnostic payload fields
+- mutable maintained fixtures can be aligned later only where stable codes already match raw evidence
+- no runtime behavior, provider coverage, source-selection behavior, fallback order, or archive schema changed
+
 ## Next Executable Slice
 
-The next safe implementation slice should review diagnostic fixtures and historical evidence references. Mutable maintained fixtures can gain typed metadata only where stable codes already match raw evidence; frozen archives should remain unchanged.
+The next safe implementation slice should expand raw fallback regression coverage. Absent, unknown, or intentionally raw-only typed diagnostics should continue to fall back to raw evidence across classification and presentation surfaces.

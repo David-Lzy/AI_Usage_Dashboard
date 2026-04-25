@@ -27,6 +27,7 @@ Status note:
 - diagnostic presentation compact-width and evidence QA completed in `Phase 196`
 - diagnostic archive and export compatibility review completed in `Phase 197`
 - sample and store seed diagnostic metadata alignment completed in `Phase 198`
+- diagnostic fixture and historical evidence alignment review completed in `Phase 199`
 - this child TODO turns the adapter diagnostic reason-code plan into executable follow-up slices
 - refresh it when typed diagnostic coverage, provider adapter behavior, or archive compatibility rules change
 
@@ -38,6 +39,7 @@ Maintained reference:
 
 - [I18n_Adapter_Diagnostic_Reason_Code_Plan.md](../I18n_Adapter_Diagnostic_Reason_Code_Plan.md)
 - [I18n_Diagnostic_Archive_Export_Compatibility.md](../I18n_Diagnostic_Archive_Export_Compatibility.md)
+- [I18n_Diagnostic_Fixture_And_Historical_Evidence_Alignment.md](../I18n_Diagnostic_Fixture_And_Historical_Evidence_Alignment.md)
 
 ## Goal
 
@@ -47,7 +49,7 @@ The goal is not to translate raw provider evidence immediately. The goal is to m
 
 ## Current Truth
 
-As of `Phase 198`:
+As of `Phase 199`:
 
 - provider-source display wrappers are localized through `ProviderSourceDisplayCopy`
 - raw provider source-truth fields still pass through unchanged
@@ -64,7 +66,9 @@ As of `Phase 198`:
 - `npm run phase196:review` now seeds a compact diagnostic stress state and verifies localized summaries plus raw evidence bodies at `420px` Settings and `360px` Provider Detail widths
 - `npm run phase197:review` now verifies archive/export compatibility markers for raw diagnostic fields, typed diagnostic fields, app-state storage, store screenshot seed/archives, theme-recovery exports, and interaction-audit exports
 - `npm run phase198:review` now verifies maintained sample and store seed typed diagnostic metadata alignment while keeping raw diagnostic strings unchanged
+- `npm run phase199:review` now verifies fixture, request/handoff, and frozen archive boundaries for diagnostic evidence alignment
 - `Doc/I18n_Diagnostic_Archive_Export_Compatibility.md` now records that localized diagnostic presentation is not an archive schema
+- `Doc/I18n_Diagnostic_Fixture_And_Historical_Evidence_Alignment.md` now records which fixture and evidence scopes are mutable versus frozen
 - the Cursor adapter populates typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` metadata beside existing raw source-selection and fallback strings
 - the Codex adapter populates typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` metadata beside existing raw source-selection and fallback strings
 - Cursor and Codex now populate typed `warningDiagnostic` metadata for missing credential and missing host-access blockers
@@ -201,21 +205,29 @@ As of `Phase 198`:
 
 ### N. Diagnostic Fixture And Historical Evidence Alignment Review
 
-- next recommended slice
+- completed in `Phase 199`
 - inventory remaining fixtures, generated review packages, archived evidence notes, and operator handoff files that intentionally preserve raw diagnostic strings
 - identify any maintained fixture that can safely gain typed diagnostic metadata without rewriting historical archive truth
 - keep this as review and alignment work, not as a translation or provider-coverage slice
 - add static checks only where a fixture is maintained source, not frozen historical evidence
 
+### O. Adapter Diagnostic Raw Fallback Regression Review
+
+- next recommended slice
+- add or expand regression coverage proving absent, unknown, and intentionally raw-only typed diagnostics still fall back to raw evidence
+- cover source-state classification, localized diagnostic presentation, and evidence-oriented detail surfaces
+- keep provider coverage, source-selection behavior, and archive schemas unchanged
+- avoid translating raw adapter bodies; this is fallback safety work before any deeper diagnostic localization
+
 ## First Implementation Candidate
 
-The next runtime phase should implement the first narrow slice of `N. Diagnostic Fixture And Historical Evidence Alignment Review`.
+The next runtime phase should implement the first narrow slice of `O. Adapter Diagnostic Raw Fallback Regression Review`.
 
 Recommended scope:
 
-- inventory maintained fixtures and generated-package templates that mention diagnostic strings
-- separate mutable maintained seeds from frozen historical archive evidence
-- add static review coverage for the remaining raw-only diagnostic evidence boundary
+- inventory existing unknown-code and raw-only fallback tests
+- add focused regression coverage for source-state, Settings diagnostic presentation, and Provider Detail diagnostic presentation where raw fallback still matters
+- document raw fallback behavior as a compatibility requirement before any deeper diagnostic-body localization
 - avoid translating raw diagnostics, changing provider coverage, or rewriting historical archives
 
 ## Acceptance Criteria

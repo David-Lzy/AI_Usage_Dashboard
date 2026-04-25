@@ -38,6 +38,7 @@ Status note:
 - twenty-seventh executable phase landed on `2026-04-25` through `Phase 196`
 - twenty-eighth executable phase landed on `2026-04-25` through `Phase 197`
 - twenty-ninth executable phase landed on `2026-04-25` through `Phase 198`
+- thirtieth executable phase landed on `2026-04-25` through `Phase 199`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -414,11 +415,19 @@ Build one maintainable localization architecture that can support manifest strin
 
 ### AA. Diagnostic Fixture And Historical Evidence Alignment Review
 
-- next recommended slice
+- completed in `Phase 199`
 - inventory maintained fixtures, generated-package templates, and historical evidence references that still carry raw diagnostic strings
 - separate mutable maintained fixtures from frozen archives that must not be rewritten
 - add review gates only where the fixture is maintained source
 - avoid translating raw adapter diagnostics or changing provider coverage claims
+
+### AB. Adapter Diagnostic Raw Fallback Regression Review
+
+- next recommended slice
+- prove absent typed diagnostics still fall back to raw evidence strings
+- prove unknown diagnostic codes do not hide raw diagnostic bodies
+- cover source-state classification and localized diagnostic presentation compatibility
+- keep archive schemas and provider coverage unchanged
 
 ## Planned Numbered Slices
 
@@ -452,7 +461,8 @@ Build one maintainable localization architecture that can support manifest strin
 28. diagnostic presentation compact-width and evidence QA - completed in `Phase 196`
 29. diagnostic archive and export compatibility review - completed in `Phase 197`
 30. sample and store seed diagnostic metadata alignment - completed in `Phase 198`
-31. diagnostic fixture and historical evidence alignment review - next
+31. diagnostic fixture and historical evidence alignment review - completed in `Phase 199`
+32. adapter diagnostic raw fallback regression review - next
 
 ## Out Of Scope
 

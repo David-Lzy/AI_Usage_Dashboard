@@ -167,6 +167,7 @@ This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still maki
 - `Phase 196` adds compact-width QA for localized diagnostic presentation stacks and keeps raw diagnostic bodies outside translated message ids
 - `Phase 197` adds diagnostic archive/export compatibility review and keeps localized diagnostic presentation out of archive/export schema message ids
 - `Phase 198` aligns maintained sample and store seed typed diagnostic metadata while keeping raw diagnostic strings outside translated message ids
+- `Phase 199` separates mutable diagnostic fixtures from generated request/handoff packages and frozen historical archives, keeping those evidence records outside translated message ids
 
 ## Locale-Aware Formatting Contract
 

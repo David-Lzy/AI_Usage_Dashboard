@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [198_Phase_Sample_Store_Seed_Diagnostic_Metadata_Alignment.md](./Archive/198_Phase_Sample_Store_Seed_Diagnostic_Metadata_Alignment.md)
+- latest completed slice: [199_Phase_Diagnostic_Fixture_And_Historical_Evidence_Alignment_Review.md](./Archive/199_Phase_Diagnostic_Fixture_And_Historical_Evidence_Alignment_Review.md)
 
 Completed phases should be moved to:
 
@@ -245,6 +245,7 @@ Completed phases should be moved to:
 - [196_Phase_Diagnostic_Presentation_Compact_Evidence_QA.md](./Archive/196_Phase_Diagnostic_Presentation_Compact_Evidence_QA.md) - completed and archived on 2026-04-25
 - [197_Phase_Diagnostic_Archive_Export_Compatibility_Review.md](./Archive/197_Phase_Diagnostic_Archive_Export_Compatibility_Review.md) - completed and archived on 2026-04-25
 - [198_Phase_Sample_Store_Seed_Diagnostic_Metadata_Alignment.md](./Archive/198_Phase_Sample_Store_Seed_Diagnostic_Metadata_Alignment.md) - completed and archived on 2026-04-25
+- [199_Phase_Diagnostic_Fixture_And_Historical_Evidence_Alignment_Review.md](./Archive/199_Phase_Diagnostic_Fixture_And_Historical_Evidence_Alignment_Review.md) - completed and archived on 2026-04-25
 
 ## Dependency Notes
 
@@ -521,6 +522,8 @@ Completed phases should be moved to:
 - the 2026-04-25 `Phase 197` closeout added a maintained diagnostic archive/export compatibility reference plus a static review for raw diagnostic fields, typed diagnostic fields, storage, screenshot seed/archive, theme-recovery export, and interaction-audit export boundaries
 - phase 198 depends on phase 197 because maintained sample and store seed typed metadata should align only after archive/export compatibility makes the raw evidence boundary explicit
 - the 2026-04-25 `Phase 198` closeout aligned maintained sample and store seed typed diagnostic metadata while preserving raw diagnostic strings, provider coverage claims, source-selection behavior, and archive schemas
+- phase 199 depends on phase 198 because fixture and historical evidence alignment should happen only after maintained sample/seed metadata proves additive typed metadata can stay separate from raw evidence
+- the 2026-04-25 `Phase 199` closeout added a maintained fixture/historical evidence boundary and a static review for mutable fixtures, generated request/handoff packages, and frozen historical archives
 
 ## Delivery Standard For Each Phase
 

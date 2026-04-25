@@ -42,6 +42,7 @@ Execution note:
 - twenty-seventh executable slice landed on `2026-04-25` through `Phase 196`
 - twenty-eighth executable slice landed on `2026-04-25` through `Phase 197`
 - twenty-ninth executable slice landed on `2026-04-25` through `Phase 198`
+- thirtieth executable slice landed on `2026-04-25` through `Phase 199`
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
 Process rule:
@@ -132,6 +133,7 @@ As of 2026-04-25:
 - compact diagnostic presentation QA now verifies localized warning/source/adapter summaries beside raw evidence bodies at `420px` Settings and `360px` Provider Detail widths
 - diagnostic archive/export compatibility review now locks raw diagnostic fields as evidence fields while keeping localized diagnostic presentation out of archive/export schemas
 - maintained sample and store seed states now align typed diagnostic metadata where stable existing codes match raw evidence strings, without changing raw strings or provider coverage claims
+- diagnostic fixture and historical evidence alignment now separates mutable maintained fixtures from generated request/handoff packages and frozen historical archives
 - the repo ships one store helper i18n boundary reference:
   - [I18n_Store_Runtime_Helper_Copy.md](../I18n_Store_Runtime_Helper_Copy.md)
 - the repo ships maintained i18n references:
@@ -223,7 +225,8 @@ Recommended rollout:
 28. diagnostic presentation compact-width and evidence QA - shipped in `Phase 196`
 29. diagnostic archive and export compatibility review - shipped in `Phase 197`
 30. sample and store seed diagnostic metadata alignment - shipped in `Phase 198`
-31. diagnostic fixture and historical evidence alignment review - next
+31. diagnostic fixture and historical evidence alignment review - shipped in `Phase 199`
+32. adapter diagnostic raw fallback regression review - next
 
 ## References
 

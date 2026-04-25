@@ -18,6 +18,7 @@ Status note:
 
 - this file records the `Phase 197` compatibility boundary for diagnostic fields in archives, requests, screenshot seeds, and operator exports
 - `Phase 198` confirmed maintained sample/store seed typed metadata can be additive without changing raw diagnostic evidence strings
+- `Phase 199` split mutable fixture alignment from generated request/handoff packages and frozen historical archives
 - refresh it when diagnostic payload fields, archive schemas, request manifests, screenshot seed states, or operator export shapes change materially
 
 ## Goal
@@ -79,4 +80,6 @@ No archive or export schema migration is required before continuing localized di
 
 `Phase 198` completed the sample and store seed diagnostic metadata alignment. Maintained sample or seed states can add typed diagnostics where stable codes already match raw strings, and raw diagnostic strings must remain unchanged.
 
-The next safe runtime slice is diagnostic fixture and historical evidence alignment review. That work should separate mutable maintained fixtures from frozen archives before adding any further typed metadata.
+`Phase 199` completed diagnostic fixture and historical evidence alignment review. It confirmed that generated request/handoff packages and frozen archives should not gain typed diagnostic payloads without a dedicated schema migration.
+
+The next safe runtime slice is adapter diagnostic raw fallback regression review. That work should prove raw fallback behavior before any deeper diagnostic-body localization.
