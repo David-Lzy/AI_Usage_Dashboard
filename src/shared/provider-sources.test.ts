@@ -1,5 +1,18 @@
 import { describe, expect, it } from "vitest";
 
+import {
+  createCredentialDiagnostic,
+  createHostAccessDiagnostic,
+  createPageSessionDiagnostic,
+  createSyncStaleDiagnostic,
+  createUsageThresholdDiagnostic,
+} from "../providers/diagnostics";
+import type {
+  ProviderDiagnostic,
+  ProviderId,
+  ProviderSetting,
+  ProviderSnapshot,
+} from "../providers/types";
 import { SAMPLE_APP_STATE } from "./constants";
 import { createRuntimeI18n } from "./i18n";
 import { buildProviderSourceDisplayLocalizedCopy } from "./localized-copy";
@@ -11,7 +24,7 @@ import {
   getSessionPagePlan,
 } from "./provider-sources";
 
-function findProviderState(providerId: (typeof SAMPLE_APP_STATE.providers)[number]["providerId"]) {
+function findProviderState(providerId: ProviderId) {
   const provider =
     SAMPLE_APP_STATE.providers.find((entry) => entry.providerId === providerId) ??
     null;
@@ -24,6 +37,28 @@ function findProviderState(providerId: (typeof SAMPLE_APP_STATE.providers)[numbe
   }
 
   return { provider, setting };
+}
+
+function buildProviderState(
+  providerId: ProviderId,
+  providerOverrides: Partial<ProviderSnapshot> = {},
+  settingOverrides: Partial<ProviderSetting> = {},
+): {
+  provider: ProviderSnapshot;
+  setting: ProviderSetting;
+} {
+  const { provider, setting } = findProviderState(providerId);
+
+  return {
+    provider: {
+      ...provider,
+      ...providerOverrides,
+    },
+    setting: {
+      ...setting,
+      ...settingOverrides,
+    },
+  };
 }
 
 describe("provider source helpers", () => {
@@ -125,6 +160,175 @@ describe("provider source helpers", () => {
     );
     expect(display.sourceSelectionReason).toBe("Auto selected Official API.");
     expect(display.sourceFallbackReason).toBeNull();
+  });
+
+  it("prefers typed host-access diagnostics over raw warning pattern matching", () => {
+    const warningReason = "Provider permission is blocked for live sync.";
+    const { provider, setting } = buildProviderState(
+      "cursor",
+      {
+        warningReason,
+        warningDiagnostic: createHostAccessDiagnostic({
+          providerId: "cursor",
+          sourceKind: "session_page",
+          hostLabel: "cursor.com",
+          rawMessage: warningReason,
+        }),
+      },
+      {
+        status: "granted",
+      },
+    );
+    const display = buildProviderSourceDisplay(provider, setting);
+
+    expect(display.stateKind).toBe("host_access_missing");
+    expect(display.stateLabel).toBe("Host access missing");
+    expect(display.stateDetail).toBe(warningReason);
+  });
+
+  it("prefers typed credential diagnostics over raw warning pattern matching", () => {
+    const warningReason = "Provider setup is incomplete for live analytics.";
+    const { provider, setting } = buildProviderState("codex", {
+      syncStatus: "error",
+      tone: "error",
+      warningReason,
+      warningDiagnostic: createCredentialDiagnostic({
+        providerId: "codex",
+        credentialKind: "workspace_config",
+        rawMessage: warningReason,
+      }),
+    });
+    const display = buildProviderSourceDisplay(provider, setting);
+
+    expect(display.stateKind).toBe("credential_missing");
+    expect(display.stateLabel).toBe("Credential missing");
+    expect(display.stateDetail).toBe(warningReason);
+  });
+
+  it("prefers typed page-session diagnostics over raw warning pattern matching", () => {
+    const loggedOutReason = "Browser session unavailable for usage capture.";
+    const loggedOut = buildProviderState("cursor", {
+      syncStatus: "warning",
+      tone: "warning",
+      warningReason: loggedOutReason,
+      warningDiagnostic: createPageSessionDiagnostic({
+        providerId: "cursor",
+        pageSessionKind: "logged_out",
+        rawMessage: loggedOutReason,
+      }),
+    });
+    const openPageReason = "Usage capture needs the provider page.";
+    const openPage = buildProviderState("cursor", {
+      syncStatus: "warning",
+      tone: "warning",
+      warningReason: openPageReason,
+      warningDiagnostic: createPageSessionDiagnostic({
+        providerId: "cursor",
+        pageSessionKind: "open_page_required",
+        rawMessage: openPageReason,
+      }),
+    });
+    const captureReason = "Parser contract drifted during capture.";
+    const captureUnavailable = buildProviderState("cursor", {
+      syncStatus: "error",
+      tone: "error",
+      warningReason: captureReason,
+      warningDiagnostic: createPageSessionDiagnostic({
+        providerId: "cursor",
+        pageSessionKind: "capture_unavailable",
+        rawMessage: captureReason,
+      }),
+    });
+
+    expect(
+      buildProviderSourceDisplay(loggedOut.provider, loggedOut.setting)
+        .stateKind,
+    ).toBe("logged_out");
+    expect(
+      buildProviderSourceDisplay(openPage.provider, openPage.setting).stateKind,
+    ).toBe("open_page_required");
+    expect(
+      buildProviderSourceDisplay(
+        captureUnavailable.provider,
+        captureUnavailable.setting,
+      ).stateKind,
+    ).toBe("sync_error");
+  });
+
+  it("keeps usage-threshold and cached-state stale diagnostics source-ready", () => {
+    const usageReason = "90% of included requests consumed";
+    const usage = buildProviderState("cursor", {
+      syncStatus: "warning",
+      tone: "warning",
+      warningReason: usageReason,
+      warningDiagnostic: createUsageThresholdDiagnostic({
+        providerId: "cursor",
+        usageThresholdKind: "threshold_warning",
+        rawMessage: usageReason,
+        usagePercent: 90,
+        thresholdPercent: 80,
+      }),
+    });
+    const staleReason = "Automatic refresh is overdue; showing cached data.";
+    const stale = buildProviderState("cursor", {
+      syncStatus: "warning",
+      tone: "warning",
+      warningReason: staleReason,
+      warningDiagnostic: createSyncStaleDiagnostic({
+        providerId: "cursor",
+        syncStaleKind: "cached_state_stale",
+        rawMessage: staleReason,
+        ageMinutes: 240,
+        staleAfterMinutes: 60,
+      }),
+    });
+
+    expect(buildProviderSourceDisplay(usage.provider, usage.setting).stateKind).toBe(
+      "ready",
+    );
+    expect(buildProviderSourceDisplay(stale.provider, stale.setting).stateKind).toBe(
+      "ready",
+    );
+  });
+
+  it("maps automatic-sync overdue diagnostics to the existing sync-error state", () => {
+    const warningReason =
+      "Automatic sync is overdue; cached state may be stale.";
+    const { provider, setting } = buildProviderState("cursor", {
+      syncStatus: "error",
+      tone: "error",
+      warningReason,
+      warningDiagnostic: createSyncStaleDiagnostic({
+        providerId: "cursor",
+        syncStaleKind: "automatic_sync_overdue",
+        rawMessage: warningReason,
+        ageMinutes: 240,
+        staleAfterMinutes: 60,
+      }),
+    });
+    const display = buildProviderSourceDisplay(provider, setting);
+
+    expect(display.stateKind).toBe("sync_error");
+    expect(display.stateDetail).toBe(warningReason);
+  });
+
+  it("keeps raw warning pattern fallback for unknown typed diagnostics", () => {
+    const warningReason =
+      "Host access missing; grant Cursor access before live sync can run.";
+    const unknownDiagnostic: ProviderDiagnostic = {
+      code: "future.host_access_hint",
+      category: "adapter_error",
+      severity: "warning",
+      rawMessage: warningReason,
+    };
+    const { provider, setting } = buildProviderState("cursor", {
+      warningReason,
+      warningDiagnostic: unknownDiagnostic,
+    });
+    const display = buildProviderSourceDisplay(provider, setting);
+
+    expect(display.stateKind).toBe("host_access_missing");
+    expect(display.stateDetail).toBe(warningReason);
   });
 
   it("classifies the retained JetBrains session-page path as exact vendor values", () => {

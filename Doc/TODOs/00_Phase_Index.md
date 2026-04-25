@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [191_Phase_Sync_Stale_Diagnostics.md](./Archive/191_Phase_Sync_Stale_Diagnostics.md)
+- latest completed slice: [192_Phase_Source_State_Typed_Diagnostic_Fallback.md](./Archive/192_Phase_Source_State_Typed_Diagnostic_Fallback.md)
 
 Completed phases should be moved to:
 
@@ -238,6 +238,7 @@ Completed phases should be moved to:
 - [189_Phase_Page_Session_Diagnostics.md](./Archive/189_Phase_Page_Session_Diagnostics.md) - completed and archived on 2026-04-25
 - [190_Phase_Usage_Threshold_And_Policy_Only_Diagnostics.md](./Archive/190_Phase_Usage_Threshold_And_Policy_Only_Diagnostics.md) - completed and archived on 2026-04-25
 - [191_Phase_Sync_Stale_Diagnostics.md](./Archive/191_Phase_Sync_Stale_Diagnostics.md) - completed and archived on 2026-04-25
+- [192_Phase_Source_State_Typed_Diagnostic_Fallback.md](./Archive/192_Phase_Source_State_Typed_Diagnostic_Fallback.md) - completed and archived on 2026-04-25
 
 ## Dependency Notes
 
@@ -500,6 +501,8 @@ Completed phases should be moved to:
 - the 2026-04-25 `Phase 190` closeout populated usage-threshold and policy-only typed warning diagnostics while preserving raw warning/source strings and rendered UI behavior
 - phase 191 depends on phase 190 because sync-stale diagnostics should land after provider-owned warning diagnostic families are broad enough that the sync engine can add its own stale metadata without overwriting them
 - the 2026-04-25 `Phase 191` closeout populated sync-engine stale cached-state and automatic-sync-overdue typed warning diagnostics while preserving raw warning/source strings and rendered UI behavior
+- phase 192 depends on phase 191 because source-state classification should prefer typed diagnostics only after source-selection, fallback, warning, usage, policy, and sync-stale diagnostic families are populated broadly enough for compatibility tests
+- the 2026-04-25 `Phase 192` closeout made source-state classification prefer typed warning diagnostics while preserving raw English warning-pattern fallback and rendered UI behavior
 
 ## Delivery Standard For Each Phase
 

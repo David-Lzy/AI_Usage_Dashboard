@@ -31,6 +31,7 @@ Status note:
 - twentieth executable phase landed on `2026-04-25` through `Phase 189`
 - twenty-first executable phase landed on `2026-04-25` through `Phase 190`
 - twenty-second executable phase landed on `2026-04-25` through `Phase 191`
+- twenty-third executable phase landed on `2026-04-25` through `Phase 192`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -352,11 +353,19 @@ Build one maintainable localization architecture that can support manifest strin
 
 ### T. Source-State Classification Typed Diagnostic Fallback
 
-- next recommended slice
+- completed in `Phase 192`
 - make provider source-state classification prefer typed diagnostic categories where available
 - keep raw English `warningReason` matching as the compatibility fallback for older stored snapshots, screenshot seeds, and archives
 - preserve rendered labels, state tones, and raw diagnostic strings unless a typed diagnostic already maps to the same current state
 - add tests for typed policy-only, host-access, credential, page-session, usage-threshold, and sync-stale inputs plus absent/unknown diagnostic fallback
+
+### U. Localized Diagnostic Presentation Follow-Up
+
+- next recommended slice
+- render short localized diagnostic labels or summaries from typed diagnostic codes and params
+- keep raw diagnostic bodies visible where evidence, details, exports, or archive compatibility still need the source-truth wording
+- add unknown-code fallback tests that preserve raw diagnostic strings
+- avoid translating raw adapter or sync-engine diagnostic bodies directly
 
 ## Planned Numbered Slices
 
@@ -383,7 +392,8 @@ Build one maintainable localization architecture that can support manifest strin
 21. page-session diagnostics - completed in `Phase 189`
 22. usage-threshold and policy-only diagnostics - completed in `Phase 190`
 23. sync-stale diagnostics - completed in `Phase 191`
-24. source-state classification typed-diagnostic fallback - next
+24. source-state classification typed-diagnostic fallback - completed in `Phase 192`
+25. localized diagnostic presentation follow-up - next
 
 ## Out Of Scope
 

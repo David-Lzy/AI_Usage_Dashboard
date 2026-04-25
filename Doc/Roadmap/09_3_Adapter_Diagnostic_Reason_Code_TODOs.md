@@ -20,6 +20,7 @@ Status note:
 - page-session diagnostics for Cursor and Codex completed in `Phase 189`
 - usage-threshold and policy-only diagnostics completed in `Phase 190`
 - sync-stale diagnostics completed in `Phase 191`
+- source-state classification typed-diagnostic fallback completed in `Phase 192`
 - this child TODO turns the adapter diagnostic reason-code plan into executable follow-up slices
 - refresh it when typed diagnostic coverage, provider adapter behavior, or archive compatibility rules change
 
@@ -39,7 +40,7 @@ The goal is not to translate raw provider evidence immediately. The goal is to m
 
 ## Current Truth
 
-As of `Phase 191`:
+As of `Phase 192`:
 
 - provider-source display wrappers are localized through `ProviderSourceDisplayCopy`
 - raw provider source-truth fields still pass through unchanged
@@ -48,6 +49,7 @@ As of `Phase 191`:
 - `src/providers/diagnostics.ts` now also provides reusable source-selection, source-fallback, credential, host-access, page-session, usage-threshold, policy-only, and sync-stale diagnostic builders
 - `src/providers/normalize.ts` now returns usage-threshold diagnostics from shared usage-signal normalization when a provider id is supplied
 - the sync engine now populates typed sync-stale `warningDiagnostic` metadata only when it is the component generating the stale raw warning body
+- source-state classification now prefers typed warning diagnostic categories where available and keeps raw English warning-pattern matching as compatibility fallback
 - the Cursor adapter populates typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` metadata beside existing raw source-selection and fallback strings
 - the Codex adapter populates typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` metadata beside existing raw source-selection and fallback strings
 - Cursor and Codex now populate typed `warningDiagnostic` metadata for missing credential and missing host-access blockers
@@ -123,7 +125,7 @@ As of `Phase 191`:
 
 ### G. Source-State Classification Typed Diagnostic Fallback
 
-- next recommended slice
+- completed in `Phase 192`
 - update source-state classification to prefer typed diagnostic categories where present
 - keep current English raw-string checks as compatibility fallback
 - add regression tests proving absent or unknown typed diagnostics still render the current source-state fallback
@@ -131,21 +133,21 @@ As of `Phase 191`:
 
 ### H. Localized Presentation Follow-Up
 
-- only start after typed coverage is stable
+- next recommended slice
 - render localized diagnostic summaries from codes and params
 - keep raw diagnostic bodies accessible in details, exports, or evidence views
 - add unknown-code fallback tests
 
 ## First Implementation Candidate
 
-The next runtime phase should implement the first narrow slice of `G. Source-State Classification Typed Diagnostic Fallback`.
+The next runtime phase should implement the first narrow slice of `H. Localized Presentation Follow-Up`.
 
 Recommended scope:
 
-- start with source-state classification because typed warning coverage is now broad enough to reduce raw English pattern dependence
-- prefer typed diagnostic categories for policy-only, host-access, credential, page-session, usage-threshold, and sync-stale states where the category already maps to the current UI state
-- keep raw English pattern matching as fallback for older snapshots, seeds, archives, and unknown future diagnostic codes
-- no UI rendering changes
+- start with diagnostic labels or short summaries generated from typed codes and params
+- keep raw diagnostic bodies visible in provider detail and evidence-oriented surfaces
+- unknown typed diagnostic codes must fall back to raw diagnostic strings
+- do not translate raw adapter or sync-engine diagnostic bodies directly
 - preserve exact raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings
 
 ## Acceptance Criteria

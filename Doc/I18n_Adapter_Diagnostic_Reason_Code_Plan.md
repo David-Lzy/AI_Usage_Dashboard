@@ -24,6 +24,7 @@ Status note:
 - `Phase 189` populated Cursor and Codex page-session warning diagnostics while preserving raw strings
 - `Phase 190` populated usage-threshold and policy-only warning diagnostics while preserving raw strings
 - `Phase 191` populated sync-stale warning diagnostics while preserving raw sync-engine stale strings
+- `Phase 192` made source-state classification prefer typed warning diagnostics while preserving raw English fallback behavior
 - refresh it when provider adapters, source-selection behavior, provider snapshot fields, archive evidence schemas, or runtime i18n boundaries change materially
 
 ## Goal
@@ -144,7 +145,7 @@ After typed diagnostics exist:
 3. Populate credential, host-access, and page-session diagnostics for provider adapters. Credential and host-access coverage for Cursor and Codex completed in `Phase 188`; page-session diagnostics for Cursor and Codex completed in `Phase 189`.
 4. Populate usage-threshold and policy-only diagnostics for shared normalization and Gemini policy output - completed in `Phase 190`.
 5. Populate sync-stale diagnostics in the sync engine - completed in `Phase 191`.
-6. Update source-state classification to prefer typed diagnostics, with raw English pattern matching kept only as a compatibility fallback.
+6. Update source-state classification to prefer typed diagnostics, with raw English pattern matching kept as a compatibility fallback - completed in `Phase 192`.
 7. Localize presentation generated from diagnostic codes after typed coverage and compatibility tests pass.
 
 ## Compatibility Rules
@@ -230,6 +231,14 @@ Before any runtime implementation lands:
 - no rendered UI behavior changes
 - no raw diagnostic string rewrites
 
+`Phase 192` updated source-state classification:
+
+- `src/shared/provider-sources.ts` now prefers typed `warningDiagnostic` categories and codes before raw English warning-pattern checks
+- host-access, credential, page-session, usage-threshold, sync-stale, policy-only, and adapter-error categories map to the same existing source-state labels and tones where applicable
+- raw English pattern checks still run for absent or unknown typed diagnostics
+- no rendered UI label or source-state vocabulary changes
+- no raw diagnostic string rewrites
+
 ## Next Executable Slice
 
-The next safe implementation slice should update source-state classification to prefer typed diagnostic categories while preserving exact raw strings, current labels, and raw English fallback behavior for older snapshots.
+The next safe implementation slice should add localized diagnostic presentation generated from typed codes and params while preserving raw diagnostic bodies for details, exports, and archive compatibility.

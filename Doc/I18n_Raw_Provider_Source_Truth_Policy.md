@@ -25,6 +25,7 @@ Status note:
 - `Phase 189` populated Cursor and Codex page-session typed diagnostics while preserving raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings
 - `Phase 190` populated usage-threshold and policy-only typed diagnostics while preserving raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings
 - `Phase 191` populated sync-stale typed diagnostics while preserving raw sync-engine `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings
+- `Phase 192` made source-state classification prefer typed diagnostics while preserving raw English warning-pattern fallback for older snapshots and unknown diagnostic codes
 - refresh it when provider source display helpers, adapter reason fields, provider-source blueprints, or runtime i18n scope changes materially
 
 ## Goal
@@ -123,6 +124,6 @@ Future localization should prefer this order:
 
 ## Next Executable Slice
 
-The next safe engineering slice should make source-state classification prefer typed diagnostic categories while preserving raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings plus the current raw English fallback path.
+The next safe engineering slice should add localized diagnostic presentation generated from typed codes and params while preserving raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings plus the current raw English fallback path.
 
-It should not translate raw provider source-truth fields listed above until that typed compatibility layer exists.
+It should not translate raw provider source-truth fields listed above directly; localized output should be generated from typed diagnostics and must keep raw bodies available for evidence surfaces.

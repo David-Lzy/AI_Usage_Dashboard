@@ -22,6 +22,13 @@ export type ProviderSourceStateKind =
   | "logged_out"
   | "sync_error";
 
+type ClassifiedSourceState = {
+  kind: ProviderSourceStateKind;
+  label: string;
+  tone: ProviderTone;
+  detail: string;
+};
+
 export type ProviderSourceFidelityKind =
   | "exact"
   | "window_only"
@@ -639,28 +646,179 @@ function buildHostAccessDisplay(
   };
 }
 
+function createPolicyOnlySourceState(
+  currentPlan: ProviderSourcePlan,
+  copy: ProviderSourceDisplayCopy,
+): ClassifiedSourceState {
+  return {
+    kind: "policy_only",
+    label: copy.sourceState.policyOnlyLabel,
+    tone: "warning",
+    detail: currentPlan.note,
+  };
+}
+
+function createHostAccessMissingSourceState(
+  warningReason: string,
+  copy: ProviderSourceDisplayCopy,
+): ClassifiedSourceState {
+  return {
+    kind: "host_access_missing",
+    label: copy.sourceState.hostAccessMissingLabel,
+    tone: "warning",
+    detail: warningReason || copy.sourceState.hostAccessMissingFallbackDetail,
+  };
+}
+
+function createCredentialMissingSourceState(
+  warningReason: string,
+  copy: ProviderSourceDisplayCopy,
+): ClassifiedSourceState {
+  return {
+    kind: "credential_missing",
+    label: copy.sourceState.credentialMissingLabel,
+    tone: "error",
+    detail: warningReason || copy.sourceState.credentialMissingFallbackDetail,
+  };
+}
+
+function createLoggedOutSourceState(
+  warningReason: string,
+  copy: ProviderSourceDisplayCopy,
+): ClassifiedSourceState {
+  return {
+    kind: "logged_out",
+    label: copy.sourceState.loggedOutLabel,
+    tone: "warning",
+    detail: warningReason || copy.sourceState.loggedOutFallbackDetail,
+  };
+}
+
+function createOpenPageRequiredSourceState(
+  warningReason: string,
+  copy: ProviderSourceDisplayCopy,
+): ClassifiedSourceState {
+  return {
+    kind: "open_page_required",
+    label: copy.sourceState.openPageRequiredLabel,
+    tone: "warning",
+    detail: warningReason || copy.sourceState.openPageRequiredFallbackDetail,
+  };
+}
+
+function createSyncErrorSourceState(
+  warningReason: string,
+  copy: ProviderSourceDisplayCopy,
+): ClassifiedSourceState {
+  return {
+    kind: "sync_error",
+    label: copy.sourceState.syncErrorLabel,
+    tone: "error",
+    detail: warningReason || copy.sourceState.syncErrorFallbackDetail,
+  };
+}
+
+function createReadySourceState(
+  currentPlan: ProviderSourcePlan,
+  copy: ProviderSourceDisplayCopy,
+): ClassifiedSourceState {
+  return {
+    kind: "ready",
+    label: copy.sourceState.readyLabel,
+    tone: "neutral",
+    detail: currentPlan.note,
+  };
+}
+
+function classifySourceStateFromWarningDiagnostic(
+  provider: ProviderSnapshot,
+  currentPlan: ProviderSourcePlan,
+  copy: ProviderSourceDisplayCopy,
+): ClassifiedSourceState | null {
+  const warningDiagnostic = provider.warningDiagnostic;
+  const warningReason = provider.warningReason ?? "";
+
+  if (!warningDiagnostic) {
+    return null;
+  }
+
+  if (warningDiagnostic.category === "policy_only") {
+    return createPolicyOnlySourceState(currentPlan, copy);
+  }
+
+  if (warningDiagnostic.category === "host_access") {
+    return createHostAccessMissingSourceState(warningReason, copy);
+  }
+
+  if (warningDiagnostic.category === "credential") {
+    return createCredentialMissingSourceState(warningReason, copy);
+  }
+
+  if (warningDiagnostic.category === "page_session") {
+    if (warningDiagnostic.code === "page_session.logged_out") {
+      return createLoggedOutSourceState(warningReason, copy);
+    }
+
+    if (warningDiagnostic.code === "page_session.open_page_required") {
+      return createOpenPageRequiredSourceState(warningReason, copy);
+    }
+
+    if (
+      warningDiagnostic.code === "page_session.capture_unavailable" &&
+      provider.syncStatus === "error"
+    ) {
+      return createSyncErrorSourceState(warningReason, copy);
+    }
+  }
+
+  if (warningDiagnostic.category === "sync_stale") {
+    if (
+      warningDiagnostic.code === "sync.automatic_sync_overdue" &&
+      provider.syncStatus === "error"
+    ) {
+      return createSyncErrorSourceState(warningReason, copy);
+    }
+
+    if (warningDiagnostic.code === "sync.cached_state_stale") {
+      return createReadySourceState(currentPlan, copy);
+    }
+  }
+
+  if (warningDiagnostic.category === "usage_threshold") {
+    return createReadySourceState(currentPlan, copy);
+  }
+
+  if (
+    warningDiagnostic.category === "adapter_error" &&
+    provider.syncStatus === "error"
+  ) {
+    return createSyncErrorSourceState(warningReason, copy);
+  }
+
+  return null;
+}
+
 function classifySourceState(
   provider: ProviderSnapshot,
   setting: ProviderSetting,
   currentPlan: ProviderSourcePlan,
   copy: ProviderSourceDisplayCopy = DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY,
-): {
-  kind: ProviderSourceStateKind;
-  label: string;
-  tone: ProviderTone;
-  detail: string;
-} {
+): ClassifiedSourceState {
   const warningReason = provider.warningReason ?? "";
   const lowerReason = lower(warningReason);
   const requiresHostAccess = setting.hostOrigins.length > 0;
+  const typedSourceState = classifySourceStateFromWarningDiagnostic(
+    provider,
+    currentPlan,
+    copy,
+  );
+
+  if (typedSourceState) {
+    return typedSourceState;
+  }
 
   if (currentPlan.kind === "policy_only") {
-    return {
-      kind: "policy_only",
-      label: copy.sourceState.policyOnlyLabel,
-      tone: "warning",
-      detail: currentPlan.note,
-    };
+    return createPolicyOnlySourceState(currentPlan, copy);
   }
 
   if (
@@ -672,13 +830,7 @@ function classifySourceState(
         "grant ",
       ]))
   ) {
-    return {
-      kind: "host_access_missing",
-      label: copy.sourceState.hostAccessMissingLabel,
-      tone: "warning",
-      detail:
-        warningReason || copy.sourceState.hostAccessMissingFallbackDetail,
-    };
+    return createHostAccessMissingSourceState(warningReason, copy);
   }
 
   if (
@@ -692,14 +844,7 @@ function classifySourceState(
       setting.credentialStatus === "missing" &&
       provider.syncStatus === "error")
   ) {
-    return {
-      kind: "credential_missing",
-      label: copy.sourceState.credentialMissingLabel,
-      tone: "error",
-      detail:
-        warningReason ||
-        copy.sourceState.credentialMissingFallbackDetail,
-    };
+    return createCredentialMissingSourceState(warningReason, copy);
   }
 
   if (
@@ -711,14 +856,7 @@ function classifySourceState(
       "sign in",
     ])
   ) {
-    return {
-      kind: "logged_out",
-      label: copy.sourceState.loggedOutLabel,
-      tone: "warning",
-      detail:
-        warningReason ||
-        copy.sourceState.loggedOutFallbackDetail,
-    };
+    return createLoggedOutSourceState(warningReason, copy);
   }
 
   if (
@@ -731,33 +869,14 @@ function classifySourceState(
       "could not be inspected",
     ])
   ) {
-    return {
-      kind: "open_page_required",
-      label: copy.sourceState.openPageRequiredLabel,
-      tone: "warning",
-      detail:
-        warningReason ||
-        copy.sourceState.openPageRequiredFallbackDetail,
-    };
+    return createOpenPageRequiredSourceState(warningReason, copy);
   }
 
   if (provider.syncStatus === "error") {
-    return {
-      kind: "sync_error",
-      label: copy.sourceState.syncErrorLabel,
-      tone: "error",
-      detail:
-        warningReason ||
-        copy.sourceState.syncErrorFallbackDetail,
-    };
+    return createSyncErrorSourceState(warningReason, copy);
   }
 
-  return {
-    kind: "ready",
-    label: copy.sourceState.readyLabel,
-    tone: "neutral",
-    detail: currentPlan.note,
-  };
+  return createReadySourceState(currentPlan, copy);
 }
 
 function buildPageBindingDisplay(
