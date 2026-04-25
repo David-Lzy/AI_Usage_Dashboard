@@ -25,6 +25,7 @@ Execution note:
 - tenth executable slice landed on `2026-04-25` through `Phase 179`
 - eleventh executable slice landed on `2026-04-25` through `Phase 180`
 - twelfth executable slice landed on `2026-04-25` through `Phase 181`
+- thirteenth executable slice landed on `2026-04-25` through `Phase 182`
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
 Process rule:
@@ -96,6 +97,8 @@ As of 2026-04-25:
   - [I18n_Operator_Workspace_Boundary_And_Extraction.md](../I18n_Operator_Workspace_Boundary_And_Extraction.md)
 - the first operator-workspace shell localization slice now routes interaction-audit and theme-recovery shell/navigation/helper copy through `buildOperatorWorkspaceLocalizedCopy` while keeping evidence payloads English
 - store-screenshot helper routes now route visible helper copy and screenshot-adjacent submission-support captions through `buildStoreWorkflowLocalizedCopy` while keeping automation titles, preset ids, route hashes, final screenshot surfaces, and native-toolbar popup capture truth boundaries stable
+- raw provider source-truth localization now has one maintained policy reference:
+  - [I18n_Raw_Provider_Source_Truth_Policy.md](../I18n_Raw_Provider_Source_Truth_Policy.md)
 - the repo ships one store helper i18n boundary reference:
   - [I18n_Store_Runtime_Helper_Copy.md](../I18n_Store_Runtime_Helper_Copy.md)
 - the repo ships maintained i18n references:
@@ -170,7 +173,8 @@ Recommended rollout:
 11. first operator-workspace shell localization slice - shipped in `Phase 179`
 12. store-facing runtime helper copy - shipped in `Phase 180`
 13. screenshot-adjacent captions inside actual product screenshot surfaces or submission-support UI - shipped in `Phase 181`
-14. raw provider source-truth localization policy and presentation-only wrapper review - next
+14. raw provider source-truth localization policy and presentation-only wrapper review - shipped in `Phase 182`
+15. provider-source display wrapper localization - next
 
 ## References
 

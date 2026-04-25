@@ -21,6 +21,7 @@ Status note:
 - tenth executable phase landed on `2026-04-25` through `Phase 179`
 - eleventh executable phase landed on `2026-04-25` through `Phase 180`
 - twelfth executable phase landed on `2026-04-25` through `Phase 181`
+- thirteenth executable phase landed on `2026-04-25` through `Phase 182`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -242,11 +243,29 @@ Build one maintainable localization architecture that can support manifest strin
 
 ### J. Raw Provider Source-Truth Policy
 
-- next recommended slice
-- define which remaining English provider detail strings are source-truth evidence and must stay raw
-- define which surrounding provider explanations are presentation-only wrappers that can safely enter structured runtime copy
+- policy and first field review shipped in `Phase 182`
+- maintained boundary reference:
+  - [I18n_Raw_Provider_Source_Truth_Policy.md](../I18n_Raw_Provider_Source_Truth_Policy.md)
+- defined which remaining English provider detail strings are source-truth evidence and must stay raw
+- defined which surrounding provider explanations are presentation-only wrappers that can safely enter structured runtime copy
 - keep vendor-owned wording and generated evidence payloads out of the translated catalog unless an explicit compatibility review approves them
 - do not use this slice to rewrite provider coverage claims; current provider coverage gaps still remain truthful and unchanged
+
+### K. Provider-Source Display Wrapper Localization
+
+- next recommended slice
+- localize presentation-only provider-source display wrappers:
+  - source kind labels
+  - source preference labels
+  - rollout stage labels
+  - field availability labels
+  - source fidelity labels and helper descriptions
+  - source contract labels
+  - connection-mode labels and helper descriptions
+  - credential, cookie, manual-cookie-import, host-access, and page-binding helper labels
+  - generated availability summaries
+- preserve raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` values unchanged
+- preserve source-contract evidence fields until a later stable message-id model exists
 
 ## Planned Numbered Slices
 
@@ -263,7 +282,8 @@ Build one maintainable localization architecture that can support manifest strin
 11. first operator-workspace shell localization slice - completed in `Phase 179`
 12. store-facing runtime helper copy - completed in `Phase 180`
 13. screenshot-adjacent captions inside actual product screenshot surfaces or submission-support UI - completed in `Phase 181`
-14. raw provider source-truth localization policy and presentation-only wrapper review - next
+14. raw provider source-truth localization policy and presentation-only wrapper review - completed in `Phase 182`
+15. provider-source display wrapper localization - next
 
 ## Out Of Scope
 
@@ -272,4 +292,5 @@ Build one maintainable localization architecture that can support manifest strin
 - shipping Arabic before explicit RTL review exists
 - localizing operator evidence schemas or archive-facing generated strings before archive compatibility is reviewed
 - translating generated store-listing source docs inside runtime code unless that copy is shown by the extension
-- translating raw provider source-truth strings before the next policy slice separates evidence from presentation-only wrapper copy
+- translating raw provider source-truth strings outside the `Phase 182` policy boundary
+- localizing adapter diagnostics before typed reason codes exist

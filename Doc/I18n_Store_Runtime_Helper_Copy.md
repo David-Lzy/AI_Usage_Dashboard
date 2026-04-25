@@ -78,4 +78,4 @@ The localized copy must continue to say:
 
 `Phase 181` closes the first screenshot-adjacent submission-support caption slice by showing localized preset-to-caption guidance inside the seed helper route. Generated store-listing source docs remain maintained separately and should not be translated inside runtime code unless the text is shown by the extension.
 
-The next i18n work should move to the raw provider source-truth detail policy: decide which remaining English provider strings are source evidence that must stay raw, and which are presentation-only wrappers that can safely enter the localized runtime pilot.
+`Phase 182` moved that next policy boundary into [I18n_Raw_Provider_Source_Truth_Policy.md](./I18n_Raw_Provider_Source_Truth_Policy.md). The next store-helper-specific change should only happen when screenshot helper routes, capture automation signals, or submission-support runtime captions change again.

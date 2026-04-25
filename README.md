@@ -223,6 +223,7 @@ The Chrome action now opens a compact popup first:
   - interaction-audit and theme-recovery workspace shell/navigation/helper copy now localizes through the same runtime pilot
   - store-screenshot seed and native popup probe helper-route copy now localizes through the same runtime pilot while preserving automation titles and screenshot truth boundaries
   - store-screenshot seed now also shows localized submission-support captions that help operators match presets to the store story without injecting captions into final popup, side-panel, or full-page screenshots
+  - raw provider source-truth localization now has a maintained policy boundary in [I18n_Raw_Provider_Source_Truth_Policy.md](./Doc/I18n_Raw_Provider_Source_Truth_Policy.md), so the next safe i18n work is provider-source display wrapper localization rather than translating adapter evidence strings directly
   - raw provider source-truth detail strings plus deeper operator evidence/export payload copy still remain outside the shipped pilot
 - the popup runtime now also ships one explicit host-width contract for real Chrome action-popup rendering, so the browser no longer has to guess popup width from the document body
 - the popup runtime now also ships one static bootstrap width contract in [src/popup/index.html](./src/popup/index.html), and repo-backed tool commands now prefer the local Node runtime through [scripts/with-preferred-node.sh](./scripts/with-preferred-node.sh) instead of relying on the older Cursor-bundled `node`

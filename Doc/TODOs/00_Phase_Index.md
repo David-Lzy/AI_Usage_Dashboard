@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [181_Phase_Screenshot_Caption_Support_Localization.md](./Archive/181_Phase_Screenshot_Caption_Support_Localization.md)
+- latest completed slice: [182_Phase_Raw_Provider_Source_Truth_Localization_Policy.md](./Archive/182_Phase_Raw_Provider_Source_Truth_Localization_Policy.md)
 
 Completed phases should be moved to:
 
@@ -228,6 +228,7 @@ Completed phases should be moved to:
 - [179_Phase_Operator_Workspace_Shell_Localization.md](./Archive/179_Phase_Operator_Workspace_Shell_Localization.md) - completed and archived on 2026-04-25
 - [180_Phase_Store_Runtime_Helper_Localization.md](./Archive/180_Phase_Store_Runtime_Helper_Localization.md) - completed and archived on 2026-04-25
 - [181_Phase_Screenshot_Caption_Support_Localization.md](./Archive/181_Phase_Screenshot_Caption_Support_Localization.md) - completed and archived on 2026-04-25
+- [182_Phase_Raw_Provider_Source_Truth_Localization_Policy.md](./Archive/182_Phase_Raw_Provider_Source_Truth_Localization_Policy.md) - completed and archived on 2026-04-25
 
 ## Dependency Notes
 
@@ -470,6 +471,8 @@ Completed phases should be moved to:
 - the 2026-04-25 `Phase 180` closeout localized store-screenshot seed and native popup probe helper-route copy while preserving automation titles, preset ids, route hashes, and the manual native-toolbar popup capture truth boundary
 - phase 181 depends on phase 180 because submission-support captions should reuse the same store helper localization boundary before any broader raw provider source-truth policy review
 - the 2026-04-25 `Phase 181` closeout localized screenshot-adjacent submission-support captions inside the store seed helper route while keeping final popup, side-panel, and full-page screenshot surfaces unchanged
+- phase 182 depends on phase 181 because raw provider source-truth policy should be settled after the store helper caption boundary closes the previous screenshot-adjacent i18n slice
+- the 2026-04-25 `Phase 182` closeout added a maintained raw provider source-truth localization policy, protected adapter evidence fields, and identified provider-source display wrappers as the next safe localized bucket
 
 ## Delivery Standard For Each Phase
 
