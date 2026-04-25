@@ -131,7 +131,7 @@ If one of these categories is localized later, the implementation must first dec
 
 ## Current Boundary
 
-As of `Phase 195`:
+As of `Phase 196`:
 
 - the runtime app already localizes the main product surfaces in `en + zh_CN`
 - the operator workspaces now have shell-localized navigation and helper copy
@@ -150,16 +150,17 @@ As of `Phase 195`:
 - warning diagnostic presentation now localizes known typed warning labels and summaries while keeping raw warning bodies available
 - source diagnostic presentation now localizes known typed source-selection and fallback labels and summaries while keeping raw source bodies available
 - adapter-error diagnostic presentation now localizes known typed `adapter.*` labels and summaries while keeping raw adapter warning bodies available
+- compact diagnostic presentation QA now verifies localized summaries and raw evidence bodies together at narrow Settings and Provider Detail widths
 - archive payload semantics remain English and unchanged
 - the repo has a maintained extraction boundary for deeper operator-workspace localization decisions
 - the next implementation step should avoid evidence-schema changes unless a dedicated archive-compatibility review lands first
 
 ## Follow-Up
 
-The next `Direction 09` implementation slice should move to diagnostic presentation compact-width and evidence QA:
+The next `Direction 09` implementation slice should move to diagnostic archive and export compatibility review:
 
 - keep raw source-selection, fallback, warning, and adapter-error diagnostic bodies available for provider detail, exports, and archive evidence
-- verify compact diagnostic stacks after warning, source, and adapter-error summaries all exist
+- inventory archive, request, screenshot seed, and export consumers before deeper diagnostic localization
 - keep raw provider `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` values unchanged
 - keep generated store-listing source docs out of runtime code unless that copy is shown by the extension
 

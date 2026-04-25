@@ -28,6 +28,7 @@ Status note:
 - `Phase 193` added localized warning diagnostic presentation while preserving raw diagnostic strings
 - `Phase 194` added localized source diagnostic presentation while preserving raw source-selection and fallback strings
 - `Phase 195` added adapter-error diagnostics and localized adapter-error presentation while preserving raw adapter warning bodies
+- `Phase 196` added compact-width evidence QA for combined diagnostic presentation stacks
 - refresh it when provider adapters, source-selection behavior, provider snapshot fields, archive evidence schemas, or runtime i18n boundaries change materially
 
 ## Goal
@@ -152,7 +153,8 @@ After typed diagnostics exist:
 7. Localize warning presentation generated from typed warning diagnostic codes after typed coverage and compatibility tests pass - completed in `Phase 193`.
 8. Localize source-selection and fallback presentation generated from typed source diagnostic codes after warning presentation proves the raw-evidence boundary - completed in `Phase 194`.
 9. Populate adapter-error diagnostics only after the raw adapter-error boundary is explicit - completed in `Phase 195`.
-10. Review diagnostic presentation density after warning, source, and adapter-error summaries are all visible.
+10. Review diagnostic presentation density after warning, source, and adapter-error summaries are all visible - completed in `Phase 196`.
+11. Review archive and export compatibility before localizing deeper diagnostic bodies or evidence payloads.
 
 ## Compatibility Rules
 
@@ -270,6 +272,14 @@ Before any runtime implementation lands:
 - raw adapter warning bodies still remain visible and unchanged
 - no provider coverage, source-selection, or fallback behavior changed
 
+`Phase 196` added compact-width evidence QA for the combined diagnostic stack:
+
+- `npm run phase196:review` seeds one zh-CN diagnostic stress state in local preview storage
+- Settings source diagnostics are verified at `420px`
+- Provider Detail diagnostics are verified at `360px`
+- localized warning/source/adapter summaries are checked beside raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason`
+- no runtime source-selection or provider coverage behavior changed
+
 ## Next Executable Slice
 
-The next safe implementation slice should review diagnostic presentation density and evidence visibility after warning, source, and adapter-error summaries are all user-visible. Raw diagnostic bodies should remain visible for details, exports, and archive compatibility.
+The next safe implementation slice should review diagnostic archive and export compatibility before any deeper diagnostic-body or evidence-payload localization. Raw diagnostic bodies should remain visible for details, exports, and archive compatibility.

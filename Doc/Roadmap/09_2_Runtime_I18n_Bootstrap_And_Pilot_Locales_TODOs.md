@@ -35,6 +35,7 @@ Status note:
 - twenty-fourth executable phase landed on `2026-04-25` through `Phase 193`
 - twenty-fifth executable phase landed on `2026-04-25` through `Phase 194`
 - twenty-sixth executable phase landed on `2026-04-25` through `Phase 195`
+- twenty-seventh executable phase landed on `2026-04-25` through `Phase 196`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -389,10 +390,18 @@ Build one maintainable localization architecture that can support manifest strin
 
 ### X. Diagnostic Presentation Compact-Width And Evidence QA
 
-- next recommended slice
+- completed in `Phase 196`
 - verify Settings and Provider Detail presentation density after warning, source, and adapter-error summaries all exist
 - keep raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` visible for evidence surfaces
 - test compact localized diagnostic stacks without changing provider coverage or source-selection behavior
+
+### Y. Diagnostic Archive And Export Compatibility Review
+
+- next recommended slice
+- inventory archive, request, screenshot seed, and export surfaces that still carry raw diagnostic strings
+- document which diagnostic fields remain evidence schema versus localized presentation
+- add a review gate before deeper diagnostic-body or evidence-payload localization
+- avoid changing archive schemas, generated filenames, provider coverage, or source-selection behavior
 
 ## Planned Numbered Slices
 
@@ -423,7 +432,8 @@ Build one maintainable localization architecture that can support manifest strin
 25. localized warning diagnostic presentation - completed in `Phase 193`
 26. source-selection and fallback diagnostic presentation expansion - completed in `Phase 194`
 27. adapter-error diagnostic builders and presentation boundary - completed in `Phase 195`
-28. diagnostic presentation compact-width and evidence QA - next
+28. diagnostic presentation compact-width and evidence QA - completed in `Phase 196`
+29. diagnostic archive and export compatibility review - next
 
 ## Out Of Scope
 

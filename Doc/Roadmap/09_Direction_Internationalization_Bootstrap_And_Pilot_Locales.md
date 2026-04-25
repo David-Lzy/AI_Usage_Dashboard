@@ -39,6 +39,7 @@ Execution note:
 - twenty-fourth executable slice landed on `2026-04-25` through `Phase 193`
 - twenty-fifth executable slice landed on `2026-04-25` through `Phase 194`
 - twenty-sixth executable slice landed on `2026-04-25` through `Phase 195`
+- twenty-seventh executable slice landed on `2026-04-25` through `Phase 196`
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
 Process rule:
@@ -126,6 +127,7 @@ As of 2026-04-25:
 - Settings and Provider Detail now show localized labels and short summaries for known typed source-selection and fallback diagnostics while preserving raw source diagnostic bodies
 - Settings and Provider Detail now show localized labels and short summaries for known typed adapter-error diagnostics while preserving raw adapter diagnostic bodies
 - Cursor, Codex, and Claude Code now populate typed adapter-error diagnostics for stable repo-owned failure paths
+- compact diagnostic presentation QA now verifies localized warning/source/adapter summaries beside raw evidence bodies at `420px` Settings and `360px` Provider Detail widths
 - the repo ships one store helper i18n boundary reference:
   - [I18n_Store_Runtime_Helper_Copy.md](../I18n_Store_Runtime_Helper_Copy.md)
 - the repo ships maintained i18n references:
@@ -214,7 +216,8 @@ Recommended rollout:
 25. localized warning diagnostic presentation - shipped in `Phase 193`
 26. source-selection and fallback diagnostic presentation expansion - shipped in `Phase 194`
 27. adapter-error diagnostic builders and presentation boundary - shipped in `Phase 195`
-28. diagnostic presentation compact-width and evidence QA - next
+28. diagnostic presentation compact-width and evidence QA - shipped in `Phase 196`
+29. diagnostic archive and export compatibility review - next
 
 ## References
 

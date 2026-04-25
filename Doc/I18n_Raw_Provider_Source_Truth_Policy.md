@@ -29,6 +29,7 @@ Status note:
 - `Phase 193` added localized warning diagnostic presentation while preserving raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings
 - `Phase 194` added localized source diagnostic presentation while preserving raw `sourceSelectionReason` and `sourceFallbackReason` strings
 - `Phase 195` added typed adapter-error diagnostics and localized adapter-error presentation while preserving raw adapter `warningReason` strings
+- `Phase 196` added compact-width diagnostic presentation QA while preserving raw diagnostic evidence visibility
 - refresh it when provider source display helpers, adapter reason fields, provider-source blueprints, or runtime i18n scope changes materially
 
 ## Goal
@@ -118,6 +119,7 @@ Future localization should prefer this order:
 6. After `Phase 193`, warning diagnostics may expose localized presentation generated from typed metadata, but the raw warning body remains visible for evidence.
 7. After `Phase 194`, source-selection and fallback diagnostics may expose localized presentation generated from typed metadata, but the raw source bodies remain visible for evidence.
 8. After `Phase 195`, adapter-error diagnostics may expose localized presentation generated from typed metadata, but raw adapter error bodies remain visible for evidence.
+9. After `Phase 196`, compact-width QA must keep localized diagnostic summaries and raw evidence bodies visible together.
 
 ## Out Of Scope
 
@@ -130,6 +132,6 @@ Future localization should prefer this order:
 
 ## Next Executable Slice
 
-The next safe engineering slice should review diagnostic presentation density and evidence visibility after warning, source, and adapter-error summaries are all visible.
+The next safe engineering slice should review archive, request, screenshot seed, and export compatibility for diagnostic fields before deeper diagnostic-body or evidence-payload localization.
 
 It should not translate raw provider source-truth fields listed above directly; localized output should be generated from typed diagnostics and must keep raw bodies available for evidence surfaces.

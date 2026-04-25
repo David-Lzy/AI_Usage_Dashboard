@@ -24,6 +24,7 @@ Status note:
 - localized warning diagnostic presentation completed in `Phase 193`
 - source diagnostic presentation completed in `Phase 194`
 - adapter-error diagnostics and presentation boundary completed in `Phase 195`
+- diagnostic presentation compact-width and evidence QA completed in `Phase 196`
 - this child TODO turns the adapter diagnostic reason-code plan into executable follow-up slices
 - refresh it when typed diagnostic coverage, provider adapter behavior, or archive compatibility rules change
 
@@ -43,7 +44,7 @@ The goal is not to translate raw provider evidence immediately. The goal is to m
 
 ## Current Truth
 
-As of `Phase 195`:
+As of `Phase 196`:
 
 - provider-source display wrappers are localized through `ProviderSourceDisplayCopy`
 - raw provider source-truth fields still pass through unchanged
@@ -57,6 +58,7 @@ As of `Phase 195`:
 - Settings and Provider Detail now render localized labels and short summaries from known typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` codes and params
 - Settings and Provider Detail now render localized labels and short summaries for known `adapter.*` diagnostics while keeping raw adapter warning bodies visible
 - `src/providers/diagnostics.ts` now provides a reusable adapter-error diagnostic builder for unexpected adapter failures, unsupported responses, and parser failures
+- `npm run phase196:review` now seeds a compact diagnostic stress state and verifies localized summaries plus raw evidence bodies at `420px` Settings and `360px` Provider Detail widths
 - the Cursor adapter populates typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` metadata beside existing raw source-selection and fallback strings
 - the Codex adapter populates typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` metadata beside existing raw source-selection and fallback strings
 - Cursor and Codex now populate typed `warningDiagnostic` metadata for missing credential and missing host-access blockers
@@ -167,23 +169,30 @@ As of `Phase 195`:
 
 ### K. Diagnostic Presentation Compact-Width And Evidence QA
 
-- next recommended slice
+- completed in `Phase 196`
 - review Settings and Provider Detail diagnostic presentation density after warning, source, and adapter-error summaries are all visible
 - verify compact-width behavior for diagnostic stacks with raw warning, source-selection, source-fallback, and adapter-error bodies
 - verify evidence-oriented surfaces still expose raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason`
 - keep this as presentation QA; do not add new provider coverage claims
 
+### L. Diagnostic Archive And Export Compatibility Review
+
+- next recommended slice
+- inventory archive, request, screenshot seed, and export surfaces that still carry raw diagnostic strings
+- decide which diagnostic fields are presentation-only and which remain evidence schema
+- keep raw diagnostic payload keys and generated evidence strings stable unless a dedicated migration is explicitly approved
+- do not localize deeper diagnostic bodies until archive compatibility and export semantics are documented
+
 ## First Implementation Candidate
 
-The next runtime phase should implement the first narrow slice of `K. Diagnostic Presentation Compact-Width And Evidence QA`.
+The next runtime phase should implement the first narrow slice of `L. Diagnostic Archive And Export Compatibility Review`.
 
 Recommended scope:
 
-- build a compact-width fixture or focused review for known diagnostic-summary stacks
-- verify Settings source cards and Provider Detail remain scannable when localized summaries and raw evidence bodies both exist
-- keep unknown typed diagnostics on raw fallback behavior
-- preserve exact raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings
-- avoid adding new provider coverage or changing source-selection behavior
+- inventory current archive/export/request paths that read or preserve diagnostic strings
+- document which diagnostic surfaces can receive localized presentation and which must stay raw evidence
+- add a static review gate for raw diagnostic payload key stability where practical
+- avoid changing archive schemas, generated filenames, source-selection behavior, or provider coverage
 
 ## Acceptance Criteria
 
