@@ -142,6 +142,7 @@
     "phase175:review": "./scripts/with-preferred-node.sh node ./scripts/phase175-settings-helper-localization-review.mjs",
     "phase176:review": "./scripts/with-preferred-node.sh node ./scripts/phase176-locale-aware-duration-review.mjs",
     "phase177:review": "./scripts/with-preferred-node.sh node ./scripts/phase177-compact-width-rtl-hardening-review.mjs",
+    "phase178:review": "./scripts/with-preferred-node.sh node ./scripts/phase178-operator-workspace-i18n-boundary-review.mjs",
     "interaction-audit:bundle": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-handoff-bundle.mjs",
     "interaction-audit:archive": "./scripts/with-preferred-node.sh node ./scripts/archive-interaction-audit-review.mjs",
     "interaction-audit:refresh-archive-index": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-review-archive-index.mjs",

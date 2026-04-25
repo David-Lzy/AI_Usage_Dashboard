@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [177_Phase_Compact_Width_And_RTL_Hardening.md](./Archive/177_Phase_Compact_Width_And_RTL_Hardening.md)
+- latest completed slice: [178_Phase_Operator_Workspace_I18n_Boundary_And_Extraction.md](./Archive/178_Phase_Operator_Workspace_I18n_Boundary_And_Extraction.md)
 
 Completed phases should be moved to:
 
@@ -224,6 +224,7 @@ Completed phases should be moved to:
 - [175_Phase_Deeper_Settings_Helper_Localization.md](./Archive/175_Phase_Deeper_Settings_Helper_Localization.md) - completed and archived on 2026-04-24
 - [176_Phase_Locale_Aware_Duration_And_Freshness_Labels.md](./Archive/176_Phase_Locale_Aware_Duration_And_Freshness_Labels.md) - completed and archived on 2026-04-24
 - [177_Phase_Compact_Width_And_RTL_Hardening.md](./Archive/177_Phase_Compact_Width_And_RTL_Hardening.md) - completed and archived on 2026-04-25
+- [178_Phase_Operator_Workspace_I18n_Boundary_And_Extraction.md](./Archive/178_Phase_Operator_Workspace_I18n_Boundary_And_Extraction.md) - completed and archived on 2026-04-25
 
 ## Dependency Notes
 
@@ -458,6 +459,8 @@ Completed phases should be moved to:
 - the 2026-04-24 `Phase 176` closeout localized duration-bearing freshness and reset labels across popup snapshot status, popup featured-provider freshness chips, and dashboard provider cards while keeping compact-width plus RTL hardening, raw provider source-truth detail strings, and operator workspaces outside the next shipped boundary
 - phase 177 depends on phase 176 because compact-width and RTL hardening only became honest after the longer localized duration-bearing freshness/reset labels had already shipped into popup and dashboard surfaces
 - the 2026-04-25 `Phase 177` closeout shipped runtime `lang` and `dir` sync, one preview `app-dir` override, one first logical CSS hardening pass, and tighter compact-width action behavior while keeping raw provider source-truth detail strings and operator workspaces outside the shipped localized pilot
+- phase 178 depends on phase 177 because operator workspace extraction should happen after the current `en + zh_CN` pilot has stable runtime roots, compact-width handling, and an explicit RTL review hook
+- the 2026-04-25 `Phase 178` closeout added one maintained operator-workspace localization boundary plus one repeatable extraction review for interaction-audit and theme-recovery workspaces while keeping archive payload semantics English for now
 
 ## Delivery Standard For Each Phase
 

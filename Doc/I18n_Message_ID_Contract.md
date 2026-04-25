@@ -138,6 +138,7 @@ This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still maki
 - raw provider source-truth detail strings and operator workspaces still remain outside the shipped localized slice
 - vendor-owned provider-page text stays outside the managed localization catalog
 - locale-aware formatting also stays outside raw message ids so generated values can be formatted per locale without multiplying message ids
+- operator workspace copy remains governed by [I18n_Operator_Workspace_Boundary_And_Extraction.md](./I18n_Operator_Workspace_Boundary_And_Extraction.md) until its first shell-localization slice lands
 
 ## Locale-Aware Formatting Contract
 

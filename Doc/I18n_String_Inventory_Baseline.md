@@ -70,20 +70,28 @@ These now ship through:
 - `src/shared/i18n.ts`
 - `src/shared/localized-copy.ts`
 
+## Operator Workspace Boundary
+
+`Phase 178` added a maintained operator-workspace boundary reference:
+
+- [I18n_Operator_Workspace_Boundary_And_Extraction.md](./I18n_Operator_Workspace_Boundary_And_Extraction.md)
+
+That reference covers the interaction-audit and theme-recovery workspaces. It separates candidate shell/helper copy from evidence-preserving English such as request ids, archive ids, generated filenames, export fields, fixture ids, vendor-owned strings, and status terms that currently serve as source-truth labels.
+
 ## Runtime Surfaces Still Mostly English
 
 The following surfaces still need broader runtime localization work:
 
 - raw provider source-truth detail strings that still intentionally surface current contract or vendor wording without translation
-- interaction-audit workspace
-- theme-recovery workspace
+- interaction-audit workspace runtime shell copy
+- theme-recovery workspace runtime shell copy
 - store-facing runtime captions and screenshot-adjacent helper copy
 
 ## Runtime Inventory Buckets
 
 Recommended next extraction order:
 
-1. audit and recovery workspace localization boundary and first extraction review
+1. first operator-workspace shell localization slice for interaction-audit and theme-recovery
 2. store-facing runtime helper copy that later appears in screenshots or submission support material
 3. revisit the remaining raw provider source-truth detail policy after the broader runtime pilot stabilizes
 
@@ -93,5 +101,5 @@ Recommended next extraction order:
 - the runtime app now has a broader but still partial localized slice plus locale-aware formatting after `Phase 177`, not a full translated rollout
 - `en` and `zh_CN` currently cover manifest surfaces plus popup/dashboard shell strings, popup explanatory copy, the first settings-shell slice, deeper settings helper copy, provider-detail shell/static copy, quick theme-toggle labels, generated counts, percentages, parseable timestamp primitives, duration-bearing runtime freshness/reset labels, and one first compact-width plus RTL hardening pass
 - runtime document roots now sync `lang` and `dir`, and preview/QA can now force `?app-dir=rtl` while the shipped locale set still resolves to `ltr`
-- raw provider source-truth detail strings and operator workspaces still remain outside the shipped pilot
+- raw provider source-truth detail strings and operator workspaces still remain outside the shipped pilot, but operator-workspace boundaries are now explicitly documented after `Phase 178`
 - non-parseable vendor-owned window labels such as `Mar 23 - Apr 21` still remain raw strings until a later explicit product decision localizes them

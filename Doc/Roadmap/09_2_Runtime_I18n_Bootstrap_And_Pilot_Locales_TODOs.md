@@ -17,6 +17,7 @@ Status note:
 - sixth executable phase landed on `2026-04-24` through `Phase 175`
 - seventh executable phase landed on `2026-04-24` through `Phase 176`
 - eighth executable phase landed on `2026-04-25` through `Phase 177`
+- ninth executable phase landed on `2026-04-25` through `Phase 178`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -181,6 +182,27 @@ Build one maintainable localization architecture that can support manifest strin
   - broader route-by-route compact-width review under the localized pilot
   - Arabic-specific mirrored icon and disclosure validation before any shipped RTL locale tier
 
+### H. Operator Workspace Boundary And Extraction
+
+- first boundary and extraction review shipped in `Phase 178`
+- maintained reference:
+  - [I18n_Operator_Workspace_Boundary_And_Extraction.md](../I18n_Operator_Workspace_Boundary_And_Extraction.md)
+- workspaces covered:
+  - interaction-audit operator workspace
+  - theme-recovery operator workspace
+- candidate localizable categories:
+  - top bar titles and subtitles
+  - section labels and section titles
+  - navigation, refresh, copy, download, reset, import, and export action labels
+  - non-evidence helper paragraphs
+  - generic feedback and empty-state messages
+- evidence-preserving categories that stay English until archive compatibility is reviewed:
+  - exported JSON field names
+  - request ids, archive ids, revision labels, and generated filenames
+  - fixture or preset ids
+  - vendor-owned strings and raw provider source-truth wording
+  - status terms already used as source-truth evidence labels in archives or request manifests
+
 ## Planned Numbered Slices
 
 1. string inventory and message-id contract - completed in `Phase 170`
@@ -192,7 +214,8 @@ Build one maintainable localization architecture that can support manifest strin
 7. deeper settings helper copy rollout - completed in `Phase 175`
 8. locale-aware durations and freshness label rollout - completed in `Phase 176`
 9. compact-width review and RTL hardening - completed in `Phase 177`
-10. audit and recovery workspace localization boundary and first extraction review - next
+10. audit and recovery workspace localization boundary and first extraction review - completed in `Phase 178`
+11. first operator-workspace shell localization slice - next
 
 ## Out Of Scope
 
