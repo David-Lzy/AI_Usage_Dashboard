@@ -154,6 +154,7 @@
     "phase187:review": "./scripts/with-preferred-node.sh node ./scripts/phase187-codex-source-diagnostic-builders-review.mjs",
     "phase188:review": "./scripts/with-preferred-node.sh node ./scripts/phase188-credential-host-access-diagnostics-review.mjs",
     "phase189:review": "./scripts/with-preferred-node.sh node ./scripts/phase189-page-session-diagnostics-review.mjs",
+    "phase190:review": "./scripts/with-preferred-node.sh node ./scripts/phase190-usage-policy-diagnostics-review.mjs",
     "interaction-audit:bundle": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-handoff-bundle.mjs",
     "interaction-audit:archive": "./scripts/with-preferred-node.sh node ./scripts/archive-interaction-audit-review.mjs",
     "interaction-audit:refresh-archive-index": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-review-archive-index.mjs",

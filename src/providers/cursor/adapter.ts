@@ -29,6 +29,7 @@ import {
   createPageSessionDiagnostic,
   createSourceFallbackDiagnostic,
   createSourceSelectionDiagnostic,
+  createUsageThresholdDiagnostic,
 } from "../diagnostics";
 import { createCursorOfficialClient } from "./official";
 import { createCursorPersonalPageClient } from "./personal-page-client";
@@ -266,6 +267,7 @@ async function tryCursorOfficialSource({
       warningThresholdPercent,
       "requests",
       usageBasedRequests,
+      "cursor",
     );
 
     return {
@@ -290,7 +292,7 @@ async function tryCursorOfficialSource({
         syncStatus: usageSignal.syncStatus,
         tone: usageSignal.tone,
         warningReason: usageSignal.warningReason,
-        warningDiagnostic: null,
+        warningDiagnostic: usageSignal.warningDiagnostic,
         lastSyncLabel: buildCursorRefreshLabel(),
       },
     };
@@ -468,7 +470,15 @@ async function tryCursorPersonalSource({
         syncStatus: "ok",
         tone: "neutral",
         warningReason,
-        warningDiagnostic: null,
+        warningDiagnostic:
+          snapshot.onDemandUsageState === "off" && warningReason
+            ? createUsageThresholdDiagnostic({
+                providerId: "cursor",
+                usageThresholdKind: "on_demand_off",
+                rawMessage: warningReason,
+                unitLabel: "requests",
+              })
+            : null,
         lastSyncLabel: buildCursorPersonalRefreshLabel(personalSource),
       },
       setting: nextSetting,

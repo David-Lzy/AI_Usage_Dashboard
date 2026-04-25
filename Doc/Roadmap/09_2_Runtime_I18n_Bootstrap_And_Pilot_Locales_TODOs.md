@@ -29,6 +29,7 @@ Status note:
 - eighteenth executable phase landed on `2026-04-25` through `Phase 187`
 - nineteenth executable phase landed on `2026-04-25` through `Phase 188`
 - twentieth executable phase landed on `2026-04-25` through `Phase 189`
+- twenty-first executable phase landed on `2026-04-25` through `Phase 190`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -332,9 +333,18 @@ Build one maintainable localization architecture that can support manifest strin
 
 ### R. Usage Threshold And Policy-Only Diagnostics
 
-- next recommended slice
+- completed in `Phase 190`
 - populate typed `warningDiagnostic` metadata for shared usage-threshold warnings and policy-only provider states
 - start with shared normalization output and Gemini policy-only output because those paths already have stable usage or policy blocker semantics
+- preserve raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings exactly
+- keep rendered UI behavior unchanged
+- keep source-state classification raw-string fallback until typed coverage is broad enough to switch safely
+
+### S. Sync-Stale Diagnostics
+
+- next recommended slice
+- populate typed `warningDiagnostic` metadata for stale cached-state and overdue automatic-sync states
+- start with sync-engine generated stale warnings because those strings are local, stable, and already separate from provider-owned source text
 - preserve raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings exactly
 - keep rendered UI behavior unchanged
 - keep source-state classification raw-string fallback until typed coverage is broad enough to switch safely
@@ -362,7 +372,8 @@ Build one maintainable localization architecture that can support manifest strin
 19. Codex source selection and fallback builders - completed in `Phase 187`
 20. credential and host-access diagnostics - completed in `Phase 188`
 21. page-session diagnostics - completed in `Phase 189`
-22. usage-threshold and policy-only diagnostics - next
+22. usage-threshold and policy-only diagnostics - completed in `Phase 190`
+23. sync-stale diagnostics - next
 
 ## Out Of Scope
 

@@ -5,9 +5,11 @@ import {
   createCredentialDiagnostic,
   createHostAccessDiagnostic,
   createPageSessionDiagnostic,
+  createPolicyOnlyDiagnostic,
   createProviderDiagnostic,
   createSourceFallbackDiagnostic,
   createSourceSelectionDiagnostic,
+  createUsageThresholdDiagnostic,
   getProviderDiagnosticRawMessage,
   isKnownProviderDiagnosticCode,
 } from "./diagnostics";
@@ -200,6 +202,50 @@ describe("provider diagnostics", () => {
       params: {
         providerId: "codex",
         pageSessionKind: "capture_unavailable",
+      },
+    });
+  });
+
+  it("builds usage-threshold diagnostics without rewriting raw warning messages", () => {
+    const diagnostic = createUsageThresholdDiagnostic({
+      providerId: "cursor",
+      usageThresholdKind: "overage_detected",
+      rawMessage: "15 pay-per-use requests recorded this cycle",
+      overageCount: 15,
+      unitLabel: "requests",
+    });
+
+    expect(diagnostic).toMatchObject({
+      code: "usage.overage_detected",
+      category: "usage_threshold",
+      severity: "warning",
+      rawMessage: "15 pay-per-use requests recorded this cycle",
+      params: {
+        providerId: "cursor",
+        usageThresholdKind: "overage_detected",
+        overageCount: 15,
+        unitLabel: "requests",
+      },
+    });
+  });
+
+  it("builds policy-only diagnostics without rewriting raw warning messages", () => {
+    const diagnostic = createPolicyOnlyDiagnostic({
+      providerId: "gemini",
+      policyOnlyKind: "documented_limit_only",
+      rawMessage:
+        "120/min and 2000/day per user for Gemini CLI and agent mode.",
+    });
+
+    expect(diagnostic).toMatchObject({
+      code: "policy.documented_limit_only",
+      category: "policy_only",
+      severity: "warning",
+      rawMessage:
+        "120/min and 2000/day per user for Gemini CLI and agent mode.",
+      params: {
+        providerId: "gemini",
+        policyOnlyKind: "documented_limit_only",
       },
     });
   });

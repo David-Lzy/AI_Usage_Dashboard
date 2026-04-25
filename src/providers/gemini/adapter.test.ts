@@ -86,6 +86,16 @@ describe("Gemini static quota policy", () => {
     expect(snapshot.warningReason).toBe(
       "120/min and 2000/day per user for Gemini CLI and agent mode. No stable official per-user live usage source is documented.",
     );
+    expect(snapshot.warningDiagnostic).toMatchObject({
+      code: "policy.documented_limit_only",
+      category: "policy_only",
+      severity: "warning",
+      rawMessage: snapshot.warningReason,
+      params: {
+        providerId: "gemini",
+        policyOnlyKind: "documented_limit_only",
+      },
+    });
     expect(snapshot.resetLabel).toBe(
       "Documented quota only; check Google Cloud Quotas for live project usage",
     );

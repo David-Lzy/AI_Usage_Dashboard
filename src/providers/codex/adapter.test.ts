@@ -180,6 +180,83 @@ describe("syncCodexProvider", () => {
     expect(createCodexPersonalPageClientMock).toHaveBeenCalled();
   });
 
+  it("adds usage-threshold diagnostics when the personal usage window crosses the warning threshold", async () => {
+    const attemptedAt = new Date(2026, 3, 21, 11, 8);
+    const personalResult: CodexPersonalParseResult = {
+      status: "ok",
+      snapshot: {
+        providerId: "codex",
+        providerLabel: "Codex",
+        measurementKind: "window_percent",
+        routeKey: "cloud_analytics",
+        sourceUrl: "https://chatgpt.com/codex/cloud/settings/analytics#usage",
+        sourceHeading: "Codex analysis",
+        primaryWindow: {
+          label: "5 hour limit",
+          normalizedLabel: "5-hour usage window",
+          kind: "rolling_5h",
+          modelLabel: null,
+          remainingPercent: 7,
+          usedPercent: 93,
+          totalPercent: 100,
+          resetAt: "2026-04-22 01:11",
+          resetText: "April 22, 2026 1:11",
+        },
+        windows: [
+          {
+            label: "5 hour limit",
+            normalizedLabel: "5-hour usage window",
+            kind: "rolling_5h",
+            modelLabel: null,
+            remainingPercent: 7,
+            usedPercent: 93,
+            totalPercent: 100,
+            resetAt: "2026-04-22 01:11",
+            resetText: "April 22, 2026 1:11",
+          },
+        ],
+        note: "Personal usage window snapshot",
+      },
+    };
+    createCodexPersonalPageClientMock.mockReturnValue({
+      getUsageSnapshot: vi.fn(async () =>
+        buildCodexPersonalPageResponse(personalResult),
+      ),
+    });
+
+    const { snapshot } = await syncCodexProvider({
+      provider: baseProvider,
+      secrets: emptySecrets,
+      setting: {
+        ...grantedSetting,
+        sourcePreference: "session_page",
+      },
+      warningThresholdPercent: 80,
+      now: attemptedAt,
+    });
+
+    expect(snapshot.syncSource).toBe("page_parse");
+    expect(snapshot.syncStatus).toBe("warning");
+    expect(snapshot.tone).toBe("warning");
+    expect(snapshot.warningReason).toBe("5-hour usage window: 7% remaining");
+    expect(snapshot.warningDiagnostic).toMatchObject({
+      code: "usage.threshold_warning",
+      category: "usage_threshold",
+      severity: "warning",
+      rawMessage: snapshot.warningReason,
+      params: {
+        providerId: "codex",
+        usageThresholdKind: "threshold_warning",
+        usagePercent: 93,
+        thresholdPercent: 80,
+        unitLabel: "percent",
+      },
+    });
+    expect(snapshot.sourceSelectionReason).toBe(
+      "Session page selected by user preference.",
+    );
+  });
+
   it("normalizes the latest daily analytics rows without inventing remaining credits", async () => {
     const attemptedAt = new Date(2026, 3, 21, 11, 8);
     createCodexAnalyticsClientMock.mockReturnValue({

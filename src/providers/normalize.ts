@@ -1,4 +1,10 @@
-import type { ProviderSnapshot, SyncStatus } from "./types";
+import { createUsageThresholdDiagnostic } from "./diagnostics";
+import type {
+  ProviderDiagnostic,
+  ProviderId,
+  ProviderSnapshot,
+  SyncStatus,
+} from "./types";
 
 function pad(value: number): string {
   return String(value).padStart(2, "0");
@@ -24,16 +30,29 @@ export function buildUsageSignal(
   warningThresholdPercent: number,
   unitLabel: string,
   overageCount: number = 0,
+  providerId: ProviderId | null = null,
 ): {
   syncStatus: SyncStatus;
   tone: ProviderSnapshot["tone"];
   warningReason: string | null;
+  warningDiagnostic: ProviderDiagnostic | null;
 } {
   if (overageCount > 0) {
+    const warningReason = `${overageCount} pay-per-use ${unitLabel} recorded this cycle`;
+
     return {
       syncStatus: "warning",
       tone: "warning",
-      warningReason: `${overageCount} pay-per-use ${unitLabel} recorded this cycle`,
+      warningReason,
+      warningDiagnostic: providerId
+        ? createUsageThresholdDiagnostic({
+            providerId,
+            usageThresholdKind: "overage_detected",
+            rawMessage: warningReason,
+            overageCount,
+            unitLabel,
+          })
+        : null,
     };
   }
 
@@ -42,16 +61,29 @@ export function buildUsageSignal(
       syncStatus: "ok",
       tone: "neutral",
       warningReason: null,
+      warningDiagnostic: null,
     };
   }
 
   const usagePercent = Math.round((used / total) * 100);
 
   if (usagePercent >= warningThresholdPercent) {
+    const warningReason = `${usagePercent}% of included ${unitLabel} consumed`;
+
     return {
       syncStatus: "warning",
       tone: "warning",
-      warningReason: `${usagePercent}% of included ${unitLabel} consumed`,
+      warningReason,
+      warningDiagnostic: providerId
+        ? createUsageThresholdDiagnostic({
+            providerId,
+            usageThresholdKind: "threshold_warning",
+            rawMessage: warningReason,
+            usagePercent,
+            thresholdPercent: warningThresholdPercent,
+            unitLabel,
+          })
+        : null,
     };
   }
 
@@ -59,5 +91,6 @@ export function buildUsageSignal(
     syncStatus: "ok",
     tone: "neutral",
     warningReason: null,
+    warningDiagnostic: null,
   };
 }

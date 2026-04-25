@@ -22,6 +22,7 @@ Status note:
 - `Phase 187` populated Codex source-selection and source-fallback typed diagnostics through the same reusable builders while preserving raw strings
 - `Phase 188` populated Cursor and Codex credential and host-access warning diagnostics while preserving raw strings
 - `Phase 189` populated Cursor and Codex page-session warning diagnostics while preserving raw strings
+- `Phase 190` populated usage-threshold and policy-only warning diagnostics while preserving raw strings
 - refresh it when provider adapters, source-selection behavior, provider snapshot fields, archive evidence schemas, or runtime i18n boundaries change materially
 
 ## Goal
@@ -140,7 +141,7 @@ After typed diagnostics exist:
 1. Add types and helpers without changing UI behavior - completed in `Phase 185`.
 2. Populate source-selection and source-fallback diagnostics for Cursor and Codex because those adapters already have source attempt order helpers. Cursor completed in `Phase 186`; Codex completed in `Phase 187`.
 3. Populate credential, host-access, and page-session diagnostics for provider adapters. Credential and host-access coverage for Cursor and Codex completed in `Phase 188`; page-session diagnostics for Cursor and Codex completed in `Phase 189`.
-4. Populate usage-threshold and policy-only diagnostics for shared normalization and Gemini policy output.
+4. Populate usage-threshold and policy-only diagnostics for shared normalization and Gemini policy output - completed in `Phase 190`.
 5. Populate sync-stale diagnostics in the sync engine.
 6. Update source-state classification to prefer typed diagnostics, with raw English pattern matching kept only as a compatibility fallback.
 7. Localize presentation generated from diagnostic codes after typed coverage and compatibility tests pass.
@@ -209,6 +210,16 @@ Before any runtime implementation lands:
 - no rendered UI behavior changes
 - no raw diagnostic string rewrites
 
+`Phase 190` populated the usage-threshold and policy-only warning diagnostic families:
+
+- reusable usage-threshold and policy-only diagnostic builders in `src/providers/diagnostics.ts`
+- shared `buildUsageSignal` usage-threshold diagnostics in `src/providers/normalize.ts`
+- Cursor official overage and personal on-demand-off `warningDiagnostic` metadata
+- Codex personal usage-threshold `warningDiagnostic` metadata
+- Gemini documented-policy-only `warningDiagnostic` metadata
+- no rendered UI behavior changes
+- no raw diagnostic string rewrites
+
 ## Next Executable Slice
 
-The next safe implementation slice should populate usage-threshold and policy-only diagnostics while preserving exact raw strings and rendered UI behavior.
+The next safe implementation slice should populate sync-stale diagnostics while preserving exact raw strings and rendered UI behavior.

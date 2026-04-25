@@ -136,7 +136,17 @@ describe("syncCursorProvider", () => {
     expect(snapshot.syncStatus).toBe("ok");
     expect(snapshot.tone).toBe("neutral");
     expect(snapshot.warningReason).toBe("On-demand usage is off.");
-    expect(snapshot.warningDiagnostic).toBeNull();
+    expect(snapshot.warningDiagnostic).toMatchObject({
+      code: "usage.on_demand_off",
+      category: "usage_threshold",
+      severity: "info",
+      rawMessage: snapshot.warningReason,
+      params: {
+        providerId: "cursor",
+        usageThresholdKind: "on_demand_off",
+        unitLabel: "requests",
+      },
+    });
     expect(snapshot.lastSyncLabel).toBe("Cursor personal fixture loaded");
     expect(snapshot.sourceSelectionReason).toBe("Auto fell back to Session page.");
     expect(snapshot.sourceSelectionDiagnostic).toMatchObject({
@@ -260,7 +270,18 @@ describe("syncCursorProvider", () => {
     expect(snapshot.warningReason).toBe(
       "15 pay-per-use requests recorded this cycle",
     );
-    expect(snapshot.warningDiagnostic).toBeNull();
+    expect(snapshot.warningDiagnostic).toMatchObject({
+      code: "usage.overage_detected",
+      category: "usage_threshold",
+      severity: "warning",
+      rawMessage: snapshot.warningReason,
+      params: {
+        providerId: "cursor",
+        usageThresholdKind: "overage_detected",
+        overageCount: 15,
+        unitLabel: "requests",
+      },
+    });
     expect(snapshot.lastSyncLabel).toBe("Cursor Admin API synced just now");
     expect(snapshot.sourceSelectionReason).toBe("Auto selected Official API.");
     expect(snapshot.sourceSelectionDiagnostic).toMatchObject({
@@ -465,7 +486,17 @@ describe("syncCursorProvider", () => {
     });
 
     expect(snapshot.syncSource).toBe("page_parse");
-    expect(snapshot.warningDiagnostic).toBeNull();
+    expect(snapshot.warningDiagnostic).toMatchObject({
+      code: "usage.on_demand_off",
+      category: "usage_threshold",
+      severity: "info",
+      rawMessage: "On-demand usage is off.",
+      params: {
+        providerId: "cursor",
+        usageThresholdKind: "on_demand_off",
+        unitLabel: "requests",
+      },
+    });
     expect(snapshot.sourceSelectionReason).toBe(
       "Official API preference fell back to Session page.",
     );

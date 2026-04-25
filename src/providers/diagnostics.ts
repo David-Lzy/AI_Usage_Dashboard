@@ -20,6 +20,13 @@ type PageSessionDiagnosticKind =
   | "open_page_required"
   | "logged_out"
   | "capture_unavailable";
+type UsageThresholdDiagnosticKind =
+  | "threshold_warning"
+  | "overage_detected"
+  | "on_demand_off";
+type PolicyOnlyDiagnosticKind =
+  | "live_source_unavailable"
+  | "documented_limit_only";
 
 export const PROVIDER_DIAGNOSTIC_CODE_CATEGORIES = {
   "source.auto_selected_official_api": "source_selection",
@@ -131,6 +138,28 @@ function getPageSessionDiagnosticCode(
   }
 
   return "page_session.capture_unavailable";
+}
+
+function getUsageThresholdDiagnosticCode(
+  usageThresholdKind: UsageThresholdDiagnosticKind,
+): KnownProviderDiagnosticCode {
+  if (usageThresholdKind === "overage_detected") {
+    return "usage.overage_detected";
+  }
+
+  if (usageThresholdKind === "on_demand_off") {
+    return "usage.on_demand_off";
+  }
+
+  return "usage.threshold_warning";
+}
+
+function getPolicyOnlyDiagnosticCode(
+  policyOnlyKind: PolicyOnlyDiagnosticKind,
+): KnownProviderDiagnosticCode {
+  return policyOnlyKind === "live_source_unavailable"
+    ? "policy.live_source_unavailable"
+    : "policy.documented_limit_only";
 }
 
 export function createSourceSelectionDiagnostic({
@@ -256,6 +285,72 @@ export function createPageSessionDiagnostic({
     {
       providerId,
       pageSessionKind,
+    },
+  );
+}
+
+export function createUsageThresholdDiagnostic({
+  providerId,
+  usageThresholdKind,
+  rawMessage,
+  usagePercent = null,
+  thresholdPercent = null,
+  overageCount = null,
+  unitLabel = null,
+}: {
+  providerId: ProviderId;
+  usageThresholdKind: UsageThresholdDiagnosticKind;
+  rawMessage: string;
+  usagePercent?: number | null;
+  thresholdPercent?: number | null;
+  overageCount?: number | null;
+  unitLabel?: string | null;
+}): ProviderDiagnostic {
+  const params: ProviderDiagnosticParams = {
+    providerId,
+    usageThresholdKind,
+  };
+
+  if (usagePercent !== null) {
+    params.usagePercent = usagePercent;
+  }
+
+  if (thresholdPercent !== null) {
+    params.thresholdPercent = thresholdPercent;
+  }
+
+  if (overageCount !== null) {
+    params.overageCount = overageCount;
+  }
+
+  if (unitLabel !== null) {
+    params.unitLabel = unitLabel;
+  }
+
+  return createProviderDiagnostic(
+    getUsageThresholdDiagnosticCode(usageThresholdKind),
+    usageThresholdKind === "on_demand_off" ? "info" : "warning",
+    rawMessage,
+    params,
+  );
+}
+
+export function createPolicyOnlyDiagnostic({
+  providerId,
+  policyOnlyKind,
+  rawMessage,
+}: {
+  providerId: ProviderId;
+  policyOnlyKind: PolicyOnlyDiagnosticKind;
+  rawMessage: string;
+}): ProviderDiagnostic {
+  return createProviderDiagnostic(
+    getPolicyOnlyDiagnosticCode(policyOnlyKind),
+    "warning",
+    rawMessage,
+    {
+      providerId,
+      policyOnlyKind,
     },
   );
 }

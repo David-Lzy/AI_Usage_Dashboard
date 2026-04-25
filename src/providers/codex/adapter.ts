@@ -24,6 +24,7 @@ import {
   createPageSessionDiagnostic,
   createSourceFallbackDiagnostic,
   createSourceSelectionDiagnostic,
+  createUsageThresholdDiagnostic,
 } from "../diagnostics";
 import {
   createCodexAnalyticsClient,
@@ -588,6 +589,17 @@ async function tryCodexPersonalSource({
     const remaining = primaryWindow.remainingPercent ?? null;
     const total = primaryWindow.totalPercent ?? 100;
     const usedPercent = used ?? 0;
+    const usageThresholdDiagnostic =
+      used !== null && usedPercent >= warningThresholdPercent && warningReason
+        ? createUsageThresholdDiagnostic({
+            providerId: "codex",
+            usageThresholdKind: "threshold_warning",
+            rawMessage: warningReason,
+            usagePercent: usedPercent,
+            thresholdPercent: warningThresholdPercent,
+            unitLabel: "percent",
+          })
+        : null;
 
     return {
       ok: true,
@@ -610,7 +622,7 @@ async function tryCodexPersonalSource({
         syncStatus: usedPercent >= warningThresholdPercent ? "warning" : "ok",
         tone: usedPercent >= warningThresholdPercent ? "warning" : "neutral",
         warningReason,
-        warningDiagnostic: null,
+        warningDiagnostic: usageThresholdDiagnostic,
         lastSyncLabel: buildCodexPersonalRefreshLabel(personalSource),
       },
       setting: nextSetting,

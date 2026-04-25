@@ -18,6 +18,7 @@ Status note:
 - Codex source-selection and fallback diagnostic builders completed in `Phase 187`
 - credential and host-access diagnostics for Cursor and Codex completed in `Phase 188`
 - page-session diagnostics for Cursor and Codex completed in `Phase 189`
+- usage-threshold and policy-only diagnostics completed in `Phase 190`
 - this child TODO turns the adapter diagnostic reason-code plan into executable follow-up slices
 - refresh it when typed diagnostic coverage, provider adapter behavior, or archive compatibility rules change
 
@@ -37,17 +38,21 @@ The goal is not to translate raw provider evidence immediately. The goal is to m
 
 ## Current Truth
 
-As of `Phase 189`:
+As of `Phase 190`:
 
 - provider-source display wrappers are localized through `ProviderSourceDisplayCopy`
 - raw provider source-truth fields still pass through unchanged
 - `ProviderSnapshot` has optional typed diagnostic fields beside the raw strings
 - `src/providers/diagnostics.ts` provides known diagnostic code categories and raw-message fallback helpers
-- `src/providers/diagnostics.ts` now also provides reusable source-selection, source-fallback, credential, host-access, and page-session diagnostic builders
+- `src/providers/diagnostics.ts` now also provides reusable source-selection, source-fallback, credential, host-access, page-session, usage-threshold, and policy-only diagnostic builders
+- `src/providers/normalize.ts` now returns usage-threshold diagnostics from shared usage-signal normalization when a provider id is supplied
 - the Cursor adapter populates typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` metadata beside existing raw source-selection and fallback strings
 - the Codex adapter populates typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` metadata beside existing raw source-selection and fallback strings
 - Cursor and Codex now populate typed `warningDiagnostic` metadata for missing credential and missing host-access blockers
 - Cursor and Codex now populate typed `warningDiagnostic` metadata for open-page-required, logged-out, and capture-unavailable page-session blockers
+- Cursor now populates typed `warningDiagnostic` metadata for official-path overage and personal-page on-demand-off usage states
+- Codex now populates typed `warningDiagnostic` metadata for personal-page usage threshold states
+- Gemini now populates typed `warningDiagnostic` metadata for its shipped documented-policy-only state
 - `ProviderSnapshot.warningReason` remains the primary raw warning body
 - `ProviderSnapshot.sourceSelectionReason` remains the primary raw source-selection explanation
 - `ProviderSnapshot.sourceFallbackReason` remains the primary raw fallback explanation
@@ -101,13 +106,14 @@ As of `Phase 189`:
 
 ### E. Usage Threshold And Policy-Only Diagnostics
 
-- next recommended slice
+- completed in `Phase 190`
 - map shared normalization warnings into typed usage-threshold diagnostics
 - map policy-only provider diagnostics into typed policy-only diagnostics
 - keep quota and policy wording raw until localized templates are explicitly implemented
 
 ### F. Sync-Stale Diagnostics
 
+- next recommended slice
 - map sync-engine stale cache warnings into typed diagnostics
 - keep current stale copy visible until UI presentation is migrated
 - add tests for cached-state fallback behavior
@@ -121,15 +127,15 @@ As of `Phase 189`:
 
 ## First Implementation Candidate
 
-The next runtime phase should implement the first narrow slice of `E. Usage Threshold And Policy-Only Diagnostics`.
+The next runtime phase should implement the first narrow slice of `F. Sync-Stale Diagnostics`.
 
 Recommended scope:
 
-- start with shared normalization warnings and Gemini policy-only output because those paths already generate stable usage or policy blocker states
-- populate `warningDiagnostic` for threshold warning, overage, on-demand-off, and documented-policy-only states without changing raw `warningReason`
+- start with sync-engine stale cached-state warnings because the raw warning text is generated locally and already has stable stale-cache semantics
+- populate typed metadata for automatic-sync-overdue and cached-state-stale states without changing raw stale warning output
 - keep source-state classification raw-string fallback intact until typed coverage is broader
 - no UI rendering changes
-- no source-selection or fallback-order behavior changes
+- no sync cadence or cache invalidation behavior changes
 - preserve exact raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings
 
 ## Acceptance Criteria
