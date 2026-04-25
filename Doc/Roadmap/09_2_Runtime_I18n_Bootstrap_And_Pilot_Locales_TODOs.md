@@ -34,6 +34,7 @@ Status note:
 - twenty-third executable phase landed on `2026-04-25` through `Phase 192`
 - twenty-fourth executable phase landed on `2026-04-25` through `Phase 193`
 - twenty-fifth executable phase landed on `2026-04-25` through `Phase 194`
+- twenty-sixth executable phase landed on `2026-04-25` through `Phase 195`
 - this child TODO keeps `Direction 09` executable as the active localization architecture track
 
 Process rule:
@@ -379,11 +380,19 @@ Build one maintainable localization architecture that can support manifest strin
 
 ### W. Adapter-Error Diagnostic Builders And Presentation Boundary
 
-- next recommended slice
+- completed in `Phase 195`
 - inventory current adapter-error and parser-failure raw message paths
 - populate typed adapter-error diagnostics only where repo-generated errors already have stable meaning
+- localize short presentation labels and summaries for known `adapter.*` codes without translating raw adapter bodies
 - keep raw adapter-error bodies visible for details, exports, and archive compatibility
 - avoid changing provider coverage claims or fallback behavior
+
+### X. Diagnostic Presentation Compact-Width And Evidence QA
+
+- next recommended slice
+- verify Settings and Provider Detail presentation density after warning, source, and adapter-error summaries all exist
+- keep raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` visible for evidence surfaces
+- test compact localized diagnostic stacks without changing provider coverage or source-selection behavior
 
 ## Planned Numbered Slices
 
@@ -413,7 +422,8 @@ Build one maintainable localization architecture that can support manifest strin
 24. source-state classification typed-diagnostic fallback - completed in `Phase 192`
 25. localized warning diagnostic presentation - completed in `Phase 193`
 26. source-selection and fallback diagnostic presentation expansion - completed in `Phase 194`
-27. adapter-error diagnostic builders and presentation boundary - next
+27. adapter-error diagnostic builders and presentation boundary - completed in `Phase 195`
+28. diagnostic presentation compact-width and evidence QA - next
 
 ## Out Of Scope
 

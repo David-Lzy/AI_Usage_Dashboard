@@ -123,6 +123,10 @@ Instead, these localized surfaces now ship through shared structured builders in
   - known source-selection and fallback diagnostic labels
   - short source diagnostic summaries generated from typed params
   - raw source-selection and fallback bodies kept outside translated message ids
+- typed adapter-error diagnostic presentation:
+  - known `adapter.*` diagnostic labels
+  - short adapter diagnostic summaries generated from typed params
+  - raw adapter warning bodies kept outside translated message ids
 
 This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still making the broader `en + zh-CN` pilot executable.
 
@@ -159,7 +163,7 @@ This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still maki
 - operator workspace copy remains governed by [I18n_Operator_Workspace_Boundary_And_Extraction.md](./I18n_Operator_Workspace_Boundary_And_Extraction.md); `Phase 179` localizes shell/navigation/helper copy while preserving English evidence payloads
 - store-screenshot helper copy remains governed by [I18n_Store_Runtime_Helper_Copy.md](./I18n_Store_Runtime_Helper_Copy.md); `Phase 180` localizes visible helper copy and `Phase 181` adds helper-only submission-support captions while preserving automation titles, preset ids, route hashes, final screenshot surfaces, and the manual native-toolbar popup capture truth boundary
 - raw provider source-truth copy remains governed by [I18n_Raw_Provider_Source_Truth_Policy.md](./I18n_Raw_Provider_Source_Truth_Policy.md); `Phase 182` separates protected raw fields from provider-source display wrappers, and `Phase 183` localizes those wrappers through `ProviderSourceDisplayCopy` plus `buildProviderSourceDisplayLocalizedCopy` while preserving raw adapter evidence fields
-- adapter diagnostic body localization remains governed by [I18n_Adapter_Diagnostic_Reason_Code_Plan.md](./I18n_Adapter_Diagnostic_Reason_Code_Plan.md); `Phase 184` defines the typed reason-code plan, `Phase 185` ships the type-only additive model, `Phase 186` populates Cursor source-selection/fallback diagnostics, `Phase 187` populates Codex source-selection/fallback diagnostics, `Phase 188` populates Cursor/Codex credential plus host-access diagnostics, `Phase 189` populates Cursor/Codex page-session diagnostics, `Phase 190` populates usage-threshold plus policy-only diagnostics, `Phase 191` populates sync-stale diagnostics, `Phase 192` makes source-state classification prefer typed diagnostics, `Phase 193` ships localized warning diagnostic presentation, and `Phase 194` ships localized source diagnostic presentation while keeping adapter-error diagnostic builders as the next safe step
+- adapter diagnostic body localization remains governed by [I18n_Adapter_Diagnostic_Reason_Code_Plan.md](./I18n_Adapter_Diagnostic_Reason_Code_Plan.md); `Phase 184` defines the typed reason-code plan, `Phase 185` ships the type-only additive model, `Phase 186` populates Cursor source-selection/fallback diagnostics, `Phase 187` populates Codex source-selection/fallback diagnostics, `Phase 188` populates Cursor/Codex credential plus host-access diagnostics, `Phase 189` populates Cursor/Codex page-session diagnostics, `Phase 190` populates usage-threshold plus policy-only diagnostics, `Phase 191` populates sync-stale diagnostics, `Phase 192` makes source-state classification prefer typed diagnostics, `Phase 193` ships localized warning diagnostic presentation, `Phase 194` ships localized source diagnostic presentation, and `Phase 195` ships adapter-error diagnostic presentation while keeping raw adapter bodies outside translated message ids
 
 ## Locale-Aware Formatting Contract
 

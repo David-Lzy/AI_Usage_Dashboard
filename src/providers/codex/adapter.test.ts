@@ -486,6 +486,54 @@ describe("syncCodexProvider", () => {
     );
   });
 
+  it("maps Codex parser route drift to a typed adapter parse diagnostic", async () => {
+    const attemptedAt = new Date(2026, 3, 21, 11, 8);
+    createCodexPersonalPageClientMock.mockReturnValue({
+      getUsageSnapshot: vi.fn(async () =>
+        buildCodexPersonalPageResponse({
+          status: "route_drift",
+          reason:
+            "The matched Codex usage page no longer exposed a parseable remaining-percentage window.",
+          chosenRoute: "cloud_analytics",
+          routeStatuses: [],
+        }),
+      ),
+    });
+
+    const { snapshot } = await syncCodexProvider({
+      provider: baseProvider,
+      secrets: emptySecrets,
+      setting: {
+        ...grantedSetting,
+        sourcePreference: "session_page",
+      },
+      warningThresholdPercent: 80,
+      now: attemptedAt,
+    });
+
+    expect(snapshot.syncSource).toBe("page_parse");
+    expect(snapshot.warningReason).toBe(
+      "The matched Codex usage page no longer exposed a parseable remaining-percentage window.",
+    );
+    expect(snapshot.warningDiagnostic).toMatchObject({
+      code: "adapter.parse_failed",
+      category: "adapter_error",
+      severity: "error",
+      rawMessage: snapshot.warningReason,
+      params: {
+        providerId: "codex",
+        adapterErrorKind: "parse_failed",
+        sourceKind: "session_page",
+        failureCode: "route_drift",
+        parserStage: "personal_usage_page",
+      },
+    });
+    expect(snapshot.lastSyncLabel).toBe("Codex usage page parse failed");
+    expect(snapshot.sourceFallbackReason).toContain(
+      "Session page unavailable: The matched Codex usage page no longer exposed",
+    );
+  });
+
   it("falls back to the personal page when Official API is preferred but Enterprise analytics config is missing", async () => {
     const attemptedAt = new Date(2026, 3, 21, 11, 8);
     const personalResult: CodexPersonalParseResult = {

@@ -260,6 +260,39 @@ function formatSyncStaleSummary(
     : "Cached freshness is overdue.";
 }
 
+function formatAdapterErrorSummary(
+  code: ProviderDiagnostic["code"],
+  params: ProviderDiagnosticParams | undefined,
+  i18n: RuntimeI18n,
+): string {
+  const sourceKindLabel = formatDiagnosticSourceKindLabel(
+    getSourceKindParam(params, "sourceKind"),
+    i18n,
+  );
+
+  if (i18n.resolvedLocale === "zh-CN") {
+    if (code === "adapter.parse_failed") {
+      return `${sourceKindLabel}解析失败；保留 raw diagnostic body 用于 parser 或 route 检查。`;
+    }
+
+    if (code === "adapter.unsupported_response") {
+      return `${sourceKindLabel}返回了当前适配器不支持的响应；保留 raw diagnostic body 用于兼容性检查。`;
+    }
+
+    return `${sourceKindLabel}出现非预期适配器错误；保留 raw diagnostic body 用于排查。`;
+  }
+
+  if (code === "adapter.parse_failed") {
+    return `${sourceKindLabel} parsing failed; keep the raw diagnostic body for parser or route review.`;
+  }
+
+  if (code === "adapter.unsupported_response") {
+    return `${sourceKindLabel} returned a response this adapter does not support; keep the raw diagnostic body for compatibility review.`;
+  }
+
+  return `${sourceKindLabel} hit an unexpected adapter error; keep the raw diagnostic body for review.`;
+}
+
 export function getProviderDiagnosticPresentation(
   diagnostic: ProviderDiagnostic | null | undefined,
   i18n: RuntimeI18n,
@@ -410,6 +443,33 @@ export function getProviderDiagnosticPresentation(
       return {
         label: zh ? "缓存状态过期" : "Cached state stale",
         summary: formatSyncStaleSummary(diagnostic.params, i18n),
+      };
+    case "adapter.unexpected_error":
+      return {
+        label: zh ? "适配器意外错误" : "Adapter unexpected error",
+        summary: formatAdapterErrorSummary(
+          diagnostic.code,
+          diagnostic.params,
+          i18n,
+        ),
+      };
+    case "adapter.unsupported_response":
+      return {
+        label: zh ? "不支持的适配器响应" : "Unsupported adapter response",
+        summary: formatAdapterErrorSummary(
+          diagnostic.code,
+          diagnostic.params,
+          i18n,
+        ),
+      };
+    case "adapter.parse_failed":
+      return {
+        label: zh ? "适配器解析失败" : "Adapter parse failed",
+        summary: formatAdapterErrorSummary(
+          diagnostic.code,
+          diagnostic.params,
+          i18n,
+        ),
       };
     default:
       return null;

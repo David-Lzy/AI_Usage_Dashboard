@@ -225,6 +225,48 @@ describe("syncClaudeCodeProvider", () => {
     });
   });
 
+  it("maps Claude analytics catch failures to a typed adapter diagnostic", async () => {
+    const attemptedAt = new Date(2026, 3, 20, 12, 34);
+    createClaudeCodeAnalyticsClientMock.mockReturnValue({
+      getUsageReport: vi.fn(async () => {
+        throw new Error("Claude analytics endpoint returned 502.");
+      }),
+    });
+
+    const { snapshot } = await syncClaudeCodeProvider({
+      provider: baseProvider,
+      secrets: {
+        ...emptySecrets,
+        "claude-code": {
+          adminApiKey: "sk-ant-admin-test",
+        },
+      },
+      setting: grantedSetting,
+      warningThresholdPercent: 80,
+      now: attemptedAt,
+    });
+
+    expect(snapshot.syncStatus).toBe("error");
+    expect(snapshot.tone).toBe("error");
+    expect(snapshot.warningReason).toBe(
+      "Claude analytics endpoint returned 502.",
+    );
+    expect(snapshot.warningDiagnostic).toMatchObject({
+      code: "adapter.unexpected_error",
+      category: "adapter_error",
+      severity: "error",
+      rawMessage: snapshot.warningReason,
+      params: {
+        providerId: "claude-code",
+        adapterErrorKind: "unexpected_error",
+        sourceKind: "official_api",
+        failureCode: "sync_error",
+        parserStage: "analytics_api",
+      },
+    });
+    expect(snapshot.lastSyncLabel).toBe("Claude analytics sync failed just now");
+  });
+
   it("returns a readable unsupported-state message when Admin API access is missing", async () => {
     const attemptedAt = new Date(2026, 3, 20, 12, 34);
     const { snapshot } = await syncClaudeCodeProvider({

@@ -28,6 +28,7 @@ Status note:
 - `Phase 192` made source-state classification prefer typed diagnostics while preserving raw English warning-pattern fallback for older snapshots and unknown diagnostic codes
 - `Phase 193` added localized warning diagnostic presentation while preserving raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings
 - `Phase 194` added localized source diagnostic presentation while preserving raw `sourceSelectionReason` and `sourceFallbackReason` strings
+- `Phase 195` added typed adapter-error diagnostics and localized adapter-error presentation while preserving raw adapter `warningReason` strings
 - refresh it when provider source display helpers, adapter reason fields, provider-source blueprints, or runtime i18n scope changes materially
 
 ## Goal
@@ -116,6 +117,7 @@ Future localization should prefer this order:
 5. Only after typed reason codes exist, consider localizing adapter diagnostics from code plus data instead of translating raw strings directly.
 6. After `Phase 193`, warning diagnostics may expose localized presentation generated from typed metadata, but the raw warning body remains visible for evidence.
 7. After `Phase 194`, source-selection and fallback diagnostics may expose localized presentation generated from typed metadata, but the raw source bodies remain visible for evidence.
+8. After `Phase 195`, adapter-error diagnostics may expose localized presentation generated from typed metadata, but raw adapter error bodies remain visible for evidence.
 
 ## Out Of Scope
 
@@ -128,6 +130,6 @@ Future localization should prefer this order:
 
 ## Next Executable Slice
 
-The next safe engineering slice should inventory adapter-error raw message paths and add typed adapter-error builders only where the repo already owns stable raw error semantics.
+The next safe engineering slice should review diagnostic presentation density and evidence visibility after warning, source, and adapter-error summaries are all visible.
 
 It should not translate raw provider source-truth fields listed above directly; localized output should be generated from typed diagnostics and must keep raw bodies available for evidence surfaces.

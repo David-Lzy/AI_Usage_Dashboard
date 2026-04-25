@@ -5,6 +5,7 @@ import type {
   ProviderSyncOutcome,
 } from "../types";
 import { formatSyncTimestamp } from "../normalize";
+import { createAdapterErrorDiagnostic } from "../diagnostics";
 import {
   createClaudeCodeAnalyticsClient,
   type ClaudeCodeAnalyticsRecord,
@@ -180,6 +181,11 @@ export async function syncClaudeCodeProvider({
       },
     };
   } catch (error) {
+    const warningReason =
+      error instanceof Error
+        ? error.message
+        : "Claude Code analytics sync failed unexpectedly.";
+
     return {
       snapshot: {
         ...provider,
@@ -187,10 +193,15 @@ export async function syncClaudeCodeProvider({
         syncSource: "official",
         syncStatus: "error",
         tone: "error",
-        warningReason:
-          error instanceof Error
-            ? error.message
-            : "Claude Code analytics sync failed unexpectedly.",
+        warningReason,
+        warningDiagnostic: createAdapterErrorDiagnostic({
+          providerId: "claude-code",
+          adapterErrorKind: "unexpected_error",
+          sourceKind: "official_api",
+          failureCode: "sync_error",
+          parserStage: "analytics_api",
+          rawMessage: warningReason,
+        }),
         lastSyncLabel: "Claude analytics sync failed just now",
         sourceSelectionReason:
           "Official API is the only shipped live source for Claude Code.",

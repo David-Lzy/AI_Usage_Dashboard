@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  createAdapterErrorDiagnostic,
   createSourceFallbackDiagnostic,
   createSourceSelectionDiagnostic,
   createUsageThresholdDiagnostic,
@@ -224,6 +225,36 @@ describe("runtime i18n", () => {
       summary:
         "The Official API source could not run because its required credential is missing.",
     });
+  });
+
+  it("builds localized adapter-error diagnostic presentation without translating raw bodies", () => {
+    const diagnostic = createAdapterErrorDiagnostic({
+      providerId: "cursor",
+      adapterErrorKind: "parse_failed",
+      sourceKind: "session_page",
+      failureCode: "route_drift",
+      parserStage: "personal_usage_page",
+      rawMessage:
+        "The matched Cursor usage page no longer exposed parseable billing-period usage signals.",
+    });
+
+    expect(
+      getProviderDiagnosticPresentation(diagnostic, createRuntimeI18n("en")),
+    ).toEqual({
+      label: "Adapter parse failed",
+      summary:
+        "Session page parsing failed; keep the raw diagnostic body for parser or route review.",
+    });
+    expect(
+      getProviderDiagnosticPresentation(diagnostic, createRuntimeI18n("zh-CN")),
+    ).toEqual({
+      label: "适配器解析失败",
+      summary:
+        "会话页面解析失败；保留 raw diagnostic body 用于 parser 或 route 检查。",
+    });
+    expect(diagnostic.rawMessage).toBe(
+      "The matched Cursor usage page no longer exposed parseable billing-period usage signals.",
+    );
   });
 
   it("returns no localized presentation for unknown diagnostic codes", () => {

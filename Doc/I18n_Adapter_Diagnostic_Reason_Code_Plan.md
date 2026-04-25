@@ -27,6 +27,7 @@ Status note:
 - `Phase 192` made source-state classification prefer typed warning diagnostics while preserving raw English fallback behavior
 - `Phase 193` added localized warning diagnostic presentation while preserving raw diagnostic strings
 - `Phase 194` added localized source diagnostic presentation while preserving raw source-selection and fallback strings
+- `Phase 195` added adapter-error diagnostics and localized adapter-error presentation while preserving raw adapter warning bodies
 - refresh it when provider adapters, source-selection behavior, provider snapshot fields, archive evidence schemas, or runtime i18n boundaries change materially
 
 ## Goal
@@ -150,7 +151,8 @@ After typed diagnostics exist:
 6. Update source-state classification to prefer typed diagnostics, with raw English pattern matching kept as a compatibility fallback - completed in `Phase 192`.
 7. Localize warning presentation generated from typed warning diagnostic codes after typed coverage and compatibility tests pass - completed in `Phase 193`.
 8. Localize source-selection and fallback presentation generated from typed source diagnostic codes after warning presentation proves the raw-evidence boundary - completed in `Phase 194`.
-9. Populate adapter-error diagnostics only after the raw adapter-error boundary is explicit.
+9. Populate adapter-error diagnostics only after the raw adapter-error boundary is explicit - completed in `Phase 195`.
+10. Review diagnostic presentation density after warning, source, and adapter-error summaries are all visible.
 
 ## Compatibility Rules
 
@@ -259,6 +261,15 @@ Before any runtime implementation lands:
 - no source-selection or fallback behavior changed
 - no raw diagnostic string rewrites
 
+`Phase 195` populated adapter-error diagnostics and presentation:
+
+- reusable adapter-error builders now cover `adapter.unexpected_error`, `adapter.unsupported_response`, and `adapter.parse_failed`
+- Cursor and Codex parser route drift now maps to typed `adapter.parse_failed` diagnostics
+- Cursor, Codex, and Claude Code catch paths now map stable repo-owned failures to typed `adapter.unexpected_error` diagnostics
+- Settings and Provider Detail can show localized adapter-error labels and short summaries generated from typed metadata
+- raw adapter warning bodies still remain visible and unchanged
+- no provider coverage, source-selection, or fallback behavior changed
+
 ## Next Executable Slice
 
-The next safe implementation slice should inventory adapter-error raw message paths and add typed adapter-error builders only where repo-generated errors already have stable meaning. Raw adapter-error bodies should remain visible for details, exports, and archive compatibility.
+The next safe implementation slice should review diagnostic presentation density and evidence visibility after warning, source, and adapter-error summaries are all user-visible. Raw diagnostic bodies should remain visible for details, exports, and archive compatibility.

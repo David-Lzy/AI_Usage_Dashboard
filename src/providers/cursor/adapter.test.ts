@@ -443,6 +443,54 @@ describe("syncCursorProvider", () => {
     );
   });
 
+  it("maps Cursor parser route drift to a typed adapter parse diagnostic", async () => {
+    const attemptedAt = new Date(2026, 3, 20, 14, 18);
+    createCursorPersonalPageClientMock.mockReturnValue({
+      getUsageSnapshot: vi.fn(async () =>
+        buildCursorPersonalPageResponse({
+          status: "route_drift",
+          reason:
+            "The matched Cursor usage page no longer exposed parseable billing-period usage signals.",
+          chosenRoute: "dashboard_usage",
+          routeStatuses: [],
+        }),
+      ),
+    });
+
+    const { snapshot } = await syncCursorProvider({
+      provider: baseProvider,
+      secrets: emptySecrets,
+      setting: {
+        ...grantedSetting,
+        sourcePreference: "session_page",
+      },
+      warningThresholdPercent: 80,
+      now: attemptedAt,
+    });
+
+    expect(snapshot.syncSource).toBe("page_parse");
+    expect(snapshot.warningReason).toBe(
+      "The matched Cursor usage page no longer exposed parseable billing-period usage signals.",
+    );
+    expect(snapshot.warningDiagnostic).toMatchObject({
+      code: "adapter.parse_failed",
+      category: "adapter_error",
+      severity: "error",
+      rawMessage: snapshot.warningReason,
+      params: {
+        providerId: "cursor",
+        adapterErrorKind: "parse_failed",
+        sourceKind: "session_page",
+        failureCode: "route_drift",
+        parserStage: "personal_usage_page",
+      },
+    });
+    expect(snapshot.lastSyncLabel).toBe("Cursor usage page parse failed");
+    expect(snapshot.sourceFallbackReason).toContain(
+      "Session page unavailable: The matched Cursor usage page no longer exposed parseable",
+    );
+  });
+
   it("falls back to the personal page when Official API is preferred but the Admin API key is missing", async () => {
     const attemptedAt = new Date(2026, 3, 20, 14, 18);
     const personalResult: CursorPersonalParseResult = {

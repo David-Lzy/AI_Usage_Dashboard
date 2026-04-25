@@ -30,6 +30,10 @@ type PolicyOnlyDiagnosticKind =
 type SyncStaleDiagnosticKind =
   | "automatic_sync_overdue"
   | "cached_state_stale";
+type AdapterErrorDiagnosticKind =
+  | "unexpected_error"
+  | "unsupported_response"
+  | "parse_failed";
 
 export const PROVIDER_DIAGNOSTIC_CODE_CATEGORIES = {
   "source.auto_selected_official_api": "source_selection",
@@ -171,6 +175,20 @@ function getSyncStaleDiagnosticCode(
   return syncStaleKind === "automatic_sync_overdue"
     ? "sync.automatic_sync_overdue"
     : "sync.cached_state_stale";
+}
+
+function getAdapterErrorDiagnosticCode(
+  adapterErrorKind: AdapterErrorDiagnosticKind,
+): KnownProviderDiagnosticCode {
+  if (adapterErrorKind === "unsupported_response") {
+    return "adapter.unsupported_response";
+  }
+
+  if (adapterErrorKind === "parse_failed") {
+    return "adapter.parse_failed";
+  }
+
+  return "adapter.unexpected_error";
 }
 
 export function createSourceSelectionDiagnostic({
@@ -395,6 +413,46 @@ export function createSyncStaleDiagnostic({
   return createProviderDiagnostic(
     getSyncStaleDiagnosticCode(syncStaleKind),
     "warning",
+    rawMessage,
+    params,
+  );
+}
+
+export function createAdapterErrorDiagnostic({
+  providerId,
+  adapterErrorKind,
+  rawMessage,
+  sourceKind = null,
+  failureCode = null,
+  parserStage = null,
+}: {
+  providerId: ProviderId;
+  adapterErrorKind: AdapterErrorDiagnosticKind;
+  rawMessage: string;
+  sourceKind?: ProviderSourceKind | null;
+  failureCode?: string | null;
+  parserStage?: string | null;
+}): ProviderDiagnostic {
+  const params: ProviderDiagnosticParams = {
+    providerId,
+    adapterErrorKind,
+  };
+
+  if (sourceKind !== null) {
+    params.sourceKind = sourceKind;
+  }
+
+  if (failureCode !== null) {
+    params.failureCode = failureCode;
+  }
+
+  if (parserStage !== null) {
+    params.parserStage = parserStage;
+  }
+
+  return createProviderDiagnostic(
+    getAdapterErrorDiagnosticCode(adapterErrorKind),
+    "error",
     rawMessage,
     params,
   );

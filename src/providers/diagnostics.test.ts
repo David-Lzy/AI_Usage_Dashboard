@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { SAMPLE_APP_STATE } from "../shared/constants";
 import {
+  createAdapterErrorDiagnostic,
   createCredentialDiagnostic,
   createHostAccessDiagnostic,
   createPageSessionDiagnostic,
@@ -270,6 +271,33 @@ describe("provider diagnostics", () => {
         syncStaleKind: "cached_state_stale",
         ageMinutes: 240,
         staleAfterMinutes: 60,
+      },
+    });
+  });
+
+  it("builds adapter-error diagnostics without rewriting raw warning messages", () => {
+    const diagnostic = createAdapterErrorDiagnostic({
+      providerId: "codex",
+      adapterErrorKind: "parse_failed",
+      sourceKind: "session_page",
+      failureCode: "route_drift",
+      parserStage: "personal_usage_page",
+      rawMessage:
+        "The matched Codex usage page no longer exposed a parseable remaining-percentage window.",
+    });
+
+    expect(diagnostic).toMatchObject({
+      code: "adapter.parse_failed",
+      category: "adapter_error",
+      severity: "error",
+      rawMessage:
+        "The matched Codex usage page no longer exposed a parseable remaining-percentage window.",
+      params: {
+        providerId: "codex",
+        adapterErrorKind: "parse_failed",
+        sourceKind: "session_page",
+        failureCode: "route_drift",
+        parserStage: "personal_usage_page",
       },
     });
   });

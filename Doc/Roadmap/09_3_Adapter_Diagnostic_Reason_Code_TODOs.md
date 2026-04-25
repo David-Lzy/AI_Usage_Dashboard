@@ -23,6 +23,7 @@ Status note:
 - source-state classification typed-diagnostic fallback completed in `Phase 192`
 - localized warning diagnostic presentation completed in `Phase 193`
 - source diagnostic presentation completed in `Phase 194`
+- adapter-error diagnostics and presentation boundary completed in `Phase 195`
 - this child TODO turns the adapter diagnostic reason-code plan into executable follow-up slices
 - refresh it when typed diagnostic coverage, provider adapter behavior, or archive compatibility rules change
 
@@ -42,7 +43,7 @@ The goal is not to translate raw provider evidence immediately. The goal is to m
 
 ## Current Truth
 
-As of `Phase 194`:
+As of `Phase 195`:
 
 - provider-source display wrappers are localized through `ProviderSourceDisplayCopy`
 - raw provider source-truth fields still pass through unchanged
@@ -54,6 +55,8 @@ As of `Phase 194`:
 - source-state classification now prefers typed warning diagnostic categories where available and keeps raw English warning-pattern matching as compatibility fallback
 - Settings and Provider Detail now render localized labels and a short diagnostic summary from known typed `warningDiagnostic` codes and params
 - Settings and Provider Detail now render localized labels and short summaries from known typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` codes and params
+- Settings and Provider Detail now render localized labels and short summaries for known `adapter.*` diagnostics while keeping raw adapter warning bodies visible
+- `src/providers/diagnostics.ts` now provides a reusable adapter-error diagnostic builder for unexpected adapter failures, unsupported responses, and parser failures
 - the Cursor adapter populates typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` metadata beside existing raw source-selection and fallback strings
 - the Codex adapter populates typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` metadata beside existing raw source-selection and fallback strings
 - Cursor and Codex now populate typed `warningDiagnostic` metadata for missing credential and missing host-access blockers
@@ -62,6 +65,9 @@ As of `Phase 194`:
 - Codex now populates typed `warningDiagnostic` metadata for personal-page usage threshold states
 - Gemini now populates typed `warningDiagnostic` metadata for its shipped documented-policy-only state
 - stale cached-state and overdue automatic-sync states now have typed `warningDiagnostic` metadata when the sync engine emits the raw stale warning
+- Cursor and Codex now populate typed `adapter.parse_failed` metadata for personal-page parser route drift
+- Cursor and Codex now populate typed `adapter.unexpected_error` metadata for official and personal adapter catch paths
+- Claude Code now populates typed `adapter.unexpected_error` metadata for analytics API catch paths
 - `ProviderSnapshot.warningReason` remains the primary raw warning body
 - `ProviderSnapshot.sourceSelectionReason` remains the primary raw source-selection explanation
 - `ProviderSnapshot.sourceFallbackReason` remains the primary raw fallback explanation
@@ -152,24 +158,32 @@ As of `Phase 194`:
 
 ### J. Adapter-Error Diagnostic Builders And Presentation Boundary
 
-- next recommended slice
-- decide where `adapter.unexpected_error`, `adapter.unsupported_response`, and `adapter.parse_failed` should be populated
+- completed in `Phase 195`
+- reusable adapter-error builders now cover `adapter.unexpected_error`, `adapter.unsupported_response`, and `adapter.parse_failed`
+- Cursor, Codex, and Claude Code now populate adapter-error diagnostics only where the repo already owns stable error semantics
 - keep raw adapter error messages visible for evidence-oriented surfaces
-- add unknown-code fallback tests for adapter-error diagnostics
-- avoid presenting localized adapter-error summaries before the population boundary is explicit
+- localized adapter-error summaries are generated from typed metadata and do not translate raw adapter bodies directly
+- focused tests cover the builder, localized presentation, parser route drift, and Claude analytics catch behavior
+
+### K. Diagnostic Presentation Compact-Width And Evidence QA
+
+- next recommended slice
+- review Settings and Provider Detail diagnostic presentation density after warning, source, and adapter-error summaries are all visible
+- verify compact-width behavior for diagnostic stacks with raw warning, source-selection, source-fallback, and adapter-error bodies
+- verify evidence-oriented surfaces still expose raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason`
+- keep this as presentation QA; do not add new provider coverage claims
 
 ## First Implementation Candidate
 
-The next runtime phase should implement the first narrow slice of `J. Adapter-Error Diagnostic Builders And Presentation Boundary`.
+The next runtime phase should implement the first narrow slice of `K. Diagnostic Presentation Compact-Width And Evidence QA`.
 
 Recommended scope:
 
-- inventory current adapter-error and parser-failure raw message paths
-- add reusable adapter-error diagnostic builders only where raw messages are already generated by repo code
-- keep raw adapter-error bodies visible in Settings, Provider Detail, exports, and evidence-oriented surfaces
-- unknown typed adapter-error codes must fall back to raw diagnostic strings
-- do not translate raw adapter or sync-engine diagnostic bodies directly
+- build a compact-width fixture or focused review for known diagnostic-summary stacks
+- verify Settings source cards and Provider Detail remain scannable when localized summaries and raw evidence bodies both exist
+- keep unknown typed diagnostics on raw fallback behavior
 - preserve exact raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` strings
+- avoid adding new provider coverage or changing source-selection behavior
 
 ## Acceptance Criteria
 

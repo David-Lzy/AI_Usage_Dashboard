@@ -131,7 +131,7 @@ If one of these categories is localized later, the implementation must first dec
 
 ## Current Boundary
 
-As of `Phase 194`:
+As of `Phase 195`:
 
 - the runtime app already localizes the main product surfaces in `en + zh_CN`
 - the operator workspaces now have shell-localized navigation and helper copy
@@ -149,16 +149,17 @@ As of `Phase 194`:
 - source-state classification now prefers typed warning diagnostics while keeping raw English warning-pattern matching for compatibility
 - warning diagnostic presentation now localizes known typed warning labels and summaries while keeping raw warning bodies available
 - source diagnostic presentation now localizes known typed source-selection and fallback labels and summaries while keeping raw source bodies available
+- adapter-error diagnostic presentation now localizes known typed `adapter.*` labels and summaries while keeping raw adapter warning bodies available
 - archive payload semantics remain English and unchanged
 - the repo has a maintained extraction boundary for deeper operator-workspace localization decisions
 - the next implementation step should avoid evidence-schema changes unless a dedicated archive-compatibility review lands first
 
 ## Follow-Up
 
-The next `Direction 09` implementation slice should move to adapter-error diagnostic builders and presentation boundary:
+The next `Direction 09` implementation slice should move to diagnostic presentation compact-width and evidence QA:
 
-- inventory current adapter-error and parser-failure raw message paths before adding presentation
 - keep raw source-selection, fallback, warning, and adapter-error diagnostic bodies available for provider detail, exports, and archive evidence
+- verify compact diagnostic stacks after warning, source, and adapter-error summaries all exist
 - keep raw provider `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` values unchanged
 - keep generated store-listing source docs out of runtime code unless that copy is shown by the extension
 

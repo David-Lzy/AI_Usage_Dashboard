@@ -23,6 +23,7 @@ import {
   type SourceAttemptFailure,
 } from "../../shared/source-selection";
 import {
+  createAdapterErrorDiagnostic,
   createCredentialDiagnostic,
   createHostAccessDiagnostic,
   createNoLiveSourceFallbackDiagnostic,
@@ -316,7 +317,14 @@ async function tryCursorOfficialSource({
         syncStatus: "error",
         tone: "error",
         warningReason: detail,
-        warningDiagnostic: null,
+        warningDiagnostic: createAdapterErrorDiagnostic({
+          providerId: "cursor",
+          adapterErrorKind: "unexpected_error",
+          sourceKind: "official_api",
+          failureCode: "sync_error",
+          parserStage: "admin_api",
+          rawMessage: detail,
+        }),
         lastSyncLabel: "Cursor sync failed just now",
         resetLabel: "Retry after checking the Cursor Admin API configuration",
       },
@@ -416,11 +424,23 @@ async function tryCursorPersonalSource({
           syncStatus: isRecoverable ? "warning" : "error",
           tone: isRecoverable ? "warning" : "error",
           warningReason: result.reason,
-          warningDiagnostic: createPageSessionDiagnostic({
-            providerId: "cursor",
-            pageSessionKind: getCursorPageSessionDiagnosticKind(result.status),
-            rawMessage: result.reason,
-          }),
+          warningDiagnostic:
+            result.status === "route_drift"
+              ? createAdapterErrorDiagnostic({
+                  providerId: "cursor",
+                  adapterErrorKind: "parse_failed",
+                  sourceKind: "session_page",
+                  failureCode: "route_drift",
+                  parserStage: "personal_usage_page",
+                  rawMessage: result.reason,
+                })
+              : createPageSessionDiagnostic({
+                  providerId: "cursor",
+                  pageSessionKind: getCursorPageSessionDiagnosticKind(
+                    result.status,
+                  ),
+                  rawMessage: result.reason,
+                }),
           lastSyncLabel:
             result.status === "logged_out"
               ? "Cursor usage page session missing"
@@ -503,9 +523,12 @@ async function tryCursorPersonalSource({
         syncStatus: "error",
         tone: "error",
         warningReason: detail,
-        warningDiagnostic: createPageSessionDiagnostic({
+        warningDiagnostic: createAdapterErrorDiagnostic({
           providerId: "cursor",
-          pageSessionKind: "capture_unavailable",
+          adapterErrorKind: "unexpected_error",
+          sourceKind: "session_page",
+          failureCode: "sync_error",
+          parserStage: "personal_usage_page",
           rawMessage: detail,
         }),
         lastSyncLabel: "Cursor personal usage page sync failed just now",
