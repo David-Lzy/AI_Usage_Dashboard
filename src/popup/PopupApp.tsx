@@ -35,6 +35,7 @@ import { StatusBadge } from "../sidepanel/components/StatusBadge";
 import { UsageProgress } from "../sidepanel/components/UsageProgress";
 import { UsageWindowProgressList } from "../sidepanel/components/UsageWindowProgressList";
 import { buildSidePanelHash, type SidePanelRouteState } from "../sidepanel/route-state";
+import { syncPopupAppearanceAttributes } from "../shared/popup-appearance";
 import {
   buildPopupViewModel,
   localizePopupViewModel,
@@ -198,6 +199,21 @@ export function PopupApp() {
         : DEFAULT_THEME_SETTINGS;
 
     return startThemeSettingsSync(themeSettings, document.documentElement, window);
+  }, [loadState]);
+
+  useEffect(() => {
+    if (typeof document === "undefined") {
+      return undefined;
+    }
+
+    if (loadState.status !== "ready") {
+      return undefined;
+    }
+
+    return syncPopupAppearanceAttributes(
+      loadState.appState.settings,
+      document.documentElement,
+    );
   }, [loadState]);
 
   async function handleRefresh() {

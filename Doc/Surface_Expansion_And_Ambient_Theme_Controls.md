@@ -22,6 +22,7 @@ Status note:
 - `Phase 160` has now refreshed real RDP runtime captures for popup, sidepanel, and full-page surfaces while teaching the capture workflow to close the extension windows it opens
 - `Phase 209` has now improved compact popup density by showing structured usage-window progress as circular remaining indicators instead of another long vertical text block
 - `Phase 210` has now made quota progress style selectable per popup, sidebar, and full-page tab surface while moving popup quota cards above nonessential summary/explanation cards
+- `Phase 211` has now added Settings-controlled popup size, corner, and shadow presets while preserving the default balanced quota-first popup appearance
 
 Process rule:
 
@@ -39,6 +40,7 @@ Define one stable contract for the next productization slices and keep it aligne
 - task-focused
 - optimized for one-click status and next-step actions
 - should not turn into a second full workspace
+- may expose controlled appearance preferences from Settings, but those preferences must stay popup-only and must not change sidebar or full-page density
 
 ### Sidebar
 
@@ -108,6 +110,17 @@ Define one stable contract for the next productization slices and keep it aligne
 - after that, the quick toggle can continue switching between explicit light and dark
 - advanced theme configuration remains a Settings concern
 
+## Popup Appearance Contract
+
+- Settings may expose popup-only appearance presets for:
+  - size
+  - corner style
+  - shadow style
+- defaults must preserve the current balanced quota-first popup.
+- popup appearance changes must be implemented through popup root attributes and CSS variables, not separate copied layouts.
+- compact size must remain truthful about space limits; if two-column circular quota rings become too dense, use a compact-specific layout instead of silently widening the compact preset.
+- sidebar and full-page surfaces must not inherit popup appearance presets.
+
 ## Animation Boundary
 
 - add motion that suggests continuity between compact and expanded surfaces
@@ -126,6 +139,7 @@ Define one stable contract for the next productization slices and keep it aligne
 ## QA Notes From Current RDP Review
 
 - popup is currently functional, quota-first when provider cards exist, and has compact circular usage progress by default, but it still needs real native-toolbar visual review after the next authenticated provider capture
+- popup now supports size, corner, and shadow presets; the real native-toolbar review should cover compact, balanced, and wide presets rather than only the default
 - sidebar already reads as a mature workspace and should not be collapsed into popup-like behavior
 - new controls should strengthen the top action density instead of adding more long vertical cards
 - current full-page dashboard and full-page settings captures read as stable, intentional workspace surfaces after the shipped expand, quick-theme, and motion slices

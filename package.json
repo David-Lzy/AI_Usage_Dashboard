@@ -173,6 +173,7 @@
     "phase208:review": "./scripts/with-preferred-node.sh node ./scripts/phase208-usage-window-progress-bars-review.mjs",
     "phase209:review": "./scripts/with-preferred-node.sh node ./scripts/phase209-popup-circular-usage-progress-review.mjs",
     "phase210:review": "./scripts/with-preferred-node.sh node ./scripts/phase210-surface-progress-style-preferences-review.mjs",
+    "phase211:review": "./scripts/with-preferred-node.sh node ./scripts/phase211-popup-appearance-preferences-review.mjs",
     "interaction-audit:bundle": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-handoff-bundle.mjs",
     "interaction-audit:archive": "./scripts/with-preferred-node.sh node ./scripts/archive-interaction-audit-review.mjs",
     "interaction-audit:refresh-archive-index": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-review-archive-index.mjs",

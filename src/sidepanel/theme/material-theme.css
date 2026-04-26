@@ -32,6 +32,57 @@ body.popup-page {
   max-width: var(--app-popup-width-max);
 }
 
+html.popup-page {
+  --app-popup-card-radius: var(--md-sys-shape-corner-extra-large);
+  --app-popup-provider-card-radius: var(--md-sys-shape-corner-large);
+  --app-popup-card-shadow: var(--app-elevation-1);
+}
+
+html.popup-page[data-popup-size-preset="compact"] {
+  --app-popup-width-min: 320px;
+  --app-popup-width-preferred: 344px;
+  --app-popup-width-max: 360px;
+}
+
+html.popup-page[data-popup-size-preset="balanced"] {
+  --app-popup-width-min: 360px;
+  --app-popup-width-preferred: 392px;
+  --app-popup-width-max: 420px;
+}
+
+html.popup-page[data-popup-size-preset="wide"] {
+  --app-popup-width-min: 420px;
+  --app-popup-width-preferred: 520px;
+  --app-popup-width-max: 560px;
+}
+
+html.popup-page[data-popup-corner-style="square"] {
+  --app-popup-card-radius: var(--md-sys-shape-corner-small);
+  --app-popup-provider-card-radius: var(--md-sys-shape-corner-small);
+}
+
+html.popup-page[data-popup-corner-style="soft"] {
+  --app-popup-card-radius: var(--md-sys-shape-corner-large);
+  --app-popup-provider-card-radius: var(--md-sys-shape-corner-medium);
+}
+
+html.popup-page[data-popup-corner-style="rounded"] {
+  --app-popup-card-radius: var(--md-sys-shape-corner-extra-large);
+  --app-popup-provider-card-radius: var(--md-sys-shape-corner-large);
+}
+
+html.popup-page[data-popup-shadow-style="none"] {
+  --app-popup-card-shadow: none;
+}
+
+html.popup-page[data-popup-shadow-style="soft"] {
+  --app-popup-card-shadow: var(--app-elevation-1);
+}
+
+html.popup-page[data-popup-shadow-style="elevated"] {
+  --app-popup-card-shadow: var(--app-elevation-2);
+}
+
 body.popup-page {
   overflow-x: hidden;
 }
@@ -1861,6 +1912,14 @@ body.popup-page .popup-shell {
   max-width: none;
 }
 
+body.popup-page .status-card {
+  border-radius: var(
+    --app-popup-card-radius,
+    var(--md-sys-shape-corner-extra-large)
+  );
+  box-shadow: var(--app-popup-card-shadow, var(--app-elevation-1));
+}
+
 .popup-header {
   gap: var(--app-space-2);
 }
@@ -1901,9 +1960,12 @@ body.popup-page .popup-shell {
   gap: var(--app-space-2);
   padding: var(--app-space-4);
   border: 1px solid var(--md-sys-color-outline-variant);
-  border-radius: var(--md-sys-shape-corner-large);
+  border-radius: var(
+    --app-popup-provider-card-radius,
+    var(--md-sys-shape-corner-large)
+  );
   background: var(--md-sys-color-surface-container-lowest);
-  box-shadow: var(--app-elevation-1);
+  box-shadow: var(--app-popup-card-shadow, var(--app-elevation-1));
 }
 
 .popup-provider-card--quota-first {

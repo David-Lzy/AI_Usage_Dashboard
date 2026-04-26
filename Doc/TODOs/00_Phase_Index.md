@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [210_Phase_Surface_Progress_Style_Preferences.md](./Archive/210_Phase_Surface_Progress_Style_Preferences.md)
+- latest completed slice: [211_Phase_Popup_Appearance_Preferences.md](./Archive/211_Phase_Popup_Appearance_Preferences.md)
 
 Completed phases should be moved to:
 
@@ -257,6 +257,7 @@ Completed phases should be moved to:
 - [208_Phase_Usage_Window_Progress_Bars.md](./Archive/208_Phase_Usage_Window_Progress_Bars.md) - completed and archived on 2026-04-25
 - [209_Phase_Popup_Circular_Usage_Progress.md](./Archive/209_Phase_Popup_Circular_Usage_Progress.md) - completed and archived on 2026-04-26
 - [210_Phase_Surface_Progress_Style_Preferences.md](./Archive/210_Phase_Surface_Progress_Style_Preferences.md) - completed and archived on 2026-04-26
+- [211_Phase_Popup_Appearance_Preferences.md](./Archive/211_Phase_Popup_Appearance_Preferences.md) - completed and archived on 2026-04-26
 
 ## Dependency Notes
 
@@ -557,6 +558,8 @@ Completed phases should be moved to:
 - the 2026-04-26 `Phase 209` closeout rendered popup structured usage windows as circular remaining progress indicators while preserving dashboard/provider-detail bars and summary-only popup fallbacks
 - phase 210 depends on phases 208 and 209 because line/circle style selection should reuse the shared progress semantics already proven on dashboard/detail and the popup circular quota treatment
 - the 2026-04-26 `Phase 210` closeout added per-surface line/circle progress style preferences and made popup quota-first by hiding nonessential cards when provider quota cards are available
+- phase 211 depends on phases 152, 153, and 210 because popup appearance preferences should extend the proven Chrome action width contract and the current quota-first popup layout instead of reworking the popup shell
+- the 2026-04-26 `Phase 211` closeout added popup size, corner, and shadow preferences while preserving provider coverage claims, parser behavior, sync behavior, sidebar layout, and full-page layout
 
 ## Delivery Standard For Each Phase
 

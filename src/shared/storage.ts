@@ -19,6 +19,14 @@ import {
   DEFAULT_SIDEBAR_PROGRESS_STYLE,
   normalizeProgressDisplayStyle,
 } from "./progress-display";
+import {
+  DEFAULT_POPUP_CORNER_STYLE,
+  DEFAULT_POPUP_SHADOW_STYLE,
+  DEFAULT_POPUP_SIZE_PRESET,
+  normalizePopupCornerStyle,
+  normalizePopupShadowStyle,
+  normalizePopupSizePreset,
+} from "./popup-appearance";
 
 let memoryFallbackState: AppState | null = null;
 
@@ -143,6 +151,18 @@ function normalizeAppState(state: AppState): AppState {
       fullPageProgressStyle: normalizeProgressDisplayStyle(
         state.settings?.fullPageProgressStyle,
         DEFAULT_FULL_PAGE_PROGRESS_STYLE,
+      ),
+      popupSizePreset: normalizePopupSizePreset(
+        state.settings?.popupSizePreset,
+        DEFAULT_POPUP_SIZE_PRESET,
+      ),
+      popupCornerStyle: normalizePopupCornerStyle(
+        state.settings?.popupCornerStyle,
+        DEFAULT_POPUP_CORNER_STYLE,
+      ),
+      popupShadowStyle: normalizePopupShadowStyle(
+        state.settings?.popupShadowStyle,
+        DEFAULT_POPUP_SHADOW_STYLE,
       ),
     },
   };

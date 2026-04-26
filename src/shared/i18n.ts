@@ -92,6 +92,18 @@ type RuntimeMessageId =
   | "settings.preferences.full_page_progress_style_label"
   | "settings.preferences.progress_style.line"
   | "settings.preferences.progress_style.circle"
+  | "settings.preferences.popup_size_label"
+  | "settings.preferences.popup_size.compact"
+  | "settings.preferences.popup_size.balanced"
+  | "settings.preferences.popup_size.wide"
+  | "settings.preferences.popup_corner_label"
+  | "settings.preferences.popup_corner.square"
+  | "settings.preferences.popup_corner.soft"
+  | "settings.preferences.popup_corner.rounded"
+  | "settings.preferences.popup_shadow_label"
+  | "settings.preferences.popup_shadow.none"
+  | "settings.preferences.popup_shadow.soft"
+  | "settings.preferences.popup_shadow.elevated"
   | "settings.preferences.minutes"
   | "settings.preferences.locale.system"
   | "settings.preferences.locale.en"
@@ -241,6 +253,18 @@ const RUNTIME_MESSAGES: Record<ResolvedAppLocale, RuntimeMessages> = {
     "settings.preferences.full_page_progress_style_label": "Tab quota style",
     "settings.preferences.progress_style.line": "Line",
     "settings.preferences.progress_style.circle": "Circle",
+    "settings.preferences.popup_size_label": "Popup size",
+    "settings.preferences.popup_size.compact": "Compact",
+    "settings.preferences.popup_size.balanced": "Balanced",
+    "settings.preferences.popup_size.wide": "Wide",
+    "settings.preferences.popup_corner_label": "Popup corners",
+    "settings.preferences.popup_corner.square": "Square",
+    "settings.preferences.popup_corner.soft": "Soft",
+    "settings.preferences.popup_corner.rounded": "Rounded",
+    "settings.preferences.popup_shadow_label": "Popup shadow",
+    "settings.preferences.popup_shadow.none": "None",
+    "settings.preferences.popup_shadow.soft": "Soft",
+    "settings.preferences.popup_shadow.elevated": "Elevated",
     "settings.preferences.minutes": "minutes",
     "settings.preferences.locale.system": "System",
     "settings.preferences.locale.en": "English",
@@ -363,6 +387,18 @@ const RUNTIME_MESSAGES: Record<ResolvedAppLocale, RuntimeMessages> = {
     "settings.preferences.full_page_progress_style_label": "标签页额度样式",
     "settings.preferences.progress_style.line": "直线",
     "settings.preferences.progress_style.circle": "圆圈",
+    "settings.preferences.popup_size_label": "Popup 尺寸",
+    "settings.preferences.popup_size.compact": "紧凑",
+    "settings.preferences.popup_size.balanced": "均衡",
+    "settings.preferences.popup_size.wide": "宽版",
+    "settings.preferences.popup_corner_label": "Popup 圆角",
+    "settings.preferences.popup_corner.square": "直角",
+    "settings.preferences.popup_corner.soft": "柔和",
+    "settings.preferences.popup_corner.rounded": "圆润",
+    "settings.preferences.popup_shadow_label": "Popup 阴影",
+    "settings.preferences.popup_shadow.none": "无",
+    "settings.preferences.popup_shadow.soft": "轻微",
+    "settings.preferences.popup_shadow.elevated": "加强",
     "settings.preferences.minutes": "分钟",
     "settings.preferences.locale.system": "跟随系统",
     "settings.preferences.locale.en": "英语",

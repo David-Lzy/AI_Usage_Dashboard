@@ -1025,6 +1025,15 @@ function StandardApp({ locationHash }: StandardAppProps) {
           onFullPageProgressStyleChange={(fullPageProgressStyle) =>
             handleUpdateSettings({ fullPageProgressStyle })
           }
+          onPopupSizePresetChange={(popupSizePreset) =>
+            handleUpdateSettings({ popupSizePreset })
+          }
+          onPopupCornerStyleChange={(popupCornerStyle) =>
+            handleUpdateSettings({ popupCornerStyle })
+          }
+          onPopupShadowStyleChange={(popupShadowStyle) =>
+            handleUpdateSettings({ popupShadowStyle })
+          }
           onSaveThemeCustomSeed={(themeCustomSeedHex) =>
             handleUpdateSettings({
               themePreset: "custom",

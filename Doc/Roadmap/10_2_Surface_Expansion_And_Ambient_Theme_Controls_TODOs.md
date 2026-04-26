@@ -17,6 +17,7 @@ Status note:
 - sixth executable slice landed on `2026-04-24` through `Phase 160`
 - compact popup progress-density follow-up landed on `2026-04-26` through `Phase 209`
 - per-surface progress-style preference follow-up landed on `2026-04-26` through `Phase 210`
+- popup appearance preference follow-up landed on `2026-04-26` through `Phase 211`
 - this child TODO turns the agreed popup / sidebar / full-page expansion contract into the next executable `Direction 10` track
 
 Process rule:
@@ -54,6 +55,7 @@ Related design contract:
 - sidebar expand opens one route-preserving full-page shell
 - full-page shell should reuse the existing route-state model instead of inventing a disconnected navigation contract
 - popup and sidebar should keep their current role boundaries even after full-page entry exists
+- popup can now tune its own size, corner, and shadow presets from Settings without changing sidebar or full-page behavior
 
 ## Agreed Theme-Control Behavior
 
@@ -166,11 +168,26 @@ Related design contract:
   - popup app-window smoke capture remains QA-only evidence and is not a pixel-identical replacement for the true toolbar action bubble
   - the next execution line now moves to `Direction 10.3` store asset-pack refresh on top of the updated runtime evidence
 
+### G. Popup Appearance Preferences
+
+- expose popup-only appearance controls from Settings
+- use preset values instead of arbitrary pixel sliders to protect Chrome action-popup overflow behavior
+- apply appearance through root attributes and CSS variables
+- keep the default balanced preset visually aligned with the existing quota-first popup
+- keep sidebar and full-page surfaces outside this preference scope
+- `Phase 211` completed this follow-up by shipping:
+  - popup size presets
+  - popup corner presets
+  - popup shadow presets
+  - popup bootstrap width support for configurable sizing
+  - storage normalization and static review coverage
+
 ## Acceptance Criteria
 
 - popup remains compact and readable after expand plus theme controls are added
 - structured popup usage windows render as compact circular progress rather than more long quota text
 - popup, sidebar, and full-page tab can independently choose line or circle quota progress
+- popup can independently choose compact, balanced, or wide sizing plus square, soft, or rounded card treatment plus none, soft, or elevated shadow
 - sidebar still reads as the operational surface rather than a stretched popup
 - popup expand always opens the dashboard full-page tab
 - sidebar expand preserves the current route when full-page mode supports it
@@ -184,6 +201,7 @@ Related design contract:
 - reload the unpacked extension after a fresh build
 - close already-open popup or extension tabs before opening new runtime surfaces
 - verify popup width remains stable when opened from the toolbar icon
+- verify popup appearance presets do not introduce horizontal overflow or hidden quota cards
 - verify the new expand action opens the intended target surface instead of a preview fallback
 - verify the quick light/dark toggle updates the current runtime surface immediately
 - verify full-page shell screenshots are collected from real extension-mode runtime, not preview-only browser tabs
@@ -196,6 +214,7 @@ Related design contract:
 4. popup plus sidebar light-dark toggle button - completed in `Phase 158`
 5. animation and motion polish for expand/open transitions - completed in `Phase 159`
 6. RDP Chrome runtime QA and screenshot refresh - completed in `Phase 160`
+7. popup size, corner, and shadow appearance preferences - completed in `Phase 211`
 
 ## Out Of Scope
 

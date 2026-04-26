@@ -13,6 +13,9 @@ function createLegacyState(): AppState {
     popupProgressStyle: _popupProgressStyle,
     sidebarProgressStyle: _sidebarProgressStyle,
     fullPageProgressStyle: _fullPageProgressStyle,
+    popupSizePreset: _popupSizePreset,
+    popupCornerStyle: _popupCornerStyle,
+    popupShadowStyle: _popupShadowStyle,
     ...legacySettings
   } = SAMPLE_APP_STATE.settings;
 
@@ -117,6 +120,27 @@ describe("storage normalization", () => {
     expect(state?.settings.popupProgressStyle).toBe("circle");
     expect(state?.settings.sidebarProgressStyle).toBe("line");
     expect(state?.settings.fullPageProgressStyle).toBe("line");
+    expect(state?.settings.popupSizePreset).toBe("balanced");
+    expect(state?.settings.popupCornerStyle).toBe("rounded");
+    expect(state?.settings.popupShadowStyle).toBe("soft");
+  });
+
+  it("normalizes invalid popup appearance preferences", async () => {
+    await writeAppState({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        popupSizePreset: "maximized",
+        popupCornerStyle: "pill",
+        popupShadowStyle: "heavy",
+      } as unknown as AppState["settings"],
+    });
+
+    const state = await readAppState();
+
+    expect(state?.settings.popupSizePreset).toBe("balanced");
+    expect(state?.settings.popupCornerStyle).toBe("rounded");
+    expect(state?.settings.popupShadowStyle).toBe("soft");
   });
 
   it("upgrades stale static provider metadata to the current sample schema", async () => {

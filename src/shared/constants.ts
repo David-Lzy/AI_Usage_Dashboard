@@ -10,6 +10,11 @@ import {
   DEFAULT_SIDEBAR_PROGRESS_STYLE,
 } from "./progress-display";
 import {
+  DEFAULT_POPUP_CORNER_STYLE,
+  DEFAULT_POPUP_SHADOW_STYLE,
+  DEFAULT_POPUP_SIZE_PRESET,
+} from "./popup-appearance";
+import {
   createPolicyOnlyDiagnostic,
   createSourceFallbackDiagnostic,
   createSourceSelectionDiagnostic,
@@ -499,5 +504,8 @@ export const SAMPLE_APP_STATE: AppState = {
     popupProgressStyle: DEFAULT_POPUP_PROGRESS_STYLE,
     sidebarProgressStyle: DEFAULT_SIDEBAR_PROGRESS_STYLE,
     fullPageProgressStyle: DEFAULT_FULL_PAGE_PROGRESS_STYLE,
+    popupSizePreset: DEFAULT_POPUP_SIZE_PRESET,
+    popupCornerStyle: DEFAULT_POPUP_CORNER_STYLE,
+    popupShadowStyle: DEFAULT_POPUP_SHADOW_STYLE,
   },
 };

@@ -43,6 +43,7 @@ Execution note:
 - twenty-eighth executable slice landed on `2026-04-24` through `Phase 169`
 - compact popup progress-density follow-up landed on `2026-04-26` through `Phase 209`
 - per-surface progress-style preference follow-up landed on `2026-04-26` through `Phase 210`
+- popup appearance preference follow-up landed on `2026-04-26` through `Phase 211`
 - this direction sharpens [Direction 06 - Toolbar Product Benchmark And Discoverability](./06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md) into a more explicit next-stage productization track
 
 Process rule:
@@ -105,6 +106,7 @@ As of 2026-04-24:
 - the popup has now recovered from the earlier narrow-width action-popup failure in real Chrome, but current RDP review still shows it as visually sparse and vertically card-heavy
 - the popup now also renders structured usage-window percentages as compact circular remaining progress indicators, reducing long quota text in the small toolbar surface
 - the popup now also enters a quota-first layout when provider quota cards exist, and quota progress can be independently configured as line or circle on popup, sidebar, and full-page tab
+- the popup now also supports our own Settings-controlled appearance presets for size, corners, and shadow without adopting another extension's visual style or changing sidebar/full-page behavior
 - the user has now explicitly fixed the next product contract:
   - popup stays compact and task-focused
   - side panel stays richer and operational

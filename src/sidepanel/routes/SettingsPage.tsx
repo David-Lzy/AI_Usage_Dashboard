@@ -4,6 +4,9 @@ import type {
   ApiKeyProviderId,
   AppLocalePreference,
   AppSettings,
+  PopupCornerStyle,
+  PopupShadowStyle,
+  PopupSizePreset,
   ProgressDisplayStyle,
   ProviderId,
   ProviderSourcePreference,
@@ -32,6 +35,11 @@ import {
   resolveThemeMode,
 } from "../../shared/theme";
 import { PROGRESS_DISPLAY_STYLE_OPTIONS } from "../../shared/progress-display";
+import {
+  POPUP_CORNER_STYLE_OPTIONS,
+  POPUP_SHADOW_STYLE_OPTIONS,
+  POPUP_SIZE_PRESET_OPTIONS,
+} from "../../shared/popup-appearance";
 
 import { PermissionPrompt } from "../components/PermissionPrompt";
 import { SummaryStrip } from "../components/SummaryStrip";
@@ -79,6 +87,9 @@ type SettingsPageProps = {
   onPopupProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onSidebarProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onFullPageProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
+  onPopupSizePresetChange: (sizePreset: PopupSizePreset) => void;
+  onPopupCornerStyleChange: (cornerStyle: PopupCornerStyle) => void;
+  onPopupShadowStyleChange: (shadowStyle: PopupShadowStyle) => void;
   onSaveThemeCustomSeed: (themeCustomSeedHex: string) => void;
   onResetThemeCustomSeed: () => void;
   onToggleProvider: (providerId: ProviderId) => void;
@@ -122,6 +133,9 @@ export function SettingsPage({
   onPopupProgressStyleChange,
   onSidebarProgressStyleChange,
   onFullPageProgressStyleChange,
+  onPopupSizePresetChange,
+  onPopupCornerStyleChange,
+  onPopupShadowStyleChange,
   onSaveThemeCustomSeed,
   onResetThemeCustomSeed,
   onToggleProvider,
@@ -244,6 +258,21 @@ export function SettingsPage({
   const progressDisplayStyleOptionLabels: Record<ProgressDisplayStyle, string> = {
     line: i18n.t("settings.preferences.progress_style.line"),
     circle: i18n.t("settings.preferences.progress_style.circle"),
+  };
+  const popupSizePresetOptionLabels: Record<PopupSizePreset, string> = {
+    compact: i18n.t("settings.preferences.popup_size.compact"),
+    balanced: i18n.t("settings.preferences.popup_size.balanced"),
+    wide: i18n.t("settings.preferences.popup_size.wide"),
+  };
+  const popupCornerStyleOptionLabels: Record<PopupCornerStyle, string> = {
+    square: i18n.t("settings.preferences.popup_corner.square"),
+    soft: i18n.t("settings.preferences.popup_corner.soft"),
+    rounded: i18n.t("settings.preferences.popup_corner.rounded"),
+  };
+  const popupShadowStyleOptionLabels: Record<PopupShadowStyle, string> = {
+    none: i18n.t("settings.preferences.popup_shadow.none"),
+    soft: i18n.t("settings.preferences.popup_shadow.soft"),
+    elevated: i18n.t("settings.preferences.popup_shadow.elevated"),
   };
   const localeOptions: Array<{ value: AppLocalePreference; label: string }> = [
     { value: "system", label: i18n.t("settings.preferences.locale.system") },
@@ -527,6 +556,57 @@ export function SettingsPage({
               {PROGRESS_DISPLAY_STYLE_OPTIONS.map((option) => (
                 <option key={option.value} value={option.value}>
                   {progressDisplayStyleOptionLabels[option.value]}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="form-field">
+            <span className="form-field__label">{i18n.t("settings.preferences.popup_size_label")}</span>
+            <select
+              className="form-field__control"
+              value={settings.popupSizePreset}
+              onChange={(event) =>
+                onPopupSizePresetChange(event.target.value as PopupSizePreset)
+              }
+            >
+              {POPUP_SIZE_PRESET_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {popupSizePresetOptionLabels[option.value]}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="form-field">
+            <span className="form-field__label">{i18n.t("settings.preferences.popup_corner_label")}</span>
+            <select
+              className="form-field__control"
+              value={settings.popupCornerStyle}
+              onChange={(event) =>
+                onPopupCornerStyleChange(event.target.value as PopupCornerStyle)
+              }
+            >
+              {POPUP_CORNER_STYLE_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {popupCornerStyleOptionLabels[option.value]}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="form-field">
+            <span className="form-field__label">{i18n.t("settings.preferences.popup_shadow_label")}</span>
+            <select
+              className="form-field__control"
+              value={settings.popupShadowStyle}
+              onChange={(event) =>
+                onPopupShadowStyleChange(event.target.value as PopupShadowStyle)
+              }
+            >
+              {POPUP_SHADOW_STYLE_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {popupShadowStyleOptionLabels[option.value]}
                 </option>
               ))}
             </select>

@@ -264,6 +264,7 @@ Phase status update:
 - `Phase 208` rendered all visible structured usage windows as remaining progress bars in dashboard provider cards and provider detail, including weekly and model-specific Codex windows, while keeping popup compact
 - `Phase 209` switched structured popup usage windows to compact circular remaining progress indicators while keeping dashboard/provider-detail bars unchanged and preserving summary-only popup fallbacks
 - `Phase 210` added per-surface line/circle quota style preferences and made popup quota-first by hiding nonessential cards whenever provider quota cards are present
+- `Phase 211` added Settings-controlled popup size, corner, and shadow preferences while preserving the default balanced quota-first popup and all provider coverage boundaries
 - the recommended next functional work is a real authenticated Codex or Cursor operator pass if that page is available; otherwise prefer narrow verification or release-readiness work before store screenshots or operator evidence closure
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete

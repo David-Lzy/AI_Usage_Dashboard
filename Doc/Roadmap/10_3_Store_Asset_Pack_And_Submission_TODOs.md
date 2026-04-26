@@ -18,7 +18,7 @@ Status note:
 - seventh executable slice landed on `2026-04-24` through `Phase 167`
 - eighth executable slice landed on `2026-04-24` through `Phase 168`
 - ninth executable slice landed on `2026-04-24` through `Phase 169`
-- this child TODO now becomes the next active `Direction 10` line after `Phase 160` refreshed the current popup / sidepanel / full-page runtime evidence
+- this child TODO now becomes the next active `Direction 10` line after `Phase 160` refreshed the current popup / sidepanel / full-page runtime evidence and `Phase 211` added popup appearance presets that need real native-toolbar review
 - this child TODO assumes the current first real screenshot archive already exists and focuses on store-ready asset preparation after the surface-expansion workstream landed
 
 Process rule:
@@ -43,6 +43,7 @@ Turn the current storyboard, screenshot workflow, first real archive, and listin
 
 - select which archived screenshots are still valid after surface-expansion work lands
 - identify which screenshots must be recaptured because popup, sidebar, or full-page shell changed materially
+- include the selected popup size/corner/shadow preset in the final native-toolbar popup capture notes
 - keep one truthful mapping from each chosen screenshot to one concrete runtime state
 - `Phase 161` completed this first store-asset slice by shipping:
   - one maintained [Store_Screenshot_Selection_Pack.md](../Store_Screenshot_Selection_Pack.md)

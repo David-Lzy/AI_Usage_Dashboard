@@ -118,6 +118,9 @@ export type ThemeMode = "system" | "light" | "dark";
 export type ThemePreset = "default" | "meadow" | "sunset" | "custom";
 export type AppLocalePreference = "system" | "en" | "zh-CN";
 export type ProgressDisplayStyle = "line" | "circle";
+export type PopupSizePreset = "compact" | "balanced" | "wide";
+export type PopupCornerStyle = "square" | "soft" | "rounded";
+export type PopupShadowStyle = "none" | "soft" | "elevated";
 
 export type ProviderPageBinding = {
   mode: "auto" | "bound";
@@ -237,6 +240,9 @@ export type AppSettings = {
   popupProgressStyle: ProgressDisplayStyle;
   sidebarProgressStyle: ProgressDisplayStyle;
   fullPageProgressStyle: ProgressDisplayStyle;
+  popupSizePreset: PopupSizePreset;
+  popupCornerStyle: PopupCornerStyle;
+  popupShadowStyle: PopupShadowStyle;
 };
 
 export type SummaryItem = {
