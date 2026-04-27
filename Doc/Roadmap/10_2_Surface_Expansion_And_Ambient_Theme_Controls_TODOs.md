@@ -18,6 +18,7 @@ Status note:
 - compact popup progress-density follow-up landed on `2026-04-26` through `Phase 209`
 - per-surface progress-style preference follow-up landed on `2026-04-26` through `Phase 210`
 - popup appearance preference follow-up landed on `2026-04-26` through `Phase 211`
+- popup appearance preview follow-up landed on `2026-04-27` through `Phase 212`
 - this child TODO turns the agreed popup / sidebar / full-page expansion contract into the next executable `Direction 10` track
 
 Process rule:
@@ -56,6 +57,7 @@ Related design contract:
 - full-page shell should reuse the existing route-state model instead of inventing a disconnected navigation contract
 - popup and sidebar should keep their current role boundaries even after full-page entry exists
 - popup can now tune its own size, corner, and shadow presets from Settings without changing sidebar or full-page behavior
+- Settings now previews that popup-only appearance contract before the user reopens the Chrome action popup
 
 ## Agreed Theme-Control Behavior
 
@@ -182,12 +184,24 @@ Related design contract:
   - popup bootstrap width support for configurable sizing
   - storage normalization and static review coverage
 
+### H. Popup Appearance Settings Preview
+
+- add one Settings-side preview for popup appearance settings
+- bind preview width, corner, and shadow to the saved popup appearance controls
+- keep the preview illustrative, not a replacement for native toolbar popup QA
+- `Phase 212` completed this follow-up by shipping:
+  - one localized preview card
+  - one preview width/radius/shadow CSS contract
+  - one compact-width preview fallback
+  - one static review script
+
 ## Acceptance Criteria
 
 - popup remains compact and readable after expand plus theme controls are added
 - structured popup usage windows render as compact circular progress rather than more long quota text
 - popup, sidebar, and full-page tab can independently choose line or circle quota progress
 - popup can independently choose compact, balanced, or wide sizing plus square, soft, or rounded card treatment plus none, soft, or elevated shadow
+- Settings previews the selected popup size, corner, and shadow before the popup is reopened
 - sidebar still reads as the operational surface rather than a stretched popup
 - popup expand always opens the dashboard full-page tab
 - sidebar expand preserves the current route when full-page mode supports it
@@ -215,6 +229,7 @@ Related design contract:
 5. animation and motion polish for expand/open transitions - completed in `Phase 159`
 6. RDP Chrome runtime QA and screenshot refresh - completed in `Phase 160`
 7. popup size, corner, and shadow appearance preferences - completed in `Phase 211`
+8. popup appearance settings preview - completed in `Phase 212`
 
 ## Out Of Scope
 

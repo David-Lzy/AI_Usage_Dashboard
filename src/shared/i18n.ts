@@ -104,6 +104,13 @@ type RuntimeMessageId =
   | "settings.preferences.popup_shadow.none"
   | "settings.preferences.popup_shadow.soft"
   | "settings.preferences.popup_shadow.elevated"
+  | "settings.popup_appearance_preview.eyebrow"
+  | "settings.popup_appearance_preview.title"
+  | "settings.popup_appearance_preview.detail"
+  | "settings.popup_appearance_preview.sample_refresh"
+  | "settings.popup_appearance_preview.sample_tab"
+  | "settings.popup_appearance_preview.sample_provider"
+  | "settings.popup_appearance_preview.sample_quota"
   | "settings.preferences.minutes"
   | "settings.preferences.locale.system"
   | "settings.preferences.locale.en"
@@ -265,6 +272,13 @@ const RUNTIME_MESSAGES: Record<ResolvedAppLocale, RuntimeMessages> = {
     "settings.preferences.popup_shadow.none": "None",
     "settings.preferences.popup_shadow.soft": "Soft",
     "settings.preferences.popup_shadow.elevated": "Elevated",
+    "settings.popup_appearance_preview.eyebrow": "Popup Preview",
+    "settings.popup_appearance_preview.title": "Toolbar bubble shape",
+    "settings.popup_appearance_preview.detail": "Preview the selected popup width, corner, and shadow treatment before reopening the Chrome action.",
+    "settings.popup_appearance_preview.sample_refresh": "Refresh",
+    "settings.popup_appearance_preview.sample_tab": "Tab",
+    "settings.popup_appearance_preview.sample_provider": "Codex",
+    "settings.popup_appearance_preview.sample_quota": "Weekly usage window",
     "settings.preferences.minutes": "minutes",
     "settings.preferences.locale.system": "System",
     "settings.preferences.locale.en": "English",
@@ -399,6 +413,13 @@ const RUNTIME_MESSAGES: Record<ResolvedAppLocale, RuntimeMessages> = {
     "settings.preferences.popup_shadow.none": "无",
     "settings.preferences.popup_shadow.soft": "轻微",
     "settings.preferences.popup_shadow.elevated": "加强",
+    "settings.popup_appearance_preview.eyebrow": "Popup 预览",
+    "settings.popup_appearance_preview.title": "工具栏弹窗形态",
+    "settings.popup_appearance_preview.detail": "在重新打开 Chrome action 前，先预览当前 popup 宽度、圆角和阴影组合。",
+    "settings.popup_appearance_preview.sample_refresh": "刷新",
+    "settings.popup_appearance_preview.sample_tab": "标签页",
+    "settings.popup_appearance_preview.sample_provider": "Codex",
+    "settings.popup_appearance_preview.sample_quota": "每周使用窗口",
     "settings.preferences.minutes": "分钟",
     "settings.preferences.locale.system": "跟随系统",
     "settings.preferences.locale.en": "英语",

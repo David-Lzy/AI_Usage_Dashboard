@@ -1,6 +1,6 @@
 # Phase Index
 
-Date: 2026-04-26
+Date: 2026-04-27
 
 Process rule:
 
@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [211_Phase_Popup_Appearance_Preferences.md](./Archive/211_Phase_Popup_Appearance_Preferences.md)
+- latest completed slice: [212_Phase_Popup_Appearance_Settings_Preview.md](./Archive/212_Phase_Popup_Appearance_Settings_Preview.md)
 
 Completed phases should be moved to:
 
@@ -258,6 +258,7 @@ Completed phases should be moved to:
 - [209_Phase_Popup_Circular_Usage_Progress.md](./Archive/209_Phase_Popup_Circular_Usage_Progress.md) - completed and archived on 2026-04-26
 - [210_Phase_Surface_Progress_Style_Preferences.md](./Archive/210_Phase_Surface_Progress_Style_Preferences.md) - completed and archived on 2026-04-26
 - [211_Phase_Popup_Appearance_Preferences.md](./Archive/211_Phase_Popup_Appearance_Preferences.md) - completed and archived on 2026-04-26
+- [212_Phase_Popup_Appearance_Settings_Preview.md](./Archive/212_Phase_Popup_Appearance_Settings_Preview.md) - completed and archived on 2026-04-27
 
 ## Dependency Notes
 
@@ -560,6 +561,8 @@ Completed phases should be moved to:
 - the 2026-04-26 `Phase 210` closeout added per-surface line/circle progress style preferences and made popup quota-first by hiding nonessential cards when provider quota cards are available
 - phase 211 depends on phases 152, 153, and 210 because popup appearance preferences should extend the proven Chrome action width contract and the current quota-first popup layout instead of reworking the popup shell
 - the 2026-04-26 `Phase 211` closeout added popup size, corner, and shadow preferences while preserving provider coverage claims, parser behavior, sync behavior, sidebar layout, and full-page layout
+- phase 212 depends on phase 211 because popup appearance choices should be previewable only after the persisted size, corner, and shadow preference contract exists
+- the 2026-04-27 `Phase 212` closeout added a Settings-side popup appearance preview while preserving provider coverage claims, parser behavior, sync behavior, popup data behavior, sidebar layout, and full-page layout
 
 ## Delivery Standard For Each Phase
 

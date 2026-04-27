@@ -18,7 +18,7 @@ Status note:
 - seventh executable slice landed on `2026-04-24` through `Phase 167`
 - eighth executable slice landed on `2026-04-24` through `Phase 168`
 - ninth executable slice landed on `2026-04-24` through `Phase 169`
-- this child TODO now becomes the next active `Direction 10` line after `Phase 160` refreshed the current popup / sidepanel / full-page runtime evidence and `Phase 211` added popup appearance presets that need real native-toolbar review
+- this child TODO now becomes the next active `Direction 10` line after `Phase 160` refreshed the current popup / sidepanel / full-page runtime evidence, `Phase 211` added popup appearance presets, and `Phase 212` added a Settings preview that still needs real native-toolbar comparison
 - this child TODO assumes the current first real screenshot archive already exists and focuses on store-ready asset preparation after the surface-expansion workstream landed
 
 Process rule:

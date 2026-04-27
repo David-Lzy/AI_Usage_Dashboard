@@ -23,6 +23,7 @@ Status note:
 - `Phase 209` has now improved compact popup density by showing structured usage-window progress as circular remaining indicators instead of another long vertical text block
 - `Phase 210` has now made quota progress style selectable per popup, sidebar, and full-page tab surface while moving popup quota cards above nonessential summary/explanation cards
 - `Phase 211` has now added Settings-controlled popup size, corner, and shadow presets while preserving the default balanced quota-first popup appearance
+- `Phase 212` has now added a Settings-side popup appearance preview bound to those size, corner, and shadow presets
 
 Process rule:
 
@@ -117,6 +118,7 @@ Define one stable contract for the next productization slices and keep it aligne
   - corner style
   - shadow style
 - defaults must preserve the current balanced quota-first popup.
+- Settings should preview the selected popup appearance because the Chrome action popup has to be reopened to see native runtime changes.
 - popup appearance changes must be implemented through popup root attributes and CSS variables, not separate copied layouts.
 - compact size must remain truthful about space limits; if two-column circular quota rings become too dense, use a compact-specific layout instead of silently widening the compact preset.
 - sidebar and full-page surfaces must not inherit popup appearance presets.
