@@ -276,6 +276,7 @@ Phase status update:
 - `Phase 220` suppressed empty percent progress bars for unavailable percent measurements, so Codex parse/source failures no longer render as `rolling percent` with an `Unknown` value
 - `Phase 221` added direct dashboard-card and provider-detail source-page recovery actions for shipped session-page providers, reusing the existing tab open/focus and page-binding flow
 - `Phase 222` extended that direct source-page recovery action into popup featured-provider cards for shipped session-page failure states
+- `Phase 223` suppressed popup empty percent progress for unavailable measurements while preserving real structured usage-window rings
 - the recommended next functional work returns to a real authenticated Codex or Cursor operator pass if that page is available; otherwise continue the Direction 10.3 store screenshot line only when the remaining manual native-toolbar popup captures can be collected
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
@@ -374,6 +375,7 @@ Security rule for this track:
 - empty percent progress suppression shipped in `Phase 220`, keeping source-state failures visually distinct from real quota progress
 - direct source-page recovery actions shipped in `Phase 221`, so dashboard/detail recovery no longer requires first navigating to Settings
 - popup source-page recovery shipped in `Phase 222`, so toolbar triage can drive the same provider-tab recovery flow directly
+- popup empty percent progress suppression shipped in `Phase 223`, so source-state failures no longer display `Unknown` quota rings in the toolbar surface
 - add a clear UI/operator pass for real source-tab logout states
 
 ### 3.4 Data TODO

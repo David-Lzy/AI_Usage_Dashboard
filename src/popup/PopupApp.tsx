@@ -49,6 +49,7 @@ import {
   localizePopupViewModel,
   type PopupGuidanceAction,
 } from "./view-models";
+import { shouldShowPopupProviderProgress } from "./progress-visibility";
 
 type PopupLoadState =
   | { status: "loading" }
@@ -452,10 +453,10 @@ export function PopupApp() {
     progressDisplayStyle: ProgressDisplayStyle,
   ) {
     const hasUsageWindows = (provider.usageWindows?.length ?? 0) > 0;
-    const hasTopLevelQuota =
-      provider.used !== null ||
-      provider.remaining !== null ||
-      provider.total !== null;
+
+    if (!shouldShowPopupProviderProgress(provider)) {
+      return null;
+    }
 
     if (hasUsageWindows && provider.usageWindows) {
       return (
@@ -466,10 +467,6 @@ export function PopupApp() {
           displayStyle={progressDisplayStyle}
         />
       );
-    }
-
-    if (!hasTopLevelQuota) {
-      return null;
     }
 
     return (

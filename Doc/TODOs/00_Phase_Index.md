@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [222_Phase_Popup_Source_Page_Recovery_Action.md](./Archive/222_Phase_Popup_Source_Page_Recovery_Action.md)
+- latest completed slice: [223_Phase_Popup_Empty_Percent_Progress_Suppression.md](./Archive/223_Phase_Popup_Empty_Percent_Progress_Suppression.md)
 
 Completed phases should be moved to:
 
@@ -269,6 +269,7 @@ Completed phases should be moved to:
 - [220_Phase_Empty_Percent_Progress_Suppression.md](./Archive/220_Phase_Empty_Percent_Progress_Suppression.md) - completed and archived on 2026-04-29
 - [221_Phase_Source_Page_Recovery_Action.md](./Archive/221_Phase_Source_Page_Recovery_Action.md) - completed and archived on 2026-04-29
 - [222_Phase_Popup_Source_Page_Recovery_Action.md](./Archive/222_Phase_Popup_Source_Page_Recovery_Action.md) - completed and archived on 2026-04-29
+- [223_Phase_Popup_Empty_Percent_Progress_Suppression.md](./Archive/223_Phase_Popup_Empty_Percent_Progress_Suppression.md) - completed and archived on 2026-04-29
 
 ## Dependency Notes
 
@@ -593,6 +594,8 @@ Completed phases should be moved to:
 - the 2026-04-29 `Phase 221` closeout added direct source-page recovery actions on dashboard provider cards and provider detail for shipped session-page providers, while keeping deferred tracks hidden
 - phase 222 depends on phase 221 because the popup should reuse the same source-page recovery semantics after dashboard/detail prove the action shape
 - the 2026-04-29 `Phase 222` closeout added direct popup source-page recovery actions for shipped session-page failure states, focusing or opening provider tabs and saving page bindings from the toolbar surface
+- phase 223 depends on phases 220 and 222 because popup source-page failure cards should keep the new recovery action while hiding empty percent progress just like dashboard/detail
+- the 2026-04-29 `Phase 223` closeout suppressed popup top-level percent progress when no used or remaining percent is measured, while preserving structured usage-window rings and documented non-percent totals
 
 ## Delivery Standard For Each Phase
 
