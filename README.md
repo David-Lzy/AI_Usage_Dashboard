@@ -345,6 +345,7 @@ Hybrid-source preference behavior:
   - whether a fallback happened because the preferred source was unavailable
 - Settings now includes a `Use current page` action for shipped session-page tracks, so an already-active Codex or Cursor usage page can be validated, bound, and refreshed without opening another provider tab
 - the background worker now marks a saved session-page binding stale when the bound tab closes or navigates away from that provider's usage-page routes
+- if Chrome replaces the tab id for a matching usage page, the background worker now moves the saved binding to the replacement tab instead of leaving the old id behind
 - open Codex or Cursor usage tabs that cannot be read by extension scripting now surface as `capture_unavailable` instead of being mislabeled as a missing page
 - current fallback rules are deterministic:
   - missing credential: may fall back to the other shipped source

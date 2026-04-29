@@ -11,6 +11,12 @@ type PageBindingLifecycleResult = {
   changedProviderIds: ProviderId[];
 };
 
+type ReplacementTab = {
+  tabId: number;
+  url?: string | null;
+  title?: string | null;
+};
+
 function isBoundToTab(provider: ProviderSetting, tabId: number): boolean {
   return (
     provider.pageBinding.status === "bound" &&
@@ -25,6 +31,24 @@ function markProviderBindingStale(provider: ProviderSetting): ProviderSetting {
   };
 }
 
+function moveProviderBindingToReplacementTab(
+  provider: ProviderSetting,
+  replacementTab: ReplacementTab,
+  updatedAt: string,
+): ProviderSetting {
+  return {
+    ...provider,
+    pageBinding: {
+      ...provider.pageBinding,
+      status: "bound",
+      tabId: replacementTab.tabId,
+      matchedUrl: replacementTab.url ?? provider.pageBinding.matchedUrl,
+      matchedTitle: replacementTab.title ?? provider.pageBinding.matchedTitle,
+      updatedAt,
+    },
+  };
+}
+
 export function reconcilePageBindingsForRemovedTab(
   state: AppState,
   tabId: number,
@@ -36,6 +60,50 @@ export function reconcilePageBindingsForRemovedTab(
     }
 
     changedProviderIds.push(provider.id);
+    return markProviderBindingStale(provider);
+  });
+
+  return {
+    state:
+      changedProviderIds.length > 0
+        ? {
+            ...state,
+            providerSettings,
+          }
+        : state,
+    changedProviderIds,
+  };
+}
+
+export function reconcilePageBindingsForReplacedTab(
+  state: AppState,
+  removedTabId: number,
+  replacementTab: ReplacementTab,
+  updatedAt: string,
+): PageBindingLifecycleResult {
+  const changedProviderIds: ProviderId[] = [];
+  const providerSettings = state.providerSettings.map((provider) => {
+    if (!isBoundToTab(provider, removedTabId)) {
+      return provider;
+    }
+
+    changedProviderIds.push(provider.id);
+
+    const sessionPagePlan = getSessionPagePlan(provider.id);
+    const nextUrl = replacementTab.url ?? null;
+
+    if (
+      sessionPagePlan &&
+      nextUrl &&
+      doesUrlMatchRouteHints(nextUrl, sessionPagePlan.routeHints)
+    ) {
+      return moveProviderBindingToReplacementTab(
+        provider,
+        replacementTab,
+        updatedAt,
+      );
+    }
+
     return markProviderBindingStale(provider);
   });
 
@@ -92,6 +160,26 @@ export async function markProviderBindingsStaleForRemovedTab(
 ): Promise<AppState | null> {
   const current = await seedAppStateIfEmpty();
   const result = reconcilePageBindingsForRemovedTab(current, tabId);
+
+  if (result.changedProviderIds.length === 0) {
+    return null;
+  }
+
+  return writeAppState(result.state);
+}
+
+export async function reconcileProviderBindingsForReplacedTab(
+  removedTabId: number,
+  replacementTab: ReplacementTab,
+  updatedAt: string,
+): Promise<AppState | null> {
+  const current = await seedAppStateIfEmpty();
+  const result = reconcilePageBindingsForReplacedTab(
+    current,
+    removedTabId,
+    replacementTab,
+    updatedAt,
+  );
 
   if (result.changedProviderIds.length === 0) {
     return null;

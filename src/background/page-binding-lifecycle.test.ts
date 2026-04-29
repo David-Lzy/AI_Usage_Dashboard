@@ -5,6 +5,7 @@ import { createPageBindingFromTab } from "../shared/page-bindings";
 import { SAMPLE_APP_STATE } from "../shared/constants";
 import {
   reconcilePageBindingsForRemovedTab,
+  reconcilePageBindingsForReplacedTab,
   reconcilePageBindingsForTabUrlChange,
 } from "./page-binding-lifecycle";
 
@@ -75,6 +76,61 @@ describe("page binding lifecycle", () => {
 
     expect(result.changedProviderIds).toEqual([]);
     expect(result.state).toBe(state);
+  });
+
+  it("moves a binding to the replacement tab when Chrome replaces the bound tab on the same route", () => {
+    const state = buildStateWithBinding(
+      "cursor",
+      42,
+      "https://cursor.com/dashboard/usage",
+    );
+    const result = reconcilePageBindingsForReplacedTab(
+      state,
+      42,
+      {
+        tabId: 43,
+        url: "https://cursor.com/dashboard/usage?period=current",
+        title: "Cursor Usage",
+      },
+      "2026-04-29T14:20:00.000Z",
+    );
+    const cursor = findProviderSetting(result.state, "cursor");
+
+    expect(result.changedProviderIds).toEqual(["cursor"]);
+    expect(cursor.pageBinding).toMatchObject({
+      status: "bound",
+      mode: "bound",
+      tabId: 43,
+      matchedUrl: "https://cursor.com/dashboard/usage?period=current",
+      matchedTitle: "Cursor Usage",
+      updatedAt: "2026-04-29T14:20:00.000Z",
+    });
+  });
+
+  it("marks a binding stale when Chrome replaces the bound tab with a different route", () => {
+    const state = buildStateWithBinding(
+      "cursor",
+      42,
+      "https://cursor.com/dashboard/usage",
+    );
+    const result = reconcilePageBindingsForReplacedTab(
+      state,
+      42,
+      {
+        tabId: 43,
+        url: "https://cursor.com/settings",
+        title: "Cursor Settings",
+      },
+      "2026-04-29T14:20:00.000Z",
+    );
+    const cursor = findProviderSetting(result.state, "cursor");
+
+    expect(result.changedProviderIds).toEqual(["cursor"]);
+    expect(cursor.pageBinding.status).toBe("stale");
+    expect(cursor.pageBinding.tabId).toBe(42);
+    expect(cursor.pageBinding.matchedUrl).toBe(
+      "https://cursor.com/dashboard/usage",
+    );
   });
 
   it("keeps a binding healthy when the bound tab navigates within provider route hints", () => {

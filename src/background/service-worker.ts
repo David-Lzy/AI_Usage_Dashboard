@@ -4,6 +4,7 @@ import { handleAppMessage, type AppMessage } from "./message-bus";
 import {
   markProviderBindingsStaleForRemovedTab,
   markProviderBindingsStaleForTabUrlChange,
+  reconcileProviderBindingsForReplacedTab,
 } from "./page-binding-lifecycle";
 import { syncStoredProviderCredentials } from "./provider-credentials";
 import { syncStoredProviderPermissions } from "./provider-permissions";
@@ -59,6 +60,31 @@ chrome.tabs.onRemoved.addListener((tabId) => {
     }
 
     const state = await markProviderBindingsStaleForRemovedTab(tabId);
+
+    if (state) {
+      await syncActionBadgeFromState(state);
+    }
+  })().catch(() => undefined);
+});
+
+chrome.tabs.onReplaced.addListener((addedTabId, removedTabId) => {
+  void (async () => {
+    if (await readStoreScreenshotRuntimeLock()) {
+      return;
+    }
+
+    const replacementTab = await chrome.tabs
+      .get(addedTabId)
+      .catch(() => null);
+    const state = await reconcileProviderBindingsForReplacedTab(
+      removedTabId,
+      {
+        tabId: addedTabId,
+        url: replacementTab?.url ?? null,
+        title: replacementTab?.title ?? null,
+      },
+      new Date().toISOString(),
+    );
 
     if (state) {
       await syncActionBadgeFromState(state);
