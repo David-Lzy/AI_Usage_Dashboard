@@ -1,8 +1,21 @@
 import { describe, expect, it } from "vitest";
 
+import { createPageSessionDiagnostic } from "../providers/diagnostics";
+import type { AppState } from "../providers/types";
 import { SAMPLE_APP_STATE } from "../shared/constants";
 import { createRuntimeI18n } from "../shared/i18n";
 import { buildPopupViewModel, localizePopupViewModel } from "./view-models";
+
+function createState(overrides?: Partial<AppState>): AppState {
+  return {
+    ...SAMPLE_APP_STATE,
+    ...overrides,
+    providers: overrides?.providers ?? SAMPLE_APP_STATE.providers,
+    providerSettings:
+      overrides?.providerSettings ?? SAMPLE_APP_STATE.providerSettings,
+    settings: overrides?.settings ?? SAMPLE_APP_STATE.settings,
+  };
+}
 
 describe("popup view models", () => {
   it("prioritizes providers needing attention in the compact popup list", () => {
@@ -247,6 +260,65 @@ describe("popup view models", () => {
         kind: "settings",
         label: "Open settings",
       },
+    });
+  });
+
+  it("uses direct source-page recovery for shipped session-page source states", () => {
+    const warningReason =
+      "The open Codex usage page could not be read by the extension. Reload the page, confirm host access, then refresh again.";
+    const state = createState({
+      providers: SAMPLE_APP_STATE.providers.map((provider) =>
+        provider.providerId === "codex"
+          ? {
+              ...provider,
+              planName: "Codex Personal Usage Page",
+              syncSource: "page_parse",
+              syncStatus: "error",
+              tone: "error",
+              warningReason,
+              warningDiagnostic: createPageSessionDiagnostic({
+                providerId: "codex",
+                pageSessionKind: "capture_unavailable",
+                rawMessage: warningReason,
+              }),
+              sourceFallbackReason:
+                "Official API unavailable: Codex analytics API key and workspace ID are not both configured.",
+              usageWindows: undefined,
+              usageBalances: undefined,
+              usageSummary: null,
+            }
+          : provider,
+      ),
+      providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
+        ...provider,
+        enabled: provider.id === "codex",
+        status: provider.id === "codex" ? "granted" : provider.status,
+        sourcePreference:
+          provider.id === "codex" ? "session_page" : provider.sourcePreference,
+      })),
+    });
+    const model = buildPopupViewModel(state);
+
+    expect(model.featuredProviderCards[0]).toMatchObject({
+      statusLabel: "Reload page",
+      primaryDetail: "Current page session is open but cannot be read.",
+      secondaryDetail: warningReason,
+      action: {
+        kind: "source-page",
+        label: "Open source page",
+        providerId: "codex",
+      },
+    });
+
+    const localizedModel = localizePopupViewModel(
+      buildPopupViewModel(state),
+      createRuntimeI18n("zh-CN"),
+    );
+
+    expect(localizedModel.featuredProviderCards[0]?.action).toEqual({
+      kind: "source-page",
+      label: "打开来源页面",
+      providerId: "codex",
     });
   });
 

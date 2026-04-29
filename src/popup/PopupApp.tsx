@@ -9,6 +9,14 @@ import type {
 import { sendAppMessage } from "../shared/app-client";
 import { storePendingFullPageEntry } from "../shared/extension-surface-entry";
 import {
+  clearPageBinding,
+  createPageBindingFromTab,
+} from "../shared/page-bindings";
+import {
+  getOpenableRouteHint,
+  getSessionPagePlan,
+} from "../shared/provider-sources";
+import {
   buildPopupSummaryLabels,
   createRuntimeI18n,
   DEFAULT_APP_LOCALE_PREFERENCE,
@@ -46,6 +54,25 @@ type PopupLoadState =
   | { status: "loading" }
   | { status: "ready"; appState: AppState }
   | { status: "error"; message: string };
+
+function hasSourcePageNavigationControl(): boolean {
+  return (
+    typeof chrome !== "undefined" &&
+    typeof chrome.tabs?.query === "function" &&
+    typeof chrome.tabs?.create === "function" &&
+    typeof chrome.tabs?.update === "function"
+  );
+}
+
+function sortTabsByPriority(tabs: chrome.tabs.Tab[]): chrome.tabs.Tab[] {
+  return [...tabs].sort((left, right) => {
+    if (left.active !== right.active) {
+      return left.active ? -1 : 1;
+    }
+
+    return (right.lastAccessed ?? 0) - (left.lastAccessed ?? 0);
+  });
+}
 
 async function openSidePanelRoute(route: SidePanelRouteState) {
   const path = buildSidePanelExtensionPath(route);
@@ -140,6 +167,76 @@ async function openProviderDetail(providerId: ProviderId) {
   await openSidePanelRoute({ name: "provider-detail", providerId });
 }
 
+async function openProviderSourcePage(providerId: ProviderId) {
+  const sessionPagePlan = getSessionPagePlan(providerId);
+
+  if (!sessionPagePlan || sessionPagePlan.rolloutStage !== "shipped") {
+    await openProviderDetail(providerId);
+    return;
+  }
+
+  const preferredRoute = getOpenableRouteHint(sessionPagePlan.routeHints);
+
+  if (!preferredRoute) {
+    await openProviderDetail(providerId);
+    return;
+  }
+
+  if (!hasSourcePageNavigationControl()) {
+    window.open(preferredRoute, "_blank", "noopener,noreferrer");
+    return;
+  }
+
+  const matchedTabs = await chrome.tabs.query({
+    url: sessionPagePlan.routeHints,
+  });
+  const exactTabs = matchedTabs.filter((tab) =>
+    tab.url?.startsWith(preferredRoute),
+  );
+  const preferredTabs = sortTabsByPriority(
+    exactTabs.length > 0 ? exactTabs : matchedTabs,
+  );
+  const preferredTab =
+    preferredTabs.find((tab) => typeof tab.id === "number") ?? null;
+
+  if (preferredTab?.id !== undefined) {
+    await chrome.tabs.update(preferredTab.id, { active: true });
+    await sendAppMessage({
+      type: "app:set-provider-page-binding",
+      providerId,
+      pageBinding: createPageBindingFromTab({
+        mode: "bound",
+        tabId: preferredTab.id,
+        matchedUrl: preferredTab.url ?? preferredRoute,
+        matchedTitle: preferredTab.title ?? null,
+        updatedAt: new Date().toISOString(),
+      }),
+    });
+    window.close();
+    return;
+  }
+
+  const createdTab = await chrome.tabs.create({
+    url: preferredRoute,
+    active: true,
+  });
+  await sendAppMessage({
+    type: "app:set-provider-page-binding",
+    providerId,
+    pageBinding:
+      typeof createdTab.id === "number"
+        ? createPageBindingFromTab({
+            mode: "bound",
+            tabId: createdTab.id,
+            matchedUrl: createdTab.url ?? preferredRoute,
+            matchedTitle: createdTab.title ?? null,
+            updatedAt: new Date().toISOString(),
+          })
+        : clearPageBinding(),
+  });
+  window.close();
+}
+
 async function handleGuidanceAction(action: PopupGuidanceAction) {
   if (action.kind === "settings") {
     await openSettings();
@@ -153,6 +250,11 @@ async function handleGuidanceAction(action: PopupGuidanceAction) {
 
   if (action.kind === "provider-detail" && action.providerId) {
     await openProviderDetail(action.providerId);
+    return;
+  }
+
+  if (action.kind === "source-page" && action.providerId) {
+    await openProviderSourcePage(action.providerId);
   }
 }
 

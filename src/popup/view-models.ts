@@ -20,7 +20,7 @@ export type PopupSnapshotStatus = {
 };
 
 export type PopupGuidanceAction = {
-  kind: "settings" | "dashboard" | "provider-detail";
+  kind: "settings" | "dashboard" | "provider-detail" | "source-page";
   label: string;
   providerId?: ProviderId;
 };
@@ -623,6 +623,19 @@ function buildPopupFeaturedAction(provider: ProviderViewModel): PopupGuidanceAct
     return {
       kind: "dashboard",
       label: "Open dashboard",
+    };
+  }
+
+  if (
+    provider.openableSessionPageUrl !== null &&
+    (provider.currentSourceStateKind === "open_page_required" ||
+      provider.currentSourceStateKind === "logged_out" ||
+      provider.currentSourceStateKind === "capture_unavailable")
+  ) {
+    return {
+      kind: "source-page",
+      label: "Open source page",
+      providerId: provider.providerId,
     };
   }
 
@@ -1307,6 +1320,15 @@ function buildLocalizedFeaturedProviderCard(
               kind: "dashboard",
               label: i18n.t("common.actions.open_dashboard"),
             }
+          : provider.openableSessionPageUrl !== null &&
+              (provider.currentSourceStateKind === "open_page_required" ||
+                provider.currentSourceStateKind === "logged_out" ||
+                provider.currentSourceStateKind === "capture_unavailable")
+            ? {
+                kind: "source-page",
+                label: copy.featuredCard.openSourcePageAction,
+                providerId: provider.providerId,
+              }
           : provider.currentSourceStateKind !== "ready" ||
               provider.displaySyncStatus !== "ok"
             ? {

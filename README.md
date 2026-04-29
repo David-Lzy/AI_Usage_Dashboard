@@ -345,6 +345,7 @@ Hybrid-source preference behavior:
   - whether a fallback happened because the preferred source was unavailable
 - Settings now includes a `Use current page` action for shipped session-page tracks, so an already-active Codex or Cursor usage page can be validated, bound, and refreshed without opening another provider tab
 - dashboard provider cards and provider detail now expose a direct source-page recovery action for shipped Codex/Cursor-style session-page tracks, reusing the same tab focus/open plus page-binding flow without requiring a Settings detour
+- popup featured-provider cards now also use that source-page recovery action for shipped session-page failure states, so toolbar triage can reopen or focus Codex/Cursor source pages directly
 - the background worker now marks a saved session-page binding stale when the bound tab closes or navigates away from that provider's usage-page routes
 - if Chrome replaces the tab id for a matching usage page, the background worker now moves the saved binding to the replacement tab instead of leaving the old id behind
 - open Codex or Cursor usage tabs that cannot be read by extension scripting now surface as `capture_unavailable` instead of being mislabeled as a missing page
