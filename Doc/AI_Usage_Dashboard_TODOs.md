@@ -268,6 +268,7 @@ Phase status update:
 - `Phase 212` added a Settings-side popup appearance preview so those size, corner, and shadow controls can be evaluated before reopening the Chrome action popup
 - `Phase 213` verified the native Chrome toolbar popup from RDP Chrome after extension reload and tightened popup-only circular quota density so four Codex usage-window rings remain a compact quick-glance surface
 - `Phase 214` produced `release/ai-usage-dashboard-0.1.0-rc.3.zip` so the installable package now includes the Phase 200-213 Codex/Cursor personal usage and popup-surface changes
+- `Phase 215` added a Settings `Use current page` action for shipped session-page tracks, so a real Codex or Cursor usage page that is already active can be bound and refreshed directly
 - the recommended next functional work returns to a real authenticated Codex or Cursor operator pass if that page is available; otherwise continue the Direction 10.3 store screenshot line only when the remaining manual native-toolbar popup captures can be collected
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
@@ -358,7 +359,7 @@ Security rule for this track:
 
 - add a content-script or injected-script execution path for logged-in usage pages
 - add tab discovery for supported provider URLs
-- add manual "use this open page" or equivalent attach flow in Settings
+- manual "use this open page" attach flow in Settings shipped in `Phase 215` for shipped session-page tracks
 - add page-source heartbeat and reconnect behavior
 - add a clear disconnected state when the source tab closes, navigates away, or logs out
 

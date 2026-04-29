@@ -110,7 +110,9 @@ type SettingsPageProps = {
   onClearCodexWorkspaceConfig: () => void;
   onClearPageBinding: (providerId: ProviderId) => void;
   onOpenSessionPage: (providerId: ProviderId) => void;
+  onAttachActiveSessionPage: (providerId: ProviderId) => void;
   sessionPageNavigationAvailable: boolean;
+  activeSessionPageAttachAvailable: boolean;
 };
 
 export function SettingsPage({
@@ -147,7 +149,9 @@ export function SettingsPage({
   onClearCodexWorkspaceConfig,
   onClearPageBinding,
   onOpenSessionPage,
+  onAttachActiveSessionPage,
   sessionPageNavigationAvailable,
+  activeSessionPageAttachAvailable,
 }: SettingsPageProps) {
   const SETTINGS_SECTION_IDS = {
     preferences: "settings-preferences",
@@ -1219,6 +1223,14 @@ export function SettingsPage({
                             {sessionPageNavigationAvailable
                               ? settingsCopy.sources.findOrOpenPage
                               : settingsCopy.sources.extensionModeOnly}
+                          </button>
+                          <button
+                            className="text-button"
+                            type="button"
+                            disabled={!activeSessionPageAttachAvailable}
+                            onClick={() => onAttachActiveSessionPage(provider.id)}
+                          >
+                            {settingsCopy.sources.useActivePage}
                           </button>
                           <button
                             className="text-button"

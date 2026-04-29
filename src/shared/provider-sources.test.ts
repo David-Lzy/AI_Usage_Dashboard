@@ -18,6 +18,8 @@ import { createRuntimeI18n } from "./i18n";
 import { buildProviderSourceDisplayLocalizedCopy } from "./localized-copy";
 import {
   buildProviderSourceDisplay,
+  doesUrlMatchRouteHint,
+  doesUrlMatchRouteHints,
   getSourceAttemptOrder,
   getOpenableRouteHint,
   getSourcePreferenceOptions,
@@ -121,6 +123,45 @@ describe("provider source helpers", () => {
     expect(getOpenableRouteHint(sessionPagePlan?.routeHints ?? [])).toBe(
       "https://chatgpt.com/codex/cloud/settings/analytics",
     );
+  });
+
+  it("matches active-tab URLs against concrete and wildcard session-page route hints", () => {
+    expect(
+      doesUrlMatchRouteHint(
+        "https://chatgpt.com/codex/cloud/settings/analytics#usage",
+        "https://chatgpt.com/codex/cloud/settings/analytics*",
+      ),
+    ).toBe(true);
+    expect(
+      doesUrlMatchRouteHint(
+        "https://cursor.com/acme/dashboard/usage?period=current",
+        "https://cursor.com/*/dashboard/usage*",
+      ),
+    ).toBe(true);
+    expect(
+      doesUrlMatchRouteHint(
+        "https://cursor.com/dashboard/usage#team",
+        "https://cursor.com/dashboard/usage*",
+      ),
+    ).toBe(true);
+    expect(
+      doesUrlMatchRouteHint(
+        "chrome-extension://example/src/sidepanel/index.html#settings",
+        "https://cursor.com/dashboard/usage*",
+      ),
+    ).toBe(false);
+  });
+
+  it("rejects non-provider active-tab URLs for provider session-page hints", () => {
+    const codexSessionPagePlan = getSessionPagePlan("codex");
+
+    expect(codexSessionPagePlan).not.toBeNull();
+    expect(
+      doesUrlMatchRouteHints(
+        "https://chatgpt.com/gpts",
+        codexSessionPagePlan?.routeHints ?? [],
+      ),
+    ).toBe(false);
   });
 
   it("distinguishes Codex analytics snapshots from the shipped personal session-page track", () => {

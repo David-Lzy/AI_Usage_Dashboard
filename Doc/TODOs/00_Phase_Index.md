@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [214_Phase_RC3_Packaging_And_Post_Phase_213_Build.md](./Archive/214_Phase_RC3_Packaging_And_Post_Phase_213_Build.md)
+- latest completed slice: [215_Phase_Active_Session_Page_Binding.md](./Archive/215_Phase_Active_Session_Page_Binding.md)
 
 Completed phases should be moved to:
 
@@ -261,6 +261,7 @@ Completed phases should be moved to:
 - [212_Phase_Popup_Appearance_Settings_Preview.md](./Archive/212_Phase_Popup_Appearance_Settings_Preview.md) - completed and archived on 2026-04-27
 - [213_Phase_Native_Toolbar_Popup_Density_Review.md](./Archive/213_Phase_Native_Toolbar_Popup_Density_Review.md) - completed and archived on 2026-04-29
 - [214_Phase_RC3_Packaging_And_Post_Phase_213_Build.md](./Archive/214_Phase_RC3_Packaging_And_Post_Phase_213_Build.md) - completed and archived on 2026-04-29
+- [215_Phase_Active_Session_Page_Binding.md](./Archive/215_Phase_Active_Session_Page_Binding.md) - completed and archived on 2026-04-29
 
 ## Dependency Notes
 
@@ -569,6 +570,8 @@ Completed phases should be moved to:
 - the 2026-04-29 `Phase 213` closeout verified the native Chrome toolbar popup from RDP Chrome after extension reload, then tightened popup-only circular quota density by reducing ring size and hiding reset detail text while preserving sidebar and full-page quota detail
 - phase 214 depends on phase 213 because the new release package should include the native toolbar popup density closeout rather than rebuilding from the older `rc.2` package boundary
 - the 2026-04-29 `Phase 214` closeout bumped the package to `0.1.0-rc.3`, bumped the manifest to `0.1.0.3`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.3.zip`, and recorded SHA256 `4811289e4f47deddce0efbe39ab5e249104d623eff437584df3837e4e2f99882`
+- phase 215 depends on phases 36, 38, and 40 because active-page attach should reuse the shipped Codex and Cursor session-page capture plus binding persistence model
+- the 2026-04-29 `Phase 215` closeout added a Settings `Use current page` action for shipped session-page tracks, validates the active tab against provider route hints, saves the bound tab, and immediately refreshes the provider without storing cookies or auth headers
 
 ## Delivery Standard For Each Phase
 
