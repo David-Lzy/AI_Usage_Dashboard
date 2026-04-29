@@ -4,9 +4,9 @@ Chrome side-panel extension for tracking usage, credits, and sync health across 
 
 Current release candidate:
 
-- package version: `0.1.0-rc.2`
-- Chrome manifest version: `0.1.0.2`
-- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.2.zip`
+- package version: `0.1.0-rc.3`
+- Chrome manifest version: `0.1.0.3`
+- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.3.zip`
 
 ## Current RC Matrix
 
@@ -40,7 +40,7 @@ Security posture for this track:
 
 Next execution queue:
 
-1. package a fresh release candidate after `Phase 213` so the distributable zip includes the post-`rc.2` Codex/Cursor personal usage, popup progress, and popup appearance work
+1. use `0.1.0-rc.3` for the next install/review pass; it includes the post-`rc.2` Codex/Cursor personal usage, popup progress, popup appearance, and Phase 213 native-popup density work
 2. keep [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) in maintenance mode unless a concrete diagnostic-body localization need appears
 3. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining manual store-popup capture dependency
 
@@ -539,7 +539,7 @@ npm run release
 
 Output artifact:
 
-- `release/ai-usage-dashboard-0.1.0-rc.2.zip`
+- `release/ai-usage-dashboard-0.1.0-rc.3.zip`
 
 The packaging script checks that:
 

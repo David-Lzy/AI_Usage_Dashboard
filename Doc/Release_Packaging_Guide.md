@@ -1,6 +1,6 @@
 # Release Packaging Guide
 
-Date: 2026-04-24
+Date: 2026-04-29
 
 Process rule:
 
@@ -30,17 +30,17 @@ Status note:
 Package version:
 
 - `package.json` uses the human-facing semver tag
-- current value: `0.1.0-rc.2`
+- current value: `0.1.0-rc.3`
 
 Chrome extension version:
 
 - `src/manifest.json` uses Chrome's required numeric-only version format
-- current value: `0.1.0.2`
+- current value: `0.1.0.3`
 
 Display version:
 
 - `src/manifest.json` also uses `version_name`
-- current value: `0.1.0-rc.2`
+- current value: `0.1.0-rc.3`
 
 Why the two values differ:
 
@@ -144,8 +144,8 @@ npx -y node@22 ./scripts/package-release.mjs
 
 Packaging output:
 
-- `release/ai-usage-dashboard-0.1.0-rc.2.zip`
-- SHA256: `3f0f4602a5b20dc0a538ae018d83cfff53b58e2dc572fe9c1c3c85cd66252339`
+- `release/ai-usage-dashboard-0.1.0-rc.3.zip`
+- SHA256: `4811289e4f47deddce0efbe39ab5e249104d623eff437584df3837e4e2f99882`
 
 The packaging script checks:
 
@@ -165,25 +165,25 @@ Environment note:
 
 | Provider | Credential requirement | Host access requirement |
 | --- | --- | --- |
-| Cursor | Admin API key | `api.cursor.com` |
+| Cursor | optional Admin API key for team path; none for personal dashboard page | `api.cursor.com`, `cursor.com` |
 | JetBrains AI | none | JetBrains account and usage pages |
 | Claude Code | Admin API key | `api.anthropic.com`, `platform.claude.com` |
 | Gemini Code Assist | none | none |
-| Codex | Analytics API key and workspace ID | `api.chatgpt.com` |
+| Codex | none for personal usage pages; analytics API key and workspace ID for Enterprise analytics | `api.chatgpt.com`, `chatgpt.com` |
 
 ## User-Facing Support Boundaries
 
-- Cursor: supported through the Team Admin API
+- Cursor: supported through the Team Admin API or logged-in personal dashboard page; personal exact remaining included requests remain unavailable
 - JetBrains AI: retained in the repository, but deferred from the active narrowed RC until a real org-visible `Users and licensing` session is reverified
 - Claude Code: supported through the Admin Analytics API
 - Gemini Code Assist: shipped as documented policy only
-- Codex: supported through the Enterprise Analytics API
+- Codex: supported through the Enterprise Analytics API or logged-in personal usage page; personal values remain visible usage-window values rather than one full plan-wide absolute remaining balance
 
 Important constraints:
 
 - Gemini does not expose a stable live per-user usage source in this release
 - JetBrains is not part of the active narrowed RC support promise even though its retained repo path and debug tooling remain present
-- Codex analytics do not expose exact remaining workspace credits
+- Codex analytics do not expose exact remaining workspace credits, and Codex personal flex credit balance cards remain supplemental context only
 - Claude analytics do not expose exact remaining included subscription quota
 
 ## Output Checklist

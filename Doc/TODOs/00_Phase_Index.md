@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [213_Phase_Native_Toolbar_Popup_Density_Review.md](./Archive/213_Phase_Native_Toolbar_Popup_Density_Review.md)
+- latest completed slice: [214_Phase_RC3_Packaging_And_Post_Phase_213_Build.md](./Archive/214_Phase_RC3_Packaging_And_Post_Phase_213_Build.md)
 
 Completed phases should be moved to:
 
@@ -260,6 +260,7 @@ Completed phases should be moved to:
 - [211_Phase_Popup_Appearance_Preferences.md](./Archive/211_Phase_Popup_Appearance_Preferences.md) - completed and archived on 2026-04-26
 - [212_Phase_Popup_Appearance_Settings_Preview.md](./Archive/212_Phase_Popup_Appearance_Settings_Preview.md) - completed and archived on 2026-04-27
 - [213_Phase_Native_Toolbar_Popup_Density_Review.md](./Archive/213_Phase_Native_Toolbar_Popup_Density_Review.md) - completed and archived on 2026-04-29
+- [214_Phase_RC3_Packaging_And_Post_Phase_213_Build.md](./Archive/214_Phase_RC3_Packaging_And_Post_Phase_213_Build.md) - completed and archived on 2026-04-29
 
 ## Dependency Notes
 
@@ -566,6 +567,8 @@ Completed phases should be moved to:
 - the 2026-04-27 `Phase 212` closeout added a Settings-side popup appearance preview while preserving provider coverage claims, parser behavior, sync behavior, popup data behavior, sidebar layout, and full-page layout
 - phase 213 depends on phases 209 through 212 because real native-toolbar popup density can only be judged after circular quota progress, per-surface style preferences, appearance presets, and the Settings preview are all wired
 - the 2026-04-29 `Phase 213` closeout verified the native Chrome toolbar popup from RDP Chrome after extension reload, then tightened popup-only circular quota density by reducing ring size and hiding reset detail text while preserving sidebar and full-page quota detail
+- phase 214 depends on phase 213 because the new release package should include the native toolbar popup density closeout rather than rebuilding from the older `rc.2` package boundary
+- the 2026-04-29 `Phase 214` closeout bumped the package to `0.1.0-rc.3`, bumped the manifest to `0.1.0.3`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.3.zip`, and recorded SHA256 `4811289e4f47deddce0efbe39ab5e249104d623eff437584df3837e4e2f99882`
 
 ## Delivery Standard For Each Phase
 
