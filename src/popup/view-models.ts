@@ -23,6 +23,7 @@ export type PopupGuidanceAction = {
   kind: "settings" | "dashboard" | "provider-detail" | "source-page";
   label: string;
   providerId?: ProviderId;
+  sourceStateKind?: ProviderViewModel["currentSourceStateKind"];
 };
 
 export type PopupGuidanceCard = {
@@ -636,6 +637,7 @@ function buildPopupFeaturedAction(provider: ProviderViewModel): PopupGuidanceAct
       kind: "source-page",
       label: "Open source page",
       providerId: provider.providerId,
+      sourceStateKind: provider.currentSourceStateKind,
     };
   }
 
@@ -1328,6 +1330,7 @@ function buildLocalizedFeaturedProviderCard(
                 kind: "source-page",
                 label: copy.featuredCard.openSourcePageAction,
                 providerId: provider.providerId,
+                sourceStateKind: provider.currentSourceStateKind,
               }
           : provider.currentSourceStateKind !== "ready" ||
               provider.displaySyncStatus !== "ok"

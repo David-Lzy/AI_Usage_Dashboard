@@ -16,7 +16,12 @@ import {
   getOpenableRouteHint,
   getSessionPagePlan,
 } from "../shared/provider-sources";
-import { shouldRefreshAfterSourcePageRecovery } from "../shared/source-page-recovery";
+import {
+  reloadSourcePageTabBeforeRefresh,
+  shouldRefreshAfterSourcePageRecovery,
+  shouldReloadBeforeSourcePageRecoveryRefresh,
+  type SourcePageRecoverySourceState,
+} from "../shared/source-page-recovery";
 import {
   buildPopupSummaryLabels,
   createRuntimeI18n,
@@ -169,7 +174,10 @@ async function openProviderDetail(providerId: ProviderId) {
   await openSidePanelRoute({ name: "provider-detail", providerId });
 }
 
-async function openProviderSourcePage(providerId: ProviderId) {
+async function openProviderSourcePage(
+  providerId: ProviderId,
+  sourceStateKind?: SourcePageRecoverySourceState,
+) {
   const sessionPagePlan = getSessionPagePlan(providerId);
 
   if (!sessionPagePlan || sessionPagePlan.rolloutStage !== "shipped") {
@@ -202,7 +210,15 @@ async function openProviderSourcePage(providerId: ProviderId) {
     preferredTabs.find((tab) => typeof tab.id === "number") ?? null;
 
   if (preferredTab?.id !== undefined) {
-    await chrome.tabs.update(preferredTab.id, { active: true });
+    if (
+      shouldReloadBeforeSourcePageRecoveryRefresh(
+        "existing-tab",
+        sourceStateKind,
+      )
+    ) {
+      await reloadSourcePageTabBeforeRefresh(preferredTab.id);
+    }
+
     const bindingResponse = await sendAppMessage({
       type: "app:set-provider-page-binding",
       providerId,
@@ -225,6 +241,7 @@ async function openProviderSourcePage(providerId: ProviderId) {
       });
     }
 
+    await chrome.tabs.update(preferredTab.id, { active: true });
     window.close();
     return;
   }
@@ -267,7 +284,7 @@ async function handleGuidanceAction(action: PopupGuidanceAction) {
   }
 
   if (action.kind === "source-page" && action.providerId) {
-    await openProviderSourcePage(action.providerId);
+    await openProviderSourcePage(action.providerId, action.sourceStateKind);
   }
 }
 

@@ -347,6 +347,7 @@ Hybrid-source preference behavior:
 - dashboard provider cards and provider detail now expose a direct source-page recovery action for shipped Codex/Cursor-style session-page tracks, reusing the same tab focus/open plus page-binding flow without requiring a Settings detour
 - popup featured-provider cards now also use that source-page recovery action for shipped session-page failure states, so toolbar triage can reopen or focus Codex/Cursor source pages directly
 - when source-page recovery finds an already-open matching provider tab, it now saves the binding and refreshes the provider immediately; newly-opened pages still wait for the operator to finish login or navigation before refreshing
+- when the existing source tab is in a `capture_unavailable` state, recovery reloads that tab before saving the binding and refreshing the provider
 - the background worker now marks a saved session-page binding stale when the bound tab closes or navigates away from that provider's usage-page routes
 - if Chrome replaces the tab id for a matching usage page, the background worker now moves the saved binding to the replacement tab instead of leaving the old id behind
 - open Codex or Cursor usage tabs that cannot be read by extension scripting now surface as `capture_unavailable` instead of being mislabeled as a missing page
@@ -519,7 +520,7 @@ Preview URL:
 | Gemini Code Assist | none | none |
 | Codex | none for personal usage pages; analytics API key + workspace ID for Enterprise analytics | `https://api.chatgpt.com/*`, `https://chatgpt.com/*` |
 
-For shipped session-page providers, use `Settings -> Source Connections` to find or open the required logged-in browser page before refreshing. The same section now shows whether the provider page is attached, stale, or unbound, and lets you disconnect a saved binding explicitly. Direct source-page recovery actions refresh immediately when they attach an already-open matching tab, but newly-opened pages still need a manual refresh after login or navigation. If an open usage tab exists but Chrome cannot read it, Codex and Cursor show a capture-unavailable session-page diagnostic with reload guidance.
+For shipped session-page providers, use `Settings -> Source Connections` to find or open the required logged-in browser page before refreshing. The same section now shows whether the provider page is attached, stale, or unbound, and lets you disconnect a saved binding explicitly. Direct source-page recovery actions refresh immediately when they attach an already-open matching tab, and they reload the tab first when the current state is `capture_unavailable`. Newly-opened pages still need a manual refresh after login or navigation. If an open usage tab exists but Chrome cannot read it, Codex and Cursor show a capture-unavailable session-page diagnostic with reload guidance.
 
 If you are using a long-lived Chrome profile for release verification, run `./scripts/with-preferred-node.sh node ./scripts/phase41-profile-audit.mjs` after reloading the unpacked extension so the runtime host grants and stored extension state are visible before the final pass. In the narrowed RC selected on `2026-04-23`, JetBrains is retained in the repo but not part of the active release promise.
 

@@ -16,7 +16,10 @@ type DashboardPageProps = {
   summaryItems: SummaryItem[];
   providers: ProviderViewModel[];
   onOpenProvider: (providerId: ProviderId) => void;
-  onOpenSourcePage?: (providerId: ProviderId) => void;
+  onOpenSourcePage?: (
+    providerId: ProviderId,
+    sourceStateKind: ProviderViewModel["currentSourceStateKind"],
+  ) => void;
   themeActionLabel?: string;
   themeActionTitle?: string;
   onToggleThemeMode?: () => void;

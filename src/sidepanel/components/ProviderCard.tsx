@@ -15,7 +15,10 @@ type ProviderCardProps = {
   progressDisplayStyle: ProgressDisplayStyle;
   provider: ProviderViewModel;
   onOpen: (providerId: ProviderId) => void;
-  onOpenSourcePage?: (providerId: ProviderId) => void;
+  onOpenSourcePage?: (
+    providerId: ProviderId,
+    sourceStateKind: ProviderViewModel["currentSourceStateKind"],
+  ) => void;
   onRefresh: (providerId: ProviderId) => void;
 };
 
@@ -194,7 +197,12 @@ export function ProviderCard({
             data-provider-card-open-source-page="true"
             type="button"
             title="Open source page"
-            onClick={() => onOpenSourcePage(provider.providerId)}
+            onClick={() =>
+              onOpenSourcePage(
+                provider.providerId,
+                provider.currentSourceStateKind,
+              )
+            }
           >
             Source page
           </button>

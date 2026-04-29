@@ -42,7 +42,12 @@ import {
   getOpenableRouteHint,
   getSessionPagePlan,
 } from "../shared/provider-sources";
-import { shouldRefreshAfterSourcePageRecovery } from "../shared/source-page-recovery";
+import {
+  reloadSourcePageTabBeforeRefresh,
+  shouldRefreshAfterSourcePageRecovery,
+  shouldReloadBeforeSourcePageRecoveryRefresh,
+  type SourcePageRecoverySourceState,
+} from "../shared/source-page-recovery";
 import { Toast } from "./components/Toast";
 import { CodexFixtureCapturePage } from "./routes/CodexFixtureCapturePage";
 import { CursorFixtureCapturePage } from "./routes/CursorFixtureCapturePage";
@@ -765,7 +770,10 @@ function StandardApp({ locationHash }: StandardAppProps) {
     });
   }
 
-  function handleOpenSessionPage(providerId: ProviderId) {
+  function handleOpenSessionPage(
+    providerId: ProviderId,
+    sourceStateKind?: SourcePageRecoverySourceState,
+  ) {
     if (!appState) {
       return;
     }
@@ -821,6 +829,16 @@ function StandardApp({ locationHash }: StandardAppProps) {
 
         if (preferredTab?.id !== undefined) {
           await chrome.tabs.update(preferredTab.id, { active: true });
+          const shouldReloadBeforeRefresh =
+            shouldReloadBeforeSourcePageRecoveryRefresh(
+              "existing-tab",
+              sourceStateKind,
+            );
+
+          if (shouldReloadBeforeRefresh) {
+            await reloadSourcePageTabBeforeRefresh(preferredTab.id);
+          }
+
           const attached = await applyMessage({
             type: "app:set-provider-page-binding",
             providerId,
@@ -847,7 +865,9 @@ function StandardApp({ locationHash }: StandardAppProps) {
                 tone: "success",
                 title: `${providerLabel} page attached`,
                 message:
-                  "A matching logged-in tab is already open. The binding was saved and the provider was refreshed immediately.",
+                  shouldReloadBeforeRefresh
+                    ? "A matching source tab was reloaded, the binding was saved, and the provider was refreshed immediately."
+                    : "A matching logged-in tab is already open. The binding was saved and the provider was refreshed immediately.",
               },
             );
           }

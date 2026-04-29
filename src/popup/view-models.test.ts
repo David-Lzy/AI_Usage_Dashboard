@@ -307,6 +307,7 @@ describe("popup view models", () => {
         kind: "source-page",
         label: "Open source page",
         providerId: "codex",
+        sourceStateKind: "capture_unavailable",
       },
     });
 
@@ -319,6 +320,7 @@ describe("popup view models", () => {
       kind: "source-page",
       label: "打开来源页面",
       providerId: "codex",
+      sourceStateKind: "capture_unavailable",
     });
   });
 

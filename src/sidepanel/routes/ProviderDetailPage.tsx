@@ -44,7 +44,10 @@ type ProviderDetailPageProps = {
   themeActionTitle?: string;
   onToggleThemeMode?: () => void;
   onOpenFullPage?: () => void;
-  onOpenSourcePage?: (providerId: ProviderId) => void;
+  onOpenSourcePage?: (
+    providerId: ProviderId,
+    sourceStateKind: ProviderViewModel["currentSourceStateKind"],
+  ) => void;
   onRefresh: (providerId: ProviderId) => void;
 };
 
@@ -472,7 +475,12 @@ export function ProviderDetailPage({
             <button
               className="text-button text-button--inline"
               type="button"
-              onClick={() => onOpenSourcePage(provider.providerId)}
+              onClick={() =>
+                onOpenSourcePage(
+                  provider.providerId,
+                  provider.currentSourceStateKind,
+                )
+              }
             >
               {copy.notes.openSourcePageAction}
             </button>

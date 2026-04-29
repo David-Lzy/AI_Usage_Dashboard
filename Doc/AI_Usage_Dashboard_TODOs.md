@@ -278,6 +278,7 @@ Phase status update:
 - `Phase 222` extended that direct source-page recovery action into popup featured-provider cards for shipped session-page failure states
 - `Phase 223` suppressed popup empty percent progress for unavailable measurements while preserving real structured usage-window rings
 - `Phase 224` removed the extra manual refresh step when source-page recovery attaches an already-open matching provider tab, while preserving manual refresh for newly-opened pages
+- `Phase 225` made capture-unavailable recovery reload the existing source tab before binding and refreshing, including popup dispatch ordering that completes sync before focusing the provider tab
 - the recommended next functional work returns to a real authenticated Codex or Cursor operator pass if that page is available; otherwise continue the Direction 10.3 store screenshot line only when the remaining manual native-toolbar popup captures can be collected
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
@@ -378,6 +379,7 @@ Security rule for this track:
 - popup source-page recovery shipped in `Phase 222`, so toolbar triage can drive the same provider-tab recovery flow directly
 - popup empty percent progress suppression shipped in `Phase 223`, so source-state failures no longer display `Unknown` quota rings in the toolbar surface
 - existing-tab source-page recovery auto-refresh shipped in `Phase 224`, so attaching an already-open matching provider page now triggers provider sync immediately
+- capture-unavailable source-tab reload shipped in `Phase 225`, so unreadable existing provider pages can be reloaded and refreshed from the same recovery action
 - add a clear UI/operator pass for real source-tab logout states
 
 ### 3.4 Data TODO
