@@ -16,6 +16,7 @@ import {
   getOpenableRouteHint,
   getSessionPagePlan,
 } from "../shared/provider-sources";
+import { shouldRefreshAfterSourcePageRecovery } from "../shared/source-page-recovery";
 import {
   buildPopupSummaryLabels,
   createRuntimeI18n,
@@ -202,7 +203,7 @@ async function openProviderSourcePage(providerId: ProviderId) {
 
   if (preferredTab?.id !== undefined) {
     await chrome.tabs.update(preferredTab.id, { active: true });
-    await sendAppMessage({
+    const bindingResponse = await sendAppMessage({
       type: "app:set-provider-page-binding",
       providerId,
       pageBinding: createPageBindingFromTab({
@@ -213,6 +214,17 @@ async function openProviderSourcePage(providerId: ProviderId) {
         updatedAt: new Date().toISOString(),
       }),
     });
+
+    if (
+      bindingResponse.ok &&
+      shouldRefreshAfterSourcePageRecovery("existing-tab")
+    ) {
+      await sendAppMessage({
+        type: "app:request-refresh",
+        providerId,
+      });
+    }
+
     window.close();
     return;
   }

@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [223_Phase_Popup_Empty_Percent_Progress_Suppression.md](./Archive/223_Phase_Popup_Empty_Percent_Progress_Suppression.md)
+- latest completed slice: [224_Phase_Existing_Source_Page_Auto_Refresh.md](./Archive/224_Phase_Existing_Source_Page_Auto_Refresh.md)
 
 Completed phases should be moved to:
 
@@ -270,6 +270,7 @@ Completed phases should be moved to:
 - [221_Phase_Source_Page_Recovery_Action.md](./Archive/221_Phase_Source_Page_Recovery_Action.md) - completed and archived on 2026-04-29
 - [222_Phase_Popup_Source_Page_Recovery_Action.md](./Archive/222_Phase_Popup_Source_Page_Recovery_Action.md) - completed and archived on 2026-04-29
 - [223_Phase_Popup_Empty_Percent_Progress_Suppression.md](./Archive/223_Phase_Popup_Empty_Percent_Progress_Suppression.md) - completed and archived on 2026-04-29
+- [224_Phase_Existing_Source_Page_Auto_Refresh.md](./Archive/224_Phase_Existing_Source_Page_Auto_Refresh.md) - completed and archived on 2026-04-29
 
 ## Dependency Notes
 
@@ -596,6 +597,8 @@ Completed phases should be moved to:
 - the 2026-04-29 `Phase 222` closeout added direct popup source-page recovery actions for shipped session-page failure states, focusing or opening provider tabs and saving page bindings from the toolbar surface
 - phase 223 depends on phases 220 and 222 because popup source-page failure cards should keep the new recovery action while hiding empty percent progress just like dashboard/detail
 - the 2026-04-29 `Phase 223` closeout suppressed popup top-level percent progress when no used or remaining percent is measured, while preserving structured usage-window rings and documented non-percent totals
+- phase 224 depends on phases 221 and 222 because existing-tab source-page recovery must reuse the same dashboard/detail and popup recovery entry points before it can safely remove the extra manual refresh step
+- the 2026-04-29 `Phase 224` closeout refreshed shipped session-page providers immediately after source-page recovery binds an already-open matching tab, while preserving manual refresh for newly-opened pages that may still need login or navigation
 
 ## Delivery Standard For Each Phase
 

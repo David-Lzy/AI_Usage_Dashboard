@@ -42,6 +42,7 @@ import {
   getOpenableRouteHint,
   getSessionPagePlan,
 } from "../shared/provider-sources";
+import { shouldRefreshAfterSourcePageRecovery } from "../shared/source-page-recovery";
 import { Toast } from "./components/Toast";
 import { CodexFixtureCapturePage } from "./routes/CodexFixtureCapturePage";
 import { CursorFixtureCapturePage } from "./routes/CursorFixtureCapturePage";
@@ -820,25 +821,36 @@ function StandardApp({ locationHash }: StandardAppProps) {
 
         if (preferredTab?.id !== undefined) {
           await chrome.tabs.update(preferredTab.id, { active: true });
-          await applyMessage(
-            {
-              type: "app:set-provider-page-binding",
-              providerId,
-              pageBinding: createPageBindingFromTab({
-                mode: "bound",
-                tabId: preferredTab.id,
-                matchedUrl: preferredTab.url ?? preferredRoute ?? null,
-                matchedTitle: preferredTab.title ?? null,
-                updatedAt: new Date().toISOString(),
-              }),
-            },
-            {
-              tone: "success",
-              title: `${providerLabel} page attached`,
-              message:
-                "A matching logged-in tab is already open. The binding was saved; refresh the provider after the page settles if you want an immediate sync.",
-            },
-          );
+          const attached = await applyMessage({
+            type: "app:set-provider-page-binding",
+            providerId,
+            pageBinding: createPageBindingFromTab({
+              mode: "bound",
+              tabId: preferredTab.id,
+              matchedUrl: preferredTab.url ?? preferredRoute ?? null,
+              matchedTitle: preferredTab.title ?? null,
+              updatedAt: new Date().toISOString(),
+            }),
+          });
+
+          if (!attached) {
+            return;
+          }
+
+          if (shouldRefreshAfterSourcePageRecovery("existing-tab")) {
+            await applyMessage(
+              {
+                type: "app:request-refresh",
+                providerId,
+              },
+              {
+                tone: "success",
+                title: `${providerLabel} page attached`,
+                message:
+                  "A matching logged-in tab is already open. The binding was saved and the provider was refreshed immediately.",
+              },
+            );
+          }
           return;
         }
 
