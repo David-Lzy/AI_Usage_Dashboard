@@ -1,6 +1,10 @@
 import { ensurePeriodicSyncAlarm, isPeriodicSyncAlarm } from "./alarms";
 import { syncActionBadgeFromState } from "./action-badge";
 import { handleAppMessage, type AppMessage } from "./message-bus";
+import {
+  markProviderBindingsStaleForRemovedTab,
+  markProviderBindingsStaleForTabUrlChange,
+} from "./page-binding-lifecycle";
 import { syncStoredProviderCredentials } from "./provider-credentials";
 import { syncStoredProviderPermissions } from "./provider-permissions";
 import { runSyncEngine } from "./sync-engine";
@@ -46,6 +50,43 @@ chrome.alarms.onAlarm.addListener((alarm) => {
       await syncActionBadgeFromState(state);
     })().catch(() => undefined);
   }
+});
+
+chrome.tabs.onRemoved.addListener((tabId) => {
+  void (async () => {
+    if (await readStoreScreenshotRuntimeLock()) {
+      return;
+    }
+
+    const state = await markProviderBindingsStaleForRemovedTab(tabId);
+
+    if (state) {
+      await syncActionBadgeFromState(state);
+    }
+  })().catch(() => undefined);
+});
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+  if (typeof changeInfo.url !== "string" || changeInfo.url.length === 0) {
+    return;
+  }
+
+  const nextUrl = changeInfo.url;
+
+  void (async () => {
+    if (await readStoreScreenshotRuntimeLock()) {
+      return;
+    }
+
+    const state = await markProviderBindingsStaleForTabUrlChange(
+      tabId,
+      nextUrl,
+    );
+
+    if (state) {
+      await syncActionBadgeFromState(state);
+    }
+  })().catch(() => undefined);
 });
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {

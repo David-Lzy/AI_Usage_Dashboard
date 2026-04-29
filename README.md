@@ -344,6 +344,7 @@ Hybrid-source preference behavior:
   - why that source was selected
   - whether a fallback happened because the preferred source was unavailable
 - Settings now includes a `Use current page` action for shipped session-page tracks, so an already-active Codex or Cursor usage page can be validated, bound, and refreshed without opening another provider tab
+- the background worker now marks a saved session-page binding stale when the bound tab closes or navigates away from that provider's usage-page routes
 - current fallback rules are deterministic:
   - missing credential: may fall back to the other shipped source
   - open page required or logged-out page: may fall back to the other shipped source

@@ -177,6 +177,7 @@
     "phase212:review": "./scripts/with-preferred-node.sh node ./scripts/phase212-popup-appearance-preview-review.mjs",
     "phase213:review": "./scripts/with-preferred-node.sh node ./scripts/phase213-native-toolbar-popup-density-review.mjs",
     "phase215:review": "./scripts/with-preferred-node.sh node ./scripts/phase215-active-session-page-binding-review.mjs",
+    "phase216:review": "./scripts/with-preferred-node.sh node ./scripts/phase216-page-binding-lifecycle-review.mjs",
     "interaction-audit:bundle": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-handoff-bundle.mjs",
     "interaction-audit:archive": "./scripts/with-preferred-node.sh node ./scripts/archive-interaction-audit-review.mjs",
     "interaction-audit:refresh-archive-index": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-review-archive-index.mjs",
