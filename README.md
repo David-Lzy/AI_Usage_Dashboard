@@ -348,6 +348,7 @@ Hybrid-source preference behavior:
 - if Chrome replaces the tab id for a matching usage page, the background worker now moves the saved binding to the replacement tab instead of leaving the old id behind
 - open Codex or Cursor usage tabs that cannot be read by extension scripting now surface as `capture_unavailable` instead of being mislabeled as a missing page
 - dashboard, provider detail, and popup source-state displays now keep that unreadable-page condition separate from generic sync errors
+- dashboard and provider detail hide generic percent progress when no measured percent value exists, keeping parse/source failures distinct from real quota progress
 - current fallback rules are deterministic:
   - missing credential: may fall back to the other shipped source
   - open page required or logged-out page: may fall back to the other shipped source

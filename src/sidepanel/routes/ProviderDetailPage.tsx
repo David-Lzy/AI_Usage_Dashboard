@@ -14,6 +14,7 @@ import { StatusBadge } from "../components/StatusBadge";
 import { TopBar } from "../components/TopBar";
 import { UsageProgress } from "../components/UsageProgress";
 import { UsageWindowProgressList } from "../components/UsageWindowProgressList";
+import { shouldShowSingleUsageProgress } from "../usage-progress-visibility";
 import type { ProviderViewModel } from "../view-models";
 
 function formatUsageBalanceDetail(
@@ -77,6 +78,7 @@ export function ProviderDetailPage({
     (provider.usageWindows?.length ?? 0) > 0 ||
     (provider.usageBalances?.length ?? 0) > 0;
   const hasUsageWindowProgress = (provider.usageWindows?.length ?? 0) > 0;
+  const showSingleUsageProgress = shouldShowSingleUsageProgress(provider);
   const showUsageSummary =
     !hasStructuredUsageContext && Boolean(provider.usageSummary);
   const hasUsageContext = hasStructuredUsageContext || showUsageSummary;
@@ -402,7 +404,7 @@ export function ProviderDetailPage({
           ) : null}
         </div>
 
-        {!hasUsageWindowProgress ? (
+        {showSingleUsageProgress ? (
           <UsageProgress
             used={provider.used}
             remaining={provider.remaining}

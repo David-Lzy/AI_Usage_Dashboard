@@ -4,6 +4,7 @@ import type {
   ProviderId,
 } from "../../providers/types";
 import { createRuntimeI18n } from "../../shared/i18n";
+import { shouldShowSingleUsageProgress } from "../usage-progress-visibility";
 import type { ProviderViewModel } from "../view-models";
 import { StatusBadge } from "./StatusBadge";
 import { UsageProgress } from "./UsageProgress";
@@ -48,6 +49,7 @@ export function ProviderCard({
     (provider.usageWindows?.length ?? 0) > 0 ||
     (provider.usageBalances?.length ?? 0) > 0;
   const hasUsageWindowProgress = (provider.usageWindows?.length ?? 0) > 0;
+  const showSingleUsageProgress = shouldShowSingleUsageProgress(provider);
   const showUsageSummary =
     !hasStructuredUsageContext && Boolean(provider.usageSummary);
   const localizedResetLabel = i18n.localizeResetRuntimeLabel(provider.resetLabel);
@@ -106,7 +108,7 @@ export function ProviderCard({
         <p className="supporting-copy">{localizedResetLabel}</p>
         <p className="supporting-copy">{provider.currentSourceContractDetail}</p>
 
-        {!hasUsageWindowProgress ? (
+        {showSingleUsageProgress ? (
           <UsageProgress
             used={provider.used}
             remaining={provider.remaining}
