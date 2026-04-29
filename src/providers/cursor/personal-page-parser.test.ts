@@ -126,6 +126,55 @@ describe("parseCursorPersonalLiveFixture", () => {
     expect(result.reason).toContain("logged-out state");
   });
 
+  it("returns capture_unavailable when the open Cursor tab cannot be read", () => {
+    const fixture: CursorPersonalLiveFixture = {
+      capturedAt: "2026-04-22T00:00:00.000Z",
+      extractionMode: "dom",
+      routes: [
+        {
+          routeKey: "dashboard_usage",
+          pageLabel: "Cursor personal dashboard usage page",
+          urlPatterns: ["https://cursor.com/dashboard/usage*"],
+          status: "capture_unavailable",
+          attempts: [
+            {
+              tabId: 88,
+              bindingMode: "bound",
+              status: "capture_failed",
+              error: "Cannot access contents of the page.",
+            },
+          ],
+          matchedUrl: null,
+          matchedTitle: null,
+          summary: null,
+        },
+      ],
+      decision: {
+        chosenRoute: null,
+        chosenSurface: null,
+        rationale:
+          "No matching logged-in Cursor dashboard usage tab was available.",
+      },
+    };
+
+    const result = parseCursorPersonalLiveFixture(fixture);
+
+    expect(result.status).toBe("capture_unavailable");
+
+    if (result.status === "ok") {
+      throw new Error("expected failure result");
+    }
+
+    expect(result.reason).toContain("could not be read");
+    expect(result.routeStatuses).toEqual([
+      {
+        routeKey: "dashboard_usage",
+        status: "capture_unavailable",
+        matchedUrl: null,
+      },
+    ]);
+  });
+
   it("returns route_drift when a matched page loses billing-period signals", () => {
     const fixture: CursorPersonalLiveFixture = {
       capturedAt: "2026-04-22T00:00:00.000Z",

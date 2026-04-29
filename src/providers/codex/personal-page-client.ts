@@ -64,7 +64,12 @@ function buildBindingFromRouteCapture(
   return reconcilePageBindingFromSessionResult(
     currentBinding,
     {
-      status: route.status === "logged_out" ? "logged_out" : "not_found",
+      status:
+        route.status === "logged_out"
+          ? "logged_out"
+          : route.status === "capture_unavailable"
+            ? "capture_unavailable"
+            : "not_found",
       attempts: route.attempts,
     },
     capturedAt,

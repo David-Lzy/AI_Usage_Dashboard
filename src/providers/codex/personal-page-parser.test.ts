@@ -412,6 +412,55 @@ describe("parseCodexPersonalLiveFixture", () => {
     expect(result.reason).toContain("logged-out state");
   });
 
+  it("returns capture_unavailable when the open Codex tab cannot be read", () => {
+    const fixture: CodexPersonalLiveFixture = {
+      capturedAt: "2026-04-22T00:00:00.000Z",
+      extractionMode: "dom",
+      primaryCandidateRoute: "https://chatgpt.com/codex/settings/usage",
+      routes: [
+        {
+          routeKey: "cloud_analytics",
+          pageLabel: "Codex cloud analytics page",
+          urlPatterns: ["https://chatgpt.com/codex/cloud/settings/analytics*"],
+          status: "capture_unavailable",
+          attempts: [
+            {
+              tabId: 77,
+              bindingMode: "bound",
+              status: "capture_failed",
+              error: "Cannot access contents of the page.",
+            },
+          ],
+          matchedUrl: null,
+          matchedTitle: null,
+          summary: null,
+        },
+      ],
+      decision: {
+        chosenRoute: null,
+        chosenSurface: null,
+        rationale: "No logged-in Codex page was matched from the current tabs.",
+      },
+    };
+
+    const result = parseCodexPersonalLiveFixture(fixture);
+
+    expect(result.status).toBe("capture_unavailable");
+
+    if (result.status === "ok") {
+      throw new Error("expected failure result");
+    }
+
+    expect(result.reason).toContain("could not be read");
+    expect(result.routeStatuses).toEqual([
+      {
+        routeKey: "cloud_analytics",
+        status: "capture_unavailable",
+        matchedUrl: null,
+      },
+    ]);
+  });
+
   it("returns route_drift when a matched page no longer exposes parseable usage windows", () => {
     const fixture: CodexPersonalLiveFixture = {
       capturedAt: "2026-04-22T00:00:00.000Z",

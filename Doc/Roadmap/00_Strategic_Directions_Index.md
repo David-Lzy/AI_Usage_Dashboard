@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-04-29:
 
-- the numbered phase queue is now completed through `Phase 216`
+- the numbered phase queue is now completed through `Phase 217`
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -99,6 +99,7 @@ As of 2026-04-29:
 - `Phase 214` packaged `0.1.0-rc.3`, so the installable zip now includes the Phase 200-213 functional provider and popup-surface changes after the older `rc.2` release boundary
 - `Phase 215` added a Settings `Use current page` action for shipped session-page tracks, so real Codex or Cursor usage pages can be bound from the active tab before immediate provider refresh
 - `Phase 216` added background page-binding lifecycle reconciliation for closed or navigated-away session-page tabs
+- `Phase 217` added a distinct `capture_unavailable` session-page state for open Codex or Cursor tabs that cannot be read by extension scripting
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
 - `Phase 42` has packaged `0.1.0-rc.2` and closed the release-closeout track for the narrowed RC
 - `Phase 43` completed the first `Direction 02` slice by productizing source-fidelity semantics in the side panel
@@ -238,8 +239,8 @@ As of 2026-04-29:
   - Claude personal support is not yet graduated
   - Gemini remains policy-only
   - Codex and Cursor personal support remain partial, not absolute-remaining-balance claims
-- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 216`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
-- the numbered phase queue is now completed through `Phase 216`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
+- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 217`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
+- the numbered phase queue is now completed through `Phase 217`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
 - `Codex` personal support is already shipped as a `session_page` path, but it currently exposes usage-window percentages and reset timing, not one absolute remaining credit balance
 - `Cursor` personal support is already shipped as a `session_page` path, but it currently exposes billing-period usage context, not one exact remaining included-request counter
 - the extension action now opens a compact popup on click, the popup makes cached snapshot freshness explicit, and the badge shows the count of visible providers needing attention
@@ -291,7 +292,7 @@ As of 2026-04-29:
 
 1. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why first now:
-   manifest localization, the first runtime shell slice, locale-aware value formatting, the first settings-shell pilot, the popup/provider-detail pilot rollout, the deeper settings-helper rollout, duration-bearing freshness/reset labels, the first compact-width plus RTL hardening pass, the operator-workspace boundary review, first operator-workspace shell localization, store-screenshot helper localization, screenshot-adjacent submission-support caption localization, the raw provider source-truth policy, provider-source display wrapper localization, adapter diagnostic reason-code planning, the type-only additive diagnostic model, Cursor plus Codex source-selection/fallback builders, Cursor plus Codex credential/host-access diagnostics, Cursor plus Codex page-session diagnostics, usage-threshold plus policy-only diagnostics, sync-stale diagnostics, source-state typed diagnostic fallback, localized warning diagnostic presentation, localized source diagnostic presentation, localized adapter-error diagnostic presentation, compact-width diagnostic presentation QA, diagnostic archive/export compatibility review, sample/store seed diagnostic metadata alignment, diagnostic fixture/historical evidence alignment, adapter diagnostic raw fallback regression, Codex personal multi-window usage surfacing, Codex personal flex credit balance surfacing, Cursor personal billing-period usage-summary surfacing, popup personal usage-context compression, surface progress style preferences, popup appearance preferences, the Settings-side popup appearance preview, native toolbar popup density tightening, the `0.1.0-rc.3` package, active-tab session-page binding, and bound-tab lifecycle staleness are now shipped. The active short-term priority can return to functional provider verification when a real authenticated Codex or Cursor page is available.
+   manifest localization, the first runtime shell slice, locale-aware value formatting, the first settings-shell pilot, the popup/provider-detail pilot rollout, the deeper settings-helper rollout, duration-bearing freshness/reset labels, the first compact-width plus RTL hardening pass, the operator-workspace boundary review, first operator-workspace shell localization, store-screenshot helper localization, screenshot-adjacent submission-support caption localization, the raw provider source-truth policy, provider-source display wrapper localization, adapter diagnostic reason-code planning, the type-only additive diagnostic model, Cursor plus Codex source-selection/fallback builders, Cursor plus Codex credential/host-access diagnostics, Cursor plus Codex page-session diagnostics, usage-threshold plus policy-only diagnostics, sync-stale diagnostics, source-state typed diagnostic fallback, localized warning diagnostic presentation, localized source diagnostic presentation, localized adapter-error diagnostic presentation, compact-width diagnostic presentation QA, diagnostic archive/export compatibility review, sample/store seed diagnostic metadata alignment, diagnostic fixture/historical evidence alignment, adapter diagnostic raw fallback regression, Codex personal multi-window usage surfacing, Codex personal flex credit balance surfacing, Cursor personal billing-period usage-summary surfacing, popup personal usage-context compression, surface progress style preferences, popup appearance preferences, the Settings-side popup appearance preview, native toolbar popup density tightening, the `0.1.0-rc.3` package, active-tab session-page binding, bound-tab lifecycle staleness, and capture-unavailable session-page diagnostics are now shipped. The active short-term priority can return to functional provider verification when a real authenticated Codex or Cursor page is available.
 
 2. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why second now:

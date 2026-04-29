@@ -446,4 +446,46 @@ describe("createPageSessionClient", () => {
       ],
     });
   });
+
+  it("reports capture_unavailable when a candidate tab cannot be read", async () => {
+    const executeScript = vi.fn(async () => {
+      throw new Error("Cannot access contents of the page.");
+    });
+    const client = createPageSessionClient({
+      tabsApi: {
+        query: vi.fn(async () => [
+          {
+            id: 17,
+            active: true,
+            lastAccessed: 1,
+            url: "https://chatgpt.com/codex/cloud/settings/analytics#usage",
+            title: "Codex",
+          },
+        ]),
+      },
+      scriptingApi: { executeScript },
+    });
+
+    const result = await client.capture({
+      providerId: "codex",
+      pageLabel: "Codex cloud analytics page",
+      urlPatterns: ["https://chatgpt.com/codex/*"],
+      extraction: {
+        mode: "dom",
+      },
+      match() {
+        return "matched";
+      },
+    });
+
+    expect(result.status).toBe("capture_unavailable");
+    expect(result.attempts).toEqual([
+      {
+        tabId: 17,
+        bindingMode: "auto",
+        status: "capture_failed",
+        error: "Cannot access contents of the page.",
+      },
+    ]);
+  });
 });

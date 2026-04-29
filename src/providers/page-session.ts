@@ -73,7 +73,7 @@ export type PageSessionResult =
       attempts: PageSessionAttempt[];
     }
   | {
-      status: "logged_out" | "not_found";
+      status: "logged_out" | "not_found" | "capture_unavailable";
       attempts: PageSessionAttempt[];
     };
 
@@ -845,6 +845,7 @@ export function createPageSessionClient(
       );
       const attempts: PageSessionAttempt[] = [];
       let sawLoggedOut = false;
+      let sawCaptureFailure = false;
 
       if (
         bindingMissing &&
@@ -907,6 +908,7 @@ export function createPageSessionClient(
             sawLoggedOut = true;
           }
         } catch (error) {
+          sawCaptureFailure = true;
           attempts.push({
             tabId: tab.id,
             bindingMode: tab.bindingMode,
@@ -917,7 +919,11 @@ export function createPageSessionClient(
       }
 
       return {
-        status: sawLoggedOut ? "logged_out" : "not_found",
+        status: sawLoggedOut
+          ? "logged_out"
+          : sawCaptureFailure
+            ? "capture_unavailable"
+            : "not_found",
         attempts,
       };
     },

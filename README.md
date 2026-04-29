@@ -345,6 +345,7 @@ Hybrid-source preference behavior:
   - whether a fallback happened because the preferred source was unavailable
 - Settings now includes a `Use current page` action for shipped session-page tracks, so an already-active Codex or Cursor usage page can be validated, bound, and refreshed without opening another provider tab
 - the background worker now marks a saved session-page binding stale when the bound tab closes or navigates away from that provider's usage-page routes
+- open Codex or Cursor usage tabs that cannot be read by extension scripting now surface as `capture_unavailable` instead of being mislabeled as a missing page
 - current fallback rules are deterministic:
   - missing credential: may fall back to the other shipped source
   - open page required or logged-out page: may fall back to the other shipped source
@@ -511,7 +512,7 @@ Preview URL:
 | Gemini Code Assist | none | none |
 | Codex | none for personal usage pages; analytics API key + workspace ID for Enterprise analytics | `https://api.chatgpt.com/*`, `https://chatgpt.com/*` |
 
-For shipped session-page providers, use `Settings -> Source Connections` to find or open the required logged-in browser page before refreshing. The same section now shows whether the provider page is attached, stale, or unbound, and lets you disconnect a saved binding explicitly.
+For shipped session-page providers, use `Settings -> Source Connections` to find or open the required logged-in browser page before refreshing. The same section now shows whether the provider page is attached, stale, or unbound, and lets you disconnect a saved binding explicitly. If an open usage tab exists but Chrome cannot read it, Codex and Cursor show a capture-unavailable session-page diagnostic with reload guidance.
 
 If you are using a long-lived Chrome profile for release verification, run `./scripts/with-preferred-node.sh node ./scripts/phase41-profile-audit.mjs` after reloading the unpacked extension so the runtime host grants and stored extension state are visible before the final pass. In the narrowed RC selected on `2026-04-23`, JetBrains is retained in the repo but not part of the active release promise.
 

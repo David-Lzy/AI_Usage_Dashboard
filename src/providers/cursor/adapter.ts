@@ -106,7 +106,11 @@ function canUseLiveCursorPersonalPage(): boolean {
 }
 
 function getCursorPageSessionDiagnosticKind(
-  status: "logged_out" | "open_page_required" | "route_drift",
+  status:
+    | "logged_out"
+    | "open_page_required"
+    | "capture_unavailable"
+    | "route_drift",
 ): "logged_out" | "open_page_required" | "capture_unavailable" {
   if (status === "logged_out" || status === "open_page_required") {
     return status;
@@ -452,7 +456,9 @@ async function tryCursorPersonalSource({
               ? "Log back into Cursor and reopen the dashboard usage page"
               : result.status === "open_page_required"
                 ? "Open the logged-in Cursor dashboard usage page and refresh again"
-                : "Inspect the live Cursor route and update the parser assumptions",
+                : result.status === "capture_unavailable"
+                  ? "Reload the Cursor dashboard usage page and refresh again"
+                  : "Inspect the live Cursor route and update the parser assumptions",
           syncedAt,
           syncSource: "page_parse",
           syncStatus: isRecoverable ? "warning" : "error",
@@ -480,7 +486,9 @@ async function tryCursorPersonalSource({
               ? "Cursor usage page session missing"
               : result.status === "open_page_required"
                 ? "Cursor usage page not open"
-                : "Cursor usage page parse failed",
+                : result.status === "capture_unavailable"
+                  ? "Cursor usage page unavailable"
+                  : "Cursor usage page parse failed",
         },
         setting: nextSetting,
       };

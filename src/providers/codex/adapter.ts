@@ -85,7 +85,11 @@ function canUseLiveCodexPersonalPage(): boolean {
 }
 
 function getCodexPageSessionDiagnosticKind(
-  status: "logged_out" | "open_page_required" | "route_drift",
+  status:
+    | "logged_out"
+    | "open_page_required"
+    | "capture_unavailable"
+    | "route_drift",
 ): "logged_out" | "open_page_required" | "capture_unavailable" {
   if (status === "logged_out" || status === "open_page_required") {
     return status;
@@ -667,7 +671,9 @@ async function tryCodexPersonalSource({
               ? "Log back into ChatGPT and reopen the Codex usage page"
               : result.status === "open_page_required"
                 ? "Open the logged-in Codex usage page and refresh again"
-                : "Inspect the live Codex page and update the parser assumptions",
+                : result.status === "capture_unavailable"
+                  ? "Reload the Codex usage page and refresh again"
+                  : "Inspect the live Codex page and update the parser assumptions",
           syncedAt,
           syncSource: "page_parse",
           syncStatus: isRecoverable ? "warning" : "error",
@@ -698,7 +704,9 @@ async function tryCodexPersonalSource({
               ? "Codex usage page session missing"
               : result.status === "open_page_required"
                 ? "Codex usage page not open"
-                : "Codex usage page parse failed",
+                : result.status === "capture_unavailable"
+                  ? "Codex usage page unavailable"
+                  : "Codex usage page parse failed",
         },
         setting: nextSetting,
       };

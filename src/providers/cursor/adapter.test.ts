@@ -452,6 +452,64 @@ describe("syncCursorProvider", () => {
     );
   });
 
+  it("keeps capture-unavailable page-session diagnostics visible when a bound Cursor tab cannot be read", async () => {
+    const attemptedAt = new Date(2026, 3, 20, 14, 18);
+    createCursorPersonalPageClientMock.mockReturnValue({
+      getUsageSnapshot: vi.fn(async () =>
+        buildCursorPersonalPageResponse({
+          status: "capture_unavailable",
+          reason:
+            "The open Cursor dashboard usage page could not be read by the extension. Reload the page, confirm host access, then refresh again.",
+          chosenRoute: null,
+          routeStatuses: [
+            {
+              routeKey: "dashboard_usage",
+              status: "capture_unavailable",
+              matchedUrl: null,
+            },
+          ],
+        }),
+      ),
+    });
+
+    const { snapshot } = await syncCursorProvider({
+      provider: baseProvider,
+      secrets: emptySecrets,
+      setting: {
+        ...grantedSetting,
+        sourcePreference: "session_page",
+      },
+      warningThresholdPercent: 80,
+      now: attemptedAt,
+    });
+
+    expect(snapshot.syncSource).toBe("page_parse");
+    expect(snapshot.syncStatus).toBe("error");
+    expect(snapshot.warningReason).toBe(
+      "The open Cursor dashboard usage page could not be read by the extension. Reload the page, confirm host access, then refresh again.",
+    );
+    expect(snapshot.warningDiagnostic).toMatchObject({
+      code: "page_session.capture_unavailable",
+      category: "page_session",
+      severity: "error",
+      rawMessage: snapshot.warningReason,
+      params: {
+        providerId: "cursor",
+        pageSessionKind: "capture_unavailable",
+      },
+    });
+    expect(snapshot.resetLabel).toBe(
+      "Reload the Cursor dashboard usage page and refresh again",
+    );
+    expect(snapshot.lastSyncLabel).toBe("Cursor usage page unavailable");
+    expect(snapshot.sourceFallbackReason).toContain(
+      "Session page unavailable: The open Cursor dashboard usage page could not be read",
+    );
+    expect(snapshot.sourceFallbackReason).toContain(
+      "Official API unavailable: No Cursor Admin API key is stored.",
+    );
+  });
+
   it("maps Cursor parser route drift to a typed adapter parse diagnostic", async () => {
     const attemptedAt = new Date(2026, 3, 20, 14, 18);
     createCursorPersonalPageClientMock.mockReturnValue({

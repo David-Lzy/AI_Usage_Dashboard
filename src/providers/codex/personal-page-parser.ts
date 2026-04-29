@@ -52,7 +52,11 @@ export type CodexPersonalParseResult =
       snapshot: CodexPersonalUsageSnapshot;
     }
   | {
-      status: "logged_out" | "open_page_required" | "route_drift";
+      status:
+        | "logged_out"
+        | "open_page_required"
+        | "capture_unavailable"
+        | "route_drift";
       reason: string;
       chosenRoute: string | null;
       routeStatuses: Array<{
@@ -427,7 +431,11 @@ function choosePrimaryWindow(
 
 function buildFailure(
   fixture: CodexPersonalLiveFixture,
-  status: "logged_out" | "open_page_required" | "route_drift",
+  status:
+    | "logged_out"
+    | "open_page_required"
+    | "capture_unavailable"
+    | "route_drift",
   reason: string,
 ): CodexPersonalParseResult {
   return {
@@ -451,18 +459,31 @@ export function parseCodexPersonalLiveFixture(
     const hasLoggedOutRoute = fixture.routes.some(
       (route) => route.status === "logged_out",
     );
+    const hasCaptureUnavailableRoute = fixture.routes.some(
+      (route) => route.status === "capture_unavailable",
+    );
 
-    return hasLoggedOutRoute
-      ? buildFailure(
-          fixture,
-          "logged_out",
-          "The current ChatGPT tab matched a logged-out state instead of a usable Codex page. Log in again and reopen the Codex usage page.",
-        )
-      : buildFailure(
-          fixture,
-          "open_page_required",
-          "Open the logged-in Codex usage page in ChatGPT before refreshing personal usage capture.",
-        );
+    if (hasLoggedOutRoute) {
+      return buildFailure(
+        fixture,
+        "logged_out",
+        "The current ChatGPT tab matched a logged-out state instead of a usable Codex page. Log in again and reopen the Codex usage page.",
+      );
+    }
+
+    if (hasCaptureUnavailableRoute) {
+      return buildFailure(
+        fixture,
+        "capture_unavailable",
+        "The open Codex usage page could not be read by the extension. Reload the page, confirm host access, then refresh again.",
+      );
+    }
+
+    return buildFailure(
+      fixture,
+      "open_page_required",
+      "Open the logged-in Codex usage page in ChatGPT before refreshing personal usage capture.",
+    );
   }
 
   const windows = buildWindows(matchedRoute.summary);

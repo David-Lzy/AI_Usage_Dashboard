@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [216_Phase_Page_Binding_Lifecycle.md](./Archive/216_Phase_Page_Binding_Lifecycle.md)
+- latest completed slice: [217_Phase_Page_Session_Capture_Unavailable.md](./Archive/217_Phase_Page_Session_Capture_Unavailable.md)
 
 Completed phases should be moved to:
 
@@ -263,6 +263,7 @@ Completed phases should be moved to:
 - [214_Phase_RC3_Packaging_And_Post_Phase_213_Build.md](./Archive/214_Phase_RC3_Packaging_And_Post_Phase_213_Build.md) - completed and archived on 2026-04-29
 - [215_Phase_Active_Session_Page_Binding.md](./Archive/215_Phase_Active_Session_Page_Binding.md) - completed and archived on 2026-04-29
 - [216_Phase_Page_Binding_Lifecycle.md](./Archive/216_Phase_Page_Binding_Lifecycle.md) - completed and archived on 2026-04-29
+- [217_Phase_Page_Session_Capture_Unavailable.md](./Archive/217_Phase_Page_Session_Capture_Unavailable.md) - completed and archived on 2026-04-29
 
 ## Dependency Notes
 
@@ -575,6 +576,8 @@ Completed phases should be moved to:
 - the 2026-04-29 `Phase 215` closeout added a Settings `Use current page` action for shipped session-page tracks, validates the active tab against provider route hints, saves the bound tab, and immediately refreshes the provider without storing cookies or auth headers
 - phase 216 depends on phase 215 because page-binding lifecycle honesty is most useful after the operator can manually bind the active session page
 - the 2026-04-29 `Phase 216` closeout added background `tabs.onRemoved` and `tabs.onUpdated` reconciliation so bound session-page tabs become stale when they close or navigate away from provider route hints
+- phase 217 depends on phase 216 because unreadable-tab diagnostics are most useful after bound tabs already move stale when they close or navigate away
+- the 2026-04-29 `Phase 217` closeout added a distinct `capture_unavailable` session-page result plus Codex and Cursor diagnostics for open tabs that exist but cannot be read by the extension
 
 ## Delivery Standard For Each Phase
 

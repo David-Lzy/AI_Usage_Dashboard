@@ -79,7 +79,11 @@ export type CursorPersonalParseResult =
       snapshot: CursorPersonalUsageSnapshot;
     }
   | {
-      status: "logged_out" | "open_page_required" | "route_drift";
+      status:
+        | "logged_out"
+        | "open_page_required"
+        | "capture_unavailable"
+        | "route_drift";
       reason: string;
       chosenRoute: string | null;
       routeStatuses: Array<{
@@ -106,7 +110,11 @@ function uniqueStrings(values: string[]): string[] {
 }
 
 function buildFailure(
-  status: "logged_out" | "open_page_required" | "route_drift",
+  status:
+    | "logged_out"
+    | "open_page_required"
+    | "capture_unavailable"
+    | "route_drift",
   reason: string,
   fixture: Pick<CursorPersonalLiveFixture, "decision" | "routes">,
 ): CursorPersonalParseResult {
@@ -250,18 +258,31 @@ export function parseCursorPersonalLiveFixture(
     const hasLoggedOutRoute = fixture.routes.some(
       (route) => route.status === "logged_out",
     );
+    const hasCaptureUnavailableRoute = fixture.routes.some(
+      (route) => route.status === "capture_unavailable",
+    );
 
-    return hasLoggedOutRoute
-      ? buildFailure(
-          "logged_out",
-          "The current Cursor tab matched a logged-out state instead of a usable usage page. Sign in again and reopen the Cursor dashboard usage page.",
-          fixture,
-        )
-      : buildFailure(
-          "open_page_required",
-          "Open the logged-in Cursor dashboard usage page before refreshing personal usage capture.",
-          fixture,
-        );
+    if (hasLoggedOutRoute) {
+      return buildFailure(
+        "logged_out",
+        "The current Cursor tab matched a logged-out state instead of a usable usage page. Sign in again and reopen the Cursor dashboard usage page.",
+        fixture,
+      );
+    }
+
+    if (hasCaptureUnavailableRoute) {
+      return buildFailure(
+        "capture_unavailable",
+        "The open Cursor dashboard usage page could not be read by the extension. Reload the page, confirm host access, then refresh again.",
+        fixture,
+      );
+    }
+
+    return buildFailure(
+      "open_page_required",
+      "Open the logged-in Cursor dashboard usage page before refreshing personal usage capture.",
+      fixture,
+    );
   }
 
   const snapshot = parseSnapshotFromSummary(
