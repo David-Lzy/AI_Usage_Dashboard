@@ -274,6 +274,7 @@ Phase status update:
 - `Phase 218` added Chrome tab replacement handling, so a bound session-page tab keeps its binding when Chrome swaps the tab id for the same usage route
 - `Phase 219` made that unreadable-page condition visible as a dedicated provider source state across dashboard cards, provider detail, popup guidance, and localized copy
 - `Phase 220` suppressed empty percent progress bars for unavailable percent measurements, so Codex parse/source failures no longer render as `rolling percent` with an `Unknown` value
+- `Phase 221` added direct dashboard-card and provider-detail source-page recovery actions for shipped session-page providers, reusing the existing tab open/focus and page-binding flow
 - the recommended next functional work returns to a real authenticated Codex or Cursor operator pass if that page is available; otherwise continue the Direction 10.3 store screenshot line only when the remaining manual native-toolbar popup captures can be collected
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
@@ -370,6 +371,7 @@ Security rule for this track:
 - first disconnected-state guard shipped in `Phase 217` for open source tabs that cannot be read by extension scripting
 - capture-unavailable display state shipped in `Phase 219` so unreadable open pages no longer collapse into generic sync errors
 - empty percent progress suppression shipped in `Phase 220`, keeping source-state failures visually distinct from real quota progress
+- direct source-page recovery actions shipped in `Phase 221`, so dashboard/detail recovery no longer requires first navigating to Settings
 - add a clear UI/operator pass for real source-tab logout states
 
 ### 3.4 Data TODO

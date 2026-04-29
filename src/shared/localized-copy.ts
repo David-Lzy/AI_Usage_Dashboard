@@ -1604,6 +1604,10 @@ export function buildProviderDetailLocalizedCopy(i18n: RuntimeI18n) {
         trustBoundary: "信任边界",
         pageBinding: "页面绑定",
         usageWindows: "可见额度上下文",
+        sourcePageRecovery: "来源页面恢复",
+        sourcePageRecoveryDetail:
+          "打开或切回这个 provider 的已发布 session-page 来源页，并保存匹配页面绑定。",
+        openSourcePageAction: "打开来源页面",
         diagnosticSummary: "诊断摘要",
         warningReason: "告警原因",
       },
@@ -1692,6 +1696,10 @@ export function buildProviderDetailLocalizedCopy(i18n: RuntimeI18n) {
       trustBoundary: "Trust boundary",
       pageBinding: "Page binding",
       usageWindows: "Visible usage context",
+      sourcePageRecovery: "Source-page recovery",
+      sourcePageRecoveryDetail:
+        "Open or focus this provider's shipped session-page source and save the matching page binding.",
+      openSourcePageAction: "Open source page",
       diagnosticSummary: "Diagnostic summary",
       warningReason: "Warning reason",
     },

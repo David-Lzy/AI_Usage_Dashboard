@@ -18,7 +18,13 @@ function createState(overrides?: Partial<AppState>): AppState {
   };
 }
 
-function renderProviderCard(state: AppState, providerId: "codex" | "gemini") {
+function renderProviderCard(
+  state: AppState,
+  providerId: "codex" | "gemini",
+  options: {
+    onOpenSourcePage?: () => void;
+  } = {},
+) {
   const provider = getProviderViewModel(state, providerId);
 
   if (!provider) {
@@ -31,6 +37,7 @@ function renderProviderCard(state: AppState, providerId: "codex" | "gemini") {
       progressDisplayStyle="line"
       provider={provider}
       onOpen={() => undefined}
+      onOpenSourcePage={options.onOpenSourcePage}
       onRefresh={() => undefined}
     />,
   );
@@ -90,5 +97,24 @@ describe("ProviderCard", () => {
     expect(html).toContain('role="progressbar"');
     expect(html).toContain("daily requests");
     expect(html).toContain("Unknown");
+  });
+
+  it("renders a source-page recovery action for shipped session-page providers", () => {
+    const html = renderProviderCard(createState(), "codex", {
+      onOpenSourcePage: () => undefined,
+    });
+
+    expect(html).toContain('data-provider-card-open-source-page="true"');
+    expect(html).toContain(">Source page<");
+    expect(html).toContain('title="Open source page"');
+  });
+
+  it("omits the source-page recovery action for deferred session-page providers", () => {
+    const html = renderProviderCard(createState(), "gemini", {
+      onOpenSourcePage: () => undefined,
+    });
+
+    expect(html).not.toContain('data-provider-card-open-source-page="true"');
+    expect(html).not.toContain(">Source page<");
   });
 });

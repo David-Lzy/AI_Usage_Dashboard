@@ -1196,6 +1196,7 @@ function StandardApp({ locationHash }: StandardAppProps) {
           onOpenFullPage={
             isFullPageSurface ? undefined : handleOpenCurrentRouteInFullPage
           }
+          onOpenSourcePage={handleOpenSessionPage}
           onRefresh={handleRefresh}
         />
       ) : (
@@ -1216,6 +1217,7 @@ function StandardApp({ locationHash }: StandardAppProps) {
             isFullPageSurface ? undefined : handleOpenCurrentRouteInFullPage
           }
           onOpenSettings={() => navigateToRoute({ name: "settings" })}
+          onOpenSourcePage={handleOpenSessionPage}
           onRefreshProvider={handleRefresh}
           onRefreshAll={() => handleRefresh()}
         />

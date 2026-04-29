@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [220_Phase_Empty_Percent_Progress_Suppression.md](./Archive/220_Phase_Empty_Percent_Progress_Suppression.md)
+- latest completed slice: [221_Phase_Source_Page_Recovery_Action.md](./Archive/221_Phase_Source_Page_Recovery_Action.md)
 
 Completed phases should be moved to:
 
@@ -267,6 +267,7 @@ Completed phases should be moved to:
 - [218_Phase_Page_Binding_Tab_Replacement.md](./Archive/218_Phase_Page_Binding_Tab_Replacement.md) - completed and archived on 2026-04-29
 - [219_Phase_Capture_Unavailable_Source_State.md](./Archive/219_Phase_Capture_Unavailable_Source_State.md) - completed and archived on 2026-04-29
 - [220_Phase_Empty_Percent_Progress_Suppression.md](./Archive/220_Phase_Empty_Percent_Progress_Suppression.md) - completed and archived on 2026-04-29
+- [221_Phase_Source_Page_Recovery_Action.md](./Archive/221_Phase_Source_Page_Recovery_Action.md) - completed and archived on 2026-04-29
 
 ## Dependency Notes
 
@@ -587,6 +588,8 @@ Completed phases should be moved to:
 - the 2026-04-29 `Phase 219` closeout surfaced `page_session.capture_unavailable` as a dedicated provider source state in dashboard cards, provider detail state, popup guidance, localized copy, and theme-recovery review snapshots
 - phase 220 depends on phases 208 and 219 because dashboard/detail progress should keep real structured usage windows while avoiding empty percent visuals for source-state failures
 - the 2026-04-29 `Phase 220` closeout suppressed generic single-value percent progress when no measured used or remaining percentage exists, while preserving documented non-percent total context
+- phase 221 depends on phases 215 and 219 because the dashboard/detail recovery action should reuse the proven session-page opening and binding flow after unreadable-page states are visible
+- the 2026-04-29 `Phase 221` closeout added direct source-page recovery actions on dashboard provider cards and provider detail for shipped session-page providers, while keeping deferred tracks hidden
 
 ## Delivery Standard For Each Phase
 

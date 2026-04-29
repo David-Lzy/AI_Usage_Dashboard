@@ -113,6 +113,15 @@ describe("provider source helpers", () => {
     expect(getOpenableRouteHint(sessionPagePlan?.routeHints ?? [])).toBe(
       "https://account.jetbrains.com/organization/ai/users-and-licensing",
     );
+    expect(
+      getOpenableRouteHint(["https://cursor.com/*/dashboard/usage*"]),
+    ).toBeNull();
+    expect(
+      getOpenableRouteHint([
+        "https://cursor.com/*/dashboard/usage*",
+        "https://cursor.com/dashboard/usage*",
+      ]),
+    ).toBe("https://cursor.com/dashboard/usage");
   });
 
   it("marks Codex personal usage pages as a shipped session-page track", () => {

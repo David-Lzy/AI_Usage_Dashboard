@@ -15,6 +15,7 @@ type ProviderCardProps = {
   progressDisplayStyle: ProgressDisplayStyle;
   provider: ProviderViewModel;
   onOpen: (providerId: ProviderId) => void;
+  onOpenSourcePage?: (providerId: ProviderId) => void;
   onRefresh: (providerId: ProviderId) => void;
 };
 
@@ -36,6 +37,7 @@ export function ProviderCard({
   progressDisplayStyle,
   provider,
   onOpen,
+  onOpenSourcePage,
   onRefresh,
 }: ProviderCardProps) {
   const i18n = createRuntimeI18n(
@@ -45,6 +47,8 @@ export function ProviderCard({
   const showSessionPageContract =
     provider.sessionPageContractLabel !== null &&
     provider.sessionPageContractLabel !== provider.currentSourceContractLabel;
+  const showSourcePageAction =
+    provider.openableSessionPageUrl !== null && onOpenSourcePage !== undefined;
   const hasStructuredUsageContext =
     (provider.usageWindows?.length ?? 0) > 0 ||
     (provider.usageBalances?.length ?? 0) > 0;
@@ -184,6 +188,17 @@ export function ProviderCard({
         >
           Open
         </button>
+        {showSourcePageAction ? (
+          <button
+            className="text-button"
+            data-provider-card-open-source-page="true"
+            type="button"
+            title="Open source page"
+            onClick={() => onOpenSourcePage(provider.providerId)}
+          >
+            Source page
+          </button>
+        ) : null}
         <button
           className="text-button"
           type="button"

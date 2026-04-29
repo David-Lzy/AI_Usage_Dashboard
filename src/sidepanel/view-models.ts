@@ -11,6 +11,7 @@ import type {
 } from "../providers/types";
 import {
   buildProviderSourceDisplay,
+  getOpenableRouteHint,
   type ProviderSourceDisplayCopy,
 } from "../shared/provider-sources";
 import { createEmptyPageBinding } from "../shared/page-bindings";
@@ -63,6 +64,7 @@ export type ProviderViewModel = ProviderSnapshot & {
   sessionPageContractDetail: string | null;
   sessionPageGraduationGateLabel: string | null;
   sessionPageGraduationGateDetail: string | null;
+  openableSessionPageUrl: string | null;
   fallbackSourceLabels: string[];
   pageBinding: ProviderPageBinding;
   pageBindingLabel: string | null;
@@ -162,6 +164,10 @@ function toProviderViewModel(
     },
     sourceDisplayCopy,
   );
+  const openableSessionPageUrl =
+    sourceDisplay.sessionPagePlan?.rolloutStage === "shipped"
+      ? getOpenableRouteHint(sourceDisplay.sessionPagePlan.routeHints)
+      : null;
 
   return {
     ...provider,
@@ -207,6 +213,7 @@ function toProviderViewModel(
       sourceDisplay.sessionPageGraduationGateLabel,
     sessionPageGraduationGateDetail:
       sourceDisplay.sessionPageGraduationGateDetail,
+    openableSessionPageUrl,
     fallbackSourceLabels: sourceDisplay.fallbackPlans.map(
       (sourcePlan) => sourcePlan.label,
     ),

@@ -83,15 +83,22 @@ describe("sidepanel view models", () => {
 
     expect(codex?.currentSourceContractLabel).toBe("Shipped enterprise analytics");
     expect(codex?.sessionPageContractLabel).toBe("Shipped personal partial");
+    expect(codex?.openableSessionPageUrl).toBe(
+      "https://chatgpt.com/codex/cloud/settings/analytics",
+    );
     expect(codex?.currentSourceGraduationGateLabel).toBeNull();
     expect(codex?.currentSourceFidelityLabel).toBe("Analytics snapshot");
     expect(codex?.currentAccessModelLabel).toBe("Stored credential");
     expect(cursor?.currentSourceContractLabel).toBe("Shipped personal partial");
     expect(cursor?.currentSourceFidelityLabel).toBe("Window-only vendor value");
     expect(cursor?.hostAccessRequirementLabel).toBe("Required");
+    expect(cursor?.openableSessionPageUrl).toBe(
+      "https://cursor.com/dashboard/usage",
+    );
     expect(gemini?.currentSourceLabel).toBe("Policy only");
     expect(gemini?.currentSourceContractLabel).toBe("Shipped policy only");
     expect(gemini?.sessionPageContractLabel).toBe("Deferred project metrics");
+    expect(gemini?.openableSessionPageUrl).toBeNull();
     expect(gemini?.sessionPageGraduationGateLabel).toBe(
       "Accept project-metrics support",
     );
@@ -102,6 +109,7 @@ describe("sidepanel view models", () => {
     expect(jetbrains?.currentSourceContractLabel).toBe(
       "Deferred org console path",
     );
+    expect(jetbrains?.openableSessionPageUrl).toBeNull();
     expect(jetbrains?.currentSourceGraduationGateLabel).toBe(
       "Reverify org-visible Console session",
     );

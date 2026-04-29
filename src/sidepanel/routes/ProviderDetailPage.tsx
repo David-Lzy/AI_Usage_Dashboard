@@ -44,6 +44,7 @@ type ProviderDetailPageProps = {
   themeActionTitle?: string;
   onToggleThemeMode?: () => void;
   onOpenFullPage?: () => void;
+  onOpenSourcePage?: (providerId: ProviderId) => void;
   onRefresh: (providerId: ProviderId) => void;
 };
 
@@ -56,6 +57,7 @@ export function ProviderDetailPage({
   themeActionTitle,
   onToggleThemeMode,
   onOpenFullPage,
+  onOpenSourcePage,
   onRefresh,
 }: ProviderDetailPageProps) {
   const i18n = createRuntimeI18n(
@@ -82,6 +84,8 @@ export function ProviderDetailPage({
   const showUsageSummary =
     !hasStructuredUsageContext && Boolean(provider.usageSummary);
   const hasUsageContext = hasStructuredUsageContext || showUsageSummary;
+  const showSourcePageAction =
+    provider.openableSessionPageUrl !== null && onOpenSourcePage !== undefined;
   const usageValue =
     provider.quotaUnit === "percent"
       ? provider.used !== null && provider.remaining !== null
@@ -453,6 +457,25 @@ export function ProviderDetailPage({
           >
             <p className="detail-note__label">{copy.notes.sourceState}</p>
             <p className="supporting-copy">{provider.currentSourceStateDetail}</p>
+          </div>
+        ) : null}
+
+        {showSourcePageAction ? (
+          <div
+            className="detail-note detail-note--neutral"
+            data-provider-detail-open-source-page="true"
+          >
+            <p className="detail-note__label">{copy.notes.sourcePageRecovery}</p>
+            <p className="supporting-copy">
+              {copy.notes.sourcePageRecoveryDetail}
+            </p>
+            <button
+              className="text-button text-button--inline"
+              type="button"
+              onClick={() => onOpenSourcePage(provider.providerId)}
+            >
+              {copy.notes.openSourcePageAction}
+            </button>
           </div>
         ) : null}
 

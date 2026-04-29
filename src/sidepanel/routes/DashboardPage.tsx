@@ -16,6 +16,7 @@ type DashboardPageProps = {
   summaryItems: SummaryItem[];
   providers: ProviderViewModel[];
   onOpenProvider: (providerId: ProviderId) => void;
+  onOpenSourcePage?: (providerId: ProviderId) => void;
   themeActionLabel?: string;
   themeActionTitle?: string;
   onToggleThemeMode?: () => void;
@@ -31,6 +32,7 @@ export function DashboardPage({
   summaryItems,
   providers,
   onOpenProvider,
+  onOpenSourcePage,
   themeActionLabel,
   themeActionTitle,
   onToggleThemeMode,
@@ -88,6 +90,7 @@ export function DashboardPage({
                 progressDisplayStyle={progressDisplayStyle}
                 provider={provider}
                 onOpen={onOpenProvider}
+                onOpenSourcePage={onOpenSourcePage}
                 onRefresh={onRefreshProvider}
               />
             ))}

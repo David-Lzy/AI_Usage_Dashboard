@@ -507,8 +507,19 @@ export function getSessionPagePlan(
 }
 
 export function getOpenableRouteHint(routeHints: string[]): string | null {
-  const matchedRoute = routeHints.find((routeHint) => routeHint.startsWith("https://"));
-  return matchedRoute ? matchedRoute.replace(/\*+$/, "") : null;
+  for (const routeHint of routeHints) {
+    if (!routeHint.startsWith("https://")) {
+      continue;
+    }
+
+    const normalizedRoute = routeHint.replace(/\*+$/, "");
+
+    if (!normalizedRoute.includes("*")) {
+      return normalizedRoute;
+    }
+  }
+
+  return null;
 }
 
 function escapeRegExp(value: string): string {
