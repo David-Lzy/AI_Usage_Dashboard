@@ -20,6 +20,7 @@ export type ProviderSourceStateKind =
   | "credential_missing"
   | "open_page_required"
   | "logged_out"
+  | "capture_unavailable"
   | "sync_error";
 
 type ClassifiedSourceState = {
@@ -139,6 +140,8 @@ export type ProviderSourceDisplayCopy = {
     loggedOutFallbackDetail: string;
     openPageRequiredLabel: string;
     openPageRequiredFallbackDetail: string;
+    captureUnavailableLabel: string;
+    captureUnavailableFallbackDetail: string;
     syncErrorLabel: string;
     syncErrorFallbackDetail: string;
   };
@@ -304,6 +307,9 @@ export const DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY: ProviderSourceDisplayCopy = {
     openPageRequiredLabel: "Open page required",
     openPageRequiredFallbackDetail:
       "Open the required logged-in provider page, then refresh again.",
+    captureUnavailableLabel: "Page capture unavailable",
+    captureUnavailableFallbackDetail:
+      "Reload the open provider page, then refresh again.",
     syncErrorLabel: "Sync issue",
     syncErrorFallbackDetail:
       "The current provider source failed unexpectedly during refresh.",
@@ -781,6 +787,18 @@ function createSyncErrorSourceState(
   };
 }
 
+function createCaptureUnavailableSourceState(
+  warningReason: string,
+  copy: ProviderSourceDisplayCopy,
+): ClassifiedSourceState {
+  return {
+    kind: "capture_unavailable",
+    label: copy.sourceState.captureUnavailableLabel,
+    tone: "error",
+    detail: warningReason || copy.sourceState.captureUnavailableFallbackDetail,
+  };
+}
+
 function createReadySourceState(
   currentPlan: ProviderSourcePlan,
   copy: ProviderSourceDisplayCopy,
@@ -830,7 +848,7 @@ function classifySourceStateFromWarningDiagnostic(
       warningDiagnostic.code === "page_session.capture_unavailable" &&
       provider.syncStatus === "error"
     ) {
-      return createSyncErrorSourceState(warningReason, copy);
+      return createCaptureUnavailableSourceState(warningReason, copy);
     }
   }
 

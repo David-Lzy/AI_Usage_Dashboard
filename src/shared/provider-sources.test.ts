@@ -269,7 +269,8 @@ describe("provider source helpers", () => {
         rawMessage: openPageReason,
       }),
     });
-    const captureReason = "Parser contract drifted during capture.";
+    const captureReason =
+      "The open Cursor dashboard usage page could not be read by extension scripting.";
     const captureUnavailable = buildProviderState("cursor", {
       syncStatus: "error",
       tone: "error",
@@ -288,12 +289,15 @@ describe("provider source helpers", () => {
     expect(
       buildProviderSourceDisplay(openPage.provider, openPage.setting).stateKind,
     ).toBe("open_page_required");
-    expect(
-      buildProviderSourceDisplay(
-        captureUnavailable.provider,
-        captureUnavailable.setting,
-      ).stateKind,
-    ).toBe("sync_error");
+    const captureDisplay = buildProviderSourceDisplay(
+      captureUnavailable.provider,
+      captureUnavailable.setting,
+    );
+
+    expect(captureDisplay.stateKind).toBe("capture_unavailable");
+    expect(captureDisplay.stateLabel).toBe("Page capture unavailable");
+    expect(captureDisplay.stateDetail).toBe(captureReason);
+    expect(captureDisplay.stateTone).toBe("error");
   });
 
   it("keeps usage-threshold and cached-state stale diagnostics source-ready", () => {

@@ -45,6 +45,7 @@ export type ThemeRecoveryTargetSnapshot = {
     | "credential_missing"
     | "open_page_required"
     | "logged_out"
+    | "capture_unavailable"
     | "sync_error";
   currentSourceStateLabel: string;
   currentSourceStateDetail: string;
@@ -133,7 +134,8 @@ function buildTargetRecoverySnapshot(
   const visible = visibleProviderIds.has(providerId);
   const hasSyncIssue =
     provider.displaySyncStatus === "error" ||
-    provider.currentSourceStateKind === "sync_error";
+    provider.currentSourceStateKind === "sync_error" ||
+    provider.currentSourceStateKind === "capture_unavailable";
   const needsAccess =
     provider.permissionStatus === "missing" ||
     provider.currentSourceStateKind === "host_access_missing";

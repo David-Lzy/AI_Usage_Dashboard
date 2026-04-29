@@ -397,6 +397,8 @@ function buildPopupFeaturedStatusLabel(provider: ProviderViewModel): string {
       return "Open page";
     case "logged_out":
       return "Sign in";
+    case "capture_unavailable":
+      return "Reload page";
     case "sync_error":
       return "Needs review";
     case "policy_only":
@@ -424,6 +426,8 @@ function buildPopupFeaturedPrimaryDetail(provider: ProviderViewModel): string {
       return "Current path still needs a live page session.";
     case "logged_out":
       return "Current path needs the signed-in page again.";
+    case "capture_unavailable":
+      return "Current page session is open but cannot be read.";
     case "sync_error":
       return "Settings setup is clear, but this provider still needs review.";
     case "policy_only":
@@ -1234,6 +1238,8 @@ function buildLocalizedFeaturedStatusLabel(
       return copy.featuredCard.statusOpenPage;
     case "logged_out":
       return copy.featuredCard.statusSignIn;
+    case "capture_unavailable":
+      return copy.featuredCard.statusReloadPage;
     case "sync_error":
       return copy.featuredCard.statusNeedsReview;
     case "policy_only":
@@ -1264,6 +1270,8 @@ function buildLocalizedFeaturedPrimaryDetail(
       return copy.featuredCard.primaryNeedsLivePage;
     case "logged_out":
       return copy.featuredCard.primaryNeedsSignedInPage;
+    case "capture_unavailable":
+      return copy.featuredCard.primaryPageUnreadable;
     case "sync_error":
       return copy.featuredCard.primaryNeedsReview;
     case "policy_only":

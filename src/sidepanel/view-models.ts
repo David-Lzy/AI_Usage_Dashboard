@@ -53,6 +53,7 @@ export type ProviderViewModel = ProviderSnapshot & {
     | "credential_missing"
     | "open_page_required"
     | "logged_out"
+    | "capture_unavailable"
     | "sync_error";
   currentSourceStateLabel: string;
   currentSourceStateDetail: string;

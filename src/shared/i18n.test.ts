@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   createAdapterErrorDiagnostic,
+  createPageSessionDiagnostic,
   createSourceFallbackDiagnostic,
   createSourceSelectionDiagnostic,
   createUsageThresholdDiagnostic,
@@ -138,6 +139,10 @@ describe("runtime i18n", () => {
 
     expect(popupCopy.actionSection.otherRouteLabel).toBe("其他入口");
     expect(popupCopy.featuredCard.statusNeedsAccess).toBe("需授权");
+    expect(popupCopy.featuredCard.statusReloadPage).toBe("重新加载");
+    expect(popupCopy.featuredCard.primaryPageUnreadable).toBe(
+      "当前页面会话已经打开，但扩展无法读取。",
+    );
     expect(providerDetailCopy.sections.providerDetail).toBe("Provider 详情");
     expect(providerDetailCopy.notes.accessStatus).toBe("访问状态");
   });
@@ -160,6 +165,9 @@ describe("runtime i18n", () => {
     );
 
     expect(providerSourceCopy.sourceKindLabels.session_page).toBe("会话页面");
+    expect(providerSourceCopy.sourceState.captureUnavailableLabel).toBe(
+      "页面捕获不可用",
+    );
     expect(providerSourceCopy.fieldAvailabilityLabels.window_only).toBe("仅窗口");
     expect(providerSourceCopy.connectionMode.credential.label).toBe("已存凭据");
     expect(
@@ -225,6 +233,31 @@ describe("runtime i18n", () => {
       summary:
         "The Official API source could not run because its required credential is missing.",
     });
+  });
+
+  it("builds localized page-capture unavailable diagnostic presentation", () => {
+    const diagnostic = createPageSessionDiagnostic({
+      providerId: "cursor",
+      pageSessionKind: "capture_unavailable",
+      rawMessage:
+        "The open Cursor dashboard usage page could not be read by extension scripting.",
+    });
+
+    expect(
+      getProviderDiagnosticPresentation(diagnostic, createRuntimeI18n("en")),
+    ).toEqual({
+      label: "Page capture unavailable",
+      summary:
+        "The current page could not be read by the extension; keep the raw detail for permission, page-state, or route review.",
+    });
+    expect(
+      getProviderDiagnosticPresentation(diagnostic, createRuntimeI18n("zh-CN")),
+    ).toEqual({
+      label: "页面捕获不可用",
+      summary:
+        "当前页面无法被扩展读取；保留 raw detail 用于权限、页面状态或 route 检查。",
+    });
+    expect(diagnostic.rawMessage).toContain("could not be read");
   });
 
   it("builds localized adapter-error diagnostic presentation without translating raw bodies", () => {

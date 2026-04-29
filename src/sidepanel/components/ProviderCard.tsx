@@ -136,7 +136,8 @@ export function ProviderCard({
           <span className="meta-chip">{localizedLastSyncLabel}</span>
           {provider.currentSourceStateKind === "credential_missing" ||
           provider.currentSourceStateKind === "open_page_required" ||
-          provider.currentSourceStateKind === "logged_out" ? (
+          provider.currentSourceStateKind === "logged_out" ||
+          provider.currentSourceStateKind === "capture_unavailable" ? (
             <span
               className={`meta-chip ${provider.currentSourceStateTone === "error" ? "meta-chip--error" : "meta-chip--warning"}`}
             >

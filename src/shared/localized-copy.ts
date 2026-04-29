@@ -400,8 +400,8 @@ export function getProviderDiagnosticPresentation(
       return {
         label: zh ? "页面捕获不可用" : "Page capture unavailable",
         summary: zh
-          ? "当前页面无法被可靠解析；保留 raw detail 用于 parser 或 route 检查。"
-          : "The current page could not be parsed reliably; keep the raw detail for parser or route review.",
+          ? "当前页面无法被扩展读取；保留 raw detail 用于权限、页面状态或 route 检查。"
+          : "The current page could not be read by the extension; keep the raw detail for permission, page-state, or route review.",
       };
     case "usage.threshold_warning":
       return {
@@ -599,6 +599,9 @@ export function buildProviderSourceDisplayLocalizedCopy(
       openPageRequiredLabel: "需要打开页面",
       openPageRequiredFallbackDetail:
         "请打开所需的已登录 provider 页面，然后再刷新。",
+      captureUnavailableLabel: "页面捕获不可用",
+      captureUnavailableFallbackDetail:
+        "请重新加载已打开的 provider 页面，然后再刷新。",
       syncErrorLabel: "同步问题",
       syncErrorFallbackDetail:
         "当前 provider source 在刷新过程中意外失败。",
@@ -721,6 +724,7 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
         statusNeedsSetup: "需配置",
         statusOpenPage: "打开页面",
         statusSignIn: "重新登录",
+        statusReloadPage: "重新加载",
         statusNeedsReview: "需复查",
         statusContractOnly: "仅合同",
         statusHealthy: "健康",
@@ -730,6 +734,7 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
         primaryNeedsCredentials: "当前路径仍然需要已存凭据。",
         primaryNeedsLivePage: "当前路径仍然需要活跃页面会话。",
         primaryNeedsSignedInPage: "当前路径需要重新拿到已登录页面。",
+        primaryPageUnreadable: "当前页面会话已经打开，但扩展无法读取。",
         primaryNeedsReview: "设置已经就绪，但这个 provider 仍需复查。",
         primaryPolicyOnly: "当前合同在这个 profile 里是仅策略。",
         primaryLiveReady: "当前路径在这个 profile 里已经可以 live-ready。",
@@ -902,6 +907,7 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
       statusNeedsSetup: "Needs setup",
       statusOpenPage: "Open page",
       statusSignIn: "Sign in",
+      statusReloadPage: "Reload page",
       statusNeedsReview: "Needs review",
       statusContractOnly: "Contract-only",
       statusHealthy: "Healthy",
@@ -911,6 +917,8 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
       primaryNeedsCredentials: "Current path still needs stored credentials.",
       primaryNeedsLivePage: "Current path still needs a live page session.",
       primaryNeedsSignedInPage: "Current path needs the signed-in page again.",
+      primaryPageUnreadable:
+        "Current page session is open but cannot be read.",
       primaryNeedsReview: "Settings setup is clear, but this provider still needs review.",
       primaryPolicyOnly: "Current contract is policy-only in this profile.",
       primaryLiveReady: "Current path is live-ready in this profile.",

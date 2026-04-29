@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [218_Phase_Page_Binding_Tab_Replacement.md](./Archive/218_Phase_Page_Binding_Tab_Replacement.md)
+- latest completed slice: [219_Phase_Capture_Unavailable_Source_State.md](./Archive/219_Phase_Capture_Unavailable_Source_State.md)
 
 Completed phases should be moved to:
 
@@ -265,6 +265,7 @@ Completed phases should be moved to:
 - [216_Phase_Page_Binding_Lifecycle.md](./Archive/216_Phase_Page_Binding_Lifecycle.md) - completed and archived on 2026-04-29
 - [217_Phase_Page_Session_Capture_Unavailable.md](./Archive/217_Phase_Page_Session_Capture_Unavailable.md) - completed and archived on 2026-04-29
 - [218_Phase_Page_Binding_Tab_Replacement.md](./Archive/218_Phase_Page_Binding_Tab_Replacement.md) - completed and archived on 2026-04-29
+- [219_Phase_Capture_Unavailable_Source_State.md](./Archive/219_Phase_Capture_Unavailable_Source_State.md) - completed and archived on 2026-04-29
 
 ## Dependency Notes
 
@@ -581,6 +582,8 @@ Completed phases should be moved to:
 - the 2026-04-29 `Phase 217` closeout added a distinct `capture_unavailable` session-page result plus Codex and Cursor diagnostics for open tabs that exist but cannot be read by the extension
 - phase 218 depends on phase 216 because Chrome tab replacement is another lifecycle path for the same saved page-binding contract
 - the 2026-04-29 `Phase 218` closeout added `tabs.onReplaced` handling so matching replacement tabs keep their binding and non-matching replacements mark the binding stale
+- phase 219 depends on phase 217 because the typed unreadable-page diagnostic needs a visible source-state distinction after the adapter/session-page state exists
+- the 2026-04-29 `Phase 219` closeout surfaced `page_session.capture_unavailable` as a dedicated provider source state in dashboard cards, provider detail state, popup guidance, localized copy, and theme-recovery review snapshots
 
 ## Delivery Standard For Each Phase
 
