@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [225_Phase_Capture_Unavailable_Source_Tab_Reload.md](./Archive/225_Phase_Capture_Unavailable_Source_Tab_Reload.md)
+- latest completed slice: [226_Phase_Popup_Shell_Corner_Mask.md](./Archive/226_Phase_Popup_Shell_Corner_Mask.md)
 
 Completed phases should be moved to:
 
@@ -272,6 +272,7 @@ Completed phases should be moved to:
 - [223_Phase_Popup_Empty_Percent_Progress_Suppression.md](./Archive/223_Phase_Popup_Empty_Percent_Progress_Suppression.md) - completed and archived on 2026-04-29
 - [224_Phase_Existing_Source_Page_Auto_Refresh.md](./Archive/224_Phase_Existing_Source_Page_Auto_Refresh.md) - completed and archived on 2026-04-29
 - [225_Phase_Capture_Unavailable_Source_Tab_Reload.md](./Archive/225_Phase_Capture_Unavailable_Source_Tab_Reload.md) - completed and archived on 2026-04-29
+- [226_Phase_Popup_Shell_Corner_Mask.md](./Archive/226_Phase_Popup_Shell_Corner_Mask.md) - completed and archived on 2026-04-29
 
 ## Dependency Notes
 
@@ -602,6 +603,8 @@ Completed phases should be moved to:
 - the 2026-04-29 `Phase 224` closeout refreshed shipped session-page providers immediately after source-page recovery binds an already-open matching tab, while preserving manual refresh for newly-opened pages that may still need login or navigation
 - phase 225 depends on phases 217 and 224 because capture-unavailable recovery should reload the unreadable source tab only after that state is distinct and existing-tab recovery already refreshes automatically
 - the 2026-04-29 `Phase 225` closeout reloaded existing capture-unavailable source tabs before binding and refreshing, and adjusted popup recovery so binding/refresh happen before focusing the provider tab
+- phase 226 depends on phases 211 through 213 because the popup shell corner mask should follow the shipped popup appearance preferences and be judged against the real native toolbar popup surface
+- the 2026-04-29 `Phase 226` closeout added a popup shell visual corner mask while preserving the Chrome-owned action-popup host shape boundary
 
 ## Delivery Standard For Each Phase
 

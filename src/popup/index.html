@@ -23,6 +23,13 @@
         --app-popup-width-min: 360px;
         --app-popup-width-preferred: 392px;
         --app-popup-width-max: 420px;
+        --app-popup-shell-radius: 28px;
+      }
+
+      html.popup-page,
+      body.popup-page,
+      #root.popup-page-root {
+        background: transparent;
       }
 
       html.popup-page[data-popup-size-preset="compact"] {
@@ -45,11 +52,14 @@
 
       body.popup-page {
         overflow-x: hidden;
+        border-radius: var(--app-popup-shell-radius, 28px);
+        clip-path: inset(0 round var(--app-popup-shell-radius, 28px));
       }
 
       #root.popup-page-root {
         margin: 0;
         width: 100%;
+        border-radius: inherit;
       }
     </style>
   </head>
