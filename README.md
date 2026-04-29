@@ -40,7 +40,7 @@ Security posture for this track:
 
 Next execution queue:
 
-1. continue functional provider work first while Codex budget is constrained; after `Phase 212`, the best next slice is a real authenticated Codex or Cursor operator pass if available
+1. package a fresh release candidate after `Phase 213` so the distributable zip includes the post-`rc.2` Codex/Cursor personal usage, popup progress, and popup appearance work
 2. keep [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) in maintenance mode unless a concrete diagnostic-body localization need appears
 3. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining manual store-popup capture dependency
 
@@ -177,6 +177,7 @@ The Chrome action now opens a compact popup first:
 - the repo now also ships one repeatable `360px` plus `420px` popup width review for no-visible, mixed-setup, policy-only, and healthy setup stages
 - the popup now also has Settings-controlled size, corner, and shadow presets, with the default preserving the balanced quota-first Phase 210 appearance
 - Settings now also previews those popup appearance presets before the user reopens the Chrome action popup
+- the native toolbar popup has now been checked in RDP Chrome after extension reload, and popup-only circular quota density was tightened so four Codex quota rings remain a quick-glance surface rather than a reset-detail surface
 - the repo now also ships one request-bound store-screenshot seed plus RDP capture-runner workflow, so truthful store assets can be collected from the real unpacked extension runtime without pretending the first real screenshot archive already exists
 - the repo now also ships the first real archived store screenshot set, captured from `RDP Chrome` and archived with request-bound truth notes instead of preview-only mocks
 - the repo now also ships one maintained store-listing copy pack anchored to that first real screenshot archive, including the preferred short description, overview paragraph, feature bullets, screenshot captions, and claim guardrails

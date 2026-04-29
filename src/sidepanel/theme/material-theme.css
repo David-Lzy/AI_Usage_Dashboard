@@ -2173,6 +2173,10 @@ body.popup-page .status-card {
   gap: var(--app-space-2);
 }
 
+.popup-provider-card__progress--circle {
+  gap: var(--app-space-1);
+}
+
 .popup-provider-card__progress .usage-window-progress-list {
   gap: var(--app-space-2);
 }
@@ -2185,6 +2189,37 @@ body.popup-page .status-card {
 
 .popup-provider-card__progress--circle .usage-window-progress-list {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--app-space-3) var(--app-space-2);
+}
+
+.popup-provider-card__progress--circle .usage-progress--circle {
+  gap: var(--app-space-1);
+}
+
+.popup-provider-card__progress--circle .usage-progress__ring {
+  width: 68px;
+}
+
+.popup-provider-card__progress--circle .usage-progress__ring::before {
+  inset: 8px;
+}
+
+.popup-provider-card__progress--circle .usage-progress__ring-value {
+  font-size: var(--md-sys-typescale-title-small-size);
+  line-height: var(--md-sys-typescale-title-small-line-height);
+}
+
+.popup-provider-card__progress--circle .usage-progress__ring-label {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: var(--md-sys-typescale-label-small-size);
+  line-height: var(--md-sys-typescale-label-small-line-height);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.popup-provider-card__progress--circle .usage-progress__detail {
+  display: none;
 }
 
 .popup-progress-ring-list {

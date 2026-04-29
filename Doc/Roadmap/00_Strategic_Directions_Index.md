@@ -1,6 +1,6 @@
 # Strategic Directions Index
 
-Date: 2026-04-26
+Date: 2026-04-29
 
 Process rule:
 
@@ -28,9 +28,9 @@ Important scope note:
 
 ## Current Truth Snapshot
 
-As of 2026-04-26:
+As of 2026-04-29:
 
-- the numbered phase queue is now completed through `Phase 210`
+- the numbered phase queue is now completed through `Phase 213`
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -93,6 +93,9 @@ As of 2026-04-26:
 - `Phase 208` rendered every visible structured usage window as a remaining progress bar on dashboard and provider-detail surfaces, including weekly and model-specific Codex windows, while keeping popup compact
 - `Phase 209` rendered structured toolbar-popup usage windows as compact circular remaining progress indicators while preserving dashboard/provider-detail bars and summary-only popup fallbacks
 - `Phase 210` added per-surface line/circle progress style preferences and made the toolbar popup quota-first when provider quota cards exist
+- `Phase 211` added popup size, corner, and shadow appearance preferences without changing sidebar/full-page behavior
+- `Phase 212` added a Settings-side popup appearance preview so the popup appearance presets are not blind controls
+- `Phase 213` verified the native toolbar popup in RDP Chrome after extension reload and tightened popup-only circular quota density for the current four-ring Codex quota state
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
 - `Phase 42` has packaged `0.1.0-rc.2` and closed the release-closeout track for the narrowed RC
 - `Phase 43` completed the first `Direction 02` slice by productizing source-fidelity semantics in the side panel
@@ -232,8 +235,8 @@ As of 2026-04-26:
   - Claude personal support is not yet graduated
   - Gemini remains policy-only
   - Codex and Cursor personal support remain partial, not absolute-remaining-balance claims
-- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 212`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
-- the numbered phase queue is now completed through `Phase 212`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
+- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 213`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
+- the numbered phase queue is now completed through `Phase 213`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
 - `Codex` personal support is already shipped as a `session_page` path, but it currently exposes usage-window percentages and reset timing, not one absolute remaining credit balance
 - `Cursor` personal support is already shipped as a `session_page` path, but it currently exposes billing-period usage context, not one exact remaining included-request counter
 - the extension action now opens a compact popup on click, the popup makes cached snapshot freshness explicit, and the badge shows the count of visible providers needing attention
@@ -251,6 +254,7 @@ As of 2026-04-26:
 - the popup onboarding stack now also has one repeatable width-range proof, so the newer guidance plus setup-summary layers are checked at realistic compact popup widths instead of only in one default preview size
 - the popup now also has Settings-controlled size, corner, and shadow presets, so users can tune the Chrome action surface without adopting another extension's design language or changing sidebar/full-page behavior
 - Settings now also has one popup appearance preview, so those presets are visible before reopening the native Chrome action popup
+- the native toolbar popup has now been checked in RDP Chrome after extension reload, and popup-only circular quota density was tightened so four Codex quota rings stay focused on progress and labels instead of reset details
 - the UI uses a Material-like token system, now has a small reduced-motion-safe motion baseline, and also has an intermediate `720px` responsive collapse point, a more scannable Settings entry, a less repetitive source-card summary pattern, clearer grouped diagnostics inside disclosure, a compact session-track layout, consistent keyboard-focus treatment on the main interactive controls, harmonized status surfaces across the main warning/error/success states, clearer toned-surface text hierarchy, explicit pressed states on the remaining Settings pointer controls, a more coherent compact chip system, honest indeterminate progress treatment for unknown values, a clearer supporting-surface hierarchy across provider detail and expanded Settings diagnostics, one dedicated fixed-width interaction-audit hub for the main shipped surfaces, preset-driven shortcuts plus visible expectation copy plus visible manual checks plus a persistent signoff workspace plus signoff-import handoff support plus a visible handoff summary plus an explicit operator workflow and reusable bundle-builder path for the main manual review states, and repeatable width plus compact-height plus keyboard-interaction plus pointer-interaction plus status-surface plus toned-content plus chip-progress plus supporting-surface plus audit-hub plus audit-preset plus evidence-pack plus signoff-pack plus signoff-workspace plus signoff-import plus handoff-bundle plus operator-bundle review baselines
 - the current theme foundation now ships shared `System / Light / Dark` mode selection, the first shipped preset accents, one validated custom-seed path, one repeatable explicit-override plus system-follow QA baseline, one repeatable dark-surface review baseline, one repeatable preset-theme review baseline, one repeatable audit-hub theme-alignment review baseline, one repeatable custom-seed review baseline, one repeatable popup-local plus audit-local custom-seed review baseline, one repeatable popup plus audit non-accent surface-stability review baseline, one repeatable dashboard plus Settings plus provider-detail non-accent surface-stability review baseline, one repeatable compact-width custom-seed review baseline, one repeatable provider-state-specific custom-seed review baseline, one repeatable seeded recovered-state review baseline, one repeatable preview-interaction recovered-state review baseline, one repeatable extension-mode recovered-state review baseline, one dedicated theme-recovery operator workspace plus runbook, one durable seeded theme-recovery archive workflow plus generated archive index, and one durable pending theme-recovery request workflow plus generated request index, but it still lacks any real fulfilled operator or native-prompt recovery archive and any decision on dual light-dark seeds
 - the current popup architecture is already shipped, which means future toolbar work should focus on competitive product fit, onboarding, and store discoverability rather than restarting popup shell design
@@ -284,7 +288,7 @@ As of 2026-04-26:
 
 1. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why first now:
-   manifest localization, the first runtime shell slice, locale-aware value formatting, the first settings-shell pilot, the popup/provider-detail pilot rollout, the deeper settings-helper rollout, duration-bearing freshness/reset labels, the first compact-width plus RTL hardening pass, the operator-workspace boundary review, first operator-workspace shell localization, store-screenshot helper localization, screenshot-adjacent submission-support caption localization, the raw provider source-truth policy, provider-source display wrapper localization, adapter diagnostic reason-code planning, the type-only additive diagnostic model, Cursor plus Codex source-selection/fallback builders, Cursor plus Codex credential/host-access diagnostics, Cursor plus Codex page-session diagnostics, usage-threshold plus policy-only diagnostics, sync-stale diagnostics, source-state typed diagnostic fallback, localized warning diagnostic presentation, localized source diagnostic presentation, localized adapter-error diagnostic presentation, compact-width diagnostic presentation QA, diagnostic archive/export compatibility review, sample/store seed diagnostic metadata alignment, diagnostic fixture/historical evidence alignment, adapter diagnostic raw fallback regression, Codex personal multi-window usage surfacing, Codex personal flex credit balance surfacing, Cursor personal billing-period usage-summary surfacing, popup personal usage-context compression, surface progress style preferences, popup appearance preferences, and the Settings-side popup appearance preview are now shipped. The active short-term priority should stay functional provider work while Codex budget is constrained.
+   manifest localization, the first runtime shell slice, locale-aware value formatting, the first settings-shell pilot, the popup/provider-detail pilot rollout, the deeper settings-helper rollout, duration-bearing freshness/reset labels, the first compact-width plus RTL hardening pass, the operator-workspace boundary review, first operator-workspace shell localization, store-screenshot helper localization, screenshot-adjacent submission-support caption localization, the raw provider source-truth policy, provider-source display wrapper localization, adapter diagnostic reason-code planning, the type-only additive diagnostic model, Cursor plus Codex source-selection/fallback builders, Cursor plus Codex credential/host-access diagnostics, Cursor plus Codex page-session diagnostics, usage-threshold plus policy-only diagnostics, sync-stale diagnostics, source-state typed diagnostic fallback, localized warning diagnostic presentation, localized source diagnostic presentation, localized adapter-error diagnostic presentation, compact-width diagnostic presentation QA, diagnostic archive/export compatibility review, sample/store seed diagnostic metadata alignment, diagnostic fixture/historical evidence alignment, adapter diagnostic raw fallback regression, Codex personal multi-window usage surfacing, Codex personal flex credit balance surfacing, Cursor personal billing-period usage-summary surfacing, popup personal usage-context compression, surface progress style preferences, popup appearance preferences, the Settings-side popup appearance preview, and native toolbar popup density tightening are now shipped. The immediate next packaging priority is a fresh release candidate because the existing `rc.2` zip predates these post-release slices.
 
 2. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why second now:

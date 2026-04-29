@@ -1,6 +1,6 @@
 # Phase Index
 
-Date: 2026-04-27
+Date: 2026-04-29
 
 Process rule:
 
@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [212_Phase_Popup_Appearance_Settings_Preview.md](./Archive/212_Phase_Popup_Appearance_Settings_Preview.md)
+- latest completed slice: [213_Phase_Native_Toolbar_Popup_Density_Review.md](./Archive/213_Phase_Native_Toolbar_Popup_Density_Review.md)
 
 Completed phases should be moved to:
 
@@ -259,6 +259,7 @@ Completed phases should be moved to:
 - [210_Phase_Surface_Progress_Style_Preferences.md](./Archive/210_Phase_Surface_Progress_Style_Preferences.md) - completed and archived on 2026-04-26
 - [211_Phase_Popup_Appearance_Preferences.md](./Archive/211_Phase_Popup_Appearance_Preferences.md) - completed and archived on 2026-04-26
 - [212_Phase_Popup_Appearance_Settings_Preview.md](./Archive/212_Phase_Popup_Appearance_Settings_Preview.md) - completed and archived on 2026-04-27
+- [213_Phase_Native_Toolbar_Popup_Density_Review.md](./Archive/213_Phase_Native_Toolbar_Popup_Density_Review.md) - completed and archived on 2026-04-29
 
 ## Dependency Notes
 
@@ -563,6 +564,8 @@ Completed phases should be moved to:
 - the 2026-04-26 `Phase 211` closeout added popup size, corner, and shadow preferences while preserving provider coverage claims, parser behavior, sync behavior, sidebar layout, and full-page layout
 - phase 212 depends on phase 211 because popup appearance choices should be previewable only after the persisted size, corner, and shadow preference contract exists
 - the 2026-04-27 `Phase 212` closeout added a Settings-side popup appearance preview while preserving provider coverage claims, parser behavior, sync behavior, popup data behavior, sidebar layout, and full-page layout
+- phase 213 depends on phases 209 through 212 because real native-toolbar popup density can only be judged after circular quota progress, per-surface style preferences, appearance presets, and the Settings preview are all wired
+- the 2026-04-29 `Phase 213` closeout verified the native Chrome toolbar popup from RDP Chrome after extension reload, then tightened popup-only circular quota density by reducing ring size and hiding reset detail text while preserving sidebar and full-page quota detail
 
 ## Delivery Standard For Each Phase
 

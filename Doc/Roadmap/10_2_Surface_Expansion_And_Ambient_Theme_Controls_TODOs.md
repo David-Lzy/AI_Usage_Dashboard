@@ -1,6 +1,6 @@
 # Direction 10.2 - Surface Expansion And Ambient Theme Controls TODOs
 
-Date: 2026-04-26
+Date: 2026-04-29
 
 Document class:
 
@@ -19,6 +19,7 @@ Status note:
 - per-surface progress-style preference follow-up landed on `2026-04-26` through `Phase 210`
 - popup appearance preference follow-up landed on `2026-04-26` through `Phase 211`
 - popup appearance preview follow-up landed on `2026-04-27` through `Phase 212`
+- native toolbar popup density follow-up landed on `2026-04-29` through `Phase 213`
 - this child TODO turns the agreed popup / sidebar / full-page expansion contract into the next executable `Direction 10` track
 
 Process rule:
@@ -195,6 +196,18 @@ Related design contract:
   - one compact-width preview fallback
   - one static review script
 
+### I. Native Toolbar Popup Density Review
+
+- reload the real RDP Chrome unpacked extension from current `dist`
+- capture the native toolbar popup from the Chrome action icon
+- compare the current four-ring Codex quota state against the Settings preview and app-window expectations
+- keep reset timing in sidebar/full-page, but remove reset-detail text from popup circular quota mode when it costs too much vertical space
+- `Phase 213` completed this follow-up by shipping:
+  - one real native-toolbar popup screenshot pass before and after density tightening
+  - popup-only circular quota ring compression
+  - popup-only reset-detail suppression for circular quota mode
+  - one static/evidence review script for the density boundary
+
 ## Acceptance Criteria
 
 - popup remains compact and readable after expand plus theme controls are added
@@ -202,6 +215,7 @@ Related design contract:
 - popup, sidebar, and full-page tab can independently choose line or circle quota progress
 - popup can independently choose compact, balanced, or wide sizing plus square, soft, or rounded card treatment plus none, soft, or elevated shadow
 - Settings previews the selected popup size, corner, and shadow before the popup is reopened
+- native toolbar popup can show the current four visible Codex quota rings without turning the toolbar bubble into a detail surface
 - sidebar still reads as the operational surface rather than a stretched popup
 - popup expand always opens the dashboard full-page tab
 - sidebar expand preserves the current route when full-page mode supports it
@@ -230,6 +244,7 @@ Related design contract:
 6. RDP Chrome runtime QA and screenshot refresh - completed in `Phase 160`
 7. popup size, corner, and shadow appearance preferences - completed in `Phase 211`
 8. popup appearance settings preview - completed in `Phase 212`
+9. native toolbar popup density review - completed in `Phase 213`
 
 ## Out Of Scope
 
