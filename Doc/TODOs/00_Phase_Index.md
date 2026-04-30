@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [227_Phase_Popup_Host_Edge_Blend.md](./Archive/227_Phase_Popup_Host_Edge_Blend.md)
+- latest completed slice: [228_Phase_Popup_Rectangular_Canvas_Reset.md](./Archive/228_Phase_Popup_Rectangular_Canvas_Reset.md)
 
 Completed phases should be moved to:
 
@@ -607,6 +607,8 @@ Completed phases should be moved to:
 - the 2026-04-29 `Phase 226` closeout added a popup shell visual corner mask while preserving the Chrome-owned action-popup host shape boundary
 - phase 227 depends on phase 226 because host-edge blending only makes sense after the extension-owned popup shell is already clipped and the remaining visible square corner is known to come from Chrome's native action-popup backing
 - the 2026-04-30 `Phase 227` closeout added a popup host-edge blend plus stronger body/root/shell clipping markers to reduce the visible light rectangular transition while preserving the true Chrome-owned host boundary
+- phase 228 depends on phase 227 because the host-edge blend proved the technical limit but produced a worse visual result than the community-standard rectangular popup document
+- the 2026-04-30 `Phase 228` closeout reset the toolbar popup to a rectangular popup canvas while preserving rounded internal cards and controls
 
 ## Delivery Standard For Each Phase
 

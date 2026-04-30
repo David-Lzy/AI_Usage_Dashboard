@@ -23,20 +23,25 @@
         --app-popup-width-min: 360px;
         --app-popup-width-preferred: 392px;
         --app-popup-width-max: 420px;
-        --app-popup-shell-radius: 28px;
-        --app-popup-host-edge-color: #f2f3fa;
+        --app-popup-page-background-start: #f8f9ff;
+        --app-popup-page-background-end: #f2f3fa;
       }
 
       @media (prefers-color-scheme: dark) {
         html.popup-page {
-          --app-popup-host-edge-color: #202124;
+          --app-popup-page-background-start: #38393d;
+          --app-popup-page-background-end: #1a1c20;
         }
       }
 
       html.popup-page,
       body.popup-page,
       #root.popup-page-root {
-        background: var(--app-popup-host-edge-color, #f2f3fa);
+        background: linear-gradient(
+          180deg,
+          var(--app-popup-page-background-start, #f8f9ff) 0%,
+          var(--app-popup-page-background-end, #f2f3fa) 100%
+        );
       }
 
       html.popup-page[data-popup-size-preset="compact"] {
@@ -58,18 +63,12 @@
       }
 
       body.popup-page {
-        overflow: hidden;
-        border-radius: var(--app-popup-shell-radius, 28px);
-        clip-path: inset(0 round var(--app-popup-shell-radius, 28px));
-        -webkit-mask-image: radial-gradient(white, black);
-        mask-image: radial-gradient(white, black);
+        overflow-x: hidden;
       }
 
       #root.popup-page-root {
         margin: 0;
         width: 100%;
-        border-radius: inherit;
-        overflow: hidden;
       }
     </style>
   </head>
