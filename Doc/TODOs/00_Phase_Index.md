@@ -1,6 +1,6 @@
 # Phase Index
 
-Date: 2026-04-29
+Date: 2026-04-30
 
 Process rule:
 
@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [226_Phase_Popup_Shell_Corner_Mask.md](./Archive/226_Phase_Popup_Shell_Corner_Mask.md)
+- latest completed slice: [227_Phase_Popup_Host_Edge_Blend.md](./Archive/227_Phase_Popup_Host_Edge_Blend.md)
 
 Completed phases should be moved to:
 
@@ -605,6 +605,8 @@ Completed phases should be moved to:
 - the 2026-04-29 `Phase 225` closeout reloaded existing capture-unavailable source tabs before binding and refreshing, and adjusted popup recovery so binding/refresh happen before focusing the provider tab
 - phase 226 depends on phases 211 through 213 because the popup shell corner mask should follow the shipped popup appearance preferences and be judged against the real native toolbar popup surface
 - the 2026-04-29 `Phase 226` closeout added a popup shell visual corner mask while preserving the Chrome-owned action-popup host shape boundary
+- phase 227 depends on phase 226 because host-edge blending only makes sense after the extension-owned popup shell is already clipped and the remaining visible square corner is known to come from Chrome's native action-popup backing
+- the 2026-04-30 `Phase 227` closeout added a popup host-edge blend plus stronger body/root/shell clipping markers to reduce the visible light rectangular transition while preserving the true Chrome-owned host boundary
 
 ## Delivery Standard For Each Phase
 

@@ -24,12 +24,19 @@
         --app-popup-width-preferred: 392px;
         --app-popup-width-max: 420px;
         --app-popup-shell-radius: 28px;
+        --app-popup-host-edge-color: #f2f3fa;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        html.popup-page {
+          --app-popup-host-edge-color: #202124;
+        }
       }
 
       html.popup-page,
       body.popup-page,
       #root.popup-page-root {
-        background: transparent;
+        background: var(--app-popup-host-edge-color, #f2f3fa);
       }
 
       html.popup-page[data-popup-size-preset="compact"] {
@@ -51,15 +58,18 @@
       }
 
       body.popup-page {
-        overflow-x: hidden;
+        overflow: hidden;
         border-radius: var(--app-popup-shell-radius, 28px);
         clip-path: inset(0 round var(--app-popup-shell-radius, 28px));
+        -webkit-mask-image: radial-gradient(white, black);
+        mask-image: radial-gradient(white, black);
       }
 
       #root.popup-page-root {
         margin: 0;
         width: 100%;
         border-radius: inherit;
+        overflow: hidden;
       }
     </style>
   </head>

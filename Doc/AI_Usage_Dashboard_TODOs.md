@@ -280,6 +280,7 @@ Phase status update:
 - `Phase 224` removed the extra manual refresh step when source-page recovery attaches an already-open matching provider tab, while preserving manual refresh for newly-opened pages
 - `Phase 225` made capture-unavailable recovery reload the existing source tab before binding and refreshing, including popup dispatch ordering that completes sync before focusing the provider tab
 - `Phase 226` added a popup shell visual corner mask so the document background no longer reads as a square 90-degree popup edge, while preserving the Chrome-owned native host boundary
+- `Phase 227` added a popup host-edge blend plus stronger body/root/shell clipping markers so dark Chrome surfaces no longer expose an obvious light rectangular backing around the rounded popup
 - the recommended next functional work returns to a real authenticated Codex or Cursor operator pass if that page is available; otherwise continue the Direction 10.3 store screenshot line only when the remaining manual native-toolbar popup captures can be collected
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
@@ -382,6 +383,7 @@ Security rule for this track:
 - existing-tab source-page recovery auto-refresh shipped in `Phase 224`, so attaching an already-open matching provider page now triggers provider sync immediately
 - capture-unavailable source-tab reload shipped in `Phase 225`, so unreadable existing provider pages can be reloaded and refreshed from the same recovery action
 - popup shell visual corner mask shipped in `Phase 226`, so extension-owned popup pixels follow the appearance corner setting even though the Chrome action-popup host shape remains browser-owned
+- popup host-edge blend shipped in `Phase 227`, so the remaining browser-owned backing is visually muted on dark Chrome surfaces without claiming true native transparency
 - add a clear UI/operator pass for real source-tab logout states
 
 ### 3.4 Data TODO

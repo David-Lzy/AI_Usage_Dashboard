@@ -14,7 +14,7 @@ html.popup-page,
 body.popup-page,
 #root.popup-page-root {
   min-height: 0;
-  background: transparent;
+  background: var(--app-popup-host-edge-color);
 }
 
 html.full-page-shell,
@@ -34,10 +34,17 @@ body.popup-page {
 }
 
 html.popup-page {
+  --app-popup-host-edge-color: #f2f3fa;
   --app-popup-shell-radius: var(--md-sys-shape-corner-extra-large);
   --app-popup-card-radius: var(--md-sys-shape-corner-extra-large);
   --app-popup-provider-card-radius: var(--md-sys-shape-corner-large);
   --app-popup-card-shadow: var(--app-elevation-1);
+}
+
+@media (prefers-color-scheme: dark) {
+  html.popup-page {
+    --app-popup-host-edge-color: #202124;
+  }
 }
 
 html.popup-page[data-popup-size-preset="compact"] {
@@ -89,7 +96,7 @@ html.popup-page[data-popup-shadow-style="elevated"] {
 }
 
 body.popup-page {
-  overflow-x: hidden;
+  overflow: hidden;
   border-radius: var(
     --app-popup-shell-radius,
     var(--md-sys-shape-corner-extra-large)
@@ -98,6 +105,8 @@ body.popup-page {
     0 round
       var(--app-popup-shell-radius, var(--md-sys-shape-corner-extra-large))
   );
+  -webkit-mask-image: radial-gradient(white, black);
+  mask-image: radial-gradient(white, black);
 }
 
 body.full-page-shell {
@@ -107,6 +116,7 @@ body.full-page-shell {
 #root.popup-page-root {
   width: 100%;
   border-radius: inherit;
+  overflow: hidden;
 }
 
 #root.full-page-shell-root {
@@ -2104,8 +2114,12 @@ body.popup-page .popup-shell {
     0 round
       var(--app-popup-shell-radius, var(--md-sys-shape-corner-extra-large))
   );
+  contain: paint;
+  overflow: hidden;
   min-width: 0;
   max-width: none;
+  -webkit-mask-image: radial-gradient(white, black);
+  mask-image: radial-gradient(white, black);
 }
 
 body.popup-page .status-card {
