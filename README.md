@@ -264,6 +264,7 @@ The Settings screen now starts with a compact overview and section-jump area:
 - the top of Settings now summarizes visible providers, stored secrets, bound pages, and access gaps
 - the Settings top bar now stays sticky so `Back` and `Save` remain reachable while scrolling
 - long Settings content now exposes direct jump controls for preferences, visibility, credentials, sources, and permissions
+- the sync interval and warning threshold settings now use an editable numeric combobox, keeping preset menu choices while accepting validated custom values
 - the side-panel CSS now collapses key grids earlier at `720px` instead of waiting for the old `480px` breakpoint alone
 - `Source Connections` cards now keep their contract summary visible by default and move dense diagnostics behind an explicit expandable section
 - the repo now includes a repeatable `360 / 420 / 720` screenshot review pass for dashboard and settings, and that pass drove a real `360px` overflow fix in Settings

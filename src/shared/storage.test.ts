@@ -143,6 +143,22 @@ describe("storage normalization", () => {
     expect(state?.settings.popupShadowStyle).toBe("soft");
   });
 
+  it("normalizes invalid numeric preference values", async () => {
+    await writeAppState({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        syncIntervalMinutes: 5,
+        warningThresholdPercent: 100,
+      } as unknown as AppState["settings"],
+    });
+
+    const state = await readAppState();
+
+    expect(state?.settings.syncIntervalMinutes).toBe(30);
+    expect(state?.settings.warningThresholdPercent).toBe(80);
+  });
+
   it("upgrades stale static provider metadata to the current sample schema", async () => {
     await writeAppState(createStaleSchemaState());
 

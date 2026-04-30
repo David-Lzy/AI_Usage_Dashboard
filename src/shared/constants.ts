@@ -15,6 +15,10 @@ import {
   DEFAULT_POPUP_SIZE_PRESET,
 } from "./popup-appearance";
 import {
+  DEFAULT_SYNC_INTERVAL_MINUTES,
+  DEFAULT_WARNING_THRESHOLD_PERCENT,
+} from "./settings-preferences";
+import {
   createPolicyOnlyDiagnostic,
   createSourceFallbackDiagnostic,
   createSourceSelectionDiagnostic,
@@ -495,8 +499,8 @@ export const SAMPLE_APP_STATE: AppState = {
     },
   ],
   settings: {
-    syncIntervalMinutes: 30,
-    warningThresholdPercent: 80,
+    syncIntervalMinutes: DEFAULT_SYNC_INTERVAL_MINUTES,
+    warningThresholdPercent: DEFAULT_WARNING_THRESHOLD_PERCENT,
     locale: "system",
     themeMode: "system",
     themePreset: "default",

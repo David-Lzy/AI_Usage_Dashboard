@@ -27,6 +27,10 @@ import {
   normalizePopupShadowStyle,
   normalizePopupSizePreset,
 } from "./popup-appearance";
+import {
+  normalizeSyncIntervalMinutes,
+  normalizeWarningThresholdPercent,
+} from "./settings-preferences";
 
 let memoryFallbackState: AppState | null = null;
 
@@ -134,6 +138,12 @@ function normalizeAppState(state: AppState): AppState {
     settings: {
       ...SAMPLE_APP_STATE.settings,
       ...state.settings,
+      syncIntervalMinutes: normalizeSyncIntervalMinutes(
+        state.settings?.syncIntervalMinutes,
+      ),
+      warningThresholdPercent: normalizeWarningThresholdPercent(
+        state.settings?.warningThresholdPercent,
+      ),
       locale: normalizeAppLocalePreference(state.settings?.locale),
       themeMode: normalizeThemeMode(state.settings?.themeMode),
       themePreset: normalizeThemePreset(state.settings?.themePreset),

@@ -40,7 +40,16 @@ import {
   POPUP_SHADOW_STYLE_OPTIONS,
   POPUP_SIZE_PRESET_OPTIONS,
 } from "../../shared/popup-appearance";
+import {
+  SYNC_INTERVAL_MAX_MINUTES,
+  SYNC_INTERVAL_MIN_MINUTES,
+  SYNC_INTERVAL_PRESETS,
+  WARNING_THRESHOLD_MAX_PERCENT,
+  WARNING_THRESHOLD_MIN_PERCENT,
+  WARNING_THRESHOLD_PRESETS,
+} from "../../shared/settings-preferences";
 
+import { EditableNumberCombobox } from "../components/EditableNumberCombobox";
 import { PermissionPrompt } from "../components/PermissionPrompt";
 import { SummaryStrip } from "../components/SummaryStrip";
 import { getPreferredScrollBehavior } from "../motion";
@@ -283,6 +292,31 @@ export function SettingsPage({
     { value: "en", label: i18n.t("settings.preferences.locale.en") },
     { value: "zh-CN", label: i18n.t("settings.preferences.locale.zh_cn") },
   ];
+  const syncIntervalUnitLabel = i18n.t("settings.preferences.minutes");
+  const syncIntervalOptions = SYNC_INTERVAL_PRESETS.map((preset) => ({
+    value: preset,
+    label: `${i18n.formatNumber(preset)} ${syncIntervalUnitLabel}`,
+  }));
+  const warningThresholdOptions = WARNING_THRESHOLD_PRESETS.map((preset) => ({
+    value: preset,
+    label: i18n.formatPercentValue(preset),
+  }));
+  const syncIntervalErrorText =
+    i18n.resolvedLocale === "zh-CN"
+      ? `请输入 ${i18n.formatNumber(SYNC_INTERVAL_MIN_MINUTES)}-${i18n.formatNumber(SYNC_INTERVAL_MAX_MINUTES)} ${syncIntervalUnitLabel}。`
+      : `Enter ${i18n.formatNumber(SYNC_INTERVAL_MIN_MINUTES)}-${i18n.formatNumber(SYNC_INTERVAL_MAX_MINUTES)} ${syncIntervalUnitLabel}.`;
+  const warningThresholdErrorText =
+    i18n.resolvedLocale === "zh-CN"
+      ? `请输入 ${i18n.formatNumber(WARNING_THRESHOLD_MIN_PERCENT)}-${i18n.formatNumber(WARNING_THRESHOLD_MAX_PERCENT)}%。`
+      : `Enter ${i18n.formatNumber(WARNING_THRESHOLD_MIN_PERCENT)}-${i18n.formatNumber(WARNING_THRESHOLD_MAX_PERCENT)}%.`;
+  const syncIntervalMenuButtonLabel =
+    i18n.resolvedLocale === "zh-CN"
+      ? "展开默认同步间隔预设"
+      : "Show default sync interval presets";
+  const warningThresholdMenuButtonLabel =
+    i18n.resolvedLocale === "zh-CN"
+      ? "展开告警阈值预设"
+      : "Show warning threshold presets";
 
   function scrollToSection(sectionId: string) {
     if (typeof document === "undefined") {
@@ -435,35 +469,31 @@ export function SettingsPage({
       >
         <p className="section-label">{i18n.t("settings.preferences.eyebrow")}</p>
         <div className="settings-grid">
-          <label className="form-field">
-            <span className="form-field__label">{i18n.t("settings.preferences.sync_interval_label")}</span>
-            <select
-              className="form-field__control"
-              value={String(settings.syncIntervalMinutes)}
-              onChange={(event) =>
-                onSyncIntervalChange(Number(event.target.value))
-              }
-            >
-              <option value="15">{`${i18n.formatNumber(15)} ${i18n.t("settings.preferences.minutes")}`}</option>
-              <option value="30">{`${i18n.formatNumber(30)} ${i18n.t("settings.preferences.minutes")}`}</option>
-              <option value="60">{`${i18n.formatNumber(60)} ${i18n.t("settings.preferences.minutes")}`}</option>
-            </select>
-          </label>
+          <EditableNumberCombobox
+            label={i18n.t("settings.preferences.sync_interval_label")}
+            value={settings.syncIntervalMinutes}
+            minimum={SYNC_INTERVAL_MIN_MINUTES}
+            maximum={SYNC_INTERVAL_MAX_MINUTES}
+            unitLabel={syncIntervalUnitLabel}
+            errorText={syncIntervalErrorText}
+            menuButtonLabel={syncIntervalMenuButtonLabel}
+            fieldIdPrefix="sync-interval"
+            options={syncIntervalOptions}
+            onChange={onSyncIntervalChange}
+          />
 
-          <label className="form-field">
-            <span className="form-field__label">{i18n.t("settings.preferences.warning_threshold_label")}</span>
-            <select
-              className="form-field__control"
-              value={String(settings.warningThresholdPercent)}
-              onChange={(event) =>
-                onWarningThresholdChange(Number(event.target.value))
-              }
-            >
-              <option value="70">70%</option>
-              <option value="80">80%</option>
-              <option value="90">90%</option>
-            </select>
-          </label>
+          <EditableNumberCombobox
+            label={i18n.t("settings.preferences.warning_threshold_label")}
+            value={settings.warningThresholdPercent}
+            minimum={WARNING_THRESHOLD_MIN_PERCENT}
+            maximum={WARNING_THRESHOLD_MAX_PERCENT}
+            unitLabel="%"
+            errorText={warningThresholdErrorText}
+            menuButtonLabel={warningThresholdMenuButtonLabel}
+            fieldIdPrefix="warning-threshold"
+            options={warningThresholdOptions}
+            onChange={onWarningThresholdChange}
+          />
 
           <label className="form-field">
             <span className="form-field__label">{i18n.t("settings.preferences.locale_label")}</span>

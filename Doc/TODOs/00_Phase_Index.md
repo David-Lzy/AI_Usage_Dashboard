@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [228_Phase_Popup_Rectangular_Canvas_Reset.md](./Archive/228_Phase_Popup_Rectangular_Canvas_Reset.md)
+- latest completed slice: [229_Phase_Settings_Editable_Number_Combobox.md](./Archive/229_Phase_Settings_Editable_Number_Combobox.md)
 
 Completed phases should be moved to:
 
@@ -609,6 +609,8 @@ Completed phases should be moved to:
 - the 2026-04-30 `Phase 227` closeout added a popup host-edge blend plus stronger body/root/shell clipping markers to reduce the visible light rectangular transition while preserving the true Chrome-owned host boundary
 - phase 228 depends on phase 227 because the host-edge blend proved the technical limit but produced a worse visual result than the community-standard rectangular popup document
 - the 2026-04-30 `Phase 228` closeout reset the toolbar popup to a rectangular popup canvas while preserving rounded internal cards and controls
+- phase 229 depends on the Settings preference surface because only the numeric preferences need arbitrary user-authored values while fixed enum settings can remain native selects
+- the 2026-04-30 `Phase 229` closeout replaced the sync interval and warning threshold native selects with a Material-style editable numeric combobox while adding storage normalization for custom values
 
 ## Delivery Standard For Each Phase
 
