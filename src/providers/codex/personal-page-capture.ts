@@ -65,6 +65,10 @@ type CodexRouteDefinition = {
   urlPatterns: string[];
 };
 
+type CodexPersonalLiveCaptureOptions = {
+  openPageWhenMissing?: boolean;
+};
+
 const CODEX_PERSONAL_ROUTE_DEFINITIONS: CodexRouteDefinition[] = [
   {
     routeKey: "personal_usage",
@@ -210,12 +214,22 @@ async function captureRoute(
   client: PageSessionClient,
   route: CodexRouteDefinition,
   binding?: PageSessionBinding,
+  options: CodexPersonalLiveCaptureOptions = {},
 ): Promise<CodexPersonalRouteCapture> {
   const result = await client.capture({
     providerId: "codex",
     pageLabel: route.pageLabel,
     urlPatterns: route.urlPatterns,
     binding,
+    ...(options.openPageWhenMissing && route.routeKey === "cloud_analytics"
+      ? {
+          openWhenMissing: {
+            url: "https://chatgpt.com/codex/cloud/settings/analytics",
+            active: false,
+            closeOnUnmatched: true,
+          },
+        }
+      : {}),
     extraction: {
       mode: "dom",
     },
@@ -287,11 +301,12 @@ function buildDecision(
 export async function captureCodexPersonalLiveFixture(
   client: PageSessionClient = createPageSessionClient(),
   binding?: PageSessionBinding,
+  options: CodexPersonalLiveCaptureOptions = {},
 ): Promise<CodexPersonalLiveFixture> {
   const routes: CodexPersonalRouteCapture[] = [];
 
   for (const route of CODEX_PERSONAL_ROUTE_DEFINITIONS) {
-    routes.push(await captureRoute(client, route, binding));
+    routes.push(await captureRoute(client, route, binding, options));
   }
 
   return {

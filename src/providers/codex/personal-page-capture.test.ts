@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { summarizeCodexPersonalPage } from "./personal-page-capture";
+import {
+  captureCodexPersonalLiveFixture,
+  summarizeCodexPersonalPage,
+} from "./personal-page-capture";
+import type { PageSessionClient } from "../page-session";
 
 describe("summarizeCodexPersonalPage", () => {
   it("prefers boot-data when Next.js flight markers are present", () => {
@@ -89,5 +93,38 @@ describe("summarizeCodexPersonalPage", () => {
       "0",
       "使用积分可在超出套餐限制后继续使用 Codex",
     ]);
+  });
+
+  it("only auto-opens the preferred cloud analytics route when enabled", async () => {
+    const capturedDefinitions: Parameters<PageSessionClient["capture"]>[0][] = [];
+    const client: PageSessionClient = {
+      async capture(definition) {
+        capturedDefinitions.push(definition);
+        return {
+          status: "not_found",
+          attempts: [],
+        };
+      },
+    };
+
+    await captureCodexPersonalLiveFixture(
+      client,
+      {
+        mode: "auto",
+        tabId: null,
+      },
+      {
+        openPageWhenMissing: true,
+      },
+    );
+
+    expect(capturedDefinitions).toHaveLength(3);
+    expect(capturedDefinitions[0].openWhenMissing).toBeUndefined();
+    expect(capturedDefinitions[1].openWhenMissing).toBeUndefined();
+    expect(capturedDefinitions[2].openWhenMissing).toEqual({
+      url: "https://chatgpt.com/codex/cloud/settings/analytics",
+      active: false,
+      closeOnUnmatched: true,
+    });
   });
 });

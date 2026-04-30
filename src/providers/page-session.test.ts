@@ -488,4 +488,144 @@ describe("createPageSessionClient", () => {
       },
     ]);
   });
+
+  it("opens an inactive managed tab when configured and no candidate exists", async () => {
+    const create = vi.fn(async () => ({
+      id: 88,
+      active: false,
+      status: "loading",
+      url: "https://chatgpt.com/codex/cloud/settings/analytics",
+    }));
+    const get = vi.fn(async (tabId: number) => ({
+      id: tabId,
+      active: false,
+      status: "complete",
+      url: "https://chatgpt.com/codex/cloud/settings/analytics",
+      title: "Codex",
+    }));
+    const remove = vi.fn(async () => {});
+    const executeScript = vi.fn(async () => [
+      {
+        result: {
+          url: "https://chatgpt.com/codex/cloud/settings/analytics",
+          title: "Codex",
+          heading: "Codex analytics",
+          html: "<html><body><h1>Codex analytics</h1></body></html>",
+          scripts: {},
+        },
+      },
+    ]);
+    const client = createPageSessionClient({
+      tabsApi: {
+        query: vi.fn(async () => []),
+        create,
+        get,
+        remove,
+      },
+      scriptingApi: { executeScript },
+    });
+
+    const result = await client.capture({
+      providerId: "codex",
+      pageLabel: "Codex cloud analytics page",
+      urlPatterns: ["https://chatgpt.com/codex/cloud/settings/analytics*"],
+      openWhenMissing: {
+        url: "https://chatgpt.com/codex/cloud/settings/analytics",
+        active: false,
+        closeOnUnmatched: true,
+      },
+      extraction: {
+        mode: "dom",
+      },
+      match(page) {
+        return page.title === "Codex" ? "matched" : "unmatched";
+      },
+    });
+
+    expect(result.status).toBe("matched");
+    expect(create).toHaveBeenCalledWith({
+      url: "https://chatgpt.com/codex/cloud/settings/analytics",
+      active: false,
+    });
+    expect(get).toHaveBeenCalledWith(88);
+    expect(remove).not.toHaveBeenCalled();
+
+    if (result.status !== "matched") {
+      throw new Error("Expected a matched page-session result.");
+    }
+
+    expect(result.target.tabId).toBe(88);
+    expect(result.target.active).toBe(false);
+    expect(result.attempts).toEqual([
+      {
+        tabId: 88,
+        bindingMode: "auto",
+        status: "matched",
+        url: "https://chatgpt.com/codex/cloud/settings/analytics",
+        title: "Codex",
+      },
+    ]);
+  });
+
+  it("cleans up an auto-opened managed tab when the session is logged out", async () => {
+    const remove = vi.fn(async () => {});
+    const executeScript = vi.fn(async () => [
+      {
+        result: {
+          url: "https://chatgpt.com/",
+          title: "ChatGPT",
+          heading: null,
+          html: "<html><body>Login to get answers based on saved chats</body></html>",
+          scripts: {},
+        },
+      },
+    ]);
+    const client = createPageSessionClient({
+      tabsApi: {
+        query: vi.fn(async () => []),
+        create: vi.fn(async () => ({
+          id: 91,
+          active: false,
+          status: "complete",
+          url: "https://chatgpt.com/codex/cloud/settings/analytics",
+        })),
+        get: vi.fn(async (tabId: number) => ({
+          id: tabId,
+          active: false,
+          status: "complete",
+        })),
+        remove,
+      },
+      scriptingApi: { executeScript },
+    });
+
+    const result = await client.capture({
+      providerId: "codex",
+      pageLabel: "Codex cloud analytics page",
+      urlPatterns: ["https://chatgpt.com/codex/cloud/settings/analytics*"],
+      openWhenMissing: {
+        url: "https://chatgpt.com/codex/cloud/settings/analytics",
+        active: false,
+        closeOnUnmatched: true,
+      },
+      extraction: {
+        mode: "dom",
+      },
+      match() {
+        return "logged_out";
+      },
+    });
+
+    expect(result.status).toBe("logged_out");
+    expect(remove).toHaveBeenCalledWith(91);
+    expect(result.attempts).toEqual([
+      {
+        tabId: 91,
+        bindingMode: "auto",
+        status: "logged_out",
+        url: "https://chatgpt.com/",
+        title: "ChatGPT",
+      },
+    ]);
+  });
 });

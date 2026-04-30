@@ -283,6 +283,7 @@ Phase status update:
 - `Phase 227` added a popup host-edge blend plus stronger body/root/shell clipping markers so dark Chrome surfaces no longer expose an obvious light rectangular backing around the rounded popup
 - `Phase 228` reset the Chrome action surface to a rectangular popup canvas and kept rounded styling on internal cards and controls after the host-edge blend proved visually worse than a standard popup
 - `Phase 229` replaced the Settings sync interval and warning threshold native selects with an editable numeric combobox that keeps presets while accepting validated custom values
+- `Phase 230` added Codex managed source-tab refresh so scheduled and manual session-page syncs can reopen the previously bound analytics page in an inactive tab after authorization, while preserving the no-cookie-storage boundary and stopping repeated auto-open attempts after logged-out detection
 - the recommended next functional work returns to a real authenticated Codex or Cursor operator pass if that page is available; otherwise continue the Direction 10.3 store screenshot line only when the remaining manual native-toolbar popup captures can be collected
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
@@ -388,6 +389,7 @@ Security rule for this track:
 - popup host-edge blend shipped in `Phase 227`, so the remaining browser-owned backing is visually muted on dark Chrome surfaces without claiming true native transparency
 - rectangular popup canvas reset shipped in `Phase 228`, so the toolbar surface follows community default_popup practice while internal cards and controls remain rounded
 - editable numeric combobox controls shipped in `Phase 229`, so Settings no longer uses native dropdown UI for the sync interval and warning threshold numeric preferences
+- Codex managed source-tab refresh shipped in `Phase 230`, so scheduled session-page sync can reopen a previously bound analytics page in an inactive tab without storing ChatGPT cookies or auth headers
 - add a clear UI/operator pass for real source-tab logout states
 
 ### 3.4 Data TODO

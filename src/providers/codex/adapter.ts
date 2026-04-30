@@ -4,6 +4,7 @@ import type {
   ProviderSnapshot,
   ProviderSourceKind,
   ProviderSyncOutcome,
+  SyncTrigger,
   ProviderUsageBalance,
   ProviderUsageWindow,
 } from "../types";
@@ -34,6 +35,7 @@ import {
   type CodexAnalyticsUsageRecord,
 } from "./official";
 import { createCodexPersonalPageClient } from "./personal-page-client";
+import { hasPageBindingFingerprint } from "../../shared/page-bindings";
 import type {
   CodexPersonalUsageBalance,
   CodexPersonalUsageWindow,
@@ -45,6 +47,7 @@ type CodexAdapterContext = {
   setting: ProviderSetting;
   warningThresholdPercent: number;
   now: Date;
+  trigger?: SyncTrigger;
 };
 
 type CodexSourceAttemptResult =
@@ -82,6 +85,33 @@ function canUseLiveCodexPersonalPage(): boolean {
     typeof chrome.tabs?.query === "function" &&
     typeof chrome.scripting?.executeScript === "function"
   );
+}
+
+function shouldOpenCodexPageWhenMissing({
+  provider,
+  setting,
+  trigger,
+}: {
+  provider: ProviderSnapshot;
+  setting: ProviderSetting;
+  trigger: SyncTrigger;
+}): boolean {
+  if (trigger === "bootstrap") {
+    return false;
+  }
+
+  if (!hasPageBindingFingerprint(setting.pageBinding)) {
+    return false;
+  }
+
+  if (
+    trigger === "alarm" &&
+    provider.warningDiagnostic?.code === "page_session.logged_out"
+  ) {
+    return false;
+  }
+
+  return true;
 }
 
 function getCodexPageSessionDiagnosticKind(
@@ -584,11 +614,13 @@ async function tryCodexPersonalSource({
   syncedAt,
   setting,
   warningThresholdPercent,
+  trigger,
 }: {
   provider: ProviderSnapshot;
   syncedAt: string;
   setting: ProviderSetting;
   warningThresholdPercent: number;
+  trigger: SyncTrigger;
 }): Promise<CodexSourceAttemptResult> {
   if (setting.status === "missing") {
     const warningReason =
@@ -631,6 +663,11 @@ async function tryCodexPersonalSource({
       : "fixture";
     const client = createCodexPersonalPageClient({
       source: personalSource,
+      openPageWhenMissing: shouldOpenCodexPageWhenMissing({
+        provider,
+        setting,
+        trigger,
+      }),
     });
     const { result, pageBinding } = await client.getUsageSnapshot(
       setting.pageBinding,
@@ -815,6 +852,7 @@ export async function syncCodexProvider({
   setting,
   warningThresholdPercent,
   now,
+  trigger = "manual",
 }: CodexAdapterContext): Promise<ProviderSyncOutcome> {
   const syncedAt = formatSyncTimestamp(now);
   const sourcePreference = normalizeSourcePreference(
@@ -839,6 +877,7 @@ export async function syncCodexProvider({
             syncedAt,
             setting,
             warningThresholdPercent,
+            trigger,
           });
 
     if (attempt.ok) {

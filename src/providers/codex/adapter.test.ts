@@ -944,4 +944,100 @@ describe("syncCodexProvider", () => {
       },
     });
   });
+
+  it("enables managed Codex page opening on alarm after a page binding exists", async () => {
+    const attemptedAt = new Date(2026, 3, 30, 9, 15);
+    const getUsageSnapshot = vi.fn(async () =>
+      buildCodexPersonalPageResponse({
+        status: "open_page_required",
+        reason:
+          "Open the logged-in Codex usage page in ChatGPT before refreshing personal usage capture.",
+        chosenRoute: null,
+        routeStatuses: [],
+      }),
+    );
+    createCodexPersonalPageClientMock.mockReturnValue({
+      getUsageSnapshot,
+    });
+
+    await syncCodexProvider({
+      provider: baseProvider,
+      secrets: emptySecrets,
+      setting: {
+        ...grantedSetting,
+        sourcePreference: "session_page",
+        pageBinding: {
+          mode: "auto",
+          status: "stale",
+          tabId: 42,
+          matchedUrl: "https://chatgpt.com/codex/cloud/settings/analytics",
+          matchedTitle: "Codex",
+          updatedAt: "2026-04-29T12:00:00.000Z",
+        },
+      },
+      warningThresholdPercent: 80,
+      now: attemptedAt,
+      trigger: "alarm",
+    });
+
+    expect(createCodexPersonalPageClientMock).toHaveBeenCalledWith({
+      source: "fixture",
+      openPageWhenMissing: true,
+    });
+    expect(getUsageSnapshot).toHaveBeenCalledWith(
+      expect.objectContaining({
+        status: "stale",
+        matchedUrl: "https://chatgpt.com/codex/cloud/settings/analytics",
+      }),
+    );
+  });
+
+  it("does not auto-open the Codex page repeatedly on alarms after logged-out detection", async () => {
+    const attemptedAt = new Date(2026, 3, 30, 9, 30);
+    createCodexPersonalPageClientMock.mockReturnValue({
+      getUsageSnapshot: vi.fn(async () =>
+        buildCodexPersonalPageResponse({
+          status: "logged_out",
+          reason:
+            "The current ChatGPT tab matched a logged-out state instead of a usable Codex usage page.",
+          chosenRoute: null,
+          routeStatuses: [],
+        }),
+      ),
+    });
+
+    await syncCodexProvider({
+      provider: {
+        ...baseProvider,
+        warningDiagnostic: {
+          code: "page_session.logged_out",
+          category: "page_session",
+          severity: "warning",
+          rawMessage:
+            "The current ChatGPT tab matched a logged-out state instead of a usable Codex usage page.",
+        },
+      },
+      secrets: emptySecrets,
+      setting: {
+        ...grantedSetting,
+        sourcePreference: "session_page",
+        pageBinding: {
+          mode: "auto",
+          status: "stale",
+          tabId: 42,
+          matchedUrl: "https://chatgpt.com/codex/cloud/settings/analytics",
+          matchedTitle: "Codex",
+          updatedAt: "2026-04-29T12:00:00.000Z",
+        },
+      },
+      warningThresholdPercent: 80,
+      now: attemptedAt,
+      trigger: "alarm",
+    });
+
+    expect(createCodexPersonalPageClientMock).toHaveBeenCalledWith({
+      source: "fixture",
+      openPageWhenMissing: false,
+    });
+  });
 });

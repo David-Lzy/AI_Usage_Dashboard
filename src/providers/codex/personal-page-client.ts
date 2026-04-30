@@ -18,6 +18,7 @@ import {
 export type CodexPersonalPageClientOptions = {
   source?: "fixture" | "live";
   pageSessionClient?: PageSessionClient;
+  openPageWhenMissing?: boolean;
 };
 
 export type CodexPersonalPageUsageResult = {
@@ -124,6 +125,9 @@ export function createCodexPersonalPageClient(
           tabId: normalizedBinding.tabId,
           matchedUrl: normalizedBinding.matchedUrl,
           matchedTitle: normalizedBinding.matchedTitle,
+        },
+        {
+          openPageWhenMissing: options.openPageWhenMissing ?? false,
         },
       );
       const routeForBinding = chooseBindingRoute(fixture);

@@ -65,6 +65,14 @@ export type PageSessionTarget = {
   lastAccessed: number | null;
 };
 
+export type PageSessionOpenWhenMissing = {
+  url: string;
+  active?: boolean;
+  closeOnUnmatched?: boolean;
+  waitForLoadTimeoutMs?: number;
+  loadPollIntervalMs?: number;
+};
+
 export type PageSessionResult =
   | {
       status: "matched";
@@ -112,6 +120,7 @@ export type PageSessionDefinition = {
   pageLabel: string;
   urlPatterns: string[];
   binding?: PageSessionBinding;
+  openWhenMissing?: PageSessionOpenWhenMissing;
   extraction: PageSessionExtraction;
   match: (page: PageSessionCapturedPage) => PageSessionMatchStatus;
 };
@@ -120,6 +129,7 @@ type PageSessionTabQueryResult = {
   id?: number;
   active?: boolean;
   lastAccessed?: number;
+  status?: string;
   url?: string;
   title?: string;
 };
@@ -127,6 +137,11 @@ type PageSessionTabQueryResult = {
 type PageSessionTabsApi = {
   query: (queryInfo: { url?: string | string[] }) => Promise<PageSessionTabQueryResult[]>;
   get?: (tabId: number) => Promise<PageSessionTabQueryResult>;
+  create?: (createProperties: {
+    url: string;
+    active?: boolean;
+  }) => Promise<PageSessionTabQueryResult>;
+  remove?: (tabId: number) => Promise<void>;
 };
 
 type PageSessionScriptingApi = {
@@ -303,6 +318,12 @@ async function executeScriptResult<T>(
 
 function uniqueStrings(values: string[] | undefined): string[] {
   return [...new Set((values ?? []).filter(Boolean))];
+}
+
+function delay(milliseconds: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, milliseconds);
+  });
 }
 
 function truncateSerializedValue(value: string, maxLength: number): string {
@@ -828,6 +849,97 @@ async function getCandidateTabs(
   };
 }
 
+async function waitForOpenedTabLoad(
+  tabsApi: PageSessionTabsApi,
+  tabId: number,
+  openWhenMissing: PageSessionOpenWhenMissing,
+): Promise<PageSessionTabQueryResult | null> {
+  if (typeof tabsApi.get !== "function") {
+    return null;
+  }
+
+  const timeoutMs = Math.max(0, openWhenMissing.waitForLoadTimeoutMs ?? 10_000);
+  const pollIntervalMs = Math.max(
+    50,
+    openWhenMissing.loadPollIntervalMs ?? 250,
+  );
+  const deadline = Date.now() + timeoutMs;
+  let lastTab: PageSessionTabQueryResult | null = null;
+
+  while (Date.now() <= deadline) {
+    try {
+      lastTab = await tabsApi.get(tabId);
+
+      if (lastTab.status === "complete") {
+        return lastTab;
+      }
+    } catch {
+      return lastTab;
+    }
+
+    if (timeoutMs === 0) {
+      return lastTab;
+    }
+
+    await delay(Math.min(pollIntervalMs, Math.max(0, deadline - Date.now())));
+  }
+
+  return lastTab;
+}
+
+async function openMissingPageSessionTab(
+  tabsApi: PageSessionTabsApi,
+  openWhenMissing: PageSessionOpenWhenMissing,
+): Promise<
+  | (PageSessionTabQueryResult & {
+      id: number;
+      bindingMode: PageSessionBindingMode;
+    })
+  | null
+> {
+  if (typeof tabsApi.create !== "function") {
+    return null;
+  }
+
+  const createdTab = await tabsApi.create({
+    url: openWhenMissing.url,
+    active: openWhenMissing.active ?? false,
+  });
+
+  if (typeof createdTab.id !== "number") {
+    return null;
+  }
+
+  const loadedTab = await waitForOpenedTabLoad(
+    tabsApi,
+    createdTab.id,
+    openWhenMissing,
+  );
+
+  return {
+    ...createdTab,
+    ...loadedTab,
+    id: createdTab.id,
+    active: loadedTab?.active ?? createdTab.active ?? false,
+    bindingMode: "auto",
+  };
+}
+
+async function closeOpenedPageSessionTab(
+  tabsApi: PageSessionTabsApi,
+  tabId: number | null,
+): Promise<void> {
+  if (tabId === null || typeof tabsApi.remove !== "function") {
+    return;
+  }
+
+  try {
+    await tabsApi.remove(tabId);
+  } catch {
+    // The user may close the tab before cleanup runs.
+  }
+}
+
 export type PageSessionClient = {
   capture: (definition: PageSessionDefinition) => Promise<PageSessionResult>;
 };
@@ -839,13 +951,15 @@ export function createPageSessionClient(
     async capture(definition) {
       const tabsApi = getTabsApi(options.tabsApi);
       const scriptingApi = getScriptingApi(options.scriptingApi);
-      const { candidates: candidateTabs, bindingMissing } = await getCandidateTabs(
+      const { candidates, bindingMissing } = await getCandidateTabs(
         tabsApi,
         definition,
       );
+      let candidateTabs = candidates;
       const attempts: PageSessionAttempt[] = [];
       let sawLoggedOut = false;
       let sawCaptureFailure = false;
+      let openedTabId: number | null = null;
 
       if (
         bindingMissing &&
@@ -859,6 +973,18 @@ export function createPageSessionClient(
           url: definition.binding.matchedUrl ?? undefined,
           title: definition.binding.matchedTitle ?? undefined,
         });
+      }
+
+      if (candidateTabs.length === 0 && definition.openWhenMissing) {
+        const openedTab = await openMissingPageSessionTab(
+          tabsApi,
+          definition.openWhenMissing,
+        ).catch(() => null);
+
+        if (openedTab) {
+          openedTabId = openedTab.id;
+          candidateTabs = [openedTab];
+        }
       }
 
       if (candidateTabs.length === 0) {
@@ -918,12 +1044,18 @@ export function createPageSessionClient(
         }
       }
 
+      const finalStatus = sawLoggedOut
+        ? "logged_out"
+        : sawCaptureFailure
+          ? "capture_unavailable"
+          : "not_found";
+
+      if (definition.openWhenMissing?.closeOnUnmatched) {
+        await closeOpenedPageSessionTab(tabsApi, openedTabId);
+      }
+
       return {
-        status: sawLoggedOut
-          ? "logged_out"
-          : sawCaptureFailure
-            ? "capture_unavailable"
-            : "not_found",
+        status: finalStatus,
         attempts,
       };
     },

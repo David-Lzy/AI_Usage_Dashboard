@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [229_Phase_Settings_Editable_Number_Combobox.md](./Archive/229_Phase_Settings_Editable_Number_Combobox.md)
+- latest completed slice: [230_Phase_Background_Session_Page_Refresh.md](./Archive/230_Phase_Background_Session_Page_Refresh.md)
 
 Completed phases should be moved to:
 
@@ -611,6 +611,8 @@ Completed phases should be moved to:
 - the 2026-04-30 `Phase 228` closeout reset the toolbar popup to a rectangular popup canvas while preserving rounded internal cards and controls
 - phase 229 depends on the Settings preference surface because only the numeric preferences need arbitrary user-authored values while fixed enum settings can remain native selects
 - the 2026-04-30 `Phase 229` closeout replaced the sync interval and warning threshold native selects with a Material-style editable numeric combobox while adding storage normalization for custom values
+- phase 230 depends on phases 215 through 225 because managed background session-page refresh must reuse the existing binding, lifecycle, source-recovery, and capture-unavailable semantics before it can safely open provider pages during alarms
+- the 2026-04-30 `Phase 230` closeout added Codex managed source-tab refresh for scheduled and manual session-page syncs after a saved page binding exists, while preserving the no-cookie-storage boundary and suppressing repeated logged-out auto-open attempts
 
 ## Delivery Standard For Each Phase
 

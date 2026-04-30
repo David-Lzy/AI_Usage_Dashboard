@@ -134,6 +134,7 @@ Current honesty boundaries:
 - dashboard cards now also expose the current provider contract and, when relevant, the retained session-page contract so the main overview stays honest without extra drilling
 - deferred tracks now also expose explicit graduation gates in Settings and provider detail so the product states what concrete evidence is still missing
 - shipped session-page providers now persist safe page-binding metadata, reconnect to matching tabs across refresh or relaunch, and surface `Attached`, `Stale binding`, and `Not bound` states in the UI
+- Codex scheduled session-page sync can now reopen a previously bound analytics page in an inactive managed tab after authorization, while still avoiding any persisted ChatGPT cookies or auth headers
 
 ## Toolbar Entry
 
@@ -354,6 +355,7 @@ Hybrid-source preference behavior:
 - when the existing source tab is in a `capture_unavailable` state, recovery reloads that tab before saving the binding and refreshing the provider
 - the background worker now marks a saved session-page binding stale when the bound tab closes or navigates away from that provider's usage-page routes
 - if Chrome replaces the tab id for a matching usage page, the background worker now moves the saved binding to the replacement tab instead of leaving the old id behind
+- after a Codex page binding exists, scheduled and manual Codex session-page refresh can open the `chatgpt.com/codex/cloud/settings/analytics` page in an inactive managed tab when no matching tab is open; if that attempt detects a logged-out page, the auto-opened tab is closed and the UI keeps the login prompt
 - open Codex or Cursor usage tabs that cannot be read by extension scripting now surface as `capture_unavailable` instead of being mislabeled as a missing page
 - dashboard, provider detail, and popup source-state displays now keep that unreadable-page condition separate from generic sync errors
 - dashboard and provider detail hide generic percent progress when no measured percent value exists, keeping parse/source failures distinct from real quota progress
@@ -524,7 +526,7 @@ Preview URL:
 | Gemini Code Assist | none | none |
 | Codex | none for personal usage pages; analytics API key + workspace ID for Enterprise analytics | `https://api.chatgpt.com/*`, `https://chatgpt.com/*` |
 
-For shipped session-page providers, use `Settings -> Source Connections` to find or open the required logged-in browser page before refreshing. The same section now shows whether the provider page is attached, stale, or unbound, and lets you disconnect a saved binding explicitly. Direct source-page recovery actions refresh immediately when they attach an already-open matching tab, and they reload the tab first when the current state is `capture_unavailable`. Newly-opened pages still need a manual refresh after login or navigation. If an open usage tab exists but Chrome cannot read it, Codex and Cursor show a capture-unavailable session-page diagnostic with reload guidance.
+For shipped session-page providers, use `Settings -> Source Connections` to find or open the required logged-in browser page before refreshing. The same section now shows whether the provider page is attached, stale, or unbound, and lets you disconnect a saved binding explicitly. Direct source-page recovery actions refresh immediately when they attach an already-open matching tab, and they reload the tab first when the current state is `capture_unavailable`. Newly-opened recovery pages still need a manual refresh after login or navigation, but Codex scheduled sync can reopen a previously bound analytics page in an inactive managed tab after authorization. If an open usage tab exists but Chrome cannot read it, Codex and Cursor show a capture-unavailable session-page diagnostic with reload guidance.
 
 If you are using a long-lived Chrome profile for release verification, run `./scripts/with-preferred-node.sh node ./scripts/phase41-profile-audit.mjs` after reloading the unpacked extension so the runtime host grants and stored extension state are visible before the final pass. In the narrowed RC selected on `2026-04-23`, JetBrains is retained in the repo but not part of the active release promise.
 
