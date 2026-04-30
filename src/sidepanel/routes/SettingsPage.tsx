@@ -50,6 +50,7 @@ import {
 } from "../../shared/settings-preferences";
 
 import { EditableNumberCombobox } from "../components/EditableNumberCombobox";
+import { MaterialSelect } from "../components/MaterialSelect";
 import { PermissionPrompt } from "../components/PermissionPrompt";
 import { SummaryStrip } from "../components/SummaryStrip";
 import { getPreferredScrollBehavior } from "../motion";
@@ -292,6 +293,33 @@ export function SettingsPage({
     { value: "en", label: i18n.t("settings.preferences.locale.en") },
     { value: "zh-CN", label: i18n.t("settings.preferences.locale.zh_cn") },
   ];
+  const themeModeOptions: Array<{ value: ThemeMode; label: string }> = [
+    { value: "system", label: i18n.t("settings.preferences.theme_mode.system") },
+    { value: "light", label: i18n.t("settings.preferences.theme_mode.light") },
+    { value: "dark", label: i18n.t("settings.preferences.theme_mode.dark") },
+  ];
+  const themePresetOptions = THEME_PRESET_OPTIONS.map((preset) => ({
+    value: preset.value,
+    label: themePresetOptionLabels[preset.value],
+  }));
+  const progressDisplayStyleOptions = PROGRESS_DISPLAY_STYLE_OPTIONS.map(
+    (option) => ({
+      value: option.value,
+      label: progressDisplayStyleOptionLabels[option.value],
+    }),
+  );
+  const popupSizePresetOptions = POPUP_SIZE_PRESET_OPTIONS.map((option) => ({
+    value: option.value,
+    label: popupSizePresetOptionLabels[option.value],
+  }));
+  const popupCornerStyleOptions = POPUP_CORNER_STYLE_OPTIONS.map((option) => ({
+    value: option.value,
+    label: popupCornerStyleOptionLabels[option.value],
+  }));
+  const popupShadowStyleOptions = POPUP_SHADOW_STYLE_OPTIONS.map((option) => ({
+    value: option.value,
+    label: popupShadowStyleOptionLabels[option.value],
+  }));
   const syncIntervalUnitLabel = i18n.t("settings.preferences.minutes");
   const syncIntervalOptions = SYNC_INTERVAL_PRESETS.map((preset) => ({
     value: preset,
@@ -495,156 +523,77 @@ export function SettingsPage({
             onChange={onWarningThresholdChange}
           />
 
-          <label className="form-field">
-            <span className="form-field__label">{i18n.t("settings.preferences.locale_label")}</span>
-            <select
-              className="form-field__control"
-              value={settings.locale}
-              onChange={(event) =>
-                onLocalePreferenceChange(event.target.value as AppLocalePreference)
-              }
-            >
-              {localeOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
+          <MaterialSelect
+            label={i18n.t("settings.preferences.locale_label")}
+            value={settings.locale}
+            fieldIdPrefix="locale-preference"
+            options={localeOptions}
+            onChange={onLocalePreferenceChange}
+          />
 
-          <label className="form-field">
-            <span className="form-field__label">{i18n.t("settings.preferences.theme_mode_label")}</span>
-            <select
-              className="form-field__control"
-              value={settings.themeMode}
-              onChange={(event) =>
-                onThemeModeChange(event.target.value as ThemeMode)
-              }
-            >
-              <option value="system">{i18n.t("settings.preferences.theme_mode.system")}</option>
-              <option value="light">{i18n.t("settings.preferences.theme_mode.light")}</option>
-              <option value="dark">{i18n.t("settings.preferences.theme_mode.dark")}</option>
-            </select>
-          </label>
+          <MaterialSelect
+            label={i18n.t("settings.preferences.theme_mode_label")}
+            value={settings.themeMode}
+            fieldIdPrefix="theme-mode"
+            options={themeModeOptions}
+            onChange={onThemeModeChange}
+          />
 
-          <label className="form-field">
-            <span className="form-field__label">{i18n.t("settings.preferences.accent_preset_label")}</span>
-            <select
-              className="form-field__control"
-              value={settings.themePreset}
-              onChange={(event) =>
-                onThemePresetChange(event.target.value as ThemePreset)
-              }
-            >
-              {THEME_PRESET_OPTIONS.map((preset) => (
-                <option key={preset.value} value={preset.value}>
-                  {themePresetOptionLabels[preset.value]}
-                </option>
-              ))}
-            </select>
-          </label>
+          <MaterialSelect
+            label={i18n.t("settings.preferences.accent_preset_label")}
+            value={settings.themePreset}
+            fieldIdPrefix="theme-preset"
+            options={themePresetOptions}
+            onChange={onThemePresetChange}
+          />
 
-          <label className="form-field">
-            <span className="form-field__label">{i18n.t("settings.preferences.popup_progress_style_label")}</span>
-            <select
-              className="form-field__control"
-              value={settings.popupProgressStyle}
-              onChange={(event) =>
-                onPopupProgressStyleChange(event.target.value as ProgressDisplayStyle)
-              }
-            >
-              {PROGRESS_DISPLAY_STYLE_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {progressDisplayStyleOptionLabels[option.value]}
-                </option>
-              ))}
-            </select>
-          </label>
+          <MaterialSelect
+            label={i18n.t("settings.preferences.popup_progress_style_label")}
+            value={settings.popupProgressStyle}
+            fieldIdPrefix="popup-progress-style"
+            options={progressDisplayStyleOptions}
+            onChange={onPopupProgressStyleChange}
+          />
 
-          <label className="form-field">
-            <span className="form-field__label">{i18n.t("settings.preferences.sidebar_progress_style_label")}</span>
-            <select
-              className="form-field__control"
-              value={settings.sidebarProgressStyle}
-              onChange={(event) =>
-                onSidebarProgressStyleChange(event.target.value as ProgressDisplayStyle)
-              }
-            >
-              {PROGRESS_DISPLAY_STYLE_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {progressDisplayStyleOptionLabels[option.value]}
-                </option>
-              ))}
-            </select>
-          </label>
+          <MaterialSelect
+            label={i18n.t("settings.preferences.sidebar_progress_style_label")}
+            value={settings.sidebarProgressStyle}
+            fieldIdPrefix="sidebar-progress-style"
+            options={progressDisplayStyleOptions}
+            onChange={onSidebarProgressStyleChange}
+          />
 
-          <label className="form-field">
-            <span className="form-field__label">{i18n.t("settings.preferences.full_page_progress_style_label")}</span>
-            <select
-              className="form-field__control"
-              value={settings.fullPageProgressStyle}
-              onChange={(event) =>
-                onFullPageProgressStyleChange(event.target.value as ProgressDisplayStyle)
-              }
-            >
-              {PROGRESS_DISPLAY_STYLE_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {progressDisplayStyleOptionLabels[option.value]}
-                </option>
-              ))}
-            </select>
-          </label>
+          <MaterialSelect
+            label={i18n.t("settings.preferences.full_page_progress_style_label")}
+            value={settings.fullPageProgressStyle}
+            fieldIdPrefix="full-page-progress-style"
+            options={progressDisplayStyleOptions}
+            onChange={onFullPageProgressStyleChange}
+          />
 
-          <label className="form-field">
-            <span className="form-field__label">{i18n.t("settings.preferences.popup_size_label")}</span>
-            <select
-              className="form-field__control"
-              value={settings.popupSizePreset}
-              onChange={(event) =>
-                onPopupSizePresetChange(event.target.value as PopupSizePreset)
-              }
-            >
-              {POPUP_SIZE_PRESET_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {popupSizePresetOptionLabels[option.value]}
-                </option>
-              ))}
-            </select>
-          </label>
+          <MaterialSelect
+            label={i18n.t("settings.preferences.popup_size_label")}
+            value={settings.popupSizePreset}
+            fieldIdPrefix="popup-size-preset"
+            options={popupSizePresetOptions}
+            onChange={onPopupSizePresetChange}
+          />
 
-          <label className="form-field">
-            <span className="form-field__label">{i18n.t("settings.preferences.popup_corner_label")}</span>
-            <select
-              className="form-field__control"
-              value={settings.popupCornerStyle}
-              onChange={(event) =>
-                onPopupCornerStyleChange(event.target.value as PopupCornerStyle)
-              }
-            >
-              {POPUP_CORNER_STYLE_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {popupCornerStyleOptionLabels[option.value]}
-                </option>
-              ))}
-            </select>
-          </label>
+          <MaterialSelect
+            label={i18n.t("settings.preferences.popup_corner_label")}
+            value={settings.popupCornerStyle}
+            fieldIdPrefix="popup-corner-style"
+            options={popupCornerStyleOptions}
+            onChange={onPopupCornerStyleChange}
+          />
 
-          <label className="form-field">
-            <span className="form-field__label">{i18n.t("settings.preferences.popup_shadow_label")}</span>
-            <select
-              className="form-field__control"
-              value={settings.popupShadowStyle}
-              onChange={(event) =>
-                onPopupShadowStyleChange(event.target.value as PopupShadowStyle)
-              }
-            >
-              {POPUP_SHADOW_STYLE_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {popupShadowStyleOptionLabels[option.value]}
-                </option>
-              ))}
-            </select>
-          </label>
+          <MaterialSelect
+            label={i18n.t("settings.preferences.popup_shadow_label")}
+            value={settings.popupShadowStyle}
+            fieldIdPrefix="popup-shadow-style"
+            options={popupShadowStyleOptions}
+            onChange={onPopupShadowStyleChange}
+          />
         </div>
 
         <div
@@ -1129,29 +1078,24 @@ export function SettingsPage({
                     <div className="source-card__field">
                       <p className="source-card__label">{settingsCopy.sources.preferenceLabel}</p>
                       {sourceDisplay.sourcePreferenceOptions.length > 1 ? (
-                        <label className="form-field">
-                          <select
-                            className="form-field__control"
-                            value={sourceDisplay.sourcePreference}
-                            onChange={(event) =>
-                              onSetSourcePreference(
-                                provider.id,
-                                event.target.value as ProviderSourcePreference,
-                              )
-                            }
-                          >
-                            {sourceDisplay.sourcePreferenceOptions.map(
-                              (preference) => (
-                                <option key={preference} value={preference}>
-                                  {getSettingsSourcePreferenceLabel(
-                                    preference,
-                                    settingsCopy,
-                                  )}
-                                </option>
+                        <MaterialSelect
+                          label={settingsCopy.sources.preferenceLabel}
+                          labelHidden
+                          value={sourceDisplay.sourcePreference}
+                          fieldIdPrefix={`source-preference-${provider.id}`}
+                          options={sourceDisplay.sourcePreferenceOptions.map(
+                            (preference) => ({
+                              value: preference,
+                              label: getSettingsSourcePreferenceLabel(
+                                preference,
+                                settingsCopy,
                               ),
-                            )}
-                          </select>
-                        </label>
+                            }),
+                          )}
+                          onChange={(preference) =>
+                            onSetSourcePreference(provider.id, preference)
+                          }
+                        />
                       ) : (
                         <p className="source-card__value">
                           {getSettingsSourcePreferenceLabel(

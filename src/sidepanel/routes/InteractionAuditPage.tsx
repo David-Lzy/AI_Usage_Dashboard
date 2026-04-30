@@ -144,7 +144,7 @@ function getAuditSurfaceReadiness(
     case "settings-420":
       return document.querySelector(".source-card__details-toggle") &&
         document.querySelector(
-          "#settings-sources .source-card select.form-field__control",
+          '#settings-sources .source-card [data-settings-material-select^="source-preference"] .material-select__button',
         )
         ? {
             ready: true,
@@ -263,19 +263,19 @@ function runAuditPreset(
 
       const select = focusFrameElement(
         frame,
-        "#settings-sources .source-card select.form-field__control",
+        '#settings-sources .source-card [data-settings-material-select^="source-preference"] .material-select__button',
       );
 
       if (!select) {
         return {
           ok: false,
-          message: "Could not find a source-preference select.",
+          message: "Could not find a source-preference material select.",
         };
       }
 
       return {
         ok: true,
-        message: "Focused the first source-preference select.",
+        message: "Focused the first source-preference material select.",
       };
     }
     case "cursor-detail-360:jump-first-note":

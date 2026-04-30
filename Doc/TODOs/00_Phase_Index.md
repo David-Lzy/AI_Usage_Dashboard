@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [230_Phase_Background_Session_Page_Refresh.md](./Archive/230_Phase_Background_Session_Page_Refresh.md)
+- latest completed slice: [231_Phase_Settings_Material_Select_Unification.md](./Archive/231_Phase_Settings_Material_Select_Unification.md)
 
 Completed phases should be moved to:
 
@@ -613,6 +613,8 @@ Completed phases should be moved to:
 - the 2026-04-30 `Phase 229` closeout replaced the sync interval and warning threshold native selects with a Material-style editable numeric combobox while adding storage normalization for custom values
 - phase 230 depends on phases 215 through 225 because managed background session-page refresh must reuse the existing binding, lifecycle, source-recovery, and capture-unavailable semantics before it can safely open provider pages during alarms
 - the 2026-04-30 `Phase 230` closeout added Codex managed source-tab refresh for scheduled and manual session-page syncs after a saved page binding exists, while preserving the no-cookie-storage boundary and suppressing repeated logged-out auto-open attempts
+- phase 231 depends on phase 229 because fixed enum Settings dropdowns should reuse the same Material-style menu language after the numeric preference controls already moved away from native browser dropdowns
+- the 2026-04-30 `Phase 231` closeout replaced the remaining user-facing Settings native selects, including Source Connections source preference, with a reusable Material-style select-only combobox
 
 ## Delivery Standard For Each Phase
 
