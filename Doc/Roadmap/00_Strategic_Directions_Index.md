@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-03:
 
-- the numbered phase queue is now completed through `Phase 246`
+- the numbered phase queue is now completed through `Phase 247`
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -129,6 +129,7 @@ As of 2026-05-03:
 - `Phase 244` completed the next maintenance-oriented file split by moving sidepanel form-field, Material select, editable number combobox, and switch-row CSS into `src/sidepanel/theme/form-controls.css`
 - `Phase 245` completed the next maintenance-oriented file split by moving popup-only page, shell, provider-card, progress-ring, and responsive CSS into `src/popup/popup-theme.css`
 - `Phase 246` completed the next maintenance-oriented file split by moving Settings grid, section navigation, section anchor, and back-to-top FAB CSS into `src/sidepanel/theme/settings-navigation.css`
+- `Phase 247` completed the next maintenance-oriented file split by moving permission prompt, credential, and toast feedback CSS into `src/sidepanel/theme/access-feedback.css`
 - the next local-safe execution slice remains maintenance-oriented file splitting for the remaining oversized UI/theme/localization modules
 - `Direction 10.3` still retains the real manual native-toolbar popup capture dependency for final store assets; the existing request has staged full-page captures but still needs the native popup slots before archive completion
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`

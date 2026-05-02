@@ -76,7 +76,7 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 246` execution priority:
+Current post-`Phase 247` execution priority:
 
 1. `P1` - continue splitting oversized implementation files now that the provider-card and shared progress visual contracts are stable:
    - remaining theme areas in `src/sidepanel/theme/material-theme.css`
@@ -305,6 +305,7 @@ Phase status update:
 - `Phase 244` completed the form-controls CSS module split by moving sidepanel form-field, Material select, editable number combobox, and switch-row CSS into `src/sidepanel/theme/form-controls.css`
 - `Phase 245` completed the popup-theme CSS module split by moving popup-only page, shell, provider-card, progress-ring, and responsive CSS into `src/popup/popup-theme.css`
 - `Phase 246` completed the Settings navigation CSS module split by moving Settings grid, section-nav chip, section anchor, and back-to-top FAB CSS into `src/sidepanel/theme/settings-navigation.css`
+- `Phase 247` completed the Access feedback CSS module split by moving permission prompt, credential, and toast feedback CSS into `src/sidepanel/theme/access-feedback.css`
 - the next maintenance follow-up should continue splitting oversized UI and localization files now that the provider-card and shared progress visual contracts are stable
 - the remaining store-readiness blocker is still the real manual native-toolbar popup capture and archive completion under `Direction 10.3`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
