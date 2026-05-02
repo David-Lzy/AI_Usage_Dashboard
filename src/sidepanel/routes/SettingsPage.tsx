@@ -1,6 +1,7 @@
 import { type FormEvent, useEffect, useState } from "react";
 
 import type {
+  ActionBadgeSelection,
   ApiKeyProviderId,
   AppLocalePreference,
   AppSettings,
@@ -48,6 +49,10 @@ import {
   WARNING_THRESHOLD_MIN_PERCENT,
   WARNING_THRESHOLD_PRESETS,
 } from "../../shared/settings-preferences";
+import {
+  buildActionBadgeSelectOptions,
+  normalizeActionBadgeSelection,
+} from "../../shared/action-badge-preferences";
 
 import { EditableNumberCombobox } from "../components/EditableNumberCombobox";
 import { MaterialSelect } from "../components/MaterialSelect";
@@ -77,6 +82,21 @@ type CredentialProviderSection = {
   placeholderConfigured: string;
 };
 
+const SETTINGS_SECTION_IDS = {
+  preferences: "settings-preferences",
+  visibility: "settings-visibility",
+  credentials: "settings-credentials",
+  sources: "settings-sources",
+  permissions: "settings-permissions",
+} as const;
+
+type SettingsSectionId =
+  (typeof SETTINGS_SECTION_IDS)[keyof typeof SETTINGS_SECTION_IDS];
+
+const SETTINGS_SECTION_ID_VALUES = Object.values(
+  SETTINGS_SECTION_IDS,
+) as SettingsSectionId[];
+
 type SettingsPageProps = {
   onBack: () => void;
   themeActionLabel?: string;
@@ -100,6 +120,9 @@ type SettingsPageProps = {
   onPopupSizePresetChange: (sizePreset: PopupSizePreset) => void;
   onPopupCornerStyleChange: (cornerStyle: PopupCornerStyle) => void;
   onPopupShadowStyleChange: (shadowStyle: PopupShadowStyle) => void;
+  onActionBadgeSelectionChange: (
+    actionBadgeSelection: ActionBadgeSelection,
+  ) => void;
   onSaveThemeCustomSeed: (themeCustomSeedHex: string) => void;
   onResetThemeCustomSeed: () => void;
   onToggleProvider: (providerId: ProviderId) => void;
@@ -148,6 +171,7 @@ export function SettingsPage({
   onPopupSizePresetChange,
   onPopupCornerStyleChange,
   onPopupShadowStyleChange,
+  onActionBadgeSelectionChange,
   onSaveThemeCustomSeed,
   onResetThemeCustomSeed,
   onToggleProvider,
@@ -163,14 +187,6 @@ export function SettingsPage({
   sessionPageNavigationAvailable,
   activeSessionPageAttachAvailable,
 }: SettingsPageProps) {
-  const SETTINGS_SECTION_IDS = {
-    preferences: "settings-preferences",
-    visibility: "settings-visibility",
-    credentials: "settings-credentials",
-    sources: "settings-sources",
-    permissions: "settings-permissions",
-  } as const;
-
   function findCredentialProvider(
     providerId: ApiKeyProviderId,
   ): (ProviderSetting & { id: ApiKeyProviderId }) | null {
@@ -207,6 +223,8 @@ export function SettingsPage({
   const [themeCustomSeedDraft, setThemeCustomSeedDraft] = useState(
     settings.themeCustomSeedHex ?? "",
   );
+  const [activeSettingsSection, setActiveSettingsSection] =
+    useState<SettingsSectionId>(SETTINGS_SECTION_IDS.preferences);
   const normalizedThemeCustomSeedDraft =
     normalizeThemeCustomSeedHex(themeCustomSeedDraft);
   const resolvedThemeMode = resolveThemeMode(
@@ -320,6 +338,18 @@ export function SettingsPage({
     value: option.value,
     label: popupShadowStyleOptionLabels[option.value],
   }));
+  const actionBadgeState = {
+    providers: snapshots,
+    providerSettings: providers,
+    settings,
+  };
+  const actionBadgeOptions = buildActionBadgeSelectOptions(
+    actionBadgeState,
+    i18n,
+  );
+  const normalizedActionBadgeSelection = normalizeActionBadgeSelection(
+    settings.actionBadgeSelection,
+  );
   const syncIntervalUnitLabel = i18n.t("settings.preferences.minutes");
   const syncIntervalOptions = SYNC_INTERVAL_PRESETS.map((preset) => ({
     value: preset,
@@ -345,14 +375,99 @@ export function SettingsPage({
     i18n.resolvedLocale === "zh-CN"
       ? "展开告警阈值预设"
       : "Show warning threshold presets";
+  const settingsSectionNavItems: Array<{
+    id: SettingsSectionId;
+    label: string;
+  }> = [
+    {
+      id: SETTINGS_SECTION_IDS.preferences,
+      label: i18n.t("settings.sections.preferences"),
+    },
+    {
+      id: SETTINGS_SECTION_IDS.visibility,
+      label: i18n.t("settings.sections.visibility"),
+    },
+    {
+      id: SETTINGS_SECTION_IDS.credentials,
+      label: i18n.t("settings.sections.credentials"),
+    },
+    {
+      id: SETTINGS_SECTION_IDS.sources,
+      label: i18n.t("settings.sections.sources"),
+    },
+    {
+      id: SETTINGS_SECTION_IDS.permissions,
+      label: i18n.t("settings.sections.permissions"),
+    },
+  ];
 
-  function scrollToSection(sectionId: string) {
+  useEffect(() => {
+    if (
+      typeof document === "undefined" ||
+      typeof window === "undefined" ||
+      typeof IntersectionObserver === "undefined"
+    ) {
+      return undefined;
+    }
+
+    const sectionElements = SETTINGS_SECTION_ID_VALUES
+      .map((sectionId) => document.getElementById(sectionId))
+      .filter((element): element is HTMLElement => element !== null);
+
+    if (sectionElements.length === 0) {
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntries = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort(
+            (left, right) =>
+              left.boundingClientRect.top - right.boundingClientRect.top,
+          );
+        const nextSectionId = visibleEntries[0]?.target.id as
+          | SettingsSectionId
+          | undefined;
+
+        if (nextSectionId) {
+          setActiveSettingsSection(nextSectionId);
+        }
+      },
+      {
+        root: null,
+        rootMargin: "-28% 0px -62% 0px",
+        threshold: 0,
+      },
+    );
+
+    for (const sectionElement of sectionElements) {
+      observer.observe(sectionElement);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  function scrollToSection(sectionId: SettingsSectionId) {
     if (typeof document === "undefined") {
       return;
     }
 
     document.getElementById(sectionId)?.scrollIntoView({
       block: "start",
+      behavior: getPreferredScrollBehavior(window),
+    });
+  }
+
+  function scrollToSettingsTop() {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    window.scrollTo({
+      top: 0,
       behavior: getPreferredScrollBehavior(window),
     });
   }
@@ -432,6 +547,29 @@ export function SettingsPage({
         secondaryActionLabel={i18n.t("common.actions.back")}
         primaryActionLabel={i18n.t("common.actions.save")}
         sticky
+        bottomContent={
+          <nav
+            className="settings-section-nav"
+            aria-label={i18n.t("settings.sections.aria")}
+          >
+            {settingsSectionNavItems.map((item) => {
+              const isActive = activeSettingsSection === item.id;
+
+              return (
+                <button
+                  key={item.id}
+                  className="settings-nav-chip"
+                  type="button"
+                  aria-current={isActive ? "true" : undefined}
+                  data-active={isActive ? "true" : "false"}
+                  onClick={() => scrollToSection(item.id)}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
+          </nav>
+        }
         onThemeAction={onToggleThemeMode}
         onExpandAction={onOpenFullPage}
         onSecondaryAction={onBack}
@@ -452,45 +590,7 @@ export function SettingsPage({
           items={settingsSummaryItems}
         />
 
-        <div className="settings-section-nav" aria-label={i18n.t("settings.sections.aria")}>
-          <button
-            className="settings-nav-chip"
-            type="button"
-            onClick={() => scrollToSection(SETTINGS_SECTION_IDS.preferences)}
-          >
-            {i18n.t("settings.sections.preferences")}
-          </button>
-          <button
-            className="settings-nav-chip"
-            type="button"
-            onClick={() => scrollToSection(SETTINGS_SECTION_IDS.visibility)}
-          >
-            {i18n.t("settings.sections.visibility")}
-          </button>
-          <button
-            className="settings-nav-chip"
-            type="button"
-            onClick={() => scrollToSection(SETTINGS_SECTION_IDS.credentials)}
-          >
-            {i18n.t("settings.sections.credentials")}
-          </button>
-          <button
-            className="settings-nav-chip"
-            type="button"
-            onClick={() => scrollToSection(SETTINGS_SECTION_IDS.sources)}
-          >
-            {i18n.t("settings.sections.sources")}
-          </button>
-          <button
-            className="settings-nav-chip"
-            type="button"
-            onClick={() => scrollToSection(SETTINGS_SECTION_IDS.permissions)}
-          >
-            {i18n.t("settings.sections.permissions")}
-          </button>
-        </div>
       </section>
-
       <section
         className="status-card settings-section-anchor"
         id={SETTINGS_SECTION_IDS.preferences}
@@ -593,6 +693,14 @@ export function SettingsPage({
             fieldIdPrefix="popup-shadow-style"
             options={popupShadowStyleOptions}
             onChange={onPopupShadowStyleChange}
+          />
+
+          <MaterialSelect
+            label={i18n.t("settings.preferences.action_badge_label")}
+            value={normalizedActionBadgeSelection}
+            fieldIdPrefix="action-badge-selection"
+            options={actionBadgeOptions}
+            onChange={onActionBadgeSelectionChange}
           />
         </div>
 
@@ -1325,6 +1433,30 @@ export function SettingsPage({
           onDismiss={onDismissToast}
         />
       ) : null}
+
+      <button
+        className="settings-back-to-top-fab"
+        type="button"
+        aria-label={i18n.t("settings.actions.back_to_top")}
+        title={i18n.t("settings.actions.back_to_top")}
+        onClick={scrollToSettingsTop}
+      >
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          viewBox="0 0 24 24"
+          width="22"
+          height="22"
+        >
+          <path
+            d="M12 5l-7 7 1.4 1.4 4.6-4.58V20h2V8.82l4.6 4.58L19 12z"
+            fill="currentColor"
+          />
+        </svg>
+        <span className="settings-back-to-top-fab__label">
+          {i18n.t("settings.actions.back_to_top_short")}
+        </span>
+      </button>
     </main>
   );
 }

@@ -16,6 +16,7 @@ function createLegacyState(): AppState {
     popupSizePreset: _popupSizePreset,
     popupCornerStyle: _popupCornerStyle,
     popupShadowStyle: _popupShadowStyle,
+    actionBadgeSelection: _actionBadgeSelection,
     ...legacySettings
   } = SAMPLE_APP_STATE.settings;
 
@@ -123,6 +124,7 @@ describe("storage normalization", () => {
     expect(state?.settings.popupSizePreset).toBe("balanced");
     expect(state?.settings.popupCornerStyle).toBe("rounded");
     expect(state?.settings.popupShadowStyle).toBe("soft");
+    expect(state?.settings.actionBadgeSelection).toBe("attention");
   });
 
   it("normalizes invalid popup appearance preferences", async () => {
@@ -141,6 +143,20 @@ describe("storage normalization", () => {
     expect(state?.settings.popupSizePreset).toBe("balanced");
     expect(state?.settings.popupCornerStyle).toBe("rounded");
     expect(state?.settings.popupShadowStyle).toBe("soft");
+  });
+
+  it("normalizes invalid action badge preferences", async () => {
+    await writeAppState({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        actionBadgeSelection: "codex-weekly",
+      } as unknown as AppState["settings"],
+    });
+
+    const state = await readAppState();
+
+    expect(state?.settings.actionBadgeSelection).toBe("attention");
   });
 
   it("normalizes invalid numeric preference values", async () => {

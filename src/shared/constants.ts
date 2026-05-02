@@ -18,6 +18,7 @@ import {
   DEFAULT_SYNC_INTERVAL_MINUTES,
   DEFAULT_WARNING_THRESHOLD_PERCENT,
 } from "./settings-preferences";
+import { DEFAULT_ACTION_BADGE_SELECTION } from "./action-badge-preferences";
 import {
   createPolicyOnlyDiagnostic,
   createSourceFallbackDiagnostic,
@@ -511,5 +512,6 @@ export const SAMPLE_APP_STATE: AppState = {
     popupSizePreset: DEFAULT_POPUP_SIZE_PRESET,
     popupCornerStyle: DEFAULT_POPUP_CORNER_STYLE,
     popupShadowStyle: DEFAULT_POPUP_SHADOW_STYLE,
+    actionBadgeSelection: DEFAULT_ACTION_BADGE_SELECTION,
   },
 };

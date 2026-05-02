@@ -49,4 +49,20 @@ describe("TopBar", () => {
     expect(html).not.toContain('data-topbar-open-full-page="true"');
     expect(html).not.toContain(">Tab<");
   });
+
+  it("renders optional bottom content inside the same top bar surface", () => {
+    const html = renderToStaticMarkup(
+      <TopBar
+        title="Settings"
+        subtitle="Dashboard preferences and access"
+        bottomContent={<nav aria-label="Sections">Section chips</nav>}
+        onSecondaryAction={() => {}}
+        onPrimaryAction={() => {}}
+      />,
+    );
+
+    expect(html).toContain('class="top-app-bar__bottom"');
+    expect(html).toContain('aria-label="Sections"');
+    expect(html).toContain("Section chips");
+  });
 });

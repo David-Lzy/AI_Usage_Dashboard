@@ -1,7 +1,65 @@
 import { describe, expect, it } from "vitest";
 
 import { SAMPLE_APP_STATE } from "../shared/constants";
+import { buildActionBadgeQuotaCandidates } from "../shared/action-badge-preferences";
 import { buildActionBadgeModel } from "./action-badge";
+
+function createStateWithCodexWindows() {
+  const state = {
+    ...SAMPLE_APP_STATE,
+    providers: SAMPLE_APP_STATE.providers.map((provider) =>
+      provider.providerId === "codex"
+        ? {
+            ...provider,
+            syncStatus: "ok" as const,
+            tone: "neutral" as const,
+            warningReason: null,
+            remaining: 32,
+            quotaUnit: "percent" as const,
+            usageSummary:
+              "Visible Codex usage: 5-hour usage window: 100% remaining · Weekly usage window: 32% remaining",
+            usageWindows: [
+              {
+                label: "5-hour usage window",
+                normalizedLabel: "5-hour usage window",
+                kind: "rolling_5h" as const,
+                modelLabel: null,
+                quotaUnit: "percent" as const,
+                used: 0,
+                remaining: 100,
+                total: 100,
+                resetAt: "2026-05-03T10:00:00.000Z",
+                resetLabel: "Resets in 2h",
+              },
+              {
+                label: "Weekly usage window",
+                normalizedLabel: "Weekly usage window",
+                kind: "weekly" as const,
+                modelLabel: null,
+                quotaUnit: "percent" as const,
+                used: 68,
+                remaining: 32,
+                total: 100,
+                resetAt: "2026-05-07T10:00:00.000Z",
+                resetLabel: "Resets Thursday",
+              },
+            ],
+          }
+        : provider,
+    ),
+  };
+  const weeklyCandidate = buildActionBadgeQuotaCandidates(state).find(
+    (candidate) => candidate.sourceLabel === "Weekly usage window",
+  );
+
+  return {
+    ...state,
+    settings: {
+      ...state.settings,
+      actionBadgeSelection: weeklyCandidate?.value ?? "attention",
+    },
+  };
+}
 
 describe("action badge", () => {
   it("clears the badge when no visible provider needs attention", () => {
@@ -29,5 +87,14 @@ describe("action badge", () => {
     expect(model.text).toBe("3");
     expect(model.title).toContain("3 visible providers need attention");
     expect(model.backgroundColor).toEqual([161, 84, 0, 255]);
+  });
+
+  it("shows a selected quota source when the badge is configured for remaining usage", () => {
+    const model = buildActionBadgeModel(createStateWithCodexWindows());
+
+    expect(model.text).toBe("32%");
+    expect(model.title).toContain("Codex: Weekly usage window");
+    expect(model.title).toContain("Visible Codex usage");
+    expect(model.backgroundColor).toEqual([46, 125, 50, 255]);
   });
 });

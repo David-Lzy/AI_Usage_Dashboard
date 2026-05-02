@@ -121,6 +121,7 @@ export type ProgressDisplayStyle = "line" | "circle";
 export type PopupSizePreset = "compact" | "balanced" | "wide";
 export type PopupCornerStyle = "square" | "soft" | "rounded";
 export type PopupShadowStyle = "none" | "soft" | "elevated";
+export type ActionBadgeSelection = "attention" | (string & {});
 
 export type ProviderPageBinding = {
   mode: "auto" | "bound";
@@ -243,6 +244,7 @@ export type AppSettings = {
   popupSizePreset: PopupSizePreset;
   popupCornerStyle: PopupCornerStyle;
   popupShadowStyle: PopupShadowStyle;
+  actionBadgeSelection: ActionBadgeSelection;
 };
 
 export type SummaryItem = {

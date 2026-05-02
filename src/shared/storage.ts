@@ -31,6 +31,7 @@ import {
   normalizeSyncIntervalMinutes,
   normalizeWarningThresholdPercent,
 } from "./settings-preferences";
+import { normalizeActionBadgeSelection } from "./action-badge-preferences";
 
 let memoryFallbackState: AppState | null = null;
 
@@ -173,6 +174,9 @@ function normalizeAppState(state: AppState): AppState {
       popupShadowStyle: normalizePopupShadowStyle(
         state.settings?.popupShadowStyle,
         DEFAULT_POPUP_SHADOW_STYLE,
+      ),
+      actionBadgeSelection: normalizeActionBadgeSelection(
+        state.settings?.actionBadgeSelection,
       ),
     },
   };

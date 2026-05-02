@@ -137,6 +137,7 @@ Current honesty boundaries:
 - Codex scheduled session-page sync can now reopen a previously bound analytics page in an inactive managed tab after authorization, while still avoiding any persisted ChatGPT cookies or auth headers
 - automatic Codex managed-page sync can now create that inactive analytics tab on alarm/manual refresh even before a saved page binding exists; this is not a fully hidden offscreen scrape because the personal source still depends on a real authenticated ChatGPT page document
 - Codex hydration retry now keeps the first refresh inside the same operation while a matched route hydrates usage windows, avoiding a transient parser failure when the page shell renders before quota content
+- the action badge now has an explicit Settings selector for attention count versus dynamic quota candidates, including individual Codex usage windows when those values exist in current provider data
 - the user-facing Settings surface now uses Material-style controls for both editable numeric values and fixed option sets, including Source Connections source preference
 
 ## Toolbar Entry
@@ -258,7 +259,7 @@ The Chrome action now opens a compact popup first:
   - popup, side-panel settings, and standard full-page dashboard/settings/provider-detail now have one current extension-mode QA capture set after the shipped expand, quick-theme, and motion slices
   - the capture helpers now close the extension windows they open, reducing repeated-capture OOM risk
   - popup smoke capture remains QA-only evidence because it opens the popup route in its own extension app window rather than the native toolbar bubble
-- the badge shows the number of visible providers currently needing attention
+- the toolbar badge can now be configured to show either the number of visible providers needing attention or a selected remaining-quota value from dynamic quota candidates such as a Codex usage window
 - the side panel remains the canonical surface for settings, source diagnostics, and provider detail
 
 ## Settings Experience
@@ -269,6 +270,8 @@ The Settings screen now starts with a compact overview and section-jump area:
 - the Settings top bar now stays sticky so `Back` and `Save` remain reachable while scrolling
 - long Settings content now exposes direct jump controls for preferences, visibility, credentials, sources, and permissions
 - the sync interval and warning threshold settings now use an editable numeric combobox, keeping preset menu choices while accepting validated custom values
+- Settings now includes a toolbar badge selector whose quota entries are generated only from providers with current remaining data, so unavailable or unauthorized providers do not appear as selectable badge sources
+- Settings section chips now live inside the sticky top bar as one merged surface, highlight the active section while scrolling, and pair with a lower-right extended back-to-top floating action button for long-page navigation
 - fixed Settings option sets now use a Material-style select-only combobox instead of native browser dropdowns, including locale, theme, progress style, popup appearance, and provider source preference controls
 - the side-panel CSS now collapses key grids earlier at `720px` instead of waiting for the old `480px` breakpoint alone
 - `Source Connections` cards now keep their contract summary visible by default and move dense diagnostics behind an explicit expandable section

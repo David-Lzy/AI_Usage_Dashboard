@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import type { AppMessage } from "../background/message-bus";
 import type {
+  ActionBadgeSelection,
   ApiKeyProviderId,
   AppLocalePreference,
   AppSettings,
@@ -1187,6 +1188,9 @@ function StandardApp({ locationHash }: StandardAppProps) {
           onPopupShadowStyleChange={(popupShadowStyle) =>
             handleUpdateSettings({ popupShadowStyle })
           }
+          onActionBadgeSelectionChange={(
+            actionBadgeSelection: ActionBadgeSelection,
+          ) => handleUpdateSettings({ actionBadgeSelection })}
           onSaveThemeCustomSeed={(themeCustomSeedHex) =>
             handleUpdateSettings({
               themePreset: "custom",

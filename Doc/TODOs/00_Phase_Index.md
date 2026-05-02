@@ -34,8 +34,8 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: none currently; see latest completed slice below
-- latest completed slice: [233_Phase_Codex_Hydration_Retry.md](./Archive/233_Phase_Codex_Hydration_Retry.md)
+- active phase file: [236_Phase_Dashboard_Provider_Card_Material_Unification.md](./236_Phase_Dashboard_Provider_Card_Material_Unification.md)
+- latest completed slice: [235_Phase_Settings_Sticky_Nav.md](./Archive/235_Phase_Settings_Sticky_Nav.md)
 
 Completed phases should be moved to:
 

@@ -77,6 +77,8 @@ type RuntimeMessageId =
   | "settings.sections.credentials"
   | "settings.sections.sources"
   | "settings.sections.permissions"
+  | "settings.actions.back_to_top"
+  | "settings.actions.back_to_top_short"
   | "settings.summary.visible"
   | "settings.summary.stored_secrets"
   | "settings.summary.bound_pages"
@@ -104,6 +106,7 @@ type RuntimeMessageId =
   | "settings.preferences.popup_shadow.none"
   | "settings.preferences.popup_shadow.soft"
   | "settings.preferences.popup_shadow.elevated"
+  | "settings.preferences.action_badge_label"
   | "settings.popup_appearance_preview.eyebrow"
   | "settings.popup_appearance_preview.title"
   | "settings.popup_appearance_preview.detail"
@@ -245,6 +248,8 @@ const RUNTIME_MESSAGES: Record<ResolvedAppLocale, RuntimeMessages> = {
     "settings.sections.credentials": "Credentials",
     "settings.sections.sources": "Sources",
     "settings.sections.permissions": "Permissions",
+    "settings.actions.back_to_top": "Back to top",
+    "settings.actions.back_to_top_short": "Top",
     "settings.summary.visible": "Visible",
     "settings.summary.stored_secrets": "Stored Secrets",
     "settings.summary.bound_pages": "Bound Pages",
@@ -272,6 +277,7 @@ const RUNTIME_MESSAGES: Record<ResolvedAppLocale, RuntimeMessages> = {
     "settings.preferences.popup_shadow.none": "None",
     "settings.preferences.popup_shadow.soft": "Soft",
     "settings.preferences.popup_shadow.elevated": "Elevated",
+    "settings.preferences.action_badge_label": "Toolbar badge",
     "settings.popup_appearance_preview.eyebrow": "Popup Preview",
     "settings.popup_appearance_preview.title": "Toolbar bubble shape",
     "settings.popup_appearance_preview.detail": "Preview the selected popup width, corner, and shadow treatment before reopening the Chrome action.",
@@ -386,6 +392,8 @@ const RUNTIME_MESSAGES: Record<ResolvedAppLocale, RuntimeMessages> = {
     "settings.sections.credentials": "凭据",
     "settings.sections.sources": "来源",
     "settings.sections.permissions": "权限",
+    "settings.actions.back_to_top": "返回顶部",
+    "settings.actions.back_to_top_short": "顶部",
     "settings.summary.visible": "可见",
     "settings.summary.stored_secrets": "已存密钥",
     "settings.summary.bound_pages": "已绑定页面",
@@ -413,6 +421,7 @@ const RUNTIME_MESSAGES: Record<ResolvedAppLocale, RuntimeMessages> = {
     "settings.preferences.popup_shadow.none": "无",
     "settings.preferences.popup_shadow.soft": "轻微",
     "settings.preferences.popup_shadow.elevated": "加强",
+    "settings.preferences.action_badge_label": "工具栏图标标记",
     "settings.popup_appearance_preview.eyebrow": "Popup 预览",
     "settings.popup_appearance_preview.title": "工具栏弹窗形态",
     "settings.popup_appearance_preview.detail": "在重新打开 Chrome action 前，先预览当前 popup 宽度、圆角和阴影组合。",

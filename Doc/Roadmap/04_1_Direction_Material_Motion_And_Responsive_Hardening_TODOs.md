@@ -81,6 +81,14 @@ Parent direction:
   - Settings selects and visibility switch rows now also expose explicit pressed states for pointer input, and the repo now has a repeatable hover-plus-press review baseline in addition to the earlier keyboard-focus pass
   - token chips, status badges, meta chips, and credential-state badges now sit on a clearer compact-chip token baseline, and unknown progress no longer pretends to be a real measured percentage
   - provider-detail fields, neutral detail notes, and expanded Settings diagnostic groups now share a more explicit supporting-surface hierarchy instead of mixed neutral container fills, and dense detail values now wrap explicitly on compact widths
+- next active Material gap:
+  - audit dashboard `ProviderCard` against Material card, action, assist-chip, status, and progress-indicator roles
+  - align dashboard provider-card action hierarchy with the Settings and popup control language instead of preserving the older evenly spaced text-action row
+  - make dashboard, provider detail, and popup quota progress feel like one visual family while keeping their intentionally different density contracts
+  - keep this as a presentation slice; do not change provider snapshots, source-selection semantics, sync behavior, or provider truth labels
+- maintenance follow-up after the provider-card contract is stable:
+  - split the oversized theme and Settings files into smaller ownership units
+  - keep file-splitting separate from Phase 236 so visual regressions are easier to review
 
 ### B. Motion System
 
@@ -179,6 +187,10 @@ Parent direction:
   - `scripts/phase94-interaction-audit-request-context-bundle-archive-review.mjs` now verifies request-bound signoff exports preserve request binding plus request revision through generated handoff bundles, archive manifests, archive README output, and the generated archive index
   - `scripts/phase95-interaction-audit-evidence-provenance-bundle-archive-review.mjs` now verifies bundle and archive artifacts preserve evidence source plus integrity summary, and that the generated archive index surfaces the same provenance truth
   - `scripts/phase96-interaction-audit-request-fulfillment-receipt-review.mjs` now verifies fulfilled request manifests, request README output, and the generated request index preserve one compact completion receipt after real request completion
+- next active visual verification gap:
+  - add a focused Phase 236 review for dashboard provider cards at side-panel widths around `360px` and `420px`, plus a full-page dashboard width
+  - verify light and dark themes, current Codex structured usage-window progress, warning/error states, and footer action density
+  - verify the provider card does not overflow or visually regress into the pre-Material browser-default style
 
 ## Out Of Scope
 

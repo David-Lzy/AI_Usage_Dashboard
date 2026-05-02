@@ -1,6 +1,6 @@
 # AI Usage Dashboard TODOs
 
-Date: 2026-04-25
+Date: 2026-05-03
 
 Process rule:
 
@@ -74,23 +74,33 @@ Why this order:
 
 ## 2.1 Current Execution Queue
 
-The project is no longer in shell-building mode.
+The project is no longer in shell-building or first provider-wiring mode.
 
-From here, the execution priority should be:
+Current post-`Phase 235` execution priority:
 
-1. connect providers one by one in this order:
-   - Cursor
-   - JetBrains AI
-   - Claude Code
-   - Gemini Code Assist
-   - Codex
-2. start release work only after provider wiring is stable
+1. `P0` - close the current uncommitted `Phase 234` and `Phase 235` worktree state after final document and runtime review.
+2. `P0` - start `Phase 236`, dashboard provider-card Material unification:
+   - the current dashboard provider card screenshot is not a context rollback or lost work
+   - the Settings and popup controls have moved farther into the Material system than the dashboard provider card
+   - `ProviderCard` should be audited against Material card, action, chip, and progress roles before more store-facing screenshots are refreshed
+3. `P1` - split oversized implementation files after the provider-card visual contract is fixed:
+   - `src/sidepanel/theme/material-theme.css`
+   - `src/sidepanel/routes/SettingsPage.tsx`
+   - `src/sidepanel/App.tsx`
+   - `src/shared/localized-copy.ts`
+4. `P1` - complete the `Direction 10.3` store asset-pack line once the remaining manual native-toolbar popup captures can be collected and archived.
+5. `P2` - continue provider and evidence closure work:
+   - JetBrains org-console reverification
+   - Claude personal Pro or Max usage-page capture
+   - Gemini project-metrics product-contract decision
+   - first real interaction-audit and theme-recovery operator archives
+   - broader runtime locale rollout beyond the current `en` plus `zh-CN` pilot
 
 Delivery rule for this stage:
 
-- do not spend the next turns on general UI polish
-- prioritize browser permissions, live provider wiring, verification, and release readiness
-- keep every provider slice independently testable before moving to the next one
+- keep active implementation phases narrow and independently verifiable
+- do not mix Phase 236 provider-card Material work with broad file-splitting refactors
+- preserve the current provider truth boundaries while changing UI presentation
 
 Phase status update:
 
@@ -287,7 +297,11 @@ Phase status update:
 - `Phase 231` replaced the remaining user-facing Settings native selects, including Source Connections source preference, with a reusable Material-style select-only combobox
 - `Phase 232` added automatic Codex managed-page sync so alarm/manual refresh can create the inactive analytics tab after authorization even before a saved page binding exists
 - `Phase 233` added Codex hydration retry so a first refresh can wait through the matched analytics route's loading shell before reporting a parser failure
-- the recommended next functional work returns to a real authenticated Codex or Cursor operator pass if that page is available; otherwise continue the Direction 10.3 store screenshot line only when the remaining manual native-toolbar popup captures can be collected
+- `Phase 234` added action badge quota selection so Settings can keep the attention-count badge or choose a remaining-quota badge from dynamic provider/window candidates
+- `Phase 235` added Settings sticky section navigation inside the existing top bar plus an extended back-to-top floating action button for long-page navigation
+- `Phase 236` is the next active development slice and should make dashboard provider cards match the Material visual language already used by Settings controls and the toolbar popup
+- the next maintenance follow-up after Phase 236 should split oversized UI and localization files only after the provider-card visual contract is stable
+- the remaining store-readiness blocker is still the real manual native-toolbar popup capture and archive completion under `Direction 10.3`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
 - the split `Phase 41` release gate cleared the old runtime-parity ambiguity and re-proved the live `Codex` plus `Cursor` personal session-page paths in real Chrome
@@ -396,6 +410,8 @@ Security rule for this track:
 - Material select unification shipped in `Phase 231`, so the user-facing Settings surface no longer opens native browser dropdowns for fixed option sets
 - automatic Codex managed-page sync shipped in `Phase 232`, so granted Codex session-page sync can create the inactive analytics tab on alarm/manual refresh even before a page binding exists, while still avoiding a fully hidden offscreen scrape
 - Codex hydration retry shipped in `Phase 233`, so the first capture of a newly opened analytics route can wait for usage-window DOM content before surfacing a parser failure
+- action badge quota selection shipped in `Phase 234`, so the toolbar icon can show a selected remaining quota value while unavailable providers stay out of the dynamic menu
+- Settings sticky section navigation shipped in `Phase 235`, so section jumps stay inside the merged sticky top bar while scrolling and long Settings pages have a dedicated return-to-top FAB
 - add a clear UI/operator pass for real source-tab logout states
 
 ### 3.4 Data TODO
