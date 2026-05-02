@@ -194,6 +194,7 @@
     "phase230:review": "./scripts/with-preferred-node.sh node ./scripts/phase230-background-session-page-refresh-review.mjs",
     "phase231:review": "./scripts/with-preferred-node.sh node ./scripts/phase231-settings-material-select-unification-review.mjs",
     "phase232:review": "./scripts/with-preferred-node.sh node ./scripts/phase232-codex-automatic-managed-page-sync-review.mjs",
+    "phase233:review": "./scripts/with-preferred-node.sh node ./scripts/phase233-codex-hydration-retry-review.mjs",
     "interaction-audit:bundle": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-handoff-bundle.mjs",
     "interaction-audit:archive": "./scripts/with-preferred-node.sh node ./scripts/archive-interaction-audit-review.mjs",
     "interaction-audit:refresh-archive-index": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-review-archive-index.mjs",

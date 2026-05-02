@@ -286,6 +286,7 @@ Phase status update:
 - `Phase 230` added Codex managed source-tab refresh so scheduled and manual session-page syncs can reopen the previously bound analytics page in an inactive tab after authorization, while preserving the no-cookie-storage boundary and stopping repeated auto-open attempts after logged-out detection
 - `Phase 231` replaced the remaining user-facing Settings native selects, including Source Connections source preference, with a reusable Material-style select-only combobox
 - `Phase 232` added automatic Codex managed-page sync so alarm/manual refresh can create the inactive analytics tab after authorization even before a saved page binding exists
+- `Phase 233` added Codex hydration retry so a first refresh can wait through the matched analytics route's loading shell before reporting a parser failure
 - the recommended next functional work returns to a real authenticated Codex or Cursor operator pass if that page is available; otherwise continue the Direction 10.3 store screenshot line only when the remaining manual native-toolbar popup captures can be collected
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
@@ -394,6 +395,7 @@ Security rule for this track:
 - Codex managed source-tab refresh shipped in `Phase 230`, so scheduled session-page sync can reopen a previously bound analytics page in an inactive tab without storing ChatGPT cookies or auth headers
 - Material select unification shipped in `Phase 231`, so the user-facing Settings surface no longer opens native browser dropdowns for fixed option sets
 - automatic Codex managed-page sync shipped in `Phase 232`, so granted Codex session-page sync can create the inactive analytics tab on alarm/manual refresh even before a page binding exists, while still avoiding a fully hidden offscreen scrape
+- Codex hydration retry shipped in `Phase 233`, so the first capture of a newly opened analytics route can wait for usage-window DOM content before surfacing a parser failure
 - add a clear UI/operator pass for real source-tab logout states
 
 ### 3.4 Data TODO

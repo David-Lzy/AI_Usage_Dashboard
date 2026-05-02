@@ -1,6 +1,6 @@
 # Phase Index
 
-Date: 2026-05-02
+Date: 2026-05-03
 
 Process rule:
 
@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [232_Phase_Codex_Automatic_Managed_Page_Sync.md](./Archive/232_Phase_Codex_Automatic_Managed_Page_Sync.md)
+- latest completed slice: [233_Phase_Codex_Hydration_Retry.md](./Archive/233_Phase_Codex_Hydration_Retry.md)
 
 Completed phases should be moved to:
 
@@ -617,6 +617,8 @@ Completed phases should be moved to:
 - the 2026-04-30 `Phase 231` closeout replaced the remaining user-facing Settings native selects, including Source Connections source preference, with a reusable Material-style select-only combobox
 - phase 232 depends on phase 230 because first-run automatic Codex refresh should reuse the managed session-page tab behavior and logged-out suppression that already exists for previously bound pages
 - the 2026-05-02 `Phase 232` closeout added automatic Codex managed-page sync before a saved binding exists, shortened the first periodic sync delay, and preserved the boundary that this is an inactive managed tab rather than a hidden offscreen scrape
+- phase 233 depends on phase 232 because the first automatically opened Codex managed tab can match the route before the ChatGPT frontend hydrates usage-window DOM content
+- the 2026-05-03 `Phase 233` closeout added a bounded Codex hydration retry so a first refresh can wait through the matched-route loading shell instead of exposing a transient parser failure
 
 ## Delivery Standard For Each Phase
 

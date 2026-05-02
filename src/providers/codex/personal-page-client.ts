@@ -19,6 +19,8 @@ export type CodexPersonalPageClientOptions = {
   source?: "fixture" | "live";
   pageSessionClient?: PageSessionClient;
   openPageWhenMissing?: boolean;
+  hydrationRetryAttempts?: number;
+  hydrationRetryDelayMs?: number;
 };
 
 export type CodexPersonalPageUsageResult = {
@@ -39,6 +41,24 @@ function hasLivePageSessionApis(): boolean {
     typeof chrome.tabs?.query === "function" &&
     typeof chrome.scripting?.executeScript === "function"
   );
+}
+
+const DEFAULT_HYDRATION_RETRY_ATTEMPTS = 4;
+const DEFAULT_HYDRATION_RETRY_DELAY_MS = 1_000;
+
+function delay(ms: number): Promise<void> {
+  if (ms <= 0) {
+    return Promise.resolve();
+  }
+
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function shouldRetryHydratingCodexRoute(
+  fixture: CodexPersonalLiveFixture,
+  result: CodexPersonalParseResult,
+): boolean {
+  return result.status === "route_drift" && fixture.decision.chosenRoute !== null;
 }
 
 function buildBindingFromRouteCapture(
@@ -118,22 +138,51 @@ export function createCodexPersonalPageClient(
         };
       }
 
-      const fixture = await captureCodexPersonalLiveFixture(
-        options.pageSessionClient ?? createPageSessionClient(),
-        {
-          mode: normalizedBinding.mode,
-          tabId: normalizedBinding.tabId,
-          matchedUrl: normalizedBinding.matchedUrl,
-          matchedTitle: normalizedBinding.matchedTitle,
-        },
-        {
-          openPageWhenMissing: options.openPageWhenMissing ?? false,
-        },
+      const pageSessionClient =
+        options.pageSessionClient ?? createPageSessionClient();
+      const pageSessionBinding = {
+        mode: normalizedBinding.mode,
+        tabId: normalizedBinding.tabId,
+        matchedUrl: normalizedBinding.matchedUrl,
+        matchedTitle: normalizedBinding.matchedTitle,
+      };
+      const captureOptions = {
+        openPageWhenMissing: options.openPageWhenMissing ?? false,
+      };
+      const retryAttempts = Math.max(
+        0,
+        options.hydrationRetryAttempts ?? DEFAULT_HYDRATION_RETRY_ATTEMPTS,
       );
+      const retryDelayMs = Math.max(
+        0,
+        options.hydrationRetryDelayMs ?? DEFAULT_HYDRATION_RETRY_DELAY_MS,
+      );
+      let fixture = await captureCodexPersonalLiveFixture(
+        pageSessionClient,
+        pageSessionBinding,
+        captureOptions,
+      );
+      let result = parseCodexPersonalLiveFixture(fixture);
+
+      for (
+        let attempt = 0;
+        attempt < retryAttempts &&
+        shouldRetryHydratingCodexRoute(fixture, result);
+        attempt += 1
+      ) {
+        await delay(retryDelayMs);
+        fixture = await captureCodexPersonalLiveFixture(
+          pageSessionClient,
+          pageSessionBinding,
+          captureOptions,
+        );
+        result = parseCodexPersonalLiveFixture(fixture);
+      }
+
       const routeForBinding = chooseBindingRoute(fixture);
 
       return {
-        result: parseCodexPersonalLiveFixture(fixture),
+        result,
         pageBinding: routeForBinding
           ? buildBindingFromRouteCapture(
               routeForBinding,
