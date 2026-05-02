@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [242_Phase_Detail_Surfaces_CSS_Module_Split.md](./Archive/242_Phase_Detail_Surfaces_CSS_Module_Split.md)
+- latest completed slice: [243_Phase_Settings_Source_Cards_CSS_Module_Split.md](./Archive/243_Phase_Settings_Source_Cards_CSS_Module_Split.md)
 
 Completed phases should be moved to:
 
@@ -637,6 +637,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 241` closeout moved Settings appearance CSS into `src/sidepanel/theme/settings-appearance.css` and kept that Settings-only module out of the popup entry
 - phase 242 depends on phases 66 and 100 because detail-field and detail-note supporting-surface styling should only be split after the sidepanel supporting-surface and dark-surface contracts are stable
 - the 2026-05-03 `Phase 242` closeout moved shared sidepanel detail-surface CSS into `src/sidepanel/theme/detail-surfaces.css` and kept that sidepanel-only module out of the popup entry
+- phase 243 depends on phases 54 through 58 and phase 242 because Settings source-card disclosure and diagnostics should only be split after the source-card progressive-disclosure and detail-surface contracts are stable
+- the 2026-05-03 `Phase 243` closeout moved Settings source-card CSS into `src/sidepanel/theme/settings-source-cards.css` and kept that Settings-only module out of the popup entry
 
 ## Delivery Standard For Each Phase
 

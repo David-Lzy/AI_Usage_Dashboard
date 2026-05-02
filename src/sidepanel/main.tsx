@@ -7,6 +7,7 @@ import { App } from "./App";
 import "./theme/tokens.css";
 import "./theme/material-theme.css";
 import "./theme/detail-surfaces.css";
+import "./theme/settings-source-cards.css";
 import "./theme/interaction-audit.css";
 import "./theme/settings-appearance.css";
 import "./theme/theme-recovery.css";

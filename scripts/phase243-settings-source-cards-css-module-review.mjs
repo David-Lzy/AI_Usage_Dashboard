@@ -10,9 +10,9 @@ const projectRoot = process.cwd();
 const artifactDir = path.join(
   projectRoot,
   "tmp",
-  "phase242-detail-surfaces-css-module-review",
+  "phase243-settings-source-cards-css-module-review",
 );
-const devPort = 42642;
+const devPort = 42643;
 
 function assert(condition, message) {
   if (!condition) {
@@ -56,9 +56,9 @@ async function verifyPackageScript() {
   const packageJson = await readJson("package.json");
 
   assert(
-    packageJson.scripts["phase242:review"] ===
-      "./scripts/with-preferred-node.sh node ./scripts/phase242-detail-surfaces-css-module-review.mjs",
-    "package.json is missing the expected phase242:review script.",
+    packageJson.scripts["phase243:review"] ===
+      "./scripts/with-preferred-node.sh node ./scripts/phase243-settings-source-cards-css-module-review.mjs",
+    "package.json is missing the expected phase243:review script.",
   );
 
   return {
@@ -73,13 +73,14 @@ async function verifyCssSplit() {
   const materialTheme = await readProjectFile(
     "src/sidepanel/theme/material-theme.css",
   );
-  const detailSurfacesTheme = await readProjectFile(
-    "src/sidepanel/theme/detail-surfaces.css",
+  const sourceCardsTheme = await readProjectFile(
+    "src/sidepanel/theme/settings-source-cards.css",
   );
 
   verifyOrder(sidepanelEntry, "src/sidepanel/main.tsx", [
     'import "./theme/material-theme.css";',
     'import "./theme/detail-surfaces.css";',
+    'import "./theme/settings-source-cards.css";',
     'import "./theme/interaction-audit.css";',
     'import "./theme/settings-appearance.css";',
     'import "./theme/theme-recovery.css";',
@@ -87,27 +88,28 @@ async function verifyCssSplit() {
     'import "./theme/provider-card.css";',
   ]);
   assert(
-    !popupEntry.includes("detail-surfaces.css"),
-    "popup entry should not import the sidepanel-only detail-surfaces CSS module.",
+    !popupEntry.includes("settings-source-cards.css"),
+    "popup entry should not import the sidepanel-only Settings source-card CSS module.",
   );
   assert(
-    !materialTheme.includes("\n.detail-grid {\n") &&
-      !materialTheme.includes("\n.detail-field {\n") &&
-      !materialTheme.includes("\n.detail-note {\n") &&
-      !materialTheme.includes("\n.detail-note--warning {\n"),
-    "material-theme.css still owns detail-surface selectors.",
+    !materialTheme.includes("\n.source-card {\n") &&
+      !materialTheme.includes("\n.source-card__header {\n") &&
+      !materialTheme.includes("\n.source-card__details-toggle {\n") &&
+      !materialTheme.includes("\n.source-card__diagnostic-group {\n") &&
+      !materialTheme.includes("\n.source-card__diagnostic-row {\n"),
+    "material-theme.css still owns source-card selectors.",
   );
 
   verifyMarkers(
-    detailSurfacesTheme,
-    "src/sidepanel/theme/detail-surfaces.css",
+    sourceCardsTheme,
+    "src/sidepanel/theme/settings-source-cards.css",
     [
-      ".detail-grid",
-      ".detail-field",
-      ".detail-field__value",
-      ".detail-note",
-      ".detail-note--warning",
-      ".detail-note--error",
+      ".source-card",
+      ".source-card__summary-grid",
+      ".source-card__details[open]",
+      ".source-card__diagnostic-group",
+      ".source-card__diagnostic-row",
+      "@media (prefers-reduced-motion: reduce)",
       "@media (max-width: 720px)",
     ],
   );
@@ -115,7 +117,7 @@ async function verifyCssSplit() {
   return [
     {
       scope: "src/sidepanel/main.tsx",
-      markers: 7,
+      markers: 8,
     },
     {
       scope: "src/popup/main.tsx",
@@ -123,10 +125,10 @@ async function verifyCssSplit() {
     },
     {
       scope: "src/sidepanel/theme/material-theme.css",
-      markers: 4,
+      markers: 5,
     },
     {
-      scope: "src/sidepanel/theme/detail-surfaces.css",
+      scope: "src/sidepanel/theme/settings-source-cards.css",
       markers: 7,
     },
   ];
@@ -135,40 +137,41 @@ async function verifyCssSplit() {
 async function verifyDocsMarkers() {
   const expectations = [
     {
-      relativePath: "Doc/testing/Phase_242_Detail_Surfaces_CSS_Module_Split.md",
+      relativePath:
+        "Doc/testing/Phase_243_Settings_Source_Cards_CSS_Module_Split.md",
       markers: [
-        "Phase 242",
-        "Detail Surfaces CSS Module Split",
-        "npm run phase242:review",
+        "Phase 243",
+        "Settings Source Cards CSS Module Split",
+        "npm run phase243:review",
       ],
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/242_Phase_Detail_Surfaces_CSS_Module_Split.md",
+        "Doc/TODOs/Archive/243_Phase_Settings_Source_Cards_CSS_Module_Split.md",
       markers: [
-        "Phase 242",
+        "Phase 243",
         "completed and archived on 2026-05-03",
-        "detail-surfaces.css",
+        "settings-source-cards.css",
       ],
     },
     {
       relativePath: "Doc/TODOs/00_Phase_Index.md",
       markers: [
-        "Phase 242",
-        "detail-surface",
+        "243_Phase_Settings_Source_Cards_CSS_Module_Split.md",
+        "latest completed slice",
       ],
     },
     {
       relativePath: "Doc/AI_Usage_Dashboard_TODOs.md",
       markers: [
-        "Phase 242",
-        "detail-surfaces CSS module split",
+        "Phase 243",
+        "Settings source-card CSS module split",
       ],
     },
     {
       relativePath: "README.md",
       markers: [
-        "detail-surfaces CSS now lives in `src/sidepanel/theme/detail-surfaces.css`",
+        "Settings source-card CSS now lives in `src/sidepanel/theme/settings-source-cards.css`",
       ],
     },
   ];
@@ -286,6 +289,10 @@ async function collectStyles(locator) {
       backgroundColor: styles.backgroundColor,
       borderColor: styles.borderColor,
       borderRadius: styles.borderRadius,
+      boxShadow: styles.boxShadow,
+      display: styles.display,
+      gridTemplateColumns: styles.gridTemplateColumns,
+      justifyItems: styles.justifyItems,
       overflowWrap: styles.overflowWrap,
       wordBreak: styles.wordBreak,
     };
@@ -299,120 +306,91 @@ async function collectOverflowState(page) {
   }));
 }
 
-async function reviewProviderDetail(baseUrl, browser) {
-  const page = await browser.newPage({
-    viewport: {
-      width: 420,
-      height: 900,
-    },
+async function openExpandedSettingsSourceCard(baseUrl, browser, viewport) {
+  const page = await browser.newPage({ viewport });
+
+  await page.goto(`${baseUrl}/src/sidepanel/index.html#settings`, {
+    waitUntil: "load",
+  });
+  await page.waitForSelector("#settings-sources .source-card", {
+    timeout: 20_000,
+  });
+  await page
+    .locator("#settings-sources .source-card__details-toggle")
+    .first()
+    .click();
+  await page.waitForSelector(".source-card__diagnostic-row", {
+    timeout: 20_000,
   });
 
-  try {
-    await page.goto(`${baseUrl}/src/sidepanel/index.html#provider-detail/codex`, {
-      waitUntil: "load",
-    });
-    await page.waitForSelector(".detail-field", { timeout: 20_000 });
-    await page.waitForSelector(".detail-note--neutral", { timeout: 20_000 });
-
-    const detailField = page.locator(".detail-field").first();
-    const detailFieldValue = page.locator(".detail-field__value").first();
-    const detailNote = page.locator(".detail-note--neutral").first();
-    const statusCard = page.locator(".status-card").last();
-
-    const result = {
-      overflow: await collectOverflowState(page),
-      detailFieldStyles: await collectStyles(detailField),
-      detailFieldValueStyles: await collectStyles(detailFieldValue),
-      detailNoteStyles: await collectStyles(detailNote),
-      statusCardStyles: await collectStyles(statusCard),
-    };
-
-    await page.screenshot({
-      path: path.join(artifactDir, "provider-detail-codex-detail-surfaces.png"),
-      fullPage: true,
-    });
-
-    assert(
-      result.overflow.overflowX === 0,
-      `provider detail overflowed horizontally (${result.overflow.overflowX}px).`,
-    );
-    assert(
-      result.detailFieldStyles?.borderColor !== "rgba(0, 0, 0, 0)",
-      "detail fields lost their explicit border.",
-    );
-    assert(
-      result.detailFieldStyles?.backgroundColor !==
-        result.statusCardStyles?.backgroundColor,
-      "detail fields collapsed into the same background as the parent status card.",
-    );
-    assert(
-      result.detailNoteStyles?.backgroundColor !==
-        result.detailFieldStyles?.backgroundColor,
-      "neutral detail notes no longer read as a stronger supporting surface than detail fields.",
-    );
-    assert(
-      result.detailFieldValueStyles?.overflowWrap === "anywhere",
-      "detail field values lost overflow-wrap:anywhere.",
-    );
-
-    return result;
-  } finally {
-    await page.close();
-  }
+  return page;
 }
 
-async function reviewSettingsDiagnostics(baseUrl, browser) {
-  const page = await browser.newPage({
-    viewport: {
-      width: 420,
-      height: 900,
-    },
-  });
+async function reviewSettingsSourceCards(baseUrl, browser, viewport, label) {
+  const page = await openExpandedSettingsSourceCard(baseUrl, browser, viewport);
 
   try {
-    await page.goto(`${baseUrl}/src/sidepanel/index.html#settings`, {
-      waitUntil: "load",
-    });
-    await page.waitForSelector("#settings-sources .source-card__details-toggle", {
-      timeout: 20_000,
-    });
-    await page
-      .locator("#settings-sources .source-card__details-toggle")
-      .first()
-      .click();
-    await page.waitForSelector(".source-card__diagnostic-group", {
-      timeout: 20_000,
-    });
-    await page.waitForSelector(".detail-note", { timeout: 20_000 });
-
-    const detailNote = page.locator(".detail-note").first();
-    const diagnosticGroup = page.locator(".source-card__diagnostic-group").first();
     const sourceCard = page.locator("#settings-sources .source-card").first();
+    const sourceField = page.locator(".source-card__field").first();
+    const sourceChips = page.locator(".source-card__chips").first();
+    const detailsToggle = page.locator(".source-card__details-toggle").first();
+    const diagnosticGroup = page
+      .locator(".source-card__diagnostic-group")
+      .first();
+    const diagnosticRow = page.locator(".source-card__diagnostic-row").first();
+    const diagnosticValue = page
+      .locator(".source-card__diagnostic-value")
+      .first();
 
     const result = {
       overflow: await collectOverflowState(page),
-      detailNoteStyles: await collectStyles(detailNote),
-      diagnosticGroupStyles: await collectStyles(diagnosticGroup),
       sourceCardStyles: await collectStyles(sourceCard),
+      sourceFieldStyles: await collectStyles(sourceField),
+      sourceChipsStyles: await collectStyles(sourceChips),
+      detailsToggleStyles: await collectStyles(detailsToggle),
+      diagnosticGroupStyles: await collectStyles(diagnosticGroup),
+      diagnosticRowStyles: await collectStyles(diagnosticRow),
+      diagnosticValueStyles: await collectStyles(diagnosticValue),
     };
 
     await page.screenshot({
-      path: path.join(artifactDir, "settings-diagnostics-detail-surfaces.png"),
+      path: path.join(artifactDir, `${label}-settings-source-cards.png`),
       fullPage: true,
     });
 
     assert(
       result.overflow.overflowX === 0,
-      `settings diagnostics overflowed horizontally (${result.overflow.overflowX}px).`,
+      `${label} settings source cards overflowed horizontally (${result.overflow.overflowX}px).`,
     );
     assert(
-      result.detailNoteStyles?.borderColor !== "rgba(0, 0, 0, 0)",
-      "settings detail notes lost their explicit border.",
+      result.sourceCardStyles?.borderColor !== "rgba(0, 0, 0, 0)",
+      `${label} source cards lost their explicit border.`,
+    );
+    assert(
+      result.sourceCardStyles?.boxShadow !== "none",
+      `${label} source cards lost their elevation shadow.`,
+    );
+    assert(
+      result.sourceFieldStyles?.backgroundColor !==
+        result.sourceCardStyles?.backgroundColor,
+      `${label} source-card fields collapsed into the card background.`,
     );
     assert(
       result.diagnosticGroupStyles?.backgroundColor !==
         result.sourceCardStyles?.backgroundColor,
-      "diagnostic groups collapsed into the same background as the source card.",
+      `${label} diagnostic groups collapsed into the card background.`,
+    );
+    assert(
+      result.detailsToggleStyles?.borderRadius !== "0px",
+      `${label} details toggle lost its rounded Material control shape.`,
+    );
+    assert(
+      result.diagnosticRowStyles?.display === "grid",
+      `${label} diagnostic rows should remain grid layouts.`,
+    );
+    assert(
+      result.diagnosticValueStyles?.overflowWrap === "anywhere",
+      `${label} diagnostic values lost overflow-wrap:anywhere.`,
     );
 
     return result;
@@ -429,8 +407,18 @@ async function runVisualReview(baseUrl) {
 
   try {
     return {
-      providerDetail: await reviewProviderDetail(baseUrl, browser),
-      settingsDiagnostics: await reviewSettingsDiagnostics(baseUrl, browser),
+      compact: await reviewSettingsSourceCards(
+        baseUrl,
+        browser,
+        { width: 420, height: 900 },
+        "compact",
+      ),
+      wide: await reviewSettingsSourceCards(
+        baseUrl,
+        browser,
+        { width: 900, height: 900 },
+        "wide",
+      ),
     };
   } finally {
     await browser.close();
@@ -463,24 +451,24 @@ async function runReview() {
   };
   const reportPath = path.join(
     artifactDir,
-    "detail-surfaces-css-module-review.json",
+    "settings-source-cards-css-module-review.json",
   );
 
   await writeFile(reportPath, JSON.stringify(report, null, 2), "utf8");
 
-  console.log("phase242: detail-surfaces CSS module split verified");
-  console.log(`phase242: saved artifacts under ${artifactDir}`);
-  console.log(`phase242: saved machine-readable results to ${reportPath}`);
+  console.log("phase243: Settings source-card CSS module split verified");
+  console.log(`phase243: saved artifacts under ${artifactDir}`);
+  console.log(`phase243: saved machine-readable results to ${reportPath}`);
   for (const result of markerResults) {
-    console.log(`phase242: ${result.scope} markers=${result.markers}`);
+    console.log(`phase243: ${result.scope} markers=${result.markers}`);
   }
   console.log(
-    `phase242: visual provider_overflow=${visualResult.providerDetail.overflow.overflowX} settings_overflow=${visualResult.settingsDiagnostics.overflow.overflowX}`,
+    `phase243: visual compact_overflow=${visualResult.compact.overflow.overflowX} wide_overflow=${visualResult.wide.overflow.overflowX}`,
   );
 }
 
 runReview().catch((error) => {
-  console.error("phase242: detail-surfaces CSS module review failed");
+  console.error("phase243: Settings source-card CSS module review failed");
   console.error(error instanceof Error ? error.message : error);
   process.exit(1);
 });
