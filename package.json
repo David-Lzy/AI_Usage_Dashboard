@@ -201,6 +201,7 @@
     "phase237:review": "./scripts/with-preferred-node.sh node ./scripts/phase237-provider-card-css-module-review.mjs",
     "phase238:review": "./scripts/with-preferred-node.sh node ./scripts/phase238-usage-progress-css-module-review.mjs",
     "phase239:review": "./scripts/with-preferred-node.sh node ./scripts/phase239-interaction-audit-css-module-review.mjs",
+    "phase240:review": "./scripts/with-preferred-node.sh node ./scripts/phase240-theme-recovery-css-module-review.mjs",
     "interaction-audit:bundle": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-handoff-bundle.mjs",
     "interaction-audit:archive": "./scripts/with-preferred-node.sh node ./scripts/archive-interaction-audit-review.mjs",
     "interaction-audit:refresh-archive-index": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-review-archive-index.mjs",

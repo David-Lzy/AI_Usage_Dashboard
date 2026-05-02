@@ -10,9 +10,9 @@ const projectRoot = process.cwd();
 const artifactDir = path.join(
   projectRoot,
   "tmp",
-  "phase239-interaction-audit-css-module-review",
+  "phase240-theme-recovery-css-module-review",
 );
-const devPort = 42639;
+const devPort = 42640;
 
 function assert(condition, message) {
   if (!condition) {
@@ -56,9 +56,9 @@ async function verifyPackageScript() {
   const packageJson = await readJson("package.json");
 
   assert(
-    packageJson.scripts["phase239:review"] ===
-      "./scripts/with-preferred-node.sh node ./scripts/phase239-interaction-audit-css-module-review.mjs",
-    "package.json is missing the expected phase239:review script.",
+    packageJson.scripts["phase240:review"] ===
+      "./scripts/with-preferred-node.sh node ./scripts/phase240-theme-recovery-css-module-review.mjs",
+    "package.json is missing the expected phase240:review script.",
   );
 
   return {
@@ -73,38 +73,35 @@ async function verifyCssSplit() {
   const materialTheme = await readProjectFile(
     "src/sidepanel/theme/material-theme.css",
   );
-  const interactionAuditTheme = await readProjectFile(
-    "src/sidepanel/theme/interaction-audit.css",
+  const themeRecoveryTheme = await readProjectFile(
+    "src/sidepanel/theme/theme-recovery.css",
   );
 
   verifyOrder(sidepanelEntry, "src/sidepanel/main.tsx", [
     'import "./theme/material-theme.css";',
     'import "./theme/interaction-audit.css";',
+    'import "./theme/theme-recovery.css";',
     'import "./theme/usage-progress.css";',
     'import "./theme/provider-card.css";',
   ]);
   assert(
-    !popupEntry.includes("interaction-audit.css"),
-    "popup entry should not import the sidepanel-only interaction-audit CSS module.",
+    !popupEntry.includes("theme-recovery.css"),
+    "popup entry should not import the sidepanel-only theme-recovery CSS module.",
   );
   assert(
-    !materialTheme.includes("interaction-audit") &&
-      !materialTheme.includes("capture-pre"),
-    "material-theme.css still owns interaction-audit selectors.",
+    !materialTheme.includes("theme-recovery"),
+    "material-theme.css still owns theme-recovery selectors.",
   );
 
   verifyMarkers(
-    interactionAuditTheme,
-    "src/sidepanel/theme/interaction-audit.css",
+    themeRecoveryTheme,
+    "src/sidepanel/theme/theme-recovery.css",
     [
-      ".interaction-audit-shell",
-      ".interaction-audit-grid",
-      ".interaction-audit__preset",
-      ".interaction-audit__review-queue",
-      ".interaction-audit-frame-shell",
-      ".capture-pre",
+      ".theme-recovery-shell",
+      ".theme-recovery-provider-list",
+      ".theme-recovery-copy-actions",
+      ".theme-recovery-export-grid",
       "@media (max-width: 720px)",
-      "@media (max-width: 1100px)",
       "@media (max-width: 480px)",
     ],
   );
@@ -112,7 +109,7 @@ async function verifyCssSplit() {
   return [
     {
       scope: "src/sidepanel/main.tsx",
-      markers: 4,
+      markers: 5,
     },
     {
       scope: "src/popup/main.tsx",
@@ -120,11 +117,11 @@ async function verifyCssSplit() {
     },
     {
       scope: "src/sidepanel/theme/material-theme.css",
-      markers: 2,
+      markers: 1,
     },
     {
-      scope: "src/sidepanel/theme/interaction-audit.css",
-      markers: 9,
+      scope: "src/sidepanel/theme/theme-recovery.css",
+      markers: 6,
     },
   ];
 }
@@ -132,41 +129,40 @@ async function verifyCssSplit() {
 async function verifyDocsMarkers() {
   const expectations = [
     {
-      relativePath:
-        "Doc/testing/Phase_239_Interaction_Audit_CSS_Module_Split.md",
+      relativePath: "Doc/testing/Phase_240_Theme_Recovery_CSS_Module_Split.md",
       markers: [
-        "Phase 239",
-        "Interaction Audit CSS Module Split",
-        "npm run phase239:review",
+        "Phase 240",
+        "Theme Recovery CSS Module Split",
+        "npm run phase240:review",
       ],
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/239_Phase_Interaction_Audit_CSS_Module_Split.md",
+        "Doc/TODOs/Archive/240_Phase_Theme_Recovery_CSS_Module_Split.md",
       markers: [
-        "Phase 239",
+        "Phase 240",
         "completed and archived on 2026-05-03",
-        "interaction-audit.css",
+        "theme-recovery.css",
       ],
     },
     {
       relativePath: "Doc/TODOs/00_Phase_Index.md",
       markers: [
-        "Phase 239",
-        "interaction-audit",
+        "240_Phase_Theme_Recovery_CSS_Module_Split.md",
+        "latest completed slice",
       ],
     },
     {
       relativePath: "Doc/AI_Usage_Dashboard_TODOs.md",
       markers: [
-        "Phase 239",
-        "interaction-audit CSS module split",
+        "Phase 240",
+        "theme-recovery CSS module split",
       ],
     },
     {
       relativePath: "README.md",
       markers: [
-        "interaction-audit CSS now lives in `src/sidepanel/theme/interaction-audit.css`",
+        "theme-recovery CSS now lives in `src/sidepanel/theme/theme-recovery.css`",
       ],
     },
   ];
@@ -279,40 +275,30 @@ async function runVisualReview(baseUrl) {
   });
   const page = await browser.newPage({
     viewport: {
-      width: 1600,
-      height: 1800,
+      width: 1366,
+      height: 1200,
     },
   });
 
   try {
-    await page.goto(`${baseUrl}/src/sidepanel/index.html#debug-interaction-audit`, {
+    await page.goto(`${baseUrl}/src/sidepanel/index.html#debug-theme-recovery-review`, {
       waitUntil: "load",
     });
-    await page.waitForSelector(".interaction-audit-shell", {
+    await page.waitForSelector("[data-theme-recovery-page='true']", {
       timeout: 20_000,
     });
-    await page.waitForSelector("[data-audit-surface-id]", {
+    await page.waitForSelector("[data-theme-recovery-summary-draft]", {
       timeout: 20_000,
     });
-    await page.waitForFunction(() =>
-      Array.from(document.querySelectorAll(".interaction-audit-frame")).every(
-        (frame) =>
-          frame instanceof HTMLIFrameElement &&
-          frame.contentDocument?.readyState === "complete",
-      ),
-    );
 
     const snapshot = await page.evaluate(() => {
       const root = document.documentElement;
-      const surfaces = Array.from(
-        document.querySelectorAll("[data-audit-surface-id]"),
+      const pageRoot = document.querySelector(".theme-recovery-shell");
+      const exportGrid = document.querySelector(".theme-recovery-export-grid");
+      const exportPanels = Array.from(
+        document.querySelectorAll(".theme-recovery-export-panel"),
       );
-      const grid = document.querySelector(".interaction-audit-grid");
-      const frameViewport = document.querySelector(
-        ".interaction-audit-frame-viewport",
-      );
-      const preset = document.querySelector(".interaction-audit__preset");
-      const queueItem = document.querySelector(".interaction-audit__queue-item");
+      const copyActions = document.querySelector(".theme-recovery-copy-actions");
 
       const styleSnapshot = (element) => {
         if (!(element instanceof HTMLElement)) {
@@ -320,46 +306,44 @@ async function runVisualReview(baseUrl) {
         }
         const styles = getComputedStyle(element);
         return {
-          backgroundColor: styles.backgroundColor,
-          borderColor: styles.borderColor,
-          borderRadius: styles.borderRadius,
           display: styles.display,
+          flexWrap: styles.flexWrap,
+          gap: styles.gap,
           gridTemplateColumns: styles.gridTemplateColumns,
         };
       };
 
       return {
         horizontalOverflow: Math.max(0, root.scrollWidth - window.innerWidth),
-        surfaceCount: surfaces.length,
-        grid: styleSnapshot(grid),
-        frameViewport: styleSnapshot(frameViewport),
-        preset: styleSnapshot(preset),
-        queueItem: styleSnapshot(queueItem),
+        exportPanelCount: exportPanels.length,
+        page: styleSnapshot(pageRoot),
+        exportGrid: styleSnapshot(exportGrid),
+        copyActions: styleSnapshot(copyActions),
       };
     });
 
     assert(
       snapshot.horizontalOverflow <= 1,
-      `interaction audit hub overflowed horizontally (${snapshot.horizontalOverflow}px).`,
+      `theme recovery page overflowed horizontally (${snapshot.horizontalOverflow}px).`,
     );
     assert(
-      snapshot.surfaceCount === 5,
-      `expected 5 audit surfaces, found ${snapshot.surfaceCount}.`,
+      snapshot.exportPanelCount === 2,
+      `expected 2 theme recovery export panels, found ${snapshot.exportPanelCount}.`,
     );
     assert(
-      snapshot.grid?.display === "grid",
-      `interaction audit grid lost grid display: ${JSON.stringify(snapshot.grid)}`,
+      snapshot.page?.display === "grid",
+      `theme recovery shell lost grid display: ${JSON.stringify(snapshot.page)}`,
     );
     assert(
-      snapshot.frameViewport?.borderRadius !== "0px",
-      "interaction audit frame viewport lost rounded Material framing.",
+      snapshot.exportGrid?.display === "grid",
+      `theme recovery export grid lost grid display: ${JSON.stringify(snapshot.exportGrid)}`,
     );
     assert(
-      snapshot.preset?.borderColor !== "rgba(0, 0, 0, 0)",
-      "interaction audit preset lost its supporting-surface border.",
+      snapshot.copyActions?.flexWrap === "wrap",
+      `theme recovery copy actions no longer wrap: ${JSON.stringify(snapshot.copyActions)}`,
     );
 
-    const screenshotPath = path.join(artifactDir, "interaction-audit-css-module.png");
+    const screenshotPath = path.join(artifactDir, "theme-recovery-css-module.png");
     await page.screenshot({
       path: screenshotPath,
       fullPage: true,
@@ -400,24 +384,24 @@ async function runReview() {
   };
   const reportPath = path.join(
     artifactDir,
-    "interaction-audit-css-module-review.json",
+    "theme-recovery-css-module-review.json",
   );
 
   await writeFile(reportPath, JSON.stringify(report, null, 2), "utf8");
 
-  console.log("phase239: interaction-audit CSS module split verified");
-  console.log(`phase239: saved artifacts under ${artifactDir}`);
-  console.log(`phase239: saved machine-readable results to ${reportPath}`);
+  console.log("phase240: theme-recovery CSS module split verified");
+  console.log(`phase240: saved artifacts under ${artifactDir}`);
+  console.log(`phase240: saved machine-readable results to ${reportPath}`);
   for (const result of markerResults) {
-    console.log(`phase239: ${result.scope} markers=${result.markers}`);
+    console.log(`phase240: ${result.scope} markers=${result.markers}`);
   }
   console.log(
-    `phase239: visual surfaces=${visualResult.snapshot.surfaceCount} overflow=${visualResult.snapshot.horizontalOverflow}`,
+    `phase240: visual export_panels=${visualResult.snapshot.exportPanelCount} overflow=${visualResult.snapshot.horizontalOverflow}`,
   );
 }
 
 runReview().catch((error) => {
-  console.error("phase239: interaction-audit CSS module review failed");
+  console.error("phase240: theme-recovery CSS module review failed");
   console.error(error instanceof Error ? error.message : error);
   process.exit(1);
 });

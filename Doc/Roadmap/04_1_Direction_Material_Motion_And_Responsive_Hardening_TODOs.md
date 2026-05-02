@@ -56,6 +56,7 @@ Status note:
 - `Phase 237` completed the first post-Phase 236 maintenance split on `2026-05-03` by moving provider-card CSS into `src/sidepanel/theme/provider-card.css`
 - `Phase 238` completed the next post-Phase 236 maintenance split on `2026-05-03` by moving shared usage progress CSS into `src/sidepanel/theme/usage-progress.css` for sidepanel and popup use
 - `Phase 239` completed the next post-Phase 236 maintenance split on `2026-05-03` by moving sidepanel-only interaction-audit CSS into `src/sidepanel/theme/interaction-audit.css`
+- `Phase 240` completed the next post-Phase 236 maintenance split on `2026-05-03` by moving sidepanel-only theme-recovery CSS into `src/sidepanel/theme/theme-recovery.css`
 
 Process rule:
 
@@ -92,6 +93,7 @@ Parent direction:
   - provider-card CSS now has a focused module in `src/sidepanel/theme/provider-card.css` instead of continuing to grow the main Material theme file
   - shared usage-progress CSS now has a focused module in `src/sidepanel/theme/usage-progress.css`, loaded by both sidepanel and popup entries while preserving provider-card-specific overrides
   - interaction-audit workspace CSS now has a focused sidepanel-only module in `src/sidepanel/theme/interaction-audit.css`
+  - theme-recovery workspace CSS now has a focused sidepanel-only module in `src/sidepanel/theme/theme-recovery.css`
 - maintenance follow-up after the provider-card contract is stable:
   - continue splitting the remaining oversized theme and Settings files into smaller ownership units
   - keep file-splitting phases narrow so future diffs remain easier to review

@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [239_Phase_Interaction_Audit_CSS_Module_Split.md](./Archive/239_Phase_Interaction_Audit_CSS_Module_Split.md)
+- latest completed slice: [240_Phase_Theme_Recovery_CSS_Module_Split.md](./Archive/240_Phase_Theme_Recovery_CSS_Module_Split.md)
 
 Completed phases should be moved to:
 
@@ -631,6 +631,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 238` closeout moved shared usage-progress and usage-window-progress-list CSS into `src/sidepanel/theme/usage-progress.css` and loaded it in both sidepanel and popup entries while preserving provider-card overrides
 - phase 239 depends on phases 67 through 96 because the interaction-audit operator workspace styling should only be split after the workspace and review-request flows are stable
 - the 2026-05-03 `Phase 239` closeout moved interaction-audit workspace CSS into `src/sidepanel/theme/interaction-audit.css` and kept that sidepanel-only module out of the popup entry
+- phase 240 depends on phases 112 through 117 because the theme-recovery operator workspace styling should only be split after the workspace and request-bound export flows are stable
+- the 2026-05-03 `Phase 240` closeout moved theme-recovery workspace CSS into `src/sidepanel/theme/theme-recovery.css` and kept that sidepanel-only module out of the popup entry
 
 ## Delivery Standard For Each Phase
 

@@ -1,0 +1,37 @@
+.theme-recovery-shell,
+.theme-recovery-provider-list,
+.theme-recovery-link-groups,
+.theme-recovery-link-group,
+.theme-recovery-export-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-3);
+}
+
+.theme-recovery-checklist {
+  display: grid;
+  gap: var(--app-space-2);
+}
+
+.theme-recovery-copy-actions {
+  flex-wrap: wrap;
+}
+
+.theme-recovery-export-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--app-space-3);
+}
+
+@media (max-width: 720px) {
+  .theme-recovery-export-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .theme-recovery-copy-actions .text-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
