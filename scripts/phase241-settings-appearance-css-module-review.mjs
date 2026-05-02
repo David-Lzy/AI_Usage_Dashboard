@@ -154,8 +154,8 @@ async function verifyDocsMarkers() {
     {
       relativePath: "Doc/TODOs/00_Phase_Index.md",
       markers: [
-        "241_Phase_Settings_Appearance_CSS_Module_Split.md",
-        "latest completed slice",
+        "Phase 241",
+        "Settings appearance",
       ],
     },
     {

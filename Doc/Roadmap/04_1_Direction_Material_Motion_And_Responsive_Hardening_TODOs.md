@@ -58,6 +58,7 @@ Status note:
 - `Phase 239` completed the next post-Phase 236 maintenance split on `2026-05-03` by moving sidepanel-only interaction-audit CSS into `src/sidepanel/theme/interaction-audit.css`
 - `Phase 240` completed the next post-Phase 236 maintenance split on `2026-05-03` by moving sidepanel-only theme-recovery CSS into `src/sidepanel/theme/theme-recovery.css`
 - `Phase 241` completed the next post-Phase 236 maintenance split on `2026-05-03` by moving Settings appearance CSS into `src/sidepanel/theme/settings-appearance.css`
+- `Phase 242` completed the next post-Phase 236 maintenance split on `2026-05-03` by moving shared sidepanel detail-surface CSS into `src/sidepanel/theme/detail-surfaces.css`
 
 Process rule:
 
@@ -96,6 +97,7 @@ Parent direction:
   - interaction-audit workspace CSS now has a focused sidepanel-only module in `src/sidepanel/theme/interaction-audit.css`
   - theme-recovery workspace CSS now has a focused sidepanel-only module in `src/sidepanel/theme/theme-recovery.css`
   - Settings appearance CSS now has a focused sidepanel-only module in `src/sidepanel/theme/settings-appearance.css`
+  - shared sidepanel detail-surface CSS now has a focused module in `src/sidepanel/theme/detail-surfaces.css`
 - maintenance follow-up after the provider-card contract is stable:
   - continue splitting the remaining oversized theme and Settings files into smaller ownership units
   - keep file-splitting phases narrow so future diffs remain easier to review
