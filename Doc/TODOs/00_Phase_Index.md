@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [238_Phase_Usage_Progress_CSS_Module_Split.md](./Archive/238_Phase_Usage_Progress_CSS_Module_Split.md)
+- latest completed slice: [239_Phase_Interaction_Audit_CSS_Module_Split.md](./Archive/239_Phase_Interaction_Audit_CSS_Module_Split.md)
 
 Completed phases should be moved to:
 
@@ -629,6 +629,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 237` closeout moved provider-card CSS into `src/sidepanel/theme/provider-card.css` while preserving the Phase 236 visual contract through the same dashboard review
 - phase 238 depends on phases 208, 209, 236, and 237 because usage progress CSS is shared across dashboard, provider-detail, and popup surfaces and must preserve provider-card override order
 - the 2026-05-03 `Phase 238` closeout moved shared usage-progress and usage-window-progress-list CSS into `src/sidepanel/theme/usage-progress.css` and loaded it in both sidepanel and popup entries while preserving provider-card overrides
+- phase 239 depends on phases 67 through 96 because the interaction-audit operator workspace styling should only be split after the workspace and review-request flows are stable
+- the 2026-05-03 `Phase 239` closeout moved interaction-audit workspace CSS into `src/sidepanel/theme/interaction-audit.css` and kept that sidepanel-only module out of the popup entry
 
 ## Delivery Standard For Each Phase
 
