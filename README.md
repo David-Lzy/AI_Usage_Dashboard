@@ -40,7 +40,7 @@ Security posture for this track:
 
 Next execution queue:
 
-1. continue splitting oversized UI/theme/localization files after the Phase 244 form-controls CSS module split
+1. continue splitting oversized UI/theme/localization files after the Phase 245 popup-theme CSS module split
 2. use `0.1.0-rc.3` for install/review passes until the next release package is cut
 3. keep [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) in maintenance mode unless a concrete diagnostic-body localization need appears
 4. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining manual store-popup capture dependency
@@ -137,6 +137,7 @@ Current honesty boundaries:
 - detail-surfaces CSS now lives in `src/sidepanel/theme/detail-surfaces.css`, keeping shared detail-field and detail-note supporting-surface styling out of the shared Material theme and popup entry
 - Settings source-card CSS now lives in `src/sidepanel/theme/settings-source-cards.css`, keeping Source Connections card, disclosure, and diagnostic-row styling out of the shared Material theme and popup entry
 - form-controls CSS now lives in `src/sidepanel/theme/form-controls.css`, keeping sidepanel form-field, Material select, editable number combobox, and switch-row styling out of the shared Material theme and popup entry
+- popup-theme CSS now lives in `src/popup/popup-theme.css`, keeping popup page, shell, provider-card, progress-ring, and responsive styling out of the shared Material theme and sidepanel entry
 - Cursor personal usage-page sync is now explicitly labeled as `Window-only vendor value`
 - Gemini remains `Policy only`; the observed Google Cloud metrics route is project-scoped and not treated as personal quota
 - the UI now makes the trust boundary explicit in Settings and provider detail, including host-access requirements, credential persistence, and the fact that cookies stay forbidden

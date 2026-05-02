@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [244_Phase_Form_Controls_CSS_Module_Split.md](./Archive/244_Phase_Form_Controls_CSS_Module_Split.md)
+- latest completed slice: [245_Phase_Popup_Theme_CSS_Module_Split.md](./Archive/245_Phase_Popup_Theme_CSS_Module_Split.md)
 
 Completed phases should be moved to:
 
@@ -641,6 +641,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 243` closeout moved Settings source-card CSS into `src/sidepanel/theme/settings-source-cards.css` and kept that Settings-only module out of the popup entry
 - phase 244 depends on phases 61, 64, 230, and 231 because sidepanel form-control styling should only be split after the focus/press and Material select/combobox contracts are stable
 - the 2026-05-03 `Phase 244` closeout moved sidepanel form-control CSS into `src/sidepanel/theme/form-controls.css` and kept that sidepanel-only module out of the popup entry
+- phase 245 depends on phases 152, 153, 209, 211, 226 through 228, and 244 because popup-only styling should only be split after width, appearance, circular progress, and host-edge contracts are stable
+- the 2026-05-03 `Phase 245` closeout moved popup-only CSS into `src/popup/popup-theme.css` and kept that popup-only module out of the sidepanel entry
 
 ## Delivery Standard For Each Phase
 
