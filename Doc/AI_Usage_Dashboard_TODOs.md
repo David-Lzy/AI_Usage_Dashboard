@@ -78,8 +78,8 @@ The project is no longer in shell-building or first provider-wiring mode.
 
 Current post-`Phase 236` execution priority:
 
-1. `P1` - split oversized implementation files now that the provider-card visual contract is stable:
-   - `src/sidepanel/theme/material-theme.css`
+1. `P1` - continue splitting oversized implementation files now that the provider-card visual contract is stable:
+   - remaining theme areas in `src/sidepanel/theme/material-theme.css`
    - `src/sidepanel/routes/SettingsPage.tsx`
    - `src/sidepanel/App.tsx`
    - `src/shared/localized-copy.ts`
@@ -295,7 +295,8 @@ Phase status update:
 - `Phase 234` added action badge quota selection so Settings can keep the attention-count badge or choose a remaining-quota badge from dynamic provider/window candidates
 - `Phase 235` added Settings sticky section navigation inside the existing top bar plus an extended back-to-top floating action button for long-page navigation
 - `Phase 236` completed dashboard provider-card Material unification, so provider cards now use a clearer Material card, supporting-surface, progress, chip, and footer-action hierarchy without changing provider truth or sync semantics
-- the next maintenance follow-up should split oversized UI and localization files now that the provider-card visual contract is stable
+- `Phase 237` completed the provider-card CSS module split after Phase 236 by moving provider-card CSS into `src/sidepanel/theme/provider-card.css` while preserving the same dashboard visual review
+- the next maintenance follow-up should continue splitting oversized UI and localization files now that the provider-card visual contract is stable
 - the remaining store-readiness blocker is still the real manual native-toolbar popup capture and archive completion under `Direction 10.3`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete

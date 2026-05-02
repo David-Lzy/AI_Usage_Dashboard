@@ -198,6 +198,7 @@
     "phase234:review": "./scripts/with-preferred-node.sh node ./scripts/phase234-action-badge-quota-selection-review.mjs",
     "phase235:review": "./scripts/with-preferred-node.sh node ./scripts/phase235-settings-sticky-nav-review.mjs",
     "phase236:review": "./scripts/with-preferred-node.sh node ./scripts/phase236-dashboard-provider-card-material-review.mjs",
+    "phase237:review": "./scripts/with-preferred-node.sh node ./scripts/phase237-provider-card-css-module-review.mjs",
     "interaction-audit:bundle": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-handoff-bundle.mjs",
     "interaction-audit:archive": "./scripts/with-preferred-node.sh node ./scripts/archive-interaction-audit-review.mjs",
     "interaction-audit:refresh-archive-index": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-review-archive-index.mjs",

@@ -53,6 +53,7 @@ Status note:
 - `Phase 95` completed the next executable slice on `2026-04-23` by preserving evidence source plus integrity summary through generated handoff bundles, durable archives, and the generated archive index
 - `Phase 96` completed the next executable slice on `2026-04-23` by preserving fulfillment receipt metadata inside fulfilled request manifests, request README output, and the generated request index
 - `Phase 236` completed the dashboard provider-card Material unification slice on `2026-05-03` by aligning dashboard provider cards with Material card, supporting-surface, progress, chip, and action roles
+- `Phase 237` completed the first post-Phase 236 maintenance split on `2026-05-03` by moving provider-card CSS into `src/sidepanel/theme/provider-card.css`
 
 Process rule:
 
@@ -86,9 +87,10 @@ Parent direction:
   - dashboard provider cards now use a Material header/status hierarchy, summary supporting surface, quota progress supporting surface, compact chip row, and right-aligned footer action hierarchy
   - Codex-style structured usage-window progress remains visible on dashboard cards while warning/error cards preserve state-toned surfaces
   - `ProviderCard` was updated as a presentation slice only; provider snapshots, source-selection semantics, sync behavior, and provider truth labels remain unchanged
+  - provider-card CSS now has a focused module in `src/sidepanel/theme/provider-card.css` instead of continuing to grow the main Material theme file
 - maintenance follow-up after the provider-card contract is stable:
-  - split the oversized theme and Settings files into smaller ownership units
-  - keep file-splitting separate from Phase 236 so future diffs remain easier to review
+  - continue splitting the remaining oversized theme and Settings files into smaller ownership units
+  - keep file-splitting phases narrow so future diffs remain easier to review
 
 ### B. Motion System
 

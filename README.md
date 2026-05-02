@@ -40,7 +40,7 @@ Security posture for this track:
 
 Next execution queue:
 
-1. split oversized UI/theme/localization files after the Phase 236 provider-card Material contract is stable
+1. continue splitting oversized UI/theme/localization files after the Phase 237 provider-card CSS module split
 2. use `0.1.0-rc.3` for install/review passes until the next release package is cut
 3. keep [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) in maintenance mode unless a concrete diagnostic-body localization need appears
 4. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining manual store-popup capture dependency
@@ -129,6 +129,7 @@ Current honesty boundaries:
 - Codex personal parsing now also tolerates merged usage-window label/value snippets such as `每周使用限额 32% 剩余` without storing the runtime percent inside the normalized label
 - dashboard and provider detail now render every visible structured usage window as a remaining progress bar, including weekly and model-specific Codex windows; popup remains compact and keeps the compressed summary
 - dashboard provider cards now use the same Material card, supporting-surface, progress, chip, and action hierarchy as the newer Settings and popup controls while preserving the existing provider data and truth labels
+- provider-card CSS now lives in `src/sidepanel/theme/provider-card.css`, loaded after the shared Material theme so the dashboard card contract can be maintained without growing the main theme file further
 - Cursor personal usage-page sync is now explicitly labeled as `Window-only vendor value`
 - Gemini remains `Policy only`; the observed Google Cloud metrics route is project-scoped and not treated as personal quota
 - the UI now makes the trust boundary explicit in Settings and provider detail, including host-access requirements, credential persistence, and the fact that cookies stay forbidden

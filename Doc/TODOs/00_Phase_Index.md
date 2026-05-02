@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [236_Phase_Dashboard_Provider_Card_Material_Unification.md](./Archive/236_Phase_Dashboard_Provider_Card_Material_Unification.md)
+- latest completed slice: [237_Phase_Provider_Card_CSS_Module_Split.md](./Archive/237_Phase_Provider_Card_CSS_Module_Split.md)
 
 Completed phases should be moved to:
 
@@ -625,6 +625,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 235` closeout added Settings sticky section navigation inside the existing top bar plus a return-to-top FAB for long Settings pages
 - phase 236 depends on phases 208 through 231 and phase 235 because dashboard provider cards should preserve existing quota, chip, source-page action, and Settings/Popup Material contracts while fixing the remaining dashboard visual gap
 - the 2026-05-03 `Phase 236` closeout unified dashboard provider-card structure and CSS around Material card, supporting-surface, progress, chip, and footer-action roles while preserving provider data, sync behavior, and truth labels
+- phase 237 depends on phase 236 because the provider-card CSS should be split only after the visual contract is stable and reviewable
+- the 2026-05-03 `Phase 237` closeout moved provider-card CSS into `src/sidepanel/theme/provider-card.css` while preserving the Phase 236 visual contract through the same dashboard review
 
 ## Delivery Standard For Each Phase
 

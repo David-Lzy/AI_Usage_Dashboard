@@ -67,13 +67,20 @@ async function verifyRuntimeMarkers() {
       ],
     },
     {
-      relativePath: "src/sidepanel/theme/material-theme.css",
+      relativePath: "src/sidepanel/theme/provider-card.css",
       markers: [
         ".provider-card__summary",
         ".provider-card__progress-surface",
         ".provider-card__action--primary",
         ".provider-card__footer",
         "flex-direction: row;",
+      ],
+    },
+    {
+      relativePath: "src/sidepanel/main.tsx",
+      markers: [
+        'import "./theme/material-theme.css";',
+        'import "./theme/provider-card.css";',
       ],
     },
     {
@@ -127,8 +134,8 @@ async function verifyDocsMarkers() {
     {
       relativePath: "Doc/TODOs/00_Phase_Index.md",
       markers: [
-        "236_Phase_Dashboard_Provider_Card_Material_Unification.md",
-        "latest completed slice",
+        "Phase 236",
+        "dashboard provider-card structure",
       ],
     },
     {
