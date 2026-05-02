@@ -10,9 +10,9 @@ const projectRoot = process.cwd();
 const artifactDir = path.join(
   projectRoot,
   "tmp",
-  "phase245-popup-theme-css-module-review",
+  "phase246-settings-navigation-css-module-review",
 );
-const devPort = 42645;
+const devPort = 42646;
 
 function assert(condition, message) {
   if (!condition) {
@@ -56,9 +56,9 @@ async function verifyPackageScript() {
   const packageJson = await readJson("package.json");
 
   assert(
-    packageJson.scripts["phase245:review"] ===
-      "./scripts/with-preferred-node.sh node ./scripts/phase245-popup-theme-css-module-review.mjs",
-    "package.json is missing the expected phase245:review script.",
+    packageJson.scripts["phase246:review"] ===
+      "./scripts/with-preferred-node.sh node ./scripts/phase246-settings-navigation-css-module-review.mjs",
+    "package.json is missing the expected phase246:review script.",
   );
 
   return {
@@ -68,48 +68,60 @@ async function verifyPackageScript() {
 }
 
 async function verifyCssSplit() {
-  const popupEntry = await readProjectFile("src/popup/main.tsx");
   const sidepanelEntry = await readProjectFile("src/sidepanel/main.tsx");
+  const popupEntry = await readProjectFile("src/popup/main.tsx");
   const materialTheme = await readProjectFile(
     "src/sidepanel/theme/material-theme.css",
   );
-  const popupTheme = await readProjectFile("src/popup/popup-theme.css");
-
-  verifyOrder(popupEntry, "src/popup/main.tsx", [
-    'import "../sidepanel/theme/material-theme.css";',
-    'import "../sidepanel/theme/usage-progress.css";',
-    'import "./popup-theme.css";',
-  ]);
-  assert(
-    !sidepanelEntry.includes("popup-theme.css"),
-    "sidepanel entry should not import the popup-only theme module.",
-  );
-  assert(
-    !materialTheme.includes("popup-page") &&
-      !materialTheme.includes("popup-shell") &&
-      !materialTheme.includes("popup-provider-card") &&
-      !materialTheme.includes("popup-progress-ring"),
-    "material-theme.css still owns popup-only selectors.",
+  const settingsNavigationTheme = await readProjectFile(
+    "src/sidepanel/theme/settings-navigation.css",
   );
 
-  verifyMarkers(popupTheme, "src/popup/popup-theme.css", [
-    "html.popup-page",
-    ".popup-shell",
-    ".popup-provider-card",
-    ".popup-provider-card__progress--circle",
-    ".popup-progress-ring",
-    ".popup-provider-card__provider",
-    "@media (max-width: 720px)",
-    "@media (max-width: 480px)",
+  verifyOrder(sidepanelEntry, "src/sidepanel/main.tsx", [
+    'import "./theme/material-theme.css";',
+    'import "./theme/detail-surfaces.css";',
+    'import "./theme/form-controls.css";',
+    'import "./theme/settings-navigation.css";',
+    'import "./theme/settings-source-cards.css";',
+    'import "./theme/interaction-audit.css";',
+    'import "./theme/settings-appearance.css";',
+    'import "./theme/theme-recovery.css";',
+    'import "./theme/usage-progress.css";',
+    'import "./theme/provider-card.css";',
   ]);
+  assert(
+    !popupEntry.includes("settings-navigation.css"),
+    "popup entry should not import the sidepanel-only Settings navigation CSS module.",
+  );
+  assert(
+    !materialTheme.includes("\n.settings-grid {\n") &&
+      !materialTheme.includes("\n.settings-section-nav {\n") &&
+      !materialTheme.includes("\n.settings-nav-chip {\n") &&
+      !materialTheme.includes("\n.settings-back-to-top-fab {\n"),
+    "material-theme.css still owns Settings navigation selectors.",
+  );
+
+  verifyMarkers(
+    settingsNavigationTheme,
+    "src/sidepanel/theme/settings-navigation.css",
+    [
+      ".settings-grid",
+      ".settings-section-anchor",
+      ".settings-section-nav",
+      ".settings-nav-chip",
+      ".settings-back-to-top-fab",
+      ".settings-back-to-top-fab__label",
+      "@media (max-width: 720px)",
+    ],
+  );
 
   return [
     {
-      scope: "src/popup/main.tsx",
-      markers: 3,
+      scope: "src/sidepanel/main.tsx",
+      markers: 10,
     },
     {
-      scope: "src/sidepanel/main.tsx",
+      scope: "src/popup/main.tsx",
       markers: 1,
     },
     {
@@ -117,8 +129,8 @@ async function verifyCssSplit() {
       markers: 4,
     },
     {
-      scope: "src/popup/popup-theme.css",
-      markers: 8,
+      scope: "src/sidepanel/theme/settings-navigation.css",
+      markers: 7,
     },
   ];
 }
@@ -126,37 +138,38 @@ async function verifyCssSplit() {
 async function verifyDocsMarkers() {
   const expectations = [
     {
-      relativePath: "Doc/testing/Phase_245_Popup_Theme_CSS_Module_Split.md",
+      relativePath:
+        "Doc/testing/Phase_246_Settings_Navigation_CSS_Module_Split.md",
       markers: [
-        "Phase 245",
-        "Popup Theme CSS Module Split",
-        "npm run phase245:review",
+        "Phase 246",
+        "Settings Navigation CSS Module Split",
+        "npm run phase246:review",
       ],
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/245_Phase_Popup_Theme_CSS_Module_Split.md",
+        "Doc/TODOs/Archive/246_Phase_Settings_Navigation_CSS_Module_Split.md",
       markers: [
-        "Phase 245",
+        "Phase 246",
         "completed and archived on 2026-05-03",
-        "popup-theme.css",
+        "settings-navigation.css",
       ],
     },
     {
       relativePath: "Doc/TODOs/00_Phase_Index.md",
       markers: [
-        "Phase 245",
-        "popup-only",
+        "246_Phase_Settings_Navigation_CSS_Module_Split.md",
+        "latest completed slice",
       ],
     },
     {
       relativePath: "Doc/AI_Usage_Dashboard_TODOs.md",
-      markers: ["Phase 245", "popup-theme CSS module split"],
+      markers: ["Phase 246", "Settings navigation CSS module split"],
     },
     {
       relativePath: "README.md",
       markers: [
-        "popup-theme CSS now lives in `src/popup/popup-theme.css`",
+        "Settings navigation CSS now lives in `src/sidepanel/theme/settings-navigation.css`",
       ],
     },
   ];
@@ -231,7 +244,7 @@ async function waitForServer(baseUrl, server, getLogTail) {
     }
 
     try {
-      const response = await fetch(`${baseUrl}/src/popup/index.html`);
+      const response = await fetch(`${baseUrl}/src/sidepanel/index.html`);
       if (response.ok) {
         return;
       }
@@ -276,89 +289,94 @@ async function collectStyles(locator) {
       borderRadius: styles.borderRadius,
       boxShadow: styles.boxShadow,
       display: styles.display,
-      gap: styles.gap,
+      flexWrap: styles.flexWrap,
       gridTemplateColumns: styles.gridTemplateColumns,
-      maxWidth: styles.maxWidth,
-      minWidth: styles.minWidth,
-      width: styles.width,
+      position: styles.position,
+      scrollMarginTop: styles.scrollMarginTop,
+      whiteSpace: styles.whiteSpace,
     };
   });
 }
 
-async function collectPopupState(page) {
+async function collectOverflowState(page) {
   return page.evaluate(() => ({
     overflowX:
       document.documentElement.scrollWidth - document.documentElement.clientWidth,
-    htmlWidth: getComputedStyle(document.documentElement).width,
-    bodyWidth: getComputedStyle(document.body).width,
-    popupSizePreset:
-      document.documentElement.getAttribute("data-popup-size-preset"),
-    popupCornerStyle:
-      document.documentElement.getAttribute("data-popup-corner-style"),
-    popupShadowStyle:
-      document.documentElement.getAttribute("data-popup-shadow-style"),
   }));
 }
 
-async function reviewPopup(baseUrl, browser, viewport, label) {
+async function reviewSettingsNavigation(baseUrl, browser, viewport, label) {
   const page = await browser.newPage({ viewport });
 
   try {
-    await page.goto(`${baseUrl}/src/popup/index.html`, {
+    await page.goto(`${baseUrl}/src/sidepanel/index.html#settings`, {
       waitUntil: "load",
     });
-    await page.waitForSelector(".popup-shell", { timeout: 20_000 });
-    await page.waitForSelector(".popup-actions", { timeout: 20_000 });
-    await page.waitForSelector(".popup-provider-card", { timeout: 20_000 });
+    await page.waitForSelector(".settings-section-nav", { timeout: 20_000 });
+    await page.waitForSelector(".settings-nav-chip", { timeout: 20_000 });
+    await page.waitForSelector(".settings-back-to-top-fab", {
+      timeout: 20_000,
+    });
+
+    const navChip = page.locator(".settings-nav-chip").first();
+    await navChip.focus();
 
     const result = {
-      popupState: await collectPopupState(page),
-      shellStyles: await collectStyles(page.locator(".popup-shell").first()),
-      statusCardStyles: await collectStyles(page.locator(".status-card").first()),
-      providerCardStyles: await collectStyles(
-        page.locator(".popup-provider-card").first(),
+      overflow: await collectOverflowState(page),
+      topBarStyles: await collectStyles(page.locator(".top-app-bar").first()),
+      navStyles: await collectStyles(page.locator(".settings-section-nav")),
+      activeChipStyles: await collectStyles(
+        page.locator('.settings-nav-chip[data-active="true"]').first(),
       ),
-      providerHeaderStyles: await collectStyles(
-        page.locator(".popup-provider-card__header").first(),
+      focusedChipStyles: await collectStyles(navChip),
+      anchorStyles: await collectStyles(
+        page.locator(".settings-section-anchor").first(),
       ),
-      progressStyles: await collectStyles(
-        page.locator(".popup-provider-card__progress").first(),
+      fabStyles: await collectStyles(page.locator(".settings-back-to-top-fab")),
+      fabLabelStyles: await collectStyles(
+        page.locator(".settings-back-to-top-fab__label"),
       ),
-      actionsStyles: await collectStyles(page.locator(".popup-actions").first()),
+      settingsGridStyles: await collectStyles(page.locator(".settings-grid").first()),
     };
 
     await page.screenshot({
-      path: path.join(artifactDir, `${label}-popup-theme.png`),
+      path: path.join(artifactDir, `${label}-settings-navigation.png`),
       fullPage: true,
     });
 
     assert(
-      result.popupState.overflowX === 0,
-      `${label} popup overflowed horizontally (${result.popupState.overflowX}px).`,
+      result.overflow.overflowX === 0,
+      `${label} Settings navigation overflowed horizontally (${result.overflow.overflowX}px).`,
     );
     assert(
-      result.shellStyles?.minWidth === "0px",
-      `${label} popup shell should use the popup-page min-width override.`,
+      result.topBarStyles?.position === "sticky",
+      `${label} Settings top app bar should remain sticky.`,
     );
     assert(
-      result.statusCardStyles?.borderRadius !== "0px",
-      `${label} popup status cards lost their runtime radius.`,
+      result.navStyles?.display === "flex" &&
+        result.navStyles.flexWrap === "wrap",
+      `${label} Settings section nav should remain a wrapping flex row.`,
     );
     assert(
-      result.providerCardStyles?.boxShadow !== "none",
-      `${label} popup provider cards lost their configured elevation.`,
+      result.activeChipStyles?.borderRadius !== "0px",
+      `${label} active Settings nav chip lost its rounded shape.`,
     );
     assert(
-      result.providerHeaderStyles?.display === "flex",
-      `${label} popup provider-card header lost its flex layout.`,
+      result.focusedChipStyles?.boxShadow !== "none",
+      `${label} focused Settings nav chip lost its focus/elevation treatment.`,
     );
     assert(
-      result.progressStyles?.display === "grid",
-      `${label} popup provider-card progress lost its grid layout.`,
+      result.fabStyles?.position === "fixed",
+      `${label} back-to-top action should remain fixed.`,
     );
     assert(
-      result.actionsStyles?.display === "flex",
-      `${label} popup actions lost their flex layout.`,
+      result.fabLabelStyles?.whiteSpace === "nowrap" ||
+        result.fabLabelStyles?.display === "none",
+      `${label} back-to-top label should either stay nowrap or be hidden compactly.`,
+    );
+    assert(
+      result.settingsGridStyles?.display === "grid",
+      `${label} Settings grid lost its grid layout.`,
     );
 
     return result;
@@ -375,17 +393,17 @@ async function runVisualReview(baseUrl) {
 
   try {
     return {
-      balanced: await reviewPopup(
+      compact: await reviewSettingsNavigation(
         baseUrl,
         browser,
         { width: 420, height: 900 },
-        "balanced",
+        "compact",
       ),
-      narrow: await reviewPopup(
+      wide: await reviewSettingsNavigation(
         baseUrl,
         browser,
-        { width: 360, height: 900 },
-        "narrow",
+        { width: 900, height: 900 },
+        "wide",
       ),
     };
   } finally {
@@ -419,24 +437,24 @@ async function runReview() {
   };
   const reportPath = path.join(
     artifactDir,
-    "popup-theme-css-module-review.json",
+    "settings-navigation-css-module-review.json",
   );
 
   await writeFile(reportPath, JSON.stringify(report, null, 2), "utf8");
 
-  console.log("phase245: popup-theme CSS module split verified");
-  console.log(`phase245: saved artifacts under ${artifactDir}`);
-  console.log(`phase245: saved machine-readable results to ${reportPath}`);
+  console.log("phase246: Settings navigation CSS module split verified");
+  console.log(`phase246: saved artifacts under ${artifactDir}`);
+  console.log(`phase246: saved machine-readable results to ${reportPath}`);
   for (const result of markerResults) {
-    console.log(`phase245: ${result.scope} markers=${result.markers}`);
+    console.log(`phase246: ${result.scope} markers=${result.markers}`);
   }
   console.log(
-    `phase245: visual balanced_overflow=${visualResult.balanced.popupState.overflowX} narrow_overflow=${visualResult.narrow.popupState.overflowX}`,
+    `phase246: visual compact_overflow=${visualResult.compact.overflow.overflowX} wide_overflow=${visualResult.wide.overflow.overflowX}`,
   );
 }
 
 runReview().catch((error) => {
-  console.error("phase245: popup-theme CSS module review failed");
+  console.error("phase246: Settings navigation CSS module review failed");
   console.error(error instanceof Error ? error.message : error);
   process.exit(1);
 });

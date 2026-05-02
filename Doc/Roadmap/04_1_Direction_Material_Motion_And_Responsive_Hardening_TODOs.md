@@ -62,6 +62,7 @@ Status note:
 - `Phase 243` completed the next post-Phase 236 maintenance split on `2026-05-03` by moving Settings source-card CSS into `src/sidepanel/theme/settings-source-cards.css`
 - `Phase 244` completed the next post-Phase 236 maintenance split on `2026-05-03` by moving sidepanel form-control CSS into `src/sidepanel/theme/form-controls.css`
 - `Phase 245` completed the next post-Phase 236 maintenance split on `2026-05-03` by moving popup-only CSS into `src/popup/popup-theme.css`
+- `Phase 246` completed the next post-Phase 236 maintenance split on `2026-05-03` by moving Settings navigation CSS into `src/sidepanel/theme/settings-navigation.css`
 
 Process rule:
 
@@ -104,6 +105,7 @@ Parent direction:
   - Settings source-card CSS now has a focused sidepanel-only module in `src/sidepanel/theme/settings-source-cards.css`
   - sidepanel form-control CSS now has a focused sidepanel-only module in `src/sidepanel/theme/form-controls.css`
   - popup-only CSS now has a focused popup entry module in `src/popup/popup-theme.css`
+  - Settings navigation CSS now has a focused sidepanel-only module in `src/sidepanel/theme/settings-navigation.css`
 - maintenance follow-up after the provider-card contract is stable:
   - continue splitting the remaining oversized theme and Settings files into smaller ownership units
   - keep file-splitting phases narrow so future diffs remain easier to review

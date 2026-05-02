@@ -70,10 +70,8 @@ async function verifyRuntimeMarkers() {
       ],
     },
     {
-      relativePath: "src/sidepanel/theme/material-theme.css",
+      relativePath: "src/sidepanel/theme/settings-navigation.css",
       markers: [
-        ".top-app-bar__bottom",
-        "position: sticky",
         ".settings-nav-chip[data-active=\"true\"]",
         ".settings-back-to-top-fab",
         ".settings-back-to-top-fab__label",
@@ -146,8 +144,8 @@ async function verifyTestsAndDocs() {
     {
       relativePath: "Doc/TODOs/00_Phase_Index.md",
       markers: [
-        "235_Phase_Settings_Sticky_Nav.md",
-        "latest completed slice",
+        "Phase 235",
+        "Settings sticky",
       ],
     },
     {
