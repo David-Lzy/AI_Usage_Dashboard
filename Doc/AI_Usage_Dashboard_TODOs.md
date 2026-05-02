@@ -76,20 +76,15 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 235` execution priority:
+Current post-`Phase 236` execution priority:
 
-1. `P0` - close the current uncommitted `Phase 234` and `Phase 235` worktree state after final document and runtime review.
-2. `P0` - start `Phase 236`, dashboard provider-card Material unification:
-   - the current dashboard provider card screenshot is not a context rollback or lost work
-   - the Settings and popup controls have moved farther into the Material system than the dashboard provider card
-   - `ProviderCard` should be audited against Material card, action, chip, and progress roles before more store-facing screenshots are refreshed
-3. `P1` - split oversized implementation files after the provider-card visual contract is fixed:
+1. `P1` - split oversized implementation files now that the provider-card visual contract is stable:
    - `src/sidepanel/theme/material-theme.css`
    - `src/sidepanel/routes/SettingsPage.tsx`
    - `src/sidepanel/App.tsx`
    - `src/shared/localized-copy.ts`
-4. `P1` - complete the `Direction 10.3` store asset-pack line once the remaining manual native-toolbar popup captures can be collected and archived.
-5. `P2` - continue provider and evidence closure work:
+2. `P1` - complete the `Direction 10.3` store asset-pack line once the remaining manual native-toolbar popup captures can be collected and archived.
+3. `P2` - continue provider and evidence closure work:
    - JetBrains org-console reverification
    - Claude personal Pro or Max usage-page capture
    - Gemini project-metrics product-contract decision
@@ -99,7 +94,7 @@ Current post-`Phase 235` execution priority:
 Delivery rule for this stage:
 
 - keep active implementation phases narrow and independently verifiable
-- do not mix Phase 236 provider-card Material work with broad file-splitting refactors
+- keep file-splitting separate from provider-card visual work so Phase 236 remains reviewable as one UI slice
 - preserve the current provider truth boundaries while changing UI presentation
 
 Phase status update:
@@ -299,8 +294,8 @@ Phase status update:
 - `Phase 233` added Codex hydration retry so a first refresh can wait through the matched analytics route's loading shell before reporting a parser failure
 - `Phase 234` added action badge quota selection so Settings can keep the attention-count badge or choose a remaining-quota badge from dynamic provider/window candidates
 - `Phase 235` added Settings sticky section navigation inside the existing top bar plus an extended back-to-top floating action button for long-page navigation
-- `Phase 236` is the next active development slice and should make dashboard provider cards match the Material visual language already used by Settings controls and the toolbar popup
-- the next maintenance follow-up after Phase 236 should split oversized UI and localization files only after the provider-card visual contract is stable
+- `Phase 236` completed dashboard provider-card Material unification, so provider cards now use a clearer Material card, supporting-surface, progress, chip, and footer-action hierarchy without changing provider truth or sync semantics
+- the next maintenance follow-up should split oversized UI and localization files now that the provider-card visual contract is stable
 - the remaining store-readiness blocker is still the real manual native-toolbar popup capture and archive completion under `Direction 10.3`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete

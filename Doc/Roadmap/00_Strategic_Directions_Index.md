@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-03:
 
-- the numbered phase queue is now completed through `Phase 235`
+- the numbered phase queue is now completed through `Phase 236`
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -118,9 +118,8 @@ As of 2026-05-03:
 - `Phase 233` added Codex hydration retry for matched analytics routes whose usage-window DOM content appears after Chrome reports the tab loaded
 - `Phase 234` added action badge quota selection so the toolbar badge can keep the attention count or show one selected remaining-quota value from dynamic provider/window candidates
 - `Phase 235` added Settings sticky section navigation inside the existing top bar plus a return-to-top FAB for long Settings pages
-- the current working tree still contains the `Phase 234` and `Phase 235` implementation plus documentation files, so the next closeout should commit that completed work before starting runtime edits for `Phase 236`
-- the next active execution slice is `Phase 236 - Dashboard Provider Card Material Unification` under `Direction 04`; the visible dashboard provider-card gap is a remaining Material coverage gap, not a rollback of the Settings Material-select work
-- `Phase 236` should keep provider data, sync behavior, source truth labels, and Codex/Cursor fidelity claims unchanged while updating dashboard provider-card layout, action hierarchy, chips, and progress presentation
+- `Phase 236` completed dashboard provider-card Material unification under `Direction 04`, so dashboard provider cards now use Material card, supporting-surface, progress, chip, and footer-action roles without changing provider data, sync behavior, source truth labels, or Codex/Cursor fidelity claims
+- the next local-safe execution slice is maintenance-oriented file splitting for oversized UI/theme/localization modules; that should stay separate from the now-closed provider-card visual slice
 - `Direction 10.3` still retains the real manual native-toolbar popup capture dependency for final store assets; the existing request has staged full-page captures but still needs the native popup slots before archive completion
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
 - `Phase 42` has packaged `0.1.0-rc.2` and closed the release-closeout track for the narrowed RC

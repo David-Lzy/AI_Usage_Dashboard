@@ -91,52 +91,67 @@ export function ProviderCard({
       className={`provider-card provider-card--${provider.displayTone}`}
       data-provider-id={provider.providerId}
     >
-      <div className="provider-card__header">
-        <div>
+      <header className="provider-card__header">
+        <div className="provider-card__identity">
           <p className="provider-card__provider">{provider.providerLabel}</p>
           <p className="provider-card__plan">{provider.planName}</p>
         </div>
-        <StatusBadge
-          label={
-            provider.permissionStatus === "missing"
-              ? "Needs access"
-              : provider.displaySyncStatus === "ok"
-              ? "Healthy"
-              : provider.displaySyncStatus === "warning"
-                ? "Warning"
-                : "Sync issue"
-          }
-          tone={provider.displayTone}
-        />
-      </div>
+        <div className="provider-card__status">
+          <StatusBadge
+            label={
+              provider.permissionStatus === "missing"
+                ? "Needs access"
+                : provider.displaySyncStatus === "ok"
+                  ? "Healthy"
+                  : provider.displaySyncStatus === "warning"
+                    ? "Warning"
+                    : "Sync issue"
+            }
+            tone={provider.displayTone}
+          />
+        </div>
+      </header>
 
       <div className="provider-card__body">
-        <p className="body-copy">{usageLabel}</p>
-        <p className="supporting-copy">{localizedResetLabel}</p>
-        <p className="supporting-copy">{provider.currentSourceContractDetail}</p>
+        <section
+          className="provider-card__summary"
+          aria-label={`${provider.providerLabel} usage summary`}
+        >
+          <p className="provider-card__usage-label">{usageLabel}</p>
+          <div className="provider-card__summary-details">
+            <p className="supporting-copy">{localizedResetLabel}</p>
+            <p className="supporting-copy">
+              {provider.currentSourceContractDetail}
+            </p>
+          </div>
+        </section>
 
         {showSingleUsageProgress ? (
-          <UsageProgress
-            used={provider.used}
-            remaining={provider.remaining}
-            total={provider.total}
-            tone={provider.displayTone}
-            label={`${provider.quotaWindow} ${provider.quotaUnit}`}
-            displayStyle={progressDisplayStyle}
-            valueKind={provider.remaining !== null ? "remaining" : "used"}
-          />
+          <section className="provider-card__progress-surface">
+            <UsageProgress
+              used={provider.used}
+              remaining={provider.remaining}
+              total={provider.total}
+              tone={provider.displayTone}
+              label={`${provider.quotaWindow} ${provider.quotaUnit}`}
+              displayStyle={progressDisplayStyle}
+              valueKind={provider.remaining !== null ? "remaining" : "used"}
+            />
+          </section>
         ) : null}
 
         {hasUsageWindowProgress && provider.usageWindows ? (
-          <UsageWindowProgressList
-            windows={provider.usageWindows}
-            i18n={i18n}
-            density="compact"
-            displayStyle={progressDisplayStyle}
-          />
+          <section className="provider-card__progress-surface">
+            <UsageWindowProgressList
+              windows={provider.usageWindows}
+              i18n={i18n}
+              density="compact"
+              displayStyle={progressDisplayStyle}
+            />
+          </section>
         ) : null}
 
-        <div className="provider-card__meta">
+        <div className="provider-card__meta" aria-label="Provider source context">
           <span className="meta-chip">{provider.currentSourceLabel}</span>
           <span className="meta-chip">{provider.currentSourceContractLabel}</span>
           <span className={fidelityChipClassName}>
@@ -172,20 +187,24 @@ export function ProviderCard({
             </span>
           ) : null}
         </div>
-        <p className="supporting-copy">{provider.currentSourceAvailabilitySummary}</p>
+        <p className="supporting-copy provider-card__availability">
+          {provider.currentSourceAvailabilitySummary}
+        </p>
         {showUsageSummary ? (
-          <p className="supporting-copy">{provider.usageSummary}</p>
+          <p className="supporting-copy provider-card__availability">
+            {provider.usageSummary}
+          </p>
         ) : null}
         {showSessionPageContract ? (
-          <p className="supporting-copy">
+          <p className="supporting-copy provider-card__availability">
             Session-page track: {provider.sessionPageContractLabel}
           </p>
         ) : null}
       </div>
 
-      <div className="provider-card__footer">
+      <footer className="provider-card__footer">
         <button
-          className="text-button"
+          className="text-button provider-card__action"
           type="button"
           onClick={() => onOpen(provider.providerId)}
         >
@@ -193,7 +212,7 @@ export function ProviderCard({
         </button>
         {showSourcePageAction ? (
           <button
-            className="text-button"
+            className="text-button provider-card__action"
             data-provider-card-open-source-page="true"
             type="button"
             title="Open source page"
@@ -208,13 +227,13 @@ export function ProviderCard({
           </button>
         ) : null}
         <button
-          className="text-button"
+          className="text-button provider-card__action provider-card__action--primary"
           type="button"
           onClick={() => onRefresh(provider.providerId)}
         >
           Refresh
         </button>
-      </div>
+      </footer>
     </article>
   );
 }

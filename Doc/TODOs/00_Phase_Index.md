@@ -34,8 +34,8 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [236_Phase_Dashboard_Provider_Card_Material_Unification.md](./236_Phase_Dashboard_Provider_Card_Material_Unification.md)
-- latest completed slice: [235_Phase_Settings_Sticky_Nav.md](./Archive/235_Phase_Settings_Sticky_Nav.md)
+- active phase file: none
+- latest completed slice: [236_Phase_Dashboard_Provider_Card_Material_Unification.md](./Archive/236_Phase_Dashboard_Provider_Card_Material_Unification.md)
 
 Completed phases should be moved to:
 
@@ -619,6 +619,12 @@ Completed phases should be moved to:
 - the 2026-05-02 `Phase 232` closeout added automatic Codex managed-page sync before a saved binding exists, shortened the first periodic sync delay, and preserved the boundary that this is an inactive managed tab rather than a hidden offscreen scrape
 - phase 233 depends on phase 232 because the first automatically opened Codex managed tab can match the route before the ChatGPT frontend hydrates usage-window DOM content
 - the 2026-05-03 `Phase 233` closeout added a bounded Codex hydration retry so a first refresh can wait through the matched-route loading shell instead of exposing a transient parser failure
+- phase 234 depends on phases 49 and 208 through 210 because the action badge can only offer quota candidates after attention-count semantics and structured quota windows already exist
+- the 2026-05-03 `Phase 234` closeout added action badge quota selection so the toolbar badge can keep the attention count or show one selected remaining-quota value from dynamic provider/window candidates
+- phase 235 depends on phase 231 because sticky Settings navigation should land after the visible Settings controls already share the Material select language
+- the 2026-05-03 `Phase 235` closeout added Settings sticky section navigation inside the existing top bar plus a return-to-top FAB for long Settings pages
+- phase 236 depends on phases 208 through 231 and phase 235 because dashboard provider cards should preserve existing quota, chip, source-page action, and Settings/Popup Material contracts while fixing the remaining dashboard visual gap
+- the 2026-05-03 `Phase 236` closeout unified dashboard provider-card structure and CSS around Material card, supporting-surface, progress, chip, and footer-action roles while preserving provider data, sync behavior, and truth labels
 
 ## Delivery Standard For Each Phase
 

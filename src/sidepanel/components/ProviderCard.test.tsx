@@ -44,6 +44,22 @@ function renderProviderCard(
 }
 
 describe("ProviderCard", () => {
+  it("uses the Material provider-card hierarchy for summary, progress, chips, and actions", () => {
+    const html = renderProviderCard(createState(), "gemini");
+
+    expect(html).toContain('<header class="provider-card__header">');
+    expect(html).toContain('class="provider-card__identity"');
+    expect(html).toContain('class="provider-card__status"');
+    expect(html).toContain('class="provider-card__summary"');
+    expect(html).toContain('class="provider-card__usage-label"');
+    expect(html).toContain('class="provider-card__progress-surface"');
+    expect(html).toContain('class="provider-card__meta"');
+    expect(html).toContain('<footer class="provider-card__footer">');
+    expect(html).toContain(
+      'class="text-button provider-card__action provider-card__action--primary"',
+    );
+  });
+
   it("does not render empty percent progress when Codex page parsing fails", () => {
     const warningReason =
       "The matched Codex usage page no longer exposed a parseable remaining-percentage window.";

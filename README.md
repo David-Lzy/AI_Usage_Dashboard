@@ -40,9 +40,10 @@ Security posture for this track:
 
 Next execution queue:
 
-1. use `0.1.0-rc.3` for the next install/review pass; it includes the post-`rc.2` Codex/Cursor personal usage, popup progress, popup appearance, and Phase 213 native-popup density work
-2. keep [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) in maintenance mode unless a concrete diagnostic-body localization need appears
-3. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining manual store-popup capture dependency
+1. split oversized UI/theme/localization files after the Phase 236 provider-card Material contract is stable
+2. use `0.1.0-rc.3` for install/review passes until the next release package is cut
+3. keep [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) in maintenance mode unless a concrete diagnostic-body localization need appears
+4. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining manual store-popup capture dependency
 
 ## Source Labels
 
@@ -127,6 +128,7 @@ Current honesty boundaries:
 - Codex personal parsing now tolerates merged remaining-percentage snippets such as `32% remaining` and `100% 剩余`, but that only hardens the visible-window path rather than changing the product claim
 - Codex personal parsing now also tolerates merged usage-window label/value snippets such as `每周使用限额 32% 剩余` without storing the runtime percent inside the normalized label
 - dashboard and provider detail now render every visible structured usage window as a remaining progress bar, including weekly and model-specific Codex windows; popup remains compact and keeps the compressed summary
+- dashboard provider cards now use the same Material card, supporting-surface, progress, chip, and action hierarchy as the newer Settings and popup controls while preserving the existing provider data and truth labels
 - Cursor personal usage-page sync is now explicitly labeled as `Window-only vendor value`
 - Gemini remains `Policy only`; the observed Google Cloud metrics route is project-scoped and not treated as personal quota
 - the UI now makes the trust boundary explicit in Settings and provider detail, including host-access requirements, credential persistence, and the fact that cookies stay forbidden

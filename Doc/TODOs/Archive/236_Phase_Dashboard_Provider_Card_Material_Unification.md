@@ -8,16 +8,16 @@ Process rule:
 
 Document class:
 
-- active phase
+- closed evidence
 
 Freshness model:
 
-- maintained current plan
+- dated snapshot
 
 Status note:
 
-- active follow-up after `Phase 235`
-- this file should move to `Archive/` only after implementation and verification are complete
+- completed and archived on 2026-05-03
+- follow-up maintenance should split oversized UI/theme files without reopening this visual slice
 
 ## Goal
 
@@ -75,3 +75,28 @@ After this visual contract is stable, plan a separate maintenance phase to split
 - `src/sidepanel/routes/SettingsPage.tsx`
 - `src/sidepanel/App.tsx`
 - `src/shared/localized-copy.ts`
+
+## Completed Work
+
+- Reworked dashboard `ProviderCard` markup into a clearer Material card hierarchy:
+  - identity and status header
+  - usage summary supporting surface
+  - quota progress supporting surface
+  - compact chip context row
+  - footer action row with a primary refresh action
+- Updated the provider-card CSS so dashboard cards keep Material surface shape, internal supporting surfaces, state-toned warning/error content, responsive footer actions, and compact progress rows.
+- Added focused component coverage for the new provider-card hierarchy while preserving existing parse-failure, indeterminate-progress, and source-page recovery checks.
+- Added `npm run phase236:review`, which validates code/doc markers and runs a Playwright dashboard visual review for light and dark provider cards at `360px`, `420px`, and full-page width.
+
+## Verification
+
+- `npm run phase236:review`
+- `npm run docs:check`
+- `npm run typecheck`
+- `git diff --check`
+- `npm run test -- --run`
+- `npm run build`
+
+The Playwright review stores its screenshots and machine-readable report under:
+
+- `tmp/phase236-dashboard-provider-card-material-review/`
