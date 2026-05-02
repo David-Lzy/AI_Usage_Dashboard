@@ -135,6 +135,7 @@ Current honesty boundaries:
 - deferred tracks now also expose explicit graduation gates in Settings and provider detail so the product states what concrete evidence is still missing
 - shipped session-page providers now persist safe page-binding metadata, reconnect to matching tabs across refresh or relaunch, and surface `Attached`, `Stale binding`, and `Not bound` states in the UI
 - Codex scheduled session-page sync can now reopen a previously bound analytics page in an inactive managed tab after authorization, while still avoiding any persisted ChatGPT cookies or auth headers
+- automatic Codex managed-page sync can now create that inactive analytics tab on alarm/manual refresh even before a saved page binding exists; this is not a fully hidden offscreen scrape because the personal source still depends on a real authenticated ChatGPT page document
 - the user-facing Settings surface now uses Material-style controls for both editable numeric values and fixed option sets, including Source Connections source preference
 
 ## Toolbar Entry

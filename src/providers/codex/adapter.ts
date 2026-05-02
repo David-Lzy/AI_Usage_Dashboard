@@ -100,10 +100,6 @@ function shouldOpenCodexPageWhenMissing({
     return false;
   }
 
-  if (!hasPageBindingFingerprint(setting.pageBinding)) {
-    return false;
-  }
-
   if (
     trigger === "alarm" &&
     provider.warningDiagnostic?.code === "page_session.logged_out"
@@ -111,7 +107,14 @@ function shouldOpenCodexPageWhenMissing({
     return false;
   }
 
-  return true;
+  if (hasPageBindingFingerprint(setting.pageBinding)) {
+    return true;
+  }
+
+  return (
+    setting.sourcePreference === "auto" ||
+    setting.sourcePreference === "session_page"
+  );
 }
 
 function getCodexPageSessionDiagnosticKind(

@@ -992,6 +992,46 @@ describe("syncCodexProvider", () => {
     );
   });
 
+  it("enables managed Codex page opening on alarm before a page binding exists", async () => {
+    const attemptedAt = new Date(2026, 4, 2, 9, 15);
+    const getUsageSnapshot = vi.fn(async () =>
+      buildCodexPersonalPageResponse({
+        status: "open_page_required",
+        reason:
+          "Open the logged-in Codex usage page in ChatGPT before refreshing personal usage capture.",
+        chosenRoute: null,
+        routeStatuses: [],
+      }),
+    );
+    createCodexPersonalPageClientMock.mockReturnValue({
+      getUsageSnapshot,
+    });
+
+    await syncCodexProvider({
+      provider: baseProvider,
+      secrets: emptySecrets,
+      setting: {
+        ...grantedSetting,
+        sourcePreference: "auto",
+        pageBinding: createEmptyPageBinding(),
+      },
+      warningThresholdPercent: 80,
+      now: attemptedAt,
+      trigger: "alarm",
+    });
+
+    expect(createCodexPersonalPageClientMock).toHaveBeenCalledWith({
+      source: "fixture",
+      openPageWhenMissing: true,
+    });
+    expect(getUsageSnapshot).toHaveBeenCalledWith(
+      expect.objectContaining({
+        status: "unbound",
+        matchedUrl: null,
+      }),
+    );
+  });
+
   it("does not auto-open the Codex page repeatedly on alarms after logged-out detection", async () => {
     const attemptedAt = new Date(2026, 3, 30, 9, 30);
     createCodexPersonalPageClientMock.mockReturnValue({

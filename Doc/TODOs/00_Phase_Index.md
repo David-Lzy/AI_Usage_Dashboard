@@ -1,6 +1,6 @@
 # Phase Index
 
-Date: 2026-04-30
+Date: 2026-05-02
 
 Process rule:
 
@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none currently; see latest completed slice below
-- latest completed slice: [231_Phase_Settings_Material_Select_Unification.md](./Archive/231_Phase_Settings_Material_Select_Unification.md)
+- latest completed slice: [232_Phase_Codex_Automatic_Managed_Page_Sync.md](./Archive/232_Phase_Codex_Automatic_Managed_Page_Sync.md)
 
 Completed phases should be moved to:
 
@@ -615,6 +615,8 @@ Completed phases should be moved to:
 - the 2026-04-30 `Phase 230` closeout added Codex managed source-tab refresh for scheduled and manual session-page syncs after a saved page binding exists, while preserving the no-cookie-storage boundary and suppressing repeated logged-out auto-open attempts
 - phase 231 depends on phase 229 because fixed enum Settings dropdowns should reuse the same Material-style menu language after the numeric preference controls already moved away from native browser dropdowns
 - the 2026-04-30 `Phase 231` closeout replaced the remaining user-facing Settings native selects, including Source Connections source preference, with a reusable Material-style select-only combobox
+- phase 232 depends on phase 230 because first-run automatic Codex refresh should reuse the managed session-page tab behavior and logged-out suppression that already exists for previously bound pages
+- the 2026-05-02 `Phase 232` closeout added automatic Codex managed-page sync before a saved binding exists, shortened the first periodic sync delay, and preserved the boundary that this is an inactive managed tab rather than a hidden offscreen scrape
 
 ## Delivery Standard For Each Phase
 
