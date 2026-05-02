@@ -1,0 +1,105 @@
+.top-app-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-3);
+  padding: var(--app-space-4) var(--app-space-5);
+  background: color-mix(
+    in srgb,
+    var(--md-sys-color-surface-container-high) 88%,
+    white 12%
+  );
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-extra-large);
+  box-shadow: var(--app-elevation-1);
+}
+
+.top-app-bar--sticky {
+  position: sticky;
+  top: var(--app-space-4);
+  z-index: 20;
+  backdrop-filter: blur(14px);
+}
+
+.top-app-bar__main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--app-space-3);
+  min-width: 0;
+}
+
+.top-app-bar__bottom {
+  min-width: 0;
+}
+
+.top-app-bar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--app-space-2);
+  min-width: 0;
+}
+
+.top-app-bar__title {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-1);
+  min-width: 0;
+}
+
+.top-app-bar__eyebrow {
+  margin: 0;
+  color: var(--md-sys-color-primary);
+  font-family: var(--md-sys-typescale-label-medium-font);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: var(--md-sys-typescale-label-medium-weight);
+  line-height: var(--md-sys-typescale-label-medium-line-height);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.top-app-bar__headline {
+  margin: 0;
+  font-family: var(--md-sys-typescale-title-large-font);
+  font-size: var(--md-sys-typescale-title-large-size);
+  font-weight: var(--md-sys-typescale-title-large-weight);
+  line-height: var(--md-sys-typescale-title-large-line-height);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+@media (max-width: 720px) {
+  .top-app-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .top-app-bar--sticky {
+    top: var(--app-space-3);
+  }
+
+  .top-app-bar__main {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .top-app-bar__actions {
+    justify-content: stretch;
+    width: 100%;
+  }
+
+  .top-app-bar__actions > * {
+    min-inline-size: 0;
+  }
+
+  .top-app-bar__actions .icon-button {
+    flex: 1 1 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-app-bar {
+    padding: var(--app-space-4);
+  }
+}

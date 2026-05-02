@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [247_Phase_Access_Feedback_CSS_Module_Split.md](./Archive/247_Phase_Access_Feedback_CSS_Module_Split.md)
+- latest completed slice: [248_Phase_Top_App_Bar_CSS_Module_Split.md](./Archive/248_Phase_Top_App_Bar_CSS_Module_Split.md)
 
 Completed phases should be moved to:
 
@@ -647,6 +647,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 246` closeout moved Settings navigation CSS into `src/sidepanel/theme/settings-navigation.css` and kept that Settings-only module out of the popup entry
 - phase 247 depends on phases 61, 64, and 173 because access-feedback styling should only be split after focus/press treatments, localized Settings save feedback, and credential surfaces are stable
 - the 2026-05-03 `Phase 247` closeout moved permission prompt, credential, and toast feedback CSS into `src/sidepanel/theme/access-feedback.css` and kept that sidepanel-only module out of the popup entry
+- phase 248 depends on phases 53, 235, and 247 because Top App Bar styling should only be split after Settings navigation, sticky top-bar behavior, and sidepanel-only access-feedback import order are stable
+- the 2026-05-03 `Phase 248` closeout moved Top App Bar CSS into `src/sidepanel/theme/top-app-bar.css` and kept that sidepanel-only module out of the popup entry
 
 ## Delivery Standard For Each Phase
 
