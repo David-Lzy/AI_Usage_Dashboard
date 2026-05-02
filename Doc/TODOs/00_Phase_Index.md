@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [240_Phase_Theme_Recovery_CSS_Module_Split.md](./Archive/240_Phase_Theme_Recovery_CSS_Module_Split.md)
+- latest completed slice: [241_Phase_Settings_Appearance_CSS_Module_Split.md](./Archive/241_Phase_Settings_Appearance_CSS_Module_Split.md)
 
 Completed phases should be moved to:
 
@@ -633,6 +633,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 239` closeout moved interaction-audit workspace CSS into `src/sidepanel/theme/interaction-audit.css` and kept that sidepanel-only module out of the popup entry
 - phase 240 depends on phases 112 through 117 because the theme-recovery operator workspace styling should only be split after the workspace and request-bound export flows are stable
 - the 2026-05-03 `Phase 240` closeout moved theme-recovery workspace CSS into `src/sidepanel/theme/theme-recovery.css` and kept that sidepanel-only module out of the popup entry
+- phase 241 depends on phases 101 through 103 and phases 211 through 212 because Settings appearance CSS covers theme preview and popup appearance preview styling that should only be split after those contracts are stable
+- the 2026-05-03 `Phase 241` closeout moved Settings appearance CSS into `src/sidepanel/theme/settings-appearance.css` and kept that Settings-only module out of the popup entry
 
 ## Delivery Standard For Each Phase
 

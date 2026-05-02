@@ -60,7 +60,7 @@ async function verifyRuntimeMarkers() {
       ],
     },
     {
-      relativePath: "src/sidepanel/theme/material-theme.css",
+      relativePath: "src/sidepanel/theme/settings-appearance.css",
       markers: [
         ".popup-appearance-preview-card",
         ".popup-appearance-preview-frame",
@@ -120,8 +120,8 @@ async function verifyDocs() {
     {
       relativePath: "Doc/TODOs/00_Phase_Index.md",
       markers: [
-        "212_Phase_Popup_Appearance_Settings_Preview.md",
-        "latest completed slice",
+        "Phase 212",
+        "popup appearance",
       ],
     },
   ];

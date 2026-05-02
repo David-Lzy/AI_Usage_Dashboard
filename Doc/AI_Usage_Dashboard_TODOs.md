@@ -76,7 +76,7 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 240` execution priority:
+Current post-`Phase 241` execution priority:
 
 1. `P1` - continue splitting oversized implementation files now that the provider-card and shared progress visual contracts are stable:
    - remaining theme areas in `src/sidepanel/theme/material-theme.css`
@@ -299,6 +299,7 @@ Phase status update:
 - `Phase 238` completed the usage-progress CSS module split by moving shared progress CSS into `src/sidepanel/theme/usage-progress.css`, loading it in both sidepanel and popup entries, and preserving provider-card override order
 - `Phase 239` completed the interaction-audit CSS module split by moving sidepanel-only operator workspace CSS into `src/sidepanel/theme/interaction-audit.css` and keeping that module out of the popup entry
 - `Phase 240` completed the theme-recovery CSS module split by moving sidepanel-only theme-recovery workspace CSS into `src/sidepanel/theme/theme-recovery.css` and keeping that module out of the popup entry
+- `Phase 241` completed the Settings appearance CSS module split by moving theme-customization and popup-appearance preview CSS into `src/sidepanel/theme/settings-appearance.css`
 - the next maintenance follow-up should continue splitting oversized UI and localization files now that the provider-card and shared progress visual contracts are stable
 - the remaining store-readiness blocker is still the real manual native-toolbar popup capture and archive completion under `Direction 10.3`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
