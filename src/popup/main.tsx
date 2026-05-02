@@ -4,6 +4,7 @@ import ReactDOM from "react-dom/client";
 import { PopupApp } from "./PopupApp";
 import "../sidepanel/theme/tokens.css";
 import "../sidepanel/theme/material-theme.css";
+import "../sidepanel/theme/usage-progress.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

@@ -76,9 +76,9 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 236` execution priority:
+Current post-`Phase 238` execution priority:
 
-1. `P1` - continue splitting oversized implementation files now that the provider-card visual contract is stable:
+1. `P1` - continue splitting oversized implementation files now that the provider-card and shared progress visual contracts are stable:
    - remaining theme areas in `src/sidepanel/theme/material-theme.css`
    - `src/sidepanel/routes/SettingsPage.tsx`
    - `src/sidepanel/App.tsx`
@@ -296,7 +296,8 @@ Phase status update:
 - `Phase 235` added Settings sticky section navigation inside the existing top bar plus an extended back-to-top floating action button for long-page navigation
 - `Phase 236` completed dashboard provider-card Material unification, so provider cards now use a clearer Material card, supporting-surface, progress, chip, and footer-action hierarchy without changing provider truth or sync semantics
 - `Phase 237` completed the provider-card CSS module split after Phase 236 by moving provider-card CSS into `src/sidepanel/theme/provider-card.css` while preserving the same dashboard visual review
-- the next maintenance follow-up should continue splitting oversized UI and localization files now that the provider-card visual contract is stable
+- `Phase 238` completed the usage-progress CSS module split by moving shared progress CSS into `src/sidepanel/theme/usage-progress.css`, loading it in both sidepanel and popup entries, and preserving provider-card override order
+- the next maintenance follow-up should continue splitting oversized UI and localization files now that the provider-card and shared progress visual contracts are stable
 - the remaining store-readiness blocker is still the real manual native-toolbar popup capture and archive completion under `Direction 10.3`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete

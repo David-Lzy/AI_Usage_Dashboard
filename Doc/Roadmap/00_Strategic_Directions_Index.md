@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-03:
 
-- the numbered phase queue is now completed through `Phase 237`
+- the numbered phase queue is now completed through `Phase 238`
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -120,6 +120,7 @@ As of 2026-05-03:
 - `Phase 235` added Settings sticky section navigation inside the existing top bar plus a return-to-top FAB for long Settings pages
 - `Phase 236` completed dashboard provider-card Material unification under `Direction 04`, so dashboard provider cards now use Material card, supporting-surface, progress, chip, and footer-action roles without changing provider data, sync behavior, source truth labels, or Codex/Cursor fidelity claims
 - `Phase 237` completed the first maintenance-oriented file split by moving provider-card CSS into `src/sidepanel/theme/provider-card.css` and reusing the Phase 236 visual review as the regression gate
+- `Phase 238` completed the next maintenance-oriented file split by moving shared usage progress CSS into `src/sidepanel/theme/usage-progress.css` and importing it from both sidepanel and popup entries
 - the next local-safe execution slice remains maintenance-oriented file splitting for the remaining oversized UI/theme/localization modules
 - `Direction 10.3` still retains the real manual native-toolbar popup capture dependency for final store assets; the existing request has staged full-page captures but still needs the native popup slots before archive completion
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`

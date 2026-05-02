@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [237_Phase_Provider_Card_CSS_Module_Split.md](./Archive/237_Phase_Provider_Card_CSS_Module_Split.md)
+- latest completed slice: [238_Phase_Usage_Progress_CSS_Module_Split.md](./Archive/238_Phase_Usage_Progress_CSS_Module_Split.md)
 
 Completed phases should be moved to:
 
@@ -627,6 +627,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 236` closeout unified dashboard provider-card structure and CSS around Material card, supporting-surface, progress, chip, and footer-action roles while preserving provider data, sync behavior, and truth labels
 - phase 237 depends on phase 236 because the provider-card CSS should be split only after the visual contract is stable and reviewable
 - the 2026-05-03 `Phase 237` closeout moved provider-card CSS into `src/sidepanel/theme/provider-card.css` while preserving the Phase 236 visual contract through the same dashboard review
+- phase 238 depends on phases 208, 209, 236, and 237 because usage progress CSS is shared across dashboard, provider-detail, and popup surfaces and must preserve provider-card override order
+- the 2026-05-03 `Phase 238` closeout moved shared usage-progress and usage-window-progress-list CSS into `src/sidepanel/theme/usage-progress.css` and loaded it in both sidepanel and popup entries while preserving provider-card overrides
 
 ## Delivery Standard For Each Phase
 
