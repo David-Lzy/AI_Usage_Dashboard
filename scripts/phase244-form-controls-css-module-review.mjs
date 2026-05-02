@@ -10,9 +10,9 @@ const projectRoot = process.cwd();
 const artifactDir = path.join(
   projectRoot,
   "tmp",
-  "phase243-settings-source-cards-css-module-review",
+  "phase244-form-controls-css-module-review",
 );
-const devPort = 42643;
+const devPort = 42644;
 
 function assert(condition, message) {
   if (!condition) {
@@ -56,9 +56,9 @@ async function verifyPackageScript() {
   const packageJson = await readJson("package.json");
 
   assert(
-    packageJson.scripts["phase243:review"] ===
-      "./scripts/with-preferred-node.sh node ./scripts/phase243-settings-source-cards-css-module-review.mjs",
-    "package.json is missing the expected phase243:review script.",
+    packageJson.scripts["phase244:review"] ===
+      "./scripts/with-preferred-node.sh node ./scripts/phase244-form-controls-css-module-review.mjs",
+    "package.json is missing the expected phase244:review script.",
   );
 
   return {
@@ -73,13 +73,14 @@ async function verifyCssSplit() {
   const materialTheme = await readProjectFile(
     "src/sidepanel/theme/material-theme.css",
   );
-  const sourceCardsTheme = await readProjectFile(
-    "src/sidepanel/theme/settings-source-cards.css",
+  const formControlsTheme = await readProjectFile(
+    "src/sidepanel/theme/form-controls.css",
   );
 
   verifyOrder(sidepanelEntry, "src/sidepanel/main.tsx", [
     'import "./theme/material-theme.css";',
     'import "./theme/detail-surfaces.css";',
+    'import "./theme/form-controls.css";',
     'import "./theme/settings-source-cards.css";',
     'import "./theme/interaction-audit.css";',
     'import "./theme/settings-appearance.css";',
@@ -88,36 +89,32 @@ async function verifyCssSplit() {
     'import "./theme/provider-card.css";',
   ]);
   assert(
-    !popupEntry.includes("settings-source-cards.css"),
-    "popup entry should not import the sidepanel-only Settings source-card CSS module.",
+    !popupEntry.includes("form-controls.css"),
+    "popup entry should not import the sidepanel-only form-controls CSS module.",
   );
   assert(
-    !materialTheme.includes("\n.source-card {\n") &&
-      !materialTheme.includes("\n.source-card__header {\n") &&
-      !materialTheme.includes("\n.source-card__details-toggle {\n") &&
-      !materialTheme.includes("\n.source-card__diagnostic-group {\n") &&
-      !materialTheme.includes("\n.source-card__diagnostic-row {\n"),
-    "material-theme.css still owns source-card selectors.",
+    !materialTheme.includes("\n.form-field {\n") &&
+      !materialTheme.includes("\n.material-select {\n") &&
+      !materialTheme.includes("\n.editable-number-combobox {\n") &&
+      !materialTheme.includes("\n.switch-row {\n"),
+    "material-theme.css still owns form-control selectors.",
   );
 
-  verifyMarkers(
-    sourceCardsTheme,
-    "src/sidepanel/theme/settings-source-cards.css",
-    [
-      ".source-card",
-      ".source-card__summary-grid",
-      ".source-card__details[open]",
-      ".source-card__diagnostic-group",
-      ".source-card__diagnostic-row",
-      "@media (prefers-reduced-motion: reduce)",
-      "@media (max-width: 720px)",
-    ],
-  );
+  verifyMarkers(formControlsTheme, "src/sidepanel/theme/form-controls.css", [
+    ".form-field",
+    ".form-field__control",
+    ".material-select",
+    ".material-select__menu",
+    ".editable-number-combobox",
+    ".editable-number-combobox__menu",
+    ".switch-row",
+    "@media (max-width: 720px)",
+  ]);
 
   return [
     {
       scope: "src/sidepanel/main.tsx",
-      markers: 8,
+      markers: 9,
     },
     {
       scope: "src/popup/main.tsx",
@@ -125,11 +122,11 @@ async function verifyCssSplit() {
     },
     {
       scope: "src/sidepanel/theme/material-theme.css",
-      markers: 5,
+      markers: 4,
     },
     {
-      scope: "src/sidepanel/theme/settings-source-cards.css",
-      markers: 7,
+      scope: "src/sidepanel/theme/form-controls.css",
+      markers: 8,
     },
   ];
 }
@@ -137,41 +134,37 @@ async function verifyCssSplit() {
 async function verifyDocsMarkers() {
   const expectations = [
     {
-      relativePath:
-        "Doc/testing/Phase_243_Settings_Source_Cards_CSS_Module_Split.md",
+      relativePath: "Doc/testing/Phase_244_Form_Controls_CSS_Module_Split.md",
       markers: [
-        "Phase 243",
-        "Settings Source Cards CSS Module Split",
-        "npm run phase243:review",
+        "Phase 244",
+        "Form Controls CSS Module Split",
+        "npm run phase244:review",
       ],
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/243_Phase_Settings_Source_Cards_CSS_Module_Split.md",
+        "Doc/TODOs/Archive/244_Phase_Form_Controls_CSS_Module_Split.md",
       markers: [
-        "Phase 243",
+        "Phase 244",
         "completed and archived on 2026-05-03",
-        "settings-source-cards.css",
+        "form-controls.css",
       ],
     },
     {
       relativePath: "Doc/TODOs/00_Phase_Index.md",
       markers: [
-        "Phase 243",
-        "Settings source-card",
+        "244_Phase_Form_Controls_CSS_Module_Split.md",
+        "latest completed slice",
       ],
     },
     {
       relativePath: "Doc/AI_Usage_Dashboard_TODOs.md",
-      markers: [
-        "Phase 243",
-        "Settings source-card CSS module split",
-      ],
+      markers: ["Phase 244", "form-controls CSS module split"],
     },
     {
       relativePath: "README.md",
       markers: [
-        "Settings source-card CSS now lives in `src/sidepanel/theme/settings-source-cards.css`",
+        "form-controls CSS now lives in `src/sidepanel/theme/form-controls.css`",
       ],
     },
   ];
@@ -292,9 +285,9 @@ async function collectStyles(locator) {
       boxShadow: styles.boxShadow,
       display: styles.display,
       gridTemplateColumns: styles.gridTemplateColumns,
-      justifyItems: styles.justifyItems,
-      overflowWrap: styles.overflowWrap,
-      wordBreak: styles.wordBreak,
+      minHeight: styles.minHeight,
+      overflow: styles.overflow,
+      textOverflow: styles.textOverflow,
     };
   });
 }
@@ -306,91 +299,109 @@ async function collectOverflowState(page) {
   }));
 }
 
-async function openExpandedSettingsSourceCard(baseUrl, browser, viewport) {
+async function openSettings(baseUrl, browser, viewport) {
   const page = await browser.newPage({ viewport });
 
   await page.goto(`${baseUrl}/src/sidepanel/index.html#settings`, {
     waitUntil: "load",
   });
-  await page.waitForSelector("#settings-sources .source-card", {
+  await page.waitForSelector(".editable-number-combobox__anchor", {
     timeout: 20_000,
   });
-  await page
-    .locator("#settings-sources .source-card__details-toggle")
-    .first()
-    .click();
-  await page.waitForSelector(".source-card__diagnostic-row", {
+  await page.waitForSelector(".material-select__button", {
     timeout: 20_000,
   });
+  await page.waitForSelector(".switch-row", { timeout: 20_000 });
 
   return page;
 }
 
-async function reviewSettingsSourceCards(baseUrl, browser, viewport, label) {
-  const page = await openExpandedSettingsSourceCard(baseUrl, browser, viewport);
+async function reviewFormControls(baseUrl, browser, viewport, label) {
+  const page = await openSettings(baseUrl, browser, viewport);
 
   try {
-    const sourceCard = page.locator("#settings-sources .source-card").first();
-    const sourceField = page.locator(".source-card__field").first();
-    const sourceChips = page.locator(".source-card__chips").first();
-    const detailsToggle = page.locator(".source-card__details-toggle").first();
-    const diagnosticGroup = page
-      .locator(".source-card__diagnostic-group")
+    const editableAnchor = page.locator(".editable-number-combobox__anchor").first();
+    const editableButton = page
+      .locator(".editable-number-combobox__menu-button")
       .first();
-    const diagnosticRow = page.locator(".source-card__diagnostic-row").first();
-    const diagnosticValue = page
-      .locator(".source-card__diagnostic-value")
-      .first();
+    await editableButton.evaluate((element) => {
+      element.scrollIntoView({ block: "center", inline: "nearest" });
+    });
+    await editableButton.click();
+    await page.waitForSelector(".editable-number-combobox__menu", {
+      timeout: 20_000,
+    });
+    const editableMenuStyles = await collectStyles(
+      page.locator(".editable-number-combobox__menu").first(),
+    );
+    await page.keyboard.press("Escape");
+    await page
+      .locator(".editable-number-combobox__menu")
+      .first()
+      .waitFor({ state: "detached", timeout: 20_000 });
+
+    const materialSelectButton = page.locator(".material-select__button").first();
+    await materialSelectButton.evaluate((element) => {
+      element.scrollIntoView({ block: "center", inline: "nearest" });
+    });
+    await materialSelectButton.click();
+    await page.waitForSelector(".material-select__menu", {
+      timeout: 20_000,
+    });
 
     const result = {
       overflow: await collectOverflowState(page),
-      sourceCardStyles: await collectStyles(sourceCard),
-      sourceFieldStyles: await collectStyles(sourceField),
-      sourceChipsStyles: await collectStyles(sourceChips),
-      detailsToggleStyles: await collectStyles(detailsToggle),
-      diagnosticGroupStyles: await collectStyles(diagnosticGroup),
-      diagnosticRowStyles: await collectStyles(diagnosticRow),
-      diagnosticValueStyles: await collectStyles(diagnosticValue),
+      formControlStyles: await collectStyles(
+        page.locator(".form-field__control").first(),
+      ),
+      editableAnchorStyles: await collectStyles(editableAnchor),
+      editableMenuStyles,
+      materialButtonStyles: await collectStyles(materialSelectButton),
+      materialMenuStyles: await collectStyles(
+        page.locator(".material-select__menu").first(),
+      ),
+      materialValueStyles: await collectStyles(
+        page.locator(".material-select__value").first(),
+      ),
+      switchRowStyles: await collectStyles(page.locator(".switch-row").first()),
     };
 
     await page.screenshot({
-      path: path.join(artifactDir, `${label}-settings-source-cards.png`),
+      path: path.join(artifactDir, `${label}-form-controls.png`),
       fullPage: true,
     });
 
     assert(
       result.overflow.overflowX === 0,
-      `${label} settings source cards overflowed horizontally (${result.overflow.overflowX}px).`,
+      `${label} form controls overflowed horizontally (${result.overflow.overflowX}px).`,
     );
     assert(
-      result.sourceCardStyles?.borderColor !== "rgba(0, 0, 0, 0)",
-      `${label} source cards lost their explicit border.`,
+      result.formControlStyles?.borderColor !== "rgba(0, 0, 0, 0)",
+      `${label} text form controls lost their explicit border.`,
     );
     assert(
-      result.sourceCardStyles?.boxShadow !== "none",
-      `${label} source cards lost their elevation shadow.`,
+      result.editableAnchorStyles?.gridTemplateColumns.includes("48px"),
+      `${label} editable number anchor lost its menu-button grid column.`,
     );
     assert(
-      result.sourceFieldStyles?.backgroundColor !==
-        result.sourceCardStyles?.backgroundColor,
-      `${label} source-card fields collapsed into the card background.`,
+      result.editableMenuStyles?.boxShadow !== "none",
+      `${label} editable number menu lost its elevated menu shadow.`,
     );
     assert(
-      result.diagnosticGroupStyles?.backgroundColor !==
-        result.sourceCardStyles?.backgroundColor,
-      `${label} diagnostic groups collapsed into the card background.`,
+      result.materialButtonStyles?.gridTemplateColumns.includes("48px"),
+      `${label} Material select button lost its menu-icon grid column.`,
     );
     assert(
-      result.detailsToggleStyles?.borderRadius !== "0px",
-      `${label} details toggle lost its rounded Material control shape.`,
+      result.materialMenuStyles?.boxShadow !== "none",
+      `${label} Material select menu lost its elevated menu shadow.`,
     );
     assert(
-      result.diagnosticRowStyles?.display === "grid",
-      `${label} diagnostic rows should remain grid layouts.`,
+      result.materialValueStyles?.textOverflow === "ellipsis",
+      `${label} Material select value lost ellipsis overflow treatment.`,
     );
     assert(
-      result.diagnosticValueStyles?.overflowWrap === "anywhere",
-      `${label} diagnostic values lost overflow-wrap:anywhere.`,
+      result.switchRowStyles?.borderRadius !== "0px",
+      `${label} switch rows lost their rounded Material row shape.`,
     );
 
     return result;
@@ -407,13 +418,13 @@ async function runVisualReview(baseUrl) {
 
   try {
     return {
-      compact: await reviewSettingsSourceCards(
+      compact: await reviewFormControls(
         baseUrl,
         browser,
         { width: 420, height: 900 },
         "compact",
       ),
-      wide: await reviewSettingsSourceCards(
+      wide: await reviewFormControls(
         baseUrl,
         browser,
         { width: 900, height: 900 },
@@ -451,24 +462,24 @@ async function runReview() {
   };
   const reportPath = path.join(
     artifactDir,
-    "settings-source-cards-css-module-review.json",
+    "form-controls-css-module-review.json",
   );
 
   await writeFile(reportPath, JSON.stringify(report, null, 2), "utf8");
 
-  console.log("phase243: Settings source-card CSS module split verified");
-  console.log(`phase243: saved artifacts under ${artifactDir}`);
-  console.log(`phase243: saved machine-readable results to ${reportPath}`);
+  console.log("phase244: form-controls CSS module split verified");
+  console.log(`phase244: saved artifacts under ${artifactDir}`);
+  console.log(`phase244: saved machine-readable results to ${reportPath}`);
   for (const result of markerResults) {
-    console.log(`phase243: ${result.scope} markers=${result.markers}`);
+    console.log(`phase244: ${result.scope} markers=${result.markers}`);
   }
   console.log(
-    `phase243: visual compact_overflow=${visualResult.compact.overflow.overflowX} wide_overflow=${visualResult.wide.overflow.overflowX}`,
+    `phase244: visual compact_overflow=${visualResult.compact.overflow.overflowX} wide_overflow=${visualResult.wide.overflow.overflowX}`,
   );
 }
 
 runReview().catch((error) => {
-  console.error("phase243: Settings source-card CSS module review failed");
+  console.error("phase244: form-controls CSS module review failed");
   console.error(error instanceof Error ? error.message : error);
   process.exit(1);
 });
