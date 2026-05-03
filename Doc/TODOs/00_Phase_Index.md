@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [280_Phase_Settings_Credentials_Section_Split.md](./Archive/280_Phase_Settings_Credentials_Section_Split.md)
+- latest completed slice: [281_Phase_Standard_App_Settings_Actions_Split.md](./Archive/281_Phase_Standard_App_Settings_Actions_Split.md)
 
 Completed phases should be moved to:
 
@@ -713,6 +713,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 279` closeout extracted Settings source card component rendering into `src/sidepanel/components/SettingsSourceCard.tsx` while preserving source truth labels, source preference controls, diagnostics, and session-page actions
 - phase 280 depends on phase 279 because `SettingsSections.tsx` became the remaining oversized Settings section aggregator after source-card rendering moved out
 - the 2026-05-03 `Phase 280` closeout extracted credential card rendering into `src/sidepanel/components/SettingsCredentialsSection.tsx` while preserving Settings route imports, credential data hooks, and credential dispatch semantics
+- phase 281 depends on phase 280 because the Settings component queue is now small enough to switch back to the standard app action aggregator
+- the 2026-05-03 `Phase 281` closeout extracted standard-app Settings actions into `src/sidepanel/standard-app-settings-actions.ts` while preserving message payloads, toast copy, and top-level action names
 
 ## Delivery Standard For Each Phase
 
