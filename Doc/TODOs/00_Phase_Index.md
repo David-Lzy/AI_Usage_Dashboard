@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [279_Phase_Settings_Source_Card_Component.md](./Archive/279_Phase_Settings_Source_Card_Component.md)
+- latest completed slice: [280_Phase_Settings_Credentials_Section_Split.md](./Archive/280_Phase_Settings_Credentials_Section_Split.md)
 
 Completed phases should be moved to:
 
@@ -711,6 +711,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 278` closeout extracted Settings page derived view models into `src/sidepanel/settings-page-view-models.ts` and custom theme seed draft behavior into `src/sidepanel/use-settings-theme-custom-seed-draft.ts` while preserving Settings route composition and dispatch semantics
 - phase 279 depends on phase 278 because `SettingsSourceSection.tsx` became the next largest Settings component after the route container split
 - the 2026-05-03 `Phase 279` closeout extracted Settings source card component rendering into `src/sidepanel/components/SettingsSourceCard.tsx` while preserving source truth labels, source preference controls, diagnostics, and session-page actions
+- phase 280 depends on phase 279 because `SettingsSections.tsx` became the remaining oversized Settings section aggregator after source-card rendering moved out
+- the 2026-05-03 `Phase 280` closeout extracted credential card rendering into `src/sidepanel/components/SettingsCredentialsSection.tsx` while preserving Settings route imports, credential data hooks, and credential dispatch semantics
 
 ## Delivery Standard For Each Phase
 
