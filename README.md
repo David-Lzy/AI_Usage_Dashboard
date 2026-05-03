@@ -40,7 +40,7 @@ Security posture for this track:
 
 Next execution queue:
 
-1. continue splitting oversized UI/theme/localization files after the Phase 267 provider-detail copy split
+1. continue splitting oversized UI/theme/localization files after the Phase 268 store-workflow copy split
 2. use `0.1.0-rc.3` for install/review passes until the next release package is cut
 3. keep [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) in maintenance mode unless a concrete diagnostic-body localization need appears
 4. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining manual store-popup capture dependency
@@ -52,6 +52,7 @@ Maintenance note:
 - standard app actions now live in `src/sidepanel/standard-app-actions.ts`, keeping provider, settings, session-page, and full-page action handlers out of the route-rendering component
 - provider-source display copy now lives in `src/shared/provider-source-display-localized-copy.ts`, while `src/shared/localized-copy.ts` keeps a compatibility re-export
 - provider-detail copy now lives in `src/shared/provider-detail-localized-copy.ts`, while `src/shared/localized-copy.ts` keeps compatibility re-exports for provider detail routes
+- store-workflow copy now lives in `src/shared/store-workflow-localized-copy.ts`, while `src/shared/localized-copy.ts` keeps compatibility re-exports for screenshot seed and native popup probe routes
 
 ## Source Labels
 
