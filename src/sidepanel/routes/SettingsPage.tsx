@@ -56,13 +56,13 @@ import {
 
 import { EditableNumberCombobox } from "../components/EditableNumberCombobox";
 import { MaterialSelect } from "../components/MaterialSelect";
-import { PermissionPrompt } from "../components/PermissionPrompt";
 import {
   SettingsBackToTopButton,
   SettingsSectionNavigation,
 } from "../components/SettingsNavigation";
 import {
   SettingsOverviewSection,
+  SettingsPermissionsSection,
   SettingsVisibilitySection,
 } from "../components/SettingsSections";
 import { getPreferredScrollBehavior } from "../motion";
@@ -1346,34 +1346,15 @@ export function SettingsPage({
         </div>
       </section>
 
-      <section
-        className="dashboard-section settings-section-anchor"
-        id={SETTINGS_SECTION_IDS.permissions}
-      >
-        <div className="dashboard-section__header">
-          <div>
-            <p className="section-label">{i18n.t("settings.permissions.eyebrow")}</p>
-            <h2 className="section-title">{i18n.t("settings.permissions.title")}</h2>
-          </div>
-          <p className="supporting-copy">{i18n.t("settings.permissions.detail")}</p>
-        </div>
-
-        <div className="provider-shell-list">
-          {providers.map((provider) => (
-            <PermissionPrompt
-              key={provider.id}
-              providerId={provider.id}
-              providerLabel={provider.label}
-              description={provider.description}
-              hostsLabel={provider.hostsLabel}
-              requiresHostAccess={(provider.hostOrigins?.length ?? 0) > 0}
-              status={provider.status}
-              labels={settingsCopy.permissions}
-              onToggle={() => onTogglePermission(provider.id)}
-            />
-          ))}
-        </div>
-      </section>
+      <SettingsPermissionsSection
+        sectionId={SETTINGS_SECTION_IDS.permissions}
+        eyebrow={i18n.t("settings.permissions.eyebrow")}
+        title={i18n.t("settings.permissions.title")}
+        detail={i18n.t("settings.permissions.detail")}
+        providers={providers}
+        labels={settingsCopy.permissions}
+        onTogglePermission={onTogglePermission}
+      />
 
       {toast ? (
         <Toast

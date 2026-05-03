@@ -1,4 +1,4 @@
-type PermissionPromptLabels = {
+export type PermissionPromptLabels = {
   noHostAccessRequired: string;
   hostAccessGranted: string;
   hostAccessMissing: string;

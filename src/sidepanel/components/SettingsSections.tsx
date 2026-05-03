@@ -4,6 +4,10 @@ import type {
   SummaryItem,
 } from "../../providers/types";
 import type { SettingsSectionId } from "../settings-section-ids";
+import {
+  PermissionPrompt,
+  type PermissionPromptLabels,
+} from "./PermissionPrompt";
 import { SummaryStrip } from "./SummaryStrip";
 
 type SettingsOverviewSectionProps = {
@@ -21,6 +25,16 @@ type SettingsVisibilitySectionProps = {
   providers: ProviderSetting[];
   sectionId: SettingsSectionId;
   onToggleProvider: (providerId: ProviderId) => void;
+};
+
+type SettingsPermissionsSectionProps = {
+  detail: string;
+  eyebrow: string;
+  labels: PermissionPromptLabels;
+  providers: ProviderSetting[];
+  sectionId: SettingsSectionId;
+  title: string;
+  onTogglePermission: (providerId: ProviderId) => void;
 };
 
 export function SettingsOverviewSection({
@@ -78,6 +92,44 @@ export function SettingsVisibilitySection({
               onChange={() => onToggleProvider(provider.id)}
             />
           </label>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export function SettingsPermissionsSection({
+  detail,
+  eyebrow,
+  labels,
+  providers,
+  sectionId,
+  title,
+  onTogglePermission,
+}: SettingsPermissionsSectionProps) {
+  return (
+    <section className="dashboard-section settings-section-anchor" id={sectionId}>
+      <div className="dashboard-section__header">
+        <div>
+          <p className="section-label">{eyebrow}</p>
+          <h2 className="section-title">{title}</h2>
+        </div>
+        <p className="supporting-copy">{detail}</p>
+      </div>
+
+      <div className="provider-shell-list">
+        {providers.map((provider) => (
+          <PermissionPrompt
+            key={provider.id}
+            providerId={provider.id}
+            providerLabel={provider.label}
+            description={provider.description}
+            hostsLabel={provider.hostsLabel}
+            requiresHostAccess={(provider.hostOrigins?.length ?? 0) > 0}
+            status={provider.status}
+            labels={labels}
+            onToggle={() => onTogglePermission(provider.id)}
+          />
         ))}
       </div>
     </section>

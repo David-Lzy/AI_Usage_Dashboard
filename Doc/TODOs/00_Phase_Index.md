@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [256_Phase_Settings_Overview_Visibility_Component_Extraction.md](./Archive/256_Phase_Settings_Overview_Visibility_Component_Extraction.md)
+- latest completed slice: [257_Phase_Settings_Permissions_Component_Extraction.md](./Archive/257_Phase_Settings_Permissions_Component_Extraction.md)
 
 Completed phases should be moved to:
 
@@ -665,6 +665,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 255` closeout extracted Settings section ids, sticky section navigation rendering, and the back-to-top FAB into `src/sidepanel/settings-section-ids.ts` and `src/sidepanel/components/SettingsNavigation.tsx`
 - phase 256 depends on phase 255 because the Settings page should first have stable navigation ownership before extracting low-risk display sections from the page body
 - the 2026-05-03 `Phase 256` closeout extracted Settings overview summary and visibility switch sections into `src/sidepanel/components/SettingsSections.tsx` while preserving localized strings and provider toggle dispatch in `SettingsPage.tsx`
+- phase 257 depends on phase 256 because the permissions section belongs in the same focused Settings section component module after overview and visibility proved that extraction boundary
+- the 2026-05-03 `Phase 257` closeout extracted Settings permissions rendering into `src/sidepanel/components/SettingsSections.tsx` while preserving localized strings and permission toggle dispatch in `SettingsPage.tsx`
 
 ## Delivery Standard For Each Phase
 

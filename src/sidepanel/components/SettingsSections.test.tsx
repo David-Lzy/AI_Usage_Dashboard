@@ -5,6 +5,7 @@ import { SAMPLE_APP_STATE } from "../../shared/constants";
 import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
 import {
   SettingsOverviewSection,
+  SettingsPermissionsSection,
   SettingsVisibilitySection,
 } from "./SettingsSections";
 
@@ -47,5 +48,32 @@ describe("SettingsSections", () => {
     expect(html).toContain('data-visibility-provider-id="cursor"');
     expect(html).toContain('data-visibility-toggle="cursor"');
     expect(html).toContain('type="checkbox"');
+  });
+
+  it("renders permission prompts with stable permission hooks", () => {
+    const html = renderToStaticMarkup(
+      <SettingsPermissionsSection
+        sectionId={SETTINGS_SECTION_IDS.permissions}
+        eyebrow="Permissions"
+        title="Host access"
+        detail="Grant access only for providers you use."
+        providers={SAMPLE_APP_STATE.providerSettings.slice(0, 2)}
+        labels={{
+          noHostAccessRequired: "No host access required",
+          hostAccessGranted: "Granted",
+          hostAccessMissing: "Needs access",
+          noActionNeeded: "No action needed",
+          removeAccess: "Remove access",
+          requestAccess: "Request access",
+        }}
+        onTogglePermission={() => {}}
+      />,
+    );
+
+    expect(html).toContain(`id="${SETTINGS_SECTION_IDS.permissions}"`);
+    expect(html).toContain('class="permission-prompt');
+    expect(html).toContain('data-provider-id="cursor"');
+    expect(html).toContain('data-permission-status=');
+    expect(html).toContain('data-permission-action=');
   });
 });

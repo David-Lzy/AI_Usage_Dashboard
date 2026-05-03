@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-03:
 
-- the numbered phase queue is now completed through `Phase 256`
+- the numbered phase queue is now completed through `Phase 257`
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -139,6 +139,7 @@ As of 2026-05-03:
 - `Phase 254` completed the next maintenance-oriented file split by moving shared summary-strip, summary-pill, token-panel, dashboard-section, and narrow layout primitive styling into a shared layout primitives CSS module
 - `Phase 255` completed the Settings navigation component extraction by moving Settings section ids, sticky section navigation rendering, and the back-to-top FAB from the oversized Settings page into focused sidepanel modules
 - `Phase 256` completed the Settings overview visibility component extraction by moving the overview summary and provider visibility switch section out of the oversized Settings page into focused section components
+- `Phase 257` completed the Settings permissions component extraction by moving permissions rendering out of the oversized Settings page into the focused Settings section component module
 - the next local-safe execution slice remains maintenance-oriented file splitting for the remaining oversized UI/theme/localization modules
 - `Direction 10.3` still retains the real manual native-toolbar popup capture dependency for final store assets; the existing request has staged full-page captures but still needs the native popup slots before archive completion
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
