@@ -67,10 +67,8 @@ import {
   SettingsVisibilitySection,
   type CredentialProviderSection,
 } from "../components/SettingsSections";
-import { getPreferredScrollBehavior } from "../motion";
 import {
   SETTINGS_SECTION_IDS,
-  SETTINGS_SECTION_ID_VALUES,
   type SettingsSectionId,
 } from "../settings-section-ids";
 import {
@@ -79,6 +77,7 @@ import {
 } from "../settings-view-models";
 import { Toast } from "../components/Toast";
 import { TopBar } from "../components/TopBar";
+import { useSettingsSectionNavigation } from "../use-settings-section-navigation";
 
 type SettingsToast = {
   tone: "success" | "error";
@@ -212,8 +211,11 @@ export function SettingsPage({
   const [themeCustomSeedDraft, setThemeCustomSeedDraft] = useState(
     settings.themeCustomSeedHex ?? "",
   );
-  const [activeSettingsSection, setActiveSettingsSection] =
-    useState<SettingsSectionId>(SETTINGS_SECTION_IDS.preferences);
+  const {
+    activeSettingsSection,
+    scrollToSection,
+    scrollToSettingsTop,
+  } = useSettingsSectionNavigation();
   const normalizedThemeCustomSeedDraft =
     normalizeThemeCustomSeedHex(themeCustomSeedDraft);
   const resolvedThemeMode = resolveThemeMode(
@@ -389,77 +391,6 @@ export function SettingsPage({
       label: i18n.t("settings.sections.permissions"),
     },
   ];
-
-  useEffect(() => {
-    if (
-      typeof document === "undefined" ||
-      typeof window === "undefined" ||
-      typeof IntersectionObserver === "undefined"
-    ) {
-      return undefined;
-    }
-
-    const sectionElements = SETTINGS_SECTION_ID_VALUES
-      .map((sectionId) => document.getElementById(sectionId))
-      .filter((element): element is HTMLElement => element !== null);
-
-    if (sectionElements.length === 0) {
-      return undefined;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visibleEntries = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort(
-            (left, right) =>
-              left.boundingClientRect.top - right.boundingClientRect.top,
-          );
-        const nextSectionId = visibleEntries[0]?.target.id as
-          | SettingsSectionId
-          | undefined;
-
-        if (nextSectionId) {
-          setActiveSettingsSection(nextSectionId);
-        }
-      },
-      {
-        root: null,
-        rootMargin: "-28% 0px -62% 0px",
-        threshold: 0,
-      },
-    );
-
-    for (const sectionElement of sectionElements) {
-      observer.observe(sectionElement);
-    }
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  function scrollToSection(sectionId: SettingsSectionId) {
-    if (typeof document === "undefined") {
-      return;
-    }
-
-    document.getElementById(sectionId)?.scrollIntoView({
-      block: "start",
-      behavior: getPreferredScrollBehavior(window),
-    });
-  }
-
-  function scrollToSettingsTop() {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    window.scrollTo({
-      top: 0,
-      behavior: getPreferredScrollBehavior(window),
-    });
-  }
 
   function handleSaveProviderApiKey(
     providerId: ApiKeyProviderId,
