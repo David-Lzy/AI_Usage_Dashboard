@@ -61,7 +61,10 @@ import {
   SettingsBackToTopButton,
   SettingsSectionNavigation,
 } from "../components/SettingsNavigation";
-import { SummaryStrip } from "../components/SummaryStrip";
+import {
+  SettingsOverviewSection,
+  SettingsVisibilitySection,
+} from "../components/SettingsSections";
 import { getPreferredScrollBehavior } from "../motion";
 import {
   SETTINGS_SECTION_IDS,
@@ -555,21 +558,13 @@ export function SettingsPage({
         onPrimaryAction={onSavePreferences}
       />
 
-      <section className="status-card settings-overview">
-        <div className="dashboard-section__header">
-          <div>
-            <p className="section-label">{i18n.t("settings.overview.eyebrow")}</p>
-            <h2 className="section-title">{i18n.t("settings.overview.title")}</h2>
-          </div>
-          <p className="supporting-copy">{i18n.t("settings.overview.detail")}</p>
-        </div>
-
-        <SummaryStrip
-          ariaLabel={i18n.t("settings.overview.aria")}
-          items={settingsSummaryItems}
-        />
-
-      </section>
+      <SettingsOverviewSection
+        ariaLabel={i18n.t("settings.overview.aria")}
+        detail={i18n.t("settings.overview.detail")}
+        eyebrow={i18n.t("settings.overview.eyebrow")}
+        items={settingsSummaryItems}
+        title={i18n.t("settings.overview.title")}
+      />
       <section
         className="status-card settings-section-anchor"
         id={SETTINGS_SECTION_IDS.preferences}
@@ -862,38 +857,14 @@ export function SettingsPage({
         </div>
       </section>
 
-      <section
-        className="status-card settings-section-anchor"
-        id={SETTINGS_SECTION_IDS.visibility}
-      >
-        <p className="section-label">{i18n.t("settings.visibility.eyebrow")}</p>
-        <div className="settings-list">
-          {providers.map((provider) => (
-            <label
-              key={provider.id}
-              className="switch-row"
-              data-visibility-provider-id={provider.id}
-              data-visibility-enabled={provider.enabled ? "true" : "false"}
-            >
-              <div>
-                <p className="switch-row__title">{provider.label}</p>
-                <p className="supporting-copy">
-                  {provider.enabled
-                    ? i18n.t("settings.visibility.enabled_detail")
-                    : i18n.t("settings.visibility.disabled_detail")}
-                </p>
-              </div>
-              <input
-                className="switch-row__control"
-                type="checkbox"
-                checked={provider.enabled}
-                data-visibility-toggle={provider.id}
-                onChange={() => onToggleProvider(provider.id)}
-              />
-            </label>
-          ))}
-        </div>
-      </section>
+      <SettingsVisibilitySection
+        sectionId={SETTINGS_SECTION_IDS.visibility}
+        eyebrow={i18n.t("settings.visibility.eyebrow")}
+        providers={providers}
+        enabledDetail={i18n.t("settings.visibility.enabled_detail")}
+        disabledDetail={i18n.t("settings.visibility.disabled_detail")}
+        onToggleProvider={onToggleProvider}
+      />
 
       {credentialProviders.length > 0 || codexProvider ? (
         <section

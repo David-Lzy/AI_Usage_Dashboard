@@ -76,7 +76,7 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 255` execution priority:
+Current post-`Phase 256` execution priority:
 
 1. `P1` - continue splitting oversized implementation files now that the provider-card and shared CSS visual contracts are stable:
    - `src/sidepanel/routes/SettingsPage.tsx`
@@ -313,6 +313,7 @@ Phase status update:
 - `Phase 253` completed the Typography CSS module split by moving shared text hierarchy, copy primitive, list spacing, and compact headline CSS into `src/sidepanel/theme/typography.css`
 - `Phase 254` completed the Layout Primitives CSS module split by moving shared summary-strip, summary-pill, token-panel, dashboard-section, and narrow layout primitive CSS into `src/sidepanel/theme/layout-primitives.css`
 - `Phase 255` completed the Settings navigation component extraction by moving Settings section ids, sticky section nav rendering, and the back-to-top FAB into focused sidepanel modules
+- `Phase 256` completed the Settings overview visibility component extraction by moving the overview summary and provider visibility switch section into focused Settings section components
 - the next maintenance follow-up should continue splitting oversized UI and localization files now that the provider-card and shared progress visual contracts are stable
 - the remaining store-readiness blocker is still the real manual native-toolbar popup capture and archive completion under `Direction 10.3`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling

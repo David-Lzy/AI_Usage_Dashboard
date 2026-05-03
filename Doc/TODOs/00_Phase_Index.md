@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [255_Phase_Settings_Navigation_Component_Extraction.md](./Archive/255_Phase_Settings_Navigation_Component_Extraction.md)
+- latest completed slice: [256_Phase_Settings_Overview_Visibility_Component_Extraction.md](./Archive/256_Phase_Settings_Overview_Visibility_Component_Extraction.md)
 
 Completed phases should be moved to:
 
@@ -663,6 +663,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 254` closeout moved shared summary-strip, summary-pill, token-panel, dashboard-section, and narrow layout primitive CSS into `src/sidepanel/theme/layout-primitives.css` and imported that shared module from both sidepanel and popup entries after `surfaces.css`
 - phase 255 depends on phases 235, 246, and 254 because Settings sticky navigation should only be componentized after the sticky nav behavior, CSS ownership, and shared layout primitives are stable
 - the 2026-05-03 `Phase 255` closeout extracted Settings section ids, sticky section navigation rendering, and the back-to-top FAB into `src/sidepanel/settings-section-ids.ts` and `src/sidepanel/components/SettingsNavigation.tsx`
+- phase 256 depends on phase 255 because the Settings page should first have stable navigation ownership before extracting low-risk display sections from the page body
+- the 2026-05-03 `Phase 256` closeout extracted Settings overview summary and visibility switch sections into `src/sidepanel/components/SettingsSections.tsx` while preserving localized strings and provider toggle dispatch in `SettingsPage.tsx`
 
 ## Delivery Standard For Each Phase
 
