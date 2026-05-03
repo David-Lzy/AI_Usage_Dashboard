@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [288_Phase_Source_Chip_Row_And_RC7_Packaging.md](./Archive/288_Phase_Source_Chip_Row_And_RC7_Packaging.md)
+- latest completed slice: [289_Phase_Settings_Topbar_Adaptive_Layout_And_RC8_Packaging.md](./Archive/289_Phase_Settings_Topbar_Adaptive_Layout_And_RC8_Packaging.md)
 
 Completed phases should be moved to:
 
@@ -729,6 +729,8 @@ Completed phases should be moved to:
 - the 2026-05-04 `Phase 287` closeout tightened linear progress row padding, divider spacing, and remaining-label wrapping, then bumped the package to `0.1.0-rc.6`, bumped the manifest to `0.1.0.6`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.6.zip`, and recorded the release package SHA256 in the Phase 287 archive
 - phase 288 depends on Phase 287 plus the user's rc6 visual smoke note because Settings source-card chips still stacked vertically and wasted space on Claude, JetBrains, and similar source cards
 - the 2026-05-04 `Phase 288` closeout changed Settings source-card chips from a single-column grid to horizontal wrapping rows, then bumped the package to `0.1.0-rc.7`, bumped the manifest to `0.1.0.7`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.7.zip`, and recorded the release package SHA256 in the Phase 288 archive
+- phase 289 depends on Phase 288 plus the user's rc7 visual smoke note because the Settings top app bar still wasted vertical space in tab mode and did not center action/navigation rows at sidebar widths
+- the 2026-05-04 `Phase 289` closeout made the Settings top app bar adaptive, then bumped the package to `0.1.0-rc.8`, bumped the manifest to `0.1.0.8`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.8.zip`, and recorded the release package SHA256 in the Phase 289 archive
 
 ## Delivery Standard For Each Phase
 

@@ -4,9 +4,9 @@ Chrome side-panel extension for tracking usage, credits, and sync health across 
 
 Current release candidate:
 
-- package version: `0.1.0-rc.7`
-- Chrome manifest version: `0.1.0.7`
-- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.7.zip`
+- package version: `0.1.0-rc.8`
+- Chrome manifest version: `0.1.0.8`
+- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.8.zip`
 
 ## Current RC Matrix
 
@@ -40,7 +40,7 @@ Security posture for this track:
 
 Next execution queue:
 
-1. use `0.1.0-rc.7` for install/review passes; it includes the Phase 288 source-chip row fix, Phase 287 progress-row spacing fix, and the Phase 285 post-rc4 smoke polish for provider cards, Settings navigation density, full-page back-to-top positioning, and direct host-access refresh prompts
+1. use `0.1.0-rc.8` for install/review passes; it includes the Phase 289 Settings top-bar adaptive layout, Phase 288 source-chip row fix, Phase 287 progress-row spacing fix, and the Phase 285 post-rc4 smoke polish for provider cards, Settings navigation density, full-page back-to-top positioning, and direct host-access refresh prompts
 2. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining store-popup screenshot capture and archive closeout now that RDP Chrome is available for manual native popup interaction
 3. keep provider closure account-gated: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 4. keep operator evidence closure below release/store work; here it means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not another runtime feature
@@ -616,7 +616,7 @@ npm run release
 
 Output artifact:
 
-- `release/ai-usage-dashboard-0.1.0-rc.7.zip`
+- `release/ai-usage-dashboard-0.1.0-rc.8.zip`
 
 The packaging script checks that:
 
