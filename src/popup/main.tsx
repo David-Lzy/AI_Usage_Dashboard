@@ -9,6 +9,7 @@ import "../sidepanel/theme/buttons.css";
 import "../sidepanel/theme/chips.css";
 import "../sidepanel/theme/typography.css";
 import "../sidepanel/theme/surfaces.css";
+import "../sidepanel/theme/layout-primitives.css";
 import "../sidepanel/theme/usage-progress.css";
 import "./popup-theme.css";
 

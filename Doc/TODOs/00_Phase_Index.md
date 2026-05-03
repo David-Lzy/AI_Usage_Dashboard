@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [253_Phase_Typography_CSS_Module_Split.md](./Archive/253_Phase_Typography_CSS_Module_Split.md)
+- latest completed slice: [254_Phase_Layout_Primitives_CSS_Module_Split.md](./Archive/254_Phase_Layout_Primitives_CSS_Module_Split.md)
 
 Completed phases should be moved to:
 
@@ -659,6 +659,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 252` closeout moved shared hero-card and status-card CSS into `src/sidepanel/theme/surfaces.css` and imported that shared module from both sidepanel and popup entries
 - phase 253 depends on phases 63, 245, 251, and 252 because shared typography is used across dashboard, Settings, popup, and toned status surfaces, and should load before surface-specific tone overrides
 - the 2026-05-03 `Phase 253` closeout moved shared text hierarchy and copy primitive CSS into `src/sidepanel/theme/typography.css` and imported that shared module from both sidepanel and popup entries before `surfaces.css`
+- phase 254 depends on phases 53, 55, 62, 63, 245, and 253 because summary strips, dashboard sections, popup setup summaries, and provider-card responsive ordering should only be split after those layout contracts are stable
+- the 2026-05-03 `Phase 254` closeout moved shared summary-strip, summary-pill, token-panel, dashboard-section, and narrow layout primitive CSS into `src/sidepanel/theme/layout-primitives.css` and imported that shared module from both sidepanel and popup entries after `surfaces.css`
 
 ## Delivery Standard For Each Phase
 

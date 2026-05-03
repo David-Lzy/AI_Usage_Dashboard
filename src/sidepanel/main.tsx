@@ -11,6 +11,7 @@ import "./theme/buttons.css";
 import "./theme/chips.css";
 import "./theme/typography.css";
 import "./theme/surfaces.css";
+import "./theme/layout-primitives.css";
 import "./theme/access-feedback.css";
 import "./theme/top-app-bar.css";
 import "./theme/detail-surfaces.css";

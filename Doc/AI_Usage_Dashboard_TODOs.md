@@ -76,10 +76,9 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 253` execution priority:
+Current post-`Phase 254` execution priority:
 
-1. `P1` - continue splitting oversized implementation files now that the provider-card and shared progress visual contracts are stable:
-   - remaining summary/dashboard layout areas in `src/sidepanel/theme/material-theme.css`
+1. `P1` - continue splitting oversized implementation files now that the provider-card and shared CSS visual contracts are stable:
    - `src/sidepanel/routes/SettingsPage.tsx`
    - `src/sidepanel/App.tsx`
    - `src/shared/localized-copy.ts`
@@ -312,6 +311,7 @@ Phase status update:
 - `Phase 251` completed the Chips CSS module split by moving shared token-chip, status-chip, and meta-chip CSS into `src/sidepanel/theme/chips.css`
 - `Phase 252` completed the Surfaces CSS module split by moving shared hero-card and status-card CSS into `src/sidepanel/theme/surfaces.css`
 - `Phase 253` completed the Typography CSS module split by moving shared text hierarchy, copy primitive, list spacing, and compact headline CSS into `src/sidepanel/theme/typography.css`
+- `Phase 254` completed the Layout Primitives CSS module split by moving shared summary-strip, summary-pill, token-panel, dashboard-section, and narrow layout primitive CSS into `src/sidepanel/theme/layout-primitives.css`
 - the next maintenance follow-up should continue splitting oversized UI and localization files now that the provider-card and shared progress visual contracts are stable
 - the remaining store-readiness blocker is still the real manual native-toolbar popup capture and archive completion under `Direction 10.3`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
