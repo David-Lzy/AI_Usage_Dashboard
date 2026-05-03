@@ -228,6 +228,7 @@
     "phase264:review": "./scripts/with-preferred-node.sh node ./scripts/phase264-standard-app-runtime-hook-review.mjs",
     "phase265:review": "./scripts/with-preferred-node.sh node ./scripts/phase265-standard-app-actions-split-review.mjs",
     "phase266:review": "./scripts/with-preferred-node.sh node ./scripts/phase266-provider-source-display-copy-split-review.mjs",
+    "phase267:review": "./scripts/with-preferred-node.sh node ./scripts/phase267-provider-detail-copy-split-review.mjs",
     "interaction-audit:bundle": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-handoff-bundle.mjs",
     "interaction-audit:archive": "./scripts/with-preferred-node.sh node ./scripts/archive-interaction-audit-review.mjs",
     "interaction-audit:refresh-archive-index": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-review-archive-index.mjs",

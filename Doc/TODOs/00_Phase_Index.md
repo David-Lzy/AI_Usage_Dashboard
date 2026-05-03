@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [266_Phase_Provider_Source_Display_Copy_Split.md](./Archive/266_Phase_Provider_Source_Display_Copy_Split.md)
+- latest completed slice: [267_Phase_Provider_Detail_Copy_Split.md](./Archive/267_Phase_Provider_Detail_Copy_Split.md)
 
 Completed phases should be moved to:
 
@@ -685,6 +685,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 265` closeout extracted standard app provider/settings/session-page/full-page action handlers into `src/sidepanel/standard-app-actions.ts` while preserving route guards, route rendering, provider action semantics, sync behavior, and source-page recovery
 - phase 266 depends on phase 265 because `App.tsx` is now small enough for the maintenance queue to switch to `src/shared/localized-copy.ts`
 - the 2026-05-03 `Phase 266` closeout extracted provider-source display localized copy into `src/shared/provider-source-display-localized-copy.ts` while preserving the legacy `src/shared/localized-copy.ts` re-export path and provider-source copy semantics
+- phase 267 depends on phase 266 because provider-detail copy is another focused localization surface that can move after the first `localized-copy.ts` split proved the re-export boundary
+- the 2026-05-03 `Phase 267` closeout extracted provider-detail localized copy and provider-detail badge/permission label helpers into `src/shared/provider-detail-localized-copy.ts` while preserving the legacy `src/shared/localized-copy.ts` re-export path and provider-detail copy semantics
 
 ## Delivery Standard For Each Phase
 
