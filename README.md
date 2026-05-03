@@ -4,9 +4,9 @@ Chrome side-panel extension for tracking usage, credits, and sync health across 
 
 Current release candidate:
 
-- package version: `0.1.0-rc.3`
-- Chrome manifest version: `0.1.0.3`
-- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.3.zip`
+- package version: `0.1.0-rc.4`
+- Chrome manifest version: `0.1.0.4`
+- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.4.zip`
 
 ## Current RC Matrix
 
@@ -40,10 +40,11 @@ Security posture for this track:
 
 Next execution queue:
 
-1. use `0.1.0-rc.3` for install/review passes until the next release package is cut
-2. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining manual store-popup capture dependency
-3. keep [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) in maintenance mode unless a concrete diagnostic-body localization need appears
-4. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
+1. use `0.1.0-rc.4` for install/review passes; Phase 283 RDP Chrome real-device validation has passed for the Codex reload-and-retry path
+2. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining store-popup screenshot capture and archive closeout now that RDP Chrome is available for manual native popup interaction
+3. keep provider closure account-gated: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
+4. keep operator evidence closure below release/store work; here it means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not another runtime feature
+5. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
 
 Maintenance note:
 
@@ -615,7 +616,7 @@ npm run release
 
 Output artifact:
 
-- `release/ai-usage-dashboard-0.1.0-rc.3.zip`
+- `release/ai-usage-dashboard-0.1.0-rc.4.zip`
 
 The packaging script checks that:
 

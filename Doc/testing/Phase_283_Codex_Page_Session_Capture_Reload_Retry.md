@@ -40,6 +40,9 @@ Codex personal page capture enables this option for its live routes.
   - verifies page-session reload recovery markers
   - verifies Codex personal capture enables the recovery option
   - verifies closeout documentation markers
+- User-run RDP Chrome real-device validation after closeout
+  - verifies the toolbar popup refresh path no longer needs a second manual click in the checked scenario
+  - reported result: passed, no issue reported
 
 ## Commands
 

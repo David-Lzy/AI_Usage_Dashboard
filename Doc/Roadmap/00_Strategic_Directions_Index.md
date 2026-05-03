@@ -24,13 +24,13 @@ Purpose:
 Important scope note:
 
 - these roadmap files are not replacements for the active phase files in `Doc/TODOs/`
-- the numbered release queue is closed through `Phase 42`; the next work should now come from the roadmap directions below
+- numbered phases are still used for narrow execution slices; roadmap directions decide priority when there is no active phase
 
 ## Current Truth Snapshot
 
 As of 2026-05-03:
 
-- the numbered phase queue is now completed through `Phase 283`
+- the numbered phase queue is now completed through `Phase 284`
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -166,6 +166,10 @@ As of 2026-05-03:
 - `Phase 281` completed the standard-app settings actions split by moving Settings update, credential, Codex workspace, source-preference, page-binding-clear, and preferences-saved handlers into `src/sidepanel/standard-app-settings-actions.ts`
 - `Phase 282` completed the standard route app split by moving dashboard, settings, and provider-detail route rendering into `src/sidepanel/standard-route-app.tsx`
 - `Phase 283` completed the Codex page-session capture reload retry by reloading an unreadable existing Codex tab with `bypassCache: true` and retrying capture once before surfacing `capture_unavailable`
+- `Phase 283` then passed user-run RDP Chrome real-device validation with no issue reported, so the reload-retry path is no longer waiting on an extra manual smoke check
+- `Phase 284` packaged `0.1.0-rc.4` after that validation, preserving current provider truth boundaries while moving the installable package beyond the old `rc.3` release boundary
+- provider closure waits on available accounts: JetBrains org-console, Claude Pro or Max usage-page, and Gemini project-metrics graduation should not be treated as repo-only blockers
+- operator evidence means archived real human/operator review exports for interaction-audit or theme-recovery workspaces; it remains useful, but it sits behind release package and store asset closeout
 - the originally queued local-safe file splitting targets are now closed enough that further splitting should be driven by a concrete maintenance risk instead of the old Phase 236-era queue
 - `Direction 10.3` still retains the real manual native-toolbar popup capture dependency for final store assets; the existing request has staged full-page captures but still needs the native popup slots before archive completion
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
@@ -363,13 +367,13 @@ As of 2026-05-03:
 
 ### Active continuation order
 
-1. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
+1. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why first now:
-   manifest localization, the first runtime shell slice, locale-aware value formatting, the first settings-shell pilot, the popup/provider-detail pilot rollout, the deeper settings-helper rollout, duration-bearing freshness/reset labels, the first compact-width plus RTL hardening pass, the operator-workspace boundary review, first operator-workspace shell localization, store-screenshot helper localization, screenshot-adjacent submission-support caption localization, the raw provider source-truth policy, provider-source display wrapper localization, adapter diagnostic reason-code planning, the type-only additive diagnostic model, Cursor plus Codex source-selection/fallback builders, Cursor plus Codex credential/host-access diagnostics, Cursor plus Codex page-session diagnostics, usage-threshold plus policy-only diagnostics, sync-stale diagnostics, source-state typed diagnostic fallback, localized warning diagnostic presentation, localized source diagnostic presentation, localized adapter-error diagnostic presentation, compact-width diagnostic presentation QA, diagnostic archive/export compatibility review, sample/store seed diagnostic metadata alignment, diagnostic fixture/historical evidence alignment, adapter diagnostic raw fallback regression, Codex personal multi-window usage surfacing, Codex personal flex credit balance surfacing, Cursor personal billing-period usage-summary surfacing, popup personal usage-context compression, surface progress style preferences, popup appearance preferences, the Settings-side popup appearance preview, native toolbar popup density tightening, the `0.1.0-rc.3` package, active-tab session-page binding, bound-tab lifecycle staleness, capture-unavailable session-page diagnostics, and replacement-tab binding migration are now shipped. The active short-term priority can return to functional provider verification when a real authenticated Codex or Cursor page is available.
+   `0.1.0-rc.4` is now package-ready after Phase 283 RDP validation, and RDP Chrome is available for real native-toolbar popup interaction, so the remaining store asset line is the highest-value user-facing closeout that does not require extra provider accounts.
 
-2. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
+2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second now:
-   the remaining high-value work is still real and important, but the refreshed store asset line now depends on one external manual native-toolbar popup capture step rather than more immediate repo-only engineering.
+   the current pilot is broad enough to stay in maintenance mode unless a concrete diagnostic-body or provider-facing localization need appears.
 
 3. [Direction 05 - Adaptive Theming And Color Modes](./05_Direction_Adaptive_Theming_And_Color_Modes.md)
    Why third now:

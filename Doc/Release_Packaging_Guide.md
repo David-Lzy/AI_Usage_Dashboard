@@ -1,6 +1,6 @@
 # Release Packaging Guide
 
-Date: 2026-04-29
+Date: 2026-05-03
 
 Process rule:
 
@@ -30,17 +30,17 @@ Status note:
 Package version:
 
 - `package.json` uses the human-facing semver tag
-- current value: `0.1.0-rc.3`
+- current value: `0.1.0-rc.4`
 
 Chrome extension version:
 
 - `src/manifest.json` uses Chrome's required numeric-only version format
-- current value: `0.1.0.3`
+- current value: `0.1.0.4`
 
 Display version:
 
 - `src/manifest.json` also uses `version_name`
-- current value: `0.1.0-rc.3`
+- current value: `0.1.0-rc.4`
 
 Why the two values differ:
 
@@ -144,8 +144,13 @@ npx -y node@22 ./scripts/package-release.mjs
 
 Packaging output:
 
-- `release/ai-usage-dashboard-0.1.0-rc.3.zip`
-- SHA256: `4811289e4f47deddce0efbe39ab5e249104d623eff437584df3837e4e2f99882`
+- `release/ai-usage-dashboard-0.1.0-rc.4.zip`
+- SHA256: `3287cb832ff336594e816e62719631cc757b3db79663d83c227d186a9122cc3f`
+
+Release context:
+
+- `0.1.0-rc.4` is the first package after Phase 283 RDP Chrome validation of the Codex page-session reload retry path
+- provider closure waits on available real accounts; no new provider support claim is introduced by this package
 
 The packaging script checks:
 

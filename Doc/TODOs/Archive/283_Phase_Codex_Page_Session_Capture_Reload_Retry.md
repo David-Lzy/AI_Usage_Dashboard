@@ -43,6 +43,7 @@ When an already-open Codex usage page becomes unreadable, for example after Chro
 - Enabled reload-and-retry for Codex personal page capture in `src/providers/codex/personal-page-capture.ts`.
 - Added test coverage proving a failed capture can reload with `bypassCache: true` and then match on retry.
 - Added `npm run phase283:review` to verify runtime and documentation markers.
+- After closeout, the user ran RDP Chrome real-device validation for the Phase 283 toolbar refresh path and reported no issue.
 
 ## Verification
 
@@ -53,7 +54,8 @@ When an already-open Codex usage page becomes unreadable, for example after Chro
 - `git diff --check`
 - `npm run test -- --run`
 - `npm run build`
+- User-run RDP Chrome real-device validation after closeout: passed, no issue reported.
 
 ## Follow-Up
 
-Use RDP Chrome to confirm a real unreadable Codex tab recovers from the toolbar popup `Refresh` button without needing a second manual click. If Cursor shows the same background-tab failure later, consider enabling the same page-session option for Cursor in a separate provider-scoped phase.
+Use `0.1.0-rc.4` or later for install/review passes. If Cursor shows the same background-tab failure later, consider enabling the same page-session option for Cursor in a separate provider-scoped phase.

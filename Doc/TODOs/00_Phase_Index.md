@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [283_Phase_Codex_Page_Session_Capture_Reload_Retry.md](./Archive/283_Phase_Codex_Page_Session_Capture_Reload_Retry.md)
+- latest completed slice: [284_Phase_RC4_Release_Packaging.md](./Archive/284_Phase_RC4_Release_Packaging.md)
 
 Completed phases should be moved to:
 
@@ -719,6 +719,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 282` closeout extracted standard route rendering into `src/sidepanel/standard-route-app.tsx` while preserving hash observation, special route dispatch, and standard route behavior
 - phase 283 depends on phases 230, 232, and 233 because Codex managed session-page sync already opens authenticated tabs and retries hydration, but unreadable background tabs still needed one real reload recovery path
 - the 2026-05-03 `Phase 283` closeout added Codex page-session capture reload retry so the refresh path can reload an unreadable existing Codex tab with `bypassCache: true` and retry capture once before surfacing `capture_unavailable`
+- phase 284 depends on Phase 283 plus the user's RDP Chrome validation because the next installable package should include the reload-retry fix only after the real toolbar popup refresh path has been checked
+- the 2026-05-03 `Phase 284` closeout bumped the package to `0.1.0-rc.4`, bumped the manifest to `0.1.0.4`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.4.zip`, and recorded the release package SHA256 in the Phase 284 archive
 
 ## Delivery Standard For Each Phase
 

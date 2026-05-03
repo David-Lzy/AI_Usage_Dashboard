@@ -76,21 +76,21 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 283` execution priority:
+Current post-`Phase 284` execution priority:
 
-1. `P1` - complete the `Direction 10.3` store asset-pack line once the remaining manual native-toolbar popup captures can be collected and archived.
-2. `P2` - continue provider and evidence closure work:
-   - JetBrains org-console reverification
-   - Claude personal Pro or Max usage-page capture
-   - Gemini project-metrics product-contract decision
-   - first real interaction-audit and theme-recovery operator archives
-   - broader runtime locale rollout beyond the current `en` plus `zh-CN` pilot
-3. `P2` - only continue file splitting when a concrete maintenance issue justifies it; the old queued split targets for `material-theme.css`, `SettingsPage.tsx`, `App.tsx`, `standard-app-actions.ts`, and `localized-copy.ts` are now closed or reduced to focused compatibility/aggregator files.
+1. `P0` - use `0.1.0-rc.4` as the next install/review package after the user-confirmed RDP Chrome validation of `Phase 283`.
+2. `P1` - complete the `Direction 10.3` store asset-pack line: RDP Chrome is available for real toolbar-popup clicking and screenshot capture, so the remaining work is capture/import/archive closeout rather than more repo-only planning.
+3. `P2` - Provider closure waits on accounts:
+   - JetBrains org-console reverification waits for a real org-visible `Users and licensing` session.
+   - Claude personal usage-page capture waits for a Pro or Max account.
+   - Gemini project-metrics graduation waits for a product decision that project-scoped metrics are acceptable.
+4. `P2` - close real operator evidence only after higher-value release/store work: operator evidence means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not a new runtime provider feature.
+5. `P2` - continue file splitting only when a concrete maintenance issue justifies it; the old queued split targets for `material-theme.css`, `SettingsPage.tsx`, `App.tsx`, `standard-app-actions.ts`, and `localized-copy.ts` are now closed or reduced to focused compatibility/aggregator files.
 
 Delivery rule for this stage:
 
 - keep active implementation phases narrow and independently verifiable
-- keep file-splitting separate from provider-card visual work so Phase 236 remains reviewable as one UI slice
+- keep file-splitting separate from release packaging, provider verification, and store evidence closeout
 - preserve the current provider truth boundaries while changing UI presentation
 
 Phase status update:
@@ -338,9 +338,11 @@ Phase status update:
 - `Phase 281` completed the standard-app settings actions split by moving Settings update, credential, Codex workspace, source-preference, page-binding-clear, and preferences-saved handlers into `src/sidepanel/standard-app-settings-actions.ts`
 - `Phase 282` completed the standard route app split by moving dashboard, settings, and provider-detail route rendering into `src/sidepanel/standard-route-app.tsx`
 - `Phase 283` completed the Codex page-session capture reload retry by reloading an unreadable existing Codex tab with `bypassCache: true` and retrying capture once before surfacing `capture_unavailable`
+- `Phase 283` was then confirmed in RDP Chrome by the user with no issue reported
+- `Phase 284` packaged `0.1.0-rc.4` so the release zip includes the Phase 215-283 session-page, UI, maintenance, and Codex reload-retry changes after the older `rc.3` boundary
 - the old maintenance split queue is closed for the originally named local-safe targets: `material-theme.css`, `localized-copy.ts`, `SettingsPage.tsx`, `App.tsx`, and `standard-app-actions.ts` are now focused base, compatibility, route, or aggregator files rather than the next default work item
-- the remaining store-readiness blocker is still the real manual native-toolbar popup capture and archive completion under `Direction 10.3`
-- the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
+- the remaining store-readiness blocker is still real native-toolbar popup capture/import/archive completion under `Direction 10.3`; RDP Chrome is now available for that manual operator step
+- the remaining high-value work in Direction 05 and Direction 04 is real operator evidence closure: archived real review exports from the shipped workspaces rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
 - the split `Phase 41` release gate cleared the old runtime-parity ambiguity and re-proved the live `Codex` plus `Cursor` personal session-page paths in real Chrome
 - `2026-04-23`: `Branch B` was selected for the current RC, so JetBrains is now a retained repo path rather than part of the active release promise
