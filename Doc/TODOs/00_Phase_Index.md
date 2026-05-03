@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [274_Phase_Settings_Credential_Draft_Hook.md](./Archive/274_Phase_Settings_Credential_Draft_Hook.md)
+- latest completed slice: [275_Phase_Settings_Preference_Options_Split.md](./Archive/275_Phase_Settings_Preference_Options_Split.md)
 
 Completed phases should be moved to:
 
@@ -701,6 +701,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 273` closeout extracted standard app session-page open and attach handlers into `src/sidepanel/standard-app-session-page-actions.ts` while preserving the `createStandardAppActions` return contract
 - phase 274 depends on phase 273 because Settings credential draft ownership is the next narrow, local-safe extraction after standard app session-page action ownership moved out of the action aggregator
 - the 2026-05-03 `Phase 274` closeout extracted Settings credential and Codex workspace draft state into `src/sidepanel/use-settings-credential-drafts.ts` while preserving Settings UI behavior, credential dispatch semantics, and theme custom seed draft ownership in `SettingsPage.tsx`
+- phase 275 depends on phase 274 because Settings preference option assembly is the next narrow extraction after credentials draft state left the Settings route container
+- the 2026-05-03 `Phase 275` closeout extracted Settings preference select, numeric combobox, and action badge option assembly into `src/sidepanel/settings-preference-options.ts` while preserving Material control rendering and settings dispatch semantics in `SettingsPreferencesSection.tsx`
 
 ## Delivery Standard For Each Phase
 

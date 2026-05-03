@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-03:
 
-- the numbered phase queue is now completed through `Phase 274`
+- the numbered phase queue is now completed through `Phase 275`
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -157,6 +157,7 @@ As of 2026-05-03:
 - `Phase 272` completed the `localized-copy.ts` diagnostic presentation split by moving `getProviderDiagnosticPresentation` plus private diagnostic formatters into `src/shared/provider-diagnostic-presentation.ts`, reducing `localized-copy.ts` to a compatibility export aggregator
 - `Phase 273` completed the standard-app session-page actions split by moving Chrome tab discovery, source-page recovery, page-binding, and active-page attach handlers into `src/sidepanel/standard-app-session-page-actions.ts`
 - `Phase 274` completed the Settings credential draft hook split by moving provider API key and Codex workspace draft state plus save/clear/input handlers into `src/sidepanel/use-settings-credential-drafts.ts`
+- `Phase 275` completed the Settings preference options split by moving select, numeric combobox, and action badge option assembly into `src/sidepanel/settings-preference-options.ts`
 - the next local-safe execution slice remains maintenance-oriented file splitting for the remaining oversized UI/theme/localization modules
 - `Direction 10.3` still retains the real manual native-toolbar popup capture dependency for final store assets; the existing request has staged full-page captures but still needs the native popup slots before archive completion
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
