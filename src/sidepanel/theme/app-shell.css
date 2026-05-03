@@ -1,0 +1,109 @@
+@keyframes app-surface-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--app-motion-distance-2));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes app-disclosure-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--app-motion-distance-1));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes app-full-page-enter-from-popup {
+  from {
+    opacity: 0;
+    transform: translateY(var(--app-motion-distance-3)) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes app-full-page-enter-from-sidebar {
+  from {
+    opacity: 0;
+    transform: translateX(var(--app-motion-distance-3)) scale(0.992);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-4);
+  padding: var(--app-space-4);
+}
+
+.full-page-shell .app-shell {
+  width: min(100%, 1440px);
+  margin-inline: auto;
+  padding: var(--app-space-5);
+}
+
+html[data-full-page-entry="popup-expand"] .app-shell {
+  animation: app-full-page-enter-from-popup var(--app-motion-duration-medium)
+    var(--app-motion-easing-emphasized) both;
+  transform-origin: top center;
+}
+
+html[data-full-page-entry="sidebar-expand"] .app-shell {
+  animation: app-full-page-enter-from-sidebar var(--app-motion-duration-medium)
+    var(--app-motion-easing-emphasized) both;
+  transform-origin: center left;
+}
+
+html[data-app-direction="rtl"][data-full-page-entry="sidebar-expand"] .app-shell {
+  transform-origin: center right;
+}
+
+.app-shell > * {
+  min-width: 0;
+  animation: app-surface-enter var(--app-motion-duration-medium)
+    var(--app-motion-easing-standard) both;
+}
+
+.app-shell > *:nth-child(2) {
+  animation-delay: 40ms;
+}
+
+.app-shell > *:nth-child(3) {
+  animation-delay: 80ms;
+}
+
+.app-shell > *:nth-child(4) {
+  animation-delay: 120ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-shell > *,
+  .full-page-shell .app-shell,
+  html[data-full-page-entry="popup-expand"] .app-shell,
+  html[data-full-page-entry="sidebar-expand"] .app-shell {
+    animation: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-shell {
+    padding: var(--app-space-3);
+  }
+}

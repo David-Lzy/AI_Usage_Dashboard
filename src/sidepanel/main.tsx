@@ -6,6 +6,7 @@ import { isFullPageSurfaceSearch } from "../shared/extension-surface-paths";
 import { App } from "./App";
 import "./theme/tokens.css";
 import "./theme/material-theme.css";
+import "./theme/app-shell.css";
 import "./theme/access-feedback.css";
 import "./theme/top-app-bar.css";
 import "./theme/detail-surfaces.css";

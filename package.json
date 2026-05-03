@@ -210,6 +210,7 @@
     "phase246:review": "./scripts/with-preferred-node.sh node ./scripts/phase246-settings-navigation-css-module-review.mjs",
     "phase247:review": "./scripts/with-preferred-node.sh node ./scripts/phase247-access-feedback-css-module-review.mjs",
     "phase248:review": "./scripts/with-preferred-node.sh node ./scripts/phase248-top-app-bar-css-module-review.mjs",
+    "phase249:review": "./scripts/with-preferred-node.sh node ./scripts/phase249-app-shell-css-module-review.mjs",
     "interaction-audit:bundle": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-handoff-bundle.mjs",
     "interaction-audit:archive": "./scripts/with-preferred-node.sh node ./scripts/archive-interaction-audit-review.mjs",
     "interaction-audit:refresh-archive-index": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-review-archive-index.mjs",

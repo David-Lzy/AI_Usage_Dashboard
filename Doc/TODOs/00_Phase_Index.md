@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [248_Phase_Top_App_Bar_CSS_Module_Split.md](./Archive/248_Phase_Top_App_Bar_CSS_Module_Split.md)
+- latest completed slice: [249_Phase_App_Shell_CSS_Module_Split.md](./Archive/249_Phase_App_Shell_CSS_Module_Split.md)
 
 Completed phases should be moved to:
 
@@ -649,6 +649,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 247` closeout moved permission prompt, credential, and toast feedback CSS into `src/sidepanel/theme/access-feedback.css` and kept that sidepanel-only module out of the popup entry
 - phase 248 depends on phases 53, 235, and 247 because Top App Bar styling should only be split after Settings navigation, sticky top-bar behavior, and sidepanel-only access-feedback import order are stable
 - the 2026-05-03 `Phase 248` closeout moved Top App Bar CSS into `src/sidepanel/theme/top-app-bar.css` and kept that sidepanel-only module out of the popup entry
+- phase 249 depends on phases 155 through 159 and phases 245 through 248 because app-shell styling spans sidepanel, full-page, popup, and entry-motion contracts
+- the 2026-05-03 `Phase 249` closeout moved shared app-shell layout and shell-entry keyframes into `src/sidepanel/theme/app-shell.css` and imported that shared module from both sidepanel and popup entries
 
 ## Delivery Standard For Each Phase
 
