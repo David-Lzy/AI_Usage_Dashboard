@@ -76,7 +76,7 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 265` execution priority:
+Current post-`Phase 266` execution priority:
 
 1. `P1` - continue splitting oversized implementation files now that the provider-card and shared CSS visual contracts are stable:
    - `src/sidepanel/routes/SettingsPage.tsx`
@@ -323,6 +323,7 @@ Phase status update:
 - `Phase 263` completed the `App.tsx` browser-controls split by moving Chrome capability checks, tab sorting, and full-page route opening into `src/sidepanel/app-browser-controls.ts`
 - `Phase 264` completed the `App.tsx` standard-app runtime hook extraction by moving initialization, theme sync, shared message application, toast/loading/error state, and retry logic into `src/sidepanel/use-standard-app-runtime.ts`
 - `Phase 265` completed the `App.tsx` standard-app actions split by moving provider, settings, session-page, and full-page action handlers into `src/sidepanel/standard-app-actions.ts`
+- `Phase 266` completed the `localized-copy.ts` provider-source display copy split by moving `buildProviderSourceDisplayLocalizedCopy` into `src/shared/provider-source-display-localized-copy.ts` while preserving the legacy re-export path
 - the next maintenance follow-up should continue splitting oversized UI and localization files now that the provider-card and shared progress visual contracts are stable
 - the remaining store-readiness blocker is still the real manual native-toolbar popup capture and archive completion under `Direction 10.3`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
