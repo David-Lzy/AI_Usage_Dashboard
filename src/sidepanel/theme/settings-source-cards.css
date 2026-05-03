@@ -16,15 +16,32 @@
   gap: var(--app-space-3);
 }
 
-.source-card__body,
-.source-card__chips {
+.source-card__body {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--app-space-2);
 }
 
+.source-card__header > :first-child,
+.source-card__session-header > :first-child {
+  min-width: 0;
+}
+
 .source-card__chips {
-  justify-items: end;
+  display: flex;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: flex-start;
+  justify-content: flex-end;
+  gap: var(--app-space-2);
+  max-width: min(100%, 720px);
+}
+
+.source-card__chips .meta-chip {
+  flex: 0 1 auto;
+  max-width: 100%;
+  white-space: nowrap;
 }
 
 .source-card__provider,
@@ -277,7 +294,7 @@
   }
 
   .source-card__chips {
-    justify-items: start;
+    justify-content: flex-start;
   }
 
   .source-card__session-chips {

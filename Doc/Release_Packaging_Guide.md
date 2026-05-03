@@ -30,17 +30,17 @@ Status note:
 Package version:
 
 - `package.json` uses the human-facing semver tag
-- current value: `0.1.0-rc.6`
+- current value: `0.1.0-rc.7`
 
 Chrome extension version:
 
 - `src/manifest.json` uses Chrome's required numeric-only version format
-- current value: `0.1.0.6`
+- current value: `0.1.0.7`
 
 Display version:
 
 - `src/manifest.json` also uses `version_name`
-- current value: `0.1.0-rc.6`
+- current value: `0.1.0-rc.7`
 
 Why the two values differ:
 
@@ -144,12 +144,12 @@ npx -y node@22 ./scripts/package-release.mjs
 
 Packaging output:
 
-- `release/ai-usage-dashboard-0.1.0-rc.6.zip`
-- SHA256: `406475217595ddb75a74a7e1db306080a77ec7b878ad7c46079e46638d8f752c`
+- `release/ai-usage-dashboard-0.1.0-rc.7.zip`
+- SHA256: `b094b9b79975f5e092f51146c3f511ae0e442d410ae5775f9da13740c8ec860d`
 
 Release context:
 
-- `0.1.0-rc.6` distributes the Phase 287 progress-row spacing fix after the Phase 285 post-rc4 smoke polish and the earlier Phase 283 RDP Chrome validation of the Codex page-session reload retry path
+- `0.1.0-rc.7` distributes the Phase 288 source-chip row fix after the Phase 287 progress-row spacing fix, Phase 285 post-rc4 smoke polish, and earlier Phase 283 RDP Chrome validation of the Codex page-session reload retry path
 - provider closure waits on available real accounts; no new provider support claim is introduced by this package
 
 The packaging script checks:

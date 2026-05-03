@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-03:
 
-- the numbered phase queue is now completed through `Phase 287`
+- the numbered phase queue is now completed through `Phase 288`
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -171,6 +171,7 @@ As of 2026-05-03:
 - `Phase 285` completed post-rc4 smoke polish for dashboard provider-card circular boundaries, horizontal source chips, Settings sticky-chip density, full-page Settings back-to-top positioning, and direct host access refresh prompt recovery
 - `Phase 286` packaged `0.1.0-rc.5` so the current install/review artifact includes Phase 285 fixes rather than the older `rc.4` package boundary
 - `Phase 287` fixed cramped dashboard provider-card linear progress rows by restoring row padding, separating divider lines from content, and hardening remaining-label wrapping before packaging `0.1.0-rc.6`
+- `Phase 288` fixed Settings source-card chips so source, contract, fidelity, and state labels use horizontal wrapping rows instead of a single-column chip stack, then packaged `0.1.0-rc.7`
 - provider closure waits on available accounts: JetBrains org-console, Claude Pro or Max usage-page, and Gemini project-metrics graduation should not be treated as repo-only blockers
 - operator evidence means archived real human/operator review exports for interaction-audit or theme-recovery workspaces; it remains useful, but it sits behind release package and store asset closeout
 - the originally queued local-safe file splitting targets are now closed enough that further splitting should be driven by a concrete maintenance risk instead of the old Phase 236-era queue
@@ -372,7 +373,7 @@ As of 2026-05-03:
 
 1. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why first now:
-   `0.1.0-rc.6` is now package-ready after the Phase 287 progress-row spacing fix, Phase 285 post-rc4 polish, and the earlier Phase 283 RDP Chrome real-device validation, and RDP Chrome is available for real native-toolbar popup interaction, so the remaining store asset line is the highest-value user-facing closeout that does not require extra provider accounts.
+   `0.1.0-rc.7` is now package-ready after the Phase 288 source-chip row fix, Phase 287 progress-row spacing fix, Phase 285 post-rc4 polish, and the earlier Phase 283 RDP Chrome real-device validation, and RDP Chrome is available for real native-toolbar popup interaction, so the remaining store asset line is the highest-value user-facing closeout that does not require extra provider accounts.
 
 2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second now:
