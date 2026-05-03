@@ -40,7 +40,7 @@ Security posture for this track:
 
 Next execution queue:
 
-1. continue splitting oversized UI/theme/localization files after the Phase 261 Settings preferences section component extraction
+1. continue splitting oversized UI/theme/localization files after the Phase 262 special-route app split
 2. use `0.1.0-rc.3` for install/review passes until the next release package is cut
 3. keep [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) in maintenance mode unless a concrete diagnostic-body localization need appears
 4. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining manual store-popup capture dependency
@@ -154,6 +154,7 @@ Current honesty boundaries:
 - Settings section navigation state now lives in `src/sidepanel/use-settings-section-navigation.ts`, keeping active-section observation and scroll helpers out of the oversized Settings page while preserving sticky top-bar placement and the back-to-top FAB
 - Settings source section now lives in `src/sidepanel/components/SettingsSourceSection.tsx`, keeping Source Connections card rendering out of the oversized Settings page while preserving source preference controls, diagnostic presentation, and session-page actions
 - Settings preferences section now lives in `src/sidepanel/components/SettingsPreferencesSection.tsx`, keeping global preference controls, popup appearance preview, and theme customization rendering out of the oversized Settings page while preserving parent dispatch wiring
+- The special-route app now lives in `src/sidepanel/special-route-app.tsx`, keeping debug/operator route parsing, rendering, and special-route-only theme/locale hydration out of the standard app runtime file
 - Cursor personal usage-page sync is now explicitly labeled as `Window-only vendor value`
 - Gemini remains `Policy only`; the observed Google Cloud metrics route is project-scoped and not treated as personal quota
 - the UI now makes the trust boundary explicit in Settings and provider detail, including host-access requirements, credential persistence, and the fact that cookies stay forbidden

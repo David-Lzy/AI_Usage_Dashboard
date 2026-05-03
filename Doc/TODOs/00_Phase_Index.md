@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [261_Phase_Settings_Preferences_Section_Component_Extraction.md](./Archive/261_Phase_Settings_Preferences_Section_Component_Extraction.md)
+- latest completed slice: [262_Phase_Special_Route_App_Split.md](./Archive/262_Phase_Special_Route_App_Split.md)
 
 Completed phases should be moved to:
 
@@ -675,6 +675,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 260` closeout extracted Settings Source Connections rendering into `src/sidepanel/components/SettingsSourceSection.tsx` while preserving source preference controls, diagnostic presentation, session-page actions, page-binding actions, and source truth labels
 - phase 261 depends on phase 260 because preferences extraction should happen after the other large Settings body sections have stable component boundaries
 - the 2026-05-03 `Phase 261` closeout extracted Settings global preferences rendering and option assembly into `src/sidepanel/components/SettingsPreferencesSection.tsx` while preserving preference validation, Material controls, action badge candidate generation, popup preview, theme seed handling, and parent dispatch wiring
+- phase 262 depends on phase 261 because the Settings body extraction is complete enough to switch the maintenance queue to `App.tsx`
+- the 2026-05-03 `Phase 262` closeout extracted special debug/operator route parsing, rendering, and special-route-only theme/locale hydration into `src/sidepanel/special-route-app.tsx` while preserving standard route rendering, sync behavior, source-page recovery, and special route hash strings
 
 ## Delivery Standard For Each Phase
 
