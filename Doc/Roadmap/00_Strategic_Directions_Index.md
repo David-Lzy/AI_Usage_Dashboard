@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-03:
 
-- the numbered phase queue is now completed through `Phase 264`
+- the numbered phase queue is now completed through `Phase 265`
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -147,6 +147,7 @@ As of 2026-05-03:
 - `Phase 262` completed the `App.tsx` special-route app split by moving debug/operator route parsing, rendering, and special-route-only theme/locale hydration into `src/sidepanel/special-route-app.tsx`
 - `Phase 263` completed the `App.tsx` browser-controls split by moving Chrome capability checks, tab sorting, and full-page route opening into `src/sidepanel/app-browser-controls.ts`
 - `Phase 264` completed the `App.tsx` standard-app runtime hook extraction by moving initialization, theme sync, shared message application, toast/loading/error state, and retry logic into `src/sidepanel/use-standard-app-runtime.ts`
+- `Phase 265` completed the `App.tsx` standard-app actions split by moving provider, settings, session-page, and full-page action handlers into `src/sidepanel/standard-app-actions.ts`
 - the next local-safe execution slice remains maintenance-oriented file splitting for the remaining oversized UI/theme/localization modules
 - `Direction 10.3` still retains the real manual native-toolbar popup capture dependency for final store assets; the existing request has staged full-page captures but still needs the native popup slots before archive completion
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
