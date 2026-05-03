@@ -40,7 +40,7 @@ Security posture for this track:
 
 Next execution queue:
 
-1. continue splitting oversized UI/theme/localization files after the Phase 254 Layout Primitives CSS module split
+1. continue splitting oversized UI/theme/localization files after the Phase 255 Settings Navigation component extraction
 2. use `0.1.0-rc.3` for install/review passes until the next release package is cut
 3. keep [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) in maintenance mode unless a concrete diagnostic-body localization need appears
 4. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining manual store-popup capture dependency
@@ -147,6 +147,7 @@ Current honesty boundaries:
 - Typography CSS now lives in `src/sidepanel/theme/typography.css`, keeping shared text hierarchy, copy primitive, and list spacing styling out of the shared Material theme base file while loading it in both sidepanel and popup entries before toned surface overrides
 - Surface CSS now lives in `src/sidepanel/theme/surfaces.css`, keeping shared hero-card and status-card styling out of the shared Material theme base file while loading it in both sidepanel and popup entries
 - Layout primitives CSS now lives in `src/sidepanel/theme/layout-primitives.css`, keeping shared summary-strip, summary-pill, token-panel, dashboard-section, and narrow layout primitive styling out of the shared Material theme base file while loading it in both sidepanel and popup entries before surface-specific overrides
+- Settings navigation components now live in `src/sidepanel/components/SettingsNavigation.tsx`, with section ids in `src/sidepanel/settings-section-ids.ts`, keeping sticky section chips and the back-to-top FAB out of the oversized Settings page while preserving the same TopBar placement
 - Cursor personal usage-page sync is now explicitly labeled as `Window-only vendor value`
 - Gemini remains `Policy only`; the observed Google Cloud metrics route is project-scoped and not treated as personal quota
 - the UI now makes the trust boundary explicit in Settings and provider detail, including host-access requirements, credential persistence, and the fact that cookies stay forbidden

@@ -57,8 +57,17 @@ import {
 import { EditableNumberCombobox } from "../components/EditableNumberCombobox";
 import { MaterialSelect } from "../components/MaterialSelect";
 import { PermissionPrompt } from "../components/PermissionPrompt";
+import {
+  SettingsBackToTopButton,
+  SettingsSectionNavigation,
+} from "../components/SettingsNavigation";
 import { SummaryStrip } from "../components/SummaryStrip";
 import { getPreferredScrollBehavior } from "../motion";
+import {
+  SETTINGS_SECTION_IDS,
+  SETTINGS_SECTION_ID_VALUES,
+  type SettingsSectionId,
+} from "../settings-section-ids";
 import {
   buildSettingsSourceCardModel,
   buildSettingsSummaryItems,
@@ -81,21 +90,6 @@ type CredentialProviderSection = {
   placeholderMissing: string;
   placeholderConfigured: string;
 };
-
-const SETTINGS_SECTION_IDS = {
-  preferences: "settings-preferences",
-  visibility: "settings-visibility",
-  credentials: "settings-credentials",
-  sources: "settings-sources",
-  permissions: "settings-permissions",
-} as const;
-
-type SettingsSectionId =
-  (typeof SETTINGS_SECTION_IDS)[keyof typeof SETTINGS_SECTION_IDS];
-
-const SETTINGS_SECTION_ID_VALUES = Object.values(
-  SETTINGS_SECTION_IDS,
-) as SettingsSectionId[];
 
 type SettingsPageProps = {
   onBack: () => void;
@@ -548,27 +542,12 @@ export function SettingsPage({
         primaryActionLabel={i18n.t("common.actions.save")}
         sticky
         bottomContent={
-          <nav
-            className="settings-section-nav"
-            aria-label={i18n.t("settings.sections.aria")}
-          >
-            {settingsSectionNavItems.map((item) => {
-              const isActive = activeSettingsSection === item.id;
-
-              return (
-                <button
-                  key={item.id}
-                  className="settings-nav-chip"
-                  type="button"
-                  aria-current={isActive ? "true" : undefined}
-                  data-active={isActive ? "true" : "false"}
-                  onClick={() => scrollToSection(item.id)}
-                >
-                  {item.label}
-                </button>
-              );
-            })}
-          </nav>
+          <SettingsSectionNavigation
+            ariaLabel={i18n.t("settings.sections.aria")}
+            activeSectionId={activeSettingsSection}
+            items={settingsSectionNavItems}
+            onSelectSection={scrollToSection}
+          />
         }
         onThemeAction={onToggleThemeMode}
         onExpandAction={onOpenFullPage}
@@ -1434,29 +1413,11 @@ export function SettingsPage({
         />
       ) : null}
 
-      <button
-        className="settings-back-to-top-fab"
-        type="button"
-        aria-label={i18n.t("settings.actions.back_to_top")}
-        title={i18n.t("settings.actions.back_to_top")}
+      <SettingsBackToTopButton
+        label={i18n.t("settings.actions.back_to_top")}
+        shortLabel={i18n.t("settings.actions.back_to_top_short")}
         onClick={scrollToSettingsTop}
-      >
-        <svg
-          aria-hidden="true"
-          focusable="false"
-          viewBox="0 0 24 24"
-          width="22"
-          height="22"
-        >
-          <path
-            d="M12 5l-7 7 1.4 1.4 4.6-4.58V20h2V8.82l4.6 4.58L19 12z"
-            fill="currentColor"
-          />
-        </svg>
-        <span className="settings-back-to-top-fab__label">
-          {i18n.t("settings.actions.back_to_top_short")}
-        </span>
-      </button>
+      />
     </main>
   );
 }
