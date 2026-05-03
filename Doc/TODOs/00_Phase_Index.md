@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [281_Phase_Standard_App_Settings_Actions_Split.md](./Archive/281_Phase_Standard_App_Settings_Actions_Split.md)
+- latest completed slice: [282_Phase_Standard_Route_App_Split.md](./Archive/282_Phase_Standard_Route_App_Split.md)
 
 Completed phases should be moved to:
 
@@ -715,6 +715,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 280` closeout extracted credential card rendering into `src/sidepanel/components/SettingsCredentialsSection.tsx` while preserving Settings route imports, credential data hooks, and credential dispatch semantics
 - phase 281 depends on phase 280 because the Settings component queue is now small enough to switch back to the standard app action aggregator
 - the 2026-05-03 `Phase 281` closeout extracted standard-app Settings actions into `src/sidepanel/standard-app-settings-actions.ts` while preserving message payloads, toast copy, and top-level action names
+- phase 282 depends on phase 281 because the standard app action aggregator is small enough to finish the remaining `App.tsx` route-container split
+- the 2026-05-03 `Phase 282` closeout extracted standard route rendering into `src/sidepanel/standard-route-app.tsx` while preserving hash observation, special route dispatch, and standard route behavior
 
 ## Delivery Standard For Each Phase
 

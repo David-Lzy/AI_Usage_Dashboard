@@ -76,19 +76,16 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 281` execution priority:
+Current post-`Phase 282` execution priority:
 
-1. `P1` - continue splitting oversized implementation files now that the provider-card, shared CSS, localization, standard app action, Settings credential draft, Settings preference option, popup appearance preview component, theme customization card, Settings page view-model, Settings source card component, Settings credentials section split, and standard-app settings actions split boundaries are stable:
-   - `src/sidepanel/routes/SettingsPage.tsx`
-   - `src/sidepanel/App.tsx`
-   - `src/sidepanel/standard-app-actions.ts`
-2. `P1` - complete the `Direction 10.3` store asset-pack line once the remaining manual native-toolbar popup captures can be collected and archived.
-3. `P2` - continue provider and evidence closure work:
+1. `P1` - complete the `Direction 10.3` store asset-pack line once the remaining manual native-toolbar popup captures can be collected and archived.
+2. `P2` - continue provider and evidence closure work:
    - JetBrains org-console reverification
    - Claude personal Pro or Max usage-page capture
    - Gemini project-metrics product-contract decision
    - first real interaction-audit and theme-recovery operator archives
    - broader runtime locale rollout beyond the current `en` plus `zh-CN` pilot
+3. `P2` - only continue file splitting when a concrete maintenance issue justifies it; the old queued split targets for `material-theme.css`, `SettingsPage.tsx`, `App.tsx`, `standard-app-actions.ts`, and `localized-copy.ts` are now closed or reduced to focused compatibility/aggregator files.
 
 Delivery rule for this stage:
 
@@ -339,7 +336,8 @@ Phase status update:
 - `Phase 279` completed the Settings source card component split by moving Source Connections article rendering into `src/sidepanel/components/SettingsSourceCard.tsx`
 - `Phase 280` completed the Settings credentials section split by moving credential card rendering into `src/sidepanel/components/SettingsCredentialsSection.tsx`
 - `Phase 281` completed the standard-app settings actions split by moving Settings update, credential, Codex workspace, source-preference, page-binding-clear, and preferences-saved handlers into `src/sidepanel/standard-app-settings-actions.ts`
-- the next maintenance follow-up should continue splitting oversized UI and localization files now that the provider-card, shared progress, localization, standard app action, Settings credential draft, Settings preference option, popup appearance preview, theme customization, Settings page view-model, Settings source card component, Settings credentials section split, and standard-app settings actions split contracts are stable
+- `Phase 282` completed the standard route app split by moving dashboard, settings, and provider-detail route rendering into `src/sidepanel/standard-route-app.tsx`
+- the old maintenance split queue is closed for the originally named local-safe targets: `material-theme.css`, `localized-copy.ts`, `SettingsPage.tsx`, `App.tsx`, and `standard-app-actions.ts` are now focused base, compatibility, route, or aggregator files rather than the next default work item
 - the remaining store-readiness blocker is still the real manual native-toolbar popup capture and archive completion under `Direction 10.3`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
