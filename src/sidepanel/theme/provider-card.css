@@ -158,6 +158,19 @@
 }
 
 .provider-card__progress-surface
+  .usage-window-progress-list--line {
+  gap: 0;
+}
+
+.provider-card__progress-surface
+  .usage-window-progress-list--line
+  .usage-window-progress-list__item {
+  position: relative;
+  padding-block: var(--app-space-3);
+  border-radius: 0;
+}
+
+.provider-card__progress-surface
   .usage-window-progress-list--line
   .usage-window-progress-list__item:first-child {
   padding-top: 0;
@@ -184,10 +197,15 @@
 }
 
 .provider-card__progress-surface
+  .usage-window-progress-list--line
   .usage-window-progress-list__item
-  + .usage-window-progress-list__item {
-  padding-top: var(--app-space-3);
-  border-top: 1px solid var(--md-sys-color-outline-variant);
+  + .usage-window-progress-list__item::before {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  height: 1px;
+  background: var(--md-sys-color-outline-variant);
+  content: "";
 }
 
 .provider-card__progress-surface

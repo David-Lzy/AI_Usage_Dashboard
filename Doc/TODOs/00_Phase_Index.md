@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [289_Phase_Settings_Topbar_Adaptive_Layout_And_RC8_Packaging.md](./Archive/289_Phase_Settings_Topbar_Adaptive_Layout_And_RC8_Packaging.md)
+- latest completed slice: [290_Phase_Progress_Divider_Visibility_And_RC9_Packaging.md](./Archive/290_Phase_Progress_Divider_Visibility_And_RC9_Packaging.md)
 
 Completed phases should be moved to:
 
@@ -731,6 +731,8 @@ Completed phases should be moved to:
 - the 2026-05-04 `Phase 288` closeout changed Settings source-card chips from a single-column grid to horizontal wrapping rows, then bumped the package to `0.1.0-rc.7`, bumped the manifest to `0.1.0.7`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.7.zip`, and recorded the release package SHA256 in the Phase 288 archive
 - phase 289 depends on Phase 288 plus the user's rc7 visual smoke note because the Settings top app bar still wasted vertical space in tab mode and did not center action/navigation rows at sidebar widths
 - the 2026-05-04 `Phase 289` closeout made the Settings top app bar adaptive, then bumped the package to `0.1.0-rc.8`, bumped the manifest to `0.1.0.8`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.8.zip`, and recorded the release package SHA256 in the Phase 289 archive
+- phase 290 depends on Phase 289 plus the user's rc8 visual smoke note because provider-card linear progress dividers still appeared partially hidden in Chrome
+- the 2026-05-04 `Phase 290` closeout replaced the linear progress row `gap + border-top` divider with explicit pseudo-dividers, then bumped the package to `0.1.0-rc.9`, bumped the manifest to `0.1.0.9`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.9.zip`, and recorded the release package SHA256 in the Phase 290 archive
 
 ## Delivery Standard For Each Phase
 
