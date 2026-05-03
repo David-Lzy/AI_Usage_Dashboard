@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [278_Phase_Settings_Page_View_Model_And_Seed_Hook.md](./Archive/278_Phase_Settings_Page_View_Model_And_Seed_Hook.md)
+- latest completed slice: [279_Phase_Settings_Source_Card_Component.md](./Archive/279_Phase_Settings_Source_Card_Component.md)
 
 Completed phases should be moved to:
 
@@ -709,6 +709,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 277` closeout extracted theme customization rendering and custom seed preview logic into `src/sidepanel/components/ThemeCustomizationCard.tsx` while preserving custom seed validation, palette preview, localized copy, and settings dispatch semantics
 - phase 278 depends on phase 277 because SettingsPage route-owned derived models and theme seed draft behavior are the next narrow route-container extraction after Settings preferences component rendering became small enough
 - the 2026-05-03 `Phase 278` closeout extracted Settings page derived view models into `src/sidepanel/settings-page-view-models.ts` and custom theme seed draft behavior into `src/sidepanel/use-settings-theme-custom-seed-draft.ts` while preserving Settings route composition and dispatch semantics
+- phase 279 depends on phase 278 because `SettingsSourceSection.tsx` became the next largest Settings component after the route container split
+- the 2026-05-03 `Phase 279` closeout extracted Settings source card component rendering into `src/sidepanel/components/SettingsSourceCard.tsx` while preserving source truth labels, source preference controls, diagnostics, and session-page actions
 
 ## Delivery Standard For Each Phase
 

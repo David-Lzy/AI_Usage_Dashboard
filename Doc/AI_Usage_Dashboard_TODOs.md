@@ -76,9 +76,9 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 278` execution priority:
+Current post-`Phase 279` execution priority:
 
-1. `P1` - continue splitting oversized implementation files now that the provider-card, shared CSS, localization, standard app action, Settings credential draft, Settings preference option, popup appearance preview component, theme customization card, and Settings page view-model boundaries are stable:
+1. `P1` - continue splitting oversized implementation files now that the provider-card, shared CSS, localization, standard app action, Settings credential draft, Settings preference option, popup appearance preview component, theme customization card, Settings page view-model, and Settings source card component boundaries are stable:
    - `src/sidepanel/routes/SettingsPage.tsx`
    - `src/sidepanel/App.tsx`
    - `src/sidepanel/standard-app-actions.ts`
@@ -336,7 +336,8 @@ Phase status update:
 - `Phase 276` completed the Popup appearance preview component split by moving Settings popup preview rendering into `src/sidepanel/components/PopupAppearancePreview.tsx`
 - `Phase 277` completed the Theme customization card component split by moving Settings custom seed form and preview rendering into `src/sidepanel/components/ThemeCustomizationCard.tsx`
 - `Phase 278` completed the Settings page view model and seed hook split by moving route-derived Settings models into `src/sidepanel/settings-page-view-models.ts` and custom seed draft behavior into `src/sidepanel/use-settings-theme-custom-seed-draft.ts`
-- the next maintenance follow-up should continue splitting oversized UI and localization files now that the provider-card, shared progress, localization, standard app action, Settings credential draft, Settings preference option, popup appearance preview, theme customization, and Settings page view-model contracts are stable
+- `Phase 279` completed the Settings source card component split by moving Source Connections article rendering into `src/sidepanel/components/SettingsSourceCard.tsx`
+- the next maintenance follow-up should continue splitting oversized UI and localization files now that the provider-card, shared progress, localization, standard app action, Settings credential draft, Settings preference option, popup appearance preview, theme customization, Settings page view-model, and Settings source card component contracts are stable
 - the remaining store-readiness blocker is still the real manual native-toolbar popup capture and archive completion under `Direction 10.3`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete

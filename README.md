@@ -40,7 +40,7 @@ Security posture for this track:
 
 Next execution queue:
 
-1. continue splitting oversized UI/theme/localization files after the Phase 278 Settings page view model and seed hook split
+1. continue splitting oversized UI/theme/localization files after the Phase 279 Settings source card component split
 2. use `0.1.0-rc.3` for install/review passes until the next release package is cut
 3. keep [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) in maintenance mode unless a concrete diagnostic-body localization need appears
 4. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining manual store-popup capture dependency
@@ -63,6 +63,7 @@ Maintenance note:
 - Popup appearance preview rendering now lives in `src/sidepanel/components/PopupAppearancePreview.tsx`, keeping the Settings preview card out of `SettingsPreferencesSection.tsx` while preserving the same popup appearance attributes
 - Theme customization card rendering now lives in `src/sidepanel/components/ThemeCustomizationCard.tsx`, keeping custom seed validation and generated preview rendering out of `SettingsPreferencesSection.tsx`
 - Settings page derived view models now live in `src/sidepanel/settings-page-view-models.ts`, and custom seed draft behavior now lives in `src/sidepanel/use-settings-theme-custom-seed-draft.ts`, keeping route-local model assembly and seed handlers out of `SettingsPage.tsx`
+- Settings source card rendering now lives in `src/sidepanel/components/SettingsSourceCard.tsx`, keeping source display construction, source preference controls, session-page actions, and detailed diagnostics out of the section wrapper
 
 ## Source Labels
 
