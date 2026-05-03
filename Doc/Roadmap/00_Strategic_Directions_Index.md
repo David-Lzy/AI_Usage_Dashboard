@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-03:
 
-- the numbered phase queue is now completed through `Phase 250`
+- the numbered phase queue is now completed through `Phase 251`
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -133,6 +133,7 @@ As of 2026-05-03:
 - `Phase 248` completed the next maintenance-oriented file split by moving sidepanel Top App Bar layout, sticky, title, and action-row CSS into `src/sidepanel/theme/top-app-bar.css`
 - `Phase 249` completed the next maintenance-oriented file split by moving shared sidepanel/popup app-shell layout and shell-entry keyframes into `src/sidepanel/theme/app-shell.css`
 - `Phase 250` completed the next maintenance-oriented file split by moving shared icon-button and text-button CSS into `src/sidepanel/theme/buttons.css`
+- `Phase 251` completed the next maintenance-oriented file split by moving shared token-chip, status-chip, and meta-chip CSS into `src/sidepanel/theme/chips.css`
 - the next local-safe execution slice remains maintenance-oriented file splitting for the remaining oversized UI/theme/localization modules
 - `Direction 10.3` still retains the real manual native-toolbar popup capture dependency for final store assets; the existing request has staged full-page captures but still needs the native popup slots before archive completion
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`

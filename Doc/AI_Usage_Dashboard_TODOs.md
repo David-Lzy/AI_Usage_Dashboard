@@ -76,7 +76,7 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 250` execution priority:
+Current post-`Phase 251` execution priority:
 
 1. `P1` - continue splitting oversized implementation files now that the provider-card and shared progress visual contracts are stable:
    - remaining theme areas in `src/sidepanel/theme/material-theme.css`
@@ -309,6 +309,7 @@ Phase status update:
 - `Phase 248` completed the Top app bar CSS module split by moving sidepanel Top App Bar layout, sticky, title, and action-row CSS into `src/sidepanel/theme/top-app-bar.css`
 - `Phase 249` completed the App shell CSS module split by moving shared sidepanel/popup app-shell layout and shell-entry keyframes into `src/sidepanel/theme/app-shell.css`
 - `Phase 250` completed the Buttons CSS module split by moving shared icon-button and text-button CSS into `src/sidepanel/theme/buttons.css`
+- `Phase 251` completed the Chips CSS module split by moving shared token-chip, status-chip, and meta-chip CSS into `src/sidepanel/theme/chips.css`
 - the next maintenance follow-up should continue splitting oversized UI and localization files now that the provider-card and shared progress visual contracts are stable
 - the remaining store-readiness blocker is still the real manual native-toolbar popup capture and archive completion under `Direction 10.3`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling

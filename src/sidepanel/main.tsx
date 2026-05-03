@@ -8,6 +8,7 @@ import "./theme/tokens.css";
 import "./theme/material-theme.css";
 import "./theme/app-shell.css";
 import "./theme/buttons.css";
+import "./theme/chips.css";
 import "./theme/access-feedback.css";
 import "./theme/top-app-bar.css";
 import "./theme/detail-surfaces.css";

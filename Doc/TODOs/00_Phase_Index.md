@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [250_Phase_Buttons_CSS_Module_Split.md](./Archive/250_Phase_Buttons_CSS_Module_Split.md)
+- latest completed slice: [251_Phase_Chips_CSS_Module_Split.md](./Archive/251_Phase_Chips_CSS_Module_Split.md)
 
 Completed phases should be moved to:
 
@@ -653,6 +653,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 249` closeout moved shared app-shell layout and shell-entry keyframes into `src/sidepanel/theme/app-shell.css` and imported that shared module from both sidepanel and popup entries
 - phase 250 depends on phases 61, 64, 125, 128, 221, and 222 because button styling spans sidepanel and popup actions after focus, press, and source-page recovery action contracts are stable
 - the 2026-05-03 `Phase 250` closeout moved shared icon-button and text-button CSS into `src/sidepanel/theme/buttons.css` and imported that shared module from both sidepanel and popup entries
+- phase 251 depends on phases 65, 127, 236, and 250 because chip styling spans dashboard, Settings, provider-card, and popup metadata after chip honesty and button import order are stable
+- the 2026-05-03 `Phase 251` closeout moved shared token-chip, status-chip, and meta-chip CSS into `src/sidepanel/theme/chips.css` and imported that shared module from both sidepanel and popup entries
 
 ## Delivery Standard For Each Phase
 

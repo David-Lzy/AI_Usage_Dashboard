@@ -6,6 +6,7 @@ import "../sidepanel/theme/tokens.css";
 import "../sidepanel/theme/material-theme.css";
 import "../sidepanel/theme/app-shell.css";
 import "../sidepanel/theme/buttons.css";
+import "../sidepanel/theme/chips.css";
 import "../sidepanel/theme/usage-progress.css";
 import "./popup-theme.css";
 

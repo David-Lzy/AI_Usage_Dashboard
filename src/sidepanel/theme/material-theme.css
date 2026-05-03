@@ -168,23 +168,6 @@ summary:focus-visible {
   gap: var(--app-space-4);
 }
 
-.token-chip {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 32px;
-  padding: 0 12px;
-  border: 1px solid var(--app-chip-accent-border);
-  border-radius: var(--md-sys-shape-corner-full);
-  background: var(--app-chip-accent-background);
-  color: var(--app-chip-accent-on);
-  font-family: var(--md-sys-typescale-label-large-font);
-  font-size: var(--md-sys-typescale-label-large-size);
-  font-weight: var(--md-sys-typescale-label-large-weight);
-  line-height: var(--md-sys-typescale-label-large-line-height);
-  justify-self: start;
-}
-
 .summary-strip {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -265,68 +248,6 @@ summary:focus-visible {
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--app-space-3);
-}
-
-.status-chip {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 30px;
-  padding: 0 12px;
-  border: 1px solid var(--app-chip-accent-border);
-  border-radius: var(--md-sys-shape-corner-full);
-  background: var(--app-chip-accent-background);
-  color: var(--app-chip-accent-on);
-  font-family: var(--md-sys-typescale-label-large-font);
-  font-size: var(--md-sys-typescale-label-large-size);
-  font-weight: var(--md-sys-typescale-label-large-weight);
-  line-height: var(--md-sys-typescale-label-large-line-height);
-}
-
-.status-chip--warning {
-  background: var(--app-chip-warning-background);
-  border-color: var(--app-chip-warning-border);
-  color: var(--app-chip-warning-on);
-}
-
-.status-chip--error {
-  background: var(--app-chip-error-background);
-  border-color: var(--app-chip-error-border);
-  color: var(--app-chip-error-on);
-}
-
-.meta-chip {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 28px;
-  padding: 0 10px;
-  border: 1px solid var(--app-chip-neutral-border);
-  border-radius: var(--md-sys-shape-corner-full);
-  background: var(--app-chip-neutral-background);
-  color: var(--app-chip-neutral-on);
-  font-family: var(--md-sys-typescale-label-medium-font);
-  font-size: var(--md-sys-typescale-label-medium-size);
-  font-weight: var(--md-sys-typescale-label-medium-weight);
-  line-height: var(--md-sys-typescale-label-medium-line-height);
-  transition:
-    background-color var(--app-motion-duration-fast)
-      var(--app-motion-easing-standard),
-    color var(--app-motion-duration-fast) var(--app-motion-easing-standard),
-    border-color var(--app-motion-duration-fast)
-      var(--app-motion-easing-standard);
-}
-
-.meta-chip--warning {
-  background: var(--app-chip-warning-background);
-  border-color: var(--app-chip-warning-border);
-  color: var(--app-chip-warning-on);
-}
-
-.meta-chip--error {
-  background: var(--app-chip-error-background);
-  border-color: var(--app-chip-error-border);
-  color: var(--app-chip-error-on);
 }
 
 .status-card--warning .section-label,
