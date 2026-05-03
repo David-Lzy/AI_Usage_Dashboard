@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [282_Phase_Standard_Route_App_Split.md](./Archive/282_Phase_Standard_Route_App_Split.md)
+- latest completed slice: [283_Phase_Codex_Page_Session_Capture_Reload_Retry.md](./Archive/283_Phase_Codex_Page_Session_Capture_Reload_Retry.md)
 
 Completed phases should be moved to:
 
@@ -717,6 +717,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 281` closeout extracted standard-app Settings actions into `src/sidepanel/standard-app-settings-actions.ts` while preserving message payloads, toast copy, and top-level action names
 - phase 282 depends on phase 281 because the standard app action aggregator is small enough to finish the remaining `App.tsx` route-container split
 - the 2026-05-03 `Phase 282` closeout extracted standard route rendering into `src/sidepanel/standard-route-app.tsx` while preserving hash observation, special route dispatch, and standard route behavior
+- phase 283 depends on phases 230, 232, and 233 because Codex managed session-page sync already opens authenticated tabs and retries hydration, but unreadable background tabs still needed one real reload recovery path
+- the 2026-05-03 `Phase 283` closeout added Codex page-session capture reload retry so the refresh path can reload an unreadable existing Codex tab with `bypassCache: true` and retry capture once before surfacing `capture_unavailable`
 
 ## Delivery Standard For Each Phase
 

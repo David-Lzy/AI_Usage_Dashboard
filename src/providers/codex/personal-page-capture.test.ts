@@ -119,6 +119,11 @@ describe("summarizeCodexPersonalPage", () => {
     );
 
     expect(capturedDefinitions).toHaveLength(3);
+    expect(capturedDefinitions[0].reloadOnCaptureFailure).toEqual({
+      bypassCache: true,
+      waitForLoadTimeoutMs: 10_000,
+      loadPollIntervalMs: 250,
+    });
     expect(capturedDefinitions[0].openWhenMissing).toBeUndefined();
     expect(capturedDefinitions[1].openWhenMissing).toBeUndefined();
     expect(capturedDefinitions[2].openWhenMissing).toEqual({

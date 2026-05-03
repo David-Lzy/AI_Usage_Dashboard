@@ -76,7 +76,7 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 282` execution priority:
+Current post-`Phase 283` execution priority:
 
 1. `P1` - complete the `Direction 10.3` store asset-pack line once the remaining manual native-toolbar popup captures can be collected and archived.
 2. `P2` - continue provider and evidence closure work:
@@ -337,6 +337,7 @@ Phase status update:
 - `Phase 280` completed the Settings credentials section split by moving credential card rendering into `src/sidepanel/components/SettingsCredentialsSection.tsx`
 - `Phase 281` completed the standard-app settings actions split by moving Settings update, credential, Codex workspace, source-preference, page-binding-clear, and preferences-saved handlers into `src/sidepanel/standard-app-settings-actions.ts`
 - `Phase 282` completed the standard route app split by moving dashboard, settings, and provider-detail route rendering into `src/sidepanel/standard-route-app.tsx`
+- `Phase 283` completed the Codex page-session capture reload retry by reloading an unreadable existing Codex tab with `bypassCache: true` and retrying capture once before surfacing `capture_unavailable`
 - the old maintenance split queue is closed for the originally named local-safe targets: `material-theme.css`, `localized-copy.ts`, `SettingsPage.tsx`, `App.tsx`, and `standard-app-actions.ts` are now focused base, compatibility, route, or aggregator files rather than the next default work item
 - the remaining store-readiness blocker is still the real manual native-toolbar popup capture and archive completion under `Direction 10.3`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling

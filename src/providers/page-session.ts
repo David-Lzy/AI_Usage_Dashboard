@@ -73,6 +73,12 @@ export type PageSessionOpenWhenMissing = {
   loadPollIntervalMs?: number;
 };
 
+export type PageSessionReloadOnCaptureFailure = {
+  waitForLoadTimeoutMs?: number;
+  loadPollIntervalMs?: number;
+  bypassCache?: boolean;
+};
+
 export type PageSessionResult =
   | {
       status: "matched";
@@ -121,6 +127,7 @@ export type PageSessionDefinition = {
   urlPatterns: string[];
   binding?: PageSessionBinding;
   openWhenMissing?: PageSessionOpenWhenMissing;
+  reloadOnCaptureFailure?: boolean | PageSessionReloadOnCaptureFailure;
   extraction: PageSessionExtraction;
   match: (page: PageSessionCapturedPage) => PageSessionMatchStatus;
 };
@@ -141,6 +148,10 @@ type PageSessionTabsApi = {
     url: string;
     active?: boolean;
   }) => Promise<PageSessionTabQueryResult>;
+  reload?: (
+    tabId: number,
+    reloadProperties?: { bypassCache?: boolean },
+  ) => Promise<void>;
   remove?: (tabId: number) => Promise<void>;
 };
 
@@ -865,6 +876,63 @@ async function waitForOpenedTabLoad(
   );
   const deadline = Date.now() + timeoutMs;
   let lastTab: PageSessionTabQueryResult | null = null;
+  let didPoll = false;
+
+  while (!didPoll || Date.now() <= deadline) {
+    didPoll = true;
+
+    try {
+      lastTab = await tabsApi.get(tabId);
+
+      if (lastTab.status === "complete") {
+        return lastTab;
+      }
+    } catch {
+      return lastTab;
+    }
+
+    if (timeoutMs === 0) {
+      return lastTab;
+    }
+
+    await delay(Math.min(pollIntervalMs, Math.max(0, deadline - Date.now())));
+  }
+
+  return lastTab;
+}
+
+function normalizeReloadOnCaptureFailure(
+  reloadOnCaptureFailure:
+    | PageSessionDefinition["reloadOnCaptureFailure"]
+    | undefined,
+): PageSessionReloadOnCaptureFailure | null {
+  if (!reloadOnCaptureFailure) {
+    return null;
+  }
+
+  if (reloadOnCaptureFailure === true) {
+    return {};
+  }
+
+  return reloadOnCaptureFailure;
+}
+
+async function waitForReloadedTabLoad(
+  tabsApi: PageSessionTabsApi,
+  tabId: number,
+  reloadOptions: PageSessionReloadOnCaptureFailure,
+): Promise<PageSessionTabQueryResult | null> {
+  if (typeof tabsApi.get !== "function") {
+    return null;
+  }
+
+  const timeoutMs = Math.max(0, reloadOptions.waitForLoadTimeoutMs ?? 10_000);
+  const pollIntervalMs = Math.max(
+    50,
+    reloadOptions.loadPollIntervalMs ?? 250,
+  );
+  const deadline = Date.now() + timeoutMs;
+  let lastTab: PageSessionTabQueryResult | null = null;
 
   while (Date.now() <= deadline) {
     try {
@@ -885,6 +953,22 @@ async function waitForOpenedTabLoad(
   }
 
   return lastTab;
+}
+
+async function reloadPageSessionTabAfterCaptureFailure(
+  tabsApi: PageSessionTabsApi,
+  tabId: number,
+  reloadOptions: PageSessionReloadOnCaptureFailure,
+): Promise<PageSessionTabQueryResult | null> {
+  if (typeof tabsApi.reload !== "function") {
+    return null;
+  }
+
+  await tabsApi.reload(tabId, {
+    bypassCache: reloadOptions.bypassCache ?? true,
+  });
+
+  return waitForReloadedTabLoad(tabsApi, tabId, reloadOptions);
 }
 
 async function openMissingPageSessionTab(
@@ -960,6 +1044,10 @@ export function createPageSessionClient(
       let sawLoggedOut = false;
       let sawCaptureFailure = false;
       let openedTabId: number | null = null;
+      const reloadOnCaptureFailure = normalizeReloadOnCaptureFailure(
+        definition.reloadOnCaptureFailure,
+      );
+      const reloadedAfterCaptureFailureTabIds = new Set<number>();
 
       if (
         bindingMissing &&
@@ -1041,6 +1129,70 @@ export function createPageSessionClient(
             status: "capture_failed",
             error: error instanceof Error ? error.message : "Unknown page capture failure",
           });
+
+          if (
+            reloadOnCaptureFailure &&
+            typeof tabsApi.reload === "function" &&
+            !reloadedAfterCaptureFailureTabIds.has(tab.id)
+          ) {
+            reloadedAfterCaptureFailureTabIds.add(tab.id);
+
+            try {
+              const reloadedTab =
+                await reloadPageSessionTabAfterCaptureFailure(
+                  tabsApi,
+                  tab.id,
+                  reloadOnCaptureFailure,
+                );
+              const page = await capturePageSessionPage(
+                tab.id,
+                scriptingApi,
+                definition.extraction,
+              );
+              const matchStatus = definition.match(page);
+
+              attempts.push({
+                tabId: tab.id,
+                bindingMode: tab.bindingMode,
+                status: matchStatus === "matched" ? "matched" : matchStatus,
+                url: page.url,
+                title: page.title,
+              });
+
+              if (matchStatus === "matched") {
+                return {
+                  status: "matched",
+                  page,
+                  target: {
+                    tabId: tab.id,
+                    bindingMode: tab.bindingMode,
+                    active: Boolean(reloadedTab?.active ?? tab.active),
+                    lastAccessed:
+                      typeof reloadedTab?.lastAccessed === "number"
+                        ? reloadedTab.lastAccessed
+                        : typeof tab.lastAccessed === "number"
+                          ? tab.lastAccessed
+                          : null,
+                  },
+                  attempts,
+                };
+              }
+
+              if (matchStatus === "logged_out") {
+                sawLoggedOut = true;
+              }
+            } catch (retryError) {
+              attempts.push({
+                tabId: tab.id,
+                bindingMode: tab.bindingMode,
+                status: "capture_failed",
+                error:
+                  retryError instanceof Error
+                    ? `After reload: ${retryError.message}`
+                    : "After reload: unknown page capture failure",
+              });
+            }
+          }
         }
       }
 

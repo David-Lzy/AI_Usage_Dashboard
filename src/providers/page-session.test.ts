@@ -489,6 +489,91 @@ describe("createPageSessionClient", () => {
     ]);
   });
 
+  it("reloads and retries a candidate tab when capture recovery is enabled", async () => {
+    const query = vi.fn(async () => [
+      {
+        id: 17,
+        active: false,
+        lastAccessed: 1,
+        url: "https://chatgpt.com/codex/cloud/settings/analytics#usage",
+        title: "Codex",
+      },
+    ]);
+    const reload = vi.fn(async () => {});
+    const get = vi.fn(async (tabId: number) => ({
+      id: tabId,
+      active: false,
+      lastAccessed: 2,
+      status: "complete",
+      url: "https://chatgpt.com/codex/cloud/settings/analytics#usage",
+      title: "Codex",
+    }));
+    const executeScript = vi
+      .fn()
+      .mockRejectedValueOnce(new Error("Cannot access contents of the page."))
+      .mockResolvedValueOnce([
+        {
+          result: {
+            url: "https://chatgpt.com/codex/cloud/settings/analytics#usage",
+            title: "Codex",
+            heading: "Codex analytics",
+            html: "<html><body><h1>Codex analytics</h1></body></html>",
+            scripts: {},
+          },
+        },
+      ]);
+    const client = createPageSessionClient({
+      tabsApi: {
+        query,
+        reload,
+        get,
+      },
+      scriptingApi: { executeScript },
+    });
+
+    const result = await client.capture({
+      providerId: "codex",
+      pageLabel: "Codex cloud analytics page",
+      urlPatterns: ["https://chatgpt.com/codex/*"],
+      reloadOnCaptureFailure: {
+        bypassCache: true,
+        waitForLoadTimeoutMs: 0,
+      },
+      extraction: {
+        mode: "dom",
+      },
+      match() {
+        return "matched";
+      },
+    });
+
+    expect(result.status).toBe("matched");
+    expect(reload).toHaveBeenCalledWith(17, { bypassCache: true });
+    expect(get).toHaveBeenCalledWith(17);
+    expect(executeScript).toHaveBeenCalledTimes(2);
+
+    if (result.status !== "matched") {
+      throw new Error("Expected a matched page-session result.");
+    }
+
+    expect(result.target.lastAccessed).toBe(2);
+    expect(result.attempts).toEqual([
+      {
+        tabId: 17,
+        bindingMode: "auto",
+        status: "capture_failed",
+        error: "Cannot access contents of the page.",
+      },
+      {
+        tabId: 17,
+        bindingMode: "auto",
+        status: "matched",
+        url: "https://chatgpt.com/codex/cloud/settings/analytics#usage",
+        title: "Codex",
+      },
+    ]);
+  });
+
   it("opens an inactive managed tab when configured and no candidate exists", async () => {
     const create = vi.fn(async () => ({
       id: 88,

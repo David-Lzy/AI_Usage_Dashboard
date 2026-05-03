@@ -221,6 +221,11 @@ async function captureRoute(
     pageLabel: route.pageLabel,
     urlPatterns: route.urlPatterns,
     binding,
+    reloadOnCaptureFailure: {
+      bypassCache: true,
+      waitForLoadTimeoutMs: 10_000,
+      loadPollIntervalMs: 250,
+    },
     ...(options.openPageWhenMissing && route.routeKey === "cloud_analytics"
       ? {
           openWhenMissing: {

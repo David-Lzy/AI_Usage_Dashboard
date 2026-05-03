@@ -188,6 +188,7 @@ Current honesty boundaries:
 - Codex scheduled session-page sync can now reopen a previously bound analytics page in an inactive managed tab after authorization, while still avoiding any persisted ChatGPT cookies or auth headers
 - automatic Codex managed-page sync can now create that inactive analytics tab on alarm/manual refresh even before a saved page binding exists; this is not a fully hidden offscreen scrape because the personal source still depends on a real authenticated ChatGPT page document
 - Codex hydration retry now keeps the first refresh inside the same operation while a matched route hydrates usage windows, avoiding a transient parser failure when the page shell renders before quota content
+- Codex personal page-session capture now reloads an unreadable existing Codex tab with `bypassCache: true` and retries capture once, so memory-saver or suspended background tabs can recover from the same popup or side-panel refresh action before showing `capture_unavailable`
 - the action badge now has an explicit Settings selector for attention count versus dynamic quota candidates, including individual Codex usage windows when those values exist in current provider data
 - the user-facing Settings surface now uses Material-style controls for both editable numeric values and fixed option sets, including Source Connections source preference
 
