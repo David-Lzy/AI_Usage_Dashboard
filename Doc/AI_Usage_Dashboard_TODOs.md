@@ -76,9 +76,9 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 276` execution priority:
+Current post-`Phase 277` execution priority:
 
-1. `P1` - continue splitting oversized implementation files now that the provider-card, shared CSS, localization, standard app action, Settings credential draft, Settings preference option, and popup appearance preview component boundaries are stable:
+1. `P1` - continue splitting oversized implementation files now that the provider-card, shared CSS, localization, standard app action, Settings credential draft, Settings preference option, popup appearance preview component, and theme customization card boundaries are stable:
    - `src/sidepanel/routes/SettingsPage.tsx`
    - `src/sidepanel/App.tsx`
    - `src/sidepanel/standard-app-actions.ts`
@@ -334,7 +334,8 @@ Phase status update:
 - `Phase 274` completed the Settings credential draft hook split by moving provider API key and Codex workspace draft state plus save/clear/input handlers into `src/sidepanel/use-settings-credential-drafts.ts`
 - `Phase 275` completed the Settings preference options split by moving select, numeric combobox, and action badge option assembly into `src/sidepanel/settings-preference-options.ts`
 - `Phase 276` completed the Popup appearance preview component split by moving Settings popup preview rendering into `src/sidepanel/components/PopupAppearancePreview.tsx`
-- the next maintenance follow-up should continue splitting oversized UI and localization files now that the provider-card, shared progress, localization, standard app action, Settings credential draft, Settings preference option, and popup appearance preview contracts are stable
+- `Phase 277` completed the Theme customization card component split by moving Settings custom seed form and preview rendering into `src/sidepanel/components/ThemeCustomizationCard.tsx`
+- the next maintenance follow-up should continue splitting oversized UI and localization files now that the provider-card, shared progress, localization, standard app action, Settings credential draft, Settings preference option, popup appearance preview, and theme customization contracts are stable
 - the remaining store-readiness blocker is still the real manual native-toolbar popup capture and archive completion under `Direction 10.3`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete

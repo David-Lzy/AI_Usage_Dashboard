@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [276_Phase_Popup_Appearance_Preview_Component.md](./Archive/276_Phase_Popup_Appearance_Preview_Component.md)
+- latest completed slice: [277_Phase_Theme_Customization_Card_Component.md](./Archive/277_Phase_Theme_Customization_Card_Component.md)
 
 Completed phases should be moved to:
 
@@ -705,6 +705,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 275` closeout extracted Settings preference select, numeric combobox, and action badge option assembly into `src/sidepanel/settings-preference-options.ts` while preserving Material control rendering and settings dispatch semantics in `SettingsPreferencesSection.tsx`
 - phase 276 depends on phase 275 because popup appearance preview rendering should move only after preference option assembly left the Settings preferences component
 - the 2026-05-03 `Phase 276` closeout extracted popup appearance preview rendering into `src/sidepanel/components/PopupAppearancePreview.tsx` while preserving preview data attributes, localized sample copy, and popup appearance setting semantics
+- phase 277 depends on phase 276 because theme customization rendering is the final large Settings preferences card left after popup appearance preview moved into a focused component
+- the 2026-05-03 `Phase 277` closeout extracted theme customization rendering and custom seed preview logic into `src/sidepanel/components/ThemeCustomizationCard.tsx` while preserving custom seed validation, palette preview, localized copy, and settings dispatch semantics
 
 ## Delivery Standard For Each Phase
 
