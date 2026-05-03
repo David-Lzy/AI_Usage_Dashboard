@@ -62,6 +62,7 @@ describe("UsageProgress", () => {
     expect(html).toContain("usage-progress__track--error");
     expect(html).toContain('style="width:28%"');
     expect(html).toContain(">28% remaining<");
+    expect(html).toContain("usage-progress__meta-detail");
     expect(html).toContain("resets 2026-04-29 04:00");
   });
 
@@ -76,6 +77,7 @@ describe("UsageProgress", () => {
         displayStyle="circle"
         valueKind="remaining"
         valueText="Weekly usage window: 35% remaining"
+        detail="resets 2026-04-29 04:00"
       />,
     );
 
@@ -86,5 +88,7 @@ describe("UsageProgress", () => {
     expect(html).toContain("--usage-progress-percent:35%");
     expect(html).toContain(">35%<");
     expect(html).not.toContain("usage-progress__track");
+    expect(html).toContain("usage-progress__detail");
+    expect(html).toContain("resets 2026-04-29 04:00");
   });
 });

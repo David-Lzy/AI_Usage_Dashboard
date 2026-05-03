@@ -33,9 +33,14 @@
   min-width: 0;
 }
 
-.usage-progress__meta > .supporting-copy {
+.usage-progress__label {
   min-width: 0;
+  margin: 0;
   overflow-wrap: anywhere;
+}
+
+.usage-progress__meta-detail {
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 .usage-progress__value {

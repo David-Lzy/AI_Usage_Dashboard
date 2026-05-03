@@ -87,7 +87,12 @@ export function UsageProgress({
       className={`usage-progress usage-progress--${valueKind}${isIndeterminate ? " usage-progress--indeterminate" : ""}`}
     >
       <div className="usage-progress__meta">
-        <p className="supporting-copy">{label}</p>
+        <p className="supporting-copy usage-progress__label">
+          <span>{label}</span>
+          {detail ? (
+            <span className="usage-progress__meta-detail"> · {detail}</span>
+          ) : null}
+        </p>
         <p
           className={`usage-progress__value${isIndeterminate ? " usage-progress__value--indeterminate" : ""}`}
         >
@@ -112,7 +117,6 @@ export function UsageProgress({
           }
         />
       </div>
-      {detail ? <p className="supporting-copy usage-progress__detail">{detail}</p> : null}
     </div>
   );
 }
