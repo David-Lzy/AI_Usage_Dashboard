@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [277_Phase_Theme_Customization_Card_Component.md](./Archive/277_Phase_Theme_Customization_Card_Component.md)
+- latest completed slice: [278_Phase_Settings_Page_View_Model_And_Seed_Hook.md](./Archive/278_Phase_Settings_Page_View_Model_And_Seed_Hook.md)
 
 Completed phases should be moved to:
 
@@ -707,6 +707,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 276` closeout extracted popup appearance preview rendering into `src/sidepanel/components/PopupAppearancePreview.tsx` while preserving preview data attributes, localized sample copy, and popup appearance setting semantics
 - phase 277 depends on phase 276 because theme customization rendering is the final large Settings preferences card left after popup appearance preview moved into a focused component
 - the 2026-05-03 `Phase 277` closeout extracted theme customization rendering and custom seed preview logic into `src/sidepanel/components/ThemeCustomizationCard.tsx` while preserving custom seed validation, palette preview, localized copy, and settings dispatch semantics
+- phase 278 depends on phase 277 because SettingsPage route-owned derived models and theme seed draft behavior are the next narrow route-container extraction after Settings preferences component rendering became small enough
+- the 2026-05-03 `Phase 278` closeout extracted Settings page derived view models into `src/sidepanel/settings-page-view-models.ts` and custom theme seed draft behavior into `src/sidepanel/use-settings-theme-custom-seed-draft.ts` while preserving Settings route composition and dispatch semantics
 
 ## Delivery Standard For Each Phase
 

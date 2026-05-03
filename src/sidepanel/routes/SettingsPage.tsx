@@ -1,5 +1,3 @@
-import { type FormEvent, useEffect, useState } from "react";
-
 import type {
   ActionBadgeSelection,
   ApiKeyProviderId,
@@ -16,17 +14,9 @@ import type {
   ThemeMode,
   ThemePreset,
 } from "../../providers/types";
-import {
-  buildSettingsSummaryLabels,
-  createRuntimeI18n,
-} from "../../shared/i18n";
-import {
-  buildSettingsLocalizedCopy,
-} from "../../shared/localized-copy";
-import {
-  normalizeThemeCustomSeedHex,
-  resolveThemeMode,
-} from "../../shared/theme";
+import { createRuntimeI18n } from "../../shared/i18n";
+import { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
+import { resolveThemeMode } from "../../shared/theme";
 
 import {
   SettingsBackToTopButton,
@@ -37,17 +27,14 @@ import {
   SettingsOverviewSection,
   SettingsPermissionsSection,
   SettingsVisibilitySection,
-  type CredentialProviderSection,
 } from "../components/SettingsSections";
-import {
-  SETTINGS_SECTION_IDS,
-  type SettingsSectionId,
-} from "../settings-section-ids";
-import { buildSettingsSummaryItems } from "../settings-view-models";
+import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
 import { Toast } from "../components/Toast";
 import { TopBar } from "../components/TopBar";
+import { buildSettingsPageViewModels } from "../settings-page-view-models";
 import { useSettingsCredentialDrafts } from "../use-settings-credential-drafts";
 import { useSettingsSectionNavigation } from "../use-settings-section-navigation";
+import { useSettingsThemeCustomSeedDraft } from "../use-settings-theme-custom-seed-draft";
 import { SettingsSourceSection } from "../components/SettingsSourceSection";
 import { SettingsPreferencesSection } from "../components/SettingsPreferencesSection";
 
@@ -147,25 +134,6 @@ export function SettingsPage({
   sessionPageNavigationAvailable,
   activeSessionPageAttachAvailable,
 }: SettingsPageProps) {
-  function findCredentialProvider(
-    providerId: ApiKeyProviderId,
-  ): (ProviderSetting & { id: ApiKeyProviderId }) | null {
-    return (
-      providers.find(
-        (provider): provider is ProviderSetting & { id: ApiKeyProviderId } =>
-          provider.id === providerId,
-      ) ?? null
-    );
-  }
-
-  const credentialProviders: CredentialProviderSection[] = [];
-  const cursorProvider = findCredentialProvider("cursor");
-  const claudeProvider = findCredentialProvider("claude-code");
-  const codexProvider =
-    providers.find(
-      (provider): provider is ProviderSetting & { id: "codex" } =>
-        provider.id === "codex",
-    ) ?? null;
   const {
     codexAnalyticsApiKeyInput,
     codexWorkspaceIdInput,
@@ -183,16 +151,21 @@ export function SettingsPage({
     onSaveCodexWorkspaceConfig,
     onClearCodexWorkspaceConfig,
   });
-  const [themeCustomSeedDraft, setThemeCustomSeedDraft] = useState(
-    settings.themeCustomSeedHex ?? "",
-  );
   const {
     activeSettingsSection,
     scrollToSection,
     scrollToSettingsTop,
   } = useSettingsSectionNavigation();
-  const normalizedThemeCustomSeedDraft =
-    normalizeThemeCustomSeedHex(themeCustomSeedDraft);
+  const {
+    handleApplyThemeCustomSeed,
+    handleResetThemeCustomSeed,
+    setThemeCustomSeedDraft,
+    themeCustomSeedDraft,
+  } = useSettingsThemeCustomSeedDraft({
+    themeCustomSeedHex: settings.themeCustomSeedHex,
+    onSaveThemeCustomSeed,
+    onResetThemeCustomSeed,
+  });
   const resolvedThemeMode = resolveThemeMode(
     settings.themeMode,
     typeof window !== "undefined" ? window : undefined,
@@ -202,82 +175,17 @@ export function SettingsPage({
     typeof window !== "undefined" ? window : undefined,
   );
   const settingsCopy = buildSettingsLocalizedCopy(i18n);
-
-  useEffect(() => {
-    setThemeCustomSeedDraft(settings.themeCustomSeedHex ?? "");
-  }, [settings.themeCustomSeedHex]);
-
-  if (cursorProvider) {
-    credentialProviders.push({
-      provider: cursorProvider,
-      title: settingsCopy.credentials.cursorTitle,
-      inputLabel: settingsCopy.credentials.adminApiKeyLabel,
-      helpText: settingsCopy.credentials.cursorHelpText,
-      footerText: settingsCopy.credentials.cursorFooterText,
-      placeholderMissing: settingsCopy.credentials.cursorPlaceholderMissing,
-      placeholderConfigured: settingsCopy.credentials.cursorPlaceholderConfigured,
-    });
-  }
-
-  if (claudeProvider) {
-    credentialProviders.push({
-      provider: claudeProvider,
-      title: settingsCopy.credentials.claudeTitle,
-      inputLabel: settingsCopy.credentials.adminApiKeyLabel,
-      helpText: settingsCopy.credentials.claudeHelpText,
-      footerText: settingsCopy.credentials.claudeFooterText,
-      placeholderMissing: settingsCopy.credentials.claudePlaceholderMissing,
-      placeholderConfigured: settingsCopy.credentials.claudePlaceholderConfigured,
-    });
-  }
-
-  const settingsSummaryItems = buildSettingsSummaryItems(
+  const {
+    codexProvider,
+    credentialProviders,
+    settingsSectionNavItems,
+    settingsSummaryItems,
+  } = buildSettingsPageViewModels({
+    i18n,
     providers,
+    settingsCopy,
     snapshots,
-    buildSettingsSummaryLabels(i18n),
-    i18n.formatNumber,
-  );
-  const settingsSectionNavItems: Array<{
-    id: SettingsSectionId;
-    label: string;
-  }> = [
-    {
-      id: SETTINGS_SECTION_IDS.preferences,
-      label: i18n.t("settings.sections.preferences"),
-    },
-    {
-      id: SETTINGS_SECTION_IDS.visibility,
-      label: i18n.t("settings.sections.visibility"),
-    },
-    {
-      id: SETTINGS_SECTION_IDS.credentials,
-      label: i18n.t("settings.sections.credentials"),
-    },
-    {
-      id: SETTINGS_SECTION_IDS.sources,
-      label: i18n.t("settings.sections.sources"),
-    },
-    {
-      id: SETTINGS_SECTION_IDS.permissions,
-      label: i18n.t("settings.sections.permissions"),
-    },
-  ];
-
-  function handleApplyThemeCustomSeed(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    if (!normalizedThemeCustomSeedDraft) {
-      return;
-    }
-
-    onSaveThemeCustomSeed(normalizedThemeCustomSeedDraft);
-    setThemeCustomSeedDraft(normalizedThemeCustomSeedDraft);
-  }
-
-  function handleResetThemeCustomSeed() {
-    setThemeCustomSeedDraft("");
-    onResetThemeCustomSeed();
-  }
+  });
 
   return (
     <main className="app-shell settings-shell">
