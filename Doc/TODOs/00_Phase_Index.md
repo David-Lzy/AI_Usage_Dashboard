@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [275_Phase_Settings_Preference_Options_Split.md](./Archive/275_Phase_Settings_Preference_Options_Split.md)
+- latest completed slice: [276_Phase_Popup_Appearance_Preview_Component.md](./Archive/276_Phase_Popup_Appearance_Preview_Component.md)
 
 Completed phases should be moved to:
 
@@ -703,6 +703,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 274` closeout extracted Settings credential and Codex workspace draft state into `src/sidepanel/use-settings-credential-drafts.ts` while preserving Settings UI behavior, credential dispatch semantics, and theme custom seed draft ownership in `SettingsPage.tsx`
 - phase 275 depends on phase 274 because Settings preference option assembly is the next narrow extraction after credentials draft state left the Settings route container
 - the 2026-05-03 `Phase 275` closeout extracted Settings preference select, numeric combobox, and action badge option assembly into `src/sidepanel/settings-preference-options.ts` while preserving Material control rendering and settings dispatch semantics in `SettingsPreferencesSection.tsx`
+- phase 276 depends on phase 275 because popup appearance preview rendering should move only after preference option assembly left the Settings preferences component
+- the 2026-05-03 `Phase 276` closeout extracted popup appearance preview rendering into `src/sidepanel/components/PopupAppearancePreview.tsx` while preserving preview data attributes, localized sample copy, and popup appearance setting semantics
 
 ## Delivery Standard For Each Phase
 

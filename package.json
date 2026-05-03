@@ -237,6 +237,7 @@
     "phase273:review": "./scripts/with-preferred-node.sh node ./scripts/phase273-standard-app-session-page-actions-split-review.mjs",
     "phase274:review": "./scripts/with-preferred-node.sh node ./scripts/phase274-settings-credential-draft-hook-review.mjs",
     "phase275:review": "./scripts/with-preferred-node.sh node ./scripts/phase275-settings-preference-options-split-review.mjs",
+    "phase276:review": "./scripts/with-preferred-node.sh node ./scripts/phase276-popup-appearance-preview-component-review.mjs",
     "interaction-audit:bundle": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-handoff-bundle.mjs",
     "interaction-audit:archive": "./scripts/with-preferred-node.sh node ./scripts/archive-interaction-audit-review.mjs",
     "interaction-audit:refresh-archive-index": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-review-archive-index.mjs",
