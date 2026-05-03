@@ -76,7 +76,7 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 268` execution priority:
+Current post-`Phase 269` execution priority:
 
 1. `P1` - continue splitting oversized implementation files now that the provider-card and shared CSS visual contracts are stable:
    - `src/sidepanel/routes/SettingsPage.tsx`
@@ -326,6 +326,7 @@ Phase status update:
 - `Phase 266` completed the `localized-copy.ts` provider-source display copy split by moving `buildProviderSourceDisplayLocalizedCopy` into `src/shared/provider-source-display-localized-copy.ts` while preserving the legacy re-export path
 - `Phase 267` completed the `localized-copy.ts` provider-detail copy split by moving provider-detail copy plus badge and permission label helpers into `src/shared/provider-detail-localized-copy.ts` while preserving the legacy re-export path
 - `Phase 268` completed the `localized-copy.ts` store-workflow copy split by moving store screenshot seed and native popup probe copy into `src/shared/store-workflow-localized-copy.ts` while preserving the legacy re-export path
+- `Phase 269` completed the `localized-copy.ts` operator-workspace copy split by moving interaction-audit and theme-recovery operator copy into `src/shared/operator-workspace-localized-copy.ts` while preserving the legacy re-export path
 - the next maintenance follow-up should continue splitting oversized UI and localization files now that the provider-card and shared progress visual contracts are stable
 - the remaining store-readiness blocker is still the real manual native-toolbar popup capture and archive completion under `Direction 10.3`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
