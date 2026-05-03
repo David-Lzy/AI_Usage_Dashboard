@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [272_Phase_Provider_Diagnostic_Presentation_Split.md](./Archive/272_Phase_Provider_Diagnostic_Presentation_Split.md)
+- latest completed slice: [273_Phase_Standard_App_Session_Page_Actions_Split.md](./Archive/273_Phase_Standard_App_Session_Page_Actions_Split.md)
 
 Completed phases should be moved to:
 
@@ -697,6 +697,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 271` closeout extracted Settings structured copy and source-label helpers into `src/shared/settings-localized-copy.ts` while preserving the legacy `src/shared/localized-copy.ts` re-export path and Settings component/view-model copy semantics
 - phase 272 depends on phase 271 because diagnostic presentation is the final focused localization surface left in `src/shared/localized-copy.ts` after Settings copy moved
 - the 2026-05-03 `Phase 272` closeout extracted provider diagnostic presentation into `src/shared/provider-diagnostic-presentation.ts` and reduced `src/shared/localized-copy.ts` to a compatibility export aggregator
+- phase 273 depends on phase 272 because the localization split queue is complete enough to switch the maintenance queue back to oversized standard app action code
+- the 2026-05-03 `Phase 273` closeout extracted standard app session-page open and attach handlers into `src/sidepanel/standard-app-session-page-actions.ts` while preserving the `createStandardAppActions` return contract
 
 ## Delivery Standard For Each Phase
 
