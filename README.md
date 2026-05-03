@@ -40,7 +40,7 @@ Security posture for this track:
 
 Next execution queue:
 
-1. continue splitting oversized UI/theme/localization files after the Phase 271 settings copy split
+1. continue splitting oversized UI/theme/localization files after the Phase 272 diagnostic presentation split
 2. use `0.1.0-rc.3` for install/review passes until the next release package is cut
 3. keep [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) in maintenance mode unless a concrete diagnostic-body localization need appears
 4. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining manual store-popup capture dependency
@@ -56,6 +56,7 @@ Maintenance note:
 - operator-workspace copy now lives in `src/shared/operator-workspace-localized-copy.ts`, while `src/shared/localized-copy.ts` keeps compatibility re-exports for interaction audit and theme recovery routes
 - popup copy now lives in `src/shared/popup-localized-copy.ts`, while `src/shared/localized-copy.ts` keeps a compatibility re-export for popup runtime and view-model consumers
 - settings copy now lives in `src/shared/settings-localized-copy.ts`, while `src/shared/localized-copy.ts` keeps compatibility re-exports for Settings routes, section components, and view-model consumers
+- diagnostic presentation now lives in `src/shared/provider-diagnostic-presentation.ts`, while `src/shared/localized-copy.ts` keeps compatibility re-exports for diagnostic view-model consumers
 
 ## Source Labels
 

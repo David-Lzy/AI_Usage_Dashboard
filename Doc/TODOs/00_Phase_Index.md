@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [271_Phase_Settings_Copy_Split.md](./Archive/271_Phase_Settings_Copy_Split.md)
+- latest completed slice: [272_Phase_Provider_Diagnostic_Presentation_Split.md](./Archive/272_Phase_Provider_Diagnostic_Presentation_Split.md)
 
 Completed phases should be moved to:
 
@@ -695,6 +695,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 270` closeout extracted popup structured copy into `src/shared/popup-localized-copy.ts` while preserving the legacy `src/shared/localized-copy.ts` re-export path and popup view-model copy semantics
 - phase 271 depends on phase 270 because Settings copy is the next focused localization surface that can move after popup copy proved the same re-export boundary
 - the 2026-05-03 `Phase 271` closeout extracted Settings structured copy and source-label helpers into `src/shared/settings-localized-copy.ts` while preserving the legacy `src/shared/localized-copy.ts` re-export path and Settings component/view-model copy semantics
+- phase 272 depends on phase 271 because diagnostic presentation is the final focused localization surface left in `src/shared/localized-copy.ts` after Settings copy moved
+- the 2026-05-03 `Phase 272` closeout extracted provider diagnostic presentation into `src/shared/provider-diagnostic-presentation.ts` and reduced `src/shared/localized-copy.ts` to a compatibility export aggregator
 
 ## Delivery Standard For Each Phase
 

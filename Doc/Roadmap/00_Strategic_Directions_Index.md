@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-03:
 
-- the numbered phase queue is now completed through `Phase 271`
+- the numbered phase queue is now completed through `Phase 272`
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -154,6 +154,7 @@ As of 2026-05-03:
 - `Phase 269` completed the `localized-copy.ts` operator-workspace copy split by moving interaction-audit and theme-recovery operator copy into `src/shared/operator-workspace-localized-copy.ts` while preserving the legacy re-export path
 - `Phase 270` completed the `localized-copy.ts` popup copy split by moving `buildPopupLocalizedCopy` into `src/shared/popup-localized-copy.ts` while preserving the legacy re-export path
 - `Phase 271` completed the `localized-copy.ts` settings copy split by moving `buildSettingsLocalizedCopy` plus source-label helpers into `src/shared/settings-localized-copy.ts` while preserving the legacy re-export path
+- `Phase 272` completed the `localized-copy.ts` diagnostic presentation split by moving `getProviderDiagnosticPresentation` plus private diagnostic formatters into `src/shared/provider-diagnostic-presentation.ts`, reducing `localized-copy.ts` to a compatibility export aggregator
 - the next local-safe execution slice remains maintenance-oriented file splitting for the remaining oversized UI/theme/localization modules
 - `Direction 10.3` still retains the real manual native-toolbar popup capture dependency for final store assets; the existing request has staged full-page captures but still needs the native popup slots before archive completion
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`

@@ -233,6 +233,7 @@
     "phase269:review": "./scripts/with-preferred-node.sh node ./scripts/phase269-operator-workspace-copy-split-review.mjs",
     "phase270:review": "./scripts/with-preferred-node.sh node ./scripts/phase270-popup-copy-split-review.mjs",
     "phase271:review": "./scripts/with-preferred-node.sh node ./scripts/phase271-settings-copy-split-review.mjs",
+    "phase272:review": "./scripts/with-preferred-node.sh node ./scripts/phase272-provider-diagnostic-presentation-split-review.mjs",
     "interaction-audit:bundle": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-handoff-bundle.mjs",
     "interaction-audit:archive": "./scripts/with-preferred-node.sh node ./scripts/archive-interaction-audit-review.mjs",
     "interaction-audit:refresh-archive-index": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-review-archive-index.mjs",
