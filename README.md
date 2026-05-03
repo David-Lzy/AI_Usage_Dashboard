@@ -40,7 +40,7 @@ Security posture for this track:
 
 Next execution queue:
 
-1. continue splitting oversized UI/theme/localization files after the Phase 251 Chips CSS module split
+1. continue splitting oversized UI/theme/localization files after the Phase 252 Surfaces CSS module split
 2. use `0.1.0-rc.3` for install/review passes until the next release package is cut
 3. keep [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) in maintenance mode unless a concrete diagnostic-body localization need appears
 4. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining manual store-popup capture dependency
@@ -144,6 +144,7 @@ Current honesty boundaries:
 - App shell CSS now lives in `src/sidepanel/theme/app-shell.css`, keeping shared sidepanel/popup shell layout and shell-entry keyframes out of the shared Material theme base file
 - Button CSS now lives in `src/sidepanel/theme/buttons.css`, keeping shared icon-button and text-button styling out of the shared Material theme base file while loading it in both sidepanel and popup entries
 - Chip CSS now lives in `src/sidepanel/theme/chips.css`, keeping shared token-chip, status-chip, and meta-chip styling out of the shared Material theme base file while loading it in both sidepanel and popup entries
+- Surface CSS now lives in `src/sidepanel/theme/surfaces.css`, keeping shared hero-card and status-card styling out of the shared Material theme base file while loading it in both sidepanel and popup entries
 - Cursor personal usage-page sync is now explicitly labeled as `Window-only vendor value`
 - Gemini remains `Policy only`; the observed Google Cloud metrics route is project-scoped and not treated as personal quota
 - the UI now makes the trust boundary explicit in Settings and provider detail, including host-access requirements, credential persistence, and the fact that cookies stay forbidden

@@ -57,42 +57,6 @@ summary:focus-visible {
   outline: none;
 }
 
-.hero-card,
-.status-card {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--app-space-3);
-  padding: var(--app-space-5);
-  border: 1px solid var(--md-sys-color-outline-variant);
-  border-radius: var(--md-sys-shape-corner-extra-large);
-  background: var(--md-sys-color-surface-container-lowest);
-  box-shadow: var(--app-elevation-1);
-}
-
-.status-card--warning {
-  --app-toned-on: var(--app-surface-warning-on);
-  --app-toned-on-muted: var(--app-surface-warning-on-muted);
-  background: var(--app-surface-warning-background);
-  border-color: var(--app-surface-warning-border);
-}
-
-.status-card--error {
-  --app-toned-on: var(--app-surface-error-on);
-  --app-toned-on-muted: var(--app-surface-error-on-muted);
-  background: var(--app-surface-error-background);
-  border-color: var(--app-surface-error-border);
-}
-
-.hero-card {
-  background:
-    radial-gradient(
-      circle at top right,
-      color-mix(in srgb, var(--md-sys-color-primary-container) 72%, white 28%) 0%,
-      transparent 44%
-    ),
-    var(--md-sys-color-surface-container-lowest);
-}
-
 .section-label {
   margin: 0;
   color: var(--md-sys-color-tertiary);
@@ -243,29 +207,6 @@ summary:focus-visible {
   min-width: 0;
 }
 
-.status-card__header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--app-space-3);
-}
-
-.status-card--warning .section-label,
-.status-card--error .section-label,
-.status-card--warning .supporting-copy,
-.status-card--error .supporting-copy {
-  color: var(--app-toned-on-muted);
-}
-
-.status-card--warning .section-title,
-.status-card--error .section-title,
-.status-card--warning .display-headline,
-.status-card--error .display-headline,
-.status-card--warning .body-copy,
-.status-card--error .body-copy {
-  color: var(--app-toned-on);
-}
-
 @media (max-width: 720px) {
   .summary-strip {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -274,8 +215,7 @@ summary:focus-visible {
   .provider-shell-card__header,
   .provider-shell-card__footer,
   .provider-card__header,
-  .provider-card__footer,
-  .status-card__header {
+  .provider-card__footer {
     flex-direction: column;
     align-items: stretch;
   }
@@ -283,11 +223,6 @@ summary:focus-visible {
 }
 
 @media (max-width: 480px) {
-  .hero-card,
-  .status-card {
-    padding: var(--app-space-4);
-  }
-
   .token-panel {
     grid-template-columns: 1fr;
   }
