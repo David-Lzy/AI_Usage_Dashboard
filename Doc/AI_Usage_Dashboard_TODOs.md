@@ -78,7 +78,7 @@ The project is no longer in shell-building or first provider-wiring mode.
 
 Current post-`Phase 292` execution priority:
 
-1. `P0` - complete active `Phase 293` and package `0.1.0-rc.11`. The current `release/ai-usage-dashboard-0.1.0-rc.10.zip` remains valid historical evidence for Phase 291, but it does not include the later Cursor logged-out detection fix, Cursor structured billing/spend usage facts, or compact inline usage-window reset labels.
+1. `P0` - complete active `Phase 293` and package `0.1.0-rc.11`. The current `release/ai-usage-dashboard-0.1.0-rc.10.zip` remains valid historical evidence for Phase 291, but it does not include the later Cursor logged-out detection fix, Cursor structured billing/spend usage facts, compact inline usage-window reset labels, or formatted action-badge tooltip with visible Cursor facts.
 2. `P0` - after `rc.11` is cut, use that package for the next install/review pass and reload the unpacked `dist/` extension in RDP Chrome before visual judgment.
 3. `P1` - complete the `Direction 10.3` store asset-pack line: RDP Chrome is available for real toolbar-popup clicking and screenshot capture, so the remaining work is capture/import/archive closeout rather than more repo-only planning.
 4. `P2` - Provider closure waits on accounts:
@@ -349,7 +349,7 @@ Phase status update:
 - `Phase 289` made the Settings top app bar adaptive: wide tabs use a title/chips/actions row, while sidebar widths center actions and section chips, then packaged `0.1.0-rc.8` for Chrome review
 - `Phase 290` replaced provider-card linear progress row `gap + border-top` dividers with explicit row pseudo-dividers so internal lines stay visible, then packaged `0.1.0-rc.9` for Chrome review
 - `Phase 291` aligned Cursor personal usage with the Codex managed session-page pattern: the default route opens `https://cursor.com/cn/dashboard/usage`, capture failure triggers a real reload, hydration retry handles freshly opened dashboards, automatic sync can open a non-active managed tab under the same trigger gates, and `0.1.0-rc.10` packages the result for Chrome review
-- post-`Phase 291` source changes fixed Cursor usage-page logged-out detection, moved visible Cursor billing-period and spend values into structured usage facts, and compacted line-style usage-window reset labels into the window title row
+- post-`Phase 291` source changes fixed Cursor usage-page logged-out detection, moved visible Cursor billing-period and spend values into structured usage facts, compacted line-style usage-window reset labels into the window title row, and reformatted the action-badge hover tooltip so enabled Cursor context appears in the visible-provider section
 - `Phase 292` refreshed the maintained docs to make that package boundary explicit: `rc.10` is still the latest zip, but the current source needs `Phase 293` / `rc.11` before the next install/review package includes all post-rc10 fixes
 - the old maintenance split queue is closed for the originally named local-safe targets: `material-theme.css`, `localized-copy.ts`, `SettingsPage.tsx`, `App.tsx`, and `standard-app-actions.ts` are now focused base, compatibility, route, or aggregator files rather than the next default work item
 - the remaining store-readiness blocker is still real native-toolbar popup capture/import/archive completion under `Direction 10.3`; RDP Chrome is now available for that manual operator step

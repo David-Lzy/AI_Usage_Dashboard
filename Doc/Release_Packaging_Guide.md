@@ -150,7 +150,7 @@ Packaging output:
 Release context:
 
 - `0.1.0-rc.10` distributes the Phase 291 Cursor managed session-page sync update after the Phase 290 progress-divider visibility fix, Phase 289 Settings top-bar adaptive layout, Phase 288 source-chip row fix, Phase 287 progress-row spacing fix, Phase 285 post-rc4 smoke polish, and earlier Phase 283 RDP Chrome validation of the Codex page-session reload retry path
-- current source has moved past that package: Cursor logged-out detection, Cursor structured billing/spend usage facts, and inline usage-window reset-label density fixes require `Phase 293` / `0.1.0-rc.11` before they are represented in a release zip
+- current source has moved past that package: Cursor logged-out detection, Cursor structured billing/spend usage facts, inline usage-window reset-label density, and formatted action-badge hover tooltip fixes require `Phase 293` / `0.1.0-rc.11` before they are represented in a release zip
 - provider closure waits on available real accounts; no new provider support claim is introduced by this package
 
 The packaging script checks:

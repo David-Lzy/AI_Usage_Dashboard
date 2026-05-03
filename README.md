@@ -41,7 +41,7 @@ Security posture for this track:
 
 Next execution queue:
 
-1. run `Phase 293` to create `0.1.0-rc.11`; the existing `rc.10` zip is the latest package, but it predates the post-rc10 Cursor logged-out detection fix, Cursor structured usage facts, and inline usage-window reset-label density fix
+1. run `Phase 293` to create `0.1.0-rc.11`; the existing `rc.10` zip is the latest package, but it predates the post-rc10 Cursor logged-out detection fix, Cursor structured usage facts, inline usage-window reset-label density fix, and formatted action-badge tooltip with enabled Cursor context
 2. use `0.1.0-rc.11` for the next install/review pass after packaging, and reload the unpacked `dist/` extension in RDP Chrome before visual judgment
 3. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining store-popup screenshot capture and archive closeout now that RDP Chrome is available for manual native popup interaction
 4. keep provider closure account-gated: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available

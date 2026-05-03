@@ -5,7 +5,10 @@ import {
   normalizeActionBadgeSelection,
   type ActionBadgeQuotaCandidate,
 } from "../shared/action-badge-preferences";
-import { getVisibleProviders } from "../sidepanel/view-models";
+import {
+  getVisibleProviders,
+  type ProviderViewModel,
+} from "../sidepanel/view-models";
 
 export type ActionBadgeModel = {
   text: string;
@@ -110,6 +113,155 @@ function formatQuotaTitleValue(candidate: ActionBadgeQuotaCandidate): string {
   return `${formatBadgeNumber(candidate.remaining)} ${candidate.quotaUnit} remaining`;
 }
 
+function formatStatusLabel(provider: ProviderViewModel): string {
+  switch (provider.displaySyncStatus) {
+    case "ok":
+      return "Healthy";
+    case "warning":
+      return "Needs review";
+    case "error":
+      return "Sync issue";
+  }
+}
+
+function formatResetTitleValue(
+  candidate: ActionBadgeQuotaCandidate,
+): string | null {
+  if (!candidate.resetLabel) {
+    return null;
+  }
+
+  const sourcePrefix = `${candidate.sourceLabel} resets at `;
+
+  if (
+    candidate.resetLabel
+      .toLocaleLowerCase()
+      .startsWith(sourcePrefix.toLocaleLowerCase())
+  ) {
+    return candidate.resetLabel.slice(sourcePrefix.length);
+  }
+
+  return candidate.resetLabel;
+}
+
+function formatProviderRemainingLine(
+  provider: ProviderViewModel,
+): string | null {
+  if (
+    typeof provider.remaining !== "number" ||
+    !Number.isFinite(provider.remaining)
+  ) {
+    return null;
+  }
+
+  if (provider.quotaUnit === "percent") {
+    return `${provider.quotaWindow}: ${Math.round(
+      provider.remaining,
+    )}% remaining`;
+  }
+
+  return `${provider.quotaWindow}: ${formatBadgeNumber(provider.remaining)} ${provider.quotaUnit} remaining`;
+}
+
+function buildProviderUsageWindowLines(provider: ProviderViewModel): string[] {
+  return (provider.usageWindows ?? [])
+    .filter(
+      (usageWindow) =>
+        typeof usageWindow.remaining === "number" &&
+        Number.isFinite(usageWindow.remaining),
+    )
+    .slice(0, 3)
+    .map(
+      (usageWindow) =>
+        `${usageWindow.normalizedLabel}: ${Math.round(
+          usageWindow.remaining ?? 0,
+        )}% remaining`,
+    );
+}
+
+function buildProviderUsageFactLines(provider: ProviderViewModel): string[] {
+  const usageFacts = provider.usageFacts ?? [];
+
+  if (usageFacts.length === 0) {
+    return [];
+  }
+
+  const firstFact = usageFacts[0];
+  const remainingFacts = usageFacts.slice(1, 4);
+  const lines = [`${firstFact.label}: ${firstFact.value}`];
+
+  if (remainingFacts.length > 0) {
+    lines.push(
+      remainingFacts
+        .map((fact) => `${fact.label}: ${fact.value}`)
+        .join("; "),
+    );
+  }
+
+  return lines;
+}
+
+function buildProviderUsageBalanceLines(provider: ProviderViewModel): string[] {
+  return (provider.usageBalances ?? [])
+    .filter(
+      (usageBalance) =>
+        typeof usageBalance.remaining === "number" &&
+        Number.isFinite(usageBalance.remaining),
+    )
+    .slice(0, 2)
+    .map(
+      (usageBalance) =>
+        `${usageBalance.normalizedLabel}: ${formatBadgeNumber(
+          usageBalance.remaining ?? 0,
+        )} ${usageBalance.quotaUnit} remaining`,
+    );
+}
+
+function buildProviderTooltipDetailLines(provider: ProviderViewModel): string[] {
+  const structuredLines = [
+    ...buildProviderUsageWindowLines(provider),
+    ...buildProviderUsageBalanceLines(provider),
+    ...buildProviderUsageFactLines(provider),
+  ];
+  const fallbackRemainingLine = formatProviderRemainingLine(provider);
+  const lines =
+    structuredLines.length > 0
+      ? structuredLines
+      : fallbackRemainingLine
+        ? [fallbackRemainingLine]
+        : [];
+
+  if (provider.warningReason) {
+    lines.push(`Status: ${provider.warningReason}`);
+  }
+
+  return lines.slice(0, 4);
+}
+
+function buildVisibleProviderTitleLines(state: AppState): string[] {
+  const visibleProviders = getVisibleProviders(state);
+
+  if (visibleProviders.length === 0) {
+    return [];
+  }
+
+  const lines = ["", "Visible providers"];
+
+  for (const provider of visibleProviders.slice(0, 5)) {
+    lines.push(`  ${provider.providerLabel}: ${formatStatusLabel(provider)}`);
+
+    for (const detailLine of buildProviderTooltipDetailLines(provider)) {
+      lines.push(`    ${detailLine}`);
+    }
+  }
+
+  if (visibleProviders.length > 5) {
+    lines.push(`  +${visibleProviders.length - 5} more visible providers`);
+  }
+
+  return lines;
+}
+
 function getRemainingPercent(candidate: ActionBadgeQuotaCandidate): number | null {
   if (candidate.quotaUnit === "percent") {
     return candidate.remaining;
@@ -147,15 +299,19 @@ function buildQuotaBadgeModel(
   candidate: ActionBadgeQuotaCandidate,
   state: AppState,
 ): ActionBadgeModel {
+  const resetTitleValue = formatResetTitleValue(candidate);
   const titleLines = [
     "AI Usage Dashboard",
-    `${candidate.providerLabel}: ${candidate.sourceLabel}`,
-    `Remaining: ${formatQuotaTitleValue(candidate)}`,
-    candidate.resetLabel ? `Reset: ${candidate.resetLabel}` : null,
-    candidate.syncedAt ? `Synced: ${candidate.syncedAt}` : null,
-    candidate.usageSummary ? `Details: ${candidate.usageSummary}` : null,
-    candidate.warningReason ? `Status: ${candidate.warningReason}` : null,
-  ].filter((line): line is string => Boolean(line));
+    "",
+    "Selected badge",
+    `  Provider: ${candidate.providerLabel}`,
+    `  Source: ${candidate.sourceLabel}`,
+    `  Remaining: ${formatQuotaTitleValue(candidate)}`,
+    resetTitleValue ? `  Reset: ${resetTitleValue}` : null,
+    candidate.syncedAt ? `  Synced: ${candidate.syncedAt}` : null,
+    candidate.warningReason ? `  Status: ${candidate.warningReason}` : null,
+    ...buildVisibleProviderTitleLines(state),
+  ].filter((line): line is string => line !== null);
 
   return {
     text: formatQuotaBadgeText(candidate),

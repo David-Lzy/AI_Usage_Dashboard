@@ -93,8 +93,19 @@ describe("action badge", () => {
     const model = buildActionBadgeModel(createStateWithCodexWindows());
 
     expect(model.text).toBe("32%");
-    expect(model.title).toContain("Codex: Weekly usage window");
-    expect(model.title).toContain("Visible Codex usage");
+    expect(model.title).toContain("Selected badge");
+    expect(model.title).toContain("  Provider: Codex");
+    expect(model.title).toContain("  Source: Weekly usage window");
+    expect(model.title).toContain("  Remaining: 32% remaining");
+    expect(model.title).toContain("  Reset: Resets Thursday");
+    expect(model.title).toContain("Visible providers");
+    expect(model.title).toContain("  Cursor: Healthy");
+    expect(model.title).toContain("    Billing period: Mar 23 - Apr 21");
+    expect(model.title).toContain(
+      "    Total spend: $0; Included: $0; On-demand: $0",
+    );
+    expect(model.title).toContain("    Weekly usage window: 32% remaining");
+    expect(model.title).not.toContain("Details:");
     expect(model.backgroundColor).toEqual([46, 125, 50, 255]);
   });
 });

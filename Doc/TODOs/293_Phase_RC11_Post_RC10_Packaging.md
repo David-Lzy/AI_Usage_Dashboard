@@ -37,6 +37,8 @@ The package should include the current post-rc10 source state:
 - Cursor usage-page logged-out detection fix.
 - Cursor visible billing/spend context rendered as structured usage facts.
 - Line-style usage-window reset copy compacted into the title row.
+- Action badge hover tooltip formatted into selected-badge and visible-provider
+  sections, including Cursor visible usage facts when Cursor is enabled.
 
 ## Preserved Boundaries
 
