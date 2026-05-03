@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [262_Phase_Special_Route_App_Split.md](./Archive/262_Phase_Special_Route_App_Split.md)
+- latest completed slice: [263_Phase_App_Browser_Controls_Split.md](./Archive/263_Phase_App_Browser_Controls_Split.md)
 
 Completed phases should be moved to:
 
@@ -677,6 +677,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 261` closeout extracted Settings global preferences rendering and option assembly into `src/sidepanel/components/SettingsPreferencesSection.tsx` while preserving preference validation, Material controls, action badge candidate generation, popup preview, theme seed handling, and parent dispatch wiring
 - phase 262 depends on phase 261 because the Settings body extraction is complete enough to switch the maintenance queue to `App.tsx`
 - the 2026-05-03 `Phase 262` closeout extracted special debug/operator route parsing, rendering, and special-route-only theme/locale hydration into `src/sidepanel/special-route-app.tsx` while preserving standard route rendering, sync behavior, source-page recovery, and special route hash strings
+- phase 263 depends on phase 262 because browser-control helpers should move only after special-route app ownership no longer shares the same top-level file region
+- the 2026-05-03 `Phase 263` closeout extracted browser capability checks, tab priority sorting, and full-page route opening into `src/sidepanel/app-browser-controls.ts` while preserving route hashes, Chrome tab behavior, standard route rendering, sync behavior, and source-page recovery
 
 ## Delivery Standard For Each Phase
 

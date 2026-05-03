@@ -40,10 +40,14 @@ Security posture for this track:
 
 Next execution queue:
 
-1. continue splitting oversized UI/theme/localization files after the Phase 262 special-route app split
+1. continue splitting oversized UI/theme/localization files after the Phase 263 browser-control helper split
 2. use `0.1.0-rc.3` for install/review passes until the next release package is cut
 3. keep [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) in maintenance mode unless a concrete diagnostic-body localization need appears
 4. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining manual store-popup capture dependency
+
+Maintenance note:
+
+- browser-control helpers now live in `src/sidepanel/app-browser-controls.ts`, keeping Chrome capability checks, tab priority sorting, and full-page route opening out of the standard app component
 
 ## Source Labels
 
