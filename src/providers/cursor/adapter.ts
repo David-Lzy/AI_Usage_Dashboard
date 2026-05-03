@@ -1,4 +1,5 @@
 import type {
+  ProviderUsageFact,
   ProviderSecrets,
   ProviderSetting,
   ProviderSnapshot,
@@ -74,18 +75,7 @@ function buildCursorPersonalRefreshLabel(source: "fixture" | "live"): string {
 function buildCursorPersonalUsageSummary(
   snapshot: CursorPersonalUsageSnapshot,
 ): string | null {
-  const spendSummary =
-    snapshot.spendCards.length > 0
-      ? snapshot.spendCards
-          .map((card) => `${card.label}: ${card.amountText}`)
-          .join(" · ")
-      : null;
   const summaryParts = [
-    snapshot.billingPeriodLabel
-      ? `Billing period: ${snapshot.billingPeriodLabel}`
-      : null,
-    spendSummary,
-    snapshot.usageSeriesLabel,
     snapshot.visiblePlanLabels.length > 0
       ? `Visible plans: ${snapshot.visiblePlanLabels.join(" · ")}`
       : null,
@@ -100,6 +90,39 @@ function buildCursorPersonalUsageSummary(
   }
 
   return `Visible Cursor usage: ${summaryParts.join(" · ")}`;
+}
+
+function buildCursorPersonalUsageFacts(
+  snapshot: CursorPersonalUsageSnapshot,
+): ProviderUsageFact[] {
+  const facts: ProviderUsageFact[] = [];
+
+  if (snapshot.billingPeriodLabel) {
+    facts.push({
+      label: "Billing period",
+      value: snapshot.billingPeriodLabel,
+      detail: snapshot.usageSeriesLabel,
+    });
+  }
+
+  facts.push(
+    ...snapshot.spendCards.map((card) => ({
+      label: card.label,
+      value: card.amountText,
+      detail:
+        card.normalizedLabel === "included"
+          ? "Plan-included spend shown by Cursor"
+          : card.normalizedLabel === "on_demand"
+            ? "Usage-based spend shown by Cursor"
+            : "Current selected period",
+      tone:
+        card.normalizedLabel === "on_demand" && (card.amount ?? 0) > 0
+          ? "warning"
+          : "neutral",
+    }) satisfies ProviderUsageFact),
+  );
+
+  return facts;
 }
 
 function hasCursorAdminApiKey(secrets: ProviderSecrets): boolean {
@@ -181,6 +204,8 @@ function finalizeCursorSnapshot(
       selectedKind === "session_page" ? snapshot.usageWindows : undefined,
     usageBalances:
       selectedKind === "session_page" ? snapshot.usageBalances : undefined,
+    usageFacts:
+      selectedKind === "session_page" ? snapshot.usageFacts : undefined,
     usageSummary:
       selectedKind === "session_page" ? (snapshot.usageSummary ?? null) : null,
     sourceSelectionReason,
@@ -219,6 +244,7 @@ function finalizeCursorNoSourceSnapshot(
     ...snapshot,
     usageWindows: undefined,
     usageBalances: undefined,
+    usageFacts: undefined,
     usageSummary: null,
     sourceSelectionReason,
     sourceFallbackReason,
@@ -543,6 +569,7 @@ async function tryCursorPersonalSource({
 
     const snapshot = result.snapshot;
     const usageSummary = buildCursorPersonalUsageSummary(snapshot);
+    const usageFacts = buildCursorPersonalUsageFacts(snapshot);
     const visiblePlanLabel =
       snapshot.visiblePlanLabels.length > 0
         ? `Visible plans: ${snapshot.visiblePlanLabels.join(" · ")}`
@@ -591,6 +618,7 @@ async function tryCursorPersonalSource({
             : null,
         usageWindows: undefined,
         usageBalances: undefined,
+        usageFacts,
         usageSummary,
         lastSyncLabel: buildCursorPersonalRefreshLabel(personalSource),
       },

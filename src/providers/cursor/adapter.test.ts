@@ -172,8 +172,33 @@ describe("syncCursorProvider", () => {
     });
     expect(snapshot.usageWindows).toBeUndefined();
     expect(snapshot.usageBalances).toBeUndefined();
+    expect(snapshot.usageFacts).toEqual([
+      {
+        label: "Billing period",
+        value: "Mar 23 - Apr 21",
+        detail: "Your usage per day across this billing period",
+      },
+      {
+        label: "Total spend",
+        value: "$0",
+        detail: "Current selected period",
+        tone: "neutral",
+      },
+      {
+        label: "Included",
+        value: "$0",
+        detail: "Plan-included spend shown by Cursor",
+        tone: "neutral",
+      },
+      {
+        label: "On-demand",
+        value: "$0",
+        detail: "Usage-based spend shown by Cursor",
+        tone: "neutral",
+      },
+    ]);
     expect(snapshot.usageSummary).toBe(
-      "Visible Cursor usage: Billing period: Mar 23 - Apr 21 · Total spend: $0 · Included: $0 · On-demand: $0 · Your usage per day across this billing period · Visible plans: Pro · Pro+ · Ultra · On-demand usage is off. · CSV export available",
+      "Visible Cursor usage: Visible plans: Pro · Pro+ · Ultra · On-demand usage is off. · CSV export available",
     );
     expect(snapshot.lastSyncLabel).toBe("Cursor personal fixture loaded");
     expect(snapshot.sourceSelectionReason).toBe("Auto fell back to Session page.");
@@ -637,7 +662,7 @@ describe("syncCursorProvider", () => {
       },
     });
     expect(snapshot.usageSummary).toBe(
-      "Visible Cursor usage: Billing period: Mar 23 - Apr 21 · Your usage per day across this billing period · Visible plans: Pro · Pro+ · Ultra · On-demand usage is off. · CSV export available",
+      "Visible Cursor usage: Visible plans: Pro · Pro+ · Ultra · On-demand usage is off. · CSV export available",
     );
     expect(snapshot.sourceSelectionReason).toBe(
       "Official API preference fell back to Session page.",

@@ -12,6 +12,7 @@ import {
 } from "../../shared/localized-copy";
 import { StatusBadge } from "../components/StatusBadge";
 import { TopBar } from "../components/TopBar";
+import { UsageFactsList } from "../components/UsageFactsList";
 import { UsageProgress } from "../components/UsageProgress";
 import { UsageWindowProgressList } from "../components/UsageWindowProgressList";
 import { shouldShowSingleUsageProgress } from "../usage-progress-visibility";
@@ -68,6 +69,8 @@ export function ProviderDetailPage({
     typeof window !== "undefined" ? window : undefined,
   );
   const copy = buildProviderDetailLocalizedCopy(i18n);
+  const visibleUsageContextLabel =
+    i18n.resolvedLocale === "zh-CN" ? "可见使用上下文" : "Visible usage context";
   const showSessionPageContract =
     provider.sessionPageContractLabel !== null &&
     (provider.sessionPageContractLabel !== provider.currentSourceContractLabel ||
@@ -81,8 +84,10 @@ export function ProviderDetailPage({
         provider.currentSourceGraduationGateDetail);
   const hasStructuredUsageContext =
     (provider.usageWindows?.length ?? 0) > 0 ||
-    (provider.usageBalances?.length ?? 0) > 0;
+    (provider.usageBalances?.length ?? 0) > 0 ||
+    (provider.usageFacts?.length ?? 0) > 0;
   const hasUsageWindowProgress = (provider.usageWindows?.length ?? 0) > 0;
+  const hasUsageFacts = (provider.usageFacts?.length ?? 0) > 0;
   const showSingleUsageProgress = shouldShowSingleUsageProgress(provider);
   const showUsageSummary =
     !hasStructuredUsageContext && Boolean(provider.usageSummary);
@@ -111,6 +116,11 @@ export function ProviderDetailPage({
                 provider.quotaUnit,
               )
             : copy.values.unknownQuotaUnit(provider.quotaUnit);
+  const normalizedUsageValue =
+    usageValue === copy.values.unknownQuotaUnit(provider.quotaUnit) &&
+    hasUsageFacts
+      ? visibleUsageContextLabel
+      : usageValue;
 
   const remainingValue =
     provider.quotaUnit === "percent" && provider.remaining !== null
@@ -213,7 +223,7 @@ export function ProviderDetailPage({
           </div>
           <div className="detail-field">
             <p className="detail-field__label">{copy.fieldLabels.used}</p>
-            <p className="detail-field__value">{usageValue}</p>
+            <p className="detail-field__value">{normalizedUsageValue}</p>
           </div>
           <div className="detail-field">
             <p className="detail-field__label">{copy.fieldLabels.remaining}</p>
@@ -435,6 +445,9 @@ export function ProviderDetailPage({
                 i18n={i18n}
                 displayStyle={progressDisplayStyle}
               />
+            ) : null}
+            {hasUsageFacts && provider.usageFacts ? (
+              <UsageFactsList facts={provider.usageFacts} />
             ) : null}
             {provider.usageBalances?.slice(0, 3).map((usageBalance) => (
               <p

@@ -181,6 +181,7 @@ export type ProviderSnapshot = {
   sourceFallbackDiagnostic?: ProviderDiagnostic | null;
   usageWindows?: ProviderUsageWindow[];
   usageBalances?: ProviderUsageBalance[];
+  usageFacts?: ProviderUsageFact[];
   usageSummary?: string | null;
   tone: ProviderTone;
 };
@@ -211,6 +212,13 @@ export type ProviderUsageBalance = {
   remaining: number | null;
   total: number | null;
   detail: string | null;
+};
+
+export type ProviderUsageFact = {
+  label: string;
+  value: string;
+  detail: string | null;
+  tone?: ProviderTone;
 };
 
 export type ProviderSetting = {

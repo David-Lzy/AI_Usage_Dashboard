@@ -20,7 +20,7 @@ function createState(overrides?: Partial<AppState>): AppState {
 
 function renderProviderCard(
   state: AppState,
-  providerId: "codex" | "gemini",
+  providerId: "codex" | "cursor" | "gemini",
   options: {
     onOpenSourcePage?: () => void;
   } = {},
@@ -123,6 +123,19 @@ describe("ProviderCard", () => {
     expect(html).toContain('data-provider-card-open-source-page="true"');
     expect(html).toContain(">Source page<");
     expect(html).toContain('title="Open source page"');
+  });
+
+  it("renders Cursor personal spend facts as structured usage context", () => {
+    const html = renderProviderCard(createState(), "cursor");
+
+    expect(html).toContain("Visible usage context");
+    expect(html).toContain('class="usage-facts usage-facts--compact"');
+    expect(html).toContain("Billing period");
+    expect(html).toContain("Mar 23 - Apr 21");
+    expect(html).toContain("Total spend");
+    expect(html).toContain("$0");
+    expect(html).not.toContain("Usage unknown · requests");
+    expect(html).not.toContain("Visible Cursor usage:");
   });
 
   it("omits the source-page recovery action for deferred session-page providers", () => {

@@ -7,6 +7,7 @@ import { createRuntimeI18n } from "../../shared/i18n";
 import { shouldShowSingleUsageProgress } from "../usage-progress-visibility";
 import type { ProviderViewModel } from "../view-models";
 import { StatusBadge } from "./StatusBadge";
+import { UsageFactsList } from "./UsageFactsList";
 import { UsageProgress } from "./UsageProgress";
 import { UsageWindowProgressList } from "./UsageWindowProgressList";
 
@@ -54,7 +55,9 @@ export function ProviderCard({
     provider.openableSessionPageUrl !== null && onOpenSourcePage !== undefined;
   const hasStructuredUsageContext =
     (provider.usageWindows?.length ?? 0) > 0 ||
-    (provider.usageBalances?.length ?? 0) > 0;
+    (provider.usageBalances?.length ?? 0) > 0 ||
+    (provider.usageFacts?.length ?? 0) > 0;
+  const hasUsageFacts = (provider.usageFacts?.length ?? 0) > 0;
   const hasUsageWindowProgress = (provider.usageWindows?.length ?? 0) > 0;
   const showSingleUsageProgress = shouldShowSingleUsageProgress(provider);
   const showUsageSummary =
@@ -63,6 +66,8 @@ export function ProviderCard({
   const localizedLastSyncLabel = i18n.localizeRelativeRuntimeLabel(
     provider.lastSyncLabel,
   );
+  const visibleUsageContextLabel =
+    i18n.resolvedLocale === "zh-CN" ? "可见使用上下文" : "Visible usage context";
   const fidelityChipClassName =
     provider.currentSourceFidelityTone === "error"
       ? "meta-chip meta-chip--error"
@@ -84,7 +89,9 @@ export function ProviderCard({
           ? `${i18n.formatNumber(provider.used)} ${provider.quotaUnit} tracked`
           : provider.total !== null
             ? `Unknown / ${i18n.formatNumber(provider.total)} ${provider.quotaUnit}`
-            : `Usage unknown · ${provider.quotaUnit}`;
+            : hasUsageFacts
+              ? visibleUsageContextLabel
+              : `Usage unknown · ${provider.quotaUnit}`;
 
   return (
     <article
@@ -148,6 +155,12 @@ export function ProviderCard({
               density="compact"
               displayStyle={progressDisplayStyle}
             />
+          </section>
+        ) : null}
+
+        {hasUsageFacts && provider.usageFacts ? (
+          <section className="provider-card__progress-surface">
+            <UsageFactsList facts={provider.usageFacts} density="compact" />
           </section>
         ) : null}
 

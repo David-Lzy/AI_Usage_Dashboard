@@ -315,6 +315,28 @@ export const SAMPLE_APP_STATE: AppState = {
         },
         rawMessage: "Official API unavailable: no Cursor Admin API key is stored.",
       }),
+      usageFacts: [
+        {
+          label: "Billing period",
+          value: "Mar 23 - Apr 21",
+          detail: "Your usage per day across this billing period",
+        },
+        {
+          label: "Total spend",
+          value: "$0",
+          detail: "Current selected period",
+        },
+        {
+          label: "Included",
+          value: "$0",
+          detail: "Plan-included spend shown by Cursor",
+        },
+        {
+          label: "On-demand",
+          value: "$0",
+          detail: "Usage-based spend shown by Cursor",
+        },
+      ],
       tone: "neutral",
     },
     {

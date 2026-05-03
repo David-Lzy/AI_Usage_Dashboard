@@ -216,6 +216,88 @@
   border-top: 1px solid var(--app-supporting-surface-border);
 }
 
+.usage-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--app-space-2);
+}
+
+.usage-facts--compact {
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+}
+
+.usage-fact {
+  display: grid;
+  min-width: 0;
+  gap: var(--app-space-1);
+  padding: var(--app-space-3);
+  border: 1px solid var(--app-supporting-surface-border);
+  border-radius: var(--md-sys-shape-corner-medium);
+  background: color-mix(
+    in srgb,
+    var(--md-sys-color-surface-container-lowest) 72%,
+    transparent
+  );
+}
+
+.usage-fact--warning {
+  border-color: color-mix(
+    in srgb,
+    var(--app-surface-warning-border) 68%,
+    transparent
+  );
+  background: color-mix(
+    in srgb,
+    var(--app-surface-warning-background) 72%,
+    var(--md-sys-color-surface-container-lowest) 28%
+  );
+}
+
+.usage-fact--error {
+  border-color: color-mix(
+    in srgb,
+    var(--app-surface-error-border) 68%,
+    transparent
+  );
+  background: color-mix(
+    in srgb,
+    var(--app-surface-error-background) 72%,
+    var(--md-sys-color-surface-container-lowest) 28%
+  );
+}
+
+.usage-fact__label,
+.usage-fact__value,
+.usage-fact__detail {
+  margin: 0;
+}
+
+.usage-fact__label {
+  color: var(--md-sys-color-on-surface-variant);
+  font-family: var(--md-sys-typescale-label-medium-font);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: var(--md-sys-typescale-label-medium-weight);
+  line-height: var(--md-sys-typescale-label-medium-line-height);
+}
+
+.usage-fact__value {
+  color: var(--md-sys-color-on-surface);
+  font-family: var(--md-sys-typescale-title-medium-font);
+  font-size: var(--md-sys-typescale-title-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-weight);
+  line-height: var(--md-sys-typescale-title-medium-line-height);
+  overflow-wrap: anywhere;
+}
+
+.usage-fact__detail {
+  color: var(--md-sys-color-on-surface-variant);
+  font-family: var(--md-sys-typescale-body-small-font);
+  font-size: var(--md-sys-typescale-body-small-size);
+  font-weight: var(--md-sys-typescale-body-small-weight);
+  line-height: var(--md-sys-typescale-body-small-line-height);
+  overflow-wrap: anywhere;
+}
+
 .provider-card--warning .provider-card__provider,
 .provider-card--error .provider-card__provider {
   color: var(--app-toned-on);

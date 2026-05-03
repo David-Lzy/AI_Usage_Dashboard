@@ -19,7 +19,7 @@ function createState(overrides?: Partial<AppState>): AppState {
 
 function renderProviderDetail(
   state: AppState,
-  providerId: "codex" | "gemini",
+  providerId: "codex" | "cursor" | "gemini",
   options: {
     onOpenSourcePage?: () => void;
   } = {},
@@ -60,5 +60,18 @@ describe("ProviderDetailPage", () => {
 
     expect(html).not.toContain('data-provider-detail-open-source-page="true"');
     expect(html).not.toContain("Source-page recovery");
+  });
+
+  it("renders Cursor personal spend facts without claiming request remaining", () => {
+    const html = renderProviderDetail(createState(), "cursor");
+
+    expect(html).toContain("Visible usage context");
+    expect(html).toContain('class="usage-facts usage-facts--regular"');
+    expect(html).toContain("Total spend");
+    expect(html).toContain("Included");
+    expect(html).toContain("On-demand");
+    expect(html).toContain("Plan-included spend shown by Cursor");
+    expect(html).not.toContain("Usage unknown · requests");
+    expect(html).not.toContain("Visible Cursor usage:");
   });
 });
