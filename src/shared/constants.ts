@@ -66,6 +66,7 @@ export const PROVIDER_SOURCE_BLUEPRINTS: Record<
         priority: 2,
         label: "Cursor personal dashboard usage page",
         routeHints: [
+          "https://cursor.com/cn/dashboard/usage*",
           "https://cursor.com/dashboard/usage*",
           "https://cursor.com/*/dashboard/usage*",
         ],

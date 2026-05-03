@@ -742,4 +742,140 @@ describe("syncCursorProvider", () => {
       },
     });
   });
+
+  it("enables managed Cursor page opening on alarm after a page binding exists", async () => {
+    const attemptedAt = new Date(2026, 4, 4, 9, 15);
+    const getUsageSnapshot = vi.fn(async () =>
+      buildCursorPersonalPageResponse({
+        status: "open_page_required",
+        reason:
+          "Open the logged-in Cursor dashboard usage page before refreshing personal usage capture.",
+        chosenRoute: null,
+        routeStatuses: [],
+      }),
+    );
+    createCursorPersonalPageClientMock.mockReturnValue({
+      getUsageSnapshot,
+    });
+
+    await syncCursorProvider({
+      provider: baseProvider,
+      secrets: emptySecrets,
+      setting: {
+        ...grantedSetting,
+        sourcePreference: "session_page",
+        pageBinding: {
+          mode: "auto",
+          status: "stale",
+          tabId: 51,
+          matchedUrl: "https://cursor.com/cn/dashboard/usage",
+          matchedTitle: "Cursor - Usage",
+          updatedAt: "2026-05-04T09:00:00.000Z",
+        },
+      },
+      warningThresholdPercent: 80,
+      now: attemptedAt,
+      trigger: "alarm",
+    });
+
+    expect(createCursorPersonalPageClientMock).toHaveBeenCalledWith({
+      source: "fixture",
+      openPageWhenMissing: true,
+    });
+    expect(getUsageSnapshot).toHaveBeenCalledWith(
+      expect.objectContaining({
+        status: "stale",
+        matchedUrl: "https://cursor.com/cn/dashboard/usage",
+      }),
+    );
+  });
+
+  it("enables managed Cursor page opening on alarm before a page binding exists", async () => {
+    const attemptedAt = new Date(2026, 4, 4, 9, 20);
+    const getUsageSnapshot = vi.fn(async () =>
+      buildCursorPersonalPageResponse({
+        status: "open_page_required",
+        reason:
+          "Open the logged-in Cursor dashboard usage page before refreshing personal usage capture.",
+        chosenRoute: null,
+        routeStatuses: [],
+      }),
+    );
+    createCursorPersonalPageClientMock.mockReturnValue({
+      getUsageSnapshot,
+    });
+
+    await syncCursorProvider({
+      provider: baseProvider,
+      secrets: emptySecrets,
+      setting: {
+        ...grantedSetting,
+        sourcePreference: "auto",
+        pageBinding: createEmptyPageBinding(),
+      },
+      warningThresholdPercent: 80,
+      now: attemptedAt,
+      trigger: "alarm",
+    });
+
+    expect(createCursorPersonalPageClientMock).toHaveBeenCalledWith({
+      source: "fixture",
+      openPageWhenMissing: true,
+    });
+    expect(getUsageSnapshot).toHaveBeenCalledWith(
+      expect.objectContaining({
+        status: "unbound",
+        matchedUrl: null,
+      }),
+    );
+  });
+
+  it("does not auto-open the Cursor page repeatedly on alarms after logged-out detection", async () => {
+    const attemptedAt = new Date(2026, 4, 4, 9, 25);
+    createCursorPersonalPageClientMock.mockReturnValue({
+      getUsageSnapshot: vi.fn(async () =>
+        buildCursorPersonalPageResponse({
+          status: "logged_out",
+          reason:
+            "The current Cursor tab matched a logged-out state instead of a usable usage page.",
+          chosenRoute: null,
+          routeStatuses: [],
+        }),
+      ),
+    });
+
+    await syncCursorProvider({
+      provider: {
+        ...baseProvider,
+        warningDiagnostic: {
+          code: "page_session.logged_out",
+          category: "page_session",
+          severity: "warning",
+          rawMessage:
+            "The current Cursor tab matched a logged-out state instead of a usable usage page.",
+        },
+      },
+      secrets: emptySecrets,
+      setting: {
+        ...grantedSetting,
+        sourcePreference: "session_page",
+        pageBinding: {
+          mode: "auto",
+          status: "stale",
+          tabId: 51,
+          matchedUrl: "https://cursor.com/cn/dashboard/usage",
+          matchedTitle: "Cursor - Usage",
+          updatedAt: "2026-05-04T09:00:00.000Z",
+        },
+      },
+      warningThresholdPercent: 80,
+      now: attemptedAt,
+      trigger: "alarm",
+    });
+
+    expect(createCursorPersonalPageClientMock).toHaveBeenCalledWith({
+      source: "fixture",
+      openPageWhenMissing: false,
+    });
+  });
 });

@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [290_Phase_Progress_Divider_Visibility_And_RC9_Packaging.md](./Archive/290_Phase_Progress_Divider_Visibility_And_RC9_Packaging.md)
+- latest completed slice: [291_Phase_Cursor_Managed_Session_Page_And_RC10_Packaging.md](./Archive/291_Phase_Cursor_Managed_Session_Page_And_RC10_Packaging.md)
 
 Completed phases should be moved to:
 
@@ -733,6 +733,8 @@ Completed phases should be moved to:
 - the 2026-05-04 `Phase 289` closeout made the Settings top app bar adaptive, then bumped the package to `0.1.0-rc.8`, bumped the manifest to `0.1.0.8`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.8.zip`, and recorded the release package SHA256 in the Phase 289 archive
 - phase 290 depends on Phase 289 plus the user's rc8 visual smoke note because provider-card linear progress dividers still appeared partially hidden in Chrome
 - the 2026-05-04 `Phase 290` closeout replaced the linear progress row `gap + border-top` divider with explicit pseudo-dividers, then bumped the package to `0.1.0-rc.9`, bumped the manifest to `0.1.0.9`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.9.zip`, and recorded the release package SHA256 in the Phase 290 archive
+- phase 291 depends on the user's available Cursor account plus the proven Codex managed session-page pattern because Cursor personal usage needed the same non-active managed tab, reload-on-capture-failure, and hydration retry flow before the next package
+- the 2026-05-04 `Phase 291` closeout added Cursor managed session-page sync for `https://cursor.com/cn/dashboard/usage`, bumped the package to `0.1.0-rc.10`, bumped the manifest to `0.1.0.10`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.10.zip`, and recorded the release package SHA256 in the Phase 291 archive
 
 ## Delivery Standard For Each Phase
 

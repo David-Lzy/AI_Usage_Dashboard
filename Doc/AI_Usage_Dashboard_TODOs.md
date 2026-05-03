@@ -76,9 +76,9 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 290` execution priority:
+Current post-`Phase 291` execution priority:
 
-1. `P0` - use `0.1.0-rc.9` as the next install/review package; it includes the Phase 290 progress-divider visibility fix, Phase 289 Settings top-bar adaptive layout, Phase 288 source-chip row fix, Phase 287 progress-row spacing fix, and the Phase 285 post-rc4 smoke polish for provider cards, Settings navigation density, full-page Settings back-to-top positioning, and direct host-access refresh prompts.
+1. `P0` - use `0.1.0-rc.10` as the next install/review package; it includes the Phase 291 Cursor managed session-page sync update, Phase 290 progress-divider visibility fix, Phase 289 Settings top-bar adaptive layout, Phase 288 source-chip row fix, Phase 287 progress-row spacing fix, and the Phase 285 post-rc4 smoke polish for provider cards, Settings navigation density, full-page Settings back-to-top positioning, and direct host-access refresh prompts.
 2. `P1` - complete the `Direction 10.3` store asset-pack line: RDP Chrome is available for real toolbar-popup clicking and screenshot capture, so the remaining work is capture/import/archive closeout rather than more repo-only planning.
 3. `P2` - Provider closure waits on accounts:
    - JetBrains org-console reverification waits for a real org-visible `Users and licensing` session.
@@ -346,6 +346,7 @@ Phase status update:
 - `Phase 288` changed Settings source-card chips from a single-column grid to horizontal wrapping rows, then packaged `0.1.0-rc.7` for Chrome review
 - `Phase 289` made the Settings top app bar adaptive: wide tabs use a title/chips/actions row, while sidebar widths center actions and section chips, then packaged `0.1.0-rc.8` for Chrome review
 - `Phase 290` replaced provider-card linear progress row `gap + border-top` dividers with explicit row pseudo-dividers so internal lines stay visible, then packaged `0.1.0-rc.9` for Chrome review
+- `Phase 291` aligned Cursor personal usage with the Codex managed session-page pattern: the default route opens `https://cursor.com/cn/dashboard/usage`, capture failure triggers a real reload, hydration retry handles freshly opened dashboards, automatic sync can open a non-active managed tab under the same trigger gates, and `0.1.0-rc.10` packages the result for Chrome review
 - the old maintenance split queue is closed for the originally named local-safe targets: `material-theme.css`, `localized-copy.ts`, `SettingsPage.tsx`, `App.tsx`, and `standard-app-actions.ts` are now focused base, compatibility, route, or aggregator files rather than the next default work item
 - the remaining store-readiness blocker is still real native-toolbar popup capture/import/archive completion under `Direction 10.3`; RDP Chrome is now available for that manual operator step
 - the remaining high-value work in Direction 05 and Direction 04 is real operator evidence closure: archived real review exports from the shipped workspaces rather than more lifecycle tooling

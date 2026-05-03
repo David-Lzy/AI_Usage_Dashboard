@@ -4,9 +4,9 @@ Chrome side-panel extension for tracking usage, credits, and sync health across 
 
 Current release candidate:
 
-- package version: `0.1.0-rc.9`
-- Chrome manifest version: `0.1.0.9`
-- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.9.zip`
+- package version: `0.1.0-rc.10`
+- Chrome manifest version: `0.1.0.10`
+- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.10.zip`
 
 ## Current RC Matrix
 
@@ -27,7 +27,7 @@ Current personal-user paths:
 | Provider | Current personal-user path | Current design note |
 | --- | --- | --- |
 | Codex | `chatgpt.com/codex/cloud/settings/analytics#usage` first, with `chatgpt.com/codex/settings/usage` still under observation | shipped as a logged-in session-page path; the proven live surface already exposes remaining percentage and reset timing in the current usage windows |
-| Cursor | `cursor.com/dashboard/usage` | shipped as a logged-in session-page path for billing-period usage context, not exact remaining included requests |
+| Cursor | `cursor.com/cn/dashboard/usage` first, with locale-free `cursor.com/dashboard/usage` still matched | shipped as a logged-in session-page path for billing-period usage context; Phase 291 aligns it with the Codex managed non-active tab, reload-on-capture-failure, and hydration retry flow, but not exact remaining included requests |
 | Claude Code | `claude.ai/settings/usage` | 2026-04-22 live spike redirected the current free account to `claude.ai/upgrade`; defer until a real Pro or Max usage page is captured |
 | Gemini Code Assist | Google Cloud Gemini metrics page | 2026-04-22 spike confirmed a project-scoped Google Cloud console route; defer from the personal-user track unless product support expands to explicit project metrics |
 
@@ -40,7 +40,7 @@ Security posture for this track:
 
 Next execution queue:
 
-1. use `0.1.0-rc.9` for install/review passes; it includes the Phase 290 progress-divider visibility fix, Phase 289 Settings top-bar adaptive layout, Phase 288 source-chip row fix, Phase 287 progress-row spacing fix, and the Phase 285 post-rc4 smoke polish for provider cards, Settings navigation density, full-page back-to-top positioning, and direct host-access refresh prompts
+1. use `0.1.0-rc.10` for install/review passes; it includes the Phase 291 Cursor managed session-page sync update, Phase 290 progress-divider visibility fix, Phase 289 Settings top-bar adaptive layout, Phase 288 source-chip row fix, Phase 287 progress-row spacing fix, and the Phase 285 post-rc4 smoke polish for provider cards, Settings navigation density, full-page back-to-top positioning, and direct host-access refresh prompts
 2. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining store-popup screenshot capture and archive closeout now that RDP Chrome is available for manual native popup interaction
 3. keep provider closure account-gated: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 4. keep operator evidence closure below release/store work; here it means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not another runtime feature
@@ -616,7 +616,7 @@ npm run release
 
 Output artifact:
 
-- `release/ai-usage-dashboard-0.1.0-rc.9.zip`
+- `release/ai-usage-dashboard-0.1.0-rc.10.zip`
 
 The packaging script checks that:
 

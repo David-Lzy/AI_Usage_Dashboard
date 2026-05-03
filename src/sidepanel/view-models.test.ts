@@ -93,7 +93,7 @@ describe("sidepanel view models", () => {
     expect(cursor?.currentSourceFidelityLabel).toBe("Window-only vendor value");
     expect(cursor?.hostAccessRequirementLabel).toBe("Required");
     expect(cursor?.openableSessionPageUrl).toBe(
-      "https://cursor.com/dashboard/usage",
+      "https://cursor.com/cn/dashboard/usage",
     );
     expect(gemini?.currentSourceLabel).toBe("Policy only");
     expect(gemini?.currentSourceContractLabel).toBe("Shipped policy only");

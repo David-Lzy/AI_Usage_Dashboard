@@ -1,6 +1,6 @@
 # Release Packaging Guide
 
-Date: 2026-05-03
+Date: 2026-05-04
 
 Process rule:
 
@@ -30,17 +30,17 @@ Status note:
 Package version:
 
 - `package.json` uses the human-facing semver tag
-- current value: `0.1.0-rc.9`
+- current value: `0.1.0-rc.10`
 
 Chrome extension version:
 
 - `src/manifest.json` uses Chrome's required numeric-only version format
-- current value: `0.1.0.9`
+- current value: `0.1.0.10`
 
 Display version:
 
 - `src/manifest.json` also uses `version_name`
-- current value: `0.1.0-rc.9`
+- current value: `0.1.0-rc.10`
 
 Why the two values differ:
 
@@ -144,12 +144,12 @@ npx -y node@22 ./scripts/package-release.mjs
 
 Packaging output:
 
-- `release/ai-usage-dashboard-0.1.0-rc.9.zip`
-- SHA256: `20657b66802f277cd0f534fe81475e23d97da4d8a6843e192f05676f82501981`
+- `release/ai-usage-dashboard-0.1.0-rc.10.zip`
+- SHA256: `cce07ba5e6a37548a18b0d0502fdfbeb303ff7823d254ad29a0e9664cb12f091`
 
 Release context:
 
-- `0.1.0-rc.9` distributes the Phase 290 progress-divider visibility fix after the Phase 289 Settings top-bar adaptive layout, Phase 288 source-chip row fix, Phase 287 progress-row spacing fix, Phase 285 post-rc4 smoke polish, and earlier Phase 283 RDP Chrome validation of the Codex page-session reload retry path
+- `0.1.0-rc.10` distributes the Phase 291 Cursor managed session-page sync update after the Phase 290 progress-divider visibility fix, Phase 289 Settings top-bar adaptive layout, Phase 288 source-chip row fix, Phase 287 progress-row spacing fix, Phase 285 post-rc4 smoke polish, and earlier Phase 283 RDP Chrome validation of the Codex page-session reload retry path
 - provider closure waits on available real accounts; no new provider support claim is introduced by this package
 
 The packaging script checks:

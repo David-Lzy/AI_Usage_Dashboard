@@ -64,11 +64,16 @@ type CursorRouteDefinition = {
   urlPatterns: string[];
 };
 
+type CursorPersonalLiveCaptureOptions = {
+  openPageWhenMissing?: boolean;
+};
+
 const CURSOR_PERSONAL_ROUTE_DEFINITIONS: CursorRouteDefinition[] = [
   {
     routeKey: "dashboard_usage",
     pageLabel: "Cursor personal dashboard usage page",
     urlPatterns: [
+      "https://cursor.com/cn/dashboard/usage*",
       "https://cursor.com/dashboard/usage*",
       "https://cursor.com/*/dashboard/usage*",
     ],
@@ -261,12 +266,27 @@ async function captureRoute(
   client: PageSessionClient,
   route: CursorRouteDefinition,
   binding?: PageSessionBinding,
+  options: CursorPersonalLiveCaptureOptions = {},
 ): Promise<CursorPersonalRouteCapture> {
   const result = await client.capture({
     providerId: "cursor",
     pageLabel: route.pageLabel,
     urlPatterns: route.urlPatterns,
     binding,
+    reloadOnCaptureFailure: {
+      bypassCache: true,
+      waitForLoadTimeoutMs: 10_000,
+      loadPollIntervalMs: 250,
+    },
+    ...(options.openPageWhenMissing
+      ? {
+          openWhenMissing: {
+            url: "https://cursor.com/cn/dashboard/usage",
+            active: false,
+            closeOnUnmatched: true,
+          },
+        }
+      : {}),
     extraction: {
       mode: "dom",
     },
@@ -307,10 +327,11 @@ async function captureRoute(
 export async function captureCursorPersonalLiveFixture(
   client: PageSessionClient = createPageSessionClient(),
   binding?: PageSessionBinding,
+  options: CursorPersonalLiveCaptureOptions = {},
 ): Promise<CursorPersonalLiveFixture> {
   const routes = await Promise.all(
     CURSOR_PERSONAL_ROUTE_DEFINITIONS.map((route) =>
-      captureRoute(client, route, binding),
+      captureRoute(client, route, binding, options),
     ),
   );
   const matchedRoute = routes.find((route) => route.status === "matched");

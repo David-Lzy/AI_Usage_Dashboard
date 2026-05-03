@@ -19,21 +19,28 @@ Status note:
 - this provider note should track the current selected source path, support boundary, and official-source basis for Cursor
 - refresh it whenever the chosen source path, active release promise, or relevant official docs change
 
+Phase 291 runtime update:
+
+- Cursor personal usage now follows the same managed session-page boundary as Codex.
+- The preferred page-open route is `https://cursor.com/cn/dashboard/usage`, while locale-free and other locale-prefixed dashboard usage routes remain matched.
+- When the source is allowed to auto-open, the extension opens a managed non-active tab, reads the logged-in page DOM with granted `cursor.com` host access, reloads unreadable captures with `bypassCache: true`, and retries while a freshly opened dashboard hydrates.
+- This does not change the personal-data claim: the current Cursor personal page provides billing-period usage context and visible plan/state labels, not an exact remaining included-request counter.
+
 ## 1. Decision
 
-Selected MVP source path:
+Selected source paths:
 
 - `A1`: Cursor Team Admin API
+- `A2`: logged-in Cursor personal dashboard usage page
 
-Selected MVP support scope:
+Selected support scope:
 
 - Cursor team admins only
+- Cursor individual accounts when the user is already logged into `cursor.com` in Chrome and grants host access
 
 Deferred from MVP:
 
 - non-admin team members
-- individual personal subscriptions
-- dashboard DOM parsing fallback
 - event-level analytics ingestion from `POST /teams/filtered-usage-events`
 
 Reason:
@@ -160,11 +167,11 @@ Important access note:
 
 ## 5. Account-Type Matrix
 
-| Account type | Official path found | MVP support |
+| Account type | Official path found | Current support |
 | --- | --- | --- |
 | Team admin | Admin API | Yes |
-| Team member, non-admin | Can see own usage in dashboard per role docs, but no public member API found in reviewed docs | No |
-| Individual personal plan | Dashboard usage is documented, but no public API found in reviewed docs | No |
+| Team member, non-admin | Can see own usage in dashboard per role docs, but no public member API found in reviewed docs | Session-page only if the same dashboard usage route is available in the logged-in Chrome profile |
+| Individual personal plan | Dashboard usage is documented, but no public API found in reviewed docs | Session-page billing-period context through `https://cursor.com/cn/dashboard/usage`; exact remaining included requests unavailable |
 
 Inference note:
 
@@ -172,12 +179,12 @@ Inference note:
 
 ## 6. Normalized Mapping
 
-Selected normalized strategy for the first Cursor adapter:
+Selected normalized strategy for the Cursor adapter:
 
 - `providerId`: `cursor`
 - `providerLabel`: `Cursor`
 - `planName`: `Cursor Team`
-- `syncSource`: `official`
+- `syncSource`: `official` for Admin API, `page_parse` for the logged-in dashboard usage page
 - `quotaUnit`: `requests`
 - `quotaWindow`: `monthly`
 
@@ -192,6 +199,7 @@ Proposed field mapping:
   - exclude `free-owner`
 - `remaining`
   - `max(total - used, 0)`
+  - unavailable on the personal dashboard usage page until a proven exact remaining counter is exposed
 - `resetAt`
   - derive from `subscriptionCycleStart` from `POST /teams/spend`
   - expected cycle is monthly

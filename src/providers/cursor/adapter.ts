@@ -4,6 +4,7 @@ import type {
   ProviderSnapshot,
   ProviderSourceKind,
   ProviderSyncOutcome,
+  SyncTrigger,
 } from "../types";
 import {
   addMonths,
@@ -34,6 +35,7 @@ import {
 } from "../diagnostics";
 import { createCursorOfficialClient } from "./official";
 import { createCursorPersonalPageClient } from "./personal-page-client";
+import { hasPageBindingFingerprint } from "../../shared/page-bindings";
 import type { CursorPersonalUsageSnapshot } from "./personal-page-parser";
 
 type CursorAdapterContext = {
@@ -42,6 +44,7 @@ type CursorAdapterContext = {
   setting: ProviderSetting;
   warningThresholdPercent: number;
   now: Date;
+  trigger?: SyncTrigger;
 };
 
 type CursorSourceAttemptResult =
@@ -102,6 +105,36 @@ function canUseLiveCursorPersonalPage(): boolean {
     Boolean(chrome.runtime?.id) &&
     typeof chrome.tabs?.query === "function" &&
     typeof chrome.scripting?.executeScript === "function"
+  );
+}
+
+function shouldOpenCursorPageWhenMissing({
+  provider,
+  setting,
+  trigger,
+}: {
+  provider: ProviderSnapshot;
+  setting: ProviderSetting;
+  trigger: SyncTrigger;
+}): boolean {
+  if (trigger === "bootstrap") {
+    return false;
+  }
+
+  if (
+    trigger === "alarm" &&
+    provider.warningDiagnostic?.code === "page_session.logged_out"
+  ) {
+    return false;
+  }
+
+  if (hasPageBindingFingerprint(setting.pageBinding)) {
+    return true;
+  }
+
+  return (
+    setting.sourcePreference === "auto" ||
+    setting.sourcePreference === "session_page"
   );
 }
 
@@ -374,10 +407,12 @@ async function tryCursorPersonalSource({
   provider,
   syncedAt,
   setting,
+  trigger,
 }: {
   provider: ProviderSnapshot;
   syncedAt: string;
   setting: ProviderSetting;
+  trigger: SyncTrigger;
 }): Promise<CursorSourceAttemptResult> {
   if (setting.status === "missing") {
     const warningReason =
@@ -416,6 +451,11 @@ async function tryCursorPersonalSource({
       : "fixture";
     const client = createCursorPersonalPageClient({
       source: personalSource,
+      openPageWhenMissing: shouldOpenCursorPageWhenMissing({
+        provider,
+        setting,
+        trigger,
+      }),
     });
     const { result, pageBinding } = await client.getUsageSnapshot(
       setting.pageBinding,
@@ -592,6 +632,7 @@ export async function syncCursorProvider({
   setting,
   warningThresholdPercent,
   now,
+  trigger = "manual",
 }: CursorAdapterContext): Promise<ProviderSyncOutcome> {
   const syncedAt = formatSyncTimestamp(now);
   const sourcePreference = normalizeSourcePreference(
@@ -617,6 +658,7 @@ export async function syncCursorProvider({
             provider,
             syncedAt,
             setting,
+            trigger,
           });
 
     if (attempt.ok) {
