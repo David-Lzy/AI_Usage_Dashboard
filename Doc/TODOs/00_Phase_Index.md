@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [260_Phase_Settings_Source_Section_Component_Extraction.md](./Archive/260_Phase_Settings_Source_Section_Component_Extraction.md)
+- latest completed slice: [261_Phase_Settings_Preferences_Section_Component_Extraction.md](./Archive/261_Phase_Settings_Preferences_Section_Component_Extraction.md)
 
 Completed phases should be moved to:
 
@@ -673,6 +673,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 259` closeout extracted Settings section navigation active-state observation and scroll helpers into `src/sidepanel/use-settings-section-navigation.ts` while preserving sticky top-bar placement, section ids, reduced-motion scroll behavior, and the back-to-top FAB
 - phase 260 depends on phase 259 because source-card extraction should happen after Settings navigation state no longer lives inline in the page body
 - the 2026-05-03 `Phase 260` closeout extracted Settings Source Connections rendering into `src/sidepanel/components/SettingsSourceSection.tsx` while preserving source preference controls, diagnostic presentation, session-page actions, page-binding actions, and source truth labels
+- phase 261 depends on phase 260 because preferences extraction should happen after the other large Settings body sections have stable component boundaries
+- the 2026-05-03 `Phase 261` closeout extracted Settings global preferences rendering and option assembly into `src/sidepanel/components/SettingsPreferencesSection.tsx` while preserving preference validation, Material controls, action badge candidate generation, popup preview, theme seed handling, and parent dispatch wiring
 
 ## Delivery Standard For Each Phase
 
