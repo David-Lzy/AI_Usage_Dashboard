@@ -40,7 +40,7 @@ Security posture for this track:
 
 Next execution queue:
 
-1. continue splitting oversized UI/theme/localization files after the Phase 273 standard session-page actions split
+1. continue splitting oversized UI/theme/localization files after the Phase 274 Settings credential draft hook split
 2. use `0.1.0-rc.3` for install/review passes until the next release package is cut
 3. keep [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) in maintenance mode unless a concrete diagnostic-body localization need appears
 4. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining manual store-popup capture dependency
@@ -58,6 +58,7 @@ Maintenance note:
 - settings copy now lives in `src/shared/settings-localized-copy.ts`, while `src/shared/localized-copy.ts` keeps compatibility re-exports for Settings routes, section components, and view-model consumers
 - diagnostic presentation now lives in `src/shared/provider-diagnostic-presentation.ts`, while `src/shared/localized-copy.ts` keeps compatibility re-exports for diagnostic view-model consumers
 - standard session-page actions now live in `src/sidepanel/standard-app-session-page-actions.ts`, keeping Chrome tab discovery, source-page recovery, page-binding, and active-page attach flow out of the standard app action aggregator
+- Settings credential draft state now lives in `src/sidepanel/use-settings-credential-drafts.ts`, keeping provider API key and Codex workspace draft save/clear/input handlers out of `SettingsPage.tsx`
 
 ## Source Labels
 

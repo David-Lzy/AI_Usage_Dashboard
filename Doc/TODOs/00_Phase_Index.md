@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [273_Phase_Standard_App_Session_Page_Actions_Split.md](./Archive/273_Phase_Standard_App_Session_Page_Actions_Split.md)
+- latest completed slice: [274_Phase_Settings_Credential_Draft_Hook.md](./Archive/274_Phase_Settings_Credential_Draft_Hook.md)
 
 Completed phases should be moved to:
 
@@ -699,6 +699,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 272` closeout extracted provider diagnostic presentation into `src/shared/provider-diagnostic-presentation.ts` and reduced `src/shared/localized-copy.ts` to a compatibility export aggregator
 - phase 273 depends on phase 272 because the localization split queue is complete enough to switch the maintenance queue back to oversized standard app action code
 - the 2026-05-03 `Phase 273` closeout extracted standard app session-page open and attach handlers into `src/sidepanel/standard-app-session-page-actions.ts` while preserving the `createStandardAppActions` return contract
+- phase 274 depends on phase 273 because Settings credential draft ownership is the next narrow, local-safe extraction after standard app session-page action ownership moved out of the action aggregator
+- the 2026-05-03 `Phase 274` closeout extracted Settings credential and Codex workspace draft state into `src/sidepanel/use-settings-credential-drafts.ts` while preserving Settings UI behavior, credential dispatch semantics, and theme custom seed draft ownership in `SettingsPage.tsx`
 
 ## Delivery Standard For Each Phase
 

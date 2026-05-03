@@ -76,9 +76,9 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 273` execution priority:
+Current post-`Phase 274` execution priority:
 
-1. `P1` - continue splitting oversized implementation files now that the provider-card and shared CSS visual contracts are stable:
+1. `P1` - continue splitting oversized implementation files now that the provider-card, shared CSS, localization, standard app action, and Settings credential draft boundaries are stable:
    - `src/sidepanel/routes/SettingsPage.tsx`
    - `src/sidepanel/App.tsx`
    - `src/sidepanel/standard-app-actions.ts`
@@ -331,7 +331,8 @@ Phase status update:
 - `Phase 271` completed the `localized-copy.ts` settings copy split by moving `buildSettingsLocalizedCopy` plus source-label helpers into `src/shared/settings-localized-copy.ts` while preserving the legacy re-export path
 - `Phase 272` completed the `localized-copy.ts` diagnostic presentation split by moving `getProviderDiagnosticPresentation` plus private diagnostic formatters into `src/shared/provider-diagnostic-presentation.ts`, reducing `localized-copy.ts` to a compatibility export aggregator
 - `Phase 273` completed the standard-app session-page actions split by moving Chrome tab discovery, source-page recovery, page-binding, and active-page attach handlers into `src/sidepanel/standard-app-session-page-actions.ts`
-- the next maintenance follow-up should continue splitting oversized UI and localization files now that the provider-card and shared progress visual contracts are stable
+- `Phase 274` completed the Settings credential draft hook split by moving provider API key and Codex workspace draft state plus save/clear/input handlers into `src/sidepanel/use-settings-credential-drafts.ts`
+- the next maintenance follow-up should continue splitting oversized UI and localization files now that the provider-card, shared progress, localization, standard app action, and Settings credential draft contracts are stable
 - the remaining store-readiness blocker is still the real manual native-toolbar popup capture and archive completion under `Direction 10.3`
 - the remaining high-value work in Direction 05 and Direction 04 is now real-operator evidence closure rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete

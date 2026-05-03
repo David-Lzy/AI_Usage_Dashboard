@@ -46,6 +46,7 @@ import {
 import { buildSettingsSummaryItems } from "../settings-view-models";
 import { Toast } from "../components/Toast";
 import { TopBar } from "../components/TopBar";
+import { useSettingsCredentialDrafts } from "../use-settings-credential-drafts";
 import { useSettingsSectionNavigation } from "../use-settings-section-navigation";
 import { SettingsSourceSection } from "../components/SettingsSourceSection";
 import { SettingsPreferencesSection } from "../components/SettingsPreferencesSection";
@@ -157,12 +158,6 @@ export function SettingsPage({
     );
   }
 
-  const [credentialInputs, setCredentialInputs] = useState<
-    Record<ApiKeyProviderId, string>
-  >({
-    cursor: "",
-    "claude-code": "",
-  });
   const credentialProviders: CredentialProviderSection[] = [];
   const cursorProvider = findCredentialProvider("cursor");
   const claudeProvider = findCredentialProvider("claude-code");
@@ -171,8 +166,23 @@ export function SettingsPage({
       (provider): provider is ProviderSetting & { id: "codex" } =>
         provider.id === "codex",
     ) ?? null;
-  const [codexAnalyticsApiKeyInput, setCodexAnalyticsApiKeyInput] = useState("");
-  const [codexWorkspaceIdInput, setCodexWorkspaceIdInput] = useState("");
+  const {
+    codexAnalyticsApiKeyInput,
+    codexWorkspaceIdInput,
+    credentialInputs,
+    handleClearCodexConfig,
+    handleClearProviderApiKey,
+    handleProviderApiKeyInputChange,
+    handleSaveCodexConfig,
+    handleSaveProviderApiKey,
+    setCodexAnalyticsApiKeyInput,
+    setCodexWorkspaceIdInput,
+  } = useSettingsCredentialDrafts({
+    onSaveProviderAdminApiKey,
+    onClearProviderAdminApiKey,
+    onSaveCodexWorkspaceConfig,
+    onClearCodexWorkspaceConfig,
+  });
   const [themeCustomSeedDraft, setThemeCustomSeedDraft] = useState(
     settings.themeCustomSeedHex ?? "",
   );
@@ -252,63 +262,6 @@ export function SettingsPage({
       label: i18n.t("settings.sections.permissions"),
     },
   ];
-
-  function handleSaveProviderApiKey(
-    providerId: ApiKeyProviderId,
-    event: FormEvent<HTMLFormElement>,
-  ) {
-    event.preventDefault();
-    const apiKey = credentialInputs[providerId].trim();
-
-    if (!apiKey) {
-      return;
-    }
-
-    onSaveProviderAdminApiKey(providerId, apiKey);
-    setCredentialInputs((current) => ({
-      ...current,
-      [providerId]: "",
-    }));
-  }
-
-  function handleClearProviderApiKey(providerId: ApiKeyProviderId) {
-    setCredentialInputs((current) => ({
-      ...current,
-      [providerId]: "",
-    }));
-    onClearProviderAdminApiKey(providerId);
-  }
-
-  function handleSaveCodexConfig(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    const analyticsApiKey = codexAnalyticsApiKeyInput.trim();
-    const workspaceId = codexWorkspaceIdInput.trim();
-
-    if (!analyticsApiKey || !workspaceId) {
-      return;
-    }
-
-    onSaveCodexWorkspaceConfig(analyticsApiKey, workspaceId);
-    setCodexAnalyticsApiKeyInput("");
-    setCodexWorkspaceIdInput("");
-  }
-
-  function handleClearCodexConfig() {
-    setCodexAnalyticsApiKeyInput("");
-    setCodexWorkspaceIdInput("");
-    onClearCodexWorkspaceConfig();
-  }
-
-  function handleProviderApiKeyInputChange(
-    providerId: ApiKeyProviderId,
-    value: string,
-  ) {
-    setCredentialInputs((current) => ({
-      ...current,
-      [providerId]: value,
-    }));
-  }
 
   function handleApplyThemeCustomSeed(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
