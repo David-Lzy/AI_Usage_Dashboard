@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [257_Phase_Settings_Permissions_Component_Extraction.md](./Archive/257_Phase_Settings_Permissions_Component_Extraction.md)
+- latest completed slice: [258_Phase_Settings_Credentials_Component_Extraction.md](./Archive/258_Phase_Settings_Credentials_Component_Extraction.md)
 
 Completed phases should be moved to:
 
@@ -667,6 +667,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 256` closeout extracted Settings overview summary and visibility switch sections into `src/sidepanel/components/SettingsSections.tsx` while preserving localized strings and provider toggle dispatch in `SettingsPage.tsx`
 - phase 257 depends on phase 256 because the permissions section belongs in the same focused Settings section component module after overview and visibility proved that extraction boundary
 - the 2026-05-03 `Phase 257` closeout extracted Settings permissions rendering into `src/sidepanel/components/SettingsSections.tsx` while preserving localized strings and permission toggle dispatch in `SettingsPage.tsx`
+- phase 258 depends on phase 257 because the credentials section belongs in the same focused Settings section component module after permissions proved that form-adjacent section extraction can stay behavior-preserving
+- the 2026-05-03 `Phase 258` closeout extracted Settings credentials rendering into `src/sidepanel/components/SettingsSections.tsx` while preserving draft input state, credential save/clear dispatch, Codex workspace config dispatch, and stored-credential truth labels in `SettingsPage.tsx`
 
 ## Delivery Standard For Each Phase
 

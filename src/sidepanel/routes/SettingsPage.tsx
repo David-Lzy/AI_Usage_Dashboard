@@ -61,9 +61,11 @@ import {
   SettingsSectionNavigation,
 } from "../components/SettingsNavigation";
 import {
+  SettingsCredentialsSection,
   SettingsOverviewSection,
   SettingsPermissionsSection,
   SettingsVisibilitySection,
+  type CredentialProviderSection,
 } from "../components/SettingsSections";
 import { getPreferredScrollBehavior } from "../motion";
 import {
@@ -82,16 +84,6 @@ type SettingsToast = {
   tone: "success" | "error";
   title: string;
   message: string;
-};
-
-type CredentialProviderSection = {
-  provider: ProviderSetting & { id: ApiKeyProviderId };
-  title: string;
-  inputLabel: string;
-  helpText: string;
-  footerText: string;
-  placeholderMissing: string;
-  placeholderConfigured: string;
 };
 
 type SettingsPageProps = {
@@ -516,6 +508,16 @@ export function SettingsPage({
     onClearCodexWorkspaceConfig();
   }
 
+  function handleProviderApiKeyInputChange(
+    providerId: ApiKeyProviderId,
+    value: string,
+  ) {
+    setCredentialInputs((current) => ({
+      ...current,
+      [providerId]: value,
+    }));
+  }
+
   function handleApplyThemeCustomSeed(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -866,192 +868,25 @@ export function SettingsPage({
         onToggleProvider={onToggleProvider}
       />
 
-      {credentialProviders.length > 0 || codexProvider ? (
-        <section
-          className="dashboard-section settings-section-anchor"
-          id={SETTINGS_SECTION_IDS.credentials}
-        >
-          <div className="dashboard-section__header">
-            <div>
-              <p className="section-label">{i18n.t("settings.credentials.eyebrow")}</p>
-              <h2 className="section-title">{i18n.t("settings.credentials.title")}</h2>
-            </div>
-            <p className="supporting-copy">{i18n.t("settings.credentials.detail")}</p>
-          </div>
-
-          <div className="provider-shell-list">
-            {credentialProviders.map((item, index) => {
-              const isConfigured = item.provider.credentialStatus === "configured";
-              const currentInput = credentialInputs[item.provider.id];
-              const trimmedInput = currentInput.trim();
-
-              return (
-                <article key={item.provider.id} className="status-card">
-                  <div className="dashboard-section__header">
-                    <div>
-                      <p className="section-label">
-                        {settingsCopy.credentials.sectionLabel}
-                      </p>
-                      <h2 className="section-title">{item.title}</h2>
-                    </div>
-                    <p
-                      className={`credential-state ${isConfigured ? "credential-state--configured" : "credential-state--missing"}`}
-                    >
-                      {isConfigured
-                        ? settingsCopy.credentials.configured
-                        : settingsCopy.credentials.missing}
-                    </p>
-                  </div>
-
-                  <div className="credential-card">
-                    <p className="supporting-copy">{item.helpText}</p>
-
-                    <form
-                      className="credential-form"
-                      onSubmit={(event) =>
-                        handleSaveProviderApiKey(item.provider.id, event)
-                      }
-                    >
-                      <label className="form-field">
-                        <span className="form-field__label">{item.inputLabel}</span>
-                        <input
-                          className="form-field__control"
-                          type="password"
-                          autoComplete="off"
-                          spellCheck={false}
-                          value={currentInput}
-                          placeholder={
-                            isConfigured
-                              ? item.placeholderConfigured
-                              : item.placeholderMissing
-                          }
-                          onChange={(event) =>
-                            setCredentialInputs((current) => ({
-                              ...current,
-                              [item.provider.id]: event.target.value,
-                            }))
-                          }
-                        />
-                      </label>
-
-                      <div className="credential-actions">
-                        <button
-                          className="text-button"
-                          type="submit"
-                          disabled={!trimmedInput}
-                        >
-                          {settingsCopy.credentials.saveKey}
-                        </button>
-                        <button
-                          className="text-button"
-                          type="button"
-                          disabled={!isConfigured}
-                          onClick={() => handleClearProviderApiKey(item.provider.id)}
-                        >
-                          {settingsCopy.credentials.clearStoredKey}
-                        </button>
-                      </div>
-                    </form>
-
-                    <p className="supporting-copy">{item.footerText}</p>
-                  </div>
-                </article>
-              );
-            })}
-
-            {codexProvider ? (
-              <article className="status-card">
-                <div className="dashboard-section__header">
-                  <div>
-                    <p className="section-label">{settingsCopy.credentials.sectionLabel}</p>
-                    <h2 className="section-title">
-                      {settingsCopy.credentials.codexTitle}
-                    </h2>
-                  </div>
-                  <p
-                    className={`credential-state ${codexProvider.credentialStatus === "configured" ? "credential-state--configured" : "credential-state--missing"}`}
-                  >
-                    {codexProvider.credentialStatus === "configured"
-                      ? settingsCopy.credentials.configured
-                      : settingsCopy.credentials.missing}
-                  </p>
-                </div>
-
-                <div className="credential-card">
-                  <p className="supporting-copy">
-                    {settingsCopy.credentials.codexHelpText}
-                  </p>
-
-                  <form className="credential-form" onSubmit={handleSaveCodexConfig}>
-                    <label className="form-field">
-                      <span className="form-field__label">{settingsCopy.credentials.analyticsApiKeyLabel}</span>
-                      <input
-                        className="form-field__control"
-                        type="password"
-                        autoComplete="off"
-                        spellCheck={false}
-                        value={codexAnalyticsApiKeyInput}
-                        placeholder={
-                          codexProvider.credentialStatus === "configured"
-                            ? settingsCopy.credentials.codexAnalyticsPlaceholderConfigured
-                            : settingsCopy.credentials.codexAnalyticsPlaceholderMissing
-                        }
-                        onChange={(event) =>
-                          setCodexAnalyticsApiKeyInput(event.target.value)
-                        }
-                      />
-                    </label>
-
-                    <label className="form-field">
-                      <span className="form-field__label">{settingsCopy.credentials.workspaceIdLabel}</span>
-                      <input
-                        className="form-field__control"
-                        type="text"
-                        autoComplete="off"
-                        spellCheck={false}
-                        value={codexWorkspaceIdInput}
-                        placeholder={
-                          codexProvider.credentialStatus === "configured"
-                            ? settingsCopy.credentials.codexWorkspacePlaceholderConfigured
-                            : settingsCopy.credentials.codexWorkspacePlaceholderMissing
-                        }
-                        onChange={(event) =>
-                          setCodexWorkspaceIdInput(event.target.value)
-                        }
-                      />
-                    </label>
-
-                    <div className="credential-actions">
-                      <button
-                        className="text-button"
-                        type="submit"
-                        disabled={
-                          !codexAnalyticsApiKeyInput.trim() ||
-                          !codexWorkspaceIdInput.trim()
-                        }
-                      >
-                        {settingsCopy.credentials.saveConfig}
-                      </button>
-                      <button
-                        className="text-button"
-                        type="button"
-                        disabled={codexProvider.credentialStatus !== "configured"}
-                        onClick={handleClearCodexConfig}
-                      >
-                        {settingsCopy.credentials.clearStoredConfig}
-                      </button>
-                    </div>
-                  </form>
-
-                  <p className="supporting-copy">
-                    {settingsCopy.credentials.codexFooterText}
-                  </p>
-                </div>
-              </article>
-            ) : null}
-          </div>
-        </section>
-      ) : null}
+      <SettingsCredentialsSection
+        sectionId={SETTINGS_SECTION_IDS.credentials}
+        eyebrow={i18n.t("settings.credentials.eyebrow")}
+        title={i18n.t("settings.credentials.title")}
+        detail={i18n.t("settings.credentials.detail")}
+        credentialProviders={credentialProviders}
+        codexProvider={codexProvider}
+        credentialInputs={credentialInputs}
+        codexAnalyticsApiKeyInput={codexAnalyticsApiKeyInput}
+        codexWorkspaceIdInput={codexWorkspaceIdInput}
+        labels={settingsCopy.credentials}
+        onSaveProviderApiKey={handleSaveProviderApiKey}
+        onClearProviderApiKey={handleClearProviderApiKey}
+        onProviderApiKeyInputChange={handleProviderApiKeyInputChange}
+        onSaveCodexConfig={handleSaveCodexConfig}
+        onClearCodexConfig={handleClearCodexConfig}
+        onCodexAnalyticsApiKeyInputChange={setCodexAnalyticsApiKeyInput}
+        onCodexWorkspaceIdInputChange={setCodexWorkspaceIdInput}
+      />
 
       <section
         className="dashboard-section settings-section-anchor"
