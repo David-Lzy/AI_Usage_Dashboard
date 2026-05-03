@@ -30,17 +30,17 @@ Status note:
 Package version:
 
 - `package.json` uses the human-facing semver tag
-- current value: `0.1.0-rc.10`
+- current value: `0.1.0-rc.11`
 
 Chrome extension version:
 
 - `src/manifest.json` uses Chrome's required numeric-only version format
-- current value: `0.1.0.10`
+- current value: `0.1.0.11`
 
 Display version:
 
 - `src/manifest.json` also uses `version_name`
-- current value: `0.1.0-rc.10`
+- current value: `0.1.0-rc.11`
 
 Why the two values differ:
 
@@ -144,13 +144,13 @@ npx -y node@22 ./scripts/package-release.mjs
 
 Packaging output:
 
-- `release/ai-usage-dashboard-0.1.0-rc.10.zip`
-- SHA256: `cce07ba5e6a37548a18b0d0502fdfbeb303ff7823d254ad29a0e9664cb12f091`
+- `release/ai-usage-dashboard-0.1.0-rc.11.zip`
+- SHA256: `f7d19b7bb84975b25c0d9291460f6ca418006c0e93edd36fe063ac5870f2907e`
 
 Release context:
 
-- `0.1.0-rc.10` distributes the Phase 291 Cursor managed session-page sync update after the Phase 290 progress-divider visibility fix, Phase 289 Settings top-bar adaptive layout, Phase 288 source-chip row fix, Phase 287 progress-row spacing fix, Phase 285 post-rc4 smoke polish, and earlier Phase 283 RDP Chrome validation of the Codex page-session reload retry path
-- current source has moved past that package: Cursor logged-out detection, Cursor structured billing/spend usage facts, inline usage-window reset-label density, and formatted action-badge hover tooltip fixes require `Phase 293` / `0.1.0-rc.11` before they are represented in a release zip
+- `0.1.0-rc.11` distributes the Phase 293 post-rc10 package after the Phase 291 Cursor managed session-page sync update, Phase 290 progress-divider visibility fix, Phase 289 Settings top-bar adaptive layout, Phase 288 source-chip row fix, Phase 287 progress-row spacing fix, Phase 285 post-rc4 smoke polish, and earlier Phase 283 RDP Chrome validation of the Codex page-session reload retry path
+- this package includes the post-rc10 Cursor logged-out detection fix, Cursor structured billing/spend usage facts, inline usage-window reset-label density fix, and formatted action-badge hover tooltip with enabled Cursor context
 - provider closure waits on available real accounts; no new provider support claim is introduced by this package
 
 The packaging script checks:

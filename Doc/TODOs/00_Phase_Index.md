@@ -34,8 +34,8 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [293_Phase_RC11_Post_RC10_Packaging.md](./293_Phase_RC11_Post_RC10_Packaging.md)
-- latest completed slice: [292_Phase_Post_RC10_Status_Doc_Refresh.md](./Archive/292_Phase_Post_RC10_Status_Doc_Refresh.md)
+- active phase file: none
+- latest completed slice: [293_Phase_RC11_Post_RC10_Packaging.md](./Archive/293_Phase_RC11_Post_RC10_Packaging.md)
 
 Completed phases should be moved to:
 
@@ -736,7 +736,7 @@ Completed phases should be moved to:
 - phase 291 depends on the user's available Cursor account plus the proven Codex managed session-page pattern because Cursor personal usage needed the same non-active managed tab, reload-on-capture-failure, and hydration retry flow before the next package
 - the 2026-05-04 `Phase 291` closeout added Cursor managed session-page sync for `https://cursor.com/cn/dashboard/usage`, bumped the package to `0.1.0-rc.10`, bumped the manifest to `0.1.0.10`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.10.zip`, and recorded the release package SHA256 in the Phase 291 archive
 - phase 292 documents the post-rc10 source truth: after `0.1.0-rc.10` was packaged, the repo fixed Cursor logged-out detection, rendered Cursor visible billing/spend context as structured usage facts, and compacted line-style usage-window reset labels into the title row
-- phase 293 is active because the current `release/ai-usage-dashboard-0.1.0-rc.10.zip` does not include those post-rc10 source fixes; the next coherent release task is to cut `0.1.0-rc.11` from the current source, verify it, rebuild `dist`, and regenerate the release zip
+- the 2026-05-04 `Phase 293` closeout bumped the package to `0.1.0-rc.11`, bumped the manifest to `0.1.0.11`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.11.zip`, and recorded SHA256 `f7d19b7bb84975b25c0d9291460f6ca418006c0e93edd36fe063ac5870f2907e` in the Phase 293 archive
 
 ## Delivery Standard For Each Phase
 

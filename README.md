@@ -4,10 +4,10 @@ Chrome side-panel extension for tracking usage, credits, and sync health across 
 
 Current release candidate:
 
-- package version: `0.1.0-rc.10`
-- Chrome manifest version: `0.1.0.10`
-- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.10.zip`
-- source status: post-rc10 fixes have landed; cut `0.1.0-rc.11` before using a zip for the next install/review pass
+- package version: `0.1.0-rc.11`
+- Chrome manifest version: `0.1.0.11`
+- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.11.zip`
+- source status: source, built `dist`, and packaged zip are aligned after `Phase 293`
 
 ## Current RC Matrix
 
@@ -41,12 +41,11 @@ Security posture for this track:
 
 Next execution queue:
 
-1. run `Phase 293` to create `0.1.0-rc.11`; the existing `rc.10` zip is the latest package, but it predates the post-rc10 Cursor logged-out detection fix, Cursor structured usage facts, inline usage-window reset-label density fix, and formatted action-badge tooltip with enabled Cursor context
-2. use `0.1.0-rc.11` for the next install/review pass after packaging, and reload the unpacked `dist/` extension in RDP Chrome before visual judgment
-3. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining store-popup screenshot capture and archive closeout now that RDP Chrome is available for manual native popup interaction
-4. keep provider closure account-gated: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
-5. keep operator evidence closure below release/store work; here it means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not another runtime feature
-6. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
+1. use `0.1.0-rc.11` for the next install/review pass, and reload the unpacked `dist/` extension in RDP Chrome before visual judgment
+2. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining store-popup screenshot capture and archive closeout now that RDP Chrome is available for manual native popup interaction
+3. keep provider closure account-gated: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
+4. keep operator evidence closure below release/store work; here it means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not another runtime feature
+5. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
 
 Maintenance note:
 
@@ -618,11 +617,11 @@ npm run release
 
 Output artifact:
 
-- `release/ai-usage-dashboard-0.1.0-rc.10.zip`
+- `release/ai-usage-dashboard-0.1.0-rc.11.zip`
 
 Packaging note:
 
-- `rc.10` is the latest existing zip, but the active `Phase 293` packaging slice should create `rc.11` before the next install/review pass.
+- `rc.11` includes the post-rc10 Cursor logged-out detection fix, Cursor structured usage facts, inline usage-window reset-label density fix, and formatted action-badge tooltip with enabled Cursor context.
 
 The packaging script checks that:
 
