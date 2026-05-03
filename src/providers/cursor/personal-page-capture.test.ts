@@ -1,6 +1,57 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
-import { summarizeCursorPersonalPage } from "./personal-page-capture";
+import type {
+  PageSessionCapturedPage,
+  PageSessionClient,
+  PageSessionResult,
+} from "../page-session";
+import {
+  captureCursorPersonalLiveFixture,
+  summarizeCursorPersonalPage,
+} from "./personal-page-capture";
+
+function buildCaptureClient(page: PageSessionCapturedPage): PageSessionClient {
+  return {
+    capture: vi.fn<PageSessionClient["capture"]>(async (definition) => {
+      const matchStatus = definition.match(page);
+
+      if (matchStatus === "matched") {
+        return {
+          status: "matched",
+          page,
+          target: {
+            tabId: 77,
+            bindingMode: "auto",
+            active: false,
+            lastAccessed: null,
+          },
+          attempts: [
+            {
+              tabId: 77,
+              bindingMode: "auto",
+              status: "matched",
+              url: page.url,
+              title: page.title,
+            },
+          ],
+        } satisfies PageSessionResult;
+      }
+
+      return {
+        status: matchStatus === "logged_out" ? "logged_out" : "not_found",
+        attempts: [
+          {
+            tabId: 77,
+            bindingMode: "auto",
+            status: matchStatus,
+            url: page.url,
+            title: page.title,
+          },
+        ],
+      } satisfies PageSessionResult;
+    }),
+  };
+}
 
 describe("summarizeCursorPersonalPage", () => {
   it("prefers boot-data when Next.js markers are present", () => {
@@ -85,5 +136,68 @@ describe("summarizeCursorPersonalPage", () => {
       "Export CSV",
       "Mar 23 - Apr 21",
     ]);
+  });
+
+  it("matches an authenticated usage dashboard even when auth copy exists in the DOM", async () => {
+    const fixture = await captureCursorPersonalLiveFixture(
+      buildCaptureClient({
+        url: "https://cursor.com/cn/dashboard/usage",
+        title: "Cursor - The best way to code with AI",
+        heading: "Usage",
+        html: `
+          <html>
+            <body>
+              <nav>Usage</nav>
+              <section>
+                <h1>Pro <span>Current</span></h1>
+                <p>On-Demand Usage is Off</p>
+                <p>Total spend</p>
+                <p>Included</p>
+                <p>On-demand</p>
+                <h2>Your Usage</h2>
+                <p>Your usage per day across this billing period</p>
+                <p>Apr 28 - May 04</p>
+              </section>
+              <div hidden>
+                <button>Continue with Google</button>
+                <button>Continue with Github</button>
+              </div>
+            </body>
+          </html>
+        `,
+      }),
+    );
+
+    expect(fixture.routes[0]).toMatchObject({
+      status: "matched",
+      matchedUrl: "https://cursor.com/cn/dashboard/usage",
+    });
+    expect(fixture.routes[0]?.summary?.textSnippets).toContain(
+      "On-Demand Usage is Off",
+    );
+  });
+
+  it("still treats a sign-in-only Cursor page as logged out", async () => {
+    const fixture = await captureCursorPersonalLiveFixture(
+      buildCaptureClient({
+        url: "https://cursor.com/cn/dashboard/usage",
+        title: "Cursor - Sign in",
+        heading: "Sign in to Cursor",
+        html: `
+          <html>
+            <body>
+              <h1>Sign in to Cursor</h1>
+              <button>Continue with Google</button>
+              <button>Continue with Github</button>
+            </body>
+          </html>
+        `,
+      }),
+    );
+
+    expect(fixture.routes[0]).toMatchObject({
+      status: "logged_out",
+      matchedUrl: null,
+    });
   });
 });

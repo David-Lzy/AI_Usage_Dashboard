@@ -152,22 +152,76 @@ function detectLocalePrefix(url: string): string | null {
   return null;
 }
 
+function isCursorUsageDashboardPath(parsedUrl: URL | null): boolean {
+  if (!parsedUrl || parsedUrl.hostname !== "cursor.com") {
+    return false;
+  }
+
+  return (
+    /^\/dashboard\/usage\/?$/i.test(parsedUrl.pathname) ||
+    /^\/[a-z]{2}(?:-[a-z]{2})?\/dashboard\/usage\/?$/i.test(
+      parsedUrl.pathname,
+    )
+  );
+}
+
+function hasCursorUsageDashboardShell(page: PageSessionCapturedPage): boolean {
+  const textLines = toTextLines(page.html).map((line) => line.toLowerCase());
+  const hasUsageHeading = textLines.some(
+    (line) =>
+      line === "usage" ||
+      line === "your usage" ||
+      line.includes("your usage per day across this billing period") ||
+      line.includes("使用情况"),
+  );
+  const hasSpendCards = textLines.some(
+    (line) =>
+      line === "total spend" ||
+      line === "included" ||
+      line === "on-demand" ||
+      line.includes("cumulative spend"),
+  );
+  const hasOnDemandState = textLines.some((line) =>
+    /on-demand usage is (on|off)/i.test(line),
+  );
+  const hasPlanCard = textLines.some((line) =>
+    /^(hobby|pro|pro\+|ultra|business|team)(\s|$)/i.test(line),
+  );
+
+  return (
+    (hasUsageHeading && (hasSpendCards || hasOnDemandState || hasPlanCard)) ||
+    hasOnDemandState
+  );
+}
+
 function isLoggedOutCursorPage(page: PageSessionCapturedPage): boolean {
   const parsedUrl = parseUrl(page.url);
   const url = page.url.toLowerCase();
   const title = page.title.toLowerCase();
-  const html = page.html.toLowerCase();
+  const visibleText = toTextLines(page.html).join("\n").toLowerCase();
+
+  if (parsedUrl?.hostname !== "cursor.com") {
+    return true;
+  }
+
+  if (url.includes("/sign-in") || url.includes("/login")) {
+    return true;
+  }
+
+  if (
+    isCursorUsageDashboardPath(parsedUrl) &&
+    hasCursorUsageDashboardShell(page)
+  ) {
+    return false;
+  }
 
   return (
-    url.includes("/sign-in") ||
-    url.includes("/login") ||
-    parsedUrl?.hostname !== "cursor.com" ||
     title.includes("sign in") ||
-    html.includes("sign in to cursor") ||
-    html.includes("continue with google") ||
-    html.includes("continue with github") ||
-    html.includes("登录") ||
-    html.includes("继续使用 google")
+    visibleText.includes("sign in to cursor") ||
+    visibleText.includes("continue with google") ||
+    visibleText.includes("continue with github") ||
+    visibleText.includes("登录") ||
+    visibleText.includes("继续使用 google")
   );
 }
 
@@ -181,11 +235,7 @@ function matchesCursorRoute(
     return false;
   }
 
-  const pathMatches =
-    /^\/dashboard\/usage\/?$/i.test(parsedUrl.pathname) ||
-    /^\/[a-z]{2}(?:-[a-z]{2})?\/dashboard\/usage\/?$/i.test(parsedUrl.pathname);
-
-  if (!pathMatches) {
+  if (!isCursorUsageDashboardPath(parsedUrl)) {
     return false;
   }
 
