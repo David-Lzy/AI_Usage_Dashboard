@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-03:
 
-- the numbered phase queue is now completed through `Phase 259`
+- the numbered phase queue is now completed through `Phase 260`
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -142,6 +142,7 @@ As of 2026-05-03:
 - `Phase 257` completed the Settings permissions component extraction by moving permissions rendering out of the oversized Settings page into the focused Settings section component module
 - `Phase 258` completed the Settings credentials component extraction by moving credential card/form rendering out of the oversized Settings page into the focused Settings section component module while preserving draft state and dispatch ownership in `SettingsPage.tsx`
 - `Phase 259` completed the Settings section navigation hook extraction by moving active-section observation and scroll helpers out of the oversized Settings page into `src/sidepanel/use-settings-section-navigation.ts`
+- `Phase 260` completed the Settings source section component extraction by moving Source Connections card rendering out of the oversized Settings page into `src/sidepanel/components/SettingsSourceSection.tsx` while preserving source preference controls, diagnostics, and session-page actions
 - the next local-safe execution slice remains maintenance-oriented file splitting for the remaining oversized UI/theme/localization modules
 - `Direction 10.3` still retains the real manual native-toolbar popup capture dependency for final store assets; the existing request has staged full-page captures but still needs the native popup slots before archive completion
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`

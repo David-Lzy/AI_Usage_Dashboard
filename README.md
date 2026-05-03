@@ -40,7 +40,7 @@ Security posture for this track:
 
 Next execution queue:
 
-1. continue splitting oversized UI/theme/localization files after the Phase 259 Settings section navigation hook extraction
+1. continue splitting oversized UI/theme/localization files after the Phase 260 Settings source section component extraction
 2. use `0.1.0-rc.3` for install/review passes until the next release package is cut
 3. keep [Direction 09 - Internationalization Bootstrap And Pilot Locales](./Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md) in maintenance mode unless a concrete diagnostic-body localization need appears
 4. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining manual store-popup capture dependency
@@ -152,6 +152,7 @@ Current honesty boundaries:
 - Settings permissions section now lives in `src/sidepanel/components/SettingsSections.tsx`, keeping permission prompt rendering out of the oversized Settings page while preserving localized strings and permission toggle dispatch
 - Settings credentials section now lives in `src/sidepanel/components/SettingsSections.tsx`, keeping credential card/form rendering out of the oversized Settings page while preserving local draft state, credential dispatch, and Codex workspace config dispatch in `SettingsPage.tsx`
 - Settings section navigation state now lives in `src/sidepanel/use-settings-section-navigation.ts`, keeping active-section observation and scroll helpers out of the oversized Settings page while preserving sticky top-bar placement and the back-to-top FAB
+- Settings source section now lives in `src/sidepanel/components/SettingsSourceSection.tsx`, keeping Source Connections card rendering out of the oversized Settings page while preserving source preference controls, diagnostic presentation, and session-page actions
 - Cursor personal usage-page sync is now explicitly labeled as `Window-only vendor value`
 - Gemini remains `Policy only`; the observed Google Cloud metrics route is project-scoped and not treated as personal quota
 - the UI now makes the trust boundary explicit in Settings and provider detail, including host-access requirements, credential persistence, and the fact that cookies stay forbidden

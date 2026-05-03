@@ -221,6 +221,7 @@
     "phase257:review": "./scripts/with-preferred-node.sh node ./scripts/phase257-settings-permissions-component-review.mjs",
     "phase258:review": "./scripts/with-preferred-node.sh node ./scripts/phase258-settings-credentials-component-review.mjs",
     "phase259:review": "./scripts/with-preferred-node.sh node ./scripts/phase259-settings-section-navigation-hook-review.mjs",
+    "phase260:review": "./scripts/with-preferred-node.sh node ./scripts/phase260-settings-source-section-component-review.mjs",
     "interaction-audit:bundle": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-handoff-bundle.mjs",
     "interaction-audit:archive": "./scripts/with-preferred-node.sh node ./scripts/archive-interaction-audit-review.mjs",
     "interaction-audit:refresh-archive-index": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-review-archive-index.mjs",

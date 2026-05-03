@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [259_Phase_Settings_Section_Navigation_Hook_Extraction.md](./Archive/259_Phase_Settings_Section_Navigation_Hook_Extraction.md)
+- latest completed slice: [260_Phase_Settings_Source_Section_Component_Extraction.md](./Archive/260_Phase_Settings_Source_Section_Component_Extraction.md)
 
 Completed phases should be moved to:
 
@@ -671,6 +671,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 258` closeout extracted Settings credentials rendering into `src/sidepanel/components/SettingsSections.tsx` while preserving draft input state, credential save/clear dispatch, Codex workspace config dispatch, and stored-credential truth labels in `SettingsPage.tsx`
 - phase 259 depends on phases 255 and 258 because Settings section navigation rendering was already componentized and the remaining page-owned navigation state can now move into a focused hook without mixing it with credentials extraction
 - the 2026-05-03 `Phase 259` closeout extracted Settings section navigation active-state observation and scroll helpers into `src/sidepanel/use-settings-section-navigation.ts` while preserving sticky top-bar placement, section ids, reduced-motion scroll behavior, and the back-to-top FAB
+- phase 260 depends on phase 259 because source-card extraction should happen after Settings navigation state no longer lives inline in the page body
+- the 2026-05-03 `Phase 260` closeout extracted Settings Source Connections rendering into `src/sidepanel/components/SettingsSourceSection.tsx` while preserving source preference controls, diagnostic presentation, session-page actions, page-binding actions, and source truth labels
 
 ## Delivery Standard For Each Phase
 
