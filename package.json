@@ -1,6 +1,6 @@
 {
   "name": "ai-usage-dashboard",
-  "version": "0.1.0-rc.5",
+  "version": "0.1.0-rc.6",
   "private": true,
   "type": "module",
   "engines": {
@@ -248,6 +248,7 @@
     "phase284:review": "./scripts/with-preferred-node.sh node ./scripts/phase284-rc4-release-package-review.mjs",
     "phase285:review": "./scripts/with-preferred-node.sh node ./scripts/phase285-post-rc4-smoke-polish-review.mjs",
     "phase286:review": "./scripts/with-preferred-node.sh node ./scripts/phase286-rc5-release-package-review.mjs",
+    "phase287:review": "./scripts/with-preferred-node.sh node ./scripts/phase287-progress-row-spacing-rc6-review.mjs",
     "interaction-audit:bundle": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-handoff-bundle.mjs",
     "interaction-audit:archive": "./scripts/with-preferred-node.sh node ./scripts/archive-interaction-audit-review.mjs",
     "interaction-audit:refresh-archive-index": "./scripts/with-preferred-node.sh node ./scripts/build-interaction-audit-review-archive-index.mjs",

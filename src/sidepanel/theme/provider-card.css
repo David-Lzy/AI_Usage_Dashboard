@@ -152,9 +152,21 @@
 
 .provider-card__progress-surface
   .usage-window-progress-list__item {
-  padding: 0;
+  padding: var(--app-space-2) 0;
   border: 0;
   background: transparent;
+}
+
+.provider-card__progress-surface
+  .usage-window-progress-list--line
+  .usage-window-progress-list__item:first-child {
+  padding-top: 0;
+}
+
+.provider-card__progress-surface
+  .usage-window-progress-list--line
+  .usage-window-progress-list__item:last-child {
+  padding-bottom: 0;
 }
 
 .provider-card__progress-surface
@@ -174,7 +186,7 @@
 .provider-card__progress-surface
   .usage-window-progress-list__item
   + .usage-window-progress-list__item {
-  padding-top: var(--app-space-2);
+  padding-top: var(--app-space-3);
   border-top: 1px solid var(--md-sys-color-outline-variant);
 }
 

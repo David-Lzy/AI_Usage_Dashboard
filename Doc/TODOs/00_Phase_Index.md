@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [286_Phase_RC5_Release_Packaging.md](./Archive/286_Phase_RC5_Release_Packaging.md)
+- latest completed slice: [287_Phase_Progress_Row_Spacing_And_RC6_Packaging.md](./Archive/287_Phase_Progress_Row_Spacing_And_RC6_Packaging.md)
 
 Completed phases should be moved to:
 
@@ -725,6 +725,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 285` closeout completed post-rc4 smoke polish: provider-card circular cell boundaries, horizontal source chips, tighter Settings sticky chips, viewport-fixed full-page Settings FAB, and direct host-access prompting before one missing-provider refresh
 - phase 286 depends on Phase 285 because the next Chrome install/review package should include those post-rc4 smoke fixes instead of leaving the user on the older `rc.4` artifact
 - the 2026-05-03 `Phase 286` closeout bumped the package to `0.1.0-rc.5`, bumped the manifest to `0.1.0.5`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.5.zip`, and recorded the release package SHA256 in the Phase 286 archive
+- phase 287 depends on Phase 286 plus the user's rc5 visual smoke note because the dashboard provider-card linear progress rows still had cramped divider/content spacing in Chrome
+- the 2026-05-04 `Phase 287` closeout tightened linear progress row padding, divider spacing, and remaining-label wrapping, then bumped the package to `0.1.0-rc.6`, bumped the manifest to `0.1.0.6`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.6.zip`, and recorded the release package SHA256 in the Phase 287 archive
 
 ## Delivery Standard For Each Phase
 

@@ -30,15 +30,23 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--app-space-2);
+  min-width: 0;
+}
+
+.usage-progress__meta > .supporting-copy {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .usage-progress__value {
+  flex: 0 0 auto;
   margin: 0;
   color: var(--md-sys-color-on-surface);
   font-family: var(--md-sys-typescale-label-large-font);
   font-size: var(--md-sys-typescale-label-large-size);
   font-weight: var(--md-sys-typescale-label-large-weight);
   line-height: var(--md-sys-typescale-label-large-line-height);
+  white-space: nowrap;
 }
 
 .usage-progress__value--indeterminate {
