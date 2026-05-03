@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [285_Phase_Post_RC4_Smoke_Polish_And_Host_Access_Refresh.md](./Archive/285_Phase_Post_RC4_Smoke_Polish_And_Host_Access_Refresh.md)
+- latest completed slice: [286_Phase_RC5_Release_Packaging.md](./Archive/286_Phase_RC5_Release_Packaging.md)
 
 Completed phases should be moved to:
 
@@ -723,6 +723,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 284` closeout bumped the package to `0.1.0-rc.4`, bumped the manifest to `0.1.0.4`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.4.zip`, and recorded the release package SHA256 in the Phase 284 archive
 - phase 285 depends on Phase 284 plus the user's post-rc4 visual smoke notes because the next store-screenshot pass should not preserve obvious provider-card, Settings navigation, full-page FAB, or host-access refresh friction
 - the 2026-05-03 `Phase 285` closeout completed post-rc4 smoke polish: provider-card circular cell boundaries, horizontal source chips, tighter Settings sticky chips, viewport-fixed full-page Settings FAB, and direct host-access prompting before one missing-provider refresh
+- phase 286 depends on Phase 285 because the next Chrome install/review package should include those post-rc4 smoke fixes instead of leaving the user on the older `rc.4` artifact
+- the 2026-05-03 `Phase 286` closeout bumped the package to `0.1.0-rc.5`, bumped the manifest to `0.1.0.5`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.5.zip`, and recorded the release package SHA256 in the Phase 286 archive
 
 ## Delivery Standard For Each Phase
 
