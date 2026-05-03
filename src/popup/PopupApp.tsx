@@ -23,6 +23,11 @@ import {
   type SourcePageRecoverySourceState,
 } from "../shared/source-page-recovery";
 import {
+  findHostAccessRefreshCandidate,
+  hasDirectHostAccessRequest,
+  requestHostAccessForProvider,
+} from "../shared/host-access-request";
+import {
   buildPopupSummaryLabels,
   createRuntimeI18n,
   DEFAULT_APP_LOCALE_PREFERENCE,
@@ -350,6 +355,37 @@ export function PopupApp() {
 
   async function handleRefresh() {
     setIsRefreshing(true);
+
+    const hostAccessCandidate =
+      loadState.status === "ready"
+        ? findHostAccessRefreshCandidate(loadState.appState)
+        : null;
+
+    if (hostAccessCandidate && hasDirectHostAccessRequest()) {
+      try {
+        const granted = await requestHostAccessForProvider(hostAccessCandidate);
+
+        if (!granted) {
+          setLoadState({
+            status: "error",
+            message: `${hostAccessCandidate.label} access was not granted. Reopen the popup and refresh again after granting host access.`,
+          });
+          setIsRefreshing(false);
+          return;
+        }
+      } catch (error) {
+        setLoadState({
+          status: "error",
+          message:
+            error instanceof Error
+              ? error.message
+              : "The browser rejected the host access request.",
+        });
+        setIsRefreshing(false);
+        return;
+      }
+    }
+
     const response = await sendAppMessage({ type: "app:request-refresh" });
 
     if (!response.ok) {

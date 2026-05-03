@@ -1,3 +1,5 @@
+import { createPortal } from "react-dom";
+
 import type { SettingsSectionId } from "../settings-section-ids";
 
 export type SettingsSectionNavItem = {
@@ -51,7 +53,7 @@ export function SettingsBackToTopButton({
   shortLabel,
   onClick,
 }: SettingsBackToTopButtonProps) {
-  return (
+  const button = (
     <button
       className="settings-back-to-top-fab"
       type="button"
@@ -74,4 +76,10 @@ export function SettingsBackToTopButton({
       <span className="settings-back-to-top-fab__label">{shortLabel}</span>
     </button>
   );
+
+  if (typeof document === "undefined") {
+    return button;
+  }
+
+  return createPortal(button, document.body);
 }

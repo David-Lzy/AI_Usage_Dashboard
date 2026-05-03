@@ -9,6 +9,10 @@ import {
   hasDirectPermissionControl,
   openFullPageRoute,
 } from "./app-browser-controls";
+import {
+  findHostAccessRefreshCandidate,
+  requestHostAccessForProvider,
+} from "../shared/host-access-request";
 import type { SidePanelRouteState } from "./route-state";
 import { createStandardAppSettingsActions } from "./standard-app-settings-actions";
 import { createStandardAppSessionPageActions } from "./standard-app-session-page-actions";
@@ -55,15 +59,49 @@ export function createStandardAppActions({
       ? getProviderLabel(appState.providerSettings, providerId)
       : "All providers";
 
-    void applyMessage(
-      { type: "app:request-refresh", providerId },
-      {
-        tone: "success",
-        title: `${providerLabel} refreshed`,
-        message:
-          "The provider state was refreshed through the shared sync flow.",
-      },
-    );
+    void (async () => {
+      const hostAccessCandidate = findHostAccessRefreshCandidate(
+        appState,
+        providerId,
+      );
+
+      if (hostAccessCandidate && hasDirectPermissionControl()) {
+        try {
+          const granted =
+            await requestHostAccessForProvider(hostAccessCandidate);
+
+          if (!granted) {
+            setToast({
+              tone: "error",
+              title: `${hostAccessCandidate.label} access denied`,
+              message:
+                "The permission request was dismissed or denied, so refresh cannot read the provider page yet.",
+            });
+            return;
+          }
+        } catch (error) {
+          setToast({
+            tone: "error",
+            title: `${hostAccessCandidate.label} access failed`,
+            message:
+              error instanceof Error
+                ? error.message
+                : "The browser rejected the host access request.",
+          });
+          return;
+        }
+      }
+
+      await applyMessage(
+        { type: "app:request-refresh", providerId },
+        {
+          tone: "success",
+          title: `${providerLabel} refreshed`,
+          message:
+            "The provider state was refreshed through the shared sync flow.",
+        },
+      );
+    })();
   }
 
   function handleOpenCurrentRouteInFullPage() {

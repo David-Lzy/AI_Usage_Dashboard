@@ -340,6 +340,7 @@ Phase status update:
 - `Phase 283` completed the Codex page-session capture reload retry by reloading an unreadable existing Codex tab with `bypassCache: true` and retrying capture once before surfacing `capture_unavailable`
 - `Phase 283` was then confirmed in RDP Chrome by the user with no issue reported
 - `Phase 284` packaged `0.1.0-rc.4` so the release zip includes the Phase 215-283 session-page, UI, maintenance, and Codex reload-retry changes after the older `rc.3` boundary
+- `Phase 285` completed post-rc4 smoke polish by restoring provider-card circular cell boundaries, keeping source chips horizontal, tightening Settings sticky chips, fixing full-page Settings back-to-top FAB positioning, and adding direct host access refresh prompts for Codex-style missing-host states
 - the old maintenance split queue is closed for the originally named local-safe targets: `material-theme.css`, `localized-copy.ts`, `SettingsPage.tsx`, `App.tsx`, and `standard-app-actions.ts` are now focused base, compatibility, route, or aggregator files rather than the next default work item
 - the remaining store-readiness blocker is still real native-toolbar popup capture/import/archive completion under `Direction 10.3`; RDP Chrome is now available for that manual operator step
 - the remaining high-value work in Direction 05 and Direction 04 is real operator evidence closure: archived real review exports from the shipped workspaces rather than more lifecycle tooling

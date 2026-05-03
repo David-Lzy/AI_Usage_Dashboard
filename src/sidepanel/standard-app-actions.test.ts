@@ -50,17 +50,95 @@ describe("createStandardAppActions", () => {
     expect(applyMessage).not.toHaveBeenCalled();
   });
 
-  it("dispatches provider refresh through the shared sync flow", () => {
+  it("dispatches provider refresh through the shared sync flow", async () => {
     const { actions, applyMessage } = createActionHarness();
 
     actions.handleRefresh("codex");
 
-    expect(applyMessage).toHaveBeenCalledWith(
-      { type: "app:request-refresh", providerId: "codex" },
-      expect.objectContaining({
-        title: "Codex refreshed",
-      }),
+    await vi.waitFor(() => {
+      expect(applyMessage).toHaveBeenCalledWith(
+        { type: "app:request-refresh", providerId: "codex" },
+        expect.objectContaining({
+          title: "Codex refreshed",
+        }),
+      );
+    });
+  });
+
+  it("requests missing host access before refreshing one provider", async () => {
+    const appState = structuredClone(SAMPLE_APP_STATE);
+    const codex = appState.providerSettings.find(
+      (provider) => provider.id === "codex",
     );
+
+    if (!codex) {
+      throw new Error("Missing Codex provider setting.");
+    }
+
+    codex.status = "missing";
+
+    const request = vi.fn(async () => true);
+
+    vi.stubGlobal("chrome", {
+      runtime: { id: "extension-id" },
+      permissions: {
+        request,
+        contains: vi.fn(),
+        remove: vi.fn(),
+      },
+    });
+
+    const { actions, applyMessage } = createActionHarness({ appState });
+
+    actions.handleRefresh("codex");
+
+    await vi.waitFor(() => {
+      expect(request).toHaveBeenCalledWith({
+        origins: codex.hostOrigins,
+      });
+      expect(applyMessage).toHaveBeenCalledWith(
+        { type: "app:request-refresh", providerId: "codex" },
+        expect.objectContaining({
+          title: "Codex refreshed",
+        }),
+      );
+    });
+  });
+
+  it("stops refresh when the host access request is denied", async () => {
+    const appState = structuredClone(SAMPLE_APP_STATE);
+    const codex = appState.providerSettings.find(
+      (provider) => provider.id === "codex",
+    );
+
+    if (!codex) {
+      throw new Error("Missing Codex provider setting.");
+    }
+
+    codex.status = "missing";
+
+    vi.stubGlobal("chrome", {
+      runtime: { id: "extension-id" },
+      permissions: {
+        request: vi.fn(async () => false),
+        contains: vi.fn(),
+        remove: vi.fn(),
+      },
+    });
+
+    const { actions, applyMessage, setToast } = createActionHarness({ appState });
+
+    actions.handleRefresh("codex");
+
+    await vi.waitFor(() => {
+      expect(setToast).toHaveBeenCalledWith(
+        expect.objectContaining({
+          tone: "error",
+          title: "Codex access denied",
+        }),
+      );
+    });
+    expect(applyMessage).not.toHaveBeenCalled();
   });
 
   it("dispatches settings updates without changing settings locally", () => {

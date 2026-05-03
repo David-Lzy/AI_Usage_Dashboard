@@ -25,6 +25,11 @@
   min-width: 0;
 }
 
+.settings-shell .top-app-bar__bottom {
+  margin-top: calc(-1 * var(--app-space-2));
+  padding-inline-start: var(--app-space-2);
+}
+
 .settings-nav-chip {
   display: inline-flex;
   align-items: center;

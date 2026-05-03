@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [284_Phase_RC4_Release_Packaging.md](./Archive/284_Phase_RC4_Release_Packaging.md)
+- latest completed slice: [285_Phase_Post_RC4_Smoke_Polish_And_Host_Access_Refresh.md](./Archive/285_Phase_Post_RC4_Smoke_Polish_And_Host_Access_Refresh.md)
 
 Completed phases should be moved to:
 
@@ -721,6 +721,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 283` closeout added Codex page-session capture reload retry so the refresh path can reload an unreadable existing Codex tab with `bypassCache: true` and retry capture once before surfacing `capture_unavailable`
 - phase 284 depends on Phase 283 plus the user's RDP Chrome validation because the next installable package should include the reload-retry fix only after the real toolbar popup refresh path has been checked
 - the 2026-05-03 `Phase 284` closeout bumped the package to `0.1.0-rc.4`, bumped the manifest to `0.1.0.4`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.4.zip`, and recorded the release package SHA256 in the Phase 284 archive
+- phase 285 depends on Phase 284 plus the user's post-rc4 visual smoke notes because the next store-screenshot pass should not preserve obvious provider-card, Settings navigation, full-page FAB, or host-access refresh friction
+- the 2026-05-03 `Phase 285` closeout completed post-rc4 smoke polish: provider-card circular cell boundaries, horizontal source chips, tighter Settings sticky chips, viewport-fixed full-page Settings FAB, and direct host-access prompting before one missing-provider refresh
 
 ## Delivery Standard For Each Phase
 
