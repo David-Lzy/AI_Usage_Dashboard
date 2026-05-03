@@ -1,6 +1,6 @@
 # Direction 04.1 - Material, Motion, And Responsive Hardening TODOs
 
-Date: 2026-05-03
+Date: 2026-05-04
 
 Document class:
 
@@ -98,6 +98,7 @@ Parent direction:
   - `ProviderCard` was updated as a presentation slice only; provider snapshots, source-selection semantics, sync behavior, and provider truth labels remain unchanged
   - provider-card CSS now has a focused module in `src/sidepanel/theme/provider-card.css` instead of continuing to grow the main Material theme file
   - shared usage-progress CSS now has a focused module in `src/sidepanel/theme/usage-progress.css`, loaded by both sidepanel and popup entries while preserving provider-card-specific overrides
+  - line-style usage-window reset copy now sits inline with the usage-window title, reducing vertical row density while preserving circular progress reset copy under the ring
   - interaction-audit workspace CSS now has a focused sidepanel-only module in `src/sidepanel/theme/interaction-audit.css`
   - theme-recovery workspace CSS now has a focused sidepanel-only module in `src/sidepanel/theme/theme-recovery.css`
   - Settings appearance CSS now has a focused sidepanel-only module in `src/sidepanel/theme/settings-appearance.css`

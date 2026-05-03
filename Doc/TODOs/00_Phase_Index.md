@@ -1,6 +1,6 @@
 # Phase Index
 
-Date: 2026-05-03
+Date: 2026-05-04
 
 Process rule:
 
@@ -34,8 +34,8 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: none
-- latest completed slice: [291_Phase_Cursor_Managed_Session_Page_And_RC10_Packaging.md](./Archive/291_Phase_Cursor_Managed_Session_Page_And_RC10_Packaging.md)
+- active phase file: [293_Phase_RC11_Post_RC10_Packaging.md](./293_Phase_RC11_Post_RC10_Packaging.md)
+- latest completed slice: [292_Phase_Post_RC10_Status_Doc_Refresh.md](./Archive/292_Phase_Post_RC10_Status_Doc_Refresh.md)
 
 Completed phases should be moved to:
 
@@ -735,6 +735,8 @@ Completed phases should be moved to:
 - the 2026-05-04 `Phase 290` closeout replaced the linear progress row `gap + border-top` divider with explicit pseudo-dividers, then bumped the package to `0.1.0-rc.9`, bumped the manifest to `0.1.0.9`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.9.zip`, and recorded the release package SHA256 in the Phase 290 archive
 - phase 291 depends on the user's available Cursor account plus the proven Codex managed session-page pattern because Cursor personal usage needed the same non-active managed tab, reload-on-capture-failure, and hydration retry flow before the next package
 - the 2026-05-04 `Phase 291` closeout added Cursor managed session-page sync for `https://cursor.com/cn/dashboard/usage`, bumped the package to `0.1.0-rc.10`, bumped the manifest to `0.1.0.10`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.10.zip`, and recorded the release package SHA256 in the Phase 291 archive
+- phase 292 documents the post-rc10 source truth: after `0.1.0-rc.10` was packaged, the repo fixed Cursor logged-out detection, rendered Cursor visible billing/spend context as structured usage facts, and compacted line-style usage-window reset labels into the title row
+- phase 293 is active because the current `release/ai-usage-dashboard-0.1.0-rc.10.zip` does not include those post-rc10 source fixes; the next coherent release task is to cut `0.1.0-rc.11` from the current source, verify it, rebuild `dist`, and regenerate the release zip
 
 ## Delivery Standard For Each Phase
 

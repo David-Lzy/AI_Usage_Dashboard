@@ -1,6 +1,6 @@
 # Strategic Directions Index
 
-Date: 2026-05-03
+Date: 2026-05-04
 
 Process rule:
 
@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-04:
 
-- the numbered phase queue is now completed through `Phase 291`
+- the numbered phase queue is now completed through documentation-only `Phase 292`, with `Phase 293` active for `0.1.0-rc.11` packaging
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -175,6 +175,8 @@ As of 2026-05-04:
 - `Phase 289` fixed Settings top app bar density by using a wide title/chips/actions row and centered sidebar-width action/navigation rows, then packaged `0.1.0-rc.8`
 - `Phase 290` fixed provider-card linear progress divider visibility by removing row gap/border stacking and drawing explicit row pseudo-dividers, then packaged `0.1.0-rc.9`
 - `Phase 291` added Cursor managed session-page sync parity with Codex: `https://cursor.com/cn/dashboard/usage` is now the preferred open route, unreadable captures use real reload, freshly opened dashboards retry hydration, automatic sync can open a non-active managed tab under the same trigger gates, and `0.1.0-rc.10` packages the update
+- post-`Phase 291` source work fixed Cursor usage-page logged-out detection, promoted visible Cursor billing-period and spend values into structured usage facts, and compacted line-style usage-window reset labels into each window title row
+- `Phase 292` reconciled docs around that post-rc10 source truth and made `Phase 293` the active packaging slice because the current `rc.10` zip does not include those later fixes
 - provider closure waits on available accounts: JetBrains org-console, Claude Pro or Max usage-page, and Gemini project-metrics graduation should not be treated as repo-only blockers
 - operator evidence means archived real human/operator review exports for interaction-audit or theme-recovery workspaces; it remains useful, but it sits behind release package and store asset closeout
 - the originally queued local-safe file splitting targets are now closed enough that further splitting should be driven by a concrete maintenance risk instead of the old Phase 236-era queue
@@ -376,7 +378,7 @@ As of 2026-05-04:
 
 1. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why first now:
-   `0.1.0-rc.10` is now package-ready after the Phase 291 Cursor managed session-page sync update, Phase 290 progress-divider visibility fix, Phase 289 Settings top-bar adaptive layout, Phase 288 source-chip row fix, Phase 287 progress-row spacing fix, Phase 285 post-rc4 polish, and the earlier Phase 283 RDP Chrome real-device validation, and RDP Chrome is available for real native-toolbar popup interaction, so the remaining store asset line is the highest-value user-facing closeout that does not require extra provider accounts.
+   `Phase 293` should cut `0.1.0-rc.11` first so the next install/review package includes the post-rc10 Cursor and usage-progress fixes. After that, RDP Chrome is available for real native-toolbar popup interaction, so the remaining store asset line is the highest-value user-facing closeout that does not require extra provider accounts.
 
 2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second now:

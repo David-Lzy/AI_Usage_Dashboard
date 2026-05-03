@@ -7,6 +7,7 @@ Current release candidate:
 - package version: `0.1.0-rc.10`
 - Chrome manifest version: `0.1.0.10`
 - packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.10.zip`
+- source status: post-rc10 fixes have landed; cut `0.1.0-rc.11` before using a zip for the next install/review pass
 
 ## Current RC Matrix
 
@@ -27,7 +28,7 @@ Current personal-user paths:
 | Provider | Current personal-user path | Current design note |
 | --- | --- | --- |
 | Codex | `chatgpt.com/codex/cloud/settings/analytics#usage` first, with `chatgpt.com/codex/settings/usage` still under observation | shipped as a logged-in session-page path; the proven live surface already exposes remaining percentage and reset timing in the current usage windows |
-| Cursor | `cursor.com/cn/dashboard/usage` first, with locale-free `cursor.com/dashboard/usage` still matched | shipped as a logged-in session-page path for billing-period usage context; Phase 291 aligns it with the Codex managed non-active tab, reload-on-capture-failure, and hydration retry flow, but not exact remaining included requests |
+| Cursor | `cursor.com/cn/dashboard/usage` first, with locale-free `cursor.com/dashboard/usage` still matched | shipped as a logged-in session-page path for billing-period usage context; Phase 291 aligns it with the Codex managed non-active tab, reload-on-capture-failure, and hydration retry flow, and post-rc10 source now renders visible billing/spend values as structured usage facts without claiming exact remaining included requests |
 | Claude Code | `claude.ai/settings/usage` | 2026-04-22 live spike redirected the current free account to `claude.ai/upgrade`; defer until a real Pro or Max usage page is captured |
 | Gemini Code Assist | Google Cloud Gemini metrics page | 2026-04-22 spike confirmed a project-scoped Google Cloud console route; defer from the personal-user track unless product support expands to explicit project metrics |
 
@@ -40,11 +41,12 @@ Security posture for this track:
 
 Next execution queue:
 
-1. use `0.1.0-rc.10` for install/review passes; it includes the Phase 291 Cursor managed session-page sync update, Phase 290 progress-divider visibility fix, Phase 289 Settings top-bar adaptive layout, Phase 288 source-chip row fix, Phase 287 progress-row spacing fix, and the Phase 285 post-rc4 smoke polish for provider cards, Settings navigation density, full-page back-to-top positioning, and direct host-access refresh prompts
-2. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining store-popup screenshot capture and archive closeout now that RDP Chrome is available for manual native popup interaction
-3. keep provider closure account-gated: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
-4. keep operator evidence closure below release/store work; here it means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not another runtime feature
-5. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
+1. run `Phase 293` to create `0.1.0-rc.11`; the existing `rc.10` zip is the latest package, but it predates the post-rc10 Cursor logged-out detection fix, Cursor structured usage facts, and inline usage-window reset-label density fix
+2. use `0.1.0-rc.11` for the next install/review pass after packaging, and reload the unpacked `dist/` extension in RDP Chrome before visual judgment
+3. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining store-popup screenshot capture and archive closeout now that RDP Chrome is available for manual native popup interaction
+4. keep provider closure account-gated: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
+5. keep operator evidence closure below release/store work; here it means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not another runtime feature
+6. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
 
 Maintenance note:
 
@@ -617,6 +619,10 @@ npm run release
 Output artifact:
 
 - `release/ai-usage-dashboard-0.1.0-rc.10.zip`
+
+Packaging note:
+
+- `rc.10` is the latest existing zip, but the active `Phase 293` packaging slice should create `rc.11` before the next install/review pass.
 
 The packaging script checks that:
 

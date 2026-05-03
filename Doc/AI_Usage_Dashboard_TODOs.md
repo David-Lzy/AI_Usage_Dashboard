@@ -1,6 +1,6 @@
 # AI Usage Dashboard TODOs
 
-Date: 2026-05-03
+Date: 2026-05-04
 
 Process rule:
 
@@ -76,22 +76,24 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 291` execution priority:
+Current post-`Phase 292` execution priority:
 
-1. `P0` - use `0.1.0-rc.10` as the next install/review package; it includes the Phase 291 Cursor managed session-page sync update, Phase 290 progress-divider visibility fix, Phase 289 Settings top-bar adaptive layout, Phase 288 source-chip row fix, Phase 287 progress-row spacing fix, and the Phase 285 post-rc4 smoke polish for provider cards, Settings navigation density, full-page Settings back-to-top positioning, and direct host-access refresh prompts.
-2. `P1` - complete the `Direction 10.3` store asset-pack line: RDP Chrome is available for real toolbar-popup clicking and screenshot capture, so the remaining work is capture/import/archive closeout rather than more repo-only planning.
-3. `P2` - Provider closure waits on accounts:
+1. `P0` - complete active `Phase 293` and package `0.1.0-rc.11`. The current `release/ai-usage-dashboard-0.1.0-rc.10.zip` remains valid historical evidence for Phase 291, but it does not include the later Cursor logged-out detection fix, Cursor structured billing/spend usage facts, or compact inline usage-window reset labels.
+2. `P0` - after `rc.11` is cut, use that package for the next install/review pass and reload the unpacked `dist/` extension in RDP Chrome before visual judgment.
+3. `P1` - complete the `Direction 10.3` store asset-pack line: RDP Chrome is available for real toolbar-popup clicking and screenshot capture, so the remaining work is capture/import/archive closeout rather than more repo-only planning.
+4. `P2` - Provider closure waits on accounts:
    - JetBrains org-console reverification waits for a real org-visible `Users and licensing` session.
    - Claude personal usage-page capture waits for a Pro or Max account.
    - Gemini project-metrics graduation waits for a product decision that project-scoped metrics are acceptable.
-4. `P2` - close real operator evidence only after higher-value release/store work: operator evidence means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not a new runtime provider feature.
-5. `P2` - continue file splitting only when a concrete maintenance issue justifies it; the old queued split targets for `material-theme.css`, `SettingsPage.tsx`, `App.tsx`, `standard-app-actions.ts`, and `localized-copy.ts` are now closed or reduced to focused compatibility/aggregator files.
+5. `P2` - close real operator evidence only after higher-value release/store work: operator evidence means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not a new runtime provider feature.
+6. `P2` - continue file splitting only when a concrete maintenance issue justifies it; the old queued split targets for `material-theme.css`, `SettingsPage.tsx`, `App.tsx`, `standard-app-actions.ts`, and `localized-copy.ts` are now closed or reduced to focused compatibility/aggregator files.
 
 Delivery rule for this stage:
 
 - keep active implementation phases narrow and independently verifiable
 - keep file-splitting separate from release packaging, provider verification, and store evidence closeout
 - preserve the current provider truth boundaries while changing UI presentation
+- treat `rc.10` as the last packaged boundary and current source as post-rc10 until `Phase 293` creates `rc.11`
 
 Phase status update:
 
@@ -347,6 +349,8 @@ Phase status update:
 - `Phase 289` made the Settings top app bar adaptive: wide tabs use a title/chips/actions row, while sidebar widths center actions and section chips, then packaged `0.1.0-rc.8` for Chrome review
 - `Phase 290` replaced provider-card linear progress row `gap + border-top` dividers with explicit row pseudo-dividers so internal lines stay visible, then packaged `0.1.0-rc.9` for Chrome review
 - `Phase 291` aligned Cursor personal usage with the Codex managed session-page pattern: the default route opens `https://cursor.com/cn/dashboard/usage`, capture failure triggers a real reload, hydration retry handles freshly opened dashboards, automatic sync can open a non-active managed tab under the same trigger gates, and `0.1.0-rc.10` packages the result for Chrome review
+- post-`Phase 291` source changes fixed Cursor usage-page logged-out detection, moved visible Cursor billing-period and spend values into structured usage facts, and compacted line-style usage-window reset labels into the window title row
+- `Phase 292` refreshed the maintained docs to make that package boundary explicit: `rc.10` is still the latest zip, but the current source needs `Phase 293` / `rc.11` before the next install/review package includes all post-rc10 fixes
 - the old maintenance split queue is closed for the originally named local-safe targets: `material-theme.css`, `localized-copy.ts`, `SettingsPage.tsx`, `App.tsx`, and `standard-app-actions.ts` are now focused base, compatibility, route, or aggregator files rather than the next default work item
 - the remaining store-readiness blocker is still real native-toolbar popup capture/import/archive completion under `Direction 10.3`; RDP Chrome is now available for that manual operator step
 - the remaining high-value work in Direction 05 and Direction 04 is real operator evidence closure: archived real review exports from the shipped workspaces rather than more lifecycle tooling

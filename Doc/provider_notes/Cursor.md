@@ -1,6 +1,6 @@
 # Cursor Provider Note
 
-Date: 2026-04-20
+Date: 2026-05-04
 
 Process rule:
 
@@ -25,6 +25,15 @@ Phase 291 runtime update:
 - The preferred page-open route is `https://cursor.com/cn/dashboard/usage`, while locale-free and other locale-prefixed dashboard usage routes remain matched.
 - When the source is allowed to auto-open, the extension opens a managed non-active tab, reads the logged-in page DOM with granted `cursor.com` host access, reloads unreadable captures with `bypassCache: true`, and retries while a freshly opened dashboard hydrates.
 - This does not change the personal-data claim: the current Cursor personal page provides billing-period usage context and visible plan/state labels, not an exact remaining included-request counter.
+
+Post-rc10 source update:
+
+- Cursor logged-out detection now requires actual logged-out state evidence instead
+  of treating auth-related DOM copy on the live dashboard shell as a blocker.
+- The personal dashboard parser preserves visible billing period, total spend,
+  included spend, on-demand spend, and on-demand state as structured usage facts.
+- Dashboard, provider-detail, and popup surfaces can now show those visible facts
+  without upgrading the source-fidelity claim to exact remaining requests.
 
 ## 1. Decision
 
@@ -171,7 +180,7 @@ Important access note:
 | --- | --- | --- |
 | Team admin | Admin API | Yes |
 | Team member, non-admin | Can see own usage in dashboard per role docs, but no public member API found in reviewed docs | Session-page only if the same dashboard usage route is available in the logged-in Chrome profile |
-| Individual personal plan | Dashboard usage is documented, but no public API found in reviewed docs | Session-page billing-period context through `https://cursor.com/cn/dashboard/usage`; exact remaining included requests unavailable |
+| Individual personal plan | Dashboard usage is documented, but no public API found in reviewed docs | Session-page billing-period and visible spend context through `https://cursor.com/cn/dashboard/usage`; exact remaining included requests unavailable |
 
 Inference note:
 
@@ -200,6 +209,10 @@ Proposed field mapping:
 - `remaining`
   - `max(total - used, 0)`
   - unavailable on the personal dashboard usage page until a proven exact remaining counter is exposed
+- `usageFacts`
+  - for the personal dashboard path, preserve visible billing-period and spend
+    cards as structured facts
+  - do not derive an exact remaining request count from those facts
 - `resetAt`
   - derive from `subscriptionCycleStart` from `POST /teams/spend`
   - expected cycle is monthly
