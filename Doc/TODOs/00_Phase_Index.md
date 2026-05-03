@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [263_Phase_App_Browser_Controls_Split.md](./Archive/263_Phase_App_Browser_Controls_Split.md)
+- latest completed slice: [264_Phase_Standard_App_Runtime_Hook.md](./Archive/264_Phase_Standard_App_Runtime_Hook.md)
 
 Completed phases should be moved to:
 
@@ -679,6 +679,8 @@ Completed phases should be moved to:
 - the 2026-05-03 `Phase 262` closeout extracted special debug/operator route parsing, rendering, and special-route-only theme/locale hydration into `src/sidepanel/special-route-app.tsx` while preserving standard route rendering, sync behavior, source-page recovery, and special route hash strings
 - phase 263 depends on phase 262 because browser-control helpers should move only after special-route app ownership no longer shares the same top-level file region
 - the 2026-05-03 `Phase 263` closeout extracted browser capability checks, tab priority sorting, and full-page route opening into `src/sidepanel/app-browser-controls.ts` while preserving route hashes, Chrome tab behavior, standard route rendering, sync behavior, and source-page recovery
+- phase 264 depends on phase 263 because standard runtime state should move after browser-control helpers no longer live in the same `App.tsx` setup region
+- the 2026-05-03 `Phase 264` closeout extracted standard app bootstrap, app initialization, theme sync, shared message application, toast/loading/error state, and retry initialization into `src/sidepanel/use-standard-app-runtime.ts` while preserving route guards, provider actions, standard route rendering, sync behavior, and source-page recovery
 
 ## Delivery Standard For Each Phase
 

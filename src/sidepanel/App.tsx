@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
 
-import type { AppMessage } from "../background/message-bus";
 import type {
   ActionBadgeSelection,
   ApiKeyProviderId,
   AppLocalePreference,
   AppSettings,
-  AppState,
   ProviderId,
   ProviderSourcePreference,
   ProviderSetting,
 } from "../providers/types";
-import { sendAppMessage } from "../shared/app-client";
 import {
   buildDashboardSummaryLabels,
   createRuntimeI18n,
@@ -24,11 +21,7 @@ import {
   clearPageBinding,
   createPageBindingFromTab,
 } from "../shared/page-bindings";
-import {
-  buildQuickThemeToggle,
-  normalizeThemeSettings,
-  startThemeSettingsSync,
-} from "../shared/theme";
+import { buildQuickThemeToggle } from "../shared/theme";
 import { buildProviderSourceDisplayLocalizedCopy } from "../shared/localized-copy";
 import {
   doesUrlMatchRouteHints,
@@ -56,22 +49,16 @@ import {
   parseSidePanelHash,
   type SidePanelRouteState,
 } from "./route-state";
-import { isStoreScreenshotSeedLockEnabled } from "./store-screenshot-seed";
 import {
   getSpecialSidePanelRoute,
   SpecialRouteApp,
 } from "./special-route-app";
+import { useStandardAppRuntime } from "./use-standard-app-runtime";
 import {
   buildSummaryItems,
   getProviderViewModel,
   getVisibleProviders,
 } from "./view-models";
-
-type AppToast = {
-  tone: "success" | "error";
-  title: string;
-  message: string;
-};
 
 type StandardAppProps = {
   locationHash: string;
@@ -87,20 +74,16 @@ function getProviderLabel(
   );
 }
 
-function getStandardAppBootstrapMessage(): Extract<
-  AppMessage,
-  { type: "app:init" } | { type: "app:read-state" }
-> {
-  return isStoreScreenshotSeedLockEnabled()
-    ? { type: "app:read-state" }
-    : { type: "app:init" };
-}
-
 function StandardApp({ locationHash }: StandardAppProps) {
-  const [appState, setAppState] = useState<AppState | null>(null);
-  const [toast, setToast] = useState<AppToast | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [loadError, setLoadError] = useState<string | null>(null);
+  const {
+    appState,
+    toast,
+    isLoading,
+    loadError,
+    applyMessage,
+    handleRetryInitialization,
+    setToast,
+  } = useStandardAppRuntime();
   const route = parseSidePanelHash(locationHash) ?? { name: "dashboard" };
   const isFullPageSurface =
     typeof window !== "undefined" &&
@@ -121,56 +104,6 @@ function StandardApp({ locationHash }: StandardAppProps) {
   }
 
   useEffect(() => {
-    let disposed = false;
-
-    async function initializeApp() {
-      setIsLoading(true);
-
-      const response = await sendAppMessage(getStandardAppBootstrapMessage());
-
-      if (disposed) {
-        return;
-      }
-
-      if (response.ok) {
-        setAppState(response.state);
-        setLoadError(null);
-      } else {
-        setLoadError(response.error);
-        setToast({
-          tone: "error",
-          title: "Initialization failed",
-          message: response.error,
-        });
-      }
-
-      setIsLoading(false);
-    }
-
-    void initializeApp();
-
-    return () => {
-      disposed = true;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (typeof document === "undefined" || typeof window === "undefined") {
-      return undefined;
-    }
-
-    return startThemeSettingsSync(
-      normalizeThemeSettings(appState?.settings),
-      document.documentElement,
-      window,
-    );
-  }, [
-    appState?.settings.themeCustomSeedHex,
-    appState?.settings.themeMode,
-    appState?.settings.themePreset,
-  ]);
-
-  useEffect(() => {
     if (
       route.name === "provider-detail" &&
       appState &&
@@ -181,53 +114,6 @@ function StandardApp({ locationHash }: StandardAppProps) {
       navigateToRoute({ name: "dashboard" });
     }
   }, [appState, route]);
-
-  async function applyMessage(
-    message: AppMessage,
-    successToast?: AppToast,
-  ): Promise<boolean> {
-    const response = await sendAppMessage(message);
-
-    if (!response.ok) {
-      setToast({
-        tone: "error",
-        title: "State update failed",
-        message: response.error,
-      });
-      return false;
-    }
-
-    setAppState(response.state);
-    setLoadError(null);
-
-    if (response.notice) {
-      setToast(response.notice);
-      return true;
-    }
-
-    if (successToast) {
-      setToast(successToast);
-    }
-
-    return true;
-  }
-
-  function handleRetryInitialization() {
-    setAppState(null);
-    setLoadError(null);
-    setIsLoading(true);
-
-    void applyMessage(
-      getStandardAppBootstrapMessage(),
-      {
-        tone: "success",
-        title: "State reloaded",
-        message: "The local dashboard state has been loaded again.",
-      },
-    ).finally(() => {
-      setIsLoading(false);
-    });
-  }
 
   function handleRefresh(providerId?: ProviderId) {
     if (!appState) {
