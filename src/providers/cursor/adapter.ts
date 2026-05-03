@@ -74,10 +74,17 @@ function buildCursorPersonalRefreshLabel(source: "fixture" | "live"): string {
 function buildCursorPersonalUsageSummary(
   snapshot: CursorPersonalUsageSnapshot,
 ): string | null {
+  const spendSummary =
+    snapshot.spendCards.length > 0
+      ? snapshot.spendCards
+          .map((card) => `${card.label}: ${card.amountText}`)
+          .join(" · ")
+      : null;
   const summaryParts = [
     snapshot.billingPeriodLabel
       ? `Billing period: ${snapshot.billingPeriodLabel}`
       : null,
+    spendSummary,
     snapshot.usageSeriesLabel,
     snapshot.visiblePlanLabels.length > 0
       ? `Visible plans: ${snapshot.visiblePlanLabels.join(" · ")}`

@@ -81,14 +81,15 @@ const CURSOR_PERSONAL_ROUTE_DEFINITIONS: CursorRouteDefinition[] = [
 ];
 
 const TEXT_SIGNAL_PATTERN =
-  /usage|remaining|request|requests|billing|reset|limit|quota|plan|included|overage|usage-based|premium|fast|period|cycle|requests used|requests left|使用|剩余|请求|额度|配额|计划|周期|重置|刷新/i;
+  /usage|remaining|request|requests|billing|reset|limit|quota|plan|included|spend|on-demand|overage|usage-based|premium|fast|period|cycle|requests used|requests left|使用|剩余|请求|额度|配额|计划|周期|重置|刷新/i;
 const REMAINING_SIGNAL_PATTERN = /remaining|left|available|剩余|可用/i;
 const REQUEST_SIGNAL_PATTERN = /request|requests|premium|fast|included|请求|次数/i;
 const RESET_SIGNAL_PATTERN = /reset|renews|period|cycle|刷新|重置|周期/i;
 const PLAN_SIGNAL_PATTERN = /pro|ultra|hobby|business|team|plan|计划/i;
 const CURSOR_USAGE_UI_LABEL_PATTERN =
-  /^(hobby|pro|pro\+|ultra|business|team|usage|your usage|by model|spend|export csv)$/i;
+  /^(hobby|pro|pro\+|ultra|business|team|usage|your usage|by model|spend|total spend|included|on-demand|export csv)$/i;
 const LOCALE_PREFIX_PATTERN = /^[a-z]{2}(?:-[a-z]{2})?$/i;
+const MONEY_SNIPPET_PATTERN = /^\$[0-9][0-9,]*(?:\.\d{1,2})?$/;
 
 function decodeEntities(value: string): string {
   return value
@@ -125,7 +126,22 @@ function pickInterestingTextSnippets(lines: string[]): string[] {
     );
   });
 
-  return [...new Set(snippets)].slice(0, 14);
+  const seenNonMoneySnippets = new Set<string>();
+
+  return snippets
+    .filter((snippet) => {
+      if (MONEY_SNIPPET_PATTERN.test(snippet)) {
+        return true;
+      }
+
+      if (seenNonMoneySnippets.has(snippet)) {
+        return false;
+      }
+
+      seenNonMoneySnippets.add(snippet);
+      return true;
+    })
+    .slice(0, 28);
 }
 
 function parseUrl(url: string): URL | null {

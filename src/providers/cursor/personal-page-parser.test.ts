@@ -40,6 +40,7 @@ describe("parseCursorPersonalEvidenceFixture", () => {
       "By Model",
       "Spend",
     ]);
+    expect(snapshot.spendCards).toEqual([]);
     expect(snapshot.exportCsvAvailable).toBe(true);
     expect(snapshot.usedAvailability).toBe("window_only");
     expect(snapshot.remainingAvailability).toBe("unavailable");
@@ -59,6 +60,12 @@ describe("parseCursorPersonalPageSummary", () => {
         "Usage",
         "Pro",
         "On-Demand Usage is Off",
+        "Total spend",
+        "$0",
+        "Included",
+        "$0",
+        "On-demand",
+        "$0",
         "Your Usage",
         "Your usage per day across this billing period",
         "By Model",
@@ -86,6 +93,29 @@ describe("parseCursorPersonalPageSummary", () => {
     expect(snapshot).not.toBeNull();
     expect(snapshot?.localePrefix).toBeNull();
     expect(snapshot?.billingPeriodLabel).toBe("Apr 1 - Apr 30");
+    expect(snapshot?.spendCards).toEqual([
+      {
+        label: "Total spend",
+        normalizedLabel: "total_spend",
+        amountText: "$0",
+        amount: 0,
+        currency: "USD",
+      },
+      {
+        label: "Included",
+        normalizedLabel: "included",
+        amountText: "$0",
+        amount: 0,
+        currency: "USD",
+      },
+      {
+        label: "On-demand",
+        normalizedLabel: "on_demand",
+        amountText: "$0",
+        amount: 0,
+        currency: "USD",
+      },
+    ]);
     expect(snapshot?.onDemandUsageState).toBe("off");
   });
 });

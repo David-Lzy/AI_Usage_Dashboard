@@ -116,6 +116,12 @@ describe("summarizeCursorPersonalPage", () => {
             <p>Your usage per day across this billing period</p>
             <p>By Model</p>
             <p>Spend</p>
+            <p>Total spend</p>
+            <p>$0</p>
+            <p>Included</p>
+            <p>$0</p>
+            <p>On-demand</p>
+            <p>$0</p>
             <p>Export CSV</p>
             <p>Mar 23 - Apr 21</p>
           </body>
@@ -133,6 +139,12 @@ describe("summarizeCursorPersonalPage", () => {
       "Your usage per day across this billing period",
       "By Model",
       "Spend",
+      "Total spend",
+      "$0",
+      "Included",
+      "$0",
+      "On-demand",
+      "$0",
       "Export CSV",
       "Mar 23 - Apr 21",
     ]);

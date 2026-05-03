@@ -52,6 +52,14 @@ export type CursorPersonalEvidenceFixture = {
 
 export type CursorOnDemandUsageState = "on" | "off" | null;
 
+export type CursorPersonalSpendCard = {
+  label: string;
+  normalizedLabel: "total_spend" | "included" | "on_demand";
+  amountText: string;
+  amount: number | null;
+  currency: "USD" | null;
+};
+
 export type CursorPersonalUsageSnapshot = {
   providerId: "cursor";
   providerLabel: "Cursor";
@@ -65,6 +73,7 @@ export type CursorPersonalUsageSnapshot = {
   usageSeriesLabel: string | null;
   visiblePlanLabels: string[];
   visibleSectionLabels: string[];
+  spendCards: CursorPersonalSpendCard[];
   onDemandUsageState: CursorOnDemandUsageState;
   exportCsvAvailable: boolean;
   usedAvailability: "window_only";
@@ -100,6 +109,15 @@ const USAGE_SERIES_PATTERN =
 const ON_DEMAND_PATTERN = /on-demand usage is (on|off)/i;
 const PLAN_LABELS = new Set(["Hobby", "Pro", "Pro+", "Ultra", "Business", "Team"]);
 const SECTION_LABELS = new Set(["Usage", "Your Usage", "By Model", "Spend"]);
+const SPEND_CARD_LABELS = new Map<
+  string,
+  CursorPersonalSpendCard["normalizedLabel"]
+>([
+  ["total spend", "total_spend"],
+  ["included", "included"],
+  ["on-demand", "on_demand"],
+]);
+const MONEY_AMOUNT_PATTERN = /^\$([0-9][0-9,]*(?:\.\d{1,2})?)$/;
 
 function normalizeWhitespace(value: string): string {
   return value.replace(/\s+/g, " ").trim();
@@ -177,15 +195,64 @@ function parseExportCsvAvailable(textSnippets: string[]): boolean {
   );
 }
 
+function parseMoneyAmount(value: string): number | null {
+  const matchedAmount = normalizeWhitespace(value).match(MONEY_AMOUNT_PATTERN)?.[1];
+
+  if (!matchedAmount) {
+    return null;
+  }
+
+  const parsedAmount = Number.parseFloat(matchedAmount.replaceAll(",", ""));
+
+  return Number.isFinite(parsedAmount) ? parsedAmount : null;
+}
+
+function parseSpendCards(textSnippets: string[]): CursorPersonalSpendCard[] {
+  const normalizedSnippets = textSnippets.map(normalizeWhitespace);
+  const spendCards: CursorPersonalSpendCard[] = [];
+
+  for (let index = 0; index < normalizedSnippets.length; index += 1) {
+    const label = normalizedSnippets[index] ?? "";
+    const normalizedLabel = SPEND_CARD_LABELS.get(label.toLowerCase());
+
+    if (!normalizedLabel) {
+      continue;
+    }
+
+    const amountText =
+      normalizedSnippets
+        .slice(index + 1, index + 4)
+        .find((snippet) => MONEY_AMOUNT_PATTERN.test(snippet)) ?? null;
+
+    if (!amountText) {
+      continue;
+    }
+
+    spendCards.push({
+      label,
+      normalizedLabel,
+      amountText,
+      amount: parseMoneyAmount(amountText),
+      currency: "USD",
+    });
+  }
+
+  return spendCards;
+}
+
 function parseSnapshotFromSummary(
   routeKey: CursorPersonalRouteKey,
   summary: CursorPersonalPageSummary,
 ): CursorPersonalUsageSnapshot | null {
-  const textSnippets = uniqueStrings(summary.textSnippets);
+  const rawTextSnippets = summary.textSnippets
+    .map(normalizeWhitespace)
+    .filter(Boolean);
+  const textSnippets = uniqueStrings(rawTextSnippets);
   const billingPeriodLabel = parseBillingPeriodLabel(textSnippets);
   const usageSeriesLabel = parseUsageSeriesLabel(textSnippets);
   const visiblePlanLabels = parseVisiblePlanLabels(textSnippets);
   const visibleSectionLabels = parseVisibleSectionLabels(textSnippets);
+  const spendCards = parseSpendCards(rawTextSnippets);
   const onDemandUsageState = parseOnDemandUsageState(textSnippets);
   const exportCsvAvailable = parseExportCsvAvailable(textSnippets);
 
@@ -195,6 +262,7 @@ function parseSnapshotFromSummary(
       usageSeriesLabel !== null ||
       onDemandUsageState !== null ||
       exportCsvAvailable ||
+      spendCards.length > 0 ||
       visibleSectionLabels.length > 0);
 
   if (!hasEnoughUsageSignals) {
@@ -214,6 +282,7 @@ function parseSnapshotFromSummary(
     usageSeriesLabel,
     visiblePlanLabels,
     visibleSectionLabels,
+    spendCards,
     onDemandUsageState,
     exportCsvAvailable,
     usedAvailability: "window_only",

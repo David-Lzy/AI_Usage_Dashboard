@@ -100,6 +100,29 @@ describe("syncCursorProvider", () => {
         usageSeriesLabel: "Your usage per day across this billing period",
         visiblePlanLabels: ["Pro", "Pro+", "Ultra"],
         visibleSectionLabels: ["Usage", "Your Usage", "By Model", "Spend"],
+        spendCards: [
+          {
+            label: "Total spend",
+            normalizedLabel: "total_spend",
+            amountText: "$0",
+            amount: 0,
+            currency: "USD",
+          },
+          {
+            label: "Included",
+            normalizedLabel: "included",
+            amountText: "$0",
+            amount: 0,
+            currency: "USD",
+          },
+          {
+            label: "On-demand",
+            normalizedLabel: "on_demand",
+            amountText: "$0",
+            amount: 0,
+            currency: "USD",
+          },
+        ],
         onDemandUsageState: "off",
         exportCsvAvailable: true,
         usedAvailability: "window_only",
@@ -150,7 +173,7 @@ describe("syncCursorProvider", () => {
     expect(snapshot.usageWindows).toBeUndefined();
     expect(snapshot.usageBalances).toBeUndefined();
     expect(snapshot.usageSummary).toBe(
-      "Visible Cursor usage: Billing period: Mar 23 - Apr 21 · Your usage per day across this billing period · Visible plans: Pro · Pro+ · Ultra · On-demand usage is off. · CSV export available",
+      "Visible Cursor usage: Billing period: Mar 23 - Apr 21 · Total spend: $0 · Included: $0 · On-demand: $0 · Your usage per day across this billing period · Visible plans: Pro · Pro+ · Ultra · On-demand usage is off. · CSV export available",
     );
     expect(snapshot.lastSyncLabel).toBe("Cursor personal fixture loaded");
     expect(snapshot.sourceSelectionReason).toBe("Auto fell back to Session page.");
@@ -575,6 +598,7 @@ describe("syncCursorProvider", () => {
         usageSeriesLabel: "Your usage per day across this billing period",
         visiblePlanLabels: ["Pro", "Pro+", "Ultra"],
         visibleSectionLabels: ["Usage", "Your Usage", "By Model", "Spend"],
+        spendCards: [],
         onDemandUsageState: "off",
         exportCsvAvailable: true,
         usedAvailability: "window_only",
