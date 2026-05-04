@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-04:
 
-- the numbered phase queue is now completed through `Phase 293`, with no active phase currently selected
+- the numbered phase queue is now completed through `Phase 294`, with no active phase currently selected
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -178,6 +178,7 @@ As of 2026-05-04:
 - post-`Phase 291` source work fixed Cursor usage-page logged-out detection, promoted visible Cursor billing-period and spend values into structured usage facts, compacted line-style usage-window reset labels into each window title row, and reformatted the action-badge hover tooltip so enabled Cursor facts are included in visible-provider context
 - `Phase 292` reconciled docs around that post-rc10 source truth and made `Phase 293` the packaging slice because the then-current `rc.10` zip did not include those later fixes
 - `Phase 293` packaged `0.1.0-rc.11`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.11.zip`, and made the post-rc10 Cursor, usage-window, and action-badge tooltip fixes available for the next install/review pass
+- `Phase 294` recorded the user-run RDP Chrome visual smoke pass for `0.1.0-rc.11`; the user reported no obvious issue across full-page dashboard, toolbar popup, action-badge tooltip, and sidebar settings surfaces
 - provider closure waits on available accounts: JetBrains org-console, Claude Pro or Max usage-page, and Gemini project-metrics graduation should not be treated as repo-only blockers
 - operator evidence means archived real human/operator review exports for interaction-audit or theme-recovery workspaces; it remains useful, but it sits behind release package and store asset closeout
 - the originally queued local-safe file splitting targets are now closed enough that further splitting should be driven by a concrete maintenance risk instead of the old Phase 236-era queue
@@ -312,7 +313,7 @@ As of 2026-05-04:
 - `Phase 169` completed the next `Direction 10.3` slice by adding one request-bound manual finalize command plus handoff update, so the remaining real-world work is now the popup capture itself instead of popup capture plus extra repo bookkeeping
 - the current store-asset line still retains one real-world manual popup-capture dependency under `10_3_Store_Asset_Pack_And_Submission_TODOs.md`
 - the previous repo-owned engineering default was adapter diagnostic raw fallback regression review for the shipped `en + zh_CN` runtime pilot under Direction 09, captured in `09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`
-- because `0.1.0-rc.11` is now cut and provider closure is account-gated, the active functional priority returns to Direction 10.3 store asset capture/import/archive before more doc, provider, or operator-evidence work
+- because `0.1.0-rc.11` is now cut and passed the user-run RDP Chrome visual smoke check, the active functional priority returns to Direction 10.3 store asset capture/import/archive before more doc, provider, or operator-evidence work
 - the remaining high-value work in Direction 05 and Direction 04 is now evidence closure, not more tool-building:
   - `05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md`
   - `04_2_Interaction_Audit_Real_Operator_Closure_TODOs.md`
@@ -321,8 +322,8 @@ As of 2026-05-04:
   - Claude personal support is not yet graduated
   - Gemini remains policy-only
   - Codex and Cursor personal support remain partial, not absolute-remaining-balance claims
-- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 293`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
-- the numbered phase queue is now completed through `Phase 293`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
+- the broader `Doc/` tree is not "fully done" even though the numbered phase queue is completed through `Phase 294`, because roadmap, request, archive-index, package-record, and reference docs remain living or maintained by design
+- the numbered phase queue is now completed through `Phase 294`, and the repo now has one explicit documentation-class vocabulary plus one explicit freshness-label vocabulary plus one lightweight executable consistency check that also covers generated package READMEs, the full roadmap set, and the current convention-only boundary
 - `Codex` personal support is already shipped as a `session_page` path, but it currently exposes usage-window percentages and reset timing, not one absolute remaining credit balance
 - `Cursor` personal support is already shipped as a `session_page` path, but it currently exposes billing-period usage context, not one exact remaining included-request counter
 - the extension action now opens a compact popup on click, the popup makes cached snapshot freshness explicit, and the badge shows the count of visible providers needing attention
@@ -379,7 +380,7 @@ As of 2026-05-04:
 
 1. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why first now:
-   `0.1.0-rc.11` is now cut, so the remaining store asset line is the highest-value user-facing closeout that does not require extra provider accounts. RDP Chrome is available for real native-toolbar popup interaction, but the native popup screenshots still need capture/import/archive completion.
+   `0.1.0-rc.11` is now cut and the user-run RDP Chrome visual smoke pass reported no obvious issue, so the remaining store asset line is the highest-value user-facing closeout that does not require extra provider accounts. RDP Chrome is available for real native-toolbar popup interaction, but the native popup screenshots still need capture/import/archive completion.
 
 2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second now:

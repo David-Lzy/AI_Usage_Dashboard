@@ -7,7 +7,7 @@ Current release candidate:
 - package version: `0.1.0-rc.11`
 - Chrome manifest version: `0.1.0.11`
 - packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.11.zip`
-- source status: source, built `dist`, and packaged zip are aligned after `Phase 293`
+- source status: source, built `dist`, and packaged zip are aligned after `Phase 293`; user-run RDP Chrome visual smoke passed in `Phase 294`
 
 ## Current RC Matrix
 
@@ -41,9 +41,9 @@ Security posture for this track:
 
 Next execution queue:
 
-1. use `0.1.0-rc.11` for the next install/review pass, and reload the unpacked `dist/` extension in RDP Chrome before visual judgment
-2. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining store-popup screenshot capture and archive closeout now that RDP Chrome is available for manual native popup interaction
-3. keep provider closure account-gated: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
+1. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining store-popup screenshot capture and archive closeout now that RDP Chrome is available for manual native popup interaction
+2. use `0.1.0-rc.11` as the current install/review package if another smoke pass is needed
+3. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 4. keep operator evidence closure below release/store work; here it means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not another runtime feature
 5. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
 

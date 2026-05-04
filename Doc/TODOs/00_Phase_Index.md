@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [293_Phase_RC11_Post_RC10_Packaging.md](./Archive/293_Phase_RC11_Post_RC10_Packaging.md)
+- latest completed slice: [294_Phase_RC11_RDP_Chrome_Smoke.md](./Archive/294_Phase_RC11_RDP_Chrome_Smoke.md)
 
 Completed phases should be moved to:
 
@@ -737,6 +737,7 @@ Completed phases should be moved to:
 - the 2026-05-04 `Phase 291` closeout added Cursor managed session-page sync for `https://cursor.com/cn/dashboard/usage`, bumped the package to `0.1.0-rc.10`, bumped the manifest to `0.1.0.10`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.10.zip`, and recorded the release package SHA256 in the Phase 291 archive
 - phase 292 documents the post-rc10 source truth: after `0.1.0-rc.10` was packaged, the repo fixed Cursor logged-out detection, rendered Cursor visible billing/spend context as structured usage facts, and compacted line-style usage-window reset labels into the title row
 - the 2026-05-04 `Phase 293` closeout bumped the package to `0.1.0-rc.11`, bumped the manifest to `0.1.0.11`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.11.zip`, and recorded SHA256 `f7d19b7bb84975b25c0d9291460f6ca418006c0e93edd36fe063ac5870f2907e` in the Phase 293 archive
+- the 2026-05-04 `Phase 294` closeout recorded the user-run RDP Chrome visual smoke pass for `0.1.0-rc.11`; the user reported no obvious issue across full-page dashboard, toolbar popup, action-badge tooltip, and sidebar settings surfaces
 
 ## Delivery Standard For Each Phase
 

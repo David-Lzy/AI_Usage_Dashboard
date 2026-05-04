@@ -76,16 +76,16 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 293` execution priority:
+Current post-`Phase 294` execution priority:
 
-1. `P0` - use `release/ai-usage-dashboard-0.1.0-rc.11.zip` as the next install/review package. It includes the Phase 291 Cursor managed session-page sync path plus the post-rc10 Cursor logged-out detection fix, Cursor structured billing/spend usage facts, compact inline usage-window reset labels, and formatted action-badge tooltip with visible Cursor facts.
-2. `P0` - reload the unpacked `dist/` extension in RDP Chrome before judging the next visual pass; `dist` has been rebuilt for `0.1.0-rc.11`.
-3. `P1` - complete the `Direction 10.3` store asset-pack line: RDP Chrome is available for real toolbar-popup clicking and screenshot capture, so the remaining work is capture/import/archive closeout rather than more repo-only planning.
+1. `P0` - complete the `Direction 10.3` store asset-pack line: RDP Chrome is available for real toolbar-popup clicking and screenshot capture, so the remaining work is capture/import/archive closeout rather than more repo-only planning.
+2. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.11.zip` as the current install/review package. It includes the Phase 291 Cursor managed session-page sync path plus the post-rc10 Cursor logged-out detection fix, Cursor structured billing/spend usage facts, compact inline usage-window reset labels, and formatted action-badge tooltip with visible Cursor facts.
+3. `P1` - run another `0.1.0-rc.11` RDP Chrome smoke pass only if new visual concerns appear. The 2026-05-04 user-run pass already reported no obvious issue across full-page dashboard, toolbar popup, action-badge tooltip, and sidebar settings surfaces.
 4. `P2` - Provider closure waits on accounts:
    - JetBrains org-console reverification waits for a real org-visible `Users and licensing` session.
    - Claude personal usage-page capture waits for a Pro or Max account.
    - Gemini project-metrics graduation waits for a product decision that project-scoped metrics are acceptable.
-5. `P2` - close real operator evidence only after higher-value release/store work: operator evidence means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not a new runtime provider feature.
+5. `P2` - close real operator evidence only after higher-value release/store work: operator evidence means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not a new runtime provider feature. The user explicitly de-prioritized this below the current store-work line.
 6. `P2` - continue file splitting only when a concrete maintenance issue justifies it; the old queued split targets for `material-theme.css`, `SettingsPage.tsx`, `App.tsx`, `standard-app-actions.ts`, and `localized-copy.ts` are now closed or reduced to focused compatibility/aggregator files.
 
 Delivery rule for this stage:
@@ -352,6 +352,7 @@ Phase status update:
 - post-`Phase 291` source changes fixed Cursor usage-page logged-out detection, moved visible Cursor billing-period and spend values into structured usage facts, compacted line-style usage-window reset labels into the window title row, and reformatted the action-badge hover tooltip so enabled Cursor context appears in the visible-provider section
 - `Phase 292` refreshed the maintained docs to make that package boundary explicit: `rc.10` was still the latest zip then, and the then-current source needed `Phase 293` / `rc.11` before the next install/review package could include all post-rc10 fixes
 - `Phase 293` packaged `0.1.0-rc.11` so the next install/review artifact includes the post-rc10 Cursor logged-out detection, structured usage facts, inline reset-label density, and formatted action-badge tooltip fixes
+- `Phase 294` recorded the user-run RDP Chrome smoke pass for `0.1.0-rc.11`; the user reported no obvious issue across the full-page dashboard, toolbar popup, action-badge tooltip, and sidebar settings surfaces
 - the old maintenance split queue is closed for the originally named local-safe targets: `material-theme.css`, `localized-copy.ts`, `SettingsPage.tsx`, `App.tsx`, and `standard-app-actions.ts` are now focused base, compatibility, route, or aggregator files rather than the next default work item
 - the remaining store-readiness blocker is still real native-toolbar popup capture/import/archive completion under `Direction 10.3`; RDP Chrome is now available for that manual operator step
 - the remaining high-value work in Direction 05 and Direction 04 is real operator evidence closure: archived real review exports from the shipped workspaces rather than more lifecycle tooling
