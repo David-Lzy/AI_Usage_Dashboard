@@ -18,6 +18,7 @@ Status note:
 
 - this file is the current maintained storyboard for truthful Chrome Web Store screenshot capture
 - `Phase 161` now treats the first archived screenshot set as a historical baseline rather than the final submission pack after the popup/full-page surface-expansion line
+- `Phase 295` accepts a mixed store-candidate pack after user review: one native toolbar popup quick-glance image plus full-page/provider/source-depth images, with final archive still pending file import
 - refresh it when the popup story, provider truth boundary, store positioning, or capture workflow changes materially
 
 Purpose:
@@ -34,10 +35,24 @@ Purpose:
    - actual user experience
    - latest shipped functionality
    - minimal text in the image itself
-4. Popup screenshots intended for final submission should use the native toolbar action bubble.
+4. The leading popup quick-glance screenshot intended for final submission should use the native toolbar action bubble.
 5. Popup app-window smoke capture is still valuable QA evidence, but it is not the final replacement for the real toolbar bubble.
-6. Use the popup as the first three screenshots only; use the full-page shell for depth proof now that popup/sidebar expand is shipped.
+6. Use full-page, provider-detail, or Settings/source surfaces for depth proof when they tell the store story more clearly than additional popup scroll states.
 7. Do not stage unsupported providers or fake healthy states that the runtime cannot currently reproduce honestly.
+
+## Current Candidate Pack
+
+The current user-approved candidate pack is:
+
+1. native toolbar popup quick glance with Codex usage windows and visible badge-compatible status
+2. full-page dashboard overview with the product promise and summary cards
+3. Codex provider usage detail with visible window percentages and reset timing
+4. Cursor source/settings detail that makes the personal partial contract explicit
+5. optional side-panel Settings/responsive setup view if the final listing uses a fifth screenshot
+
+The screenshots were reviewed in the chat thread on `2026-05-04`. They still need
+to be saved as files and imported before they become a formal store screenshot
+archive.
 
 ## Screenshot Storyboard Order
 
@@ -52,49 +67,49 @@ Purpose:
 - Must visibly show:
   - popup header, top summary, setup coverage, featured provider, and badge-compatible quick-glance framing
 
-### 2. Setup guidance
+### 2. Dashboard overview
 
 - Surface:
-  - native toolbar popup bubble
+  - full-page shell `Dashboard`
 - Runtime state:
-  - mixed setup blockers
+  - healthy or near-healthy Codex plus Cursor state
 - Claim it proves:
-  - the product tells the user what to do next instead of only showing raw usage cards
+  - one panel collects AI coding quota signals and provider status
 - Must visibly show:
-  - guidance card, setup stage, and stateful CTA
+  - dashboard headline, product promise, summary cards, and Material 3 release-candidate framing
 
-### 3. Honest contract-only or policy-only state
+### 3. Provider usage detail
 
 - Surface:
-  - native toolbar popup bubble
+  - full-page shell `Dashboard` or provider-detail surface
 - Runtime state:
-  - policy-only or contract-only provider mix
+  - Codex usage-window detail
 - Claim it proves:
-  - the extension is honest about provider coverage and does not fake live precision
+  - provider cards expose useful usage-window detail without claiming one absolute balance
 - Must visibly show:
-  - setup or contract story without pretending unsupported live data exists
+  - Codex status, remaining percentages, reset timing, and source/truth chips
 
-### 4. Settings and setup depth
+### 4. Honest source boundary
 
 - Surface:
-  - full-page shell `Settings`
+  - Settings/source detail
+- Runtime state:
+  - Cursor personal partial session-page state
+- Claim it proves:
+  - the extension is honest about partial live paths and does not fake exact remaining requests
+- Must visibly show:
+  - Cursor source route, personal partial labels, availability summary, and explanatory contract text
+
+### 5. Optional Settings/setup depth
+
+- Surface:
+  - side panel or full-page shell `Settings`
 - Runtime state:
   - real setup-oriented state
 - Claim it proves:
   - setup ownership lives in the deeper workspace instead of a bloated popup
 - Must visibly show:
-  - theme and source/setup controls with enough surrounding context to read as an expanded extension workspace
-
-### 5. Provider or dashboard depth
-
-- Surface:
-  - full-page shell `Provider detail` by default, `Dashboard` if it tells the clearer truthful story
-- Runtime state:
-  - truthful detail-review state
-- Claim it proves:
-  - the expanded workspace owns deeper review, contract context, and provider detail
-- Must visibly show:
-  - one deeper inspection surface that clearly extends beyond the popup quick-glance role
+  - theme/source/setup controls with enough surrounding context to read as an extension workspace
 
 ## Optional Sixth Screenshot
 
@@ -108,10 +123,10 @@ Purpose:
 | Screenshot | Main store claim |
 | --- | --- |
 | 1 | Quick glance in one click |
-| 2 | Clear next step when setup is blocked |
-| 3 | Honest provider coverage |
-| 4 | Setup belongs to a deeper workspace |
-| 5 | Detailed review belongs to the expanded workspace |
+| 2 | One dashboard collects quota and status |
+| 3 | Provider usage detail stays precise about its window scope |
+| 4 | Source contracts stay honest about partial live paths |
+| 5 | Setup belongs to a deeper workspace |
 
 ## Current Baseline Note
 

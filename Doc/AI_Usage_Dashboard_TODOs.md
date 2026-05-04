@@ -76,9 +76,9 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 294` execution priority:
+Current post-`Phase 295` execution priority:
 
-1. `P0` - complete the `Direction 10.3` store asset-pack line: RDP Chrome is available for real toolbar-popup clicking and screenshot capture, so the remaining work is capture/import/archive closeout rather than more repo-only planning.
+1. `P0` - complete the `Direction 10.3` store asset-pack line by saving the user-approved mixed screenshot candidate pack as files, then importing and archiving it through the store screenshot workflow.
 2. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.11.zip` as the current install/review package. It includes the Phase 291 Cursor managed session-page sync path plus the post-rc10 Cursor logged-out detection fix, Cursor structured billing/spend usage facts, compact inline usage-window reset labels, and formatted action-badge tooltip with visible Cursor facts.
 3. `P1` - run another `0.1.0-rc.11` RDP Chrome smoke pass only if new visual concerns appear. The 2026-05-04 user-run pass already reported no obvious issue across full-page dashboard, toolbar popup, action-badge tooltip, and sidebar settings surfaces.
 4. `P2` - Provider closure waits on accounts:
@@ -353,6 +353,7 @@ Phase status update:
 - `Phase 292` refreshed the maintained docs to make that package boundary explicit: `rc.10` was still the latest zip then, and the then-current source needed `Phase 293` / `rc.11` before the next install/review package could include all post-rc10 fixes
 - `Phase 293` packaged `0.1.0-rc.11` so the next install/review artifact includes the post-rc10 Cursor logged-out detection, structured usage facts, inline reset-label density, and formatted action-badge tooltip fixes
 - `Phase 294` recorded the user-run RDP Chrome smoke pass for `0.1.0-rc.11`; the user reported no obvious issue across the full-page dashboard, toolbar popup, action-badge tooltip, and sidebar settings surfaces
+- `Phase 295` accepted the user-reviewed mixed store screenshot candidate pack: one native toolbar popup quick-glance image plus full-page dashboard, Codex provider detail, Cursor source boundary, and optional Settings depth images; final archive still waits on saving/importing those image files
 - the old maintenance split queue is closed for the originally named local-safe targets: `material-theme.css`, `localized-copy.ts`, `SettingsPage.tsx`, `App.tsx`, and `standard-app-actions.ts` are now focused base, compatibility, route, or aggregator files rather than the next default work item
 - the remaining store-readiness blocker is still real native-toolbar popup capture/import/archive completion under `Direction 10.3`; RDP Chrome is now available for that manual operator step
 - the remaining high-value work in Direction 05 and Direction 04 is real operator evidence closure: archived real review exports from the shipped workspaces rather than more lifecycle tooling

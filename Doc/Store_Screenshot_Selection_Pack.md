@@ -18,6 +18,7 @@ Status note:
 
 - this file records the current screenshot-slot selection and stale-review decision for Chrome Web Store assets
 - `Phase 161` turned the first archived screenshot set into a historical baseline rather than a final submission pack after the popup/full-page surface-expansion line
+- `Phase 295` records the user-approved mixed screenshot candidate pack; the final archive is still pending file import
 - refresh this file whenever a new screenshot archive lands, the popup capture method changes, or the storyboard/copy pack changes materially
 
 Purpose:
@@ -50,7 +51,28 @@ Purpose:
   - `04-settings-and-setup-depth.png`
   - `05-provider-or-dashboard-depth.png`
 - immediate next action:
-  - fulfill the refreshed screenshot-capture request [2026-04-24-surface-expansion-store-screenshot-refresh-request](./testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md) for the post-`Phase 160` surface contract
+  - import the user-approved `2026-05-04` mixed candidate screenshots as files, then complete a refreshed store screenshot archive
+
+## Current Candidate Decision
+
+The user accepted a mixed store screenshot pack on `2026-05-04`.
+
+Preferred candidate order:
+
+1. native toolbar popup quick glance showing Codex usage-window rings
+2. full-page dashboard overview showing the product promise and summary cards
+3. Codex provider usage detail showing remaining percentages and reset timing
+4. Cursor source/settings detail showing the personal partial boundary
+5. optional side-panel Settings/responsive setup view if a fifth listing image is useful
+
+This decision replaces the old product requirement that the first three final
+slots all be native toolbar popup captures. The first screenshot should still be
+a native toolbar popup capture. Additional popup scroll states are now optional
+rather than blocking the store asset pack.
+
+The selected images were reviewed in chat, not imported into the repository.
+They are not a formal archive until the image files are saved and run through
+the store screenshot import/archive workflow.
 
 ## Slot Decisions
 
@@ -73,28 +95,28 @@ Purpose:
 - current archived asset:
   - `02-setup-guidance.png`
 - selection status:
-  - `recapture required`
+  - `replaced by candidate`
 - next target:
-  - native toolbar action-bubble popup capture
+  - full-page dashboard overview
 - keep current archive as:
   - historical baseline only
 - why:
-  - the claim remains valid, but the visual contract changed with the shipped popup expand and quick-theme controls
-  - final store capture should use the real toolbar bubble rather than the QA-only popup app-window framing
+  - after user review, the dashboard overview tells the current product story more clearly than a second popup scroll state
+  - setup guidance remains part of the listing copy and Settings story, but no longer blocks the screenshot pack as a dedicated popup slot
 
 ### 3. Honest contract-only or policy-only state
 
 - current archived asset:
   - `03-honest-contract-or-policy-only.png`
 - selection status:
-  - `recapture required`
+  - `replaced by candidate`
 - next target:
-  - native toolbar action-bubble popup capture
+  - Codex provider usage detail plus Cursor source/settings boundary detail
 - keep current archive as:
   - historical baseline only
 - why:
-  - the honesty claim is still correct, but the popup surface changed materially after the first archive
-  - this slot should be refreshed together with the other popup slots so the first three store screenshots share one consistent current popup contract
+  - the honesty claim is clearer in the current full-page/provider/source surfaces than in a narrow policy-only popup scroll state
+  - the chosen Cursor settings/source image explicitly shows `personal partial` and `仅窗口供应商值`, preserving the no-fake-precision boundary
 
 ### 4. Settings and setup depth
 

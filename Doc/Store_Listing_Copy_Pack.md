@@ -18,6 +18,7 @@ Status note:
 
 - this file is the current maintained Chrome Web Store copy pack for the shipped extension scope
 - after `Phase 161`, treat it as a pre-refresh English claim baseline anchored to the first screenshot archive rather than the final submission pack
+- `Phase 295` defines the current mixed screenshot candidate captions, pending file import and archive completion
 - refresh it when the popup story, provider truth boundary, screenshot selection pack, or refreshed screenshot archive changes materially
 
 Purpose:
@@ -68,56 +69,60 @@ Purpose:
 
 ## Screenshot Caption Pack
 
+The current candidate captions below target the `2026-05-04` mixed screenshot
+candidate pack accepted by the user. Links still point at the historical archive
+until the candidate screenshots are saved as files and archived.
+
 ### 1. Toolbar-first quick glance
 
 - screenshot:
   - [01-toolbar-first-quick-glance.png](./testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/screenshots/01-toolbar-first-quick-glance.png)
 - caption:
-  - `Check visible AI tool status in one quick popup glance.`
+  - `Check Codex and Cursor status from one Chrome toolbar popup.`
 - claim:
   - one click shows a compact snapshot instead of a second full dashboard
 
-### 2. Setup guidance
+### 2. Dashboard overview
 
 - screenshot:
   - [02-setup-guidance.png](./testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/screenshots/02-setup-guidance.png)
 - caption:
-  - `Know the next setup step when access or credentials are missing.`
+  - `Use one dashboard to collect AI coding quota and sync health.`
 - claim:
-  - the popup explains the next action instead of only surfacing raw warning cards
+  - the full-page dashboard gives the product promise, summary cards, and provider overview in one scannable workspace
 
-### 3. Honest contract-only or policy-only state
+### 3. Provider usage detail
 
 - screenshot:
   - [03-honest-contract-or-policy-only.png](./testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/screenshots/03-honest-contract-or-policy-only.png)
 - caption:
-  - `See honest provider coverage without faking unsupported live usage.`
+  - `Review usage windows and reset timing without fake precision.`
 - claim:
-  - the product keeps contract-only or policy-only states explicit
+  - Codex detail shows window-scoped percentages and reset timing without claiming one plan-wide remaining balance
 
-### 4. Settings and setup depth
+### 4. Source boundary detail
 
 - screenshot:
   - [04-settings-and-setup-depth.png](./testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/screenshots/04-settings-and-setup-depth.png)
 - caption:
-  - `Use the side panel for setup ownership and deeper controls.`
+  - `Keep partial provider contracts visible before you trust a number.`
 - claim:
-  - setup belongs in Settings, not in an overloaded popup
+  - Cursor personal support is shown as partial billing-period context rather than exact remaining included requests
 
-### 5. Provider or dashboard depth
+### 5. Optional Settings depth
 
 - screenshot:
   - [05-provider-or-dashboard-depth.png](./testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/screenshots/05-provider-or-dashboard-depth.png)
 - caption:
-  - `Open deeper provider review when the popup needs more context.`
+  - `Use Settings for preferences, source access, credentials, and permissions.`
 - claim:
-  - detailed provider and contract review belongs to the side panel
+  - setup and control surfaces stay in the deeper workspace instead of crowding the popup
 
 ## Current Asset Boundary
 
-- the current title, overview, feature bullets, and captions still map truthfully to the first archived screenshot set
-- after `Phase 161`, this pack is no longer the final submission pack because the underlying screenshot set is now treated as a historical baseline after the popup/full-page surface-expansion line
-- tighten this pack only after a refreshed screenshot archive replaces the first archived set
+- the current title, overview, feature bullets, and captions map to the user-approved mixed candidate pack
+- the linked screenshot files remain the historical archive until the candidate images are imported and archived
+- do not treat this pack as final submission evidence until the candidate screenshots exist as repo files and the archive ledger is refreshed
 
 ## Claim Guardrails
 

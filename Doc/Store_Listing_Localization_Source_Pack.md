@@ -18,6 +18,7 @@ Status note:
 
 - this file is the current English source pack for future Chrome Web Store listing localization work
 - after `Phase 161`, treat it as a pre-refresh localization baseline anchored to the first screenshot archive rather than the final submission source pack
+- `Phase 295` refreshes screenshot-caption source strings for the user-approved mixed screenshot candidate pack, pending file import and archive completion
 - refresh it when the maintained store-listing copy pack, screenshot selection pack, refreshed screenshot archive, or shipped truth boundary changes materially
 
 Purpose:
@@ -66,15 +67,15 @@ Purpose:
 ### Screenshot Captions
 
 - `store.screenshot_caption.01_toolbar_first`
-  - `Check visible AI tool status in one quick popup glance.`
+  - `Check Codex and Cursor status from one Chrome toolbar popup.`
 - `store.screenshot_caption.02_setup_guidance`
-  - `Know the next setup step when access or credentials are missing.`
+  - `Use one dashboard to collect AI coding quota and sync health.`
 - `store.screenshot_caption.03_honest_contract_or_policy_only`
-  - `See honest provider coverage without faking unsupported live usage.`
+  - `Review usage windows and reset timing without fake precision.`
 - `store.screenshot_caption.04_settings_and_setup_depth`
-  - `Use the side panel for setup ownership and deeper controls.`
+  - `Keep partial provider contracts visible before you trust a number.`
 - `store.screenshot_caption.05_provider_or_dashboard_depth`
-  - `Open deeper provider review when the popup needs more context.`
+  - `Use Settings for preferences, source access, credentials, and permissions.`
 
 ## Truth Anchor Map
 
@@ -89,13 +90,13 @@ Purpose:
   - proof surface: popup handles fast state recognition while the side panel owns deeper review
 - `store.feature.quick_glance`
   - evidence anchor: `01-toolbar-first-quick-glance.png`
-  - truth note: real runtime capture from a request-bound approximated state, not a live operator-session snapshot
+  - truth note: current candidate is a user-reviewed native toolbar popup runtime capture; archive file import is still pending
 - `store.feature.setup_guidance`
   - evidence anchor: `02-setup-guidance.png`
-  - truth note: real runtime capture from a request-bound approximated setup-blocker state
+  - truth note: current candidate uses a full-page dashboard overview instead of a dedicated setup-blocker popup slot
 - `store.feature.honest_coverage`
   - evidence anchor: `03-honest-contract-or-policy-only.png`
-  - truth note: policy-only fallback is intentional and must remain explicit in any translation
+  - truth note: current candidate uses Codex window-scoped detail and Cursor personal partial source context instead of faking exact usage
 - `store.feature.sidepanel_depth`
   - evidence anchor: `04-settings-and-setup-depth.png`
   - truth note: settings owns setup depth; the popup must stay compact
@@ -115,9 +116,9 @@ Purpose:
 
 ## Current Asset Boundary
 
-- the current string ids still map truthfully to the maintained listing-copy pack and first screenshot archive
-- after `Phase 161`, this source pack is a historical baseline for localization handoff, not the final submission-ready source set
-- refresh localized listing work only after a new screenshot archive and refreshed English copy pack replace the current first-archive baseline
+- the current string ids map truthfully to the maintained listing-copy pack and user-approved mixed screenshot candidate pack
+- the screenshot files remain pending archive import, so this source pack is not final submission evidence yet
+- refresh localized listing work only after the candidate screenshot archive lands or the English copy pack changes again
 
 ## Translation Guardrails
 

@@ -7,7 +7,7 @@ Current release candidate:
 - package version: `0.1.0-rc.11`
 - Chrome manifest version: `0.1.0.11`
 - packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.11.zip`
-- source status: source, built `dist`, and packaged zip are aligned after `Phase 293`; user-run RDP Chrome visual smoke passed in `Phase 294`
+- source status: source, built `dist`, and packaged zip are aligned after `Phase 293`; user-run RDP Chrome visual smoke passed in `Phase 294`; mixed store screenshot candidate accepted in `Phase 295`
 
 ## Current RC Matrix
 
@@ -41,7 +41,7 @@ Security posture for this track:
 
 Next execution queue:
 
-1. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) for the remaining store-popup screenshot capture and archive closeout now that RDP Chrome is available for manual native popup interaction
+1. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) by saving the user-approved mixed store screenshots as files, then importing/archiving them through the store screenshot workflow
 2. use `0.1.0-rc.11` as the current install/review package if another smoke pass is needed
 3. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 4. keep operator evidence closure below release/store work; here it means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not another runtime feature
@@ -246,15 +246,15 @@ The Chrome action now opens a compact popup first:
 - the repo now also ships one native toolbar-popup probe plus helper-window evidence review:
   - current `RDP Chrome` does not expose the native popup as a separate capturable X11 top-level window
   - the probe can capture one truthful helper-window screenshot that documents the environment boundary
-  - popup slots `1` through `3` in the refreshed request therefore remain manual native-toolbar captures rather than silently falling back to the wrong surface
+  - the older refreshed request therefore kept popup slots `1` through `3` manual rather than silently falling back to the wrong surface
 - the repo now also ships one hybrid request-bound full-page staging pass for that refreshed screenshot request:
   - generated `capture-plan.json` now marks popup slots `1` through `3` as manual native-toolbar capture and depth slots `4` and `5` as request-bound full-page-shell capture
   - the pending request package now already includes staged full-page captures for slots `4` and `5`
-  - screenshot truth therefore still remains `1 pending request / 1 archived set` until the remaining manual popup captures are completed and archived
+  - screenshot truth therefore stayed `1 pending request / 1 archived set` until the user accepted a mixed screenshot candidate pack in Phase 295
 - the repo now also ships one manual screenshot handoff plus archive-readiness preflight for that same refreshed request:
   - the request package now generates `manual-capture-handoff.md` and `manual-capture-handoff.json`
-  - those files make the remaining three native-toolbar popup slots explicit and confirm that the two full-page depth slots are already staged
-  - the request still stays pending until those remaining manual popup captures are added and archived
+  - those files made the former three native-toolbar popup slots explicit and confirmed that the two full-page depth slots were already staged
+  - after Phase 295, the next store step is mixed candidate image-file intake/import/archive rather than more screenshot-selection debate
 - the repo now also ships one manual screenshot import workflow for that same refreshed request:
   - generated handoff files now expose `manualImportCommand` and `manualImportWithNotesCommand`
   - one repo-backed command can copy real native-toolbar popup captures and an optional popup-note overlay back into the pending request package without hand-editing `capture-notes.json`
@@ -270,7 +270,11 @@ The Chrome action now opens a compact popup first:
 - the repo now also ships one request-bound manual finalize path for that refreshed screenshot request:
   - generated handoff files now expose `manualFinalizeCommand` and `manualFinalizeWithNotesCommand`
   - `store:finalize-manual-screenshot-request` now compresses popup import, archive-readiness check, and request completion into one repo-backed operator step
-  - the real repo still remains `1 pending request / 1 archived set`; the actual native-toolbar popup capture is still the remaining real-world step
+  - the real repo still remains `1 pending request / 1 archived set`; after Phase 295 the remaining real-world step is saving the accepted mixed candidate screenshots as files and importing/archiving them
+- the repo now also records one user-approved mixed store screenshot candidate pack:
+  - first image: native toolbar popup quick glance
+  - remaining images: full-page dashboard overview, Codex usage detail, Cursor source-boundary detail, and optional Settings depth
+  - the candidate is not yet a formal store archive because the reviewed chat screenshots still need to be saved as files and imported
 - the repo now also ships one manifest-level i18n bootstrap baseline:
   - `src/manifest.json` now uses `default_locale = en` plus `__MSG_...__` keys for extension name, description, and action title
   - `public/_locales/en/messages.json` and `public/_locales/zh_CN/messages.json` now ship the first manifest catalogs
