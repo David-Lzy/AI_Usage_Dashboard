@@ -239,10 +239,10 @@ The Chrome action now opens a compact popup first:
 - the native toolbar popup has now been checked in RDP Chrome after extension reload, and popup-only circular quota density was tightened so four Codex quota rings remain a quick-glance surface rather than a reset-detail surface
 - the repo now also ships one request-bound store-screenshot seed plus RDP capture-runner workflow, so truthful store assets can be collected from the real unpacked extension runtime without pretending the first real screenshot archive already exists
 - the repo now also ships the first real archived store screenshot set, captured from `RDP Chrome` and archived with request-bound truth notes instead of preview-only mocks
-- the repo now also ships one maintained store-listing copy pack anchored to that first real screenshot archive, including the preferred short description, overview paragraph, feature bullets, screenshot captions, and claim guardrails
-- the repo now also ships one maintained store-listing localization source pack anchored to the current manifest, maintained listing-copy pack, and first archived screenshot set, so future translated store listings can stay aligned with the same truth boundary
+- the repo now also ships one maintained store-listing copy pack anchored to the refreshed RC11 screenshot archive, including the preferred short description, overview paragraph, feature bullets, screenshot captions, and claim guardrails
+- the repo now also ships one maintained store-listing localization source pack anchored to the current manifest, maintained listing-copy pack, and refreshed screenshot archive, so future translated store listings can stay aligned with the same truth boundary
 - the repo now also ships one maintained screenshot selection pack that marks the first screenshot archive as a historical baseline after the popup/full-page surface-expansion line, so refreshed store-ready capture is now driven by an explicit stale-review instead of guesswork
-- the repo now also ships one refreshed pending screenshot-capture request for that post-surface-expansion asset set, so current screenshot truth is now `1 pending request / 1 archived set` instead of treating the first archive as the final submission pack
+- the repo also preserved the refreshed screenshot-capture request workflow for the post-surface-expansion asset set; after Phase 296, that request is fulfilled and no longer the current blocker
 - the repo now also ships one native toolbar-popup probe plus helper-window evidence review:
   - current `RDP Chrome` does not expose the native popup as a separate capturable X11 top-level window
   - the probe can capture one truthful helper-window screenshot that documents the environment boundary
@@ -250,15 +250,15 @@ The Chrome action now opens a compact popup first:
 - the repo now also ships one hybrid request-bound full-page staging pass for that refreshed screenshot request:
   - generated `capture-plan.json` now marks popup slots `1` through `3` as manual native-toolbar capture and depth slots `4` and `5` as request-bound full-page-shell capture
   - the pending request package now already includes staged full-page captures for slots `4` and `5`
-  - screenshot truth therefore stayed `1 pending request / 1 archived set` until the user accepted a mixed screenshot candidate pack in Phase 295
+  - screenshot truth stayed `1 pending request / 1 archived set` until the user accepted a mixed screenshot candidate pack in Phase 295 and Phase 296 archived it
 - the repo now also ships one manual screenshot handoff plus archive-readiness preflight for that same refreshed request:
   - the request package now generates `manual-capture-handoff.md` and `manual-capture-handoff.json`
   - those files made the former three native-toolbar popup slots explicit and confirmed that the two full-page depth slots were already staged
-  - after Phase 295, the next store step is mixed candidate image-file intake/import/archive rather than more screenshot-selection debate
+  - after Phase 296, that mixed candidate image-file intake/import/archive step is complete
 - the repo now also ships one manual screenshot import workflow for that same refreshed request:
   - generated handoff files now expose `manualImportCommand` and `manualImportWithNotesCommand`
   - one repo-backed command can copy real native-toolbar popup captures and an optional popup-note overlay back into the pending request package without hand-editing `capture-notes.json`
-  - screenshot truth still remains `1 pending request / 1 archived set` until the imported popup captures are actually completed and archived
+  - this import workflow remains available for future requests, but the current refreshed request is already fulfilled by the RC11 mixed archive
 - the repo now also ships one generated popup-notes template plus popup-capture checklist for that same refreshed request:
   - the pending request package now includes `manual-popup-notes-overlay.template.json` and `manual-popup-capture-checklist.md`
   - the notes-import command now points at the request-bound template path instead of a generic placeholder
@@ -266,15 +266,18 @@ The Chrome action now opens a compact popup first:
 - the repo now also ships one request-bound screenshot completion default path:
   - `store:complete-screenshot-capture-request` now defaults to the request package `captures/` directory when `--captures-dir` is omitted
   - once real popup files are imported into the pending request, completion can run with only `--request-id` instead of another manual path argument
-  - the real repo still remains `1 pending request / 1 archived set`; this slice only proved that the final completion path works on a temp request-bound review fixture
+  - Phase 296 used the completion path on the real refreshed request, so the repo now records `0` pending screenshot requests and `2` archived sets
 - the repo now also ships one request-bound manual finalize path for that refreshed screenshot request:
   - generated handoff files now expose `manualFinalizeCommand` and `manualFinalizeWithNotesCommand`
   - `store:finalize-manual-screenshot-request` now compresses popup import, archive-readiness check, and request completion into one repo-backed operator step
-  - the real repo still remains `1 pending request / 1 archived set`; after Phase 295 the remaining real-world step is saving the accepted mixed candidate screenshots as files and importing/archiving them
+  - Phase 296 completed the remaining real-world step by saving the accepted mixed candidate screenshots as files and archiving them
 - the repo now also records one user-approved mixed store screenshot candidate pack:
   - first image: native toolbar popup quick glance
-  - remaining images: full-page dashboard overview, Codex usage detail, Cursor source-boundary detail, and optional Settings depth
-  - the candidate is not yet a formal store archive because the reviewed chat screenshots still need to be saved as files and imported
+  - remaining images: full-page dashboard overview, Codex usage detail, Cursor source-boundary detail, and side-panel provider depth
+- the repo now also ships the fulfilled RC11 mixed store screenshot archive:
+  - [2026-05-04-rc11-mixed-store-candidate-archive](./Doc/testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
+  - the refreshed request is no longer pending; generated screenshot request and archive indexes now report `0` pending requests and `2` fulfilled archives
+  - the archive preserves `5/5` reviewed screenshots and `3` explicit truth-boundary notes for Codex window-scoped usage and Cursor personal partial context
 - the repo now also ships one manifest-level i18n bootstrap baseline:
   - `src/manifest.json` now uses `default_locale = en` plus `__MSG_...__` keys for extension name, description, and action title
   - `public/_locales/en/messages.json` and `public/_locales/zh_CN/messages.json` now ship the first manifest catalogs

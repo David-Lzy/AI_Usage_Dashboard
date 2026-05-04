@@ -17,14 +17,14 @@ Freshness model:
 Status note:
 
 - this file is the current English source pack for future Chrome Web Store listing localization work
-- after `Phase 161`, treat it as a pre-refresh localization baseline anchored to the first screenshot archive rather than the final submission source pack
-- `Phase 295` refreshes screenshot-caption source strings for the user-approved mixed screenshot candidate pack, pending file import and archive completion
+- after `Phase 296`, treat it as the current English source pack anchored to the refreshed RC11 screenshot archive
+- `Phase 296` anchors the screenshot-caption source strings to the user-approved mixed screenshot archive
 - refresh it when the maintained store-listing copy pack, screenshot selection pack, refreshed screenshot archive, or shipped truth boundary changes materially
 
 Purpose:
 
 - turn the current English store-listing copy into one stable source pack for future localization work
-- keep future translated listing work anchored to the same screenshot archive, manifest text, and truth boundary as the maintained English copy pack
+- keep future translated listing work anchored to the same refreshed screenshot archive, manifest text, and truth boundary as the maintained English copy pack
 - make listing-localization work explicit without implying that the in-product UI is localized today
 
 ## Source Anchors
@@ -33,6 +33,8 @@ Purpose:
   - [Store_Listing_Copy_Pack.md](./Store_Listing_Copy_Pack.md)
 - first real screenshot archive:
   - [2026-04-24-first-real-store-screenshot-capture-request-archive/README.md](./testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md)
+- current refreshed screenshot archive:
+  - [2026-05-04-rc11-mixed-store-candidate-archive/README.md](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
 - screenshot storyboard:
   - [Store_Screenshot_Storyboard.md](./Store_Screenshot_Storyboard.md)
 - screenshot selection pack:
@@ -75,7 +77,7 @@ Purpose:
 - `store.screenshot_caption.04_settings_and_setup_depth`
   - `Keep partial provider contracts visible before you trust a number.`
 - `store.screenshot_caption.05_provider_or_dashboard_depth`
-  - `Use Settings for preferences, source access, credentials, and permissions.`
+  - `Open the side panel for compact provider review.`
 
 ## Truth Anchor Map
 
@@ -90,7 +92,7 @@ Purpose:
   - proof surface: popup handles fast state recognition while the side panel owns deeper review
 - `store.feature.quick_glance`
   - evidence anchor: `01-toolbar-first-quick-glance.png`
-  - truth note: current candidate is a user-reviewed native toolbar popup runtime capture; archive file import is still pending
+  - truth note: current archive uses a user-reviewed native toolbar popup runtime capture from RDP Chrome
 - `store.feature.setup_guidance`
   - evidence anchor: `02-setup-guidance.png`
   - truth note: current candidate uses a full-page dashboard overview instead of a dedicated setup-blocker popup slot
@@ -98,8 +100,8 @@ Purpose:
   - evidence anchor: `03-honest-contract-or-policy-only.png`
   - truth note: current candidate uses Codex window-scoped detail and Cursor personal partial source context instead of faking exact usage
 - `store.feature.sidepanel_depth`
-  - evidence anchor: `04-settings-and-setup-depth.png`
-  - truth note: settings owns setup depth; the popup must stay compact
+  - evidence anchor: `04-settings-and-setup-depth.png` plus `05-provider-or-dashboard-depth.png`
+  - truth note: settings owns source/setup depth while provider detail owns compact review depth; the popup must stay compact
 - `store.feature.runtime_evidence`
   - evidence anchor: screenshot archive package plus archive ledger
   - truth note: this claim depends on archived extension-mode evidence, not on preview-only mockups
@@ -117,13 +119,13 @@ Purpose:
 ## Current Asset Boundary
 
 - the current string ids map truthfully to the maintained listing-copy pack and user-approved mixed screenshot candidate pack
-- the screenshot files remain pending archive import, so this source pack is not final submission evidence yet
-- refresh localized listing work only after the candidate screenshot archive lands or the English copy pack changes again
+- the screenshot files now live in [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
+- this source pack is submission-prep evidence, not a submitted listing receipt
 
 ## Translation Guardrails
 
 - this source pack is for future store-listing localization work and is not evidence that the in-product UI is localized today
-- localized listing strings must stay aligned with the current maintained [Store_Listing_Copy_Pack.md](./Store_Listing_Copy_Pack.md) and the first archived screenshot set
+- localized listing strings must stay aligned with the current maintained [Store_Listing_Copy_Pack.md](./Store_Listing_Copy_Pack.md) and the refreshed screenshot archive
 - do not translate product or provider names blindly:
   - `AI Usage Dashboard`
   - `Chrome`
@@ -138,5 +140,5 @@ Purpose:
 ## Follow-up Use
 
 - use this pack as the English source document for future store-listing localization work
-- refresh this pack when a later archived screenshot set replaces the current first archive or when the maintained listing-copy pack changes
+- refresh this pack when a later archived screenshot set replaces the refreshed RC11 archive or when the maintained listing-copy pack changes
 - coordinate future listing-localization rollout with `Direction 09`, but do not wait for full in-product localization before defining truthful listing-source strings

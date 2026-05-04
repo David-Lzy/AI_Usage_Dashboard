@@ -76,17 +76,18 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 295` execution priority:
+Current post-`Phase 296` execution priority:
 
-1. `P0` - complete the `Direction 10.3` store asset-pack line by saving the user-approved mixed screenshot candidate pack as files, then importing and archiving it through the store screenshot workflow.
-2. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.11.zip` as the current install/review package. It includes the Phase 291 Cursor managed session-page sync path plus the post-rc10 Cursor logged-out detection fix, Cursor structured billing/spend usage facts, compact inline usage-window reset labels, and formatted action-badge tooltip with visible Cursor facts.
-3. `P1` - run another `0.1.0-rc.11` RDP Chrome smoke pass only if new visual concerns appear. The 2026-05-04 user-run pass already reported no obvious issue across full-page dashboard, toolbar popup, action-badge tooltip, and sidebar settings surfaces.
-4. `P2` - Provider closure waits on accounts:
+1. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.11.zip` as the current install/review package. It includes the Phase 291 Cursor managed session-page sync path plus the post-rc10 Cursor logged-out detection fix, Cursor structured billing/spend usage facts, compact inline usage-window reset labels, and formatted action-badge tooltip with visible Cursor facts.
+2. `P0` - treat the refreshed `Direction 10.3` screenshot evidence as archived, not pending: [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) now fulfills the refreshed store screenshot request with `5/5` reviewed images and `3` explicit truth-boundary notes.
+3. `P1` - prepare a final Chrome Web Store submission checklist only when the user is ready to move from release-review packaging into listing submission. The screenshot archive, listing copy pack, and localization source pack are now aligned enough to support that checklist.
+4. `P1` - run another `0.1.0-rc.11` RDP Chrome smoke pass only if new visual concerns appear. The 2026-05-04 user-run pass already reported no obvious issue across full-page dashboard, toolbar popup, action-badge tooltip, and sidebar settings surfaces.
+5. `P2` - Provider closure waits on accounts:
    - JetBrains org-console reverification waits for a real org-visible `Users and licensing` session.
    - Claude personal usage-page capture waits for a Pro or Max account.
    - Gemini project-metrics graduation waits for a product decision that project-scoped metrics are acceptable.
-5. `P2` - close real operator evidence only after higher-value release/store work: operator evidence means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not a new runtime provider feature. The user explicitly de-prioritized this below the current store-work line.
-6. `P2` - continue file splitting only when a concrete maintenance issue justifies it; the old queued split targets for `material-theme.css`, `SettingsPage.tsx`, `App.tsx`, `standard-app-actions.ts`, and `localized-copy.ts` are now closed or reduced to focused compatibility/aggregator files.
+6. `P2` - close real operator evidence only after higher-value release/store work: operator evidence means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not a new runtime provider feature. The user explicitly de-prioritized this below the current store-work line.
+7. `P2` - continue file splitting only when a concrete maintenance issue justifies it; the old queued split targets for `material-theme.css`, `SettingsPage.tsx`, `App.tsx`, `standard-app-actions.ts`, and `localized-copy.ts` are now closed or reduced to focused compatibility/aggregator files.
 
 Delivery rule for this stage:
 
@@ -225,7 +226,7 @@ Phase status update:
 - `Phase 167` completed the next `Direction 10.3` slice by generating one request-bound popup-notes overlay template plus one popup-capture checklist, so the final manual popup pass now has repo-backed note scaffolding instead of ad-hoc prep work
 - `Phase 168` completed the next `Direction 10.3` slice by making request completion default to the request package `captures/` directory after popup import, so the next real-world step is the popup capture itself instead of another path-resolution step
 - `Phase 169` completed the next `Direction 10.3` slice by adding one request-bound manual finalize command plus handoff update, so popup import, archive-readiness validation, and request completion can now run in one repo-backed step once the real native-toolbar popup files exist
-- the store-asset line still retains one real manual native-toolbar popup capture dependency under `Doc/Roadmap/10_3_Store_Asset_Pack_And_Submission_TODOs.md`
+- `Phase 296` closed the refreshed store screenshot archive dependency under `Doc/Roadmap/10_3_Store_Asset_Pack_And_Submission_TODOs.md`
 - `Phase 170` completed the first `Direction 09` slice by shipping one manifest locale bootstrap baseline plus one message-id contract and one string inventory
 - `Phase 171` completed the next `Direction 09` slice by shipping one shared runtime i18n helper, persisted locale normalization, and the first localized popup/dashboard shell slice while keeping broader settings, provider-detail, popup body copy, and operator workspaces English for now
 - `Phase 172` completed the next `Direction 09` slice by shipping locale-aware formatting for generated counts, percentages, and parseable timestamp primitives across popup, dashboard, and provider-detail surfaces while keeping most deeper body copy and durations pending
@@ -353,9 +354,10 @@ Phase status update:
 - `Phase 292` refreshed the maintained docs to make that package boundary explicit: `rc.10` was still the latest zip then, and the then-current source needed `Phase 293` / `rc.11` before the next install/review package could include all post-rc10 fixes
 - `Phase 293` packaged `0.1.0-rc.11` so the next install/review artifact includes the post-rc10 Cursor logged-out detection, structured usage facts, inline reset-label density, and formatted action-badge tooltip fixes
 - `Phase 294` recorded the user-run RDP Chrome smoke pass for `0.1.0-rc.11`; the user reported no obvious issue across the full-page dashboard, toolbar popup, action-badge tooltip, and sidebar settings surfaces
-- `Phase 295` accepted the user-reviewed mixed store screenshot candidate pack: one native toolbar popup quick-glance image plus full-page dashboard, Codex provider detail, Cursor source boundary, and optional Settings depth images; final archive still waits on saving/importing those image files
+- `Phase 295` accepted the user-reviewed mixed store screenshot candidate pack: one native toolbar popup quick-glance image plus full-page dashboard, Codex provider detail, Cursor source boundary, and side-panel/provider-depth images
+- `Phase 296` captured those mixed candidate images from RDP Chrome, saved them under a candidate-intake package, and completed [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md), fulfilling the refreshed store screenshot request with `5/5` reviewed screenshots and `3` explicit truth-boundary notes
 - the old maintenance split queue is closed for the originally named local-safe targets: `material-theme.css`, `localized-copy.ts`, `SettingsPage.tsx`, `App.tsx`, and `standard-app-actions.ts` are now focused base, compatibility, route, or aggregator files rather than the next default work item
-- the remaining store-readiness blocker is still real native-toolbar popup capture/import/archive completion under `Direction 10.3`; RDP Chrome is now available for that manual operator step
+- the previous store-readiness blocker for screenshot file intake/import/archive is now closed under `Direction 10.3`; the next store step is a submission checklist when the user wants to move beyond release review
 - the remaining high-value work in Direction 05 and Direction 04 is real operator evidence closure: archived real review exports from the shipped workspaces rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
 - the split `Phase 41` release gate cleared the old runtime-parity ambiguity and re-proved the live `Codex` plus `Cursor` personal session-page paths in real Chrome

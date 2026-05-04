@@ -1,0 +1,94 @@
+{
+  "archiveId": "2026-05-04-rc11-mixed-store-candidate-archive",
+  "archivedAt": "2026-05-04T04:12:44.065Z",
+  "sourceRequest": {
+    "requestId": "2026-04-24-surface-expansion-store-screenshot-refresh-request",
+    "requestReadmePath": "Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md",
+    "requestManifestPath": "Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/capture-request.json",
+    "requestNotesPath": "Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/capture-notes.json"
+  },
+  "sourceCaptureDir": "Doc/testing/store_screenshot_candidate_intake/2026-05-04-rc11-mixed-store-candidate/captures",
+  "sourceNotesPath": "Doc/testing/store_screenshot_candidate_intake/2026-05-04-rc11-mixed-store-candidate/capture-notes.json",
+  "requestCreatedAt": "2026-04-24T08:50:12.783Z",
+  "runtimeSource": "RDP Chrome unpacked extension",
+  "preferredSize": "1280x800",
+  "fallbackSize": "640x400",
+  "storyboardPath": "Doc/Store_Screenshot_Storyboard.md",
+  "baselinePackReadme": "Doc/testing/store_screenshot_capture_packs/2026-04-24-toolbar-storyboard-baseline/README.md",
+  "baselinePackPlan": "Doc/testing/store_screenshot_capture_packs/2026-04-24-toolbar-storyboard-baseline/capture-plan.json",
+  "requiredScreenshotFilenames": [
+    "01-toolbar-first-quick-glance.png",
+    "02-setup-guidance.png",
+    "03-honest-contract-or-policy-only.png",
+    "04-settings-and-setup-depth.png",
+    "05-provider-or-dashboard-depth.png"
+  ],
+  "captureNotesPath": "Doc/testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/capture-notes.json",
+  "captureNotesSummary": {
+    "noteCount": 5,
+    "reviewedScreenshotCount": 5,
+    "pendingReviewCount": 0,
+    "truthBoundaryCount": 3
+  },
+  "captureNotes": [
+    {
+      "filename": "01-toolbar-first-quick-glance.png",
+      "captureTruth": "exact_runtime_capture",
+      "stateSummary": "Native Chrome toolbar popup quick glance captured from the RDP Chrome unpacked extension, showing Codex usage-window rings and the current action badge state.",
+      "operatorNote": ""
+    },
+    {
+      "filename": "02-setup-guidance.png",
+      "captureTruth": "exact_runtime_capture",
+      "stateSummary": "Full-page dashboard overview captured from the RDP Chrome unpacked extension, showing the product promise, summary counts, and the beginning of the provider-card list.",
+      "operatorNote": ""
+    },
+    {
+      "filename": "03-honest-contract-or-policy-only.png",
+      "captureTruth": "other_truth_boundary",
+      "stateSummary": "Full-page Codex provider card captured from the RDP Chrome unpacked extension, showing live window-scoped remaining percentages and reset timing.",
+      "operatorNote": "The screenshot intentionally shows Codex usage-window percentages and reset timing instead of claiming one absolute plan-wide remaining balance."
+    },
+    {
+      "filename": "04-settings-and-setup-depth.png",
+      "captureTruth": "other_truth_boundary",
+      "stateSummary": "Full-page Settings source card captured from the RDP Chrome unpacked extension, showing the Cursor personal session-page route, availability summary, and source controls.",
+      "operatorNote": "The screenshot intentionally preserves the Cursor personal contract boundary: billing-period context is visible, but no exact remaining included-request counter is claimed."
+    },
+    {
+      "filename": "05-provider-or-dashboard-depth.png",
+      "captureTruth": "other_truth_boundary",
+      "stateSummary": "Chrome side panel provider-detail route captured from the RDP Chrome unpacked extension, showing the compact Codex source snapshot and detail hierarchy.",
+      "operatorNote": "This is a real side-panel capture triggered through the shipped popup path; it uses Codex window-scoped usage semantics rather than a plan-wide absolute balance."
+    }
+  ],
+  "screenshots": [
+    {
+      "filename": "01-toolbar-first-quick-glance.png",
+      "sourcePath": "Doc/testing/store_screenshot_candidate_intake/2026-05-04-rc11-mixed-store-candidate/captures/01-toolbar-first-quick-glance.png",
+      "archivePath": "Doc/testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/screenshots/01-toolbar-first-quick-glance.png"
+    },
+    {
+      "filename": "02-setup-guidance.png",
+      "sourcePath": "Doc/testing/store_screenshot_candidate_intake/2026-05-04-rc11-mixed-store-candidate/captures/02-setup-guidance.png",
+      "archivePath": "Doc/testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/screenshots/02-setup-guidance.png"
+    },
+    {
+      "filename": "03-honest-contract-or-policy-only.png",
+      "sourcePath": "Doc/testing/store_screenshot_candidate_intake/2026-05-04-rc11-mixed-store-candidate/captures/03-honest-contract-or-policy-only.png",
+      "archivePath": "Doc/testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/screenshots/03-honest-contract-or-policy-only.png"
+    },
+    {
+      "filename": "04-settings-and-setup-depth.png",
+      "sourcePath": "Doc/testing/store_screenshot_candidate_intake/2026-05-04-rc11-mixed-store-candidate/captures/04-settings-and-setup-depth.png",
+      "archivePath": "Doc/testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/screenshots/04-settings-and-setup-depth.png"
+    },
+    {
+      "filename": "05-provider-or-dashboard-depth.png",
+      "sourcePath": "Doc/testing/store_screenshot_candidate_intake/2026-05-04-rc11-mixed-store-candidate/captures/05-provider-or-dashboard-depth.png",
+      "archivePath": "Doc/testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/screenshots/05-provider-or-dashboard-depth.png"
+    }
+  ],
+  "screenshotCount": 5,
+  "captureDate": "2026-05-04"
+}

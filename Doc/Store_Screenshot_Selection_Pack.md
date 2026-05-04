@@ -18,7 +18,7 @@ Status note:
 
 - this file records the current screenshot-slot selection and stale-review decision for Chrome Web Store assets
 - `Phase 161` turned the first archived screenshot set into a historical baseline rather than a final submission pack after the popup/full-page surface-expansion line
-- `Phase 295` records the user-approved mixed screenshot candidate pack; the final archive is still pending file import
+- `Phase 296` archived the user-approved mixed screenshot candidate pack as [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
 - refresh this file whenever a new screenshot archive lands, the popup capture method changes, or the storyboard/copy pack changes materially
 
 Purpose:
@@ -31,6 +31,8 @@ Purpose:
 
 - first real screenshot archive:
   - [2026-04-24-first-real-store-screenshot-capture-request-archive/README.md](./testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md)
+- current refreshed screenshot archive:
+  - [2026-05-04-rc11-mixed-store-candidate-archive/README.md](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
 - refreshed runtime QA evidence from `Phase 160`:
   - [phase160-results.json](../tmp/phase160-rdp-runtime-surface-refresh-review/phase160-results.json)
 - current storyboard:
@@ -43,15 +45,15 @@ Purpose:
 ## Selection Decision Summary
 
 - archived screenshots retained as final submission assets without recapture:
-  - none
-- archived screenshots retained as truthful historical baseline only:
   - `01-toolbar-first-quick-glance.png`
   - `02-setup-guidance.png`
   - `03-honest-contract-or-policy-only.png`
   - `04-settings-and-setup-depth.png`
   - `05-provider-or-dashboard-depth.png`
+- archived screenshots retained as truthful historical baseline only:
+  - the full `2026-04-24` first real screenshot archive
 - immediate next action:
-  - import the user-approved `2026-05-04` mixed candidate screenshots as files, then complete a refreshed store screenshot archive
+  - move to a final submission checklist when the user wants to prepare the Chrome Web Store listing
 
 ## Current Candidate Decision
 
@@ -63,28 +65,28 @@ Preferred candidate order:
 2. full-page dashboard overview showing the product promise and summary cards
 3. Codex provider usage detail showing remaining percentages and reset timing
 4. Cursor source/settings detail showing the personal partial boundary
-5. optional side-panel Settings/responsive setup view if a fifth listing image is useful
+5. Chrome side-panel provider-detail view triggered through the shipped popup path
 
 This decision replaces the old product requirement that the first three final
 slots all be native toolbar popup captures. The first screenshot should still be
 a native toolbar popup capture. Additional popup scroll states are now optional
 rather than blocking the store asset pack.
 
-The selected images were reviewed in chat, not imported into the repository.
-They are not a formal archive until the image files are saved and run through
-the store screenshot import/archive workflow.
+The selected images were captured from RDP Chrome, saved under the candidate
+intake package, and archived in
+[2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md).
 
 ## Slot Decisions
 
 ### 1. Toolbar-first quick glance
 
-- current archived asset:
+- current refreshed archived asset:
   - `01-toolbar-first-quick-glance.png`
 - selection status:
-  - `recapture required`
-- next target:
+  - `archived final candidate`
+- selected target:
   - native toolbar action-bubble popup capture
-- keep current archive as:
+- keep first archive as:
   - historical baseline only
 - why:
   - the archived popup shot predates the shipped popup expand control, quick light-dark toggle, and full-page entry motion line
@@ -92,13 +94,13 @@ the store screenshot import/archive workflow.
 
 ### 2. Setup guidance
 
-- current archived asset:
+- current refreshed archived asset:
   - `02-setup-guidance.png`
 - selection status:
-  - `replaced by candidate`
-- next target:
+  - `archived final candidate`
+- selected target:
   - full-page dashboard overview
-- keep current archive as:
+- keep first archive as:
   - historical baseline only
 - why:
   - after user review, the dashboard overview tells the current product story more clearly than a second popup scroll state
@@ -106,13 +108,13 @@ the store screenshot import/archive workflow.
 
 ### 3. Honest contract-only or policy-only state
 
-- current archived asset:
+- current refreshed archived asset:
   - `03-honest-contract-or-policy-only.png`
 - selection status:
-  - `replaced by candidate`
-- next target:
+  - `archived final candidate`
+- selected target:
   - Codex provider usage detail plus Cursor source/settings boundary detail
-- keep current archive as:
+- keep first archive as:
   - historical baseline only
 - why:
   - the honesty claim is clearer in the current full-page/provider/source surfaces than in a narrow policy-only popup scroll state
@@ -120,37 +122,37 @@ the store screenshot import/archive workflow.
 
 ### 4. Settings and setup depth
 
-- current archived asset:
+- current refreshed archived asset:
   - `04-settings-and-setup-depth.png`
 - selection status:
-  - `recapture required`
-- next target:
+  - `archived final candidate`
+- selected target:
   - full-page shell `Settings`
-- keep current archive as:
+- keep first archive as:
   - historical baseline only
 - why:
-  - the old sidepanel Settings capture remains truthful, but it no longer reflects the now-shipped expand-to-full-page story
-  - `Phase 160` refreshed full-page Settings QA evidence, so the next store-ready pack should use that larger expanded workspace surface instead of stopping at the sidepanel baseline
+  - the refreshed Settings/source capture shows the deeper source-control workspace without crowding the toolbar popup
+  - the Cursor personal route remains partial by design, so the image preserves that no-fake-precision boundary
 
 ### 5. Provider or dashboard depth
 
-- current archived asset:
+- current refreshed archived asset:
   - `05-provider-or-dashboard-depth.png`
 - selection status:
-  - `recapture required`
-- next target:
-  - full-page shell `Provider detail` by default, with full-page dashboard as an explicit fallback if it tells the clearer truthful story
-- keep current archive as:
+  - `archived final candidate`
+- selected target:
+  - Chrome side panel `Provider detail`, captured through the shipped popup path
+- keep first archive as:
   - historical baseline only
 - why:
-  - the old sidepanel provider-detail capture is now behind the current expanded workspace contract
-  - `Phase 160` refreshed both full-page dashboard and full-page provider-detail QA evidence, so the next store pack can choose the clearer of those expanded review surfaces instead of staying on the narrower sidepanel view
+  - the side panel remains a shipped deep-review surface, and this capture proves the compact provider-detail hierarchy through the real popup-to-side-panel path
+  - the Codex detail still uses window-scoped usage semantics, not a plan-wide absolute balance
 
 ## Current Boundary
 
-- the first archived screenshot set is still useful as a truthful evidence package and caption baseline
-- the first archived screenshot set is no longer the final recommended submission asset set after `Phase 155` through `Phase 160`
-- the maintained listing-copy pack and localization source pack therefore remain pre-refresh English baselines until a new screenshot archive replaces the current first archive
+- the first archived screenshot set remains useful as truthful historical evidence
+- [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) is the current refreshed screenshot evidence package
+- the maintained listing-copy pack and localization source pack should point at the refreshed archive for current submission-prep work
 
 ## Related Docs
 

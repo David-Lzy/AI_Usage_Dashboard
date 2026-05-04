@@ -1,6 +1,6 @@
 # Store Screenshot Capture Archive
 
-Date: 2026-04-23
+Date: 2026-05-04
 
 Process rule:
 
@@ -38,6 +38,13 @@ npm run store:refresh-screenshot-capture-archive-index
 
 ## Archived Screenshot Sets
 
+- [2026-05-04-rc11-mixed-store-candidate-archive](./store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
+  - archived on 2026-05-04
+  - runtime source: `RDP Chrome unpacked extension`
+  - sizes: preferred `1280x800` · fallback `640x400`
+  - screenshot count: `5`
+  - capture notes: `5/5` reviewed · truth boundaries `3`
+  - source request: `2026-04-24-surface-expansion-store-screenshot-refresh-request` · `Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md`
 - [2026-04-24-first-real-store-screenshot-capture-request-archive](./store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md)
   - archived on 2026-04-23
   - runtime source: `RDP Chrome unpacked extension`

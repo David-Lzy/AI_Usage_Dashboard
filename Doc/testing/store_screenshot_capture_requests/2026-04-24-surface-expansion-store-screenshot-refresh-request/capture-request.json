@@ -1,7 +1,7 @@
 {
   "requestId": "2026-04-24-surface-expansion-store-screenshot-refresh-request",
   "createdAt": "2026-04-24T08:50:12.783Z",
-  "status": "pending_operator_capture",
+  "status": "fulfilled_operator_capture",
   "sourceTemplate": "fixtures/store-screenshot/operator-capture-request-template.fixture.json",
   "storyboardPath": "Doc/Store_Screenshot_Storyboard.md",
   "selectionPackPath": "Doc/Store_Screenshot_Selection_Pack.md",
@@ -34,5 +34,22 @@
     "Do not use popup app-window smoke capture as the final replacement for the native toolbar bubble.",
     "Do not claim multilingual or unsupported provider coverage in screenshots before the product actually ships it."
   ],
-  "fulfillment": null
+  "fulfillment": {
+    "fulfilledAt": "2026-05-04T04:12:44.065Z",
+    "sourceCaptureDir": "Doc/testing/store_screenshot_candidate_intake/2026-05-04-rc11-mixed-store-candidate/captures",
+    "sourceNotesPath": "Doc/testing/store_screenshot_candidate_intake/2026-05-04-rc11-mixed-store-candidate/capture-notes.json",
+    "archiveId": "2026-05-04-rc11-mixed-store-candidate-archive",
+    "archiveReadmePath": "Doc/testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md",
+    "archiveManifestPath": "Doc/testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/capture-archive.json",
+    "archiveNotesPath": "Doc/testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/capture-notes.json",
+    "screenshotFilenames": [
+      "01-toolbar-first-quick-glance.png",
+      "02-setup-guidance.png",
+      "03-honest-contract-or-policy-only.png",
+      "04-settings-and-setup-depth.png",
+      "05-provider-or-dashboard-depth.png"
+    ],
+    "reviewedScreenshotCount": 5,
+    "truthBoundaryCount": 3
+  }
 }

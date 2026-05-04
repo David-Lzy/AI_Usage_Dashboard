@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-04-24T11:06:57.937Z",
+  "generatedAt": "2026-05-04T04:12:44.065Z",
   "requestRoot": "Doc/testing/store_screenshot_capture_requests",
   "recordCount": 2,
-  "pendingRequestCount": 1,
-  "fulfilledRequestCount": 1,
+  "pendingRequestCount": 0,
+  "fulfilledRequestCount": 2,
   "records": [
     {
       "requestId": "2026-04-24-surface-expansion-store-screenshot-refresh-request",
       "createdAt": "2026-04-24T08:50:12.783Z",
-      "status": "pending_operator_capture",
+      "status": "fulfilled_operator_capture",
       "runtimeSource": "RDP Chrome unpacked extension",
       "preferredSize": "1280x800",
       "fallbackSize": "640x400",
@@ -17,7 +17,20 @@
       "baselinePackReadme": "Doc/testing/store_screenshot_capture_packs/2026-04-24-toolbar-storyboard-baseline/README.md",
       "baselineArchiveReadme": "Doc/testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md",
       "captureAutomationMode": "manual_capture_required",
-      "fulfillment": null,
+      "fulfillment": {
+        "fulfilledAt": "2026-05-04T04:12:44.065Z",
+        "archiveId": "2026-05-04-rc11-mixed-store-candidate-archive",
+        "archiveReadmePath": "Doc/testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md",
+        "archiveManifestPath": "Doc/testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/capture-archive.json",
+        "sourceCaptureDir": "Doc/testing/store_screenshot_candidate_intake/2026-05-04-rc11-mixed-store-candidate/captures",
+        "screenshotFilenames": [
+          "01-toolbar-first-quick-glance.png",
+          "02-setup-guidance.png",
+          "03-honest-contract-or-policy-only.png",
+          "04-settings-and-setup-depth.png",
+          "05-provider-or-dashboard-depth.png"
+        ]
+      },
       "requiredScreenshotFilenames": [
         "01-toolbar-first-quick-glance.png",
         "02-setup-guidance.png",
@@ -28,9 +41,9 @@
       "captureNotesPath": "Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/capture-notes.json",
       "captureNotesSummary": {
         "noteCount": 5,
-        "reviewedScreenshotCount": 2,
-        "pendingReviewCount": 3,
-        "truthBoundaryCount": 2
+        "reviewedScreenshotCount": 5,
+        "pendingReviewCount": 0,
+        "truthBoundaryCount": 3
       },
       "readmePath": "Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md",
       "manifestPath": "Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/capture-request.json"

@@ -24,7 +24,7 @@ Status note:
 - request id:
   - `2026-04-24-surface-expansion-store-screenshot-refresh-request`
 - status:
-  - `pending_operator_capture`
+  - `fulfilled_operator_capture`
 - manual slots:
   - `3`
 - remaining manual slots:
@@ -32,7 +32,7 @@ Status note:
 - manual captures still missing:
   - `3`
 - manual notes still incomplete:
-  - `3`
+  - `0`
 - manual slots already ready:
   - `0`
 - staged request-bound slots:
@@ -68,10 +68,11 @@ Status note:
   - mode: `manual_operator_capture`
   - surface: `native_toolbar_popup`
   - capture present: `no`
-  - note status: `not_reviewed`
+  - note status: `exact_runtime_capture`
   - preferred size: `640x400`
   - fallback size: `640x400`
   - manual note: This refreshed store slot must be captured from the native Chrome toolbar action bubble instead of the popup app-window helper.
+  - state summary: Native Chrome toolbar popup quick glance captured from the RDP Chrome unpacked extension, showing Codex usage-window rings and the current action badge state.
 - `02-setup-guidance.png`
   - slot: Setup guidance
   - claim: the product tells the user what to do next instead of only showing raw usage cards
@@ -79,10 +80,11 @@ Status note:
   - mode: `manual_operator_capture`
   - surface: `native_toolbar_popup`
   - capture present: `no`
-  - note status: `not_reviewed`
+  - note status: `exact_runtime_capture`
   - preferred size: `640x400`
   - fallback size: `640x400`
   - manual note: This refreshed store slot must be captured from the native Chrome toolbar action bubble instead of the popup app-window helper.
+  - state summary: Full-page dashboard overview captured from the RDP Chrome unpacked extension, showing the product promise, summary counts, and the beginning of the provider-card list.
 - `03-honest-contract-or-policy-only.png`
   - slot: Honest contract-only or policy-only state
   - claim: the extension is honest about provider coverage and does not fake live precision
@@ -90,10 +92,12 @@ Status note:
   - mode: `manual_operator_capture`
   - surface: `native_toolbar_popup`
   - capture present: `no`
-  - note status: `not_reviewed`
+  - note status: `other_truth_boundary`
   - preferred size: `640x400`
   - fallback size: `640x400`
   - manual note: This refreshed store slot must be captured from the native Chrome toolbar action bubble instead of the popup app-window helper.
+  - state summary: Full-page Codex provider card captured from the RDP Chrome unpacked extension, showing live window-scoped remaining percentages and reset timing.
+  - operator note: The screenshot intentionally shows Codex usage-window percentages and reset timing instead of claiming one absolute plan-wide remaining balance.
 
 ## Staged Request-Bound Entries
 
@@ -104,11 +108,11 @@ Status note:
   - mode: `request_bound_rdp_runner`
   - surface: `full_page_shell`
   - capture present: `yes`
-  - note status: `approximated_runtime_state`
+  - note status: `other_truth_boundary`
   - route path: `src/sidepanel/index.html?surface=full-page#settings`
   - capture path: `Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/captures/04-settings-and-setup-depth.png`
-  - state summary: Full-page Settings shows setup ownership in the deeper workspace with the same mixed blockers carried over from the popup story.
-  - operator note: This is a real full-page shell capture from a request-bound seeded state used to keep the Settings setup story consistent during refreshed store screenshot review.
+  - state summary: Full-page Settings source card captured from the RDP Chrome unpacked extension, showing the Cursor personal session-page route, availability summary, and source controls.
+  - operator note: The screenshot intentionally preserves the Cursor personal contract boundary: billing-period context is visible, but no exact remaining included-request counter is claimed.
 - `05-provider-or-dashboard-depth.png`
   - slot: Provider or dashboard depth
   - claim: the expanded workspace owns deeper review, contract context, and provider detail
@@ -116,20 +120,14 @@ Status note:
   - mode: `request_bound_rdp_runner`
   - surface: `full_page_shell`
   - capture present: `yes`
-  - note status: `approximated_runtime_state`
+  - note status: `other_truth_boundary`
   - route path: `src/sidepanel/index.html?surface=full-page#provider-detail/codex`
   - capture path: `Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/captures/05-provider-or-dashboard-depth.png`
-  - state summary: Full-page Codex provider detail shows a truthful warning-state review surface beyond the popup.
-  - operator note: This screenshot uses a request-bound seeded Codex warning state so the full-page shell can show deeper contract context without claiming it came from a current live analytics session.
+  - state summary: Chrome side panel provider-detail route captured from the RDP Chrome unpacked extension, showing the compact Codex source snapshot and detail hierarchy.
+  - operator note: This is a real side-panel capture triggered through the shipped popup path; it uses Codex window-scoped usage semantics rather than a plan-wide absolute balance.
 
 ## Archive Readiness
 
 - Capture file is still missing for `01-toolbar-first-quick-glance.png`.
-- Capture notes are still `not_reviewed` for `01-toolbar-first-quick-glance.png`.
-- Capture notes are missing `stateSummary` for `01-toolbar-first-quick-glance.png`.
 - Capture file is still missing for `02-setup-guidance.png`.
-- Capture notes are still `not_reviewed` for `02-setup-guidance.png`.
-- Capture notes are missing `stateSummary` for `02-setup-guidance.png`.
 - Capture file is still missing for `03-honest-contract-or-policy-only.png`.
-- Capture notes are still `not_reviewed` for `03-honest-contract-or-policy-only.png`.
-- Capture notes are missing `stateSummary` for `03-honest-contract-or-policy-only.png`.

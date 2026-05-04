@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-04:
 
-- the numbered phase queue is now completed through `Phase 295`, with no active phase currently selected
+- the numbered phase queue is now completed through `Phase 296`, with no active phase currently selected
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -180,10 +180,11 @@ As of 2026-05-04:
 - `Phase 293` packaged `0.1.0-rc.11`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.11.zip`, and made the post-rc10 Cursor, usage-window, and action-badge tooltip fixes available for the next install/review pass
 - `Phase 294` recorded the user-run RDP Chrome visual smoke pass for `0.1.0-rc.11`; the user reported no obvious issue across full-page dashboard, toolbar popup, action-badge tooltip, and sidebar settings surfaces
 - `Phase 295` accepted the user-reviewed mixed store screenshot candidate pack, replacing the older product requirement for three native popup screenshots with one native toolbar popup quick-glance image plus full-page/provider/source-depth images
+- `Phase 296` captured that mixed screenshot pack from RDP Chrome and completed [2026-05-04-rc11-mixed-store-candidate-archive](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md), so the refreshed store screenshot request is fulfilled and the generated indexes now show `0` pending screenshot requests
 - provider closure waits on available accounts: JetBrains org-console, Claude Pro or Max usage-page, and Gemini project-metrics graduation should not be treated as repo-only blockers
 - operator evidence means archived real human/operator review exports for interaction-audit or theme-recovery workspaces; it remains useful, but it sits behind release package and store asset closeout
 - the originally queued local-safe file splitting targets are now closed enough that further splitting should be driven by a concrete maintenance risk instead of the old Phase 236-era queue
-- `Direction 10.3` still retains the real manual native-toolbar popup capture dependency for final store assets; the existing request has staged full-page captures but still needs the native popup slots before archive completion
+- `Direction 10.3` no longer has a screenshot archive blocker for the current RC11 store pack; the next store step is a submission checklist or listing package review when the user wants to move past release review
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
 - `Phase 42` has packaged `0.1.0-rc.2` and closed the release-closeout track for the narrowed RC
 - `Phase 43` completed the first `Direction 02` slice by productizing source-fidelity semantics in the side panel
@@ -312,9 +313,9 @@ As of 2026-05-04:
 - `Phase 167` completed the next `Direction 10.3` slice by generating one request-bound popup-notes overlay template plus one popup-capture checklist, so the final manual popup pass no longer needs ad-hoc note scaffolding
 - `Phase 168` completed the next `Direction 10.3` slice by making archive completion default to the request package itself once popup files are imported, so the last remaining real-world step is now the actual popup capture rather than another manual path handoff
 - `Phase 169` completed the next `Direction 10.3` slice by adding one request-bound manual finalize command plus handoff update, so the remaining real-world work is now the popup capture itself instead of popup capture plus extra repo bookkeeping
-- the current store-asset line still retains one real-world manual popup-capture dependency under `10_3_Store_Asset_Pack_And_Submission_TODOs.md`
+- `Phase 296` completed the mixed candidate screenshot file intake plus archive completion under `10_3_Store_Asset_Pack_And_Submission_TODOs.md`
 - the previous repo-owned engineering default was adapter diagnostic raw fallback regression review for the shipped `en + zh_CN` runtime pilot under Direction 09, captured in `09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`
-- because `0.1.0-rc.11` is now cut, passed the user-run RDP Chrome visual smoke check, and has a user-approved mixed store screenshot candidate pack, the active functional priority is now screenshot file intake/import/archive before more doc, provider, or operator-evidence work
+- because `0.1.0-rc.11` is now cut, passed the user-run RDP Chrome visual smoke check, and has an archived mixed store screenshot pack, the active functional priority is now submission-checklist preparation only when the user wants to proceed toward listing submission
 - the remaining high-value work in Direction 05 and Direction 04 is now evidence closure, not more tool-building:
   - `05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md`
   - `04_2_Interaction_Audit_Real_Operator_Closure_TODOs.md`

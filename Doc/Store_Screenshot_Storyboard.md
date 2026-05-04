@@ -18,7 +18,7 @@ Status note:
 
 - this file is the current maintained storyboard for truthful Chrome Web Store screenshot capture
 - `Phase 161` now treats the first archived screenshot set as a historical baseline rather than the final submission pack after the popup/full-page surface-expansion line
-- `Phase 295` accepts a mixed store-candidate pack after user review: one native toolbar popup quick-glance image plus full-page/provider/source-depth images, with final archive still pending file import
+- `Phase 296` archived the mixed store-candidate pack after RDP Chrome capture: one native toolbar popup quick-glance image plus full-page/provider/source-depth images
 - refresh it when the popup story, provider truth boundary, store positioning, or capture workflow changes materially
 
 Purpose:
@@ -48,11 +48,11 @@ The current user-approved candidate pack is:
 2. full-page dashboard overview with the product promise and summary cards
 3. Codex provider usage detail with visible window percentages and reset timing
 4. Cursor source/settings detail that makes the personal partial contract explicit
-5. optional side-panel Settings/responsive setup view if the final listing uses a fifth screenshot
+5. Chrome side-panel provider-detail view triggered through the shipped popup path
 
-The screenshots were reviewed in the chat thread on `2026-05-04`. They still need
-to be saved as files and imported before they become a formal store screenshot
-archive.
+The screenshots were reviewed in the chat thread on `2026-05-04`, then captured
+from RDP Chrome and archived as
+[2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md).
 
 ## Screenshot Storyboard Order
 
@@ -100,16 +100,16 @@ archive.
 - Must visibly show:
   - Cursor source route, personal partial labels, availability summary, and explanatory contract text
 
-### 5. Optional Settings/setup depth
+### 5. Side-panel provider depth
 
 - Surface:
-  - side panel or full-page shell `Settings`
+  - Chrome side panel `Provider detail`
 - Runtime state:
-  - real setup-oriented state
+  - Codex provider detail opened through the shipped popup path
 - Claim it proves:
-  - setup ownership lives in the deeper workspace instead of a bloated popup
+  - provider review lives in the deeper side-panel workspace instead of a bloated popup
 - Must visibly show:
-  - theme/source/setup controls with enough surrounding context to read as an extension workspace
+  - side-panel header, provider-detail title, source snapshot, and usage/detail hierarchy
 
 ## Optional Sixth Screenshot
 
@@ -126,13 +126,13 @@ archive.
 | 2 | One dashboard collects quota and status |
 | 3 | Provider usage detail stays precise about its window scope |
 | 4 | Source contracts stay honest about partial live paths |
-| 5 | Setup belongs to a deeper workspace |
+| 5 | Provider depth belongs to the side panel |
 
 ## Current Baseline Note
 
 - the first archived screenshot set remains one truthful historical evidence package
-- after `Phase 161`, that first archive is no longer the final recommended submission set because the shipped popup/full-page surface contract changed materially
-- the next store-asset slice should create one refreshed screenshot request against this storyboard instead of reusing the first archive unchanged
+- after `Phase 296`, the current recommended screenshot evidence package is [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
+- the next store-asset slice should be a submission checklist or listing package review, not another screenshot archive, unless the UI changes again
 
 ## Do Not Capture
 

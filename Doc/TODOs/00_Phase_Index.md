@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [295_Phase_Store_Mixed_Screenshot_Candidate.md](./Archive/295_Phase_Store_Mixed_Screenshot_Candidate.md)
+- latest completed slice: [296_Phase_Store_Mixed_Screenshot_Intake_And_Archive.md](./Archive/296_Phase_Store_Mixed_Screenshot_Intake_And_Archive.md)
 
 Completed phases should be moved to:
 
@@ -738,7 +738,8 @@ Completed phases should be moved to:
 - phase 292 documents the post-rc10 source truth: after `0.1.0-rc.10` was packaged, the repo fixed Cursor logged-out detection, rendered Cursor visible billing/spend context as structured usage facts, and compacted line-style usage-window reset labels into the title row
 - the 2026-05-04 `Phase 293` closeout bumped the package to `0.1.0-rc.11`, bumped the manifest to `0.1.0.11`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.11.zip`, and recorded SHA256 `f7d19b7bb84975b25c0d9291460f6ca418006c0e93edd36fe063ac5870f2907e` in the Phase 293 archive
 - the 2026-05-04 `Phase 294` closeout recorded the user-run RDP Chrome visual smoke pass for `0.1.0-rc.11`; the user reported no obvious issue across full-page dashboard, toolbar popup, action-badge tooltip, and sidebar settings surfaces
-- the 2026-05-04 `Phase 295` closeout accepted the user-reviewed mixed store screenshot candidate pack and updated the maintained storyboard, selection pack, listing copy, localization source, and roadmap docs; final archive still waits on image-file intake/import
+- the 2026-05-04 `Phase 295` closeout accepted the user-reviewed mixed store screenshot candidate pack and updated the maintained storyboard, selection pack, listing copy, localization source, and roadmap docs
+- the 2026-05-04 `Phase 296` closeout captured that mixed candidate pack from RDP Chrome, completed `2026-05-04-rc11-mixed-store-candidate-archive`, and refreshed store screenshot request/archive indexes so the current refreshed request is fulfilled rather than pending
 
 ## Delivery Standard For Each Phase
 

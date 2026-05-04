@@ -19,7 +19,8 @@ Status note:
 - eighth executable slice landed on `2026-04-24` through `Phase 168`
 - ninth executable slice landed on `2026-04-24` through `Phase 169`
 - `Phase 295` accepted a user-reviewed mixed store screenshot candidate pack: one native toolbar popup quick-glance image plus full-page/provider/source-depth images
-- this child TODO now becomes the next active `Direction 10` line after `Phase 160` refreshed the current popup / sidepanel / full-page runtime evidence, `Phase 211` added popup appearance presets, and `Phase 212` added a Settings preview that still needs real native-toolbar comparison
+- `Phase 296` saved those mixed candidate screenshots from RDP Chrome and completed [2026-05-04-rc11-mixed-store-candidate-archive](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
+- this child TODO now tracks the closed screenshot-archive line and the next optional submission-checklist step after the current RC11 mixed screenshot archive
 - this child TODO assumes the current first real screenshot archive already exists and focuses on store-ready asset preparation after the surface-expansion workstream landed
 
 Process rule:
@@ -50,12 +51,12 @@ Turn the current storyboard, screenshot workflow, first real archive, and listin
   - one maintained [Store_Screenshot_Selection_Pack.md](../Store_Screenshot_Selection_Pack.md)
   - one explicit stale-review pass across the first screenshot archive, current storyboard, current listing-copy pack, and current localization source pack
   - one rule that treats popup app-window smoke capture as QA evidence only, not as the final submission replacement for the native toolbar bubble
-- current boundary after `Phase 295`:
+- current boundary after `Phase 296`:
   - the first archived screenshot set remains truthful historical evidence
   - one refreshed pending request now exists: [2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md](../testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md)
-  - that request is still useful operational scaffolding, but its older strict requirement for three native toolbar-bubble popup slots has been superseded by the user-approved mixed candidate pack
-  - the first final screenshot should still be a native toolbar popup quick-glance capture
-  - later screenshots can use full-page dashboard, provider-card, and Settings/source-detail views when they tell the store story more clearly than additional popup scroll states
+  - that request is now fulfilled by [2026-05-04-rc11-mixed-store-candidate-archive](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
+  - the first final screenshot remains a native toolbar popup quick-glance capture
+  - later screenshots use full-page dashboard, provider-card, Settings/source-detail, and side-panel provider-detail views when they tell the store story more clearly than additional popup scroll states
   - one native-toolbar popup probe now exists and confirms the current `RDP Chrome` session does not expose the real popup bubble as a separate capturable X11 top-level window
   - the refreshed request now also ships one generated `capture-plan.json` that marks three manual popup slots and two request-bound full-page-shell slots
   - full-page slots `4` and `5` are now already staged inside the pending request package through the hybrid request-bound runner
@@ -63,7 +64,7 @@ Turn the current storyboard, screenshot workflow, first real archive, and listin
   - the pending request now also ships one request-bound `manual-popup-notes-overlay.template.json` plus `manual-popup-capture-checklist.md`
   - the notes-import command now points at that generated template path, and the completion command now defaults to the request package `captures/` directory instead of requiring a separate `--captures-dir` path
   - the pending request now also exposes `manualFinalizeCommand` plus `manualFinalizeWithNotesCommand`, so popup import, readiness validation, and archive completion can run in one repo-backed operator step once real popup files exist
-  - current screenshot truth therefore still remains `1 pending request / 1 archived set` until the user-approved screenshots are saved as files and imported or archived through the store workflow
+  - current screenshot truth is now `0 pending requests / 2 archived sets`; the refreshed archive has `5/5` reviewed screenshots and `3` explicit truth-boundary notes
 
 ### B. Final Screenshot Ordering
 
@@ -109,10 +110,10 @@ Turn the current storyboard, screenshot workflow, first real archive, and listin
 7. generated popup-notes template plus popup checklist for the remaining manual slots - completed in `Phase 167`
 8. request-bound archive completion defaults - completed in `Phase 168`
 9. request-bound manual finalize command and handoff update - completed in `Phase 169`
-10. mixed candidate screenshot file intake plus archive completion - next
-11. final screenshot ordering and caption contract - started in `Phase 295`
-12. listing-copy tightening against refreshed archives
-13. submission checklist and store-pack closeout
+10. final screenshot ordering and caption contract - started in `Phase 295`
+11. mixed candidate screenshot file intake plus archive completion - completed in `Phase 296`
+12. listing-copy tightening against refreshed archives - completed for the current RC11 archive in `Phase 296`
+13. submission checklist and store-pack closeout - next when the user wants to prepare the Chrome Web Store listing
 
 ## Out Of Scope
 
