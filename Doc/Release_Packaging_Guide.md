@@ -30,17 +30,17 @@ Status note:
 Package version:
 
 - `package.json` uses the human-facing semver tag
-- current value: `0.1.0-rc.11`
+- current value: `0.1.0-rc.12`
 
 Chrome extension version:
 
 - `src/manifest.json` uses Chrome's required numeric-only version format
-- current value: `0.1.0.11`
+- current value: `0.1.0.12`
 
 Display version:
 
 - `src/manifest.json` also uses `version_name`
-- current value: `0.1.0-rc.11`
+- current value: `0.1.0-rc.12`
 
 Why the two values differ:
 
@@ -144,13 +144,14 @@ npx -y node@22 ./scripts/package-release.mjs
 
 Packaging output:
 
-- `release/ai-usage-dashboard-0.1.0-rc.11.zip`
-- SHA256: `f7d19b7bb84975b25c0d9291460f6ca418006c0e93edd36fe063ac5870f2907e`
+- `release/ai-usage-dashboard-0.1.0-rc.12.zip`
+- SHA256: `d12c294adda25125731a106efcb99e17904ab50209926e719912f95279c16233`
 
 Release context:
 
-- `0.1.0-rc.11` distributes the Phase 293 post-rc10 package after the Phase 291 Cursor managed session-page sync update, Phase 290 progress-divider visibility fix, Phase 289 Settings top-bar adaptive layout, Phase 288 source-chip row fix, Phase 287 progress-row spacing fix, Phase 285 post-rc4 smoke polish, and earlier Phase 283 RDP Chrome validation of the Codex page-session reload retry path
-- this package includes the post-rc10 Cursor logged-out detection fix, Cursor structured billing/spend usage facts, inline usage-window reset-label density fix, and formatted action-badge hover tooltip with enabled Cursor context
+- `0.1.0-rc.12` distributes the Phase 297 Codex stale-page freshness reload fix, the refreshed trimmed transparent Chrome extension icons, and all `rc.11` post-rc10 Cursor, usage-window, and action-badge tooltip fixes
+- this package includes trimmed transparent 16/32/48/128 Chrome icons generated from the supplied PNG package and keeps the post-rc10 Cursor logged-out detection fix, structured usage facts, inline reset-label density fix, and formatted action-badge hover tooltip
+- `Phase 299` records `0.1.0-rc.12` as the current Chrome Web Store upload candidate in [2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md)
 - provider closure waits on available real accounts; no new provider support claim is introduced by this package
 
 The packaging script checks:

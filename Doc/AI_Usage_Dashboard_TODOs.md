@@ -76,25 +76,26 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 296` execution priority:
+Current post-`Phase 299` execution priority:
 
-1. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.11.zip` as the current install/review package. It includes the Phase 291 Cursor managed session-page sync path plus the post-rc10 Cursor logged-out detection fix, Cursor structured billing/spend usage facts, compact inline usage-window reset labels, and formatted action-badge tooltip with visible Cursor facts.
-2. `P0` - treat the refreshed `Direction 10.3` screenshot evidence as archived, not pending: [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) now fulfills the refreshed store screenshot request with `5/5` reviewed images and `3` explicit truth-boundary notes.
-3. `P1` - prepare a final Chrome Web Store submission checklist only when the user is ready to move from release-review packaging into listing submission. The screenshot archive, listing copy pack, and localization source pack are now aligned enough to support that checklist.
-4. `P1` - run another `0.1.0-rc.11` RDP Chrome smoke pass only if new visual concerns appear. The 2026-05-04 user-run pass already reported no obvious issue across full-page dashboard, toolbar popup, action-badge tooltip, and sidebar settings surfaces.
-5. `P2` - Provider closure waits on accounts:
+1. `P0` - use `release/ai-usage-dashboard-0.1.0-rc.12.zip` as the current Chrome Web Store upload-candidate package. It includes the `rc.11` Cursor, usage-window, and action-badge tooltip fixes; the Phase 297 Codex stale-page freshness reload; and the refreshed trimmed transparent Chrome extension icon set.
+2. `P0` - use [2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md) as the handoff milestone for upload, screenshots, listing copy, permission/privacy disclosures, and provider-support boundaries.
+3. `P0` - treat the refreshed `Direction 10.3` screenshot evidence as archived, not pending: [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) now fulfills the refreshed store screenshot request with `5/5` reviewed images and `3` explicit truth-boundary notes.
+4. `P1` - only cut another RC if Chrome Web Store review, final human listing edits, or an explicit visual issue requires code, icon, package, or copy changes. Do not mutate the `rc.12` boundary silently.
+5. `P1` - run another `0.1.0-rc.12` RDP Chrome smoke pass only if new visual concerns appear or if the refreshed toolbar icon needs real Chrome review. The 2026-05-04 user-run `rc.11` pass already reported no obvious issue across full-page dashboard, toolbar popup, action-badge tooltip, and sidebar settings surfaces.
+6. `P2` - Provider closure waits on accounts:
    - JetBrains org-console reverification waits for a real org-visible `Users and licensing` session.
    - Claude personal usage-page capture waits for a Pro or Max account.
    - Gemini project-metrics graduation waits for a product decision that project-scoped metrics are acceptable.
-6. `P2` - close real operator evidence only after higher-value release/store work: operator evidence means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not a new runtime provider feature. The user explicitly de-prioritized this below the current store-work line.
-7. `P2` - continue file splitting only when a concrete maintenance issue justifies it; the old queued split targets for `material-theme.css`, `SettingsPage.tsx`, `App.tsx`, `standard-app-actions.ts`, and `localized-copy.ts` are now closed or reduced to focused compatibility/aggregator files.
+7. `P2` - close real operator evidence only after higher-value release/store work: operator evidence means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not a new runtime provider feature. The user explicitly de-prioritized this below the current store-work line.
+8. `P2` - continue file splitting only when a concrete maintenance issue justifies it; the old queued split targets for `material-theme.css`, `SettingsPage.tsx`, `App.tsx`, `standard-app-actions.ts`, and `localized-copy.ts` are now closed or reduced to focused compatibility/aggregator files.
 
 Delivery rule for this stage:
 
 - keep active implementation phases narrow and independently verifiable
 - keep file-splitting separate from release packaging, provider verification, and store evidence closeout
 - preserve the current provider truth boundaries while changing UI presentation
-- treat `rc.11` as the current packaged boundary; `rc.10` remains historical Phase 291 evidence
+- treat `rc.12` as the current store-upload candidate boundary; `rc.11` remains historical Phase 293 evidence
 
 Phase status update:
 
@@ -356,8 +357,11 @@ Phase status update:
 - `Phase 294` recorded the user-run RDP Chrome smoke pass for `0.1.0-rc.11`; the user reported no obvious issue across the full-page dashboard, toolbar popup, action-badge tooltip, and sidebar settings surfaces
 - `Phase 295` accepted the user-reviewed mixed store screenshot candidate pack: one native toolbar popup quick-glance image plus full-page dashboard, Codex provider detail, Cursor source boundary, and side-panel/provider-depth images
 - `Phase 296` captured those mixed candidate images from RDP Chrome, saved them under a candidate-intake package, and completed [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md), fulfilling the refreshed store screenshot request with `5/5` reviewed screenshots and `3` explicit truth-boundary notes
+- `Phase 297` fixed Codex stale-but-readable usage pages by forcing a cache-bypassing source-page reload before DOM capture, then waiting briefly for the analytics UI to hydrate
+- `Phase 298` packaged `0.1.0-rc.12` with the Phase 297 Codex freshness fix plus the refreshed trimmed transparent 16/32/48/128 Chrome icon set
+- `Phase 299` created the [RC12 Chrome Web Store upload-candidate milestone](./Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md), aligning code, release package, screenshot evidence, icon evidence, README, release guide, and roadmap/TODO docs without changing runtime code
 - the old maintenance split queue is closed for the originally named local-safe targets: `material-theme.css`, `localized-copy.ts`, `SettingsPage.tsx`, `App.tsx`, and `standard-app-actions.ts` are now focused base, compatibility, route, or aggregator files rather than the next default work item
-- the previous store-readiness blocker for screenshot file intake/import/archive is now closed under `Direction 10.3`; the next store step is a submission checklist when the user wants to move beyond release review
+- the previous store-readiness blocker for screenshot file intake/import/archive is now closed under `Direction 10.3`; the current store step is the human Chrome Web Store listing upload and review flow using the Phase 299 milestone
 - the remaining high-value work in Direction 05 and Direction 04 is real operator evidence closure: archived real review exports from the shipped workspaces rather than more lifecycle tooling
 - the research, parser, live-wiring, source-selection, and page-binding track through `Phase 40` is complete
 - the split `Phase 41` release gate cleared the old runtime-parity ambiguity and re-proved the live `Codex` plus `Cursor` personal session-page paths in real Chrome

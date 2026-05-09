@@ -17,8 +17,9 @@ Freshness model:
 Status note:
 
 - this file is the current maintained Chrome Web Store copy pack for the shipped extension scope
-- after `Phase 296`, treat it as the current English submission-prep pack anchored to the refreshed RC11 screenshot archive
+- after `Phase 299`, treat it as the current English upload-candidate copy pack anchored to the RC12 milestone and refreshed screenshot archive
 - `Phase 296` anchors the current mixed screenshot captions to the refreshed RC11 screenshot archive
+- `Phase 299` records the upload-candidate handoff in [2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md)
 - refresh it when the popup story, provider truth boundary, screenshot selection pack, or refreshed screenshot archive changes materially
 
 Purpose:
@@ -33,6 +34,8 @@ Purpose:
   - [2026-04-24-first-real-store-screenshot-capture-request-archive/README.md](./testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md)
 - current refreshed screenshot archive:
   - [2026-05-04-rc11-mixed-store-candidate-archive/README.md](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
+- upload-candidate milestone:
+  - [2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md)
 - screenshot storyboard:
   - [Store_Screenshot_Storyboard.md](./Store_Screenshot_Storyboard.md)
 - screenshot selection pack:

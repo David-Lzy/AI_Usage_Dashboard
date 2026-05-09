@@ -20,7 +20,9 @@ Status note:
 - ninth executable slice landed on `2026-04-24` through `Phase 169`
 - `Phase 295` accepted a user-reviewed mixed store screenshot candidate pack: one native toolbar popup quick-glance image plus full-page/provider/source-depth images
 - `Phase 296` saved those mixed candidate screenshots from RDP Chrome and completed [2026-05-04-rc11-mixed-store-candidate-archive](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
-- this child TODO now tracks the closed screenshot-archive line and the next optional submission-checklist step after the current RC11 mixed screenshot archive
+- `Phase 298` refreshed the trimmed transparent Chrome extension icon set and packaged it in `0.1.0-rc.12`
+- `Phase 299` created the [RC12 Chrome Web Store upload-candidate milestone](../Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md)
+- this child TODO now tracks a completed upload-candidate handoff; the next repo work only starts if listing submission, review feedback, or human edits require another package or documentation update
 - this child TODO assumes the current first real screenshot archive already exists and focuses on store-ready asset preparation after the surface-expansion workstream landed
 
 Process rule:
@@ -37,7 +39,7 @@ Depends on:
 
 ## Goal
 
-Turn the current storyboard, screenshot workflow, first real archive, and listing-copy pack into one store-ready asset pack plus one submission checklist that can be updated without guessing what the product should promise.
+Turn the current storyboard, screenshot workflow, real screenshot archive, icon set, listing-copy pack, and release package into one store-ready upload-candidate handoff that can be updated without guessing what the product should promise.
 
 ## Detailed TODOs
 
@@ -51,7 +53,7 @@ Turn the current storyboard, screenshot workflow, first real archive, and listin
   - one maintained [Store_Screenshot_Selection_Pack.md](../Store_Screenshot_Selection_Pack.md)
   - one explicit stale-review pass across the first screenshot archive, current storyboard, current listing-copy pack, and current localization source pack
   - one rule that treats popup app-window smoke capture as QA evidence only, not as the final submission replacement for the native toolbar bubble
-- current boundary after `Phase 296`:
+- current boundary after `Phase 299`:
   - the first archived screenshot set remains truthful historical evidence
   - one refreshed pending request now exists: [2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md](../testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md)
   - that request is now fulfilled by [2026-05-04-rc11-mixed-store-candidate-archive](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
@@ -65,6 +67,7 @@ Turn the current storyboard, screenshot workflow, first real archive, and listin
   - the notes-import command now points at that generated template path, and the completion command now defaults to the request package `captures/` directory instead of requiring a separate `--captures-dir` path
   - the pending request now also exposes `manualFinalizeCommand` plus `manualFinalizeWithNotesCommand`, so popup import, readiness validation, and archive completion can run in one repo-backed operator step once real popup files exist
   - current screenshot truth is now `0 pending requests / 2 archived sets`; the refreshed archive has `5/5` reviewed screenshots and `3` explicit truth-boundary notes
+  - `0.1.0-rc.12` is the current upload-candidate package and is linked from the milestone handoff
 
 ### B. Final Screenshot Ordering
 
@@ -113,7 +116,9 @@ Turn the current storyboard, screenshot workflow, first real archive, and listin
 10. final screenshot ordering and caption contract - started in `Phase 295`
 11. mixed candidate screenshot file intake plus archive completion - completed in `Phase 296`
 12. listing-copy tightening against refreshed archives - completed for the current RC11 archive in `Phase 296`
-13. submission checklist and store-pack closeout - next when the user wants to prepare the Chrome Web Store listing
+13. trimmed transparent extension icon refresh - completed in `Phase 298`
+14. upload-candidate milestone and store-pack closeout - completed in `Phase 299`
+15. review feedback or listing-change follow-up - future only if Chrome Web Store review or human listing edits require another package
 
 ## Out Of Scope
 

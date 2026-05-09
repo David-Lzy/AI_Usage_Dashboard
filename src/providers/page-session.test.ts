@@ -574,6 +574,81 @@ describe("createPageSessionClient", () => {
     ]);
   });
 
+  it("reloads a candidate tab before capture when freshness reload is enabled", async () => {
+    const calls: string[] = [];
+    const query = vi.fn(async () => [
+      {
+        id: 17,
+        active: false,
+        lastAccessed: 1,
+        url: "https://chatgpt.com/codex/cloud/settings/analytics#usage",
+        title: "Codex",
+      },
+    ]);
+    const reload = vi.fn(async () => {
+      calls.push("reload");
+    });
+    const get = vi.fn(async (tabId: number) => ({
+      id: tabId,
+      active: false,
+      lastAccessed: 3,
+      status: "complete",
+      url: "https://chatgpt.com/codex/cloud/settings/analytics#usage",
+      title: "Codex",
+    }));
+    const executeScript = vi.fn(async () => {
+      calls.push("capture");
+
+      return [
+        {
+          result: {
+            url: "https://chatgpt.com/codex/cloud/settings/analytics#usage",
+            title: "Codex",
+            heading: "Codex analytics",
+            html: "<html><body><h1>Codex analytics</h1></body></html>",
+            scripts: {},
+          },
+        },
+      ];
+    });
+    const client = createPageSessionClient({
+      tabsApi: {
+        query,
+        reload,
+        get,
+      },
+      scriptingApi: { executeScript },
+    });
+
+    const result = await client.capture({
+      providerId: "codex",
+      pageLabel: "Codex cloud analytics page",
+      urlPatterns: ["https://chatgpt.com/codex/*"],
+      reloadBeforeCapture: {
+        bypassCache: true,
+        waitForLoadTimeoutMs: 0,
+      },
+      extraction: {
+        mode: "dom",
+      },
+      match() {
+        return "matched";
+      },
+    });
+
+    expect(result.status).toBe("matched");
+    expect(reload).toHaveBeenCalledWith(17, { bypassCache: true });
+    expect(get).toHaveBeenCalledWith(17);
+    expect(executeScript).toHaveBeenCalledTimes(1);
+    expect(calls).toEqual(["reload", "capture"]);
+
+    if (result.status !== "matched") {
+      throw new Error("Expected a matched page-session result.");
+    }
+
+    expect(result.target.lastAccessed).toBe(3);
+  });
+
   it("opens an inactive managed tab when configured and no candidate exists", async () => {
     const create = vi.fn(async () => ({
       id: 88,

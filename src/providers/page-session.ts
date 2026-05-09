@@ -73,11 +73,16 @@ export type PageSessionOpenWhenMissing = {
   loadPollIntervalMs?: number;
 };
 
-export type PageSessionReloadOnCaptureFailure = {
+export type PageSessionReloadOptions = {
   waitForLoadTimeoutMs?: number;
   loadPollIntervalMs?: number;
+  postLoadDelayMs?: number;
   bypassCache?: boolean;
 };
+
+export type PageSessionReloadOnCaptureFailure = PageSessionReloadOptions;
+
+export type PageSessionReloadBeforeCapture = PageSessionReloadOptions;
 
 export type PageSessionResult =
   | {
@@ -127,6 +132,7 @@ export type PageSessionDefinition = {
   urlPatterns: string[];
   binding?: PageSessionBinding;
   openWhenMissing?: PageSessionOpenWhenMissing;
+  reloadBeforeCapture?: boolean | PageSessionReloadBeforeCapture;
   reloadOnCaptureFailure?: boolean | PageSessionReloadOnCaptureFailure;
   extraction: PageSessionExtraction;
   match: (page: PageSessionCapturedPage) => PageSessionMatchStatus;
@@ -901,20 +907,21 @@ async function waitForOpenedTabLoad(
   return lastTab;
 }
 
-function normalizeReloadOnCaptureFailure(
-  reloadOnCaptureFailure:
+function normalizeReloadOptions(
+  reloadOptions:
+    | PageSessionDefinition["reloadBeforeCapture"]
     | PageSessionDefinition["reloadOnCaptureFailure"]
     | undefined,
-): PageSessionReloadOnCaptureFailure | null {
-  if (!reloadOnCaptureFailure) {
+): PageSessionReloadOptions | null {
+  if (!reloadOptions) {
     return null;
   }
 
-  if (reloadOnCaptureFailure === true) {
+  if (reloadOptions === true) {
     return {};
   }
 
-  return reloadOnCaptureFailure;
+  return reloadOptions;
 }
 
 async function waitForReloadedTabLoad(
@@ -934,31 +941,41 @@ async function waitForReloadedTabLoad(
   const deadline = Date.now() + timeoutMs;
   let lastTab: PageSessionTabQueryResult | null = null;
 
+  const finish = async (tab: PageSessionTabQueryResult | null) => {
+    const postLoadDelayMs = Math.max(0, reloadOptions.postLoadDelayMs ?? 0);
+
+    if (postLoadDelayMs > 0) {
+      await delay(postLoadDelayMs);
+    }
+
+    return tab;
+  };
+
   while (Date.now() <= deadline) {
     try {
       lastTab = await tabsApi.get(tabId);
 
       if (lastTab.status === "complete") {
-        return lastTab;
+        return finish(lastTab);
       }
     } catch {
-      return lastTab;
+      return finish(lastTab);
     }
 
     if (timeoutMs === 0) {
-      return lastTab;
+      return finish(lastTab);
     }
 
     await delay(Math.min(pollIntervalMs, Math.max(0, deadline - Date.now())));
   }
 
-  return lastTab;
+  return finish(lastTab);
 }
 
-async function reloadPageSessionTabAfterCaptureFailure(
+async function reloadPageSessionTab(
   tabsApi: PageSessionTabsApi,
   tabId: number,
-  reloadOptions: PageSessionReloadOnCaptureFailure,
+  reloadOptions: PageSessionReloadOptions,
 ): Promise<PageSessionTabQueryResult | null> {
   if (typeof tabsApi.reload !== "function") {
     return null;
@@ -1044,9 +1061,13 @@ export function createPageSessionClient(
       let sawLoggedOut = false;
       let sawCaptureFailure = false;
       let openedTabId: number | null = null;
-      const reloadOnCaptureFailure = normalizeReloadOnCaptureFailure(
+      const reloadBeforeCapture = normalizeReloadOptions(
+        definition.reloadBeforeCapture,
+      );
+      const reloadOnCaptureFailure = normalizeReloadOptions(
         definition.reloadOnCaptureFailure,
       );
+      const reloadedBeforeCaptureTabIds = new Set<number>();
       const reloadedAfterCaptureFailureTabIds = new Set<number>();
 
       if (
@@ -1088,6 +1109,30 @@ export function createPageSessionClient(
         }
 
         try {
+          let currentTab = tab;
+
+          if (
+            reloadBeforeCapture &&
+            typeof tabsApi.reload === "function" &&
+            tab.id !== openedTabId &&
+            !reloadedBeforeCaptureTabIds.has(tab.id)
+          ) {
+            reloadedBeforeCaptureTabIds.add(tab.id);
+
+            const reloadedTab = await reloadPageSessionTab(
+              tabsApi,
+              tab.id,
+              reloadBeforeCapture,
+            );
+
+            currentTab = {
+              ...currentTab,
+              ...reloadedTab,
+              id: tab.id,
+              bindingMode: tab.bindingMode,
+            };
+          }
+
           const page = await capturePageSessionPage(
             tab.id,
             scriptingApi,
@@ -1110,9 +1155,11 @@ export function createPageSessionClient(
               target: {
                 tabId: tab.id,
                 bindingMode: tab.bindingMode,
-                active: Boolean(tab.active),
+                active: Boolean(currentTab.active),
                 lastAccessed:
-                  typeof tab.lastAccessed === "number" ? tab.lastAccessed : null,
+                  typeof currentTab.lastAccessed === "number"
+                    ? currentTab.lastAccessed
+                    : null,
               },
               attempts,
             };
@@ -1139,7 +1186,7 @@ export function createPageSessionClient(
 
             try {
               const reloadedTab =
-                await reloadPageSessionTabAfterCaptureFailure(
+                await reloadPageSessionTab(
                   tabsApi,
                   tab.id,
                   reloadOnCaptureFailure,

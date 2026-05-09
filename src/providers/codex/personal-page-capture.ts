@@ -163,6 +163,22 @@ function matchesCodexRoute(
   );
 }
 
+function bindingMatchesRoute(
+  route: CodexRouteDefinition,
+  binding?: PageSessionBinding,
+): boolean {
+  if (!binding?.matchedUrl) {
+    return true;
+  }
+
+  const expectedPath = route.urlPatterns[0]
+    .replace("https://chatgpt.com", "")
+    .replace("*", "")
+    .toLowerCase();
+
+  return binding.matchedUrl.toLowerCase().includes(expectedPath);
+}
+
 function chooseRecommendedSurface(
   page: PageSessionCapturedPage,
   snippets: string[],
@@ -216,15 +232,23 @@ async function captureRoute(
   binding?: PageSessionBinding,
   options: CodexPersonalLiveCaptureOptions = {},
 ): Promise<CodexPersonalRouteCapture> {
+  const routeBinding = bindingMatchesRoute(route, binding) ? binding : undefined;
   const result = await client.capture({
     providerId: "codex",
     pageLabel: route.pageLabel,
     urlPatterns: route.urlPatterns,
-    binding,
+    binding: routeBinding,
+    reloadBeforeCapture: {
+      bypassCache: true,
+      waitForLoadTimeoutMs: 10_000,
+      loadPollIntervalMs: 250,
+      postLoadDelayMs: 3_000,
+    },
     reloadOnCaptureFailure: {
       bypassCache: true,
       waitForLoadTimeoutMs: 10_000,
       loadPollIntervalMs: 250,
+      postLoadDelayMs: 3_000,
     },
     ...(options.openPageWhenMissing && route.routeKey === "cloud_analytics"
       ? {

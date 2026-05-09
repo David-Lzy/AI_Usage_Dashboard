@@ -132,7 +132,8 @@ from RDP Chrome and archived as
 
 - the first archived screenshot set remains one truthful historical evidence package
 - after `Phase 296`, the current recommended screenshot evidence package is [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
-- the next store-asset slice should be a submission checklist or listing package review, not another screenshot archive, unless the UI changes again
+- after `Phase 299`, the [RC12 upload-candidate milestone](./Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md) is the handoff for human Chrome Web Store listing upload
+- the next store-asset slice should be review-feedback or listing-change follow-up, not another screenshot archive, unless the UI changes again
 
 ## Do Not Capture
 

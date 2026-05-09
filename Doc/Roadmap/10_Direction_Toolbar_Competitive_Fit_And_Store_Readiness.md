@@ -210,15 +210,17 @@ Turn the current popup from "already shipped and increasingly polished" into one
 
 ## Recommendation
 
-This direction is feasible and is now the immediate next execution line.
+This direction has reached the current upload-candidate handoff for `0.1.0-rc.12`.
 
-Recommended rollout:
+Completed rollout:
 
-1. continue popup plus sidepanel plus full-page surface expansion from the now-shipped full-page route-entry baseline and popup-header expand slice
-2. refresh RDP Chrome runtime QA after the new expand plus theme controls land
-3. refresh screenshot selection and screenshot ordering against the new surfaces
-4. tighten the store asset pack and submission checklist around the refreshed runtime evidence
-5. only then move broader listing-localization work forward
+1. shipped popup plus sidepanel plus full-page surface expansion from the route-preserving full-page shell
+2. refreshed RDP Chrome runtime QA and user visual smoke evidence across the relevant surfaces
+3. refreshed screenshot selection and screenshot ordering against the new surfaces
+4. completed the mixed screenshot archive and trimmed transparent icon refresh
+5. recorded the [RC12 Chrome Web Store upload-candidate milestone](../Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md)
+
+Next work should be review-feedback or listing-change follow-up after the human Chrome Web Store upload starts, not more local store-readiness mechanism unless the listing flow exposes a real gap.
 
 `Phase 141` completed the first executable part of steps `1` and `3` by shipping one current competitive-fit decision matrix with explicit `adopt / adapt / reject` outcomes and one maintained screenshot storyboard pack for truthful extension-mode capture.
 

@@ -119,10 +119,17 @@ describe("summarizeCodexPersonalPage", () => {
     );
 
     expect(capturedDefinitions).toHaveLength(3);
+    expect(capturedDefinitions[0].reloadBeforeCapture).toEqual({
+      bypassCache: true,
+      waitForLoadTimeoutMs: 10_000,
+      loadPollIntervalMs: 250,
+      postLoadDelayMs: 3_000,
+    });
     expect(capturedDefinitions[0].reloadOnCaptureFailure).toEqual({
       bypassCache: true,
       waitForLoadTimeoutMs: 10_000,
       loadPollIntervalMs: 250,
+      postLoadDelayMs: 3_000,
     });
     expect(capturedDefinitions[0].openWhenMissing).toBeUndefined();
     expect(capturedDefinitions[1].openWhenMissing).toBeUndefined();
@@ -130,6 +137,35 @@ describe("summarizeCodexPersonalPage", () => {
       url: "https://chatgpt.com/codex/cloud/settings/analytics",
       active: false,
       closeOnUnmatched: true,
+    });
+  });
+
+  it("does not reuse a bound cloud analytics tab for unrelated Codex routes", async () => {
+    const capturedDefinitions: Parameters<PageSessionClient["capture"]>[0][] = [];
+    const client: PageSessionClient = {
+      async capture(definition) {
+        capturedDefinitions.push(definition);
+        return {
+          status: "not_found",
+          attempts: [],
+        };
+      },
+    };
+
+    await captureCodexPersonalLiveFixture(client, {
+      mode: "auto",
+      tabId: 42,
+      matchedUrl: "https://chatgpt.com/codex/cloud/settings/analytics#usage",
+      matchedTitle: "Codex",
+    });
+
+    expect(capturedDefinitions[0].binding).toBeUndefined();
+    expect(capturedDefinitions[1].binding).toBeUndefined();
+    expect(capturedDefinitions[2].binding).toEqual({
+      mode: "auto",
+      tabId: 42,
+      matchedUrl: "https://chatgpt.com/codex/cloud/settings/analytics#usage",
+      matchedTitle: "Codex",
     });
   });
 });

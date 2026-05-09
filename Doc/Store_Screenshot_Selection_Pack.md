@@ -19,6 +19,7 @@ Status note:
 - this file records the current screenshot-slot selection and stale-review decision for Chrome Web Store assets
 - `Phase 161` turned the first archived screenshot set into a historical baseline rather than a final submission pack after the popup/full-page surface-expansion line
 - `Phase 296` archived the user-approved mixed screenshot candidate pack as [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
+- `Phase 299` recorded the RC12 Chrome Web Store upload-candidate milestone that uses this screenshot archive
 - refresh this file whenever a new screenshot archive lands, the popup capture method changes, or the storyboard/copy pack changes materially
 
 Purpose:
@@ -53,7 +54,7 @@ Purpose:
 - archived screenshots retained as truthful historical baseline only:
   - the full `2026-04-24` first real screenshot archive
 - immediate next action:
-  - move to a final submission checklist when the user wants to prepare the Chrome Web Store listing
+  - use the [RC12 upload-candidate milestone](./Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md) for the human Chrome Web Store listing upload
 
 ## Current Candidate Decision
 

@@ -4,10 +4,11 @@ Chrome side-panel extension for tracking usage, credits, and sync health across 
 
 Current release candidate:
 
-- package version: `0.1.0-rc.11`
-- Chrome manifest version: `0.1.0.11`
-- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.11.zip`
-- source status: source, built `dist`, and packaged zip are aligned after `Phase 293`; user-run RDP Chrome visual smoke passed in `Phase 294`; mixed store screenshot candidate accepted in `Phase 295`
+- package version: `0.1.0-rc.12`
+- Chrome manifest version: `0.1.0.12`
+- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.12.zip`
+- source status: source, built `dist`, packaged zip, and store-upload handoff docs are aligned after `Phase 299`; `rc.12` includes the Codex stale-page freshness reload fix plus the trimmed transparent Chrome icon refresh
+- upload-candidate milestone: [2026-05-04 RC12 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md)
 
 ## Current RC Matrix
 
@@ -41,8 +42,8 @@ Security posture for this track:
 
 Next execution queue:
 
-1. continue [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) by saving the user-approved mixed store screenshots as files, then importing/archiving them through the store screenshot workflow
-2. use `0.1.0-rc.11` as the current install/review package if another smoke pass is needed
+1. use `0.1.0-rc.12` as the current Chrome Web Store upload-candidate package; it includes the Phase 297 Codex stale-page freshness reload fix and refreshed trimmed transparent extension icons
+2. use the [RC12 upload-candidate milestone](./Doc/Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md) as the human handoff for Chrome Web Store listing upload, screenshots, and permission/privacy disclosures
 3. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 4. keep operator evidence closure below release/store work; here it means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not another runtime feature
 5. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
@@ -624,11 +625,12 @@ npm run release
 
 Output artifact:
 
-- `release/ai-usage-dashboard-0.1.0-rc.11.zip`
+- `release/ai-usage-dashboard-0.1.0-rc.12.zip`
 
 Packaging note:
 
-- `rc.11` includes the post-rc10 Cursor logged-out detection fix, Cursor structured usage facts, inline usage-window reset-label density fix, and formatted action-badge tooltip with enabled Cursor context.
+- `rc.12` includes the `rc.11` fixes, Phase 297 Codex stale-page freshness reload, and the refreshed trimmed transparent Chrome extension icons.
+- `Phase 299` marks `rc.12` as the current Chrome Web Store upload candidate without changing the package bytes.
 
 The packaging script checks that:
 

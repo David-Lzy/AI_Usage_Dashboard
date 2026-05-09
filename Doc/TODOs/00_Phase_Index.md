@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [296_Phase_Store_Mixed_Screenshot_Intake_And_Archive.md](./Archive/296_Phase_Store_Mixed_Screenshot_Intake_And_Archive.md)
+- latest completed slice: [299_Phase_RC12_Store_Upload_Candidate_Milestone.md](./Archive/299_Phase_RC12_Store_Upload_Candidate_Milestone.md)
 
 Completed phases should be moved to:
 
@@ -740,6 +740,9 @@ Completed phases should be moved to:
 - the 2026-05-04 `Phase 294` closeout recorded the user-run RDP Chrome visual smoke pass for `0.1.0-rc.11`; the user reported no obvious issue across full-page dashboard, toolbar popup, action-badge tooltip, and sidebar settings surfaces
 - the 2026-05-04 `Phase 295` closeout accepted the user-reviewed mixed store screenshot candidate pack and updated the maintained storyboard, selection pack, listing copy, localization source, and roadmap docs
 - the 2026-05-04 `Phase 296` closeout captured that mixed candidate pack from RDP Chrome, completed `2026-05-04-rc11-mixed-store-candidate-archive`, and refreshed store screenshot request/archive indexes so the current refreshed request is fulfilled rather than pending
+- the 2026-05-04 `Phase 297` closeout made Codex personal session-page sync reload stale-but-readable usage pages before DOM capture, with cache bypass plus a short post-load hydrate delay
+- the 2026-05-04 `Phase 298` closeout replaced the extension icons with the supplied trimmed transparent PNG set, bumped the package to `0.1.0-rc.12`, bumped the manifest to `0.1.0.12`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.12.zip`, and recorded SHA256 `d12c294adda25125731a106efcb99e17904ab50209926e719912f95279c16233` in the Phase 298 archive
+- the 2026-05-04 `Phase 299` closeout created the RC12 Chrome Web Store upload-candidate milestone and aligned roadmap, TODO, release-guide, and README references around that store handoff boundary without changing runtime code or package bytes
 
 ## Delivery Standard For Each Phase
 
