@@ -52,14 +52,16 @@ Parent direction:
 - evaluate whether the personal page exposes enough stable structure to improve "usage unknown" into a more useful partial summary
 - only pursue request-counter style inference if the team explicitly accepts a separate `local_estimate` mode
 
-### D. Deferred Providers
+### D. Deferred And Graduated Providers
 
-- keep `Claude` personal deferred until a real Pro or Max usage page is captured
+- keep `Claude` Team usage-page support as a shipped partial session-page path after `Phase 300`
+- keep individual `Claude` Pro / Max behavior separate until that account type is captured directly
 - keep `Gemini` personal deferred until the product model for project-scoped metrics is intentionally accepted
 - avoid vague "coming soon" language where the route itself is not yet defensible
 - current shipped baseline:
-  - deferred `Claude`, `Gemini`, and `JetBrains` tracks are now labeled explicitly in the UI as deferred contracts instead of being left inside implementation notes only
-  - deferred `Claude`, `Gemini`, and `JetBrains` tracks now also expose explicit graduation gates so the product states what concrete condition must be met before the contract can change
+  - `Claude` Team now follows the same honest partial-session-page pattern as Codex/Cursor: show only visible usage-window or page-context values, and keep upgrade-only/logged-out states explicit
+  - deferred `Gemini` and `JetBrains` tracks are labeled explicitly in the UI as deferred contracts instead of being left inside implementation notes only
+  - deferred `Gemini` and `JetBrains` tracks still expose explicit graduation gates so the product states what concrete condition must be met before the contract can change
 
 ### E. Compliance And Trust
 

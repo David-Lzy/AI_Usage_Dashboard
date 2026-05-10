@@ -161,8 +161,9 @@ Provider truth boundaries:
    included requests.
 3. JetBrains remains retained but deferred until a real org-visible Users and
    licensing page is reverified.
-4. Claude personal usage remains deferred until a real Pro or Max usage page is
-   captured.
+4. Claude Team usage is a logged-in `claude.ai/settings/usage` session-page
+   partial path; individual Pro / Max behavior remains unclaimed until captured
+   directly.
 5. Gemini remains policy-only unless project metrics are explicitly accepted as
    a supported product contract.
 6. Do not upgrade any provider claim without live evidence and updated docs.

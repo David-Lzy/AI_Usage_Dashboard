@@ -1,6 +1,6 @@
 # Claude Provider Note
 
-Date: 2026-04-20
+Date: 2026-05-11
 
 Process rule:
 
@@ -21,26 +21,28 @@ Status note:
 
 ## 1. Decision
 
-Selected MVP source path:
+Selected source paths:
 
 - `A1`: Claude Code Analytics Admin API
+- `B1`: logged-in Claude Team settings usage page at `https://claude.ai/settings/usage`
 
-Selected MVP support scope:
+Selected support scope:
 
 - Claude organizations with Admin API access
 - usage-based Enterprise or Console-style organization setups where an Admin API key can be provisioned
+- Claude Team accounts whose logged-in `claude.ai/settings/usage` page exposes visible usage-page context
 
 Deferred from MVP:
 
-- Team plan dashboard-only accounts on `claude.ai`
 - seat-based Enterprise accounts that only expose analytics through the web dashboard
-- personal Pro or Max accounts
+- individual personal Pro or Max accounts until that exact account type is captured directly
 - CLI-local `/cost` output as an account-level source
 
 Reason:
 
 - Anthropic now has an official structured Claude Code Analytics API
 - the API is a cleaner and more stable source than page parsing
+- the Team settings usage page is now available in the operator Chrome profile, but it remains a session-page partial source: the extension reports visible page values only and does not claim a private API or one absolute remaining balance
 - the web analytics dashboards document usage and adoption metrics, but the reviewed docs do not promise exact remaining included usage or a machine-readable quota endpoint for Team or seat-based Enterprise plans
 
 ## 2. Official Sources Reviewed
@@ -90,9 +92,9 @@ Why the dashboard is not the MVP primary path:
 
 ### 4.2 Explicitly Deferred
 
-- Team plan owners using only the `claude.ai` analytics dashboard
 - seat-based Enterprise plans that rely on included seat usage plus optional extra usage
 - individual Pro / Max subscribers
+- Team analytics dashboards that are not the `settings/usage` page
 
 Reason for the defer:
 
@@ -330,4 +332,31 @@ Phase 32 added one live redacted evidence fixture:
 Why this fixture matters:
 
 - it records the exact live redirect outcome from `claude.ai/settings/usage`
-- it preserves the honest shipped decision: personal Claude remains unsupported until a real Pro or Max usage page is captured
+- it preserves the old free-account decision: upgrade-only Claude states remain unsupported and should not be confused with the later Team usage-page path
+
+## 16. Phase 300 Claude Team Usage Page Support
+
+Phase 300 updates the Claude support boundary after the user provided access to a real Claude Team account in RDP Chrome.
+
+Current implementation decision:
+
+- `https://claude.ai/settings/usage` is now a shipped session-page partial source for Claude Team usage context
+- the source is selected after the Admin API path when `sourcePreference` is `auto`
+- if the Admin API key is missing, `auto` can fall back to the session page
+- if host access is missing, the provider remains blocked until Chrome grants the configured optional host origins
+
+Runtime behavior:
+
+- the extension uses the existing `chrome.tabs` + `chrome.scripting` page-session capture framework
+- stale or unreadable usage tabs are reloaded with `bypassCache: true` before capture
+- newly opened pages get hydration retry before route drift is surfaced
+- logged-out, upgrade-only, capture-unavailable, and route-drift states remain explicit warning/error states
+
+Security and truth boundary:
+
+- no Claude cookies are read from disk, copied by the user, or persisted by the extension
+- no bearer tokens or private Claude API responses are imported
+- no internal Claude API is called directly by this implementation
+- the parser only normalizes visible page text into usage windows and facts
+- exact remaining quota is only shown when the visible page exposes a remaining percentage for a window
+- individual Pro / Max behavior remains unclaimed until observed with that exact account type

@@ -3,12 +3,19 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ProviderSecrets, ProviderSetting, ProviderSnapshot } from "../types";
 import { createEmptyPageBinding } from "../../shared/page-bindings";
 
-const { createClaudeCodeAnalyticsClientMock } = vi.hoisted(() => ({
+const {
+  createClaudeCodeAnalyticsClientMock,
+  createClaudePersonalPageClientMock,
+} = vi.hoisted(() => ({
   createClaudeCodeAnalyticsClientMock: vi.fn(),
+  createClaudePersonalPageClientMock: vi.fn(),
 }));
 
 vi.mock("./official", () => ({
   createClaudeCodeAnalyticsClient: createClaudeCodeAnalyticsClientMock,
+}));
+vi.mock("./personal-page-client", () => ({
+  createClaudePersonalPageClient: createClaudePersonalPageClientMock,
 }));
 
 import { syncClaudeCodeProvider } from "./adapter";
@@ -42,13 +49,14 @@ const grantedSetting: ProviderSetting = {
   credentialStatus: "configured",
   sourcePreference: "auto",
   pageBinding: createEmptyPageBinding(),
-  hostsLabel: "api.anthropic.com · platform.claude.com",
+  hostsLabel: "api.anthropic.com · platform.claude.com · claude.ai",
   hostOrigins: [
     "https://api.anthropic.com/*",
     "https://platform.claude.com/*",
+    "https://claude.ai/*",
   ],
   description:
-    "Needed for Claude Code Analytics Admin API access and dashboard verification.",
+    "Uses the Claude Code Analytics Admin API when a key is configured, or the logged-in Claude Team usage page when no key is stored.",
 };
 
 const emptySecrets: ProviderSecrets = {
@@ -67,10 +75,62 @@ const emptySecrets: ProviderSecrets = {
 describe("syncClaudeCodeProvider", () => {
   beforeEach(() => {
     createClaudeCodeAnalyticsClientMock.mockReset();
+    createClaudePersonalPageClientMock.mockReset();
   });
 
-  it("returns a readable missing-key state when the Claude Admin API key is absent", async () => {
+  it("falls back to the Claude usage page when the Admin API key is absent", async () => {
     const attemptedAt = new Date(2026, 3, 20, 12, 34);
+    createClaudePersonalPageClientMock.mockReturnValue({
+      getUsageSnapshot: vi.fn(async () => ({
+        result: {
+          status: "ok",
+          snapshot: {
+            providerId: "claude-code",
+            providerLabel: "Claude Code",
+            measurementKind: "usage_page_context",
+            routeKey: "settings_usage",
+            sourceUrl: "https://claude.ai/settings/usage",
+            sourceTitle: "Claude",
+            sourceHeading: "Usage",
+            recommendedSurface: "dom",
+            primaryWindow: {
+              label: "Team weekly usage",
+              normalizedLabel: "Weekly usage window",
+              kind: "weekly",
+              remainingPercent: 42,
+              usedPercent: 58,
+              totalPercent: 100,
+              resetAt: "2026-05-18 00:00",
+              resetText: "2026-05-18 00:00",
+            },
+            windows: [
+              {
+                label: "Team weekly usage",
+                normalizedLabel: "Weekly usage window",
+                kind: "weekly",
+                remainingPercent: 42,
+                usedPercent: 58,
+                totalPercent: 100,
+                resetAt: "2026-05-18 00:00",
+                resetText: "2026-05-18 00:00",
+              },
+            ],
+            facts: [
+              {
+                label: "Plan",
+                value: "Team",
+                detail: null,
+              },
+            ],
+            usedAvailability: "window_only",
+            remainingAvailability: "exact",
+            resetAvailability: "window_only",
+            note: "Visible page context only.",
+          },
+        },
+        pageBinding: createEmptyPageBinding(),
+      })),
+    });
     const { snapshot } = await syncClaudeCodeProvider({
       provider: baseProvider,
       secrets: emptySecrets,
@@ -79,11 +139,25 @@ describe("syncClaudeCodeProvider", () => {
       now: attemptedAt,
     });
 
-    expect(snapshot.syncStatus).toBe("error");
-    expect(snapshot.tone).toBe("error");
-    expect(snapshot.warningReason).toContain("Claude Admin API key");
-    expect(snapshot.lastSyncLabel).toBe("Claude Admin API key required");
+    expect(snapshot.syncStatus).toBe("ok");
+    expect(snapshot.tone).toBe("neutral");
+    expect(snapshot.syncSource).toBe("page_parse");
+    expect(snapshot.planName).toBe(
+      "Claude Team Usage Page (Weekly usage window)",
+    );
+    expect(snapshot.remaining).toBe(42);
+    expect(snapshot.sourceSelectionReason).toBe(
+      "Auto fell back to Session page.",
+    );
+    expect(snapshot.sourceFallbackDiagnostic).toMatchObject({
+      code: "source.official_api_missing_credential",
+      params: {
+        failedSourceKind: "official_api",
+        failureCode: "credential_missing",
+      },
+    });
     expect(createClaudeCodeAnalyticsClientMock).not.toHaveBeenCalled();
+    expect(createClaudePersonalPageClientMock).toHaveBeenCalled();
   });
 
   it("normalizes the live Claude analytics response", async () => {
@@ -267,7 +341,7 @@ describe("syncClaudeCodeProvider", () => {
     expect(snapshot.lastSyncLabel).toBe("Claude analytics sync failed just now");
   });
 
-  it("returns a readable unsupported-state message when Admin API access is missing", async () => {
+  it("returns a readable host-access message when Claude access is missing", async () => {
     const attemptedAt = new Date(2026, 3, 20, 12, 34);
     const { snapshot } = await syncClaudeCodeProvider({
       provider: baseProvider,
@@ -280,12 +354,10 @@ describe("syncClaudeCodeProvider", () => {
       now: attemptedAt,
     });
 
-    expect(snapshot.syncStatus).toBe("error");
-    expect(snapshot.tone).toBe("error");
-    expect(snapshot.warningReason).toContain(
-      "organizations with Admin API access",
-    );
-    expect(snapshot.warningReason).toContain("personal Pro or Max");
+    expect(snapshot.syncStatus).toBe("warning");
+    expect(snapshot.tone).toBe("warning");
+    expect(snapshot.warningReason).toContain("Host access missing");
+    expect(snapshot.warningReason).toContain("claude.ai");
     expect(snapshot.lastSyncLabel).toBe("Claude Admin API access required");
   });
 });

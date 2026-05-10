@@ -83,9 +83,9 @@ Current post-`Phase 299` execution priority:
 3. `P0` - treat the refreshed `Direction 10.3` screenshot evidence as archived, not pending: [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) now fulfills the refreshed store screenshot request with `5/5` reviewed images and `3` explicit truth-boundary notes.
 4. `P1` - only cut another RC if Chrome Web Store review, final human listing edits, or an explicit visual issue requires code, icon, package, or copy changes. Do not mutate the `rc.12` boundary silently.
 5. `P1` - run another `0.1.0-rc.12` RDP Chrome smoke pass only if new visual concerns appear or if the refreshed toolbar icon needs real Chrome review. The 2026-05-04 user-run `rc.11` pass already reported no obvious issue across full-page dashboard, toolbar popup, action-badge tooltip, and sidebar settings surfaces.
-6. `P2` - Provider closure waits on accounts:
+6. `P2` - Provider closure waits only on the accounts that are still unavailable:
    - JetBrains org-console reverification waits for a real org-visible `Users and licensing` session.
-   - Claude personal usage-page capture waits for a Pro or Max account.
+   - Claude individual Pro / Max usage-page behavior remains separate from the now-shipped Claude Team session-page path.
    - Gemini project-metrics graduation waits for a product decision that project-scoped metrics are acceptable.
 7. `P2` - close real operator evidence only after higher-value release/store work: operator evidence means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not a new runtime provider feature. The user explicitly de-prioritized this below the current store-work line.
 8. `P2` - continue file splitting only when a concrete maintenance issue justifies it; the old queued split targets for `material-theme.css`, `SettingsPage.tsx`, `App.tsx`, `standard-app-actions.ts`, and `localized-copy.ts` are now closed or reduced to focused compatibility/aggregator files.
@@ -360,6 +360,7 @@ Phase status update:
 - `Phase 297` fixed Codex stale-but-readable usage pages by forcing a cache-bypassing source-page reload before DOM capture, then waiting briefly for the analytics UI to hydrate
 - `Phase 298` packaged `0.1.0-rc.12` with the Phase 297 Codex freshness fix plus the refreshed trimmed transparent 16/32/48/128 Chrome icon set
 - `Phase 299` created the [RC12 Chrome Web Store upload-candidate milestone](./Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md), aligning code, release package, screenshot evidence, icon evidence, README, release guide, and roadmap/TODO docs without changing runtime code
+- `Phase 300` completed the Claude Team usage-page implementation slice: `claude.ai/settings/usage` is now a shipped session-page partial source in current source while preserving the existing Admin API path and the no-cookie/no-private-token boundary
 - the old maintenance split queue is closed for the originally named local-safe targets: `material-theme.css`, `localized-copy.ts`, `SettingsPage.tsx`, `App.tsx`, and `standard-app-actions.ts` are now focused base, compatibility, route, or aggregator files rather than the next default work item
 - the previous store-readiness blocker for screenshot file intake/import/archive is now closed under `Direction 10.3`; the current store step is the human Chrome Web Store listing upload and review flow using the Phase 299 milestone
 - the remaining high-value work in Direction 05 and Direction 04 is real operator evidence closure: archived real review exports from the shipped workspaces rather than more lifecycle tooling
@@ -1174,18 +1175,19 @@ Recommendation:
 
 - do this second
 
-### 16.4 Claude Personal TODO
+### 16.4 Claude Team / Personal TODO
 
 - inspect `claude.ai/settings/usage`
 - classify outcomes:
   - logged out
   - free / no paid usage page
+  - Team usage page available
   - Pro / Max usage page available
   - redirected or gated account states
 - determine whether the page offers exact remaining usage, rolling-window status, or only subscription copy
 - keep unsupported personal states explicit if the page is too fragile or too incomplete
 
-Current findings from the 2026-04-22 spike:
+Current findings:
 
 - in the current logged-in browser session, `https://claude.ai/settings/usage` redirected to `https://claude.ai/upgrade`
 - the live page exposed only plan and upgrade content:
@@ -1195,12 +1197,15 @@ Current findings from the 2026-04-22 spike:
   - `Individual`
   - `Team and Enterprise`
 - no usage meter, remaining allowance, rolling window, or reset time was visible
+- on 2026-05-11, a real Claude Team account became available in RDP Chrome, making the Team settings usage route a valid implementation target
+- the implementation path remains page-session only: no Claude cookies, bearer tokens, manual auth-header import, or private Claude API calls
 
 Decision:
 
-- keep personal Claude unsupported for now
+- graduate the Claude Team usage page as a shipped personal/team partial session-page source
+- keep individual Pro / Max behavior separate until that exact account type is observed
 - treat redirected or upgrade-only states as first-class account states
-- revisit only after capturing a real Pro or Max usage page, if one exists
+- do not claim an exact absolute remaining Claude balance unless the visible page exposes it
 
 Recommendation:
 

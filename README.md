@@ -7,7 +7,7 @@ Current release candidate:
 - package version: `0.1.0-rc.12`
 - Chrome manifest version: `0.1.0.12`
 - packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.12.zip`
-- source status: source, built `dist`, packaged zip, and store-upload handoff docs are aligned after `Phase 299`; `rc.12` includes the Codex stale-page freshness reload fix plus the trimmed transparent Chrome icon refresh
+- source status: current source is ahead of the submitted `rc.12` package with `Phase 300` Claude Team usage-page support; rebuild and package a later RC before shipping that new provider path
 - upload-candidate milestone: [2026-05-04 RC12 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md)
 
 ## Current RC Matrix
@@ -16,7 +16,7 @@ Current release candidate:
 | --- | --- | --- | --- |
 | Cursor | Team Admin API or logged-in personal dashboard page | live | exact remaining included requests on the personal page |
 | JetBrains AI | retained repo path for the logged-in Console page | deferred from the active RC promise | current RC does not promise JetBrains until a real org-visible `Users and licensing` session is reverified |
-| Claude Code | Admin Analytics API | live | exact remaining included quota |
+| Claude Code | Admin Analytics API or logged-in Claude Team usage page | live partial | one absolute remaining Claude balance across all plan windows; individual Pro / Max behavior remains unclaimed |
 | Gemini Code Assist | documented quota policy | policy only | live per-user usage |
 | Codex | Enterprise Analytics API or logged-in personal usage page | live | one full plan-wide absolute remaining-credit value; flex credit balance cards are supplemental context only |
 
@@ -30,7 +30,7 @@ Current personal-user paths:
 | --- | --- | --- |
 | Codex | `chatgpt.com/codex/cloud/settings/analytics#usage` first, with `chatgpt.com/codex/settings/usage` still under observation | shipped as a logged-in session-page path; the proven live surface already exposes remaining percentage and reset timing in the current usage windows |
 | Cursor | `cursor.com/cn/dashboard/usage` first, with locale-free `cursor.com/dashboard/usage` still matched | shipped as a logged-in session-page path for billing-period usage context; Phase 291 aligns it with the Codex managed non-active tab, reload-on-capture-failure, and hydration retry flow, and post-rc10 source now renders visible billing/spend values as structured usage facts without claiming exact remaining included requests |
-| Claude Code | `claude.ai/settings/usage` | 2026-04-22 live spike redirected the current free account to `claude.ai/upgrade`; defer until a real Pro or Max usage page is captured |
+| Claude Code | `claude.ai/settings/usage` | shipped as a logged-in Claude Team session-page path for visible usage-window or usage-page context; upgrade-only and logged-out redirects stay explicit warning states, and individual Pro / Max behavior remains separately unclaimed |
 | Gemini Code Assist | Google Cloud Gemini metrics page | 2026-04-22 spike confirmed a project-scoped Google Cloud console route; defer from the personal-user track unless product support expands to explicit project metrics |
 
 Security posture for this track:
@@ -138,8 +138,6 @@ The side panel now also labels what the product is actually promising for each p
 
 Deferred paths now also carry explicit graduation gates in the UI:
 
-- `Claude`
-  - graduate only after a real Pro or Max usage page is captured instead of an upgrade redirect
 - `Gemini`
   - graduate only if the product explicitly accepts bound-tab project metrics as a supported contract
 - `JetBrains`
@@ -147,6 +145,7 @@ Deferred paths now also carry explicit graduation gates in the UI:
 
 Current honesty boundaries:
 
+- Claude Team is now a shipped session-page partial source in current source; individual Pro / Max behavior remains separately unclaimed until observed directly
 - JetBrains AI remains implemented in the repo, but it is hidden by default and deferred from the active RC support promise until a real org-visible `Users and licensing` session is reverified
 - Codex now ships a real `Session page` path for personal users and an `Official API` path for Enterprise workspace analytics
 - Cursor now ships a real `Session page` path for personal users and an `Official API` path for team admins, but the personal path still only exposes billing-period usage context
@@ -591,7 +590,7 @@ Preview URL:
 | --- | --- | --- |
 | Cursor | optional Admin API key for the team path; none for the personal dashboard page | `https://api.cursor.com/*`, `https://cursor.com/*` |
 | JetBrains AI | none | `https://account.jetbrains.com/*`, `https://*.jetbrains.com/*` |
-| Claude Code | Admin API key | `https://api.anthropic.com/*`, `https://platform.claude.com/*` |
+| Claude Code | optional Admin API key for organization analytics; none for the Claude Team usage page | `https://api.anthropic.com/*`, `https://platform.claude.com/*`, `https://claude.ai/*` |
 | Gemini Code Assist | none | none |
 | Codex | none for personal usage pages; analytics API key + workspace ID for Enterprise analytics | `https://api.chatgpt.com/*`, `https://chatgpt.com/*` |
 

@@ -40,19 +40,19 @@ It is:
 
 ## Current Truth
 
-As of 2026-04-23:
+As of 2026-05-11:
 
 - `Codex` personal support is already shipped through a logged-in ChatGPT page session and currently returns usage-window percentages plus reset timing
 - `Codex` still does not expose one absolute remaining personal credit balance in the current shipped path
 - `Cursor` personal support is already shipped through a logged-in usage page, but it currently exposes billing-period context instead of an exact remaining included-request counter
-- `Claude` personal support is deferred because the observed free-account route redirected to `claude.ai/upgrade` on 2026-04-22
+- `Claude` Team support is now shipped in current source through a logged-in `claude.ai/settings/usage` page-session path, while the old free-account upgrade redirect remains an unsupported account state and individual Pro / Max behavior remains unclaimed
 - `Gemini` personal support is deferred because the observed metrics route is project-scoped rather than a clean personal quota surface
 - `Phase 43` now exposes source-fidelity semantics in the UI so the shipped `Codex` and `Cursor` personal paths are visibly labeled as `Window-only vendor value`
 - the UI also distinguishes current enterprise/admin analytics paths as `Analytics snapshot` so they are not confused with live remaining counters
 - `Phase 44` now exposes trust-boundary semantics in the UI so users can see which paths depend on stored credentials, logged-in page sessions, host access, and the explicit cookie ban
 - `Phase 45` now exposes provider-contract semantics in the UI so shipped personal partial paths, shipped admin or enterprise analytics paths, and deferred tracks are labeled explicitly instead of being implied through notes
 - `Phase 46` now brings the current provider contract onto dashboard cards so the main overview reflects the same honesty model as Settings and provider detail
-- `Phase 47` now exposes explicit graduation gates for deferred tracks so the product states what concrete evidence would allow `Claude`, `Gemini`, or `JetBrains` to graduate into a shipped path
+- `Phase 47` now exposes explicit graduation gates for deferred tracks; after `Phase 300`, Claude Team has graduated while Gemini project metrics and JetBrains org-console still require explicit evidence or product acceptance
 
 ## What External Market Signals Say
 

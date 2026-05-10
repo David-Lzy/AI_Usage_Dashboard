@@ -174,7 +174,7 @@ Environment note:
 | --- | --- | --- |
 | Cursor | optional Admin API key for team path; none for personal dashboard page | `api.cursor.com`, `cursor.com` |
 | JetBrains AI | none | JetBrains account and usage pages |
-| Claude Code | Admin API key | `api.anthropic.com`, `platform.claude.com` |
+| Claude Code | optional Admin API key for organization analytics; none for the Claude Team usage page | `api.anthropic.com`, `platform.claude.com`, `claude.ai` |
 | Gemini Code Assist | none | none |
 | Codex | none for personal usage pages; analytics API key and workspace ID for Enterprise analytics | `api.chatgpt.com`, `chatgpt.com` |
 
@@ -182,7 +182,7 @@ Environment note:
 
 - Cursor: supported through the Team Admin API or logged-in personal dashboard page; personal exact remaining included requests remain unavailable
 - JetBrains AI: retained in the repository, but deferred from the active narrowed RC until a real org-visible `Users and licensing` session is reverified
-- Claude Code: supported through the Admin Analytics API
+- Claude Code: supported through the Admin Analytics API or logged-in Claude Team usage page; exact absolute remaining included quota is still not claimed
 - Gemini Code Assist: shipped as documented policy only
 - Codex: supported through the Enterprise Analytics API or logged-in personal usage page; personal values remain visible usage-window values rather than one full plan-wide absolute remaining balance
 

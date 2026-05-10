@@ -24,6 +24,7 @@
     "https://*.jetbrains.com/*",
     "https://api.anthropic.com/*",
     "https://platform.claude.com/*",
+    "https://claude.ai/*",
     "https://api.chatgpt.com/*",
     "https://chatgpt.com/*"
   ],

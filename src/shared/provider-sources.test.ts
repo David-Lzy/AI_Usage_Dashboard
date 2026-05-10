@@ -420,7 +420,7 @@ describe("provider source helpers", () => {
     expect(display.manualCookieImportLabel).toBe("Forbidden");
   });
 
-  it("makes deferred personal and project tracks explicit in source display", () => {
+  it("makes shipped Claude Team and deferred project tracks explicit in source display", () => {
     const claude = buildProviderSourceDisplay(
       findProviderState("claude-code").provider,
       findProviderState("claude-code").setting,
@@ -430,14 +430,12 @@ describe("provider source helpers", () => {
       findProviderState("gemini").setting,
     );
 
-    expect(claude.sessionPageContractLabel).toBe("Deferred personal page");
-    expect(claude.sessionPageContractDetail).toContain("free-account route");
-    expect(claude.sessionPageGraduationGateLabel).toBe(
-      "Capture a real Pro or Max usage page",
+    expect(claude.sessionPageContractLabel).toBe("Shipped personal partial");
+    expect(claude.sessionPageContractDetail).toContain(
+      "Current shipped Team-session contract",
     );
-    expect(claude.sessionPageGraduationGateDetail).toContain(
-      "upgrade redirect",
-    );
+    expect(claude.sessionPageGraduationGateLabel).toBeNull();
+    expect(claude.sessionPageGraduationGateDetail).toBeNull();
     expect(gemini.sessionPageContractLabel).toBe("Deferred project metrics");
     expect(gemini.sessionPageContractDetail).toContain("project-scoped");
     expect(gemini.sessionPageGraduationGateLabel).toBe(

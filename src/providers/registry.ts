@@ -58,6 +58,7 @@ const providerRegistry: Record<ProviderId, MockProviderAdapter> = {
         setting: context.setting,
         warningThresholdPercent: context.warningThresholdPercent,
         now: context.attemptedAt,
+        trigger: context.trigger,
       });
     },
   },

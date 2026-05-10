@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [299_Phase_RC12_Store_Upload_Candidate_Milestone.md](./Archive/299_Phase_RC12_Store_Upload_Candidate_Milestone.md)
+- latest completed slice: [300_Phase_Claude_Team_Usage_Page_Session_Support.md](./Archive/300_Phase_Claude_Team_Usage_Page_Session_Support.md)
 
 Completed phases should be moved to:
 
