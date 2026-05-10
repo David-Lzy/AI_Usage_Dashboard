@@ -158,6 +158,23 @@ function formatMetric(value: number | null): string {
   return value.toFixed(2).replace(/\.?0+$/, "");
 }
 
+function formatClaudeWindowResetLabel(
+  window: Pick<
+    ClaudePersonalUsageWindow,
+    "normalizedLabel" | "resetAt" | "resetText"
+  >,
+): string | null {
+  if (!window.resetAt) {
+    return window.resetText;
+  }
+
+  const resetPrefix = /^\s*(?:in|within)\b/i.test(window.resetAt)
+    ? "resets"
+    : "resets at";
+
+  return `${window.normalizedLabel} ${resetPrefix} ${window.resetAt}`;
+}
+
 function toProviderUsageWindow(
   window: ClaudePersonalUsageWindow,
 ): ProviderUsageWindow {
@@ -174,9 +191,7 @@ function toProviderUsageWindow(
     remaining: window.remainingPercent,
     total: window.totalPercent,
     resetAt: window.resetAt,
-    resetLabel: window.resetAt
-      ? `${window.normalizedLabel} resets at ${window.resetAt}`
-      : window.resetText,
+    resetLabel: formatClaudeWindowResetLabel(window),
   };
 }
 
@@ -690,9 +705,8 @@ async function tryClaudePersonalSource({
         total,
         resetAt: primaryWindow?.resetAt ?? "Visible Claude usage page",
         resetLabel: primaryWindow
-          ? primaryWindow.resetAt
-            ? `${primaryWindow.normalizedLabel} resets at ${primaryWindow.resetAt}`
-            : `${primaryWindow.normalizedLabel} reset timing is visible only inside the current page session`
+          ? formatClaudeWindowResetLabel(primaryWindow) ??
+            `${primaryWindow.normalizedLabel} reset timing is visible only inside the current page session`
           : "Claude usage page captured; no exact remaining percentage was visible",
         syncedAt,
         syncSource: "page_parse",

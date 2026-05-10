@@ -77,6 +77,107 @@ describe("parseClaudePersonalPageSummary", () => {
     expect(snapshot?.facts.length).toBeGreaterThan(0);
   });
 
+  it("keeps Claude usage rows while filtering helper copy from windows and facts", () => {
+    const snapshot = parseClaudePersonalPageSummary("settings_usage", {
+      url: "https://claude.ai/settings/usage",
+      title: "Claude",
+      heading: "Usage",
+      recommendedSurface: "dom",
+      textSnippets: [
+        "Usage",
+        "Your Usage limits",
+        "Team",
+        "Current session",
+        "Starts when a message is sent",
+        "0% used",
+        "Weekly limits",
+        "Learn more about usage limits",
+        "All models",
+        "Resets in 21 hr 56 min",
+        "1% used",
+        "Claude Code",
+        "Projects",
+        "Invite team members",
+        "Claude Design",
+        "You haven't used Claude Design yet",
+        "0% used",
+        "Last updated: 1 minute ago",
+        "Additional features",
+        "Daily included routine runs",
+        "You haven't run any routines yet",
+        "0 / 25",
+      ],
+      scriptMarkers: {
+        hasNextDataScript: false,
+        hasNextFlightStream: false,
+        hasCloudflareChallenge: false,
+      },
+      keywordSignals: {
+        hasUsageSignal: true,
+        hasRemainingSignal: false,
+        hasResetSignal: true,
+        hasPlanSignal: true,
+        hasTeamSignal: true,
+        hasUpgradeSignal: false,
+      },
+    });
+
+    expect(snapshot).not.toBeNull();
+    expect(snapshot?.windows.map((window) => window.normalizedLabel)).toEqual([
+      "Current session",
+      "All models weekly limit",
+      "Claude Design",
+      "Daily included routine runs",
+    ]);
+    expect(snapshot?.primaryWindow).toMatchObject({
+      normalizedLabel: "All models weekly limit",
+      kind: "weekly",
+      remainingPercent: 99,
+      usedPercent: 1,
+      resetAt: "in 21 hr 56 min",
+    });
+    expect(snapshot?.windows).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          normalizedLabel: "Current session",
+          remainingPercent: 100,
+          usedPercent: 0,
+          resetAt: null,
+          resetText: "Starts when a message is sent",
+        }),
+        expect.objectContaining({
+          normalizedLabel: "All models weekly limit",
+          remainingPercent: 99,
+          usedPercent: 1,
+          resetAt: "in 21 hr 56 min",
+        }),
+        expect.objectContaining({
+          normalizedLabel: "Claude Design",
+          remainingPercent: 100,
+          usedPercent: 0,
+          resetAt: null,
+          resetText: "You haven't used Claude Design yet",
+        }),
+        expect.objectContaining({
+          normalizedLabel: "Daily included routine runs",
+          remainingPercent: 100,
+          usedPercent: 0,
+          resetText: "0 / 25",
+        }),
+      ]),
+    );
+
+    const renderedFactText = snapshot?.facts
+      .flatMap((fact) => [fact.label, fact.value])
+      .join(" ");
+
+    expect(renderedFactText).not.toContain("Projects");
+    expect(renderedFactText).not.toContain("Invite team members");
+    expect(renderedFactText).not.toContain("Your Usage limits");
+    expect(renderedFactText).not.toContain("Learn more about usage limits");
+    expect(renderedFactText).not.toContain("Starts when a message is sent");
+  });
+
   it("rejects a matched route when no usage, plan, or quota signals are visible", () => {
     const snapshot = parseClaudePersonalPageSummary("settings_usage", {
       url: "https://claude.ai/settings/usage",
@@ -102,4 +203,3 @@ describe("parseClaudePersonalPageSummary", () => {
     expect(snapshot).toBeNull();
   });
 });
-

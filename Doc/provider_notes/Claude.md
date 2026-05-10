@@ -360,3 +360,36 @@ Security and truth boundary:
 - the parser only normalizes visible page text into usage windows and facts
 - exact remaining quota is only shown when the visible page exposes a remaining percentage for a window
 - individual Pro / Max behavior remains unclaimed until observed with that exact account type
+
+## 17. Phase 301 Claude Usage Page Noise Filtering
+
+Phase 301 tightens the Team usage-page parser after RDP Chrome showed that the live Claude settings page includes helper and navigation copy near visible usage percentages.
+
+Observed live rows that should be preserved:
+
+- `Current session`
+- `All models`
+- `Claude Design`
+- `Daily included routine runs`
+
+Observed noisy labels that should be filtered:
+
+- `Your limits`
+- `Learn more about limits`
+- `Starts when a message is sent`
+- generic navigation labels such as `Projects`, `Invite team members`, `Claude Code`, and `Team`
+
+Current parser behavior:
+
+- usage-window parsing preserves original text order and duplicate percent snippets so repeated `0% used` values are not accidentally deduplicated before label pairing
+- progress windows are emitted for the meaningful Claude usage rows above plus named quota/window labels such as weekly, monthly, 5-hour, message, quota, premium, standard, Opus, Sonnet, and localized equivalents
+- detail rows such as `Starts when a message is sent` or `You haven't used Claude Design yet` are retained as row detail, not promoted to standalone progress rows
+- absolute count rows such as `0 / 25` are converted into a percent progress value while retaining the visible count text as row detail
+- generic helper labels are filtered from both progress windows and structured usage facts
+- relative reset strings such as `in 21 hr 56 min` are formatted as `resets in ...` rather than `resets at in ...`
+
+Truth boundary:
+
+- this phase does not add a new Claude data source
+- it does not change Admin API behavior
+- it only makes the shipped Team session-page partial source more conservative about what it presents as a quota progress row

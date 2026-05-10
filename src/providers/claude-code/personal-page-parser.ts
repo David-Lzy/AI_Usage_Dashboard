@@ -68,19 +68,40 @@ export type ClaudePersonalParseResult =
     };
 
 const PERCENT_PATTERN = /(\d{1,3}(?:\.\d+)?)\s*[%％]/;
+const COUNT_OF_TOTAL_PATTERN = /(\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)/;
 const WINDOW_LABEL_PATTERN =
   /usage|limit|quota|remaining|left|available|messages?|premium|standard|opus|sonnet|5\s*-?\s*hour|5h|week|weekly|month|monthly|额度|配额|限制|剩余|消息|高级|标准|5\s*小时|每周|每月|月/i;
+const CLAUDE_USAGE_ROW_LABEL_PATTERN =
+  /^(?:current session|all models|claude design|daily included routine runs|daily routine runs|当前会话|所有模型|每日例程运行)$/i;
+const CLAUDE_USAGE_SECTION_BOUNDARY_PATTERN =
+  /^(?:your usage limits?|your limits?|weekly limits?|monthly limits?|additional features|last updated.*|team|你的使用限制|你的限制|每周限制|每月限制|附加功能|上次更新.*|团队)$/i;
 const REMAINING_MARKER_PATTERN = /remaining|left|available|剩余|可用/i;
 const USED_MARKER_PATTERN = /used|usage|consumed|使用|已用|消耗/i;
 const RESET_LINE_PATTERN =
   /(?:reset(?:s| time)?|renews?|renewal|cycle|period|重置(?:时间)?|刷新|周期)(?:[:：]\s*)?(.+)/i;
+const DETAIL_LINE_PATTERN =
+  /starts when a message is sent|haven['’]t used|haven['’]t run|发送消息时开始|尚未使用|还没有使用|尚未运行|还没有运行/i;
 const FACT_SIGNAL_PATTERN =
   /usage|remaining|limit|quota|reset|renews|billing|plan|team|pro|max|message|premium|standard|opus|sonnet|使用|剩余|额度|配额|限制|重置|账单|计划|团队|消息/i;
 const VALUE_LIKE_PATTERN =
   /(\d|[%％]|\$|A\$|USD|AUD|remaining|left|available|剩余|可用|team|pro|max|团队|计划)/i;
+const GENERIC_WINDOW_LABEL_PATTERN =
+  /^(?:your usage limits?|your limits?|weekly limits|monthly limits|learn more(?: about (?:usage )?limits)?|starts when a message is sent|reset(?:s| time)?(?: in| at)?.*|renews?(?: in| at)?.*|usage|claude code|team|projects?|invite team members?|settings|profile|account|你的使用限制|你的限制|每周限制|每月限制|了解(?:更多)?(?:使用)?限制|发送消息时开始|使用情况|团队|项目|邀请团队成员)$/i;
+const MEANINGFUL_WINDOW_LABEL_PATTERN =
+  /usage window|usage limit|quota|limit|messages?|premium|standard|opus|sonnet|5\s*-?\s*hour|5h|week|weekly|month|monthly|daily|current session|all models|claude design|routine runs|额度|配额|限制|消息|高级|标准|5\s*小时|每周|每月|每日|当前会话|所有模型|例程运行|月/i;
+const GENERIC_FACT_LABEL_PATTERN =
+  /^(?:visible claude usage signal|usage|your usage limits?|your limits?|weekly limits|monthly limits|learn more(?: about (?:usage )?limits)?|starts when a message is sent|reset(?:s| time)?(?: in| at)?.*|renews?(?: in| at)?.*|claude code|team|projects?|invite team members?|settings|profile|account|使用情况|你的使用限制|你的限制|每周限制|每月限制|团队|项目|邀请团队成员)$/i;
+const GENERIC_FACT_VALUE_PATTERN =
+  /^(?:usage|your usage limits?|your limits?|weekly limits|monthly limits|learn more(?: about (?:usage )?limits)?|starts when a message is sent|claude code|team|projects?|invite team members?|settings|profile|account|使用情况|你的使用限制|你的限制|每周限制|每月限制|团队|项目|邀请团队成员)$/i;
 
 function normalizeWhitespace(value: string): string {
   return value.replace(/\s+/g, " ").trim();
+}
+
+function normalizeComparableLabel(value: string): string {
+  return normalizeWhitespace(value)
+    .replace(/[.。]+$/g, "")
+    .trim();
 }
 
 function uniqueStrings(values: string[]): string[] {
@@ -101,6 +122,37 @@ function parsePercent(value: string): number | null {
   }
 
   return parsed;
+}
+
+function parseCountOfTotal(
+  value: string,
+): { used: number; total: number } | null {
+  const match = normalizeWhitespace(value).match(COUNT_OF_TOTAL_PATTERN);
+
+  if (!match) {
+    return null;
+  }
+
+  const used = Number.parseFloat(match[1] ?? "");
+  const total = Number.parseFloat(match[2] ?? "");
+
+  if (
+    !Number.isFinite(used) ||
+    !Number.isFinite(total) ||
+    used < 0 ||
+    total <= 0
+  ) {
+    return null;
+  }
+
+  return {
+    used: Math.min(used, total),
+    total,
+  };
+}
+
+function toBoundedPercent(value: number): number {
+  return Math.max(0, Math.min(100, Number(value.toFixed(2))));
 }
 
 function classifyWindowKind(label: string): ClaudePersonalWindowKind {
@@ -125,6 +177,29 @@ function normalizeWindowLabel(
   label: string,
   kind: ClaudePersonalWindowKind,
 ): string {
+  const strippedLabel = normalizeWhitespace(
+    label
+      .replace(/\s*(?:[:：]\s*)?\d{1,3}(?:\.\d+)?\s*[%％].*$/i, "")
+      .replace(/\s*[·,，;；|/-]\s*$/g, ""),
+  );
+  const lowerLabel = strippedLabel.toLowerCase();
+
+  if (/^current session$/i.test(strippedLabel)) {
+    return "Current session";
+  }
+
+  if (/^all models$/i.test(strippedLabel)) {
+    return kind === "weekly" ? "All models weekly limit" : "All models";
+  }
+
+  if (/^claude design$/i.test(strippedLabel)) {
+    return "Claude Design";
+  }
+
+  if (/routine runs/i.test(lowerLabel)) {
+    return "Daily included routine runs";
+  }
+
   if (kind === "rolling_5h") {
     return "5-hour usage window";
   }
@@ -138,9 +213,7 @@ function normalizeWindowLabel(
   }
 
   return normalizeWhitespace(
-    label
-      .replace(/\s*(?:[:：]\s*)?\d{1,3}(?:\.\d+)?\s*[%％].*$/i, "")
-      .replace(/\s*[·,，;；|/-]\s*$/g, ""),
+    strippedLabel,
   );
 }
 
@@ -180,6 +253,38 @@ function normalizeResetAt(value: string): string {
   return trimmedValue;
 }
 
+function isMeaningfulWindowLabel(
+  label: string,
+  kind: ClaudePersonalWindowKind,
+): boolean {
+  const comparableLabel = normalizeComparableLabel(label);
+
+  if (!comparableLabel || GENERIC_WINDOW_LABEL_PATTERN.test(comparableLabel)) {
+    return false;
+  }
+
+  if (kind !== "unknown") {
+    return true;
+  }
+
+  return MEANINGFUL_WINDOW_LABEL_PATTERN.test(comparableLabel);
+}
+
+function isMeaningfulFact(label: string, value: string): boolean {
+  const comparableLabel = normalizeComparableLabel(label);
+  const comparableValue = normalizeComparableLabel(value);
+
+  if (!comparableValue || GENERIC_FACT_VALUE_PATTERN.test(comparableValue)) {
+    return false;
+  }
+
+  if (GENERIC_FACT_LABEL_PATTERN.test(comparableLabel)) {
+    return false;
+  }
+
+  return true;
+}
+
 function extractResetText(context: string[]): string | null {
   const resetLine =
     context.find((line) => RESET_LINE_PATTERN.test(line)) ?? null;
@@ -194,9 +299,18 @@ function extractResetText(context: string[]): string | null {
   return normalizeWhitespace(resetValue);
 }
 
+function extractDetailText(context: string[]): string | null {
+  return (
+    context
+      .map(normalizeWhitespace)
+      .find((line) => DETAIL_LINE_PATTERN.test(line)) ?? null
+  );
+}
+
 function createWindowFromContext(
   labelLine: string,
   context: string[],
+  sectionContext = "",
 ): ClaudePersonalUsageWindow | null {
   const percentLine =
     context.find(
@@ -205,31 +319,66 @@ function createWindowFromContext(
     context.find((line) => PERCENT_PATTERN.test(line) && USED_MARKER_PATTERN.test(line)) ??
     context.find((line) => PERCENT_PATTERN.test(line)) ??
     null;
+  const countLine =
+    percentLine === null
+      ? (context.find((line) => COUNT_OF_TOTAL_PATTERN.test(line)) ?? null)
+      : null;
 
-  if (!percentLine) {
+  if (!percentLine && !countLine) {
     return null;
   }
 
-  const percentValue = parsePercent(percentLine);
-
-  if (percentValue === null) {
-    return null;
-  }
-
-  const label = stripRuntimeValues(labelLine) || stripRuntimeValues(percentLine);
-  const kind = classifyWindowKind(`${label} ${percentLine}`);
-  const normalizedLabel = normalizeWindowLabel(label, kind);
-  const hasRemainingMarker = REMAINING_MARKER_PATTERN.test(
-    `${labelLine} ${percentLine}`,
+  const label =
+    stripRuntimeValues(labelLine) ||
+    stripRuntimeValues(percentLine ?? countLine ?? "");
+  const kind = classifyWindowKind(
+    `${label} ${percentLine ?? countLine ?? ""} ${sectionContext}`,
   );
-  const hasUsedMarker = USED_MARKER_PATTERN.test(`${labelLine} ${percentLine}`);
-  const remainingPercent = hasUsedMarker && !hasRemainingMarker
-    ? 100 - percentValue
-    : percentValue;
-  const usedPercent = hasUsedMarker && !hasRemainingMarker
-    ? percentValue
-    : 100 - remainingPercent;
+  const normalizedLabel = normalizeWindowLabel(label, kind);
+
+  if (!isMeaningfulWindowLabel(label, kind)) {
+    return null;
+  }
+
   const resetText = extractResetText(context);
+  const detailText = resetText ?? extractDetailText(context);
+
+  if (percentLine) {
+    const percentValue = parsePercent(percentLine);
+
+    if (percentValue === null) {
+      return null;
+    }
+
+    const hasRemainingMarker = REMAINING_MARKER_PATTERN.test(
+      `${labelLine} ${percentLine}`,
+    );
+    const hasUsedMarker = USED_MARKER_PATTERN.test(`${labelLine} ${percentLine}`);
+    const remainingPercent =
+      hasUsedMarker && !hasRemainingMarker ? 100 - percentValue : percentValue;
+    const usedPercent =
+      hasUsedMarker && !hasRemainingMarker ? percentValue : 100 - remainingPercent;
+
+    return {
+      label: normalizeWhitespace(label || normalizedLabel),
+      normalizedLabel,
+      kind,
+      remainingPercent,
+      usedPercent,
+      totalPercent: 100,
+      resetAt: resetText ? normalizeResetAt(resetText) : null,
+      resetText: detailText,
+    };
+  }
+
+  const countValue = countLine ? parseCountOfTotal(countLine) : null;
+
+  if (!countValue) {
+    return null;
+  }
+
+  const usedPercent = toBoundedPercent((countValue.used / countValue.total) * 100);
+  const remainingPercent = toBoundedPercent(100 - usedPercent);
 
   return {
     label: normalizeWhitespace(label || normalizedLabel),
@@ -239,7 +388,60 @@ function createWindowFromContext(
     usedPercent,
     totalPercent: 100,
     resetAt: resetText ? normalizeResetAt(resetText) : null,
-    resetText,
+    resetText: resetText ?? normalizeWhitespace(countLine ?? "") ?? detailText,
+  };
+}
+
+function isUsageWindowLabelCandidate(line: string): boolean {
+  return (
+    !PERCENT_PATTERN.test(line) &&
+    !COUNT_OF_TOTAL_PATTERN.test(line) &&
+    (CLAUDE_USAGE_ROW_LABEL_PATTERN.test(line) || WINDOW_LABEL_PATTERN.test(line))
+  );
+}
+
+function isClaudeUsageContextBoundary(line: string): boolean {
+  return (
+    CLAUDE_USAGE_ROW_LABEL_PATTERN.test(line) ||
+    CLAUDE_USAGE_SECTION_BOUNDARY_PATTERN.test(line)
+  );
+}
+
+function buildWindowContext(
+  snippets: string[],
+  index: number,
+): { context: string[]; sectionContext: string } {
+  const context = [snippets[index] ?? ""].filter(Boolean);
+  const sectionContext = snippets
+    .slice(Math.max(0, index - 4), index)
+    .filter((line) => CLAUDE_USAGE_SECTION_BOUNDARY_PATTERN.test(line))
+    .join(" ");
+
+  for (
+    let contextIndex = index + 1;
+    contextIndex < snippets.length && context.length < 8;
+    contextIndex += 1
+  ) {
+    const line = snippets[contextIndex] ?? "";
+
+    if (contextIndex > index + 1 && isClaudeUsageContextBoundary(line)) {
+      break;
+    }
+
+    context.push(line);
+
+    if (PERCENT_PATTERN.test(line) || COUNT_OF_TOTAL_PATTERN.test(line)) {
+      const nextLine = snippets[contextIndex + 1] ?? "";
+
+      if (isClaudeUsageContextBoundary(nextLine)) {
+        break;
+      }
+    }
+  }
+
+  return {
+    context,
+    sectionContext,
   };
 }
 
@@ -251,19 +453,26 @@ function parseUsageWindows(textSnippets: string[]): ClaudePersonalUsageWindow[] 
   for (let index = 0; index < normalizedSnippets.length; index += 1) {
     const line = normalizedSnippets[index] ?? "";
 
-    if (!WINDOW_LABEL_PATTERN.test(line) && !PERCENT_PATTERN.test(line)) {
+    if (
+      !isUsageWindowLabelCandidate(line) &&
+      !PERCENT_PATTERN.test(line) &&
+      !COUNT_OF_TOTAL_PATTERN.test(line)
+    ) {
       continue;
     }
 
     const previousLine = normalizedSnippets[index - 1] ?? "";
     const labelLine =
-      WINDOW_LABEL_PATTERN.test(line) && !PERCENT_PATTERN.test(line)
+      isUsageWindowLabelCandidate(line)
         ? line
-        : WINDOW_LABEL_PATTERN.test(previousLine)
+        : isUsageWindowLabelCandidate(previousLine)
           ? previousLine
           : line;
-    const context = normalizedSnippets.slice(Math.max(0, index - 1), index + 6);
-    const window = createWindowFromContext(labelLine, context);
+    const { context, sectionContext } = buildWindowContext(
+      normalizedSnippets,
+      isUsageWindowLabelCandidate(line) ? index : Math.max(0, index - 1),
+    );
+    const window = createWindowFromContext(labelLine, context, sectionContext);
 
     if (!window || seenLabels.has(window.normalizedLabel)) {
       continue;
@@ -303,7 +512,7 @@ function parseUsageFacts(textSnippets: string[]): ClaudePersonalUsageFact[] {
     const label = hasStandaloneValue ? snippet : "Visible Claude usage signal";
     const dedupeKey = `${label}=${value}`;
 
-    if (seenValues.has(dedupeKey)) {
+    if (seenValues.has(dedupeKey) || !isMeaningfulFact(label, value)) {
       continue;
     }
 
@@ -367,8 +576,11 @@ function parseSnapshotFromSummary(
   routeKey: ClaudePersonalRouteKey,
   summary: ClaudePersonalPageSummary,
 ): ClaudePersonalUsageSnapshot | null {
+  const orderedTextSnippets = summary.textSnippets
+    .map(normalizeWhitespace)
+    .filter(Boolean);
   const textSnippets = uniqueStrings(summary.textSnippets);
-  const windows = parseUsageWindows(textSnippets);
+  const windows = parseUsageWindows(orderedTextSnippets);
   const facts = parseUsageFacts(textSnippets);
   const primaryWindow = choosePrimaryWindow(windows);
   const hasEnoughUsageSignals =

@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [300_Phase_Claude_Team_Usage_Page_Session_Support.md](./Archive/300_Phase_Claude_Team_Usage_Page_Session_Support.md)
+- latest completed slice: [301_Phase_Claude_Usage_Page_Noise_Filtering.md](./Archive/301_Phase_Claude_Usage_Page_Noise_Filtering.md)
 
 Completed phases should be moved to:
 
@@ -743,6 +743,8 @@ Completed phases should be moved to:
 - the 2026-05-04 `Phase 297` closeout made Codex personal session-page sync reload stale-but-readable usage pages before DOM capture, with cache bypass plus a short post-load hydrate delay
 - the 2026-05-04 `Phase 298` closeout replaced the extension icons with the supplied trimmed transparent PNG set, bumped the package to `0.1.0-rc.12`, bumped the manifest to `0.1.0.12`, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.12.zip`, and recorded SHA256 `d12c294adda25125731a106efcb99e17904ab50209926e719912f95279c16233` in the Phase 298 archive
 - the 2026-05-04 `Phase 299` closeout created the RC12 Chrome Web Store upload-candidate milestone and aligned roadmap, TODO, release-guide, and README references around that store handoff boundary without changing runtime code or package bytes
+- the 2026-05-11 `Phase 300` closeout added Claude Team `https://claude.ai/settings/usage` as a shipped session-page partial source in current source while preserving the existing Admin API path and the no-cookie/no-private-token boundary
+- the 2026-05-11 `Phase 301` closeout filtered Claude Team settings helper/navigation copy out of progress windows and preserved duplicate ordered percent snippets before label pairing
 
 ## Delivery Standard For Each Phase
 
