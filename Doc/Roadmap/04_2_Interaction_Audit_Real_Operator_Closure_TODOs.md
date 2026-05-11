@@ -9,8 +9,9 @@ Document class:
 Status note:
 
 - direction created on `2026-04-24`
-- no executable phase has started yet
-- this child TODO narrows the remaining `Direction 04` gap to real operator evidence closure rather than more audit tooling
+- **closed 2026-05-11**: first real operator closure completed via RDP Chrome visual audit
+- archive: [Doc/testing/operator_reviews/2026-05-11-2026-05-11-rdp-chrome-visual-audit/](../testing/operator_reviews/2026-05-11-2026-05-11-rdp-chrome-visual-audit/README.md)
+- all 5 surfaces reviewed, all 11 manual checks resolved, pending request fulfilled and archived
 
 Process rule:
 

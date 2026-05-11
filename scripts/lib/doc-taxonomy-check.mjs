@@ -152,6 +152,18 @@ async function buildDocRequirements(projectRoot) {
       needsStatus: true,
     },
     {
+      relativePath: "Doc/Project_Quickstart.md",
+      needsClass: true,
+      needsFreshness: true,
+      needsStatus: true,
+    },
+    {
+      relativePath: "Doc/Next_Steps_Post_Operator_Closures.md",
+      needsClass: true,
+      needsFreshness: false,
+      needsStatus: true,
+    },
+    {
       relativePath: "Doc/Roadmap/00_Strategic_Directions_Index.md",
       needsClass: true,
       needsFreshness: false,

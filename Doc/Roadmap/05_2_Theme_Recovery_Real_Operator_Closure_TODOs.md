@@ -9,8 +9,9 @@ Document class:
 Status note:
 
 - direction created on `2026-04-24`
-- no executable phase has started yet
-- this child TODO narrows the remaining `Direction 05` gap to real operator evidence closure rather than more local theme tooling
+- **closed 2026-05-11**: first real operator theme-recovery closure completed via RDP Chrome
+- archive: [Doc/testing/theme_recovery_reviews/2026-05-11-system-recovered-014312/](../testing/theme_recovery_reviews/2026-05-11-system-recovered-014312/README.md)
+- theme: System mode, custom preset, seed `#4F46E5`, resolved light — stage `Recovered`
 
 Process rule:
 
