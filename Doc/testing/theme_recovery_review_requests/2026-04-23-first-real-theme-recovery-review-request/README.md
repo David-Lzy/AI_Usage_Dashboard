@@ -11,7 +11,7 @@ Status note:
 
 Request ID: `2026-04-23-first-real-theme-recovery-review-request`
 Created at: 2026-04-23T11:13:03.801Z
-Status: `pending_operator_review`
+Status: `fulfilled_review_archived`
 
 Workspace route:
 
@@ -48,6 +48,16 @@ Expected operator focus:
 - expected seed: `#4F46E5`
 - recommended downloads: `summary, json`
 
+Fulfillment receipt:
+
+- fulfilled at: `2026-05-11T01:46:26.951Z`
+- source completed export: `tmp/theme-recovery-review-export.json`
+- archive: `Doc/testing/theme_recovery_reviews/2026-05-11-system-recovered-014312/README.md`
+- archive manifest: `Doc/testing/theme_recovery_reviews/2026-05-11-system-recovered-014312/review-archive.json`
+- completed stage: `Recovered` · popup `Aligned` · scope `Cursor + Codex isolated`
+- completed theme: `system` / `custom` · seed `#4F46E5`
+- completed providers: recovered `2` / total `2`
+- completed export digest: `sha256:0ea2f1b58913995ecf60ad0ccce7004d54483ef35ce691e55d002ab266328a60 (3350 bytes)`
 
 Workflow:
 
@@ -61,7 +71,7 @@ Lifecycle commands:
 
 ```bash
 npm run theme-recovery:preflight-review-request -- --request-id 2026-04-23-first-real-theme-recovery-review-request --input tmp/theme-recovery-review-export.json
-npm run theme-recovery:complete-review-request -- --request-id 2026-04-23-first-real-theme-recovery-review-request --input tmp/theme-recovery-review-export.json
+# already fulfilled via archive 2026-05-11-system-recovered-014312
 npm run theme-recovery:refresh-review-request-index
 npm run theme-recovery:refresh-archive-index
 ```

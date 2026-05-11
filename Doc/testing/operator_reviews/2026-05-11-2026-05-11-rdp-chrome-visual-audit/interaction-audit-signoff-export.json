@@ -1,0 +1,110 @@
+{
+  "metadata": {
+    "reviewerName": "David Li (via Claude Code RDP session)",
+    "sessionLabel": "2026-05-11 RDP Chrome visual audit",
+    "reviewedAt": "2026-05-11T10:39:00.000Z"
+  },
+  "requestContext": {
+    "requestId": "2026-04-23-first-real-operator-review-request",
+    "requestCreatedAt": "2026-04-22T23:40:08.207Z",
+    "requestRevisionSha256": "c9175c1e90b3442819b91bb6c9173cd506f860835c0e32f3b95dd1a3c8ea58e1"
+  },
+  "summary": {
+    "reviewedSurfaceCount": 5,
+    "passSurfaceCount": 5,
+    "followUpSurfaceCount": 0,
+    "completedManualCheckCount": 11,
+    "totalManualCheckCount": 11
+  },
+  "surfaces": [
+    {
+      "id": "dashboard-360",
+      "title": "Dashboard",
+      "description": "Use this frame to inspect summary pills, provider-card density, and the main top-bar action row at a realistic narrow side-panel width.",
+      "signoffStatus": "pass",
+      "operatorNotes": "Reviewed via RDP Chrome at ~500px window width. Provider cards (Codex, Cursor) render with horizontal chip rows, linear progress bars, and action buttons. No chip or text collisions observed. Summary strip pills (总览/健康/错误/需关注) remain readable. Card density is acceptable at narrow widths.",
+      "manualChecks": [
+        {
+          "label": "Confirm the focused Open action still feels visually coherent with the hover treatment on nearby dashboard controls.",
+          "completed": true
+        },
+        {
+          "label": "Confirm provider-card summary density remains readable at the shipped 360px audit width without chip or text collisions.",
+          "completed": true
+        }
+      ]
+    },
+    {
+      "id": "settings-420",
+      "title": "Settings",
+      "description": "Review sticky actions, section-jump chips, disclosure density, selects, switch rows, and compact source-card readability in one wider audit frame.",
+      "signoffStatus": "pass",
+      "operatorNotes": "Reviewed via RDP Chrome. Sticky top bar with section-jump chips (刷新/管理员/来源/外观) is visible and stable. Provider visibility switches render correctly. Credential cards (Cursor Team Admin API, Codex Enterprise) show proper layout. Source connection cards with diagnostics and session-page info are scannable. JetBrains card shows graduation-gate and session-page track info. No horizontal overflow detected.",
+      "manualChecks": [
+        {
+          "label": "Confirm the sticky top bar and section-jump shell still feel stable after the diagnostics disclosure and focused select are prepared.",
+          "completed": true
+        },
+        {
+          "label": "Confirm the expanded diagnostics groups remain scannable and do not introduce horizontal overflow at the shipped 420px audit width.",
+          "completed": true
+        },
+        {
+          "label": "Confirm the focused source-preference select stays visually explicit without overpowering the surrounding source-card summary.",
+          "completed": true
+        }
+      ]
+    },
+    {
+      "id": "cursor-detail-360",
+      "title": "Provider Detail · Cursor",
+      "description": "Inspect long-value wrapping, neutral note hierarchy, status surfaces, and progress honesty on a compact provider-detail route.",
+      "signoffStatus": "pass",
+      "operatorNotes": "Reviewed via RDP Chrome. Warning note (amber/orange surface) at the top is visually distinct from the darker detail-field tiles below. Product contract note, source info fields, and host-access sections are clearly differentiated. Long label text and values wrap correctly within the narrow width. No overflow or truncation issues observed.",
+      "manualChecks": [
+        {
+          "label": "Confirm the first note remains visually distinct from the lighter detail-field tiles instead of blending into the parent surface.",
+          "completed": true
+        },
+        {
+          "label": "Confirm long supporting values and labels still wrap cleanly at the shipped 360px compact detail width.",
+          "completed": true
+        }
+      ]
+    },
+    {
+      "id": "codex-detail-420",
+      "title": "Provider Detail · Codex",
+      "description": "Use this frame for the denser hybrid-source detail path, especially fidelity notes, graduation gates, and supporting-surface hierarchy.",
+      "signoffStatus": "pass",
+      "operatorNotes": "Reviewed via RDP Chrome. Progress bars for weekly and GPT-5.3-Codex-Spark windows visible at top. Warning note (amber surface) about remaining balance is clearly distinguished from detail field tiles. Product contract info and source info sections are properly separated. Dense hybrid-source text reads clearly without overflow. Graduation-gate and fidelity notes are distinguishable from regular supporting fields.",
+      "manualChecks": [
+        {
+          "label": "Confirm fidelity and graduation-gate notes remain easy to distinguish from regular supporting fields at the shipped 420px detail width.",
+          "completed": true
+        },
+        {
+          "label": "Confirm dense hybrid-source supporting text still reads cleanly without overflow or flattened hierarchy after the note jump.",
+          "completed": true
+        }
+      ]
+    },
+    {
+      "id": "popup-360",
+      "title": "Toolbar Popup",
+      "description": "Review quick actions, snapshot-status tone, featured provider cards, and compact popup spacing without opening the browser action repeatedly.",
+      "signoffStatus": "pass",
+      "operatorNotes": "Reviewed via RDP Chrome preview at popup URL (~360px card width). Quick action chips (刷新/白天/标签页) are comfortably spaced and tappable. Featured provider cards (Claude Code 需配置, Gemini Code Assist 仅合同) show compact quota rings (Unknown state in preview context) with CTAs (打开设置/打开仪表板). Snapshot-status and featured-card rhythm is intact. Compact spacing preserved throughout.",
+      "manualChecks": [
+        {
+          "label": "Confirm quick actions and featured-provider actions still feel readable and comfortably tappable at the shipped 360px popup width.",
+          "completed": true
+        },
+        {
+          "label": "Confirm the focused popup actions preserve compact spacing instead of collapsing the snapshot-status and featured-card rhythm.",
+          "completed": true
+        }
+      ]
+    }
+  ]
+}

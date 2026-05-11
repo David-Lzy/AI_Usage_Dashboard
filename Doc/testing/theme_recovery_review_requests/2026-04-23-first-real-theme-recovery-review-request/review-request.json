@@ -1,7 +1,7 @@
 {
   "requestId": "2026-04-23-first-real-theme-recovery-review-request",
   "createdAt": "2026-04-23T11:13:03.801Z",
-  "status": "pending_operator_review",
+  "status": "fulfilled_review_archived",
   "workspaceRoute": "http://127.0.0.1:4173/src/sidepanel/index.html#debug-theme-recovery-review",
   "requestContext": {
     "requestId": "2026-04-23-first-real-theme-recovery-review-request",
@@ -54,7 +54,27 @@
       "Codex"
     ]
   },
-  "fulfillment": null,
+  "fulfillment": {
+    "fulfilledAt": "2026-05-11T01:46:26.951Z",
+    "sourceCompletedReviewExport": "tmp/theme-recovery-review-export.json",
+    "archiveId": "2026-05-11-system-recovered-014312",
+    "archiveReadmePath": "Doc/testing/theme_recovery_reviews/2026-05-11-system-recovered-014312/README.md",
+    "archiveManifestPath": "Doc/testing/theme_recovery_reviews/2026-05-11-system-recovered-014312/review-archive.json",
+    "completedStageSummary": {
+      "overallLabel": "Recovered",
+      "popupSnapshotLabel": "Aligned",
+      "scopeIsolationLabel": "Cursor + Codex isolated",
+      "themeMode": "system",
+      "themePreset": "custom",
+      "themeCustomSeedHex": "#4F46E5",
+      "recoveredProviderCount": 2,
+      "targetProviderCount": 2
+    },
+    "completedReviewExportDigest": {
+      "sha256": "0ea2f1b58913995ecf60ad0ccce7004d54483ef35ce691e55d002ab266328a60",
+      "sizeBytes": 3350
+    }
+  },
   "artifacts": {
     "reviewTemplate": "theme-recovery-review-template.json",
     "seedReference": "theme-recovery-seeded-reference.json",

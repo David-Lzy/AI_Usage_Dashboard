@@ -1,0 +1,67 @@
+{
+  "generatedAt": "2026-05-11T01:43:12.062Z",
+  "requestContext": {
+    "requestId": "2026-04-23-first-real-theme-recovery-review-request",
+    "requestCreatedAt": "2026-04-23T11:13:03.801Z",
+    "requestBoundWorkspaceRoute": "http://127.0.0.1:4173/src/sidepanel/index.html?themeRecoveryRequestId=2026-04-23-first-real-theme-recovery-review-request&themeRecoveryRequestCreatedAt=2026-04-23T11%3A13%3A03.801Z#debug-theme-recovery-review"
+  },
+  "themeMode": "system",
+  "themePreset": "custom",
+  "themeResolved": "light",
+  "themeCustomSeedHex": "#4F46E5",
+  "popupSnapshotLabel": "Aligned",
+  "popupSnapshotTone": "neutral",
+  "popupSnapshotHeadline": "Codex personal fixture loaded",
+  "popupSnapshotDetail": "All 2 visible providers share the same cached snapshot window.",
+  "computedActionBadge": {
+    "text": "",
+    "title": "AI Usage Dashboard: all visible providers are healthy"
+  },
+  "scopeIsolationLabel": "Cursor + Codex isolated",
+  "scopeIsolationDetail": "Only the target session-page providers are visible, so popup alignment and action-badge recovery can be interpreted directly.",
+  "missingTargetProviderIds": [],
+  "extraVisibleProviderLabels": [],
+  "overallStage": "recovered",
+  "overallLabel": "Recovered",
+  "overallTone": "neutral",
+  "overallDetail": "The target providers are healthy, isolated, and the popup snapshot is aligned under the same saved theme state.",
+  "targetProviders": [
+    {
+      "providerId": "cursor",
+      "providerLabel": "Cursor",
+      "visible": true,
+      "displaySyncStatus": "ok",
+      "permissionStatus": "granted",
+      "currentSourceLabel": "Session page",
+      "currentSourceStateKind": "ready",
+      "currentSourceStateLabel": "Ready to sync",
+      "currentSourceStateDetail": "Shipped personal-user path. The 2026-04-21 live page and view-source spike showed a Next flight-backed usage page that exposes current billing-period usage and spend controls, but no exact remaining included-request counter.",
+      "currentSourceStateTone": "neutral",
+      "lastSyncLabel": "Cursor personal fixture loaded",
+      "recoveryLabel": "Healthy",
+      "recoveryTone": "neutral",
+      "recoveryDetail": "This target is visible, granted, and currently reporting a ready healthy state under the saved theme.",
+      "hostAccessLabel": "Granted",
+      "isRecovered": true
+    },
+    {
+      "providerId": "codex",
+      "providerLabel": "Codex",
+      "visible": true,
+      "displaySyncStatus": "ok",
+      "permissionStatus": "granted",
+      "currentSourceLabel": "Session page",
+      "currentSourceStateKind": "ready",
+      "currentSourceStateLabel": "Ready to sync",
+      "currentSourceStateDetail": "Shipped personal-user path. The 2026-04-21 live-tab capture matched chatgpt.com/codex/cloud/settings/analytics#usage and exposed exact remaining percentages plus reset times in DOM. The extension attaches to the already-running logged-in ChatGPT tab and does not export cookies.",
+      "currentSourceStateTone": "neutral",
+      "lastSyncLabel": "Codex personal fixture loaded",
+      "recoveryLabel": "Healthy",
+      "recoveryTone": "neutral",
+      "recoveryDetail": "This target is visible, granted, and currently reporting a ready healthy state under the saved theme.",
+      "hostAccessLabel": "Granted",
+      "isRecovered": true
+    }
+  ],
+  "liveActionBadge": null
+}

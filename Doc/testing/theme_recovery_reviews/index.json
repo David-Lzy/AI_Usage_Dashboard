@@ -1,10 +1,100 @@
 {
-  "generatedAt": "2026-04-23T16:57:50.104Z",
+  "generatedAt": "2026-05-11T01:46:26.951Z",
   "archiveRoot": "Doc/testing/theme_recovery_reviews",
-  "recordCount": 1,
+  "recordCount": 2,
   "seededRecordCount": 1,
-  "operatorRecordCount": 0,
+  "operatorRecordCount": 1,
   "records": [
+    {
+      "archiveId": "2026-05-11-system-recovered-014312",
+      "archivedAt": "2026-05-11T01:46:26.951Z",
+      "seeded": false,
+      "sourceReviewExport": "tmp/theme-recovery-review-export.json",
+      "sourceRequest": {
+        "requestId": "2026-04-23-first-real-theme-recovery-review-request",
+        "requestReadmePath": "Doc/testing/theme_recovery_review_requests/2026-04-23-first-real-theme-recovery-review-request/README.md",
+        "requestManifestPath": "Doc/testing/theme_recovery_review_requests/2026-04-23-first-real-theme-recovery-review-request/review-request.json"
+      },
+      "review": {
+        "generatedAt": "2026-05-11T01:43:12.062Z",
+        "requestContext": {
+          "requestId": "2026-04-23-first-real-theme-recovery-review-request",
+          "requestCreatedAt": "2026-04-23T11:13:03.801Z",
+          "requestBoundWorkspaceRoute": "http://127.0.0.1:4173/src/sidepanel/index.html?themeRecoveryRequestId=2026-04-23-first-real-theme-recovery-review-request&themeRecoveryRequestCreatedAt=2026-04-23T11%3A13%3A03.801Z#debug-theme-recovery-review"
+        },
+        "themeMode": "system",
+        "themePreset": "custom",
+        "themeResolved": "light",
+        "themeCustomSeedHex": "#4F46E5",
+        "popupSnapshotLabel": "Aligned",
+        "popupSnapshotTone": "neutral",
+        "popupSnapshotHeadline": "Codex personal fixture loaded",
+        "popupSnapshotDetail": "All 2 visible providers share the same cached snapshot window.",
+        "computedActionBadge": {
+          "text": "",
+          "title": "AI Usage Dashboard: all visible providers are healthy"
+        },
+        "scopeIsolationLabel": "Cursor + Codex isolated",
+        "scopeIsolationDetail": "Only the target session-page providers are visible, so popup alignment and action-badge recovery can be interpreted directly.",
+        "missingTargetProviderIds": [],
+        "extraVisibleProviderLabels": [],
+        "overallStage": "recovered",
+        "overallLabel": "Recovered",
+        "overallTone": "neutral",
+        "overallDetail": "The target providers are healthy, isolated, and the popup snapshot is aligned under the same saved theme state.",
+        "targetProviders": [
+          {
+            "providerId": "cursor",
+            "providerLabel": "Cursor",
+            "visible": true,
+            "displaySyncStatus": "ok",
+            "permissionStatus": "granted",
+            "currentSourceLabel": "Session page",
+            "currentSourceStateKind": "ready",
+            "currentSourceStateLabel": "Ready to sync",
+            "currentSourceStateDetail": "Shipped personal-user path. The 2026-04-21 live page and view-source spike showed a Next flight-backed usage page that exposes current billing-period usage and spend controls, but no exact remaining included-request counter.",
+            "currentSourceStateTone": "neutral",
+            "lastSyncLabel": "Cursor personal fixture loaded",
+            "recoveryLabel": "Healthy",
+            "recoveryTone": "neutral",
+            "recoveryDetail": "This target is visible, granted, and currently reporting a ready healthy state under the saved theme.",
+            "hostAccessLabel": "Granted",
+            "isRecovered": true
+          },
+          {
+            "providerId": "codex",
+            "providerLabel": "Codex",
+            "visible": true,
+            "displaySyncStatus": "ok",
+            "permissionStatus": "granted",
+            "currentSourceLabel": "Session page",
+            "currentSourceStateKind": "ready",
+            "currentSourceStateLabel": "Ready to sync",
+            "currentSourceStateDetail": "Shipped personal-user path. The 2026-04-21 live-tab capture matched chatgpt.com/codex/cloud/settings/analytics#usage and exposed exact remaining percentages plus reset times in DOM. The extension attaches to the already-running logged-in ChatGPT tab and does not export cookies.",
+            "currentSourceStateTone": "neutral",
+            "lastSyncLabel": "Codex personal fixture loaded",
+            "recoveryLabel": "Healthy",
+            "recoveryTone": "neutral",
+            "recoveryDetail": "This target is visible, granted, and currently reporting a ready healthy state under the saved theme.",
+            "hostAccessLabel": "Granted",
+            "isRecovered": true
+          }
+        ],
+        "liveActionBadge": null
+      },
+      "summary": {
+        "recoveredProviderCount": 2,
+        "needsAccessProviderCount": 0,
+        "syncIssueProviderCount": 0,
+        "targetProviderCount": 2,
+        "overallStage": "recovered",
+        "overallLabel": "Recovered",
+        "scopeIsolationLabel": "Cursor + Codex isolated",
+        "popupSnapshotLabel": "Aligned"
+      },
+      "readmePath": "Doc/testing/theme_recovery_reviews/2026-05-11-system-recovered-014312/README.md",
+      "manifestPath": "Doc/testing/theme_recovery_reviews/2026-05-11-system-recovered-014312/review-archive.json"
+    },
     {
       "archiveId": "2026-04-23-theme-recovery-seeded-archive-baseline",
       "archivedAt": "2026-04-23T11:51:50.081Z",

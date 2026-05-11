@@ -1,6 +1,6 @@
 # Interaction Audit Review Archive
 
-Date: 2026-04-23
+Date: 2026-05-11
 
 Process rule:
 
@@ -56,4 +56,13 @@ npm run interaction-audit:refresh-archive-index
 
 ## Operator Review Sessions
 
-- no real operator review sessions are archived yet
+- [2026-05-11-2026-05-11-rdp-chrome-visual-audit](./operator_reviews/2026-05-11-2026-05-11-rdp-chrome-visual-audit/README.md)
+  - archived on 2026-05-11
+  - reviewer: `David Li (via Claude Code RDP session)`
+  - session: `2026-05-11 RDP Chrome visual audit`
+  - source request: [2026-04-23-first-real-operator-review-request](./operator_review_requests/2026-04-23-first-real-operator-review-request/README.md)
+  - request binding: `2026-04-23-first-real-operator-review-request @ 2026-04-22T23:40:08.207Z`
+  - request revision: `sha256:c9175c1e90b3442819b91bb6c9173cd506f860835c0e32f3b95dd1a3c8ea58e1`
+  - evidence source: `Request evidence snapshot`
+  - evidence integrity: `verified`
+  - current truth: `Ready for signoff: yes`, `Follow-up required: 0`, `Not reviewed: 0`

@@ -1,6 +1,6 @@
 # Theme Recovery Review Requests
 
-Date: 2026-04-23
+Date: 2026-05-11
 
 Process rule:
 
@@ -56,14 +56,16 @@ npm run theme-recovery:refresh-review-request-index
 
 ## Pending Requests
 
+- no pending theme-recovery review requests are recorded yet
+
+## Fulfilled Requests
+
 - [2026-04-23-first-real-theme-recovery-review-request](./theme_recovery_review_requests/2026-04-23-first-real-theme-recovery-review-request/README.md)
-  - status: `pending_operator_review`
+  - status: `fulfilled_review_archived`
   - created on 2026-04-23
   - workspace route: `http://127.0.0.1:4173/src/sidepanel/index.html#debug-theme-recovery-review`
   - seeded reference: stage `Needs access` · popup `Mixed state` · scope `Cursor + Codex isolated`
   - theme: `light` / `custom` · seed `#4F46E5`
   - source seeded archive: `Doc/testing/theme_recovery_reviews/2026-04-23-theme-recovery-seeded-archive-baseline/README.md`
-
-## Fulfilled Requests
-
-- no fulfilled theme-recovery review requests are recorded yet
+  - archive: `2026-05-11-system-recovered-014312` · `Doc/testing/theme_recovery_reviews/2026-05-11-system-recovered-014312/README.md`
+  - fulfilled stage: `Recovered` · popup `Aligned` · scope `Cursor + Codex isolated`

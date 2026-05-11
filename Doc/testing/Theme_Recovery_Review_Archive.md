@@ -1,6 +1,6 @@
 # Theme Recovery Review Archive
 
-Date: 2026-04-23
+Date: 2026-05-11
 
 Process rule:
 
@@ -52,4 +52,9 @@ npm run theme-recovery:refresh-archive-index
 
 ## Operator Review Sessions
 
-- no real operator theme-recovery sessions are archived yet
+- [2026-05-11-system-recovered-014312](./theme_recovery_reviews/2026-05-11-system-recovered-014312/README.md)
+  - stage: `Recovered` · scope: `Cursor + Codex isolated` · popup: `Aligned`
+  - theme: `system` / `custom` · seed `#4F46E5`
+  - providers: recovered `2` / total `2`
+  - source export: `tmp/theme-recovery-review-export.json`
+  - source request: `2026-04-23-first-real-theme-recovery-review-request` · `Doc/testing/theme_recovery_review_requests/2026-04-23-first-real-theme-recovery-review-request/README.md`

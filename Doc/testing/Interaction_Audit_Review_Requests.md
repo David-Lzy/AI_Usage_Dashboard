@@ -1,6 +1,6 @@
 # Interaction Audit Review Requests
 
-Date: 2026-04-22
+Date: 2026-05-11
 
 Process rule:
 
@@ -70,15 +70,19 @@ npm run interaction-audit:refresh-review-request-index
 
 ## Pending Requests
 
-- [2026-04-23-first-real-operator-review-request](./operator_review_requests/2026-04-23-first-real-operator-review-request/README.md)
-  - status: `pending_operator_review`
-  - created on 2026-04-22
-  - source evidence seed: `tmp/phase69-interaction-audit-evidence-pack/phase69-results.json`
-  - request evidence snapshot: `Doc/testing/operator_review_requests/2026-04-23-first-real-operator-review-request/interaction-audit-evidence-pack.json`
-  - request evidence snapshot integrity: `sha256:987d16594942591d332858b689ce751fc2b189607d365843ac08547022e0fd5a (5837 bytes)`
-  - request revision: `sha256:c9175c1e90b3442819b91bb6c9173cd506f860835c0e32f3b95dd1a3c8ea58e1`
-  - template drift: `aligned with current source template`
+- no pending operator review requests are recorded yet
 
 ## Fulfilled Requests
 
-- no fulfilled request records are recorded yet
+- [2026-04-23-first-real-operator-review-request](./operator_review_requests/2026-04-23-first-real-operator-review-request/README.md)
+  - status: `fulfilled_review_archived`
+  - created on 2026-04-22
+  - fulfilled on 2026-05-11
+  - archive: [2026-05-11-2026-05-11-rdp-chrome-visual-audit](./operator_reviews/2026-05-11-2026-05-11-rdp-chrome-visual-audit/README.md)
+  - current truth: `Ready for signoff: yes`, `Follow-up required: 0`, `Not reviewed: 0`, `Pending checks: 0 / 11`
+  - completed signoff export: `tmp/operator-signoff-export.json`
+  - completion request binding: `2026-04-23-first-real-operator-review-request @ 2026-04-22T23:40:08.207Z`
+  - completion request revision: `sha256:c9175c1e90b3442819b91bb6c9173cd506f860835c0e32f3b95dd1a3c8ea58e1`
+  - completion evidence source: `Request evidence snapshot`
+  - completion evidence integrity: `verified`
+  - completed export digest: `sha256:06f076db815531ba180d6298ed0b15108bf7fbd5795c162f85ee763aabed3d92 (6331 bytes)`
