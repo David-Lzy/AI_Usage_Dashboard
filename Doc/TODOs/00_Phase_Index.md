@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [304_Phase_Settings_IA_Simplification_With_User_Levels.md](./Archive/304_Phase_Settings_IA_Simplification_With_User_Levels.md)
+- latest completed slice: [305_Phase_Full_Page_Cached_Bootstrap_And_Settings_Preferences_Polish.md](./Archive/305_Phase_Full_Page_Cached_Bootstrap_And_Settings_Preferences_Polish.md)
 
 Completed phases should be moved to:
 
@@ -748,6 +748,7 @@ Completed phases should be moved to:
 - the 2026-05-11 `Phase 302` closeout restored tracked workflow/runbook docs as canonical, ignored local-only `.agent/`, made project scripts auto-fall back to Node 22, made release packaging verify built-manifest version alignment, bumped the package to `0.1.0-rc.13`, bumped the manifest to `0.1.0.13`, generated `release/ai-usage-dashboard-0.1.0-rc.13.zip`, and recorded SHA256 `5bd659c7c84a5d69c385a413cd8879d8f4cb6cf0b31fe98db09ed6ab6a400664`
 - the 2026-05-11 `Phase 303` closeout fixed Claude Team multi-row settings capture by preserving ordered duplicate snippets plus known visible usage-row labels before parser pairing
 - the 2026-05-11 `Phase 304` closeout simplified Settings IA with persisted user levels, task-oriented Quick Setup, a reduced basic-mode preferences surface, and one gated Advanced container for enterprise/API and source controls
+- the 2026-05-11 `Phase 305` closeout added cached-first full-page bootstrap with a sync writeback drift guard, fixed Settings select layering, simplified `Appearance & Sync` into always-visible common controls plus a `More` disclosure, and lowered the periodic sync floor to `3` minutes with bounded startup jitter
 
 ## Delivery Standard For Each Phase
 

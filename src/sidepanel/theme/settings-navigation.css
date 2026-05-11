@@ -24,6 +24,12 @@
   scroll-margin-top: 172px;
 }
 
+.settings-section-anchor:has(.material-select__button[data-open="true"]),
+.settings-section-anchor:has(.editable-number-combobox__anchor[data-open="true"]) {
+  position: relative;
+  z-index: 5;
+}
+
 .settings-advanced {
   gap: var(--app-space-4);
 }

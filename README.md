@@ -7,7 +7,7 @@ Current release candidate:
 - package version: `0.1.0-rc.13`
 - Chrome manifest version: `0.1.0.13`
 - packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.13.zip`
-- source status: current source, tracked docs, and upload candidate are aligned through `Phase 302`
+- source status: `release/ai-usage-dashboard-0.1.0-rc.13.zip` remains the current upload candidate through `Phase 302`; current source and tracked docs now include post-`rc.13` polish through `Phase 305`
 - upload-candidate milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
 ## Current RC Matrix
@@ -42,7 +42,7 @@ Security posture for this track:
 
 Next execution queue:
 
-1. use `0.1.0-rc.13` as the current Chrome Web Store upload-candidate package; it includes the Claude Team usage-page path, Claude usage-page noise filtering, the Phase 297 Codex stale-page freshness reload, and the refreshed trimmed transparent extension icons
+1. keep `0.1.0-rc.13` as the current Chrome Web Store upload-candidate package; it includes the Claude Team usage-page path, Claude usage-page noise filtering, the Phase 297 Codex stale-page freshness reload, and the refreshed trimmed transparent extension icons, while current source now also contains post-`rc.13` `Phase 303` through `Phase 305` polish that should not be silently repackaged during review
 2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the human handoff for Chrome Web Store listing upload, screenshots, and permission/privacy disclosures
 3. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 4. keep operator evidence closure below release/store work; here it means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not another runtime feature
@@ -629,7 +629,8 @@ Output artifact:
 Packaging note:
 
 - `rc.13` packages the already-implemented Claude Team usage-page path plus the Claude noise-filtering parser pass, alongside the existing Codex freshness fix and refreshed trimmed transparent Chrome extension icons.
-- `Phase 302` marks `rc.13` as the current Chrome Web Store upload candidate and closes the previous source-versus-package drift.
+- `Phase 302` cut `rc.13` as the current Chrome Web Store upload candidate.
+- `Phase 303` through `Phase 305` are current-source-only follow-up fixes and polish; they are not packaged into the current upload candidate yet.
 
 The packaging script checks that:
 

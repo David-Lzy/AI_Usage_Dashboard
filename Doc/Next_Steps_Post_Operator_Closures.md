@@ -40,6 +40,8 @@ As of 2026-05-11 the following previously-open items are now done:
 
 The package `release/ai-usage-dashboard-0.1.0-rc.13.zip` is the current upload candidate. This is a human task in the Chrome Web Store Developer Dashboard.
 
+Current source is now ahead through `Phase 305`, but those post-`rc.13` runtime and Settings polish changes are intentionally not part of the current upload candidate until review feedback or an explicit release decision says otherwise.
+
 Reference: [Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
 Remaining human steps:
@@ -48,7 +50,7 @@ Remaining human steps:
 - fill the listing form using [Store_Listing_Copy_Pack.md](./Store_Listing_Copy_Pack.md)
 - answer privacy and permission disclosures truthfully against the RC13 support boundary
 
-No code changes are needed before this upload unless review feedback requires them.
+No additional code changes are needed before this upload unless review feedback requires them.
 
 ### P1 — Respond To Chrome Web Store Review Feedback
 

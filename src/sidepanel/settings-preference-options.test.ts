@@ -23,6 +23,10 @@ describe("buildSettingsPreferenceOptions", () => {
       label: "Dark",
     });
     expect(options.syncIntervalOptions).toContainEqual({
+      value: 3,
+      label: "3 minutes",
+    });
+    expect(options.syncIntervalOptions).toContainEqual({
       value: 15,
       label: "15 minutes",
     });
@@ -46,7 +50,7 @@ describe("buildSettingsPreferenceOptions", () => {
     });
 
     expect(options.syncIntervalUnitLabel).toBe("分钟");
-    expect(options.syncIntervalErrorText).toBe("请输入 15-240 分钟。");
+    expect(options.syncIntervalErrorText).toBe("请输入 3-240 分钟。");
     expect(options.warningThresholdErrorText).toBe("请输入 50-99%。");
     expect(options.syncIntervalMenuButtonLabel).toBe("展开默认同步间隔预设");
     expect(options.warningThresholdMenuButtonLabel).toBe("展开告警阈值预设");

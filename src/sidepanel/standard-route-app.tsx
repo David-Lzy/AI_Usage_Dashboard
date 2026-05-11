@@ -36,6 +36,9 @@ type StandardRouteAppProps = {
 };
 
 export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
+  const isFullPageSurface =
+    typeof window !== "undefined" &&
+    isFullPageSurfaceSearch(window.location.search);
   const {
     appState,
     toast,
@@ -44,11 +47,10 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
     applyMessage,
     handleRetryInitialization,
     setToast,
-  } = useStandardAppRuntime();
+  } = useStandardAppRuntime({
+    preferCachedBootstrap: isFullPageSurface,
+  });
   const route = parseSidePanelHash(locationHash) ?? { name: "dashboard" };
-  const isFullPageSurface =
-    typeof window !== "undefined" &&
-    isFullPageSurfaceSearch(window.location.search);
 
   function navigateToRoute(nextRoute: SidePanelRouteState) {
     const nextHash = buildSidePanelHash(nextRoute);

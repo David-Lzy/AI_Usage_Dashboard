@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import type { AppMessage } from "../background/message-bus";
 import type { AppState } from "../providers/types";
@@ -15,28 +15,62 @@ export type AppToast = {
   message: string;
 };
 
+export type StandardAppBootstrapPlan = {
+  initialMessage: Extract<AppMessage, { type: "app:init" } | { type: "app:read-state" }>;
+  backgroundMessage?: Extract<AppMessage, { type: "app:init" }>;
+};
+
+type UseStandardAppRuntimeOptions = {
+  preferCachedBootstrap?: boolean;
+};
+
+export function getStandardAppBootstrapPlan(
+  preferCachedBootstrap = false,
+): StandardAppBootstrapPlan {
+  if (isStoreScreenshotSeedLockEnabled()) {
+    return {
+      initialMessage: { type: "app:read-state" },
+    };
+  }
+
+  if (preferCachedBootstrap) {
+    return {
+      initialMessage: { type: "app:read-state" },
+      backgroundMessage: { type: "app:init" },
+    };
+  }
+
+  return {
+    initialMessage: { type: "app:init" },
+  };
+}
+
 export function getStandardAppBootstrapMessage(): Extract<
   AppMessage,
   { type: "app:init" } | { type: "app:read-state" }
 > {
-  return isStoreScreenshotSeedLockEnabled()
-    ? { type: "app:read-state" }
-    : { type: "app:init" };
+  return getStandardAppBootstrapPlan().initialMessage;
 }
 
-export function useStandardAppRuntime() {
+export function useStandardAppRuntime(
+  options: UseStandardAppRuntimeOptions = {},
+) {
   const [appState, setAppState] = useState<AppState | null>(null);
   const [toast, setToast] = useState<AppToast | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const backgroundBootstrapStartedRef = useRef(false);
+  const preferCachedBootstrap = options.preferCachedBootstrap ?? false;
 
   useEffect(() => {
     let disposed = false;
+    const bootstrapPlan = getStandardAppBootstrapPlan(preferCachedBootstrap);
 
     async function initializeApp() {
       setIsLoading(true);
+      backgroundBootstrapStartedRef.current = false;
 
-      const response = await sendAppMessage(getStandardAppBootstrapMessage());
+      const response = await sendAppMessage(bootstrapPlan.initialMessage);
 
       if (disposed) {
         return;
@@ -62,7 +96,45 @@ export function useStandardAppRuntime() {
     return () => {
       disposed = true;
     };
-  }, []);
+  }, [preferCachedBootstrap]);
+
+  useEffect(() => {
+    const bootstrapPlan = getStandardAppBootstrapPlan(preferCachedBootstrap);
+
+    if (
+      !bootstrapPlan.backgroundMessage ||
+      !appState ||
+      isLoading ||
+      backgroundBootstrapStartedRef.current
+    ) {
+      return undefined;
+    }
+
+    let disposed = false;
+    backgroundBootstrapStartedRef.current = true;
+
+    void sendAppMessage(bootstrapPlan.backgroundMessage).then((response) => {
+      if (disposed) {
+        return;
+      }
+
+      if (response.ok) {
+        setAppState(response.state);
+        setLoadError(null);
+        return;
+      }
+
+      setToast({
+        tone: "error",
+        title: "Initialization failed",
+        message: response.error,
+      });
+    });
+
+    return () => {
+      disposed = true;
+    };
+  }, [appState, isLoading, preferCachedBootstrap]);
 
   useEffect(() => {
     if (typeof document === "undefined" || typeof window === "undefined") {
@@ -114,9 +186,11 @@ export function useStandardAppRuntime() {
     setAppState(null);
     setLoadError(null);
     setIsLoading(true);
+    backgroundBootstrapStartedRef.current = false;
+    const bootstrapPlan = getStandardAppBootstrapPlan(preferCachedBootstrap);
 
     void applyMessage(
-      getStandardAppBootstrapMessage(),
+      bootstrapPlan.initialMessage,
       {
         tone: "success",
         title: "State reloaded",

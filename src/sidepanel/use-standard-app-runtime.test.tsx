@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { STORE_SCREENSHOT_SEED_LOCK_STORAGE_KEY } from "./store-screenshot-seed";
 import {
+  getStandardAppBootstrapPlan,
   getStandardAppBootstrapMessage,
   useStandardAppRuntime,
 } from "./use-standard-app-runtime";
@@ -55,6 +56,13 @@ describe("useStandardAppRuntime", () => {
 
     expect(getStandardAppBootstrapMessage()).toEqual({
       type: "app:read-state",
+    });
+  });
+
+  it("uses cached bootstrap plus background init for full-page surfaces", () => {
+    expect(getStandardAppBootstrapPlan(true)).toEqual({
+      initialMessage: { type: "app:read-state" },
+      backgroundMessage: { type: "app:init" },
     });
   });
 });

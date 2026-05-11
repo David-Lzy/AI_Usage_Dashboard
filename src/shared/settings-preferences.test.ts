@@ -7,13 +7,14 @@ import {
 
 describe("settings preference normalization", () => {
   it("accepts integer sync intervals inside the supported range", () => {
+    expect(normalizeSyncIntervalMinutes(3)).toBe(3);
     expect(normalizeSyncIntervalMinutes(15)).toBe(15);
     expect(normalizeSyncIntervalMinutes("45")).toBe(45);
     expect(normalizeSyncIntervalMinutes(240)).toBe(240);
   });
 
   it("falls back for unsupported sync intervals", () => {
-    expect(normalizeSyncIntervalMinutes(14)).toBe(30);
+    expect(normalizeSyncIntervalMinutes(2)).toBe(30);
     expect(normalizeSyncIntervalMinutes(241)).toBe(30);
     expect(normalizeSyncIntervalMinutes(30.5)).toBe(30);
     expect(normalizeSyncIntervalMinutes("soon")).toBe(30);

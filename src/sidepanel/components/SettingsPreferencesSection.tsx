@@ -1,4 +1,4 @@
-import type { FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 
 import type {
   ActionBadgeSelection,
@@ -71,7 +71,7 @@ export function SettingsPreferencesSection({
   settingsCopy,
   snapshots,
   themeCustomSeedDraft,
-  userLevelVisibility,
+  userLevelVisibility: _userLevelVisibility,
   onActionBadgeSelectionChange,
   onApplyThemeCustomSeed,
   onFullPageProgressStyleChange,
@@ -111,6 +111,13 @@ export function SettingsPreferencesSection({
     settings,
     snapshots,
   });
+  const [moreOpen, setMoreOpen] = useState(settings.themePreset === "custom");
+
+  useEffect(() => {
+    if (settings.themePreset === "custom") {
+      setMoreOpen(true);
+    }
+  }, [settings.themePreset]);
 
   return (
     <section className="status-card settings-section-anchor" id={sectionId}>
@@ -129,27 +136,17 @@ export function SettingsPreferencesSection({
           onChange={onSyncIntervalChange}
         />
 
-        {userLevelVisibility.showWarningThreshold ? (
-          <EditableNumberCombobox
-            label={i18n.t("settings.preferences.warning_threshold_label")}
-            value={settings.warningThresholdPercent}
-            minimum={WARNING_THRESHOLD_MIN_PERCENT}
-            maximum={WARNING_THRESHOLD_MAX_PERCENT}
-            unitLabel="%"
-            errorText={warningThresholdErrorText}
-            menuButtonLabel={warningThresholdMenuButtonLabel}
-            fieldIdPrefix="warning-threshold"
-            options={warningThresholdOptions}
-            onChange={onWarningThresholdChange}
-          />
-        ) : null}
-
-        <MaterialSelect
-          label={i18n.t("settings.preferences.locale_label")}
-          value={settings.locale}
-          fieldIdPrefix="locale-preference"
-          options={localeOptions}
-          onChange={onLocalePreferenceChange}
+        <EditableNumberCombobox
+          label={i18n.t("settings.preferences.warning_threshold_label")}
+          value={settings.warningThresholdPercent}
+          minimum={WARNING_THRESHOLD_MIN_PERCENT}
+          maximum={WARNING_THRESHOLD_MAX_PERCENT}
+          unitLabel="%"
+          errorText={warningThresholdErrorText}
+          menuButtonLabel={warningThresholdMenuButtonLabel}
+          fieldIdPrefix="warning-threshold"
+          options={warningThresholdOptions}
+          onChange={onWarningThresholdChange}
         />
 
         <MaterialSelect
@@ -168,8 +165,44 @@ export function SettingsPreferencesSection({
           onChange={onThemePresetChange}
         />
 
-        {userLevelVisibility.showDeveloperAppearanceControls ? (
-          <>
+        <MaterialSelect
+          label={i18n.t("settings.preferences.action_badge_label")}
+          value={normalizedActionBadgeSelection}
+          fieldIdPrefix="action-badge-selection"
+          options={actionBadgeOptions}
+          onChange={onActionBadgeSelectionChange}
+        />
+      </div>
+
+      <details
+        className="source-card__details settings-preferences__more"
+        open={moreOpen}
+        onToggle={(event) =>
+          setMoreOpen((event.currentTarget as HTMLDetailsElement).open)
+        }
+      >
+        <summary className="source-card__details-toggle">
+          <span>
+            {moreOpen
+              ? settingsCopy.preferences.hideMore
+              : settingsCopy.preferences.showMore}
+          </span>
+        </summary>
+
+        <div className="source-card__details-body settings-preferences__more-body">
+          <p className="supporting-copy settings-preferences__more-copy">
+            {settingsCopy.preferences.detail}
+          </p>
+
+          <div className="settings-grid">
+            <MaterialSelect
+              label={i18n.t("settings.preferences.locale_label")}
+              value={settings.locale}
+              fieldIdPrefix="locale-preference"
+              options={localeOptions}
+              onChange={onLocalePreferenceChange}
+            />
+
             <MaterialSelect
               label={i18n.t("settings.preferences.popup_progress_style_label")}
               value={settings.popupProgressStyle}
@@ -217,34 +250,22 @@ export function SettingsPreferencesSection({
               options={popupShadowStyleOptions}
               onChange={onPopupShadowStyleChange}
             />
-          </>
-        ) : null}
+          </div>
 
-        {userLevelVisibility.showActionBadgeSelection ? (
-          <MaterialSelect
-            label={i18n.t("settings.preferences.action_badge_label")}
-            value={normalizedActionBadgeSelection}
-            fieldIdPrefix="action-badge-selection"
-            options={actionBadgeOptions}
-            onChange={onActionBadgeSelectionChange}
+          <PopupAppearancePreview i18n={i18n} settings={settings} />
+
+          <ThemeCustomizationCard
+            i18n={i18n}
+            resolvedThemeMode={resolvedThemeMode}
+            settings={settings}
+            settingsCopy={settingsCopy}
+            themeCustomSeedDraft={themeCustomSeedDraft}
+            onApplyThemeCustomSeed={onApplyThemeCustomSeed}
+            onResetThemeCustomSeed={onResetThemeCustomSeed}
+            onThemeCustomSeedDraftChange={onThemeCustomSeedDraftChange}
           />
-        ) : null}
-      </div>
-
-      {userLevelVisibility.showPopupAppearancePreview ? (
-        <PopupAppearancePreview i18n={i18n} settings={settings} />
-      ) : null}
-
-      <ThemeCustomizationCard
-        i18n={i18n}
-        resolvedThemeMode={resolvedThemeMode}
-        settings={settings}
-        settingsCopy={settingsCopy}
-        themeCustomSeedDraft={themeCustomSeedDraft}
-        onApplyThemeCustomSeed={onApplyThemeCustomSeed}
-        onResetThemeCustomSeed={onResetThemeCustomSeed}
-        onThemeCustomSeedDraftChange={onThemeCustomSeedDraftChange}
-      />
+        </div>
+      </details>
     </section>
   );
 }

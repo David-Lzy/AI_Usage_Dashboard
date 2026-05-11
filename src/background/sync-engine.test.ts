@@ -1,9 +1,12 @@
 import { describe, expect, it } from "vitest";
 
 import { createUsageThresholdDiagnostic } from "../providers/diagnostics";
-import type { AppState, ProviderSnapshot } from "../providers/types";
+import type { AppState, ProviderSetting, ProviderSnapshot } from "../providers/types";
 import { SAMPLE_APP_STATE } from "../shared/constants";
-import { reconcileAppStateHealth } from "./sync-engine";
+import {
+  hasSyncRelevantProviderSettingDrift,
+  reconcileAppStateHealth,
+} from "./sync-engine";
 
 const NOW = new Date("2026-04-25T10:00:00.000Z");
 const STALE_SYNCED_AT = "2026-04-25T06:00:00.000Z";
@@ -30,6 +33,15 @@ function buildStateWithProvider(
         ...overrides,
       },
     ],
+  };
+}
+
+function buildProviderSetting(
+  overrides: Partial<ProviderSetting> = {},
+): ProviderSetting {
+  return {
+    ...SAMPLE_APP_STATE.providerSettings[0],
+    ...overrides,
   };
 }
 
@@ -109,5 +121,25 @@ describe("sync engine health reconciliation", () => {
     expect(snapshot.lastSyncLabel).toBe("Cached snapshot stale by 4h");
     expect(snapshot.warningReason).toBe(existingDiagnostic.rawMessage);
     expect(snapshot.warningDiagnostic).toEqual(existingDiagnostic);
+  });
+
+  it("detects user-visible provider-setting drift during background sync", () => {
+    const startedSetting = buildProviderSetting();
+    const latestSetting = buildProviderSetting({
+      sourcePreference: "session_page",
+    });
+
+    expect(
+      hasSyncRelevantProviderSettingDrift(startedSetting, latestSetting),
+    ).toBe(true);
+  });
+
+  it("ignores unchanged provider settings when background sync writes back", () => {
+    const startedSetting = buildProviderSetting();
+    const latestSetting = buildProviderSetting();
+
+    expect(
+      hasSyncRelevantProviderSettingDrift(startedSetting, latestSetting),
+    ).toBe(false);
   });
 });

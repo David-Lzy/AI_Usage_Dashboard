@@ -4,8 +4,10 @@ import type { AppSettings } from "../providers/types";
 import { SAMPLE_APP_STATE } from "../shared/constants";
 import {
   ensurePeriodicSyncAlarm,
+  getPeriodicSyncInitialDelayMinutes,
   INITIAL_PERIODIC_SYNC_DELAY_MINUTES,
   LEGACY_PERIODIC_SYNC_ALARMS,
+  PERIODIC_SYNC_INITIAL_JITTER_MAX_MINUTES,
   PERIODIC_SYNC_ALARM,
 } from "./alarms";
 
@@ -47,6 +49,7 @@ describe("ensurePeriodicSyncAlarm", () => {
 
   it("creates the periodic sync alarm with a short initial delay", async () => {
     const alarms = stubChromeAlarms();
+    const randomSpy = vi.spyOn(Math, "random").mockReturnValue(0);
 
     await ensurePeriodicSyncAlarm(baseSettings);
 
@@ -56,6 +59,7 @@ describe("ensurePeriodicSyncAlarm", () => {
       delayInMinutes: INITIAL_PERIODIC_SYNC_DELAY_MINUTES,
       periodInMinutes: 30,
     });
+    randomSpy.mockRestore();
   });
 
   it("keeps an existing current alarm when the period already matches", async () => {
@@ -70,17 +74,27 @@ describe("ensurePeriodicSyncAlarm", () => {
     expect(alarms.create).not.toHaveBeenCalled();
   });
 
-  it("normalizes too-small settings to Chrome's supported fifteen-minute period", async () => {
+  it("normalizes too-small settings to the supported three-minute period", async () => {
     const alarms = stubChromeAlarms();
+    const randomSpy = vi.spyOn(Math, "random").mockReturnValue(0);
 
     await ensurePeriodicSyncAlarm({
       ...baseSettings,
-      syncIntervalMinutes: 5,
+      syncIntervalMinutes: 2,
     });
 
     expect(alarms.create).toHaveBeenCalledWith(PERIODIC_SYNC_ALARM, {
       delayInMinutes: INITIAL_PERIODIC_SYNC_DELAY_MINUTES,
-      periodInMinutes: 15,
+      periodInMinutes: 3,
     });
+    randomSpy.mockRestore();
+  });
+
+  it("adds bounded startup jitter to the initial periodic delay", () => {
+    expect(getPeriodicSyncInitialDelayMinutes(30, 1)).toBe(
+      INITIAL_PERIODIC_SYNC_DELAY_MINUTES +
+        PERIODIC_SYNC_INITIAL_JITTER_MAX_MINUTES,
+    );
+    expect(getPeriodicSyncInitialDelayMinutes(3, 1)).toBe(3);
   });
 });

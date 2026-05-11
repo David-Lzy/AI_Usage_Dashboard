@@ -1,10 +1,12 @@
 import type { AppSettings } from "../providers/types";
+import { SYNC_INTERVAL_MIN_MINUTES } from "../shared/settings-preferences";
 
 export const LEGACY_PERIODIC_SYNC_ALARMS = [
   "ai-usage-dashboard.periodic-sync",
 ];
 export const PERIODIC_SYNC_ALARM = "ai-usage-dashboard.periodic-sync.v2";
 export const INITIAL_PERIODIC_SYNC_DELAY_MINUTES = 1;
+export const PERIODIC_SYNC_INITIAL_JITTER_MAX_MINUTES = 2;
 
 function supportsChromeAlarms(): boolean {
   return typeof chrome !== "undefined" && typeof chrome.alarms?.create === "function";
@@ -24,6 +26,32 @@ async function clearLegacyPeriodicSyncAlarms(): Promise<void> {
   }
 }
 
+export function getPeriodicSyncInitialDelayMinutes(
+  periodInMinutes: number,
+  randomValue = Math.random(),
+): number {
+  const normalizedPeriodInMinutes = Math.max(
+    SYNC_INTERVAL_MIN_MINUTES,
+    periodInMinutes,
+  );
+  const normalizedRandomValue = Math.min(1, Math.max(0, randomValue));
+  const jitterWindow = Math.min(
+    PERIODIC_SYNC_INITIAL_JITTER_MAX_MINUTES,
+    Math.max(
+      0,
+      normalizedPeriodInMinutes - INITIAL_PERIODIC_SYNC_DELAY_MINUTES,
+    ),
+  );
+
+  return Number(
+    Math.min(
+      normalizedPeriodInMinutes,
+      INITIAL_PERIODIC_SYNC_DELAY_MINUTES +
+        normalizedRandomValue * jitterWindow,
+    ).toFixed(3),
+  );
+}
+
 export async function ensurePeriodicSyncAlarm(
   settings: AppSettings,
 ): Promise<void> {
@@ -33,7 +61,10 @@ export async function ensurePeriodicSyncAlarm(
 
   await clearLegacyPeriodicSyncAlarms();
 
-  const periodInMinutes = Math.max(15, settings.syncIntervalMinutes);
+  const periodInMinutes = Math.max(
+    SYNC_INTERVAL_MIN_MINUTES,
+    settings.syncIntervalMinutes,
+  );
   const currentAlarm = await chrome.alarms.get(PERIODIC_SYNC_ALARM);
 
   if (currentAlarm?.periodInMinutes === periodInMinutes) {
@@ -41,7 +72,7 @@ export async function ensurePeriodicSyncAlarm(
   }
 
   await chrome.alarms.create(PERIODIC_SYNC_ALARM, {
-    delayInMinutes: INITIAL_PERIODIC_SYNC_DELAY_MINUTES,
+    delayInMinutes: getPeriodicSyncInitialDelayMinutes(periodInMinutes),
     periodInMinutes,
   });
 }

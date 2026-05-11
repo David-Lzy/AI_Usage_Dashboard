@@ -54,6 +54,8 @@ describe("SettingsPage", () => {
     expect(html).toContain('class="settings-section-nav"');
     expect(html).toContain('data-settings-material-select="settings-user-level"');
     expect(html).toContain(">Quick Setup<");
+    expect(html).toContain('data-settings-material-select="action-badge-selection"');
+    expect(html).toContain(">More<");
     expect(html).not.toContain('data-credential-provider-id="cursor"');
     expect(html).toContain('class="settings-back-to-top-fab"');
     expect(html).toContain('aria-label="Back to top"');

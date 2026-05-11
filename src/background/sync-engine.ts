@@ -13,6 +13,14 @@ import { seedAppStateIfEmpty, writeAppState } from "../shared/storage";
 const STALE_MULTIPLIER = 2;
 const MIN_STALE_MINUTES = 60;
 
+type SyncEngineOutcome = {
+  didSync: boolean;
+  providerId: ProviderId;
+  setting: ProviderSetting | null;
+  snapshot: ProviderSnapshot;
+  startedSetting: ProviderSetting | null;
+};
+
 function parseTimestamp(rawValue: string): Date | null {
   const normalizedValue = rawValue.includes("T")
     ? rawValue
@@ -32,6 +40,33 @@ function formatAge(minutes: number): string {
   }
 
   return `${Math.floor(minutes / (24 * 60))}d`;
+}
+
+function getPageBindingStateKey(
+  binding: ProviderSetting["pageBinding"],
+): string {
+  return [
+    binding.mode,
+    binding.status,
+    binding.tabId ?? "",
+    binding.matchedUrl ?? "",
+    binding.matchedTitle ?? "",
+    binding.updatedAt ?? "",
+  ].join("|");
+}
+
+export function hasSyncRelevantProviderSettingDrift(
+  startedSetting: ProviderSetting,
+  latestSetting: ProviderSetting,
+): boolean {
+  return (
+    startedSetting.enabled !== latestSetting.enabled ||
+    startedSetting.status !== latestSetting.status ||
+    startedSetting.credentialStatus !== latestSetting.credentialStatus ||
+    startedSetting.sourcePreference !== latestSetting.sourcePreference ||
+    getPageBindingStateKey(startedSetting.pageBinding) !==
+      getPageBindingStateKey(latestSetting.pageBinding)
+  );
 }
 
 function markProviderStale(
@@ -137,9 +172,11 @@ export async function runSyncEngine({
 
       if (!setting) {
         return {
+          didSync: false,
           providerId: provider.providerId,
           snapshot: provider,
           setting: null,
+          startedSetting: null,
         };
       }
 
@@ -149,9 +186,11 @@ export async function runSyncEngine({
 
       if (!shouldSync) {
         return {
+          didSync: false,
           providerId: provider.providerId,
           snapshot: provider,
           setting,
+          startedSetting: setting,
         };
       }
 
@@ -165,29 +204,68 @@ export async function runSyncEngine({
       });
 
       return {
+        didSync: true,
         providerId: provider.providerId,
         snapshot: outcome.snapshot,
         setting: outcome.setting ?? setting,
+        startedSetting: setting,
       };
     }),
   );
-  const nextProviderSettings = new Map<ProviderId, ProviderSetting>(
-    current.providerSettings.map((provider) => [provider.id, provider]),
+  const latest = await seedAppStateIfEmpty();
+  const latestProviderSettings = new Map<ProviderId, ProviderSetting>(
+    latest.providerSettings.map((provider) => [provider.id, provider]),
   );
+  const syncedOutcomes = new Map<ProviderId, SyncEngineOutcome>();
 
   for (const outcome of outcomes) {
-    if (outcome.setting) {
-      nextProviderSettings.set(outcome.setting.id, outcome.setting);
+    if (!outcome.didSync || !outcome.startedSetting) {
+      continue;
     }
+
+    const latestSetting = latestProviderSettings.get(outcome.providerId);
+
+    if (
+      !latestSetting ||
+      hasSyncRelevantProviderSettingDrift(outcome.startedSetting, latestSetting)
+    ) {
+      continue;
+    }
+
+    syncedOutcomes.set(outcome.providerId, outcome);
   }
 
-  const nextProviders = outcomes.map((outcome) => outcome.snapshot);
+  const nextProviderSettings = new Map<ProviderId, ProviderSetting>(
+    latest.providerSettings.map((provider) => [provider.id, provider]),
+  );
+
+  for (const outcome of syncedOutcomes.values()) {
+    if (!outcome.setting) {
+      continue;
+    }
+
+    const latestSetting = nextProviderSettings.get(outcome.providerId);
+
+    if (!latestSetting) {
+      nextProviderSettings.set(outcome.setting.id, outcome.setting);
+      continue;
+    }
+
+    nextProviderSettings.set(outcome.providerId, {
+      ...latestSetting,
+      pageBinding: outcome.setting.pageBinding,
+    });
+  }
+
+  const nextProviders = latest.providers.map(
+    (provider) => syncedOutcomes.get(provider.providerId)?.snapshot ?? provider,
+  );
 
   const nextState = reconcileAppStateHealth(
     {
-      ...current,
+      ...latest,
       providers: nextProviders,
-      providerSettings: current.providerSettings.map(
+      providerSettings: latest.providerSettings.map(
         (provider) => nextProviderSettings.get(provider.id) ?? provider,
       ),
     },

@@ -102,6 +102,12 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
           disconnectPage: "断开页面",
         },
       },
+      preferences: {
+        showMore: "更多",
+        hideMore: "收起更多",
+        detail:
+          "应用语言、Popup 形态和各个 surface 的额度样式都收在这里，需要时再展开。",
+      },
       themeCustomization: {
         previewingSeed: (seed: string, mode: "light" | "dark") =>
           `正在为当前${mode === "dark" ? "夜间" : "白天"}配色预览 ${seed}。应用之后会把 accent preset 切到 Custom Seed。`,
@@ -329,6 +335,12 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
         useCurrentPage: "Use current page",
         disconnectPage: "Disconnect page",
       },
+    },
+    preferences: {
+      showMore: "More",
+      hideMore: "Less",
+      detail:
+        "App language, popup shape, and per-surface quota styling live here when you need them.",
     },
     themeCustomization: {
       previewingSeed: (seed: string, mode: "light" | "dark") =>

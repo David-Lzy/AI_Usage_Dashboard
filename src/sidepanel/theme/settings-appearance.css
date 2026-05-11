@@ -9,6 +9,18 @@
   background: var(--app-supporting-surface-background);
 }
 
+.settings-preferences__more {
+  margin-top: var(--app-space-4);
+}
+
+.settings-preferences__more-body {
+  gap: var(--app-space-4);
+}
+
+.settings-preferences__more-copy {
+  margin: 0;
+}
+
 .popup-appearance-preview-card {
   --popup-appearance-preview-width: 76%;
   --popup-appearance-preview-radius: var(--md-sys-shape-corner-extra-large);

@@ -76,13 +76,13 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 304` execution priority:
+Current post-`Phase 305` execution priority:
 
-1. `P0` - use `release/ai-usage-dashboard-0.1.0-rc.13.zip` as the current Chrome Web Store upload-candidate package. It adds the Claude Team usage-page source plus Claude usage-page noise filtering on top of the existing Codex freshness fix, Cursor post-rc10 fixes, and refreshed trimmed transparent Chrome extension icon set.
+1. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.13.zip` as the current Chrome Web Store upload-candidate package. The current source now contains post-`rc.13` `Phase 303` through `Phase 305` Claude/settings/full-page polish, but that newer source should stay outside store submission until a later RC is intentionally cut.
 2. `P0` - use [2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the handoff milestone for upload, screenshots, listing copy, permission/privacy disclosures, and provider-support boundaries.
 3. `P0` - treat the refreshed `Direction 10.3` screenshot evidence as archived, not pending: [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) now fulfills the refreshed store screenshot request with `5/5` reviewed images and `3` explicit truth-boundary notes.
-4. `P1` - only cut another RC if Chrome Web Store review, final human listing edits, or an explicit visual issue requires code, icon, package, or copy changes. Do not mutate the `rc.13` boundary silently.
-5. `P1` - run another `0.1.0-rc.13` RDP Chrome smoke pass only if new visual concerns appear or if Claude Team session-page support needs explicit real-Chrome confirmation. The 2026-05-04 user-run `rc.11` pass remains the latest manual surface smoke note.
+4. `P1` - only cut another RC if Chrome Web Store review, final human listing edits, or an explicit decision to ship the post-`rc.13` `Phase 303` through `Phase 305` polish requires code, icon, package, or copy changes. Do not mutate the `rc.13` boundary silently.
+5. `P1` - run another `0.1.0-rc.13` RDP Chrome smoke pass only if new visual concerns appear or if the post-`rc.13` full-page/settings polish needs explicit real-Chrome confirmation before a later RC. The 2026-05-04 user-run `rc.11` pass remains the latest manual surface smoke note.
 6. `P2` - Provider closure waits only on the accounts that are still unavailable:
    - JetBrains org-console reverification waits for a real org-visible `Users and licensing` session.
    - Claude individual Pro / Max usage-page behavior remains separate from the now-shipped Claude Team session-page path.
