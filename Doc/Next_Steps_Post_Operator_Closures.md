@@ -1,4 +1,4 @@
-# Next Steps — Post RC12 And Operator Closures
+# Next Steps — Post RC13 And Operator Closures
 
 Date: 2026-05-11
 
@@ -38,15 +38,15 @@ As of 2026-05-11 the following previously-open items are now done:
 
 ### P0 — Chrome Web Store Upload (Human-Owned)
 
-The package `release/ai-usage-dashboard-0.1.0-rc.12.zip` is the current upload candidate. This is a human task in the Chrome Web Store Developer Dashboard.
+The package `release/ai-usage-dashboard-0.1.0-rc.13.zip` is the current upload candidate. This is a human task in the Chrome Web Store Developer Dashboard.
 
-Reference: [Doc/Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md)
+Reference: [Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
 Remaining human steps:
 - upload the package zip
 - attach the 5 reviewed screenshots from [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
 - fill the listing form using [Store_Listing_Copy_Pack.md](./Store_Listing_Copy_Pack.md)
-- answer privacy and permission disclosures truthfully against the RC12 support boundary
+- answer privacy and permission disclosures truthfully against the RC13 support boundary
 
 No code changes are needed before this upload unless review feedback requires them.
 
@@ -62,7 +62,7 @@ Priority is taken from `00_Strategic_Directions_Index.md` active continuation or
 
 ### 1. Direction 10 — Toolbar Competitive Fit And Store Readiness
 
-Status: maintenance mode after RC12. Reopen only if:
+Status: maintenance mode after RC13. Reopen only if:
 - Chrome Web Store review requests changes
 - a new provider or popup surface change creates a new screenshot or listing update need
 - a post-launch user feedback round requires a listed-feature correction
@@ -121,7 +121,7 @@ The following files remain living or maintained by design. Refresh them when the
 - [Doc/AI_Usage_Dashboard_TODOs.md](./AI_Usage_Dashboard_TODOs.md) — add phase history entries and update execution queue whenever a phase completes
 - [Doc/Roadmap/00_Strategic_Directions_Index.md](./Roadmap/00_Strategic_Directions_Index.md) — update priority order when direction status changes
 - [Doc/TODOs/00_Phase_Index.md](./TODOs/00_Phase_Index.md) — point to the active phase file; archive completed phase docs
-- [Doc/Project_Quickstart.md](./Project_Quickstart.md) — update when source layout or orientation entry points change
+- [Project Quickstart](./Project_Quickstart.md) — update when source layout or orientation entry points change
 
 Generated ledgers regenerate themselves via `npm run docs:refresh-generated-package-readmes` and the `interaction-audit:*` / `theme-recovery:*` scripts. Do not hand-edit them.
 

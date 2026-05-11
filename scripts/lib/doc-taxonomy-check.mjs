@@ -158,6 +158,12 @@ async function buildDocRequirements(projectRoot) {
       needsStatus: true,
     },
     {
+      relativePath: "Doc/AUTONOMOUS_PROMPT.md",
+      needsClass: true,
+      needsFreshness: true,
+      needsStatus: true,
+    },
+    {
       relativePath: "Doc/Next_Steps_Post_Operator_Closures.md",
       needsClass: true,
       needsFreshness: false,
@@ -209,6 +215,12 @@ async function buildDocRequirements(projectRoot) {
     },
     {
       relativePath: "Doc/testing/Page_Session_Fixture_Conventions.md",
+      needsClass: true,
+      needsFreshness: true,
+      needsStatus: true,
+    },
+    {
+      relativePath: "Doc/testing/Store_Screenshot_Capture_Runbook.md",
       needsClass: true,
       needsFreshness: true,
       needsStatus: true,

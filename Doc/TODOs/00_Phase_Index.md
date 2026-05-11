@@ -1,6 +1,6 @@
 # Phase Index
 
-Date: 2026-05-04
+Date: 2026-05-11
 
 Process rule:
 
@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [301_Phase_Claude_Usage_Page_Noise_Filtering.md](./Archive/301_Phase_Claude_Usage_Page_Noise_Filtering.md)
+- latest completed slice: [302_Phase_Node22_Default_And_RC13_Source_Alignment.md](./Archive/302_Phase_Node22_Default_And_RC13_Source_Alignment.md)
 
 Completed phases should be moved to:
 
@@ -745,6 +745,7 @@ Completed phases should be moved to:
 - the 2026-05-04 `Phase 299` closeout created the RC12 Chrome Web Store upload-candidate milestone and aligned roadmap, TODO, release-guide, and README references around that store handoff boundary without changing runtime code or package bytes
 - the 2026-05-11 `Phase 300` closeout added Claude Team `https://claude.ai/settings/usage` as a shipped session-page partial source in current source while preserving the existing Admin API path and the no-cookie/no-private-token boundary
 - the 2026-05-11 `Phase 301` closeout filtered Claude Team settings helper/navigation copy out of progress windows and preserved duplicate ordered percent snippets before label pairing
+- the 2026-05-11 `Phase 302` closeout restored tracked workflow/runbook docs as canonical, ignored local-only `.agent/`, made project scripts auto-fall back to Node 22, made release packaging verify built-manifest version alignment, bumped the package to `0.1.0-rc.13`, bumped the manifest to `0.1.0.13`, generated `release/ai-usage-dashboard-0.1.0-rc.13.zip`, and recorded SHA256 `5bd659c7c84a5d69c385a413cd8879d8f4cb6cf0b31fe98db09ed6ab6a400664`
 
 ## Delivery Standard For Each Phase
 

@@ -1,6 +1,6 @@
 # Strategic Directions Index
 
-Date: 2026-05-04
+Date: 2026-05-11
 
 Process rule:
 
@@ -28,9 +28,9 @@ Important scope note:
 
 ## Current Truth Snapshot
 
-As of 2026-05-04:
+As of 2026-05-11:
 
-- the numbered phase queue is now completed through `Phase 299`, with no active phase currently selected
+- the numbered phase queue is now completed through `Phase 302`, with no active phase currently selected
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -184,12 +184,13 @@ As of 2026-05-04:
 - `Phase 297` fixed Codex stale-but-readable usage pages by forcing a cache-bypassing source-page reload before DOM capture
 - `Phase 298` packaged `0.1.0-rc.12`, refreshed the trimmed transparent Chrome icon set, rebuilt `dist`, generated `release/ai-usage-dashboard-0.1.0-rc.12.zip`, and made the Phase 297 Codex freshness fix installable
 - `Phase 299` created the [RC12 Chrome Web Store upload-candidate milestone](../Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md), aligning code, release package, screenshot evidence, icon evidence, README, release guide, and roadmap/TODO docs without changing runtime code
-- `Phase 300` completed the post-submission provider expansion: Claude Team `https://claude.ai/settings/usage` is now shipped in current source as a session-page partial source, while the submitted `rc.12` package remains the store-upload candidate until a later RC is intentionally packaged
+- `Phase 300` completed the post-submission provider expansion: Claude Team `https://claude.ai/settings/usage` is now shipped in current source as a session-page partial source
 - `Phase 301` tightened that Claude Team session-page source by filtering generic helper/navigation copy from usage windows while preserving the four meaningful live rows (`Current session`, `All models`, `Claude Design`, and `Daily included routine runs`) and ordered duplicate percent snippets before quota-window pairing
+- `Phase 302` made tracked root/`Doc/` workflow docs canonical again, ignored local-only `.agent/`, made project scripts auto-fall back to Node 22, made release packaging verify built-manifest version alignment, and packaged `0.1.0-rc.13` so current source and upload candidate now match
 - provider closure still waits on available accounts or product decisions for JetBrains org-console, individual Claude Pro / Max behavior, and Gemini project-metrics graduation; Claude Team no longer belongs in the blocked-by-account queue
 - operator evidence means archived real human/operator review exports for interaction-audit or theme-recovery workspaces; it remains useful, but it sits behind release package and store asset closeout
 - the originally queued local-safe file splitting targets are now closed enough that further splitting should be driven by a concrete maintenance risk instead of the old Phase 236-era queue
-- `Direction 10.3` no longer has a screenshot archive, icon, or packaging blocker for the current RC12 store pack; the next store step is human Chrome Web Store listing upload and review using the Phase 299 milestone
+- `Direction 10.3` no longer has a screenshot archive, icon, or packaging blocker for the current RC13 store pack; the next store step is human Chrome Web Store listing upload and review using the Phase 302 milestone
 - `Phase 41` is now resolved for the narrowed RC selected on `2026-04-23`
 - `Phase 42` has packaged `0.1.0-rc.2` and closed the release-closeout track for the narrowed RC
 - `Phase 43` completed the first `Direction 02` slice by productizing source-fidelity semantics in the side panel
@@ -320,7 +321,7 @@ As of 2026-05-04:
 - `Phase 169` completed the next `Direction 10.3` slice by adding one request-bound manual finalize command plus handoff update, so the remaining real-world work is now the popup capture itself instead of popup capture plus extra repo bookkeeping
 - `Phase 296` completed the mixed candidate screenshot file intake plus archive completion under `10_3_Store_Asset_Pack_And_Submission_TODOs.md`
 - the previous repo-owned engineering default was adapter diagnostic raw fallback regression review for the shipped `en + zh_CN` runtime pilot under Direction 09, captured in `09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`
-- because `0.1.0-rc.12` is now cut and has an archived mixed store screenshot pack plus an upload-candidate milestone, the active functional priority is now review-feedback or listing-change follow-up only if the Chrome Web Store flow asks for it
+- because `0.1.0-rc.13` is now cut and has an archived mixed store screenshot pack plus an upload-candidate milestone, the active functional priority is now review-feedback or listing-change follow-up only if the Chrome Web Store flow asks for it
 - the remaining high-value work in Direction 05 and Direction 04 is now evidence closure, not more tool-building:
   - `05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md`
   - `04_2_Interaction_Audit_Real_Operator_Closure_TODOs.md`
@@ -387,7 +388,7 @@ As of 2026-05-04:
 
 1. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why first now:
-   `0.1.0-rc.12` is now cut, the mixed screenshot archive is complete, the trimmed transparent icon refresh is packaged, and the RC12 upload-candidate milestone is recorded. The next work is only review-feedback or listing-change follow-up after the human Chrome Web Store flow starts.
+   `0.1.0-rc.13` is now cut, the mixed screenshot archive is complete, the trimmed transparent icon refresh is packaged, the Claude Team usage-page path is included, and the RC13 upload-candidate milestone is recorded. The next work is only review-feedback or listing-change follow-up after the human Chrome Web Store flow starts.
 
 2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second now:

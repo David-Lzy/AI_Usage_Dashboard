@@ -1,6 +1,6 @@
 {
   "name": "ai-usage-dashboard",
-  "version": "0.1.0-rc.12",
+  "version": "0.1.0-rc.13",
   "private": true,
   "type": "module",
   "engines": {

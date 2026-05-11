@@ -1,6 +1,6 @@
 # Release Packaging Guide
 
-Date: 2026-05-04
+Date: 2026-05-11
 
 Process rule:
 
@@ -16,73 +16,43 @@ Freshness model:
 
 Status note:
 
-- this guide should track the current shipped release process and version truth
+- this file is the canonical tracked release packaging and verification workflow
 - refresh it whenever package versions, build outputs, packaging commands, or active support boundaries change
 
 ## Purpose
 
 - define the release-candidate versioning scheme
 - document the exact path from source tree to unpacked build and packaged zip
-- make install and permission expectations explicit for another operator
+- make the Node 22 execution path explicit for any shell
 
-## Release Candidate Version Strategy
+## Runtime Requirement
 
-Package version:
+- `.nvmrc` pins the project to Node `22`
+- `package.json` requires Node `>=22.12.0`
+- every `npm run ...` script now auto-falls back to `npx -y node@22` when the current shell is older
 
-- `package.json` uses the human-facing semver tag
-- current value: `0.1.0-rc.12`
+## Current Release Candidate
 
-Chrome extension version:
-
-- `src/manifest.json` uses Chrome's required numeric-only version format
-- current value: `0.1.0.12`
-
-Display version:
-
-- `src/manifest.json` also uses `version_name`
-- current value: `0.1.0-rc.12`
-
-Why the two values differ:
-
-- Chrome requires `version` to be one to four dot-separated integers
-- the release candidate label is preserved in `version_name`
-
-Reference:
-
-- Chrome manifest version rules: https://developer.chrome.com/docs/extensions/mv3/manifest/version
+- package version: `0.1.0-rc.13`
+- Chrome manifest version: `0.1.0.13`
+- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.13.zip`
 
 ## Build And Verification Flow
 
 From the repository root:
 
 ```bash
-nvm use
 npm install
 npm run typecheck
 npm run test
 npm run build
 ```
 
-Portable fallback if `nvm` is not installed in the current shell:
-
-```bash
-npx -y node@22 ./node_modules/typescript/bin/tsc --noEmit
-npx -y node@22 ./node_modules/vitest/vitest.mjs run
-npx -y node@22 ./node_modules/vite/bin/vite.js build
-```
-
 Release-candidate verification shortcut:
 
 ```bash
-nvm use
 npm run release:check
 npm run phase27:check
-```
-
-Portable fallback:
-
-```bash
-npx -y node@22 ./scripts/phase27-real-profile-check.mjs
 ```
 
 What this verifies:
@@ -92,108 +62,37 @@ What this verifies:
 - the extension bundle is rebuilt into `dist/`
 - the unpacked extension survives the persistent-profile phase-27 browser checks
 
-## Static Preview Flow
+## Preview And Extension Review
 
-Use the built `dist/` output, not the CRXJS dev server, when you need a stable release preview:
-
-```bash
-nvm use
-npm run preview:dist
-```
-
-Reason:
-
-- CRXJS serve workflows are useful for development, but they do not behave like a stable packaged build
-- the release preview for this project should reflect the actual `dist/` artifact
-
-Preview URLs:
-
-- local: `http://127.0.0.1:4173/src/sidepanel/index.html`
-- LAN: `http://10.10.2.202:4173/src/sidepanel/index.html`
-
-## Unpacked Install Steps
-
-1. Run `npm run build`.
-2. Open `chrome://extensions`.
-3. Turn on `Developer mode`.
-4. Click `Load unpacked`.
-5. Select the repository `dist/` directory.
-6. Verify the extension name, icon, and side panel load correctly.
+- use `npm run preview:dist` for a stable preview over built `dist/`
+- load the unpacked extension from `dist/` in `chrome://extensions`
+- rebuild before any extension-mode review
+- reload the unpacked extension after every rebuild before trusting runtime results
 
 ## Release Packaging
 
 Create the release zip from the built extension:
 
 ```bash
-nvm use
 npm run release:package
 ```
 
 Or run the full flow:
 
 ```bash
-nvm use
 npm run release
 ```
 
-Portable packaging fallback:
-
-```bash
-npx -y node@22 ./scripts/package-release.mjs
-```
-
-Packaging output:
-
-- `release/ai-usage-dashboard-0.1.0-rc.12.zip`
-- SHA256: `d12c294adda25125731a106efcb99e17904ab50209926e719912f95279c16233`
-
-Release context:
-
-- `0.1.0-rc.12` distributes the Phase 297 Codex stale-page freshness reload fix, the refreshed trimmed transparent Chrome extension icons, and all `rc.11` post-rc10 Cursor, usage-window, and action-badge tooltip fixes
-- this package includes trimmed transparent 16/32/48/128 Chrome icons generated from the supplied PNG package and keeps the post-rc10 Cursor logged-out detection fix, structured usage facts, inline reset-label density fix, and formatted action-badge hover tooltip
-- `Phase 299` records `0.1.0-rc.12` as the current Chrome Web Store upload candidate in [2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md)
-- provider closure waits on available real accounts; no new provider support claim is introduced by this package
-
-The packaging script checks:
+Packaging checks:
 
 - `package.json` version matches `manifest.version_name`
-- `manifest.version` matches the Chrome numeric version derived from the package version
+- `manifest.version` matches the numeric Chrome version derived from the package version
+- `dist/manifest.json` matches the same package and manifest versions before zipping
 - `dist/manifest.json` exists
 - `dist/src/sidepanel/index.html` exists
 - `dist/icons/icon128.png` exists
 
-Environment note:
-
-- the project expects Node `22`
-- if your default shell still points at an older runtime, run `nvm use` before any `npm run ...` command
-- if `nvm` is unavailable, use `npx -y node@22 ...` for the verification and packaging commands above
-
-## Permission And Credential Expectations
-
-| Provider | Credential requirement | Host access requirement |
-| --- | --- | --- |
-| Cursor | optional Admin API key for team path; none for personal dashboard page | `api.cursor.com`, `cursor.com` |
-| JetBrains AI | none | JetBrains account and usage pages |
-| Claude Code | optional Admin API key for organization analytics; none for the Claude Team usage page | `api.anthropic.com`, `platform.claude.com`, `claude.ai` |
-| Gemini Code Assist | none | none |
-| Codex | none for personal usage pages; analytics API key and workspace ID for Enterprise analytics | `api.chatgpt.com`, `chatgpt.com` |
-
-## User-Facing Support Boundaries
-
-- Cursor: supported through the Team Admin API or logged-in personal dashboard page; personal exact remaining included requests remain unavailable
-- JetBrains AI: retained in the repository, but deferred from the active narrowed RC until a real org-visible `Users and licensing` session is reverified
-- Claude Code: supported through the Admin Analytics API or logged-in Claude Team usage page; exact absolute remaining included quota is still not claimed
-- Gemini Code Assist: shipped as documented policy only
-- Codex: supported through the Enterprise Analytics API or logged-in personal usage page; personal values remain visible usage-window values rather than one full plan-wide absolute remaining balance
-
-Important constraints:
-
-- Gemini does not expose a stable live per-user usage source in this release
-- JetBrains is not part of the active narrowed RC support promise even though its retained repo path and debug tooling remain present
-- Codex analytics do not expose exact remaining workspace credits, and Codex personal flex credit balance cards remain supplemental context only
-- Claude analytics do not expose exact remaining included subscription quota
-
-## Output Checklist
+## Support Boundary Checklist
 
 Before calling the build a release candidate, confirm:
 
@@ -201,5 +100,4 @@ Before calling the build a release candidate, confirm:
 - the unpacked `dist/` directory still loads in Chrome
 - the extension icon appears in `chrome://extensions`
 - the settings page still renders provider credentials and host-access controls
-- the local real-profile check has been run via `npm run phase27:check`
-- the remaining GUI-only permission prompt pass is closed by an operator if release sign-off requires native prompt acceptance
+- the current provider claims in README, milestone docs, and store copy match the packaged source

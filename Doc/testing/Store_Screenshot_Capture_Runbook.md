@@ -1,10 +1,10 @@
 # Store Screenshot Capture Runbook
 
-Date: 2026-04-24
+Date: 2026-05-11
 
 Process rule:
 
-- follow [Development_Guardrails.md](../Development_Guardrails.md)
+- follow [../Development_Guardrails.md](../Development_Guardrails.md)
 
 Document class:
 
@@ -16,299 +16,51 @@ Freshness model:
 
 Status note:
 
-- this file is the current maintained runbook for truthful Chrome Web Store screenshot capture from the real unpacked extension runtime
-- refresh it when screenshot order, capture workflow, Chrome Web Store asset guidance, or RDP Chrome runtime rules change materially
+- this file is the canonical maintained runbook for truthful Chrome Web Store screenshot capture
+- refresh it when screenshot order, capture workflow, Chrome Web Store asset guidance, or RDP runtime rules change materially
 
-Purpose:
+## Purpose
 
-- turn the screenshot storyboard into one repeatable operator workflow
-- keep store screenshots sourced from truthful extension-mode runtime states
-- reduce ad-hoc capture drift between popup story, side-panel depth, and store-facing promises
-
-## Source Guidance
-
-The current workflow aligns with public Chrome Web Store guidance:
-
-- screenshots should demonstrate the actual user experience and current functionality
-- screenshots should use square corners with no padding
-- screenshots should be `1280x800` or `640x400`
-- at least one screenshot is required and up to five are recommended
-
-Primary references:
-
-- Chrome Web Store best listing:
-  https://developer.chrome.com/docs/webstore/best-listing
-- Chrome Web Store listing dashboard guidance:
-  https://developer.chrome.com/docs/webstore/cws-dashboard-listing
-- Chrome Web Store image guidance:
-  https://developer.chrome.com/webstore/images?csw=1
+- keep store screenshots sourced from the real unpacked extension runtime
+- reduce drift between popup story, side-panel depth, and store-facing promises
 
 ## Pre-Capture Requirements
 
 1. Work from the current pushed source state.
-2. Run a fresh build:
-   - `npm run build`
-3. In the RDP Chrome profile:
-   - open `chrome://extensions`
-   - reload the unpacked extension pointing at `dist/`
-   - close any already-open popup or side-panel extension pages
-4. Reopen the extension surfaces only after the reload.
-5. Use the current storyboard:
-   - [Store_Screenshot_Storyboard.md](../Store_Screenshot_Storyboard.md)
+2. Run a fresh build with `npm run build`.
+3. Reload the unpacked extension from `dist/` in `chrome://extensions`.
+4. Close stale popup, side-panel, or full-page extension windows before recapturing.
+5. Use the current storyboard in [../Store_Screenshot_Storyboard.md](../Store_Screenshot_Storyboard.md).
 
-## Create A Capture Pack
+## Core Commands
 
-Generate one named capture pack before taking screenshots:
+Create a capture pack:
 
 ```bash
-npm run store:create-screenshot-capture-pack -- --pack-id 2026-04-24-toolbar-storyboard-capture
+npm run store:create-screenshot-capture-pack -- --pack-id <pack-id>
 ```
 
-This writes a pack under:
-
-- `Doc/testing/store_screenshot_capture_packs/<pack-id>/`
-
-Each pack contains:
-
-- `README.md`
-- `capture-plan.json`
-- `captures/README.md`
-
-## Optional RDP Runtime Smoke Capture
-
-When you need to prove that the real RDP Chrome profile can still open and render the unpacked extension pages before a full screenshot pass, use:
+Capture request-bound staged screenshots from the real RDP runtime:
 
 ```bash
-npm run store:capture-rdp-extension-window -- --route popup --output tmp/store-rdp-popup.png
-npm run store:capture-rdp-extension-window -- --route settings --output tmp/store-rdp-settings.png
+npm run store:capture-screenshot-request-from-rdp -- --request-id <request-id>
 ```
 
-Supported route keys are currently:
-
-- `popup`
-- `dashboard`
-- `settings`
-- `provider-detail-codex`
-- `full-page-dashboard`
-- `full-page-settings`
-- `full-page-provider-detail-codex`
-
-Truth note:
-
-- this helper captures real extension runtime windows from the existing RDP Chrome session
-- it now closes the extension window it opened after saving the screenshot
-- the popup route still opens as its own extension app window here, so it is useful for runtime QA but not a pixel-identical replacement for the true toolbar action bubble
-- it is a smoke-capture tool, not a substitute for the full storyboard review and archive flow
-
-## Native Toolbar Popup Probe
-
-When you need to verify whether the current `RDP Chrome` session exposes the native toolbar popup as a separately capturable top-level X11 window, use:
+For mixed manual-popup plus staged full-page requests:
 
 ```bash
-npm run store:probe-native-toolbar-popup
+npm run store:capture-hybrid-screenshot-request-from-rdp -- --request-id <request-id>
 ```
 
-Truth note:
-
-- this probe opens one dedicated helper route inside the real unpacked extension runtime and attempts to trigger the real action popup from there
-- if the current environment exposes one separate popup window, the probe records it
-- if the current environment does not expose one separate popup window, the probe still records one helper-window screenshot plus one results JSON file instead of silently pretending the helper window is the final popup asset
-- the current truthful result after `Phase 163` is that `RDP Chrome` does not expose the native toolbar bubble as one separate capturable X11 top-level window in this environment
-- because of that boundary, popup slots `1` through `3` in [2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md](./store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md) remain manual native-toolbar captures
-- helper-window evidence from this probe is valid for runtime diagnosis and truth-boundary documentation, not as the final Chrome Web Store popup screenshot replacement
-
-## Request-Bound Seed And Capture Helpers
-
-When the request needs one stable seeded runtime pass before manual review or archival, use:
+When native toolbar popup captures must be imported manually:
 
 ```bash
-npm run store:apply-rdp-screenshot-seed -- --preset toolbar-first-quick-glance
+npm run store:finalize-manual-screenshot-request -- --request-id <request-id> --source-dir <capture-dir>
 ```
 
-Supported presets currently include:
+## Honesty Rules
 
-- `toolbar-first-quick-glance`
-- `setup-guidance`
-- `honest-contract-or-policy-only`
-- `settings-and-setup-depth`
-- `provider-or-dashboard-depth`
-- `unlock`
-
-When you want the current pending request package filled in one pass from the real extension runtime, use:
-
-```bash
-npm run store:capture-screenshot-request-from-rdp -- --request-id <auto-rdp-request-id>
-```
-
-Truth note:
-
-- this runner captures from the real unpacked extension runtime, not preview-only pages
-- it applies one request-bound screenshot seed plus a runtime lock before each capture, then restores the pre-seed baseline on `unlock`
-- it also updates the request-bound `capture-notes.json` with the current reviewed truth statuses and operator notes
-- it only works for requests whose manifest keeps `captureAutomationMode` on the request-bound runner path
-- if the current request requires native toolbar-bubble popup capture or other manual-only proof, the command will reject that request instead of silently producing the wrong asset set
-- the current refreshed request package is [2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md](./store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md), and it stays `manual_capture_required` because slots `1` through `3` now need native toolbar-bubble capture while slots `4` and `5` move to the full-page shell
-- it does not mark the request fulfilled by itself; completion still requires the normal archive command
-
-When a pending request mixes manual popup slots with request-bound full-page depth slots, use the hybrid runner instead:
-
-```bash
-npm run store:capture-hybrid-screenshot-request-from-rdp -- --request-id 2026-04-24-surface-expansion-store-screenshot-refresh-request
-```
-
-Truth note:
-
-- this runner refreshes `capture-plan.json` and captures only the request-bound entries whose `captureMode` stays on the RDP runner path
-- it updates `capture-notes.json` for the staged full-page entries only and leaves manual popup entries unresolved
-- it does not fulfill or archive the request; the package stays pending until the remaining manual toolbar-bubble screenshots are captured
-- after `Phase 164`, the current refreshed request already uses this path to stage full-page slots `4` and `5` while popup slots `1` through `3` still require manual native-toolbar capture
-
-Before and after the remaining popup captures, refresh the dedicated manual handoff bundle with:
-
-```bash
-npm run store:prepare-manual-screenshot-handoff -- --request-id 2026-04-24-surface-expansion-store-screenshot-refresh-request
-```
-
-Truth note:
-
-- this command rewrites `manual-capture-handoff.md` plus `manual-capture-handoff.json` inside the request package
-- it keeps the remaining manual popup filenames, staged full-page captures, and archive-readiness state visible in one place
-- it does not fabricate popup screenshots or mark the request fulfilled by itself
-- after `Phase 165`, the refreshed request uses this handoff path to show that `3` popup slots still remain manual while `2` full-page depth slots are already staged
-
-Once real native-toolbar popup files exist outside the repo, import them back into the pending request with:
-
-```bash
-npm run store:import-manual-screenshot-captures -- --request-id 2026-04-24-surface-expansion-store-screenshot-refresh-request --source-dir <native-toolbar-popup-capture-dir>
-```
-
-If popup-note review was recorded in a separate overlay file, merge it during import with:
-
-```bash
-npm run store:import-manual-screenshot-captures -- --request-id 2026-04-24-surface-expansion-store-screenshot-refresh-request --source-dir <native-toolbar-popup-capture-dir> --notes-file <manual-popup-notes-overlay.json>
-```
-
-Truth note:
-
-- this command copies any matching popup files into the request package `captures/` directory and then refreshes the request README plus manual handoff in place
-- the optional `--notes-file` overlay merges popup-note updates into `capture-notes.json` without requiring manual JSON editing
-- it does not fabricate popup screenshots or fulfill/archive the request by itself
-- after `Phase 166`, this is the supported repo-backed path for turning a real native-toolbar popup pass into one request package that can eventually report `archiveReady = true`
-- after `Phase 168`, once those popup files are imported, the final archive command can run with only `--request-id` because completion now defaults to the request package `captures/` directory
-
-When you want one repo-backed command to import manual popup files, validate archive readiness, and complete the request in one pass, use:
-
-```bash
-npm run store:finalize-manual-screenshot-request -- --request-id 2026-04-24-surface-expansion-store-screenshot-refresh-request --source-dir <native-toolbar-popup-capture-dir>
-```
-
-If popup-note review was recorded in the generated overlay template, use:
-
-```bash
-npm run store:finalize-manual-screenshot-request -- --request-id 2026-04-24-surface-expansion-store-screenshot-refresh-request --source-dir <native-toolbar-popup-capture-dir> --notes-file Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/manual-popup-notes-overlay.template.json
-```
-
-Truth note:
-
-- this command first runs the manual import path, then checks archive readiness, and only then completes the archive
-- if popup files or popup notes are still incomplete, it fails with the remaining request-bound issues instead of silently archiving a partial set
-- it shortens the operator path to `capture -> edit template -> finalize` without pretending the native-toolbar popup capture itself is automated
-
-Current generated helper files for that refreshed request:
-
-- notes overlay template:
-  - `Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/manual-popup-notes-overlay.template.json`
-- popup capture checklist:
-  - `Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/manual-popup-capture-checklist.md`
-
-Truth note:
-
-- after `Phase 167`, the repo now generates those two request-bound files for the remaining popup slots instead of asking the operator to invent a notes overlay from scratch
-- the checklist is not archive evidence; it is only the current operator aid for the final popup capture pass
-
-If an RDP capture attempt leaves stale AI Usage Dashboard popup or extension windows behind, close them before retrying:
-
-```bash
-npm run store:cleanup-rdp-runtime-windows
-```
-
-If an RDP capture attempt hangs on `xwininfo` or `import`, clean the stale probe processes before retrying:
-
-```bash
-npm run store:cleanup-rdp-capture-probes
-```
-
-Truth note:
-
-- the runtime-window cleanup command only closes currently open AI Usage Dashboard popup or extension windows in the RDP Chrome session
-- the probe-cleanup command only removes stale helper processes from failed capture attempts
-- neither command fabricates screenshots or marks any request fulfilled
-
-## Capture Workflow
-
-1. Open the generated pack README and follow the screenshot order.
-2. For each screenshot:
-   - create the required runtime state in RDP Chrome
-   - confirm the screenshot still matches the claim in the storyboard
-   - capture the screenshot at `1280x800` when practical
-   - fall back to `640x400` only if the real extension surface cannot be shown honestly at `1280x800`
-3. Save each file using the exact filenames from `capture-plan.json`.
-4. Update the request-bound `capture-notes.json` file:
-   - set one reviewed `captureTruth` for every screenshot
-   - write one short `stateSummary` for every screenshot
-   - add one `operatorNote` whenever the screenshot used:
-     - `policy_only_fallback`
-     - `provider_omitted`
-     - `approximated_runtime_state`
-     - `other_truth_boundary`
-   - or let the request-bound RDP capture runner prefill those reviewed note entries when its seeded runtime plan matches the current storyboard
-5. Do not crop out context in a way that changes the product story.
-
-## Do Not Capture
-
-- preview-only states that were not reproduced in extension mode
-- unsupported provider combinations presented as healthy
-- screenshots with fake data added only for marketing
-- internal debug routes as store-facing screenshots
-
-## Current Storyboard-to-Filename Contract
-
-1. `01-toolbar-first-quick-glance.png`
-2. `02-setup-guidance.png`
-3. `03-honest-contract-or-policy-only.png`
-4. `04-settings-and-setup-depth.png`
-5. `05-provider-or-dashboard-depth.png`
-
-## After Capture
-
-1. Review the screenshot order against the storyboard.
-2. Confirm the filenames still match the pack manifest.
-3. Confirm `capture-notes.json` no longer contains any `not_reviewed` entries.
-4. If the runtime story has changed enough that the pack no longer fits, update:
-   - [Store_Screenshot_Storyboard.md](../Store_Screenshot_Storyboard.md)
-   - the capture pack generator
-   - this runbook
-5. Once the real extension-mode screenshots are ready, complete the pending request and archive the set:
-
-```bash
-npm run store:complete-screenshot-capture-request -- --request-id 2026-04-24-surface-expansion-store-screenshot-refresh-request --captures-dir Doc/testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/captures
-```
-
-6. If the request package template changed and the existing pending request needs the newest generated README or notes scaffolding first, run:
-
-```bash
-npm run store:refresh-screenshot-capture-request-packages
-```
-
-Truth note:
-
-- pending requests refresh from the current request template so the latest selection-pack and workflow notes stay visible
-- fulfilled requests now refresh from their recorded manifest state instead, so historical automation mode and fulfillment semantics are not silently rewritten by later template changes
-
-## Related Docs
-
-- [Store_Screenshot_Storyboard.md](../Store_Screenshot_Storyboard.md)
-- [Store_Screenshot_Capture_Packs.md](./Store_Screenshot_Capture_Packs.md)
-- [Store_Screenshot_Capture_Requests.md](./Store_Screenshot_Capture_Requests.md)
-- [Store_Screenshot_Capture_Archive.md](./Store_Screenshot_Capture_Archive.md)
-- [Direction 10 - Toolbar Competitive Fit And Store Readiness](../Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
+- do not replace the native toolbar popup with a fake helper window
+- do not mark a request fulfilled until required manual captures exist
+- keep popup/manual limits explicit in request notes and milestone docs
+- store screenshots must match the currently packaged support boundary

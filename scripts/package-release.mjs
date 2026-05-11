@@ -10,6 +10,7 @@ const distDir = path.join(projectRoot, "dist");
 const releaseDir = path.join(projectRoot, "release");
 const packageJsonPath = path.join(projectRoot, "package.json");
 const manifestPath = path.join(projectRoot, "src", "manifest.json");
+const builtManifestPath = path.join(distDir, "manifest.json");
 
 async function readJson(filePath) {
   const moduleUrl = new URL(`file://${filePath}`);
@@ -61,9 +62,25 @@ async function main() {
   }
 
   await ensureExists(distDir, "Build output directory");
-  await ensureExists(path.join(distDir, "manifest.json"), "Built manifest");
+  await ensureExists(builtManifestPath, "Built manifest");
   await ensureExists(path.join(distDir, "src", "sidepanel", "index.html"), "Built side panel entry");
   await ensureExists(path.join(distDir, "icons", "icon128.png"), "Built icon set");
+
+  const builtManifest = await readJson(builtManifestPath);
+  const builtManifestVersionName =
+    builtManifest.version_name ?? builtManifest.version;
+
+  if (builtManifestVersionName !== packageVersion) {
+    throw new Error(
+      `dist/manifest.json version_name (${builtManifestVersionName}) must match package.json version (${packageVersion}). Run \`npm run build\` before packaging.`,
+    );
+  }
+
+  if (builtManifest.version !== expectedManifestVersion) {
+    throw new Error(
+      `dist/manifest.json version (${builtManifest.version}) must match the numeric Chrome version derived from package.json (${expectedManifestVersion}). Run \`npm run build\` before packaging.`,
+    );
+  }
 
   await mkdir(releaseDir, { recursive: true });
 

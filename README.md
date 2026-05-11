@@ -4,11 +4,11 @@ Chrome side-panel extension for tracking usage, credits, and sync health across 
 
 Current release candidate:
 
-- package version: `0.1.0-rc.12`
-- Chrome manifest version: `0.1.0.12`
-- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.12.zip`
-- source status: current source is ahead of the submitted `rc.12` package with `Phase 300` Claude Team usage-page support; rebuild and package a later RC before shipping that new provider path
-- upload-candidate milestone: [2026-05-04 RC12 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md)
+- package version: `0.1.0-rc.13`
+- Chrome manifest version: `0.1.0.13`
+- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.13.zip`
+- source status: current source, tracked docs, and upload candidate are aligned through `Phase 302`
+- upload-candidate milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
 ## Current RC Matrix
 
@@ -42,8 +42,8 @@ Security posture for this track:
 
 Next execution queue:
 
-1. use `0.1.0-rc.12` as the current Chrome Web Store upload-candidate package; it includes the Phase 297 Codex stale-page freshness reload fix and refreshed trimmed transparent extension icons
-2. use the [RC12 upload-candidate milestone](./Doc/Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md) as the human handoff for Chrome Web Store listing upload, screenshots, and permission/privacy disclosures
+1. use `0.1.0-rc.13` as the current Chrome Web Store upload-candidate package; it includes the Claude Team usage-page path, Claude usage-page noise filtering, the Phase 297 Codex stale-page freshness reload, and the refreshed trimmed transparent extension icons
+2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the human handoff for Chrome Web Store listing upload, screenshots, and permission/privacy disclosures
 3. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 4. keep operator evidence closure below release/store work; here it means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not another runtime feature
 5. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
@@ -624,12 +624,12 @@ npm run release
 
 Output artifact:
 
-- `release/ai-usage-dashboard-0.1.0-rc.12.zip`
+- `release/ai-usage-dashboard-0.1.0-rc.13.zip`
 
 Packaging note:
 
-- `rc.12` includes the `rc.11` fixes, Phase 297 Codex stale-page freshness reload, and the refreshed trimmed transparent Chrome extension icons.
-- `Phase 299` marks `rc.12` as the current Chrome Web Store upload candidate without changing the package bytes.
+- `rc.13` packages the already-implemented Claude Team usage-page path plus the Claude noise-filtering parser pass, alongside the existing Codex freshness fix and refreshed trimmed transparent Chrome extension icons.
+- `Phase 302` marks `rc.13` as the current Chrome Web Store upload candidate and closes the previous source-versus-package drift.
 
 The packaging script checks that:
 
@@ -648,6 +648,7 @@ npx -y node@22 ./scripts/package-release.mjs
 
 ## Docs
 
+- [Project Quickstart](./Doc/Project_Quickstart.md)
 - [Strategic Directions Index](./Doc/Roadmap/00_Strategic_Directions_Index.md)
 - [Release Packaging Guide](./Doc/Release_Packaging_Guide.md)
 - [Manual Test Checklist](./Doc/testing/Manual_Test_Checklist.md)
@@ -657,6 +658,10 @@ npx -y node@22 ./scripts/package-release.mjs
 - [Phase 69 Interaction Audit Evidence Pack](./Doc/testing/Phase_69_Interaction_Audit_Evidence_Pack.md)
 - [Phase 70 Interaction Audit Manual Signoff Pack](./Doc/testing/Phase_70_Interaction_Audit_Manual_Signoff_Pack.md)
 - [Phase 71 Interaction Audit Signoff Workspace](./Doc/testing/Phase_71_Interaction_Audit_Signoff_Workspace.md)
+- [Store Screenshot Capture Runbook](./Doc/testing/Store_Screenshot_Capture_Runbook.md)
+- [Interaction Audit Operator Handoff Runbook](./Doc/testing/Interaction_Audit_Operator_Handoff_Runbook.md)
+- [Theme Recovery Operator Runbook](./Doc/testing/Theme_Recovery_Operator_Runbook.md)
+- [Page Session Fixture Conventions](./Doc/testing/Page_Session_Fixture_Conventions.md)
 - [Cursor Note](./Doc/provider_notes/Cursor.md)
 - [JetBrains Note](./Doc/provider_notes/JetBrains.md)
 - [Claude Note](./Doc/provider_notes/Claude.md)

@@ -22,6 +22,7 @@ Status note:
 - `Phase 296` saved those mixed candidate screenshots from RDP Chrome and completed [2026-05-04-rc11-mixed-store-candidate-archive](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
 - `Phase 298` refreshed the trimmed transparent Chrome extension icon set and packaged it in `0.1.0-rc.12`
 - `Phase 299` created the [RC12 Chrome Web Store upload-candidate milestone](../Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md)
+- `Phase 302` packaged `0.1.0-rc.13`, aligned tracked workflow docs with the repo boundary, and created the [RC13 Chrome Web Store upload-candidate milestone](../Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 - this child TODO now tracks a completed upload-candidate handoff; the next repo work only starts if listing submission, review feedback, or human edits require another package or documentation update
 - this child TODO assumes the current first real screenshot archive already exists and focuses on store-ready asset preparation after the surface-expansion workstream landed
 
@@ -67,7 +68,7 @@ Turn the current storyboard, screenshot workflow, real screenshot archive, icon 
   - the notes-import command now points at that generated template path, and the completion command now defaults to the request package `captures/` directory instead of requiring a separate `--captures-dir` path
   - the pending request now also exposes `manualFinalizeCommand` plus `manualFinalizeWithNotesCommand`, so popup import, readiness validation, and archive completion can run in one repo-backed operator step once real popup files exist
   - current screenshot truth is now `0 pending requests / 2 archived sets`; the refreshed archive has `5/5` reviewed screenshots and `3` explicit truth-boundary notes
-  - `0.1.0-rc.12` is the current upload-candidate package and is linked from the milestone handoff
+  - `0.1.0-rc.13` is the current upload-candidate package and is linked from the milestone handoff
 
 ### B. Final Screenshot Ordering
 
