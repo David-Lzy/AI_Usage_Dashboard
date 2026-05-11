@@ -14,6 +14,7 @@ import { buildSettingsSummaryItems } from "./settings-view-models";
 
 type BuildSettingsPageViewModelsOptions = {
   providers: ProviderSetting[];
+  showAdvancedSection?: boolean;
   settings: AppSettings;
   settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>;
   snapshots: ProviderSnapshot[];
@@ -21,10 +22,13 @@ type BuildSettingsPageViewModelsOptions = {
 
 export function buildSettingsPageViewModels({
   providers,
+  showAdvancedSection,
   settings,
   settingsCopy,
   snapshots,
 }: BuildSettingsPageViewModelsOptions) {
+  const resolvedShowAdvancedSection =
+    showAdvancedSection ?? settings.userLevel !== "basic";
   const credentialProviders: CredentialProviderSection[] = [];
   const cursorProvider = findCredentialProvider(providers, "cursor");
   const claudeProvider = findCredentialProvider(providers, "claude-code");
@@ -62,7 +66,7 @@ export function buildSettingsPageViewModels({
     codexProvider,
     credentialProviders,
     settingsSectionNavItems: buildSettingsSectionNavItems(
-      settings.userLevel,
+      resolvedShowAdvancedSection,
       settingsCopy,
     ),
     settingsSummaryItems: buildSettingsSummaryItems(
@@ -87,7 +91,7 @@ function findCredentialProvider(
 }
 
 function buildSettingsSectionNavItems(
-  userLevel: AppSettings["userLevel"],
+  showAdvancedSection: boolean,
   settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>,
 ): Array<{
   id: SettingsSectionId;
@@ -111,7 +115,7 @@ function buildSettingsSectionNavItems(
     },
   ];
 
-  if (userLevel !== "basic") {
+  if (showAdvancedSection) {
     items.push({
       id: SETTINGS_SECTION_IDS.advanced,
       label: settingsCopy.layout.sections.advanced,

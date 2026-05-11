@@ -53,7 +53,11 @@ import { SummaryStrip } from "../sidepanel/components/SummaryStrip";
 import { StatusBadge } from "../sidepanel/components/StatusBadge";
 import { UsageProgress } from "../sidepanel/components/UsageProgress";
 import { UsageWindowProgressList } from "../sidepanel/components/UsageWindowProgressList";
-import { buildSidePanelHash, type SidePanelRouteState } from "../sidepanel/route-state";
+import {
+  buildSidePanelHash,
+  type SettingsRouteFocus,
+  type SidePanelRouteState,
+} from "../sidepanel/route-state";
 import { syncPopupAppearanceAttributes } from "../shared/popup-appearance";
 import {
   buildPopupViewModel,
@@ -61,6 +65,10 @@ import {
   type PopupGuidanceAction,
 } from "./view-models";
 import { shouldShowPopupProviderProgress } from "./progress-visibility";
+import {
+  getSettingsRouteFocusForPopupProvider,
+  getSettingsRouteFocusForPopupVisibleProviders,
+} from "./settings-route-targets";
 
 type PopupLoadState =
   | { status: "loading" }
@@ -171,8 +179,8 @@ async function openFullDashboardTab() {
   await openFullPageRoute({ name: "dashboard" });
 }
 
-async function openSettings() {
-  await openSidePanelRoute({ name: "settings" });
+async function openSettings(focus?: SettingsRouteFocus) {
+  await openSidePanelRoute({ name: "settings", focus });
 }
 
 async function openProviderDetail(providerId: ProviderId) {
@@ -272,9 +280,18 @@ async function openProviderSourcePage(
   window.close();
 }
 
-async function handleGuidanceAction(action: PopupGuidanceAction) {
+async function handleGuidanceAction(
+  action: PopupGuidanceAction,
+  options: {
+    settingsFocus?: SettingsRouteFocus | null;
+  } = {},
+) {
+  if (action.kind === "hide-provider") {
+    return;
+  }
+
   if (action.kind === "settings") {
-    await openSettings();
+    await openSettings(options.settingsFocus ?? undefined);
     return;
   }
 
@@ -512,6 +529,39 @@ export function PopupApp() {
   );
   const popupProgressStyle = loadState.appState.settings.popupProgressStyle;
   const hasFeaturedProviderCards = popupModel.featuredProviderCards.length > 0;
+  const settingsFocusForGuidance =
+    guidanceCard?.action.kind === "settings"
+      ? getSettingsRouteFocusForPopupVisibleProviders(popupModel.visibleProviders)
+      : null;
+  const settingsFocusForSetupCoverage =
+    popupModel.setupCoverage.action?.kind === "settings"
+      ? getSettingsRouteFocusForPopupVisibleProviders(popupModel.visibleProviders)
+      : null;
+
+  async function handlePopupAction(
+    action: PopupGuidanceAction,
+    options: {
+      settingsFocus?: SettingsRouteFocus | null;
+    } = {},
+  ) {
+    if (action.kind === "hide-provider" && action.providerId) {
+      const response = await sendAppMessage({
+        type: "app:set-provider-enabled",
+        providerId: action.providerId,
+        enabled: false,
+      });
+
+      if (!response.ok) {
+        setLoadState({ status: "error", message: response.error });
+        return;
+      }
+
+      setLoadState({ status: "ready", appState: response.state });
+      return;
+    }
+
+    await handleGuidanceAction(action, options);
+  }
 
   function renderPopupProviderProgress(
     provider: (typeof popupModel.featuredProviderCards)[number]["provider"],
@@ -634,10 +684,25 @@ export function PopupApp() {
                   data-popup-featured-action={index === 0 ? "true" : undefined}
                   type="button"
                   onClick={() => {
-                    void handleGuidanceAction(card.action);
+                    void handlePopupAction(card.action, {
+                      settingsFocus:
+                        card.action.kind === "settings"
+                          ? getSettingsRouteFocusForPopupProvider(provider)
+                          : null,
+                    });
                   }}
                 >
                   {card.action.label}
+                </button>
+                <button
+                  className="text-button"
+                  data-popup-hide-provider={provider.providerId}
+                  type="button"
+                  onClick={() => {
+                    void handlePopupAction(card.secondaryAction);
+                  }}
+                >
+                  {card.secondaryAction.label}
                 </button>
               </div>
             </article>
@@ -737,7 +802,9 @@ export function PopupApp() {
               data-theme-local-surface="popup-guidance-action"
               type="button"
               onClick={() => {
-                void handleGuidanceAction(guidanceCard.action);
+                void handlePopupAction(guidanceCard.action, {
+                  settingsFocus: settingsFocusForGuidance,
+                });
               }}
             >
               {guidanceCard.action.label}
@@ -762,10 +829,27 @@ export function PopupApp() {
               <h2 className="section-title">{popupModel.setupCoverage.headline}</h2>
             </div>
             <div data-popup-setup-coverage-stage>
-              <StatusBadge
-                label={popupModel.setupCoverage.statusLabel}
-                tone={popupModel.setupCoverage.tone}
-              />
+              {popupModel.setupCoverage.action ? (
+                <button
+                  className={`status-chip status-chip-button status-chip--${popupModel.setupCoverage.tone}`}
+                  data-popup-setup-coverage-action="true"
+                  type="button"
+                  aria-label={popupModel.setupCoverage.action.label}
+                  title={popupModel.setupCoverage.action.label}
+                  onClick={() => {
+                    void handlePopupAction(popupModel.setupCoverage.action!, {
+                      settingsFocus: settingsFocusForSetupCoverage,
+                    });
+                  }}
+                >
+                  {popupModel.setupCoverage.statusLabel}
+                </button>
+              ) : (
+                <StatusBadge
+                  label={popupModel.setupCoverage.statusLabel}
+                  tone={popupModel.setupCoverage.tone}
+                />
+              )}
             </div>
           </div>
           <p className="supporting-copy" data-popup-setup-coverage-detail>
@@ -822,7 +906,7 @@ export function PopupApp() {
                 }
                 type="button"
                 onClick={() => {
-                  void handleGuidanceAction(action);
+                  void handlePopupAction(action);
                 }}
               >
                 {action.label}

@@ -36,27 +36,30 @@ As of 2026-05-11 the following previously-open items are now done:
 
 ## Current Blocking Priorities
 
-### P0 — Chrome Web Store Upload (Human-Owned)
+### P0 — Chrome Web Store Review Tracking (Human-Owned)
 
-The package `release/ai-usage-dashboard-0.1.0-rc.13.zip` is the current upload candidate. This is a human task in the Chrome Web Store Developer Dashboard.
+The submitted store-review boundary remains `release/ai-usage-dashboard-0.1.0-rc.13.zip`. Keep using the RC13 milestone as the truthful historical submission handoff while that review is still pending in the Chrome Web Store Developer Dashboard.
 
-Current source is now ahead through `Phase 305`, but those post-`rc.13` runtime and Settings polish changes are intentionally not part of the current upload candidate until review feedback or an explicit release decision says otherwise.
+The repo is now also packaged forward through `Phase 306` as `release/ai-usage-dashboard-0.1.0-rc.14.zip`. That newer package is a prepared follow-up candidate, not an instruction to silently replace the submitted RC13 review boundary.
 
-Reference: [Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
+References:
+- [Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
+- [Doc/Milestones/2026-05-11_RC14_Follow_Up_Release_Candidate.md](./Milestones/2026-05-11_RC14_Follow_Up_Release_Candidate.md)
 
 Remaining human steps:
-- upload the package zip
-- attach the 5 reviewed screenshots from [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
-- fill the listing form using [Store_Listing_Copy_Pack.md](./Store_Listing_Copy_Pack.md)
-- answer privacy and permission disclosures truthfully against the RC13 support boundary
+- monitor the RC13 Chrome Web Store review result
+- keep the reviewed screenshots from [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md), listing copy, and disclosure answers ready
+- if review feedback or a deliberate product decision calls for a newer package, promote RC14 from the follow-up milestone instead of mutating RC13 history
 
-No additional code changes are needed before this upload unless review feedback requires them.
+No additional repo-owned code work is required before review feedback arrives; the newer RC14 package already exists if it becomes necessary.
 
-### P1 — Respond To Chrome Web Store Review Feedback
+### P1 — Decide Whether To Promote RC14
 
-If Chrome Web Store review returns with a request for code, icon, manifest, or listing changes, cut a new RC at that point. Do not preemptively bump the RC version.
+If Chrome Web Store review requests code, icon, manifest, or listing changes that are already covered by RC14, resubmit from the RC14 follow-up candidate and record a fresh submission milestone for that handoff.
 
-If the review passes with no changes, the upload task is done and the priority shifts to the items below.
+If review feedback asks for more changes beyond RC14, build on RC14 rather than reopening RC13.
+
+If RC13 passes with no changes, RC14 remains optional follow-up polish rather than a forced resubmission.
 
 ## Next Engineering Work (After Store Upload Clears)
 

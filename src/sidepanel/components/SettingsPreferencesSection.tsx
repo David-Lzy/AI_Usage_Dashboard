@@ -150,6 +150,14 @@ export function SettingsPreferencesSection({
         />
 
         <MaterialSelect
+          label={i18n.t("settings.preferences.locale_label")}
+          value={settings.locale}
+          fieldIdPrefix="locale-preference"
+          options={localeOptions}
+          onChange={onLocalePreferenceChange}
+        />
+
+        <MaterialSelect
           label={i18n.t("settings.preferences.theme_mode_label")}
           value={settings.themeMode}
           fieldIdPrefix="theme-mode"
@@ -195,14 +203,6 @@ export function SettingsPreferencesSection({
           </p>
 
           <div className="settings-grid">
-            <MaterialSelect
-              label={i18n.t("settings.preferences.locale_label")}
-              value={settings.locale}
-              fieldIdPrefix="locale-preference"
-              options={localeOptions}
-              onChange={onLocalePreferenceChange}
-            />
-
             <MaterialSelect
               label={i18n.t("settings.preferences.popup_progress_style_label")}
               value={settings.popupProgressStyle}

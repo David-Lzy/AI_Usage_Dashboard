@@ -75,4 +75,28 @@ describe("SettingsPage", () => {
     expect(html).toContain("Detailed diagnostics");
     expect(html).toContain('data-settings-material-select="action-badge-selection"');
   });
+
+  it("reveals the targeted advanced section for a credential-focused deep link", () => {
+    const html = renderSettingsPage({
+      routeFocus: {
+        kind: "credential-provider",
+        providerId: "cursor",
+      },
+    });
+
+    expect(html).toContain('id="settings-advanced"');
+    expect(html).toContain('data-credential-provider-id="cursor"');
+  });
+
+  it("marks more providers for attention when no quick-setup provider is visible", () => {
+    const html = renderSettingsPage({
+      providers: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
+        ...provider,
+        enabled: false,
+      })),
+    });
+
+    expect(html).toContain('data-quick-setup-empty-visible="true"');
+    expect(html).toContain('data-quick-setup-attention="true"');
+  });
 });

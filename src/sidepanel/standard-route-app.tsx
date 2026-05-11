@@ -48,7 +48,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
     handleRetryInitialization,
     setToast,
   } = useStandardAppRuntime({
-    preferCachedBootstrap: isFullPageSurface,
+    preferCachedBootstrap: true,
   });
   const route = parseSidePanelHash(locationHash) ?? { name: "dashboard" };
 
@@ -204,6 +204,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
       {route.name === "settings" ? (
         <SettingsPage
           onBack={() => navigateToRoute({ name: "dashboard" })}
+          routeFocus={route.focus}
           onLocalePreferenceChange={(locale) =>
             handleUpdateSettings({ locale })
           }

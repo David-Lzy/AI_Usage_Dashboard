@@ -76,13 +76,13 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 305` execution priority:
+Current post-`Phase 306` execution priority:
 
-1. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.13.zip` as the current Chrome Web Store upload-candidate package. The current source now contains post-`rc.13` `Phase 303` through `Phase 305` Claude/settings/full-page polish, but that newer source should stay outside store submission until a later RC is intentionally cut.
-2. `P0` - use [2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the handoff milestone for upload, screenshots, listing copy, permission/privacy disclosures, and provider-support boundaries.
-3. `P0` - treat the refreshed `Direction 10.3` screenshot evidence as archived, not pending: [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) now fulfills the refreshed store screenshot request with `5/5` reviewed images and `3` explicit truth-boundary notes.
-4. `P1` - only cut another RC if Chrome Web Store review, final human listing edits, or an explicit decision to ship the post-`rc.13` `Phase 303` through `Phase 305` polish requires code, icon, package, or copy changes. Do not mutate the `rc.13` boundary silently.
-5. `P1` - run another `0.1.0-rc.13` RDP Chrome smoke pass only if new visual concerns appear or if the post-`rc.13` full-page/settings polish needs explicit real-Chrome confirmation before a later RC. The 2026-05-04 user-run `rc.11` pass remains the latest manual surface smoke note.
+1. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.13.zip` as the submitted Chrome Web Store review boundary. Do not silently mutate or rewrite the [RC13 upload-candidate milestone](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) while that submission remains the human-reviewed baseline.
+2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.14.zip` as the current packaged follow-up candidate. It now includes post-`rc.13` `Phase 303` through `Phase 306` Claude, popup, settings, full-page, and side-panel polish and is ready if review feedback or an explicit resubmission decision needs a newer build.
+3. `P0` - keep the refreshed `Direction 10.3` screenshot evidence archived and ready, not pending: [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) still fulfills the latest reviewed screenshot pack with `5/5` images and `3` explicit truth-boundary notes.
+4. `P1` - if a resubmission becomes necessary, use [2026-05-11_RC14_Follow_Up_Release_Candidate.md](./Milestones/2026-05-11_RC14_Follow_Up_Release_Candidate.md) as the current packaged-source reference and cut a fresh submission milestone from that boundary instead of mutating RC13 history.
+5. `P1` - run another `0.1.0-rc.14` RDP Chrome smoke pass only if the new popup/settings/onboarding polish needs explicit real-Chrome confirmation before resubmission. The 2026-05-04 user-run `rc.11` pass remains the latest manual surface smoke note.
 6. `P2` - Provider closure waits only on the accounts that are still unavailable:
    - JetBrains org-console reverification waits for a real org-visible `Users and licensing` session.
    - Claude individual Pro / Max usage-page behavior remains separate from the now-shipped Claude Team session-page path.
@@ -95,7 +95,7 @@ Delivery rule for this stage:
 - keep active implementation phases narrow and independently verifiable
 - keep file-splitting separate from release packaging, provider verification, and store evidence closeout
 - preserve the current provider truth boundaries while changing UI presentation
-- treat `rc.13` as the current store-upload candidate boundary; `rc.12` and `rc.11` remain historical evidence
+- treat `rc.13` as the current submitted store-review boundary, and `rc.14` as the current packaged follow-up candidate; `rc.12` and `rc.11` remain historical evidence
 
 Phase status update:
 
@@ -365,6 +365,8 @@ Phase status update:
 - `Phase 302` restored tracked workflow/runbook docs as the canonical repo source, ignored local-only `.agent/`, made project scripts auto-fall back to Node 22, made release packaging reject stale `dist/manifest.json` versions, and packaged `0.1.0-rc.13` so current source and upload candidate are aligned again
 - `Phase 303` fixed Claude Team settings multi-window rendering by preserving ordered duplicate capture snippets plus the known visible usage-row labels before parser pairing
 - `Phase 304` simplified Settings IA around personal-user setup: persisted user levels (`basic` / `advanced` / `developer` / `debug`), task-oriented Quick Setup, reduced basic-mode preferences, and one gated Advanced container for enterprise/API plus source controls
+- `Phase 305` added cached-first full-page bootstrap with a sync writeback drift guard, fixed Settings select layering, kept the common `Appearance & Sync` controls always visible, moved the rest behind one `More` disclosure, and lowered the periodic sync floor to `3` minutes with bounded startup jitter
+- `Phase 306` extended cached-first bootstrap to the side panel, routed popup setup/problem actions into focused Settings targets, added popup quick-hide/setup affordances plus a subtle zero-provider `More providers` attention cue, kept app language always visible, fixed English display-level labels, and packaged `0.1.0-rc.14` as the follow-up candidate while preserving the RC13 review milestone
 - the old maintenance split queue is closed for the originally named local-safe targets: `material-theme.css`, `localized-copy.ts`, `SettingsPage.tsx`, `App.tsx`, and `standard-app-actions.ts` are now focused base, compatibility, route, or aggregator files rather than the next default work item
 - the previous store-readiness blocker for screenshot file intake/import/archive is now closed under `Direction 10.3`; the current store step is the human Chrome Web Store listing upload and review flow using the Phase 299 milestone
 - `2026-05-11 RDP session` completed Direction 04 real operator closure: first real interaction-audit visual audit across all 5 surfaces (dashboard-360, settings-420, cursor-detail-360, codex-detail-420, popup-360), all 11 manual checks resolved, pending request `2026-04-23-first-real-operator-review-request` fulfilled and archived under [2026-05-11-2026-05-11-rdp-chrome-visual-audit](./testing/operator_reviews/2026-05-11-2026-05-11-rdp-chrome-visual-audit/README.md)

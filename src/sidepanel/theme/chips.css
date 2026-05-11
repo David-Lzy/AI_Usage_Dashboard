@@ -43,6 +43,34 @@
   color: var(--app-chip-error-on);
 }
 
+.status-chip-button {
+  appearance: none;
+  cursor: pointer;
+  transition:
+    background-color var(--app-motion-duration-fast)
+      var(--app-motion-easing-standard),
+    border-color var(--app-motion-duration-fast)
+      var(--app-motion-easing-standard),
+    color var(--app-motion-duration-fast) var(--app-motion-easing-standard),
+    box-shadow var(--app-motion-duration-fast) var(--app-motion-easing-standard),
+    transform var(--app-motion-duration-fast) var(--app-motion-easing-standard);
+}
+
+.status-chip-button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--app-elevation-1);
+}
+
+.status-chip-button:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: var(--app-focus-ring-shadow);
+}
+
+.status-chip-button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
 .meta-chip {
   display: inline-flex;
   align-items: center;

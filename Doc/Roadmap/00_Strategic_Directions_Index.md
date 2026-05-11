@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-11:
 
-- the numbered phase queue is now completed through `Phase 305`, with no active phase currently selected
+- the numbered phase queue is now completed through `Phase 306`, with no active phase currently selected
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -190,6 +190,7 @@ As of 2026-05-11:
 - `Phase 303` fixed Claude Team multi-row settings capture so the extension preserves ordered duplicate snippets plus the known visible usage rows before parser pairing
 - `Phase 304` simplified Settings IA around the personal-user path with persisted user levels, Quick Setup, reduced basic-mode preferences, and one gated Advanced container for enterprise/API plus source controls
 - `Phase 305` added current-source-only post-`rc.13` polish: cached-first full-page bootstrap with a sync-writeback drift guard, Settings select layering fixes, always-visible common `Appearance & Sync` controls plus a `More` disclosure, and a `3` minute minimum periodic sync with bounded startup jitter
+- `Phase 306` packaged that follow-up polish into `0.1.0-rc.14`, extended cached-first bootstrap to the side panel, routed popup setup/problem actions into focused Settings targets, added popup quick-hide/setup affordances, restored always-visible app language, and fixed English display-level labels while keeping the RC13 milestone as the submitted review boundary
 - provider closure still waits on available accounts or product decisions for JetBrains org-console, individual Claude Pro / Max behavior, and Gemini project-metrics graduation; Claude Team no longer belongs in the blocked-by-account queue
 - operator evidence means archived real human/operator review exports for interaction-audit or theme-recovery workspaces; it remains useful, but it sits behind release package and store asset closeout
 - the originally queued local-safe file splitting targets are now closed enough that further splitting should be driven by a concrete maintenance risk instead of the old Phase 236-era queue
@@ -324,7 +325,7 @@ As of 2026-05-11:
 - `Phase 169` completed the next `Direction 10.3` slice by adding one request-bound manual finalize command plus handoff update, so the remaining real-world work is now the popup capture itself instead of popup capture plus extra repo bookkeeping
 - `Phase 296` completed the mixed candidate screenshot file intake plus archive completion under `10_3_Store_Asset_Pack_And_Submission_TODOs.md`
 - the previous repo-owned engineering default was adapter diagnostic raw fallback regression review for the shipped `en + zh_CN` runtime pilot under Direction 09, captured in `09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`
-- because `0.1.0-rc.13` is now cut and has an archived mixed store screenshot pack plus an upload-candidate milestone, the active functional priority is now review-feedback or listing-change follow-up only if the Chrome Web Store flow asks for it
+- because `0.1.0-rc.14` is now packaged as the aligned follow-up candidate while the RC13 milestone remains the submitted store-review boundary, the active functional priority is now review-feedback or deliberate resubmission follow-up only if the Chrome Web Store flow asks for it
 - the remaining high-value work in Direction 05 and Direction 04 is now evidence closure, not more tool-building:
   - `05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md`
   - `04_2_Interaction_Audit_Real_Operator_Closure_TODOs.md`
@@ -391,7 +392,7 @@ As of 2026-05-11:
 
 1. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why first now:
-   `0.1.0-rc.13` is now cut, the mixed screenshot archive is complete, the trimmed transparent icon refresh is packaged, the Claude Team usage-page path is included, and the RC13 upload-candidate milestone is recorded. The next work is only review-feedback or listing-change follow-up after the human Chrome Web Store flow starts.
+   `0.1.0-rc.14` is now packaged as the next aligned follow-up candidate, the mixed screenshot archive is complete, the trimmed transparent icon refresh and Claude Team usage-page path are already in the submitted RC13 boundary, and the next work is only review-feedback or deliberate resubmission follow-up after the human Chrome Web Store flow returns.
 
 2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second now:

@@ -25,7 +25,7 @@ type UseStandardAppRuntimeOptions = {
 };
 
 export function getStandardAppBootstrapPlan(
-  preferCachedBootstrap = false,
+  preferCachedBootstrap = true,
 ): StandardAppBootstrapPlan {
   if (isStoreScreenshotSeedLockEnabled()) {
     return {
@@ -60,7 +60,7 @@ export function useStandardAppRuntime(
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const backgroundBootstrapStartedRef = useRef(false);
-  const preferCachedBootstrap = options.preferCachedBootstrap ?? false;
+  const preferCachedBootstrap = options.preferCachedBootstrap ?? true;
 
   useEffect(() => {
     let disposed = false;

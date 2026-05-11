@@ -41,8 +41,10 @@ describe("useStandardAppRuntime", () => {
     expect(html).toContain('data-has-set-toast="true"');
   });
 
-  it("uses normal initialization unless store screenshot seed lock is enabled", () => {
-    expect(getStandardAppBootstrapMessage()).toEqual({ type: "app:init" });
+  it("uses cached bootstrap by default for sidepanel and full-page surfaces", () => {
+    expect(getStandardAppBootstrapMessage()).toEqual({
+      type: "app:read-state",
+    });
   });
 
   it("uses read-state initialization for locked store screenshot seeds", () => {
@@ -63,6 +65,12 @@ describe("useStandardAppRuntime", () => {
     expect(getStandardAppBootstrapPlan(true)).toEqual({
       initialMessage: { type: "app:read-state" },
       backgroundMessage: { type: "app:init" },
+    });
+  });
+
+  it("still supports explicit blocking bootstrap when cached-first is disabled", () => {
+    expect(getStandardAppBootstrapPlan(false)).toEqual({
+      initialMessage: { type: "app:init" },
     });
   });
 });

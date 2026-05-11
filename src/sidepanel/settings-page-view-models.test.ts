@@ -58,4 +58,21 @@ describe("buildSettingsPageViewModels", () => {
       "Claude Code Analytics Admin API key",
     );
   });
+
+  it("can expose the advanced nav chip for a focused settings deep link", () => {
+    const i18n = createRuntimeI18n("en", undefined);
+    const settingsCopy = buildSettingsLocalizedCopy(i18n);
+    const viewModels = buildSettingsPageViewModels({
+      providers: SAMPLE_APP_STATE.providerSettings,
+      settings: SAMPLE_APP_STATE.settings,
+      settingsCopy,
+      snapshots: SAMPLE_APP_STATE.providers,
+      showAdvancedSection: true,
+    });
+
+    expect(viewModels.settingsSectionNavItems).toContainEqual({
+      id: SETTINGS_SECTION_IDS.advanced,
+      label: "Advanced",
+    });
+  });
 });

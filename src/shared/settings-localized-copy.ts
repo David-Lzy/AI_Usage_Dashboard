@@ -260,17 +260,17 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
         storedSecrets: "Stored secrets",
         boundPages: "Bound pages",
       },
-      userLevel: {
-        label: "Display level",
-        helpText:
-          "Basic mode keeps Settings focused on the common path. Advanced, Developer, and Debug progressively reveal team/API setup, source controls, and deeper diagnostics.",
-        options: {
-          basic: "普通",
-          advanced: "高级",
-          developer: "开发者",
-          debug: "Debug",
-        } as Record<SettingsUserLevel, string>,
-      },
+        userLevel: {
+          label: "Display level",
+          helpText:
+            "Basic mode keeps Settings focused on the common path. Advanced, Developer, and Debug progressively reveal team/API setup, source controls, and deeper diagnostics.",
+          options: {
+            basic: "Basic",
+            advanced: "Advanced",
+            developer: "Developer",
+            debug: "Debug",
+          } as Record<SettingsUserLevel, string>,
+        },
       advanced: {
         eyebrow: "Advanced",
         title: "Team / API / source controls",

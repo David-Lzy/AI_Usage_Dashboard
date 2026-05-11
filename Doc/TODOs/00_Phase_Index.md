@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [305_Phase_Full_Page_Cached_Bootstrap_And_Settings_Preferences_Polish.md](./Archive/305_Phase_Full_Page_Cached_Bootstrap_And_Settings_Preferences_Polish.md)
+- latest completed slice: [306_Phase_Popup_Onboarding_Handoff_And_RC14_Follow_Up_Packaging.md](./Archive/306_Phase_Popup_Onboarding_Handoff_And_RC14_Follow_Up_Packaging.md)
 
 Completed phases should be moved to:
 
@@ -749,6 +749,7 @@ Completed phases should be moved to:
 - the 2026-05-11 `Phase 303` closeout fixed Claude Team multi-row settings capture by preserving ordered duplicate snippets plus known visible usage-row labels before parser pairing
 - the 2026-05-11 `Phase 304` closeout simplified Settings IA with persisted user levels, task-oriented Quick Setup, a reduced basic-mode preferences surface, and one gated Advanced container for enterprise/API and source controls
 - the 2026-05-11 `Phase 305` closeout added cached-first full-page bootstrap with a sync writeback drift guard, fixed Settings select layering, simplified `Appearance & Sync` into always-visible common controls plus a `More` disclosure, and lowered the periodic sync floor to `3` minutes with bounded startup jitter
+- the 2026-05-11 `Phase 306` closeout extended cached-first bootstrap to the side panel, routed popup blocker/policy/setup actions into focused Settings targets, added popup quick-hide plus zero-provider setup affordances, kept app language always visible, fixed English display-level labels, bumped the package to `0.1.0-rc.14`, bumped the manifest to `0.1.0.14`, generated `release/ai-usage-dashboard-0.1.0-rc.14.zip`, and recorded SHA256 `5b3e31469f7b2fd94511aa8a3b702d3f656f2014b7334e6a7931ff1f7289185e` in the new follow-up-candidate milestone
 
 ## Delivery Standard For Each Phase
 

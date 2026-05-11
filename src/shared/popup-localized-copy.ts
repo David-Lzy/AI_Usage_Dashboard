@@ -64,7 +64,7 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
           `复查 ${providerLabel}`,
         policyOnlyHeadline: "当前可见 provider 都是仅策略路径",
         policyOnlyDetail:
-          "popup 仍然可以汇总共享缓存状态，但当前 profile 里这些可见 provider 都没有 live in-browser usage path。请到 dashboard 和 settings 查看当前 provider 合同。",
+          "popup 仍然可以汇总共享缓存状态，但当前 profile 里这些可见 provider 都没有 live in-browser usage path。打开 settings 查看当前 provider 合同和 source controls。",
         openDetail: "打开详情",
         reviewDetail: "复查详情",
       },
@@ -111,6 +111,7 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
         openSourcePageAction: "打开来源页面",
         reviewDetailAction: "复查详情",
         openDetailAction: "打开详情",
+        hideProviderAction: "暂不显示",
       },
       setupCoverage: {
         label: "配置覆盖面",
@@ -185,6 +186,9 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
           "用 settings 启用 provider、授予 host access、补充凭据。至少有一个 provider 可见之后，dashboard 才真正开始有意义。",
         settingsOwnsSetupDetail:
           "把 settings 用在 provider 开关、host access 和已存凭据上。在配置清楚之前，popup 仍然只是快速分诊层。",
+        settingsOwnsContractControlsHeadline: "Settings 负责合同控制",
+        settingsOwnsContractControlsDetail:
+          "用 settings 复查 provider 合同、source preference 和 page-source controls；dashboard 仍然保留更广的多 provider 上下文。",
         dashboardOwnsContractReviewHeadline: "Dashboard 负责合同复查",
         dashboardOwnsContractReviewDetail:
           "用 dashboard 看跨 provider 的更大合同上下文；settings 仍然负责 provider 控制和已存凭据。",
@@ -248,7 +252,7 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
         `Review ${providerLabel}`,
       policyOnlyHeadline: "Visible providers are policy-only",
       policyOnlyDetail:
-        "The popup can still summarize shared cached state, but these visible providers do not expose one live in-browser usage path in this profile. Use dashboard and settings to review the current provider contracts.",
+        "The popup can still summarize shared cached state, but these visible providers do not expose one live in-browser usage path in this profile. Open settings to review the current provider contracts and source controls.",
       openDetail: "Open detail",
       reviewDetail: "Review detail",
     },
@@ -273,9 +277,9 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
       healthyProvidersDetail:
         "No visible provider currently needs setup or review, so this section keeps the top providers visible for current path and freshness at a glance.",
     },
-    featuredCard: {
-      statusNeedsAccess: "Needs access",
-      statusNeedsSetup: "Needs setup",
+      featuredCard: {
+        statusNeedsAccess: "Needs access",
+        statusNeedsSetup: "Needs setup",
       statusOpenPage: "Open page",
       statusSignIn: "Sign in",
       statusReloadPage: "Reload page",
@@ -290,13 +294,14 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
       primaryNeedsSignedInPage: "Current path needs the signed-in page again.",
       primaryPageUnreadable:
         "Current page session is open but cannot be read.",
-      primaryNeedsReview: "Settings setup is clear, but this provider still needs review.",
-      primaryPolicyOnly: "Current contract is policy-only in this profile.",
-      primaryLiveReady: "Current path is live-ready in this profile.",
-      openSourcePageAction: "Open source page",
-      reviewDetailAction: "Review detail",
-      openDetailAction: "Open detail",
-    },
+        primaryNeedsReview: "Settings setup is clear, but this provider still needs review.",
+        primaryPolicyOnly: "Current contract is policy-only in this profile.",
+        primaryLiveReady: "Current path is live-ready in this profile.",
+        openSourcePageAction: "Open source page",
+        reviewDetailAction: "Review detail",
+        openDetailAction: "Open detail",
+        hideProviderAction: "Stop showing",
+      },
     setupCoverage: {
       label: "Setup coverage",
       liveReadyItemLabel: "Live ready",
@@ -370,6 +375,9 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
         "Use settings to enable providers, grant host access, and add credentials. The dashboard becomes useful after at least one provider is visible.",
       settingsOwnsSetupDetail:
         "Use settings for provider toggles, host access, and stored credentials. The popup stays a quick triage layer until setup is clear.",
+      settingsOwnsContractControlsHeadline: "Settings owns contract controls",
+      settingsOwnsContractControlsDetail:
+        "Use settings to review provider contracts, source preference, and page-source controls. Dashboard stays the broader multi-provider context.",
       dashboardOwnsContractReviewHeadline: "Dashboard owns contract review",
       dashboardOwnsContractReviewDetail:
         "Use dashboard for broader contract context across visible providers. Settings still owns provider controls and stored credentials.",

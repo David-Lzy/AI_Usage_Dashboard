@@ -205,6 +205,10 @@ describe("popup view models", () => {
           tone: "neutral",
         },
       ],
+      action: {
+        kind: "settings",
+        label: "Open settings",
+      },
     });
     expect(model.actionSection).toEqual({
       label: "Other route",
@@ -226,6 +230,25 @@ describe("popup view models", () => {
     expect(model.showSnapshotStatus).toBe(false);
     expect(model.featuredProviders).toEqual([]);
     expect(model.featuredProviderCards).toEqual([]);
+  });
+
+  it("keeps the setup-coverage start action localized for no-provider popup states", () => {
+    const model = localizePopupViewModel(
+      buildPopupViewModel({
+        ...SAMPLE_APP_STATE,
+        providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
+          ...provider,
+          enabled: false,
+        })),
+      }),
+      createRuntimeI18n("zh-CN"),
+    );
+
+    expect(model.setupCoverage.action).toEqual({
+      kind: "settings",
+      label: "打开设置",
+    });
+    expect(model.setupCoverage.statusLabel).toBe("开始配置");
   });
 
   it("uses popup-specific featured-card copy when a visible provider still needs host access", () => {
@@ -259,6 +282,11 @@ describe("popup view models", () => {
       action: {
         kind: "settings",
         label: "Open settings",
+      },
+      secondaryAction: {
+        kind: "hide-provider",
+        label: "Stop showing",
+        providerId: "cursor",
       },
     });
   });
@@ -321,6 +349,11 @@ describe("popup view models", () => {
       label: "打开来源页面",
       providerId: "codex",
       sourceStateKind: "capture_unavailable",
+    });
+    expect(localizedModel.featuredProviderCards[0]?.secondaryAction).toEqual({
+      kind: "hide-provider",
+      label: "暂不显示",
+      providerId: "codex",
     });
   });
 
@@ -430,6 +463,7 @@ describe("popup view models", () => {
           tone: "neutral",
         },
       ],
+      action: null,
     });
     expect(model.actionSection).toEqual({
       label: "Other route",
@@ -593,6 +627,11 @@ describe("popup view models", () => {
         kind: "settings",
         label: "Open settings",
       },
+      secondaryAction: {
+        kind: "hide-provider",
+        label: "Stop showing",
+        providerId: "claude-code",
+      },
     });
   });
 
@@ -691,6 +730,7 @@ describe("popup view models", () => {
           tone: "neutral",
         },
       ],
+      action: null,
     });
     expect(model.featuredSection).toEqual({
       label: "All clear",
@@ -875,10 +915,10 @@ describe("popup view models", () => {
       tone: "neutral",
       headline: "Visible providers are policy-only",
       detail:
-        "The popup can still summarize shared cached state, but these visible providers do not expose one live in-browser usage path in this profile. Use dashboard and settings to review the current provider contracts.",
+        "The popup can still summarize shared cached state, but these visible providers do not expose one live in-browser usage path in this profile. Open settings to review the current provider contracts and source controls.",
       action: {
-        kind: "dashboard",
-        label: "Open dashboard",
+        kind: "settings",
+        label: "Open settings",
       },
     });
     expect(model.headerDetail).toBe(
@@ -909,19 +949,19 @@ describe("popup view models", () => {
     expect(model.actionSection).toEqual({
       label: "Other route",
       detail:
-        "The primary next step is above. Use settings when you need provider toggles, permissions, or stored credentials.",
+        "The primary next step is above. Use dashboard if you want the broader multi-provider view first.",
       actions: [
         {
-          kind: "settings",
-          label: "Open settings",
+          kind: "dashboard",
+          label: "Open dashboard",
         },
       ],
     });
     expect(model.surfaceRolesCard).toEqual({
       label: "Surface roles",
-      headline: "Dashboard owns contract review",
+      headline: "Settings owns contract controls",
       detail:
-        "Use dashboard for broader contract context across visible providers. Settings still owns provider controls and stored credentials.",
+        "Use settings to review provider contracts, source preference, and page-source controls. Dashboard stays the broader multi-provider context.",
     });
     expect(model.showSnapshotStatus).toBe(true);
     expect(model.snapshotStatus).toEqual({
@@ -959,6 +999,7 @@ describe("popup view models", () => {
           tone: "neutral",
         },
       ],
+      action: null,
     });
     expect(model.featuredSection).toEqual({
       label: "Current contract",
@@ -977,8 +1018,13 @@ describe("popup view models", () => {
       primaryDetail: "Current contract is policy-only in this profile.",
       secondaryDetail: model.featuredProviders[0].currentSourceAvailabilitySummary,
       action: {
-        kind: "dashboard",
-        label: "Open dashboard",
+        kind: "settings",
+        label: "Open settings",
+      },
+      secondaryAction: {
+        kind: "hide-provider",
+        label: "Stop showing",
+        providerId: "gemini",
       },
     });
   });
@@ -1043,6 +1089,7 @@ describe("popup view models", () => {
           tone: "neutral",
         },
       ],
+      action: null,
     });
     expect(model.headerDetail).toBe(
       "Settings setup is clear. Use this popup for quick review and freshness triage.",
@@ -1115,6 +1162,11 @@ describe("popup view models", () => {
         label: "Review detail",
         providerId: "claude-code",
       },
+      secondaryAction: {
+        kind: "hide-provider",
+        label: "Stop showing",
+        providerId: "claude-code",
+      },
     });
   });
 
@@ -1171,6 +1223,10 @@ describe("popup view models", () => {
           tone: "neutral",
         },
       ],
+      action: {
+        kind: "settings",
+        label: "打开设置",
+      },
     });
     expect(model.actionSection).toEqual({
       label: "其他入口",

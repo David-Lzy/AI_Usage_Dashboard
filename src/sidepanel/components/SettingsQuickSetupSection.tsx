@@ -42,6 +42,8 @@ export function SettingsQuickSetupSection({
   );
   const enabledProviders = providers.filter((provider) => provider.enabled);
   const disabledProviders = providers.filter((provider) => !provider.enabled);
+  const shouldHighlightDisabledProviders =
+    enabledProviders.length === 0 && disabledProviders.length > 0;
 
   function runAction(provider: ProviderSetting, action: SettingsQuickSetupActionModel) {
     switch (action.id) {
@@ -212,8 +214,14 @@ export function SettingsQuickSetupSection({
       </div>
 
       {disabledProviders.length > 0 ? (
-        <details className="quick-setup-card__more">
-          <summary className="source-card__details-toggle">
+        <details
+          className="quick-setup-card__more"
+          data-quick-setup-empty-visible={shouldHighlightDisabledProviders}
+        >
+          <summary
+            className="source-card__details-toggle"
+            data-quick-setup-attention={shouldHighlightDisabledProviders}
+          >
             <span>
               {settingsCopy.quickSetup.disabledProvidersSummary(
                 disabledProviders.length,

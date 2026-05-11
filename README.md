@@ -2,13 +2,14 @@
 
 Chrome side-panel extension for tracking usage, credits, and sync health across AI coding tools.
 
-Current release candidate:
+Current packaged release state:
 
-- package version: `0.1.0-rc.13`
-- Chrome manifest version: `0.1.0.13`
-- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.13.zip`
-- source status: `release/ai-usage-dashboard-0.1.0-rc.13.zip` remains the current upload candidate through `Phase 302`; current source and tracked docs now include post-`rc.13` polish through `Phase 305`
-- upload-candidate milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
+- package version: `0.1.0-rc.14`
+- Chrome manifest version: `0.1.0.14`
+- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.14.zip`
+- source status: current source and tracked docs are aligned through `Phase 306` and packaged as `rc.14`; the earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it
+- packaged follow-up milestone: [2026-05-11 RC14 Follow-Up Release Candidate](./Doc/Milestones/2026-05-11_RC14_Follow_Up_Release_Candidate.md)
+- submitted review milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
 ## Current RC Matrix
 
@@ -42,8 +43,8 @@ Security posture for this track:
 
 Next execution queue:
 
-1. keep `0.1.0-rc.13` as the current Chrome Web Store upload-candidate package; it includes the Claude Team usage-page path, Claude usage-page noise filtering, the Phase 297 Codex stale-page freshness reload, and the refreshed trimmed transparent extension icons, while current source now also contains post-`rc.13` `Phase 303` through `Phase 305` polish that should not be silently repackaged during review
-2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the human handoff for Chrome Web Store listing upload, screenshots, and permission/privacy disclosures
+1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary, but use `0.1.0-rc.14` as the ready follow-up package for the post-`rc.13` `Phase 303` through `Phase 306` popup, settings, side-panel, and Claude polish if review feedback or an explicit resubmission decision asks for a newer build
+2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC14 follow-up milestone](./Doc/Milestones/2026-05-11_RC14_Follow_Up_Release_Candidate.md) as the current packaged-source reference
 3. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 4. keep operator evidence closure below release/store work; here it means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not another runtime feature
 5. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
@@ -624,13 +625,13 @@ npm run release
 
 Output artifact:
 
-- `release/ai-usage-dashboard-0.1.0-rc.13.zip`
+- `release/ai-usage-dashboard-0.1.0-rc.14.zip`
 
 Packaging note:
 
-- `rc.13` packages the already-implemented Claude Team usage-page path plus the Claude noise-filtering parser pass, alongside the existing Codex freshness fix and refreshed trimmed transparent Chrome extension icons.
-- `Phase 302` cut `rc.13` as the current Chrome Web Store upload candidate.
-- `Phase 303` through `Phase 305` are current-source-only follow-up fixes and polish; they are not packaged into the current upload candidate yet.
+- `rc.14` packages the post-`rc.13` follow-up work from `Phase 303` through `Phase 306`, including the Claude Team multi-window capture fix, Settings IA simplification, cached-first full-page plus side-panel bootstrap, and popup-to-Settings onboarding polish.
+- `Phase 306` cut `rc.14` as the current packaged follow-up candidate.
+- the `RC13` milestone remains the submitted Chrome Web Store review boundary until a deliberate resubmission replaces it.
 
 The packaging script checks that:
 

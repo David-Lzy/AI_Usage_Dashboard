@@ -20,7 +20,12 @@ export type PopupSnapshotStatus = {
 };
 
 export type PopupGuidanceAction = {
-  kind: "settings" | "dashboard" | "provider-detail" | "source-page";
+  kind:
+    | "settings"
+    | "dashboard"
+    | "provider-detail"
+    | "source-page"
+    | "hide-provider";
   label: string;
   providerId?: ProviderId;
   sourceStateKind?: ProviderViewModel["currentSourceStateKind"];
@@ -57,6 +62,7 @@ export type PopupSetupCoverage = {
   headline: string;
   detail: string;
   items: SummaryItem[];
+  action: PopupGuidanceAction | null;
 };
 
 export type PopupActionSection = {
@@ -79,6 +85,7 @@ export type PopupFeaturedProviderCard = {
   secondaryDetail: string;
   usageProgressCircles: PopupUsageProgressCircle[];
   action: PopupGuidanceAction;
+  secondaryAction: PopupGuidanceAction;
 };
 
 export type PopupViewModel = {
@@ -323,10 +330,10 @@ function buildGuidanceCard(
       tone: "neutral",
       headline: "Visible providers are policy-only",
       detail:
-        "The popup can still summarize shared cached state, but these visible providers do not expose one live in-browser usage path in this profile. Use dashboard and settings to review the current provider contracts.",
+        "The popup can still summarize shared cached state, but these visible providers do not expose one live in-browser usage path in this profile. Open settings to review the current provider contracts and source controls.",
       action: {
-        kind: "dashboard",
-        label: "Open dashboard",
+        kind: "settings",
+        label: "Open settings",
       },
     };
   }
@@ -606,6 +613,11 @@ function buildPopupFeaturedProviderCard(
     secondaryDetail: buildPopupFeaturedSecondaryDetail(provider),
     usageProgressCircles: buildPopupUsageProgressCircles(provider),
     action: buildPopupFeaturedAction(provider),
+    secondaryAction: {
+      kind: "hide-provider",
+      label: "Stop showing",
+      providerId: provider.providerId,
+    },
   };
 }
 
@@ -622,8 +634,8 @@ function buildPopupFeaturedAction(provider: ProviderViewModel): PopupGuidanceAct
 
   if (provider.currentSourceStateKind === "policy_only") {
     return {
-      kind: "dashboard",
-      label: "Open dashboard",
+      kind: "settings",
+      label: "Open settings",
     };
   }
 
@@ -760,6 +772,10 @@ function buildSetupCoverage(
           tone: "neutral",
         },
       ],
+      action: {
+        kind: "settings",
+        label: "Open settings",
+      },
     };
   }
 
@@ -834,6 +850,7 @@ function buildSetupCoverage(
         tone: "neutral",
       },
     ],
+    action: null,
   };
 }
 
@@ -960,6 +977,21 @@ function buildSurfaceRolesCard(
   }
 
   if (guidanceCard?.action.kind === "settings") {
+    const allPolicyOnly =
+      visibleProviders.length > 0 &&
+      visibleProviders.every(
+        (provider) => provider.currentSourceStateKind === "policy_only",
+      );
+
+    if (allPolicyOnly) {
+      return {
+        label: "Surface roles",
+        headline: "Settings owns contract controls",
+        detail:
+          "Use settings to review provider contracts, source preference, and page-source controls. Dashboard stays the broader multi-provider context.",
+      };
+    }
+
     return {
       label: "Surface roles",
       headline: "Settings owns setup",
@@ -1181,8 +1213,8 @@ function buildLocalizedGuidanceCard(
       headline: copy.guidance.policyOnlyHeadline,
       detail: copy.guidance.policyOnlyDetail,
       action: {
-        kind: "dashboard",
-        label: i18n.t("common.actions.open_dashboard"),
+        kind: "settings",
+        label: i18n.t("common.actions.open_settings"),
       },
     };
   }
@@ -1319,8 +1351,8 @@ function buildLocalizedFeaturedProviderCard(
           }
         : provider.currentSourceStateKind === "policy_only"
           ? {
-              kind: "dashboard",
-              label: i18n.t("common.actions.open_dashboard"),
+              kind: "settings",
+              label: i18n.t("common.actions.open_settings"),
             }
           : provider.openableSessionPageUrl !== null &&
               (provider.currentSourceStateKind === "open_page_required" ||
@@ -1344,12 +1376,18 @@ function buildLocalizedFeaturedProviderCard(
                 label: copy.featuredCard.openDetailAction,
                 providerId: provider.providerId,
               },
+    secondaryAction: {
+      kind: "hide-provider",
+      label: copy.featuredCard.hideProviderAction,
+      providerId: provider.providerId,
+    },
   };
 }
 
 function buildLocalizedSetupCoverage(
   visibleProviders: ProviderViewModel[],
   existingItems: SummaryItem[],
+  i18n: RuntimeI18n,
   copy: ReturnType<typeof buildPopupLocalizedCopy>,
 ): PopupSetupCoverage {
   const {
@@ -1386,6 +1424,10 @@ function buildLocalizedSetupCoverage(
           label: copy.setupCoverage.policyOnlyItemLabel,
         },
       ],
+      action: {
+        kind: "settings",
+        label: i18n.t("common.actions.open_settings"),
+      },
     };
   }
 
@@ -1449,6 +1491,7 @@ function buildLocalizedSetupCoverage(
         label: copy.setupCoverage.policyOnlyItemLabel,
       },
     ],
+    action: null,
   };
 }
 
@@ -1535,6 +1578,20 @@ function buildLocalizedSurfaceRolesCard(
   }
 
   if (guidanceCard?.action.kind === "settings") {
+    const allPolicyOnly =
+      visibleProviders.length > 0 &&
+      visibleProviders.every(
+        (provider) => provider.currentSourceStateKind === "policy_only",
+      );
+
+    if (allPolicyOnly) {
+      return {
+        label: copy.surfaceRoles.label,
+        headline: copy.surfaceRoles.settingsOwnsContractControlsHeadline,
+        detail: copy.surfaceRoles.settingsOwnsContractControlsDetail,
+      };
+    }
+
     return {
       label: copy.surfaceRoles.label,
       headline: copy.surfaceRoles.settingsOwnsSetupHeadline,
@@ -1576,6 +1633,7 @@ export function localizePopupViewModel(
   const setupCoverage = buildLocalizedSetupCoverage(
     visibleProviders,
     model.setupCoverage.items,
+    i18n,
     copy,
   );
 

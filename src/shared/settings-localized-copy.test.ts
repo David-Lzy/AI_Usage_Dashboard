@@ -19,6 +19,13 @@ describe("buildSettingsLocalizedCopy", () => {
 
     expect(copy.credentials.saveKey).toBe("Save key");
     expect(copy.sources.preferenceLabel).toBe("Preference");
+    expect(copy.layout.userLevel.label).toBe("Display level");
+    expect(copy.layout.userLevel.options).toEqual({
+      basic: "Basic",
+      advanced: "Advanced",
+      developer: "Developer",
+      debug: "Debug",
+    });
     expect(getSettingsSourcePreferenceLabel("session_page", copy)).toBe(
       "Session page",
     );

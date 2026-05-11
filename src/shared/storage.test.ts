@@ -166,7 +166,7 @@ describe("storage normalization", () => {
       ...SAMPLE_APP_STATE,
       settings: {
         ...SAMPLE_APP_STATE.settings,
-        syncIntervalMinutes: 5,
+        syncIntervalMinutes: 2,
         warningThresholdPercent: 100,
       } as unknown as AppState["settings"],
     });

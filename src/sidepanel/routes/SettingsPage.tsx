@@ -19,6 +19,7 @@ import type {
 import { createRuntimeI18n } from "../../shared/i18n";
 import { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
 import { resolveThemeMode } from "../../shared/theme";
+import { getPreferredScrollBehavior } from "../motion";
 
 import {
   SettingsBackToTopButton,
@@ -35,6 +36,10 @@ import { getSettingsUserLevelVisibility } from "../settings-user-level-visibilit
 import { Toast } from "../components/Toast";
 import { TopBar } from "../components/TopBar";
 import { buildSettingsPageViewModels } from "../settings-page-view-models";
+import {
+  settingsRouteFocusRequiresAdvanced,
+  type SettingsRouteFocus,
+} from "../route-state";
 import { useSettingsCredentialDrafts } from "../use-settings-credential-drafts";
 import { useSettingsSectionNavigation } from "../use-settings-section-navigation";
 import { useSettingsThemeCustomSeedDraft } from "../use-settings-theme-custom-seed-draft";
@@ -47,8 +52,31 @@ type SettingsToast = {
   message: string;
 };
 
+function getSettingsRouteFocusElement(
+  routeFocus: SettingsRouteFocus,
+  documentRef: Document,
+): HTMLElement | null {
+  switch (routeFocus.kind) {
+    case "section":
+      return documentRef.getElementById(routeFocus.sectionId);
+    case "quick-setup-provider":
+      return documentRef.querySelector<HTMLElement>(
+        `[data-quick-setup-provider-id="${routeFocus.providerId}"]`,
+      );
+    case "credential-provider":
+      return documentRef.querySelector<HTMLElement>(
+        `[data-credential-provider-id="${routeFocus.providerId}"]`,
+      );
+    case "source-provider":
+      return documentRef.querySelector<HTMLElement>(
+        `.source-card[data-provider-id="${routeFocus.providerId}"]`,
+      );
+  }
+}
+
 type SettingsPageProps = {
   onBack: () => void;
+  routeFocus?: SettingsRouteFocus;
   themeActionLabel?: string;
   themeActionTitle?: string;
   onToggleThemeMode?: () => void;
@@ -101,6 +129,7 @@ type SettingsPageProps = {
 
 export function SettingsPage({
   onBack,
+  routeFocus,
   themeActionLabel,
   themeActionTitle,
   onToggleThemeMode,
@@ -181,6 +210,9 @@ export function SettingsPage({
   );
   const settingsCopy = buildSettingsLocalizedCopy(i18n);
   const userLevelVisibility = getSettingsUserLevelVisibility(settings.userLevel);
+  const routeFocusRequiresAdvanced = settingsRouteFocusRequiresAdvanced(routeFocus);
+  const showAdvancedContainer =
+    userLevelVisibility.showAdvancedContainer || routeFocusRequiresAdvanced;
   const {
     codexProvider,
     credentialProviders,
@@ -188,19 +220,53 @@ export function SettingsPage({
     settingsSummaryItems,
   } = buildSettingsPageViewModels({
     providers,
+    showAdvancedSection: showAdvancedContainer,
     settings,
     settingsCopy,
     snapshots,
   });
   const [advancedOpen, setAdvancedOpen] = useState(
-    userLevelVisibility.advancedInitiallyOpen,
+    userLevelVisibility.advancedInitiallyOpen || routeFocusRequiresAdvanced,
   );
   const advancedGroupCount =
     (credentialProviders.length > 0 || codexProvider ? 1 : 0) + 1;
 
   useEffect(() => {
-    setAdvancedOpen(userLevelVisibility.advancedInitiallyOpen);
-  }, [userLevelVisibility.advancedInitiallyOpen]);
+    setAdvancedOpen(
+      userLevelVisibility.advancedInitiallyOpen || routeFocusRequiresAdvanced,
+    );
+  }, [routeFocusRequiresAdvanced, userLevelVisibility.advancedInitiallyOpen]);
+
+  useEffect(() => {
+    if (
+      !routeFocus ||
+      typeof document === "undefined" ||
+      typeof window === "undefined"
+    ) {
+      return undefined;
+    }
+
+    if (settingsRouteFocusRequiresAdvanced(routeFocus) && !advancedOpen) {
+      return undefined;
+    }
+
+    const targetElement = getSettingsRouteFocusElement(routeFocus, document);
+
+    if (!targetElement) {
+      return undefined;
+    }
+
+    const frameId = window.requestAnimationFrame(() => {
+      targetElement.scrollIntoView({
+        block: "start",
+        behavior: getPreferredScrollBehavior(window),
+      });
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+    };
+  }, [advancedOpen, routeFocus]);
 
   return (
     <main className="app-shell settings-shell">
@@ -309,7 +375,7 @@ export function SettingsPage({
         onResetThemeCustomSeed={handleResetThemeCustomSeed}
       />
 
-      {userLevelVisibility.showAdvancedContainer ? (
+      {showAdvancedContainer ? (
         <section
           className="status-card settings-section-anchor settings-advanced"
           id={SETTINGS_SECTION_IDS.advanced}
@@ -342,6 +408,7 @@ export function SettingsPage({
 
             <div className="source-card__details-body settings-advanced__body">
               <SettingsCredentialsSection
+                sectionId="settings-advanced-credentials"
                 eyebrow={i18n.t("settings.credentials.eyebrow")}
                 title={i18n.t("settings.credentials.title")}
                 detail={i18n.t("settings.credentials.detail")}
@@ -361,6 +428,7 @@ export function SettingsPage({
               />
 
               <SettingsSourceSection
+                sectionId="settings-advanced-sources"
                 eyebrow={i18n.t("settings.sources.eyebrow")}
                 title={i18n.t("settings.sources.title")}
                 detail={i18n.t("settings.sources.detail")}

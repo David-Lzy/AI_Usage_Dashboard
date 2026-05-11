@@ -44,13 +44,16 @@ describe("SettingsPreferencesSection", () => {
     expect(html).toContain(`id="${SETTINGS_SECTION_IDS.appearance}"`);
     expect(html).toContain('data-settings-custom-number-field="sync-interval"');
     expect(html).toContain('data-settings-custom-number-field="warning-threshold"');
+    expect(html).toContain('data-settings-material-select="locale-preference"');
     expect(html).toContain('data-settings-material-select="theme-mode"');
     expect(html).toContain('data-settings-material-select="theme-preset"');
     expect(html).toContain('data-settings-material-select="action-badge-selection"');
     expect(html).toContain(">More<");
-    expect(html).toContain('data-settings-material-select="locale-preference"');
     expect(html).toContain('class="popup-appearance-preview-card"');
     expect(html).toContain('class="theme-customization-form"');
     expect(html).toContain('class="theme-preview-grid"');
+    expect(
+      html.indexOf('data-settings-material-select="locale-preference"'),
+    ).toBeLessThan(html.indexOf(">More<"));
   });
 });
