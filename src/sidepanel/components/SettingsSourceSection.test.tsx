@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { SAMPLE_APP_STATE } from "../../shared/constants";
 import { createRuntimeI18n } from "../../shared/i18n";
 import { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
-import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
+import { getSettingsUserLevelVisibility } from "../settings-user-level-visibility";
 import { SettingsSourceSection } from "./SettingsSourceSection";
 
 describe("SettingsSourceSection", () => {
@@ -13,7 +13,7 @@ describe("SettingsSourceSection", () => {
     const settingsCopy = buildSettingsLocalizedCopy(i18n);
     const html = renderToStaticMarkup(
       <SettingsSourceSection
-        sectionId={SETTINGS_SECTION_IDS.sources}
+        sectionId="settings-source-test"
         eyebrow="Source connections"
         title="Provider sources"
         detail="Choose how each provider is refreshed."
@@ -21,6 +21,7 @@ describe("SettingsSourceSection", () => {
         snapshots={SAMPLE_APP_STATE.providers}
         i18n={i18n}
         settingsCopy={settingsCopy}
+        userLevelVisibility={getSettingsUserLevelVisibility("advanced")}
         sessionPageNavigationAvailable
         activeSessionPageAttachAvailable={false}
         onSetSourcePreference={() => {}}
@@ -30,13 +31,12 @@ describe("SettingsSourceSection", () => {
       />,
     );
 
-    expect(html).toContain(`id="${SETTINGS_SECTION_IDS.sources}"`);
+    expect(html).toContain('id="settings-source-test"');
     expect(html).toContain('class="source-card"');
     expect(html).toContain('data-provider-id="cursor"');
     expect(html).toContain('data-provider-id="codex"');
     expect(html).toContain(
       'data-settings-material-select="source-preference-cursor"',
     );
-    expect(html).toContain('class="source-card__details-toggle"');
   });
 });

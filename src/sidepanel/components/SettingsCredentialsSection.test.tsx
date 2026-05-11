@@ -3,7 +3,6 @@ import { describe, expect, it } from "vitest";
 
 import type { ApiKeyProviderId, ProviderSetting } from "../../providers/types";
 import { SAMPLE_APP_STATE } from "../../shared/constants";
-import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
 import {
   SettingsCredentialsSection,
   type CredentialProviderSection,
@@ -39,7 +38,7 @@ describe("SettingsCredentialsSection", () => {
 
     const html = renderToStaticMarkup(
       <SettingsCredentialsSection
-        sectionId={SETTINGS_SECTION_IDS.credentials}
+        sectionId="settings-credentials-test"
         eyebrow="Credentials"
         title="Provider credentials"
         detail="Add optional provider credentials."
@@ -87,7 +86,7 @@ describe("SettingsCredentialsSection", () => {
       />,
     );
 
-    expect(html).toContain(`id="${SETTINGS_SECTION_IDS.credentials}"`);
+    expect(html).toContain('id="settings-credentials-test"');
     expect(html).toContain('data-credential-provider-id="cursor"');
     expect(html).toContain('data-credential-provider-id="codex"');
     expect(html).toContain('class="credential-form"');

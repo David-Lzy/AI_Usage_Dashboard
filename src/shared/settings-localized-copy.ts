@@ -1,12 +1,107 @@
 import type {
   ProviderSourceKind,
   ProviderSourcePreference,
+  SettingsUserLevel,
 } from "../providers/types";
 import type { RuntimeI18n } from "./i18n";
 
 export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
   if (i18n.resolvedLocale === "zh-CN") {
     return {
+      layout: {
+        sectionsAria: "设置分区",
+        sections: {
+          overview: "概览",
+          quickSetup: "快速设置",
+          appearance: "外观与同步",
+          advanced: "高级",
+        },
+        overview: {
+          aria: "设置概览",
+          eyebrow: "设置概览",
+          title: "先完成个人账户的常用设置",
+          detail:
+            "大多数个人用户只需要快速设置、语言/主题和同步频率。切换下面的模式，可以决定这里展示多少高级配置与诊断信息。",
+        },
+        summary: {
+          enabled: "已启用",
+          connected: "已连接",
+          needsAction: "待处理",
+          storedSecrets: "已存密钥",
+          boundPages: "已绑定页面",
+        },
+        userLevel: {
+          label: "显示级别",
+          helpText:
+            "普通模式只显示常用设置。高级、开发者和 Debug 会逐步展示团队/API 配置、来源控制和更深的诊断信息。",
+          options: {
+            basic: "普通",
+            advanced: "高级",
+            developer: "开发者",
+            debug: "Debug",
+          } as Record<SettingsUserLevel, string>,
+        },
+        advanced: {
+          eyebrow: "高级",
+          title: "团队 / API / 来源控制",
+          detail:
+            "只在你需要团队或企业配置、来源偏好和页面绑定管理时再展开这里。",
+          show: "展开高级设置",
+          hide: "收起高级设置",
+          itemCount: (count: number) => `${i18n.formatNumber(count)} 组`,
+        },
+      },
+      quickSetup: {
+        eyebrow: "快速设置",
+        title: "按 Provider 完成常用连接",
+        detail:
+          "这里优先处理个人账户最常见的动作：启用 Provider、授予浏览器访问、打开使用页面，以及确认当前是否已经连通。",
+        currentSetupLabel: "当前方式",
+        nextStepLabel: "推荐下一步",
+        visibilityLabel: "显示到仪表板",
+        pageStatusLabel: "页面状态",
+        noActionNeeded: "当前不需要额外操作",
+        disabledProvidersSummary: (count: number) =>
+          `更多 Provider（${i18n.formatNumber(count)}）`,
+        hideDisabledProviders: "收起更多 Provider",
+        currentSetup: {
+          disabled: "已关闭",
+          sessionPage: "已登录使用页面",
+          savedConnection: "已存团队 / API 配置",
+          policyOnly: "仅文档化策略",
+        },
+        helperText: {
+          disabled: "启用后，这个 Provider 才会回到仪表板和刷新流程里。",
+          readySessionPage:
+            "这个 Provider 会使用当前浏览器里已登录的使用页面做同步。",
+          readyCredential:
+            "这个 Provider 会使用当前浏览器 profile 里保存的团队或企业配置做同步。",
+          policyOnly:
+            "这个 Provider 当前只展示文档化限制，不会假装提供实时个人用量。",
+          hostAccessMissing: (hostsLabel: string) =>
+            `继续之前，需要允许扩展访问 ${hostsLabel}。`,
+          credentialMissingBasic:
+            "如果你确实需要团队或企业 API 路径，请先切到高级模式再配置。",
+          credentialMissingAdvanced:
+            "如果你需要团队或企业 API 路径，请在下面的高级配置里补齐凭据。",
+          openPageRequired: "先打开这个 Provider 的使用页面，再回来刷新。",
+          loggedOut: "先打开这个 Provider 的使用页面并重新登录。",
+          captureUnavailable:
+            "页面已经打开，但当前会话无法读取，先重开页面再试一次。",
+          syncError: "上一次同步没有成功，建议先回到来源页面重试。",
+        },
+        actions: {
+          enableProvider: "启用 Provider",
+          disableProvider: "隐藏 Provider",
+          grantAccess: "授予访问",
+          openUsagePage: "打开使用页面",
+          openAndSignIn: "打开页面并登录",
+          retryPage: "重试当前页面",
+          openSourcePage: "打开来源页面",
+          useCurrentPage: "使用当前页面",
+          disconnectPage: "断开页面",
+        },
+      },
       themeCustomization: {
         previewingSeed: (seed: string, mode: "light" | "dark") =>
           `正在为当前${mode === "dark" ? "夜间" : "白天"}配色预览 ${seed}。应用之后会把 accent preset 切到 Custom Seed。`,
@@ -54,7 +149,7 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
       },
       sources: {
         preferenceLabel: "偏好",
-        operationalNoteLabel: "运行说明",
+        operationalNoteLabel: "你需要知道",
         sessionPageTrackLabel: "Session-page 轨道",
         sessionPageNoteLabel: "Session-page 说明",
         findOrOpenPage: "查找或打开页面",
@@ -62,6 +157,17 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
         extensionModeOnly: "仅扩展模式",
         disconnectBinding: "断开绑定",
         detailedDiagnostics: "详细诊断",
+        compactFields: {
+          currentSetup: "当前方式",
+          setupStatus: "状态",
+          pageStatus: "页面状态",
+          pageRoute: "页面入口",
+        },
+        compactCurrentSetup: {
+          sessionPage: "已登录使用页面",
+          savedConnection: "已存团队 / API 配置",
+          policyOnly: "仅文档化策略",
+        },
         itemCount: (count: number) => `${i18n.formatNumber(count)} 项`,
         routeFallback: "从 provider settings 打开",
         sourcePreferenceLabels: {
@@ -126,6 +232,104 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
   }
 
   return {
+    layout: {
+      sectionsAria: "Settings sections",
+      sections: {
+        overview: "Overview",
+        quickSetup: "Quick Setup",
+        appearance: "Appearance & Sync",
+        advanced: "Advanced",
+      },
+      overview: {
+        aria: "Settings overview",
+        eyebrow: "Settings overview",
+        title: "Start with the personal-account path",
+        detail:
+          "Most personal users only need Quick Setup, language/theme, and sync controls. Switch the mode below to decide how much team/API setup and diagnostics are shown.",
+      },
+      summary: {
+        enabled: "Enabled",
+        connected: "Connected",
+        needsAction: "Needs action",
+        storedSecrets: "Stored secrets",
+        boundPages: "Bound pages",
+      },
+      userLevel: {
+        label: "Display level",
+        helpText:
+          "Basic mode keeps Settings focused on the common path. Advanced, Developer, and Debug progressively reveal team/API setup, source controls, and deeper diagnostics.",
+        options: {
+          basic: "普通",
+          advanced: "高级",
+          developer: "开发者",
+          debug: "Debug",
+        } as Record<SettingsUserLevel, string>,
+      },
+      advanced: {
+        eyebrow: "Advanced",
+        title: "Team / API / source controls",
+        detail:
+          "Open this only when you need team or enterprise configuration, source preference changes, or page-binding management.",
+        show: "Show advanced settings",
+        hide: "Hide advanced settings",
+        itemCount: (count: number) => `${i18n.formatNumber(count)} groups`,
+      },
+    },
+    quickSetup: {
+      eyebrow: "Quick setup",
+      title: "Set up providers the normal-user way",
+      detail:
+        "This section focuses on the common personal-account tasks: enabling a provider, granting browser access, opening the usage page, and checking whether the provider is already connected.",
+      currentSetupLabel: "Current setup",
+      nextStepLabel: "Recommended next step",
+      visibilityLabel: "Show on dashboard",
+      pageStatusLabel: "Page status",
+      noActionNeeded: "No extra action needed right now",
+      disabledProvidersSummary: (count: number) =>
+        `More providers (${i18n.formatNumber(count)})`,
+      hideDisabledProviders: "Hide more providers",
+      currentSetup: {
+        disabled: "Turned off",
+        sessionPage: "Signed-in usage page",
+        savedConnection: "Saved team / API config",
+        policyOnly: "Documented policy only",
+      },
+      helperText: {
+        disabled:
+          "Turn this provider on when you want it back in the dashboard and refresh flow.",
+        readySessionPage:
+          "This provider syncs from a usage page that is already signed in on this browser.",
+        readyCredential:
+          "This provider syncs from team or enterprise configuration saved on this browser profile.",
+        policyOnly:
+          "This provider currently shows documented limits only and does not pretend to have live personal usage.",
+        hostAccessMissing: (hostsLabel: string) =>
+          `Browser access to ${hostsLabel} is required before live sync can continue.`,
+        credentialMissingBasic:
+          "If you really need the team or enterprise API path, switch to Advanced mode first.",
+        credentialMissingAdvanced:
+          "If you need the team or enterprise API path, finish the credential setup in Advanced.",
+        openPageRequired:
+          "Open the provider usage page first, then come back and refresh.",
+        loggedOut:
+          "Open the provider usage page and sign in again before retrying.",
+        captureUnavailable:
+          "The page is open, but the current session cannot be read. Reopen the page and retry.",
+        syncError:
+          "The last sync did not complete successfully. Start by reopening the source page or checking the advanced source controls.",
+      },
+      actions: {
+        enableProvider: "Enable provider",
+        disableProvider: "Hide provider",
+        grantAccess: "Grant access",
+        openUsagePage: "Open usage page",
+        openAndSignIn: "Open page and sign in",
+        retryPage: "Retry page",
+        openSourcePage: "Open source page",
+        useCurrentPage: "Use current page",
+        disconnectPage: "Disconnect page",
+      },
+    },
     themeCustomization: {
       previewingSeed: (seed: string, mode: "light" | "dark") =>
         `Previewing ${seed} for the current ${mode} palette. Apply it to switch the accent preset to Custom Seed.`,
@@ -175,7 +379,7 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
     },
     sources: {
       preferenceLabel: "Preference",
-      operationalNoteLabel: "Operational note",
+      operationalNoteLabel: "What to know",
       sessionPageTrackLabel: "Session-page track",
       sessionPageNoteLabel: "Session-page note",
       findOrOpenPage: "Find or open page",
@@ -183,6 +387,17 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
       extensionModeOnly: "Extension mode only",
       disconnectBinding: "Disconnect binding",
       detailedDiagnostics: "Detailed diagnostics",
+      compactFields: {
+        currentSetup: "Current setup",
+        setupStatus: "Status",
+        pageStatus: "Page status",
+        pageRoute: "Page route",
+      },
+      compactCurrentSetup: {
+        sessionPage: "Signed-in usage page",
+        savedConnection: "Saved team / API config",
+        policyOnly: "Documented policy only",
+      },
       itemCount: (count: number) => `${i18n.formatNumber(count)} items`,
       routeFallback: "Open from provider settings",
       sourcePreferenceLabels: {

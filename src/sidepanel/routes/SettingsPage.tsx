@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import type {
   ActionBadgeSelection,
   ApiKeyProviderId,
@@ -25,10 +27,11 @@ import {
 import {
   SettingsCredentialsSection,
   SettingsOverviewSection,
-  SettingsPermissionsSection,
-  SettingsVisibilitySection,
 } from "../components/SettingsSections";
+import { MaterialSelect } from "../components/MaterialSelect";
+import { SettingsQuickSetupSection } from "../components/SettingsQuickSetupSection";
 import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
+import { getSettingsUserLevelVisibility } from "../settings-user-level-visibility";
 import { Toast } from "../components/Toast";
 import { TopBar } from "../components/TopBar";
 import { buildSettingsPageViewModels } from "../settings-page-view-models";
@@ -58,6 +61,7 @@ type SettingsPageProps = {
   onSavePreferences: () => void;
   onSyncIntervalChange: (minutes: number) => void;
   onLocalePreferenceChange: (locale: AppLocalePreference) => void;
+  onUserLevelChange: (userLevel: AppSettings["userLevel"]) => void;
   onWarningThresholdChange: (percent: number) => void;
   onThemeModeChange: (themeMode: ThemeMode) => void;
   onThemePresetChange: (themePreset: ThemePreset) => void;
@@ -109,6 +113,7 @@ export function SettingsPage({
   onSavePreferences,
   onSyncIntervalChange,
   onLocalePreferenceChange,
+  onUserLevelChange,
   onWarningThresholdChange,
   onThemeModeChange,
   onThemePresetChange,
@@ -175,17 +180,27 @@ export function SettingsPage({
     typeof window !== "undefined" ? window : undefined,
   );
   const settingsCopy = buildSettingsLocalizedCopy(i18n);
+  const userLevelVisibility = getSettingsUserLevelVisibility(settings.userLevel);
   const {
     codexProvider,
     credentialProviders,
     settingsSectionNavItems,
     settingsSummaryItems,
   } = buildSettingsPageViewModels({
-    i18n,
     providers,
+    settings,
     settingsCopy,
     snapshots,
   });
+  const [advancedOpen, setAdvancedOpen] = useState(
+    userLevelVisibility.advancedInitiallyOpen,
+  );
+  const advancedGroupCount =
+    (credentialProviders.length > 0 || codexProvider ? 1 : 0) + 1;
+
+  useEffect(() => {
+    setAdvancedOpen(userLevelVisibility.advancedInitiallyOpen);
+  }, [userLevelVisibility.advancedInitiallyOpen]);
 
   return (
     <main className="app-shell settings-shell">
@@ -201,7 +216,7 @@ export function SettingsPage({
         sticky
         bottomContent={
           <SettingsSectionNavigation
-            ariaLabel={i18n.t("settings.sections.aria")}
+            ariaLabel={settingsCopy.layout.sectionsAria}
             activeSectionId={activeSettingsSection}
             items={settingsSectionNavItems}
             onSelectSection={scrollToSection}
@@ -214,14 +229,61 @@ export function SettingsPage({
       />
 
       <SettingsOverviewSection
-        ariaLabel={i18n.t("settings.overview.aria")}
-        detail={i18n.t("settings.overview.detail")}
-        eyebrow={i18n.t("settings.overview.eyebrow")}
+        sectionId={SETTINGS_SECTION_IDS.overview}
+        ariaLabel={settingsCopy.layout.overview.aria}
+        detail={settingsCopy.layout.overview.detail}
+        eyebrow={settingsCopy.layout.overview.eyebrow}
         items={settingsSummaryItems}
-        title={i18n.t("settings.overview.title")}
+        title={settingsCopy.layout.overview.title}
+      >
+        <div className="settings-overview__controls">
+          <MaterialSelect
+            label={settingsCopy.layout.userLevel.label}
+            value={settings.userLevel}
+            fieldIdPrefix="settings-user-level"
+            options={[
+              {
+                value: "basic",
+                label: settingsCopy.layout.userLevel.options.basic,
+              },
+              {
+                value: "advanced",
+                label: settingsCopy.layout.userLevel.options.advanced,
+              },
+              {
+                value: "developer",
+                label: settingsCopy.layout.userLevel.options.developer,
+              },
+              {
+                value: "debug",
+                label: settingsCopy.layout.userLevel.options.debug,
+              },
+            ]}
+            onChange={onUserLevelChange}
+          />
+          <p className="supporting-copy">
+            {settingsCopy.layout.userLevel.helpText}
+          </p>
+        </div>
+      </SettingsOverviewSection>
+
+      <SettingsQuickSetupSection
+        sectionId={SETTINGS_SECTION_IDS.quickSetup}
+        providers={providers}
+        snapshots={snapshots}
+        settingsCopy={settingsCopy}
+        userLevel={settings.userLevel}
+        sessionPageNavigationAvailable={sessionPageNavigationAvailable}
+        activeSessionPageAttachAvailable={activeSessionPageAttachAvailable}
+        onToggleProvider={onToggleProvider}
+        onTogglePermission={onTogglePermission}
+        onOpenSessionPage={onOpenSessionPage}
+        onAttachActiveSessionPage={onAttachActiveSessionPage}
+        onClearPageBinding={onClearPageBinding}
       />
+
       <SettingsPreferencesSection
-        sectionId={SETTINGS_SECTION_IDS.preferences}
+        sectionId={SETTINGS_SECTION_IDS.appearance}
         settings={settings}
         providers={providers}
         snapshots={snapshots}
@@ -229,6 +291,7 @@ export function SettingsPage({
         settingsCopy={settingsCopy}
         resolvedThemeMode={resolvedThemeMode}
         themeCustomSeedDraft={themeCustomSeedDraft}
+        userLevelVisibility={userLevelVisibility}
         onSyncIntervalChange={onSyncIntervalChange}
         onWarningThresholdChange={onWarningThresholdChange}
         onLocalePreferenceChange={onLocalePreferenceChange}
@@ -246,61 +309,77 @@ export function SettingsPage({
         onResetThemeCustomSeed={handleResetThemeCustomSeed}
       />
 
-      <SettingsVisibilitySection
-        sectionId={SETTINGS_SECTION_IDS.visibility}
-        eyebrow={i18n.t("settings.visibility.eyebrow")}
-        providers={providers}
-        enabledDetail={i18n.t("settings.visibility.enabled_detail")}
-        disabledDetail={i18n.t("settings.visibility.disabled_detail")}
-        onToggleProvider={onToggleProvider}
-      />
+      {userLevelVisibility.showAdvancedContainer ? (
+        <section
+          className="status-card settings-section-anchor settings-advanced"
+          id={SETTINGS_SECTION_IDS.advanced}
+        >
+          <div className="dashboard-section__header">
+            <div>
+              <p className="section-label">{settingsCopy.layout.advanced.eyebrow}</p>
+              <h2 className="section-title">{settingsCopy.layout.advanced.title}</h2>
+            </div>
+            <p className="supporting-copy">{settingsCopy.layout.advanced.detail}</p>
+          </div>
 
-      <SettingsCredentialsSection
-        sectionId={SETTINGS_SECTION_IDS.credentials}
-        eyebrow={i18n.t("settings.credentials.eyebrow")}
-        title={i18n.t("settings.credentials.title")}
-        detail={i18n.t("settings.credentials.detail")}
-        credentialProviders={credentialProviders}
-        codexProvider={codexProvider}
-        credentialInputs={credentialInputs}
-        codexAnalyticsApiKeyInput={codexAnalyticsApiKeyInput}
-        codexWorkspaceIdInput={codexWorkspaceIdInput}
-        labels={settingsCopy.credentials}
-        onSaveProviderApiKey={handleSaveProviderApiKey}
-        onClearProviderApiKey={handleClearProviderApiKey}
-        onProviderApiKeyInputChange={handleProviderApiKeyInputChange}
-        onSaveCodexConfig={handleSaveCodexConfig}
-        onClearCodexConfig={handleClearCodexConfig}
-        onCodexAnalyticsApiKeyInputChange={setCodexAnalyticsApiKeyInput}
-        onCodexWorkspaceIdInputChange={setCodexWorkspaceIdInput}
-      />
+          <details
+            className="source-card__details settings-advanced__details"
+            open={advancedOpen}
+            onToggle={(event) =>
+              setAdvancedOpen((event.currentTarget as HTMLDetailsElement).open)
+            }
+          >
+            <summary className="source-card__details-toggle">
+              <span>
+                {advancedOpen
+                  ? settingsCopy.layout.advanced.hide
+                  : settingsCopy.layout.advanced.show}
+              </span>
+              <span className="meta-chip">
+                {settingsCopy.layout.advanced.itemCount(advancedGroupCount)}
+              </span>
+            </summary>
 
-      <SettingsSourceSection
-        sectionId={SETTINGS_SECTION_IDS.sources}
-        eyebrow={i18n.t("settings.sources.eyebrow")}
-        title={i18n.t("settings.sources.title")}
-        detail={i18n.t("settings.sources.detail")}
-        providers={providers}
-        snapshots={snapshots}
-        i18n={i18n}
-        settingsCopy={settingsCopy}
-        sessionPageNavigationAvailable={sessionPageNavigationAvailable}
-        activeSessionPageAttachAvailable={activeSessionPageAttachAvailable}
-        onSetSourcePreference={onSetSourcePreference}
-        onOpenSessionPage={onOpenSessionPage}
-        onAttachActiveSessionPage={onAttachActiveSessionPage}
-        onClearPageBinding={onClearPageBinding}
-      />
+            <div className="source-card__details-body settings-advanced__body">
+              <SettingsCredentialsSection
+                eyebrow={i18n.t("settings.credentials.eyebrow")}
+                title={i18n.t("settings.credentials.title")}
+                detail={i18n.t("settings.credentials.detail")}
+                credentialProviders={credentialProviders}
+                codexProvider={codexProvider}
+                credentialInputs={credentialInputs}
+                codexAnalyticsApiKeyInput={codexAnalyticsApiKeyInput}
+                codexWorkspaceIdInput={codexWorkspaceIdInput}
+                labels={settingsCopy.credentials}
+                onSaveProviderApiKey={handleSaveProviderApiKey}
+                onClearProviderApiKey={handleClearProviderApiKey}
+                onProviderApiKeyInputChange={handleProviderApiKeyInputChange}
+                onSaveCodexConfig={handleSaveCodexConfig}
+                onClearCodexConfig={handleClearCodexConfig}
+                onCodexAnalyticsApiKeyInputChange={setCodexAnalyticsApiKeyInput}
+                onCodexWorkspaceIdInputChange={setCodexWorkspaceIdInput}
+              />
 
-      <SettingsPermissionsSection
-        sectionId={SETTINGS_SECTION_IDS.permissions}
-        eyebrow={i18n.t("settings.permissions.eyebrow")}
-        title={i18n.t("settings.permissions.title")}
-        detail={i18n.t("settings.permissions.detail")}
-        providers={providers}
-        labels={settingsCopy.permissions}
-        onTogglePermission={onTogglePermission}
-      />
+              <SettingsSourceSection
+                eyebrow={i18n.t("settings.sources.eyebrow")}
+                title={i18n.t("settings.sources.title")}
+                detail={i18n.t("settings.sources.detail")}
+                providers={providers}
+                snapshots={snapshots}
+                i18n={i18n}
+                settingsCopy={settingsCopy}
+                userLevelVisibility={userLevelVisibility}
+                sessionPageNavigationAvailable={sessionPageNavigationAvailable}
+                activeSessionPageAttachAvailable={activeSessionPageAttachAvailable}
+                onSetSourcePreference={onSetSourcePreference}
+                onOpenSessionPage={onOpenSessionPage}
+                onAttachActiveSessionPage={onAttachActiveSessionPage}
+                onClearPageBinding={onClearPageBinding}
+              />
+            </div>
+          </details>
+        </section>
+      ) : null}
 
       {toast ? (
         <Toast

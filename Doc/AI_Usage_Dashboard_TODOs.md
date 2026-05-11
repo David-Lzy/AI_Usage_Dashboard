@@ -76,7 +76,7 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 302` execution priority:
+Current post-`Phase 304` execution priority:
 
 1. `P0` - use `release/ai-usage-dashboard-0.1.0-rc.13.zip` as the current Chrome Web Store upload-candidate package. It adds the Claude Team usage-page source plus Claude usage-page noise filtering on top of the existing Codex freshness fix, Cursor post-rc10 fixes, and refreshed trimmed transparent Chrome extension icon set.
 2. `P0` - use [2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the handoff milestone for upload, screenshots, listing copy, permission/privacy disclosures, and provider-support boundaries.
@@ -363,6 +363,8 @@ Phase status update:
 - `Phase 300` completed the Claude Team usage-page implementation slice: `claude.ai/settings/usage` is now a shipped session-page partial source in current source while preserving the existing Admin API path and the no-cookie/no-private-token boundary
 - `Phase 301` filtered Claude Team usage-page helper/navigation copy out of quota progress rows while preserving the four meaningful live rows (`Current session`, `All models`, `Claude Design`, and `Daily included routine runs`), kept duplicate ordered percent snippets for correct label pairing, and fixed relative reset wording
 - `Phase 302` restored tracked workflow/runbook docs as the canonical repo source, ignored local-only `.agent/`, made project scripts auto-fall back to Node 22, made release packaging reject stale `dist/manifest.json` versions, and packaged `0.1.0-rc.13` so current source and upload candidate are aligned again
+- `Phase 303` fixed Claude Team settings multi-window rendering by preserving ordered duplicate capture snippets plus the known visible usage-row labels before parser pairing
+- `Phase 304` simplified Settings IA around personal-user setup: persisted user levels (`basic` / `advanced` / `developer` / `debug`), task-oriented Quick Setup, reduced basic-mode preferences, and one gated Advanced container for enterprise/API plus source controls
 - the old maintenance split queue is closed for the originally named local-safe targets: `material-theme.css`, `localized-copy.ts`, `SettingsPage.tsx`, `App.tsx`, and `standard-app-actions.ts` are now focused base, compatibility, route, or aggregator files rather than the next default work item
 - the previous store-readiness blocker for screenshot file intake/import/archive is now closed under `Direction 10.3`; the current store step is the human Chrome Web Store listing upload and review flow using the Phase 299 milestone
 - `2026-05-11 RDP session` completed Direction 04 real operator closure: first real interaction-audit visual audit across all 5 surfaces (dashboard-360, settings-420, cursor-detail-360, codex-detail-420, popup-360), all 11 manual checks resolved, pending request `2026-04-23-first-real-operator-review-request` fulfilled and archived under [2026-05-11-2026-05-11-rdp-chrome-visual-audit](./testing/operator_reviews/2026-05-11-2026-05-11-rdp-chrome-visual-audit/README.md)

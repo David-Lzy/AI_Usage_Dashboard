@@ -5,7 +5,6 @@ import type {
   ProviderSetting,
 } from "../../providers/types";
 import type { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
-import type { SettingsSectionId } from "../settings-section-ids";
 
 export type CredentialProviderSection = {
   provider: ProviderSetting & { id: ApiKeyProviderId };
@@ -26,7 +25,7 @@ type SettingsCredentialsSectionProps = {
   detail: string;
   eyebrow: string;
   labels: ReturnType<typeof buildSettingsLocalizedCopy>["credentials"];
-  sectionId: SettingsSectionId;
+  sectionId?: string;
   title: string;
   onClearCodexConfig: () => void;
   onClearProviderApiKey: (providerId: ApiKeyProviderId) => void;

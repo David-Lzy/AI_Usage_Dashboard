@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { SAMPLE_APP_STATE } from "../../shared/constants";
 import { createRuntimeI18n } from "../../shared/i18n";
 import { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
+import { getSettingsUserLevelVisibility } from "../settings-user-level-visibility";
 import { SettingsSourceCard } from "./SettingsSourceCard";
 
 describe("SettingsSourceCard", () => {
@@ -29,6 +30,7 @@ describe("SettingsSourceCard", () => {
         sessionPageNavigationAvailable
         settingsCopy={settingsCopy}
         snapshot={snapshot}
+        userLevelVisibility={getSettingsUserLevelVisibility("debug")}
         onAttachActiveSessionPage={() => {}}
         onClearPageBinding={() => {}}
         onOpenSessionPage={() => {}}

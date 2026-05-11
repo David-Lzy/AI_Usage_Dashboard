@@ -32,6 +32,7 @@ import {
   normalizeWarningThresholdPercent,
 } from "./settings-preferences";
 import { normalizeActionBadgeSelection } from "./action-badge-preferences";
+import { normalizeSettingsUserLevel } from "./settings-user-level";
 
 let memoryFallbackState: AppState | null = null;
 
@@ -146,6 +147,7 @@ function normalizeAppState(state: AppState): AppState {
         state.settings?.warningThresholdPercent,
       ),
       locale: normalizeAppLocalePreference(state.settings?.locale),
+      userLevel: normalizeSettingsUserLevel(state.settings?.userLevel),
       themeMode: normalizeThemeMode(state.settings?.themeMode),
       themePreset: normalizeThemePreset(state.settings?.themePreset),
       themeCustomSeedHex: normalizeThemeCustomSeedHex(

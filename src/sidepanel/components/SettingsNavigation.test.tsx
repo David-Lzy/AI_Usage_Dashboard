@@ -12,18 +12,18 @@ describe("SettingsNavigation", () => {
     const html = renderToStaticMarkup(
       <SettingsSectionNavigation
         ariaLabel="Settings sections"
-        activeSectionId={SETTINGS_SECTION_IDS.visibility}
+        activeSectionId={SETTINGS_SECTION_IDS.quickSetup}
         items={[
-          { id: SETTINGS_SECTION_IDS.preferences, label: "Preferences" },
-          { id: SETTINGS_SECTION_IDS.visibility, label: "Visibility" },
+          { id: SETTINGS_SECTION_IDS.overview, label: "Overview" },
+          { id: SETTINGS_SECTION_IDS.quickSetup, label: "Quick Setup" },
         ]}
         onSelectSection={() => {}}
       />,
     );
 
     expect(html).toContain('class="settings-section-nav"');
-    expect(html).toContain(">Preferences<");
-    expect(html).toContain(">Visibility<");
+    expect(html).toContain(">Overview<");
+    expect(html).toContain(">Quick Setup<");
     expect(html).toContain('aria-current="true"');
     expect(html).toContain('data-active="true"');
     expect(html).toContain('data-active="false"');

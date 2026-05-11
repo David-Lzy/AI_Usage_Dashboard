@@ -6,7 +6,7 @@ import type {
 } from "../../providers/types";
 import type { RuntimeI18n } from "../../shared/i18n";
 import { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
-import type { SettingsSectionId } from "../settings-section-ids";
+import type { SettingsUserLevelVisibility } from "../settings-user-level-visibility";
 import { SettingsSourceCard } from "./SettingsSourceCard";
 
 type SettingsSourceSectionProps = {
@@ -15,11 +15,12 @@ type SettingsSourceSectionProps = {
   eyebrow: string;
   i18n: RuntimeI18n;
   providers: ProviderSetting[];
-  sectionId: SettingsSectionId;
+  sectionId?: string;
   sessionPageNavigationAvailable: boolean;
   settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>;
   snapshots: ProviderSnapshot[];
   title: string;
+  userLevelVisibility: SettingsUserLevelVisibility;
   onAttachActiveSessionPage: (providerId: ProviderId) => void;
   onClearPageBinding: (providerId: ProviderId) => void;
   onOpenSessionPage: (providerId: ProviderId) => void;
@@ -40,6 +41,7 @@ export function SettingsSourceSection({
   settingsCopy,
   snapshots,
   title,
+  userLevelVisibility,
   onAttachActiveSessionPage,
   onClearPageBinding,
   onOpenSessionPage,
@@ -80,6 +82,7 @@ export function SettingsSourceSection({
               sessionPageNavigationAvailable={sessionPageNavigationAvailable}
               settingsCopy={settingsCopy}
               snapshot={snapshot}
+              userLevelVisibility={userLevelVisibility}
               onAttachActiveSessionPage={onAttachActiveSessionPage}
               onClearPageBinding={onClearPageBinding}
               onOpenSessionPage={onOpenSessionPage}

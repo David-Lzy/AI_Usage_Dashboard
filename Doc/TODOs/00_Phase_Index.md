@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [302_Phase_Node22_Default_And_RC13_Source_Alignment.md](./Archive/302_Phase_Node22_Default_And_RC13_Source_Alignment.md)
+- latest completed slice: [304_Phase_Settings_IA_Simplification_With_User_Levels.md](./Archive/304_Phase_Settings_IA_Simplification_With_User_Levels.md)
 
 Completed phases should be moved to:
 
@@ -746,6 +746,8 @@ Completed phases should be moved to:
 - the 2026-05-11 `Phase 300` closeout added Claude Team `https://claude.ai/settings/usage` as a shipped session-page partial source in current source while preserving the existing Admin API path and the no-cookie/no-private-token boundary
 - the 2026-05-11 `Phase 301` closeout filtered Claude Team settings helper/navigation copy out of progress windows and preserved duplicate ordered percent snippets before label pairing
 - the 2026-05-11 `Phase 302` closeout restored tracked workflow/runbook docs as canonical, ignored local-only `.agent/`, made project scripts auto-fall back to Node 22, made release packaging verify built-manifest version alignment, bumped the package to `0.1.0-rc.13`, bumped the manifest to `0.1.0.13`, generated `release/ai-usage-dashboard-0.1.0-rc.13.zip`, and recorded SHA256 `5bd659c7c84a5d69c385a413cd8879d8f4cb6cf0b31fe98db09ed6ab6a400664`
+- the 2026-05-11 `Phase 303` closeout fixed Claude Team multi-row settings capture by preserving ordered duplicate snippets plus known visible usage-row labels before parser pairing
+- the 2026-05-11 `Phase 304` closeout simplified Settings IA with persisted user levels, task-oriented Quick Setup, a reduced basic-mode preferences surface, and one gated Advanced container for enterprise/API and source controls
 
 ## Delivery Standard For Each Phase
 

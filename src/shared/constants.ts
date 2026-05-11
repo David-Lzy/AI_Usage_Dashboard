@@ -18,6 +18,7 @@ import {
   DEFAULT_SYNC_INTERVAL_MINUTES,
   DEFAULT_WARNING_THRESHOLD_PERCENT,
 } from "./settings-preferences";
+import { DEFAULT_SETTINGS_USER_LEVEL } from "./settings-user-level";
 import { DEFAULT_ACTION_BADGE_SELECTION } from "./action-badge-preferences";
 import {
   createPolicyOnlyDiagnostic,
@@ -526,6 +527,7 @@ export const SAMPLE_APP_STATE: AppState = {
     syncIntervalMinutes: DEFAULT_SYNC_INTERVAL_MINUTES,
     warningThresholdPercent: DEFAULT_WARNING_THRESHOLD_PERCENT,
     locale: "system",
+    userLevel: DEFAULT_SETTINGS_USER_LEVEL,
     themeMode: "system",
     themePreset: "default",
     themeCustomSeedHex: null,

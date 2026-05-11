@@ -20,7 +20,7 @@ function createState(overrides?: Partial<AppState>): AppState {
 
 function renderProviderCard(
   state: AppState,
-  providerId: "codex" | "cursor" | "gemini",
+  providerId: "claude-code" | "codex" | "cursor" | "gemini",
   options: {
     onOpenSourcePage?: () => void;
   } = {},
@@ -136,6 +136,93 @@ describe("ProviderCard", () => {
     expect(html).toContain("$0");
     expect(html).not.toContain("Usage unknown · requests");
     expect(html).not.toContain("Visible Cursor usage:");
+  });
+
+  it("renders multiple Claude Team usage windows instead of collapsing back to one summary bar", () => {
+    const state = createState({
+      providers: SAMPLE_APP_STATE.providers.map((provider) =>
+        provider.providerId === "claude-code"
+          ? {
+              ...provider,
+              planName: "Claude Team Usage Page (Current session)",
+              quotaUnit: "percent",
+              quotaWindow: "rolling",
+              used: 49,
+              remaining: 51,
+              total: 100,
+              resetAt: "in 29 min",
+              resetLabel: "Current session resets in 29 min",
+              syncSource: "page_parse",
+              syncStatus: "ok",
+              tone: "neutral",
+              warningReason: null,
+              usageWindows: [
+                {
+                  label: "Current session",
+                  normalizedLabel: "Current session",
+                  kind: "unknown",
+                  modelLabel: null,
+                  quotaUnit: "percent",
+                  used: 49,
+                  remaining: 51,
+                  total: 100,
+                  resetAt: "in 29 min",
+                  resetLabel: "Current session resets in 29 min",
+                },
+                {
+                  label: "All models",
+                  normalizedLabel: "All models weekly limit",
+                  kind: "weekly",
+                  modelLabel: null,
+                  quotaUnit: "percent",
+                  used: 15,
+                  remaining: 85,
+                  total: 100,
+                  resetAt: "in 9 hr 49 min",
+                  resetLabel: "All models weekly limit resets in 9 hr 49 min",
+                },
+                {
+                  label: "Claude Design",
+                  normalizedLabel: "Claude Design",
+                  kind: "unknown",
+                  modelLabel: null,
+                  quotaUnit: "percent",
+                  used: 0,
+                  remaining: 100,
+                  total: 100,
+                  resetAt: null,
+                  resetLabel: "You haven't used Claude Design yet",
+                },
+                {
+                  label: "Daily included routine runs",
+                  normalizedLabel: "Daily included routine runs",
+                  kind: "unknown",
+                  modelLabel: null,
+                  quotaUnit: "percent",
+                  used: 0,
+                  remaining: 100,
+                  total: 100,
+                  resetAt: null,
+                  resetLabel: "0 / 25",
+                },
+              ],
+              usageFacts: [],
+              usageSummary: null,
+              lastSyncLabel: "Claude usage page synced just now",
+            }
+          : provider,
+      ),
+    });
+
+    const html = renderProviderCard(state, "claude-code");
+
+    expect(html).toContain('class="usage-window-progress-list');
+    expect(html.match(/role="progressbar"/g)).toHaveLength(4);
+    expect(html).toContain("Current session");
+    expect(html).toContain("All models weekly limit");
+    expect(html).toContain("Claude Design");
+    expect(html).toContain("Daily included routine runs");
+    expect(html).not.toContain("rolling percent");
   });
 
   it("omits the source-page recovery action for deferred session-page providers", () => {

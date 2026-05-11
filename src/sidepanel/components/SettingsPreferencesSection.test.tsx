@@ -5,6 +5,7 @@ import { SAMPLE_APP_STATE } from "../../shared/constants";
 import { createRuntimeI18n } from "../../shared/i18n";
 import { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
 import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
+import { getSettingsUserLevelVisibility } from "../settings-user-level-visibility";
 import { SettingsPreferencesSection } from "./SettingsPreferencesSection";
 
 describe("SettingsPreferencesSection", () => {
@@ -13,7 +14,7 @@ describe("SettingsPreferencesSection", () => {
     const settingsCopy = buildSettingsLocalizedCopy(i18n);
     const html = renderToStaticMarkup(
       <SettingsPreferencesSection
-        sectionId={SETTINGS_SECTION_IDS.preferences}
+        sectionId={SETTINGS_SECTION_IDS.appearance}
         settings={SAMPLE_APP_STATE.settings}
         providers={SAMPLE_APP_STATE.providerSettings}
         snapshots={SAMPLE_APP_STATE.providers}
@@ -21,6 +22,7 @@ describe("SettingsPreferencesSection", () => {
         settingsCopy={settingsCopy}
         resolvedThemeMode="light"
         themeCustomSeedDraft="#2f6fed"
+        userLevelVisibility={getSettingsUserLevelVisibility("debug")}
         onSyncIntervalChange={() => {}}
         onWarningThresholdChange={() => {}}
         onLocalePreferenceChange={() => {}}
@@ -39,7 +41,7 @@ describe("SettingsPreferencesSection", () => {
       />,
     );
 
-    expect(html).toContain(`id="${SETTINGS_SECTION_IDS.preferences}"`);
+    expect(html).toContain(`id="${SETTINGS_SECTION_IDS.appearance}"`);
     expect(html).toContain('data-settings-custom-number-field="sync-interval"');
     expect(html).toContain('data-settings-material-select="locale-preference"');
     expect(html).toContain('data-settings-material-select="action-badge-selection"');

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  createPageSessionDiagnostic,
   createSourceFallbackDiagnostic,
   createSourceSelectionDiagnostic,
   createUsageThresholdDiagnostic,
@@ -15,6 +16,7 @@ import {
 } from "../shared/localized-copy";
 import { buildProviderSourceDisplay } from "../shared/provider-sources";
 import {
+  buildSettingsQuickSetupCardModel,
   buildSettingsSourceCardModel,
   buildSettingsSummaryItems,
 } from "./settings-view-models";
@@ -27,10 +29,9 @@ describe("settings view models", () => {
     );
 
     expect(items).toEqual([
-      { label: "Visible", value: "4", tone: "neutral" },
-      { label: "Stored Secrets", value: "0", tone: "neutral" },
-      { label: "Bound Pages", value: "0", tone: "neutral" },
-      { label: "Needs Access", value: "0", tone: "neutral" },
+      { label: "Enabled", value: "4", tone: "neutral" },
+      { label: "Connected", value: "3", tone: "neutral" },
+      { label: "Needs action", value: "0", tone: "neutral" },
     ]);
   });
 
@@ -38,20 +39,23 @@ describe("settings view models", () => {
     const items = buildSettingsSummaryItems(
       SAMPLE_APP_STATE.providerSettings,
       SAMPLE_APP_STATE.providers,
+      "developer",
       {
-        visible: "可见",
+        enabled: "已启用",
+        connected: "已连接",
+        needsAction: "待处理",
         storedSecrets: "已存密钥",
         boundPages: "已绑定页面",
-        needsAccess: "需授权",
       },
-      (value) => `#${value}`,
+      (value: number) => `#${value}`,
     );
 
     expect(items).toEqual([
-      { label: "可见", value: "#4", tone: "neutral" },
+      { label: "已启用", value: "#4", tone: "neutral" },
+      { label: "已连接", value: "#3", tone: "neutral" },
+      { label: "待处理", value: "#0", tone: "neutral" },
       { label: "已存密钥", value: "#0", tone: "neutral" },
       { label: "已绑定页面", value: "#0", tone: "neutral" },
-      { label: "需授权", value: "#0", tone: "neutral" },
     ]);
   });
 
@@ -91,14 +95,136 @@ describe("settings view models", () => {
         return provider;
       }),
       SAMPLE_APP_STATE.providers,
+      "debug",
     );
 
     expect(items).toEqual([
-      { label: "Visible", value: "4", tone: "neutral" },
+      { label: "Enabled", value: "4", tone: "neutral" },
+      { label: "Connected", value: "2", tone: "neutral" },
+      { label: "Needs action", value: "1", tone: "warning" },
       { label: "Stored Secrets", value: "1", tone: "neutral" },
       { label: "Bound Pages", value: "1", tone: "neutral" },
-      { label: "Needs Access", value: "1", tone: "warning" },
     ]);
+  });
+
+  it("builds a quick-setup model for page-backed providers that are ready", () => {
+    const provider =
+      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "cursor") ??
+      null;
+    const snapshot =
+      SAMPLE_APP_STATE.providers.find(
+        (entry) => entry.providerId === "cursor",
+      ) ?? null;
+    const settingsCopy = buildSettingsLocalizedCopy(createRuntimeI18n("en"));
+
+    expect(provider).not.toBeNull();
+    expect(snapshot).not.toBeNull();
+
+    const quickSetupModel = buildSettingsQuickSetupCardModel(
+      provider!,
+      snapshot!,
+      settingsCopy,
+      "basic",
+    );
+
+    expect(quickSetupModel.statusLabel).toBe("Ready to sync");
+    expect(quickSetupModel.currentSetupValue).toBe("Signed-in usage page");
+    expect(quickSetupModel.primaryAction).toBeNull();
+    expect(
+      quickSetupModel.secondaryActions.some(
+        (action) => action.id === "open_source_page",
+      ),
+    ).toBe(true);
+  });
+
+  it("maps missing host access to a grant-access quick-setup action", () => {
+    const provider =
+      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "cursor") ??
+      null;
+    const snapshot =
+      SAMPLE_APP_STATE.providers.find(
+        (entry) => entry.providerId === "cursor",
+      ) ?? null;
+    const settingsCopy = buildSettingsLocalizedCopy(createRuntimeI18n("en"));
+
+    expect(provider).not.toBeNull();
+    expect(snapshot).not.toBeNull();
+
+    const quickSetupModel = buildSettingsQuickSetupCardModel(
+      {
+        ...provider!,
+        status: "missing",
+      },
+      {
+        ...snapshot!,
+        warningReason: "Grant host access before live sync can continue.",
+      },
+      settingsCopy,
+      "advanced",
+    );
+
+    expect(quickSetupModel.primaryAction).toEqual({
+      id: "grant_access",
+      label: "Grant access",
+    });
+    expect(quickSetupModel.nextStepValue).toBe("Grant access");
+  });
+
+  it("maps open-page-required and logged-out states to the correct page actions", () => {
+    const provider =
+      SAMPLE_APP_STATE.providerSettings.find(
+        (entry) => entry.id === "claude-code",
+      ) ?? null;
+    const snapshot =
+      SAMPLE_APP_STATE.providers.find(
+        (entry) => entry.providerId === "claude-code",
+      ) ?? null;
+    const settingsCopy = buildSettingsLocalizedCopy(createRuntimeI18n("en"));
+
+    expect(provider).not.toBeNull();
+    expect(snapshot).not.toBeNull();
+
+    const openPageModel = buildSettingsQuickSetupCardModel(
+      provider!,
+      {
+        ...snapshot!,
+        syncSource: "page_parse",
+        warningReason: "Open the required logged-in provider page, then refresh again.",
+        warningDiagnostic: createPageSessionDiagnostic({
+          providerId: "claude-code",
+          pageSessionKind: "open_page_required",
+          rawMessage:
+            "Open the required logged-in provider page, then refresh again.",
+        }),
+      },
+      settingsCopy,
+      "basic",
+    );
+    const loggedOutModel = buildSettingsQuickSetupCardModel(
+      provider!,
+      {
+        ...snapshot!,
+        syncSource: "page_parse",
+        warningReason: "Log in on the provider page again before refreshing the dashboard.",
+        warningDiagnostic: createPageSessionDiagnostic({
+          providerId: "claude-code",
+          pageSessionKind: "logged_out",
+          rawMessage:
+            "Log in on the provider page again before refreshing the dashboard.",
+        }),
+      },
+      settingsCopy,
+      "basic",
+    );
+
+    expect(openPageModel.primaryAction).toEqual({
+      id: "open_usage_page",
+      label: "Open usage page",
+    });
+    expect(loggedOutModel.primaryAction).toEqual({
+      id: "open_page_and_sign_in",
+      label: "Open page and sign in",
+    });
   });
 
   it("splits source-card data into primary summary fields and diagnostics", () => {

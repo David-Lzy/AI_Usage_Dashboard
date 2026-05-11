@@ -4,6 +4,7 @@ import {
   captureClaudePersonalLiveFixture,
   summarizeClaudePersonalPage,
 } from "./personal-page-capture";
+import { parseClaudePersonalPageSummary } from "./personal-page-parser";
 import type { PageSessionClient } from "../page-session";
 
 describe("summarizeClaudePersonalPage", () => {
@@ -75,5 +76,62 @@ describe("summarizeClaudePersonalPage", () => {
       closeOnUnmatched: true,
     });
   });
-});
 
+  it("preserves repeated Claude usage snippets so all visible Team rows can still be parsed", () => {
+    const summary = summarizeClaudePersonalPage({
+      url: "https://claude.ai/settings/usage",
+      title: "Claude",
+      heading: "Usage",
+      html: `
+        <html>
+          <body>
+            <nav>
+              <p>0% used</p>
+              <p>All models</p>
+              <p>Customize</p>
+              <p>Design</p>
+              <p>More</p>
+              <p>Recents</p>
+              <p>Language capabilities and usage context</p>
+              <p>Support</p>
+              <p>Invite team members</p>
+            </nav>
+            <main>
+              <h1>Usage</h1>
+              <p>Your usage limits</p>
+              <p>Team</p>
+              <p>Current session</p>
+              <p>Resets in 29 min</p>
+              <p>0% used</p>
+              <p>Weekly limits</p>
+              <p>Learn more about usage limits</p>
+              <p>All models</p>
+              <p>Resets in 9 hr 49 min</p>
+              <p>15% used</p>
+              <p>Claude Design</p>
+              <p>You haven't used Claude Design yet</p>
+              <p>0% used</p>
+              <p>Additional features</p>
+              <p>Daily included routine runs</p>
+              <p>You haven't run any routines yet</p>
+              <p>0 / 25</p>
+            </main>
+          </body>
+        </html>
+      `,
+    });
+
+    expect(summary.textSnippets.filter((line) => line === "All models")).toHaveLength(2);
+    expect(summary.textSnippets.filter((line) => line === "0% used")).toHaveLength(3);
+
+    const snapshot = parseClaudePersonalPageSummary("settings_usage", summary);
+
+    expect(snapshot).not.toBeNull();
+    expect(snapshot?.windows.map((window) => window.normalizedLabel)).toEqual([
+      "Current session",
+      "All models weekly limit",
+      "Claude Design",
+      "Daily included routine runs",
+    ]);
+  });
+});

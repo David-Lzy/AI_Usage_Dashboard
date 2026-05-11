@@ -11,18 +11,16 @@ describe("buildSettingsPageViewModels", () => {
     const i18n = createRuntimeI18n("en", undefined);
     const settingsCopy = buildSettingsLocalizedCopy(i18n);
     const viewModels = buildSettingsPageViewModels({
-      i18n,
       providers: SAMPLE_APP_STATE.providerSettings,
+      settings: SAMPLE_APP_STATE.settings,
       settingsCopy,
       snapshots: SAMPLE_APP_STATE.providers,
     });
 
     expect(viewModels.settingsSectionNavItems).toEqual([
-      { id: SETTINGS_SECTION_IDS.preferences, label: "Preferences" },
-      { id: SETTINGS_SECTION_IDS.visibility, label: "Visibility" },
-      { id: SETTINGS_SECTION_IDS.credentials, label: "Credentials" },
-      { id: SETTINGS_SECTION_IDS.sources, label: "Sources" },
-      { id: SETTINGS_SECTION_IDS.permissions, label: "Permissions" },
+      { id: SETTINGS_SECTION_IDS.overview, label: "Overview" },
+      { id: SETTINGS_SECTION_IDS.quickSetup, label: "Quick Setup" },
+      { id: SETTINGS_SECTION_IDS.appearance, label: "Appearance & Sync" },
     ]);
     expect(viewModels.settingsSummaryItems.length).toBeGreaterThan(0);
     expect(
@@ -39,15 +37,22 @@ describe("buildSettingsPageViewModels", () => {
     const i18n = createRuntimeI18n("zh-CN", undefined);
     const settingsCopy = buildSettingsLocalizedCopy(i18n);
     const viewModels = buildSettingsPageViewModels({
-      i18n,
       providers: SAMPLE_APP_STATE.providerSettings,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        userLevel: "debug",
+      },
       settingsCopy,
       snapshots: SAMPLE_APP_STATE.providers,
     });
 
     expect(viewModels.settingsSectionNavItems).toContainEqual({
-      id: SETTINGS_SECTION_IDS.preferences,
-      label: "偏好",
+      id: SETTINGS_SECTION_IDS.appearance,
+      label: "外观与同步",
+    });
+    expect(viewModels.settingsSectionNavItems).toContainEqual({
+      id: SETTINGS_SECTION_IDS.advanced,
+      label: "高级",
     });
     expect(viewModels.credentialProviders[1]?.title).toBe(
       "Claude Code Analytics Admin API key",

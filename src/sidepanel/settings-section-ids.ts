@@ -1,9 +1,8 @@
 export const SETTINGS_SECTION_IDS = {
-  preferences: "settings-preferences",
-  visibility: "settings-visibility",
-  credentials: "settings-credentials",
-  sources: "settings-sources",
-  permissions: "settings-permissions",
+  overview: "settings-overview",
+  quickSetup: "settings-quick-setup",
+  appearance: "settings-appearance",
+  advanced: "settings-advanced",
 } as const;
 
 export type SettingsSectionId =

@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-11:
 
-- the numbered phase queue is now completed through `Phase 302`, with no active phase currently selected
+- the numbered phase queue is now completed through `Phase 304`, with no active phase currently selected
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -187,6 +187,8 @@ As of 2026-05-11:
 - `Phase 300` completed the post-submission provider expansion: Claude Team `https://claude.ai/settings/usage` is now shipped in current source as a session-page partial source
 - `Phase 301` tightened that Claude Team session-page source by filtering generic helper/navigation copy from usage windows while preserving the four meaningful live rows (`Current session`, `All models`, `Claude Design`, and `Daily included routine runs`) and ordered duplicate percent snippets before quota-window pairing
 - `Phase 302` made tracked root/`Doc/` workflow docs canonical again, ignored local-only `.agent/`, made project scripts auto-fall back to Node 22, made release packaging verify built-manifest version alignment, and packaged `0.1.0-rc.13` so current source and upload candidate now match
+- `Phase 303` fixed Claude Team multi-row settings capture so the extension preserves ordered duplicate snippets plus the known visible usage rows before parser pairing
+- `Phase 304` simplified Settings IA around the personal-user path with persisted user levels, Quick Setup, reduced basic-mode preferences, and one gated Advanced container for enterprise/API plus source controls
 - provider closure still waits on available accounts or product decisions for JetBrains org-console, individual Claude Pro / Max behavior, and Gemini project-metrics graduation; Claude Team no longer belongs in the blocked-by-account queue
 - operator evidence means archived real human/operator review exports for interaction-audit or theme-recovery workspaces; it remains useful, but it sits behind release package and store asset closeout
 - the originally queued local-safe file splitting targets are now closed enough that further splitting should be driven by a concrete maintenance risk instead of the old Phase 236-era queue

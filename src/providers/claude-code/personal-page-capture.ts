@@ -85,6 +85,9 @@ const UPGRADE_SIGNAL_PATTERN =
   /upgrade|plans that grow with you|choose a plan|free|pro|max|升级|选择计划/i;
 const CLAUDE_USAGE_UI_LABEL_PATTERN =
   /^(usage|your usage|messages|premium|standard|billing|plan|team|members|使用情况|用量|消息|账单|计划|团队)$/i;
+const CLAUDE_USAGE_ROW_LABEL_PATTERN =
+  /^(?:current session|all models|claude design|daily included routine runs|daily routine runs|当前会话|所有模型|每日例程运行)$/i;
+const MAX_INTERESTING_TEXT_SNIPPETS = 72;
 
 function decodeEntities(value: string): string {
   return value
@@ -109,29 +112,20 @@ function toTextLines(html: string): string[] {
 }
 
 function pickInterestingTextSnippets(lines: string[]): string[] {
-  const seen = new Set<string>();
-  const snippets = lines.filter((line) => {
-    if (line.length < 2 || line.length > 180) {
-      return false;
-    }
-
-    return (
-      TEXT_SIGNAL_PATTERN.test(line) ||
-      CLAUDE_USAGE_UI_LABEL_PATTERN.test(line) ||
-      (/\d/.test(line) && line.length <= 120)
-    );
-  });
-
-  return snippets
-    .filter((snippet) => {
-      if (seen.has(snippet)) {
+  return lines
+    .filter((line) => {
+      if (line.length < 2 || line.length > 180) {
         return false;
       }
 
-      seen.add(snippet);
-      return true;
+      return (
+        TEXT_SIGNAL_PATTERN.test(line) ||
+        CLAUDE_USAGE_UI_LABEL_PATTERN.test(line) ||
+        CLAUDE_USAGE_ROW_LABEL_PATTERN.test(line) ||
+        (/\d/.test(line) && line.length <= 120)
+      );
     })
-    .slice(0, 36);
+    .slice(0, MAX_INTERESTING_TEXT_SNIPPETS);
 }
 
 function parseUrl(url: string): URL | null {
@@ -381,4 +375,3 @@ export async function captureClaudePersonalLiveFixture(
         },
   };
 }
-

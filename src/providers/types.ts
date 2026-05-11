@@ -117,6 +117,7 @@ export type ProviderPageBindingStatus = "unbound" | "bound" | "stale";
 export type ThemeMode = "system" | "light" | "dark";
 export type ThemePreset = "default" | "meadow" | "sunset" | "custom";
 export type AppLocalePreference = "system" | "en" | "zh-CN";
+export type SettingsUserLevel = "basic" | "advanced" | "developer" | "debug";
 export type ProgressDisplayStyle = "line" | "circle";
 export type PopupSizePreset = "compact" | "balanced" | "wide";
 export type PopupCornerStyle = "square" | "soft" | "rounded";
@@ -243,6 +244,7 @@ export type AppSettings = {
   syncIntervalMinutes: number;
   warningThresholdPercent: number;
   locale: AppLocalePreference;
+  userLevel: SettingsUserLevel;
   themeMode: ThemeMode;
   themePreset: ThemePreset;
   themeCustomSeedHex: string | null;

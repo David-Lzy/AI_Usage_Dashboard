@@ -14,8 +14,84 @@
   gap: var(--app-space-4);
 }
 
+.settings-overview__controls {
+  display: grid;
+  grid-template-columns: minmax(0, min(320px, 100%));
+  gap: var(--app-space-3);
+}
+
 .settings-section-anchor {
   scroll-margin-top: 172px;
+}
+
+.settings-advanced {
+  gap: var(--app-space-4);
+}
+
+.settings-advanced__details {
+  margin-top: var(--app-space-2);
+}
+
+.settings-advanced__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-5);
+}
+
+.quick-setup-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-3);
+  padding: var(--app-space-5);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-extra-large);
+  background: var(--md-sys-color-surface-container-lowest);
+  box-shadow: var(--app-elevation-1);
+}
+
+.quick-setup-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--app-space-3);
+}
+
+.quick-setup-card__provider {
+  margin: 0;
+  font-family: var(--md-sys-typescale-title-medium-font);
+  font-size: var(--md-sys-typescale-title-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-weight);
+  line-height: var(--md-sys-typescale-title-medium-line-height);
+}
+
+.quick-setup-card__fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--app-space-3);
+}
+
+.quick-setup-card__visibility {
+  min-height: 100%;
+}
+
+.quick-setup-card__actions {
+  justify-content: flex-start;
+}
+
+.quick-setup-card__more {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-3);
+  margin-top: var(--app-space-4);
+}
+
+.quick-setup-card__more[open] {
+  padding-top: var(--app-space-3);
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.quick-setup-card__disabled-list {
+  margin-top: var(--app-space-3);
 }
 
 .settings-section-nav {
@@ -172,6 +248,15 @@
 }
 
 @media (max-width: 720px) {
+  .quick-setup-card__header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .quick-setup-card__fields {
+    grid-template-columns: 1fr;
+  }
+
   .settings-section-anchor {
     scroll-margin-top: 232px;
   }

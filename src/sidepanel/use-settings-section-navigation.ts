@@ -9,7 +9,7 @@ import {
 
 export function useSettingsSectionNavigation() {
   const [activeSettingsSection, setActiveSettingsSection] =
-    useState<SettingsSectionId>(SETTINGS_SECTION_IDS.preferences);
+    useState<SettingsSectionId>(SETTINGS_SECTION_IDS.overview);
 
   useEffect(() => {
     if (

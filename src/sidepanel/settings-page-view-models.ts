@@ -1,10 +1,9 @@
 import type {
   ApiKeyProviderId,
+  AppSettings,
   ProviderSetting,
   ProviderSnapshot,
 } from "../providers/types";
-import { buildSettingsSummaryLabels } from "../shared/i18n";
-import type { RuntimeI18n } from "../shared/i18n";
 import type { buildSettingsLocalizedCopy } from "../shared/localized-copy";
 import {
   SETTINGS_SECTION_IDS,
@@ -14,15 +13,15 @@ import type { CredentialProviderSection } from "./components/SettingsSections";
 import { buildSettingsSummaryItems } from "./settings-view-models";
 
 type BuildSettingsPageViewModelsOptions = {
-  i18n: RuntimeI18n;
   providers: ProviderSetting[];
+  settings: AppSettings;
   settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>;
   snapshots: ProviderSnapshot[];
 };
 
 export function buildSettingsPageViewModels({
-  i18n,
   providers,
+  settings,
   settingsCopy,
   snapshots,
 }: BuildSettingsPageViewModelsOptions) {
@@ -62,12 +61,15 @@ export function buildSettingsPageViewModels({
   return {
     codexProvider,
     credentialProviders,
-    settingsSectionNavItems: buildSettingsSectionNavItems(i18n),
+    settingsSectionNavItems: buildSettingsSectionNavItems(
+      settings.userLevel,
+      settingsCopy,
+    ),
     settingsSummaryItems: buildSettingsSummaryItems(
       providers,
       snapshots,
-      buildSettingsSummaryLabels(i18n),
-      i18n.formatNumber,
+      settings.userLevel,
+      settingsCopy.layout.summary,
     ),
   };
 }
@@ -85,31 +87,36 @@ function findCredentialProvider(
 }
 
 function buildSettingsSectionNavItems(
-  i18n: RuntimeI18n,
+  userLevel: AppSettings["userLevel"],
+  settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>,
 ): Array<{
   id: SettingsSectionId;
   label: string;
 }> {
-  return [
+  const items: Array<{
+    id: SettingsSectionId;
+    label: string;
+  }> = [
     {
-      id: SETTINGS_SECTION_IDS.preferences,
-      label: i18n.t("settings.sections.preferences"),
+      id: SETTINGS_SECTION_IDS.overview,
+      label: settingsCopy.layout.sections.overview,
     },
     {
-      id: SETTINGS_SECTION_IDS.visibility,
-      label: i18n.t("settings.sections.visibility"),
+      id: SETTINGS_SECTION_IDS.quickSetup,
+      label: settingsCopy.layout.sections.quickSetup,
     },
     {
-      id: SETTINGS_SECTION_IDS.credentials,
-      label: i18n.t("settings.sections.credentials"),
-    },
-    {
-      id: SETTINGS_SECTION_IDS.sources,
-      label: i18n.t("settings.sections.sources"),
-    },
-    {
-      id: SETTINGS_SECTION_IDS.permissions,
-      label: i18n.t("settings.sections.permissions"),
+      id: SETTINGS_SECTION_IDS.appearance,
+      label: settingsCopy.layout.sections.appearance,
     },
   ];
+
+  if (userLevel !== "basic") {
+    items.push({
+      id: SETTINGS_SECTION_IDS.advanced,
+      label: settingsCopy.layout.sections.advanced,
+    });
+  }
+
+  return items;
 }

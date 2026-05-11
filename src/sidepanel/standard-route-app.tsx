@@ -205,6 +205,9 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           onLocalePreferenceChange={(locale) =>
             handleUpdateSettings({ locale })
           }
+          onUserLevelChange={(userLevel) =>
+            handleUpdateSettings({ userLevel })
+          }
           themeActionLabel={quickThemeToggleCopy.label}
           themeActionTitle={quickThemeToggleCopy.title}
           onToggleThemeMode={() =>

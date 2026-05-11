@@ -13,6 +13,7 @@ describe("SettingsSections", () => {
   it("renders the settings overview summary", () => {
     const html = renderToStaticMarkup(
       <SettingsOverviewSection
+        sectionId={SETTINGS_SECTION_IDS.overview}
         ariaLabel="Settings summary"
         detail="Review global preferences and access."
         eyebrow="Dashboard preferences"
@@ -24,7 +25,10 @@ describe("SettingsSections", () => {
       />,
     );
 
-    expect(html).toContain('class="status-card settings-overview"');
+    expect(html).toContain(`id="${SETTINGS_SECTION_IDS.overview}"`);
+    expect(html).toContain(
+      'class="status-card settings-overview settings-section-anchor"',
+    );
     expect(html).toContain('aria-label="Settings summary"');
     expect(html).toContain('class="summary-pill summary-pill--neutral"');
     expect(html).toContain('class="summary-pill summary-pill--warning"');
@@ -34,7 +38,7 @@ describe("SettingsSections", () => {
   it("renders visibility switch rows with stable provider hooks", () => {
     const html = renderToStaticMarkup(
       <SettingsVisibilitySection
-        sectionId={SETTINGS_SECTION_IDS.visibility}
+        sectionId="settings-visibility-test"
         eyebrow="Visibility"
         providers={SAMPLE_APP_STATE.providerSettings.slice(0, 2)}
         enabledDetail="Shown on dashboard."
@@ -43,7 +47,7 @@ describe("SettingsSections", () => {
       />,
     );
 
-    expect(html).toContain(`id="${SETTINGS_SECTION_IDS.visibility}"`);
+    expect(html).toContain('id="settings-visibility-test"');
     expect(html).toContain('class="switch-row"');
     expect(html).toContain('data-visibility-provider-id="cursor"');
     expect(html).toContain('data-visibility-toggle="cursor"');
@@ -53,7 +57,7 @@ describe("SettingsSections", () => {
   it("renders permission prompts with stable permission hooks", () => {
     const html = renderToStaticMarkup(
       <SettingsPermissionsSection
-        sectionId={SETTINGS_SECTION_IDS.permissions}
+        sectionId="settings-permissions-test"
         eyebrow="Permissions"
         title="Host access"
         detail="Grant access only for providers you use."
@@ -70,7 +74,7 @@ describe("SettingsSections", () => {
       />,
     );
 
-    expect(html).toContain(`id="${SETTINGS_SECTION_IDS.permissions}"`);
+    expect(html).toContain('id="settings-permissions-test"');
     expect(html).toContain('class="permission-prompt');
     expect(html).toContain('data-provider-id="cursor"');
     expect(html).toContain('data-permission-status=');

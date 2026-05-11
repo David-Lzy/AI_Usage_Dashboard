@@ -1,9 +1,10 @@
+import type { ReactNode } from "react";
+
 import type {
   ProviderId,
   ProviderSetting,
   SummaryItem,
 } from "../../providers/types";
-import type { SettingsSectionId } from "../settings-section-ids";
 import {
   PermissionPrompt,
   type PermissionPromptLabels,
@@ -17,9 +18,11 @@ export {
 
 type SettingsOverviewSectionProps = {
   ariaLabel: string;
+  children?: ReactNode;
   detail: string;
   eyebrow: string;
   items: SummaryItem[];
+  sectionId?: string;
   title: string;
 };
 
@@ -28,7 +31,7 @@ type SettingsVisibilitySectionProps = {
   enabledDetail: string;
   eyebrow: string;
   providers: ProviderSetting[];
-  sectionId: SettingsSectionId;
+  sectionId?: string;
   onToggleProvider: (providerId: ProviderId) => void;
 };
 
@@ -37,20 +40,25 @@ type SettingsPermissionsSectionProps = {
   eyebrow: string;
   labels: PermissionPromptLabels;
   providers: ProviderSetting[];
-  sectionId: SettingsSectionId;
+  sectionId?: string;
   title: string;
   onTogglePermission: (providerId: ProviderId) => void;
 };
 
 export function SettingsOverviewSection({
   ariaLabel,
+  children,
   detail,
   eyebrow,
   items,
+  sectionId,
   title,
 }: SettingsOverviewSectionProps) {
   return (
-    <section className="status-card settings-overview">
+    <section
+      className="status-card settings-overview settings-section-anchor"
+      id={sectionId}
+    >
       <div className="dashboard-section__header">
         <div>
           <p className="section-label">{eyebrow}</p>
@@ -60,6 +68,7 @@ export function SettingsOverviewSection({
       </div>
 
       <SummaryStrip ariaLabel={ariaLabel} items={items} />
+      {children}
     </section>
   );
 }
