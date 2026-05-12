@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [357_Phase_Settings_Source_Card_View_Model_Split.md](./Archive/357_Phase_Settings_Source_Card_View_Model_Split.md)
+- latest completed slice: [358_Phase_Settings_Quick_Setup_View_Model_Split.md](./Archive/358_Phase_Settings_Quick_Setup_View_Model_Split.md)
 - queued phase files: none
 
 Completed phases should be moved to:
