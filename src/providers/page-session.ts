@@ -1,11 +1,11 @@
 import type { ProviderId } from "./types";
+import { getCandidateTabs } from "./page-session-candidate-tabs";
 import {
   closeOpenedPageSessionTab,
   normalizeReloadOptions,
   openMissingPageSessionTab,
   reloadPageSessionTab,
 } from "./page-session-tab-lifecycle";
-import { sortTabsByPriority } from "./page-session-tab-priority";
 import type {
   PageSessionNetworkObserverExtraction,
   PageSessionObservedNetworkState,
@@ -264,73 +264,6 @@ async function capturePageSessionPage(
     html: baseSnapshot.html,
     ...(bootData ? { bootData } : {}),
     ...(observedNetwork ? { observedNetwork } : {}),
-  };
-}
-
-async function getCandidateTabs(
-  tabsApi: PageSessionTabsApi,
-  definition: PageSessionDefinition,
-): Promise<{
-  candidates: Array<PageSessionTabQueryResult & { bindingMode: PageSessionBindingMode }>;
-  bindingMissing: boolean;
-}> {
-  const binding = definition.binding ?? {
-    mode: "auto",
-    tabId: null,
-  };
-  const candidates: Array<
-    PageSessionTabQueryResult & { bindingMode: PageSessionBindingMode }
-  > = [];
-  let bindingMissing = false;
-  const seenTabIds = new Set<number>();
-
-  if (binding.mode === "bound" && typeof binding.tabId === "number") {
-    if (typeof tabsApi.get === "function") {
-      try {
-        const tab = await tabsApi.get(binding.tabId);
-        candidates.push({
-          ...tab,
-          id: binding.tabId,
-          bindingMode: "bound",
-        });
-        seenTabIds.add(binding.tabId);
-      } catch {
-        bindingMissing = true;
-      }
-    } else {
-      const tabs = await tabsApi.query({
-        url: definition.urlPatterns,
-      });
-      const matchedTab = tabs.find((tab) => tab.id === binding.tabId) ?? null;
-
-      if (matchedTab?.id === binding.tabId) {
-        candidates.push({
-          ...matchedTab,
-          bindingMode: "bound",
-        });
-        seenTabIds.add(binding.tabId);
-      } else {
-        bindingMissing = true;
-      }
-    }
-  }
-
-  const autoTabs = sortTabsByPriority(
-    (
-      await tabsApi.query({
-        url: definition.urlPatterns,
-      })
-    )
-      .filter((tab) =>
-        typeof tab.id === "number" ? !seenTabIds.has(tab.id) : true,
-      )
-      .map((tab) => ({ ...tab, bindingMode: "auto" as const })),
-    binding,
-  );
-
-  return {
-    candidates: [...candidates, ...autoTabs],
-    bindingMissing,
   };
 }
 

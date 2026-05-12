@@ -76,7 +76,7 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 362` execution priority:
+Current post-`Phase 363` execution priority:
 
 1. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.13.zip` as the submitted Chrome Web Store review boundary. Do not silently mutate or rewrite the [RC13 upload-candidate milestone](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) while that submission remains the human-reviewed baseline.
 2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.14.zip` as the current packaged follow-up candidate. It now includes post-`rc.13` `Phase 303` through `Phase 306` Claude, popup, settings, full-page, and side-panel polish and is ready if review feedback or an explicit resubmission decision needs a newer build.
@@ -123,26 +123,27 @@ Current post-`Phase 362` execution priority:
 43. `P2` - keep the `Phase 360` page-session tab-lifecycle helper stable: open-missing-tab, reload-tab, load-wait, reload-option normalization, and close cleanup semantics should stay covered outside the large page-session client.
 44. `P2` - keep the `Phase 361` page-session script-capture helper stable: script-result execution, isolated DOM snapshots, main-world window-value reads, selector/key normalization, and truncation semantics should stay covered outside the large page-session client.
 45. `P2` - keep the `Phase 362` page-session network-observer helper stable: bridge install/read behavior, fetch/XHR capture defaults, bridge id, and malformed snapshot fallback should stay covered outside the large page-session client.
-46. `P2` - keep the `Phase 334` interaction-audit surface-card split stable: per-surface iframe, preset-action, manual-check, and signoff controls should stay outside the large operator route while route-owned state remains in the route.
-47. `P2` - keep the `Phase 335` interaction-audit review-queue split stable: queue summary and jump-list rendering should stay outside the large operator route while queue construction remains route-owned.
-48. `P2` - keep the `Phase 336` interaction-audit request-scope split stable: request binding summaries and next-command display should stay outside the large operator route while request-context state remains route-owned.
-49. `P2` - keep the `Phase 337` interaction-audit signoff-session split stable: signoff workspace header, summary metrics, metadata fields, timestamp action, and session-summary note should stay outside the large operator route while metadata state remains route-owned.
-50. `P2` - keep the `Phase 338` interaction-audit handoff-summary split stable: handoff counts, grouped surface lists, preview text, and operator workflow display should stay outside the large operator route while draft generation and copy/download handlers remain route-owned.
-51. `P2` - keep the `Phase 345` interaction-audit guidance-card split stable: operator checklist and extension surface links should stay outside the large operator route while URL construction remains route-owned.
-52. `P2` - keep the `Phase 346` interaction-audit workspace-controls split stable: signoff action buttons, JSON import controls, feedback, and draft preview should stay outside the large operator route while state and handlers remain route-owned.
-53. `P2` - keep the `Phase 347` interaction-audit surface-grid split stable: surface-card mapping and fallback signoff-state behavior should stay outside the large operator route while refs, readiness state, and callbacks remain route-owned.
-54. `P2` - keep the `Phase 339` theme-recovery current-state split stable: overall stage, popup snapshot, and action-badge display should stay outside the route while snapshot construction and live badge reads remain route-owned.
-55. `P2` - keep the `Phase 340` theme-recovery theme-state split stable: theme mode, resolved mode, preset, custom seed, scope isolation, and badge-source detail should stay outside the route while snapshot and live badge inputs remain route-owned.
-56. `P2` - keep the `Phase 341` theme-recovery request-scope split stable: bound/ad-hoc request identity display should stay outside the route while query parsing and request-context state remain route-owned.
-57. `P2` - keep the `Phase 342` theme-recovery provider-list split stable: provider recovery cards and status badges should stay outside the route while snapshot construction and recovery classification remain route-owned.
-58. `P2` - keep the `Phase 343` theme-recovery workflow-links split stable: workflow checklist and extension/vendor link groups should stay outside the route while link ids, hrefs, target behavior, and data hooks remain unchanged.
-59. `P2` - keep the `Phase 344` theme-recovery outputs split stable: export buttons, draft previews, and feedback rendering should stay outside the route while draft generation and copy/download/open callbacks remain route-owned.
-60. `P2` - Provider closure waits only on the accounts that are still unavailable:
+46. `P2` - keep the `Phase 363` page-session candidate-tabs helper stable: bound-tab lookup, query-only bound fallback, duplicate filtering, binding-missing reporting, and auto priority sorting should stay covered outside the large page-session client.
+47. `P2` - keep the `Phase 334` interaction-audit surface-card split stable: per-surface iframe, preset-action, manual-check, and signoff controls should stay outside the large operator route while route-owned state remains in the route.
+48. `P2` - keep the `Phase 335` interaction-audit review-queue split stable: queue summary and jump-list rendering should stay outside the large operator route while queue construction remains route-owned.
+49. `P2` - keep the `Phase 336` interaction-audit request-scope split stable: request binding summaries and next-command display should stay outside the large operator route while request-context state remains route-owned.
+50. `P2` - keep the `Phase 337` interaction-audit signoff-session split stable: signoff workspace header, summary metrics, metadata fields, timestamp action, and session-summary note should stay outside the large operator route while metadata state remains route-owned.
+51. `P2` - keep the `Phase 338` interaction-audit handoff-summary split stable: handoff counts, grouped surface lists, preview text, and operator workflow display should stay outside the large operator route while draft generation and copy/download handlers remain route-owned.
+52. `P2` - keep the `Phase 345` interaction-audit guidance-card split stable: operator checklist and extension surface links should stay outside the large operator route while URL construction remains route-owned.
+53. `P2` - keep the `Phase 346` interaction-audit workspace-controls split stable: signoff action buttons, JSON import controls, feedback, and draft preview should stay outside the large operator route while state and handlers remain route-owned.
+54. `P2` - keep the `Phase 347` interaction-audit surface-grid split stable: surface-card mapping and fallback signoff-state behavior should stay outside the large operator route while refs, readiness state, and callbacks remain route-owned.
+55. `P2` - keep the `Phase 339` theme-recovery current-state split stable: overall stage, popup snapshot, and action-badge display should stay outside the route while snapshot construction and live badge reads remain route-owned.
+56. `P2` - keep the `Phase 340` theme-recovery theme-state split stable: theme mode, resolved mode, preset, custom seed, scope isolation, and badge-source detail should stay outside the route while snapshot and live badge inputs remain route-owned.
+57. `P2` - keep the `Phase 341` theme-recovery request-scope split stable: bound/ad-hoc request identity display should stay outside the route while query parsing and request-context state remain route-owned.
+58. `P2` - keep the `Phase 342` theme-recovery provider-list split stable: provider recovery cards and status badges should stay outside the route while snapshot construction and recovery classification remain route-owned.
+59. `P2` - keep the `Phase 343` theme-recovery workflow-links split stable: workflow checklist and extension/vendor link groups should stay outside the route while link ids, hrefs, target behavior, and data hooks remain unchanged.
+60. `P2` - keep the `Phase 344` theme-recovery outputs split stable: export buttons, draft previews, and feedback rendering should stay outside the route while draft generation and copy/download/open callbacks remain route-owned.
+61. `P2` - Provider closure waits only on the accounts that are still unavailable:
    - JetBrains org-console reverification waits for a real org-visible `Users and licensing` session.
    - Claude individual Pro / Max usage-page behavior remains separate from the now-shipped Claude Team session-page path.
    - Gemini project-metrics graduation waits for a product decision that project-scoped metrics are acceptable.
-61. `P2` - real operator evidence is now closed as of 2026-05-11: Direction 04 interaction-audit closure archived under [2026-05-11-2026-05-11-rdp-chrome-visual-audit](./testing/operator_reviews/2026-05-11-2026-05-11-rdp-chrome-visual-audit/README.md); Direction 05 theme-recovery closure archived under [2026-05-11-system-recovered-014312](./testing/theme_recovery_reviews/2026-05-11-system-recovered-014312/README.md). No further operator evidence phases are queued unless a new surface or theme regression opens them.
-62. `P2` - continue file splitting only when a concrete maintenance issue justifies it; the old queued split targets for `material-theme.css`, `SettingsPage.tsx`, `App.tsx`, `standard-app-actions.ts`, and `localized-copy.ts` are now closed or reduced to focused compatibility/aggregator files.
+62. `P2` - real operator evidence is now closed as of 2026-05-11: Direction 04 interaction-audit closure archived under [2026-05-11-2026-05-11-rdp-chrome-visual-audit](./testing/operator_reviews/2026-05-11-2026-05-11-rdp-chrome-visual-audit/README.md); Direction 05 theme-recovery closure archived under [2026-05-11-system-recovered-014312](./testing/theme_recovery_reviews/2026-05-11-system-recovered-014312/README.md). No further operator evidence phases are queued unless a new surface or theme regression opens them.
+63. `P2` - continue file splitting only when a concrete maintenance issue justifies it; the old queued split targets for `material-theme.css`, `SettingsPage.tsx`, `App.tsx`, `standard-app-actions.ts`, and `localized-copy.ts` are now closed or reduced to focused compatibility/aggregator files.
 
 Delivery rule for this stage:
 
@@ -443,6 +444,7 @@ Phase status update:
 - `Phase 360` split page-session tab lifecycle helpers into a dedicated helper with focused tests while preserving existing open, reload, wait, and close cleanup semantics
 - `Phase 361` split page-session script execution and page snapshot helpers into a dedicated helper with focused tests while preserving existing DOM, boot-data, and network observer semantics
 - `Phase 362` split page-session network observer bridge logic into a dedicated helper with focused tests while preserving existing bridge install/read semantics
+- `Phase 363` split page-session candidate-tab selection into a dedicated helper with focused tests while preserving bound-tab lookup, query-only fallback, duplicate filtering, binding-missing reporting, and auto priority sorting semantics
 - `Phase 334` split interaction-audit per-surface card rendering into a dedicated component while preserving route-owned audit refs, preset actions, manual checks, and signoff callbacks
 - `Phase 335` split interaction-audit review queue rendering into a dedicated component while preserving route-owned queue construction and jump behavior
 - `Phase 336` split interaction-audit request-scope rendering into a dedicated component while preserving route-owned request-context state plus existing binding, revision, and next-command display
