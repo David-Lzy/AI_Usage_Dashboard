@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [317_Phase_Operator_Runtime_I18n_Helper_Split.md](./Archive/317_Phase_Operator_Runtime_I18n_Helper_Split.md)
+- latest completed slice: [318_Phase_Settings_Focused_Deep_Link_Render_Guard.md](./Archive/318_Phase_Settings_Focused_Deep_Link_Render_Guard.md)
 - queued phase files: none
 
 Completed phases should be moved to:

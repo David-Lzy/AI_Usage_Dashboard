@@ -88,6 +88,32 @@ describe("SettingsPage", () => {
     expect(html).toContain('data-credential-provider-id="cursor"');
   });
 
+  it("reveals the targeted advanced source card for a source-focused deep link", () => {
+    const html = renderSettingsPage({
+      routeFocus: {
+        kind: "source-provider",
+        providerId: "gemini",
+      },
+    });
+
+    expect(html).toContain('id="settings-advanced"');
+    expect(html).toContain('class="source-card');
+    expect(html).toContain('data-provider-id="gemini"');
+  });
+
+  it("keeps quick-setup focused deep links out of advanced credentials", () => {
+    const html = renderSettingsPage({
+      routeFocus: {
+        kind: "quick-setup-provider",
+        providerId: "cursor",
+      },
+    });
+
+    expect(html).toContain('data-quick-setup-provider-id="cursor"');
+    expect(html).not.toContain('id="settings-advanced"');
+    expect(html).not.toContain('data-credential-provider-id="cursor"');
+  });
+
   it("marks more providers for attention when no quick-setup provider is visible", () => {
     const html = renderSettingsPage({
       providers: SAMPLE_APP_STATE.providerSettings.map((provider) => ({

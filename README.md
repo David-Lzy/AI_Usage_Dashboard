@@ -7,7 +7,7 @@ Current packaged release state:
 - package version: `0.1.0-rc.14`
 - Chrome manifest version: `0.1.0.14`
 - packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.14.zip`
-- source status: extension runtime/package bytes are aligned through `Phase 306` and packaged as `rc.14`; current source also includes post-package Chrome automation, smoke-evidence, first-provider setup, cached-first guard, popup view-model maintenance, RDP full-page route-contract, store screenshot route-config reuse, interaction-audit frame-action maintenance, operator download-helper, clipboard-helper, and runtime-i18n-helper follow-ups through `Phase 317`; the earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it
+- source status: extension runtime/package bytes are aligned through `Phase 306` and packaged as `rc.14`; current source also includes post-package Chrome automation, smoke-evidence, first-provider setup, cached-first guard, popup view-model maintenance, RDP full-page route-contract, store screenshot route-config reuse, interaction-audit frame-action maintenance, operator helper follow-ups, and Settings focused deep-link render coverage through `Phase 318`; the earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it
 - packaged follow-up milestone: [2026-05-11 RC14 Follow-Up Release Candidate](./Doc/Milestones/2026-05-11_RC14_Follow_Up_Release_Candidate.md)
 - submitted review milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
@@ -78,6 +78,7 @@ Maintenance note:
 - operator text-file download behavior now lives in `src/sidepanel/download-text-file.ts`, so interaction-audit and theme-recovery export buttons share one tested browser-download path
 - operator clipboard write behavior now lives in `src/sidepanel/write-clipboard-text.ts`, preserving interaction-audit's unavailable-vs-failed feedback while sharing the underlying browser clipboard path with theme recovery
 - default operator runtime i18n bootstrap now lives in `src/sidepanel/operator-runtime-i18n.ts`, so interaction-audit and theme-recovery use the same tested `system` locale initialization path
+- Settings focused deep-link render behavior is guarded in `src/sidepanel/routes/SettingsPage.test.tsx`, including source-provider Advanced targets and quick-setup provider targets used by popup setup/problem actions
 
 ## Source Labels
 
