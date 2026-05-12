@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is now completed through `Phase 309`, with no active phase currently selected and `Phase 310` plus `Phase 311` queued as local-safe follow-up work
+- the numbered phase queue is now completed through `Phase 310`, with no active phase currently selected and `Phase 311` queued as local-safe maintenance follow-up work
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness

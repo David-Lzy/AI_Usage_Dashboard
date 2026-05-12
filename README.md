@@ -7,7 +7,7 @@ Current packaged release state:
 - package version: `0.1.0-rc.14`
 - Chrome manifest version: `0.1.0.14`
 - packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.14.zip`
-- source status: extension runtime/package bytes are aligned through `Phase 306` and packaged as `rc.14`; current source also includes post-package Chrome automation and smoke-evidence follow-ups through `Phase 308`; the earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it
+- source status: extension runtime/package bytes are aligned through `Phase 306` and packaged as `rc.14`; current source also includes post-package Chrome automation, smoke-evidence, first-provider setup, and cached-first guard follow-ups through `Phase 310`; the earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it
 - packaged follow-up milestone: [2026-05-11 RC14 Follow-Up Release Candidate](./Doc/Milestones/2026-05-11_RC14_Follow_Up_Release_Candidate.md)
 - submitted review milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
@@ -45,7 +45,7 @@ Next execution queue:
 
 1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary, but use `0.1.0-rc.14` as the ready follow-up package for the post-`rc.13` `Phase 303` through `Phase 306` popup, settings, side-panel, and Claude polish if review feedback or an explicit resubmission decision asks for a newer build
 2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC14 follow-up milestone](./Doc/Milestones/2026-05-11_RC14_Follow_Up_Release_Candidate.md) as the current packaged-source reference
-3. next local-safe execution phases are [Phase 310](./Doc/TODOs/310_Phase_Cached_First_Bootstrap_Performance_Guard.md) and [Phase 311](./Doc/TODOs/311_Phase_Popup_View_Model_Maintenance_Split.md); Phase 309 has already landed the first-provider Quick Setup path
+3. next local-safe execution phase is [Phase 311](./Doc/TODOs/311_Phase_Popup_View_Model_Maintenance_Split.md); Phase 309 has already landed the first-provider Quick Setup path and Phase 310 has landed the cached-first rendering guard
 4. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 5. keep operator evidence closure below release/store work; here it means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not another runtime feature
 6. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes

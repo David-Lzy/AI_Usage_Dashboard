@@ -76,15 +76,15 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 309` execution priority:
+Current post-`Phase 310` execution priority:
 
 1. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.13.zip` as the submitted Chrome Web Store review boundary. Do not silently mutate or rewrite the [RC13 upload-candidate milestone](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) while that submission remains the human-reviewed baseline.
 2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.14.zip` as the current packaged follow-up candidate. It now includes post-`rc.13` `Phase 303` through `Phase 306` Claude, popup, settings, full-page, and side-panel polish and is ready if review feedback or an explicit resubmission decision needs a newer build.
 3. `P0` - keep the refreshed `Direction 10.3` screenshot evidence archived and ready, not pending: [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) still fulfills the latest reviewed screenshot pack with `5/5` images and `3` explicit truth-boundary notes.
 4. `P1` - if a resubmission becomes necessary, use [2026-05-11_RC14_Follow_Up_Release_Candidate.md](./Milestones/2026-05-11_RC14_Follow_Up_Release_Candidate.md) as the current packaged-source reference and cut a fresh submission milestone from that boundary instead of mutating RC13 history.
-5. `P1` - start [310_Phase_Cached_First_Bootstrap_Performance_Guard.md](./TODOs/310_Phase_Cached_First_Bootstrap_Performance_Guard.md) to prevent side-panel or full-page entry from regressing back to blocking background refresh before cached state renders.
-6. `P2` - use [311_Phase_Popup_View_Model_Maintenance_Split.md](./TODOs/311_Phase_Popup_View_Model_Maintenance_Split.md) as a maintenance-only cleanup after product and performance guards, keeping popup behavior unchanged.
-7. `P2` - keep the `Phase 309` first-provider setup behavior stable: zero-provider Settings now recommends one personal-user provider in Quick Setup and popup zero-provider actions deep-link to that same setup card.
+5. `P2` - use [311_Phase_Popup_View_Model_Maintenance_Split.md](./TODOs/311_Phase_Popup_View_Model_Maintenance_Split.md) as a maintenance-only cleanup after product and performance guards, keeping popup behavior unchanged.
+6. `P2` - keep the `Phase 309` first-provider setup behavior stable: zero-provider Settings now recommends one personal-user provider in Quick Setup and popup zero-provider actions deep-link to that same setup card.
+7. `P2` - keep the `Phase 310` cached-first guard stable: standard dashboard routes must keep rendering cached app state while background bootstrap is still loading.
 8. `P2` - Provider closure waits only on the accounts that are still unavailable:
    - JetBrains org-console reverification waits for a real org-visible `Users and licensing` session.
    - Claude individual Pro / Max usage-page behavior remains separate from the now-shipped Claude Team session-page path.
@@ -372,6 +372,7 @@ Phase status update:
 - `Phase 307` made Chrome plus the official Playwright Extension bridge the default local browser automation path for normal web tabs, changed RDP helper defaults to Chrome-first with Brave fallback, and made profile audit auto-detect the current unpacked extension id from the Chrome profile
 - `Phase 308` recorded a real Chrome helper smoke pass for `0.1.0-rc.14` dashboard, Settings, focused Settings, provider-detail, full-page, and popup routes; a later restarted Codex session confirmed direct Playwright MCP can drive normal web tabs but Chrome blocks using that bridge to drive another extension's `chrome-extension://` UI, so extension UI smoke remains on the Chrome RDP helper
 - `Phase 309` made the zero-provider first-run path explicit for personal-account users: Settings Quick Setup now recommends one first provider while keeping `More providers` recoverable, and popup zero-provider actions deep-link to that same focused setup card
+- `Phase 310` added a cached-first rendering regression guard for standard sidepanel/full-page dashboard routes and refreshed Chrome helper smoke evidence for the dashboard aliases, preventing a return to blocking background bootstrap before cached state renders
 - the old maintenance split queue is closed for the originally named local-safe targets: `material-theme.css`, `localized-copy.ts`, `SettingsPage.tsx`, `App.tsx`, and `standard-app-actions.ts` are now focused base, compatibility, route, or aggregator files rather than the next default work item
 - the previous store-readiness blocker for screenshot file intake/import/archive is now closed under `Direction 10.3`; the current store step is the human Chrome Web Store listing upload and review flow using the Phase 299 milestone
 - `2026-05-11 RDP session` completed Direction 04 real operator closure: first real interaction-audit visual audit across all 5 surfaces (dashboard-360, settings-420, cursor-detail-360, codex-detail-420, popup-360), all 11 manual checks resolved, pending request `2026-04-23-first-real-operator-review-request` fulfilled and archived under [2026-05-11-2026-05-11-rdp-chrome-visual-audit](./testing/operator_reviews/2026-05-11-2026-05-11-rdp-chrome-visual-audit/README.md)
