@@ -30,7 +30,6 @@ import {
   localizePopupViewModel,
   type PopupGuidanceAction,
 } from "./view-models";
-import { shouldShowPopupProviderProgress } from "./progress-visibility";
 import {
   getSettingsRouteFocusForPopupAction,
   getSettingsRouteFocusForPopupProvider,
@@ -44,7 +43,7 @@ import { runPopupRefreshAction } from "./popup-refresh-action";
 import { runPopupThemeToggleAction } from "./popup-theme-toggle-action";
 import { runPopupHideProviderAction } from "./popup-hide-provider-action";
 import { runPopupGuidanceAction } from "./popup-guidance-action";
-import { PopupProviderProgress } from "./PopupProviderProgress";
+import { PopupFeaturedProviderList } from "./PopupFeaturedProviderList";
 
 type PopupLoadState =
   | { status: "loading" }
@@ -262,125 +261,6 @@ export function PopupApp() {
     await runPopupGuidanceAction(action, options);
   }
 
-  const featuredProviderList = hasFeaturedProviderCards ? (
-    <section
-      className="popup-quota-section"
-      aria-label={popupCopy.aria.featuredProviders}
-    >
-      <div className="popup-provider-list">
-        {popupModel.featuredProviderCards.map((card, index) => {
-          const { provider } = card;
-          const providerProgress = (
-            <PopupProviderProgress
-              provider={provider}
-              progressDisplayStyle={popupProgressStyle}
-              i18n={runtimeI18n}
-            />
-          );
-          const hasProviderProgress = shouldShowPopupProviderProgress(provider);
-
-          return (
-            <article
-              key={provider.providerId}
-              className={`popup-provider-card popup-provider-card--${provider.displayTone}${
-                hasProviderProgress ? " popup-provider-card--quota-first" : ""
-              }`}
-              data-theme-local-surface={
-                index === 0 ? "popup-first-provider-card" : undefined
-              }
-            >
-              <div className="popup-provider-card__header">
-                <div>
-                  <p className="popup-provider-card__provider">
-                    {provider.providerLabel}
-                  </p>
-                  {!hasProviderProgress ? (
-                    <p className="popup-provider-card__plan">{provider.planName}</p>
-                  ) : null}
-                </div>
-                <div data-popup-featured-status={index === 0 ? "true" : undefined}>
-                  <StatusBadge
-                    label={card.statusLabel}
-                    tone={provider.displayTone}
-                  />
-                </div>
-              </div>
-
-              {hasProviderProgress ? (
-                <div
-                  className={`popup-provider-card__progress popup-provider-card__progress--${popupProgressStyle}`}
-                  data-popup-featured-progress={
-                    index === 0 ? "true" : undefined
-                  }
-                >
-                  {providerProgress}
-                </div>
-              ) : (
-                <>
-                  <div
-                    className="popup-provider-card__chips"
-                    data-popup-featured-chips={index === 0 ? "true" : undefined}
-                  >
-                    {card.metaChips.map((chipLabel) => (
-                      <span key={chipLabel} className="meta-chip">
-                        {chipLabel}
-                      </span>
-                    ))}
-                  </div>
-                  <p
-                    className="supporting-copy"
-                    data-popup-featured-primary={index === 0 ? "true" : undefined}
-                  >
-                    {card.primaryDetail}
-                  </p>
-                  <p
-                    className="supporting-copy"
-                    data-popup-featured-secondary={
-                      index === 0 ? "true" : undefined
-                    }
-                  >
-                    {card.secondaryDetail}
-                  </p>
-                </>
-              )}
-
-              <div className="popup-actions">
-                <button
-                  className="text-button"
-                  data-theme-local-surface={
-                    index === 0 ? "popup-first-open-detail" : undefined
-                  }
-                  data-popup-featured-action={index === 0 ? "true" : undefined}
-                  type="button"
-                  onClick={() => {
-                    void handlePopupAction(card.action, {
-                      settingsFocus:
-                        card.action.kind === "settings"
-                          ? getSettingsRouteFocusForPopupProvider(provider)
-                          : null,
-                    });
-                  }}
-                >
-                  {card.action.label}
-                </button>
-                <button
-                  className="text-button"
-                  data-popup-hide-provider={provider.providerId}
-                  type="button"
-                  onClick={() => {
-                    void handlePopupAction(card.secondaryAction);
-                  }}
-                >
-                  {card.secondaryAction.label}
-                </button>
-              </div>
-            </article>
-          );
-        })}
-      </div>
-    </section>
-  ) : null;
-
   return (
     <main
       className={`app-shell popup-shell${
@@ -436,7 +316,14 @@ export function PopupApp() {
         </div>
       </section>
 
-      {featuredProviderList}
+      <PopupFeaturedProviderList
+        ariaLabel={popupCopy.aria.featuredProviders}
+        cards={popupModel.featuredProviderCards}
+        i18n={runtimeI18n}
+        progressDisplayStyle={popupProgressStyle}
+        getSettingsFocusForProvider={getSettingsRouteFocusForPopupProvider}
+        onAction={handlePopupAction}
+      />
 
       {!hasFeaturedProviderCards ? (
         <SummaryStrip
