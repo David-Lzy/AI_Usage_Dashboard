@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is now completed through `Phase 345`, with no active phase or queued numbered phase currently selected
+- the numbered phase queue is now completed through `Phase 346`, with no active phase or queued numbered phase currently selected
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -221,6 +221,7 @@ As of 2026-05-13:
 - `Phase 337` extracted interaction-audit signoff session rendering while preserving route-owned metadata state plus summary metrics, timestamp action, and session-summary hooks
 - `Phase 338` extracted interaction-audit handoff summary rendering while preserving route-owned handoff draft generation, copy/download handlers, grouped surface lists, and workflow display
 - `Phase 345` extracted interaction-audit guidance rendering while preserving route-owned URL construction, checklist copy, route links, and link data hooks
+- `Phase 346` extracted interaction-audit workspace-control rendering while preserving route-owned state, import parsing, copy/download/reset behavior, feedback semantics, and preview hooks
 - `Phase 339` extracted theme-recovery current-state rendering while preserving route-owned snapshot construction, live action-badge reads, and summary value hooks
 - `Phase 340` extracted theme-recovery theme-state rendering while preserving route-owned snapshot and live action-badge inputs plus theme detail hooks
 - `Phase 341` extracted theme-recovery request-scope rendering while preserving route-owned query parsing, request-context state, and request identity hooks
