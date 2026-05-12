@@ -46,6 +46,7 @@ import { runPopupGuidanceAction } from "./popup-guidance-action";
 import { PopupFeaturedProviderList } from "./PopupFeaturedProviderList";
 import { PopupGuidanceCardSection } from "./PopupGuidanceCardSection";
 import { PopupHeaderSection } from "./PopupHeaderSection";
+import { PopupSetupCoverageSection } from "./PopupSetupCoverageSection";
 
 type PopupLoadState =
   | { status: "loading" }
@@ -307,54 +308,12 @@ export function PopupApp() {
       ) : null}
 
       {!hasFeaturedProviderCards ? (
-        <section
-          className="status-card popup-setup-coverage"
-          data-theme-local-surface="popup-setup-coverage-card"
-        >
-          <div className="status-card__header">
-            <div>
-              <p
-                className="section-label"
-                data-theme-local-surface="popup-setup-coverage-label"
-              >
-                {popupModel.setupCoverage.label}
-              </p>
-              <h2 className="section-title">{popupModel.setupCoverage.headline}</h2>
-            </div>
-            <div data-popup-setup-coverage-stage>
-              {popupModel.setupCoverage.action ? (
-                <button
-                  className={`status-chip status-chip-button status-chip--${popupModel.setupCoverage.tone}`}
-                  data-popup-setup-coverage-action="true"
-                  type="button"
-                  aria-label={popupModel.setupCoverage.action.label}
-                  title={popupModel.setupCoverage.action.label}
-                  onClick={() => {
-                    void handlePopupAction(popupModel.setupCoverage.action!, {
-                      settingsFocus: settingsFocusForSetupCoverage,
-                    });
-                  }}
-                >
-                  {popupModel.setupCoverage.statusLabel}
-                </button>
-              ) : (
-                <StatusBadge
-                  label={popupModel.setupCoverage.statusLabel}
-                  tone={popupModel.setupCoverage.tone}
-                />
-              )}
-            </div>
-          </div>
-          <p className="supporting-copy" data-popup-setup-coverage-detail>
-            {popupModel.setupCoverage.detail}
-          </p>
-          <div data-popup-setup-coverage-grid>
-            <SummaryStrip
-              ariaLabel={popupCopy.aria.setupCoverage}
-              items={popupModel.setupCoverage.items}
-            />
-          </div>
-        </section>
+        <PopupSetupCoverageSection
+          ariaLabel={popupCopy.aria.setupCoverage}
+          setupCoverage={popupModel.setupCoverage}
+          settingsFocus={settingsFocusForSetupCoverage}
+          onAction={handlePopupAction}
+        />
       ) : null}
 
       {!hasFeaturedProviderCards && popupModel.showSnapshotStatus ? (
