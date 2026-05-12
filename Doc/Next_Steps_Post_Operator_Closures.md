@@ -12,7 +12,7 @@ Document class:
 
 Status note:
 
-- snapshot refreshed on 2026-05-12 after Chrome automation default alignment and the `rc.14` Chrome helper smoke pass
+- snapshot refreshed on 2026-05-13 after Chrome automation default alignment, the `rc.14` Chrome helper smoke pass, and the RDP full-page route-contract guard
 - refresh this file when the Chrome Web Store review result arrives, or when a new high-priority direction opens
 
 ## What Just Closed
@@ -40,7 +40,7 @@ As of 2026-05-11 the following previously-open items are now done:
 
 The submitted store-review boundary remains `release/ai-usage-dashboard-0.1.0-rc.13.zip`. Keep using the RC13 milestone as the truthful historical submission handoff while that review is still pending in the Chrome Web Store Developer Dashboard.
 
-The repo is now also packaged forward through `Phase 306` as `release/ai-usage-dashboard-0.1.0-rc.14.zip`. That newer package is a prepared follow-up candidate, not an instruction to silently replace the submitted RC13 review boundary. `Phase 307` through `Phase 310` are post-package tooling, Chrome automation, smoke-evidence, first-provider setup, and cached-first guard follow-ups; they do not create a new extension package.
+The repo is now also packaged forward through `Phase 306` as `release/ai-usage-dashboard-0.1.0-rc.14.zip`. That newer package is a prepared follow-up candidate, not an instruction to silently replace the submitted RC13 review boundary. `Phase 307` through `Phase 312` are post-package tooling, Chrome automation, smoke-evidence, first-provider setup, cached-first guard, popup maintenance, and route-contract follow-ups; they do not create a new extension package.
 
 References:
 - [Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
@@ -74,6 +74,7 @@ Completed local-safe follow-up:
 - [309_Phase_Quick_Setup_First_Provider_Guided_Setup.md](./TODOs/Archive/309_Phase_Quick_Setup_First_Provider_Guided_Setup.md) - made zero-provider Settings recommend one personal-user provider and made popup zero-provider actions deep-link to that same Quick Setup card.
 - [310_Phase_Cached_First_Bootstrap_Performance_Guard.md](./TODOs/Archive/310_Phase_Cached_First_Bootstrap_Performance_Guard.md) - added a render-level cached-first regression guard and refreshed Chrome helper dashboard/full-page smoke evidence.
 - [311_Phase_Popup_View_Model_Maintenance_Split.md](./TODOs/Archive/311_Phase_Popup_View_Model_Maintenance_Split.md) - split popup view-model internals into type, setup-coverage, and featured-provider-card modules without changing popup behavior.
+- [312_Phase_RDP_Full_Page_Route_Contract_Guard.md](./TODOs/Archive/312_Phase_RDP_Full_Page_Route_Contract_Guard.md) - made extension-window capture routes testable and locked ordinary Chrome app-window smoke routes to `?surface=full-page#...`.
 
 ### 1. Direction 10 — Toolbar Competitive Fit And Store Readiness
 
