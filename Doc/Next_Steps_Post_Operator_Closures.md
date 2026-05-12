@@ -12,7 +12,7 @@ Document class:
 
 Status note:
 
-- snapshot refreshed on 2026-05-13 after Chrome automation default alignment, the `rc.14` Chrome helper smoke pass, the RDP full-page route-contract guard, store screenshot route-config reuse, interaction-audit frame-action split, shared operator helpers, Settings focused deep-link render coverage, popup Settings-focus helper coverage, and popup source-page tab-selection coverage
+- snapshot refreshed on 2026-05-13 after Chrome automation default alignment, the `rc.14` Chrome helper smoke pass, the RDP full-page route-contract guard, store screenshot route-config reuse, interaction-audit frame-action split, shared operator helpers, Settings focused deep-link render coverage, popup Settings/source-page helper coverage, and popup route-action coverage
 - refresh this file when the Chrome Web Store review result arrives, or when a new high-priority direction opens
 
 ## What Just Closed
@@ -40,7 +40,7 @@ As of 2026-05-11 the following previously-open items are now done:
 
 The submitted store-review boundary remains `release/ai-usage-dashboard-0.1.0-rc.13.zip`. Keep using the RC13 milestone as the truthful historical submission handoff while that review is still pending in the Chrome Web Store Developer Dashboard.
 
-The repo is now also packaged forward through `Phase 306` as `release/ai-usage-dashboard-0.1.0-rc.14.zip`. That newer package is a prepared follow-up candidate, not an instruction to silently replace the submitted RC13 review boundary. `Phase 307` through `Phase 320` are post-package tooling, Chrome automation, smoke-evidence, first-provider setup, cached-first guard, popup maintenance, route-contract, screenshot-helper reuse, interaction-audit maintenance, operator-helper follow-ups, and focused-link / source-page guardrails; they do not create a new extension package.
+The repo is now also packaged forward through `Phase 306` as `release/ai-usage-dashboard-0.1.0-rc.14.zip`. That newer package is a prepared follow-up candidate, not an instruction to silently replace the submitted RC13 review boundary. `Phase 307` through `Phase 321` are post-package tooling, Chrome automation, smoke-evidence, first-provider setup, cached-first guard, popup maintenance, route-contract, screenshot-helper reuse, interaction-audit maintenance, operator-helper follow-ups, and focused-link / source-page / route-action guardrails; they do not create a new extension package.
 
 References:
 - [Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
@@ -83,6 +83,7 @@ Completed local-safe follow-up:
 - [318_Phase_Settings_Focused_Deep_Link_Render_Guard.md](./TODOs/Archive/318_Phase_Settings_Focused_Deep_Link_Render_Guard.md) - added render coverage for Settings source and Quick Setup focused deep links used by popup setup/problem actions.
 - [319_Phase_Popup_Settings_Action_Focus_Helper.md](./TODOs/Archive/319_Phase_Popup_Settings_Action_Focus_Helper.md) - centralized popup Settings-action focus mapping and covered explicit-provider plus visible-provider-derived targets.
 - [320_Phase_Popup_Source_Page_Tab_Selection_Helper.md](./TODOs/Archive/320_Phase_Popup_Source_Page_Tab_Selection_Helper.md) - extracted and tested popup source-page recovery tab selection while preserving binding and activation behavior.
+- [321_Phase_Popup_Route_Action_Helper.md](./TODOs/Archive/321_Phase_Popup_Route_Action_Helper.md) - extracted popup route-opening actions and covered preview plus Chrome full-page handoffs.
 
 ### 1. Direction 10 — Toolbar Competitive Fit And Store Readiness
 

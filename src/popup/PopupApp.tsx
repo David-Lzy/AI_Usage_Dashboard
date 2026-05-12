@@ -7,7 +7,6 @@ import type {
   ProviderId,
 } from "../providers/types";
 import { sendAppMessage } from "../shared/app-client";
-import { storePendingFullPageEntry } from "../shared/extension-surface-entry";
 import {
   clearPageBinding,
   createPageBindingFromTab,
@@ -39,12 +38,6 @@ import {
   buildProviderSourceDisplayLocalizedCopy,
 } from "../shared/localized-copy";
 import {
-  buildFullPageExtensionPath,
-  buildFullPagePreviewUrl,
-  buildSidePanelExtensionPath,
-  buildSidePanelPreviewUrl,
-} from "../shared/extension-surface-paths";
-import {
   buildQuickThemeToggle,
   DEFAULT_THEME_SETTINGS,
   startThemeSettingsSync,
@@ -53,11 +46,7 @@ import { SummaryStrip } from "../sidepanel/components/SummaryStrip";
 import { StatusBadge } from "../sidepanel/components/StatusBadge";
 import { UsageProgress } from "../sidepanel/components/UsageProgress";
 import { UsageWindowProgressList } from "../sidepanel/components/UsageWindowProgressList";
-import {
-  buildSidePanelHash,
-  type SettingsRouteFocus,
-  type SidePanelRouteState,
-} from "../sidepanel/route-state";
+import type { SettingsRouteFocus } from "../sidepanel/route-state";
 import { syncPopupAppearanceAttributes } from "../shared/popup-appearance";
 import {
   buildPopupViewModel,
@@ -70,6 +59,12 @@ import {
   getSettingsRouteFocusForPopupProvider,
 } from "./settings-route-targets";
 import { selectPreferredSourcePageTab } from "./source-page-tab-selection";
+import {
+  openFullDashboard,
+  openFullDashboardTab,
+  openProviderDetail,
+  openSettings,
+} from "./popup-route-actions";
 
 type PopupLoadState =
   | { status: "loading" }
@@ -83,99 +78,6 @@ function hasSourcePageNavigationControl(): boolean {
     typeof chrome.tabs?.create === "function" &&
     typeof chrome.tabs?.update === "function"
   );
-}
-
-async function openSidePanelRoute(route: SidePanelRouteState) {
-  const path = buildSidePanelExtensionPath(route);
-
-  if (
-    typeof chrome !== "undefined" &&
-    Boolean(chrome.runtime?.id) &&
-    typeof chrome.sidePanel?.open === "function" &&
-    typeof chrome.sidePanel?.setOptions === "function" &&
-    typeof chrome.windows?.getCurrent === "function"
-  ) {
-    const [activeTab] =
-      typeof chrome.tabs?.query === "function"
-        ? await chrome.tabs.query({ active: true, currentWindow: true })
-        : [];
-
-    if (typeof activeTab?.id === "number") {
-      await chrome.sidePanel.setOptions({
-        tabId: activeTab.id,
-        enabled: true,
-        path,
-      });
-      await chrome.sidePanel.open({ tabId: activeTab.id });
-    } else {
-      const currentWindow = await chrome.windows.getCurrent();
-
-      if (typeof currentWindow.id === "number") {
-        await chrome.sidePanel.setOptions({
-          enabled: true,
-          path,
-        });
-        await chrome.sidePanel.open({ windowId: currentWindow.id });
-      }
-    }
-
-    window.close();
-    return;
-  }
-
-  window.open(
-    buildSidePanelPreviewUrl(route, window.location.href),
-    "_blank",
-    "noopener,noreferrer",
-  );
-}
-
-async function openFullPageRoute(route: SidePanelRouteState) {
-  const path = buildFullPageExtensionPath(route);
-
-  if (typeof window !== "undefined") {
-    storePendingFullPageEntry(
-      "popup-expand",
-      buildSidePanelHash(route),
-      window.localStorage,
-    );
-  }
-
-  if (
-    typeof chrome !== "undefined" &&
-    Boolean(chrome.runtime?.id) &&
-    typeof chrome.runtime?.getURL === "function" &&
-    typeof chrome.tabs?.create === "function"
-  ) {
-    await chrome.tabs.create({
-      url: chrome.runtime.getURL(path),
-      active: true,
-    });
-    window.close();
-    return;
-  }
-
-  window.open(
-    buildFullPagePreviewUrl(route, window.location.href),
-    "_blank",
-    "noopener,noreferrer",
-  );
-}
-
-async function openFullDashboard() {
-  await openSidePanelRoute({ name: "dashboard" });
-}
-
-async function openFullDashboardTab() {
-  await openFullPageRoute({ name: "dashboard" });
-}
-
-async function openSettings(focus?: SettingsRouteFocus) {
-  await openSidePanelRoute({ name: "settings", focus });
-}
-
-async function openProviderDetail(providerId: ProviderId) {
-  await openSidePanelRoute({ name: "provider-detail", providerId });
 }
 
 async function openProviderSourcePage(
