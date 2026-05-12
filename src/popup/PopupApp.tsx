@@ -42,6 +42,7 @@ import { runPopupRefreshAction } from "./popup-refresh-action";
 import { runPopupThemeToggleAction } from "./popup-theme-toggle-action";
 import { runPopupHideProviderAction } from "./popup-hide-provider-action";
 import { runPopupGuidanceAction } from "./popup-guidance-action";
+import { PopupActionSection } from "./PopupActionSection";
 import { PopupFeaturedProviderList } from "./PopupFeaturedProviderList";
 import { PopupGuidanceCardSection } from "./PopupGuidanceCardSection";
 import { PopupHeaderSection } from "./PopupHeaderSection";
@@ -324,32 +325,10 @@ export function PopupApp() {
       ) : null}
 
       {!hasFeaturedProviderCards ? (
-        <section
-          className="status-card"
-          data-theme-local-surface="popup-actions-card"
-        >
-          <p className="section-label" data-theme-local-surface="popup-actions-label">
-            {popupModel.actionSection.label}
-          </p>
-          <p className="supporting-copy">{popupModel.actionSection.detail}</p>
-          <div className="popup-actions">
-            {popupModel.actionSection.actions.map((action) => (
-              <button
-                key={`${action.kind}-${action.providerId ?? "root"}`}
-                className="text-button"
-                data-theme-local-surface={
-                  action.kind === "dashboard" ? "popup-open-dashboard" : undefined
-                }
-                type="button"
-                onClick={() => {
-                  void handlePopupAction(action);
-                }}
-              >
-                {action.label}
-              </button>
-            ))}
-          </div>
-        </section>
+        <PopupActionSection
+          actionSection={popupModel.actionSection}
+          onAction={handlePopupAction}
+        />
       ) : null}
 
       {!hasFeaturedProviderCards ? (
