@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is now completed through `Phase 321`, with no active phase or queued numbered phase currently selected
+- the numbered phase queue is now completed through `Phase 322`, with no active phase or queued numbered phase currently selected
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -203,6 +203,7 @@ As of 2026-05-13:
 - `Phase 319` centralized popup Settings-action focus mapping and covered explicit-provider plus visible-provider-derived targets
 - `Phase 320` extracted and tested popup source-page recovery tab selection while preserving binding and activation behavior
 - `Phase 321` extracted popup route-opening actions and covered preview plus Chrome full-page handoffs
+- `Phase 322` added active-tab and current-window Chrome sidePanel route-action coverage
 - provider closure still waits on available accounts or product decisions for JetBrains org-console, individual Claude Pro / Max behavior, and Gemini project-metrics graduation; Claude Team no longer belongs in the blocked-by-account queue
 - operator evidence means archived real human/operator review exports for interaction-audit or theme-recovery workspaces; it remains useful, but it sits behind release package and store asset closeout
 - the originally queued local-safe file splitting targets are now closed enough that further splitting should be driven by a concrete maintenance risk instead of the old Phase 236-era queue

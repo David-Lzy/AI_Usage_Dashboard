@@ -5,6 +5,7 @@ import { SETTINGS_SECTION_IDS } from "../sidepanel/settings-section-ids";
 import {
   openFullDashboardTab,
   openFullPageRoute,
+  openSidePanelRoute,
   openSettings,
 } from "./popup-route-actions";
 
@@ -62,6 +63,82 @@ describe("popup route actions", () => {
       "noopener,noreferrer",
     );
     expect(popupWindow.close).not.toHaveBeenCalled();
+  });
+
+  it("opens Chrome sidePanel routes against the active tab", async () => {
+    const popupWindow = stubPopupWindow();
+    const setOptions = vi.fn(async () => undefined);
+    const open = vi.fn(async () => undefined);
+    const query = vi.fn(async () => [{ id: 7 }]);
+    const getCurrent = vi.fn(async () => ({ id: 9 }));
+
+    vi.stubGlobal("chrome", {
+      runtime: {
+        id: "extension-id",
+      },
+      sidePanel: {
+        open,
+        setOptions,
+      },
+      tabs: {
+        query,
+      },
+      windows: {
+        getCurrent,
+      },
+    });
+
+    await openSidePanelRoute({
+      name: "settings",
+      focus: {
+        kind: "quick-setup-provider",
+        providerId: "cursor",
+      },
+    });
+
+    expect(query).toHaveBeenCalledWith({
+      active: true,
+      currentWindow: true,
+    });
+    expect(setOptions).toHaveBeenCalledWith({
+      enabled: true,
+      path: "src/sidepanel/index.html#settings/quick-setup/cursor",
+      tabId: 7,
+    });
+    expect(open).toHaveBeenCalledWith({ tabId: 7 });
+    expect(getCurrent).not.toHaveBeenCalled();
+    expect(popupWindow.close).toHaveBeenCalled();
+  });
+
+  it("falls back to current-window sidePanel routes when no active tab id is available", async () => {
+    const popupWindow = stubPopupWindow();
+    const setOptions = vi.fn(async () => undefined);
+    const open = vi.fn(async () => undefined);
+
+    vi.stubGlobal("chrome", {
+      runtime: {
+        id: "extension-id",
+      },
+      sidePanel: {
+        open,
+        setOptions,
+      },
+      tabs: {
+        query: vi.fn(async () => [{}]),
+      },
+      windows: {
+        getCurrent: vi.fn(async () => ({ id: 11 })),
+      },
+    });
+
+    await openSidePanelRoute({ name: "dashboard" });
+
+    expect(setOptions).toHaveBeenCalledWith({
+      enabled: true,
+      path: "src/sidepanel/index.html#dashboard",
+    });
+    expect(open).toHaveBeenCalledWith({ windowId: 11 });
+    expect(popupWindow.close).toHaveBeenCalled();
   });
 
   it("stores the pending full-page entry before preview fallback open", async () => {
