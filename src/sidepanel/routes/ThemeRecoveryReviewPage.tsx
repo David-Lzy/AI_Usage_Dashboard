@@ -7,6 +7,10 @@ import type { RuntimeI18n } from "../../shared/i18n";
 import { buildOperatorWorkspaceLocalizedCopy } from "../../shared/localized-copy";
 import { TopBar } from "../components/TopBar";
 import { ThemeRecoveryCurrentStateCard } from "../components/ThemeRecoveryCurrentStateCard";
+import {
+  ThemeRecoveryOutputsSection,
+  type ThemeRecoveryWorkspaceFeedback,
+} from "../components/ThemeRecoveryOutputsSection";
 import { ThemeRecoveryProviderList } from "../components/ThemeRecoveryProviderList";
 import { ThemeRecoveryRequestScopeSection } from "../components/ThemeRecoveryRequestScopeSection";
 import { ThemeRecoveryThemeStateCard } from "../components/ThemeRecoveryThemeStateCard";
@@ -24,27 +28,9 @@ import {
 } from "../theme-recovery-review";
 import { writeClipboardText } from "../write-clipboard-text";
 
-type ReviewWorkspaceFeedback = {
-  tone: "neutral" | "warning" | "error";
-  message: string;
-};
-
 const THEME_RECOVERY_REQUEST_ID_QUERY_PARAM = "themeRecoveryRequestId";
 const THEME_RECOVERY_REQUEST_CREATED_AT_QUERY_PARAM =
   "themeRecoveryRequestCreatedAt";
-
-function feedbackToneToNoteClass(
-  tone: ReviewWorkspaceFeedback["tone"],
-): "detail-note--neutral" | "detail-note--warning" | "detail-note--error" {
-  switch (tone) {
-    case "warning":
-      return "detail-note--warning";
-    case "error":
-      return "detail-note--error";
-    default:
-      return "detail-note--neutral";
-  }
-}
 
 function hasLiveActionBadgeReadApi(): boolean {
   return (
@@ -135,7 +121,7 @@ export function ThemeRecoveryReviewPage({
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [workspaceFeedback, setWorkspaceFeedback] =
-    useState<ReviewWorkspaceFeedback | null>(null);
+    useState<ThemeRecoveryWorkspaceFeedback | null>(null);
   const requestContext = useMemo(() => readThemeRecoveryRequestContext(), []);
 
   async function refreshWorkspace() {
@@ -265,6 +251,66 @@ export function ThemeRecoveryReviewPage({
         sourceLabel: copy.themeState.computedBadgeSource,
       };
 
+  async function handleCopySummary() {
+    const copied = (await writeClipboardText(summaryDraft)) === "success";
+    setWorkspaceFeedback({
+      tone: copied ? "neutral" : "warning",
+      message: copied
+        ? copy.outputs.copiedSummary
+        : copy.outputs.clipboardUnavailable,
+    });
+  }
+
+  function handleDownloadSummary() {
+    if (!exportValue) {
+      return;
+    }
+
+    const downloaded = downloadTextFile(
+      buildThemeRecoveryExportFilename("summary-draft", exportValue),
+      summaryDraft,
+      "text/markdown;charset=utf-8",
+    );
+    setWorkspaceFeedback({
+      tone: downloaded ? "neutral" : "warning",
+      message: downloaded
+        ? copy.outputs.downloadedSummary
+        : copy.outputs.downloadUnavailable,
+    });
+  }
+
+  async function handleCopyJson() {
+    const copied = (await writeClipboardText(jsonDraft)) === "success";
+    setWorkspaceFeedback({
+      tone: copied ? "neutral" : "warning",
+      message: copied
+        ? copy.outputs.copiedJson
+        : copy.outputs.clipboardUnavailable,
+    });
+  }
+
+  function handleDownloadJson() {
+    if (!exportValue) {
+      return;
+    }
+
+    const downloaded = downloadTextFile(
+      buildThemeRecoveryExportFilename("export-json", exportValue),
+      jsonDraft,
+      "application/json;charset=utf-8",
+    );
+    setWorkspaceFeedback({
+      tone: downloaded ? "neutral" : "warning",
+      message: downloaded
+        ? copy.outputs.downloadedJson
+        : copy.outputs.downloadUnavailable,
+    });
+  }
+
+  function handleOpenSettingsTab() {
+    openRouteInNewTab("./index.html#settings");
+  }
+
   return (
     <main className="app-shell theme-recovery-shell">
       <TopBar
@@ -337,148 +383,17 @@ export function ThemeRecoveryReviewPage({
             workflowCopy={copy.workflow}
           />
 
-          <section className="status-card">
-            <div className="status-card__header">
-              <div>
-                <p className="section-label">{copy.outputs.eyebrow}</p>
-                <h2 className="section-title">{copy.outputs.title}</h2>
-              </div>
-              <p className="supporting-copy">{copy.outputs.detail}</p>
-            </div>
-
-            <div className="interaction-audit__actions theme-recovery-copy-actions">
-              <button
-                className="text-button"
-                data-theme-recovery-copy="summary"
-                type="button"
-                onClick={async () => {
-                  const copied =
-                    (await writeClipboardText(summaryDraft)) === "success";
-                  setWorkspaceFeedback({
-                    tone: copied ? "neutral" : "warning",
-                    message: copied
-                      ? copy.outputs.copiedSummary
-                      : copy.outputs.clipboardUnavailable,
-                  });
-                }}
-              >
-                {copy.outputs.copySummary}
-              </button>
-              <button
-                className="text-button"
-                data-theme-recovery-download="summary"
-                type="button"
-                onClick={() => {
-                  if (!exportValue) {
-                    return;
-                  }
-
-                  const downloaded = downloadTextFile(
-                    buildThemeRecoveryExportFilename(
-                      "summary-draft",
-                      exportValue,
-                    ),
-                    summaryDraft,
-                    "text/markdown;charset=utf-8",
-                  );
-                  setWorkspaceFeedback({
-                    tone: downloaded ? "neutral" : "warning",
-                    message: downloaded
-                      ? copy.outputs.downloadedSummary
-                      : copy.outputs.downloadUnavailable,
-                  });
-                }}
-              >
-                {copy.outputs.downloadSummary}
-              </button>
-              <button
-                className="text-button"
-                data-theme-recovery-copy="json"
-                type="button"
-                onClick={async () => {
-                  const copied =
-                    (await writeClipboardText(jsonDraft)) === "success";
-                  setWorkspaceFeedback({
-                    tone: copied ? "neutral" : "warning",
-                    message: copied
-                      ? copy.outputs.copiedJson
-                      : copy.outputs.clipboardUnavailable,
-                  });
-                }}
-              >
-                {copy.outputs.copyJson}
-              </button>
-              <button
-                className="text-button"
-                data-theme-recovery-download="json"
-                type="button"
-                onClick={() => {
-                  if (!exportValue) {
-                    return;
-                  }
-
-                  const downloaded = downloadTextFile(
-                    buildThemeRecoveryExportFilename(
-                      "export-json",
-                      exportValue,
-                    ),
-                    jsonDraft,
-                    "application/json;charset=utf-8",
-                  );
-                  setWorkspaceFeedback({
-                    tone: downloaded ? "neutral" : "warning",
-                    message: downloaded
-                      ? copy.outputs.downloadedJson
-                      : copy.outputs.downloadUnavailable,
-                  });
-                }}
-              >
-                {copy.outputs.downloadJson}
-              </button>
-              <button
-                className="text-button"
-                type="button"
-                onClick={() => {
-                  openRouteInNewTab("./index.html#settings");
-                }}
-              >
-                {copy.outputs.openSettingsTab}
-              </button>
-            </div>
-
-            <div className="theme-recovery-export-grid">
-              <div className="theme-recovery-export-panel">
-                <p className="detail-note__label">{copy.outputs.summaryDraft}</p>
-                <pre
-                  className="capture-pre"
-                  data-theme-recovery-summary-draft
-                >
-                  {summaryDraft}
-                </pre>
-              </div>
-
-              <div className="theme-recovery-export-panel">
-                <p className="detail-note__label">{copy.outputs.jsonExport}</p>
-                <pre
-                  className="capture-pre"
-                  data-theme-recovery-json-draft
-                >
-                  {jsonDraft}
-                </pre>
-              </div>
-            </div>
-          </section>
-
-          {workspaceFeedback ? (
-            <section
-              className={`detail-note ${feedbackToneToNoteClass(
-                workspaceFeedback.tone,
-              )}`}
-            >
-              <p className="detail-note__label">{copy.outputs.workspaceNote}</p>
-              <p className="supporting-copy">{workspaceFeedback.message}</p>
-            </section>
-          ) : null}
+          <ThemeRecoveryOutputsSection
+            copy={copy.outputs}
+            jsonDraft={jsonDraft}
+            summaryDraft={summaryDraft}
+            workspaceFeedback={workspaceFeedback}
+            onCopyJson={handleCopyJson}
+            onCopySummary={handleCopySummary}
+            onDownloadJson={handleDownloadJson}
+            onDownloadSummary={handleDownloadSummary}
+            onOpenSettingsTab={handleOpenSettingsTab}
+          />
         </>
       ) : null}
     </main>
