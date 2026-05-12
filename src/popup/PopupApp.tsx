@@ -187,6 +187,26 @@ async function openProviderDetail(providerId: ProviderId) {
   await openSidePanelRoute({ name: "provider-detail", providerId });
 }
 
+function getSettingsRouteFocusForPopupAction(
+  action: PopupGuidanceAction | null | undefined,
+  visibleProviders: Parameters<
+    typeof getSettingsRouteFocusForPopupVisibleProviders
+  >[0],
+): SettingsRouteFocus | null {
+  if (action?.kind !== "settings") {
+    return null;
+  }
+
+  if (action.providerId) {
+    return {
+      kind: "quick-setup-provider",
+      providerId: action.providerId,
+    };
+  }
+
+  return getSettingsRouteFocusForPopupVisibleProviders(visibleProviders);
+}
+
 async function openProviderSourcePage(
   providerId: ProviderId,
   sourceStateKind?: SourcePageRecoverySourceState,
@@ -530,13 +550,14 @@ export function PopupApp() {
   const popupProgressStyle = loadState.appState.settings.popupProgressStyle;
   const hasFeaturedProviderCards = popupModel.featuredProviderCards.length > 0;
   const settingsFocusForGuidance =
-    guidanceCard?.action.kind === "settings"
-      ? getSettingsRouteFocusForPopupVisibleProviders(popupModel.visibleProviders)
-      : null;
-  const settingsFocusForSetupCoverage =
-    popupModel.setupCoverage.action?.kind === "settings"
-      ? getSettingsRouteFocusForPopupVisibleProviders(popupModel.visibleProviders)
-      : null;
+    getSettingsRouteFocusForPopupAction(
+      guidanceCard?.action,
+      popupModel.visibleProviders,
+    );
+  const settingsFocusForSetupCoverage = getSettingsRouteFocusForPopupAction(
+    popupModel.setupCoverage.action,
+    popupModel.visibleProviders,
+  );
 
   async function handlePopupAction(
     action: PopupGuidanceAction,

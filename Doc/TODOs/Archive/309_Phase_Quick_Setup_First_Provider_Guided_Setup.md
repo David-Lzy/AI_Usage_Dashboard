@@ -31,3 +31,21 @@ Make the first-provider setup path clearer for personal-account users who open S
 - `npm run test -- --run src/sidepanel/routes/SettingsPage.test.tsx src/sidepanel/settings-page-view-models.test.ts src/popup/view-models.test.ts`
 - `npm run docs:check`
 - `git diff --check`
+
+## Completion
+
+Status: completed on 2026-05-13.
+
+Summary:
+
+- Added one shared first-provider recommendation helper that prioritizes the personal-user path (`Codex`, then `Cursor`, then `Claude Code`, then `Gemini`) and keeps JetBrains out of the default first-run recommendation when another provider is available.
+- Added a zero-enabled Quick Setup starter card that deep links as `data-quick-setup-provider-id`, recommends one provider, and keeps the existing `More providers` recovery list intact.
+- Updated popup zero-provider guidance and setup coverage so the primary action opens focused Quick Setup for the recommended provider instead of a generic Settings page.
+- Localized the new first-provider setup path in English and zh-CN without changing provider semantics or sync behavior.
+
+Verification:
+
+- `npm run test -- --run src/sidepanel/routes/SettingsPage.test.tsx src/sidepanel/settings-page-view-models.test.ts src/popup/view-models.test.ts src/shared/first-provider-setup.test.ts`
+- `npm run typecheck`
+- `npm run docs:check`
+- `git diff --check`

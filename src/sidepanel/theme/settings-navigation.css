@@ -55,6 +55,19 @@
   box-shadow: var(--app-elevation-1);
 }
 
+.quick-setup-card--starter {
+  border-color: color-mix(
+    in srgb,
+    var(--md-sys-color-primary) 36%,
+    var(--md-sys-color-outline-variant)
+  );
+  background: color-mix(
+    in srgb,
+    var(--md-sys-color-primary-container) 22%,
+    var(--md-sys-color-surface-container-lowest)
+  );
+}
+
 .quick-setup-card__header {
   display: flex;
   align-items: flex-start;

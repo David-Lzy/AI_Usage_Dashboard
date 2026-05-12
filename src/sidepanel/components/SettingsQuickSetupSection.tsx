@@ -5,6 +5,7 @@ import type {
   SettingsUserLevel,
 } from "../../providers/types";
 import { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
+import { getRecommendedFirstSetupProvider } from "../../shared/first-provider-setup";
 import type { SettingsQuickSetupActionModel } from "../settings-view-models";
 import { buildSettingsQuickSetupCardModel } from "../settings-view-models";
 
@@ -44,6 +45,10 @@ export function SettingsQuickSetupSection({
   const disabledProviders = providers.filter((provider) => !provider.enabled);
   const shouldHighlightDisabledProviders =
     enabledProviders.length === 0 && disabledProviders.length > 0;
+  const firstSetupProvider =
+    enabledProviders.length === 0
+      ? getRecommendedFirstSetupProvider(providers)
+      : null;
 
   function runAction(provider: ProviderSetting, action: SettingsQuickSetupActionModel) {
     switch (action.id) {
@@ -99,6 +104,73 @@ export function SettingsQuickSetupSection({
       </div>
 
       <div className="provider-shell-list">
+        {firstSetupProvider ? (
+          <article
+            className="quick-setup-card quick-setup-card--starter"
+            data-quick-setup-provider-id={firstSetupProvider.id}
+            data-quick-setup-first-provider-id={firstSetupProvider.id}
+          >
+            <div className="quick-setup-card__header">
+              <div>
+                <p className="section-label">
+                  {settingsCopy.quickSetup.firstProvider.eyebrow}
+                </p>
+                <p className="quick-setup-card__provider">
+                  {settingsCopy.quickSetup.firstProvider.title(
+                    firstSetupProvider.label,
+                  )}
+                </p>
+                <p className="supporting-copy">
+                  {settingsCopy.quickSetup.firstProvider.detail(
+                    firstSetupProvider.label,
+                  )}
+                </p>
+              </div>
+              <span className={getQuickSetupStatusClassName("neutral")}>
+                {settingsCopy.quickSetup.firstProvider.statusLabel}
+              </span>
+            </div>
+
+            <div className="quick-setup-card__fields">
+              <div className="source-card__field">
+                <p className="source-card__label">
+                  {settingsCopy.quickSetup.currentSetupLabel}
+                </p>
+                <p className="source-card__value">
+                  {settingsCopy.quickSetup.currentSetup.disabled}
+                </p>
+              </div>
+
+              <div className="source-card__field">
+                <p className="source-card__label">
+                  {settingsCopy.quickSetup.nextStepLabel}
+                </p>
+                <p className="source-card__value">
+                  {settingsCopy.quickSetup.firstProvider.action(
+                    firstSetupProvider.label,
+                  )}
+                </p>
+              </div>
+            </div>
+
+            <div className="credential-actions quick-setup-card__actions">
+              <button
+                className="text-button"
+                type="button"
+                data-quick-setup-primary-action="enable_provider"
+                onClick={() => onToggleProvider(firstSetupProvider.id)}
+              >
+                {settingsCopy.quickSetup.firstProvider.action(
+                  firstSetupProvider.label,
+                )}
+              </button>
+              <span className="supporting-copy">
+                {settingsCopy.quickSetup.firstProvider.moreHint}
+              </span>
+            </div>
+          </article>
+        ) : null}
+
         {enabledProviders.map((provider) => {
           const snapshot = snapshotMap.get(provider.id);
 

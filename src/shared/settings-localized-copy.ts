@@ -64,6 +64,15 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
         disabledProvidersSummary: (count: number) =>
           `更多 Provider（${i18n.formatNumber(count)}）`,
         hideDisabledProviders: "收起更多 Provider",
+        firstProvider: {
+          eyebrow: "建议第一步",
+          statusLabel: "推荐",
+          title: (providerLabel: string) => `先配置 ${providerLabel}`,
+          detail: (providerLabel: string) =>
+            `先启用 ${providerLabel}。之后这里会继续引导浏览器授权、打开使用页面，以及确认是否已经连通。也可以在下方更多 Provider 里选择别的。`,
+          action: (providerLabel: string) => `启用 ${providerLabel}`,
+          moreHint: "想换一个工具？展开下方更多 Provider。",
+        },
         currentSetup: {
           disabled: "已关闭",
           sessionPage: "已登录使用页面",
@@ -294,6 +303,15 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
       disabledProvidersSummary: (count: number) =>
         `More providers (${i18n.formatNumber(count)})`,
       hideDisabledProviders: "Hide more providers",
+      firstProvider: {
+        eyebrow: "Suggested first step",
+        statusLabel: "Recommended",
+        title: (providerLabel: string) => `Start with ${providerLabel}`,
+        detail: (providerLabel: string) =>
+          `Enable ${providerLabel} first. Quick Setup will then walk through browser access, the usage page, and whether the provider is connected. You can choose a different provider under More providers.`,
+        action: (providerLabel: string) => `Enable ${providerLabel}`,
+        moreHint: "Prefer another tool? Open More providers below.",
+      },
       currentSetup: {
         disabled: "Turned off",
         sessionPage: "Signed-in usage page",

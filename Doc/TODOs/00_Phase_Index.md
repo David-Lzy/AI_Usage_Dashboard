@@ -35,9 +35,8 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [308_Phase_RC14_Chrome_Playwright_MCP_Smoke.md](./Archive/308_Phase_RC14_Chrome_Playwright_MCP_Smoke.md)
+- latest completed slice: [309_Phase_Quick_Setup_First_Provider_Guided_Setup.md](./Archive/309_Phase_Quick_Setup_First_Provider_Guided_Setup.md)
 - queued phase files:
-  - [309_Phase_Quick_Setup_First_Provider_Guided_Setup.md](./309_Phase_Quick_Setup_First_Provider_Guided_Setup.md)
   - [310_Phase_Cached_First_Bootstrap_Performance_Guard.md](./310_Phase_Cached_First_Bootstrap_Performance_Guard.md)
   - [311_Phase_Popup_View_Model_Maintenance_Split.md](./311_Phase_Popup_View_Model_Maintenance_Split.md)
 

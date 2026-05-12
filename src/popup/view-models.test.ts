@@ -134,16 +134,21 @@ describe("popup view models", () => {
     expect(model.guidanceCard).toEqual({
       label: "Start here",
       tone: "warning",
-      headline: "Enable a provider in settings",
+      headline: "Start with Codex in Quick Setup",
       detail:
-        "The popup only becomes useful after at least one provider is visible. Start in settings, then return here for one-click status and attention triage.",
+        "Open Settings > Quick Setup and enable Codex. Then follow the browser-access and usage-page steps before returning here for status triage.",
       action: {
         kind: "settings",
-        label: "Open settings",
+        label: "Open Quick Setup",
+        providerId: "codex",
       },
     });
+    expect(model.firstSetupProvider).toEqual({
+      providerId: "codex",
+      providerLabel: "Codex",
+    });
     expect(model.headerDetail).toBe(
-      "Start in settings. Once one provider is visible, this popup will summarize live readiness and next steps.",
+      "Start in Settings > Quick Setup with Codex. Once one provider is visible, this popup will summarize live readiness and next steps.",
     );
     expect(model.summaryItems).toEqual([
       {
@@ -171,10 +176,10 @@ describe("popup view models", () => {
       label: "Provider triage",
       headline: "Nothing to triage yet",
       detail:
-        "This section becomes actionable after at least one provider is visible in settings.",
+        "Enable Codex in Settings > Quick Setup first, then this section becomes actionable.",
       emptyStateHeadline: "No provider cards yet",
       emptyStateDetail:
-        "Enable one provider in settings, then come back here for one-click provider triage.",
+        "Start with Codex, then come back here for one-click provider triage.",
     });
     expect(model.setupCoverage).toEqual({
       label: "Setup coverage",
@@ -182,7 +187,7 @@ describe("popup view models", () => {
       tone: "warning",
       headline: "No visible providers configured",
       detail:
-        "Enable one provider in settings first. Then this card will show whether visible providers are live-ready, blocked on setup, or policy-only.",
+        "Enable Codex in Settings > Quick Setup first. Then this card will show whether visible providers are live-ready, blocked on setup, or policy-only.",
       items: [
         {
           label: "Live ready",
@@ -207,7 +212,8 @@ describe("popup view models", () => {
       ],
       action: {
         kind: "settings",
-        label: "Open settings",
+        label: "Open Quick Setup",
+        providerId: "codex",
       },
     });
     expect(model.actionSection).toEqual({
@@ -225,7 +231,7 @@ describe("popup view models", () => {
       label: "Surface roles",
       headline: "Settings owns setup",
       detail:
-        "Use settings to enable providers, grant host access, and add credentials. The dashboard becomes useful after at least one provider is visible.",
+        "Use Settings > Quick Setup to enable Codex, grant host access, and open the usage page. The dashboard becomes useful after at least one provider is visible.",
     });
     expect(model.showSnapshotStatus).toBe(false);
     expect(model.featuredProviders).toEqual([]);
@@ -246,7 +252,8 @@ describe("popup view models", () => {
 
     expect(model.setupCoverage.action).toEqual({
       kind: "settings",
-      label: "打开设置",
+      label: "打开快速设置",
+      providerId: "codex",
     });
     expect(model.setupCoverage.statusLabel).toBe("开始配置");
   });
@@ -1186,12 +1193,13 @@ describe("popup view models", () => {
     expect(model.guidanceCard).toEqual({
       label: "从这里开始",
       tone: "warning",
-      headline: "先在设置里启用一个 provider",
+      headline: "先在快速设置里配置 Codex",
       detail:
-        "至少有一个 provider 可见之后，这个 popup 才真正有用。先去设置里启用，再回来做一键状态检查和分诊。",
+        "打开 Settings > 快速设置，先启用 Codex。之后按提示完成浏览器授权和使用页面，再回来做状态分诊。",
       action: {
         kind: "settings",
-        label: "打开设置",
+        label: "打开快速设置",
+        providerId: "codex",
       },
     });
     expect(model.setupCoverage).toEqual({
@@ -1200,7 +1208,7 @@ describe("popup view models", () => {
       tone: "warning",
       headline: "还没有可见 provider 已配置",
       detail:
-        "先在设置里启用一个 provider。之后这张卡会显示当前可见 provider 是 live-ready、被配置阻塞，还是仅策略。",
+        "先在 Settings > 快速设置里启用 Codex。之后这张卡会显示当前可见 provider 是 live-ready、被配置阻塞，还是仅策略。",
       items: [
         {
           label: "可实时同步",
@@ -1225,7 +1233,8 @@ describe("popup view models", () => {
       ],
       action: {
         kind: "settings",
-        label: "打开设置",
+        label: "打开快速设置",
+        providerId: "codex",
       },
     });
     expect(model.actionSection).toEqual({
@@ -1243,16 +1252,16 @@ describe("popup view models", () => {
       label: "Surface roles",
       headline: "Settings 负责配置",
       detail:
-        "用 settings 启用 provider、授予 host access、补充凭据。至少有一个 provider 可见之后，dashboard 才真正开始有意义。",
+        "用 Settings > 快速设置启用 Codex、授予 host access、打开使用页面。至少有一个 provider 可见之后，dashboard 才真正开始有意义。",
     });
     expect(model.featuredSection).toEqual({
       label: "Provider 分诊",
       headline: "还没有可分诊内容",
       detail:
-        "至少有一个 provider 在设置里可见之后，这个区域才会变得可操作。",
+        "先在 Settings > 快速设置里启用 Codex，之后这里才会变得可操作。",
       emptyStateHeadline: "还没有 provider 卡片",
       emptyStateDetail:
-        "先在设置里启用一个 provider，再回来做一键 provider 分诊。",
+        "先从 Codex 开始，再回来做一键 provider 分诊。",
     });
   });
 

@@ -38,6 +38,11 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
         enableProviderHeadline: "先在设置里启用一个 provider",
         enableProviderDetail:
           "至少有一个 provider 可见之后，这个 popup 才真正有用。先去设置里启用，再回来做一键状态检查和分诊。",
+        startWithProviderHeadline: (providerLabel: string) =>
+          `先在快速设置里配置 ${providerLabel}`,
+        startWithProviderDetail: (providerLabel: string) =>
+          `打开 Settings > 快速设置，先启用 ${providerLabel}。之后按提示完成浏览器授权和使用页面，再回来做状态分诊。`,
+        openQuickSetupAction: "打开快速设置",
         grantAccessSingleHeadline: (providerLabel: string) =>
           `为 ${providerLabel} 授权访问`,
         grantAccessManyHeadline: "先在设置里授予 host access",
@@ -76,6 +81,10 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
         noProviderCardsYetHeadline: "还没有 provider 卡片",
         enableProviderComeBackDetail:
           "先在设置里启用一个 provider，再回来做一键 provider 分诊。",
+        actionableAfterFirstProviderDetail: (providerLabel: string) =>
+          `先在 Settings > 快速设置里启用 ${providerLabel}，之后这里才会变得可操作。`,
+        startFirstProviderComeBackDetail: (providerLabel: string) =>
+          `先从 ${providerLabel} 开始，再回来做一键 provider 分诊。`,
         needsAttentionLabel: "需要关注",
         featuredProvidersHeadline: "重点 provider",
         needsAttentionDetail:
@@ -127,6 +136,8 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
         noVisibleHeadline: "还没有可见 provider 已配置",
         noVisibleDetail:
           "先在设置里启用一个 provider。之后这张卡会显示当前可见 provider 是 live-ready、被配置阻塞，还是仅策略。",
+        noVisibleDetailForProvider: (providerLabel: string) =>
+          `先在 Settings > 快速设置里启用 ${providerLabel}。之后这张卡会显示当前可见 provider 是 live-ready、被配置阻塞，还是仅策略。`,
         visibleProvidersHeadline: (count: number) =>
           `${formatProviderCount(i18n, count)} 可见`,
         needsSetupDetail: (sentence: string) =>
@@ -159,6 +170,8 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
       header: {
         noVisible:
           "先去设置开始。只要有一个 provider 可见，这个 popup 就会开始汇总 live readiness 和下一步。",
+        noVisibleForProvider: (providerLabel: string) =>
+          `先在 Settings > 快速设置里从 ${providerLabel} 开始。只要有一个 provider 可见，这个 popup 就会开始汇总 live readiness 和下一步。`,
         needsSetup:
           "用这个 popup 把配置阻塞和已经 ready 的 provider 分开看。",
         contractOnly:
@@ -184,6 +197,8 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
         settingsOwnsSetupHeadline: "Settings 负责配置",
         settingsOwnsSetupNoVisibleDetail:
           "用 settings 启用 provider、授予 host access、补充凭据。至少有一个 provider 可见之后，dashboard 才真正开始有意义。",
+        settingsOwnsFirstProviderSetupDetail: (providerLabel: string) =>
+          `用 Settings > 快速设置启用 ${providerLabel}、授予 host access、打开使用页面。至少有一个 provider 可见之后，dashboard 才真正开始有意义。`,
         settingsOwnsSetupDetail:
           "把 settings 用在 provider 开关、host access 和已存凭据上。在配置清楚之前，popup 仍然只是快速分诊层。",
         settingsOwnsContractControlsHeadline: "Settings 负责合同控制",
@@ -234,6 +249,11 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
       enableProviderHeadline: "Enable a provider in settings",
       enableProviderDetail:
         "The popup only becomes useful after at least one provider is visible. Start in settings, then return here for one-click status and attention triage.",
+      startWithProviderHeadline: (providerLabel: string) =>
+        `Start with ${providerLabel} in Quick Setup`,
+      startWithProviderDetail: (providerLabel: string) =>
+        `Open Settings > Quick Setup and enable ${providerLabel}. Then follow the browser-access and usage-page steps before returning here for status triage.`,
+      openQuickSetupAction: "Open Quick Setup",
       grantAccessSingleHeadline: (providerLabel: string) =>
         `Grant access for ${providerLabel}`,
       grantAccessManyHeadline: "Grant host access in settings",
@@ -264,6 +284,10 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
       noProviderCardsYetHeadline: "No provider cards yet",
       enableProviderComeBackDetail:
         "Enable one provider in settings, then come back here for one-click provider triage.",
+      actionableAfterFirstProviderDetail: (providerLabel: string) =>
+        `Enable ${providerLabel} in Settings > Quick Setup first, then this section becomes actionable.`,
+      startFirstProviderComeBackDetail: (providerLabel: string) =>
+        `Start with ${providerLabel}, then come back here for one-click provider triage.`,
       needsAttentionLabel: "Needs attention",
       featuredProvidersHeadline: "Featured providers",
       needsAttentionDetail:
@@ -316,6 +340,8 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
       noVisibleHeadline: "No visible providers configured",
       noVisibleDetail:
         "Enable one provider in settings first. Then this card will show whether visible providers are live-ready, blocked on setup, or policy-only.",
+      noVisibleDetailForProvider: (providerLabel: string) =>
+        `Enable ${providerLabel} in Settings > Quick Setup first. Then this card will show whether visible providers are live-ready, blocked on setup, or policy-only.`,
       visibleProvidersHeadline: (count: number) =>
         `${i18n.formatNumber(count)} visible ${count === 1 ? "provider" : "providers"}`,
       needsSetupDetail: (sentence: string) =>
@@ -348,6 +374,8 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
     header: {
       noVisible:
         "Start in settings. Once one provider is visible, this popup will summarize live readiness and next steps.",
+      noVisibleForProvider: (providerLabel: string) =>
+        `Start in Settings > Quick Setup with ${providerLabel}. Once one provider is visible, this popup will summarize live readiness and next steps.`,
       needsSetup:
         "Use this popup to separate setup blockers from the providers that are already ready.",
       contractOnly:
@@ -373,6 +401,8 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
       settingsOwnsSetupHeadline: "Settings owns setup",
       settingsOwnsSetupNoVisibleDetail:
         "Use settings to enable providers, grant host access, and add credentials. The dashboard becomes useful after at least one provider is visible.",
+      settingsOwnsFirstProviderSetupDetail: (providerLabel: string) =>
+        `Use Settings > Quick Setup to enable ${providerLabel}, grant host access, and open the usage page. The dashboard becomes useful after at least one provider is visible.`,
       settingsOwnsSetupDetail:
         "Use settings for provider toggles, host access, and stored credentials. The popup stays a quick triage layer until setup is clear.",
       settingsOwnsContractControlsHeadline: "Settings owns contract controls",

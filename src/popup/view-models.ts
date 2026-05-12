@@ -1,9 +1,11 @@
 import type {
   AppState,
   ProviderId,
+  ProviderSetting,
   ProviderTone,
   SummaryItem,
 } from "../providers/types";
+import { getRecommendedFirstSetupProvider } from "../shared/first-provider-setup";
 import type { RuntimeI18n } from "../shared/i18n";
 import { buildPopupLocalizedCopy } from "../shared/localized-copy";
 import type { ProviderSourceDisplayCopy } from "../shared/provider-sources";
@@ -77,6 +79,11 @@ export type PopupSurfaceRolesCard = {
   detail: string;
 };
 
+export type PopupFirstSetupProvider = {
+  providerId: ProviderId;
+  providerLabel: string;
+};
+
 export type PopupFeaturedProviderCard = {
   provider: ProviderViewModel;
   statusLabel: string;
@@ -91,6 +98,7 @@ export type PopupFeaturedProviderCard = {
 export type PopupViewModel = {
   headerDetail: string;
   summaryItems: SummaryItem[];
+  firstSetupProvider: PopupFirstSetupProvider | null;
   visibleProviders: ProviderViewModel[];
   featuredProviders: ProviderViewModel[];
   featuredProviderCards: PopupFeaturedProviderCard[];
@@ -132,6 +140,21 @@ const DEFAULT_POPUP_VALUE_FORMATTER: PopupValueFormatter = (value) => String(val
 
 function pluralize(count: number, singular: string, plural = `${singular}s`) {
   return count === 1 ? singular : plural;
+}
+
+function buildFirstSetupProvider(
+  providers: ProviderSetting[],
+): PopupFirstSetupProvider | null {
+  const provider = getRecommendedFirstSetupProvider(providers);
+
+  if (!provider) {
+    return null;
+  }
+
+  return {
+    providerId: provider.id,
+    providerLabel: provider.label,
+  };
 }
 
 function needsAttention(provider: ProviderViewModel): boolean {
@@ -228,17 +251,27 @@ function buildSnapshotStatus(
 
 function buildGuidanceCard(
   visibleProviders: ProviderViewModel[],
+  firstSetupProvider: PopupFirstSetupProvider | null = null,
 ): PopupGuidanceCard | null {
   if (visibleProviders.length === 0) {
+    const providerLabel = firstSetupProvider?.providerLabel ?? "one provider";
+
     return {
       label: "Start here",
       tone: "warning",
-      headline: "Enable a provider in settings",
+      headline: firstSetupProvider
+        ? `Start with ${providerLabel} in Quick Setup`
+        : "Enable a provider in Quick Setup",
       detail:
-        "The popup only becomes useful after at least one provider is visible. Start in settings, then return here for one-click status and attention triage.",
+        firstSetupProvider
+          ? `Open Settings > Quick Setup and enable ${providerLabel}. Then follow the browser-access and usage-page steps before returning here for status triage.`
+          : "Open Settings > Quick Setup and enable one provider. Then return here for one-click status and attention triage.",
       action: {
         kind: "settings",
-        label: "Open settings",
+        label: firstSetupProvider ? "Open Quick Setup" : "Open settings",
+        ...(firstSetupProvider
+          ? { providerId: firstSetupProvider.providerId }
+          : {}),
       },
     };
   }
@@ -344,16 +377,23 @@ function buildGuidanceCard(
 function buildFeaturedSection(
   visibleProviders: ProviderViewModel[],
   attentionProviders: ProviderViewModel[],
+  firstSetupProvider: PopupFirstSetupProvider | null = null,
 ): PopupFeaturedSection {
   if (visibleProviders.length === 0) {
+    const providerLabel = firstSetupProvider?.providerLabel ?? "one provider";
+
     return {
       label: "Provider triage",
       headline: "Nothing to triage yet",
       detail:
-        "This section becomes actionable after at least one provider is visible in settings.",
+        firstSetupProvider
+          ? `Enable ${providerLabel} in Settings > Quick Setup first, then this section becomes actionable.`
+          : "This section becomes actionable after at least one provider is visible in Settings > Quick Setup.",
       emptyStateHeadline: "No provider cards yet",
       emptyStateDetail:
-        "Enable one provider in settings, then come back here for one-click provider triage.",
+        firstSetupProvider
+          ? `Start with ${providerLabel}, then come back here for one-click provider triage.`
+          : "Enable one provider in Settings > Quick Setup, then come back here for one-click provider triage.",
     };
   }
 
@@ -732,6 +772,7 @@ function buildSetupBlockerSentence(
 function buildSetupCoverage(
   visibleProviders: ProviderViewModel[],
   formatValue: PopupValueFormatter = DEFAULT_POPUP_VALUE_FORMATTER,
+  firstSetupProvider: PopupFirstSetupProvider | null = null,
 ): PopupSetupCoverage {
   const {
     providerCount,
@@ -743,13 +784,17 @@ function buildSetupCoverage(
   } = buildSetupCoverageStats(visibleProviders);
 
   if (visibleProviders.length === 0) {
+    const providerLabel = firstSetupProvider?.providerLabel ?? "one provider";
+
     return {
       label: "Setup coverage",
       statusLabel: "Start setup",
       tone: "warning",
       headline: "No visible providers configured",
       detail:
-        "Enable one provider in settings first. Then this card will show whether visible providers are live-ready, blocked on setup, or policy-only.",
+        firstSetupProvider
+          ? `Enable ${providerLabel} in Settings > Quick Setup first. Then this card will show whether visible providers are live-ready, blocked on setup, or policy-only.`
+          : "Enable one provider in Settings > Quick Setup first. Then this card will show whether visible providers are live-ready, blocked on setup, or policy-only.",
       items: [
         {
           label: "Live ready",
@@ -774,7 +819,10 @@ function buildSetupCoverage(
       ],
       action: {
         kind: "settings",
-        label: "Open settings",
+        label: firstSetupProvider ? "Open Quick Setup" : "Open settings",
+        ...(firstSetupProvider
+          ? { providerId: firstSetupProvider.providerId }
+          : {}),
       },
     };
   }
@@ -857,9 +905,12 @@ function buildSetupCoverage(
 function buildPopupHeaderDetail(
   visibleProviders: ProviderViewModel[],
   setupCoverage: PopupSetupCoverage,
+  firstSetupProvider: PopupFirstSetupProvider | null = null,
 ): string {
   if (visibleProviders.length === 0) {
-    return "Start in settings. Once one provider is visible, this popup will summarize live readiness and next steps.";
+    return firstSetupProvider
+      ? `Start in Settings > Quick Setup with ${firstSetupProvider.providerLabel}. Once one provider is visible, this popup will summarize live readiness and next steps.`
+      : "Start in Settings > Quick Setup. Once one provider is visible, this popup will summarize live readiness and next steps.";
   }
 
   if (setupCoverage.statusLabel === "Needs setup") {
@@ -966,13 +1017,16 @@ function buildActionSection(
 function buildSurfaceRolesCard(
   visibleProviders: ProviderViewModel[],
   guidanceCard: PopupGuidanceCard | null,
+  firstSetupProvider: PopupFirstSetupProvider | null = null,
 ): PopupSurfaceRolesCard {
   if (visibleProviders.length === 0) {
     return {
       label: "Surface roles",
       headline: "Settings owns setup",
       detail:
-        "Use settings to enable providers, grant host access, and add credentials. The dashboard becomes useful after at least one provider is visible.",
+        firstSetupProvider
+          ? `Use Settings > Quick Setup to enable ${firstSetupProvider.providerLabel}, grant host access, and open the usage page. The dashboard becomes useful after at least one provider is visible.`
+          : "Use Settings > Quick Setup to enable providers, grant host access, and open usage pages. The dashboard becomes useful after at least one provider is visible.",
     };
   }
 
@@ -1099,16 +1153,28 @@ function buildLocalizedGuidanceCard(
   visibleProviders: ProviderViewModel[],
   i18n: RuntimeI18n,
   copy: ReturnType<typeof buildPopupLocalizedCopy>,
+  firstSetupProvider: PopupFirstSetupProvider | null = null,
 ): PopupGuidanceCard | null {
   if (visibleProviders.length === 0) {
     return {
       label: copy.guidance.startHereLabel,
       tone: "warning",
-      headline: copy.guidance.enableProviderHeadline,
-      detail: copy.guidance.enableProviderDetail,
+      headline: firstSetupProvider
+        ? copy.guidance.startWithProviderHeadline(
+            firstSetupProvider.providerLabel,
+          )
+        : copy.guidance.enableProviderHeadline,
+      detail: firstSetupProvider
+        ? copy.guidance.startWithProviderDetail(firstSetupProvider.providerLabel)
+        : copy.guidance.enableProviderDetail,
       action: {
         kind: "settings",
-        label: i18n.t("common.actions.open_settings"),
+        label: firstSetupProvider
+          ? copy.guidance.openQuickSetupAction
+          : i18n.t("common.actions.open_settings"),
+        ...(firstSetupProvider
+          ? { providerId: firstSetupProvider.providerId }
+          : {}),
       },
     };
   }
@@ -1226,14 +1292,23 @@ function buildLocalizedFeaturedSection(
   visibleProviders: ProviderViewModel[],
   attentionProviders: ProviderViewModel[],
   copy: ReturnType<typeof buildPopupLocalizedCopy>,
+  firstSetupProvider: PopupFirstSetupProvider | null = null,
 ): PopupFeaturedSection {
   if (visibleProviders.length === 0) {
     return {
       label: copy.featuredSection.providerTriageLabel,
       headline: copy.featuredSection.nothingToTriageHeadline,
-      detail: copy.featuredSection.actionableAfterVisibleDetail,
+      detail: firstSetupProvider
+        ? copy.featuredSection.actionableAfterFirstProviderDetail(
+            firstSetupProvider.providerLabel,
+          )
+        : copy.featuredSection.actionableAfterVisibleDetail,
       emptyStateHeadline: copy.featuredSection.noProviderCardsYetHeadline,
-      emptyStateDetail: copy.featuredSection.enableProviderComeBackDetail,
+      emptyStateDetail: firstSetupProvider
+        ? copy.featuredSection.startFirstProviderComeBackDetail(
+            firstSetupProvider.providerLabel,
+          )
+        : copy.featuredSection.enableProviderComeBackDetail,
     };
   }
 
@@ -1389,6 +1464,7 @@ function buildLocalizedSetupCoverage(
   existingItems: SummaryItem[],
   i18n: RuntimeI18n,
   copy: ReturnType<typeof buildPopupLocalizedCopy>,
+  firstSetupProvider: PopupFirstSetupProvider | null = null,
 ): PopupSetupCoverage {
   const {
     providerCount,
@@ -1405,7 +1481,11 @@ function buildLocalizedSetupCoverage(
       statusLabel: copy.setupCoverage.statusStartSetup,
       tone: "warning",
       headline: copy.setupCoverage.noVisibleHeadline,
-      detail: copy.setupCoverage.noVisibleDetail,
+      detail: firstSetupProvider
+        ? copy.setupCoverage.noVisibleDetailForProvider(
+            firstSetupProvider.providerLabel,
+          )
+        : copy.setupCoverage.noVisibleDetail,
       items: [
         {
           ...existingItems[0],
@@ -1426,7 +1506,12 @@ function buildLocalizedSetupCoverage(
       ],
       action: {
         kind: "settings",
-        label: i18n.t("common.actions.open_settings"),
+        label: firstSetupProvider
+          ? copy.guidance.openQuickSetupAction
+          : i18n.t("common.actions.open_settings"),
+        ...(firstSetupProvider
+          ? { providerId: firstSetupProvider.providerId }
+          : {}),
       },
     };
   }
@@ -1499,9 +1584,12 @@ function buildLocalizedHeaderDetail(
   visibleProviders: ProviderViewModel[],
   setupCoverage: PopupSetupCoverage,
   copy: ReturnType<typeof buildPopupLocalizedCopy>,
+  firstSetupProvider: PopupFirstSetupProvider | null = null,
 ) {
   if (visibleProviders.length === 0) {
-    return copy.header.noVisible;
+    return firstSetupProvider
+      ? copy.header.noVisibleForProvider(firstSetupProvider.providerLabel)
+      : copy.header.noVisible;
   }
 
   if (setupCoverage.statusLabel === copy.setupCoverage.statusNeedsSetup) {
@@ -1568,12 +1656,17 @@ function buildLocalizedSurfaceRolesCard(
   visibleProviders: ProviderViewModel[],
   guidanceCard: PopupGuidanceCard | null,
   copy: ReturnType<typeof buildPopupLocalizedCopy>,
+  firstSetupProvider: PopupFirstSetupProvider | null = null,
 ): PopupSurfaceRolesCard {
   if (visibleProviders.length === 0) {
     return {
       label: copy.surfaceRoles.label,
       headline: copy.surfaceRoles.settingsOwnsSetupHeadline,
-      detail: copy.surfaceRoles.settingsOwnsSetupNoVisibleDetail,
+      detail: firstSetupProvider
+        ? copy.surfaceRoles.settingsOwnsFirstProviderSetupDetail(
+            firstSetupProvider.providerLabel,
+          )
+        : copy.surfaceRoles.settingsOwnsSetupNoVisibleDetail,
     };
   }
 
@@ -1629,17 +1722,29 @@ export function localizePopupViewModel(
   const copy = buildPopupLocalizedCopy(i18n);
   const visibleProviders = model.visibleProviders;
   const attentionProviders = visibleProviders.filter(needsAttention);
-  const guidanceCard = buildLocalizedGuidanceCard(visibleProviders, i18n, copy);
+  const firstSetupProvider = model.firstSetupProvider;
+  const guidanceCard = buildLocalizedGuidanceCard(
+    visibleProviders,
+    i18n,
+    copy,
+    firstSetupProvider,
+  );
   const setupCoverage = buildLocalizedSetupCoverage(
     visibleProviders,
     model.setupCoverage.items,
     i18n,
     copy,
+    firstSetupProvider,
   );
 
   return {
     ...model,
-    headerDetail: buildLocalizedHeaderDetail(visibleProviders, setupCoverage, copy),
+    headerDetail: buildLocalizedHeaderDetail(
+      visibleProviders,
+      setupCoverage,
+      copy,
+      firstSetupProvider,
+    ),
     summaryItems: [
       {
         ...model.summaryItems[0],
@@ -1666,11 +1771,13 @@ export function localizePopupViewModel(
       visibleProviders,
       guidanceCard,
       copy,
+      firstSetupProvider,
     ),
     featuredSection: buildLocalizedFeaturedSection(
       visibleProviders,
       attentionProviders,
       copy,
+      firstSetupProvider,
     ),
     featuredProviderCards: model.featuredProviders.map((provider) =>
       buildLocalizedFeaturedProviderCard(provider, i18n, copy),
@@ -1687,16 +1794,29 @@ export function buildPopupViewModel(
 ): PopupViewModel {
   const visibleProviders = getVisibleProviders(state, sourceDisplayCopy);
   const attentionProviders = visibleProviders.filter(needsAttention);
-  const guidanceCard = buildGuidanceCard(visibleProviders);
-  const setupCoverage = buildSetupCoverage(visibleProviders, formatValue);
+  const firstSetupProvider =
+    visibleProviders.length === 0
+      ? buildFirstSetupProvider(state.providerSettings)
+      : null;
+  const guidanceCard = buildGuidanceCard(visibleProviders, firstSetupProvider);
+  const setupCoverage = buildSetupCoverage(
+    visibleProviders,
+    formatValue,
+    firstSetupProvider,
+  );
   const popupProviders =
     attentionProviders.length > 0
       ? attentionProviders.slice(0, 3)
       : visibleProviders.slice(0, 3);
 
   return {
-    headerDetail: buildPopupHeaderDetail(visibleProviders, setupCoverage),
+    headerDetail: buildPopupHeaderDetail(
+      visibleProviders,
+      setupCoverage,
+      firstSetupProvider,
+    ),
     summaryItems: buildPopupSummaryItems(visibleProviders, setupCoverage, summaryLabels, formatValue),
+    firstSetupProvider,
     visibleProviders,
     featuredProviderCards: popupProviders.map(buildPopupFeaturedProviderCard),
     showSnapshotStatus: visibleProviders.length > 0,
@@ -1704,8 +1824,16 @@ export function buildPopupViewModel(
     guidanceCard,
     setupCoverage,
     actionSection: buildActionSection(guidanceCard),
-    surfaceRolesCard: buildSurfaceRolesCard(visibleProviders, guidanceCard),
-    featuredSection: buildFeaturedSection(visibleProviders, attentionProviders),
+    surfaceRolesCard: buildSurfaceRolesCard(
+      visibleProviders,
+      guidanceCard,
+      firstSetupProvider,
+    ),
+    featuredSection: buildFeaturedSection(
+      visibleProviders,
+      attentionProviders,
+      firstSetupProvider,
+    ),
     featuredProviders: popupProviders,
   };
 }
