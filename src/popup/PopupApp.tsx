@@ -44,6 +44,7 @@ import { runPopupThemeToggleAction } from "./popup-theme-toggle-action";
 import { runPopupHideProviderAction } from "./popup-hide-provider-action";
 import { runPopupGuidanceAction } from "./popup-guidance-action";
 import { PopupFeaturedProviderList } from "./PopupFeaturedProviderList";
+import { PopupHeaderSection } from "./PopupHeaderSection";
 
 type PopupLoadState =
   | { status: "loading" }
@@ -267,54 +268,17 @@ export function PopupApp() {
         hasFeaturedProviderCards ? " popup-shell--quota-first" : ""
       }`}
     >
-      <section className="status-card popup-header">
-        <div>
-          <p className="section-label" data-theme-local-surface="popup-header-label">
-            {runtimeI18n.t("popup.header.eyebrow")}
-          </p>
-          <h1 className="section-title">{runtimeI18n.t("popup.header.title")}</h1>
-          {!hasFeaturedProviderCards ? (
-            <p className="supporting-copy">{popupModel.headerDetail}</p>
-          ) : null}
-        </div>
-        <div className="popup-actions">
-          <button
-            className="text-button"
-            type="button"
-            disabled={isRefreshing}
-            onClick={handleRefresh}
-          >
-            {isRefreshing ? runtimeI18n.t("popup.actions.refreshing") : runtimeI18n.t("popup.actions.refresh")}
-          </button>
-          <button
-            className="icon-button"
-            data-popup-toggle-theme-mode="true"
-            data-theme-local-surface="popup-toggle-theme-mode"
-            type="button"
-            aria-label={quickThemeToggleCopy.title}
-            title={quickThemeToggleCopy.title}
-            disabled={isThemeTogglePending}
-            onClick={() => {
-              void handleToggleThemeMode();
-            }}
-          >
-            {quickThemeToggleCopy.label}
-          </button>
-          <button
-            className="icon-button"
-            data-popup-open-dashboard-tab="true"
-            data-theme-local-surface="popup-open-dashboard-tab"
-            type="button"
-            aria-label={runtimeI18n.t("common.actions.open_dashboard_tab")}
-            title={runtimeI18n.t("common.actions.open_dashboard_tab")}
-            onClick={() => {
-              void openFullDashboardTab();
-            }}
-          >
-            {runtimeI18n.t("common.actions.tab")}
-          </button>
-        </div>
-      </section>
+      <PopupHeaderSection
+        headerDetail={popupModel.headerDetail}
+        hasFeaturedProviderCards={hasFeaturedProviderCards}
+        isRefreshing={isRefreshing}
+        isThemeTogglePending={isThemeTogglePending}
+        quickThemeToggleCopy={quickThemeToggleCopy}
+        runtimeI18n={runtimeI18n}
+        onOpenDashboardTab={openFullDashboardTab}
+        onRefresh={handleRefresh}
+        onToggleThemeMode={handleToggleThemeMode}
+      />
 
       <PopupFeaturedProviderList
         ariaLabel={popupCopy.aria.featuredProviders}
