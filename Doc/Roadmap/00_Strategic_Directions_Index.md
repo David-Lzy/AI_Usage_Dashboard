@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is now completed through `Phase 313`, with no active phase or queued numbered phase currently selected
+- the numbered phase queue is now completed through `Phase 314`, with no active phase or queued numbered phase currently selected
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -195,6 +195,7 @@ As of 2026-05-13:
 - `Phase 308` recorded the `0.1.0-rc.14` Chrome helper smoke pass across dashboard, Settings, focused Settings, provider-detail, full-page dashboard, and popup surfaces while preserving the direct Playwright MCP restart boundary
 - `Phase 312` added a testable RDP extension-window route map and locked ordinary Chrome tab/app-window captures of sidepanel-derived routes to the full-page surface path
 - `Phase 313` reused that RDP route map from store screenshot runtime capture plans so screenshot request generation and extension-window smoke helpers share route path/title/size values
+- `Phase 314` split interaction-audit iframe readiness and preset-action helpers out of the route component while preserving signoff and export behavior
 - provider closure still waits on available accounts or product decisions for JetBrains org-console, individual Claude Pro / Max behavior, and Gemini project-metrics graduation; Claude Team no longer belongs in the blocked-by-account queue
 - operator evidence means archived real human/operator review exports for interaction-audit or theme-recovery workspaces; it remains useful, but it sits behind release package and store asset closeout
 - the originally queued local-safe file splitting targets are now closed enough that further splitting should be driven by a concrete maintenance risk instead of the old Phase 236-era queue

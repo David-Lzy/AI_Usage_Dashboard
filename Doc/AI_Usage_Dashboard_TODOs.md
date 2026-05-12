@@ -76,7 +76,7 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 313` execution priority:
+Current post-`Phase 314` execution priority:
 
 1. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.13.zip` as the submitted Chrome Web Store review boundary. Do not silently mutate or rewrite the [RC13 upload-candidate milestone](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) while that submission remains the human-reviewed baseline.
 2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.14.zip` as the current packaged follow-up candidate. It now includes post-`rc.13` `Phase 303` through `Phase 306` Claude, popup, settings, full-page, and side-panel polish and is ready if review feedback or an explicit resubmission decision needs a newer build.
@@ -88,12 +88,13 @@ Current post-`Phase 313` execution priority:
 8. `P2` - keep the `Phase 311` popup view-model split behavior-only: `src/popup/view-models.ts` remains the public aggregator and the extracted setup-coverage / featured-card modules should not change popup UI semantics.
 9. `P2` - keep the `Phase 312` RDP route-contract guard stable: ordinary Chrome tab/app-window captures of dashboard, Settings, focused Settings, and provider detail must use the full-page surface path, while `popup` remains the only popup app-window route.
 10. `P2` - keep the `Phase 313` store screenshot route-config reuse stable: request-bound screenshot plans should keep route path, title, and size values aligned with the shared RDP extension-window route table instead of duplicating those strings.
-11. `P2` - Provider closure waits only on the accounts that are still unavailable:
+11. `P2` - keep the `Phase 314` interaction-audit frame-action split behavior-only: iframe readiness and preset-action helpers live outside the route component, but signoff state, exports, request binding, and operator copy stay unchanged.
+12. `P2` - Provider closure waits only on the accounts that are still unavailable:
    - JetBrains org-console reverification waits for a real org-visible `Users and licensing` session.
    - Claude individual Pro / Max usage-page behavior remains separate from the now-shipped Claude Team session-page path.
    - Gemini project-metrics graduation waits for a product decision that project-scoped metrics are acceptable.
-12. `P2` - real operator evidence is now closed as of 2026-05-11: Direction 04 interaction-audit closure archived under [2026-05-11-2026-05-11-rdp-chrome-visual-audit](./testing/operator_reviews/2026-05-11-2026-05-11-rdp-chrome-visual-audit/README.md); Direction 05 theme-recovery closure archived under [2026-05-11-system-recovered-014312](./testing/theme_recovery_reviews/2026-05-11-system-recovered-014312/README.md). No further operator evidence phases are queued unless a new surface or theme regression opens them.
-13. `P2` - continue file splitting only when a concrete maintenance issue justifies it; the old queued split targets for `material-theme.css`, `SettingsPage.tsx`, `App.tsx`, `standard-app-actions.ts`, and `localized-copy.ts` are now closed or reduced to focused compatibility/aggregator files.
+13. `P2` - real operator evidence is now closed as of 2026-05-11: Direction 04 interaction-audit closure archived under [2026-05-11-2026-05-11-rdp-chrome-visual-audit](./testing/operator_reviews/2026-05-11-2026-05-11-rdp-chrome-visual-audit/README.md); Direction 05 theme-recovery closure archived under [2026-05-11-system-recovered-014312](./testing/theme_recovery_reviews/2026-05-11-system-recovered-014312/README.md). No further operator evidence phases are queued unless a new surface or theme regression opens them.
+14. `P2` - continue file splitting only when a concrete maintenance issue justifies it; the old queued split targets for `material-theme.css`, `SettingsPage.tsx`, `App.tsx`, `standard-app-actions.ts`, and `localized-copy.ts` are now closed or reduced to focused compatibility/aggregator files.
 
 Delivery rule for this stage:
 
