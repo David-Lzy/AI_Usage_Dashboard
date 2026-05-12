@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [316_Phase_Operator_Clipboard_Helper_Split.md](./Archive/316_Phase_Operator_Clipboard_Helper_Split.md)
+- latest completed slice: [317_Phase_Operator_Runtime_I18n_Helper_Split.md](./Archive/317_Phase_Operator_Runtime_I18n_Helper_Split.md)
 - queued phase files: none
 
 Completed phases should be moved to:

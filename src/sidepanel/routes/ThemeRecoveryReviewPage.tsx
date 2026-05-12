@@ -3,15 +3,12 @@ import { useEffect, useMemo, useState } from "react";
 import type { AppState } from "../../providers/types";
 import { sendAppMessage } from "../../shared/app-client";
 import { APP_STATE_STORAGE_KEY } from "../../shared/constants";
-import {
-  createRuntimeI18n,
-  DEFAULT_APP_LOCALE_PREFERENCE,
-  type RuntimeI18n,
-} from "../../shared/i18n";
+import type { RuntimeI18n } from "../../shared/i18n";
 import { buildOperatorWorkspaceLocalizedCopy } from "../../shared/localized-copy";
 import { TopBar } from "../components/TopBar";
 import { StatusBadge } from "../components/StatusBadge";
 import { downloadTextFile } from "../download-text-file";
+import { createDefaultOperatorRuntimeI18n } from "../operator-runtime-i18n";
 import { buildThemeRecoveryExportFilename } from "../theme-recovery-export-files";
 import {
   buildThemeRecoveryReviewExport,
@@ -161,13 +158,6 @@ function readThemeRecoveryRequestContext(): ThemeRecoveryReviewRequestContext | 
 type ThemeRecoveryReviewPageProps = {
   i18n?: RuntimeI18n;
 };
-
-function createDefaultOperatorRuntimeI18n(): RuntimeI18n {
-  return createRuntimeI18n(
-    DEFAULT_APP_LOCALE_PREFERENCE,
-    typeof window !== "undefined" ? window : undefined,
-  );
-}
 
 export function ThemeRecoveryReviewPage({
   i18n = createDefaultOperatorRuntimeI18n(),

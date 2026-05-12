@@ -1,11 +1,7 @@
 import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
 
-import {
-  createRuntimeI18n,
-  DEFAULT_APP_LOCALE_PREFERENCE,
-  type RuntimeI18n,
-} from "../../shared/i18n";
+import type { RuntimeI18n } from "../../shared/i18n";
 import { buildOperatorWorkspaceLocalizedCopy } from "../../shared/localized-copy";
 import { TopBar } from "../components/TopBar";
 import { downloadTextFile } from "../download-text-file";
@@ -41,6 +37,7 @@ import {
   INTERACTION_AUDIT_SIGNOFF_SURFACES,
   INTERACTION_AUDIT_SURFACES,
 } from "../interaction-audit-surfaces";
+import { createDefaultOperatorRuntimeI18n } from "../operator-runtime-i18n";
 import { writeClipboardText } from "../write-clipboard-text";
 
 function buildAuditUrl(path: string): string {
@@ -62,13 +59,6 @@ function openAuditSurface(path: string) {
 type InteractionAuditPageProps = {
   i18n?: RuntimeI18n;
 };
-
-function createDefaultOperatorRuntimeI18n(): RuntimeI18n {
-  return createRuntimeI18n(
-    DEFAULT_APP_LOCALE_PREFERENCE,
-    typeof window !== "undefined" ? window : undefined,
-  );
-}
 
 export function InteractionAuditPage({
   i18n = createDefaultOperatorRuntimeI18n(),
