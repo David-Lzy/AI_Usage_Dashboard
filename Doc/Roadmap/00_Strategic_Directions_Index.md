@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is now completed through `Phase 335`, with no active phase or queued numbered phase currently selected
+- the numbered phase queue is now completed through `Phase 336`, with no active phase or queued numbered phase currently selected
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -217,6 +217,7 @@ As of 2026-05-13:
 - `Phase 333` extracted popup localized view-model orchestration while preserving the public `localizePopupViewModel` export path
 - `Phase 334` extracted interaction-audit per-surface card rendering while preserving route-owned audit refs, preset actions, manual checks, and signoff callbacks
 - `Phase 335` extracted interaction-audit review queue rendering while preserving route-owned queue construction and jump behavior
+- `Phase 336` extracted interaction-audit request-scope rendering while preserving route-owned request-context state plus binding, revision, and next-command display
 - provider closure still waits on available accounts or product decisions for JetBrains org-console, individual Claude Pro / Max behavior, and Gemini project-metrics graduation; Claude Team no longer belongs in the blocked-by-account queue
 - operator evidence means archived real human/operator review exports for interaction-audit or theme-recovery workspaces; it remains useful, but it sits behind release package and store asset closeout
 - the originally queued local-safe file splitting targets are now closed enough that further splitting should be driven by a concrete maintenance risk instead of the old Phase 236-era queue

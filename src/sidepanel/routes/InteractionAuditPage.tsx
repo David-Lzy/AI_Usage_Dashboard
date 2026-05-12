@@ -2,11 +2,12 @@ import { useEffect, useRef, useState } from "react";
 
 import type { RuntimeI18n } from "../../shared/i18n";
 import { buildOperatorWorkspaceLocalizedCopy } from "../../shared/localized-copy";
+import { InteractionAuditRequestScopeSection } from "../components/InteractionAuditRequestScopeSection";
+import { InteractionAuditReviewQueueSection } from "../components/InteractionAuditReviewQueueSection";
 import {
   InteractionAuditSurfaceCard,
   type InteractionAuditSurfaceStatus,
 } from "../components/InteractionAuditSurfaceCard";
-import { InteractionAuditReviewQueueSection } from "../components/InteractionAuditReviewQueueSection";
 import { TopBar } from "../components/TopBar";
 import { downloadTextFile } from "../download-text-file";
 import { buildInteractionAuditExportFilename } from "../interaction-audit-export-files";
@@ -223,19 +224,6 @@ export function InteractionAuditPage({
     signoffMetadata,
     signoffRequestContext,
   );
-  const boundRequestId = signoffRequestContext.requestId.trim();
-  const hasBoundRequest = boundRequestId.length > 0;
-  const requestScopeLabel = hasBoundRequest
-    ? copy.signoff.repoBackedRequest
-    : copy.signoff.adHocWorkspace;
-  const requestPreflightCommand = hasBoundRequest
-    ? `npm run interaction-audit:preflight-review-request -- --request-id ${boundRequestId} --input tmp/operator-signoff-export.json`
-    : "";
-  const requestCompleteCommand = hasBoundRequest
-    ? `npm run interaction-audit:complete-review-request -- --request-id ${boundRequestId} --input tmp/operator-signoff-export.json`
-    : "";
-  const requestArchiveCommand =
-    "npm run interaction-audit:archive -- --input tmp/operator-signoff-export.json";
 
   function handleFrameLoad(surfaceId: string) {
     const readiness = getAuditSurfaceReadiness(
@@ -753,95 +741,10 @@ export function InteractionAuditPage({
           </p>
         </div>
 
-        <section
-          className="detail-note detail-note--neutral interaction-audit__request-scope"
-          data-audit-request-scope
-          data-audit-request-scope-mode={hasBoundRequest ? "bound" : "adhoc"}
-        >
-          <div className="interaction-audit__request-scope-header">
-            <div>
-              <p className="detail-note__label">{copy.signoff.requestScope}</p>
-              <p
-                className="supporting-copy"
-                data-audit-request-scope-copy
-              >
-                {hasBoundRequest
-                  ? copy.signoff.boundRequestDetail
-                  : copy.signoff.adHocDetail}
-              </p>
-            </div>
-            <span className="meta-chip" data-audit-request-scope-label>
-              {requestScopeLabel}
-            </span>
-          </div>
-
-          <div className="interaction-audit__signoff-summary">
-            <div
-              className="source-card__field"
-              data-audit-request-scope-summary="binding"
-            >
-              <p className="source-card__label">{copy.signoff.binding}</p>
-              <p className="source-card__value">
-                {formatInteractionAuditSignoffRequestBinding(signoffRequestContext)}
-              </p>
-            </div>
-            <div
-              className="source-card__field"
-              data-audit-request-scope-summary="revision"
-            >
-              <p className="source-card__label">{copy.signoff.requestRevision}</p>
-              <p className="source-card__value">
-                {formatInteractionAuditSignoffRequestRevision(signoffRequestContext)}
-              </p>
-            </div>
-            <div
-              className="source-card__field"
-              data-audit-request-scope-summary="downloads"
-            >
-              <p className="source-card__label">{copy.signoff.downloadIdentity}</p>
-              <p className="source-card__value">
-                {hasBoundRequest
-                  ? copy.signoff.downloadsBound
-                  : copy.signoff.downloadsAdHoc}
-              </p>
-            </div>
-          </div>
-
-          <div className="interaction-audit__request-scope-commands">
-            {hasBoundRequest ? (
-              <>
-                <div className="interaction-audit__request-scope-command">
-                  <p className="detail-note__label">Preflight next</p>
-                  <pre
-                    className="capture-pre"
-                    data-audit-request-scope-preflight
-                  >
-                    {requestPreflightCommand}
-                  </pre>
-                </div>
-                <div className="interaction-audit__request-scope-command">
-                  <p className="detail-note__label">Complete next</p>
-                  <pre
-                    className="capture-pre"
-                    data-audit-request-scope-complete
-                  >
-                    {requestCompleteCommand}
-                  </pre>
-                </div>
-              </>
-            ) : (
-              <div className="interaction-audit__request-scope-command">
-                <p className="detail-note__label">Archive next</p>
-                <pre
-                  className="capture-pre"
-                  data-audit-request-scope-archive
-                >
-                  {requestArchiveCommand}
-                </pre>
-              </div>
-            )}
-          </div>
-        </section>
+        <InteractionAuditRequestScopeSection
+          copy={copy.signoff}
+          signoffRequestContext={signoffRequestContext}
+        />
 
         <InteractionAuditReviewQueueSection
           nextReviewTarget={nextReviewTarget}
