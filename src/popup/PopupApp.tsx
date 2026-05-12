@@ -48,6 +48,7 @@ import { PopupGuidanceCardSection } from "./PopupGuidanceCardSection";
 import { PopupHeaderSection } from "./PopupHeaderSection";
 import { PopupSnapshotStatusSection } from "./PopupSnapshotStatusSection";
 import { PopupSetupCoverageSection } from "./PopupSetupCoverageSection";
+import { PopupSurfaceRolesSection } from "./PopupSurfaceRolesSection";
 
 type PopupLoadState =
   | { status: "loading" }
@@ -332,21 +333,9 @@ export function PopupApp() {
       ) : null}
 
       {!hasFeaturedProviderCards ? (
-        <section
-          className="status-card"
-          data-theme-local-surface="popup-contract-card"
-        >
-          <p className="section-label">{popupModel.surfaceRolesCard.label}</p>
-          <h2
-            className="section-title"
-            data-popup-surface-roles-headline="true"
-          >
-            {popupModel.surfaceRolesCard.headline}
-          </h2>
-          <p className="supporting-copy" data-popup-surface-roles-detail="true">
-            {popupModel.surfaceRolesCard.detail}
-          </p>
-        </section>
+        <PopupSurfaceRolesSection
+          surfaceRolesCard={popupModel.surfaceRolesCard}
+        />
       ) : null}
 
       {!hasFeaturedProviderCards ? (
