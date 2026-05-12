@@ -10,6 +10,7 @@ import { ThemeRecoveryCurrentStateCard } from "../components/ThemeRecoveryCurren
 import { ThemeRecoveryProviderList } from "../components/ThemeRecoveryProviderList";
 import { ThemeRecoveryRequestScopeSection } from "../components/ThemeRecoveryRequestScopeSection";
 import { ThemeRecoveryThemeStateCard } from "../components/ThemeRecoveryThemeStateCard";
+import { ThemeRecoveryWorkflowLinksCard } from "../components/ThemeRecoveryWorkflowLinksCard";
 import { downloadTextFile } from "../download-text-file";
 import { createDefaultOperatorRuntimeI18n } from "../operator-runtime-i18n";
 import { buildThemeRecoveryExportFilename } from "../theme-recovery-export-files";
@@ -27,40 +28,6 @@ type ReviewWorkspaceFeedback = {
   tone: "neutral" | "warning" | "error";
   message: string;
 };
-
-const SIDE_PANEL_ROUTE_LINKS = [
-  {
-    id: "settings",
-    href: "./index.html#settings",
-  },
-  {
-    id: "dashboard",
-    href: "./index.html#dashboard",
-  },
-  {
-    id: "cursor-detail",
-    href: "./index.html#provider-detail/cursor",
-  },
-  {
-    id: "codex-detail",
-    href: "./index.html#provider-detail/codex",
-  },
-  {
-    id: "popup",
-    href: "../popup/index.html",
-  },
-] as const;
-
-const VENDOR_ROUTE_LINKS = [
-  {
-    id: "cursor-session-page",
-    href: "https://cursor.com/dashboard/usage",
-  },
-  {
-    id: "codex-session-page",
-    href: "https://chatgpt.com/codex/cloud/settings/analytics#usage",
-  },
-] as const;
 
 const THEME_RECOVERY_REQUEST_ID_QUERY_PARAM = "themeRecoveryRequestId";
 const THEME_RECOVERY_REQUEST_CREATED_AT_QUERY_PARAM =
@@ -365,63 +332,10 @@ export function ThemeRecoveryReviewPage({
 
           <ThemeRecoveryProviderList providers={snapshot.targetProviders} />
 
-          <section className="status-card">
-            <div className="dashboard-section__header">
-              <div>
-                <p className="section-label">{copy.workflow.eyebrow}</p>
-                <h2 className="section-title">{copy.workflow.title}</h2>
-              </div>
-              <p className="supporting-copy">{copy.workflow.detail}</p>
-            </div>
-
-            <ol className="feature-list theme-recovery-checklist">
-              {copy.workflow.steps.map((step) => (
-                <li key={step}>{step}</li>
-              ))}
-            </ol>
-
-            <div className="theme-recovery-link-groups">
-              <div className="theme-recovery-link-group">
-                <p className="detail-note__label">
-                  {copy.workflow.extensionSurfaces}
-                </p>
-                <div className="interaction-audit__actions">
-                  {SIDE_PANEL_ROUTE_LINKS.map((link) => (
-                    <a
-                      key={link.id}
-                      className="text-button interaction-audit__open-link"
-                      data-theme-recovery-link={link.id}
-                      href={link.href}
-                      rel="noreferrer"
-                      target="_blank"
-                    >
-                      {copy.links.sidePanel[link.id]}
-                    </a>
-                  ))}
-                </div>
-              </div>
-
-              <div className="theme-recovery-link-group">
-                <p className="detail-note__label">
-                  {copy.workflow.vendorSessionPages}
-                </p>
-                <div className="interaction-audit__actions">
-                  {VENDOR_ROUTE_LINKS.map((link) => (
-                    <a
-                      key={link.id}
-                      className="text-button interaction-audit__open-link"
-                      data-theme-recovery-vendor-link={link.id}
-                      href={link.href}
-                      rel="noreferrer"
-                      target="_blank"
-                    >
-                      {copy.links.vendor[link.id]}
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
+          <ThemeRecoveryWorkflowLinksCard
+            linksCopy={copy.links}
+            workflowCopy={copy.workflow}
+          />
 
           <section className="status-card">
             <div className="status-card__header">

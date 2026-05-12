@@ -12,7 +12,7 @@ Document class:
 
 Status note:
 
-- snapshot refreshed on 2026-05-13 after Chrome automation default alignment, the `rc.14` Chrome helper smoke pass, the RDP full-page route-contract guard, store screenshot route-config reuse, interaction-audit frame-action, surface-card, review-queue, request-scope, signoff-session, and handoff-summary splits, theme-recovery current-state, theme-state, request-scope, and provider-list splits, shared operator helpers, Settings focused deep-link render coverage, popup Settings/source-page helper coverage, popup route-action sidePanel coverage, popup source-page action helper coverage, popup refresh action helper coverage, popup theme-toggle helper coverage, popup hide-provider helper coverage, popup guidance action helper coverage, popup provider-progress component coverage, popup snapshot-status / guidance-card / featured-section / surface-route / localized-view-model coverage
+- snapshot refreshed on 2026-05-13 after Chrome automation default alignment, the `rc.14` Chrome helper smoke pass, the RDP full-page route-contract guard, store screenshot route-config reuse, interaction-audit frame-action, surface-card, review-queue, request-scope, signoff-session, and handoff-summary splits, theme-recovery current-state, theme-state, request-scope, provider-list, and workflow-links splits, shared operator helpers, Settings focused deep-link render coverage, popup Settings/source-page helper coverage, popup route-action sidePanel coverage, popup source-page action helper coverage, popup refresh action helper coverage, popup theme-toggle helper coverage, popup hide-provider helper coverage, popup guidance action helper coverage, popup provider-progress component coverage, popup snapshot-status / guidance-card / featured-section / surface-route / localized-view-model coverage
 - refresh this file when the Chrome Web Store review result arrives, or when a new high-priority direction opens
 
 ## What Just Closed
@@ -40,7 +40,7 @@ As of 2026-05-11 the following previously-open items are now done:
 
 The submitted store-review boundary remains `release/ai-usage-dashboard-0.1.0-rc.13.zip`. Keep using the RC13 milestone as the truthful historical submission handoff while that review is still pending in the Chrome Web Store Developer Dashboard.
 
-The repo is now also packaged forward through `Phase 306` as `release/ai-usage-dashboard-0.1.0-rc.14.zip`. That newer package is a prepared follow-up candidate, not an instruction to silently replace the submitted RC13 review boundary. `Phase 307` through `Phase 342` are post-package tooling, Chrome automation, smoke-evidence, first-provider setup, cached-first guard, popup maintenance, route-contract, screenshot-helper reuse, interaction-audit maintenance, theme-recovery maintenance, operator-helper follow-ups, and focused-link / source-page / refresh / theme-toggle / hide-provider / guidance / progress / snapshot-status / featured-section / surface-route / localized-view-model / route-action guardrails; they do not create a new extension package.
+The repo is now also packaged forward through `Phase 306` as `release/ai-usage-dashboard-0.1.0-rc.14.zip`. That newer package is a prepared follow-up candidate, not an instruction to silently replace the submitted RC13 review boundary. `Phase 307` through `Phase 343` are post-package tooling, Chrome automation, smoke-evidence, first-provider setup, cached-first guard, popup maintenance, route-contract, screenshot-helper reuse, interaction-audit maintenance, theme-recovery maintenance, operator-helper follow-ups, and focused-link / source-page / refresh / theme-toggle / hide-provider / guidance / progress / snapshot-status / featured-section / surface-route / localized-view-model / route-action guardrails; they do not create a new extension package.
 
 References:
 - [Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
@@ -51,7 +51,7 @@ Remaining human steps:
 - keep the reviewed screenshots from [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md), listing copy, and disclosure answers ready
 - if review feedback or a deliberate product decision calls for a newer package, promote RC14 from the follow-up milestone instead of mutating RC13 history
 
-No additional release-package work is required before review feedback arrives; the newer RC14 package already exists if it becomes necessary. The previously queued local-safe follow-ups through Phase 342 are now complete; create a new small TODO before starting additional behavior changes.
+No additional release-package work is required before review feedback arrives; the newer RC14 package already exists if it becomes necessary. The previously queued local-safe follow-ups through Phase 343 are now complete; create a new small TODO before starting additional behavior changes.
 
 ### P1 — Decide Whether To Promote RC14
 
@@ -105,6 +105,7 @@ Completed local-safe follow-up:
 - [340_Phase_Theme_Recovery_Theme_State_Component.md](./TODOs/Archive/340_Phase_Theme_Recovery_Theme_State_Component.md) - extracted theme-recovery theme-state rendering while preserving route-owned snapshot and live action-badge inputs.
 - [341_Phase_Theme_Recovery_Request_Scope_Component.md](./TODOs/Archive/341_Phase_Theme_Recovery_Request_Scope_Component.md) - extracted theme-recovery request-scope rendering while preserving route-owned query parsing and request-context state.
 - [342_Phase_Theme_Recovery_Provider_List_Component.md](./TODOs/Archive/342_Phase_Theme_Recovery_Provider_List_Component.md) - extracted theme-recovery provider-list rendering while preserving route-owned snapshot construction and recovery classification.
+- [343_Phase_Theme_Recovery_Workflow_Links_Component.md](./TODOs/Archive/343_Phase_Theme_Recovery_Workflow_Links_Component.md) - extracted theme-recovery workflow-link rendering while preserving link ids, hrefs, target behavior, and data hooks.
 
 ### 1. Direction 10 — Toolbar Competitive Fit And Store Readiness
 
