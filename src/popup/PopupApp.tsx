@@ -66,8 +66,8 @@ import {
 } from "./view-models";
 import { shouldShowPopupProviderProgress } from "./progress-visibility";
 import {
+  getSettingsRouteFocusForPopupAction,
   getSettingsRouteFocusForPopupProvider,
-  getSettingsRouteFocusForPopupVisibleProviders,
 } from "./settings-route-targets";
 
 type PopupLoadState =
@@ -185,26 +185,6 @@ async function openSettings(focus?: SettingsRouteFocus) {
 
 async function openProviderDetail(providerId: ProviderId) {
   await openSidePanelRoute({ name: "provider-detail", providerId });
-}
-
-function getSettingsRouteFocusForPopupAction(
-  action: PopupGuidanceAction | null | undefined,
-  visibleProviders: Parameters<
-    typeof getSettingsRouteFocusForPopupVisibleProviders
-  >[0],
-): SettingsRouteFocus | null {
-  if (action?.kind !== "settings") {
-    return null;
-  }
-
-  if (action.providerId) {
-    return {
-      kind: "quick-setup-provider",
-      providerId: action.providerId,
-    };
-  }
-
-  return getSettingsRouteFocusForPopupVisibleProviders(visibleProviders);
 }
 
 async function openProviderSourcePage(

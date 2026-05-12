@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [318_Phase_Settings_Focused_Deep_Link_Render_Guard.md](./Archive/318_Phase_Settings_Focused_Deep_Link_Render_Guard.md)
+- latest completed slice: [319_Phase_Popup_Settings_Action_Focus_Helper.md](./Archive/319_Phase_Popup_Settings_Action_Focus_Helper.md)
 - queued phase files: none
 
 Completed phases should be moved to:

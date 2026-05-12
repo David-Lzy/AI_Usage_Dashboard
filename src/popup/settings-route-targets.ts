@@ -1,6 +1,7 @@
 import type { ProviderId } from "../providers/types";
 import type { SettingsRouteFocus } from "../sidepanel/route-state";
 import { SETTINGS_SECTION_IDS } from "../sidepanel/settings-section-ids";
+import type { PopupGuidanceAction } from "./view-model-types";
 
 type PopupSettingsTargetProvider = {
   currentSourceStateKind: string;
@@ -64,4 +65,22 @@ export function getSettingsRouteFocusForPopupVisibleProviders(
       .find((target) => target !== null) ?? null;
 
   return providerTarget;
+}
+
+export function getSettingsRouteFocusForPopupAction(
+  action: PopupGuidanceAction | null | undefined,
+  visibleProviders: PopupSettingsTargetProvider[],
+): SettingsRouteFocus | null {
+  if (action?.kind !== "settings") {
+    return null;
+  }
+
+  if (action.providerId) {
+    return {
+      kind: "quick-setup-provider",
+      providerId: action.providerId,
+    };
+  }
+
+  return getSettingsRouteFocusForPopupVisibleProviders(visibleProviders);
 }
