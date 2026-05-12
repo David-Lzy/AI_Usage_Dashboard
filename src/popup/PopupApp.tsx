@@ -41,48 +41,17 @@ import {
 import {
   openFullDashboard,
   openFullDashboardTab,
-  openProviderDetail,
   openSettings,
 } from "./popup-route-actions";
-import { openProviderSourcePage } from "./popup-source-page-actions";
 import { runPopupRefreshAction } from "./popup-refresh-action";
 import { runPopupThemeToggleAction } from "./popup-theme-toggle-action";
 import { runPopupHideProviderAction } from "./popup-hide-provider-action";
+import { runPopupGuidanceAction } from "./popup-guidance-action";
 
 type PopupLoadState =
   | { status: "loading" }
   | { status: "ready"; appState: AppState }
   | { status: "error"; message: string };
-
-async function handleGuidanceAction(
-  action: PopupGuidanceAction,
-  options: {
-    settingsFocus?: SettingsRouteFocus | null;
-  } = {},
-) {
-  if (action.kind === "hide-provider") {
-    return;
-  }
-
-  if (action.kind === "settings") {
-    await openSettings(options.settingsFocus ?? undefined);
-    return;
-  }
-
-  if (action.kind === "dashboard") {
-    await openFullDashboard();
-    return;
-  }
-
-  if (action.kind === "provider-detail" && action.providerId) {
-    await openProviderDetail(action.providerId);
-    return;
-  }
-
-  if (action.kind === "source-page" && action.providerId) {
-    await openProviderSourcePage(action.providerId, action.sourceStateKind);
-  }
-}
 
 export function PopupApp() {
   const [loadState, setLoadState] = useState<PopupLoadState>({
@@ -292,7 +261,7 @@ export function PopupApp() {
       return;
     }
 
-    await handleGuidanceAction(action, options);
+    await runPopupGuidanceAction(action, options);
   }
 
   function renderPopupProviderProgress(
