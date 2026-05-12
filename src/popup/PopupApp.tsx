@@ -22,7 +22,6 @@ import {
   startThemeSettingsSync,
 } from "../shared/theme";
 import { SummaryStrip } from "../sidepanel/components/SummaryStrip";
-import { StatusBadge } from "../sidepanel/components/StatusBadge";
 import type { SettingsRouteFocus } from "../sidepanel/route-state";
 import { syncPopupAppearanceAttributes } from "../shared/popup-appearance";
 import {
@@ -46,6 +45,7 @@ import { runPopupGuidanceAction } from "./popup-guidance-action";
 import { PopupFeaturedProviderList } from "./PopupFeaturedProviderList";
 import { PopupGuidanceCardSection } from "./PopupGuidanceCardSection";
 import { PopupHeaderSection } from "./PopupHeaderSection";
+import { PopupSnapshotStatusSection } from "./PopupSnapshotStatusSection";
 import { PopupSetupCoverageSection } from "./PopupSetupCoverageSection";
 
 type PopupLoadState =
@@ -317,26 +317,10 @@ export function PopupApp() {
       ) : null}
 
       {!hasFeaturedProviderCards && popupModel.showSnapshotStatus ? (
-        <section
-          className={`status-card${
-            popupModel.snapshotStatus.tone === "neutral"
-              ? ""
-              : ` status-card--${popupModel.snapshotStatus.tone}`
-          }`}
-          data-theme-local-surface="popup-snapshot-status-card"
-        >
-          <div className="status-card__header">
-            <div>
-              <p className="section-label">{runtimeI18n.t("popup.snapshot_status.eyebrow")}</p>
-              <h2 className="section-title">{popupModel.snapshotStatus.headline}</h2>
-            </div>
-            <StatusBadge
-              label={popupModel.snapshotStatus.label}
-              tone={popupModel.snapshotStatus.tone}
-            />
-          </div>
-          <p className="supporting-copy">{popupModel.snapshotStatus.detail}</p>
-        </section>
+        <PopupSnapshotStatusSection
+          runtimeI18n={runtimeI18n}
+          snapshotStatus={popupModel.snapshotStatus}
+        />
       ) : null}
 
       {!hasFeaturedProviderCards ? (
