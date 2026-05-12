@@ -46,6 +46,7 @@ import {
 } from "./popup-route-actions";
 import { openProviderSourcePage } from "./popup-source-page-actions";
 import { runPopupRefreshAction } from "./popup-refresh-action";
+import { runPopupThemeToggleAction } from "./popup-theme-toggle-action";
 
 type PopupLoadState =
   | { status: "loading" }
@@ -184,22 +185,15 @@ export function PopupApp() {
     }
 
     setIsThemeTogglePending(true);
-    const quickThemeToggle = buildQuickThemeToggle(
-      loadState.appState.settings.themeMode,
-      typeof window !== "undefined" ? window : undefined,
-    );
-    const response = await sendAppMessage({
-      type: "app:update-settings",
-      settings: { themeMode: quickThemeToggle.nextMode },
+    const result = await runPopupThemeToggleAction(loadState.appState, {
+      reader: typeof window !== "undefined" ? window : undefined,
     });
 
-    if (!response.ok) {
-      setLoadState({ status: "error", message: response.error });
-      setIsThemeTogglePending(false);
-      return;
-    }
-
-    setLoadState({ status: "ready", appState: response.state });
+    setLoadState(
+      result.status === "ready"
+        ? { status: "ready", appState: result.state }
+        : { status: "error", message: result.message },
+    );
     setIsThemeTogglePending(false);
   }
 
