@@ -7,7 +7,7 @@ Current packaged release state:
 - package version: `0.1.0-rc.14`
 - Chrome manifest version: `0.1.0.14`
 - packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.14.zip`
-- source status: extension runtime/package bytes are aligned through `Phase 306` and packaged as `rc.14`; current source also includes post-package Chrome automation, smoke-evidence, first-provider setup, cached-first guard, popup view-model maintenance, RDP full-page route-contract, store screenshot route-config reuse, interaction-audit frame-action maintenance, operator helper follow-ups, Settings focused deep-link render coverage, and popup Settings/source-page/refresh/theme-toggle/hide-provider/guidance/progress/snapshot-status/featured-section/route-action coverage through `Phase 331`; the earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it
+- source status: extension runtime/package bytes are aligned through `Phase 306` and packaged as `rc.14`; current source also includes post-package Chrome automation, smoke-evidence, first-provider setup, cached-first guard, popup view-model maintenance, RDP full-page route-contract, store screenshot route-config reuse, interaction-audit frame-action maintenance, operator helper follow-ups, Settings focused deep-link render coverage, and popup Settings/source-page/refresh/theme-toggle/hide-provider/guidance/progress/snapshot-status/featured-section/surface-route/route-action coverage through `Phase 332`; the earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it
 - packaged follow-up milestone: [2026-05-11 RC14 Follow-Up Release Candidate](./Doc/Milestones/2026-05-11_RC14_Follow_Up_Release_Candidate.md)
 - submitted review milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
@@ -92,6 +92,7 @@ Maintenance note:
 - popup snapshot-status view-model logic now lives in `src/popup/snapshot-status-view-models.ts`, keeping raw and localized snapshot state decisions covered outside the popup view-model aggregator
 - popup guidance-card view-model logic now lives in `src/popup/guidance-card-view-models.ts`, keeping first setup, missing access, missing credential, blocked provider, policy-only, and ready-provider decisions covered outside the popup view-model aggregator
 - popup featured-section view-model logic now lives in `src/popup/featured-section-view-models.ts`, keeping zero-provider, needs-attention, policy-only, and all-clear section stories covered outside the popup view-model aggregator
+- popup surface-route view-model logic now lives in `src/popup/surface-route-view-models.ts`, keeping secondary action selection and surface-ownership copy covered outside the popup view-model aggregator
 
 ## Source Labels
 
