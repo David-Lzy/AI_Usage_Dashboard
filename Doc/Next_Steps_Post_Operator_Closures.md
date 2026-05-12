@@ -40,7 +40,7 @@ As of 2026-05-11 the following previously-open items are now done:
 
 The submitted store-review boundary remains `release/ai-usage-dashboard-0.1.0-rc.13.zip`. Keep using the RC13 milestone as the truthful historical submission handoff while that review is still pending in the Chrome Web Store Developer Dashboard.
 
-The repo is now also packaged forward through `Phase 306` as `release/ai-usage-dashboard-0.1.0-rc.14.zip`. That newer package is a prepared follow-up candidate, not an instruction to silently replace the submitted RC13 review boundary. `Phase 307` through `Phase 329` are post-package tooling, Chrome automation, smoke-evidence, first-provider setup, cached-first guard, popup maintenance, route-contract, screenshot-helper reuse, interaction-audit maintenance, operator-helper follow-ups, and focused-link / source-page / refresh / theme-toggle / hide-provider / guidance / progress / snapshot-status / route-action guardrails; they do not create a new extension package.
+The repo is now also packaged forward through `Phase 306` as `release/ai-usage-dashboard-0.1.0-rc.14.zip`. That newer package is a prepared follow-up candidate, not an instruction to silently replace the submitted RC13 review boundary. `Phase 307` through `Phase 330` are post-package tooling, Chrome automation, smoke-evidence, first-provider setup, cached-first guard, popup maintenance, route-contract, screenshot-helper reuse, interaction-audit maintenance, operator-helper follow-ups, and focused-link / source-page / refresh / theme-toggle / hide-provider / guidance / progress / snapshot-status / route-action guardrails; they do not create a new extension package.
 
 References:
 - [Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
@@ -92,6 +92,7 @@ Completed local-safe follow-up:
 - [327_Phase_Popup_Guidance_Action_Helper.md](./TODOs/Archive/327_Phase_Popup_Guidance_Action_Helper.md) - extracted popup guidance routing and covered Settings focus, dashboard, provider-detail, source-page, and hide-provider no-op branches.
 - [328_Phase_Popup_Provider_Progress_Component.md](./TODOs/Archive/328_Phase_Popup_Provider_Progress_Component.md) - extracted popup provider progress rendering and covered usage-window, single-value, and hidden empty-percent branches.
 - [329_Phase_Popup_Snapshot_Status_View_Model_Split.md](./TODOs/Archive/329_Phase_Popup_Snapshot_Status_View_Model_Split.md) - extracted popup snapshot-status view-model logic and covered no-provider, aligned, mixed, warning, and error decisions.
+- [330_Phase_Popup_Guidance_Card_View_Model_Split.md](./TODOs/Archive/330_Phase_Popup_Guidance_Card_View_Model_Split.md) - extracted popup guidance-card view-model logic and covered first setup, missing access, missing credential, blocked provider, policy-only, and ready-provider decisions.
 
 ### 1. Direction 10 — Toolbar Competitive Fit And Store Readiness
 
