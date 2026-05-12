@@ -4,23 +4,8 @@ import type {
   AppLocalePreference,
   AppState,
   ProgressDisplayStyle,
-  ProviderId,
 } from "../providers/types";
 import { sendAppMessage } from "../shared/app-client";
-import {
-  clearPageBinding,
-  createPageBindingFromTab,
-} from "../shared/page-bindings";
-import {
-  getOpenableRouteHint,
-  getSessionPagePlan,
-} from "../shared/provider-sources";
-import {
-  reloadSourcePageTabBeforeRefresh,
-  shouldRefreshAfterSourcePageRecovery,
-  shouldReloadBeforeSourcePageRecoveryRefresh,
-  type SourcePageRecoverySourceState,
-} from "../shared/source-page-recovery";
 import {
   findHostAccessRefreshCandidate,
   hasDirectHostAccessRequest,
@@ -58,116 +43,18 @@ import {
   getSettingsRouteFocusForPopupAction,
   getSettingsRouteFocusForPopupProvider,
 } from "./settings-route-targets";
-import { selectPreferredSourcePageTab } from "./source-page-tab-selection";
 import {
   openFullDashboard,
   openFullDashboardTab,
   openProviderDetail,
   openSettings,
 } from "./popup-route-actions";
+import { openProviderSourcePage } from "./popup-source-page-actions";
 
 type PopupLoadState =
   | { status: "loading" }
   | { status: "ready"; appState: AppState }
   | { status: "error"; message: string };
-
-function hasSourcePageNavigationControl(): boolean {
-  return (
-    typeof chrome !== "undefined" &&
-    typeof chrome.tabs?.query === "function" &&
-    typeof chrome.tabs?.create === "function" &&
-    typeof chrome.tabs?.update === "function"
-  );
-}
-
-async function openProviderSourcePage(
-  providerId: ProviderId,
-  sourceStateKind?: SourcePageRecoverySourceState,
-) {
-  const sessionPagePlan = getSessionPagePlan(providerId);
-
-  if (!sessionPagePlan || sessionPagePlan.rolloutStage !== "shipped") {
-    await openProviderDetail(providerId);
-    return;
-  }
-
-  const preferredRoute = getOpenableRouteHint(sessionPagePlan.routeHints);
-
-  if (!preferredRoute) {
-    await openProviderDetail(providerId);
-    return;
-  }
-
-  if (!hasSourcePageNavigationControl()) {
-    window.open(preferredRoute, "_blank", "noopener,noreferrer");
-    return;
-  }
-
-  const matchedTabs = await chrome.tabs.query({
-    url: sessionPagePlan.routeHints,
-  });
-  const preferredTab = selectPreferredSourcePageTab(
-    matchedTabs,
-    preferredRoute,
-  );
-
-  if (preferredTab?.id !== undefined) {
-    if (
-      shouldReloadBeforeSourcePageRecoveryRefresh(
-        "existing-tab",
-        sourceStateKind,
-      )
-    ) {
-      await reloadSourcePageTabBeforeRefresh(preferredTab.id);
-    }
-
-    const bindingResponse = await sendAppMessage({
-      type: "app:set-provider-page-binding",
-      providerId,
-      pageBinding: createPageBindingFromTab({
-        mode: "bound",
-        tabId: preferredTab.id,
-        matchedUrl: preferredTab.url ?? preferredRoute,
-        matchedTitle: preferredTab.title ?? null,
-        updatedAt: new Date().toISOString(),
-      }),
-    });
-
-    if (
-      bindingResponse.ok &&
-      shouldRefreshAfterSourcePageRecovery("existing-tab")
-    ) {
-      await sendAppMessage({
-        type: "app:request-refresh",
-        providerId,
-      });
-    }
-
-    await chrome.tabs.update(preferredTab.id, { active: true });
-    window.close();
-    return;
-  }
-
-  const createdTab = await chrome.tabs.create({
-    url: preferredRoute,
-    active: true,
-  });
-  await sendAppMessage({
-    type: "app:set-provider-page-binding",
-    providerId,
-    pageBinding:
-      typeof createdTab.id === "number"
-        ? createPageBindingFromTab({
-            mode: "bound",
-            tabId: createdTab.id,
-            matchedUrl: createdTab.url ?? preferredRoute,
-            matchedTitle: createdTab.title ?? null,
-            updatedAt: new Date().toISOString(),
-          })
-        : clearPageBinding(),
-  });
-  window.close();
-}
 
 async function handleGuidanceAction(
   action: PopupGuidanceAction,

@@ -7,7 +7,7 @@ Current packaged release state:
 - package version: `0.1.0-rc.14`
 - Chrome manifest version: `0.1.0.14`
 - packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.14.zip`
-- source status: extension runtime/package bytes are aligned through `Phase 306` and packaged as `rc.14`; current source also includes post-package Chrome automation, smoke-evidence, first-provider setup, cached-first guard, popup view-model maintenance, RDP full-page route-contract, store screenshot route-config reuse, interaction-audit frame-action maintenance, operator helper follow-ups, Settings focused deep-link render coverage, popup Settings/source-page helper coverage, and popup route-action coverage through `Phase 322`; the earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it
+- source status: extension runtime/package bytes are aligned through `Phase 306` and packaged as `rc.14`; current source also includes post-package Chrome automation, smoke-evidence, first-provider setup, cached-first guard, popup view-model maintenance, RDP full-page route-contract, store screenshot route-config reuse, interaction-audit frame-action maintenance, operator helper follow-ups, Settings focused deep-link render coverage, popup Settings/source-page helper coverage, and popup route-action coverage through `Phase 323`; the earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it
 - packaged follow-up milestone: [2026-05-11 RC14 Follow-Up Release Candidate](./Doc/Milestones/2026-05-11_RC14_Follow_Up_Release_Candidate.md)
 - submitted review milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
@@ -83,6 +83,7 @@ Maintenance note:
 - popup source-page recovery tab selection now lives in `src/popup/source-page-tab-selection.ts`, keeping exact-route, active-tab, recency, and numeric-tab-id selection rules testable outside `PopupApp.tsx`
 - popup route-opening actions now live in `src/popup/popup-route-actions.ts`, keeping side-panel, full-page, Settings, dashboard, and provider-detail handoffs testable outside `PopupApp.tsx`
 - Chrome sidePanel route-action behavior is guarded in `src/popup/popup-route-actions.test.ts`, including active-tab and current-window fallback branches
+- popup source-page recovery actions now live in `src/popup/popup-source-page-actions.ts`, keeping unsupported-provider fallback, direct window open, existing-tab binding plus refresh, and created-tab binding testable outside `PopupApp.tsx`
 
 ## Source Labels
 
