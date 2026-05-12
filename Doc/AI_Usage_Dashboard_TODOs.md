@@ -76,7 +76,7 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 334` execution priority:
+Current post-`Phase 335` execution priority:
 
 1. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.13.zip` as the submitted Chrome Web Store review boundary. Do not silently mutate or rewrite the [RC13 upload-candidate milestone](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) while that submission remains the human-reviewed baseline.
 2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.14.zip` as the current packaged follow-up candidate. It now includes post-`rc.13` `Phase 303` through `Phase 306` Claude, popup, settings, full-page, and side-panel polish and is ready if review feedback or an explicit resubmission decision needs a newer build.
@@ -109,12 +109,13 @@ Current post-`Phase 334` execution priority:
 29. `P2` - keep the `Phase 332` popup surface-route split stable: secondary action selection and surface-ownership copy should remain covered outside the view-model aggregator.
 30. `P2` - keep the `Phase 333` popup localized view-model split stable: localized popup orchestration should remain outside the raw view-model builder while preserving the public re-export path.
 31. `P2` - keep the `Phase 334` interaction-audit surface-card split stable: per-surface iframe, preset-action, manual-check, and signoff controls should stay outside the large operator route while route-owned state remains in the route.
-32. `P2` - Provider closure waits only on the accounts that are still unavailable:
+32. `P2` - keep the `Phase 335` interaction-audit review-queue split stable: queue summary and jump-list rendering should stay outside the large operator route while queue construction remains route-owned.
+33. `P2` - Provider closure waits only on the accounts that are still unavailable:
    - JetBrains org-console reverification waits for a real org-visible `Users and licensing` session.
    - Claude individual Pro / Max usage-page behavior remains separate from the now-shipped Claude Team session-page path.
    - Gemini project-metrics graduation waits for a product decision that project-scoped metrics are acceptable.
-33. `P2` - real operator evidence is now closed as of 2026-05-11: Direction 04 interaction-audit closure archived under [2026-05-11-2026-05-11-rdp-chrome-visual-audit](./testing/operator_reviews/2026-05-11-2026-05-11-rdp-chrome-visual-audit/README.md); Direction 05 theme-recovery closure archived under [2026-05-11-system-recovered-014312](./testing/theme_recovery_reviews/2026-05-11-system-recovered-014312/README.md). No further operator evidence phases are queued unless a new surface or theme regression opens them.
-34. `P2` - continue file splitting only when a concrete maintenance issue justifies it; the old queued split targets for `material-theme.css`, `SettingsPage.tsx`, `App.tsx`, `standard-app-actions.ts`, and `localized-copy.ts` are now closed or reduced to focused compatibility/aggregator files.
+34. `P2` - real operator evidence is now closed as of 2026-05-11: Direction 04 interaction-audit closure archived under [2026-05-11-2026-05-11-rdp-chrome-visual-audit](./testing/operator_reviews/2026-05-11-2026-05-11-rdp-chrome-visual-audit/README.md); Direction 05 theme-recovery closure archived under [2026-05-11-system-recovered-014312](./testing/theme_recovery_reviews/2026-05-11-system-recovered-014312/README.md). No further operator evidence phases are queued unless a new surface or theme regression opens them.
+35. `P2` - continue file splitting only when a concrete maintenance issue justifies it; the old queued split targets for `material-theme.css`, `SettingsPage.tsx`, `App.tsx`, `standard-app-actions.ts`, and `localized-copy.ts` are now closed or reduced to focused compatibility/aggregator files.
 
 Delivery rule for this stage:
 
@@ -401,6 +402,7 @@ Phase status update:
 - `Phase 332` split popup surface-route view-model logic into a dedicated tested module, keeping secondary action selection and surface-ownership copy outside the popup view-model aggregator
 - `Phase 333` split popup localized view-model orchestration into a dedicated module while preserving the public `localizePopupViewModel` export from `src/popup/view-models.ts`
 - `Phase 334` split interaction-audit per-surface card rendering into a dedicated component while preserving route-owned audit refs, preset actions, manual checks, and signoff callbacks
+- `Phase 335` split interaction-audit review queue rendering into a dedicated component while preserving route-owned queue construction and jump behavior
 - the old maintenance split queue is closed for the originally named local-safe targets: `material-theme.css`, `localized-copy.ts`, `SettingsPage.tsx`, `App.tsx`, and `standard-app-actions.ts` are now focused base, compatibility, route, or aggregator files rather than the next default work item
 - the previous store-readiness blocker for screenshot file intake/import/archive is now closed under `Direction 10.3`; the current store step is the human Chrome Web Store listing upload and review flow using the Phase 299 milestone
 - `2026-05-11 RDP session` completed Direction 04 real operator closure: first real interaction-audit visual audit across all 5 surfaces (dashboard-360, settings-420, cursor-detail-360, codex-detail-420, popup-360), all 11 manual checks resolved, pending request `2026-04-23-first-real-operator-review-request` fulfilled and archived under [2026-05-11-2026-05-11-rdp-chrome-visual-audit](./testing/operator_reviews/2026-05-11-2026-05-11-rdp-chrome-visual-audit/README.md)
