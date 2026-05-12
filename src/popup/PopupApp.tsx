@@ -44,6 +44,7 @@ import { runPopupThemeToggleAction } from "./popup-theme-toggle-action";
 import { runPopupHideProviderAction } from "./popup-hide-provider-action";
 import { runPopupGuidanceAction } from "./popup-guidance-action";
 import { PopupFeaturedProviderList } from "./PopupFeaturedProviderList";
+import { PopupGuidanceCardSection } from "./PopupGuidanceCardSection";
 import { PopupHeaderSection } from "./PopupHeaderSection";
 
 type PopupLoadState =
@@ -296,41 +297,13 @@ export function PopupApp() {
         />
       ) : null}
 
-      {!hasFeaturedProviderCards && guidanceCard ? (
-        <section
-          className={`status-card${
-            guidanceCard.tone === "neutral"
-              ? ""
-              : ` status-card--${guidanceCard.tone}`
-          }`}
-          data-theme-local-surface="popup-guidance-card"
-        >
-          <div className="status-card__header">
-            <div>
-              <p className="section-label">{runtimeI18n.t("popup.guidance.eyebrow")}</p>
-              <h2 className="section-title">{guidanceCard.headline}</h2>
-            </div>
-            <StatusBadge
-              label={guidanceCard.label}
-              tone={guidanceCard.tone}
-            />
-          </div>
-          <p className="supporting-copy">{guidanceCard.detail}</p>
-          <div className="popup-actions">
-            <button
-              className="text-button"
-              data-theme-local-surface="popup-guidance-action"
-              type="button"
-              onClick={() => {
-                void handlePopupAction(guidanceCard.action, {
-                  settingsFocus: settingsFocusForGuidance,
-                });
-              }}
-            >
-              {guidanceCard.action.label}
-            </button>
-          </div>
-        </section>
+      {!hasFeaturedProviderCards ? (
+        <PopupGuidanceCardSection
+          card={guidanceCard}
+          runtimeI18n={runtimeI18n}
+          settingsFocus={settingsFocusForGuidance}
+          onAction={handlePopupAction}
+        />
       ) : null}
 
       {!hasFeaturedProviderCards ? (

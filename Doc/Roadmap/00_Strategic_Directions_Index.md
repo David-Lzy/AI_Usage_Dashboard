@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is now completed through `Phase 349`, with no active phase or queued numbered phase currently selected
+- the numbered phase queue is now completed through `Phase 350`, with no active phase or queued numbered phase currently selected
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -217,6 +217,7 @@ As of 2026-05-13:
 - `Phase 333` extracted popup localized view-model orchestration while preserving the public `localizePopupViewModel` export path
 - `Phase 348` extracted popup featured-provider list rendering while preserving quota-first provider-card rendering, route-owned action execution, settings-focus targeting, and featured-card data hooks
 - `Phase 349` extracted popup header rendering while preserving route-owned refresh, theme-toggle, dashboard-tab behavior, pending states, and header data hooks
+- `Phase 350` extracted popup guidance-card rendering while preserving route-owned action routing, settings-focus targeting, tone mapping, and guidance-card data hooks
 - `Phase 334` extracted interaction-audit per-surface card rendering while preserving route-owned audit refs, preset actions, manual checks, and signoff callbacks
 - `Phase 335` extracted interaction-audit review queue rendering while preserving route-owned queue construction and jump behavior
 - `Phase 336` extracted interaction-audit request-scope rendering while preserving route-owned request-context state plus binding, revision, and next-command display
