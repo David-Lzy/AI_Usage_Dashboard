@@ -3,8 +3,6 @@ import type {
   ProviderSetting,
 } from "../providers/types";
 import { getRecommendedFirstSetupProvider } from "../shared/first-provider-setup";
-import type { RuntimeI18n } from "../shared/i18n";
-import { buildPopupLocalizedCopy } from "../shared/localized-copy";
 import type { ProviderSourceDisplayCopy } from "../shared/provider-sources";
 import { getVisibleProviders } from "../sidepanel/view-models";
 import type {
@@ -23,26 +21,12 @@ import {
   buildSetupCoverage,
   needsAttention,
 } from "./setup-coverage-view-models";
-import {
-  buildLocalizedFeaturedProviderCard,
-  buildPopupFeaturedProviderCard,
-} from "./featured-provider-card-view-models";
-import {
-  buildFeaturedSection,
-  buildLocalizedFeaturedSection,
-} from "./featured-section-view-models";
-import {
-  buildGuidanceCard,
-  buildLocalizedGuidanceCard,
-} from "./guidance-card-view-models";
-import {
-  buildLocalizedSnapshotStatus,
-  buildSnapshotStatus,
-} from "./snapshot-status-view-models";
+import { buildPopupFeaturedProviderCard } from "./featured-provider-card-view-models";
+import { buildFeaturedSection } from "./featured-section-view-models";
+import { buildGuidanceCard } from "./guidance-card-view-models";
+import { buildSnapshotStatus } from "./snapshot-status-view-models";
 import {
   buildActionSection,
-  buildLocalizedActionSection,
-  buildLocalizedSurfaceRolesCard,
   buildSurfaceRolesCard,
 } from "./surface-route-view-models";
 
@@ -61,6 +45,8 @@ export type {
   PopupViewModel,
 } from "./view-model-types";
 
+export { localizePopupViewModel } from "./localized-view-models";
+
 function buildFirstSetupProvider(
   providers: ProviderSetting[],
 ): PopupFirstSetupProvider | null {
@@ -75,77 +61,6 @@ function buildFirstSetupProvider(
     providerLabel: provider.label,
   };
 }
-
-export function localizePopupViewModel(
-  model: PopupViewModel,
-  i18n: RuntimeI18n,
-): PopupViewModel {
-  const copy = buildPopupLocalizedCopy(i18n);
-  const visibleProviders = model.visibleProviders;
-  const attentionProviders = visibleProviders.filter(needsAttention);
-  const firstSetupProvider = model.firstSetupProvider;
-  const guidanceCard = buildLocalizedGuidanceCard(
-    visibleProviders,
-    i18n,
-    copy,
-    firstSetupProvider,
-  );
-  const setupCoverage = buildLocalizedSetupCoverage(
-    visibleProviders,
-    model.setupCoverage.items,
-    i18n,
-    copy,
-    firstSetupProvider,
-  );
-
-  return {
-    ...model,
-    headerDetail: buildLocalizedHeaderDetail(
-      visibleProviders,
-      setupCoverage,
-      copy,
-      firstSetupProvider,
-    ),
-    summaryItems: [
-      {
-        ...model.summaryItems[0],
-        label: i18n.t("popup.summary.visible"),
-      },
-      {
-        ...model.summaryItems[1],
-        label: i18n.t("popup.summary.live_ready"),
-      },
-      {
-        ...model.summaryItems[2],
-        label: i18n.t("popup.summary.setup_blockers"),
-      },
-      {
-        ...model.summaryItems[3],
-        label: i18n.t("popup.summary.policy_only"),
-      },
-    ],
-    snapshotStatus: buildLocalizedSnapshotStatus(visibleProviders, i18n, copy),
-    guidanceCard,
-    setupCoverage,
-    actionSection: buildLocalizedActionSection(guidanceCard, i18n, copy),
-    surfaceRolesCard: buildLocalizedSurfaceRolesCard(
-      visibleProviders,
-      guidanceCard,
-      copy,
-      firstSetupProvider,
-    ),
-    featuredSection: buildLocalizedFeaturedSection(
-      visibleProviders,
-      attentionProviders,
-      copy,
-      firstSetupProvider,
-    ),
-    featuredProviderCards: model.featuredProviders.map((provider) =>
-      buildLocalizedFeaturedProviderCard(provider, i18n, copy),
-    ),
-  };
-}
-
 
 export function buildPopupViewModel(
   state: AppState,
