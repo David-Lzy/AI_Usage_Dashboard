@@ -4,6 +4,7 @@ import type { RuntimeI18n } from "../../shared/i18n";
 import { buildOperatorWorkspaceLocalizedCopy } from "../../shared/localized-copy";
 import { InteractionAuditRequestScopeSection } from "../components/InteractionAuditRequestScopeSection";
 import { InteractionAuditReviewQueueSection } from "../components/InteractionAuditReviewQueueSection";
+import { InteractionAuditSignoffSessionSection } from "../components/InteractionAuditSignoffSessionSection";
 import {
   InteractionAuditSurfaceCard,
   type InteractionAuditSurfaceStatus,
@@ -28,8 +29,6 @@ import {
   clearInteractionAuditSignoffMetadata,
   clearInteractionAuditSignoffRequestContext,
   clearInteractionAuditSignoffState,
-  formatInteractionAuditSignoffRequestBinding,
-  formatInteractionAuditSignoffRequestRevision,
   parseInteractionAuditSignoffImport,
   readInteractionAuditSignoffMetadata,
   readInteractionAuditSignoffRequestContext,
@@ -608,138 +607,15 @@ export function InteractionAuditPage({
         className="status-card interaction-audit__signoff-workspace"
         data-audit-signoff-workspace
       >
-        <div className="status-card__header">
-          <div>
-            <p className="section-label">{copy.signoff.eyebrow}</p>
-            <h2 className="section-title">{copy.signoff.title}</h2>
-          </div>
-          <p className="supporting-copy">{copy.signoff.detail}</p>
-        </div>
-
-        <div className="interaction-audit__signoff-summary">
-          <div
-            className="source-card__field"
-            data-audit-signoff-summary-id="reviewed-surfaces"
-          >
-            <p className="source-card__label">{copy.signoff.reviewedSurfaces}</p>
-            <p className="source-card__value" data-audit-signoff-summary-value>
-              {signoffSummary.reviewedSurfaceCount} /{" "}
-              {INTERACTION_AUDIT_SIGNOFF_SURFACES.length}
-            </p>
-          </div>
-          <div className="source-card__field" data-audit-signoff-summary-id="pass">
-            <p className="source-card__label">{copy.signoff.pass}</p>
-            <p className="source-card__value" data-audit-signoff-summary-value>
-              {signoffSummary.passSurfaceCount}
-            </p>
-          </div>
-          <div
-            className="source-card__field"
-            data-audit-signoff-summary-id="follow-up"
-          >
-            <p className="source-card__label">{copy.signoff.followUp}</p>
-            <p className="source-card__value" data-audit-signoff-summary-value>
-              {signoffSummary.followUpSurfaceCount}
-            </p>
-          </div>
-          <div
-            className="source-card__field"
-            data-audit-signoff-summary-id="completed-checks"
-          >
-            <p className="source-card__label">{copy.signoff.completedChecks}</p>
-            <p className="source-card__value" data-audit-signoff-summary-value>
-              {signoffSummary.completedManualCheckCount} /{" "}
-              {signoffSummary.totalManualCheckCount}
-            </p>
-          </div>
-        </div>
-
-        <div className="interaction-audit__signoff-fields">
-          <label className="form-field">
-            <span className="form-field__label">{copy.signoff.reviewerName}</span>
-            <input
-              className="form-field__control"
-              data-audit-session-reviewer
-              placeholder={copy.signoff.reviewerPlaceholder}
-              type="text"
-              value={signoffMetadata.reviewerName}
-              onChange={(event) => {
-                handleSignoffMetadata("reviewerName", event.target.value);
-              }}
-            />
-          </label>
-
-          <label className="form-field">
-            <span className="form-field__label">{copy.signoff.sessionLabel}</span>
-            <input
-              className="form-field__control"
-              data-audit-session-label
-              placeholder={copy.signoff.sessionPlaceholder}
-              type="text"
-              value={signoffMetadata.sessionLabel}
-              onChange={(event) => {
-                handleSignoffMetadata("sessionLabel", event.target.value);
-              }}
-            />
-          </label>
-
-          <label className="form-field">
-            <span className="form-field__label">{copy.signoff.reviewedAt}</span>
-            <input
-              className="form-field__control"
-              data-audit-session-reviewed-at
-              placeholder={copy.signoff.reviewedAtPlaceholder}
-              type="text"
-              value={signoffMetadata.reviewedAt}
-              onChange={(event) => {
-                handleSignoffMetadata("reviewedAt", event.target.value);
-              }}
-            />
-          </label>
-        </div>
-
-        <div className="interaction-audit__actions interaction-audit__workspace-actions">
-          <button
-            className="text-button"
-            data-audit-session-stamp-time
-            type="button"
-            onClick={() => {
-              handleStampReviewedAt();
-            }}
-          >
-            {copy.signoff.stampCurrentTime}
-          </button>
-        </div>
-
-        <div
-          className="detail-note detail-note--neutral"
-          data-audit-session-summary
-        >
-          <p className="detail-note__label">{copy.signoff.reviewSession}</p>
-          <p className="supporting-copy">
-            {copy.signoff.reviewerPrefix}:{" "}
-            {signoffMetadata.reviewerName.trim().length > 0
-              ? signoffMetadata.reviewerName.trim()
-              : copy.signoff.notSet}
-            {" · "}{copy.signoff.sessionPrefix}:{" "}
-            {signoffMetadata.sessionLabel.trim().length > 0
-              ? signoffMetadata.sessionLabel.trim()
-              : copy.signoff.notSet}
-            {" · "}{copy.signoff.reviewedAtPrefix}:{" "}
-            {signoffMetadata.reviewedAt.trim().length > 0
-              ? signoffMetadata.reviewedAt.trim()
-              : copy.signoff.notSet}
-          </p>
-          <p
-            className="supporting-copy"
-            data-audit-request-binding-summary
-          >
-            {copy.signoff.requestBindingPrefix}:{" "}
-            {formatInteractionAuditSignoffRequestBinding(signoffRequestContext)}
-            {" · "}{copy.signoff.requestRevisionPrefix}:{" "}
-            {formatInteractionAuditSignoffRequestRevision(signoffRequestContext)}
-          </p>
-        </div>
+        <InteractionAuditSignoffSessionSection
+          copy={copy.signoff}
+          signoffMetadata={signoffMetadata}
+          signoffRequestContext={signoffRequestContext}
+          signoffSummary={signoffSummary}
+          signoffSurfaceCount={INTERACTION_AUDIT_SIGNOFF_SURFACES.length}
+          onMetadataChange={handleSignoffMetadata}
+          onStampReviewedAt={handleStampReviewedAt}
+        />
 
         <InteractionAuditRequestScopeSection
           copy={copy.signoff}
