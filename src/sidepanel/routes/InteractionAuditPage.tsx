@@ -8,9 +8,9 @@ import { InteractionAuditRequestScopeSection } from "../components/InteractionAu
 import { InteractionAuditReviewQueueSection } from "../components/InteractionAuditReviewQueueSection";
 import { InteractionAuditSignoffSessionSection } from "../components/InteractionAuditSignoffSessionSection";
 import {
-  InteractionAuditSurfaceCard,
+  InteractionAuditSurfaceGridSection,
   type InteractionAuditSurfaceStatus,
-} from "../components/InteractionAuditSurfaceCard";
+} from "../components/InteractionAuditSurfaceGridSection";
 import {
   InteractionAuditWorkspaceControlsSection,
   type InteractionAuditWorkspaceFeedback,
@@ -621,37 +621,23 @@ export function InteractionAuditPage({
         />
       </section>
 
-      <section className="interaction-audit-grid" aria-label="Interaction audit surfaces">
-        {INTERACTION_AUDIT_SURFACES.map((surface) => {
-          const surfaceSignoffState =
-            signoffState[surface.id] ??
-            buildInitialInteractionAuditSignoffState(
-              INTERACTION_AUDIT_SIGNOFF_SURFACES,
-            )[surface.id];
-
-          return (
-            <InteractionAuditSurfaceCard
-              key={surface.id}
-              surface={surface}
-              loaded={Boolean(loadedSurfaces[surface.id])}
-              status={surfaceStatus[surface.id]}
-              signoffState={surfaceSignoffState}
-              buildAuditUrl={buildAuditUrl}
-              onAction={handleAuditAction}
-              onCardRef={(surfaceId, element) => {
-                auditCardRefs.current[surfaceId] = element;
-              }}
-              onFrameLoad={handleFrameLoad}
-              onFrameRef={(surfaceId, node) => {
-                auditFrameRefs.current[surfaceId] = node;
-              }}
-              onManualCheckToggle={handleManualCheckToggle}
-              onNotes={handleSurfaceNotes}
-              onSignoffStatus={handleSurfaceSignoffStatus}
-            />
-          );
-        })}
-      </section>
+      <InteractionAuditSurfaceGridSection
+        buildAuditUrl={buildAuditUrl}
+        loadedSurfaces={loadedSurfaces}
+        signoffState={signoffState}
+        surfaceStatus={surfaceStatus}
+        onAction={handleAuditAction}
+        onCardRef={(surfaceId, element) => {
+          auditCardRefs.current[surfaceId] = element;
+        }}
+        onFrameLoad={handleFrameLoad}
+        onFrameRef={(surfaceId, node) => {
+          auditFrameRefs.current[surfaceId] = node;
+        }}
+        onManualCheckToggle={handleManualCheckToggle}
+        onNotes={handleSurfaceNotes}
+        onSignoffStatus={handleSurfaceSignoffStatus}
+      />
     </main>
   );
 }
