@@ -47,6 +47,10 @@ import { PopupFeaturedProviderList } from "./PopupFeaturedProviderList";
 import { PopupFeaturedSection } from "./PopupFeaturedSection";
 import { PopupGuidanceCardSection } from "./PopupGuidanceCardSection";
 import { PopupHeaderSection } from "./PopupHeaderSection";
+import {
+  PopupErrorCard,
+  PopupLoadingCard,
+} from "./PopupLoadStateCards";
 import { PopupSnapshotStatusSection } from "./PopupSnapshotStatusSection";
 import { PopupSetupCoverageSection } from "./PopupSetupCoverageSection";
 import { PopupSurfaceRolesSection } from "./PopupSurfaceRolesSection";
@@ -171,49 +175,18 @@ export function PopupApp() {
   }
 
   if (loadState.status === "loading") {
-    return (
-      <main className="app-shell popup-shell">
-        <section className="status-card">
-          <p className="section-label">{runtimeI18n.t("popup.loading.eyebrow")}</p>
-          <h1 className="section-title">{runtimeI18n.t("popup.loading.title")}</h1>
-          <p className="supporting-copy">{runtimeI18n.t("popup.loading.detail")}</p>
-        </section>
-      </main>
-    );
+    return <PopupLoadingCard runtimeI18n={runtimeI18n} />;
   }
 
   if (loadState.status === "error") {
     return (
-      <main className="app-shell popup-shell">
-        <section className="status-card">
-          <p className="section-label">{runtimeI18n.t("popup.error.eyebrow")}</p>
-          <h1 className="section-title">{runtimeI18n.t("popup.error.title")}</h1>
-          <p className="supporting-copy">{loadState.message}</p>
-          <div className="popup-actions">
-            <button className="text-button" type="button" onClick={handleRefresh}>
-              {runtimeI18n.t("common.actions.retry")}
-            </button>
-            <button
-              className="text-button"
-              type="button"
-              onClick={() => {
-                void openFullDashboard();
-              }}
-            >
-              {runtimeI18n.t("common.actions.open_dashboard")}
-            </button>
-            <button
-              className="text-button"
-              type="button"
-              onClick={() => {
-                void openSettings();
-              }}
-            >
-              {runtimeI18n.t("common.actions.open_settings")}
-            </button>
-          </div>
-        </section>
-      </main>
+      <PopupErrorCard
+        message={loadState.message}
+        runtimeI18n={runtimeI18n}
+        onOpenDashboard={openFullDashboard}
+        onOpenSettings={openSettings}
+        onRetry={handleRefresh}
+      />
     );
   }
 
