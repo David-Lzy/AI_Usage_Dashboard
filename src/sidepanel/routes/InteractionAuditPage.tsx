@@ -1,8 +1,11 @@
-import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
 
 import type { RuntimeI18n } from "../../shared/i18n";
 import { buildOperatorWorkspaceLocalizedCopy } from "../../shared/localized-copy";
+import {
+  InteractionAuditSurfaceCard,
+  type InteractionAuditSurfaceStatus,
+} from "../components/InteractionAuditSurfaceCard";
 import { TopBar } from "../components/TopBar";
 import { downloadTextFile } from "../download-text-file";
 import { buildInteractionAuditExportFilename } from "../interaction-audit-export-files";
@@ -70,13 +73,7 @@ export function InteractionAuditPage({
     {},
   );
   const [surfaceStatus, setSurfaceStatus] = useState<
-    Record<
-      string,
-      {
-        tone: "neutral" | "warning";
-        message: string;
-      }
-    >
+    Record<string, InteractionAuditSurfaceStatus>
   >({});
   const [signoffState, setSignoffState] = useState(() =>
     readInteractionAuditSignoffState(INTERACTION_AUDIT_SIGNOFF_SURFACES),
@@ -1344,171 +1341,25 @@ export function InteractionAuditPage({
             )[surface.id];
 
           return (
-            <article
+            <InteractionAuditSurfaceCard
               key={surface.id}
-              className="status-card interaction-audit-card"
-              data-audit-surface-id={surface.id}
-              data-audit-surface-title={surface.title}
-              ref={(element) => {
-                auditCardRefs.current[surface.id] = element;
+              surface={surface}
+              loaded={Boolean(loadedSurfaces[surface.id])}
+              status={surfaceStatus[surface.id]}
+              signoffState={surfaceSignoffState}
+              buildAuditUrl={buildAuditUrl}
+              onAction={handleAuditAction}
+              onCardRef={(surfaceId, element) => {
+                auditCardRefs.current[surfaceId] = element;
               }}
-            >
-              <div className="status-card__header">
-                <div>
-                  <p className="section-label">Audit Surface</p>
-                  <h2 className="section-title">{surface.title}</h2>
-                </div>
-                <span className="meta-chip">
-                  {surface.width} x {surface.height}
-                </span>
-              </div>
-
-              <p className="supporting-copy">{surface.description}</p>
-
-              <div className="interaction-audit__actions">
-                <a
-                  className="text-button interaction-audit__open-link"
-                  href={buildAuditUrl(surface.path)}
-                  rel="noreferrer"
-                  target="_blank"
-                >
-                  Open standalone
-                </a>
-                {surface.actions.map((action) => (
-                  <div
-                    key={action.id}
-                    className="interaction-audit__preset"
-                    data-audit-preset-id={`${surface.id}:${action.id}`}
-                  >
-                    <button
-                      className="text-button"
-                      data-audit-action-expectation={action.expectation}
-                      data-audit-action-id={action.id}
-                      data-audit-action-label={action.label}
-                      type="button"
-                      disabled={!loadedSurfaces[surface.id]}
-                      onClick={() => {
-                        handleAuditAction(surface.id, action.id);
-                      }}
-                    >
-                      {action.label}
-                    </button>
-                    <p className="supporting-copy interaction-audit__preset-copy">
-                      {action.expectation}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              <div
-                className={`detail-note ${surfaceStatus[surface.id]?.tone === "warning" ? "detail-note--warning" : "detail-note--neutral"}`}
-                data-audit-status-id={surface.id}
-              >
-                <p className="detail-note__label">
-                  {loadedSurfaces[surface.id] ? "Audit state" : "Frame state"}
-                </p>
-                <p className="supporting-copy">
-                  {surfaceStatus[surface.id]?.message ??
-                    "Loading embedded frame for audit presets."}
-                </p>
-              </div>
-
-              <div
-                className="detail-note detail-note--neutral interaction-audit__manual-review"
-                data-audit-manual-checks-id={surface.id}
-              >
-                <p className="detail-note__label">Manual checks</p>
-                <ul className="interaction-audit__manual-checks">
-                  {surface.manualChecks.map((check, index) => (
-                    <li
-                      key={`${surface.id}-manual-check-${index + 1}`}
-                      className="interaction-audit__manual-check-item"
-                      data-audit-manual-check-id={`${surface.id}:${index + 1}`}
-                    >
-                      <label className="switch-row interaction-audit__manual-check-row">
-                        <div>
-                          <p className="switch-row__title">{check}</p>
-                        </div>
-                        <input
-                          className="switch-row__control"
-                          checked={Boolean(surfaceSignoffState.manualCheckStates[index])}
-                          data-audit-manual-toggle-id={`${surface.id}:${index + 1}`}
-                          type="checkbox"
-                          onChange={(event) => {
-                            handleManualCheckToggle(
-                              surface.id,
-                              index,
-                              event.target.checked,
-                            );
-                          }}
-                        />
-                      </label>
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="interaction-audit__signoff-fields">
-                  <label className="form-field">
-                    <span className="form-field__label">Surface signoff</span>
-                    <select
-                      className="form-field__control"
-                      data-audit-signoff-status-id={surface.id}
-                      value={surfaceSignoffState.signoffStatus}
-                      onChange={(event) => {
-                        handleSurfaceSignoffStatus(
-                          surface.id,
-                          event.target.value as "not_reviewed" | "pass" | "follow_up",
-                        );
-                      }}
-                    >
-                      <option value="not_reviewed">Not reviewed</option>
-                      <option value="pass">Pass</option>
-                      <option value="follow_up">Follow-up required</option>
-                    </select>
-                  </label>
-
-                  <label className="form-field">
-                    <span className="form-field__label">Operator notes</span>
-                    <textarea
-                      className="form-field__control interaction-audit__notes-control"
-                      data-audit-signoff-notes-id={surface.id}
-                      placeholder="Record reviewer notes for this surface."
-                      rows={4}
-                      value={surfaceSignoffState.operatorNotes}
-                      onChange={(event) => {
-                        handleSurfaceNotes(surface.id, event.target.value);
-                      }}
-                    />
-                  </label>
-                </div>
-              </div>
-
-              <div
-                className="interaction-audit-frame-shell"
-                data-audit-frame-height={surface.height}
-                data-audit-frame-width={surface.width}
-                style={
-                  {
-                    "--interaction-audit-frame-height": `${surface.height}px`,
-                    "--interaction-audit-frame-width": `${surface.width}px`,
-                  } as CSSProperties
-                }
-              >
-                <div className="interaction-audit-frame-viewport">
-                  <iframe
-                    className="interaction-audit-frame"
-                    src={buildAuditUrl(surface.path)}
-                    title={`${surface.title} audit frame`}
-                    ref={(node) => {
-                      auditFrameRefs.current[surface.id] = node;
-                    }}
-                    onLoad={() => {
-                      handleFrameLoad(surface.id);
-                    }}
-                  />
-                </div>
-              </div>
-            </article>
+              onFrameLoad={handleFrameLoad}
+              onFrameRef={(surfaceId, node) => {
+                auditFrameRefs.current[surfaceId] = node;
+              }}
+              onManualCheckToggle={handleManualCheckToggle}
+              onNotes={handleSurfaceNotes}
+              onSignoffStatus={handleSurfaceSignoffStatus}
+            />
           );
         })}
       </section>
