@@ -1,3 +1,5 @@
+import { getRdpExtensionWindowRouteConfig } from "./rdp-extension-window-routes.mjs";
+
 export const STORE_SCREENSHOT_SEED_ROUTE_HASH = "#debug-store-screenshot-seed";
 export const STORE_SCREENSHOT_SEED_APPLIED_TITLE =
   "AI Usage Dashboard Screenshot Seed Applied";
@@ -8,14 +10,30 @@ export function buildStoreScreenshotSeedRoutePath(preset) {
   return `src/sidepanel/index.html?preset=${encodeURIComponent(preset)}${STORE_SCREENSHOT_SEED_ROUTE_HASH}`;
 }
 
+function getRequiredRouteConfig(routeKey) {
+  const routeConfig = getRdpExtensionWindowRouteConfig(routeKey);
+
+  if (!routeConfig) {
+    throw new Error(`Missing RDP extension window route config: ${routeKey}`);
+  }
+
+  return routeConfig;
+}
+
+const POPUP_WINDOW_ROUTE = getRequiredRouteConfig("popup");
+const SETTINGS_FULL_PAGE_ROUTE = getRequiredRouteConfig("settings");
+const CODEX_DETAIL_FULL_PAGE_ROUTE = getRequiredRouteConfig(
+  "provider-detail-codex",
+);
+
 export const STORE_SCREENSHOT_RUNTIME_CAPTURE_PLAN = [
   {
     filename: "01-toolbar-first-quick-glance.png",
     preset: "toolbar-first-quick-glance",
-    routePath: "src/popup/index.html",
-    expectedTitle: "AI Usage Dashboard Popup",
-    width: 640,
-    height: 400,
+    routePath: POPUP_WINDOW_ROUTE.routePath,
+    expectedTitle: POPUP_WINDOW_ROUTE.expectedTitle,
+    width: POPUP_WINDOW_ROUTE.width,
+    height: POPUP_WINDOW_ROUTE.height,
     captureTruth: "approximated_runtime_state",
     stateSummary:
       "Popup shows a compact quick-glance state with Cursor, Claude Code, and Codex visible in one healthy toolbar-first view.",
@@ -25,10 +43,10 @@ export const STORE_SCREENSHOT_RUNTIME_CAPTURE_PLAN = [
   {
     filename: "02-setup-guidance.png",
     preset: "setup-guidance",
-    routePath: "src/popup/index.html",
-    expectedTitle: "AI Usage Dashboard Popup",
-    width: 640,
-    height: 400,
+    routePath: POPUP_WINDOW_ROUTE.routePath,
+    expectedTitle: POPUP_WINDOW_ROUTE.expectedTitle,
+    width: POPUP_WINDOW_ROUTE.width,
+    height: POPUP_WINDOW_ROUTE.height,
     captureTruth: "approximated_runtime_state",
     stateSummary:
       "Popup shows mixed setup blockers with Cursor missing host access and Codex missing workspace credentials.",
@@ -38,10 +56,10 @@ export const STORE_SCREENSHOT_RUNTIME_CAPTURE_PLAN = [
   {
     filename: "03-honest-contract-or-policy-only.png",
     preset: "honest-contract-or-policy-only",
-    routePath: "src/popup/index.html",
-    expectedTitle: "AI Usage Dashboard Popup",
-    width: 640,
-    height: 400,
+    routePath: POPUP_WINDOW_ROUTE.routePath,
+    expectedTitle: POPUP_WINDOW_ROUTE.expectedTitle,
+    width: POPUP_WINDOW_ROUTE.width,
+    height: POPUP_WINDOW_ROUTE.height,
     captureTruth: "policy_only_fallback",
     stateSummary:
       "Popup shows Gemini as the only visible provider in a truthful policy-only contract state.",
@@ -51,10 +69,10 @@ export const STORE_SCREENSHOT_RUNTIME_CAPTURE_PLAN = [
   {
     filename: "04-settings-and-setup-depth.png",
     preset: "settings-and-setup-depth",
-    routePath: "src/sidepanel/index.html?surface=full-page#settings",
-    expectedTitle: "AI Usage Dashboard",
-    width: 1280,
-    height: 800,
+    routePath: SETTINGS_FULL_PAGE_ROUTE.routePath,
+    expectedTitle: SETTINGS_FULL_PAGE_ROUTE.expectedTitle,
+    width: SETTINGS_FULL_PAGE_ROUTE.width,
+    height: SETTINGS_FULL_PAGE_ROUTE.height,
     captureTruth: "approximated_runtime_state",
     stateSummary:
       "Full-page Settings shows setup ownership in the deeper workspace with the same mixed blockers carried over from the popup story.",
@@ -64,10 +82,10 @@ export const STORE_SCREENSHOT_RUNTIME_CAPTURE_PLAN = [
   {
     filename: "05-provider-or-dashboard-depth.png",
     preset: "provider-or-dashboard-depth",
-    routePath: "src/sidepanel/index.html?surface=full-page#provider-detail/codex",
-    expectedTitle: "AI Usage Dashboard",
-    width: 1280,
-    height: 800,
+    routePath: CODEX_DETAIL_FULL_PAGE_ROUTE.routePath,
+    expectedTitle: CODEX_DETAIL_FULL_PAGE_ROUTE.expectedTitle,
+    width: CODEX_DETAIL_FULL_PAGE_ROUTE.width,
+    height: CODEX_DETAIL_FULL_PAGE_ROUTE.height,
     captureTruth: "approximated_runtime_state",
     stateSummary:
       "Full-page Codex provider detail shows a truthful warning-state review surface beyond the popup.",

@@ -7,7 +7,7 @@ Current packaged release state:
 - package version: `0.1.0-rc.14`
 - Chrome manifest version: `0.1.0.14`
 - packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.14.zip`
-- source status: extension runtime/package bytes are aligned through `Phase 306` and packaged as `rc.14`; current source also includes post-package Chrome automation, smoke-evidence, first-provider setup, cached-first guard, popup view-model maintenance, and RDP full-page route-contract follow-ups through `Phase 312`; the earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it
+- source status: extension runtime/package bytes are aligned through `Phase 306` and packaged as `rc.14`; current source also includes post-package Chrome automation, smoke-evidence, first-provider setup, cached-first guard, popup view-model maintenance, RDP full-page route-contract, and store screenshot route-config reuse follow-ups through `Phase 313`; the earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it
 - packaged follow-up milestone: [2026-05-11 RC14 Follow-Up Release Candidate](./Doc/Milestones/2026-05-11_RC14_Follow_Up_Release_Candidate.md)
 - submitted review milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
@@ -73,6 +73,7 @@ Maintenance note:
 - Settings source card rendering now lives in `src/sidepanel/components/SettingsSourceCard.tsx`, keeping source display construction, source preference controls, session-page actions, and detailed diagnostics out of the section wrapper
 - Settings credential card rendering now lives in `src/sidepanel/components/SettingsCredentialsSection.tsx`, keeping API-key and Codex analytics credential forms out of the remaining Settings section aggregator while preserving the existing Settings page import path
 - RDP extension-window smoke routes now live in `scripts/lib/rdp-extension-window-routes.mjs`, keeping ordinary Chrome tab/app-window captures on the full-page surface contract for sidepanel-derived routes while preserving `src/popup/index.html` for popup-window captures
+- store screenshot runtime capture plans now reuse that same RDP route config for popup and full-page entries, so request-bound screenshot generation cannot drift away from the extension-window smoke helper
 
 ## Source Labels
 

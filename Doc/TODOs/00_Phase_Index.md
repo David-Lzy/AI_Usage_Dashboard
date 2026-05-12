@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [312_Phase_RDP_Full_Page_Route_Contract_Guard.md](./Archive/312_Phase_RDP_Full_Page_Route_Contract_Guard.md)
+- latest completed slice: [313_Phase_Store_Screenshot_Route_Config_Reuse.md](./Archive/313_Phase_Store_Screenshot_Route_Config_Reuse.md)
 - queued phase files: none
 
 Completed phases should be moved to:

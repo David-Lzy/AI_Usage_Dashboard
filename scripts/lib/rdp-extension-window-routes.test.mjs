@@ -5,6 +5,7 @@ import {
   getRdpExtensionWindowRouteConfig,
   getRdpExtensionWindowRouteKeys,
 } from "./rdp-extension-window-routes.mjs";
+import { STORE_SCREENSHOT_RUNTIME_CAPTURE_PLAN } from "./store-screenshot-rdp-capture.mjs";
 
 const FULL_PAGE_ROUTE_KEYS = [
   "dashboard",
@@ -59,5 +60,30 @@ describe("RDP extension window routes", () => {
       "popup",
       ...FULL_PAGE_ROUTE_KEYS,
     ]);
+  });
+
+  it("keeps store screenshot runtime routes aligned with extension-window routes", () => {
+    const entriesByFilename = new Map(
+      STORE_SCREENSHOT_RUNTIME_CAPTURE_PLAN.map((entry) => [
+        entry.filename,
+        entry,
+      ]),
+    );
+
+    expect(entriesByFilename.get("01-toolbar-first-quick-glance.png")).toMatchObject(
+      RDP_EXTENSION_WINDOW_ROUTES.popup,
+    );
+    expect(entriesByFilename.get("02-setup-guidance.png")).toMatchObject(
+      RDP_EXTENSION_WINDOW_ROUTES.popup,
+    );
+    expect(
+      entriesByFilename.get("03-honest-contract-or-policy-only.png"),
+    ).toMatchObject(RDP_EXTENSION_WINDOW_ROUTES.popup);
+    expect(entriesByFilename.get("04-settings-and-setup-depth.png")).toMatchObject(
+      RDP_EXTENSION_WINDOW_ROUTES.settings,
+    );
+    expect(entriesByFilename.get("05-provider-or-dashboard-depth.png")).toMatchObject(
+      RDP_EXTENSION_WINDOW_ROUTES["provider-detail-codex"],
+    );
   });
 });
