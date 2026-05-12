@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is now completed through `Phase 330`, with no active phase or queued numbered phase currently selected
+- the numbered phase queue is now completed through `Phase 331`, with no active phase or queued numbered phase currently selected
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -212,6 +212,7 @@ As of 2026-05-13:
 - `Phase 328` extracted popup provider progress rendering and covered usage-window, single-value, and hidden empty-percent branches
 - `Phase 329` extracted popup snapshot-status view-model logic and covered no-provider, aligned, mixed, warning, and error decisions
 - `Phase 330` extracted popup guidance-card view-model logic and covered first setup, missing access, missing credential, blocked provider, policy-only, and ready-provider decisions
+- `Phase 331` extracted popup featured-section view-model logic and covered zero-provider, needs-attention, policy-only, and all-clear section stories
 - provider closure still waits on available accounts or product decisions for JetBrains org-console, individual Claude Pro / Max behavior, and Gemini project-metrics graduation; Claude Team no longer belongs in the blocked-by-account queue
 - operator evidence means archived real human/operator review exports for interaction-audit or theme-recovery workspaces; it remains useful, but it sits behind release package and store asset closeout
 - the originally queued local-safe file splitting targets are now closed enough that further splitting should be driven by a concrete maintenance risk instead of the old Phase 236-era queue
