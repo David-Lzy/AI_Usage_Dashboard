@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import type { RuntimeI18n } from "../../shared/i18n";
 import { buildOperatorWorkspaceLocalizedCopy } from "../../shared/localized-copy";
+import { InteractionAuditGuidanceCard } from "../components/InteractionAuditGuidanceCard";
 import { InteractionAuditHandoffSummarySection } from "../components/InteractionAuditHandoffSummarySection";
 import { InteractionAuditRequestScopeSection } from "../components/InteractionAuditRequestScopeSection";
 import { InteractionAuditReviewQueueSection } from "../components/InteractionAuditReviewQueueSection";
@@ -560,49 +561,10 @@ export function InteractionAuditPage({
         </span>
       </section>
 
-      <section className="status-card">
-        <div className="dashboard-section__header">
-          <div>
-            <p className="section-label">{copy.guidance.eyebrow}</p>
-            <h2 className="section-title">{copy.guidance.title}</h2>
-          </div>
-          <p className="supporting-copy">{copy.guidance.detail}</p>
-        </div>
-
-        <ul className="feature-list interaction-audit__checklist">
-          {copy.guidance.checks.map((check) => (
-            <li key={check}>{check}</li>
-          ))}
-        </ul>
-
-        <div className="interaction-audit__actions">
-          <a
-            className="text-button interaction-audit__open-link"
-            href={buildAuditUrl("./index.html#dashboard")}
-            rel="noreferrer"
-            target="_blank"
-          >
-            {copy.guidance.openDashboard}
-          </a>
-          <a
-            className="text-button interaction-audit__open-link"
-            href={buildAuditUrl("./index.html#settings")}
-            rel="noreferrer"
-            target="_blank"
-            data-theme-local-surface="audit-open-settings-link"
-          >
-            {copy.guidance.openSettings}
-          </a>
-          <a
-            className="text-button interaction-audit__open-link"
-            href={buildAuditUrl("../popup/index.html")}
-            rel="noreferrer"
-            target="_blank"
-          >
-            {copy.guidance.openPopup}
-          </a>
-        </div>
-      </section>
+      <InteractionAuditGuidanceCard
+        buildAuditUrl={buildAuditUrl}
+        copy={copy.guidance}
+      />
 
       <section
         className="status-card interaction-audit__signoff-workspace"

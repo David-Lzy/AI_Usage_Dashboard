@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [344_Phase_Theme_Recovery_Outputs_Component.md](./Archive/344_Phase_Theme_Recovery_Outputs_Component.md)
+- latest completed slice: [345_Phase_Interaction_Audit_Guidance_Card_Component.md](./Archive/345_Phase_Interaction_Audit_Guidance_Card_Component.md)
 - queued phase files: none
 
 Completed phases should be moved to:
