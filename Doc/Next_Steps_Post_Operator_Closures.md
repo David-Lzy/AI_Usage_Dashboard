@@ -1,6 +1,6 @@
 # Next Steps — Post RC13 And Operator Closures
 
-Date: 2026-05-11
+Date: 2026-05-12
 
 Process rule:
 
@@ -12,7 +12,7 @@ Document class:
 
 Status note:
 
-- snapshot taken on 2026-05-11 after Direction 04 and Direction 05 real operator closures completed
+- snapshot refreshed on 2026-05-12 after Chrome automation default alignment and the `rc.14` Chrome helper smoke pass
 - refresh this file when the Chrome Web Store review result arrives, or when a new high-priority direction opens
 
 ## What Just Closed
@@ -40,7 +40,7 @@ As of 2026-05-11 the following previously-open items are now done:
 
 The submitted store-review boundary remains `release/ai-usage-dashboard-0.1.0-rc.13.zip`. Keep using the RC13 milestone as the truthful historical submission handoff while that review is still pending in the Chrome Web Store Developer Dashboard.
 
-The repo is now also packaged forward through `Phase 306` as `release/ai-usage-dashboard-0.1.0-rc.14.zip`. That newer package is a prepared follow-up candidate, not an instruction to silently replace the submitted RC13 review boundary.
+The repo is now also packaged forward through `Phase 306` as `release/ai-usage-dashboard-0.1.0-rc.14.zip`. That newer package is a prepared follow-up candidate, not an instruction to silently replace the submitted RC13 review boundary. `Phase 307` and `Phase 308` are post-package tooling, Chrome automation, and smoke-evidence follow-ups; they do not create a new extension package.
 
 References:
 - [Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
@@ -51,7 +51,7 @@ Remaining human steps:
 - keep the reviewed screenshots from [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md), listing copy, and disclosure answers ready
 - if review feedback or a deliberate product decision calls for a newer package, promote RC14 from the follow-up milestone instead of mutating RC13 history
 
-No additional repo-owned code work is required before review feedback arrives; the newer RC14 package already exists if it becomes necessary.
+No additional release-package work is required before review feedback arrives; the newer RC14 package already exists if it becomes necessary. Local-safe product and maintenance work is queued separately under Phase 309 through Phase 311.
 
 ### P1 — Decide Whether To Promote RC14
 
@@ -64,6 +64,12 @@ If RC13 passes with no changes, RC14 remains optional follow-up polish rather th
 ## Next Engineering Work (After Store Upload Clears)
 
 Priority is taken from `00_Strategic_Directions_Index.md` active continuation order:
+
+### Immediate Queued Phases
+
+- [309_Phase_Quick_Setup_First_Provider_Guided_Setup.md](./TODOs/309_Phase_Quick_Setup_First_Provider_Guided_Setup.md) - make the first-provider setup path clearer for personal-account users.
+- [310_Phase_Cached_First_Bootstrap_Performance_Guard.md](./TODOs/310_Phase_Cached_First_Bootstrap_Performance_Guard.md) - protect side-panel and full-page cached-first entry from regressing into blocking background refresh.
+- [311_Phase_Popup_View_Model_Maintenance_Split.md](./TODOs/311_Phase_Popup_View_Model_Maintenance_Split.md) - split popup view-model internals without changing popup behavior.
 
 ### 1. Direction 10 — Toolbar Competitive Fit And Store Readiness
 

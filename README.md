@@ -7,7 +7,7 @@ Current packaged release state:
 - package version: `0.1.0-rc.14`
 - Chrome manifest version: `0.1.0.14`
 - packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.14.zip`
-- source status: current source and tracked docs are aligned through `Phase 306` and packaged as `rc.14`; the earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it
+- source status: extension runtime/package bytes are aligned through `Phase 306` and packaged as `rc.14`; current source also includes post-package Chrome automation and smoke-evidence follow-ups through `Phase 308`; the earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it
 - packaged follow-up milestone: [2026-05-11 RC14 Follow-Up Release Candidate](./Doc/Milestones/2026-05-11_RC14_Follow_Up_Release_Candidate.md)
 - submitted review milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
@@ -45,9 +45,10 @@ Next execution queue:
 
 1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary, but use `0.1.0-rc.14` as the ready follow-up package for the post-`rc.13` `Phase 303` through `Phase 306` popup, settings, side-panel, and Claude polish if review feedback or an explicit resubmission decision asks for a newer build
 2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC14 follow-up milestone](./Doc/Milestones/2026-05-11_RC14_Follow_Up_Release_Candidate.md) as the current packaged-source reference
-3. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
-4. keep operator evidence closure below release/store work; here it means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not another runtime feature
-5. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
+3. next local-safe execution phases are [Phase 309](./Doc/TODOs/309_Phase_Quick_Setup_First_Provider_Guided_Setup.md), [Phase 310](./Doc/TODOs/310_Phase_Cached_First_Bootstrap_Performance_Guard.md), and [Phase 311](./Doc/TODOs/311_Phase_Popup_View_Model_Maintenance_Split.md)
+4. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
+5. keep operator evidence closure below release/store work; here it means archived real human/operator review exports for interaction-audit or theme-recovery workspaces, not another runtime feature
+6. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
 
 Maintenance note:
 
@@ -583,7 +584,7 @@ Preview URL:
 4. Click `Load unpacked`.
 5. Select the repo `dist/` directory.
 6. Click the toolbar action to open the popup, review the snapshot-status card if needed, then use `Open dashboard` or `Open settings` to jump into the side panel.
-7. If you rebuild and keep using the same Chrome profile, go back to `chrome://extensions` and reload or update the unpacked extension before rerunning operator verification.
+7. If you rebuild and keep using the same Chrome profile, go back to `chrome://extensions` and reload or update the unpacked extension before rerunning operator verification. Brave remains an explicit fallback profile for RDP troubleshooting, not the default verification target.
 
 ## Provider Credentials And Permissions
 
@@ -595,9 +596,11 @@ Preview URL:
 | Gemini Code Assist | none | none |
 | Codex | none for personal usage pages; analytics API key + workspace ID for Enterprise analytics | `https://api.chatgpt.com/*`, `https://chatgpt.com/*` |
 
-For shipped session-page providers, use `Settings -> Source Connections` to find or open the required logged-in browser page before refreshing. The same section now shows whether the provider page is attached, stale, or unbound, and lets you disconnect a saved binding explicitly. Direct source-page recovery actions refresh immediately when they attach an already-open matching tab, and they reload the tab first when the current state is `capture_unavailable`. Newly-opened recovery pages still need a manual refresh after login or navigation, but Codex scheduled sync can reopen a previously bound analytics page in an inactive managed tab after authorization. If an open usage tab exists but Chrome cannot read it, Codex and Cursor show a capture-unavailable session-page diagnostic with reload guidance.
+For shipped session-page providers, use `Settings -> Source Connections` to find or open the required logged-in browser page before refreshing. The same section now shows whether the provider page is attached, stale, or unbound, and lets you disconnect a saved binding explicitly. Direct source-page recovery actions refresh immediately when they attach an already-open matching tab, and they reload the tab first when the current state is `capture_unavailable`. Newly-opened recovery pages still need a manual refresh after login or navigation, but Codex scheduled sync can reopen a previously bound analytics page in an inactive managed tab after authorization. If an open usage tab exists but the browser cannot read it, Codex and Cursor show a capture-unavailable session-page diagnostic with reload guidance.
 
-If you are using a long-lived Chrome profile for release verification, run `./scripts/with-preferred-node.sh node ./scripts/phase41-profile-audit.mjs` after reloading the unpacked extension so the runtime host grants and stored extension state are visible before the final pass. In the narrowed RC selected on `2026-04-23`, JetBrains is retained in the repo but not part of the active release promise.
+If you are using the long-lived Chrome profile for release verification, run `./scripts/with-preferred-node.sh node ./scripts/phase41-profile-audit.mjs` after reloading the unpacked extension so the runtime host grants and stored extension state are visible before the final pass. The local RDP helper defaults now prefer Chrome and can fall back to Brave when Chrome is unavailable; use `RDP_BROWSER_*` or `--profile-dir` for explicit profile inspection. In the narrowed RC selected on `2026-04-23`, JetBrains is retained in the repo but not part of the active release promise.
+
+When opening sidepanel-derived routes in an ordinary Chrome tab or app window, use the full-page contract such as `chrome-extension://<id>/src/sidepanel/index.html?surface=full-page#dashboard`. The bare `src/sidepanel/index.html#...` route is reserved for real side panel handoff and is not the RDP app-window smoke target.
 
 ## Release Flow
 

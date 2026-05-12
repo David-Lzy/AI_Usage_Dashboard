@@ -5,8 +5,8 @@ import { execFile, spawn } from "node:child_process";
 import { promisify } from "node:util";
 
 import {
-  detectChromeRuntimeEnvironment,
-  detectLoadedExtensionId,
+  detectLoadedExtensionRuntime,
+  detectRdpBrowserRuntimeEnvironment,
 } from "./lib/rdp-extension-runtime-capture.mjs";
 
 const execFileAsync = promisify(execFile);
@@ -98,7 +98,7 @@ async function runX11Command({ runtime, command, args, label, timeoutMs = DEFAUL
   }
 }
 
-async function listChromeWindows(runtime) {
+async function listBrowserWindows(runtime) {
   const { stdout } = await runX11Command({
     runtime,
     command: "xwininfo",
@@ -128,9 +128,9 @@ async function closeWindowById(runtime, windowId) {
   }).catch(() => undefined);
 }
 
-function spawnChromeUrlWindow({ runtime, url, width, height }) {
+function spawnBrowserUrlWindow({ browser, runtime, url, width, height }) {
   const child = spawn(
-    "/opt/google/chrome/chrome",
+    browser.executablePath,
     [
       "--profile-directory=Default",
       "--new-window",
@@ -182,14 +182,18 @@ function pickPopupCandidate(windows, existingIds, helperWindowId) {
 }
 
 export async function probeRdpNativeToolbarPopup({ outputPath, resultsPath }) {
-  const runtime = await detectChromeRuntimeEnvironment();
-  const extensionId = await detectLoadedExtensionId({ projectRoot });
+  const extensionRuntime = await detectLoadedExtensionRuntime({ projectRoot });
+  const runtime = await detectRdpBrowserRuntimeEnvironment({
+    browser: extensionRuntime.browser,
+  });
+  const extensionId = extensionRuntime.extensionId;
   const helperUrl = `chrome-extension://${extensionId}/src/sidepanel/index.html#debug-native-popup-probe`;
-  const beforeWindows = await listChromeWindows(runtime);
+  const beforeWindows = await listBrowserWindows(runtime);
   const existingIds = new Set(beforeWindows.map((windowInfo) => windowInfo.id));
   const beforeTitles = beforeWindows.map((windowInfo) => windowInfo.title);
 
-  spawnChromeUrlWindow({
+  spawnBrowserUrlWindow({
+    browser: extensionRuntime.browser,
     runtime,
     url: helperUrl,
     width: 1280,
@@ -201,7 +205,7 @@ export async function probeRdpNativeToolbarPopup({ outputPath, resultsPath }) {
   let helperSnapshot = beforeWindows;
 
   while (Date.now() <= deadline) {
-    helperSnapshot = await listChromeWindows(runtime);
+    helperSnapshot = await listBrowserWindows(runtime);
     helperWindow = pickHelperWindow(helperSnapshot, existingIds);
 
     if (helperWindow !== null) {
@@ -215,13 +219,18 @@ export async function probeRdpNativeToolbarPopup({ outputPath, resultsPath }) {
     const result = {
       ok: false,
       reason: "helper_window_not_found",
+      browserLabel: extensionRuntime.browser.label,
+      browserExecutablePath: extensionRuntime.browser.executablePath,
+      profileDir: extensionRuntime.browser.profileDir,
       helperUrl,
       beforeTitles,
       afterTitles: helperSnapshot.map((windowInfo) => windowInfo.title),
     };
     await mkdir(path.dirname(resultsPath), { recursive: true });
     await writeFile(resultsPath, `${JSON.stringify(result, null, 2)}\n`, "utf8");
-    throw new Error(`Could not find a Chrome window whose title included "${HELPER_TITLE}".`);
+    throw new Error(
+      `Could not find a ${extensionRuntime.browser.label} window whose title included "${HELPER_TITLE}".`,
+    );
   }
 
   let popupWindow = null;
@@ -229,7 +238,7 @@ export async function probeRdpNativeToolbarPopup({ outputPath, resultsPath }) {
   const helperOutputPath = buildHelperOutputPath(outputPath);
 
   while (Date.now() <= deadline) {
-    finalSnapshot = await listChromeWindows(runtime);
+    finalSnapshot = await listBrowserWindows(runtime);
     popupWindow = pickPopupCandidate(finalSnapshot, existingIds, helperWindow.id);
 
     if (popupWindow !== null) {
@@ -241,6 +250,9 @@ export async function probeRdpNativeToolbarPopup({ outputPath, resultsPath }) {
 
   const result = {
     ok: popupWindow !== null,
+    browserLabel: extensionRuntime.browser.label,
+    browserExecutablePath: extensionRuntime.browser.executablePath,
+    profileDir: extensionRuntime.browser.profileDir,
     helperUrl,
     helperWindow,
     popupWindow,

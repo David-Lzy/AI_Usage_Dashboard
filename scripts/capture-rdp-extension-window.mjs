@@ -11,19 +11,31 @@ const ROUTES = {
     height: 400,
   },
   dashboard: {
-    routePath: "src/sidepanel/index.html#dashboard",
+    routePath: "src/sidepanel/index.html?surface=full-page#dashboard",
     expectedTitle: "AI Usage Dashboard",
     width: 1280,
     height: 800,
   },
   settings: {
-    routePath: "src/sidepanel/index.html#settings",
+    routePath: "src/sidepanel/index.html?surface=full-page#settings",
+    expectedTitle: "AI Usage Dashboard",
+    width: 1280,
+    height: 800,
+  },
+  "settings-quick-setup-cursor": {
+    routePath: "src/sidepanel/index.html?surface=full-page#settings/quick-setup/cursor",
+    expectedTitle: "AI Usage Dashboard",
+    width: 1280,
+    height: 800,
+  },
+  "settings-credentials-codex": {
+    routePath: "src/sidepanel/index.html?surface=full-page#settings/credentials/codex",
     expectedTitle: "AI Usage Dashboard",
     width: 1280,
     height: 800,
   },
   "provider-detail-codex": {
-    routePath: "src/sidepanel/index.html#provider-detail/codex",
+    routePath: "src/sidepanel/index.html?surface=full-page#provider-detail/codex",
     expectedTitle: "AI Usage Dashboard",
     width: 1280,
     height: 800,
@@ -80,7 +92,10 @@ function assert(condition, message) {
 
 async function run() {
   const options = parseArgs(process.argv.slice(2));
-  assert(options.route.length > 0, "Pass `--route <popup|dashboard|settings|provider-detail-codex|full-page-dashboard|full-page-settings|full-page-provider-detail-codex>`.");
+  assert(
+    options.route.length > 0,
+    "Pass `--route <popup|dashboard|settings|settings-quick-setup-cursor|settings-credentials-codex|provider-detail-codex|full-page-dashboard|full-page-settings|full-page-provider-detail-codex>`.",
+  );
   assert(options.output.length > 0, "Pass `--output <path-to-png>`.");
   assert(options.route in ROUTES, `Unsupported route key: ${options.route}`);
 

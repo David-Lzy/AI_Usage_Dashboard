@@ -1,6 +1,6 @@
 # AI Usage Dashboard TODOs
 
-Date: 2026-05-11
+Date: 2026-05-12
 
 Process rule:
 
@@ -76,19 +76,21 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 306` execution priority:
+Current post-`Phase 308` execution priority:
 
 1. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.13.zip` as the submitted Chrome Web Store review boundary. Do not silently mutate or rewrite the [RC13 upload-candidate milestone](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) while that submission remains the human-reviewed baseline.
 2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.14.zip` as the current packaged follow-up candidate. It now includes post-`rc.13` `Phase 303` through `Phase 306` Claude, popup, settings, full-page, and side-panel polish and is ready if review feedback or an explicit resubmission decision needs a newer build.
 3. `P0` - keep the refreshed `Direction 10.3` screenshot evidence archived and ready, not pending: [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) still fulfills the latest reviewed screenshot pack with `5/5` images and `3` explicit truth-boundary notes.
 4. `P1` - if a resubmission becomes necessary, use [2026-05-11_RC14_Follow_Up_Release_Candidate.md](./Milestones/2026-05-11_RC14_Follow_Up_Release_Candidate.md) as the current packaged-source reference and cut a fresh submission milestone from that boundary instead of mutating RC13 history.
-5. `P1` - run another `0.1.0-rc.14` RDP Chrome smoke pass only if the new popup/settings/onboarding polish needs explicit real-Chrome confirmation before resubmission. The 2026-05-04 user-run `rc.11` pass remains the latest manual surface smoke note.
-6. `P2` - Provider closure waits only on the accounts that are still unavailable:
+5. `P1` - start [309_Phase_Quick_Setup_First_Provider_Guided_Setup.md](./TODOs/309_Phase_Quick_Setup_First_Provider_Guided_Setup.md) when the next product slice is allowed: make the zero-provider and first-provider Settings path more explicit for personal-account users.
+6. `P1` - then start [310_Phase_Cached_First_Bootstrap_Performance_Guard.md](./TODOs/310_Phase_Cached_First_Bootstrap_Performance_Guard.md) to prevent side-panel or full-page entry from regressing back to blocking background refresh before cached state renders.
+7. `P2` - use [311_Phase_Popup_View_Model_Maintenance_Split.md](./TODOs/311_Phase_Popup_View_Model_Maintenance_Split.md) as a maintenance-only cleanup after product and performance guards, keeping popup behavior unchanged.
+8. `P2` - Provider closure waits only on the accounts that are still unavailable:
    - JetBrains org-console reverification waits for a real org-visible `Users and licensing` session.
    - Claude individual Pro / Max usage-page behavior remains separate from the now-shipped Claude Team session-page path.
    - Gemini project-metrics graduation waits for a product decision that project-scoped metrics are acceptable.
-7. `P2` - real operator evidence is now closed as of 2026-05-11: Direction 04 interaction-audit closure archived under [2026-05-11-2026-05-11-rdp-chrome-visual-audit](./testing/operator_reviews/2026-05-11-2026-05-11-rdp-chrome-visual-audit/README.md); Direction 05 theme-recovery closure archived under [2026-05-11-system-recovered-014312](./testing/theme_recovery_reviews/2026-05-11-system-recovered-014312/README.md). No further operator evidence phases are queued unless a new surface or theme regression opens them.
-8. `P2` - continue file splitting only when a concrete maintenance issue justifies it; the old queued split targets for `material-theme.css`, `SettingsPage.tsx`, `App.tsx`, `standard-app-actions.ts`, and `localized-copy.ts` are now closed or reduced to focused compatibility/aggregator files.
+9. `P2` - real operator evidence is now closed as of 2026-05-11: Direction 04 interaction-audit closure archived under [2026-05-11-2026-05-11-rdp-chrome-visual-audit](./testing/operator_reviews/2026-05-11-2026-05-11-rdp-chrome-visual-audit/README.md); Direction 05 theme-recovery closure archived under [2026-05-11-system-recovered-014312](./testing/theme_recovery_reviews/2026-05-11-system-recovered-014312/README.md). No further operator evidence phases are queued unless a new surface or theme regression opens them.
+10. `P2` - continue file splitting only when a concrete maintenance issue justifies it; the old queued split targets for `material-theme.css`, `SettingsPage.tsx`, `App.tsx`, `standard-app-actions.ts`, and `localized-copy.ts` are now closed or reduced to focused compatibility/aggregator files.
 
 Delivery rule for this stage:
 
@@ -367,6 +369,8 @@ Phase status update:
 - `Phase 304` simplified Settings IA around personal-user setup: persisted user levels (`basic` / `advanced` / `developer` / `debug`), task-oriented Quick Setup, reduced basic-mode preferences, and one gated Advanced container for enterprise/API plus source controls
 - `Phase 305` added cached-first full-page bootstrap with a sync writeback drift guard, fixed Settings select layering, kept the common `Appearance & Sync` controls always visible, moved the rest behind one `More` disclosure, and lowered the periodic sync floor to `3` minutes with bounded startup jitter
 - `Phase 306` extended cached-first bootstrap to the side panel, routed popup setup/problem actions into focused Settings targets, added popup quick-hide/setup affordances plus a subtle zero-provider `More providers` attention cue, kept app language always visible, fixed English display-level labels, and packaged `0.1.0-rc.14` as the follow-up candidate while preserving the RC13 review milestone
+- `Phase 307` made Chrome plus the official Playwright Extension bridge the default local browser automation path for normal web tabs, changed RDP helper defaults to Chrome-first with Brave fallback, and made profile audit auto-detect the current unpacked extension id from the Chrome profile
+- `Phase 308` recorded a real Chrome helper smoke pass for `0.1.0-rc.14` dashboard, Settings, focused Settings, provider-detail, full-page, and popup routes; a later restarted Codex session confirmed direct Playwright MCP can drive normal web tabs but Chrome blocks using that bridge to drive another extension's `chrome-extension://` UI, so extension UI smoke remains on the Chrome RDP helper
 - the old maintenance split queue is closed for the originally named local-safe targets: `material-theme.css`, `localized-copy.ts`, `SettingsPage.tsx`, `App.tsx`, and `standard-app-actions.ts` are now focused base, compatibility, route, or aggregator files rather than the next default work item
 - the previous store-readiness blocker for screenshot file intake/import/archive is now closed under `Direction 10.3`; the current store step is the human Chrome Web Store listing upload and review flow using the Phase 299 milestone
 - `2026-05-11 RDP session` completed Direction 04 real operator closure: first real interaction-audit visual audit across all 5 surfaces (dashboard-360, settings-420, cursor-detail-360, codex-detail-420, popup-360), all 11 manual checks resolved, pending request `2026-04-23-first-real-operator-review-request` fulfilled and archived under [2026-05-11-2026-05-11-rdp-chrome-visual-audit](./testing/operator_reviews/2026-05-11-2026-05-11-rdp-chrome-visual-audit/README.md)

@@ -61,7 +61,7 @@ try {
 
 assert(
   result.helperWindow && result.helperWindow.title.includes("AI Usage Dashboard Native Popup Probe"),
-  "Native toolbar popup probe did not open the helper Chrome window.",
+  "Native toolbar popup probe did not open the helper browser window.",
 );
 assert(
   typeof result.helperOutputPath === "string" && result.helperOutputPath.length > 0,

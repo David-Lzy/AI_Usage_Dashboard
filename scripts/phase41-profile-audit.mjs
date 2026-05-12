@@ -4,19 +4,20 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 
+import {
+  detectLoadedExtensionRuntime,
+  listRdpBrowserCandidates,
+  resolvePreferredRdpBrowserCandidate,
+} from "./lib/rdp-extension-runtime-capture.mjs";
+
 const APP_STATE_STORAGE_KEY = "ai-usage-dashboard.app-state";
 const PROVIDER_SECRETS_STORAGE_KEY = "ai-usage-dashboard.provider-secrets";
 const LEVELDB_BLOCK_SIZE = 32768;
 
 function parseArgs(argv) {
   const args = {
-    extensionId: "gkjioiklbdjcknhdglaehbeofkjmmdpc",
-    profileDir: path.join(
-      process.env.HOME ?? "",
-      ".config",
-      "google-chrome",
-      "Default",
-    ),
+    extensionId: "",
+    profileDir: "",
     manifestPath: path.join(process.cwd(), "dist", "manifest.json"),
   };
 
@@ -28,6 +29,41 @@ function parseArgs(argv) {
     } else if (entry.startsWith("--manifest-path=")) {
       args.manifestPath = entry.slice("--manifest-path=".length);
     }
+  }
+
+  return args;
+}
+
+function buildProfileDirBrowserCandidate(profileDir) {
+  const preferredBrowser = resolvePreferredRdpBrowserCandidate();
+  return {
+    ...preferredBrowser,
+    label: "Configured profile",
+    profileDir,
+  };
+}
+
+async function resolveArgs(rawArgs) {
+  const args = { ...rawArgs };
+
+  if (args.extensionId.length === 0) {
+    const browserCandidates =
+      args.profileDir.length > 0
+        ? [buildProfileDirBrowserCandidate(args.profileDir)]
+        : listRdpBrowserCandidates();
+    const extensionRuntime = await detectLoadedExtensionRuntime({
+      projectRoot: process.cwd(),
+      browserCandidates,
+    });
+    args.extensionId = extensionRuntime.extensionId;
+
+    if (args.profileDir.length === 0) {
+      args.profileDir = extensionRuntime.browser.profileDir;
+    }
+  }
+
+  if (args.profileDir.length === 0) {
+    args.profileDir = resolvePreferredRdpBrowserCandidate().profileDir;
   }
 
   return args;
@@ -262,7 +298,7 @@ function buildSchemaWarnings(providerSettings) {
 }
 
 async function main() {
-  const args = parseArgs(process.argv.slice(2));
+  const args = await resolveArgs(parseArgs(process.argv.slice(2)));
   const preferencesPath = path.join(args.profileDir, "Preferences");
   const localExtensionDir = path.join(
     args.profileDir,

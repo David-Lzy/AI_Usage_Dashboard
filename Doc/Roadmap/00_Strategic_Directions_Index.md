@@ -1,6 +1,6 @@
 # Strategic Directions Index
 
-Date: 2026-05-11
+Date: 2026-05-12
 
 Process rule:
 
@@ -28,9 +28,9 @@ Important scope note:
 
 ## Current Truth Snapshot
 
-As of 2026-05-11:
+As of 2026-05-12:
 
-- the numbered phase queue is now completed through `Phase 306`, with no active phase currently selected
+- the numbered phase queue is now completed through `Phase 308`, with no active phase currently selected and `Phase 309` through `Phase 311` queued as local-safe follow-up work
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -191,6 +191,8 @@ As of 2026-05-11:
 - `Phase 304` simplified Settings IA around the personal-user path with persisted user levels, Quick Setup, reduced basic-mode preferences, and one gated Advanced container for enterprise/API plus source controls
 - `Phase 305` added current-source-only post-`rc.13` polish: cached-first full-page bootstrap with a sync-writeback drift guard, Settings select layering fixes, always-visible common `Appearance & Sync` controls plus a `More` disclosure, and a `3` minute minimum periodic sync with bounded startup jitter
 - `Phase 306` packaged that follow-up polish into `0.1.0-rc.14`, extended cached-first bootstrap to the side panel, routed popup setup/problem actions into focused Settings targets, added popup quick-hide/setup affordances, restored always-visible app language, and fixed English display-level labels while keeping the RC13 milestone as the submitted review boundary
+- `Phase 307` made Chrome plus the Playwright CRX bridge the default local browser automation path, changed project RDP helper defaults to Chrome-first with Brave fallback, and made profile audit discover the current unpacked extension id from the selected profile
+- `Phase 308` recorded the `0.1.0-rc.14` Chrome helper smoke pass across dashboard, Settings, focused Settings, provider-detail, full-page dashboard, and popup surfaces while preserving the direct Playwright MCP restart boundary
 - provider closure still waits on available accounts or product decisions for JetBrains org-console, individual Claude Pro / Max behavior, and Gemini project-metrics graduation; Claude Team no longer belongs in the blocked-by-account queue
 - operator evidence means archived real human/operator review exports for interaction-audit or theme-recovery workspaces; it remains useful, but it sits behind release package and store asset closeout
 - the originally queued local-safe file splitting targets are now closed enough that further splitting should be driven by a concrete maintenance risk instead of the old Phase 236-era queue

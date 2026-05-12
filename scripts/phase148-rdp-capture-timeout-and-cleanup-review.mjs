@@ -52,7 +52,7 @@ async function run() {
         cwd: projectRoot,
         env: {
           ...process.env,
-          RDP_CHROME_X11_COMMAND_TIMEOUT_MS: "1",
+          RDP_BROWSER_X11_COMMAND_TIMEOUT_MS: "1",
         },
       },
     );

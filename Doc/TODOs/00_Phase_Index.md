@@ -1,6 +1,6 @@
 # Phase Index
 
-Date: 2026-05-11
+Date: 2026-05-12
 
 Process rule:
 
@@ -35,7 +35,11 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [306_Phase_Popup_Onboarding_Handoff_And_RC14_Follow_Up_Packaging.md](./Archive/306_Phase_Popup_Onboarding_Handoff_And_RC14_Follow_Up_Packaging.md)
+- latest completed slice: [308_Phase_RC14_Chrome_Playwright_MCP_Smoke.md](./Archive/308_Phase_RC14_Chrome_Playwright_MCP_Smoke.md)
+- queued phase files:
+  - [309_Phase_Quick_Setup_First_Provider_Guided_Setup.md](./309_Phase_Quick_Setup_First_Provider_Guided_Setup.md)
+  - [310_Phase_Cached_First_Bootstrap_Performance_Guard.md](./310_Phase_Cached_First_Bootstrap_Performance_Guard.md)
+  - [311_Phase_Popup_View_Model_Maintenance_Split.md](./311_Phase_Popup_View_Model_Maintenance_Split.md)
 
 Completed phases should be moved to:
 
@@ -750,6 +754,8 @@ Completed phases should be moved to:
 - the 2026-05-11 `Phase 304` closeout simplified Settings IA with persisted user levels, task-oriented Quick Setup, a reduced basic-mode preferences surface, and one gated Advanced container for enterprise/API and source controls
 - the 2026-05-11 `Phase 305` closeout added cached-first full-page bootstrap with a sync writeback drift guard, fixed Settings select layering, simplified `Appearance & Sync` into always-visible common controls plus a `More` disclosure, and lowered the periodic sync floor to `3` minutes with bounded startup jitter
 - the 2026-05-11 `Phase 306` closeout extended cached-first bootstrap to the side panel, routed popup blocker/policy/setup actions into focused Settings targets, added popup quick-hide plus zero-provider setup affordances, kept app language always visible, fixed English display-level labels, bumped the package to `0.1.0-rc.14`, bumped the manifest to `0.1.0.14`, generated `release/ai-usage-dashboard-0.1.0-rc.14.zip`, and recorded SHA256 `5b3e31469f7b2fd94511aa8a3b702d3f656f2014b7334e6a7931ff1f7289185e` in the new follow-up-candidate milestone
+- the 2026-05-12 `Phase 307` closeout made Chrome plus the official Playwright Extension bridge the default local automation path for normal web tabs, changed the RDP helper browser preference to Chrome-first with Brave fallback, and made profile audit auto-detect the current unpacked extension id from the Chrome profile
+- the 2026-05-12 `Phase 308` closeout recorded a real Chrome helper smoke pass for `0.1.0-rc.14` dashboard, Settings, focused Settings targets, provider detail, full-page dashboard, and popup surfaces; a later restarted Codex session confirmed direct Playwright MCP can drive normal web tabs but Chrome blocks using that bridge to drive another extension's `chrome-extension://` UI, so extension UI smoke remains on the Chrome RDP helper
 
 ## Delivery Standard For Each Phase
 
