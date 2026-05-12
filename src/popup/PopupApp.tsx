@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import type {
   AppLocalePreference,
   AppState,
-  ProgressDisplayStyle,
 } from "../providers/types";
 import { sendAppMessage } from "../shared/app-client";
 import {
@@ -24,8 +23,6 @@ import {
 } from "../shared/theme";
 import { SummaryStrip } from "../sidepanel/components/SummaryStrip";
 import { StatusBadge } from "../sidepanel/components/StatusBadge";
-import { UsageProgress } from "../sidepanel/components/UsageProgress";
-import { UsageWindowProgressList } from "../sidepanel/components/UsageWindowProgressList";
 import type { SettingsRouteFocus } from "../sidepanel/route-state";
 import { syncPopupAppearanceAttributes } from "../shared/popup-appearance";
 import {
@@ -47,6 +44,7 @@ import { runPopupRefreshAction } from "./popup-refresh-action";
 import { runPopupThemeToggleAction } from "./popup-theme-toggle-action";
 import { runPopupHideProviderAction } from "./popup-hide-provider-action";
 import { runPopupGuidanceAction } from "./popup-guidance-action";
+import { PopupProviderProgress } from "./PopupProviderProgress";
 
 type PopupLoadState =
   | { status: "loading" }
@@ -264,39 +262,6 @@ export function PopupApp() {
     await runPopupGuidanceAction(action, options);
   }
 
-  function renderPopupProviderProgress(
-    provider: (typeof popupModel.featuredProviderCards)[number]["provider"],
-    progressDisplayStyle: ProgressDisplayStyle,
-  ) {
-    const hasUsageWindows = (provider.usageWindows?.length ?? 0) > 0;
-
-    if (!shouldShowPopupProviderProgress(provider)) {
-      return null;
-    }
-
-    if (hasUsageWindows && provider.usageWindows) {
-      return (
-        <UsageWindowProgressList
-          windows={provider.usageWindows}
-          i18n={runtimeI18n}
-          density="compact"
-          displayStyle={progressDisplayStyle}
-        />
-      );
-    }
-
-    return (
-      <UsageProgress
-        used={provider.used}
-        remaining={provider.remaining}
-        total={provider.total}
-        tone={provider.displayTone}
-        label={`${provider.providerLabel} ${provider.quotaWindow} ${provider.quotaUnit}`}
-        displayStyle={progressDisplayStyle}
-        valueKind={provider.remaining !== null ? "remaining" : "used"}
-      />
-    );
-  }
   const featuredProviderList = hasFeaturedProviderCards ? (
     <section
       className="popup-quota-section"
@@ -305,11 +270,14 @@ export function PopupApp() {
       <div className="popup-provider-list">
         {popupModel.featuredProviderCards.map((card, index) => {
           const { provider } = card;
-          const providerProgress = renderPopupProviderProgress(
-            provider,
-            popupProgressStyle,
+          const providerProgress = (
+            <PopupProviderProgress
+              provider={provider}
+              progressDisplayStyle={popupProgressStyle}
+              i18n={runtimeI18n}
+            />
           );
-          const hasProviderProgress = providerProgress !== null;
+          const hasProviderProgress = shouldShowPopupProviderProgress(provider);
 
           return (
             <article
