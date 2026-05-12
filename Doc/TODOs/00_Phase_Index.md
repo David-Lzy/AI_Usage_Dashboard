@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [337_Phase_Interaction_Audit_Signoff_Session_Component.md](./Archive/337_Phase_Interaction_Audit_Signoff_Session_Component.md)
+- latest completed slice: [338_Phase_Interaction_Audit_Handoff_Summary_Component.md](./Archive/338_Phase_Interaction_Audit_Handoff_Summary_Component.md)
 - queued phase files: none
 
 Completed phases should be moved to:
