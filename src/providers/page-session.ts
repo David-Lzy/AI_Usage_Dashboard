@@ -7,16 +7,29 @@ import {
 } from "./page-session-tab-lifecycle";
 import { sortTabsByPriority } from "./page-session-tab-priority";
 import type {
+  PageSessionNetworkObserverExtraction,
+  PageSessionObservedNetworkState,
+} from "./page-session-network-observer";
+import {
+  installNetworkObserverBridge,
+  readNetworkObserverBridge,
+} from "./page-session-network-observer";
+import type {
   PageSessionCapturedScriptMap,
   PageSessionCapturedWindowMap,
   PageSessionScriptingApi,
 } from "./page-session-script-capture";
 import {
-  executeScriptResult,
   readIsolatedPageSnapshot,
   readMainWorldWindowValues,
   uniqueStrings,
 } from "./page-session-script-capture";
+
+export type {
+  PageSessionNetworkObserverExtraction,
+  PageSessionObservedNetworkEntry,
+  PageSessionObservedNetworkState,
+} from "./page-session-network-observer";
 
 export type {
   PageSessionCapturedScriptMap,
@@ -31,23 +44,6 @@ export type PageSessionExtractionMode =
 export type PageSessionMatchStatus = "matched" | "logged_out" | "unmatched";
 
 export type PageSessionBindingMode = "auto" | "bound";
-
-export type PageSessionObservedNetworkEntry = {
-  url: string;
-  method: string;
-  status: number | null;
-  ok: boolean | null;
-  contentType: string | null;
-  bodyText: string | null;
-  capturedAt: string;
-  transport: "fetch" | "xhr";
-};
-
-export type PageSessionObservedNetworkState = {
-  matchUrlSubstrings: string[];
-  maxEntries: number;
-  entries: PageSessionObservedNetworkEntry[];
-};
 
 export type PageSessionCapturedPage = {
   url: string;
@@ -131,13 +127,6 @@ export type PageSessionBootDataExtraction = {
   scriptSelectors?: string[];
   windowKeys?: string[];
   maxSerializedLength?: number;
-};
-
-export type PageSessionNetworkObserverExtraction = {
-  mode: "network_observer";
-  matchUrlSubstrings: string[];
-  maxEntries?: number;
-  maxBodyLength?: number;
 };
 
 export type PageSessionExtraction =
@@ -225,314 +214,6 @@ function getScriptingApi(
   }
 
   return chrome.scripting;
-}
-
-async function installNetworkObserverBridge(
-  tabId: number,
-  scriptingApi: PageSessionScriptingApi,
-  extraction: PageSessionNetworkObserverExtraction,
-): Promise<void> {
-  await executeScriptResult(scriptingApi, {
-    tabId,
-    world: "MAIN",
-    func: (
-      rawBridgeScriptId: unknown,
-      rawMatchUrlSubstrings: unknown,
-      rawMaxEntries: unknown,
-      rawMaxBodyLength: unknown,
-    ) => {
-      const bridgeScriptId =
-        typeof rawBridgeScriptId === "string"
-          ? rawBridgeScriptId
-          : "__ai_usage_dashboard_page_session_bridge__";
-      const matchUrlSubstrings = Array.isArray(rawMatchUrlSubstrings)
-        ? rawMatchUrlSubstrings.filter(
-            (value): value is string => typeof value === "string" && value.length > 0,
-          )
-        : [];
-      const maxEntries =
-        typeof rawMaxEntries === "number" && rawMaxEntries > 0
-          ? rawMaxEntries
-          : 20;
-      const maxBodyLength =
-        typeof rawMaxBodyLength === "number" && rawMaxBodyLength > 0
-          ? rawMaxBodyLength
-          : 20_000;
-      const globalStoreKey = "__AI_USAGE_DASHBOARD_PAGE_SESSION__";
-      const bridgeEventName = "ai-usage-dashboard:page-session-updated";
-      const root = globalThis as typeof globalThis & {
-        [globalStoreKey]?: {
-          installed: boolean;
-          matchUrlSubstrings: string[];
-          maxEntries: number;
-          maxBodyLength: number;
-          entries: PageSessionObservedNetworkEntry[];
-          originalFetch?: typeof fetch;
-          xhrPatched?: boolean;
-        };
-      };
-
-      if (!root[globalStoreKey]) {
-        root[globalStoreKey] = {
-          installed: false,
-          matchUrlSubstrings: [],
-          maxEntries,
-          maxBodyLength,
-          entries: [],
-        };
-      }
-
-      const store = root[globalStoreKey]!;
-      store.matchUrlSubstrings = Array.from(
-        new Set([...store.matchUrlSubstrings, ...matchUrlSubstrings]),
-      );
-      store.maxEntries = Math.max(store.maxEntries, maxEntries);
-      store.maxBodyLength = Math.max(store.maxBodyLength, maxBodyLength);
-
-      function shouldCapture(url: string): boolean {
-        return store.matchUrlSubstrings.some((substring) => url.includes(substring));
-      }
-
-      function reflectStore() {
-        const script =
-          globalThis.document.getElementById(bridgeScriptId) ??
-          (() => {
-            const nextScript = globalThis.document.createElement("script");
-            nextScript.id = bridgeScriptId;
-            nextScript.type = "application/json";
-            globalThis.document.documentElement.appendChild(nextScript);
-            return nextScript;
-          })();
-
-        const snapshot = {
-          matchUrlSubstrings: store.matchUrlSubstrings,
-          maxEntries: store.maxEntries,
-          entries: store.entries,
-        };
-
-        script.textContent = JSON.stringify(snapshot);
-        globalThis.dispatchEvent(
-          new CustomEvent(bridgeEventName, {
-            detail: {
-              entryCount: store.entries.length,
-            },
-          }),
-        );
-      }
-
-      function pushEntry(entry: PageSessionObservedNetworkEntry) {
-        store.entries = [entry, ...store.entries].slice(0, store.maxEntries);
-        reflectStore();
-      }
-
-      async function captureFetchResponse(
-        response: Response,
-      ): Promise<PageSessionObservedNetworkEntry> {
-        const contentType = response.headers.get("content-type");
-        let bodyText: string | null = null;
-
-        try {
-          bodyText = await response.clone().text();
-          bodyText =
-            bodyText.length > store.maxBodyLength
-              ? `${bodyText.slice(0, store.maxBodyLength)}…`
-              : bodyText;
-        } catch {
-          bodyText = null;
-        }
-
-        return {
-          url: response.url,
-          method: "GET",
-          status: response.status,
-          ok: response.ok,
-          contentType,
-          bodyText,
-          capturedAt: new Date().toISOString(),
-          transport: "fetch",
-        };
-      }
-
-      if (!store.installed) {
-        store.originalFetch = globalThis.fetch.bind(globalThis);
-        globalThis.fetch = async (...args) => {
-          const response = await store.originalFetch!(...args);
-          const requestUrl =
-            typeof args[0] === "string"
-              ? args[0]
-              : args[0] instanceof Request
-                ? args[0].url
-                : String(args[0]);
-
-          if (shouldCapture(requestUrl)) {
-            try {
-              const entry = await captureFetchResponse(response);
-              entry.method =
-                args[1]?.method ??
-                (args[0] instanceof Request ? args[0].method : "GET");
-              pushEntry(entry);
-            } catch {
-              // Ignore observer failures; page fetches should not break.
-            }
-          }
-
-          return response;
-        };
-
-        const originalOpen = XMLHttpRequest.prototype.open;
-        const originalSend = XMLHttpRequest.prototype.send;
-
-        XMLHttpRequest.prototype.open = function patchedOpen(
-          method: string,
-          url: string | URL,
-          ...rest: unknown[]
-        ) {
-          const urlString = String(url);
-          const asyncValue =
-            typeof rest[0] === "boolean" ? rest[0] : true;
-          const username =
-            typeof rest[1] === "string" || rest[1] === null
-              ? rest[1]
-              : undefined;
-          const password =
-            typeof rest[2] === "string" || rest[2] === null
-              ? rest[2]
-              : undefined;
-
-          Object.defineProperty(this, "__aiUsageDashboardRequestMeta__", {
-            value: {
-              method,
-              url: urlString,
-            },
-            configurable: true,
-            enumerable: false,
-            writable: true,
-          });
-
-          return originalOpen.call(
-            this,
-            method,
-            urlString,
-            asyncValue,
-            username,
-            password,
-          );
-        };
-
-        XMLHttpRequest.prototype.send = function patchedSend(...rest: unknown[]) {
-          this.addEventListener(
-            "loadend",
-            () => {
-              const meta = (this as XMLHttpRequest & {
-                __aiUsageDashboardRequestMeta__?: { method: string; url: string };
-              }).__aiUsageDashboardRequestMeta__;
-
-              if (!meta || !shouldCapture(meta.url)) {
-                return;
-              }
-
-              let bodyText: string | null = null;
-
-              try {
-                bodyText =
-                  typeof this.responseText === "string"
-                    ? this.responseText.slice(0, store.maxBodyLength)
-                    : null;
-              } catch {
-                bodyText = null;
-              }
-
-              pushEntry({
-                url: meta.url,
-                method: meta.method,
-                status: this.status || null,
-                ok: this.status >= 200 && this.status < 400,
-                contentType: this.getResponseHeader("content-type"),
-                bodyText,
-                capturedAt: new Date().toISOString(),
-                transport: "xhr",
-              });
-            },
-            { once: true },
-          );
-
-          if (rest.length === 0) {
-            return originalSend.call(this);
-          }
-
-          return originalSend.call(
-            this,
-            rest[0] as Document | XMLHttpRequestBodyInit | null | undefined,
-          );
-        };
-
-        store.installed = true;
-        store.xhrPatched = true;
-      }
-
-      reflectStore();
-
-      return {
-        installed: store.installed,
-        entryCount: store.entries.length,
-      };
-    },
-    args: [
-      NETWORK_BRIDGE_SCRIPT_ID,
-      extraction.matchUrlSubstrings,
-      extraction.maxEntries ?? 20,
-      extraction.maxBodyLength ?? 20_000,
-    ],
-  });
-}
-
-async function readNetworkObserverBridge(
-  tabId: number,
-  scriptingApi: PageSessionScriptingApi,
-): Promise<PageSessionObservedNetworkState> {
-  const rawValue = await executeScriptResult<string | null>(scriptingApi, {
-    tabId,
-    func: (rawBridgeScriptId: unknown) => {
-      const bridgeScriptId =
-        typeof rawBridgeScriptId === "string"
-          ? rawBridgeScriptId
-          : "__ai_usage_dashboard_page_session_bridge__";
-
-      return (
-        globalThis.document.getElementById(bridgeScriptId)?.textContent ?? null
-      );
-    },
-    args: [NETWORK_BRIDGE_SCRIPT_ID],
-  });
-
-  if (!rawValue) {
-    return {
-      matchUrlSubstrings: [],
-      maxEntries: 0,
-      entries: [],
-    };
-  }
-
-  try {
-    const parsed = JSON.parse(rawValue) as PageSessionObservedNetworkState;
-
-    return {
-      matchUrlSubstrings: Array.isArray(parsed.matchUrlSubstrings)
-        ? parsed.matchUrlSubstrings
-        : [],
-      maxEntries:
-        typeof parsed.maxEntries === "number" && parsed.maxEntries >= 0
-          ? parsed.maxEntries
-          : 0,
-      entries: Array.isArray(parsed.entries) ? parsed.entries : [],
-    };
-  } catch {
-    return {
-      matchUrlSubstrings: [],
-      maxEntries: 0,
-      entries: [],
-    };
-  }
 }
 
 async function capturePageSessionPage(

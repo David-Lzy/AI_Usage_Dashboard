@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [361_Phase_Page_Session_Script_Capture_Helper.md](./Archive/361_Phase_Page_Session_Script_Capture_Helper.md)
+- latest completed slice: [362_Phase_Page_Session_Network_Observer_Helper.md](./Archive/362_Phase_Page_Session_Network_Observer_Helper.md)
 - queued phase files: none
 
 Completed phases should be moved to:
