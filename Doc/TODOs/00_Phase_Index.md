@@ -35,9 +35,8 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [310_Phase_Cached_First_Bootstrap_Performance_Guard.md](./Archive/310_Phase_Cached_First_Bootstrap_Performance_Guard.md)
-- queued phase files:
-  - [311_Phase_Popup_View_Model_Maintenance_Split.md](./311_Phase_Popup_View_Model_Maintenance_Split.md)
+- latest completed slice: [311_Phase_Popup_View_Model_Maintenance_Split.md](./Archive/311_Phase_Popup_View_Model_Maintenance_Split.md)
+- queued phase files: none
 
 Completed phases should be moved to:
 

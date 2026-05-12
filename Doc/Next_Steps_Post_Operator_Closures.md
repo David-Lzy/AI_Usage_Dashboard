@@ -51,7 +51,7 @@ Remaining human steps:
 - keep the reviewed screenshots from [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md), listing copy, and disclosure answers ready
 - if review feedback or a deliberate product decision calls for a newer package, promote RC14 from the follow-up milestone instead of mutating RC13 history
 
-No additional release-package work is required before review feedback arrives; the newer RC14 package already exists if it becomes necessary. Local-safe maintenance work is queued separately under Phase 311 after the completed Phase 309 first-provider setup and Phase 310 cached-first guard slices.
+No additional release-package work is required before review feedback arrives; the newer RC14 package already exists if it becomes necessary. The previously queued local-safe follow-ups through Phase 311 are now complete; create a new small TODO before starting additional behavior changes.
 
 ### P1 — Decide Whether To Promote RC14
 
@@ -67,12 +67,13 @@ Priority is taken from `00_Strategic_Directions_Index.md` active continuation or
 
 ### Immediate Queued Phases
 
-- [311_Phase_Popup_View_Model_Maintenance_Split.md](./TODOs/311_Phase_Popup_View_Model_Maintenance_Split.md) - split popup view-model internals without changing popup behavior.
+None currently queued.
 
 Completed local-safe follow-up:
 
 - [309_Phase_Quick_Setup_First_Provider_Guided_Setup.md](./TODOs/Archive/309_Phase_Quick_Setup_First_Provider_Guided_Setup.md) - made zero-provider Settings recommend one personal-user provider and made popup zero-provider actions deep-link to that same Quick Setup card.
 - [310_Phase_Cached_First_Bootstrap_Performance_Guard.md](./TODOs/Archive/310_Phase_Cached_First_Bootstrap_Performance_Guard.md) - added a render-level cached-first regression guard and refreshed Chrome helper dashboard/full-page smoke evidence.
+- [311_Phase_Popup_View_Model_Maintenance_Split.md](./TODOs/Archive/311_Phase_Popup_View_Model_Maintenance_Split.md) - split popup view-model internals into type, setup-coverage, and featured-provider-card modules without changing popup behavior.
 
 ### 1. Direction 10 — Toolbar Competitive Fit And Store Readiness
 
