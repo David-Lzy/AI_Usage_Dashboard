@@ -1,4 +1,10 @@
 import type { ProviderId } from "./types";
+import {
+  closeOpenedPageSessionTab,
+  normalizeReloadOptions,
+  openMissingPageSessionTab,
+  reloadPageSessionTab,
+} from "./page-session-tab-lifecycle";
 import { sortTabsByPriority } from "./page-session-tab-priority";
 
 export type PageSessionExtractionMode =
@@ -251,12 +257,6 @@ async function executeScriptResult<T>(
 
 function uniqueStrings(values: string[] | undefined): string[] {
   return [...new Set((values ?? []).filter(Boolean))];
-}
-
-function delay(milliseconds: number): Promise<void> {
-  return new Promise((resolve) => {
-    setTimeout(resolve, milliseconds);
-  });
 }
 
 function truncateSerializedValue(value: string, maxLength: number): string {
@@ -780,181 +780,6 @@ async function getCandidateTabs(
     candidates: [...candidates, ...autoTabs],
     bindingMissing,
   };
-}
-
-async function waitForOpenedTabLoad(
-  tabsApi: PageSessionTabsApi,
-  tabId: number,
-  openWhenMissing: PageSessionOpenWhenMissing,
-): Promise<PageSessionTabQueryResult | null> {
-  if (typeof tabsApi.get !== "function") {
-    return null;
-  }
-
-  const timeoutMs = Math.max(0, openWhenMissing.waitForLoadTimeoutMs ?? 10_000);
-  const pollIntervalMs = Math.max(
-    50,
-    openWhenMissing.loadPollIntervalMs ?? 250,
-  );
-  const deadline = Date.now() + timeoutMs;
-  let lastTab: PageSessionTabQueryResult | null = null;
-  let didPoll = false;
-
-  while (!didPoll || Date.now() <= deadline) {
-    didPoll = true;
-
-    try {
-      lastTab = await tabsApi.get(tabId);
-
-      if (lastTab.status === "complete") {
-        return lastTab;
-      }
-    } catch {
-      return lastTab;
-    }
-
-    if (timeoutMs === 0) {
-      return lastTab;
-    }
-
-    await delay(Math.min(pollIntervalMs, Math.max(0, deadline - Date.now())));
-  }
-
-  return lastTab;
-}
-
-function normalizeReloadOptions(
-  reloadOptions:
-    | PageSessionDefinition["reloadBeforeCapture"]
-    | PageSessionDefinition["reloadOnCaptureFailure"]
-    | undefined,
-): PageSessionReloadOptions | null {
-  if (!reloadOptions) {
-    return null;
-  }
-
-  if (reloadOptions === true) {
-    return {};
-  }
-
-  return reloadOptions;
-}
-
-async function waitForReloadedTabLoad(
-  tabsApi: PageSessionTabsApi,
-  tabId: number,
-  reloadOptions: PageSessionReloadOnCaptureFailure,
-): Promise<PageSessionTabQueryResult | null> {
-  if (typeof tabsApi.get !== "function") {
-    return null;
-  }
-
-  const timeoutMs = Math.max(0, reloadOptions.waitForLoadTimeoutMs ?? 10_000);
-  const pollIntervalMs = Math.max(
-    50,
-    reloadOptions.loadPollIntervalMs ?? 250,
-  );
-  const deadline = Date.now() + timeoutMs;
-  let lastTab: PageSessionTabQueryResult | null = null;
-
-  const finish = async (tab: PageSessionTabQueryResult | null) => {
-    const postLoadDelayMs = Math.max(0, reloadOptions.postLoadDelayMs ?? 0);
-
-    if (postLoadDelayMs > 0) {
-      await delay(postLoadDelayMs);
-    }
-
-    return tab;
-  };
-
-  while (Date.now() <= deadline) {
-    try {
-      lastTab = await tabsApi.get(tabId);
-
-      if (lastTab.status === "complete") {
-        return finish(lastTab);
-      }
-    } catch {
-      return finish(lastTab);
-    }
-
-    if (timeoutMs === 0) {
-      return finish(lastTab);
-    }
-
-    await delay(Math.min(pollIntervalMs, Math.max(0, deadline - Date.now())));
-  }
-
-  return finish(lastTab);
-}
-
-async function reloadPageSessionTab(
-  tabsApi: PageSessionTabsApi,
-  tabId: number,
-  reloadOptions: PageSessionReloadOptions,
-): Promise<PageSessionTabQueryResult | null> {
-  if (typeof tabsApi.reload !== "function") {
-    return null;
-  }
-
-  await tabsApi.reload(tabId, {
-    bypassCache: reloadOptions.bypassCache ?? true,
-  });
-
-  return waitForReloadedTabLoad(tabsApi, tabId, reloadOptions);
-}
-
-async function openMissingPageSessionTab(
-  tabsApi: PageSessionTabsApi,
-  openWhenMissing: PageSessionOpenWhenMissing,
-): Promise<
-  | (PageSessionTabQueryResult & {
-      id: number;
-      bindingMode: PageSessionBindingMode;
-    })
-  | null
-> {
-  if (typeof tabsApi.create !== "function") {
-    return null;
-  }
-
-  const createdTab = await tabsApi.create({
-    url: openWhenMissing.url,
-    active: openWhenMissing.active ?? false,
-  });
-
-  if (typeof createdTab.id !== "number") {
-    return null;
-  }
-
-  const loadedTab = await waitForOpenedTabLoad(
-    tabsApi,
-    createdTab.id,
-    openWhenMissing,
-  );
-
-  return {
-    ...createdTab,
-    ...loadedTab,
-    id: createdTab.id,
-    active: loadedTab?.active ?? createdTab.active ?? false,
-    bindingMode: "auto",
-  };
-}
-
-async function closeOpenedPageSessionTab(
-  tabsApi: PageSessionTabsApi,
-  tabId: number | null,
-): Promise<void> {
-  if (tabId === null || typeof tabsApi.remove !== "function") {
-    return;
-  }
-
-  try {
-    await tabsApi.remove(tabId);
-  } catch {
-    // The user may close the tab before cleanup runs.
-  }
 }
 
 export type PageSessionClient = {
