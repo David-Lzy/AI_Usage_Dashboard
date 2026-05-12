@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is now completed through `Phase 360`, with no active phase or queued numbered phase currently selected
+- the numbered phase queue is now completed through `Phase 361`, with no active phase or queued numbered phase currently selected
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -228,6 +228,7 @@ As of 2026-05-13:
 - `Phase 358` extracted Settings Quick Setup action ids, card construction, setup-state resolution, and helper text selection while preserving the existing `settings-view-models.ts` compatibility export path
 - `Phase 359` extracted page-session tab priority scoring and sorting while preserving existing exact URL, hash-stripped URL, prefix URL, matched-title, active-tab, and recency weighting semantics
 - `Phase 360` extracted page-session tab lifecycle helpers while preserving existing open-missing-tab, reload-tab, load-wait, reload-option normalization, and close cleanup semantics
+- `Phase 361` extracted page-session script execution and page snapshot helpers while preserving existing DOM snapshot, boot-data, main-world window-value, and network observer semantics
 - `Phase 334` extracted interaction-audit per-surface card rendering while preserving route-owned audit refs, preset actions, manual checks, and signoff callbacks
 - `Phase 335` extracted interaction-audit review queue rendering while preserving route-owned queue construction and jump behavior
 - `Phase 336` extracted interaction-audit request-scope rendering while preserving route-owned request-context state plus binding, revision, and next-command display
