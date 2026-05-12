@@ -47,6 +47,7 @@ import {
 import { openProviderSourcePage } from "./popup-source-page-actions";
 import { runPopupRefreshAction } from "./popup-refresh-action";
 import { runPopupThemeToggleAction } from "./popup-theme-toggle-action";
+import { runPopupHideProviderAction } from "./popup-hide-provider-action";
 
 type PopupLoadState =
   | { status: "loading" }
@@ -282,18 +283,12 @@ export function PopupApp() {
     } = {},
   ) {
     if (action.kind === "hide-provider" && action.providerId) {
-      const response = await sendAppMessage({
-        type: "app:set-provider-enabled",
-        providerId: action.providerId,
-        enabled: false,
-      });
-
-      if (!response.ok) {
-        setLoadState({ status: "error", message: response.error });
-        return;
-      }
-
-      setLoadState({ status: "ready", appState: response.state });
+      const result = await runPopupHideProviderAction(action.providerId);
+      setLoadState(
+        result.status === "ready"
+          ? { status: "ready", appState: result.state }
+          : { status: "error", message: result.message },
+      );
       return;
     }
 
