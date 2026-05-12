@@ -21,6 +21,7 @@ import {
   type ThemeRecoveryReviewRequestContext,
   type ThemeRecoveryLiveBadgeSnapshot,
 } from "../theme-recovery-review";
+import { writeClipboardText } from "../write-clipboard-text";
 
 type ReviewWorkspaceFeedback = {
   tone: "neutral" | "warning" | "error";
@@ -155,19 +156,6 @@ function readThemeRecoveryRequestContext(): ThemeRecoveryReviewRequestContext | 
     requestCreatedAt,
     requestBoundWorkspaceRoute: boundUrl.toString(),
   };
-}
-
-async function writeClipboardText(value: string): Promise<boolean> {
-  if (!navigator.clipboard?.writeText) {
-    return false;
-  }
-
-  try {
-    await navigator.clipboard.writeText(value);
-    return true;
-  } catch {
-    return false;
-  }
 }
 
 type ThemeRecoveryReviewPageProps = {
@@ -708,7 +696,8 @@ export function ThemeRecoveryReviewPage({
                 data-theme-recovery-copy="summary"
                 type="button"
                 onClick={async () => {
-                  const copied = await writeClipboardText(summaryDraft);
+                  const copied =
+                    (await writeClipboardText(summaryDraft)) === "success";
                   setWorkspaceFeedback({
                     tone: copied ? "neutral" : "warning",
                     message: copied
@@ -751,7 +740,8 @@ export function ThemeRecoveryReviewPage({
                 data-theme-recovery-copy="json"
                 type="button"
                 onClick={async () => {
-                  const copied = await writeClipboardText(jsonDraft);
+                  const copied =
+                    (await writeClipboardText(jsonDraft)) === "success";
                   setWorkspaceFeedback({
                     tone: copied ? "neutral" : "warning",
                     message: copied

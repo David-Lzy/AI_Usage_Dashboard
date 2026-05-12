@@ -41,6 +41,7 @@ import {
   INTERACTION_AUDIT_SIGNOFF_SURFACES,
   INTERACTION_AUDIT_SURFACES,
 } from "../interaction-audit-surfaces";
+import { writeClipboardText } from "../write-clipboard-text";
 
 function buildAuditUrl(path: string): string {
   if (typeof window === "undefined") {
@@ -368,72 +369,65 @@ export function InteractionAuditPage({
   }
 
   async function handleCopySignoffDraft() {
-    if (typeof navigator === "undefined" || !navigator.clipboard?.writeText) {
-      setWorkspaceFeedback({
-        tone: "warning",
-        message: "Clipboard access is unavailable in this audit environment.",
-      });
-      return;
-    }
+    const result = await writeClipboardText(signoffDraft);
 
-    try {
-      await navigator.clipboard.writeText(signoffDraft);
+    if (result === "success") {
       setWorkspaceFeedback({
         tone: "neutral",
         message: "Copied the current signoff draft to the clipboard.",
       });
-    } catch {
-      setWorkspaceFeedback({
-        tone: "warning",
-        message: "Failed to copy the current signoff draft to the clipboard.",
-      });
-    }
-  }
-
-  async function handleCopySignoffJson() {
-    if (typeof navigator === "undefined" || !navigator.clipboard?.writeText) {
-      setWorkspaceFeedback({
-        tone: "warning",
-        message: "Clipboard access is unavailable in this audit environment.",
-      });
       return;
     }
 
-    try {
-      await navigator.clipboard.writeText(JSON.stringify(signoffExport, null, 2));
+    setWorkspaceFeedback({
+      tone: "warning",
+      message:
+        result === "unavailable"
+          ? "Clipboard access is unavailable in this audit environment."
+          : "Failed to copy the current signoff draft to the clipboard.",
+    });
+  }
+
+  async function handleCopySignoffJson() {
+    const result = await writeClipboardText(
+      JSON.stringify(signoffExport, null, 2),
+    );
+
+    if (result === "success") {
       setWorkspaceFeedback({
         tone: "neutral",
         message: "Copied the current signoff JSON to the clipboard.",
       });
-    } catch {
-      setWorkspaceFeedback({
-        tone: "warning",
-        message: "Failed to copy the current signoff JSON to the clipboard.",
-      });
-    }
-  }
-
-  async function handleCopyHandoffSummary() {
-    if (typeof navigator === "undefined" || !navigator.clipboard?.writeText) {
-      setWorkspaceFeedback({
-        tone: "warning",
-        message: "Clipboard access is unavailable in this audit environment.",
-      });
       return;
     }
 
-    try {
-      await navigator.clipboard.writeText(handoffDraft);
+    setWorkspaceFeedback({
+      tone: "warning",
+      message:
+        result === "unavailable"
+          ? "Clipboard access is unavailable in this audit environment."
+          : "Failed to copy the current signoff JSON to the clipboard.",
+    });
+  }
+
+  async function handleCopyHandoffSummary() {
+    const result = await writeClipboardText(handoffDraft);
+
+    if (result === "success") {
       setWorkspaceFeedback({
         tone: "neutral",
         message: "Copied the current handoff summary to the clipboard.",
       });
-    } catch {
-      setWorkspaceFeedback({
-        tone: "warning",
-        message: "Failed to copy the current handoff summary to the clipboard.",
-      });
+      return;
     }
+
+    setWorkspaceFeedback({
+      tone: "warning",
+      message:
+        result === "unavailable"
+          ? "Clipboard access is unavailable in this audit environment."
+          : "Failed to copy the current handoff summary to the clipboard.",
+    });
   }
 
   function handleDownloadSignoffDraft() {
