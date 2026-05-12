@@ -12,7 +12,7 @@ Document class:
 
 Status note:
 
-- snapshot refreshed on 2026-05-13 after Chrome automation default alignment, the `rc.14` Chrome helper smoke pass, the RDP full-page route-contract guard, store screenshot route-config reuse, interaction-audit frame-action split, shared operator helpers, Settings focused deep-link render coverage, popup Settings/source-page helper coverage, popup route-action sidePanel coverage, popup source-page action helper coverage, popup refresh action helper coverage, popup theme-toggle helper coverage, popup hide-provider helper coverage, popup guidance action helper coverage, and popup provider-progress component coverage
+- snapshot refreshed on 2026-05-13 after Chrome automation default alignment, the `rc.14` Chrome helper smoke pass, the RDP full-page route-contract guard, store screenshot route-config reuse, interaction-audit frame-action split, shared operator helpers, Settings focused deep-link render coverage, popup Settings/source-page helper coverage, popup route-action sidePanel coverage, popup source-page action helper coverage, popup refresh action helper coverage, popup theme-toggle helper coverage, popup hide-provider helper coverage, popup guidance action helper coverage, popup provider-progress component coverage, and popup snapshot-status view-model coverage
 - refresh this file when the Chrome Web Store review result arrives, or when a new high-priority direction opens
 
 ## What Just Closed
@@ -40,7 +40,7 @@ As of 2026-05-11 the following previously-open items are now done:
 
 The submitted store-review boundary remains `release/ai-usage-dashboard-0.1.0-rc.13.zip`. Keep using the RC13 milestone as the truthful historical submission handoff while that review is still pending in the Chrome Web Store Developer Dashboard.
 
-The repo is now also packaged forward through `Phase 306` as `release/ai-usage-dashboard-0.1.0-rc.14.zip`. That newer package is a prepared follow-up candidate, not an instruction to silently replace the submitted RC13 review boundary. `Phase 307` through `Phase 328` are post-package tooling, Chrome automation, smoke-evidence, first-provider setup, cached-first guard, popup maintenance, route-contract, screenshot-helper reuse, interaction-audit maintenance, operator-helper follow-ups, and focused-link / source-page / refresh / theme-toggle / hide-provider / guidance / progress / route-action guardrails; they do not create a new extension package.
+The repo is now also packaged forward through `Phase 306` as `release/ai-usage-dashboard-0.1.0-rc.14.zip`. That newer package is a prepared follow-up candidate, not an instruction to silently replace the submitted RC13 review boundary. `Phase 307` through `Phase 329` are post-package tooling, Chrome automation, smoke-evidence, first-provider setup, cached-first guard, popup maintenance, route-contract, screenshot-helper reuse, interaction-audit maintenance, operator-helper follow-ups, and focused-link / source-page / refresh / theme-toggle / hide-provider / guidance / progress / snapshot-status / route-action guardrails; they do not create a new extension package.
 
 References:
 - [Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
@@ -91,6 +91,7 @@ Completed local-safe follow-up:
 - [326_Phase_Popup_Hide_Provider_Action_Helper.md](./TODOs/Archive/326_Phase_Popup_Hide_Provider_Action_Helper.md) - extracted popup hide-provider actions and covered provider-disable success plus message-bus failure branches.
 - [327_Phase_Popup_Guidance_Action_Helper.md](./TODOs/Archive/327_Phase_Popup_Guidance_Action_Helper.md) - extracted popup guidance routing and covered Settings focus, dashboard, provider-detail, source-page, and hide-provider no-op branches.
 - [328_Phase_Popup_Provider_Progress_Component.md](./TODOs/Archive/328_Phase_Popup_Provider_Progress_Component.md) - extracted popup provider progress rendering and covered usage-window, single-value, and hidden empty-percent branches.
+- [329_Phase_Popup_Snapshot_Status_View_Model_Split.md](./TODOs/Archive/329_Phase_Popup_Snapshot_Status_View_Model_Split.md) - extracted popup snapshot-status view-model logic and covered no-provider, aligned, mixed, warning, and error decisions.
 
 ### 1. Direction 10 — Toolbar Competitive Fit And Store Readiness
 
