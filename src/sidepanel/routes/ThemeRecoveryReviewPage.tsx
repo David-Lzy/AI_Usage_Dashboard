@@ -7,6 +7,7 @@ import type { RuntimeI18n } from "../../shared/i18n";
 import { buildOperatorWorkspaceLocalizedCopy } from "../../shared/localized-copy";
 import { TopBar } from "../components/TopBar";
 import { StatusBadge } from "../components/StatusBadge";
+import { ThemeRecoveryCurrentStateCard } from "../components/ThemeRecoveryCurrentStateCard";
 import { downloadTextFile } from "../download-text-file";
 import { createDefaultOperatorRuntimeI18n } from "../operator-runtime-i18n";
 import { buildThemeRecoveryExportFilename } from "../theme-recovery-export-files";
@@ -110,10 +111,6 @@ async function readLiveActionBadge(): Promise<ThemeRecoveryLiveBadgeSnapshot | n
       sourceLabel: "Live extension action badge unavailable",
     };
   }
-}
-
-function formatBadgeText(text: string): string {
-  return text.trim().length > 0 ? text.trim() : "cleared";
 }
 
 function openRouteInNewTab(href: string) {
@@ -347,82 +344,11 @@ export function ThemeRecoveryReviewPage({
         </section>
       ) : snapshot ? (
         <>
-          <section
-            className={`status-card theme-recovery-status-card${
-              snapshot.overallTone === "warning"
-                ? " status-card--warning"
-                : snapshot.overallTone === "error"
-                  ? " status-card--error"
-                  : ""
-            }`}
-            data-theme-recovery-current-state
-          >
-            <div className="dashboard-section__header">
-              <div>
-                <p className="section-label">{copy.currentTruth.eyebrow}</p>
-                <h2 className="section-title">{copy.currentTruth.title}</h2>
-              </div>
-              <p className="supporting-copy">{snapshot.overallDetail}</p>
-            </div>
-
-            <div className="summary-strip theme-recovery-summary-strip">
-              <div
-                className={`summary-pill${
-                  snapshot.overallTone === "warning"
-                    ? " summary-pill--warning"
-                    : snapshot.overallTone === "error"
-                      ? " summary-pill--error"
-                      : ""
-                }`}
-              >
-                <p className="summary-pill__label">
-                  {copy.currentTruth.reviewStage}
-                </p>
-                <p
-                  className="summary-pill__value"
-                  data-theme-recovery-overall-label
-                >
-                  {snapshot.overallLabel}
-                </p>
-              </div>
-              <div
-                className={`summary-pill${
-                  snapshot.popupSnapshotTone === "warning"
-                    ? " summary-pill--warning"
-                    : snapshot.popupSnapshotTone === "error"
-                      ? " summary-pill--error"
-                      : ""
-                }`}
-              >
-                <p className="summary-pill__label">
-                  {copy.currentTruth.popupSnapshot}
-                </p>
-                <p
-                  className="summary-pill__value"
-                  data-theme-recovery-popup-label
-                >
-                  {snapshot.popupSnapshotLabel}
-                </p>
-              </div>
-              <div
-                className={`summary-pill${
-                  badgeSummary.text.trim().length > 0
-                    ? " summary-pill--warning"
-                    : ""
-                }`}
-              >
-                <p className="summary-pill__label">
-                  {copy.currentTruth.actionBadge}
-                </p>
-                <p
-                  className="summary-pill__value"
-                  data-theme-recovery-badge-text
-                >
-                  {formatBadgeText(badgeSummary.text)}
-                </p>
-              </div>
-            </div>
-          </section>
+          <ThemeRecoveryCurrentStateCard
+            badgeSummary={badgeSummary}
+            copy={copy.currentTruth}
+            snapshot={snapshot}
+          />
 
           <section className="status-card">
             <div className="dashboard-section__header">
