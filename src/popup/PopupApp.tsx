@@ -7,11 +7,6 @@ import type {
 } from "../providers/types";
 import { sendAppMessage } from "../shared/app-client";
 import {
-  findHostAccessRefreshCandidate,
-  hasDirectHostAccessRequest,
-  requestHostAccessForProvider,
-} from "../shared/host-access-request";
-import {
   buildPopupSummaryLabels,
   createRuntimeI18n,
   DEFAULT_APP_LOCALE_PREFERENCE,
@@ -50,6 +45,7 @@ import {
   openSettings,
 } from "./popup-route-actions";
 import { openProviderSourcePage } from "./popup-source-page-actions";
+import { runPopupRefreshAction } from "./popup-refresh-action";
 
 type PopupLoadState =
   | { status: "loading" }
@@ -149,45 +145,15 @@ export function PopupApp() {
   async function handleRefresh() {
     setIsRefreshing(true);
 
-    const hostAccessCandidate =
-      loadState.status === "ready"
-        ? findHostAccessRefreshCandidate(loadState.appState)
-        : null;
+    const result = await runPopupRefreshAction(
+      loadState.status === "ready" ? loadState.appState : null,
+    );
 
-    if (hostAccessCandidate && hasDirectHostAccessRequest()) {
-      try {
-        const granted = await requestHostAccessForProvider(hostAccessCandidate);
-
-        if (!granted) {
-          setLoadState({
-            status: "error",
-            message: `${hostAccessCandidate.label} access was not granted. Reopen the popup and refresh again after granting host access.`,
-          });
-          setIsRefreshing(false);
-          return;
-        }
-      } catch (error) {
-        setLoadState({
-          status: "error",
-          message:
-            error instanceof Error
-              ? error.message
-              : "The browser rejected the host access request.",
-        });
-        setIsRefreshing(false);
-        return;
-      }
-    }
-
-    const response = await sendAppMessage({ type: "app:request-refresh" });
-
-    if (!response.ok) {
-      setLoadState({ status: "error", message: response.error });
-      setIsRefreshing(false);
-      return;
-    }
-
-    setLoadState({ status: "ready", appState: response.state });
+    setLoadState(
+      result.status === "ready"
+        ? { status: "ready", appState: result.state }
+        : { status: "error", message: result.message },
+    );
     setIsRefreshing(false);
   }
 
