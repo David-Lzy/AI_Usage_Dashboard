@@ -69,6 +69,7 @@ import {
   getSettingsRouteFocusForPopupAction,
   getSettingsRouteFocusForPopupProvider,
 } from "./settings-route-targets";
+import { selectPreferredSourcePageTab } from "./source-page-tab-selection";
 
 type PopupLoadState =
   | { status: "loading" }
@@ -82,16 +83,6 @@ function hasSourcePageNavigationControl(): boolean {
     typeof chrome.tabs?.create === "function" &&
     typeof chrome.tabs?.update === "function"
   );
-}
-
-function sortTabsByPriority(tabs: chrome.tabs.Tab[]): chrome.tabs.Tab[] {
-  return [...tabs].sort((left, right) => {
-    if (left.active !== right.active) {
-      return left.active ? -1 : 1;
-    }
-
-    return (right.lastAccessed ?? 0) - (left.lastAccessed ?? 0);
-  });
 }
 
 async function openSidePanelRoute(route: SidePanelRouteState) {
@@ -213,14 +204,10 @@ async function openProviderSourcePage(
   const matchedTabs = await chrome.tabs.query({
     url: sessionPagePlan.routeHints,
   });
-  const exactTabs = matchedTabs.filter((tab) =>
-    tab.url?.startsWith(preferredRoute),
+  const preferredTab = selectPreferredSourcePageTab(
+    matchedTabs,
+    preferredRoute,
   );
-  const preferredTabs = sortTabsByPriority(
-    exactTabs.length > 0 ? exactTabs : matchedTabs,
-  );
-  const preferredTab =
-    preferredTabs.find((tab) => typeof tab.id === "number") ?? null;
 
   if (preferredTab?.id !== undefined) {
     if (

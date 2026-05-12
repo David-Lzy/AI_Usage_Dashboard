@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [319_Phase_Popup_Settings_Action_Focus_Helper.md](./Archive/319_Phase_Popup_Settings_Action_Focus_Helper.md)
+- latest completed slice: [320_Phase_Popup_Source_Page_Tab_Selection_Helper.md](./Archive/320_Phase_Popup_Source_Page_Tab_Selection_Helper.md)
 - queued phase files: none
 
 Completed phases should be moved to:
