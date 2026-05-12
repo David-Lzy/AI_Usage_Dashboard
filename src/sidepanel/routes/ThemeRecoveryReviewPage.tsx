@@ -11,6 +11,7 @@ import {
 import { buildOperatorWorkspaceLocalizedCopy } from "../../shared/localized-copy";
 import { TopBar } from "../components/TopBar";
 import { StatusBadge } from "../components/StatusBadge";
+import { downloadTextFile } from "../download-text-file";
 import { buildThemeRecoveryExportFilename } from "../theme-recovery-export-files";
 import {
   buildThemeRecoveryReviewExport,
@@ -154,42 +155,6 @@ function readThemeRecoveryRequestContext(): ThemeRecoveryReviewRequestContext | 
     requestCreatedAt,
     requestBoundWorkspaceRoute: boundUrl.toString(),
   };
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mimeType: string,
-): boolean {
-  if (
-    typeof window === "undefined" ||
-    typeof document === "undefined" ||
-    typeof URL?.createObjectURL !== "function"
-  ) {
-    return false;
-  }
-
-  try {
-    const blob = new Blob([content], { type: mimeType });
-    const objectUrl = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-
-    anchor.href = objectUrl;
-    anchor.download = filename;
-    anchor.rel = "noopener";
-    anchor.style.display = "none";
-
-    document.body.append(anchor);
-    anchor.click();
-    anchor.remove();
-    window.setTimeout(() => {
-      URL.revokeObjectURL(objectUrl);
-    }, 0);
-
-    return true;
-  } catch {
-    return false;
-  }
 }
 
 async function writeClipboardText(value: string): Promise<boolean> {

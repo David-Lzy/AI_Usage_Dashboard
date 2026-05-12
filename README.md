@@ -7,7 +7,7 @@ Current packaged release state:
 - package version: `0.1.0-rc.14`
 - Chrome manifest version: `0.1.0.14`
 - packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.14.zip`
-- source status: extension runtime/package bytes are aligned through `Phase 306` and packaged as `rc.14`; current source also includes post-package Chrome automation, smoke-evidence, first-provider setup, cached-first guard, popup view-model maintenance, RDP full-page route-contract, store screenshot route-config reuse, and interaction-audit frame-action maintenance follow-ups through `Phase 314`; the earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it
+- source status: extension runtime/package bytes are aligned through `Phase 306` and packaged as `rc.14`; current source also includes post-package Chrome automation, smoke-evidence, first-provider setup, cached-first guard, popup view-model maintenance, RDP full-page route-contract, store screenshot route-config reuse, interaction-audit frame-action maintenance, and operator download-helper follow-ups through `Phase 315`; the earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it
 - packaged follow-up milestone: [2026-05-11 RC14 Follow-Up Release Candidate](./Doc/Milestones/2026-05-11_RC14_Follow_Up_Release_Candidate.md)
 - submitted review milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
@@ -75,6 +75,7 @@ Maintenance note:
 - RDP extension-window smoke routes now live in `scripts/lib/rdp-extension-window-routes.mjs`, keeping ordinary Chrome tab/app-window captures on the full-page surface contract for sidepanel-derived routes while preserving `src/popup/index.html` for popup-window captures
 - store screenshot runtime capture plans now reuse that same RDP route config for popup and full-page entries, so request-bound screenshot generation cannot drift away from the extension-window smoke helper
 - interaction-audit iframe readiness and preset-action helpers now live in `src/sidepanel/interaction-audit-frame-actions.ts`, keeping low-level iframe DOM selectors out of the large interaction-audit route while preserving signoff and export behavior there
+- operator text-file download behavior now lives in `src/sidepanel/download-text-file.ts`, so interaction-audit and theme-recovery export buttons share one tested browser-download path
 
 ## Source Labels
 

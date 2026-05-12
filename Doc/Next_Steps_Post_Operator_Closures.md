@@ -12,7 +12,7 @@ Document class:
 
 Status note:
 
-- snapshot refreshed on 2026-05-13 after Chrome automation default alignment, the `rc.14` Chrome helper smoke pass, the RDP full-page route-contract guard, store screenshot route-config reuse, and interaction-audit frame-action split
+- snapshot refreshed on 2026-05-13 after Chrome automation default alignment, the `rc.14` Chrome helper smoke pass, the RDP full-page route-contract guard, store screenshot route-config reuse, interaction-audit frame-action split, and shared operator download helper
 - refresh this file when the Chrome Web Store review result arrives, or when a new high-priority direction opens
 
 ## What Just Closed
@@ -40,7 +40,7 @@ As of 2026-05-11 the following previously-open items are now done:
 
 The submitted store-review boundary remains `release/ai-usage-dashboard-0.1.0-rc.13.zip`. Keep using the RC13 milestone as the truthful historical submission handoff while that review is still pending in the Chrome Web Store Developer Dashboard.
 
-The repo is now also packaged forward through `Phase 306` as `release/ai-usage-dashboard-0.1.0-rc.14.zip`. That newer package is a prepared follow-up candidate, not an instruction to silently replace the submitted RC13 review boundary. `Phase 307` through `Phase 314` are post-package tooling, Chrome automation, smoke-evidence, first-provider setup, cached-first guard, popup maintenance, route-contract, screenshot-helper reuse, and interaction-audit maintenance follow-ups; they do not create a new extension package.
+The repo is now also packaged forward through `Phase 306` as `release/ai-usage-dashboard-0.1.0-rc.14.zip`. That newer package is a prepared follow-up candidate, not an instruction to silently replace the submitted RC13 review boundary. `Phase 307` through `Phase 315` are post-package tooling, Chrome automation, smoke-evidence, first-provider setup, cached-first guard, popup maintenance, route-contract, screenshot-helper reuse, interaction-audit maintenance, and operator-helper follow-ups; they do not create a new extension package.
 
 References:
 - [Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
@@ -77,6 +77,7 @@ Completed local-safe follow-up:
 - [312_Phase_RDP_Full_Page_Route_Contract_Guard.md](./TODOs/Archive/312_Phase_RDP_Full_Page_Route_Contract_Guard.md) - made extension-window capture routes testable and locked ordinary Chrome app-window smoke routes to `?surface=full-page#...`.
 - [313_Phase_Store_Screenshot_Route_Config_Reuse.md](./TODOs/Archive/313_Phase_Store_Screenshot_Route_Config_Reuse.md) - made request-bound store screenshot runtime plans reuse the same RDP extension-window route config.
 - [314_Phase_Interaction_Audit_Frame_Actions_Split.md](./TODOs/Archive/314_Phase_Interaction_Audit_Frame_Actions_Split.md) - split interaction-audit iframe readiness and preset-action helpers out of the route component without changing signoff behavior.
+- [315_Phase_Operator_Download_Helper_Split.md](./TODOs/Archive/315_Phase_Operator_Download_Helper_Split.md) - shared the browser text-file download helper across interaction-audit and theme-recovery operator pages.
 
 ### 1. Direction 10 — Toolbar Competitive Fit And Store Readiness
 

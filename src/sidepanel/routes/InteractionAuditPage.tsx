@@ -8,6 +8,7 @@ import {
 } from "../../shared/i18n";
 import { buildOperatorWorkspaceLocalizedCopy } from "../../shared/localized-copy";
 import { TopBar } from "../components/TopBar";
+import { downloadTextFile } from "../download-text-file";
 import { buildInteractionAuditExportFilename } from "../interaction-audit-export-files";
 import {
   getAuditSurfaceReadiness,
@@ -55,42 +56,6 @@ function openAuditSurface(path: string) {
   }
 
   window.open(buildAuditUrl(path), "_blank", "noopener,noreferrer");
-}
-
-function downloadTextFile(
-  filename: string,
-  content: string,
-  mimeType: string,
-): boolean {
-  if (
-    typeof window === "undefined" ||
-    typeof document === "undefined" ||
-    typeof URL?.createObjectURL !== "function"
-  ) {
-    return false;
-  }
-
-  try {
-    const blob = new Blob([content], { type: mimeType });
-    const objectUrl = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-
-    anchor.href = objectUrl;
-    anchor.download = filename;
-    anchor.rel = "noopener";
-    anchor.style.display = "none";
-
-    document.body.append(anchor);
-    anchor.click();
-    anchor.remove();
-    window.setTimeout(() => {
-      URL.revokeObjectURL(objectUrl);
-    }, 0);
-
-    return true;
-  } catch {
-    return false;
-  }
 }
 
 type InteractionAuditPageProps = {
