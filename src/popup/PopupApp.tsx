@@ -44,6 +44,7 @@ import { runPopupHideProviderAction } from "./popup-hide-provider-action";
 import { runPopupGuidanceAction } from "./popup-guidance-action";
 import { PopupActionSection } from "./PopupActionSection";
 import { PopupFeaturedProviderList } from "./PopupFeaturedProviderList";
+import { PopupFeaturedSection } from "./PopupFeaturedSection";
 import { PopupGuidanceCardSection } from "./PopupGuidanceCardSection";
 import { PopupHeaderSection } from "./PopupHeaderSection";
 import { PopupSnapshotStatusSection } from "./PopupSnapshotStatusSection";
@@ -339,30 +340,10 @@ export function PopupApp() {
       ) : null}
 
       {!hasFeaturedProviderCards ? (
-        <section className="dashboard-section">
-          <div className="dashboard-section__header">
-            <div>
-              <p
-                className="section-label"
-                data-theme-local-surface="popup-featured-section-label"
-              >
-                {popupModel.featuredSection.label}
-              </p>
-              <h2 className="section-title">{popupModel.featuredSection.headline}</h2>
-            </div>
-            <p className="supporting-copy">{popupModel.featuredSection.detail}</p>
-          </div>
-
-          <section className="status-card" data-theme-local-surface="popup-empty-state-card">
-            <p className="section-label">{runtimeI18n.t("popup.triage.eyebrow")}</p>
-            <h3 className="section-title">
-              {popupModel.featuredSection.emptyStateHeadline}
-            </h3>
-            <p className="supporting-copy">
-              {popupModel.featuredSection.emptyStateDetail}
-            </p>
-          </section>
-        </section>
+        <PopupFeaturedSection
+          featuredSection={popupModel.featuredSection}
+          runtimeI18n={runtimeI18n}
+        />
       ) : null}
     </main>
   );
