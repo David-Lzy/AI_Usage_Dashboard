@@ -16,8 +16,8 @@ Freshness model:
 
 Status note:
 
-- queued after `Phase 392`
-- second deeper runtime localization implementation slice
+- split and archived on 2026-05-13
+- replaced by `Phase 393.1`, `Phase 393.2`, and `Phase 393.3`
 
 ## Goal
 
@@ -56,3 +56,16 @@ Expand deeper Settings and provider-detail helper copy into 14-locale runtime ca
 ## Follow-Up
 
 - Defer any operator-workspace or diagnostics-body localization until a separate phase confirms the raw-evidence boundary.
+
+## Split Closeout
+
+- This phase grouped three large helper surfaces: Settings layout/Quick Setup, Settings credential/source controls, and Provider Detail/provider-source wrappers.
+- The implementation queue is split so each child phase has a smaller translation table, focused tests, and independent documentation closeout.
+- `Phase 393.1` owns Settings layout, Quick Setup, preferences, and theme-customization helper copy.
+- `Phase 393.2` owns Settings credentials, source-card helper labels, and permission helper copy.
+- `Phase 393.3` owns Provider Detail copy plus provider-source display wrappers.
+
+Verification:
+
+- `npm run docs:check`
+- `git diff --check`

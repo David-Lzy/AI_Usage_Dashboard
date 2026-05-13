@@ -51,7 +51,7 @@ Today the truthful answer is "some are complete, some are intentionally living,"
 
 As of 2026-05-13:
 
-- numbered phase docs are archived through `Phase 392.4`, with active `Phase 393` selected for Settings/provider-detail 14-locale runtime copy
+- numbered phase docs are archived through `Phase 393`, with active `Phase 393.1` selected for Settings core 14-locale runtime copy
 - roadmap directions remain open by design
 - interaction-audit request docs now show `0` pending requests and `1` fulfilled real operator request
 - theme-recovery request docs now show `0` pending requests and `1` fulfilled real operator request
