@@ -16,8 +16,8 @@ Freshness model:
 
 Status note:
 
-- queued after `Phase 407`
-- maintenance audit for post-localization bundle growth
+- completed and archived on 2026-05-14
+- maintenance audit for post-localization bundle growth landed in `Doc/I18n/I18n_Localization_Copy_Chunk_Size_Audit.md`
 
 ## Goal
 
@@ -44,6 +44,31 @@ Audit the bundle-size impact of the expanded localized copy catalogs and decide 
 ## Planned Verification
 
 - `npm run build`
+- `npm run docs:check`
+- `git diff --check`
+
+## Closeout
+
+Completed on 2026-05-14.
+
+Summary:
+
+- ran `npm run build` and recorded the current Vite large-chunk warning
+- measured built asset raw/gzip sizes after stable output rewrite
+- measured localized copy and runtime catalog source sizes
+- compared Phase 404/405 operator/store helper copy source deltas against commit `0d2279d`
+- documented the decision in [I18n_Localization_Copy_Chunk_Size_Audit.md](../../../../I18n/I18n_Localization_Copy_Chunk_Size_Audit.md)
+
+Decision:
+
+- no Phase 408 runtime change
+- the current side-panel warning is acceptable for the next maintenance package
+- if size becomes a release blocker, the right follow-up is lazy-loading special debug/helper routes, not removing locales
+
+Verification:
+
+- `npm run build`
+- source byte/gzip audit for localized copy and runtime catalog modules
 - `npm run docs:check`
 - `git diff --check`
 

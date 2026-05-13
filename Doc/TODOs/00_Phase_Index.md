@@ -34,9 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [408_Phase_Localization_Copy_Chunk_Size_Audit.md](./408_Phase_Localization_Copy_Chunk_Size_Audit.md)
-- latest completed slice: [407_Phase_Localized_Operator_Store_RDP_Visual_QA.md](./Archive/by-phase/400-499/407_Phase_Localized_Operator_Store_RDP_Visual_QA.md)
-- queued phase files: [409_Phase_Interaction_Audit_Consumer_Copy_Presentation_Split.md](./409_Phase_Interaction_Audit_Consumer_Copy_Presentation_Split.md), [410_Phase_Store_Helper_Error_Presentation_Split.md](./410_Phase_Store_Helper_Error_Presentation_Split.md)
+- active phase file: [409_Phase_Interaction_Audit_Consumer_Copy_Presentation_Split.md](./409_Phase_Interaction_Audit_Consumer_Copy_Presentation_Split.md)
+- latest completed slice: [408_Phase_Localization_Copy_Chunk_Size_Audit.md](./Archive/by-phase/400-499/408_Phase_Localization_Copy_Chunk_Size_Audit.md)
+- queued phase files: [410_Phase_Store_Helper_Error_Presentation_Split.md](./410_Phase_Store_Helper_Error_Presentation_Split.md)
 
 Completed phases should be moved to:
 
@@ -800,6 +800,7 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 405` closeout added explicit 14-locale store-helper copy while preserving automation titles, preset ids, route hashes, capture-plan identity fields, generated evidence, final screenshot surfaces, and listing source text
 - the 2026-05-14 `Phase 406` closeout ran the full post-helper localization release gate; `npm run release:check` passed with no package, manifest, release artifact, provider contract, locale registry, shipped locale, manifest locale, or store-listing source changes
 - the 2026-05-14 `Phase 407` closeout captured representative RDP Chrome extension-mode screenshots for localized operator/store helper routes across `en`, `zh-CN`, `ja`, `de`, and `ar`, with Arabic RTL and German long-label spot checks recorded under `Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/`
+- the 2026-05-14 `Phase 408` closeout audited post-localization copy chunk size, recorded the current `sidepanel.js` warning as acceptable for the next maintenance package, and documented a later special-route lazy-loading boundary if raw side-panel size becomes a release blocker
 
 ## Delivery Standard For Each Phase
 

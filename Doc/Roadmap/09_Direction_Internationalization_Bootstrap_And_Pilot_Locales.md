@@ -89,6 +89,7 @@ Execution note:
 - seventy-third executable slice landed on `2026-05-14` through `Phase 405`
 - seventy-fourth release-gate baseline slice landed on `2026-05-14` through `Phase 406`
 - seventy-fifth visual QA slice landed on `2026-05-14` through `Phase 407`
+- seventy-sixth maintenance audit slice landed on `2026-05-14` through `Phase 408`
 - `Phase 200` and `Phase 201` intentionally paused this i18n/diagnostic follow-up line for functionality-first Codex personal usage-context surfacing while Codex budget is constrained
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
@@ -150,7 +151,8 @@ As of 2026-05-14:
 - the full `npm run release:check` gate passed after the 14-locale expansion and runtime message catalog split in `Phase 396`, and passed again after typed diagnostic presentation reached 14-locale coverage in `Phase 401`
 - the full `npm run release:check` gate passed after operator/store helper localization in `Phase 406`
 - localized operator/store helper RDP Chrome visual QA is recorded for `en`, `zh-CN`, `ja`, `de`, and `ar` in [2026-05-14-phase407](../testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/README.md)
-- active `Phase 408` covers localization copy chunk-size audit before queued presentation-split maintenance follow-ups
+- localization copy chunk-size audit is recorded in [I18n_Localization_Copy_Chunk_Size_Audit.md](../I18n/I18n_Localization_Copy_Chunk_Size_Audit.md), with no current runtime split required
+- active `Phase 409` covers interaction-audit consumer-copy presentation split before the queued store-helper error presentation follow-up
 - the current shipped runtime localized slice covers:
   - popup shell
   - popup explanatory copy
@@ -355,8 +357,8 @@ Recommended rollout:
 76. store-helper 14-locale copy - shipped in `Phase 405`
 77. post-helper localization release gate - shipped in `Phase 406`
 78. localized operator/store RDP visual QA - shipped in `Phase 407`
-79. localization copy chunk-size audit - active in `Phase 408`
-80. interaction-audit consumer-copy presentation split - queued in `Phase 409`
+79. localization copy chunk-size audit - shipped in `Phase 408`
+80. interaction-audit consumer-copy presentation split - active in `Phase 409`
 81. store-helper error presentation split - queued in `Phase 410`
 
 ## References
