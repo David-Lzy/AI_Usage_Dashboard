@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is now completed through `Phase 365`, with no active phase or queued numbered phase currently selected
+- the numbered phase queue is now completed through `Phase 366`, with no active phase or queued numbered phase currently selected
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -233,6 +233,7 @@ As of 2026-05-13:
 - `Phase 363` extracted page-session candidate-tab selection while preserving bound-tab lookup, query-only fallback, duplicate filtering, binding-missing reporting, and auto priority sorting semantics
 - `Phase 364` packaged the post-`rc.14` maintenance boundary into `0.1.0-rc.15`, aligned package and manifest versions, generated the release artifact, and recorded a new follow-up milestone while keeping RC13 as the submitted review boundary
 - `Phase 365` added a source-only provider host-permission contract guard so provider route hints, Settings host origins, and manifest optional host permissions stay aligned without changing runtime permissions or provider support claims
+- `Phase 366` verified first-run RDP Chrome extension screenshots, added a dashboard empty-state Quick Setup action, and made hidden-provider Quick Setup deep links fall back to the Quick Setup section instead of the top of Settings
 - `Phase 334` extracted interaction-audit per-surface card rendering while preserving route-owned audit refs, preset actions, manual checks, and signoff callbacks
 - `Phase 335` extracted interaction-audit review queue rendering while preserving route-owned queue construction and jump behavior
 - `Phase 336` extracted interaction-audit request-scope rendering while preserving route-owned request-context state plus binding, revision, and next-command display

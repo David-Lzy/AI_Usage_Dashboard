@@ -52,7 +52,7 @@ type SettingsToast = {
   message: string;
 };
 
-function getSettingsRouteFocusElement(
+export function getSettingsRouteFocusElement(
   routeFocus: SettingsRouteFocus,
   documentRef: Document,
 ): HTMLElement | null {
@@ -60,8 +60,10 @@ function getSettingsRouteFocusElement(
     case "section":
       return documentRef.getElementById(routeFocus.sectionId);
     case "quick-setup-provider":
-      return documentRef.querySelector<HTMLElement>(
-        `[data-quick-setup-provider-id="${routeFocus.providerId}"]`,
+      return (
+        documentRef.querySelector<HTMLElement>(
+          `[data-quick-setup-provider-id="${routeFocus.providerId}"]`,
+        ) ?? documentRef.getElementById(SETTINGS_SECTION_IDS.quickSetup)
       );
     case "credential-provider":
       return documentRef.querySelector<HTMLElement>(

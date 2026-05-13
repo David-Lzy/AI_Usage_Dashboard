@@ -25,6 +25,7 @@ type DashboardPageProps = {
   onToggleThemeMode?: () => void;
   onOpenFullPage?: () => void;
   onOpenSettings: () => void;
+  onOpenQuickSetup: () => void;
   onRefreshProvider: (providerId: ProviderId) => void;
   onRefreshAll: () => void;
 };
@@ -41,6 +42,7 @@ export function DashboardPage({
   onToggleThemeMode,
   onOpenFullPage,
   onOpenSettings,
+  onOpenQuickSetup,
   onRefreshProvider,
   onRefreshAll,
 }: DashboardPageProps) {
@@ -102,6 +104,15 @@ export function DashboardPage({
           <section className="status-card" aria-live="polite">
             <p className="section-label">{i18n.t("dashboard.empty.eyebrow")}</p>
             <p className="body-copy">{i18n.t("dashboard.empty.detail")}</p>
+            <div className="credential-actions">
+              <button
+                className="text-button"
+                type="button"
+                onClick={onOpenQuickSetup}
+              >
+                {i18n.t("dashboard.empty.action")}
+              </button>
+            </div>
           </section>
         )}
       </section>

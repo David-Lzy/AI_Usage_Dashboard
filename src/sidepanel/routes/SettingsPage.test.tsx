@@ -2,7 +2,8 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
 import { SAMPLE_APP_STATE } from "../../shared/constants";
-import { SettingsPage } from "./SettingsPage";
+import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
+import { getSettingsRouteFocusElement, SettingsPage } from "./SettingsPage";
 
 function renderSettingsPage(overrides: Partial<Parameters<typeof SettingsPage>[0]> = {}) {
   return renderToStaticMarkup(
@@ -112,6 +113,33 @@ describe("SettingsPage", () => {
     expect(html).toContain('data-quick-setup-provider-id="cursor"');
     expect(html).not.toContain('id="settings-advanced"');
     expect(html).not.toContain('data-credential-provider-id="cursor"');
+  });
+
+  it("uses the quick setup section as the fallback target for hidden provider deep links", () => {
+    const providerTarget = {} as HTMLElement;
+    const fallbackSection = {} as HTMLElement;
+    const exactDocument = {
+      querySelector: () => providerTarget,
+      getElementById: () => fallbackSection,
+    } as unknown as Document;
+    const fallbackDocument = {
+      querySelector: () => null,
+      getElementById: (sectionId: string) =>
+        sectionId === SETTINGS_SECTION_IDS.quickSetup ? fallbackSection : null,
+    } as unknown as Document;
+
+    expect(
+      getSettingsRouteFocusElement(
+        { kind: "quick-setup-provider", providerId: "cursor" },
+        exactDocument,
+      ),
+    ).toBe(providerTarget);
+    expect(
+      getSettingsRouteFocusElement(
+        { kind: "quick-setup-provider", providerId: "cursor" },
+        fallbackDocument,
+      ),
+    ).toBe(fallbackSection);
   });
 
   it("marks more providers for attention when no quick-setup provider is visible", () => {

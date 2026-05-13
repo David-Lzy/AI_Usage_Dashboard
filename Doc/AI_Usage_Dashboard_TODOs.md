@@ -1,6 +1,6 @@
 # AI Usage Dashboard TODOs
 
-Date: 2026-05-12
+Date: 2026-05-13
 
 Process rule:
 
@@ -76,13 +76,13 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 365` execution priority:
+Current post-`Phase 366` execution priority:
 
 1. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.13.zip` as the submitted Chrome Web Store review boundary. Do not silently mutate or rewrite the [RC13 upload-candidate milestone](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) while that submission remains the human-reviewed baseline.
 2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.15.zip` as the current packaged follow-up candidate. It includes the previous `rc.14` follow-up work plus post-`rc.14` local-safe maintenance through `Phase 363`, and is ready if review feedback or an explicit resubmission decision needs a newer build.
 3. `P0` - keep the refreshed `Direction 10.3` screenshot evidence archived and ready, not pending: [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) still fulfills the latest reviewed screenshot pack with `5/5` images and `3` explicit truth-boundary notes.
 4. `P1` - if a resubmission becomes necessary, use [2026-05-13_RC15_Maintenance_Follow_Up_Release_Candidate.md](./Milestones/2026-05-13_RC15_Maintenance_Follow_Up_Release_Candidate.md) as the current packaged-source reference and cut a fresh submission milestone from that boundary instead of mutating RC13 history.
-5. `P2` - no numbered phase is currently queued after `Phase 365`. If continuing, review the project and create a new small TODO before changing behavior.
+5. `P2` - no numbered phase is currently queued after `Phase 366`. If continuing, review the project and create a new small TODO before changing behavior.
 6. `P2` - keep the `Phase 309` first-provider setup behavior stable: zero-provider Settings now recommends one personal-user provider in Quick Setup and popup zero-provider actions deep-link to that same setup card.
 7. `P2` - keep the `Phase 310` cached-first guard stable: standard dashboard routes must keep rendering cached app state while background bootstrap is still loading.
 8. `P2` - keep the `Phase 311` popup view-model split behavior-only: `src/popup/view-models.ts` remains the public aggregator and the extracted setup-coverage / featured-card modules should not change popup UI semantics.
@@ -93,57 +93,58 @@ Current post-`Phase 365` execution priority:
 13. `P2` - keep the `Phase 316` operator clipboard-helper split behavior-only: interaction-audit and theme-recovery share clipboard writes, while interaction-audit still distinguishes unavailable clipboard access from failed writes.
 14. `P2` - keep the `Phase 317` operator runtime-i18n helper split behavior-only: interaction-audit and theme-recovery share default `system` locale bootstrap without changing runtime locale resolution rules.
 15. `P2` - keep the `Phase 318` Settings focused deep-link guard stable: popup setup/problem targets should keep landing on Quick Setup or Advanced source cards instead of degrading to a generic Settings open.
-16. `P2` - keep the `Phase 319` popup Settings-focus helper stable: explicit provider Settings actions should target Quick Setup, while generic Settings actions derive the first relevant visible-provider target.
-17. `P2` - keep the `Phase 320` popup source-page tab-selection helper stable: exact preferred routes, active tabs, recent tabs, and numeric tab ids should keep the same precedence before page binding or tab activation.
-18. `P2` - keep the `Phase 321` popup route-action helper stable: side-panel, full-page, Settings, dashboard, and provider-detail handoffs should continue to preserve focused hashes and pending full-page entries.
-19. `P2` - keep the `Phase 322` popup sidePanel route-action guard stable: active-tab and current-window Chrome sidePanel branches should continue to set the expected path and close the popup.
-20. `P2` - keep the `Phase 323` popup source-page action helper stable: unsupported-provider fallback, direct window open, existing-tab binding plus refresh, and created-tab binding should keep their current behavior.
-21. `P2` - keep the `Phase 324` popup refresh action helper stable: direct refresh, one-provider host-access prompting, denied-access messaging, browser rejection fallback, and granted-access continuation should keep their current behavior.
-22. `P2` - keep the `Phase 325` popup theme-toggle action helper stable: light/dark/system-resolved next-mode selection should keep sending only `themeMode` through the existing `app:update-settings` path.
-23. `P2` - keep the `Phase 326` popup hide-provider action helper stable: hide/ignore provider actions should keep using `app:set-provider-enabled` with `enabled: false`.
-24. `P2` - keep the `Phase 327` popup guidance action helper stable: Settings focus, dashboard, provider-detail, source-page, and hide-provider no-op routing should keep using the existing popup route/source helpers.
-25. `P2` - keep the `Phase 328` popup provider progress component stable: usage-window-first rendering, single-value fallback, and empty percent-only suppression should keep matching dashboard truth boundaries.
-26. `P2` - keep the `Phase 329` popup snapshot-status split stable: no-provider, aligned, mixed timestamp, missing permission, and sync-error status decisions should remain covered outside the view-model aggregator.
-27. `P2` - keep the `Phase 330` popup guidance-card split stable: first setup, missing access, missing credential, blocked provider, policy-only, and ready-provider guidance decisions should remain covered outside the view-model aggregator.
-28. `P2` - keep the `Phase 331` popup featured-section split stable: zero-provider, needs-attention, policy-only, and all-clear section stories should remain covered outside the view-model aggregator.
-29. `P2` - keep the `Phase 332` popup surface-route split stable: secondary action selection and surface-ownership copy should remain covered outside the view-model aggregator.
-30. `P2` - keep the `Phase 333` popup localized view-model split stable: localized popup orchestration should remain outside the raw view-model builder while preserving the public re-export path.
-31. `P2` - keep the `Phase 348` popup featured-provider list split stable: quota-first provider-card rendering should stay outside `PopupApp.tsx` while action execution and settings-focus targeting remain route-owned.
-32. `P2` - keep the `Phase 349` popup header split stable: refresh, theme-toggle, and dashboard-tab header controls should stay outside `PopupApp.tsx` while route-owned handlers and pending states remain unchanged.
-33. `P2` - keep the `Phase 350` popup guidance-card rendering split stable: no-featured-provider guidance-card markup should stay outside `PopupApp.tsx` while route-owned action routing and settings-focus targeting remain unchanged.
-34. `P2` - keep the `Phase 351` popup setup-coverage rendering split stable: no-featured-provider setup-coverage markup should stay outside `PopupApp.tsx` while route-owned action routing and settings-focus targeting remain unchanged.
-35. `P2` - keep the `Phase 352` popup snapshot-status rendering split stable: no-featured-provider snapshot-status markup should stay outside `PopupApp.tsx` while route-owned display gating remains unchanged.
-36. `P2` - keep the `Phase 353` popup action-section rendering split stable: no-featured-provider action-card markup should stay outside `PopupApp.tsx` while route-owned action execution remains unchanged.
-37. `P2` - keep the `Phase 354` popup surface-roles rendering split stable: no-featured-provider surface-roles markup should stay outside `PopupApp.tsx` while route-owned display gating remains unchanged.
-38. `P2` - keep the `Phase 355` popup featured-section rendering split stable: no-featured-provider featured-section and empty-state markup should stay outside `PopupApp.tsx` while route-owned display gating remains unchanged.
-39. `P2` - keep the `Phase 356` popup load-state rendering split stable: loading/error card markup should stay outside `PopupApp.tsx` while route-owned retry and open actions remain unchanged.
-40. `P2` - keep the `Phase 357` Settings source-card view-model split stable: compact fields, session-track, and diagnostics model construction should stay outside `settings-view-models.ts` while compatibility re-exports remain intact.
-41. `P2` - keep the `Phase 358` Settings Quick Setup view-model split stable: action ids, card construction, setup-state resolution, and helper text selection should stay outside `settings-view-models.ts` while compatibility re-exports remain intact.
-42. `P2` - keep the `Phase 359` page-session tab-priority helper stable: exact URL, hash-stripped URL, prefix URL, matched-title, active-tab boost, and recency weighting should stay covered outside the large page-session client.
-43. `P2` - keep the `Phase 360` page-session tab-lifecycle helper stable: open-missing-tab, reload-tab, load-wait, reload-option normalization, and close cleanup semantics should stay covered outside the large page-session client.
-44. `P2` - keep the `Phase 361` page-session script-capture helper stable: script-result execution, isolated DOM snapshots, main-world window-value reads, selector/key normalization, and truncation semantics should stay covered outside the large page-session client.
-45. `P2` - keep the `Phase 362` page-session network-observer helper stable: bridge install/read behavior, fetch/XHR capture defaults, bridge id, and malformed snapshot fallback should stay covered outside the large page-session client.
-46. `P2` - keep the `Phase 363` page-session candidate-tabs helper stable: bound-tab lookup, query-only bound fallback, duplicate filtering, binding-missing reporting, and auto priority sorting should stay covered outside the large page-session client.
-47. `P2` - keep the `Phase 334` interaction-audit surface-card split stable: per-surface iframe, preset-action, manual-check, and signoff controls should stay outside the large operator route while route-owned state remains in the route.
-48. `P2` - keep the `Phase 335` interaction-audit review-queue split stable: queue summary and jump-list rendering should stay outside the large operator route while queue construction remains route-owned.
-49. `P2` - keep the `Phase 336` interaction-audit request-scope split stable: request binding summaries and next-command display should stay outside the large operator route while request-context state remains route-owned.
-50. `P2` - keep the `Phase 337` interaction-audit signoff-session split stable: signoff workspace header, summary metrics, metadata fields, timestamp action, and session-summary note should stay outside the large operator route while metadata state remains route-owned.
-51. `P2` - keep the `Phase 338` interaction-audit handoff-summary split stable: handoff counts, grouped surface lists, preview text, and operator workflow display should stay outside the large operator route while draft generation and copy/download handlers remain route-owned.
-52. `P2` - keep the `Phase 345` interaction-audit guidance-card split stable: operator checklist and extension surface links should stay outside the large operator route while URL construction remains route-owned.
-53. `P2` - keep the `Phase 346` interaction-audit workspace-controls split stable: signoff action buttons, JSON import controls, feedback, and draft preview should stay outside the large operator route while state and handlers remain route-owned.
-54. `P2` - keep the `Phase 347` interaction-audit surface-grid split stable: surface-card mapping and fallback signoff-state behavior should stay outside the large operator route while refs, readiness state, and callbacks remain route-owned.
-55. `P2` - keep the `Phase 339` theme-recovery current-state split stable: overall stage, popup snapshot, and action-badge display should stay outside the route while snapshot construction and live badge reads remain route-owned.
-56. `P2` - keep the `Phase 340` theme-recovery theme-state split stable: theme mode, resolved mode, preset, custom seed, scope isolation, and badge-source detail should stay outside the route while snapshot and live badge inputs remain route-owned.
-57. `P2` - keep the `Phase 341` theme-recovery request-scope split stable: bound/ad-hoc request identity display should stay outside the route while query parsing and request-context state remain route-owned.
-58. `P2` - keep the `Phase 342` theme-recovery provider-list split stable: provider recovery cards and status badges should stay outside the route while snapshot construction and recovery classification remain route-owned.
-59. `P2` - keep the `Phase 343` theme-recovery workflow-links split stable: workflow checklist and extension/vendor link groups should stay outside the route while link ids, hrefs, target behavior, and data hooks remain unchanged.
-60. `P2` - keep the `Phase 344` theme-recovery outputs split stable: export buttons, draft previews, and feedback rendering should stay outside the route while draft generation and copy/download/open callbacks remain route-owned.
-61. `P2` - Provider closure waits only on the accounts that are still unavailable:
+16. `P2` - keep the `Phase 366` first-run onboarding focus stable: zero-provider dashboard users should have a direct Quick Setup action, and hidden-provider Quick Setup deep links should land on the Quick Setup section instead of the top of Settings.
+17. `P2` - keep the `Phase 319` popup Settings-focus helper stable: explicit provider Settings actions should target Quick Setup, while generic Settings actions derive the first relevant visible-provider target.
+18. `P2` - keep the `Phase 320` popup source-page tab-selection helper stable: exact preferred routes, active tabs, recent tabs, and numeric tab ids should keep the same precedence before page binding or tab activation.
+19. `P2` - keep the `Phase 321` popup route-action helper stable: side-panel, full-page, Settings, dashboard, and provider-detail handoffs should continue to preserve focused hashes and pending full-page entries.
+20. `P2` - keep the `Phase 322` popup sidePanel route-action guard stable: active-tab and current-window Chrome sidePanel branches should continue to set the expected path and close the popup.
+21. `P2` - keep the `Phase 323` popup source-page action helper stable: unsupported-provider fallback, direct window open, existing-tab binding plus refresh, and created-tab binding should keep their current behavior.
+22. `P2` - keep the `Phase 324` popup refresh action helper stable: direct refresh, one-provider host-access prompting, denied-access messaging, browser rejection fallback, and granted-access continuation should keep their current behavior.
+23. `P2` - keep the `Phase 325` popup theme-toggle action helper stable: light/dark/system-resolved next-mode selection should keep sending only `themeMode` through the existing `app:update-settings` path.
+24. `P2` - keep the `Phase 326` popup hide-provider action helper stable: hide/ignore provider actions should keep using `app:set-provider-enabled` with `enabled: false`.
+25. `P2` - keep the `Phase 327` popup guidance action helper stable: Settings focus, dashboard, provider-detail, source-page, and hide-provider no-op routing should keep using the existing popup route/source helpers.
+26. `P2` - keep the `Phase 328` popup provider progress component stable: usage-window-first rendering, single-value fallback, and empty percent-only suppression should keep matching dashboard truth boundaries.
+27. `P2` - keep the `Phase 329` popup snapshot-status split stable: no-provider, aligned, mixed timestamp, missing permission, and sync-error status decisions should remain covered outside the view-model aggregator.
+28. `P2` - keep the `Phase 330` popup guidance-card split stable: first setup, missing access, missing credential, blocked provider, policy-only, and ready-provider guidance decisions should remain covered outside the view-model aggregator.
+29. `P2` - keep the `Phase 331` popup featured-section split stable: zero-provider, needs-attention, policy-only, and all-clear section stories should remain covered outside the view-model aggregator.
+30. `P2` - keep the `Phase 332` popup surface-route split stable: secondary action selection and surface-ownership copy should remain covered outside the view-model aggregator.
+31. `P2` - keep the `Phase 333` popup localized view-model split stable: localized popup orchestration should remain outside the raw view-model builder while preserving the public re-export path.
+32. `P2` - keep the `Phase 348` popup featured-provider list split stable: quota-first provider-card rendering should stay outside `PopupApp.tsx` while action execution and settings-focus targeting remain route-owned.
+33. `P2` - keep the `Phase 349` popup header split stable: refresh, theme-toggle, and dashboard-tab header controls should stay outside `PopupApp.tsx` while route-owned handlers and pending states remain unchanged.
+34. `P2` - keep the `Phase 350` popup guidance-card rendering split stable: no-featured-provider guidance-card markup should stay outside `PopupApp.tsx` while route-owned action routing and settings-focus targeting remain unchanged.
+35. `P2` - keep the `Phase 351` popup setup-coverage rendering split stable: no-featured-provider setup-coverage markup should stay outside `PopupApp.tsx` while route-owned action routing and settings-focus targeting remain unchanged.
+36. `P2` - keep the `Phase 352` popup snapshot-status rendering split stable: no-featured-provider snapshot-status markup should stay outside `PopupApp.tsx` while route-owned display gating remains unchanged.
+37. `P2` - keep the `Phase 353` popup action-section rendering split stable: no-featured-provider action-card markup should stay outside `PopupApp.tsx` while route-owned action execution remains unchanged.
+38. `P2` - keep the `Phase 354` popup surface-roles rendering split stable: no-featured-provider surface-roles markup should stay outside `PopupApp.tsx` while route-owned display gating remains unchanged.
+39. `P2` - keep the `Phase 355` popup featured-section rendering split stable: no-featured-provider featured-section and empty-state markup should stay outside `PopupApp.tsx` while route-owned display gating remains unchanged.
+40. `P2` - keep the `Phase 356` popup load-state rendering split stable: loading/error card markup should stay outside `PopupApp.tsx` while route-owned retry and open actions remain unchanged.
+41. `P2` - keep the `Phase 357` Settings source-card view-model split stable: compact fields, session-track, and diagnostics model construction should stay outside `settings-view-models.ts` while compatibility re-exports remain intact.
+42. `P2` - keep the `Phase 358` Settings Quick Setup view-model split stable: action ids, card construction, setup-state resolution, and helper text selection should stay outside `settings-view-models.ts` while compatibility re-exports remain intact.
+43. `P2` - keep the `Phase 359` page-session tab-priority helper stable: exact URL, hash-stripped URL, prefix URL, matched-title, active-tab boost, and recency weighting should stay covered outside the large page-session client.
+44. `P2` - keep the `Phase 360` page-session tab-lifecycle helper stable: open-missing-tab, reload-tab, load-wait, reload-option normalization, and close cleanup semantics should stay covered outside the large page-session client.
+45. `P2` - keep the `Phase 361` page-session script-capture helper stable: script-result execution, isolated DOM snapshots, main-world window-value reads, selector/key normalization, and truncation semantics should stay covered outside the large page-session client.
+46. `P2` - keep the `Phase 362` page-session network-observer helper stable: bridge install/read behavior, fetch/XHR capture defaults, bridge id, and malformed snapshot fallback should stay covered outside the large page-session client.
+47. `P2` - keep the `Phase 363` page-session candidate-tabs helper stable: bound-tab lookup, query-only bound fallback, duplicate filtering, binding-missing reporting, and auto priority sorting should stay covered outside the large page-session client.
+48. `P2` - keep the `Phase 334` interaction-audit surface-card split stable: per-surface iframe, preset-action, manual-check, and signoff controls should stay outside the large operator route while route-owned state remains in the route.
+49. `P2` - keep the `Phase 335` interaction-audit review-queue split stable: queue summary and jump-list rendering should stay outside the large operator route while queue construction remains route-owned.
+50. `P2` - keep the `Phase 336` interaction-audit request-scope split stable: request binding summaries and next-command display should stay outside the large operator route while request-context state remains route-owned.
+51. `P2` - keep the `Phase 337` interaction-audit signoff-session split stable: signoff workspace header, summary metrics, metadata fields, timestamp action, and session-summary note should stay outside the large operator route while metadata state remains route-owned.
+52. `P2` - keep the `Phase 338` interaction-audit handoff-summary split stable: handoff counts, grouped surface lists, preview text, and operator workflow display should stay outside the large operator route while draft generation and copy/download handlers remain route-owned.
+53. `P2` - keep the `Phase 345` interaction-audit guidance-card split stable: operator checklist and extension surface links should stay outside the large operator route while URL construction remains route-owned.
+54. `P2` - keep the `Phase 346` interaction-audit workspace-controls split stable: signoff action buttons, JSON import controls, feedback, and draft preview should stay outside the large operator route while state and handlers remain route-owned.
+55. `P2` - keep the `Phase 347` interaction-audit surface-grid split stable: surface-card mapping and fallback signoff-state behavior should stay outside the large operator route while refs, readiness state, and callbacks remain route-owned.
+56. `P2` - keep the `Phase 339` theme-recovery current-state split stable: overall stage, popup snapshot, and action-badge display should stay outside the route while snapshot construction and live badge reads remain route-owned.
+57. `P2` - keep the `Phase 340` theme-recovery theme-state split stable: theme mode, resolved mode, preset, custom seed, scope isolation, and badge-source detail should stay outside the route while snapshot and live badge inputs remain route-owned.
+58. `P2` - keep the `Phase 341` theme-recovery request-scope split stable: bound/ad-hoc request identity display should stay outside the route while query parsing and request-context state remain route-owned.
+59. `P2` - keep the `Phase 342` theme-recovery provider-list split stable: provider recovery cards and status badges should stay outside the route while snapshot construction and recovery classification remain route-owned.
+60. `P2` - keep the `Phase 343` theme-recovery workflow-links split stable: workflow checklist and extension/vendor link groups should stay outside the route while link ids, hrefs, target behavior, and data hooks remain unchanged.
+61. `P2` - keep the `Phase 344` theme-recovery outputs split stable: export buttons, draft previews, and feedback rendering should stay outside the route while draft generation and copy/download/open callbacks remain route-owned.
+62. `P2` - Provider closure waits only on the accounts that are still unavailable:
    - JetBrains org-console reverification waits for a real org-visible `Users and licensing` session.
    - Claude individual Pro / Max usage-page behavior remains separate from the now-shipped Claude Team session-page path.
    - Gemini project-metrics graduation waits for a product decision that project-scoped metrics are acceptable.
-62. `P2` - real operator evidence is now closed as of 2026-05-11: Direction 04 interaction-audit closure archived under [2026-05-11-2026-05-11-rdp-chrome-visual-audit](./testing/operator_reviews/2026-05-11-2026-05-11-rdp-chrome-visual-audit/README.md); Direction 05 theme-recovery closure archived under [2026-05-11-system-recovered-014312](./testing/theme_recovery_reviews/2026-05-11-system-recovered-014312/README.md). No further operator evidence phases are queued unless a new surface or theme regression opens them.
-63. `P2` - continue file splitting only when a concrete maintenance issue justifies it; the old queued split targets for `material-theme.css`, `SettingsPage.tsx`, `App.tsx`, `standard-app-actions.ts`, and `localized-copy.ts` are now closed or reduced to focused compatibility/aggregator files.
+63. `P2` - real operator evidence is now closed as of 2026-05-11: Direction 04 interaction-audit closure archived under [2026-05-11-2026-05-11-rdp-chrome-visual-audit](./testing/operator_reviews/2026-05-11-2026-05-11-rdp-chrome-visual-audit/README.md); Direction 05 theme-recovery closure archived under [2026-05-11-system-recovered-014312](./testing/theme_recovery_reviews/2026-05-11-system-recovered-014312/README.md). No further operator evidence phases are queued unless a new surface or theme regression opens them.
+64. `P2` - continue file splitting only when a concrete maintenance issue justifies it; the old queued split targets for `material-theme.css`, `SettingsPage.tsx`, `App.tsx`, `standard-app-actions.ts`, and `localized-copy.ts` are now closed or reduced to focused compatibility/aggregator files.
 
 Delivery rule for this stage:
 
@@ -447,6 +448,7 @@ Phase status update:
 - `Phase 363` split page-session candidate-tab selection into a dedicated helper with focused tests while preserving bound-tab lookup, query-only fallback, duplicate filtering, binding-missing reporting, and auto priority sorting semantics
 - `Phase 364` packaged the current post-`rc.14` maintenance source boundary as `0.1.0-rc.15`, aligned package and manifest versions, generated the release zip, and recorded the RC15 follow-up milestone while preserving RC13 as the submitted store-review boundary
 - `Phase 365` added a source-only provider host-permission contract guard so source route hints, Settings host origins, and manifest optional host permissions stay aligned while preserving the deferred Gemini project-metrics no-host-access boundary
+- `Phase 366` verified first-run RDP Chrome extension screenshots, added a dashboard empty-state Quick Setup action, and made hidden-provider Quick Setup deep links fall back to the Quick Setup section instead of the top of Settings
 - `Phase 334` split interaction-audit per-surface card rendering into a dedicated component while preserving route-owned audit refs, preset actions, manual checks, and signoff callbacks
 - `Phase 335` split interaction-audit review queue rendering into a dedicated component while preserving route-owned queue construction and jump behavior
 - `Phase 336` split interaction-audit request-scope rendering into a dedicated component while preserving route-owned request-context state plus existing binding, revision, and next-command display

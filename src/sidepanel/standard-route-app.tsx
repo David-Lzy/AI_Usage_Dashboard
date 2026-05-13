@@ -30,6 +30,7 @@ import {
   getProviderViewModel,
   getVisibleProviders,
 } from "./view-models";
+import { SETTINGS_SECTION_IDS } from "./settings-section-ids";
 
 type StandardRouteAppProps = {
   locationHash: string;
@@ -318,6 +319,15 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
             isFullPageSurface ? undefined : handleOpenCurrentRouteInFullPage
           }
           onOpenSettings={() => navigateToRoute({ name: "settings" })}
+          onOpenQuickSetup={() =>
+            navigateToRoute({
+              name: "settings",
+              focus: {
+                kind: "section",
+                sectionId: SETTINGS_SECTION_IDS.quickSetup,
+              },
+            })
+          }
           onOpenSourcePage={handleOpenSessionPage}
           onRefreshProvider={handleRefresh}
           onRefreshAll={() => handleRefresh()}

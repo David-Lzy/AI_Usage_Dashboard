@@ -40,6 +40,7 @@ type RuntimeMessageId =
   | "dashboard.providers.aria"
   | "dashboard.empty.eyebrow"
   | "dashboard.empty.detail"
+  | "dashboard.empty.action"
   | "dashboard.summary.aria"
   | "dashboard.summary.visible"
   | "dashboard.summary.healthy"
@@ -210,7 +211,8 @@ const RUNTIME_MESSAGES: Record<ResolvedAppLocale, RuntimeMessages> = {
     "dashboard.providers.detail": "Cards are ordered by severity first, then current access gaps, so the highest-risk providers stay at the top of the dashboard while still exposing the current product contract at a glance.",
     "dashboard.providers.aria": "Provider cards",
     "dashboard.empty.eyebrow": "No Visible Providers",
-    "dashboard.empty.detail": "Enable at least one provider in Settings to restore the dashboard feed.",
+    "dashboard.empty.detail": "Start in Quick Setup to enable your first provider, then follow the access and usage-page steps before returning to the dashboard.",
+    "dashboard.empty.action": "Open Quick Setup",
     "dashboard.summary.aria": "Dashboard summary",
     "dashboard.summary.visible": "Visible",
     "dashboard.summary.healthy": "Healthy",
@@ -354,7 +356,8 @@ const RUNTIME_MESSAGES: Record<ResolvedAppLocale, RuntimeMessages> = {
     "dashboard.providers.detail": "卡片先按严重程度排序，再按当前访问缺口排序，让高风险 provider 保持在顶部，同时保留当前产品合同的一眼可见性。",
     "dashboard.providers.aria": "Provider 卡片",
     "dashboard.empty.eyebrow": "没有可见 Provider",
-    "dashboard.empty.detail": "请先在设置中启用至少一个 Provider，恢复仪表板内容流。",
+    "dashboard.empty.detail": "请先进入 Quick Setup 启用第一个 Provider，再按提示完成授权和用量页面步骤，然后回到仪表板。",
+    "dashboard.empty.action": "打开 Quick Setup",
     "dashboard.summary.aria": "仪表板摘要",
     "dashboard.summary.visible": "可见",
     "dashboard.summary.healthy": "健康",
