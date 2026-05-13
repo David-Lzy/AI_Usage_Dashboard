@@ -17,7 +17,7 @@ Freshness model:
 Status note:
 
 - child phase split from `Phase 392.2`
-- queued after `Phase 392.3`
+- completed and archived on 2026-05-13
 
 ## Goal
 
@@ -54,3 +54,20 @@ Complete the remaining popup structured-copy translation after featured provider
 ## Follow-Up
 
 - Move to Settings and provider-detail deeper runtime copy in `Phase 393`.
+
+## Closeout
+
+Summary:
+
+- Added explicit 14-locale popup copy for `actionSection`, `surfaceRoles`, and `aria` buckets.
+- Kept popup routing, action execution, provider models, raw evidence, vendor strings, route ids, action ids, filenames, and archive/export payloads unchanged.
+- Updated the focused popup localized-copy guard so every non-English locale must keep translated representative action, surface-role, and aria copy.
+
+Verification:
+
+- `npm run i18n:check`
+- `npm run test -- src/shared/popup-localized-copy.test.ts`
+- `npm run test -- src/popup/view-models.test.ts`
+- `npm run typecheck`
+- `npm run docs:check`
+- `git diff --check`

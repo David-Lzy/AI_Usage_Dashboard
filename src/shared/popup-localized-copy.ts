@@ -1676,6 +1676,431 @@ const POPUP_FEATURED_COPY: Record<
   },
 };
 
+type PopupSurfaceCopyText = {
+  quickActionsLabel: string;
+  otherRouteLabel: string;
+  secondaryActionsLabel: string;
+  detailDashboardFirst: string;
+  detailSettingsFirst: string;
+  detailBroaderSurface: string;
+  surfaceRolesLabel: string;
+  settingsOwnsSetupHeadline: string;
+  settingsOwnsSetupNoVisibleDetail: string;
+  settingsOwnsFirstProviderSetupDetail: (providerLabel: string) => string;
+  settingsOwnsSetupDetail: string;
+  settingsOwnsContractControlsHeadline: string;
+  settingsOwnsContractControlsDetail: string;
+  dashboardOwnsContractReviewHeadline: string;
+  dashboardOwnsContractReviewDetail: string;
+  providerDetailOwnsReviewHeadline: string;
+  providerDetailOwnsReviewDetail: string;
+  popupQuickGlanceHeadline: string;
+  popupQuickGlanceDetail: string;
+  ariaSetupCoverage: string;
+  ariaFeaturedProviders: string;
+};
+
+const POPUP_SURFACE_COPY: Record<
+  PopupFirstRunLocalizedLocale,
+  PopupSurfaceCopyText
+> = {
+  "zh-TW": {
+    quickActionsLabel: "快速動作",
+    otherRouteLabel: "其他入口",
+    secondaryActionsLabel: "次要動作",
+    detailDashboardFirst:
+      "主要下一步在上方。若要先看更完整的多 provider 視圖，請使用 dashboard。",
+    detailSettingsFirst:
+      "主要下一步在上方。需要 provider 開關、權限或已儲存 credentials 時，請使用 Settings。",
+    detailBroaderSurface:
+      "主要下一步在上方。需要更大的工作面時，請使用 dashboard 或 Settings。",
+    surfaceRolesLabel: "Surface roles",
+    settingsOwnsSetupHeadline: "Settings 負責 setup",
+    settingsOwnsSetupNoVisibleDetail:
+      "用 Settings 啟用 provider、授予 host access、加入 credentials。至少有一個 provider 可見後，dashboard 才會變得有用。",
+    settingsOwnsFirstProviderSetupDetail: (provider) =>
+      `用 Settings > Quick Setup 啟用 ${provider}、授予 host access 並開啟 usage page。至少有一個 provider 可見後，dashboard 才會變得有用。`,
+    settingsOwnsSetupDetail:
+      "用 Settings 管理 provider 開關、host access 和已儲存 credentials。setup 清楚之前，popup 保持快速分診層。",
+    settingsOwnsContractControlsHeadline: "Settings 負責合約控制",
+    settingsOwnsContractControlsDetail:
+      "用 Settings 檢查 provider 合約、source preference 和 page-source controls。dashboard 保留較完整的多 provider 脈絡。",
+    dashboardOwnsContractReviewHeadline: "Dashboard 負責合約檢查",
+    dashboardOwnsContractReviewDetail:
+      "用 dashboard 查看跨可見 provider 的較完整合約脈絡。Settings 仍負責 provider controls 和已儲存 credentials。",
+    providerDetailOwnsReviewHeadline: "Provider detail 負責檢查",
+    providerDetailOwnsReviewDetail:
+      "setup 已清楚後，用 provider detail 查看單一 provider 的目前路徑和健康狀態。dashboard 保留較完整的多 provider surface。",
+    popupQuickGlanceHeadline: "popup 保持快速概覽",
+    popupQuickGlanceDetail:
+      "用 dashboard 查看較完整多 provider 脈絡，用 Settings 做 controls；只有需要單一 provider 更深的合約和健康狀態時才進入 provider detail。",
+    ariaSetupCoverage: "popup setup 覆蓋",
+    ariaFeaturedProviders: "popup 重點 provider",
+  },
+  ja: {
+    quickActionsLabel: "クイック操作",
+    otherRouteLabel: "他の入口",
+    secondaryActionsLabel: "補助操作",
+    detailDashboardFirst:
+      "主な次の手順は上にあります。より広い multi-provider ビューを先に見る場合は dashboard を使ってください。",
+    detailSettingsFirst:
+      "主な次の手順は上にあります。provider toggles、権限、保存済み credentials が必要な場合は Settings を使ってください。",
+    detailBroaderSurface:
+      "主な次の手順は上にあります。より広い surface が必要な場合は dashboard または Settings を使ってください。",
+    surfaceRolesLabel: "Surface roles",
+    settingsOwnsSetupHeadline: "Settings が setup を担当",
+    settingsOwnsSetupNoVisibleDetail:
+      "Settings で provider を有効にし、host access を付与し、credentials を追加します。provider が 1 つ以上表示されると dashboard が有用になります。",
+    settingsOwnsFirstProviderSetupDetail: (provider) =>
+      `Settings > Quick Setup で ${provider} を有効にし、host access を付与し、usage page を開きます。provider が 1 つ以上表示されると dashboard が有用になります。`,
+    settingsOwnsSetupDetail:
+      "provider toggles、host access、保存済み credentials には Settings を使います。setup が明確になるまで popup はクイックトリアージ層です。",
+    settingsOwnsContractControlsHeadline: "Settings が contract controls を担当",
+    settingsOwnsContractControlsDetail:
+      "Settings で provider contracts、source preference、page-source controls を確認します。dashboard はより広い multi-provider context を保ちます。",
+    dashboardOwnsContractReviewHeadline: "Dashboard が contract review を担当",
+    dashboardOwnsContractReviewDetail:
+      "表示中 provider 全体の広い contract context には dashboard を使います。Settings は引き続き provider controls と保存済み credentials を担当します。",
+    providerDetailOwnsReviewHeadline: "Provider detail が review を担当",
+    providerDetailOwnsReviewDetail:
+      "setup が明確になった後、単一 provider の現在の経路と health には provider detail を使います。dashboard は広い multi-provider surface を保ちます。",
+    popupQuickGlanceHeadline: "popup はクイック確認用",
+    popupQuickGlanceDetail:
+      "広い multi-provider context には dashboard、controls には Settings を使い、単一 provider の深い contract と health が必要な時だけ provider detail に入ります。",
+    ariaSetupCoverage: "popup setup coverage",
+    ariaFeaturedProviders: "popup featured providers",
+  },
+  ko: {
+    quickActionsLabel: "빠른 작업",
+    otherRouteLabel: "다른 경로",
+    secondaryActionsLabel: "보조 작업",
+    detailDashboardFirst:
+      "주요 다음 단계는 위에 있습니다. 더 넓은 multi-provider 보기를 먼저 원하면 dashboard를 사용하세요.",
+    detailSettingsFirst:
+      "주요 다음 단계는 위에 있습니다. provider toggles, 권한 또는 저장 credentials가 필요하면 Settings를 사용하세요.",
+    detailBroaderSurface:
+      "주요 다음 단계는 위에 있습니다. 더 넓은 surface가 필요하면 dashboard 또는 Settings를 사용하세요.",
+    surfaceRolesLabel: "Surface roles",
+    settingsOwnsSetupHeadline: "Settings가 setup 담당",
+    settingsOwnsSetupNoVisibleDetail:
+      "Settings에서 provider를 활성화하고 host access를 허용하며 credentials를 추가하세요. provider가 하나 이상 표시되면 dashboard가 유용해집니다.",
+    settingsOwnsFirstProviderSetupDetail: (provider) =>
+      `Settings > Quick Setup으로 ${provider}를 활성화하고 host access를 허용하며 usage page를 여세요. provider가 하나 이상 표시되면 dashboard가 유용해집니다.`,
+    settingsOwnsSetupDetail:
+      "provider toggles, host access, 저장 credentials에는 Settings를 사용하세요. setup이 명확해질 때까지 popup은 빠른 분류 계층입니다.",
+    settingsOwnsContractControlsHeadline: "Settings가 contract controls 담당",
+    settingsOwnsContractControlsDetail:
+      "Settings에서 provider contracts, source preference, page-source controls를 검토하세요. dashboard는 더 넓은 multi-provider context를 유지합니다.",
+    dashboardOwnsContractReviewHeadline: "Dashboard가 contract review 담당",
+    dashboardOwnsContractReviewDetail:
+      "visible providers 전반의 더 넓은 contract context는 dashboard를 사용하세요. Settings는 계속 provider controls와 저장 credentials를 담당합니다.",
+    providerDetailOwnsReviewHeadline: "Provider detail이 review 담당",
+    providerDetailOwnsReviewDetail:
+      "setup이 명확해진 뒤 한 provider의 현재 경로와 health는 provider detail에서 확인하세요. dashboard는 더 넓은 multi-provider surface를 유지합니다.",
+    popupQuickGlanceHeadline: "popup은 빠른 확인 유지",
+    popupQuickGlanceDetail:
+      "더 넓은 multi-provider context는 dashboard, controls는 Settings를 사용하고, 한 provider의 더 깊은 contract와 health가 필요할 때만 provider detail로 이동하세요.",
+    ariaSetupCoverage: "popup setup coverage",
+    ariaFeaturedProviders: "popup featured providers",
+  },
+  "es-419": {
+    quickActionsLabel: "Acciones rápidas",
+    otherRouteLabel: "Otra ruta",
+    secondaryActionsLabel: "Acciones secundarias",
+    detailDashboardFirst:
+      "El siguiente paso principal está arriba. Usa dashboard si quieres ver primero la vista multi-provider más amplia.",
+    detailSettingsFirst:
+      "El siguiente paso principal está arriba. Usa Settings cuando necesites provider toggles, permisos o credentials guardadas.",
+    detailBroaderSurface:
+      "El siguiente paso principal está arriba. Usa dashboard o Settings si necesitas una surface más amplia.",
+    surfaceRolesLabel: "Roles de surface",
+    settingsOwnsSetupHeadline: "Settings controla el setup",
+    settingsOwnsSetupNoVisibleDetail:
+      "Usa Settings para activar providers, conceder host access y agregar credentials. dashboard se vuelve útil cuando al menos un provider está visible.",
+    settingsOwnsFirstProviderSetupDetail: (provider) =>
+      `Usa Settings > Quick Setup para activar ${provider}, conceder host access y abrir la usage page. dashboard se vuelve útil cuando al menos un provider está visible.`,
+    settingsOwnsSetupDetail:
+      "Usa Settings para provider toggles, host access y credentials guardadas. popup sigue siendo una capa de triage rápido hasta que el setup esté claro.",
+    settingsOwnsContractControlsHeadline: "Settings controla los contratos",
+    settingsOwnsContractControlsDetail:
+      "Usa Settings para revisar provider contracts, source preference y page-source controls. dashboard conserva el contexto multi-provider más amplio.",
+    dashboardOwnsContractReviewHeadline: "dashboard revisa contratos",
+    dashboardOwnsContractReviewDetail:
+      "Usa dashboard para ver contexto de contrato más amplio entre providers visibles. Settings sigue controlando provider controls y credentials guardadas.",
+    providerDetailOwnsReviewHeadline: "provider detail revisa",
+    providerDetailOwnsReviewDetail:
+      "Usa provider detail para la ruta actual y salud de un provider después de que el setup esté claro. dashboard mantiene la surface multi-provider más amplia.",
+    popupQuickGlanceHeadline: "popup sigue siendo vista rápida",
+    popupQuickGlanceDetail:
+      "Usa dashboard para contexto multi-provider más amplio, Settings para controls y provider detail solo cuando necesites contrato y salud más profundos de un provider.",
+    ariaSetupCoverage: "Cobertura de setup del popup",
+    ariaFeaturedProviders: "providers destacados del popup",
+  },
+  "pt-BR": {
+    quickActionsLabel: "Ações rápidas",
+    otherRouteLabel: "Outra rota",
+    secondaryActionsLabel: "Ações secundárias",
+    detailDashboardFirst:
+      "O próximo passo principal está acima. Use dashboard se quiser primeiro a visão multi-provider mais ampla.",
+    detailSettingsFirst:
+      "O próximo passo principal está acima. Use Settings quando precisar de provider toggles, permissões ou credentials salvas.",
+    detailBroaderSurface:
+      "O próximo passo principal está acima. Use dashboard ou Settings se precisar de uma surface mais ampla.",
+    surfaceRolesLabel: "Papéis de surface",
+    settingsOwnsSetupHeadline: "Settings controla o setup",
+    settingsOwnsSetupNoVisibleDetail:
+      "Use Settings para ativar providers, conceder host access e adicionar credentials. dashboard fica útil depois que pelo menos um provider está visível.",
+    settingsOwnsFirstProviderSetupDetail: (provider) =>
+      `Use Settings > Quick Setup para ativar ${provider}, conceder host access e abrir a usage page. dashboard fica útil depois que pelo menos um provider está visível.`,
+    settingsOwnsSetupDetail:
+      "Use Settings para provider toggles, host access e credentials salvas. popup permanece uma camada de triagem rápida até o setup ficar claro.",
+    settingsOwnsContractControlsHeadline: "Settings controla contratos",
+    settingsOwnsContractControlsDetail:
+      "Use Settings para revisar provider contracts, source preference e page-source controls. dashboard mantém o contexto multi-provider mais amplo.",
+    dashboardOwnsContractReviewHeadline: "dashboard revisa contratos",
+    dashboardOwnsContractReviewDetail:
+      "Use dashboard para o contexto de contrato mais amplo entre providers visíveis. Settings ainda controla provider controls e credentials salvas.",
+    providerDetailOwnsReviewHeadline: "provider detail revisa",
+    providerDetailOwnsReviewDetail:
+      "Use provider detail para a rota atual e saúde de um provider depois que o setup estiver claro. dashboard mantém a surface multi-provider mais ampla.",
+    popupQuickGlanceHeadline: "popup permanece visão rápida",
+    popupQuickGlanceDetail:
+      "Use dashboard para contexto multi-provider mais amplo, Settings para controls e provider detail apenas quando precisar de contrato e saúde mais profundos de um provider.",
+    ariaSetupCoverage: "Cobertura de setup do popup",
+    ariaFeaturedProviders: "providers em destaque do popup",
+  },
+  fr: {
+    quickActionsLabel: "Actions rapides",
+    otherRouteLabel: "Autre route",
+    secondaryActionsLabel: "Actions secondaires",
+    detailDashboardFirst:
+      "La prochaine étape principale est au-dessus. Utilisez dashboard si vous voulez d'abord la vue multi-provider plus large.",
+    detailSettingsFirst:
+      "La prochaine étape principale est au-dessus. Utilisez Settings pour les provider toggles, permissions ou credentials enregistrées.",
+    detailBroaderSurface:
+      "La prochaine étape principale est au-dessus. Utilisez dashboard ou Settings si vous avez besoin d'une surface plus large.",
+    surfaceRolesLabel: "Rôles de surface",
+    settingsOwnsSetupHeadline: "Settings gère le setup",
+    settingsOwnsSetupNoVisibleDetail:
+      "Utilisez Settings pour activer les providers, accorder host access et ajouter credentials. dashboard devient utile lorsqu'au moins un provider est visible.",
+    settingsOwnsFirstProviderSetupDetail: (provider) =>
+      `Utilisez Settings > Quick Setup pour activer ${provider}, accorder host access et ouvrir la usage page. dashboard devient utile lorsqu'au moins un provider est visible.`,
+    settingsOwnsSetupDetail:
+      "Utilisez Settings pour provider toggles, host access et credentials enregistrées. popup reste une couche de triage rapide tant que le setup n'est pas clair.",
+    settingsOwnsContractControlsHeadline: "Settings gère les contrats",
+    settingsOwnsContractControlsDetail:
+      "Utilisez Settings pour examiner provider contracts, source preference et page-source controls. dashboard garde le contexte multi-provider plus large.",
+    dashboardOwnsContractReviewHeadline: "dashboard examine les contrats",
+    dashboardOwnsContractReviewDetail:
+      "Utilisez dashboard pour le contexte de contrat plus large entre providers visibles. Settings garde provider controls et credentials enregistrées.",
+    providerDetailOwnsReviewHeadline: "provider detail examine",
+    providerDetailOwnsReviewDetail:
+      "Utilisez provider detail pour la route actuelle et la santé d'un provider après clarification du setup. dashboard garde la surface multi-provider plus large.",
+    popupQuickGlanceHeadline: "popup reste un aperçu rapide",
+    popupQuickGlanceDetail:
+      "Utilisez dashboard pour le contexte multi-provider plus large, Settings pour les controls, et provider detail seulement pour le contrat et la santé plus profonds d'un provider.",
+    ariaSetupCoverage: "Couverture setup du popup",
+    ariaFeaturedProviders: "providers mis en avant du popup",
+  },
+  de: {
+    quickActionsLabel: "Schnellaktionen",
+    otherRouteLabel: "Andere Route",
+    secondaryActionsLabel: "Sekundäre Aktionen",
+    detailDashboardFirst:
+      "Der wichtigste nächste Schritt steht oben. Nutze dashboard, wenn du zuerst die breitere multi-provider Ansicht brauchst.",
+    detailSettingsFirst:
+      "Der wichtigste nächste Schritt steht oben. Nutze Settings, wenn du provider toggles, Berechtigungen oder gespeicherte credentials brauchst.",
+    detailBroaderSurface:
+      "Der wichtigste nächste Schritt steht oben. Nutze dashboard oder Settings, wenn du eine breitere surface brauchst.",
+    surfaceRolesLabel: "Surface-Rollen",
+    settingsOwnsSetupHeadline: "Settings verantwortet setup",
+    settingsOwnsSetupNoVisibleDetail:
+      "Nutze Settings, um provider zu aktivieren, host access zu gewähren und credentials hinzuzufügen. dashboard wird nützlich, sobald mindestens ein provider sichtbar ist.",
+    settingsOwnsFirstProviderSetupDetail: (provider) =>
+      `Nutze Settings > Quick Setup, um ${provider} zu aktivieren, host access zu gewähren und die usage page zu öffnen. dashboard wird nützlich, sobald mindestens ein provider sichtbar ist.`,
+    settingsOwnsSetupDetail:
+      "Nutze Settings für provider toggles, host access und gespeicherte credentials. popup bleibt eine schnelle Triage-Ebene, bis setup klar ist.",
+    settingsOwnsContractControlsHeadline: "Settings verantwortet contract controls",
+    settingsOwnsContractControlsDetail:
+      "Nutze Settings, um provider contracts, source preference und page-source controls zu prüfen. dashboard bleibt der breitere multi-provider context.",
+    dashboardOwnsContractReviewHeadline: "dashboard verantwortet contract review",
+    dashboardOwnsContractReviewDetail:
+      "Nutze dashboard für breiteren contract context über sichtbare provider. Settings bleibt für provider controls und gespeicherte credentials zuständig.",
+    providerDetailOwnsReviewHeadline: "provider detail verantwortet review",
+    providerDetailOwnsReviewDetail:
+      "Nutze provider detail für aktuellen Pfad und health eines providers, nachdem setup klar ist. dashboard bleibt die breitere multi-provider surface.",
+    popupQuickGlanceHeadline: "popup bleibt Kurzüberblick",
+    popupQuickGlanceDetail:
+      "Nutze dashboard für breiteren multi-provider context, Settings für controls und provider detail nur für tieferen contract und health eines providers.",
+    ariaSetupCoverage: "popup setup coverage",
+    ariaFeaturedProviders: "popup featured providers",
+  },
+  it: {
+    quickActionsLabel: "Azioni rapide",
+    otherRouteLabel: "Altra route",
+    secondaryActionsLabel: "Azioni secondarie",
+    detailDashboardFirst:
+      "Il prossimo passo principale è sopra. Usa dashboard se vuoi prima la vista multi-provider più ampia.",
+    detailSettingsFirst:
+      "Il prossimo passo principale è sopra. Usa Settings quando ti servono provider toggles, permessi o credentials salvate.",
+    detailBroaderSurface:
+      "Il prossimo passo principale è sopra. Usa dashboard o Settings se ti serve una surface più ampia.",
+    surfaceRolesLabel: "Ruoli surface",
+    settingsOwnsSetupHeadline: "Settings gestisce il setup",
+    settingsOwnsSetupNoVisibleDetail:
+      "Usa Settings per attivare providers, concedere host access e aggiungere credentials. dashboard diventa utile dopo che almeno un provider è visibile.",
+    settingsOwnsFirstProviderSetupDetail: (provider) =>
+      `Usa Settings > Quick Setup per attivare ${provider}, concedere host access e aprire la usage page. dashboard diventa utile dopo che almeno un provider è visibile.`,
+    settingsOwnsSetupDetail:
+      "Usa Settings per provider toggles, host access e credentials salvate. popup resta un livello di triage rapido finché il setup non è chiaro.",
+    settingsOwnsContractControlsHeadline: "Settings gestisce i contratti",
+    settingsOwnsContractControlsDetail:
+      "Usa Settings per rivedere provider contracts, source preference e page-source controls. dashboard resta il contesto multi-provider più ampio.",
+    dashboardOwnsContractReviewHeadline: "dashboard gestisce la revisione contratti",
+    dashboardOwnsContractReviewDetail:
+      "Usa dashboard per il contesto contratto più ampio tra provider visibili. Settings gestisce ancora provider controls e credentials salvate.",
+    providerDetailOwnsReviewHeadline: "provider detail gestisce la revisione",
+    providerDetailOwnsReviewDetail:
+      "Usa provider detail per percorso attuale e salute di un provider dopo che il setup è chiaro. dashboard resta la surface multi-provider più ampia.",
+    popupQuickGlanceHeadline: "popup resta panoramica rapida",
+    popupQuickGlanceDetail:
+      "Usa dashboard per contesto multi-provider più ampio, Settings per controls e provider detail solo quando serve contratto e salute più profondi di un provider.",
+    ariaSetupCoverage: "Copertura setup del popup",
+    ariaFeaturedProviders: "provider in evidenza del popup",
+  },
+  ru: {
+    quickActionsLabel: "Быстрые действия",
+    otherRouteLabel: "Другая route",
+    secondaryActionsLabel: "Дополнительные действия",
+    detailDashboardFirst:
+      "Основной следующий шаг выше. Используйте dashboard, если сначала нужна более широкая multi-provider картина.",
+    detailSettingsFirst:
+      "Основной следующий шаг выше. Используйте Settings, когда нужны provider toggles, разрешения или сохраненные credentials.",
+    detailBroaderSurface:
+      "Основной следующий шаг выше. Используйте dashboard или Settings, если нужна более широкая surface.",
+    surfaceRolesLabel: "Роли surface",
+    settingsOwnsSetupHeadline: "Settings отвечает за setup",
+    settingsOwnsSetupNoVisibleDetail:
+      "Используйте Settings, чтобы включать providers, давать host access и добавлять credentials. dashboard становится полезным, когда виден хотя бы один provider.",
+    settingsOwnsFirstProviderSetupDetail: (provider) =>
+      `Используйте Settings > Quick Setup, чтобы включить ${provider}, дать host access и открыть usage page. dashboard становится полезным, когда виден хотя бы один provider.`,
+    settingsOwnsSetupDetail:
+      "Используйте Settings для provider toggles, host access и сохраненных credentials. popup остается быстрым triage слоем, пока setup не ясен.",
+    settingsOwnsContractControlsHeadline: "Settings отвечает за contract controls",
+    settingsOwnsContractControlsDetail:
+      "Используйте Settings для проверки provider contracts, source preference и page-source controls. dashboard остается более широким multi-provider context.",
+    dashboardOwnsContractReviewHeadline: "dashboard отвечает за contract review",
+    dashboardOwnsContractReviewDetail:
+      "Используйте dashboard для более широкого contract context по видимым provider. Settings все еще отвечает за provider controls и сохраненные credentials.",
+    providerDetailOwnsReviewHeadline: "provider detail отвечает за review",
+    providerDetailOwnsReviewDetail:
+      "Используйте provider detail для текущего пути и health одного provider после ясного setup. dashboard остается более широкой multi-provider surface.",
+    popupQuickGlanceHeadline: "popup остается быстрым обзором",
+    popupQuickGlanceDetail:
+      "Используйте dashboard для более широкого multi-provider context, Settings для controls, а provider detail только когда нужен более глубокий contract и health одного provider.",
+    ariaSetupCoverage: "popup setup coverage",
+    ariaFeaturedProviders: "popup featured providers",
+  },
+  ar: {
+    quickActionsLabel: "إجراءات سريعة",
+    otherRouteLabel: "مسار آخر",
+    secondaryActionsLabel: "إجراءات ثانوية",
+    detailDashboardFirst:
+      "الخطوة الرئيسية التالية في الأعلى. استخدم dashboard إذا أردت عرض multi-provider الأوسع أولا.",
+    detailSettingsFirst:
+      "الخطوة الرئيسية التالية في الأعلى. استخدم Settings عندما تحتاج provider toggles أو أذونات أو credentials محفوظة.",
+    detailBroaderSurface:
+      "الخطوة الرئيسية التالية في الأعلى. استخدم dashboard أو Settings إذا احتجت surface أوسع.",
+    surfaceRolesLabel: "أدوار surface",
+    settingsOwnsSetupHeadline: "Settings مسؤولة عن setup",
+    settingsOwnsSetupNoVisibleDetail:
+      "استخدم Settings لتفعيل providers ومنح host access وإضافة credentials. يصبح dashboard مفيدا بعد ظهور provider واحد على الأقل.",
+    settingsOwnsFirstProviderSetupDetail: (provider) =>
+      `استخدم Settings > Quick Setup لتفعيل ${provider} ومنح host access وفتح usage page. يصبح dashboard مفيدا بعد ظهور provider واحد على الأقل.`,
+    settingsOwnsSetupDetail:
+      "استخدم Settings من أجل provider toggles و host access و credentials المحفوظة. يبقى popup طبقة فرز سريعة حتى يصبح setup واضحا.",
+    settingsOwnsContractControlsHeadline: "Settings مسؤولة عن contract controls",
+    settingsOwnsContractControlsDetail:
+      "استخدم Settings لمراجعة provider contracts و source preference و page-source controls. يبقى dashboard سياق multi-provider الأوسع.",
+    dashboardOwnsContractReviewHeadline: "dashboard مسؤول عن contract review",
+    dashboardOwnsContractReviewDetail:
+      "استخدم dashboard لسياق contract أوسع عبر providers المرئية. تبقى Settings مسؤولة عن provider controls و credentials المحفوظة.",
+    providerDetailOwnsReviewHeadline: "provider detail مسؤول عن review",
+    providerDetailOwnsReviewDetail:
+      "استخدم provider detail لمسار provider الحالي وحالته بعد أن يصبح setup واضحا. يبقى dashboard هو multi-provider surface الأوسع.",
+    popupQuickGlanceHeadline: "popup يبقى نظرة سريعة",
+    popupQuickGlanceDetail:
+      "استخدم dashboard لسياق multi-provider أوسع، و Settings من أجل controls، و provider detail فقط عندما تحتاج contract و health أعمق provider واحد.",
+    ariaSetupCoverage: "تغطية setup في popup",
+    ariaFeaturedProviders: "providers المميزة في popup",
+  },
+  hi: {
+    quickActionsLabel: "त्वरित actions",
+    otherRouteLabel: "दूसरा route",
+    secondaryActionsLabel: "Secondary actions",
+    detailDashboardFirst:
+      "मुख्य next step ऊपर है। अगर पहले बड़ा multi-provider view चाहिए तो dashboard इस्तेमाल करें।",
+    detailSettingsFirst:
+      "मुख्य next step ऊपर है। provider toggles, permissions या stored credentials चाहिए हों तो Settings इस्तेमाल करें।",
+    detailBroaderSurface:
+      "मुख्य next step ऊपर है। बड़ा surface चाहिए हो तो dashboard या Settings इस्तेमाल करें।",
+    surfaceRolesLabel: "Surface roles",
+    settingsOwnsSetupHeadline: "Settings setup संभालता है",
+    settingsOwnsSetupNoVisibleDetail:
+      "providers enable करने, host access देने और credentials जोड़ने के लिए Settings इस्तेमाल करें। कम से कम एक provider visible होने के बाद dashboard उपयोगी होता है।",
+    settingsOwnsFirstProviderSetupDetail: (provider) =>
+      `${provider} enable करने, host access देने और usage page खोलने के लिए Settings > Quick Setup इस्तेमाल करें। कम से कम एक provider visible होने के बाद dashboard उपयोगी होता है।`,
+    settingsOwnsSetupDetail:
+      "provider toggles, host access और stored credentials के लिए Settings इस्तेमाल करें। setup साफ होने तक popup quick triage layer रहता है।",
+    settingsOwnsContractControlsHeadline: "Settings contract controls संभालता है",
+    settingsOwnsContractControlsDetail:
+      "provider contracts, source preference और page-source controls देखने के लिए Settings इस्तेमाल करें। dashboard बड़ा multi-provider context रखता है।",
+    dashboardOwnsContractReviewHeadline: "dashboard contract review संभालता है",
+    dashboardOwnsContractReviewDetail:
+      "visible providers के बड़े contract context के लिए dashboard इस्तेमाल करें। Settings अभी भी provider controls और stored credentials संभालता है।",
+    providerDetailOwnsReviewHeadline: "provider detail review संभालता है",
+    providerDetailOwnsReviewDetail:
+      "setup साफ होने के बाद एक provider के current path और health के लिए provider detail इस्तेमाल करें। dashboard बड़ा multi-provider surface रहता है।",
+    popupQuickGlanceHeadline: "popup quick glance रहता है",
+    popupQuickGlanceDetail:
+      "बड़े multi-provider context के लिए dashboard, controls के लिए Settings, और एक provider के गहरे contract और health के लिए ही provider detail इस्तेमाल करें।",
+    ariaSetupCoverage: "popup setup coverage",
+    ariaFeaturedProviders: "popup featured providers",
+  },
+  id: {
+    quickActionsLabel: "Aksi cepat",
+    otherRouteLabel: "Route lain",
+    secondaryActionsLabel: "Aksi sekunder",
+    detailDashboardFirst:
+      "Langkah utama berikutnya ada di atas. Gunakan dashboard jika ingin melihat tampilan multi-provider yang lebih luas terlebih dahulu.",
+    detailSettingsFirst:
+      "Langkah utama berikutnya ada di atas. Gunakan Settings saat membutuhkan provider toggles, izin, atau credentials tersimpan.",
+    detailBroaderSurface:
+      "Langkah utama berikutnya ada di atas. Gunakan dashboard atau Settings jika membutuhkan surface yang lebih luas.",
+    surfaceRolesLabel: "Peran surface",
+    settingsOwnsSetupHeadline: "Settings menangani setup",
+    settingsOwnsSetupNoVisibleDetail:
+      "Gunakan Settings untuk mengaktifkan providers, memberi host access, dan menambahkan credentials. dashboard berguna setelah setidaknya satu provider terlihat.",
+    settingsOwnsFirstProviderSetupDetail: (provider) =>
+      `Gunakan Settings > Quick Setup untuk mengaktifkan ${provider}, memberi host access, dan membuka usage page. dashboard berguna setelah setidaknya satu provider terlihat.`,
+    settingsOwnsSetupDetail:
+      "Gunakan Settings untuk provider toggles, host access, dan credentials tersimpan. popup tetap menjadi lapisan triage cepat sampai setup jelas.",
+    settingsOwnsContractControlsHeadline: "Settings menangani contract controls",
+    settingsOwnsContractControlsDetail:
+      "Gunakan Settings untuk meninjau provider contracts, source preference, dan page-source controls. dashboard tetap menjadi konteks multi-provider yang lebih luas.",
+    dashboardOwnsContractReviewHeadline: "dashboard menangani contract review",
+    dashboardOwnsContractReviewDetail:
+      "Gunakan dashboard untuk konteks contract yang lebih luas di provider terlihat. Settings tetap menangani provider controls dan credentials tersimpan.",
+    providerDetailOwnsReviewHeadline: "provider detail menangani review",
+    providerDetailOwnsReviewDetail:
+      "Gunakan provider detail untuk jalur saat ini dan health satu provider setelah setup jelas. dashboard tetap menjadi multi-provider surface yang lebih luas.",
+    popupQuickGlanceHeadline: "popup tetap ringkas",
+    popupQuickGlanceDetail:
+      "Gunakan dashboard untuk konteks multi-provider yang lebih luas, Settings untuk controls, dan provider detail hanya saat membutuhkan contract dan health lebih dalam untuk satu provider.",
+    ariaSetupCoverage: "Cakupan setup popup",
+    ariaFeaturedProviders: "provider unggulan popup",
+  },
+};
 function getPopupFirstRunCopy(
   locale: ResolvedAppLocale,
 ): PopupFirstRunCopyText | null {
@@ -1694,6 +2119,16 @@ function getPopupFeaturedCopy(
   }
 
   return POPUP_FEATURED_COPY[locale];
+}
+
+function getPopupSurfaceCopy(
+  locale: ResolvedAppLocale,
+): PopupSurfaceCopyText | null {
+  if (locale === "en" || locale === "zh-CN") {
+    return null;
+  }
+
+  return POPUP_SURFACE_COPY[locale];
 }
 
 function formatLocalizedProviderCount(
@@ -1891,6 +2326,42 @@ function buildLocalizedFeaturedPopupSections(copy: PopupFeaturedCopyText) {
       reviewDetailAction: copy.reviewDetailAction,
       openDetailAction: copy.openDetailAction,
       hideProviderAction: copy.hideProviderAction,
+    },
+  } as const;
+}
+
+function buildLocalizedSurfacePopupSections(copy: PopupSurfaceCopyText) {
+  return {
+    actionSection: {
+      quickActionsLabel: copy.quickActionsLabel,
+      otherRouteLabel: copy.otherRouteLabel,
+      secondaryActionsLabel: copy.secondaryActionsLabel,
+      detailDashboardFirst: copy.detailDashboardFirst,
+      detailSettingsFirst: copy.detailSettingsFirst,
+      detailBroaderSurface: copy.detailBroaderSurface,
+    },
+    surfaceRoles: {
+      label: copy.surfaceRolesLabel,
+      settingsOwnsSetupHeadline: copy.settingsOwnsSetupHeadline,
+      settingsOwnsSetupNoVisibleDetail: copy.settingsOwnsSetupNoVisibleDetail,
+      settingsOwnsFirstProviderSetupDetail: (providerLabel: string) =>
+        copy.settingsOwnsFirstProviderSetupDetail(providerLabel),
+      settingsOwnsSetupDetail: copy.settingsOwnsSetupDetail,
+      settingsOwnsContractControlsHeadline:
+        copy.settingsOwnsContractControlsHeadline,
+      settingsOwnsContractControlsDetail:
+        copy.settingsOwnsContractControlsDetail,
+      dashboardOwnsContractReviewHeadline:
+        copy.dashboardOwnsContractReviewHeadline,
+      dashboardOwnsContractReviewDetail: copy.dashboardOwnsContractReviewDetail,
+      providerDetailOwnsReviewHeadline: copy.providerDetailOwnsReviewHeadline,
+      providerDetailOwnsReviewDetail: copy.providerDetailOwnsReviewDetail,
+      popupQuickGlanceHeadline: copy.popupQuickGlanceHeadline,
+      popupQuickGlanceDetail: copy.popupQuickGlanceDetail,
+    },
+    aria: {
+      setupCoverage: copy.ariaSetupCoverage,
+      featuredProviders: copy.ariaFeaturedProviders,
     },
   } as const;
 }
@@ -2317,10 +2788,12 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
   }
 
   const featuredCopy = getPopupFeaturedCopy(i18n.resolvedLocale);
+  const surfaceCopy = getPopupSurfaceCopy(i18n.resolvedLocale);
 
   return {
     ...englishCopy,
     ...buildLocalizedFirstRunPopupSections(i18n, firstRunCopy),
     ...(featuredCopy ? buildLocalizedFeaturedPopupSections(featuredCopy) : {}),
+    ...(surfaceCopy ? buildLocalizedSurfacePopupSections(surfaceCopy) : {}),
   };
 }

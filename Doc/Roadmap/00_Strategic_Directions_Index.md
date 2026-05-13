@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is completed through `Phase 392.3`, with active `Phase 392.4` selected for popup action-section, surface-role, and aria 14-locale runtime copy and queued `Phase 393` through `Phase 395` covering Settings/provider-detail copy and bounded maintenance follow-up
+- the numbered phase queue is completed through `Phase 392.4`, with active `Phase 393` selected for Settings/provider-detail 14-locale runtime copy and queued `Phase 394` through `Phase 395` covering bounded maintenance follow-up
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness

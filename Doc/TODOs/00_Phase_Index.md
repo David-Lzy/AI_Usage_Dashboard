@@ -34,12 +34,11 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [392_4_Phase_Popup_Surface_Roles_14_Locale_Copy.md](./392_4_Phase_Popup_Surface_Roles_14_Locale_Copy.md)
-- latest completed slice: [392_3_Phase_Popup_Featured_Cards_14_Locale_Copy.md](./Archive/by-phase/300-399/392_3_Phase_Popup_Featured_Cards_14_Locale_Copy.md)
+- active phase file: [393_Phase_Settings_Provider_Detail_14_Locale_Copy.md](./393_Phase_Settings_Provider_Detail_14_Locale_Copy.md)
+- latest completed slice: [392_4_Phase_Popup_Surface_Roles_14_Locale_Copy.md](./Archive/by-phase/300-399/392_4_Phase_Popup_Surface_Roles_14_Locale_Copy.md)
 - queued phase files:
-  1. [393_Phase_Settings_Provider_Detail_14_Locale_Copy.md](./393_Phase_Settings_Provider_Detail_14_Locale_Copy.md)
-  2. [394_Phase_Code_Maintenance_Hotspot_Audit.md](./394_Phase_Code_Maintenance_Hotspot_Audit.md)
-  3. [395_Phase_Runtime_Message_Catalog_Module_Split.md](./395_Phase_Runtime_Message_Catalog_Module_Split.md)
+  1. [394_Phase_Code_Maintenance_Hotspot_Audit.md](./394_Phase_Code_Maintenance_Hotspot_Audit.md)
+  2. [395_Phase_Runtime_Message_Catalog_Module_Split.md](./395_Phase_Runtime_Message_Catalog_Module_Split.md)
 
 Completed phases should be moved to:
 
@@ -780,6 +779,7 @@ Completed phases should be moved to:
 - the 2026-05-13 `Phase 385` closeout added the first Indonesian runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while preserving deeper structured copy and raw evidence fallback boundaries
 - the 2026-05-13 `Phase 386` closeout added a focused runtime shell pilot coverage guard so every non-English locale must keep explicit first-shell message overrides even though deeper runtime copy can still fall back to English
 - the 2026-05-13 `Phase 387` closeout added notranslate markers to popup and sidepanel HTML shells and verified representative localized RDP popup captures no longer show Chrome/Google Translate overlay UI
+- the 2026-05-13 `Phase 392.4` closeout added explicit 14-locale popup action-section, surface-role, and aria structured copy while preserving popup behavior and raw-evidence boundaries
 
 ## Delivery Standard For Each Phase
 

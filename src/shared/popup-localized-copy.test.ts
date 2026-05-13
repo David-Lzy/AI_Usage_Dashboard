@@ -72,21 +72,21 @@ describe("buildPopupLocalizedCopy", () => {
     }
   });
 
-  it("keeps action and surface-role buckets on English fallback until the next slice", () => {
+  it("ships action and surface-role copy for every non-English locale", () => {
     const englishCopy = buildPopupLocalizedCopy(createRuntimeI18n("en"));
 
     for (const locale of SUPPORTED_APP_LOCALES.filter(
-      (supportedLocale) => supportedLocale !== "en" && supportedLocale !== "zh-CN",
+      (supportedLocale) => supportedLocale !== "en",
     )) {
       const copy = buildPopupLocalizedCopy(createRuntimeI18n(locale));
 
-      expect(copy.actionSection.quickActionsLabel).toBe(
+      expect(copy.actionSection.quickActionsLabel).not.toBe(
         englishCopy.actionSection.quickActionsLabel,
       );
-      expect(copy.surfaceRoles.popupQuickGlanceHeadline).toBe(
+      expect(copy.surfaceRoles.popupQuickGlanceHeadline).not.toBe(
         englishCopy.surfaceRoles.popupQuickGlanceHeadline,
       );
-      expect(copy.aria.setupCoverage).toBe(englishCopy.aria.setupCoverage);
+      expect(copy.aria.setupCoverage).not.toBe(englishCopy.aria.setupCoverage);
     }
   });
 
