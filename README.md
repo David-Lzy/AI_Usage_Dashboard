@@ -47,7 +47,7 @@ Next execution queue:
 
 1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary, but use `0.1.0-rc.15` as the ready follow-up package for the post-`rc.13` polish and post-`rc.14` maintenance slices if review feedback or an explicit resubmission decision asks for a newer build
 2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC15 follow-up milestone](./Doc/Milestones/2026-05-13_RC15_Maintenance_Follow_Up_Release_Candidate.md) as the current packaged-source reference
-3. no numbered phase is currently queued after `Phase 405`; the next planning slice should choose between localized operator/store visual QA, a release-gate pass, or a maintenance hotspot from `Phase 394`
+3. continue the numbered queue after `Phase 405`: active `Phase 406` runs the post-helper localization release gate, then queued `Phase 407` covers localized operator/store RDP visual QA, `Phase 408` audits localization bundle growth, `Phase 409` scopes interaction-audit consumer-copy presentation, and `Phase 410` scopes store-helper error presentation
 4. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 5. keep real operator evidence closed and archived; do not open another interaction-audit or theme-recovery operator evidence phase unless a new surface or theme regression creates a fresh review need
 6. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
