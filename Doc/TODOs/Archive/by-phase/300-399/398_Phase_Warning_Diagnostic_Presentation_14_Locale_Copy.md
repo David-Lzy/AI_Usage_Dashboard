@@ -16,7 +16,7 @@ Freshness model:
 
 Status note:
 
-- queued after `Phase 397`
+- completed and archived on 2026-05-13
 - first diagnostic presentation implementation slice
 
 ## Goal
@@ -27,7 +27,7 @@ Add explicit 14-locale presentation copy for typed warning diagnostics while kee
 
 - Localize warning diagnostic labels and short summaries generated from typed params.
 - Cover credential, host-access, page-session, usage-threshold, policy-only, and sync-stale warning presentation that currently branches only for `zh-CN`.
-- Use [I18n_Diagnostic_Presentation_14_Locale_Inventory.md](../I18n/I18n_Diagnostic_Presentation_14_Locale_Inventory.md) as the code list:
+- Use [I18n_Diagnostic_Presentation_14_Locale_Inventory.md](../../../../I18n/I18n_Diagnostic_Presentation_14_Locale_Inventory.md) as the code list:
   - `credential.admin_api_key_missing`
   - `credential.workspace_config_missing`
   - `host_access.missing`
@@ -70,3 +70,24 @@ Add explicit 14-locale presentation copy for typed warning diagnostics while kee
 ## Follow-Up
 
 - Continue to `Phase 399` source-selection and fallback diagnostic presentation copy.
+
+## Closeout
+
+Completed on 2026-05-13.
+
+Summary:
+
+- Added `src/shared/provider-diagnostic-warning-copy.ts` with explicit 14-locale warning diagnostic labels and summaries for credential, host-access, page-session, usage-threshold, policy-only, and sync-stale typed warning diagnostics.
+- Kept `src/shared/provider-diagnostic-presentation.ts` as the public presentation entry while delegating warning diagnostic codes to the new helper.
+- Preserved raw `warningReason`, `ProviderDiagnostic.rawMessage`, adapter raw bodies, provider ids, host labels, URLs, route hints, archive/export schemas, and raw `unitLabel` params.
+- Added focused coverage proving every shipped locale gets explicit usage-threshold warning presentation and that every warning diagnostic code still leaves raw warning bodies untouched.
+
+Verification:
+
+- `npm run i18n:check` passed.
+- `npm run test -- src/shared/provider-diagnostic-presentation.test.ts` passed with `6` tests.
+- `npm run test -- src/shared/i18n.test.ts` passed with `37` tests.
+- `npm run test -- src/sidepanel/settings-view-models.test.ts` passed with `13` tests.
+- `npm run typecheck` passed.
+- `npm run docs:check` passed.
+- `git diff --check` passed.

@@ -97,7 +97,8 @@ Source bucket:
 
 User-facing copy:
 
-- typed diagnostic labels and short summaries for warning, source-selection, fallback, and adapter-error codes
+- typed diagnostic labels and short summaries for source-selection, fallback, and adapter-error codes
+- typed warning diagnostic labels and summaries already have explicit 14-locale coverage after `Phase 398`
 
 Reason:
 
@@ -112,8 +113,8 @@ Preserve:
 
 Default next action:
 
-- `Phase 397` inventories typed diagnostic presentation copy and keeps the implementation code/code-list mapping in [I18n_Diagnostic_Presentation_14_Locale_Inventory.md](./I18n_Diagnostic_Presentation_14_Locale_Inventory.md).
-- `Phase 398` handles warning diagnostic presentation copy.
+- `Phase 397` inventoried typed diagnostic presentation copy and keeps the implementation code/code-list mapping in [I18n_Diagnostic_Presentation_14_Locale_Inventory.md](./I18n_Diagnostic_Presentation_14_Locale_Inventory.md).
+- `Phase 398` handled warning diagnostic presentation copy.
 - `Phase 399` handles source-selection and fallback diagnostic presentation copy.
 - `Phase 400` handles adapter-error diagnostic presentation copy.
 
@@ -168,7 +169,8 @@ Reason:
 - `Phase 393.3.1` translated Provider Detail buckets for all 14 runtime locales.
 - `Phase 393.3.2` translated provider-source display wrapper buckets for all 14 runtime locales.
 - `Phase 397` inventoried the typed diagnostic presentation bucket and split it into warning, source, and adapter-error implementation phases.
-- Diagnostics implementation, operator workspaces, and store helper routes remain follow-up work.
+- `Phase 398` translated typed warning diagnostic presentation for all 14 runtime locales.
+- Source/adapter diagnostics implementation, operator workspaces, and store helper routes remain follow-up work.
 
 ## Verification Pattern
 

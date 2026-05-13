@@ -5,6 +5,7 @@ import type {
   ProviderSourcePreference,
 } from "../providers/types";
 import type { RuntimeI18n } from "./i18n";
+import { getWarningDiagnosticPresentation } from "./provider-diagnostic-warning-copy";
 
 export type ProviderDiagnosticPresentation = {
   label: string;
@@ -182,69 +183,6 @@ function formatNoLivePathSummary(
     : "No live source is available.";
 }
 
-function formatThresholdSummary(
-  params: ProviderDiagnosticParams | undefined,
-  i18n: RuntimeI18n,
-): string {
-  const usagePercent = getNumberParam(params, "usagePercent");
-  const thresholdPercent = getNumberParam(params, "thresholdPercent");
-  const unitLabel = getStringParam(params, "unitLabel");
-
-  if (usagePercent !== null && thresholdPercent !== null) {
-    if (i18n.resolvedLocale === "zh-CN") {
-      return `当前用量 ${i18n.formatPercentValue(usagePercent)}，已达到 ${i18n.formatPercentValue(thresholdPercent)} 告警阈值。`;
-    }
-
-    return `Usage is at ${i18n.formatPercentValue(usagePercent)}, reaching the ${i18n.formatPercentValue(thresholdPercent)} warning threshold.`;
-  }
-
-  if (unitLabel) {
-    return i18n.resolvedLocale === "zh-CN"
-      ? `当前 ${unitLabel} 用量已达到告警阈值。`
-      : `Current ${unitLabel} usage reached the warning threshold.`;
-  }
-
-  return i18n.resolvedLocale === "zh-CN"
-    ? "当前用量已达到告警阈值。"
-    : "Current usage reached the warning threshold.";
-}
-
-function formatOverageSummary(
-  params: ProviderDiagnosticParams | undefined,
-  i18n: RuntimeI18n,
-): string {
-  const overageCount = getNumberParam(params, "overageCount");
-  const unitLabel = getStringParam(params, "unitLabel") ?? "units";
-
-  if (overageCount !== null) {
-    return i18n.resolvedLocale === "zh-CN"
-      ? `已记录 ${i18n.formatNumber(overageCount)} 个超额 ${unitLabel}。`
-      : `${i18n.formatNumber(overageCount)} overage ${unitLabel} recorded.`;
-  }
-
-  return i18n.resolvedLocale === "zh-CN"
-    ? "已检测到超额用量。"
-    : "Overage usage is detected.";
-}
-
-function formatSyncStaleSummary(
-  params: ProviderDiagnosticParams | undefined,
-  i18n: RuntimeI18n,
-): string {
-  const ageMinutes = getNumberParam(params, "ageMinutes");
-  const staleAfterMinutes = getNumberParam(params, "staleAfterMinutes");
-
-  if (ageMinutes !== null && staleAfterMinutes !== null) {
-    return i18n.resolvedLocale === "zh-CN"
-      ? `缓存年龄 ${i18n.formatNumber(ageMinutes)} 分钟，已超过 ${i18n.formatNumber(staleAfterMinutes)} 分钟 freshness 阈值。`
-      : `Cache age is ${i18n.formatNumber(ageMinutes)} minutes, above the ${i18n.formatNumber(staleAfterMinutes)} minute freshness threshold.`;
-  }
-
-  return i18n.resolvedLocale === "zh-CN"
-    ? "缓存 freshness 已过期。"
-    : "Cached freshness is overdue.";
-}
-
 function formatAdapterErrorSummary(
   code: ProviderDiagnostic["code"],
   params: ProviderDiagnosticParams | undefined,
@@ -287,6 +225,11 @@ export function getProviderDiagnosticPresentation(
   }
 
   const zh = i18n.resolvedLocale === "zh-CN";
+  const warningPresentation = getWarningDiagnosticPresentation(diagnostic, i18n);
+
+  if (warningPresentation) {
+    return warningPresentation;
+  }
 
   switch (diagnostic.code) {
     case "source.auto_selected_official_api":
@@ -344,90 +287,6 @@ export function getProviderDiagnosticPresentation(
       return {
         label: zh ? "无 live source path" : "No live source path",
         summary: formatNoLivePathSummary(diagnostic.params, i18n),
-      };
-    case "credential.admin_api_key_missing":
-      return {
-        label: zh ? "缺少 Admin API key" : "Admin API key missing",
-        summary: zh
-          ? "添加所需 Admin API key 后，这条官方来源才能同步。"
-          : "Add the required Admin API key before this official source can sync.",
-      };
-    case "credential.workspace_config_missing":
-      return {
-        label: zh ? "缺少 workspace config" : "Workspace config missing",
-        summary: zh
-          ? "添加 analytics API key 和 workspace ID 后，这条 workspace 来源才能同步。"
-          : "Add both the analytics API key and workspace ID before this workspace source can sync.",
-      };
-    case "host_access.missing":
-    case "host_access.required_for_live_sync":
-      return {
-        label: zh ? "缺少 host access" : "Host access missing",
-        summary: zh
-          ? "授予所需 provider host 权限后，live sync 才能运行。"
-          : "Grant the required provider host access before live sync can run.",
-      };
-    case "page_session.open_page_required":
-      return {
-        label: zh ? "需要打开页面" : "Open page required",
-        summary: zh
-          ? "打开已登录的 provider usage 页面后再刷新。"
-          : "Open the logged-in provider usage page before refreshing again.",
-      };
-    case "page_session.logged_out":
-      return {
-        label: zh ? "页面会话未登录" : "Page session logged out",
-        summary: zh
-          ? "重新登录 provider 页面后再运行 page-session sync。"
-          : "Sign back into the provider page before running page-session sync.",
-      };
-    case "page_session.capture_unavailable":
-      return {
-        label: zh ? "页面捕获不可用" : "Page capture unavailable",
-        summary: zh
-          ? "当前页面无法被扩展读取；保留 raw detail 用于权限、页面状态或 route 检查。"
-          : "The current page could not be read by the extension; keep the raw detail for permission, page-state, or route review.",
-      };
-    case "usage.threshold_warning":
-      return {
-        label: zh ? "用量阈值" : "Usage threshold",
-        summary: formatThresholdSummary(diagnostic.params, i18n),
-      };
-    case "usage.overage_detected":
-      return {
-        label: zh ? "检测到超额" : "Overage detected",
-        summary: formatOverageSummary(diagnostic.params, i18n),
-      };
-    case "usage.on_demand_off":
-      return {
-        label: zh ? "按需用量关闭" : "On-demand usage off",
-        summary: zh
-          ? "当前 provider 的 on-demand 用量开关处于关闭状态。"
-          : "On-demand usage is currently turned off for this provider.",
-      };
-    case "policy.live_source_unavailable":
-      return {
-        label: zh ? "无 live source" : "No live source",
-        summary: zh
-          ? "当前 provider 只显示策略信息，没有稳定 live usage source。"
-          : "This provider only shows policy information because no stable live usage source is selected.",
-      };
-    case "policy.documented_limit_only":
-      return {
-        label: zh ? "仅文档化限制" : "Documented limit only",
-        summary: zh
-          ? "当前状态来自文档化 quota policy，不代表 live per-user usage。"
-          : "This state comes from documented quota policy, not live per-user usage.",
-      };
-    case "sync.automatic_sync_overdue":
-      return {
-        label: zh ? "自动同步逾期" : "Automatic sync overdue",
-        summary: formatSyncStaleSummary(diagnostic.params, i18n),
-      };
-    case "sync.cached_state_stale":
-      return {
-        label: zh ? "缓存状态过期" : "Cached state stale",
-        summary: formatSyncStaleSummary(diagnostic.params, i18n),
       };
     case "adapter.unexpected_error":
       return {

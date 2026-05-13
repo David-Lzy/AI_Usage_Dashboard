@@ -51,7 +51,7 @@ Today the truthful answer is "some are complete, some are intentionally living,"
 
 As of 2026-05-13:
 
-- numbered phase docs are archived through `Phase 397`, with active `Phase 398` selected for typed warning diagnostic presentation 14-locale copy
+- numbered phase docs are archived through `Phase 398`, with active `Phase 399` selected for typed source-selection and fallback diagnostic presentation 14-locale copy
 - roadmap directions remain open by design
 - interaction-audit request docs now show `0` pending requests and `1` fulfilled real operator request
 - theme-recovery request docs now show `0` pending requests and `1` fulfilled real operator request

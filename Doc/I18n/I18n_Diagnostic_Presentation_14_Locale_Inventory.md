@@ -35,8 +35,9 @@ Consumed by:
 
 Current behavior:
 
-- known typed diagnostics get localized labels plus short summaries for `en` and `zh-CN`
-- all other runtime locales fall back to English for this helper
+- known typed warning diagnostics get localized labels plus short summaries for all 14 runtime locales after `Phase 398`
+- known typed source-selection, source-fallback, and adapter-error diagnostics still get localized labels plus short summaries for `en` and `zh-CN`
+- non-`en` / non-`zh-CN` runtime locales still fall back to English for source-selection, source-fallback, and adapter-error diagnostics until `Phase 399` and `Phase 400`
 - unknown diagnostic codes return `null`, leaving raw evidence display paths unchanged
 
 ## Safe Presentation Copy
@@ -75,6 +76,12 @@ These values must stay raw and must not be translated or rewritten:
 
 ## Phase 398 - Warning Diagnostics
 
+Status:
+
+- completed in `Phase 398`
+- implementation copy lives in [provider-diagnostic-warning-copy.ts](../../src/shared/provider-diagnostic-warning-copy.ts)
+- raw warning bodies, `ProviderDiagnostic.rawMessage`, and raw `unitLabel` params remain untranslated evidence
+
 Implementation scope:
 
 | Category | Codes | Summary helper |
@@ -96,6 +103,8 @@ Guard tests:
 
 ## Phase 399 - Source Diagnostics
 
+Status: active after `Phase 398`.
+
 Implementation scope:
 
 | Category | Codes | Summary helper |
@@ -115,6 +124,8 @@ Guard tests:
 - verify `failureCount` formatting for `source.no_live_path`
 
 ## Phase 400 - Adapter-Error Diagnostics
+
+Status: queued after `Phase 399`.
 
 Implementation scope:
 

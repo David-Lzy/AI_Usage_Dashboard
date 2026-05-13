@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is completed through `Phase 397`, with the post-localization maintenance release gate passing and active `Phase 398` selected for typed warning diagnostic presentation before queued `Phase 399` and `Phase 400` cover source and adapter-error diagnostic presentation follow-up
+- the numbered phase queue is completed through `Phase 398`, with the post-localization maintenance release gate passing and active `Phase 399` selected for typed source-selection/fallback diagnostic presentation before queued `Phase 400` covers adapter-error diagnostic presentation follow-up
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -93,6 +93,8 @@ As of 2026-05-13:
 - `Phase 376` moved the large runtime message catalog into `src/shared/runtime-message-catalogs.ts`, keeping locale registry, resolution, and formatting ownership in `src/shared/i18n.ts`
 - `Phase 395` split runtime message catalog internals into `src/shared/runtime-message-catalog-data/` while preserving the public `src/shared/runtime-message-catalogs.ts` export path and catalog behavior
 - `Phase 396` ran the full post-localization maintenance release gate after the 14-locale expansion and runtime message catalog split; `npm run release:check` passed without changing release artifacts or product behavior
+- `Phase 397` added a maintained diagnostic presentation 14-locale inventory and split the remaining work into warning, source, and adapter-error implementation slices
+- `Phase 398` added explicit 14-locale warning diagnostic presentation while preserving raw warning evidence fields and unknown-code fallback behavior
 - `Phase 377` added the first `es-419` runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while keeping deeper structured copy on the existing fallback boundary
 - `Phase 378` added the first `pt-BR` runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while keeping deeper structured copy on the existing fallback boundary
 - `Phase 379` added the first `fr` runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while keeping deeper structured copy on the existing fallback boundary
