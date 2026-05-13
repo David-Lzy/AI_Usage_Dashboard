@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is now completed through `Phase 370`, with no active phase or queued numbered phase currently selected
+- the numbered phase queue is now completed through `Phase 371`, with no active phase or queued numbered phase currently selected
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -356,6 +356,7 @@ As of 2026-05-13:
 - `Phase 138` completed the next executable `Direction 08` slice by labeling the remaining roadmap direction files as explicit `living strategy` docs and extending the taxonomy consistency check to the full roadmap set
 - `Phase 139` completed the next executable `Direction 08` slice by making the remaining convention-only doc boundary explicit and surfacing that policy through checker output
 - `Phase 140` completed the next executable `Direction 08` slice by moving the documentation-completion line into maintenance mode and handing default strategic follow-up back to `Direction 10` and `Direction 09`
+- `Phase 371` reopened `Direction 08` for one maintenance guard by extending `docs:check` to validate README, top-level TODO, and strategic-index current-phase references against the latest archived phase
 - `Phase 141` completed the first executable `Direction 10` slice by shipping one competitive-fit decision matrix plus one truthful screenshot storyboard pack for store-facing toolbar work
 - `Phase 142` completed the next executable `Direction 10` slice by shipping one maintained screenshot-capture runbook plus one generator-backed baseline capture pack for truthful extension-mode store capture
 - `Phase 143` completed the next executable `Direction 10` slice by shipping one pending screenshot-capture request workflow for the first real RDP Chrome operator pass
@@ -497,7 +498,7 @@ As of 2026-05-13:
 
 3. [Direction 08 - Documentation Completion And Truth Audit](./08_Direction_Documentation_Completion_And_Truth_Audit.md)
    Why third among the new requests:
-   the numbered phase queue is now closed through `Phase 140`, and the repo now has one explicit documentation taxonomy plus one freshness-label model plus one lightweight consistency check that reaches package-level generated docs, the full roadmap set, and the current convention-only boundary; this direction is now maintenance work, not the next default expansion line.
+   the numbered phase queue is now closed through `Phase 371`, and the repo now has one explicit documentation taxonomy plus one freshness-label model plus one lightweight consistency check that reaches package-level generated docs, the full roadmap set, the current convention-only boundary, and current-phase reference drift; this direction is maintenance work, not the next default expansion line.
 
 Completed first:
 

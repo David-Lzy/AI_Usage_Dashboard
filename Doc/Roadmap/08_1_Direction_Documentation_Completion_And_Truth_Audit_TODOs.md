@@ -17,6 +17,7 @@ Status note:
 - `Phase 138` completed the next executable slice on `2026-04-24` by shipping explicit `living strategy` labels across the remaining roadmap direction files and by extending the checker to cover the full roadmap set
 - `Phase 139` completed the next executable slice on `2026-04-24` by defining the current convention-only boundary explicitly and surfacing that same boundary in checker output
 - `Phase 140` completed the next executable slice on `2026-04-24` by transitioning this direction into maintenance mode and explicitly reprioritizing the strategic index toward `Direction 10` then `Direction 09`
+- `Phase 371` completed one maintenance slice on `2026-05-13` by extending `docs:check` to catch stale current-phase references in README, the top-level TODO, and the strategic directions index
 
 Process rule:
 
@@ -92,6 +93,8 @@ Parent direction:
   - reopen this direction when a new doc family does not fit the current taxonomy
   - reopen this direction when checker coverage drifts behind high-value docs
   - do not widen explicit labeling just to chase low-value convention-only artifacts
+- current maintenance guard after `Phase 371`:
+  - `docs:check` also verifies current-phase references in README, top-level TODOs, and the strategic directions index against the latest archived phase
 
 ## Out Of Scope
 

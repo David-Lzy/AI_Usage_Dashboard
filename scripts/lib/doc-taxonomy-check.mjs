@@ -26,12 +26,20 @@ export function comparePhaseTuples(left, right) {
   return left[1] - right[1];
 }
 
+export function formatPhaseTupleLabel(tuple) {
+  return tuple[1] === 0 ? `Phase ${tuple[0]}` : `Phase ${tuple[0]}.${tuple[1]}`;
+}
+
 export function extractLatestCompletedSlicePath(phaseIndexText) {
   const match = phaseIndexText.match(
     /latest completed slice:\s*\[[^\]]+\]\(([^)]+)\)/,
   );
 
   return match ? match[1] : null;
+}
+
+function phaseIndexHasNoQueuedPhaseFiles(phaseIndexText) {
+  return /queued phase files:\s*none/i.test(phaseIndexText);
 }
 
 export function evaluateDocLabels({
@@ -303,6 +311,50 @@ export async function runDocTaxonomyCheck(projectRoot) {
     issues.push(
       `Doc/TODOs/00_Phase_Index.md latest completed slice \`${latestCompletedSliceFilename}\` did not match latest archived phase \`${latestArchivedPhaseFilename}\`.`,
     );
+  }
+
+  const latestArchivedPhaseTuple = latestArchivedPhaseFilename
+    ? parsePhaseTupleFromFilename(latestArchivedPhaseFilename)
+    : null;
+  const latestPhaseLabel = latestArchivedPhaseTuple
+    ? formatPhaseTupleLabel(latestArchivedPhaseTuple)
+    : null;
+
+  if (latestPhaseLabel) {
+    const currentReferenceChecks = [
+      {
+        relativePath: "Doc/AI_Usage_Dashboard_TODOs.md",
+        requiredText: `Current post-\`${latestPhaseLabel}\` execution priority:`,
+      },
+      {
+        relativePath: "Doc/Roadmap/00_Strategic_Directions_Index.md",
+        requiredText: `completed through \`${latestPhaseLabel}\``,
+      },
+    ];
+
+    if (phaseIndexHasNoQueuedPhaseFiles(phaseIndexText)) {
+      currentReferenceChecks.push(
+        {
+          relativePath: "README.md",
+          requiredText: `no numbered phase is currently queued after \`${latestPhaseLabel}\``,
+        },
+        {
+          relativePath: "Doc/AI_Usage_Dashboard_TODOs.md",
+          requiredText: `no numbered phase is currently queued after \`${latestPhaseLabel}\``,
+        },
+      );
+    }
+
+    for (const check of currentReferenceChecks) {
+      const absolutePath = path.join(projectRoot, check.relativePath);
+      const text = await readFile(absolutePath, "utf8");
+
+      if (!text.includes(check.requiredText)) {
+        issues.push(
+          `${check.relativePath} is missing current phase reference \`${check.requiredText}\`.`,
+        );
+      }
+    }
   }
 
   return {
