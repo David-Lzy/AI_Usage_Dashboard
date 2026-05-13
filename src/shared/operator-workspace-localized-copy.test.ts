@@ -39,6 +39,12 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
         "handoff.md",
       ),
     ).toBe("Downloaded the current handoff summary as handoff.md.");
+    expect(copy.interactionAudit.frameResults.readiness.ready).toBe(
+      "Frame loaded and ready for audit presets.",
+    );
+    expect(
+      copy.interactionAudit.frameResults.presets.missing_first_provider_action,
+    ).toBe("Could not find the first provider action.");
     expect(copy.themeRecovery.hero.title).toBe(
       "One place to stage native-prompt and real-session recovery checks",
     );
@@ -61,6 +67,9 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
       "下一步归档",
     );
     expect(copy.interactionAudit.handoffSummary.none).toBe("无");
+    expect(
+      copy.interactionAudit.frameResults.presets.focused_popup_dashboard_action,
+    ).toBe("已聚焦 popup dashboard action。");
     expect(copy.themeRecovery.currentTruth.reviewStage).toBe("复查阶段");
   });
 
@@ -160,6 +169,17 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
           totalManualCheckCount: 3,
         }),
       ).toContain("1");
+      expect(copy.interactionAudit.frameResults.rawDetailLabel.length).toBeGreaterThan(
+        0,
+      );
+      expect(
+        copy.interactionAudit.frameResults.readiness
+          .waiting_settings_source_controls.length,
+      ).toBeGreaterThan(0);
+      expect(
+        copy.interactionAudit.frameResults.presets
+          .unsupported_audit_preset.length,
+      ).toBeGreaterThan(0);
       expect(copy.themeRecovery.workflow.steps).toHaveLength(5);
     }
   });
@@ -178,6 +198,7 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
     expect(copy.interactionAudit.handoffSummary.feedback.clipboardUnavailable).toContain(
       "clipboard",
     );
+    expect(copy.interactionAudit.frameResults.rawDetailLabel).toContain("raw");
     expect(copy.themeRecovery.outputs.clipboardUnavailable).toContain(
       "clipboard",
     );

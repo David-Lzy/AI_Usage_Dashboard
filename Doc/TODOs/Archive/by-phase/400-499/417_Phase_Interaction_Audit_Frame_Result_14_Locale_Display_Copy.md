@@ -4,7 +4,7 @@ Date: 2026-05-14
 
 Process rule:
 
-- follow [Development_Guardrails.md](../Development_Guardrails.md)
+- follow [Development_Guardrails.md](../../../../Development_Guardrails.md)
 
 Document class:
 
@@ -16,8 +16,9 @@ Freshness model:
 
 Status note:
 
-- active after `Phase 416`
-- next child implementation phase from [I18n_Interaction_Audit_Presentation_Export_Split.md](../I18n/I18n_Interaction_Audit_Presentation_Export_Split.md)
+- completed on 2026-05-14
+- archived after `Phase 417`
+- next child implementation phase from [I18n_Interaction_Audit_Presentation_Export_Split.md](../../../../I18n/I18n_Interaction_Audit_Presentation_Export_Split.md)
 
 ## Goal
 
@@ -54,4 +55,20 @@ Localize interaction-audit frame readiness and preset result display labels for 
 
 ## Follow-Up
 
-- After this slice, review whether any remaining interaction-audit text is still hard-coded presentation copy or intentionally raw evidence.
+- `Phase 418` should review whether any remaining interaction-audit text is still hard-coded presentation copy or intentionally raw evidence.
+
+## Completion Summary
+
+- Added `interactionAudit.frameResults` 14-locale copy for frame readiness and preset result codes.
+- Moved frame result code unions into a shared type file so the frame-action helper and localized-copy registry use the same stable contract.
+- Added a presentation helper that renders localized display text from typed codes while preserving existing English `message` fallback values.
+- Kept `rawMessage` untranslated and visible as raw detail evidence when selector, preset, or readiness diagnostics are present.
+- Updated the interaction-audit route and surface card to show localized frame-result status without changing iframe readiness, preset execution, signoff exports, handoff drafts, or archive/request schemas.
+
+## Verification
+
+- `npm run test -- src/shared/operator-workspace-localized-copy.test.ts src/sidepanel/interaction-audit-frame-actions.test.ts src/sidepanel/interaction-audit-frame-result-presentation.test.ts`
+- `npm run typecheck`
+- `npm run i18n:check`
+- `npm run docs:check`
+- `git diff --check`

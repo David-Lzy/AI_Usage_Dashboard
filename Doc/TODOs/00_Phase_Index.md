@@ -34,9 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [417_Phase_Interaction_Audit_Frame_Result_14_Locale_Display_Copy.md](./417_Phase_Interaction_Audit_Frame_Result_14_Locale_Display_Copy.md)
-- latest completed slice: [416_Phase_Interaction_Audit_Frame_Result_Typed_Display_Split.md](./Archive/by-phase/400-499/416_Phase_Interaction_Audit_Frame_Result_Typed_Display_Split.md)
-- queued phase files: not selected yet after active `Phase 417`
+- active phase file: [418_Phase_Interaction_Audit_Remaining_Presentation_Copy_Inventory.md](./418_Phase_Interaction_Audit_Remaining_Presentation_Copy_Inventory.md)
+- latest completed slice: [417_Phase_Interaction_Audit_Frame_Result_14_Locale_Display_Copy.md](./Archive/by-phase/400-499/417_Phase_Interaction_Audit_Frame_Result_14_Locale_Display_Copy.md)
+- queued phase files: not selected yet after active `Phase 418`
 
 Completed phases should be moved to:
 
@@ -809,6 +809,7 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 414` closeout added localized interaction-audit Request Scope command headings while preserving generated command text, request ids, request revisions, archive path examples, input filename examples, signoff export JSON, signoff draft Markdown, handoff draft Markdown, filenames, and MIME types
 - the 2026-05-14 `Phase 415` closeout added localized interaction-audit Handoff Summary presentation labels and safe handoff feedback while preserving handoff draft content, generated bundle command text, operator notes, surface ids, surface titles, pending manual-check evidence text, filenames, MIME types, and signoff export schemas
 - the 2026-05-14 `Phase 416` closeout added typed result codes and optional raw-message separation for interaction-audit frame readiness and preset results while preserving existing display messages, preset execution behavior, iframe behavior, signoff exports, handoff drafts, and archive/request schemas
+- the 2026-05-14 `Phase 417` closeout added localized 14-locale display copy for typed interaction-audit frame readiness and preset result codes while preserving raw selector/preset diagnostics, English message fallback fields, iframe behavior, preset execution behavior, signoff exports, handoff drafts, and archive/request schemas
 
 ## Delivery Standard For Each Phase
 

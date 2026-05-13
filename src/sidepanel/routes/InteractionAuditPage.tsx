@@ -22,6 +22,10 @@ import {
   getAuditSurfaceReadiness,
   runAuditPreset,
 } from "../interaction-audit-frame-actions";
+import {
+  presentAuditFrameReadiness,
+  presentAuditPresetResult,
+} from "../interaction-audit-frame-result-presentation";
 import { buildInteractionAuditReviewQueue } from "../interaction-audit-review-queue";
 import {
   buildInitialInteractionAuditSignoffMetadata,
@@ -133,7 +137,7 @@ export function InteractionAuditPage({
     return () => {
       delete auditWindow.__interactionAuditRunPreset;
     };
-  }, []);
+  }, [copy.frameResults]);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -168,14 +172,18 @@ export function InteractionAuditPage({
         let changed = false;
 
         for (const [surfaceId, readiness] of readinessEntries) {
+          const status = presentAuditFrameReadiness(
+            readiness,
+            copy.frameResults,
+          );
+
           if (
-            next[surfaceId]?.tone !== "neutral" ||
-            next[surfaceId]?.message !== readiness.message
+            next[surfaceId]?.tone !== status.tone ||
+            next[surfaceId]?.message !== status.message ||
+            next[surfaceId]?.rawDetailLabel !== status.rawDetailLabel ||
+            next[surfaceId]?.rawMessage !== status.rawMessage
           ) {
-            next[surfaceId] = {
-              tone: "neutral",
-              message: readiness.message,
-            };
+            next[surfaceId] = status;
             changed = true;
           }
         }
@@ -191,7 +199,7 @@ export function InteractionAuditPage({
     return () => {
       window.clearInterval(intervalId);
     };
-  }, []);
+  }, [copy.frameResults]);
 
   const signoffSummary = buildInteractionAuditSignoffSummary(
     INTERACTION_AUDIT_SIGNOFF_SURFACES,
@@ -240,10 +248,7 @@ export function InteractionAuditPage({
     }));
     setSurfaceStatus((current) => ({
       ...current,
-      [surfaceId]: {
-        tone: "neutral",
-        message: readiness.message,
-      },
+      [surfaceId]: presentAuditFrameReadiness(readiness, copy.frameResults),
     }));
   }
 
@@ -256,10 +261,7 @@ export function InteractionAuditPage({
 
     setSurfaceStatus((current) => ({
       ...current,
-      [surfaceId]: {
-        tone: result.ok ? "neutral" : "warning",
-        message: result.message,
-      },
+      [surfaceId]: presentAuditPresetResult(result, copy.frameResults),
     }));
   }
 

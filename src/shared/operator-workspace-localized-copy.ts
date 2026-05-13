@@ -1,4 +1,8 @@
 import type { ResolvedAppLocale, RuntimeI18n } from "./i18n";
+import type {
+  AuditFrameReadinessCode,
+  AuditPresetResultCode,
+} from "./interaction-audit-frame-result-codes";
 
 type OperatorWorkspaceLocalizedCopy = {
   interactionAudit: {
@@ -281,6 +285,12 @@ type InteractionAuditHandoffSummaryCopy = {
     downloadedHandoffSummary: (filename: string) => string;
     failedDownloadHandoffSummary: string;
   };
+};
+
+type InteractionAuditFrameResultsCopy = {
+  rawDetailLabel: string;
+  readiness: Record<AuditFrameReadinessCode, string>;
+  presets: Record<AuditPresetResultCode, string>;
 };
 
 const INTERACTION_AUDIT_REVIEW_QUEUE_COPY: Record<
@@ -2321,6 +2331,579 @@ const INTERACTION_AUDIT_HANDOFF_SUMMARY_COPY: Record<
         `Ringkasan handoff saat ini diunduh sebagai ${filename}.`,
       failedDownloadHandoffSummary:
         "Gagal mengunduh ringkasan handoff saat ini dari lingkungan audit ini.",
+    },
+  },
+};
+
+const INTERACTION_AUDIT_FRAME_RESULTS_COPY: Record<
+  ResolvedAppLocale,
+  InteractionAuditFrameResultsCopy
+> = {
+  en: {
+    rawDetailLabel: "Raw detail",
+    readiness: {
+      frame_not_ready: "Frame not ready yet.",
+      ready: "Frame loaded and ready for audit presets.",
+      waiting_dashboard_provider_actions:
+        "Frame loaded. Waiting for dashboard provider actions.",
+      waiting_settings_source_controls:
+        "Frame loaded. Waiting for Settings source controls.",
+      waiting_provider_detail_notes:
+        "Frame loaded. Waiting for provider detail notes.",
+      waiting_popup_actions: "Frame loaded. Waiting for popup actions.",
+    },
+    presets: {
+      frame_not_ready: "Frame not ready yet.",
+      focused_first_provider_action:
+        "Focused the first provider action button.",
+      missing_first_provider_action:
+        "Could not find the first provider action.",
+      opened_first_source_diagnostics:
+        "Opened the first source diagnostics disclosure.",
+      missing_source_diagnostics_disclosure:
+        "Could not find a source diagnostics disclosure.",
+      focused_source_preference:
+        "Focused the first source-preference material select.",
+      missing_source_preference_select:
+        "Could not find a source-preference material select.",
+      scrolled_first_detail_note:
+        "Scrolled the detail frame to the first note block.",
+      missing_detail_note: "Could not find a detail note block.",
+      focused_popup_dashboard_action:
+        "Focused the popup dashboard action.",
+      missing_popup_dashboard_action:
+        "Could not find the popup dashboard action.",
+      focused_featured_provider_detail_action:
+        "Focused the first featured-provider detail action.",
+      missing_featured_provider_detail_action:
+        "Could not find the featured-provider detail action.",
+      unsupported_audit_preset: "Unsupported audit preset.",
+    },
+  },
+  "zh-CN": {
+    rawDetailLabel: "原始详情",
+    readiness: {
+      frame_not_ready: "Frame 尚未就绪。",
+      ready: "Frame 已加载，可运行审计 preset。",
+      waiting_dashboard_provider_actions:
+        "Frame 已加载，正在等待 dashboard provider action。",
+      waiting_settings_source_controls:
+        "Frame 已加载，正在等待 Settings source 控件。",
+      waiting_provider_detail_notes:
+        "Frame 已加载，正在等待 provider detail note。",
+      waiting_popup_actions: "Frame 已加载，正在等待 popup action。",
+    },
+    presets: {
+      frame_not_ready: "Frame 尚未就绪。",
+      focused_first_provider_action: "已聚焦第一个 provider action 按钮。",
+      missing_first_provider_action: "找不到第一个 provider action。",
+      opened_first_source_diagnostics:
+        "已打开第一个 source diagnostics disclosure。",
+      missing_source_diagnostics_disclosure:
+        "找不到 source diagnostics disclosure。",
+      focused_source_preference:
+        "已聚焦第一个 source-preference material select。",
+      missing_source_preference_select:
+        "找不到 source-preference material select。",
+      scrolled_first_detail_note: "已滚动 detail frame 到第一个 note block。",
+      missing_detail_note: "找不到 detail note block。",
+      focused_popup_dashboard_action: "已聚焦 popup dashboard action。",
+      missing_popup_dashboard_action: "找不到 popup dashboard action。",
+      focused_featured_provider_detail_action:
+        "已聚焦第一个 featured-provider detail action。",
+      missing_featured_provider_detail_action:
+        "找不到 featured-provider detail action。",
+      unsupported_audit_preset: "不支持此 audit preset。",
+    },
+  },
+  "zh-TW": {
+    rawDetailLabel: "原始詳情",
+    readiness: {
+      frame_not_ready: "Frame 尚未就緒。",
+      ready: "Frame 已載入，可執行稽核 preset。",
+      waiting_dashboard_provider_actions:
+        "Frame 已載入，正在等待 dashboard provider action。",
+      waiting_settings_source_controls:
+        "Frame 已載入，正在等待 Settings source 控制項。",
+      waiting_provider_detail_notes:
+        "Frame 已載入，正在等待 provider detail note。",
+      waiting_popup_actions: "Frame 已載入，正在等待 popup action。",
+    },
+    presets: {
+      frame_not_ready: "Frame 尚未就緒。",
+      focused_first_provider_action: "已聚焦第一個 provider action 按鈕。",
+      missing_first_provider_action: "找不到第一個 provider action。",
+      opened_first_source_diagnostics:
+        "已開啟第一個 source diagnostics disclosure。",
+      missing_source_diagnostics_disclosure:
+        "找不到 source diagnostics disclosure。",
+      focused_source_preference:
+        "已聚焦第一個 source-preference material select。",
+      missing_source_preference_select:
+        "找不到 source-preference material select。",
+      scrolled_first_detail_note: "已將 detail frame 捲動到第一個 note block。",
+      missing_detail_note: "找不到 detail note block。",
+      focused_popup_dashboard_action: "已聚焦 popup dashboard action。",
+      missing_popup_dashboard_action: "找不到 popup dashboard action。",
+      focused_featured_provider_detail_action:
+        "已聚焦第一個 featured-provider detail action。",
+      missing_featured_provider_detail_action:
+        "找不到 featured-provider detail action。",
+      unsupported_audit_preset: "不支援此 audit preset。",
+    },
+  },
+  ja: {
+    rawDetailLabel: "生の詳細",
+    readiness: {
+      frame_not_ready: "Frame はまだ準備できていません。",
+      ready: "Frame が読み込まれ、監査 preset を実行できます。",
+      waiting_dashboard_provider_actions:
+        "Frame は読み込み済みです。Dashboard の provider action を待機しています。",
+      waiting_settings_source_controls:
+        "Frame は読み込み済みです。Settings の source controls を待機しています。",
+      waiting_provider_detail_notes:
+        "Frame は読み込み済みです。Provider detail notes を待機しています。",
+      waiting_popup_actions:
+        "Frame は読み込み済みです。Popup actions を待機しています。",
+    },
+    presets: {
+      frame_not_ready: "Frame はまだ準備できていません。",
+      focused_first_provider_action:
+        "最初の provider action ボタンにフォーカスしました。",
+      missing_first_provider_action:
+        "最初の provider action が見つかりませんでした。",
+      opened_first_source_diagnostics:
+        "最初の source diagnostics disclosure を開きました。",
+      missing_source_diagnostics_disclosure:
+        "Source diagnostics disclosure が見つかりませんでした。",
+      focused_source_preference:
+        "最初の source-preference material select にフォーカスしました。",
+      missing_source_preference_select:
+        "Source-preference material select が見つかりませんでした。",
+      scrolled_first_detail_note:
+        "Detail frame を最初の note block までスクロールしました。",
+      missing_detail_note: "Detail note block が見つかりませんでした。",
+      focused_popup_dashboard_action:
+        "Popup dashboard action にフォーカスしました。",
+      missing_popup_dashboard_action:
+        "Popup dashboard action が見つかりませんでした。",
+      focused_featured_provider_detail_action:
+        "最初の featured-provider detail action にフォーカスしました。",
+      missing_featured_provider_detail_action:
+        "Featured-provider detail action が見つかりませんでした。",
+      unsupported_audit_preset: "未対応の audit preset です。",
+    },
+  },
+  ko: {
+    rawDetailLabel: "Raw detail",
+    readiness: {
+      frame_not_ready: "Frame 이 아직 준비되지 않았습니다.",
+      ready: "Frame 이 로드되어 audit preset 을 실행할 준비가 되었습니다.",
+      waiting_dashboard_provider_actions:
+        "Frame 이 로드되었습니다. Dashboard provider action 을 기다리는 중입니다.",
+      waiting_settings_source_controls:
+        "Frame 이 로드되었습니다. Settings source control 을 기다리는 중입니다.",
+      waiting_provider_detail_notes:
+        "Frame 이 로드되었습니다. Provider detail note 를 기다리는 중입니다.",
+      waiting_popup_actions:
+        "Frame 이 로드되었습니다. Popup action 을 기다리는 중입니다.",
+    },
+    presets: {
+      frame_not_ready: "Frame 이 아직 준비되지 않았습니다.",
+      focused_first_provider_action:
+        "첫 번째 provider action 버튼에 focus 했습니다.",
+      missing_first_provider_action:
+        "첫 번째 provider action 을 찾을 수 없습니다.",
+      opened_first_source_diagnostics:
+        "첫 번째 source diagnostics disclosure 를 열었습니다.",
+      missing_source_diagnostics_disclosure:
+        "Source diagnostics disclosure 를 찾을 수 없습니다.",
+      focused_source_preference:
+        "첫 번째 source-preference material select 에 focus 했습니다.",
+      missing_source_preference_select:
+        "Source-preference material select 를 찾을 수 없습니다.",
+      scrolled_first_detail_note:
+        "Detail frame 을 첫 번째 note block 으로 스크롤했습니다.",
+      missing_detail_note: "Detail note block 을 찾을 수 없습니다.",
+      focused_popup_dashboard_action: "Popup dashboard action 에 focus 했습니다.",
+      missing_popup_dashboard_action:
+        "Popup dashboard action 을 찾을 수 없습니다.",
+      focused_featured_provider_detail_action:
+        "첫 번째 featured-provider detail action 에 focus 했습니다.",
+      missing_featured_provider_detail_action:
+        "Featured-provider detail action 을 찾을 수 없습니다.",
+      unsupported_audit_preset: "지원되지 않는 audit preset 입니다.",
+    },
+  },
+  "es-419": {
+    rawDetailLabel: "Detalle raw",
+    readiness: {
+      frame_not_ready: "El frame aún no está listo.",
+      ready: "El frame cargó y está listo para presets de auditoría.",
+      waiting_dashboard_provider_actions:
+        "El frame cargó. Esperando acciones de provider en dashboard.",
+      waiting_settings_source_controls:
+        "El frame cargó. Esperando controles de source en Settings.",
+      waiting_provider_detail_notes:
+        "El frame cargó. Esperando notas de detalle del provider.",
+      waiting_popup_actions: "El frame cargó. Esperando acciones del popup.",
+    },
+    presets: {
+      frame_not_ready: "El frame aún no está listo.",
+      focused_first_provider_action:
+        "Se enfocó el primer botón de acción del provider.",
+      missing_first_provider_action:
+        "No se encontró la primera acción del provider.",
+      opened_first_source_diagnostics:
+        "Se abrió el primer disclosure de diagnósticos de source.",
+      missing_source_diagnostics_disclosure:
+        "No se encontró un disclosure de diagnósticos de source.",
+      focused_source_preference:
+        "Se enfocó el primer material select de source-preference.",
+      missing_source_preference_select:
+        "No se encontró un material select de source-preference.",
+      scrolled_first_detail_note:
+        "Se desplazó el frame de detalle al primer bloque de notas.",
+      missing_detail_note: "No se encontró un bloque de notas de detalle.",
+      focused_popup_dashboard_action:
+        "Se enfocó la acción de dashboard del popup.",
+      missing_popup_dashboard_action:
+        "No se encontró la acción de dashboard del popup.",
+      focused_featured_provider_detail_action:
+        "Se enfocó la primera acción de detalle del featured provider.",
+      missing_featured_provider_detail_action:
+        "No se encontró la acción de detalle del featured provider.",
+      unsupported_audit_preset: "Preset de auditoría no compatible.",
+    },
+  },
+  "pt-BR": {
+    rawDetailLabel: "Detalhe raw",
+    readiness: {
+      frame_not_ready: "O frame ainda não está pronto.",
+      ready: "O frame carregou e está pronto para presets de auditoria.",
+      waiting_dashboard_provider_actions:
+        "O frame carregou. Aguardando ações de provider no dashboard.",
+      waiting_settings_source_controls:
+        "O frame carregou. Aguardando controles de source em Settings.",
+      waiting_provider_detail_notes:
+        "O frame carregou. Aguardando notas de detalhe do provider.",
+      waiting_popup_actions: "O frame carregou. Aguardando ações do popup.",
+    },
+    presets: {
+      frame_not_ready: "O frame ainda não está pronto.",
+      focused_first_provider_action:
+        "Focou o primeiro botão de ação do provider.",
+      missing_first_provider_action:
+        "Não foi possível encontrar a primeira ação do provider.",
+      opened_first_source_diagnostics:
+        "Abriu o primeiro disclosure de diagnósticos de source.",
+      missing_source_diagnostics_disclosure:
+        "Não foi possível encontrar um disclosure de diagnósticos de source.",
+      focused_source_preference:
+        "Focou o primeiro material select de source-preference.",
+      missing_source_preference_select:
+        "Não foi possível encontrar um material select de source-preference.",
+      scrolled_first_detail_note:
+        "Rolou o frame de detalhe até o primeiro bloco de notas.",
+      missing_detail_note:
+        "Não foi possível encontrar um bloco de notas de detalhe.",
+      focused_popup_dashboard_action:
+        "Focou a ação de dashboard do popup.",
+      missing_popup_dashboard_action:
+        "Não foi possível encontrar a ação de dashboard do popup.",
+      focused_featured_provider_detail_action:
+        "Focou a primeira ação de detalhe do featured provider.",
+      missing_featured_provider_detail_action:
+        "Não foi possível encontrar a ação de detalhe do featured provider.",
+      unsupported_audit_preset: "Preset de auditoria não compatível.",
+    },
+  },
+  fr: {
+    rawDetailLabel: "Détail raw",
+    readiness: {
+      frame_not_ready: "Le frame n'est pas encore prêt.",
+      ready: "Le frame est chargé et prêt pour les presets d'audit.",
+      waiting_dashboard_provider_actions:
+        "Le frame est chargé. En attente des actions provider du dashboard.",
+      waiting_settings_source_controls:
+        "Le frame est chargé. En attente des contrôles source dans Settings.",
+      waiting_provider_detail_notes:
+        "Le frame est chargé. En attente des notes de détail provider.",
+      waiting_popup_actions: "Le frame est chargé. En attente des actions popup.",
+    },
+    presets: {
+      frame_not_ready: "Le frame n'est pas encore prêt.",
+      focused_first_provider_action:
+        "Le premier bouton d'action provider a reçu le focus.",
+      missing_first_provider_action:
+        "Impossible de trouver la première action provider.",
+      opened_first_source_diagnostics:
+        "Le premier disclosure de diagnostics source a été ouvert.",
+      missing_source_diagnostics_disclosure:
+        "Impossible de trouver un disclosure de diagnostics source.",
+      focused_source_preference:
+        "Le premier material select source-preference a reçu le focus.",
+      missing_source_preference_select:
+        "Impossible de trouver un material select source-preference.",
+      scrolled_first_detail_note:
+        "Le frame de détail a défilé jusqu'au premier bloc de notes.",
+      missing_detail_note: "Impossible de trouver un bloc de notes de détail.",
+      focused_popup_dashboard_action:
+        "L'action dashboard du popup a reçu le focus.",
+      missing_popup_dashboard_action:
+        "Impossible de trouver l'action dashboard du popup.",
+      focused_featured_provider_detail_action:
+        "La première action de détail du featured provider a reçu le focus.",
+      missing_featured_provider_detail_action:
+        "Impossible de trouver l'action de détail du featured provider.",
+      unsupported_audit_preset: "Preset d'audit non pris en charge.",
+    },
+  },
+  de: {
+    rawDetailLabel: "Raw-Detail",
+    readiness: {
+      frame_not_ready: "Der Frame ist noch nicht bereit.",
+      ready: "Der Frame ist geladen und bereit für Audit-Presets.",
+      waiting_dashboard_provider_actions:
+        "Der Frame ist geladen. Warte auf Dashboard-Provider-Aktionen.",
+      waiting_settings_source_controls:
+        "Der Frame ist geladen. Warte auf Settings-Source-Controls.",
+      waiting_provider_detail_notes:
+        "Der Frame ist geladen. Warte auf Provider-Detail-Notizen.",
+      waiting_popup_actions: "Der Frame ist geladen. Warte auf Popup-Aktionen.",
+    },
+    presets: {
+      frame_not_ready: "Der Frame ist noch nicht bereit.",
+      focused_first_provider_action:
+        "Der erste Provider-Aktionsbutton wurde fokussiert.",
+      missing_first_provider_action:
+        "Die erste Provider-Aktion wurde nicht gefunden.",
+      opened_first_source_diagnostics:
+        "Die erste Source-Diagnostics-Disclosure wurde geöffnet.",
+      missing_source_diagnostics_disclosure:
+        "Keine Source-Diagnostics-Disclosure gefunden.",
+      focused_source_preference:
+        "Der erste Source-Preference-Material-Select wurde fokussiert.",
+      missing_source_preference_select:
+        "Kein Source-Preference-Material-Select gefunden.",
+      scrolled_first_detail_note:
+        "Der Detail-Frame wurde zum ersten Notizblock gescrollt.",
+      missing_detail_note: "Kein Detail-Notizblock gefunden.",
+      focused_popup_dashboard_action:
+        "Die Popup-Dashboard-Aktion wurde fokussiert.",
+      missing_popup_dashboard_action:
+        "Die Popup-Dashboard-Aktion wurde nicht gefunden.",
+      focused_featured_provider_detail_action:
+        "Die erste Featured-Provider-Detailaktion wurde fokussiert.",
+      missing_featured_provider_detail_action:
+        "Die Featured-Provider-Detailaktion wurde nicht gefunden.",
+      unsupported_audit_preset: "Nicht unterstütztes Audit-Preset.",
+    },
+  },
+  it: {
+    rawDetailLabel: "Dettaglio raw",
+    readiness: {
+      frame_not_ready: "Il frame non è ancora pronto.",
+      ready: "Il frame è caricato e pronto per i preset di audit.",
+      waiting_dashboard_provider_actions:
+        "Il frame è caricato. In attesa delle azioni provider nella dashboard.",
+      waiting_settings_source_controls:
+        "Il frame è caricato. In attesa dei controlli source in Settings.",
+      waiting_provider_detail_notes:
+        "Il frame è caricato. In attesa delle note di dettaglio provider.",
+      waiting_popup_actions: "Il frame è caricato. In attesa delle azioni popup.",
+    },
+    presets: {
+      frame_not_ready: "Il frame non è ancora pronto.",
+      focused_first_provider_action:
+        "Il primo pulsante azione provider ha ricevuto il focus.",
+      missing_first_provider_action:
+        "Impossibile trovare la prima azione provider.",
+      opened_first_source_diagnostics:
+        "Aperto il primo disclosure dei diagnostics source.",
+      missing_source_diagnostics_disclosure:
+        "Impossibile trovare un disclosure dei diagnostics source.",
+      focused_source_preference:
+        "Il primo material select source-preference ha ricevuto il focus.",
+      missing_source_preference_select:
+        "Impossibile trovare un material select source-preference.",
+      scrolled_first_detail_note:
+        "Il frame di dettaglio è stato scrollato al primo blocco note.",
+      missing_detail_note: "Impossibile trovare un blocco note di dettaglio.",
+      focused_popup_dashboard_action:
+        "L'azione dashboard del popup ha ricevuto il focus.",
+      missing_popup_dashboard_action:
+        "Impossibile trovare l'azione dashboard del popup.",
+      focused_featured_provider_detail_action:
+        "La prima azione di dettaglio del featured provider ha ricevuto il focus.",
+      missing_featured_provider_detail_action:
+        "Impossibile trovare l'azione di dettaglio del featured provider.",
+      unsupported_audit_preset: "Preset di audit non supportato.",
+    },
+  },
+  ru: {
+    rawDetailLabel: "Raw detail",
+    readiness: {
+      frame_not_ready: "Frame еще не готов.",
+      ready: "Frame загружен и готов к audit presets.",
+      waiting_dashboard_provider_actions:
+        "Frame загружен. Ожидание dashboard provider actions.",
+      waiting_settings_source_controls:
+        "Frame загружен. Ожидание Settings source controls.",
+      waiting_provider_detail_notes:
+        "Frame загружен. Ожидание provider detail notes.",
+      waiting_popup_actions: "Frame загружен. Ожидание popup actions.",
+    },
+    presets: {
+      frame_not_ready: "Frame еще не готов.",
+      focused_first_provider_action:
+        "Фокус установлен на первую кнопку provider action.",
+      missing_first_provider_action:
+        "Не удалось найти первую provider action.",
+      opened_first_source_diagnostics:
+        "Открыт первый disclosure source diagnostics.",
+      missing_source_diagnostics_disclosure:
+        "Не удалось найти disclosure source diagnostics.",
+      focused_source_preference:
+        "Фокус установлен на первый source-preference material select.",
+      missing_source_preference_select:
+        "Не удалось найти source-preference material select.",
+      scrolled_first_detail_note:
+        "Detail frame прокручен к первому note block.",
+      missing_detail_note: "Не удалось найти detail note block.",
+      focused_popup_dashboard_action:
+        "Фокус установлен на popup dashboard action.",
+      missing_popup_dashboard_action:
+        "Не удалось найти popup dashboard action.",
+      focused_featured_provider_detail_action:
+        "Фокус установлен на первую featured-provider detail action.",
+      missing_featured_provider_detail_action:
+        "Не удалось найти featured-provider detail action.",
+      unsupported_audit_preset: "Неподдерживаемый audit preset.",
+    },
+  },
+  ar: {
+    rawDetailLabel: "تفاصيل raw",
+    readiness: {
+      frame_not_ready: "Frame غير جاهز بعد.",
+      ready: "تم تحميل frame وهو جاهز لتشغيل audit presets.",
+      waiting_dashboard_provider_actions:
+        "تم تحميل frame. بانتظار dashboard provider actions.",
+      waiting_settings_source_controls:
+        "تم تحميل frame. بانتظار عناصر تحكم Settings source.",
+      waiting_provider_detail_notes:
+        "تم تحميل frame. بانتظار provider detail notes.",
+      waiting_popup_actions: "تم تحميل frame. بانتظار popup actions.",
+    },
+    presets: {
+      frame_not_ready: "Frame غير جاهز بعد.",
+      focused_first_provider_action:
+        "تم تركيز أول زر provider action.",
+      missing_first_provider_action:
+        "تعذر العثور على أول provider action.",
+      opened_first_source_diagnostics:
+        "تم فتح أول source diagnostics disclosure.",
+      missing_source_diagnostics_disclosure:
+        "تعذر العثور على source diagnostics disclosure.",
+      focused_source_preference:
+        "تم تركيز أول source-preference material select.",
+      missing_source_preference_select:
+        "تعذر العثور على source-preference material select.",
+      scrolled_first_detail_note:
+        "تم تمرير detail frame إلى أول note block.",
+      missing_detail_note: "تعذر العثور على detail note block.",
+      focused_popup_dashboard_action:
+        "تم تركيز popup dashboard action.",
+      missing_popup_dashboard_action:
+        "تعذر العثور على popup dashboard action.",
+      focused_featured_provider_detail_action:
+        "تم تركيز أول featured-provider detail action.",
+      missing_featured_provider_detail_action:
+        "تعذر العثور على featured-provider detail action.",
+      unsupported_audit_preset: "Audit preset غير مدعوم.",
+    },
+  },
+  hi: {
+    rawDetailLabel: "Raw detail",
+    readiness: {
+      frame_not_ready: "Frame अभी ready नहीं है।",
+      ready: "Frame load हो गया है और audit presets के लिए ready है।",
+      waiting_dashboard_provider_actions:
+        "Frame load हो गया है। Dashboard provider actions का इंतजार है।",
+      waiting_settings_source_controls:
+        "Frame load हो गया है। Settings source controls का इंतजार है।",
+      waiting_provider_detail_notes:
+        "Frame load हो गया है। Provider detail notes का इंतजार है।",
+      waiting_popup_actions:
+        "Frame load हो गया है। Popup actions का इंतजार है।",
+    },
+    presets: {
+      frame_not_ready: "Frame अभी ready नहीं है।",
+      focused_first_provider_action:
+        "पहले provider action button पर focus किया गया।",
+      missing_first_provider_action:
+        "पहला provider action नहीं मिला।",
+      opened_first_source_diagnostics:
+        "पहला source diagnostics disclosure खोला गया।",
+      missing_source_diagnostics_disclosure:
+        "Source diagnostics disclosure नहीं मिला।",
+      focused_source_preference:
+        "पहले source-preference material select पर focus किया गया।",
+      missing_source_preference_select:
+        "Source-preference material select नहीं मिला।",
+      scrolled_first_detail_note:
+        "Detail frame को पहले note block तक scroll किया गया।",
+      missing_detail_note: "Detail note block नहीं मिला।",
+      focused_popup_dashboard_action:
+        "Popup dashboard action पर focus किया गया।",
+      missing_popup_dashboard_action:
+        "Popup dashboard action नहीं मिला।",
+      focused_featured_provider_detail_action:
+        "पहले featured-provider detail action पर focus किया गया।",
+      missing_featured_provider_detail_action:
+        "Featured-provider detail action नहीं मिला।",
+      unsupported_audit_preset: "Audit preset समर्थित नहीं है।",
+    },
+  },
+  id: {
+    rawDetailLabel: "Detail raw",
+    readiness: {
+      frame_not_ready: "Frame belum siap.",
+      ready: "Frame sudah dimuat dan siap untuk preset audit.",
+      waiting_dashboard_provider_actions:
+        "Frame sudah dimuat. Menunggu aksi provider di dashboard.",
+      waiting_settings_source_controls:
+        "Frame sudah dimuat. Menunggu kontrol source di Settings.",
+      waiting_provider_detail_notes:
+        "Frame sudah dimuat. Menunggu note detail provider.",
+      waiting_popup_actions: "Frame sudah dimuat. Menunggu aksi popup.",
+    },
+    presets: {
+      frame_not_ready: "Frame belum siap.",
+      focused_first_provider_action:
+        "Tombol aksi provider pertama sudah difokuskan.",
+      missing_first_provider_action:
+        "Aksi provider pertama tidak ditemukan.",
+      opened_first_source_diagnostics:
+        "Disclosure diagnostics source pertama sudah dibuka.",
+      missing_source_diagnostics_disclosure:
+        "Disclosure diagnostics source tidak ditemukan.",
+      focused_source_preference:
+        "Material select source-preference pertama sudah difokuskan.",
+      missing_source_preference_select:
+        "Material select source-preference tidak ditemukan.",
+      scrolled_first_detail_note:
+        "Frame detail sudah digulir ke blok note pertama.",
+      missing_detail_note: "Blok note detail tidak ditemukan.",
+      focused_popup_dashboard_action:
+        "Aksi dashboard popup sudah difokuskan.",
+      missing_popup_dashboard_action:
+        "Aksi dashboard popup tidak ditemukan.",
+      focused_featured_provider_detail_action:
+        "Aksi detail featured provider pertama sudah difokuskan.",
+      missing_featured_provider_detail_action:
+        "Aksi detail featured provider tidak ditemukan.",
+      unsupported_audit_preset: "Preset audit tidak didukung.",
     },
   },
 };
@@ -4791,6 +5374,8 @@ export function buildOperatorWorkspaceLocalizedCopy(i18n: RuntimeI18n) {
         INTERACTION_AUDIT_REQUEST_SCOPE_COMMANDS_COPY[i18n.resolvedLocale],
       handoffSummary:
         INTERACTION_AUDIT_HANDOFF_SUMMARY_COPY[i18n.resolvedLocale],
+      frameResults:
+        INTERACTION_AUDIT_FRAME_RESULTS_COPY[i18n.resolvedLocale],
     },
   };
 }

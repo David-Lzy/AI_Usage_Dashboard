@@ -66,7 +66,7 @@ Delivered:
 - added stable `code` fields for ready, waiting, focused, missing-selector, unsupported-preset, and frame-not-ready states
 - added `rawMessage` for selector/action/detail failures where raw diagnostic context must remain recoverable
 - preserved preset execution behavior, readiness polling behavior, iframe behavior, existing `message` text, signoff exports, handoff drafts, and archive/request schemas
-- queued [417_Phase_Interaction_Audit_Frame_Result_14_Locale_Display_Copy.md](../../../417_Phase_Interaction_Audit_Frame_Result_14_Locale_Display_Copy.md) as the next typed-result localization slice
+- queued [417_Phase_Interaction_Audit_Frame_Result_14_Locale_Display_Copy.md](./417_Phase_Interaction_Audit_Frame_Result_14_Locale_Display_Copy.md) as the next typed-result localization slice
 
 ## Verification
 

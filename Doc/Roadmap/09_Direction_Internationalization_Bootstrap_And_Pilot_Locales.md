@@ -98,6 +98,7 @@ Execution note:
 - eighty-second Request Scope command-heading display-copy slice landed on `2026-05-14` through `Phase 414`
 - eighty-third Handoff Summary display-copy slice landed on `2026-05-14` through `Phase 415`
 - eighty-fourth frame-result typed display split landed on `2026-05-14` through `Phase 416`
+- eighty-fifth frame-result 14-locale display-copy slice landed on `2026-05-14` through `Phase 417`
 - `Phase 200` and `Phase 201` intentionally paused this i18n/diagnostic follow-up line for functionality-first Codex personal usage-context surfacing while Codex budget is constrained
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
@@ -160,7 +161,7 @@ As of 2026-05-14:
 - the full `npm run release:check` gate passed after operator/store helper localization in `Phase 406`
 - localized operator/store helper RDP Chrome visual QA is recorded for `en`, `zh-CN`, `ja`, `de`, and `ar` in [2026-05-14-phase407](../testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/README.md)
 - localization copy chunk-size audit is recorded in [I18n_Localization_Copy_Chunk_Size_Audit.md](../I18n/I18n_Localization_Copy_Chunk_Size_Audit.md), with no current runtime split required
-- interaction-audit presentation/export split is recorded in [I18n_Interaction_Audit_Presentation_Export_Split.md](../I18n/I18n_Interaction_Audit_Presentation_Export_Split.md), with Review Queue, Surface Card, Workspace Controls, Request Scope command headings, Handoff Summary display-copy, and frame-result typed split completed and frame-result 14-locale display copy now active in `Phase 417`
+- interaction-audit presentation/export split is recorded in [I18n_Interaction_Audit_Presentation_Export_Split.md](../I18n/I18n_Interaction_Audit_Presentation_Export_Split.md), with Review Queue, Surface Card, Workspace Controls, Request Scope command headings, Handoff Summary display-copy, frame-result typed split, and frame-result 14-locale display copy completed; remaining interaction-audit presentation-copy inventory is active in `Phase 418`
 - store-helper error presentation is recorded in [I18n_Store_Helper_Error_Presentation_Split.md](../I18n/I18n_Store_Helper_Error_Presentation_Split.md), and the runtime now localizes the wrapper while preserving raw helper error messages inside it
 - the current shipped runtime localized slice covers:
   - popup shell
@@ -375,7 +376,8 @@ Recommended rollout:
 85. interaction-audit Request Scope command heading display copy - shipped in `Phase 414`
 86. interaction-audit Handoff Summary display copy - shipped in `Phase 415`
 87. interaction-audit frame-result typed display split - shipped in `Phase 416`
-88. interaction-audit frame-result 14-locale display copy - active in `Phase 417`
+88. interaction-audit frame-result 14-locale display copy - shipped in `Phase 417`
+89. remaining interaction-audit presentation-copy inventory - active in `Phase 418`
 
 ## References
 

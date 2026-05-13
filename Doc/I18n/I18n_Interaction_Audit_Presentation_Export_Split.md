@@ -19,7 +19,7 @@ Status note:
 - created in `Phase 409`
 - defines which remaining interaction-audit visible labels can be localized without changing signoff exports, handoff drafts, request identities, automation hooks, or raw evidence
 - use this document before moving any remaining interaction-audit component strings into `buildOperatorWorkspaceLocalizedCopy`
-- `Phase 411` completed the Review Queue display-copy slice; `Phase 412` completed the Surface Card display-copy slice; `Phase 413` completed the Workspace Controls display-copy slice; `Phase 414` completed the Request Scope command-heading slice; `Phase 415` completed the Handoff Summary display-copy slice; `Phase 416` completed the frame-result typed display split; typed frame-result localization is next
+- `Phase 411` completed the Review Queue display-copy slice; `Phase 412` completed the Surface Card display-copy slice; `Phase 413` completed the Workspace Controls display-copy slice; `Phase 414` completed the Request Scope command-heading slice; `Phase 415` completed the Handoff Summary display-copy slice; `Phase 416` completed the frame-result typed display split; `Phase 417` completed typed frame-result 14-locale display copy
 
 ## Purpose
 
@@ -58,7 +58,7 @@ Already localized through `Phase 404`:
 
 Not localized in `Phase 409`:
 
-- frame readiness and preset result display labels until `Phase 417` localizes the `Phase 416` typed result codes
+- remaining unclassified interaction-audit presentation strings until `Phase 418` inventories them
 
 Localized after `Phase 411`:
 
@@ -80,9 +80,11 @@ Localized after `Phase 415`:
 
 - Handoff Summary presentation labels, safe count patterns, workflow instructions, and handoff copy/download feedback
 
-Typed/raw split added after `Phase 416`:
+Typed/raw split added after `Phase 416` and localized after `Phase 417`:
 
-- frame readiness and preset result codes now have stable `code` values plus optional raw-message evidence; display localization is queued separately
+- frame readiness and preset result codes now have stable `code` values plus optional raw-message evidence; display localization is implemented through `interactionAudit.frameResults`
+- `interactionAudit.frameResults` now maps the typed frame-readiness and preset-result codes to 14-locale display messages
+- `rawMessage` remains raw selector/preset diagnostic evidence and is displayed separately as untranslated raw detail
 
 ## Safe Presentation-Only Labels
 
@@ -313,7 +315,9 @@ The first safe child phase started with Review Queue display labels because:
 
 `Phase 416` added stable typed result codes and optional raw-message evidence for frame readiness and preset results while keeping existing display messages unchanged.
 
-The next safe child phase is `Phase 417`, covering 14-locale display copy for typed frame readiness and preset result codes only. Raw-message evidence must remain untranslated.
+`Phase 417` added 14-locale display copy for typed frame readiness and preset result codes only. Raw-message evidence remains untranslated.
+
+The next safe child phase is `Phase 418`, inventorying any remaining hard-coded interaction-audit presentation copy and classifying it against the raw/export boundary before more implementation work.
 
 Required tests for completed and later interaction-audit display-copy slices:
 

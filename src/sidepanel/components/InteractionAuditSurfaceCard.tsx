@@ -10,6 +10,8 @@ import type {
 export type InteractionAuditSurfaceStatus = {
   tone: "neutral" | "warning";
   message: string;
+  rawDetailLabel?: string;
+  rawMessage?: string;
 };
 
 export type InteractionAuditSurfaceCardCopy = ReturnType<
@@ -120,6 +122,16 @@ export function InteractionAuditSurfaceCard({
         <p className="supporting-copy">
           {status?.message ?? copy.loadingFrame}
         </p>
+        {status?.rawMessage ? (
+          <p
+            className="supporting-copy interaction-audit__raw-status"
+            data-audit-raw-status-id={surface.id}
+          >
+            {status.rawDetailLabel
+              ? `${status.rawDetailLabel}: ${status.rawMessage}`
+              : status.rawMessage}
+          </p>
+        ) : null}
       </div>
 
       <div
