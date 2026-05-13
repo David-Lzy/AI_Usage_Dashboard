@@ -216,6 +216,17 @@ describe("runtime i18n", () => {
     expect(i18n.t("settings.preferences.locale.system")).toBe("Segui sistema");
   });
 
+  it("returns translated runtime strings for the first ru shell slice", () => {
+    const i18n = createRuntimeI18n("ru");
+
+    expect(i18n.t("dashboard.hero.title")).toBe(
+      "Одна панель для квот AI coding",
+    );
+    expect(i18n.t("popup.header.title")).toBe("Быстрый обзор");
+    expect(i18n.t("settings.topbar.title")).toBe("Настройки");
+    expect(i18n.t("settings.preferences.locale.system")).toBe("Как в системе");
+  });
+
   it("localizes quick theme toggle copy from the next explicit mode", () => {
     const i18n = createRuntimeI18n("zh-CN");
 

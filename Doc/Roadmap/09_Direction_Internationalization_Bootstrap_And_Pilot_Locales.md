@@ -57,6 +57,7 @@ Execution note:
 - forty-second executable slice landed on `2026-05-13` through `Phase 379`
 - forty-third executable slice landed on `2026-05-13` through `Phase 380`
 - forty-fourth executable slice landed on `2026-05-13` through `Phase 381`
+- forty-fifth executable slice landed on `2026-05-13` through `Phase 382`
 - `Phase 200` and `Phase 201` intentionally paused this i18n/diagnostic follow-up line for functionality-first Codex personal usage-context surfacing while Codex budget is constrained
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
@@ -100,7 +101,7 @@ As of 2026-05-13:
 - Settings language options are generated from the registry instead of hard-coded `en / zh-CN` entries
 - `ar` resolves to `rtl`; all other shipped runtime locales resolve to `ltr`
 - the new non-reviewed runtime locales use complete key coverage with English fallback where human-reviewed translations are not yet present
-- `zh-TW`, `ja`, `ko`, `es-419`, `pt-BR`, `fr`, `de`, and `it` now have first runtime shell pilots for dashboard, popup, Settings, common actions, and theme-toggle labels; deeper structured runtime copy still falls back to English until reviewed translations are added
+- `zh-TW`, `ja`, `ko`, `es-419`, `pt-BR`, `fr`, `de`, `it`, and `ru` now have first runtime shell pilots for dashboard, popup, Settings, common actions, and theme-toggle labels; deeper structured runtime copy still falls back to English until reviewed translations are added
 - Arabic/RTL surfaces now isolate English fallback text direction so fallback punctuation stays readable until reviewed Arabic runtime translations are added
 - RDP extension-window locale smoke captures now validate `--locale` against the same 14 runtime tags before opening a Chrome extension window
 - `npm run i18n:check` now derives Chrome `_locales` directories from runtime registry metadata and verifies the RDP capture helper locale list against the same runtime tags
@@ -270,8 +271,9 @@ Recommended rollout:
 44. French runtime shell pilot - shipped in `Phase 379`
 45. German runtime shell pilot - shipped in `Phase 380`
 46. Italian runtime shell pilot - shipped in `Phase 381`
-47. deeper runtime catalog translation review for non-English fallback locales - future work
-48. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact
+47. Russian runtime shell pilot - shipped in `Phase 382`
+48. deeper runtime catalog translation review for non-English fallback locales - future work
+49. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact
 
 ## References
 
