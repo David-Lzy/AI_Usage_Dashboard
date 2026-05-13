@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [367_Phase_14_Language_Localization_Expansion.md](./Archive/367_Phase_14_Language_Localization_Expansion.md)
+- latest completed slice: [368_Phase_RTL_Fallback_Text_Direction_Hardening.md](./Archive/368_Phase_RTL_Fallback_Text_Direction_Hardening.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -757,6 +757,7 @@ Completed phases should be moved to:
 - the 2026-05-13 `Phase 365` closeout added a focused provider source host-permission guard so source route hints, Settings host origins, and manifest optional host permissions stay aligned without expanding runtime permissions or changing provider support claims
 - the 2026-05-13 `Phase 366` closeout verified RDP Chrome extension-mode screenshots, added a dashboard empty-state Quick Setup action, and made hidden-provider Quick Setup deep links fall back to the Quick Setup section
 - the 2026-05-13 `Phase 367` closeout expanded locale architecture to 14 runtime locale tags, generated Settings locale options from one registry, added 14 Chrome manifest catalogs, added a guarded 14-locale Chrome Web Store listing draft, and introduced manifest i18n completeness checking without changing release/package boundaries
+- the 2026-05-13 `Phase 368` closeout hardened Arabic/RTL English fallback text rendering with shared `unicode-bidi: plaintext` typography coverage and verified dashboard, Settings, and popup Arabic extension-mode captures
 
 ## Delivery Standard For Each Phase
 

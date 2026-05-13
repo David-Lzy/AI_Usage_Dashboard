@@ -157,6 +157,7 @@ This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still maki
 - runtime document roots now sync `lang` and `dir` from the shared runtime i18n layer
 - `ar` resolves to `rtl`; all other shipped locales resolve to `ltr`
 - preview and QA can still force `?app-dir=rtl` or `?app-dir=ltr`, and `Phase 367` adds `?app-locale=<supported-locale>` for extension-window visual checks without mutating saved settings
+- `Phase 368` keeps English fallback text readable under RTL roots with shared typography-level bidirectional isolation; this is a rendering guard, not a replacement for reviewed Arabic runtime translations
 
 ## Runtime Direction
 

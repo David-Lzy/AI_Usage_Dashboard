@@ -44,6 +44,7 @@ Execution note:
 - twenty-ninth executable slice landed on `2026-04-25` through `Phase 198`
 - thirtieth executable slice landed on `2026-04-25` through `Phase 199`
 - thirty-first executable slice landed on `2026-05-13` through `Phase 367`
+- thirty-second executable slice landed on `2026-05-13` through `Phase 368`
 - `Phase 200` and `Phase 201` intentionally paused this i18n/diagnostic follow-up line for functionality-first Codex personal usage-context surfacing while Codex budget is constrained
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
@@ -86,6 +87,7 @@ As of 2026-05-13:
 - Settings language options are generated from the registry instead of hard-coded `en / zh-CN` entries
 - `ar` resolves to `rtl`; all other shipped runtime locales resolve to `ltr`
 - the new non-reviewed runtime locales use complete key coverage with English fallback where human-reviewed translations are not yet present
+- Arabic/RTL surfaces now isolate English fallback text direction so fallback punctuation stays readable until reviewed Arabic runtime translations are added
 - the current shipped runtime localized slice covers:
   - popup shell
   - popup explanatory copy
@@ -238,8 +240,9 @@ Recommended rollout:
 31. diagnostic fixture and historical evidence alignment review - shipped in `Phase 199`
 32. adapter diagnostic raw fallback regression review - shipped in `Phase 204`
 33. 14-locale registry, manifest catalogs, and store listing draft - shipped in `Phase 367`
-34. deeper runtime catalog translation review for non-English fallback locales - future work
-35. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact
+34. RTL fallback text direction hardening - shipped in `Phase 368`
+35. deeper runtime catalog translation review for non-English fallback locales - future work
+36. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact
 
 ## References
 
