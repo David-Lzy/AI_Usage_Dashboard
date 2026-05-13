@@ -34,25 +34,36 @@ export const DOC_COMPATIBILITY_STUBS = [
 export const DOC_COMPATIBILITY_STUB_MAX_LINE_COUNT = 40;
 
 export function parsePhaseTupleFromFilename(filename) {
-  const match = path.basename(filename).match(/^(\d+)(?:_(\d+))?_Phase_/);
+  const match = path.basename(filename).match(/^(\d+(?:_\d+)*)_Phase_/);
 
   if (!match) {
     return null;
   }
 
-  return [Number(match[1]), Number(match[2] ?? "0")];
+  const tuple = match[1].split("_").map((part) => Number(part));
+
+  return tuple.length === 1 ? [tuple[0], 0] : tuple;
 }
 
 export function comparePhaseTuples(left, right) {
-  if (left[0] !== right[0]) {
-    return left[0] - right[0];
+  const maxLength = Math.max(left.length, right.length);
+
+  for (let index = 0; index < maxLength; index += 1) {
+    const leftValue = left[index] ?? 0;
+    const rightValue = right[index] ?? 0;
+
+    if (leftValue !== rightValue) {
+      return leftValue - rightValue;
+    }
   }
 
-  return left[1] - right[1];
+  return 0;
 }
 
 export function formatPhaseTupleLabel(tuple) {
-  return tuple[1] === 0 ? `Phase ${tuple[0]}` : `Phase ${tuple[0]}.${tuple[1]}`;
+  return tuple.length === 2 && tuple[1] === 0
+    ? `Phase ${tuple[0]}`
+    : `Phase ${tuple.join(".")}`;
 }
 
 export function extractLatestCompletedSlicePath(phaseIndexText) {

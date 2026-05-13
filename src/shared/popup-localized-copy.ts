@@ -1065,6 +1065,617 @@ const POPUP_FIRST_RUN_COPY: Record<
   },
 };
 
+type PopupFeaturedCopyText = {
+  providerTriageLabel: string;
+  nothingToTriageHeadline: string;
+  actionableAfterVisibleDetail: string;
+  noProviderCardsYetHeadline: string;
+  enableProviderComeBackDetail: string;
+  actionableAfterFirstProviderDetail: (providerLabel: string) => string;
+  startFirstProviderComeBackDetail: (providerLabel: string) => string;
+  needsAttentionLabel: string;
+  featuredProvidersHeadline: string;
+  needsAttentionDetail: string;
+  currentContractLabel: string;
+  policyOnlyProvidersHeadline: string;
+  policyOnlyProvidersDetail: string;
+  allClearLabel: string;
+  healthyProvidersHeadline: string;
+  healthyProvidersDetail: string;
+  statusNeedsAccess: string;
+  statusNeedsSetup: string;
+  statusOpenPage: string;
+  statusSignIn: string;
+  statusReloadPage: string;
+  statusNeedsReview: string;
+  statusContractOnly: string;
+  statusHealthy: string;
+  statusWarning: string;
+  statusSyncIssue: string;
+  primaryBlockedHostAccess: string;
+  primaryNeedsCredentials: string;
+  primaryNeedsLivePage: string;
+  primaryNeedsSignedInPage: string;
+  primaryPageUnreadable: string;
+  primaryNeedsReview: string;
+  primaryPolicyOnly: string;
+  primaryLiveReady: string;
+  openSourcePageAction: string;
+  reviewDetailAction: string;
+  openDetailAction: string;
+  hideProviderAction: string;
+};
+
+const POPUP_FEATURED_COPY: Record<
+  PopupFirstRunLocalizedLocale,
+  PopupFeaturedCopyText
+> = {
+  "zh-TW": {
+    providerTriageLabel: "Provider 分診",
+    nothingToTriageHeadline: "還沒有可分診內容",
+    actionableAfterVisibleDetail:
+      "至少有一個 provider 在 Settings 可見後，這個區塊才會變得可操作。",
+    noProviderCardsYetHeadline: "還沒有 provider 卡片",
+    enableProviderComeBackDetail:
+      "先在 Settings 啟用一個 provider，再回來做一鍵 provider 分診。",
+    actionableAfterFirstProviderDetail: (provider) =>
+      `先在 Settings > Quick Setup 啟用 ${provider}，之後這個區塊才會變得可操作。`,
+    startFirstProviderComeBackDetail: (provider) =>
+      `先從 ${provider} 開始，再回來做一鍵 provider 分診。`,
+    needsAttentionLabel: "需要注意",
+    featuredProvidersHeadline: "重點 provider",
+    needsAttentionDetail:
+      "popup 最多顯示 3 個 provider，優先顯示仍需設定或產品內檢查的 provider。",
+    currentContractLabel: "目前合約",
+    policyOnlyProvidersHeadline: "Policy-only provider",
+    policyOnlyProvidersDetail:
+      "這個 profile 沒有可見 provider 暴露 live in-browser path，所以這些卡片會偏向合約說明，而不是動作引導。",
+    allClearLabel: "狀態正常",
+    healthyProvidersHeadline: "健康 provider",
+    healthyProvidersDetail:
+      "目前沒有可見 provider 需要設定或檢查，所以這個區塊保留頂部 provider 的目前路徑和 freshness 脈絡。",
+    statusNeedsAccess: "需要 host access",
+    statusNeedsSetup: "需要設定",
+    statusOpenPage: "開啟頁面",
+    statusSignIn: "登入",
+    statusReloadPage: "重新載入頁面",
+    statusNeedsReview: "需要檢查",
+    statusContractOnly: "僅合約",
+    statusHealthy: "健康",
+    statusWarning: "警告",
+    statusSyncIssue: "同步異常",
+    primaryBlockedHostAccess: "目前路徑被 host access 阻擋。",
+    primaryNeedsCredentials: "目前路徑仍需要已儲存 credentials。",
+    primaryNeedsLivePage: "目前路徑仍需要 live page session。",
+    primaryNeedsSignedInPage: "目前路徑需要再次取得已登入頁面。",
+    primaryPageUnreadable: "目前 page session 已開啟，但無法讀取。",
+    primaryNeedsReview: "Settings 設定已清楚，但這個 provider 仍需要檢查。",
+    primaryPolicyOnly: "目前合約在這個 profile 中是 policy-only。",
+    primaryLiveReady: "目前路徑在這個 profile 中已 live-ready。",
+    openSourcePageAction: "開啟來源頁面",
+    reviewDetailAction: "檢查詳細資訊",
+    openDetailAction: "開啟詳細資訊",
+    hideProviderAction: "停止顯示",
+  },
+  ja: {
+    providerTriageLabel: "Provider トリアージ",
+    nothingToTriageHeadline: "まだトリアージ対象はありません",
+    actionableAfterVisibleDetail:
+      "少なくとも 1 つの provider が Settings で表示されると、このセクションが操作可能になります。",
+    noProviderCardsYetHeadline: "provider カードはまだありません",
+    enableProviderComeBackDetail:
+      "Settings で provider を 1 つ有効にしてから、ここに戻って provider をワンクリックで確認してください。",
+    actionableAfterFirstProviderDetail: (provider) =>
+      `まず Settings > Quick Setup で ${provider} を有効にすると、このセクションが操作可能になります。`,
+    startFirstProviderComeBackDetail: (provider) =>
+      `${provider} から開始し、その後ここに戻って provider をワンクリックで確認してください。`,
+    needsAttentionLabel: "注意が必要",
+    featuredProvidersHeadline: "注目 provider",
+    needsAttentionDetail:
+      "popup は最大 3 つの provider を表示し、まだ setup または製品内確認が必要なものを優先します。",
+    currentContractLabel: "現在の contract",
+    policyOnlyProvidersHeadline: "Policy-only provider",
+    policyOnlyProvidersDetail:
+      "この profile では表示中の provider が live in-browser path を公開していないため、これらのカードは action より contract に重点を置きます。",
+    allClearLabel: "問題なし",
+    healthyProvidersHeadline: "健全な provider",
+    healthyProvidersDetail:
+      "現在、表示中の provider に setup や確認は不要です。このセクションは上位 provider の現在の経路と freshness を一目で残します。",
+    statusNeedsAccess: "Host access が必要",
+    statusNeedsSetup: "Setup が必要",
+    statusOpenPage: "ページを開く",
+    statusSignIn: "サインイン",
+    statusReloadPage: "ページを再読み込み",
+    statusNeedsReview: "確認が必要",
+    statusContractOnly: "Contract-only",
+    statusHealthy: "健全",
+    statusWarning: "警告",
+    statusSyncIssue: "sync の問題",
+    primaryBlockedHostAccess: "現在の経路は host access でブロックされています。",
+    primaryNeedsCredentials: "現在の経路には保存済み credentials がまだ必要です。",
+    primaryNeedsLivePage: "現在の経路には live page session がまだ必要です。",
+    primaryNeedsSignedInPage: "現在の経路にはサインイン済みページが再度必要です。",
+    primaryPageUnreadable: "現在の page session は開いていますが読み取れません。",
+    primaryNeedsReview: "Settings setup は明確ですが、この provider はまだ確認が必要です。",
+    primaryPolicyOnly: "この profile の現在の contract は policy-only です。",
+    primaryLiveReady: "この profile の現在の経路は live-ready です。",
+    openSourcePageAction: "ソースページを開く",
+    reviewDetailAction: "詳細を確認",
+    openDetailAction: "詳細を開く",
+    hideProviderAction: "表示を停止",
+  },
+  ko: {
+    providerTriageLabel: "Provider 분류",
+    nothingToTriageHeadline: "아직 분류할 항목 없음",
+    actionableAfterVisibleDetail:
+      "Settings에서 provider가 하나 이상 표시되면 이 섹션을 사용할 수 있습니다.",
+    noProviderCardsYetHeadline: "아직 provider 카드 없음",
+    enableProviderComeBackDetail:
+      "Settings에서 provider 하나를 활성화한 뒤 돌아와 한 번에 provider를 분류하세요.",
+    actionableAfterFirstProviderDetail: (provider) =>
+      `먼저 Settings > Quick Setup에서 ${provider}를 활성화하면 이 섹션을 사용할 수 있습니다.`,
+    startFirstProviderComeBackDetail: (provider) =>
+      `${provider}부터 시작한 뒤 돌아와 한 번에 provider를 분류하세요.`,
+    needsAttentionLabel: "주의 필요",
+    featuredProvidersHeadline: "주요 provider",
+    needsAttentionDetail:
+      "popup은 최대 3개 provider를 표시하며 아직 setup 또는 제품 내 검토가 필요한 항목을 우선합니다.",
+    currentContractLabel: "현재 contract",
+    policyOnlyProvidersHeadline: "Policy-only provider",
+    policyOnlyProvidersDetail:
+      "이 profile에는 live in-browser path를 노출하는 visible provider가 없으므로 이 카드는 action보다 contract 중심으로 유지됩니다.",
+    allClearLabel: "문제 없음",
+    healthyProvidersHeadline: "정상 provider",
+    healthyProvidersDetail:
+      "현재 visible provider에 setup이나 검토가 필요하지 않아, 이 섹션은 상위 provider의 현재 경로와 freshness context를 유지합니다.",
+    statusNeedsAccess: "Host access 필요",
+    statusNeedsSetup: "Setup 필요",
+    statusOpenPage: "페이지 열기",
+    statusSignIn: "로그인",
+    statusReloadPage: "페이지 다시 로드",
+    statusNeedsReview: "검토 필요",
+    statusContractOnly: "Contract-only",
+    statusHealthy: "정상",
+    statusWarning: "경고",
+    statusSyncIssue: "sync 문제",
+    primaryBlockedHostAccess: "현재 경로가 host access에 막혀 있습니다.",
+    primaryNeedsCredentials: "현재 경로에는 저장된 credentials가 아직 필요합니다.",
+    primaryNeedsLivePage: "현재 경로에는 live page session이 아직 필요합니다.",
+    primaryNeedsSignedInPage: "현재 경로에는 로그인된 페이지가 다시 필요합니다.",
+    primaryPageUnreadable: "현재 page session은 열려 있지만 읽을 수 없습니다.",
+    primaryNeedsReview: "Settings setup은 명확하지만 이 provider는 아직 검토가 필요합니다.",
+    primaryPolicyOnly: "이 profile의 현재 contract는 policy-only입니다.",
+    primaryLiveReady: "이 profile의 현재 경로는 live-ready입니다.",
+    openSourcePageAction: "소스 페이지 열기",
+    reviewDetailAction: "상세 검토",
+    openDetailAction: "상세 열기",
+    hideProviderAction: "표시 중지",
+  },
+  "es-419": {
+    providerTriageLabel: "Triage de provider",
+    nothingToTriageHeadline: "Aún no hay nada para revisar",
+    actionableAfterVisibleDetail:
+      "Esta sección se puede usar cuando al menos un provider está visible en Settings.",
+    noProviderCardsYetHeadline: "Aún no hay tarjetas de provider",
+    enableProviderComeBackDetail:
+      "Activa un provider en Settings y vuelve aquí para triage de provider en un clic.",
+    actionableAfterFirstProviderDetail: (provider) =>
+      `Activa primero ${provider} en Settings > Quick Setup y esta sección se podrá usar.`,
+    startFirstProviderComeBackDetail: (provider) =>
+      `Empieza con ${provider} y vuelve aquí para triage de provider en un clic.`,
+    needsAttentionLabel: "Requiere atención",
+    featuredProvidersHeadline: "Providers destacados",
+    needsAttentionDetail:
+      "El popup muestra hasta tres providers y prioriza los que aún necesitan setup o revisión dentro del producto.",
+    currentContractLabel: "Contrato actual",
+    policyOnlyProvidersHeadline: "Providers policy-only",
+    policyOnlyProvidersDetail:
+      "Ningún provider visible expone una live in-browser path en este profile, así que estas tarjetas se enfocan en contrato en vez de acciones.",
+    allClearLabel: "Todo correcto",
+    healthyProvidersHeadline: "Providers saludables",
+    healthyProvidersDetail:
+      "Ningún provider visible necesita setup o revisión, así que esta sección mantiene los providers principales visibles con ruta actual y freshness.",
+    statusNeedsAccess: "Necesita host access",
+    statusNeedsSetup: "Necesita setup",
+    statusOpenPage: "Abrir página",
+    statusSignIn: "Iniciar sesión",
+    statusReloadPage: "Recargar página",
+    statusNeedsReview: "Necesita revisión",
+    statusContractOnly: "Solo contrato",
+    statusHealthy: "Saludable",
+    statusWarning: "Advertencia",
+    statusSyncIssue: "Problema de sync",
+    primaryBlockedHostAccess: "La ruta actual está bloqueada por host access.",
+    primaryNeedsCredentials: "La ruta actual aún necesita credentials guardadas.",
+    primaryNeedsLivePage: "La ruta actual aún necesita una live page session.",
+    primaryNeedsSignedInPage: "La ruta actual necesita de nuevo la página con sesión iniciada.",
+    primaryPageUnreadable: "La page session actual está abierta, pero no se puede leer.",
+    primaryNeedsReview: "El setup en Settings está claro, pero este provider todavía necesita revisión.",
+    primaryPolicyOnly: "El contrato actual es policy-only en este profile.",
+    primaryLiveReady: "La ruta actual está live-ready en este profile.",
+    openSourcePageAction: "Abrir página fuente",
+    reviewDetailAction: "Revisar detalle",
+    openDetailAction: "Abrir detalle",
+    hideProviderAction: "Dejar de mostrar",
+  },
+  "pt-BR": {
+    providerTriageLabel: "Triagem de provider",
+    nothingToTriageHeadline: "Ainda não há nada para triagem",
+    actionableAfterVisibleDetail:
+      "Esta seção fica acionável depois que pelo menos um provider está visível em Settings.",
+    noProviderCardsYetHeadline: "Ainda não há cartões de provider",
+    enableProviderComeBackDetail:
+      "Ative um provider em Settings e volte aqui para triagem de provider em um clique.",
+    actionableAfterFirstProviderDetail: (provider) =>
+      `Ative ${provider} primeiro em Settings > Quick Setup e esta seção ficará acionável.`,
+    startFirstProviderComeBackDetail: (provider) =>
+      `Comece com ${provider} e volte aqui para triagem de provider em um clique.`,
+    needsAttentionLabel: "Precisa de atenção",
+    featuredProvidersHeadline: "Providers em destaque",
+    needsAttentionDetail:
+      "O popup mostra até três providers, priorizando os que ainda precisam de setup ou revisão no produto.",
+    currentContractLabel: "Contrato atual",
+    policyOnlyProvidersHeadline: "Providers policy-only",
+    policyOnlyProvidersDetail:
+      "Nenhum provider visível expõe uma live in-browser path neste profile, então estes cartões ficam focados em contrato em vez de ação.",
+    allClearLabel: "Tudo certo",
+    healthyProvidersHeadline: "Providers saudáveis",
+    healthyProvidersDetail:
+      "Nenhum provider visível precisa de setup ou revisão, então esta seção mantém os providers principais visíveis com rota atual e freshness.",
+    statusNeedsAccess: "Precisa de host access",
+    statusNeedsSetup: "Precisa de setup",
+    statusOpenPage: "Abrir página",
+    statusSignIn: "Entrar",
+    statusReloadPage: "Recarregar página",
+    statusNeedsReview: "Precisa de revisão",
+    statusContractOnly: "Só contrato",
+    statusHealthy: "Saudável",
+    statusWarning: "Aviso",
+    statusSyncIssue: "Problema de sync",
+    primaryBlockedHostAccess: "A rota atual está bloqueada por host access.",
+    primaryNeedsCredentials: "A rota atual ainda precisa de credentials salvas.",
+    primaryNeedsLivePage: "A rota atual ainda precisa de uma live page session.",
+    primaryNeedsSignedInPage: "A rota atual precisa da página logada novamente.",
+    primaryPageUnreadable: "A page session atual está aberta, mas não pode ser lida.",
+    primaryNeedsReview: "O setup em Settings está claro, mas este provider ainda precisa de revisão.",
+    primaryPolicyOnly: "O contrato atual é policy-only neste profile.",
+    primaryLiveReady: "A rota atual está live-ready neste profile.",
+    openSourcePageAction: "Abrir página fonte",
+    reviewDetailAction: "Revisar detalhe",
+    openDetailAction: "Abrir detalhe",
+    hideProviderAction: "Parar de mostrar",
+  },
+  fr: {
+    providerTriageLabel: "Triage provider",
+    nothingToTriageHeadline: "Rien à trier pour l'instant",
+    actionableAfterVisibleDetail:
+      "Cette section devient actionnable lorsqu'au moins un provider est visible dans Settings.",
+    noProviderCardsYetHeadline: "Aucune carte provider pour l'instant",
+    enableProviderComeBackDetail:
+      "Activez un provider dans Settings, puis revenez ici pour un triage provider en un clic.",
+    actionableAfterFirstProviderDetail: (provider) =>
+      `Activez d'abord ${provider} dans Settings > Quick Setup, puis cette section devient actionnable.`,
+    startFirstProviderComeBackDetail: (provider) =>
+      `Commencez avec ${provider}, puis revenez ici pour un triage provider en un clic.`,
+    needsAttentionLabel: "Attention requise",
+    featuredProvidersHeadline: "Providers en avant",
+    needsAttentionDetail:
+      "Le popup affiche jusqu'à trois providers, en priorisant ceux qui ont encore besoin de setup ou d'une revue dans le produit.",
+    currentContractLabel: "Contrat actuel",
+    policyOnlyProvidersHeadline: "Providers policy-only",
+    policyOnlyProvidersDetail:
+      "Aucun provider visible n'expose de live in-browser path dans ce profile, donc ces cartes restent centrées sur le contrat plutôt que sur l'action.",
+    allClearLabel: "Tout est clair",
+    healthyProvidersHeadline: "Providers sains",
+    healthyProvidersDetail:
+      "Aucun provider visible n'a besoin de setup ou de revue, donc cette section garde les principaux providers visibles avec route actuelle et freshness.",
+    statusNeedsAccess: "Host access requis",
+    statusNeedsSetup: "Setup requis",
+    statusOpenPage: "Ouvrir la page",
+    statusSignIn: "Se connecter",
+    statusReloadPage: "Recharger la page",
+    statusNeedsReview: "Revue requise",
+    statusContractOnly: "Contrat seul",
+    statusHealthy: "Sain",
+    statusWarning: "Avertissement",
+    statusSyncIssue: "Problème de sync",
+    primaryBlockedHostAccess: "La route actuelle est bloquée par host access.",
+    primaryNeedsCredentials: "La route actuelle a encore besoin de credentials enregistrées.",
+    primaryNeedsLivePage: "La route actuelle a encore besoin d'une live page session.",
+    primaryNeedsSignedInPage: "La route actuelle a de nouveau besoin de la page connectée.",
+    primaryPageUnreadable: "La page session actuelle est ouverte, mais ne peut pas être lue.",
+    primaryNeedsReview: "Le setup Settings est clair, mais ce provider a encore besoin d'une revue.",
+    primaryPolicyOnly: "Le contrat actuel est policy-only dans ce profile.",
+    primaryLiveReady: "La route actuelle est live-ready dans ce profile.",
+    openSourcePageAction: "Ouvrir la page source",
+    reviewDetailAction: "Examiner le détail",
+    openDetailAction: "Ouvrir le détail",
+    hideProviderAction: "Ne plus afficher",
+  },
+  de: {
+    providerTriageLabel: "Provider-Triage",
+    nothingToTriageHeadline: "Noch nichts zu prüfen",
+    actionableAfterVisibleDetail:
+      "Dieser Abschnitt wird nutzbar, sobald mindestens ein provider in Settings sichtbar ist.",
+    noProviderCardsYetHeadline: "Noch keine provider Karten",
+    enableProviderComeBackDetail:
+      "Aktiviere einen provider in Settings und kehre dann für provider-Triage mit einem Klick zurück.",
+    actionableAfterFirstProviderDetail: (provider) =>
+      `Aktiviere zuerst ${provider} in Settings > Quick Setup, dann wird dieser Abschnitt nutzbar.`,
+    startFirstProviderComeBackDetail: (provider) =>
+      `Starte mit ${provider} und kehre dann für provider-Triage mit einem Klick zurück.`,
+    needsAttentionLabel: "Benötigt Aufmerksamkeit",
+    featuredProvidersHeadline: "Hervorgehobene provider",
+    needsAttentionDetail:
+      "Das popup zeigt bis zu drei provider und bevorzugt diejenigen, die noch setup oder Prüfung im Produkt benötigen.",
+    currentContractLabel: "Aktueller Vertrag",
+    policyOnlyProvidersHeadline: "Policy-only provider",
+    policyOnlyProvidersDetail:
+      "Kein sichtbarer provider stellt in diesem profile eine live in-browser path bereit, daher bleiben diese Karten vertragsorientiert statt aktionsorientiert.",
+    allClearLabel: "Alles klar",
+    healthyProvidersHeadline: "Gesunde provider",
+    healthyProvidersDetail:
+      "Kein sichtbarer provider benötigt aktuell setup oder Prüfung, daher hält dieser Abschnitt die wichtigsten provider mit aktuellem Pfad und freshness sichtbar.",
+    statusNeedsAccess: "Host access nötig",
+    statusNeedsSetup: "Setup nötig",
+    statusOpenPage: "Seite öffnen",
+    statusSignIn: "Anmelden",
+    statusReloadPage: "Seite neu laden",
+    statusNeedsReview: "Prüfung nötig",
+    statusContractOnly: "Nur Vertrag",
+    statusHealthy: "Gesund",
+    statusWarning: "Warnung",
+    statusSyncIssue: "Sync-Problem",
+    primaryBlockedHostAccess: "Der aktuelle Pfad ist durch host access blockiert.",
+    primaryNeedsCredentials: "Der aktuelle Pfad benötigt noch gespeicherte credentials.",
+    primaryNeedsLivePage: "Der aktuelle Pfad benötigt noch eine live page session.",
+    primaryNeedsSignedInPage: "Der aktuelle Pfad benötigt die angemeldete Seite erneut.",
+    primaryPageUnreadable: "Die aktuelle page session ist geöffnet, kann aber nicht gelesen werden.",
+    primaryNeedsReview: "Das Settings setup ist klar, aber dieser provider benötigt noch Prüfung.",
+    primaryPolicyOnly: "Der aktuelle Vertrag ist in diesem profile policy-only.",
+    primaryLiveReady: "Der aktuelle Pfad ist in diesem profile live-ready.",
+    openSourcePageAction: "Quellseite öffnen",
+    reviewDetailAction: "Detail prüfen",
+    openDetailAction: "Detail öffnen",
+    hideProviderAction: "Nicht mehr anzeigen",
+  },
+  it: {
+    providerTriageLabel: "Triage provider",
+    nothingToTriageHeadline: "Ancora niente da valutare",
+    actionableAfterVisibleDetail:
+      "Questa sezione diventa utilizzabile dopo che almeno un provider è visibile in Settings.",
+    noProviderCardsYetHeadline: "Ancora nessuna scheda provider",
+    enableProviderComeBackDetail:
+      "Attiva un provider in Settings, poi torna qui per triage provider in un clic.",
+    actionableAfterFirstProviderDetail: (provider) =>
+      `Attiva prima ${provider} in Settings > Quick Setup, poi questa sezione diventa utilizzabile.`,
+    startFirstProviderComeBackDetail: (provider) =>
+      `Inizia con ${provider}, poi torna qui per triage provider in un clic.`,
+    needsAttentionLabel: "Richiede attenzione",
+    featuredProvidersHeadline: "Provider in evidenza",
+    needsAttentionDetail:
+      "Il popup mostra fino a tre provider, dando priorità a quelli che richiedono ancora setup o revisione nel prodotto.",
+    currentContractLabel: "Contratto attuale",
+    policyOnlyProvidersHeadline: "Provider policy-only",
+    policyOnlyProvidersDetail:
+      "Nessun provider visibile espone una live in-browser path in questo profile, quindi queste schede restano focalizzate sul contratto invece che sulle azioni.",
+    allClearLabel: "Tutto a posto",
+    healthyProvidersHeadline: "Provider sani",
+    healthyProvidersDetail:
+      "Nessun provider visibile richiede setup o revisione, quindi questa sezione mantiene visibili i provider principali con percorso attuale e freshness.",
+    statusNeedsAccess: "Richiede host access",
+    statusNeedsSetup: "Richiede setup",
+    statusOpenPage: "Apri pagina",
+    statusSignIn: "Accedi",
+    statusReloadPage: "Ricarica pagina",
+    statusNeedsReview: "Richiede revisione",
+    statusContractOnly: "Solo contratto",
+    statusHealthy: "Sano",
+    statusWarning: "Avviso",
+    statusSyncIssue: "Problema di sync",
+    primaryBlockedHostAccess: "Il percorso attuale è bloccato da host access.",
+    primaryNeedsCredentials: "Il percorso attuale richiede ancora credentials salvate.",
+    primaryNeedsLivePage: "Il percorso attuale richiede ancora una live page session.",
+    primaryNeedsSignedInPage: "Il percorso attuale richiede di nuovo la pagina con accesso.",
+    primaryPageUnreadable: "La page session attuale è aperta ma non può essere letta.",
+    primaryNeedsReview: "Il setup in Settings è chiaro, ma questo provider richiede ancora revisione.",
+    primaryPolicyOnly: "Il contratto attuale è policy-only in questo profile.",
+    primaryLiveReady: "Il percorso attuale è live-ready in questo profile.",
+    openSourcePageAction: "Apri pagina sorgente",
+    reviewDetailAction: "Rivedi dettaglio",
+    openDetailAction: "Apri dettaglio",
+    hideProviderAction: "Smetti di mostrare",
+  },
+  ru: {
+    providerTriageLabel: "Триаж provider",
+    nothingToTriageHeadline: "Пока нечего проверять",
+    actionableAfterVisibleDetail:
+      "Этот раздел станет доступен, когда хотя бы один provider будет видим в Settings.",
+    noProviderCardsYetHeadline: "Карточек provider пока нет",
+    enableProviderComeBackDetail:
+      "Включите один provider в Settings, затем вернитесь сюда для triage provider в один клик.",
+    actionableAfterFirstProviderDetail: (provider) =>
+      `Сначала включите ${provider} в Settings > Quick Setup, затем этот раздел станет доступен.`,
+    startFirstProviderComeBackDetail: (provider) =>
+      `Начните с ${provider}, затем вернитесь сюда для triage provider в один клик.`,
+    needsAttentionLabel: "Требует внимания",
+    featuredProvidersHeadline: "Избранные provider",
+    needsAttentionDetail:
+      "popup показывает до трех provider, отдавая приоритет тем, которым еще нужны setup или проверка в продукте.",
+    currentContractLabel: "Текущий контракт",
+    policyOnlyProvidersHeadline: "Provider policy-only",
+    policyOnlyProvidersDetail:
+      "Ни один видимый provider не предоставляет live in-browser path в этом profile, поэтому эти карточки сосредоточены на контракте, а не на действиях.",
+    allClearLabel: "Все чисто",
+    healthyProvidersHeadline: "Здоровые provider",
+    healthyProvidersDetail:
+      "Видимым provider сейчас не нужны setup или проверка, поэтому этот раздел оставляет верхние provider видимыми с текущим путем и freshness.",
+    statusNeedsAccess: "Нужен host access",
+    statusNeedsSetup: "Нужен setup",
+    statusOpenPage: "Открыть страницу",
+    statusSignIn: "Войти",
+    statusReloadPage: "Перезагрузить страницу",
+    statusNeedsReview: "Нужна проверка",
+    statusContractOnly: "Только контракт",
+    statusHealthy: "Здорово",
+    statusWarning: "Предупреждение",
+    statusSyncIssue: "Проблема sync",
+    primaryBlockedHostAccess: "Текущий путь заблокирован host access.",
+    primaryNeedsCredentials: "Текущему пути все еще нужны сохраненные credentials.",
+    primaryNeedsLivePage: "Текущему пути все еще нужна live page session.",
+    primaryNeedsSignedInPage: "Текущему пути снова нужна страница с выполненным входом.",
+    primaryPageUnreadable: "Текущая page session открыта, но не может быть прочитана.",
+    primaryNeedsReview: "Setup в Settings ясен, но этот provider все еще требует проверки.",
+    primaryPolicyOnly: "Текущий контракт policy-only в этом profile.",
+    primaryLiveReady: "Текущий путь live-ready в этом profile.",
+    openSourcePageAction: "Открыть исходную страницу",
+    reviewDetailAction: "Проверить детали",
+    openDetailAction: "Открыть детали",
+    hideProviderAction: "Не показывать",
+  },
+  ar: {
+    providerTriageLabel: "فرز provider",
+    nothingToTriageHeadline: "لا يوجد ما يحتاج فرزا بعد",
+    actionableAfterVisibleDetail:
+      "يصبح هذا القسم قابلا للاستخدام بعد ظهور provider واحد على الأقل في Settings.",
+    noProviderCardsYetHeadline: "لا توجد بطاقات provider بعد",
+    enableProviderComeBackDetail:
+      "فعّل provider واحدا في Settings، ثم عد هنا لفرز provider بنقرة واحدة.",
+    actionableAfterFirstProviderDetail: (provider) =>
+      `فعّل ${provider} أولا في Settings > Quick Setup، ثم يصبح هذا القسم قابلا للاستخدام.`,
+    startFirstProviderComeBackDetail: (provider) =>
+      `ابدأ مع ${provider}، ثم عد هنا لفرز provider بنقرة واحدة.`,
+    needsAttentionLabel: "يحتاج انتباها",
+    featuredProvidersHeadline: "Providers بارزة",
+    needsAttentionDetail:
+      "يعرض popup حتى ثلاثة providers، مع أولوية لمن لا يزال يحتاج setup أو مراجعة داخل المنتج.",
+    currentContractLabel: "العقد الحالي",
+    policyOnlyProvidersHeadline: "Providers policy-only",
+    policyOnlyProvidersDetail:
+      "لا يعرض أي provider مرئي live in-browser path في هذا profile، لذلك تبقى هذه البطاقات مركزة على العقد بدلا من الإجراءات.",
+    allClearLabel: "كل شيء واضح",
+    healthyProvidersHeadline: "Providers سليمة",
+    healthyProvidersDetail:
+      "لا يحتاج أي provider مرئي حاليا إلى setup أو مراجعة، لذلك يبقي هذا القسم أهم providers مرئية مع المسار الحالي و freshness.",
+    statusNeedsAccess: "يحتاج host access",
+    statusNeedsSetup: "يحتاج setup",
+    statusOpenPage: "فتح الصفحة",
+    statusSignIn: "تسجيل الدخول",
+    statusReloadPage: "إعادة تحميل الصفحة",
+    statusNeedsReview: "يحتاج مراجعة",
+    statusContractOnly: "عقد فقط",
+    statusHealthy: "سليم",
+    statusWarning: "تحذير",
+    statusSyncIssue: "مشكلة sync",
+    primaryBlockedHostAccess: "المسار الحالي محجوب بسبب host access.",
+    primaryNeedsCredentials: "المسار الحالي ما زال يحتاج credentials محفوظة.",
+    primaryNeedsLivePage: "المسار الحالي ما زال يحتاج live page session.",
+    primaryNeedsSignedInPage: "المسار الحالي يحتاج الصفحة المسجلة الدخول مرة أخرى.",
+    primaryPageUnreadable: "الـ page session الحالية مفتوحة لكن لا يمكن قراءتها.",
+    primaryNeedsReview: "إعداد Settings واضح، لكن هذا provider ما زال يحتاج مراجعة.",
+    primaryPolicyOnly: "العقد الحالي policy-only في هذا profile.",
+    primaryLiveReady: "المسار الحالي live-ready في هذا profile.",
+    openSourcePageAction: "فتح صفحة المصدر",
+    reviewDetailAction: "مراجعة التفاصيل",
+    openDetailAction: "فتح التفاصيل",
+    hideProviderAction: "إيقاف العرض",
+  },
+  hi: {
+    providerTriageLabel: "Provider triage",
+    nothingToTriageHeadline: "अभी triage के लिए कुछ नहीं",
+    actionableAfterVisibleDetail:
+      "Settings में कम से कम एक provider visible होने के बाद यह section actionable होगा।",
+    noProviderCardsYetHeadline: "अभी कोई provider card नहीं",
+    enableProviderComeBackDetail:
+      "Settings में एक provider enable करें, फिर one-click provider triage के लिए यहां लौटें।",
+    actionableAfterFirstProviderDetail: (provider) =>
+      `पहले Settings > Quick Setup में ${provider} enable करें, फिर यह section actionable होगा।`,
+    startFirstProviderComeBackDetail: (provider) =>
+      `${provider} से शुरू करें, फिर one-click provider triage के लिए यहां लौटें।`,
+    needsAttentionLabel: "ध्यान चाहिए",
+    featuredProvidersHeadline: "Featured providers",
+    needsAttentionDetail:
+      "popup तीन तक providers दिखाता है और उन providers को प्राथमिकता देता है जिन्हें अभी setup या in-product review चाहिए।",
+    currentContractLabel: "मौजूदा contract",
+    policyOnlyProvidersHeadline: "Policy-only providers",
+    policyOnlyProvidersDetail:
+      "इस profile में कोई visible provider live in-browser path expose नहीं करता, इसलिए ये cards action-focused के बजाय contract-focused रहते हैं।",
+    allClearLabel: "सब ठीक",
+    healthyProvidersHeadline: "Healthy providers",
+    healthyProvidersDetail:
+      "अभी कोई visible provider setup या review नहीं मांगता, इसलिए यह section current path और freshness context के लिए top providers दिखाए रखता है।",
+    statusNeedsAccess: "Host access चाहिए",
+    statusNeedsSetup: "Setup चाहिए",
+    statusOpenPage: "Page खोलें",
+    statusSignIn: "Sign in",
+    statusReloadPage: "Page reload करें",
+    statusNeedsReview: "Review चाहिए",
+    statusContractOnly: "Contract-only",
+    statusHealthy: "Healthy",
+    statusWarning: "Warning",
+    statusSyncIssue: "sync समस्या",
+    primaryBlockedHostAccess: "Current path host access पर blocked है।",
+    primaryNeedsCredentials: "Current path को अभी stored credentials चाहिए।",
+    primaryNeedsLivePage: "Current path को अभी live page session चाहिए।",
+    primaryNeedsSignedInPage: "Current path को signed-in page फिर चाहिए।",
+    primaryPageUnreadable: "Current page session खुला है, लेकिन पढ़ा नहीं जा सकता।",
+    primaryNeedsReview: "Settings setup साफ है, लेकिन इस provider को अभी review चाहिए।",
+    primaryPolicyOnly: "इस profile में current contract policy-only है।",
+    primaryLiveReady: "इस profile में current path live-ready है।",
+    openSourcePageAction: "Source page खोलें",
+    reviewDetailAction: "Detail review करें",
+    openDetailAction: "Detail खोलें",
+    hideProviderAction: "दिखाना बंद करें",
+  },
+  id: {
+    providerTriageLabel: "Triage provider",
+    nothingToTriageHeadline: "Belum ada yang perlu ditriage",
+    actionableAfterVisibleDetail:
+      "Bagian ini dapat digunakan setelah setidaknya satu provider terlihat di Settings.",
+    noProviderCardsYetHeadline: "Belum ada kartu provider",
+    enableProviderComeBackDetail:
+      "Aktifkan satu provider di Settings, lalu kembali ke sini untuk triage provider sekali klik.",
+    actionableAfterFirstProviderDetail: (provider) =>
+      `Aktifkan ${provider} di Settings > Quick Setup terlebih dahulu, lalu bagian ini dapat digunakan.`,
+    startFirstProviderComeBackDetail: (provider) =>
+      `Mulai dengan ${provider}, lalu kembali ke sini untuk triage provider sekali klik.`,
+    needsAttentionLabel: "Perlu perhatian",
+    featuredProvidersHeadline: "Provider unggulan",
+    needsAttentionDetail:
+      "popup menampilkan hingga tiga provider, memprioritaskan yang masih perlu setup atau tinjauan di dalam produk.",
+    currentContractLabel: "Kontrak saat ini",
+    policyOnlyProvidersHeadline: "Provider policy-only",
+    policyOnlyProvidersDetail:
+      "Tidak ada provider terlihat yang mengekspos live in-browser path di profile ini, jadi kartu ini tetap berfokus pada kontrak, bukan aksi.",
+    allClearLabel: "Semua jelas",
+    healthyProvidersHeadline: "Provider sehat",
+    healthyProvidersDetail:
+      "Tidak ada provider terlihat yang perlu setup atau tinjauan, jadi bagian ini menjaga provider teratas tetap terlihat untuk jalur saat ini dan freshness.",
+    statusNeedsAccess: "Perlu host access",
+    statusNeedsSetup: "Perlu setup",
+    statusOpenPage: "Buka halaman",
+    statusSignIn: "Masuk",
+    statusReloadPage: "Muat ulang halaman",
+    statusNeedsReview: "Perlu tinjauan",
+    statusContractOnly: "Hanya kontrak",
+    statusHealthy: "Sehat",
+    statusWarning: "Peringatan",
+    statusSyncIssue: "Masalah sync",
+    primaryBlockedHostAccess: "Jalur saat ini terblokir oleh host access.",
+    primaryNeedsCredentials: "Jalur saat ini masih memerlukan credentials tersimpan.",
+    primaryNeedsLivePage: "Jalur saat ini masih memerlukan live page session.",
+    primaryNeedsSignedInPage: "Jalur saat ini memerlukan halaman yang sudah masuk lagi.",
+    primaryPageUnreadable: "page session saat ini terbuka tetapi tidak dapat dibaca.",
+    primaryNeedsReview: "Setup Settings sudah jelas, tetapi provider ini masih perlu tinjauan.",
+    primaryPolicyOnly: "Kontrak saat ini policy-only di profile ini.",
+    primaryLiveReady: "Jalur saat ini live-ready di profile ini.",
+    openSourcePageAction: "Buka halaman sumber",
+    reviewDetailAction: "Tinjau detail",
+    openDetailAction: "Buka detail",
+    hideProviderAction: "Berhenti tampilkan",
+  },
+};
+
 function getPopupFirstRunCopy(
   locale: ResolvedAppLocale,
 ): PopupFirstRunCopyText | null {
@@ -1073,6 +1684,16 @@ function getPopupFirstRunCopy(
   }
 
   return POPUP_FIRST_RUN_COPY[locale];
+}
+
+function getPopupFeaturedCopy(
+  locale: ResolvedAppLocale,
+): PopupFeaturedCopyText | null {
+  if (locale === "en" || locale === "zh-CN") {
+    return null;
+  }
+
+  return POPUP_FEATURED_COPY[locale];
 }
 
 function formatLocalizedProviderCount(
@@ -1221,6 +1842,55 @@ function buildLocalizedFirstRunPopupSections(
       contractOnly: copy.headerContractOnly,
       needsReview: copy.headerNeedsReview,
       ready: copy.headerReady,
+    },
+  } as const;
+}
+
+function buildLocalizedFeaturedPopupSections(copy: PopupFeaturedCopyText) {
+  return {
+    featuredSection: {
+      providerTriageLabel: copy.providerTriageLabel,
+      nothingToTriageHeadline: copy.nothingToTriageHeadline,
+      actionableAfterVisibleDetail: copy.actionableAfterVisibleDetail,
+      noProviderCardsYetHeadline: copy.noProviderCardsYetHeadline,
+      enableProviderComeBackDetail: copy.enableProviderComeBackDetail,
+      actionableAfterFirstProviderDetail: (providerLabel: string) =>
+        copy.actionableAfterFirstProviderDetail(providerLabel),
+      startFirstProviderComeBackDetail: (providerLabel: string) =>
+        copy.startFirstProviderComeBackDetail(providerLabel),
+      needsAttentionLabel: copy.needsAttentionLabel,
+      featuredProvidersHeadline: copy.featuredProvidersHeadline,
+      needsAttentionDetail: copy.needsAttentionDetail,
+      currentContractLabel: copy.currentContractLabel,
+      policyOnlyProvidersHeadline: copy.policyOnlyProvidersHeadline,
+      policyOnlyProvidersDetail: copy.policyOnlyProvidersDetail,
+      allClearLabel: copy.allClearLabel,
+      healthyProvidersHeadline: copy.healthyProvidersHeadline,
+      healthyProvidersDetail: copy.healthyProvidersDetail,
+    },
+    featuredCard: {
+      statusNeedsAccess: copy.statusNeedsAccess,
+      statusNeedsSetup: copy.statusNeedsSetup,
+      statusOpenPage: copy.statusOpenPage,
+      statusSignIn: copy.statusSignIn,
+      statusReloadPage: copy.statusReloadPage,
+      statusNeedsReview: copy.statusNeedsReview,
+      statusContractOnly: copy.statusContractOnly,
+      statusHealthy: copy.statusHealthy,
+      statusWarning: copy.statusWarning,
+      statusSyncIssue: copy.statusSyncIssue,
+      primaryBlockedHostAccess: copy.primaryBlockedHostAccess,
+      primaryNeedsCredentials: copy.primaryNeedsCredentials,
+      primaryNeedsLivePage: copy.primaryNeedsLivePage,
+      primaryNeedsSignedInPage: copy.primaryNeedsSignedInPage,
+      primaryPageUnreadable: copy.primaryPageUnreadable,
+      primaryNeedsReview: copy.primaryNeedsReview,
+      primaryPolicyOnly: copy.primaryPolicyOnly,
+      primaryLiveReady: copy.primaryLiveReady,
+      openSourcePageAction: copy.openSourcePageAction,
+      reviewDetailAction: copy.reviewDetailAction,
+      openDetailAction: copy.openDetailAction,
+      hideProviderAction: copy.hideProviderAction,
     },
   } as const;
 }
@@ -1646,8 +2316,11 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
     return englishCopy;
   }
 
+  const featuredCopy = getPopupFeaturedCopy(i18n.resolvedLocale);
+
   return {
     ...englishCopy,
     ...buildLocalizedFirstRunPopupSections(i18n, firstRunCopy),
+    ...(featuredCopy ? buildLocalizedFeaturedPopupSections(featuredCopy) : {}),
   };
 }

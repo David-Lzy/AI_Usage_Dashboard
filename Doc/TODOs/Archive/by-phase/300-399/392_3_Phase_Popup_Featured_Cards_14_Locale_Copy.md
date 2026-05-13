@@ -1,4 +1,4 @@
-# Phase 392.2.1 - Popup Featured Cards 14-Locale Copy
+# Phase 392.3 - Popup Featured Cards 14-Locale Copy
 
 Date: 2026-05-13
 
@@ -17,7 +17,8 @@ Freshness model:
 Status note:
 
 - child phase split from `Phase 392.2`
-- active popup localization implementation slice
+- completed and archived on 2026-05-13
+- popup featured localization implementation slice
 
 ## Goal
 
@@ -34,12 +35,12 @@ Translate popup featured-section and featured-card structured copy for all 14 ru
 
 - Do not change popup view-model decisions, action ids, route ids, provider ordering, sync behavior, or provider support claims.
 - Do not translate raw provider evidence, raw diagnostic body text, archive/export schemas, request ids, filenames, route ids, or vendor page text.
-- Do not change `actionSection`, `surfaceRoles`, or `aria`; those move to `Phase 392.2.2`.
+- Do not change `actionSection`, `surfaceRoles`, or `aria`; those move to `Phase 392.4`.
 
 ## Acceptance
 
 - Popup featured-section and featured-card copy has explicit 14-locale coverage.
-- English fallback remains only for `Phase 392.2.2` buckets or protected raw evidence.
+- English fallback remains only for `Phase 392.4` buckets or protected raw evidence.
 - Existing popup view-model tests still pass.
 
 ## Planned Verification
@@ -53,4 +54,10 @@ Translate popup featured-section and featured-card structured copy for all 14 ru
 
 ## Follow-Up
 
-- Finish action-section, surface-role, and aria popup copy in `Phase 392.2.2`.
+- Finish action-section, surface-role, and aria popup copy in `Phase 392.4`.
+
+## Closeout
+
+- Added explicit 14-locale structured copy for popup featured-section and featured-card buckets.
+- Preserved English fallback for action-section, surface-role, and aria buckets until `Phase 392.4`.
+- Added focused tests proving every non-English locale has non-English representative featured-section and featured-card copy while `Phase 392.4` buckets remain on the planned fallback boundary.

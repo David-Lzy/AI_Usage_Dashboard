@@ -14,6 +14,11 @@ describe("doc taxonomy check helpers", () => {
   it("parses phase filenames into sortable tuples", () => {
     expect(parsePhaseTupleFromFilename("135_Phase_Foo.md")).toEqual([135, 0]);
     expect(parsePhaseTupleFromFilename("41_2_Phase_Bar.md")).toEqual([41, 2]);
+    expect(parsePhaseTupleFromFilename("392_2_1_Phase_Baz.md")).toEqual([
+      392,
+      2,
+      1,
+    ]);
     expect(
       parsePhaseTupleFromFilename(
         "Doc/TODOs/Archive/by-phase/100-199/135_Phase_Foo.md",
@@ -24,6 +29,8 @@ describe("doc taxonomy check helpers", () => {
 
   it("compares phase tuples in archive order", () => {
     expect(comparePhaseTuples([41, 0], [41, 2])).toBeLessThan(0);
+    expect(comparePhaseTuples([392, 2], [392, 2, 1])).toBeLessThan(0);
+    expect(comparePhaseTuples([392, 2, 1], [392, 2, 0])).toBeGreaterThan(0);
     expect(comparePhaseTuples([135, 0], [134, 0])).toBeGreaterThan(0);
   });
 

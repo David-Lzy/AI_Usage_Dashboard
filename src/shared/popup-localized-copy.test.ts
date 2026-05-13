@@ -52,7 +52,27 @@ describe("buildPopupLocalizedCopy", () => {
     }
   });
 
-  it("keeps later popup buckets on English fallback until the next slice", () => {
+  it("ships popup featured copy for every non-English locale", () => {
+    const englishCopy = buildPopupLocalizedCopy(createRuntimeI18n("en"));
+
+    for (const locale of SUPPORTED_APP_LOCALES.filter(
+      (supportedLocale) => supportedLocale !== "en",
+    )) {
+      const copy = buildPopupLocalizedCopy(createRuntimeI18n(locale));
+
+      expect(copy.featuredSection.nothingToTriageHeadline).not.toBe(
+        englishCopy.featuredSection.nothingToTriageHeadline,
+      );
+      expect(copy.featuredCard.statusNeedsAccess).not.toBe(
+        englishCopy.featuredCard.statusNeedsAccess,
+      );
+      expect(copy.featuredCard.primaryBlockedHostAccess).not.toBe(
+        englishCopy.featuredCard.primaryBlockedHostAccess,
+      );
+    }
+  });
+
+  it("keeps action and surface-role buckets on English fallback until the next slice", () => {
     const englishCopy = buildPopupLocalizedCopy(createRuntimeI18n("en"));
 
     for (const locale of SUPPORTED_APP_LOCALES.filter(
@@ -60,12 +80,13 @@ describe("buildPopupLocalizedCopy", () => {
     )) {
       const copy = buildPopupLocalizedCopy(createRuntimeI18n(locale));
 
-      expect(copy.featuredCard.statusNeedsAccess).toBe(
-        englishCopy.featuredCard.statusNeedsAccess,
+      expect(copy.actionSection.quickActionsLabel).toBe(
+        englishCopy.actionSection.quickActionsLabel,
       );
       expect(copy.surfaceRoles.popupQuickGlanceHeadline).toBe(
         englishCopy.surfaceRoles.popupQuickGlanceHeadline,
       );
+      expect(copy.aria.setupCoverage).toBe(englishCopy.aria.setupCoverage);
     }
   });
 

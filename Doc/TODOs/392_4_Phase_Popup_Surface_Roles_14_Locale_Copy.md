@@ -1,4 +1,4 @@
-# Phase 392.2.2 - Popup Surface Roles 14-Locale Copy
+# Phase 392.4 - Popup Surface Roles 14-Locale Copy
 
 Date: 2026-05-13
 
@@ -17,7 +17,7 @@ Freshness model:
 Status note:
 
 - child phase split from `Phase 392.2`
-- queued after `Phase 392.2.1`
+- queued after `Phase 392.3`
 
 ## Goal
 
