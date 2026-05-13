@@ -161,6 +161,17 @@ describe("runtime i18n", () => {
     expect(i18n.t("settings.preferences.locale.system")).toBe("시스템 따름");
   });
 
+  it("returns translated runtime strings for the first es-419 shell slice", () => {
+    const i18n = createRuntimeI18n("es-419");
+
+    expect(i18n.t("dashboard.hero.title")).toBe(
+      "Un panel para las cuotas de codificación con IA",
+    );
+    expect(i18n.t("popup.header.title")).toBe("Vista rápida");
+    expect(i18n.t("settings.topbar.title")).toBe("Configuración");
+    expect(i18n.t("settings.preferences.locale.system")).toBe("Seguir sistema");
+  });
+
   it("localizes quick theme toggle copy from the next explicit mode", () => {
     const i18n = createRuntimeI18n("zh-CN");
 
