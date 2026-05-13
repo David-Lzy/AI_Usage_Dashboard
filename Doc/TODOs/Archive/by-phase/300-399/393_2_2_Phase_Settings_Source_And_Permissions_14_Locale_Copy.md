@@ -17,7 +17,7 @@ Freshness model:
 Status note:
 
 - child phase split from `Phase 393.2`
-- queued after `Phase 393.2.1`
+- completed and archived on 2026-05-13
 
 ## Goal
 
@@ -54,3 +54,21 @@ Expand Settings source-card and permission helper copy into explicit 14-locale r
 ## Follow-Up
 
 - Move to Provider Detail and provider-source display wrapper copy in `Phase 393.3`.
+
+## Closeout
+
+Summary:
+
+- Added explicit 14-locale Settings source-card and permission helper copy through `src/shared/settings-source-permissions-localized-copy.ts`.
+- Merged the source and permission buckets into `buildSettingsLocalizedCopy` for non-`en`/non-`zh-CN` locales while preserving the English base, the `zh-CN` reviewed branch, and existing Settings behavior.
+- Kept provider source ids, source preference ids, route hints, host labels, raw diagnostic bodies, provider source-truth text, source preference behavior, host-permission actions, page binding, diagnostics behavior, provider support claims, and raw evidence rendering unchanged.
+- Added a focused guard that every non-English locale keeps representative source-card and permission copy while Provider Detail and provider-source wrapper copy remain on the planned `Phase 393.3` boundary.
+
+Verification:
+
+- `npm run i18n:check`
+- `npm run test -- src/shared/settings-localized-copy.test.ts`
+- `npm run test -- src/sidepanel/settings-view-models.test.ts`
+- `npm run typecheck`
+- `npm run docs:check`
+- `git diff --check`

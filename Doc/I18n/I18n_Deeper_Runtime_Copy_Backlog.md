@@ -30,7 +30,8 @@ Track runtime copy that still falls back to English after the 14-locale shell pi
 - Popup first-run guidance, setup coverage, snapshot status, header, featured-section, featured-card, action-section, surface-role, and aria helper copy now has explicit 14-locale coverage through `Phase 392.4`.
 - Settings core helper copy for layout, Quick Setup, preferences, and theme-customization buckets now has explicit 14-locale coverage through `Phase 393.1`.
 - Settings credential helper copy now has explicit 14-locale coverage through `Phase 393.2.1`.
-- Deeper structured helper copy outside the popup, Settings core, and Settings credential slices still mostly uses explicit `zh-CN` branches plus English fallback for every other non-English locale.
+- Settings source-card and permission helper copy now has explicit 14-locale coverage through `Phase 393.2.2`.
+- Deeper structured helper copy outside the popup and Settings slices still mostly uses explicit `zh-CN` branches plus English fallback for every other non-English locale.
 - Locale registry, `rtl` mapping, runtime `lang`/`dir`, Chrome `_locales`, RDP locale validation, and store listing draft coverage are already guarded by `npm run i18n:check`.
 
 ## Translation Backlog
@@ -156,7 +157,7 @@ Reason:
 - `Phase 393.1` translated Settings layout, Quick Setup, preferences, and theme-customization buckets for all 14 runtime locales.
 - `Phase 393.2` split Settings source-control work into credential and source/permission child phases before runtime code changes.
 - `Phase 393.2.1` translated Settings credential buckets for all 14 runtime locales.
-- `Phase 393.2.2` should translate Settings source-card helper labels and permission buckets for all 14 runtime locales.
+- `Phase 393.2.2` translated Settings source-card helper labels and permission buckets for all 14 runtime locales.
 - `Phase 393.3` should translate Provider Detail and provider-source display wrapper buckets for all 14 runtime locales.
 - Diagnostics, operator workspaces, and store helper routes should remain follow-up work unless the child phases prove small enough to split safely.
 

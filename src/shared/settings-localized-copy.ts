@@ -12,6 +12,10 @@ import {
   buildLocalizedSettingsCoreSections,
   getSettingsCoreCopy,
 } from "./settings-core-localized-copy";
+import {
+  buildLocalizedSettingsSourcePermissionsSections,
+  getSettingsSourcePermissionsCopy,
+} from "./settings-source-permissions-localized-copy";
 
 export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
   if (i18n.resolvedLocale === "zh-CN") {
@@ -500,8 +504,11 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
 
   const coreCopy = getSettingsCoreCopy(i18n.resolvedLocale);
   const credentialsCopy = getSettingsCredentialsCopy(i18n.resolvedLocale);
+  const sourcePermissionsCopy = getSettingsSourcePermissionsCopy(
+    i18n.resolvedLocale,
+  );
 
-  if (!coreCopy && !credentialsCopy) {
+  if (!coreCopy && !credentialsCopy && !sourcePermissionsCopy) {
     return englishCopy;
   }
 
@@ -510,6 +517,12 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
     ...(coreCopy ? buildLocalizedSettingsCoreSections(i18n, coreCopy) : {}),
     ...(credentialsCopy
       ? buildLocalizedSettingsCredentialsSection(credentialsCopy)
+      : {}),
+    ...(sourcePermissionsCopy
+      ? buildLocalizedSettingsSourcePermissionsSections(
+          i18n,
+          sourcePermissionsCopy,
+        )
       : {}),
   };
 }

@@ -43,7 +43,7 @@ describe("buildSettingsLocalizedCopy", () => {
     expect(copy.permissions.requestAccess).toBe("请求授权");
   });
 
-  it("ships Settings core and credential copy for every non-English locale", () => {
+  it("ships Settings core, credential, source, and permission copy for every non-English locale", () => {
     const englishCopy = buildSettingsLocalizedCopy(createRuntimeI18n("en"));
 
     for (const locale of SUPPORTED_APP_LOCALES.filter(
@@ -70,15 +70,24 @@ describe("buildSettingsLocalizedCopy", () => {
       expect(copy.credentials.codexHelpText).not.toBe(
         englishCopy.credentials.codexHelpText,
       );
-
-      if (locale !== "zh-CN") {
-        expect(copy.sources.preferenceLabel).toBe(
-          englishCopy.sources.preferenceLabel,
-        );
-        expect(copy.permissions.requestAccess).toBe(
-          englishCopy.permissions.requestAccess,
-        );
-      }
+      expect(copy.sources.preferenceLabel).not.toBe(
+        englishCopy.sources.preferenceLabel,
+      );
+      expect(copy.sources.operationalNoteLabel).not.toBe(
+        englishCopy.sources.operationalNoteLabel,
+      );
+      expect(copy.sources.itemCount(3)).not.toBe(
+        englishCopy.sources.itemCount(3),
+      );
+      expect(copy.sources.cardLabels.primary.availabilitySummary).not.toBe(
+        englishCopy.sources.cardLabels.primary.availabilitySummary,
+      );
+      expect(copy.permissions.hostAccessMissing).not.toBe(
+        englishCopy.permissions.hostAccessMissing,
+      );
+      expect(copy.permissions.requestAccess).not.toBe(
+        englishCopy.permissions.requestAccess,
+      );
     }
   });
 
