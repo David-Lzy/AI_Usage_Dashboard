@@ -136,8 +136,8 @@ for (const relativePath of [
 }
 
 for (const relativePath of [
-  "Doc/testing/Phase_183_Provider_Source_Display_Wrapper_Localization.md",
-  "Doc/TODOs/Archive/183_Phase_Provider_Source_Display_Wrapper_Localization.md",
+  "Doc/testing/Archive/phase-reports/100-199/Phase_183_Provider_Source_Display_Wrapper_Localization.md",
+  "Doc/TODOs/Archive/by-phase/100-199/183_Phase_Provider_Source_Display_Wrapper_Localization.md",
 ]) {
   const fileContent = await readProjectFile(relativePath);
   for (const requiredMarker of [

@@ -90,7 +90,7 @@ async function verifyTestsAndDocs() {
       ],
     },
     {
-      relativePath: "Doc/testing/Phase_233_Codex_Hydration_Retry.md",
+      relativePath: "Doc/testing/Archive/phase-reports/200-299/Phase_233_Codex_Hydration_Retry.md",
       markers: [
         "Phase 233",
         "Codex Hydration Retry",
@@ -98,7 +98,7 @@ async function verifyTestsAndDocs() {
       ],
     },
     {
-      relativePath: "Doc/TODOs/Archive/233_Phase_Codex_Hydration_Retry.md",
+      relativePath: "Doc/TODOs/Archive/by-phase/200-299/233_Phase_Codex_Hydration_Retry.md",
       markers: [
         "Phase 233",
         "completed and archived on 2026-05-03",

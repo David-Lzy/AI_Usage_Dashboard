@@ -203,7 +203,7 @@ async function reviewStoreScreenshotSeedMetadata() {
 async function reviewCloseoutDocs() {
   const docChecks = [
     [
-      "Doc/testing/Phase_198_Sample_Store_Seed_Diagnostic_Metadata_Alignment.md",
+      "Doc/testing/Archive/phase-reports/100-199/Phase_198_Sample_Store_Seed_Diagnostic_Metadata_Alignment.md",
       [
         "Phase 198",
         "Sample Store Seed Diagnostic Metadata Alignment",
@@ -212,7 +212,7 @@ async function reviewCloseoutDocs() {
       ],
     ],
     [
-      "Doc/TODOs/Archive/198_Phase_Sample_Store_Seed_Diagnostic_Metadata_Alignment.md",
+      "Doc/TODOs/Archive/by-phase/100-199/198_Phase_Sample_Store_Seed_Diagnostic_Metadata_Alignment.md",
       [
         "Phase 198",
         "Sample Store Seed Diagnostic Metadata Alignment",

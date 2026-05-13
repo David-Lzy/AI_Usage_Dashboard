@@ -197,7 +197,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/291_Phase_Cursor_Managed_Session_Page_And_RC10_Packaging.md",
+        "Doc/TODOs/Archive/by-phase/200-299/291_Phase_Cursor_Managed_Session_Page_And_RC10_Packaging.md",
       markers: [
         "Phase 291",
         expectedPackageVersion,
@@ -207,7 +207,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/testing/Phase_291_Cursor_Managed_Session_Page_And_RC10_Packaging.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_291_Cursor_Managed_Session_Page_And_RC10_Packaging.md",
       markers: [
         "Phase 291",
         expectedPackageVersion,

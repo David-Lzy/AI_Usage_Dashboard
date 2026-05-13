@@ -107,7 +107,7 @@ async function verifyDocsMarkers() {
   const expectations = [
     {
       relativePath:
-        "Doc/testing/Phase_237_Provider_Card_CSS_Module_Split.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_237_Provider_Card_CSS_Module_Split.md",
       markers: [
         "Phase 237",
         "Provider Card CSS Module Split",
@@ -117,7 +117,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/237_Phase_Provider_Card_CSS_Module_Split.md",
+        "Doc/TODOs/Archive/by-phase/200-299/237_Phase_Provider_Card_CSS_Module_Split.md",
       markers: [
         "Phase 237",
         "completed and archived on 2026-05-03",

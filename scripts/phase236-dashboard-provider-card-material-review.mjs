@@ -115,7 +115,7 @@ async function verifyDocsMarkers() {
   const expectations = [
     {
       relativePath:
-        "Doc/testing/Phase_236_Dashboard_Provider_Card_Material_Unification.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_236_Dashboard_Provider_Card_Material_Unification.md",
       markers: [
         "Phase 236",
         "Dashboard Provider Card Material Unification",
@@ -124,7 +124,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/236_Phase_Dashboard_Provider_Card_Material_Unification.md",
+        "Doc/TODOs/Archive/by-phase/200-299/236_Phase_Dashboard_Provider_Card_Material_Unification.md",
       markers: [
         "Phase 236",
         "completed and archived on 2026-05-03",

@@ -121,7 +121,7 @@ async function verifyDocsMarkers() {
   const expectations = [
     {
       relativePath:
-        "Doc/testing/Phase_264_Standard_App_Runtime_Hook.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_264_Standard_App_Runtime_Hook.md",
       markers: [
         "Phase 264",
         "Standard App Runtime Hook",
@@ -130,7 +130,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/264_Phase_Standard_App_Runtime_Hook.md",
+        "Doc/TODOs/Archive/by-phase/200-299/264_Phase_Standard_App_Runtime_Hook.md",
       markers: [
         "Phase 264",
         "completed and archived on 2026-05-03",

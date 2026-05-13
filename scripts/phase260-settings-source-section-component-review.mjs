@@ -114,7 +114,7 @@ async function verifyDocsMarkers() {
   const expectations = [
     {
       relativePath:
-        "Doc/testing/Phase_260_Settings_Source_Section_Component_Extraction.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_260_Settings_Source_Section_Component_Extraction.md",
       markers: [
         "Phase 260",
         "Settings Source Section Component Extraction",
@@ -123,7 +123,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/260_Phase_Settings_Source_Section_Component_Extraction.md",
+        "Doc/TODOs/Archive/by-phase/200-299/260_Phase_Settings_Source_Section_Component_Extraction.md",
       markers: [
         "Phase 260",
         "completed and archived on 2026-05-03",

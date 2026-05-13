@@ -100,7 +100,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/testing/Phase_216_Page_Binding_Lifecycle.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_216_Page_Binding_Lifecycle.md",
       markers: [
         "Phase 216",
         "Page Binding Lifecycle",
@@ -109,7 +109,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/216_Phase_Page_Binding_Lifecycle.md",
+        "Doc/TODOs/Archive/by-phase/200-299/216_Phase_Page_Binding_Lifecycle.md",
       markers: [
         "Phase 216",
         "completed and archived on 2026-04-29",

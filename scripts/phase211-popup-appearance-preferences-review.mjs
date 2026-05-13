@@ -144,7 +144,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/testing/Phase_211_Popup_Appearance_Preferences.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_211_Popup_Appearance_Preferences.md",
       markers: [
         "Phase 211",
         "Popup Appearance Preferences",
@@ -153,7 +153,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/211_Phase_Popup_Appearance_Preferences.md",
+        "Doc/TODOs/Archive/by-phase/200-299/211_Phase_Popup_Appearance_Preferences.md",
       markers: [
         "Phase 211",
         "completed and archived on 2026-04-26",

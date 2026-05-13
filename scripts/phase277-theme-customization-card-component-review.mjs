@@ -111,7 +111,7 @@ async function verifyDocsMarkers() {
   const expectations = [
     {
       relativePath:
-        "Doc/testing/Phase_277_Theme_Customization_Card_Component.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_277_Theme_Customization_Card_Component.md",
       markers: [
         "Phase 277",
         "Theme Customization Card Component",
@@ -120,7 +120,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/277_Phase_Theme_Customization_Card_Component.md",
+        "Doc/TODOs/Archive/by-phase/200-299/277_Phase_Theme_Customization_Card_Component.md",
       markers: [
         "Phase 277",
         "completed and archived on 2026-05-03",

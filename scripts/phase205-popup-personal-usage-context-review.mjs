@@ -90,7 +90,7 @@ async function verifyDocs() {
   const docExpectations = [
     {
       relativePath:
-        "Doc/testing/Phase_205_Popup_Personal_Usage_Context_Compression.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_205_Popup_Personal_Usage_Context_Compression.md",
       markers: [
         "Phase 205",
         "Popup Personal Usage Context Compression",
@@ -100,7 +100,7 @@ async function verifyDocs() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/205_Phase_Popup_Personal_Usage_Context_Compression.md",
+        "Doc/TODOs/Archive/by-phase/200-299/205_Phase_Popup_Personal_Usage_Context_Compression.md",
       markers: [
         "Phase 205",
         "completed and archived on 2026-04-25",

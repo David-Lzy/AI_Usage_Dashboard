@@ -140,8 +140,8 @@ for (const requiredPhrase of [
 }
 
 for (const relativePath of [
-  "Doc/testing/Phase_193_Localized_Warning_Diagnostic_Presentation.md",
-  "Doc/TODOs/Archive/193_Phase_Localized_Warning_Diagnostic_Presentation.md",
+  "Doc/testing/Archive/phase-reports/100-199/Phase_193_Localized_Warning_Diagnostic_Presentation.md",
+  "Doc/TODOs/Archive/by-phase/100-199/193_Phase_Localized_Warning_Diagnostic_Presentation.md",
 ]) {
   const fileContent = await readProjectFile(relativePath);
   for (const requiredPhrase of [

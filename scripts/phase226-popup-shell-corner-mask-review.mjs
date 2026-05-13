@@ -94,7 +94,7 @@ async function verifyStyleMarkers() {
 async function verifyDocs() {
   const expectations = [
     {
-      relativePath: "Doc/testing/Phase_226_Popup_Shell_Corner_Mask.md",
+      relativePath: "Doc/testing/Archive/phase-reports/200-299/Phase_226_Popup_Shell_Corner_Mask.md",
       markers: [
         "Phase 226",
         "Popup Shell Corner Mask",
@@ -103,7 +103,7 @@ async function verifyDocs() {
       ],
     },
     {
-      relativePath: "Doc/TODOs/Archive/226_Phase_Popup_Shell_Corner_Mask.md",
+      relativePath: "Doc/TODOs/Archive/by-phase/200-299/226_Phase_Popup_Shell_Corner_Mask.md",
       markers: [
         "Phase 226",
         "completed and archived on 2026-04-29",

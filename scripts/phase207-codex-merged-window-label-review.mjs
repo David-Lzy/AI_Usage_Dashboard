@@ -89,7 +89,7 @@ async function verifyDocs() {
   const docExpectations = [
     {
       relativePath:
-        "Doc/testing/Phase_207_Codex_Merged_Window_Label_Parser.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_207_Codex_Merged_Window_Label_Parser.md",
       markers: [
         "Phase 207",
         "Codex Merged Window Label Parser",
@@ -99,7 +99,7 @@ async function verifyDocs() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/207_Phase_Codex_Merged_Window_Label_Parser.md",
+        "Doc/TODOs/Archive/by-phase/200-299/207_Phase_Codex_Merged_Window_Label_Parser.md",
       markers: [
         "Phase 207",
         "completed and archived on 2026-04-25",

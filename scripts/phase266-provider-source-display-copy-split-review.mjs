@@ -108,7 +108,7 @@ async function verifyDocsMarkers() {
   const expectations = [
     {
       relativePath:
-        "Doc/testing/Phase_266_Provider_Source_Display_Copy_Split.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_266_Provider_Source_Display_Copy_Split.md",
       markers: [
         "Phase 266",
         "Provider Source Display Copy Split",
@@ -117,7 +117,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/266_Phase_Provider_Source_Display_Copy_Split.md",
+        "Doc/TODOs/Archive/by-phase/200-299/266_Phase_Provider_Source_Display_Copy_Split.md",
       markers: [
         "Phase 266",
         "completed and archived on 2026-05-03",

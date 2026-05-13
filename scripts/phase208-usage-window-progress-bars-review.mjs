@@ -154,7 +154,7 @@ async function verifyDocs() {
   const docExpectations = [
     {
       relativePath:
-        "Doc/testing/Phase_208_Usage_Window_Progress_Bars.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_208_Usage_Window_Progress_Bars.md",
       markers: [
         "Phase 208",
         "Usage Window Progress Bars",
@@ -164,7 +164,7 @@ async function verifyDocs() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/208_Phase_Usage_Window_Progress_Bars.md",
+        "Doc/TODOs/Archive/by-phase/200-299/208_Phase_Usage_Window_Progress_Bars.md",
       markers: [
         "Phase 208",
         "completed and archived on 2026-04-25",

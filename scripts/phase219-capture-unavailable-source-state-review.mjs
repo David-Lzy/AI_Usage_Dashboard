@@ -131,7 +131,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/testing/Phase_219_Capture_Unavailable_Source_State.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_219_Capture_Unavailable_Source_State.md",
       markers: [
         "Phase 219",
         "Capture Unavailable Source State",
@@ -140,7 +140,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/219_Phase_Capture_Unavailable_Source_State.md",
+        "Doc/TODOs/Archive/by-phase/200-299/219_Phase_Capture_Unavailable_Source_State.md",
       markers: [
         "Phase 219",
         "completed and archived on 2026-04-29",

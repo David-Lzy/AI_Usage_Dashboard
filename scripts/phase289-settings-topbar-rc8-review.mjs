@@ -167,7 +167,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/289_Phase_Settings_Topbar_Adaptive_Layout_And_RC8_Packaging.md",
+        "Doc/TODOs/Archive/by-phase/200-299/289_Phase_Settings_Topbar_Adaptive_Layout_And_RC8_Packaging.md",
       markers: [
         "Phase 289",
         expectedPackageVersion,
@@ -177,7 +177,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/testing/Phase_289_Settings_Topbar_Adaptive_Layout_And_RC8_Packaging.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_289_Settings_Topbar_Adaptive_Layout_And_RC8_Packaging.md",
       markers: [
         "Phase 289",
         expectedPackageVersion,

@@ -116,7 +116,7 @@ async function verifyStyleMarkers() {
 async function verifyDocs() {
   const expectations = [
     {
-      relativePath: "Doc/testing/Phase_228_Popup_Rectangular_Canvas_Reset.md",
+      relativePath: "Doc/testing/Archive/phase-reports/200-299/Phase_228_Popup_Rectangular_Canvas_Reset.md",
       markers: [
         "Phase 228",
         "Popup Rectangular Canvas Reset",
@@ -125,7 +125,7 @@ async function verifyDocs() {
       ],
     },
     {
-      relativePath: "Doc/TODOs/Archive/228_Phase_Popup_Rectangular_Canvas_Reset.md",
+      relativePath: "Doc/TODOs/Archive/by-phase/200-299/228_Phase_Popup_Rectangular_Canvas_Reset.md",
       markers: [
         "Phase 228",
         "completed and archived on 2026-04-30",

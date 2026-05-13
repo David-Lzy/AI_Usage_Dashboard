@@ -192,7 +192,7 @@ async function verifyTestMarkers() {
 async function verifyDocs() {
   const expectations = [
     {
-      relativePath: "Doc/testing/Phase_229_Settings_Editable_Number_Combobox.md",
+      relativePath: "Doc/testing/Archive/phase-reports/200-299/Phase_229_Settings_Editable_Number_Combobox.md",
       markers: [
         "Phase 229",
         "Settings Editable Number Combobox",
@@ -201,7 +201,7 @@ async function verifyDocs() {
       ],
     },
     {
-      relativePath: "Doc/TODOs/Archive/229_Phase_Settings_Editable_Number_Combobox.md",
+      relativePath: "Doc/TODOs/Archive/by-phase/200-299/229_Phase_Settings_Editable_Number_Combobox.md",
       markers: [
         "Phase 229",
         "completed and archived on 2026-04-30",

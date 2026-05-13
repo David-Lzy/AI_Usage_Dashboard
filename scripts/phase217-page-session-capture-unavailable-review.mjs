@@ -127,7 +127,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/testing/Phase_217_Page_Session_Capture_Unavailable.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_217_Page_Session_Capture_Unavailable.md",
       markers: [
         "Phase 217",
         "Page Session Capture Unavailable",
@@ -136,7 +136,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/217_Phase_Page_Session_Capture_Unavailable.md",
+        "Doc/TODOs/Archive/by-phase/200-299/217_Phase_Page_Session_Capture_Unavailable.md",
       markers: [
         "Phase 217",
         "completed and archived on 2026-04-29",

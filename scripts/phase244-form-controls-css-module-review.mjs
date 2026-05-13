@@ -134,7 +134,7 @@ async function verifyCssSplit() {
 async function verifyDocsMarkers() {
   const expectations = [
     {
-      relativePath: "Doc/testing/Phase_244_Form_Controls_CSS_Module_Split.md",
+      relativePath: "Doc/testing/Archive/phase-reports/200-299/Phase_244_Form_Controls_CSS_Module_Split.md",
       markers: [
         "Phase 244",
         "Form Controls CSS Module Split",
@@ -143,7 +143,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/244_Phase_Form_Controls_CSS_Module_Split.md",
+        "Doc/TODOs/Archive/by-phase/200-299/244_Phase_Form_Controls_CSS_Module_Split.md",
       markers: [
         "Phase 244",
         "completed and archived on 2026-05-03",

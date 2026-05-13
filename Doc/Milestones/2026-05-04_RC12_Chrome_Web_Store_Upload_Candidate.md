@@ -33,7 +33,7 @@ The candidate source boundary is:
 - package version: `0.1.0-rc.12`
 - Chrome manifest version: `0.1.0.12`
 - Chrome manifest display version: `0.1.0-rc.12`
-- current latest archived phase: [299_Phase_RC12_Store_Upload_Candidate_Milestone.md](../TODOs/Archive/299_Phase_RC12_Store_Upload_Candidate_Milestone.md)
+- current latest archived phase: [299_Phase_RC12_Store_Upload_Candidate_Milestone.md](../TODOs/Archive/by-phase/200-299/299_Phase_RC12_Store_Upload_Candidate_Milestone.md)
 
 ## Included Changes Since RC11
 

@@ -123,7 +123,7 @@ async function verifyDocsMarkers() {
   const expectations = [
     {
       relativePath:
-        "Doc/testing/Phase_278_Settings_Page_View_Model_And_Seed_Hook.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_278_Settings_Page_View_Model_And_Seed_Hook.md",
       markers: [
         "Phase 278",
         "Settings Page View Model And Seed Hook",
@@ -132,7 +132,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/278_Phase_Settings_Page_View_Model_And_Seed_Hook.md",
+        "Doc/TODOs/Archive/by-phase/200-299/278_Phase_Settings_Page_View_Model_And_Seed_Hook.md",
       markers: [
         "Phase 278",
         "completed and archived on 2026-05-03",

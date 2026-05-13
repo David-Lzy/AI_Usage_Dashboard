@@ -111,7 +111,7 @@ async function verifyTestsAndDocs() {
       ],
     },
     {
-      relativePath: "Doc/testing/Phase_234_Action_Badge_Quota_Selection.md",
+      relativePath: "Doc/testing/Archive/phase-reports/200-299/Phase_234_Action_Badge_Quota_Selection.md",
       markers: [
         "Phase 234",
         "Action Badge Quota Selection",
@@ -119,7 +119,7 @@ async function verifyTestsAndDocs() {
       ],
     },
     {
-      relativePath: "Doc/TODOs/Archive/234_Phase_Action_Badge_Quota_Selection.md",
+      relativePath: "Doc/TODOs/Archive/by-phase/200-299/234_Phase_Action_Badge_Quota_Selection.md",
       markers: [
         "Phase 234",
         "completed and archived on 2026-05-03",

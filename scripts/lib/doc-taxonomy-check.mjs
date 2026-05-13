@@ -2,14 +2,39 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 
 export const DOC_TAXONOMY_CONVENTION_ONLY_PATTERNS = [
-  "Doc/TODOs/Archive/*.md",
-  "Doc/testing/Phase_*.md",
+  "Doc/TODOs/Archive/by-phase/*/*.md",
+  "Doc/testing/Archive/phase-reports/*/Phase_*.md",
   "Doc/testing/operator_reviews/*/interaction-audit-handoff-bundle.md",
   "Doc/testing/theme_recovery_reviews/*/theme-recovery-summary.md",
 ];
 
+export const DOC_TOP_LEVEL_MARKDOWN_ALLOWLIST = [
+  "Doc/AI_Usage_Dashboard_TODOs.md",
+  "Doc/AUTONOMOUS_PROMPT.md",
+  "Doc/Development_Guardrails.md",
+  "Doc/Documentation_Taxonomy.md",
+  "Doc/Project_Quickstart.md",
+  "Doc/README.md",
+  "Doc/Release_Packaging_Guide.md",
+];
+
+export const DOC_COMPATIBILITY_STUBS = [
+  "Doc/AUTONOMOUS_PROMPT.md",
+  "Doc/Development_Guardrails.md",
+  "Doc/Documentation_Taxonomy.md",
+  "Doc/Project_Quickstart.md",
+  "Doc/Release_Packaging_Guide.md",
+  "Doc/testing/Interaction_Audit_Operator_Handoff_Runbook.md",
+  "Doc/testing/Manual_Test_Checklist.md",
+  "Doc/testing/Page_Session_Fixture_Conventions.md",
+  "Doc/testing/Store_Screenshot_Capture_Runbook.md",
+  "Doc/testing/Theme_Recovery_Operator_Runbook.md",
+];
+
+export const DOC_COMPATIBILITY_STUB_MAX_LINE_COUNT = 40;
+
 export function parsePhaseTupleFromFilename(filename) {
-  const match = filename.match(/^(\d+)(?:_(\d+))?_Phase_/);
+  const match = path.basename(filename).match(/^(\d+)(?:_(\d+))?_Phase_/);
 
   if (!match) {
     return null;
@@ -75,28 +100,100 @@ export function evaluateDocLabels({
   };
 }
 
+export function evaluateTopLevelDocFiles(relativePaths) {
+  const allowlist = new Set(DOC_TOP_LEVEL_MARKDOWN_ALLOWLIST);
+  return relativePaths
+    .filter((relativePath) => !allowlist.has(relativePath))
+    .map(
+      (relativePath) =>
+        `${relativePath} is an unclassified top-level Doc markdown file; move it into a functional directory or add an explicit allowlist entry.`,
+    );
+}
+
+export function evaluateCompatibilityStub({
+  relativePath,
+  text,
+  maxLineCount = DOC_COMPATIBILITY_STUB_MAX_LINE_COUNT,
+}) {
+  const issues = [];
+  const lineCount = text.trimEnd().split(/\r?\n/).length;
+
+  if (!/compatibility stub/i.test(text)) {
+    issues.push(`${relativePath} must identify itself as a compatibility stub.`);
+  }
+
+  if (lineCount > maxLineCount) {
+    issues.push(
+      `${relativePath} has ${lineCount} lines; compatibility stubs must stay at or below ${maxLineCount} lines.`,
+    );
+  }
+
+  return issues;
+}
+
+async function listMarkdownFiles(projectRoot, relativeDir, { recursive = false } = {}) {
+  const results = [];
+
+  async function visit(currentRelativeDir) {
+    const absoluteDir = path.join(projectRoot, currentRelativeDir);
+    const entries = (await readdir(absoluteDir, { withFileTypes: true })).sort((left, right) =>
+      left.name.localeCompare(right.name, undefined, { numeric: true }),
+    );
+
+    for (const entry of entries) {
+      const relativePath = `${currentRelativeDir}/${entry.name}`;
+
+      if (entry.isDirectory()) {
+        if (recursive) {
+          await visit(relativePath);
+        }
+        continue;
+      }
+
+      if (entry.isFile() && entry.name.endsWith(".md")) {
+        results.push(relativePath);
+      }
+    }
+  }
+
+  await visit(relativeDir);
+  return results;
+}
+
+function toRequirements(
+  relativePaths,
+  { needsClass = true, needsFreshness = true, needsStatus = true } = {},
+) {
+  return relativePaths.map((relativePath) => ({
+    relativePath,
+    needsClass,
+    needsFreshness,
+    needsStatus,
+  }));
+}
+
 async function buildDocRequirements(projectRoot) {
-  const providerNotesDir = path.join(projectRoot, "Doc/provider_notes");
-  const providerNoteFiles = (await readdir(providerNotesDir))
-    .filter((entry) => entry.endsWith(".md"))
-    .sort()
-    .map((entry) => ({
-      relativePath: `Doc/provider_notes/${entry}`,
-      needsClass: true,
-      needsFreshness: true,
-      needsStatus: true,
-    }));
-  const roadmapDir = path.join(projectRoot, "Doc/Roadmap");
-  const roadmapFiles = (await readdir(roadmapDir))
-    .filter((entry) => entry.endsWith(".md"))
-    .filter((entry) => entry !== "00_Strategic_Directions_Index.md")
-    .sort()
-    .map((entry) => ({
-      relativePath: `Doc/Roadmap/${entry}`,
-      needsClass: true,
-      needsFreshness: false,
-      needsStatus: true,
-    }));
+  const providerNoteFiles = toRequirements(
+    await listMarkdownFiles(projectRoot, "Doc/provider_notes"),
+  );
+  const roadmapFiles = toRequirements(
+    (await listMarkdownFiles(projectRoot, "Doc/Roadmap")).filter(
+      (relativePath) => relativePath !== "Doc/Roadmap/00_Strategic_Directions_Index.md",
+    ),
+    { needsFreshness: false },
+  );
+  const archiveReferenceFiles = toRequirements(
+    await listMarkdownFiles(projectRoot, "Doc/Archive", { recursive: true }),
+  );
+  const i18nReferenceFiles = toRequirements(await listMarkdownFiles(projectRoot, "Doc/I18n"));
+  const productReferenceFiles = toRequirements(
+    await listMarkdownFiles(projectRoot, "Doc/Product"),
+  );
+  const storeReferenceFiles = toRequirements(
+    (await listMarkdownFiles(projectRoot, "Doc/Store")).filter(
+      (relativePath) => !path.basename(relativePath).startsWith("Chrome_Web_Store_Product_Description_"),
+    ),
+  );
   const generatedPackageReadmeDirs = [
     "Doc/testing/operator_review_requests",
     "Doc/testing/operator_reviews",
@@ -124,7 +221,7 @@ async function buildDocRequirements(projectRoot) {
 
   return [
     {
-      relativePath: "Doc/Archive/baselines/AI_Usage_Dashboard_MVP_Design.md",
+      relativePath: "Doc/README.md",
       needsClass: true,
       needsFreshness: true,
       needsStatus: true,
@@ -137,12 +234,6 @@ async function buildDocRequirements(projectRoot) {
     },
     {
       relativePath: "Doc/Development_Guardrails.md",
-      needsClass: true,
-      needsFreshness: true,
-      needsStatus: true,
-    },
-    {
-      relativePath: "Doc/Archive/audits/Documentation_Completion_Audit_2026-04-24.md",
       needsClass: true,
       needsFreshness: true,
       needsStatus: true,
@@ -172,12 +263,6 @@ async function buildDocRequirements(projectRoot) {
       needsStatus: true,
     },
     {
-      relativePath: "Doc/Archive/notes/Next_Steps_Post_Operator_Closures.md",
-      needsClass: true,
-      needsFreshness: false,
-      needsStatus: true,
-    },
-    {
       relativePath: "Doc/Roadmap/00_Strategic_Directions_Index.md",
       needsClass: true,
       needsFreshness: false,
@@ -191,12 +276,40 @@ async function buildDocRequirements(projectRoot) {
       needsStatus: true,
     },
     {
-      relativePath: "Doc/Archive/benchmarks/Toolbar_Product_Benchmark_Matrix_2026-04-23.md",
+      relativePath: "Doc/TODOs/Archive/README.md",
       needsClass: true,
       needsFreshness: true,
       needsStatus: true,
     },
+    {
+      relativePath: "Doc/TODOs/Archive/by-phase/README.md",
+      needsClass: true,
+      needsFreshness: true,
+      needsStatus: true,
+    },
+    ...archiveReferenceFiles,
+    ...i18nReferenceFiles,
+    ...productReferenceFiles,
+    ...storeReferenceFiles,
     ...providerNoteFiles,
+    {
+      relativePath: "Doc/testing/README.md",
+      needsClass: true,
+      needsFreshness: true,
+      needsStatus: true,
+    },
+    {
+      relativePath: "Doc/testing/Archive/README.md",
+      needsClass: true,
+      needsFreshness: true,
+      needsStatus: true,
+    },
+    {
+      relativePath: "Doc/testing/Archive/phase-reports/README.md",
+      needsClass: true,
+      needsFreshness: true,
+      needsStatus: true,
+    },
     {
       relativePath: "Doc/testing/Interaction_Audit_Operator_Handoff_Runbook.md",
       needsClass: true,
@@ -260,6 +373,14 @@ export async function runDocTaxonomyCheck(projectRoot) {
   const issues = [];
   const results = [];
 
+  const topLevelMarkdownFiles = (await readdir(path.join(projectRoot, "Doc"), {
+    withFileTypes: true,
+  }))
+    .filter((entry) => entry.isFile() && entry.name.endsWith(".md"))
+    .map((entry) => `Doc/${entry.name}`)
+    .sort();
+  issues.push(...evaluateTopLevelDocFiles(topLevelMarkdownFiles));
+
   for (const requirement of requirements) {
     const absolutePath = path.join(projectRoot, requirement.relativePath);
     const text = await readFile(absolutePath, "utf8");
@@ -272,6 +393,11 @@ export async function runDocTaxonomyCheck(projectRoot) {
     issues.push(...result.issues);
   }
 
+  for (const relativePath of DOC_COMPATIBILITY_STUBS) {
+    const text = await readFile(path.join(projectRoot, relativePath), "utf8");
+    issues.push(...evaluateCompatibilityStub({ relativePath, text }));
+  }
+
   const phaseIndexPath = path.join(projectRoot, "Doc/TODOs/00_Phase_Index.md");
   const phaseIndexText = await readFile(phaseIndexPath, "utf8");
   const latestCompletedSlicePath = extractLatestCompletedSlicePath(phaseIndexText);
@@ -282,10 +408,10 @@ export async function runDocTaxonomyCheck(projectRoot) {
     );
   }
 
-  const archiveDir = path.join(projectRoot, "Doc/TODOs/Archive");
-  const archiveFiles = (await readdir(archiveDir))
-    .filter((entry) => entry.endsWith(".md"))
-    .filter((entry) => parsePhaseTupleFromFilename(entry))
+  const archiveFiles = (await listMarkdownFiles(projectRoot, "Doc/TODOs/Archive", {
+    recursive: true,
+  }))
+    .filter((relativePath) => parsePhaseTupleFromFilename(relativePath))
     .sort((left, right) =>
       comparePhaseTuples(
         parsePhaseTupleFromFilename(left),
@@ -293,7 +419,10 @@ export async function runDocTaxonomyCheck(projectRoot) {
       ),
     );
 
-  const latestArchivedPhaseFilename = archiveFiles.at(-1) ?? null;
+  const latestArchivedPhasePath = archiveFiles.at(-1) ?? null;
+  const latestArchivedPhaseFilename = latestArchivedPhasePath
+    ? path.basename(latestArchivedPhasePath)
+    : null;
 
   if (!latestArchivedPhaseFilename) {
     issues.push("Doc/TODOs/Archive does not contain any parsable phase archive files.");

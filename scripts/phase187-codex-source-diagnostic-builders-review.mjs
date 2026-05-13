@@ -110,8 +110,8 @@ for (const requiredPhrase of [
 }
 
 for (const relativePath of [
-  "Doc/testing/Phase_187_Codex_Source_Selection_And_Fallback_Diagnostic_Builders.md",
-  "Doc/TODOs/Archive/187_Phase_Codex_Source_Selection_And_Fallback_Diagnostic_Builders.md",
+  "Doc/testing/Archive/phase-reports/100-199/Phase_187_Codex_Source_Selection_And_Fallback_Diagnostic_Builders.md",
+  "Doc/TODOs/Archive/by-phase/100-199/187_Phase_Codex_Source_Selection_And_Fallback_Diagnostic_Builders.md",
 ]) {
   const fileContent = await readProjectFile(relativePath);
   for (const requiredPhrase of [

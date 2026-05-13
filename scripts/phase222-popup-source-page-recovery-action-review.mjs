@@ -101,7 +101,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/testing/Phase_222_Popup_Source_Page_Recovery_Action.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_222_Popup_Source_Page_Recovery_Action.md",
       markers: [
         "Phase 222",
         "Popup Source Page Recovery Action",
@@ -110,7 +110,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/222_Phase_Popup_Source_Page_Recovery_Action.md",
+        "Doc/TODOs/Archive/by-phase/200-299/222_Phase_Popup_Source_Page_Recovery_Action.md",
       markers: [
         "Phase 222",
         "completed and archived on 2026-04-29",

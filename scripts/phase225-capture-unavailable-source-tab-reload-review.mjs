@@ -130,7 +130,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/testing/Phase_225_Capture_Unavailable_Source_Tab_Reload.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_225_Capture_Unavailable_Source_Tab_Reload.md",
       markers: [
         "Phase 225",
         "Capture Unavailable Source Tab Reload",
@@ -139,7 +139,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/225_Phase_Capture_Unavailable_Source_Tab_Reload.md",
+        "Doc/TODOs/Archive/by-phase/200-299/225_Phase_Capture_Unavailable_Source_Tab_Reload.md",
       markers: [
         "Phase 225",
         "completed and archived on 2026-04-29",

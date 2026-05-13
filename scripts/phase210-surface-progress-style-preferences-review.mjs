@@ -148,7 +148,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/testing/Phase_210_Surface_Progress_Style_Preferences.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_210_Surface_Progress_Style_Preferences.md",
       markers: [
         "Phase 210",
         "Surface Progress Style Preferences",
@@ -157,7 +157,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/210_Phase_Surface_Progress_Style_Preferences.md",
+        "Doc/TODOs/Archive/by-phase/200-299/210_Phase_Surface_Progress_Style_Preferences.md",
       markers: [
         "Phase 210",
         "completed and archived on 2026-04-26",

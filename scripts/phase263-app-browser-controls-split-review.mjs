@@ -122,7 +122,7 @@ async function verifyDocsMarkers() {
   const expectations = [
     {
       relativePath:
-        "Doc/testing/Phase_263_App_Browser_Controls_Split.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_263_App_Browser_Controls_Split.md",
       markers: [
         "Phase 263",
         "App Browser Controls Split",
@@ -131,7 +131,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/263_Phase_App_Browser_Controls_Split.md",
+        "Doc/TODOs/Archive/by-phase/200-299/263_Phase_App_Browser_Controls_Split.md",
       markers: [
         "Phase 263",
         "completed and archived on 2026-05-03",

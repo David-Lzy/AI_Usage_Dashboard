@@ -186,7 +186,7 @@ async function verifyDocsMarkers() {
       ],
     },
     {
-      relativePath: "Doc/TODOs/Archive/287_Phase_Progress_Row_Spacing_And_RC6_Packaging.md",
+      relativePath: "Doc/TODOs/Archive/by-phase/200-299/287_Phase_Progress_Row_Spacing_And_RC6_Packaging.md",
       markers: [
         "Phase 287",
         expectedPackageVersion,
@@ -195,7 +195,7 @@ async function verifyDocsMarkers() {
       ],
     },
     {
-      relativePath: "Doc/testing/Phase_287_Progress_Row_Spacing_And_RC6_Packaging.md",
+      relativePath: "Doc/testing/Archive/phase-reports/200-299/Phase_287_Progress_Row_Spacing_And_RC6_Packaging.md",
       markers: [
         "Phase 287",
         expectedPackageVersion,

@@ -105,7 +105,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/testing/Phase_224_Existing_Source_Page_Auto_Refresh.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_224_Existing_Source_Page_Auto_Refresh.md",
       markers: [
         "Phase 224",
         "Existing Source Page Auto Refresh",
@@ -114,7 +114,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/224_Phase_Existing_Source_Page_Auto_Refresh.md",
+        "Doc/TODOs/Archive/by-phase/200-299/224_Phase_Existing_Source_Page_Auto_Refresh.md",
       markers: [
         "Phase 224",
         "completed and archived on 2026-04-29",

@@ -112,7 +112,7 @@ async function verifyDocsMarkers() {
   const expectations = [
     {
       relativePath:
-        "Doc/testing/Phase_267_Provider_Detail_Copy_Split.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_267_Provider_Detail_Copy_Split.md",
       markers: [
         "Phase 267",
         "Provider Detail Copy Split",
@@ -121,7 +121,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/267_Phase_Provider_Detail_Copy_Split.md",
+        "Doc/TODOs/Archive/by-phase/200-299/267_Phase_Provider_Detail_Copy_Split.md",
       markers: [
         "Phase 267",
         "completed and archived on 2026-05-03",

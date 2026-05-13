@@ -278,7 +278,7 @@ async function reviewDocsAndCloseoutMarkers() {
       ],
     ],
     [
-      "Doc/testing/Phase_199_Diagnostic_Fixture_And_Historical_Evidence_Alignment_Review.md",
+      "Doc/testing/Archive/phase-reports/100-199/Phase_199_Diagnostic_Fixture_And_Historical_Evidence_Alignment_Review.md",
       [
         "Phase 199",
         "Diagnostic Fixture And Historical Evidence Alignment Review",
@@ -287,7 +287,7 @@ async function reviewDocsAndCloseoutMarkers() {
       ],
     ],
     [
-      "Doc/TODOs/Archive/199_Phase_Diagnostic_Fixture_And_Historical_Evidence_Alignment_Review.md",
+      "Doc/TODOs/Archive/by-phase/100-199/199_Phase_Diagnostic_Fixture_And_Historical_Evidence_Alignment_Review.md",
       [
         "Phase 199",
         "Diagnostic Fixture And Historical Evidence Alignment Review",

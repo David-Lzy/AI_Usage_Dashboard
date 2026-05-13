@@ -104,7 +104,7 @@ async function verifyDocsMarkers() {
   const expectations = [
     {
       relativePath:
-        "Doc/testing/Phase_283_Codex_Page_Session_Capture_Reload_Retry.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_283_Codex_Page_Session_Capture_Reload_Retry.md",
       markers: [
         "Phase 283",
         "Codex Page Session Capture Reload Retry",
@@ -113,7 +113,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/283_Phase_Codex_Page_Session_Capture_Reload_Retry.md",
+        "Doc/TODOs/Archive/by-phase/200-299/283_Phase_Codex_Page_Session_Capture_Reload_Retry.md",
       markers: [
         "Phase 283",
         "completed and archived on 2026-05-03",

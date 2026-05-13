@@ -114,7 +114,7 @@ async function verifyDocsMarkers() {
   const expectations = [
     {
       relativePath:
-        "Doc/testing/Phase_259_Settings_Section_Navigation_Hook_Extraction.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_259_Settings_Section_Navigation_Hook_Extraction.md",
       markers: [
         "Phase 259",
         "Settings Section Navigation Hook Extraction",
@@ -123,7 +123,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/259_Phase_Settings_Section_Navigation_Hook_Extraction.md",
+        "Doc/TODOs/Archive/by-phase/200-299/259_Phase_Settings_Section_Navigation_Hook_Extraction.md",
       markers: [
         "Phase 259",
         "completed and archived on 2026-05-03",

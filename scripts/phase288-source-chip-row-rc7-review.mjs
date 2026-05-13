@@ -166,7 +166,7 @@ async function verifyDocsMarkers() {
       ],
     },
     {
-      relativePath: "Doc/TODOs/Archive/288_Phase_Source_Chip_Row_And_RC7_Packaging.md",
+      relativePath: "Doc/TODOs/Archive/by-phase/200-299/288_Phase_Source_Chip_Row_And_RC7_Packaging.md",
       markers: [
         "Phase 288",
         expectedPackageVersion,
@@ -175,7 +175,7 @@ async function verifyDocsMarkers() {
       ],
     },
     {
-      relativePath: "Doc/testing/Phase_288_Source_Chip_Row_And_RC7_Packaging.md",
+      relativePath: "Doc/testing/Archive/phase-reports/200-299/Phase_288_Source_Chip_Row_And_RC7_Packaging.md",
       markers: [
         "Phase 288",
         expectedPackageVersion,

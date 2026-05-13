@@ -133,7 +133,7 @@ async function verifyDocsMarkers() {
   const expectations = [
     {
       relativePath:
-        "Doc/testing/Phase_239_Interaction_Audit_CSS_Module_Split.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_239_Interaction_Audit_CSS_Module_Split.md",
       markers: [
         "Phase 239",
         "Interaction Audit CSS Module Split",
@@ -142,7 +142,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/239_Phase_Interaction_Audit_CSS_Module_Split.md",
+        "Doc/TODOs/Archive/by-phase/200-299/239_Phase_Interaction_Audit_CSS_Module_Split.md",
       markers: [
         "Phase 239",
         "completed and archived on 2026-05-03",

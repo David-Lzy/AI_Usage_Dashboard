@@ -334,7 +334,7 @@ async function verifyDocsAndCloseoutMarkers() {
       ],
     ],
     [
-      "Doc/testing/Phase_196_Diagnostic_Presentation_Compact_Evidence_QA.md",
+      "Doc/testing/Archive/phase-reports/100-199/Phase_196_Diagnostic_Presentation_Compact_Evidence_QA.md",
       [
         "Phase 196",
         "Diagnostic Presentation Compact Evidence QA",
@@ -342,7 +342,7 @@ async function verifyDocsAndCloseoutMarkers() {
       ],
     ],
     [
-      "Doc/TODOs/Archive/196_Phase_Diagnostic_Presentation_Compact_Evidence_QA.md",
+      "Doc/TODOs/Archive/by-phase/100-199/196_Phase_Diagnostic_Presentation_Compact_Evidence_QA.md",
       [
         "Phase 196",
         "Diagnostic Presentation Compact Evidence QA",

@@ -107,7 +107,7 @@ async function verifyRuntimeMarkers() {
 async function verifyDocsMarkers() {
   const expectations = [
     {
-      relativePath: "Doc/testing/Phase_279_Settings_Source_Card_Component.md",
+      relativePath: "Doc/testing/Archive/phase-reports/200-299/Phase_279_Settings_Source_Card_Component.md",
       markers: [
         "Phase 279",
         "Settings Source Card Component",
@@ -116,7 +116,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/279_Phase_Settings_Source_Card_Component.md",
+        "Doc/TODOs/Archive/by-phase/200-299/279_Phase_Settings_Source_Card_Component.md",
       markers: [
         "Phase 279",
         "completed and archived on 2026-05-03",

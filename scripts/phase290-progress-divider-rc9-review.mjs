@@ -138,7 +138,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/290_Phase_Progress_Divider_Visibility_And_RC9_Packaging.md",
+        "Doc/TODOs/Archive/by-phase/200-299/290_Phase_Progress_Divider_Visibility_And_RC9_Packaging.md",
       markers: [
         "Phase 290",
         expectedPackageVersion,
@@ -148,7 +148,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/testing/Phase_290_Progress_Divider_Visibility_And_RC9_Packaging.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_290_Progress_Divider_Visibility_And_RC9_Packaging.md",
       markers: [
         "Phase 290",
         expectedPackageVersion,

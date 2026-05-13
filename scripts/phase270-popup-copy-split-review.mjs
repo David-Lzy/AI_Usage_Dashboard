@@ -108,7 +108,7 @@ async function verifyRuntimeMarkers() {
 async function verifyDocsMarkers() {
   const expectations = [
     {
-      relativePath: "Doc/testing/Phase_270_Popup_Copy_Split.md",
+      relativePath: "Doc/testing/Archive/phase-reports/200-299/Phase_270_Popup_Copy_Split.md",
       markers: [
         "Phase 270",
         "Popup Copy Split",
@@ -116,7 +116,7 @@ async function verifyDocsMarkers() {
       ],
     },
     {
-      relativePath: "Doc/TODOs/Archive/270_Phase_Popup_Copy_Split.md",
+      relativePath: "Doc/TODOs/Archive/by-phase/200-299/270_Phase_Popup_Copy_Split.md",
       markers: [
         "Phase 270",
         "completed and archived on 2026-05-03",

@@ -144,7 +144,7 @@ async function verifyDocsMarkers() {
       ],
     },
     {
-      relativePath: "Doc/TODOs/Archive/286_Phase_RC5_Release_Packaging.md",
+      relativePath: "Doc/TODOs/Archive/by-phase/200-299/286_Phase_RC5_Release_Packaging.md",
       markers: [
         "Phase 286",
         expectedPackageVersion,
@@ -153,7 +153,7 @@ async function verifyDocsMarkers() {
       ],
     },
     {
-      relativePath: "Doc/testing/Phase_286_RC5_Release_Packaging.md",
+      relativePath: "Doc/testing/Archive/phase-reports/200-299/Phase_286_RC5_Release_Packaging.md",
       markers: [
         "Phase 286",
         expectedPackageVersion,

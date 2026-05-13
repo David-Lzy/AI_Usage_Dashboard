@@ -116,7 +116,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/testing/Phase_232_Codex_Automatic_Managed_Page_Sync.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_232_Codex_Automatic_Managed_Page_Sync.md",
       markers: [
         "Phase 232",
         "Codex Automatic Managed Page Sync",
@@ -125,7 +125,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/232_Phase_Codex_Automatic_Managed_Page_Sync.md",
+        "Doc/TODOs/Archive/by-phase/200-299/232_Phase_Codex_Automatic_Managed_Page_Sync.md",
       markers: [
         "Phase 232",
         "completed and archived on 2026-05-02",

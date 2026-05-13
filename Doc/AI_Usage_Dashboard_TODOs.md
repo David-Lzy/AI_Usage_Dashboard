@@ -1351,14 +1351,14 @@ Recommendation:
 
 ### 16.6 Completed Research And UX Queue
 
-- [28_Phase_Hybrid_Source_Model_Design.md](./TODOs/Archive/28_Phase_Hybrid_Source_Model_Design.md)
-- [29_Phase_Page_Session_Adapter_Framework.md](./TODOs/Archive/29_Phase_Page_Session_Adapter_Framework.md)
-- [30_Phase_Codex_Personal_Usage_Page_Spike.md](./TODOs/Archive/30_Phase_Codex_Personal_Usage_Page_Spike.md)
-- [30_1_Phase_Codex_Live_Tab_Fixture_Capture.md](./TODOs/Archive/30_1_Phase_Codex_Live_Tab_Fixture_Capture.md)
-- [31_Phase_Cursor_Personal_Usage_Page_Spike.md](./TODOs/Archive/31_Phase_Cursor_Personal_Usage_Page_Spike.md)
-- [32_Phase_Claude_Personal_Usage_Page_Spike.md](./TODOs/Archive/32_Phase_Claude_Personal_Usage_Page_Spike.md)
-- [33_Phase_Gemini_Project_Metrics_Page_Spike.md](./TODOs/Archive/33_Phase_Gemini_Project_Metrics_Page_Spike.md)
-- [34_Phase_Hybrid_Source_UX_And_QA.md](./TODOs/Archive/34_Phase_Hybrid_Source_UX_And_QA.md)
+- [28_Phase_Hybrid_Source_Model_Design.md](./TODOs/Archive/by-phase/001-099/28_Phase_Hybrid_Source_Model_Design.md)
+- [29_Phase_Page_Session_Adapter_Framework.md](./TODOs/Archive/by-phase/001-099/29_Phase_Page_Session_Adapter_Framework.md)
+- [30_Phase_Codex_Personal_Usage_Page_Spike.md](./TODOs/Archive/by-phase/001-099/30_Phase_Codex_Personal_Usage_Page_Spike.md)
+- [30_1_Phase_Codex_Live_Tab_Fixture_Capture.md](./TODOs/Archive/by-phase/001-099/30_1_Phase_Codex_Live_Tab_Fixture_Capture.md)
+- [31_Phase_Cursor_Personal_Usage_Page_Spike.md](./TODOs/Archive/by-phase/001-099/31_Phase_Cursor_Personal_Usage_Page_Spike.md)
+- [32_Phase_Claude_Personal_Usage_Page_Spike.md](./TODOs/Archive/by-phase/001-099/32_Phase_Claude_Personal_Usage_Page_Spike.md)
+- [33_Phase_Gemini_Project_Metrics_Page_Spike.md](./TODOs/Archive/by-phase/001-099/33_Phase_Gemini_Project_Metrics_Page_Spike.md)
+- [34_Phase_Hybrid_Source_UX_And_QA.md](./TODOs/Archive/by-phase/001-099/34_Phase_Hybrid_Source_UX_And_QA.md)
 
 ### 16.7 Review After Phase 34
 
@@ -1381,11 +1381,11 @@ Next direction:
 
 ### 16.8 Next Phase Queue
 
-- [35_Phase_Codex_Personal_Snapshot_Parser.md](./TODOs/Archive/35_Phase_Codex_Personal_Snapshot_Parser.md)
-- [36_Phase_Codex_Personal_Live_Wiring.md](./TODOs/Archive/36_Phase_Codex_Personal_Live_Wiring.md)
-- [37_Phase_Cursor_Personal_Snapshot_Parser.md](./TODOs/Archive/37_Phase_Cursor_Personal_Snapshot_Parser.md)
-- [38_Phase_Cursor_Personal_Live_Wiring.md](./TODOs/Archive/38_Phase_Cursor_Personal_Live_Wiring.md)
-- [39_Phase_Hybrid_Source_Selection_And_Fallback.md](./TODOs/Archive/39_Phase_Hybrid_Source_Selection_And_Fallback.md)
-- [40_Phase_Page_Binding_Persistence_And_Reconnect.md](./TODOs/Archive/40_Phase_Page_Binding_Persistence_And_Reconnect.md)
-- [41_Phase_Personal_Mixed_Source_Real_Chrome_Verification.md](./TODOs/Archive/41_Phase_Personal_Mixed_Source_Real_Chrome_Verification.md)
-- [42_Phase_RC2_Packaging_And_Release_Docs.md](./TODOs/Archive/42_Phase_RC2_Packaging_And_Release_Docs.md)
+- [35_Phase_Codex_Personal_Snapshot_Parser.md](./TODOs/Archive/by-phase/001-099/35_Phase_Codex_Personal_Snapshot_Parser.md)
+- [36_Phase_Codex_Personal_Live_Wiring.md](./TODOs/Archive/by-phase/001-099/36_Phase_Codex_Personal_Live_Wiring.md)
+- [37_Phase_Cursor_Personal_Snapshot_Parser.md](./TODOs/Archive/by-phase/001-099/37_Phase_Cursor_Personal_Snapshot_Parser.md)
+- [38_Phase_Cursor_Personal_Live_Wiring.md](./TODOs/Archive/by-phase/001-099/38_Phase_Cursor_Personal_Live_Wiring.md)
+- [39_Phase_Hybrid_Source_Selection_And_Fallback.md](./TODOs/Archive/by-phase/001-099/39_Phase_Hybrid_Source_Selection_And_Fallback.md)
+- [40_Phase_Page_Binding_Persistence_And_Reconnect.md](./TODOs/Archive/by-phase/001-099/40_Phase_Page_Binding_Persistence_And_Reconnect.md)
+- [41_Phase_Personal_Mixed_Source_Real_Chrome_Verification.md](./TODOs/Archive/by-phase/001-099/41_Phase_Personal_Mixed_Source_Real_Chrome_Verification.md)
+- [42_Phase_RC2_Packaging_And_Release_Docs.md](./TODOs/Archive/by-phase/001-099/42_Phase_RC2_Packaging_And_Release_Docs.md)

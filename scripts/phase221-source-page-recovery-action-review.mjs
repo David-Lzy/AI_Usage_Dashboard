@@ -129,7 +129,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/testing/Phase_221_Source_Page_Recovery_Action.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_221_Source_Page_Recovery_Action.md",
       markers: [
         "Phase 221",
         "Source Page Recovery Action",
@@ -138,7 +138,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/221_Phase_Source_Page_Recovery_Action.md",
+        "Doc/TODOs/Archive/by-phase/200-299/221_Phase_Source_Page_Recovery_Action.md",
       markers: [
         "Phase 221",
         "completed and archived on 2026-04-29",

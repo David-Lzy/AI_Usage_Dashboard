@@ -134,7 +134,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/testing/Phase_230_Background_Session_Page_Refresh.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_230_Background_Session_Page_Refresh.md",
       markers: [
         "Phase 230",
         "Background Session Page Refresh",
@@ -143,7 +143,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/230_Phase_Background_Session_Page_Refresh.md",
+        "Doc/TODOs/Archive/by-phase/200-299/230_Phase_Background_Session_Page_Refresh.md",
       markers: [
         "Phase 230",
         "completed and archived on 2026-04-30",

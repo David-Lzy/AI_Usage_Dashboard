@@ -246,7 +246,7 @@ async function verifyDocsAndCloseoutMarkers() {
       ],
     ],
     [
-      "Doc/testing/Phase_197_Diagnostic_Archive_Export_Compatibility_Review.md",
+      "Doc/testing/Archive/phase-reports/100-199/Phase_197_Diagnostic_Archive_Export_Compatibility_Review.md",
       [
         "Phase 197",
         "Diagnostic Archive Export Compatibility Review",
@@ -254,7 +254,7 @@ async function verifyDocsAndCloseoutMarkers() {
       ],
     ],
     [
-      "Doc/TODOs/Archive/197_Phase_Diagnostic_Archive_Export_Compatibility_Review.md",
+      "Doc/TODOs/Archive/by-phase/100-199/197_Phase_Diagnostic_Archive_Export_Compatibility_Review.md",
       [
         "Phase 197",
         "Diagnostic Archive Export Compatibility Review",

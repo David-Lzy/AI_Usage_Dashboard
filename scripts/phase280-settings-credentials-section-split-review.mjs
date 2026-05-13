@@ -134,7 +134,7 @@ async function verifyDocsMarkers() {
   const expectations = [
     {
       relativePath:
-        "Doc/testing/Phase_280_Settings_Credentials_Section_Split.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_280_Settings_Credentials_Section_Split.md",
       markers: [
         "Phase 280",
         "Settings Credentials Section Split",
@@ -143,7 +143,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/280_Phase_Settings_Credentials_Section_Split.md",
+        "Doc/TODOs/Archive/by-phase/200-299/280_Phase_Settings_Credentials_Section_Split.md",
       markers: [
         "Phase 280",
         "completed and archived on 2026-05-03",

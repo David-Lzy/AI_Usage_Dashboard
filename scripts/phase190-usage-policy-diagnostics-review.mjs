@@ -164,8 +164,8 @@ for (const requiredPhrase of [
 }
 
 for (const relativePath of [
-  "Doc/testing/Phase_190_Usage_Threshold_And_Policy_Only_Diagnostics.md",
-  "Doc/TODOs/Archive/190_Phase_Usage_Threshold_And_Policy_Only_Diagnostics.md",
+  "Doc/testing/Archive/phase-reports/100-199/Phase_190_Usage_Threshold_And_Policy_Only_Diagnostics.md",
+  "Doc/TODOs/Archive/by-phase/100-199/190_Phase_Usage_Threshold_And_Policy_Only_Diagnostics.md",
 ]) {
   const fileContent = await readProjectFile(relativePath);
   for (const requiredPhrase of [

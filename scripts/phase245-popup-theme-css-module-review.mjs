@@ -126,7 +126,7 @@ async function verifyCssSplit() {
 async function verifyDocsMarkers() {
   const expectations = [
     {
-      relativePath: "Doc/testing/Phase_245_Popup_Theme_CSS_Module_Split.md",
+      relativePath: "Doc/testing/Archive/phase-reports/200-299/Phase_245_Popup_Theme_CSS_Module_Split.md",
       markers: [
         "Phase 245",
         "Popup Theme CSS Module Split",
@@ -135,7 +135,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/245_Phase_Popup_Theme_CSS_Module_Split.md",
+        "Doc/TODOs/Archive/by-phase/200-299/245_Phase_Popup_Theme_CSS_Module_Split.md",
       markers: [
         "Phase 245",
         "completed and archived on 2026-05-03",

@@ -89,7 +89,7 @@ async function verifyDocs() {
   const docExpectations = [
     {
       relativePath:
-        "Doc/testing/Phase_206_Codex_Inline_Remaining_Percent_Parser.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_206_Codex_Inline_Remaining_Percent_Parser.md",
       markers: [
         "Phase 206",
         "Codex Inline Remaining Percent Parser",
@@ -99,7 +99,7 @@ async function verifyDocs() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/206_Phase_Codex_Inline_Remaining_Percent_Parser.md",
+        "Doc/TODOs/Archive/by-phase/200-299/206_Phase_Codex_Inline_Remaining_Percent_Parser.md",
       markers: [
         "Phase 206",
         "completed and archived on 2026-04-25",

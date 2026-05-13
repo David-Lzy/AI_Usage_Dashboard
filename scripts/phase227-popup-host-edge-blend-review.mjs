@@ -95,7 +95,7 @@ async function verifyStyleMarkers() {
 async function verifyDocs() {
   const expectations = [
     {
-      relativePath: "Doc/testing/Phase_227_Popup_Host_Edge_Blend.md",
+      relativePath: "Doc/testing/Archive/phase-reports/200-299/Phase_227_Popup_Host_Edge_Blend.md",
       markers: [
         "Phase 227",
         "Popup Host Edge Blend",
@@ -104,7 +104,7 @@ async function verifyDocs() {
       ],
     },
     {
-      relativePath: "Doc/TODOs/Archive/227_Phase_Popup_Host_Edge_Blend.md",
+      relativePath: "Doc/TODOs/Archive/by-phase/200-299/227_Phase_Popup_Host_Edge_Blend.md",
       markers: [
         "Phase 227",
         "completed and archived on 2026-04-30",

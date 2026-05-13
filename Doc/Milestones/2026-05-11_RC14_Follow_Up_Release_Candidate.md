@@ -33,7 +33,7 @@ The follow-up source boundary is:
 - package version: `0.1.0-rc.14`
 - Chrome manifest version: `0.1.0.14`
 - Chrome manifest display version: `0.1.0-rc.14`
-- current latest archived phase: [306_Phase_Popup_Onboarding_Handoff_And_RC14_Follow_Up_Packaging.md](../TODOs/Archive/306_Phase_Popup_Onboarding_Handoff_And_RC14_Follow_Up_Packaging.md)
+- current latest archived phase: [306_Phase_Popup_Onboarding_Handoff_And_RC14_Follow_Up_Packaging.md](../TODOs/Archive/by-phase/300-399/306_Phase_Popup_Onboarding_Handoff_And_RC14_Follow_Up_Packaging.md)
 
 The still-submitted store-review boundary remains:
 

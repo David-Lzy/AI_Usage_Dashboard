@@ -111,7 +111,7 @@ async function verifyDocsMarkers() {
   const expectations = [
     {
       relativePath:
-        "Doc/testing/Phase_273_Standard_App_Session_Page_Actions_Split.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_273_Standard_App_Session_Page_Actions_Split.md",
       markers: [
         "Phase 273",
         "Standard App Session Page Actions Split",
@@ -120,7 +120,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/273_Phase_Standard_App_Session_Page_Actions_Split.md",
+        "Doc/TODOs/Archive/by-phase/200-299/273_Phase_Standard_App_Session_Page_Actions_Split.md",
       markers: [
         "Phase 273",
         "completed and archived on 2026-05-03",

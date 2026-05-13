@@ -101,7 +101,7 @@ async function verifyDocs() {
   const expectations = [
     {
       relativePath:
-        "Doc/testing/Phase_212_Popup_Appearance_Settings_Preview.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_212_Popup_Appearance_Settings_Preview.md",
       markers: [
         "Phase 212",
         "Popup Appearance Settings Preview",
@@ -110,7 +110,7 @@ async function verifyDocs() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/212_Phase_Popup_Appearance_Settings_Preview.md",
+        "Doc/TODOs/Archive/by-phase/200-299/212_Phase_Popup_Appearance_Settings_Preview.md",
       markers: [
         "Phase 212",
         "completed and archived on 2026-04-27",

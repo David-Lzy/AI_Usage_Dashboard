@@ -156,7 +156,7 @@ async function verifyDocs() {
     },
     {
       relativePath:
-        "Doc/testing/Phase_204_Diagnostic_Raw_Fallback_Regression.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_204_Diagnostic_Raw_Fallback_Regression.md",
       markers: [
         "Phase 204",
         "Diagnostic Raw Fallback Regression",
@@ -166,7 +166,7 @@ async function verifyDocs() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/204_Phase_Diagnostic_Raw_Fallback_Regression.md",
+        "Doc/TODOs/Archive/by-phase/200-299/204_Phase_Diagnostic_Raw_Fallback_Regression.md",
       markers: [
         "Phase 204",
         "completed and archived on 2026-04-25",

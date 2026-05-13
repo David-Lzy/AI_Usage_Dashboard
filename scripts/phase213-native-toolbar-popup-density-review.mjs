@@ -78,7 +78,7 @@ async function verifyDocs() {
   const expectations = [
     {
       relativePath:
-        "Doc/testing/Phase_213_Native_Toolbar_Popup_Density_Review.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_213_Native_Toolbar_Popup_Density_Review.md",
       markers: [
         "Phase 213",
         "Native Toolbar Popup Density Review",
@@ -88,7 +88,7 @@ async function verifyDocs() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/213_Phase_Native_Toolbar_Popup_Density_Review.md",
+        "Doc/TODOs/Archive/by-phase/200-299/213_Phase_Native_Toolbar_Popup_Density_Review.md",
       markers: [
         "Phase 213",
         "completed and archived on 2026-04-29",

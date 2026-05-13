@@ -110,7 +110,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/testing/Phase_220_Empty_Percent_Progress_Suppression.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_220_Empty_Percent_Progress_Suppression.md",
       markers: [
         "Phase 220",
         "Empty Percent Progress Suppression",
@@ -119,7 +119,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/220_Phase_Empty_Percent_Progress_Suppression.md",
+        "Doc/TODOs/Archive/by-phase/200-299/220_Phase_Empty_Percent_Progress_Suppression.md",
       markers: [
         "Phase 220",
         "completed and archived on 2026-04-29",

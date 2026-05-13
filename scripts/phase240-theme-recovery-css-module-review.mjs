@@ -129,7 +129,7 @@ async function verifyCssSplit() {
 async function verifyDocsMarkers() {
   const expectations = [
     {
-      relativePath: "Doc/testing/Phase_240_Theme_Recovery_CSS_Module_Split.md",
+      relativePath: "Doc/testing/Archive/phase-reports/200-299/Phase_240_Theme_Recovery_CSS_Module_Split.md",
       markers: [
         "Phase 240",
         "Theme Recovery CSS Module Split",
@@ -138,7 +138,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/240_Phase_Theme_Recovery_CSS_Module_Split.md",
+        "Doc/TODOs/Archive/by-phase/200-299/240_Phase_Theme_Recovery_CSS_Module_Split.md",
       markers: [
         "Phase 240",
         "completed and archived on 2026-05-03",

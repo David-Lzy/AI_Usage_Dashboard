@@ -33,7 +33,7 @@ The candidate source boundary is:
 - package version: `0.1.0-rc.13`
 - Chrome manifest version: `0.1.0.13`
 - Chrome manifest display version: `0.1.0-rc.13`
-- current latest archived phase: [302_Phase_Node22_Default_And_RC13_Source_Alignment.md](../TODOs/Archive/302_Phase_Node22_Default_And_RC13_Source_Alignment.md)
+- current latest archived phase: [302_Phase_Node22_Default_And_RC13_Source_Alignment.md](../TODOs/Archive/by-phase/300-399/302_Phase_Node22_Default_And_RC13_Source_Alignment.md)
 
 ## Included Changes Since RC12
 

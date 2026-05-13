@@ -96,7 +96,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/testing/Phase_223_Popup_Empty_Percent_Progress_Suppression.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_223_Popup_Empty_Percent_Progress_Suppression.md",
       markers: [
         "Phase 223",
         "Popup Empty Percent Progress Suppression",
@@ -105,7 +105,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/223_Phase_Popup_Empty_Percent_Progress_Suppression.md",
+        "Doc/TODOs/Archive/by-phase/200-299/223_Phase_Popup_Empty_Percent_Progress_Suppression.md",
       markers: [
         "Phase 223",
         "completed and archived on 2026-04-29",

@@ -99,7 +99,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/testing/Phase_218_Page_Binding_Tab_Replacement.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_218_Page_Binding_Tab_Replacement.md",
       markers: [
         "Phase 218",
         "Page Binding Tab Replacement",
@@ -108,7 +108,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/218_Phase_Page_Binding_Tab_Replacement.md",
+        "Doc/TODOs/Archive/by-phase/200-299/218_Phase_Page_Binding_Tab_Replacement.md",
       markers: [
         "Phase 218",
         "completed and archived on 2026-04-29",

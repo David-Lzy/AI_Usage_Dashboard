@@ -37,7 +37,7 @@ It means different document classes have different completion rules.
 
 Current truthful state:
 
-- numbered phase files are archived through [133_Phase_Documentation_Taxonomy_And_Operational_Ledger_Labeling.md](../../TODOs/Archive/133_Phase_Documentation_Taxonomy_And_Operational_Ledger_Labeling.md)
+- numbered phase files are archived through [133_Phase_Documentation_Taxonomy_And_Operational_Ledger_Labeling.md](../../TODOs/Archive/by-phase/100-199/133_Phase_Documentation_Taxonomy_And_Operational_Ledger_Labeling.md)
 - there is no active numbered phase file in [00_Phase_Index.md](../../TODOs/00_Phase_Index.md)
 - roadmap directions remain open by design, especially:
   - [04_Direction_Material_Motion_And_Responsive_Hardening.md](../../Roadmap/04_Direction_Material_Motion_And_Responsive_Hardening.md)
@@ -73,12 +73,12 @@ The current release and build-closeout story is documented:
 
 - [README.md](../../../README.md)
 - [Release_Packaging_Guide.md](../../Release_Packaging_Guide.md)
-- [131_Phase_Extension_Build_Output_Stability_And_Git_Closeout_Rule.md](../../TODOs/Archive/131_Phase_Extension_Build_Output_Stability_And_Git_Closeout_Rule.md)
-- [133_Phase_Documentation_Taxonomy_And_Operational_Ledger_Labeling.md](../../TODOs/Archive/133_Phase_Documentation_Taxonomy_And_Operational_Ledger_Labeling.md)
+- [131_Phase_Extension_Build_Output_Stability_And_Git_Closeout_Rule.md](../../TODOs/Archive/by-phase/100-199/131_Phase_Extension_Build_Output_Stability_And_Git_Closeout_Rule.md)
+- [133_Phase_Documentation_Taxonomy_And_Operational_Ledger_Labeling.md](../../TODOs/Archive/by-phase/100-199/133_Phase_Documentation_Taxonomy_And_Operational_Ledger_Labeling.md)
 
 ### 3. Historical Testing Evidence
 
-Most `Doc/testing/Phase_*.md` files are closed evidence records rather than open TODO documents.
+Most `Doc/testing/Archive/phase-reports/*/Phase_*.md` files are closed evidence records rather than open TODO documents.
 They should stay readable, but they are not expected to become empty or disappear.
 
 ## What Is Not Complete

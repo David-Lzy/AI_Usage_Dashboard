@@ -111,7 +111,7 @@ async function verifyPopupCircularProgress() {
 async function verifyDocs() {
   const docExpectations = [
     {
-      relativePath: "Doc/testing/Phase_209_Popup_Circular_Usage_Progress.md",
+      relativePath: "Doc/testing/Archive/phase-reports/200-299/Phase_209_Popup_Circular_Usage_Progress.md",
       markers: [
         "Phase 209",
         "Popup Circular Usage Progress",
@@ -121,7 +121,7 @@ async function verifyDocs() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/209_Phase_Popup_Circular_Usage_Progress.md",
+        "Doc/TODOs/Archive/by-phase/200-299/209_Phase_Popup_Circular_Usage_Progress.md",
       markers: [
         "Phase 209",
         "completed and archived on 2026-04-26",

@@ -104,7 +104,7 @@ async function verifyDocsMarkers() {
   const expectations = [
     {
       relativePath:
-        "Doc/testing/Phase_274_Settings_Credential_Draft_Hook.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_274_Settings_Credential_Draft_Hook.md",
       markers: [
         "Phase 274",
         "Settings Credential Draft Hook",
@@ -113,7 +113,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/274_Phase_Settings_Credential_Draft_Hook.md",
+        "Doc/TODOs/Archive/by-phase/200-299/274_Phase_Settings_Credential_Draft_Hook.md",
       markers: [
         "Phase 274",
         "completed and archived on 2026-05-03",

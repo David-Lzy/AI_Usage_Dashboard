@@ -142,7 +142,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/testing/Phase_231_Settings_Material_Select_Unification.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_231_Settings_Material_Select_Unification.md",
       markers: [
         "Phase 231",
         "Settings Material Select Unification",
@@ -151,7 +151,7 @@ async function verifyTestsAndDocs() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/231_Phase_Settings_Material_Select_Unification.md",
+        "Doc/TODOs/Archive/by-phase/200-299/231_Phase_Settings_Material_Select_Unification.md",
       markers: [
         "Phase 231",
         "completed and archived on 2026-04-30",

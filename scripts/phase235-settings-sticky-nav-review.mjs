@@ -126,7 +126,7 @@ async function verifyTestsAndDocs() {
       ],
     },
     {
-      relativePath: "Doc/testing/Phase_235_Settings_Sticky_Nav.md",
+      relativePath: "Doc/testing/Archive/phase-reports/200-299/Phase_235_Settings_Sticky_Nav.md",
       markers: [
         "Phase 235",
         "Settings Sticky Nav",
@@ -134,7 +134,7 @@ async function verifyTestsAndDocs() {
       ],
     },
     {
-      relativePath: "Doc/TODOs/Archive/235_Phase_Settings_Sticky_Nav.md",
+      relativePath: "Doc/TODOs/Archive/by-phase/200-299/235_Phase_Settings_Sticky_Nav.md",
       markers: [
         "Phase 235",
         "completed and archived on 2026-05-03",

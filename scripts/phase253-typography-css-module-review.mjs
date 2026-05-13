@@ -137,7 +137,7 @@ async function verifyCssSplit() {
 async function verifyDocsMarkers() {
   const expectations = [
     {
-      relativePath: "Doc/testing/Phase_253_Typography_CSS_Module_Split.md",
+      relativePath: "Doc/testing/Archive/phase-reports/200-299/Phase_253_Typography_CSS_Module_Split.md",
       markers: [
         "Phase 253",
         "Typography CSS Module Split",
@@ -146,7 +146,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/TODOs/Archive/253_Phase_Typography_CSS_Module_Split.md",
+        "Doc/TODOs/Archive/by-phase/200-299/253_Phase_Typography_CSS_Module_Split.md",
       markers: [
         "Phase 253",
         "completed and archived on 2026-05-03",

@@ -142,7 +142,7 @@ async function verifyDocsMarkers() {
   const expectations = [
     {
       relativePath:
-        "Doc/TODOs/Archive/285_Phase_Post_RC4_Smoke_Polish_And_Host_Access_Refresh.md",
+        "Doc/TODOs/Archive/by-phase/200-299/285_Phase_Post_RC4_Smoke_Polish_And_Host_Access_Refresh.md",
       markers: [
         "Phase 285",
         "post-rc4 smoke polish",
@@ -151,7 +151,7 @@ async function verifyDocsMarkers() {
     },
     {
       relativePath:
-        "Doc/testing/Phase_285_Post_RC4_Smoke_Polish_And_Host_Access_Refresh.md",
+        "Doc/testing/Archive/phase-reports/200-299/Phase_285_Post_RC4_Smoke_Polish_And_Host_Access_Refresh.md",
       markers: [
         "Phase 285",
         "npm run phase285:review",
