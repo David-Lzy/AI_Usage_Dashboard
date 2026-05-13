@@ -16,7 +16,7 @@ Freshness model:
 
 Status note:
 
-- active after `Phase 400`
+- completed and archived on 2026-05-13
 - release-gate baseline after typed diagnostic presentation reached 14-locale coverage
 
 ## Goal
@@ -52,3 +52,24 @@ Run the full release gate after `Phase 400` so the repo has one current baseline
 ## Follow-Up
 
 - Continue with `Phase 402` operator-workspace runtime copy inventory.
+
+## Closeout
+
+Completed on 2026-05-13.
+
+Summary:
+
+- Ran the full `npm run release:check` gate after typed warning, source, and adapter-error diagnostic presentation all had explicit 14-locale coverage.
+- Confirmed the gate passed without package version, manifest version, release artifact, provider behavior, locale registry, or archive/export schema changes.
+- Left `rc.13` as the submitted Chrome Web Store review boundary and `rc.15` as the current packaged follow-up artifact.
+- Advanced the active queue to `Phase 402` for operator-workspace runtime copy inventory.
+
+Verification:
+
+- `npm run release:check` passed.
+  - `npm run i18n:check` passed.
+  - `npm run typecheck` passed.
+  - `npm run test` passed with `124` files and `574` tests.
+  - `npm run build` passed.
+- `npm run docs:check` passed.
+- `git diff --check` passed.

@@ -82,6 +82,7 @@ Execution note:
 - sixty-sixth executable slice landed on `2026-05-13` through `Phase 398`
 - sixty-seventh executable slice landed on `2026-05-13` through `Phase 399`
 - sixty-eighth executable slice landed on `2026-05-13` through `Phase 400`
+- sixty-ninth release-gate baseline slice landed on `2026-05-13` through `Phase 401`
 - `Phase 200` and `Phase 201` intentionally paused this i18n/diagnostic follow-up line for functionality-first Codex personal usage-context surfacing while Codex budget is constrained
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
@@ -136,8 +137,8 @@ As of 2026-05-13:
 - RDP extension-window locale smoke captures now validate `--locale` against the same 14 runtime tags before opening a Chrome extension window
 - `npm run i18n:check` now derives Chrome `_locales` directories from runtime registry metadata and verifies the RDP capture helper locale list against the same runtime tags
 - `npm run i18n:check` now also verifies the 14-locale Chrome Web Store listing draft has registry-aligned locale sections and complete listing field structure
-- the full `npm run release:check` gate passed after the 14-locale expansion and runtime message catalog split in `Phase 396`
-- active `Phase 401` reruns the full release gate after typed diagnostic presentation reached 14-locale coverage, before the next operator/store helper implementation slices
+- the full `npm run release:check` gate passed after the 14-locale expansion and runtime message catalog split in `Phase 396`, and passed again after typed diagnostic presentation reached 14-locale coverage in `Phase 401`
+- active `Phase 402` inventories the operator-workspace helper-copy boundary before the next operator/store helper implementation slices
 - the current shipped runtime localized slice covers:
   - popup shell
   - popup explanatory copy
