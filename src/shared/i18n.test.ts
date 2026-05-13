@@ -139,6 +139,17 @@ describe("runtime i18n", () => {
     expect(i18n.t("settings.preferences.locale.system")).toBe("跟隨系統");
   });
 
+  it("returns translated runtime strings for the first ja shell slice", () => {
+    const i18n = createRuntimeI18n("ja");
+
+    expect(i18n.t("dashboard.hero.title")).toBe(
+      "AI コーディングクォータを一画面で把握",
+    );
+    expect(i18n.t("popup.header.title")).toBe("クイック確認");
+    expect(i18n.t("settings.topbar.title")).toBe("設定");
+    expect(i18n.t("settings.preferences.locale.system")).toBe("システムに従う");
+  });
+
   it("localizes quick theme toggle copy from the next explicit mode", () => {
     const i18n = createRuntimeI18n("zh-CN");
 
