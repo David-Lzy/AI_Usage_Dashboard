@@ -16,8 +16,7 @@ Freshness model:
 
 Status note:
 
-- queued after `Phase 389`
-- verification phase only unless the release gate exposes a local drift bug
+- completed and archived on 2026-05-13
 
 ## Goal
 
@@ -48,6 +47,23 @@ Run the current release gate after the documentation cleanup and record whether 
 - `npm run docs:check`
 - `git diff --check`
 
+## Completion Summary
+
+- Ran the full release gate after the documentation cleanup and link-check guard.
+- Confirmed `i18n:check`, `typecheck`, full unit test suite, and production build all pass on the current source tree.
+- Confirmed `npm run docs:check` also passes with taxonomy plus Markdown link checking.
+- No package version, manifest version, release zip, submitted `rc.13` boundary, or packaged `rc.15` follow-up artifact changed.
+
+## Verification
+
+- `npm run release:check`
+  - `i18n:check` passed for `14` Chrome locale catalogs, `14` runtime locales, and the store listing localization draft
+  - `typecheck` passed
+  - `vitest` passed with `124` files and `562` tests
+  - `vite build` completed successfully
+- `npm run docs:check`
+- `git diff --check`
+
 ## Follow-Up
 
-- If `release:check` fails outside this phase boundary, create the next smallest phase TODO before fixing it.
+- Start `Phase 391` for the deeper runtime i18n copy inventory.
