@@ -30,6 +30,22 @@ Split the runtime message catalog implementation into smaller modules while pres
 - Preserve all existing message ids, fallback behavior, shipped locale tags, and runtime registry metadata.
 - Add or update focused tests so catalog completeness continues to fail fast after the split.
 
+## Phase 394 Audit Input
+
+- `src/shared/runtime-message-catalogs.ts` is the safest first maintenance target because only `src/shared/i18n.ts` and `src/shared/i18n.test.ts` import it directly.
+- Use this write scope only:
+  - `src/shared/runtime-message-catalogs.ts`
+  - new internal modules under `src/shared/runtime-message-catalogs/`
+  - `src/shared/i18n.test.ts` only if stable import/completeness assertions need adjustment
+  - docs and phase closeout files
+- Recommended module shape:
+  - `runtime-message-catalogs/base.ts` for `EN_RUNTIME_MESSAGES` and `RUNTIME_SHELL_MESSAGE_IDS`
+  - `runtime-message-catalogs/overrides-cjk.ts` for `zh-CN`, `zh-TW`, `ja`, and `ko`
+  - `runtime-message-catalogs/overrides-latin.ts` for `es-419`, `pt-BR`, `fr`, `de`, and `it`
+  - `runtime-message-catalogs/overrides-other.ts` for `ru`, `ar`, `hi`, and `id`
+  - `runtime-message-catalogs.ts` remains the public entrypoint that imports those internal modules and exports the same helpers
+- Do not touch structured-copy helpers, provider adapters, parsers, page-session clients, provider source contracts, manifest catalogs, store listing drafts, release packages, or generated evidence.
+
 ## Preserved Boundaries
 
 - Do not change runtime copy text except for mechanical relocation required by the split.
