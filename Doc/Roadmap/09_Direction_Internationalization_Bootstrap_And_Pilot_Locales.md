@@ -84,6 +84,7 @@ Execution note:
 - sixty-eighth executable slice landed on `2026-05-13` through `Phase 400`
 - sixty-ninth release-gate baseline slice landed on `2026-05-13` through `Phase 401`
 - seventieth inventory slice landed on `2026-05-13` through `Phase 402`
+- seventy-first inventory slice landed on `2026-05-13` through `Phase 403`
 - `Phase 200` and `Phase 201` intentionally paused this i18n/diagnostic follow-up line for functionality-first Codex personal usage-context surfacing while Codex budget is constrained
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
@@ -134,6 +135,8 @@ As of 2026-05-13:
   - [I18n_Deeper_Runtime_Copy_Backlog.md](../I18n/I18n_Deeper_Runtime_Copy_Backlog.md)
 - operator-workspace helper and consumer copy has a maintained 14-locale inventory for the next implementation slice:
   - [I18n_Operator_Workspace_14_Locale_Copy_Inventory.md](../I18n/I18n_Operator_Workspace_14_Locale_Copy_Inventory.md)
+- store-helper runtime copy has a maintained 14-locale inventory for the next implementation slice:
+  - [I18n_Store_Helper_14_Locale_Copy_Inventory.md](../I18n/I18n_Store_Helper_14_Locale_Copy_Inventory.md)
 - focused i18n tests now guard that every non-English locale keeps explicit first-shell runtime message overrides instead of silently relying on English fallback for the shell pilot surface
 - Arabic/RTL surfaces now isolate English fallback text direction so fallback punctuation stays readable until reviewed Arabic runtime translations are added
 - popup and sidepanel HTML shells now declare notranslate so Chrome/Google Translate overlays do not obscure localized extension-window screenshots
@@ -141,7 +144,7 @@ As of 2026-05-13:
 - `npm run i18n:check` now derives Chrome `_locales` directories from runtime registry metadata and verifies the RDP capture helper locale list against the same runtime tags
 - `npm run i18n:check` now also verifies the 14-locale Chrome Web Store listing draft has registry-aligned locale sections and complete listing field structure
 - the full `npm run release:check` gate passed after the 14-locale expansion and runtime message catalog split in `Phase 396`, and passed again after typed diagnostic presentation reached 14-locale coverage in `Phase 401`
-- active `Phase 403` inventories the store-helper helper-copy boundary before the next operator/store helper implementation slices
+- active `Phase 404` implements operator-workspace helper copy from the maintained inventory before the store-helper implementation slice
 - the current shipped runtime localized slice covers:
   - popup shell
   - popup explanatory copy

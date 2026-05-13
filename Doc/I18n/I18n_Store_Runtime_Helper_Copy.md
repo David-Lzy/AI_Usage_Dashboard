@@ -19,6 +19,7 @@ Status note:
 - this file records the localization boundary for store-screenshot helper runtime routes
 - refresh it when store screenshot helper routes, capture automation signals, or screenshot-adjacent runtime captions change
 - `Phase 181` adds localized submission-support captions to the seed helper route while keeping final screenshot surfaces unchanged
+- `Phase 403` adds a 14-locale implementation inventory for the existing helper route copy
 
 ## Goal
 
@@ -78,4 +79,6 @@ The localized copy must continue to say:
 
 `Phase 181` closes the first screenshot-adjacent submission-support caption slice by showing localized preset-to-caption guidance inside the seed helper route. Generated store-listing source docs remain maintained separately and should not be translated inside runtime code unless the text is shown by the extension.
 
-`Phase 182` moved that next policy boundary into [I18n_Raw_Provider_Source_Truth_Policy.md](./I18n_Raw_Provider_Source_Truth_Policy.md). The next store-helper-specific change should only happen when screenshot helper routes, capture automation signals, or submission-support runtime captions change again.
+`Phase 182` moved that next policy boundary into [I18n_Raw_Provider_Source_Truth_Policy.md](./I18n_Raw_Provider_Source_Truth_Policy.md).
+
+`Phase 403` inventories the 14-locale implementation boundary in [I18n_Store_Helper_14_Locale_Copy_Inventory.md](./I18n_Store_Helper_14_Locale_Copy_Inventory.md). The next store-helper-specific runtime change should use that inventory and preserve automation titles, preset ids, route hashes, capture-plan truth fields, final screenshot surfaces, request/archive ids, filenames, generated capture evidence, and Chrome Web Store listing source text.

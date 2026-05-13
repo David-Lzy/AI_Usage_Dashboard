@@ -76,13 +76,13 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 402` execution priority:
+Current post-`Phase 403` execution priority:
 
 1. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.13.zip` as the submitted Chrome Web Store review boundary. Do not silently mutate or rewrite the [RC13 upload-candidate milestone](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) while that submission remains the human-reviewed baseline.
 2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.15.zip` as the current packaged follow-up candidate. It includes the previous `rc.14` follow-up work plus post-`rc.14` local-safe maintenance through `Phase 363`, and is ready if review feedback or an explicit resubmission decision needs a newer build.
 3. `P0` - keep the refreshed `Direction 10.3` screenshot evidence archived and ready, not pending: [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) still fulfills the latest reviewed screenshot pack with `5/5` images and `3` explicit truth-boundary notes.
 4. `P1` - if a resubmission becomes necessary, use [2026-05-13_RC15_Maintenance_Follow_Up_Release_Candidate.md](./Milestones/2026-05-13_RC15_Maintenance_Follow_Up_Release_Candidate.md) as the current packaged-source reference and cut a fresh submission milestone from that boundary instead of mutating RC13 history.
-5. `P1` - continue the numbered queue after `Phase 402`: active `Phase 403` inventories store-helper 14-locale copy, then queued `Phase 404` and `Phase 405` implement operator-workspace and store-helper 14-locale copy while preserving evidence and automation identity boundaries.
+5. `P1` - continue the numbered queue after `Phase 403`: active `Phase 404` implements operator-workspace 14-locale copy, then queued `Phase 405` implements store-helper 14-locale copy while preserving evidence and automation identity boundaries.
 6. `P2` - keep the `Phase 309` first-provider setup behavior stable: zero-provider Settings now recommends one personal-user provider in Quick Setup and popup zero-provider actions deep-link to that same setup card.
 7. `P2` - keep the `Phase 310` cached-first guard stable: standard dashboard routes must keep rendering cached app state while background bootstrap is still loading.
 8. `P2` - keep the `Phase 311` popup view-model split behavior-only: `src/popup/view-models.ts` remains the public aggregator and the extracted setup-coverage / featured-card modules should not change popup UI semantics.
