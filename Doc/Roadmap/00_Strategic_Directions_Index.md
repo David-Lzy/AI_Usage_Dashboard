@@ -123,6 +123,7 @@ As of 2026-05-14:
 - `Phase 419` added localized interaction-audit route feedback and accessibility labels while keeping dynamic surface titles source-bound and preserving route paths, iframe sources, ids, presets, signoff exports, handoff drafts, and archive/request schemas
 - `Phase 420` added typed signoff import-error codes and localized display copy while preserving pasted JSON, parsed payload fields, accepted import compatibility, generated drafts, filenames, MIME types, storage keys, and request binding/revision formatting
 - `Phase 421` added localized interaction-audit surface-definition display copy for all 14 runtime locales while preserving source ids, route paths, iframe sources, preset ids, data attributes, signoff exports, generated Markdown drafts, filenames, MIME types, storage keys, and request binding/revision formatting
+- post-`Phase 421` closeout packaged the current source boundary as `0.1.0-rc.16` while preserving RC13 as the submitted Chrome Web Store review boundary
 - `Phase 200` completed a functionality-first Codex personal slice by preserving multiple visible usage windows, expanding Codex page-capture snippets, and surfacing the most constrained visible percentage window across dashboard, provider detail, and popup paths
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without changing the primary percentage-window quota model
 - `Phase 202` completed repeatable unpacked-extension verification for Codex personal multi-window plus flex-balance context, while fixing DOM capture so repeated percentages and single-character balance values are not lost before parsing
@@ -424,7 +425,7 @@ As of 2026-05-14:
 - `Phase 169` completed the next `Direction 10.3` slice by adding one request-bound manual finalize command plus handoff update, so the remaining real-world work is now the popup capture itself instead of popup capture plus extra repo bookkeeping
 - `Phase 296` completed the mixed candidate screenshot file intake plus archive completion under `10_3_Store_Asset_Pack_And_Submission_TODOs.md`
 - the previous repo-owned engineering default was adapter diagnostic raw fallback regression review for the shipped `en + zh_CN` runtime pilot under Direction 09, captured in `09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`
-- because `0.1.0-rc.15` is now packaged as the aligned follow-up candidate while the RC13 milestone remains the submitted store-review boundary, the active functional priority is now review-feedback or deliberate resubmission follow-up only if the Chrome Web Store flow asks for it
+- because `0.1.0-rc.16` is now packaged as the aligned follow-up candidate while the RC13 milestone remains the submitted store-review boundary, the active functional priority is now review-feedback or deliberate resubmission follow-up only if the Chrome Web Store flow asks for it
 - the remaining high-value work in Direction 05 and Direction 04 is now evidence closure, not more tool-building:
   - `05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md`
   - `04_2_Interaction_Audit_Real_Operator_Closure_TODOs.md`
@@ -491,7 +492,7 @@ As of 2026-05-14:
 
 1. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why first now:
-   `0.1.0-rc.15` is now packaged as the next aligned follow-up candidate, the mixed screenshot archive is complete, the trimmed transparent icon refresh and Claude Team usage-page path are already in the submitted RC13 boundary, and the next work is only review-feedback or deliberate resubmission follow-up after the human Chrome Web Store flow returns.
+   `0.1.0-rc.16` is now packaged as the next aligned follow-up candidate, the mixed screenshot archive is complete, the trimmed transparent icon refresh and Claude Team usage-page path are already in the submitted RC13 boundary, and the next work is only review-feedback or deliberate resubmission follow-up after the human Chrome Web Store flow returns.
 
 2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second now:

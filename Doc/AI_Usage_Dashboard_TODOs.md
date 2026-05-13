@@ -79,9 +79,9 @@ The project is no longer in shell-building or first provider-wiring mode.
 Current post-`Phase 421` execution priority:
 
 1. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.13.zip` as the submitted Chrome Web Store review boundary. Do not silently mutate or rewrite the [RC13 upload-candidate milestone](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) while that submission remains the human-reviewed baseline.
-2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.15.zip` as the current packaged follow-up candidate. It includes the previous `rc.14` follow-up work plus post-`rc.14` local-safe maintenance through `Phase 363`, and is ready if review feedback or an explicit resubmission decision needs a newer build.
+2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.16.zip` as the current packaged follow-up candidate. It includes the previous `rc.15` follow-up work plus post-`rc.15` local-safe localization and interaction-audit display/source split work through `Phase 421`, and is ready if review feedback or an explicit resubmission decision needs a newer build.
 3. `P0` - keep the refreshed `Direction 10.3` screenshot evidence archived and ready, not pending: [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) still fulfills the latest reviewed screenshot pack with `5/5` images and `3` explicit truth-boundary notes.
-4. `P1` - if a resubmission becomes necessary, use [2026-05-13_RC15_Maintenance_Follow_Up_Release_Candidate.md](./Milestones/2026-05-13_RC15_Maintenance_Follow_Up_Release_Candidate.md) as the current packaged-source reference and cut a fresh submission milestone from that boundary instead of mutating RC13 history.
+4. `P1` - if a resubmission becomes necessary, use [2026-05-14_RC16_Post_Localization_Closeout_Release_Candidate.md](./Milestones/2026-05-14_RC16_Post_Localization_Closeout_Release_Candidate.md) as the current packaged-source reference and cut a fresh submission milestone from that boundary instead of mutating RC13 history.
 5. `P1` - no numbered phase is currently queued after `Phase 421`; create a new narrow phase before starting additional source, runtime, release, or documentation work.
 6. `P2` - keep the `Phase 309` first-provider setup behavior stable: zero-provider Settings now recommends one personal-user provider in Quick Setup and popup zero-provider actions deep-link to that same setup card.
 7. `P2` - keep the `Phase 310` cached-first guard stable: standard dashboard routes must keep rendering cached app state while background bootstrap is still loading.
@@ -152,7 +152,7 @@ Delivery rule for this stage:
 - keep active implementation phases narrow and independently verifiable
 - keep file-splitting separate from release packaging, provider verification, and store evidence closeout
 - preserve the current provider truth boundaries while changing UI presentation
-- treat `rc.13` as the current submitted store-review boundary, and `rc.15` as the current packaged follow-up candidate; `rc.14`, `rc.12`, and `rc.11` remain historical evidence
+- treat `rc.13` as the current submitted store-review boundary, and `rc.16` as the current packaged follow-up candidate; `rc.15`, `rc.14`, `rc.12`, and `rc.11` remain historical evidence
 
 Phase status update:
 
@@ -451,6 +451,7 @@ Phase status update:
 - `Phase 364` packaged the current post-`rc.14` maintenance source boundary as `0.1.0-rc.15`, aligned package and manifest versions, generated the release zip, and recorded the RC15 follow-up milestone while preserving RC13 as the submitted store-review boundary
 - `Phase 365` added a source-only provider host-permission contract guard so source route hints, Settings host origins, and manifest optional host permissions stay aligned while preserving the deferred Gemini project-metrics no-host-access boundary
 - `Phase 366` verified first-run RDP Chrome extension screenshots, added a dashboard empty-state Quick Setup action, and made hidden-provider Quick Setup deep links fall back to the Quick Setup section instead of the top of Settings
+- post-`Phase 421` closeout packaged the post-localization source boundary as `0.1.0-rc.16`, aligned package and manifest versions, generated `release/ai-usage-dashboard-0.1.0-rc.16.zip`, and recorded the RC16 follow-up milestone while preserving RC13 as the submitted store-review boundary
 - `Phase 334` split interaction-audit per-surface card rendering into a dedicated component while preserving route-owned audit refs, preset actions, manual checks, and signoff callbacks
 - `Phase 335` split interaction-audit review queue rendering into a dedicated component while preserving route-owned queue construction and jump behavior
 - `Phase 336` split interaction-audit request-scope rendering into a dedicated component while preserving route-owned request-context state plus existing binding, revision, and next-command display
