@@ -251,6 +251,18 @@ describe("runtime i18n", () => {
     expect(i18n.resolvedTextDirection).toBe("ltr");
   });
 
+  it("returns translated runtime strings for the first id shell slice", () => {
+    const i18n = createRuntimeI18n("id");
+
+    expect(i18n.t("dashboard.hero.title")).toBe(
+      "Satu dasbor untuk kuota AI coding",
+    );
+    expect(i18n.t("popup.header.title")).toBe("Ringkasan cepat");
+    expect(i18n.t("settings.topbar.title")).toBe("Pengaturan");
+    expect(i18n.t("settings.preferences.locale.system")).toBe("Ikuti sistem");
+    expect(i18n.resolvedTextDirection).toBe("ltr");
+  });
+
   it("localizes quick theme toggle copy from the next explicit mode", () => {
     const i18n = createRuntimeI18n("zh-CN");
 

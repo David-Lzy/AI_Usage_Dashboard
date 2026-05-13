@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [384_Phase_Hindi_Runtime_Shell_Pilot.md](./Archive/384_Phase_Hindi_Runtime_Shell_Pilot.md)
+- latest completed slice: [385_Phase_Indonesian_Runtime_Shell_Pilot.md](./Archive/385_Phase_Indonesian_Runtime_Shell_Pilot.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -774,6 +774,7 @@ Completed phases should be moved to:
 - the 2026-05-13 `Phase 382` closeout added the first Russian runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while preserving deeper structured copy and raw evidence fallback boundaries
 - the 2026-05-13 `Phase 383` closeout added the first Arabic runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while preserving deeper structured copy, raw evidence fallback boundaries, and the existing `rtl` locale direction
 - the 2026-05-13 `Phase 384` closeout added the first Hindi runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while preserving deeper structured copy and raw evidence fallback boundaries
+- the 2026-05-13 `Phase 385` closeout added the first Indonesian runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while preserving deeper structured copy and raw evidence fallback boundaries
 
 ## Delivery Standard For Each Phase
 
