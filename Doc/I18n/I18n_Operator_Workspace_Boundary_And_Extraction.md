@@ -18,6 +18,8 @@ Status note:
 
 - this file records the current localization boundary for operator-only review workspaces
 - refresh it when interaction-audit or theme-recovery workspace copy moves further under the runtime i18n pilot
+- `Phase 402` adds the 14-locale implementation inventory:
+  - [I18n_Operator_Workspace_14_Locale_Copy_Inventory.md](./I18n_Operator_Workspace_14_Locale_Copy_Inventory.md)
 
 ## Goal
 
@@ -98,6 +100,20 @@ The localized scope is intentionally presentation-only:
 
 Evidence payloads remain English. Export schemas, request bindings, generated filenames, archive-facing status values, fixture ids, provider source-truth values, and vendor-owned text remain outside this shipped shell slice.
 
+## Phase 402 14-Locale Inventory
+
+`Phase 402` inventories the next expansion from `en + zh-CN` to the 14 shipped runtime locales.
+
+Implementation planning now lives in:
+
+- [I18n_Operator_Workspace_14_Locale_Copy_Inventory.md](./I18n_Operator_Workspace_14_Locale_Copy_Inventory.md)
+
+That inventory separates:
+
+- existing structured helper buckets that can move directly to explicit 14-locale copy
+- hardcoded interaction-audit panels that can move behind helper keys if `Phase 404` remains small enough
+- evidence/export/request/preset/command values that must remain raw and stable
+
 ## Candidate Localizable Copy
 
 These categories can move into the runtime i18n pilot first:
@@ -160,7 +176,7 @@ As of `Phase 199`:
 
 ## Follow-Up
 
-After `Phase 400`, typed diagnostic presentation has explicit 14-locale coverage. The remaining `Direction 09` follow-up should choose between operator-workspace helper copy and store-helper copy:
+After `Phase 402`, typed diagnostic presentation has explicit 14-locale coverage and the remaining operator-workspace helper-copy boundary is inventoried in [I18n_Operator_Workspace_14_Locale_Copy_Inventory.md](./I18n_Operator_Workspace_14_Locale_Copy_Inventory.md). The remaining `Direction 09` follow-up should continue with store-helper inventory and then the approved operator/store helper implementation slices:
 
 - keep raw source-selection, fallback, warning, and adapter-error diagnostic bodies available for provider detail, exports, and archive evidence
 - keep operator evidence payload fields, request identifiers, preset ids, filenames, route hashes, and generated evidence strings untranslated

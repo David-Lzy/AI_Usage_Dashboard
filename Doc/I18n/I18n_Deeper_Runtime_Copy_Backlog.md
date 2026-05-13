@@ -131,7 +131,8 @@ Source buckets:
 
 - `src/shared/operator-workspace-localized-copy.ts`
 - `src/shared/store-workflow-localized-copy.ts`
-- [402_Phase_Operator_Workspace_14_Locale_Copy_Inventory.md](../TODOs/402_Phase_Operator_Workspace_14_Locale_Copy_Inventory.md)
+- [I18n_Operator_Workspace_14_Locale_Copy_Inventory.md](./I18n_Operator_Workspace_14_Locale_Copy_Inventory.md)
+- [402_Phase_Operator_Workspace_14_Locale_Copy_Inventory.md](../TODOs/Archive/by-phase/400-499/402_Phase_Operator_Workspace_14_Locale_Copy_Inventory.md)
 - [403_Phase_Store_Helper_14_Locale_Copy_Inventory.md](../TODOs/403_Phase_Store_Helper_14_Locale_Copy_Inventory.md)
 
 User-facing copy:
@@ -147,6 +148,11 @@ Reason:
 Preserve:
 
 - evidence payloads, export field names, request ids, archive ids, fixture ids, filenames, preset ids, route hashes, automation titles, and final screenshot surfaces
+
+Default next action:
+
+- `Phase 402` inventoried the operator-workspace helper and consumer-copy boundary for `Phase 404`.
+- `Phase 403` should inventory the store-helper boundary before implementation.
 
 ### P2 - Explicitly Not Translated
 
@@ -181,7 +187,9 @@ Reason:
 - `Phase 398` translated typed warning diagnostic presentation for all 14 runtime locales.
 - `Phase 399` translated typed source-selection and source-fallback diagnostic presentation for all 14 runtime locales.
 - `Phase 400` translated typed adapter-error diagnostic presentation for all 14 runtime locales.
-- Operator workspaces and store helper routes remain follow-up work.
+- `Phase 401` reran the full release gate after typed diagnostic presentation reached 14-locale coverage.
+- `Phase 402` inventoried operator-workspace helper copy for the next implementation slice.
+- Store helper routes remain follow-up work.
 
 ## Verification Pattern
 

@@ -16,7 +16,7 @@ Freshness model:
 
 Status note:
 
-- queued after `Phase 401`
+- completed and archived on 2026-05-13
 - inventory slice before operator-workspace runtime copy implementation
 
 ## Goal
@@ -50,3 +50,20 @@ Inventory operator-workspace copy that still relies on English fallback outside 
 ## Follow-Up
 
 - Continue with `Phase 403` store-helper runtime copy inventory.
+
+## Closeout
+
+Completed on 2026-05-13.
+
+Summary:
+
+- Reviewed `src/shared/operator-workspace-localized-copy.ts`, the interaction-audit route, the theme-recovery route, and their focused components.
+- Added [I18n_Operator_Workspace_14_Locale_Copy_Inventory.md](../../../../I18n/I18n_Operator_Workspace_14_Locale_Copy_Inventory.md) as the maintained implementation boundary for `Phase 404`.
+- Split approved helper-owned UI copy from consumer-only display labels that can move into the helper if the implementation remains narrow.
+- Explicitly deferred export bodies, JSON schemas, request ids, route hashes, preset ids, filenames, generated command text, provider source-truth labels, raw diagnostics, action-badge text/title, and mixed presentation/export snapshot labels.
+- Updated the deeper runtime copy backlog and Direction 09 roadmap references so the next operator implementation phase does not need to rediscover scope.
+
+Verification:
+
+- `npm run docs:check` passed.
+- `git diff --check` passed.
