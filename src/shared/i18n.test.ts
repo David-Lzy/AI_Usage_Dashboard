@@ -172,6 +172,17 @@ describe("runtime i18n", () => {
     expect(i18n.t("settings.preferences.locale.system")).toBe("Seguir sistema");
   });
 
+  it("returns translated runtime strings for the first pt-BR shell slice", () => {
+    const i18n = createRuntimeI18n("pt-BR");
+
+    expect(i18n.t("dashboard.hero.title")).toBe(
+      "Um painel para cotas de codificação com IA",
+    );
+    expect(i18n.t("popup.header.title")).toBe("Vista rápida");
+    expect(i18n.t("settings.topbar.title")).toBe("Configurações");
+    expect(i18n.t("settings.preferences.locale.system")).toBe("Seguir sistema");
+  });
+
   it("localizes quick theme toggle copy from the next explicit mode", () => {
     const i18n = createRuntimeI18n("zh-CN");
 
