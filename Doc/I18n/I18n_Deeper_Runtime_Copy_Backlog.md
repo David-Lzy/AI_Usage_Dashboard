@@ -57,7 +57,7 @@ Preserve:
 - policy-only and partial-support wording
 - route ids, action ids, and provider source truth
 
-### P0 - Phase 393 Settings And Provider Detail Helpers
+### P0 - Phase 393.1 Through 393.3 Settings And Provider Detail Helpers
 
 Source buckets:
 
@@ -150,8 +150,11 @@ Reason:
 - `Phase 392.1` translated the popup first-run guidance, setup coverage, snapshot status, and header buckets for all 14 runtime locales.
 - `Phase 392.3` translated the popup featured-section and featured-card buckets for all 14 runtime locales.
 - `Phase 392.4` translated the popup action-section, surface-role, and aria buckets for all 14 runtime locales.
-- `Phase 393` should translate Settings, provider-detail, and provider-source wrapper buckets for all 14 runtime locales.
-- Diagnostics, operator workspaces, and store helper routes should remain follow-up work unless `Phase 393` proves small enough to split safely.
+- `Phase 393` split Settings/provider-detail work into three implementation phases before runtime code changes.
+- `Phase 393.1` should translate Settings layout, Quick Setup, preferences, and theme-customization buckets for all 14 runtime locales.
+- `Phase 393.2` should translate Settings credentials, source-card helper labels, and permission buckets for all 14 runtime locales.
+- `Phase 393.3` should translate Provider Detail and provider-source display wrapper buckets for all 14 runtime locales.
+- Diagnostics, operator workspaces, and store helper routes should remain follow-up work unless the child phases prove small enough to split safely.
 
 ## Verification Pattern
 
