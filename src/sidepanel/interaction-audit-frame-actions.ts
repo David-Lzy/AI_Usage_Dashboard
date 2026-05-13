@@ -1,12 +1,68 @@
-type AuditFrameReadiness = {
+export type AuditFrameReadinessCode =
+  | "frame_not_ready"
+  | "ready"
+  | "waiting_dashboard_provider_actions"
+  | "waiting_settings_source_controls"
+  | "waiting_provider_detail_notes"
+  | "waiting_popup_actions";
+
+export type AuditPresetResultCode =
+  | "frame_not_ready"
+  | "focused_first_provider_action"
+  | "missing_first_provider_action"
+  | "opened_first_source_diagnostics"
+  | "missing_source_diagnostics_disclosure"
+  | "focused_source_preference"
+  | "missing_source_preference_select"
+  | "scrolled_first_detail_note"
+  | "missing_detail_note"
+  | "focused_popup_dashboard_action"
+  | "missing_popup_dashboard_action"
+  | "focused_featured_provider_detail_action"
+  | "missing_featured_provider_detail_action"
+  | "unsupported_audit_preset";
+
+export type AuditFrameReadiness = {
   ready: boolean;
+  code: AuditFrameReadinessCode;
   message: string;
+  rawMessage?: string;
 };
 
-type AuditPresetResult = {
+export type AuditPresetResult = {
   ok: boolean;
+  code: AuditPresetResultCode;
   message: string;
+  rawMessage?: string;
 };
+
+function frameReadiness(
+  code: AuditFrameReadinessCode,
+  ready: boolean,
+  message: string,
+  rawMessage?: string,
+): AuditFrameReadiness {
+  return {
+    ready,
+    code,
+    message,
+    ...(rawMessage ? { rawMessage } : {}),
+  };
+}
+
+function presetResult(
+  code: AuditPresetResultCode,
+  ok: boolean,
+  message: string,
+  rawMessage?: string,
+): AuditPresetResult {
+  return {
+    ok,
+    code,
+    message,
+    ...(rawMessage ? { rawMessage } : {}),
+  };
+}
 
 function isHtmlElementLike(value: unknown): value is HTMLElement {
   return Boolean(
@@ -90,10 +146,7 @@ export function getAuditSurfaceReadiness(
   const frameContext = getFrameContext(frame);
 
   if (!frameContext) {
-    return {
-      ready: false,
-      message: "Frame not ready yet.",
-    };
+    return frameReadiness("frame_not_ready", false, "Frame not ready yet.");
   }
 
   const { document } = frameContext;
@@ -101,54 +154,67 @@ export function getAuditSurfaceReadiness(
   switch (surfaceId) {
     case "dashboard-360":
       return document.querySelector(".provider-card .text-button")
-        ? {
-            ready: true,
-            message: "Frame loaded and ready for audit presets.",
-          }
-        : {
-            ready: false,
-            message: "Frame loaded. Waiting for dashboard provider actions.",
-          };
+        ? frameReadiness(
+            "ready",
+            true,
+            "Frame loaded and ready for audit presets.",
+          )
+        : frameReadiness(
+            "waiting_dashboard_provider_actions",
+            false,
+            "Frame loaded. Waiting for dashboard provider actions.",
+            "Missing selector .provider-card .text-button for dashboard-360 readiness.",
+          );
     case "settings-420":
       return document.querySelector(".source-card__details-toggle") &&
         document.querySelector(
           '#settings-sources .source-card [data-settings-material-select^="source-preference"] .material-select__button',
         )
-        ? {
-            ready: true,
-            message: "Frame loaded and ready for audit presets.",
-          }
-        : {
-            ready: false,
-            message: "Frame loaded. Waiting for Settings source controls.",
-          };
+        ? frameReadiness(
+            "ready",
+            true,
+            "Frame loaded and ready for audit presets.",
+          )
+        : frameReadiness(
+            "waiting_settings_source_controls",
+            false,
+            "Frame loaded. Waiting for Settings source controls.",
+            "Missing Settings source disclosure or source-preference material select for settings-420 readiness.",
+          );
     case "cursor-detail-360":
     case "codex-detail-420":
       return document.querySelector(".detail-note")
-        ? {
-            ready: true,
-            message: "Frame loaded and ready for audit presets.",
-          }
-        : {
-            ready: false,
-            message: "Frame loaded. Waiting for provider detail notes.",
-          };
+        ? frameReadiness(
+            "ready",
+            true,
+            "Frame loaded and ready for audit presets.",
+          )
+        : frameReadiness(
+            "waiting_provider_detail_notes",
+            false,
+            "Frame loaded. Waiting for provider detail notes.",
+            `Missing selector .detail-note for ${surfaceId} readiness.`,
+          );
     case "popup-360":
       return document.querySelector(".popup-actions .text-button") &&
         document.querySelector(".popup-provider-card .text-button")
-        ? {
-            ready: true,
-            message: "Frame loaded and ready for audit presets.",
-          }
-        : {
-            ready: false,
-            message: "Frame loaded. Waiting for popup actions.",
-          };
+        ? frameReadiness(
+            "ready",
+            true,
+            "Frame loaded and ready for audit presets.",
+          )
+        : frameReadiness(
+            "waiting_popup_actions",
+            false,
+            "Frame loaded. Waiting for popup actions.",
+            "Missing popup action or featured-provider detail button for popup-360 readiness.",
+          );
     default:
-      return {
-        ready: true,
-        message: "Frame loaded and ready for audit presets.",
-      };
+      return frameReadiness(
+        "ready",
+        true,
+        "Frame loaded and ready for audit presets.",
+      );
   }
 }
 
@@ -160,10 +226,7 @@ export function runAuditPreset(
   const frameContext = getFrameContext(frame);
 
   if (!frameContext) {
-    return {
-      ok: false,
-      message: "Frame not ready yet.",
-    };
+    return presetResult("frame_not_ready", false, "Frame not ready yet.");
   }
 
   const { document, window } = frameContext;
@@ -173,16 +236,19 @@ export function runAuditPreset(
       const openButton = focusFrameElement(frame, ".provider-card .text-button");
 
       if (!openButton) {
-        return {
-          ok: false,
-          message: "Could not find the first provider action.",
-        };
+        return presetResult(
+          "missing_first_provider_action",
+          false,
+          "Could not find the first provider action.",
+          "Missing selector .provider-card .text-button for dashboard-360:focus-first-provider-open.",
+        );
       }
 
-      return {
-        ok: true,
-        message: "Focused the first provider action button.",
-      };
+      return presetResult(
+        "focused_first_provider_action",
+        true,
+        "Focused the first provider action button.",
+      );
     }
     case "settings-420:open-first-diagnostics": {
       document.getElementById("settings-sources")?.scrollIntoView({
@@ -192,10 +258,12 @@ export function runAuditPreset(
       const details = document.querySelector(".source-card__details");
 
       if (!isHtmlDetailsElementLike(details)) {
-        return {
-          ok: false,
-          message: "Could not find a source diagnostics disclosure.",
-        };
+        return presetResult(
+          "missing_source_diagnostics_disclosure",
+          false,
+          "Could not find a source diagnostics disclosure.",
+          "Missing selector .source-card__details for settings-420:open-first-diagnostics.",
+        );
       }
 
       details.open = true;
@@ -216,10 +284,11 @@ export function runAuditPreset(
         }, 0);
       }
 
-      return {
-        ok: true,
-        message: "Opened the first source diagnostics disclosure.",
-      };
+      return presetResult(
+        "opened_first_source_diagnostics",
+        true,
+        "Opened the first source diagnostics disclosure.",
+      );
     }
     case "settings-420:focus-first-source-preference": {
       document.getElementById("settings-sources")?.scrollIntoView({
@@ -232,26 +301,31 @@ export function runAuditPreset(
       );
 
       if (!select) {
-        return {
-          ok: false,
-          message: "Could not find a source-preference material select.",
-        };
+        return presetResult(
+          "missing_source_preference_select",
+          false,
+          "Could not find a source-preference material select.",
+          "Missing selector #settings-sources .source-card [data-settings-material-select^=\"source-preference\"] .material-select__button for settings-420:focus-first-source-preference.",
+        );
       }
 
-      return {
-        ok: true,
-        message: "Focused the first source-preference material select.",
-      };
+      return presetResult(
+        "focused_source_preference",
+        true,
+        "Focused the first source-preference material select.",
+      );
     }
     case "cursor-detail-360:jump-first-note":
     case "codex-detail-420:jump-first-note": {
       const firstNote = document.querySelector(".detail-note");
 
       if (!isHtmlElementLike(firstNote)) {
-        return {
-          ok: false,
-          message: "Could not find a detail note block.",
-        };
+        return presetResult(
+          "missing_detail_note",
+          false,
+          "Could not find a detail note block.",
+          `Missing selector .detail-note for ${surfaceId}:jump-first-note.`,
+        );
       }
 
       firstNote.scrollIntoView({
@@ -262,10 +336,11 @@ export function runAuditPreset(
         top: -24,
       });
 
-      return {
-        ok: true,
-        message: "Scrolled the detail frame to the first note block.",
-      };
+      return presetResult(
+        "scrolled_first_detail_note",
+        true,
+        "Scrolled the detail frame to the first note block.",
+      );
     }
     case "popup-360:focus-open-dashboard": {
       const quickActions = Array.from(
@@ -278,10 +353,12 @@ export function runAuditPreset(
       });
 
       if (!isHtmlElementLike(dashboardButton)) {
-        return {
-          ok: false,
-          message: "Could not find the popup dashboard action.",
-        };
+        return presetResult(
+          "missing_popup_dashboard_action",
+          false,
+          "Could not find the popup dashboard action.",
+          "Missing localized dashboard action text inside .popup-actions .text-button for popup-360:focus-open-dashboard.",
+        );
       }
 
       dashboardButton.scrollIntoView({
@@ -290,10 +367,11 @@ export function runAuditPreset(
       });
       dashboardButton.focus();
 
-      return {
-        ok: true,
-        message: "Focused the popup dashboard action.",
-      };
+      return presetResult(
+        "focused_popup_dashboard_action",
+        true,
+        "Focused the popup dashboard action.",
+      );
     }
     case "popup-360:focus-first-detail": {
       const detailButton = focusFrameElement(
@@ -302,21 +380,26 @@ export function runAuditPreset(
       );
 
       if (!detailButton) {
-        return {
-          ok: false,
-          message: "Could not find the featured-provider detail action.",
-        };
+        return presetResult(
+          "missing_featured_provider_detail_action",
+          false,
+          "Could not find the featured-provider detail action.",
+          "Missing selector .popup-provider-card .text-button for popup-360:focus-first-detail.",
+        );
       }
 
-      return {
-        ok: true,
-        message: "Focused the first featured-provider detail action.",
-      };
+      return presetResult(
+        "focused_featured_provider_detail_action",
+        true,
+        "Focused the first featured-provider detail action.",
+      );
     }
     default:
-      return {
-        ok: false,
-        message: "Unsupported audit preset.",
-      };
+      return presetResult(
+        "unsupported_audit_preset",
+        false,
+        "Unsupported audit preset.",
+        `Unsupported audit preset ${surfaceId}:${actionId}.`,
+      );
   }
 }

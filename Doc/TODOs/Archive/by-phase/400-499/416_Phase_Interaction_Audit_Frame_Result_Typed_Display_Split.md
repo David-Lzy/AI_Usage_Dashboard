@@ -16,8 +16,9 @@ Freshness model:
 
 Status note:
 
-- active after `Phase 415`
-- next child implementation phase from [I18n_Interaction_Audit_Presentation_Export_Split.md](../I18n/I18n_Interaction_Audit_Presentation_Export_Split.md)
+- completed on `2026-05-14`
+- next child implementation phase from [I18n_Interaction_Audit_Presentation_Export_Split.md](../../../../I18n/I18n_Interaction_Audit_Presentation_Export_Split.md)
+- closeout archived after adding stable result codes and raw-message separation for frame readiness and preset results
 
 ## Goal
 
@@ -54,3 +55,22 @@ Add a typed display/raw split for interaction-audit frame readiness and preset r
 ## Follow-Up
 
 - After this split, localize only typed frame readiness and preset result display labels. Keep raw evidence details unlocalized.
+
+## Completion Summary
+
+`Phase 416` added typed result codes and optional raw-message fields for interaction-audit frame readiness and preset results without changing existing `message` display text.
+
+Delivered:
+
+- exported `AuditFrameReadinessCode`, `AuditPresetResultCode`, `AuditFrameReadiness`, and `AuditPresetResult`
+- added stable `code` fields for ready, waiting, focused, missing-selector, unsupported-preset, and frame-not-ready states
+- added `rawMessage` for selector/action/detail failures where raw diagnostic context must remain recoverable
+- preserved preset execution behavior, readiness polling behavior, iframe behavior, existing `message` text, signoff exports, handoff drafts, and archive/request schemas
+- queued [417_Phase_Interaction_Audit_Frame_Result_14_Locale_Display_Copy.md](../../../417_Phase_Interaction_Audit_Frame_Result_14_Locale_Display_Copy.md) as the next typed-result localization slice
+
+## Verification
+
+- `npm run test -- src/sidepanel/interaction-audit-frame-actions.test.ts`
+- `npm run typecheck`
+- `npm run docs:check`
+- `git diff --check`

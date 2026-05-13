@@ -74,7 +74,7 @@ Delivered:
 - localized section label/detail, copy/download actions, summary labels, ready/not-ready labels, ready/outstanding status labels and descriptions, group headings, empty-state labels, pending-check count patterns, preview/workflow disclosure labels, and workflow instruction bullets
 - localized route-owned handoff copy/download success/failure feedback while preserving clipboard-unavailable branching
 - preserved `handoffDraft`, generated bundle command text, operator notes, surface ids, surface titles, pending manual-check evidence text, downloaded filenames, MIME types, and signoff export schemas
-- queued [416_Phase_Interaction_Audit_Frame_Result_Typed_Display_Split.md](../../../416_Phase_Interaction_Audit_Frame_Result_Typed_Display_Split.md) as the next interaction-audit localization safety slice
+- queued [416_Phase_Interaction_Audit_Frame_Result_Typed_Display_Split.md](./416_Phase_Interaction_Audit_Frame_Result_Typed_Display_Split.md) as the next interaction-audit localization safety slice
 
 ## Verification
 

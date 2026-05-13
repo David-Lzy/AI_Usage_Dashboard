@@ -51,6 +51,7 @@ describe("interaction audit frame actions", () => {
   it("reports not-ready frames before inspecting audit surface selectors", () => {
     expect(getAuditSurfaceReadiness("dashboard-360", null)).toEqual({
       ready: false,
+      code: "frame_not_ready",
       message: "Frame not ready yet.",
     });
     expect(
@@ -60,6 +61,7 @@ describe("interaction audit frame actions", () => {
       ),
     ).toEqual({
       ready: false,
+      code: "frame_not_ready",
       message: "Frame not ready yet.",
     });
   });
@@ -78,6 +80,7 @@ describe("interaction audit frame actions", () => {
       ),
     ).toEqual({
       ready: true,
+      code: "ready",
       message: "Frame loaded and ready for audit presets.",
     });
 
@@ -94,7 +97,18 @@ describe("interaction audit frame actions", () => {
       ),
     ).toEqual({
       ready: true,
+      code: "ready",
       message: "Frame loaded and ready for audit presets.",
+    });
+
+    expect(
+      getAuditSurfaceReadiness("dashboard-360", createFrame()),
+    ).toMatchObject({
+      ready: false,
+      code: "waiting_dashboard_provider_actions",
+      message: "Frame loaded. Waiting for dashboard provider actions.",
+      rawMessage:
+        "Missing selector .provider-card .text-button for dashboard-360 readiness.",
     });
   });
 
@@ -111,7 +125,9 @@ describe("interaction audit frame actions", () => {
       ),
     ).toEqual({
       ok: false,
+      code: "unsupported_audit_preset",
       message: "Unsupported audit preset.",
+      rawMessage: "Unsupported audit preset dashboard-360:missing-action.",
     });
   });
 
@@ -131,9 +147,26 @@ describe("interaction audit frame actions", () => {
       ),
     ).toEqual({
       ok: true,
+      code: "focused_popup_dashboard_action",
       message: "Focused the popup dashboard action.",
     });
     expect(refreshButton.focus).not.toHaveBeenCalled();
     expect(dashboardButton.focus).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps raw selector details separate from stable preset result codes", () => {
+    expect(
+      runAuditPreset(
+        "dashboard-360",
+        "focus-first-provider-open",
+        createFrame(),
+      ),
+    ).toEqual({
+      ok: false,
+      code: "missing_first_provider_action",
+      message: "Could not find the first provider action.",
+      rawMessage:
+        "Missing selector .provider-card .text-button for dashboard-360:focus-first-provider-open.",
+    });
   });
 });

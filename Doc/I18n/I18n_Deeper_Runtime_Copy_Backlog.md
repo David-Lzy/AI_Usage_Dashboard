@@ -34,9 +34,9 @@ Track runtime copy that still falls back to English after the 14-locale shell pi
 - Provider Detail helper copy now has explicit 14-locale coverage through `Phase 393.3.1`.
 - Provider-source display wrapper copy now has explicit 14-locale coverage through `Phase 393.3.2`.
 - Typed diagnostic presentation copy now has explicit 14-locale coverage for warning, source-selection, source-fallback, and adapter-error diagnostics through `Phase 400`.
-- Operator-workspace helper-owned copy now has explicit 14-locale coverage through `Phase 404`; consumer-only interaction-audit labels next to export/automation boundaries are moving in narrow follow-up slices, with Review Queue, Surface Card, Workspace Controls, Request Scope command headings, and Handoff Summary completed through `Phase 415`.
+- Operator-workspace helper-owned copy now has explicit 14-locale coverage through `Phase 404`; consumer-only interaction-audit labels next to export/automation boundaries are moving in narrow follow-up slices, with Review Queue, Surface Card, Workspace Controls, Request Scope command headings, Handoff Summary, and frame-result typed display split completed through `Phase 416`.
 - The interaction-audit consumer-label follow-up now has a presentation/export split reference from `Phase 409`: [I18n_Interaction_Audit_Presentation_Export_Split.md](./I18n_Interaction_Audit_Presentation_Export_Split.md).
-- Interaction-audit Review Queue display labels have explicit 14-locale coverage through `Phase 411`; Surface Card chrome labels have explicit 14-locale coverage through `Phase 412`; Workspace Controls labels and signoff-workspace feedback have explicit 14-locale coverage through `Phase 413`; Request Scope command headings have explicit 14-locale coverage through `Phase 414`; Handoff Summary presentation labels and safe feedback have explicit 14-locale coverage through `Phase 415`; frame readiness and preset result messages remain raw until a typed display split exists.
+- Interaction-audit Review Queue display labels have explicit 14-locale coverage through `Phase 411`; Surface Card chrome labels have explicit 14-locale coverage through `Phase 412`; Workspace Controls labels and signoff-workspace feedback have explicit 14-locale coverage through `Phase 413`; Request Scope command headings have explicit 14-locale coverage through `Phase 414`; Handoff Summary presentation labels and safe feedback have explicit 14-locale coverage through `Phase 415`; frame readiness and preset result messages now have a typed display/raw split through `Phase 416`; 14-locale typed display copy remains follow-up.
 - Store-helper copy now has explicit 14-locale coverage through `Phase 405` while screenshot workflow evidence and automation identity fields remain raw.
 - Store-helper visible error presentation now has explicit 14-locale wrappers through `Phase 410`, with raw helper error text preserved inside the wrapper.
 - Deeper structured helper copy outside the popup, Settings, Provider Detail, provider-source display, typed diagnostic presentation, operator-workspace helper, and store-helper slices still mostly uses explicit `zh-CN` branches plus English fallback for every other non-English locale.
@@ -168,6 +168,7 @@ Default next action:
 - `Phase 413` translated Workspace Controls labels and signoff-workspace feedback for all 14 runtime locales while preserving pasted JSON, parsed import errors, signoff export JSON, generated Markdown drafts, filenames, MIME types, storage keys, request binding, and request revision formatting.
 - `Phase 414` translated Request Scope command headings for all 14 runtime locales while preserving generated command text, request ids, request revisions, archive path examples, input filename examples, signoff export JSON, generated Markdown drafts, filenames, and MIME types.
 - `Phase 415` translated Handoff Summary presentation labels and safe handoff feedback for all 14 runtime locales while preserving handoff draft content, generated bundle command text, operator notes, surface ids, surface titles, manual-check evidence, filenames, MIME types, and signoff export schemas.
+- `Phase 416` added typed frame-readiness and preset-result codes with optional raw-message evidence while preserving current display messages and runtime behavior.
 
 ### P2 - Explicitly Not Translated
 
@@ -213,6 +214,7 @@ Reason:
 - `Phase 413` translated interaction-audit Workspace Controls labels and signoff-workspace feedback for all 14 runtime locales.
 - `Phase 414` translated interaction-audit Request Scope command headings for all 14 runtime locales.
 - `Phase 415` translated interaction-audit Handoff Summary presentation labels and safe handoff feedback for all 14 runtime locales.
+- `Phase 416` added the interaction-audit frame-result typed display split before localization.
 
 ## Verification Pattern
 
