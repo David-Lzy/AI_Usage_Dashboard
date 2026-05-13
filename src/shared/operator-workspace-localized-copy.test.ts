@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { INTERACTION_AUDIT_SURFACES } from "../sidepanel/interaction-audit-surfaces";
 import { createRuntimeI18n, SUPPORTED_APP_LOCALES } from "./i18n";
 import { buildOperatorWorkspaceLocalizedCopy as buildReexportedCopy } from "./localized-copy";
 import { buildOperatorWorkspaceLocalizedCopy } from "./operator-workspace-localized-copy";
@@ -54,6 +55,14 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
     expect(copy.interactionAudit.importErrors.empty_input).toBe(
       "Paste exported signoff JSON before importing.",
     );
+    expect(copy.interactionAudit.surfaceDefinitions["dashboard-360"].title).toBe(
+      "Dashboard",
+    );
+    expect(
+      copy.interactionAudit.surfaceDefinitions["dashboard-360"].actions[
+        "focus-first-provider-open"
+      ].label,
+    ).toBe("Focus first provider action");
     expect(copy.themeRecovery.hero.title).toBe(
       "One place to stage native-prompt and real-session recovery checks",
     );
@@ -88,6 +97,9 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
     expect(copy.interactionAudit.importErrors.invalid_json).toBe(
       "无法解析 signoff import JSON。",
     );
+    expect(
+      copy.interactionAudit.surfaceDefinitions["dashboard-360"].manualChecks[0],
+    ).toContain("确认");
     expect(copy.themeRecovery.currentTruth.reviewStage).toBe("复查阶段");
   });
 
@@ -210,6 +222,31 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
       expect(
         copy.interactionAudit.importErrors.unsupported_shape.length,
       ).toBeGreaterThan(0);
+      expect(Object.keys(copy.interactionAudit.surfaceDefinitions).sort()).toEqual(
+        INTERACTION_AUDIT_SURFACES.map((surface) => surface.id).sort(),
+      );
+      for (const surface of INTERACTION_AUDIT_SURFACES) {
+        const displaySurface =
+          copy.interactionAudit.surfaceDefinitions[surface.id];
+
+        expect(displaySurface.title.length).toBeGreaterThan(0);
+        expect(displaySurface.description.length).toBeGreaterThan(0);
+        expect(displaySurface.manualChecks).toHaveLength(
+          surface.manualChecks.length,
+        );
+        expect(Object.keys(displaySurface.actions).sort()).toEqual(
+          surface.actions.map((action) => action.id).sort(),
+        );
+
+        for (const action of surface.actions) {
+          expect(displaySurface.actions[action.id].label.length).toBeGreaterThan(
+            0,
+          );
+          expect(
+            displaySurface.actions[action.id].expectation.length,
+          ).toBeGreaterThan(0);
+        }
+      }
       expect(copy.themeRecovery.workflow.steps).toHaveLength(5);
     }
   });
@@ -236,6 +273,9 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
       "Surfaces",
     );
     expect(copy.interactionAudit.importErrors.invalid_json).toContain("JSON");
+    expect(
+      copy.interactionAudit.surfaceDefinitions["settings-420"].manualChecks[0],
+    ).toContain("تأكد");
     expect(copy.themeRecovery.outputs.clipboardUnavailable).toContain(
       "clipboard",
     );

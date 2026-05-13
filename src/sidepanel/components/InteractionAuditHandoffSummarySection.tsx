@@ -1,20 +1,57 @@
 import type { buildOperatorWorkspaceLocalizedCopy } from "../../shared/localized-copy";
 import type { InteractionAuditSignoffHandoffSummary } from "../interaction-audit-signoff";
+import { INTERACTION_AUDIT_SIGNOFF_SURFACES } from "../interaction-audit-surfaces";
 
 type InteractionAuditHandoffSummaryCopy = ReturnType<
   typeof buildOperatorWorkspaceLocalizedCopy
 >["interactionAudit"]["handoffSummary"];
 
+type InteractionAuditSurfaceDefinitionsCopy = ReturnType<
+  typeof buildOperatorWorkspaceLocalizedCopy
+>["interactionAudit"]["surfaceDefinitions"];
+
 type InteractionAuditHandoffSummarySectionProps = {
   copy: InteractionAuditHandoffSummaryCopy;
+  surfaceDefinitionsCopy: InteractionAuditSurfaceDefinitionsCopy;
   handoffDraft: string;
   handoffSummary: InteractionAuditSignoffHandoffSummary;
   onCopyHandoffSummary: () => void | Promise<void>;
   onDownloadHandoffSummary: () => void;
 };
 
+const SOURCE_SURFACES_BY_ID = new Map(
+  INTERACTION_AUDIT_SIGNOFF_SURFACES.map((surface) => [surface.id, surface]),
+);
+
+function getSurfaceDisplayTitle(
+  surfaceDefinitionsCopy: InteractionAuditSurfaceDefinitionsCopy,
+  surfaceId: string,
+  fallbackTitle: string,
+) {
+  return surfaceDefinitionsCopy[surfaceId]?.title ?? fallbackTitle;
+}
+
+function getManualCheckDisplayText(
+  surfaceDefinitionsCopy: InteractionAuditSurfaceDefinitionsCopy,
+  surfaceId: string,
+  sourceCheck: string,
+) {
+  const sourceSurface = SOURCE_SURFACES_BY_ID.get(surfaceId);
+  const sourceCheckIndex = sourceSurface?.manualChecks.indexOf(sourceCheck) ?? -1;
+
+  if (sourceCheckIndex < 0) {
+    return sourceCheck;
+  }
+
+  return (
+    surfaceDefinitionsCopy[surfaceId]?.manualChecks[sourceCheckIndex] ??
+    sourceCheck
+  );
+}
+
 export function InteractionAuditHandoffSummarySection({
   copy,
+  surfaceDefinitionsCopy,
   handoffDraft,
   handoffSummary,
   onCopyHandoffSummary,
@@ -134,7 +171,11 @@ export function InteractionAuditHandoffSummarySection({
                   data-audit-handoff-follow-up-item={surface.id}
                 >
                   <p className="interaction-audit__handoff-item-title">
-                    {surface.title}
+                    {getSurfaceDisplayTitle(
+                      surfaceDefinitionsCopy,
+                      surface.id,
+                      surface.title,
+                    )}
                   </p>
                   <p className="interaction-audit__handoff-item-meta">
                     {copy.pendingChecksMeta({
@@ -174,7 +215,11 @@ export function InteractionAuditHandoffSummarySection({
                   data-audit-handoff-not-reviewed-item={surface.id}
                 >
                   <p className="interaction-audit__handoff-item-title">
-                    {surface.title}
+                    {getSurfaceDisplayTitle(
+                      surfaceDefinitionsCopy,
+                      surface.id,
+                      surface.title,
+                    )}
                   </p>
                   <p className="interaction-audit__handoff-item-meta">
                     {copy.pendingChecksMeta({
@@ -209,7 +254,11 @@ export function InteractionAuditHandoffSummarySection({
                   data-audit-handoff-pending-item={surface.id}
                 >
                   <p className="interaction-audit__handoff-item-title">
-                    {surface.title}
+                    {getSurfaceDisplayTitle(
+                      surfaceDefinitionsCopy,
+                      surface.id,
+                      surface.title,
+                    )}
                   </p>
                   <p className="interaction-audit__handoff-item-meta">
                     {copy.pendingOfTotal({
@@ -220,7 +269,13 @@ export function InteractionAuditHandoffSummarySection({
                   </p>
                   <ul className="interaction-audit__handoff-check-list">
                     {surface.pendingManualChecks.map((check) => (
-                      <li key={`${surface.id}-${check}`}>{check}</li>
+                      <li key={`${surface.id}-${check}`}>
+                        {getManualCheckDisplayText(
+                          surfaceDefinitionsCopy,
+                          surface.id,
+                          check,
+                        )}
+                      </li>
                     ))}
                   </ul>
                 </li>

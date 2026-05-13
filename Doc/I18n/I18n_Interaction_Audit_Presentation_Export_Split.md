@@ -95,9 +95,9 @@ This section records the historical `Phase 409` migration plan. Review Queue, Su
 
 | Bucket | Source | Classification | Safe next step |
 | --- | --- | --- | --- |
-| Surface titles, descriptions, action labels, action expectations, and manual checks | `src/sidepanel/interaction-audit-surfaces.ts` | mixed visible UI plus export/handoff source truth | add a localized display map while leaving `INTERACTION_AUDIT_SIGNOFF_SURFACES`, JSON exports, signoff drafts, and handoff drafts on the current English source strings |
-| Surface title usage in Review Queue and Handoff Summary | `src/sidepanel/components/InteractionAuditReviewQueueSection.tsx`, `src/sidepanel/components/InteractionAuditHandoffSummarySection.tsx` | display currently uses export-bound surface title | localize only after the surface-definition display/source split exists |
-| Jump-to-surface feedback | `src/sidepanel/routes/InteractionAuditPage.tsx` | visible workspace feedback, not export-bound | completed in `Phase 419`; dynamic surface titles remain source-bound |
+| Surface titles, descriptions, action labels, action expectations, and manual checks | `src/sidepanel/interaction-audit-surfaces.ts` plus `interactionAudit.surfaceDefinitions` | mixed visible UI plus export/handoff source truth | completed in `Phase 421`; visible UI renders localized display copy while `INTERACTION_AUDIT_SIGNOFF_SURFACES`, JSON exports, signoff drafts, and handoff drafts stay on English source strings |
+| Surface title usage in Review Queue and Handoff Summary | `src/sidepanel/components/InteractionAuditReviewQueueSection.tsx`, `src/sidepanel/components/InteractionAuditHandoffSummarySection.tsx` | UI display titles, not export evidence | completed in `Phase 421`; Review Queue and Handoff Summary render localized display titles while generated drafts keep source titles |
+| Jump-to-surface feedback | `src/sidepanel/routes/InteractionAuditPage.tsx` | visible workspace feedback, not export-bound | completed in `Phase 419`; after `Phase 421`, dynamic surface titles render from the localized surface-definition display map |
 | Grid and iframe accessibility labels | `src/sidepanel/components/InteractionAuditSurfaceGridSection.tsx`, `src/sidepanel/components/InteractionAuditSurfaceCard.tsx` | screen-reader-visible presentation copy | completed in `Phase 419`; route paths, iframe identity, and surface ids remain unchanged |
 | Signoff import parse errors | `src/sidepanel/interaction-audit-signoff.ts` | visible workspace feedback from parser failures | completed in `Phase 420`; pasted JSON and parsed payload fields remain raw |
 | Request binding fallback labels | `src/sidepanel/interaction-audit-signoff.ts` | currently shared by UI display and generated drafts | keep `none`, `not recorded`, and `sha256:` formatting raw until display and generated-draft paths are separated |
@@ -110,9 +110,11 @@ Recommended follow-up order:
 2. typed import-error presentation, because parser errors need stable codes before localization
 3. surface-definition display/source split, because those strings feed both UI and export evidence
 
-`Phase 419` completed the route feedback and accessibility-label slice. Dynamic surface titles remain source-bound until the surface-definition display/source split.
+`Phase 419` completed the route feedback and accessibility-label slice. `Phase 421` then moved dynamic surface-title display to the localized surface-definition map.
 
 `Phase 420` completed typed import-error presentation. Parser failures now expose stable codes plus English fallback messages, and the route renders localized feedback from `interactionAudit.importErrors`.
+
+`Phase 421` completed the surface-definition display/source split. Surface cards, Review Queue, Handoff Summary, iframe titles, and jump feedback now render `interactionAudit.surfaceDefinitions` display copy while signoff exports and generated Markdown drafts keep the original English source definitions.
 
 ### Review Queue
 
@@ -134,7 +136,8 @@ Preserve:
 
 - `data-audit-review-queue-*` attributes
 - `surface.id`
-- `surface.title` until surface definitions gain a separate localized display title
+- source `surface.id`, queue status enum values, signoff exports, and generated handoff drafts
+- localized UI title from `interactionAudit.surfaceDefinitions`
 - queue status enum values: `follow_up`, `not_reviewed`, `pending_checks`, `ready`
 
 ### Surface Card Chrome
@@ -159,12 +162,13 @@ Safe display copy:
 Preserve:
 
 - `data-audit-*` attributes
-- iframe `title` until automation assertions are audited
+- iframe identity, source route, and data hooks
 - `surface.id`
 - `surface.path`
 - dimensions
 - action ids and preset ids
-- `surface.title`, `surface.description`, `action.label`, `action.expectation`, and `manualChecks` until display/export separation exists for surface definitions
+- source `surface.title`, `surface.description`, `action.label`, `action.expectation`, and `manualChecks` for export and data attributes
+- localized visible title, description, action text, and manual-check labels from `interactionAudit.surfaceDefinitions`
 
 ### Workspace Controls
 
@@ -236,7 +240,8 @@ Preserve:
 - operator notes
 - surface ids
 - generated bundle command
-- manual-check evidence text until surface definitions gain display/export separation
+- manual-check evidence text in generated drafts and exports
+- localized pending manual-check display text in the Handoff Summary UI only
 
 ## Mixed Labels Requiring A Typed Display Layer
 
@@ -257,7 +262,8 @@ Preserved split:
 
 - keep `queueStatus` and `signoffStatus` as stable enum values
 - keep ordering and next-target behavior as helper truth
-- keep surface titles source-bound until the surface-definition display/source split exists
+- keep source surface ids and queue ordering source-bound
+- render surface titles from `interactionAudit.surfaceDefinitions` in UI only
 
 ### Frame Readiness And Preset Result Messages
 
@@ -284,16 +290,16 @@ Source:
 - `src/sidepanel/interaction-audit-surfaces.ts`
 - `src/sidepanel/interaction-audit-signoff.ts`
 
-Current issue:
+Status:
 
-- surface titles, descriptions, action labels, expectations, and manual checks are visible UI strings
-- the same values also feed signoff exports and handoff drafts
+- closed in `Phase 421`
+- surface titles, descriptions, action labels, expectations, and manual checks now have a localized display map
+- the source values still feed signoff exports and handoff drafts
 
-Required split:
+Preserved split:
 
-- add separate display fields or a localized presentation map
 - keep export definitions and handoff drafts on the existing source-truth strings
-- add tests proving exported JSON and generated Markdown retain the existing English source values
+- keep tests proving exported JSON and generated Markdown retain the existing English source values
 
 ## Raw And Export-Bound Values
 
@@ -312,7 +318,7 @@ Do not translate these values:
 - MIME types
 - imported JSON content
 - operator notes entered by a reviewer
-- manual-check evidence text until a display/export split is implemented
+- manual-check evidence text in generated drafts and exports
 - frame-action `rawMessage` selector/preset diagnostics and English fallback `message` values
 
 ## Implementation Decision From Phase 409
@@ -348,7 +354,9 @@ The first safe child phase started with Review Queue display labels because:
 
 `Phase 420` added typed signoff import-error codes and 14-locale display copy while preserving pasted JSON, parsed payload fields, accepted import compatibility, generated drafts, filenames, MIME types, storage keys, and request binding/revision formatting.
 
-The next safe child phase is `Phase 421`, covering the larger surface-definition display/source split.
+`Phase 421` added 14-locale surface-definition display copy while preserving source ids, data attributes, route paths, preset ids, signoff export JSON, signoff Markdown drafts, and handoff Markdown drafts.
+
+No further interaction-audit display-copy child phase is currently selected.
 
 Required tests for completed and later interaction-audit display-copy slices:
 

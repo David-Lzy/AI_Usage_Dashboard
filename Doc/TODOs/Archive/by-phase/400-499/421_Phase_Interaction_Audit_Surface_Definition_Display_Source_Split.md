@@ -16,7 +16,7 @@ Freshness model:
 
 Status note:
 
-- active after `Phase 420`
+- completed after `Phase 420`
 - high-risk implementation slice from the remaining interaction-audit presentation-copy inventory
 
 ## Goal
@@ -54,4 +54,17 @@ Separate localized surface-definition display copy from the English source-truth
 
 ## Follow-Up
 
-- Revisit whether any generated-preview-only localized draft should exist separately from downloadable export evidence.
+- No generated-preview-only localized draft is selected for implementation. If that becomes useful later, it must stay separate from downloadable export evidence.
+
+## Completion Summary
+
+- Added `interactionAudit.surfaceDefinitions` as a 14-locale display catalog for surface titles, descriptions, action labels, action expectations, and manual-check labels.
+- Updated the interaction-audit surface cards, Review Queue, Handoff Summary, iframe titles, and jump feedback to render display copy while keeping source ids, data attributes, route paths, preset ids, and automation hooks unchanged.
+- Preserved `INTERACTION_AUDIT_SIGNOFF_SURFACES`, signoff export JSON, signoff Markdown drafts, and handoff Markdown drafts on the existing English source-truth values.
+- Added focused tests for catalog completeness and source-truth export/draft preservation.
+
+## Verification
+
+- Passed `npm run i18n:check`
+- Passed `npm run test -- src/shared/operator-workspace-localized-copy.test.ts src/sidepanel/interaction-audit-signoff.test.ts`
+- Passed `npm run typecheck`

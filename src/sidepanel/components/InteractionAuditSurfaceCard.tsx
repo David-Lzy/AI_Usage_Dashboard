@@ -22,9 +22,14 @@ export type InteractionAuditAccessibilityCopy = ReturnType<
   typeof buildOperatorWorkspaceLocalizedCopy
 >["interactionAudit"]["accessibility"];
 
+export type InteractionAuditSurfaceDefinitionsCopy = ReturnType<
+  typeof buildOperatorWorkspaceLocalizedCopy
+>["interactionAudit"]["surfaceDefinitions"];
+
 type InteractionAuditSurfaceCardProps = {
   copy: InteractionAuditSurfaceCardCopy;
   accessibilityCopy: InteractionAuditAccessibilityCopy;
+  surfaceDefinitionsCopy: InteractionAuditSurfaceDefinitionsCopy;
   surface: InteractionAuditSurface;
   loaded: boolean;
   status: InteractionAuditSurfaceStatus | undefined;
@@ -49,6 +54,7 @@ type InteractionAuditSurfaceCardProps = {
 export function InteractionAuditSurfaceCard({
   copy,
   accessibilityCopy,
+  surfaceDefinitionsCopy,
   surface,
   loaded,
   status,
@@ -62,6 +68,10 @@ export function InteractionAuditSurfaceCard({
   onNotes,
   onSignoffStatus,
 }: InteractionAuditSurfaceCardProps) {
+  const displaySurface = surfaceDefinitionsCopy[surface.id];
+  const displayTitle = displaySurface?.title ?? surface.title;
+  const displayDescription = displaySurface?.description ?? surface.description;
+
   return (
     <article
       className="status-card interaction-audit-card"
@@ -74,14 +84,14 @@ export function InteractionAuditSurfaceCard({
       <div className="status-card__header">
         <div>
           <p className="section-label">{copy.sectionLabel}</p>
-          <h2 className="section-title">{surface.title}</h2>
+          <h2 className="section-title">{displayTitle}</h2>
         </div>
         <span className="meta-chip">
           {surface.width} x {surface.height}
         </span>
       </div>
 
-      <p className="supporting-copy">{surface.description}</p>
+      <p className="supporting-copy">{displayDescription}</p>
 
       <div className="interaction-audit__actions">
         <a
@@ -92,30 +102,34 @@ export function InteractionAuditSurfaceCard({
         >
           {copy.openStandalone}
         </a>
-        {surface.actions.map((action) => (
-          <div
-            key={action.id}
-            className="interaction-audit__preset"
-            data-audit-preset-id={`${surface.id}:${action.id}`}
-          >
-            <button
-              className="text-button"
-              data-audit-action-expectation={action.expectation}
-              data-audit-action-id={action.id}
-              data-audit-action-label={action.label}
-              type="button"
-              disabled={!loaded}
-              onClick={() => {
-                onAction(surface.id, action.id);
-              }}
+        {surface.actions.map((action) => {
+          const displayAction = displaySurface?.actions[action.id];
+
+          return (
+            <div
+              key={action.id}
+              className="interaction-audit__preset"
+              data-audit-preset-id={`${surface.id}:${action.id}`}
             >
-              {action.label}
-            </button>
-            <p className="supporting-copy interaction-audit__preset-copy">
-              {action.expectation}
-            </p>
-          </div>
-        ))}
+              <button
+                className="text-button"
+                data-audit-action-expectation={action.expectation}
+                data-audit-action-id={action.id}
+                data-audit-action-label={action.label}
+                type="button"
+                disabled={!loaded}
+                onClick={() => {
+                  onAction(surface.id, action.id);
+                }}
+              >
+                {displayAction?.label ?? action.label}
+              </button>
+              <p className="supporting-copy interaction-audit__preset-copy">
+                {displayAction?.expectation ?? action.expectation}
+              </p>
+            </div>
+          );
+        })}
       </div>
 
       <div
@@ -154,7 +168,9 @@ export function InteractionAuditSurfaceCard({
             >
               <label className="switch-row interaction-audit__manual-check-row">
                 <div>
-                  <p className="switch-row__title">{check}</p>
+                  <p className="switch-row__title">
+                    {displaySurface?.manualChecks[index] ?? check}
+                  </p>
                 </div>
                 <input
                   className="switch-row__control"
@@ -223,7 +239,7 @@ export function InteractionAuditSurfaceCard({
           <iframe
             className="interaction-audit-frame"
             src={buildAuditUrl(surface.path)}
-            title={accessibilityCopy.auditFrameTitle(surface.title)}
+            title={accessibilityCopy.auditFrameTitle(displayTitle)}
             ref={(node) => {
               onFrameRef(surface.id, node);
             }}

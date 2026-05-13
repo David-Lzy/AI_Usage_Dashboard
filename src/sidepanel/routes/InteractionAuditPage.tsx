@@ -536,7 +536,9 @@ export function InteractionAuditPage({
     setWorkspaceFeedback({
       tone: "neutral",
       message: copy.routeFeedback.jumpedToSurface(
-        surfaceCard.dataset.auditSurfaceTitle ?? surfaceId,
+        copy.surfaceDefinitions[surfaceId]?.title ??
+          surfaceCard.dataset.auditSurfaceTitle ??
+          surfaceId,
       ),
     });
   }
@@ -594,6 +596,7 @@ export function InteractionAuditPage({
 
         <InteractionAuditReviewQueueSection
           copy={copy.reviewQueue}
+          surfaceDefinitionsCopy={copy.surfaceDefinitions}
           nextReviewTarget={nextReviewTarget}
           reviewQueue={reviewQueue}
           onJumpToSurface={handleJumpToSurface}
@@ -622,6 +625,7 @@ export function InteractionAuditPage({
 
         <InteractionAuditHandoffSummarySection
           copy={copy.handoffSummary}
+          surfaceDefinitionsCopy={copy.surfaceDefinitions}
           handoffDraft={handoffDraft}
           handoffSummary={handoffSummary}
           onCopyHandoffSummary={handleCopyHandoffSummary}
@@ -632,6 +636,7 @@ export function InteractionAuditPage({
       <InteractionAuditSurfaceGridSection
         copy={copy.surfaceCard}
         accessibilityCopy={copy.accessibility}
+        surfaceDefinitionsCopy={copy.surfaceDefinitions}
         buildAuditUrl={buildAuditUrl}
         loadedSurfaces={loadedSurfaces}
         signoffState={signoffState}

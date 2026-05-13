@@ -309,6 +309,22 @@ type InteractionAuditSignoffImportErrorsCopy = Record<
   string
 >;
 
+type InteractionAuditSurfaceDefinitionDisplayCopy = Record<
+  string,
+  {
+    title: string;
+    description: string;
+    actions: Record<
+      string,
+      {
+        label: string;
+        expectation: string;
+      }
+    >;
+    manualChecks: string[];
+  }
+>;
+
 const INTERACTION_AUDIT_REVIEW_QUEUE_COPY: Record<
   ResolvedAppLocale,
   InteractionAuditReviewQueueCopy
@@ -3148,6 +3164,1314 @@ const INTERACTION_AUDIT_SIGNOFF_IMPORT_ERRORS_COPY: Record<
   },
 };
 
+const INTERACTION_AUDIT_SURFACE_DEFINITION_DISPLAY_COPY: Record<
+  ResolvedAppLocale,
+  InteractionAuditSurfaceDefinitionDisplayCopy
+> = {
+  en: {
+    "dashboard-360": {
+      title: "Dashboard",
+      description:
+        "Use this frame to inspect summary pills, provider-card density, and the main top-bar action row at a realistic narrow side-panel width.",
+      actions: {
+        "focus-first-provider-open": {
+          label: "Focus first provider action",
+          expectation:
+            "The first provider card should place visible keyboard focus on its Open action so hover-versus-focus parity can be checked.",
+        },
+      },
+      manualChecks: [
+        "Confirm the focused Open action still feels visually coherent with the hover treatment on nearby dashboard controls.",
+        "Confirm provider-card summary density remains readable at the shipped 360px audit width without chip or text collisions.",
+      ],
+    },
+    "settings-420": {
+      title: "Settings",
+      description:
+        "Review sticky actions, section-jump chips, disclosure density, selects, switch rows, and compact source-card readability in one wider audit frame.",
+      actions: {
+        "open-first-diagnostics": {
+          label: "Open first diagnostics",
+          expectation:
+            "The first Source Connections disclosure should open and keep its summary toggle focused for grouped-diagnostics review.",
+        },
+        "focus-first-source-preference": {
+          label: "Focus source preference",
+          expectation:
+            "The first source-preference select inside Source Connections should receive focus for keyboard-state review.",
+        },
+      },
+      manualChecks: [
+        "Confirm the sticky top bar and section-jump shell still feel stable after the diagnostics disclosure and focused select are prepared.",
+        "Confirm the expanded diagnostics groups remain scannable and do not introduce horizontal overflow at the shipped 420px audit width.",
+        "Confirm the focused source-preference select stays visually explicit without overpowering the surrounding source-card summary.",
+      ],
+    },
+    "cursor-detail-360": {
+      title: "Provider Detail · Cursor",
+      description:
+        "Inspect long-value wrapping, neutral note hierarchy, status surfaces, and progress honesty on a compact provider-detail route.",
+      actions: {
+        "jump-first-note": {
+          label: "Jump to first note",
+          expectation:
+            "The first detail note block should be brought into view so note hierarchy and dense supporting content can be reviewed quickly.",
+        },
+      },
+      manualChecks: [
+        "Confirm the first note remains visually distinct from the lighter detail-field tiles instead of blending into the parent surface.",
+        "Confirm long supporting values and labels still wrap cleanly at the shipped 360px compact detail width.",
+      ],
+    },
+    "codex-detail-420": {
+      title: "Provider Detail · Codex",
+      description:
+        "Use this frame for the denser hybrid-source detail path, especially fidelity notes, graduation gates, and supporting-surface hierarchy.",
+      actions: {
+        "jump-first-note": {
+          label: "Jump to first note",
+          expectation:
+            "The first detail note block should be brought into view so fidelity and graduation-gate note treatment can be reviewed quickly.",
+        },
+      },
+      manualChecks: [
+        "Confirm fidelity and graduation-gate notes remain easy to distinguish from regular supporting fields at the shipped 420px detail width.",
+        "Confirm dense hybrid-source supporting text still reads cleanly without overflow or flattened hierarchy after the note jump.",
+      ],
+    },
+    "popup-360": {
+      title: "Toolbar Popup",
+      description:
+        "Review quick actions, snapshot-status tone, featured provider cards, and compact popup spacing without opening the browser action repeatedly.",
+      actions: {
+        "focus-open-dashboard": {
+          label: "Focus dashboard action",
+          expectation:
+            "The popup Quick Actions row should place visible focus on Open dashboard for keyboard and compact-spacing review.",
+        },
+        "focus-first-detail": {
+          label: "Focus featured detail action",
+          expectation:
+            "The first featured-provider card should place visible focus on Open detail for compact action density review.",
+        },
+      },
+      manualChecks: [
+        "Confirm quick actions and featured-provider actions still feel readable and comfortably tappable at the shipped 360px popup width.",
+        "Confirm the focused popup actions preserve compact spacing instead of collapsing the snapshot-status and featured-card rhythm.",
+      ],
+    },
+  },
+  "zh-CN": {
+    "dashboard-360": {
+      title: "Dashboard",
+      description:
+        "用这个 frame 检查 summary pill、provider card 密度，以及在真实窄 side panel 宽度下的主 top bar action 行。",
+      actions: {
+        "focus-first-provider-open": {
+          label: "聚焦第一个 provider action",
+          expectation:
+            "第一个 provider card 应把键盘焦点清楚放在 Open action 上，以便检查 hover 与 focus 的一致性。",
+        },
+      },
+      manualChecks: [
+        "确认聚焦后的 Open action 与附近 dashboard 控件的 hover 处理仍然视觉协调。",
+        "确认 provider-card summary 在发布的 360px 审计宽度下仍可读，没有 chip 或文字碰撞。",
+      ],
+    },
+    "settings-420": {
+      title: "Settings",
+      description:
+        "在较宽审计 frame 中检查 sticky action、section jump chip、disclosure 密度、select、switch row 和紧凑 source-card 可读性。",
+      actions: {
+        "open-first-diagnostics": {
+          label: "打开第一个 diagnostics",
+          expectation:
+            "第一个 Source Connections disclosure 应打开，并保持 summary toggle 聚焦以复查分组 diagnostics。",
+        },
+        "focus-first-source-preference": {
+          label: "聚焦 source preference",
+          expectation:
+            "Source Connections 中的第一个 source-preference select 应获得焦点，用于键盘状态复查。",
+        },
+      },
+      manualChecks: [
+        "确认 diagnostics disclosure 和聚焦 select 准备好后，sticky top bar 与 section-jump shell 仍然稳定。",
+        "确认展开的 diagnostics groups 仍可扫描，并且在发布的 420px 审计宽度下不会产生水平溢出。",
+        "确认聚焦的 source-preference select 足够明确，同时不会压过周围的 source-card summary。",
+      ],
+    },
+    "cursor-detail-360": {
+      title: "Provider Detail · Cursor",
+      description:
+        "在紧凑 provider-detail route 中检查长值换行、中性 note 层级、状态 surface 和进度诚实性。",
+      actions: {
+        "jump-first-note": {
+          label: "跳到第一个 note",
+          expectation:
+            "第一个 detail note block 应进入视图，便于快速复查 note 层级和密集辅助内容。",
+        },
+      },
+      manualChecks: [
+        "确认第一个 note 仍明显区别于较轻的 detail-field tile，没有混入父 surface。",
+        "确认长辅助值和标签在发布的 360px 紧凑 detail 宽度下仍能干净换行。",
+      ],
+    },
+    "codex-detail-420": {
+      title: "Provider Detail · Codex",
+      description:
+        "用这个 frame 检查更密集的 hybrid-source detail 路径，尤其是 fidelity note、graduation gate 和 supporting-surface 层级。",
+      actions: {
+        "jump-first-note": {
+          label: "跳到第一个 note",
+          expectation:
+            "第一个 detail note block 应进入视图，便于快速复查 fidelity 和 graduation-gate note 处理。",
+        },
+      },
+      manualChecks: [
+        "确认 fidelity 和 graduation-gate note 在发布的 420px detail 宽度下仍容易与普通 supporting field 区分。",
+        "确认 note jump 后，密集 hybrid-source 辅助文字仍可清楚阅读，没有溢出或层级变平。",
+      ],
+    },
+    "popup-360": {
+      title: "Toolbar Popup",
+      description:
+        "不反复打开 browser action，也能复查 quick action、snapshot-status tone、featured provider card 和紧凑 popup spacing。",
+      actions: {
+        "focus-open-dashboard": {
+          label: "聚焦 dashboard action",
+          expectation:
+            "Popup Quick Actions 行应把可见焦点放在 Open dashboard 上，用于键盘和紧凑间距复查。",
+        },
+        "focus-first-detail": {
+          label: "聚焦 featured detail action",
+          expectation:
+            "第一个 featured-provider card 应把可见焦点放在 Open detail 上，用于紧凑 action 密度复查。",
+        },
+      },
+      manualChecks: [
+        "确认 quick action 和 featured-provider action 在发布的 360px popup 宽度下仍可读、可轻松点击。",
+        "确认聚焦的 popup action 保持紧凑间距，不会压塌 snapshot-status 和 featured-card 节奏。",
+      ],
+    },
+  },
+  "zh-TW": {
+    "dashboard-360": {
+      title: "Dashboard",
+      description:
+        "用這個 frame 檢查 summary pill、provider card 密度，以及在真實窄 side panel 寬度下的主 top bar action 列。",
+      actions: {
+        "focus-first-provider-open": {
+          label: "聚焦第一個 provider action",
+          expectation:
+            "第一個 provider card 應將鍵盤焦點清楚放在 Open action 上，以便檢查 hover 與 focus 的一致性。",
+        },
+      },
+      manualChecks: [
+        "確認聚焦後的 Open action 與附近 dashboard 控制項的 hover 處理仍然視覺協調。",
+        "確認 provider-card summary 在發布的 360px 稽核寬度下仍可讀，沒有 chip 或文字碰撞。",
+      ],
+    },
+    "settings-420": {
+      title: "Settings",
+      description:
+        "在較寬稽核 frame 中檢查 sticky action、section jump chip、disclosure 密度、select、switch row 和緊湊 source-card 可讀性。",
+      actions: {
+        "open-first-diagnostics": {
+          label: "開啟第一個 diagnostics",
+          expectation:
+            "第一個 Source Connections disclosure 應開啟，並保持 summary toggle 聚焦以複查分組 diagnostics。",
+        },
+        "focus-first-source-preference": {
+          label: "聚焦 source preference",
+          expectation:
+            "Source Connections 中的第一個 source-preference select 應取得焦點，用於鍵盤狀態複查。",
+        },
+      },
+      manualChecks: [
+        "確認 diagnostics disclosure 和聚焦 select 準備好後，sticky top bar 與 section-jump shell 仍然穩定。",
+        "確認展開的 diagnostics groups 仍可掃描，且在發布的 420px 稽核寬度下不會產生水平溢出。",
+        "確認聚焦的 source-preference select 足夠明確，同時不會壓過周圍的 source-card summary。",
+      ],
+    },
+    "cursor-detail-360": {
+      title: "Provider Detail · Cursor",
+      description:
+        "在緊湊 provider-detail route 中檢查長值換行、中性 note 層級、狀態 surface 和進度誠實性。",
+      actions: {
+        "jump-first-note": {
+          label: "跳到第一個 note",
+          expectation:
+            "第一個 detail note block 應進入視圖，便於快速複查 note 層級和密集輔助內容。",
+        },
+      },
+      manualChecks: [
+        "確認第一個 note 仍明顯區別於較輕的 detail-field tile，沒有混入父 surface。",
+        "確認長輔助值和標籤在發布的 360px 緊湊 detail 寬度下仍能乾淨換行。",
+      ],
+    },
+    "codex-detail-420": {
+      title: "Provider Detail · Codex",
+      description:
+        "用這個 frame 檢查更密集的 hybrid-source detail 路徑，尤其是 fidelity note、graduation gate 和 supporting-surface 層級。",
+      actions: {
+        "jump-first-note": {
+          label: "跳到第一個 note",
+          expectation:
+            "第一個 detail note block 應進入視圖，便於快速複查 fidelity 和 graduation-gate note 處理。",
+        },
+      },
+      manualChecks: [
+        "確認 fidelity 和 graduation-gate note 在發布的 420px detail 寬度下仍容易與普通 supporting field 區分。",
+        "確認 note jump 後，密集 hybrid-source 輔助文字仍可清楚閱讀，沒有溢出或層級變平。",
+      ],
+    },
+    "popup-360": {
+      title: "Toolbar Popup",
+      description:
+        "不反覆開啟 browser action，也能複查 quick action、snapshot-status tone、featured provider card 和緊湊 popup spacing。",
+      actions: {
+        "focus-open-dashboard": {
+          label: "聚焦 dashboard action",
+          expectation:
+            "Popup Quick Actions 列應把可見焦點放在 Open dashboard 上，用於鍵盤和緊湊間距複查。",
+        },
+        "focus-first-detail": {
+          label: "聚焦 featured detail action",
+          expectation:
+            "第一個 featured-provider card 應把可見焦點放在 Open detail 上，用於緊湊 action 密度複查。",
+        },
+      },
+      manualChecks: [
+        "確認 quick action 和 featured-provider action 在發布的 360px popup 寬度下仍可讀、可輕鬆點擊。",
+        "確認聚焦的 popup action 保持緊湊間距，不會壓塌 snapshot-status 和 featured-card 節奏。",
+      ],
+    },
+  },
+  ja: {
+    "dashboard-360": {
+      title: "Dashboard",
+      description:
+        "この frame で summary pill、provider card の密度、実際の狭い side panel 幅での main top-bar action row を確認します。",
+      actions: {
+        "focus-first-provider-open": {
+          label: "最初の provider action にフォーカス",
+          expectation:
+            "最初の provider card は Open action に見えるキーボードフォーカスを置き、hover と focus の整合を確認できるようにします。",
+        },
+      },
+      manualChecks: [
+        "フォーカスされた Open action が周辺 dashboard controls の hover 表現と視覚的に整合していることを確認します。",
+        "Provider-card summary が出荷時の 360px audit 幅で chip や文字の衝突なく読めることを確認します。",
+      ],
+    },
+    "settings-420": {
+      title: "Settings",
+      description:
+        "広めの audit frame で sticky actions、section-jump chips、disclosure density、select、switch row、compact source-card の可読性を確認します。",
+      actions: {
+        "open-first-diagnostics": {
+          label: "最初の diagnostics を開く",
+          expectation:
+            "最初の Source Connections disclosure が開き、grouped diagnostics review のため summary toggle に focus が残る必要があります。",
+        },
+        "focus-first-source-preference": {
+          label: "Source preference にフォーカス",
+          expectation:
+            "Source Connections 内の最初の source-preference select が keyboard-state review のため focus を受け取る必要があります。",
+        },
+      },
+      manualChecks: [
+        "Diagnostics disclosure と focused select の準備後も sticky top bar と section-jump shell が安定していることを確認します。",
+        "展開した diagnostics groups が読み取りやすく、出荷時の 420px audit 幅で horizontal overflow を起こさないことを確認します。",
+        "Focused source-preference select が周囲の source-card summary を圧倒せず、十分に明確であることを確認します。",
+      ],
+    },
+    "cursor-detail-360": {
+      title: "Provider Detail · Cursor",
+      description:
+        "Compact provider-detail route で長い値の折り返し、neutral note hierarchy、status surfaces、progress honesty を確認します。",
+      actions: {
+        "jump-first-note": {
+          label: "最初の note へ移動",
+          expectation:
+            "最初の detail note block を表示し、note hierarchy と dense supporting content をすばやく確認できるようにします。",
+        },
+      },
+      manualChecks: [
+        "最初の note が軽い detail-field tiles と混ざらず、parent surface から視覚的に区別されていることを確認します。",
+        "長い supporting values と labels が出荷時の 360px compact detail 幅で自然に折り返されることを確認します。",
+      ],
+    },
+    "codex-detail-420": {
+      title: "Provider Detail · Codex",
+      description:
+        "この frame でより密度の高い hybrid-source detail path、特に fidelity notes、graduation gates、supporting-surface hierarchy を確認します。",
+      actions: {
+        "jump-first-note": {
+          label: "最初の note へ移動",
+          expectation:
+            "最初の detail note block を表示し、fidelity と graduation-gate note treatment をすばやく確認できるようにします。",
+        },
+      },
+      manualChecks: [
+        "Fidelity と graduation-gate notes が出荷時の 420px detail 幅で regular supporting fields と区別しやすいことを確認します。",
+        "Note jump 後も dense hybrid-source supporting text が overflow や hierarchy の平板化なしに読めることを確認します。",
+      ],
+    },
+    "popup-360": {
+      title: "Toolbar Popup",
+      description:
+        "Browser action を何度も開かずに quick actions、snapshot-status tone、featured provider cards、compact popup spacing を確認します。",
+      actions: {
+        "focus-open-dashboard": {
+          label: "Dashboard action にフォーカス",
+          expectation:
+            "Popup Quick Actions row は keyboard と compact-spacing review のため Open dashboard に見える focus を置く必要があります。",
+        },
+        "focus-first-detail": {
+          label: "Featured detail action にフォーカス",
+          expectation:
+            "最初の featured-provider card は compact action density review のため Open detail に見える focus を置く必要があります。",
+        },
+      },
+      manualChecks: [
+        "Quick actions と featured-provider actions が出荷時の 360px popup 幅で読みやすく、押しやすいことを確認します。",
+        "Focused popup actions が compact spacing を保ち、snapshot-status と featured-card rhythm を崩さないことを確認します。",
+      ],
+    },
+  },
+  ko: {
+    "dashboard-360": {
+      title: "Dashboard",
+      description:
+        "이 frame 에서 summary pill, provider-card density, 실제 좁은 side-panel 폭의 main top-bar action row 를 점검합니다.",
+      actions: {
+        "focus-first-provider-open": {
+          label: "첫 provider action focus",
+          expectation:
+            "첫 provider card 는 Open action 에 보이는 keyboard focus 를 두어 hover 와 focus parity 를 확인할 수 있어야 합니다.",
+        },
+      },
+      manualChecks: [
+        "Focused Open action 이 주변 dashboard controls 의 hover 처리와 시각적으로 어울리는지 확인합니다.",
+        "Provider-card summary density 가 shipped 360px audit width 에서 chip 이나 text 충돌 없이 읽히는지 확인합니다.",
+      ],
+    },
+    "settings-420": {
+      title: "Settings",
+      description:
+        "더 넓은 audit frame 에서 sticky actions, section-jump chips, disclosure density, selects, switch rows, compact source-card readability 를 검토합니다.",
+      actions: {
+        "open-first-diagnostics": {
+          label: "첫 diagnostics 열기",
+          expectation:
+            "첫 Source Connections disclosure 가 열리고 grouped-diagnostics review 를 위해 summary toggle focus 를 유지해야 합니다.",
+        },
+        "focus-first-source-preference": {
+          label: "Source preference focus",
+          expectation:
+            "Source Connections 안의 첫 source-preference select 가 keyboard-state review 를 위해 focus 되어야 합니다.",
+        },
+      },
+      manualChecks: [
+        "Diagnostics disclosure 와 focused select 를 준비한 뒤에도 sticky top bar 와 section-jump shell 이 안정적인지 확인합니다.",
+        "Expanded diagnostics groups 가 shipped 420px audit width 에서 scan 가능하고 horizontal overflow 를 만들지 않는지 확인합니다.",
+        "Focused source-preference select 가 주변 source-card summary 를 압도하지 않으면서 명확한지 확인합니다.",
+      ],
+    },
+    "cursor-detail-360": {
+      title: "Provider Detail · Cursor",
+      description:
+        "Compact provider-detail route 에서 long-value wrapping, neutral note hierarchy, status surfaces, progress honesty 를 점검합니다.",
+      actions: {
+        "jump-first-note": {
+          label: "첫 note 로 이동",
+          expectation:
+            "첫 detail note block 이 view 로 들어와 note hierarchy 와 dense supporting content 를 빠르게 검토할 수 있어야 합니다.",
+        },
+      },
+      manualChecks: [
+        "첫 note 가 lighter detail-field tiles 와 섞이지 않고 parent surface 에서 시각적으로 구분되는지 확인합니다.",
+        "Long supporting values 와 labels 가 shipped 360px compact detail width 에서 깔끔하게 wrap 되는지 확인합니다.",
+      ],
+    },
+    "codex-detail-420": {
+      title: "Provider Detail · Codex",
+      description:
+        "이 frame 으로 더 dense 한 hybrid-source detail path, 특히 fidelity notes, graduation gates, supporting-surface hierarchy 를 점검합니다.",
+      actions: {
+        "jump-first-note": {
+          label: "첫 note 로 이동",
+          expectation:
+            "첫 detail note block 이 view 로 들어와 fidelity 와 graduation-gate note treatment 를 빠르게 검토할 수 있어야 합니다.",
+        },
+      },
+      manualChecks: [
+        "Fidelity 와 graduation-gate notes 가 shipped 420px detail width 에서 regular supporting fields 와 쉽게 구분되는지 확인합니다.",
+        "Note jump 후에도 dense hybrid-source supporting text 가 overflow 나 flattened hierarchy 없이 읽히는지 확인합니다.",
+      ],
+    },
+    "popup-360": {
+      title: "Toolbar Popup",
+      description:
+        "Browser action 을 반복해서 열지 않고 quick actions, snapshot-status tone, featured provider cards, compact popup spacing 을 검토합니다.",
+      actions: {
+        "focus-open-dashboard": {
+          label: "Dashboard action focus",
+          expectation:
+            "Popup Quick Actions row 는 keyboard 와 compact-spacing review 를 위해 Open dashboard 에 visible focus 를 두어야 합니다.",
+        },
+        "focus-first-detail": {
+          label: "Featured detail action focus",
+          expectation:
+            "첫 featured-provider card 는 compact action density review 를 위해 Open detail 에 visible focus 를 두어야 합니다.",
+        },
+      },
+      manualChecks: [
+        "Quick actions 와 featured-provider actions 가 shipped 360px popup width 에서 readable 하고 comfortably tappable 한지 확인합니다.",
+        "Focused popup actions 가 compact spacing 을 보존하고 snapshot-status 와 featured-card rhythm 을 무너뜨리지 않는지 확인합니다.",
+      ],
+    },
+  },
+  "es-419": {
+    "dashboard-360": {
+      title: "Dashboard",
+      description:
+        "Usa este frame para inspeccionar summary pills, densidad de provider cards y la fila principal de acciones del top bar en un ancho estrecho realista de side panel.",
+      actions: {
+        "focus-first-provider-open": {
+          label: "Enfocar primera acción de provider",
+          expectation:
+            "La primera provider card debe poner focus visible de teclado en su acción Open para revisar la paridad hover-versus-focus.",
+        },
+      },
+      manualChecks: [
+        "Confirma que la acción Open enfocada siga siendo coherente con el tratamiento hover de los controles cercanos del dashboard.",
+        "Confirma que la densidad del resumen de provider-card siga legible en el ancho auditado de 360px sin choques de chips o texto.",
+      ],
+    },
+    "settings-420": {
+      title: "Settings",
+      description:
+        "Revisa acciones sticky, chips de salto de sección, densidad de disclosures, selects, switch rows y legibilidad compacta de source cards en un frame más ancho.",
+      actions: {
+        "open-first-diagnostics": {
+          label: "Abrir primeros diagnósticos",
+          expectation:
+            "El primer disclosure de Source Connections debe abrirse y mantener enfocado su summary toggle para revisar diagnósticos agrupados.",
+        },
+        "focus-first-source-preference": {
+          label: "Enfocar preferencia de source",
+          expectation:
+            "El primer select de source-preference dentro de Source Connections debe recibir focus para revisar el estado de teclado.",
+        },
+      },
+      manualChecks: [
+        "Confirma que el top bar sticky y el shell de section jumps sigan estables después de preparar el disclosure y el select enfocado.",
+        "Confirma que los grupos de diagnósticos expandidos sigan escaneables y no generen overflow horizontal a 420px.",
+        "Confirma que el select de source-preference enfocado sea claro sin dominar el resumen de la source-card.",
+      ],
+    },
+    "cursor-detail-360": {
+      title: "Provider Detail · Cursor",
+      description:
+        "Inspecciona wrapping de valores largos, jerarquía de notas neutrales, superficies de estado y honestidad del progreso en una ruta compacta de provider detail.",
+      actions: {
+        "jump-first-note": {
+          label: "Ir a la primera nota",
+          expectation:
+            "El primer bloque de nota de detalle debe entrar en vista para revisar rápido la jerarquía de notas y el contenido denso de apoyo.",
+        },
+      },
+      manualChecks: [
+        "Confirma que la primera nota siga diferenciándose de los tiles detail-field más ligeros y no se mezcle con la superficie padre.",
+        "Confirma que los valores y labels largos sigan envolviendo limpiamente en el ancho compacto de 360px.",
+      ],
+    },
+    "codex-detail-420": {
+      title: "Provider Detail · Codex",
+      description:
+        "Usa este frame para la ruta hybrid-source más densa, especialmente notas de fidelity, graduation gates y jerarquía de supporting surfaces.",
+      actions: {
+        "jump-first-note": {
+          label: "Ir a la primera nota",
+          expectation:
+            "El primer bloque de nota de detalle debe entrar en vista para revisar rápido el tratamiento de fidelity y graduation-gate notes.",
+        },
+      },
+      manualChecks: [
+        "Confirma que las notas de fidelity y graduation-gate sigan siendo fáciles de distinguir de campos de apoyo normales a 420px.",
+        "Confirma que el texto denso de hybrid-source siga leyéndose sin overflow ni jerarquía plana después del salto a la nota.",
+      ],
+    },
+    "popup-360": {
+      title: "Toolbar Popup",
+      description:
+        "Revisa quick actions, tono de snapshot status, featured provider cards y espaciado compacto del popup sin abrir repetidamente la browser action.",
+      actions: {
+        "focus-open-dashboard": {
+          label: "Enfocar acción de dashboard",
+          expectation:
+            "La fila Quick Actions del popup debe poner focus visible en Open dashboard para revisar teclado y espaciado compacto.",
+        },
+        "focus-first-detail": {
+          label: "Enfocar acción de detalle destacada",
+          expectation:
+            "La primera featured-provider card debe poner focus visible en Open detail para revisar densidad compacta de acciones.",
+        },
+      },
+      manualChecks: [
+        "Confirma que quick actions y featured-provider actions sigan legibles y cómodas de tocar en el ancho popup de 360px.",
+        "Confirma que las acciones popup enfocadas mantengan el espaciado compacto sin colapsar el ritmo de snapshot-status y featured-card.",
+      ],
+    },
+  },
+  "pt-BR": {
+    "dashboard-360": {
+      title: "Dashboard",
+      description:
+        "Use este frame para inspecionar summary pills, densidade dos provider cards e a linha principal de ações do top bar em uma largura estreita realista de side panel.",
+      actions: {
+        "focus-first-provider-open": {
+          label: "Focar primeira ação do provider",
+          expectation:
+            "O primeiro provider card deve colocar foco de teclado visível na ação Open para revisar a paridade entre hover e focus.",
+        },
+      },
+      manualChecks: [
+        "Confirme que a ação Open focada ainda combine visualmente com o tratamento hover dos controles próximos do dashboard.",
+        "Confirme que a densidade do resumo do provider-card continue legível na largura auditada de 360px, sem colisões de chips ou texto.",
+      ],
+    },
+    "settings-420": {
+      title: "Settings",
+      description:
+        "Revise ações sticky, chips de salto de seção, densidade de disclosures, selects, switch rows e legibilidade compacta de source cards em um frame mais largo.",
+      actions: {
+        "open-first-diagnostics": {
+          label: "Abrir primeiros diagnósticos",
+          expectation:
+            "O primeiro disclosure de Source Connections deve abrir e manter seu summary toggle focado para revisão de diagnósticos agrupados.",
+        },
+        "focus-first-source-preference": {
+          label: "Focar preferência de source",
+          expectation:
+            "O primeiro select source-preference em Source Connections deve receber focus para revisão do estado de teclado.",
+        },
+      },
+      manualChecks: [
+        "Confirme que o top bar sticky e o shell de section jumps continuem estáveis depois de preparar o disclosure e o select focado.",
+        "Confirme que os grupos de diagnósticos expandidos continuem escaneáveis e não criem overflow horizontal na largura auditada de 420px.",
+        "Confirme que o select source-preference focado esteja claro sem dominar o resumo do source-card ao redor.",
+      ],
+    },
+    "cursor-detail-360": {
+      title: "Provider Detail · Cursor",
+      description:
+        "Inspecione quebra de valores longos, hierarquia de notas neutras, superfícies de status e honestidade de progresso em uma rota compacta de provider detail.",
+      actions: {
+        "jump-first-note": {
+          label: "Ir para a primeira nota",
+          expectation:
+            "O primeiro bloco de nota de detalhe deve entrar em vista para revisar rapidamente a hierarquia de notas e o conteúdo de apoio denso.",
+        },
+      },
+      manualChecks: [
+        "Confirme que a primeira nota continue visualmente distinta dos tiles detail-field mais leves, sem se misturar à superfície pai.",
+        "Confirme que valores e labels longos ainda quebrem limpos na largura compacta de detalhe de 360px.",
+      ],
+    },
+    "codex-detail-420": {
+      title: "Provider Detail · Codex",
+      description:
+        "Use este frame para a rota hybrid-source mais densa, especialmente fidelity notes, graduation gates e hierarquia de supporting surfaces.",
+      actions: {
+        "jump-first-note": {
+          label: "Ir para a primeira nota",
+          expectation:
+            "O primeiro bloco de nota de detalhe deve entrar em vista para revisar rapidamente o tratamento de fidelity e graduation-gate notes.",
+        },
+      },
+      manualChecks: [
+        "Confirme que fidelity e graduation-gate notes continuem fáceis de distinguir de campos de apoio comuns na largura de detalhe de 420px.",
+        "Confirme que o texto denso de hybrid-source continue legível sem overflow nem hierarquia achatada depois do salto para a nota.",
+      ],
+    },
+    "popup-360": {
+      title: "Toolbar Popup",
+      description:
+        "Revise quick actions, tom de snapshot status, featured provider cards e espaçamento compacto do popup sem abrir repetidamente a browser action.",
+      actions: {
+        "focus-open-dashboard": {
+          label: "Focar ação do dashboard",
+          expectation:
+            "A linha Quick Actions do popup deve colocar focus visível em Open dashboard para revisão de teclado e espaçamento compacto.",
+        },
+        "focus-first-detail": {
+          label: "Focar ação de detalhe destacada",
+          expectation:
+            "O primeiro featured-provider card deve colocar focus visível em Open detail para revisão da densidade compacta de ações.",
+        },
+      },
+      manualChecks: [
+        "Confirme que quick actions e featured-provider actions continuem legíveis e confortáveis de tocar na largura popup de 360px.",
+        "Confirme que as ações focadas do popup preservem o espaçamento compacto sem colapsar o ritmo de snapshot-status e featured-card.",
+      ],
+    },
+  },
+  fr: {
+    "dashboard-360": {
+      title: "Dashboard",
+      description:
+        "Utilisez ce frame pour inspecter les summary pills, la densité des provider cards et la rangée principale d'actions du top bar dans une largeur réaliste de side panel étroit.",
+      actions: {
+        "focus-first-provider-open": {
+          label: "Focaliser la première action provider",
+          expectation:
+            "La première provider card doit placer un focus clavier visible sur son action Open afin de vérifier la parité hover-versus-focus.",
+        },
+      },
+      manualChecks: [
+        "Confirmez que l'action Open focalisée reste visuellement cohérente avec le traitement hover des contrôles voisins du dashboard.",
+        "Confirmez que la densité du résumé provider-card reste lisible à la largeur d'audit de 360px sans collision de chips ou de texte.",
+      ],
+    },
+    "settings-420": {
+      title: "Settings",
+      description:
+        "Passez en revue les actions sticky, les chips de saut de section, la densité des disclosures, les selects, les switch rows et la lisibilité compacte des source cards dans un frame plus large.",
+      actions: {
+        "open-first-diagnostics": {
+          label: "Ouvrir les premiers diagnostics",
+          expectation:
+            "Le premier disclosure Source Connections doit s'ouvrir et garder son summary toggle focalisé pour la revue des diagnostics groupés.",
+        },
+        "focus-first-source-preference": {
+          label: "Focaliser la préférence source",
+          expectation:
+            "Le premier select source-preference dans Source Connections doit recevoir le focus pour la revue de l'état clavier.",
+        },
+      },
+      manualChecks: [
+        "Confirmez que le top bar sticky et le shell des section jumps restent stables après préparation du disclosure et du select focalisé.",
+        "Confirmez que les groupes de diagnostics ouverts restent scannables et n'ajoutent pas d'overflow horizontal à 420px.",
+        "Confirmez que le select source-preference focalisé reste explicite sans dominer le résumé source-card voisin.",
+      ],
+    },
+    "cursor-detail-360": {
+      title: "Provider Detail · Cursor",
+      description:
+        "Inspectez le wrapping des valeurs longues, la hiérarchie des notes neutres, les surfaces de statut et l'honnêteté de progression sur une route provider-detail compacte.",
+      actions: {
+        "jump-first-note": {
+          label: "Aller à la première note",
+          expectation:
+            "Le premier bloc de note de détail doit être amené dans la vue afin de revoir rapidement la hiérarchie des notes et le contenu de support dense.",
+        },
+      },
+      manualChecks: [
+        "Confirmez que la première note reste distincte des tiles detail-field plus légers au lieu de se fondre dans la surface parente.",
+        "Confirmez que les longues valeurs et labels de support se replient proprement à la largeur compacte de détail de 360px.",
+      ],
+    },
+    "codex-detail-420": {
+      title: "Provider Detail · Codex",
+      description:
+        "Utilisez ce frame pour le chemin hybrid-source plus dense, notamment les fidelity notes, graduation gates et la hiérarchie des supporting surfaces.",
+      actions: {
+        "jump-first-note": {
+          label: "Aller à la première note",
+          expectation:
+            "Le premier bloc de note de détail doit être amené dans la vue afin de revoir rapidement le traitement des fidelity et graduation-gate notes.",
+        },
+      },
+      manualChecks: [
+        "Confirmez que les fidelity et graduation-gate notes restent faciles à distinguer des champs de support ordinaires à 420px.",
+        "Confirmez que le texte hybrid-source dense reste lisible sans overflow ni hiérarchie aplatie après le saut vers la note.",
+      ],
+    },
+    "popup-360": {
+      title: "Toolbar Popup",
+      description:
+        "Passez en revue les quick actions, le ton snapshot-status, les featured provider cards et l'espacement compact du popup sans rouvrir sans cesse la browser action.",
+      actions: {
+        "focus-open-dashboard": {
+          label: "Focaliser l'action dashboard",
+          expectation:
+            "La rangée Quick Actions du popup doit placer un focus visible sur Open dashboard pour la revue clavier et espacement compact.",
+        },
+        "focus-first-detail": {
+          label: "Focaliser l'action détail en vedette",
+          expectation:
+            "La première featured-provider card doit placer un focus visible sur Open detail pour la revue de densité compacte des actions.",
+        },
+      },
+      manualChecks: [
+        "Confirmez que les quick actions et featured-provider actions restent lisibles et faciles à toucher à la largeur popup de 360px.",
+        "Confirmez que les actions popup focalisées préservent l'espacement compact au lieu d'écraser le rythme snapshot-status et featured-card.",
+      ],
+    },
+  },
+  de: {
+    "dashboard-360": {
+      title: "Dashboard",
+      description:
+        "Verwende diesen Frame, um Summary Pills, Provider-Card-Dichte und die Haupt-Aktionszeile der Top Bar in einer realistischen schmalen Side-Panel-Breite zu prüfen.",
+      actions: {
+        "focus-first-provider-open": {
+          label: "Erste Provider-Aktion fokussieren",
+          expectation:
+            "Die erste Provider Card soll sichtbaren Tastaturfokus auf ihre Open-Aktion setzen, damit Hover-versus-Focus-Parität geprüft werden kann.",
+        },
+      },
+      manualChecks: [
+        "Bestätige, dass die fokussierte Open-Aktion weiterhin visuell zum Hover-Verhalten benachbarter Dashboard-Controls passt.",
+        "Bestätige, dass die Provider-Card-Summary-Dichte bei der ausgelieferten 360px-Auditbreite ohne Chip- oder Textkollisionen lesbar bleibt.",
+      ],
+    },
+    "settings-420": {
+      title: "Settings",
+      description:
+        "Prüfe Sticky Actions, Section-Jump-Chips, Disclosure-Dichte, Selects, Switch Rows und kompakte Source-Card-Lesbarkeit in einem breiteren Audit-Frame.",
+      actions: {
+        "open-first-diagnostics": {
+          label: "Erste Diagnostics öffnen",
+          expectation:
+            "Das erste Source-Connections-Disclosure soll sich öffnen und den Summary Toggle für die grouped-diagnostics Review fokussiert halten.",
+        },
+        "focus-first-source-preference": {
+          label: "Source Preference fokussieren",
+          expectation:
+            "Das erste Source-Preference-Select in Source Connections soll für die Keyboard-State-Review Fokus erhalten.",
+        },
+      },
+      manualChecks: [
+        "Bestätige, dass Sticky Top Bar und Section-Jump-Shell nach vorbereitetem Diagnostics Disclosure und fokussiertem Select stabil bleiben.",
+        "Bestätige, dass erweiterte Diagnostics Groups scannbar bleiben und bei 420px Auditbreite keinen horizontalen Overflow erzeugen.",
+        "Bestätige, dass das fokussierte Source-Preference-Select klar bleibt, ohne die umliegende Source-Card-Summary zu dominieren.",
+      ],
+    },
+    "cursor-detail-360": {
+      title: "Provider Detail · Cursor",
+      description:
+        "Prüfe Long-Value-Wrapping, neutrale Note-Hierarchie, Status-Surfaces und Progress Honesty auf einer kompakten Provider-Detail-Route.",
+      actions: {
+        "jump-first-note": {
+          label: "Zur ersten Note springen",
+          expectation:
+            "Der erste Detail-Note-Block soll sichtbar werden, damit Note-Hierarchie und dichter Supporting Content schnell geprüft werden können.",
+        },
+      },
+      manualChecks: [
+        "Bestätige, dass die erste Note visuell von den leichteren Detail-Field-Tiles unterscheidbar bleibt und nicht in der Parent Surface verschwindet.",
+        "Bestätige, dass lange Supporting Values und Labels bei der kompakten 360px-Detailbreite sauber umbrechen.",
+      ],
+    },
+    "codex-detail-420": {
+      title: "Provider Detail · Codex",
+      description:
+        "Verwende diesen Frame für den dichteren Hybrid-Source-Detailpfad, besonders Fidelity Notes, Graduation Gates und Supporting-Surface-Hierarchie.",
+      actions: {
+        "jump-first-note": {
+          label: "Zur ersten Note springen",
+          expectation:
+            "Der erste Detail-Note-Block soll sichtbar werden, damit Fidelity- und Graduation-Gate-Note-Behandlung schnell geprüft werden kann.",
+        },
+      },
+      manualChecks: [
+        "Bestätige, dass Fidelity- und Graduation-Gate-Notes bei 420px Detailbreite leicht von regulären Supporting Fields unterscheidbar bleiben.",
+        "Bestätige, dass dichter Hybrid-Source-Supporting-Text nach dem Note-Sprung ohne Overflow oder abgeflachte Hierarchie lesbar bleibt.",
+      ],
+    },
+    "popup-360": {
+      title: "Toolbar Popup",
+      description:
+        "Prüfe Quick Actions, Snapshot-Status-Ton, Featured Provider Cards und kompaktes Popup-Spacing, ohne die Browser Action wiederholt zu öffnen.",
+      actions: {
+        "focus-open-dashboard": {
+          label: "Dashboard-Aktion fokussieren",
+          expectation:
+            "Die Quick-Actions-Zeile des Popups soll sichtbaren Fokus auf Open dashboard setzen, um Tastaturverhalten und kompaktes Spacing zu prüfen.",
+        },
+        "focus-first-detail": {
+          label: "Featured-Detail-Aktion fokussieren",
+          expectation:
+            "Die erste Featured-Provider-Card soll sichtbaren Fokus auf Open detail setzen, um kompakte Aktionsdichte zu prüfen.",
+        },
+      },
+      manualChecks: [
+        "Bestätige, dass Quick Actions und Featured-Provider-Actions bei 360px Popupbreite lesbar und angenehm antippbar bleiben.",
+        "Bestätige, dass fokussierte Popup-Actions kompaktes Spacing bewahren und den Snapshot-Status- und Featured-Card-Rhythmus nicht zusammendrücken.",
+      ],
+    },
+  },
+  it: {
+    "dashboard-360": {
+      title: "Dashboard",
+      description:
+        "Usa questo frame per ispezionare summary pill, densità delle provider card e riga principale di azioni della top bar in una larghezza realistica e stretta del side panel.",
+      actions: {
+        "focus-first-provider-open": {
+          label: "Focalizza la prima azione provider",
+          expectation:
+            "La prima provider card deve mettere il focus tastiera visibile sulla sua azione Open per controllare la parità hover-versus-focus.",
+        },
+      },
+      manualChecks: [
+        "Conferma che l'azione Open focalizzata resti visivamente coerente con il trattamento hover dei controlli dashboard vicini.",
+        "Conferma che la densità del riepilogo provider-card resti leggibile alla larghezza audit di 360px senza collisioni di chip o testo.",
+      ],
+    },
+    "settings-420": {
+      title: "Settings",
+      description:
+        "Rivedi azioni sticky, chip di salto sezione, densità dei disclosure, select, switch row e leggibilità compatta delle source card in un frame più largo.",
+      actions: {
+        "open-first-diagnostics": {
+          label: "Apri i primi diagnostics",
+          expectation:
+            "Il primo disclosure Source Connections deve aprirsi e mantenere il suo summary toggle focalizzato per la review dei diagnostics raggruppati.",
+        },
+        "focus-first-source-preference": {
+          label: "Focalizza source preference",
+          expectation:
+            "Il primo select source-preference in Source Connections deve ricevere focus per la review dello stato tastiera.",
+        },
+      },
+      manualChecks: [
+        "Conferma che top bar sticky e shell dei section jump restino stabili dopo aver preparato disclosure e select focalizzato.",
+        "Conferma che i gruppi diagnostics espansi restino scansionabili e non introducano overflow orizzontale alla larghezza audit di 420px.",
+        "Conferma che il select source-preference focalizzato sia chiaro senza dominare il riepilogo source-card circostante.",
+      ],
+    },
+    "cursor-detail-360": {
+      title: "Provider Detail · Cursor",
+      description:
+        "Ispeziona wrapping dei valori lunghi, gerarchia delle note neutre, superfici di stato e onestà del progresso in una route provider-detail compatta.",
+      actions: {
+        "jump-first-note": {
+          label: "Vai alla prima note",
+          expectation:
+            "Il primo blocco detail note deve entrare in vista per rivedere rapidamente gerarchia delle note e contenuto di supporto denso.",
+        },
+      },
+      manualChecks: [
+        "Conferma che la prima note resti visivamente distinta dai tile detail-field più leggeri invece di confondersi nella surface madre.",
+        "Conferma che valori e label di supporto lunghi vadano a capo pulitamente alla larghezza detail compatta di 360px.",
+      ],
+    },
+    "codex-detail-420": {
+      title: "Provider Detail · Codex",
+      description:
+        "Usa questo frame per il percorso hybrid-source più denso, specialmente fidelity notes, graduation gates e gerarchia delle supporting surfaces.",
+      actions: {
+        "jump-first-note": {
+          label: "Vai alla prima note",
+          expectation:
+            "Il primo blocco detail note deve entrare in vista per rivedere rapidamente il trattamento di fidelity e graduation-gate notes.",
+        },
+      },
+      manualChecks: [
+        "Conferma che fidelity e graduation-gate notes restino facili da distinguere dai normali supporting field alla larghezza detail di 420px.",
+        "Conferma che il testo hybrid-source denso resti leggibile senza overflow o gerarchia appiattita dopo il salto alla note.",
+      ],
+    },
+    "popup-360": {
+      title: "Toolbar Popup",
+      description:
+        "Rivedi quick actions, tono snapshot-status, featured provider card e spaziatura compatta del popup senza riaprire continuamente la browser action.",
+      actions: {
+        "focus-open-dashboard": {
+          label: "Focalizza azione dashboard",
+          expectation:
+            "La riga Quick Actions del popup deve mettere focus visibile su Open dashboard per la review tastiera e spacing compatto.",
+        },
+        "focus-first-detail": {
+          label: "Focalizza azione detail in evidenza",
+          expectation:
+            "La prima featured-provider card deve mettere focus visibile su Open detail per la review della densità compatta delle azioni.",
+        },
+      },
+      manualChecks: [
+        "Conferma che quick actions e featured-provider actions restino leggibili e comode da toccare alla larghezza popup di 360px.",
+        "Conferma che le azioni popup focalizzate preservino lo spacing compatto senza comprimere il ritmo snapshot-status e featured-card.",
+      ],
+    },
+  },
+  ru: {
+    "dashboard-360": {
+      title: "Dashboard",
+      description:
+        "Используйте этот frame, чтобы проверить summary pills, плотность provider cards и основной ряд действий top bar при реалистичной узкой ширине side panel.",
+      actions: {
+        "focus-first-provider-open": {
+          label: "Сфокусировать первое действие provider",
+          expectation:
+            "Первая provider card должна поставить видимый клавиатурный focus на действие Open, чтобы проверить паритет hover-versus-focus.",
+        },
+      },
+      manualChecks: [
+        "Подтвердите, что сфокусированное действие Open визуально согласовано с hover-обработкой соседних контролов dashboard.",
+        "Подтвердите, что плотность provider-card summary остается читаемой на audit-ширине 360px без столкновений chips или текста.",
+      ],
+    },
+    "settings-420": {
+      title: "Settings",
+      description:
+        "Проверьте sticky actions, section-jump chips, плотность disclosures, selects, switch rows и компактную читаемость source cards в более широком audit frame.",
+      actions: {
+        "open-first-diagnostics": {
+          label: "Открыть первые diagnostics",
+          expectation:
+            "Первый Source Connections disclosure должен открыться и оставить summary toggle в focus для проверки grouped diagnostics.",
+        },
+        "focus-first-source-preference": {
+          label: "Сфокусировать source preference",
+          expectation:
+            "Первый source-preference select внутри Source Connections должен получить focus для проверки keyboard state.",
+        },
+      },
+      manualChecks: [
+        "Подтвердите, что sticky top bar и section-jump shell остаются стабильными после подготовки diagnostics disclosure и сфокусированного select.",
+        "Подтвердите, что раскрытые diagnostics groups остаются сканируемыми и не создают horizontal overflow на audit-ширине 420px.",
+        "Подтвердите, что сфокусированный source-preference select остается явным и не подавляет окружающий source-card summary.",
+      ],
+    },
+    "cursor-detail-360": {
+      title: "Provider Detail · Cursor",
+      description:
+        "Проверьте перенос длинных значений, иерархию neutral notes, status surfaces и честность progress на компактной provider-detail route.",
+      actions: {
+        "jump-first-note": {
+          label: "Перейти к первой note",
+          expectation:
+            "Первый detail note block должен попасть в видимую область, чтобы быстро проверить note hierarchy и dense supporting content.",
+        },
+      },
+      manualChecks: [
+        "Подтвердите, что первая note визуально отличается от более легких detail-field tiles и не сливается с parent surface.",
+        "Подтвердите, что длинные supporting values и labels чисто переносятся на компактной detail-ширине 360px.",
+      ],
+    },
+    "codex-detail-420": {
+      title: "Provider Detail · Codex",
+      description:
+        "Используйте этот frame для более плотного hybrid-source detail path, особенно fidelity notes, graduation gates и hierarchy supporting surfaces.",
+      actions: {
+        "jump-first-note": {
+          label: "Перейти к первой note",
+          expectation:
+            "Первый detail note block должен попасть в видимую область, чтобы быстро проверить обработку fidelity и graduation-gate notes.",
+        },
+      },
+      manualChecks: [
+        "Подтвердите, что fidelity и graduation-gate notes легко отличить от обычных supporting fields на detail-ширине 420px.",
+        "Подтвердите, что dense hybrid-source supporting text остается читаемым без overflow или сглаженной hierarchy после перехода к note.",
+      ],
+    },
+    "popup-360": {
+      title: "Toolbar Popup",
+      description:
+        "Проверьте quick actions, тон snapshot-status, featured provider cards и компактный popup spacing без повторного открытия browser action.",
+      actions: {
+        "focus-open-dashboard": {
+          label: "Сфокусировать действие dashboard",
+          expectation:
+            "Строка Quick Actions в popup должна поставить видимый focus на Open dashboard для проверки клавиатуры и компактного spacing.",
+        },
+        "focus-first-detail": {
+          label: "Сфокусировать featured detail action",
+          expectation:
+            "Первая featured-provider card должна поставить видимый focus на Open detail для проверки компактной плотности действий.",
+        },
+      },
+      manualChecks: [
+        "Подтвердите, что quick actions и featured-provider actions остаются читаемыми и удобными для касания при popup-ширине 360px.",
+        "Подтвердите, что сфокусированные popup actions сохраняют compact spacing и не ломают ритм snapshot-status и featured-card.",
+      ],
+    },
+  },
+  ar: {
+    "dashboard-360": {
+      title: "Dashboard",
+      description:
+        "استخدم هذا frame لفحص summary pills وكثافة provider cards وصف actions الرئيسي في top bar عند عرض side panel ضيق وواقعي.",
+      actions: {
+        "focus-first-provider-open": {
+          label: "تركيز أول provider action",
+          expectation:
+            "يجب أن تضع أول provider card تركيز لوحة مفاتيح واضحا على action Open حتى يمكن فحص تطابق hover و focus.",
+        },
+      },
+      manualChecks: [
+        "تأكد أن action Open المركزة تبقى منسجمة بصريا مع معالجة hover في عناصر dashboard القريبة.",
+        "تأكد أن كثافة provider-card summary تبقى مقروءة عند عرض audit البالغ 360px من دون تصادم chips أو نص.",
+      ],
+    },
+    "settings-420": {
+      title: "Settings",
+      description:
+        "راجع sticky actions و section-jump chips وكثافة disclosures و selects و switch rows وقابلية قراءة source cards المضغوطة في frame أوسع.",
+      actions: {
+        "open-first-diagnostics": {
+          label: "فتح أول diagnostics",
+          expectation:
+            "يجب أن يفتح أول Source Connections disclosure وأن يبقي summary toggle في focus لمراجعة grouped diagnostics.",
+        },
+        "focus-first-source-preference": {
+          label: "تركيز source preference",
+          expectation:
+            "يجب أن يحصل أول source-preference select داخل Source Connections على focus لمراجعة حالة لوحة المفاتيح.",
+        },
+      },
+      manualChecks: [
+        "تأكد أن sticky top bar و section-jump shell يبقيان ثابتين بعد تجهيز diagnostics disclosure والselect المركزة.",
+        "تأكد أن diagnostics groups المفتوحة تبقى قابلة للمسح ولا تضيف horizontal overflow عند عرض audit البالغ 420px.",
+        "تأكد أن source-preference select المركزة واضحة من دون أن تطغى على source-card summary المحيطة.",
+      ],
+    },
+    "cursor-detail-360": {
+      title: "Provider Detail · Cursor",
+      description:
+        "افحص التفاف القيم الطويلة وتسلسل neutral notes و status surfaces ووضوح progress في route provider-detail مضغوطة.",
+      actions: {
+        "jump-first-note": {
+          label: "الانتقال إلى أول note",
+          expectation:
+            "يجب إحضار أول detail note block إلى العرض حتى يمكن مراجعة note hierarchy والمحتوى الداعم الكثيف بسرعة.",
+        },
+      },
+      manualChecks: [
+        "تأكد أن أول note تبقى مميزة بصريا عن detail-field tiles الأخف ولا تختلط مع parent surface.",
+        "تأكد أن القيم والlabels الطويلة تلتف بوضوح عند عرض detail المضغوط البالغ 360px.",
+      ],
+    },
+    "codex-detail-420": {
+      title: "Provider Detail · Codex",
+      description:
+        "استخدم هذا frame لمسار hybrid-source detail الأكثر كثافة، خصوصا fidelity notes و graduation gates وتسلسل supporting surfaces.",
+      actions: {
+        "jump-first-note": {
+          label: "الانتقال إلى أول note",
+          expectation:
+            "يجب إحضار أول detail note block إلى العرض حتى يمكن مراجعة معالجة fidelity و graduation-gate notes بسرعة.",
+        },
+      },
+      manualChecks: [
+        "تأكد أن fidelity و graduation-gate notes تبقى سهلة التمييز عن supporting fields العادية عند عرض detail البالغ 420px.",
+        "تأكد أن نص hybrid-source الداعم الكثيف يبقى مقروءا من دون overflow أو تسلسل مسطح بعد الانتقال إلى note.",
+      ],
+    },
+    "popup-360": {
+      title: "Toolbar Popup",
+      description:
+        "راجع quick actions ونبرة snapshot-status و featured provider cards و popup spacing المضغوط من دون فتح browser action مرارا.",
+      actions: {
+        "focus-open-dashboard": {
+          label: "تركيز dashboard action",
+          expectation:
+            "يجب أن يضع صف Quick Actions في popup تركيزا واضحا على Open dashboard لمراجعة لوحة المفاتيح والمسافة المضغوطة.",
+        },
+        "focus-first-detail": {
+          label: "تركيز featured detail action",
+          expectation:
+            "يجب أن تضع أول featured-provider card تركيزا واضحا على Open detail لمراجعة كثافة actions المضغوطة.",
+        },
+      },
+      manualChecks: [
+        "تأكد أن quick actions و featured-provider actions تبقى مقروءة وسهلة الضغط عند عرض popup البالغ 360px.",
+        "تأكد أن popup actions المركزة تحافظ على spacing مضغوط من دون ضغط إيقاع snapshot-status و featured-card.",
+      ],
+    },
+  },
+  hi: {
+    "dashboard-360": {
+      title: "Dashboard",
+      description:
+        "इस frame में summary pills, provider-card density और realistic narrow side-panel width पर main top-bar action row की जांच करें।",
+      actions: {
+        "focus-first-provider-open": {
+          label: "पहले provider action पर focus",
+          expectation:
+            "पहले provider card को अपने Open action पर visible keyboard focus रखना चाहिए ताकि hover-versus-focus parity जांची जा सके।",
+        },
+      },
+      manualChecks: [
+        "पुष्टि करें कि focused Open action पास के dashboard controls के hover treatment के साथ visually coherent रहता है।",
+        "पुष्टि करें कि provider-card summary density shipped 360px audit width पर chip या text collisions के बिना readable रहती है।",
+      ],
+    },
+    "settings-420": {
+      title: "Settings",
+      description:
+        "एक wider audit frame में sticky actions, section-jump chips, disclosure density, selects, switch rows और compact source-card readability की review करें।",
+      actions: {
+        "open-first-diagnostics": {
+          label: "पहले diagnostics खोलें",
+          expectation:
+            "पहला Source Connections disclosure खुलना चाहिए और grouped-diagnostics review के लिए अपना summary toggle focused रखना चाहिए।",
+        },
+        "focus-first-source-preference": {
+          label: "Source preference focus करें",
+          expectation:
+            "Source Connections के अंदर पहला source-preference select keyboard-state review के लिए focus लेना चाहिए।",
+        },
+      },
+      manualChecks: [
+        "पुष्टि करें कि diagnostics disclosure और focused select तैयार होने के बाद sticky top bar और section-jump shell stable रहते हैं।",
+        "पुष्टि करें कि expanded diagnostics groups scannable रहते हैं और shipped 420px audit width पर horizontal overflow नहीं बनाते।",
+        "पुष्टि करें कि focused source-preference select आसपास के source-card summary को overpower किए बिना visually explicit रहता है।",
+      ],
+    },
+    "cursor-detail-360": {
+      title: "Provider Detail · Cursor",
+      description:
+        "Compact provider-detail route पर long-value wrapping, neutral note hierarchy, status surfaces और progress honesty की जांच करें।",
+      actions: {
+        "jump-first-note": {
+          label: "पहले note पर जाएं",
+          expectation:
+            "पहला detail note block view में आना चाहिए ताकि note hierarchy और dense supporting content जल्दी review हो सके।",
+        },
+      },
+      manualChecks: [
+        "पुष्टि करें कि पहला note lighter detail-field tiles से visually अलग रहता है और parent surface में blend नहीं होता।",
+        "पुष्टि करें कि लंबे supporting values और labels shipped 360px compact detail width पर cleanly wrap होते हैं।",
+      ],
+    },
+    "codex-detail-420": {
+      title: "Provider Detail · Codex",
+      description:
+        "इस frame का उपयोग denser hybrid-source detail path के लिए करें, खासकर fidelity notes, graduation gates और supporting-surface hierarchy के लिए।",
+      actions: {
+        "jump-first-note": {
+          label: "पहले note पर जाएं",
+          expectation:
+            "पहला detail note block view में आना चाहिए ताकि fidelity और graduation-gate note treatment जल्दी review हो सके।",
+        },
+      },
+      manualChecks: [
+        "पुष्टि करें कि fidelity और graduation-gate notes shipped 420px detail width पर regular supporting fields से आसानी से अलग दिखते हैं।",
+        "पुष्टि करें कि note jump के बाद dense hybrid-source supporting text overflow या flattened hierarchy के बिना cleanly पढ़ा जा सकता है।",
+      ],
+    },
+    "popup-360": {
+      title: "Toolbar Popup",
+      description:
+        "Browser action को बार-बार खोले बिना quick actions, snapshot-status tone, featured provider cards और compact popup spacing की review करें।",
+      actions: {
+        "focus-open-dashboard": {
+          label: "Dashboard action focus करें",
+          expectation:
+            "Popup Quick Actions row को keyboard और compact-spacing review के लिए Open dashboard पर visible focus रखना चाहिए।",
+        },
+        "focus-first-detail": {
+          label: "Featured detail action focus करें",
+          expectation:
+            "पहले featured-provider card को compact action density review के लिए Open detail पर visible focus रखना चाहिए।",
+        },
+      },
+      manualChecks: [
+        "पुष्टि करें कि quick actions और featured-provider actions shipped 360px popup width पर readable और comfortably tappable रहते हैं।",
+        "पुष्टि करें कि focused popup actions compact spacing बनाए रखते हैं और snapshot-status व featured-card rhythm को collapse नहीं करते।",
+      ],
+    },
+  },
+  id: {
+    "dashboard-360": {
+      title: "Dashboard",
+      description:
+        "Gunakan frame ini untuk memeriksa summary pills, kepadatan provider card, dan baris action utama top bar pada lebar side panel sempit yang realistis.",
+      actions: {
+        "focus-first-provider-open": {
+          label: "Fokus action provider pertama",
+          expectation:
+            "Provider card pertama harus menaruh focus keyboard yang terlihat pada action Open agar paritas hover-versus-focus dapat diperiksa.",
+        },
+      },
+      manualChecks: [
+        "Pastikan action Open yang difokuskan tetap selaras secara visual dengan perlakuan hover pada kontrol dashboard di dekatnya.",
+        "Pastikan density summary provider-card tetap terbaca pada lebar audit 360px tanpa benturan chip atau teks.",
+      ],
+    },
+    "settings-420": {
+      title: "Settings",
+      description:
+        "Review sticky actions, section-jump chips, density disclosure, selects, switch rows, dan keterbacaan source-card compact dalam satu frame audit yang lebih lebar.",
+      actions: {
+        "open-first-diagnostics": {
+          label: "Buka diagnostics pertama",
+          expectation:
+            "Disclosure Source Connections pertama harus terbuka dan mempertahankan focus pada summary toggle untuk review diagnostics berkelompok.",
+        },
+        "focus-first-source-preference": {
+          label: "Fokus source preference",
+          expectation:
+            "Select source-preference pertama di Source Connections harus menerima focus untuk review status keyboard.",
+        },
+      },
+      manualChecks: [
+        "Pastikan sticky top bar dan shell section-jump tetap stabil setelah diagnostics disclosure dan select terfokus disiapkan.",
+        "Pastikan diagnostics groups yang dibuka tetap mudah dipindai dan tidak membuat horizontal overflow pada lebar audit 420px.",
+        "Pastikan select source-preference yang terfokus tetap jelas tanpa mengalahkan summary source-card di sekitarnya.",
+      ],
+    },
+    "cursor-detail-360": {
+      title: "Provider Detail · Cursor",
+      description:
+        "Periksa wrapping nilai panjang, hierarki neutral note, status surfaces, dan progress honesty pada route provider-detail yang compact.",
+      actions: {
+        "jump-first-note": {
+          label: "Lompat ke note pertama",
+          expectation:
+            "Blok detail note pertama harus dibawa ke view agar note hierarchy dan dense supporting content dapat direview cepat.",
+        },
+      },
+      manualChecks: [
+        "Pastikan note pertama tetap berbeda secara visual dari tile detail-field yang lebih ringan dan tidak menyatu dengan parent surface.",
+        "Pastikan supporting values dan labels yang panjang tetap wrap bersih pada lebar detail compact 360px.",
+      ],
+    },
+    "codex-detail-420": {
+      title: "Provider Detail · Codex",
+      description:
+        "Gunakan frame ini untuk jalur hybrid-source detail yang lebih padat, terutama fidelity notes, graduation gates, dan hierarchy supporting surfaces.",
+      actions: {
+        "jump-first-note": {
+          label: "Lompat ke note pertama",
+          expectation:
+            "Blok detail note pertama harus dibawa ke view agar perlakuan fidelity dan graduation-gate notes dapat direview cepat.",
+        },
+      },
+      manualChecks: [
+        "Pastikan fidelity dan graduation-gate notes tetap mudah dibedakan dari supporting fields biasa pada lebar detail 420px.",
+        "Pastikan dense hybrid-source supporting text tetap terbaca tanpa overflow atau hierarchy yang rata setelah lompat ke note.",
+      ],
+    },
+    "popup-360": {
+      title: "Toolbar Popup",
+      description:
+        "Review quick actions, tone snapshot-status, featured provider cards, dan spacing popup compact tanpa membuka browser action berulang kali.",
+      actions: {
+        "focus-open-dashboard": {
+          label: "Fokus action dashboard",
+          expectation:
+            "Baris Quick Actions popup harus menaruh focus terlihat pada Open dashboard untuk review keyboard dan compact spacing.",
+        },
+        "focus-first-detail": {
+          label: "Fokus action detail unggulan",
+          expectation:
+            "Featured-provider card pertama harus menaruh focus terlihat pada Open detail untuk review kepadatan action compact.",
+        },
+      },
+      manualChecks: [
+        "Pastikan quick actions dan featured-provider actions tetap terbaca dan nyaman diketuk pada lebar popup 360px.",
+        "Pastikan focused popup actions mempertahankan spacing compact tanpa meruntuhkan ritme snapshot-status dan featured-card.",
+      ],
+    },
+  },
+};
+
 const OPERATOR_WORKSPACE_COPY: Record<
   ResolvedAppLocale,
   OperatorWorkspaceLocalizedCopy
@@ -5622,6 +6946,8 @@ export function buildOperatorWorkspaceLocalizedCopy(i18n: RuntimeI18n) {
         INTERACTION_AUDIT_ACCESSIBILITY_COPY[i18n.resolvedLocale],
       importErrors:
         INTERACTION_AUDIT_SIGNOFF_IMPORT_ERRORS_COPY[i18n.resolvedLocale],
+      surfaceDefinitions:
+        INTERACTION_AUDIT_SURFACE_DEFINITION_DISPLAY_COPY[i18n.resolvedLocale],
     },
   };
 }

@@ -10,8 +10,13 @@ type InteractionAuditReviewQueueCopy = ReturnType<
   typeof buildOperatorWorkspaceLocalizedCopy
 >["interactionAudit"]["reviewQueue"];
 
+type InteractionAuditSurfaceDefinitionsCopy = ReturnType<
+  typeof buildOperatorWorkspaceLocalizedCopy
+>["interactionAudit"]["surfaceDefinitions"];
+
 type InteractionAuditReviewQueueSectionProps = {
   copy: InteractionAuditReviewQueueCopy;
+  surfaceDefinitionsCopy: InteractionAuditSurfaceDefinitionsCopy;
   nextReviewTarget: InteractionAuditReviewQueueItem | null;
   reviewQueue: InteractionAuditReviewQueue;
   onJumpToSurface: (surfaceId: string) => void;
@@ -50,12 +55,29 @@ function getSignoffStatusLabel(
   }
 }
 
+function getSurfaceDisplayTitle(
+  surfaceDefinitionsCopy: InteractionAuditSurfaceDefinitionsCopy,
+  surfaceId: string,
+  fallbackTitle: string,
+) {
+  return surfaceDefinitionsCopy[surfaceId]?.title ?? fallbackTitle;
+}
+
 export function InteractionAuditReviewQueueSection({
   copy,
+  surfaceDefinitionsCopy,
   nextReviewTarget,
   reviewQueue,
   onJumpToSurface,
 }: InteractionAuditReviewQueueSectionProps) {
+  const nextReviewTargetTitle = nextReviewTarget
+    ? getSurfaceDisplayTitle(
+        surfaceDefinitionsCopy,
+        nextReviewTarget.id,
+        nextReviewTarget.title,
+      )
+    : null;
+
   return (
     <section
       className="detail-note detail-note--neutral interaction-audit__review-queue"
@@ -80,7 +102,7 @@ export function InteractionAuditReviewQueueSection({
           }}
         >
           {nextReviewTarget
-            ? copy.jumpToSurface(nextReviewTarget.title)
+            ? copy.jumpToSurface(nextReviewTargetTitle ?? nextReviewTarget.title)
             : copy.allSurfacesReady}
         </button>
       </div>
@@ -92,7 +114,7 @@ export function InteractionAuditReviewQueueSection({
             className="source-card__value"
             data-audit-review-queue-summary-value
           >
-            {nextReviewTarget ? nextReviewTarget.title : copy.allReady}
+            {nextReviewTargetTitle ?? copy.allReady}
           </p>
         </div>
         <div
@@ -156,7 +178,11 @@ export function InteractionAuditReviewQueueSection({
             <div className="interaction-audit__queue-item-header">
               <div>
                 <p className="interaction-audit__queue-item-title">
-                  {item.title}
+                  {getSurfaceDisplayTitle(
+                    surfaceDefinitionsCopy,
+                    item.id,
+                    item.title,
+                  )}
                 </p>
                 <p className="interaction-audit__queue-item-meta">
                   {copy.itemMeta({

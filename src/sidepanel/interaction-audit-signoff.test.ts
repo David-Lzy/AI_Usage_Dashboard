@@ -16,6 +16,7 @@ import {
   normalizeInteractionAuditSignoffState,
   parseInteractionAuditSignoffImport,
 } from "./interaction-audit-signoff";
+import { INTERACTION_AUDIT_SIGNOFF_SURFACES } from "./interaction-audit-surfaces";
 
 const TEST_SURFACES = [
   {
@@ -343,6 +344,53 @@ describe("interaction audit signoff helpers", () => {
     expect(draft).toContain("## Pending manual checks");
     expect(draft).toContain("### Dashboard");
     expect(draft).toContain("- Confirm density remains readable.");
+  });
+
+  it("keeps shipped signoff export and drafts on English source-truth surface definitions", () => {
+    const state = buildInitialInteractionAuditSignoffState(
+      INTERACTION_AUDIT_SIGNOFF_SURFACES,
+    );
+    const metadata = buildInitialInteractionAuditSignoffMetadata();
+    const requestContext = buildInitialInteractionAuditSignoffRequestContext();
+
+    const signoffExport = buildInteractionAuditSignoffExport(
+      INTERACTION_AUDIT_SIGNOFF_SURFACES,
+      state,
+      metadata,
+      requestContext,
+    );
+
+    expect(signoffExport.surfaces[0]).toMatchObject({
+      id: "dashboard-360",
+      title: "Dashboard",
+      description:
+        "Use this frame to inspect summary pills, provider-card density, and the main top-bar action row at a realistic narrow side-panel width.",
+    });
+    expect(signoffExport.surfaces[0].manualChecks[0].label).toBe(
+      "Confirm the focused Open action still feels visually coherent with the hover treatment on nearby dashboard controls.",
+    );
+
+    const signoffDraft = buildInteractionAuditSignoffDraft(
+      INTERACTION_AUDIT_SIGNOFF_SURFACES,
+      state,
+      metadata,
+      requestContext,
+    );
+    const handoffDraft = buildInteractionAuditSignoffHandoffDraft(
+      INTERACTION_AUDIT_SIGNOFF_SURFACES,
+      state,
+      metadata,
+      requestContext,
+    );
+
+    expect(signoffDraft).toContain("## Dashboard");
+    expect(signoffDraft).toContain(
+      "- [ ] Confirm the focused Open action still feels visually coherent with the hover treatment on nearby dashboard controls.",
+    );
+    expect(handoffDraft).toContain("## Dashboard");
+    expect(handoffDraft).toContain(
+      "- Confirm the focused Open action still feels visually coherent with the hover treatment on nearby dashboard controls.",
+    );
   });
 
   it("parses exported signoff JSON back into workspace state", () => {
