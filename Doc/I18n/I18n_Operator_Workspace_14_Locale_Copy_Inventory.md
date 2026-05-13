@@ -27,6 +27,7 @@ Status note:
 - `Phase 415` completed Handoff Summary presentation labels and safe handoff feedback with 14-locale copy while preserving handoff draft content, generated bundle command text, operator notes, surface ids, surface titles, manual-check evidence, filenames, MIME types, and signoff export schemas
 - `Phase 416` completed the frame-result typed display split with stable result codes and optional raw-message evidence while preserving existing display messages and runtime behavior
 - `Phase 417` completed frame-result 14-locale display copy for those typed codes while preserving raw selector/preset diagnostics as untranslated raw detail
+- `Phase 418` classifies the remaining interaction-audit strings into route feedback/accessibility labels, typed import-error presentation, and surface-definition display/source split candidates
 
 ## Purpose
 
@@ -244,4 +245,4 @@ If `Phase 404` cannot move all consumer-only labels without touching export/evid
 
 `Phase 409` completed that split as documentation-only planning.
 
-`Phase 411` completed the Review Queue slice. `Phase 412` completed the Surface Card slice. `Phase 413` completed the Workspace Controls slice. `Phase 414` completed the Request Scope command-heading slice. `Phase 415` completed the Handoff Summary slice. `Phase 416` completed the typed frame-result display/raw split. `Phase 417` completed typed frame-result localization using that split. The next child phase is [418_Phase_Interaction_Audit_Remaining_Presentation_Copy_Inventory.md](../TODOs/418_Phase_Interaction_Audit_Remaining_Presentation_Copy_Inventory.md), scoped to inventorying any remaining hard-coded interaction-audit presentation copy before more implementation slices.
+`Phase 411` completed the Review Queue slice. `Phase 412` completed the Surface Card slice. `Phase 413` completed the Workspace Controls slice. `Phase 414` completed the Request Scope command-heading slice. `Phase 415` completed the Handoff Summary slice. `Phase 416` completed the typed frame-result display/raw split. `Phase 417` completed typed frame-result localization using that split. `Phase 418` inventories the remaining hard-coded interaction-audit presentation copy before more implementation slices. The next child phase should localize route feedback and accessibility labels first, then split typed import errors, then tackle surface definitions with an export-preserving display/source split.

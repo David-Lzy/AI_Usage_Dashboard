@@ -56,9 +56,10 @@ Already localized through `Phase 404`:
 - signoff session summary labels and field labels
 - request-scope labels sourced from the signoff copy bucket
 
-Not localized in `Phase 409`:
+Remaining after `Phase 417`:
 
-- remaining unclassified interaction-audit presentation strings until `Phase 418` inventories them
+- surface-definition strings that are both visible UI copy and export/handoff source truth
+- route feedback, accessibility labels, and import parse errors that still need typed presentation boundaries
 
 Localized after `Phase 411`:
 
@@ -88,7 +89,26 @@ Typed/raw split added after `Phase 416` and localized after `Phase 417`:
 
 ## Safe Presentation-Only Labels
 
-These labels can move into `buildOperatorWorkspaceLocalizedCopy(i18n).interactionAudit` as display copy in a later implementation phase. Moving them must not alter exported JSON, downloaded filenames, generated Markdown drafts, route ids, action ids, preset ids, or automation selectors.
+This section records the historical `Phase 409` migration plan. Review Queue, Surface Card chrome, Workspace Controls, Request Scope command headings, Handoff Summary, and typed frame-result display copy are now closed through `Phase 417`. The remaining candidate buckets are listed in the `Phase 418` inventory below.
+
+## Phase 418 Remaining Inventory
+
+| Bucket | Source | Classification | Safe next step |
+| --- | --- | --- | --- |
+| Surface titles, descriptions, action labels, action expectations, and manual checks | `src/sidepanel/interaction-audit-surfaces.ts` | mixed visible UI plus export/handoff source truth | add a localized display map while leaving `INTERACTION_AUDIT_SIGNOFF_SURFACES`, JSON exports, signoff drafts, and handoff drafts on the current English source strings |
+| Surface title usage in Review Queue and Handoff Summary | `src/sidepanel/components/InteractionAuditReviewQueueSection.tsx`, `src/sidepanel/components/InteractionAuditHandoffSummarySection.tsx` | display currently uses export-bound surface title | localize only after the surface-definition display/source split exists |
+| Jump-to-surface feedback | `src/sidepanel/routes/InteractionAuditPage.tsx` | visible workspace feedback, not export-bound | move `Could not find the requested audit surface on this page.` and `Jumped to ...` into localized copy; keep dynamic surface titles sourced from the display/source split decision |
+| Grid and iframe accessibility labels | `src/sidepanel/components/InteractionAuditSurfaceGridSection.tsx`, `src/sidepanel/components/InteractionAuditSurfaceCard.tsx` | screen-reader-visible presentation copy | localize the grid aria label and iframe-title suffix without changing route paths, iframe identity, or surface ids |
+| Signoff import parse errors | `src/sidepanel/interaction-audit-signoff.ts` | visible workspace feedback from parser failures | add typed import-error codes or a localized wrapper before translating; keep pasted JSON and parsed payload fields raw |
+| Request binding fallback labels | `src/sidepanel/interaction-audit-signoff.ts` | currently shared by UI display and generated drafts | keep `none`, `not recorded`, and `sha256:` formatting raw until display and generated-draft paths are separated |
+| Generated signoff and handoff Markdown | `src/sidepanel/interaction-audit-signoff.ts` | export evidence | do not localize in runtime copy; any future localized preview must be separate from downloadable draft content |
+| Frame-action fallback `message` and `rawMessage` values | `src/sidepanel/interaction-audit-frame-actions.ts` | fallback plus raw selector/preset diagnostics | keep English fallback fields and raw diagnostics unchanged; `interactionAudit.frameResults` is the localized display layer |
+
+Recommended follow-up order:
+
+1. route feedback and accessibility labels, because they are presentation-only and low risk
+2. typed import-error presentation, because parser errors need stable codes before localization
+3. surface-definition display/source split, because those strings feed both UI and export evidence
 
 ### Review Queue
 
@@ -216,7 +236,7 @@ Preserve:
 
 ## Mixed Labels Requiring A Typed Display Layer
 
-These values are visible today but should not be translated by passing raw strings through a catalog. They need a typed result or separate display field first.
+These values are visible today but should not be translated by passing raw strings through a catalog. Completed buckets are kept here as closed examples; remaining buckets still need a typed result or separate display field first.
 
 ### Review Queue Status Labels
 
@@ -224,16 +244,16 @@ Source:
 
 - `src/sidepanel/interaction-audit-review-queue.ts`
 
-Current issue:
+Status:
 
-- queue labels and signoff labels are built as English strings inside the queue helper
-- the helper output is currently presentation-oriented, but tests assert the English labels
+- closed in `Phase 411`
+- queue labels and signoff labels now render from localized copy while the queue helper keeps stable enum values
 
-Required split:
+Preserved split:
 
 - keep `queueStatus` and `signoffStatus` as stable enum values
-- move localized labels to the component or a presentation helper
-- update tests so ordering and status enums are behavior truth while labels are display truth
+- keep ordering and next-target behavior as helper truth
+- keep surface titles source-bound until the surface-definition display/source split exists
 
 ### Frame Readiness And Preset Result Messages
 
@@ -241,16 +261,17 @@ Source:
 
 - `src/sidepanel/interaction-audit-frame-actions.ts`
 
-Current issue:
+Status:
 
-- readiness and preset-action helpers return English messages
-- these messages are debugging/operator evidence for embedded-frame state
+- typed/raw split closed in `Phase 416`
+- 14-locale typed display copy closed in `Phase 417`
+- helper `message` values remain English fallback fields and `rawMessage` values remain untranslated diagnostics
 
-Required split:
+Preserved split:
 
-- add typed result codes before localizing
-- preserve unknown result messages as raw debugging evidence
-- do not translate selector, preset, or iframe identity failures without a raw field beside the display message
+- keep typed result codes as display keys
+- keep unknown result messages as fallback evidence
+- do not translate selector, preset, or iframe identity failures; show them through `rawMessage`
 
 ### Surface Definition Copy
 
@@ -288,7 +309,7 @@ Do not translate these values:
 - imported JSON content
 - operator notes entered by a reviewer
 - manual-check evidence text until a display/export split is implemented
-- frame-action raw failure messages until typed result codes exist
+- frame-action `rawMessage` selector/preset diagnostics and English fallback `message` values
 
 ## Implementation Decision From Phase 409
 
@@ -317,7 +338,7 @@ The first safe child phase started with Review Queue display labels because:
 
 `Phase 417` added 14-locale display copy for typed frame readiness and preset result codes only. Raw-message evidence remains untranslated.
 
-The next safe child phase is `Phase 418`, inventorying any remaining hard-coded interaction-audit presentation copy and classifying it against the raw/export boundary before more implementation work.
+`Phase 418` inventoried the remaining interaction-audit presentation copy boundaries. The next safe child phase is `Phase 419`, covering route feedback and accessibility labels because they are presentation-only and do not touch export evidence.
 
 Required tests for completed and later interaction-audit display-copy slices:
 

@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-14:
 
-- the numbered phase queue is completed through `Phase 417`, with active `Phase 418` selected for remaining interaction-audit presentation-copy inventory
+- the numbered phase queue is completed through `Phase 418`, with active `Phase 419` selected for interaction-audit route feedback and accessibility-label localization
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -119,6 +119,7 @@ As of 2026-05-14:
 - `Phase 415` added localized interaction-audit Handoff Summary presentation labels and safe handoff feedback while keeping handoff draft content, generated bundle command text, operator notes, surface ids, surface titles, manual-check evidence, filenames, MIME types, and signoff export schemas unchanged
 - `Phase 416` added typed frame-readiness and preset-result codes plus optional raw-message separation while keeping existing display messages, preset execution behavior, iframe behavior, signoff exports, handoff drafts, and archive/request schemas unchanged
 - `Phase 417` added 14-locale display copy for typed interaction-audit frame-readiness and preset-result codes while keeping raw selector/preset diagnostics untranslated and preserving the English fallback message fields
+- `Phase 418` inventoried remaining interaction-audit presentation-copy boundaries and queued route feedback/accessibility labels, typed import-error presentation, and surface-definition display/source split as separate follow-up phases
 - `Phase 200` completed a functionality-first Codex personal slice by preserving multiple visible usage windows, expanding Codex page-capture snippets, and surfacing the most constrained visible percentage window across dashboard, provider detail, and popup paths
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without changing the primary percentage-window quota model
 - `Phase 202` completed repeatable unpacked-extension verification for Codex personal multi-window plus flex-balance context, while fixing DOM capture so repeated percentages and single-character balance values are not lost before parsing

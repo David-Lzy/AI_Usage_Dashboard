@@ -4,7 +4,7 @@ Date: 2026-05-14
 
 Process rule:
 
-- follow [Development_Guardrails.md](../Development_Guardrails.md)
+- follow [Development_Guardrails.md](../../../../Development_Guardrails.md)
 
 Document class:
 
@@ -16,8 +16,9 @@ Freshness model:
 
 Status note:
 
-- active after `Phase 417`
-- follow-up inventory from [I18n_Interaction_Audit_Presentation_Export_Split.md](../I18n/I18n_Interaction_Audit_Presentation_Export_Split.md)
+- completed on 2026-05-14
+- archived after `Phase 418`
+- follow-up inventory from [I18n_Interaction_Audit_Presentation_Export_Split.md](../../../../I18n/I18n_Interaction_Audit_Presentation_Export_Split.md)
 
 ## Goal
 
@@ -51,4 +52,20 @@ Inventory the remaining interaction-audit strings after the frame-result 14-loca
 
 ## Follow-Up
 
-- Use the resulting candidate list to split any remaining interaction-audit localization work into narrow implementation phases.
+- `Phase 419` should localize route feedback and accessibility labels.
+- `Phase 420` should add typed signoff import-error presentation.
+- `Phase 421` should split surface-definition display copy from export/source truth.
+
+## Completion Summary
+
+- Reviewed the remaining interaction-audit route, component, surface-definition, frame-action, and signoff/export string boundaries.
+- Classified remaining strings into route feedback/accessibility labels, typed import-error presentation, and surface-definition display/source split candidates.
+- Reconfirmed generated signoff drafts, handoff drafts, JSON schemas, request/archive values, filenames, MIME types, route ids, preset/action ids, and raw selector/preset diagnostics stay outside runtime localization.
+- Updated the maintained I18n split/backlog/inventory docs with the `Phase 417` closeout and `Phase 418` remaining-copy classification.
+- Created follow-up TODOs for `Phase 419`, `Phase 420`, and `Phase 421`.
+
+## Verification
+
+- `npm run docs:check`
+- `rg 'Phase 417|Phase 418|frame-result|remaining interaction-audit' README.md Doc`
+- `git diff --check`

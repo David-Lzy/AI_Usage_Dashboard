@@ -34,9 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [418_Phase_Interaction_Audit_Remaining_Presentation_Copy_Inventory.md](./418_Phase_Interaction_Audit_Remaining_Presentation_Copy_Inventory.md)
-- latest completed slice: [417_Phase_Interaction_Audit_Frame_Result_14_Locale_Display_Copy.md](./Archive/by-phase/400-499/417_Phase_Interaction_Audit_Frame_Result_14_Locale_Display_Copy.md)
-- queued phase files: not selected yet after active `Phase 418`
+- active phase file: [419_Phase_Interaction_Audit_Route_Feedback_A11y_14_Locale_Copy.md](./419_Phase_Interaction_Audit_Route_Feedback_A11y_14_Locale_Copy.md)
+- latest completed slice: [418_Phase_Interaction_Audit_Remaining_Presentation_Copy_Inventory.md](./Archive/by-phase/400-499/418_Phase_Interaction_Audit_Remaining_Presentation_Copy_Inventory.md)
+- queued phase files: [420_Phase_Interaction_Audit_Signoff_Import_Error_Typed_Copy.md](./420_Phase_Interaction_Audit_Signoff_Import_Error_Typed_Copy.md), [421_Phase_Interaction_Audit_Surface_Definition_Display_Source_Split.md](./421_Phase_Interaction_Audit_Surface_Definition_Display_Source_Split.md)
 
 Completed phases should be moved to:
 
@@ -810,6 +810,7 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 415` closeout added localized interaction-audit Handoff Summary presentation labels and safe handoff feedback while preserving handoff draft content, generated bundle command text, operator notes, surface ids, surface titles, pending manual-check evidence text, filenames, MIME types, and signoff export schemas
 - the 2026-05-14 `Phase 416` closeout added typed result codes and optional raw-message separation for interaction-audit frame readiness and preset results while preserving existing display messages, preset execution behavior, iframe behavior, signoff exports, handoff drafts, and archive/request schemas
 - the 2026-05-14 `Phase 417` closeout added localized 14-locale display copy for typed interaction-audit frame readiness and preset result codes while preserving raw selector/preset diagnostics, English message fallback fields, iframe behavior, preset execution behavior, signoff exports, handoff drafts, and archive/request schemas
+- the 2026-05-14 `Phase 418` closeout inventoried remaining interaction-audit presentation-copy boundaries, classified route feedback/accessibility labels, typed import-error presentation, and surface-definition display/source split candidates, and queued follow-up phases `419` through `421`
 
 ## Delivery Standard For Each Phase
 
