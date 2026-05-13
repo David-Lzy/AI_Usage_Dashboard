@@ -134,7 +134,12 @@ function countMarkdownListItems(block) {
 
 async function verifyStoreListingLocalizationDraft(runtimeLocales) {
   const text = await readFile(
-    path.join(repoRoot, "Doc", "Store_Listing_Localization_14_Locale_Draft.md"),
+    path.join(
+      repoRoot,
+      "Doc",
+      "Store",
+      "Store_Listing_Localization_14_Locale_Draft.md",
+    ),
     "utf8",
   );
   const supportedLocalesMatch = text.match(/^Supported locales:\s*(.+)$/m);
