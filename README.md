@@ -2,6 +2,8 @@
 
 Chrome side-panel extension for tracking usage, credits, and sync health across AI coding tools.
 
+Documentation entry point: [Doc/README.md](./Doc/README.md).
+
 Current packaged release state:
 
 - package version: `0.1.0-rc.15`

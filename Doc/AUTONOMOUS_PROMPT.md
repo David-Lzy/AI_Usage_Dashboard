@@ -1,10 +1,6 @@
-# Autonomous Codex Prompt
+# Autonomous Prompt
 
-Date: 2026-05-11
-
-Process rule:
-
-- follow [Development_Guardrails.md](./Development_Guardrails.md)
+Date: 2026-05-13
 
 Document class:
 
@@ -16,17 +12,11 @@ Freshness model:
 
 Status note:
 
-- this file keeps the historical autonomous-agent bootstrap path available
-- the tracked bootstrap target for current agents is [../START_PROMPT.md](../START_PROMPT.md)
+- compatibility stub for historical links
+- keep unattended-work routing in the phase index and current TODOs, not here
 
-## Use
+## Current Entry Points
 
-You can start an agent with:
-
-```text
-请遵守 START_PROMPT.md
-```
-
-## Instruction
-
-Read [../START_PROMPT.md](../START_PROMPT.md) and follow it exactly before implementation or analysis.
+- [Documentation Index](./README.md)
+- [Phase Index](./TODOs/00_Phase_Index.md)
+- [Current Project TODOs](./AI_Usage_Dashboard_TODOs.md)
