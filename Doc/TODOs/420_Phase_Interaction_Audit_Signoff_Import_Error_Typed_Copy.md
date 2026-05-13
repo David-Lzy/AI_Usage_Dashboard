@@ -16,7 +16,7 @@ Freshness model:
 
 Status note:
 
-- queued after `Phase 419`
+- active after `Phase 419`
 - second implementation slice from the remaining interaction-audit presentation-copy inventory
 
 ## Goal

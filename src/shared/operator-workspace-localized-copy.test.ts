@@ -45,6 +45,12 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
     expect(
       copy.interactionAudit.frameResults.presets.missing_first_provider_action,
     ).toBe("Could not find the first provider action.");
+    expect(copy.interactionAudit.routeFeedback.jumpedToSurface("Dashboard")).toBe(
+      "Jumped to Dashboard.",
+    );
+    expect(copy.interactionAudit.accessibility.auditFrameTitle("Dashboard")).toBe(
+      "Dashboard audit frame",
+    );
     expect(copy.themeRecovery.hero.title).toBe(
       "One place to stage native-prompt and real-session recovery checks",
     );
@@ -70,6 +76,12 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
     expect(
       copy.interactionAudit.frameResults.presets.focused_popup_dashboard_action,
     ).toBe("已聚焦 popup dashboard action。");
+    expect(
+      copy.interactionAudit.routeFeedback.jumpedToSurface("Dashboard"),
+    ).toBe("已跳转到 Dashboard。");
+    expect(
+      copy.interactionAudit.accessibility.auditFrameTitle("Dashboard"),
+    ).toBe("Dashboard 审计 frame");
     expect(copy.themeRecovery.currentTruth.reviewStage).toBe("复查阶段");
   });
 
@@ -180,6 +192,12 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
         copy.interactionAudit.frameResults.presets
           .unsupported_audit_preset.length,
       ).toBeGreaterThan(0);
+      expect(
+        copy.interactionAudit.routeFeedback.jumpedToSurface("Surface"),
+      ).toContain("Surface");
+      expect(
+        copy.interactionAudit.accessibility.auditFrameTitle("Surface"),
+      ).toContain("Surface");
       expect(copy.themeRecovery.workflow.steps).toHaveLength(5);
     }
   });
@@ -199,6 +217,12 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
       "clipboard",
     );
     expect(copy.interactionAudit.frameResults.rawDetailLabel).toContain("raw");
+    expect(copy.interactionAudit.routeFeedback.missingSurface).toContain(
+      "audit surface",
+    );
+    expect(copy.interactionAudit.accessibility.surfaceGridLabel).toContain(
+      "Surfaces",
+    );
     expect(copy.themeRecovery.outputs.clipboardUnavailable).toContain(
       "clipboard",
     );

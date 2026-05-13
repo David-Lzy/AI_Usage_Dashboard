@@ -510,7 +510,7 @@ export function InteractionAuditPage({
     if (!surfaceCard) {
       setWorkspaceFeedback({
         tone: "warning",
-        message: "Could not find the requested audit surface on this page.",
+        message: copy.routeFeedback.missingSurface,
       });
       return;
     }
@@ -535,7 +535,9 @@ export function InteractionAuditPage({
 
     setWorkspaceFeedback({
       tone: "neutral",
-      message: `Jumped to ${surfaceCard.dataset.auditSurfaceTitle ?? "the requested audit surface"}.`,
+      message: copy.routeFeedback.jumpedToSurface(
+        surfaceCard.dataset.auditSurfaceTitle ?? surfaceId,
+      ),
     });
   }
 
@@ -629,6 +631,7 @@ export function InteractionAuditPage({
 
       <InteractionAuditSurfaceGridSection
         copy={copy.surfaceCard}
+        accessibilityCopy={copy.accessibility}
         buildAuditUrl={buildAuditUrl}
         loadedSurfaces={loadedSurfaces}
         signoffState={signoffState}

@@ -97,8 +97,8 @@ This section records the historical `Phase 409` migration plan. Review Queue, Su
 | --- | --- | --- | --- |
 | Surface titles, descriptions, action labels, action expectations, and manual checks | `src/sidepanel/interaction-audit-surfaces.ts` | mixed visible UI plus export/handoff source truth | add a localized display map while leaving `INTERACTION_AUDIT_SIGNOFF_SURFACES`, JSON exports, signoff drafts, and handoff drafts on the current English source strings |
 | Surface title usage in Review Queue and Handoff Summary | `src/sidepanel/components/InteractionAuditReviewQueueSection.tsx`, `src/sidepanel/components/InteractionAuditHandoffSummarySection.tsx` | display currently uses export-bound surface title | localize only after the surface-definition display/source split exists |
-| Jump-to-surface feedback | `src/sidepanel/routes/InteractionAuditPage.tsx` | visible workspace feedback, not export-bound | move `Could not find the requested audit surface on this page.` and `Jumped to ...` into localized copy; keep dynamic surface titles sourced from the display/source split decision |
-| Grid and iframe accessibility labels | `src/sidepanel/components/InteractionAuditSurfaceGridSection.tsx`, `src/sidepanel/components/InteractionAuditSurfaceCard.tsx` | screen-reader-visible presentation copy | localize the grid aria label and iframe-title suffix without changing route paths, iframe identity, or surface ids |
+| Jump-to-surface feedback | `src/sidepanel/routes/InteractionAuditPage.tsx` | visible workspace feedback, not export-bound | completed in `Phase 419`; dynamic surface titles remain source-bound |
+| Grid and iframe accessibility labels | `src/sidepanel/components/InteractionAuditSurfaceGridSection.tsx`, `src/sidepanel/components/InteractionAuditSurfaceCard.tsx` | screen-reader-visible presentation copy | completed in `Phase 419`; route paths, iframe identity, and surface ids remain unchanged |
 | Signoff import parse errors | `src/sidepanel/interaction-audit-signoff.ts` | visible workspace feedback from parser failures | add typed import-error codes or a localized wrapper before translating; keep pasted JSON and parsed payload fields raw |
 | Request binding fallback labels | `src/sidepanel/interaction-audit-signoff.ts` | currently shared by UI display and generated drafts | keep `none`, `not recorded`, and `sha256:` formatting raw until display and generated-draft paths are separated |
 | Generated signoff and handoff Markdown | `src/sidepanel/interaction-audit-signoff.ts` | export evidence | do not localize in runtime copy; any future localized preview must be separate from downloadable draft content |
@@ -109,6 +109,8 @@ Recommended follow-up order:
 1. route feedback and accessibility labels, because they are presentation-only and low risk
 2. typed import-error presentation, because parser errors need stable codes before localization
 3. surface-definition display/source split, because those strings feed both UI and export evidence
+
+`Phase 419` completed the route feedback and accessibility-label slice. Dynamic surface titles remain source-bound until the surface-definition display/source split.
 
 ### Review Queue
 
@@ -338,7 +340,11 @@ The first safe child phase started with Review Queue display labels because:
 
 `Phase 417` added 14-locale display copy for typed frame readiness and preset result codes only. Raw-message evidence remains untranslated.
 
-`Phase 418` inventoried the remaining interaction-audit presentation copy boundaries. The next safe child phase is `Phase 419`, covering route feedback and accessibility labels because they are presentation-only and do not touch export evidence.
+`Phase 418` inventoried the remaining interaction-audit presentation copy boundaries.
+
+`Phase 419` localized route feedback and accessibility labels while preserving surface source strings, route paths, iframe sources, ids, presets, signoff exports, handoff drafts, and archive/request schemas.
+
+The next safe child phase is `Phase 420`, covering typed signoff import-error presentation before the larger surface-definition display/source split.
 
 Required tests for completed and later interaction-audit display-copy slices:
 

@@ -18,8 +18,13 @@ export type InteractionAuditSurfaceCardCopy = ReturnType<
   typeof buildOperatorWorkspaceLocalizedCopy
 >["interactionAudit"]["surfaceCard"];
 
+export type InteractionAuditAccessibilityCopy = ReturnType<
+  typeof buildOperatorWorkspaceLocalizedCopy
+>["interactionAudit"]["accessibility"];
+
 type InteractionAuditSurfaceCardProps = {
   copy: InteractionAuditSurfaceCardCopy;
+  accessibilityCopy: InteractionAuditAccessibilityCopy;
   surface: InteractionAuditSurface;
   loaded: boolean;
   status: InteractionAuditSurfaceStatus | undefined;
@@ -43,6 +48,7 @@ type InteractionAuditSurfaceCardProps = {
 
 export function InteractionAuditSurfaceCard({
   copy,
+  accessibilityCopy,
   surface,
   loaded,
   status,
@@ -217,7 +223,7 @@ export function InteractionAuditSurfaceCard({
           <iframe
             className="interaction-audit-frame"
             src={buildAuditUrl(surface.path)}
-            title={`${surface.title} audit frame`}
+            title={accessibilityCopy.auditFrameTitle(surface.title)}
             ref={(node) => {
               onFrameRef(surface.id, node);
             }}

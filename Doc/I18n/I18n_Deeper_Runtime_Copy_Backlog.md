@@ -218,7 +218,7 @@ Reason:
 - `Phase 416` added the interaction-audit frame-result typed display split before localization.
 - `Phase 417` localized the typed frame-result display messages for all 14 runtime locales.
 - `Phase 418` inventoried the remaining interaction-audit presentation-copy boundary: route feedback/accessibility labels are presentation-only, import parse errors need typed presentation, and surface definitions need a display/source split before localization.
-- `Phase 419` is the next active implementation slice for route feedback and accessibility labels; `Phase 420` and `Phase 421` remain queued for typed import-error presentation and surface-definition display/source split.
+- `Phase 419` completed route feedback and accessibility-label localization; `Phase 420` is active for typed import-error presentation, with `Phase 421` queued for the surface-definition display/source split.
 
 ## Verification Pattern
 

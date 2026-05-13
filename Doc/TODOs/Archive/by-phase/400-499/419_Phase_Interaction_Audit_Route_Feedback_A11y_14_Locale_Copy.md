@@ -4,7 +4,7 @@ Date: 2026-05-14
 
 Process rule:
 
-- follow [Development_Guardrails.md](../Development_Guardrails.md)
+- follow [Development_Guardrails.md](../../../../Development_Guardrails.md)
 
 Document class:
 
@@ -16,7 +16,8 @@ Freshness model:
 
 Status note:
 
-- active after `Phase 418`
+- completed on 2026-05-14
+- archived after `Phase 419`
 - first implementation slice from the remaining interaction-audit presentation-copy inventory
 
 ## Goal
@@ -53,4 +54,19 @@ Localize interaction-audit route feedback and accessibility-only labels for all 
 
 ## Follow-Up
 
-- Continue with typed signoff import-error presentation before the larger surface-definition display/source split.
+- `Phase 420` should continue with typed signoff import-error presentation before the larger surface-definition display/source split.
+
+## Completion Summary
+
+- Added 14-locale `interactionAudit.routeFeedback` copy for missing-surface and jumped-to-surface workspace feedback.
+- Added 14-locale `interactionAudit.accessibility` copy for the surface-grid `aria-label` and iframe title suffix.
+- Updated the interaction-audit route, grid section, and surface card to render those localized labels without changing surface titles, descriptions, action labels, expectations, manual checks, route paths, iframe sources, ids, presets, signoff exports, handoff drafts, or archive/request schemas.
+- Preserved dynamic surface titles as source-bound values until the later surface-definition display/source split.
+
+## Verification
+
+- `npm run i18n:check`
+- `npm run test -- src/shared/operator-workspace-localized-copy.test.ts`
+- `npm run typecheck`
+- `npm run docs:check`
+- `git diff --check`

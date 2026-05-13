@@ -293,6 +293,16 @@ type InteractionAuditFrameResultsCopy = {
   presets: Record<AuditPresetResultCode, string>;
 };
 
+type InteractionAuditRouteFeedbackCopy = {
+  missingSurface: string;
+  jumpedToSurface: (surfaceTitle: string) => string;
+};
+
+type InteractionAuditAccessibilityCopy = {
+  surfaceGridLabel: string;
+  auditFrameTitle: (surfaceTitle: string) => string;
+};
+
 const INTERACTION_AUDIT_REVIEW_QUEUE_COPY: Record<
   ResolvedAppLocale,
   InteractionAuditReviewQueueCopy
@@ -2908,6 +2918,140 @@ const INTERACTION_AUDIT_FRAME_RESULTS_COPY: Record<
   },
 };
 
+const INTERACTION_AUDIT_ROUTE_FEEDBACK_COPY: Record<
+  ResolvedAppLocale,
+  InteractionAuditRouteFeedbackCopy
+> = {
+  en: {
+    missingSurface: "Could not find the requested audit surface on this page.",
+    jumpedToSurface: (surfaceTitle) => `Jumped to ${surfaceTitle}.`,
+  },
+  "zh-CN": {
+    missingSurface: "在此页面上找不到请求的审计 surface。",
+    jumpedToSurface: (surfaceTitle) => `已跳转到 ${surfaceTitle}。`,
+  },
+  "zh-TW": {
+    missingSurface: "在此頁面上找不到要求的稽核 surface。",
+    jumpedToSurface: (surfaceTitle) => `已跳到 ${surfaceTitle}。`,
+  },
+  ja: {
+    missingSurface: "このページで要求された監査 surface が見つかりませんでした。",
+    jumpedToSurface: (surfaceTitle) => `${surfaceTitle} へ移動しました。`,
+  },
+  ko: {
+    missingSurface: "이 페이지에서 요청한 audit surface 를 찾을 수 없습니다.",
+    jumpedToSurface: (surfaceTitle) => `${surfaceTitle}(으)로 이동했습니다.`,
+  },
+  "es-419": {
+    missingSurface:
+      "No se encontró la superficie de auditoría solicitada en esta página.",
+    jumpedToSurface: (surfaceTitle) => `Se saltó a ${surfaceTitle}.`,
+  },
+  "pt-BR": {
+    missingSurface:
+      "Não foi possível encontrar a superfície de auditoria solicitada nesta página.",
+    jumpedToSurface: (surfaceTitle) => `Foi para ${surfaceTitle}.`,
+  },
+  fr: {
+    missingSurface:
+      "Impossible de trouver la surface d'audit demandée sur cette page.",
+    jumpedToSurface: (surfaceTitle) => `Aller à ${surfaceTitle}.`,
+  },
+  de: {
+    missingSurface:
+      "Die angeforderte Audit-Surface wurde auf dieser Seite nicht gefunden.",
+    jumpedToSurface: (surfaceTitle) => `Zu ${surfaceTitle} gesprungen.`,
+  },
+  it: {
+    missingSurface:
+      "Impossibile trovare la surface di audit richiesta in questa pagina.",
+    jumpedToSurface: (surfaceTitle) => `Vai a ${surfaceTitle}.`,
+  },
+  ru: {
+    missingSurface:
+      "Не удалось найти запрошенную audit surface на этой странице.",
+    jumpedToSurface: (surfaceTitle) => `Переход к ${surfaceTitle}.`,
+  },
+  ar: {
+    missingSurface:
+      "تعذر العثور على audit surface المطلوبة في هذه الصفحة.",
+    jumpedToSurface: (surfaceTitle) => `تم الانتقال إلى ${surfaceTitle}.`,
+  },
+  hi: {
+    missingSurface: "इस page पर requested audit surface नहीं मिला।",
+    jumpedToSurface: (surfaceTitle) => `${surfaceTitle} पर गए।`,
+  },
+  id: {
+    missingSurface:
+      "Surface audit yang diminta tidak ditemukan di halaman ini.",
+    jumpedToSurface: (surfaceTitle) => `Lompat ke ${surfaceTitle}.`,
+  },
+};
+
+const INTERACTION_AUDIT_ACCESSIBILITY_COPY: Record<
+  ResolvedAppLocale,
+  InteractionAuditAccessibilityCopy
+> = {
+  en: {
+    surfaceGridLabel: "Interaction audit surfaces",
+    auditFrameTitle: (surfaceTitle) => `${surfaceTitle} audit frame`,
+  },
+  "zh-CN": {
+    surfaceGridLabel: "交互审计 surface",
+    auditFrameTitle: (surfaceTitle) => `${surfaceTitle} 审计 frame`,
+  },
+  "zh-TW": {
+    surfaceGridLabel: "互動稽核 surface",
+    auditFrameTitle: (surfaceTitle) => `${surfaceTitle} 稽核 frame`,
+  },
+  ja: {
+    surfaceGridLabel: "インタラクション監査 surface",
+    auditFrameTitle: (surfaceTitle) => `${surfaceTitle} 監査 frame`,
+  },
+  ko: {
+    surfaceGridLabel: "상호작용 audit surface",
+    auditFrameTitle: (surfaceTitle) => `${surfaceTitle} audit frame`,
+  },
+  "es-419": {
+    surfaceGridLabel: "Superficies de auditoría de interacción",
+    auditFrameTitle: (surfaceTitle) =>
+      `Frame de auditoría de ${surfaceTitle}`,
+  },
+  "pt-BR": {
+    surfaceGridLabel: "Superfícies de auditoria de interação",
+    auditFrameTitle: (surfaceTitle) =>
+      `Frame de auditoria de ${surfaceTitle}`,
+  },
+  fr: {
+    surfaceGridLabel: "Surfaces d'audit d'interaction",
+    auditFrameTitle: (surfaceTitle) => `Frame d'audit ${surfaceTitle}`,
+  },
+  de: {
+    surfaceGridLabel: "Interaktionsaudit-Surfaces",
+    auditFrameTitle: (surfaceTitle) => `${surfaceTitle} Audit-Frame`,
+  },
+  it: {
+    surfaceGridLabel: "Surface di audit interazioni",
+    auditFrameTitle: (surfaceTitle) => `Frame di audit ${surfaceTitle}`,
+  },
+  ru: {
+    surfaceGridLabel: "Surfaces аудита взаимодействий",
+    auditFrameTitle: (surfaceTitle) => `Audit frame ${surfaceTitle}`,
+  },
+  ar: {
+    surfaceGridLabel: "Surfaces تدقيق التفاعل",
+    auditFrameTitle: (surfaceTitle) => `Frame تدقيق ${surfaceTitle}`,
+  },
+  hi: {
+    surfaceGridLabel: "Interaction audit surfaces",
+    auditFrameTitle: (surfaceTitle) => `${surfaceTitle} audit frame`,
+  },
+  id: {
+    surfaceGridLabel: "Surface audit interaksi",
+    auditFrameTitle: (surfaceTitle) => `Frame audit ${surfaceTitle}`,
+  },
+};
+
 const OPERATOR_WORKSPACE_COPY: Record<
   ResolvedAppLocale,
   OperatorWorkspaceLocalizedCopy
@@ -5376,6 +5520,10 @@ export function buildOperatorWorkspaceLocalizedCopy(i18n: RuntimeI18n) {
         INTERACTION_AUDIT_HANDOFF_SUMMARY_COPY[i18n.resolvedLocale],
       frameResults:
         INTERACTION_AUDIT_FRAME_RESULTS_COPY[i18n.resolvedLocale],
+      routeFeedback:
+        INTERACTION_AUDIT_ROUTE_FEEDBACK_COPY[i18n.resolvedLocale],
+      accessibility:
+        INTERACTION_AUDIT_ACCESSIBILITY_COPY[i18n.resolvedLocale],
     },
   };
 }
