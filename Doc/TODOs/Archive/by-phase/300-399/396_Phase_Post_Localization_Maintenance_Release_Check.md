@@ -16,7 +16,7 @@ Freshness model:
 
 Status note:
 
-- queued after `Phase 395`
+- completed and archived on 2026-05-13
 - release-gate baseline only
 
 ## Goal
@@ -51,3 +51,23 @@ Run the full release gate after the 14-locale expansion and runtime message cata
 ## Follow-Up
 
 - Continue to `Phase 397` diagnostic presentation inventory after the release baseline is known.
+
+## Closeout
+
+Completed on 2026-05-13.
+
+Summary:
+
+- Ran the full release gate after the 14-locale localization expansion and `Phase 395` runtime message catalog internal split.
+- The post-`Phase 395` source passes the full release gate without version bumps, release zip creation, locale copy changes, manifest catalog changes, store listing changes, provider behavior changes, or generated evidence changes.
+- The existing `0.1.0-rc.15` package remains the current packaged follow-up candidate; this phase records source health only.
+
+Verification:
+
+- `npm run release:check` passed:
+  - `npm run i18n:check` passed for 14 Chrome locale catalogs, 14 runtime locales, and the store listing localization draft.
+  - `npm run typecheck` passed.
+  - `npm run test` passed with `124` test files and `568` tests.
+  - `npm run build` passed.
+- `npm run docs:check` passed after closeout doc updates.
+- `git diff --check` passed after closeout doc updates.

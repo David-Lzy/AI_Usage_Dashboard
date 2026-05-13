@@ -77,6 +77,7 @@ Execution note:
 - sixty-second executable slice landed on `2026-05-13` through `Phase 393.3.1`
 - sixty-second planning split landed on `2026-05-13` through `Phase 393.3`
 - sixty-third executable slice landed on `2026-05-13` through `Phase 393.3.2`
+- sixty-fourth release-gate baseline slice landed on `2026-05-13` through `Phase 396`
 - `Phase 200` and `Phase 201` intentionally paused this i18n/diagnostic follow-up line for functionality-first Codex personal usage-context surfacing while Codex budget is constrained
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
@@ -129,6 +130,7 @@ As of 2026-05-13:
 - RDP extension-window locale smoke captures now validate `--locale` against the same 14 runtime tags before opening a Chrome extension window
 - `npm run i18n:check` now derives Chrome `_locales` directories from runtime registry metadata and verifies the RDP capture helper locale list against the same runtime tags
 - `npm run i18n:check` now also verifies the 14-locale Chrome Web Store listing draft has registry-aligned locale sections and complete listing field structure
+- the full `npm run release:check` gate passed after the 14-locale expansion and runtime message catalog split in `Phase 396`
 - the current shipped runtime localized slice covers:
   - popup shell
   - popup explanatory copy

@@ -34,13 +34,12 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [396_Phase_Post_Localization_Maintenance_Release_Check.md](./396_Phase_Post_Localization_Maintenance_Release_Check.md)
-- latest completed slice: [395_Phase_Runtime_Message_Catalog_Module_Split.md](./Archive/by-phase/300-399/395_Phase_Runtime_Message_Catalog_Module_Split.md)
+- active phase file: [397_Phase_Diagnostic_Presentation_14_Locale_Inventory.md](./397_Phase_Diagnostic_Presentation_14_Locale_Inventory.md)
+- latest completed slice: [396_Phase_Post_Localization_Maintenance_Release_Check.md](./Archive/by-phase/300-399/396_Phase_Post_Localization_Maintenance_Release_Check.md)
 - queued phase files:
-  1. [397_Phase_Diagnostic_Presentation_14_Locale_Inventory.md](./397_Phase_Diagnostic_Presentation_14_Locale_Inventory.md)
-  2. [398_Phase_Warning_Diagnostic_Presentation_14_Locale_Copy.md](./398_Phase_Warning_Diagnostic_Presentation_14_Locale_Copy.md)
-  3. [399_Phase_Source_Diagnostic_Presentation_14_Locale_Copy.md](./399_Phase_Source_Diagnostic_Presentation_14_Locale_Copy.md)
-  4. [400_Phase_Adapter_Error_Diagnostic_Presentation_14_Locale_Copy.md](./400_Phase_Adapter_Error_Diagnostic_Presentation_14_Locale_Copy.md)
+  1. [398_Phase_Warning_Diagnostic_Presentation_14_Locale_Copy.md](./398_Phase_Warning_Diagnostic_Presentation_14_Locale_Copy.md)
+  2. [399_Phase_Source_Diagnostic_Presentation_14_Locale_Copy.md](./399_Phase_Source_Diagnostic_Presentation_14_Locale_Copy.md)
+  3. [400_Phase_Adapter_Error_Diagnostic_Presentation_14_Locale_Copy.md](./400_Phase_Adapter_Error_Diagnostic_Presentation_14_Locale_Copy.md)
 
 Completed phases should be moved to:
 
@@ -792,6 +791,7 @@ Completed phases should be moved to:
 - the 2026-05-13 `Phase 393.3.2` closeout added explicit 14-locale provider-source display wrapper copy while preserving raw source-selection, fallback, diagnostic, provider-id, host, URL, route-hint, and archive/export evidence boundaries
 - the 2026-05-13 `Phase 394` closeout audited code maintenance hotspots and confirmed `Phase 395` should only split runtime message catalog internals while preserving the public `src/shared/runtime-message-catalogs.ts` entry
 - the 2026-05-13 `Phase 395` closeout split runtime message catalog internals into `src/shared/runtime-message-catalog-data/` while preserving the public `src/shared/runtime-message-catalogs.ts` entry and all catalog behavior
+- the 2026-05-13 `Phase 396` closeout ran the full post-localization maintenance release gate after the 14-locale expansion and runtime message catalog split; `npm run release:check` passed without package, manifest, release artifact, provider, locale-copy, store-listing, or generated-evidence changes
 
 ## Delivery Standard For Each Phase
 
