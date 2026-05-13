@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { createRuntimeI18n } from "./i18n";
+import { createRuntimeI18n, SUPPORTED_APP_LOCALES } from "./i18n";
 import { buildProviderSourceDisplayLocalizedCopy as buildReexportedCopy } from "./localized-copy";
 import { buildProviderSourceDisplayLocalizedCopy } from "./provider-source-display-localized-copy";
 import { DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY } from "./provider-sources";
@@ -23,6 +23,39 @@ describe("buildProviderSourceDisplayLocalizedCopy", () => {
     expect(copy.availabilitySummary("10%", "90%", "明天")).toBe(
       "已用：10% · 剩余：90% · 重置：明天",
     );
+  });
+
+  it("localizes provider source display wrapper copy for every non-English locale", () => {
+    const englishCopy = buildProviderSourceDisplayLocalizedCopy(
+      createRuntimeI18n("en"),
+    );
+
+    for (const locale of SUPPORTED_APP_LOCALES.filter(
+      (supportedLocale) => supportedLocale !== "en",
+    )) {
+      const copy = buildProviderSourceDisplayLocalizedCopy(
+        createRuntimeI18n(locale),
+      );
+
+      expect(copy.rolloutStageLabels.deferred).not.toBe(
+        englishCopy.rolloutStageLabels.deferred,
+      );
+      expect(copy.fieldAvailabilityLabels.unavailable).not.toBe(
+        englishCopy.fieldAvailabilityLabels.unavailable,
+      );
+      expect(copy.sourceFidelity.window_only.detail).not.toBe(
+        englishCopy.sourceFidelity.window_only.detail,
+      );
+      expect(copy.connectionMode.credential.detail).not.toBe(
+        englishCopy.connectionMode.credential.detail,
+      );
+      expect(copy.sourceState.hostAccessMissingLabel).not.toBe(
+        englishCopy.sourceState.hostAccessMissingLabel,
+      );
+      expect(copy.availabilitySummary("10%", "90%", "tomorrow")).not.toBe(
+        englishCopy.availabilitySummary("10%", "90%", "tomorrow"),
+      );
+    }
   });
 
   it("preserves the legacy localized-copy export path", () => {

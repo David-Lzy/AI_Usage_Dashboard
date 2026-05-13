@@ -1,4 +1,5 @@
 import type { RuntimeI18n } from "./i18n";
+import { getProviderSourceDisplayExtendedCopy } from "./provider-source-display-extended-localized-copy";
 import {
   DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY,
   type ProviderSourceDisplayCopy,
@@ -8,7 +9,10 @@ export function buildProviderSourceDisplayLocalizedCopy(
   i18n: RuntimeI18n,
 ): ProviderSourceDisplayCopy {
   if (i18n.resolvedLocale !== "zh-CN") {
-    return DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY;
+    return (
+      getProviderSourceDisplayExtendedCopy(i18n.resolvedLocale) ??
+      DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY
+    );
   }
 
   return {

@@ -17,7 +17,7 @@ Freshness model:
 Status note:
 
 - child phase split from `Phase 393.3`
-- queued after `Phase 393.3.1`
+- completed and archived on 2026-05-13
 
 ## Goal
 
@@ -52,7 +52,30 @@ Expand provider-source display wrapper copy into explicit 14-locale runtime copy
 - `npm run build`
 - `npm run docs:check`
 - `git diff --check`
+- `npm run docs:check`
+- `git diff --check`
+- `npm run docs:check`
+- `git diff --check`
 
 ## Follow-Up
 
 - Move to `Phase 394` maintenance hotspot audit before any module-splitting implementation.
+
+## Closeout
+
+Completed on 2026-05-13.
+
+Summary:
+
+- Added explicit 14-locale provider-source display wrapper copy through `src/shared/provider-source-display-extended-localized-copy.ts`.
+- Wired `buildProviderSourceDisplayLocalizedCopy` so every shipped non-English locale now receives translated source kind/preference labels, rollout labels, availability labels, fidelity/connection/contract wrappers, credential/cookie/manual-import wrappers, host-access wrappers, source-state wrappers, page-binding wrappers, and generated availability summaries.
+- Preserved raw `sourceSelectionReason`, `sourceFallbackReason`, diagnostic raw bodies, source evidence fields, provider ids, host labels, URLs, route hints, archive/export schemas, and source-selection/fallback semantics unchanged.
+
+Verification:
+
+- `npm run i18n:check`
+- `npm run test -- src/shared/provider-source-display-localized-copy.test.ts`
+- `npm run test -- src/shared/provider-sources.test.ts`
+- `npm run test -- src/shared/i18n.test.ts`
+- `npm run typecheck`
+- `npm run build`

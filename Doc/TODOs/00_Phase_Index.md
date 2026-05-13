@@ -34,11 +34,10 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [393_3_2_Phase_Provider_Source_Display_14_Locale_Copy.md](./393_3_2_Phase_Provider_Source_Display_14_Locale_Copy.md)
-- latest completed slice: [393_3_1_Phase_Provider_Detail_14_Locale_Copy.md](./Archive/by-phase/300-399/393_3_1_Phase_Provider_Detail_14_Locale_Copy.md)
+- active phase file: [394_Phase_Code_Maintenance_Hotspot_Audit.md](./394_Phase_Code_Maintenance_Hotspot_Audit.md)
+- latest completed slice: [393_3_2_Phase_Provider_Source_Display_14_Locale_Copy.md](./Archive/by-phase/300-399/393_3_2_Phase_Provider_Source_Display_14_Locale_Copy.md)
 - queued phase files:
-  1. [394_Phase_Code_Maintenance_Hotspot_Audit.md](./394_Phase_Code_Maintenance_Hotspot_Audit.md)
-  2. [395_Phase_Runtime_Message_Catalog_Module_Split.md](./395_Phase_Runtime_Message_Catalog_Module_Split.md)
+  1. [395_Phase_Runtime_Message_Catalog_Module_Split.md](./395_Phase_Runtime_Message_Catalog_Module_Split.md)
 
 Completed phases should be moved to:
 
@@ -787,6 +786,7 @@ Completed phases should be moved to:
 - the 2026-05-13 `Phase 393.2.2` closeout added explicit 14-locale Settings source-card and permission helper copy while preserving source preference behavior, host-permission prompts, page binding, and raw evidence boundaries
 - the 2026-05-13 `Phase 393.3` closeout split Provider Detail/source-display 14-locale copy into Provider Detail and provider-source display child phases before changing runtime code
 - the 2026-05-13 `Phase 393.3.1` closeout added explicit 14-locale Provider Detail helper copy while preserving raw diagnostic/source evidence boundaries
+- the 2026-05-13 `Phase 393.3.2` closeout added explicit 14-locale provider-source display wrapper copy while preserving raw source-selection, fallback, diagnostic, provider-id, host, URL, route-hint, and archive/export evidence boundaries
 
 ## Delivery Standard For Each Phase
 

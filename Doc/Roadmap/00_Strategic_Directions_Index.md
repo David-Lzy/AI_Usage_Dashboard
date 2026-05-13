@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is completed through `Phase 393.3.1`, with active `Phase 393.3.2` selected for provider-source display 14-locale runtime copy and queued `Phase 394` through `Phase 395` covering bounded maintenance follow-up
+- the numbered phase queue is completed through `Phase 393.3.2`, with active `Phase 394` selected for maintenance hotspot audit and queued `Phase 395` covering runtime message catalog module splitting
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
