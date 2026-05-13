@@ -208,10 +208,11 @@ Protected raw-evidence values are intentionally not translation backlog:
 
 Recommended next extraction order:
 
-1. Settings credential/source/permission structured copy for all 14 runtime locales in `Phase 393.2`
-2. Provider Detail and provider-source wrapper structured copy for all 14 runtime locales in `Phase 393.3`
-3. typed diagnostic presentation follow-up if the Settings/provider-detail child phases stay small enough
-4. operator-workspace and store-helper follow-up only after the end-user surfaces are stable
+1. Settings credential structured copy for all 14 runtime locales in `Phase 393.2.1`
+2. Settings source/permission structured copy for all 14 runtime locales in `Phase 393.2.2`
+3. Provider Detail and provider-source wrapper structured copy for all 14 runtime locales in `Phase 393.3`
+4. typed diagnostic presentation follow-up if the Settings/provider-detail child phases stay small enough
+5. operator-workspace and store-helper follow-up only after the end-user surfaces are stable
 
 Current maintained backlog:
 

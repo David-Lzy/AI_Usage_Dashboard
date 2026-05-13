@@ -153,7 +153,9 @@ Reason:
 - `Phase 392.4` translated the popup action-section, surface-role, and aria buckets for all 14 runtime locales.
 - `Phase 393` split Settings/provider-detail work into three implementation phases before runtime code changes.
 - `Phase 393.1` translated Settings layout, Quick Setup, preferences, and theme-customization buckets for all 14 runtime locales.
-- `Phase 393.2` should translate Settings credentials, source-card helper labels, and permission buckets for all 14 runtime locales.
+- `Phase 393.2` split Settings source-control work into credential and source/permission child phases before runtime code changes.
+- `Phase 393.2.1` should translate Settings credential buckets for all 14 runtime locales.
+- `Phase 393.2.2` should translate Settings source-card helper labels and permission buckets for all 14 runtime locales.
 - `Phase 393.3` should translate Provider Detail and provider-source display wrapper buckets for all 14 runtime locales.
 - Diagnostics, operator workspaces, and store helper routes should remain follow-up work unless the child phases prove small enough to split safely.
 

@@ -17,7 +17,8 @@ Freshness model:
 Status note:
 
 - child phase split from `Phase 393`
-- queued after `Phase 393.1`
+- split and archived on 2026-05-13
+- replaced by `Phase 393.2.1` and `Phase 393.2.2`
 
 ## Goal
 
@@ -54,3 +55,14 @@ Expand Settings credential, source-card, and permission helper copy into explici
 ## Follow-Up
 
 - Move to Provider Detail and provider-source display wrapper copy in `Phase 393.3`.
+
+## Split Closeout
+
+- This phase grouped credential-card copy with source-card and permission copy, which is too broad for one safe translation slice.
+- `Phase 393.2.1` owns Settings credential helper copy.
+- `Phase 393.2.2` owns Settings source-card and permission helper copy.
+
+Verification:
+
+- `npm run docs:check`
+- `git diff --check`
