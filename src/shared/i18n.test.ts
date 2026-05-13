@@ -227,6 +227,16 @@ describe("runtime i18n", () => {
     expect(i18n.t("settings.preferences.locale.system")).toBe("Как в системе");
   });
 
+  it("returns translated runtime strings for the first ar shell slice", () => {
+    const i18n = createRuntimeI18n("ar");
+
+    expect(i18n.t("dashboard.hero.title")).toBe("لوحة واحدة لحصص AI coding");
+    expect(i18n.t("popup.header.title")).toBe("نظرة سريعة");
+    expect(i18n.t("settings.topbar.title")).toBe("الإعدادات");
+    expect(i18n.t("settings.preferences.locale.system")).toBe("اتباع النظام");
+    expect(i18n.resolvedTextDirection).toBe("rtl");
+  });
+
   it("localizes quick theme toggle copy from the next explicit mode", () => {
     const i18n = createRuntimeI18n("zh-CN");
 
