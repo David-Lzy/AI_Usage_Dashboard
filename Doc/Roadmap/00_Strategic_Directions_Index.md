@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is now completed through `Phase 387`, with no active phase or queued numbered phase currently selected
+- the numbered phase queue is completed through `Phase 387`, with active `Phase 388` selected for current-truth documentation drift and queued `Phase 389` through `Phase 395` covering doc link checking, release-gate baseline, deeper 14-locale runtime copy, and bounded maintenance follow-up
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness

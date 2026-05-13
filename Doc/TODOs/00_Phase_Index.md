@@ -34,9 +34,16 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: none
+- active phase file: [388_Phase_Current_Truth_Drift_Closeout.md](./388_Phase_Current_Truth_Drift_Closeout.md)
 - latest completed slice: [387_Phase_Extension_Notranslate_And_Locale_RDP_QA.md](./Archive/by-phase/300-399/387_Phase_Extension_Notranslate_And_Locale_RDP_QA.md)
-- queued phase files: none
+- queued phase files:
+  1. [389_Phase_Documentation_Link_Check_Guard.md](./389_Phase_Documentation_Link_Check_Guard.md)
+  2. [390_Phase_Release_Check_Baseline.md](./390_Phase_Release_Check_Baseline.md)
+  3. [391_Phase_Runtime_I18n_Deeper_Copy_Inventory.md](./391_Phase_Runtime_I18n_Deeper_Copy_Inventory.md)
+  4. [392_Phase_Popup_Guidance_14_Locale_Copy.md](./392_Phase_Popup_Guidance_14_Locale_Copy.md)
+  5. [393_Phase_Settings_Provider_Detail_14_Locale_Copy.md](./393_Phase_Settings_Provider_Detail_14_Locale_Copy.md)
+  6. [394_Phase_Code_Maintenance_Hotspot_Audit.md](./394_Phase_Code_Maintenance_Hotspot_Audit.md)
+  7. [395_Phase_Runtime_Message_Catalog_Module_Split.md](./395_Phase_Runtime_Message_Catalog_Module_Split.md)
 
 Completed phases should be moved to:
 
