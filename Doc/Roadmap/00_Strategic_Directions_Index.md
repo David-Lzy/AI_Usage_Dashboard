@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is now completed through `Phase 363`, with no active phase or queued numbered phase currently selected
+- the numbered phase queue is now completed through `Phase 364`, with no active phase or queued numbered phase currently selected
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -231,6 +231,7 @@ As of 2026-05-13:
 - `Phase 361` extracted page-session script execution and page snapshot helpers while preserving existing DOM snapshot, boot-data, main-world window-value, and network observer semantics
 - `Phase 362` extracted page-session network observer bridge helpers while preserving existing bridge id, fetch/XHR capture defaults, and malformed snapshot fallback semantics
 - `Phase 363` extracted page-session candidate-tab selection while preserving bound-tab lookup, query-only fallback, duplicate filtering, binding-missing reporting, and auto priority sorting semantics
+- `Phase 364` packaged the post-`rc.14` maintenance boundary into `0.1.0-rc.15`, aligned package and manifest versions, generated the release artifact, and recorded a new follow-up milestone while keeping RC13 as the submitted review boundary
 - `Phase 334` extracted interaction-audit per-surface card rendering while preserving route-owned audit refs, preset actions, manual checks, and signoff callbacks
 - `Phase 335` extracted interaction-audit review queue rendering while preserving route-owned queue construction and jump behavior
 - `Phase 336` extracted interaction-audit request-scope rendering while preserving route-owned request-context state plus binding, revision, and next-command display
@@ -379,7 +380,7 @@ As of 2026-05-13:
 - `Phase 169` completed the next `Direction 10.3` slice by adding one request-bound manual finalize command plus handoff update, so the remaining real-world work is now the popup capture itself instead of popup capture plus extra repo bookkeeping
 - `Phase 296` completed the mixed candidate screenshot file intake plus archive completion under `10_3_Store_Asset_Pack_And_Submission_TODOs.md`
 - the previous repo-owned engineering default was adapter diagnostic raw fallback regression review for the shipped `en + zh_CN` runtime pilot under Direction 09, captured in `09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`
-- because `0.1.0-rc.14` is now packaged as the aligned follow-up candidate while the RC13 milestone remains the submitted store-review boundary, the active functional priority is now review-feedback or deliberate resubmission follow-up only if the Chrome Web Store flow asks for it
+- because `0.1.0-rc.15` is now packaged as the aligned follow-up candidate while the RC13 milestone remains the submitted store-review boundary, the active functional priority is now review-feedback or deliberate resubmission follow-up only if the Chrome Web Store flow asks for it
 - the remaining high-value work in Direction 05 and Direction 04 is now evidence closure, not more tool-building:
   - `05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md`
   - `04_2_Interaction_Audit_Real_Operator_Closure_TODOs.md`
@@ -446,7 +447,7 @@ As of 2026-05-13:
 
 1. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why first now:
-   `0.1.0-rc.14` is now packaged as the next aligned follow-up candidate, the mixed screenshot archive is complete, the trimmed transparent icon refresh and Claude Team usage-page path are already in the submitted RC13 boundary, and the next work is only review-feedback or deliberate resubmission follow-up after the human Chrome Web Store flow returns.
+   `0.1.0-rc.15` is now packaged as the next aligned follow-up candidate, the mixed screenshot archive is complete, the trimmed transparent icon refresh and Claude Team usage-page path are already in the submitted RC13 boundary, and the next work is only review-feedback or deliberate resubmission follow-up after the human Chrome Web Store flow returns.
 
 2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second now:

@@ -33,10 +33,10 @@ Status note:
 
 ## Current Release Candidate
 
-- package version: `0.1.0-rc.14`
-- Chrome manifest version: `0.1.0.14`
-- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.14.zip`
-- follow-up candidate milestone: [2026-05-11_RC14_Follow_Up_Release_Candidate.md](./Milestones/2026-05-11_RC14_Follow_Up_Release_Candidate.md)
+- package version: `0.1.0-rc.15`
+- Chrome manifest version: `0.1.0.15`
+- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.15.zip`
+- follow-up candidate milestone: [2026-05-13_RC15_Maintenance_Follow_Up_Release_Candidate.md](./Milestones/2026-05-13_RC15_Maintenance_Follow_Up_Release_Candidate.md)
 - submitted store-review boundary: [2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
 ## Build And Verification Flow

@@ -12,7 +12,7 @@ Document class:
 
 Status note:
 
-- snapshot refreshed on 2026-05-13 after Chrome automation default alignment, the `rc.14` Chrome helper smoke pass, the RDP full-page route-contract guard, store screenshot route-config reuse, interaction-audit frame-action, surface-card, review-queue, request-scope, signoff-session, handoff-summary, guidance-card, workspace-controls, and surface-grid splits, theme-recovery current-state, theme-state, request-scope, provider-list, workflow-links, and outputs splits, shared operator helpers, Settings focused deep-link render coverage, Settings source-card and quick-setup view-model splits, page-session tab-priority, tab-lifecycle, script-capture, network-observer, and candidate-tabs helper splits, popup Settings/source-page helper coverage, popup route-action sidePanel coverage, popup source-page action helper coverage, popup refresh action helper coverage, popup theme-toggle helper coverage, popup hide-provider helper coverage, popup guidance action helper coverage, popup provider-progress component coverage, popup featured-provider-list, popup header, popup guidance-card rendering, popup setup-coverage rendering, popup snapshot-status rendering, popup action-section rendering, popup surface-roles rendering, popup featured-section rendering, popup load-state rendering, popup snapshot-status / guidance-card / featured-section / surface-route / localized-view-model coverage
+- snapshot refreshed on 2026-05-13 after RC15 maintenance follow-up packaging, Chrome automation default alignment, the `rc.14` Chrome helper smoke pass, the RDP full-page route-contract guard, store screenshot route-config reuse, interaction-audit frame-action, surface-card, review-queue, request-scope, signoff-session, handoff-summary, guidance-card, workspace-controls, and surface-grid splits, theme-recovery current-state, theme-state, request-scope, provider-list, workflow-links, and outputs splits, shared operator helpers, Settings focused deep-link render coverage, Settings source-card and quick-setup view-model splits, page-session tab-priority, tab-lifecycle, script-capture, network-observer, and candidate-tabs helper splits, popup Settings/source-page helper coverage, popup route-action sidePanel coverage, popup source-page action helper coverage, popup refresh action helper coverage, popup theme-toggle helper coverage, popup hide-provider helper coverage, popup guidance action helper coverage, popup provider-progress component coverage, popup featured-provider-list, popup header, popup guidance-card rendering, popup setup-coverage rendering, popup snapshot-status rendering, popup action-section rendering, popup surface-roles rendering, popup featured-section rendering, popup load-state rendering, popup snapshot-status / guidance-card / featured-section / surface-route / localized-view-model coverage
 - refresh this file when the Chrome Web Store review result arrives, or when a new high-priority direction opens
 
 ## What Just Closed
@@ -40,26 +40,26 @@ As of 2026-05-11 the following previously-open items are now done:
 
 The submitted store-review boundary remains `release/ai-usage-dashboard-0.1.0-rc.13.zip`. Keep using the RC13 milestone as the truthful historical submission handoff while that review is still pending in the Chrome Web Store Developer Dashboard.
 
-The repo is now also packaged forward through `Phase 306` as `release/ai-usage-dashboard-0.1.0-rc.14.zip`. That newer package is a prepared follow-up candidate, not an instruction to silently replace the submitted RC13 review boundary. `Phase 307` through `Phase 363` are post-package tooling, Chrome automation, smoke-evidence, first-provider setup, cached-first guard, popup and Settings maintenance, page-session helper maintenance, route-contract, screenshot-helper reuse, interaction-audit maintenance, theme-recovery maintenance, operator-helper follow-ups, and focused-link / source-page / refresh / theme-toggle / hide-provider / guidance / progress / snapshot-status / featured-section / surface-route / localized-view-model / route-action guardrails; they do not create a new extension package.
+The repo is now also packaged forward through `Phase 364` as `release/ai-usage-dashboard-0.1.0-rc.15.zip`. That newer package is a prepared follow-up candidate, not an instruction to silently replace the submitted RC13 review boundary. It includes the previous RC14 follow-up polish plus `Phase 307` through `Phase 363` post-package tooling, Chrome automation, smoke-evidence, first-provider setup, cached-first guard, popup and Settings maintenance, page-session helper maintenance, route-contract, screenshot-helper reuse, interaction-audit maintenance, theme-recovery maintenance, operator-helper follow-ups, and focused-link / source-page / refresh / theme-toggle / hide-provider / guidance / progress / snapshot-status / featured-section / surface-route / localized-view-model / route-action guardrails.
 
 References:
 - [Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
-- [Doc/Milestones/2026-05-11_RC14_Follow_Up_Release_Candidate.md](./Milestones/2026-05-11_RC14_Follow_Up_Release_Candidate.md)
+- [Doc/Milestones/2026-05-13_RC15_Maintenance_Follow_Up_Release_Candidate.md](./Milestones/2026-05-13_RC15_Maintenance_Follow_Up_Release_Candidate.md)
 
 Remaining human steps:
 - monitor the RC13 Chrome Web Store review result
 - keep the reviewed screenshots from [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md), listing copy, and disclosure answers ready
-- if review feedback or a deliberate product decision calls for a newer package, promote RC14 from the follow-up milestone instead of mutating RC13 history
+- if review feedback or a deliberate product decision calls for a newer package, promote RC15 from the follow-up milestone instead of mutating RC13 history
 
-No additional release-package work is required before review feedback arrives; the newer RC14 package already exists if it becomes necessary. The previously queued local-safe follow-ups through Phase 363 are now complete; create a new small TODO before starting additional behavior changes.
+No additional release-package work is required before review feedback arrives; the newer RC15 package already exists if it becomes necessary. The previously queued local-safe follow-ups through Phase 364 are now complete; create a new small TODO before starting additional behavior changes.
 
-### P1 — Decide Whether To Promote RC14
+### P1 — Decide Whether To Promote RC15
 
-If Chrome Web Store review requests code, icon, manifest, or listing changes that are already covered by RC14, resubmit from the RC14 follow-up candidate and record a fresh submission milestone for that handoff.
+If Chrome Web Store review requests code, icon, manifest, or listing changes that are already covered by RC15, resubmit from the RC15 follow-up candidate and record a fresh submission milestone for that handoff.
 
-If review feedback asks for more changes beyond RC14, build on RC14 rather than reopening RC13.
+If review feedback asks for more changes beyond RC15, build on RC15 rather than reopening RC13.
 
-If RC13 passes with no changes, RC14 remains optional follow-up polish rather than a forced resubmission.
+If RC13 passes with no changes, RC15 remains optional follow-up polish rather than a forced resubmission.
 
 ## Next Engineering Work (After Store Upload Clears)
 
@@ -112,6 +112,7 @@ Completed local-safe follow-up:
 - [361_Phase_Page_Session_Script_Capture_Helper.md](./TODOs/Archive/361_Phase_Page_Session_Script_Capture_Helper.md) - extracted page-session script execution and page snapshot helpers while preserving existing DOM, boot-data, and network observer semantics.
 - [362_Phase_Page_Session_Network_Observer_Helper.md](./TODOs/Archive/362_Phase_Page_Session_Network_Observer_Helper.md) - extracted page-session network observer bridge helpers while preserving existing bridge install/read semantics.
 - [363_Phase_Page_Session_Candidate_Tabs_Helper.md](./TODOs/Archive/363_Phase_Page_Session_Candidate_Tabs_Helper.md) - extracted page-session candidate-tab selection while preserving bound-tab lookup, query-only fallback, duplicate filtering, and auto priority sorting semantics.
+- [364_Phase_RC15_Maintenance_Follow_Up_Packaging.md](./TODOs/Archive/364_Phase_RC15_Maintenance_Follow_Up_Packaging.md) - packaged the post-RC14 maintenance boundary as RC15 while preserving RC13 as the submitted review boundary.
 - [334_Phase_Interaction_Audit_Surface_Card_Component.md](./TODOs/Archive/334_Phase_Interaction_Audit_Surface_Card_Component.md) - extracted interaction-audit per-surface card rendering while preserving route-owned audit refs, preset actions, manual checks, and signoff callbacks.
 - [335_Phase_Interaction_Audit_Review_Queue_Component.md](./TODOs/Archive/335_Phase_Interaction_Audit_Review_Queue_Component.md) - extracted interaction-audit review queue rendering while preserving route-owned queue construction and jump behavior.
 - [336_Phase_Interaction_Audit_Request_Scope_Component.md](./TODOs/Archive/336_Phase_Interaction_Audit_Request_Scope_Component.md) - extracted interaction-audit request-scope rendering while preserving route-owned request-context state and next-command display.

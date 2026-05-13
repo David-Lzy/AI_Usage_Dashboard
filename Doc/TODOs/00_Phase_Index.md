@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [363_Phase_Page_Session_Candidate_Tabs_Helper.md](./Archive/363_Phase_Page_Session_Candidate_Tabs_Helper.md)
+- latest completed slice: [364_Phase_RC15_Maintenance_Follow_Up_Packaging.md](./Archive/364_Phase_RC15_Maintenance_Follow_Up_Packaging.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -753,6 +753,7 @@ Completed phases should be moved to:
 - the 2026-05-11 `Phase 306` closeout extended cached-first bootstrap to the side panel, routed popup blocker/policy/setup actions into focused Settings targets, added popup quick-hide plus zero-provider setup affordances, kept app language always visible, fixed English display-level labels, bumped the package to `0.1.0-rc.14`, bumped the manifest to `0.1.0.14`, generated `release/ai-usage-dashboard-0.1.0-rc.14.zip`, and recorded SHA256 `5b3e31469f7b2fd94511aa8a3b702d3f656f2014b7334e6a7931ff1f7289185e` in the new follow-up-candidate milestone
 - the 2026-05-12 `Phase 307` closeout made Chrome plus the official Playwright Extension bridge the default local automation path for normal web tabs, changed the RDP helper browser preference to Chrome-first with Brave fallback, and made profile audit auto-detect the current unpacked extension id from the Chrome profile
 - the 2026-05-12 `Phase 308` closeout recorded a real Chrome helper smoke pass for `0.1.0-rc.14` dashboard, Settings, focused Settings targets, provider detail, full-page dashboard, and popup surfaces; a later restarted Codex session confirmed direct Playwright MCP can drive normal web tabs but Chrome blocks using that bridge to drive another extension's `chrome-extension://` UI, so extension UI smoke remains on the Chrome RDP helper
+- the 2026-05-13 `Phase 364` closeout bumped the package to `0.1.0-rc.15`, bumped the manifest to `0.1.0.15`, generated `release/ai-usage-dashboard-0.1.0-rc.15.zip`, and recorded SHA256 `5ad5b0771c9a33dc6d04d90c02d1c963f04b072a525c4769ee8c36ac783c9e5a` in the new maintenance follow-up milestone while preserving RC13 as the submitted Chrome Web Store review boundary
 
 ## Delivery Standard For Each Phase
 
