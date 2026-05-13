@@ -34,9 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [409_Phase_Interaction_Audit_Consumer_Copy_Presentation_Split.md](./409_Phase_Interaction_Audit_Consumer_Copy_Presentation_Split.md)
-- latest completed slice: [408_Phase_Localization_Copy_Chunk_Size_Audit.md](./Archive/by-phase/400-499/408_Phase_Localization_Copy_Chunk_Size_Audit.md)
-- queued phase files: [410_Phase_Store_Helper_Error_Presentation_Split.md](./410_Phase_Store_Helper_Error_Presentation_Split.md)
+- active phase file: [410_Phase_Store_Helper_Error_Presentation_Split.md](./410_Phase_Store_Helper_Error_Presentation_Split.md)
+- latest completed slice: [409_Phase_Interaction_Audit_Consumer_Copy_Presentation_Split.md](./Archive/by-phase/400-499/409_Phase_Interaction_Audit_Consumer_Copy_Presentation_Split.md)
+- queued phase files: [411_Phase_Interaction_Audit_Review_Queue_Display_Copy.md](./411_Phase_Interaction_Audit_Review_Queue_Display_Copy.md)
 
 Completed phases should be moved to:
 
@@ -801,6 +801,7 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 406` closeout ran the full post-helper localization release gate; `npm run release:check` passed with no package, manifest, release artifact, provider contract, locale registry, shipped locale, manifest locale, or store-listing source changes
 - the 2026-05-14 `Phase 407` closeout captured representative RDP Chrome extension-mode screenshots for localized operator/store helper routes across `en`, `zh-CN`, `ja`, `de`, and `ar`, with Arabic RTL and German long-label spot checks recorded under `Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/`
 - the 2026-05-14 `Phase 408` closeout audited post-localization copy chunk size, recorded the current `sidepanel.js` warning as acceptable for the next maintenance package, and documented a later special-route lazy-loading boundary if raw side-panel size becomes a release blocker
+- the 2026-05-14 `Phase 409` closeout documented the interaction-audit presentation/export split, preserved signoff exports, handoff drafts, request ids, route ids, preset ids, command text, and manual-check evidence outside localization, and queued Review Queue display-copy localization as `Phase 411`
 
 ## Delivery Standard For Each Phase
 

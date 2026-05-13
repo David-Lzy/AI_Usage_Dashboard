@@ -90,6 +90,7 @@ Execution note:
 - seventy-fourth release-gate baseline slice landed on `2026-05-14` through `Phase 406`
 - seventy-fifth visual QA slice landed on `2026-05-14` through `Phase 407`
 - seventy-sixth maintenance audit slice landed on `2026-05-14` through `Phase 408`
+- seventy-seventh presentation/export split landed on `2026-05-14` through `Phase 409`
 - `Phase 200` and `Phase 201` intentionally paused this i18n/diagnostic follow-up line for functionality-first Codex personal usage-context surfacing while Codex budget is constrained
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
@@ -152,7 +153,7 @@ As of 2026-05-14:
 - the full `npm run release:check` gate passed after operator/store helper localization in `Phase 406`
 - localized operator/store helper RDP Chrome visual QA is recorded for `en`, `zh-CN`, `ja`, `de`, and `ar` in [2026-05-14-phase407](../testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/README.md)
 - localization copy chunk-size audit is recorded in [I18n_Localization_Copy_Chunk_Size_Audit.md](../I18n/I18n_Localization_Copy_Chunk_Size_Audit.md), with no current runtime split required
-- active `Phase 409` covers interaction-audit consumer-copy presentation split before the queued store-helper error presentation follow-up
+- interaction-audit presentation/export split is recorded in [I18n_Interaction_Audit_Presentation_Export_Split.md](../I18n/I18n_Interaction_Audit_Presentation_Export_Split.md), with the Review Queue display-copy implementation queued after the active store-helper error presentation follow-up
 - the current shipped runtime localized slice covers:
   - popup shell
   - popup explanatory copy
@@ -358,8 +359,9 @@ Recommended rollout:
 77. post-helper localization release gate - shipped in `Phase 406`
 78. localized operator/store RDP visual QA - shipped in `Phase 407`
 79. localization copy chunk-size audit - shipped in `Phase 408`
-80. interaction-audit consumer-copy presentation split - active in `Phase 409`
-81. store-helper error presentation split - queued in `Phase 410`
+80. interaction-audit consumer-copy presentation split - shipped in `Phase 409`
+81. store-helper error presentation split - active in `Phase 410`
+82. interaction-audit Review Queue display copy - queued in `Phase 411`
 
 ## References
 

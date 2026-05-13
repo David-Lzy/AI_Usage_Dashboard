@@ -24,6 +24,7 @@ Status note:
 - [Store Runtime Helper Copy](./I18n_Store_Runtime_Helper_Copy.md)
 - [Adapter Diagnostic Reason Code Plan](./I18n_Adapter_Diagnostic_Reason_Code_Plan.md)
 - [Operator Workspace Boundary And Extraction](./I18n_Operator_Workspace_Boundary_And_Extraction.md)
+- [Interaction Audit Presentation And Export Split](./I18n_Interaction_Audit_Presentation_Export_Split.md)
 - [Diagnostic Archive Export Compatibility](./I18n_Diagnostic_Archive_Export_Compatibility.md)
 - [Diagnostic Fixture And Historical Evidence Alignment](./I18n_Diagnostic_Fixture_And_Historical_Evidence_Alignment.md)
 - [Localization Copy Chunk Size Audit](./I18n_Localization_Copy_Chunk_Size_Audit.md)

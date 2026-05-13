@@ -35,6 +35,7 @@ Track runtime copy that still falls back to English after the 14-locale shell pi
 - Provider-source display wrapper copy now has explicit 14-locale coverage through `Phase 393.3.2`.
 - Typed diagnostic presentation copy now has explicit 14-locale coverage for warning, source-selection, source-fallback, and adapter-error diagnostics through `Phase 400`.
 - Operator-workspace helper-owned copy now has explicit 14-locale coverage through `Phase 404`; consumer-only interaction-audit labels next to export/automation boundaries remain follow-up.
+- The interaction-audit consumer-label follow-up now has a presentation/export split reference from `Phase 409`: [I18n_Interaction_Audit_Presentation_Export_Split.md](./I18n_Interaction_Audit_Presentation_Export_Split.md).
 - Store-helper copy now has explicit 14-locale coverage through `Phase 405` while screenshot workflow evidence and automation identity fields remain raw.
 - Deeper structured helper copy outside the popup, Settings, Provider Detail, provider-source display, typed diagnostic presentation, operator-workspace helper, and store-helper slices still mostly uses explicit `zh-CN` branches plus English fallback for every other non-English locale.
 - Locale registry, `rtl` mapping, runtime `lang`/`dir`, Chrome `_locales`, RDP locale validation, and store listing draft coverage are already guarded by `npm run i18n:check`.
@@ -159,6 +160,7 @@ Default next action:
 - `Phase 403` inventoried the store-helper boundary for `Phase 405`.
 - `Phase 404` translated the operator-workspace helper-owned buckets for all 14 runtime locales while leaving consumer-only labels and export-adjacent strings on the documented boundary.
 - `Phase 405` translated the store-helper screenshot seed and native popup probe buckets for all 14 runtime locales while preserving automation titles, preset ids, route hashes, capture-plan identity fields, generated evidence, and listing source text.
+- `Phase 409` documented the remaining interaction-audit presentation/export split and queued `Phase 411` for the first Review Queue display-copy implementation slice.
 
 ### P2 - Explicitly Not Translated
 
