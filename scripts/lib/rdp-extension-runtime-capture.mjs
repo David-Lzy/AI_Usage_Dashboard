@@ -153,11 +153,17 @@ function getX11CommandTimeoutMs() {
 function parseWindowTree(rawOutput) {
   return rawOutput
     .split("\n")
-    .map((line) => line.match(/^\s*(0x[0-9a-f]+)\s+"([^"]+)"/i))
+    .map((line) =>
+      line.match(
+        /^\s*(0x[0-9a-f]+)\s+"([^"]+)"(?:\:\s+\("([^"]+)"\s+"([^"]+)"\))?/i,
+      ),
+    )
     .filter(Boolean)
     .map((match) => ({
       id: match[1],
       title: match[2],
+      className: match[3] ?? "",
+      classType: match[4] ?? "",
       numericId: parseHexWindowId(match[1]),
     }));
 }
@@ -376,7 +382,11 @@ export async function openRdpExtensionWindow({
   const existingWindows = await listBrowserWindows(runtime);
   const existingIds = new Set(
     existingWindows
-      .filter((windowInfo) => windowInfo.title === expectedTitle)
+      .filter(
+        (windowInfo) =>
+          windowInfo.title === expectedTitle ||
+          windowInfo.className.startsWith(`${extensionRuntime.extensionId}__`),
+      )
       .map((windowInfo) => windowInfo.id),
   );
 
@@ -397,7 +407,11 @@ export async function openRdpExtensionWindow({
   while (Date.now() <= deadline) {
     const windows = await listBrowserWindows(runtime);
     const matchingWindows = windows
-      .filter((windowInfo) => windowInfo.title === expectedTitle)
+      .filter(
+        (windowInfo) =>
+          windowInfo.title === expectedTitle ||
+          windowInfo.className.startsWith(`${extensionRuntime.extensionId}__`),
+      )
       .sort((left, right) => left.numericId - right.numericId);
     targetWindow =
       matchingWindows.find((windowInfo) => !existingIds.has(windowInfo.id)) ??

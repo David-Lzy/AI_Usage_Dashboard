@@ -1,0 +1,14 @@
+{
+  "manifest_ext_name": {
+    "message": "AI 使用状況ダッシュボード",
+    "description": "Chrome UI と Chrome Web Store に表示される拡張機能名。"
+  },
+  "manifest_ext_description": {
+    "message": "AI コーディングツールの使用状況、設定のブロック要因、同期状態を追跡します。",
+    "description": "拡張機能一覧と Chrome 拡張機能管理画面に表示される短い説明。"
+  },
+  "manifest_action_default_title": {
+    "message": "AI 使用状況ダッシュボード",
+    "description": "ツールバーアクションと popup トリガーに表示される既定のタイトル。"
+  }
+}

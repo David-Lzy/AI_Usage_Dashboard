@@ -1,10 +1,167 @@
 import type { AppLocalePreference } from "../providers/types";
 import type { ResolvedThemeMode } from "./theme";
 
-export type ResolvedAppLocale = "en" | "zh-CN";
+export const SUPPORTED_APP_LOCALES = [
+  "en",
+  "zh-CN",
+  "zh-TW",
+  "ja",
+  "ko",
+  "es-419",
+  "pt-BR",
+  "fr",
+  "de",
+  "it",
+  "ru",
+  "ar",
+  "hi",
+  "id",
+] as const;
+
+export type ResolvedAppLocale = (typeof SUPPORTED_APP_LOCALES)[number];
 export type ResolvedTextDirection = "ltr" | "rtl";
 
 export const DEFAULT_APP_LOCALE_PREFERENCE: AppLocalePreference = "system";
+
+export type AppLocaleMetadata = {
+  locale: ResolvedAppLocale;
+  chromeLocale: string;
+  label: string;
+  nativeLabel: string;
+  intlLocale: string;
+  htmlLang: string;
+  textDirection: ResolvedTextDirection;
+};
+
+export const APP_LOCALE_METADATA: Record<ResolvedAppLocale, AppLocaleMetadata> =
+  {
+    en: {
+      locale: "en",
+      chromeLocale: "en",
+      label: "English",
+      nativeLabel: "English",
+      intlLocale: "en",
+      htmlLang: "en",
+      textDirection: "ltr",
+    },
+    "zh-CN": {
+      locale: "zh-CN",
+      chromeLocale: "zh_CN",
+      label: "Simplified Chinese",
+      nativeLabel: "简体中文",
+      intlLocale: "zh-CN",
+      htmlLang: "zh-CN",
+      textDirection: "ltr",
+    },
+    "zh-TW": {
+      locale: "zh-TW",
+      chromeLocale: "zh_TW",
+      label: "Traditional Chinese",
+      nativeLabel: "繁體中文",
+      intlLocale: "zh-TW",
+      htmlLang: "zh-TW",
+      textDirection: "ltr",
+    },
+    ja: {
+      locale: "ja",
+      chromeLocale: "ja",
+      label: "Japanese",
+      nativeLabel: "日本語",
+      intlLocale: "ja",
+      htmlLang: "ja",
+      textDirection: "ltr",
+    },
+    ko: {
+      locale: "ko",
+      chromeLocale: "ko",
+      label: "Korean",
+      nativeLabel: "한국어",
+      intlLocale: "ko",
+      htmlLang: "ko",
+      textDirection: "ltr",
+    },
+    "es-419": {
+      locale: "es-419",
+      chromeLocale: "es_419",
+      label: "Spanish (Latin America)",
+      nativeLabel: "Español (Latinoamérica)",
+      intlLocale: "es-419",
+      htmlLang: "es-419",
+      textDirection: "ltr",
+    },
+    "pt-BR": {
+      locale: "pt-BR",
+      chromeLocale: "pt_BR",
+      label: "Portuguese (Brazil)",
+      nativeLabel: "Português (Brasil)",
+      intlLocale: "pt-BR",
+      htmlLang: "pt-BR",
+      textDirection: "ltr",
+    },
+    fr: {
+      locale: "fr",
+      chromeLocale: "fr",
+      label: "French",
+      nativeLabel: "Français",
+      intlLocale: "fr",
+      htmlLang: "fr",
+      textDirection: "ltr",
+    },
+    de: {
+      locale: "de",
+      chromeLocale: "de",
+      label: "German",
+      nativeLabel: "Deutsch",
+      intlLocale: "de",
+      htmlLang: "de",
+      textDirection: "ltr",
+    },
+    it: {
+      locale: "it",
+      chromeLocale: "it",
+      label: "Italian",
+      nativeLabel: "Italiano",
+      intlLocale: "it",
+      htmlLang: "it",
+      textDirection: "ltr",
+    },
+    ru: {
+      locale: "ru",
+      chromeLocale: "ru",
+      label: "Russian",
+      nativeLabel: "Русский",
+      intlLocale: "ru",
+      htmlLang: "ru",
+      textDirection: "ltr",
+    },
+    ar: {
+      locale: "ar",
+      chromeLocale: "ar",
+      label: "Arabic",
+      nativeLabel: "العربية",
+      intlLocale: "ar",
+      htmlLang: "ar",
+      textDirection: "rtl",
+    },
+    hi: {
+      locale: "hi",
+      chromeLocale: "hi",
+      label: "Hindi",
+      nativeLabel: "हिन्दी",
+      intlLocale: "hi",
+      htmlLang: "hi",
+      textDirection: "ltr",
+    },
+    id: {
+      locale: "id",
+      chromeLocale: "id",
+      label: "Indonesian",
+      nativeLabel: "Bahasa Indonesia",
+      intlLocale: "id",
+      htmlLang: "id",
+      textDirection: "ltr",
+    },
+  };
 
 type RuntimeMessageId =
   | "app.loading.eyebrow"
@@ -177,8 +334,7 @@ export type RuntimeI18n = {
   localizeResetRuntimeLabel: (rawValue: string) => string;
 };
 
-const RUNTIME_MESSAGES: Record<ResolvedAppLocale, RuntimeMessages> = {
-  en: {
+const EN_RUNTIME_MESSAGES = {
     "app.loading.eyebrow": "Loading",
     "app.loading.title": "Preparing dashboard state",
     "app.loading.detail": "Initializing the dashboard store and message bus.",
@@ -322,7 +478,11 @@ const RUNTIME_MESSAGES: Record<ResolvedAppLocale, RuntimeMessages> = {
     "settings.permissions.detail": "In extension mode these actions use chrome.permissions. In browser preview mode they fall back to local state simulation.",
     "settings.toast.preferences_saved_title": "Preferences saved",
     "settings.toast.preferences_saved_detail": "Settings are now persisted in local dashboard state for the preview.",
-  },
+} satisfies RuntimeMessages;
+
+const RUNTIME_MESSAGE_OVERRIDES: Partial<
+  Record<ResolvedAppLocale, Partial<RuntimeMessages>>
+> = {
   "zh-CN": {
     "app.loading.eyebrow": "加载中",
     "app.loading.title": "正在准备仪表板状态",
@@ -470,10 +630,75 @@ const RUNTIME_MESSAGES: Record<ResolvedAppLocale, RuntimeMessages> = {
   },
 };
 
+export const RUNTIME_MESSAGES = Object.fromEntries(
+  SUPPORTED_APP_LOCALES.map((locale) => [
+    locale,
+    {
+      ...EN_RUNTIME_MESSAGES,
+      ...(RUNTIME_MESSAGE_OVERRIDES[locale] ?? {}),
+    },
+  ]),
+) as Record<ResolvedAppLocale, RuntimeMessages>;
+
+export function getRuntimeMessageCatalog(
+  locale: ResolvedAppLocale,
+): RuntimeMessages {
+  return RUNTIME_MESSAGES[locale];
+}
+
+function normalizeLanguageTag(language: string | null | undefined): string {
+  return typeof language === "string"
+    ? language.trim().replace(/_/g, "-").toLowerCase()
+    : "";
+}
+
+export function isResolvedAppLocale(value: unknown): value is ResolvedAppLocale {
+  return (
+    typeof value === "string" &&
+    SUPPORTED_APP_LOCALES.includes(value as ResolvedAppLocale)
+  );
+}
+
 function mapLanguageToLocale(language: string | null | undefined): ResolvedAppLocale {
-  return typeof language === "string" && language.toLowerCase().startsWith("zh")
-    ? "zh-CN"
-    : "en";
+  const normalizedLanguage = normalizeLanguageTag(language);
+
+  if (normalizedLanguage.length === 0) {
+    return "en";
+  }
+
+  if (
+    normalizedLanguage === "zh-tw" ||
+    normalizedLanguage === "zh-hk" ||
+    normalizedLanguage === "zh-mo" ||
+    normalizedLanguage.startsWith("zh-hant")
+  ) {
+    return "zh-TW";
+  }
+
+  if (normalizedLanguage === "zh" || normalizedLanguage.startsWith("zh-")) {
+    return "zh-CN";
+  }
+
+  if (normalizedLanguage === "pt" || normalizedLanguage.startsWith("pt-")) {
+    return "pt-BR";
+  }
+
+  if (normalizedLanguage === "es" || normalizedLanguage.startsWith("es-")) {
+    return "es-419";
+  }
+
+  for (const locale of SUPPORTED_APP_LOCALES) {
+    const normalizedLocale = normalizeLanguageTag(locale);
+
+    if (
+      normalizedLanguage === normalizedLocale ||
+      normalizedLanguage.startsWith(`${normalizedLocale}-`)
+    ) {
+      return locale;
+    }
+  }
+
+  return "en";
 }
 
 function readUiLanguage(reader?: LocaleReader): string | undefined {
@@ -588,9 +813,10 @@ function formatTemporalValue(
           timeStyle: "short" as const,
           timeZone: "UTC",
         };
-  const formattedValue = new Intl.DateTimeFormat(locale, options).format(
-    parsedValue.date,
-  );
+  const formattedValue = new Intl.DateTimeFormat(
+    APP_LOCALE_METADATA[locale].intlLocale,
+    options,
+  ).format(parsedValue.date);
 
   return parsedValue.utcExplicit ? `${formattedValue} UTC` : formattedValue;
 }
@@ -643,7 +869,9 @@ function formatDurationToken(
   locale: ResolvedAppLocale,
   duration: ParsedDurationToken,
 ): string {
-  const formattedNumber = new Intl.NumberFormat(locale).format(duration.value);
+  const formattedNumber = new Intl.NumberFormat(
+    APP_LOCALE_METADATA[locale].intlLocale,
+  ).format(duration.value);
 
   if (locale === "zh-CN") {
     const unitLabel =
@@ -678,7 +906,7 @@ function localizeRelativeRuntimeLabel(
 ): string {
   const normalizedValue = rawValue.trim();
 
-  if (normalizedValue.length === 0 || locale === "en") {
+  if (normalizedValue.length === 0 || locale !== "zh-CN") {
     return normalizedValue;
   }
 
@@ -743,7 +971,7 @@ function localizeResetRuntimeLabel(
 ): string {
   const normalizedValue = rawValue.trim();
 
-  if (normalizedValue.length === 0 || locale === "en") {
+  if (normalizedValue.length === 0 || locale !== "zh-CN") {
     return normalizedValue;
   }
 
@@ -775,15 +1003,33 @@ function localizeResetRuntimeLabel(
 }
 
 export function normalizeAppLocalePreference(value: unknown): AppLocalePreference {
-  return value === "system" || value === "en" || value === "zh-CN"
+  return value === "system" || isResolvedAppLocale(value)
     ? value
     : DEFAULT_APP_LOCALE_PREFERENCE;
+}
+
+function readLocaleOverride(reader?: LocaleReader): ResolvedAppLocale | null {
+  const search = reader?.location?.search;
+
+  if (typeof search !== "string" || search.length === 0) {
+    return null;
+  }
+
+  const appLocale = new URLSearchParams(search).get("app-locale");
+
+  return isResolvedAppLocale(appLocale) ? appLocale : null;
 }
 
 export function resolveAppLocale(
   localePreference: AppLocalePreference,
   reader?: LocaleReader,
 ): ResolvedAppLocale {
+  const localeOverride = readLocaleOverride(reader);
+
+  if (localeOverride) {
+    return localeOverride;
+  }
+
   const normalizedPreference = normalizeAppLocalePreference(localePreference);
 
   if (normalizedPreference !== "system") {
@@ -810,9 +1056,9 @@ function readDirectionOverride(
 }
 
 function mapLocaleToTextDirection(
-  _locale: ResolvedAppLocale,
+  locale: ResolvedAppLocale,
 ): ResolvedTextDirection {
-  return "ltr";
+  return APP_LOCALE_METADATA[locale].textDirection;
 }
 
 export function resolveAppTextDirection(
@@ -844,9 +1090,12 @@ export function createRuntimeI18n(
     resolvedLocale,
     resolvedTextDirection,
     t: (id) => RUNTIME_MESSAGES[resolvedLocale][id] ?? RUNTIME_MESSAGES.en[id],
-    formatNumber: (value) => new Intl.NumberFormat(resolvedLocale).format(value),
+    formatNumber: (value) =>
+      new Intl.NumberFormat(APP_LOCALE_METADATA[resolvedLocale].intlLocale).format(
+        value,
+      ),
     formatPercentValue: (value) =>
-      new Intl.NumberFormat(resolvedLocale, {
+      new Intl.NumberFormat(APP_LOCALE_METADATA[resolvedLocale].intlLocale, {
         style: "percent",
         maximumFractionDigits: 0,
       }).format(value / 100),
@@ -863,7 +1112,7 @@ export function syncRuntimeLocaleAttributes(
   root?: RuntimeLocaleAttributeTarget | null,
   body?: RuntimeLocaleAttributeTarget | null,
 ) {
-  const resolvedLang = i18n.resolvedLocale === "zh-CN" ? "zh-CN" : "en";
+  const resolvedLang = APP_LOCALE_METADATA[i18n.resolvedLocale].htmlLang;
 
   for (const target of [root, body]) {
     if (!target) {
@@ -895,6 +1144,63 @@ export function buildPopupSummaryLabels(i18n: RuntimeI18n) {
     liveReady: i18n.t("popup.summary.live_ready"),
     setupBlockers: i18n.t("popup.summary.setup_blockers"),
     policyOnly: i18n.t("popup.summary.policy_only"),
+  } as const;
+}
+
+export function buildRuntimeCommonCopy(i18n: RuntimeI18n) {
+  const zh = i18n.resolvedLocale === "zh-CN";
+
+  return {
+    remaining: zh ? "剩余" : "remaining",
+    reset: zh ? "重置" : "resets",
+    visibleUsageContext: zh ? "可见使用上下文" : "Visible usage context",
+    needsAttentionCount: zh ? "异常数量" : "Needs attention count",
+    syncIntervalMenuButton: zh
+      ? "展开默认同步间隔预设"
+      : "Show default sync interval presets",
+    warningThresholdMenuButton: zh
+      ? "展开告警阈值预设"
+      : "Show warning threshold presets",
+    quotaUnitLabel: (quotaUnit: string) => {
+      if (!zh) {
+        return quotaUnit;
+      }
+
+      switch (quotaUnit) {
+        case "credits":
+          return "积分";
+        case "requests":
+          return "请求";
+        case "sessions":
+          return "会话";
+        default:
+          return quotaUnit;
+      }
+    },
+    quotaUnitRemainingLabel: (quotaUnit: string) => {
+      if (!zh) {
+        return `${quotaUnit} remaining`;
+      }
+
+      switch (quotaUnit) {
+        case "credits":
+          return "积分剩余";
+        case "requests":
+          return "请求剩余";
+        case "sessions":
+          return "会话剩余";
+        default:
+          return "剩余";
+      }
+    },
+    syncIntervalRangeError: (min: number, max: number, unitLabel: string) =>
+      zh
+        ? `请输入 ${i18n.formatNumber(min)}-${i18n.formatNumber(max)} ${unitLabel}。`
+        : `Enter ${i18n.formatNumber(min)}-${i18n.formatNumber(max)} ${unitLabel}.`,
+    warningThresholdRangeError: (min: number, max: number) =>
+      zh
+        ? `请输入 ${i18n.formatNumber(min)}-${i18n.formatNumber(max)}%。`
+        : `Enter ${i18n.formatNumber(min)}-${i18n.formatNumber(max)}%.`,
   } as const;
 }
 

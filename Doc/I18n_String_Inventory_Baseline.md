@@ -1,6 +1,6 @@
 # I18n String Inventory Baseline
 
-Date: 2026-04-25
+Date: 2026-05-13
 
 Process rule:
 
@@ -21,7 +21,7 @@ Status note:
 
 ## Current Localized Scope
 
-Localized through `Phase 170`, `Phase 171`, `Phase 172`, `Phase 173`, `Phase 174`, `Phase 175`, `Phase 176`, `Phase 177`, `Phase 179`, `Phase 180`, `Phase 181`, `Phase 183`, `Phase 193`, `Phase 194`, and `Phase 195`.
+Localized through `Phase 170`, `Phase 171`, `Phase 172`, `Phase 173`, `Phase 174`, `Phase 175`, `Phase 176`, `Phase 177`, `Phase 179`, `Phase 180`, `Phase 181`, `Phase 183`, `Phase 193`, `Phase 194`, `Phase 195`, and the `Phase 367` 14-locale architecture/manifest/listing draft expansion.
 
 Compact diagnostic presentation QA shipped in `Phase 196`. Diagnostic archive/export compatibility review shipped in `Phase 197`. Sample/store seed diagnostic metadata alignment shipped in `Phase 198`. Diagnostic fixture and historical evidence alignment review shipped in `Phase 199`.
 
@@ -34,6 +34,7 @@ Localized runtime surfaces:
 - manifest `name`
 - manifest `description`
 - manifest `action.default_title`
+- locale registry metadata for 14 runtime locale tags, Chrome `_locales` directory names, native labels, Intl/html language tags, and text direction
 - popup loading and error shell
 - popup header shell and top summary labels
 - popup quick refresh plus full-page-tab action labels
@@ -99,8 +100,28 @@ These now ship through:
 - `src/manifest.json`
 - `public/_locales/en/messages.json`
 - `public/_locales/zh_CN/messages.json`
+- `public/_locales/zh_TW/messages.json`
+- `public/_locales/ja/messages.json`
+- `public/_locales/ko/messages.json`
+- `public/_locales/es_419/messages.json`
+- `public/_locales/pt_BR/messages.json`
+- `public/_locales/fr/messages.json`
+- `public/_locales/de/messages.json`
+- `public/_locales/it/messages.json`
+- `public/_locales/ru/messages.json`
+- `public/_locales/ar/messages.json`
+- `public/_locales/hi/messages.json`
+- `public/_locales/id/messages.json`
 - `src/shared/i18n.ts`
 - `src/shared/localized-copy.ts`
+- `Doc/Store_Listing_Localization_14_Locale_Draft.md`
+
+Phase 367 note:
+
+- runtime catalog key coverage now exists for `en`, `zh-CN`, `zh-TW`, `ja`, `ko`, `es-419`, `pt-BR`, `fr`, `de`, `it`, `ru`, `ar`, `hi`, and `id`
+- only `zh-CN` has broad reviewed non-English runtime copy in the current source; other non-English runtime locales may fall back to English copy until a future translation-review slice replaces those strings
+- Chrome manifest strings and Chrome Web Store listing draft copy have 14-locale coverage
+- `npm run i18n:check` guards manifest catalog completeness across the 14 Chrome locale directories
 
 ## Store Runtime Helper Boundary
 
@@ -167,6 +188,7 @@ That reference defines the additive typed diagnostic model that should exist bef
 The following surfaces still need broader runtime localization work:
 
 - raw provider source-truth detail strings that still intentionally surface current contract or vendor wording without translation
+- non-`zh-CN` deep runtime structured copy that currently falls back to English until reviewed translations are added
 - deeper interaction-audit evidence, preset, queue, import, and export payload copy
 - deeper theme-recovery evidence summary and provider source-truth copy
 
@@ -181,9 +203,10 @@ Recommended next extraction order:
 ## Truth Boundary
 
 - the extension is no longer manifest-English-only after `Phase 170`
-- the runtime app now has a broader but still partial localized slice plus locale-aware formatting after `Phase 183`, not a full translated rollout
+- the runtime app now has a broader but still partial localized slice plus locale-aware formatting after `Phase 183`, and a 14-locale runtime/manifest architecture after `Phase 367`; this is not yet a fully reviewed translated rollout for every runtime string
 - `en` and `zh_CN` currently cover manifest surfaces plus popup/dashboard shell strings, popup explanatory copy, the first settings-shell slice, deeper settings helper copy, provider-detail shell/static copy, provider-source display wrappers, quick theme-toggle labels, generated counts, percentages, parseable timestamp primitives, duration-bearing runtime freshness/reset labels, operator-workspace shell copy, store-screenshot runtime helper copy plus seed-route submission-support captions, and one first compact-width plus RTL hardening pass
-- runtime document roots now sync `lang` and `dir`, and preview/QA can now force `?app-dir=rtl` while the shipped locale set still resolves to `ltr`
+- `zh_TW`, `ja`, `ko`, `es_419`, `pt_BR`, `fr`, `de`, `it`, `ru`, `ar`, `hi`, and `id` currently cover Chrome manifest surfaces and Chrome Web Store listing drafts, while deeper runtime copy falls back to English where translation review has not occurred
+- runtime document roots now sync `lang` and `dir`, `ar` resolves to `rtl`, and preview/QA can still force `?app-dir=rtl` plus `?app-locale=<supported-locale>` for extension-window checks
 - raw provider source-truth detail strings and deeper operator evidence payloads still remain outside the shipped pilot, but operator-workspace boundaries are now explicitly documented after `Phase 178` and the shell slice is shipped after `Phase 179`
 - provider source-truth values now have an explicit policy boundary after `Phase 182`, provider-source display wrappers are localized after `Phase 183`, typed adapter diagnostic planning is documented after `Phase 184`, the type-only additive model exists after `Phase 185`, Cursor source-selection/fallback diagnostics are populated after `Phase 186`, Codex source-selection/fallback diagnostics are populated after `Phase 187`, Cursor/Codex credential plus host-access diagnostics are populated after `Phase 188`, Cursor/Codex page-session diagnostics are populated after `Phase 189`, usage-threshold plus policy-only diagnostics are populated after `Phase 190`, sync-stale diagnostics are populated after `Phase 191`, source-state classification prefers typed warning diagnostics after `Phase 192`, localized warning diagnostic presentation ships after `Phase 193`, localized source diagnostic presentation ships after `Phase 194`, adapter-error diagnostic presentation ships after `Phase 195`, compact diagnostic presentation QA ships after `Phase 196`, archive/export compatibility review ships after `Phase 197`, sample/store seed diagnostic metadata alignment ships after `Phase 198`, and diagnostic fixture/historical evidence alignment review ships after `Phase 199`; adapter diagnostic raw fallback regression review remains the next safe diagnostic work, but `Phase 200` shifted short-term execution to functional Codex personal quota surfacing
 - non-parseable vendor-owned window labels such as `Mar 23 - Apr 21` still remain raw strings until a later explicit product decision localizes them

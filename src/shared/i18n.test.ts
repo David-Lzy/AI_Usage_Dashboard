@@ -9,8 +9,11 @@ import {
 } from "../providers/diagnostics";
 import type { ProviderDiagnostic } from "../providers/types";
 import {
+  APP_LOCALE_METADATA,
+  SUPPORTED_APP_LOCALES,
   buildSettingsSummaryLabels,
   createRuntimeI18n,
+  getRuntimeMessageCatalog,
   getQuickThemeToggleCopy,
   normalizeAppLocalePreference,
   resolveAppLocale,
@@ -29,30 +32,60 @@ import {
 
 describe("runtime i18n", () => {
   it("normalizes unknown locale preferences back to system", () => {
-    expect(normalizeAppLocalePreference("fr")).toBe("system");
+    expect(normalizeAppLocalePreference("xx")).toBe("system");
     expect(normalizeAppLocalePreference("zh-CN")).toBe("zh-CN");
   });
 
-  it("resolves system locale to zh-CN when the browser locale is Chinese", () => {
-    expect(
-      resolveAppLocale("system", {
-        navigator: { language: "zh-TW" },
-      }),
-    ).toBe("zh-CN");
+  it("accepts every shipped explicit locale preference", () => {
+    for (const locale of SUPPORTED_APP_LOCALES) {
+      expect(normalizeAppLocalePreference(locale)).toBe(locale);
+    }
   });
 
-  it("defaults runtime text direction to ltr for shipped locales and honors preview overrides", () => {
-    expect(resolveAppTextDirection("zh-CN")).toBe("ltr");
+  it("resolves system browser languages to shipped locale tags", () => {
+    expect(resolveAppLocale("system", { navigator: { language: "zh-CN" } })).toBe(
+      "zh-CN",
+    );
+    expect(resolveAppLocale("system", { navigator: { language: "zh-TW" } })).toBe(
+      "zh-TW",
+    );
+    expect(resolveAppLocale("system", { navigator: { language: "pt-BR" } })).toBe(
+      "pt-BR",
+    );
+    expect(resolveAppLocale("system", { navigator: { language: "es-MX" } })).toBe(
+      "es-419",
+    );
+    expect(resolveAppLocale("system", { navigator: { language: "ar" } })).toBe(
+      "ar",
+    );
+    expect(resolveAppLocale("system", { navigator: { language: "ja-JP" } })).toBe(
+      "ja",
+    );
+  });
+
+  it("resolves text direction from locale metadata and honors preview overrides", () => {
+    expect(resolveAppTextDirection("ar")).toBe("rtl");
+    for (const locale of SUPPORTED_APP_LOCALES.filter((locale) => locale !== "ar")) {
+      expect(resolveAppTextDirection(locale)).toBe("ltr");
+    }
     expect(
       createRuntimeI18n("en", { location: { search: "?app-dir=rtl" } })
         .resolvedTextDirection,
     ).toBe("rtl");
   });
 
-  it("syncs runtime lang and dir attributes onto document roots", () => {
-    const i18n = createRuntimeI18n("zh-CN", {
-      location: { search: "?app-dir=rtl" },
+  it("honors explicit locale preview overrides without changing the saved preference", () => {
+    const i18n = createRuntimeI18n("en", {
+      location: { search: "?surface=full-page&app-locale=ar" },
     });
+
+    expect(i18n.localePreference).toBe("en");
+    expect(i18n.resolvedLocale).toBe("ar");
+    expect(i18n.resolvedTextDirection).toBe("rtl");
+  });
+
+  it("syncs runtime lang and dir attributes onto document roots", () => {
+    const i18n = createRuntimeI18n("ar");
     const root = {
       lang: "",
       dir: "",
@@ -67,15 +100,27 @@ describe("runtime i18n", () => {
     syncRuntimeLocaleAttributes(i18n, root, body);
 
     expect(root).toMatchObject({
-      lang: "zh-CN",
+      lang: "ar",
       dir: "rtl",
-      dataset: { appLocale: "zh-CN", appDirection: "rtl" },
+      dataset: { appLocale: "ar", appDirection: "rtl" },
     });
     expect(body).toMatchObject({
-      lang: "zh-CN",
+      lang: "ar",
       dir: "rtl",
-      dataset: { appLocale: "zh-CN", appDirection: "rtl" },
+      dataset: { appLocale: "ar", appDirection: "rtl" },
     });
+  });
+
+  it("ships complete runtime catalogs for every supported locale", () => {
+    const englishKeys = Object.keys(getRuntimeMessageCatalog("en")).sort();
+
+    expect(SUPPORTED_APP_LOCALES).toHaveLength(14);
+    for (const locale of SUPPORTED_APP_LOCALES) {
+      expect(APP_LOCALE_METADATA[locale].locale).toBe(locale);
+      expect(Object.keys(getRuntimeMessageCatalog(locale)).sort()).toEqual(
+        englishKeys,
+      );
+    }
   });
 
   it("returns translated runtime strings for the first zh-CN shell slice", () => {

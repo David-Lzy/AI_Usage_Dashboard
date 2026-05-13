@@ -1,6 +1,6 @@
 # I18n Message ID Contract
 
-Date: 2026-04-25
+Date: 2026-05-13
 
 Process rule:
 
@@ -44,7 +44,7 @@ Keep manifest and runtime localization on one stable naming contract so later co
 - `manifest_action_default_title`
   - maps to manifest `action.default_title`
 
-## Shipped Runtime IDs Through Phase 181
+## Shipped Runtime IDs Through Phase 367
 
 Runtime localization now exists for one broader but still partial manifest plus runtime pilot slice. Current shipped groups are:
 
@@ -128,7 +128,7 @@ Instead, these localized surfaces now ship through shared structured builders in
   - short adapter diagnostic summaries generated from typed params
   - raw adapter warning bodies kept outside translated message ids
 
-This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still making the broader `en + zh-CN` pilot executable.
+This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still making the broader `en + zh-CN` reviewed pilot executable. `Phase 367` expands the runtime catalog shape to 14 locales with English fallback for non-reviewed runtime copy, so key completeness is now enforced separately from translation-review completeness.
 
 ## Locale Preference Contract
 
@@ -137,14 +137,31 @@ This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still maki
   - `system`
   - `en`
   - `zh-CN`
+  - `zh-TW`
+  - `ja`
+  - `ko`
+  - `es-419`
+  - `pt-BR`
+  - `fr`
+  - `de`
+  - `it`
+  - `ru`
+  - `ar`
+  - `hi`
+  - `id`
 - `system` resolves from Chrome UI language first, then browser navigator language
-- any current `zh*` UI language resolves into the shipped `zh-CN` catalog tier for now
+- `zh-TW`, `zh-HK`, `zh-MO`, and `zh-Hant*` resolve to `zh-TW`; other `zh*` values resolve to `zh-CN`
+- `pt*` resolves to `pt-BR`
+- `es*` resolves to `es-419`
+- other supported language prefixes resolve to their matching shipped locale, with unknown values falling back to `en`
 - runtime document roots now sync `lang` and `dir` from the shared runtime i18n layer
-- preview and QA can now force `?app-dir=rtl` or `?app-dir=ltr` without implying that a shipped RTL locale already exists
+- `ar` resolves to `rtl`; all other shipped locales resolve to `ltr`
+- preview and QA can still force `?app-dir=rtl` or `?app-dir=ltr`, and `Phase 367` adds `?app-locale=<supported-locale>` for extension-window visual checks without mutating saved settings
 
 ## Runtime Direction
 
 - runtime React localization is now partially shipped, not fully rolled out
+- runtime locale architecture now covers 14 locales, but only `zh-CN` has broad reviewed non-English runtime copy; other non-English locales currently rely on English fallback for deeper runtime copy until a translation-review phase replaces those entries
 - runtime document roots now sync `lang` and `dir` for popup, sidepanel, and full-page surfaces
 - the current localized slice covers:
   - popup shell
@@ -160,6 +177,7 @@ This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still maki
 - raw provider source-truth detail strings and deeper operator evidence/export payload copy still remain outside the shipped localized slice
 - vendor-owned provider-page text stays outside the managed localization catalog
 - locale-aware formatting also stays outside raw message ids so generated values can be formatted per locale without multiplying message ids
+- Chrome manifest message ids are guarded by `npm run i18n:check` across `en`, `zh_CN`, `zh_TW`, `ja`, `ko`, `es_419`, `pt_BR`, `fr`, `de`, `it`, `ru`, `ar`, `hi`, and `id`
 - operator workspace copy remains governed by [I18n_Operator_Workspace_Boundary_And_Extraction.md](./I18n_Operator_Workspace_Boundary_And_Extraction.md); `Phase 179` localizes shell/navigation/helper copy while preserving English evidence payloads
 - store-screenshot helper copy remains governed by [I18n_Store_Runtime_Helper_Copy.md](./I18n_Store_Runtime_Helper_Copy.md); `Phase 180` localizes visible helper copy and `Phase 181` adds helper-only submission-support captions while preserving automation titles, preset ids, route hashes, final screenshot surfaces, and the manual native-toolbar popup capture truth boundary
 - raw provider source-truth copy remains governed by [I18n_Raw_Provider_Source_Truth_Policy.md](./I18n_Raw_Provider_Source_Truth_Policy.md); `Phase 182` separates protected raw fields from provider-source display wrappers, and `Phase 183` localizes those wrappers through `ProviderSourceDisplayCopy` plus `buildProviderSourceDisplayLocalizedCopy` while preserving raw adapter evidence fields
@@ -189,6 +207,22 @@ This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still maki
 
 - baseline locale:
   - `en`
-- first pilot locale:
-  - `zh_CN`
-- later planned tiers remain governed by [Direction 09](./Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
+- reviewed runtime pilot locale:
+  - `zh-CN`
+- shipped architecture and manifest locale set:
+  - `en`
+  - `zh-CN`
+  - `zh-TW`
+  - `ja`
+  - `ko`
+  - `es-419`
+  - `pt-BR`
+  - `fr`
+  - `de`
+  - `it`
+  - `ru`
+  - `ar`
+  - `hi`
+  - `id`
+- Chrome `_locales` directory names use Chrome format such as `zh_CN`, `zh_TW`, `es_419`, and `pt_BR`; runtime locale tags use BCP-style tags such as `zh-CN`, `zh-TW`, `es-419`, and `pt-BR`
+- translation review and RDP visual QA remain governed by [Direction 09](./Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)

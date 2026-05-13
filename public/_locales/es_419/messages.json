@@ -1,0 +1,14 @@
+{
+  "manifest_ext_name": {
+    "message": "Panel de uso de AI",
+    "description": "Nombre de la extensión que se muestra en Chrome y Chrome Web Store."
+  },
+  "manifest_ext_description": {
+    "message": "Controla el uso, los bloqueos de configuración y el estado de sincronización de herramientas de codificación con AI.",
+    "description": "Descripción breve que aparece en listados de extensiones y en la administración de extensiones de Chrome."
+  },
+  "manifest_action_default_title": {
+    "message": "Panel de uso de AI",
+    "description": "Título predeterminado mostrado para la acción de la barra de herramientas y el disparador del popup."
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "manifest_ext_name": {
+    "message": "لوحة استخدام AI",
+    "description": "اسم الإضافة المعروض في واجهات Chrome وChrome Web Store."
+  },
+  "manifest_ext_description": {
+    "message": "تتبّع الاستخدام وعوائق الإعداد وحالة المزامنة عبر أدوات البرمجة بالذكاء الاصطناعي.",
+    "description": "وصف قصير يظهر في قوائم الإضافات وواجهات إدارة إضافات Chrome."
+  },
+  "manifest_action_default_title": {
+    "message": "لوحة استخدام AI",
+    "description": "العنوان الافتراضي المعروض لإجراء شريط الأدوات ومشغّل popup."
+  }
+}

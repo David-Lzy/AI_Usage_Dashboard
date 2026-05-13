@@ -1,0 +1,14 @@
+{
+  "manifest_ext_name": {
+    "message": "AI 사용량 대시보드",
+    "description": "Chrome 화면과 Chrome Web Store에 표시되는 확장 프로그램 이름입니다."
+  },
+  "manifest_ext_description": {
+    "message": "AI 코딩 도구의 사용량, 설정 차단 요소, 동기화 상태를 추적합니다.",
+    "description": "확장 프로그램 목록과 Chrome 확장 프로그램 관리 화면에 표시되는 짧은 설명입니다."
+  },
+  "manifest_action_default_title": {
+    "message": "AI 사용량 대시보드",
+    "description": "도구 모음 작업과 popup 트리거에 표시되는 기본 제목입니다."
+  }
+}

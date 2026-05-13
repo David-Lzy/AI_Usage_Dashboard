@@ -11,6 +11,7 @@ function parseArgs(argv) {
   const options = {
     route: "",
     output: "",
+    locale: "",
   };
 
   for (let index = 0; index < argv.length; index += 1) {
@@ -25,6 +26,12 @@ function parseArgs(argv) {
     if (arg === "--output") {
       options.output = argv[index + 1] ?? "";
       index += 1;
+      continue;
+    }
+
+    if (arg === "--locale") {
+      options.locale = argv[index + 1] ?? "";
+      index += 1;
     }
   }
 
@@ -35,6 +42,18 @@ function assert(condition, message) {
   if (!condition) {
     throw new Error(message);
   }
+}
+
+function appendLocaleOverride(routePath, locale) {
+  if (locale.length === 0) {
+    return routePath;
+  }
+
+  const [pathAndSearch, hash = ""] = routePath.split("#", 2);
+  const separator = pathAndSearch.includes("?") ? "&" : "?";
+  const nextPathAndSearch = `${pathAndSearch}${separator}app-locale=${encodeURIComponent(locale)}`;
+
+  return hash.length > 0 ? `${nextPathAndSearch}#${hash}` : nextPathAndSearch;
 }
 
 async function run() {
@@ -49,7 +68,7 @@ async function run() {
 
   const result = await captureRdpExtensionWindow({
     projectRoot: process.cwd(),
-    routePath: routeConfig.routePath,
+    routePath: appendLocaleOverride(routeConfig.routePath, options.locale),
     expectedTitle: routeConfig.expectedTitle,
     width: routeConfig.width,
     height: routeConfig.height,

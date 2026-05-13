@@ -1,0 +1,14 @@
+{
+  "manifest_ext_name": {
+    "message": "Tableau de bord d’utilisation AI",
+    "description": "Nom de l’extension affiché dans Chrome et dans le Chrome Web Store."
+  },
+  "manifest_ext_description": {
+    "message": "Suivez l’utilisation, les blocages de configuration et l’état de synchronisation des outils de codage AI.",
+    "description": "Description courte affichée dans les listes d’extensions et les surfaces de gestion des extensions Chrome."
+  },
+  "manifest_action_default_title": {
+    "message": "Tableau de bord d’utilisation AI",
+    "description": "Titre par défaut affiché pour l’action de barre d’outils et le déclencheur du popup."
+  }
+}

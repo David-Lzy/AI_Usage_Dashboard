@@ -1,0 +1,14 @@
+{
+  "manifest_ext_name": {
+    "message": "AI उपयोग डैशबोर्ड",
+    "description": "Chrome सतहों और Chrome Web Store में दिखाया जाने वाला एक्सटेंशन नाम।"
+  },
+  "manifest_ext_description": {
+    "message": "AI कोडिंग टूल्स में उपयोग, सेटअप अवरोधों और सिंक स्वास्थ्य को ट्रैक करें।",
+    "description": "एक्सटेंशन सूचियों और Chrome एक्सटेंशन प्रबंधन सतहों में दिखाया जाने वाला छोटा विवरण।"
+  },
+  "manifest_action_default_title": {
+    "message": "AI उपयोग डैशबोर्ड",
+    "description": "टूलबार action और popup ट्रिगर के लिए दिखाया जाने वाला डिफ़ॉल्ट शीर्षक।"
+  }
+}

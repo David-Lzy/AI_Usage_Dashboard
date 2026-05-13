@@ -1,5 +1,6 @@
 import type { ProviderTone } from "../providers/types";
 import type { RuntimeI18n } from "../shared/i18n";
+import { buildRuntimeCommonCopy } from "../shared/i18n";
 import type { buildPopupLocalizedCopy } from "../shared/localized-copy";
 import type { ProviderViewModel } from "../sidepanel/view-models";
 import type {
@@ -72,7 +73,9 @@ function formatPopupUsageWindowDetail(
       : i18n
         ? i18n.formatPercentValue(window.remaining)
         : `${window.remaining}%`;
-  const remainingLabel = i18n?.resolvedLocale === "zh-CN" ? "剩余" : "remaining";
+  const remainingLabel = i18n
+    ? buildRuntimeCommonCopy(i18n).remaining
+    : "remaining";
 
   return remaining
     ? `${window.normalizedLabel}: ${remaining} ${remainingLabel}`
@@ -89,7 +92,9 @@ function formatPopupUsageBalanceDetail(
       : i18n
         ? i18n.formatNumber(balance.remaining)
         : String(balance.remaining);
-  const unitLabel = i18n?.resolvedLocale === "zh-CN" ? "积分" : balance.quotaUnit;
+  const unitLabel = i18n
+    ? buildRuntimeCommonCopy(i18n).quotaUnitLabel(balance.quotaUnit)
+    : balance.quotaUnit;
 
   return remaining
     ? `${balance.normalizedLabel}: ${remaining} ${unitLabel}`
@@ -150,7 +155,9 @@ function buildPopupUsageProgressCircles(
   provider: ProviderViewModel,
   i18n?: RuntimeI18n,
 ): PopupUsageProgressCircle[] {
-  const remainingLabel = i18n?.resolvedLocale === "zh-CN" ? "剩余" : "remaining";
+  const remainingLabel = i18n
+    ? buildRuntimeCommonCopy(i18n).remaining
+    : "remaining";
 
   return (provider.usageWindows ?? [])
     .filter((window) => window.remaining !== null)

@@ -1,0 +1,14 @@
+{
+  "manifest_ext_name": {
+    "message": "Dasbor penggunaan AI",
+    "description": "Nama ekstensi yang ditampilkan di permukaan Chrome dan Chrome Web Store."
+  },
+  "manifest_ext_description": {
+    "message": "Lacak penggunaan, hambatan penyiapan, dan kesehatan sinkronisasi di alat coding AI.",
+    "description": "Deskripsi singkat yang ditampilkan di daftar ekstensi dan permukaan pengelolaan ekstensi Chrome."
+  },
+  "manifest_action_default_title": {
+    "message": "Dasbor penggunaan AI",
+    "description": "Judul default yang ditampilkan untuk tindakan toolbar dan pemicu popup."
+  }
+}

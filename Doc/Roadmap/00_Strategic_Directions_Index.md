@@ -1,6 +1,6 @@
 # Strategic Directions Index
 
-Date: 2026-05-12
+Date: 2026-05-13
 
 Process rule:
 
@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is now completed through `Phase 366`, with no active phase or queued numbered phase currently selected
+- the numbered phase queue is now completed through `Phase 367`, with no active phase or queued numbered phase currently selected
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -82,6 +82,7 @@ As of 2026-05-13:
 - `Phase 197` completed the next `Direction 09` slice by adding diagnostic archive/export compatibility review, including one maintained reference and one static gate proving localized diagnostic presentation remains separate from raw evidence schemas
 - `Phase 198` completed the next `Direction 09` slice by aligning maintained sample and store seed typed diagnostic metadata where stable existing codes match raw evidence strings
 - `Phase 199` completed the next `Direction 09` slice by adding diagnostic fixture and historical evidence alignment review, separating mutable maintained fixtures from generated request/handoff packages and frozen historical archives
+- `Phase 367` reopened `Direction 09` for a source-only 14-locale expansion: runtime locale registry, Settings locale options, Chrome manifest `_locales` catalogs, i18n completeness checking, and a guarded Chrome Web Store listing localization draft now cover `en`, `zh-CN`, `zh-TW`, `ja`, `ko`, `es-419`, `pt-BR`, `fr`, `de`, `it`, `ru`, `ar`, `hi`, and `id`
 - `Phase 200` completed a functionality-first Codex personal slice by preserving multiple visible usage windows, expanding Codex page-capture snippets, and surfacing the most constrained visible percentage window across dashboard, provider detail, and popup paths
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without changing the primary percentage-window quota model
 - `Phase 202` completed repeatable unpacked-extension verification for Codex personal multi-window plus flex-balance context, while fixing DOM capture so repeated percentages and single-character balance values are not lost before parsing
@@ -489,7 +490,7 @@ As of 2026-05-13:
 
 2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second among the new requests:
-   the project now has a narrow manifest plus popup/dashboard shell localization baseline, but the safe next move is still formatting plus pilot-hardening before promising a full ten-language rollout.
+   the project now has a 14-locale registry, manifest catalog set, and store listing draft, but broad runtime copy still needs reviewed translations and RDP visual QA before it should be treated as fully localized product surface.
 
 3. [Direction 08 - Documentation Completion And Truth Audit](./08_Direction_Documentation_Completion_And_Truth_Audit.md)
    Why third among the new requests:

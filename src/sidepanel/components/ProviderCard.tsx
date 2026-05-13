@@ -3,7 +3,7 @@ import type {
   ProgressDisplayStyle,
   ProviderId,
 } from "../../providers/types";
-import { createRuntimeI18n } from "../../shared/i18n";
+import { buildRuntimeCommonCopy, createRuntimeI18n } from "../../shared/i18n";
 import { shouldShowSingleUsageProgress } from "../usage-progress-visibility";
 import type { ProviderViewModel } from "../view-models";
 import { StatusBadge } from "./StatusBadge";
@@ -29,7 +29,9 @@ function formatUsageBalanceChip(
 ): string {
   const remaining =
     balance.remaining === null ? null : i18n.formatNumber(balance.remaining);
-  const unitLabel = i18n.resolvedLocale === "zh-CN" ? "积分" : balance.quotaUnit;
+  const unitLabel = buildRuntimeCommonCopy(i18n).quotaUnitLabel(
+    balance.quotaUnit,
+  );
 
   return remaining
     ? `${balance.normalizedLabel}: ${remaining} ${unitLabel}`
@@ -67,7 +69,7 @@ export function ProviderCard({
     provider.lastSyncLabel,
   );
   const visibleUsageContextLabel =
-    i18n.resolvedLocale === "zh-CN" ? "可见使用上下文" : "Visible usage context";
+    buildRuntimeCommonCopy(i18n).visibleUsageContext;
   const fidelityChipClassName =
     provider.currentSourceFidelityTone === "error"
       ? "meta-chip meta-chip--error"

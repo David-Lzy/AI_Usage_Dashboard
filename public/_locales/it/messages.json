@@ -1,0 +1,14 @@
+{
+  "manifest_ext_name": {
+    "message": "Dashboard utilizzo AI",
+    "description": "Nome dell’estensione mostrato nelle superfici di Chrome e nel Chrome Web Store."
+  },
+  "manifest_ext_description": {
+    "message": "Monitora utilizzo, blocchi di configurazione e stato di sincronizzazione degli strumenti di coding AI.",
+    "description": "Descrizione breve mostrata negli elenchi delle estensioni e nelle superfici di gestione delle estensioni di Chrome."
+  },
+  "manifest_action_default_title": {
+    "message": "Dashboard utilizzo AI",
+    "description": "Titolo predefinito mostrato per l’azione nella barra degli strumenti e il trigger del popup."
+  }
+}

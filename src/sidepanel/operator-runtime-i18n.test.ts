@@ -16,7 +16,7 @@ describe("createDefaultOperatorRuntimeI18n", () => {
     });
 
     expect(i18n.localePreference).toBe("system");
-    expect(i18n.resolvedLocale).toBe("zh-CN");
+    expect(i18n.resolvedLocale).toBe("zh-TW");
     expect(i18n.resolvedTextDirection).toBe("rtl");
   });
 });

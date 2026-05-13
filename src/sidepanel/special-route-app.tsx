@@ -6,6 +6,7 @@ import { APP_STATE_STORAGE_KEY } from "../shared/constants";
 import {
   createRuntimeI18n,
   DEFAULT_APP_LOCALE_PREFERENCE,
+  normalizeAppLocalePreference,
   syncRuntimeLocaleAttributes,
 } from "../shared/i18n";
 import {
@@ -74,9 +75,7 @@ function readLocalePreferenceFromStoredAppState(
   const locale = (value as { settings?: Partial<AppSettings> | null }).settings
     ?.locale;
 
-  return locale === "system" || locale === "en" || locale === "zh-CN"
-    ? locale
-    : DEFAULT_APP_LOCALE_PREFERENCE;
+  return normalizeAppLocalePreference(locale);
 }
 
 function parseStoredThemeSettings(rawValue: string | null): ThemeSettings {

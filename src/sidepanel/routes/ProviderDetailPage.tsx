@@ -3,7 +3,7 @@ import type {
   ProgressDisplayStyle,
   ProviderId,
 } from "../../providers/types";
-import { createRuntimeI18n } from "../../shared/i18n";
+import { buildRuntimeCommonCopy, createRuntimeI18n } from "../../shared/i18n";
 import {
   buildProviderDetailLocalizedCopy,
   getProviderDiagnosticPresentation,
@@ -24,8 +24,9 @@ function formatUsageBalanceDetail(
 ): string {
   const remaining =
     balance.remaining === null ? null : i18n.formatNumber(balance.remaining);
-  const unitLabel = i18n.resolvedLocale === "zh-CN" ? "积分" : balance.quotaUnit;
-  const remainingLabel = i18n.resolvedLocale === "zh-CN" ? "剩余" : "remaining";
+  const commonCopy = buildRuntimeCommonCopy(i18n);
+  const unitLabel = commonCopy.quotaUnitLabel(balance.quotaUnit);
+  const remainingLabel = commonCopy.remaining;
   const balanceValue = remaining
     ? `${remaining} ${unitLabel} ${remainingLabel}`
     : null;
@@ -70,7 +71,7 @@ export function ProviderDetailPage({
   );
   const copy = buildProviderDetailLocalizedCopy(i18n);
   const visibleUsageContextLabel =
-    i18n.resolvedLocale === "zh-CN" ? "可见使用上下文" : "Visible usage context";
+    buildRuntimeCommonCopy(i18n).visibleUsageContext;
   const showSessionPageContract =
     provider.sessionPageContractLabel !== null &&
     (provider.sessionPageContractLabel !== provider.currentSourceContractLabel ||

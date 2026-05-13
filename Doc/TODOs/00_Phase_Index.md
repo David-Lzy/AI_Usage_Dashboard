@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [366_Phase_First_Run_Quick_Setup_Onboarding_Focus.md](./Archive/366_Phase_First_Run_Quick_Setup_Onboarding_Focus.md)
+- latest completed slice: [367_Phase_14_Language_Localization_Expansion.md](./Archive/367_Phase_14_Language_Localization_Expansion.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -756,6 +756,7 @@ Completed phases should be moved to:
 - the 2026-05-13 `Phase 364` closeout bumped the package to `0.1.0-rc.15`, bumped the manifest to `0.1.0.15`, generated `release/ai-usage-dashboard-0.1.0-rc.15.zip`, and recorded SHA256 `5ad5b0771c9a33dc6d04d90c02d1c963f04b072a525c4769ee8c36ac783c9e5a` in the new maintenance follow-up milestone while preserving RC13 as the submitted Chrome Web Store review boundary
 - the 2026-05-13 `Phase 365` closeout added a focused provider source host-permission guard so source route hints, Settings host origins, and manifest optional host permissions stay aligned without expanding runtime permissions or changing provider support claims
 - the 2026-05-13 `Phase 366` closeout verified RDP Chrome extension-mode screenshots, added a dashboard empty-state Quick Setup action, and made hidden-provider Quick Setup deep links fall back to the Quick Setup section
+- the 2026-05-13 `Phase 367` closeout expanded locale architecture to 14 runtime locale tags, generated Settings locale options from one registry, added 14 Chrome manifest catalogs, added a guarded 14-locale Chrome Web Store listing draft, and introduced manifest i18n completeness checking without changing release/package boundaries
 
 ## Delivery Standard For Each Phase
 

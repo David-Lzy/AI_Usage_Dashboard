@@ -1,5 +1,6 @@
 import type { ProgressDisplayStyle } from "../../providers/types";
 import type { RuntimeI18n } from "../../shared/i18n";
+import { buildRuntimeCommonCopy } from "../../shared/i18n";
 import type { ProviderViewModel } from "../view-models";
 import { UsageProgress } from "./UsageProgress";
 
@@ -41,7 +42,7 @@ function formatRemainingValue(
     return i18n.formatPercentValue(window.remaining);
   }
 
-  const remainingLabel = i18n.resolvedLocale === "zh-CN" ? "剩余" : "remaining";
+  const remainingLabel = buildRuntimeCommonCopy(i18n).remaining;
   return `${i18n.formatPercentValue(window.remaining)} ${remainingLabel}`;
 }
 
@@ -53,7 +54,7 @@ function formatRemainingText(
     return undefined;
   }
 
-  const remainingLabel = i18n.resolvedLocale === "zh-CN" ? "剩余" : "remaining";
+  const remainingLabel = buildRuntimeCommonCopy(i18n).remaining;
   return `${window.normalizedLabel}: ${i18n.formatPercentValue(window.remaining)} ${remainingLabel}`;
 }
 
@@ -64,7 +65,7 @@ function formatWindowResetDetail(
   const resetAt = window.resetAt
     ? (i18n.formatTemporalValue(window.resetAt) ?? window.resetAt)
     : null;
-  const resetLabel = i18n.resolvedLocale === "zh-CN" ? "重置" : "resets";
+  const resetLabel = buildRuntimeCommonCopy(i18n).reset;
 
   if (resetAt) {
     return `${resetLabel} ${resetAt}`;

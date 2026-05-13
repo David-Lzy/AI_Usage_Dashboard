@@ -1,6 +1,6 @@
 # Direction 09 - Internationalization Bootstrap And Pilot Locales
 
-Date: 2026-04-25
+Date: 2026-05-13
 
 Document class:
 
@@ -43,6 +43,7 @@ Execution note:
 - twenty-eighth executable slice landed on `2026-04-25` through `Phase 197`
 - twenty-ninth executable slice landed on `2026-04-25` through `Phase 198`
 - thirtieth executable slice landed on `2026-04-25` through `Phase 199`
+- thirty-first executable slice landed on `2026-05-13` through `Phase 367`
 - `Phase 200` and `Phase 201` intentionally paused this i18n/diagnostic follow-up line for functionality-first Codex personal usage-context surfacing while Codex budget is constrained
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
@@ -74,13 +75,17 @@ It is:
 
 ## Current Truth
 
-As of 2026-04-25:
+As of 2026-05-13:
 
 - the manifest defines `default_locale = en`
-- the repo ships `_locales/en` plus `_locales/zh_CN` for manifest-level Chrome surfaces
+- the repo ships manifest-level Chrome catalogs for 14 locale directories: `en`, `zh_CN`, `zh_TW`, `ja`, `ko`, `es_419`, `pt_BR`, `fr`, `de`, `it`, `ru`, `ar`, `hi`, and `id`
 - the runtime app now ships one shared localization helper in `src/shared/i18n.ts`
+- the runtime app now ships a 14-locale registry with runtime locale tags, Chrome locale directory names, native labels, Intl/html language tags, and text direction metadata
 - the runtime app now also ships one shared structured-copy helper in `src/shared/localized-copy.ts`
-- locale preference now persists in `AppSettings.locale` with current values `system | en | zh-CN`
+- locale preference now persists in `AppSettings.locale` with current values `system | en | zh-CN | zh-TW | ja | ko | es-419 | pt-BR | fr | de | it | ru | ar | hi | id`
+- Settings language options are generated from the registry instead of hard-coded `en / zh-CN` entries
+- `ar` resolves to `rtl`; all other shipped runtime locales resolve to `ltr`
+- the new non-reviewed runtime locales use complete key coverage with English fallback where human-reviewed translations are not yet present
 - the current shipped runtime localized slice covers:
   - popup shell
   - popup explanatory copy
@@ -140,6 +145,8 @@ As of 2026-04-25:
 - the repo ships maintained i18n references:
   - [I18n_Message_ID_Contract.md](../I18n_Message_ID_Contract.md)
   - [I18n_String_Inventory_Baseline.md](../I18n_String_Inventory_Baseline.md)
+- the repo now ships one guarded 14-locale Chrome Web Store listing draft:
+  - [Store_Listing_Localization_14_Locale_Draft.md](../Store_Listing_Localization_14_Locale_Draft.md)
 - the repo also ships the execution-ready child TODO for the remaining i18n track:
   - [09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md](./09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md)
 
@@ -159,11 +166,13 @@ Ship one localization architecture that can start with a small pilot set and the
    Do not start by translating ten locales into a monolingual codebase.
 
 2. Stage locale rollout in tiers.
-   Recommended rollout:
-   - Tier 0: architecture only
-   - Tier 1: `en` plus `zh_CN`
-   - Tier 2: `zh_TW`, `ja`, `ko`, `es_419`
-   - Tier 3: `pt_BR`, `fr`, `de`, `ar`
+   Current architecture/catalog target:
+   - `en`
+   - `zh_CN`, `zh_TW`
+   - `ja`, `ko`
+   - `es_419`, `pt_BR`, `fr`, `de`, `it`
+   - `ru`, `ar`, `hi`, `id`
+   Future work should replace English fallback runtime copy with reviewed translations instead of adding ad-hoc locale branches.
 
 3. Keep manifest and app strings aligned.
    The manifest and React surfaces should share one stable message-id model even if storage formats differ.
@@ -177,17 +186,17 @@ Ship one localization architecture that can start with a small pilot set and the
 ## Success Criteria
 
 - the manifest ships `default_locale`
-- the repo ships `_locales/`
+- the repo ships `_locales/` catalogs for the 14 target Chrome locale directories
 - the runtime app reads translated UI strings from one shared localization contract
 - the app uses locale-aware formatting for counts, timestamps, and durations
 - at least one pilot locale beyond English is shippable without layout breakage
-- RTL has one explicit review plan before Arabic ships
+- Arabic resolves `rtl` from locale metadata and still needs representative RDP visual QA before the new locale set is considered fully polished
 
 ## Main Risks
 
 - translating before popup, settings, and provider-detail copy stabilizes
 - creating separate manifest and runtime catalogs with drifting IDs
-- promising ten polished locales before width and RTL QA exists
+- promising 14 polished locales before width and RTL QA exists
 - translating every string manually without a maintainable workflow
 
 ## Recommendation
@@ -228,7 +237,9 @@ Recommended rollout:
 30. sample and store seed diagnostic metadata alignment - shipped in `Phase 198`
 31. diagnostic fixture and historical evidence alignment review - shipped in `Phase 199`
 32. adapter diagnostic raw fallback regression review - shipped in `Phase 204`
-33. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact
+33. 14-locale registry, manifest catalogs, and store listing draft - shipped in `Phase 367`
+34. deeper runtime catalog translation review for non-English fallback locales - future work
+35. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact
 
 ## References
 

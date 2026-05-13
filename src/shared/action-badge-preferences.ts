@@ -8,6 +8,7 @@ import type {
   QuotaUnit,
 } from "../providers/types";
 import type { RuntimeI18n } from "./i18n";
+import { buildRuntimeCommonCopy } from "./i18n";
 
 export const ACTION_BADGE_ATTENTION_SELECTION: ActionBadgeSelection = "attention";
 export const DEFAULT_ACTION_BADGE_SELECTION = ACTION_BADGE_ATTENTION_SELECTION;
@@ -239,32 +240,20 @@ function formatCandidateUnit(
   candidate: ActionBadgeQuotaCandidate,
   i18n: RuntimeI18n,
 ): string {
+  const commonCopy = buildRuntimeCommonCopy(i18n);
+
   if (candidate.quotaUnit === "percent") {
-    return i18n.resolvedLocale === "zh-CN" ? "剩余" : "remaining";
+    return commonCopy.remaining;
   }
 
-  if (i18n.resolvedLocale === "zh-CN") {
-    switch (candidate.quotaUnit) {
-      case "credits":
-        return "积分剩余";
-      case "requests":
-        return "请求剩余";
-      case "sessions":
-        return "会话剩余";
-      default:
-        return "剩余";
-    }
-  }
-
-  return `${candidate.quotaUnit} remaining`;
+  return commonCopy.quotaUnitRemainingLabel(candidate.quotaUnit);
 }
 
 export function buildActionBadgeSelectOptions(
   state: AppState,
   i18n: RuntimeI18n,
 ): ActionBadgeSelectOption[] {
-  const attentionLabel =
-    i18n.resolvedLocale === "zh-CN" ? "异常数量" : "Needs attention count";
+  const attentionLabel = buildRuntimeCommonCopy(i18n).needsAttentionCount;
 
   return [
     {

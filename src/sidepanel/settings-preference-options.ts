@@ -12,6 +12,11 @@ import type {
 } from "../providers/types";
 import type { RuntimeI18n } from "../shared/i18n";
 import {
+  APP_LOCALE_METADATA,
+  SUPPORTED_APP_LOCALES,
+  buildRuntimeCommonCopy,
+} from "../shared/i18n";
+import {
   buildActionBadgeSelectOptions,
   normalizeActionBadgeSelection,
 } from "../shared/action-badge-preferences";
@@ -72,8 +77,10 @@ export function buildSettingsPreferenceOptions({
   };
   const localeOptions: Array<{ value: AppLocalePreference; label: string }> = [
     { value: "system", label: i18n.t("settings.preferences.locale.system") },
-    { value: "en", label: i18n.t("settings.preferences.locale.en") },
-    { value: "zh-CN", label: i18n.t("settings.preferences.locale.zh_cn") },
+    ...SUPPORTED_APP_LOCALES.map((locale) => ({
+      value: locale,
+      label: APP_LOCALE_METADATA[locale].nativeLabel,
+    })),
   ];
   const themeModeOptions: Array<{ value: ThemeMode; label: string }> = [
     { value: "system", label: i18n.t("settings.preferences.theme_mode.system") },
@@ -122,22 +129,18 @@ export function buildSettingsPreferenceOptions({
     value: preset,
     label: i18n.formatPercentValue(preset),
   }));
-  const syncIntervalErrorText =
-    i18n.resolvedLocale === "zh-CN"
-      ? `请输入 ${i18n.formatNumber(SYNC_INTERVAL_MIN_MINUTES)}-${i18n.formatNumber(SYNC_INTERVAL_MAX_MINUTES)} ${syncIntervalUnitLabel}。`
-      : `Enter ${i18n.formatNumber(SYNC_INTERVAL_MIN_MINUTES)}-${i18n.formatNumber(SYNC_INTERVAL_MAX_MINUTES)} ${syncIntervalUnitLabel}.`;
-  const warningThresholdErrorText =
-    i18n.resolvedLocale === "zh-CN"
-      ? `请输入 ${i18n.formatNumber(WARNING_THRESHOLD_MIN_PERCENT)}-${i18n.formatNumber(WARNING_THRESHOLD_MAX_PERCENT)}%。`
-      : `Enter ${i18n.formatNumber(WARNING_THRESHOLD_MIN_PERCENT)}-${i18n.formatNumber(WARNING_THRESHOLD_MAX_PERCENT)}%.`;
-  const syncIntervalMenuButtonLabel =
-    i18n.resolvedLocale === "zh-CN"
-      ? "展开默认同步间隔预设"
-      : "Show default sync interval presets";
-  const warningThresholdMenuButtonLabel =
-    i18n.resolvedLocale === "zh-CN"
-      ? "展开告警阈值预设"
-      : "Show warning threshold presets";
+  const commonCopy = buildRuntimeCommonCopy(i18n);
+  const syncIntervalErrorText = commonCopy.syncIntervalRangeError(
+    SYNC_INTERVAL_MIN_MINUTES,
+    SYNC_INTERVAL_MAX_MINUTES,
+    syncIntervalUnitLabel,
+  );
+  const warningThresholdErrorText = commonCopy.warningThresholdRangeError(
+    WARNING_THRESHOLD_MIN_PERCENT,
+    WARNING_THRESHOLD_MAX_PERCENT,
+  );
+  const syncIntervalMenuButtonLabel = commonCopy.syncIntervalMenuButton;
+  const warningThresholdMenuButtonLabel = commonCopy.warningThresholdMenuButton;
 
   return {
     actionBadgeOptions,

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { SAMPLE_APP_STATE } from "../shared/constants";
-import { createRuntimeI18n } from "../shared/i18n";
+import { SUPPORTED_APP_LOCALES, createRuntimeI18n } from "../shared/i18n";
 import { buildSettingsPreferenceOptions } from "./settings-preference-options";
 
 describe("buildSettingsPreferenceOptions", () => {
@@ -17,6 +17,16 @@ describe("buildSettingsPreferenceOptions", () => {
     expect(options.localeOptions).toContainEqual({
       value: "system",
       label: "System",
+    });
+    expect(options.localeOptions).toHaveLength(SUPPORTED_APP_LOCALES.length + 1);
+    for (const locale of SUPPORTED_APP_LOCALES) {
+      expect(options.localeOptions.map((option) => option.value)).toContain(
+        locale,
+      );
+    }
+    expect(options.localeOptions).toContainEqual({
+      value: "ar",
+      label: "العربية",
     });
     expect(options.themeModeOptions).toContainEqual({
       value: "dark",

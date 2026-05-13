@@ -1,0 +1,14 @@
+{
+  "manifest_ext_name": {
+    "message": "AI 使用儀表板",
+    "description": "擴充功能在 Chrome 介面和 Chrome Web Store 中顯示的名稱。"
+  },
+  "manifest_ext_description": {
+    "message": "追蹤 AI 編碼工具的使用情況、設定阻礙與同步健康狀態。",
+    "description": "擴充功能清單和 Chrome 擴充功能管理頁中顯示的簡短描述。"
+  },
+  "manifest_action_default_title": {
+    "message": "AI 使用儀表板",
+    "description": "工具列按鈕和 popup 觸發器顯示的預設標題。"
+  }
+}

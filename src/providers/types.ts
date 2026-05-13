@@ -116,7 +116,22 @@ export type ProviderPageBindingStatus = "unbound" | "bound" | "stale";
 
 export type ThemeMode = "system" | "light" | "dark";
 export type ThemePreset = "default" | "meadow" | "sunset" | "custom";
-export type AppLocalePreference = "system" | "en" | "zh-CN";
+export type AppLocalePreference =
+  | "system"
+  | "en"
+  | "zh-CN"
+  | "zh-TW"
+  | "ja"
+  | "ko"
+  | "es-419"
+  | "pt-BR"
+  | "fr"
+  | "de"
+  | "it"
+  | "ru"
+  | "ar"
+  | "hi"
+  | "id";
 export type SettingsUserLevel = "basic" | "advanced" | "developer" | "debug";
 export type ProgressDisplayStyle = "line" | "circle";
 export type PopupSizePreset = "compact" | "balanced" | "wide";

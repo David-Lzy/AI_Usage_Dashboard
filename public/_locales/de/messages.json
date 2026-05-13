@@ -1,0 +1,14 @@
+{
+  "manifest_ext_name": {
+    "message": "AI-Nutzungsdashboard",
+    "description": "Name der Erweiterung, der in Chrome-Oberflächen und im Chrome Web Store angezeigt wird."
+  },
+  "manifest_ext_description": {
+    "message": "Verfolgen Sie Nutzung, Einrichtungsblocker und Synchronisierungsstatus von AI-Coding-Tools.",
+    "description": "Kurze Beschreibung, die in Erweiterungslisten und in der Chrome-Erweiterungsverwaltung angezeigt wird."
+  },
+  "manifest_action_default_title": {
+    "message": "AI-Nutzungsdashboard",
+    "description": "Standardtitel für die Symbolleistenaktion und den popup-Auslöser."
+  }
+}
