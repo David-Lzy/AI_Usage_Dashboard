@@ -17,7 +17,7 @@ Freshness model:
 Status note:
 
 - child phase split from `Phase 393`
-- queued after `Phase 393.2`
+- split and archived on 2026-05-13 before runtime code changes
 
 ## Goal
 
@@ -56,3 +56,29 @@ Expand Provider Detail copy and provider-source display wrappers into explicit 1
 ## Follow-Up
 
 - Move to `Phase 394` maintenance hotspot audit before any module-splitting implementation.
+
+## Closeout
+
+Summary:
+
+- Split this umbrella phase into `Phase 393.3.1` for Provider Detail copy and `Phase 393.3.2` for provider-source display wrapper copy.
+- Kept Provider Detail and provider-source display work separated so raw evidence boundaries and large catalog edits can be reviewed independently.
+
+Verification:
+
+- `npm run docs:check`
+- `git diff --check`
+
+## Closeout
+
+Summary:
+
+- Split the oversized Provider Detail/source-display localization phase into two child phases before runtime code changes.
+- `Phase 393.3.1` owns Provider Detail shell, badge, label, note, generated value, hero, and progress copy.
+- `Phase 393.3.2` owns provider-source display wrapper copy and preserves raw source-selection/fallback evidence boundaries.
+
+Verification:
+
+- split-only documentation change; runtime verification moves to child phases
+- `npm run docs:check`
+- `git diff --check`

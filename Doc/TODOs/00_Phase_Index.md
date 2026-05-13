@@ -34,11 +34,12 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [393_3_Phase_Provider_Detail_Source_Display_14_Locale_Copy.md](./393_3_Phase_Provider_Detail_Source_Display_14_Locale_Copy.md)
-- latest completed slice: [393_2_2_Phase_Settings_Source_And_Permissions_14_Locale_Copy.md](./Archive/by-phase/300-399/393_2_2_Phase_Settings_Source_And_Permissions_14_Locale_Copy.md)
+- active phase file: [393_3_1_Phase_Provider_Detail_14_Locale_Copy.md](./393_3_1_Phase_Provider_Detail_14_Locale_Copy.md)
+- latest completed slice: [393_3_Phase_Provider_Detail_Source_Display_14_Locale_Copy.md](./Archive/by-phase/300-399/393_3_Phase_Provider_Detail_Source_Display_14_Locale_Copy.md)
 - queued phase files:
-  1. [394_Phase_Code_Maintenance_Hotspot_Audit.md](./394_Phase_Code_Maintenance_Hotspot_Audit.md)
-  2. [395_Phase_Runtime_Message_Catalog_Module_Split.md](./395_Phase_Runtime_Message_Catalog_Module_Split.md)
+  1. [393_3_2_Phase_Provider_Source_Display_14_Locale_Copy.md](./393_3_2_Phase_Provider_Source_Display_14_Locale_Copy.md)
+  2. [394_Phase_Code_Maintenance_Hotspot_Audit.md](./394_Phase_Code_Maintenance_Hotspot_Audit.md)
+  3. [395_Phase_Runtime_Message_Catalog_Module_Split.md](./395_Phase_Runtime_Message_Catalog_Module_Split.md)
 
 Completed phases should be moved to:
 
@@ -785,6 +786,7 @@ Completed phases should be moved to:
 - the 2026-05-13 `Phase 393.2` closeout split Settings source-control copy into credential and source/permission child phases before changing runtime code
 - the 2026-05-13 `Phase 393.2.1` closeout added explicit 14-locale Settings credential helper copy while preserving credential persistence, source controls, permissions, and raw evidence boundaries
 - the 2026-05-13 `Phase 393.2.2` closeout added explicit 14-locale Settings source-card and permission helper copy while preserving source preference behavior, host-permission prompts, page binding, and raw evidence boundaries
+- the 2026-05-13 `Phase 393.3` closeout split Provider Detail/source-display 14-locale copy into Provider Detail and provider-source display child phases before changing runtime code
 
 ## Delivery Standard For Each Phase
 

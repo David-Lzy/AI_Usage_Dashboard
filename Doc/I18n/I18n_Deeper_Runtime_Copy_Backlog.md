@@ -60,7 +60,7 @@ Preserve:
 - policy-only and partial-support wording
 - route ids, action ids, and provider source truth
 
-### P0 - Phase 393.1 Through 393.3 Settings And Provider Detail Helpers
+### P0 - Phase 393.1 Through 393.3.2 Settings And Provider Detail Helpers
 
 Source buckets:
 
@@ -158,7 +158,9 @@ Reason:
 - `Phase 393.2` split Settings source-control work into credential and source/permission child phases before runtime code changes.
 - `Phase 393.2.1` translated Settings credential buckets for all 14 runtime locales.
 - `Phase 393.2.2` translated Settings source-card helper labels and permission buckets for all 14 runtime locales.
-- `Phase 393.3` should translate Provider Detail and provider-source display wrapper buckets for all 14 runtime locales.
+- `Phase 393.3` split Provider Detail and provider-source display wrapper work into child phases before runtime code changes.
+- `Phase 393.3.1` should translate Provider Detail buckets for all 14 runtime locales.
+- `Phase 393.3.2` should translate provider-source display wrapper buckets for all 14 runtime locales.
 - Diagnostics, operator workspaces, and store helper routes should remain follow-up work unless the child phases prove small enough to split safely.
 
 ## Verification Pattern
