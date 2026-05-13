@@ -137,6 +137,7 @@ As of 2026-05-13:
 - `npm run i18n:check` now derives Chrome `_locales` directories from runtime registry metadata and verifies the RDP capture helper locale list against the same runtime tags
 - `npm run i18n:check` now also verifies the 14-locale Chrome Web Store listing draft has registry-aligned locale sections and complete listing field structure
 - the full `npm run release:check` gate passed after the 14-locale expansion and runtime message catalog split in `Phase 396`
+- active `Phase 401` reruns the full release gate after typed diagnostic presentation reached 14-locale coverage, before the next operator/store helper implementation slices
 - the current shipped runtime localized slice covers:
   - popup shell
   - popup explanatory copy
@@ -332,6 +333,11 @@ Recommended rollout:
 69. warning diagnostic presentation 14-locale copy - shipped in `Phase 398`
 70. source diagnostic presentation 14-locale copy - shipped in `Phase 399`
 71. adapter-error diagnostic presentation 14-locale copy - shipped in `Phase 400`
+72. post-diagnostic localization release check - active in `Phase 401`
+73. operator-workspace 14-locale copy inventory - queued in `Phase 402`
+74. store-helper 14-locale copy inventory - queued in `Phase 403`
+75. operator-workspace 14-locale copy - queued in `Phase 404`
+76. store-helper 14-locale copy - queued in `Phase 405`
 
 ## References
 

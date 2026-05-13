@@ -122,6 +122,8 @@ Default next action:
 - `Phase 398` handled warning diagnostic presentation copy.
 - `Phase 399` handled source-selection and fallback diagnostic presentation copy.
 - `Phase 400` handled adapter-error diagnostic presentation copy.
+- `Phase 401` is the post-diagnostic localization release check before the remaining operator/store helper slices.
+- `Phase 402` and `Phase 403` inventory operator-workspace and store-helper 14-locale copy boundaries before implementation.
 
 ### P1 - Operator And Store Helper Follow-Up
 
@@ -129,6 +131,8 @@ Source buckets:
 
 - `src/shared/operator-workspace-localized-copy.ts`
 - `src/shared/store-workflow-localized-copy.ts`
+- [402_Phase_Operator_Workspace_14_Locale_Copy_Inventory.md](../TODOs/402_Phase_Operator_Workspace_14_Locale_Copy_Inventory.md)
+- [403_Phase_Store_Helper_14_Locale_Copy_Inventory.md](../TODOs/403_Phase_Store_Helper_14_Locale_Copy_Inventory.md)
 
 User-facing copy:
 
