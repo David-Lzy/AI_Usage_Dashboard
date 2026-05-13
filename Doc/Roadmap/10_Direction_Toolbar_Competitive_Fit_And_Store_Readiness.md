@@ -148,22 +148,17 @@ As of 2026-04-24:
   - the next execution line now moves to `Direction 10.3` store asset-pack refresh after the updated runtime evidence
 - the repo still does not yet ship localized listing variants or a submitted store asset pack beyond the first archived evidence plus English source documents
 - the first screenshot archive plus current listing-copy docs now serve as a pre-refresh baseline rather than the final store-submission pack after `Phase 161`
-- the repo now also ships one refreshed pending screenshot-capture request package for the post-surface-expansion store asset set:
+- the repo now also ships one fulfilled refreshed screenshot-capture request package for the post-surface-expansion store asset set:
   - [2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md](../testing/store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md)
-  - slots `1` through `3` require native toolbar-bubble popup capture
-  - slots `4` and `5` require full-page-shell depth capture
+  - status: `fulfilled_operator_capture`
+  - required screenshots: `5`
+  - archive: [2026-05-04-rc11-mixed-store-candidate-archive](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
 - the repo now also ships one native-toolbar popup probe result:
   - current `RDP Chrome` does not expose the real popup bubble as one separate capturable X11 top-level window
   - helper-window evidence is valid for diagnosis, not as the final store popup screenshot replacement
-- the repo now also ships one hybrid refreshed-request staging path:
-  - the current pending request now includes one generated `capture-plan.json`
-  - popup slots `1` through `3` remain manual native-toolbar capture
-  - full-page slots `4` and `5` are already staged as request-bound full-page-shell captures inside the pending request package
-- the repo now also ships one manual screenshot handoff path for that refreshed request:
-  - the current pending request now includes `manual-capture-handoff.md` plus `manual-capture-handoff.json`
-  - those generated handoff files now summarize `3` remaining manual popup slots, `2` staged full-page slots, and one explicit archive-readiness state
+- the repo still preserves the hybrid refreshed-request staging and manual screenshot handoff workflow as historical process evidence for that fulfilled request
 - the project now has an RDP Chrome environment available for truthful extension-mode capture and review
-- the current screenshot state is now `1 pending request / 1 archived set`, with the pending request already carrying `2` staged full-page captures and `3` remaining manual popup slots
+- the current screenshot state is now `0 pending requests / 2 archived sets`; the refreshed archive has `5/5` reviewed screenshots and `3` explicit truth-boundary notes
 
 External signals:
 
@@ -278,7 +273,7 @@ Next work should be review-feedback or listing-change follow-up after the human 
 
 `Phase 168` completed the next `Direction 10.3` slice by turning screenshot-request completion into one request-bound default path. Once real popup captures have been imported back into the pending request package, completion no longer needs a separate `--captures-dir` argument; the repo now proves through a temp review fixture that `store:complete-screenshot-capture-request -- --request-id ...` can archive directly from the request package itself.
 
-`Phase 169` completed the next `Direction 10.3` slice by turning that import-plus-complete chain into one request-bound finalize command. The refreshed pending request now exposes `manualFinalizeCommand` plus `manualFinalizeWithNotesCommand`, so once the real native-toolbar popup files exist the operator can import them, validate archive readiness, and complete the request in one repo-backed step. The real repo still remains `1 pending request / 1 archived set`, so the next product slice is still the actual popup capture itself rather than another workflow invention.
+`Phase 169` completed the next `Direction 10.3` slice by turning that import-plus-complete chain into one request-bound finalize command. The refreshed pending request exposed `manualFinalizeCommand` plus `manualFinalizeWithNotesCommand`, so once the real native-toolbar popup files existed the operator could import them, validate archive readiness, and complete the request in one repo-backed step. `Phase 295` and `Phase 296` later closed that request by accepting the mixed candidate pack and archiving [2026-05-04-rc11-mixed-store-candidate-archive](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md), so the current repo state is `0 pending requests / 2 archived sets`.
 
 ## References
 

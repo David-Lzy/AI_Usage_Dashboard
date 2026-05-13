@@ -49,13 +49,12 @@ Today the truthful answer is "some are complete, some are intentionally living,"
 
 ## Current Truth
 
-As of 2026-04-24:
+As of 2026-05-13:
 
-- numbered phase docs are archived through `Phase 140`
-- there is no active numbered phase file in [00_Phase_Index.md](../TODOs/00_Phase_Index.md)
+- numbered phase docs are archived through `Phase 388`, with active `Phase 389` selected for documentation link-check coverage
 - roadmap directions remain open by design
-- interaction-audit request docs still show `1 pending / 0 fulfilled`
-- theme-recovery request docs still show `1 pending / 0 fulfilled`
+- interaction-audit request docs now show `0` pending requests and `1` fulfilled real operator request
+- theme-recovery request docs now show `0` pending requests and `1` fulfilled real operator request
 - provider notes, runbooks, benchmark docs, and guardrails are maintained reference docs, not one-time closeout docs
 - the project now also ships one explicit taxonomy reference plus guardrail rules for documentation classes
 - the most ambiguity-prone maintained-reference docs now also carry explicit freshness labels so readers can distinguish current references from dated snapshots or historical design baselines
@@ -64,6 +63,7 @@ As of 2026-04-24:
 - the generated repo-backed request and archive package READMEs now also carry explicit taxonomy labels and can be refreshed through one dedicated package-readme refresh command
 - the remaining roadmap direction files now also carry explicit `living strategy` labels instead of relying only on folder-level semantics
 - the repo now also records which remaining doc patterns are intentionally convention-only instead of leaving that boundary implicit
+- the docs taxonomy has since been compressed into functional directories plus bucketed phase archives; old top-level process docs remain compatibility stubs
 - this direction is now sufficiently complete for maintenance mode, so the default next work should shift to toolbar competitive fit and internationalization bootstrap instead of more taxonomy expansion
 
 This means:

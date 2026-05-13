@@ -74,13 +74,13 @@ As of 2026-04-23:
 - the repo now also ships a repeatable `Phase 111` review pass that proves the real unpacked MV3 runtime can carry that same custom-seed recovery path through `chrome.permissions`, `chrome.tabs`, `chrome.scripting`, `chrome.action`, and `chrome.storage.local` by using pre-granted optional host access plus synthetic vendor tabs
 - the repo now also ships a dedicated `Phase 112` operator workspace plus runbook, so native-prompt or real-session follow-up now has one fixed route, one fixed summary format, and one fixed set of quick links instead of a loose manual note only
 - the repo now also ships a `Phase 113` downloadable-export and archive workflow, so the current theme-recovery workspace can emit stable summary plus JSON artifacts and turn them into one durable repo-backed seeded archive under `Doc/testing/theme_recovery_reviews/`
-- the repo now also ships a generated [Theme_Recovery_Review_Archive.md](../testing/Theme_Recovery_Review_Archive.md) index, and the current truthful state there is still:
+- the repo now also ships a generated [Theme_Recovery_Review_Archive.md](../testing/Theme_Recovery_Review_Archive.md) index, and the current truthful state there is:
   - one seeded internal baseline
-  - no real operator theme-recovery sessions archived yet
+  - one fulfilled real operator theme-recovery archive from 2026-05-11
 - the repo now also ships a `Phase 114` review-request workflow, so the first real operator theme-recovery pass now has one repo-backed pending request package plus one generated [Theme_Recovery_Review_Requests.md](../testing/Theme_Recovery_Review_Requests.md) index instead of only a runbook
 - the repo now also ships a `Phase 115` completion workflow, so a future real operator export can now turn that pending request into one fulfilled archive-linked receipt without manual README edits or a detached ad-hoc archive
 - the repo now also ships a `Phase 116` request-bound export workflow, so the bound workspace route, summary draft, JSON export, downloaded filenames, and completion gate now all preserve one explicit `requestId + requestCreatedAt` identity instead of treating similar pending requests as interchangeable
-- the repo now also ships a `Phase 117` preflight workflow, so a future real operator export can now be eligibility-checked against that pending request without mutating request or archive state first
+- the repo now also ships a `Phase 117` preflight workflow, and the first real operator export has since fulfilled the original request through that lifecycle
 - motion exists and `prefers-reduced-motion` is already honored
 - Settings already adapts at compact widths and now exposes:
   - `Theme mode`
@@ -171,14 +171,13 @@ It should start with:
 `Phase 112` then turned that remaining gap into one concrete operator workspace plus runbook, so the next missing piece is real human evidence collection rather than missing recovery-review tooling.
 `Phase 113` then added direct downloadable exports plus one durable seeded archive workflow and generated archive index, so the next missing piece is no longer repo-backed artifact plumbing but one real operator recovery record.
 `Phase 114` then added one repo-backed review-request workflow plus generated request index.
-`Phase 115` then added the matching completion workflow plus archive-request traceability, so the next missing piece is no longer lifecycle plumbing but one real fulfilled operator recovery archive linked to the existing pending request.
-`Phase 116` then bound that lifecycle into the workspace export itself, so the next missing piece is no longer request identity or export fungibility but one real operator archive produced through the now request-bound route.
-`Phase 117` then added the missing no-mutation preflight gate, so the next missing piece is no longer lifecycle safety but the first real operator archive itself.
+`Phase 115` then added the matching completion workflow plus archive-request traceability, so the next missing piece at that point was one real fulfilled operator recovery archive linked to the existing pending request.
+`Phase 116` then bound that lifecycle into the workspace export itself, so the next missing piece at that point was one real operator archive produced through the now request-bound route.
+`Phase 117` then added the missing no-mutation preflight gate. The 2026-05-11 RDP Chrome pass later fulfilled that first real operator archive, so this direction is now in maintenance mode unless new theme states or regressions create fresh review work.
 
 It should not start with a wide-open per-token theme editor.
 
-The highest-value remaining work is now evidence closure, not more theme-tooling layers.
-The next missing proof is still the first real operator theme-recovery archive.
+The first real operator theme-recovery archive is now closed. The highest-value remaining work is maintenance: keep the archived evidence truthful and reopen this direction only for a new target state, target provider, or regression.
 
 ## References
 

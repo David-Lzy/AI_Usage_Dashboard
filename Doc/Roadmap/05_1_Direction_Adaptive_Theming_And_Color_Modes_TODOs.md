@@ -124,7 +124,7 @@ Parent direction:
 
 ### F. Remaining Cross-Surface Theme Coverage
 
-- decide whether the first real operator theme-recovery archive should now be collected using the shipped workspace, downloads, seeded archive workflow, and pending request package before richer seed-color work starts
+- keep the first real operator theme-recovery archive linked from the generated ledgers, and collect another operator archive only when a new theme state, target provider, or regression justifies it
 - decide whether one future review slice should cover separate light and dark seed behavior now that the current one-seed provider-state path is covered
 
 ## Out Of Scope

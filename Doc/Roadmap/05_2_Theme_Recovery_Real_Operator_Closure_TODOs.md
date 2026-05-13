@@ -21,43 +21,36 @@ Parent direction:
 
 - [Direction 05 - Adaptive Theming And Color Modes](./05_Direction_Adaptive_Theming_And_Color_Modes.md)
 
-## Current Gap
+## Current State
 
-- the repo already has one seeded theme-recovery archive baseline
-- the repo already has one pending real operator request
-- the repo still has `0` real operator theme-recovery archives
+- this direction is closed as of `2026-05-11`
+- the first real theme-recovery operator request is fulfilled and archived under [2026-05-11-system-recovered-014312](../testing/theme_recovery_reviews/2026-05-11-system-recovered-014312/README.md)
+- the generated request ledger now reports `0` pending theme-recovery review requests and `1` fulfilled request
+- future work should reopen this direction only for a new theme state, a new target provider, or a concrete theme-regression report
 
-## Detailed TODOs
+## Closure Record
 
-### A. First Real Operator Pass
+### A. First Real Operator Pass - Done
 
-- run the existing theme-recovery workspace as a real human pass
-- keep the exported stage truthful
-- record omissions, approximations, and fallback boundaries instead of rewriting them into a pass claim
+- completed by the 2026-05-11 RDP Chrome theme-recovery pass
+- preserved stage `Recovered`, popup `Aligned`, custom seed `#4F46E5`, and Cursor + Codex target scope truthfully
 
-### B. Request Fulfillment
+### B. Request Fulfillment - Done
 
-- use the existing pending request package
-- run preflight before completion
-- fulfill the request through the current request-bound lifecycle instead of ad-hoc files
+- fulfilled `2026-04-23-first-real-theme-recovery-review-request`
+- preserved request binding and archive linkage through the current request-bound lifecycle
 
-### C. Archive Truth Review
+### C. Archive Truth Review - Done
 
-- confirm the resulting archive preserves:
-  - request linkage
-  - recovery stage
-  - theme mode
-  - preset or custom seed
-  - operator truth notes
-- refresh request and archive ledgers after fulfillment
+- confirmed the resulting archive preserves request linkage, recovery stage, theme mode, custom seed, target scope, and operator truth notes
+- refreshed the generated request and archive ledgers after fulfillment
 
-### D. Post-Archive Follow-Up
+### D. Post-Archive Follow-Up - Maintenance Only
 
-- update the runbook if the first real operator pass exposes friction
-- update workspace guidance only if the real pass shows missing or misleading instructions
-- keep future work focused on evidence quality, not another round of generic tooling
+- update the runbook only if a future real operator pass exposes friction
+- keep future work focused on new evidence quality or regressions, not another round of generic tooling
 
-## Planned Numbered Slices
+## Completed Numbered Slices
 
 1. first real operator theme-recovery export
 2. pending request preflight and completion

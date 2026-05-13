@@ -21,39 +21,37 @@ Parent direction:
 
 - [Direction 04 - Material, Motion, And Responsive Hardening](./04_Direction_Material_Motion_And_Responsive_Hardening.md)
 
-## Current Gap
+## Current State
 
-- the repo already has one pending interaction-audit operator request
-- the repo already has seeded archive baselines and a mature request/archive lifecycle
-- the repo still has `0` fulfilled real operator interaction-audit requests
+- this direction is closed as of `2026-05-11`
+- the first real interaction-audit operator request is fulfilled and archived under [2026-05-11-2026-05-11-rdp-chrome-visual-audit](../testing/operator_reviews/2026-05-11-2026-05-11-rdp-chrome-visual-audit/README.md)
+- the generated request ledger now reports `0` pending operator review requests and `1` fulfilled request
+- future work should reopen this direction only for a new surface, a new manual-check requirement, or a concrete regression
 
 ## Detailed TODOs
 
-### A. First Real Operator Signoff
+### A. First Real Operator Signoff - Done
 
-- run the interaction-audit workspace as a real human signoff pass
-- preserve unresolved or partially reviewed surfaces truthfully
-- keep seeded evidence distinct from human review conclusions
+- completed by the 2026-05-11 RDP Chrome visual audit
+- preserved seeded evidence as historical context instead of rewriting it into human evidence
+- resolved all 11 manual checks across all 5 requested surfaces
 
-### B. Pending Request Completion
+### B. Pending Request Completion - Done
 
-- use the current pending operator request package
-- run preflight before completion
-- fulfill the request through the shipped request-bound lifecycle
+- fulfilled `2026-04-23-first-real-operator-review-request`
+- preserved request binding, revision binding, evidence provenance, and completion receipt metadata
 
-### C. Archive Closure
+### C. Archive Closure - Done
 
-- archive the exported signoff through the current durable archive path
-- confirm request linkage, evidence linkage, revision linkage, and fulfillment receipt metadata all remain intact
-- refresh the request and archive ledgers after completion
+- archived the exported signoff through the durable operator review archive path
+- refreshed the generated request and archive ledgers
 
-### D. Evidence, Handoff, And Runbook Cleanup
+### D. Evidence, Handoff, And Runbook Cleanup - Maintenance Only
 
-- update the operator runbook only if the first real pass exposes missing steps
-- tighten handoff wording only if the first real pass exposes ambiguity
-- avoid reopening generic tooling work unless the real pass proves a missing lifecycle step
+- update the operator runbook only if a future real pass exposes missing steps
+- avoid reopening generic tooling work unless a future pass proves a missing lifecycle step
 
-## Planned Numbered Slices
+## Completed Numbered Slices
 
 1. first real interaction-audit operator export
 2. pending request preflight and fulfillment

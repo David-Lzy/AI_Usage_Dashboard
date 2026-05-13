@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is completed through `Phase 387`, with active `Phase 388` selected for current-truth documentation drift and queued `Phase 389` through `Phase 395` covering doc link checking, release-gate baseline, deeper 14-locale runtime copy, and bounded maintenance follow-up
+- the numbered phase queue is completed through `Phase 388`, with active `Phase 389` selected for documentation link-check coverage and queued `Phase 390` through `Phase 395` covering release-gate baseline, deeper 14-locale runtime copy, and bounded maintenance follow-up
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -456,7 +456,7 @@ As of 2026-05-13:
 
 3. [Direction 05 - Adaptive Theming And Color Modes](./05_Direction_Adaptive_Theming_And_Color_Modes.md)
    Why third now:
-   the shared theme runtime is already strong, so the highest-value remaining work is now the first real operator recovery archive rather than more local-only theme tooling.
+   the shared theme runtime is already strong and the first real operator recovery archive is now fulfilled, so this direction should stay in maintenance mode unless new theme states or regressions create fresh review work.
 
 4. [Direction 04 - Material, Motion, And Responsive Hardening](./04_Direction_Material_Motion_And_Responsive_Hardening.md)
    Why fourth now:
@@ -478,11 +478,11 @@ As of 2026-05-13:
 
 3. [Direction 05 - Adaptive Theming And Color Modes](./05_Direction_Adaptive_Theming_And_Color_Modes.md)
    Why third now:
-   the current theme system is mature and truthful, but its highest-value remaining step is now real operator evidence closure rather than more theme tooling.
+   the current theme system is mature and truthful, and its first real operator evidence closure is complete; future work should be regression-driven rather than another generic tooling pass.
 
 4. [Direction 04 - Material, Motion, And Responsive Hardening](./04_Direction_Material_Motion_And_Responsive_Hardening.md)
    Why fourth now:
-   the interaction-audit and operator-review workflow is similarly mature, so the remaining value is first real operator signoff rather than more lifecycle machinery.
+   the interaction-audit and operator-review workflow is similarly mature, and first real operator signoff is complete; future work should start only from a new surface, manual-check, or regression need.
 
 5. [Direction 08 - Documentation Completion And Truth Audit](./08_Direction_Documentation_Completion_And_Truth_Audit.md)
    Why fifth now:
