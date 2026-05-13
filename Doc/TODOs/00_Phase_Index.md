@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [374_Phase_Japanese_Runtime_Shell_Pilot.md](./Archive/374_Phase_Japanese_Runtime_Shell_Pilot.md)
+- latest completed slice: [375_Phase_Korean_Runtime_Shell_Pilot.md](./Archive/375_Phase_Korean_Runtime_Shell_Pilot.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -764,6 +764,7 @@ Completed phases should be moved to:
 - the 2026-05-13 `Phase 372` closeout extended `npm run i18n:check` to verify the 14-locale Chrome Web Store listing draft has registry-aligned locale sections, preserved product titles, and complete listing fields
 - the 2026-05-13 `Phase 373` closeout added the first Traditional Chinese runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while preserving deeper structured copy and raw evidence fallback boundaries
 - the 2026-05-13 `Phase 374` closeout added the first Japanese runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while preserving deeper structured copy and raw evidence fallback boundaries
+- the 2026-05-13 `Phase 375` closeout added the first Korean runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while preserving deeper structured copy and raw evidence fallback boundaries
 
 ## Delivery Standard For Each Phase
 

@@ -50,6 +50,7 @@ Execution note:
 - thirty-fifth executable slice landed on `2026-05-13` through `Phase 372`
 - thirty-sixth executable slice landed on `2026-05-13` through `Phase 373`
 - thirty-seventh executable slice landed on `2026-05-13` through `Phase 374`
+- thirty-eighth executable slice landed on `2026-05-13` through `Phase 375`
 - `Phase 200` and `Phase 201` intentionally paused this i18n/diagnostic follow-up line for functionality-first Codex personal usage-context surfacing while Codex budget is constrained
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
@@ -92,7 +93,7 @@ As of 2026-05-13:
 - Settings language options are generated from the registry instead of hard-coded `en / zh-CN` entries
 - `ar` resolves to `rtl`; all other shipped runtime locales resolve to `ltr`
 - the new non-reviewed runtime locales use complete key coverage with English fallback where human-reviewed translations are not yet present
-- `zh-TW` and `ja` now have first runtime shell pilots for dashboard, popup, Settings, common actions, and theme-toggle labels; deeper structured runtime copy still falls back to English until reviewed translations are added
+- `zh-TW`, `ja`, and `ko` now have first runtime shell pilots for dashboard, popup, Settings, common actions, and theme-toggle labels; deeper structured runtime copy still falls back to English until reviewed translations are added
 - Arabic/RTL surfaces now isolate English fallback text direction so fallback punctuation stays readable until reviewed Arabic runtime translations are added
 - RDP extension-window locale smoke captures now validate `--locale` against the same 14 runtime tags before opening a Chrome extension window
 - `npm run i18n:check` now derives Chrome `_locales` directories from runtime registry metadata and verifies the RDP capture helper locale list against the same runtime tags
@@ -255,8 +256,9 @@ Recommended rollout:
 37. store listing localization draft structure guard - shipped in `Phase 372`
 38. Traditional Chinese runtime shell pilot - shipped in `Phase 373`
 39. Japanese runtime shell pilot - shipped in `Phase 374`
-40. deeper runtime catalog translation review for non-English fallback locales - future work
-41. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact
+40. Korean runtime shell pilot - shipped in `Phase 375`
+41. deeper runtime catalog translation review for non-English fallback locales - future work
+42. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact
 
 ## References
 

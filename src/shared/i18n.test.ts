@@ -150,6 +150,17 @@ describe("runtime i18n", () => {
     expect(i18n.t("settings.preferences.locale.system")).toBe("システムに従う");
   });
 
+  it("returns translated runtime strings for the first ko shell slice", () => {
+    const i18n = createRuntimeI18n("ko");
+
+    expect(i18n.t("dashboard.hero.title")).toBe(
+      "AI 코딩 할당량을 한 화면에서 확인",
+    );
+    expect(i18n.t("popup.header.title")).toBe("빠른 보기");
+    expect(i18n.t("settings.topbar.title")).toBe("설정");
+    expect(i18n.t("settings.preferences.locale.system")).toBe("시스템 따름");
+  });
+
   it("localizes quick theme toggle copy from the next explicit mode", () => {
     const i18n = createRuntimeI18n("zh-CN");
 
