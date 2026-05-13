@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is completed through `Phase 395`, with no active numbered phase queued
+- the numbered phase queue is completed through `Phase 395`, with active `Phase 396` selected for the post-localization maintenance release gate baseline and queued `Phase 397` through `Phase 400` covering typed diagnostic presentation 14-locale follow-up
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness

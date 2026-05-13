@@ -121,7 +121,7 @@ As of 2026-05-13:
 - `ar` resolves to `rtl`; all other shipped runtime locales resolve to `ltr`
 - the new non-reviewed runtime locales use complete key coverage with English fallback where human-reviewed translations are not yet present
 - every non-English locale in the 14-locale set now has a first runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels; popup first-run guidance, setup coverage, snapshot status, header, featured-section, featured-card, action-section, surface-role, and aria copy now have explicit 14-locale structured coverage through `Phase 392.4`; Settings core layout, Quick Setup, preferences, theme-customization, credential, source-card, and permission helper copy now has explicit 14-locale coverage through `Phase 393.2.2`; Provider Detail helper copy now has explicit 14-locale coverage through `Phase 393.3.1`; provider-source display wrapper copy now has explicit 14-locale coverage through `Phase 393.3.2`; deeper structured runtime copy outside those slices still falls back to English until reviewed translations are added
-- the deeper runtime copy backlog now maps remaining fallback buckets to diagnostics/operator/store-helper follow-up:
+- the deeper runtime copy backlog now maps typed diagnostic presentation follow-up to `Phase 397` through `Phase 400`, with operator/store-helper follow-up remaining later:
   - [I18n_Deeper_Runtime_Copy_Backlog.md](../I18n/I18n_Deeper_Runtime_Copy_Backlog.md)
 - focused i18n tests now guard that every non-English locale keeps explicit first-shell runtime message overrides instead of silently relying on English fallback for the shell pilot surface
 - Arabic/RTL surfaces now isolate English fallback text direction so fallback punctuation stays readable until reviewed Arabic runtime translations are added
@@ -317,6 +317,10 @@ Recommended rollout:
 65. Provider Detail 14-locale copy - shipped in `Phase 393.3.1`
 66. Provider-source display 14-locale copy - shipped in `Phase 393.3.2`
 67. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact
+68. diagnostic presentation 14-locale inventory - queued in `Phase 397`
+69. warning diagnostic presentation 14-locale copy - queued in `Phase 398`
+70. source diagnostic presentation 14-locale copy - queued in `Phase 399`
+71. adapter-error diagnostic presentation 14-locale copy - queued in `Phase 400`
 
 ## References
 

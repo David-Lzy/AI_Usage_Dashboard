@@ -111,7 +111,10 @@ Preserve:
 
 Default next action:
 
-- do not merge this into `Phase 393` unless the Settings/provider-detail copy expansion stays small after implementation starts
+- `Phase 397` inventories typed diagnostic presentation copy.
+- `Phase 398` handles warning diagnostic presentation copy.
+- `Phase 399` handles source-selection and fallback diagnostic presentation copy.
+- `Phase 400` handles adapter-error diagnostic presentation copy.
 
 ### P1 - Operator And Store Helper Follow-Up
 

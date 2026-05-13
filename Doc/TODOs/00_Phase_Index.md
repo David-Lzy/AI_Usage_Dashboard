@@ -34,9 +34,13 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: none
+- active phase file: [396_Phase_Post_Localization_Maintenance_Release_Check.md](./396_Phase_Post_Localization_Maintenance_Release_Check.md)
 - latest completed slice: [395_Phase_Runtime_Message_Catalog_Module_Split.md](./Archive/by-phase/300-399/395_Phase_Runtime_Message_Catalog_Module_Split.md)
-- queued phase files: none
+- queued phase files:
+  1. [397_Phase_Diagnostic_Presentation_14_Locale_Inventory.md](./397_Phase_Diagnostic_Presentation_14_Locale_Inventory.md)
+  2. [398_Phase_Warning_Diagnostic_Presentation_14_Locale_Copy.md](./398_Phase_Warning_Diagnostic_Presentation_14_Locale_Copy.md)
+  3. [399_Phase_Source_Diagnostic_Presentation_14_Locale_Copy.md](./399_Phase_Source_Diagnostic_Presentation_14_Locale_Copy.md)
+  4. [400_Phase_Adapter_Error_Diagnostic_Presentation_14_Locale_Copy.md](./400_Phase_Adapter_Error_Diagnostic_Presentation_14_Locale_Copy.md)
 
 Completed phases should be moved to:
 
