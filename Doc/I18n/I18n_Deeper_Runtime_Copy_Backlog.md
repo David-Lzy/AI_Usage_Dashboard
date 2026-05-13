@@ -34,9 +34,9 @@ Track runtime copy that still falls back to English after the 14-locale shell pi
 - Provider Detail helper copy now has explicit 14-locale coverage through `Phase 393.3.1`.
 - Provider-source display wrapper copy now has explicit 14-locale coverage through `Phase 393.3.2`.
 - Typed diagnostic presentation copy now has explicit 14-locale coverage for warning, source-selection, source-fallback, and adapter-error diagnostics through `Phase 400`.
-- Operator-workspace helper-owned copy now has explicit 14-locale coverage through `Phase 404`; consumer-only interaction-audit labels next to export/automation boundaries remain follow-up.
+- Operator-workspace helper-owned copy now has explicit 14-locale coverage through `Phase 404`; consumer-only interaction-audit labels next to export/automation boundaries are moving in narrow follow-up slices, with Review Queue, Surface Card, and Workspace Controls completed through `Phase 413`.
 - The interaction-audit consumer-label follow-up now has a presentation/export split reference from `Phase 409`: [I18n_Interaction_Audit_Presentation_Export_Split.md](./I18n_Interaction_Audit_Presentation_Export_Split.md).
-- Interaction-audit Review Queue display labels have explicit 14-locale coverage through `Phase 411`; Surface Card chrome labels have explicit 14-locale coverage through `Phase 412`; Workspace Controls and Handoff-adjacent labels remain follow-up.
+- Interaction-audit Review Queue display labels have explicit 14-locale coverage through `Phase 411`; Surface Card chrome labels have explicit 14-locale coverage through `Phase 412`; Workspace Controls labels and signoff-workspace feedback have explicit 14-locale coverage through `Phase 413`; Request Scope command headings and Handoff-adjacent labels remain follow-up.
 - Store-helper copy now has explicit 14-locale coverage through `Phase 405` while screenshot workflow evidence and automation identity fields remain raw.
 - Store-helper visible error presentation now has explicit 14-locale wrappers through `Phase 410`, with raw helper error text preserved inside the wrapper.
 - Deeper structured helper copy outside the popup, Settings, Provider Detail, provider-source display, typed diagnostic presentation, operator-workspace helper, and store-helper slices still mostly uses explicit `zh-CN` branches plus English fallback for every other non-English locale.
@@ -144,7 +144,7 @@ Source buckets:
 User-facing copy:
 
 - operator workspace shell, workflow helper copy, and action labels now have explicit 14-locale helper-owned coverage through `Phase 404`
-- consumer-only interaction-audit labels are moving in narrow follow-up slices; Review Queue completed in `Phase 411` and Surface Card completed in `Phase 412`
+- consumer-only interaction-audit labels are moving in narrow follow-up slices; Review Queue completed in `Phase 411`, Surface Card completed in `Phase 412`, and Workspace Controls completed in `Phase 413`
 - store screenshot helper route labels and submission-support captions now have explicit 14-locale coverage through `Phase 405`
 
 Reason:
@@ -165,6 +165,7 @@ Default next action:
 - `Phase 409` documented the remaining interaction-audit presentation/export split and queued `Phase 411` for the first Review Queue display-copy implementation slice.
 - `Phase 411` translated Review Queue display labels for all 14 runtime locales while preserving queue status enums, surface titles, signoff exports, and generated handoff drafts.
 - `Phase 412` translated Surface Card chrome labels for all 14 runtime locales while preserving surface definitions, manual checks, frame-action raw messages, iframe identity, signoff exports, and generated handoff drafts.
+- `Phase 413` translated Workspace Controls labels and signoff-workspace feedback for all 14 runtime locales while preserving pasted JSON, parsed import errors, signoff export JSON, generated Markdown drafts, filenames, MIME types, storage keys, request binding, and request revision formatting.
 
 ### P2 - Explicitly Not Translated
 
@@ -207,6 +208,7 @@ Reason:
 - `Phase 410` added localized store-helper error wrappers while preserving raw invalid-preset, malformed-seed, and native popup probe error strings inside the displayed message.
 - `Phase 411` translated interaction-audit Review Queue display labels for all 14 runtime locales.
 - `Phase 412` translated interaction-audit Surface Card chrome labels for all 14 runtime locales.
+- `Phase 413` translated interaction-audit Workspace Controls labels and signoff-workspace feedback for all 14 runtime locales.
 
 ## Verification Pattern
 

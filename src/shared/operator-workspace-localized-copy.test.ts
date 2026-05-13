@@ -20,6 +20,14 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
     expect(copy.interactionAudit.surfaceCard.signoffStatus.followUp).toBe(
       "Follow-up required",
     );
+    expect(copy.interactionAudit.workspaceControls.copySignoffDraft).toBe(
+      "Copy signoff draft",
+    );
+    expect(
+      copy.interactionAudit.workspaceControls.feedback.downloadedSignoffJson(
+        "audit.json",
+      ),
+    ).toBe("Downloaded the current signoff JSON as audit.json.");
     expect(copy.themeRecovery.hero.title).toBe(
       "One place to stage native-prompt and real-session recovery checks",
     );
@@ -35,6 +43,9 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
     );
     expect(copy.interactionAudit.reviewQueue.nextTarget).toBe("下一个目标");
     expect(copy.interactionAudit.surfaceCard.openStandalone).toBe("单独打开");
+    expect(copy.interactionAudit.workspaceControls.workspaceState).toBe(
+      "Workspace 状态",
+    );
     expect(copy.themeRecovery.currentTruth.reviewStage).toBe("复查阶段");
   });
 
@@ -119,6 +130,11 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
       expect(copy.interactionAudit.surfaceCard.sectionLabel.length).toBeGreaterThan(
         0,
       );
+      expect(
+        copy.interactionAudit.workspaceControls.feedback.downloadedSignoffDraft(
+          "audit.md",
+        ),
+      ).toContain("audit.md");
       expect(copy.themeRecovery.workflow.steps).toHaveLength(5);
     }
   });
@@ -130,6 +146,9 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
     expect(copy.interactionAudit.reviewQueue.pendingChecks(3)).toContain("3");
     expect(copy.interactionAudit.surfaceCard.notesPlaceholder).toContain(
       "surface",
+    );
+    expect(copy.interactionAudit.workspaceControls.feedback.noDecisions).toContain(
+      "signoff",
     );
     expect(copy.themeRecovery.outputs.clipboardUnavailable).toContain(
       "clipboard",

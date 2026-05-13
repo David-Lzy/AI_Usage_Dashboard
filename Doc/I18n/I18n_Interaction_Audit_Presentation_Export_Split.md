@@ -19,7 +19,7 @@ Status note:
 - created in `Phase 409`
 - defines which remaining interaction-audit visible labels can be localized without changing signoff exports, handoff drafts, request identities, automation hooks, or raw evidence
 - use this document before moving any remaining interaction-audit component strings into `buildOperatorWorkspaceLocalizedCopy`
-- `Phase 411` completed the Review Queue display-copy slice; `Phase 412` completed the Surface Card display-copy slice; Workspace Controls is the next child slice
+- `Phase 411` completed the Review Queue display-copy slice; `Phase 412` completed the Surface Card display-copy slice; `Phase 413` completed the Workspace Controls display-copy slice; Request Scope command headings are the next child slice
 
 ## Purpose
 
@@ -58,7 +58,6 @@ Already localized through `Phase 404`:
 
 Not localized in `Phase 409`:
 
-- workspace controls and feedback messages
 - request-scope command headings
 - handoff summary labels and helper copy
 - frame readiness and preset result messages
@@ -70,6 +69,10 @@ Localized after `Phase 411`:
 Localized after `Phase 412`:
 
 - Surface Card chrome labels, status headings, loading fallback, manual-check heading, signoff option labels, notes label, and notes placeholder
+
+Localized after `Phase 413`:
+
+- Workspace Controls labels, import UI labels, workspace-state label, current-draft disclosure, and signoff-workspace feedback messages
 
 ## Safe Presentation-Only Labels
 
@@ -292,7 +295,9 @@ The first safe child phase started with Review Queue display labels because:
 
 `Phase 412` moved Surface Card chrome labels into localized copy while preserving surface titles, descriptions, action labels, action expectations, manual checks, iframe titles, preset ids, action ids, and frame-action raw messages.
 
-The next safe child phase is `Phase 413`, covering Workspace Controls display labels and route-owned feedback messages only. It must still preserve pasted JSON, exported JSON field names, generated Markdown drafts, downloaded filenames, MIME types, and parsed import error semantics.
+`Phase 413` moved Workspace Controls display labels and signoff-workspace feedback into localized copy while preserving pasted JSON, exported JSON field names, generated Markdown drafts, downloaded filenames, MIME types, and parsed import error semantics.
+
+The next safe child phase is `Phase 414`, covering Request Scope command headings only. It must still preserve command text, request ids, request revisions, archive path examples, and input filename examples.
 
 Required tests for completed and later interaction-audit display-copy slices:
 

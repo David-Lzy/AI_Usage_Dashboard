@@ -1,9 +1,16 @@
+import type { buildOperatorWorkspaceLocalizedCopy } from "../../shared/localized-copy";
+
 export type InteractionAuditWorkspaceFeedback = {
   tone: "neutral" | "warning";
   message: string;
 };
 
+export type InteractionAuditWorkspaceControlsCopy = ReturnType<
+  typeof buildOperatorWorkspaceLocalizedCopy
+>["interactionAudit"]["workspaceControls"];
+
 type InteractionAuditWorkspaceControlsSectionProps = {
+  copy: InteractionAuditWorkspaceControlsCopy;
   importDraft: string;
   signoffDraft: string;
   workspaceFeedback: InteractionAuditWorkspaceFeedback;
@@ -18,6 +25,7 @@ type InteractionAuditWorkspaceControlsSectionProps = {
 };
 
 export function InteractionAuditWorkspaceControlsSection({
+  copy,
   importDraft,
   signoffDraft,
   workspaceFeedback,
@@ -46,7 +54,7 @@ export function InteractionAuditWorkspaceControlsSection({
             void onCopySignoffDraft();
           }}
         >
-          Copy signoff draft
+          {copy.copySignoffDraft}
         </button>
         <button
           className="text-button"
@@ -54,7 +62,7 @@ export function InteractionAuditWorkspaceControlsSection({
           type="button"
           onClick={onDownloadSignoffDraft}
         >
-          Download signoff draft
+          {copy.downloadSignoffDraft}
         </button>
         <button
           className="text-button"
@@ -64,7 +72,7 @@ export function InteractionAuditWorkspaceControlsSection({
             void onCopySignoffJson();
           }}
         >
-          Copy signoff JSON
+          {copy.copySignoffJson}
         </button>
         <button
           className="text-button"
@@ -72,7 +80,7 @@ export function InteractionAuditWorkspaceControlsSection({
           type="button"
           onClick={onDownloadSignoffJson}
         >
-          Download signoff JSON
+          {copy.downloadSignoffJson}
         </button>
         <button
           className="text-button"
@@ -80,7 +88,7 @@ export function InteractionAuditWorkspaceControlsSection({
           type="button"
           onClick={onResetSignoffWorkspace}
         >
-          Reset signoff
+          {copy.resetSignoff}
         </button>
       </div>
 
@@ -89,15 +97,15 @@ export function InteractionAuditWorkspaceControlsSection({
         data-audit-signoff-import-details
       >
         <summary className="source-card__details-toggle">
-          Import signoff JSON
+          {copy.importSignoffJson}
         </summary>
         <div className="source-card__details-body interaction-audit__signoff-fields">
           <label className="form-field">
-            <span className="form-field__label">Pasted signoff JSON</span>
+            <span className="form-field__label">{copy.pastedSignoffJson}</span>
             <textarea
               className="form-field__control interaction-audit__notes-control"
               data-audit-import-textarea
-              placeholder="Paste exported signoff JSON to restore a workspace."
+              placeholder={copy.importPlaceholder}
               rows={8}
               value={importDraft}
               onChange={(event) => {
@@ -113,7 +121,7 @@ export function InteractionAuditWorkspaceControlsSection({
               type="button"
               onClick={onApplyImport}
             >
-              Apply imported signoff
+              {copy.applyImportedSignoff}
             </button>
             <button
               className="text-button"
@@ -121,14 +129,14 @@ export function InteractionAuditWorkspaceControlsSection({
               type="button"
               onClick={onClearImport}
             >
-              Clear pasted JSON
+              {copy.clearPastedJson}
             </button>
           </div>
         </div>
       </details>
 
       <div className={feedbackClassName} data-audit-signoff-feedback>
-        <p className="detail-note__label">Workspace state</p>
+        <p className="detail-note__label">{copy.workspaceState}</p>
         <p className="supporting-copy">{workspaceFeedback.message}</p>
       </div>
 
@@ -137,7 +145,7 @@ export function InteractionAuditWorkspaceControlsSection({
         data-audit-signoff-preview-details
       >
         <summary className="source-card__details-toggle">
-          Current signoff draft
+          {copy.currentSignoffDraft}
         </summary>
         <div className="source-card__details-body">
           <pre className="capture-pre" data-audit-signoff-preview>

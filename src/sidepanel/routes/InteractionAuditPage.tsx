@@ -94,7 +94,7 @@ export function InteractionAuditPage({
   const [workspaceFeedback, setWorkspaceFeedback] =
     useState<InteractionAuditWorkspaceFeedback>({
       tone: "neutral",
-      message: "No operator signoff decisions are recorded yet.",
+      message: copy.workspaceControls.feedback.noDecisions,
     });
   const [importDraft, setImportDraft] = useState("");
 
@@ -291,7 +291,7 @@ export function InteractionAuditPage({
     }));
     setWorkspaceFeedback({
       tone: "neutral",
-      message: "Updated the operator signoff workspace.",
+      message: copy.workspaceControls.feedback.updatedWorkspace,
     });
   }
 
@@ -305,7 +305,7 @@ export function InteractionAuditPage({
     }));
     setWorkspaceFeedback({
       tone: "neutral",
-      message: "Updated the operator signoff workspace.",
+      message: copy.workspaceControls.feedback.updatedWorkspace,
     });
   }
 
@@ -316,7 +316,7 @@ export function InteractionAuditPage({
     }));
     setWorkspaceFeedback({
       tone: "neutral",
-      message: "Updated the operator signoff workspace.",
+      message: copy.workspaceControls.feedback.updatedWorkspace,
     });
   }
 
@@ -330,7 +330,7 @@ export function InteractionAuditPage({
     }));
     setWorkspaceFeedback({
       tone: "neutral",
-      message: "Updated the review-session metadata.",
+      message: copy.workspaceControls.feedback.updatedMetadata,
     });
   }
 
@@ -343,7 +343,7 @@ export function InteractionAuditPage({
     }));
     setWorkspaceFeedback({
       tone: "neutral",
-      message: "Stamped the current review time into the workspace metadata.",
+      message: copy.workspaceControls.feedback.stampedReviewTime,
     });
   }
 
@@ -353,7 +353,7 @@ export function InteractionAuditPage({
     if (result === "success") {
       setWorkspaceFeedback({
         tone: "neutral",
-        message: "Copied the current signoff draft to the clipboard.",
+        message: copy.workspaceControls.feedback.copiedSignoffDraft,
       });
       return;
     }
@@ -362,8 +362,8 @@ export function InteractionAuditPage({
       tone: "warning",
       message:
         result === "unavailable"
-          ? "Clipboard access is unavailable in this audit environment."
-          : "Failed to copy the current signoff draft to the clipboard.",
+          ? copy.workspaceControls.feedback.clipboardUnavailable
+          : copy.workspaceControls.feedback.failedCopySignoffDraft,
     });
   }
 
@@ -375,7 +375,7 @@ export function InteractionAuditPage({
     if (result === "success") {
       setWorkspaceFeedback({
         tone: "neutral",
-        message: "Copied the current signoff JSON to the clipboard.",
+        message: copy.workspaceControls.feedback.copiedSignoffJson,
       });
       return;
     }
@@ -384,8 +384,8 @@ export function InteractionAuditPage({
       tone: "warning",
       message:
         result === "unavailable"
-          ? "Clipboard access is unavailable in this audit environment."
-          : "Failed to copy the current signoff JSON to the clipboard.",
+          ? copy.workspaceControls.feedback.clipboardUnavailable
+          : copy.workspaceControls.feedback.failedCopySignoffJson,
     });
   }
 
@@ -420,8 +420,8 @@ export function InteractionAuditPage({
     setWorkspaceFeedback({
       tone: didDownload ? "neutral" : "warning",
       message: didDownload
-        ? `Downloaded the current signoff draft as ${filename}.`
-        : "Failed to download the current signoff draft from this audit environment.",
+        ? copy.workspaceControls.feedback.downloadedSignoffDraft(filename)
+        : copy.workspaceControls.feedback.failedDownloadSignoffDraft,
     });
   }
 
@@ -440,8 +440,8 @@ export function InteractionAuditPage({
     setWorkspaceFeedback({
       tone: didDownload ? "neutral" : "warning",
       message: didDownload
-        ? `Downloaded the current signoff JSON as ${filename}.`
-        : "Failed to download the current signoff JSON from this audit environment.",
+        ? copy.workspaceControls.feedback.downloadedSignoffJson(filename)
+        : copy.workspaceControls.feedback.failedDownloadSignoffJson,
     });
   }
 
@@ -475,7 +475,7 @@ export function InteractionAuditPage({
     setImportDraft("");
     setWorkspaceFeedback({
       tone: "neutral",
-      message: "Reset the operator signoff workspace.",
+      message: copy.workspaceControls.feedback.resetWorkspace,
     });
   }
 
@@ -498,7 +498,7 @@ export function InteractionAuditPage({
     setSignoffRequestContext(result.requestContext);
     setWorkspaceFeedback({
       tone: "neutral",
-      message: "Imported signoff JSON into the workspace.",
+      message: copy.workspaceControls.feedback.importedSignoffJson,
     });
   }
 
@@ -595,6 +595,7 @@ export function InteractionAuditPage({
         />
 
         <InteractionAuditWorkspaceControlsSection
+          copy={copy.workspaceControls}
           importDraft={importDraft}
           signoffDraft={signoffDraft}
           workspaceFeedback={workspaceFeedback}
@@ -603,7 +604,7 @@ export function InteractionAuditPage({
             setImportDraft("");
             setWorkspaceFeedback({
               tone: "neutral",
-              message: "Cleared the pasted signoff JSON.",
+              message: copy.workspaceControls.feedback.clearedPastedJson,
             });
           }}
           onCopySignoffDraft={handleCopySignoffDraft}

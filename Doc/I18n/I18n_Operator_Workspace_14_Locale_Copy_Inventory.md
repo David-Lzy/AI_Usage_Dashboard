@@ -22,6 +22,7 @@ Status note:
 - `Phase 409` adds a maintained presentation/export split for the remaining interaction-audit consumer labels: [I18n_Interaction_Audit_Presentation_Export_Split.md](./I18n_Interaction_Audit_Presentation_Export_Split.md)
 - `Phase 411` completed Review Queue display labels with 14-locale copy while preserving queue status enums and export payloads
 - `Phase 412` completed Surface Card chrome labels with 14-locale copy while preserving surface definitions, manual checks, frame identity, and export payloads
+- `Phase 413` completed Workspace Controls display labels and signoff-workspace feedback with 14-locale copy while preserving pasted JSON, parsed import errors, generated exports, filenames, MIME types, and request identity formatting
 
 ## Purpose
 
@@ -121,7 +122,7 @@ Preserve:
 - iframe titles if they are used by automation assertions
 - surface ids, dimensions, paths, action ids, and preset ids
 
-### Interaction Audit Workspace Controls
+### Interaction Audit Workspace Controls - Completed In Phase 413
 
 Source:
 
@@ -239,4 +240,4 @@ If `Phase 404` cannot move all consumer-only labels without touching export/evid
 
 `Phase 409` completed that split as documentation-only planning.
 
-`Phase 411` completed the Review Queue slice. `Phase 412` completed the Surface Card slice. The next child phase is [413_Phase_Interaction_Audit_Workspace_Controls_Display_Copy.md](../TODOs/413_Phase_Interaction_Audit_Workspace_Controls_Display_Copy.md), scoped to Workspace Controls display labels and safe route-owned feedback messages only.
+`Phase 411` completed the Review Queue slice. `Phase 412` completed the Surface Card slice. `Phase 413` completed the Workspace Controls slice. The next child phase is [414_Phase_Interaction_Audit_Request_Scope_Command_Headings_Display_Copy.md](../TODOs/414_Phase_Interaction_Audit_Request_Scope_Command_Headings_Display_Copy.md), scoped to Request Scope command headings only.

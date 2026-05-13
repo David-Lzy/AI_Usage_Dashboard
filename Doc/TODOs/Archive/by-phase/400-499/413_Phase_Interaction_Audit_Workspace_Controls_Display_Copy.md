@@ -16,8 +16,9 @@ Freshness model:
 
 Status note:
 
-- active after `Phase 412`
-- next child implementation phase from [I18n_Interaction_Audit_Presentation_Export_Split.md](../I18n/I18n_Interaction_Audit_Presentation_Export_Split.md)
+- completed on `2026-05-14`
+- next child implementation phase from [I18n_Interaction_Audit_Presentation_Export_Split.md](../../../../I18n/I18n_Interaction_Audit_Presentation_Export_Split.md)
+- closeout archived after moving Workspace Controls display labels and signoff-workspace feedback into 14-locale operator copy
 
 ## Goal
 
@@ -60,3 +61,22 @@ Move the interaction-audit Workspace Controls display labels and route-owned fee
 ## Follow-Up
 
 - Later phases may localize Request-Scope command headings and Handoff Summary presentation labels if they preserve raw/export evidence boundaries.
+
+## Completion Summary
+
+`Phase 413` moved Workspace Controls display labels and signoff-workspace feedback messages into `buildOperatorWorkspaceLocalizedCopy(i18n).interactionAudit.workspaceControls` with explicit copy for all 14 runtime locales.
+
+Delivered:
+
+- localized stable Workspace Controls labels: signoff draft/JSON copy and download actions, reset action, import disclosure, import textarea label and placeholder, apply/clear import actions, workspace-state label, and current-draft disclosure
+- localized signoff-workspace feedback for workspace updates, metadata updates, timestamp stamping, signoff draft/JSON copy/download success and failure, clipboard-unavailable state, reset, import success, and clear-pasted JSON
+- preserved pasted JSON content, parsed import error text, signoff export JSON fields, signoff draft Markdown, handoff draft Markdown, downloaded filenames, MIME types, signoff storage keys, request binding, and request revision formatting
+- queued [414_Phase_Interaction_Audit_Request_Scope_Command_Headings_Display_Copy.md](../../../414_Phase_Interaction_Audit_Request_Scope_Command_Headings_Display_Copy.md) as the next narrow interaction-audit display-copy slice
+
+## Verification
+
+- `npm run test -- src/shared/operator-workspace-localized-copy.test.ts src/sidepanel/interaction-audit-signoff.test.ts`
+- `npm run typecheck`
+- `npm run i18n:check`
+- `npm run docs:check`
+- `git diff --check`

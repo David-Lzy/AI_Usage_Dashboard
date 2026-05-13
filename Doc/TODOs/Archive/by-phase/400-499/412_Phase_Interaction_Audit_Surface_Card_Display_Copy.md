@@ -74,7 +74,7 @@ Delivered:
 - localized stable Surface Card chrome labels: section label, open-standalone action, status labels, loading fallback, manual-checks heading, signoff field label, signoff option display labels, notes label, and notes placeholder
 - updated `InteractionAuditSurfaceCard` and `InteractionAuditSurfaceGridSection` to receive display copy from the route
 - preserved surface titles, descriptions, action labels, action expectations, manual-check text, iframe title, surface ids, dimensions, paths, data attributes, action ids, preset ids, frame readiness raw messages, signoff exports, and generated handoff drafts
-- queued [413_Phase_Interaction_Audit_Workspace_Controls_Display_Copy.md](../../../413_Phase_Interaction_Audit_Workspace_Controls_Display_Copy.md) as the next narrow interaction-audit display-copy slice
+- queued [413_Phase_Interaction_Audit_Workspace_Controls_Display_Copy.md](./413_Phase_Interaction_Audit_Workspace_Controls_Display_Copy.md) as the next narrow interaction-audit display-copy slice
 
 ## Verification
 

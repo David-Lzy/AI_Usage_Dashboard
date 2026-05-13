@@ -201,6 +201,39 @@ type InteractionAuditSurfaceCardCopy = {
   };
 };
 
+type InteractionAuditWorkspaceControlsCopy = {
+  copySignoffDraft: string;
+  downloadSignoffDraft: string;
+  copySignoffJson: string;
+  downloadSignoffJson: string;
+  resetSignoff: string;
+  importSignoffJson: string;
+  pastedSignoffJson: string;
+  importPlaceholder: string;
+  applyImportedSignoff: string;
+  clearPastedJson: string;
+  workspaceState: string;
+  currentSignoffDraft: string;
+  feedback: {
+    noDecisions: string;
+    updatedWorkspace: string;
+    updatedMetadata: string;
+    stampedReviewTime: string;
+    copiedSignoffDraft: string;
+    copiedSignoffJson: string;
+    clipboardUnavailable: string;
+    failedCopySignoffDraft: string;
+    failedCopySignoffJson: string;
+    downloadedSignoffDraft: (filename: string) => string;
+    downloadedSignoffJson: (filename: string) => string;
+    failedDownloadSignoffDraft: string;
+    failedDownloadSignoffJson: string;
+    resetWorkspace: string;
+    importedSignoffJson: string;
+    clearedPastedJson: string;
+  };
+};
+
 const INTERACTION_AUDIT_REVIEW_QUEUE_COPY: Record<
   ResolvedAppLocale,
   InteractionAuditReviewQueueCopy
@@ -839,6 +872,578 @@ const INTERACTION_AUDIT_SURFACE_CARD_COPY: Record<
       notReviewed: "Belum direview",
       pass: "Lulus",
       followUp: "Follow-up diperlukan",
+    },
+  },
+};
+
+const INTERACTION_AUDIT_WORKSPACE_CONTROLS_COPY: Record<
+  ResolvedAppLocale,
+  InteractionAuditWorkspaceControlsCopy
+> = {
+  en: {
+    copySignoffDraft: "Copy signoff draft",
+    downloadSignoffDraft: "Download signoff draft",
+    copySignoffJson: "Copy signoff JSON",
+    downloadSignoffJson: "Download signoff JSON",
+    resetSignoff: "Reset signoff",
+    importSignoffJson: "Import signoff JSON",
+    pastedSignoffJson: "Pasted signoff JSON",
+    importPlaceholder: "Paste exported signoff JSON to restore a workspace.",
+    applyImportedSignoff: "Apply imported signoff",
+    clearPastedJson: "Clear pasted JSON",
+    workspaceState: "Workspace state",
+    currentSignoffDraft: "Current signoff draft",
+    feedback: {
+      noDecisions: "No operator signoff decisions are recorded yet.",
+      updatedWorkspace: "Updated the operator signoff workspace.",
+      updatedMetadata: "Updated the review-session metadata.",
+      stampedReviewTime:
+        "Stamped the current review time into the workspace metadata.",
+      copiedSignoffDraft: "Copied the current signoff draft to the clipboard.",
+      copiedSignoffJson: "Copied the current signoff JSON to the clipboard.",
+      clipboardUnavailable:
+        "Clipboard access is unavailable in this audit environment.",
+      failedCopySignoffDraft:
+        "Failed to copy the current signoff draft to the clipboard.",
+      failedCopySignoffJson:
+        "Failed to copy the current signoff JSON to the clipboard.",
+      downloadedSignoffDraft: (filename) =>
+        `Downloaded the current signoff draft as ${filename}.`,
+      downloadedSignoffJson: (filename) =>
+        `Downloaded the current signoff JSON as ${filename}.`,
+      failedDownloadSignoffDraft:
+        "Failed to download the current signoff draft from this audit environment.",
+      failedDownloadSignoffJson:
+        "Failed to download the current signoff JSON from this audit environment.",
+      resetWorkspace: "Reset the operator signoff workspace.",
+      importedSignoffJson: "Imported signoff JSON into the workspace.",
+      clearedPastedJson: "Cleared the pasted signoff JSON.",
+    },
+  },
+  "zh-CN": {
+    copySignoffDraft: "复制 signoff 草稿",
+    downloadSignoffDraft: "下载 signoff 草稿",
+    copySignoffJson: "复制 signoff JSON",
+    downloadSignoffJson: "下载 signoff JSON",
+    resetSignoff: "重置 signoff",
+    importSignoffJson: "导入 signoff JSON",
+    pastedSignoffJson: "粘贴的 signoff JSON",
+    importPlaceholder: "粘贴已导出的 signoff JSON 以恢复 workspace。",
+    applyImportedSignoff: "应用导入的 signoff",
+    clearPastedJson: "清空粘贴的 JSON",
+    workspaceState: "Workspace 状态",
+    currentSignoffDraft: "当前 signoff 草稿",
+    feedback: {
+      noDecisions: "尚未记录 operator signoff 决策。",
+      updatedWorkspace: "已更新 operator signoff workspace。",
+      updatedMetadata: "已更新 review-session 元数据。",
+      stampedReviewTime: "已将当前复查时间写入 workspace 元数据。",
+      copiedSignoffDraft: "已将当前 signoff 草稿复制到剪贴板。",
+      copiedSignoffJson: "已将当前 signoff JSON 复制到剪贴板。",
+      clipboardUnavailable: "此审计环境无法访问剪贴板。",
+      failedCopySignoffDraft: "无法将当前 signoff 草稿复制到剪贴板。",
+      failedCopySignoffJson: "无法将当前 signoff JSON 复制到剪贴板。",
+      downloadedSignoffDraft: (filename) =>
+        `已将当前 signoff 草稿下载为 ${filename}。`,
+      downloadedSignoffJson: (filename) =>
+        `已将当前 signoff JSON 下载为 ${filename}。`,
+      failedDownloadSignoffDraft:
+        "无法从此审计环境下载当前 signoff 草稿。",
+      failedDownloadSignoffJson:
+        "无法从此审计环境下载当前 signoff JSON。",
+      resetWorkspace: "已重置 operator signoff workspace。",
+      importedSignoffJson: "已将 signoff JSON 导入 workspace。",
+      clearedPastedJson: "已清空粘贴的 signoff JSON。",
+    },
+  },
+  "zh-TW": {
+    copySignoffDraft: "複製 signoff 草稿",
+    downloadSignoffDraft: "下載 signoff 草稿",
+    copySignoffJson: "複製 signoff JSON",
+    downloadSignoffJson: "下載 signoff JSON",
+    resetSignoff: "重置 signoff",
+    importSignoffJson: "匯入 signoff JSON",
+    pastedSignoffJson: "貼上的 signoff JSON",
+    importPlaceholder: "貼上已匯出的 signoff JSON 以恢復 workspace。",
+    applyImportedSignoff: "套用匯入的 signoff",
+    clearPastedJson: "清除貼上的 JSON",
+    workspaceState: "Workspace 狀態",
+    currentSignoffDraft: "目前 signoff 草稿",
+    feedback: {
+      noDecisions: "尚未記錄 operator signoff 決策。",
+      updatedWorkspace: "已更新 operator signoff workspace。",
+      updatedMetadata: "已更新 review-session 中繼資料。",
+      stampedReviewTime: "已將目前複查時間寫入 workspace 中繼資料。",
+      copiedSignoffDraft: "已將目前 signoff 草稿複製到剪貼簿。",
+      copiedSignoffJson: "已將目前 signoff JSON 複製到剪貼簿。",
+      clipboardUnavailable: "此稽核環境無法存取剪貼簿。",
+      failedCopySignoffDraft: "無法將目前 signoff 草稿複製到剪貼簿。",
+      failedCopySignoffJson: "無法將目前 signoff JSON 複製到剪貼簿。",
+      downloadedSignoffDraft: (filename) =>
+        `已將目前 signoff 草稿下載為 ${filename}。`,
+      downloadedSignoffJson: (filename) =>
+        `已將目前 signoff JSON 下載為 ${filename}。`,
+      failedDownloadSignoffDraft:
+        "無法從此稽核環境下載目前 signoff 草稿。",
+      failedDownloadSignoffJson:
+        "無法從此稽核環境下載目前 signoff JSON。",
+      resetWorkspace: "已重置 operator signoff workspace。",
+      importedSignoffJson: "已將 signoff JSON 匯入 workspace。",
+      clearedPastedJson: "已清除貼上的 signoff JSON。",
+    },
+  },
+  ja: {
+    copySignoffDraft: "Signoff 草稿をコピー",
+    downloadSignoffDraft: "Signoff 草稿をダウンロード",
+    copySignoffJson: "Signoff JSON をコピー",
+    downloadSignoffJson: "Signoff JSON をダウンロード",
+    resetSignoff: "Signoff をリセット",
+    importSignoffJson: "Signoff JSON をインポート",
+    pastedSignoffJson: "貼り付けた signoff JSON",
+    importPlaceholder:
+      "Export した signoff JSON を貼り付けて workspace を復元します。",
+    applyImportedSignoff: "インポートした signoff を適用",
+    clearPastedJson: "貼り付けた JSON をクリア",
+    workspaceState: "Workspace 状態",
+    currentSignoffDraft: "現在の signoff 草稿",
+    feedback: {
+      noDecisions: "Operator signoff の判断はまだ記録されていません。",
+      updatedWorkspace: "Operator signoff workspace を更新しました。",
+      updatedMetadata: "Review-session メタデータを更新しました。",
+      stampedReviewTime: "現在のレビュー時刻を workspace メタデータに記録しました。",
+      copiedSignoffDraft: "現在の signoff 草稿をクリップボードにコピーしました。",
+      copiedSignoffJson: "現在の signoff JSON をクリップボードにコピーしました。",
+      clipboardUnavailable:
+        "この監査環境ではクリップボードにアクセスできません。",
+      failedCopySignoffDraft:
+        "現在の signoff 草稿をクリップボードにコピーできませんでした。",
+      failedCopySignoffJson:
+        "現在の signoff JSON をクリップボードにコピーできませんでした。",
+      downloadedSignoffDraft: (filename) =>
+        `現在の signoff 草稿を ${filename} としてダウンロードしました。`,
+      downloadedSignoffJson: (filename) =>
+        `現在の signoff JSON を ${filename} としてダウンロードしました。`,
+      failedDownloadSignoffDraft:
+        "この監査環境から現在の signoff 草稿をダウンロードできませんでした。",
+      failedDownloadSignoffJson:
+        "この監査環境から現在の signoff JSON をダウンロードできませんでした。",
+      resetWorkspace: "Operator signoff workspace をリセットしました。",
+      importedSignoffJson: "Signoff JSON を workspace にインポートしました。",
+      clearedPastedJson: "貼り付けた signoff JSON をクリアしました。",
+    },
+  },
+  ko: {
+    copySignoffDraft: "Signoff draft 복사",
+    downloadSignoffDraft: "Signoff draft 다운로드",
+    copySignoffJson: "Signoff JSON 복사",
+    downloadSignoffJson: "Signoff JSON 다운로드",
+    resetSignoff: "Signoff 재설정",
+    importSignoffJson: "Signoff JSON 가져오기",
+    pastedSignoffJson: "붙여넣은 signoff JSON",
+    importPlaceholder:
+      "내보낸 signoff JSON 을 붙여넣어 workspace 를 복원합니다.",
+    applyImportedSignoff: "가져온 signoff 적용",
+    clearPastedJson: "붙여넣은 JSON 지우기",
+    workspaceState: "Workspace 상태",
+    currentSignoffDraft: "현재 signoff draft",
+    feedback: {
+      noDecisions: "Operator signoff 결정이 아직 기록되지 않았습니다.",
+      updatedWorkspace: "Operator signoff workspace 를 업데이트했습니다.",
+      updatedMetadata: "Review-session metadata 를 업데이트했습니다.",
+      stampedReviewTime:
+        "현재 review 시간을 workspace metadata 에 기록했습니다.",
+      copiedSignoffDraft: "현재 signoff draft 를 clipboard 에 복사했습니다.",
+      copiedSignoffJson: "현재 signoff JSON 을 clipboard 에 복사했습니다.",
+      clipboardUnavailable:
+        "이 audit 환경에서는 clipboard 접근을 사용할 수 없습니다.",
+      failedCopySignoffDraft:
+        "현재 signoff draft 를 clipboard 에 복사하지 못했습니다.",
+      failedCopySignoffJson:
+        "현재 signoff JSON 을 clipboard 에 복사하지 못했습니다.",
+      downloadedSignoffDraft: (filename) =>
+        `현재 signoff draft 를 ${filename}(으)로 다운로드했습니다.`,
+      downloadedSignoffJson: (filename) =>
+        `현재 signoff JSON 을 ${filename}(으)로 다운로드했습니다.`,
+      failedDownloadSignoffDraft:
+        "이 audit 환경에서 현재 signoff draft 를 다운로드하지 못했습니다.",
+      failedDownloadSignoffJson:
+        "이 audit 환경에서 현재 signoff JSON 을 다운로드하지 못했습니다.",
+      resetWorkspace: "Operator signoff workspace 를 재설정했습니다.",
+      importedSignoffJson: "Signoff JSON 을 workspace 로 가져왔습니다.",
+      clearedPastedJson: "붙여넣은 signoff JSON 을 지웠습니다.",
+    },
+  },
+  "es-419": {
+    copySignoffDraft: "Copiar borrador de signoff",
+    downloadSignoffDraft: "Descargar borrador de signoff",
+    copySignoffJson: "Copiar signoff JSON",
+    downloadSignoffJson: "Descargar signoff JSON",
+    resetSignoff: "Restablecer signoff",
+    importSignoffJson: "Importar signoff JSON",
+    pastedSignoffJson: "Signoff JSON pegado",
+    importPlaceholder:
+      "Pega el signoff JSON exportado para restaurar un workspace.",
+    applyImportedSignoff: "Aplicar signoff importado",
+    clearPastedJson: "Limpiar JSON pegado",
+    workspaceState: "Estado del workspace",
+    currentSignoffDraft: "Borrador de signoff actual",
+    feedback: {
+      noDecisions: "Aún no se registran decisiones de signoff del operador.",
+      updatedWorkspace: "Se actualizó el workspace de signoff del operador.",
+      updatedMetadata: "Se actualizaron los metadatos de la review-session.",
+      stampedReviewTime:
+        "Se marcó la hora de revisión actual en los metadatos del workspace.",
+      copiedSignoffDraft:
+        "Se copió el borrador de signoff actual al portapapeles.",
+      copiedSignoffJson: "Se copió el signoff JSON actual al portapapeles.",
+      clipboardUnavailable:
+        "El acceso al portapapeles no está disponible en este entorno de auditoría.",
+      failedCopySignoffDraft:
+        "No se pudo copiar el borrador de signoff actual al portapapeles.",
+      failedCopySignoffJson:
+        "No se pudo copiar el signoff JSON actual al portapapeles.",
+      downloadedSignoffDraft: (filename) =>
+        `Se descargó el borrador de signoff actual como ${filename}.`,
+      downloadedSignoffJson: (filename) =>
+        `Se descargó el signoff JSON actual como ${filename}.`,
+      failedDownloadSignoffDraft:
+        "No se pudo descargar el borrador de signoff actual desde este entorno de auditoría.",
+      failedDownloadSignoffJson:
+        "No se pudo descargar el signoff JSON actual desde este entorno de auditoría.",
+      resetWorkspace: "Se restableció el workspace de signoff del operador.",
+      importedSignoffJson: "Se importó el signoff JSON al workspace.",
+      clearedPastedJson: "Se limpió el signoff JSON pegado.",
+    },
+  },
+  "pt-BR": {
+    copySignoffDraft: "Copiar rascunho de signoff",
+    downloadSignoffDraft: "Baixar rascunho de signoff",
+    copySignoffJson: "Copiar signoff JSON",
+    downloadSignoffJson: "Baixar signoff JSON",
+    resetSignoff: "Redefinir signoff",
+    importSignoffJson: "Importar signoff JSON",
+    pastedSignoffJson: "Signoff JSON colado",
+    importPlaceholder:
+      "Cole o signoff JSON exportado para restaurar um workspace.",
+    applyImportedSignoff: "Aplicar signoff importado",
+    clearPastedJson: "Limpar JSON colado",
+    workspaceState: "Estado do workspace",
+    currentSignoffDraft: "Rascunho de signoff atual",
+    feedback: {
+      noDecisions: "Ainda não há decisões de signoff do operador registradas.",
+      updatedWorkspace: "Workspace de signoff do operador atualizado.",
+      updatedMetadata: "Metadados da review-session atualizados.",
+      stampedReviewTime:
+        "Hora atual da revisão registrada nos metadados do workspace.",
+      copiedSignoffDraft:
+        "Rascunho de signoff atual copiado para a área de transferência.",
+      copiedSignoffJson:
+        "Signoff JSON atual copiado para a área de transferência.",
+      clipboardUnavailable:
+        "Acesso à área de transferência indisponível neste ambiente de auditoria.",
+      failedCopySignoffDraft:
+        "Falha ao copiar o rascunho de signoff atual para a área de transferência.",
+      failedCopySignoffJson:
+        "Falha ao copiar o signoff JSON atual para a área de transferência.",
+      downloadedSignoffDraft: (filename) =>
+        `Rascunho de signoff atual baixado como ${filename}.`,
+      downloadedSignoffJson: (filename) =>
+        `Signoff JSON atual baixado como ${filename}.`,
+      failedDownloadSignoffDraft:
+        "Falha ao baixar o rascunho de signoff atual deste ambiente de auditoria.",
+      failedDownloadSignoffJson:
+        "Falha ao baixar o signoff JSON atual deste ambiente de auditoria.",
+      resetWorkspace: "Workspace de signoff do operador redefinido.",
+      importedSignoffJson: "Signoff JSON importado para o workspace.",
+      clearedPastedJson: "Signoff JSON colado limpo.",
+    },
+  },
+  fr: {
+    copySignoffDraft: "Copier le brouillon de signoff",
+    downloadSignoffDraft: "Télécharger le brouillon de signoff",
+    copySignoffJson: "Copier le signoff JSON",
+    downloadSignoffJson: "Télécharger le signoff JSON",
+    resetSignoff: "Réinitialiser le signoff",
+    importSignoffJson: "Importer le signoff JSON",
+    pastedSignoffJson: "Signoff JSON collé",
+    importPlaceholder:
+      "Collez le signoff JSON exporté pour restaurer un workspace.",
+    applyImportedSignoff: "Appliquer le signoff importé",
+    clearPastedJson: "Effacer le JSON collé",
+    workspaceState: "État du workspace",
+    currentSignoffDraft: "Brouillon de signoff actuel",
+    feedback: {
+      noDecisions: "Aucune décision de signoff operator n'est encore enregistrée.",
+      updatedWorkspace: "Workspace de signoff operator mis à jour.",
+      updatedMetadata: "Métadonnées de review-session mises à jour.",
+      stampedReviewTime:
+        "Heure de revue actuelle inscrite dans les métadonnées du workspace.",
+      copiedSignoffDraft:
+        "Brouillon de signoff actuel copié dans le presse-papiers.",
+      copiedSignoffJson: "Signoff JSON actuel copié dans le presse-papiers.",
+      clipboardUnavailable:
+        "L'accès au presse-papiers est indisponible dans cet environnement d'audit.",
+      failedCopySignoffDraft:
+        "Impossible de copier le brouillon de signoff actuel dans le presse-papiers.",
+      failedCopySignoffJson:
+        "Impossible de copier le signoff JSON actuel dans le presse-papiers.",
+      downloadedSignoffDraft: (filename) =>
+        `Brouillon de signoff actuel téléchargé sous ${filename}.`,
+      downloadedSignoffJson: (filename) =>
+        `Signoff JSON actuel téléchargé sous ${filename}.`,
+      failedDownloadSignoffDraft:
+        "Impossible de télécharger le brouillon de signoff actuel depuis cet environnement d'audit.",
+      failedDownloadSignoffJson:
+        "Impossible de télécharger le signoff JSON actuel depuis cet environnement d'audit.",
+      resetWorkspace: "Workspace de signoff operator réinitialisé.",
+      importedSignoffJson: "Signoff JSON importé dans le workspace.",
+      clearedPastedJson: "Signoff JSON collé effacé.",
+    },
+  },
+  de: {
+    copySignoffDraft: "Signoff-Entwurf kopieren",
+    downloadSignoffDraft: "Signoff-Entwurf herunterladen",
+    copySignoffJson: "Signoff-JSON kopieren",
+    downloadSignoffJson: "Signoff-JSON herunterladen",
+    resetSignoff: "Signoff zurücksetzen",
+    importSignoffJson: "Signoff-JSON importieren",
+    pastedSignoffJson: "Eingefügtes Signoff-JSON",
+    importPlaceholder:
+      "Exportiertes Signoff-JSON einfügen, um einen Workspace wiederherzustellen.",
+    applyImportedSignoff: "Importierten Signoff anwenden",
+    clearPastedJson: "Eingefügtes JSON löschen",
+    workspaceState: "Workspace-Status",
+    currentSignoffDraft: "Aktueller Signoff-Entwurf",
+    feedback: {
+      noDecisions: "Es sind noch keine Operator-Signoff-Entscheidungen erfasst.",
+      updatedWorkspace: "Operator-Signoff-Workspace aktualisiert.",
+      updatedMetadata: "Review-Session-Metadaten aktualisiert.",
+      stampedReviewTime:
+        "Aktuelle Review-Zeit in die Workspace-Metadaten geschrieben.",
+      copiedSignoffDraft:
+        "Aktueller Signoff-Entwurf in die Zwischenablage kopiert.",
+      copiedSignoffJson: "Aktuelles Signoff-JSON in die Zwischenablage kopiert.",
+      clipboardUnavailable:
+        "Zwischenablagezugriff ist in dieser Audit-Umgebung nicht verfügbar.",
+      failedCopySignoffDraft:
+        "Aktueller Signoff-Entwurf konnte nicht in die Zwischenablage kopiert werden.",
+      failedCopySignoffJson:
+        "Aktuelles Signoff-JSON konnte nicht in die Zwischenablage kopiert werden.",
+      downloadedSignoffDraft: (filename) =>
+        `Aktueller Signoff-Entwurf als ${filename} heruntergeladen.`,
+      downloadedSignoffJson: (filename) =>
+        `Aktuelles Signoff-JSON als ${filename} heruntergeladen.`,
+      failedDownloadSignoffDraft:
+        "Aktueller Signoff-Entwurf konnte aus dieser Audit-Umgebung nicht heruntergeladen werden.",
+      failedDownloadSignoffJson:
+        "Aktuelles Signoff-JSON konnte aus dieser Audit-Umgebung nicht heruntergeladen werden.",
+      resetWorkspace: "Operator-Signoff-Workspace zurückgesetzt.",
+      importedSignoffJson: "Signoff-JSON in den Workspace importiert.",
+      clearedPastedJson: "Eingefügtes Signoff-JSON gelöscht.",
+    },
+  },
+  it: {
+    copySignoffDraft: "Copia bozza signoff",
+    downloadSignoffDraft: "Scarica bozza signoff",
+    copySignoffJson: "Copia signoff JSON",
+    downloadSignoffJson: "Scarica signoff JSON",
+    resetSignoff: "Reimposta signoff",
+    importSignoffJson: "Importa signoff JSON",
+    pastedSignoffJson: "Signoff JSON incollato",
+    importPlaceholder:
+      "Incolla il signoff JSON esportato per ripristinare un workspace.",
+    applyImportedSignoff: "Applica signoff importato",
+    clearPastedJson: "Cancella JSON incollato",
+    workspaceState: "Stato workspace",
+    currentSignoffDraft: "Bozza signoff attuale",
+    feedback: {
+      noDecisions: "Nessuna decisione di signoff operator ancora registrata.",
+      updatedWorkspace: "Workspace di signoff operator aggiornato.",
+      updatedMetadata: "Metadati review-session aggiornati.",
+      stampedReviewTime:
+        "Ora di revisione attuale registrata nei metadati del workspace.",
+      copiedSignoffDraft: "Bozza signoff attuale copiata negli appunti.",
+      copiedSignoffJson: "Signoff JSON attuale copiato negli appunti.",
+      clipboardUnavailable:
+        "Accesso agli appunti non disponibile in questo ambiente di audit.",
+      failedCopySignoffDraft:
+        "Impossibile copiare la bozza signoff attuale negli appunti.",
+      failedCopySignoffJson:
+        "Impossibile copiare il signoff JSON attuale negli appunti.",
+      downloadedSignoffDraft: (filename) =>
+        `Bozza signoff attuale scaricata come ${filename}.`,
+      downloadedSignoffJson: (filename) =>
+        `Signoff JSON attuale scaricato come ${filename}.`,
+      failedDownloadSignoffDraft:
+        "Impossibile scaricare la bozza signoff attuale da questo ambiente di audit.",
+      failedDownloadSignoffJson:
+        "Impossibile scaricare il signoff JSON attuale da questo ambiente di audit.",
+      resetWorkspace: "Workspace di signoff operator reimpostato.",
+      importedSignoffJson: "Signoff JSON importato nel workspace.",
+      clearedPastedJson: "Signoff JSON incollato cancellato.",
+    },
+  },
+  ru: {
+    copySignoffDraft: "Копировать draft signoff",
+    downloadSignoffDraft: "Скачать draft signoff",
+    copySignoffJson: "Копировать signoff JSON",
+    downloadSignoffJson: "Скачать signoff JSON",
+    resetSignoff: "Сбросить signoff",
+    importSignoffJson: "Импортировать signoff JSON",
+    pastedSignoffJson: "Вставленный signoff JSON",
+    importPlaceholder:
+      "Вставьте экспортированный signoff JSON, чтобы восстановить workspace.",
+    applyImportedSignoff: "Применить импортированный signoff",
+    clearPastedJson: "Очистить вставленный JSON",
+    workspaceState: "Состояние workspace",
+    currentSignoffDraft: "Текущий draft signoff",
+    feedback: {
+      noDecisions: "Решения operator signoff еще не записаны.",
+      updatedWorkspace: "Operator signoff workspace обновлен.",
+      updatedMetadata: "Метаданные review-session обновлены.",
+      stampedReviewTime:
+        "Текущее время проверки записано в метаданные workspace.",
+      copiedSignoffDraft: "Текущий draft signoff скопирован в clipboard.",
+      copiedSignoffJson: "Текущий signoff JSON скопирован в clipboard.",
+      clipboardUnavailable:
+        "Доступ к clipboard недоступен в этой audit-среде.",
+      failedCopySignoffDraft:
+        "Не удалось скопировать текущий draft signoff в clipboard.",
+      failedCopySignoffJson:
+        "Не удалось скопировать текущий signoff JSON в clipboard.",
+      downloadedSignoffDraft: (filename) =>
+        `Текущий draft signoff скачан как ${filename}.`,
+      downloadedSignoffJson: (filename) =>
+        `Текущий signoff JSON скачан как ${filename}.`,
+      failedDownloadSignoffDraft:
+        "Не удалось скачать текущий draft signoff из этой audit-среды.",
+      failedDownloadSignoffJson:
+        "Не удалось скачать текущий signoff JSON из этой audit-среды.",
+      resetWorkspace: "Operator signoff workspace сброшен.",
+      importedSignoffJson: "Signoff JSON импортирован в workspace.",
+      clearedPastedJson: "Вставленный signoff JSON очищен.",
+    },
+  },
+  ar: {
+    copySignoffDraft: "نسخ مسودة signoff",
+    downloadSignoffDraft: "تنزيل مسودة signoff",
+    copySignoffJson: "نسخ signoff JSON",
+    downloadSignoffJson: "تنزيل signoff JSON",
+    resetSignoff: "إعادة ضبط signoff",
+    importSignoffJson: "استيراد signoff JSON",
+    pastedSignoffJson: "signoff JSON الملصق",
+    importPlaceholder:
+      "الصق signoff JSON المصدّر لاستعادة workspace.",
+    applyImportedSignoff: "تطبيق signoff المستورد",
+    clearPastedJson: "مسح JSON الملصق",
+    workspaceState: "حالة workspace",
+    currentSignoffDraft: "مسودة signoff الحالية",
+    feedback: {
+      noDecisions: "لم يتم تسجيل قرارات operator signoff بعد.",
+      updatedWorkspace: "تم تحديث operator signoff workspace.",
+      updatedMetadata: "تم تحديث بيانات review-session.",
+      stampedReviewTime:
+        "تم تسجيل وقت المراجعة الحالي في بيانات workspace.",
+      copiedSignoffDraft: "تم نسخ مسودة signoff الحالية إلى clipboard.",
+      copiedSignoffJson: "تم نسخ signoff JSON الحالي إلى clipboard.",
+      clipboardUnavailable:
+        "الوصول إلى clipboard غير متاح في بيئة التدقيق هذه.",
+      failedCopySignoffDraft:
+        "تعذر نسخ مسودة signoff الحالية إلى clipboard.",
+      failedCopySignoffJson: "تعذر نسخ signoff JSON الحالي إلى clipboard.",
+      downloadedSignoffDraft: (filename) =>
+        `تم تنزيل مسودة signoff الحالية باسم ${filename}.`,
+      downloadedSignoffJson: (filename) =>
+        `تم تنزيل signoff JSON الحالي باسم ${filename}.`,
+      failedDownloadSignoffDraft:
+        "تعذر تنزيل مسودة signoff الحالية من بيئة التدقيق هذه.",
+      failedDownloadSignoffJson:
+        "تعذر تنزيل signoff JSON الحالي من بيئة التدقيق هذه.",
+      resetWorkspace: "تمت إعادة ضبط operator signoff workspace.",
+      importedSignoffJson: "تم استيراد signoff JSON إلى workspace.",
+      clearedPastedJson: "تم مسح signoff JSON الملصق.",
+    },
+  },
+  hi: {
+    copySignoffDraft: "Signoff draft copy करें",
+    downloadSignoffDraft: "Signoff draft download करें",
+    copySignoffJson: "Signoff JSON copy करें",
+    downloadSignoffJson: "Signoff JSON download करें",
+    resetSignoff: "Signoff reset करें",
+    importSignoffJson: "Signoff JSON import करें",
+    pastedSignoffJson: "Pasted signoff JSON",
+    importPlaceholder:
+      "Workspace restore करने के लिए exported signoff JSON paste करें।",
+    applyImportedSignoff: "Imported signoff apply करें",
+    clearPastedJson: "Pasted JSON clear करें",
+    workspaceState: "Workspace state",
+    currentSignoffDraft: "Current signoff draft",
+    feedback: {
+      noDecisions: "अभी कोई operator signoff decision record नहीं है।",
+      updatedWorkspace: "Operator signoff workspace updated.",
+      updatedMetadata: "Review-session metadata updated.",
+      stampedReviewTime:
+        "Current review time workspace metadata में stamped.",
+      copiedSignoffDraft: "Current signoff draft clipboard में copied.",
+      copiedSignoffJson: "Current signoff JSON clipboard में copied.",
+      clipboardUnavailable:
+        "इस audit environment में clipboard access unavailable है।",
+      failedCopySignoffDraft:
+        "Current signoff draft clipboard में copy नहीं हुआ।",
+      failedCopySignoffJson:
+        "Current signoff JSON clipboard में copy नहीं हुआ।",
+      downloadedSignoffDraft: (filename) =>
+        `Current signoff draft ${filename} के रूप में downloaded.`,
+      downloadedSignoffJson: (filename) =>
+        `Current signoff JSON ${filename} के रूप में downloaded.`,
+      failedDownloadSignoffDraft:
+        "इस audit environment से current signoff draft download नहीं हुआ।",
+      failedDownloadSignoffJson:
+        "इस audit environment से current signoff JSON download नहीं हुआ।",
+      resetWorkspace: "Operator signoff workspace reset.",
+      importedSignoffJson: "Signoff JSON workspace में imported.",
+      clearedPastedJson: "Pasted signoff JSON cleared.",
+    },
+  },
+  id: {
+    copySignoffDraft: "Salin draft signoff",
+    downloadSignoffDraft: "Unduh draft signoff",
+    copySignoffJson: "Salin signoff JSON",
+    downloadSignoffJson: "Unduh signoff JSON",
+    resetSignoff: "Reset signoff",
+    importSignoffJson: "Impor signoff JSON",
+    pastedSignoffJson: "Signoff JSON yang ditempel",
+    importPlaceholder:
+      "Tempel signoff JSON yang diekspor untuk memulihkan workspace.",
+    applyImportedSignoff: "Terapkan signoff impor",
+    clearPastedJson: "Bersihkan JSON tempel",
+    workspaceState: "Status workspace",
+    currentSignoffDraft: "Draft signoff saat ini",
+    feedback: {
+      noDecisions: "Belum ada keputusan signoff operator yang direkam.",
+      updatedWorkspace: "Workspace signoff operator diperbarui.",
+      updatedMetadata: "Metadata review-session diperbarui.",
+      stampedReviewTime:
+        "Waktu review saat ini dicatat ke metadata workspace.",
+      copiedSignoffDraft: "Draft signoff saat ini disalin ke clipboard.",
+      copiedSignoffJson: "Signoff JSON saat ini disalin ke clipboard.",
+      clipboardUnavailable:
+        "Akses clipboard tidak tersedia di lingkungan audit ini.",
+      failedCopySignoffDraft:
+        "Gagal menyalin draft signoff saat ini ke clipboard.",
+      failedCopySignoffJson:
+        "Gagal menyalin signoff JSON saat ini ke clipboard.",
+      downloadedSignoffDraft: (filename) =>
+        `Draft signoff saat ini diunduh sebagai ${filename}.`,
+      downloadedSignoffJson: (filename) =>
+        `Signoff JSON saat ini diunduh sebagai ${filename}.`,
+      failedDownloadSignoffDraft:
+        "Gagal mengunduh draft signoff saat ini dari lingkungan audit ini.",
+      failedDownloadSignoffJson:
+        "Gagal mengunduh signoff JSON saat ini dari lingkungan audit ini.",
+      resetWorkspace: "Workspace signoff operator direset.",
+      importedSignoffJson: "Signoff JSON diimpor ke workspace.",
+      clearedPastedJson: "Signoff JSON yang ditempel dibersihkan.",
     },
   },
 };
@@ -3303,6 +3908,8 @@ export function buildOperatorWorkspaceLocalizedCopy(i18n: RuntimeI18n) {
       ...copy.interactionAudit,
       reviewQueue: INTERACTION_AUDIT_REVIEW_QUEUE_COPY[i18n.resolvedLocale],
       surfaceCard: INTERACTION_AUDIT_SURFACE_CARD_COPY[i18n.resolvedLocale],
+      workspaceControls:
+        INTERACTION_AUDIT_WORKSPACE_CONTROLS_COPY[i18n.resolvedLocale],
     },
   };
 }

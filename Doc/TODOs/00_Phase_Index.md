@@ -34,9 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [413_Phase_Interaction_Audit_Workspace_Controls_Display_Copy.md](./413_Phase_Interaction_Audit_Workspace_Controls_Display_Copy.md)
-- latest completed slice: [412_Phase_Interaction_Audit_Surface_Card_Display_Copy.md](./Archive/by-phase/400-499/412_Phase_Interaction_Audit_Surface_Card_Display_Copy.md)
-- queued phase files: not selected yet after active `Phase 413`
+- active phase file: [414_Phase_Interaction_Audit_Request_Scope_Command_Headings_Display_Copy.md](./414_Phase_Interaction_Audit_Request_Scope_Command_Headings_Display_Copy.md)
+- latest completed slice: [413_Phase_Interaction_Audit_Workspace_Controls_Display_Copy.md](./Archive/by-phase/400-499/413_Phase_Interaction_Audit_Workspace_Controls_Display_Copy.md)
+- queued phase files: not selected yet after active `Phase 414`
 
 Completed phases should be moved to:
 
@@ -805,6 +805,7 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 410` closeout added localized store-helper error wrappers while preserving raw invalid-preset, malformed-seed, and native popup probe error text inside the rendered helper message
 - the 2026-05-14 `Phase 411` closeout added localized interaction-audit Review Queue display labels while preserving queue status enums, surface titles, signoff exports, generated handoff drafts, route ids, action ids, preset ids, data attributes, and downloaded filenames
 - the 2026-05-14 `Phase 412` closeout added localized interaction-audit Surface Card chrome labels while preserving surface definitions, manual checks, frame-action raw messages, iframe identity, signoff exports, generated handoff drafts, route ids, action ids, preset ids, data attributes, and downloaded filenames
+- the 2026-05-14 `Phase 413` closeout added localized interaction-audit Workspace Controls display labels and signoff-workspace feedback while preserving pasted JSON, parsed import error text, signoff export JSON, signoff draft Markdown, handoff draft Markdown, filenames, MIME types, storage keys, request binding, and request revision formatting
 
 ## Delivery Standard For Each Phase
 
