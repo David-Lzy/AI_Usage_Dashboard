@@ -22,6 +22,7 @@ Status note:
 - [Deeper Runtime Copy Backlog](./I18n_Deeper_Runtime_Copy_Backlog.md)
 - [Raw Provider Source Truth Policy](./I18n_Raw_Provider_Source_Truth_Policy.md)
 - [Store Runtime Helper Copy](./I18n_Store_Runtime_Helper_Copy.md)
+- [Store Helper Error Presentation Split](./I18n_Store_Helper_Error_Presentation_Split.md)
 - [Adapter Diagnostic Reason Code Plan](./I18n_Adapter_Diagnostic_Reason_Code_Plan.md)
 - [Operator Workspace Boundary And Extraction](./I18n_Operator_Workspace_Boundary_And_Extraction.md)
 - [Interaction Audit Presentation And Export Split](./I18n_Interaction_Audit_Presentation_Export_Split.md)

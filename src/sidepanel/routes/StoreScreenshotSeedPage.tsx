@@ -215,7 +215,7 @@ export function StoreScreenshotSeedPage({
             ? copy.applyingDetail(seedState.preset)
             : seedState.status === "done"
               ? doneDetail
-              : seedState.message}
+              : copy.errorDetail(seedState.message)}
         </p>
       </section>
 

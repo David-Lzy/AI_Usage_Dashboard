@@ -37,6 +37,7 @@ Track runtime copy that still falls back to English after the 14-locale shell pi
 - Operator-workspace helper-owned copy now has explicit 14-locale coverage through `Phase 404`; consumer-only interaction-audit labels next to export/automation boundaries remain follow-up.
 - The interaction-audit consumer-label follow-up now has a presentation/export split reference from `Phase 409`: [I18n_Interaction_Audit_Presentation_Export_Split.md](./I18n_Interaction_Audit_Presentation_Export_Split.md).
 - Store-helper copy now has explicit 14-locale coverage through `Phase 405` while screenshot workflow evidence and automation identity fields remain raw.
+- Store-helper visible error presentation now has explicit 14-locale wrappers through `Phase 410`, with raw helper error text preserved inside the wrapper.
 - Deeper structured helper copy outside the popup, Settings, Provider Detail, provider-source display, typed diagnostic presentation, operator-workspace helper, and store-helper slices still mostly uses explicit `zh-CN` branches plus English fallback for every other non-English locale.
 - Locale registry, `rtl` mapping, runtime `lang`/`dir`, Chrome `_locales`, RDP locale validation, and store listing draft coverage are already guarded by `npm run i18n:check`.
 
@@ -200,6 +201,7 @@ Reason:
 - `Phase 403` inventoried store-helper runtime copy for the next implementation slice.
 - `Phase 404` translated operator-workspace helper-owned buckets for all 14 runtime locales.
 - `Phase 405` translated store-helper screenshot seed and native popup probe buckets for all 14 runtime locales.
+- `Phase 410` added localized store-helper error wrappers while preserving raw invalid-preset, malformed-seed, and native popup probe error strings inside the displayed message.
 
 ## Verification Pattern
 

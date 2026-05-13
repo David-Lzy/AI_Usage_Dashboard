@@ -103,7 +103,7 @@ export function StoreScreenshotNativePopupProbePage({
             ? copy.openingDetail
             : probeState.status === "done"
               ? copy.acceptedMessage
-              : probeState.message}
+              : copy.errorDetail(probeState.message)}
         </p>
       </section>
 

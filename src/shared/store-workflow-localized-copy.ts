@@ -44,6 +44,101 @@ type StoreWorkflowCopyData = {
   };
 };
 
+type StoreWorkflowErrorPresentationData = {
+  screenshotSeedErrorDetail: (rawMessage: string) => string;
+  nativePopupProbeErrorDetail: (rawMessage: string) => string;
+};
+
+const STORE_WORKFLOW_ERROR_PRESENTATION: Record<
+  ResolvedAppLocale,
+  StoreWorkflowErrorPresentationData
+> = {
+  en: {
+    screenshotSeedErrorDetail: (rawMessage) =>
+      `Runtime seed error: ${rawMessage}`,
+    nativePopupProbeErrorDetail: (rawMessage) =>
+      `Native popup probe error: ${rawMessage}`,
+  },
+  "zh-CN": {
+    screenshotSeedErrorDetail: (rawMessage) =>
+      `运行时 seed 错误：${rawMessage}`,
+    nativePopupProbeErrorDetail: (rawMessage) =>
+      `原生 popup probe 错误：${rawMessage}`,
+  },
+  "zh-TW": {
+    screenshotSeedErrorDetail: (rawMessage) =>
+      `Runtime seed 錯誤：${rawMessage}`,
+    nativePopupProbeErrorDetail: (rawMessage) =>
+      `原生 popup probe 錯誤：${rawMessage}`,
+  },
+  ja: {
+    screenshotSeedErrorDetail: (rawMessage) =>
+      `Runtime seed エラー: ${rawMessage}`,
+    nativePopupProbeErrorDetail: (rawMessage) =>
+      `Native popup probe エラー: ${rawMessage}`,
+  },
+  ko: {
+    screenshotSeedErrorDetail: (rawMessage) =>
+      `Runtime seed 오류: ${rawMessage}`,
+    nativePopupProbeErrorDetail: (rawMessage) =>
+      `Native popup probe 오류: ${rawMessage}`,
+  },
+  "es-419": {
+    screenshotSeedErrorDetail: (rawMessage) =>
+      `Error runtime del seed: ${rawMessage}`,
+    nativePopupProbeErrorDetail: (rawMessage) =>
+      `Error del native popup probe: ${rawMessage}`,
+  },
+  "pt-BR": {
+    screenshotSeedErrorDetail: (rawMessage) =>
+      `Erro runtime do seed: ${rawMessage}`,
+    nativePopupProbeErrorDetail: (rawMessage) =>
+      `Erro do native popup probe: ${rawMessage}`,
+  },
+  fr: {
+    screenshotSeedErrorDetail: (rawMessage) =>
+      `Erreur runtime du seed: ${rawMessage}`,
+    nativePopupProbeErrorDetail: (rawMessage) =>
+      `Erreur du native popup probe: ${rawMessage}`,
+  },
+  de: {
+    screenshotSeedErrorDetail: (rawMessage) =>
+      `Runtime-Seed-Fehler: ${rawMessage}`,
+    nativePopupProbeErrorDetail: (rawMessage) =>
+      `Native-Popup-Probe-Fehler: ${rawMessage}`,
+  },
+  it: {
+    screenshotSeedErrorDetail: (rawMessage) =>
+      `Errore runtime del seed: ${rawMessage}`,
+    nativePopupProbeErrorDetail: (rawMessage) =>
+      `Errore del native popup probe: ${rawMessage}`,
+  },
+  ru: {
+    screenshotSeedErrorDetail: (rawMessage) =>
+      `Ошибка runtime seed: ${rawMessage}`,
+    nativePopupProbeErrorDetail: (rawMessage) =>
+      `Ошибка native popup probe: ${rawMessage}`,
+  },
+  ar: {
+    screenshotSeedErrorDetail: (rawMessage) =>
+      `خطأ runtime seed: ${rawMessage}`,
+    nativePopupProbeErrorDetail: (rawMessage) =>
+      `خطأ native popup probe: ${rawMessage}`,
+  },
+  hi: {
+    screenshotSeedErrorDetail: (rawMessage) =>
+      `Runtime seed त्रुटि: ${rawMessage}`,
+    nativePopupProbeErrorDetail: (rawMessage) =>
+      `Native popup probe त्रुटि: ${rawMessage}`,
+  },
+  id: {
+    screenshotSeedErrorDetail: (rawMessage) =>
+      `Error runtime seed: ${rawMessage}`,
+    nativePopupProbeErrorDetail: (rawMessage) =>
+      `Error native popup probe: ${rawMessage}`,
+  },
+};
+
 const STORE_WORKFLOW_COPY: Record<ResolvedAppLocale, StoreWorkflowCopyData> = {
   en: {
     screenshotSeed: {
@@ -1067,6 +1162,8 @@ const STORE_WORKFLOW_COPY: Record<ResolvedAppLocale, StoreWorkflowCopyData> = {
 
 export function buildStoreWorkflowLocalizedCopy(i18n: RuntimeI18n) {
   const copy = STORE_WORKFLOW_COPY[i18n.resolvedLocale];
+  const errorPresentation =
+    STORE_WORKFLOW_ERROR_PRESENTATION[i18n.resolvedLocale];
   const screenshotSeed = copy.screenshotSeed;
 
   return {
@@ -1093,7 +1190,13 @@ export function buildStoreWorkflowLocalizedCopy(i18n: RuntimeI18n) {
       submissionCaption: (preset: string) =>
         screenshotSeed.submissionCaptions[preset as CaptionPresetKey] ?? "",
       routeFailedFallback: screenshotSeed.routeFailedFallback,
+      errorDetail: (rawMessage: string) =>
+        errorPresentation.screenshotSeedErrorDetail(rawMessage),
     },
-    nativePopupProbe: copy.nativePopupProbe,
+    nativePopupProbe: {
+      ...copy.nativePopupProbe,
+      errorDetail: (rawMessage: string) =>
+        errorPresentation.nativePopupProbeErrorDetail(rawMessage),
+    },
   };
 }

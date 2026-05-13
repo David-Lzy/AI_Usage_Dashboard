@@ -19,6 +19,7 @@ Status note:
 - created in `Phase 403`
 - implementation input for `Phase 405`
 - `Phase 405` completed helper-owned store-helper runtime copy; automation titles, capture-plan fields, listing source text, and generated evidence remain protected raw data
+- `Phase 410` added localized error presentation wrappers while preserving raw helper error text: [I18n_Store_Helper_Error_Presentation_Split.md](./I18n_Store_Helper_Error_Presentation_Split.md)
 
 ## Purpose
 
@@ -176,3 +177,5 @@ Do not translate or rewrite these in `Phase 405`:
 ## Follow-Up Boundary
 
 If `Phase 405` cannot translate every visible helper-adjacent label without touching automation or evidence contracts, it should prioritize the `buildStoreWorkflowLocalizedCopy` helper-owned buckets and leave invalid-preset/error-message localization to a later typed presentation split.
+
+`Phase 410` completed that error-message presentation split for invalid-preset, malformed-seed, and native popup probe failures. The UI wrapper is localized, but the raw helper error string remains embedded exactly for debugging and evidence review.

@@ -34,9 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [410_Phase_Store_Helper_Error_Presentation_Split.md](./410_Phase_Store_Helper_Error_Presentation_Split.md)
-- latest completed slice: [409_Phase_Interaction_Audit_Consumer_Copy_Presentation_Split.md](./Archive/by-phase/400-499/409_Phase_Interaction_Audit_Consumer_Copy_Presentation_Split.md)
-- queued phase files: [411_Phase_Interaction_Audit_Review_Queue_Display_Copy.md](./411_Phase_Interaction_Audit_Review_Queue_Display_Copy.md)
+- active phase file: [411_Phase_Interaction_Audit_Review_Queue_Display_Copy.md](./411_Phase_Interaction_Audit_Review_Queue_Display_Copy.md)
+- latest completed slice: [410_Phase_Store_Helper_Error_Presentation_Split.md](./Archive/by-phase/400-499/410_Phase_Store_Helper_Error_Presentation_Split.md)
+- queued phase files: not selected yet after active `Phase 411`
 
 Completed phases should be moved to:
 
@@ -802,6 +802,7 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 407` closeout captured representative RDP Chrome extension-mode screenshots for localized operator/store helper routes across `en`, `zh-CN`, `ja`, `de`, and `ar`, with Arabic RTL and German long-label spot checks recorded under `Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/`
 - the 2026-05-14 `Phase 408` closeout audited post-localization copy chunk size, recorded the current `sidepanel.js` warning as acceptable for the next maintenance package, and documented a later special-route lazy-loading boundary if raw side-panel size becomes a release blocker
 - the 2026-05-14 `Phase 409` closeout documented the interaction-audit presentation/export split, preserved signoff exports, handoff drafts, request ids, route ids, preset ids, command text, and manual-check evidence outside localization, and queued Review Queue display-copy localization as `Phase 411`
+- the 2026-05-14 `Phase 410` closeout added localized store-helper error wrappers while preserving raw invalid-preset, malformed-seed, and native popup probe error text inside the rendered helper message
 
 ## Delivery Standard For Each Phase
 

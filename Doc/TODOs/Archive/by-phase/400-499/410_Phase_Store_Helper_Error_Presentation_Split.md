@@ -16,8 +16,9 @@ Freshness model:
 
 Status note:
 
-- queued after `Phase 409`
+- completed on `2026-05-14`
 - follow-up for store-helper visible errors left outside `Phase 405`
+- closeout archived after adding [I18n_Store_Helper_Error_Presentation_Split.md](../../../../I18n/I18n_Store_Helper_Error_Presentation_Split.md)
 
 ## Goal
 
@@ -51,3 +52,22 @@ Decide whether store-helper invalid-preset, malformed-seed, and background/runti
 ## Follow-Up
 
 - If the split is implemented, consider whether the same pattern is useful for remaining operator-only helper routes.
+
+## Completion Summary
+
+`Phase 410` implemented the small typed presentation wrapper because the boundary was clear: the helper routes can localize the surrounding error presentation while preserving the raw error message as debugging evidence.
+
+Delivered:
+
+- added `screenshotSeed.errorDetail(rawMessage)` and `nativePopupProbe.errorDetail(rawMessage)` to `buildStoreWorkflowLocalizedCopy`
+- added explicit 14-locale wrappers for seed-route and native-popup-probe errors
+- updated `StoreScreenshotSeedPage.tsx` and `StoreScreenshotNativePopupProbePage.tsx` to render localized wrappers around raw error messages
+- preserved automation document titles, preset ids, route hashes, capture-plan identities, request/archive identities, filenames, generated evidence, final screenshot surfaces, and store listing text
+- documented the boundary in [I18n_Store_Helper_Error_Presentation_Split.md](../../../../I18n/I18n_Store_Helper_Error_Presentation_Split.md)
+
+## Verification
+
+- `npm run test -- src/shared/store-workflow-localized-copy.test.ts`
+- `npm run typecheck`
+- `npm run docs:check`
+- `git diff --check`

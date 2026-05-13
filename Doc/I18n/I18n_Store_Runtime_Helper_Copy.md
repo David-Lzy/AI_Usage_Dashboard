@@ -20,6 +20,7 @@ Status note:
 - refresh it when store screenshot helper routes, capture automation signals, or screenshot-adjacent runtime captions change
 - `Phase 181` adds localized submission-support captions to the seed helper route while keeping final screenshot surfaces unchanged
 - `Phase 403` adds a 14-locale implementation inventory for the existing helper route copy
+- `Phase 410` adds localized error presentation wrappers while keeping raw helper error text visible inside the wrapper
 
 ## Goal
 
@@ -82,3 +83,5 @@ The localized copy must continue to say:
 `Phase 182` moved that next policy boundary into [I18n_Raw_Provider_Source_Truth_Policy.md](./I18n_Raw_Provider_Source_Truth_Policy.md).
 
 `Phase 403` inventories the 14-locale implementation boundary in [I18n_Store_Helper_14_Locale_Copy_Inventory.md](./I18n_Store_Helper_14_Locale_Copy_Inventory.md). The next store-helper-specific runtime change should use that inventory and preserve automation titles, preset ids, route hashes, capture-plan truth fields, final screenshot surfaces, request/archive ids, filenames, generated capture evidence, and Chrome Web Store listing source text.
+
+`Phase 410` adds [I18n_Store_Helper_Error_Presentation_Split.md](./I18n_Store_Helper_Error_Presentation_Split.md). Store helper errors now have localized presentation wrappers, while raw invalid-preset, malformed-seed, and native popup probe error strings remain embedded exactly inside the rendered helper message.

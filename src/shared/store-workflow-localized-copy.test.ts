@@ -14,6 +14,9 @@ describe("buildStoreWorkflowLocalizedCopy", () => {
     expect(copy.screenshotSeed.presetHeadline("unlock", "Fallback")).toBe(
       "Screenshot seed lock cleared",
     );
+    expect(copy.screenshotSeed.errorDetail("raw seed failure")).toBe(
+      "Runtime seed error: raw seed failure",
+    );
     expect(copy.nativePopupProbe.openingTitle).toBe(
       "Opening native toolbar popup",
     );
@@ -24,6 +27,9 @@ describe("buildStoreWorkflowLocalizedCopy", () => {
 
     expect(copy.screenshotSeed.sectionLabel).toBe("Store Screenshot 调试路由");
     expect(copy.screenshotSeed.presetDetail("missing", "回退")).toBe("回退");
+    expect(copy.screenshotSeed.errorDetail("RAW_SEED_ERROR")).toContain(
+      "RAW_SEED_ERROR",
+    );
     expect(copy.nativePopupProbe.requestedTitle).toBe("已请求原生 popup");
   });
 
@@ -65,6 +71,12 @@ describe("buildStoreWorkflowLocalizedCopy", () => {
       expect(copy.nativePopupProbe.sectionLabel).toBe(
         expectedSectionLabels[locale],
       );
+      expect(copy.screenshotSeed.errorDetail("RAW_SEED_ERROR")).toContain(
+        "RAW_SEED_ERROR",
+      );
+      expect(copy.nativePopupProbe.errorDetail("RAW_POPUP_ERROR")).toContain(
+        "RAW_POPUP_ERROR",
+      );
     }
   });
 
@@ -79,6 +91,9 @@ describe("buildStoreWorkflowLocalizedCopy", () => {
     );
     expect(copy.nativePopupProbe.openingTitle).toBe(
       "جار فتح native toolbar popup",
+    );
+    expect(copy.nativePopupProbe.errorDetail("RAW_POPUP_ERROR")).toContain(
+      "RAW_POPUP_ERROR",
     );
   });
 
