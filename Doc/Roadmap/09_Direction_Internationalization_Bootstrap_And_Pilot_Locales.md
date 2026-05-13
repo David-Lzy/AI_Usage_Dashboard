@@ -337,9 +337,9 @@ Recommended rollout:
 69. warning diagnostic presentation 14-locale copy - shipped in `Phase 398`
 70. source diagnostic presentation 14-locale copy - shipped in `Phase 399`
 71. adapter-error diagnostic presentation 14-locale copy - shipped in `Phase 400`
-72. post-diagnostic localization release check - active in `Phase 401`
-73. operator-workspace 14-locale copy inventory - queued in `Phase 402`
-74. store-helper 14-locale copy inventory - queued in `Phase 403`
+72. post-diagnostic localization release check - shipped in `Phase 401`
+73. operator-workspace 14-locale copy inventory - shipped in `Phase 402`
+74. store-helper 14-locale copy inventory - active in `Phase 403`
 75. operator-workspace 14-locale copy - queued in `Phase 404`
 76. store-helper 14-locale copy - queued in `Phase 405`
 
