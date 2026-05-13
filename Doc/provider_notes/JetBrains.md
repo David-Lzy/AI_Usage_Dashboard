@@ -244,8 +244,8 @@ Inference note:
 
 Docs-derived fixtures created in this phase:
 
-- [users-and-licensing.fixture.html](/home/davidli/Project/personal_project/AI_Usage_Dashboard/fixtures/jetbrains/users-and-licensing.fixture.html:1)
-- [users-and-licensing-extracted.fixture.json](/home/davidli/Project/personal_project/AI_Usage_Dashboard/fixtures/jetbrains/users-and-licensing-extracted.fixture.json:1)
+- [users-and-licensing.fixture.html](../../fixtures/jetbrains/users-and-licensing.fixture.html)
+- [users-and-licensing-extracted.fixture.json](../../fixtures/jetbrains/users-and-licensing-extracted.fixture.json)
 
 Fixture note:
 

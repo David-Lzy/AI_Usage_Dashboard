@@ -416,7 +416,7 @@ Truth rules:
 ${truthRuleLines}
 - this request package does not claim that a human review has already happened
 - the first real operator theme-recovery pass should preserve its actual exported stage instead of rewriting degraded outcomes into a pass claim
-- the current repo archive index lives in [Theme_Recovery_Review_Archive.md](../Theme_Recovery_Review_Archive.md)
+- the current repo archive index lives in [Theme_Recovery_Review_Archive.md](../../Theme_Recovery_Review_Archive.md)
 `;
 }
 

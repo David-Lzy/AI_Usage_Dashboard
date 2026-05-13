@@ -253,9 +253,9 @@ Current recommendation:
 
 Doc-derived sanitized fixtures created in this phase:
 
-- [admin-api-members.fixture.json](/home/davidli/Project/personal_project/AI_Usage_Dashboard/fixtures/cursor/admin-api-members.fixture.json:1)
-- [admin-api-spend.fixture.json](/home/davidli/Project/personal_project/AI_Usage_Dashboard/fixtures/cursor/admin-api-spend.fixture.json:1)
-- [admin-api-daily-usage.fixture.json](/home/davidli/Project/personal_project/AI_Usage_Dashboard/fixtures/cursor/admin-api-daily-usage.fixture.json:1)
+- [admin-api-members.fixture.json](../../fixtures/cursor/admin-api-members.fixture.json)
+- [admin-api-spend.fixture.json](../../fixtures/cursor/admin-api-spend.fixture.json)
+- [admin-api-daily-usage.fixture.json](../../fixtures/cursor/admin-api-daily-usage.fixture.json)
 
 Fixture source note:
 
@@ -374,7 +374,7 @@ What it should not claim yet:
 
 Phase 31 added one live redacted evidence fixture:
 
-- [personal-page-live-evidence.fixture.json](/nfs/server1/disk1/Project/personal_project/AI_Usage_Dashboard/fixtures/cursor/personal-page-live-evidence.fixture.json:1)
+- [personal-page-live-evidence.fixture.json](../../fixtures/cursor/personal-page-live-evidence.fixture.json)
 
 Why this fixture matters:
 

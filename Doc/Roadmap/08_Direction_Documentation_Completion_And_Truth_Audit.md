@@ -51,7 +51,7 @@ Today the truthful answer is "some are complete, some are intentionally living,"
 
 As of 2026-05-13:
 
-- numbered phase docs are archived through `Phase 388`, with active `Phase 389` selected for documentation link-check coverage
+- numbered phase docs are archived through `Phase 389`, with active `Phase 390` selected for release-gate baseline verification
 - roadmap directions remain open by design
 - interaction-audit request docs now show `0` pending requests and `1` fulfilled real operator request
 - theme-recovery request docs now show `0` pending requests and `1` fulfilled real operator request
@@ -64,6 +64,7 @@ As of 2026-05-13:
 - the remaining roadmap direction files now also carry explicit `living strategy` labels instead of relying only on folder-level semantics
 - the repo now also records which remaining doc patterns are intentionally convention-only instead of leaving that boundary implicit
 - the docs taxonomy has since been compressed into functional directories plus bucketed phase archives; old top-level process docs remain compatibility stubs
+- `docs:check` now also runs a repo-local Markdown link check for maintained docs and generated ledgers while skipping convention-only closed-evidence archives
 - this direction is now sufficiently complete for maintenance mode, so the default next work should shift to toolbar competitive fit and internationalization bootstrap instead of more taxonomy expansion
 
 This means:

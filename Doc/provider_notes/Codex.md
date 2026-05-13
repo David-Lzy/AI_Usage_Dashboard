@@ -135,9 +135,9 @@ Inference from sources:
 
 Docs-derived fixtures now used in this provider:
 
-- [analytics-api.fixture.json](/nfs/server1/disk1/Project/personal_project/AI_Usage_Dashboard/fixtures/codex/analytics-api.fixture.json:1)
-- [workspace-usage-surfaces.fixture.json](/nfs/server1/disk1/Project/personal_project/AI_Usage_Dashboard/fixtures/codex/workspace-usage-surfaces.fixture.json:1)
-- [rate-card-summary.fixture.json](/nfs/server1/disk1/Project/personal_project/AI_Usage_Dashboard/fixtures/codex/rate-card-summary.fixture.json:1)
+- [analytics-api.fixture.json](../../fixtures/codex/analytics-api.fixture.json)
+- [workspace-usage-surfaces.fixture.json](../../fixtures/codex/workspace-usage-surfaces.fixture.json)
+- [rate-card-summary.fixture.json](../../fixtures/codex/rate-card-summary.fixture.json)
 
 Fixture note:
 
@@ -253,7 +253,7 @@ Enterprise coexistence rule:
 
 Phase 30 added one non-sensitive evidence fixture:
 
-- [personal-page-route-evidence.fixture.json](/nfs/server1/disk1/Project/personal_project/AI_Usage_Dashboard/fixtures/codex/personal-page-route-evidence.fixture.json:1)
+- [personal-page-route-evidence.fixture.json](../../fixtures/codex/personal-page-route-evidence.fixture.json)
 
 Why this fixture exists:
 
@@ -330,7 +330,7 @@ Important parser constraint:
 
 Phase 30.1 added one live redacted fixture:
 
-- [personal-page-live.fixture.json](/nfs/server1/disk1/Project/personal_project/AI_Usage_Dashboard/fixtures/codex/personal-page-live.fixture.json:1)
+- [personal-page-live.fixture.json](../../fixtures/codex/personal-page-live.fixture.json)
 
 Why this fixture matters:
 

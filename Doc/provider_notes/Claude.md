@@ -219,8 +219,8 @@ Implication for implementation:
 
 Docs-derived fixtures created in this phase:
 
-- [analytics-api.fixture.json](/home/davidli/Project/personal_project/AI_Usage_Dashboard/fixtures/claude/analytics-api.fixture.json:1)
-- [analytics-api-extracted.fixture.json](/home/davidli/Project/personal_project/AI_Usage_Dashboard/fixtures/claude/analytics-api-extracted.fixture.json:1)
+- [analytics-api.fixture.json](../../fixtures/claude/analytics-api.fixture.json)
+- [analytics-api-extracted.fixture.json](../../fixtures/claude/analytics-api-extracted.fixture.json)
 
 Fixture note:
 
@@ -327,7 +327,7 @@ Important product boundary:
 
 Phase 32 added one live redacted evidence fixture:
 
-- [personal-upgrade-gate.fixture.json](/nfs/server1/disk1/Project/personal_project/AI_Usage_Dashboard/fixtures/claude/personal-upgrade-gate.fixture.json:1)
+- [personal-upgrade-gate.fixture.json](../../fixtures/claude/personal-upgrade-gate.fixture.json)
 
 Why this fixture matters:
 

@@ -47,7 +47,7 @@ Next execution queue:
 
 1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary, but use `0.1.0-rc.15` as the ready follow-up package for the post-`rc.13` polish and post-`rc.14` maintenance slices if review feedback or an explicit resubmission decision asks for a newer build
 2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC15 follow-up milestone](./Doc/Milestones/2026-05-13_RC15_Maintenance_Follow_Up_Release_Candidate.md) as the current packaged-source reference
-3. run the active numbered queue after `Phase 388`: `Phase 389` for doc link checking, then queued `Phase 390` through `Phase 395` for release-gate baseline, deeper 14-locale runtime copy, and bounded maintenance follow-up
+3. run the active numbered queue after `Phase 389`: `Phase 390` for release-gate baseline, then queued `Phase 391` through `Phase 395` for deeper 14-locale runtime copy and bounded maintenance follow-up
 4. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 5. keep real operator evidence closed and archived; do not open another interaction-audit or theme-recovery operator evidence phase unless a new surface or theme regression creates a fresh review need
 6. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
@@ -118,6 +118,7 @@ Maintenance note:
 - Arabic/RTL preview surfaces now isolate English fallback text direction through shared typography rules, so untranslated fallback sentences keep natural punctuation order until reviewed Arabic runtime translations replace them
 - RDP extension-window locale smoke captures now use `scripts/lib/rdp-extension-locale-route.mjs`, so `--locale` accepts only the 14 runtime locale tags and preserves existing route query/hash structure when adding `app-locale`
 - docs taxonomy checking now also validates current-phase references in README, top-level TODOs, and the strategic directions index, so phase closeout docs fail fast when the latest archived phase number drifts
+- docs checking now also validates maintained repo-local Markdown links outside convention-only closed-evidence archives, so document moves fail fast when they break current references
 - Settings focused deep-link render behavior is guarded in `src/sidepanel/routes/SettingsPage.test.tsx`, including source-provider Advanced targets and quick-setup provider targets used by popup setup/problem actions
 - Dashboard first-run empty-state guidance is guarded in `src/sidepanel/routes/DashboardPage.test.tsx`, and Settings Quick Setup deep links now fall back to the Quick Setup section when a provider-specific card is hidden
 - popup settings-action focus selection now lives in `src/popup/settings-route-targets.ts`, keeping guidance-card and setup-card Settings links aligned with the focused Settings deep-link contract

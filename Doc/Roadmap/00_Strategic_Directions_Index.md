@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is completed through `Phase 388`, with active `Phase 389` selected for documentation link-check coverage and queued `Phase 390` through `Phase 395` covering release-gate baseline, deeper 14-locale runtime copy, and bounded maintenance follow-up
+- the numbered phase queue is completed through `Phase 389`, with active `Phase 390` selected for release-gate baseline verification and queued `Phase 391` through `Phase 395` covering deeper 14-locale runtime copy and bounded maintenance follow-up
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness

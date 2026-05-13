@@ -16,8 +16,7 @@ Freshness model:
 
 Status note:
 
-- queued after `Phase 388`
-- documentation tooling phase only
+- completed and archived on 2026-05-13
 
 ## Goal
 
@@ -48,6 +47,24 @@ Add a lightweight repository-local Markdown link checker so future document move
 
 - `npm run test -- scripts/lib/doc-link-check.test.mjs`
 - `npm run docs:links`
+- `npm run docs:check`
+- `git diff --check`
+
+## Completion Summary
+
+- Added `scripts/check-doc-links.mjs` and `scripts/lib/doc-link-check.mjs`.
+- Added `npm run docs:links` and made `npm run docs:check` run taxonomy plus link checking.
+- Added focused tests for inline/reference links, ignored external links, fragment-only links, archive-bucket targets, skipped closed-evidence files, and broken local links.
+- Skipped convention-only closed-evidence phase archives and phase-report archives by default so historical closeouts remain readable evidence instead of becoming a large rewrite target.
+- Replaced maintained provider-note absolute fixture links with repo-relative links.
+- Fixed the theme-recovery request README generator link to the archive index and refreshed generated package READMEs through `npm run docs:refresh-generated-package-readmes`.
+
+## Verification
+
+- `npm run test -- scripts/lib/doc-link-check.test.mjs`
+- `npm run docs:links`
+  - verified `856` local Markdown links across `121` files
+  - skipped `634` closed-evidence files
 - `npm run docs:check`
 - `git diff --check`
 
