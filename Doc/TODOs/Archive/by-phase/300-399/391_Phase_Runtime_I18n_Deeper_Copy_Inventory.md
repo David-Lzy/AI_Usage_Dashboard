@@ -16,8 +16,7 @@ Freshness model:
 
 Status note:
 
-- queued after `Phase 390`
-- inventory phase before deeper translation implementation
+- completed and archived on 2026-05-13
 
 ## Goal
 
@@ -45,6 +44,23 @@ Inventory the runtime copy that still falls back to English after the 14-locale 
 ## Planned Verification
 
 - `rg 'resolvedLocale === \"zh-CN\"|locale === \"zh-CN\"|fallback|English' src Doc/I18n Doc/Roadmap`
+- `npm run i18n:check`
+- `npm run docs:check`
+- `git diff --check`
+
+## Completion Summary
+
+- Added [I18n_Deeper_Runtime_Copy_Backlog.md](../I18n/I18n_Deeper_Runtime_Copy_Backlog.md) as the maintained backlog for non-`zh-CN` deeper runtime copy fallback.
+- Confirmed the 14-locale runtime message catalog covers the shell pilot while deeper structured-copy helpers still mostly branch on `zh-CN` and fall back to English.
+- Mapped `Phase 392` to popup and new-user guidance copy.
+- Mapped `Phase 393` to Settings, provider-detail, and provider-source wrapper copy.
+- Deferred typed diagnostic presentation, operator workspaces, and store-helper copy to later follow-up unless the next implementation slices stay small enough to split safely.
+- Updated the i18n README, string inventory baseline, and Direction 09 roadmap references.
+
+## Verification
+
+- `rg 'resolvedLocale === \"zh-CN\"|locale === \"zh-CN\"|fallback|English' src Doc/I18n Doc/Roadmap`
+  - reviewed expected `zh-CN` structured-copy branches, English fallback boundaries, and raw-evidence notes
 - `npm run i18n:check`
 - `npm run docs:check`
 - `git diff --check`

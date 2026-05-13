@@ -19,6 +19,7 @@ Status note:
 
 - [Message ID Contract](./I18n_Message_ID_Contract.md)
 - [String Inventory Baseline](./I18n_String_Inventory_Baseline.md)
+- [Deeper Runtime Copy Backlog](./I18n_Deeper_Runtime_Copy_Backlog.md)
 - [Raw Provider Source Truth Policy](./I18n_Raw_Provider_Source_Truth_Policy.md)
 - [Store Runtime Helper Copy](./I18n_Store_Runtime_Helper_Copy.md)
 - [Adapter Diagnostic Reason Code Plan](./I18n_Adapter_Diagnostic_Reason_Code_Plan.md)

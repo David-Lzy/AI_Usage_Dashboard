@@ -47,7 +47,7 @@ Next execution queue:
 
 1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary, but use `0.1.0-rc.15` as the ready follow-up package for the post-`rc.13` polish and post-`rc.14` maintenance slices if review feedback or an explicit resubmission decision asks for a newer build
 2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC15 follow-up milestone](./Doc/Milestones/2026-05-13_RC15_Maintenance_Follow_Up_Release_Candidate.md) as the current packaged-source reference
-3. run the active numbered queue after `Phase 390`: `Phase 391` for deeper runtime i18n copy inventory, then queued `Phase 392` through `Phase 395` for 14-locale runtime copy expansion and bounded maintenance follow-up
+3. run the active numbered queue after `Phase 391`: `Phase 392` for popup and new-user guidance 14-locale runtime copy, then queued `Phase 393` through `Phase 395` for Settings/provider-detail copy and bounded maintenance follow-up
 4. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 5. keep real operator evidence closed and archived; do not open another interaction-audit or theme-recovery operator evidence phase unless a new surface or theme regression creates a fresh review need
 6. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
@@ -113,6 +113,7 @@ Maintenance note:
 - runtime locale support now uses the 14-locale registry in `src/shared/i18n.ts`, Settings language options are generated from that registry, Arabic resolves `rtl`, and `npm run i18n:check` now guards registry metadata, Chrome manifest `_locales` catalogs, the RDP locale capture helper, and the store listing localization draft together
 - runtime message catalogs now live in `src/shared/runtime-message-catalogs.ts`, keeping the large English catalog and locale override map out of the registry/resolution/formatting helper in `src/shared/i18n.ts`
 - Traditional Chinese, Japanese, Korean, Latin American Spanish, Brazilian Portuguese, French, German, Italian, Russian, Arabic, Hindi, and Indonesian now have first runtime shell pilots for dashboard, popup, Settings, common actions, and theme-toggle labels; deeper structured helper copy still falls back to English until reviewed translation phases replace it
+- the maintained deeper runtime copy backlog now maps the next reviewed translation phases to popup/new-user guidance first, then Settings and provider detail, while keeping raw provider evidence and archive/export payloads outside localization
 - focused i18n tests now require every non-English locale to keep explicit first-shell runtime message overrides, preventing shell pilot coverage from silently falling back to English
 - popup and sidepanel HTML shells now declare notranslate, preventing Chrome/Google Translate overlay UI from polluting localized extension-window screenshots
 - Arabic/RTL preview surfaces now isolate English fallback text direction through shared typography rules, so untranslated fallback sentences keep natural punctuation order until reviewed Arabic runtime translations replace them

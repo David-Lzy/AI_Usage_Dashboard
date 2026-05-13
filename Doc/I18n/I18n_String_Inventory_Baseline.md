@@ -191,18 +191,29 @@ That reference defines the additive typed diagnostic model that should exist bef
 
 The following surfaces still need broader runtime localization work:
 
-- raw provider source-truth detail strings that still intentionally surface current contract or vendor wording without translation
 - non-`zh-CN` deep runtime structured copy that currently falls back to English until reviewed translations are added
-- deeper interaction-audit evidence, preset, queue, import, and export payload copy
-- deeper theme-recovery evidence summary and provider source-truth copy
+- typed diagnostic presentation beyond the current `zh-CN` branch
+- operator-workspace and store-helper copy beyond the current `zh-CN` branch where it is not evidence or automation identity
+
+Protected raw-evidence values are intentionally not translation backlog:
+
+- raw provider source-truth detail strings that surface current contract or vendor wording
+- diagnostic raw bodies
+- interaction-audit and theme-recovery evidence, preset, queue, import, and export payload identifiers
+- archive/export schemas, route hashes, fixture ids, filenames, and generated request/archive ids
 
 ## Runtime Inventory Buckets
 
 Recommended next extraction order:
 
-1. adapter diagnostic raw fallback regression review
-2. revisit deeper operator-workspace evidence copy only after archive-compatibility rules are explicit
-3. revisit generated store-listing source localization only after refreshed screenshot assets replace the historical baseline
+1. popup and new-user guidance structured copy for all 14 runtime locales
+2. Settings, provider-detail, and provider-source wrapper structured copy for all 14 runtime locales
+3. typed diagnostic presentation follow-up if the Settings/provider-detail slice stays small enough
+4. operator-workspace and store-helper follow-up only after the end-user surfaces are stable
+
+Current maintained backlog:
+
+- [I18n_Deeper_Runtime_Copy_Backlog.md](./I18n_Deeper_Runtime_Copy_Backlog.md)
 
 ## Truth Boundary
 

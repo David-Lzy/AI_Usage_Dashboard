@@ -34,13 +34,12 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [391_Phase_Runtime_I18n_Deeper_Copy_Inventory.md](./391_Phase_Runtime_I18n_Deeper_Copy_Inventory.md)
-- latest completed slice: [390_Phase_Release_Check_Baseline.md](./Archive/by-phase/300-399/390_Phase_Release_Check_Baseline.md)
+- active phase file: [392_Phase_Popup_Guidance_14_Locale_Copy.md](./392_Phase_Popup_Guidance_14_Locale_Copy.md)
+- latest completed slice: [391_Phase_Runtime_I18n_Deeper_Copy_Inventory.md](./Archive/by-phase/300-399/391_Phase_Runtime_I18n_Deeper_Copy_Inventory.md)
 - queued phase files:
-  1. [392_Phase_Popup_Guidance_14_Locale_Copy.md](./392_Phase_Popup_Guidance_14_Locale_Copy.md)
-  2. [393_Phase_Settings_Provider_Detail_14_Locale_Copy.md](./393_Phase_Settings_Provider_Detail_14_Locale_Copy.md)
-  3. [394_Phase_Code_Maintenance_Hotspot_Audit.md](./394_Phase_Code_Maintenance_Hotspot_Audit.md)
-  4. [395_Phase_Runtime_Message_Catalog_Module_Split.md](./395_Phase_Runtime_Message_Catalog_Module_Split.md)
+  1. [393_Phase_Settings_Provider_Detail_14_Locale_Copy.md](./393_Phase_Settings_Provider_Detail_14_Locale_Copy.md)
+  2. [394_Phase_Code_Maintenance_Hotspot_Audit.md](./394_Phase_Code_Maintenance_Hotspot_Audit.md)
+  3. [395_Phase_Runtime_Message_Catalog_Module_Split.md](./395_Phase_Runtime_Message_Catalog_Module_Split.md)
 
 Completed phases should be moved to:
 

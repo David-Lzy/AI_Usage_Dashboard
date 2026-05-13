@@ -63,6 +63,7 @@ Execution note:
 - forty-eighth executable slice landed on `2026-05-13` through `Phase 385`
 - forty-ninth executable slice landed on `2026-05-13` through `Phase 386`
 - fiftieth executable slice landed on `2026-05-13` through `Phase 387`
+- fifty-first documentation inventory slice landed on `2026-05-13` through `Phase 391`
 - `Phase 200` and `Phase 201` intentionally paused this i18n/diagnostic follow-up line for functionality-first Codex personal usage-context surfacing while Codex budget is constrained
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
@@ -107,6 +108,8 @@ As of 2026-05-13:
 - `ar` resolves to `rtl`; all other shipped runtime locales resolve to `ltr`
 - the new non-reviewed runtime locales use complete key coverage with English fallback where human-reviewed translations are not yet present
 - every non-English locale in the 14-locale set now has a first runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels; deeper structured runtime copy still falls back to English until reviewed translations are added
+- the deeper runtime copy backlog now maps those fallback buckets to popup/new-user guidance in `Phase 392`, Settings/provider-detail helpers in `Phase 393`, and later diagnostics/operator/store-helper follow-up:
+  - [I18n_Deeper_Runtime_Copy_Backlog.md](../I18n/I18n_Deeper_Runtime_Copy_Backlog.md)
 - focused i18n tests now guard that every non-English locale keeps explicit first-shell runtime message overrides instead of silently relying on English fallback for the shell pilot surface
 - Arabic/RTL surfaces now isolate English fallback text direction so fallback punctuation stays readable until reviewed Arabic runtime translations are added
 - popup and sidepanel HTML shells now declare notranslate so Chrome/Google Translate overlays do not obscure localized extension-window screenshots
@@ -284,8 +287,10 @@ Recommended rollout:
 50. Indonesian runtime shell pilot - shipped in `Phase 385`
 51. runtime shell pilot coverage guard - shipped in `Phase 386`
 52. notranslate extension shells and representative locale RDP popup QA - shipped in `Phase 387`
-53. deeper runtime catalog translation review for non-English fallback locales - future work
-54. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact
+53. deeper runtime copy inventory for non-English fallback locales - shipped in `Phase 391`
+54. popup and new-user guidance 14-locale copy - future work in `Phase 392`
+55. Settings and provider-detail 14-locale copy - future work in `Phase 393`
+56. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact
 
 ## References
 
