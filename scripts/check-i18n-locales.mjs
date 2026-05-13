@@ -55,7 +55,7 @@ async function readRuntimeLocaleContract() {
   );
 
   const metadataBlockMatch = source.match(
-    /export const APP_LOCALE_METADATA:[\s\S]*?=\s*\{([\s\S]*?)\};\n\ntype RuntimeMessageId/,
+    /export const APP_LOCALE_METADATA:[\s\S]*?=\s*\{([\s\S]*?)\};\n\n(?:export\s+)?type RuntimeMessageId/,
   );
   assert(
     metadataBlockMatch,

@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is now completed through `Phase 385`, with no active phase or queued numbered phase currently selected
+- the numbered phase queue is now completed through `Phase 386`, with no active phase or queued numbered phase currently selected
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -100,6 +100,7 @@ As of 2026-05-13:
 - `Phase 383` added the first `ar` runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while preserving the existing `rtl` locale direction boundary
 - `Phase 384` added the first `hi` runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while keeping deeper structured copy on the existing fallback boundary
 - `Phase 385` added the first `id` runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while keeping deeper structured copy on the existing fallback boundary
+- `Phase 386` added a focused runtime shell pilot coverage guard so every non-English locale must keep explicit first-shell message overrides even though deeper runtime copy can still fall back to English
 - `Phase 200` completed a functionality-first Codex personal slice by preserving multiple visible usage windows, expanding Codex page-capture snippets, and surfacing the most constrained visible percentage window across dashboard, provider detail, and popup paths
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without changing the primary percentage-window quota model
 - `Phase 202` completed repeatable unpacked-extension verification for Codex personal multi-window plus flex-balance context, while fixing DOM capture so repeated percentages and single-character balance values are not lost before parsing
@@ -508,7 +509,7 @@ As of 2026-05-13:
 
 2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second among the new requests:
-   the project now has a 14-locale registry, manifest catalog set, guarded store listing draft, Arabic RDP visual baseline, guarded locale-specific RDP capture helper, first runtime shell pilots for every non-English locale in the 14-locale set, and a split runtime catalog module, but broad runtime copy still needs reviewed translations before it should be treated as fully localized product surface.
+   the project now has a 14-locale registry, manifest catalog set, guarded store listing draft, Arabic RDP visual baseline, guarded locale-specific RDP capture helper, first runtime shell pilots for every non-English locale in the 14-locale set, a split runtime catalog module, and a focused shell-pilot coverage guard, but broad runtime copy still needs reviewed translations before it should be treated as fully localized product surface.
 
 3. [Direction 08 - Documentation Completion And Truth Audit](./08_Direction_Documentation_Completion_And_Truth_Audit.md)
    Why third among the new requests:

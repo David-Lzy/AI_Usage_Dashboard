@@ -164,7 +164,7 @@ export const APP_LOCALE_METADATA: Record<ResolvedAppLocale, AppLocaleMetadata> =
     },
   };
 
-type RuntimeMessageId =
+export type RuntimeMessageId =
   | "app.loading.eyebrow"
   | "app.loading.title"
   | "app.loading.detail"
