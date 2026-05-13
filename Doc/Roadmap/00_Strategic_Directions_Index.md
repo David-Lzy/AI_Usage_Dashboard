@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is completed through `Phase 399`, with the post-localization maintenance release gate passing and active `Phase 400` selected for typed adapter-error diagnostic presentation follow-up
+- the numbered phase queue is completed through `Phase 400`, with the post-localization maintenance release gate passing and no active numbered phase currently queued
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -96,6 +96,7 @@ As of 2026-05-13:
 - `Phase 397` added a maintained diagnostic presentation 14-locale inventory and split the remaining work into warning, source, and adapter-error implementation slices
 - `Phase 398` added explicit 14-locale warning diagnostic presentation while preserving raw warning evidence fields and unknown-code fallback behavior
 - `Phase 399` added explicit 14-locale source-selection and source-fallback diagnostic presentation while preserving raw source-selection and fallback evidence boundaries
+- `Phase 400` added explicit 14-locale adapter-error diagnostic presentation while preserving raw adapter diagnostic evidence boundaries
 - `Phase 377` added the first `es-419` runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while keeping deeper structured copy on the existing fallback boundary
 - `Phase 378` added the first `pt-BR` runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while keeping deeper structured copy on the existing fallback boundary
 - `Phase 379` added the first `fr` runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while keeping deeper structured copy on the existing fallback boundary

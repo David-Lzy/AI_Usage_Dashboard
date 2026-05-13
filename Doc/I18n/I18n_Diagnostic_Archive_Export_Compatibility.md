@@ -82,4 +82,4 @@ No archive or export schema migration is required before continuing localized di
 
 `Phase 199` completed diagnostic fixture and historical evidence alignment review. It confirmed that generated request/handoff packages and frozen archives should not gain typed diagnostic payloads without a dedicated schema migration.
 
-The next safe runtime slice is adapter diagnostic raw fallback regression review. That work should prove raw fallback behavior before any deeper diagnostic-body localization.
+`Phase 204` completed adapter diagnostic raw fallback regression review, and `Phase 398` through `Phase 400` completed typed diagnostic presentation 14-locale copy. The next diagnostic-related work should still preserve this archive/export boundary and avoid translating raw diagnostic evidence fields.

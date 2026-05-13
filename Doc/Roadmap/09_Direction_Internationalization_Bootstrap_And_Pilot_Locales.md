@@ -81,6 +81,7 @@ Execution note:
 - sixty-fifth inventory slice landed on `2026-05-13` through `Phase 397`
 - sixty-sixth executable slice landed on `2026-05-13` through `Phase 398`
 - sixty-seventh executable slice landed on `2026-05-13` through `Phase 399`
+- sixty-eighth executable slice landed on `2026-05-13` through `Phase 400`
 - `Phase 200` and `Phase 201` intentionally paused this i18n/diagnostic follow-up line for functionality-first Codex personal usage-context surfacing while Codex budget is constrained
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
@@ -124,10 +125,10 @@ As of 2026-05-13:
 - Settings language options are generated from the registry instead of hard-coded `en / zh-CN` entries
 - `ar` resolves to `rtl`; all other shipped runtime locales resolve to `ltr`
 - the new non-reviewed runtime locales use complete key coverage with English fallback where human-reviewed translations are not yet present
-- every non-English locale in the 14-locale set now has a first runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels; popup first-run guidance, setup coverage, snapshot status, header, featured-section, featured-card, action-section, surface-role, and aria copy now have explicit 14-locale structured coverage through `Phase 392.4`; Settings core layout, Quick Setup, preferences, theme-customization, credential, source-card, and permission helper copy now has explicit 14-locale coverage through `Phase 393.2.2`; Provider Detail helper copy now has explicit 14-locale coverage through `Phase 393.3.1`; provider-source display wrapper copy now has explicit 14-locale coverage through `Phase 393.3.2`; typed warning diagnostic presentation now has explicit 14-locale coverage through `Phase 398`; typed source-selection and source-fallback diagnostic presentation now has explicit 14-locale coverage through `Phase 399`; deeper structured runtime copy outside those slices still falls back to English until reviewed translations are added
-- the diagnostic presentation inventory now maps the completed typed warning and source diagnostic slices plus adapter-error presentation copy to `Phase 400`, while preserving raw diagnostic evidence outside localization:
+- every non-English locale in the 14-locale set now has a first runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels; popup first-run guidance, setup coverage, snapshot status, header, featured-section, featured-card, action-section, surface-role, and aria copy now have explicit 14-locale structured coverage through `Phase 392.4`; Settings core layout, Quick Setup, preferences, theme-customization, credential, source-card, and permission helper copy now has explicit 14-locale coverage through `Phase 393.2.2`; Provider Detail helper copy now has explicit 14-locale coverage through `Phase 393.3.1`; provider-source display wrapper copy now has explicit 14-locale coverage through `Phase 393.3.2`; typed warning diagnostic presentation now has explicit 14-locale coverage through `Phase 398`; typed source-selection and source-fallback diagnostic presentation now has explicit 14-locale coverage through `Phase 399`; typed adapter-error diagnostic presentation now has explicit 14-locale coverage through `Phase 400`; deeper structured runtime copy outside those slices still falls back to English until reviewed translations are added
+- the diagnostic presentation inventory now maps the completed typed warning, source, and adapter-error presentation copy while preserving raw diagnostic evidence outside localization:
   - [I18n_Diagnostic_Presentation_14_Locale_Inventory.md](../I18n/I18n_Diagnostic_Presentation_14_Locale_Inventory.md)
-- the deeper runtime copy backlog now maps typed diagnostic presentation follow-up to `Phase 397` through `Phase 400`, with operator/store-helper follow-up remaining later:
+- the deeper runtime copy backlog now records typed diagnostic presentation as complete through `Phase 400`, with operator/store-helper follow-up remaining later:
   - [I18n_Deeper_Runtime_Copy_Backlog.md](../I18n/I18n_Deeper_Runtime_Copy_Backlog.md)
 - focused i18n tests now guard that every non-English locale keeps explicit first-shell runtime message overrides instead of silently relying on English fallback for the shell pilot surface
 - Arabic/RTL surfaces now isolate English fallback text direction so fallback punctuation stays readable until reviewed Arabic runtime translations are added
@@ -150,6 +151,7 @@ As of 2026-05-13:
   - provider-source display wrapper labels and helper descriptions generated from typed source/fidelity/availability/connection state
   - warning diagnostic labels and summaries generated from typed warning diagnostics
   - source-selection and source-fallback diagnostic labels and summaries generated from typed source diagnostics
+  - adapter-error diagnostic labels and summaries generated from typed adapter diagnostics
   - shared quick theme-toggle labels
 - the current settings-shell slice includes:
   - settings top bar and actions
@@ -329,7 +331,7 @@ Recommended rollout:
 68. diagnostic presentation 14-locale inventory - shipped in `Phase 397`
 69. warning diagnostic presentation 14-locale copy - shipped in `Phase 398`
 70. source diagnostic presentation 14-locale copy - shipped in `Phase 399`
-71. adapter-error diagnostic presentation 14-locale copy - queued in `Phase 400`
+71. adapter-error diagnostic presentation 14-locale copy - shipped in `Phase 400`
 
 ## References
 

@@ -333,6 +333,81 @@ describe("getProviderDiagnosticPresentation", () => {
     });
   });
 
+  it("builds explicit non-English adapter-error presentation for every shipped locale", () => {
+    const diagnostic = createAdapterErrorDiagnostic({
+      providerId: "codex",
+      adapterErrorKind: "parse_failed",
+      sourceKind: "session_page",
+      rawMessage: "Codex usage page parse failed",
+    });
+    const english = getProviderDiagnosticPresentation(diagnostic, createRuntimeI18n("en"));
+    const expectedLabels = {
+      en: "Adapter parse failed",
+      "zh-CN": "适配器解析失败",
+      "zh-TW": "適配器解析失敗",
+      ja: "アダプター解析失敗",
+      ko: "어댑터 파싱 실패",
+      "es-419": "Error de parseo del adaptador",
+      "pt-BR": "Falha de parsing do adaptador",
+      fr: "Échec de parsing de l'adaptateur",
+      de: "Adapter-Parsing fehlgeschlagen",
+      it: "Parsing dell'adapter non riuscito",
+      ru: "Ошибка парсинга адаптера",
+      ar: "فشل تحليل المحول",
+      hi: "Adapter parsing विफल",
+      id: "Parsing adapter gagal",
+    } satisfies Record<(typeof SUPPORTED_APP_LOCALES)[number], string>;
+
+    for (const locale of SUPPORTED_APP_LOCALES) {
+      const presentation = getProviderDiagnosticPresentation(
+        diagnostic,
+        createRuntimeI18n(locale),
+      );
+
+      expect(presentation?.label).toBe(expectedLabels[locale]);
+
+      if (locale !== "en") {
+        expect(presentation?.summary).not.toBe(english?.summary);
+        expect(presentation?.summary).not.toContain("parsing failed; keep");
+      }
+    }
+  });
+
+  it("covers every adapter-error diagnostic code without translating raw adapter bodies", () => {
+    const diagnostics = [
+      createAdapterErrorDiagnostic({
+        providerId: "codex",
+        adapterErrorKind: "parse_failed",
+        sourceKind: "session_page",
+        rawMessage: "Codex usage page parse failed",
+      }),
+      createAdapterErrorDiagnostic({
+        providerId: "cursor",
+        adapterErrorKind: "unsupported_response",
+        sourceKind: "official_api",
+        rawMessage: "Cursor Admin API returned an unsupported response.",
+      }),
+      createAdapterErrorDiagnostic({
+        providerId: "claude-code",
+        adapterErrorKind: "unexpected_error",
+        sourceKind: "session_page",
+        rawMessage: "Claude usage page adapter hit an unexpected error.",
+      }),
+    ] as const;
+
+    for (const diagnostic of diagnostics) {
+      const presentation = getProviderDiagnosticPresentation(
+        diagnostic,
+        createRuntimeI18n("ar"),
+      );
+
+      expect(presentation?.label).toBeTruthy();
+      expect(presentation?.summary).toBeTruthy();
+      expect(presentation?.summary).not.toBe(diagnostic.rawMessage);
+      expect(diagnostic.rawMessage).toMatch(/[A-Za-z]/);
+    }
+  });
+
   it("preserves the legacy localized-copy export path", () => {
     const diagnostic = createUsageThresholdDiagnostic({
       providerId: "codex",

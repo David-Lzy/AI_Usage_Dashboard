@@ -33,6 +33,7 @@ Track runtime copy that still falls back to English after the 14-locale shell pi
 - Settings source-card and permission helper copy now has explicit 14-locale coverage through `Phase 393.2.2`.
 - Provider Detail helper copy now has explicit 14-locale coverage through `Phase 393.3.1`.
 - Provider-source display wrapper copy now has explicit 14-locale coverage through `Phase 393.3.2`.
+- Typed diagnostic presentation copy now has explicit 14-locale coverage for warning, source-selection, source-fallback, and adapter-error diagnostics through `Phase 400`.
 - Deeper structured helper copy outside the popup, Settings, Provider Detail, and provider-source display slices still mostly uses explicit `zh-CN` branches plus English fallback for every other non-English locale.
 - Locale registry, `rtl` mapping, runtime `lang`/`dir`, Chrome `_locales`, RDP locale validation, and store listing draft coverage are already guarded by `npm run i18n:check`.
 
@@ -95,13 +96,14 @@ Source bucket:
 - `src/shared/provider-diagnostic-presentation.ts`
 - `src/shared/provider-diagnostic-warning-copy.ts`
 - `src/shared/provider-diagnostic-source-copy.ts`
+- `src/shared/provider-diagnostic-adapter-error-copy.ts`
 - [I18n_Diagnostic_Presentation_14_Locale_Inventory.md](./I18n_Diagnostic_Presentation_14_Locale_Inventory.md)
 
 User-facing copy:
 
-- typed adapter-error diagnostic labels and short summaries remain the active `Phase 400` follow-up
 - typed warning diagnostic labels and summaries already have explicit 14-locale coverage after `Phase 398`
 - typed source-selection and source-fallback labels and summaries already have explicit 14-locale coverage after `Phase 399`
+- typed adapter-error diagnostic labels and summaries already have explicit 14-locale coverage after `Phase 400`
 
 Reason:
 
@@ -119,7 +121,7 @@ Default next action:
 - `Phase 397` inventoried typed diagnostic presentation copy and keeps the implementation code/code-list mapping in [I18n_Diagnostic_Presentation_14_Locale_Inventory.md](./I18n_Diagnostic_Presentation_14_Locale_Inventory.md).
 - `Phase 398` handled warning diagnostic presentation copy.
 - `Phase 399` handled source-selection and fallback diagnostic presentation copy.
-- `Phase 400` handles adapter-error diagnostic presentation copy.
+- `Phase 400` handled adapter-error diagnostic presentation copy.
 
 ### P1 - Operator And Store Helper Follow-Up
 
@@ -174,7 +176,8 @@ Reason:
 - `Phase 397` inventoried the typed diagnostic presentation bucket and split it into warning, source, and adapter-error implementation phases.
 - `Phase 398` translated typed warning diagnostic presentation for all 14 runtime locales.
 - `Phase 399` translated typed source-selection and source-fallback diagnostic presentation for all 14 runtime locales.
-- Adapter-error diagnostic presentation, operator workspaces, and store helper routes remain follow-up work.
+- `Phase 400` translated typed adapter-error diagnostic presentation for all 14 runtime locales.
+- Operator workspaces and store helper routes remain follow-up work.
 
 ## Verification Pattern
 

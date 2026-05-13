@@ -16,7 +16,7 @@ Freshness model:
 
 Status note:
 
-- queued after `Phase 399`
+- completed and archived on 2026-05-13
 - third diagnostic presentation implementation slice
 
 ## Goal
@@ -27,7 +27,7 @@ Add explicit 14-locale presentation copy for typed adapter-error diagnostics whi
 
 - Localize adapter-error labels and short summaries generated from typed params.
 - Cover parse-failed, unsupported-response, and unexpected-error presentation.
-- Use [I18n_Diagnostic_Presentation_14_Locale_Inventory.md](../I18n/I18n_Diagnostic_Presentation_14_Locale_Inventory.md) as the code list:
+- Use [I18n_Diagnostic_Presentation_14_Locale_Inventory.md](../../../../I18n/I18n_Diagnostic_Presentation_14_Locale_Inventory.md) as the code list:
   - `adapter.parse_failed`
   - `adapter.unsupported_response`
   - `adapter.unexpected_error`
@@ -62,3 +62,25 @@ Add explicit 14-locale presentation copy for typed adapter-error diagnostics whi
 ## Follow-Up
 
 - Choose between operator-workspace/store-helper localization and another maintenance hotspot after diagnostic presentation is complete.
+
+## Closeout
+
+Completed on 2026-05-13.
+
+Summary:
+
+- Added `src/shared/provider-diagnostic-adapter-error-copy.ts` with explicit 14-locale adapter-error labels and summaries for parse-failed, unsupported-response, and unexpected-error diagnostics.
+- Kept `src/shared/provider-diagnostic-presentation.ts` as the public presentation entry while delegating `adapter.*` diagnostic codes to the new helper.
+- Preserved raw adapter diagnostic bodies, `ProviderDiagnostic.rawMessage`, provider ids, host labels, URLs, route hints, archive/export schemas, and vendor page text.
+- Added focused coverage proving every shipped locale gets explicit adapter-error presentation and that every adapter-error code still leaves raw adapter bodies untouched.
+
+Verification:
+
+- `npm run i18n:check` passed.
+- `npm run test -- src/shared/provider-diagnostic-presentation.test.ts` passed with `10` tests.
+- `npm run test -- src/shared/i18n.test.ts` passed with `37` tests.
+- `npm run test -- src/sidepanel/settings-view-models.test.ts` passed with `13` tests.
+- `npm run typecheck` passed.
+- `npm run build` passed.
+- `npm run docs:check` passed.
+- `git diff --check` passed.

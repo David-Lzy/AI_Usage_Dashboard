@@ -104,4 +104,4 @@ The review writes:
 
 No fixture or archive mutation is required before continuing diagnostic i18n work.
 
-The next safe slice is adapter diagnostic raw fallback regression review. That work should prove absent, unknown, or intentionally raw-only diagnostics still fall back to raw evidence across the maintained presentation and classification paths.
+`Phase 204` completed adapter diagnostic raw fallback regression review, and `Phase 398` through `Phase 400` completed typed diagnostic presentation 14-locale copy. Future diagnostic work should keep absent, unknown, or intentionally raw-only diagnostics falling back to raw evidence across maintained presentation and classification paths.

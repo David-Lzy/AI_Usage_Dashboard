@@ -33,6 +33,7 @@ Status note:
 - `Phase 197` added diagnostic archive/export compatibility review while preserving raw diagnostic evidence schema fields
 - `Phase 198` aligned maintained sample and store seed typed diagnostic metadata while preserving raw diagnostic evidence strings
 - `Phase 199` added diagnostic fixture and historical evidence alignment review while preserving generated request/handoff and frozen archive evidence boundaries
+- `Phase 398` through `Phase 400` expanded typed warning, source, and adapter-error diagnostic presentation to 14 runtime locales while preserving raw diagnostic evidence bodies
 - refresh it when provider source display helpers, adapter reason fields, provider-source blueprints, or runtime i18n scope changes materially
 
 ## Goal
@@ -126,6 +127,7 @@ Future localization should prefer this order:
 10. After `Phase 197`, archive and export compatibility reviews must treat localized diagnostic presentation as UI output, not as a replacement for raw diagnostic evidence fields.
 11. After `Phase 198`, maintained sample and store seed typed metadata may be aligned where stable codes already match raw strings, but frozen historical evidence must not be rewritten.
 12. After `Phase 199`, generated request/handoff packages and frozen historical archives must stay out of typed diagnostic backfills unless a dedicated schema migration explicitly approves it.
+13. After `Phase 400`, typed warning, source, and adapter-error presentation may be localized for all shipped runtime locales, but raw diagnostic evidence bodies must remain unchanged and visible.
 
 ## Out Of Scope
 

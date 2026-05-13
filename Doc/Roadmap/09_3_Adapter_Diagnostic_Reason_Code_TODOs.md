@@ -32,7 +32,7 @@ Status note:
 - adapter diagnostic raw fallback regression review completed in `Phase 204`
 - this child TODO turns the adapter diagnostic reason-code plan into executable follow-up slices
 - the diagnostic raw fallback safety line is now closed at the regression-test level; future diagnostic-body localization must keep this compatibility boundary intact
-- `Phase 398` and `Phase 399` later expanded typed warning and source diagnostic presentation to explicit 14-locale copy; adapter-error presentation remains the active `Phase 400` localization follow-up
+- `Phase 398` through `Phase 400` later expanded typed warning, source, and adapter-error diagnostic presentation to explicit 14-locale copy
 - refresh it when typed diagnostic coverage, provider adapter behavior, or archive compatibility rules change
 
 Parent direction:
@@ -53,7 +53,7 @@ The goal is not to translate raw provider evidence immediately. The goal is to m
 
 ## Current Truth
 
-As of `Phase 399`:
+As of `Phase 400`:
 
 - provider-source display wrappers are localized through `ProviderSourceDisplayCopy`
 - raw provider source-truth fields still pass through unchanged
@@ -66,8 +66,7 @@ As of `Phase 399`:
 - Settings and Provider Detail now render localized labels and a short diagnostic summary from known typed `warningDiagnostic` codes and params
 - Settings and Provider Detail now render localized labels and short summaries from known typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` codes and params
 - Settings and Provider Detail now render localized labels and short summaries for known `adapter.*` diagnostics while keeping raw adapter warning bodies visible
-- warning and source diagnostic presentation now has explicit 14-locale copy after `Phase 398` and `Phase 399`
-- adapter-error diagnostic presentation remains `en + zh-CN` until the active `Phase 400` slice completes
+- warning, source, and adapter-error diagnostic presentation now has explicit 14-locale copy after `Phase 398` through `Phase 400`
 - `src/providers/diagnostics.ts` now provides a reusable adapter-error diagnostic builder for unexpected adapter failures, unsupported responses, and parser failures
 - `npm run phase196:review` now seeds a compact diagnostic stress state and verifies localized summaries plus raw evidence bodies at `420px` Settings and `360px` Provider Detail widths
 - `npm run phase197:review` now verifies archive/export compatibility markers for raw diagnostic fields, typed diagnostic fields, app-state storage, store screenshot seed/archives, theme-recovery exports, and interaction-audit exports

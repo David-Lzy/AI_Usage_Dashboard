@@ -34,9 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [400_Phase_Adapter_Error_Diagnostic_Presentation_14_Locale_Copy.md](./400_Phase_Adapter_Error_Diagnostic_Presentation_14_Locale_Copy.md)
-- latest completed slice: [399_Phase_Source_Diagnostic_Presentation_14_Locale_Copy.md](./Archive/by-phase/300-399/399_Phase_Source_Diagnostic_Presentation_14_Locale_Copy.md)
-- queued phase files after active `Phase 400`: none
+- active phase file: none
+- latest completed slice: [400_Phase_Adapter_Error_Diagnostic_Presentation_14_Locale_Copy.md](./Archive/by-phase/400-499/400_Phase_Adapter_Error_Diagnostic_Presentation_14_Locale_Copy.md)
+- queued phase files: none
 
 Completed phases should be moved to:
 
@@ -792,6 +792,7 @@ Completed phases should be moved to:
 - the 2026-05-13 `Phase 397` closeout added a maintained diagnostic presentation 14-locale inventory and split implementation into warning, source-selection/fallback, and adapter-error slices while preserving raw diagnostic evidence boundaries
 - the 2026-05-13 `Phase 398` closeout added explicit 14-locale warning diagnostic presentation for credential, host-access, page-session, usage-threshold, policy-only, and sync-stale diagnostics while preserving raw warning evidence boundaries
 - the 2026-05-13 `Phase 399` closeout added explicit 14-locale source-selection and source-fallback diagnostic presentation while preserving raw source-selection and fallback evidence boundaries
+- the 2026-05-13 `Phase 400` closeout added explicit 14-locale adapter-error diagnostic presentation while preserving raw adapter diagnostic evidence boundaries
 
 ## Delivery Standard For Each Phase
 

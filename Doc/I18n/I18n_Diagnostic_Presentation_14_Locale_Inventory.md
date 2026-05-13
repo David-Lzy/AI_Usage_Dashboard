@@ -37,8 +37,8 @@ Current behavior:
 
 - known typed warning diagnostics get localized labels plus short summaries for all 14 runtime locales after `Phase 398`
 - known typed source-selection and source-fallback diagnostics get localized labels plus short summaries for all 14 runtime locales after `Phase 399`
-- known typed adapter-error diagnostics still get localized labels plus short summaries for `en` and `zh-CN`
-- non-`en` / non-`zh-CN` runtime locales still fall back to English for adapter-error diagnostics until `Phase 400`
+- known typed adapter-error diagnostics get localized labels plus short summaries for all 14 runtime locales after `Phase 400`
+- typed diagnostic presentation no longer has a non-`zh-CN` English fallback bucket for the current known code set
 - unknown diagnostic codes return `null`, leaving raw evidence display paths unchanged
 
 ## Safe Presentation Copy
@@ -130,17 +130,21 @@ Guard tests:
 
 ## Phase 400 - Adapter-Error Diagnostics
 
-Status: active after `Phase 399`.
+Status:
+
+- completed in `Phase 400`
+- implementation copy lives in [provider-diagnostic-adapter-error-copy.ts](../../src/shared/provider-diagnostic-adapter-error-copy.ts)
+- raw adapter diagnostic bodies, `ProviderDiagnostic.rawMessage`, and vendor/source identifiers remain untranslated evidence
 
 Implementation scope:
 
 | Category | Codes | Summary helper |
 | --- | --- | --- |
-| `adapter_error` | `adapter.unexpected_error`, `adapter.unsupported_response`, `adapter.parse_failed` | `formatAdapterErrorSummary` |
+| `adapter_error` | `adapter.unexpected_error`, `adapter.unsupported_response`, `adapter.parse_failed` | `provider-diagnostic-adapter-error-copy.ts` summary templates |
 
 Shared labels:
 
-- `formatDiagnosticSourceKindLabel` for the optional `sourceKind` param
+- localized `ProviderSourceKind` labels for the optional `sourceKind` param
 
 Guard tests:
 
@@ -159,4 +163,4 @@ Each implementation phase should run:
 - `npm run docs:check`
 - `git diff --check`
 
-`Phase 400` should also run `npm run build` and update the deeper runtime copy backlog to remove typed diagnostic presentation from the remaining fallback buckets.
+`Phase 400` also ran `npm run build` and removed typed diagnostic presentation from the remaining fallback buckets.

@@ -160,10 +160,10 @@ As of `Phase 199`:
 
 ## Follow-Up
 
-The next `Direction 09` implementation slice should move to adapter diagnostic raw fallback regression review:
+After `Phase 400`, typed diagnostic presentation has explicit 14-locale coverage. The remaining `Direction 09` follow-up should choose between operator-workspace helper copy and store-helper copy:
 
 - keep raw source-selection, fallback, warning, and adapter-error diagnostic bodies available for provider detail, exports, and archive evidence
-- prove absent, unknown, and intentionally raw-only typed diagnostics still fall back to raw evidence
+- keep operator evidence payload fields, request identifiers, preset ids, filenames, route hashes, and generated evidence strings untranslated
 - keep raw provider `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` values unchanged
 - keep generated store-listing source docs out of runtime code unless that copy is shown by the extension
 
