@@ -32,6 +32,7 @@ Status note:
 - `Phase 197` added diagnostic archive and export compatibility review
 - `Phase 198` aligned maintained sample and store seed typed diagnostic metadata while preserving raw diagnostic strings
 - `Phase 199` added diagnostic fixture and historical evidence alignment review
+- `Phase 398` through `Phase 400` expanded typed warning, source, and adapter-error diagnostic presentation to 14 runtime locales
 - refresh it when provider adapters, source-selection behavior, provider snapshot fields, archive evidence schemas, or runtime i18n boundaries change materially
 
 ## Goal
@@ -277,6 +278,8 @@ Before any runtime implementation lands:
 - Settings and Provider Detail can show localized adapter-error labels and short summaries generated from typed metadata
 - raw adapter warning bodies still remain visible and unchanged
 - no provider coverage, source-selection, or fallback behavior changed
+
+`Phase 400` expanded adapter-error diagnostic presentation to all 14 shipped runtime locales while preserving the same typed codes, params, fallback behavior, and raw adapter warning bodies.
 
 `Phase 196` added compact-width evidence QA for the combined diagnostic stack:
 
