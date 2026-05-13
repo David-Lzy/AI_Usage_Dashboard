@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is now completed through `Phase 369`, with no active phase or queued numbered phase currently selected
+- the numbered phase queue is now completed through `Phase 370`, with no active phase or queued numbered phase currently selected
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -85,6 +85,7 @@ As of 2026-05-13:
 - `Phase 367` reopened `Direction 09` for a source-only 14-locale expansion: runtime locale registry, Settings locale options, Chrome manifest `_locales` catalogs, i18n completeness checking, and a guarded Chrome Web Store listing localization draft now cover `en`, `zh-CN`, `zh-TW`, `ja`, `ko`, `es-419`, `pt-BR`, `fr`, `de`, `it`, `ru`, `ar`, `hi`, and `id`
 - `Phase 368` hardened Arabic/RTL fallback rendering so untranslated English runtime fallback sentences keep natural punctuation order while Arabic remains an RTL locale
 - `Phase 369` hardened locale-specific RDP visual QA by validating `--locale` against those 14 runtime tags and sharing the `app-locale` URL override helper across extension-window captures
+- `Phase 370` folded runtime registry, Chrome catalog directory, and RDP locale helper alignment into the standard `npm run i18n:check` drift gate
 - `Phase 200` completed a functionality-first Codex personal slice by preserving multiple visible usage windows, expanding Codex page-capture snippets, and surfacing the most constrained visible percentage window across dashboard, provider detail, and popup paths
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without changing the primary percentage-window quota model
 - `Phase 202` completed repeatable unpacked-extension verification for Codex personal multi-window plus flex-balance context, while fixing DOM capture so repeated percentages and single-character balance values are not lost before parsing

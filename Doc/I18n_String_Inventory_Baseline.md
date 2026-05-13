@@ -21,7 +21,7 @@ Status note:
 
 ## Current Localized Scope
 
-Localized through `Phase 170`, `Phase 171`, `Phase 172`, `Phase 173`, `Phase 174`, `Phase 175`, `Phase 176`, `Phase 177`, `Phase 179`, `Phase 180`, `Phase 181`, `Phase 183`, `Phase 193`, `Phase 194`, `Phase 195`, the `Phase 367` 14-locale architecture/manifest/listing draft expansion, and the `Phase 368` RTL fallback text-direction hardening.
+Localized through `Phase 170`, `Phase 171`, `Phase 172`, `Phase 173`, `Phase 174`, `Phase 175`, `Phase 176`, `Phase 177`, `Phase 179`, `Phase 180`, `Phase 181`, `Phase 183`, `Phase 193`, `Phase 194`, `Phase 195`, the `Phase 367` 14-locale architecture/manifest/listing draft expansion, the `Phase 368` RTL fallback text-direction hardening, the `Phase 369` RDP locale capture guard, and the `Phase 370` i18n registry drift guard.
 
 Compact diagnostic presentation QA shipped in `Phase 196`. Diagnostic archive/export compatibility review shipped in `Phase 197`. Sample/store seed diagnostic metadata alignment shipped in `Phase 198`. Diagnostic fixture and historical evidence alignment review shipped in `Phase 199`.
 
@@ -121,7 +121,7 @@ Phase 367 note:
 - runtime catalog key coverage now exists for `en`, `zh-CN`, `zh-TW`, `ja`, `ko`, `es-419`, `pt-BR`, `fr`, `de`, `it`, `ru`, `ar`, `hi`, and `id`
 - only `zh-CN` has broad reviewed non-English runtime copy in the current source; other non-English runtime locales may fall back to English copy until a future translation-review slice replaces those strings
 - Chrome manifest strings and Chrome Web Store listing draft copy have 14-locale coverage
-- `npm run i18n:check` guards manifest catalog completeness across the 14 Chrome locale directories
+- `npm run i18n:check` guards runtime locale metadata, registry-derived Chrome locale directories, manifest catalog completeness, and the RDP capture helper locale list
 - `Phase 368` adds shared typography-level `unicode-bidi: plaintext` protection for common text-bearing elements under `data-app-direction="rtl"`, so English fallback copy remains readable until reviewed translations land
 
 ## Store Runtime Helper Boundary
