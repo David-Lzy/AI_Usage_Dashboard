@@ -55,3 +55,21 @@ Expand Provider Detail shell and value-wrapper copy into explicit 14-locale runt
 ## Follow-Up
 
 - Move to provider-source display wrapper copy in `Phase 393.3.2`.
+
+## Closeout
+
+Summary:
+
+- Added explicit 14-locale Provider Detail helper copy through `src/shared/provider-detail-extended-localized-copy.ts`.
+- Kept the existing `buildProviderDetailLocalizedCopy` and `localized-copy` export paths stable while routing non-`en`/non-`zh-CN` locales through the new Provider Detail catalog.
+- Added a focused guard that every non-English locale keeps representative Provider Detail shell, badge, note, value-wrapper, and hero copy.
+
+Verification:
+
+- `npm run i18n:check`
+- `npm run test -- src/shared/provider-detail-localized-copy.test.ts`
+- `npm run test -- src/shared/i18n.test.ts`
+- `npm run typecheck`
+- `npm run build`
+- `npm run docs:check`
+- `git diff --check`

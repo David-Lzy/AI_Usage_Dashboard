@@ -3,6 +3,7 @@ import type {
   SyncStatus,
 } from "../providers/types";
 import type { RuntimeI18n } from "./i18n";
+import { getProviderDetailExtendedCopy } from "./provider-detail-extended-localized-copy";
 
 export function buildProviderDetailLocalizedCopy(i18n: RuntimeI18n) {
   if (i18n.resolvedLocale === "zh-CN") {
@@ -96,6 +97,12 @@ export function buildProviderDetailLocalizedCopy(i18n: RuntimeI18n) {
         "这个详情页反映的是当前 dashboard 和 refresh flow 正在使用的标准化 provider 快照，包括 side panel 中显示的 source fidelity 和 product-contract 语义。",
       progressLabel: (providerLabel: string) => `${providerLabel} usage ratio`,
     } as const;
+  }
+
+  const extendedCopy = getProviderDetailExtendedCopy(i18n.resolvedLocale);
+
+  if (extendedCopy) {
+    return extendedCopy;
   }
 
   return {

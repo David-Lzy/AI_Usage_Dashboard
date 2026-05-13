@@ -31,7 +31,8 @@ Track runtime copy that still falls back to English after the 14-locale shell pi
 - Settings core helper copy for layout, Quick Setup, preferences, and theme-customization buckets now has explicit 14-locale coverage through `Phase 393.1`.
 - Settings credential helper copy now has explicit 14-locale coverage through `Phase 393.2.1`.
 - Settings source-card and permission helper copy now has explicit 14-locale coverage through `Phase 393.2.2`.
-- Deeper structured helper copy outside the popup and Settings slices still mostly uses explicit `zh-CN` branches plus English fallback for every other non-English locale.
+- Provider Detail helper copy now has explicit 14-locale coverage through `Phase 393.3.1`.
+- Deeper structured helper copy outside the popup, Settings, and Provider Detail slices still mostly uses explicit `zh-CN` branches plus English fallback for every other non-English locale.
 - Locale registry, `rtl` mapping, runtime `lang`/`dir`, Chrome `_locales`, RDP locale validation, and store listing draft coverage are already guarded by `npm run i18n:check`.
 
 ## Translation Backlog
@@ -159,7 +160,7 @@ Reason:
 - `Phase 393.2.1` translated Settings credential buckets for all 14 runtime locales.
 - `Phase 393.2.2` translated Settings source-card helper labels and permission buckets for all 14 runtime locales.
 - `Phase 393.3` split Provider Detail and provider-source display wrapper work into child phases before runtime code changes.
-- `Phase 393.3.1` should translate Provider Detail buckets for all 14 runtime locales.
+- `Phase 393.3.1` translated Provider Detail buckets for all 14 runtime locales.
 - `Phase 393.3.2` should translate provider-source display wrapper buckets for all 14 runtime locales.
 - Diagnostics, operator workspaces, and store helper routes should remain follow-up work unless the child phases prove small enough to split safely.
 

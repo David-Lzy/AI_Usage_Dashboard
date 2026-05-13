@@ -74,6 +74,7 @@ Execution note:
 - fifty-ninth planning split landed on `2026-05-13` through `Phase 393.2`
 - sixtieth executable slice landed on `2026-05-13` through `Phase 393.2.1`
 - sixty-first executable slice landed on `2026-05-13` through `Phase 393.2.2`
+- sixty-second executable slice landed on `2026-05-13` through `Phase 393.3.1`
 - sixty-second planning split landed on `2026-05-13` through `Phase 393.3`
 - `Phase 200` and `Phase 201` intentionally paused this i18n/diagnostic follow-up line for functionality-first Codex personal usage-context surfacing while Codex budget is constrained
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
@@ -118,8 +119,8 @@ As of 2026-05-13:
 - Settings language options are generated from the registry instead of hard-coded `en / zh-CN` entries
 - `ar` resolves to `rtl`; all other shipped runtime locales resolve to `ltr`
 - the new non-reviewed runtime locales use complete key coverage with English fallback where human-reviewed translations are not yet present
-- every non-English locale in the 14-locale set now has a first runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels; popup first-run guidance, setup coverage, snapshot status, header, featured-section, featured-card, action-section, surface-role, and aria copy now have explicit 14-locale structured coverage through `Phase 392.4`; Settings core layout, Quick Setup, preferences, theme-customization, credential, source-card, and permission helper copy now has explicit 14-locale coverage through `Phase 393.2.2`; deeper structured runtime copy outside those slices still falls back to English until reviewed translations are added
-- the deeper runtime copy backlog now maps remaining fallback buckets to Provider Detail helpers in `Phase 393.3.1`, provider-source display helpers in `Phase 393.3.2`, then later diagnostics/operator/store-helper follow-up:
+- every non-English locale in the 14-locale set now has a first runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels; popup first-run guidance, setup coverage, snapshot status, header, featured-section, featured-card, action-section, surface-role, and aria copy now have explicit 14-locale structured coverage through `Phase 392.4`; Settings core layout, Quick Setup, preferences, theme-customization, credential, source-card, and permission helper copy now has explicit 14-locale coverage through `Phase 393.2.2`; Provider Detail helper copy now has explicit 14-locale coverage through `Phase 393.3.1`; deeper structured runtime copy outside those slices still falls back to English until reviewed translations are added
+- the deeper runtime copy backlog now maps remaining fallback buckets to provider-source display helpers in `Phase 393.3.2`, then later diagnostics/operator/store-helper follow-up:
   - [I18n_Deeper_Runtime_Copy_Backlog.md](../I18n/I18n_Deeper_Runtime_Copy_Backlog.md)
 - focused i18n tests now guard that every non-English locale keeps explicit first-shell runtime message overrides instead of silently relying on English fallback for the shell pilot surface
 - Arabic/RTL surfaces now isolate English fallback text direction so fallback punctuation stays readable until reviewed Arabic runtime translations are added
@@ -311,7 +312,7 @@ Recommended rollout:
 62. Settings credentials 14-locale copy - shipped in `Phase 393.2.1`
 63. Settings source and permissions 14-locale copy - shipped in `Phase 393.2.2`
 64. Provider Detail and source-display 14-locale copy split - shipped in `Phase 393.3`
-65. Provider Detail 14-locale copy - future work in `Phase 393.3.1`
+65. Provider Detail 14-locale copy - shipped in `Phase 393.3.1`
 66. Provider-source display 14-locale copy - future work in `Phase 393.3.2`
 67. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact
 

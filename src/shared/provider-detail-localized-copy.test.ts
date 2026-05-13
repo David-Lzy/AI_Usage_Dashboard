@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { createRuntimeI18n } from "./i18n";
+import { createRuntimeI18n, SUPPORTED_APP_LOCALES } from "./i18n";
 import {
   buildProviderDetailLocalizedCopy as buildReexportedCopy,
   getPermissionStatusLabel as getReexportedPermissionStatusLabel,
@@ -35,6 +35,29 @@ describe("provider detail localized copy", () => {
     expect(copy.sections.syncStatus).toBe("同步状态");
     expect(copy.badges.syncIssue).toBe("同步异常");
     expect(copy.values.remainingOnly("58%")).toBe("剩余 58%");
+  });
+
+  it("ships Provider Detail copy for every non-English locale", () => {
+    const englishCopy = buildProviderDetailLocalizedCopy(createRuntimeI18n("en"));
+
+    for (const locale of SUPPORTED_APP_LOCALES.filter(
+      (supportedLocale) => supportedLocale !== "en",
+    )) {
+      const copy = buildProviderDetailLocalizedCopy(createRuntimeI18n(locale));
+
+      expect(copy.topbarSubtitle).not.toBe(englishCopy.topbarSubtitle);
+      expect(copy.sections.providerDetail).not.toBe(
+        englishCopy.sections.providerDetail,
+      );
+      expect(copy.badges.needsAccess).not.toBe(englishCopy.badges.needsAccess);
+      expect(copy.notes.accessStatusDetail).not.toBe(
+        englishCopy.notes.accessStatusDetail,
+      );
+      expect(copy.values.usedAndRemaining("42%", "58%")).not.toBe(
+        englishCopy.values.usedAndRemaining("42%", "58%"),
+      );
+      expect(copy.heroDetail).not.toBe(englishCopy.heroDetail);
+    }
   });
 
   it("preserves the legacy localized-copy export path", () => {
