@@ -62,6 +62,7 @@ Execution note:
 - forty-seventh executable slice landed on `2026-05-13` through `Phase 384`
 - forty-eighth executable slice landed on `2026-05-13` through `Phase 385`
 - forty-ninth executable slice landed on `2026-05-13` through `Phase 386`
+- fiftieth executable slice landed on `2026-05-13` through `Phase 387`
 - `Phase 200` and `Phase 201` intentionally paused this i18n/diagnostic follow-up line for functionality-first Codex personal usage-context surfacing while Codex budget is constrained
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
@@ -108,6 +109,7 @@ As of 2026-05-13:
 - every non-English locale in the 14-locale set now has a first runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels; deeper structured runtime copy still falls back to English until reviewed translations are added
 - focused i18n tests now guard that every non-English locale keeps explicit first-shell runtime message overrides instead of silently relying on English fallback for the shell pilot surface
 - Arabic/RTL surfaces now isolate English fallback text direction so fallback punctuation stays readable until reviewed Arabic runtime translations are added
+- popup and sidepanel HTML shells now declare notranslate so Chrome/Google Translate overlays do not obscure localized extension-window screenshots
 - RDP extension-window locale smoke captures now validate `--locale` against the same 14 runtime tags before opening a Chrome extension window
 - `npm run i18n:check` now derives Chrome `_locales` directories from runtime registry metadata and verifies the RDP capture helper locale list against the same runtime tags
 - `npm run i18n:check` now also verifies the 14-locale Chrome Web Store listing draft has registry-aligned locale sections and complete listing field structure
@@ -281,8 +283,9 @@ Recommended rollout:
 49. Hindi runtime shell pilot - shipped in `Phase 384`
 50. Indonesian runtime shell pilot - shipped in `Phase 385`
 51. runtime shell pilot coverage guard - shipped in `Phase 386`
-52. deeper runtime catalog translation review for non-English fallback locales - future work
-53. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact
+52. notranslate extension shells and representative locale RDP popup QA - shipped in `Phase 387`
+53. deeper runtime catalog translation review for non-English fallback locales - future work
+54. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact
 
 ## References
 

@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [386_Phase_Runtime_Shell_Pilot_Coverage_Guard.md](./Archive/386_Phase_Runtime_Shell_Pilot_Coverage_Guard.md)
+- latest completed slice: [387_Phase_Extension_Notranslate_And_Locale_RDP_QA.md](./Archive/387_Phase_Extension_Notranslate_And_Locale_RDP_QA.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -776,6 +776,7 @@ Completed phases should be moved to:
 - the 2026-05-13 `Phase 384` closeout added the first Hindi runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while preserving deeper structured copy and raw evidence fallback boundaries
 - the 2026-05-13 `Phase 385` closeout added the first Indonesian runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while preserving deeper structured copy and raw evidence fallback boundaries
 - the 2026-05-13 `Phase 386` closeout added a focused runtime shell pilot coverage guard so every non-English locale must keep explicit first-shell message overrides even though deeper runtime copy can still fall back to English
+- the 2026-05-13 `Phase 387` closeout added notranslate markers to popup and sidepanel HTML shells and verified representative localized RDP popup captures no longer show Chrome/Google Translate overlay UI
 
 ## Delivery Standard For Each Phase
 
