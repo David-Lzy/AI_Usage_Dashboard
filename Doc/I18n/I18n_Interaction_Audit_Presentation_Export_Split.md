@@ -19,7 +19,7 @@ Status note:
 - created in `Phase 409`
 - defines which remaining interaction-audit visible labels can be localized without changing signoff exports, handoff drafts, request identities, automation hooks, or raw evidence
 - use this document before moving any remaining interaction-audit component strings into `buildOperatorWorkspaceLocalizedCopy`
-- `Phase 411` completed the Review Queue display-copy slice; `Phase 412` completed the Surface Card display-copy slice; `Phase 413` completed the Workspace Controls display-copy slice; `Phase 414` completed the Request Scope command-heading slice; Handoff Summary is the next child slice
+- `Phase 411` completed the Review Queue display-copy slice; `Phase 412` completed the Surface Card display-copy slice; `Phase 413` completed the Workspace Controls display-copy slice; `Phase 414` completed the Request Scope command-heading slice; `Phase 415` completed the Handoff Summary display-copy slice; frame readiness and preset results need a typed display split next
 
 ## Purpose
 
@@ -58,7 +58,6 @@ Already localized through `Phase 404`:
 
 Not localized in `Phase 409`:
 
-- handoff summary labels and helper copy
 - frame readiness and preset result messages
 
 Localized after `Phase 411`:
@@ -76,6 +75,10 @@ Localized after `Phase 413`:
 Localized after `Phase 414`:
 
 - Request Scope command headings for preflight, completion, and archive commands
+
+Localized after `Phase 415`:
+
+- Handoff Summary presentation labels, safe count patterns, workflow instructions, and handoff copy/download feedback
 
 ## Safe Presentation-Only Labels
 
@@ -302,7 +305,9 @@ The first safe child phase started with Review Queue display labels because:
 
 `Phase 414` moved Request Scope command headings into localized copy while preserving command text, request ids, request revisions, archive path examples, and input filename examples.
 
-The next safe child phase is `Phase 415`, covering Handoff Summary presentation labels and safe handoff feedback only. It must still preserve handoff draft content, generated bundle command text, operator notes, surface ids, and manual-check evidence text.
+`Phase 415` moved Handoff Summary presentation labels and safe handoff feedback into localized copy while preserving handoff draft content, generated bundle command text, operator notes, surface ids, and manual-check evidence text.
+
+The next safe child phase is `Phase 416`, covering a typed display/raw split for frame readiness and preset result messages before any localization of those messages.
 
 Required tests for completed and later interaction-audit display-copy slices:
 

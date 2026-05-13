@@ -16,8 +16,9 @@ Freshness model:
 
 Status note:
 
-- active after `Phase 414`
-- next child implementation phase from [I18n_Interaction_Audit_Presentation_Export_Split.md](../I18n/I18n_Interaction_Audit_Presentation_Export_Split.md)
+- completed on `2026-05-14`
+- next child implementation phase from [I18n_Interaction_Audit_Presentation_Export_Split.md](../../../../I18n/I18n_Interaction_Audit_Presentation_Export_Split.md)
+- closeout archived after moving Handoff Summary presentation labels and safe handoff feedback into 14-locale operator copy
 
 ## Goal
 
@@ -63,3 +64,22 @@ Move interaction-audit Handoff Summary presentation labels and safe handoff feed
 ## Follow-Up
 
 - Later phases may decide whether frame readiness and preset result messages need typed result codes before localization; they should remain raw until that split exists.
+
+## Completion Summary
+
+`Phase 415` moved Handoff Summary presentation labels and safe handoff feedback into `buildOperatorWorkspaceLocalizedCopy(i18n).interactionAudit.handoffSummary` with explicit copy for all 14 runtime locales.
+
+Delivered:
+
+- localized section label/detail, copy/download actions, summary labels, ready/not-ready labels, ready/outstanding status labels and descriptions, group headings, empty-state labels, pending-check count patterns, preview/workflow disclosure labels, and workflow instruction bullets
+- localized route-owned handoff copy/download success/failure feedback while preserving clipboard-unavailable branching
+- preserved `handoffDraft`, generated bundle command text, operator notes, surface ids, surface titles, pending manual-check evidence text, downloaded filenames, MIME types, and signoff export schemas
+- queued [416_Phase_Interaction_Audit_Frame_Result_Typed_Display_Split.md](../../../416_Phase_Interaction_Audit_Frame_Result_Typed_Display_Split.md) as the next interaction-audit localization safety slice
+
+## Verification
+
+- `npm run test -- src/shared/operator-workspace-localized-copy.test.ts src/sidepanel/interaction-audit-signoff.test.ts`
+- `npm run typecheck`
+- `npm run i18n:check`
+- `npm run docs:check`
+- `git diff --check`

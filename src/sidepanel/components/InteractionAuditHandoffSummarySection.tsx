@@ -1,6 +1,12 @@
+import type { buildOperatorWorkspaceLocalizedCopy } from "../../shared/localized-copy";
 import type { InteractionAuditSignoffHandoffSummary } from "../interaction-audit-signoff";
 
+type InteractionAuditHandoffSummaryCopy = ReturnType<
+  typeof buildOperatorWorkspaceLocalizedCopy
+>["interactionAudit"]["handoffSummary"];
+
 type InteractionAuditHandoffSummarySectionProps = {
+  copy: InteractionAuditHandoffSummaryCopy;
   handoffDraft: string;
   handoffSummary: InteractionAuditSignoffHandoffSummary;
   onCopyHandoffSummary: () => void | Promise<void>;
@@ -8,6 +14,7 @@ type InteractionAuditHandoffSummarySectionProps = {
 };
 
 export function InteractionAuditHandoffSummarySection({
+  copy,
   handoffDraft,
   handoffSummary,
   onCopyHandoffSummary,
@@ -20,10 +27,9 @@ export function InteractionAuditHandoffSummarySection({
     >
       <div className="interaction-audit__handoff-header">
         <div>
-          <p className="detail-note__label">Handoff Summary</p>
+          <p className="detail-note__label">{copy.label}</p>
           <p className="supporting-copy">
-            Use this summary to see what still blocks final operator signoff
-            before exporting the current workspace conclusions.
+            {copy.detail}
           </p>
         </div>
         <button
@@ -34,7 +40,7 @@ export function InteractionAuditHandoffSummarySection({
             void onCopyHandoffSummary();
           }}
         >
-          Copy handoff summary
+          {copy.copyAction}
         </button>
         <button
           className="text-button"
@@ -44,22 +50,22 @@ export function InteractionAuditHandoffSummarySection({
             onDownloadHandoffSummary();
           }}
         >
-          Download handoff summary
+          {copy.downloadAction}
         </button>
       </div>
 
       <div className="interaction-audit__signoff-summary">
         <div className="source-card__field" data-audit-handoff-summary-id="ready">
-          <p className="source-card__label">Ready for signoff</p>
+          <p className="source-card__label">{copy.readyForSignoff}</p>
           <p className="source-card__value" data-audit-handoff-summary-value>
-            {handoffSummary.readyForSignoff ? "Ready" : "Not ready"}
+            {handoffSummary.readyForSignoff ? copy.ready : copy.notReady}
           </p>
         </div>
         <div
           className="source-card__field"
           data-audit-handoff-summary-id="follow-up"
         >
-          <p className="source-card__label">Follow-up surfaces</p>
+          <p className="source-card__label">{copy.followUpSurfaces}</p>
           <p className="source-card__value" data-audit-handoff-summary-value>
             {handoffSummary.followUpSurfaceCount}
           </p>
@@ -68,7 +74,7 @@ export function InteractionAuditHandoffSummarySection({
           className="source-card__field"
           data-audit-handoff-summary-id="not-reviewed"
         >
-          <p className="source-card__label">Not reviewed</p>
+          <p className="source-card__label">{copy.notReviewed}</p>
           <p className="source-card__value" data-audit-handoff-summary-value>
             {handoffSummary.notReviewedSurfaceCount}
           </p>
@@ -77,7 +83,7 @@ export function InteractionAuditHandoffSummarySection({
           className="source-card__field"
           data-audit-handoff-summary-id="pending-checks"
         >
-          <p className="source-card__label">Pending checks</p>
+          <p className="source-card__label">{copy.pendingChecks}</p>
           <p className="source-card__value" data-audit-handoff-summary-value>
             {handoffSummary.pendingManualCheckCount} /{" "}
             {handoffSummary.totalManualCheckCount}
@@ -91,26 +97,34 @@ export function InteractionAuditHandoffSummarySection({
       >
         <p className="detail-note__label">
           {handoffSummary.readyForSignoff
-            ? "Ready for final signoff"
-            : "Outstanding review work"}
+            ? copy.readyStatusLabel
+            : copy.outstandingStatusLabel}
         </p>
         <p className="supporting-copy">
           {handoffSummary.readyForSignoff
-            ? "All audit surfaces are reviewed, no follow-up state remains, and every manual check is complete."
-            : `${handoffSummary.followUpSurfaceCount + handoffSummary.notReviewedSurfaceCount} surfaces still need review attention, and ${handoffSummary.pendingManualCheckCount} manual checks remain incomplete.`}
+            ? copy.readyStatusDetail
+            : copy.outstandingStatusDetail({
+                reviewSurfaceCount:
+                  handoffSummary.followUpSurfaceCount +
+                  handoffSummary.notReviewedSurfaceCount,
+                pendingManualCheckCount:
+                  handoffSummary.pendingManualCheckCount,
+              })}
         </p>
       </div>
 
       <div className="interaction-audit__handoff-groups">
         <div className="interaction-audit__handoff-group">
-          <p className="detail-note__label">Follow-up Required</p>
+          <p className="detail-note__label">{copy.followUpRequired}</p>
           <ul
             className="interaction-audit__handoff-list"
             data-audit-handoff-follow-up-list
           >
             {handoffSummary.followUpSurfaces.length === 0 ? (
               <li className="interaction-audit__handoff-item">
-                <p className="interaction-audit__handoff-item-title">None</p>
+                <p className="interaction-audit__handoff-item-title">
+                  {copy.none}
+                </p>
               </li>
             ) : (
               handoffSummary.followUpSurfaces.map((surface) => (
@@ -123,13 +137,16 @@ export function InteractionAuditHandoffSummarySection({
                     {surface.title}
                   </p>
                   <p className="interaction-audit__handoff-item-meta">
-                    Pending checks: {surface.pendingManualChecks.length} /{" "}
-                    {surface.totalManualCheckCount}
+                    {copy.pendingChecksMeta({
+                      pendingManualCheckCount:
+                        surface.pendingManualChecks.length,
+                      totalManualCheckCount: surface.totalManualCheckCount,
+                    })}
                   </p>
                   <p className="supporting-copy">
                     {surface.operatorNotes.length > 0
                       ? surface.operatorNotes
-                      : "No operator notes recorded yet."}
+                      : copy.noOperatorNotes}
                   </p>
                 </li>
               ))
@@ -138,14 +155,16 @@ export function InteractionAuditHandoffSummarySection({
         </div>
 
         <div className="interaction-audit__handoff-group">
-          <p className="detail-note__label">Not Reviewed</p>
+          <p className="detail-note__label">{copy.notReviewedGroup}</p>
           <ul
             className="interaction-audit__handoff-list"
             data-audit-handoff-not-reviewed-list
           >
             {handoffSummary.notReviewedSurfaces.length === 0 ? (
               <li className="interaction-audit__handoff-item">
-                <p className="interaction-audit__handoff-item-title">None</p>
+                <p className="interaction-audit__handoff-item-title">
+                  {copy.none}
+                </p>
               </li>
             ) : (
               handoffSummary.notReviewedSurfaces.map((surface) => (
@@ -158,8 +177,11 @@ export function InteractionAuditHandoffSummarySection({
                     {surface.title}
                   </p>
                   <p className="interaction-audit__handoff-item-meta">
-                    Pending checks: {surface.pendingManualChecks.length} /{" "}
-                    {surface.totalManualCheckCount}
+                    {copy.pendingChecksMeta({
+                      pendingManualCheckCount:
+                        surface.pendingManualChecks.length,
+                      totalManualCheckCount: surface.totalManualCheckCount,
+                    })}
                   </p>
                 </li>
               ))
@@ -168,14 +190,16 @@ export function InteractionAuditHandoffSummarySection({
         </div>
 
         <div className="interaction-audit__handoff-group">
-          <p className="detail-note__label">Pending Manual Checks</p>
+          <p className="detail-note__label">{copy.pendingManualChecks}</p>
           <ul
             className="interaction-audit__handoff-list"
             data-audit-handoff-pending-list
           >
             {handoffSummary.surfacesWithPendingChecks.length === 0 ? (
               <li className="interaction-audit__handoff-item">
-                <p className="interaction-audit__handoff-item-title">None</p>
+                <p className="interaction-audit__handoff-item-title">
+                  {copy.none}
+                </p>
               </li>
             ) : (
               handoffSummary.surfacesWithPendingChecks.map((surface) => (
@@ -188,8 +212,11 @@ export function InteractionAuditHandoffSummarySection({
                     {surface.title}
                   </p>
                   <p className="interaction-audit__handoff-item-meta">
-                    {surface.pendingManualChecks.length} pending of{" "}
-                    {surface.totalManualCheckCount}
+                    {copy.pendingOfTotal({
+                      pendingManualCheckCount:
+                        surface.pendingManualChecks.length,
+                      totalManualCheckCount: surface.totalManualCheckCount,
+                    })}
                   </p>
                   <ul className="interaction-audit__handoff-check-list">
                     {surface.pendingManualChecks.map((check) => (
@@ -208,7 +235,7 @@ export function InteractionAuditHandoffSummarySection({
         data-audit-handoff-preview-details
       >
         <summary className="source-card__details-toggle">
-          Current handoff summary
+          {copy.currentHandoffSummary}
         </summary>
         <div className="source-card__details-body">
           <pre className="capture-pre" data-audit-handoff-preview>
@@ -222,34 +249,16 @@ export function InteractionAuditHandoffSummarySection({
         data-audit-operator-workflow-details
       >
         <summary className="source-card__details-toggle">
-          Operator handoff workflow
+          {copy.operatorHandoffWorkflow}
         </summary>
         <div
           className="source-card__details-body interaction-audit__operator-workflow"
           data-audit-operator-workflow
         >
           <ul className="feature-list interaction-audit__checklist">
-            <li>
-              Finish the current review state in the audit hub or import an
-              existing signoff JSON snapshot.
-            </li>
-            <li>
-              Fill the review-session metadata so the export records reviewer,
-              session label, and review time.
-            </li>
-            <li>
-              Use `Download signoff JSON` for a direct local file, or `Copy
-              signoff JSON` if the current environment cannot download files.
-            </li>
-            <li>
-              Keep the downloaded or pasted file under a local path such as
-              `tmp/operator-signoff-export.json`.
-            </li>
-            <li>
-              Run the bundle command below to package the current export with
-              the latest preset evidence references and preserved review-session
-              metadata.
-            </li>
+            {copy.workflowSteps.map((step) => (
+              <li key={step}>{step}</li>
+            ))}
           </ul>
           <pre className="capture-pre" data-audit-operator-bundle-command>
             npm run interaction-audit:bundle -- --input tmp/operator-signoff-export.json --output-dir tmp/operator-handoff-bundle

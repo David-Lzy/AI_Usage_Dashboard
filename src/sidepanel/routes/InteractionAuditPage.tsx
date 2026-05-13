@@ -395,7 +395,7 @@ export function InteractionAuditPage({
     if (result === "success") {
       setWorkspaceFeedback({
         tone: "neutral",
-        message: "Copied the current handoff summary to the clipboard.",
+        message: copy.handoffSummary.feedback.copiedHandoffSummary,
       });
       return;
     }
@@ -404,8 +404,8 @@ export function InteractionAuditPage({
       tone: "warning",
       message:
         result === "unavailable"
-          ? "Clipboard access is unavailable in this audit environment."
-          : "Failed to copy the current handoff summary to the clipboard.",
+          ? copy.handoffSummary.feedback.clipboardUnavailable
+          : copy.handoffSummary.feedback.failedCopyHandoffSummary,
     });
   }
 
@@ -456,8 +456,8 @@ export function InteractionAuditPage({
     setWorkspaceFeedback({
       tone: didDownload ? "neutral" : "warning",
       message: didDownload
-        ? `Downloaded the current handoff summary as ${filename}.`
-        : "Failed to download the current handoff summary from this audit environment.",
+        ? copy.handoffSummary.feedback.downloadedHandoffSummary(filename)
+        : copy.handoffSummary.feedback.failedDownloadHandoffSummary,
     });
   }
 
@@ -617,6 +617,7 @@ export function InteractionAuditPage({
         />
 
         <InteractionAuditHandoffSummarySection
+          copy={copy.handoffSummary}
           handoffDraft={handoffDraft}
           handoffSummary={handoffSummary}
           onCopyHandoffSummary={handleCopyHandoffSummary}

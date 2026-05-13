@@ -240,6 +240,49 @@ type InteractionAuditRequestScopeCommandsCopy = {
   archiveNext: string;
 };
 
+type InteractionAuditHandoffSummaryCopy = {
+  label: string;
+  detail: string;
+  copyAction: string;
+  downloadAction: string;
+  readyForSignoff: string;
+  ready: string;
+  notReady: string;
+  followUpSurfaces: string;
+  notReviewed: string;
+  pendingChecks: string;
+  readyStatusLabel: string;
+  readyStatusDetail: string;
+  outstandingStatusLabel: string;
+  outstandingStatusDetail: (input: {
+    reviewSurfaceCount: number;
+    pendingManualCheckCount: number;
+  }) => string;
+  followUpRequired: string;
+  notReviewedGroup: string;
+  pendingManualChecks: string;
+  none: string;
+  pendingChecksMeta: (input: {
+    pendingManualCheckCount: number;
+    totalManualCheckCount: number;
+  }) => string;
+  pendingOfTotal: (input: {
+    pendingManualCheckCount: number;
+    totalManualCheckCount: number;
+  }) => string;
+  noOperatorNotes: string;
+  currentHandoffSummary: string;
+  operatorHandoffWorkflow: string;
+  workflowSteps: string[];
+  feedback: {
+    copiedHandoffSummary: string;
+    clipboardUnavailable: string;
+    failedCopyHandoffSummary: string;
+    downloadedHandoffSummary: (filename: string) => string;
+    failedDownloadHandoffSummary: string;
+  };
+};
+
 const INTERACTION_AUDIT_REVIEW_QUEUE_COPY: Record<
   ResolvedAppLocale,
   InteractionAuditReviewQueueCopy
@@ -1527,6 +1570,758 @@ const INTERACTION_AUDIT_REQUEST_SCOPE_COMMANDS_COPY: Record<
     preflightNext: "Preflight berikutnya",
     completeNext: "Complete berikutnya",
     archiveNext: "Archive berikutnya",
+  },
+};
+
+const INTERACTION_AUDIT_HANDOFF_SUMMARY_COPY: Record<
+  ResolvedAppLocale,
+  InteractionAuditHandoffSummaryCopy
+> = {
+  en: {
+    label: "Handoff Summary",
+    detail:
+      "Use this summary to see what still blocks final operator signoff before exporting the current workspace conclusions.",
+    copyAction: "Copy handoff summary",
+    downloadAction: "Download handoff summary",
+    readyForSignoff: "Ready for signoff",
+    ready: "Ready",
+    notReady: "Not ready",
+    followUpSurfaces: "Follow-up surfaces",
+    notReviewed: "Not reviewed",
+    pendingChecks: "Pending checks",
+    readyStatusLabel: "Ready for final signoff",
+    readyStatusDetail:
+      "All audit surfaces are reviewed, no follow-up state remains, and every manual check is complete.",
+    outstandingStatusLabel: "Outstanding review work",
+    outstandingStatusDetail: ({
+      reviewSurfaceCount,
+      pendingManualCheckCount,
+    }) =>
+      `${reviewSurfaceCount} surfaces still need review attention, and ${pendingManualCheckCount} manual checks remain incomplete.`,
+    followUpRequired: "Follow-up Required",
+    notReviewedGroup: "Not Reviewed",
+    pendingManualChecks: "Pending Manual Checks",
+    none: "None",
+    pendingChecksMeta: ({
+      pendingManualCheckCount,
+      totalManualCheckCount,
+    }) => `Pending checks: ${pendingManualCheckCount} / ${totalManualCheckCount}`,
+    pendingOfTotal: ({ pendingManualCheckCount, totalManualCheckCount }) =>
+      `${pendingManualCheckCount} pending of ${totalManualCheckCount}`,
+    noOperatorNotes: "No operator notes recorded yet.",
+    currentHandoffSummary: "Current handoff summary",
+    operatorHandoffWorkflow: "Operator handoff workflow",
+    workflowSteps: [
+      "Finish the current review state in the audit hub or import an existing signoff JSON snapshot.",
+      "Fill the review-session metadata so the export records reviewer, session label, and review time.",
+      "Use `Download signoff JSON` for a direct local file, or `Copy signoff JSON` if the current environment cannot download files.",
+      "Keep the downloaded or pasted file under a local path such as `tmp/operator-signoff-export.json`.",
+      "Run the bundle command below to package the current export with the latest preset evidence references and preserved review-session metadata.",
+    ],
+    feedback: {
+      copiedHandoffSummary:
+        "Copied the current handoff summary to the clipboard.",
+      clipboardUnavailable:
+        "Clipboard access is unavailable in this audit environment.",
+      failedCopyHandoffSummary:
+        "Failed to copy the current handoff summary to the clipboard.",
+      downloadedHandoffSummary: (filename) =>
+        `Downloaded the current handoff summary as ${filename}.`,
+      failedDownloadHandoffSummary:
+        "Failed to download the current handoff summary from this audit environment.",
+    },
+  },
+  "zh-CN": {
+    label: "Handoff 摘要",
+    detail:
+      "用此摘要查看导出当前 workspace 结论前，哪些内容仍阻塞最终 operator signoff。",
+    copyAction: "复制 handoff 摘要",
+    downloadAction: "下载 handoff 摘要",
+    readyForSignoff: "可 signoff",
+    ready: "就绪",
+    notReady: "未就绪",
+    followUpSurfaces: "Follow-up surface",
+    notReviewed: "未复查",
+    pendingChecks: "待检查",
+    readyStatusLabel: "可进行最终 signoff",
+    readyStatusDetail:
+      "所有 audit surface 均已复查，没有 follow-up 状态，且所有手动检查均已完成。",
+    outstandingStatusLabel: "仍有复查工作",
+    outstandingStatusDetail: ({
+      reviewSurfaceCount,
+      pendingManualCheckCount,
+    }) =>
+      `${reviewSurfaceCount} 个 surface 仍需复查关注，且 ${pendingManualCheckCount} 个手动检查尚未完成。`,
+    followUpRequired: "需要 Follow-up",
+    notReviewedGroup: "未复查",
+    pendingManualChecks: "待办手动检查",
+    none: "无",
+    pendingChecksMeta: ({
+      pendingManualCheckCount,
+      totalManualCheckCount,
+    }) => `待检查：${pendingManualCheckCount} / ${totalManualCheckCount}`,
+    pendingOfTotal: ({ pendingManualCheckCount, totalManualCheckCount }) =>
+      `${pendingManualCheckCount} 个待办，共 ${totalManualCheckCount} 个`,
+    noOperatorNotes: "尚未记录 operator 备注。",
+    currentHandoffSummary: "当前 handoff 摘要",
+    operatorHandoffWorkflow: "Operator handoff 流程",
+    workflowSteps: [
+      "在 audit hub 中完成当前复查状态，或导入现有 signoff JSON snapshot。",
+      "填写 review-session 元数据，使导出记录 reviewer、session label 和 review time。",
+      "使用 `Download signoff JSON` 获取本地文件；如果当前环境无法下载文件，则使用 `Copy signoff JSON`。",
+      "将下载或粘贴的文件保存在本地路径，例如 `tmp/operator-signoff-export.json`。",
+      "运行下方 bundle 命令，将当前导出与最新 preset evidence 引用和保留的 review-session 元数据打包。",
+    ],
+    feedback: {
+      copiedHandoffSummary: "已将当前 handoff 摘要复制到剪贴板。",
+      clipboardUnavailable: "此审计环境无法访问剪贴板。",
+      failedCopyHandoffSummary: "无法将当前 handoff 摘要复制到剪贴板。",
+      downloadedHandoffSummary: (filename) =>
+        `已将当前 handoff 摘要下载为 ${filename}。`,
+      failedDownloadHandoffSummary:
+        "无法从此审计环境下载当前 handoff 摘要。",
+    },
+  },
+  "zh-TW": {
+    label: "Handoff 摘要",
+    detail:
+      "用此摘要查看匯出目前 workspace 結論前，哪些內容仍阻塞最終 operator signoff。",
+    copyAction: "複製 handoff 摘要",
+    downloadAction: "下載 handoff 摘要",
+    readyForSignoff: "可 signoff",
+    ready: "就緒",
+    notReady: "未就緒",
+    followUpSurfaces: "Follow-up surface",
+    notReviewed: "未複查",
+    pendingChecks: "待檢查",
+    readyStatusLabel: "可進行最終 signoff",
+    readyStatusDetail:
+      "所有 audit surface 均已複查，沒有 follow-up 狀態，且所有手動檢查均已完成。",
+    outstandingStatusLabel: "仍有複查工作",
+    outstandingStatusDetail: ({
+      reviewSurfaceCount,
+      pendingManualCheckCount,
+    }) =>
+      `${reviewSurfaceCount} 個 surface 仍需複查關注，且 ${pendingManualCheckCount} 個手動檢查尚未完成。`,
+    followUpRequired: "需要 Follow-up",
+    notReviewedGroup: "未複查",
+    pendingManualChecks: "待辦手動檢查",
+    none: "無",
+    pendingChecksMeta: ({
+      pendingManualCheckCount,
+      totalManualCheckCount,
+    }) => `待檢查：${pendingManualCheckCount} / ${totalManualCheckCount}`,
+    pendingOfTotal: ({ pendingManualCheckCount, totalManualCheckCount }) =>
+      `${pendingManualCheckCount} 個待辦，共 ${totalManualCheckCount} 個`,
+    noOperatorNotes: "尚未記錄 operator 備註。",
+    currentHandoffSummary: "目前 handoff 摘要",
+    operatorHandoffWorkflow: "Operator handoff 流程",
+    workflowSteps: [
+      "在 audit hub 中完成目前複查狀態，或匯入現有 signoff JSON snapshot。",
+      "填寫 review-session 中繼資料，使匯出記錄 reviewer、session label 和 review time。",
+      "使用 `Download signoff JSON` 取得本機檔案；如果目前環境無法下載檔案，則使用 `Copy signoff JSON`。",
+      "將下載或貼上的檔案保存在本機路徑，例如 `tmp/operator-signoff-export.json`。",
+      "執行下方 bundle 命令，將目前匯出與最新 preset evidence 參照和保留的 review-session 中繼資料打包。",
+    ],
+    feedback: {
+      copiedHandoffSummary: "已將目前 handoff 摘要複製到剪貼簿。",
+      clipboardUnavailable: "此稽核環境無法存取剪貼簿。",
+      failedCopyHandoffSummary: "無法將目前 handoff 摘要複製到剪貼簿。",
+      downloadedHandoffSummary: (filename) =>
+        `已將目前 handoff 摘要下載為 ${filename}。`,
+      failedDownloadHandoffSummary:
+        "無法從此稽核環境下載目前 handoff 摘要。",
+    },
+  },
+  ja: {
+    label: "Handoff サマリー",
+    detail:
+      "現在の workspace の結論をエクスポートする前に、最終 operator signoff を妨げる残作業を確認します。",
+    copyAction: "Handoff サマリーをコピー",
+    downloadAction: "Handoff サマリーをダウンロード",
+    readyForSignoff: "Signoff 可能",
+    ready: "準備済み",
+    notReady: "未準備",
+    followUpSurfaces: "Follow-up surface",
+    notReviewed: "未レビュー",
+    pendingChecks: "未完了チェック",
+    readyStatusLabel: "最終 signoff 可能",
+    readyStatusDetail:
+      "すべての audit surface がレビュー済みで、follow-up 状態はなく、すべての手動チェックが完了しています。",
+    outstandingStatusLabel: "未解決のレビュー作業",
+    outstandingStatusDetail: ({
+      reviewSurfaceCount,
+      pendingManualCheckCount,
+    }) =>
+      `${reviewSurfaceCount} 件の surface にレビュー対応が必要で、${pendingManualCheckCount} 件の手動チェックが未完了です。`,
+    followUpRequired: "Follow-up が必要",
+    notReviewedGroup: "未レビュー",
+    pendingManualChecks: "未完了の手動チェック",
+    none: "なし",
+    pendingChecksMeta: ({
+      pendingManualCheckCount,
+      totalManualCheckCount,
+    }) => `未完了チェック: ${pendingManualCheckCount} / ${totalManualCheckCount}`,
+    pendingOfTotal: ({ pendingManualCheckCount, totalManualCheckCount }) =>
+      `${totalManualCheckCount} 件中 ${pendingManualCheckCount} 件が未完了`,
+    noOperatorNotes: "Operator メモはまだ記録されていません。",
+    currentHandoffSummary: "現在の handoff サマリー",
+    operatorHandoffWorkflow: "Operator handoff ワークフロー",
+    workflowSteps: [
+      "Audit hub で現在のレビュー状態を完了するか、既存の signoff JSON snapshot をインポートします。",
+      "Review-session メタデータを入力し、export に reviewer、session label、review time を記録します。",
+      "直接ローカルファイルを作るには `Download signoff JSON` を使い、現在の環境でダウンロードできない場合は `Copy signoff JSON` を使います。",
+      "ダウンロードまたは貼り付けたファイルを `tmp/operator-signoff-export.json` などのローカルパスに置きます。",
+      "下の bundle command を実行し、現在の export を最新 preset evidence 参照と保持された review-session メタデータでパッケージ化します。",
+    ],
+    feedback: {
+      copiedHandoffSummary:
+        "現在の handoff サマリーをクリップボードにコピーしました。",
+      clipboardUnavailable:
+        "この監査環境ではクリップボードにアクセスできません。",
+      failedCopyHandoffSummary:
+        "現在の handoff サマリーをクリップボードにコピーできませんでした。",
+      downloadedHandoffSummary: (filename) =>
+        `現在の handoff サマリーを ${filename} としてダウンロードしました。`,
+      failedDownloadHandoffSummary:
+        "この監査環境から現在の handoff サマリーをダウンロードできませんでした。",
+    },
+  },
+  ko: {
+    label: "Handoff summary",
+    detail:
+      "현재 workspace 결론을 내보내기 전에 최종 operator signoff 를 막는 항목을 확인합니다.",
+    copyAction: "Handoff summary 복사",
+    downloadAction: "Handoff summary 다운로드",
+    readyForSignoff: "Signoff 준비됨",
+    ready: "준비됨",
+    notReady: "준비 안 됨",
+    followUpSurfaces: "Follow-up surface",
+    notReviewed: "미검토",
+    pendingChecks: "보류 체크",
+    readyStatusLabel: "최종 signoff 준비됨",
+    readyStatusDetail:
+      "모든 audit surface 가 검토되었고 follow-up 상태가 없으며 모든 수동 체크가 완료되었습니다.",
+    outstandingStatusLabel: "남은 검토 작업",
+    outstandingStatusDetail: ({
+      reviewSurfaceCount,
+      pendingManualCheckCount,
+    }) =>
+      `${reviewSurfaceCount}개 surface 에 검토가 더 필요하고 ${pendingManualCheckCount}개 수동 체크가 미완료입니다.`,
+    followUpRequired: "Follow-up 필요",
+    notReviewedGroup: "미검토",
+    pendingManualChecks: "보류 수동 체크",
+    none: "없음",
+    pendingChecksMeta: ({
+      pendingManualCheckCount,
+      totalManualCheckCount,
+    }) => `보류 체크: ${pendingManualCheckCount} / ${totalManualCheckCount}`,
+    pendingOfTotal: ({ pendingManualCheckCount, totalManualCheckCount }) =>
+      `${totalManualCheckCount}개 중 ${pendingManualCheckCount}개 보류`,
+    noOperatorNotes: "Operator notes 가 아직 기록되지 않았습니다.",
+    currentHandoffSummary: "현재 handoff summary",
+    operatorHandoffWorkflow: "Operator handoff workflow",
+    workflowSteps: [
+      "Audit hub 에서 현재 review state 를 완료하거나 기존 signoff JSON snapshot 을 가져옵니다.",
+      "Export 가 reviewer, session label, review time 을 기록하도록 review-session metadata 를 채웁니다.",
+      "직접 local file 이 필요하면 `Download signoff JSON` 을 사용하고, 현재 환경에서 파일을 다운로드할 수 없으면 `Copy signoff JSON` 을 사용합니다.",
+      "다운로드하거나 붙여넣은 파일을 `tmp/operator-signoff-export.json` 같은 local path 에 둡니다.",
+      "아래 bundle command 로 현재 export 를 최신 preset evidence references 및 보존된 review-session metadata 와 함께 패키징합니다.",
+    ],
+    feedback: {
+      copiedHandoffSummary: "현재 handoff summary 를 clipboard 에 복사했습니다.",
+      clipboardUnavailable:
+        "이 audit 환경에서는 clipboard 접근을 사용할 수 없습니다.",
+      failedCopyHandoffSummary:
+        "현재 handoff summary 를 clipboard 에 복사하지 못했습니다.",
+      downloadedHandoffSummary: (filename) =>
+        `현재 handoff summary 를 ${filename}(으)로 다운로드했습니다.`,
+      failedDownloadHandoffSummary:
+        "이 audit 환경에서 현재 handoff summary 를 다운로드하지 못했습니다.",
+    },
+  },
+  "es-419": {
+    label: "Resumen de handoff",
+    detail:
+      "Usa este resumen para ver qué bloquea el signoff final del operador antes de exportar las conclusiones actuales del workspace.",
+    copyAction: "Copiar resumen de handoff",
+    downloadAction: "Descargar resumen de handoff",
+    readyForSignoff: "Listo para signoff",
+    ready: "Listo",
+    notReady: "No listo",
+    followUpSurfaces: "Superficies con follow-up",
+    notReviewed: "No revisado",
+    pendingChecks: "Checks pendientes",
+    readyStatusLabel: "Listo para signoff final",
+    readyStatusDetail:
+      "Todas las superficies de auditoría están revisadas, no queda estado follow-up y cada check manual está completo.",
+    outstandingStatusLabel: "Trabajo de revisión pendiente",
+    outstandingStatusDetail: ({
+      reviewSurfaceCount,
+      pendingManualCheckCount,
+    }) =>
+      `${reviewSurfaceCount} superficies aún necesitan atención de revisión y ${pendingManualCheckCount} checks manuales siguen incompletos.`,
+    followUpRequired: "Follow-up requerido",
+    notReviewedGroup: "No revisado",
+    pendingManualChecks: "Checks manuales pendientes",
+    none: "Ninguno",
+    pendingChecksMeta: ({
+      pendingManualCheckCount,
+      totalManualCheckCount,
+    }) => `Checks pendientes: ${pendingManualCheckCount} / ${totalManualCheckCount}`,
+    pendingOfTotal: ({ pendingManualCheckCount, totalManualCheckCount }) =>
+      `${pendingManualCheckCount} pendientes de ${totalManualCheckCount}`,
+    noOperatorNotes: "Aún no hay notas del operador.",
+    currentHandoffSummary: "Resumen de handoff actual",
+    operatorHandoffWorkflow: "Workflow de handoff del operador",
+    workflowSteps: [
+      "Termina el estado de revisión actual en el audit hub o importa un snapshot signoff JSON existente.",
+      "Completa los metadatos de review-session para que el export registre reviewer, session label y review time.",
+      "Usa `Download signoff JSON` para un archivo local directo, o `Copy signoff JSON` si el entorno actual no puede descargar archivos.",
+      "Mantén el archivo descargado o pegado en una ruta local como `tmp/operator-signoff-export.json`.",
+      "Ejecuta el bundle command de abajo para empaquetar el export actual con las referencias preset evidence más recientes y los metadatos review-session preservados.",
+    ],
+    feedback: {
+      copiedHandoffSummary:
+        "Se copió el resumen de handoff actual al portapapeles.",
+      clipboardUnavailable:
+        "El acceso al portapapeles no está disponible en este entorno de auditoría.",
+      failedCopyHandoffSummary:
+        "No se pudo copiar el resumen de handoff actual al portapapeles.",
+      downloadedHandoffSummary: (filename) =>
+        `Se descargó el resumen de handoff actual como ${filename}.`,
+      failedDownloadHandoffSummary:
+        "No se pudo descargar el resumen de handoff actual desde este entorno de auditoría.",
+    },
+  },
+  "pt-BR": {
+    label: "Resumo de handoff",
+    detail:
+      "Use este resumo para ver o que ainda bloqueia o signoff final do operador antes de exportar as conclusões atuais do workspace.",
+    copyAction: "Copiar resumo de handoff",
+    downloadAction: "Baixar resumo de handoff",
+    readyForSignoff: "Pronto para signoff",
+    ready: "Pronto",
+    notReady: "Não pronto",
+    followUpSurfaces: "Superfícies com follow-up",
+    notReviewed: "Não revisado",
+    pendingChecks: "Checks pendentes",
+    readyStatusLabel: "Pronto para signoff final",
+    readyStatusDetail:
+      "Todas as superfícies de auditoria foram revisadas, não resta estado follow-up e todos os checks manuais estão completos.",
+    outstandingStatusLabel: "Trabalho de revisão pendente",
+    outstandingStatusDetail: ({
+      reviewSurfaceCount,
+      pendingManualCheckCount,
+    }) =>
+      `${reviewSurfaceCount} superfícies ainda precisam de atenção de revisão e ${pendingManualCheckCount} checks manuais seguem incompletos.`,
+    followUpRequired: "Follow-up necessário",
+    notReviewedGroup: "Não revisado",
+    pendingManualChecks: "Checks manuais pendentes",
+    none: "Nenhum",
+    pendingChecksMeta: ({
+      pendingManualCheckCount,
+      totalManualCheckCount,
+    }) => `Checks pendentes: ${pendingManualCheckCount} / ${totalManualCheckCount}`,
+    pendingOfTotal: ({ pendingManualCheckCount, totalManualCheckCount }) =>
+      `${pendingManualCheckCount} pendentes de ${totalManualCheckCount}`,
+    noOperatorNotes: "Nenhuma nota do operador registrada ainda.",
+    currentHandoffSummary: "Resumo de handoff atual",
+    operatorHandoffWorkflow: "Workflow de handoff do operador",
+    workflowSteps: [
+      "Conclua o estado de revisão atual no audit hub ou importe um snapshot signoff JSON existente.",
+      "Preencha os metadados de review-session para que o export registre reviewer, session label e review time.",
+      "Use `Download signoff JSON` para um arquivo local direto, ou `Copy signoff JSON` se o ambiente atual não puder baixar arquivos.",
+      "Mantenha o arquivo baixado ou colado em um caminho local como `tmp/operator-signoff-export.json`.",
+      "Execute o bundle command abaixo para empacotar o export atual com as referências preset evidence mais recentes e os metadados review-session preservados.",
+    ],
+    feedback: {
+      copiedHandoffSummary:
+        "Resumo de handoff atual copiado para a área de transferência.",
+      clipboardUnavailable:
+        "Acesso à área de transferência indisponível neste ambiente de auditoria.",
+      failedCopyHandoffSummary:
+        "Falha ao copiar o resumo de handoff atual para a área de transferência.",
+      downloadedHandoffSummary: (filename) =>
+        `Resumo de handoff atual baixado como ${filename}.`,
+      failedDownloadHandoffSummary:
+        "Falha ao baixar o resumo de handoff atual deste ambiente de auditoria.",
+    },
+  },
+  fr: {
+    label: "Résumé de handoff",
+    detail:
+      "Utilisez ce résumé pour voir ce qui bloque encore le signoff operator final avant d'exporter les conclusions actuelles du workspace.",
+    copyAction: "Copier le résumé de handoff",
+    downloadAction: "Télécharger le résumé de handoff",
+    readyForSignoff: "Prêt pour signoff",
+    ready: "Prêt",
+    notReady: "Non prêt",
+    followUpSurfaces: "Surfaces avec follow-up",
+    notReviewed: "Non revu",
+    pendingChecks: "Checks en attente",
+    readyStatusLabel: "Prêt pour le signoff final",
+    readyStatusDetail:
+      "Toutes les surfaces d'audit sont revues, aucun état follow-up ne reste et chaque check manuel est terminé.",
+    outstandingStatusLabel: "Travail de revue restant",
+    outstandingStatusDetail: ({
+      reviewSurfaceCount,
+      pendingManualCheckCount,
+    }) =>
+      `${reviewSurfaceCount} surfaces nécessitent encore une revue et ${pendingManualCheckCount} checks manuels restent incomplets.`,
+    followUpRequired: "Follow-up requis",
+    notReviewedGroup: "Non revu",
+    pendingManualChecks: "Checks manuels en attente",
+    none: "Aucun",
+    pendingChecksMeta: ({
+      pendingManualCheckCount,
+      totalManualCheckCount,
+    }) => `Checks en attente: ${pendingManualCheckCount} / ${totalManualCheckCount}`,
+    pendingOfTotal: ({ pendingManualCheckCount, totalManualCheckCount }) =>
+      `${pendingManualCheckCount} en attente sur ${totalManualCheckCount}`,
+    noOperatorNotes: "Aucune note operator enregistrée pour l'instant.",
+    currentHandoffSummary: "Résumé de handoff actuel",
+    operatorHandoffWorkflow: "Workflow de handoff operator",
+    workflowSteps: [
+      "Terminez l'état de revue actuel dans l'audit hub ou importez un snapshot signoff JSON existant.",
+      "Renseignez les métadonnées review-session afin que l'export enregistre reviewer, session label et review time.",
+      "Utilisez `Download signoff JSON` pour un fichier local direct, ou `Copy signoff JSON` si l'environnement actuel ne peut pas télécharger de fichiers.",
+      "Conservez le fichier téléchargé ou collé sous un chemin local comme `tmp/operator-signoff-export.json`.",
+      "Exécutez le bundle command ci-dessous pour empaqueter l'export actuel avec les dernières références preset evidence et les métadonnées review-session préservées.",
+    ],
+    feedback: {
+      copiedHandoffSummary:
+        "Résumé de handoff actuel copié dans le presse-papiers.",
+      clipboardUnavailable:
+        "L'accès au presse-papiers est indisponible dans cet environnement d'audit.",
+      failedCopyHandoffSummary:
+        "Impossible de copier le résumé de handoff actuel dans le presse-papiers.",
+      downloadedHandoffSummary: (filename) =>
+        `Résumé de handoff actuel téléchargé sous ${filename}.`,
+      failedDownloadHandoffSummary:
+        "Impossible de télécharger le résumé de handoff actuel depuis cet environnement d'audit.",
+    },
+  },
+  de: {
+    label: "Handoff-Zusammenfassung",
+    detail:
+      "Diese Zusammenfassung zeigt, was den finalen Operator-Signoff vor dem Export der aktuellen Workspace-Ergebnisse noch blockiert.",
+    copyAction: "Handoff-Zusammenfassung kopieren",
+    downloadAction: "Handoff-Zusammenfassung herunterladen",
+    readyForSignoff: "Bereit für Signoff",
+    ready: "Bereit",
+    notReady: "Nicht bereit",
+    followUpSurfaces: "Follow-up-Surfaces",
+    notReviewed: "Nicht geprüft",
+    pendingChecks: "Offene Checks",
+    readyStatusLabel: "Bereit für finalen Signoff",
+    readyStatusDetail:
+      "Alle Audit-Surfaces sind geprüft, kein Follow-up-Status bleibt offen, und jeder manuelle Check ist abgeschlossen.",
+    outstandingStatusLabel: "Offene Review-Arbeit",
+    outstandingStatusDetail: ({
+      reviewSurfaceCount,
+      pendingManualCheckCount,
+    }) =>
+      `${reviewSurfaceCount} Surfaces benötigen noch Review-Aufmerksamkeit, und ${pendingManualCheckCount} manuelle Checks sind unvollständig.`,
+    followUpRequired: "Follow-up erforderlich",
+    notReviewedGroup: "Nicht geprüft",
+    pendingManualChecks: "Offene manuelle Checks",
+    none: "Keine",
+    pendingChecksMeta: ({
+      pendingManualCheckCount,
+      totalManualCheckCount,
+    }) => `Offene Checks: ${pendingManualCheckCount} / ${totalManualCheckCount}`,
+    pendingOfTotal: ({ pendingManualCheckCount, totalManualCheckCount }) =>
+      `${pendingManualCheckCount} offen von ${totalManualCheckCount}`,
+    noOperatorNotes: "Noch keine Operator-Notizen erfasst.",
+    currentHandoffSummary: "Aktuelle Handoff-Zusammenfassung",
+    operatorHandoffWorkflow: "Operator-Handoff-Workflow",
+    workflowSteps: [
+      "Schließe den aktuellen Review-Status im Audit Hub ab oder importiere einen vorhandenen Signoff-JSON-Snapshot.",
+      "Fülle die Review-Session-Metadaten aus, damit der Export Reviewer, Session Label und Review Time erfasst.",
+      "Nutze `Download signoff JSON` für eine direkte lokale Datei oder `Copy signoff JSON`, wenn die aktuelle Umgebung keine Dateien herunterladen kann.",
+      "Lege die heruntergeladene oder eingefügte Datei unter einem lokalen Pfad wie `tmp/operator-signoff-export.json` ab.",
+      "Führe den bundle command unten aus, um den aktuellen Export mit den neuesten preset evidence references und den erhaltenen Review-Session-Metadaten zu paketieren.",
+    ],
+    feedback: {
+      copiedHandoffSummary:
+        "Aktuelle Handoff-Zusammenfassung in die Zwischenablage kopiert.",
+      clipboardUnavailable:
+        "Zwischenablagezugriff ist in dieser Audit-Umgebung nicht verfügbar.",
+      failedCopyHandoffSummary:
+        "Aktuelle Handoff-Zusammenfassung konnte nicht in die Zwischenablage kopiert werden.",
+      downloadedHandoffSummary: (filename) =>
+        `Aktuelle Handoff-Zusammenfassung als ${filename} heruntergeladen.`,
+      failedDownloadHandoffSummary:
+        "Aktuelle Handoff-Zusammenfassung konnte aus dieser Audit-Umgebung nicht heruntergeladen werden.",
+    },
+  },
+  it: {
+    label: "Riepilogo handoff",
+    detail:
+      "Usa questo riepilogo per vedere cosa blocca ancora il signoff operator finale prima di esportare le conclusioni attuali del workspace.",
+    copyAction: "Copia riepilogo handoff",
+    downloadAction: "Scarica riepilogo handoff",
+    readyForSignoff: "Pronto per signoff",
+    ready: "Pronto",
+    notReady: "Non pronto",
+    followUpSurfaces: "Surface con follow-up",
+    notReviewed: "Non revisionato",
+    pendingChecks: "Check pendenti",
+    readyStatusLabel: "Pronto per signoff finale",
+    readyStatusDetail:
+      "Tutte le surface di audit sono revisionate, non resta alcuno stato follow-up e ogni check manuale è completo.",
+    outstandingStatusLabel: "Lavoro di review restante",
+    outstandingStatusDetail: ({
+      reviewSurfaceCount,
+      pendingManualCheckCount,
+    }) =>
+      `${reviewSurfaceCount} surface richiedono ancora attenzione di review e ${pendingManualCheckCount} check manuali restano incompleti.`,
+    followUpRequired: "Follow-up richiesto",
+    notReviewedGroup: "Non revisionato",
+    pendingManualChecks: "Check manuali pendenti",
+    none: "Nessuno",
+    pendingChecksMeta: ({
+      pendingManualCheckCount,
+      totalManualCheckCount,
+    }) => `Check pendenti: ${pendingManualCheckCount} / ${totalManualCheckCount}`,
+    pendingOfTotal: ({ pendingManualCheckCount, totalManualCheckCount }) =>
+      `${pendingManualCheckCount} pendenti su ${totalManualCheckCount}`,
+    noOperatorNotes: "Nessuna nota operator ancora registrata.",
+    currentHandoffSummary: "Riepilogo handoff attuale",
+    operatorHandoffWorkflow: "Workflow handoff operator",
+    workflowSteps: [
+      "Completa lo stato di review corrente nell'audit hub o importa uno snapshot signoff JSON esistente.",
+      "Compila i metadati review-session così l'export registra reviewer, session label e review time.",
+      "Usa `Download signoff JSON` per un file locale diretto, oppure `Copy signoff JSON` se l'ambiente corrente non può scaricare file.",
+      "Mantieni il file scaricato o incollato in un percorso locale come `tmp/operator-signoff-export.json`.",
+      "Esegui il bundle command sotto per impacchettare l'export corrente con i riferimenti preset evidence più recenti e i metadati review-session preservati.",
+    ],
+    feedback: {
+      copiedHandoffSummary:
+        "Riepilogo handoff attuale copiato negli appunti.",
+      clipboardUnavailable:
+        "Accesso agli appunti non disponibile in questo ambiente di audit.",
+      failedCopyHandoffSummary:
+        "Impossibile copiare il riepilogo handoff attuale negli appunti.",
+      downloadedHandoffSummary: (filename) =>
+        `Riepilogo handoff attuale scaricato come ${filename}.`,
+      failedDownloadHandoffSummary:
+        "Impossibile scaricare il riepilogo handoff attuale da questo ambiente di audit.",
+    },
+  },
+  ru: {
+    label: "Сводка handoff",
+    detail:
+      "Эта сводка показывает, что еще блокирует финальный operator signoff перед экспортом текущих выводов workspace.",
+    copyAction: "Копировать сводку handoff",
+    downloadAction: "Скачать сводку handoff",
+    readyForSignoff: "Готово к signoff",
+    ready: "Готово",
+    notReady: "Не готово",
+    followUpSurfaces: "Surfaces с follow-up",
+    notReviewed: "Не проверено",
+    pendingChecks: "Незавершенные checks",
+    readyStatusLabel: "Готово к финальному signoff",
+    readyStatusDetail:
+      "Все audit surfaces проверены, follow-up не остается, и каждый manual check завершен.",
+    outstandingStatusLabel: "Оставшаяся review-работа",
+    outstandingStatusDetail: ({
+      reviewSurfaceCount,
+      pendingManualCheckCount,
+    }) =>
+      `${reviewSurfaceCount} surfaces еще требуют review-внимания, и ${pendingManualCheckCount} manual checks остаются незавершенными.`,
+    followUpRequired: "Требуется follow-up",
+    notReviewedGroup: "Не проверено",
+    pendingManualChecks: "Незавершенные manual checks",
+    none: "Нет",
+    pendingChecksMeta: ({
+      pendingManualCheckCount,
+      totalManualCheckCount,
+    }) => `Незавершенные checks: ${pendingManualCheckCount} / ${totalManualCheckCount}`,
+    pendingOfTotal: ({ pendingManualCheckCount, totalManualCheckCount }) =>
+      `${pendingManualCheckCount} pending из ${totalManualCheckCount}`,
+    noOperatorNotes: "Operator notes пока не записаны.",
+    currentHandoffSummary: "Текущая сводка handoff",
+    operatorHandoffWorkflow: "Operator handoff workflow",
+    workflowSteps: [
+      "Завершите текущий review state в audit hub или импортируйте существующий signoff JSON snapshot.",
+      "Заполните review-session metadata, чтобы export записал reviewer, session label и review time.",
+      "Используйте `Download signoff JSON` для прямого local file или `Copy signoff JSON`, если текущая среда не может скачивать файлы.",
+      "Держите скачанный или вставленный файл в local path, например `tmp/operator-signoff-export.json`.",
+      "Запустите bundle command ниже, чтобы упаковать текущий export с последними preset evidence references и сохраненными review-session metadata.",
+    ],
+    feedback: {
+      copiedHandoffSummary: "Текущая сводка handoff скопирована в clipboard.",
+      clipboardUnavailable:
+        "Доступ к clipboard недоступен в этой audit-среде.",
+      failedCopyHandoffSummary:
+        "Не удалось скопировать текущую сводку handoff в clipboard.",
+      downloadedHandoffSummary: (filename) =>
+        `Текущая сводка handoff скачана как ${filename}.`,
+      failedDownloadHandoffSummary:
+        "Не удалось скачать текущую сводку handoff из этой audit-среды.",
+    },
+  },
+  ar: {
+    label: "ملخص handoff",
+    detail:
+      "استخدم هذا الملخص لمعرفة ما الذي ما زال يمنع operator signoff النهائي قبل تصدير استنتاجات workspace الحالية.",
+    copyAction: "نسخ ملخص handoff",
+    downloadAction: "تنزيل ملخص handoff",
+    readyForSignoff: "جاهز لـ signoff",
+    ready: "جاهز",
+    notReady: "غير جاهز",
+    followUpSurfaces: "Surfaces لديها follow-up",
+    notReviewed: "غير مراجع",
+    pendingChecks: "Checks معلقة",
+    readyStatusLabel: "جاهز لـ signoff النهائي",
+    readyStatusDetail:
+      "تمت مراجعة كل audit surfaces، ولا تبقى حالة follow-up، وكل manual check مكتمل.",
+    outstandingStatusLabel: "عمل مراجعة متبق",
+    outstandingStatusDetail: ({
+      reviewSurfaceCount,
+      pendingManualCheckCount,
+    }) =>
+      `${reviewSurfaceCount} surfaces ما زالت تحتاج مراجعة، و ${pendingManualCheckCount} manual checks ما زالت غير مكتملة.`,
+    followUpRequired: "يتطلب follow-up",
+    notReviewedGroup: "غير مراجع",
+    pendingManualChecks: "Manual checks معلقة",
+    none: "لا يوجد",
+    pendingChecksMeta: ({
+      pendingManualCheckCount,
+      totalManualCheckCount,
+    }) => `Checks معلقة: ${pendingManualCheckCount} / ${totalManualCheckCount}`,
+    pendingOfTotal: ({ pendingManualCheckCount, totalManualCheckCount }) =>
+      `${pendingManualCheckCount} معلقة من ${totalManualCheckCount}`,
+    noOperatorNotes: "لم يتم تسجيل ملاحظات operator بعد.",
+    currentHandoffSummary: "ملخص handoff الحالي",
+    operatorHandoffWorkflow: "سير عمل operator handoff",
+    workflowSteps: [
+      "أكمل review state الحالية في audit hub أو استورد signoff JSON snapshot موجودا.",
+      "املأ review-session metadata حتى يسجل export كل من reviewer و session label و review time.",
+      "استخدم `Download signoff JSON` للحصول على ملف محلي مباشر، أو `Copy signoff JSON` إذا كانت البيئة الحالية لا تستطيع تنزيل الملفات.",
+      "احتفظ بالملف المنزل أو الملصق في local path مثل `tmp/operator-signoff-export.json`.",
+      "شغل bundle command أدناه لتغليف export الحالي مع أحدث preset evidence references و review-session metadata المحفوظة.",
+    ],
+    feedback: {
+      copiedHandoffSummary: "تم نسخ ملخص handoff الحالي إلى clipboard.",
+      clipboardUnavailable:
+        "الوصول إلى clipboard غير متاح في بيئة التدقيق هذه.",
+      failedCopyHandoffSummary:
+        "تعذر نسخ ملخص handoff الحالي إلى clipboard.",
+      downloadedHandoffSummary: (filename) =>
+        `تم تنزيل ملخص handoff الحالي باسم ${filename}.`,
+      failedDownloadHandoffSummary:
+        "تعذر تنزيل ملخص handoff الحالي من بيئة التدقيق هذه.",
+    },
+  },
+  hi: {
+    label: "Handoff summary",
+    detail:
+      "Current workspace conclusions export करने से पहले final operator signoff को block करने वाली चीजें देखें।",
+    copyAction: "Handoff summary copy करें",
+    downloadAction: "Handoff summary download करें",
+    readyForSignoff: "Signoff के लिए ready",
+    ready: "Ready",
+    notReady: "Not ready",
+    followUpSurfaces: "Follow-up surfaces",
+    notReviewed: "Not reviewed",
+    pendingChecks: "Pending checks",
+    readyStatusLabel: "Final signoff के लिए ready",
+    readyStatusDetail:
+      "सभी audit surfaces reviewed हैं, कोई follow-up state बाकी नहीं है, और हर manual check complete है।",
+    outstandingStatusLabel: "Outstanding review work",
+    outstandingStatusDetail: ({
+      reviewSurfaceCount,
+      pendingManualCheckCount,
+    }) =>
+      `${reviewSurfaceCount} surfaces को अभी review attention चाहिए, और ${pendingManualCheckCount} manual checks incomplete हैं।`,
+    followUpRequired: "Follow-up required",
+    notReviewedGroup: "Not reviewed",
+    pendingManualChecks: "Pending manual checks",
+    none: "None",
+    pendingChecksMeta: ({
+      pendingManualCheckCount,
+      totalManualCheckCount,
+    }) => `Pending checks: ${pendingManualCheckCount} / ${totalManualCheckCount}`,
+    pendingOfTotal: ({ pendingManualCheckCount, totalManualCheckCount }) =>
+      `${totalManualCheckCount} में से ${pendingManualCheckCount} pending`,
+    noOperatorNotes: "अभी कोई operator notes record नहीं हैं।",
+    currentHandoffSummary: "Current handoff summary",
+    operatorHandoffWorkflow: "Operator handoff workflow",
+    workflowSteps: [
+      "Audit hub में current review state finish करें या existing signoff JSON snapshot import करें।",
+      "Review-session metadata भरें ताकि export reviewer, session label, और review time record करे।",
+      "Direct local file के लिए `Download signoff JSON` इस्तेमाल करें, या current environment files download नहीं कर सकता तो `Copy signoff JSON` इस्तेमाल करें।",
+      "Downloaded या pasted file को `tmp/operator-signoff-export.json` जैसे local path में रखें।",
+      "Current export को latest preset evidence references और preserved review-session metadata के साथ package करने के लिए नीचे bundle command चलाएं।",
+    ],
+    feedback: {
+      copiedHandoffSummary: "Current handoff summary clipboard में copied.",
+      clipboardUnavailable:
+        "इस audit environment में clipboard access unavailable है।",
+      failedCopyHandoffSummary:
+        "Current handoff summary clipboard में copy नहीं हुआ।",
+      downloadedHandoffSummary: (filename) =>
+        `Current handoff summary ${filename} के रूप में downloaded.`,
+      failedDownloadHandoffSummary:
+        "इस audit environment से current handoff summary download नहीं हुआ।",
+    },
+  },
+  id: {
+    label: "Ringkasan handoff",
+    detail:
+      "Gunakan ringkasan ini untuk melihat apa yang masih memblokir signoff operator final sebelum mengekspor kesimpulan workspace saat ini.",
+    copyAction: "Salin ringkasan handoff",
+    downloadAction: "Unduh ringkasan handoff",
+    readyForSignoff: "Siap untuk signoff",
+    ready: "Siap",
+    notReady: "Belum siap",
+    followUpSurfaces: "Surface follow-up",
+    notReviewed: "Belum direview",
+    pendingChecks: "Check tertunda",
+    readyStatusLabel: "Siap untuk signoff final",
+    readyStatusDetail:
+      "Semua surface audit sudah direview, tidak ada status follow-up tersisa, dan setiap check manual selesai.",
+    outstandingStatusLabel: "Pekerjaan review tersisa",
+    outstandingStatusDetail: ({
+      reviewSurfaceCount,
+      pendingManualCheckCount,
+    }) =>
+      `${reviewSurfaceCount} surface masih butuh perhatian review, dan ${pendingManualCheckCount} check manual masih belum selesai.`,
+    followUpRequired: "Follow-up diperlukan",
+    notReviewedGroup: "Belum direview",
+    pendingManualChecks: "Check manual tertunda",
+    none: "Tidak ada",
+    pendingChecksMeta: ({
+      pendingManualCheckCount,
+      totalManualCheckCount,
+    }) => `Check tertunda: ${pendingManualCheckCount} / ${totalManualCheckCount}`,
+    pendingOfTotal: ({ pendingManualCheckCount, totalManualCheckCount }) =>
+      `${pendingManualCheckCount} tertunda dari ${totalManualCheckCount}`,
+    noOperatorNotes: "Belum ada catatan operator yang direkam.",
+    currentHandoffSummary: "Ringkasan handoff saat ini",
+    operatorHandoffWorkflow: "Workflow handoff operator",
+    workflowSteps: [
+      "Selesaikan status review saat ini di audit hub atau impor snapshot signoff JSON yang sudah ada.",
+      "Isi metadata review-session agar export merekam reviewer, session label, dan review time.",
+      "Gunakan `Download signoff JSON` untuk file lokal langsung, atau `Copy signoff JSON` jika lingkungan saat ini tidak dapat mengunduh file.",
+      "Simpan file yang diunduh atau ditempel di path lokal seperti `tmp/operator-signoff-export.json`.",
+      "Jalankan bundle command di bawah untuk memaketkan export saat ini dengan referensi preset evidence terbaru dan metadata review-session yang dipertahankan.",
+    ],
+    feedback: {
+      copiedHandoffSummary:
+        "Ringkasan handoff saat ini disalin ke clipboard.",
+      clipboardUnavailable:
+        "Akses clipboard tidak tersedia di lingkungan audit ini.",
+      failedCopyHandoffSummary:
+        "Gagal menyalin ringkasan handoff saat ini ke clipboard.",
+      downloadedHandoffSummary: (filename) =>
+        `Ringkasan handoff saat ini diunduh sebagai ${filename}.`,
+      failedDownloadHandoffSummary:
+        "Gagal mengunduh ringkasan handoff saat ini dari lingkungan audit ini.",
+    },
   },
 };
 
@@ -3994,6 +4789,8 @@ export function buildOperatorWorkspaceLocalizedCopy(i18n: RuntimeI18n) {
         INTERACTION_AUDIT_WORKSPACE_CONTROLS_COPY[i18n.resolvedLocale],
       requestScopeCommands:
         INTERACTION_AUDIT_REQUEST_SCOPE_COMMANDS_COPY[i18n.resolvedLocale],
+      handoffSummary:
+        INTERACTION_AUDIT_HANDOFF_SUMMARY_COPY[i18n.resolvedLocale],
     },
   };
 }

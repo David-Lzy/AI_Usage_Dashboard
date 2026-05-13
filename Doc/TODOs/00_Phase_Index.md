@@ -34,9 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [415_Phase_Interaction_Audit_Handoff_Summary_Display_Copy.md](./415_Phase_Interaction_Audit_Handoff_Summary_Display_Copy.md)
-- latest completed slice: [414_Phase_Interaction_Audit_Request_Scope_Command_Headings_Display_Copy.md](./Archive/by-phase/400-499/414_Phase_Interaction_Audit_Request_Scope_Command_Headings_Display_Copy.md)
-- queued phase files: not selected yet after active `Phase 415`
+- active phase file: [416_Phase_Interaction_Audit_Frame_Result_Typed_Display_Split.md](./416_Phase_Interaction_Audit_Frame_Result_Typed_Display_Split.md)
+- latest completed slice: [415_Phase_Interaction_Audit_Handoff_Summary_Display_Copy.md](./Archive/by-phase/400-499/415_Phase_Interaction_Audit_Handoff_Summary_Display_Copy.md)
+- queued phase files: not selected yet after active `Phase 416`
 
 Completed phases should be moved to:
 
@@ -807,6 +807,7 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 412` closeout added localized interaction-audit Surface Card chrome labels while preserving surface definitions, manual checks, frame-action raw messages, iframe identity, signoff exports, generated handoff drafts, route ids, action ids, preset ids, data attributes, and downloaded filenames
 - the 2026-05-14 `Phase 413` closeout added localized interaction-audit Workspace Controls display labels and signoff-workspace feedback while preserving pasted JSON, parsed import error text, signoff export JSON, signoff draft Markdown, handoff draft Markdown, filenames, MIME types, storage keys, request binding, and request revision formatting
 - the 2026-05-14 `Phase 414` closeout added localized interaction-audit Request Scope command headings while preserving generated command text, request ids, request revisions, archive path examples, input filename examples, signoff export JSON, signoff draft Markdown, handoff draft Markdown, filenames, and MIME types
+- the 2026-05-14 `Phase 415` closeout added localized interaction-audit Handoff Summary presentation labels and safe handoff feedback while preserving handoff draft content, generated bundle command text, operator notes, surface ids, surface titles, pending manual-check evidence text, filenames, MIME types, and signoff export schemas
 
 ## Delivery Standard For Each Phase
 

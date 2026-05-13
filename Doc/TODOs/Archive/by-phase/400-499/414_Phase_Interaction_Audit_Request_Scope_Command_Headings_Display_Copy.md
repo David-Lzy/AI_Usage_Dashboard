@@ -67,7 +67,7 @@ Delivered:
 - localized `Preflight next`, `Complete next`, and `Archive next` headings for all shipped runtime locales
 - updated `InteractionAuditRequestScopeSection` to receive heading copy separately from the existing signoff/request binding copy bucket
 - preserved generated `npm run ...` command strings, request id values, request revision values, archive path examples, input filename examples, signoff export JSON, signoff draft Markdown, handoff draft Markdown, filenames, and MIME types
-- queued [415_Phase_Interaction_Audit_Handoff_Summary_Display_Copy.md](../../../415_Phase_Interaction_Audit_Handoff_Summary_Display_Copy.md) as the next narrow interaction-audit display-copy slice
+- queued [415_Phase_Interaction_Audit_Handoff_Summary_Display_Copy.md](./415_Phase_Interaction_Audit_Handoff_Summary_Display_Copy.md) as the next narrow interaction-audit display-copy slice
 
 ## Verification
 

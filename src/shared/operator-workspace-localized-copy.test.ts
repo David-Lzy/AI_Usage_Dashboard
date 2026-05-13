@@ -31,6 +31,14 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
     expect(copy.interactionAudit.requestScopeCommands.preflightNext).toBe(
       "Preflight next",
     );
+    expect(copy.interactionAudit.handoffSummary.readyStatusLabel).toBe(
+      "Ready for final signoff",
+    );
+    expect(
+      copy.interactionAudit.handoffSummary.feedback.downloadedHandoffSummary(
+        "handoff.md",
+      ),
+    ).toBe("Downloaded the current handoff summary as handoff.md.");
     expect(copy.themeRecovery.hero.title).toBe(
       "One place to stage native-prompt and real-session recovery checks",
     );
@@ -52,6 +60,7 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
     expect(copy.interactionAudit.requestScopeCommands.archiveNext).toBe(
       "下一步归档",
     );
+    expect(copy.interactionAudit.handoffSummary.none).toBe("无");
     expect(copy.themeRecovery.currentTruth.reviewStage).toBe("复查阶段");
   });
 
@@ -144,6 +153,13 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
       expect(
         copy.interactionAudit.requestScopeCommands.completeNext.length,
       ).toBeGreaterThan(0);
+      expect(copy.interactionAudit.handoffSummary.workflowSteps).toHaveLength(5);
+      expect(
+        copy.interactionAudit.handoffSummary.pendingChecksMeta({
+          pendingManualCheckCount: 1,
+          totalManualCheckCount: 3,
+        }),
+      ).toContain("1");
       expect(copy.themeRecovery.workflow.steps).toHaveLength(5);
     }
   });
@@ -158,6 +174,9 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
     );
     expect(copy.interactionAudit.workspaceControls.feedback.noDecisions).toContain(
       "signoff",
+    );
+    expect(copy.interactionAudit.handoffSummary.feedback.clipboardUnavailable).toContain(
+      "clipboard",
     );
     expect(copy.themeRecovery.outputs.clipboardUnavailable).toContain(
       "clipboard",
