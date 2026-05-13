@@ -21,7 +21,7 @@ Status note:
 
 ## Current Localized Scope
 
-Localized through `Phase 170`, `Phase 171`, `Phase 172`, `Phase 173`, `Phase 174`, `Phase 175`, `Phase 176`, `Phase 177`, `Phase 179`, `Phase 180`, `Phase 181`, `Phase 183`, `Phase 193`, `Phase 194`, `Phase 195`, the `Phase 367` 14-locale architecture/manifest/listing draft expansion, the `Phase 368` RTL fallback text-direction hardening, the `Phase 369` RDP locale capture guard, the `Phase 370` i18n registry drift guard, the `Phase 372` store listing draft structure guard, the `Phase 373` Traditional Chinese runtime shell pilot, the `Phase 374` Japanese runtime shell pilot, the `Phase 375` Korean runtime shell pilot, the `Phase 376` runtime message catalog module split, the `Phase 377` Latin American Spanish runtime shell pilot, the `Phase 378` Brazilian Portuguese runtime shell pilot, the `Phase 379` French runtime shell pilot, the `Phase 380` German runtime shell pilot, the `Phase 381` Italian runtime shell pilot, the `Phase 382` Russian runtime shell pilot, the `Phase 383` Arabic runtime shell pilot, the `Phase 384` Hindi runtime shell pilot, the `Phase 385` Indonesian runtime shell pilot, the `Phase 386` runtime shell pilot coverage guard, the `Phase 387` notranslate plus locale RDP QA fix, the `Phase 392.1` popup first-run guidance 14-locale copy slice, the `Phase 392.3` popup featured provider 14-locale copy slice, and the `Phase 392.4` popup action/surface-role/aria 14-locale copy slice.
+Localized through `Phase 170`, `Phase 171`, `Phase 172`, `Phase 173`, `Phase 174`, `Phase 175`, `Phase 176`, `Phase 177`, `Phase 179`, `Phase 180`, `Phase 181`, `Phase 183`, `Phase 193`, `Phase 194`, `Phase 195`, the `Phase 367` 14-locale architecture/manifest/listing draft expansion, the `Phase 368` RTL fallback text-direction hardening, the `Phase 369` RDP locale capture guard, the `Phase 370` i18n registry drift guard, the `Phase 372` store listing draft structure guard, the `Phase 373` Traditional Chinese runtime shell pilot, the `Phase 374` Japanese runtime shell pilot, the `Phase 375` Korean runtime shell pilot, the `Phase 376` runtime message catalog module split, the `Phase 377` Latin American Spanish runtime shell pilot, the `Phase 378` Brazilian Portuguese runtime shell pilot, the `Phase 379` French runtime shell pilot, the `Phase 380` German runtime shell pilot, the `Phase 381` Italian runtime shell pilot, the `Phase 382` Russian runtime shell pilot, the `Phase 383` Arabic runtime shell pilot, the `Phase 384` Hindi runtime shell pilot, the `Phase 385` Indonesian runtime shell pilot, the `Phase 386` runtime shell pilot coverage guard, the `Phase 387` notranslate plus locale RDP QA fix, the `Phase 392.1` popup first-run guidance 14-locale copy slice, the `Phase 392.3` popup featured provider 14-locale copy slice, the `Phase 392.4` popup action/surface-role/aria 14-locale copy slice, and the `Phase 393.1` Settings core 14-locale copy slice.
 
 Compact diagnostic presentation QA shipped in `Phase 196`. Diagnostic archive/export compatibility review shipped in `Phase 197`. Sample/store seed diagnostic metadata alignment shipped in `Phase 198`. Diagnostic fixture and historical evidence alignment review shipped in `Phase 199`.
 
@@ -122,7 +122,7 @@ These now ship through:
 Phase 367 note:
 
 - runtime catalog key coverage now exists for `en`, `zh-CN`, `zh-TW`, `ja`, `ko`, `es-419`, `pt-BR`, `fr`, `de`, `it`, `ru`, `ar`, `hi`, and `id`
-- `zh-CN` has broad reviewed non-English runtime copy in the current source; every other non-English locale in the 14-locale set now has a first runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels; `Phase 392.1` adds explicit 14-locale popup first-run guidance, setup coverage, snapshot status, and header copy; `Phase 392.3` adds explicit 14-locale popup featured-section and featured-card copy; `Phase 392.4` completes popup action-section, surface-role, and aria copy; deeper runtime copy outside popup may still fall back to English until a future translation-review slice replaces those strings
+- `zh-CN` has broad reviewed non-English runtime copy in the current source; every other non-English locale in the 14-locale set now has a first runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels; `Phase 392.1` adds explicit 14-locale popup first-run guidance, setup coverage, snapshot status, and header copy; `Phase 392.3` adds explicit 14-locale popup featured-section and featured-card copy; `Phase 392.4` completes popup action-section, surface-role, and aria copy; `Phase 393.1` completes Settings core layout, Quick Setup, preferences, and theme-customization copy; deeper runtime copy outside those buckets may still fall back to English until a future translation-review slice replaces those strings
 - Chrome manifest strings and Chrome Web Store listing draft copy have 14-locale coverage
 - focused i18n tests require every non-English runtime locale to keep explicit first-shell message overrides for the pilot surface
 - popup and sidepanel HTML shells declare notranslate so browser translation overlays do not obscure localized extension screenshots
@@ -193,7 +193,7 @@ That reference defines the additive typed diagnostic model that should exist bef
 
 The following surfaces still need broader runtime localization work:
 
-- non-`zh-CN` deep runtime structured copy outside popup structured-copy buckets that currently falls back to English until reviewed translations are added
+- non-`zh-CN` deep runtime structured copy outside popup and Settings core structured-copy buckets that currently falls back to English until reviewed translations are added
 - typed diagnostic presentation beyond the current `zh-CN` branch
 - operator-workspace and store-helper copy beyond the current `zh-CN` branch where it is not evidence or automation identity
 
@@ -208,11 +208,10 @@ Protected raw-evidence values are intentionally not translation backlog:
 
 Recommended next extraction order:
 
-1. Settings core structured copy for all 14 runtime locales in `Phase 393.1`
-2. Settings credential/source/permission structured copy for all 14 runtime locales in `Phase 393.2`
-3. Provider Detail and provider-source wrapper structured copy for all 14 runtime locales in `Phase 393.3`
-4. typed diagnostic presentation follow-up if the Settings/provider-detail child phases stay small enough
-5. operator-workspace and store-helper follow-up only after the end-user surfaces are stable
+1. Settings credential/source/permission structured copy for all 14 runtime locales in `Phase 393.2`
+2. Provider Detail and provider-source wrapper structured copy for all 14 runtime locales in `Phase 393.3`
+3. typed diagnostic presentation follow-up if the Settings/provider-detail child phases stay small enough
+4. operator-workspace and store-helper follow-up only after the end-user surfaces are stable
 
 Current maintained backlog:
 

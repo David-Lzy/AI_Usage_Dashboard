@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { ProviderSourceKind, ProviderSourcePreference } from "../providers/types";
-import { createRuntimeI18n } from "./i18n";
+import { createRuntimeI18n, SUPPORTED_APP_LOCALES } from "./i18n";
 import {
   buildSettingsLocalizedCopy as buildReexportedCopy,
   getSettingsSourceKindLabel as getReexportedSourceKindLabel,
@@ -41,6 +41,31 @@ describe("buildSettingsLocalizedCopy", () => {
     expect(copy.credentials.saveConfig).toBe("保存配置");
     expect(copy.sources.itemCount(3)).toBe("3 项");
     expect(copy.permissions.requestAccess).toBe("请求授权");
+  });
+
+  it("ships Settings core copy for every non-English locale", () => {
+    const englishCopy = buildSettingsLocalizedCopy(createRuntimeI18n("en"));
+
+    for (const locale of SUPPORTED_APP_LOCALES.filter(
+      (supportedLocale) => supportedLocale !== "en",
+    )) {
+      const copy = buildSettingsLocalizedCopy(createRuntimeI18n(locale));
+
+      expect(copy.layout.overview.title).not.toBe(
+        englishCopy.layout.overview.title,
+      );
+      expect(copy.quickSetup.noActionNeeded).not.toBe(
+        englishCopy.quickSetup.noActionNeeded,
+      );
+      expect(copy.preferences.detail).not.toBe(englishCopy.preferences.detail);
+      expect(copy.themeCustomization.enterValidSeed).not.toBe(
+        englishCopy.themeCustomization.enterValidSeed,
+      );
+
+      if (locale !== "zh-CN") {
+        expect(copy.credentials.saveKey).toBe(englishCopy.credentials.saveKey);
+      }
+    }
   });
 
   it("preserves the legacy localized-copy export path", () => {

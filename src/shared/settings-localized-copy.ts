@@ -4,6 +4,10 @@ import type {
   SettingsUserLevel,
 } from "../providers/types";
 import type { RuntimeI18n } from "./i18n";
+import {
+  buildLocalizedSettingsCoreSections,
+  getSettingsCoreCopy,
+} from "./settings-core-localized-copy";
 
 export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
   if (i18n.resolvedLocale === "zh-CN") {
@@ -246,7 +250,7 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
     };
   }
 
-  return {
+  const englishCopy = {
     layout: {
       sectionsAria: "Settings sections",
       sections: {
@@ -488,6 +492,17 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
       removeAccess: "Remove access",
       requestAccess: "Request access",
     },
+  };
+
+  const coreCopy = getSettingsCoreCopy(i18n.resolvedLocale);
+
+  if (!coreCopy) {
+    return englishCopy;
+  }
+
+  return {
+    ...englishCopy,
+    ...buildLocalizedSettingsCoreSections(i18n, coreCopy),
   };
 }
 

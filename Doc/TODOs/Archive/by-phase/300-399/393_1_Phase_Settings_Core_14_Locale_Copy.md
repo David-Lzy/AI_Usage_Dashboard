@@ -17,7 +17,7 @@ Freshness model:
 Status note:
 
 - child phase split from `Phase 393`
-- active after the `Phase 393` split closeout
+- completed and archived on 2026-05-13
 
 ## Goal
 
@@ -54,3 +54,20 @@ Expand the high-exposure Settings core helper copy into explicit 14-locale runti
 ## Follow-Up
 
 - Move to Settings credentials, source-card helper labels, and permission helper copy in `Phase 393.2`.
+
+## Closeout
+
+Summary:
+
+- Added explicit 14-locale Settings core copy for `layout`, `quickSetup`, `preferences`, and `themeCustomization` through `src/shared/settings-core-localized-copy.ts`.
+- Kept the existing `buildSettingsLocalizedCopy` and `localized-copy` export paths stable while merging the new core buckets into the English base for non-`en`/non-`zh-CN` locales.
+- Added a focused guard that every non-English locale keeps representative Settings core copy while non-core credentials remain on the planned `Phase 393.2` fallback boundary.
+
+Verification:
+
+- `npm run i18n:check`
+- `npm run test -- src/shared/settings-localized-copy.test.ts`
+- `npm run test -- src/sidepanel/settings-view-models.test.ts`
+- `npm run typecheck`
+- `npm run docs:check`
+- `git diff --check`
