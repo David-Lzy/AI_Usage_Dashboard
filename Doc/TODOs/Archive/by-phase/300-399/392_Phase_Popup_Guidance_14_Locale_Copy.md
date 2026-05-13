@@ -16,8 +16,7 @@ Freshness model:
 
 Status note:
 
-- queued after `Phase 391`
-- first deeper runtime localization implementation slice
+- split and archived on 2026-05-13
 
 ## Goal
 
@@ -53,6 +52,18 @@ Expand high-exposure popup and first-run guidance copy from shell-level localiza
 - `npm run docs:check`
 - `git diff --check`
 
+## Completion Summary
+
+- Split this broad popup-copy implementation into two smaller child phases before changing runtime code.
+- `Phase 392.1` owns first-run guidance, setup coverage, snapshot status, and popup header copy.
+- `Phase 392.2` owns featured provider cards, action-section copy, surface-role notes, and aria labels.
+- Kept `Phase 393` focused on Settings and provider-detail copy instead of mixing it with popup work.
+
+## Verification
+
+- `npm run docs:check`
+- `git diff --check`
+
 ## Follow-Up
 
-- Move Settings and provider-detail deeper runtime copy in `Phase 393`.
+- Start `Phase 392.1`, then finish `Phase 392.2` before moving to `Phase 393`.

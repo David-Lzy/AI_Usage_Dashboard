@@ -64,6 +64,7 @@ Execution note:
 - forty-ninth executable slice landed on `2026-05-13` through `Phase 386`
 - fiftieth executable slice landed on `2026-05-13` through `Phase 387`
 - fifty-first documentation inventory slice landed on `2026-05-13` through `Phase 391`
+- fifty-second planning split landed on `2026-05-13` through `Phase 392`
 - `Phase 200` and `Phase 201` intentionally paused this i18n/diagnostic follow-up line for functionality-first Codex personal usage-context surfacing while Codex budget is constrained
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
@@ -288,9 +289,11 @@ Recommended rollout:
 51. runtime shell pilot coverage guard - shipped in `Phase 386`
 52. notranslate extension shells and representative locale RDP popup QA - shipped in `Phase 387`
 53. deeper runtime copy inventory for non-English fallback locales - shipped in `Phase 391`
-54. popup and new-user guidance 14-locale copy - future work in `Phase 392`
-55. Settings and provider-detail 14-locale copy - future work in `Phase 393`
-56. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact
+54. popup guidance implementation split - shipped in `Phase 392`
+55. popup first-run guidance 14-locale copy - future work in `Phase 392.1`
+56. popup featured and surface-role 14-locale copy - future work in `Phase 392.2`
+57. Settings and provider-detail 14-locale copy - future work in `Phase 393`
+58. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact
 
 ## References
 

@@ -47,7 +47,7 @@ Next execution queue:
 
 1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary, but use `0.1.0-rc.15` as the ready follow-up package for the post-`rc.13` polish and post-`rc.14` maintenance slices if review feedback or an explicit resubmission decision asks for a newer build
 2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC15 follow-up milestone](./Doc/Milestones/2026-05-13_RC15_Maintenance_Follow_Up_Release_Candidate.md) as the current packaged-source reference
-3. run the active numbered queue after `Phase 391`: `Phase 392` for popup and new-user guidance 14-locale runtime copy, then queued `Phase 393` through `Phase 395` for Settings/provider-detail copy and bounded maintenance follow-up
+3. run the active numbered queue after `Phase 392`: `Phase 392.1` and `Phase 392.2` split popup 14-locale runtime copy into first-run guidance first and featured/surface-role copy second, then queued `Phase 393` through `Phase 395` for Settings/provider-detail copy and bounded maintenance follow-up
 4. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 5. keep real operator evidence closed and archived; do not open another interaction-audit or theme-recovery operator evidence phase unless a new surface or theme regression creates a fresh review need
 6. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
