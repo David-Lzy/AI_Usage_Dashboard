@@ -588,6 +588,7 @@ export function InteractionAuditPage({
         />
 
         <InteractionAuditReviewQueueSection
+          copy={copy.reviewQueue}
           nextReviewTarget={nextReviewTarget}
           reviewQueue={reviewQueue}
           onJumpToSurface={handleJumpToSurface}

@@ -1,6 +1,7 @@
 import {
   buildInteractionAuditSignoffHandoffSummary,
   type InteractionAuditSignoffState,
+  type InteractionAuditSignoffStatus,
   type InteractionAuditSurfaceSignoffDefinition,
 } from "./interaction-audit-signoff";
 
@@ -14,8 +15,7 @@ export type InteractionAuditReviewQueueItem = {
   id: string;
   title: string;
   queueStatus: InteractionAuditReviewQueueStatus;
-  queueLabel: string;
-  signoffLabel: string;
+  signoffStatus: InteractionAuditSignoffStatus;
   completedManualCheckCount: number;
   totalManualCheckCount: number;
   pendingManualCheckCount: number;
@@ -45,33 +45,6 @@ function getQueueStatusPriority(status: InteractionAuditReviewQueueStatus): numb
   }
 }
 
-function buildQueueLabel(status: InteractionAuditReviewQueueStatus): string {
-  switch (status) {
-    case "follow_up":
-      return "Follow-up required";
-    case "not_reviewed":
-      return "Not reviewed";
-    case "pending_checks":
-      return "Pending checks";
-    case "ready":
-      return "Ready";
-    default:
-      return "Not reviewed";
-  }
-}
-
-function buildSignoffLabel(value: "not_reviewed" | "pass" | "follow_up"): string {
-  switch (value) {
-    case "pass":
-      return "Pass";
-    case "follow_up":
-      return "Follow-up required";
-    case "not_reviewed":
-    default:
-      return "Not reviewed";
-  }
-}
-
 export function buildInteractionAuditReviewQueue(
   definitions: InteractionAuditSurfaceSignoffDefinition[],
   state: InteractionAuditSignoffState,
@@ -92,8 +65,7 @@ export function buildInteractionAuditReviewQueue(
       id: surface.id,
       title: surface.title,
       queueStatus,
-      queueLabel: buildQueueLabel(queueStatus),
-      signoffLabel: buildSignoffLabel(surface.signoffStatus),
+      signoffStatus: surface.signoffStatus,
       completedManualCheckCount: surface.completedManualCheckCount,
       totalManualCheckCount: surface.totalManualCheckCount,
       pendingManualCheckCount: surface.pendingManualChecks.length,

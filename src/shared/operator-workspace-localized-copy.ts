@@ -153,6 +153,449 @@ type OperatorWorkspaceLocalizedCopy = {
   };
 };
 
+type InteractionAuditReviewQueueCopy = {
+  label: string;
+  detail: string;
+  jumpToSurface: (surfaceTitle: string) => string;
+  allSurfacesReady: string;
+  allReady: string;
+  nextTarget: string;
+  followUp: string;
+  notReviewed: string;
+  pendingCheckSurfaces: string;
+  ready: string;
+  itemMeta: (input: {
+    signoffLabel: string;
+    completedManualCheckCount: number;
+    totalManualCheckCount: number;
+  }) => string;
+  jumpToSurfaceAction: string;
+  pendingChecks: (pendingManualCheckCount: number) => string;
+  queueStatus: {
+    followUp: string;
+    notReviewed: string;
+    pendingChecks: string;
+    ready: string;
+  };
+  signoffStatus: {
+    notReviewed: string;
+    pass: string;
+    followUp: string;
+  };
+};
+
+const INTERACTION_AUDIT_REVIEW_QUEUE_COPY: Record<
+  ResolvedAppLocale,
+  InteractionAuditReviewQueueCopy
+> = {
+  en: {
+    label: "Review Queue",
+    detail:
+      "The queue keeps follow-up surfaces first, then not-reviewed surfaces, then pass states with pending checks, so a reviewer can move through the unresolved work without scanning the whole page.",
+    jumpToSurface: (surfaceTitle) => `Jump to ${surfaceTitle}`,
+    allSurfacesReady: "All surfaces ready",
+    allReady: "All ready",
+    nextTarget: "Next target",
+    followUp: "Follow-up",
+    notReviewed: "Not reviewed",
+    pendingCheckSurfaces: "Pending-check surfaces",
+    ready: "Ready",
+    itemMeta: ({ signoffLabel, completedManualCheckCount, totalManualCheckCount }) =>
+      `Signoff: ${signoffLabel} · Checks: ${completedManualCheckCount} / ${totalManualCheckCount}`,
+    jumpToSurfaceAction: "Jump to surface",
+    pendingChecks: (pendingManualCheckCount) =>
+      `Pending checks: ${pendingManualCheckCount}`,
+    queueStatus: {
+      followUp: "Follow-up required",
+      notReviewed: "Not reviewed",
+      pendingChecks: "Pending checks",
+      ready: "Ready",
+    },
+    signoffStatus: {
+      notReviewed: "Not reviewed",
+      pass: "Pass",
+      followUp: "Follow-up required",
+    },
+  },
+  "zh-CN": {
+    label: "复查队列",
+    detail:
+      "队列会先显示需要 follow-up 的 surface，再显示未复查 surface，然后显示仍有待办检查的 pass 状态，让复查者不用扫描整页也能处理未完成工作。",
+    jumpToSurface: (surfaceTitle) => `跳转到 ${surfaceTitle}`,
+    allSurfacesReady: "所有 surface 已就绪",
+    allReady: "全部就绪",
+    nextTarget: "下一个目标",
+    followUp: "Follow-up",
+    notReviewed: "未复查",
+    pendingCheckSurfaces: "待检查 surface",
+    ready: "就绪",
+    itemMeta: ({ signoffLabel, completedManualCheckCount, totalManualCheckCount }) =>
+      `签核：${signoffLabel} · 检查：${completedManualCheckCount} / ${totalManualCheckCount}`,
+    jumpToSurfaceAction: "跳转到 surface",
+    pendingChecks: (pendingManualCheckCount) =>
+      `待检查：${pendingManualCheckCount}`,
+    queueStatus: {
+      followUp: "需要 follow-up",
+      notReviewed: "未复查",
+      pendingChecks: "待检查",
+      ready: "就绪",
+    },
+    signoffStatus: {
+      notReviewed: "未复查",
+      pass: "通过",
+      followUp: "需要 follow-up",
+    },
+  },
+  "zh-TW": {
+    label: "複查佇列",
+    detail:
+      "佇列會先顯示需要 follow-up 的 surface，再顯示未複查 surface，接著顯示仍有待辦檢查的 pass 狀態，讓 reviewer 不必掃描整頁也能處理未完成工作。",
+    jumpToSurface: (surfaceTitle) => `跳到 ${surfaceTitle}`,
+    allSurfacesReady: "所有 surface 已就緒",
+    allReady: "全部就緒",
+    nextTarget: "下一個目標",
+    followUp: "Follow-up",
+    notReviewed: "未複查",
+    pendingCheckSurfaces: "待檢查 surface",
+    ready: "就緒",
+    itemMeta: ({ signoffLabel, completedManualCheckCount, totalManualCheckCount }) =>
+      `簽核：${signoffLabel} · 檢查：${completedManualCheckCount} / ${totalManualCheckCount}`,
+    jumpToSurfaceAction: "跳到 surface",
+    pendingChecks: (pendingManualCheckCount) =>
+      `待檢查：${pendingManualCheckCount}`,
+    queueStatus: {
+      followUp: "需要 follow-up",
+      notReviewed: "未複查",
+      pendingChecks: "待檢查",
+      ready: "就緒",
+    },
+    signoffStatus: {
+      notReviewed: "未複查",
+      pass: "通過",
+      followUp: "需要 follow-up",
+    },
+  },
+  ja: {
+    label: "レビューキュー",
+    detail:
+      "このキューは follow-up が必要な surface、未レビュー surface、未完了チェックが残る pass 状態の順に並べ、レビュー担当者がページ全体を探さず未解決作業を進められるようにします。",
+    jumpToSurface: (surfaceTitle) => `${surfaceTitle} へ移動`,
+    allSurfacesReady: "すべての surface が準備済み",
+    allReady: "すべて準備済み",
+    nextTarget: "次の対象",
+    followUp: "Follow-up",
+    notReviewed: "未レビュー",
+    pendingCheckSurfaces: "未完了チェックのある surface",
+    ready: "準備済み",
+    itemMeta: ({ signoffLabel, completedManualCheckCount, totalManualCheckCount }) =>
+      `サインオフ: ${signoffLabel} · チェック: ${completedManualCheckCount} / ${totalManualCheckCount}`,
+    jumpToSurfaceAction: "Surface へ移動",
+    pendingChecks: (pendingManualCheckCount) =>
+      `未完了チェック: ${pendingManualCheckCount}`,
+    queueStatus: {
+      followUp: "Follow-up が必要",
+      notReviewed: "未レビュー",
+      pendingChecks: "未完了チェック",
+      ready: "準備済み",
+    },
+    signoffStatus: {
+      notReviewed: "未レビュー",
+      pass: "合格",
+      followUp: "Follow-up が必要",
+    },
+  },
+  ko: {
+    label: "검토 대기열",
+    detail:
+      "대기열은 follow-up 이 필요한 surface, 아직 검토하지 않은 surface, 보류 체크가 남은 pass 상태 순서로 보여 주어 reviewer 가 전체 페이지를 훑지 않고 미해결 작업을 처리하게 합니다.",
+    jumpToSurface: (surfaceTitle) => `${surfaceTitle}(으)로 이동`,
+    allSurfacesReady: "모든 surface 준비됨",
+    allReady: "모두 준비됨",
+    nextTarget: "다음 대상",
+    followUp: "Follow-up",
+    notReviewed: "미검토",
+    pendingCheckSurfaces: "보류 체크 surface",
+    ready: "준비됨",
+    itemMeta: ({ signoffLabel, completedManualCheckCount, totalManualCheckCount }) =>
+      `Signoff: ${signoffLabel} · Checks: ${completedManualCheckCount} / ${totalManualCheckCount}`,
+    jumpToSurfaceAction: "Surface 로 이동",
+    pendingChecks: (pendingManualCheckCount) =>
+      `보류 체크: ${pendingManualCheckCount}`,
+    queueStatus: {
+      followUp: "Follow-up 필요",
+      notReviewed: "미검토",
+      pendingChecks: "보류 체크",
+      ready: "준비됨",
+    },
+    signoffStatus: {
+      notReviewed: "미검토",
+      pass: "통과",
+      followUp: "Follow-up 필요",
+    },
+  },
+  "es-419": {
+    label: "Cola de revisión",
+    detail:
+      "La cola mantiene primero las superficies con follow-up, luego las no revisadas y después los estados pass con checks pendientes, para avanzar por el trabajo abierto sin revisar toda la página.",
+    jumpToSurface: (surfaceTitle) => `Ir a ${surfaceTitle}`,
+    allSurfacesReady: "Todas las superficies listas",
+    allReady: "Todo listo",
+    nextTarget: "Siguiente objetivo",
+    followUp: "Follow-up",
+    notReviewed: "No revisado",
+    pendingCheckSurfaces: "Superficies con checks pendientes",
+    ready: "Listo",
+    itemMeta: ({ signoffLabel, completedManualCheckCount, totalManualCheckCount }) =>
+      `Signoff: ${signoffLabel} · Checks: ${completedManualCheckCount} / ${totalManualCheckCount}`,
+    jumpToSurfaceAction: "Ir a la superficie",
+    pendingChecks: (pendingManualCheckCount) =>
+      `Checks pendientes: ${pendingManualCheckCount}`,
+    queueStatus: {
+      followUp: "Follow-up requerido",
+      notReviewed: "No revisado",
+      pendingChecks: "Checks pendientes",
+      ready: "Listo",
+    },
+    signoffStatus: {
+      notReviewed: "No revisado",
+      pass: "Aprobado",
+      followUp: "Follow-up requerido",
+    },
+  },
+  "pt-BR": {
+    label: "Fila de revisão",
+    detail:
+      "A fila mantém primeiro as superfícies com follow-up, depois as não revisadas e depois estados pass com checks pendentes, para o reviewer avançar no trabalho aberto sem varrer a página inteira.",
+    jumpToSurface: (surfaceTitle) => `Ir para ${surfaceTitle}`,
+    allSurfacesReady: "Todas as superfícies prontas",
+    allReady: "Tudo pronto",
+    nextTarget: "Próximo alvo",
+    followUp: "Follow-up",
+    notReviewed: "Não revisado",
+    pendingCheckSurfaces: "Superfícies com checks pendentes",
+    ready: "Pronto",
+    itemMeta: ({ signoffLabel, completedManualCheckCount, totalManualCheckCount }) =>
+      `Signoff: ${signoffLabel} · Checks: ${completedManualCheckCount} / ${totalManualCheckCount}`,
+    jumpToSurfaceAction: "Ir para a superfície",
+    pendingChecks: (pendingManualCheckCount) =>
+      `Checks pendentes: ${pendingManualCheckCount}`,
+    queueStatus: {
+      followUp: "Follow-up necessário",
+      notReviewed: "Não revisado",
+      pendingChecks: "Checks pendentes",
+      ready: "Pronto",
+    },
+    signoffStatus: {
+      notReviewed: "Não revisado",
+      pass: "Aprovado",
+      followUp: "Follow-up necessário",
+    },
+  },
+  fr: {
+    label: "File de revue",
+    detail:
+      "La file place d'abord les surfaces avec follow-up, puis les surfaces non revues, puis les états pass avec checks en attente, afin de traiter le travail ouvert sans parcourir toute la page.",
+    jumpToSurface: (surfaceTitle) => `Aller à ${surfaceTitle}`,
+    allSurfacesReady: "Toutes les surfaces sont prêtes",
+    allReady: "Tout est prêt",
+    nextTarget: "Prochaine cible",
+    followUp: "Follow-up",
+    notReviewed: "Non revu",
+    pendingCheckSurfaces: "Surfaces avec checks en attente",
+    ready: "Prêt",
+    itemMeta: ({ signoffLabel, completedManualCheckCount, totalManualCheckCount }) =>
+      `Signoff: ${signoffLabel} · Checks: ${completedManualCheckCount} / ${totalManualCheckCount}`,
+    jumpToSurfaceAction: "Aller à la surface",
+    pendingChecks: (pendingManualCheckCount) =>
+      `Checks en attente: ${pendingManualCheckCount}`,
+    queueStatus: {
+      followUp: "Follow-up requis",
+      notReviewed: "Non revu",
+      pendingChecks: "Checks en attente",
+      ready: "Prêt",
+    },
+    signoffStatus: {
+      notReviewed: "Non revu",
+      pass: "Validé",
+      followUp: "Follow-up requis",
+    },
+  },
+  de: {
+    label: "Review-Warteschlange",
+    detail:
+      "Die Warteschlange zeigt zuerst Follow-up-Surfaces, dann nicht geprüfte Surfaces und danach Pass-Zustände mit offenen Checks, damit Reviewer offene Arbeit ohne Seitensuche abarbeiten.",
+    jumpToSurface: (surfaceTitle) => `Zu ${surfaceTitle} springen`,
+    allSurfacesReady: "Alle Surfaces bereit",
+    allReady: "Alles bereit",
+    nextTarget: "Nächstes Ziel",
+    followUp: "Follow-up",
+    notReviewed: "Nicht geprüft",
+    pendingCheckSurfaces: "Surfaces mit offenen Checks",
+    ready: "Bereit",
+    itemMeta: ({ signoffLabel, completedManualCheckCount, totalManualCheckCount }) =>
+      `Signoff: ${signoffLabel} · Checks: ${completedManualCheckCount} / ${totalManualCheckCount}`,
+    jumpToSurfaceAction: "Zum Surface springen",
+    pendingChecks: (pendingManualCheckCount) =>
+      `Offene Checks: ${pendingManualCheckCount}`,
+    queueStatus: {
+      followUp: "Follow-up erforderlich",
+      notReviewed: "Nicht geprüft",
+      pendingChecks: "Offene Checks",
+      ready: "Bereit",
+    },
+    signoffStatus: {
+      notReviewed: "Nicht geprüft",
+      pass: "Bestanden",
+      followUp: "Follow-up erforderlich",
+    },
+  },
+  it: {
+    label: "Coda di revisione",
+    detail:
+      "La coda mette prima le surface con follow-up, poi quelle non revisionate e quindi gli stati pass con check pendenti, così il reviewer procede sul lavoro aperto senza scansionare tutta la pagina.",
+    jumpToSurface: (surfaceTitle) => `Vai a ${surfaceTitle}`,
+    allSurfacesReady: "Tutte le surface sono pronte",
+    allReady: "Tutto pronto",
+    nextTarget: "Prossimo target",
+    followUp: "Follow-up",
+    notReviewed: "Non revisionato",
+    pendingCheckSurfaces: "Surface con check pendenti",
+    ready: "Pronto",
+    itemMeta: ({ signoffLabel, completedManualCheckCount, totalManualCheckCount }) =>
+      `Signoff: ${signoffLabel} · Check: ${completedManualCheckCount} / ${totalManualCheckCount}`,
+    jumpToSurfaceAction: "Vai alla surface",
+    pendingChecks: (pendingManualCheckCount) =>
+      `Check pendenti: ${pendingManualCheckCount}`,
+    queueStatus: {
+      followUp: "Follow-up richiesto",
+      notReviewed: "Non revisionato",
+      pendingChecks: "Check pendenti",
+      ready: "Pronto",
+    },
+    signoffStatus: {
+      notReviewed: "Non revisionato",
+      pass: "Pass",
+      followUp: "Follow-up richiesto",
+    },
+  },
+  ru: {
+    label: "Очередь проверки",
+    detail:
+      "Очередь сначала показывает surfaces с follow-up, затем не проверенные surfaces, затем состояния pass с незавершенными checks, чтобы reviewer работал с открытыми задачами без просмотра всей страницы.",
+    jumpToSurface: (surfaceTitle) => `Перейти к ${surfaceTitle}`,
+    allSurfacesReady: "Все surfaces готовы",
+    allReady: "Все готово",
+    nextTarget: "Следующая цель",
+    followUp: "Follow-up",
+    notReviewed: "Не проверено",
+    pendingCheckSurfaces: "Surfaces с незавершенными checks",
+    ready: "Готово",
+    itemMeta: ({ signoffLabel, completedManualCheckCount, totalManualCheckCount }) =>
+      `Signoff: ${signoffLabel} · Checks: ${completedManualCheckCount} / ${totalManualCheckCount}`,
+    jumpToSurfaceAction: "Перейти к surface",
+    pendingChecks: (pendingManualCheckCount) =>
+      `Незавершенные checks: ${pendingManualCheckCount}`,
+    queueStatus: {
+      followUp: "Требуется follow-up",
+      notReviewed: "Не проверено",
+      pendingChecks: "Незавершенные checks",
+      ready: "Готово",
+    },
+    signoffStatus: {
+      notReviewed: "Не проверено",
+      pass: "Пройдено",
+      followUp: "Требуется follow-up",
+    },
+  },
+  ar: {
+    label: "قائمة المراجعة",
+    detail:
+      "تعرض القائمة surfaces التي تحتاج follow-up أولا، ثم surfaces غير المراجعة، ثم حالات pass التي لديها checks معلقة، حتى يستطيع المراجع متابعة العمل المفتوح بدون فحص الصفحة كلها.",
+    jumpToSurface: (surfaceTitle) => `انتقال إلى ${surfaceTitle}`,
+    allSurfacesReady: "كل surfaces جاهزة",
+    allReady: "كل شيء جاهز",
+    nextTarget: "الهدف التالي",
+    followUp: "Follow-up",
+    notReviewed: "غير مراجع",
+    pendingCheckSurfaces: "Surfaces لديها checks معلقة",
+    ready: "جاهز",
+    itemMeta: ({ signoffLabel, completedManualCheckCount, totalManualCheckCount }) =>
+      `Signoff: ${signoffLabel} · Checks: ${completedManualCheckCount} / ${totalManualCheckCount}`,
+    jumpToSurfaceAction: "انتقال إلى surface",
+    pendingChecks: (pendingManualCheckCount) =>
+      `Checks معلقة: ${pendingManualCheckCount}`,
+    queueStatus: {
+      followUp: "يتطلب follow-up",
+      notReviewed: "غير مراجع",
+      pendingChecks: "Checks معلقة",
+      ready: "جاهز",
+    },
+    signoffStatus: {
+      notReviewed: "غير مراجع",
+      pass: "ناجح",
+      followUp: "يتطلب follow-up",
+    },
+  },
+  hi: {
+    label: "Review queue",
+    detail:
+      "Queue पहले follow-up वाली surfaces, फिर not-reviewed surfaces, फिर pending checks वाले pass states दिखाती है ताकि reviewer पूरी page scan किए बिना unresolved work कर सके।",
+    jumpToSurface: (surfaceTitle) => `${surfaceTitle} पर जाएं`,
+    allSurfacesReady: "सभी surfaces ready हैं",
+    allReady: "सब ready",
+    nextTarget: "अगला target",
+    followUp: "Follow-up",
+    notReviewed: "Not reviewed",
+    pendingCheckSurfaces: "Pending-check surfaces",
+    ready: "Ready",
+    itemMeta: ({ signoffLabel, completedManualCheckCount, totalManualCheckCount }) =>
+      `Signoff: ${signoffLabel} · Checks: ${completedManualCheckCount} / ${totalManualCheckCount}`,
+    jumpToSurfaceAction: "Surface पर जाएं",
+    pendingChecks: (pendingManualCheckCount) =>
+      `Pending checks: ${pendingManualCheckCount}`,
+    queueStatus: {
+      followUp: "Follow-up required",
+      notReviewed: "Not reviewed",
+      pendingChecks: "Pending checks",
+      ready: "Ready",
+    },
+    signoffStatus: {
+      notReviewed: "Not reviewed",
+      pass: "Pass",
+      followUp: "Follow-up required",
+    },
+  },
+  id: {
+    label: "Antrean review",
+    detail:
+      "Antrean menaruh surface yang butuh follow-up lebih dulu, lalu surface belum direview, lalu status pass dengan check tertunda, agar reviewer bisa menangani pekerjaan terbuka tanpa memindai seluruh halaman.",
+    jumpToSurface: (surfaceTitle) => `Lompat ke ${surfaceTitle}`,
+    allSurfacesReady: "Semua surface siap",
+    allReady: "Semua siap",
+    nextTarget: "Target berikutnya",
+    followUp: "Follow-up",
+    notReviewed: "Belum direview",
+    pendingCheckSurfaces: "Surface dengan check tertunda",
+    ready: "Siap",
+    itemMeta: ({ signoffLabel, completedManualCheckCount, totalManualCheckCount }) =>
+      `Signoff: ${signoffLabel} · Check: ${completedManualCheckCount} / ${totalManualCheckCount}`,
+    jumpToSurfaceAction: "Lompat ke surface",
+    pendingChecks: (pendingManualCheckCount) =>
+      `Check tertunda: ${pendingManualCheckCount}`,
+    queueStatus: {
+      followUp: "Follow-up diperlukan",
+      notReviewed: "Belum direview",
+      pendingChecks: "Check tertunda",
+      ready: "Siap",
+    },
+    signoffStatus: {
+      notReviewed: "Belum direview",
+      pass: "Lulus",
+      followUp: "Follow-up diperlukan",
+    },
+  },
+};
+
 const OPERATOR_WORKSPACE_COPY: Record<
   ResolvedAppLocale,
   OperatorWorkspaceLocalizedCopy
@@ -2605,5 +3048,13 @@ const OPERATOR_WORKSPACE_COPY: Record<
 };
 
 export function buildOperatorWorkspaceLocalizedCopy(i18n: RuntimeI18n) {
-  return OPERATOR_WORKSPACE_COPY[i18n.resolvedLocale];
+  const copy = OPERATOR_WORKSPACE_COPY[i18n.resolvedLocale];
+
+  return {
+    ...copy,
+    interactionAudit: {
+      ...copy.interactionAudit,
+      reviewQueue: INTERACTION_AUDIT_REVIEW_QUEUE_COPY[i18n.resolvedLocale],
+    },
+  };
 }

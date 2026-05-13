@@ -92,6 +92,7 @@ Execution note:
 - seventy-sixth maintenance audit slice landed on `2026-05-14` through `Phase 408`
 - seventy-seventh presentation/export split landed on `2026-05-14` through `Phase 409`
 - seventy-eighth error-presentation split landed on `2026-05-14` through `Phase 410`
+- seventy-ninth Review Queue display-copy slice landed on `2026-05-14` through `Phase 411`
 - `Phase 200` and `Phase 201` intentionally paused this i18n/diagnostic follow-up line for functionality-first Codex personal usage-context surfacing while Codex budget is constrained
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
@@ -154,7 +155,7 @@ As of 2026-05-14:
 - the full `npm run release:check` gate passed after operator/store helper localization in `Phase 406`
 - localized operator/store helper RDP Chrome visual QA is recorded for `en`, `zh-CN`, `ja`, `de`, and `ar` in [2026-05-14-phase407](../testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/README.md)
 - localization copy chunk-size audit is recorded in [I18n_Localization_Copy_Chunk_Size_Audit.md](../I18n/I18n_Localization_Copy_Chunk_Size_Audit.md), with no current runtime split required
-- interaction-audit presentation/export split is recorded in [I18n_Interaction_Audit_Presentation_Export_Split.md](../I18n/I18n_Interaction_Audit_Presentation_Export_Split.md), with the Review Queue display-copy implementation now active in `Phase 411`
+- interaction-audit presentation/export split is recorded in [I18n_Interaction_Audit_Presentation_Export_Split.md](../I18n/I18n_Interaction_Audit_Presentation_Export_Split.md), with Review Queue display-copy completed and Surface Card display-copy now active in `Phase 412`
 - store-helper error presentation is recorded in [I18n_Store_Helper_Error_Presentation_Split.md](../I18n/I18n_Store_Helper_Error_Presentation_Split.md), and the runtime now localizes the wrapper while preserving raw helper error messages inside it
 - the current shipped runtime localized slice covers:
   - popup shell
@@ -363,7 +364,8 @@ Recommended rollout:
 79. localization copy chunk-size audit - shipped in `Phase 408`
 80. interaction-audit consumer-copy presentation split - shipped in `Phase 409`
 81. store-helper error presentation split - shipped in `Phase 410`
-82. interaction-audit Review Queue display copy - active in `Phase 411`
+82. interaction-audit Review Queue display copy - shipped in `Phase 411`
+83. interaction-audit Surface Card display copy - active in `Phase 412`
 
 ## References
 

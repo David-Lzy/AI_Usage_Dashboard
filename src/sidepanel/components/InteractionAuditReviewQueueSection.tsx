@@ -1,15 +1,57 @@
+import type { buildOperatorWorkspaceLocalizedCopy } from "../../shared/localized-copy";
 import type {
   InteractionAuditReviewQueue,
   InteractionAuditReviewQueueItem,
+  InteractionAuditReviewQueueStatus,
 } from "../interaction-audit-review-queue";
+import type { InteractionAuditSignoffStatus } from "../interaction-audit-signoff";
+
+type InteractionAuditReviewQueueCopy = ReturnType<
+  typeof buildOperatorWorkspaceLocalizedCopy
+>["interactionAudit"]["reviewQueue"];
 
 type InteractionAuditReviewQueueSectionProps = {
+  copy: InteractionAuditReviewQueueCopy;
   nextReviewTarget: InteractionAuditReviewQueueItem | null;
   reviewQueue: InteractionAuditReviewQueue;
   onJumpToSurface: (surfaceId: string) => void;
 };
 
+function getQueueStatusLabel(
+  copy: InteractionAuditReviewQueueCopy,
+  status: InteractionAuditReviewQueueStatus,
+) {
+  switch (status) {
+    case "follow_up":
+      return copy.queueStatus.followUp;
+    case "not_reviewed":
+      return copy.queueStatus.notReviewed;
+    case "pending_checks":
+      return copy.queueStatus.pendingChecks;
+    case "ready":
+      return copy.queueStatus.ready;
+    default:
+      return copy.queueStatus.notReviewed;
+  }
+}
+
+function getSignoffStatusLabel(
+  copy: InteractionAuditReviewQueueCopy,
+  status: InteractionAuditSignoffStatus,
+) {
+  switch (status) {
+    case "pass":
+      return copy.signoffStatus.pass;
+    case "follow_up":
+      return copy.signoffStatus.followUp;
+    case "not_reviewed":
+    default:
+      return copy.signoffStatus.notReviewed;
+  }
+}
+
 export function InteractionAuditReviewQueueSection({
+  copy,
   nextReviewTarget,
   reviewQueue,
   onJumpToSurface,
@@ -21,11 +63,9 @@ export function InteractionAuditReviewQueueSection({
     >
       <div className="interaction-audit__queue-header">
         <div>
-          <p className="detail-note__label">Review Queue</p>
+          <p className="detail-note__label">{copy.label}</p>
           <p className="supporting-copy">
-            The queue keeps follow-up surfaces first, then not-reviewed
-            surfaces, then pass states with pending checks, so a reviewer can
-            move through the unresolved work without scanning the whole page.
+            {copy.detail}
           </p>
         </div>
         <button
@@ -40,26 +80,26 @@ export function InteractionAuditReviewQueueSection({
           }}
         >
           {nextReviewTarget
-            ? `Jump to ${nextReviewTarget.title}`
-            : "All surfaces ready"}
+            ? copy.jumpToSurface(nextReviewTarget.title)
+            : copy.allSurfacesReady}
         </button>
       </div>
 
       <div className="interaction-audit__signoff-summary">
         <div className="source-card__field" data-audit-review-queue-summary-id="next">
-          <p className="source-card__label">Next target</p>
+          <p className="source-card__label">{copy.nextTarget}</p>
           <p
             className="source-card__value"
             data-audit-review-queue-summary-value
           >
-            {nextReviewTarget ? nextReviewTarget.title : "All ready"}
+            {nextReviewTarget ? nextReviewTarget.title : copy.allReady}
           </p>
         </div>
         <div
           className="source-card__field"
           data-audit-review-queue-summary-id="follow-up"
         >
-          <p className="source-card__label">Follow-up</p>
+          <p className="source-card__label">{copy.followUp}</p>
           <p
             className="source-card__value"
             data-audit-review-queue-summary-value
@@ -71,7 +111,7 @@ export function InteractionAuditReviewQueueSection({
           className="source-card__field"
           data-audit-review-queue-summary-id="not-reviewed"
         >
-          <p className="source-card__label">Not reviewed</p>
+          <p className="source-card__label">{copy.notReviewed}</p>
           <p
             className="source-card__value"
             data-audit-review-queue-summary-value
@@ -83,7 +123,7 @@ export function InteractionAuditReviewQueueSection({
           className="source-card__field"
           data-audit-review-queue-summary-id="pending-checks"
         >
-          <p className="source-card__label">Pending-check surfaces</p>
+          <p className="source-card__label">{copy.pendingCheckSurfaces}</p>
           <p
             className="source-card__value"
             data-audit-review-queue-summary-value
@@ -95,7 +135,7 @@ export function InteractionAuditReviewQueueSection({
           className="source-card__field"
           data-audit-review-queue-summary-id="ready"
         >
-          <p className="source-card__label">Ready</p>
+          <p className="source-card__label">{copy.ready}</p>
           <p
             className="source-card__value"
             data-audit-review-queue-summary-value
@@ -119,12 +159,18 @@ export function InteractionAuditReviewQueueSection({
                   {item.title}
                 </p>
                 <p className="interaction-audit__queue-item-meta">
-                  Signoff: {item.signoffLabel} · Checks:{" "}
-                  {item.completedManualCheckCount} / {item.totalManualCheckCount}
+                  {copy.itemMeta({
+                    signoffLabel: getSignoffStatusLabel(
+                      copy,
+                      item.signoffStatus,
+                    ),
+                    completedManualCheckCount: item.completedManualCheckCount,
+                    totalManualCheckCount: item.totalManualCheckCount,
+                  })}
                 </p>
               </div>
               <span className="meta-chip interaction-audit__queue-chip">
-                {item.queueLabel}
+                {getQueueStatusLabel(copy, item.queueStatus)}
               </span>
             </div>
 
@@ -137,13 +183,13 @@ export function InteractionAuditReviewQueueSection({
                   onJumpToSurface(item.id);
                 }}
               >
-                Jump to surface
+                {copy.jumpToSurfaceAction}
               </button>
               <span
                 className="supporting-copy interaction-audit__queue-item-meta"
                 data-audit-review-queue-checks={item.id}
               >
-                Pending checks: {item.pendingManualCheckCount}
+                {copy.pendingChecks(item.pendingManualCheckCount)}
               </span>
             </div>
           </li>

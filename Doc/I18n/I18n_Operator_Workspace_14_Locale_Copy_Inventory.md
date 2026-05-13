@@ -20,6 +20,7 @@ Status note:
 - implementation input for `Phase 404`
 - `Phase 404` completed the helper-owned bucket implementation; consumer-only labels remain follow-up unless a later phase moves them without touching export/evidence contracts
 - `Phase 409` adds a maintained presentation/export split for the remaining interaction-audit consumer labels: [I18n_Interaction_Audit_Presentation_Export_Split.md](./I18n_Interaction_Audit_Presentation_Export_Split.md)
+- `Phase 411` completed Review Queue display labels with 14-locale copy while preserving queue status enums and export payloads
 
 ## Purpose
 
@@ -235,4 +236,6 @@ These values are either raw evidence, automation identity, export content, or mi
 
 If `Phase 404` cannot move all consumer-only labels without touching export/evidence contracts, it should prioritize `src/shared/operator-workspace-localized-copy.ts` helper-owned buckets first and leave a follow-up TODO for a typed presentation/export split.
 
-`Phase 409` completed that split as documentation-only planning. The first safe runtime child phase is [411_Phase_Interaction_Audit_Review_Queue_Display_Copy.md](../TODOs/411_Phase_Interaction_Audit_Review_Queue_Display_Copy.md), which should localize Review Queue display labels while preserving queue status enums and export payloads.
+`Phase 409` completed that split as documentation-only planning.
+
+`Phase 411` completed the Review Queue slice. The next child phase is [412_Phase_Interaction_Audit_Surface_Card_Display_Copy.md](../TODOs/412_Phase_Interaction_Audit_Surface_Card_Display_Copy.md), scoped to Surface Card chrome labels only.

@@ -10,6 +10,10 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
 
     expect(copy.interactionAudit.topbar.title).toBe("Interaction Audit");
     expect(copy.interactionAudit.signoff.pass).toBe("Pass");
+    expect(copy.interactionAudit.reviewQueue.label).toBe("Review Queue");
+    expect(copy.interactionAudit.reviewQueue.queueStatus.followUp).toBe(
+      "Follow-up required",
+    );
     expect(copy.themeRecovery.hero.title).toBe(
       "One place to stage native-prompt and real-session recovery checks",
     );
@@ -23,6 +27,7 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
     expect(copy.interactionAudit.signoff.reviewedSurfaces).toBe(
       "已复查 surface",
     );
+    expect(copy.interactionAudit.reviewQueue.nextTarget).toBe("下一个目标");
     expect(copy.themeRecovery.currentTruth.reviewStage).toBe("复查阶段");
   });
 
@@ -96,6 +101,14 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
         expectedTitles[locale].themeRecovery,
       );
       expect(copy.interactionAudit.guidance.checks).toHaveLength(3);
+      expect(copy.interactionAudit.reviewQueue.label.length).toBeGreaterThan(0);
+      expect(
+        copy.interactionAudit.reviewQueue.itemMeta({
+          signoffLabel: copy.interactionAudit.reviewQueue.signoffStatus.pass,
+          completedManualCheckCount: 1,
+          totalManualCheckCount: 2,
+        }),
+      ).toContain("1");
       expect(copy.themeRecovery.workflow.steps).toHaveLength(5);
     }
   });
@@ -104,6 +117,7 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
     const copy = buildOperatorWorkspaceLocalizedCopy(createRuntimeI18n("ar"));
 
     expect(copy.interactionAudit.hero.title).toContain("مراجعة");
+    expect(copy.interactionAudit.reviewQueue.pendingChecks(3)).toContain("3");
     expect(copy.themeRecovery.outputs.clipboardUnavailable).toContain(
       "clipboard",
     );

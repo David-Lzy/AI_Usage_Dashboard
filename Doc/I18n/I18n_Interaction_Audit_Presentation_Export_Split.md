@@ -19,6 +19,7 @@ Status note:
 - created in `Phase 409`
 - defines which remaining interaction-audit visible labels can be localized without changing signoff exports, handoff drafts, request identities, automation hooks, or raw evidence
 - use this document before moving any remaining interaction-audit component strings into `buildOperatorWorkspaceLocalizedCopy`
+- `Phase 411` completed the Review Queue display-copy slice; Surface Card chrome is the next child slice
 
 ## Purpose
 
@@ -57,12 +58,15 @@ Already localized through `Phase 404`:
 
 Not localized in `Phase 409`:
 
-- review queue labels
 - surface-card labels
 - workspace controls and feedback messages
 - request-scope command headings
 - handoff summary labels and helper copy
 - frame readiness and preset result messages
+
+Localized after `Phase 411`:
+
+- Review Queue section labels, summary labels, status labels, signoff status labels, next-target actions, and pending-check display patterns
 
 ## Safe Presentation-Only Labels
 
@@ -272,7 +276,7 @@ Do not translate these values:
 
 `Phase 409` does not change runtime code. The remaining interaction-audit migration is broad enough that a runtime change should be implemented as a narrow child phase with focused tests.
 
-The first safe child phase should start with Review Queue display labels because:
+The first safe child phase started with Review Queue display labels because:
 
 - it is visible operator UI
 - it has stable enum status values
@@ -281,13 +285,14 @@ The first safe child phase should start with Review Queue display labels because
 
 ## Planned Next Runtime Slice
 
-Use `Phase 411` to move Review Queue display labels into localized copy.
+`Phase 411` moved Review Queue display labels into localized copy.
 
-Required tests for that slice:
+The next safe child phase is `Phase 412`, covering Surface Card chrome labels only. It must still preserve surface titles, descriptions, action labels, action expectations, manual checks, iframe titles, preset ids, action ids, and frame-action raw messages.
+
+Required tests for Review Queue and later slices:
 
 - review queue helper still returns stable status enums and ordering
 - localized labels render from copy without changing `queueStatus`
 - signoff export JSON remains unchanged
 - handoff draft Markdown remains unchanged
 - unknown/raw evidence strings remain raw
-

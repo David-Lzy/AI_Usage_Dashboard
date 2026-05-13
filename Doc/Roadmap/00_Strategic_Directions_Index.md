@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-14:
 
-- the numbered phase queue is completed through `Phase 410`, with active `Phase 411` selected for interaction-audit Review Queue display copy
+- the numbered phase queue is completed through `Phase 411`, with active `Phase 412` selected for interaction-audit Surface Card display copy
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -112,6 +112,7 @@ As of 2026-05-14:
 - `Phase 408` audited localization copy chunk size after the operator/store helper copy rollout and recorded that the current `sidepanel.js` raw-size warning is acceptable unless a later release gate chooses to lazy-load special debug/helper routes
 - `Phase 409` documented the interaction-audit presentation/export split, preserving signoff exports, handoff drafts, request ids, route ids, preset ids, command text, and manual-check evidence while queuing Review Queue display-copy localization as a narrow follow-up
 - `Phase 410` added localized store-helper error wrappers while preserving raw invalid-preset, malformed-seed, and native popup probe error text inside the rendered helper message
+- `Phase 411` added localized interaction-audit Review Queue display labels while keeping queue status enums, surface titles, signoff exports, and generated handoff drafts unchanged
 - `Phase 200` completed a functionality-first Codex personal slice by preserving multiple visible usage windows, expanding Codex page-capture snippets, and surfacing the most constrained visible percentage window across dashboard, provider detail, and popup paths
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without changing the primary percentage-window quota model
 - `Phase 202` completed repeatable unpacked-extension verification for Codex personal multi-window plus flex-balance context, while fixing DOM capture so repeated percentages and single-character balance values are not lost before parsing
