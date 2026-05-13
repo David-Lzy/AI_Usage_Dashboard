@@ -16,7 +16,7 @@ Start `Direction 06` with one honest benchmark slice and one small popup IA impr
 ## What Shipped
 
 - one benchmark matrix:
-  - [Toolbar_Product_Benchmark_Matrix_2026-04-23.md](../Toolbar_Product_Benchmark_Matrix_2026-04-23.md)
+  - [Toolbar_Product_Benchmark_Matrix_2026-04-23.md](../Archive/benchmarks/Toolbar_Product_Benchmark_Matrix_2026-04-23.md)
 - one popup view-model extension for dynamic next-step guidance:
   - `no visible providers -> open settings`
   - `missing host access -> open settings`
@@ -33,7 +33,7 @@ Start `Direction 06` with one honest benchmark slice and one small popup IA impr
 - `src/popup/view-models.ts`
 - `src/popup/view-models.test.ts`
 - `src/popup/PopupApp.tsx`
-- `Doc/Toolbar_Product_Benchmark_Matrix_2026-04-23.md`
+- `Doc/Archive/benchmarks/Toolbar_Product_Benchmark_Matrix_2026-04-23.md`
 
 ## Verification
 

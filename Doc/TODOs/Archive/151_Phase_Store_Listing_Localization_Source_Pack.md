@@ -27,6 +27,6 @@ Status note:
 
 ## Outcome
 
-- shipped one maintained [Store_Listing_Localization_Source_Pack.md](../../Store_Listing_Localization_Source_Pack.md)
+- shipped one maintained [Store_Listing_Localization_Source_Pack.md](../../Store/Store_Listing_Localization_Source_Pack.md)
 - kept future listing-localization work anchored to the current manifest, maintained listing-copy pack, and first archived screenshot set
 - added repeatable review coverage with `npm run phase151:review`

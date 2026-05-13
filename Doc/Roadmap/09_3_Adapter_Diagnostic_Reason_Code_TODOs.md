@@ -40,9 +40,9 @@ Parent direction:
 
 Maintained reference:
 
-- [I18n_Adapter_Diagnostic_Reason_Code_Plan.md](../I18n_Adapter_Diagnostic_Reason_Code_Plan.md)
-- [I18n_Diagnostic_Archive_Export_Compatibility.md](../I18n_Diagnostic_Archive_Export_Compatibility.md)
-- [I18n_Diagnostic_Fixture_And_Historical_Evidence_Alignment.md](../I18n_Diagnostic_Fixture_And_Historical_Evidence_Alignment.md)
+- [I18n_Adapter_Diagnostic_Reason_Code_Plan.md](../I18n/I18n_Adapter_Diagnostic_Reason_Code_Plan.md)
+- [I18n_Diagnostic_Archive_Export_Compatibility.md](../I18n/I18n_Diagnostic_Archive_Export_Compatibility.md)
+- [I18n_Diagnostic_Fixture_And_Historical_Evidence_Alignment.md](../I18n/I18n_Diagnostic_Fixture_And_Historical_Evidence_Alignment.md)
 
 ## Goal
 
@@ -76,8 +76,8 @@ As of `Phase 204`:
 - `Phase 204` added regression coverage and a static review proving unknown or absent typed diagnostics still fall back to raw evidence in source-state classification, Settings source cards, Provider Detail inputs, and localized diagnostic presentation boundaries
 - `npm run phase199:review` now verifies fixture, request/handoff, and frozen archive boundaries for diagnostic evidence alignment
 - `npm run phase204:review` now verifies the raw-fallback regression markers without changing provider coverage, source-selection behavior, or archive schemas
-- `Doc/I18n_Diagnostic_Archive_Export_Compatibility.md` now records that localized diagnostic presentation is not an archive schema
-- `Doc/I18n_Diagnostic_Fixture_And_Historical_Evidence_Alignment.md` now records which fixture and evidence scopes are mutable versus frozen
+- `Doc/I18n/I18n_Diagnostic_Archive_Export_Compatibility.md` now records that localized diagnostic presentation is not an archive schema
+- `Doc/I18n/I18n_Diagnostic_Fixture_And_Historical_Evidence_Alignment.md` now records which fixture and evidence scopes are mutable versus frozen
 - the Cursor adapter populates typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` metadata beside existing raw source-selection and fallback strings
 - the Codex adapter populates typed `sourceSelectionDiagnostic` and `sourceFallbackDiagnostic` metadata beside existing raw source-selection and fallback strings
 - Cursor and Codex now populate typed `warningDiagnostic` metadata for missing credential and missing host-access blockers

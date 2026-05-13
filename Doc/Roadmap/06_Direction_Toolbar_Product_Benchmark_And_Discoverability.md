@@ -83,7 +83,7 @@ As of 2026-04-23:
 - the badge already has one explicit meaning: visible providers needing attention
 - the side panel remains the canonical detailed workspace
 - the repo now also ships one benchmark matrix grounded in current Chrome docs plus current competitor listing mirrors:
-  - [Toolbar_Product_Benchmark_Matrix_2026-04-23.md](../Toolbar_Product_Benchmark_Matrix_2026-04-23.md)
+  - [Toolbar_Product_Benchmark_Matrix_2026-04-23.md](../Archive/benchmarks/Toolbar_Product_Benchmark_Matrix_2026-04-23.md)
 
 External product signals:
 

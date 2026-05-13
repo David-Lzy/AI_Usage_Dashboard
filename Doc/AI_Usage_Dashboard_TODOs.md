@@ -21,7 +21,7 @@ Status note:
 
 Related doc:
 
-- [AI_Usage_Dashboard_MVP_Design.md](./AI_Usage_Dashboard_MVP_Design.md)
+- [AI_Usage_Dashboard_MVP_Design.md](./Archive/baselines/AI_Usage_Dashboard_MVP_Design.md)
 - [00_Phase_Index.md](./TODOs/00_Phase_Index.md)
 - [00_Strategic_Directions_Index.md](./Roadmap/00_Strategic_Directions_Index.md)
 

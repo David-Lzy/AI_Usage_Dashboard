@@ -24,9 +24,9 @@ Turn the current English store-listing copy into one maintained source pack for 
 
 ## Implemented
 
-- added [Store_Listing_Localization_Source_Pack.md](../Store_Listing_Localization_Source_Pack.md) as the current English source pack for future Chrome Web Store listing localization
+- added [Store_Listing_Localization_Source_Pack.md](../Store/Store_Listing_Localization_Source_Pack.md) as the current English source pack for future Chrome Web Store listing localization
 - anchored that source pack to:
-  - [Store_Listing_Copy_Pack.md](../Store_Listing_Copy_Pack.md)
+  - [Store_Listing_Copy_Pack.md](../Store/Store_Listing_Copy_Pack.md)
   - [src/manifest.json](../../src/manifest.json)
   - [2026-04-24-first-real-store-screenshot-capture-request-archive/README.md](../store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md)
 - included stable string ids for:

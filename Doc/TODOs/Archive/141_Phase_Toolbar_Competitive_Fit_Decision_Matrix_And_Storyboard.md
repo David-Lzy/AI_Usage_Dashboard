@@ -29,5 +29,5 @@ Process rule:
 
 - [Phase_141_Toolbar_Competitive_Fit_Decision_Matrix_And_Storyboard.md](../../testing/Phase_141_Toolbar_Competitive_Fit_Decision_Matrix_And_Storyboard.md)
 - [10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md](../../Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
-- [Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md](../../Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md)
-- [Store_Screenshot_Storyboard.md](../../Store_Screenshot_Storyboard.md)
+- [Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md](../../Archive/benchmarks/Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md)
+- [Store_Screenshot_Storyboard.md](../../Store/Store_Screenshot_Storyboard.md)

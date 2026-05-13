@@ -19,7 +19,7 @@ After `Phase 180`, store screenshot helper routes already used the runtime `en +
 - [localized-copy.ts](../../src/shared/localized-copy.ts) now maps screenshot seed preset ids to localized submission-support captions
 - [StoreScreenshotSeedPage.tsx](../../src/sidepanel/routes/StoreScreenshotSeedPage.tsx) now shows the matching helper-only caption for non-`unlock` presets
 - [i18n.test.ts](../../src/shared/i18n.test.ts) now verifies the `zh_CN` caption mapping
-- [I18n_Store_Runtime_Helper_Copy.md](../I18n_Store_Runtime_Helper_Copy.md) now records the `Phase 181` caption boundary
+- [I18n_Store_Runtime_Helper_Copy.md](../I18n/I18n_Store_Runtime_Helper_Copy.md) now records the `Phase 181` caption boundary
 - [phase181-screenshot-caption-support-localization-review.mjs](../../scripts/phase181-screenshot-caption-support-localization-review.mjs) verifies the runtime and documentation contract
 
 ## Truth Boundary

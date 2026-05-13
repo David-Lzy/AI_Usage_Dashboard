@@ -15,5 +15,5 @@ Summary:
 Key references:
 
 - [Phase_118_Toolbar_Benchmark_And_Popup_Next_Step_Guidance.md](../../testing/Phase_118_Toolbar_Benchmark_And_Popup_Next_Step_Guidance.md)
-- [Toolbar_Product_Benchmark_Matrix_2026-04-23.md](../../Toolbar_Product_Benchmark_Matrix_2026-04-23.md)
+- [Toolbar_Product_Benchmark_Matrix_2026-04-23.md](../../Archive/benchmarks/Toolbar_Product_Benchmark_Matrix_2026-04-23.md)
 - [Direction 06 - Toolbar Product Benchmark And Discoverability](../../Roadmap/06_Direction_Toolbar_Product_Benchmark_And_Discoverability.md)

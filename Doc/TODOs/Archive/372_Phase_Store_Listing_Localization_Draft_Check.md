@@ -24,7 +24,7 @@ Make `npm run i18n:check` guard the 14-locale Chrome Web Store listing draft as 
 
 ## Scope
 
-- Verify `Doc/Store_Listing_Localization_14_Locale_Draft.md` lists the same supported locale tags as `SUPPORTED_APP_LOCALES`.
+- Verify `Doc/Store/Store_Listing_Localization_14_Locale_Draft.md` lists the same supported locale tags as `SUPPORTED_APP_LOCALES`.
 - Verify the draft has one section for each shipped runtime locale, in registry order.
 - Verify each locale section preserves the product title.
 - Verify each locale section has non-empty short description and overview fields.

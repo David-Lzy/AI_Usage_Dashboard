@@ -67,7 +67,7 @@ npm run store:refresh-screenshot-capture-request-packages
   - runtime source: `RDP Chrome unpacked extension`
   - sizes: preferred `1280x800` · fallback `640x400`
   - required screenshots: `5`
-  - selection pack: `Doc/Store_Screenshot_Selection_Pack.md`
+  - selection pack: `Doc/Store/Store_Screenshot_Selection_Pack.md`
   - baseline pack: `Doc/testing/store_screenshot_capture_packs/2026-04-24-toolbar-storyboard-baseline/README.md`
   - automation mode: `manual_capture_required`
   - capture notes: `5/5` reviewed · truth boundaries `3`

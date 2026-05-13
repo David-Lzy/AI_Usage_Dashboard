@@ -2,14 +2,14 @@
 
 Process rule:
 
-- follow [Development_Guardrails.md](./Development_Guardrails.md)
+- follow [Development_Guardrails.md](../Development_Guardrails.md)
 
 Document class: maintained reference
 Freshness model: maintained current reference
 Last updated: 2026-05-13
 Status note: machine draft for localization expansion; requires human sampling before Chrome Web Store submission.
 
-Source pack: `Doc/Store_Listing_Localization_Source_Pack.md`
+Source pack: `Doc/Store/Store_Listing_Localization_Source_Pack.md`
 
 Guardrails:
 - Keep product name `AI Usage Dashboard` unchanged in listing titles.

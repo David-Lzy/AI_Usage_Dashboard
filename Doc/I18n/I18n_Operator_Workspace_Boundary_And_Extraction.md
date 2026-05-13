@@ -4,7 +4,7 @@ Date: 2026-04-25
 
 Process rule:
 
-- follow [Development_Guardrails.md](./Development_Guardrails.md)
+- follow [Development_Guardrails.md](../Development_Guardrails.md)
 
 Document class:
 
@@ -35,7 +35,7 @@ Runtime route:
 
 Source file:
 
-- [InteractionAuditPage.tsx](../src/sidepanel/routes/InteractionAuditPage.tsx)
+- [InteractionAuditPage.tsx](../../src/sidepanel/routes/InteractionAuditPage.tsx)
 
 Current role:
 
@@ -53,7 +53,7 @@ Runtime route:
 
 Source file:
 
-- [ThemeRecoveryReviewPage.tsx](../src/sidepanel/routes/ThemeRecoveryReviewPage.tsx)
+- [ThemeRecoveryReviewPage.tsx](../../src/sidepanel/routes/ThemeRecoveryReviewPage.tsx)
 
 Current role:
 
@@ -68,7 +68,7 @@ Current role:
 
 The repeatable review script is:
 
-- [phase178-operator-workspace-i18n-boundary-review.mjs](../scripts/phase178-operator-workspace-i18n-boundary-review.mjs)
+- [phase178-operator-workspace-i18n-boundary-review.mjs](../../scripts/phase178-operator-workspace-i18n-boundary-review.mjs)
 
 The script verifies that both workspaces still contain the expected operator markers, then writes a temporary extraction snapshot to:
 
@@ -82,10 +82,10 @@ That snapshot is evidence for the scale and categories of copy still outside the
 
 The runtime implementation lives in:
 
-- [localized-copy.ts](../src/shared/localized-copy.ts)
-- [InteractionAuditPage.tsx](../src/sidepanel/routes/InteractionAuditPage.tsx)
-- [ThemeRecoveryReviewPage.tsx](../src/sidepanel/routes/ThemeRecoveryReviewPage.tsx)
-- [App.tsx](../src/sidepanel/App.tsx)
+- [localized-copy.ts](../../src/shared/localized-copy.ts)
+- [InteractionAuditPage.tsx](../../src/sidepanel/routes/InteractionAuditPage.tsx)
+- [ThemeRecoveryReviewPage.tsx](../../src/sidepanel/routes/ThemeRecoveryReviewPage.tsx)
+- [App.tsx](../../src/sidepanel/App.tsx)
 
 The localized scope is intentionally presentation-only:
 

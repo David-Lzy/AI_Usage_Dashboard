@@ -41,7 +41,7 @@ Turn the `Phase 161` screenshot selection/stale-review decision into one current
   - [2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md](./store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md)
 - updated the maintained store screenshot runbook, selection pack, and `Direction 10.3` docs so the next executable step is now fulfilling and archiving that refreshed request rather than regenerating another plan:
   - [Store_Screenshot_Capture_Runbook.md](./Store_Screenshot_Capture_Runbook.md)
-  - [Store_Screenshot_Selection_Pack.md](../Store_Screenshot_Selection_Pack.md)
+  - [Store_Screenshot_Selection_Pack.md](../Store/Store_Screenshot_Selection_Pack.md)
   - [10_3_Store_Asset_Pack_And_Submission_TODOs.md](../Roadmap/10_3_Store_Asset_Pack_And_Submission_TODOs.md)
 - added one repeatable review for the refreshed request package, generator boundary, and fulfilled-request refresh rule:
   - [phase162-store-screenshot-refresh-request-review.mjs](../../scripts/phase162-store-screenshot-refresh-request-review.mjs)

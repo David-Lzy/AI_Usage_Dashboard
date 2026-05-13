@@ -83,8 +83,8 @@ Use this candidate when filling the Chrome Web Store listing:
 
 - upload zip: `release/ai-usage-dashboard-0.1.0-rc.12.zip`
 - screenshots: use the mixed store candidate archive linked above
-- title and description source: [Store_Listing_Copy_Pack.md](../Store_Listing_Copy_Pack.md)
-- localization source: [Store_Listing_Localization_Source_Pack.md](../Store_Listing_Localization_Source_Pack.md)
+- title and description source: [Store_Listing_Copy_Pack.md](../Store/Store_Listing_Copy_Pack.md)
+- localization source: [Store_Listing_Localization_Source_Pack.md](../Store/Store_Listing_Localization_Source_Pack.md)
 - release process reference: [Release_Packaging_Guide.md](../Release_Packaging_Guide.md)
 
 Remaining human-owned work:

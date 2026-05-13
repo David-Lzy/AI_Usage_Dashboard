@@ -20,7 +20,7 @@ Create one repeatable static compatibility review for diagnostic archive, reques
 
 ## What Changed
 
-- `Doc/I18n_Diagnostic_Archive_Export_Compatibility.md` now records the maintained compatibility contract.
+- `Doc/I18n/I18n_Diagnostic_Archive_Export_Compatibility.md` now records the maintained compatibility contract.
 - `scripts/phase197-diagnostic-archive-export-compatibility-review.mjs` now verifies schema and archive/export markers.
 - `package.json` now exposes `phase197:review`.
 - Roadmap docs now mark diagnostic archive/export compatibility review complete and move the next work to sample and store seed diagnostic metadata alignment.

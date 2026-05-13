@@ -124,7 +124,7 @@ async function buildDocRequirements(projectRoot) {
 
   return [
     {
-      relativePath: "Doc/AI_Usage_Dashboard_MVP_Design.md",
+      relativePath: "Doc/Archive/baselines/AI_Usage_Dashboard_MVP_Design.md",
       needsClass: true,
       needsFreshness: true,
       needsStatus: true,
@@ -142,7 +142,7 @@ async function buildDocRequirements(projectRoot) {
       needsStatus: true,
     },
     {
-      relativePath: "Doc/Documentation_Completion_Audit_2026-04-24.md",
+      relativePath: "Doc/Archive/audits/Documentation_Completion_Audit_2026-04-24.md",
       needsClass: true,
       needsFreshness: true,
       needsStatus: true,
@@ -172,7 +172,7 @@ async function buildDocRequirements(projectRoot) {
       needsStatus: true,
     },
     {
-      relativePath: "Doc/Next_Steps_Post_Operator_Closures.md",
+      relativePath: "Doc/Archive/notes/Next_Steps_Post_Operator_Closures.md",
       needsClass: true,
       needsFreshness: false,
       needsStatus: true,
@@ -191,7 +191,7 @@ async function buildDocRequirements(projectRoot) {
       needsStatus: true,
     },
     {
-      relativePath: "Doc/Toolbar_Product_Benchmark_Matrix_2026-04-23.md",
+      relativePath: "Doc/Archive/benchmarks/Toolbar_Product_Benchmark_Matrix_2026-04-23.md",
       needsClass: true,
       needsFreshness: true,
       needsStatus: true,

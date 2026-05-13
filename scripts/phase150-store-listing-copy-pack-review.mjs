@@ -8,7 +8,7 @@ const outputDir = path.join(
   "tmp",
   "phase150-store-listing-copy-pack-review",
 );
-const listingCopyPath = path.join(projectRoot, "Doc/Store_Listing_Copy_Pack.md");
+const listingCopyPath = path.join(projectRoot, "Doc/Store/Store_Listing_Copy_Pack.md");
 const archiveId = "2026-04-24-first-real-store-screenshot-capture-request-archive";
 
 function assert(condition, message) {

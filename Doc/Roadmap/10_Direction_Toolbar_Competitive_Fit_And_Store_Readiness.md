@@ -82,11 +82,11 @@ As of 2026-04-24:
 
 - the popup already has a compact setup story, featured-provider story, and stateful CTA hierarchy
 - one toolbar benchmark matrix already exists:
-  - [Toolbar_Product_Benchmark_Matrix_2026-04-23.md](../Toolbar_Product_Benchmark_Matrix_2026-04-23.md)
+  - [Toolbar_Product_Benchmark_Matrix_2026-04-23.md](../Archive/benchmarks/Toolbar_Product_Benchmark_Matrix_2026-04-23.md)
 - the repo now also ships one explicit competitive-fit decision matrix:
-  - [Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md](../Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md)
+  - [Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md](../Archive/benchmarks/Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md)
 - the repo now also ships one maintained screenshot storyboard pack for truthful store captures:
-  - [Store_Screenshot_Storyboard.md](../Store_Screenshot_Storyboard.md)
+  - [Store_Screenshot_Storyboard.md](../Store/Store_Screenshot_Storyboard.md)
 - the repo now also ships one maintained screenshot-capture runbook plus one generator-backed baseline capture pack:
   - [Store_Screenshot_Capture_Runbook.md](../testing/Store_Screenshot_Capture_Runbook.md)
   - [Store_Screenshot_Capture_Packs.md](../testing/Store_Screenshot_Capture_Packs.md)
@@ -115,7 +115,7 @@ As of 2026-04-24:
   - full-page shell becomes a separate extension surface
   - popup and side panel both get one near-surface light-dark toggle
 - the repo now also ships one maintained implementation contract for that next surface work:
-  - [Surface_Expansion_And_Ambient_Theme_Controls.md](../Surface_Expansion_And_Ambient_Theme_Controls.md)
+  - [Surface_Expansion_And_Ambient_Theme_Controls.md](../Product/Surface_Expansion_And_Ambient_Theme_Controls.md)
 - the repo now also ships two execution-ready child TODO docs for the next Direction 10 work:
   - [10_2_Surface_Expansion_And_Ambient_Theme_Controls_TODOs.md](./10_2_Surface_Expansion_And_Ambient_Theme_Controls_TODOs.md)
   - [10_3_Store_Asset_Pack_And_Submission_TODOs.md](./10_3_Store_Asset_Pack_And_Submission_TODOs.md)
@@ -294,8 +294,8 @@ Next work should be review-feedback or listing-change follow-up after the human 
   https://chrome-stats.com/d/jjlkgogdgdflbifbmojbmleifblpekid
 - `QuotaMeter` listing:
   https://chromewebstore.google.com/detail/quotameter/mbbkamghkbadgggdnjpflfobkfaepbbo
-- [Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md](../Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md)
-- [Store_Screenshot_Storyboard.md](../Store_Screenshot_Storyboard.md)
+- [Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md](../Archive/benchmarks/Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md)
+- [Store_Screenshot_Storyboard.md](../Store/Store_Screenshot_Storyboard.md)
 - [Store_Screenshot_Capture_Runbook.md](../testing/Store_Screenshot_Capture_Runbook.md)
 - [Store_Screenshot_Capture_Packs.md](../testing/Store_Screenshot_Capture_Packs.md)
 - [Store_Screenshot_Capture_Requests.md](../testing/Store_Screenshot_Capture_Requests.md)

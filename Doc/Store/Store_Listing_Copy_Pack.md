@@ -4,7 +4,7 @@ Date: 2026-04-24
 
 Process rule:
 
-- follow [Development_Guardrails.md](./Development_Guardrails.md)
+- follow [Development_Guardrails.md](../Development_Guardrails.md)
 
 Document class:
 
@@ -19,7 +19,7 @@ Status note:
 - this file is the current maintained Chrome Web Store copy pack for the shipped extension scope
 - after `Phase 299`, treat it as the current English upload-candidate copy pack anchored to the RC12 milestone and refreshed screenshot archive
 - `Phase 296` anchors the current mixed screenshot captions to the refreshed RC11 screenshot archive
-- `Phase 299` records the upload-candidate handoff in [2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md)
+- `Phase 299` records the upload-candidate handoff in [2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md](../Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md)
 - refresh it when the popup story, provider truth boundary, screenshot selection pack, or refreshed screenshot archive changes materially
 
 Purpose:
@@ -31,19 +31,19 @@ Purpose:
 ## Source Anchors
 
 - first real screenshot archive:
-  - [2026-04-24-first-real-store-screenshot-capture-request-archive/README.md](./testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md)
+  - [2026-04-24-first-real-store-screenshot-capture-request-archive/README.md](../testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md)
 - current refreshed screenshot archive:
-  - [2026-05-04-rc11-mixed-store-candidate-archive/README.md](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
+  - [2026-05-04-rc11-mixed-store-candidate-archive/README.md](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
 - upload-candidate milestone:
-  - [2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md)
+  - [2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md](../Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md)
 - screenshot storyboard:
   - [Store_Screenshot_Storyboard.md](./Store_Screenshot_Storyboard.md)
 - screenshot selection pack:
   - [Store_Screenshot_Selection_Pack.md](./Store_Screenshot_Selection_Pack.md)
 - toolbar competitive-fit decisions:
-  - [Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md](./Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md)
+  - [Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md](../Archive/benchmarks/Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md)
 - current extension manifest:
-  - [src/manifest.json](../src/manifest.json)
+  - [src/manifest.json](../../src/manifest.json)
 
 ## Store Title
 
@@ -80,7 +80,7 @@ accepted by the user and captured from RDP Chrome.
 ### 1. Toolbar-first quick glance
 
 - screenshot:
-  - [01-toolbar-first-quick-glance.png](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/screenshots/01-toolbar-first-quick-glance.png)
+  - [01-toolbar-first-quick-glance.png](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/screenshots/01-toolbar-first-quick-glance.png)
 - caption:
   - `Check Codex and Cursor status from one Chrome toolbar popup.`
 - claim:
@@ -89,7 +89,7 @@ accepted by the user and captured from RDP Chrome.
 ### 2. Dashboard overview
 
 - screenshot:
-  - [02-setup-guidance.png](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/screenshots/02-setup-guidance.png)
+  - [02-setup-guidance.png](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/screenshots/02-setup-guidance.png)
 - caption:
   - `Use one dashboard to collect AI coding quota and sync health.`
 - claim:
@@ -98,7 +98,7 @@ accepted by the user and captured from RDP Chrome.
 ### 3. Provider usage detail
 
 - screenshot:
-  - [03-honest-contract-or-policy-only.png](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/screenshots/03-honest-contract-or-policy-only.png)
+  - [03-honest-contract-or-policy-only.png](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/screenshots/03-honest-contract-or-policy-only.png)
 - caption:
   - `Review usage windows and reset timing without fake precision.`
 - claim:
@@ -107,7 +107,7 @@ accepted by the user and captured from RDP Chrome.
 ### 4. Source boundary detail
 
 - screenshot:
-  - [04-settings-and-setup-depth.png](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/screenshots/04-settings-and-setup-depth.png)
+  - [04-settings-and-setup-depth.png](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/screenshots/04-settings-and-setup-depth.png)
 - caption:
   - `Keep partial provider contracts visible before you trust a number.`
 - claim:
@@ -116,7 +116,7 @@ accepted by the user and captured from RDP Chrome.
 ### 5. Side-panel provider depth
 
 - screenshot:
-  - [05-provider-or-dashboard-depth.png](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/screenshots/05-provider-or-dashboard-depth.png)
+  - [05-provider-or-dashboard-depth.png](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/screenshots/05-provider-or-dashboard-depth.png)
 - caption:
   - `Open the side panel for compact provider review.`
 - claim:

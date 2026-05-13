@@ -3,7 +3,7 @@
   "createdAt": "2026-04-23T18:20:45.169Z",
   "status": "fulfilled_operator_capture",
   "sourceTemplate": "fixtures/store-screenshot/operator-capture-request-template.fixture.json",
-  "storyboardPath": "Doc/Store_Screenshot_Storyboard.md",
+  "storyboardPath": "Doc/Store/Store_Screenshot_Storyboard.md",
   "selectionPackPath": "",
   "baselinePackReadme": "Doc/testing/store_screenshot_capture_packs/2026-04-24-toolbar-storyboard-baseline/README.md",
   "baselinePackPlan": "Doc/testing/store_screenshot_capture_packs/2026-04-24-toolbar-storyboard-baseline/capture-plan.json",

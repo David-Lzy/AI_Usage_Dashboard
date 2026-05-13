@@ -14,7 +14,7 @@ async function readUtf8(relativePath) {
   return readFile(path.join(projectRoot, relativePath), "utf8");
 }
 
-const selectionPack = await readUtf8("Doc/Store_Screenshot_Selection_Pack.md");
+const selectionPack = await readUtf8("Doc/Store/Store_Screenshot_Selection_Pack.md");
 assert(
   selectionPack.includes("historical baseline") &&
     selectionPack.includes("native toolbar action-bubble popup capture") &&
@@ -28,7 +28,7 @@ assert(
   "Selection pack does not mark all five screenshot slots as recapture-required.",
 );
 
-const storyboard = await readUtf8("Doc/Store_Screenshot_Storyboard.md");
+const storyboard = await readUtf8("Doc/Store/Store_Screenshot_Storyboard.md");
 assert(
   storyboard.includes("native toolbar action bubble") &&
     storyboard.includes("Popup app-window smoke capture") &&
@@ -37,7 +37,7 @@ assert(
   "Storyboard does not reflect the expected native-popup and full-page-shell store capture contract.",
 );
 
-const copyPack = await readUtf8("Doc/Store_Listing_Copy_Pack.md");
+const copyPack = await readUtf8("Doc/Store/Store_Listing_Copy_Pack.md");
 assert(
   copyPack.includes("pre-refresh English claim baseline") &&
     copyPack.includes("Store_Screenshot_Selection_Pack.md") &&
@@ -45,7 +45,7 @@ assert(
   "Store listing copy pack does not reflect the expected pre-refresh baseline status.",
 );
 
-const localizationSourcePack = await readUtf8("Doc/Store_Listing_Localization_Source_Pack.md");
+const localizationSourcePack = await readUtf8("Doc/Store/Store_Listing_Localization_Source_Pack.md");
 assert(
   localizationSourcePack.includes("pre-refresh localization baseline") &&
     localizationSourcePack.includes("Store_Screenshot_Selection_Pack.md") &&

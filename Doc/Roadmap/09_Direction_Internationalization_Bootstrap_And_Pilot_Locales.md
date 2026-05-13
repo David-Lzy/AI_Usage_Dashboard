@@ -145,13 +145,13 @@ As of 2026-05-13:
 - runtime roots now sync `lang` and `dir` attributes from the shared runtime i18n layer
 - preview and QA can now force `?app-dir=rtl` or `?app-dir=ltr` without mutating saved locale settings
 - operator workspaces now have one maintained localization boundary and first extraction review:
-  - [I18n_Operator_Workspace_Boundary_And_Extraction.md](../I18n_Operator_Workspace_Boundary_And_Extraction.md)
+  - [I18n_Operator_Workspace_Boundary_And_Extraction.md](../I18n/I18n_Operator_Workspace_Boundary_And_Extraction.md)
 - the first operator-workspace shell localization slice now routes interaction-audit and theme-recovery shell/navigation/helper copy through `buildOperatorWorkspaceLocalizedCopy` while keeping evidence payloads English
 - store-screenshot helper routes now route visible helper copy and screenshot-adjacent submission-support captions through `buildStoreWorkflowLocalizedCopy` while keeping automation titles, preset ids, route hashes, final screenshot surfaces, and native-toolbar popup capture truth boundaries stable
 - raw provider source-truth localization now has one maintained policy reference:
-  - [I18n_Raw_Provider_Source_Truth_Policy.md](../I18n_Raw_Provider_Source_Truth_Policy.md)
+  - [I18n_Raw_Provider_Source_Truth_Policy.md](../I18n/I18n_Raw_Provider_Source_Truth_Policy.md)
 - adapter diagnostic reason-code planning now has one maintained reference:
-  - [I18n_Adapter_Diagnostic_Reason_Code_Plan.md](../I18n_Adapter_Diagnostic_Reason_Code_Plan.md)
+  - [I18n_Adapter_Diagnostic_Reason_Code_Plan.md](../I18n/I18n_Adapter_Diagnostic_Reason_Code_Plan.md)
 - Cursor source-selection and fallback diagnostics now have typed metadata beside the existing raw adapter strings
 - Codex source-selection and fallback diagnostics now have typed metadata beside the existing raw adapter strings
 - Cursor and Codex credential and host-access diagnostics now have typed metadata beside the existing raw adapter warning strings
@@ -168,12 +168,12 @@ As of 2026-05-13:
 - maintained sample and store seed states now align typed diagnostic metadata where stable existing codes match raw evidence strings, without changing raw strings or provider coverage claims
 - diagnostic fixture and historical evidence alignment now separates mutable maintained fixtures from generated request/handoff packages and frozen historical archives
 - the repo ships one store helper i18n boundary reference:
-  - [I18n_Store_Runtime_Helper_Copy.md](../I18n_Store_Runtime_Helper_Copy.md)
+  - [I18n_Store_Runtime_Helper_Copy.md](../I18n/I18n_Store_Runtime_Helper_Copy.md)
 - the repo ships maintained i18n references:
-  - [I18n_Message_ID_Contract.md](../I18n_Message_ID_Contract.md)
-  - [I18n_String_Inventory_Baseline.md](../I18n_String_Inventory_Baseline.md)
+  - [I18n_Message_ID_Contract.md](../I18n/I18n_Message_ID_Contract.md)
+  - [I18n_String_Inventory_Baseline.md](../I18n/I18n_String_Inventory_Baseline.md)
 - the repo now ships one guarded 14-locale Chrome Web Store listing draft:
-  - [Store_Listing_Localization_14_Locale_Draft.md](../Store_Listing_Localization_14_Locale_Draft.md)
+  - [Store_Listing_Localization_14_Locale_Draft.md](../Store/Store_Listing_Localization_14_Locale_Draft.md)
 - the repo also ships the execution-ready child TODO for the remaining i18n track:
   - [09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md](./09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md)
 

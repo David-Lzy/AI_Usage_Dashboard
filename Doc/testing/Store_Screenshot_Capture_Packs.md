@@ -38,4 +38,4 @@ npm run store:create-screenshot-capture-pack -- --pack-id 2026-04-24-toolbar-sto
 ## Related Docs
 
 - [Store_Screenshot_Capture_Runbook.md](./Store_Screenshot_Capture_Runbook.md)
-- [Store_Screenshot_Storyboard.md](../Store_Screenshot_Storyboard.md)
+- [Store_Screenshot_Storyboard.md](../Store/Store_Screenshot_Storyboard.md)

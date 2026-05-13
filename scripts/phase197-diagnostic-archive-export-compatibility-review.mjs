@@ -229,7 +229,7 @@ async function verifyDocsAndCloseoutMarkers() {
 
   const docChecks = [
     [
-      "Doc/I18n_Diagnostic_Archive_Export_Compatibility.md",
+      "Doc/I18n/I18n_Diagnostic_Archive_Export_Compatibility.md",
       [
         "Diagnostic Archive Export Compatibility",
         "ProviderSnapshot.warningReason",

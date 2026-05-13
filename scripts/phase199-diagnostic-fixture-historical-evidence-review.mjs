@@ -249,7 +249,7 @@ async function reviewDocsAndCloseoutMarkers() {
 
   const docChecks = [
     [
-      "Doc/I18n_Diagnostic_Fixture_And_Historical_Evidence_Alignment.md",
+      "Doc/I18n/I18n_Diagnostic_Fixture_And_Historical_Evidence_Alignment.md",
       [
         "Diagnostic Fixture And Historical Evidence Alignment",
         "Mutable maintained fixtures",

@@ -77,7 +77,7 @@ Expand the current `en + zh-CN` localization pilot into a 14-locale architecture
 - Added complete manifest catalogs under `public/_locales/` for the 14 target locales while preserving `manifest_ext_name`, `manifest_ext_description`, and `manifest_action_default_title`.
 - Added locale override support for extension-window QA and wired `npm run store:capture-rdp-extension-window -- --locale <tag>` through the existing RDP capture helper.
 - Added `npm run i18n:check` for manifest catalog completeness.
-- Added `Doc/Store_Listing_Localization_14_Locale_Draft.md` as a guarded machine-draft Chrome Web Store localization pack.
+- Added `Doc/Store/Store_Listing_Localization_14_Locale_Draft.md` as a guarded machine-draft Chrome Web Store localization pack.
 - Updated targeted unit coverage for supported locale normalization, system resolution, RTL direction, Settings language options, runtime catalog completeness, and the operator runtime locale helper.
 
 ## Verification

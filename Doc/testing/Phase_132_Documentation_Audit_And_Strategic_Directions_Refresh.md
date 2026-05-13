@@ -17,7 +17,7 @@ Refresh the strategic roadmap around three user-requested questions:
 ## What Was Done
 
 - produced one explicit documentation audit report:
-  - [Documentation_Completion_Audit_2026-04-24.md](../Documentation_Completion_Audit_2026-04-24.md)
+  - [Documentation_Completion_Audit_2026-04-24.md](../Archive/audits/Documentation_Completion_Audit_2026-04-24.md)
 - added one new high-priority documentation direction plus child TODOs:
   - [08_Direction_Documentation_Completion_And_Truth_Audit.md](../Roadmap/08_Direction_Documentation_Completion_And_Truth_Audit.md)
   - [08_1_Direction_Documentation_Completion_And_Truth_Audit_TODOs.md](../Roadmap/08_1_Direction_Documentation_Completion_And_Truth_Audit_TODOs.md)

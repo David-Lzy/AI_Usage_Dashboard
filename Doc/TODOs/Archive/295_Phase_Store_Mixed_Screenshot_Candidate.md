@@ -32,10 +32,10 @@ pack.
 - Accepted full-page dashboard, Codex provider detail, Cursor source-boundary,
   and optional Settings-depth images as the rest of the store candidate pack.
 - Updated maintained store docs:
-  - `Doc/Store_Screenshot_Storyboard.md`
-  - `Doc/Store_Screenshot_Selection_Pack.md`
-  - `Doc/Store_Listing_Copy_Pack.md`
-  - `Doc/Store_Listing_Localization_Source_Pack.md`
+  - `Doc/Store/Store_Screenshot_Storyboard.md`
+  - `Doc/Store/Store_Screenshot_Selection_Pack.md`
+  - `Doc/Store/Store_Listing_Copy_Pack.md`
+  - `Doc/Store/Store_Listing_Localization_Source_Pack.md`
   - `Doc/Roadmap/10_3_Store_Asset_Pack_And_Submission_TODOs.md`
 - Updated top-level README, TODOs, roadmap index, and phase index.
 

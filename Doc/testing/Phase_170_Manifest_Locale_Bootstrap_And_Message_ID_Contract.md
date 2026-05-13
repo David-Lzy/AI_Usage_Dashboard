@@ -39,8 +39,8 @@ Start `Direction 09` with one real localization baseline by localizing the manif
   - `public/_locales/en/messages.json`
   - `public/_locales/zh_CN/messages.json`
 - added maintained i18n reference docs:
-  - [I18n_Message_ID_Contract.md](../I18n_Message_ID_Contract.md)
-  - [I18n_String_Inventory_Baseline.md](../I18n_String_Inventory_Baseline.md)
+  - [I18n_Message_ID_Contract.md](../I18n/I18n_Message_ID_Contract.md)
+  - [I18n_String_Inventory_Baseline.md](../I18n/I18n_String_Inventory_Baseline.md)
 - added one repeatable review:
   - [phase170-manifest-locale-bootstrap-review.mjs](../../scripts/phase170-manifest-locale-bootstrap-review.mjs)
 - updated `Direction 09`, `Direction 09.2`, README, the strategic index, and the phase index so the active repo-owned engineering line now moves into the runtime localization layer

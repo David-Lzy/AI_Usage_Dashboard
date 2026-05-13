@@ -20,7 +20,7 @@ const template = JSON.parse(
   await readUtf8("fixtures/store-screenshot/operator-capture-request-template.fixture.json"),
 );
 assert(
-  template.selectionPackPath === "Doc/Store_Screenshot_Selection_Pack.md" &&
+  template.selectionPackPath === "Doc/Store/Store_Screenshot_Selection_Pack.md" &&
     template.baselineArchiveReadme ===
       "Doc/testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md" &&
     template.captureAutomationMode === "manual_capture_required",
@@ -49,7 +49,7 @@ const manifest = JSON.parse(await readUtf8(`${requestDir}/capture-request.json`)
 assert(
   manifest.status === "pending_operator_capture" &&
     manifest.captureAutomationMode === "manual_capture_required" &&
-    manifest.selectionPackPath === "Doc/Store_Screenshot_Selection_Pack.md" &&
+    manifest.selectionPackPath === "Doc/Store/Store_Screenshot_Selection_Pack.md" &&
     manifest.baselineArchiveReadme ===
       "Doc/testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md",
   "Refreshed pending screenshot request manifest does not reflect the expected manual-capture contract.",
@@ -75,7 +75,7 @@ const pendingRecord = requestIndex.records.find((record) => record.requestId ===
 assert(
   pendingRecord &&
     pendingRecord.captureAutomationMode === "manual_capture_required" &&
-    pendingRecord.selectionPackPath === "Doc/Store_Screenshot_Selection_Pack.md",
+    pendingRecord.selectionPackPath === "Doc/Store/Store_Screenshot_Selection_Pack.md",
   "Screenshot request index did not record the refreshed pending request with the expected manual-capture metadata.",
 );
 const fulfilledRecord = requestIndex.records.find(

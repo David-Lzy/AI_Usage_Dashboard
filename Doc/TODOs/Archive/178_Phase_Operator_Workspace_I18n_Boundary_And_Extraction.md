@@ -16,10 +16,10 @@ The runtime pilot now covers the main product surfaces, value formatting, compac
 
 ## What Changed
 
-- [I18n_Operator_Workspace_Boundary_And_Extraction.md](../../I18n_Operator_Workspace_Boundary_And_Extraction.md) now defines the maintained boundary for operator workspace localization
+- [I18n_Operator_Workspace_Boundary_And_Extraction.md](../../I18n/I18n_Operator_Workspace_Boundary_And_Extraction.md) now defines the maintained boundary for operator workspace localization
 - [phase178-operator-workspace-i18n-boundary-review.mjs](../../../scripts/phase178-operator-workspace-i18n-boundary-review.mjs) now verifies the boundary and writes a temporary extraction snapshot
-- [I18n_String_Inventory_Baseline.md](../../I18n_String_Inventory_Baseline.md) now points the next extraction order to the first operator-workspace shell localization pass
-- [I18n_Message_ID_Contract.md](../../I18n_Message_ID_Contract.md) now links operator workspace copy to the boundary reference until the first shell-localization slice lands
+- [I18n_String_Inventory_Baseline.md](../../I18n/I18n_String_Inventory_Baseline.md) now points the next extraction order to the first operator-workspace shell localization pass
+- [I18n_Message_ID_Contract.md](../../I18n/I18n_Message_ID_Contract.md) now links operator workspace copy to the boundary reference until the first shell-localization slice lands
 - Direction 09 roadmap files now mark the boundary review as completed and move the next implementation slice to operator-workspace shell localization
 
 ## Result

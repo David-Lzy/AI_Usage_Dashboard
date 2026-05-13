@@ -4,7 +4,7 @@ Date: 2026-04-24
 
 Process rule:
 
-- follow [Development_Guardrails.md](./Development_Guardrails.md)
+- follow [Development_Guardrails.md](../Development_Guardrails.md)
 
 Document class:
 
@@ -19,7 +19,7 @@ Status note:
 - this file is the current English source pack for future Chrome Web Store listing localization work
 - after `Phase 299`, treat it as the current English source pack anchored to the RC12 upload-candidate milestone and refreshed screenshot archive
 - `Phase 296` anchors the screenshot-caption source strings to the user-approved mixed screenshot archive
-- `Phase 299` records the upload-candidate handoff in [2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md)
+- `Phase 299` records the upload-candidate handoff in [2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md](../Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md)
 - refresh it when the maintained store-listing copy pack, screenshot selection pack, refreshed screenshot archive, or shipped truth boundary changes materially
 
 Purpose:
@@ -33,17 +33,17 @@ Purpose:
 - maintained listing-copy pack:
   - [Store_Listing_Copy_Pack.md](./Store_Listing_Copy_Pack.md)
 - first real screenshot archive:
-  - [2026-04-24-first-real-store-screenshot-capture-request-archive/README.md](./testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md)
+  - [2026-04-24-first-real-store-screenshot-capture-request-archive/README.md](../testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md)
 - current refreshed screenshot archive:
-  - [2026-05-04-rc11-mixed-store-candidate-archive/README.md](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
+  - [2026-05-04-rc11-mixed-store-candidate-archive/README.md](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
 - upload-candidate milestone:
-  - [2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md](./Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md)
+  - [2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md](../Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md)
 - screenshot storyboard:
   - [Store_Screenshot_Storyboard.md](./Store_Screenshot_Storyboard.md)
 - screenshot selection pack:
   - [Store_Screenshot_Selection_Pack.md](./Store_Screenshot_Selection_Pack.md)
 - current extension manifest:
-  - [src/manifest.json](../src/manifest.json)
+  - [src/manifest.json](../../src/manifest.json)
 
 ## English Source Strings
 
@@ -122,7 +122,7 @@ Purpose:
 ## Current Asset Boundary
 
 - the current string ids map truthfully to the maintained listing-copy pack and user-approved mixed screenshot candidate pack
-- the screenshot files now live in [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
+- the screenshot files now live in [2026-05-04-rc11-mixed-store-candidate-archive](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
 - this source pack is submission-prep evidence, not a submitted listing receipt
 
 ## Translation Guardrails

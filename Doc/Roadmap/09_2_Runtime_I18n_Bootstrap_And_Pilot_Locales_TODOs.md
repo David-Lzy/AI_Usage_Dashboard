@@ -208,7 +208,7 @@ Build one maintainable localization architecture that can support manifest strin
 
 - first boundary and extraction review shipped in `Phase 178`
 - maintained reference:
-  - [I18n_Operator_Workspace_Boundary_And_Extraction.md](../I18n_Operator_Workspace_Boundary_And_Extraction.md)
+  - [I18n_Operator_Workspace_Boundary_And_Extraction.md](../I18n/I18n_Operator_Workspace_Boundary_And_Extraction.md)
 - workspaces covered:
   - interaction-audit operator workspace
   - theme-recovery operator workspace
@@ -244,7 +244,7 @@ Build one maintainable localization architecture that can support manifest strin
 - first store-helper localization slice shipped in `Phase 180`
 - screenshot-adjacent submission-support caption slice shipped in `Phase 181`
 - maintained boundary reference:
-  - [I18n_Store_Runtime_Helper_Copy.md](../I18n_Store_Runtime_Helper_Copy.md)
+  - [I18n_Store_Runtime_Helper_Copy.md](../I18n/I18n_Store_Runtime_Helper_Copy.md)
 - implementation scope:
   - `buildStoreWorkflowLocalizedCopy` in [localized-copy.ts](../../src/shared/localized-copy.ts)
   - screenshot seed route labels, headings, preset-applied helper copy, and route-contract copy
@@ -263,7 +263,7 @@ Build one maintainable localization architecture that can support manifest strin
 
 - policy and first field review shipped in `Phase 182`
 - maintained boundary reference:
-  - [I18n_Raw_Provider_Source_Truth_Policy.md](../I18n_Raw_Provider_Source_Truth_Policy.md)
+  - [I18n_Raw_Provider_Source_Truth_Policy.md](../I18n/I18n_Raw_Provider_Source_Truth_Policy.md)
 - defined which remaining English provider detail strings are source-truth evidence and must stay raw
 - defined which surrounding provider explanations are presentation-only wrappers that can safely enter structured runtime copy
 - keep vendor-owned wording and generated evidence payloads out of the translated catalog unless an explicit compatibility review approves them
@@ -289,7 +289,7 @@ Build one maintainable localization architecture that can support manifest strin
 
 - completed in `Phase 184`
 - maintained reference:
-  - [I18n_Adapter_Diagnostic_Reason_Code_Plan.md](../I18n_Adapter_Diagnostic_Reason_Code_Plan.md)
+  - [I18n_Adapter_Diagnostic_Reason_Code_Plan.md](../I18n/I18n_Adapter_Diagnostic_Reason_Code_Plan.md)
 - child TODO:
   - [09_3_Adapter_Diagnostic_Reason_Code_TODOs.md](./09_3_Adapter_Diagnostic_Reason_Code_TODOs.md)
 - design typed reason codes for adapter-generated diagnostics before localizing diagnostic bodies

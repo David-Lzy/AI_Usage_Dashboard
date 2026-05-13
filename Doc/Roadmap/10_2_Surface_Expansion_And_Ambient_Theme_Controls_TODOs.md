@@ -32,7 +32,7 @@ Parent direction:
 
 Related design contract:
 
-- [Surface_Expansion_And_Ambient_Theme_Controls.md](../Surface_Expansion_And_Ambient_Theme_Controls.md)
+- [Surface_Expansion_And_Ambient_Theme_Controls.md](../Product/Surface_Expansion_And_Ambient_Theme_Controls.md)
 
 ## Agreed Surface Contract
 

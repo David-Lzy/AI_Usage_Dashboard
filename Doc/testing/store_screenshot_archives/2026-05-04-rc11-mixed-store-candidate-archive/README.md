@@ -47,7 +47,7 @@ Status note:
 - source notes:
   - `Doc/testing/store_screenshot_candidate_intake/2026-05-04-rc11-mixed-store-candidate/capture-notes.json`
 - storyboard:
-  - `Doc/Store_Screenshot_Storyboard.md`
+  - `Doc/Store/Store_Screenshot_Storyboard.md`
 - baseline pack README:
   - `Doc/testing/store_screenshot_capture_packs/2026-04-24-toolbar-storyboard-baseline/README.md`
 - baseline pack plan:

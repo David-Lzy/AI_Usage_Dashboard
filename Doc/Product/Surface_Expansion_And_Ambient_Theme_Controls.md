@@ -27,7 +27,7 @@ Status note:
 
 Process rule:
 
-- follow [Development_Guardrails.md](./Development_Guardrails.md)
+- follow [Development_Guardrails.md](../Development_Guardrails.md)
 
 ## Purpose
 

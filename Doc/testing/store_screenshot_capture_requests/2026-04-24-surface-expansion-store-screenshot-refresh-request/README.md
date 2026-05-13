@@ -43,9 +43,9 @@ Status note:
 ## Source References
 
 - storyboard:
-  - `Doc/Store_Screenshot_Storyboard.md`
+  - `Doc/Store/Store_Screenshot_Storyboard.md`
 - selection pack:
-  - `Doc/Store_Screenshot_Selection_Pack.md`
+  - `Doc/Store/Store_Screenshot_Selection_Pack.md`
 - baseline archive README:
   - `Doc/testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md`
 - baseline pack README:

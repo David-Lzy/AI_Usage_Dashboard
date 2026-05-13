@@ -112,8 +112,8 @@ for (const requiredPhrase of [
 for (const relativePath of [
   "Doc/Roadmap/00_Strategic_Directions_Index.md",
   "Doc/AI_Usage_Dashboard_TODOs.md",
-  "Doc/I18n_String_Inventory_Baseline.md",
-  "Doc/I18n_Message_ID_Contract.md",
+  "Doc/I18n/I18n_String_Inventory_Baseline.md",
+  "Doc/I18n/I18n_Message_ID_Contract.md",
   "README.md",
 ]) {
   const fileContent = await readProjectFile(relativePath);
@@ -159,7 +159,7 @@ await writeFile(
   path.join(artifactDir, "adapter-diagnostic-reason-code-plan-review.json"),
   `${JSON.stringify(
     {
-      maintainedReference: "Doc/I18n_Adapter_Diagnostic_Reason_Code_Plan.md",
+      maintainedReference: "Doc/I18n/I18n_Adapter_Diagnostic_Reason_Code_Plan.md",
       childTodo: "Doc/Roadmap/09_3_Adapter_Diagnostic_Reason_Code_TODOs.md",
       protectedRawFields: [
         "ProviderSnapshot.warningReason",

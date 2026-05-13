@@ -16,7 +16,7 @@ After `Phase 179`, the remaining repo-owned i18n work moved to store-facing runt
 
 ## What Changed
 
-- [I18n_Store_Runtime_Helper_Copy.md](../../I18n_Store_Runtime_Helper_Copy.md) now records the helper-route localization boundary
+- [I18n_Store_Runtime_Helper_Copy.md](../../I18n/I18n_Store_Runtime_Helper_Copy.md) now records the helper-route localization boundary
 - [localized-copy.ts](../../../src/shared/localized-copy.ts) now includes `buildStoreWorkflowLocalizedCopy`
 - [StoreScreenshotSeedPage.tsx](../../../src/sidepanel/routes/StoreScreenshotSeedPage.tsx) now localizes its visible helper shell while preserving `document.title` automation signals
 - [StoreScreenshotNativePopupProbePage.tsx](../../../src/sidepanel/routes/StoreScreenshotNativePopupProbePage.tsx) now localizes its visible helper shell while preserving the probe title signal

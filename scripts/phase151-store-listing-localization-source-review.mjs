@@ -31,8 +31,8 @@ function normalizeListBlock(block) {
     .map((line) => line.replace(/^- `|`$/g, ""));
 }
 
-const copyPackPath = path.join(repoRoot, "Doc/Store_Listing_Copy_Pack.md");
-const localizationSourcePath = path.join(repoRoot, "Doc/Store_Listing_Localization_Source_Pack.md");
+const copyPackPath = path.join(repoRoot, "Doc/Store/Store_Listing_Copy_Pack.md");
+const localizationSourcePath = path.join(repoRoot, "Doc/Store/Store_Listing_Localization_Source_Pack.md");
 const archiveReadmePath = path.join(
   repoRoot,
   "Doc/testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md",

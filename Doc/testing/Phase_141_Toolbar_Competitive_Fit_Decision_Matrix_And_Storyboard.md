@@ -25,9 +25,9 @@ Start `Direction 10` with one explicit competitive-fit contract and one truthful
 ## What Changed
 
 - added one current competitive-fit decision matrix:
-  - [Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md](../Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md)
+  - [Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md](../Archive/benchmarks/Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md)
 - added one maintained screenshot storyboard pack:
-  - [Store_Screenshot_Storyboard.md](../Store_Screenshot_Storyboard.md)
+  - [Store_Screenshot_Storyboard.md](../Store/Store_Screenshot_Storyboard.md)
 - updated [Direction 10](../Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md) and [Direction 10.1 TODOs](../Roadmap/10_1_Direction_Toolbar_Competitive_Fit_And_Store_Readiness_TODOs.md) to reflect the first shipped slice
 - updated the strategic and phase indexes to point at `Phase 141`
 - added one repeatable review script:

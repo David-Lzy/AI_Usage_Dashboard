@@ -16,7 +16,7 @@ Add a repeatable static review for diagnostic archive and export compatibility b
 
 ## What Changed
 
-- Added `Doc/I18n_Diagnostic_Archive_Export_Compatibility.md`.
+- Added `Doc/I18n/I18n_Diagnostic_Archive_Export_Compatibility.md`.
 - Added `scripts/phase197-diagnostic-archive-export-compatibility-review.mjs`.
 - Added `npm run phase197:review`.
 - The review inventories runtime schema, app-state storage, store screenshot seeds, store screenshot archives, theme-recovery exports, and interaction-audit exports.

@@ -4,7 +4,7 @@ Date: 2026-04-24
 
 Process rule:
 
-- follow [Development_Guardrails.md](./Development_Guardrails.md)
+- follow [Development_Guardrails.md](../Development_Guardrails.md)
 
 Document class:
 
@@ -18,7 +18,7 @@ Status note:
 
 - this file records the current screenshot-slot selection and stale-review decision for Chrome Web Store assets
 - `Phase 161` turned the first archived screenshot set into a historical baseline rather than a final submission pack after the popup/full-page surface-expansion line
-- `Phase 296` archived the user-approved mixed screenshot candidate pack as [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
+- `Phase 296` archived the user-approved mixed screenshot candidate pack as [2026-05-04-rc11-mixed-store-candidate-archive](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
 - `Phase 299` recorded the RC12 Chrome Web Store upload-candidate milestone that uses this screenshot archive
 - refresh this file whenever a new screenshot archive lands, the popup capture method changes, or the storyboard/copy pack changes materially
 
@@ -31,11 +31,11 @@ Purpose:
 ## Source Inputs
 
 - first real screenshot archive:
-  - [2026-04-24-first-real-store-screenshot-capture-request-archive/README.md](./testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md)
+  - [2026-04-24-first-real-store-screenshot-capture-request-archive/README.md](../testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md)
 - current refreshed screenshot archive:
-  - [2026-05-04-rc11-mixed-store-candidate-archive/README.md](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
+  - [2026-05-04-rc11-mixed-store-candidate-archive/README.md](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
 - refreshed runtime QA evidence from `Phase 160`:
-  - [phase160-results.json](../tmp/phase160-rdp-runtime-surface-refresh-review/phase160-results.json)
+  - [phase160-results.json](../../tmp/phase160-rdp-runtime-surface-refresh-review/phase160-results.json)
 - current storyboard:
   - [Store_Screenshot_Storyboard.md](./Store_Screenshot_Storyboard.md)
 - maintained listing copy pack:
@@ -54,7 +54,7 @@ Purpose:
 - archived screenshots retained as truthful historical baseline only:
   - the full `2026-04-24` first real screenshot archive
 - immediate next action:
-  - use the [RC12 upload-candidate milestone](./Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md) for the human Chrome Web Store listing upload
+  - use the [RC12 upload-candidate milestone](../Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md) for the human Chrome Web Store listing upload
 
 ## Current Candidate Decision
 
@@ -75,7 +75,7 @@ rather than blocking the store asset pack.
 
 The selected images were captured from RDP Chrome, saved under the candidate
 intake package, and archived in
-[2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md).
+[2026-05-04-rc11-mixed-store-candidate-archive](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md).
 
 ## Slot Decisions
 
@@ -152,7 +152,7 @@ intake package, and archived in
 ## Current Boundary
 
 - the first archived screenshot set remains useful as truthful historical evidence
-- [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) is the current refreshed screenshot evidence package
+- [2026-05-04-rc11-mixed-store-candidate-archive](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) is the current refreshed screenshot evidence package
 - the maintained listing-copy pack and localization source pack should point at the refreshed archive for current submission-prep work
 
 ## Related Docs
@@ -160,4 +160,4 @@ intake package, and archived in
 - [Store_Screenshot_Storyboard.md](./Store_Screenshot_Storyboard.md)
 - [Store_Listing_Copy_Pack.md](./Store_Listing_Copy_Pack.md)
 - [Store_Listing_Localization_Source_Pack.md](./Store_Listing_Localization_Source_Pack.md)
-- [Direction 10.3 - Store Asset Pack And Submission TODOs](./Roadmap/10_3_Store_Asset_Pack_And_Submission_TODOs.md)
+- [Direction 10.3 - Store Asset Pack And Submission TODOs](../Roadmap/10_3_Store_Asset_Pack_And_Submission_TODOs.md)

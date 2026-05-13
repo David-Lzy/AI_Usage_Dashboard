@@ -146,7 +146,7 @@ Recommended rollout:
 
 ## References
 
-- [Documentation_Completion_Audit_2026-04-24.md](../Documentation_Completion_Audit_2026-04-24.md)
+- [Documentation_Completion_Audit_2026-04-24.md](../Archive/audits/Documentation_Completion_Audit_2026-04-24.md)
 - [00_Phase_Index.md](../TODOs/00_Phase_Index.md)
 - [00_Strategic_Directions_Index.md](./00_Strategic_Directions_Index.md)
 - [Interaction_Audit_Review_Requests.md](../testing/Interaction_Audit_Review_Requests.md)

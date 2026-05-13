@@ -16,10 +16,10 @@ After `Phase 181`, the remaining `Direction 09` work moved from store screenshot
 
 ## What Changed
 
-- [I18n_Raw_Provider_Source_Truth_Policy.md](../../I18n_Raw_Provider_Source_Truth_Policy.md) now defines protected raw fields and safe presentation-only candidates
+- [I18n_Raw_Provider_Source_Truth_Policy.md](../../I18n/I18n_Raw_Provider_Source_Truth_Policy.md) now defines protected raw fields and safe presentation-only candidates
 - [09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md](../../Roadmap/09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md) now marks raw provider source-truth policy complete and queues provider-source display wrapper localization next
-- [I18n_String_Inventory_Baseline.md](../../I18n_String_Inventory_Baseline.md) now references the new policy boundary
-- [I18n_Message_ID_Contract.md](../../I18n_Message_ID_Contract.md) now records that raw provider source-truth copy is governed by the new maintained reference
+- [I18n_String_Inventory_Baseline.md](../../I18n/I18n_String_Inventory_Baseline.md) now references the new policy boundary
+- [I18n_Message_ID_Contract.md](../../I18n/I18n_Message_ID_Contract.md) now records that raw provider source-truth copy is governed by the new maintained reference
 - [phase182-provider-source-truth-policy-review.mjs](../../../scripts/phase182-provider-source-truth-policy-review.mjs) verifies the policy and roadmap references
 
 ## Protected Raw Fields

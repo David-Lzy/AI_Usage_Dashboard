@@ -77,8 +77,8 @@ for (const requiredMarker of [
 }
 
 for (const relativePath of [
-  "Doc/I18n_Adapter_Diagnostic_Reason_Code_Plan.md",
-  "Doc/I18n_Raw_Provider_Source_Truth_Policy.md",
+  "Doc/I18n/I18n_Adapter_Diagnostic_Reason_Code_Plan.md",
+  "Doc/I18n/I18n_Raw_Provider_Source_Truth_Policy.md",
   "Doc/Roadmap/09_3_Adapter_Diagnostic_Reason_Code_TODOs.md",
   "Doc/Roadmap/09_2_Runtime_I18n_Bootstrap_And_Pilot_Locales_TODOs.md",
   "Doc/Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md",

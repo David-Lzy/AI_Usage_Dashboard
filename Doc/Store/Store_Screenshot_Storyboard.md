@@ -4,7 +4,7 @@ Date: 2026-04-24
 
 Process rule:
 
-- follow [Development_Guardrails.md](./Development_Guardrails.md)
+- follow [Development_Guardrails.md](../Development_Guardrails.md)
 
 Document class:
 
@@ -52,7 +52,7 @@ The current user-approved candidate pack is:
 
 The screenshots were reviewed in the chat thread on `2026-05-04`, then captured
 from RDP Chrome and archived as
-[2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md).
+[2026-05-04-rc11-mixed-store-candidate-archive](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md).
 
 ## Screenshot Storyboard Order
 
@@ -131,8 +131,8 @@ from RDP Chrome and archived as
 ## Current Baseline Note
 
 - the first archived screenshot set remains one truthful historical evidence package
-- after `Phase 296`, the current recommended screenshot evidence package is [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
-- after `Phase 299`, the [RC12 upload-candidate milestone](./Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md) is the handoff for human Chrome Web Store listing upload
+- after `Phase 296`, the current recommended screenshot evidence package is [2026-05-04-rc11-mixed-store-candidate-archive](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
+- after `Phase 299`, the [RC12 upload-candidate milestone](../Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md) is the handoff for human Chrome Web Store listing upload
 - the next store-asset slice should be review-feedback or listing-change follow-up, not another screenshot archive, unless the UI changes again
 
 ## Do Not Capture
@@ -146,6 +146,6 @@ from RDP Chrome and archived as
 ## Related Docs
 
 - [Store_Screenshot_Selection_Pack.md](./Store_Screenshot_Selection_Pack.md)
-- [Direction 10 - Toolbar Competitive Fit And Store Readiness](./Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
-- [Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md](./Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md)
-- [Toolbar_Product_Benchmark_Matrix_2026-04-23.md](./Toolbar_Product_Benchmark_Matrix_2026-04-23.md)
+- [Direction 10 - Toolbar Competitive Fit And Store Readiness](../Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
+- [Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md](../Archive/benchmarks/Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md)
+- [Toolbar_Product_Benchmark_Matrix_2026-04-23.md](../Archive/benchmarks/Toolbar_Product_Benchmark_Matrix_2026-04-23.md)

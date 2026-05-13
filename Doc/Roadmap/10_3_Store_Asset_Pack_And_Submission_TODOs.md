@@ -51,7 +51,7 @@ Turn the current storyboard, screenshot workflow, real screenshot archive, icon 
 - include the selected popup size/corner/shadow preset in the final native-toolbar popup capture notes
 - keep one truthful mapping from each chosen screenshot to one concrete runtime state
 - `Phase 161` completed this first store-asset slice by shipping:
-  - one maintained [Store_Screenshot_Selection_Pack.md](../Store_Screenshot_Selection_Pack.md)
+  - one maintained [Store_Screenshot_Selection_Pack.md](../Store/Store_Screenshot_Selection_Pack.md)
   - one explicit stale-review pass across the first screenshot archive, current storyboard, current listing-copy pack, and current localization source pack
   - one rule that treats popup app-window smoke capture as QA evidence only, not as the final submission replacement for the native toolbar bubble
 - current boundary after `Phase 299`:

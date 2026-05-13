@@ -4,7 +4,7 @@ Date: 2026-04-20
 
 Process rule:
 
-- follow [Development_Guardrails.md](./Development_Guardrails.md)
+- follow [Development_Guardrails.md](../../Development_Guardrails.md)
 
 Document class:
 
@@ -17,7 +17,7 @@ Freshness model:
 Status note:
 
 - this file records the original MVP framing from `2026-04-20`
-- current shipped product truth should be taken from [README.md](../README.md), current roadmap directions, and the latest numbered phase closeouts rather than from this baseline alone
+- current shipped product truth should be taken from [README.md](../../../README.md), current roadmap directions, and the latest numbered phase closeouts rather than from this baseline alone
 
 ## 1. Goal
 

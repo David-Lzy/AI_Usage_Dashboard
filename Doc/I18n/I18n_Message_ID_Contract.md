@@ -4,7 +4,7 @@ Date: 2026-05-13
 
 Process rule:
 
-- follow [Development_Guardrails.md](./Development_Guardrails.md)
+- follow [Development_Guardrails.md](../Development_Guardrails.md)
 
 Document class:
 
@@ -84,7 +84,7 @@ Runtime localization now exists for one broader but still partial manifest plus 
 
 `Phase 174` and `Phase 175` deliberately did not explode the runtime id list with one message id per popup sentence, provider-detail field label, or settings helper paragraph.
 
-Instead, these localized surfaces now ship through shared structured builders in [src/shared/localized-copy.ts](../src/shared/localized-copy.ts):
+Instead, these localized surfaces now ship through shared structured builders in [src/shared/localized-copy.ts](../../src/shared/localized-copy.ts):
 
 - popup explanatory copy:
   - snapshot-status copy
@@ -244,4 +244,4 @@ This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still maki
   - `id`
 - Chrome `_locales` directory names use Chrome format such as `zh_CN`, `zh_TW`, `es_419`, and `pt_BR`; runtime locale tags use BCP-style tags such as `zh-CN`, `zh-TW`, `es-419`, and `pt-BR`
 - `npm run i18n:check` is the drift gate for runtime locale tags, metadata `chromeLocale` values, manifest catalog ids, the RDP capture locale helper, and the store listing localization draft structure
-- translation review and RDP visual QA remain governed by [Direction 09](./Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
+- translation review and RDP visual QA remain governed by [Direction 09](../Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)

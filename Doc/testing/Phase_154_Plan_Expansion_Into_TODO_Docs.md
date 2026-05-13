@@ -35,7 +35,7 @@ Turn the newly agreed next-work plan into explicit roadmap TODO markdowns so lat
 - created one new Direction 04 execution-ready child TODO for interaction-audit real-operator closure:
   - [04_2_Interaction_Audit_Real_Operator_Closure_TODOs.md](../Roadmap/04_2_Interaction_Audit_Real_Operator_Closure_TODOs.md)
 - created one maintained reference for the agreed next surface contract:
-  - [Surface_Expansion_And_Ambient_Theme_Controls.md](../Surface_Expansion_And_Ambient_Theme_Controls.md)
+  - [Surface_Expansion_And_Ambient_Theme_Controls.md](../Product/Surface_Expansion_And_Ambient_Theme_Controls.md)
 - updated the parent roadmap directions, the strategic index, the top-level backlog, and the phase index so those new TODO docs now form the official next-step map
 - reordered the documented priority so the immediate next executable work is now the new Direction 10 surface-expansion plus ambient-theme line, followed by Direction 10 store asset follow-through and then Direction 09 i18n bootstrap
 - clarified that Direction 05 and Direction 04 now mainly need real-operator evidence closure, not more lifecycle tooling

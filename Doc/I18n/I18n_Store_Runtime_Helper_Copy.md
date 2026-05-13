@@ -4,7 +4,7 @@ Date: 2026-04-25
 
 Process rule:
 
-- follow [Development_Guardrails.md](./Development_Guardrails.md)
+- follow [Development_Guardrails.md](../Development_Guardrails.md)
 
 Document class:
 
@@ -46,9 +46,9 @@ These routes are internal helpers. They can appear during store screenshot captu
 
 Implementation lives in:
 
-- [localized-copy.ts](../src/shared/localized-copy.ts)
-- [StoreScreenshotSeedPage.tsx](../src/sidepanel/routes/StoreScreenshotSeedPage.tsx)
-- [StoreScreenshotNativePopupProbePage.tsx](../src/sidepanel/routes/StoreScreenshotNativePopupProbePage.tsx)
+- [localized-copy.ts](../../src/shared/localized-copy.ts)
+- [StoreScreenshotSeedPage.tsx](../../src/sidepanel/routes/StoreScreenshotSeedPage.tsx)
+- [StoreScreenshotNativePopupProbePage.tsx](../../src/sidepanel/routes/StoreScreenshotNativePopupProbePage.tsx)
 
 ## Preserved Automation Boundary
 

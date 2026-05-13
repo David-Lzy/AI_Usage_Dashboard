@@ -4,7 +4,7 @@ Date: 2026-04-25
 
 Process rule:
 
-- follow [Development_Guardrails.md](./Development_Guardrails.md)
+- follow [Development_Guardrails.md](../Development_Guardrails.md)
 
 Document class:
 
@@ -288,7 +288,7 @@ Before any runtime implementation lands:
 
 `Phase 197` added diagnostic archive and export compatibility review:
 
-- `Doc/I18n_Diagnostic_Archive_Export_Compatibility.md` records the maintained archive/export boundary
+- `Doc/I18n/I18n_Diagnostic_Archive_Export_Compatibility.md` records the maintained archive/export boundary
 - `npm run phase197:review` verifies stable raw diagnostic fields, optional typed diagnostic fields, and `ProviderDiagnostic.rawMessage`
 - the review inventories app-state storage, store screenshot seed/archives, theme-recovery exports, and interaction-audit exports
 - localized diagnostic presentation remains separate from archive and export schemas
@@ -304,7 +304,7 @@ Before any runtime implementation lands:
 
 `Phase 199` added diagnostic fixture and historical evidence alignment review:
 
-- `Doc/I18n_Diagnostic_Fixture_And_Historical_Evidence_Alignment.md` records which fixture and evidence scopes are mutable versus frozen
+- `Doc/I18n/I18n_Diagnostic_Fixture_And_Historical_Evidence_Alignment.md` records which fixture and evidence scopes are mutable versus frozen
 - `npm run phase199:review` verifies maintained fixture paths, runtime seed paths, generated request/handoff package indexes, and frozen archive indexes
 - generated request/handoff packages and frozen archives are checked for accidental typed diagnostic payload fields
 - mutable maintained fixtures can be aligned later only where stable codes already match raw evidence

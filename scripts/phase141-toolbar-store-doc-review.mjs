@@ -15,9 +15,9 @@ const strategicIndex = await read("Doc/Roadmap/00_Strategic_Directions_Index.md"
 const direction10 = await read(
   "Doc/Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md",
 );
-const storyboard = await read("Doc/Store_Screenshot_Storyboard.md");
+const storyboard = await read("Doc/Store/Store_Screenshot_Storyboard.md");
 const decisionMatrix = await read(
-  "Doc/Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md",
+  "Doc/Archive/benchmarks/Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md",
 );
 const phaseIndex = await read("Doc/TODOs/00_Phase_Index.md");
 

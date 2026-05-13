@@ -22,9 +22,9 @@ It updates:
 - one project-level freshness vocabulary in [Documentation_Taxonomy.md](../Documentation_Taxonomy.md)
 - one guardrail rule for freshness labeling in [Development_Guardrails.md](../Development_Guardrails.md)
 - six ambiguity-prone docs that previously looked similar even though they should age differently:
-  - [Toolbar_Product_Benchmark_Matrix_2026-04-23.md](../Toolbar_Product_Benchmark_Matrix_2026-04-23.md)
-  - [Documentation_Completion_Audit_2026-04-24.md](../Documentation_Completion_Audit_2026-04-24.md)
-  - [AI_Usage_Dashboard_MVP_Design.md](../AI_Usage_Dashboard_MVP_Design.md)
+  - [Toolbar_Product_Benchmark_Matrix_2026-04-23.md](../Archive/benchmarks/Toolbar_Product_Benchmark_Matrix_2026-04-23.md)
+  - [Documentation_Completion_Audit_2026-04-24.md](../Archive/audits/Documentation_Completion_Audit_2026-04-24.md)
+  - [AI_Usage_Dashboard_MVP_Design.md](../Archive/baselines/AI_Usage_Dashboard_MVP_Design.md)
   - [Interaction_Audit_Operator_Handoff_Runbook.md](./Interaction_Audit_Operator_Handoff_Runbook.md)
   - [Theme_Recovery_Operator_Runbook.md](./Theme_Recovery_Operator_Runbook.md)
   - [Manual_Test_Checklist.md](./Manual_Test_Checklist.md)

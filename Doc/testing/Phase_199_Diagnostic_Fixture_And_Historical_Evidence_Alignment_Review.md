@@ -16,7 +16,7 @@ Record and verify the boundary between mutable maintained diagnostic fixtures, g
 
 ## What Changed
 
-- Added `Doc/I18n_Diagnostic_Fixture_And_Historical_Evidence_Alignment.md`.
+- Added `Doc/I18n/I18n_Diagnostic_Fixture_And_Historical_Evidence_Alignment.md`.
 - Added `scripts/phase199-diagnostic-fixture-historical-evidence-review.mjs`.
 - Added `npm run phase199:review`.
 - Updated Direction 09.3 and related i18n references so the next slice is adapter diagnostic raw fallback regression review.

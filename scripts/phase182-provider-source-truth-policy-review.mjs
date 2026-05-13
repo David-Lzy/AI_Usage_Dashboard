@@ -109,7 +109,7 @@ await writeFile(
   path.join(artifactDir, "provider-source-truth-policy-review.json"),
   `${JSON.stringify(
     {
-      policyReference: "Doc/I18n_Raw_Provider_Source_Truth_Policy.md",
+      policyReference: "Doc/I18n/I18n_Raw_Provider_Source_Truth_Policy.md",
       protectedRawFields: [
         "ProviderSnapshot.warningReason",
         "ProviderSnapshot.sourceSelectionReason",

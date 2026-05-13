@@ -4,7 +4,7 @@ Date: 2026-05-13
 
 Process rule:
 
-- follow [Development_Guardrails.md](./Development_Guardrails.md)
+- follow [Development_Guardrails.md](../Development_Guardrails.md)
 
 Document class:
 
@@ -115,7 +115,7 @@ These now ship through:
 - `src/shared/i18n.ts`
 - `src/shared/runtime-message-catalogs.ts`
 - `src/shared/localized-copy.ts`
-- `Doc/Store_Listing_Localization_14_Locale_Draft.md`
+- `Doc/Store/Store_Listing_Localization_14_Locale_Draft.md`
 
 Phase 367 note:
 

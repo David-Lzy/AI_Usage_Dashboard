@@ -16,7 +16,7 @@ Plan the typed diagnostic reason-code layer that must exist before adapter-gener
 
 ## What Changed
 
-- [I18n_Adapter_Diagnostic_Reason_Code_Plan.md](../../I18n_Adapter_Diagnostic_Reason_Code_Plan.md) now defines the maintained reason-code contract.
+- [I18n_Adapter_Diagnostic_Reason_Code_Plan.md](../../I18n/I18n_Adapter_Diagnostic_Reason_Code_Plan.md) now defines the maintained reason-code contract.
 - [09_3_Adapter_Diagnostic_Reason_Code_TODOs.md](../../Roadmap/09_3_Adapter_Diagnostic_Reason_Code_TODOs.md) now breaks the work into executable future slices.
 - Direction 09 docs now mark adapter diagnostic typed reason-code planning as complete and queue a type-only additive runtime model next.
 - raw `warningReason`, `sourceSelectionReason`, and `sourceFallbackReason` fields remain protected source-truth values.

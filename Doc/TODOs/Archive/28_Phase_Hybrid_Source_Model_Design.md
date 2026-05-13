@@ -57,7 +57,7 @@ Completion summary:
 - added static source-blueprint types in [src/providers/types.ts](/nfs/server1/disk1/Project/personal_project/AI_Usage_Dashboard/src/providers/types.ts:1) so later phases have a shared contract for source priority, connection mode, and field fidelity
 - added provider-by-provider hybrid-source blueprints in [src/shared/constants.ts](/nfs/server1/disk1/Project/personal_project/AI_Usage_Dashboard/src/shared/constants.ts:1) covering shipped and planned paths for Codex, Cursor, Claude, Gemini, and JetBrains
 - updated the main design and product docs so the personal-user expansion track is explicit in:
-  - [AI_Usage_Dashboard_MVP_Design.md](/nfs/server1/disk1/Project/personal_project/AI_Usage_Dashboard/Doc/AI_Usage_Dashboard_MVP_Design.md:1)
+  - [AI_Usage_Dashboard_MVP_Design.md](/nfs/server1/disk1/Project/personal_project/AI_Usage_Dashboard/Doc/Archive/baselines/AI_Usage_Dashboard_MVP_Design.md:1)
   - [AI_Usage_Dashboard_TODOs.md](/nfs/server1/disk1/Project/personal_project/AI_Usage_Dashboard/Doc/AI_Usage_Dashboard_TODOs.md:1)
   - [README.md](/nfs/server1/disk1/Project/personal_project/AI_Usage_Dashboard/README.md:1)
 

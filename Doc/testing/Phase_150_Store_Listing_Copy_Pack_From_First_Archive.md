@@ -25,7 +25,7 @@ Turn the first real archived store screenshot set into one maintained Chrome Web
 ## What Changed
 
 - added one maintained listing-copy source pack:
-  - [Store_Listing_Copy_Pack.md](../Store_Listing_Copy_Pack.md)
+  - [Store_Listing_Copy_Pack.md](../Store/Store_Listing_Copy_Pack.md)
 - anchored that pack to:
   - the first real archived screenshot set
   - the current screenshot storyboard
