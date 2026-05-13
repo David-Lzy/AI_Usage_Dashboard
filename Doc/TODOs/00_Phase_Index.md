@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [379_Phase_French_Runtime_Shell_Pilot.md](./Archive/379_Phase_French_Runtime_Shell_Pilot.md)
+- latest completed slice: [380_Phase_German_Runtime_Shell_Pilot.md](./Archive/380_Phase_German_Runtime_Shell_Pilot.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -769,6 +769,7 @@ Completed phases should be moved to:
 - the 2026-05-13 `Phase 377` closeout added the first Latin American Spanish runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while preserving deeper structured copy and raw evidence fallback boundaries
 - the 2026-05-13 `Phase 378` closeout added the first Brazilian Portuguese runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while preserving deeper structured copy and raw evidence fallback boundaries
 - the 2026-05-13 `Phase 379` closeout added the first French runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while preserving deeper structured copy and raw evidence fallback boundaries
+- the 2026-05-13 `Phase 380` closeout added the first German runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while preserving deeper structured copy and raw evidence fallback boundaries
 
 ## Delivery Standard For Each Phase
 

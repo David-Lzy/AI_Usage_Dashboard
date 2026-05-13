@@ -194,6 +194,17 @@ describe("runtime i18n", () => {
     expect(i18n.t("settings.preferences.locale.system")).toBe("Suivre le système");
   });
 
+  it("returns translated runtime strings for the first de shell slice", () => {
+    const i18n = createRuntimeI18n("de");
+
+    expect(i18n.t("dashboard.hero.title")).toBe(
+      "Ein Dashboard für KI-Coding-Kontingente",
+    );
+    expect(i18n.t("popup.header.title")).toBe("Schnellüberblick");
+    expect(i18n.t("settings.topbar.title")).toBe("Einstellungen");
+    expect(i18n.t("settings.preferences.locale.system")).toBe("System folgen");
+  });
+
   it("localizes quick theme toggle copy from the next explicit mode", () => {
     const i18n = createRuntimeI18n("zh-CN");
 
