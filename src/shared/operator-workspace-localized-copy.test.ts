@@ -28,6 +28,9 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
         "audit.json",
       ),
     ).toBe("Downloaded the current signoff JSON as audit.json.");
+    expect(copy.interactionAudit.requestScopeCommands.preflightNext).toBe(
+      "Preflight next",
+    );
     expect(copy.themeRecovery.hero.title).toBe(
       "One place to stage native-prompt and real-session recovery checks",
     );
@@ -45,6 +48,9 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
     expect(copy.interactionAudit.surfaceCard.openStandalone).toBe("单独打开");
     expect(copy.interactionAudit.workspaceControls.workspaceState).toBe(
       "Workspace 状态",
+    );
+    expect(copy.interactionAudit.requestScopeCommands.archiveNext).toBe(
+      "下一步归档",
     );
     expect(copy.themeRecovery.currentTruth.reviewStage).toBe("复查阶段");
   });
@@ -135,6 +141,9 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
           "audit.md",
         ),
       ).toContain("audit.md");
+      expect(
+        copy.interactionAudit.requestScopeCommands.completeNext.length,
+      ).toBeGreaterThan(0);
       expect(copy.themeRecovery.workflow.steps).toHaveLength(5);
     }
   });

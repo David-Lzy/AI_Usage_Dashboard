@@ -19,7 +19,7 @@ Status note:
 - created in `Phase 409`
 - defines which remaining interaction-audit visible labels can be localized without changing signoff exports, handoff drafts, request identities, automation hooks, or raw evidence
 - use this document before moving any remaining interaction-audit component strings into `buildOperatorWorkspaceLocalizedCopy`
-- `Phase 411` completed the Review Queue display-copy slice; `Phase 412` completed the Surface Card display-copy slice; `Phase 413` completed the Workspace Controls display-copy slice; Request Scope command headings are the next child slice
+- `Phase 411` completed the Review Queue display-copy slice; `Phase 412` completed the Surface Card display-copy slice; `Phase 413` completed the Workspace Controls display-copy slice; `Phase 414` completed the Request Scope command-heading slice; Handoff Summary is the next child slice
 
 ## Purpose
 
@@ -58,7 +58,6 @@ Already localized through `Phase 404`:
 
 Not localized in `Phase 409`:
 
-- request-scope command headings
 - handoff summary labels and helper copy
 - frame readiness and preset result messages
 
@@ -73,6 +72,10 @@ Localized after `Phase 412`:
 Localized after `Phase 413`:
 
 - Workspace Controls labels, import UI labels, workspace-state label, current-draft disclosure, and signoff-workspace feedback messages
+
+Localized after `Phase 414`:
+
+- Request Scope command headings for preflight, completion, and archive commands
 
 ## Safe Presentation-Only Labels
 
@@ -297,7 +300,9 @@ The first safe child phase started with Review Queue display labels because:
 
 `Phase 413` moved Workspace Controls display labels and signoff-workspace feedback into localized copy while preserving pasted JSON, exported JSON field names, generated Markdown drafts, downloaded filenames, MIME types, and parsed import error semantics.
 
-The next safe child phase is `Phase 414`, covering Request Scope command headings only. It must still preserve command text, request ids, request revisions, archive path examples, and input filename examples.
+`Phase 414` moved Request Scope command headings into localized copy while preserving command text, request ids, request revisions, archive path examples, and input filename examples.
+
+The next safe child phase is `Phase 415`, covering Handoff Summary presentation labels and safe handoff feedback only. It must still preserve handoff draft content, generated bundle command text, operator notes, surface ids, and manual-check evidence text.
 
 Required tests for completed and later interaction-audit display-copy slices:
 

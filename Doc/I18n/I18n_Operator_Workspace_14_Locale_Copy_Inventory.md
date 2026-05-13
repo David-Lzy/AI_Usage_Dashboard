@@ -23,6 +23,7 @@ Status note:
 - `Phase 411` completed Review Queue display labels with 14-locale copy while preserving queue status enums and export payloads
 - `Phase 412` completed Surface Card chrome labels with 14-locale copy while preserving surface definitions, manual checks, frame identity, and export payloads
 - `Phase 413` completed Workspace Controls display labels and signoff-workspace feedback with 14-locale copy while preserving pasted JSON, parsed import errors, generated exports, filenames, MIME types, and request identity formatting
+- `Phase 414` completed Request Scope command headings with 14-locale copy while preserving generated command text, request ids, request revisions, archive path examples, input filename examples, and export payloads
 
 ## Purpose
 
@@ -145,7 +146,7 @@ Preserve:
 - export schema field names
 - parsed error semantics
 
-### Interaction Audit Request Scope Commands
+### Interaction Audit Request Scope Commands - Completed In Phase 414
 
 Source:
 
@@ -240,4 +241,4 @@ If `Phase 404` cannot move all consumer-only labels without touching export/evid
 
 `Phase 409` completed that split as documentation-only planning.
 
-`Phase 411` completed the Review Queue slice. `Phase 412` completed the Surface Card slice. `Phase 413` completed the Workspace Controls slice. The next child phase is [414_Phase_Interaction_Audit_Request_Scope_Command_Headings_Display_Copy.md](../TODOs/414_Phase_Interaction_Audit_Request_Scope_Command_Headings_Display_Copy.md), scoped to Request Scope command headings only.
+`Phase 411` completed the Review Queue slice. `Phase 412` completed the Surface Card slice. `Phase 413` completed the Workspace Controls slice. `Phase 414` completed the Request Scope command-heading slice. The next child phase is [415_Phase_Interaction_Audit_Handoff_Summary_Display_Copy.md](../TODOs/415_Phase_Interaction_Audit_Handoff_Summary_Display_Copy.md), scoped to Handoff Summary presentation labels and safe handoff feedback only.

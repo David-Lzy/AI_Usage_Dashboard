@@ -1,0 +1,65 @@
+# Phase 415 - Interaction Audit Handoff Summary Display Copy
+
+Date: 2026-05-14
+
+Process rule:
+
+- follow [Development_Guardrails.md](../Development_Guardrails.md)
+
+Document class:
+
+- maintained reference
+
+Freshness model:
+
+- maintained current reference
+
+Status note:
+
+- active after `Phase 414`
+- next child implementation phase from [I18n_Interaction_Audit_Presentation_Export_Split.md](../I18n/I18n_Interaction_Audit_Presentation_Export_Split.md)
+
+## Goal
+
+Move interaction-audit Handoff Summary presentation labels and safe handoff feedback messages into 14-locale presentation copy without changing generated handoff draft content, generated bundle command text, operator notes, surface ids, or manual-check evidence text.
+
+## Scope
+
+- Add a focused `interactionAudit.handoffSummary` copy bucket under `buildOperatorWorkspaceLocalizedCopy`.
+- Move stable display labels and patterns from `InteractionAuditHandoffSummarySection.tsx`:
+  - section label and explanatory text
+  - copy/download action labels
+  - summary labels and ready/not-ready display labels
+  - ready/outstanding status labels and descriptions
+  - group headings
+  - empty-state `None`
+  - pending-check count patterns
+  - preview and workflow disclosure labels
+  - operator workflow instruction bullets
+- Move route-owned handoff copy/download feedback messages from `InteractionAuditPage.tsx` if they are presentation-only.
+
+## Preserved Boundaries
+
+- Do not translate or rewrite `handoffDraft`.
+- Do not translate operator notes, surface ids, surface titles, pending manual-check evidence text, generated bundle command text, downloaded filenames, MIME types, or signoff export schemas.
+- Do not change handoff summary counts, ready-state logic, copy/download behavior, or archive/request semantics.
+
+## Acceptance
+
+- Handoff Summary visible labels and safe feedback messages have explicit coverage for all 14 runtime locales.
+- Handoff draft Markdown remains unchanged.
+- Generated bundle command text remains byte-for-byte unchanged.
+- Manual-check evidence text remains raw.
+
+## Planned Verification
+
+- `npm run i18n:check`
+- focused operator-workspace localized-copy tests
+- focused interaction-audit signoff/export tests
+- `npm run typecheck`
+- `npm run docs:check`
+- `git diff --check`
+
+## Follow-Up
+
+- Later phases may decide whether frame readiness and preset result messages need typed result codes before localization; they should remain raw until that split exists.

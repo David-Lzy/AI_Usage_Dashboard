@@ -234,6 +234,12 @@ type InteractionAuditWorkspaceControlsCopy = {
   };
 };
 
+type InteractionAuditRequestScopeCommandsCopy = {
+  preflightNext: string;
+  completeNext: string;
+  archiveNext: string;
+};
+
 const INTERACTION_AUDIT_REVIEW_QUEUE_COPY: Record<
   ResolvedAppLocale,
   InteractionAuditReviewQueueCopy
@@ -1445,6 +1451,82 @@ const INTERACTION_AUDIT_WORKSPACE_CONTROLS_COPY: Record<
       importedSignoffJson: "Signoff JSON diimpor ke workspace.",
       clearedPastedJson: "Signoff JSON yang ditempel dibersihkan.",
     },
+  },
+};
+
+const INTERACTION_AUDIT_REQUEST_SCOPE_COMMANDS_COPY: Record<
+  ResolvedAppLocale,
+  InteractionAuditRequestScopeCommandsCopy
+> = {
+  en: {
+    preflightNext: "Preflight next",
+    completeNext: "Complete next",
+    archiveNext: "Archive next",
+  },
+  "zh-CN": {
+    preflightNext: "下一步预检",
+    completeNext: "下一步完成",
+    archiveNext: "下一步归档",
+  },
+  "zh-TW": {
+    preflightNext: "下一步預檢",
+    completeNext: "下一步完成",
+    archiveNext: "下一步歸檔",
+  },
+  ja: {
+    preflightNext: "次に preflight",
+    completeNext: "次に complete",
+    archiveNext: "次に archive",
+  },
+  ko: {
+    preflightNext: "다음 preflight",
+    completeNext: "다음 complete",
+    archiveNext: "다음 archive",
+  },
+  "es-419": {
+    preflightNext: "Siguiente preflight",
+    completeNext: "Siguiente complete",
+    archiveNext: "Siguiente archive",
+  },
+  "pt-BR": {
+    preflightNext: "Próximo preflight",
+    completeNext: "Próximo complete",
+    archiveNext: "Próximo archive",
+  },
+  fr: {
+    preflightNext: "Preflight suivant",
+    completeNext: "Complete suivant",
+    archiveNext: "Archive suivante",
+  },
+  de: {
+    preflightNext: "Nächster Preflight",
+    completeNext: "Nächster Complete-Schritt",
+    archiveNext: "Nächster Archive-Schritt",
+  },
+  it: {
+    preflightNext: "Preflight successivo",
+    completeNext: "Complete successivo",
+    archiveNext: "Archive successivo",
+  },
+  ru: {
+    preflightNext: "Следующий preflight",
+    completeNext: "Следующий complete",
+    archiveNext: "Следующий archive",
+  },
+  ar: {
+    preflightNext: "Preflight التالي",
+    completeNext: "Complete التالي",
+    archiveNext: "Archive التالي",
+  },
+  hi: {
+    preflightNext: "अगला preflight",
+    completeNext: "अगला complete",
+    archiveNext: "अगला archive",
+  },
+  id: {
+    preflightNext: "Preflight berikutnya",
+    completeNext: "Complete berikutnya",
+    archiveNext: "Archive berikutnya",
   },
 };
 
@@ -3910,6 +3992,8 @@ export function buildOperatorWorkspaceLocalizedCopy(i18n: RuntimeI18n) {
       surfaceCard: INTERACTION_AUDIT_SURFACE_CARD_COPY[i18n.resolvedLocale],
       workspaceControls:
         INTERACTION_AUDIT_WORKSPACE_CONTROLS_COPY[i18n.resolvedLocale],
+      requestScopeCommands:
+        INTERACTION_AUDIT_REQUEST_SCOPE_COMMANDS_COPY[i18n.resolvedLocale],
     },
   };
 }

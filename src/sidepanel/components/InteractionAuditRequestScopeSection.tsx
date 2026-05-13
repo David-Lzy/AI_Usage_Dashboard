@@ -9,12 +9,18 @@ type InteractionAuditSignoffCopy = ReturnType<
   typeof buildOperatorWorkspaceLocalizedCopy
 >["interactionAudit"]["signoff"];
 
+type InteractionAuditRequestScopeCommandsCopy = ReturnType<
+  typeof buildOperatorWorkspaceLocalizedCopy
+>["interactionAudit"]["requestScopeCommands"];
+
 type InteractionAuditRequestScopeSectionProps = {
   copy: InteractionAuditSignoffCopy;
+  commandCopy: InteractionAuditRequestScopeCommandsCopy;
   signoffRequestContext: InteractionAuditSignoffRequestContext;
 };
 
 export function InteractionAuditRequestScopeSection({
+  commandCopy,
   copy,
   signoffRequestContext,
 }: InteractionAuditRequestScopeSectionProps) {
@@ -84,7 +90,9 @@ export function InteractionAuditRequestScopeSection({
         {hasBoundRequest ? (
           <>
             <div className="interaction-audit__request-scope-command">
-              <p className="detail-note__label">Preflight next</p>
+              <p className="detail-note__label">
+                {commandCopy.preflightNext}
+              </p>
               <pre
                 className="capture-pre"
                 data-audit-request-scope-preflight
@@ -93,7 +101,7 @@ export function InteractionAuditRequestScopeSection({
               </pre>
             </div>
             <div className="interaction-audit__request-scope-command">
-              <p className="detail-note__label">Complete next</p>
+              <p className="detail-note__label">{commandCopy.completeNext}</p>
               <pre className="capture-pre" data-audit-request-scope-complete>
                 {requestCompleteCommand}
               </pre>
@@ -101,7 +109,7 @@ export function InteractionAuditRequestScopeSection({
           </>
         ) : (
           <div className="interaction-audit__request-scope-command">
-            <p className="detail-note__label">Archive next</p>
+            <p className="detail-note__label">{commandCopy.archiveNext}</p>
             <pre className="capture-pre" data-audit-request-scope-archive>
               {requestArchiveCommand}
             </pre>

@@ -583,6 +583,7 @@ export function InteractionAuditPage({
         />
 
         <InteractionAuditRequestScopeSection
+          commandCopy={copy.requestScopeCommands}
           copy={copy.signoff}
           signoffRequestContext={signoffRequestContext}
         />
