@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is completed through `Phase 393.2`, with active `Phase 393.2.1` selected for Settings credential 14-locale runtime copy and queued `Phase 393.2.2` through `Phase 395` covering Settings source/permission copy, Provider Detail/source-display copy, and bounded maintenance follow-up
+- the numbered phase queue is completed through `Phase 393.2.1`, with active `Phase 393.2.2` selected for Settings source/permission 14-locale runtime copy and queued `Phase 393.3` through `Phase 395` covering Provider Detail/source-display copy and bounded maintenance follow-up
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness

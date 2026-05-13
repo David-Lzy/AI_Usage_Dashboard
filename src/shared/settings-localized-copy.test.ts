@@ -43,7 +43,7 @@ describe("buildSettingsLocalizedCopy", () => {
     expect(copy.permissions.requestAccess).toBe("请求授权");
   });
 
-  it("ships Settings core copy for every non-English locale", () => {
+  it("ships Settings core and credential copy for every non-English locale", () => {
     const englishCopy = buildSettingsLocalizedCopy(createRuntimeI18n("en"));
 
     for (const locale of SUPPORTED_APP_LOCALES.filter(
@@ -61,9 +61,23 @@ describe("buildSettingsLocalizedCopy", () => {
       expect(copy.themeCustomization.enterValidSeed).not.toBe(
         englishCopy.themeCustomization.enterValidSeed,
       );
+      expect(copy.credentials.saveConfig).not.toBe(
+        englishCopy.credentials.saveConfig,
+      );
+      expect(copy.credentials.cursorHelpText).not.toBe(
+        englishCopy.credentials.cursorHelpText,
+      );
+      expect(copy.credentials.codexHelpText).not.toBe(
+        englishCopy.credentials.codexHelpText,
+      );
 
       if (locale !== "zh-CN") {
-        expect(copy.credentials.saveKey).toBe(englishCopy.credentials.saveKey);
+        expect(copy.sources.preferenceLabel).toBe(
+          englishCopy.sources.preferenceLabel,
+        );
+        expect(copy.permissions.requestAccess).toBe(
+          englishCopy.permissions.requestAccess,
+        );
       }
     }
   });

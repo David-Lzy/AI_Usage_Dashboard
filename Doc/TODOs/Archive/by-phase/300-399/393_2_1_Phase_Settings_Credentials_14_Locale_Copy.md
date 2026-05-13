@@ -17,7 +17,7 @@ Freshness model:
 Status note:
 
 - child phase split from `Phase 393.2`
-- active after the `Phase 393.2` split closeout
+- completed and archived on 2026-05-13
 
 ## Goal
 
@@ -54,3 +54,37 @@ Expand Settings credential helper copy into explicit 14-locale runtime copy.
 ## Follow-Up
 
 - Move to Settings source-card and permission helper copy in `Phase 393.2.2`.
+
+## Closeout
+
+Summary:
+
+- Added explicit 14-locale Settings credential helper copy through `src/shared/settings-credentials-localized-copy.ts`.
+- Merged the credential copy into `buildSettingsLocalizedCopy` for non-`en`/non-`zh-CN` locales while preserving the existing English base, the `zh-CN` reviewed branch, and all credential behavior.
+- Added a focused guard that every non-English locale keeps representative credential copy while source-card and permission buckets remain on the planned `Phase 393.2.2` fallback boundary.
+
+Verification:
+
+- `npm run i18n:check`
+- `npm run test -- src/shared/settings-localized-copy.test.ts`
+- `npm run test -- src/sidepanel/settings-view-models.test.ts`
+- `npm run typecheck`
+- `npm run docs:check`
+- `git diff --check`
+
+## Closeout
+
+Summary:
+
+- Added explicit 14-locale Settings credential helper copy through `src/shared/settings-credentials-localized-copy.ts`.
+- Kept `sources` and `permissions` on the planned `Phase 393.2.2` fallback boundary for non-`zh-CN` locales.
+- Preserved credential persistence, stored values, provider names, API names, URLs, auth-header names, workspace ids, and provider support claims.
+
+Verification:
+
+- `npm run i18n:check`
+- `npm run test -- src/shared/settings-localized-copy.test.ts`
+- `npm run test -- src/sidepanel/settings-view-models.test.ts`
+- `npm run typecheck`
+- `npm run docs:check`
+- `git diff --check`

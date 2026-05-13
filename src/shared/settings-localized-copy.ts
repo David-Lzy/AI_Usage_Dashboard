@@ -5,6 +5,10 @@ import type {
 } from "../providers/types";
 import type { RuntimeI18n } from "./i18n";
 import {
+  buildLocalizedSettingsCredentialsSection,
+  getSettingsCredentialsCopy,
+} from "./settings-credentials-localized-copy";
+import {
   buildLocalizedSettingsCoreSections,
   getSettingsCoreCopy,
 } from "./settings-core-localized-copy";
@@ -495,14 +499,18 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
   };
 
   const coreCopy = getSettingsCoreCopy(i18n.resolvedLocale);
+  const credentialsCopy = getSettingsCredentialsCopy(i18n.resolvedLocale);
 
-  if (!coreCopy) {
+  if (!coreCopy && !credentialsCopy) {
     return englishCopy;
   }
 
   return {
     ...englishCopy,
-    ...buildLocalizedSettingsCoreSections(i18n, coreCopy),
+    ...(coreCopy ? buildLocalizedSettingsCoreSections(i18n, coreCopy) : {}),
+    ...(credentialsCopy
+      ? buildLocalizedSettingsCredentialsSection(credentialsCopy)
+      : {}),
   };
 }
 
