@@ -51,6 +51,7 @@ Execution note:
 - thirty-sixth executable slice landed on `2026-05-13` through `Phase 373`
 - thirty-seventh executable slice landed on `2026-05-13` through `Phase 374`
 - thirty-eighth executable slice landed on `2026-05-13` through `Phase 375`
+- thirty-ninth executable slice landed on `2026-05-13` through `Phase 376`
 - `Phase 200` and `Phase 201` intentionally paused this i18n/diagnostic follow-up line for functionality-first Codex personal usage-context surfacing while Codex budget is constrained
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
@@ -87,6 +88,7 @@ As of 2026-05-13:
 - the manifest defines `default_locale = en`
 - the repo ships manifest-level Chrome catalogs for 14 locale directories: `en`, `zh_CN`, `zh_TW`, `ja`, `ko`, `es_419`, `pt_BR`, `fr`, `de`, `it`, `ru`, `ar`, `hi`, and `id`
 - the runtime app now ships one shared localization helper in `src/shared/i18n.ts`
+- the runtime message catalog now lives in `src/shared/runtime-message-catalogs.ts`, while locale registry, resolution, direction, and formatter helpers stay in `src/shared/i18n.ts`
 - the runtime app now ships a 14-locale registry with runtime locale tags, Chrome locale directory names, native labels, Intl/html language tags, and text direction metadata
 - the runtime app now also ships one shared structured-copy helper in `src/shared/localized-copy.ts`
 - locale preference now persists in `AppSettings.locale` with current values `system | en | zh-CN | zh-TW | ja | ko | es-419 | pt-BR | fr | de | it | ru | ar | hi | id`
@@ -257,8 +259,9 @@ Recommended rollout:
 38. Traditional Chinese runtime shell pilot - shipped in `Phase 373`
 39. Japanese runtime shell pilot - shipped in `Phase 374`
 40. Korean runtime shell pilot - shipped in `Phase 375`
-41. deeper runtime catalog translation review for non-English fallback locales - future work
-42. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact
+41. runtime message catalog module split - shipped in `Phase 376`
+42. deeper runtime catalog translation review for non-English fallback locales - future work
+43. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact
 
 ## References
 

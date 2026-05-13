@@ -21,7 +21,7 @@ Status note:
 
 ## Current Localized Scope
 
-Localized through `Phase 170`, `Phase 171`, `Phase 172`, `Phase 173`, `Phase 174`, `Phase 175`, `Phase 176`, `Phase 177`, `Phase 179`, `Phase 180`, `Phase 181`, `Phase 183`, `Phase 193`, `Phase 194`, `Phase 195`, the `Phase 367` 14-locale architecture/manifest/listing draft expansion, the `Phase 368` RTL fallback text-direction hardening, the `Phase 369` RDP locale capture guard, the `Phase 370` i18n registry drift guard, the `Phase 372` store listing draft structure guard, the `Phase 373` Traditional Chinese runtime shell pilot, the `Phase 374` Japanese runtime shell pilot, and the `Phase 375` Korean runtime shell pilot.
+Localized through `Phase 170`, `Phase 171`, `Phase 172`, `Phase 173`, `Phase 174`, `Phase 175`, `Phase 176`, `Phase 177`, `Phase 179`, `Phase 180`, `Phase 181`, `Phase 183`, `Phase 193`, `Phase 194`, `Phase 195`, the `Phase 367` 14-locale architecture/manifest/listing draft expansion, the `Phase 368` RTL fallback text-direction hardening, the `Phase 369` RDP locale capture guard, the `Phase 370` i18n registry drift guard, the `Phase 372` store listing draft structure guard, the `Phase 373` Traditional Chinese runtime shell pilot, the `Phase 374` Japanese runtime shell pilot, the `Phase 375` Korean runtime shell pilot, and the `Phase 376` runtime message catalog module split.
 
 Compact diagnostic presentation QA shipped in `Phase 196`. Diagnostic archive/export compatibility review shipped in `Phase 197`. Sample/store seed diagnostic metadata alignment shipped in `Phase 198`. Diagnostic fixture and historical evidence alignment review shipped in `Phase 199`.
 
@@ -113,6 +113,7 @@ These now ship through:
 - `public/_locales/hi/messages.json`
 - `public/_locales/id/messages.json`
 - `src/shared/i18n.ts`
+- `src/shared/runtime-message-catalogs.ts`
 - `src/shared/localized-copy.ts`
 - `Doc/Store_Listing_Localization_14_Locale_Draft.md`
 

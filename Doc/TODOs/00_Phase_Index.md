@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [375_Phase_Korean_Runtime_Shell_Pilot.md](./Archive/375_Phase_Korean_Runtime_Shell_Pilot.md)
+- latest completed slice: [376_Phase_Runtime_Message_Catalog_Module_Split.md](./Archive/376_Phase_Runtime_Message_Catalog_Module_Split.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -765,6 +765,7 @@ Completed phases should be moved to:
 - the 2026-05-13 `Phase 373` closeout added the first Traditional Chinese runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while preserving deeper structured copy and raw evidence fallback boundaries
 - the 2026-05-13 `Phase 374` closeout added the first Japanese runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while preserving deeper structured copy and raw evidence fallback boundaries
 - the 2026-05-13 `Phase 375` closeout added the first Korean runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while preserving deeper structured copy and raw evidence fallback boundaries
+- the 2026-05-13 `Phase 376` closeout moved runtime message catalogs into `src/shared/runtime-message-catalogs.ts` while keeping locale registry, resolution, and formatting in `src/shared/i18n.ts`
 
 ## Delivery Standard For Each Phase
 
