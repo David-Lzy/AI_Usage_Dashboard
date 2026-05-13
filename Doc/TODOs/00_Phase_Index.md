@@ -34,10 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [399_Phase_Source_Diagnostic_Presentation_14_Locale_Copy.md](./399_Phase_Source_Diagnostic_Presentation_14_Locale_Copy.md)
-- latest completed slice: [398_Phase_Warning_Diagnostic_Presentation_14_Locale_Copy.md](./Archive/by-phase/300-399/398_Phase_Warning_Diagnostic_Presentation_14_Locale_Copy.md)
-- queued phase files:
-  1. [400_Phase_Adapter_Error_Diagnostic_Presentation_14_Locale_Copy.md](./400_Phase_Adapter_Error_Diagnostic_Presentation_14_Locale_Copy.md)
+- active phase file: [400_Phase_Adapter_Error_Diagnostic_Presentation_14_Locale_Copy.md](./400_Phase_Adapter_Error_Diagnostic_Presentation_14_Locale_Copy.md)
+- latest completed slice: [399_Phase_Source_Diagnostic_Presentation_14_Locale_Copy.md](./Archive/by-phase/300-399/399_Phase_Source_Diagnostic_Presentation_14_Locale_Copy.md)
+- queued phase files after active `Phase 400`: none
 
 Completed phases should be moved to:
 
@@ -792,6 +791,7 @@ Completed phases should be moved to:
 - the 2026-05-13 `Phase 396` closeout ran the full post-localization maintenance release gate after the 14-locale expansion and runtime message catalog split; `npm run release:check` passed without package, manifest, release artifact, provider, locale-copy, store-listing, or generated-evidence changes
 - the 2026-05-13 `Phase 397` closeout added a maintained diagnostic presentation 14-locale inventory and split implementation into warning, source-selection/fallback, and adapter-error slices while preserving raw diagnostic evidence boundaries
 - the 2026-05-13 `Phase 398` closeout added explicit 14-locale warning diagnostic presentation for credential, host-access, page-session, usage-threshold, policy-only, and sync-stale diagnostics while preserving raw warning evidence boundaries
+- the 2026-05-13 `Phase 399` closeout added explicit 14-locale source-selection and source-fallback diagnostic presentation while preserving raw source-selection and fallback evidence boundaries
 
 ## Delivery Standard For Each Phase
 

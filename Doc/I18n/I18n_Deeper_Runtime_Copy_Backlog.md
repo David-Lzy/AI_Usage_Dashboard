@@ -93,12 +93,15 @@ Preserve:
 Source bucket:
 
 - `src/shared/provider-diagnostic-presentation.ts`
+- `src/shared/provider-diagnostic-warning-copy.ts`
+- `src/shared/provider-diagnostic-source-copy.ts`
 - [I18n_Diagnostic_Presentation_14_Locale_Inventory.md](./I18n_Diagnostic_Presentation_14_Locale_Inventory.md)
 
 User-facing copy:
 
-- typed diagnostic labels and short summaries for source-selection, fallback, and adapter-error codes
+- typed adapter-error diagnostic labels and short summaries remain the active `Phase 400` follow-up
 - typed warning diagnostic labels and summaries already have explicit 14-locale coverage after `Phase 398`
+- typed source-selection and source-fallback labels and summaries already have explicit 14-locale coverage after `Phase 399`
 
 Reason:
 
@@ -115,7 +118,7 @@ Default next action:
 
 - `Phase 397` inventoried typed diagnostic presentation copy and keeps the implementation code/code-list mapping in [I18n_Diagnostic_Presentation_14_Locale_Inventory.md](./I18n_Diagnostic_Presentation_14_Locale_Inventory.md).
 - `Phase 398` handled warning diagnostic presentation copy.
-- `Phase 399` handles source-selection and fallback diagnostic presentation copy.
+- `Phase 399` handled source-selection and fallback diagnostic presentation copy.
 - `Phase 400` handles adapter-error diagnostic presentation copy.
 
 ### P1 - Operator And Store Helper Follow-Up
@@ -170,7 +173,8 @@ Reason:
 - `Phase 393.3.2` translated provider-source display wrapper buckets for all 14 runtime locales.
 - `Phase 397` inventoried the typed diagnostic presentation bucket and split it into warning, source, and adapter-error implementation phases.
 - `Phase 398` translated typed warning diagnostic presentation for all 14 runtime locales.
-- Source/adapter diagnostics implementation, operator workspaces, and store helper routes remain follow-up work.
+- `Phase 399` translated typed source-selection and source-fallback diagnostic presentation for all 14 runtime locales.
+- Adapter-error diagnostic presentation, operator workspaces, and store helper routes remain follow-up work.
 
 ## Verification Pattern
 

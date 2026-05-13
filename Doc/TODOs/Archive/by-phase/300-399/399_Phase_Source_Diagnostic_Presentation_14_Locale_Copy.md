@@ -16,7 +16,7 @@ Freshness model:
 
 Status note:
 
-- queued after `Phase 398`
+- completed and archived on 2026-05-13
 - second diagnostic presentation implementation slice
 
 ## Goal
@@ -27,7 +27,7 @@ Add explicit 14-locale presentation copy for typed source-selection and source-f
 
 - Localize source kind and source preference labels used by diagnostic presentation.
 - Localize source-selection summaries, no-live-path summaries, and fallback summaries generated from typed params.
-- Use [I18n_Diagnostic_Presentation_14_Locale_Inventory.md](../I18n/I18n_Diagnostic_Presentation_14_Locale_Inventory.md) as the code list:
+- Use [I18n_Diagnostic_Presentation_14_Locale_Inventory.md](../../../../I18n/I18n_Diagnostic_Presentation_14_Locale_Inventory.md) as the code list:
   - `source.auto_selected_official_api`
   - `source.auto_selected_session_page`
   - `source.preference_selected_official_api`
@@ -64,3 +64,24 @@ Add explicit 14-locale presentation copy for typed source-selection and source-f
 ## Follow-Up
 
 - Continue to `Phase 400` adapter-error diagnostic presentation copy.
+
+## Closeout
+
+Completed on 2026-05-13.
+
+Summary:
+
+- Added `src/shared/provider-diagnostic-source-copy.ts` with explicit 14-locale source diagnostic labels, source-kind/source-preference labels, source-selection summaries, fallback summaries, and no-live-path summaries.
+- Kept `src/shared/provider-diagnostic-presentation.ts` as the public presentation entry while delegating `source.*` diagnostic codes to the new helper.
+- Preserved raw `sourceSelectionReason`, `sourceFallbackReason`, `ProviderDiagnostic.rawMessage`, provider ids, host labels, URLs, route hints, archive/export schemas, and vendor page text.
+- Added focused coverage proving every shipped locale gets explicit source-selection presentation and that every source diagnostic code still leaves raw source bodies untouched.
+
+Verification:
+
+- `npm run i18n:check` passed.
+- `npm run test -- src/shared/provider-diagnostic-presentation.test.ts` passed with `8` tests.
+- `npm run test -- src/shared/i18n.test.ts` passed with `37` tests.
+- `npm run test -- src/sidepanel/settings-view-models.test.ts` passed with `13` tests.
+- `npm run typecheck` passed.
+- `npm run docs:check` passed.
+- `git diff --check` passed.

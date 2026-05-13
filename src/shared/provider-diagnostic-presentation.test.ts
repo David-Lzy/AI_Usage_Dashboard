@@ -4,8 +4,10 @@ import {
   createAdapterErrorDiagnostic,
   createCredentialDiagnostic,
   createHostAccessDiagnostic,
+  createNoLiveSourceFallbackDiagnostic,
   createPageSessionDiagnostic,
   createPolicyOnlyDiagnostic,
+  createSourceFallbackDiagnostic,
   createSourceSelectionDiagnostic,
   createSyncStaleDiagnostic,
   createUsageThresholdDiagnostic,
@@ -34,6 +36,128 @@ describe("getProviderDiagnosticPresentation", () => {
       label: "自动回退到会话页面",
       summary: "自动偏好在前置来源不可用后选择了会话页面。",
     });
+  });
+
+  it("builds explicit non-English source presentation for every shipped locale", () => {
+    const diagnostic = createSourceSelectionDiagnostic({
+      providerId: "cursor",
+      sourcePreference: "auto",
+      selectedKind: "session_page",
+      hadFallback: true,
+      rawMessage: "Auto fell back to Session page.",
+    });
+    const english = getProviderDiagnosticPresentation(diagnostic, createRuntimeI18n("en"));
+    const expectedLabels = {
+      en: "Auto fell back to Session page",
+      "zh-CN": "自动回退到会话页面",
+      "zh-TW": "自動回退到會話頁面",
+      ja: "自動でセッションページへフォールバック",
+      ko: "자동으로 세션 페이지로 fallback",
+      "es-419": "Auto volvió a página de sesión",
+      "pt-BR": "Auto voltou para página de sessão",
+      fr: "Auto est revenu à la page de session",
+      de: "Auto fiel auf Sitzungsseite zurück",
+      it: "Auto è tornato alla pagina di sessione",
+      ru: "Авто переключилось на страницу сессии",
+      ar: "رجوع تلقائي إلى صفحة الجلسة",
+      hi: "Auto सेशन पेज पर fallback हुआ",
+      id: "Auto fallback ke halaman sesi",
+    } satisfies Record<(typeof SUPPORTED_APP_LOCALES)[number], string>;
+
+    for (const locale of SUPPORTED_APP_LOCALES) {
+      const presentation = getProviderDiagnosticPresentation(
+        diagnostic,
+        createRuntimeI18n(locale),
+      );
+
+      expect(presentation?.label).toBe(expectedLabels[locale]);
+
+      if (locale !== "en") {
+        expect(presentation?.summary).not.toBe(english?.summary);
+        expect(presentation?.summary).not.toContain("Auto preference selected");
+      }
+    }
+  });
+
+  it("covers every source diagnostic code without translating raw source bodies", () => {
+    const diagnostics = [
+      createSourceSelectionDiagnostic({
+        providerId: "cursor",
+        sourcePreference: "auto",
+        selectedKind: "official_api",
+        hadFallback: false,
+        rawMessage: "Auto selected Official API.",
+      })!,
+      createSourceSelectionDiagnostic({
+        providerId: "cursor",
+        sourcePreference: "auto",
+        selectedKind: "session_page",
+        hadFallback: false,
+        rawMessage: "Auto selected Session page.",
+      })!,
+      createSourceSelectionDiagnostic({
+        providerId: "cursor",
+        sourcePreference: "official_api",
+        selectedKind: "official_api",
+        hadFallback: false,
+        rawMessage: "Preferred Official API selected.",
+      })!,
+      createSourceSelectionDiagnostic({
+        providerId: "cursor",
+        sourcePreference: "session_page",
+        selectedKind: "session_page",
+        hadFallback: false,
+        rawMessage: "Preferred Session page selected.",
+      })!,
+      createSourceFallbackDiagnostic({
+        providerId: "cursor",
+        sourcePreference: "auto",
+        failure: {
+          kind: "official_api",
+          code: "credential_missing",
+          detail: "No Cursor Admin API key is stored.",
+        },
+        rawMessage: "Official API unavailable: no Cursor Admin API key is stored.",
+      }),
+      createSourceFallbackDiagnostic({
+        providerId: "cursor",
+        sourcePreference: "auto",
+        failure: {
+          kind: "official_api",
+          code: "request_failed",
+          detail: "Cursor Admin API request failed.",
+        },
+        rawMessage: "Official API request failed.",
+      }),
+      createSourceFallbackDiagnostic({
+        providerId: "cursor",
+        sourcePreference: "auto",
+        failure: {
+          kind: "session_page",
+          code: "capture_unavailable",
+          detail: "Cursor usage page could not be read.",
+        },
+        rawMessage: "Session page unavailable.",
+      }),
+      createNoLiveSourceFallbackDiagnostic({
+        providerId: "cursor",
+        sourcePreference: "auto",
+        failureCount: 2,
+        rawMessage: "No live source path is available.",
+      }),
+    ] as const;
+
+    for (const diagnostic of diagnostics) {
+      const presentation = getProviderDiagnosticPresentation(
+        diagnostic,
+        createRuntimeI18n("ar"),
+      );
+
+      expect(presentation?.label).toBeTruthy();
+      expect(presentation?.summary).toBeTruthy();
+      expect(presentation?.summary).not.toBe(diagnostic.rawMessage);
+      expect(diagnostic.rawMessage).toMatch(/[A-Za-z]/);
+    }
   });
 
   it("builds localized usage-threshold presentation", () => {
