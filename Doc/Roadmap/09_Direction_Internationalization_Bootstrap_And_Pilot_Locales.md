@@ -45,6 +45,9 @@ Execution note:
 - thirtieth executable slice landed on `2026-04-25` through `Phase 199`
 - thirty-first executable slice landed on `2026-05-13` through `Phase 367`
 - thirty-second executable slice landed on `2026-05-13` through `Phase 368`
+- thirty-third executable slice landed on `2026-05-13` through `Phase 369`
+- thirty-fourth executable slice landed on `2026-05-13` through `Phase 370`
+- thirty-fifth executable slice landed on `2026-05-13` through `Phase 372`
 - `Phase 200` and `Phase 201` intentionally paused this i18n/diagnostic follow-up line for functionality-first Codex personal usage-context surfacing while Codex budget is constrained
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
@@ -90,6 +93,7 @@ As of 2026-05-13:
 - Arabic/RTL surfaces now isolate English fallback text direction so fallback punctuation stays readable until reviewed Arabic runtime translations are added
 - RDP extension-window locale smoke captures now validate `--locale` against the same 14 runtime tags before opening a Chrome extension window
 - `npm run i18n:check` now derives Chrome `_locales` directories from runtime registry metadata and verifies the RDP capture helper locale list against the same runtime tags
+- `npm run i18n:check` now also verifies the 14-locale Chrome Web Store listing draft has registry-aligned locale sections and complete listing field structure
 - the current shipped runtime localized slice covers:
   - popup shell
   - popup explanatory copy
@@ -245,8 +249,9 @@ Recommended rollout:
 34. RTL fallback text direction hardening - shipped in `Phase 368`
 35. RDP locale capture guard for locale-specific visual QA - shipped in `Phase 369`
 36. i18n registry, Chrome catalog, and RDP helper drift guard - shipped in `Phase 370`
-37. deeper runtime catalog translation review for non-English fallback locales - future work
-38. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact
+37. store listing localization draft structure guard - shipped in `Phase 372`
+38. deeper runtime catalog translation review for non-English fallback locales - future work
+39. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact
 
 ## References
 

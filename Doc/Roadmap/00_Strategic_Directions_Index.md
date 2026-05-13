@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is now completed through `Phase 371`, with no active phase or queued numbered phase currently selected
+- the numbered phase queue is now completed through `Phase 372`, with no active phase or queued numbered phase currently selected
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -86,6 +86,7 @@ As of 2026-05-13:
 - `Phase 368` hardened Arabic/RTL fallback rendering so untranslated English runtime fallback sentences keep natural punctuation order while Arabic remains an RTL locale
 - `Phase 369` hardened locale-specific RDP visual QA by validating `--locale` against those 14 runtime tags and sharing the `app-locale` URL override helper across extension-window captures
 - `Phase 370` folded runtime registry, Chrome catalog directory, and RDP locale helper alignment into the standard `npm run i18n:check` drift gate
+- `Phase 372` extended that i18n drift gate to the 14-locale Chrome Web Store listing draft, including locale section coverage and required listing field counts
 - `Phase 200` completed a functionality-first Codex personal slice by preserving multiple visible usage windows, expanding Codex page-capture snippets, and surfacing the most constrained visible percentage window across dashboard, provider detail, and popup paths
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without changing the primary percentage-window quota model
 - `Phase 202` completed repeatable unpacked-extension verification for Codex personal multi-window plus flex-balance context, while fixing DOM capture so repeated percentages and single-character balance values are not lost before parsing
@@ -494,7 +495,7 @@ As of 2026-05-13:
 
 2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second among the new requests:
-   the project now has a 14-locale registry, manifest catalog set, store listing draft, Arabic RDP visual baseline, and guarded locale-specific RDP capture helper, but broad runtime copy still needs reviewed translations before it should be treated as fully localized product surface.
+   the project now has a 14-locale registry, manifest catalog set, guarded store listing draft, Arabic RDP visual baseline, and guarded locale-specific RDP capture helper, but broad runtime copy still needs reviewed translations before it should be treated as fully localized product surface.
 
 3. [Direction 08 - Documentation Completion And Truth Audit](./08_Direction_Documentation_Completion_And_Truth_Audit.md)
    Why third among the new requests:

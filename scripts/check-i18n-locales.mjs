@@ -89,6 +89,120 @@ async function readRuntimeLocaleContract() {
   };
 }
 
+function extractStoreListingSections(text) {
+  const headingMatches = [...text.matchAll(/^## ([^\n]+)\n/gm)];
+
+  return headingMatches.map((match, index) => {
+    const nextMatch = headingMatches[index + 1];
+    const startIndex = match.index + match[0].length;
+    const endIndex = nextMatch ? nextMatch.index : text.length;
+
+    return {
+      locale: match[1],
+      body: text.slice(startIndex, endIndex),
+    };
+  });
+}
+
+function extractListBlock(sectionBody, startLabel, nextLabel) {
+  const marker = `${startLabel}:\n`;
+  const startIndex = sectionBody.indexOf(marker);
+  assert(startIndex !== -1, `Store listing section is missing ${startLabel}.`);
+
+  const blockStart = startIndex + marker.length;
+  const nextMarker = nextLabel ? `\n${nextLabel}:` : "";
+  const endIndex =
+    nextMarker.length > 0
+      ? sectionBody.indexOf(nextMarker, blockStart)
+      : sectionBody.length;
+
+  assert(
+    endIndex !== -1,
+    `Store listing section is missing ${nextLabel} after ${startLabel}.`,
+  );
+
+  return sectionBody.slice(blockStart, endIndex);
+}
+
+function countMarkdownListItems(block) {
+  return block
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("- "))
+    .length;
+}
+
+async function verifyStoreListingLocalizationDraft(runtimeLocales) {
+  const text = await readFile(
+    path.join(repoRoot, "Doc", "Store_Listing_Localization_14_Locale_Draft.md"),
+    "utf8",
+  );
+  const supportedLocalesMatch = text.match(/^Supported locales:\s*(.+)$/m);
+  assert(
+    supportedLocalesMatch,
+    "Store listing localization draft is missing a Supported locales line.",
+  );
+  const supportedLocales = [
+    ...supportedLocalesMatch[1].matchAll(/`([^`]+)`/g),
+  ].map((match) => match[1]);
+
+  assertArrayEqual(
+    supportedLocales,
+    runtimeLocales,
+    "Store listing Supported locales line drifted from SUPPORTED_APP_LOCALES.",
+  );
+
+  const sections = extractStoreListingSections(text);
+  const sectionLocales = sections.map((section) => section.locale);
+
+  assertArrayEqual(
+    sectionLocales,
+    runtimeLocales,
+    "Store listing locale sections drifted from SUPPORTED_APP_LOCALES.",
+  );
+
+  for (const section of sections) {
+    const titleMatch = section.body.match(/^Title:\s*(.+)$/m);
+    const shortDescriptionMatch = section.body.match(
+      /^Short description:\s*(.+)$/m,
+    );
+    const overviewMatch = section.body.match(/^Overview:\s*(.+)$/m);
+
+    assert(
+      titleMatch?.[1]?.trim() === "AI Usage Dashboard",
+      `${section.locale} store listing title must preserve the product name.`,
+    );
+    assert(
+      shortDescriptionMatch?.[1]?.trim().length > 0,
+      `${section.locale} store listing short description is missing.`,
+    );
+    assert(
+      overviewMatch?.[1]?.trim().length > 0,
+      `${section.locale} store listing overview is missing.`,
+    );
+
+    const featureBullets = extractListBlock(
+      section.body,
+      "Feature bullets",
+      "Screenshot captions",
+    );
+    const screenshotCaptions = extractListBlock(
+      section.body,
+      "Screenshot captions",
+      null,
+    );
+
+    assert(
+      countMarkdownListItems(featureBullets) === 5,
+      `${section.locale} store listing must include exactly 5 feature bullets.`,
+    );
+    assert(
+      countMarkdownListItems(screenshotCaptions) === 5,
+      `${section.locale} store listing must include exactly 5 screenshot captions.`,
+    );
+  }
+}
+
 const { runtimeLocales, chromeLocales: supportedChromeLocales } =
   await readRuntimeLocaleContract();
 
@@ -116,6 +230,8 @@ for (const chromeLocale of supportedChromeLocales) {
   }
 }
 
+await verifyStoreListingLocalizationDraft(runtimeLocales);
+
 console.log(
-  `i18n locale check passed for ${supportedChromeLocales.length} Chrome locale catalogs and ${runtimeLocales.length} runtime locales.`,
+  `i18n locale check passed for ${supportedChromeLocales.length} Chrome locale catalogs, ${runtimeLocales.length} runtime locales, and the store listing localization draft.`,
 );

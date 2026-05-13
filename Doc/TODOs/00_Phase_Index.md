@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [371_Phase_Current_Phase_Doc_Drift_Guard.md](./Archive/371_Phase_Current_Phase_Doc_Drift_Guard.md)
+- latest completed slice: [372_Phase_Store_Listing_Localization_Draft_Check.md](./Archive/372_Phase_Store_Listing_Localization_Draft_Check.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -761,6 +761,7 @@ Completed phases should be moved to:
 - the 2026-05-13 `Phase 369` closeout added a shared RDP locale capture URL helper, validated `--locale` against the 14 runtime locale tags, and documented serial locale-specific RDP smoke captures for future visual QA
 - the 2026-05-13 `Phase 370` closeout made `npm run i18n:check` derive Chrome locale directories from runtime registry metadata and verify the RDP capture helper locale list stays aligned
 - the 2026-05-13 `Phase 371` closeout extended `npm run docs:check` so README, top-level TODO, and strategic-index current phase references cannot silently drift behind the latest archived phase
+- the 2026-05-13 `Phase 372` closeout extended `npm run i18n:check` to verify the 14-locale Chrome Web Store listing draft has registry-aligned locale sections, preserved product titles, and complete listing fields
 
 ## Delivery Standard For Each Phase
 

@@ -179,7 +179,7 @@ This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still maki
 - raw provider source-truth detail strings and deeper operator evidence/export payload copy still remain outside the shipped localized slice
 - vendor-owned provider-page text stays outside the managed localization catalog
 - locale-aware formatting also stays outside raw message ids so generated values can be formatted per locale without multiplying message ids
-- Chrome manifest message ids are guarded by `npm run i18n:check`, which now derives Chrome catalog directories from `APP_LOCALE_METADATA` and verifies the RDP capture helper locale list against `SUPPORTED_APP_LOCALES`
+- Chrome manifest message ids are guarded by `npm run i18n:check`, which now derives Chrome catalog directories from `APP_LOCALE_METADATA`, verifies the RDP capture helper locale list against `SUPPORTED_APP_LOCALES`, and checks the 14-locale Chrome Web Store listing draft structure
 - operator workspace copy remains governed by [I18n_Operator_Workspace_Boundary_And_Extraction.md](./I18n_Operator_Workspace_Boundary_And_Extraction.md); `Phase 179` localizes shell/navigation/helper copy while preserving English evidence payloads
 - store-screenshot helper copy remains governed by [I18n_Store_Runtime_Helper_Copy.md](./I18n_Store_Runtime_Helper_Copy.md); `Phase 180` localizes visible helper copy and `Phase 181` adds helper-only submission-support captions while preserving automation titles, preset ids, route hashes, final screenshot surfaces, and the manual native-toolbar popup capture truth boundary
 - raw provider source-truth copy remains governed by [I18n_Raw_Provider_Source_Truth_Policy.md](./I18n_Raw_Provider_Source_Truth_Policy.md); `Phase 182` separates protected raw fields from provider-source display wrappers, and `Phase 183` localizes those wrappers through `ProviderSourceDisplayCopy` plus `buildProviderSourceDisplayLocalizedCopy` while preserving raw adapter evidence fields
@@ -227,5 +227,5 @@ This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still maki
   - `hi`
   - `id`
 - Chrome `_locales` directory names use Chrome format such as `zh_CN`, `zh_TW`, `es_419`, and `pt_BR`; runtime locale tags use BCP-style tags such as `zh-CN`, `zh-TW`, `es-419`, and `pt-BR`
-- `npm run i18n:check` is the drift gate for runtime locale tags, metadata `chromeLocale` values, manifest catalog ids, and the RDP capture locale helper
+- `npm run i18n:check` is the drift gate for runtime locale tags, metadata `chromeLocale` values, manifest catalog ids, the RDP capture locale helper, and the store listing localization draft structure
 - translation review and RDP visual QA remain governed by [Direction 09](./Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
