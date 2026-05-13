@@ -18,6 +18,7 @@ Status note:
 
 - created in `Phase 402`
 - implementation input for `Phase 404`
+- `Phase 404` completed the helper-owned bucket implementation; consumer-only labels remain follow-up unless a later phase moves them without touching export/evidence contracts
 
 ## Purpose
 
@@ -25,18 +26,18 @@ Define the safe 14-locale implementation boundary for operator-workspace runtime
 
 ## Current Runtime State
 
-- `src/shared/operator-workspace-localized-copy.ts` currently has one explicit `zh-CN` branch plus English fallback for every other runtime locale.
+- `src/shared/operator-workspace-localized-copy.ts` has explicit helper-owned copy for all 14 runtime locales after `Phase 404`.
 - `src/shared/localized-copy.ts` re-exports `buildOperatorWorkspaceLocalizedCopy`; this public path must remain stable.
-- `src/shared/operator-workspace-localized-copy.test.ts` currently guards English, Simplified Chinese, and the legacy re-export path.
+- `src/shared/operator-workspace-localized-copy.test.ts` guards every shipped locale, representative Arabic copy, Simplified Chinese, English, and the legacy re-export path.
 - The helper feeds:
   - `src/sidepanel/routes/InteractionAuditPage.tsx`
   - `src/sidepanel/routes/ThemeRecoveryReviewPage.tsx`
   - focused interaction-audit and theme-recovery route components under `src/sidepanel/components/`
 - Several operator-route labels still live in route/component files instead of the shared helper. They are visible UI copy, but some are adjacent to archive/export evidence and should move carefully.
 
-## Phase 404 Approved Helper Buckets
+## Phase 404 Implemented Helper Buckets
 
-These buckets are stable product UI copy and should receive explicit copy for all 14 shipped runtime locales in `Phase 404`:
+These buckets are stable product UI copy and received explicit copy for all 14 shipped runtime locales in `Phase 404`:
 
 - `interactionAudit.topbar`
   - title, subtitle, dashboard/settings actions
@@ -71,7 +72,7 @@ These buckets are stable product UI copy and should receive explicit copy for al
 
 ## Consumer Copy To Migrate Into The Helper
 
-The following hard-coded visible UI strings can be moved into `buildOperatorWorkspaceLocalizedCopy` during `Phase 404` if the implementation remains narrow. Moving them should not change route behavior.
+The following hard-coded visible UI strings remain follow-up work. They can move into `buildOperatorWorkspaceLocalizedCopy` in a later phase if the implementation stays presentation-only and does not change route behavior or export/evidence payloads.
 
 ### Interaction Audit Review Queue
 

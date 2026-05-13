@@ -34,7 +34,8 @@ Track runtime copy that still falls back to English after the 14-locale shell pi
 - Provider Detail helper copy now has explicit 14-locale coverage through `Phase 393.3.1`.
 - Provider-source display wrapper copy now has explicit 14-locale coverage through `Phase 393.3.2`.
 - Typed diagnostic presentation copy now has explicit 14-locale coverage for warning, source-selection, source-fallback, and adapter-error diagnostics through `Phase 400`.
-- Deeper structured helper copy outside the popup, Settings, Provider Detail, and provider-source display slices still mostly uses explicit `zh-CN` branches plus English fallback for every other non-English locale.
+- Operator-workspace helper-owned copy now has explicit 14-locale coverage through `Phase 404`; consumer-only interaction-audit labels next to export/automation boundaries remain follow-up.
+- Deeper structured helper copy outside the popup, Settings, Provider Detail, provider-source display, typed diagnostic presentation, and operator-workspace helper slices still mostly uses explicit `zh-CN` branches plus English fallback for every other non-English locale.
 - Locale registry, `rtl` mapping, runtime `lang`/`dir`, Chrome `_locales`, RDP locale validation, and store listing draft coverage are already guarded by `npm run i18n:check`.
 
 ## Translation Backlog
@@ -138,7 +139,8 @@ Source buckets:
 
 User-facing copy:
 
-- operator workspace shell, workflow helper copy, and action labels
+- operator workspace shell, workflow helper copy, and action labels now have explicit 14-locale helper-owned coverage through `Phase 404`
+- consumer-only interaction-audit labels remain follow-up until they can move without changing export/evidence contracts
 - store screenshot helper route labels and submission-support captions
 
 Reason:
@@ -154,6 +156,7 @@ Default next action:
 
 - `Phase 402` inventoried the operator-workspace helper and consumer-copy boundary for `Phase 404`.
 - `Phase 403` inventoried the store-helper boundary for `Phase 405`.
+- `Phase 404` translated the operator-workspace helper-owned buckets for all 14 runtime locales while leaving consumer-only labels and export-adjacent strings on the documented boundary.
 
 ### P2 - Explicitly Not Translated
 
@@ -191,6 +194,7 @@ Reason:
 - `Phase 401` reran the full release gate after typed diagnostic presentation reached 14-locale coverage.
 - `Phase 402` inventoried operator-workspace helper copy for the next implementation slice.
 - `Phase 403` inventoried store-helper runtime copy for the next implementation slice.
+- `Phase 404` translated operator-workspace helper-owned buckets for all 14 runtime locales.
 
 ## Verification Pattern
 

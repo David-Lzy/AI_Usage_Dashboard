@@ -1,185 +1,163 @@
-import type { RuntimeI18n } from "./i18n";
+import type { ResolvedAppLocale, RuntimeI18n } from "./i18n";
 
-export function buildOperatorWorkspaceLocalizedCopy(i18n: RuntimeI18n) {
-  if (i18n.resolvedLocale === "zh-CN") {
-    return {
-      interactionAudit: {
-        topbar: {
-          title: "交互审计",
-          subtitle: "真实浏览器 QA 工作台",
-          openDashboard: "打开 dashboard",
-          openSettings: "打开设置",
-        },
-        hero: {
-          eyebrow: "审计中心",
-          title: "不用反复调整窗口的手动交互复查",
-          detail:
-            "这个页面把真实发布的 dashboard、settings、provider detail 和 popup 放进固定宽度 frame，让真实浏览器复查聚焦 hover、focus、pressed 和紧凑宽度行为，而不是反复重新打开路由。审计中心会跟随 side panel 与 popup 的共享主题偏好。",
-          chip: "手动 QA · 固定宽度 frame",
-        },
-        guidance: {
-          eyebrow: "使用方式",
-          title: "复查指引",
-          detail:
-            "当自动化复查脚本之后还需要人工确认时，在普通浏览器标签页或扩展页面打开这个路由。即使外层浏览器窗口更大，内嵌 frame 仍会保留代表性宽度。",
-          checks: [
-            "悬停交互控件，并确认跨页面的状态层仍然一致。",
-            "用键盘 tab 穿过内嵌 surface，并确认 focus 可见性仍然明确。",
-            "使用下方 preset actions 打开 disclosure、聚焦控件或露出更低层 detail note，再签核一个 UI slice。",
-          ],
-          openDashboard: "打开 dashboard",
-          openSettings: "打开设置",
-          openPopup: "打开 popup",
-        },
-        signoff: {
-          eyebrow: "签核工作台",
-          title: "当前 operator 草稿",
-          detail:
-            "使用每个审计 surface 内的控件记录检查进度、reviewer notes，以及 pass 或 follow-up 状态。下面的草稿会跟随当前工作台状态实时更新。",
-          reviewedSurfaces: "已复查 surface",
-          pass: "通过",
-          followUp: "待跟进",
-          completedChecks: "已完成检查",
-          reviewerName: "Reviewer 名称",
-          reviewerPlaceholder: "记录 reviewer 或 operator 名称。",
-          sessionLabel: "Session 标签",
-          sessionPlaceholder: "标记这次复查，例如 Compact QA Pass。",
-          reviewedAt: "复查时间",
-          reviewedAtPlaceholder: "使用 ISO-8601 时间，或盖上当前复查时间。",
-          stampCurrentTime: "填入当前时间",
-          reviewSession: "Review session",
-          reviewerPrefix: "Reviewer",
-          sessionPrefix: "Session",
-          reviewedAtPrefix: "Reviewed at",
-          notSet: "未设置",
-          requestBindingPrefix: "Request binding",
-          requestRevisionPrefix: "Request revision",
-          requestScope: "请求范围",
-          boundRequestDetail:
-            "这个工作台绑定到一个 repo-backed pending request。请针对该请求执行 preflight 和 completion，而不是使用 ad-hoc archive path。",
-          adHocDetail:
-            "这个工作台没有绑定 repo-backed request。除非先导入 pending request template，否则请使用 archive path。",
-          repoBackedRequest: "Repo-backed request",
-          adHocWorkspace: "Ad-hoc audit workspace",
-          binding: "绑定",
-          requestRevision: "Request revision",
-          downloadIdentity: "下载身份",
-          downloadsBound:
-            "下载内容会包含绑定的 request id 和 request revision。",
-          downloadsAdHoc: "下载内容仅保留当前 session scope。",
-        },
-      },
-      themeRecovery: {
-        topbar: {
-          title: "主题恢复审核",
-          subtitle: "Operator 工作台",
-          refresh: "刷新",
-          openSettings: "打开设置",
-        },
-        hero: {
-          eyebrow: "真实 session 跟进",
-          title: "集中执行 native prompt 与真实 session 恢复检查",
-          detail:
-            "这个路由不会声称 native host prompt 或真实 vendor session 已经通过。它会收集当前主题状态、恢复状态、快速链接和可复制证据，让下一次 operator pass 保持真实且可重复。",
-          chip: "主题 QA · 恢复跟进",
-        },
-        loading: {
-          title: "正在加载当前审核状态...",
-          detail:
-            "正在读取当前 app state 和 action badge，让这个工作台能反映与已发布 surface 相同的主题和 provider 状态。",
-        },
-        error: {
-          title: "无法加载审核状态",
-        },
-        currentTruth: {
-          eyebrow: "当前真值",
-          title: "此刻的恢复状态",
-          reviewStage: "复查阶段",
-          popupSnapshot: "Popup 快照",
-          actionBadge: "Action badge",
-        },
-        themeState: {
-          eyebrow: "主题状态",
-          title: "共享运行时状态",
-          detail:
-            "这个工作台读取 side panel、popup 和 audit hub 使用的同一份已保存主题设置。Operator pass 应在恢复 provider access 时保持当前 custom-seed 状态固定。",
-          themeMode: "Theme mode",
-          resolvedMode: "Resolved mode",
-          accentPreset: "Accent preset",
-          customSeed: "Custom seed",
-          scopeIsolation: "Scope isolation",
-          liveBadgeSource: "Live badge source",
-          notSet: "未设置",
-          computedBadgeSource: "由当前 app state 计算",
-          scopeNote: "Scope note",
-          popupSnapshotPrefix: "Popup 快照",
-          actionBadgeTitlePrefix: "Action badge 标题",
-        },
-        requestScope: {
-          eyebrow: "请求范围",
-          title: "Repo-backed request 绑定",
-          detail:
-            "这个工作台绑定到一个 pending theme-recovery request。Summary 和 JSON export 必须保留该请求身份，避免 completion 意外履行另一个请求。",
-          requestId: "Request id",
-          createdAt: "Created at",
-          boundWorkspaceRoute: "绑定的工作台路由",
-          adHocTitle: "Ad-hoc 工作台",
-          adHocDetail:
-            "这个 review route 当前没有绑定 repo-backed request。它的 export 仍可用于本地检查，但不应拿来履行 pending request。",
-        },
-        workflow: {
-          eyebrow: "Operator workflow",
-          title: "真实 session 跟进步骤",
-          detail:
-            "在 Settings、popup 和目标 vendor 页面之间切换时保持这个页面打开。用下方链接在独立标签页打开准确的已发布 surface，且不丢失当前工作台。",
-          steps: [
-            "固定当前 custom seed，并确认工作台仍报告预期的 theme mode、resolved mode、preset 和 seed。",
-            "在信任 popup alignment 与 action badge 之前，用 Settings 保持只有 Cursor 和 Codex 可见。",
-            "先捕获 degraded state：缺少 host access 或真实 session 被阻塞时，这个页面应保持 warning 状态。",
-            "通过 native prompt 授予 host access，或恢复真实 vendor session；随后刷新此页面，并确认 review stage 回到 recovered。",
-            "真实 pass 之后复制 summary 或 JSON export，让结果可附加到后续 repo-backed archive 或 operator note。",
-          ],
-          extensionSurfaces: "扩展 surface",
-          vendorSessionPages: "Vendor session 页面",
-        },
-        links: {
-          sidePanel: {
-            settings: "打开设置",
-            dashboard: "打开 dashboard",
-            "cursor-detail": "打开 Cursor 详情",
-            "codex-detail": "打开 Codex 详情",
-            popup: "打开 popup",
-          },
-          vendor: {
-            "cursor-session-page": "打开 Cursor usage 页面",
-            "codex-session-page": "打开 Codex analytics 页面",
-          },
-        },
-        outputs: {
-          eyebrow: "可复制输出",
-          title: "Summary 与 JSON 证据",
-          detail:
-            "这些输出保持只读。它们会准确反映上方显示的当前工作台状态，并可在手动 extension-mode 或真实 session pass 之后复制。",
-          copySummary: "复制 summary",
-          downloadSummary: "下载 summary",
-          copyJson: "复制 JSON",
-          downloadJson: "下载 JSON",
-          openSettingsTab: "在新标签页打开设置",
-          summaryDraft: "Summary 草稿",
-          jsonExport: "JSON export",
-          copiedSummary: "已复制当前主题恢复 summary。",
-          downloadedSummary: "已下载当前主题恢复 summary。",
-          copiedJson: "已复制当前主题恢复 JSON export。",
-          downloadedJson: "已下载当前主题恢复 JSON export。",
-          clipboardUnavailable: "当前上下文无法访问 clipboard。",
-          downloadUnavailable: "当前上下文无法直接下载。",
-          workspaceNote: "工作台备注",
-        },
-      },
-    } as const;
-  }
+type OperatorWorkspaceLocalizedCopy = {
+  interactionAudit: {
+    topbar: {
+      title: string;
+      subtitle: string;
+      openDashboard: string;
+      openSettings: string;
+    };
+    hero: {
+      eyebrow: string;
+      title: string;
+      detail: string;
+      chip: string;
+    };
+    guidance: {
+      eyebrow: string;
+      title: string;
+      detail: string;
+      checks: string[];
+      openDashboard: string;
+      openSettings: string;
+      openPopup: string;
+    };
+    signoff: {
+      eyebrow: string;
+      title: string;
+      detail: string;
+      reviewedSurfaces: string;
+      pass: string;
+      followUp: string;
+      completedChecks: string;
+      reviewerName: string;
+      reviewerPlaceholder: string;
+      sessionLabel: string;
+      sessionPlaceholder: string;
+      reviewedAt: string;
+      reviewedAtPlaceholder: string;
+      stampCurrentTime: string;
+      reviewSession: string;
+      reviewerPrefix: string;
+      sessionPrefix: string;
+      reviewedAtPrefix: string;
+      notSet: string;
+      requestBindingPrefix: string;
+      requestRevisionPrefix: string;
+      requestScope: string;
+      boundRequestDetail: string;
+      adHocDetail: string;
+      repoBackedRequest: string;
+      adHocWorkspace: string;
+      binding: string;
+      requestRevision: string;
+      downloadIdentity: string;
+      downloadsBound: string;
+      downloadsAdHoc: string;
+    };
+  };
+  themeRecovery: {
+    topbar: {
+      title: string;
+      subtitle: string;
+      refresh: string;
+      openSettings: string;
+    };
+    hero: {
+      eyebrow: string;
+      title: string;
+      detail: string;
+      chip: string;
+    };
+    loading: {
+      title: string;
+      detail: string;
+    };
+    error: {
+      title: string;
+    };
+    currentTruth: {
+      eyebrow: string;
+      title: string;
+      reviewStage: string;
+      popupSnapshot: string;
+      actionBadge: string;
+    };
+    themeState: {
+      eyebrow: string;
+      title: string;
+      detail: string;
+      themeMode: string;
+      resolvedMode: string;
+      accentPreset: string;
+      customSeed: string;
+      scopeIsolation: string;
+      liveBadgeSource: string;
+      notSet: string;
+      computedBadgeSource: string;
+      scopeNote: string;
+      popupSnapshotPrefix: string;
+      actionBadgeTitlePrefix: string;
+    };
+    requestScope: {
+      eyebrow: string;
+      title: string;
+      detail: string;
+      requestId: string;
+      createdAt: string;
+      boundWorkspaceRoute: string;
+      adHocTitle: string;
+      adHocDetail: string;
+    };
+    workflow: {
+      eyebrow: string;
+      title: string;
+      detail: string;
+      steps: string[];
+      extensionSurfaces: string;
+      vendorSessionPages: string;
+    };
+    links: {
+      sidePanel: {
+        settings: string;
+        dashboard: string;
+        "cursor-detail": string;
+        "codex-detail": string;
+        popup: string;
+      };
+      vendor: {
+        "cursor-session-page": string;
+        "codex-session-page": string;
+      };
+    };
+    outputs: {
+      eyebrow: string;
+      title: string;
+      detail: string;
+      copySummary: string;
+      downloadSummary: string;
+      copyJson: string;
+      downloadJson: string;
+      openSettingsTab: string;
+      summaryDraft: string;
+      jsonExport: string;
+      copiedSummary: string;
+      downloadedSummary: string;
+      copiedJson: string;
+      downloadedJson: string;
+      clipboardUnavailable: string;
+      downloadUnavailable: string;
+      workspaceNote: string;
+    };
+  };
+};
 
-  return {
+const OPERATOR_WORKSPACE_COPY: Record<
+  ResolvedAppLocale,
+  OperatorWorkspaceLocalizedCopy
+> = {
+  en: {
     interactionAudit: {
       topbar: {
         title: "Interaction Audit",
@@ -353,5 +331,2279 @@ export function buildOperatorWorkspaceLocalizedCopy(i18n: RuntimeI18n) {
         workspaceNote: "Workspace note",
       },
     },
-  };
+  },
+  "zh-CN": {
+    interactionAudit: {
+      topbar: {
+        title: "交互审计",
+        subtitle: "真实浏览器 QA 工作台",
+        openDashboard: "打开 dashboard",
+        openSettings: "打开设置",
+      },
+      hero: {
+        eyebrow: "审计中心",
+        title: "不用反复调整窗口的手动交互复查",
+        detail:
+          "这个页面把真实发布的 dashboard、settings、provider detail 和 popup 放进固定宽度 frame，让真实浏览器复查聚焦 hover、focus、pressed 和紧凑宽度行为，而不是反复重新打开路由。审计中心会跟随 side panel 与 popup 的共享主题偏好。",
+        chip: "手动 QA · 固定宽度 frame",
+      },
+      guidance: {
+        eyebrow: "使用方式",
+        title: "复查指引",
+        detail:
+          "当自动化复查脚本之后还需要人工确认时，在普通浏览器标签页或扩展页面打开这个路由。即使外层浏览器窗口更大，内嵌 frame 仍会保留代表性宽度。",
+        checks: [
+          "悬停交互控件，并确认跨页面的状态层仍然一致。",
+          "用键盘 tab 穿过内嵌 surface，并确认 focus 可见性仍然明确。",
+          "使用下方 preset actions 打开 disclosure、聚焦控件或露出更低层 detail note，再签核一个 UI slice。",
+        ],
+        openDashboard: "打开 dashboard",
+        openSettings: "打开设置",
+        openPopup: "打开 popup",
+      },
+      signoff: {
+        eyebrow: "签核工作台",
+        title: "当前 operator 草稿",
+        detail:
+          "使用每个审计 surface 内的控件记录检查进度、reviewer notes，以及 pass 或 follow-up 状态。下面的草稿会跟随当前工作台状态实时更新。",
+        reviewedSurfaces: "已复查 surface",
+        pass: "通过",
+        followUp: "待跟进",
+        completedChecks: "已完成检查",
+        reviewerName: "Reviewer 名称",
+        reviewerPlaceholder: "记录 reviewer 或 operator 名称。",
+        sessionLabel: "Session 标签",
+        sessionPlaceholder: "标记这次复查，例如 Compact QA Pass。",
+        reviewedAt: "复查时间",
+        reviewedAtPlaceholder: "使用 ISO-8601 时间，或盖上当前复查时间。",
+        stampCurrentTime: "填入当前时间",
+        reviewSession: "Review session",
+        reviewerPrefix: "Reviewer",
+        sessionPrefix: "Session",
+        reviewedAtPrefix: "Reviewed at",
+        notSet: "未设置",
+        requestBindingPrefix: "Request binding",
+        requestRevisionPrefix: "Request revision",
+        requestScope: "请求范围",
+        boundRequestDetail:
+          "这个工作台绑定到一个 repo-backed pending request。请针对该请求执行 preflight 和 completion，而不是使用 ad-hoc archive path。",
+        adHocDetail:
+          "这个工作台没有绑定 repo-backed request。除非先导入 pending request template，否则请使用 archive path。",
+        repoBackedRequest: "Repo-backed request",
+        adHocWorkspace: "Ad-hoc audit workspace",
+        binding: "绑定",
+        requestRevision: "Request revision",
+        downloadIdentity: "下载身份",
+        downloadsBound:
+          "下载内容会包含绑定的 request id 和 request revision。",
+        downloadsAdHoc: "下载内容仅保留当前 session scope。",
+      },
+    },
+    themeRecovery: {
+      topbar: {
+        title: "主题恢复审核",
+        subtitle: "Operator 工作台",
+        refresh: "刷新",
+        openSettings: "打开设置",
+      },
+      hero: {
+        eyebrow: "真实 session 跟进",
+        title: "集中执行 native prompt 与真实 session 恢复检查",
+        detail:
+          "这个路由不会声称 native host prompt 或真实 vendor session 已经通过。它会收集当前主题状态、恢复状态、快速链接和可复制证据，让下一次 operator pass 保持真实且可重复。",
+        chip: "主题 QA · 恢复跟进",
+      },
+      loading: {
+        title: "正在加载当前审核状态...",
+        detail:
+          "正在读取当前 app state 和 action badge，让这个工作台能反映与已发布 surface 相同的主题和 provider 状态。",
+      },
+      error: {
+        title: "无法加载审核状态",
+      },
+      currentTruth: {
+        eyebrow: "当前真值",
+        title: "此刻的恢复状态",
+        reviewStage: "复查阶段",
+        popupSnapshot: "Popup 快照",
+        actionBadge: "Action badge",
+      },
+      themeState: {
+        eyebrow: "主题状态",
+        title: "共享运行时状态",
+        detail:
+          "这个工作台读取 side panel、popup 和 audit hub 使用的同一份已保存主题设置。Operator pass 应在恢复 provider access 时保持当前 custom-seed 状态固定。",
+        themeMode: "Theme mode",
+        resolvedMode: "Resolved mode",
+        accentPreset: "Accent preset",
+        customSeed: "Custom seed",
+        scopeIsolation: "Scope isolation",
+        liveBadgeSource: "Live badge source",
+        notSet: "未设置",
+        computedBadgeSource: "由当前 app state 计算",
+        scopeNote: "Scope note",
+        popupSnapshotPrefix: "Popup 快照",
+        actionBadgeTitlePrefix: "Action badge 标题",
+      },
+      requestScope: {
+        eyebrow: "请求范围",
+        title: "Repo-backed request 绑定",
+        detail:
+          "这个工作台绑定到一个 pending theme-recovery request。Summary 和 JSON export 必须保留该请求身份，避免 completion 意外履行另一个请求。",
+        requestId: "Request id",
+        createdAt: "Created at",
+        boundWorkspaceRoute: "绑定的工作台路由",
+        adHocTitle: "Ad-hoc 工作台",
+        adHocDetail:
+          "这个 review route 当前没有绑定 repo-backed request。它的 export 仍可用于本地检查，但不应拿来履行 pending request。",
+      },
+      workflow: {
+        eyebrow: "Operator workflow",
+        title: "真实 session 跟进步骤",
+        detail:
+          "在 Settings、popup 和目标 vendor 页面之间切换时保持这个页面打开。用下方链接在独立标签页打开准确的已发布 surface，且不丢失当前工作台。",
+        steps: [
+          "固定当前 custom seed，并确认工作台仍报告预期的 theme mode、resolved mode、preset 和 seed。",
+          "在信任 popup alignment 与 action badge 之前，用 Settings 保持只有 Cursor 和 Codex 可见。",
+          "先捕获 degraded state：缺少 host access 或真实 session 被阻塞时，这个页面应保持 warning 状态。",
+          "通过 native prompt 授予 host access，或恢复真实 vendor session；随后刷新此页面，并确认 review stage 回到 recovered。",
+          "真实 pass 之后复制 summary 或 JSON export，让结果可附加到后续 repo-backed archive 或 operator note。",
+        ],
+        extensionSurfaces: "扩展 surface",
+        vendorSessionPages: "Vendor session 页面",
+      },
+      links: {
+        sidePanel: {
+          settings: "打开设置",
+          dashboard: "打开 dashboard",
+          "cursor-detail": "打开 Cursor 详情",
+          "codex-detail": "打开 Codex 详情",
+          popup: "打开 popup",
+        },
+        vendor: {
+          "cursor-session-page": "打开 Cursor usage 页面",
+          "codex-session-page": "打开 Codex analytics 页面",
+        },
+      },
+      outputs: {
+        eyebrow: "可复制输出",
+        title: "Summary 与 JSON 证据",
+        detail:
+          "这些输出保持只读。它们会准确反映上方显示的当前工作台状态，并可在手动 extension-mode 或真实 session pass 之后复制。",
+        copySummary: "复制 summary",
+        downloadSummary: "下载 summary",
+        copyJson: "复制 JSON",
+        downloadJson: "下载 JSON",
+        openSettingsTab: "在新标签页打开设置",
+        summaryDraft: "Summary 草稿",
+        jsonExport: "JSON export",
+        copiedSummary: "已复制当前主题恢复 summary。",
+        downloadedSummary: "已下载当前主题恢复 summary。",
+        copiedJson: "已复制当前主题恢复 JSON export。",
+        downloadedJson: "已下载当前主题恢复 JSON export。",
+        clipboardUnavailable: "当前上下文无法访问 clipboard。",
+        downloadUnavailable: "当前上下文无法直接下载。",
+        workspaceNote: "工作台备注",
+      },
+    },
+  },
+  "zh-TW": {
+    interactionAudit: {
+      topbar: {
+        title: "互動稽核",
+        subtitle: "真實瀏覽器 QA 工作台",
+        openDashboard: "開啟 dashboard",
+        openSettings: "開啟設定",
+      },
+      hero: {
+        eyebrow: "稽核中心",
+        title: "不用反覆調整視窗的手動互動複查",
+        detail:
+          "這個頁面會把實際發布的 dashboard、settings、provider detail 和 popup 放進固定寬度 frame，讓真實瀏覽器複查專注在 hover、focus、pressed 與緊湊寬度行為，而不是反覆重新開啟路由。稽核中心會跟隨 side panel 與 popup 的共用主題偏好。",
+        chip: "手動 QA · 固定寬度 frame",
+      },
+      guidance: {
+        eyebrow: "使用方式",
+        title: "複查指引",
+        detail:
+          "當自動化複查腳本之後仍需要人工確認時，請在一般瀏覽器分頁或擴充功能頁面開啟此路由。即使外層瀏覽器視窗更大，內嵌 frame 仍會保留代表性寬度。",
+        checks: [
+          "懸停互動控制項，確認跨頁面的狀態層仍然一致。",
+          "用鍵盤 tab 穿過內嵌 surface，確認 focus 可見性仍然明確。",
+          "使用下方 preset actions 開啟 disclosure、聚焦控制項或露出較低層 detail note，再簽核一個 UI slice。",
+        ],
+        openDashboard: "開啟 dashboard",
+        openSettings: "開啟設定",
+        openPopup: "開啟 popup",
+      },
+      signoff: {
+        eyebrow: "簽核工作台",
+        title: "目前 operator 草稿",
+        detail:
+          "使用每個稽核 surface 內的控制項記錄檢查進度、reviewer notes，以及 pass 或 follow-up 狀態。下方草稿會隨目前工作台狀態即時更新。",
+        reviewedSurfaces: "已複查 surface",
+        pass: "通過",
+        followUp: "待跟進",
+        completedChecks: "已完成檢查",
+        reviewerName: "Reviewer 名稱",
+        reviewerPlaceholder: "記錄 reviewer 或 operator 名稱。",
+        sessionLabel: "Session 標籤",
+        sessionPlaceholder: "標記這次複查，例如 Compact QA Pass。",
+        reviewedAt: "複查時間",
+        reviewedAtPlaceholder: "使用 ISO-8601 時間，或蓋上目前複查時間。",
+        stampCurrentTime: "填入目前時間",
+        reviewSession: "Review session",
+        reviewerPrefix: "Reviewer",
+        sessionPrefix: "Session",
+        reviewedAtPrefix: "Reviewed at",
+        notSet: "未設定",
+        requestBindingPrefix: "Request binding",
+        requestRevisionPrefix: "Request revision",
+        requestScope: "請求範圍",
+        boundRequestDetail:
+          "這個工作台已綁定一個 repo-backed pending request。請針對該請求執行 preflight 與 completion，而不是使用 ad-hoc archive path。",
+        adHocDetail:
+          "這個工作台未綁定 repo-backed request。除非先匯入 pending request template，否則請使用 archive path。",
+        repoBackedRequest: "Repo-backed request",
+        adHocWorkspace: "Ad-hoc audit workspace",
+        binding: "綁定",
+        requestRevision: "Request revision",
+        downloadIdentity: "下載身分",
+        downloadsBound: "下載內容會包含綁定的 request id 與 request revision。",
+        downloadsAdHoc: "下載內容只保留目前 session scope。",
+      },
+    },
+    themeRecovery: {
+      topbar: {
+        title: "主題恢復審核",
+        subtitle: "Operator 工作台",
+        refresh: "重新整理",
+        openSettings: "開啟設定",
+      },
+      hero: {
+        eyebrow: "真實 session 跟進",
+        title: "集中執行 native prompt 與真實 session 復原檢查",
+        detail:
+          "這個路由不會宣稱 native host prompt 或真實 vendor session 已經通過。它會收集目前主題狀態、復原狀態、快速連結與可複製證據，讓下一次 operator pass 保持真實且可重複。",
+        chip: "主題 QA · 復原跟進",
+      },
+      loading: {
+        title: "正在載入目前審核狀態...",
+        detail:
+          "正在讀取目前 app state 與 action badge，讓這個工作台反映與已發布 surface 相同的主題和 provider 狀態。",
+      },
+      error: {
+        title: "無法載入審核狀態",
+      },
+      currentTruth: {
+        eyebrow: "目前真值",
+        title: "此刻的復原狀態",
+        reviewStage: "複查階段",
+        popupSnapshot: "Popup 快照",
+        actionBadge: "Action badge",
+      },
+      themeState: {
+        eyebrow: "主題狀態",
+        title: "共用執行時狀態",
+        detail:
+          "這個工作台讀取 side panel、popup 與 audit hub 使用的同一份已儲存主題設定。Operator pass 應在復原 provider access 時固定目前 custom-seed 狀態。",
+        themeMode: "Theme mode",
+        resolvedMode: "Resolved mode",
+        accentPreset: "Accent preset",
+        customSeed: "Custom seed",
+        scopeIsolation: "Scope isolation",
+        liveBadgeSource: "Live badge source",
+        notSet: "未設定",
+        computedBadgeSource: "由目前 app state 計算",
+        scopeNote: "Scope note",
+        popupSnapshotPrefix: "Popup 快照",
+        actionBadgeTitlePrefix: "Action badge 標題",
+      },
+      requestScope: {
+        eyebrow: "請求範圍",
+        title: "Repo-backed request 綁定",
+        detail:
+          "這個工作台已綁定一個 pending theme-recovery request。Summary 與 JSON export 必須保留該請求身分，避免 completion 意外履行另一個請求。",
+        requestId: "Request id",
+        createdAt: "Created at",
+        boundWorkspaceRoute: "綁定的工作台路由",
+        adHocTitle: "Ad-hoc 工作台",
+        adHocDetail:
+          "這個 review route 目前未綁定 repo-backed request。它的 export 仍可用於本機檢查，但不應用來履行 pending request。",
+      },
+      workflow: {
+        eyebrow: "Operator workflow",
+        title: "真實 session 跟進步驟",
+        detail:
+          "在 Settings、popup 與目標 vendor 頁面之間切換時保持這個頁面開啟。用下方連結在獨立分頁開啟準確的已發布 surface，且不會遺失目前工作台。",
+        steps: [
+          "固定目前 custom seed，並確認工作台仍回報預期的 theme mode、resolved mode、preset 與 seed。",
+          "在信任 popup alignment 與 action badge 之前，用 Settings 保持只有 Cursor 和 Codex 可見。",
+          "先捕捉 degraded state：缺少 host access 或真實 session 被阻擋時，此頁面應保持 warning 狀態。",
+          "透過 native prompt 授予 host access，或復原真實 vendor session；接著重新整理此頁，確認 review stage 回到 recovered。",
+          "真實 pass 後複製 summary 或 JSON export，讓結果可附加到後續 repo-backed archive 或 operator note。",
+        ],
+        extensionSurfaces: "擴充功能 surface",
+        vendorSessionPages: "Vendor session 頁面",
+      },
+      links: {
+        sidePanel: {
+          settings: "開啟設定",
+          dashboard: "開啟 dashboard",
+          "cursor-detail": "開啟 Cursor 詳細資訊",
+          "codex-detail": "開啟 Codex 詳細資訊",
+          popup: "開啟 popup",
+        },
+        vendor: {
+          "cursor-session-page": "開啟 Cursor usage 頁面",
+          "codex-session-page": "開啟 Codex analytics 頁面",
+        },
+      },
+      outputs: {
+        eyebrow: "可複製輸出",
+        title: "Summary 與 JSON 證據",
+        detail:
+          "這些輸出保持唯讀。它們會準確反映上方顯示的目前工作台狀態，並可在手動 extension-mode 或真實 session pass 後複製。",
+        copySummary: "複製 summary",
+        downloadSummary: "下載 summary",
+        copyJson: "複製 JSON",
+        downloadJson: "下載 JSON",
+        openSettingsTab: "在新分頁開啟設定",
+        summaryDraft: "Summary 草稿",
+        jsonExport: "JSON export",
+        copiedSummary: "已複製目前主題復原 summary。",
+        downloadedSummary: "已下載目前主題復原 summary。",
+        copiedJson: "已複製目前主題復原 JSON export。",
+        downloadedJson: "已下載目前主題復原 JSON export。",
+        clipboardUnavailable: "目前內容無法存取 clipboard。",
+        downloadUnavailable: "目前內容無法直接下載。",
+        workspaceNote: "工作台備註",
+      },
+    },
+  },
+  ja: {
+    interactionAudit: {
+      topbar: {
+        title: "インタラクション監査",
+        subtitle: "実ブラウザー QA ハブ",
+        openDashboard: "dashboard を開く",
+        openSettings: "設定を開く",
+      },
+      hero: {
+        eyebrow: "監査ハブ",
+        title: "リサイズを繰り返さない手動インタラクションレビュー",
+        detail:
+          "このページは実際に出荷されている dashboard、settings、provider detail、popup の各 surface を固定幅 frame に埋め込みます。実ブラウザーのレビューでは、route を何度も開き直す代わりに hover、focus、pressed、コンパクト幅の挙動へ集中できます。監査ハブは出荷済み side panel と popup と同じ共有テーマ設定に従います。",
+        chip: "手動 QA · 固定幅 frame",
+      },
+      guidance: {
+        eyebrow: "使い方",
+        title: "レビューガイダンス",
+        detail:
+          "自動レビュー script の後に人の確認が必要なときは、この route を通常のブラウザータブまたは拡張機能ページで開きます。外側のブラウザーウィンドウが大きくても、埋め込み frame は代表的な幅を保ちます。",
+        checks: [
+          "インタラクティブなコントロールに hover し、ページ間で state layer が一貫していることを確認します。",
+          "キーボードの tab で埋め込み surface を移動し、focus の可視性が明確なままか確認します。",
+          "下の preset actions で disclosure を開く、コントロールへ focus する、または下位の detail note を表示してから UI slice を sign off します。",
+        ],
+        openDashboard: "dashboard を開く",
+        openSettings: "設定を開く",
+        openPopup: "popup を開く",
+      },
+      signoff: {
+        eyebrow: "サインオフ作業領域",
+        title: "現在の operator draft",
+        detail:
+          "各監査 surface 内のコントロールで、チェック進捗、reviewer notes、pass または follow-up 状態を記録します。下の draft は現在の workspace 状態からリアルタイムに更新されます。",
+        reviewedSurfaces: "レビュー済み surface",
+        pass: "合格",
+        followUp: "フォローアップ",
+        completedChecks: "完了したチェック",
+        reviewerName: "Reviewer 名",
+        reviewerPlaceholder: "reviewer または operator 名を記録します。",
+        sessionLabel: "Session ラベル",
+        sessionPlaceholder: "例: Compact QA Pass のようにこの pass をラベル付けします。",
+        reviewedAt: "レビュー日時",
+        reviewedAtPlaceholder: "ISO-8601 時刻を使うか、現在のレビュー時刻を入れます。",
+        stampCurrentTime: "現在時刻を入力",
+        reviewSession: "Review session",
+        reviewerPrefix: "Reviewer",
+        sessionPrefix: "Session",
+        reviewedAtPrefix: "Reviewed at",
+        notSet: "未設定",
+        requestBindingPrefix: "Request binding",
+        requestRevisionPrefix: "Request revision",
+        requestScope: "Request scope",
+        boundRequestDetail:
+          "この workspace は repo-backed pending request に紐付いています。ad-hoc archive path ではなく、その request に対して preflight と completion を実行してください。",
+        adHocDetail:
+          "この workspace は repo-backed request に紐付いていません。pending request template を先に import しない限り archive path を使ってください。",
+        repoBackedRequest: "Repo-backed request",
+        adHocWorkspace: "Ad-hoc audit workspace",
+        binding: "紐付け",
+        requestRevision: "Request revision",
+        downloadIdentity: "ダウンロード識別情報",
+        downloadsBound: "ダウンロードには紐付いた request id と request revision が含まれます。",
+        downloadsAdHoc: "ダウンロードは現在の session scope のみに限定されます。",
+      },
+    },
+    themeRecovery: {
+      topbar: {
+        title: "テーマ復旧レビュー",
+        subtitle: "Operator workspace",
+        refresh: "更新",
+        openSettings: "設定を開く",
+      },
+      hero: {
+        eyebrow: "実 session のフォローアップ",
+        title: "native prompt と実 session 復旧チェックをまとめて準備",
+        detail:
+          "この route は native host prompt や実 vendor session がすでに通過したとは主張しません。現在のテーマ状態、復旧状態、クイックリンク、コピー可能な証拠を集め、次の operator pass を正確で再現可能にします。",
+        chip: "テーマ QA · 復旧フォローアップ",
+      },
+      loading: {
+        title: "現在のレビュー状態を読み込み中...",
+        detail:
+          "現在の app state と action badge を読み込み、この workspace が出荷済み surface と同じテーマおよび provider 状態を反映できるようにしています。",
+      },
+      error: {
+        title: "レビュー状態を読み込めませんでした",
+      },
+      currentTruth: {
+        eyebrow: "現在の真実",
+        title: "現時点の復旧状態",
+        reviewStage: "Review stage",
+        popupSnapshot: "Popup snapshot",
+        actionBadge: "Action badge",
+      },
+      themeState: {
+        eyebrow: "テーマ状態",
+        title: "共有 runtime 状態",
+        detail:
+          "この workspace は side panel、popup、audit hub が使う同じ保存済みテーマ設定を読みます。operator pass では provider access を復旧する間、現在の custom-seed 状態を固定してください。",
+        themeMode: "Theme mode",
+        resolvedMode: "Resolved mode",
+        accentPreset: "Accent preset",
+        customSeed: "Custom seed",
+        scopeIsolation: "Scope isolation",
+        liveBadgeSource: "Live badge source",
+        notSet: "未設定",
+        computedBadgeSource: "現在の app state から計算",
+        scopeNote: "Scope note",
+        popupSnapshotPrefix: "Popup snapshot",
+        actionBadgeTitlePrefix: "Action badge title",
+      },
+      requestScope: {
+        eyebrow: "Request scope",
+        title: "Repo-backed request の紐付け",
+        detail:
+          "この workspace は pending theme-recovery request に紐付いています。Summary と JSON export は、この request identity を保持し、completion が別の request を誤って完了しないようにします。",
+        requestId: "Request id",
+        createdAt: "Created at",
+        boundWorkspaceRoute: "紐付いた workspace route",
+        adHocTitle: "Ad-hoc workspace",
+        adHocDetail:
+          "この review route は現在 repo-backed request に紐付いていません。export はローカル検査には有用ですが、pending request の完了には使わないでください。",
+      },
+      workflow: {
+        eyebrow: "Operator workflow",
+        title: "実 session フォローアップ手順",
+        detail:
+          "Settings、popup、対象 vendor ページの間を切り替える間、このページを開いたままにします。下のリンクで正確な出荷済み surface を別タブで開き、現在の workspace を失わないようにします。",
+        steps: [
+          "現在の custom seed を固定し、workspace が期待した theme mode、resolved mode、preset、seed を報告していることを確認します。",
+          "popup alignment と action badge を信頼する前に、Settings で Cursor と Codex だけを表示します。",
+          "まず degraded state を記録します。host access がない場合や実 session がブロックされている場合、このページは warning 状態のままであるべきです。",
+          "native prompt で host access を許可するか、実 vendor session を復旧します。その後このページを更新し、review stage が recovered に戻ることを確認します。",
+          "実 pass の後に summary または JSON export をコピーし、後続の repo-backed archive や operator note へ添付できるようにします。",
+        ],
+        extensionSurfaces: "拡張機能 surface",
+        vendorSessionPages: "Vendor session ページ",
+      },
+      links: {
+        sidePanel: {
+          settings: "設定を開く",
+          dashboard: "dashboard を開く",
+          "cursor-detail": "Cursor detail を開く",
+          "codex-detail": "Codex detail を開く",
+          popup: "popup を開く",
+        },
+        vendor: {
+          "cursor-session-page": "Cursor usage ページを開く",
+          "codex-session-page": "Codex analytics ページを開く",
+        },
+      },
+      outputs: {
+        eyebrow: "コピー可能な出力",
+        title: "Summary と JSON 証拠",
+        detail:
+          "これらの出力は読み取り専用です。上に表示される現在の workspace 状態を正確に反映し、手動 extension-mode または実 session pass の後にコピーできます。",
+        copySummary: "summary をコピー",
+        downloadSummary: "summary をダウンロード",
+        copyJson: "JSON をコピー",
+        downloadJson: "JSON をダウンロード",
+        openSettingsTab: "新しいタブで設定を開く",
+        summaryDraft: "Summary draft",
+        jsonExport: "JSON export",
+        copiedSummary: "現在のテーマ復旧 summary をコピーしました。",
+        downloadedSummary: "現在のテーマ復旧 summary をダウンロードしました。",
+        copiedJson: "現在のテーマ復旧 JSON export をコピーしました。",
+        downloadedJson: "現在のテーマ復旧 JSON export をダウンロードしました。",
+        clipboardUnavailable: "この context では clipboard にアクセスできません。",
+        downloadUnavailable: "この context では直接ダウンロードできません。",
+        workspaceNote: "Workspace note",
+      },
+    },
+  },
+  ko: {
+    interactionAudit: {
+      topbar: {
+        title: "상호작용 감사",
+        subtitle: "실제 브라우저 QA 허브",
+        openDashboard: "dashboard 열기",
+        openSettings: "설정 열기",
+      },
+      hero: {
+        eyebrow: "감사 허브",
+        title: "반복 리사이즈 없이 수동 상호작용 검토",
+        detail:
+          "이 페이지는 실제 배포된 dashboard, settings, provider detail, popup surface 를 고정 너비 frame 안에 넣습니다. 실제 브라우저 검토는 route 를 반복해서 다시 여는 대신 hover, focus, pressed, compact-width 동작에 집중할 수 있습니다. 감사 허브는 배포된 side panel 및 popup 과 같은 공유 theme preferences 를 따릅니다.",
+        chip: "수동 QA · 고정 너비 frame",
+      },
+      guidance: {
+        eyebrow: "사용 방법",
+        title: "검토 가이드",
+        detail:
+          "자동 검토 script 이후 사람의 확인이 필요할 때 이 route 를 일반 브라우저 탭이나 확장 페이지에서 여세요. 바깥 브라우저 창이 더 커도 embedded frame 은 대표 너비를 유지합니다.",
+        checks: [
+          "상호작용 컨트롤에 hover 하고 페이지 간 state layer 가 일관적인지 확인합니다.",
+          "키보드 tab 으로 embedded surface 를 이동하며 focus 가 명확하게 보이는지 확인합니다.",
+          "아래 preset actions 로 disclosure 를 열거나 컨트롤에 focus 하거나 더 낮은 detail note 를 노출한 뒤 UI slice 를 sign off 합니다.",
+        ],
+        openDashboard: "dashboard 열기",
+        openSettings: "설정 열기",
+        openPopup: "popup 열기",
+      },
+      signoff: {
+        eyebrow: "Signoff workspace",
+        title: "현재 operator draft",
+        detail:
+          "각 감사 surface 안의 컨트롤로 check 진행 상황, reviewer notes, pass 또는 follow-up 상태를 기록합니다. 아래 draft 는 현재 workspace state 에서 실시간으로 업데이트됩니다.",
+        reviewedSurfaces: "검토된 surface",
+        pass: "통과",
+        followUp: "후속 조치",
+        completedChecks: "완료된 check",
+        reviewerName: "Reviewer 이름",
+        reviewerPlaceholder: "reviewer 또는 operator 이름을 기록합니다.",
+        sessionLabel: "Session 라벨",
+        sessionPlaceholder: "예: Compact QA Pass 처럼 이번 pass 를 표시합니다.",
+        reviewedAt: "검토 시간",
+        reviewedAtPlaceholder: "ISO-8601 시간을 쓰거나 현재 검토 시간을 입력합니다.",
+        stampCurrentTime: "현재 시간 입력",
+        reviewSession: "Review session",
+        reviewerPrefix: "Reviewer",
+        sessionPrefix: "Session",
+        reviewedAtPrefix: "Reviewed at",
+        notSet: "설정되지 않음",
+        requestBindingPrefix: "Request binding",
+        requestRevisionPrefix: "Request revision",
+        requestScope: "Request scope",
+        boundRequestDetail:
+          "이 workspace 는 repo-backed pending request 에 바인딩되어 있습니다. ad-hoc archive path 대신 해당 request 에 대해 preflight 와 completion 을 실행하세요.",
+        adHocDetail:
+          "이 workspace 는 repo-backed request 에 바인딩되어 있지 않습니다. pending request template 을 먼저 가져오지 않는 한 archive path 를 사용하세요.",
+        repoBackedRequest: "Repo-backed request",
+        adHocWorkspace: "Ad-hoc audit workspace",
+        binding: "바인딩",
+        requestRevision: "Request revision",
+        downloadIdentity: "다운로드 identity",
+        downloadsBound: "다운로드에는 바인딩된 request id 와 request revision 이 포함됩니다.",
+        downloadsAdHoc: "다운로드는 현재 session scope 에만 유지됩니다.",
+      },
+    },
+    themeRecovery: {
+      topbar: {
+        title: "테마 복구 검토",
+        subtitle: "Operator workspace",
+        refresh: "새로고침",
+        openSettings: "설정 열기",
+      },
+      hero: {
+        eyebrow: "실제 session follow-up",
+        title: "native prompt 와 실제 session 복구 검사를 한곳에서 준비",
+        detail:
+          "이 route 는 native host prompt 나 실제 vendor session 이 이미 통과했다고 주장하지 않습니다. 현재 theme state, recovery state, quick links, 복사 가능한 evidence 를 모아 다음 operator pass 가 사실에 맞고 반복 가능하도록 합니다.",
+        chip: "Theme QA · 복구 follow-up",
+      },
+      loading: {
+        title: "현재 검토 상태를 불러오는 중...",
+        detail:
+          "현재 app state 와 action badge 를 읽어 이 workspace 가 배포된 surface 와 같은 theme 및 provider 상태를 반영하도록 합니다.",
+      },
+      error: {
+        title: "검토 상태를 불러올 수 없음",
+      },
+      currentTruth: {
+        eyebrow: "현재 truth",
+        title: "지금의 복구 상태",
+        reviewStage: "Review stage",
+        popupSnapshot: "Popup snapshot",
+        actionBadge: "Action badge",
+      },
+      themeState: {
+        eyebrow: "Theme state",
+        title: "공유 runtime state",
+        detail:
+          "이 workspace 는 side panel, popup, audit hub 가 사용하는 같은 저장된 theme settings 를 읽습니다. operator pass 는 provider access 를 복구하는 동안 현재 custom-seed state 를 고정해야 합니다.",
+        themeMode: "Theme mode",
+        resolvedMode: "Resolved mode",
+        accentPreset: "Accent preset",
+        customSeed: "Custom seed",
+        scopeIsolation: "Scope isolation",
+        liveBadgeSource: "Live badge source",
+        notSet: "설정되지 않음",
+        computedBadgeSource: "현재 app state 에서 계산됨",
+        scopeNote: "Scope note",
+        popupSnapshotPrefix: "Popup snapshot",
+        actionBadgeTitlePrefix: "Action badge title",
+      },
+      requestScope: {
+        eyebrow: "Request scope",
+        title: "Repo-backed request 바인딩",
+        detail:
+          "이 workspace 는 pending theme-recovery request 하나에 바인딩되어 있습니다. Summary 와 JSON export 는 이 request identity 를 보존해 completion 이 다른 request 를 실수로 완료하지 않도록 해야 합니다.",
+        requestId: "Request id",
+        createdAt: "Created at",
+        boundWorkspaceRoute: "바인딩된 workspace route",
+        adHocTitle: "Ad-hoc workspace",
+        adHocDetail:
+          "이 review route 는 현재 repo-backed request 에 바인딩되어 있지 않습니다. export 는 로컬 검사에는 유용하지만 pending request 완료에는 사용하지 마세요.",
+      },
+      workflow: {
+        eyebrow: "Operator workflow",
+        title: "실제 session follow-up 단계",
+        detail:
+          "Settings, popup, 대상 vendor page 사이를 전환하는 동안 이 페이지를 열어 두세요. 아래 링크로 정확한 배포 surface 를 별도 탭에서 열어 현재 workspace 를 잃지 않습니다.",
+        steps: [
+          "현재 custom seed 를 고정하고 workspace 가 예상 theme mode, resolved mode, preset, seed 를 계속 보고하는지 확인합니다.",
+          "popup alignment 와 action badge 를 신뢰하기 전에 Settings 에서 Cursor 와 Codex 만 보이게 유지합니다.",
+          "먼저 degraded state 를 캡처합니다. host access 누락이나 실제 session 차단은 이 페이지가 warning 상태를 유지해야 합니다.",
+          "native prompt 로 host access 를 부여하거나 실제 vendor session 을 복구한 뒤 이 페이지를 새로고침하고 review stage 가 recovered 로 돌아오는지 확인합니다.",
+          "실제 pass 후 summary 또는 JSON export 를 복사해 이후 repo-backed archive 나 operator note 에 첨부할 수 있게 합니다.",
+        ],
+        extensionSurfaces: "확장 surface",
+        vendorSessionPages: "Vendor session 페이지",
+      },
+      links: {
+        sidePanel: {
+          settings: "설정 열기",
+          dashboard: "dashboard 열기",
+          "cursor-detail": "Cursor detail 열기",
+          "codex-detail": "Codex detail 열기",
+          popup: "popup 열기",
+        },
+        vendor: {
+          "cursor-session-page": "Cursor usage 페이지 열기",
+          "codex-session-page": "Codex analytics 페이지 열기",
+        },
+      },
+      outputs: {
+        eyebrow: "복사 가능한 출력",
+        title: "Summary 및 JSON evidence",
+        detail:
+          "이 출력은 읽기 전용입니다. 위에 표시된 현재 workspace state 를 정확히 반영하며 수동 extension-mode 또는 실제 session pass 후 복사할 수 있습니다.",
+        copySummary: "summary 복사",
+        downloadSummary: "summary 다운로드",
+        copyJson: "JSON 복사",
+        downloadJson: "JSON 다운로드",
+        openSettingsTab: "새 탭에서 설정 열기",
+        summaryDraft: "Summary draft",
+        jsonExport: "JSON export",
+        copiedSummary: "현재 theme recovery summary 를 복사했습니다.",
+        downloadedSummary: "현재 theme recovery summary 를 다운로드했습니다.",
+        copiedJson: "현재 theme recovery JSON export 를 복사했습니다.",
+        downloadedJson: "현재 theme recovery JSON export 를 다운로드했습니다.",
+        clipboardUnavailable: "현재 context 에서 clipboard 에 접근할 수 없습니다.",
+        downloadUnavailable: "현재 context 에서 직접 다운로드할 수 없습니다.",
+        workspaceNote: "Workspace note",
+      },
+    },
+  },
+  "es-419": {
+    interactionAudit: {
+      topbar: {
+        title: "Auditoría de interacción",
+        subtitle: "Hub QA en navegador real",
+        openDashboard: "Abrir dashboard",
+        openSettings: "Abrir Settings",
+      },
+      hero: {
+        eyebrow: "Hub de auditoria",
+        title: "Revision manual de interacciones sin redimensionar una y otra vez",
+        detail:
+          "Esta pagina incrusta las superficies reales publicadas de dashboard, settings, provider detail y popup dentro de frames de ancho fijo. Asi la revision en navegador real puede enfocarse en hover, focus, pressed y comportamiento en ancho compacto, en vez de reabrir rutas repetidamente. El hub de auditoria sigue las mismas preferencias de tema compartidas que el side panel y el popup publicados.",
+        chip: "QA manual · Frames de ancho fijo",
+      },
+      guidance: {
+        eyebrow: "Como usarlo",
+        title: "Guia de revision",
+        detail:
+          "Abre esta ruta en una pestana normal del navegador o en una pagina de la extension cuando quieras una pasada humana despues de los scripts de revision automatizada. Los frames incrustados conservan anchos representativos incluso si la ventana externa es mas grande.",
+        checks: [
+          "Haz hover sobre controles interactivos y confirma que la capa de estado siga siendo coherente entre paginas.",
+          "Usa tabulacion de teclado en las superficies incrustadas y confirma que el focus siga siendo visible.",
+          "Usa las preset actions de abajo para abrir disclosures, enfocar controles o mostrar notas de detalle mas profundas antes de firmar un UI slice.",
+        ],
+        openDashboard: "Abrir dashboard",
+        openSettings: "Abrir Settings",
+        openPopup: "Abrir popup",
+      },
+      signoff: {
+        eyebrow: "Workspace de signoff",
+        title: "Borrador actual del operator",
+        detail:
+          "Usa los controles dentro de cada superficie auditada para registrar progreso de checks, reviewer notes y estado pass o follow-up. El borrador de abajo se actualiza en vivo desde el estado actual del workspace.",
+        reviewedSurfaces: "Superficies revisadas",
+        pass: "Pass",
+        followUp: "Follow-up",
+        completedChecks: "Checks completados",
+        reviewerName: "Nombre del reviewer",
+        reviewerPlaceholder: "Registra el nombre del reviewer u operator.",
+        sessionLabel: "Etiqueta de session",
+        sessionPlaceholder: "Etiqueta esta pasada, por ejemplo Compact QA Pass.",
+        reviewedAt: "Reviewed at",
+        reviewedAtPlaceholder: "Usa hora ISO-8601 o marca el momento actual de revision.",
+        stampCurrentTime: "Marcar hora actual",
+        reviewSession: "Review session",
+        reviewerPrefix: "Reviewer",
+        sessionPrefix: "Session",
+        reviewedAtPrefix: "Reviewed at",
+        notSet: "sin definir",
+        requestBindingPrefix: "Request binding",
+        requestRevisionPrefix: "Request revision",
+        requestScope: "Alcance del request",
+        boundRequestDetail:
+          "Este workspace esta vinculado a un pending request repo-backed. Usa preflight y completion contra ese request en vez del ad-hoc archive path.",
+        adHocDetail:
+          "Este workspace no esta vinculado a un repo-backed request. Usa el archive path salvo que primero importes un pending request template.",
+        repoBackedRequest: "Repo-backed request",
+        adHocWorkspace: "Ad-hoc audit workspace",
+        binding: "Vinculo",
+        requestRevision: "Request revision",
+        downloadIdentity: "Identidad de descarga",
+        downloadsBound:
+          "Las descargas incluyen el request id vinculado y el request revision.",
+        downloadsAdHoc: "Las descargas quedan limitadas al session scope actual.",
+      },
+    },
+    themeRecovery: {
+      topbar: {
+        title: "Revisión de recuperación de tema",
+        subtitle: "Workspace del operator",
+        refresh: "Actualizar",
+        openSettings: "Abrir Settings",
+      },
+      hero: {
+        eyebrow: "Seguimiento de session real",
+        title: "Un lugar para preparar checks de native prompt y recuperacion de session real",
+        detail:
+          "Esta ruta no afirma que el native host prompt o una session real del vendor ya hayan pasado. Reune el estado actual del tema, estado de recuperacion, enlaces rapidos y evidencia copiable para que la proxima pasada del operator sea veraz y repetible.",
+        chip: "Theme QA · Seguimiento de recuperacion",
+      },
+      loading: {
+        title: "Cargando estado actual de revision...",
+        detail:
+          "Leyendo el app state actual y el action badge para que este workspace refleje el mismo tema y estado de provider que las superficies publicadas.",
+      },
+      error: {
+        title: "No se pudo cargar el estado de revision",
+      },
+      currentTruth: {
+        eyebrow: "Verdad actual",
+        title: "Estado de recuperacion ahora",
+        reviewStage: "Review stage",
+        popupSnapshot: "Popup snapshot",
+        actionBadge: "Action badge",
+      },
+      themeState: {
+        eyebrow: "Estado del tema",
+        title: "Estado runtime compartido",
+        detail:
+          "Este workspace lee la misma configuracion de tema guardada que usan side panel, popup y audit hub. La pasada del operator debe mantener fijo el custom-seed actual mientras recupera provider access.",
+        themeMode: "Theme mode",
+        resolvedMode: "Resolved mode",
+        accentPreset: "Accent preset",
+        customSeed: "Custom seed",
+        scopeIsolation: "Scope isolation",
+        liveBadgeSource: "Live badge source",
+        notSet: "Sin definir",
+        computedBadgeSource: "Calculado desde el app state actual",
+        scopeNote: "Scope note",
+        popupSnapshotPrefix: "Popup snapshot",
+        actionBadgeTitlePrefix: "Action badge title",
+      },
+      requestScope: {
+        eyebrow: "Alcance del request",
+        title: "Vinculo de repo-backed request",
+        detail:
+          "Este workspace esta vinculado a un pending theme-recovery request. Summary y JSON export deben conservar esta identidad del request para que completion no cierre otro request por error.",
+        requestId: "Request id",
+        createdAt: "Created at",
+        boundWorkspaceRoute: "Ruta de workspace vinculada",
+        adHocTitle: "Ad-hoc workspace",
+        adHocDetail:
+          "Esta review route no esta vinculada actualmente a un repo-backed request. Sus exports siguen siendo utiles para inspeccion local, pero no deben usarse para completar un pending request.",
+      },
+      workflow: {
+        eyebrow: "Operator workflow",
+        title: "Pasos de seguimiento de session real",
+        detail:
+          "Manten esta pagina abierta mientras cambias entre Settings, popup y las paginas vendor objetivo. Usa los enlaces de abajo para abrir las superficies publicadas exactas en pestanas separadas sin perder este workspace.",
+        steps: [
+          "Mantener fijo el custom seed actual y confirmar que el workspace aun reporta el theme mode, resolved mode, preset y seed esperados.",
+          "Usar Settings para mantener visibles solo Cursor y Codex antes de confiar en popup alignment y action badge.",
+          "Capturar primero el degraded state: falta de host access o una session real bloqueada debe mantener esta pagina en warning.",
+          "Conceder host access mediante el native prompt o restaurar la session real del vendor; luego actualizar esta pagina y confirmar que review stage vuelve a recovered.",
+          "Copiar el summary o JSON export despues de la pasada real para adjuntarlo luego a un repo-backed archive u operator note.",
+        ],
+        extensionSurfaces: "Superficies de extension",
+        vendorSessionPages: "Paginas de vendor session",
+      },
+      links: {
+        sidePanel: {
+          settings: "Abrir Settings",
+          dashboard: "Abrir dashboard",
+          "cursor-detail": "Abrir detalle de Cursor",
+          "codex-detail": "Abrir detalle de Codex",
+          popup: "Abrir popup",
+        },
+        vendor: {
+          "cursor-session-page": "Abrir pagina de usage de Cursor",
+          "codex-session-page": "Abrir pagina de analytics de Codex",
+        },
+      },
+      outputs: {
+        eyebrow: "Salidas copiables",
+        title: "Evidencia Summary y JSON",
+        detail:
+          "Estas salidas permanecen en solo lectura. Reflejan exactamente el estado actual del workspace mostrado arriba y pueden copiarse despues de una pasada manual extension-mode o de session real.",
+        copySummary: "Copiar summary",
+        downloadSummary: "Descargar summary",
+        copyJson: "Copiar JSON",
+        downloadJson: "Descargar JSON",
+        openSettingsTab: "Abrir Settings en nueva pestana",
+        summaryDraft: "Summary draft",
+        jsonExport: "JSON export",
+        copiedSummary: "Se copio el summary actual de recuperacion de tema.",
+        downloadedSummary: "Se descargo el summary actual de recuperacion de tema.",
+        copiedJson: "Se copio el JSON export actual de recuperacion de tema.",
+        downloadedJson: "Se descargo el JSON export actual de recuperacion de tema.",
+        clipboardUnavailable: "Clipboard no esta disponible en este contexto.",
+        downloadUnavailable: "La descarga directa no esta disponible en este contexto.",
+        workspaceNote: "Nota del workspace",
+      },
+    },
+  },
+  "pt-BR": {
+    interactionAudit: {
+      topbar: {
+        title: "Auditoria de interação",
+        subtitle: "Hub de QA em navegador real",
+        openDashboard: "Abrir dashboard",
+        openSettings: "Abrir Settings",
+      },
+      hero: {
+        eyebrow: "Hub de auditoria",
+        title: "Revisao manual de interacoes sem redimensionar varias vezes",
+        detail:
+          "Esta pagina incorpora as superficies reais publicadas de dashboard, settings, provider detail e popup dentro de frames de largura fixa. Assim a revisao em navegador real pode focar hover, focus, pressed e comportamento em largura compacta, em vez de reabrir rotas repetidamente. O hub de auditoria segue as mesmas preferencias de tema compartilhadas do side panel e do popup publicados.",
+        chip: "QA manual · Frames de largura fixa",
+      },
+      guidance: {
+        eyebrow: "Como usar",
+        title: "Orientacao de revisao",
+        detail:
+          "Abra esta rota em uma aba normal do navegador ou em uma pagina da extensao quando quiser uma passada humana depois dos scripts de revisao automatizada. Os frames incorporados preservam larguras representativas mesmo quando a janela externa do navegador e maior.",
+        checks: [
+          "Passe o mouse sobre controles interativos e confirme que a camada de estado continua coerente entre paginas.",
+          "Use tab pelo teclado nas superficies incorporadas e confirme que a visibilidade de focus continua explicita.",
+          "Use as preset actions abaixo para abrir disclosures, focar controles ou revelar detail notes mais baixos antes de assinar um UI slice.",
+        ],
+        openDashboard: "Abrir dashboard",
+        openSettings: "Abrir Settings",
+        openPopup: "Abrir popup",
+      },
+      signoff: {
+        eyebrow: "Workspace de signoff",
+        title: "Rascunho atual do operator",
+        detail:
+          "Use os controles dentro de cada superficie auditada para registrar progresso de checks, reviewer notes e estado pass ou follow-up. O rascunho abaixo atualiza ao vivo a partir do estado atual do workspace.",
+        reviewedSurfaces: "Superficies revisadas",
+        pass: "Pass",
+        followUp: "Follow-up",
+        completedChecks: "Checks concluidos",
+        reviewerName: "Nome do reviewer",
+        reviewerPlaceholder: "Registre o nome do reviewer ou operator.",
+        sessionLabel: "Rotulo da session",
+        sessionPlaceholder: "Rotule esta passada, por exemplo Compact QA Pass.",
+        reviewedAt: "Reviewed at",
+        reviewedAtPlaceholder: "Use horario ISO-8601 ou marque o momento atual da revisao.",
+        stampCurrentTime: "Marcar horario atual",
+        reviewSession: "Review session",
+        reviewerPrefix: "Reviewer",
+        sessionPrefix: "Session",
+        reviewedAtPrefix: "Reviewed at",
+        notSet: "nao definido",
+        requestBindingPrefix: "Request binding",
+        requestRevisionPrefix: "Request revision",
+        requestScope: "Escopo do request",
+        boundRequestDetail:
+          "Este workspace esta vinculado a um pending request repo-backed. Use preflight e completion nesse request em vez do ad-hoc archive path.",
+        adHocDetail:
+          "Este workspace nao esta vinculado a um repo-backed request. Use o archive path a menos que um pending request template seja importado primeiro.",
+        repoBackedRequest: "Repo-backed request",
+        adHocWorkspace: "Ad-hoc audit workspace",
+        binding: "Vinculo",
+        requestRevision: "Request revision",
+        downloadIdentity: "Identidade do download",
+        downloadsBound:
+          "Downloads incluem o request id vinculado e o request revision.",
+        downloadsAdHoc: "Downloads ficam somente no session scope atual.",
+      },
+    },
+    themeRecovery: {
+      topbar: {
+        title: "Revisão de recuperação de tema",
+        subtitle: "Workspace do operator",
+        refresh: "Atualizar",
+        openSettings: "Abrir Settings",
+      },
+      hero: {
+        eyebrow: "Acompanhamento de session real",
+        title: "Um lugar para preparar checks de native prompt e recuperacao de session real",
+        detail:
+          "Esta rota nao afirma que o native host prompt ou uma session real do vendor ja passou. Ela coleta o estado atual do tema, estado de recuperacao, links rapidos e evidencias copiaveis para que a proxima passada do operator seja verdadeira e repetivel.",
+        chip: "Theme QA · Acompanhamento de recuperacao",
+      },
+      loading: {
+        title: "Carregando estado atual da revisao...",
+        detail:
+          "Lendo o app state atual e o action badge para que este workspace reflita o mesmo tema e estado de provider das superficies publicadas.",
+      },
+      error: {
+        title: "Nao foi possivel carregar o estado da revisao",
+      },
+      currentTruth: {
+        eyebrow: "Verdade atual",
+        title: "Estado de recuperacao agora",
+        reviewStage: "Review stage",
+        popupSnapshot: "Popup snapshot",
+        actionBadge: "Action badge",
+      },
+      themeState: {
+        eyebrow: "Estado do tema",
+        title: "Estado runtime compartilhado",
+        detail:
+          "Este workspace le as mesmas configuracoes de tema salvas usadas pelo side panel, popup e audit hub. A passada do operator deve manter o custom-seed atual fixo enquanto recupera provider access.",
+        themeMode: "Theme mode",
+        resolvedMode: "Resolved mode",
+        accentPreset: "Accent preset",
+        customSeed: "Custom seed",
+        scopeIsolation: "Scope isolation",
+        liveBadgeSource: "Live badge source",
+        notSet: "Nao definido",
+        computedBadgeSource: "Calculado do app state atual",
+        scopeNote: "Scope note",
+        popupSnapshotPrefix: "Popup snapshot",
+        actionBadgeTitlePrefix: "Action badge title",
+      },
+      requestScope: {
+        eyebrow: "Escopo do request",
+        title: "Vinculo de repo-backed request",
+        detail:
+          "Este workspace esta vinculado a um pending theme-recovery request. Summary e JSON export devem preservar esta identidade de request para que completion nao conclua outro request por acidente.",
+        requestId: "Request id",
+        createdAt: "Created at",
+        boundWorkspaceRoute: "Rota do workspace vinculada",
+        adHocTitle: "Ad-hoc workspace",
+        adHocDetail:
+          "Esta review route nao esta vinculada a um repo-backed request no momento. Seus exports ainda sao uteis para inspecao local, mas nao devem ser usados para concluir um pending request.",
+      },
+      workflow: {
+        eyebrow: "Operator workflow",
+        title: "Passos de acompanhamento da session real",
+        detail:
+          "Mantenha esta pagina aberta enquanto alterna entre Settings, popup e as paginas vendor de destino. Use os links abaixo para abrir as superficies publicadas exatas em abas separadas sem perder este workspace.",
+        steps: [
+          "Manter o custom seed atual fixo e confirmar que o workspace ainda relata theme mode, resolved mode, preset e seed esperados.",
+          "Usar Settings para manter apenas Cursor e Codex visiveis antes de confiar no popup alignment e no action badge.",
+          "Capturar primeiro o degraded state: falta de host access ou session real bloqueada deve manter esta pagina em warning.",
+          "Conceder host access pelo native prompt ou restaurar a session real do vendor; depois atualizar esta pagina e confirmar que review stage voltou para recovered.",
+          "Copiar o summary ou JSON export depois da passada real para anexar o resultado a um repo-backed archive ou operator note posterior.",
+        ],
+        extensionSurfaces: "Superficies da extensao",
+        vendorSessionPages: "Paginas de vendor session",
+      },
+      links: {
+        sidePanel: {
+          settings: "Abrir Settings",
+          dashboard: "Abrir dashboard",
+          "cursor-detail": "Abrir detalhe de Cursor",
+          "codex-detail": "Abrir detalhe de Codex",
+          popup: "Abrir popup",
+        },
+        vendor: {
+          "cursor-session-page": "Abrir pagina de usage do Cursor",
+          "codex-session-page": "Abrir pagina de analytics do Codex",
+        },
+      },
+      outputs: {
+        eyebrow: "Saidas copiaveis",
+        title: "Evidencia Summary e JSON",
+        detail:
+          "Estas saidas ficam somente leitura. Elas refletem exatamente o estado atual do workspace mostrado acima e podem ser copiadas depois de uma passada manual extension-mode ou de session real.",
+        copySummary: "Copiar summary",
+        downloadSummary: "Baixar summary",
+        copyJson: "Copiar JSON",
+        downloadJson: "Baixar JSON",
+        openSettingsTab: "Abrir Settings em nova aba",
+        summaryDraft: "Summary draft",
+        jsonExport: "JSON export",
+        copiedSummary: "Summary atual de recuperacao de tema copiado.",
+        downloadedSummary: "Summary atual de recuperacao de tema baixado.",
+        copiedJson: "JSON export atual de recuperacao de tema copiado.",
+        downloadedJson: "JSON export atual de recuperacao de tema baixado.",
+        clipboardUnavailable: "Clipboard nao esta disponivel neste contexto.",
+        downloadUnavailable: "Download direto nao esta disponivel neste contexto.",
+        workspaceNote: "Nota do workspace",
+      },
+    },
+  },
+  fr: {
+    interactionAudit: {
+      topbar: {
+        title: "Audit d'interaction",
+        subtitle: "Hub QA en navigateur reel",
+        openDashboard: "Ouvrir dashboard",
+        openSettings: "Ouvrir Settings",
+      },
+      hero: {
+        eyebrow: "Hub d'audit",
+        title: "Revue manuelle des interactions sans redimensionnements repetes",
+        detail:
+          "Cette page integre les surfaces reellement publiees dashboard, settings, provider detail et popup dans des frames a largeur fixe. La revue en navigateur reel peut ainsi se concentrer sur hover, focus, pressed et les comportements en largeur compacte au lieu de rouvrir les routes. Le hub d'audit suit les memes preferences de theme partagees que le side panel et le popup publies.",
+        chip: "QA manuelle · Frames a largeur fixe",
+      },
+      guidance: {
+        eyebrow: "Utilisation",
+        title: "Guide de revue",
+        detail:
+          "Ouvrez cette route dans un onglet navigateur normal ou une page d'extension lorsque vous voulez une passe humaine apres les scripts de revue automatises. Les frames integrees conservent des largeurs representatives meme si la fenetre externe est plus grande.",
+        checks: [
+          "Survolez les controles interactifs et confirmez que la couche d'etat reste coherente entre les pages.",
+          "Utilisez tab au clavier dans les surfaces integrees et confirmez que la visibilite du focus reste explicite.",
+          "Utilisez les preset actions ci-dessous pour ouvrir des disclosures, focaliser des controles ou afficher des detail notes plus basses avant de signer un UI slice.",
+        ],
+        openDashboard: "Ouvrir dashboard",
+        openSettings: "Ouvrir Settings",
+        openPopup: "Ouvrir popup",
+      },
+      signoff: {
+        eyebrow: "Workspace de signoff",
+        title: "Brouillon operator actuel",
+        detail:
+          "Utilisez les controles dans chaque surface auditee pour enregistrer la progression des checks, les reviewer notes et l'etat pass ou follow-up. Le brouillon ci-dessous se met a jour en direct depuis l'etat actuel du workspace.",
+        reviewedSurfaces: "Surfaces revues",
+        pass: "Pass",
+        followUp: "Follow-up",
+        completedChecks: "Checks termines",
+        reviewerName: "Nom du reviewer",
+        reviewerPlaceholder: "Notez le nom du reviewer ou de l'operator.",
+        sessionLabel: "Libelle de session",
+        sessionPlaceholder: "Nommez cette passe, par exemple Compact QA Pass.",
+        reviewedAt: "Reviewed at",
+        reviewedAtPlaceholder: "Utilisez l'heure ISO-8601 ou marquez le moment actuel de revue.",
+        stampCurrentTime: "Marquer l'heure actuelle",
+        reviewSession: "Review session",
+        reviewerPrefix: "Reviewer",
+        sessionPrefix: "Session",
+        reviewedAtPrefix: "Reviewed at",
+        notSet: "non defini",
+        requestBindingPrefix: "Request binding",
+        requestRevisionPrefix: "Request revision",
+        requestScope: "Portee du request",
+        boundRequestDetail:
+          "Ce workspace est lie a un pending request repo-backed. Utilisez preflight et completion sur ce request au lieu du ad-hoc archive path.",
+        adHocDetail:
+          "Ce workspace n'est pas lie a un repo-backed request. Utilisez l'archive path sauf si un pending request template est d'abord importe.",
+        repoBackedRequest: "Repo-backed request",
+        adHocWorkspace: "Ad-hoc audit workspace",
+        binding: "Lien",
+        requestRevision: "Request revision",
+        downloadIdentity: "Identite de telechargement",
+        downloadsBound:
+          "Les telechargements incluent le request id lie et le request revision.",
+        downloadsAdHoc: "Les telechargements restent limites au session scope actuel.",
+      },
+    },
+    themeRecovery: {
+      topbar: {
+        title: "Revue de récupération du thème",
+        subtitle: "Workspace operator",
+        refresh: "Actualiser",
+        openSettings: "Ouvrir Settings",
+      },
+      hero: {
+        eyebrow: "Suivi de session reelle",
+        title: "Un endroit pour preparer les checks de native prompt et de recuperation de session reelle",
+        detail:
+          "Cette route ne pretend pas que le native host prompt ou une session vendor reelle a deja reussi. Elle rassemble l'etat actuel du theme, l'etat de recuperation, les liens rapides et les preuves copiables afin que la prochaine passe operator reste exacte et reproductible.",
+        chip: "Theme QA · Suivi de recuperation",
+      },
+      loading: {
+        title: "Chargement de l'etat de revue actuel...",
+        detail:
+          "Lecture de l'app state actuel et de l'action badge afin que ce workspace reflete le meme theme et le meme etat provider que les surfaces publiees.",
+      },
+      error: {
+        title: "Impossible de charger l'etat de revue",
+      },
+      currentTruth: {
+        eyebrow: "Verite actuelle",
+        title: "Etat de recuperation maintenant",
+        reviewStage: "Review stage",
+        popupSnapshot: "Popup snapshot",
+        actionBadge: "Action badge",
+      },
+      themeState: {
+        eyebrow: "Etat du theme",
+        title: "Etat runtime partage",
+        detail:
+          "Ce workspace lit les memes reglages de theme enregistres que le side panel, le popup et l'audit hub. La passe operator doit garder l'etat custom-seed actuel fixe pendant la recuperation du provider access.",
+        themeMode: "Theme mode",
+        resolvedMode: "Resolved mode",
+        accentPreset: "Accent preset",
+        customSeed: "Custom seed",
+        scopeIsolation: "Scope isolation",
+        liveBadgeSource: "Live badge source",
+        notSet: "Non defini",
+        computedBadgeSource: "Calcule depuis l'app state actuel",
+        scopeNote: "Scope note",
+        popupSnapshotPrefix: "Popup snapshot",
+        actionBadgeTitlePrefix: "Action badge title",
+      },
+      requestScope: {
+        eyebrow: "Portee du request",
+        title: "Lien repo-backed request",
+        detail:
+          "Ce workspace est lie a un pending theme-recovery request. Summary et JSON export doivent conserver cette identite de request afin que completion ne remplisse pas accidentellement un autre request.",
+        requestId: "Request id",
+        createdAt: "Created at",
+        boundWorkspaceRoute: "Route workspace liee",
+        adHocTitle: "Ad-hoc workspace",
+        adHocDetail:
+          "Cette review route n'est actuellement pas liee a un repo-backed request. Ses exports restent utiles pour l'inspection locale, mais ne doivent pas servir a remplir un pending request.",
+      },
+      workflow: {
+        eyebrow: "Operator workflow",
+        title: "Etapes de suivi de session reelle",
+        detail:
+          "Gardez cette page ouverte pendant que vous passez entre Settings, popup et les pages vendor cible. Utilisez les liens ci-dessous pour ouvrir les surfaces publiees exactes dans des onglets separes sans perdre ce workspace.",
+        steps: [
+          "Garder le custom seed actuel fixe et confirmer que le workspace signale toujours le theme mode, resolved mode, preset et seed attendus.",
+          "Utiliser Settings pour ne garder visibles que Cursor et Codex avant de faire confiance au popup alignment et a l'action badge.",
+          "Capturer d'abord le degraded state : un host access manquant ou une session reelle bloquee doit garder cette page en warning.",
+          "Accorder host access via le native prompt ou restaurer la session vendor reelle ; actualiser ensuite cette page et confirmer que review stage revient a recovered.",
+          "Copier le summary ou JSON export apres la passe reelle afin d'attacher le resultat a une archive repo-backed ou une operator note ulterieure.",
+        ],
+        extensionSurfaces: "Surfaces d'extension",
+        vendorSessionPages: "Pages de vendor session",
+      },
+      links: {
+        sidePanel: {
+          settings: "Ouvrir Settings",
+          dashboard: "Ouvrir dashboard",
+          "cursor-detail": "Ouvrir le detail Cursor",
+          "codex-detail": "Ouvrir le detail Codex",
+          popup: "Ouvrir popup",
+        },
+        vendor: {
+          "cursor-session-page": "Ouvrir la page usage Cursor",
+          "codex-session-page": "Ouvrir la page analytics Codex",
+        },
+      },
+      outputs: {
+        eyebrow: "Sorties copiables",
+        title: "Preuve Summary et JSON",
+        detail:
+          "Ces sorties restent en lecture seule. Elles refletent exactement l'etat actuel du workspace affiche ci-dessus et peuvent etre copiees apres une passe manuelle extension-mode ou de session reelle.",
+        copySummary: "Copier summary",
+        downloadSummary: "Telecharger summary",
+        copyJson: "Copier JSON",
+        downloadJson: "Telecharger JSON",
+        openSettingsTab: "Ouvrir Settings dans un nouvel onglet",
+        summaryDraft: "Summary draft",
+        jsonExport: "JSON export",
+        copiedSummary: "Summary actuel de recuperation du theme copie.",
+        downloadedSummary: "Summary actuel de recuperation du theme telecharge.",
+        copiedJson: "JSON export actuel de recuperation du theme copie.",
+        downloadedJson: "JSON export actuel de recuperation du theme telecharge.",
+        clipboardUnavailable: "Le clipboard n'est pas disponible dans ce contexte.",
+        downloadUnavailable: "Le telechargement direct n'est pas disponible dans ce contexte.",
+        workspaceNote: "Note du workspace",
+      },
+    },
+  },
+  de: {
+    interactionAudit: {
+      topbar: {
+        title: "Interaktionsaudit",
+        subtitle: "QA-Hub im echten Browser",
+        openDashboard: "dashboard offnen",
+        openSettings: "Settings offnen",
+      },
+      hero: {
+        eyebrow: "Audit-Hub",
+        title: "Manuelle Interaktionsprufung ohne wiederholtes Skalieren",
+        detail:
+          "Diese Seite bettet die wirklich ausgelieferten dashboard-, settings-, provider-detail- und popup-Oberflachen in Frames mit fester Breite ein. Die Prufung im echten Browser kann sich dadurch auf hover, focus, pressed und kompaktes Breitenverhalten konzentrieren, statt Routen wiederholt neu zu offnen. Der Audit-Hub folgt denselben gemeinsamen Theme-Einstellungen wie das ausgelieferte side panel und popup.",
+        chip: "Manuelle QA · Frames mit fester Breite",
+      },
+      guidance: {
+        eyebrow: "Verwendung",
+        title: "Prufhinweise",
+        detail:
+          "Offnen Sie diese Route in einem normalen Browser-Tab oder auf einer Erweiterungsseite, wenn nach automatisierten Review-Scripts eine menschliche Prufung gewunscht ist. Die eingebetteten Frames behalten representative Breiten bei, auch wenn das außere Browserfenster großer ist.",
+        checks: [
+          "Interaktive Controls per hover prufen und bestatigen, dass die state layer seitenubergreifend koharent bleibt.",
+          "Mit der Tastatur per tab durch die eingebetteten surfaces gehen und bestatigen, dass focus sichtbar bleibt.",
+          "Die preset actions unten nutzen, um disclosures zu offnen, controls zu fokussieren oder tiefere detail notes sichtbar zu machen, bevor ein UI slice signiert wird.",
+        ],
+        openDashboard: "dashboard offnen",
+        openSettings: "Settings offnen",
+        openPopup: "popup offnen",
+      },
+      signoff: {
+        eyebrow: "Signoff-Workspace",
+        title: "Aktueller operator draft",
+        detail:
+          "Nutzen Sie die Controls in jeder audit surface, um Check-Fortschritt, reviewer notes und pass- oder follow-up-Status zu erfassen. Der draft unten aktualisiert sich live aus dem aktuellen workspace state.",
+        reviewedSurfaces: "Geprufte surfaces",
+        pass: "Pass",
+        followUp: "Follow-up",
+        completedChecks: "Abgeschlossene checks",
+        reviewerName: "Reviewer-Name",
+        reviewerPlaceholder: "Reviewer- oder operator-Namen erfassen.",
+        sessionLabel: "Session-Label",
+        sessionPlaceholder: "Diese Prufung benennen, zum Beispiel Compact QA Pass.",
+        reviewedAt: "Reviewed at",
+        reviewedAtPlaceholder: "ISO-8601-Zeit verwenden oder den aktuellen Review-Zeitpunkt stempeln.",
+        stampCurrentTime: "Aktuelle Zeit stempeln",
+        reviewSession: "Review session",
+        reviewerPrefix: "Reviewer",
+        sessionPrefix: "Session",
+        reviewedAtPrefix: "Reviewed at",
+        notSet: "nicht gesetzt",
+        requestBindingPrefix: "Request binding",
+        requestRevisionPrefix: "Request revision",
+        requestScope: "Request scope",
+        boundRequestDetail:
+          "Dieser workspace ist an einen repo-backed pending request gebunden. Preflight und completion gegen diesen request ausfuhren, nicht gegen den ad-hoc archive path.",
+        adHocDetail:
+          "Dieser workspace ist nicht an einen repo-backed request gebunden. Den archive path verwenden, sofern nicht zuerst ein pending request template importiert wird.",
+        repoBackedRequest: "Repo-backed request",
+        adHocWorkspace: "Ad-hoc audit workspace",
+        binding: "Bindung",
+        requestRevision: "Request revision",
+        downloadIdentity: "Download-Identitat",
+        downloadsBound:
+          "Downloads enthalten die gebundene request id und request revision.",
+        downloadsAdHoc: "Downloads bleiben nur im aktuellen session scope.",
+      },
+    },
+    themeRecovery: {
+      topbar: {
+        title: "Theme-Recovery-Review",
+        subtitle: "Operator workspace",
+        refresh: "Aktualisieren",
+        openSettings: "Settings offnen",
+      },
+      hero: {
+        eyebrow: "Follow-up fur echte session",
+        title: "Ein Ort fur native-prompt- und echte-session-Recovery-Checks",
+        detail:
+          "Diese Route behauptet nicht, dass native host prompt oder eine echte vendor session bereits bestanden haben. Sie sammelt aktuellen theme state, recovery state, Schnelllinks und kopierbare evidence, damit der nachste operator pass wahrheitsgemaß und wiederholbar bleibt.",
+        chip: "Theme QA · Recovery-Follow-up",
+      },
+      loading: {
+        title: "Aktuellen Review-Status laden...",
+        detail:
+          "Aktuellen app state und action badge lesen, damit dieser workspace denselben theme- und provider-state wie die ausgelieferten surfaces widerspiegelt.",
+      },
+      error: {
+        title: "Review-Status konnte nicht geladen werden",
+      },
+      currentTruth: {
+        eyebrow: "Aktuelle Wahrheit",
+        title: "Recovery-Status jetzt",
+        reviewStage: "Review stage",
+        popupSnapshot: "Popup snapshot",
+        actionBadge: "Action badge",
+      },
+      themeState: {
+        eyebrow: "Theme state",
+        title: "Gemeinsamer runtime state",
+        detail:
+          "Dieser workspace liest dieselben gespeicherten Theme-Einstellungen, die side panel, popup und audit hub nutzen. Der operator pass sollte den aktuellen custom-seed state festhalten, wahrend provider access wiederhergestellt wird.",
+        themeMode: "Theme mode",
+        resolvedMode: "Resolved mode",
+        accentPreset: "Accent preset",
+        customSeed: "Custom seed",
+        scopeIsolation: "Scope isolation",
+        liveBadgeSource: "Live badge source",
+        notSet: "Nicht gesetzt",
+        computedBadgeSource: "Aus aktuellem app state berechnet",
+        scopeNote: "Scope note",
+        popupSnapshotPrefix: "Popup snapshot",
+        actionBadgeTitlePrefix: "Action badge title",
+      },
+      requestScope: {
+        eyebrow: "Request scope",
+        title: "Repo-backed request binding",
+        detail:
+          "Dieser workspace ist an einen pending theme-recovery request gebunden. Summary und JSON export mussen diese request identity bewahren, damit completion nicht versehentlich einen anderen request erfullt.",
+        requestId: "Request id",
+        createdAt: "Created at",
+        boundWorkspaceRoute: "Gebundene workspace route",
+        adHocTitle: "Ad-hoc workspace",
+        adHocDetail:
+          "Diese review route ist aktuell nicht an einen repo-backed request gebunden. Ihre exports sind fur lokale Inspektion nutzlich, sollten aber nicht zur Erfullung eines pending request verwendet werden.",
+      },
+      workflow: {
+        eyebrow: "Operator workflow",
+        title: "Follow-up-Schritte fur echte session",
+        detail:
+          "Diese Seite offen lassen, wahrend zwischen Settings, popup und den Ziel-vendor-Seiten gewechselt wird. Die Links unten offnen die exakten ausgelieferten surfaces in separaten Tabs, ohne diesen workspace zu verlieren.",
+        steps: [
+          "Den aktuellen custom seed fixieren und bestatigen, dass der workspace weiterhin erwarteten theme mode, resolved mode, preset und seed meldet.",
+          "Mit Settings nur Cursor und Codex sichtbar halten, bevor popup alignment und action badge vertraut wird.",
+          "Zuerst den degraded state erfassen: fehlender host access oder eine blockierte echte session sollte diese Seite im warning state halten.",
+          "Host access uber den native prompt gewahren oder die echte vendor session wiederherstellen; danach diese Seite aktualisieren und bestatigen, dass review stage zu recovered zuruckkehrt.",
+          "Nach dem echten pass summary oder JSON export kopieren, damit das Ergebnis spater an ein repo-backed archive oder eine operator note angehangt werden kann.",
+        ],
+        extensionSurfaces: "Erweiterungs-surfaces",
+        vendorSessionPages: "Vendor-session-Seiten",
+      },
+      links: {
+        sidePanel: {
+          settings: "Settings offnen",
+          dashboard: "dashboard offnen",
+          "cursor-detail": "Cursor detail offnen",
+          "codex-detail": "Codex detail offnen",
+          popup: "popup offnen",
+        },
+        vendor: {
+          "cursor-session-page": "Cursor usage page offnen",
+          "codex-session-page": "Codex analytics page offnen",
+        },
+      },
+      outputs: {
+        eyebrow: "Kopierbare Ausgaben",
+        title: "Summary- und JSON-Evidence",
+        detail:
+          "Diese Ausgaben bleiben read-only. Sie spiegeln den oben angezeigten aktuellen workspace state exakt wider und konnen nach einem manuellen extension-mode- oder real-session-pass kopiert werden.",
+        copySummary: "summary kopieren",
+        downloadSummary: "summary herunterladen",
+        copyJson: "JSON kopieren",
+        downloadJson: "JSON herunterladen",
+        openSettingsTab: "Settings in neuem Tab offnen",
+        summaryDraft: "Summary draft",
+        jsonExport: "JSON export",
+        copiedSummary: "Aktuelle theme recovery summary kopiert.",
+        downloadedSummary: "Aktuelle theme recovery summary heruntergeladen.",
+        copiedJson: "Aktuellen theme recovery JSON export kopiert.",
+        downloadedJson: "Aktuellen theme recovery JSON export heruntergeladen.",
+        clipboardUnavailable: "Clipboard-Zugriff ist in diesem context nicht verfugbar.",
+        downloadUnavailable: "Direkter Download ist in diesem context nicht verfugbar.",
+        workspaceNote: "Workspace note",
+      },
+    },
+  },
+  it: {
+    interactionAudit: {
+      topbar: {
+        title: "Audit interazioni",
+        subtitle: "Hub QA nel browser reale",
+        openDashboard: "Apri dashboard",
+        openSettings: "Apri Settings",
+      },
+      hero: {
+        eyebrow: "Hub audit",
+        title: "Revisione manuale delle interazioni senza ridimensionamenti ripetuti",
+        detail:
+          "Questa pagina incorpora le superfici realmente pubblicate dashboard, settings, provider detail e popup dentro frame a larghezza fissa. La revisione nel browser reale puo concentrarsi su hover, focus, pressed e comportamento a larghezza compatta invece di riaprire route ripetutamente. L'hub audit segue le stesse preferenze tema condivise del side panel e del popup pubblicati.",
+        chip: "QA manuale · Frame a larghezza fissa",
+      },
+      guidance: {
+        eyebrow: "Come usarlo",
+        title: "Guida alla revisione",
+        detail:
+          "Apri questa route in una normale scheda del browser o in una pagina dell'estensione quando vuoi una passata umana dopo gli script di revisione automatizzati. I frame incorporati mantengono larghezze rappresentative anche se la finestra esterna del browser e piu grande.",
+        checks: [
+          "Passa sui controlli interattivi e conferma che lo state layer resti coerente tra le pagine.",
+          "Usa tab da tastiera sulle superfici incorporate e conferma che la visibilita del focus resti esplicita.",
+          "Usa le preset actions sotto per aprire disclosure, focalizzare controlli o mostrare detail notes inferiori prima di firmare un UI slice.",
+        ],
+        openDashboard: "Apri dashboard",
+        openSettings: "Apri Settings",
+        openPopup: "Apri popup",
+      },
+      signoff: {
+        eyebrow: "Workspace di signoff",
+        title: "Bozza operator corrente",
+        detail:
+          "Usa i controlli dentro ogni superficie audit per registrare avanzamento dei check, reviewer notes e stato pass o follow-up. La bozza sotto si aggiorna live dallo stato corrente del workspace.",
+        reviewedSurfaces: "Superfici revisionate",
+        pass: "Pass",
+        followUp: "Follow-up",
+        completedChecks: "Check completati",
+        reviewerName: "Nome reviewer",
+        reviewerPlaceholder: "Registra il nome del reviewer o operator.",
+        sessionLabel: "Etichetta session",
+        sessionPlaceholder: "Etichetta questa passata, per esempio Compact QA Pass.",
+        reviewedAt: "Reviewed at",
+        reviewedAtPlaceholder: "Usa orario ISO-8601 o marca il momento corrente di revisione.",
+        stampCurrentTime: "Marca ora corrente",
+        reviewSession: "Review session",
+        reviewerPrefix: "Reviewer",
+        sessionPrefix: "Session",
+        reviewedAtPrefix: "Reviewed at",
+        notSet: "non impostato",
+        requestBindingPrefix: "Request binding",
+        requestRevisionPrefix: "Request revision",
+        requestScope: "Ambito request",
+        boundRequestDetail:
+          "Questo workspace e collegato a un pending request repo-backed. Usa preflight e completion su quel request invece dell'ad-hoc archive path.",
+        adHocDetail:
+          "Questo workspace non e collegato a un repo-backed request. Usa l'archive path a meno che prima venga importato un pending request template.",
+        repoBackedRequest: "Repo-backed request",
+        adHocWorkspace: "Ad-hoc audit workspace",
+        binding: "Collegamento",
+        requestRevision: "Request revision",
+        downloadIdentity: "Identita download",
+        downloadsBound:
+          "I download includono il request id collegato e il request revision.",
+        downloadsAdHoc: "I download restano solo nel session scope corrente.",
+      },
+    },
+    themeRecovery: {
+      topbar: {
+        title: "Revisione recupero tema",
+        subtitle: "Operator workspace",
+        refresh: "Aggiorna",
+        openSettings: "Apri Settings",
+      },
+      hero: {
+        eyebrow: "Follow-up di session reale",
+        title: "Un posto per preparare check di native prompt e recupero session reale",
+        detail:
+          "Questa route non sostiene che il native host prompt o una session vendor reale siano gia passati. Raccoglie theme state corrente, recovery state, link rapidi ed evidenza copiabile, cosi la prossima passata operator resta veritiera e ripetibile.",
+        chip: "Theme QA · Follow-up recupero",
+      },
+      loading: {
+        title: "Caricamento stato revisione corrente...",
+        detail:
+          "Lettura dell'app state corrente e dell'action badge per far riflettere a questo workspace lo stesso tema e stato provider delle superfici pubblicate.",
+      },
+      error: {
+        title: "Impossibile caricare lo stato revisione",
+      },
+      currentTruth: {
+        eyebrow: "Verita corrente",
+        title: "Stato recupero adesso",
+        reviewStage: "Review stage",
+        popupSnapshot: "Popup snapshot",
+        actionBadge: "Action badge",
+      },
+      themeState: {
+        eyebrow: "Theme state",
+        title: "Runtime state condiviso",
+        detail:
+          "Questo workspace legge le stesse impostazioni tema salvate usate da side panel, popup e audit hub. La passata operator deve mantenere fisso il custom-seed state corrente mentre recupera provider access.",
+        themeMode: "Theme mode",
+        resolvedMode: "Resolved mode",
+        accentPreset: "Accent preset",
+        customSeed: "Custom seed",
+        scopeIsolation: "Scope isolation",
+        liveBadgeSource: "Live badge source",
+        notSet: "Non impostato",
+        computedBadgeSource: "Calcolato dall'app state corrente",
+        scopeNote: "Scope note",
+        popupSnapshotPrefix: "Popup snapshot",
+        actionBadgeTitlePrefix: "Action badge title",
+      },
+      requestScope: {
+        eyebrow: "Ambito request",
+        title: "Collegamento repo-backed request",
+        detail:
+          "Questo workspace e collegato a un pending theme-recovery request. Summary e JSON export devono preservare questa request identity affinche completion non soddisfi per errore un altro request.",
+        requestId: "Request id",
+        createdAt: "Created at",
+        boundWorkspaceRoute: "Route workspace collegata",
+        adHocTitle: "Ad-hoc workspace",
+        adHocDetail:
+          "Questa review route non e attualmente collegata a un repo-backed request. I suoi export restano utili per ispezione locale, ma non devono essere usati per completare un pending request.",
+      },
+      workflow: {
+        eyebrow: "Operator workflow",
+        title: "Passi follow-up di session reale",
+        detail:
+          "Tieni aperta questa pagina mentre passi tra Settings, popup e le pagine vendor target. Usa i link sotto per aprire le superfici pubblicate esatte in schede separate senza perdere questo workspace.",
+        steps: [
+          "Mantieni fisso il custom seed corrente e conferma che il workspace riporti ancora theme mode, resolved mode, preset e seed attesi.",
+          "Usa Settings per tenere visibili solo Cursor e Codex prima di fidarti di popup alignment e action badge.",
+          "Cattura prima il degraded state: host access mancante o session reale bloccata deve mantenere questa pagina in warning.",
+          "Concedi host access tramite native prompt o ripristina la session vendor reale; poi aggiorna questa pagina e conferma che review stage torni a recovered.",
+          "Copia summary o JSON export dopo la passata reale cosi il risultato puo essere allegato a un repo-backed archive o operator note successivo.",
+        ],
+        extensionSurfaces: "Superfici estensione",
+        vendorSessionPages: "Pagine vendor session",
+      },
+      links: {
+        sidePanel: {
+          settings: "Apri Settings",
+          dashboard: "Apri dashboard",
+          "cursor-detail": "Apri dettaglio Cursor",
+          "codex-detail": "Apri dettaglio Codex",
+          popup: "Apri popup",
+        },
+        vendor: {
+          "cursor-session-page": "Apri pagina usage Cursor",
+          "codex-session-page": "Apri pagina analytics Codex",
+        },
+      },
+      outputs: {
+        eyebrow: "Output copiabili",
+        title: "Evidenza Summary e JSON",
+        detail:
+          "Questi output restano in sola lettura. Riflettono esattamente lo stato workspace corrente mostrato sopra e possono essere copiati dopo una passata manuale extension-mode o di session reale.",
+        copySummary: "Copia summary",
+        downloadSummary: "Scarica summary",
+        copyJson: "Copia JSON",
+        downloadJson: "Scarica JSON",
+        openSettingsTab: "Apri Settings in nuova scheda",
+        summaryDraft: "Summary draft",
+        jsonExport: "JSON export",
+        copiedSummary: "Summary corrente di recupero tema copiato.",
+        downloadedSummary: "Summary corrente di recupero tema scaricato.",
+        copiedJson: "JSON export corrente di recupero tema copiato.",
+        downloadedJson: "JSON export corrente di recupero tema scaricato.",
+        clipboardUnavailable: "Clipboard non disponibile in questo context.",
+        downloadUnavailable: "Download diretto non disponibile in questo context.",
+        workspaceNote: "Nota workspace",
+      },
+    },
+  },
+  ru: {
+    interactionAudit: {
+      topbar: {
+        title: "Аудит взаимодействий",
+        subtitle: "QA-хаб в реальном браузере",
+        openDashboard: "Открыть dashboard",
+        openSettings: "Открыть Settings",
+      },
+      hero: {
+        eyebrow: "Хаб аудита",
+        title: "Ручная проверка взаимодействий без повторного изменения размера",
+        detail:
+          "Эта страница встраивает реально поставляемые поверхности dashboard, settings, provider detail и popup во frame фиксированной ширины. Проверка в реальном браузере может сосредоточиться на hover, focus, pressed и поведении в компактной ширине, вместо повторного открытия route. Хаб аудита следует тем же общим настройкам темы, что и поставляемые side panel и popup.",
+        chip: "Ручной QA · Frame фиксированной ширины",
+      },
+      guidance: {
+        eyebrow: "Как использовать",
+        title: "Инструкции проверки",
+        detail:
+          "Откройте этот route в обычной вкладке браузера или на странице расширения, когда после автоматизированных review scripts нужна ручная проверка. Встроенные frames сохраняют representative width даже при большем внешнем окне браузера.",
+        checks: [
+          "Наведите курсор на интерактивные controls и подтвердите, что state layer остается согласованным между страницами.",
+          "Пройдите по встроенным surfaces клавишей tab и подтвердите, что focus остается явно видимым.",
+          "Используйте preset actions ниже, чтобы открыть disclosures, сфокусировать controls или показать нижние detail notes перед signoff UI slice.",
+        ],
+        openDashboard: "Открыть dashboard",
+        openSettings: "Открыть Settings",
+        openPopup: "Открыть popup",
+      },
+      signoff: {
+        eyebrow: "Signoff workspace",
+        title: "Текущий operator draft",
+        detail:
+          "Используйте controls внутри каждой audit surface, чтобы записывать прогресс checks, reviewer notes и состояние pass или follow-up. Draft ниже обновляется live из текущего workspace state.",
+        reviewedSurfaces: "Проверенные surfaces",
+        pass: "Pass",
+        followUp: "Follow-up",
+        completedChecks: "Завершенные checks",
+        reviewerName: "Имя reviewer",
+        reviewerPlaceholder: "Запишите имя reviewer или operator.",
+        sessionLabel: "Метка session",
+        sessionPlaceholder: "Назовите эту проверку, например Compact QA Pass.",
+        reviewedAt: "Reviewed at",
+        reviewedAtPlaceholder: "Используйте время ISO-8601 или отметьте текущий момент проверки.",
+        stampCurrentTime: "Поставить текущее время",
+        reviewSession: "Review session",
+        reviewerPrefix: "Reviewer",
+        sessionPrefix: "Session",
+        reviewedAtPrefix: "Reviewed at",
+        notSet: "не задано",
+        requestBindingPrefix: "Request binding",
+        requestRevisionPrefix: "Request revision",
+        requestScope: "Request scope",
+        boundRequestDetail:
+          "Этот workspace привязан к repo-backed pending request. Выполняйте preflight и completion для этого request, а не для ad-hoc archive path.",
+        adHocDetail:
+          "Этот workspace не привязан к repo-backed request. Используйте archive path, если pending request template не импортирован заранее.",
+        repoBackedRequest: "Repo-backed request",
+        adHocWorkspace: "Ad-hoc audit workspace",
+        binding: "Привязка",
+        requestRevision: "Request revision",
+        downloadIdentity: "Идентификатор загрузки",
+        downloadsBound:
+          "Загрузки включают привязанный request id и request revision.",
+        downloadsAdHoc: "Загрузки остаются только в текущем session scope.",
+      },
+    },
+    themeRecovery: {
+      topbar: {
+        title: "Проверка восстановления темы",
+        subtitle: "Operator workspace",
+        refresh: "Обновить",
+        openSettings: "Открыть Settings",
+      },
+      hero: {
+        eyebrow: "Follow-up реальной session",
+        title: "Одно место для native-prompt и real-session recovery checks",
+        detail:
+          "Этот route не утверждает, что native host prompt или реальная vendor session уже прошли. Он собирает текущий theme state, recovery state, быстрые ссылки и копируемую evidence, чтобы следующий operator pass оставался правдивым и повторяемым.",
+        chip: "Theme QA · Recovery follow-up",
+      },
+      loading: {
+        title: "Загрузка текущего состояния review...",
+        detail:
+          "Чтение текущего app state и action badge, чтобы этот workspace отражал те же theme и provider state, что и поставляемые surfaces.",
+      },
+      error: {
+        title: "Не удалось загрузить состояние review",
+      },
+      currentTruth: {
+        eyebrow: "Текущая правда",
+        title: "Состояние recovery сейчас",
+        reviewStage: "Review stage",
+        popupSnapshot: "Popup snapshot",
+        actionBadge: "Action badge",
+      },
+      themeState: {
+        eyebrow: "Theme state",
+        title: "Общий runtime state",
+        detail:
+          "Этот workspace читает те же сохраненные theme settings, которые используют side panel, popup и audit hub. Operator pass должен удерживать текущий custom-seed state фиксированным во время восстановления provider access.",
+        themeMode: "Theme mode",
+        resolvedMode: "Resolved mode",
+        accentPreset: "Accent preset",
+        customSeed: "Custom seed",
+        scopeIsolation: "Scope isolation",
+        liveBadgeSource: "Live badge source",
+        notSet: "Не задано",
+        computedBadgeSource: "Вычислено из текущего app state",
+        scopeNote: "Scope note",
+        popupSnapshotPrefix: "Popup snapshot",
+        actionBadgeTitlePrefix: "Action badge title",
+      },
+      requestScope: {
+        eyebrow: "Request scope",
+        title: "Привязка repo-backed request",
+        detail:
+          "Этот workspace привязан к pending theme-recovery request. Summary и JSON export должны сохранять эту request identity, чтобы completion случайно не выполнил другой request.",
+        requestId: "Request id",
+        createdAt: "Created at",
+        boundWorkspaceRoute: "Привязанный workspace route",
+        adHocTitle: "Ad-hoc workspace",
+        adHocDetail:
+          "Этот review route сейчас не привязан к repo-backed request. Его exports полезны для локальной проверки, но не должны использоваться для выполнения pending request.",
+      },
+      workflow: {
+        eyebrow: "Operator workflow",
+        title: "Шаги follow-up для реальной session",
+        detail:
+          "Держите эту страницу открытой при переключении между Settings, popup и целевыми vendor pages. Используйте ссылки ниже, чтобы открыть точные поставляемые surfaces в отдельных вкладках, не теряя этот workspace.",
+        steps: [
+          "Зафиксировать текущий custom seed и подтвердить, что workspace все еще сообщает ожидаемые theme mode, resolved mode, preset и seed.",
+          "Использовать Settings, чтобы оставить видимыми только Cursor и Codex перед доверием popup alignment и action badge.",
+          "Сначала зафиксировать degraded state: отсутствие host access или заблокированная реальная session должны удерживать страницу в warning state.",
+          "Предоставить host access через native prompt или восстановить реальную vendor session; затем обновить страницу и подтвердить, что review stage вернулся в recovered.",
+          "Скопировать summary или JSON export после реального pass, чтобы результат можно было приложить к последующему repo-backed archive или operator note.",
+        ],
+        extensionSurfaces: "Surfaces расширения",
+        vendorSessionPages: "Страницы vendor session",
+      },
+      links: {
+        sidePanel: {
+          settings: "Открыть Settings",
+          dashboard: "Открыть dashboard",
+          "cursor-detail": "Открыть detail Cursor",
+          "codex-detail": "Открыть detail Codex",
+          popup: "Открыть popup",
+        },
+        vendor: {
+          "cursor-session-page": "Открыть страницу usage Cursor",
+          "codex-session-page": "Открыть страницу analytics Codex",
+        },
+      },
+      outputs: {
+        eyebrow: "Копируемые выходные данные",
+        title: "Summary и JSON evidence",
+        detail:
+          "Эти outputs остаются read-only. Они точно отражают текущий workspace state, показанный выше, и могут быть скопированы после ручного extension-mode или real-session pass.",
+        copySummary: "Копировать summary",
+        downloadSummary: "Скачать summary",
+        copyJson: "Копировать JSON",
+        downloadJson: "Скачать JSON",
+        openSettingsTab: "Открыть Settings в новой вкладке",
+        summaryDraft: "Summary draft",
+        jsonExport: "JSON export",
+        copiedSummary: "Текущий theme recovery summary скопирован.",
+        downloadedSummary: "Текущий theme recovery summary скачан.",
+        copiedJson: "Текущий theme recovery JSON export скопирован.",
+        downloadedJson: "Текущий theme recovery JSON export скачан.",
+        clipboardUnavailable: "Clipboard недоступен в этом context.",
+        downloadUnavailable: "Прямая загрузка недоступна в этом context.",
+        workspaceNote: "Workspace note",
+      },
+    },
+  },
+  ar: {
+    interactionAudit: {
+      topbar: {
+        title: "تدقيق التفاعل",
+        subtitle: "مركز QA في متصفح حقيقي",
+        openDashboard: "فتح dashboard",
+        openSettings: "فتح الإعدادات",
+      },
+      hero: {
+        eyebrow: "مركز التدقيق",
+        title: "مراجعة تفاعل يدوية من دون تكرار تغيير الحجم",
+        detail:
+          "تضع هذه الصفحة أسطح dashboard وsettings وprovider detail وpopup المنشورة فعليا داخل frames ثابتة العرض. بذلك يمكن لمراجعة المتصفح الحقيقي التركيز على hover وfocus وpressed وسلوك العرض المدمج بدلا من إعادة فتح routes مرارا. يتبع مركز التدقيق تفضيلات theme المشتركة نفسها في side panel وpopup المنشورين.",
+        chip: "QA يدوي · frames ثابتة العرض",
+      },
+      guidance: {
+        eyebrow: "طريقة الاستخدام",
+        title: "إرشادات المراجعة",
+        detail:
+          "افتح هذه route في تبويب متصفح عادي أو صفحة extension عندما تحتاج إلى مرور بشري بعد scripts المراجعة الآلية. تحافظ frames المضمنة على عروض تمثيلية حتى عندما تكون نافذة المتصفح الخارجية أكبر.",
+        checks: [
+          "مرر فوق عناصر التحكم التفاعلية وتأكد من بقاء state layer متماسكة عبر الصفحات.",
+          "استخدم tab من لوحة المفاتيح عبر الأسطح المضمنة وتأكد من أن focus يبقى واضحا.",
+          "استخدم preset actions أدناه لفتح disclosures أو تركيز controls أو إظهار detail notes أعمق قبل signoff على UI slice.",
+        ],
+        openDashboard: "فتح dashboard",
+        openSettings: "فتح الإعدادات",
+        openPopup: "فتح popup",
+      },
+      signoff: {
+        eyebrow: "Workspace التوقيع",
+        title: "مسودة operator الحالية",
+        detail:
+          "استخدم عناصر التحكم داخل كل audit surface لتسجيل تقدم checks وreviewer notes وحالة pass أو follow-up. تتحدث المسودة أدناه مباشرة من workspace state الحالي.",
+        reviewedSurfaces: "الأسطح التي تمت مراجعتها",
+        pass: "نجح",
+        followUp: "متابعة",
+        completedChecks: "Checks مكتملة",
+        reviewerName: "اسم Reviewer",
+        reviewerPlaceholder: "سجل اسم reviewer أو operator.",
+        sessionLabel: "تسمية Session",
+        sessionPlaceholder: "ضع تسمية لهذه الجولة، مثل Compact QA Pass.",
+        reviewedAt: "وقت المراجعة",
+        reviewedAtPlaceholder: "استخدم وقت ISO-8601 أو اختم لحظة المراجعة الحالية.",
+        stampCurrentTime: "ختم الوقت الحالي",
+        reviewSession: "Review session",
+        reviewerPrefix: "Reviewer",
+        sessionPrefix: "Session",
+        reviewedAtPrefix: "Reviewed at",
+        notSet: "غير محدد",
+        requestBindingPrefix: "Request binding",
+        requestRevisionPrefix: "Request revision",
+        requestScope: "نطاق request",
+        boundRequestDetail:
+          "هذا workspace مرتبط بطلب pending repo-backed واحد. استخدم preflight وcompletion لذلك request بدلا من ad-hoc archive path.",
+        adHocDetail:
+          "هذا workspace غير مرتبط ب repo-backed request. استخدم archive path ما لم يتم استيراد pending request template أولا.",
+        repoBackedRequest: "Repo-backed request",
+        adHocWorkspace: "Ad-hoc audit workspace",
+        binding: "الارتباط",
+        requestRevision: "Request revision",
+        downloadIdentity: "هوية التنزيل",
+        downloadsBound: "تتضمن التنزيلات request id وrequest revision المرتبطين.",
+        downloadsAdHoc: "تبقى التنزيلات ضمن session scope الحالي فقط.",
+      },
+    },
+    themeRecovery: {
+      topbar: {
+        title: "مراجعة استعادة theme",
+        subtitle: "Operator workspace",
+        refresh: "تحديث",
+        openSettings: "فتح الإعدادات",
+      },
+      hero: {
+        eyebrow: "متابعة session حقيقية",
+        title: "مكان واحد لتحضير فحوص native prompt واستعادة session حقيقية",
+        detail:
+          "لا تدعي هذه route أن native host prompt أو vendor session حقيقية قد نجحت بالفعل. إنها تجمع theme state الحالي وrecovery state والروابط السريعة والأدلة القابلة للنسخ كي تبقى جولة operator التالية صادقة وقابلة للتكرار.",
+        chip: "Theme QA · متابعة الاستعادة",
+      },
+      loading: {
+        title: "جار تحميل حالة المراجعة الحالية...",
+        detail:
+          "تتم قراءة app state الحالي وaction badge كي يعكس هذا workspace theme وprovider state نفسيهما كما في الأسطح المنشورة.",
+      },
+      error: {
+        title: "تعذر تحميل حالة المراجعة",
+      },
+      currentTruth: {
+        eyebrow: "الحقيقة الحالية",
+        title: "حالة الاستعادة الآن",
+        reviewStage: "Review stage",
+        popupSnapshot: "Popup snapshot",
+        actionBadge: "Action badge",
+      },
+      themeState: {
+        eyebrow: "Theme state",
+        title: "Runtime state مشترك",
+        detail:
+          "يقرأ هذا workspace إعدادات theme المحفوظة نفسها التي يستخدمها side panel وpopup وaudit hub. يجب أن تبقي جولة operator حالة custom-seed الحالية ثابتة أثناء استعادة provider access.",
+        themeMode: "Theme mode",
+        resolvedMode: "Resolved mode",
+        accentPreset: "Accent preset",
+        customSeed: "Custom seed",
+        scopeIsolation: "Scope isolation",
+        liveBadgeSource: "Live badge source",
+        notSet: "غير محدد",
+        computedBadgeSource: "محسوب من app state الحالي",
+        scopeNote: "Scope note",
+        popupSnapshotPrefix: "Popup snapshot",
+        actionBadgeTitlePrefix: "Action badge title",
+      },
+      requestScope: {
+        eyebrow: "نطاق request",
+        title: "ارتباط repo-backed request",
+        detail:
+          "هذا workspace مرتبط ب pending theme-recovery request واحد. يجب أن يحافظ Summary وJSON export على request identity هذه حتى لا ينفذ completion طلبا مختلفا بالخطأ.",
+        requestId: "Request id",
+        createdAt: "Created at",
+        boundWorkspaceRoute: "Workspace route المرتبطة",
+        adHocTitle: "Ad-hoc workspace",
+        adHocDetail:
+          "هذه review route غير مرتبطة حاليا ب repo-backed request. تبقى exports مفيدة للفحص المحلي، لكنها لا يجب أن تستخدم لإنجاز pending request.",
+      },
+      workflow: {
+        eyebrow: "Operator workflow",
+        title: "خطوات متابعة session حقيقية",
+        detail:
+          "اترك هذه الصفحة مفتوحة أثناء التنقل بين Settings وpopup وصفحات vendor الهدف. استخدم الروابط أدناه لفتح الأسطح المنشورة الدقيقة في تبويبات منفصلة من دون فقدان هذا workspace.",
+        steps: [
+          "ثبّت custom seed الحالي وتأكد من أن workspace لا يزال يبلغ theme mode وresolved mode وpreset وseed المتوقعة.",
+          "استخدم Settings لإبقاء Cursor وCodex فقط مرئيين قبل الثقة في popup alignment وaction badge.",
+          "التقط degraded state أولا: نقص host access أو session حقيقية محجوبة يجب أن يبقي هذه الصفحة في حالة warning.",
+          "امنح host access عبر native prompt أو استعد vendor session الحقيقية؛ ثم حدث هذه الصفحة وتأكد من عودة review stage إلى recovered.",
+          "انسخ summary أو JSON export بعد الجولة الحقيقية كي يمكن إرفاق النتيجة لاحقا ب repo-backed archive أو operator note.",
+        ],
+        extensionSurfaces: "أسطح extension",
+        vendorSessionPages: "صفحات vendor session",
+      },
+      links: {
+        sidePanel: {
+          settings: "فتح الإعدادات",
+          dashboard: "فتح dashboard",
+          "cursor-detail": "فتح تفاصيل Cursor",
+          "codex-detail": "فتح تفاصيل Codex",
+          popup: "فتح popup",
+        },
+        vendor: {
+          "cursor-session-page": "فتح صفحة Cursor usage",
+          "codex-session-page": "فتح صفحة Codex analytics",
+        },
+      },
+      outputs: {
+        eyebrow: "مخرجات قابلة للنسخ",
+        title: "أدلة Summary وJSON",
+        detail:
+          "تبقى هذه المخرجات للقراءة فقط. إنها تعكس workspace state الحالي كما يظهر أعلاه ويمكن نسخها بعد مرور extension-mode يدوي أو session حقيقية.",
+        copySummary: "نسخ summary",
+        downloadSummary: "تنزيل summary",
+        copyJson: "نسخ JSON",
+        downloadJson: "تنزيل JSON",
+        openSettingsTab: "فتح الإعدادات في تبويب جديد",
+        summaryDraft: "Summary draft",
+        jsonExport: "JSON export",
+        copiedSummary: "تم نسخ summary استعادة theme الحالي.",
+        downloadedSummary: "تم تنزيل summary استعادة theme الحالي.",
+        copiedJson: "تم نسخ JSON export لاستعادة theme الحالية.",
+        downloadedJson: "تم تنزيل JSON export لاستعادة theme الحالية.",
+        clipboardUnavailable: "الوصول إلى clipboard غير متاح في هذا context.",
+        downloadUnavailable: "التنزيل المباشر غير متاح في هذا context.",
+        workspaceNote: "Workspace note",
+      },
+    },
+  },
+  hi: {
+    interactionAudit: {
+      topbar: {
+        title: "इंटरैक्शन audit",
+        subtitle: "Real-browser QA hub",
+        openDashboard: "dashboard खोलें",
+        openSettings: "Settings खोलें",
+      },
+      hero: {
+        eyebrow: "Audit hub",
+        title: "बार-बार resize किए बिना manual interaction review",
+        detail:
+          "यह page वास्तविक shipped dashboard, settings, provider detail और popup surfaces को fixed-width frames में embed करता है। इससे real-browser review route दोबारा खोलने के बजाय hover, focus, pressed और compact-width behavior पर ध्यान दे सकता है। audit hub वही shared theme preferences follow करता है जो shipped side panel और popup करते हैं।",
+        chip: "Manual QA · Fixed-width frames",
+      },
+      guidance: {
+        eyebrow: "कैसे उपयोग करें",
+        title: "Review guidance",
+        detail:
+          "जब automated review scripts के बाद human pass चाहिए, तो इस route को सामान्य browser tab या extension page में खोलें। outer browser window बड़ी होने पर भी embedded frames representative widths बनाए रखते हैं।",
+        checks: [
+          "interactive controls पर hover करें और confirm करें कि state layer pages के बीच coherent रहती है।",
+          "embedded surfaces में keyboard tab focus का उपयोग करें और confirm करें कि focus visibility explicit रहती है।",
+          "UI slice sign off करने से पहले disclosures खोलने, controls focus करने, या lower detail notes दिखाने के लिए नीचे preset actions उपयोग करें।",
+        ],
+        openDashboard: "dashboard खोलें",
+        openSettings: "Settings खोलें",
+        openPopup: "popup खोलें",
+      },
+      signoff: {
+        eyebrow: "Signoff workspace",
+        title: "Current operator draft",
+        detail:
+          "हर audit surface के controls से check progress, reviewer notes और pass या follow-up state record करें। नीचे draft current workspace state से live update होता है।",
+        reviewedSurfaces: "Reviewed surfaces",
+        pass: "Pass",
+        followUp: "Follow-up",
+        completedChecks: "Completed checks",
+        reviewerName: "Reviewer name",
+        reviewerPlaceholder: "reviewer या operator name record करें।",
+        sessionLabel: "Session label",
+        sessionPlaceholder: "इस pass को label करें, जैसे Compact QA Pass.",
+        reviewedAt: "Reviewed at",
+        reviewedAtPlaceholder: "ISO-8601 time उपयोग करें या current review moment stamp करें।",
+        stampCurrentTime: "Current time stamp करें",
+        reviewSession: "Review session",
+        reviewerPrefix: "Reviewer",
+        sessionPrefix: "Session",
+        reviewedAtPrefix: "Reviewed at",
+        notSet: "set नहीं",
+        requestBindingPrefix: "Request binding",
+        requestRevisionPrefix: "Request revision",
+        requestScope: "Request scope",
+        boundRequestDetail:
+          "यह workspace एक repo-backed pending request से bound है। ad-hoc archive path के बजाय उसी request पर preflight और completion चलाएं।",
+        adHocDetail:
+          "यह workspace repo-backed request से bound नहीं है। जब तक pending request template पहले import न हो, archive path उपयोग करें।",
+        repoBackedRequest: "Repo-backed request",
+        adHocWorkspace: "Ad-hoc audit workspace",
+        binding: "Binding",
+        requestRevision: "Request revision",
+        downloadIdentity: "Download identity",
+        downloadsBound: "Downloads में bound request id और request revision शामिल होते हैं।",
+        downloadsAdHoc: "Downloads केवल current session scope में रहते हैं।",
+      },
+    },
+    themeRecovery: {
+      topbar: {
+        title: "Theme recovery समीक्षा",
+        subtitle: "Operator workspace",
+        refresh: "Refresh",
+        openSettings: "Settings खोलें",
+      },
+      hero: {
+        eyebrow: "Real-session follow-up",
+        title: "native prompt और real-session recovery checks stage करने की एक जगह",
+        detail:
+          "यह route दावा नहीं करता कि native host prompt या real vendor session पहले ही pass हो गया है। यह current theme state, recovery state, quick links और copyable evidence collect करता है ताकि अगला operator pass truthful और repeatable रहे।",
+        chip: "Theme QA · Recovery follow-up",
+      },
+      loading: {
+        title: "Current review state load हो रहा है...",
+        detail:
+          "current app state और action badge पढ़े जा रहे हैं ताकि यह workspace shipped surfaces जैसा ही theme और provider state reflect कर सके।",
+      },
+      error: {
+        title: "Review state load नहीं हो सका",
+      },
+      currentTruth: {
+        eyebrow: "Current truth",
+        title: "अभी recovery status",
+        reviewStage: "Review stage",
+        popupSnapshot: "Popup snapshot",
+        actionBadge: "Action badge",
+      },
+      themeState: {
+        eyebrow: "Theme state",
+        title: "Shared runtime state",
+        detail:
+          "यह workspace वही saved theme settings पढ़ता है जिन्हें side panel, popup और audit hub उपयोग करते हैं। operator pass को provider access recover करते समय current custom-seed state fixed रखना चाहिए।",
+        themeMode: "Theme mode",
+        resolvedMode: "Resolved mode",
+        accentPreset: "Accent preset",
+        customSeed: "Custom seed",
+        scopeIsolation: "Scope isolation",
+        liveBadgeSource: "Live badge source",
+        notSet: "Set नहीं",
+        computedBadgeSource: "current app state से computed",
+        scopeNote: "Scope note",
+        popupSnapshotPrefix: "Popup snapshot",
+        actionBadgeTitlePrefix: "Action badge title",
+      },
+      requestScope: {
+        eyebrow: "Request scope",
+        title: "Repo-backed request binding",
+        detail:
+          "यह workspace एक pending theme-recovery request से bound है। Summary और JSON export को यह request identity preserve करनी चाहिए ताकि completion गलती से किसी दूसरे request को fulfill न करे।",
+        requestId: "Request id",
+        createdAt: "Created at",
+        boundWorkspaceRoute: "Bound workspace route",
+        adHocTitle: "Ad-hoc workspace",
+        adHocDetail:
+          "यह review route अभी repo-backed request से bound नहीं है। इसके exports local inspection के लिए उपयोगी हैं, लेकिन pending request fulfill करने के लिए उपयोग नहीं होने चाहिए।",
+      },
+      workflow: {
+        eyebrow: "Operator workflow",
+        title: "Real-session follow-up steps",
+        detail:
+          "Settings, popup और target vendor pages के बीच switch करते समय यह page open रखें। नीचे links exact shipped surfaces को अलग tabs में खोलते हैं, current workspace खोए बिना।",
+        steps: [
+          "current custom seed fixed रखें और confirm करें कि workspace expected theme mode, resolved mode, preset और seed report करता है।",
+          "popup alignment और action badge पर भरोसा करने से पहले Settings में केवल Cursor और Codex visible रखें।",
+          "पहले degraded state capture करें: missing host access या blocked real session इस page को warning state में रखना चाहिए।",
+          "native prompt से host access grant करें या real vendor session restore करें; फिर इस page को refresh करें और confirm करें कि review stage recovered पर लौटता है।",
+          "real pass के बाद summary या JSON export copy करें ताकि result बाद के repo-backed archive या operator note में attach हो सके।",
+        ],
+        extensionSurfaces: "Extension surfaces",
+        vendorSessionPages: "Vendor session pages",
+      },
+      links: {
+        sidePanel: {
+          settings: "Settings खोलें",
+          dashboard: "dashboard खोलें",
+          "cursor-detail": "Cursor detail खोलें",
+          "codex-detail": "Codex detail खोलें",
+          popup: "popup खोलें",
+        },
+        vendor: {
+          "cursor-session-page": "Cursor usage page खोलें",
+          "codex-session-page": "Codex analytics page खोलें",
+        },
+      },
+      outputs: {
+        eyebrow: "Copyable outputs",
+        title: "Summary और JSON evidence",
+        detail:
+          "ये outputs read-only रहते हैं। ये ऊपर दिखाए गए current workspace state को ठीक से reflect करते हैं और manual extension-mode या real-session pass के बाद copy किए जा सकते हैं।",
+        copySummary: "summary copy करें",
+        downloadSummary: "summary download करें",
+        copyJson: "JSON copy करें",
+        downloadJson: "JSON download करें",
+        openSettingsTab: "Settings नए tab में खोलें",
+        summaryDraft: "Summary draft",
+        jsonExport: "JSON export",
+        copiedSummary: "current theme recovery summary copy हो गया।",
+        downloadedSummary: "current theme recovery summary download हो गया।",
+        copiedJson: "current theme recovery JSON export copy हो गया।",
+        downloadedJson: "current theme recovery JSON export download हो गया।",
+        clipboardUnavailable: "इस context में clipboard access available नहीं है।",
+        downloadUnavailable: "इस context में direct download available नहीं है।",
+        workspaceNote: "Workspace note",
+      },
+    },
+  },
+  id: {
+    interactionAudit: {
+      topbar: {
+        title: "Audit interaksi",
+        subtitle: "Hub QA browser nyata",
+        openDashboard: "Buka dashboard",
+        openSettings: "Buka Settings",
+      },
+      hero: {
+        eyebrow: "Hub audit",
+        title: "Review interaksi manual tanpa resize berulang",
+        detail:
+          "Halaman ini menanamkan surface dashboard, settings, provider detail, dan popup yang benar-benar dikirim dalam frame lebar tetap. Review browser nyata bisa fokus pada hover, focus, pressed, dan perilaku lebar compact, bukan membuka ulang route berkali-kali. Hub audit mengikuti preferensi theme bersama yang sama dengan side panel dan popup yang dikirim.",
+        chip: "QA manual · Frame lebar tetap",
+      },
+      guidance: {
+        eyebrow: "Cara pakai",
+        title: "Panduan review",
+        detail:
+          "Buka route ini di tab browser normal atau halaman extension saat Anda ingin pass manusia setelah script review otomatis. Frame tertanam tetap mempertahankan lebar representatif walau jendela browser luar lebih besar.",
+        checks: [
+          "Hover kontrol interaktif dan pastikan state layer tetap koheren di seluruh halaman.",
+          "Gunakan keyboard tab focus di surface tertanam dan pastikan visibilitas focus tetap jelas.",
+          "Gunakan preset actions di bawah untuk membuka disclosure, memfokuskan kontrol, atau menampilkan detail note yang lebih rendah sebelum sign off UI slice.",
+        ],
+        openDashboard: "Buka dashboard",
+        openSettings: "Buka Settings",
+        openPopup: "Buka popup",
+      },
+      signoff: {
+        eyebrow: "Workspace signoff",
+        title: "Draft operator saat ini",
+        detail:
+          "Gunakan kontrol di dalam setiap audit surface untuk mencatat progress check, reviewer notes, dan status pass atau follow-up. Draft di bawah diperbarui live dari workspace state saat ini.",
+        reviewedSurfaces: "Surface yang direview",
+        pass: "Pass",
+        followUp: "Follow-up",
+        completedChecks: "Check selesai",
+        reviewerName: "Nama reviewer",
+        reviewerPlaceholder: "Catat nama reviewer atau operator.",
+        sessionLabel: "Label session",
+        sessionPlaceholder: "Beri label pass ini, misalnya Compact QA Pass.",
+        reviewedAt: "Reviewed at",
+        reviewedAtPlaceholder: "Gunakan waktu ISO-8601 atau stamp momen review saat ini.",
+        stampCurrentTime: "Stamp waktu saat ini",
+        reviewSession: "Review session",
+        reviewerPrefix: "Reviewer",
+        sessionPrefix: "Session",
+        reviewedAtPrefix: "Reviewed at",
+        notSet: "belum diset",
+        requestBindingPrefix: "Request binding",
+        requestRevisionPrefix: "Request revision",
+        requestScope: "Request scope",
+        boundRequestDetail:
+          "Workspace ini terikat ke satu pending request repo-backed. Gunakan preflight dan completion terhadap request itu, bukan ad-hoc archive path.",
+        adHocDetail:
+          "Workspace ini tidak terikat ke repo-backed request. Gunakan archive path kecuali pending request template diimpor lebih dulu.",
+        repoBackedRequest: "Repo-backed request",
+        adHocWorkspace: "Ad-hoc audit workspace",
+        binding: "Binding",
+        requestRevision: "Request revision",
+        downloadIdentity: "Identitas download",
+        downloadsBound:
+          "Download menyertakan request id dan request revision yang terikat.",
+        downloadsAdHoc: "Download hanya tetap dalam session scope saat ini.",
+      },
+    },
+    themeRecovery: {
+      topbar: {
+        title: "Review pemulihan theme",
+        subtitle: "Operator workspace",
+        refresh: "Refresh",
+        openSettings: "Buka Settings",
+      },
+      hero: {
+        eyebrow: "Follow-up session nyata",
+        title: "Satu tempat untuk menyiapkan check native prompt dan pemulihan session nyata",
+        detail:
+          "Route ini tidak mengklaim bahwa native host prompt atau session vendor nyata sudah lulus. Route ini mengumpulkan theme state saat ini, recovery state, quick link, dan evidence yang bisa disalin agar pass operator berikutnya tetap jujur dan dapat diulang.",
+        chip: "Theme QA · Follow-up pemulihan",
+      },
+      loading: {
+        title: "Memuat status review saat ini...",
+        detail:
+          "Membaca app state dan action badge saat ini agar workspace ini mencerminkan theme dan provider state yang sama dengan surface yang dikirim.",
+      },
+      error: {
+        title: "Tidak dapat memuat status review",
+      },
+      currentTruth: {
+        eyebrow: "Truth saat ini",
+        title: "Status pemulihan saat ini",
+        reviewStage: "Review stage",
+        popupSnapshot: "Popup snapshot",
+        actionBadge: "Action badge",
+      },
+      themeState: {
+        eyebrow: "Theme state",
+        title: "Shared runtime state",
+        detail:
+          "Workspace ini membaca pengaturan theme tersimpan yang sama dengan side panel, popup, dan audit hub. Pass operator harus menjaga custom-seed state saat ini tetap fixed saat memulihkan provider access.",
+        themeMode: "Theme mode",
+        resolvedMode: "Resolved mode",
+        accentPreset: "Accent preset",
+        customSeed: "Custom seed",
+        scopeIsolation: "Scope isolation",
+        liveBadgeSource: "Live badge source",
+        notSet: "Belum diset",
+        computedBadgeSource: "Dihitung dari app state saat ini",
+        scopeNote: "Scope note",
+        popupSnapshotPrefix: "Popup snapshot",
+        actionBadgeTitlePrefix: "Action badge title",
+      },
+      requestScope: {
+        eyebrow: "Request scope",
+        title: "Binding repo-backed request",
+        detail:
+          "Workspace ini terikat ke satu pending theme-recovery request. Summary dan JSON export harus mempertahankan request identity ini agar completion tidak tanpa sengaja memenuhi request lain.",
+        requestId: "Request id",
+        createdAt: "Created at",
+        boundWorkspaceRoute: "Workspace route terikat",
+        adHocTitle: "Ad-hoc workspace",
+        adHocDetail:
+          "Review route ini saat ini tidak terikat ke repo-backed request. Export-nya tetap berguna untuk inspeksi lokal, tetapi tidak boleh digunakan untuk memenuhi pending request.",
+      },
+      workflow: {
+        eyebrow: "Operator workflow",
+        title: "Langkah follow-up session nyata",
+        detail:
+          "Biarkan halaman ini terbuka saat berpindah antara Settings, popup, dan halaman vendor target. Gunakan link di bawah untuk membuka surface yang dikirim secara tepat di tab terpisah tanpa kehilangan workspace ini.",
+        steps: [
+          "Pertahankan custom seed saat ini dan pastikan workspace masih melaporkan theme mode, resolved mode, preset, dan seed yang diharapkan.",
+          "Gunakan Settings untuk menjaga hanya Cursor dan Codex yang terlihat sebelum mempercayai popup alignment dan action badge.",
+          "Tangkap degraded state lebih dulu: host access yang hilang atau session nyata yang terblokir harus membuat halaman ini tetap dalam warning state.",
+          "Berikan host access melalui native prompt atau pulihkan session vendor nyata; lalu refresh halaman ini dan pastikan review stage kembali ke recovered.",
+          "Salin summary atau JSON export setelah pass nyata agar hasilnya bisa dilampirkan ke repo-backed archive atau operator note berikutnya.",
+        ],
+        extensionSurfaces: "Surface extension",
+        vendorSessionPages: "Halaman vendor session",
+      },
+      links: {
+        sidePanel: {
+          settings: "Buka Settings",
+          dashboard: "Buka dashboard",
+          "cursor-detail": "Buka detail Cursor",
+          "codex-detail": "Buka detail Codex",
+          popup: "Buka popup",
+        },
+        vendor: {
+          "cursor-session-page": "Buka halaman usage Cursor",
+          "codex-session-page": "Buka halaman analytics Codex",
+        },
+      },
+      outputs: {
+        eyebrow: "Output yang bisa disalin",
+        title: "Evidence Summary dan JSON",
+        detail:
+          "Output ini tetap read-only. Output mencerminkan workspace state saat ini persis seperti yang ditampilkan di atas dan bisa disalin setelah pass manual extension-mode atau session nyata.",
+        copySummary: "Salin summary",
+        downloadSummary: "Download summary",
+        copyJson: "Salin JSON",
+        downloadJson: "Download JSON",
+        openSettingsTab: "Buka Settings di tab baru",
+        summaryDraft: "Summary draft",
+        jsonExport: "JSON export",
+        copiedSummary: "Summary theme recovery saat ini disalin.",
+        downloadedSummary: "Summary theme recovery saat ini didownload.",
+        copiedJson: "JSON export theme recovery saat ini disalin.",
+        downloadedJson: "JSON export theme recovery saat ini didownload.",
+        clipboardUnavailable: "Akses clipboard tidak tersedia dalam context ini.",
+        downloadUnavailable: "Download langsung tidak tersedia dalam context ini.",
+        workspaceNote: "Workspace note",
+      },
+    },
+  },
+};
+
+export function buildOperatorWorkspaceLocalizedCopy(i18n: RuntimeI18n) {
+  return OPERATOR_WORKSPACE_COPY[i18n.resolvedLocale];
 }

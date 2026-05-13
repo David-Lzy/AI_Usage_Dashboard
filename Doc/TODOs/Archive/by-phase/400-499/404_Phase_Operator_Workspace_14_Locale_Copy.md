@@ -16,8 +16,8 @@ Freshness model:
 
 Status note:
 
-- queued after `Phase 403`
-- operator-workspace runtime copy implementation slice
+- completed and archived after `Phase 404`
+- operator-workspace runtime copy implementation slice completed on 2026-05-13
 
 ## Goal
 
@@ -54,3 +54,29 @@ Add explicit 14-locale copy for the operator-workspace UI buckets approved by `P
 ## Follow-Up
 
 - Continue with `Phase 405` store-helper 14-locale copy.
+
+## Closeout
+
+Completed on 2026-05-13.
+
+Summary:
+
+- Replaced the `en` plus `zh-CN` branch in `src/shared/operator-workspace-localized-copy.ts` with a 14-locale catalog keyed by the shipped runtime locale registry.
+- Kept `buildOperatorWorkspaceLocalizedCopy(i18n)` and the `src/shared/localized-copy.ts` re-export stable.
+- Covered the Phase 402 approved helper-owned interaction-audit and theme-recovery buckets without moving consumer-only labels that are adjacent to export, route, request, preset, or evidence contracts.
+- Added focused test coverage for every shipped locale plus representative Arabic copy.
+- Updated the operator-workspace inventory, deeper i18n backlog, and roadmap state for the completed helper-owned implementation boundary.
+
+Verification:
+
+- `npm run i18n:check` passed.
+- `npm run test -- src/shared/operator-workspace-localized-copy.test.ts` passed.
+- `npm run typecheck` passed.
+- `npm run build` passed.
+- `npm run docs:check` passed.
+- `git diff --check` passed.
+
+Follow-up:
+
+- `Phase 405` should translate the store-helper runtime copy from the maintained inventory.
+- Consumer-only interaction-audit labels remain a later presentation/export split if a future phase can move them without altering persisted evidence or generated handoff text.
