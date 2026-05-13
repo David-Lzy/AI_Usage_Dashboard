@@ -88,6 +88,7 @@ As of 2026-05-13:
 - `ar` resolves to `rtl`; all other shipped runtime locales resolve to `ltr`
 - the new non-reviewed runtime locales use complete key coverage with English fallback where human-reviewed translations are not yet present
 - Arabic/RTL surfaces now isolate English fallback text direction so fallback punctuation stays readable until reviewed Arabic runtime translations are added
+- RDP extension-window locale smoke captures now validate `--locale` against the same 14 runtime tags before opening a Chrome extension window
 - the current shipped runtime localized slice covers:
   - popup shell
   - popup explanatory copy
@@ -192,7 +193,7 @@ Ship one localization architecture that can start with a small pilot set and the
 - the runtime app reads translated UI strings from one shared localization contract
 - the app uses locale-aware formatting for counts, timestamps, and durations
 - at least one pilot locale beyond English is shippable without layout breakage
-- Arabic resolves `rtl` from locale metadata and still needs representative RDP visual QA before the new locale set is considered fully polished
+- Arabic resolves `rtl` from locale metadata and has one representative RDP visual QA baseline, but the new locale set still needs reviewed translations before it is considered fully polished
 
 ## Main Risks
 
@@ -241,8 +242,9 @@ Recommended rollout:
 32. adapter diagnostic raw fallback regression review - shipped in `Phase 204`
 33. 14-locale registry, manifest catalogs, and store listing draft - shipped in `Phase 367`
 34. RTL fallback text direction hardening - shipped in `Phase 368`
-35. deeper runtime catalog translation review for non-English fallback locales - future work
-36. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact
+35. RDP locale capture guard for locale-specific visual QA - shipped in `Phase 369`
+36. deeper runtime catalog translation review for non-English fallback locales - future work
+37. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact
 
 ## References
 

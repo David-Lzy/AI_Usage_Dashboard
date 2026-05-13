@@ -1,6 +1,7 @@
 import path from "node:path";
 import process from "node:process";
 
+import { appendLocaleOverride } from "./lib/rdp-extension-locale-route.mjs";
 import { captureRdpExtensionWindow } from "./lib/rdp-extension-runtime-capture.mjs";
 import {
   getRdpExtensionWindowRouteConfig,
@@ -42,18 +43,6 @@ function assert(condition, message) {
   if (!condition) {
     throw new Error(message);
   }
-}
-
-function appendLocaleOverride(routePath, locale) {
-  if (locale.length === 0) {
-    return routePath;
-  }
-
-  const [pathAndSearch, hash = ""] = routePath.split("#", 2);
-  const separator = pathAndSearch.includes("?") ? "&" : "?";
-  const nextPathAndSearch = `${pathAndSearch}${separator}app-locale=${encodeURIComponent(locale)}`;
-
-  return hash.length > 0 ? `${nextPathAndSearch}#${hash}` : nextPathAndSearch;
 }
 
 async function run() {

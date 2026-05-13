@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [368_Phase_RTL_Fallback_Text_Direction_Hardening.md](./Archive/368_Phase_RTL_Fallback_Text_Direction_Hardening.md)
+- latest completed slice: [369_Phase_RDP_Locale_Capture_Guard.md](./Archive/369_Phase_RDP_Locale_Capture_Guard.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -758,6 +758,7 @@ Completed phases should be moved to:
 - the 2026-05-13 `Phase 366` closeout verified RDP Chrome extension-mode screenshots, added a dashboard empty-state Quick Setup action, and made hidden-provider Quick Setup deep links fall back to the Quick Setup section
 - the 2026-05-13 `Phase 367` closeout expanded locale architecture to 14 runtime locale tags, generated Settings locale options from one registry, added 14 Chrome manifest catalogs, added a guarded 14-locale Chrome Web Store listing draft, and introduced manifest i18n completeness checking without changing release/package boundaries
 - the 2026-05-13 `Phase 368` closeout hardened Arabic/RTL English fallback text rendering with shared `unicode-bidi: plaintext` typography coverage and verified dashboard, Settings, and popup Arabic extension-mode captures
+- the 2026-05-13 `Phase 369` closeout added a shared RDP locale capture URL helper, validated `--locale` against the 14 runtime locale tags, and documented serial locale-specific RDP smoke captures for future visual QA
 
 ## Delivery Standard For Each Phase
 
