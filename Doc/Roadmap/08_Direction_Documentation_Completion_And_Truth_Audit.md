@@ -51,7 +51,7 @@ Today the truthful answer is "some are complete, some are intentionally living,"
 
 As of 2026-05-13:
 
-- numbered phase docs are archived through `Phase 405`, with active `Phase 406` and queued `Phase 407`-`Phase 410` continuing release-gate, visual-QA, and maintenance follow-up work
+- numbered phase docs are archived through `Phase 406`, with active `Phase 407` and queued `Phase 408`-`Phase 410` continuing visual-QA and maintenance follow-up work
 - roadmap directions remain open by design
 - interaction-audit request docs now show `0` pending requests and `1` fulfilled real operator request
 - theme-recovery request docs now show `0` pending requests and `1` fulfilled real operator request

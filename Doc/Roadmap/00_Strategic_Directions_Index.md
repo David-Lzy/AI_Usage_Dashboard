@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is completed through `Phase 405`, with active `Phase 406` selected for a post-helper localization release gate and queued `Phase 407`-`Phase 410` covering visual QA and maintenance follow-ups
+- the numbered phase queue is completed through `Phase 406`, with active `Phase 407` selected for localized operator/store RDP visual QA and queued `Phase 408`-`Phase 410` covering localization bundle and presentation-split maintenance follow-ups
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness

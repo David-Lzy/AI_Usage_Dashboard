@@ -16,8 +16,8 @@ Freshness model:
 
 Status note:
 
-- active after `Phase 405`
-- release-gate baseline after operator/store helper localization
+- completed and archived after `Phase 406`
+- release-gate baseline after operator/store helper localization passed on 2026-05-14
 
 ## Goal
 
@@ -51,3 +51,27 @@ Run the full release gate after the operator-workspace and store-helper 14-local
 ## Follow-Up
 
 - Continue with `Phase 407` localized operator/store RDP visual QA if the release gate passes.
+
+## Closeout
+
+Completed on 2026-05-14.
+
+Summary:
+
+- Ran the full post-helper localization release gate after `Phase 404` and `Phase 405`.
+- Confirmed `npm run release:check` passed without package version, manifest version, release zip, provider contract, locale registry, shipped locale, manifest locale, or Chrome Web Store listing source changes.
+- Recorded the existing Vite large-chunk warning for `dist/assets/index.html2.js`; this is already covered by queued `Phase 408` for localization copy chunk-size audit.
+
+Verification:
+
+- `npm run release:check` passed:
+  - `npm run i18n:check` passed.
+  - `npm run typecheck` passed.
+  - `npm run test` passed with `124` test files and `579` tests.
+  - `npm run build` passed.
+- `npm run docs:check` passed.
+- `git diff --check` passed.
+
+Follow-up:
+
+- Continue with `Phase 407` localized operator/store RDP visual QA.

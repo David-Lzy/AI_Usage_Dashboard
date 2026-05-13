@@ -87,6 +87,7 @@ Execution note:
 - seventy-first inventory slice landed on `2026-05-13` through `Phase 403`
 - seventy-second executable slice landed on `2026-05-13` through `Phase 404`
 - seventy-third executable slice landed on `2026-05-14` through `Phase 405`
+- seventy-fourth release-gate baseline slice landed on `2026-05-14` through `Phase 406`
 - `Phase 200` and `Phase 201` intentionally paused this i18n/diagnostic follow-up line for functionality-first Codex personal usage-context surfacing while Codex budget is constrained
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
@@ -146,7 +147,8 @@ As of 2026-05-13:
 - `npm run i18n:check` now derives Chrome `_locales` directories from runtime registry metadata and verifies the RDP capture helper locale list against the same runtime tags
 - `npm run i18n:check` now also verifies the 14-locale Chrome Web Store listing draft has registry-aligned locale sections and complete listing field structure
 - the full `npm run release:check` gate passed after the 14-locale expansion and runtime message catalog split in `Phase 396`, and passed again after typed diagnostic presentation reached 14-locale coverage in `Phase 401`
-- active `Phase 406` runs the post-helper localization release gate before queued localized operator/store visual QA and maintenance follow-ups
+- the full `npm run release:check` gate passed after operator/store helper localization in `Phase 406`
+- active `Phase 407` covers localized operator/store RDP visual QA before queued localization maintenance follow-ups
 - the current shipped runtime localized slice covers:
   - popup shell
   - popup explanatory copy
@@ -349,8 +351,8 @@ Recommended rollout:
 74. store-helper 14-locale copy inventory - shipped in `Phase 403`
 75. operator-workspace 14-locale copy - shipped in `Phase 404`
 76. store-helper 14-locale copy - shipped in `Phase 405`
-77. post-helper localization release gate - active in `Phase 406`
-78. localized operator/store RDP visual QA - queued in `Phase 407`
+77. post-helper localization release gate - shipped in `Phase 406`
+78. localized operator/store RDP visual QA - active in `Phase 407`
 79. localization copy chunk-size audit - queued in `Phase 408`
 80. interaction-audit consumer-copy presentation split - queued in `Phase 409`
 81. store-helper error presentation split - queued in `Phase 410`
