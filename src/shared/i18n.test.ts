@@ -183,6 +183,17 @@ describe("runtime i18n", () => {
     expect(i18n.t("settings.preferences.locale.system")).toBe("Seguir sistema");
   });
 
+  it("returns translated runtime strings for the first fr shell slice", () => {
+    const i18n = createRuntimeI18n("fr");
+
+    expect(i18n.t("dashboard.hero.title")).toBe(
+      "Un tableau de bord pour les quotas de codage IA",
+    );
+    expect(i18n.t("popup.header.title")).toBe("Coup d'oeil rapide");
+    expect(i18n.t("settings.topbar.title")).toBe("Paramètres");
+    expect(i18n.t("settings.preferences.locale.system")).toBe("Suivre le système");
+  });
+
   it("localizes quick theme toggle copy from the next explicit mode", () => {
     const i18n = createRuntimeI18n("zh-CN");
 

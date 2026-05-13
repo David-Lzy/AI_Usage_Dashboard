@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [378_Phase_Brazilian_Portuguese_Runtime_Shell_Pilot.md](./Archive/378_Phase_Brazilian_Portuguese_Runtime_Shell_Pilot.md)
+- latest completed slice: [379_Phase_French_Runtime_Shell_Pilot.md](./Archive/379_Phase_French_Runtime_Shell_Pilot.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -768,6 +768,7 @@ Completed phases should be moved to:
 - the 2026-05-13 `Phase 376` closeout moved runtime message catalogs into `src/shared/runtime-message-catalogs.ts` while keeping locale registry, resolution, and formatting in `src/shared/i18n.ts`
 - the 2026-05-13 `Phase 377` closeout added the first Latin American Spanish runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while preserving deeper structured copy and raw evidence fallback boundaries
 - the 2026-05-13 `Phase 378` closeout added the first Brazilian Portuguese runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while preserving deeper structured copy and raw evidence fallback boundaries
+- the 2026-05-13 `Phase 379` closeout added the first French runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while preserving deeper structured copy and raw evidence fallback boundaries
 
 ## Delivery Standard For Each Phase
 
