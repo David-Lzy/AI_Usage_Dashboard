@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 
+import type { buildOperatorWorkspaceLocalizedCopy } from "../../shared/localized-copy";
 import type { InteractionAuditSurface } from "../interaction-audit-surfaces";
 import type {
   InteractionAuditSignoffStatus,
@@ -11,7 +12,12 @@ export type InteractionAuditSurfaceStatus = {
   message: string;
 };
 
+export type InteractionAuditSurfaceCardCopy = ReturnType<
+  typeof buildOperatorWorkspaceLocalizedCopy
+>["interactionAudit"]["surfaceCard"];
+
 type InteractionAuditSurfaceCardProps = {
+  copy: InteractionAuditSurfaceCardCopy;
   surface: InteractionAuditSurface;
   loaded: boolean;
   status: InteractionAuditSurfaceStatus | undefined;
@@ -34,6 +40,7 @@ type InteractionAuditSurfaceCardProps = {
 };
 
 export function InteractionAuditSurfaceCard({
+  copy,
   surface,
   loaded,
   status,
@@ -58,7 +65,7 @@ export function InteractionAuditSurfaceCard({
     >
       <div className="status-card__header">
         <div>
-          <p className="section-label">Audit Surface</p>
+          <p className="section-label">{copy.sectionLabel}</p>
           <h2 className="section-title">{surface.title}</h2>
         </div>
         <span className="meta-chip">
@@ -75,7 +82,7 @@ export function InteractionAuditSurfaceCard({
           rel="noreferrer"
           target="_blank"
         >
-          Open standalone
+          {copy.openStandalone}
         </a>
         {surface.actions.map((action) => (
           <div
@@ -108,10 +115,10 @@ export function InteractionAuditSurfaceCard({
         data-audit-status-id={surface.id}
       >
         <p className="detail-note__label">
-          {loaded ? "Audit state" : "Frame state"}
+          {loaded ? copy.auditState : copy.frameState}
         </p>
         <p className="supporting-copy">
-          {status?.message ?? "Loading embedded frame for audit presets."}
+          {status?.message ?? copy.loadingFrame}
         </p>
       </div>
 
@@ -119,7 +126,7 @@ export function InteractionAuditSurfaceCard({
         className="detail-note detail-note--neutral interaction-audit__manual-review"
         data-audit-manual-checks-id={surface.id}
       >
-        <p className="detail-note__label">Manual checks</p>
+        <p className="detail-note__label">{copy.manualChecks}</p>
         <ul className="interaction-audit__manual-checks">
           {surface.manualChecks.map((check, index) => (
             <li
@@ -147,7 +154,7 @@ export function InteractionAuditSurfaceCard({
 
         <div className="interaction-audit__signoff-fields">
           <label className="form-field">
-            <span className="form-field__label">Surface signoff</span>
+            <span className="form-field__label">{copy.surfaceSignoff}</span>
             <select
               className="form-field__control"
               data-audit-signoff-status-id={surface.id}
@@ -159,18 +166,20 @@ export function InteractionAuditSurfaceCard({
                 );
               }}
             >
-              <option value="not_reviewed">Not reviewed</option>
-              <option value="pass">Pass</option>
-              <option value="follow_up">Follow-up required</option>
+              <option value="not_reviewed">
+                {copy.signoffStatus.notReviewed}
+              </option>
+              <option value="pass">{copy.signoffStatus.pass}</option>
+              <option value="follow_up">{copy.signoffStatus.followUp}</option>
             </select>
           </label>
 
           <label className="form-field">
-            <span className="form-field__label">Operator notes</span>
+            <span className="form-field__label">{copy.operatorNotes}</span>
             <textarea
               className="form-field__control interaction-audit__notes-control"
               data-audit-signoff-notes-id={surface.id}
-              placeholder="Record reviewer notes for this surface."
+              placeholder={copy.notesPlaceholder}
               rows={4}
               value={signoffState.operatorNotes}
               onChange={(event) => {

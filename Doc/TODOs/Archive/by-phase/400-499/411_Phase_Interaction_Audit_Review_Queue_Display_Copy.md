@@ -68,7 +68,7 @@ Delivered:
 - updated `InteractionAuditReviewQueueSection` to render labels from localized copy
 - updated `buildInteractionAuditReviewQueue` so queue behavior keeps returning status enums, signoff status, counts, ordering, and next-target identity instead of English display labels
 - preserved surface ids, surface titles, manual-check text, signoff export JSON, generated handoff drafts, route ids, action ids, preset ids, data attributes, and downloaded filenames
-- queued [412_Phase_Interaction_Audit_Surface_Card_Display_Copy.md](../../../412_Phase_Interaction_Audit_Surface_Card_Display_Copy.md) as the next narrow interaction-audit display-copy slice
+- queued [412_Phase_Interaction_Audit_Surface_Card_Display_Copy.md](./412_Phase_Interaction_Audit_Surface_Card_Display_Copy.md) as the next narrow interaction-audit display-copy slice
 
 ## Verification
 

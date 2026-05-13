@@ -21,6 +21,7 @@ Status note:
 - `Phase 404` completed the helper-owned bucket implementation; consumer-only labels remain follow-up unless a later phase moves them without touching export/evidence contracts
 - `Phase 409` adds a maintained presentation/export split for the remaining interaction-audit consumer labels: [I18n_Interaction_Audit_Presentation_Export_Split.md](./I18n_Interaction_Audit_Presentation_Export_Split.md)
 - `Phase 411` completed Review Queue display labels with 14-locale copy while preserving queue status enums and export payloads
+- `Phase 412` completed Surface Card chrome labels with 14-locale copy while preserving surface definitions, manual checks, frame identity, and export payloads
 
 ## Purpose
 
@@ -74,9 +75,9 @@ These buckets are stable product UI copy and received explicit copy for all 14 s
 
 ## Consumer Copy To Migrate Into The Helper
 
-The following hard-coded visible UI strings remain follow-up work. They can move into `buildOperatorWorkspaceLocalizedCopy` in a later phase if the implementation stays presentation-only and does not change route behavior or export/evidence payloads.
+The following hard-coded visible UI strings are split between completed narrow slices and remaining follow-up work. Remaining labels can move into `buildOperatorWorkspaceLocalizedCopy` in a later phase if the implementation stays presentation-only and does not change route behavior or export/evidence payloads.
 
-### Interaction Audit Review Queue
+### Interaction Audit Review Queue - Completed In Phase 411
 
 Source:
 
@@ -97,7 +98,7 @@ Preserve:
 - queue status enum values
 - surface titles when they are still sourced from evidence definitions
 
-### Interaction Audit Surface Card
+### Interaction Audit Surface Card - Completed In Phase 412
 
 Source:
 
@@ -238,4 +239,4 @@ If `Phase 404` cannot move all consumer-only labels without touching export/evid
 
 `Phase 409` completed that split as documentation-only planning.
 
-`Phase 411` completed the Review Queue slice. The next child phase is [412_Phase_Interaction_Audit_Surface_Card_Display_Copy.md](../TODOs/412_Phase_Interaction_Audit_Surface_Card_Display_Copy.md), scoped to Surface Card chrome labels only.
+`Phase 411` completed the Review Queue slice. `Phase 412` completed the Surface Card slice. The next child phase is [413_Phase_Interaction_Audit_Workspace_Controls_Display_Copy.md](../TODOs/413_Phase_Interaction_Audit_Workspace_Controls_Display_Copy.md), scoped to Workspace Controls display labels and safe route-owned feedback messages only.

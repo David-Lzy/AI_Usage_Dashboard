@@ -9,12 +9,14 @@ import {
 } from "../interaction-audit-surfaces";
 import {
   InteractionAuditSurfaceCard,
+  type InteractionAuditSurfaceCardCopy,
   type InteractionAuditSurfaceStatus,
 } from "./InteractionAuditSurfaceCard";
 
 export type { InteractionAuditSurfaceStatus };
 
 type InteractionAuditSurfaceGridSectionProps = {
+  copy: InteractionAuditSurfaceCardCopy;
   buildAuditUrl: (path: string) => string;
   loadedSurfaces: Record<string, boolean>;
   signoffState: InteractionAuditSignoffState;
@@ -36,6 +38,7 @@ type InteractionAuditSurfaceGridSectionProps = {
 };
 
 export function InteractionAuditSurfaceGridSection({
+  copy,
   buildAuditUrl,
   loadedSurfaces,
   signoffState,
@@ -64,6 +67,7 @@ export function InteractionAuditSurfaceGridSection({
         return (
           <InteractionAuditSurfaceCard
             key={surface.id}
+            copy={copy}
             surface={surface}
             loaded={Boolean(loadedSurfaces[surface.id])}
             status={surfaceStatus[surface.id]}

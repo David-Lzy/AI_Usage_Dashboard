@@ -16,8 +16,9 @@ Freshness model:
 
 Status note:
 
-- queued after `Phase 411`
-- next child implementation phase from [I18n_Interaction_Audit_Presentation_Export_Split.md](../I18n/I18n_Interaction_Audit_Presentation_Export_Split.md)
+- completed on `2026-05-14`
+- next child implementation phase from [I18n_Interaction_Audit_Presentation_Export_Split.md](../../../../I18n/I18n_Interaction_Audit_Presentation_Export_Split.md)
+- closeout archived after moving Surface Card chrome labels into 14-locale operator copy
 
 ## Goal
 
@@ -63,3 +64,22 @@ Move the interaction-audit Surface Card chrome labels into 14-locale presentatio
 ## Follow-Up
 
 - Later phases may localize Workspace Controls, Request-Scope command headings, and Handoff Summary presentation labels if they preserve raw/export evidence boundaries.
+
+## Completion Summary
+
+`Phase 412` moved Surface Card chrome labels into `buildOperatorWorkspaceLocalizedCopy(i18n).interactionAudit.surfaceCard` with explicit copy for all 14 runtime locales.
+
+Delivered:
+
+- localized stable Surface Card chrome labels: section label, open-standalone action, status labels, loading fallback, manual-checks heading, signoff field label, signoff option display labels, notes label, and notes placeholder
+- updated `InteractionAuditSurfaceCard` and `InteractionAuditSurfaceGridSection` to receive display copy from the route
+- preserved surface titles, descriptions, action labels, action expectations, manual-check text, iframe title, surface ids, dimensions, paths, data attributes, action ids, preset ids, frame readiness raw messages, signoff exports, and generated handoff drafts
+- queued [413_Phase_Interaction_Audit_Workspace_Controls_Display_Copy.md](../../../413_Phase_Interaction_Audit_Workspace_Controls_Display_Copy.md) as the next narrow interaction-audit display-copy slice
+
+## Verification
+
+- `npm run test -- src/shared/operator-workspace-localized-copy.test.ts src/sidepanel/interaction-audit-signoff.test.ts`
+- `npm run typecheck`
+- `npm run i18n:check`
+- `npm run docs:check`
+- `git diff --check`

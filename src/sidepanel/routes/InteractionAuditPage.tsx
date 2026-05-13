@@ -623,6 +623,7 @@ export function InteractionAuditPage({
       </section>
 
       <InteractionAuditSurfaceGridSection
+        copy={copy.surfaceCard}
         buildAuditUrl={buildAuditUrl}
         loadedSurfaces={loadedSurfaces}
         signoffState={signoffState}

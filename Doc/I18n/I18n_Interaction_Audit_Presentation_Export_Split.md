@@ -19,7 +19,7 @@ Status note:
 - created in `Phase 409`
 - defines which remaining interaction-audit visible labels can be localized without changing signoff exports, handoff drafts, request identities, automation hooks, or raw evidence
 - use this document before moving any remaining interaction-audit component strings into `buildOperatorWorkspaceLocalizedCopy`
-- `Phase 411` completed the Review Queue display-copy slice; Surface Card chrome is the next child slice
+- `Phase 411` completed the Review Queue display-copy slice; `Phase 412` completed the Surface Card display-copy slice; Workspace Controls is the next child slice
 
 ## Purpose
 
@@ -58,7 +58,6 @@ Already localized through `Phase 404`:
 
 Not localized in `Phase 409`:
 
-- surface-card labels
 - workspace controls and feedback messages
 - request-scope command headings
 - handoff summary labels and helper copy
@@ -67,6 +66,10 @@ Not localized in `Phase 409`:
 Localized after `Phase 411`:
 
 - Review Queue section labels, summary labels, status labels, signoff status labels, next-target actions, and pending-check display patterns
+
+Localized after `Phase 412`:
+
+- Surface Card chrome labels, status headings, loading fallback, manual-check heading, signoff option labels, notes label, and notes placeholder
 
 ## Safe Presentation-Only Labels
 
@@ -287,9 +290,11 @@ The first safe child phase started with Review Queue display labels because:
 
 `Phase 411` moved Review Queue display labels into localized copy.
 
-The next safe child phase is `Phase 412`, covering Surface Card chrome labels only. It must still preserve surface titles, descriptions, action labels, action expectations, manual checks, iframe titles, preset ids, action ids, and frame-action raw messages.
+`Phase 412` moved Surface Card chrome labels into localized copy while preserving surface titles, descriptions, action labels, action expectations, manual checks, iframe titles, preset ids, action ids, and frame-action raw messages.
 
-Required tests for Review Queue and later slices:
+The next safe child phase is `Phase 413`, covering Workspace Controls display labels and route-owned feedback messages only. It must still preserve pasted JSON, exported JSON field names, generated Markdown drafts, downloaded filenames, MIME types, and parsed import error semantics.
+
+Required tests for completed and later interaction-audit display-copy slices:
 
 - review queue helper still returns stable status enums and ordering
 - localized labels render from copy without changing `queueStatus`

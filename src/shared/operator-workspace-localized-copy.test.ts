@@ -14,6 +14,12 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
     expect(copy.interactionAudit.reviewQueue.queueStatus.followUp).toBe(
       "Follow-up required",
     );
+    expect(copy.interactionAudit.surfaceCard.sectionLabel).toBe(
+      "Audit Surface",
+    );
+    expect(copy.interactionAudit.surfaceCard.signoffStatus.followUp).toBe(
+      "Follow-up required",
+    );
     expect(copy.themeRecovery.hero.title).toBe(
       "One place to stage native-prompt and real-session recovery checks",
     );
@@ -28,6 +34,7 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
       "已复查 surface",
     );
     expect(copy.interactionAudit.reviewQueue.nextTarget).toBe("下一个目标");
+    expect(copy.interactionAudit.surfaceCard.openStandalone).toBe("单独打开");
     expect(copy.themeRecovery.currentTruth.reviewStage).toBe("复查阶段");
   });
 
@@ -109,6 +116,9 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
           totalManualCheckCount: 2,
         }),
       ).toContain("1");
+      expect(copy.interactionAudit.surfaceCard.sectionLabel.length).toBeGreaterThan(
+        0,
+      );
       expect(copy.themeRecovery.workflow.steps).toHaveLength(5);
     }
   });
@@ -118,6 +128,9 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
 
     expect(copy.interactionAudit.hero.title).toContain("مراجعة");
     expect(copy.interactionAudit.reviewQueue.pendingChecks(3)).toContain("3");
+    expect(copy.interactionAudit.surfaceCard.notesPlaceholder).toContain(
+      "surface",
+    );
     expect(copy.themeRecovery.outputs.clipboardUnavailable).toContain(
       "clipboard",
     );

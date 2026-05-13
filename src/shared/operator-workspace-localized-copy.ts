@@ -184,6 +184,23 @@ type InteractionAuditReviewQueueCopy = {
   };
 };
 
+type InteractionAuditSurfaceCardCopy = {
+  sectionLabel: string;
+  openStandalone: string;
+  auditState: string;
+  frameState: string;
+  loadingFrame: string;
+  manualChecks: string;
+  surfaceSignoff: string;
+  operatorNotes: string;
+  notesPlaceholder: string;
+  signoffStatus: {
+    notReviewed: string;
+    pass: string;
+    followUp: string;
+  };
+};
+
 const INTERACTION_AUDIT_REVIEW_QUEUE_COPY: Record<
   ResolvedAppLocale,
   InteractionAuditReviewQueueCopy
@@ -588,6 +605,236 @@ const INTERACTION_AUDIT_REVIEW_QUEUE_COPY: Record<
       pendingChecks: "Check tertunda",
       ready: "Siap",
     },
+    signoffStatus: {
+      notReviewed: "Belum direview",
+      pass: "Lulus",
+      followUp: "Follow-up diperlukan",
+    },
+  },
+};
+
+const INTERACTION_AUDIT_SURFACE_CARD_COPY: Record<
+  ResolvedAppLocale,
+  InteractionAuditSurfaceCardCopy
+> = {
+  en: {
+    sectionLabel: "Audit Surface",
+    openStandalone: "Open standalone",
+    auditState: "Audit state",
+    frameState: "Frame state",
+    loadingFrame: "Loading embedded frame for audit presets.",
+    manualChecks: "Manual checks",
+    surfaceSignoff: "Surface signoff",
+    operatorNotes: "Operator notes",
+    notesPlaceholder: "Record reviewer notes for this surface.",
+    signoffStatus: {
+      notReviewed: "Not reviewed",
+      pass: "Pass",
+      followUp: "Follow-up required",
+    },
+  },
+  "zh-CN": {
+    sectionLabel: "审计 surface",
+    openStandalone: "单独打开",
+    auditState: "审计状态",
+    frameState: "Frame 状态",
+    loadingFrame: "正在加载用于审计 preset 的嵌入 frame。",
+    manualChecks: "手动检查",
+    surfaceSignoff: "Surface 签核",
+    operatorNotes: "Operator 备注",
+    notesPlaceholder: "记录此 surface 的 reviewer 备注。",
+    signoffStatus: {
+      notReviewed: "未复查",
+      pass: "通过",
+      followUp: "需要 follow-up",
+    },
+  },
+  "zh-TW": {
+    sectionLabel: "稽核 surface",
+    openStandalone: "單獨開啟",
+    auditState: "稽核狀態",
+    frameState: "Frame 狀態",
+    loadingFrame: "正在載入用於稽核 preset 的嵌入 frame。",
+    manualChecks: "手動檢查",
+    surfaceSignoff: "Surface 簽核",
+    operatorNotes: "Operator 備註",
+    notesPlaceholder: "記錄此 surface 的 reviewer 備註。",
+    signoffStatus: {
+      notReviewed: "未複查",
+      pass: "通過",
+      followUp: "需要 follow-up",
+    },
+  },
+  ja: {
+    sectionLabel: "監査 surface",
+    openStandalone: "単独で開く",
+    auditState: "監査状態",
+    frameState: "Frame 状態",
+    loadingFrame: "監査 preset 用の埋め込み frame を読み込んでいます。",
+    manualChecks: "手動チェック",
+    surfaceSignoff: "Surface サインオフ",
+    operatorNotes: "Operator メモ",
+    notesPlaceholder: "この surface の reviewer メモを記録します。",
+    signoffStatus: {
+      notReviewed: "未レビュー",
+      pass: "合格",
+      followUp: "Follow-up が必要",
+    },
+  },
+  ko: {
+    sectionLabel: "감사 surface",
+    openStandalone: "단독으로 열기",
+    auditState: "감사 상태",
+    frameState: "Frame 상태",
+    loadingFrame: "감사 preset 용 embedded frame 을 로드하는 중입니다.",
+    manualChecks: "수동 체크",
+    surfaceSignoff: "Surface signoff",
+    operatorNotes: "Operator notes",
+    notesPlaceholder: "이 surface 에 대한 reviewer notes 를 기록합니다.",
+    signoffStatus: {
+      notReviewed: "미검토",
+      pass: "통과",
+      followUp: "Follow-up 필요",
+    },
+  },
+  "es-419": {
+    sectionLabel: "Superficie de auditoría",
+    openStandalone: "Abrir independiente",
+    auditState: "Estado de auditoría",
+    frameState: "Estado del frame",
+    loadingFrame: "Cargando frame embebido para presets de auditoría.",
+    manualChecks: "Checks manuales",
+    surfaceSignoff: "Signoff de superficie",
+    operatorNotes: "Notas del operador",
+    notesPlaceholder: "Registra notas del reviewer para esta superficie.",
+    signoffStatus: {
+      notReviewed: "No revisado",
+      pass: "Aprobado",
+      followUp: "Follow-up requerido",
+    },
+  },
+  "pt-BR": {
+    sectionLabel: "Superfície de auditoria",
+    openStandalone: "Abrir separado",
+    auditState: "Estado da auditoria",
+    frameState: "Estado do frame",
+    loadingFrame: "Carregando frame embutido para presets de auditoria.",
+    manualChecks: "Checks manuais",
+    surfaceSignoff: "Signoff da superfície",
+    operatorNotes: "Notas do operador",
+    notesPlaceholder: "Registre notas do reviewer para esta superfície.",
+    signoffStatus: {
+      notReviewed: "Não revisado",
+      pass: "Aprovado",
+      followUp: "Follow-up necessário",
+    },
+  },
+  fr: {
+    sectionLabel: "Surface d'audit",
+    openStandalone: "Ouvrir séparément",
+    auditState: "État d'audit",
+    frameState: "État du frame",
+    loadingFrame: "Chargement du frame intégré pour les presets d'audit.",
+    manualChecks: "Checks manuels",
+    surfaceSignoff: "Signoff de surface",
+    operatorNotes: "Notes operator",
+    notesPlaceholder: "Enregistrer les notes reviewer pour cette surface.",
+    signoffStatus: {
+      notReviewed: "Non revu",
+      pass: "Validé",
+      followUp: "Follow-up requis",
+    },
+  },
+  de: {
+    sectionLabel: "Audit-Surface",
+    openStandalone: "Separat öffnen",
+    auditState: "Audit-Status",
+    frameState: "Frame-Status",
+    loadingFrame: "Eingebetteter Frame für Audit-Presets wird geladen.",
+    manualChecks: "Manuelle Checks",
+    surfaceSignoff: "Surface-Signoff",
+    operatorNotes: "Operator-Notizen",
+    notesPlaceholder: "Reviewer-Notizen für dieses Surface erfassen.",
+    signoffStatus: {
+      notReviewed: "Nicht geprüft",
+      pass: "Bestanden",
+      followUp: "Follow-up erforderlich",
+    },
+  },
+  it: {
+    sectionLabel: "Surface di audit",
+    openStandalone: "Apri separato",
+    auditState: "Stato audit",
+    frameState: "Stato frame",
+    loadingFrame: "Caricamento frame incorporato per preset di audit.",
+    manualChecks: "Check manuali",
+    surfaceSignoff: "Signoff surface",
+    operatorNotes: "Note operator",
+    notesPlaceholder: "Registra note reviewer per questa surface.",
+    signoffStatus: {
+      notReviewed: "Non revisionato",
+      pass: "Pass",
+      followUp: "Follow-up richiesto",
+    },
+  },
+  ru: {
+    sectionLabel: "Audit surface",
+    openStandalone: "Открыть отдельно",
+    auditState: "Состояние аудита",
+    frameState: "Состояние frame",
+    loadingFrame: "Загрузка встроенного frame для audit presets.",
+    manualChecks: "Ручные checks",
+    surfaceSignoff: "Surface signoff",
+    operatorNotes: "Заметки operator",
+    notesPlaceholder: "Запишите reviewer notes для этого surface.",
+    signoffStatus: {
+      notReviewed: "Не проверено",
+      pass: "Пройдено",
+      followUp: "Требуется follow-up",
+    },
+  },
+  ar: {
+    sectionLabel: "Surface التدقيق",
+    openStandalone: "فتح بشكل مستقل",
+    auditState: "حالة التدقيق",
+    frameState: "حالة frame",
+    loadingFrame: "جار تحميل frame مضمن من أجل audit presets.",
+    manualChecks: "Checks يدوية",
+    surfaceSignoff: "توقيع surface",
+    operatorNotes: "ملاحظات operator",
+    notesPlaceholder: "سجل ملاحظات reviewer لهذه surface.",
+    signoffStatus: {
+      notReviewed: "غير مراجع",
+      pass: "ناجح",
+      followUp: "يتطلب follow-up",
+    },
+  },
+  hi: {
+    sectionLabel: "Audit surface",
+    openStandalone: "अलग से खोलें",
+    auditState: "Audit state",
+    frameState: "Frame state",
+    loadingFrame: "Audit presets के लिए embedded frame load हो रहा है।",
+    manualChecks: "Manual checks",
+    surfaceSignoff: "Surface signoff",
+    operatorNotes: "Operator notes",
+    notesPlaceholder: "इस surface के reviewer notes दर्ज करें।",
+    signoffStatus: {
+      notReviewed: "Not reviewed",
+      pass: "Pass",
+      followUp: "Follow-up required",
+    },
+  },
+  id: {
+    sectionLabel: "Surface audit",
+    openStandalone: "Buka terpisah",
+    auditState: "Status audit",
+    frameState: "Status frame",
+    loadingFrame: "Memuat frame tertanam untuk preset audit.",
+    manualChecks: "Check manual",
+    surfaceSignoff: "Signoff surface",
+    operatorNotes: "Catatan operator",
+    notesPlaceholder: "Catat notes reviewer untuk surface ini.",
     signoffStatus: {
       notReviewed: "Belum direview",
       pass: "Lulus",
@@ -3055,6 +3302,7 @@ export function buildOperatorWorkspaceLocalizedCopy(i18n: RuntimeI18n) {
     interactionAudit: {
       ...copy.interactionAudit,
       reviewQueue: INTERACTION_AUDIT_REVIEW_QUEUE_COPY[i18n.resolvedLocale],
+      surfaceCard: INTERACTION_AUDIT_SURFACE_CARD_COPY[i18n.resolvedLocale],
     },
   };
 }
