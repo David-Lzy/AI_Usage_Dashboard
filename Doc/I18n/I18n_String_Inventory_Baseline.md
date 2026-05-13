@@ -116,6 +116,10 @@ These now ship through:
 - `public/_locales/id/messages.json`
 - `src/shared/i18n.ts`
 - `src/shared/runtime-message-catalogs.ts`
+- `src/shared/runtime-message-catalog-data/base.ts`
+- `src/shared/runtime-message-catalog-data/overrides-cjk.ts`
+- `src/shared/runtime-message-catalog-data/overrides-latin.ts`
+- `src/shared/runtime-message-catalog-data/overrides-other.ts`
 - `src/shared/localized-copy.ts`
 - `Doc/Store/Store_Listing_Localization_14_Locale_Draft.md`
 

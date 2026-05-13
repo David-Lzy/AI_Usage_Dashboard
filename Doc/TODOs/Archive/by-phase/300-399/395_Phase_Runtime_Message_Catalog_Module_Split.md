@@ -16,7 +16,7 @@ Freshness model:
 
 Status note:
 
-- queued after `Phase 394`
+- completed and archived on 2026-05-13
 - first maintenance implementation phase after deeper localization work
 
 ## Goal
@@ -35,14 +35,14 @@ Split the runtime message catalog implementation into smaller modules while pres
 - `src/shared/runtime-message-catalogs.ts` is the safest first maintenance target because only `src/shared/i18n.ts` and `src/shared/i18n.test.ts` import it directly.
 - Use this write scope only:
   - `src/shared/runtime-message-catalogs.ts`
-  - new internal modules under `src/shared/runtime-message-catalogs/`
+  - new internal modules under `src/shared/runtime-message-catalog-data/`
   - `src/shared/i18n.test.ts` only if stable import/completeness assertions need adjustment
   - docs and phase closeout files
 - Recommended module shape:
-  - `runtime-message-catalogs/base.ts` for `EN_RUNTIME_MESSAGES` and `RUNTIME_SHELL_MESSAGE_IDS`
-  - `runtime-message-catalogs/overrides-cjk.ts` for `zh-CN`, `zh-TW`, `ja`, and `ko`
-  - `runtime-message-catalogs/overrides-latin.ts` for `es-419`, `pt-BR`, `fr`, `de`, and `it`
-  - `runtime-message-catalogs/overrides-other.ts` for `ru`, `ar`, `hi`, and `id`
+  - `runtime-message-catalog-data/base.ts` for `EN_RUNTIME_MESSAGES` and `RUNTIME_SHELL_MESSAGE_IDS`
+  - `runtime-message-catalog-data/overrides-cjk.ts` for `zh-CN`, `zh-TW`, `ja`, and `ko`
+  - `runtime-message-catalog-data/overrides-latin.ts` for `es-419`, `pt-BR`, `fr`, `de`, and `it`
+  - `runtime-message-catalog-data/overrides-other.ts` for `ru`, `ar`, `hi`, and `id`
   - `runtime-message-catalogs.ts` remains the public entrypoint that imports those internal modules and exports the same helpers
 - Do not touch structured-copy helpers, provider adapters, parsers, page-session clients, provider source contracts, manifest catalogs, store listing drafts, release packages, or generated evidence.
 
@@ -72,3 +72,37 @@ Split the runtime message catalog implementation into smaller modules while pres
 ## Follow-Up
 
 - Choose the next maintenance hotspot only after this split is complete and archived.
+
+## Closeout
+
+Completed on 2026-05-13.
+
+Summary:
+
+- Kept `src/shared/runtime-message-catalogs.ts` as the stable public import path for `buildRuntimeMessages`, `getRuntimeMessageOverrideIds`, and `RUNTIME_SHELL_MESSAGE_IDS`.
+- Moved internal catalog data into smaller modules:
+  - `src/shared/runtime-message-catalog-data/base.ts`
+  - `src/shared/runtime-message-catalog-data/overrides-cjk.ts`
+  - `src/shared/runtime-message-catalog-data/overrides-latin.ts`
+  - `src/shared/runtime-message-catalog-data/overrides-other.ts`
+- Used `runtime-message-catalog-data/` instead of the audit's proposed `runtime-message-catalogs/` directory after implementation exposed resolver ambiguity with the existing public `runtime-message-catalogs.ts` entry.
+- Preserved all message ids, locale tags, fallback behavior, runtime registry metadata, UI copy text, manifest catalogs, store listing drafts, provider behavior, release artifacts, and generated evidence.
+
+Size result:
+
+| File | Lines after split |
+| --- | ---: |
+| `src/shared/runtime-message-catalogs.ts` | 33 |
+| `src/shared/runtime-message-catalog-data/base.ts` | 264 |
+| `src/shared/runtime-message-catalog-data/overrides-cjk.ts` | 497 |
+| `src/shared/runtime-message-catalog-data/overrides-latin.ts` | 584 |
+| `src/shared/runtime-message-catalog-data/overrides-other.ts` | 468 |
+
+Verification:
+
+- `npm run i18n:check`
+- `npm run test -- src/shared/i18n.test.ts`
+- `npm run typecheck`
+- `npm run build`
+- `npm run docs:check`
+- `git diff --check`

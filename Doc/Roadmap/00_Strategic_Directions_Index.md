@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is completed through `Phase 394`, with active `Phase 395` selected for runtime message catalog module splitting
+- the numbered phase queue is completed through `Phase 395`, with no active numbered phase queued
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -91,6 +91,7 @@ As of 2026-05-13:
 - `Phase 374` added the first `ja` runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while keeping deeper structured copy on the existing fallback boundary
 - `Phase 375` added the first `ko` runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while keeping deeper structured copy on the existing fallback boundary
 - `Phase 376` moved the large runtime message catalog into `src/shared/runtime-message-catalogs.ts`, keeping locale registry, resolution, and formatting ownership in `src/shared/i18n.ts`
+- `Phase 395` split runtime message catalog internals into `src/shared/runtime-message-catalog-data/` while preserving the public `src/shared/runtime-message-catalogs.ts` export path and catalog behavior
 - `Phase 377` added the first `es-419` runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while keeping deeper structured copy on the existing fallback boundary
 - `Phase 378` added the first `pt-BR` runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while keeping deeper structured copy on the existing fallback boundary
 - `Phase 379` added the first `fr` runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while keeping deeper structured copy on the existing fallback boundary

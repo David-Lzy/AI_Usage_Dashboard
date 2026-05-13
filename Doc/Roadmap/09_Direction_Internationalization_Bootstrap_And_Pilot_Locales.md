@@ -113,7 +113,7 @@ As of 2026-05-13:
 - the manifest defines `default_locale = en`
 - the repo ships manifest-level Chrome catalogs for 14 locale directories: `en`, `zh_CN`, `zh_TW`, `ja`, `ko`, `es_419`, `pt_BR`, `fr`, `de`, `it`, `ru`, `ar`, `hi`, and `id`
 - the runtime app now ships one shared localization helper in `src/shared/i18n.ts`
-- the runtime message catalog now lives in `src/shared/runtime-message-catalogs.ts`, while locale registry, resolution, direction, and formatter helpers stay in `src/shared/i18n.ts`
+- the runtime message catalog public entry now lives in `src/shared/runtime-message-catalogs.ts`, internal catalog data now lives in `src/shared/runtime-message-catalog-data/`, and locale registry, resolution, direction, and formatter helpers stay in `src/shared/i18n.ts`
 - the runtime app now ships a 14-locale registry with runtime locale tags, Chrome locale directory names, native labels, Intl/html language tags, and text direction metadata
 - the runtime app now also ships one shared structured-copy helper in `src/shared/localized-copy.ts`
 - locale preference now persists in `AppSettings.locale` with current values `system | en | zh-CN | zh-TW | ja | ko | es-419 | pt-BR | fr | de | it | ru | ar | hi | id`
@@ -290,6 +290,7 @@ Recommended rollout:
 39. Japanese runtime shell pilot - shipped in `Phase 374`
 40. Korean runtime shell pilot - shipped in `Phase 375`
 41. runtime message catalog module split - shipped in `Phase 376`
+41.1 runtime message catalog internal data split - shipped in `Phase 395`
 42. Latin American Spanish runtime shell pilot - shipped in `Phase 377`
 43. Brazilian Portuguese runtime shell pilot - shipped in `Phase 378`
 44. French runtime shell pilot - shipped in `Phase 379`

@@ -34,8 +34,8 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [395_Phase_Runtime_Message_Catalog_Module_Split.md](./395_Phase_Runtime_Message_Catalog_Module_Split.md)
-- latest completed slice: [394_Phase_Code_Maintenance_Hotspot_Audit.md](./Archive/by-phase/300-399/394_Phase_Code_Maintenance_Hotspot_Audit.md)
+- active phase file: none
+- latest completed slice: [395_Phase_Runtime_Message_Catalog_Module_Split.md](./Archive/by-phase/300-399/395_Phase_Runtime_Message_Catalog_Module_Split.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -787,6 +787,7 @@ Completed phases should be moved to:
 - the 2026-05-13 `Phase 393.3.1` closeout added explicit 14-locale Provider Detail helper copy while preserving raw diagnostic/source evidence boundaries
 - the 2026-05-13 `Phase 393.3.2` closeout added explicit 14-locale provider-source display wrapper copy while preserving raw source-selection, fallback, diagnostic, provider-id, host, URL, route-hint, and archive/export evidence boundaries
 - the 2026-05-13 `Phase 394` closeout audited code maintenance hotspots and confirmed `Phase 395` should only split runtime message catalog internals while preserving the public `src/shared/runtime-message-catalogs.ts` entry
+- the 2026-05-13 `Phase 395` closeout split runtime message catalog internals into `src/shared/runtime-message-catalog-data/` while preserving the public `src/shared/runtime-message-catalogs.ts` entry and all catalog behavior
 
 ## Delivery Standard For Each Phase
 

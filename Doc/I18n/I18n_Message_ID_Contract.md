@@ -164,7 +164,7 @@ This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still maki
 ## Runtime Direction
 
 - runtime React localization is now partially shipped, not fully rolled out
-- runtime message catalogs now live in `src/shared/runtime-message-catalogs.ts`; `src/shared/i18n.ts` owns the locale registry, locale resolution, text direction, formatting, and public runtime helper functions
+- runtime message catalog public helpers now live in `src/shared/runtime-message-catalogs.ts`, internal catalog data lives in `src/shared/runtime-message-catalog-data/`, and `src/shared/i18n.ts` owns the locale registry, locale resolution, text direction, formatting, and public runtime helper functions
 - runtime locale architecture now covers 14 locales; `zh-CN` has broad reviewed non-English runtime copy, every other non-English locale in the 14-locale set has a first shell-level runtime pilot, and deeper runtime copy currently relies on English fallback until a translation-review phase replaces those entries
 - `RUNTIME_SHELL_MESSAGE_IDS` and focused i18n tests guard explicit first-shell override coverage for every non-English runtime locale
 - runtime document roots now sync `lang` and `dir` for popup, sidepanel, and full-page surfaces
