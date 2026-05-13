@@ -29,6 +29,7 @@ Status note:
 - `Phase 417` completed frame-result 14-locale display copy for those typed codes while preserving raw selector/preset diagnostics as untranslated raw detail
 - `Phase 418` classifies the remaining interaction-audit strings into route feedback/accessibility labels, typed import-error presentation, and surface-definition display/source split candidates
 - `Phase 419` completes route feedback and accessibility-label localization while keeping dynamic surface titles source-bound
+- `Phase 420` completes typed signoff import-error localization while keeping pasted JSON and parsed payload fields raw
 
 ## Purpose
 
@@ -246,4 +247,4 @@ If `Phase 404` cannot move all consumer-only labels without touching export/evid
 
 `Phase 409` completed that split as documentation-only planning.
 
-`Phase 411` completed the Review Queue slice. `Phase 412` completed the Surface Card slice. `Phase 413` completed the Workspace Controls slice. `Phase 414` completed the Request Scope command-heading slice. `Phase 415` completed the Handoff Summary slice. `Phase 416` completed the typed frame-result display/raw split. `Phase 417` completed typed frame-result localization using that split. `Phase 418` inventoried the remaining hard-coded interaction-audit presentation copy before more implementation slices. `Phase 419` completed route feedback and accessibility-label localization. The next child phase should split typed import errors, then tackle surface definitions with an export-preserving display/source split.
+`Phase 411` completed the Review Queue slice. `Phase 412` completed the Surface Card slice. `Phase 413` completed the Workspace Controls slice. `Phase 414` completed the Request Scope command-heading slice. `Phase 415` completed the Handoff Summary slice. `Phase 416` completed the typed frame-result display/raw split. `Phase 417` completed typed frame-result localization using that split. `Phase 418` inventoried the remaining hard-coded interaction-audit presentation copy before more implementation slices. `Phase 419` completed route feedback and accessibility-label localization. `Phase 420` completed typed import-error localization. The next child phase should tackle surface definitions with an export-preserving display/source split.

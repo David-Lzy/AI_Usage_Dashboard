@@ -99,7 +99,7 @@ This section records the historical `Phase 409` migration plan. Review Queue, Su
 | Surface title usage in Review Queue and Handoff Summary | `src/sidepanel/components/InteractionAuditReviewQueueSection.tsx`, `src/sidepanel/components/InteractionAuditHandoffSummarySection.tsx` | display currently uses export-bound surface title | localize only after the surface-definition display/source split exists |
 | Jump-to-surface feedback | `src/sidepanel/routes/InteractionAuditPage.tsx` | visible workspace feedback, not export-bound | completed in `Phase 419`; dynamic surface titles remain source-bound |
 | Grid and iframe accessibility labels | `src/sidepanel/components/InteractionAuditSurfaceGridSection.tsx`, `src/sidepanel/components/InteractionAuditSurfaceCard.tsx` | screen-reader-visible presentation copy | completed in `Phase 419`; route paths, iframe identity, and surface ids remain unchanged |
-| Signoff import parse errors | `src/sidepanel/interaction-audit-signoff.ts` | visible workspace feedback from parser failures | add typed import-error codes or a localized wrapper before translating; keep pasted JSON and parsed payload fields raw |
+| Signoff import parse errors | `src/sidepanel/interaction-audit-signoff.ts` | visible workspace feedback from parser failures | completed in `Phase 420`; pasted JSON and parsed payload fields remain raw |
 | Request binding fallback labels | `src/sidepanel/interaction-audit-signoff.ts` | currently shared by UI display and generated drafts | keep `none`, `not recorded`, and `sha256:` formatting raw until display and generated-draft paths are separated |
 | Generated signoff and handoff Markdown | `src/sidepanel/interaction-audit-signoff.ts` | export evidence | do not localize in runtime copy; any future localized preview must be separate from downloadable draft content |
 | Frame-action fallback `message` and `rawMessage` values | `src/sidepanel/interaction-audit-frame-actions.ts` | fallback plus raw selector/preset diagnostics | keep English fallback fields and raw diagnostics unchanged; `interactionAudit.frameResults` is the localized display layer |
@@ -111,6 +111,8 @@ Recommended follow-up order:
 3. surface-definition display/source split, because those strings feed both UI and export evidence
 
 `Phase 419` completed the route feedback and accessibility-label slice. Dynamic surface titles remain source-bound until the surface-definition display/source split.
+
+`Phase 420` completed typed import-error presentation. Parser failures now expose stable codes plus English fallback messages, and the route renders localized feedback from `interactionAudit.importErrors`.
 
 ### Review Queue
 
@@ -344,7 +346,9 @@ The first safe child phase started with Review Queue display labels because:
 
 `Phase 419` localized route feedback and accessibility labels while preserving surface source strings, route paths, iframe sources, ids, presets, signoff exports, handoff drafts, and archive/request schemas.
 
-The next safe child phase is `Phase 420`, covering typed signoff import-error presentation before the larger surface-definition display/source split.
+`Phase 420` added typed signoff import-error codes and 14-locale display copy while preserving pasted JSON, parsed payload fields, accepted import compatibility, generated drafts, filenames, MIME types, storage keys, and request binding/revision formatting.
+
+The next safe child phase is `Phase 421`, covering the larger surface-definition display/source split.
 
 Required tests for completed and later interaction-audit display-copy slices:
 

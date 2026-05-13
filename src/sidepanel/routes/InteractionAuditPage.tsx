@@ -490,7 +490,7 @@ export function InteractionAuditPage({
     if (!result.ok) {
       setWorkspaceFeedback({
         tone: "warning",
-        message: result.error,
+        message: copy.importErrors[result.code] ?? result.error,
       });
       return;
     }

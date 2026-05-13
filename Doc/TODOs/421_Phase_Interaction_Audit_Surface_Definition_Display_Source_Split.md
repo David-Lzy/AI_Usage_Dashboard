@@ -16,7 +16,7 @@ Freshness model:
 
 Status note:
 
-- queued after `Phase 420`
+- active after `Phase 420`
 - high-risk implementation slice from the remaining interaction-audit presentation-copy inventory
 
 ## Goal

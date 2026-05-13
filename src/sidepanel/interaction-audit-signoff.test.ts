@@ -445,6 +445,7 @@ describe("interaction audit signoff helpers", () => {
   it("rejects invalid import text with an honest error", () => {
     expect(parseInteractionAuditSignoffImport("", TEST_SURFACES)).toEqual({
       ok: false,
+      code: "empty_input",
       error: "Paste exported signoff JSON before importing.",
     });
 
@@ -452,7 +453,15 @@ describe("interaction audit signoff helpers", () => {
       parseInteractionAuditSignoffImport("{bad json", TEST_SURFACES),
     ).toEqual({
       ok: false,
+      code: "invalid_json",
       error: "Signoff import JSON could not be parsed.",
+    });
+
+    expect(parseInteractionAuditSignoffImport("42", TEST_SURFACES)).toEqual({
+      ok: false,
+      code: "unsupported_shape",
+      error:
+        "Signoff import JSON did not match the expected workspace or export shape.",
     });
   });
 });

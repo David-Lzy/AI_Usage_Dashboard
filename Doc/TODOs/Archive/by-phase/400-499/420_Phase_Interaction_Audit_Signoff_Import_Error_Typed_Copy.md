@@ -4,7 +4,7 @@ Date: 2026-05-14
 
 Process rule:
 
-- follow [Development_Guardrails.md](../Development_Guardrails.md)
+- follow [Development_Guardrails.md](../../../../Development_Guardrails.md)
 
 Document class:
 
@@ -16,7 +16,8 @@ Freshness model:
 
 Status note:
 
-- active after `Phase 419`
+- completed on 2026-05-14
+- archived after `Phase 420`
 - second implementation slice from the remaining interaction-audit presentation-copy inventory
 
 ## Goal
@@ -53,4 +54,19 @@ Split signoff import parser failures into typed error codes and localized displa
 
 ## Follow-Up
 
-- Proceed to the surface-definition display/source split only after typed import-error copy is stable.
+- `Phase 421` should proceed to the surface-definition display/source split now that typed import-error copy is stable.
+
+## Completion Summary
+
+- Added stable signoff import-error codes for empty input, invalid JSON, and unsupported workspace/export shape.
+- Preserved the existing English `error` fallback messages while rendering localized route feedback from `interactionAudit.importErrors`.
+- Added 14-locale import-error copy under the operator workspace interaction-audit copy.
+- Kept pasted JSON, parsed payload fields, operator notes, request context values, surface ids, accepted legacy workspace imports, current signoff export imports, generated drafts, filenames, MIME types, localStorage keys, and request binding/revision formatting unchanged.
+
+## Verification
+
+- `npm run i18n:check`
+- `npm run test -- src/sidepanel/interaction-audit-signoff.test.ts src/shared/operator-workspace-localized-copy.test.ts`
+- `npm run typecheck`
+- `npm run docs:check`
+- `git diff --check`

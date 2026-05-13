@@ -51,6 +51,9 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
     expect(copy.interactionAudit.accessibility.auditFrameTitle("Dashboard")).toBe(
       "Dashboard audit frame",
     );
+    expect(copy.interactionAudit.importErrors.empty_input).toBe(
+      "Paste exported signoff JSON before importing.",
+    );
     expect(copy.themeRecovery.hero.title).toBe(
       "One place to stage native-prompt and real-session recovery checks",
     );
@@ -82,6 +85,9 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
     expect(
       copy.interactionAudit.accessibility.auditFrameTitle("Dashboard"),
     ).toBe("Dashboard 审计 frame");
+    expect(copy.interactionAudit.importErrors.invalid_json).toBe(
+      "无法解析 signoff import JSON。",
+    );
     expect(copy.themeRecovery.currentTruth.reviewStage).toBe("复查阶段");
   });
 
@@ -198,6 +204,12 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
       expect(
         copy.interactionAudit.accessibility.auditFrameTitle("Surface"),
       ).toContain("Surface");
+      expect(copy.interactionAudit.importErrors.empty_input.length).toBeGreaterThan(
+        0,
+      );
+      expect(
+        copy.interactionAudit.importErrors.unsupported_shape.length,
+      ).toBeGreaterThan(0);
       expect(copy.themeRecovery.workflow.steps).toHaveLength(5);
     }
   });
@@ -223,6 +235,7 @@ describe("buildOperatorWorkspaceLocalizedCopy", () => {
     expect(copy.interactionAudit.accessibility.surfaceGridLabel).toContain(
       "Surfaces",
     );
+    expect(copy.interactionAudit.importErrors.invalid_json).toContain("JSON");
     expect(copy.themeRecovery.outputs.clipboardUnavailable).toContain(
       "clipboard",
     );

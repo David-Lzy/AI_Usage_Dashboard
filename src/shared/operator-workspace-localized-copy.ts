@@ -3,6 +3,7 @@ import type {
   AuditFrameReadinessCode,
   AuditPresetResultCode,
 } from "./interaction-audit-frame-result-codes";
+import type { InteractionAuditSignoffImportErrorCode } from "./interaction-audit-signoff-import-error-codes";
 
 type OperatorWorkspaceLocalizedCopy = {
   interactionAudit: {
@@ -302,6 +303,11 @@ type InteractionAuditAccessibilityCopy = {
   surfaceGridLabel: string;
   auditFrameTitle: (surfaceTitle: string) => string;
 };
+
+type InteractionAuditSignoffImportErrorsCopy = Record<
+  InteractionAuditSignoffImportErrorCode,
+  string
+>;
 
 const INTERACTION_AUDIT_REVIEW_QUEUE_COPY: Record<
   ResolvedAppLocale,
@@ -3052,6 +3058,96 @@ const INTERACTION_AUDIT_ACCESSIBILITY_COPY: Record<
   },
 };
 
+const INTERACTION_AUDIT_SIGNOFF_IMPORT_ERRORS_COPY: Record<
+  ResolvedAppLocale,
+  InteractionAuditSignoffImportErrorsCopy
+> = {
+  en: {
+    empty_input: "Paste exported signoff JSON before importing.",
+    invalid_json: "Signoff import JSON could not be parsed.",
+    unsupported_shape:
+      "Signoff import JSON did not match the expected workspace or export shape.",
+  },
+  "zh-CN": {
+    empty_input: "请先粘贴导出的 signoff JSON 再导入。",
+    invalid_json: "无法解析 signoff import JSON。",
+    unsupported_shape:
+      "Signoff import JSON 与预期的 workspace 或 export 结构不匹配。",
+  },
+  "zh-TW": {
+    empty_input: "請先貼上匯出的 signoff JSON 再匯入。",
+    invalid_json: "無法解析 signoff import JSON。",
+    unsupported_shape:
+      "Signoff import JSON 與預期的 workspace 或 export 結構不相符。",
+  },
+  ja: {
+    empty_input: "インポート前に export した signoff JSON を貼り付けてください。",
+    invalid_json: "Signoff import JSON を解析できませんでした。",
+    unsupported_shape:
+      "Signoff import JSON が想定された workspace または export 形式と一致しません。",
+  },
+  ko: {
+    empty_input: "가져오기 전에 내보낸 signoff JSON 을 붙여넣으세요.",
+    invalid_json: "Signoff import JSON 을 파싱할 수 없습니다.",
+    unsupported_shape:
+      "Signoff import JSON 이 예상한 workspace 또는 export 형태와 일치하지 않습니다.",
+  },
+  "es-419": {
+    empty_input: "Pega el JSON de signoff exportado antes de importar.",
+    invalid_json: "No se pudo analizar el JSON de importación de signoff.",
+    unsupported_shape:
+      "El JSON de importación de signoff no coincide con la forma esperada de workspace o export.",
+  },
+  "pt-BR": {
+    empty_input: "Cole o JSON de signoff exportado antes de importar.",
+    invalid_json: "Não foi possível analisar o JSON de importação de signoff.",
+    unsupported_shape:
+      "O JSON de importação de signoff não corresponde ao formato esperado de workspace ou export.",
+  },
+  fr: {
+    empty_input: "Collez le JSON de signoff exporté avant l'import.",
+    invalid_json: "Impossible d'analyser le JSON d'import signoff.",
+    unsupported_shape:
+      "Le JSON d'import signoff ne correspond pas à la forme workspace ou export attendue.",
+  },
+  de: {
+    empty_input: "Füge vor dem Import das exportierte Signoff-JSON ein.",
+    invalid_json: "Das Signoff-Import-JSON konnte nicht geparst werden.",
+    unsupported_shape:
+      "Das Signoff-Import-JSON entspricht nicht der erwarteten Workspace- oder Export-Struktur.",
+  },
+  it: {
+    empty_input: "Incolla il JSON signoff esportato prima di importare.",
+    invalid_json: "Impossibile analizzare il JSON di import signoff.",
+    unsupported_shape:
+      "Il JSON di import signoff non corrisponde alla forma workspace o export prevista.",
+  },
+  ru: {
+    empty_input: "Вставьте экспортированный signoff JSON перед импортом.",
+    invalid_json: "Не удалось разобрать signoff import JSON.",
+    unsupported_shape:
+      "Signoff import JSON не соответствует ожидаемой форме workspace или export.",
+  },
+  ar: {
+    empty_input: "الصق signoff JSON المصدّر قبل الاستيراد.",
+    invalid_json: "تعذر تحليل signoff import JSON.",
+    unsupported_shape:
+      "لا يطابق signoff import JSON شكل workspace أو export المتوقع.",
+  },
+  hi: {
+    empty_input: "Import करने से पहले exported signoff JSON paste करें।",
+    invalid_json: "Signoff import JSON parse नहीं किया जा सका।",
+    unsupported_shape:
+      "Signoff import JSON expected workspace या export shape से मेल नहीं खाता।",
+  },
+  id: {
+    empty_input: "Tempel JSON signoff yang diekspor sebelum import.",
+    invalid_json: "JSON import signoff tidak dapat di-parse.",
+    unsupported_shape:
+      "JSON import signoff tidak cocok dengan bentuk workspace atau export yang diharapkan.",
+  },
+};
+
 const OPERATOR_WORKSPACE_COPY: Record<
   ResolvedAppLocale,
   OperatorWorkspaceLocalizedCopy
@@ -5524,6 +5620,8 @@ export function buildOperatorWorkspaceLocalizedCopy(i18n: RuntimeI18n) {
         INTERACTION_AUDIT_ROUTE_FEEDBACK_COPY[i18n.resolvedLocale],
       accessibility:
         INTERACTION_AUDIT_ACCESSIBILITY_COPY[i18n.resolvedLocale],
+      importErrors:
+        INTERACTION_AUDIT_SIGNOFF_IMPORT_ERRORS_COPY[i18n.resolvedLocale],
     },
   };
 }

@@ -34,9 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [420_Phase_Interaction_Audit_Signoff_Import_Error_Typed_Copy.md](./420_Phase_Interaction_Audit_Signoff_Import_Error_Typed_Copy.md)
-- latest completed slice: [419_Phase_Interaction_Audit_Route_Feedback_A11y_14_Locale_Copy.md](./Archive/by-phase/400-499/419_Phase_Interaction_Audit_Route_Feedback_A11y_14_Locale_Copy.md)
-- queued phase files: [421_Phase_Interaction_Audit_Surface_Definition_Display_Source_Split.md](./421_Phase_Interaction_Audit_Surface_Definition_Display_Source_Split.md)
+- active phase file: [421_Phase_Interaction_Audit_Surface_Definition_Display_Source_Split.md](./421_Phase_Interaction_Audit_Surface_Definition_Display_Source_Split.md)
+- latest completed slice: [420_Phase_Interaction_Audit_Signoff_Import_Error_Typed_Copy.md](./Archive/by-phase/400-499/420_Phase_Interaction_Audit_Signoff_Import_Error_Typed_Copy.md)
+- queued phase files: not selected yet after active `Phase 421`
 
 Completed phases should be moved to:
 
@@ -812,6 +812,7 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 417` closeout added localized 14-locale display copy for typed interaction-audit frame readiness and preset result codes while preserving raw selector/preset diagnostics, English message fallback fields, iframe behavior, preset execution behavior, signoff exports, handoff drafts, and archive/request schemas
 - the 2026-05-14 `Phase 418` closeout inventoried remaining interaction-audit presentation-copy boundaries, classified route feedback/accessibility labels, typed import-error presentation, and surface-definition display/source split candidates, and queued follow-up phases `419` through `421`
 - the 2026-05-14 `Phase 419` closeout added localized route feedback and accessibility labels for interaction-audit jump feedback, grid aria label, and iframe title suffix while preserving surface source strings, route paths, iframe sources, ids, presets, signoff exports, handoff drafts, and archive/request schemas
+- the 2026-05-14 `Phase 420` closeout added typed signoff import-error codes and 14-locale display copy while preserving pasted JSON, parsed payload fields, accepted import compatibility, generated drafts, filenames, MIME types, storage keys, and request binding/revision formatting
 
 ## Delivery Standard For Each Phase
 

@@ -1,3 +1,5 @@
+import type { InteractionAuditSignoffImportErrorCode } from "../shared/interaction-audit-signoff-import-error-codes";
+
 export type InteractionAuditSignoffStatus =
   | "not_reviewed"
   | "pass"
@@ -92,8 +94,11 @@ export type InteractionAuditSignoffImportResult =
     }
   | {
       ok: false;
+      code: InteractionAuditSignoffImportErrorCode;
       error: string;
     };
+
+export type { InteractionAuditSignoffImportErrorCode } from "../shared/interaction-audit-signoff-import-error-codes";
 
 export const INTERACTION_AUDIT_SIGNOFF_STORAGE_KEY =
   "ai-usage-dashboard:interaction-audit-signoff:v1";
@@ -736,6 +741,7 @@ export function parseInteractionAuditSignoffImport(
   if (rawInput.trim().length === 0) {
     return {
       ok: false,
+      code: "empty_input",
       error: "Paste exported signoff JSON before importing.",
     };
   }
@@ -747,6 +753,7 @@ export function parseInteractionAuditSignoffImport(
   } catch {
     return {
       ok: false,
+      code: "invalid_json",
       error: "Signoff import JSON could not be parsed.",
     };
   }
@@ -824,6 +831,7 @@ export function parseInteractionAuditSignoffImport(
 
   return {
     ok: false,
+    code: "unsupported_shape",
     error: "Signoff import JSON did not match the expected workspace or export shape.",
   };
 }
