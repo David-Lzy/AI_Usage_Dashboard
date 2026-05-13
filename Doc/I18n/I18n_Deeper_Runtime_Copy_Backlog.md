@@ -27,7 +27,8 @@ Track runtime copy that still falls back to English after the 14-locale shell pi
 
 - `src/shared/runtime-message-catalogs.ts` has complete runtime message key coverage for the 14 shipped runtime locales.
 - Every non-English locale has explicit first-shell runtime message overrides for dashboard, popup, Settings, common actions, and theme-toggle labels.
-- Deeper structured helper copy still mostly uses explicit `zh-CN` branches plus English fallback for every other non-English locale.
+- Popup first-run guidance, setup coverage, snapshot status, and header helper copy now has explicit 14-locale coverage from `Phase 392.1`.
+- Deeper structured helper copy outside that popup first-run slice still mostly uses explicit `zh-CN` branches plus English fallback for every other non-English locale.
 - Locale registry, `rtl` mapping, runtime `lang`/`dir`, Chrome `_locales`, RDP locale validation, and store listing draft coverage are already guarded by `npm run i18n:check`.
 
 ## Translation Backlog
@@ -40,11 +41,8 @@ Source bucket:
 
 User-facing copy:
 
-- guidance-card titles, descriptions, route labels, and action labels
-- setup-coverage labels and first-run readiness language
-- snapshot-status labels and stale/mixed/error summaries
-- featured-section and featured-card summaries
-- action-section labels and surface-route notes
+- `Phase 392.1` shipped explicit 14-locale coverage for guidance-card first-run titles, setup coverage, snapshot status, and header readiness copy
+- `Phase 392.2` should finish featured-section summaries, featured-card labels and actions, action-section labels, surface-route notes, and aria copy
 
 Reason:
 
@@ -148,9 +146,10 @@ Reason:
 
 ## Phase Mapping
 
-- `Phase 392` should translate the popup/new-user guidance bucket for all 14 runtime locales.
+- `Phase 392.1` translated the popup first-run guidance, setup coverage, snapshot status, and header buckets for all 14 runtime locales.
+- `Phase 392.2` should translate the remaining popup featured-section, featured-card, action-section, surface-role, and aria buckets for all 14 runtime locales.
 - `Phase 393` should translate Settings, provider-detail, and provider-source wrapper buckets for all 14 runtime locales.
-- Diagnostics, operator workspaces, and store helper routes should remain follow-up work unless `Phase 392` or `Phase 393` proves small enough to split safely.
+- Diagnostics, operator workspaces, and store helper routes should remain follow-up work unless `Phase 392.2` or `Phase 393` proves small enough to split safely.
 
 ## Verification Pattern
 

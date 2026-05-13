@@ -1,4 +1,4 @@
-import type { RuntimeI18n } from "./i18n";
+import type { ResolvedAppLocale, RuntimeI18n } from "./i18n";
 
 function formatProviderCount(i18n: RuntimeI18n, count: number) {
   if (i18n.resolvedLocale === "zh-CN") {
@@ -6,6 +6,1223 @@ function formatProviderCount(i18n: RuntimeI18n, count: number) {
   }
 
   return `${i18n.formatNumber(count)} ${count === 1 ? "provider" : "providers"}`;
+}
+
+type PopupFirstRunCopyText = {
+  providerCount: (countLabel: string) => string;
+  noProvidersLabel: string;
+  noProvidersHeadline: string;
+  noProvidersDetail: string;
+  syncIssueLabel: string;
+  mixedStateLabel: string;
+  alignedLabel: string;
+  alignedSingleDetail: string;
+  alignedManyDetail: (countLabel: string) => string;
+  mixedDetail: (
+    newestProviderLabel: string,
+    newestSyncLabel: string,
+    oldestProviderLabel: string,
+    oldestSyncLabel: string,
+  ) => string;
+  startHereLabel: string;
+  nextStepLabel: string;
+  currentContractLabel: string;
+  enableProviderHeadline: string;
+  enableProviderDetail: string;
+  startWithProviderHeadline: (providerLabel: string) => string;
+  startWithProviderDetail: (providerLabel: string) => string;
+  openQuickSetupAction: string;
+  grantAccessSingleHeadline: (providerLabel: string) => string;
+  grantAccessManyHeadline: string;
+  singleMissingAccessDetail: (providerLabel: string) => string;
+  multipleMissingAccessDetail: (countLabel: string) => string;
+  addCredentialsSingleHeadline: (providerLabel: string) => string;
+  addCredentialsManyHeadline: string;
+  singleMissingCredentialDetail: (providerLabel: string) => string;
+  multipleMissingCredentialDetail: (countLabel: string) => string;
+  reviewProviderHeadline: (providerLabel: string) => string;
+  policyOnlyHeadline: string;
+  policyOnlyDetail: string;
+  openDetail: string;
+  reviewDetail: string;
+  setupLabel: string;
+  liveReadyItemLabel: string;
+  hostAccessItemLabel: string;
+  credentialsItemLabel: string;
+  policyOnlyItemLabel: string;
+  statusStartSetup: string;
+  statusNeedsSetup: string;
+  statusNeedsReview: string;
+  statusContractOnly: string;
+  statusReady: string;
+  noVisibleHeadline: string;
+  noVisibleDetail: string;
+  noVisibleDetailForProvider: (providerLabel: string) => string;
+  visibleProvidersHeadline: (countLabel: string) => string;
+  needsSetupDetail: (sentence: string) => string;
+  needsReviewDetail: (countLabel: string) => string;
+  contractOnlyDetail: string;
+  mixedReadyPolicyDetail: (
+    liveReadyCountLabel: string,
+    policyOnlyCountLabel: string,
+  ) => string;
+  readyDetail: string;
+  setupBlockerAccess: (countLabel: string) => string;
+  setupBlockerCredentials: (countLabel: string) => string;
+  headerNoVisible: string;
+  headerNoVisibleForProvider: (providerLabel: string) => string;
+  headerNeedsSetup: string;
+  headerContractOnly: string;
+  headerNeedsReview: string;
+  headerReady: string;
+};
+
+type PopupFirstRunLocalizedLocale = Exclude<
+  ResolvedAppLocale,
+  "en" | "zh-CN"
+>;
+
+const POPUP_FIRST_RUN_COPY: Record<
+  PopupFirstRunLocalizedLocale,
+  PopupFirstRunCopyText
+> = {
+  "zh-TW": {
+    providerCount: (count) => `${count} 個 provider`,
+    noProvidersLabel: "沒有 provider",
+    noProvidersHeadline: "沒有可見 provider",
+    noProvidersDetail: "尚未有可共享的 popup 快照。先啟用一個 provider，這裡才會開始快取狀態。",
+    syncIssueLabel: "同步異常",
+    mixedStateLabel: "狀態混合",
+    alignedLabel: "已對齊",
+    alignedSingleDetail: "目前可見 provider 共用同一個快取快照視窗。",
+    alignedManyDetail: (count) => `全部 ${count} 可見 provider 共用同一個快取快照視窗。`,
+    mixedDetail: (newestProvider, newestSync, oldestProvider, oldestSync) =>
+      `最新可見快照：${newestProvider}（${newestSync}）。最舊可見快照：${oldestProvider}（${oldestSync}）。`,
+    startHereLabel: "從這裡開始",
+    nextStepLabel: "下一步",
+    currentContractLabel: "目前合約",
+    enableProviderHeadline: "先在 Settings 啟用一個 provider",
+    enableProviderDetail: "至少有一個 provider 可見後，這個 popup 才真正有用。先到 Settings 啟用，再回來做一鍵狀態與注意事項分診。",
+    startWithProviderHeadline: (provider) => `先在 Quick Setup 設定 ${provider}`,
+    startWithProviderDetail: (provider) =>
+      `開啟 Settings > Quick Setup 並啟用 ${provider}。接著完成 browser access 和 usage page 步驟，再回來做狀態分診。`,
+    openQuickSetupAction: "開啟 Quick Setup",
+    grantAccessSingleHeadline: (provider) => `為 ${provider} 授予 host access`,
+    grantAccessManyHeadline: "先在 Settings 授予 host access",
+    singleMissingAccessDetail: (provider) => `${provider} 仍缺少 optional host access，所以 popup 還不能顯示健康的 live 狀態。`,
+    multipleMissingAccessDetail: (count) => `${count} 仍缺少 optional host access，popup 還不能收斂成對齊且健康的快照。`,
+    addCredentialsSingleHeadline: (provider) => `為 ${provider} 補上 credentials`,
+    addCredentialsManyHeadline: "先在 Settings 補上 credentials",
+    singleMissingCredentialDetail: (provider) => `${provider} 目前路徑仍缺少已儲存 credentials，所以 live sync 還無法啟動。`,
+    multipleMissingCredentialDetail: (count) => `${count} 仍依賴缺少的已儲存 credentials，當前 live 路徑還不能穩定執行。`,
+    reviewProviderHeadline: (provider) => `檢查 ${provider}`,
+    policyOnlyHeadline: "可見 provider 目前都是 policy-only",
+    policyOnlyDetail: "popup 仍可彙總共享快取狀態，但這個 profile 中的可見 provider 沒有 live in-browser usage path。開啟 Settings 檢查目前 provider 合約與 source controls。",
+    openDetail: "開啟詳細資訊",
+    reviewDetail: "檢查詳細資訊",
+    setupLabel: "設定覆蓋",
+    liveReadyItemLabel: "Live-ready",
+    hostAccessItemLabel: "Host access",
+    credentialsItemLabel: "Credentials",
+    policyOnlyItemLabel: "Policy-only",
+    statusStartSetup: "開始設定",
+    statusNeedsSetup: "需要設定",
+    statusNeedsReview: "需要檢查",
+    statusContractOnly: "僅合約",
+    statusReady: "已就緒",
+    noVisibleHeadline: "尚未設定可見 provider",
+    noVisibleDetail: "先在 Settings 啟用一個 provider。之後這張卡會顯示可見 provider 是 live-ready、被設定阻擋，或是 policy-only。",
+    noVisibleDetailForProvider: (provider) => `先在 Settings > Quick Setup 啟用 ${provider}。之後這張卡會顯示可見 provider 是 live-ready、被設定阻擋，或是 policy-only。`,
+    visibleProvidersHeadline: (count) => `${count} 可見`,
+    needsSetupDetail: (sentence) => `把這個 popup 視為 ready 之前，先完成 Settings 設定。${sentence}`,
+    needsReviewDetail: (count) => `Settings 設定已清楚，但 ${count} 仍需要產品內檢查。`,
+    contractOnlyDetail: "可見 provider 已設定，但目前合約仍是 policy-only，而不是 live in-browser path。",
+    mixedReadyPolicyDetail: (liveReady, policyOnly) => `${liveReady} 已 live-ready。${policyOnly} 是 policy-only。`,
+    readyDetail: "這裡看不到 Settings 設定阻擋。用下方摘要確認 live-ready 與 policy-only 覆蓋。",
+    setupBlockerAccess: (count) => `${count} 還需要 host access。`,
+    setupBlockerCredentials: (count) => `${count} 還需要 credentials。`,
+    headerNoVisible: "先從 Settings 開始。只要有一個 provider 可見，這個 popup 就會彙總 live readiness 和下一步。",
+    headerNoVisibleForProvider: (provider) => `先在 Settings > Quick Setup 從 ${provider} 開始。只要有一個 provider 可見，這個 popup 就會彙總 live readiness 和下一步。`,
+    headerNeedsSetup: "用這個 popup 區分設定阻擋與已 ready 的 provider。",
+    headerContractOnly: "這個 popup 目前顯示合約脈絡，而不是 live in-browser sync 路徑。",
+    headerNeedsReview: "Settings 設定已清楚。用這個 popup 快速檢查 freshness 和 provider 分診。",
+    headerReady: "用這個 popup 快速查看 freshness 和 provider 分診，不必重新開啟完整 dashboard。",
+  },
+  ja: {
+    providerCount: (count) => `${count} provider`,
+    noProvidersLabel: "provider なし",
+    noProvidersHeadline: "表示中の provider がありません",
+    noProvidersDetail: "共有できる popup スナップショットはまだありません。まず provider を 1 つ有効にすると、ここで状態のキャッシュが始まります。",
+    syncIssueLabel: "sync の問題",
+    mixedStateLabel: "混在状態",
+    alignedLabel: "整合済み",
+    alignedSingleDetail: "表示中の provider は同じキャッシュ済みスナップショット期間を共有しています。",
+    alignedManyDetail: (count) => `表示中の ${count} すべてが同じキャッシュ済みスナップショット期間を共有しています。`,
+    mixedDetail: (newestProvider, newestSync, oldestProvider, oldestSync) =>
+      `最新の表示スナップショット: ${newestProvider} (${newestSync})。最も古い表示スナップショット: ${oldestProvider} (${oldestSync})。`,
+    startHereLabel: "ここから開始",
+    nextStepLabel: "次の手順",
+    currentContractLabel: "現在の contract",
+    enableProviderHeadline: "Settings で provider を有効にしてください",
+    enableProviderDetail: "少なくとも 1 つの provider が表示されると、この popup が有用になります。Settings で有効にしてから、ここに戻って状態と注意点を確認してください。",
+    startWithProviderHeadline: (provider) => `Quick Setup で ${provider} から開始`,
+    startWithProviderDetail: (provider) =>
+      `Settings > Quick Setup を開いて ${provider} を有効にします。その後 browser access と usage page の手順を完了し、ここに戻って状態を確認してください。`,
+    openQuickSetupAction: "Quick Setup を開く",
+    grantAccessSingleHeadline: (provider) => `${provider} に host access を付与`,
+    grantAccessManyHeadline: "Settings で host access を付与",
+    singleMissingAccessDetail: (provider) => `${provider} はまだ optional host access が不足しているため、popup は健全な live 状態を表示できません。`,
+    multipleMissingAccessDetail: (count) => `${count} はまだ optional host access が必要です。popup は整合した健全なスナップショットにできません。`,
+    addCredentialsSingleHeadline: (provider) => `${provider} の credentials を追加`,
+    addCredentialsManyHeadline: "Settings で credentials を追加",
+    singleMissingCredentialDetail: (provider) => `${provider} の現在の経路には保存済み credentials がまだ必要なため、live sync を実行できません。`,
+    multipleMissingCredentialDetail: (count) => `${count} は不足している保存済み credentials に依存しており、現在の live 経路を安定して実行できません。`,
+    reviewProviderHeadline: (provider) => `${provider} を確認`,
+    policyOnlyHeadline: "表示中の provider は policy-only です",
+    policyOnlyDetail: "popup は共有キャッシュ状態を要約できますが、この profile の表示中 provider は live in-browser usage path を公開していません。Settings で provider contract と source controls を確認してください。",
+    openDetail: "詳細を開く",
+    reviewDetail: "詳細を確認",
+    setupLabel: "設定カバレッジ",
+    liveReadyItemLabel: "Live-ready",
+    hostAccessItemLabel: "Host access",
+    credentialsItemLabel: "Credentials",
+    policyOnlyItemLabel: "Policy-only",
+    statusStartSetup: "設定を開始",
+    statusNeedsSetup: "設定が必要",
+    statusNeedsReview: "確認が必要",
+    statusContractOnly: "Contract-only",
+    statusReady: "準備完了",
+    noVisibleHeadline: "表示中の provider は未設定です",
+    noVisibleDetail: "まず Settings で provider を 1 つ有効にします。このカードは、その provider が live-ready か、設定でブロックされているか、policy-only かを表示します。",
+    noVisibleDetailForProvider: (provider) => `まず Settings > Quick Setup で ${provider} を有効にします。このカードは、その provider が live-ready か、設定でブロックされているか、policy-only かを表示します。`,
+    visibleProvidersHeadline: (count) => `${count} 表示中`,
+    needsSetupDetail: (sentence) => `この popup を ready とみなす前に Settings の設定を完了してください。${sentence}`,
+    needsReviewDetail: (count) => `Settings の設定は明確ですが、${count} は製品内での確認がまだ必要です。`,
+    contractOnlyDetail: "表示中の provider は設定済みですが、現在の contract は live in-browser path ではなく policy-only です。",
+    mixedReadyPolicyDetail: (liveReady, policyOnly) => `${liveReady} は live-ready。${policyOnly} は policy-only。`,
+    readyDetail: "Settings 側の設定ブロックはここにはありません。下の概要で live-ready と policy-only の範囲を確認してください。",
+    setupBlockerAccess: (count) => `${count} は host access がまだ必要です。`,
+    setupBlockerCredentials: (count) => `${count} は credentials がまだ必要です。`,
+    headerNoVisible: "まず Settings から開始します。provider が 1 つ表示されると、この popup が live readiness と次の手順を要約します。",
+    headerNoVisibleForProvider: (provider) => `まず Settings > Quick Setup で ${provider} から開始します。provider が 1 つ表示されると、この popup が live readiness と次の手順を要約します。`,
+    headerNeedsSetup: "この popup で設定ブロックと ready 済み provider を分けて確認します。",
+    headerContractOnly: "この popup は live in-browser sync 経路ではなく、現在の contract context を表示しています。",
+    headerNeedsReview: "Settings の設定は明確です。この popup で freshness と provider を素早く確認します。",
+    headerReady: "完全な dashboard を開き直さずに、この popup で freshness と provider を素早く確認できます。",
+  },
+  ko: {
+    providerCount: (count) => `${count} provider`,
+    noProvidersLabel: "provider 없음",
+    noProvidersHeadline: "표시되는 provider 없음",
+    noProvidersDetail: "아직 공유할 popup 스냅샷이 없습니다. provider 하나를 활성화하면 여기서 상태 캐시가 시작됩니다.",
+    syncIssueLabel: "sync 문제",
+    mixedStateLabel: "혼합 상태",
+    alignedLabel: "정렬됨",
+    alignedSingleDetail: "표시되는 provider가 같은 캐시 스냅샷 창을 공유합니다.",
+    alignedManyDetail: (count) => `표시되는 ${count} 모두 같은 캐시 스냅샷 창을 공유합니다.`,
+    mixedDetail: (newestProvider, newestSync, oldestProvider, oldestSync) =>
+      `최신 표시 스냅샷: ${newestProvider} (${newestSync}). 가장 오래된 표시 스냅샷: ${oldestProvider} (${oldestSync}).`,
+    startHereLabel: "여기서 시작",
+    nextStepLabel: "다음 단계",
+    currentContractLabel: "현재 contract",
+    enableProviderHeadline: "Settings에서 provider 활성화",
+    enableProviderDetail: "provider가 하나 이상 표시되어야 이 popup이 유용합니다. Settings에서 먼저 활성화한 뒤 돌아와 상태와 주의 항목을 확인하세요.",
+    startWithProviderHeadline: (provider) => `Quick Setup에서 ${provider} 시작`,
+    startWithProviderDetail: (provider) =>
+      `Settings > Quick Setup을 열고 ${provider}를 활성화하세요. 그런 다음 browser access와 usage page 단계를 마치고 돌아와 상태를 확인하세요.`,
+    openQuickSetupAction: "Quick Setup 열기",
+    grantAccessSingleHeadline: (provider) => `${provider} host access 허용`,
+    grantAccessManyHeadline: "Settings에서 host access 허용",
+    singleMissingAccessDetail: (provider) => `${provider}에 optional host access가 아직 없어 popup이 건강한 live 상태를 표시할 수 없습니다.`,
+    multipleMissingAccessDetail: (count) => `${count}에 optional host access가 아직 필요해 popup이 정렬된 건강한 스냅샷으로 안정화될 수 없습니다.`,
+    addCredentialsSingleHeadline: (provider) => `${provider} credentials 추가`,
+    addCredentialsManyHeadline: "Settings에서 credentials 추가",
+    singleMissingCredentialDetail: (provider) => `${provider}의 현재 경로에는 저장된 credentials가 아직 필요해 live sync를 실행할 수 없습니다.`,
+    multipleMissingCredentialDetail: (count) => `${count}는 누락된 저장 credentials에 의존하므로 현재 live 경로를 안정적으로 실행할 수 없습니다.`,
+    reviewProviderHeadline: (provider) => `${provider} 검토`,
+    policyOnlyHeadline: "표시되는 provider가 policy-only입니다",
+    policyOnlyDetail: "popup은 공유 캐시 상태를 요약할 수 있지만, 이 profile의 표시 provider는 live in-browser usage path를 제공하지 않습니다. Settings에서 provider contract와 source controls를 확인하세요.",
+    openDetail: "상세 열기",
+    reviewDetail: "상세 검토",
+    setupLabel: "설정 범위",
+    liveReadyItemLabel: "Live-ready",
+    hostAccessItemLabel: "Host access",
+    credentialsItemLabel: "Credentials",
+    policyOnlyItemLabel: "Policy-only",
+    statusStartSetup: "설정 시작",
+    statusNeedsSetup: "설정 필요",
+    statusNeedsReview: "검토 필요",
+    statusContractOnly: "Contract-only",
+    statusReady: "준비됨",
+    noVisibleHeadline: "설정된 표시 provider 없음",
+    noVisibleDetail: "먼저 Settings에서 provider 하나를 활성화하세요. 이후 이 카드는 표시 provider가 live-ready인지, 설정에 막혔는지, policy-only인지 보여줍니다.",
+    noVisibleDetailForProvider: (provider) => `먼저 Settings > Quick Setup에서 ${provider}를 활성화하세요. 이후 이 카드는 표시 provider가 live-ready인지, 설정에 막혔는지, policy-only인지 보여줍니다.`,
+    visibleProvidersHeadline: (count) => `${count} 표시됨`,
+    needsSetupDetail: (sentence) => `이 popup을 ready로 보기 전에 Settings 설정을 마치세요. ${sentence}`,
+    needsReviewDetail: (count) => `Settings 설정은 명확하지만 ${count}는 제품 안에서 추가 검토가 필요합니다.`,
+    contractOnlyDetail: "표시 provider는 설정되었지만 현재 contract는 live in-browser path가 아니라 policy-only입니다.",
+    mixedReadyPolicyDetail: (liveReady, policyOnly) => `${liveReady}는 live-ready입니다. ${policyOnly}는 policy-only입니다.`,
+    readyDetail: "여기에는 Settings 설정 차단 항목이 보이지 않습니다. 아래 요약으로 live-ready와 policy-only 범위를 확인하세요.",
+    setupBlockerAccess: (count) => `${count}에 host access가 아직 필요합니다.`,
+    setupBlockerCredentials: (count) => `${count}에 credentials가 아직 필요합니다.`,
+    headerNoVisible: "Settings에서 시작하세요. provider 하나가 표시되면 이 popup이 live readiness와 다음 단계를 요약합니다.",
+    headerNoVisibleForProvider: (provider) => `Settings > Quick Setup에서 ${provider}로 시작하세요. provider 하나가 표시되면 이 popup이 live readiness와 다음 단계를 요약합니다.`,
+    headerNeedsSetup: "이 popup으로 설정 차단 항목과 이미 ready인 provider를 구분하세요.",
+    headerContractOnly: "이 popup은 live in-browser sync 경로가 아니라 현재 contract context를 보여줍니다.",
+    headerNeedsReview: "Settings 설정은 명확합니다. 이 popup으로 freshness와 provider를 빠르게 검토하세요.",
+    headerReady: "전체 dashboard를 다시 열지 않고 이 popup으로 freshness와 provider를 빠르게 확인하세요.",
+  },
+  "es-419": {
+    providerCount: (count) => `${count} provider`,
+    noProvidersLabel: "Sin providers",
+    noProvidersHeadline: "No hay providers visibles",
+    noProvidersDetail:
+      "Aún no existe una snapshot compartida del popup. Activa un provider para empezar a guardar estado aquí.",
+    syncIssueLabel: "Problema de sync",
+    mixedStateLabel: "Estado mixto",
+    alignedLabel: "Alineado",
+    alignedSingleDetail:
+      "El provider visible comparte la misma ventana de snapshot en cache.",
+    alignedManyDetail: (count) =>
+      `Los ${count} visibles comparten la misma ventana de snapshot en cache.`,
+    mixedDetail: (newestProvider, newestSync, oldestProvider, oldestSync) =>
+      `Snapshot visible más reciente: ${newestProvider} (${newestSync}). Snapshot visible más antigua: ${oldestProvider} (${oldestSync}).`,
+    startHereLabel: "Empieza aquí",
+    nextStepLabel: "Siguiente paso",
+    currentContractLabel: "Contrato actual",
+    enableProviderHeadline: "Activa un provider en Settings",
+    enableProviderDetail:
+      "El popup solo es útil cuando al menos un provider está visible. Empieza en Settings y vuelve aquí para revisar estado y atención en un clic.",
+    startWithProviderHeadline: (provider) =>
+      `Empieza con ${provider} en Quick Setup`,
+    startWithProviderDetail: (provider) =>
+      `Abre Settings > Quick Setup y activa ${provider}. Luego completa los pasos de browser access y usage page antes de volver aquí para revisar el estado.`,
+    openQuickSetupAction: "Abrir Quick Setup",
+    grantAccessSingleHeadline: (provider) =>
+      `Concede host access para ${provider}`,
+    grantAccessManyHeadline: "Concede host access en Settings",
+    singleMissingAccessDetail: (provider) =>
+      `${provider} todavía necesita optional host access, así que el popup aún no puede mostrar un estado live saludable.`,
+    multipleMissingAccessDetail: (count) =>
+      `${count} todavía necesitan optional host access antes de que el popup pueda quedar en una snapshot alineada y saludable.`,
+    addCredentialsSingleHeadline: (provider) =>
+      `Agrega credentials para ${provider}`,
+    addCredentialsManyHeadline: "Agrega credentials en Settings",
+    singleMissingCredentialDetail: (provider) =>
+      `${provider} todavía necesita credentials guardadas para que live sync pueda ejecutarse.`,
+    multipleMissingCredentialDetail: (count) =>
+      `${count} todavía dependen de credentials guardadas faltantes antes de que su ruta live actual pueda ejecutarse bien.`,
+    reviewProviderHeadline: (provider) => `Revisa ${provider}`,
+    policyOnlyHeadline: "Los providers visibles son policy-only",
+    policyOnlyDetail:
+      "El popup aún puede resumir el estado compartido en cache, pero estos providers visibles no exponen una live in-browser usage path en este perfil. Abre Settings para revisar los contratos actuales y source controls.",
+    openDetail: "Abrir detalle",
+    reviewDetail: "Revisar detalle",
+    setupLabel: "Cobertura de setup",
+    liveReadyItemLabel: "Live-ready",
+    hostAccessItemLabel: "Host access",
+    credentialsItemLabel: "Credentials",
+    policyOnlyItemLabel: "Policy-only",
+    statusStartSetup: "Iniciar setup",
+    statusNeedsSetup: "Necesita setup",
+    statusNeedsReview: "Necesita revisión",
+    statusContractOnly: "Solo contrato",
+    statusReady: "Listo",
+    noVisibleHeadline: "No hay providers visibles configurados",
+    noVisibleDetail:
+      "Activa primero un provider en Settings. Después esta tarjeta mostrará si los providers visibles están live-ready, bloqueados por setup o policy-only.",
+    noVisibleDetailForProvider: (provider) =>
+      `Activa primero ${provider} en Settings > Quick Setup. Después esta tarjeta mostrará si los providers visibles están live-ready, bloqueados por setup o policy-only.`,
+    visibleProvidersHeadline: (count) => `${count} visibles`,
+    needsSetupDetail: (sentence) =>
+      `Termina el setup en Settings antes de tratar este popup como ready. ${sentence}`,
+    needsReviewDetail: (count) =>
+      `El setup en Settings está claro, pero ${count} todavía necesitan revisión dentro del producto.`,
+    contractOnlyDetail:
+      "Los providers visibles están configurados, pero su contrato actual es policy-only y no una live in-browser path.",
+    mixedReadyPolicyDetail: (liveReady, policyOnly) =>
+      `${liveReady} están live-ready. ${policyOnly} son policy-only.`,
+    readyDetail:
+      "Aquí no se ven bloqueos de setup en Settings. Usa el resumen de abajo para confirmar cobertura live-ready y policy-only.",
+    setupBlockerAccess: (count) => `${count} todavía necesitan host access.`,
+    setupBlockerCredentials: (count) =>
+      `${count} todavía necesitan credentials.`,
+    headerNoVisible:
+      "Empieza en Settings. Cuando un provider esté visible, este popup resumirá live readiness y siguientes pasos.",
+    headerNoVisibleForProvider: (provider) =>
+      `Empieza con ${provider} en Settings > Quick Setup. Cuando un provider esté visible, este popup resumirá live readiness y siguientes pasos.`,
+    headerNeedsSetup:
+      "Usa este popup para separar bloqueos de setup de los providers que ya están ready.",
+    headerContractOnly:
+      "Este popup muestra contexto de contrato actual, no una ruta de live in-browser sync.",
+    headerNeedsReview:
+      "El setup en Settings está claro. Usa este popup para revisar freshness y providers rápido.",
+    headerReady:
+      "Usa este popup para revisar freshness y providers sin reabrir el dashboard completo.",
+  },
+  "pt-BR": {
+    providerCount: (count) => `${count} provider`,
+    noProvidersLabel: "Sem providers",
+    noProvidersHeadline: "Nenhum provider visível",
+    noProvidersDetail:
+      "Ainda não há snapshot compartilhado do popup. Ative um provider para começar a armazenar estado aqui.",
+    syncIssueLabel: "Problema de sync",
+    mixedStateLabel: "Estado misto",
+    alignedLabel: "Alinhado",
+    alignedSingleDetail:
+      "O provider visível compartilha a mesma janela de snapshot em cache.",
+    alignedManyDetail: (count) =>
+      `Todos os ${count} visíveis compartilham a mesma janela de snapshot em cache.`,
+    mixedDetail: (newestProvider, newestSync, oldestProvider, oldestSync) =>
+      `Snapshot visível mais recente: ${newestProvider} (${newestSync}). Snapshot visível mais antigo: ${oldestProvider} (${oldestSync}).`,
+    startHereLabel: "Comece aqui",
+    nextStepLabel: "Próximo passo",
+    currentContractLabel: "Contrato atual",
+    enableProviderHeadline: "Ative um provider em Settings",
+    enableProviderDetail:
+      "O popup só fica útil depois que pelo menos um provider está visível. Comece em Settings e volte aqui para triagem de status e atenção em um clique.",
+    startWithProviderHeadline: (provider) =>
+      `Comece com ${provider} no Quick Setup`,
+    startWithProviderDetail: (provider) =>
+      `Abra Settings > Quick Setup e ative ${provider}. Depois conclua as etapas de browser access e usage page antes de voltar aqui para a triagem de status.`,
+    openQuickSetupAction: "Abrir Quick Setup",
+    grantAccessSingleHeadline: (provider) =>
+      `Conceder host access para ${provider}`,
+    grantAccessManyHeadline: "Conceder host access em Settings",
+    singleMissingAccessDetail: (provider) =>
+      `${provider} ainda precisa de optional host access, então o popup ainda não pode mostrar um estado live saudável.`,
+    multipleMissingAccessDetail: (count) =>
+      `${count} ainda precisam de optional host access antes que o popup possa chegar a um snapshot alinhado e saudável.`,
+    addCredentialsSingleHeadline: (provider) =>
+      `Adicionar credentials para ${provider}`,
+    addCredentialsManyHeadline: "Adicionar credentials em Settings",
+    singleMissingCredentialDetail: (provider) =>
+      `${provider} ainda precisa de credentials salvas para que live sync possa rodar.`,
+    multipleMissingCredentialDetail: (count) =>
+      `${count} ainda dependem de credentials salvas ausentes antes que o caminho live atual rode corretamente.`,
+    reviewProviderHeadline: (provider) => `Revisar ${provider}`,
+    policyOnlyHeadline: "Os providers visíveis são policy-only",
+    policyOnlyDetail:
+      "O popup ainda pode resumir o estado compartilhado em cache, mas estes providers visíveis não expõem uma live in-browser usage path neste perfil. Abra Settings para revisar contratos atuais e source controls.",
+    openDetail: "Abrir detalhe",
+    reviewDetail: "Revisar detalhe",
+    setupLabel: "Cobertura de setup",
+    liveReadyItemLabel: "Live-ready",
+    hostAccessItemLabel: "Host access",
+    credentialsItemLabel: "Credentials",
+    policyOnlyItemLabel: "Policy-only",
+    statusStartSetup: "Iniciar setup",
+    statusNeedsSetup: "Precisa de setup",
+    statusNeedsReview: "Precisa de revisão",
+    statusContractOnly: "Só contrato",
+    statusReady: "Pronto",
+    noVisibleHeadline: "Nenhum provider visível configurado",
+    noVisibleDetail:
+      "Ative primeiro um provider em Settings. Depois este cartão mostrará se os providers visíveis estão live-ready, bloqueados por setup ou policy-only.",
+    noVisibleDetailForProvider: (provider) =>
+      `Ative primeiro ${provider} em Settings > Quick Setup. Depois este cartão mostrará se os providers visíveis estão live-ready, bloqueados por setup ou policy-only.`,
+    visibleProvidersHeadline: (count) => `${count} visíveis`,
+    needsSetupDetail: (sentence) =>
+      `Conclua o setup em Settings antes de tratar este popup como ready. ${sentence}`,
+    needsReviewDetail: (count) =>
+      `O setup em Settings está claro, mas ${count} ainda precisam de revisão no produto.`,
+    contractOnlyDetail:
+      "Os providers visíveis estão configurados, mas o contrato atual é policy-only em vez de uma live in-browser path.",
+    mixedReadyPolicyDetail: (liveReady, policyOnly) =>
+      `${liveReady} estão live-ready. ${policyOnly} são policy-only.`,
+    readyDetail:
+      "Nenhum bloqueio de setup em Settings aparece aqui. Use o resumo abaixo para confirmar cobertura live-ready e policy-only.",
+    setupBlockerAccess: (count) => `${count} ainda precisam de host access.`,
+    setupBlockerCredentials: (count) =>
+      `${count} ainda precisam de credentials.`,
+    headerNoVisible:
+      "Comece em Settings. Quando um provider estiver visível, este popup resumirá live readiness e próximos passos.",
+    headerNoVisibleForProvider: (provider) =>
+      `Comece com ${provider} em Settings > Quick Setup. Quando um provider estiver visível, este popup resumirá live readiness e próximos passos.`,
+    headerNeedsSetup:
+      "Use este popup para separar bloqueios de setup dos providers que já estão ready.",
+    headerContractOnly:
+      "Este popup mostra o contexto do contrato atual, não uma rota live in-browser sync.",
+    headerNeedsReview:
+      "O setup em Settings está claro. Use este popup para revisar freshness e providers rapidamente.",
+    headerReady:
+      "Use este popup para revisar freshness e providers sem reabrir o dashboard completo.",
+  },
+  fr: {
+    providerCount: (count) => `${count} provider`,
+    noProvidersLabel: "Aucun provider",
+    noProvidersHeadline: "Aucun provider visible",
+    noProvidersDetail:
+      "Aucun snapshot partagé du popup n'existe encore. Activez un provider pour commencer à mettre l'état en cache ici.",
+    syncIssueLabel: "Problème de sync",
+    mixedStateLabel: "État mixte",
+    alignedLabel: "Aligné",
+    alignedSingleDetail:
+      "Le provider visible partage la même fenêtre de snapshot mise en cache.",
+    alignedManyDetail: (count) =>
+      `Les ${count} visibles partagent la même fenêtre de snapshot mise en cache.`,
+    mixedDetail: (newestProvider, newestSync, oldestProvider, oldestSync) =>
+      `Snapshot visible le plus récent : ${newestProvider} (${newestSync}). Snapshot visible le plus ancien : ${oldestProvider} (${oldestSync}).`,
+    startHereLabel: "Commencer ici",
+    nextStepLabel: "Étape suivante",
+    currentContractLabel: "Contrat actuel",
+    enableProviderHeadline: "Activez un provider dans Settings",
+    enableProviderDetail:
+      "Le popup devient utile seulement lorsqu'au moins un provider est visible. Commencez dans Settings, puis revenez ici pour trier l'état et l'attention en un clic.",
+    startWithProviderHeadline: (provider) =>
+      `Commencer avec ${provider} dans Quick Setup`,
+    startWithProviderDetail: (provider) =>
+      `Ouvrez Settings > Quick Setup et activez ${provider}. Terminez ensuite les étapes browser access et usage page avant de revenir ici pour trier l'état.`,
+    openQuickSetupAction: "Ouvrir Quick Setup",
+    grantAccessSingleHeadline: (provider) =>
+      `Accorder host access pour ${provider}`,
+    grantAccessManyHeadline: "Accorder host access dans Settings",
+    singleMissingAccessDetail: (provider) =>
+      `${provider} a encore besoin de optional host access ; le popup ne peut donc pas afficher un état live sain.`,
+    multipleMissingAccessDetail: (count) =>
+      `${count} ont encore besoin de optional host access avant que le popup puisse afficher un snapshot aligné et sain.`,
+    addCredentialsSingleHeadline: (provider) =>
+      `Ajouter credentials pour ${provider}`,
+    addCredentialsManyHeadline: "Ajouter credentials dans Settings",
+    singleMissingCredentialDetail: (provider) =>
+      `${provider} a encore besoin de credentials enregistrées avant que live sync puisse s'exécuter.`,
+    multipleMissingCredentialDetail: (count) =>
+      `${count} dépendent encore de credentials enregistrées manquantes avant que leur chemin live actuel puisse s'exécuter correctement.`,
+    reviewProviderHeadline: (provider) => `Examiner ${provider}`,
+    policyOnlyHeadline: "Les providers visibles sont policy-only",
+    policyOnlyDetail:
+      "Le popup peut toujours résumer l'état partagé en cache, mais ces providers visibles n'exposent pas de live in-browser usage path dans ce profil. Ouvrez Settings pour examiner les contrats actuels et les source controls.",
+    openDetail: "Ouvrir le détail",
+    reviewDetail: "Examiner le détail",
+    setupLabel: "Couverture setup",
+    liveReadyItemLabel: "Live-ready",
+    hostAccessItemLabel: "Host access",
+    credentialsItemLabel: "Credentials",
+    policyOnlyItemLabel: "Policy-only",
+    statusStartSetup: "Démarrer setup",
+    statusNeedsSetup: "Setup requis",
+    statusNeedsReview: "Revue requise",
+    statusContractOnly: "Contrat seul",
+    statusReady: "Prêt",
+    noVisibleHeadline: "Aucun provider visible configuré",
+    noVisibleDetail:
+      "Activez d'abord un provider dans Settings. Cette carte indiquera ensuite si les providers visibles sont live-ready, bloqués par setup ou policy-only.",
+    noVisibleDetailForProvider: (provider) =>
+      `Activez d'abord ${provider} dans Settings > Quick Setup. Cette carte indiquera ensuite si les providers visibles sont live-ready, bloqués par setup ou policy-only.`,
+    visibleProvidersHeadline: (count) => `${count} visibles`,
+    needsSetupDetail: (sentence) =>
+      `Terminez le setup dans Settings avant de considérer ce popup comme ready. ${sentence}`,
+    needsReviewDetail: (count) =>
+      `Le setup dans Settings est clair, mais ${count} ont encore besoin d'une revue dans le produit.`,
+    contractOnlyDetail:
+      "Les providers visibles sont configurés, mais leur contrat actuel est policy-only plutôt qu'une live in-browser path.",
+    mixedReadyPolicyDetail: (liveReady, policyOnly) =>
+      `${liveReady} sont live-ready. ${policyOnly} sont policy-only.`,
+    readyDetail:
+      "Aucun blocage de setup Settings n'apparaît ici. Utilisez le résumé ci-dessous pour confirmer la couverture live-ready et policy-only.",
+    setupBlockerAccess: (count) => `${count} ont encore besoin de host access.`,
+    setupBlockerCredentials: (count) =>
+      `${count} ont encore besoin de credentials.`,
+    headerNoVisible:
+      "Commencez dans Settings. Lorsqu'un provider est visible, ce popup résume live readiness et prochaines étapes.",
+    headerNoVisibleForProvider: (provider) =>
+      `Commencez avec ${provider} dans Settings > Quick Setup. Lorsqu'un provider est visible, ce popup résume live readiness et prochaines étapes.`,
+    headerNeedsSetup:
+      "Utilisez ce popup pour séparer les blocages de setup des providers déjà ready.",
+    headerContractOnly:
+      "Ce popup affiche le contexte du contrat actuel, pas un chemin live in-browser sync.",
+    headerNeedsReview:
+      "Le setup Settings est clair. Utilisez ce popup pour examiner rapidement freshness et providers.",
+    headerReady:
+      "Utilisez ce popup pour examiner freshness et providers sans rouvrir le dashboard complet.",
+  },
+  de: {
+    providerCount: (count) => `${count} provider`,
+    noProvidersLabel: "Keine provider",
+    noProvidersHeadline: "Keine sichtbaren provider",
+    noProvidersDetail:
+      "Es gibt noch keinen geteilten popup Snapshot. Aktiviere einen provider, damit hier Status gecacht wird.",
+    syncIssueLabel: "Sync-Problem",
+    mixedStateLabel: "Gemischter Status",
+    alignedLabel: "Abgeglichen",
+    alignedSingleDetail:
+      "Der sichtbare provider nutzt dasselbe gecachte Snapshot-Fenster.",
+    alignedManyDetail: (count) =>
+      `Alle ${count} sichtbaren provider nutzen dasselbe gecachte Snapshot-Fenster.`,
+    mixedDetail: (newestProvider, newestSync, oldestProvider, oldestSync) =>
+      `Neuester sichtbarer Snapshot: ${newestProvider} (${newestSync}). Ältester sichtbarer Snapshot: ${oldestProvider} (${oldestSync}).`,
+    startHereLabel: "Hier starten",
+    nextStepLabel: "Nächster Schritt",
+    currentContractLabel: "Aktueller Vertrag",
+    enableProviderHeadline: "Einen provider in Settings aktivieren",
+    enableProviderDetail:
+      "Das popup wird erst nützlich, wenn mindestens ein provider sichtbar ist. Starte in Settings und kehre dann für Status- und Aufmerksamkeitstriage mit einem Klick zurück.",
+    startWithProviderHeadline: (provider) =>
+      `Mit ${provider} in Quick Setup starten`,
+    startWithProviderDetail: (provider) =>
+      `Öffne Settings > Quick Setup und aktiviere ${provider}. Schließe danach browser access und usage page ab, bevor du zur Status-Triage zurückkehrst.`,
+    openQuickSetupAction: "Quick Setup öffnen",
+    grantAccessSingleHeadline: (provider) =>
+      `Host access für ${provider} gewähren`,
+    grantAccessManyHeadline: "Host access in Settings gewähren",
+    singleMissingAccessDetail: (provider) =>
+      `${provider} benötigt noch optional host access, daher kann das popup noch keinen gesunden live Status anzeigen.`,
+    multipleMissingAccessDetail: (count) =>
+      `${count} benötigen noch optional host access, bevor das popup einen abgeglichenen gesunden Snapshot zeigen kann.`,
+    addCredentialsSingleHeadline: (provider) =>
+      `Credentials für ${provider} hinzufügen`,
+    addCredentialsManyHeadline: "Credentials in Settings hinzufügen",
+    singleMissingCredentialDetail: (provider) =>
+      `${provider} benötigt noch gespeicherte credentials, bevor live sync laufen kann.`,
+    multipleMissingCredentialDetail: (count) =>
+      `${count} hängen noch von fehlenden gespeicherten credentials ab, bevor ihr aktueller live Pfad sauber laufen kann.`,
+    reviewProviderHeadline: (provider) => `${provider} prüfen`,
+    policyOnlyHeadline: "Sichtbare provider sind policy-only",
+    policyOnlyDetail:
+      "Das popup kann den geteilten gecachten Status weiter zusammenfassen, aber diese sichtbaren provider stellen in diesem Profil keine live in-browser usage path bereit. Öffne Settings, um aktuelle provider Verträge und source controls zu prüfen.",
+    openDetail: "Detail öffnen",
+    reviewDetail: "Detail prüfen",
+    setupLabel: "Setup-Abdeckung",
+    liveReadyItemLabel: "Live-ready",
+    hostAccessItemLabel: "Host access",
+    credentialsItemLabel: "Credentials",
+    policyOnlyItemLabel: "Policy-only",
+    statusStartSetup: "Setup starten",
+    statusNeedsSetup: "Setup nötig",
+    statusNeedsReview: "Prüfung nötig",
+    statusContractOnly: "Nur Vertrag",
+    statusReady: "Bereit",
+    noVisibleHeadline: "Keine sichtbaren provider konfiguriert",
+    noVisibleDetail:
+      "Aktiviere zuerst einen provider in Settings. Danach zeigt diese Karte, ob sichtbare provider live-ready, durch setup blockiert oder policy-only sind.",
+    noVisibleDetailForProvider: (provider) =>
+      `Aktiviere zuerst ${provider} in Settings > Quick Setup. Danach zeigt diese Karte, ob sichtbare provider live-ready, durch setup blockiert oder policy-only sind.`,
+    visibleProvidersHeadline: (count) => `${count} sichtbar`,
+    needsSetupDetail: (sentence) =>
+      `Beende das Setup in Settings, bevor du dieses popup als ready behandelst. ${sentence}`,
+    needsReviewDetail: (count) =>
+      `Das Setup in Settings ist klar, aber ${count} benötigen noch Prüfung im Produkt.`,
+    contractOnlyDetail:
+      "Sichtbare provider sind konfiguriert, aber ihr aktueller Vertrag ist policy-only statt einer live in-browser path.",
+    mixedReadyPolicyDetail: (liveReady, policyOnly) =>
+      `${liveReady} sind live-ready. ${policyOnly} sind policy-only.`,
+    readyDetail:
+      "Hier sind keine Setup-Blocker aus Settings sichtbar. Nutze die Zusammenfassung unten, um live-ready und policy-only Abdeckung zu prüfen.",
+    setupBlockerAccess: (count) => `${count} benötigen noch host access.`,
+    setupBlockerCredentials: (count) =>
+      `${count} benötigen noch credentials.`,
+    headerNoVisible:
+      "Starte in Settings. Sobald ein provider sichtbar ist, fasst dieses popup live readiness und nächste Schritte zusammen.",
+    headerNoVisibleForProvider: (provider) =>
+      `Starte mit ${provider} in Settings > Quick Setup. Sobald ein provider sichtbar ist, fasst dieses popup live readiness und nächste Schritte zusammen.`,
+    headerNeedsSetup:
+      "Nutze dieses popup, um Setup-Blocker von bereits ready providern zu trennen.",
+    headerContractOnly:
+      "Dieses popup zeigt aktuellen Vertragskontext statt eines live in-browser sync Pfads.",
+    headerNeedsReview:
+      "Das Setup in Settings ist klar. Nutze dieses popup für schnelle freshness- und provider-Prüfung.",
+    headerReady:
+      "Nutze dieses popup für schnelle freshness- und provider-Prüfung, ohne das vollständige dashboard erneut zu öffnen.",
+  },
+  it: {
+    providerCount: (count) => `${count} provider`,
+    noProvidersLabel: "Nessun provider",
+    noProvidersHeadline: "Nessun provider visibile",
+    noProvidersDetail:
+      "Non esiste ancora uno snapshot condiviso del popup. Attiva un provider per iniziare a salvare lo stato qui.",
+    syncIssueLabel: "Problema di sync",
+    mixedStateLabel: "Stato misto",
+    alignedLabel: "Allineato",
+    alignedSingleDetail:
+      "Il provider visibile condivide la stessa finestra di snapshot in cache.",
+    alignedManyDetail: (count) =>
+      `Tutti i ${count} visibili condividono la stessa finestra di snapshot in cache.`,
+    mixedDetail: (newestProvider, newestSync, oldestProvider, oldestSync) =>
+      `Snapshot visibile più recente: ${newestProvider} (${newestSync}). Snapshot visibile più vecchio: ${oldestProvider} (${oldestSync}).`,
+    startHereLabel: "Inizia qui",
+    nextStepLabel: "Passo successivo",
+    currentContractLabel: "Contratto attuale",
+    enableProviderHeadline: "Attiva un provider in Settings",
+    enableProviderDetail:
+      "Il popup diventa utile solo quando almeno un provider è visibile. Inizia in Settings, poi torna qui per triage di stato e attenzione in un clic.",
+    startWithProviderHeadline: (provider) =>
+      `Inizia con ${provider} in Quick Setup`,
+    startWithProviderDetail: (provider) =>
+      `Apri Settings > Quick Setup e attiva ${provider}. Poi completa browser access e usage page prima di tornare qui per il triage di stato.`,
+    openQuickSetupAction: "Apri Quick Setup",
+    grantAccessSingleHeadline: (provider) =>
+      `Concedi host access per ${provider}`,
+    grantAccessManyHeadline: "Concedi host access in Settings",
+    singleMissingAccessDetail: (provider) =>
+      `${provider} richiede ancora optional host access, quindi il popup non può ancora mostrare uno stato live sano.`,
+    multipleMissingAccessDetail: (count) =>
+      `${count} richiedono ancora optional host access prima che il popup possa mostrare uno snapshot allineato e sano.`,
+    addCredentialsSingleHeadline: (provider) =>
+      `Aggiungi credentials per ${provider}`,
+    addCredentialsManyHeadline: "Aggiungi credentials in Settings",
+    singleMissingCredentialDetail: (provider) =>
+      `${provider} richiede ancora credentials salvate prima che live sync possa funzionare.`,
+    multipleMissingCredentialDetail: (count) =>
+      `${count} dipendono ancora da credentials salvate mancanti prima che il percorso live attuale possa funzionare bene.`,
+    reviewProviderHeadline: (provider) => `Rivedi ${provider}`,
+    policyOnlyHeadline: "I provider visibili sono policy-only",
+    policyOnlyDetail:
+      "Il popup può ancora riassumere lo stato condiviso in cache, ma questi provider visibili non espongono una live in-browser usage path in questo profilo. Apri Settings per rivedere contratti provider e source controls correnti.",
+    openDetail: "Apri dettaglio",
+    reviewDetail: "Rivedi dettaglio",
+    setupLabel: "Copertura setup",
+    liveReadyItemLabel: "Live-ready",
+    hostAccessItemLabel: "Host access",
+    credentialsItemLabel: "Credentials",
+    policyOnlyItemLabel: "Policy-only",
+    statusStartSetup: "Avvia setup",
+    statusNeedsSetup: "Setup richiesto",
+    statusNeedsReview: "Revisione richiesta",
+    statusContractOnly: "Solo contratto",
+    statusReady: "Pronto",
+    noVisibleHeadline: "Nessun provider visibile configurato",
+    noVisibleDetail:
+      "Attiva prima un provider in Settings. Poi questa scheda mostrerà se i provider visibili sono live-ready, bloccati dal setup o policy-only.",
+    noVisibleDetailForProvider: (provider) =>
+      `Attiva prima ${provider} in Settings > Quick Setup. Poi questa scheda mostrerà se i provider visibili sono live-ready, bloccati dal setup o policy-only.`,
+    visibleProvidersHeadline: (count) => `${count} visibili`,
+    needsSetupDetail: (sentence) =>
+      `Completa il setup in Settings prima di considerare questo popup ready. ${sentence}`,
+    needsReviewDetail: (count) =>
+      `Il setup in Settings è chiaro, ma ${count} richiedono ancora revisione nel prodotto.`,
+    contractOnlyDetail:
+      "I provider visibili sono configurati, ma il contratto attuale è policy-only invece di una live in-browser path.",
+    mixedReadyPolicyDetail: (liveReady, policyOnly) =>
+      `${liveReady} sono live-ready. ${policyOnly} sono policy-only.`,
+    readyDetail:
+      "Qui non sono visibili blocchi di setup da Settings. Usa il riepilogo sotto per confermare copertura live-ready e policy-only.",
+    setupBlockerAccess: (count) => `${count} richiedono ancora host access.`,
+    setupBlockerCredentials: (count) =>
+      `${count} richiedono ancora credentials.`,
+    headerNoVisible:
+      "Inizia in Settings. Quando un provider è visibile, questo popup riassume live readiness e prossimi passi.",
+    headerNoVisibleForProvider: (provider) =>
+      `Inizia con ${provider} in Settings > Quick Setup. Quando un provider è visibile, questo popup riassume live readiness e prossimi passi.`,
+    headerNeedsSetup:
+      "Usa questo popup per separare blocchi di setup dai provider già ready.",
+    headerContractOnly:
+      "Questo popup mostra il contesto del contratto attuale, non un percorso live in-browser sync.",
+    headerNeedsReview:
+      "Il setup in Settings è chiaro. Usa questo popup per rivedere rapidamente freshness e provider.",
+    headerReady:
+      "Usa questo popup per rivedere rapidamente freshness e provider senza riaprire il dashboard completo.",
+  },
+  ru: {
+    providerCount: (count) => `${count} provider`,
+    noProvidersLabel: "Нет provider",
+    noProvidersHeadline: "Нет видимых provider",
+    noProvidersDetail:
+      "Общего snapshot для popup пока нет. Включите один provider, чтобы здесь начал кешироваться статус.",
+    syncIssueLabel: "Проблема sync",
+    mixedStateLabel: "Смешанное состояние",
+    alignedLabel: "Согласовано",
+    alignedSingleDetail:
+      "Видимый provider использует то же кешированное окно snapshot.",
+    alignedManyDetail: (count) =>
+      `Все ${count} видимых provider используют то же кешированное окно snapshot.`,
+    mixedDetail: (newestProvider, newestSync, oldestProvider, oldestSync) =>
+      `Самый новый видимый snapshot: ${newestProvider} (${newestSync}). Самый старый видимый snapshot: ${oldestProvider} (${oldestSync}).`,
+    startHereLabel: "Начните здесь",
+    nextStepLabel: "Следующий шаг",
+    currentContractLabel: "Текущий контракт",
+    enableProviderHeadline: "Включите provider в Settings",
+    enableProviderDetail:
+      "popup становится полезным только после появления хотя бы одного provider. Начните в Settings, затем вернитесь сюда для быстрой проверки статуса и внимания.",
+    startWithProviderHeadline: (provider) =>
+      `Начните с ${provider} в Quick Setup`,
+    startWithProviderDetail: (provider) =>
+      `Откройте Settings > Quick Setup и включите ${provider}. Затем завершите browser access и usage page перед возвратом к проверке статуса.`,
+    openQuickSetupAction: "Открыть Quick Setup",
+    grantAccessSingleHeadline: (provider) =>
+      `Дать host access для ${provider}`,
+    grantAccessManyHeadline: "Дать host access в Settings",
+    singleMissingAccessDetail: (provider) =>
+      `${provider} все еще требует optional host access, поэтому popup пока не может показать здоровый live статус.`,
+    multipleMissingAccessDetail: (count) =>
+      `${count} все еще требуют optional host access, прежде чем popup сможет показать согласованный здоровый snapshot.`,
+    addCredentialsSingleHeadline: (provider) =>
+      `Добавить credentials для ${provider}`,
+    addCredentialsManyHeadline: "Добавить credentials в Settings",
+    singleMissingCredentialDetail: (provider) =>
+      `${provider} все еще требует сохраненные credentials, прежде чем live sync сможет запускаться.`,
+    multipleMissingCredentialDetail: (count) =>
+      `${count} все еще зависят от отсутствующих сохраненных credentials, прежде чем их текущий live путь сможет работать стабильно.`,
+    reviewProviderHeadline: (provider) => `Проверить ${provider}`,
+    policyOnlyHeadline: "Видимые provider имеют policy-only",
+    policyOnlyDetail:
+      "popup все еще может сводить общий кешированный статус, но эти видимые provider не предоставляют live in-browser usage path в этом профиле. Откройте Settings, чтобы проверить текущие контракты provider и source controls.",
+    openDetail: "Открыть детали",
+    reviewDetail: "Проверить детали",
+    setupLabel: "Покрытие setup",
+    liveReadyItemLabel: "Live-ready",
+    hostAccessItemLabel: "Host access",
+    credentialsItemLabel: "Credentials",
+    policyOnlyItemLabel: "Policy-only",
+    statusStartSetup: "Начать setup",
+    statusNeedsSetup: "Нужен setup",
+    statusNeedsReview: "Нужна проверка",
+    statusContractOnly: "Только контракт",
+    statusReady: "Готово",
+    noVisibleHeadline: "Нет настроенных видимых provider",
+    noVisibleDetail:
+      "Сначала включите один provider в Settings. Затем эта карточка покажет, являются ли видимые provider live-ready, заблокированы setup или policy-only.",
+    noVisibleDetailForProvider: (provider) =>
+      `Сначала включите ${provider} в Settings > Quick Setup. Затем эта карточка покажет, являются ли видимые provider live-ready, заблокированы setup или policy-only.`,
+    visibleProvidersHeadline: (count) => `${count} видимых`,
+    needsSetupDetail: (sentence) =>
+      `Завершите setup в Settings, прежде чем считать этот popup ready. ${sentence}`,
+    needsReviewDetail: (count) =>
+      `Setup в Settings ясен, но ${count} все еще требуют проверки в продукте.`,
+    contractOnlyDetail:
+      "Видимые provider настроены, но их текущий контракт policy-only, а не live in-browser path.",
+    mixedReadyPolicyDetail: (liveReady, policyOnly) =>
+      `${liveReady} имеют live-ready. ${policyOnly} имеют policy-only.`,
+    readyDetail:
+      "Здесь не видно блокировок setup из Settings. Используйте сводку ниже, чтобы проверить покрытие live-ready и policy-only.",
+    setupBlockerAccess: (count) => `${count} все еще требуют host access.`,
+    setupBlockerCredentials: (count) =>
+      `${count} все еще требуют credentials.`,
+    headerNoVisible:
+      "Начните в Settings. Когда один provider станет видимым, этот popup покажет live readiness и следующие шаги.",
+    headerNoVisibleForProvider: (provider) =>
+      `Начните с ${provider} в Settings > Quick Setup. Когда один provider станет видимым, этот popup покажет live readiness и следующие шаги.`,
+    headerNeedsSetup:
+      "Используйте этот popup, чтобы отделить блокировки setup от уже ready provider.",
+    headerContractOnly:
+      "Этот popup показывает текущий контекст контракта, а не путь live in-browser sync.",
+    headerNeedsReview:
+      "Setup в Settings ясен. Используйте этот popup для быстрой проверки freshness и provider.",
+    headerReady:
+      "Используйте этот popup для быстрой проверки freshness и provider без повторного открытия полного dashboard.",
+  },
+  ar: {
+    providerCount: (count) => `${count} provider`,
+    noProvidersLabel: "لا توجد provider",
+    noProvidersHeadline: "لا توجد provider مرئية",
+    noProvidersDetail:
+      "لا توجد snapshot مشتركة في popup بعد. فعّل provider واحدا لبدء تخزين الحالة هنا.",
+    syncIssueLabel: "مشكلة sync",
+    mixedStateLabel: "حالة مختلطة",
+    alignedLabel: "متوافق",
+    alignedSingleDetail:
+      "الـ provider المرئي يستخدم نافذة snapshot المخزنة نفسها.",
+    alignedManyDetail: (count) =>
+      `كل ${count} المرئية تستخدم نافذة snapshot المخزنة نفسها.`,
+    mixedDetail: (newestProvider, newestSync, oldestProvider, oldestSync) =>
+      `أحدث snapshot مرئية: ${newestProvider} (${newestSync}). أقدم snapshot مرئية: ${oldestProvider} (${oldestSync}).`,
+    startHereLabel: "ابدأ هنا",
+    nextStepLabel: "الخطوة التالية",
+    currentContractLabel: "العقد الحالي",
+    enableProviderHeadline: "فعّل provider في Settings",
+    enableProviderDetail:
+      "يصبح popup مفيدا فقط بعد ظهور provider واحد على الأقل. ابدأ من Settings ثم عد إلى هنا لفحص الحالة والتنبيهات بنقرة واحدة.",
+    startWithProviderHeadline: (provider) =>
+      `ابدأ مع ${provider} في Quick Setup`,
+    startWithProviderDetail: (provider) =>
+      `افتح Settings > Quick Setup وفعّل ${provider}. ثم أكمل خطوات browser access و usage page قبل العودة لفحص الحالة.`,
+    openQuickSetupAction: "فتح Quick Setup",
+    grantAccessSingleHeadline: (provider) =>
+      `امنح host access لـ ${provider}`,
+    grantAccessManyHeadline: "امنح host access في Settings",
+    singleMissingAccessDetail: (provider) =>
+      `${provider} ما زال يحتاج optional host access، لذلك لا يستطيع popup عرض حالة live سليمة بعد.`,
+    multipleMissingAccessDetail: (count) =>
+      `${count} ما زالت تحتاج optional host access قبل أن يستقر popup على snapshot متوافقة وسليمة.`,
+    addCredentialsSingleHeadline: (provider) =>
+      `أضف credentials لـ ${provider}`,
+    addCredentialsManyHeadline: "أضف credentials في Settings",
+    singleMissingCredentialDetail: (provider) =>
+      `${provider} ما زال يحتاج credentials محفوظة قبل أن يعمل live sync.`,
+    multipleMissingCredentialDetail: (count) =>
+      `${count} ما زالت تعتمد على credentials محفوظة مفقودة قبل أن يعمل مسار live الحالي بثبات.`,
+    reviewProviderHeadline: (provider) => `راجع ${provider}`,
+    policyOnlyHeadline: "الـ providers المرئية هي policy-only",
+    policyOnlyDetail:
+      "يمكن لـ popup تلخيص الحالة المشتركة المخزنة، لكن هذه providers المرئية لا تعرض live in-browser usage path في هذا profile. افتح Settings لمراجعة عقود provider الحالية و source controls.",
+    openDetail: "فتح التفاصيل",
+    reviewDetail: "مراجعة التفاصيل",
+    setupLabel: "تغطية setup",
+    liveReadyItemLabel: "Live-ready",
+    hostAccessItemLabel: "Host access",
+    credentialsItemLabel: "Credentials",
+    policyOnlyItemLabel: "Policy-only",
+    statusStartSetup: "بدء setup",
+    statusNeedsSetup: "يحتاج setup",
+    statusNeedsReview: "يحتاج مراجعة",
+    statusContractOnly: "عقد فقط",
+    statusReady: "جاهز",
+    noVisibleHeadline: "لا توجد provider مرئية مضبوطة",
+    noVisibleDetail:
+      "فعّل provider واحدا في Settings أولا. بعدها ستعرض هذه البطاقة هل providers المرئية live-ready أو محجوبة بسبب setup أو policy-only.",
+    noVisibleDetailForProvider: (provider) =>
+      `فعّل ${provider} أولا في Settings > Quick Setup. بعدها ستعرض هذه البطاقة هل providers المرئية live-ready أو محجوبة بسبب setup أو policy-only.`,
+    visibleProvidersHeadline: (count) => `${count} مرئية`,
+    needsSetupDetail: (sentence) =>
+      `أكمل setup في Settings قبل اعتبار هذا popup ready. ${sentence}`,
+    needsReviewDetail: (count) =>
+      `إعداد Settings واضح، لكن ${count} ما زالت تحتاج مراجعة داخل المنتج.`,
+    contractOnlyDetail:
+      "الـ providers المرئية مضبوطة، لكن العقد الحالي policy-only وليس live in-browser path.",
+    mixedReadyPolicyDetail: (liveReady, policyOnly) =>
+      `${liveReady} live-ready. ${policyOnly} policy-only.`,
+    readyDetail:
+      "لا تظهر هنا أي عوائق setup من Settings. استخدم الملخص أدناه لتأكيد تغطية live-ready و policy-only.",
+    setupBlockerAccess: (count) => `${count} ما زالت تحتاج host access.`,
+    setupBlockerCredentials: (count) =>
+      `${count} ما زالت تحتاج credentials.`,
+    headerNoVisible:
+      "ابدأ من Settings. عندما يصبح provider واحد مرئيا، سيلخص هذا popup حالة live readiness والخطوات التالية.",
+    headerNoVisibleForProvider: (provider) =>
+      `ابدأ مع ${provider} في Settings > Quick Setup. عندما يصبح provider واحد مرئيا، سيلخص هذا popup حالة live readiness والخطوات التالية.`,
+    headerNeedsSetup:
+      "استخدم هذا popup لفصل عوائق setup عن providers الجاهزة بالفعل.",
+    headerContractOnly:
+      "يعرض هذا popup سياق العقد الحالي وليس مسار live in-browser sync.",
+    headerNeedsReview:
+      "إعداد Settings واضح. استخدم هذا popup لمراجعة freshness و provider بسرعة.",
+    headerReady:
+      "استخدم هذا popup لمراجعة freshness و provider بسرعة دون إعادة فتح dashboard الكامل.",
+  },
+  hi: {
+    providerCount: (count) => `${count} provider`,
+    noProvidersLabel: "कोई provider नहीं",
+    noProvidersHeadline: "कोई visible provider नहीं",
+    noProvidersDetail:
+      "अभी कोई साझा popup snapshot मौजूद नहीं है। यहां state cache शुरू करने के लिए एक provider enable करें।",
+    syncIssueLabel: "sync समस्या",
+    mixedStateLabel: "मिला-जुला state",
+    alignedLabel: "Aligned",
+    alignedSingleDetail:
+      "Visible provider वही cached snapshot window साझा कर रहा है।",
+    alignedManyDetail: (count) =>
+      `सभी ${count} visible provider वही cached snapshot window साझा कर रहे हैं।`,
+    mixedDetail: (newestProvider, newestSync, oldestProvider, oldestSync) =>
+      `Newest visible snapshot: ${newestProvider} (${newestSync}). Oldest visible snapshot: ${oldestProvider} (${oldestSync}).`,
+    startHereLabel: "यहां शुरू करें",
+    nextStepLabel: "अगला step",
+    currentContractLabel: "मौजूदा contract",
+    enableProviderHeadline: "Settings में एक provider enable करें",
+    enableProviderDetail:
+      "popup तभी उपयोगी होता है जब कम से कम एक provider visible हो। Settings से शुरू करें, फिर one-click status और attention triage के लिए यहां लौटें।",
+    startWithProviderHeadline: (provider) =>
+      `Quick Setup में ${provider} से शुरू करें`,
+    startWithProviderDetail: (provider) =>
+      `Settings > Quick Setup खोलें और ${provider} enable करें। फिर status triage के लिए लौटने से पहले browser access और usage page steps पूरे करें।`,
+    openQuickSetupAction: "Quick Setup खोलें",
+    grantAccessSingleHeadline: (provider) =>
+      `${provider} के लिए host access दें`,
+    grantAccessManyHeadline: "Settings में host access दें",
+    singleMissingAccessDetail: (provider) =>
+      `${provider} को अभी optional host access चाहिए, इसलिए popup healthy live state नहीं दिखा सकता।`,
+    multipleMissingAccessDetail: (count) =>
+      `${count} को अभी optional host access चाहिए, तभी popup एक aligned healthy snapshot पर आ सकेगा।`,
+    addCredentialsSingleHeadline: (provider) =>
+      `${provider} के लिए credentials जोड़ें`,
+    addCredentialsManyHeadline: "Settings में credentials जोड़ें",
+    singleMissingCredentialDetail: (provider) =>
+      `${provider} को अभी saved credentials चाहिए, तभी live sync चल सकेगा।`,
+    multipleMissingCredentialDetail: (count) =>
+      `${count} अभी missing saved credentials पर निर्भर हैं, इसलिए current live path साफ तरह से नहीं चल सकता।`,
+    reviewProviderHeadline: (provider) => `${provider} की समीक्षा करें`,
+    policyOnlyHeadline: "Visible providers policy-only हैं",
+    policyOnlyDetail:
+      "popup shared cached state को summarize कर सकता है, लेकिन ये visible providers इस profile में live in-browser usage path expose नहीं करते। Current provider contracts और source controls देखने के लिए Settings खोलें।",
+    openDetail: "Detail खोलें",
+    reviewDetail: "Detail review करें",
+    setupLabel: "Setup coverage",
+    liveReadyItemLabel: "Live-ready",
+    hostAccessItemLabel: "Host access",
+    credentialsItemLabel: "Credentials",
+    policyOnlyItemLabel: "Policy-only",
+    statusStartSetup: "Setup शुरू करें",
+    statusNeedsSetup: "Setup चाहिए",
+    statusNeedsReview: "Review चाहिए",
+    statusContractOnly: "Contract-only",
+    statusReady: "Ready",
+    noVisibleHeadline: "कोई visible provider configured नहीं",
+    noVisibleDetail:
+      "पहले Settings में एक provider enable करें। फिर यह card दिखाएगा कि visible providers live-ready हैं, setup से blocked हैं या policy-only हैं।",
+    noVisibleDetailForProvider: (provider) =>
+      `पहले Settings > Quick Setup में ${provider} enable करें। फिर यह card दिखाएगा कि visible providers live-ready हैं, setup से blocked हैं या policy-only हैं।`,
+    visibleProvidersHeadline: (count) => `${count} visible`,
+    needsSetupDetail: (sentence) =>
+      `इस popup को ready मानने से पहले Settings setup पूरा करें। ${sentence}`,
+    needsReviewDetail: (count) =>
+      `Settings setup साफ है, लेकिन ${count} को अभी in-product review चाहिए।`,
+    contractOnlyDetail:
+      "Visible providers configured हैं, लेकिन उनका current contract live in-browser path के बजाय policy-only है।",
+    mixedReadyPolicyDetail: (liveReady, policyOnly) =>
+      `${liveReady} live-ready हैं। ${policyOnly} policy-only हैं।`,
+    readyDetail:
+      "यहां Settings setup blockers नहीं दिख रहे। नीचे summary से live-ready और policy-only coverage confirm करें।",
+    setupBlockerAccess: (count) => `${count} को अभी host access चाहिए।`,
+    setupBlockerCredentials: (count) => `${count} को अभी credentials चाहिए।`,
+    headerNoVisible:
+      "Settings से शुरू करें। एक provider visible होते ही यह popup live readiness और next steps summarize करेगा।",
+    headerNoVisibleForProvider: (provider) =>
+      `Settings > Quick Setup में ${provider} से शुरू करें। एक provider visible होते ही यह popup live readiness और next steps summarize करेगा।`,
+    headerNeedsSetup:
+      "इस popup से setup blockers और already ready providers को अलग देखें।",
+    headerContractOnly:
+      "यह popup current contract context दिखा रहा है, live in-browser sync path नहीं।",
+    headerNeedsReview:
+      "Settings setup साफ है। Freshness और provider triage के लिए यह popup इस्तेमाल करें।",
+    headerReady:
+      "पूरा dashboard फिर खोले बिना freshness और provider triage के लिए यह popup इस्तेमाल करें।",
+  },
+  id: {
+    providerCount: (count) => `${count} provider`,
+    noProvidersLabel: "Tidak ada provider",
+    noProvidersHeadline: "Tidak ada provider terlihat",
+    noProvidersDetail:
+      "Belum ada snapshot popup bersama. Aktifkan satu provider untuk mulai menyimpan state di sini.",
+    syncIssueLabel: "Masalah sync",
+    mixedStateLabel: "State campuran",
+    alignedLabel: "Selaras",
+    alignedSingleDetail:
+      "Provider yang terlihat memakai jendela snapshot cache yang sama.",
+    alignedManyDetail: (count) =>
+      `Semua ${count} yang terlihat memakai jendela snapshot cache yang sama.`,
+    mixedDetail: (newestProvider, newestSync, oldestProvider, oldestSync) =>
+      `Snapshot terlihat terbaru: ${newestProvider} (${newestSync}). Snapshot terlihat terlama: ${oldestProvider} (${oldestSync}).`,
+    startHereLabel: "Mulai di sini",
+    nextStepLabel: "Langkah berikutnya",
+    currentContractLabel: "Kontrak saat ini",
+    enableProviderHeadline: "Aktifkan provider di Settings",
+    enableProviderDetail:
+      "popup baru berguna setelah setidaknya satu provider terlihat. Mulai dari Settings, lalu kembali ke sini untuk triage status dan perhatian sekali klik.",
+    startWithProviderHeadline: (provider) =>
+      `Mulai dengan ${provider} di Quick Setup`,
+    startWithProviderDetail: (provider) =>
+      `Buka Settings > Quick Setup dan aktifkan ${provider}. Lalu selesaikan langkah browser access dan usage page sebelum kembali ke sini untuk triage status.`,
+    openQuickSetupAction: "Buka Quick Setup",
+    grantAccessSingleHeadline: (provider) =>
+      `Berikan host access untuk ${provider}`,
+    grantAccessManyHeadline: "Berikan host access di Settings",
+    singleMissingAccessDetail: (provider) =>
+      `${provider} masih memerlukan optional host access, jadi popup belum bisa menampilkan state live yang sehat.`,
+    multipleMissingAccessDetail: (count) =>
+      `${count} masih memerlukan optional host access sebelum popup bisa menjadi snapshot yang selaras dan sehat.`,
+    addCredentialsSingleHeadline: (provider) =>
+      `Tambahkan credentials untuk ${provider}`,
+    addCredentialsManyHeadline: "Tambahkan credentials di Settings",
+    singleMissingCredentialDetail: (provider) =>
+      `${provider} masih memerlukan credentials tersimpan sebelum live sync dapat berjalan.`,
+    multipleMissingCredentialDetail: (count) =>
+      `${count} masih bergantung pada credentials tersimpan yang hilang sebelum jalur live saat ini dapat berjalan bersih.`,
+    reviewProviderHeadline: (provider) => `Tinjau ${provider}`,
+    policyOnlyHeadline: "Provider terlihat bersifat policy-only",
+    policyOnlyDetail:
+      "popup masih dapat merangkum state cache bersama, tetapi provider terlihat ini tidak mengekspos live in-browser usage path di profil ini. Buka Settings untuk meninjau kontrak provider saat ini dan source controls.",
+    openDetail: "Buka detail",
+    reviewDetail: "Tinjau detail",
+    setupLabel: "Cakupan setup",
+    liveReadyItemLabel: "Live-ready",
+    hostAccessItemLabel: "Host access",
+    credentialsItemLabel: "Credentials",
+    policyOnlyItemLabel: "Policy-only",
+    statusStartSetup: "Mulai setup",
+    statusNeedsSetup: "Perlu setup",
+    statusNeedsReview: "Perlu tinjauan",
+    statusContractOnly: "Hanya kontrak",
+    statusReady: "Siap",
+    noVisibleHeadline: "Belum ada provider terlihat yang dikonfigurasi",
+    noVisibleDetail:
+      "Aktifkan satu provider di Settings terlebih dahulu. Setelah itu kartu ini akan menunjukkan apakah provider terlihat live-ready, terblokir setup, atau policy-only.",
+    noVisibleDetailForProvider: (provider) =>
+      `Aktifkan ${provider} di Settings > Quick Setup terlebih dahulu. Setelah itu kartu ini akan menunjukkan apakah provider terlihat live-ready, terblokir setup, atau policy-only.`,
+    visibleProvidersHeadline: (count) => `${count} terlihat`,
+    needsSetupDetail: (sentence) =>
+      `Selesaikan setup di Settings sebelum menganggap popup ini ready. ${sentence}`,
+    needsReviewDetail: (count) =>
+      `Setup di Settings sudah jelas, tetapi ${count} masih perlu tinjauan di dalam produk.`,
+    contractOnlyDetail:
+      "Provider terlihat sudah dikonfigurasi, tetapi kontrak saat ini policy-only, bukan live in-browser path.",
+    mixedReadyPolicyDetail: (liveReady, policyOnly) =>
+      `${liveReady} live-ready. ${policyOnly} policy-only.`,
+    readyDetail:
+      "Tidak ada blocker setup dari Settings yang terlihat di sini. Gunakan ringkasan di bawah untuk memastikan cakupan live-ready dan policy-only.",
+    setupBlockerAccess: (count) => `${count} masih memerlukan host access.`,
+    setupBlockerCredentials: (count) =>
+      `${count} masih memerlukan credentials.`,
+    headerNoVisible:
+      "Mulai dari Settings. Setelah satu provider terlihat, popup ini akan merangkum live readiness dan langkah berikutnya.",
+    headerNoVisibleForProvider: (provider) =>
+      `Mulai dengan ${provider} di Settings > Quick Setup. Setelah satu provider terlihat, popup ini akan merangkum live readiness dan langkah berikutnya.`,
+    headerNeedsSetup:
+      "Gunakan popup ini untuk memisahkan blocker setup dari provider yang sudah ready.",
+    headerContractOnly:
+      "popup ini menampilkan konteks kontrak saat ini, bukan jalur live in-browser sync.",
+    headerNeedsReview:
+      "Setup Settings sudah jelas. Gunakan popup ini untuk meninjau freshness dan provider dengan cepat.",
+    headerReady:
+      "Gunakan popup ini untuk meninjau freshness dan provider tanpa membuka ulang dashboard lengkap.",
+  },
+};
+
+function getPopupFirstRunCopy(
+  locale: ResolvedAppLocale,
+): PopupFirstRunCopyText | null {
+  if (locale === "en" || locale === "zh-CN") {
+    return null;
+  }
+
+  return POPUP_FIRST_RUN_COPY[locale];
+}
+
+function formatLocalizedProviderCount(
+  i18n: RuntimeI18n,
+  copy: PopupFirstRunCopyText,
+  count: number,
+) {
+  return copy.providerCount(i18n.formatNumber(count));
+}
+
+function buildLocalizedFirstRunPopupSections(
+  i18n: RuntimeI18n,
+  copy: PopupFirstRunCopyText,
+) {
+  return {
+    snapshotStatus: {
+      noProvidersLabel: copy.noProvidersLabel,
+      noProvidersHeadline: copy.noProvidersHeadline,
+      noProvidersDetail: copy.noProvidersDetail,
+      syncIssueLabel: copy.syncIssueLabel,
+      mixedStateLabel: copy.mixedStateLabel,
+      alignedLabel: copy.alignedLabel,
+      alignedSingleDetail: copy.alignedSingleDetail,
+      alignedManyDetail: (count: number) =>
+        copy.alignedManyDetail(formatLocalizedProviderCount(i18n, copy, count)),
+      mixedDetail: (
+        newestProviderLabel: string,
+        newestSyncLabel: string,
+        oldestProviderLabel: string,
+        oldestSyncLabel: string,
+      ) =>
+        copy.mixedDetail(
+          newestProviderLabel,
+          newestSyncLabel,
+          oldestProviderLabel,
+          oldestSyncLabel,
+        ),
+    },
+    guidance: {
+      startHereLabel: copy.startHereLabel,
+      nextStepLabel: copy.nextStepLabel,
+      currentContractLabel: copy.currentContractLabel,
+      enableProviderHeadline: copy.enableProviderHeadline,
+      enableProviderDetail: copy.enableProviderDetail,
+      startWithProviderHeadline: (providerLabel: string) =>
+        copy.startWithProviderHeadline(providerLabel),
+      startWithProviderDetail: (providerLabel: string) =>
+        copy.startWithProviderDetail(providerLabel),
+      openQuickSetupAction: copy.openQuickSetupAction,
+      grantAccessSingleHeadline: (providerLabel: string) =>
+        copy.grantAccessSingleHeadline(providerLabel),
+      grantAccessManyHeadline: copy.grantAccessManyHeadline,
+      singleMissingAccessDetail: (providerLabel: string, detail: string) =>
+        detail || copy.singleMissingAccessDetail(providerLabel),
+      multipleMissingAccessDetail: (count: number) =>
+        copy.multipleMissingAccessDetail(
+          formatLocalizedProviderCount(i18n, copy, count),
+        ),
+      addCredentialsSingleHeadline: (providerLabel: string) =>
+        copy.addCredentialsSingleHeadline(providerLabel),
+      addCredentialsManyHeadline: copy.addCredentialsManyHeadline,
+      singleMissingCredentialDetail: (providerLabel: string, detail: string) =>
+        detail || copy.singleMissingCredentialDetail(providerLabel),
+      multipleMissingCredentialDetail: (count: number) =>
+        copy.multipleMissingCredentialDetail(
+          formatLocalizedProviderCount(i18n, copy, count),
+        ),
+      reviewProviderHeadline: (providerLabel: string) =>
+        copy.reviewProviderHeadline(providerLabel),
+      policyOnlyHeadline: copy.policyOnlyHeadline,
+      policyOnlyDetail: copy.policyOnlyDetail,
+      openDetail: copy.openDetail,
+      reviewDetail: copy.reviewDetail,
+    },
+    setupCoverage: {
+      label: copy.setupLabel,
+      liveReadyItemLabel: copy.liveReadyItemLabel,
+      hostAccessItemLabel: copy.hostAccessItemLabel,
+      credentialsItemLabel: copy.credentialsItemLabel,
+      policyOnlyItemLabel: copy.policyOnlyItemLabel,
+      statusStartSetup: copy.statusStartSetup,
+      statusNeedsSetup: copy.statusNeedsSetup,
+      statusNeedsReview: copy.statusNeedsReview,
+      statusContractOnly: copy.statusContractOnly,
+      statusReady: copy.statusReady,
+      noVisibleHeadline: copy.noVisibleHeadline,
+      noVisibleDetail: copy.noVisibleDetail,
+      noVisibleDetailForProvider: (providerLabel: string) =>
+        copy.noVisibleDetailForProvider(providerLabel),
+      visibleProvidersHeadline: (count: number) =>
+        copy.visibleProvidersHeadline(
+          formatLocalizedProviderCount(i18n, copy, count),
+        ),
+      needsSetupDetail: (sentence: string) =>
+        copy.needsSetupDetail(sentence),
+      needsReviewDetail: (count: number) =>
+        copy.needsReviewDetail(formatLocalizedProviderCount(i18n, copy, count)),
+      contractOnlyDetail: copy.contractOnlyDetail,
+      mixedReadyPolicyDetail: (
+        liveReadyCount: number,
+        policyOnlyCount: number,
+      ) =>
+        copy.mixedReadyPolicyDetail(
+          formatLocalizedProviderCount(i18n, copy, liveReadyCount),
+          formatLocalizedProviderCount(i18n, copy, policyOnlyCount),
+        ),
+      readyDetail: copy.readyDetail,
+      buildSetupBlockerSentence: (
+        providersNeedingAccessCount: number,
+        providersNeedingCredentialsCount: number,
+      ) => {
+        const parts: string[] = [];
+
+        if (providersNeedingAccessCount > 0) {
+          parts.push(
+            copy.setupBlockerAccess(
+              formatLocalizedProviderCount(
+                i18n,
+                copy,
+                providersNeedingAccessCount,
+              ),
+            ),
+          );
+        }
+
+        if (providersNeedingCredentialsCount > 0) {
+          parts.push(
+            copy.setupBlockerCredentials(
+              formatLocalizedProviderCount(
+                i18n,
+                copy,
+                providersNeedingCredentialsCount,
+              ),
+            ),
+          );
+        }
+
+        return parts.join(" ");
+      },
+    },
+    header: {
+      noVisible: copy.headerNoVisible,
+      noVisibleForProvider: (providerLabel: string) =>
+        copy.headerNoVisibleForProvider(providerLabel),
+      needsSetup: copy.headerNeedsSetup,
+      contractOnly: copy.headerContractOnly,
+      needsReview: copy.headerNeedsReview,
+      ready: copy.headerReady,
+    },
+  } as const;
 }
 
 export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
@@ -221,7 +1438,7 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
     } as const;
   }
 
-  return {
+  const englishCopy = {
     snapshotStatus: {
       noProvidersLabel: "No providers",
       noProvidersHeadline: "No visible providers",
@@ -422,5 +1639,15 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
       setupCoverage: "Popup setup coverage",
       featuredProviders: "Popup featured providers",
     },
+  };
+  const firstRunCopy = getPopupFirstRunCopy(i18n.resolvedLocale);
+
+  if (!firstRunCopy) {
+    return englishCopy;
+  }
+
+  return {
+    ...englishCopy,
+    ...buildLocalizedFirstRunPopupSections(i18n, firstRunCopy),
   };
 }

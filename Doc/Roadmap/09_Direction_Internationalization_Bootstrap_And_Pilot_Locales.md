@@ -65,6 +65,7 @@ Execution note:
 - fiftieth executable slice landed on `2026-05-13` through `Phase 387`
 - fifty-first documentation inventory slice landed on `2026-05-13` through `Phase 391`
 - fifty-second planning split landed on `2026-05-13` through `Phase 392`
+- fifty-third executable slice landed on `2026-05-13` through `Phase 392.1`
 - `Phase 200` and `Phase 201` intentionally paused this i18n/diagnostic follow-up line for functionality-first Codex personal usage-context surfacing while Codex budget is constrained
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
@@ -108,8 +109,8 @@ As of 2026-05-13:
 - Settings language options are generated from the registry instead of hard-coded `en / zh-CN` entries
 - `ar` resolves to `rtl`; all other shipped runtime locales resolve to `ltr`
 - the new non-reviewed runtime locales use complete key coverage with English fallback where human-reviewed translations are not yet present
-- every non-English locale in the 14-locale set now has a first runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels; deeper structured runtime copy still falls back to English until reviewed translations are added
-- the deeper runtime copy backlog now maps those fallback buckets to popup/new-user guidance in `Phase 392`, Settings/provider-detail helpers in `Phase 393`, and later diagnostics/operator/store-helper follow-up:
+- every non-English locale in the 14-locale set now has a first runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels; popup first-run guidance, setup coverage, snapshot status, and header copy now have explicit 14-locale structured coverage from `Phase 392.1`; deeper structured runtime copy outside that slice still falls back to English until reviewed translations are added
+- the deeper runtime copy backlog now maps remaining fallback buckets to popup featured/surface-role copy in `Phase 392.2`, Settings/provider-detail helpers in `Phase 393`, and later diagnostics/operator/store-helper follow-up:
   - [I18n_Deeper_Runtime_Copy_Backlog.md](../I18n/I18n_Deeper_Runtime_Copy_Backlog.md)
 - focused i18n tests now guard that every non-English locale keeps explicit first-shell runtime message overrides instead of silently relying on English fallback for the shell pilot surface
 - Arabic/RTL surfaces now isolate English fallback text direction so fallback punctuation stays readable until reviewed Arabic runtime translations are added
@@ -290,7 +291,7 @@ Recommended rollout:
 52. notranslate extension shells and representative locale RDP popup QA - shipped in `Phase 387`
 53. deeper runtime copy inventory for non-English fallback locales - shipped in `Phase 391`
 54. popup guidance implementation split - shipped in `Phase 392`
-55. popup first-run guidance 14-locale copy - future work in `Phase 392.1`
+55. popup first-run guidance 14-locale copy - shipped in `Phase 392.1`
 56. popup featured and surface-role 14-locale copy - future work in `Phase 392.2`
 57. Settings and provider-detail 14-locale copy - future work in `Phase 393`
 58. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact

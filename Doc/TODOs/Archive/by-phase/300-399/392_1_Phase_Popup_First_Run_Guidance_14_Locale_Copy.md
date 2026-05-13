@@ -17,7 +17,8 @@ Freshness model:
 Status note:
 
 - child phase split from `Phase 392`
-- active first popup localization implementation slice
+- completed and archived on 2026-05-13
+- first popup localization implementation slice
 
 ## Goal
 
@@ -55,3 +56,9 @@ Expand the first-run popup guidance, setup coverage, snapshot status, and header
 ## Follow-Up
 
 - Finish the remaining popup featured-card, action-section, surface-role, and aria copy in `Phase 392.2`.
+
+## Closeout
+
+- Added explicit 14-locale structured copy for popup first-run guidance, setup coverage, snapshot status, and header readiness buckets.
+- Preserved English fallback for featured-card, action-section, surface-role, and aria buckets until `Phase 392.2`.
+- Added focused tests proving every non-English locale has non-English representative first-run popup copy while non-`zh-CN` later popup buckets remain on the planned English fallback boundary.

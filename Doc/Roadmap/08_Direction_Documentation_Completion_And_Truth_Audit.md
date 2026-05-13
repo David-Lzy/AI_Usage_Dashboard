@@ -51,7 +51,7 @@ Today the truthful answer is "some are complete, some are intentionally living,"
 
 As of 2026-05-13:
 
-- numbered phase docs are archived through `Phase 392`, with active `Phase 392.1` selected for popup first-run guidance 14-locale runtime copy
+- numbered phase docs are archived through `Phase 392.1`, with active `Phase 392.2` selected for remaining popup featured-card, action-section, surface-role, and aria 14-locale runtime copy
 - roadmap directions remain open by design
 - interaction-audit request docs now show `0` pending requests and `1` fulfilled real operator request
 - theme-recovery request docs now show `0` pending requests and `1` fulfilled real operator request

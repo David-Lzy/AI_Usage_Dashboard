@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { createRuntimeI18n } from "./i18n";
+import { SUPPORTED_APP_LOCALES, createRuntimeI18n } from "./i18n";
 import { buildPopupLocalizedCopy as buildReexportedCopy } from "./localized-copy";
 import { buildPopupLocalizedCopy } from "./popup-localized-copy";
 
@@ -29,6 +29,44 @@ describe("buildPopupLocalizedCopy", () => {
     expect(copy.setupCoverage.visibleProvidersHeadline(3)).toBe(
       "3 个 provider 可见",
     );
+  });
+
+  it("ships first-run popup guidance copy for every non-English locale", () => {
+    const englishCopy = buildPopupLocalizedCopy(createRuntimeI18n("en"));
+
+    for (const locale of SUPPORTED_APP_LOCALES.filter(
+      (supportedLocale) => supportedLocale !== "en",
+    )) {
+      const copy = buildPopupLocalizedCopy(createRuntimeI18n(locale));
+
+      expect(copy.snapshotStatus.noProvidersHeadline).not.toBe(
+        englishCopy.snapshotStatus.noProvidersHeadline,
+      );
+      expect(copy.guidance.startHereLabel).not.toBe(
+        englishCopy.guidance.startHereLabel,
+      );
+      expect(copy.setupCoverage.statusStartSetup).not.toBe(
+        englishCopy.setupCoverage.statusStartSetup,
+      );
+      expect(copy.header.ready).not.toBe(englishCopy.header.ready);
+    }
+  });
+
+  it("keeps later popup buckets on English fallback until the next slice", () => {
+    const englishCopy = buildPopupLocalizedCopy(createRuntimeI18n("en"));
+
+    for (const locale of SUPPORTED_APP_LOCALES.filter(
+      (supportedLocale) => supportedLocale !== "en" && supportedLocale !== "zh-CN",
+    )) {
+      const copy = buildPopupLocalizedCopy(createRuntimeI18n(locale));
+
+      expect(copy.featuredCard.statusNeedsAccess).toBe(
+        englishCopy.featuredCard.statusNeedsAccess,
+      );
+      expect(copy.surfaceRoles.popupQuickGlanceHeadline).toBe(
+        englishCopy.surfaceRoles.popupQuickGlanceHeadline,
+      );
+    }
   });
 
   it("preserves the legacy localized-copy export path", () => {
