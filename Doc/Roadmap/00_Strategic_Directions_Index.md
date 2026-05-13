@@ -1,6 +1,6 @@
 # Strategic Directions Index
 
-Date: 2026-05-13
+Date: 2026-05-14
 
 Process rule:
 
@@ -28,9 +28,9 @@ Important scope note:
 
 ## Current Truth Snapshot
 
-As of 2026-05-13:
+As of 2026-05-14:
 
-- the numbered phase queue is completed through `Phase 406`, with active `Phase 407` selected for localized operator/store RDP visual QA and queued `Phase 408`-`Phase 410` covering localization bundle and presentation-split maintenance follow-ups
+- the numbered phase queue is completed through `Phase 407`, with active `Phase 408` selected for localization copy chunk-size audit and queued `Phase 409`-`Phase 410` covering presentation-split maintenance follow-ups
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -108,6 +108,7 @@ As of 2026-05-13:
 - `Phase 385` added the first `id` runtime shell pilot for dashboard, popup, Settings, common actions, and theme-toggle labels while keeping deeper structured copy on the existing fallback boundary
 - `Phase 386` added a focused runtime shell pilot coverage guard so every non-English locale must keep explicit first-shell message overrides even though deeper runtime copy can still fall back to English
 - `Phase 387` added notranslate markers to the extension HTML shells and verified representative localized RDP popup captures no longer show Chrome/Google Translate overlay UI
+- `Phase 407` captured representative localized operator/store helper RDP Chrome screenshots for `en`, `zh-CN`, `ja`, `de`, and `ar`, preserving the current Arabic RTL and German long-label visual QA evidence under [2026-05-14-phase407](../testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/README.md)
 - `Phase 200` completed a functionality-first Codex personal slice by preserving multiple visible usage windows, expanding Codex page-capture snippets, and surfacing the most constrained visible percentage window across dashboard, provider detail, and popup paths
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without changing the primary percentage-window quota model
 - `Phase 202` completed repeatable unpacked-extension verification for Codex personal multi-window plus flex-balance context, while fixing DOM capture so repeated percentages and single-character balance values are not lost before parsing

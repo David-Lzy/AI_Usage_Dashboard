@@ -1,6 +1,6 @@
 # Documentation Index
 
-Date: 2026-05-13
+Date: 2026-05-14
 
 Document class:
 
@@ -34,6 +34,7 @@ the shared source of truth.
 - [Phase index](./TODOs/00_Phase_Index.md) - active numbered slice and latest completed slice.
 - [Provider notes](./provider_notes/) - provider-specific implementation and truth-boundary references.
 - [Milestones](./Milestones/) - release and submission handoff records.
+- [Localized operator/store RDP visual QA](./testing/localized_operator_store_rdp_visual_qa/README.md) - representative helper-route locale screenshot evidence.
 
 ## Functional References
 

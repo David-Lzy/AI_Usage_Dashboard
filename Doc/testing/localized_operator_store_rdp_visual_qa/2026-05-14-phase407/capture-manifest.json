@@ -1,0 +1,323 @@
+{
+  "capturedAt": "2026-05-13T15:27:24.324Z",
+  "phase": 407,
+  "runtimeSource": "RDP Chrome unpacked extension",
+  "extensionId": "gkjioiklbdjcknhdglaehbeofkjmmdpc",
+  "browserLabel": "Chrome",
+  "browserExecutablePath": "/opt/google/chrome/chrome",
+  "profileDir": "/home/davidli/.config/google-chrome/Default",
+  "preferencesPath": "/home/davidli/.config/google-chrome/Default/Preferences",
+  "display": ":10.0",
+  "xauthority": "/home/davidli/.Xauthority",
+  "buildCommand": "npm run build",
+  "locales": [
+    "en",
+    "zh-CN",
+    "ja",
+    "de",
+    "ar"
+  ],
+  "routes": [
+    {
+      "key": "interaction-audit",
+      "label": "Interaction audit workspace",
+      "routePath": "src/sidepanel/index.html?surface=full-page#debug-interaction-audit",
+      "expectedTitle": "AI Usage Dashboard",
+      "width": 1280,
+      "height": 900
+    },
+    {
+      "key": "theme-recovery",
+      "label": "Theme recovery review workspace",
+      "routePath": "src/sidepanel/index.html?surface=full-page#debug-theme-recovery-review",
+      "expectedTitle": "AI Usage Dashboard",
+      "width": 1280,
+      "height": 900
+    },
+    {
+      "key": "native-popup-probe",
+      "label": "Native popup probe helper",
+      "routePath": "src/sidepanel/index.html?surface=full-page#debug-native-popup-probe",
+      "expectedTitle": "AI Usage Dashboard Native Popup Probe",
+      "width": 960,
+      "height": 720
+    },
+    {
+      "key": "store-seed",
+      "label": "Store screenshot seed helper",
+      "routePath": "src/sidepanel/index.html?surface=full-page&preset=toolbar-first-quick-glance#debug-store-screenshot-seed",
+      "expectedTitle": "AI Usage Dashboard Screenshot Seed Applied",
+      "width": 960,
+      "height": 720
+    }
+  ],
+  "cleanupRoute": {
+    "key": "cleanup-unlock",
+    "label": "Store screenshot seed cleanup unlock",
+    "routePath": "src/sidepanel/index.html?surface=full-page&preset=unlock#debug-store-screenshot-seed",
+    "expectedTitle": "AI Usage Dashboard Screenshot Seed Cleared",
+    "width": 960,
+    "height": 720
+  },
+  "captures": [
+    {
+      "locale": "en",
+      "routeKey": "interaction-audit",
+      "label": "Interaction audit workspace",
+      "routePath": "src/sidepanel/index.html?surface=full-page&app-locale=en#debug-interaction-audit",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&app-locale=en#debug-interaction-audit",
+      "title": "AI Usage Dashboard",
+      "windowId": "0x2e00029",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/en-interaction-audit.png"
+    },
+    {
+      "locale": "en",
+      "routeKey": "theme-recovery",
+      "label": "Theme recovery review workspace",
+      "routePath": "src/sidepanel/index.html?surface=full-page&app-locale=en#debug-theme-recovery-review",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&app-locale=en#debug-theme-recovery-review",
+      "title": "AI Usage Dashboard",
+      "windowId": "0x2e00003",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/en-theme-recovery.png"
+    },
+    {
+      "locale": "en",
+      "routeKey": "native-popup-probe",
+      "label": "Native popup probe helper",
+      "routePath": "src/sidepanel/index.html?surface=full-page&app-locale=en#debug-native-popup-probe",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&app-locale=en#debug-native-popup-probe",
+      "title": "AI Usage Dashboard Native Popup Probe",
+      "windowId": "0x2e00003",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/en-native-popup-probe.png"
+    },
+    {
+      "locale": "en",
+      "routeKey": "store-seed",
+      "label": "Store screenshot seed helper",
+      "routePath": "src/sidepanel/index.html?surface=full-page&preset=toolbar-first-quick-glance&app-locale=en#debug-store-screenshot-seed",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&preset=toolbar-first-quick-glance&app-locale=en#debug-store-screenshot-seed",
+      "title": "AI Usage Dashboard Screenshot Seed Applied",
+      "windowId": "0x2e00003",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/en-store-seed.png"
+    },
+    {
+      "locale": "zh-CN",
+      "routeKey": "interaction-audit",
+      "label": "Interaction audit workspace",
+      "routePath": "src/sidepanel/index.html?surface=full-page&app-locale=zh-CN#debug-interaction-audit",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&app-locale=zh-CN#debug-interaction-audit",
+      "title": "AI Usage Dashboard",
+      "windowId": "0x2e00003",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/zh_cn-interaction-audit.png"
+    },
+    {
+      "locale": "zh-CN",
+      "routeKey": "theme-recovery",
+      "label": "Theme recovery review workspace",
+      "routePath": "src/sidepanel/index.html?surface=full-page&app-locale=zh-CN#debug-theme-recovery-review",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&app-locale=zh-CN#debug-theme-recovery-review",
+      "title": "AI Usage Dashboard",
+      "windowId": "0x2e00003",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/zh_cn-theme-recovery.png"
+    },
+    {
+      "locale": "zh-CN",
+      "routeKey": "native-popup-probe",
+      "label": "Native popup probe helper",
+      "routePath": "src/sidepanel/index.html?surface=full-page&app-locale=zh-CN#debug-native-popup-probe",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&app-locale=zh-CN#debug-native-popup-probe",
+      "title": "AI Usage Dashboard Native Popup Probe",
+      "windowId": "0x2e00003",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/zh_cn-native-popup-probe.png"
+    },
+    {
+      "locale": "zh-CN",
+      "routeKey": "store-seed",
+      "label": "Store screenshot seed helper",
+      "routePath": "src/sidepanel/index.html?surface=full-page&preset=toolbar-first-quick-glance&app-locale=zh-CN#debug-store-screenshot-seed",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&preset=toolbar-first-quick-glance&app-locale=zh-CN#debug-store-screenshot-seed",
+      "title": "AI Usage Dashboard Screenshot Seed Applied",
+      "windowId": "0x2e00003",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/zh_cn-store-seed.png"
+    },
+    {
+      "locale": "ja",
+      "routeKey": "interaction-audit",
+      "label": "Interaction audit workspace",
+      "routePath": "src/sidepanel/index.html?surface=full-page&app-locale=ja#debug-interaction-audit",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&app-locale=ja#debug-interaction-audit",
+      "title": "AI Usage Dashboard",
+      "windowId": "0x2e00003",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/ja-interaction-audit.png"
+    },
+    {
+      "locale": "ja",
+      "routeKey": "theme-recovery",
+      "label": "Theme recovery review workspace",
+      "routePath": "src/sidepanel/index.html?surface=full-page&app-locale=ja#debug-theme-recovery-review",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&app-locale=ja#debug-theme-recovery-review",
+      "title": "AI Usage Dashboard",
+      "windowId": "0x2e00003",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/ja-theme-recovery.png"
+    },
+    {
+      "locale": "ja",
+      "routeKey": "native-popup-probe",
+      "label": "Native popup probe helper",
+      "routePath": "src/sidepanel/index.html?surface=full-page&app-locale=ja#debug-native-popup-probe",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&app-locale=ja#debug-native-popup-probe",
+      "title": "AI Usage Dashboard Native Popup Probe",
+      "windowId": "0x2e00003",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/ja-native-popup-probe.png"
+    },
+    {
+      "locale": "ja",
+      "routeKey": "store-seed",
+      "label": "Store screenshot seed helper",
+      "routePath": "src/sidepanel/index.html?surface=full-page&preset=toolbar-first-quick-glance&app-locale=ja#debug-store-screenshot-seed",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&preset=toolbar-first-quick-glance&app-locale=ja#debug-store-screenshot-seed",
+      "title": "AI Usage Dashboard Screenshot Seed Applied",
+      "windowId": "0x2e00003",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/ja-store-seed.png"
+    },
+    {
+      "locale": "de",
+      "routeKey": "interaction-audit",
+      "label": "Interaction audit workspace",
+      "routePath": "src/sidepanel/index.html?surface=full-page&app-locale=de#debug-interaction-audit",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&app-locale=de#debug-interaction-audit",
+      "title": "AI Usage Dashboard",
+      "windowId": "0x2e00003",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/de-interaction-audit.png"
+    },
+    {
+      "locale": "de",
+      "routeKey": "theme-recovery",
+      "label": "Theme recovery review workspace",
+      "routePath": "src/sidepanel/index.html?surface=full-page&app-locale=de#debug-theme-recovery-review",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&app-locale=de#debug-theme-recovery-review",
+      "title": "AI Usage Dashboard",
+      "windowId": "0x2e00003",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/de-theme-recovery.png"
+    },
+    {
+      "locale": "de",
+      "routeKey": "native-popup-probe",
+      "label": "Native popup probe helper",
+      "routePath": "src/sidepanel/index.html?surface=full-page&app-locale=de#debug-native-popup-probe",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&app-locale=de#debug-native-popup-probe",
+      "title": "AI Usage Dashboard Native Popup Probe",
+      "windowId": "0x2e00003",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/de-native-popup-probe.png"
+    },
+    {
+      "locale": "de",
+      "routeKey": "store-seed",
+      "label": "Store screenshot seed helper",
+      "routePath": "src/sidepanel/index.html?surface=full-page&preset=toolbar-first-quick-glance&app-locale=de#debug-store-screenshot-seed",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&preset=toolbar-first-quick-glance&app-locale=de#debug-store-screenshot-seed",
+      "title": "AI Usage Dashboard Screenshot Seed Applied",
+      "windowId": "0x2e00003",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/de-store-seed.png"
+    },
+    {
+      "locale": "ar",
+      "routeKey": "interaction-audit",
+      "label": "Interaction audit workspace",
+      "routePath": "src/sidepanel/index.html?surface=full-page&app-locale=ar#debug-interaction-audit",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&app-locale=ar#debug-interaction-audit",
+      "title": "AI Usage Dashboard",
+      "windowId": "0x2e00003",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/ar-interaction-audit.png"
+    },
+    {
+      "locale": "ar",
+      "routeKey": "theme-recovery",
+      "label": "Theme recovery review workspace",
+      "routePath": "src/sidepanel/index.html?surface=full-page&app-locale=ar#debug-theme-recovery-review",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&app-locale=ar#debug-theme-recovery-review",
+      "title": "AI Usage Dashboard",
+      "windowId": "0x2e00003",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/ar-theme-recovery.png"
+    },
+    {
+      "locale": "ar",
+      "routeKey": "native-popup-probe",
+      "label": "Native popup probe helper",
+      "routePath": "src/sidepanel/index.html?surface=full-page&app-locale=ar#debug-native-popup-probe",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&app-locale=ar#debug-native-popup-probe",
+      "title": "AI Usage Dashboard Native Popup Probe",
+      "windowId": "0x2e00003",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/ar-native-popup-probe.png"
+    },
+    {
+      "locale": "ar",
+      "routeKey": "store-seed",
+      "label": "Store screenshot seed helper",
+      "routePath": "src/sidepanel/index.html?surface=full-page&preset=toolbar-first-quick-glance&app-locale=ar#debug-store-screenshot-seed",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&preset=toolbar-first-quick-glance&app-locale=ar#debug-store-screenshot-seed",
+      "title": "AI Usage Dashboard Screenshot Seed Applied",
+      "windowId": "0x2e00003",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/ar-store-seed.png"
+    }
+  ],
+  "cleanupCaptures": [
+    {
+      "locale": "en",
+      "routeKey": "cleanup-unlock",
+      "label": "Store screenshot seed cleanup unlock",
+      "routePath": "src/sidepanel/index.html?surface=full-page&preset=unlock&app-locale=en#debug-store-screenshot-seed",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&preset=unlock&app-locale=en#debug-store-screenshot-seed",
+      "title": "AI Usage Dashboard Screenshot Seed Cleared",
+      "windowId": "0x2e00003",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/en-cleanup-unlock.png"
+    },
+    {
+      "locale": "zh-CN",
+      "routeKey": "cleanup-unlock",
+      "label": "Store screenshot seed cleanup unlock",
+      "routePath": "src/sidepanel/index.html?surface=full-page&preset=unlock&app-locale=zh-CN#debug-store-screenshot-seed",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&preset=unlock&app-locale=zh-CN#debug-store-screenshot-seed",
+      "title": "AI Usage Dashboard Screenshot Seed Cleared",
+      "windowId": "0x2e00003",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/zh_cn-cleanup-unlock.png"
+    },
+    {
+      "locale": "ja",
+      "routeKey": "cleanup-unlock",
+      "label": "Store screenshot seed cleanup unlock",
+      "routePath": "src/sidepanel/index.html?surface=full-page&preset=unlock&app-locale=ja#debug-store-screenshot-seed",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&preset=unlock&app-locale=ja#debug-store-screenshot-seed",
+      "title": "AI Usage Dashboard Screenshot Seed Cleared",
+      "windowId": "0x2e00003",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/ja-cleanup-unlock.png"
+    },
+    {
+      "locale": "de",
+      "routeKey": "cleanup-unlock",
+      "label": "Store screenshot seed cleanup unlock",
+      "routePath": "src/sidepanel/index.html?surface=full-page&preset=unlock&app-locale=de#debug-store-screenshot-seed",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&preset=unlock&app-locale=de#debug-store-screenshot-seed",
+      "title": "AI Usage Dashboard Screenshot Seed Cleared",
+      "windowId": "0x2e00003",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/de-cleanup-unlock.png"
+    },
+    {
+      "locale": "ar",
+      "routeKey": "cleanup-unlock",
+      "label": "Store screenshot seed cleanup unlock",
+      "routePath": "src/sidepanel/index.html?surface=full-page&preset=unlock&app-locale=ar#debug-store-screenshot-seed",
+      "url": "chrome-extension://gkjioiklbdjcknhdglaehbeofkjmmdpc/src/sidepanel/index.html?surface=full-page&preset=unlock&app-locale=ar#debug-store-screenshot-seed",
+      "title": "AI Usage Dashboard Screenshot Seed Cleared",
+      "windowId": "0x2e00003",
+      "outputPath": "Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/ar-cleanup-unlock.png"
+    }
+  ],
+  "failures": [],
+  "notes": [
+    "Capture route URLs include app-locale overrides for each representative locale.",
+    "Store screenshot seed was unlocked after each locale capture to avoid leaving the runtime lock enabled.",
+    "The loaded unpacked extension path was detected from the Chrome profile Preferences file.",
+    "The current session did not automate chrome://extensions reload; fresh app windows were opened after npm run build against the detected dist-backed extension id."
+  ]
+}

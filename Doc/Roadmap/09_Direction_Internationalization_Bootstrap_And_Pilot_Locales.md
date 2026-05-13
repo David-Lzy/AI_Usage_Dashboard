@@ -1,6 +1,6 @@
 # Direction 09 - Internationalization Bootstrap And Pilot Locales
 
-Date: 2026-05-13
+Date: 2026-05-14
 
 Document class:
 
@@ -88,6 +88,7 @@ Execution note:
 - seventy-second executable slice landed on `2026-05-13` through `Phase 404`
 - seventy-third executable slice landed on `2026-05-14` through `Phase 405`
 - seventy-fourth release-gate baseline slice landed on `2026-05-14` through `Phase 406`
+- seventy-fifth visual QA slice landed on `2026-05-14` through `Phase 407`
 - `Phase 200` and `Phase 201` intentionally paused this i18n/diagnostic follow-up line for functionality-first Codex personal usage-context surfacing while Codex budget is constrained
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
@@ -119,7 +120,7 @@ It is:
 
 ## Current Truth
 
-As of 2026-05-13:
+As of 2026-05-14:
 
 - the manifest defines `default_locale = en`
 - the repo ships manifest-level Chrome catalogs for 14 locale directories: `en`, `zh_CN`, `zh_TW`, `ja`, `ko`, `es_419`, `pt_BR`, `fr`, `de`, `it`, `ru`, `ar`, `hi`, and `id`
@@ -148,7 +149,8 @@ As of 2026-05-13:
 - `npm run i18n:check` now also verifies the 14-locale Chrome Web Store listing draft has registry-aligned locale sections and complete listing field structure
 - the full `npm run release:check` gate passed after the 14-locale expansion and runtime message catalog split in `Phase 396`, and passed again after typed diagnostic presentation reached 14-locale coverage in `Phase 401`
 - the full `npm run release:check` gate passed after operator/store helper localization in `Phase 406`
-- active `Phase 407` covers localized operator/store RDP visual QA before queued localization maintenance follow-ups
+- localized operator/store helper RDP Chrome visual QA is recorded for `en`, `zh-CN`, `ja`, `de`, and `ar` in [2026-05-14-phase407](../testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/README.md)
+- active `Phase 408` covers localization copy chunk-size audit before queued presentation-split maintenance follow-ups
 - the current shipped runtime localized slice covers:
   - popup shell
   - popup explanatory copy
@@ -259,7 +261,7 @@ Ship one localization architecture that can start with a small pilot set and the
 - the runtime app reads translated UI strings from one shared localization contract
 - the app uses locale-aware formatting for counts, timestamps, and durations
 - at least one pilot locale beyond English is shippable without layout breakage
-- Arabic resolves `rtl` from locale metadata and has one representative RDP visual QA baseline, but the new locale set still needs reviewed translations before it is considered fully polished
+- Arabic resolves `rtl` from locale metadata and now has representative localized operator/store helper RDP visual QA evidence, but the new locale set still needs reviewed translations before it is considered fully polished
 
 ## Main Risks
 
@@ -352,8 +354,8 @@ Recommended rollout:
 75. operator-workspace 14-locale copy - shipped in `Phase 404`
 76. store-helper 14-locale copy - shipped in `Phase 405`
 77. post-helper localization release gate - shipped in `Phase 406`
-78. localized operator/store RDP visual QA - active in `Phase 407`
-79. localization copy chunk-size audit - queued in `Phase 408`
+78. localized operator/store RDP visual QA - shipped in `Phase 407`
+79. localization copy chunk-size audit - active in `Phase 408`
 80. interaction-audit consumer-copy presentation split - queued in `Phase 409`
 81. store-helper error presentation split - queued in `Phase 410`
 

@@ -16,8 +16,8 @@ Freshness model:
 
 Status note:
 
-- queued after `Phase 406`
-- representative visual QA for newly localized operator and store helper routes
+- completed and archived on 2026-05-14
+- representative visual QA for newly localized operator and store helper routes landed under `Doc/testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/`
 
 ## Goal
 
@@ -48,6 +48,34 @@ Capture or inspect representative extension-mode surfaces for the newly localize
 - RDP Chrome extension-mode captures or documented manual checks
 - `npm run docs:check`
 - `git diff --check`
+
+## Closeout
+
+Completed on 2026-05-14.
+
+Summary:
+
+- built `dist/` with `npm run build`
+- detected the RDP Chrome unpacked extension id `gkjioiklbdjcknhdglaehbeofkjmmdpc`
+- captured representative extension-mode screenshots for `en`, `zh-CN`, `ja`, `de`, and `ar`
+- covered interaction audit, theme recovery, store screenshot seed, and native popup probe helper routes
+- unlocked the store screenshot seed after each locale so the runtime lock was not left enabled
+- archived the visual QA package at [2026-05-14-phase407](../../../../testing/localized_operator_store_rdp_visual_qa/2026-05-14-phase407/README.md)
+
+Verification:
+
+- `npm run build`
+- RDP Chrome capture matrix: `20` target screenshots plus `5` cleanup screenshots
+- sampled visual inspection of Arabic RTL and German long-label screenshots
+- `identify` sanity check confirmed target screenshots were non-blank after recapturing one initial black X11 frame
+- `npm run test -- src/shared/i18n.test.ts`
+- `npm run docs:check`
+- `git diff --check`
+
+Follow-up:
+
+- continue with `Phase 408` localization copy chunk-size audit
+- keep native toolbar popup capture as a separate manual boundary; the helper app-window probe still reports that the app window has no toolbar
 
 ## Follow-Up
 

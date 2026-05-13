@@ -1,6 +1,6 @@
 # Direction 08 - Documentation Completion And Truth Audit
 
-Date: 2026-04-24
+Date: 2026-05-14
 
 Document class:
 
@@ -49,9 +49,9 @@ Today the truthful answer is "some are complete, some are intentionally living,"
 
 ## Current Truth
 
-As of 2026-05-13:
+As of 2026-05-14:
 
-- numbered phase docs are archived through `Phase 406`, with active `Phase 407` and queued `Phase 408`-`Phase 410` continuing visual-QA and maintenance follow-up work
+- numbered phase docs are archived through `Phase 407`, with active `Phase 408` and queued `Phase 409`-`Phase 410` continuing localization bundle and presentation-split maintenance follow-up work
 - roadmap directions remain open by design
 - interaction-audit request docs now show `0` pending requests and `1` fulfilled real operator request
 - theme-recovery request docs now show `0` pending requests and `1` fulfilled real operator request
