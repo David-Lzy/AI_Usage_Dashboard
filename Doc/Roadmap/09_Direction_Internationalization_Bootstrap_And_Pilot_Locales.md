@@ -78,6 +78,7 @@ Execution note:
 - sixty-second planning split landed on `2026-05-13` through `Phase 393.3`
 - sixty-third executable slice landed on `2026-05-13` through `Phase 393.3.2`
 - sixty-fourth release-gate baseline slice landed on `2026-05-13` through `Phase 396`
+- sixty-fifth inventory slice landed on `2026-05-13` through `Phase 397`
 - `Phase 200` and `Phase 201` intentionally paused this i18n/diagnostic follow-up line for functionality-first Codex personal usage-context surfacing while Codex budget is constrained
 - this direction sharpens [Direction 07 - Internationalization And Localization](./07_Direction_Internationalization_And_Localization.md) into a more actionable first rollout
 
@@ -319,7 +320,7 @@ Recommended rollout:
 65. Provider Detail 14-locale copy - shipped in `Phase 393.3.1`
 66. Provider-source display 14-locale copy - shipped in `Phase 393.3.2`
 67. deeper diagnostic-body localization - deferred until a separate product need exists and the raw evidence compatibility boundary remains intact
-68. diagnostic presentation 14-locale inventory - queued in `Phase 397`
+68. diagnostic presentation 14-locale inventory - shipped in `Phase 397`
 69. warning diagnostic presentation 14-locale copy - queued in `Phase 398`
 70. source diagnostic presentation 14-locale copy - queued in `Phase 399`
 71. adapter-error diagnostic presentation 14-locale copy - queued in `Phase 400`

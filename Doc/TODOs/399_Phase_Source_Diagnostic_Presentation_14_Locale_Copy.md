@@ -27,11 +27,21 @@ Add explicit 14-locale presentation copy for typed source-selection and source-f
 
 - Localize source kind and source preference labels used by diagnostic presentation.
 - Localize source-selection summaries, no-live-path summaries, and fallback summaries generated from typed params.
+- Use [I18n_Diagnostic_Presentation_14_Locale_Inventory.md](../I18n/I18n_Diagnostic_Presentation_14_Locale_Inventory.md) as the code list:
+  - `source.auto_selected_official_api`
+  - `source.auto_selected_session_page`
+  - `source.preference_selected_official_api`
+  - `source.preference_selected_session_page`
+  - `source.official_api_missing_credential`
+  - `source.official_api_failed`
+  - `source.session_page_unavailable`
+  - `source.no_live_path`
 - Add tests proving every non-English locale gets representative non-English source diagnostic presentation.
 
 ## Preserved Boundaries
 
 - Do not translate raw `sourceSelectionReason` or `sourceFallbackReason`.
+- Do not translate `ProviderDiagnostic.rawMessage`, provider ids, host labels, URLs, route hints, archive/export schemas, or vendor page text.
 - Do not change source selection, fallback selection, provider source contracts, adapters, or raw evidence rendering.
 - Do not start adapter-error presentation in this phase.
 
@@ -44,6 +54,7 @@ Add explicit 14-locale presentation copy for typed source-selection and source-f
 ## Planned Verification
 
 - `npm run i18n:check`
+- focused diagnostic presentation tests for source diagnostics
 - `npm run test -- src/shared/i18n.test.ts`
 - `npm run test -- src/sidepanel/settings-view-models.test.ts`
 - `npm run typecheck`

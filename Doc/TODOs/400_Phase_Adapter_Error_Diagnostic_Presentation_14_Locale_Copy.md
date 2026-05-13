@@ -27,12 +27,17 @@ Add explicit 14-locale presentation copy for typed adapter-error diagnostics whi
 
 - Localize adapter-error labels and short summaries generated from typed params.
 - Cover parse-failed, unsupported-response, and unexpected-error presentation.
+- Use [I18n_Diagnostic_Presentation_14_Locale_Inventory.md](../I18n/I18n_Diagnostic_Presentation_14_Locale_Inventory.md) as the code list:
+  - `adapter.parse_failed`
+  - `adapter.unsupported_response`
+  - `adapter.unexpected_error`
 - Add tests proving every non-English locale gets representative non-English adapter-error presentation.
 - Update i18n inventory/backlog docs when diagnostic presentation coverage is complete.
 
 ## Preserved Boundaries
 
 - Do not translate raw adapter diagnostic bodies.
+- Do not translate `ProviderDiagnostic.rawMessage`, provider ids, host labels, URLs, route hints, archive/export schemas, or vendor page text.
 - Do not change parser behavior, adapter behavior, typed diagnostic builders, source-state classification, archive/export schemas, or raw evidence rendering.
 - Do not start operator-workspace or store-helper localization in this phase.
 
@@ -46,6 +51,7 @@ Add explicit 14-locale presentation copy for typed adapter-error diagnostics whi
 ## Planned Verification
 
 - `npm run i18n:check`
+- focused diagnostic presentation tests for adapter-error diagnostics
 - `npm run test -- src/shared/i18n.test.ts`
 - `npm run test -- src/sidepanel/settings-view-models.test.ts`
 - `npm run typecheck`

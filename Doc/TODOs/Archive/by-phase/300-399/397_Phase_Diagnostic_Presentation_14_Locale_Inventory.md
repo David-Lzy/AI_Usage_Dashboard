@@ -16,7 +16,7 @@ Freshness model:
 
 Status note:
 
-- queued after `Phase 396`
+- completed and archived on 2026-05-13
 - inventory and split-planning phase only
 
 ## Goal
@@ -51,3 +51,22 @@ Inventory `src/shared/provider-diagnostic-presentation.ts` so warning, source-se
 ## Follow-Up
 
 - Start `Phase 398` warning diagnostic presentation copy after the inventory is archived.
+
+## Closeout
+
+Completed on 2026-05-13.
+
+Summary:
+
+- Added [I18n_Diagnostic_Presentation_14_Locale_Inventory.md](../../../../I18n/I18n_Diagnostic_Presentation_14_Locale_Inventory.md) as the maintained diagnostic presentation inventory.
+- Mapped typed diagnostic presentation into three implementation slices:
+  - `Phase 398` warning diagnostic presentation
+  - `Phase 399` source-selection and fallback diagnostic presentation
+  - `Phase 400` adapter-error diagnostic presentation
+- Confirmed raw `warningReason`, `sourceSelectionReason`, `sourceFallbackReason`, adapter raw body text, provider ids, host labels, URLs, route hints, archive/export schemas, and unknown diagnostic fallback behavior stay outside localization.
+
+Verification:
+
+- `rg 'getProviderDiagnosticPresentation|warningDiagnostic|sourceDiagnostic|adapter_error' src Doc` completed.
+- `npm run docs:check` passed.
+- `git diff --check` passed.

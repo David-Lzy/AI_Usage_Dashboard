@@ -218,6 +218,7 @@ Recommended next extraction order:
 Current maintained backlog:
 
 - [I18n_Deeper_Runtime_Copy_Backlog.md](./I18n_Deeper_Runtime_Copy_Backlog.md)
+- [I18n_Diagnostic_Presentation_14_Locale_Inventory.md](./I18n_Diagnostic_Presentation_14_Locale_Inventory.md)
 
 ## Truth Boundary
 

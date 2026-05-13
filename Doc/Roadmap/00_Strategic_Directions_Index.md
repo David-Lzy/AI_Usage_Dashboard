@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is completed through `Phase 396`, with the post-localization maintenance release gate passing and active `Phase 397` selected for typed diagnostic presentation inventory before queued `Phase 398` through `Phase 400` cover 14-locale diagnostic presentation follow-up
+- the numbered phase queue is completed through `Phase 397`, with the post-localization maintenance release gate passing and active `Phase 398` selected for typed warning diagnostic presentation before queued `Phase 399` and `Phase 400` cover source and adapter-error diagnostic presentation follow-up
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
