@@ -65,7 +65,7 @@ Maintenance note:
 - operator-workspace copy now lives in `src/shared/operator-workspace-localized-copy.ts`, while `src/shared/localized-copy.ts` keeps compatibility re-exports for interaction audit and theme recovery routes
 - popup copy now lives in `src/shared/popup-localized-copy.ts`, while `src/shared/localized-copy.ts` keeps a compatibility re-export for popup runtime and view-model consumers
 - settings copy now lives in `src/shared/settings-localized-copy.ts`, while `src/shared/localized-copy.ts` keeps compatibility re-exports for Settings routes, section components, and view-model consumers
-- diagnostic presentation now lives in `src/shared/provider-diagnostic-presentation.ts`, while `src/shared/localized-copy.ts` keeps compatibility re-exports for diagnostic view-model consumers
+- diagnostic presentation dispatch now lives in `src/shared/provider-diagnostic-presentation.ts`; warning and source diagnostic 14-locale copy live in focused helpers, while `src/shared/localized-copy.ts` keeps compatibility re-exports for diagnostic view-model consumers
 - standard session-page actions now live in `src/sidepanel/standard-app-session-page-actions.ts`, keeping Chrome tab discovery, source-page recovery, page-binding, and active-page attach flow out of the standard app action aggregator
 - Settings credential draft state now lives in `src/sidepanel/use-settings-credential-drafts.ts`, keeping provider API key and Codex workspace draft save/clear/input handlers out of `SettingsPage.tsx`
 - Settings preference option assembly now lives in `src/sidepanel/settings-preference-options.ts`, keeping select, numeric combobox, and action badge option construction out of `SettingsPreferencesSection.tsx`
