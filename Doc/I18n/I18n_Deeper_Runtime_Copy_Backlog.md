@@ -42,7 +42,8 @@ Source bucket:
 User-facing copy:
 
 - `Phase 392.1` shipped explicit 14-locale coverage for guidance-card first-run titles, setup coverage, snapshot status, and header readiness copy
-- `Phase 392.2` should finish featured-section summaries, featured-card labels and actions, action-section labels, surface-route notes, and aria copy
+- `Phase 392.2.1` should finish featured-section summaries plus featured-card labels and actions
+- `Phase 392.2.2` should finish action-section labels, surface-route notes, and aria copy
 
 Reason:
 
@@ -147,9 +148,10 @@ Reason:
 ## Phase Mapping
 
 - `Phase 392.1` translated the popup first-run guidance, setup coverage, snapshot status, and header buckets for all 14 runtime locales.
-- `Phase 392.2` should translate the remaining popup featured-section, featured-card, action-section, surface-role, and aria buckets for all 14 runtime locales.
+- `Phase 392.2.1` should translate the popup featured-section and featured-card buckets for all 14 runtime locales.
+- `Phase 392.2.2` should translate the popup action-section, surface-role, and aria buckets for all 14 runtime locales.
 - `Phase 393` should translate Settings, provider-detail, and provider-source wrapper buckets for all 14 runtime locales.
-- Diagnostics, operator workspaces, and store helper routes should remain follow-up work unless `Phase 392.2` or `Phase 393` proves small enough to split safely.
+- Diagnostics, operator workspaces, and store helper routes should remain follow-up work unless `Phase 392.2.2` or `Phase 393` proves small enough to split safely.
 
 ## Verification Pattern
 

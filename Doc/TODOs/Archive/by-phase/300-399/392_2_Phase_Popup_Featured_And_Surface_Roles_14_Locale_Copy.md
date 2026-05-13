@@ -17,7 +17,8 @@ Freshness model:
 Status note:
 
 - child phase split from `Phase 392`
-- queued after `Phase 392.1`
+- completed and archived on 2026-05-13
+- split into `Phase 392.2.1` and `Phase 392.2.2`
 
 ## Goal
 
@@ -54,3 +55,8 @@ Complete the remaining popup structured-copy translation after first-run guidanc
 ## Follow-Up
 
 - Move to Settings and provider-detail deeper runtime copy in `Phase 393`.
+
+## Split Closeout
+
+- `Phase 392.2` was still too large for one safe implementation slice because it grouped featured provider cards with action-section, surface-role, and aria copy.
+- The implementation queue now uses `Phase 392.2.1` for featured-section and featured-card copy, then `Phase 392.2.2` for action-section, surface-role, and aria copy.
