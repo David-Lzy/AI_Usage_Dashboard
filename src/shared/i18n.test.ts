@@ -130,6 +130,15 @@ describe("runtime i18n", () => {
     expect(i18n.t("popup.header.title")).toBe("快速概览");
   });
 
+  it("returns translated runtime strings for the first zh-TW shell slice", () => {
+    const i18n = createRuntimeI18n("zh-TW");
+
+    expect(i18n.t("dashboard.hero.title")).toBe("一個面板掌握 AI 編碼配額");
+    expect(i18n.t("popup.header.title")).toBe("快速概覽");
+    expect(i18n.t("settings.topbar.title")).toBe("設定");
+    expect(i18n.t("settings.preferences.locale.system")).toBe("跟隨系統");
+  });
+
   it("localizes quick theme toggle copy from the next explicit mode", () => {
     const i18n = createRuntimeI18n("zh-CN");
 
