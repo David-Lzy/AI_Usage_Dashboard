@@ -164,7 +164,7 @@ This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still maki
 
 - runtime React localization is now partially shipped, not fully rolled out
 - runtime message catalogs now live in `src/shared/runtime-message-catalogs.ts`; `src/shared/i18n.ts` owns the locale registry, locale resolution, text direction, formatting, and public runtime helper functions
-- runtime locale architecture now covers 14 locales; `zh-CN` has broad reviewed non-English runtime copy, `zh-TW`, `ja`, `ko`, `es-419`, `pt-BR`, `fr`, `de`, `it`, `ru`, and `ar` have first shell-level runtime pilots, and other non-English locales currently rely on English fallback for deeper runtime copy until a translation-review phase replaces those entries
+- runtime locale architecture now covers 14 locales; `zh-CN` has broad reviewed non-English runtime copy, `zh-TW`, `ja`, `ko`, `es-419`, `pt-BR`, `fr`, `de`, `it`, `ru`, `ar`, and `hi` have first shell-level runtime pilots, and other non-English locales currently rely on English fallback for deeper runtime copy until a translation-review phase replaces those entries
 - runtime document roots now sync `lang` and `dir` for popup, sidepanel, and full-page surfaces
 - the current localized slice covers:
   - popup shell
@@ -223,6 +223,7 @@ This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still maki
   - `it`
   - `ru`
   - `ar`
+  - `hi`
 - shipped architecture and manifest locale set:
   - `en`
   - `zh-CN`

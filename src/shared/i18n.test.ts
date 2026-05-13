@@ -237,6 +237,20 @@ describe("runtime i18n", () => {
     expect(i18n.resolvedTextDirection).toBe("rtl");
   });
 
+  it("returns translated runtime strings for the first hi shell slice", () => {
+    const i18n = createRuntimeI18n("hi");
+
+    expect(i18n.t("dashboard.hero.title")).toBe(
+      "AI coding quotas के लिए एक डैशबोर्ड",
+    );
+    expect(i18n.t("popup.header.title")).toBe("त्वरित झलक");
+    expect(i18n.t("settings.topbar.title")).toBe("सेटिंग्स");
+    expect(i18n.t("settings.preferences.locale.system")).toBe(
+      "सिस्टम का अनुसरण करें",
+    );
+    expect(i18n.resolvedTextDirection).toBe("ltr");
+  });
+
   it("localizes quick theme toggle copy from the next explicit mode", () => {
     const i18n = createRuntimeI18n("zh-CN");
 
