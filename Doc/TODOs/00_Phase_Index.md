@@ -34,8 +34,8 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [405_Phase_Store_Helper_14_Locale_Copy.md](./405_Phase_Store_Helper_14_Locale_Copy.md)
-- latest completed slice: [404_Phase_Operator_Workspace_14_Locale_Copy.md](./Archive/by-phase/400-499/404_Phase_Operator_Workspace_14_Locale_Copy.md)
+- active phase file: none
+- latest completed slice: [405_Phase_Store_Helper_14_Locale_Copy.md](./Archive/by-phase/400-499/405_Phase_Store_Helper_14_Locale_Copy.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -797,6 +797,7 @@ Completed phases should be moved to:
 - the 2026-05-13 `Phase 402` closeout added a maintained operator-workspace 14-locale copy inventory for `Phase 404` while preserving evidence, export, request, route, preset, filename, and generated command boundaries
 - the 2026-05-13 `Phase 403` closeout added a maintained store-helper 14-locale copy inventory for `Phase 405` while preserving automation titles, preset ids, route hashes, capture-plan truth fields, final screenshot surfaces, request/archive ids, filenames, generated evidence, and listing source text
 - the 2026-05-13 `Phase 404` closeout added explicit 14-locale operator-workspace helper copy while preserving consumer-only interaction-audit labels and all export, evidence, request, route, preset, filename, and generated command boundaries
+- the 2026-05-14 `Phase 405` closeout added explicit 14-locale store-helper copy while preserving automation titles, preset ids, route hashes, capture-plan identity fields, generated evidence, final screenshot surfaces, and listing source text
 
 ## Delivery Standard For Each Phase
 

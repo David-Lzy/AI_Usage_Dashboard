@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-13:
 
-- the numbered phase queue is completed through `Phase 404`, with active `Phase 405` selected for store-helper 14-locale copy implementation
+- the numbered phase queue is completed through `Phase 405`; no numbered phase is currently queued after `Phase 405`
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness

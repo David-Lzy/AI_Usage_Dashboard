@@ -18,6 +18,7 @@ Status note:
 
 - created in `Phase 403`
 - implementation input for `Phase 405`
+- `Phase 405` completed helper-owned store-helper runtime copy; automation titles, capture-plan fields, listing source text, and generated evidence remain protected raw data
 
 ## Purpose
 
@@ -25,17 +26,17 @@ Define the safe 14-locale implementation boundary for store-helper runtime copy,
 
 ## Current Runtime State
 
-- `src/shared/store-workflow-localized-copy.ts` currently has one explicit `zh-CN` branch plus English fallback for every other runtime locale.
+- `src/shared/store-workflow-localized-copy.ts` has explicit helper-owned copy for all 14 runtime locales after `Phase 405`.
 - `src/shared/localized-copy.ts` re-exports `buildStoreWorkflowLocalizedCopy`; this public path must remain stable.
-- `src/shared/store-workflow-localized-copy.test.ts` currently guards English, Simplified Chinese, and the legacy re-export path.
+- `src/shared/store-workflow-localized-copy.test.ts` guards every shipped locale, representative Arabic copy, preset interpolation, unknown preset fallback, empty unsupported captions, Simplified Chinese, English, and the legacy re-export path.
 - The helper feeds:
   - `src/sidepanel/routes/StoreScreenshotSeedPage.tsx`
   - `src/sidepanel/routes/StoreScreenshotNativePopupProbePage.tsx`
 - The helper routes are internal operator routes. They may appear during RDP/store screenshot workflows, but they are not final Chrome Web Store screenshot surfaces.
 
-## Phase 405 Approved Helper Buckets
+## Phase 405 Implemented Helper Buckets
 
-These buckets are stable helper UI copy and should receive explicit copy for all 14 shipped runtime locales in `Phase 405`:
+These buckets are stable helper UI copy and received explicit copy for all 14 shipped runtime locales in `Phase 405`:
 
 ### Screenshot Seed Route
 
