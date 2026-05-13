@@ -205,6 +205,17 @@ describe("runtime i18n", () => {
     expect(i18n.t("settings.preferences.locale.system")).toBe("System folgen");
   });
 
+  it("returns translated runtime strings for the first it shell slice", () => {
+    const i18n = createRuntimeI18n("it");
+
+    expect(i18n.t("dashboard.hero.title")).toBe(
+      "Una dashboard per le quote di coding IA",
+    );
+    expect(i18n.t("popup.header.title")).toBe("Vista rapida");
+    expect(i18n.t("settings.topbar.title")).toBe("Impostazioni");
+    expect(i18n.t("settings.preferences.locale.system")).toBe("Segui sistema");
+  });
+
   it("localizes quick theme toggle copy from the next explicit mode", () => {
     const i18n = createRuntimeI18n("zh-CN");
 
