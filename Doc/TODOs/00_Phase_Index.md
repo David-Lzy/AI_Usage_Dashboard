@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [364_Phase_RC15_Maintenance_Follow_Up_Packaging.md](./Archive/364_Phase_RC15_Maintenance_Follow_Up_Packaging.md)
+- latest completed slice: [365_Phase_Provider_Source_Host_Permission_Contract_Guard.md](./Archive/365_Phase_Provider_Source_Host_Permission_Contract_Guard.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -754,6 +754,7 @@ Completed phases should be moved to:
 - the 2026-05-12 `Phase 307` closeout made Chrome plus the official Playwright Extension bridge the default local automation path for normal web tabs, changed the RDP helper browser preference to Chrome-first with Brave fallback, and made profile audit auto-detect the current unpacked extension id from the Chrome profile
 - the 2026-05-12 `Phase 308` closeout recorded a real Chrome helper smoke pass for `0.1.0-rc.14` dashboard, Settings, focused Settings targets, provider detail, full-page dashboard, and popup surfaces; a later restarted Codex session confirmed direct Playwright MCP can drive normal web tabs but Chrome blocks using that bridge to drive another extension's `chrome-extension://` UI, so extension UI smoke remains on the Chrome RDP helper
 - the 2026-05-13 `Phase 364` closeout bumped the package to `0.1.0-rc.15`, bumped the manifest to `0.1.0.15`, generated `release/ai-usage-dashboard-0.1.0-rc.15.zip`, and recorded SHA256 `5ad5b0771c9a33dc6d04d90c02d1c963f04b072a525c4769ee8c36ac783c9e5a` in the new maintenance follow-up milestone while preserving RC13 as the submitted Chrome Web Store review boundary
+- the 2026-05-13 `Phase 365` closeout added a focused provider source host-permission guard so source route hints, Settings host origins, and manifest optional host permissions stay aligned without expanding runtime permissions or changing provider support claims
 
 ## Delivery Standard For Each Phase
 
