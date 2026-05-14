@@ -34,9 +34,15 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: none
+- active phase file: [434_Phase_Settings_Carousel_Focused_Depth_Layout.md](./434_Phase_Settings_Carousel_Focused_Depth_Layout.md)
 - latest completed slice: [433_Phase_RC17_Display_Preference_Follow_Up_Packaging.md](./Archive/by-phase/400-499/433_Phase_RC17_Display_Preference_Follow_Up_Packaging.md)
-- queued phase files: none
+- queued phase files:
+  - [435_Phase_Circular_Progress_Ring_Value_And_Geometry_Polish.md](./435_Phase_Circular_Progress_Ring_Value_And_Geometry_Polish.md)
+  - [436_Phase_Disclosure_Chevron_State_Animation.md](./436_Phase_Disclosure_Chevron_State_Animation.md)
+  - [437_Phase_Chrome_Extension_Error_Triage_And_Fix.md](./437_Phase_Chrome_Extension_Error_Triage_And_Fix.md)
+  - [438_Phase_Quota_Item_Settings_14_Locale_Copy.md](./438_Phase_Quota_Item_Settings_14_Locale_Copy.md)
+  - [439_Phase_UI_Polish_RDP_QA_And_Doc_Closeout.md](./439_Phase_UI_Polish_RDP_QA_And_Doc_Closeout.md)
+  - [440_Phase_RC18_UI_Polish_Follow_Up_Packaging.md](./440_Phase_RC18_UI_Polish_Follow_Up_Packaging.md)
 
 Completed phases should be moved to:
 
