@@ -2,6 +2,7 @@ import type {
   AppLocalePreference,
   AppSettings,
   PopupCornerStyle,
+  PopupCircularProgressItemsPerRow,
   PopupShadowStyle,
   PopupSizePreset,
   ProgressDisplayStyle,
@@ -21,6 +22,7 @@ import {
   normalizeActionBadgeSelection,
 } from "../shared/action-badge-preferences";
 import {
+  POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW_OPTIONS,
   POPUP_CORNER_STYLE_OPTIONS,
   POPUP_SHADOW_STYLE_OPTIONS,
   POPUP_SIZE_PRESET_OPTIONS,
@@ -76,6 +78,14 @@ export function buildSettingsPreferenceOptions({
     soft: i18n.t("settings.preferences.popup_shadow.soft"),
     elevated: i18n.t("settings.preferences.popup_shadow.elevated"),
   };
+  const popupCircularProgressItemsPerRowOptionLabels: Record<
+    PopupCircularProgressItemsPerRow,
+    string
+  > = {
+    1: i18n.t("settings.preferences.popup_circular_row_count.one"),
+    2: i18n.t("settings.preferences.popup_circular_row_count.two"),
+    3: i18n.t("settings.preferences.popup_circular_row_count.three"),
+  };
   const localeOptions: Array<{ value: AppLocalePreference; label: string }> = [
     { value: "system", label: i18n.t("settings.preferences.locale.system") },
     ...SUPPORTED_APP_LOCALES.map((locale) => ({
@@ -110,6 +120,11 @@ export function buildSettingsPreferenceOptions({
     value: option.value,
     label: popupShadowStyleOptionLabels[option.value],
   }));
+  const popupCircularProgressItemsPerRowOptions =
+    POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW_OPTIONS.map((option) => ({
+      value: option.value,
+      label: popupCircularProgressItemsPerRowOptionLabels[option.value],
+    }));
   const actionBadgeOptions = buildActionBadgeSelectOptions(
     {
       providers: snapshots,
@@ -150,6 +165,7 @@ export function buildSettingsPreferenceOptions({
     popupCornerStyleOptions,
     popupShadowStyleOptions,
     popupSizePresetOptions,
+    popupCircularProgressItemsPerRowOptions,
     progressDisplayStyleOptions,
     syncIntervalErrorText,
     syncIntervalMenuButtonLabel,

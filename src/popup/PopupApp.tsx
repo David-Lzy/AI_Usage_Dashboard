@@ -264,6 +264,9 @@ export function PopupApp() {
         cards={popupModel.featuredProviderCards}
         i18n={runtimeI18n}
         progressColorBands={loadState.appState.settings.progressColorBands}
+        popupCircularProgressItemsPerRow={
+          loadState.appState.settings.popupCircularProgressItemsPerRow
+        }
         progressDisplayStyle={popupProgressStyle}
         progressItemsBySurface={loadState.appState.settings.progressItemsBySurface}
         progressThicknessPx={loadState.appState.settings.progressThicknessPx}

@@ -44,5 +44,6 @@ Status note:
 - `Phase 460` moved all providers into the Quick Setup carousel and removed the separate "More Provider" disclosure while keeping hidden providers editable through card-level visibility controls.
 - `Phase 461` stabilized Settings provider-carousel motion by capping depth offsets and slightly slowing the carousel-local transition while preserving reduced-motion handling and carousel interaction semantics.
 - `Phase 462` moved popup refresh into the title row, added a popup header Settings action, and kept theme, tab, and Settings controls in a compact action row.
-- Current implementation source is ahead of the `0.1.0-rc.19` package by the `Phase 449` through `Phase 462` UI micro-polish phases.
-- `Phase 463` through `Phase 466` are queued as the next scoped UI polish sequence covering popup circular progress density, form-control typography, UI font preference, and visual QA/docs closeout.
+- `Phase 463` added a popup circular progress row-count preference, Settings control, and popup-only circular layout consumption while leaving line progress unchanged.
+- Current implementation source is ahead of the `0.1.0-rc.19` package by the `Phase 449` through `Phase 463` UI micro-polish phases.
+- `Phase 464` through `Phase 466` are queued as the next scoped UI polish sequence covering form-control typography, UI font preference, and visual QA/docs closeout.

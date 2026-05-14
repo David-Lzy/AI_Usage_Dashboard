@@ -15,6 +15,9 @@ function renderFeaturedList(
       cards={cards}
       i18n={createRuntimeI18n("en")}
       progressColorBands={SAMPLE_APP_STATE.settings.progressColorBands}
+      popupCircularProgressItemsPerRow={
+        SAMPLE_APP_STATE.settings.popupCircularProgressItemsPerRow
+      }
       progressDisplayStyle={SAMPLE_APP_STATE.settings.popupProgressStyle}
       progressItemsBySurface={SAMPLE_APP_STATE.settings.progressItemsBySurface}
       progressThicknessPx={SAMPLE_APP_STATE.settings.progressThicknessPx}

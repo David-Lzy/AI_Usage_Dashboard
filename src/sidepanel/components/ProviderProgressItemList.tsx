@@ -1,5 +1,8 @@
+import type { CSSProperties } from "react";
+
 import type {
   DisplaySurface,
+  PopupCircularProgressItemsPerRow,
   ProgressColorBand,
   ProgressDisplayStyle,
   ProgressItemsBySurface,
@@ -17,6 +20,7 @@ type ProviderProgressItemListProps = {
   displayStyle: ProgressDisplayStyle;
   i18n: RuntimeI18n;
   progressColorBands: readonly ProgressColorBand[];
+  popupCircularProgressItemsPerRow?: PopupCircularProgressItemsPerRow;
   progressItemsBySurface: ProgressItemsBySurface;
   progressThicknessPx: number;
   provider: ProviderViewModel;
@@ -123,6 +127,7 @@ export function ProviderProgressItemList({
   displayStyle,
   i18n,
   progressColorBands,
+  popupCircularProgressItemsPerRow,
   progressItemsBySurface,
   progressThicknessPx,
   provider,
@@ -138,10 +143,26 @@ export function ProviderProgressItemList({
     return null;
   }
 
+  const isPopupCircularLayout =
+    surface === "popup" &&
+    (displayStyle === "circle" ||
+      displayStyle === "circle-soft" ||
+      displayStyle === "circle-gauge");
+  const popupCircularItemsPerRow = popupCircularProgressItemsPerRow ?? 2;
+  const listStyle = isPopupCircularLayout
+    ? ({
+        "--popup-circular-items-per-row": popupCircularItemsPerRow,
+      } as CSSProperties)
+    : undefined;
+
   return (
     <div
       className={`provider-progress-item-list provider-progress-item-list--${density} provider-progress-item-list--${displayStyle}`}
+      data-popup-circular-items-per-row={
+        isPopupCircularLayout ? popupCircularItemsPerRow : undefined
+      }
       data-provider-progress-item-list={surface}
+      style={listStyle}
     >
       {visibleProgressItems.map((item) => {
         const detail = formatProgressItemDetail(item, i18n);

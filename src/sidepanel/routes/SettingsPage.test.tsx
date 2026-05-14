@@ -26,6 +26,7 @@ function renderSettingsPage(overrides: Partial<Parameters<typeof SettingsPage>[0
       onFullPageProgressStyleChange={() => {}}
       onPopupSizePresetChange={() => {}}
       onPopupCornerStyleChange={() => {}}
+      onPopupCircularProgressItemsPerRowChange={() => {}}
       onPopupShadowStyleChange={() => {}}
       onProviderOrderBySurfaceChange={() => {}}
       onProgressItemsBySurfaceChange={() => {}}
@@ -64,6 +65,7 @@ describe("SettingsPage", () => {
     expect(html).toContain('data-settings-material-select="theme-mode"');
     expect(html).toContain('data-provider-carousel=""');
     expect(html).toContain(">Quick Setup<");
+    expect(html).toContain('data-settings-material-select="popup-circular-row-count"');
     expect(html).toContain('data-settings-material-select="action-badge-selection"');
     expect(html).toContain('data-provider-order-preferences=""');
     expect(html).toContain('data-provider-progress-preferences=""');

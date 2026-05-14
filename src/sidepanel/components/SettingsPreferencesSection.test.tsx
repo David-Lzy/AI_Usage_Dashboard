@@ -29,6 +29,7 @@ describe("SettingsPreferencesSection", () => {
         onFullPageProgressStyleChange={() => {}}
         onPopupSizePresetChange={() => {}}
         onPopupCornerStyleChange={() => {}}
+        onPopupCircularProgressItemsPerRowChange={() => {}}
         onPopupShadowStyleChange={() => {}}
         onProviderOrderBySurfaceChange={() => {}}
         onProgressItemsBySurfaceChange={() => {}}
@@ -45,6 +46,9 @@ describe("SettingsPreferencesSection", () => {
     expect(html).not.toContain('data-settings-material-select="locale-preference"');
     expect(html).not.toContain('data-settings-material-select="theme-mode"');
     expect(html).toContain('data-color-choice-dropdown="accent-color"');
+    expect(html).toContain('data-settings-material-select="popup-circular-row-count"');
+    expect(html).toContain("Circular items per row");
+    expect(html).toContain("2 per row");
     expect(html).toContain('data-settings-material-select="action-badge-selection"');
     expect(html).toContain('data-provider-order-preferences=""');
     expect(html).toContain('data-provider-progress-preferences=""');

@@ -21,8 +21,10 @@ import {
 } from "./progress-display";
 import {
   DEFAULT_POPUP_CORNER_STYLE,
+  DEFAULT_POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW,
   DEFAULT_POPUP_SHADOW_STYLE,
   DEFAULT_POPUP_SIZE_PRESET,
+  normalizePopupCircularProgressItemsPerRow,
   normalizePopupCornerStyle,
   normalizePopupShadowStyle,
   normalizePopupSizePreset,
@@ -191,6 +193,11 @@ function normalizeAppState(state: AppState): AppState {
         state.settings?.popupShadowStyle,
         DEFAULT_POPUP_SHADOW_STYLE,
       ),
+      popupCircularProgressItemsPerRow:
+        normalizePopupCircularProgressItemsPerRow(
+          state.settings?.popupCircularProgressItemsPerRow,
+          DEFAULT_POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW,
+        ),
       actionBadgeSelection: normalizeActionBadgeSelection(
         state.settings?.actionBadgeSelection,
       ),

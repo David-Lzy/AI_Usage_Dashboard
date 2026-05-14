@@ -1,4 +1,5 @@
 import type {
+  PopupCircularProgressItemsPerRow,
   ProgressColorBand,
   ProgressDisplayStyle,
   ProgressItemsBySurface,
@@ -10,6 +11,7 @@ import type { ProviderViewModel } from "../sidepanel/view-models";
 type PopupProviderProgressProps = {
   i18n: RuntimeI18n;
   progressColorBands: readonly ProgressColorBand[];
+  popupCircularProgressItemsPerRow: PopupCircularProgressItemsPerRow;
   progressDisplayStyle: ProgressDisplayStyle;
   progressItemsBySurface: ProgressItemsBySurface;
   progressThicknessPx: number;
@@ -19,6 +21,7 @@ type PopupProviderProgressProps = {
 export function PopupProviderProgress({
   i18n,
   progressColorBands,
+  popupCircularProgressItemsPerRow,
   progressDisplayStyle,
   progressItemsBySurface,
   progressThicknessPx,
@@ -30,6 +33,7 @@ export function PopupProviderProgress({
       displayStyle={progressDisplayStyle}
       i18n={i18n}
       progressColorBands={progressColorBands}
+      popupCircularProgressItemsPerRow={popupCircularProgressItemsPerRow}
       progressItemsBySurface={progressItemsBySurface}
       progressThicknessPx={progressThicknessPx}
       provider={provider}

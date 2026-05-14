@@ -255,6 +255,9 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           onPopupCornerStyleChange={(popupCornerStyle) =>
             handleUpdateSettings({ popupCornerStyle })
           }
+          onPopupCircularProgressItemsPerRowChange={(
+            popupCircularProgressItemsPerRow,
+          ) => handleUpdateSettings({ popupCircularProgressItemsPerRow })}
           onPopupShadowStyleChange={(popupShadowStyle) =>
             handleUpdateSettings({ popupShadowStyle })
           }

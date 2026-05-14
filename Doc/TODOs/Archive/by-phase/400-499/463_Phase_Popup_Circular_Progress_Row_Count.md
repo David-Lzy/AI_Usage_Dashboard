@@ -1,6 +1,6 @@
 # Phase 463 - Popup Circular Progress Row Count
 
-Status: queued
+Status: completed on 2026-05-15
 
 ## Goal
 
@@ -34,6 +34,23 @@ Let users choose how many circular quota items can appear per row in the popup, 
 - `npm run typecheck`
 - Popup visual check for circular styles and compact/balanced/wide presets.
 - `npm run docs:check`
+- `git diff --check`
+
+## Completion Notes
+
+- Added `popupCircularProgressItemsPerRow` to `AppSettings` with a default of `2` and storage normalization fallback to `2`.
+- Added Settings UI under the UI appearance controls with choices for `1`, `2`, or `3` circular quota items per popup row plus localized helper copy.
+- Popup progress rendering now applies the row-count preference only to circular popup styles: `circle`, `circle-soft`, and `circle-gauge`.
+- Line-style popup progress ignores the circular row-count preference.
+- Provider values, quota item visibility/order, warning/diagnostic semantics, raw evidence, sidebar layout, and full-page layout are unchanged.
+
+## Verification
+
+- `npm run test -- src/shared/storage.test.ts src/popup/PopupProviderProgress.test.tsx src/popup/PopupFeaturedProviderList.test.tsx src/sidepanel/components/SettingsPreferencesSection.test.tsx src/sidepanel/routes/SettingsPage.test.tsx --run`
+- `npm run i18n:check`
+- `npm run typecheck`
+- `npm run docs:check`
+- `npm run build`
 - `git diff --check`
 
 ## Follow-Up

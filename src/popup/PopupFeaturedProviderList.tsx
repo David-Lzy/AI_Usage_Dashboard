@@ -1,4 +1,5 @@
 import type {
+  PopupCircularProgressItemsPerRow,
   ProgressColorBand,
   ProgressDisplayStyle,
   ProgressItemsBySurface,
@@ -18,6 +19,7 @@ type PopupFeaturedProviderListProps = {
   cards: PopupFeaturedProviderCard[];
   i18n: RuntimeI18n;
   progressColorBands: readonly ProgressColorBand[];
+  popupCircularProgressItemsPerRow: PopupCircularProgressItemsPerRow;
   progressDisplayStyle: ProgressDisplayStyle;
   progressItemsBySurface: ProgressItemsBySurface;
   progressThicknessPx: number;
@@ -35,6 +37,7 @@ export function PopupFeaturedProviderList({
   cards,
   i18n,
   progressColorBands,
+  popupCircularProgressItemsPerRow,
   progressDisplayStyle,
   progressItemsBySurface,
   progressThicknessPx,
@@ -54,6 +57,7 @@ export function PopupFeaturedProviderList({
             <PopupProviderProgress
               provider={provider}
               progressColorBands={progressColorBands}
+              popupCircularProgressItemsPerRow={popupCircularProgressItemsPerRow}
               progressDisplayStyle={progressDisplayStyle}
               progressItemsBySurface={progressItemsBySurface}
               progressThicknessPx={progressThicknessPx}

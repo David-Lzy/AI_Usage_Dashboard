@@ -270,7 +270,10 @@ body.popup-page .status-card {
 .popup-provider-card__progress--circle .provider-progress-item-list,
 .popup-provider-card__progress--circle-soft .provider-progress-item-list,
 .popup-provider-card__progress--circle-gauge .provider-progress-item-list {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(
+    var(--popup-circular-items-per-row, 2),
+    minmax(0, 1fr)
+  );
   gap: var(--app-space-3) var(--app-space-2);
 }
 

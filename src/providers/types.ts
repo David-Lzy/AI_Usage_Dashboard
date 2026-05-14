@@ -141,6 +141,7 @@ export type ProgressDisplayStyle =
 export type PopupSizePreset = "compact" | "balanced" | "wide";
 export type PopupCornerStyle = "square" | "soft" | "rounded";
 export type PopupShadowStyle = "none" | "soft" | "elevated";
+export type PopupCircularProgressItemsPerRow = 1 | 2 | 3;
 export type ActionBadgeSelection = "attention" | (string & {});
 export type DisplaySurface = "popup" | "sidebar" | "fullPage";
 export type ProviderOrderBySurface = Record<DisplaySurface, ProviderId[]>;
@@ -289,6 +290,7 @@ export type AppSettings = {
   popupSizePreset: PopupSizePreset;
   popupCornerStyle: PopupCornerStyle;
   popupShadowStyle: PopupShadowStyle;
+  popupCircularProgressItemsPerRow: PopupCircularProgressItemsPerRow;
   actionBadgeSelection: ActionBadgeSelection;
   providerOrderBySurface: ProviderOrderBySurface;
   progressItemsBySurface: ProgressItemsBySurface;

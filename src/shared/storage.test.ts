@@ -17,6 +17,7 @@ function createLegacyState(): AppState {
     popupSizePreset: _popupSizePreset,
     popupCornerStyle: _popupCornerStyle,
     popupShadowStyle: _popupShadowStyle,
+    popupCircularProgressItemsPerRow: _popupCircularProgressItemsPerRow,
     actionBadgeSelection: _actionBadgeSelection,
     providerOrderBySurface: _providerOrderBySurface,
     progressItemsBySurface: _progressItemsBySurface,
@@ -130,6 +131,7 @@ describe("storage normalization", () => {
     expect(state?.settings.popupSizePreset).toBe("balanced");
     expect(state?.settings.popupCornerStyle).toBe("rounded");
     expect(state?.settings.popupShadowStyle).toBe("soft");
+    expect(state?.settings.popupCircularProgressItemsPerRow).toBe(2);
     expect(state?.settings.actionBadgeSelection).toBe("attention");
     expect(state?.settings.providerOrderBySurface).toEqual({
       popup: [],
@@ -243,6 +245,7 @@ describe("storage normalization", () => {
         popupSizePreset: "maximized",
         popupCornerStyle: "pill",
         popupShadowStyle: "heavy",
+        popupCircularProgressItemsPerRow: 9,
       } as unknown as AppState["settings"],
     });
 
@@ -251,6 +254,7 @@ describe("storage normalization", () => {
     expect(state?.settings.popupSizePreset).toBe("balanced");
     expect(state?.settings.popupCornerStyle).toBe("rounded");
     expect(state?.settings.popupShadowStyle).toBe("soft");
+    expect(state?.settings.popupCircularProgressItemsPerRow).toBe(2);
   });
 
   it("normalizes invalid action badge preferences", async () => {

@@ -52,6 +52,9 @@ function renderPopupProviderProgress(
     <PopupProviderProgress
       i18n={testI18n}
       progressColorBands={progressColorBands}
+      popupCircularProgressItemsPerRow={
+        SAMPLE_APP_STATE.settings.popupCircularProgressItemsPerRow
+      }
       progressDisplayStyle={progressDisplayStyle}
       progressItemsBySurface={progressItemsBySurface}
       progressThicknessPx={SAMPLE_APP_STATE.settings.progressThicknessPx}
@@ -92,6 +95,9 @@ describe("PopupProviderProgress", () => {
       <PopupProviderProgress
         i18n={testI18n}
         progressColorBands={SAMPLE_APP_STATE.settings.progressColorBands}
+        popupCircularProgressItemsPerRow={
+          SAMPLE_APP_STATE.settings.popupCircularProgressItemsPerRow
+        }
         progressDisplayStyle="line"
         progressItemsBySurface={createDefaultProgressItemsBySurface()}
         progressThicknessPx={SAMPLE_APP_STATE.settings.progressThicknessPx}
@@ -111,6 +117,9 @@ describe("PopupProviderProgress", () => {
       <PopupProviderProgress
         i18n={testI18n}
         progressColorBands={SAMPLE_APP_STATE.settings.progressColorBands}
+        popupCircularProgressItemsPerRow={
+          SAMPLE_APP_STATE.settings.popupCircularProgressItemsPerRow
+        }
         progressDisplayStyle="line"
         progressItemsBySurface={createDefaultProgressItemsBySurface()}
         progressThicknessPx={SAMPLE_APP_STATE.settings.progressThicknessPx}
@@ -147,5 +156,35 @@ describe("PopupProviderProgress", () => {
     expect(html).toContain("provider-progress-item-list--circle-soft");
     expect(html).toContain("usage-progress-ring--circle-soft");
     expect(html).toContain('aria-valuenow="42"');
+  });
+
+  it("applies the popup circular row count only to circular styles", () => {
+    const circularHtml = renderToStaticMarkup(
+      <PopupProviderProgress
+        i18n={testI18n}
+        progressColorBands={SAMPLE_APP_STATE.settings.progressColorBands}
+        popupCircularProgressItemsPerRow={3}
+        progressDisplayStyle="circle-soft"
+        progressItemsBySurface={createDefaultProgressItemsBySurface()}
+        progressThicknessPx={SAMPLE_APP_STATE.settings.progressThicknessPx}
+        provider={createProvider()}
+      />,
+    );
+    const lineHtml = renderToStaticMarkup(
+      <PopupProviderProgress
+        i18n={testI18n}
+        progressColorBands={SAMPLE_APP_STATE.settings.progressColorBands}
+        popupCircularProgressItemsPerRow={3}
+        progressDisplayStyle="line"
+        progressItemsBySurface={createDefaultProgressItemsBySurface()}
+        progressThicknessPx={SAMPLE_APP_STATE.settings.progressThicknessPx}
+        provider={createProvider()}
+      />,
+    );
+
+    expect(circularHtml).toContain('data-popup-circular-items-per-row="3"');
+    expect(circularHtml).toContain("--popup-circular-items-per-row:3");
+    expect(lineHtml).not.toContain("data-popup-circular-items-per-row");
+    expect(lineHtml).not.toContain("--popup-circular-items-per-row");
   });
 });

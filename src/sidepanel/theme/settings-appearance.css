@@ -10,6 +10,16 @@
   margin: 0;
 }
 
+.settings-preferences__field-with-helper {
+  display: grid;
+  gap: var(--app-space-1);
+  min-width: 0;
+}
+
+.settings-preferences__inline-helper {
+  margin: 0;
+}
+
 .provider-order-preferences {
   display: grid;
   grid-template-columns: minmax(0, 1fr);

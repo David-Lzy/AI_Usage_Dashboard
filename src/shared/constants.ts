@@ -10,6 +10,7 @@ import {
   DEFAULT_SIDEBAR_PROGRESS_STYLE,
 } from "./progress-display";
 import {
+  DEFAULT_POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW,
   DEFAULT_POPUP_CORNER_STYLE,
   DEFAULT_POPUP_SHADOW_STYLE,
   DEFAULT_POPUP_SIZE_PRESET,
@@ -545,6 +546,8 @@ export const SAMPLE_APP_STATE: AppState = {
     popupSizePreset: DEFAULT_POPUP_SIZE_PRESET,
     popupCornerStyle: DEFAULT_POPUP_CORNER_STYLE,
     popupShadowStyle: DEFAULT_POPUP_SHADOW_STYLE,
+    popupCircularProgressItemsPerRow:
+      DEFAULT_POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW,
     actionBadgeSelection: DEFAULT_ACTION_BADGE_SELECTION,
     providerOrderBySurface: createDefaultProviderOrderBySurface(),
     progressItemsBySurface: createDefaultProgressItemsBySurface(),

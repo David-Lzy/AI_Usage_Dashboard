@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-15:
 
-- the numbered phase queue is completed through `Phase 462`; `Phase 463` is active and `Phase 464` through `Phase 466` are queued for scoped UI polish, and `0.1.0-rc.19` is the current packaged follow-up candidate while current implementation source is ahead through `Phase 462` popup header action layout and RC13 remains the submitted store-review boundary
+- the numbered phase queue is completed through `Phase 463`; `Phase 464` is active and `Phase 465` through `Phase 466` are queued for scoped UI polish, and `0.1.0-rc.19` is the current packaged follow-up candidate while current implementation source is ahead through `Phase 463` popup circular progress row-count settings and RC13 remains the submitted store-review boundary
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -166,6 +166,7 @@ As of 2026-05-15:
 - `Phase 460` moved all providers into the Quick Setup carousel, removed the separate "More Provider" disclosure, kept hidden providers editable through card-level visibility controls, and preserved zero-provider recommended-start deep links plus dashboard visibility semantics outside Quick Setup.
 - `Phase 461` stabilized Settings provider-carousel motion by capping depth offsets and slightly slowing the carousel-local transition while preserving reduced-motion handling, keyboard navigation, pointer drag thresholds, RTL semantics, focus behavior, and inactive-slide semantics.
 - `Phase 462` moved popup refresh into the title row, added a popup header Settings action, and kept theme, tab, and Settings controls in a compact action row while preserving existing popup route/action handlers and localized common action labels.
+- `Phase 463` added a default-two popup circular progress row-count preference, Settings control, 14-locale labels/helper copy, and popup-only circular layout consumption while preserving line progress, provider values, quota visibility/order, warnings, diagnostics, raw evidence, sidebar layout, and full-page layout.
 - `Phase 200` completed a functionality-first Codex personal slice by preserving multiple visible usage windows, expanding Codex page-capture snippets, and surfacing the most constrained visible percentage window across dashboard, provider detail, and popup paths
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without changing the primary percentage-window quota model
 - `Phase 202` completed repeatable unpacked-extension verification for Codex personal multi-window plus flex-balance context, while fixing DOM capture so repeated percentages and single-character balance values are not lost before parsing
@@ -467,7 +468,7 @@ As of 2026-05-15:
 - `Phase 169` completed the next `Direction 10.3` slice by adding one request-bound manual finalize command plus handoff update, so the remaining real-world work is now the popup capture itself instead of popup capture plus extra repo bookkeeping
 - `Phase 296` completed the mixed candidate screenshot file intake plus archive completion under `10_3_Store_Asset_Pack_And_Submission_TODOs.md`
 - the previous repo-owned engineering default was adapter diagnostic raw fallback regression review for the shipped `en + zh_CN` runtime pilot under Direction 09, captured in `09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`
-- because `0.1.0-rc.19` is packaged as the current follow-up candidate while implementation source is ahead through `Phase 462` popup header action layout and the RC13 milestone remains the submitted store-review boundary, the active functional priority is now the `Phase 463` through `Phase 466` scoped UI polish queue, review-feedback, deliberate resubmission follow-up, or an explicit packaging phase for the latest source only if needed
+- because `0.1.0-rc.19` is packaged as the current follow-up candidate while implementation source is ahead through `Phase 463` popup circular progress row-count settings and the RC13 milestone remains the submitted store-review boundary, the active functional priority is now the `Phase 464` through `Phase 466` scoped UI polish queue, review-feedback, deliberate resubmission follow-up, or an explicit packaging phase for the latest source only if needed
 - the remaining high-value work in Direction 05 and Direction 04 is now evidence closure, not more tool-building:
   - `05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md`
   - `04_2_Interaction_Audit_Real_Operator_Closure_TODOs.md`
@@ -534,7 +535,7 @@ As of 2026-05-15:
 
 1. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why first now:
-   `0.1.0-rc.19` is now packaged as the current follow-up candidate, current implementation source is ahead through `Phase 462` popup header action layout, the `Phase 463` through `Phase 466` UI polish queue is active, the mixed screenshot archive is complete, and the trimmed transparent icon refresh plus Claude Team usage-page path are already in the submitted RC13 boundary.
+   `0.1.0-rc.19` is now packaged as the current follow-up candidate, current implementation source is ahead through `Phase 463` popup circular progress row-count settings, the `Phase 464` through `Phase 466` UI polish queue is active, the mixed screenshot archive is complete, and the trimmed transparent icon refresh plus Claude Team usage-page path are already in the submitted RC13 boundary.
 
 2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second now:

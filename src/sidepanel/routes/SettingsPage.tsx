@@ -6,6 +6,7 @@ import type {
   AppLocalePreference,
   AppSettings,
   PopupCornerStyle,
+  PopupCircularProgressItemsPerRow,
   PopupShadowStyle,
   PopupSizePreset,
   ProgressColorBand,
@@ -102,6 +103,9 @@ type SettingsPageProps = {
   onFullPageProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onPopupSizePresetChange: (sizePreset: PopupSizePreset) => void;
   onPopupCornerStyleChange: (cornerStyle: PopupCornerStyle) => void;
+  onPopupCircularProgressItemsPerRowChange: (
+    itemsPerRow: PopupCircularProgressItemsPerRow,
+  ) => void;
   onPopupShadowStyleChange: (shadowStyle: PopupShadowStyle) => void;
   onProviderOrderBySurfaceChange: (
     providerOrderBySurface: ProviderOrderBySurface,
@@ -162,6 +166,7 @@ export function SettingsPage({
   onFullPageProgressStyleChange,
   onPopupSizePresetChange,
   onPopupCornerStyleChange,
+  onPopupCircularProgressItemsPerRowChange,
   onPopupShadowStyleChange,
   onProviderOrderBySurfaceChange,
   onProgressItemsBySurfaceChange,
@@ -394,6 +399,9 @@ export function SettingsPage({
         onFullPageProgressStyleChange={onFullPageProgressStyleChange}
         onPopupSizePresetChange={onPopupSizePresetChange}
         onPopupCornerStyleChange={onPopupCornerStyleChange}
+        onPopupCircularProgressItemsPerRowChange={
+          onPopupCircularProgressItemsPerRowChange
+        }
         onPopupShadowStyleChange={onPopupShadowStyleChange}
         onProviderOrderBySurfaceChange={onProviderOrderBySurfaceChange}
         onProgressItemsBySurfaceChange={onProgressItemsBySurfaceChange}

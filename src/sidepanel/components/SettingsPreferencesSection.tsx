@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import type {
   ActionBadgeSelection,
   AppSettings,
+  PopupCircularProgressItemsPerRow,
   PopupCornerStyle,
   PopupShadowStyle,
   PopupSizePreset,
@@ -47,6 +48,9 @@ type SettingsPreferencesSectionProps = {
     progressStyle: ProgressDisplayStyle,
   ) => void;
   onPopupCornerStyleChange: (cornerStyle: PopupCornerStyle) => void;
+  onPopupCircularProgressItemsPerRowChange: (
+    itemsPerRow: PopupCircularProgressItemsPerRow,
+  ) => void;
   onPopupProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onPopupShadowStyleChange: (shadowStyle: PopupShadowStyle) => void;
   onPopupSizePresetChange: (sizePreset: PopupSizePreset) => void;
@@ -78,6 +82,7 @@ export function SettingsPreferencesSection({
   onActionBadgeSelectionChange,
   onFullPageProgressStyleChange,
   onPopupCornerStyleChange,
+  onPopupCircularProgressItemsPerRowChange,
   onPopupProgressStyleChange,
   onPopupShadowStyleChange,
   onPopupSizePresetChange,
@@ -95,6 +100,7 @@ export function SettingsPreferencesSection({
     actionBadgeOptions,
     normalizedActionBadgeSelection,
     popupCornerStyleOptions,
+    popupCircularProgressItemsPerRowOptions,
     popupShadowStyleOptions,
     popupSizePresetOptions,
     progressDisplayStyleOptions,
@@ -114,6 +120,11 @@ export function SettingsPreferencesSection({
   });
   const [uiMoreOpen, setUiMoreOpen] = useState(settings.themePreset === "custom");
   const [providerDisplayOpen, setProviderDisplayOpen] = useState(false);
+  const popupCircularProgressItemsPerRowOptionsForSelect =
+    popupCircularProgressItemsPerRowOptions.map((option) => ({
+      value: String(option.value) as "1" | "2" | "3",
+      label: option.label,
+    }));
 
   useEffect(() => {
     if (settings.themePreset === "custom") {
@@ -198,6 +209,30 @@ export function SettingsPreferencesSection({
               options={progressDisplayStyleOptions}
               onChange={onPopupProgressStyleChange}
             />
+
+            <div className="settings-preferences__field-with-helper">
+              <MaterialSelect
+                label={i18n.t(
+                  "settings.preferences.popup_circular_row_count_label",
+                )}
+                value={
+                  String(settings.popupCircularProgressItemsPerRow) as
+                    | "1"
+                    | "2"
+                    | "3"
+                }
+                fieldIdPrefix="popup-circular-row-count"
+                options={popupCircularProgressItemsPerRowOptionsForSelect}
+                onChange={(value) =>
+                  onPopupCircularProgressItemsPerRowChange(
+                    Number(value) as PopupCircularProgressItemsPerRow,
+                  )
+                }
+              />
+              <p className="supporting-copy settings-preferences__inline-helper">
+                {i18n.t("settings.preferences.popup_circular_row_count_helper")}
+              </p>
+            </div>
 
             <MaterialSelect
               label={i18n.t("settings.preferences.sidebar_progress_style_label")}
