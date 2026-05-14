@@ -49,5 +49,6 @@ Status note:
 - Post-`Phase 464` polish moved Settings section/helper explanations into hover/focus tooltips, including the popup circular row-count helper, so dense Settings controls no longer carry full-width always-visible notes.
 - Post-`Phase 464` polish also made remaining-color-band rows wrap the color selector below the numeric range at sidepanel widths, avoiding card overflow while preserving wide-layout alignment.
 - Post-`Phase 464` polish renamed the UI disclosure copy to “More UI settings / Collapse UI settings” with synchronized 14-locale labels.
+- Post-`Phase 464` polish tightened remaining-color-band responsive grids so number and color controls use stretch-to-fit columns instead of content-width columns at sidepanel widths.
 - Current implementation source is ahead of the `0.1.0-rc.19` package by the `Phase 449` through `Phase 464` UI micro-polish phases.
 - `Phase 465` through `Phase 466` are queued as the next scoped UI polish sequence covering UI font preference and visual QA/docs closeout.

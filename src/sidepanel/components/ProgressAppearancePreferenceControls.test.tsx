@@ -44,12 +44,17 @@ describe("ProgressAppearancePreferenceControls", () => {
 
   it("keeps color-band number and color controls compact but aligned", () => {
     expect(settingsAppearanceCss).toContain(
-      "grid-template-columns: max-content max-content minmax(148px, 16rem);",
+      "grid-template-columns: repeat(\n    auto-fit,",
     );
-    expect(settingsAppearanceCss).toContain("inline-size: 5.5ch;");
-    expect(settingsAppearanceCss).toContain("min-inline-size: 68px;");
-    expect(settingsAppearanceCss).toContain("min-inline-size: 9.5rem;");
+    expect(settingsAppearanceCss).toContain(
+      "minmax(min(100%, var(--progress-appearance-band-field-min)), 1fr)",
+    );
+    expect(settingsAppearanceCss).toContain("justify-content: stretch;");
+    expect(settingsAppearanceCss).toContain("inline-size: 100%;");
     expect(settingsAppearanceCss).toContain("@media (max-width: 720px)");
+    expect(settingsAppearanceCss).toContain(
+      "grid-template-columns: repeat(2, minmax(0, 1fr));",
+    );
     expect(settingsAppearanceCss).toContain("grid-column: 1 / -1;");
   });
 });

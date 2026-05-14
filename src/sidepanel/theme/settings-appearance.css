@@ -423,11 +423,15 @@
 }
 
 .progress-appearance-band__fields {
+  --progress-appearance-band-field-min: 10.5rem;
   display: grid;
-  grid-template-columns: max-content max-content minmax(148px, 16rem);
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, var(--progress-appearance-band-field-min)), 1fr)
+  );
   align-items: center;
   gap: var(--app-space-2);
-  justify-content: start;
+  justify-content: stretch;
   min-width: 0;
 }
 
@@ -445,9 +449,9 @@
 }
 
 .progress-appearance-band__fields > .form-field .form-field__control {
-  inline-size: 5.5ch;
-  min-inline-size: 68px;
-  width: auto;
+  inline-size: 100%;
+  min-inline-size: 0;
+  width: 100%;
   min-height: 44px;
   padding-inline: var(--app-space-3);
 }
@@ -455,8 +459,8 @@
 .progress-appearance-band__fields
   > .color-choice-dropdown
   .color-choice-dropdown__button {
-  inline-size: fit-content;
-  min-inline-size: 9.5rem;
+  inline-size: 100%;
+  min-inline-size: 0;
   max-inline-size: 100%;
   min-height: 44px;
   grid-template-columns: auto minmax(0, 1fr) 36px;
@@ -518,7 +522,7 @@
 
 @media (max-width: 720px) {
   .progress-appearance-band__fields {
-    grid-template-columns: max-content max-content;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .progress-appearance-band__fields > .color-choice-dropdown {

@@ -9,7 +9,7 @@ Current packaged release state:
 - package version: `0.1.0-rc.19`
 - Chrome manifest version: `0.1.0.19`
 - packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.19.zip`
-- source status: `rc.19` package bytes are aligned through `Phase 448`; current implementation source is ahead through `Phase 464` Settings form-control typography/sizing polish plus post-Phase 464 Settings helper tooltip rollout and UI disclosure-label polish, and tracked docs now queue `Phase 465` through `Phase 466` as the next UI polish work. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
+- source status: `rc.19` package bytes are aligned through `Phase 448`; current implementation source is ahead through `Phase 464` Settings form-control typography/sizing polish plus post-Phase 464 Settings helper tooltip rollout, responsive color-band grid polish, and UI disclosure-label polish, and tracked docs now queue `Phase 465` through `Phase 466` as the next UI polish work. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
 - packaged follow-up milestone: [2026-05-14 RC19 Post-RC18 UI Polish Closeout Release Candidate](./Doc/Milestones/2026-05-14_RC19_Post_RC18_UI_Polish_Closeout_Release_Candidate.md)
 - submitted review milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
