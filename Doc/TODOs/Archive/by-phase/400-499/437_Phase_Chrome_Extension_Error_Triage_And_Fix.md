@@ -1,6 +1,6 @@
 # Phase 437 - Chrome Extension Error Triage And Fix
 
-Status: queued
+Status: completed
 
 ## Goal
 
@@ -39,4 +39,31 @@ Investigate and fix the Chrome Extensions page error badge shown for the unpacke
 
 ## Follow-Up
 
-- If the error belongs to a larger lifecycle problem, create a narrower follow-up TODO with the captured stack and keep this phase limited to triage plus the smallest safe fix.
+- No code follow-up is required from this phase. The Chrome Errors entries were historical Vite dev-server records, not current `dist/` runtime failures.
+
+## Completion Notes
+
+Completed on 2026-05-14.
+
+Findings:
+
+- RDP Chrome was loading the unpacked extension from `dist/` with extension id `gkjioiklbdjcknhdglaehbeofkjmmdpc`.
+- Structured Chrome profile inspection showed no current `manifest_errors`, `runtime_errors`, or `install_warnings` fields for this extension.
+- The Chrome Extensions `Errors` panel contained stale historical entries from `src/sidepanel/index.html?surface=full-page#settings` trying to load Vite dev-server resources:
+  - `http://localhost:5173/`
+  - `http://localhost:5173/@vite/env`
+- Current `dist/` output contains no `localhost:5173`, `@vite/env`, or Vite client references.
+- After `npm run build`, extension reload from the Chrome Extensions detail page, and Chrome Errors `Clear all`, the extension card no longer showed an `Errors` button.
+
+Boundary:
+
+- No source-code fix was made because the confirmed error records were stale Chrome extension error-log entries from an older dev-mode run, not reproducible current-build failures.
+- The only browser-profile cleanup was the targeted Chrome Extensions `Clear all` action for this unpacked extension's error panel.
+
+Verification:
+
+- `npm run build`
+- RDP Chrome `chrome://extensions/?id=gkjioiklbdjcknhdglaehbeofkjmmdpc` detail page reload showed `Reloaded`.
+- RDP Chrome `chrome://extensions/?errors=gkjioiklbdjcknhdglaehbeofkjmmdpc` captured the stale dev-server CORS records before cleanup.
+- RDP Chrome `chrome://extensions` captured the extension card after cleanup with no `Errors` button.
+- `rg -n 'localhost:5173|@vite/env|vite/client' dist src package.json vite.config.ts` returned no matches.

@@ -34,10 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [437_Phase_Chrome_Extension_Error_Triage_And_Fix.md](./437_Phase_Chrome_Extension_Error_Triage_And_Fix.md)
-- latest completed slice: [436_Phase_Disclosure_Chevron_State_Animation.md](./Archive/by-phase/400-499/436_Phase_Disclosure_Chevron_State_Animation.md)
+- active phase file: [438_Phase_Quota_Item_Settings_14_Locale_Copy.md](./438_Phase_Quota_Item_Settings_14_Locale_Copy.md)
+- latest completed slice: [437_Phase_Chrome_Extension_Error_Triage_And_Fix.md](./Archive/by-phase/400-499/437_Phase_Chrome_Extension_Error_Triage_And_Fix.md)
 - queued phase files:
-  - [438_Phase_Quota_Item_Settings_14_Locale_Copy.md](./438_Phase_Quota_Item_Settings_14_Locale_Copy.md)
   - [439_Phase_UI_Polish_RDP_QA_And_Doc_Closeout.md](./439_Phase_UI_Polish_RDP_QA_And_Doc_Closeout.md)
   - [440_Phase_RC18_UI_Polish_Follow_Up_Packaging.md](./440_Phase_RC18_UI_Polish_Follow_Up_Packaging.md)
 
@@ -833,6 +832,7 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 434` closeout changed Settings provider carousel presentation to a single active card with blurred inactive depth layers, inactive-slide `inert`/`aria-hidden` semantics, and safer viewport/dot spacing while preserving provider business controls and carousel movement behavior
 - the 2026-05-14 `Phase 435` closeout made circular progress ring center labels numeric-only, preserved full remaining/used aria text, and aligned soft/gauge ring grooves to the same SVG circle geometry as the foreground arc
 - the 2026-05-14 `Phase 436` closeout generalized Settings disclosure chevron open-state styling so Quick Setup more-provider details, source-card details, advanced sections, and custom dropdown affordances share consistent rotation and reduced-motion handling
+- the 2026-05-14 `Phase 437` closeout triaged the Chrome Extensions `Errors` badge to stale Vite dev-server CORS records from an older `src/sidepanel/index.html?surface=full-page#settings` run, verified current `dist/` has no Vite dev-client references, rebuilt/reloaded the unpacked extension, and cleared the stale Chrome error log so the extension card no longer shows `Errors`
 
 ## Delivery Standard For Each Phase
 
