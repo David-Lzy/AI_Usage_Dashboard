@@ -33,6 +33,36 @@ describe("sidepanel view models", () => {
     ]);
   });
 
+  it("applies custom provider order for the selected surface", () => {
+    const state = createState({
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        providerOrderBySurface: {
+          ...SAMPLE_APP_STATE.settings.providerOrderBySurface,
+          sidebar: ["cursor", "codex", "gemini", "claude-code", "jetbrains"],
+          fullPage: ["gemini", "codex", "cursor", "claude-code", "jetbrains"],
+        },
+      },
+    });
+
+    expect(
+      getVisibleProviders(state, undefined, "sidebar").map(
+        (provider) => provider.providerId,
+      ),
+    ).toEqual(["cursor", "codex", "gemini", "claude-code"]);
+    expect(
+      getVisibleProviders(state, undefined, "fullPage").map(
+        (provider) => provider.providerId,
+      ),
+    ).toEqual(["gemini", "codex", "cursor", "claude-code"]);
+    expect(getVisibleProviders(state).map((provider) => provider.providerId)).toEqual([
+      "claude-code",
+      "codex",
+      "gemini",
+      "cursor",
+    ]);
+  });
+
   it("escalates a healthy provider to warning when host access is missing", () => {
     const state = createState({
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) =>

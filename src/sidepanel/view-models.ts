@@ -1,5 +1,6 @@
 import type {
   AppState,
+  DisplaySurface,
   ProviderPageBinding,
   PermissionStatus,
   ProviderId,
@@ -256,11 +257,44 @@ function compareProviders(
   return left.providerLabel.localeCompare(right.providerLabel);
 }
 
+function applyProviderOrderPreference(
+  providers: ProviderViewModel[],
+  providerOrder: ProviderId[],
+): ProviderViewModel[] {
+  if (providerOrder.length === 0) {
+    return providers;
+  }
+
+  const providerOrderIndex = new Map(
+    providerOrder.map((providerId, index) => [providerId, index]),
+  );
+
+  return [...providers].sort((left, right) => {
+    const leftIndex = providerOrderIndex.get(left.providerId);
+    const rightIndex = providerOrderIndex.get(right.providerId);
+
+    if (leftIndex !== undefined && rightIndex !== undefined) {
+      return leftIndex - rightIndex;
+    }
+
+    if (leftIndex !== undefined) {
+      return -1;
+    }
+
+    if (rightIndex !== undefined) {
+      return 1;
+    }
+
+    return 0;
+  });
+}
+
 export function getVisibleProviders(
   state: AppState,
   sourceDisplayCopy?: ProviderSourceDisplayCopy,
+  surface?: DisplaySurface,
 ): ProviderViewModel[] {
-  return state.providers
+  const providers = state.providers
     .filter((provider) => {
       const setting = findProviderSetting(state.providerSettings, provider.providerId);
       return setting?.enabled ?? false;
@@ -273,6 +307,13 @@ export function getVisibleProviders(
       ),
     )
     .sort(compareProviders);
+
+  return surface
+    ? applyProviderOrderPreference(
+        providers,
+        state.settings.providerOrderBySurface[surface],
+      )
+    : providers;
 }
 
 export function getProviderViewModel(

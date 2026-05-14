@@ -176,9 +176,11 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
   );
   const providerSourceDisplayCopy =
     buildProviderSourceDisplayLocalizedCopy(runtimeI18n);
+  const providerDisplaySurface = isFullPageSurface ? "fullPage" : "sidebar";
   const visibleProviders = getVisibleProviders(
     appState,
     providerSourceDisplayCopy,
+    providerDisplaySurface,
   );
   const selectedProvider =
     route.name === "provider-detail"

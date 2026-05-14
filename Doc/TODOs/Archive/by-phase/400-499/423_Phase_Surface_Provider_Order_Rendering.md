@@ -1,6 +1,6 @@
 # Phase 423 - Surface Provider Order Rendering
 
-Status: queued
+Status: completed
 
 ## Goal
 
@@ -35,3 +35,16 @@ Apply saved provider order independently for popup, sidebar, and full-page surfa
 ## Follow-Up
 
 - Phase 424 adds Settings controls for users to edit the saved surface orders.
+
+## Completion Summary
+
+- Popup view-models now consume the `popup` provider-order preference.
+- Standard side-panel route rendering now chooses `sidebar` or `fullPage` provider order based on the current surface.
+- Default provider health/status sorting remains unchanged when no surface preference is supplied.
+- Added focused tests for custom per-surface provider order and popup featured-provider selection.
+
+## Verification
+
+- `npm run test -- src/sidepanel/view-models.test.ts src/popup/view-models.test.ts`
+- `npm run typecheck`
+- `git diff --check`

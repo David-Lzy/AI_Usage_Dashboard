@@ -29,6 +29,31 @@ describe("popup view models", () => {
     expect(model.featuredSection.label).toBe("Needs attention");
   });
 
+  it("uses the popup provider order preference before selecting featured providers", () => {
+    const model = buildPopupViewModel({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        providerOrderBySurface: {
+          ...SAMPLE_APP_STATE.settings.providerOrderBySurface,
+          popup: ["gemini", "codex", "claude-code", "cursor", "jetbrains"],
+        },
+      },
+    });
+
+    expect(model.visibleProviders.map((provider) => provider.providerId)).toEqual([
+      "gemini",
+      "codex",
+      "claude-code",
+      "cursor",
+    ]);
+    expect(model.featuredProviders.map((provider) => provider.providerId)).toEqual([
+      "gemini",
+      "codex",
+      "claude-code",
+    ]);
+  });
+
   it("falls back to the first visible providers when everything is healthy", () => {
     const model = buildPopupViewModel({
       ...SAMPLE_APP_STATE,

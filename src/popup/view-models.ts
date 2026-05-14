@@ -68,7 +68,7 @@ export function buildPopupViewModel(
   formatValue: PopupValueFormatter = DEFAULT_POPUP_VALUE_FORMATTER,
   sourceDisplayCopy?: ProviderSourceDisplayCopy,
 ): PopupViewModel {
-  const visibleProviders = getVisibleProviders(state, sourceDisplayCopy);
+  const visibleProviders = getVisibleProviders(state, sourceDisplayCopy, "popup");
   const attentionProviders = visibleProviders.filter(needsAttention);
   const firstSetupProvider =
     visibleProviders.length === 0

@@ -47,7 +47,7 @@ Next execution queue:
 
 1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary, but use `0.1.0-rc.16` as the ready follow-up package if review feedback or an explicit resubmission decision asks for a newer build
 2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC16 follow-up milestone](./Doc/Milestones/2026-05-14_RC16_Post_Localization_Closeout_Release_Candidate.md) as the current packaged-source reference
-3. continue the `Phase 423` through `Phase 432` UI preference queue before considering another release package: provider ordering, per-surface quota visibility/order, progress ring polish, Settings provider carousel, and visual/doc closeout
+3. continue the `Phase 424` through `Phase 432` UI preference queue before considering another release package: Settings provider order controls, per-surface quota visibility/order, progress ring polish, Settings provider carousel, and visual/doc closeout
 4. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 5. keep real operator evidence closed and archived; do not open another interaction-audit or theme-recovery operator evidence phase unless a new surface or theme regression creates a fresh review need
 6. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
