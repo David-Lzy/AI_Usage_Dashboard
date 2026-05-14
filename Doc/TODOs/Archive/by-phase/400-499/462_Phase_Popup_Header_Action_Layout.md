@@ -1,6 +1,6 @@
 # Phase 462 - Popup Header Action Layout
 
-Status: queued
+Status: completed on 2026-05-15
 
 ## Goal
 
@@ -34,6 +34,23 @@ Rework popup header actions so refresh and Settings are easier to find while kee
 - `npm run typecheck`
 - Popup visual check for compact, balanced, and wide presets.
 - `npm run docs:check`
+- `git diff --check`
+
+## Completion Notes
+
+- Popup refresh now lives in the header title row, to the right of the `Toolbar popup` / `Quick overview` title area.
+- Popup theme mode, full-page tab, and Settings actions now share a compact header action row.
+- The new Settings header action reuses the existing popup Settings route handoff.
+- Existing refresh, theme-toggle, and full-page tab handlers are unchanged.
+- Existing localized common action labels are reused; no new runtime message ids were needed.
+
+## Verification
+
+- `npm run test -- src/popup/PopupHeaderSection.test.tsx src/popup/popup-route-actions.test.ts src/shared/i18n.test.ts --run`
+- `npm run i18n:check`
+- `npm run typecheck`
+- `npm run docs:check`
+- `npm run build`
 - `git diff --check`
 
 ## Follow-Up

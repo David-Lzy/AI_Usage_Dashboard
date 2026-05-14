@@ -108,11 +108,45 @@ body.popup-page .status-card {
 }
 
 .popup-header {
+  display: grid;
   gap: var(--app-space-2);
 }
 
 .popup-shell--quota-first .popup-header {
   padding: var(--app-space-3);
+}
+
+.popup-header__top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--app-space-2);
+  min-width: 0;
+}
+
+.popup-header__title-copy {
+  display: grid;
+  gap: var(--app-space-1);
+  min-width: 0;
+}
+
+.popup-header__refresh {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.popup-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--app-space-2);
+}
+
+.popup-header__actions .icon-button {
+  flex: 1 1 0;
+  min-width: 0;
+  padding-inline: var(--app-space-2);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  white-space: nowrap;
 }
 
 .popup-actions {

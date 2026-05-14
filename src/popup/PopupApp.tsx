@@ -254,6 +254,7 @@ export function PopupApp() {
         quickThemeToggleCopy={quickThemeToggleCopy}
         runtimeI18n={runtimeI18n}
         onOpenDashboardTab={openFullDashboardTab}
+        onOpenSettings={openSettings}
         onRefresh={handleRefresh}
         onToggleThemeMode={handleToggleThemeMode}
       />

@@ -11,6 +11,7 @@ type PopupHeaderSectionProps = {
   quickThemeToggleCopy: ReturnType<typeof getQuickThemeToggleCopy>;
   runtimeI18n: RuntimeI18n;
   onOpenDashboardTab: () => void | Promise<void>;
+  onOpenSettings: () => void | Promise<void>;
   onRefresh: () => void | Promise<void>;
   onToggleThemeMode: () => void | Promise<void>;
 };
@@ -23,25 +24,32 @@ export function PopupHeaderSection({
   quickThemeToggleCopy,
   runtimeI18n,
   onOpenDashboardTab,
+  onOpenSettings,
   onRefresh,
   onToggleThemeMode,
 }: PopupHeaderSectionProps) {
   return (
     <section className="status-card popup-header">
-      <div>
-        <p className="section-label" data-theme-local-surface="popup-header-label">
-          {runtimeI18n.t("popup.header.eyebrow")}
-        </p>
-        <h1 className="section-title">{runtimeI18n.t("popup.header.title")}</h1>
-        {!hasFeaturedProviderCards ? (
-          <p className="supporting-copy">{headerDetail}</p>
-        ) : null}
-      </div>
-      <div className="popup-actions">
+      <div className="popup-header__top-row">
+        <div className="popup-header__title-copy">
+          <p
+            className="section-label"
+            data-theme-local-surface="popup-header-label"
+          >
+            {runtimeI18n.t("popup.header.eyebrow")}
+          </p>
+          <h1 className="section-title">
+            {runtimeI18n.t("popup.header.title")}
+          </h1>
+          {!hasFeaturedProviderCards ? (
+            <p className="supporting-copy">{headerDetail}</p>
+          ) : null}
+        </div>
         <button
-          className="text-button"
+          className="text-button popup-header__refresh"
           type="button"
           disabled={isRefreshing}
+          data-popup-refresh="true"
           onClick={() => {
             void onRefresh();
           }}
@@ -50,6 +58,8 @@ export function PopupHeaderSection({
             ? runtimeI18n.t("popup.actions.refreshing")
             : runtimeI18n.t("popup.actions.refresh")}
         </button>
+      </div>
+      <div className="popup-header__actions">
         <button
           className="icon-button"
           data-popup-toggle-theme-mode="true"
@@ -76,6 +86,19 @@ export function PopupHeaderSection({
           }}
         >
           {runtimeI18n.t("common.actions.tab")}
+        </button>
+        <button
+          className="icon-button"
+          data-popup-open-settings="true"
+          data-theme-local-surface="popup-open-settings"
+          type="button"
+          aria-label={runtimeI18n.t("common.actions.open_settings")}
+          title={runtimeI18n.t("common.actions.open_settings")}
+          onClick={() => {
+            void onOpenSettings();
+          }}
+        >
+          {runtimeI18n.t("common.actions.settings")}
         </button>
       </div>
     </section>
