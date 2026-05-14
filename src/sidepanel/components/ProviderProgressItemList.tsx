@@ -1,5 +1,6 @@
 import type {
   DisplaySurface,
+  ProgressColorBand,
   ProgressDisplayStyle,
   ProgressItemsBySurface,
   QuotaUnit,
@@ -15,7 +16,9 @@ type ProviderProgressItemListProps = {
   density?: "compact" | "detail";
   displayStyle: ProgressDisplayStyle;
   i18n: RuntimeI18n;
+  progressColorBands: readonly ProgressColorBand[];
   progressItemsBySurface: ProgressItemsBySurface;
+  progressThicknessPx: number;
   provider: ProviderViewModel;
   surface: DisplaySurface;
 };
@@ -119,7 +122,9 @@ export function ProviderProgressItemList({
   density = "detail",
   displayStyle,
   i18n,
+  progressColorBands,
   progressItemsBySurface,
+  progressThicknessPx,
   provider,
   surface,
 }: ProviderProgressItemListProps) {
@@ -157,6 +162,8 @@ export function ProviderProgressItemList({
                 tone={tone}
                 label={item.label}
                 displayStyle={displayStyle}
+                progressColorBands={progressColorBands}
+                progressThicknessPx={progressThicknessPx}
                 valueKind={getProgressItemValueKind(item)}
                 valueLabel={formatProgressValueLabel(
                   item,

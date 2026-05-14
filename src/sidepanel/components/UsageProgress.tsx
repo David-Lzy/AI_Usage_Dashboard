@@ -1,6 +1,15 @@
 import type { CSSProperties } from "react";
 
-import type { ProgressDisplayStyle } from "../../providers/types";
+import type {
+  ProgressColorBand,
+  ProgressDisplayStyle,
+} from "../../providers/types";
+import {
+  DEFAULT_PROGRESS_COLOR_BANDS,
+  DEFAULT_PROGRESS_THICKNESS_PX,
+  normalizeProgressThicknessPx,
+  resolveProgressColorForRemainingPercent,
+} from "../../shared/progress-appearance";
 import { UsageProgressRing } from "./UsageProgressRing";
 
 type UsageProgressProps = {
@@ -10,6 +19,8 @@ type UsageProgressProps = {
   tone: "neutral" | "warning" | "error";
   label: string;
   displayStyle?: ProgressDisplayStyle;
+  progressColorBands?: readonly ProgressColorBand[];
+  progressThicknessPx?: number;
   valueKind?: "used" | "remaining";
   valueLabel?: string;
   valueText?: string;
@@ -33,6 +44,8 @@ export function UsageProgress({
   tone,
   label,
   displayStyle = "line",
+  progressColorBands = DEFAULT_PROGRESS_COLOR_BANDS,
+  progressThicknessPx = DEFAULT_PROGRESS_THICKNESS_PX,
   valueKind = "used",
   valueLabel,
   valueText,
@@ -48,6 +61,15 @@ export function UsageProgress({
       ? Math.min(100, Math.max(0, (trackedValue / total) * 100))
       : null;
   const roundedPercent = percent === null ? null : Math.round(percent);
+  const remainingPercent =
+    remaining !== null && remaining !== undefined && total !== null && total > 0
+      ? Math.min(100, Math.max(0, (remaining / total) * 100))
+      : null;
+  const resolvedThicknessPx = normalizeProgressThicknessPx(progressThicknessPx);
+  const resolvedProgressColor = resolveProgressColorForRemainingPercent(
+    remainingPercent,
+    progressColorBands,
+  );
   const isIndeterminate = roundedPercent === null;
   const progressValueLabel = isIndeterminate
     ? "Unknown"
@@ -61,12 +83,23 @@ export function UsageProgress({
     ? "Usage percentage unavailable"
     : (valueText ??
       `${roundedPercent}% ${valueKind === "remaining" ? "remaining" : "used"}`);
-  const progressStyle =
-    roundedPercent === null
-      ? undefined
-      : ({
+  const progressStyle = {
+    "--usage-progress-thickness": `${resolvedThicknessPx}px`,
+    ...(roundedPercent === null
+      ? {}
+      : {
           "--usage-progress-percent": `${roundedPercent}%`,
-        } as CSSProperties & { "--usage-progress-percent": string });
+        }),
+    ...(resolvedProgressColor && !isIndeterminate
+      ? {
+          "--usage-progress-color": resolvedProgressColor,
+        }
+      : {}),
+  } as CSSProperties & {
+    "--usage-progress-color"?: string;
+    "--usage-progress-percent"?: string;
+    "--usage-progress-thickness": string;
+  };
 
   if (displayStyle === "circle") {
     return (
@@ -100,6 +133,8 @@ export function UsageProgress({
         isIndeterminate={isIndeterminate}
         label={label}
         roundedPercent={roundedPercent}
+        progressColor={resolvedProgressColor}
+        progressThicknessPx={resolvedThicknessPx}
         tone={tone}
         valueKind={valueKind}
         valueLabel={progressValueLabel}
@@ -135,6 +170,7 @@ export function UsageProgress({
         aria-valuenow={roundedPercent ?? undefined}
         aria-valuetext={progressValueText}
         className={`usage-progress__track usage-progress__track--${tone}${isIndeterminate ? " usage-progress__track--indeterminate" : ""}`}
+        style={progressStyle}
       >
         <div
           aria-hidden="true"

@@ -1,4 +1,11 @@
-import type { ProgressDisplayStyle } from "../../providers/types";
+import type {
+  ProgressColorBand,
+  ProgressDisplayStyle,
+} from "../../providers/types";
+import {
+  DEFAULT_PROGRESS_COLOR_BANDS,
+  DEFAULT_PROGRESS_THICKNESS_PX,
+} from "../../shared/progress-appearance";
 import type { RuntimeI18n } from "../../shared/i18n";
 import { buildRuntimeCommonCopy } from "../../shared/i18n";
 import type { ProviderViewModel } from "../view-models";
@@ -9,6 +16,8 @@ type UsageWindowProgressListProps = {
   i18n: RuntimeI18n;
   density?: "compact" | "detail";
   displayStyle?: ProgressDisplayStyle;
+  progressColorBands?: readonly ProgressColorBand[];
+  progressThicknessPx?: number;
 };
 
 function getUsageWindowProgressTone(
@@ -79,6 +88,8 @@ export function UsageWindowProgressList({
   i18n,
   density = "detail",
   displayStyle = "line",
+  progressColorBands = DEFAULT_PROGRESS_COLOR_BANDS,
+  progressThicknessPx = DEFAULT_PROGRESS_THICKNESS_PX,
 }: UsageWindowProgressListProps) {
   if (windows.length === 0) {
     return null;
@@ -101,6 +112,8 @@ export function UsageWindowProgressList({
             tone={getUsageWindowProgressTone(usageWindow)}
             label={usageWindow.normalizedLabel}
             displayStyle={displayStyle}
+            progressColorBands={progressColorBands}
+            progressThicknessPx={progressThicknessPx}
             valueKind="remaining"
             valueLabel={formatRemainingValue(usageWindow, i18n, displayStyle)}
             valueText={formatRemainingText(usageWindow, i18n)}

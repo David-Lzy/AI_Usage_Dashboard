@@ -262,8 +262,10 @@ export function PopupApp() {
         ariaLabel={popupCopy.aria.featuredProviders}
         cards={popupModel.featuredProviderCards}
         i18n={runtimeI18n}
+        progressColorBands={loadState.appState.settings.progressColorBands}
         progressDisplayStyle={popupProgressStyle}
         progressItemsBySurface={loadState.appState.settings.progressItemsBySurface}
+        progressThicknessPx={loadState.appState.settings.progressThicknessPx}
         getSettingsFocusForProvider={getSettingsRouteFocusForPopupProvider}
         onAction={handlePopupAction}
       />

@@ -2,9 +2,11 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
 import type {
+  ProgressColorBand,
   ProgressDisplayStyle,
   ProgressItemsBySurface,
 } from "../providers/types";
+import { SAMPLE_APP_STATE } from "../shared/constants";
 import { createDefaultProgressItemsBySurface } from "../shared/display-preferences";
 import type { RuntimeI18n } from "../shared/i18n";
 import type { ProviderViewModel } from "../sidepanel/view-models";
@@ -43,12 +45,16 @@ function renderPopupProviderProgress(
   provider: ProviderViewModel,
   progressItemsBySurface: ProgressItemsBySurface = createDefaultProgressItemsBySurface(),
   progressDisplayStyle: ProgressDisplayStyle = "circle",
+  progressColorBands: readonly ProgressColorBand[] =
+    SAMPLE_APP_STATE.settings.progressColorBands,
 ) {
   return renderToStaticMarkup(
     <PopupProviderProgress
       i18n={testI18n}
+      progressColorBands={progressColorBands}
       progressDisplayStyle={progressDisplayStyle}
       progressItemsBySurface={progressItemsBySurface}
+      progressThicknessPx={SAMPLE_APP_STATE.settings.progressThicknessPx}
       provider={provider}
     />,
   );
@@ -85,8 +91,10 @@ describe("PopupProviderProgress", () => {
     const html = renderToStaticMarkup(
       <PopupProviderProgress
         i18n={testI18n}
+        progressColorBands={SAMPLE_APP_STATE.settings.progressColorBands}
         progressDisplayStyle="line"
         progressItemsBySurface={createDefaultProgressItemsBySurface()}
+        progressThicknessPx={SAMPLE_APP_STATE.settings.progressThicknessPx}
         provider={createProvider()}
       />,
     );
@@ -94,14 +102,18 @@ describe("PopupProviderProgress", () => {
     expect(html).toContain('role="progressbar"');
     expect(html).toContain('aria-valuenow="42"');
     expect(html).toContain('aria-label="weekly window percent"');
+    expect(html).toContain("--usage-progress-thickness:10px");
+    expect(html).toContain("--usage-progress-color:#8A4B00");
   });
 
   it("renders nothing for empty percent-only providers", () => {
     const html = renderToStaticMarkup(
       <PopupProviderProgress
         i18n={testI18n}
+        progressColorBands={SAMPLE_APP_STATE.settings.progressColorBands}
         progressDisplayStyle="line"
         progressItemsBySurface={createDefaultProgressItemsBySurface()}
+        progressThicknessPx={SAMPLE_APP_STATE.settings.progressThicknessPx}
         provider={createProvider({
           remaining: null,
           total: 100,

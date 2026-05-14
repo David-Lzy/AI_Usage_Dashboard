@@ -1,4 +1,5 @@
 import type {
+  ProgressColorBand,
   ProgressDisplayStyle,
   ProgressItemsBySurface,
 } from "../providers/types";
@@ -16,8 +17,10 @@ type PopupFeaturedProviderListProps = {
   ariaLabel: string;
   cards: PopupFeaturedProviderCard[];
   i18n: RuntimeI18n;
+  progressColorBands: readonly ProgressColorBand[];
   progressDisplayStyle: ProgressDisplayStyle;
   progressItemsBySurface: ProgressItemsBySurface;
+  progressThicknessPx: number;
   getSettingsFocusForProvider: (
     provider: PopupFeaturedProviderCard["provider"],
   ) => SettingsRouteFocus | null;
@@ -31,8 +34,10 @@ export function PopupFeaturedProviderList({
   ariaLabel,
   cards,
   i18n,
+  progressColorBands,
   progressDisplayStyle,
   progressItemsBySurface,
+  progressThicknessPx,
   getSettingsFocusForProvider,
   onAction,
 }: PopupFeaturedProviderListProps) {
@@ -48,8 +53,10 @@ export function PopupFeaturedProviderList({
           const providerProgress = (
             <PopupProviderProgress
               provider={provider}
+              progressColorBands={progressColorBands}
               progressDisplayStyle={progressDisplayStyle}
               progressItemsBySurface={progressItemsBySurface}
+              progressThicknessPx={progressThicknessPx}
               i18n={i18n}
             />
           );

@@ -33,8 +33,10 @@ function renderProviderDetail(
   return renderToStaticMarkup(
     <ProviderDetailPage
       localePreference="en"
+      progressColorBands={state.settings.progressColorBands}
       progressDisplayStyle="line"
       progressItemsBySurface={state.settings.progressItemsBySurface}
+      progressThicknessPx={state.settings.progressThicknessPx}
       progressSurface="sidebar"
       provider={provider}
       onBack={() => undefined}

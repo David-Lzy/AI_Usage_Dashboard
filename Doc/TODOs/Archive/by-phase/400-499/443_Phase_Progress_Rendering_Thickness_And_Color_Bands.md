@@ -1,6 +1,8 @@
 # Phase 443 - Progress Rendering Thickness And Color Bands
 
-Status: active
+Status: completed
+
+Completed: 2026-05-14
 
 ## Goal
 
@@ -44,3 +46,19 @@ Apply the global thickness preference and remaining-percent color bands to every
 ## Follow-Up
 
 - Continue to `Phase 444` if soft and gauge rings still look too similar after the shared rendering pass.
+
+## Closeout Notes
+
+- Threaded `progressThicknessPx` and `progressColorBands` from `AppSettings` into popup, sidebar dashboard, full-page dashboard, provider detail, popup appearance preview, and the legacy usage-window progress list.
+- Added progress color-band resolution helpers that select visual color from remaining percentage without changing provider warning thresholds, diagnostics, action-badge counts, or provider tones.
+- Made line progress height, classic circle ring thickness, and soft/gauge SVG stroke width consume the shared thickness setting through CSS variables.
+- Made determinate progress fills use the configured remaining-color band when a remaining percentage is available; indeterminate/unknown progress keeps the existing neutral/tone fallback.
+- Preserved numeric-only circular center labels, aria text, RTL numeric isolation, quota math, progress item inventory, provider order, per-surface visibility, raw evidence, and export/schema boundaries.
+
+## Verification Result
+
+- Passed: `npm run test -- src/shared/progress-appearance.test.ts src/sidepanel/components/UsageProgress.test.tsx src/popup/PopupProviderProgress.test.tsx src/popup/PopupFeaturedProviderList.test.tsx src/sidepanel/components/ProviderCard.test.tsx src/sidepanel/routes/ProviderDetailPage.test.tsx src/sidepanel/routes/DashboardPage.test.tsx src/sidepanel/components/PopupAppearancePreview.test.tsx --run`
+- Passed: `npm run typecheck`
+- Passed: `npm run build`
+- Passed: `npm run docs:check`
+- Passed: `git diff --check`

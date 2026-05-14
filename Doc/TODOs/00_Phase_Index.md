@@ -34,10 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [443_Phase_Progress_Rendering_Thickness_And_Color_Bands.md](./443_Phase_Progress_Rendering_Thickness_And_Color_Bands.md)
-- latest completed slice: [442_Phase_Progress_Appearance_Model_Controls.md](./Archive/by-phase/400-499/442_Phase_Progress_Appearance_Model_Controls.md)
+- active phase file: [444_Phase_Soft_And_Gauge_Ring_Visual_Differentiation.md](./444_Phase_Soft_And_Gauge_Ring_Visual_Differentiation.md)
+- latest completed slice: [443_Phase_Progress_Rendering_Thickness_And_Color_Bands.md](./Archive/by-phase/400-499/443_Phase_Progress_Rendering_Thickness_And_Color_Bands.md)
 - queued phase files:
-  - [444_Phase_Soft_And_Gauge_Ring_Visual_Differentiation.md](./444_Phase_Soft_And_Gauge_Ring_Visual_Differentiation.md)
   - [445_Phase_Settings_Control_Order_And_Localization_Polish.md](./445_Phase_Settings_Control_Order_And_Localization_Polish.md)
   - [446_Phase_Settings_Overview_Responsive_User_Level_Help.md](./446_Phase_Settings_Overview_Responsive_User_Level_Help.md)
   - [447_Phase_Settings_Appearance_Responsive_Control_Grid.md](./447_Phase_Settings_Appearance_Responsive_Control_Grid.md)
@@ -840,6 +839,7 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 440` closeout packaged the verified post-RC17 UI polish source as `0.1.0-rc.18`, generated `release/ai-usage-dashboard-0.1.0-rc.18.zip`, recorded SHA256 `e291870988264b07d23cb8cb3c3bd3bf6a1207fcaed7b93fa5e13f829386dfdb`, and preserved RC13 as the submitted Chrome Web Store review boundary
 - the 2026-05-14 `Phase 441` closeout moved popup featured-provider status chips into the provider title row, added focused render coverage, and recorded structural Playwright popup checks for compact, balanced, and wide widths across `en`, `zh-CN`, `de`, and `ar`
 - the 2026-05-14 `Phase 442` closeout added typed progress thickness and remaining-color-band preferences, storage normalization, Settings controls, and 14-locale Settings progress-appearance copy while preserving provider warnings, diagnostics, action-badge behavior, adapter output, raw evidence, and existing progress rendering until `Phase 443`
+- the 2026-05-14 `Phase 443` closeout applied global progress thickness and remaining-percent color bands to line, classic circle, soft ring, and gauge ring renderers across popup, dashboard, provider detail, and preview surfaces while preserving quota math, provider warnings, diagnostics, action-badge behavior, and raw evidence boundaries
 
 ## Delivery Standard For Each Phase
 

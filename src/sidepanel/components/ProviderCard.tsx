@@ -1,6 +1,7 @@
 import type {
   AppLocalePreference,
   DisplaySurface,
+  ProgressColorBand,
   ProgressDisplayStyle,
   ProgressItemsBySurface,
   ProviderId,
@@ -14,8 +15,10 @@ import { UsageFactsList } from "./UsageFactsList";
 
 type ProviderCardProps = {
   localePreference: AppLocalePreference;
+  progressColorBands: readonly ProgressColorBand[];
   progressDisplayStyle: ProgressDisplayStyle;
   progressItemsBySurface: ProgressItemsBySurface;
+  progressThicknessPx: number;
   progressSurface: DisplaySurface;
   provider: ProviderViewModel;
   onOpen: (providerId: ProviderId) => void;
@@ -28,8 +31,10 @@ type ProviderCardProps = {
 
 export function ProviderCard({
   localePreference,
+  progressColorBands,
   progressDisplayStyle,
   progressItemsBySurface,
+  progressThicknessPx,
   progressSurface,
   provider,
   onOpen,
@@ -134,7 +139,9 @@ export function ProviderCard({
               density="compact"
               displayStyle={progressDisplayStyle}
               i18n={i18n}
+              progressColorBands={progressColorBands}
               progressItemsBySurface={progressItemsBySurface}
+              progressThicknessPx={progressThicknessPx}
               provider={provider}
               surface={progressSurface}
             />

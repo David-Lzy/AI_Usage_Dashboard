@@ -197,6 +197,36 @@ export function normalizeProgressColorBands(value: unknown): ProgressColorBand[]
   }));
 }
 
+export function resolveProgressColorBandForRemainingPercent(
+  remainingPercent: number | null,
+  colorBands: readonly ProgressColorBand[],
+): ProgressColorBand | null {
+  if (remainingPercent === null || !Number.isFinite(remainingPercent)) {
+    return null;
+  }
+
+  const normalizedPercent = Math.min(100, Math.max(0, Math.round(remainingPercent)));
+  const normalizedBands = normalizeProgressColorBands(colorBands);
+
+  return (
+    normalizedBands.find(
+      (band) =>
+        normalizedPercent >= band.minimumPercent &&
+        normalizedPercent <= band.maximumPercent,
+    ) ?? null
+  );
+}
+
+export function resolveProgressColorForRemainingPercent(
+  remainingPercent: number | null,
+  colorBands: readonly ProgressColorBand[],
+): string | null {
+  return (
+    resolveProgressColorBandForRemainingPercent(remainingPercent, colorBands)
+      ?.colorHex ?? null
+  );
+}
+
 export function moveProgressColorBand(
   bands: readonly ProgressColorBand[],
   bandId: string,

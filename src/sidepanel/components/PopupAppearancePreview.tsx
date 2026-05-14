@@ -7,6 +7,8 @@ type PopupAppearancePreviewProps = {
   settings: Pick<
     AppSettings,
     | "popupCornerStyle"
+    | "progressColorBands"
+    | "progressThicknessPx"
     | "popupProgressStyle"
     | "popupShadowStyle"
     | "popupSizePreset"
@@ -83,6 +85,8 @@ export function PopupAppearancePreview({
                 tone="neutral"
                 label={sampleQuotaLabel}
                 displayStyle={settings.popupProgressStyle}
+                progressColorBands={settings.progressColorBands}
+                progressThicknessPx={settings.progressThicknessPx}
                 valueKind="remaining"
                 valueLabel={sampleRemainingLabel}
                 valueText={`${sampleQuotaLabel}: 51% ${remainingLabel}`}

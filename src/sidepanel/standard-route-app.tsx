@@ -301,8 +301,10 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
       ) : route.name === "provider-detail" && selectedProvider ? (
         <ProviderDetailPage
           localePreference={localePreference}
+          progressColorBands={appState.settings.progressColorBands}
           progressDisplayStyle={progressDisplayStyle}
           progressItemsBySurface={appState.settings.progressItemsBySurface}
+          progressThicknessPx={appState.settings.progressThicknessPx}
           progressSurface={providerDisplaySurface}
           provider={selectedProvider}
           onBack={() => navigateToRoute({ name: "dashboard" })}
@@ -320,8 +322,10 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
       ) : (
         <DashboardPage
           localePreference={localePreference}
+          progressColorBands={appState.settings.progressColorBands}
           progressDisplayStyle={progressDisplayStyle}
           progressItemsBySurface={appState.settings.progressItemsBySurface}
+          progressThicknessPx={appState.settings.progressThicknessPx}
           progressSurface={providerDisplaySurface}
           summaryItems={summaryItems}
           providers={visibleProviders}

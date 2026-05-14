@@ -9,6 +9,7 @@ import {
   normalizeProgressColorBands,
   normalizeProgressThicknessPx,
   removeProgressColorBand,
+  resolveProgressColorForRemainingPercent,
   splitProgressColorBand,
 } from "./progress-appearance";
 
@@ -204,5 +205,18 @@ describe("progress appearance preferences", () => {
         colorHex: "#146C2E",
       },
     ]);
+  });
+
+  it("resolves remaining percent to the configured color band", () => {
+    expect(resolveProgressColorForRemainingPercent(20, DEFAULT_PROGRESS_COLOR_BANDS)).toBe(
+      "#B3261E",
+    );
+    expect(resolveProgressColorForRemainingPercent(21, DEFAULT_PROGRESS_COLOR_BANDS)).toBe(
+      "#8A4B00",
+    );
+    expect(resolveProgressColorForRemainingPercent(50, DEFAULT_PROGRESS_COLOR_BANDS)).toBe(
+      "#146C2E",
+    );
+    expect(resolveProgressColorForRemainingPercent(null, DEFAULT_PROGRESS_COLOR_BANDS)).toBeNull();
   });
 });

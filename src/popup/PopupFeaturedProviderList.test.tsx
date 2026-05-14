@@ -14,8 +14,10 @@ function renderFeaturedList(
       ariaLabel="Featured providers"
       cards={cards}
       i18n={createRuntimeI18n("en")}
+      progressColorBands={SAMPLE_APP_STATE.settings.progressColorBands}
       progressDisplayStyle={SAMPLE_APP_STATE.settings.popupProgressStyle}
       progressItemsBySurface={SAMPLE_APP_STATE.settings.progressItemsBySurface}
+      progressThicknessPx={SAMPLE_APP_STATE.settings.progressThicknessPx}
       getSettingsFocusForProvider={() => null}
       onAction={() => {}}
     />,

@@ -21,3 +21,4 @@ Status note:
 - [Phase 439 UI Polish RDP QA And Doc Closeout](./Phase_439_UI_Polish_RDP_QA_And_Doc_Closeout.md)
 - [Phase 441 Popup Status Chip Header Compactness](./Phase_441_Popup_Status_Chip_Header_Compactness.md)
 - [Phase 442 Progress Appearance Model Controls](./Phase_442_Progress_Appearance_Model_Controls.md)
+- [Phase 443 Progress Rendering Thickness And Color Bands](./Phase_443_Progress_Rendering_Thickness_And_Color_Bands.md)

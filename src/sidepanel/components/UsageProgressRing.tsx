@@ -6,6 +6,8 @@ type UsageProgressRingProps = {
   detail?: string | null;
   isIndeterminate: boolean;
   label: string;
+  progressColor: string | null;
+  progressThicknessPx: number;
   roundedPercent: number | null;
   tone: "neutral" | "warning" | "error";
   valueKind: "used" | "remaining";
@@ -34,6 +36,8 @@ export function UsageProgressRing({
   detail,
   isIndeterminate,
   label,
+  progressColor,
+  progressThicknessPx,
   roundedPercent,
   tone,
   valueKind,
@@ -44,9 +48,17 @@ export function UsageProgressRing({
   const arcLength = getRingArcLength(variant);
   const ringStyle = {
     "--usage-progress-ring-arc": String(arcLength),
+    "--usage-progress-ring-stroke": String(progressThicknessPx),
     "--usage-progress-ring-offset": String(getRingOffset(variant, roundedPercent)),
+    ...(progressColor && !isIndeterminate
+      ? {
+          "--usage-progress-ring-fill": progressColor,
+        }
+      : {}),
   } as CSSProperties & {
     "--usage-progress-ring-arc": string;
+    "--usage-progress-ring-fill"?: string;
+    "--usage-progress-ring-stroke": string;
     "--usage-progress-ring-offset": string;
   };
 

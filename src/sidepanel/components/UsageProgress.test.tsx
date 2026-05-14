@@ -53,6 +53,7 @@ describe("UsageProgress", () => {
         valueLabel="28% remaining"
         valueText="Weekly usage window: 28% remaining"
         detail="resets 2026-04-29 04:00"
+        progressThicknessPx={12}
       />,
     );
 
@@ -60,6 +61,8 @@ describe("UsageProgress", () => {
     expect(html).toContain('aria-valuenow="28"');
     expect(html).toContain('aria-valuetext="Weekly usage window: 28% remaining"');
     expect(html).toContain("usage-progress__track--error");
+    expect(html).toContain("--usage-progress-thickness:12px");
+    expect(html).toContain("--usage-progress-color:#8A4B00");
     expect(html).toContain('style="width:28%"');
     expect(html).toContain(">28% remaining<");
     expect(html).toContain("usage-progress__meta-detail");
@@ -79,6 +82,7 @@ describe("UsageProgress", () => {
         valueLabel="35% remaining"
         valueText="Weekly usage window: 35% remaining"
         detail="resets 2026-04-29 04:00"
+        progressThicknessPx={12}
       />,
     );
 
@@ -87,6 +91,8 @@ describe("UsageProgress", () => {
     expect(html).toContain('aria-valuenow="35"');
     expect(html).toContain('aria-valuetext="Weekly usage window: 35% remaining"');
     expect(html).toContain("--usage-progress-percent:35%");
+    expect(html).toContain("--usage-progress-thickness:12px");
+    expect(html).toContain("--usage-progress-color:#8A4B00");
     expect(html).toContain(">35%<");
     expect(html).not.toContain(">35% remaining<");
     expect(html).not.toContain("usage-progress__track");
@@ -106,6 +112,7 @@ describe("UsageProgress", () => {
         valueKind="remaining"
         valueLabel="35% remaining"
         valueText="Weekly usage window: 35% remaining"
+        progressThicknessPx={14}
       />,
     );
 
@@ -115,7 +122,9 @@ describe("UsageProgress", () => {
     expect(html).toContain('aria-valuenow="35"');
     expect(html).toContain('aria-valuetext="Weekly usage window: 35% remaining"');
     expect(html).toContain("--usage-progress-ring-arc:100");
+    expect(html).toContain("--usage-progress-ring-stroke:14");
     expect(html).toContain("--usage-progress-ring-offset:65");
+    expect(html).toContain("--usage-progress-ring-fill:#8A4B00");
     expect(html).toContain("<svg");
     expect(html).toContain('class="usage-progress-ring__value">35%</span>');
     expect(html).not.toContain(">35% remaining<");
@@ -136,6 +145,7 @@ describe("UsageProgress", () => {
         displayStyle="circle-gauge"
         valueKind="remaining"
         valueText="Weekly usage window: 51% remaining"
+        progressThicknessPx={16}
       />,
     );
 
@@ -143,7 +153,9 @@ describe("UsageProgress", () => {
     expect(html).toContain("usage-progress-ring--circle-gauge");
     expect(html).toContain('aria-valuenow="51"');
     expect(html).toContain("--usage-progress-ring-arc:76");
+    expect(html).toContain("--usage-progress-ring-stroke:16");
     expect(html).toContain("--usage-progress-ring-offset:37.24");
+    expect(html).toContain("--usage-progress-ring-fill:#146C2E");
   });
 
   it("keeps soft SVG ring indeterminate semantics accessible", () => {
