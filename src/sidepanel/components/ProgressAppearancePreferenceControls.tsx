@@ -15,6 +15,7 @@ import {
   splitProgressColorBand,
 } from "../../shared/progress-appearance";
 import { ColorChoiceDropdown } from "./ColorChoiceDropdown";
+import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 
 type ProgressAppearancePreferenceControlsProps = {
   colorBands: ProgressColorBand[];
@@ -154,53 +155,56 @@ export function ProgressAppearancePreferenceControls({
       <div className="progress-appearance-preferences__header">
         <div>
           <p className="section-label">{copy.sectionLabel}</p>
-          <h3 className="section-title progress-appearance-preferences__title">
-            {copy.title}
-          </h3>
+          <div className="section-title-with-info">
+            <h3 className="section-title progress-appearance-preferences__title">
+              {copy.title}
+            </h3>
+            <MaterialInfoTooltip>{copy.detail}</MaterialInfoTooltip>
+          </div>
         </div>
-        <p className="supporting-copy">{copy.detail}</p>
       </div>
 
       <div className="progress-appearance-preferences__body">
         <div className="progress-appearance-thickness">
-          <label className="form-field" htmlFor="progress-thickness-input">
-            <span className="form-field__label">{copy.thickness.label}</span>
-            <span className="progress-appearance-thickness__control">
-              <input
-                id="progress-thickness-input"
-                className="form-field__control progress-appearance-thickness__number"
-                type="number"
-                min={PROGRESS_THICKNESS_MIN_PX}
-                max={PROGRESS_THICKNESS_MAX_PX}
-                value={thicknessPx}
-                onChange={handleThicknessChange}
-              />
-              <input
-                className="progress-appearance-thickness__range"
-                type="range"
-                min={PROGRESS_THICKNESS_MIN_PX}
-                max={PROGRESS_THICKNESS_MAX_PX}
-                value={thicknessPx}
-                aria-label={copy.thickness.label}
-                onChange={handleThicknessChange}
-              />
-              <span className="meta-chip">{copy.thickness.unit}</span>
-            </span>
-          </label>
-          <p className="supporting-copy progress-appearance-thickness__help">
-            {copy.thickness.help}
-          </p>
+          <div className="field-label-with-info">
+            <label
+              className="form-field__label"
+              htmlFor="progress-thickness-input"
+            >
+              {copy.thickness.label}
+            </label>
+            <MaterialInfoTooltip>{copy.thickness.help}</MaterialInfoTooltip>
+          </div>
+          <div className="progress-appearance-thickness__control">
+            <input
+              id="progress-thickness-input"
+              className="form-field__control progress-appearance-thickness__number"
+              type="number"
+              min={PROGRESS_THICKNESS_MIN_PX}
+              max={PROGRESS_THICKNESS_MAX_PX}
+              value={thicknessPx}
+              onChange={handleThicknessChange}
+            />
+            <input
+              className="progress-appearance-thickness__range"
+              type="range"
+              min={PROGRESS_THICKNESS_MIN_PX}
+              max={PROGRESS_THICKNESS_MAX_PX}
+              value={thicknessPx}
+              aria-label={copy.thickness.label}
+              onChange={handleThicknessChange}
+            />
+            <span className="meta-chip">{copy.thickness.unit}</span>
+          </div>
         </div>
 
         <div className="progress-appearance-bands">
           <div className="progress-appearance-bands__header">
-            <div>
+            <div className="section-title-with-info">
               <p className="provider-progress-provider__title">
                 {copy.colorBands.label}
               </p>
-              <p className="supporting-copy progress-appearance-bands__detail">
-                {copy.colorBands.detail}
-              </p>
+              <MaterialInfoTooltip>{copy.colorBands.detail}</MaterialInfoTooltip>
             </div>
             <div className="progress-appearance-bands__header-actions">
               <button className="text-button" type="button" onClick={addBand}>

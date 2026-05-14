@@ -48,6 +48,7 @@ import { useSettingsCredentialDrafts } from "../use-settings-credential-drafts";
 import { useSettingsSectionNavigation } from "../use-settings-section-navigation";
 import { SettingsSourceSection } from "../components/SettingsSourceSection";
 import { SettingsPreferencesSection } from "../components/SettingsPreferencesSection";
+import { MaterialInfoTooltip } from "../components/MaterialInfoTooltip";
 
 type SettingsToast = {
   tone: "success" | "error";
@@ -345,9 +346,9 @@ export function SettingsPage({
               ]}
               onChange={onUserLevelChange}
             />
-            <p className="supporting-copy settings-overview__user-level-help">
+            <MaterialInfoTooltip className="settings-overview__user-level-help">
               {settingsCopy.layout.userLevel.helpText}
-            </p>
+            </MaterialInfoTooltip>
           </div>
           <MaterialSelect
             label={i18n.t("settings.preferences.locale_label")}
@@ -419,9 +420,15 @@ export function SettingsPage({
           <div className="dashboard-section__header">
             <div>
               <p className="section-label">{settingsCopy.layout.advanced.eyebrow}</p>
-              <h2 className="section-title">{settingsCopy.layout.advanced.title}</h2>
+              <div className="section-title-with-info">
+                <h2 className="section-title">
+                  {settingsCopy.layout.advanced.title}
+                </h2>
+                <MaterialInfoTooltip>
+                  {settingsCopy.layout.advanced.detail}
+                </MaterialInfoTooltip>
+              </div>
             </div>
-            <p className="supporting-copy">{settingsCopy.layout.advanced.detail}</p>
           </div>
 
           <details

@@ -13,6 +13,7 @@ import {
   ProviderCarousel,
   type ProviderCarouselItem,
 } from "./ProviderCarousel";
+import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 
 type SettingsQuickSetupSectionProps = {
   activeSessionPageAttachAvailable: boolean;
@@ -266,9 +267,13 @@ export function SettingsQuickSetupSection({
       <div className="dashboard-section__header">
         <div>
           <p className="section-label">{settingsCopy.quickSetup.eyebrow}</p>
-          <h2 className="section-title">{settingsCopy.quickSetup.title}</h2>
+          <div className="section-title-with-info">
+            <h2 className="section-title">{settingsCopy.quickSetup.title}</h2>
+            <MaterialInfoTooltip>
+              {settingsCopy.quickSetup.detail}
+            </MaterialInfoTooltip>
+          </div>
         </div>
-        <p className="supporting-copy">{settingsCopy.quickSetup.detail}</p>
       </div>
 
       <ProviderCarousel

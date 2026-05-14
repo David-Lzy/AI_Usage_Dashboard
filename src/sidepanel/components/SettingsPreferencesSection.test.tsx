@@ -49,9 +49,7 @@ describe("SettingsPreferencesSection", () => {
     expect(html).toContain('data-settings-material-select="popup-circular-row-count"');
     expect(html).toContain("Circular items per row");
     expect(html).toContain("2 per row");
-    expect(html).toContain(
-      'id="popup-circular-row-count-helper-tooltip"',
-    );
+    expect(html).toContain("material-info-tooltip__trigger");
     expect(html).toContain('role="tooltip"');
     expect(html).toContain("Line progress stays one item per row.");
     expect(html).not.toContain("settings-preferences__inline-helper");

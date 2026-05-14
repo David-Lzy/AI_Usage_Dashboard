@@ -23,8 +23,8 @@
 
 .settings-overview__level-control {
   display: grid;
-  grid-template-columns: minmax(220px, min(320px, 44%)) minmax(240px, 1fr);
-  align-items: start;
+  grid-template-columns: minmax(0, min(320px, 100%)) auto;
+  align-items: end;
   gap: var(--app-space-3);
   min-width: 0;
 }
@@ -35,10 +35,8 @@
 }
 
 .settings-overview__user-level-help {
-  align-self: start;
-  max-width: 72ch;
-  margin: 0;
-  padding-block-start: calc(var(--md-sys-typescale-label-medium-line-height) + var(--app-space-2));
+  align-self: end;
+  margin-block-end: 14px;
 }
 
 .settings-section-anchor {
@@ -307,12 +305,11 @@
   }
 
   .settings-overview__level-control {
-    grid-template-columns: minmax(0, min(320px, 100%));
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 
   .settings-overview__user-level-help {
-    max-width: none;
-    padding-block-start: 0;
+    margin-block-end: 14px;
   }
 }
 

@@ -27,6 +27,7 @@ import { buildSettingsPreferenceOptions } from "../settings-preference-options";
 import type { SettingsUserLevelVisibility } from "../settings-user-level-visibility";
 import { AccentColorSelect } from "./AccentColorSelect";
 import { EditableNumberCombobox } from "./EditableNumberCombobox";
+import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 import { MaterialSelect } from "./MaterialSelect";
 import { ProviderOrderPreferenceControls } from "./ProviderOrderPreferenceControls";
 import { ProviderProgressItemPreferenceControls } from "./ProviderProgressItemPreferenceControls";
@@ -200,9 +201,11 @@ export function SettingsPreferencesSection({
         </summary>
 
         <div className="source-card__details-body settings-preferences__more-body">
-          <p className="supporting-copy settings-preferences__more-copy">
-            {settingsCopy.preferenceGroups.uiMoreDetail}
-          </p>
+          <div className="settings-preferences__more-info">
+            <MaterialInfoTooltip>
+              {settingsCopy.preferenceGroups.uiMoreDetail}
+            </MaterialInfoTooltip>
+          </div>
 
           <div className="settings-grid">
             <MaterialSelect
@@ -232,23 +235,9 @@ export function SettingsPreferencesSection({
                   )
                 }
               />
-              <span className="settings-preferences__field-note">
-                <span
-                  className="settings-preferences__field-note-trigger"
-                  tabIndex={0}
-                  aria-label={popupCircularRowCountHelperText}
-                  aria-describedby="popup-circular-row-count-helper-tooltip"
-                >
-                  ?
-                </span>
-                <span
-                  id="popup-circular-row-count-helper-tooltip"
-                  className="settings-preferences__field-note-tooltip"
-                  role="tooltip"
-                >
-                  {popupCircularRowCountHelperText}
-                </span>
-              </span>
+              <MaterialInfoTooltip className="settings-preferences__field-note">
+                {popupCircularRowCountHelperText}
+              </MaterialInfoTooltip>
             </div>
 
             <MaterialSelect
@@ -321,9 +310,11 @@ export function SettingsPreferencesSection({
         </summary>
 
         <div className="source-card__details-body settings-preferences__more-body">
-          <p className="supporting-copy settings-preferences__more-copy">
-            {settingsCopy.preferenceGroups.providerDisplayDetail}
-          </p>
+          <div className="settings-preferences__more-info">
+            <MaterialInfoTooltip>
+              {settingsCopy.preferenceGroups.providerDisplayDetail}
+            </MaterialInfoTooltip>
+          </div>
           <ProviderOrderPreferenceControls
             copy={settingsCopy.providerOrder}
             providers={providers}

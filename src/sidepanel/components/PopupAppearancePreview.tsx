@@ -1,5 +1,6 @@
 import type { AppSettings } from "../../providers/types";
 import { buildRuntimeCommonCopy, type RuntimeI18n } from "../../shared/i18n";
+import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 import { UsageProgress } from "./UsageProgress";
 
 type PopupAppearancePreviewProps = {
@@ -39,13 +40,15 @@ export function PopupAppearancePreview({
           <p className="section-label">
             {i18n.t("settings.popup_appearance_preview.eyebrow")}
           </p>
-          <h2 className="section-title">
-            {i18n.t("settings.popup_appearance_preview.title")}
-          </h2>
+          <div className="section-title-with-info">
+            <h2 className="section-title">
+              {i18n.t("settings.popup_appearance_preview.title")}
+            </h2>
+            <MaterialInfoTooltip>
+              {i18n.t("settings.popup_appearance_preview.detail")}
+            </MaterialInfoTooltip>
+          </div>
         </div>
-        <p className="supporting-copy">
-          {i18n.t("settings.popup_appearance_preview.detail")}
-        </p>
       </div>
 
       <div

@@ -18,6 +18,7 @@ import {
   resolveProviderOrder,
 } from "../../shared/display-preferences";
 import type { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
+import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 
 type ProviderOrderPreferenceControlsProps = {
   copy: ReturnType<typeof buildSettingsLocalizedCopy>["providerOrder"];
@@ -126,11 +127,13 @@ export function ProviderOrderPreferenceControls({
       <div className="provider-order-preferences__header">
         <div>
           <p className="section-label">{copy.sectionLabel}</p>
-          <h3 className="section-title provider-order-preferences__title">
-            {copy.title}
-          </h3>
+          <div className="section-title-with-info">
+            <h3 className="section-title provider-order-preferences__title">
+              {copy.title}
+            </h3>
+            <MaterialInfoTooltip>{copy.detail}</MaterialInfoTooltip>
+          </div>
         </div>
-        <p className="supporting-copy">{copy.detail}</p>
       </div>
 
       <div className="provider-order-preferences__surfaces">

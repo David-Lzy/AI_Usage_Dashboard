@@ -10,6 +10,7 @@ import {
   PermissionPrompt,
   type PermissionPromptLabels,
 } from "./PermissionPrompt";
+import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 import { ProviderCarousel } from "./ProviderCarousel";
 import { SummaryStrip } from "./SummaryStrip";
 
@@ -66,9 +67,11 @@ export function SettingsOverviewSection({
       <div className="dashboard-section__header">
         <div>
           <p className="section-label">{eyebrow}</p>
-          <h2 className="section-title">{title}</h2>
+          <div className="section-title-with-info">
+            <h2 className="section-title">{title}</h2>
+            <MaterialInfoTooltip>{detail}</MaterialInfoTooltip>
+          </div>
         </div>
-        <p className="supporting-copy">{detail}</p>
       </div>
 
       <SummaryStrip ariaLabel={ariaLabel} items={items} />
@@ -137,9 +140,11 @@ export function SettingsPermissionsSection({
       <div className="dashboard-section__header">
         <div>
           <p className="section-label">{eyebrow}</p>
-          <h2 className="section-title">{title}</h2>
+          <div className="section-title-with-info">
+            <h2 className="section-title">{title}</h2>
+            <MaterialInfoTooltip>{detail}</MaterialInfoTooltip>
+          </div>
         </div>
-        <p className="supporting-copy">{detail}</p>
       </div>
 
       <ProviderCarousel
