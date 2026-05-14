@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-14:
 
-- the numbered phase queue is completed through `Phase 438`; `Phase 439` is active and `Phase 440` is queued for post-RC17 UI polish covering visual QA/doc closeout and follow-up packaging
+- the numbered phase queue is completed through `Phase 439`; `Phase 440` is active for RC18 packaging from the verified post-RC17 UI polish source
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -142,7 +142,8 @@ As of 2026-05-14:
 - `Phase 436` completed disclosure chevron state animation by extending open-state rotation to Quick Setup more-provider details and preserving custom select/combobox arrow behavior with reduced-motion handling.
 - `Phase 437` completed Chrome extension error triage by identifying the `Errors` badge as stale Vite dev-server CORS records from an older dev-mode sidepanel run, verifying current `dist/` has no Vite dev-client references, rebuilding/reloading the unpacked extension, and clearing the stale Chrome error log.
 - `Phase 438` completed Settings quota-item 14-locale copy by moving the quota/progress item controls into `buildSettingsLocalizedCopy`, while preserving provider/progress ids, raw evidence, diagnostics, and storage behavior.
-- `Phase 439` is active for UI polish closeout QA, with `Phase 440` queued for RC18 packaging after the remaining UI polish is verified.
+- `Phase 439` completed UI polish closeout QA by checking popup, sidebar dashboard, full-page dashboard, German Settings quota controls, Arabic RTL Settings quota controls, numeric-only circular ring centers, carousel depth layout, and the cleared RDP Chrome extension error state.
+- `Phase 440` is active for RC18 packaging from the verified UI polish source.
 - `Phase 200` completed a functionality-first Codex personal slice by preserving multiple visible usage windows, expanding Codex page-capture snippets, and surfacing the most constrained visible percentage window across dashboard, provider detail, and popup paths
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without changing the primary percentage-window quota model
 - `Phase 202` completed repeatable unpacked-extension verification for Codex personal multi-window plus flex-balance context, while fixing DOM capture so repeated percentages and single-character balance values are not lost before parsing

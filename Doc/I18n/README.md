@@ -35,3 +35,4 @@ Status note:
 - `Phase 429` added 14-locale labels for the expanded progress display style options and made the Settings popup appearance preview render the selected localized progress style.
 - `Phase 432` verified Arabic Settings carousel rendering through Playwright preview and fixed mixed-direction carousel status text while preserving provider names and raw evidence outside translation scope.
 - `Phase 438` added 14-locale Settings quota/progress item control copy while preserving provider/progress ids, raw evidence, diagnostics, and storage behavior.
+- `Phase 439` rechecked German and Arabic Settings quota controls through Playwright preview, confirming localized quota copy renders without English heading fallback in those representative locales.

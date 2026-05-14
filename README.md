@@ -10,6 +10,7 @@ Current packaged release state:
 - Chrome manifest version: `0.1.0.17`
 - packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.17.zip`
 - source status: `rc.17` package bytes are aligned through `Phase 433`, including the `rc.16` localization/interaction-audit display boundary plus post-`rc.16` display-preference storage architecture, per-surface provider ordering, Settings provider-order controls, shared progress-item inventory, Settings quota-item visibility/order controls, per-surface progress item rendering, new soft/gauge progress ring styles, localized Settings progress-style preview/options, Settings provider-section carousel migration, and representative UI QA/doc closeout. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
+- post-`rc.17` source status: UI polish is verified through `Phase 439`; it is not packaged until active `Phase 440` creates the next follow-up candidate.
 - packaged follow-up milestone: [2026-05-14 RC17 Display Preference Follow-Up Release Candidate](./Doc/Milestones/2026-05-14_RC17_Display_Preference_Follow_Up_Release_Candidate.md)
 - submitted review milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
@@ -47,7 +48,7 @@ Next execution queue:
 
 1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary, but use `0.1.0-rc.17` as the ready follow-up package if review feedback or an explicit resubmission decision asks for a newer build
 2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC17 follow-up milestone](./Doc/Milestones/2026-05-14_RC17_Display_Preference_Follow_Up_Release_Candidate.md) as the current packaged-source reference
-3. execute the remaining `Phase 439` through `Phase 440` UI polish follow-up queue: UI QA/doc closeout and RC18 packaging only after the QA fixes are verified
+3. execute active `Phase 440` RC18 packaging from the verified post-RC17 UI polish source; do not mutate the submitted RC13 review boundary
 4. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 5. keep real operator evidence closed and archived; do not open another interaction-audit or theme-recovery operator evidence phase unless a new surface or theme regression creates a fresh review need
 6. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
