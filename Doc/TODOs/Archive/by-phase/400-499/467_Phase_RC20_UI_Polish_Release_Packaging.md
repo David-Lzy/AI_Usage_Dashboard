@@ -1,6 +1,6 @@
 # Phase 467 - RC20 UI Polish Release Packaging
 
-Status: active
+Status: completed
 
 ## Goal
 
@@ -34,6 +34,20 @@ Package the completed Phase 449-466 UI polish source as a new follow-up release 
 - `npm run release:package`
 - `npm run docs:check`
 - `git diff --check`
+
+## Completed
+
+- Bumped `package.json` and `package-lock.json` to `0.1.0-rc.20`.
+- Bumped `src/manifest.json` to Chrome version `0.1.0.20` and display version `0.1.0-rc.20`.
+- Ran the full release gate and generated `release/ai-usage-dashboard-0.1.0-rc.20.zip`.
+- Recorded SHA256 `0c681b4b120f5a8cd108ec62d532da8089d9fba136256b8aecb1d3597fd023fb`.
+- Added the RC20 milestone while preserving RC13 as the submitted Chrome Web Store review boundary.
+
+## Verification Notes
+
+- `npm run release:check`
+- `npm run release:package`
+- `sha256sum release/ai-usage-dashboard-0.1.0-rc.20.zip`
 
 ## Follow-Up
 

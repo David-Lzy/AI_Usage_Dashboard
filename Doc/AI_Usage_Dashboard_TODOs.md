@@ -76,13 +76,13 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 466` execution priority:
+Current post-`Phase 467` execution priority:
 
 1. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.13.zip` as the submitted Chrome Web Store review boundary. Do not silently mutate or rewrite the [RC13 upload-candidate milestone](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) while that submission remains the human-reviewed baseline.
-2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.19.zip` as the current packaged follow-up candidate until `Phase 467` completes. It includes the previous `rc.18` follow-up work plus post-`rc.18` UI polish through `Phase 447`; current implementation source is ahead through `Phase 466` UI polish visual QA/docs closeout, while the tracked TODO queue now schedules `Phase 467` as the explicit RC20 packaging slice.
+2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.20.zip` as the current packaged follow-up candidate. It includes the previous `rc.19` follow-up work plus UI polish through `Phase 467`; no numbered phase is currently queued after `Phase 467`.
 3. `P0` - keep the refreshed `Direction 10.3` screenshot evidence archived and ready, not pending: [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) still fulfills the latest reviewed screenshot pack with `5/5` images and `3` explicit truth-boundary notes.
-4. `P1` - if a resubmission becomes necessary, use [2026-05-14_RC19_Post_RC18_UI_Polish_Closeout_Release_Candidate.md](./Milestones/2026-05-14_RC19_Post_RC18_UI_Polish_Closeout_Release_Candidate.md) as the current packaged-source reference and cut a fresh submission milestone from that boundary instead of mutating RC13 history.
-5. `P1` - package the completed UI polish source in `Phase 467` as a follow-up release candidate. This queue does not change the submitted RC13 store-review boundary unless a later submitted-store milestone is explicitly opened.
+4. `P1` - if a resubmission becomes necessary, use [2026-05-15_RC20_UI_Polish_Release_Candidate.md](./Milestones/2026-05-15_RC20_UI_Polish_Release_Candidate.md) as the current packaged-source reference and cut a fresh submission milestone from that boundary instead of mutating RC13 history.
+5. `P1` - no numbered phase is currently queued after `Phase 467`; start the next change from a new scoped TODO so the RC20 package boundary remains stable.
 6. `P2` - keep the `Phase 309` first-provider setup behavior stable: zero-provider Settings now recommends one personal-user provider in Quick Setup and popup zero-provider actions deep-link to that same setup card.
 7. `P2` - keep the `Phase 310` cached-first guard stable: standard dashboard routes must keep rendering cached app state while background bootstrap is still loading.
 8. `P2` - keep the `Phase 311` popup view-model split behavior-only: `src/popup/view-models.ts` remains the public aggregator and the extracted setup-coverage / featured-card modules should not change popup UI semantics.
@@ -152,7 +152,7 @@ Delivery rule for this stage:
 - keep active implementation phases narrow and independently verifiable
 - keep file-splitting separate from release packaging, provider verification, and store evidence closeout
 - preserve the current provider truth boundaries while changing UI presentation
-- treat `rc.13` as the current submitted store-review boundary, and `rc.19` as the current packaged follow-up candidate; `rc.18`, `rc.17`, `rc.16`, `rc.15`, `rc.14`, `rc.12`, and `rc.11` remain historical evidence
+- treat `rc.13` as the current submitted store-review boundary, and `rc.20` as the current packaged follow-up candidate; `rc.19`, `rc.18`, `rc.17`, `rc.16`, `rc.15`, `rc.14`, `rc.12`, and `rc.11` remain historical evidence
 
 Phase status update:
 
@@ -499,6 +499,7 @@ Phase status update:
 - Post-`Phase 464` polish also renamed the UI disclosure copy to “More UI settings / Collapse UI settings” with synchronized 14-locale labels
 - `Phase 465` added a safe local UI font-family preference, wired it through settings storage normalization and root Material typography variables, and added 14-locale Settings labels/helper copy while avoiding remote font assets
 - `Phase 466` closed the Phase 458-465 UI polish queue with Playwright built-preview checks, sequential RDP Chrome extension-window captures, documentation alignment, and an explicit decision to package RC20 in a dedicated follow-up phase
+- `Phase 467` packaged the completed UI polish source as `0.1.0-rc.20`, generated `release/ai-usage-dashboard-0.1.0-rc.20.zip`, recorded SHA256 `0c681b4b120f5a8cd108ec62d532da8089d9fba136256b8aecb1d3597fd023fb`, and preserved RC13 as the submitted Chrome Web Store review boundary
 - `Phase 334` split interaction-audit per-surface card rendering into a dedicated component while preserving route-owned audit refs, preset actions, manual checks, and signoff callbacks
 - `Phase 335` split interaction-audit review queue rendering into a dedicated component while preserving route-owned queue construction and jump behavior
 - `Phase 336` split interaction-audit request-scope rendering into a dedicated component while preserving route-owned request-context state plus existing binding, revision, and next-command display

@@ -34,10 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [467_Phase_RC20_UI_Polish_Release_Packaging.md](./467_Phase_RC20_UI_Polish_Release_Packaging.md)
-- latest completed slice: [466_Phase_UI_Polish_Visual_QA_Docs_Closeout.md](./Archive/by-phase/400-499/466_Phase_UI_Polish_Visual_QA_Docs_Closeout.md)
-- queued phase files:
-  - [467_Phase_RC20_UI_Polish_Release_Packaging.md](./467_Phase_RC20_UI_Polish_Release_Packaging.md)
+- active phase file: none
+- latest completed slice: [467_Phase_RC20_UI_Polish_Release_Packaging.md](./Archive/by-phase/400-499/467_Phase_RC20_UI_Polish_Release_Packaging.md)
+- queued phase files: none
 
 Completed phases should be moved to:
 

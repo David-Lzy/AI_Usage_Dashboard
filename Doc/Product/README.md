@@ -52,5 +52,6 @@ Status note:
 - Post-`Phase 464` polish tightened remaining-color-band responsive grids so number and color controls use stretch-to-fit columns instead of content-width columns at sidepanel widths.
 - `Phase 465` added a safe local UI font-family preference, Settings control, storage normalization, root Material typography-variable sync, and 14-locale labels/helper copy without loading remote fonts.
 - `Phase 466` closed the UI polish queue with Playwright built-preview checks, sequential RDP Chrome extension-window captures, documentation alignment, and an RC20 packaging decision.
-- Current implementation source is ahead of the `0.1.0-rc.19` package by the `Phase 449` through `Phase 466` UI micro-polish phases.
-- `Phase 467` is queued as the RC20 packaging slice for this completed UI polish source.
+- `Phase 467` packaged the completed UI polish source as `0.1.0-rc.20`; RC13 remains the submitted Chrome Web Store review boundary.
+- Current implementation source is aligned with the `0.1.0-rc.20` package through `Phase 467`.
+- No numbered phase is currently queued after `Phase 467`.
