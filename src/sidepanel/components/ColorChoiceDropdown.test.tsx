@@ -43,6 +43,7 @@ describe("ColorChoiceDropdown", () => {
     expect(html).toContain('aria-expanded="false"');
     expect(html).toContain("Indigo");
     expect(html).toContain("#4F46E5");
+    expect(html).not.toContain("color-choice-dropdown__hex");
     expect(html).not.toContain('type="color"');
   });
 
@@ -54,7 +55,7 @@ describe("ColorChoiceDropdown", () => {
       "Red",
     );
     expect(getColorChoiceSelectionLabel("#111111", sections, "Custom")).toBe(
-      "Custom #111111",
+      "#111111",
     );
   });
 });

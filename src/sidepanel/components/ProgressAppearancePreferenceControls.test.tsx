@@ -28,8 +28,10 @@ describe("ProgressAppearancePreferenceControls", () => {
     expect(html).toContain('id="progress-thickness-input"');
     expect(html).toContain('data-progress-color-band="low"');
     expect(html).toContain('data-color-choice-dropdown="progress-color-band-low"');
+    expect(html).toContain("Rot");
     expect(html).toContain("#B3261E");
     expect(html).toContain("Farben zurucksetzen");
+    expect(html).not.toContain("color-choice-dropdown__hex");
     expect(html).not.toContain('type="color"');
   });
 });

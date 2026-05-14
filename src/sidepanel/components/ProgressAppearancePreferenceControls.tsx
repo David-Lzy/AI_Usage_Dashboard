@@ -281,7 +281,6 @@ export function ProgressAppearancePreferenceControls({
                     <ColorChoiceDropdown
                       label={copy.colorBands.colorLabel}
                       valueHex={colorInputValue}
-                      selectedLabel={band.colorHex}
                       fieldIdPrefix={`progress-color-band-${band.id}`}
                       copy={colorChoiceCopy}
                       sections={[

@@ -1,6 +1,6 @@
 # Phase 458 - Color Band Control Copy And Row Layout
 
-Status: active
+Status: completed on 2026-05-15
 
 ## Goal
 
@@ -33,7 +33,21 @@ Polish the remaining-color band controls so each band reads as one compact horiz
 - `npm run test -- src/sidepanel/components/ColorChoiceDropdown.test.tsx src/sidepanel/components/ProgressAppearancePreferenceControls.test.tsx src/sidepanel/components/SettingsPreferencesSection.test.tsx --run`
 - `npm run typecheck`
 - `npm run docs:check`
+- `npm run build`
 - `git diff --check`
+- `npm run docs:check`
+- `git diff --check`
+
+## Completion Notes
+
+- Color dropdown closed-state text now shows one visible value: recommended colors use their localized names, while unlisted custom colors use normalized `#RRGGBB`.
+- Remaining-color-band rows now use compact inline field groups for `From`, `To`, and `Color`, preserving a narrow fallback stack below 420px.
+- Progress color-band storage, validation, warning thresholds, and provider quota semantics are unchanged.
+
+## Verification
+
+- `npm run test -- src/sidepanel/components/ColorChoiceDropdown.test.tsx src/sidepanel/components/ProgressAppearancePreferenceControls.test.tsx src/sidepanel/components/SettingsPreferencesSection.test.tsx --run`
+- `npm run typecheck`
 
 ## Follow-Up
 

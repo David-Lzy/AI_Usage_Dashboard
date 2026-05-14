@@ -34,10 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [458_Phase_Color_Band_Control_Copy_And_Row_Layout.md](./458_Phase_Color_Band_Control_Copy_And_Row_Layout.md)
-- latest completed slice: [457_Phase_Color_Dropdown_Localization_Docs_Closeout.md](./Archive/by-phase/400-499/457_Phase_Color_Dropdown_Localization_Docs_Closeout.md)
+- active phase file: [459_Phase_Settings_Overview_Locale_Theme_Promotion.md](./459_Phase_Settings_Overview_Locale_Theme_Promotion.md)
+- latest completed slice: [458_Phase_Color_Band_Control_Copy_And_Row_Layout.md](./Archive/by-phase/400-499/458_Phase_Color_Band_Control_Copy_And_Row_Layout.md)
 - queued phase files:
-  - [459_Phase_Settings_Overview_Locale_Theme_Promotion.md](./459_Phase_Settings_Overview_Locale_Theme_Promotion.md)
   - [460_Phase_Quick_Setup_All_Providers_Carousel.md](./460_Phase_Quick_Setup_All_Providers_Carousel.md)
   - [461_Phase_Provider_Carousel_Motion_Pacing.md](./461_Phase_Provider_Carousel_Motion_Pacing.md)
   - [462_Phase_Popup_Header_Action_Layout.md](./462_Phase_Popup_Header_Action_Layout.md)
@@ -859,6 +858,7 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 455` closeout replaced the visible custom seed card with one accent color dropdown that keeps named presets, adds recommended colors, and routes custom colors through the existing `themePreset: "custom"` plus `themeCustomSeedHex` storage path
 - the 2026-05-14 `Phase 456` closeout added a shared Material-style color dropdown and moved remaining-color-band color editing onto that dropdown while preserving range validation, warning threshold semantics, provider data, package, and submitted-review boundaries
 - the 2026-05-14 `Phase 457` closeout added 14-locale Settings color picker and disclosure-group copy, focused tests, and current-truth docs for the Settings More split and color-dropdown source boundary
+- the 2026-05-15 `Phase 458` closeout made the remaining-color-band dropdown show one visible value, using localized recommended-color names or custom hex labels as appropriate, and compacted remaining-color-band controls into aligned inline field groups while preserving storage, validation, warning thresholds, and provider quota semantics
 
 ## Delivery Standard For Each Phase
 

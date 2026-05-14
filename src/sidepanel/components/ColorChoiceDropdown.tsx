@@ -66,7 +66,7 @@ export function getColorChoiceSelectionLabel(
     }
   }
 
-  return `${fallbackLabel} ${normalizedValueHex}`;
+  return normalizedValueHex;
 }
 
 function flattenSections(
@@ -212,7 +212,6 @@ export function ColorChoiceDropdown({
         />
         <span className="color-choice-dropdown__value">
           <span>{computedSelectedLabel}</span>
-          <span className="color-choice-dropdown__hex">{selectedValueHex}</span>
         </span>
         <span className="color-choice-dropdown__menu-icon" aria-hidden="true" />
       </button>
