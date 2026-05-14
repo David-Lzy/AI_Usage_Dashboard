@@ -425,7 +425,7 @@
 
 .progress-appearance-band__fields {
   display: grid;
-  grid-template-columns: repeat(3, minmax(112px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 112px), 1fr));
   gap: var(--app-space-2);
   min-width: 0;
 }

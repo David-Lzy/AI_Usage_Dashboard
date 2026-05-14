@@ -1,6 +1,6 @@
 # Phase 447 - Settings Appearance Responsive Control Grid
 
-Status: active
+Status: completed
 
 ## Goal
 
@@ -39,4 +39,20 @@ Make Appearance & Sync controls adapt their column width automatically across si
 
 ## Follow-Up
 
-- After `Phase 447`, run a closeout QA/packaging decision phase only if the UI changes are implemented and verified.
+- No numbered phase is currently queued after `Phase 447`.
+- Run a closeout QA/packaging decision phase only if a new release package is needed for post-`rc.18` source changes.
+
+## Completion Summary
+
+- Replaced fixed two-column Settings preference grids with responsive `auto-fit` tracks so Appearance & Sync controls use one, two, or four columns depending on available width.
+- Applied the same responsive pattern to progress appearance band fields so thickness and color-band controls stop relying on fixed three-column tracks.
+- Added shared maximum height and vertical scrolling to `MaterialSelect` and `EditableNumberCombobox` menus so long option lists remain visible above neighboring Settings content.
+
+## Completed Verification
+
+- `npm run test -- src/sidepanel/components/SettingsPreferencesSection.test.tsx src/sidepanel/routes/SettingsPage.test.tsx src/sidepanel/components/MaterialSelect.test.tsx src/sidepanel/components/EditableNumberCombobox.test.tsx --run`
+- `npm run typecheck`
+- `npm run build`
+- Playwright preview smoke against `http://127.0.0.1:4173/src/sidepanel/index.html#settings` and `?surface=full-page#settings` at `760px`, `1280px`, and `420px`.
+- `npm run docs:check`
+- `git diff --check`

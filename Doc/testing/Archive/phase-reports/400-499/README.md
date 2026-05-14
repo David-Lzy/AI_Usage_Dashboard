@@ -25,3 +25,4 @@ Status note:
 - [Phase 444 Soft And Gauge Ring Visual Differentiation](./Phase_444_Soft_And_Gauge_Ring_Visual_Differentiation.md)
 - [Phase 445 Settings Control Order And Localization Polish](./Phase_445_Settings_Control_Order_And_Localization_Polish.md)
 - [Phase 446 Settings Overview Responsive User Level Help](./Phase_446_Settings_Overview_Responsive_User_Level_Help.md)
+- [Phase 447 Settings Appearance Responsive Control Grid](./Phase_447_Settings_Appearance_Responsive_Control_Grid.md)

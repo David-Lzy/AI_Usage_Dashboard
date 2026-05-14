@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-14:
 
-- the numbered phase queue is completed through `Phase 446`; `Phase 447` is active for scoped post-`rc.18` UI polish without changing the submitted RC13 store-review boundary
+- the numbered phase queue is completed through `Phase 447`; no numbered phase is currently queued after `Phase 447`, and the post-`rc.18` UI polish source remains outside the submitted RC13 store-review boundary until a later packaging phase is explicitly opened
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -150,7 +150,7 @@ As of 2026-05-14:
 - `Phase 444` made `circle-soft` and `circle-gauge` visually distinct by keeping soft as a full 360-degree ring and making gauge a shorter instrument-style arc with separate rotation, track opacity, sizing, and fill emphasis while preserving progress values, aria text, color-band selection, provider warnings, diagnostics, and raw evidence boundaries.
 - `Phase 445` moved Provider order and Quota items to the bottom of the expanded Appearance & Sync block, localized Provider order copy across 14 runtime locales, and corrected Quota items English/Japanese/Korean surface-label drift while preserving provider/order storage, drag/drop behavior, provider visibility, credentials, source preferences, diagnostics, and release boundaries.
 - `Phase 446` made the Settings overview display-level helper responsive so wide layouts place it beside the selector and narrow `zh-CN`/`ar` layouts stack it below without overflow, while preserving user-level semantics, localized copy, route focus, Settings navigation, MaterialSelect internals, and release boundaries.
-- `Phase 447` remains active as a documentation-backed post-`rc.18` UI polish track for the broader Appearance & Sync responsive control grid; this queue does not package a new release candidate by itself.
+- `Phase 447` made Appearance & Sync controls use responsive grid tracks across side-panel, full-page, and narrow Settings layouts, and capped long custom select/editable-number menus so they remain visible and scrollable while preserving settings values, provider behavior, localized labels, and release boundaries.
 - `Phase 200` completed a functionality-first Codex personal slice by preserving multiple visible usage windows, expanding Codex page-capture snippets, and surfacing the most constrained visible percentage window across dashboard, provider detail, and popup paths
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without changing the primary percentage-window quota model
 - `Phase 202` completed repeatable unpacked-extension verification for Codex personal multi-window plus flex-balance context, while fixing DOM capture so repeated percentages and single-character balance values are not lost before parsing
@@ -452,7 +452,7 @@ As of 2026-05-14:
 - `Phase 169` completed the next `Direction 10.3` slice by adding one request-bound manual finalize command plus handoff update, so the remaining real-world work is now the popup capture itself instead of popup capture plus extra repo bookkeeping
 - `Phase 296` completed the mixed candidate screenshot file intake plus archive completion under `10_3_Store_Asset_Pack_And_Submission_TODOs.md`
 - the previous repo-owned engineering default was adapter diagnostic raw fallback regression review for the shipped `en + zh_CN` runtime pilot under Direction 09, captured in `09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`
-- because `0.1.0-rc.18` is now packaged as the aligned follow-up candidate while the RC13 milestone remains the submitted store-review boundary, the active functional priority is now review-feedback or deliberate resubmission follow-up only if the Chrome Web Store flow asks for it
+- because `0.1.0-rc.18` is now packaged as the aligned follow-up candidate while source is ahead through `Phase 447` and the RC13 milestone remains the submitted store-review boundary, the active functional priority is now review-feedback, deliberate resubmission follow-up, or an explicit closeout packaging phase only if the Chrome Web Store flow asks for it
 - the remaining high-value work in Direction 05 and Direction 04 is now evidence closure, not more tool-building:
   - `05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md`
   - `04_2_Interaction_Audit_Real_Operator_Closure_TODOs.md`

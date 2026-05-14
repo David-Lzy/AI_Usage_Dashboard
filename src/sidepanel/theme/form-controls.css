@@ -185,12 +185,14 @@ html[data-app-direction="rtl"] .material-select__button {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 0;
+  max-block-size: min(360px, calc(100vh - 24px));
   padding: var(--app-space-2) 0;
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--md-sys-shape-corner-large);
   background: var(--md-sys-color-surface-container);
   box-shadow: var(--app-elevation-2);
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .material-select__option {
@@ -365,12 +367,14 @@ html[data-app-direction="rtl"] .editable-number-combobox__input {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 0;
+  max-block-size: min(360px, calc(100vh - 24px));
   padding: var(--app-space-2) 0;
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--md-sys-shape-corner-large);
   background: var(--md-sys-color-surface-container);
   box-shadow: var(--app-elevation-2);
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .editable-number-combobox__option {

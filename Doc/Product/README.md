@@ -31,3 +31,4 @@ Status note:
 - `Phase 444` made soft and gauge SVG rings visually distinct without changing progress values, accessibility text, or provider evidence boundaries.
 - `Phase 445` moved Provider order and Quota items below the visual appearance controls and localized Provider order copy across the 14 runtime locales.
 - `Phase 446` made the Settings overview display-level helper responsive across wide and narrow localized layouts.
+- `Phase 447` made Appearance & Sync preference grids responsive and kept long custom select/combobox menus visible through scrollable capped overlays.
