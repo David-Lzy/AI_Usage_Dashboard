@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-14:
 
-- the numbered phase queue is completed through `Phase 433`; `Phase 434` is active and `Phase 435` through `Phase 440` are queued for post-RC17 UI polish covering Settings carousel focus/depth, circular progress rings, disclosure chevrons, Chrome extension error triage, quota-item localization, visual QA/doc closeout, and follow-up packaging
+- the numbered phase queue is completed through `Phase 434`; `Phase 435` is active and `Phase 436` through `Phase 440` are queued for post-RC17 UI polish covering circular progress rings, disclosure chevrons, Chrome extension error triage, quota-item localization, visual QA/doc closeout, and follow-up packaging
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -137,7 +137,8 @@ As of 2026-05-14:
 - `Phase 431` migrated Quick Setup, Visibility, Permissions, Credentials, and Source provider-shaped Settings sections onto `ProviderCarousel` while preserving data hooks, business controls, focused deep-link behavior, runtime text direction, and advanced/debug visibility boundaries.
 - `Phase 432` closed the UI preference track with docs alignment and representative Playwright visual QA for popup, sidebar-sized dashboard, full-page dashboard, and Arabic Settings carousel; RDP Chrome capture produced invalid blank images in this run, so the limitation is recorded as capture-path evidence rather than a product visual pass.
 - `Phase 433` packaged the post-`rc.16` display-preference and Settings-carousel source boundary as `0.1.0-rc.17`, preserving RC13 as the submitted Chrome Web Store review boundary and recording RC17 as the current packaged follow-up candidate.
-- `Phase 434` is active for Settings provider carousel focused-depth layout based on the latest visual review feedback, with `Phase 435` through `Phase 440` queued for ring polish, disclosure chevrons, Chrome extension error triage, quota-item 14-locale copy, closeout QA, and RC18 packaging after the fixes land.
+- `Phase 434` completed Settings provider carousel focused-depth layout by switching provider sections to one active card with blurred adjacent depth layers, inactive-slide `inert`/`aria-hidden` semantics, and safer indicator spacing while preserving provider business controls.
+- `Phase 435` is active for circular progress ring label and geometry polish, with `Phase 436` through `Phase 440` queued for disclosure chevrons, Chrome extension error triage, quota-item 14-locale copy, closeout QA, and RC18 packaging after the fixes land.
 - `Phase 200` completed a functionality-first Codex personal slice by preserving multiple visible usage windows, expanding Codex page-capture snippets, and surfacing the most constrained visible percentage window across dashboard, provider detail, and popup paths
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without changing the primary percentage-window quota model
 - `Phase 202` completed repeatable unpacked-extension verification for Codex personal multi-window plus flex-balance context, while fixing DOM capture so repeated percentages and single-character balance values are not lost before parsing

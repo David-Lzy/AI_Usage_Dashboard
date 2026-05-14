@@ -10,6 +10,7 @@ export type ProviderCarouselItem = {
 };
 
 type ProviderCarouselMove = "previous" | "next";
+type ProviderCarouselSlidePosition = "active" | "previous" | "next" | "hidden";
 
 type ProviderCarouselProps = {
   ariaLabel: string;
@@ -73,6 +74,37 @@ export function getProviderCarouselDragMove(
   const draggedTowardInlineEnd =
     textDirection === "rtl" ? deltaX < 0 : deltaX > 0;
   return draggedTowardInlineEnd ? "previous" : "next";
+}
+
+export function getProviderCarouselSlidePosition(
+  index: number,
+  activeIndex: number,
+  itemCount: number,
+): ProviderCarouselSlidePosition {
+  if (itemCount <= 1 || index === activeIndex) {
+    return "active";
+  }
+
+  const previousIndex = getNextProviderCarouselIndex(
+    activeIndex,
+    "previous",
+    itemCount,
+  );
+  const nextIndex = getNextProviderCarouselIndex(activeIndex, "next", itemCount);
+
+  if (previousIndex === nextIndex && index === nextIndex) {
+    return "next";
+  }
+
+  if (index === previousIndex) {
+    return "previous";
+  }
+
+  if (index === nextIndex) {
+    return "next";
+  }
+
+  return "hidden";
 }
 
 export function ProviderCarousel({
@@ -215,27 +247,34 @@ export function ProviderCarousel({
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerCancel}
       >
-        <div
-          className="provider-carousel__track"
-          style={{
-            transform: `translateX(${activeIndex * (textDirection === "rtl" ? 86 : -86)}%)`,
-          }}
-        >
-          {items.map((item, index) => (
-            <div
-              key={item.id}
-              className="provider-carousel__slide"
-              role="group"
-              aria-label={`${index + 1} of ${itemCount}: ${item.label}`}
-              aria-roledescription="slide"
-              data-provider-carousel-slide={item.id}
-              data-provider-carousel-slide-active={
-                index === activeIndex ? "true" : "false"
-              }
-            >
-              {item.content}
-            </div>
-          ))}
+        <div className="provider-carousel__track">
+          {items.map((item, index) => {
+            const isActive = index === activeIndex;
+            const slidePosition = getProviderCarouselSlidePosition(
+              index,
+              activeIndex,
+              itemCount,
+            );
+
+            return (
+              <div
+                key={item.id}
+                className="provider-carousel__slide"
+                role="group"
+                aria-hidden={isActive ? undefined : true}
+                aria-label={`${index + 1} of ${itemCount}: ${item.label}`}
+                aria-roledescription="slide"
+                inert={isActive ? undefined : true}
+                data-provider-carousel-slide={item.id}
+                data-provider-carousel-slide-active={
+                  isActive ? "true" : "false"
+                }
+                data-provider-carousel-slide-position={slidePosition}
+              >
+                {item.content}
+              </div>
+            );
+          })}
         </div>
       </div>
 

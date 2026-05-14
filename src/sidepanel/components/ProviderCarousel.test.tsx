@@ -7,6 +7,7 @@ import {
   getNextProviderCarouselIndex,
   getProviderCarouselDragMove,
   getProviderCarouselKeyboardMove,
+  getProviderCarouselSlidePosition,
 } from "./ProviderCarousel";
 
 const sampleItems = [
@@ -46,6 +47,12 @@ describe("ProviderCarousel", () => {
     expect(html).toContain('tabindex="0"');
     expect(html).toContain("2 / 3 · Claude Code");
     expect(html).toContain('data-provider-carousel-slide="cursor"');
+    expect(html).toContain(
+      'data-provider-carousel-slide-position="previous"',
+    );
+    expect(html).toContain('data-provider-carousel-slide-active="false"');
+    expect(html).toContain('aria-hidden="true"');
+    expect(html).toContain("inert=");
     expect(html).toContain('data-provider-carousel-dot="codex"');
     expect(html).toContain('aria-current="true"');
   });
@@ -91,5 +98,15 @@ describe("ProviderCarousel", () => {
     expect(getProviderCarouselDragMove(44, "ltr")).toBe("previous");
     expect(getProviderCarouselDragMove(-44, "rtl")).toBe("previous");
     expect(getProviderCarouselDragMove(44, "rtl")).toBe("next");
+  });
+
+  it("marks only the active and neighboring slides as visible layers", () => {
+    expect(getProviderCarouselSlidePosition(2, 2, 5)).toBe("active");
+    expect(getProviderCarouselSlidePosition(1, 2, 5)).toBe("previous");
+    expect(getProviderCarouselSlidePosition(3, 2, 5)).toBe("next");
+    expect(getProviderCarouselSlidePosition(0, 2, 5)).toBe("hidden");
+    expect(getProviderCarouselSlidePosition(4, 0, 5)).toBe("previous");
+    expect(getProviderCarouselSlidePosition(1, 0, 5)).toBe("next");
+    expect(getProviderCarouselSlidePosition(1, 0, 2)).toBe("next");
   });
 });

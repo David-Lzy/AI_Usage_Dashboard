@@ -1,6 +1,6 @@
 # Phase 434 - Settings Carousel Focused Depth Layout
 
-Status: active
+Status: completed
 
 ## Goal
 
@@ -40,3 +40,18 @@ Polish the Settings provider carousel so it presents one primary provider card a
 ## Follow-Up
 
 - If the focused-depth layout exposes section-specific card height problems, split those card-content density fixes into a separate phase instead of folding them into this carousel container slice.
+
+## Completion Summary
+
+- Reworked `ProviderCarousel` from a horizontally translated multi-card strip into a stacked depth layout.
+- Added slide-position classification so only the active card is fully readable and interactive while adjacent cards render as blurred, offset background layers.
+- Marked inactive carousel slides with `inert` and `aria-hidden` so inactive provider card controls are not reachable by pointer or keyboard.
+- Increased carousel viewport and dot spacing so card shadows and bottoms are no longer crowded by the indicator row.
+- Preserved previous/next buttons, dots, keyboard arrow mapping, pointer drag threshold behavior, RTL direction mapping, and reduced-motion handling.
+
+## Verification
+
+- `npm run test -- src/sidepanel/components/ProviderCarousel.test.tsx`
+- `npm run test -- src/sidepanel/components/ProviderCarousel.test.tsx src/sidepanel/routes/SettingsPage.test.tsx src/sidepanel/components/SettingsSections.test.tsx src/sidepanel/components/SettingsCredentialsSection.test.tsx src/sidepanel/components/SettingsSourceSection.test.tsx`
+- `npm run typecheck`
+- `npm run build`

@@ -34,10 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [434_Phase_Settings_Carousel_Focused_Depth_Layout.md](./434_Phase_Settings_Carousel_Focused_Depth_Layout.md)
-- latest completed slice: [433_Phase_RC17_Display_Preference_Follow_Up_Packaging.md](./Archive/by-phase/400-499/433_Phase_RC17_Display_Preference_Follow_Up_Packaging.md)
+- active phase file: [435_Phase_Circular_Progress_Ring_Value_And_Geometry_Polish.md](./435_Phase_Circular_Progress_Ring_Value_And_Geometry_Polish.md)
+- latest completed slice: [434_Phase_Settings_Carousel_Focused_Depth_Layout.md](./Archive/by-phase/400-499/434_Phase_Settings_Carousel_Focused_Depth_Layout.md)
 - queued phase files:
-  - [435_Phase_Circular_Progress_Ring_Value_And_Geometry_Polish.md](./435_Phase_Circular_Progress_Ring_Value_And_Geometry_Polish.md)
   - [436_Phase_Disclosure_Chevron_State_Animation.md](./436_Phase_Disclosure_Chevron_State_Animation.md)
   - [437_Phase_Chrome_Extension_Error_Triage_And_Fix.md](./437_Phase_Chrome_Extension_Error_Triage_And_Fix.md)
   - [438_Phase_Quota_Item_Settings_14_Locale_Copy.md](./438_Phase_Quota_Item_Settings_14_Locale_Copy.md)
@@ -833,6 +832,7 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 431` closeout migrated Quick Setup, Visibility, Permissions, Credentials, and Source provider-shaped Settings sections onto `ProviderCarousel` while preserving their business controls, stable data hooks, deep-link focused provider behavior, runtime text direction, and advanced/debug visibility boundaries
 - the 2026-05-14 `Phase 432` closeout aligned maintained docs, recorded representative Playwright visual QA for popup, sidebar-sized dashboard, full-page dashboard, and Arabic Settings carousel, documented the current invalid blank RDP capture boundary, and fixed mixed-direction carousel status text in RTL Settings
 - the 2026-05-14 `Phase 433` closeout packaged the post-`rc.16` display-preference and Settings-carousel source boundary as `0.1.0-rc.17`, aligned package and manifest versions, generated `release/ai-usage-dashboard-0.1.0-rc.17.zip`, and recorded SHA256 `effa7fd1cb61a5573f7c882275042b8245256d52507747bf507faa982d04e9b7`
+- the 2026-05-14 `Phase 434` closeout changed Settings provider carousel presentation to a single active card with blurred inactive depth layers, inactive-slide `inert`/`aria-hidden` semantics, and safer viewport/dot spacing while preserving provider business controls and carousel movement behavior
 
 ## Delivery Standard For Each Phase
 

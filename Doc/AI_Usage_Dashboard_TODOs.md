@@ -76,13 +76,13 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 433` execution priority:
+Current post-`Phase 434` execution priority:
 
 1. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.13.zip` as the submitted Chrome Web Store review boundary. Do not silently mutate or rewrite the [RC13 upload-candidate milestone](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) while that submission remains the human-reviewed baseline.
 2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.17.zip` as the current packaged follow-up candidate. It includes the previous `rc.16` follow-up work plus post-`rc.16` display-preference, progress-item, progress-ring, Settings carousel, and UI QA/doc closeout work through `Phase 433`, and is ready if review feedback or an explicit resubmission decision needs a newer build.
 3. `P0` - keep the refreshed `Direction 10.3` screenshot evidence archived and ready, not pending: [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) still fulfills the latest reviewed screenshot pack with `5/5` images and `3` explicit truth-boundary notes.
 4. `P1` - if a resubmission becomes necessary, use [2026-05-14_RC17_Display_Preference_Follow_Up_Release_Candidate.md](./Milestones/2026-05-14_RC17_Display_Preference_Follow_Up_Release_Candidate.md) as the current packaged-source reference and cut a fresh submission milestone from that boundary instead of mutating RC13 history.
-5. `P1` - execute the `Phase 434` through `Phase 440` UI polish follow-up queue: Settings carousel focused-depth layout, circular progress ring value/geometry polish, disclosure chevron state animation, Chrome extension error triage, quota-item 14-locale copy, representative UI QA/doc closeout, and RC18 packaging only after the fixes land.
+5. `P1` - execute the remaining `Phase 435` through `Phase 440` UI polish follow-up queue: circular progress ring value/geometry polish, disclosure chevron state animation, Chrome extension error triage, quota-item 14-locale copy, representative UI QA/doc closeout, and RC18 packaging only after the fixes land.
 6. `P2` - keep the `Phase 309` first-provider setup behavior stable: zero-provider Settings now recommends one personal-user provider in Quick Setup and popup zero-provider actions deep-link to that same setup card.
 7. `P2` - keep the `Phase 310` cached-first guard stable: standard dashboard routes must keep rendering cached app state while background bootstrap is still loading.
 8. `P2` - keep the `Phase 311` popup view-model split behavior-only: `src/popup/view-models.ts` remains the public aggregator and the extracted setup-coverage / featured-card modules should not change popup UI semantics.
@@ -464,8 +464,8 @@ Phase status update:
 - `Phase 431` migrated Quick Setup, Visibility, Permissions, Credentials, and Source provider-shaped Settings sections onto the reusable carousel while preserving data hooks, business controls, focused deep-link behavior, runtime text direction, and advanced/debug visibility boundaries
 - `Phase 432` closed the provider display-preference queue with representative Playwright visual QA for popup, sidebar-sized dashboard, full-page dashboard, and Arabic Settings carousel; RDP Chrome captures opened windows but produced invalid blank images in the current capture path, so that boundary is recorded as a QA limitation rather than passing evidence
 - `Phase 433` packaged the post-`rc.16` display-preference and Settings-carousel source boundary as `0.1.0-rc.17`, aligned package and manifest versions, generated `release/ai-usage-dashboard-0.1.0-rc.17.zip`, and recorded the RC17 follow-up milestone while preserving RC13 as the submitted store-review boundary
-- `Phase 434` is now active to polish Settings provider carousel depth/focus behavior based on the latest visual review feedback
-- `Phase 435` through `Phase 440` are queued for circular progress ring label/geometry polish, disclosure chevron state animation, Chrome extension error triage, quota-item 14-locale localization, UI QA/doc closeout, and RC18 packaging after the fixes are verified
+- `Phase 434` completed Settings provider carousel focused-depth layout so each carousel now presents one active provider card, adjacent blurred background layers, inactive-slide `inert`/`aria-hidden` semantics, and safer dot spacing while preserving provider business controls
+- `Phase 435` is now active for circular progress ring label and geometry polish, with `Phase 436` through `Phase 440` queued for disclosure chevrons, Chrome extension error triage, quota-item 14-locale localization, UI QA/doc closeout, and RC18 packaging after the fixes are verified
 - `Phase 334` split interaction-audit per-surface card rendering into a dedicated component while preserving route-owned audit refs, preset actions, manual checks, and signoff callbacks
 - `Phase 335` split interaction-audit review queue rendering into a dedicated component while preserving route-owned queue construction and jump behavior
 - `Phase 336` split interaction-audit request-scope rendering into a dedicated component while preserving route-owned request-context state plus existing binding, revision, and next-command display
