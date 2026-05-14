@@ -216,10 +216,10 @@
 
 .usage-progress-ring__fill {
   stroke: var(--usage-progress-ring-fill);
-  stroke-dasharray: var(--usage-progress-ring-arc) 100;
-  stroke-dashoffset: var(--usage-progress-ring-offset);
+  stroke-dasharray: var(--usage-progress-ring-fill-arc) 100;
+  stroke-dashoffset: 0;
   transform: rotate(var(--usage-progress-ring-rotation, -90deg));
-  transition: stroke-dashoffset 180ms var(--app-motion-easing-standard);
+  transition: stroke-dasharray 180ms var(--app-motion-easing-standard);
 }
 
 .usage-progress-ring--circle-soft .usage-progress-ring__track {

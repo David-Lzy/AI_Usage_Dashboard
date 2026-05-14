@@ -5,6 +5,7 @@
   --provider-carousel-card-max-width: 760px;
   --provider-carousel-depth-offset: clamp(48px, 12vw, 168px);
   --provider-carousel-depth-y: var(--app-space-3);
+  --provider-carousel-motion-duration: 420ms;
 }
 
 .provider-carousel--empty {
@@ -105,9 +106,11 @@
   transform: translateX(0) translateY(var(--provider-carousel-depth-y))
     scale(0.86);
   transition:
-    opacity var(--app-motion-duration-medium) var(--app-motion-easing-standard),
-    filter var(--app-motion-duration-medium) var(--app-motion-easing-standard),
-    transform var(--app-motion-duration-medium)
+    opacity var(--provider-carousel-motion-duration)
+      var(--app-motion-easing-standard),
+    filter var(--provider-carousel-motion-duration)
+      var(--app-motion-easing-standard),
+    transform var(--provider-carousel-motion-duration)
       var(--app-motion-easing-standard);
   visibility: hidden;
   will-change: opacity, filter, transform;

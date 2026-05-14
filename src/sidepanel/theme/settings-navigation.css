@@ -17,7 +17,7 @@
 .settings-overview__controls {
   display: grid;
   grid-template-columns: minmax(220px, min(320px, 38%)) minmax(260px, 1fr);
-  align-items: end;
+  align-items: start;
   gap: var(--app-space-3);
 }
 
@@ -26,9 +26,10 @@
 }
 
 .settings-overview__user-level-help {
-  align-self: end;
+  align-self: start;
   max-width: 72ch;
   margin: 0;
+  padding-block-start: calc(var(--md-sys-typescale-label-medium-line-height) + var(--app-space-2));
 }
 
 .settings-section-anchor {
@@ -314,6 +315,7 @@
 
   .settings-overview__user-level-help {
     max-width: none;
+    padding-block-start: 0;
   }
 }
 

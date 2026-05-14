@@ -22,6 +22,7 @@ describe("UsageProgressRing", () => {
 
     expect(html).toContain("usage-progress-ring--circle-soft");
     expect(html).toContain("--usage-progress-ring-arc:100");
+    expect(html).toContain("--usage-progress-ring-fill-arc:51");
     expect(html).toContain("--usage-progress-ring-rotation:-90deg");
     expect(html).toContain("--usage-progress-ring-track-opacity:1");
   });
@@ -44,6 +45,7 @@ describe("UsageProgressRing", () => {
 
     expect(html).toContain("usage-progress-ring--circle-gauge");
     expect(html).toContain("--usage-progress-ring-arc:68");
+    expect(html).toContain("--usage-progress-ring-fill-arc:34.68");
     expect(html).toContain("--usage-progress-ring-rotation:146deg");
     expect(html).toContain("--usage-progress-ring-track-opacity:0.46");
   });

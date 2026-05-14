@@ -407,7 +407,7 @@
 .progress-appearance-band {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto auto;
-  align-items: center;
+  align-items: end;
   gap: var(--app-space-3);
   min-width: 0;
   padding: var(--app-space-3);
@@ -417,8 +417,10 @@
 }
 
 .progress-appearance-band__swatch {
+  align-self: end;
   width: 28px;
   height: 28px;
+  margin-block-end: 9px;
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: 999px;
 }
@@ -426,6 +428,7 @@
 .progress-appearance-band__fields {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 112px), 1fr));
+  align-items: end;
   gap: var(--app-space-2);
   min-width: 0;
 }
@@ -446,8 +449,15 @@
 }
 
 .progress-appearance-band__range {
+  align-self: end;
   justify-self: end;
+  margin-block-end: 7px;
   white-space: nowrap;
+}
+
+.progress-appearance-band__actions {
+  align-self: end;
+  margin-block-end: 7px;
 }
 
 .progress-appearance-band__action {
@@ -485,6 +495,11 @@
     grid-column: 2;
     justify-self: start;
   }
+
+  .progress-appearance-band__range,
+  .progress-appearance-band__actions {
+    margin-block-end: 0;
+  }
 }
 
 @media (max-width: 520px) {
@@ -512,6 +527,7 @@
   .progress-appearance-band__range,
   .progress-appearance-band__actions {
     grid-column: 1;
+    margin-block-end: 0;
   }
 
   .progress-appearance-band__actions {

@@ -125,7 +125,7 @@ describe("UsageProgress", () => {
     expect(html).toContain("--usage-progress-ring-rotation:-90deg");
     expect(html).toContain("--usage-progress-ring-track-opacity:1");
     expect(html).toContain("--usage-progress-ring-stroke:14");
-    expect(html).toContain("--usage-progress-ring-offset:65");
+    expect(html).toContain("--usage-progress-ring-fill-arc:35");
     expect(html).toContain("--usage-progress-ring-fill:#8A4B00");
     expect(html).toContain("<svg");
     expect(html).toContain('class="usage-progress-ring__value">35%</span>');
@@ -158,7 +158,7 @@ describe("UsageProgress", () => {
     expect(html).toContain("--usage-progress-ring-rotation:146deg");
     expect(html).toContain("--usage-progress-ring-track-opacity:0.46");
     expect(html).toContain("--usage-progress-ring-stroke:16");
-    expect(html).toContain("--usage-progress-ring-offset:33.32");
+    expect(html).toContain("--usage-progress-ring-fill-arc:34.68");
     expect(html).toContain("--usage-progress-ring-fill:#146C2E");
   });
 

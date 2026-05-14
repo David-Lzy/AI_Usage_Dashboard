@@ -76,13 +76,13 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 448` execution priority:
+Current post-`Phase 449` execution priority:
 
 1. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.13.zip` as the submitted Chrome Web Store review boundary. Do not silently mutate or rewrite the [RC13 upload-candidate milestone](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) while that submission remains the human-reviewed baseline.
-2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.19.zip` as the current packaged follow-up candidate. It includes the previous `rc.18` follow-up work plus post-`rc.18` UI polish through `Phase 447`, and is ready if review feedback or an explicit resubmission decision needs a newer build.
+2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.19.zip` as the current packaged follow-up candidate. It includes the previous `rc.18` follow-up work plus post-`rc.18` UI polish through `Phase 447`; current source is ahead by `Phase 449` UI micro-polish and should be packaged only in a separate explicit release phase.
 3. `P0` - keep the refreshed `Direction 10.3` screenshot evidence archived and ready, not pending: [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) still fulfills the latest reviewed screenshot pack with `5/5` images and `3` explicit truth-boundary notes.
 4. `P1` - if a resubmission becomes necessary, use [2026-05-14_RC19_Post_RC18_UI_Polish_Closeout_Release_Candidate.md](./Milestones/2026-05-14_RC19_Post_RC18_UI_Polish_Closeout_Release_Candidate.md) as the current packaged-source reference and cut a fresh submission milestone from that boundary instead of mutating RC13 history.
-5. `P1` - no numbered phase is currently queued after `Phase 448`; open a new phase only for review feedback, an explicit resubmission handoff, or a new scoped product request. This queue does not change the submitted RC13 store-review boundary unless a later submitted-store milestone is explicitly opened.
+5. `P1` - no numbered phase is currently queued after `Phase 449`; open a new phase only for review feedback, an explicit resubmission handoff, packaging the latest source, or a new scoped product request. This queue does not change the submitted RC13 store-review boundary unless a later submitted-store milestone is explicitly opened.
 6. `P2` - keep the `Phase 309` first-provider setup behavior stable: zero-provider Settings now recommends one personal-user provider in Quick Setup and popup zero-provider actions deep-link to that same setup card.
 7. `P2` - keep the `Phase 310` cached-first guard stable: standard dashboard routes must keep rendering cached app state while background bootstrap is still loading.
 8. `P2` - keep the `Phase 311` popup view-model split behavior-only: `src/popup/view-models.ts` remains the public aggregator and the extracted setup-coverage / featured-card modules should not change popup UI semantics.
@@ -479,6 +479,7 @@ Phase status update:
 - `Phase 446` made the Settings overview display-level helper responsive so wide layouts place it beside the selector and narrow `zh-CN`/`ar` layouts stack it below without overflow, while preserving user-level semantics, localized copy, route focus, Settings navigation, MaterialSelect internals, and release boundaries
 - `Phase 447` made Appearance & Sync controls use responsive grid tracks across side-panel, full-page, and narrow Settings layouts, and capped long custom select/editable-number menus so they remain visible and scrollable while preserving settings values, provider behavior, localized labels, and release boundaries
 - `Phase 448` packaged the post-`rc.18` UI polish source boundary through `Phase 447` as `0.1.0-rc.19`, generated `release/ai-usage-dashboard-0.1.0-rc.19.zip`, recorded SHA256 `2b3237e4acf0d855de394fdbc2c87b8a0ac4475e2cdf2ae46dabfab9256ee0a1`, and preserved RC13 as the submitted Chrome Web Store review boundary
+- `Phase 449` fixed reported UI micro-polish regressions for remaining-color-band row alignment, Settings display-level helper alignment, soft-ring percentage rendering, and provider-carousel motion while preserving storage, provider data, localization, package, and submitted-review boundaries
 - `Phase 334` split interaction-audit per-surface card rendering into a dedicated component while preserving route-owned audit refs, preset actions, manual checks, and signoff callbacks
 - `Phase 335` split interaction-audit review queue rendering into a dedicated component while preserving route-owned queue construction and jump behavior
 - `Phase 336` split interaction-audit request-scope rendering into a dedicated component while preserving route-owned request-context state plus existing binding, revision, and next-command display

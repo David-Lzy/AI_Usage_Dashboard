@@ -27,3 +27,4 @@ Status note:
 - [Phase 446 Settings Overview Responsive User Level Help](./Phase_446_Settings_Overview_Responsive_User_Level_Help.md)
 - [Phase 447 Settings Appearance Responsive Control Grid](./Phase_447_Settings_Appearance_Responsive_Control_Grid.md)
 - [Phase 448 RC19 Post-RC18 UI Polish Closeout Packaging](./Phase_448_RC19_Post_RC18_UI_Polish_Closeout_Packaging.md)
+- [Phase 449 UI Micro Polish Alignment Ring And Carousel](./Phase_449_UI_Micro_Polish_Alignment_Ring_And_Carousel.md)
