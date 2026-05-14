@@ -13,11 +13,20 @@ import {
   getSettingsCoreCopy,
 } from "./settings-core-localized-copy";
 import {
+  buildLocalizedSettingsProgressItemsSection,
+  getSettingsProgressItemsCopy,
+} from "./settings-progress-items-localized-copy";
+import {
   buildLocalizedSettingsSourcePermissionsSections,
   getSettingsSourcePermissionsCopy,
 } from "./settings-source-permissions-localized-copy";
 
 export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
+  const progressItems = buildLocalizedSettingsProgressItemsSection(
+    i18n,
+    getSettingsProgressItemsCopy(i18n.resolvedLocale),
+  );
+
   if (i18n.resolvedLocale === "zh-CN") {
     return {
       layout: {
@@ -255,6 +264,7 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
         removeAccess: "移除授权",
         requestAccess: "请求授权",
       },
+      progressItems,
     };
   }
 
@@ -500,6 +510,7 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
       removeAccess: "Remove access",
       requestAccess: "Request access",
     },
+    progressItems,
   };
 
   const coreCopy = getSettingsCoreCopy(i18n.resolvedLocale);
@@ -524,6 +535,7 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
           sourcePermissionsCopy,
         )
       : {}),
+    progressItems,
   };
 }
 

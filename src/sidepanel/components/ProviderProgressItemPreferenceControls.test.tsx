@@ -2,12 +2,16 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
 import { SAMPLE_APP_STATE } from "../../shared/constants";
+import { createRuntimeI18n } from "../../shared/i18n";
+import { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
 import { ProviderProgressItemPreferenceControls } from "./ProviderProgressItemPreferenceControls";
 
 describe("ProviderProgressItemPreferenceControls", () => {
   it("renders quota item controls for each surface without exposing usage facts", () => {
+    const copy = buildSettingsLocalizedCopy(createRuntimeI18n("en"));
     const html = renderToStaticMarkup(
       <ProviderProgressItemPreferenceControls
+        copy={copy.progressItems}
         providers={SAMPLE_APP_STATE.providerSettings}
         snapshots={SAMPLE_APP_STATE.providers}
         progressItemsBySurface={SAMPLE_APP_STATE.settings.progressItemsBySurface}
@@ -27,5 +31,24 @@ describe("ProviderProgressItemPreferenceControls", () => {
     expect(html).toContain("Shown");
     expect(html).not.toContain("Billing period");
     expect(html).not.toContain("Total spend");
+  });
+
+  it("renders quota item controls with non-English localized copy", () => {
+    const copy = buildSettingsLocalizedCopy(createRuntimeI18n("de"));
+    const html = renderToStaticMarkup(
+      <ProviderProgressItemPreferenceControls
+        copy={copy.progressItems}
+        providers={SAMPLE_APP_STATE.providerSettings}
+        snapshots={SAMPLE_APP_STATE.providers}
+        progressItemsBySurface={SAMPLE_APP_STATE.settings.progressItemsBySurface}
+        onChange={() => {}}
+      />,
+    );
+
+    expect(html).toContain("Kontingentelemente");
+    expect(html).toContain("Angezeigt");
+    expect(html).toContain("Vollseiten-Tab");
+    expect(html).not.toContain("Quota items");
+    expect(html).not.toContain(">Shown<");
   });
 });

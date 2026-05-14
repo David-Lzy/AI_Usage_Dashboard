@@ -41,9 +41,11 @@ describe("buildSettingsLocalizedCopy", () => {
     expect(copy.credentials.saveConfig).toBe("保存配置");
     expect(copy.sources.itemCount(3)).toBe("3 项");
     expect(copy.permissions.requestAccess).toBe("请求授权");
+    expect(copy.progressItems.sectionLabel).toBe("额度项");
+    expect(copy.progressItems.visibleCount(1, 3)).toBe("1/3 已显示");
   });
 
-  it("ships Settings core, credential, source, and permission copy for every non-English locale", () => {
+  it("ships Settings core, credential, source, permission, and quota item copy for every non-English locale", () => {
     const englishCopy = buildSettingsLocalizedCopy(createRuntimeI18n("en"));
 
     for (const locale of SUPPORTED_APP_LOCALES.filter(
@@ -87,6 +89,18 @@ describe("buildSettingsLocalizedCopy", () => {
       );
       expect(copy.permissions.requestAccess).not.toBe(
         englishCopy.permissions.requestAccess,
+      );
+      expect(copy.progressItems.sectionLabel).not.toBe(
+        englishCopy.progressItems.sectionLabel,
+      );
+      expect(copy.progressItems.title).not.toBe(englishCopy.progressItems.title);
+      expect(copy.progressItems.detail).not.toBe(
+        englishCopy.progressItems.detail,
+      );
+      expect(copy.progressItems.shown).not.toBe(englishCopy.progressItems.shown);
+      expect(copy.progressItems.up).not.toBe(englishCopy.progressItems.up);
+      expect(copy.progressItems.allHidden).not.toBe(
+        englishCopy.progressItems.allHidden,
       );
     }
   });

@@ -221,6 +221,7 @@ export function SettingsPreferencesSection({
           />
 
           <ProviderProgressItemPreferenceControls
+            copy={settingsCopy.progressItems}
             providers={providers}
             snapshots={snapshots}
             progressItemsBySurface={settings.progressItemsBySurface}

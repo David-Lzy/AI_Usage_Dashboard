@@ -1,6 +1,6 @@
 # Phase 438 - Quota Item Settings 14-Locale Copy
 
-Status: queued
+Status: completed
 
 ## Goal
 
@@ -39,4 +39,22 @@ Localize the new quota item visibility/order Settings controls so "Quota items" 
 
 ## Follow-Up
 
-- If broader Settings display-preference copy still has gaps after this phase, create a separate inventory phase instead of expanding this quota-item slice.
+- Broader Settings display-preference copy gaps should remain a separate inventory phase; this slice only localized quota/progress item controls.
+
+## Completion Notes
+
+Completed on 2026-05-14.
+
+Implementation:
+
+- Added `src/shared/settings-progress-items-localized-copy.ts` with 14-locale quota/progress item Settings copy.
+- Wired `buildSettingsLocalizedCopy(i18n).progressItems` through `SettingsPreferencesSection` into `ProviderProgressItemPreferenceControls`.
+- Replaced hard-coded quota item headings, helper text, empty states, surface labels, count chips, kind/availability labels, shown/hidden labels, checkbox aria labels, row aria labels, move button labels, and all-hidden fallback text.
+- Preserved provider names, progress item labels/ids, provider source truth, raw evidence, diagnostics, and storage behavior.
+
+Verification:
+
+- `npm run test -- src/shared/settings-localized-copy.test.ts src/sidepanel/components/ProviderProgressItemPreferenceControls.test.tsx src/sidepanel/components/SettingsPreferencesSection.test.tsx`
+- `npm run i18n:check`
+- `npm run typecheck`
+- `npm run build`

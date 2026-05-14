@@ -47,7 +47,7 @@ Next execution queue:
 
 1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary, but use `0.1.0-rc.17` as the ready follow-up package if review feedback or an explicit resubmission decision asks for a newer build
 2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC17 follow-up milestone](./Doc/Milestones/2026-05-14_RC17_Display_Preference_Follow_Up_Release_Candidate.md) as the current packaged-source reference
-3. execute the remaining `Phase 438` through `Phase 440` UI polish follow-up queue: quota-item 14-locale copy, UI QA/doc closeout, and RC18 packaging only after the localization and QA fixes are verified
+3. execute the remaining `Phase 439` through `Phase 440` UI polish follow-up queue: UI QA/doc closeout and RC18 packaging only after the QA fixes are verified
 4. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 5. keep real operator evidence closed and archived; do not open another interaction-audit or theme-recovery operator evidence phase unless a new surface or theme regression creates a fresh review need
 6. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
@@ -139,7 +139,7 @@ Maintenance note:
 - popup surface-route view-model logic now lives in `src/popup/surface-route-view-models.ts`, keeping secondary action selection and surface-ownership copy covered outside the popup view-model aggregator
 - popup localized view-model orchestration now lives in `src/popup/localized-view-models.ts`, while `src/popup/view-models.ts` keeps the public `localizePopupViewModel` re-export
 - shared provider progress item inventory now lives in `src/shared/provider-progress-items.ts`, keeping primary quota, usage-window, and usage-balance item ids/discovery outside storage normalization while leaving usage facts and raw provider evidence outside progress rendering
-- Settings quota item controls now live in `src/sidepanel/components/ProviderProgressItemPreferenceControls.tsx`, keeping per-surface progress item show/hide and reorder UI outside the larger Settings preferences section
+- Settings quota item controls now live in `src/sidepanel/components/ProviderProgressItemPreferenceControls.tsx`, with 14-locale display copy in `src/shared/settings-progress-items-localized-copy.ts`, keeping per-surface progress item show/hide and reorder UI outside the larger Settings preferences section
 - provider progress item rendering now uses `src/shared/provider-progress-item-selection.ts` plus `src/sidepanel/components/ProviderProgressItemList.tsx`, so popup, dashboard cards, and provider detail consume the same per-surface visibility/order preferences
 - soft and gauge circular progress now render through `src/sidepanel/components/UsageProgressRing.tsx`, while the legacy `circle` style remains the classic conic ring and fresh popup installs default to `circle-soft`
 

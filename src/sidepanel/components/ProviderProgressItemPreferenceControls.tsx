@@ -23,11 +23,11 @@ import {
 import {
   buildProviderProgressItems,
   type ProviderProgressItem,
-  type ProviderProgressItemAvailability,
-  type ProviderProgressItemKind,
 } from "../../shared/provider-progress-items";
+import type { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
 
 type ProviderProgressItemPreferenceControlsProps = {
+  copy: ReturnType<typeof buildSettingsLocalizedCopy>["progressItems"];
   progressItemsBySurface: ProgressItemsBySurface;
   providers: ProviderSetting[];
   snapshots: ProviderSnapshot[];
@@ -38,27 +38,6 @@ type DraggedProgressItem = {
   surface: DisplaySurface;
   providerId: ProviderId;
   itemId: string;
-};
-
-const SURFACE_LABELS: Record<DisplaySurface, string> = {
-  popup: "Popup",
-  sidebar: "Sidebar",
-  fullPage: "Full-page tab",
-};
-
-const PROGRESS_ITEM_KIND_LABELS: Record<ProviderProgressItemKind, string> = {
-  primary_quota: "Primary quota",
-  usage_window: "Usage window",
-  usage_balance: "Balance",
-};
-
-const PROGRESS_ITEM_AVAILABILITY_LABELS: Record<
-  ProviderProgressItemAvailability,
-  string
-> = {
-  progress: "Progress",
-  value_only: "Value only",
-  unavailable: "Unavailable",
 };
 
 function createProgressItemMap(
@@ -77,6 +56,7 @@ function getOrderedProgressItems(
 }
 
 export function ProviderProgressItemPreferenceControls({
+  copy,
   progressItemsBySurface,
   providers,
   snapshots,
@@ -219,16 +199,12 @@ export function ProviderProgressItemPreferenceControls({
     >
       <div className="provider-progress-preferences__header">
         <div>
-          <p className="section-label">Quota items</p>
+          <p className="section-label">{copy.sectionLabel}</p>
           <h3 className="section-title provider-progress-preferences__title">
-            Choose visible progress per surface
+            {copy.title}
           </h3>
         </div>
-        <p className="supporting-copy">
-          Hide, show, and reorder quota progress items independently for popup,
-          sidebar, and full-page tab. Usage facts and raw diagnostics stay out
-          of this progress list.
-        </p>
+        <p className="supporting-copy">{copy.detail}</p>
       </div>
 
       <div className="provider-progress-preferences__providers">
@@ -250,16 +226,15 @@ export function ProviderProgressItemPreferenceControls({
                   </p>
                   <p className="supporting-copy provider-progress-provider__detail">
                     {progressItems.length > 0
-                      ? `${progressItems.length} configurable quota items`
-                      : "No configurable quota progress items yet"}
+                      ? copy.provider.count(progressItems.length)
+                      : copy.provider.emptyDetail}
                   </p>
                 </div>
               </div>
 
               {progressItems.length === 0 ? (
                 <p className="supporting-copy provider-progress-provider__empty">
-                  This provider currently exposes facts, policy text, or raw
-                  evidence rather than renderable progress items.
+                  {copy.provider.emptyBody}
                 </p>
               ) : (
                 <div className="provider-progress-surfaces">
@@ -276,7 +251,7 @@ export function ProviderProgressItemPreferenceControls({
                     const visibleCount = preferences.filter(
                       (preference) => preference.visible,
                     ).length;
-                    const surfaceLabel = SURFACE_LABELS[surface];
+                    const surfaceLabel = copy.surfaceLabels[surface];
 
                     return (
                       <section
@@ -289,7 +264,10 @@ export function ProviderProgressItemPreferenceControls({
                             {surfaceLabel}
                           </p>
                           <span className="meta-chip">
-                            {visibleCount}/{preferences.length} shown
+                            {copy.visibleCount(
+                              visibleCount,
+                              preferences.length,
+                            )}
                           </span>
                         </div>
 
@@ -310,7 +288,12 @@ export function ProviderProgressItemPreferenceControls({
                                 data-provider-progress-item-row={progressItem.id}
                                 draggable
                                 tabIndex={0}
-                                aria-label={`${progressItem.label}, ${index + 1} of ${orderedProgressItems.length} on ${surfaceLabel}`}
+                                aria-label={copy.rowAria(
+                                  progressItem.label,
+                                  index + 1,
+                                  orderedProgressItems.length,
+                                  surfaceLabel,
+                                )}
                                 onDragStart={() =>
                                   setDraggedProgressItem({
                                     surface,
@@ -343,7 +326,11 @@ export function ProviderProgressItemPreferenceControls({
                                   <input
                                     type="checkbox"
                                     checked={isVisible}
-                                    aria-label={`${isVisible ? "Hide" : "Show"} ${progressItem.label} on ${surfaceLabel}`}
+                                    aria-label={copy.visibilityAction(
+                                      isVisible ? "hide" : "show",
+                                      progressItem.label,
+                                      surfaceLabel,
+                                    )}
                                     onChange={(event) =>
                                       setItemVisibility(
                                         surface,
@@ -354,20 +341,20 @@ export function ProviderProgressItemPreferenceControls({
                                       )
                                     }
                                   />
-                                  <span>{isVisible ? "Shown" : "Hidden"}</span>
+                                  <span>
+                                    {isVisible ? copy.shown : copy.hidden}
+                                  </span>
                                 </label>
                                 <span className="provider-progress-list__main">
                                   <span className="provider-progress-list__label">
                                     {progressItem.label}
                                   </span>
                                   <span className="provider-progress-list__meta">
-                                    {PROGRESS_ITEM_KIND_LABELS[progressItem.kind]}
+                                    {copy.kindLabels[progressItem.kind]}
                                     {" · "}
-                                    {
-                                      PROGRESS_ITEM_AVAILABILITY_LABELS[
-                                        progressItem.availability
-                                      ]
-                                    }
+                                    {copy.availabilityLabels[
+                                      progressItem.availability
+                                    ]}
                                   </span>
                                 </span>
                                 <span className="provider-progress-list__actions">
@@ -375,7 +362,10 @@ export function ProviderProgressItemPreferenceControls({
                                     className="text-button provider-progress-list__action"
                                     type="button"
                                     disabled={isFirst}
-                                    aria-label={`Move ${progressItem.label} up on ${surfaceLabel}`}
+                                    aria-label={copy.moveUpAction(
+                                      progressItem.label,
+                                      surfaceLabel,
+                                    )}
                                     onClick={() =>
                                       moveItem(
                                         surface,
@@ -386,13 +376,16 @@ export function ProviderProgressItemPreferenceControls({
                                       )
                                     }
                                   >
-                                    Up
+                                    {copy.up}
                                   </button>
                                   <button
                                     className="text-button provider-progress-list__action"
                                     type="button"
                                     disabled={isLast}
-                                    aria-label={`Move ${progressItem.label} down on ${surfaceLabel}`}
+                                    aria-label={copy.moveDownAction(
+                                      progressItem.label,
+                                      surfaceLabel,
+                                    )}
                                     onClick={() =>
                                       moveItem(
                                         surface,
@@ -403,7 +396,7 @@ export function ProviderProgressItemPreferenceControls({
                                       )
                                     }
                                   >
-                                    Down
+                                    {copy.down}
                                   </button>
                                 </span>
                               </li>
@@ -413,9 +406,7 @@ export function ProviderProgressItemPreferenceControls({
 
                         {visibleCount === 0 ? (
                           <p className="supporting-copy provider-progress-surface__fallback">
-                            All progress items are hidden on this surface; later
-                            rendering can fall back to provider metadata instead
-                            of an empty card.
+                            {copy.allHidden}
                           </p>
                         ) : null}
                       </section>
