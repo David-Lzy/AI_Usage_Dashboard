@@ -6,10 +6,10 @@
 
 .form-field__label {
   color: var(--md-sys-color-on-surface-variant);
-  font-family: var(--md-sys-typescale-label-medium-font);
-  font-size: var(--md-sys-typescale-label-medium-size);
-  font-weight: var(--md-sys-typescale-label-medium-weight);
-  line-height: var(--md-sys-typescale-label-medium-line-height);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  line-height: var(--md-sys-typescale-label-large-line-height);
 }
 
 .form-field__control {
@@ -90,10 +90,12 @@ select.form-field__control {
   border-radius: var(--md-sys-shape-corner-full);
   background: var(--md-sys-color-surface-container-low);
   color: var(--md-sys-color-primary);
+  filter: blur(0.18px) saturate(0.8);
   font-family: var(--md-sys-typescale-label-large-font);
   font-size: var(--md-sys-typescale-label-large-size);
   font-weight: 700;
   line-height: 1;
+  opacity: 0.48;
   cursor: help;
   transition:
     background-color var(--app-motion-duration-fast)
@@ -101,6 +103,8 @@ select.form-field__control {
     border-color var(--app-motion-duration-fast)
       var(--app-motion-easing-standard),
     box-shadow var(--app-motion-duration-fast) var(--app-motion-easing-standard),
+    filter var(--app-motion-duration-fast) var(--app-motion-easing-standard),
+    opacity var(--app-motion-duration-fast) var(--app-motion-easing-standard),
     color var(--app-motion-duration-fast) var(--app-motion-easing-standard);
 }
 
@@ -113,21 +117,24 @@ select.form-field__control {
     var(--md-sys-color-outline-variant) 66%
   );
   box-shadow: var(--app-focus-ring-shadow);
+  filter: none;
+  opacity: 1;
   outline: 0;
 }
 
 .material-info-tooltip__content {
-  position: absolute;
-  z-index: 100;
-  inset-block-start: calc(100% + var(--app-space-2));
-  inset-inline-end: 0;
-  min-inline-size: min(240px, calc(100vw - 48px));
-  max-inline-size: min(340px, calc(100vw - 48px));
+  position: fixed;
+  z-index: 1000;
+  display: block;
+  inset-block-start: var(--material-info-tooltip-top, 0);
+  inset-inline-start: var(--material-info-tooltip-left, 0);
+  box-sizing: border-box;
+  inline-size: min(340px, calc(100vw - 32px));
   padding: var(--app-space-2) var(--app-space-3);
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--md-sys-shape-corner-medium);
-  background: var(--md-sys-color-inverse-surface);
-  color: var(--md-sys-color-inverse-on-surface);
+  background: var(--md-sys-color-surface-container-highest);
+  color: var(--md-sys-color-on-surface);
   box-shadow: var(--app-elevation-2);
   font-family: var(--md-sys-typescale-body-small-font);
   font-size: var(--md-sys-typescale-body-small-size);
@@ -138,16 +145,15 @@ select.form-field__control {
   text-align: start;
   transform: translateY(-4px);
   visibility: hidden;
+  overflow-wrap: anywhere;
   transition:
     opacity var(--app-motion-duration-fast) var(--app-motion-easing-standard),
     transform var(--app-motion-duration-fast) var(--app-motion-easing-standard),
     visibility var(--app-motion-duration-fast) var(--app-motion-easing-standard);
 }
 
-.material-info-tooltip:hover .material-info-tooltip__content,
-.material-info-tooltip:focus-within .material-info-tooltip__content {
+.material-info-tooltip__content[data-open="true"][data-positioned="true"] {
   opacity: 1;
-  pointer-events: auto;
   transform: translateY(0);
   visibility: visible;
 }

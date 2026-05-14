@@ -53,5 +53,6 @@ Status note:
 - `Phase 465` added a safe local UI font-family preference, Settings control, storage normalization, root Material typography-variable sync, and 14-locale labels/helper copy without loading remote fonts.
 - `Phase 466` closed the UI polish queue with Playwright built-preview checks, sequential RDP Chrome extension-window captures, documentation alignment, and an RC20 packaging decision.
 - `Phase 467` packaged the completed UI polish source as `0.1.0-rc.20`; RC13 remains the submitted Chrome Web Store review boundary.
-- Current implementation source is aligned with the `0.1.0-rc.20` package through `Phase 467`.
-- No numbered phase is currently queued after `Phase 467`.
+- `Phase 468` polished Settings help tooltips and form controls by making help triggers subtle, tooltip content opaque and viewport-positioned, progress-thickness input wider, and shared field labels more readable.
+- Current implementation source is ahead of the `0.1.0-rc.20` package by `Phase 468`.
+- No numbered phase is currently queued after `Phase 468`.

@@ -57,4 +57,11 @@ describe("ProgressAppearancePreferenceControls", () => {
     );
     expect(settingsAppearanceCss).toContain("grid-column: 1 / -1;");
   });
+
+  it("keeps the thickness number field wide enough for localized controls", () => {
+    expect(settingsAppearanceCss).toContain(
+      "grid-template-columns: minmax(112px, 132px) minmax(160px, 1fr) auto;",
+    );
+    expect(settingsAppearanceCss).toContain("min-inline-size: 7.5rem;");
+  });
 });

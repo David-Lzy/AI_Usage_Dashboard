@@ -76,13 +76,13 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 467` execution priority:
+Current post-`Phase 468` execution priority:
 
 1. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.13.zip` as the submitted Chrome Web Store review boundary. Do not silently mutate or rewrite the [RC13 upload-candidate milestone](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) while that submission remains the human-reviewed baseline.
-2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.20.zip` as the current packaged follow-up candidate. It includes the previous `rc.19` follow-up work plus UI polish through `Phase 467`; no numbered phase is currently queued after `Phase 467`.
+2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.20.zip` as the current packaged follow-up candidate. It includes the previous `rc.19` follow-up work plus UI polish through `Phase 467`; current source is ahead through `Phase 468` Settings tooltip and form-control polish, and no numbered phase is currently queued after `Phase 468`.
 3. `P0` - keep the refreshed `Direction 10.3` screenshot evidence archived and ready, not pending: [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) still fulfills the latest reviewed screenshot pack with `5/5` images and `3` explicit truth-boundary notes.
 4. `P1` - if a resubmission becomes necessary, use [2026-05-15_RC20_UI_Polish_Release_Candidate.md](./Milestones/2026-05-15_RC20_UI_Polish_Release_Candidate.md) as the current packaged-source reference and cut a fresh submission milestone from that boundary instead of mutating RC13 history.
-5. `P1` - no numbered phase is currently queued after `Phase 467`; start the next change from a new scoped TODO so the RC20 package boundary remains stable.
+5. `P1` - no numbered phase is currently queued after `Phase 468`; start the next change from a new scoped TODO so the RC20 package boundary remains stable.
 6. `P2` - keep the `Phase 309` first-provider setup behavior stable: zero-provider Settings now recommends one personal-user provider in Quick Setup and popup zero-provider actions deep-link to that same setup card.
 7. `P2` - keep the `Phase 310` cached-first guard stable: standard dashboard routes must keep rendering cached app state while background bootstrap is still loading.
 8. `P2` - keep the `Phase 311` popup view-model split behavior-only: `src/popup/view-models.ts` remains the public aggregator and the extracted setup-coverage / featured-card modules should not change popup UI semantics.
@@ -500,6 +500,7 @@ Phase status update:
 - `Phase 465` added a safe local UI font-family preference, wired it through settings storage normalization and root Material typography variables, and added 14-locale Settings labels/helper copy while avoiding remote font assets
 - `Phase 466` closed the Phase 458-465 UI polish queue with Playwright built-preview checks, sequential RDP Chrome extension-window captures, documentation alignment, and an explicit decision to package RC20 in a dedicated follow-up phase
 - `Phase 467` packaged the completed UI polish source as `0.1.0-rc.20`, generated `release/ai-usage-dashboard-0.1.0-rc.20.zip`, recorded SHA256 `0c681b4b120f5a8cd108ec62d532da8089d9fba136256b8aecb1d3597fd023fb`, and preserved RC13 as the submitted Chrome Web Store review boundary
+- `Phase 468` polished Settings help tooltips and form controls by making tooltip triggers subtle, rendering tooltip content as an opaque viewport-positioned surface, widening the progress-thickness numeric input, and raising shared field-label typography while preserving settings semantics
 - `Phase 334` split interaction-audit per-surface card rendering into a dedicated component while preserving route-owned audit refs, preset actions, manual checks, and signoff callbacks
 - `Phase 335` split interaction-audit review queue rendering into a dedicated component while preserving route-owned queue construction and jump behavior
 - `Phase 336` split interaction-audit request-scope rendering into a dedicated component while preserving route-owned request-context state plus existing binding, revision, and next-command display

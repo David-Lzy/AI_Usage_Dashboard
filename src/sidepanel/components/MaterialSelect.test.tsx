@@ -76,4 +76,14 @@ describe("MaterialSelect", () => {
       "line-height: var(--md-sys-typescale-body-large-line-height);",
     );
   });
+
+  it("uses label-large typography for visible field labels", () => {
+    expect(formControlsCss).toContain(".form-field__label {");
+    expect(formControlsCss).toContain(
+      "font-size: var(--md-sys-typescale-label-large-size);",
+    );
+    expect(formControlsCss).toContain(
+      "line-height: var(--md-sys-typescale-label-large-line-height);",
+    );
+  });
 });
