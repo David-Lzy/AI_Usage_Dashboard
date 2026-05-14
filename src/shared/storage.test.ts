@@ -18,6 +18,8 @@ function createLegacyState(): AppState {
     popupCornerStyle: _popupCornerStyle,
     popupShadowStyle: _popupShadowStyle,
     actionBadgeSelection: _actionBadgeSelection,
+    providerOrderBySurface: _providerOrderBySurface,
+    progressItemsBySurface: _progressItemsBySurface,
     ...legacySettings
   } = SAMPLE_APP_STATE.settings;
 
@@ -127,6 +129,62 @@ describe("storage normalization", () => {
     expect(state?.settings.popupCornerStyle).toBe("rounded");
     expect(state?.settings.popupShadowStyle).toBe("soft");
     expect(state?.settings.actionBadgeSelection).toBe("attention");
+    expect(state?.settings.providerOrderBySurface).toEqual({
+      popup: [],
+      sidebar: [],
+      fullPage: [],
+    });
+    expect(state?.settings.progressItemsBySurface).toEqual({
+      popup: {},
+      sidebar: {},
+      fullPage: {},
+    });
+  });
+
+  it("normalizes display preferences from stale stored state", async () => {
+    await writeAppState({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        providerOrderBySurface: {
+          popup: ["codex", "unknown-provider", "cursor", "codex"],
+          sidebar: "codex",
+          fullPage: ["gemini"],
+        },
+        progressItemsBySurface: {
+          popup: {
+            codex: [
+              { id: "unknown-window", visible: false },
+              { id: 42, visible: true },
+            ],
+            "unknown-provider": [{ id: "primary", visible: true }],
+          },
+        },
+      } as unknown as AppState["settings"],
+    });
+
+    const state = await readAppState();
+
+    expect(state?.settings.providerOrderBySurface.popup).toEqual([
+      "codex",
+      "cursor",
+      "jetbrains",
+      "claude-code",
+      "gemini",
+    ]);
+    expect(state?.settings.providerOrderBySurface.sidebar).toEqual([]);
+    expect(state?.settings.providerOrderBySurface.fullPage).toEqual([
+      "gemini",
+      "cursor",
+      "jetbrains",
+      "claude-code",
+      "codex",
+    ]);
+    expect(state?.settings.progressItemsBySurface).toEqual({
+      popup: {},
+      sidebar: {},
+      fullPage: {},
+    });
   });
 
   it("normalizes invalid popup appearance preferences", async () => {

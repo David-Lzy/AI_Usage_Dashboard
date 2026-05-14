@@ -34,9 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [422_Phase_Display_Preference_Model_Architecture.md](./422_Phase_Display_Preference_Model_Architecture.md)
-- latest completed slice: [421_Phase_Interaction_Audit_Surface_Definition_Display_Source_Split.md](./Archive/by-phase/400-499/421_Phase_Interaction_Audit_Surface_Definition_Display_Source_Split.md)
-- queued phase files: [423_Phase_Surface_Provider_Order_Rendering.md](./423_Phase_Surface_Provider_Order_Rendering.md), [424_Phase_Settings_Surface_Order_Controls.md](./424_Phase_Settings_Surface_Order_Controls.md), [425_Phase_Progress_Item_Inventory_Model.md](./425_Phase_Progress_Item_Inventory_Model.md), [426_Phase_Per_Surface_Progress_Visibility_Order_Settings.md](./426_Phase_Per_Surface_Progress_Visibility_Order_Settings.md), [427_Phase_Progress_Item_Rendering_Across_Surfaces.md](./427_Phase_Progress_Item_Rendering_Across_Surfaces.md), [428_Phase_Progress_Ring_Visual_Styles.md](./428_Phase_Progress_Ring_Visual_Styles.md), [429_Phase_Progress_Appearance_Settings_Preview.md](./429_Phase_Progress_Appearance_Settings_Preview.md), [430_Phase_Settings_Provider_Carousel_Foundation.md](./430_Phase_Settings_Provider_Carousel_Foundation.md), [431_Phase_Settings_Carousel_All_Provider_Sections.md](./431_Phase_Settings_Carousel_All_Provider_Sections.md), [432_Phase_UI_QA_And_Doc_Closeout.md](./432_Phase_UI_QA_And_Doc_Closeout.md)
+- active phase file: [423_Phase_Surface_Provider_Order_Rendering.md](./423_Phase_Surface_Provider_Order_Rendering.md)
+- latest completed slice: [422_Phase_Display_Preference_Model_Architecture.md](./Archive/by-phase/400-499/422_Phase_Display_Preference_Model_Architecture.md)
+- queued phase files: [424_Phase_Settings_Surface_Order_Controls.md](./424_Phase_Settings_Surface_Order_Controls.md), [425_Phase_Progress_Item_Inventory_Model.md](./425_Phase_Progress_Item_Inventory_Model.md), [426_Phase_Per_Surface_Progress_Visibility_Order_Settings.md](./426_Phase_Per_Surface_Progress_Visibility_Order_Settings.md), [427_Phase_Progress_Item_Rendering_Across_Surfaces.md](./427_Phase_Progress_Item_Rendering_Across_Surfaces.md), [428_Phase_Progress_Ring_Visual_Styles.md](./428_Phase_Progress_Ring_Visual_Styles.md), [429_Phase_Progress_Appearance_Settings_Preview.md](./429_Phase_Progress_Appearance_Settings_Preview.md), [430_Phase_Settings_Provider_Carousel_Foundation.md](./430_Phase_Settings_Provider_Carousel_Foundation.md), [431_Phase_Settings_Carousel_All_Provider_Sections.md](./431_Phase_Settings_Carousel_All_Provider_Sections.md), [432_Phase_UI_QA_And_Doc_Closeout.md](./432_Phase_UI_QA_And_Doc_Closeout.md)
 
 Completed phases should be moved to:
 
@@ -815,6 +815,7 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 420` closeout added typed signoff import-error codes and 14-locale display copy while preserving pasted JSON, parsed payload fields, accepted import compatibility, generated drafts, filenames, MIME types, storage keys, and request binding/revision formatting
 - the 2026-05-14 `Phase 421` closeout added localized interaction-audit surface-definition display copy for all 14 runtime locales while preserving source ids, data attributes, route paths, preset ids, signoff export JSON, signoff Markdown drafts, and handoff Markdown drafts
 - `Phase 422` starts the provider display-preference architecture queue for independent popup, sidebar, and full-page provider ordering, per-surface quota item visibility/order, polished progress ring styles, and Settings provider carousel work. It must preserve provider source truth, raw evidence, credentials, host permissions, and release-submission boundaries while adding only display preferences first.
+- the 2026-05-14 `Phase 422` closeout added shared display-surface preference types, defaults, normalizers, and storage migration for provider order plus progress item preferences while preserving current rendering behavior, provider source truth, credentials, host permissions, and release boundaries
 
 ## Delivery Standard For Each Phase
 

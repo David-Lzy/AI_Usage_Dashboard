@@ -138,6 +138,16 @@ export type PopupSizePreset = "compact" | "balanced" | "wide";
 export type PopupCornerStyle = "square" | "soft" | "rounded";
 export type PopupShadowStyle = "none" | "soft" | "elevated";
 export type ActionBadgeSelection = "attention" | (string & {});
+export type DisplaySurface = "popup" | "sidebar" | "fullPage";
+export type ProviderOrderBySurface = Record<DisplaySurface, ProviderId[]>;
+export type ProviderProgressItemPreference = {
+  id: string;
+  visible: boolean;
+};
+export type ProgressItemsBySurface = Record<
+  DisplaySurface,
+  Partial<Record<ProviderId, ProviderProgressItemPreference[]>>
+>;
 
 export type ProviderPageBinding = {
   mode: "auto" | "bound";
@@ -270,6 +280,8 @@ export type AppSettings = {
   popupCornerStyle: PopupCornerStyle;
   popupShadowStyle: PopupShadowStyle;
   actionBadgeSelection: ActionBadgeSelection;
+  providerOrderBySurface: ProviderOrderBySurface;
+  progressItemsBySurface: ProgressItemsBySurface;
 };
 
 export type SummaryItem = {

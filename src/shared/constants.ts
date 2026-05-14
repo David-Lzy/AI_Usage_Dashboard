@@ -21,6 +21,10 @@ import {
 import { DEFAULT_SETTINGS_USER_LEVEL } from "./settings-user-level";
 import { DEFAULT_ACTION_BADGE_SELECTION } from "./action-badge-preferences";
 import {
+  createDefaultProgressItemsBySurface,
+  createDefaultProviderOrderBySurface,
+} from "./display-preferences";
+import {
   createPolicyOnlyDiagnostic,
   createSourceFallbackDiagnostic,
   createSourceSelectionDiagnostic,
@@ -538,5 +542,7 @@ export const SAMPLE_APP_STATE: AppState = {
     popupCornerStyle: DEFAULT_POPUP_CORNER_STYLE,
     popupShadowStyle: DEFAULT_POPUP_SHADOW_STYLE,
     actionBadgeSelection: DEFAULT_ACTION_BADGE_SELECTION,
+    providerOrderBySurface: createDefaultProviderOrderBySurface(),
+    progressItemsBySurface: createDefaultProgressItemsBySurface(),
   },
 };

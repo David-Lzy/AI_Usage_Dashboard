@@ -32,6 +32,10 @@ import {
   normalizeWarningThresholdPercent,
 } from "./settings-preferences";
 import { normalizeActionBadgeSelection } from "./action-badge-preferences";
+import {
+  normalizeProgressItemsBySurface,
+  normalizeProviderOrderBySurface,
+} from "./display-preferences";
 import { normalizeSettingsUserLevel } from "./settings-user-level";
 
 let memoryFallbackState: AppState | null = null;
@@ -117,6 +121,9 @@ function normalizeAppState(state: AppState): AppState {
       return normalizeProviderSetting(sampleProviderSetting, storedProviderSetting);
     },
   );
+  const knownProviderIds = SAMPLE_APP_STATE.providerSettings.map(
+    (provider) => provider.id,
+  );
 
   const extraProviders = state.providers.filter(
     (provider) => !sampleProviders.has(provider.providerId),
@@ -179,6 +186,14 @@ function normalizeAppState(state: AppState): AppState {
       ),
       actionBadgeSelection: normalizeActionBadgeSelection(
         state.settings?.actionBadgeSelection,
+      ),
+      providerOrderBySurface: normalizeProviderOrderBySurface(
+        state.settings?.providerOrderBySurface,
+        knownProviderIds,
+      ),
+      progressItemsBySurface: normalizeProgressItemsBySurface(
+        state.settings?.progressItemsBySurface,
+        knownProviderIds,
       ),
     },
   };

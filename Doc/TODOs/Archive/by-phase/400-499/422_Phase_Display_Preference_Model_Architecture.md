@@ -1,6 +1,6 @@
 # Phase 422 - Display Preference Model Architecture
 
-Status: active
+Status: completed
 
 ## Goal
 
@@ -39,3 +39,16 @@ Add the shared storage and normalization model for per-surface provider order an
 ## Follow-Up
 
 - Phase 423 consumes provider order preferences in popup/sidebar/full-page view-model rendering.
+
+## Completion Summary
+
+- Added shared display surface preference types for `popup`, `sidebar`, and `fullPage`.
+- Added default factories and normalizers for provider order and provider progress-item preferences.
+- Extended app settings storage so legacy states receive safe default display preferences.
+- Added focused tests for provider-order cleanup, progress-item cleanup, and storage migration.
+
+## Verification
+
+- `npm run test -- src/shared/display-preferences.test.ts src/shared/storage.test.ts`
+- `npm run typecheck`
+- `git diff --check`
