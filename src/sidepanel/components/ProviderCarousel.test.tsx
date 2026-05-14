@@ -44,7 +44,7 @@ describe("ProviderCarousel", () => {
     expect(html).toContain('data-provider-carousel-action="previous"');
     expect(html).toContain('data-provider-carousel-action="next"');
     expect(html).toContain('tabindex="0"');
-    expect(html).toContain("2 of 3: Claude Code");
+    expect(html).toContain("2 / 3 · Claude Code");
     expect(html).toContain('data-provider-carousel-slide="cursor"');
     expect(html).toContain('data-provider-carousel-dot="codex"');
     expect(html).toContain('aria-current="true"');

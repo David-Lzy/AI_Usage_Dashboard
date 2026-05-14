@@ -29,3 +29,8 @@ Status note:
 - [Diagnostic Archive Export Compatibility](./I18n_Diagnostic_Archive_Export_Compatibility.md)
 - [Diagnostic Fixture And Historical Evidence Alignment](./I18n_Diagnostic_Fixture_And_Historical_Evidence_Alignment.md)
 - [Localization Copy Chunk Size Audit](./I18n_Localization_Copy_Chunk_Size_Audit.md)
+
+## Current Runtime Boundary
+
+- `Phase 429` added 14-locale labels for the expanded progress display style options and made the Settings popup appearance preview render the selected localized progress style.
+- `Phase 432` verified Arabic Settings carousel rendering through Playwright preview and fixed mixed-direction carousel status text while preserving provider names and raw evidence outside translation scope.

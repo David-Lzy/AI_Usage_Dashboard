@@ -34,8 +34,8 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [432_Phase_UI_QA_And_Doc_Closeout.md](./432_Phase_UI_QA_And_Doc_Closeout.md)
-- latest completed slice: [431_Phase_Settings_Carousel_All_Provider_Sections.md](./Archive/by-phase/400-499/431_Phase_Settings_Carousel_All_Provider_Sections.md)
+- active phase file: none
+- latest completed slice: [432_Phase_UI_QA_And_Doc_Closeout.md](./Archive/by-phase/400-499/432_Phase_UI_QA_And_Doc_Closeout.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -825,6 +825,7 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 429` closeout exposed all four progress style choices through localized Settings option labels and made the popup appearance preview render the selected `UsageProgress` style directly while preserving existing stored `line`/`circle` values and provider evidence boundaries
 - the 2026-05-14 `Phase 430` closeout added a reusable Settings `ProviderCarousel` foundation with previous/next controls, slide dots, keyboard arrow navigation, pointer drag threshold helpers, RTL direction semantics, focus-visible styling, and reduced-motion CSS while leaving existing Settings provider sections unmigrated
 - the 2026-05-14 `Phase 431` closeout migrated Quick Setup, Visibility, Permissions, Credentials, and Source provider-shaped Settings sections onto `ProviderCarousel` while preserving their business controls, stable data hooks, deep-link focused provider behavior, runtime text direction, and advanced/debug visibility boundaries
+- the 2026-05-14 `Phase 432` closeout aligned maintained docs, recorded representative Playwright visual QA for popup, sidebar-sized dashboard, full-page dashboard, and Arabic Settings carousel, documented the current invalid blank RDP capture boundary, and fixed mixed-direction carousel status text in RTL Settings
 
 ## Delivery Standard For Each Phase
 

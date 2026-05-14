@@ -202,8 +202,8 @@ export function ProviderCarousel({
             </button>
           </div>
         ) : null}
-        <p className="provider-carousel__status" aria-live="polite">
-          {`${activeIndex + 1} of ${itemCount}: ${activeItem?.label ?? ""}`}
+        <p className="provider-carousel__status" aria-live="polite" dir="auto">
+          {`${activeIndex + 1} / ${itemCount} · ${activeItem?.label ?? ""}`}
         </p>
       </div>
 

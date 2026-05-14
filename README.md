@@ -9,7 +9,7 @@ Current packaged release state:
 - package version: `0.1.0-rc.16`
 - Chrome manifest version: `0.1.0.16`
 - packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.16.zip`
-- source status: `rc.16` package bytes are aligned through `Phase 421`; current source has advanced through `Phase 431` with display-preference storage architecture, per-surface provider ordering, Settings provider-order controls, shared progress-item inventory, Settings quota-item visibility/order controls, per-surface progress item rendering, new soft/gauge progress ring styles, localized Settings progress-style preview/options, and Settings provider-section carousel migration that are not yet packaged as a new release candidate. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
+- source status: `rc.16` package bytes are aligned through `Phase 421`; current source has advanced through `Phase 432` with display-preference storage architecture, per-surface provider ordering, Settings provider-order controls, shared progress-item inventory, Settings quota-item visibility/order controls, per-surface progress item rendering, new soft/gauge progress ring styles, localized Settings progress-style preview/options, Settings provider-section carousel migration, and representative UI QA/doc closeout that are not yet packaged as a new release candidate. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
 - packaged follow-up milestone: [2026-05-14 RC16 Post-Localization Closeout Release Candidate](./Doc/Milestones/2026-05-14_RC16_Post_Localization_Closeout_Release_Candidate.md)
 - submitted review milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
@@ -47,7 +47,7 @@ Next execution queue:
 
 1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary, but use `0.1.0-rc.16` as the ready follow-up package if review feedback or an explicit resubmission decision asks for a newer build
 2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC16 follow-up milestone](./Doc/Milestones/2026-05-14_RC16_Post_Localization_Closeout_Release_Candidate.md) as the current packaged-source reference
-3. finish `Phase 432` UI preference closeout before considering another release package: representative visual QA, documentation alignment, and final verification; no numbered phase is currently queued after `Phase 431`
+3. no numbered phase is currently queued after `Phase 432`; before considering another release package, decide whether the post-`rc.16` display-preference and Settings-carousel source changes should be promoted into a new release-candidate package
 4. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 5. keep real operator evidence closed and archived; do not open another interaction-audit or theme-recovery operator evidence phase unless a new surface or theme regression creates a fresh review need
 6. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes

@@ -1,6 +1,6 @@
 # Surface Expansion And Ambient Theme Controls
 
-Date: 2026-04-26
+Date: 2026-05-14
 
 Document class:
 
@@ -24,6 +24,9 @@ Status note:
 - `Phase 210` has now made quota progress style selectable per popup, sidebar, and full-page tab surface while moving popup quota cards above nonessential summary/explanation cards
 - `Phase 211` has now added Settings-controlled popup size, corner, and shadow presets while preserving the default balanced quota-first popup appearance
 - `Phase 212` has now added a Settings-side popup appearance preview bound to those size, corner, and shadow presets
+- `Phase 422` through `Phase 427` have now made provider order and quota progress item visibility/order configurable per popup, sidebar, and full-page surface without changing provider source truth
+- `Phase 428` and `Phase 429` have now added soft and gauge circular progress styles plus localized Settings preview/options while keeping the classic ring valid for existing users
+- `Phase 430` through `Phase 432` have now moved Settings provider-shaped sections onto a reusable carousel and closed the queue with representative UI QA notes
 
 Process rule:
 
@@ -123,6 +126,23 @@ Define one stable contract for the next productization slices and keep it aligne
 - compact size must remain truthful about space limits; if two-column circular quota rings become too dense, use a compact-specific layout instead of silently widening the compact preset.
 - sidebar and full-page surfaces must not inherit popup appearance presets.
 
+## Provider Display Preference Contract
+
+- Provider order is independent for `popup`, `sidebar`, and `fullPage` surfaces.
+- Surfaces with no saved custom provider order keep the default health/status order.
+- Per-provider quota progress item visibility and order is also independent for `popup`, `sidebar`, and `fullPage`.
+- Unknown provider ids or progress item ids are dropped during normalization; newly discovered providers or progress items append after existing saved preferences.
+- Usage facts, raw diagnostic bodies, provider evidence, and archive/export payloads remain source-truth data, not configurable progress bars.
+- Settings owns order and visibility editing; popup and dashboard surfaces only consume those display preferences.
+
+## Settings Provider Carousel Contract
+
+- Provider-shaped Settings sections may use the reusable provider carousel for navigation density.
+- Carousel controls must stay keyboard accessible through previous/next buttons, slide dots, and ArrowLeft/ArrowRight handling.
+- Pointer drag and swipe are local interaction helpers; no external carousel or drag dependency is required.
+- RTL pages must preserve logical navigation and stable mixed-direction status text.
+- Reduced-motion mode disables slide transform animation while preserving the same controls and content.
+
 ## Animation Boundary
 
 - add motion that suggests continuity between compact and expanded surfaces
@@ -147,6 +167,7 @@ Define one stable contract for the next productization slices and keep it aligne
 - current full-page dashboard and full-page settings captures read as stable, intentional workspace surfaces after the shipped expand, quick-theme, and motion slices
 - current popup smoke capture remains useful as runtime QA evidence but is visually wider than the true toolbar bubble because the helper opens the popup route in its own extension app window
 - RDP runtime capture should close old popup windows and tabs between attempts to reduce session buildup and OOM risk
+- Phase 432 RDP extension-window captures opened windows but produced blank or near-blank image files in the current capture path; Playwright/Vite preview covered representative `en`, `zh-CN`, `de`, and `ar` routes with `overflowX=0`, and the RDP blank-capture boundary is recorded under `Doc/testing/Archive/phase-reports/400-499/Phase_432_UI_QA_And_Doc_Closeout.md`
 
 ## Acceptance Boundary
 

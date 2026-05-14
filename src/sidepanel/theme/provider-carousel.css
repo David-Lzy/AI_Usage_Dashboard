@@ -73,6 +73,7 @@
   line-height: var(--md-sys-typescale-label-medium-line-height);
   overflow-wrap: anywhere;
   text-align: end;
+  unicode-bidi: plaintext;
 }
 
 .provider-carousel__viewport {

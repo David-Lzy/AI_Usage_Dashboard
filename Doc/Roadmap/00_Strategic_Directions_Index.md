@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-14:
 
-- the numbered phase queue is completed through `Phase 431`, with `Phase 432` now active for UI QA and documentation closeout
+- the numbered phase queue is completed through `Phase 432`; no active numbered phase is queued after the provider display-preference and Settings carousel closeout
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -124,7 +124,7 @@ As of 2026-05-14:
 - `Phase 420` added typed signoff import-error codes and localized display copy while preserving pasted JSON, parsed payload fields, accepted import compatibility, generated drafts, filenames, MIME types, storage keys, and request binding/revision formatting
 - `Phase 421` added localized interaction-audit surface-definition display copy for all 14 runtime locales while preserving source ids, route paths, iframe sources, preset ids, data attributes, signoff exports, generated Markdown drafts, filenames, MIME types, storage keys, and request binding/revision formatting
 - post-`Phase 421` closeout packaged the current source boundary as `0.1.0-rc.16` while preserving RC13 as the submitted Chrome Web Store review boundary
-- `Phase 422` is the active first slice for the next UI preference track. The queue runs through `Phase 432` and must keep provider source truth, raw evidence, credentials, host permissions, and RC13/RC16 release boundaries unchanged while adding display-only provider order, quota visibility/order, progress style, and Settings carousel behavior.
+- `Phase 422` started the provider display-preference architecture queue for independent popup, sidebar, and full-page provider ordering, per-surface quota item visibility/order, polished progress ring styles, and Settings provider carousel work. The queue is now completed through `Phase 432` and kept provider source truth, raw evidence, credentials, host permissions, and RC13/RC16 release boundaries unchanged.
 - `Phase 422` completed that first slice by adding shared display preference types, defaults, normalizers, and storage migration while leaving current UI rendering behavior unchanged for `Phase 423`.
 - `Phase 423` consumed the provider-order preference in popup, sidebar, and full-page dashboard rendering while preserving the existing default health/status ordering for surfaces without a saved custom order.
 - `Phase 424` exposed provider-order editing in Settings for popup, sidebar, and full-page tab surfaces while preserving provider enabled state, permissions, credentials, source preferences, and sync behavior.
@@ -135,6 +135,7 @@ As of 2026-05-14:
 - `Phase 429` exposed all four progress style choices through localized Settings option labels and made the popup appearance preview render the selected `UsageProgress` style directly while preserving existing stored `line`/`circle` values and provider evidence boundaries.
 - `Phase 430` added a reusable Settings `ProviderCarousel` foundation with previous/next controls, slide dots, keyboard arrow navigation, pointer drag threshold helpers, RTL direction semantics, focus-visible styling, and reduced-motion CSS while leaving section migration to `Phase 431`.
 - `Phase 431` migrated Quick Setup, Visibility, Permissions, Credentials, and Source provider-shaped Settings sections onto `ProviderCarousel` while preserving data hooks, business controls, focused deep-link behavior, runtime text direction, and advanced/debug visibility boundaries.
+- `Phase 432` closed the UI preference track with docs alignment and representative Playwright visual QA for popup, sidebar-sized dashboard, full-page dashboard, and Arabic Settings carousel; RDP Chrome capture produced invalid blank images in this run, so the limitation is recorded as capture-path evidence rather than a product visual pass.
 - `Phase 200` completed a functionality-first Codex personal slice by preserving multiple visible usage windows, expanding Codex page-capture snippets, and surfacing the most constrained visible percentage window across dashboard, provider detail, and popup paths
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without changing the primary percentage-window quota model
 - `Phase 202` completed repeatable unpacked-extension verification for Codex personal multi-window plus flex-balance context, while fixing DOM capture so repeated percentages and single-character balance values are not lost before parsing
