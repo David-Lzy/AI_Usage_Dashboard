@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-14:
 
-- the numbered phase queue is completed through `Phase 440`; `Phase 441` is active and `Phase 442` through `Phase 447` are queued for scoped post-`rc.18` UI polish without changing the submitted RC13 store-review boundary
+- the numbered phase queue is completed through `Phase 441`; `Phase 442` is active and `Phase 443` through `Phase 447` are queued for scoped post-`rc.18` UI polish without changing the submitted RC13 store-review boundary
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -144,7 +144,8 @@ As of 2026-05-14:
 - `Phase 438` completed Settings quota-item 14-locale copy by moving the quota/progress item controls into `buildSettingsLocalizedCopy`, while preserving provider/progress ids, raw evidence, diagnostics, and storage behavior.
 - `Phase 439` completed UI polish closeout QA by checking popup, sidebar dashboard, full-page dashboard, German Settings quota controls, Arabic RTL Settings quota controls, numeric-only circular ring centers, carousel depth layout, and the cleared RDP Chrome extension error state.
 - `Phase 440` packaged the verified post-RC17 UI polish source as `0.1.0-rc.18`, generated `release/ai-usage-dashboard-0.1.0-rc.18.zip`, recorded SHA256 `e291870988264b07d23cb8cb3c3bd3bf6a1207fcaed7b93fa5e13f829386dfdb`, and preserved RC13 as the submitted Chrome Web Store review boundary.
-- `Phase 441` through `Phase 447` are queued as a documentation-backed post-`rc.18` UI polish track for popup status-chip compactness, progress appearance controls, progress rendering color/thickness, soft-versus-gauge ring differentiation, Settings control ordering/localization, and responsive Settings layouts; this queue does not package a new release candidate by itself.
+- `Phase 441` moved popup featured-provider status chips into the provider title row and verified compact, balanced, and wide popup widths with structural Playwright checks across `en`, `zh-CN`, `de`, and `ar`.
+- `Phase 442` through `Phase 447` remain queued as a documentation-backed post-`rc.18` UI polish track for progress appearance controls, progress rendering color/thickness, soft-versus-gauge ring differentiation, Settings control ordering/localization, and responsive Settings layouts; this queue does not package a new release candidate by itself.
 - `Phase 200` completed a functionality-first Codex personal slice by preserving multiple visible usage windows, expanding Codex page-capture snippets, and surfacing the most constrained visible percentage window across dashboard, provider detail, and popup paths
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without changing the primary percentage-window quota model
 - `Phase 202` completed repeatable unpacked-extension verification for Codex personal multi-window plus flex-balance context, while fixing DOM capture so repeated percentages and single-character balance values are not lost before parsing

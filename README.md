@@ -9,7 +9,7 @@ Current packaged release state:
 - package version: `0.1.0-rc.18`
 - Chrome manifest version: `0.1.0.18`
 - packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.18.zip`
-- source status: `rc.18` package bytes are aligned through `Phase 440`, including the previous `rc.17` display-preference and Settings-carousel boundary plus post-`rc.17` UI polish for carousel depth layout, circular progress ring labels and geometry, disclosure chevron animation, stale Chrome extension error-log cleanup, Settings quota-item 14-locale copy, and representative UI QA/doc closeout. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
+- source status: `rc.18` package bytes are aligned through `Phase 440`; current source is now ahead with post-`rc.18` `Phase 441` popup status-chip compactness. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
 - packaged follow-up milestone: [2026-05-14 RC18 UI Polish Follow-Up Release Candidate](./Doc/Milestones/2026-05-14_RC18_UI_Polish_Follow_Up_Release_Candidate.md)
 - submitted review milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
@@ -47,7 +47,7 @@ Next execution queue:
 
 1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary, but use `0.1.0-rc.18` as the ready follow-up package if review feedback or an explicit resubmission decision asks for a newer build
 2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC18 follow-up milestone](./Doc/Milestones/2026-05-14_RC18_UI_Polish_Follow_Up_Release_Candidate.md) as the current packaged-source reference
-3. execute the scoped post-`rc.18` UI polish queue starting with `Phase 441`, then `Phase 442` through `Phase 447`; this queue does not replace the submitted RC13 review boundary or package a new RC unless a later packaging phase is explicitly opened
+3. continue the scoped post-`rc.18` UI polish queue with active `Phase 442`, then queued `Phase 443` through `Phase 447`; this queue does not replace the submitted RC13 review boundary or package a new RC unless a later packaging phase is explicitly opened
 4. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 5. keep real operator evidence closed and archived; do not open another interaction-audit or theme-recovery operator evidence phase unless a new surface or theme regression creates a fresh review need
 6. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes

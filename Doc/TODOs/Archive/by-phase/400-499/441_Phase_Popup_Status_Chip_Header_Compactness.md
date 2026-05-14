@@ -1,6 +1,6 @@
 # Phase 441 - Popup Status Chip Header Compactness
 
-Status: active
+Status: completed on 2026-05-14
 
 ## Goal
 
@@ -39,3 +39,18 @@ Move the popup provider-card status badge, such as Healthy, Warning, or Sync iss
 ## Follow-Up
 
 - Continue to `Phase 442` for progress appearance settings after the popup header compactness is stable.
+
+## Completion Notes
+
+- Moved the popup featured-provider status chip into a dedicated provider title row so quota-first popup cards no longer spend a separate header column on status.
+- Added popup-only CSS for the title row, provider identity wrapper, and status-chip width behavior so long provider names can wrap beside the status chip without overlapping the progress area.
+- Added focused server-rendered tests proving the status chip lives in the title row and non-progress cards still keep the plan below that row.
+- Ran a targeted Playwright preview check for `en`, `zh-CN`, `de`, and `ar` across compact, balanced, and wide popup widths; screenshots and JSON were written under `tmp/phase441-popup-status-chip/`.
+- The older `phase129:review` helper is no longer a reliable current-gate because it waits for the historical English `Quick glance` string; the Phase 441 preview check used structural selectors instead.
+
+## Verification
+
+- `npm run test -- src/popup/PopupFeaturedProviderList.test.tsx src/popup/PopupProviderProgress.test.tsx --run`
+- `npm run typecheck`
+- `npm run build`
+- Playwright popup structural/overflow check for `en`, `zh-CN`, `de`, and `ar`

@@ -70,21 +70,28 @@ export function PopupFeaturedProviderList({
               }
             >
               <div className="popup-provider-card__header">
-                <div>
-                  <p className="popup-provider-card__provider">
-                    {provider.providerLabel}
-                  </p>
+                <div className="popup-provider-card__identity">
+                  <div className="popup-provider-card__title-row">
+                    <p className="popup-provider-card__provider">
+                      {provider.providerLabel}
+                    </p>
+                    <div
+                      className="popup-provider-card__status"
+                      data-popup-featured-status={
+                        index === 0 ? "true" : undefined
+                      }
+                    >
+                      <StatusBadge
+                        label={card.statusLabel}
+                        tone={provider.displayTone}
+                      />
+                    </div>
+                  </div>
                   {!hasProviderProgress ? (
                     <p className="popup-provider-card__plan">
                       {provider.planName}
                     </p>
                   ) : null}
-                </div>
-                <div data-popup-featured-status={index === 0 ? "true" : undefined}>
-                  <StatusBadge
-                    label={card.statusLabel}
-                    tone={provider.displayTone}
-                  />
                 </div>
               </div>
 

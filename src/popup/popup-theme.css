@@ -175,10 +175,32 @@ body.popup-page .status-card {
 }
 
 .popup-provider-card__header {
+  min-width: 0;
+}
+
+.popup-provider-card__identity {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-1);
+  min-width: 0;
+}
+
+.popup-provider-card__title-row {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--app-space-2);
+  min-width: 0;
+}
+
+.popup-provider-card__status {
+  flex: 0 0 auto;
+  max-width: 48%;
+}
+
+.popup-provider-card__status .status-chip {
+  max-width: 100%;
+  white-space: nowrap;
 }
 
 .popup-provider-card__chips {
@@ -338,6 +360,7 @@ body.popup-page .status-card {
 .popup-provider-card__provider,
 .popup-provider-card__plan {
   margin: 0;
+  min-width: 0;
   overflow-wrap: anywhere;
   word-break: break-word;
 }
