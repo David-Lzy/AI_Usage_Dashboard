@@ -17,11 +17,12 @@ Freshness model:
 Status note:
 
 - records the packaged follow-up candidate prepared after `Phase 467`
+- superseded as the current packaged follow-up reference by [2026-05-15_RC21_Settings_Tooltip_Form_Control_Release_Candidate.md](./2026-05-15_RC21_Settings_Tooltip_Form_Control_Release_Candidate.md)
 - this is not a claim that RC20 has already been submitted to Chrome Web Store
 
 ## Milestone Summary
 
-`0.1.0-rc.20` is the current packaged follow-up candidate.
+`0.1.0-rc.20` was a packaged follow-up candidate for the UI polish boundary through `Phase 467`. The current packaged follow-up reference is [RC21](./2026-05-15_RC21_Settings_Tooltip_Form_Control_Release_Candidate.md).
 
 The follow-up package is:
 

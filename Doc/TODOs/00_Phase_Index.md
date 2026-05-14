@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [468_Phase_Settings_Tooltip_And_Form_Control_Polish.md](./Archive/by-phase/400-499/468_Phase_Settings_Tooltip_And_Form_Control_Polish.md)
+- latest completed slice: [469_Phase_RC21_Settings_Tooltip_Form_Control_Closeout_Packaging.md](./Archive/by-phase/400-499/469_Phase_RC21_Settings_Tooltip_Form_Control_Closeout_Packaging.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -858,6 +858,11 @@ Completed phases should be moved to:
 - the 2026-05-15 `Phase 462` closeout moved popup refresh into the title row, added a popup header Settings action, and kept theme, tab, and Settings controls in a compact action row while preserving existing popup route/action handlers and localized common action labels
 - the 2026-05-15 `Phase 463` closeout added a default-two popup circular progress row-count preference, Settings control, 14-locale labels/helper copy, and popup-only circular layout consumption while preserving line progress, provider values, quota visibility/order, warnings, diagnostics, raw evidence, sidebar layout, and full-page layout
 - the 2026-05-15 `Phase 464` closeout made shared Settings form-control values more legible with explicit body-large typography and tightened progress appearance numeric/color controls while preserving storage, settings semantics, provider data, locale behavior, and popup quota rendering
+- the 2026-05-15 `Phase 465` closeout added a safe local UI font-family preference, wired it through settings storage normalization and root Material typography variables, and added 14-locale Settings labels/helper copy while avoiding remote font assets
+- the 2026-05-15 `Phase 466` closeout closed the Phase 458-465 UI polish queue with Playwright built-preview checks, sequential RDP Chrome extension-window captures, documentation alignment, and an explicit decision to package RC20 in a dedicated follow-up phase
+- the 2026-05-15 `Phase 467` closeout packaged the completed UI polish source as `0.1.0-rc.20`, generated `release/ai-usage-dashboard-0.1.0-rc.20.zip`, recorded SHA256 `0c681b4b120f5a8cd108ec62d532da8089d9fba136256b8aecb1d3597fd023fb`, and preserved RC13 as the submitted Chrome Web Store review boundary
+- the 2026-05-15 `Phase 468` closeout polished Settings help tooltips and form controls by making tooltip triggers subtle, rendering tooltip content as an opaque viewport-positioned surface, widening the progress-thickness numeric input, and raising shared field-label typography while preserving settings semantics
+- the 2026-05-15 `Phase 469` closeout packaged the Phase 468 source boundary as `0.1.0-rc.21`, generated `release/ai-usage-dashboard-0.1.0-rc.21.zip`, recorded SHA256 `edcd6546695b89b70a271919a4531c19053216301affbc951eb98569f4aa4079`, and preserved RC13 as the submitted Chrome Web Store review boundary
 
 ## Delivery Standard For Each Phase
 
