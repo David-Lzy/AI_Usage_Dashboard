@@ -28,3 +28,4 @@ Status note:
 - [Phase 447 Settings Appearance Responsive Control Grid](./Phase_447_Settings_Appearance_Responsive_Control_Grid.md)
 - [Phase 448 RC19 Post-RC18 UI Polish Closeout Packaging](./Phase_448_RC19_Post_RC18_UI_Polish_Closeout_Packaging.md)
 - [Phase 449 UI Micro Polish Alignment Ring And Carousel](./Phase_449_UI_Micro_Polish_Alignment_Ring_And_Carousel.md)
+- [Phase 450 UI Micro Polish Select Ring And Color Bands](./Phase_450_UI_Micro_Polish_Select_Ring_And_Color_Bands.md)

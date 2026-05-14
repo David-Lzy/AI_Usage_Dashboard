@@ -9,7 +9,7 @@ Current packaged release state:
 - package version: `0.1.0-rc.19`
 - Chrome manifest version: `0.1.0.19`
 - packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.19.zip`
-- source status: `rc.19` package bytes are aligned through `Phase 448`; current source is ahead by `Phase 449` UI micro-polish. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
+- source status: `rc.19` package bytes are aligned through `Phase 448`; current source is ahead by `Phase 450` UI micro-polish. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
 - packaged follow-up milestone: [2026-05-14 RC19 Post-RC18 UI Polish Closeout Release Candidate](./Doc/Milestones/2026-05-14_RC19_Post_RC18_UI_Polish_Closeout_Release_Candidate.md)
 - submitted review milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
@@ -47,7 +47,7 @@ Next execution queue:
 
 1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary, but use `0.1.0-rc.19` as the ready follow-up package if review feedback or an explicit resubmission decision asks for a newer build
 2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC19 follow-up milestone](./Doc/Milestones/2026-05-14_RC19_Post_RC18_UI_Polish_Closeout_Release_Candidate.md) as the current packaged-source reference
-3. no numbered phase is currently queued after `Phase 449`; open a new phase only for review feedback, an explicit resubmission handoff, packaging the latest source, or a new scoped product request
+3. no numbered phase is currently queued after `Phase 450`; open a new phase only for review feedback, an explicit resubmission handoff, packaging the latest source, or a new scoped product request
 4. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 5. keep real operator evidence closed and archived; do not open another interaction-audit or theme-recovery operator evidence phase unless a new surface or theme regression creates a fresh review need
 6. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
@@ -707,7 +707,7 @@ Output artifact:
 
 Packaging note:
 
-- `rc.19` packages the previous `rc.18` follow-up work plus post-`rc.18` source changes through `Phase 447`, including popup status-chip compactness, progress appearance controls/rendering, soft/gauge ring differentiation, Settings order-control localization, Settings overview responsive help, and responsive Appearance & Sync control grids. Current source is ahead by `Phase 449` UI micro-polish and needs a separate packaging phase before it becomes a release artifact.
+- `rc.19` packages the previous `rc.18` follow-up work plus post-`rc.18` source changes through `Phase 447`, including popup status-chip compactness, progress appearance controls/rendering, soft/gauge ring differentiation, Settings order-control localization, Settings overview responsive help, and responsive Appearance & Sync control grids. Current source is ahead by `Phase 450` UI micro-polish and needs a separate packaging phase before it becomes a release artifact.
 - `rc.15` remains a historical packaged follow-up candidate for the post-`rc.14` maintenance boundary through `Phase 364`.
 - `rc.16` remains a historical packaged follow-up candidate for the post-localization and interaction-audit display/source boundary through `Phase 421`.
 - `rc.17` remains a historical packaged follow-up candidate for the display-preference and Settings-carousel boundary through `Phase 433`.

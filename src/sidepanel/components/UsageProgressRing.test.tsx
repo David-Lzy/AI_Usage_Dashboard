@@ -22,7 +22,11 @@ describe("UsageProgressRing", () => {
 
     expect(html).toContain("usage-progress-ring--circle-soft");
     expect(html).toContain("--usage-progress-ring-arc:100");
-    expect(html).toContain("--usage-progress-ring-fill-arc:51");
+    expect(html).toContain("--usage-progress-ring-track-arc:301.59");
+    expect(html).toContain("--usage-progress-ring-fill-arc:153.81");
+    expect(html).toContain("--usage-progress-ring-circumference:301.59");
+    expect(html).toContain('stroke-dasharray="301.59 301.59"');
+    expect(html).toContain('stroke-dasharray="153.81 301.59"');
     expect(html).toContain("--usage-progress-ring-rotation:-90deg");
     expect(html).toContain("--usage-progress-ring-track-opacity:1");
   });
@@ -45,7 +49,11 @@ describe("UsageProgressRing", () => {
 
     expect(html).toContain("usage-progress-ring--circle-gauge");
     expect(html).toContain("--usage-progress-ring-arc:68");
-    expect(html).toContain("--usage-progress-ring-fill-arc:34.68");
+    expect(html).toContain("--usage-progress-ring-track-arc:205.08");
+    expect(html).toContain("--usage-progress-ring-fill-arc:104.59");
+    expect(html).toContain("--usage-progress-ring-circumference:301.59");
+    expect(html).toContain('stroke-dasharray="205.08 301.59"');
+    expect(html).toContain('stroke-dasharray="104.59 301.59"');
     expect(html).toContain("--usage-progress-ring-rotation:146deg");
     expect(html).toContain("--usage-progress-ring-track-opacity:0.46");
   });

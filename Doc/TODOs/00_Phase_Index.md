@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [449_Phase_UI_Micro_Polish_Alignment_Ring_And_Carousel.md](./Archive/by-phase/400-499/449_Phase_UI_Micro_Polish_Alignment_Ring_And_Carousel.md)
+- latest completed slice: [450_Phase_UI_Micro_Polish_Select_Ring_And_Color_Bands.md](./Archive/by-phase/400-499/450_Phase_UI_Micro_Polish_Select_Ring_And_Color_Bands.md)
 - queued phase files:
   - none
 
@@ -844,6 +844,7 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 447` closeout made Appearance & Sync controls use responsive grid tracks across side-panel, full-page, and narrow Settings layouts, and capped long custom select/editable-number menus so they remain visible and scrollable while preserving settings values, provider behavior, localized labels, and release boundaries
 - the 2026-05-14 `Phase 448` closeout packaged the post-`rc.18` UI polish source boundary through `Phase 447` as `0.1.0-rc.19`, generated `release/ai-usage-dashboard-0.1.0-rc.19.zip`, recorded SHA256 `2b3237e4acf0d855de394fdbc2c87b8a0ac4475e2cdf2ae46dabfab9256ee0a1`, and preserved RC13 as the submitted Chrome Web Store review boundary
 - the 2026-05-14 `Phase 449` closeout fixed reported UI micro-polish regressions for remaining-color-band alignment, Settings display-level helper alignment, soft-ring percentage rendering, and provider-carousel motion while preserving storage, provider data, localization, package, and submitted-review boundaries
+- the 2026-05-14 `Phase 450` closeout fixed select open-ring clipping, hardened soft/gauge SVG ring dash rendering with actual circumference values, and compacted remaining-color-band controls while preserving storage, provider data, localization, package, and submitted-review boundaries
 
 ## Delivery Standard For Each Phase
 

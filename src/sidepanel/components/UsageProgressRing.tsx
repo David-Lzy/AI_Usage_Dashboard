@@ -16,6 +16,13 @@ type UsageProgressRingProps = {
   variant: Extract<ProgressDisplayStyle, "circle-soft" | "circle-gauge">;
 };
 
+const RING_RADIUS = 48;
+const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
+
+function formatSvgNumber(value: number): string {
+  return String(Math.round(value * 100) / 100);
+}
+
 function getRingArcLength(variant: UsageProgressRingProps["variant"]): number {
   return variant === "circle-gauge" ? 68 : 100;
 }
@@ -36,8 +43,13 @@ function getRingFillArcLength(
     return 0;
   }
 
-  const arcLength = getRingArcLength(variant);
-  return (roundedPercent / 100) * arcLength;
+  return getRingTrackArcLength(variant) * (roundedPercent / 100);
+}
+
+function getRingTrackArcLength(
+  variant: UsageProgressRingProps["variant"],
+): number {
+  return RING_CIRCUMFERENCE * (getRingArcLength(variant) / 100);
 }
 
 export function UsageProgressRing({
@@ -54,14 +66,19 @@ export function UsageProgressRing({
   variant,
 }: UsageProgressRingProps) {
   const arcLength = getRingArcLength(variant);
+  const circumference = formatSvgNumber(RING_CIRCUMFERENCE);
+  const fillArcLength = formatSvgNumber(
+    getRingFillArcLength(variant, roundedPercent),
+  );
+  const trackArcLength = formatSvgNumber(getRingTrackArcLength(variant));
   const ringStyle = {
     "--usage-progress-ring-arc": String(arcLength),
+    "--usage-progress-ring-circumference": circumference,
+    "--usage-progress-ring-fill-arc": fillArcLength,
     "--usage-progress-ring-rotation": getRingRotation(variant),
     "--usage-progress-ring-stroke": String(progressThicknessPx),
+    "--usage-progress-ring-track-arc": trackArcLength,
     "--usage-progress-ring-track-opacity": getRingTrackOpacity(variant),
-    "--usage-progress-ring-fill-arc": String(
-      getRingFillArcLength(variant, roundedPercent),
-    ),
     ...(progressColor && !isIndeterminate
       ? {
           "--usage-progress-ring-fill": progressColor,
@@ -69,12 +86,16 @@ export function UsageProgressRing({
       : {}),
   } as CSSProperties & {
     "--usage-progress-ring-arc": string;
+    "--usage-progress-ring-circumference": string;
     "--usage-progress-ring-fill"?: string;
+    "--usage-progress-ring-fill-arc": string;
     "--usage-progress-ring-rotation": string;
     "--usage-progress-ring-stroke": string;
+    "--usage-progress-ring-track-arc": string;
     "--usage-progress-ring-track-opacity": string;
-    "--usage-progress-ring-fill-arc": string;
   };
+  const trackDasharray = `${trackArcLength} ${circumference}`;
+  const fillDasharray = `${fillArcLength} ${circumference}`;
 
   return (
     <div
@@ -99,15 +120,15 @@ export function UsageProgressRing({
             className="usage-progress-ring__track"
             cx="60"
             cy="60"
-            r="48"
-            pathLength="100"
+            r={RING_RADIUS}
+            strokeDasharray={trackDasharray}
           />
           <circle
             className="usage-progress-ring__fill"
             cx="60"
             cy="60"
-            r="48"
-            pathLength="100"
+            r={RING_RADIUS}
+            strokeDasharray={fillDasharray}
           />
         </svg>
         <span className="usage-progress-ring__value">{valueLabel}</span>

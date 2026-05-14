@@ -209,14 +209,12 @@
 
 .usage-progress-ring__track {
   stroke: var(--usage-progress-ring-track);
-  stroke-dasharray: var(--usage-progress-ring-arc) 100;
   opacity: var(--usage-progress-ring-track-opacity);
   transform: rotate(var(--usage-progress-ring-rotation, -90deg));
 }
 
 .usage-progress-ring__fill {
   stroke: var(--usage-progress-ring-fill);
-  stroke-dasharray: var(--usage-progress-ring-fill-arc) 100;
   stroke-dashoffset: 0;
   transform: rotate(var(--usage-progress-ring-rotation, -90deg));
   transition: stroke-dasharray 180ms var(--app-motion-easing-standard);
