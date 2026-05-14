@@ -3,9 +3,9 @@
   gap: var(--app-space-4);
   min-width: 0;
   --provider-carousel-card-max-width: 760px;
-  --provider-carousel-depth-offset: clamp(48px, 12vw, 168px);
+  --provider-carousel-depth-offset: clamp(44px, 5vw, 96px);
   --provider-carousel-depth-y: var(--app-space-3);
-  --provider-carousel-motion-duration: 420ms;
+  --provider-carousel-motion-duration: 560ms;
 }
 
 .provider-carousel--empty {
@@ -184,7 +184,7 @@
 
 @media (max-width: 520px) {
   .provider-carousel {
-    --provider-carousel-depth-offset: clamp(28px, 9vw, 48px);
+    --provider-carousel-depth-offset: clamp(28px, 8vw, 44px);
   }
 
   .provider-carousel__viewport {

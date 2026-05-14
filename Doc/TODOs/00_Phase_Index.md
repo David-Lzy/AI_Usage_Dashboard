@@ -34,10 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [461_Phase_Provider_Carousel_Motion_Pacing.md](./461_Phase_Provider_Carousel_Motion_Pacing.md)
-- latest completed slice: [460_Phase_Quick_Setup_All_Providers_Carousel.md](./Archive/by-phase/400-499/460_Phase_Quick_Setup_All_Providers_Carousel.md)
+- active phase file: [462_Phase_Popup_Header_Action_Layout.md](./462_Phase_Popup_Header_Action_Layout.md)
+- latest completed slice: [461_Phase_Provider_Carousel_Motion_Pacing.md](./Archive/by-phase/400-499/461_Phase_Provider_Carousel_Motion_Pacing.md)
 - queued phase files:
-  - [461_Phase_Provider_Carousel_Motion_Pacing.md](./461_Phase_Provider_Carousel_Motion_Pacing.md)
   - [462_Phase_Popup_Header_Action_Layout.md](./462_Phase_Popup_Header_Action_Layout.md)
   - [463_Phase_Popup_Circular_Progress_Row_Count.md](./463_Phase_Popup_Circular_Progress_Row_Count.md)
   - [464_Phase_Form_Control_Typography_And_Auto_Sizing.md](./464_Phase_Form_Control_Typography_And_Auto_Sizing.md)
@@ -860,6 +859,7 @@ Completed phases should be moved to:
 - the 2026-05-15 `Phase 458` closeout made the remaining-color-band dropdown show one visible value, using localized recommended-color names or custom hex labels as appropriate, and compacted remaining-color-band controls into aligned inline field groups while preserving storage, validation, warning thresholds, and provider quota semantics
 - the 2026-05-15 `Phase 459` closeout promoted application language and theme mode into Settings overview, removed their duplicate Appearance & Sync controls, and preserved locale normalization, runtime direction, theme storage, provider settings, credentials, permissions, and source preferences
 - the 2026-05-15 `Phase 460` closeout moved all providers into the Quick Setup carousel, removed the separate "More Provider" disclosure, kept hidden providers editable through card-level visibility controls, and preserved zero-provider recommended-start deep links plus dashboard visibility semantics outside Quick Setup
+- the 2026-05-15 `Phase 461` closeout stabilized Settings provider-carousel motion by capping depth offsets and slightly slowing the carousel-local transition while preserving reduced-motion handling, keyboard navigation, pointer drag thresholds, RTL semantics, focus behavior, and inactive-slide semantics
 
 ## Delivery Standard For Each Phase
 

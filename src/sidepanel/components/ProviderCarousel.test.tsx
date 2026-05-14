@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 
@@ -29,6 +31,11 @@ const sampleItems = [
     content: <article data-provider-card="codex">Codex card</article>,
   },
 ];
+
+const providerCarouselCss = readFileSync(
+  new URL("../theme/provider-carousel.css", import.meta.url),
+  "utf8",
+);
 
 describe("ProviderCarousel", () => {
   it("renders arbitrary provider cards with controls, status, and dots", () => {
@@ -132,5 +139,21 @@ describe("ProviderCarousel", () => {
     expect(getProviderCarouselSlidePosition(4, 0, 5)).toBe("previous");
     expect(getProviderCarouselSlidePosition(1, 0, 5)).toBe("next");
     expect(getProviderCarouselSlidePosition(1, 0, 2)).toBe("next");
+  });
+
+  it("uses capped local motion tokens and preserves reduced-motion escape", () => {
+    expect(providerCarouselCss).toContain(
+      "--provider-carousel-motion-duration: 560ms;",
+    );
+    expect(providerCarouselCss).toContain(
+      "--provider-carousel-depth-offset: clamp(44px, 5vw, 96px);",
+    );
+    expect(providerCarouselCss).toContain(
+      "--provider-carousel-depth-offset: clamp(28px, 8vw, 44px);",
+    );
+    expect(providerCarouselCss).toContain(
+      "@media (prefers-reduced-motion: reduce)",
+    );
+    expect(providerCarouselCss).toContain("transition: none;");
   });
 });

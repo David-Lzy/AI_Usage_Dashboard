@@ -42,5 +42,6 @@ Status note:
 - `Phase 458` made remaining-color-band color dropdowns show one visible value, with localized recommended-color names or custom hex labels as appropriate, and compacted the band controls into inline field groups.
 - `Phase 459` promoted application language and theme mode into Settings overview and removed their duplicate Appearance & Sync controls.
 - `Phase 460` moved all providers into the Quick Setup carousel and removed the separate "More Provider" disclosure while keeping hidden providers editable through card-level visibility controls.
-- Current implementation source is ahead of the `0.1.0-rc.19` package by the `Phase 449` through `Phase 460` UI micro-polish phases.
-- `Phase 461` through `Phase 466` are queued as the next scoped UI polish sequence covering carousel pacing, popup header actions, popup circular progress density, form-control typography, UI font preference, and visual QA/docs closeout.
+- `Phase 461` stabilized Settings provider-carousel motion by capping depth offsets and slightly slowing the carousel-local transition while preserving reduced-motion handling and carousel interaction semantics.
+- Current implementation source is ahead of the `0.1.0-rc.19` package by the `Phase 449` through `Phase 461` UI micro-polish phases.
+- `Phase 462` through `Phase 466` are queued as the next scoped UI polish sequence covering popup header actions, popup circular progress density, form-control typography, UI font preference, and visual QA/docs closeout.

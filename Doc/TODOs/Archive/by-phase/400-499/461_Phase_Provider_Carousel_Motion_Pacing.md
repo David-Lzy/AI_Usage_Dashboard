@@ -1,6 +1,6 @@
 # Phase 461 - Provider Carousel Motion Pacing
 
-Status: active
+Status: completed on 2026-05-15
 
 ## Goal
 
@@ -32,6 +32,21 @@ Make provider carousel transitions feel stable and consistent across viewport wi
 - `npm run typecheck`
 - Playwright or RDP visual check for sidepanel and full-page Settings carousel.
 - `npm run docs:check`
+- `git diff --check`
+
+## Completion Notes
+
+- Provider carousel depth offsets now use narrower capped CSS tokens, so wide full-page Settings no longer travels much farther than side-panel Settings during the same transition.
+- The carousel-local motion duration is slightly slower, making Quick Setup provider changes visible but restrained.
+- Reduced-motion behavior still disables slide transitions.
+- Existing button, keyboard, drag-threshold, RTL, focus, and inactive-slide semantics are unchanged.
+
+## Verification
+
+- `npm run test -- src/sidepanel/components/ProviderCarousel.test.tsx src/sidepanel/routes/SettingsPage.test.tsx --run`
+- `npm run typecheck`
+- `npm run docs:check`
+- `npm run build`
 - `git diff --check`
 
 ## Follow-Up
