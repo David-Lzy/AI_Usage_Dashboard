@@ -1,9 +1,12 @@
-import type { ProgressDisplayStyle } from "../providers/types";
+import type {
+  ProgressDisplayStyle,
+  ProgressItemsBySurface,
+} from "../providers/types";
 import type { RuntimeI18n } from "../shared/i18n";
+import { hasVisibleProviderProgressItems } from "../shared/provider-progress-item-selection";
 import { StatusBadge } from "../sidepanel/components/StatusBadge";
 import type { SettingsRouteFocus } from "../sidepanel/route-state";
 import { PopupProviderProgress } from "./PopupProviderProgress";
-import { shouldShowPopupProviderProgress } from "./progress-visibility";
 import type {
   PopupFeaturedProviderCard,
   PopupGuidanceAction,
@@ -14,6 +17,7 @@ type PopupFeaturedProviderListProps = {
   cards: PopupFeaturedProviderCard[];
   i18n: RuntimeI18n;
   progressDisplayStyle: ProgressDisplayStyle;
+  progressItemsBySurface: ProgressItemsBySurface;
   getSettingsFocusForProvider: (
     provider: PopupFeaturedProviderCard["provider"],
   ) => SettingsRouteFocus | null;
@@ -28,6 +32,7 @@ export function PopupFeaturedProviderList({
   cards,
   i18n,
   progressDisplayStyle,
+  progressItemsBySurface,
   getSettingsFocusForProvider,
   onAction,
 }: PopupFeaturedProviderListProps) {
@@ -44,10 +49,15 @@ export function PopupFeaturedProviderList({
             <PopupProviderProgress
               provider={provider}
               progressDisplayStyle={progressDisplayStyle}
+              progressItemsBySurface={progressItemsBySurface}
               i18n={i18n}
             />
           );
-          const hasProviderProgress = shouldShowPopupProviderProgress(provider);
+          const hasProviderProgress = hasVisibleProviderProgressItems(
+            provider,
+            "popup",
+            progressItemsBySurface,
+          );
 
           return (
             <article

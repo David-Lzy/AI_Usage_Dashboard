@@ -1,6 +1,7 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
+import { createDefaultProgressItemsBySurface } from "../../shared/display-preferences";
 import { DashboardPage } from "./DashboardPage";
 
 describe("DashboardPage", () => {
@@ -9,6 +10,8 @@ describe("DashboardPage", () => {
       <DashboardPage
         localePreference="en"
         progressDisplayStyle="line"
+        progressItemsBySurface={createDefaultProgressItemsBySurface()}
+        progressSurface="sidebar"
         summaryItems={[]}
         providers={[]}
         onOpenProvider={() => {}}

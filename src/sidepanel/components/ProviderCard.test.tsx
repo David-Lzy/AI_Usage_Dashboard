@@ -2,7 +2,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
 import { createAdapterErrorDiagnostic } from "../../providers/diagnostics";
-import type { AppState } from "../../providers/types";
+import type { AppState, ProviderId } from "../../providers/types";
 import { SAMPLE_APP_STATE } from "../../shared/constants";
 import { getProviderViewModel } from "../view-models";
 import { ProviderCard } from "./ProviderCard";
@@ -20,7 +20,7 @@ function createState(overrides?: Partial<AppState>): AppState {
 
 function renderProviderCard(
   state: AppState,
-  providerId: "claude-code" | "codex" | "cursor" | "gemini",
+  providerId: ProviderId,
   options: {
     onOpenSourcePage?: () => void;
   } = {},
@@ -35,6 +35,8 @@ function renderProviderCard(
     <ProviderCard
       localePreference="en"
       progressDisplayStyle="line"
+      progressItemsBySurface={state.settings.progressItemsBySurface}
+      progressSurface="sidebar"
       provider={provider}
       onOpen={() => undefined}
       onOpenSourcePage={options.onOpenSourcePage}
@@ -45,7 +47,7 @@ function renderProviderCard(
 
 describe("ProviderCard", () => {
   it("uses the Material provider-card hierarchy for summary, progress, chips, and actions", () => {
-    const html = renderProviderCard(createState(), "gemini");
+    const html = renderProviderCard(createState(), "jetbrains");
 
     expect(html).toContain('<header class="provider-card__header">');
     expect(html).toContain('class="provider-card__identity"');
@@ -107,12 +109,12 @@ describe("ProviderCard", () => {
     expect(html).not.toContain("&gt;Unknown&lt;");
   });
 
-  it("keeps documented non-percent totals visible as indeterminate progress", () => {
+  it("does not render policy-only totals as fabricated progress", () => {
     const html = renderProviderCard(createState(), "gemini");
 
-    expect(html).toContain('role="progressbar"');
-    expect(html).toContain("daily requests");
-    expect(html).toContain("Unknown");
+    expect(html).not.toContain('role="progressbar"');
+    expect(html).toContain("Unknown / 2,000 requests");
+    expect(html).toContain("Documented quota snapshot");
   });
 
   it("renders a source-page recovery action for shipped session-page providers", () => {
@@ -216,13 +218,31 @@ describe("ProviderCard", () => {
 
     const html = renderProviderCard(state, "claude-code");
 
-    expect(html).toContain('class="usage-window-progress-list');
+    expect(html).toContain('class="provider-progress-item-list');
     expect(html.match(/role="progressbar"/g)).toHaveLength(4);
     expect(html).toContain("Current session");
     expect(html).toContain("All models weekly limit");
     expect(html).toContain("Claude Design");
     expect(html).toContain("Daily included routine runs");
     expect(html).not.toContain("rolling percent");
+  });
+
+  it("honors hidden sidebar progress item preferences", () => {
+    const state = createState({
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        progressItemsBySurface: {
+          ...SAMPLE_APP_STATE.settings.progressItemsBySurface,
+          sidebar: {
+            jetbrains: [{ id: "primary", visible: false }],
+          },
+        },
+      },
+    });
+    const html = renderProviderCard(state, "jetbrains");
+
+    expect(html).not.toContain('role="progressbar"');
+    expect(html).toContain("16 / 20 credits");
   });
 
   it("omits the source-page recovery action for deferred session-page providers", () => {

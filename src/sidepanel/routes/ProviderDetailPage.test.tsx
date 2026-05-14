@@ -34,6 +34,8 @@ function renderProviderDetail(
     <ProviderDetailPage
       localePreference="en"
       progressDisplayStyle="line"
+      progressItemsBySurface={state.settings.progressItemsBySurface}
+      progressSurface="sidebar"
       provider={provider}
       onBack={() => undefined}
       onOpenSourcePage={options.onOpenSourcePage}

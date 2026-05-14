@@ -194,6 +194,50 @@
   background: var(--app-supporting-surface-background);
 }
 
+.provider-progress-item-list {
+  display: grid;
+  gap: var(--app-space-3);
+}
+
+.provider-progress-item-list--compact {
+  gap: var(--app-space-2);
+}
+
+.provider-progress-item-list--circle {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+}
+
+.provider-progress-item-list__item {
+  display: grid;
+  gap: var(--app-space-2);
+  padding: var(--app-space-3);
+  border: 1px solid var(--app-supporting-surface-border);
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--app-supporting-surface-background);
+}
+
+.provider-progress-item-list__value-only {
+  display: grid;
+  gap: var(--app-space-1);
+  min-width: 0;
+}
+
+.provider-progress-item-list__label,
+.provider-progress-item-list__detail {
+  margin: 0;
+}
+
+.provider-progress-item-list__value {
+  margin: 0;
+  color: var(--md-sys-color-on-surface);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  line-height: var(--md-sys-typescale-label-large-line-height);
+  overflow-wrap: anywhere;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .usage-progress__fill--indeterminate {
     animation: none;

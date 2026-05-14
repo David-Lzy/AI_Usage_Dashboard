@@ -296,6 +296,8 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
         <ProviderDetailPage
           localePreference={localePreference}
           progressDisplayStyle={progressDisplayStyle}
+          progressItemsBySurface={appState.settings.progressItemsBySurface}
+          progressSurface={providerDisplaySurface}
           provider={selectedProvider}
           onBack={() => navigateToRoute({ name: "dashboard" })}
           themeActionLabel={quickThemeToggleCopy.label}
@@ -313,6 +315,8 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
         <DashboardPage
           localePreference={localePreference}
           progressDisplayStyle={progressDisplayStyle}
+          progressItemsBySurface={appState.settings.progressItemsBySurface}
+          progressSurface={providerDisplaySurface}
           summaryItems={summaryItems}
           providers={visibleProviders}
           onOpenProvider={(providerId) =>

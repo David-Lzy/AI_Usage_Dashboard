@@ -1,6 +1,6 @@
 # Phase 427 - Progress Item Rendering Across Surfaces
 
-Status: queued
+Status: completed
 
 ## Goal
 
@@ -32,6 +32,18 @@ Render popup, sidebar, full-page dashboard, and provider detail progress from th
 - `npm run test -- src/popup/PopupProviderProgress.test.tsx src/sidepanel/components/ProviderCard.test.tsx src/sidepanel/routes/ProviderDetailPage.test.tsx`
 - `npm run typecheck`
 - `git diff --check`
+
+## Completion Summary
+
+- Added shared progress item selection and rendering so popup, sidebar dashboard cards, full-page dashboard cards, and provider detail consume per-surface progress item preferences.
+- Replaced duplicated primary/window rendering branches with `ProviderProgressItemList`, including value-only item presentation for items that do not have a determinate total.
+- Wired popup to use `popup` item settings and sidepanel/full-page routes to use `sidebar` or `fullPage` settings.
+- Kept usage facts as supplemental context and left provider snapshots, adapter output, raw evidence, export payloads, source truth labels, and popup featured-provider count unchanged.
+
+## Verification
+
+- `npm run test -- src/shared/provider-progress-item-selection.test.ts src/popup/PopupProviderProgress.test.tsx src/sidepanel/components/ProviderCard.test.tsx src/sidepanel/routes/ProviderDetailPage.test.tsx src/sidepanel/routes/DashboardPage.test.tsx`
+- `npm run typecheck`
 
 ## Follow-Up
 

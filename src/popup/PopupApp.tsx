@@ -263,6 +263,7 @@ export function PopupApp() {
         cards={popupModel.featuredProviderCards}
         i18n={runtimeI18n}
         progressDisplayStyle={popupProgressStyle}
+        progressItemsBySurface={loadState.appState.settings.progressItemsBySurface}
         getSettingsFocusForProvider={getSettingsRouteFocusForPopupProvider}
         onAction={handlePopupAction}
       />

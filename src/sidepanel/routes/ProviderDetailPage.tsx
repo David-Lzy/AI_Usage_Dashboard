@@ -1,6 +1,8 @@
 import type {
   AppLocalePreference,
+  DisplaySurface,
   ProgressDisplayStyle,
+  ProgressItemsBySurface,
   ProviderId,
 } from "../../providers/types";
 import { buildRuntimeCommonCopy, createRuntimeI18n } from "../../shared/i18n";
@@ -10,36 +12,18 @@ import {
   getPermissionStatusLabel,
   getProviderDetailStatusBadgeLabel,
 } from "../../shared/localized-copy";
+import { hasVisibleProviderProgressItems } from "../../shared/provider-progress-item-selection";
+import { ProviderProgressItemList } from "../components/ProviderProgressItemList";
 import { StatusBadge } from "../components/StatusBadge";
 import { TopBar } from "../components/TopBar";
 import { UsageFactsList } from "../components/UsageFactsList";
-import { UsageProgress } from "../components/UsageProgress";
-import { UsageWindowProgressList } from "../components/UsageWindowProgressList";
-import { shouldShowSingleUsageProgress } from "../usage-progress-visibility";
 import type { ProviderViewModel } from "../view-models";
-
-function formatUsageBalanceDetail(
-  balance: NonNullable<ProviderViewModel["usageBalances"]>[number],
-  i18n: ReturnType<typeof createRuntimeI18n>,
-): string {
-  const remaining =
-    balance.remaining === null ? null : i18n.formatNumber(balance.remaining);
-  const commonCopy = buildRuntimeCommonCopy(i18n);
-  const unitLabel = commonCopy.quotaUnitLabel(balance.quotaUnit);
-  const remainingLabel = commonCopy.remaining;
-  const balanceValue = remaining
-    ? `${remaining} ${unitLabel} ${remainingLabel}`
-    : null;
-  const usageParts = [balanceValue, balance.detail].filter(Boolean);
-
-  return usageParts.length > 0
-    ? `${balance.normalizedLabel}: ${usageParts.join(" · ")}`
-    : balance.normalizedLabel;
-}
 
 type ProviderDetailPageProps = {
   localePreference: AppLocalePreference;
   progressDisplayStyle: ProgressDisplayStyle;
+  progressItemsBySurface: ProgressItemsBySurface;
+  progressSurface: DisplaySurface;
   provider: ProviderViewModel;
   onBack: () => void;
   themeActionLabel?: string;
@@ -56,6 +40,8 @@ type ProviderDetailPageProps = {
 export function ProviderDetailPage({
   localePreference,
   progressDisplayStyle,
+  progressItemsBySurface,
+  progressSurface,
   provider,
   onBack,
   themeActionLabel,
@@ -87,12 +73,16 @@ export function ProviderDetailPage({
     (provider.usageWindows?.length ?? 0) > 0 ||
     (provider.usageBalances?.length ?? 0) > 0 ||
     (provider.usageFacts?.length ?? 0) > 0;
-  const hasUsageWindowProgress = (provider.usageWindows?.length ?? 0) > 0;
   const hasUsageFacts = (provider.usageFacts?.length ?? 0) > 0;
-  const showSingleUsageProgress = shouldShowSingleUsageProgress(provider);
+  const hasProviderProgressItems = hasVisibleProviderProgressItems(
+    provider,
+    progressSurface,
+    progressItemsBySurface,
+  );
   const showUsageSummary =
-    !hasStructuredUsageContext && Boolean(provider.usageSummary);
-  const hasUsageContext = hasStructuredUsageContext || showUsageSummary;
+    Boolean(provider.usageSummary) &&
+    (!hasStructuredUsageContext || !hasProviderProgressItems);
+  const hasUsageContext = hasUsageFacts || showUsageSummary;
   const showSourcePageAction =
     provider.openableSessionPageUrl !== null && onOpenSourcePage !== undefined;
   const usageValue =
@@ -422,15 +412,13 @@ export function ProviderDetailPage({
           ) : null}
         </div>
 
-        {showSingleUsageProgress ? (
-          <UsageProgress
-            used={provider.used}
-            remaining={provider.remaining}
-            total={provider.total}
-            tone={provider.displayTone}
-            label={copy.progressLabel(provider.providerLabel)}
+        {hasProviderProgressItems ? (
+          <ProviderProgressItemList
             displayStyle={progressDisplayStyle}
-            valueKind={provider.remaining !== null ? "remaining" : "used"}
+            i18n={i18n}
+            progressItemsBySurface={progressItemsBySurface}
+            provider={provider}
+            surface={progressSurface}
           />
         ) : null}
 
@@ -440,24 +428,9 @@ export function ProviderDetailPage({
             {showUsageSummary ? (
               <p className="supporting-copy">{provider.usageSummary}</p>
             ) : null}
-            {hasUsageWindowProgress && provider.usageWindows ? (
-              <UsageWindowProgressList
-                windows={provider.usageWindows}
-                i18n={i18n}
-                displayStyle={progressDisplayStyle}
-              />
-            ) : null}
             {hasUsageFacts && provider.usageFacts ? (
               <UsageFactsList facts={provider.usageFacts} />
             ) : null}
-            {provider.usageBalances?.slice(0, 3).map((usageBalance) => (
-              <p
-                key={`${usageBalance.normalizedLabel}-${usageBalance.remaining ?? "unknown"}`}
-                className="supporting-copy"
-              >
-                {formatUsageBalanceDetail(usageBalance, i18n)}
-              </p>
-            ))}
           </div>
         ) : null}
 

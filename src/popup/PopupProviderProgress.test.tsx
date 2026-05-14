@@ -1,6 +1,8 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
+import type { ProgressItemsBySurface } from "../providers/types";
+import { createDefaultProgressItemsBySurface } from "../shared/display-preferences";
 import type { RuntimeI18n } from "../shared/i18n";
 import type { ProviderViewModel } from "../sidepanel/view-models";
 import { PopupProviderProgress } from "./PopupProviderProgress";
@@ -22,6 +24,7 @@ function createProvider(
 ): ProviderViewModel {
   return {
     displayTone: "warning",
+    providerId: "codex",
     providerLabel: "Codex",
     quotaUnit: "percent",
     quotaWindow: "weekly window",
@@ -33,13 +36,24 @@ function createProvider(
   } as ProviderViewModel;
 }
 
+function renderPopupProviderProgress(
+  provider: ProviderViewModel,
+  progressItemsBySurface: ProgressItemsBySurface = createDefaultProgressItemsBySurface(),
+) {
+  return renderToStaticMarkup(
+    <PopupProviderProgress
+      i18n={testI18n}
+      progressDisplayStyle="circle"
+      progressItemsBySurface={progressItemsBySurface}
+      provider={provider}
+    />,
+  );
+}
+
 describe("PopupProviderProgress", () => {
   it("renders structured usage windows before single-value progress", () => {
-    const html = renderToStaticMarkup(
-      <PopupProviderProgress
-        i18n={testI18n}
-        progressDisplayStyle="circle"
-        provider={createProvider({
+    const html = renderPopupProviderProgress(
+      createProvider({
           usageWindows: [
             {
               label: "Weekly usage window",
@@ -54,11 +68,10 @@ describe("PopupProviderProgress", () => {
               resetLabel: "Weekly usage window resets at 2026-05-13 04:00",
             },
           ],
-        })}
-      />,
+        }),
     );
 
-    expect(html).toContain("usage-window-progress-list--circle");
+    expect(html).toContain("provider-progress-item-list--circle");
     expect(html).toContain("Weekly usage window");
     expect(html).toContain("--usage-progress-percent:35%");
     expect(html).not.toContain("Codex weekly window percent");
@@ -69,13 +82,14 @@ describe("PopupProviderProgress", () => {
       <PopupProviderProgress
         i18n={testI18n}
         progressDisplayStyle="line"
+        progressItemsBySurface={createDefaultProgressItemsBySurface()}
         provider={createProvider()}
       />,
     );
 
     expect(html).toContain('role="progressbar"');
     expect(html).toContain('aria-valuenow="42"');
-    expect(html).toContain('aria-label="Codex weekly window percent"');
+    expect(html).toContain('aria-label="weekly window percent"');
   });
 
   it("renders nothing for empty percent-only providers", () => {
@@ -83,6 +97,7 @@ describe("PopupProviderProgress", () => {
       <PopupProviderProgress
         i18n={testI18n}
         progressDisplayStyle="line"
+        progressItemsBySurface={createDefaultProgressItemsBySurface()}
         provider={createProvider({
           remaining: null,
           total: 100,
@@ -90,6 +105,18 @@ describe("PopupProviderProgress", () => {
         })}
       />,
     );
+
+    expect(html).toBe("");
+  });
+
+  it("honors hidden popup progress item preferences", () => {
+    const html = renderPopupProviderProgress(createProvider(), {
+      popup: {
+        codex: [{ id: "primary", visible: false }],
+      },
+      sidebar: {},
+      fullPage: {},
+    });
 
     expect(html).toBe("");
   });

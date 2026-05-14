@@ -1,19 +1,22 @@
 import type {
   AppLocalePreference,
+  DisplaySurface,
   ProgressDisplayStyle,
+  ProgressItemsBySurface,
   ProviderId,
 } from "../../providers/types";
 import { buildRuntimeCommonCopy, createRuntimeI18n } from "../../shared/i18n";
-import { shouldShowSingleUsageProgress } from "../usage-progress-visibility";
+import { hasVisibleProviderProgressItems } from "../../shared/provider-progress-item-selection";
 import type { ProviderViewModel } from "../view-models";
+import { ProviderProgressItemList } from "./ProviderProgressItemList";
 import { StatusBadge } from "./StatusBadge";
 import { UsageFactsList } from "./UsageFactsList";
-import { UsageProgress } from "./UsageProgress";
-import { UsageWindowProgressList } from "./UsageWindowProgressList";
 
 type ProviderCardProps = {
   localePreference: AppLocalePreference;
   progressDisplayStyle: ProgressDisplayStyle;
+  progressItemsBySurface: ProgressItemsBySurface;
+  progressSurface: DisplaySurface;
   provider: ProviderViewModel;
   onOpen: (providerId: ProviderId) => void;
   onOpenSourcePage?: (
@@ -23,24 +26,11 @@ type ProviderCardProps = {
   onRefresh: (providerId: ProviderId) => void;
 };
 
-function formatUsageBalanceChip(
-  balance: NonNullable<ProviderViewModel["usageBalances"]>[number],
-  i18n: ReturnType<typeof createRuntimeI18n>,
-): string {
-  const remaining =
-    balance.remaining === null ? null : i18n.formatNumber(balance.remaining);
-  const unitLabel = buildRuntimeCommonCopy(i18n).quotaUnitLabel(
-    balance.quotaUnit,
-  );
-
-  return remaining
-    ? `${balance.normalizedLabel}: ${remaining} ${unitLabel}`
-    : balance.normalizedLabel;
-}
-
 export function ProviderCard({
   localePreference,
   progressDisplayStyle,
+  progressItemsBySurface,
+  progressSurface,
   provider,
   onOpen,
   onOpenSourcePage,
@@ -60,8 +50,11 @@ export function ProviderCard({
     (provider.usageBalances?.length ?? 0) > 0 ||
     (provider.usageFacts?.length ?? 0) > 0;
   const hasUsageFacts = (provider.usageFacts?.length ?? 0) > 0;
-  const hasUsageWindowProgress = (provider.usageWindows?.length ?? 0) > 0;
-  const showSingleUsageProgress = shouldShowSingleUsageProgress(provider);
+  const hasProviderProgressItems = hasVisibleProviderProgressItems(
+    provider,
+    progressSurface,
+    progressItemsBySurface,
+  );
   const showUsageSummary =
     !hasStructuredUsageContext && Boolean(provider.usageSummary);
   const localizedResetLabel = i18n.localizeResetRuntimeLabel(provider.resetLabel);
@@ -135,27 +128,15 @@ export function ProviderCard({
           </div>
         </section>
 
-        {showSingleUsageProgress ? (
+        {hasProviderProgressItems ? (
           <section className="provider-card__progress-surface">
-            <UsageProgress
-              used={provider.used}
-              remaining={provider.remaining}
-              total={provider.total}
-              tone={provider.displayTone}
-              label={`${provider.quotaWindow} ${provider.quotaUnit}`}
-              displayStyle={progressDisplayStyle}
-              valueKind={provider.remaining !== null ? "remaining" : "used"}
-            />
-          </section>
-        ) : null}
-
-        {hasUsageWindowProgress && provider.usageWindows ? (
-          <section className="provider-card__progress-surface">
-            <UsageWindowProgressList
-              windows={provider.usageWindows}
-              i18n={i18n}
+            <ProviderProgressItemList
               density="compact"
               displayStyle={progressDisplayStyle}
+              i18n={i18n}
+              progressItemsBySurface={progressItemsBySurface}
+              provider={provider}
+              surface={progressSurface}
             />
           </section>
         ) : null}
@@ -188,14 +169,6 @@ export function ProviderCard({
               Host access missing
             </span>
           ) : null}
-          {provider.usageBalances?.slice(0, 2).map((usageBalance) => (
-            <span
-              key={`${usageBalance.normalizedLabel}-${usageBalance.remaining ?? "unknown"}`}
-              className="meta-chip"
-            >
-              {formatUsageBalanceChip(usageBalance, i18n)}
-            </span>
-          ))}
           {provider.warningReason ? (
             <span className="meta-chip meta-chip--warning">
               {provider.warningReason}
