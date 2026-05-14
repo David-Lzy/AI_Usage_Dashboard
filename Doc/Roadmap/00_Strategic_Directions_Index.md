@@ -1,6 +1,6 @@
 # Strategic Directions Index
 
-Date: 2026-05-14
+Date: 2026-05-15
 
 Process rule:
 
@@ -28,9 +28,9 @@ Important scope note:
 
 ## Current Truth Snapshot
 
-As of 2026-05-14:
+As of 2026-05-15:
 
-- the numbered phase queue is completed through `Phase 457`; no numbered phase is currently queued after `Phase 457`, and `0.1.0-rc.19` is the current packaged follow-up candidate while current source is ahead by `Phase 457` Settings color-picker and disclosure-group polish and RC13 remains the submitted store-review boundary
+- the numbered phase queue is completed through `Phase 457`; `Phase 458` is active and `Phase 459` through `Phase 466` are queued for scoped UI polish, and `0.1.0-rc.19` is the current packaged follow-up candidate while current implementation source is ahead through `Phase 457` Settings color-picker and disclosure-group polish and RC13 remains the submitted store-review boundary
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -462,7 +462,7 @@ As of 2026-05-14:
 - `Phase 169` completed the next `Direction 10.3` slice by adding one request-bound manual finalize command plus handoff update, so the remaining real-world work is now the popup capture itself instead of popup capture plus extra repo bookkeeping
 - `Phase 296` completed the mixed candidate screenshot file intake plus archive completion under `10_3_Store_Asset_Pack_And_Submission_TODOs.md`
 - the previous repo-owned engineering default was adapter diagnostic raw fallback regression review for the shipped `en + zh_CN` runtime pilot under Direction 09, captured in `09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`
-- because `0.1.0-rc.19` is packaged as the current follow-up candidate while source is ahead by `Phase 457` Settings color-picker and disclosure-group polish and the RC13 milestone remains the submitted store-review boundary, the active functional priority is now review-feedback, deliberate resubmission follow-up, or an explicit packaging phase for the latest source only if needed
+- because `0.1.0-rc.19` is packaged as the current follow-up candidate while implementation source is ahead through `Phase 457` Settings color-picker and disclosure-group polish and the RC13 milestone remains the submitted store-review boundary, the active functional priority is now the `Phase 458` through `Phase 466` scoped UI polish queue, review-feedback, deliberate resubmission follow-up, or an explicit packaging phase for the latest source only if needed
 - the remaining high-value work in Direction 05 and Direction 04 is now evidence closure, not more tool-building:
   - `05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md`
   - `04_2_Interaction_Audit_Real_Operator_Closure_TODOs.md`
@@ -529,7 +529,7 @@ As of 2026-05-14:
 
 1. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why first now:
-   `0.1.0-rc.19` is now packaged as the current follow-up candidate, current source is ahead by `Phase 457` Settings color-picker and disclosure-group polish, the mixed screenshot archive is complete, the trimmed transparent icon refresh and Claude Team usage-page path are already in the submitted RC13 boundary, and the next work is only review-feedback, deliberate resubmission follow-up, or explicit latest-source packaging after the human Chrome Web Store flow returns.
+   `0.1.0-rc.19` is now packaged as the current follow-up candidate, current implementation source is ahead through `Phase 457` Settings color-picker and disclosure-group polish, the `Phase 458` through `Phase 466` UI polish queue is active, the mixed screenshot archive is complete, and the trimmed transparent icon refresh plus Claude Team usage-page path are already in the submitted RC13 boundary.
 
 2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second now:

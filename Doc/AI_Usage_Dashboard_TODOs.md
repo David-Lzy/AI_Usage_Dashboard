@@ -1,6 +1,6 @@
 # AI Usage Dashboard TODOs
 
-Date: 2026-05-14
+Date: 2026-05-15
 
 Process rule:
 
@@ -79,10 +79,10 @@ The project is no longer in shell-building or first provider-wiring mode.
 Current post-`Phase 457` execution priority:
 
 1. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.13.zip` as the submitted Chrome Web Store review boundary. Do not silently mutate or rewrite the [RC13 upload-candidate milestone](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) while that submission remains the human-reviewed baseline.
-2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.19.zip` as the current packaged follow-up candidate. It includes the previous `rc.18` follow-up work plus post-`rc.18` UI polish through `Phase 447`; current source is ahead by `Phase 457` Settings color-picker and disclosure-group polish and should be packaged only in a separate explicit release phase.
+2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.19.zip` as the current packaged follow-up candidate. It includes the previous `rc.18` follow-up work plus post-`rc.18` UI polish through `Phase 447`; current implementation source is ahead through `Phase 457` Settings color-picker and disclosure-group polish, while the tracked TODO queue now schedules `Phase 458` through `Phase 466` as the next scoped UI polish work. Package this only in a separate explicit release phase.
 3. `P0` - keep the refreshed `Direction 10.3` screenshot evidence archived and ready, not pending: [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) still fulfills the latest reviewed screenshot pack with `5/5` images and `3` explicit truth-boundary notes.
 4. `P1` - if a resubmission becomes necessary, use [2026-05-14_RC19_Post_RC18_UI_Polish_Closeout_Release_Candidate.md](./Milestones/2026-05-14_RC19_Post_RC18_UI_Polish_Closeout_Release_Candidate.md) as the current packaged-source reference and cut a fresh submission milestone from that boundary instead of mutating RC13 history.
-5. `P1` - no numbered phase is currently queued after `Phase 457`; open a new phase only for review feedback, an explicit resubmission handoff, packaging the latest source, or a new scoped product request. This queue does not change the submitted RC13 store-review boundary unless a later submitted-store milestone is explicitly opened.
+5. `P1` - execute the new UI polish queue in order: `Phase 458` color-band copy/layout, `Phase 459` Settings overview language/theme promotion, `Phase 460` all-provider Quick Setup carousel, `Phase 461` carousel motion pacing, `Phase 462` popup header actions, `Phase 463` popup circular-progress row count, `Phase 464` form-control typography/sizing, `Phase 465` UI font preference, and `Phase 466` visual QA/docs closeout. This queue does not change the submitted RC13 store-review boundary unless a later submitted-store milestone is explicitly opened.
 6. `P2` - keep the `Phase 309` first-provider setup behavior stable: zero-provider Settings now recommends one personal-user provider in Quick Setup and popup zero-provider actions deep-link to that same setup card.
 7. `P2` - keep the `Phase 310` cached-first guard stable: standard dashboard routes must keep rendering cached app state while background bootstrap is still loading.
 8. `P2` - keep the `Phase 311` popup view-model split behavior-only: `src/popup/view-models.ts` remains the public aggregator and the extracted setup-coverage / featured-card modules should not change popup UI semantics.
