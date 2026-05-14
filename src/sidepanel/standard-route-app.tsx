@@ -261,6 +261,9 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           onProviderOrderBySurfaceChange={(providerOrderBySurface) =>
             handleUpdateSettings({ providerOrderBySurface })
           }
+          onProgressItemsBySurfaceChange={(progressItemsBySurface) =>
+            handleUpdateSettings({ progressItemsBySurface })
+          }
           onActionBadgeSelectionChange={(
             actionBadgeSelection: ActionBadgeSelection,
           ) => handleUpdateSettings({ actionBadgeSelection })}

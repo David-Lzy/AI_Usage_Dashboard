@@ -7,9 +7,13 @@ import {
   DISPLAY_SURFACES,
   normalizeProgressItemsBySurface,
   normalizeProviderOrderBySurface,
+  moveProgressItemPreference,
   moveProviderInOrder,
+  reorderProgressItemPreferenceBefore,
   reorderProviderBefore,
+  resolveProgressItemPreferences,
   resolveProviderOrder,
+  setProgressItemVisibility,
 } from "./display-preferences";
 
 const PROVIDER_IDS: ProviderId[] = [
@@ -149,6 +153,64 @@ describe("display preferences", () => {
         ],
       },
     });
+  });
+
+  it("resolves progress item preferences to visible defaults and appended known ids", () => {
+    expect(resolveProgressItemPreferences(undefined, ["primary"])).toEqual([
+      { id: "primary", visible: true },
+    ]);
+    expect(
+      resolveProgressItemPreferences(
+        [{ id: "window:weekly", visible: false }],
+        ["window:5h", "window:weekly", "balance:flex"],
+      ),
+    ).toEqual([
+      { id: "window:weekly", visible: false },
+      { id: "window:5h", visible: true },
+      { id: "balance:flex", visible: true },
+    ]);
+  });
+
+  it("updates progress item visibility while preserving all known items", () => {
+    expect(
+      setProgressItemVisibility(undefined, ["window:5h", "window:weekly"], "window:5h", false),
+    ).toEqual([
+      { id: "window:5h", visible: false },
+      { id: "window:weekly", visible: true },
+    ]);
+  });
+
+  it("moves and reorders progress item preferences without losing visibility", () => {
+    const preferences = [
+      { id: "window:5h", visible: true },
+      { id: "window:weekly", visible: false },
+      { id: "balance:flex", visible: true },
+    ];
+
+    expect(
+      moveProgressItemPreference(
+        preferences,
+        ["window:5h", "window:weekly", "balance:flex"],
+        "balance:flex",
+        "up",
+      ),
+    ).toEqual([
+      { id: "window:5h", visible: true },
+      { id: "balance:flex", visible: true },
+      { id: "window:weekly", visible: false },
+    ]);
+    expect(
+      reorderProgressItemPreferenceBefore(
+        preferences,
+        ["window:5h", "window:weekly", "balance:flex"],
+        "balance:flex",
+        "window:5h",
+      ),
+    ).toEqual([
+      { id: "balance:flex", visible: true },
+      { id: "window:5h", visible: true },
+      { id: "window:weekly", visible: false },
+    ]);
   });
 
   it("drops progress preferences when no known item ids are supplied", () => {

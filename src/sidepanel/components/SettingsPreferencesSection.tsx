@@ -8,6 +8,7 @@ import type {
   PopupShadowStyle,
   PopupSizePreset,
   ProgressDisplayStyle,
+  ProgressItemsBySurface,
   ProviderOrderBySurface,
   ProviderSetting,
   ProviderSnapshot,
@@ -28,6 +29,7 @@ import type { SettingsUserLevelVisibility } from "../settings-user-level-visibil
 import { EditableNumberCombobox } from "./EditableNumberCombobox";
 import { MaterialSelect } from "./MaterialSelect";
 import { ProviderOrderPreferenceControls } from "./ProviderOrderPreferenceControls";
+import { ProviderProgressItemPreferenceControls } from "./ProviderProgressItemPreferenceControls";
 import { PopupAppearancePreview } from "./PopupAppearancePreview";
 import { ThemeCustomizationCard } from "./ThemeCustomizationCard";
 
@@ -55,6 +57,9 @@ type SettingsPreferencesSectionProps = {
   onPopupSizePresetChange: (sizePreset: PopupSizePreset) => void;
   onProviderOrderBySurfaceChange: (
     providerOrderBySurface: ProviderOrderBySurface,
+  ) => void;
+  onProgressItemsBySurfaceChange: (
+    progressItemsBySurface: ProgressItemsBySurface,
   ) => void;
   onResetThemeCustomSeed: () => void;
   onSidebarProgressStyleChange: (
@@ -86,6 +91,7 @@ export function SettingsPreferencesSection({
   onPopupShadowStyleChange,
   onPopupSizePresetChange,
   onProviderOrderBySurfaceChange,
+  onProgressItemsBySurfaceChange,
   onResetThemeCustomSeed,
   onSidebarProgressStyleChange,
   onSyncIntervalChange,
@@ -212,6 +218,13 @@ export function SettingsPreferencesSection({
             providers={providers}
             providerOrderBySurface={settings.providerOrderBySurface}
             onChange={onProviderOrderBySurfaceChange}
+          />
+
+          <ProviderProgressItemPreferenceControls
+            providers={providers}
+            snapshots={snapshots}
+            progressItemsBySurface={settings.progressItemsBySurface}
+            onChange={onProgressItemsBySurfaceChange}
           />
 
           <div className="settings-grid">

@@ -9,6 +9,7 @@ import type {
   PopupShadowStyle,
   PopupSizePreset,
   ProgressDisplayStyle,
+  ProgressItemsBySurface,
   ProviderId,
   ProviderOrderBySurface,
   ProviderSourcePreference,
@@ -105,6 +106,9 @@ type SettingsPageProps = {
   onProviderOrderBySurfaceChange: (
     providerOrderBySurface: ProviderOrderBySurface,
   ) => void;
+  onProgressItemsBySurfaceChange: (
+    progressItemsBySurface: ProgressItemsBySurface,
+  ) => void;
   onActionBadgeSelectionChange: (
     actionBadgeSelection: ActionBadgeSelection,
   ) => void;
@@ -159,6 +163,7 @@ export function SettingsPage({
   onPopupCornerStyleChange,
   onPopupShadowStyleChange,
   onProviderOrderBySurfaceChange,
+  onProgressItemsBySurfaceChange,
   onActionBadgeSelectionChange,
   onSaveThemeCustomSeed,
   onResetThemeCustomSeed,
@@ -377,6 +382,7 @@ export function SettingsPage({
         onPopupCornerStyleChange={onPopupCornerStyleChange}
         onPopupShadowStyleChange={onPopupShadowStyleChange}
         onProviderOrderBySurfaceChange={onProviderOrderBySurfaceChange}
+        onProgressItemsBySurfaceChange={onProgressItemsBySurfaceChange}
         onActionBadgeSelectionChange={onActionBadgeSelectionChange}
         onThemeCustomSeedDraftChange={setThemeCustomSeedDraft}
         onApplyThemeCustomSeed={handleApplyThemeCustomSeed}

@@ -205,6 +205,114 @@ function normalizeProgressItemPreferences(
   return normalizedItems;
 }
 
+function createVisibleProgressItemPreferences(
+  itemIds: readonly string[],
+): ProviderProgressItemPreference[] {
+  return itemIds.map((id) => ({
+    id,
+    visible: true,
+  }));
+}
+
+export function resolveProgressItemPreferences(
+  preferences: readonly ProviderProgressItemPreference[] | undefined,
+  knownItemIds: readonly string[],
+): ProviderProgressItemPreference[] {
+  const normalizedPreferences = normalizeProgressItemPreferences(
+    preferences,
+    knownItemIds,
+  );
+
+  return normalizedPreferences.length > 0
+    ? normalizedPreferences
+    : createVisibleProgressItemPreferences(knownItemIds);
+}
+
+export function setProgressItemVisibility(
+  preferences: readonly ProviderProgressItemPreference[] | undefined,
+  knownItemIds: readonly string[],
+  itemId: string,
+  visible: boolean,
+): ProviderProgressItemPreference[] {
+  const resolvedPreferences = resolveProgressItemPreferences(
+    preferences,
+    knownItemIds,
+  );
+
+  if (!knownItemIds.includes(itemId)) {
+    return resolvedPreferences;
+  }
+
+  return resolvedPreferences.map((preference) =>
+    preference.id === itemId ? { ...preference, visible } : preference,
+  );
+}
+
+export function moveProgressItemPreference(
+  preferences: readonly ProviderProgressItemPreference[] | undefined,
+  knownItemIds: readonly string[],
+  itemId: string,
+  direction: "up" | "down",
+): ProviderProgressItemPreference[] {
+  const resolvedPreferences = resolveProgressItemPreferences(
+    preferences,
+    knownItemIds,
+  );
+  const currentIndex = resolvedPreferences.findIndex(
+    (preference) => preference.id === itemId,
+  );
+
+  if (currentIndex === -1) {
+    return resolvedPreferences;
+  }
+
+  const nextIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
+
+  if (nextIndex < 0 || nextIndex >= resolvedPreferences.length) {
+    return resolvedPreferences;
+  }
+
+  const nextPreferences = [...resolvedPreferences];
+  const [movedPreference] = nextPreferences.splice(currentIndex, 1);
+  nextPreferences.splice(nextIndex, 0, movedPreference);
+  return nextPreferences;
+}
+
+export function reorderProgressItemPreferenceBefore(
+  preferences: readonly ProviderProgressItemPreference[] | undefined,
+  knownItemIds: readonly string[],
+  movedItemId: string,
+  targetItemId: string,
+): ProviderProgressItemPreference[] {
+  const resolvedPreferences = resolveProgressItemPreferences(
+    preferences,
+    knownItemIds,
+  );
+
+  if (movedItemId === targetItemId) {
+    return resolvedPreferences;
+  }
+
+  const currentIndex = resolvedPreferences.findIndex(
+    (preference) => preference.id === movedItemId,
+  );
+  const targetIndex = resolvedPreferences.findIndex(
+    (preference) => preference.id === targetItemId,
+  );
+
+  if (currentIndex === -1 || targetIndex === -1) {
+    return resolvedPreferences;
+  }
+
+  const nextPreferences = [...resolvedPreferences];
+  const [movedPreference] = nextPreferences.splice(currentIndex, 1);
+  const insertionIndex = nextPreferences.findIndex(
+    (preference) => preference.id === targetItemId,
+  );
+  nextPreferences.splice(insertionIndex, 0, movedPreference);
+  return nextPreferences;
+}
+
 function getKnownProgressItemIds(
   providerId: ProviderId,
   knownProgressItemIdsByProvider: KnownProgressItemIdsByProvider,
