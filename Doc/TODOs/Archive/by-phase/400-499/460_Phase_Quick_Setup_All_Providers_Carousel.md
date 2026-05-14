@@ -1,6 +1,6 @@
 # Phase 460 - Quick Setup All Providers Carousel
 
-Status: active
+Status: completed on 2026-05-15
 
 ## Goal
 
@@ -31,6 +31,22 @@ Remove the separate "More Provider" disclosure from Quick Setup and show every p
 - `npm run test -- src/sidepanel/components/QuickSetupSection.test.tsx src/sidepanel/components/ProviderCarousel.test.tsx src/sidepanel/routes/SettingsPage.test.tsx --run`
 - `npm run typecheck`
 - `npm run docs:check`
+- `git diff --check`
+
+## Completion Notes
+
+- Quick Setup now sends every provider into the provider carousel, including providers hidden from the dashboard.
+- The separate "More Provider" disclosure/list was removed from Quick Setup.
+- Hidden providers remain editable through the card-level "Show on dashboard" switch and enable action.
+- Zero-enabled-provider setup still starts on the recommended first provider card and preserves the `data-quick-setup-first-provider-id` deep-link target.
+- Dashboard visibility semantics outside Quick Setup, provider order preferences, quota item preferences, credentials, permissions, source page actions, and popup featured-provider filtering are unchanged.
+
+## Verification
+
+- `npm run test -- src/sidepanel/components/ProviderCarousel.test.tsx src/sidepanel/routes/SettingsPage.test.tsx --run`
+- `npm run typecheck`
+- `npm run docs:check`
+- `npm run build`
 - `git diff --check`
 
 ## Follow-Up

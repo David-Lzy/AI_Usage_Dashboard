@@ -118,22 +118,6 @@
   justify-content: flex-start;
 }
 
-.quick-setup-card__more {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--app-space-3);
-  margin-top: var(--app-space-4);
-}
-
-.quick-setup-card__more[open] {
-  padding-top: var(--app-space-3);
-  border-top: 1px solid var(--md-sys-color-outline-variant);
-}
-
-.quick-setup-card__disabled-list {
-  margin-top: var(--app-space-3);
-}
-
 .settings-section-nav {
   display: flex;
   flex-wrap: wrap;

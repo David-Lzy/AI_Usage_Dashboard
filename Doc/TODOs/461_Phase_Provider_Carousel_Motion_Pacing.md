@@ -1,6 +1,6 @@
 # Phase 461 - Provider Carousel Motion Pacing
 
-Status: queued
+Status: active
 
 ## Goal
 

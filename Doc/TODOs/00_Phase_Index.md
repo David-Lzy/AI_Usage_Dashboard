@@ -34,10 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [460_Phase_Quick_Setup_All_Providers_Carousel.md](./460_Phase_Quick_Setup_All_Providers_Carousel.md)
-- latest completed slice: [459_Phase_Settings_Overview_Locale_Theme_Promotion.md](./Archive/by-phase/400-499/459_Phase_Settings_Overview_Locale_Theme_Promotion.md)
+- active phase file: [461_Phase_Provider_Carousel_Motion_Pacing.md](./461_Phase_Provider_Carousel_Motion_Pacing.md)
+- latest completed slice: [460_Phase_Quick_Setup_All_Providers_Carousel.md](./Archive/by-phase/400-499/460_Phase_Quick_Setup_All_Providers_Carousel.md)
 - queued phase files:
-  - [460_Phase_Quick_Setup_All_Providers_Carousel.md](./460_Phase_Quick_Setup_All_Providers_Carousel.md)
   - [461_Phase_Provider_Carousel_Motion_Pacing.md](./461_Phase_Provider_Carousel_Motion_Pacing.md)
   - [462_Phase_Popup_Header_Action_Layout.md](./462_Phase_Popup_Header_Action_Layout.md)
   - [463_Phase_Popup_Circular_Progress_Row_Count.md](./463_Phase_Popup_Circular_Progress_Row_Count.md)
@@ -860,6 +859,7 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 457` closeout added 14-locale Settings color picker and disclosure-group copy, focused tests, and current-truth docs for the Settings More split and color-dropdown source boundary
 - the 2026-05-15 `Phase 458` closeout made the remaining-color-band dropdown show one visible value, using localized recommended-color names or custom hex labels as appropriate, and compacted remaining-color-band controls into aligned inline field groups while preserving storage, validation, warning thresholds, and provider quota semantics
 - the 2026-05-15 `Phase 459` closeout promoted application language and theme mode into Settings overview, removed their duplicate Appearance & Sync controls, and preserved locale normalization, runtime direction, theme storage, provider settings, credentials, permissions, and source preferences
+- the 2026-05-15 `Phase 460` closeout moved all providers into the Quick Setup carousel, removed the separate "More Provider" disclosure, kept hidden providers editable through card-level visibility controls, and preserved zero-provider recommended-start deep links plus dashboard visibility semantics outside Quick Setup
 
 ## Delivery Standard For Each Phase
 

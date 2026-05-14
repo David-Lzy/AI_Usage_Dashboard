@@ -156,19 +156,26 @@ describe("SettingsPage", () => {
     ).toBe(fallbackSection);
   });
 
-  it("marks more providers for attention when no quick-setup provider is visible", () => {
+  it("keeps all providers in quick setup when every provider is hidden", () => {
+    const hiddenProviders = SAMPLE_APP_STATE.providerSettings.map((provider) => ({
+      ...provider,
+      enabled: false,
+    }));
     const html = renderSettingsPage({
-      providers: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
-        ...provider,
-        enabled: false,
-      })),
+      providers: hiddenProviders,
     });
 
-    expect(html).toContain('data-quick-setup-empty-visible="true"');
-    expect(html).toContain('data-quick-setup-attention="true"');
-    expect(html).toContain('class="quick-setup-card__more"');
-    expect(html).toContain('class="source-card__details-toggle"');
+    expect(html).toContain(
+      `data-provider-carousel-count="${hiddenProviders.length}"`,
+    );
+    for (const provider of hiddenProviders) {
+      expect(html).toContain(`data-quick-setup-provider-id="${provider.id}"`);
+      expect(html).toContain(`data-visibility-toggle="${provider.id}"`);
+    }
+    expect(html).not.toContain('class="quick-setup-card__more"');
+    expect(html).not.toContain("More Provider");
     expect(html).toContain('data-quick-setup-first-provider-id="codex"');
+    expect(html).toContain('data-provider-carousel-active-id="codex"');
     expect(html).toContain(">Start with Codex<");
     expect(html).toContain(">Enable Codex<");
   });

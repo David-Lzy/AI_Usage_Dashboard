@@ -41,5 +41,6 @@ Status note:
 - `Phase 454` through `Phase 457` split the Settings bottom disclosures into UI controls and Provider display controls, replaced the visible custom seed card with an accent color dropdown, reused that dropdown for remaining-color bands, and added 14-locale color picker/disclosure copy.
 - `Phase 458` made remaining-color-band color dropdowns show one visible value, with localized recommended-color names or custom hex labels as appropriate, and compacted the band controls into inline field groups.
 - `Phase 459` promoted application language and theme mode into Settings overview and removed their duplicate Appearance & Sync controls.
-- Current implementation source is ahead of the `0.1.0-rc.19` package by the `Phase 449` through `Phase 459` UI micro-polish phases.
-- `Phase 460` through `Phase 466` are queued as the next scoped UI polish sequence covering all-provider Quick Setup carousel behavior, carousel pacing, popup header actions, popup circular progress density, form-control typography, UI font preference, and visual QA/docs closeout.
+- `Phase 460` moved all providers into the Quick Setup carousel and removed the separate "More Provider" disclosure while keeping hidden providers editable through card-level visibility controls.
+- Current implementation source is ahead of the `0.1.0-rc.19` package by the `Phase 449` through `Phase 460` UI micro-polish phases.
+- `Phase 461` through `Phase 466` are queued as the next scoped UI polish sequence covering carousel pacing, popup header actions, popup circular progress density, form-control typography, UI font preference, and visual QA/docs closeout.
