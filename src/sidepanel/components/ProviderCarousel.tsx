@@ -92,10 +92,8 @@ export function ProviderCarousel({
   const hasMultipleItems = itemCount > 1;
 
   useEffect(() => {
-    setActiveIndex((currentIndex) =>
-      clampProviderCarouselIndex(currentIndex, itemCount),
-    );
-  }, [itemCount]);
+    setActiveIndex(clampProviderCarouselIndex(initialIndex, itemCount));
+  }, [initialIndex, itemCount]);
 
   useEffect(() => {
     if (activeItem) {
@@ -110,6 +108,10 @@ export function ProviderCarousel({
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    if (event.target !== event.currentTarget) {
+      return;
+    }
+
     const move = getProviderCarouselKeyboardMove(event.key, textDirection);
 
     if (!move || !hasMultipleItems) {
@@ -226,7 +228,6 @@ export function ProviderCarousel({
               role="group"
               aria-label={`${index + 1} of ${itemCount}: ${item.label}`}
               aria-roledescription="slide"
-              aria-hidden={index === activeIndex ? undefined : true}
               data-provider-carousel-slide={item.id}
               data-provider-carousel-slide-active={
                 index === activeIndex ? "true" : "false"

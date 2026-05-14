@@ -56,6 +56,7 @@ describe("SettingsPage", () => {
     expect(html).toContain('class="top-app-bar__bottom"');
     expect(html).toContain('class="settings-section-nav"');
     expect(html).toContain('data-settings-material-select="settings-user-level"');
+    expect(html).toContain('data-provider-carousel=""');
     expect(html).toContain(">Quick Setup<");
     expect(html).toContain('data-settings-material-select="action-badge-selection"');
     expect(html).toContain('data-provider-order-preferences=""');
@@ -104,6 +105,7 @@ describe("SettingsPage", () => {
     expect(html).toContain('id="settings-advanced"');
     expect(html).toContain('class="source-card');
     expect(html).toContain('data-provider-id="gemini"');
+    expect(html).toContain('data-provider-carousel-active-id="gemini"');
   });
 
   it("keeps quick-setup focused deep links out of advanced credentials", () => {

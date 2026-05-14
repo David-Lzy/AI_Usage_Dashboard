@@ -4,18 +4,25 @@ import type {
   ProviderSnapshot,
   SettingsUserLevel,
 } from "../../providers/types";
+import type { ResolvedTextDirection } from "../../shared/i18n";
 import { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
 import { getRecommendedFirstSetupProvider } from "../../shared/first-provider-setup";
 import type { SettingsQuickSetupActionModel } from "../settings-view-models";
 import { buildSettingsQuickSetupCardModel } from "../settings-view-models";
+import {
+  ProviderCarousel,
+  type ProviderCarouselItem,
+} from "./ProviderCarousel";
 
 type SettingsQuickSetupSectionProps = {
   activeSessionPageAttachAvailable: boolean;
+  focusedProviderId?: ProviderId | null;
   providers: ProviderSetting[];
   sectionId?: string;
   sessionPageNavigationAvailable: boolean;
   settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>;
   snapshots: ProviderSnapshot[];
+  textDirection?: ResolvedTextDirection;
   userLevel: SettingsUserLevel;
   onAttachActiveSessionPage: (providerId: ProviderId) => void;
   onClearPageBinding: (providerId: ProviderId) => void;
@@ -26,11 +33,13 @@ type SettingsQuickSetupSectionProps = {
 
 export function SettingsQuickSetupSection({
   activeSessionPageAttachAvailable,
+  focusedProviderId = null,
   providers,
   sectionId,
   sessionPageNavigationAvailable,
   settingsCopy,
   snapshots,
+  textDirection = "ltr",
   userLevel,
   onAttachActiveSessionPage,
   onClearPageBinding,
@@ -93,6 +102,204 @@ export function SettingsQuickSetupSection({
     }
   }
 
+  function renderFirstSetupCard(provider: ProviderSetting) {
+    return (
+      <article
+        className="quick-setup-card quick-setup-card--starter"
+        data-quick-setup-provider-id={provider.id}
+        data-quick-setup-first-provider-id={provider.id}
+      >
+        <div className="quick-setup-card__header">
+          <div>
+            <p className="section-label">
+              {settingsCopy.quickSetup.firstProvider.eyebrow}
+            </p>
+            <p className="quick-setup-card__provider">
+              {settingsCopy.quickSetup.firstProvider.title(provider.label)}
+            </p>
+            <p className="supporting-copy">
+              {settingsCopy.quickSetup.firstProvider.detail(provider.label)}
+            </p>
+          </div>
+          <span className={getQuickSetupStatusClassName("neutral")}>
+            {settingsCopy.quickSetup.firstProvider.statusLabel}
+          </span>
+        </div>
+
+        <div className="quick-setup-card__fields">
+          <div className="source-card__field">
+            <p className="source-card__label">
+              {settingsCopy.quickSetup.currentSetupLabel}
+            </p>
+            <p className="source-card__value">
+              {settingsCopy.quickSetup.currentSetup.disabled}
+            </p>
+          </div>
+
+          <div className="source-card__field">
+            <p className="source-card__label">
+              {settingsCopy.quickSetup.nextStepLabel}
+            </p>
+            <p className="source-card__value">
+              {settingsCopy.quickSetup.firstProvider.action(provider.label)}
+            </p>
+          </div>
+        </div>
+
+        <div className="credential-actions quick-setup-card__actions">
+          <button
+            className="text-button"
+            type="button"
+            data-quick-setup-primary-action="enable_provider"
+            onClick={() => onToggleProvider(provider.id)}
+          >
+            {settingsCopy.quickSetup.firstProvider.action(provider.label)}
+          </button>
+          <span className="supporting-copy">
+            {settingsCopy.quickSetup.firstProvider.moreHint}
+          </span>
+        </div>
+      </article>
+    );
+  }
+
+  function renderEnabledProviderCard(
+    provider: ProviderSetting,
+    snapshot: ProviderSnapshot,
+  ) {
+    const model = buildSettingsQuickSetupCardModel(
+      provider,
+      snapshot,
+      settingsCopy,
+      userLevel,
+    );
+    const secondaryActions = model.secondaryActions.filter(
+      (action, index, actions) =>
+        actions.findIndex((candidate) => candidate.id === action.id) === index,
+    );
+
+    return (
+      <article
+        className="quick-setup-card"
+        data-quick-setup-provider-id={provider.id}
+      >
+        <div className="quick-setup-card__header">
+          <div>
+            <p className="quick-setup-card__provider">{model.providerLabel}</p>
+            <p className="supporting-copy">{model.helperText}</p>
+          </div>
+          <span className={getQuickSetupStatusClassName(model.statusTone)}>
+            {model.statusLabel}
+          </span>
+        </div>
+
+        <div className="quick-setup-card__fields">
+          <label
+            className="switch-row quick-setup-card__visibility"
+            data-visibility-provider-id={provider.id}
+            data-visibility-enabled="true"
+          >
+            <div>
+              <p className="switch-row__title">
+                {settingsCopy.quickSetup.visibilityLabel}
+              </p>
+              <p className="supporting-copy">
+                {settingsCopy.quickSetup.actions.disableProvider}
+              </p>
+            </div>
+            <input
+              className="switch-row__control"
+              type="checkbox"
+              checked
+              data-visibility-toggle={provider.id}
+              onChange={() => onToggleProvider(provider.id)}
+            />
+          </label>
+
+          <div className="source-card__field">
+            <p className="source-card__label">
+              {settingsCopy.quickSetup.currentSetupLabel}
+            </p>
+            <p className="source-card__value">{model.currentSetupValue}</p>
+          </div>
+
+          <div className="source-card__field">
+            <p className="source-card__label">
+              {settingsCopy.quickSetup.nextStepLabel}
+            </p>
+            <p className="source-card__value">{model.nextStepValue}</p>
+          </div>
+
+          {model.pageStatusValue ? (
+            <div className="source-card__field">
+              <p className="source-card__label">
+                {settingsCopy.quickSetup.pageStatusLabel}
+              </p>
+              <p className="source-card__value">{model.pageStatusValue}</p>
+            </div>
+          ) : null}
+        </div>
+
+        {model.primaryAction || secondaryActions.length > 0 ? (
+          <div className="credential-actions quick-setup-card__actions">
+            {model.primaryAction ? (
+              <button
+                className="text-button"
+                type="button"
+                data-quick-setup-primary-action={model.primaryAction.id}
+                disabled={isActionDisabled(provider, model.primaryAction)}
+                onClick={() => runAction(provider, model.primaryAction!)}
+              >
+                {model.primaryAction.label}
+              </button>
+            ) : null}
+
+            {secondaryActions.map((action) => (
+              <button
+                key={action.id}
+                className="text-button"
+                type="button"
+                data-quick-setup-secondary-action={action.id}
+                disabled={isActionDisabled(provider, action)}
+                onClick={() => runAction(provider, action)}
+              >
+                {action.label}
+              </button>
+            ))}
+          </div>
+        ) : null}
+      </article>
+    );
+  }
+
+  const quickSetupItems: ProviderCarouselItem[] = [
+    ...(firstSetupProvider
+      ? [
+          {
+            id: firstSetupProvider.id,
+            label: firstSetupProvider.label,
+            content: renderFirstSetupCard(firstSetupProvider),
+          },
+        ]
+      : []),
+    ...enabledProviders.flatMap((provider) => {
+      const snapshot = snapshotMap.get(provider.id);
+
+      return snapshot
+        ? [
+            {
+              id: provider.id,
+              label: provider.label,
+              content: renderEnabledProviderCard(provider, snapshot),
+            },
+          ]
+        : [];
+    }),
+  ];
+  const focusedQuickSetupIndex = quickSetupItems.findIndex(
+    (item) => item.id === focusedProviderId,
+  );
+
   return (
     <section className="dashboard-section settings-section-anchor" id={sectionId}>
       <div className="dashboard-section__header">
@@ -103,187 +310,12 @@ export function SettingsQuickSetupSection({
         <p className="supporting-copy">{settingsCopy.quickSetup.detail}</p>
       </div>
 
-      <div className="provider-shell-list">
-        {firstSetupProvider ? (
-          <article
-            className="quick-setup-card quick-setup-card--starter"
-            data-quick-setup-provider-id={firstSetupProvider.id}
-            data-quick-setup-first-provider-id={firstSetupProvider.id}
-          >
-            <div className="quick-setup-card__header">
-              <div>
-                <p className="section-label">
-                  {settingsCopy.quickSetup.firstProvider.eyebrow}
-                </p>
-                <p className="quick-setup-card__provider">
-                  {settingsCopy.quickSetup.firstProvider.title(
-                    firstSetupProvider.label,
-                  )}
-                </p>
-                <p className="supporting-copy">
-                  {settingsCopy.quickSetup.firstProvider.detail(
-                    firstSetupProvider.label,
-                  )}
-                </p>
-              </div>
-              <span className={getQuickSetupStatusClassName("neutral")}>
-                {settingsCopy.quickSetup.firstProvider.statusLabel}
-              </span>
-            </div>
-
-            <div className="quick-setup-card__fields">
-              <div className="source-card__field">
-                <p className="source-card__label">
-                  {settingsCopy.quickSetup.currentSetupLabel}
-                </p>
-                <p className="source-card__value">
-                  {settingsCopy.quickSetup.currentSetup.disabled}
-                </p>
-              </div>
-
-              <div className="source-card__field">
-                <p className="source-card__label">
-                  {settingsCopy.quickSetup.nextStepLabel}
-                </p>
-                <p className="source-card__value">
-                  {settingsCopy.quickSetup.firstProvider.action(
-                    firstSetupProvider.label,
-                  )}
-                </p>
-              </div>
-            </div>
-
-            <div className="credential-actions quick-setup-card__actions">
-              <button
-                className="text-button"
-                type="button"
-                data-quick-setup-primary-action="enable_provider"
-                onClick={() => onToggleProvider(firstSetupProvider.id)}
-              >
-                {settingsCopy.quickSetup.firstProvider.action(
-                  firstSetupProvider.label,
-                )}
-              </button>
-              <span className="supporting-copy">
-                {settingsCopy.quickSetup.firstProvider.moreHint}
-              </span>
-            </div>
-          </article>
-        ) : null}
-
-        {enabledProviders.map((provider) => {
-          const snapshot = snapshotMap.get(provider.id);
-
-          if (!snapshot) {
-            return null;
-          }
-
-          const model = buildSettingsQuickSetupCardModel(
-            provider,
-            snapshot,
-            settingsCopy,
-            userLevel,
-          );
-          const secondaryActions = model.secondaryActions.filter(
-            (action, index, actions) =>
-              actions.findIndex((candidate) => candidate.id === action.id) === index,
-          );
-
-          return (
-            <article
-              key={provider.id}
-              className="quick-setup-card"
-              data-quick-setup-provider-id={provider.id}
-            >
-              <div className="quick-setup-card__header">
-                <div>
-                  <p className="quick-setup-card__provider">{model.providerLabel}</p>
-                  <p className="supporting-copy">{model.helperText}</p>
-                </div>
-                <span className={getQuickSetupStatusClassName(model.statusTone)}>
-                  {model.statusLabel}
-                </span>
-              </div>
-
-              <div className="quick-setup-card__fields">
-                <label
-                  className="switch-row quick-setup-card__visibility"
-                  data-visibility-provider-id={provider.id}
-                  data-visibility-enabled="true"
-                >
-                  <div>
-                    <p className="switch-row__title">
-                      {settingsCopy.quickSetup.visibilityLabel}
-                    </p>
-                    <p className="supporting-copy">
-                      {settingsCopy.quickSetup.actions.disableProvider}
-                    </p>
-                  </div>
-                  <input
-                    className="switch-row__control"
-                    type="checkbox"
-                    checked
-                    data-visibility-toggle={provider.id}
-                    onChange={() => onToggleProvider(provider.id)}
-                  />
-                </label>
-
-                <div className="source-card__field">
-                  <p className="source-card__label">
-                    {settingsCopy.quickSetup.currentSetupLabel}
-                  </p>
-                  <p className="source-card__value">{model.currentSetupValue}</p>
-                </div>
-
-                <div className="source-card__field">
-                  <p className="source-card__label">
-                    {settingsCopy.quickSetup.nextStepLabel}
-                  </p>
-                  <p className="source-card__value">{model.nextStepValue}</p>
-                </div>
-
-                {model.pageStatusValue ? (
-                  <div className="source-card__field">
-                    <p className="source-card__label">
-                      {settingsCopy.quickSetup.pageStatusLabel}
-                    </p>
-                    <p className="source-card__value">{model.pageStatusValue}</p>
-                  </div>
-                ) : null}
-              </div>
-
-              {model.primaryAction || secondaryActions.length > 0 ? (
-                <div className="credential-actions quick-setup-card__actions">
-                  {model.primaryAction ? (
-                    <button
-                      className="text-button"
-                      type="button"
-                      data-quick-setup-primary-action={model.primaryAction.id}
-                      disabled={isActionDisabled(provider, model.primaryAction)}
-                      onClick={() => runAction(provider, model.primaryAction!)}
-                    >
-                      {model.primaryAction.label}
-                    </button>
-                  ) : null}
-
-                  {secondaryActions.map((action) => (
-                    <button
-                      key={action.id}
-                      className="text-button"
-                      type="button"
-                      data-quick-setup-secondary-action={action.id}
-                      disabled={isActionDisabled(provider, action)}
-                      onClick={() => runAction(provider, action)}
-                    >
-                      {action.label}
-                    </button>
-                  ))}
-                </div>
-              ) : null}
-            </article>
-          );
-        })}
-      </div>
+      <ProviderCarousel
+        ariaLabel={settingsCopy.quickSetup.title}
+        initialIndex={focusedQuickSetupIndex > -1 ? focusedQuickSetupIndex : 0}
+        items={quickSetupItems}
+        textDirection={textDirection}
+      />
 
       {disabledProviders.length > 0 ? (
         <details

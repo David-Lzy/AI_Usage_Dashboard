@@ -95,6 +95,14 @@
   min-width: 0;
 }
 
+.provider-carousel__slide > .quick-setup-card,
+.provider-carousel__slide > .permission-prompt,
+.provider-carousel__slide > .source-card,
+.provider-carousel__slide > .status-card,
+.provider-carousel__slide > .switch-row {
+  height: 100%;
+}
+
 .provider-carousel__dots {
   justify-content: center;
 }

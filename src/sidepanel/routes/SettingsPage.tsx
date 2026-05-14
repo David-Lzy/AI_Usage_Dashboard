@@ -242,6 +242,12 @@ export function SettingsPage({
   );
   const advancedGroupCount =
     (credentialProviders.length > 0 || codexProvider ? 1 : 0) + 1;
+  const quickSetupFocusedProviderId =
+    routeFocus?.kind === "quick-setup-provider" ? routeFocus.providerId : null;
+  const credentialFocusedProviderId =
+    routeFocus?.kind === "credential-provider" ? routeFocus.providerId : null;
+  const sourceFocusedProviderId =
+    routeFocus?.kind === "source-provider" ? routeFocus.providerId : null;
 
   useEffect(() => {
     setAdvancedOpen(
@@ -346,10 +352,12 @@ export function SettingsPage({
       </SettingsOverviewSection>
 
       <SettingsQuickSetupSection
+        focusedProviderId={quickSetupFocusedProviderId}
         sectionId={SETTINGS_SECTION_IDS.quickSetup}
         providers={providers}
         snapshots={snapshots}
         settingsCopy={settingsCopy}
+        textDirection={i18n.resolvedTextDirection}
         userLevel={settings.userLevel}
         sessionPageNavigationAvailable={sessionPageNavigationAvailable}
         activeSessionPageAttachAvailable={activeSessionPageAttachAvailable}
@@ -422,6 +430,7 @@ export function SettingsPage({
 
             <div className="source-card__details-body settings-advanced__body">
               <SettingsCredentialsSection
+                focusedProviderId={credentialFocusedProviderId}
                 sectionId="settings-advanced-credentials"
                 eyebrow={i18n.t("settings.credentials.eyebrow")}
                 title={i18n.t("settings.credentials.title")}
@@ -432,6 +441,7 @@ export function SettingsPage({
                 codexAnalyticsApiKeyInput={codexAnalyticsApiKeyInput}
                 codexWorkspaceIdInput={codexWorkspaceIdInput}
                 labels={settingsCopy.credentials}
+                textDirection={i18n.resolvedTextDirection}
                 onSaveProviderApiKey={handleSaveProviderApiKey}
                 onClearProviderApiKey={handleClearProviderApiKey}
                 onProviderApiKeyInputChange={handleProviderApiKeyInputChange}
@@ -442,6 +452,7 @@ export function SettingsPage({
               />
 
               <SettingsSourceSection
+                focusedProviderId={sourceFocusedProviderId}
                 sectionId="settings-advanced-sources"
                 eyebrow={i18n.t("settings.sources.eyebrow")}
                 title={i18n.t("settings.sources.title")}

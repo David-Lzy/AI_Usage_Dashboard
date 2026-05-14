@@ -48,6 +48,7 @@ describe("SettingsSections", () => {
     );
 
     expect(html).toContain('id="settings-visibility-test"');
+    expect(html).toContain('data-provider-carousel=""');
     expect(html).toContain('class="switch-row"');
     expect(html).toContain('data-visibility-provider-id="cursor"');
     expect(html).toContain('data-visibility-toggle="cursor"');
@@ -75,6 +76,7 @@ describe("SettingsSections", () => {
     );
 
     expect(html).toContain('id="settings-permissions-test"');
+    expect(html).toContain('data-provider-carousel=""');
     expect(html).toContain('class="permission-prompt');
     expect(html).toContain('data-provider-id="cursor"');
     expect(html).toContain('data-permission-status=');

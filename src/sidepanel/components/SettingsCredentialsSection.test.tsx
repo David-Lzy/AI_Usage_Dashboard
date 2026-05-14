@@ -42,6 +42,7 @@ describe("SettingsCredentialsSection", () => {
         eyebrow="Credentials"
         title="Provider credentials"
         detail="Add optional provider credentials."
+        focusedProviderId="codex"
         credentialProviders={credentialProviders}
         codexProvider={codexProvider!}
         credentialInputs={{ cursor: "draft-key", "claude-code": "" }}
@@ -87,6 +88,8 @@ describe("SettingsCredentialsSection", () => {
     );
 
     expect(html).toContain('id="settings-credentials-test"');
+    expect(html).toContain('data-provider-carousel=""');
+    expect(html).toContain('data-provider-carousel-active-id="codex"');
     expect(html).toContain('data-credential-provider-id="cursor"');
     expect(html).toContain('data-credential-provider-id="codex"');
     expect(html).toContain('class="credential-form"');
