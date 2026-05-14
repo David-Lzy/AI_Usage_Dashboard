@@ -33,7 +33,6 @@ function renderSettingsPage(overrides: Partial<Parameters<typeof SettingsPage>[0
       onProgressColorBandsChange={() => {}}
       onActionBadgeSelectionChange={() => {}}
       onSaveThemeCustomSeed={() => {}}
-      onResetThemeCustomSeed={() => {}}
       onToggleProvider={() => {}}
       onTogglePermission={() => {}}
       onSetSourcePreference={() => {}}
@@ -66,7 +65,8 @@ describe("SettingsPage", () => {
     expect(html).toContain('data-provider-order-preferences=""');
     expect(html).toContain('data-provider-progress-preferences=""');
     expect(html).toContain('data-progress-appearance-preferences=""');
-    expect(html).toContain(">More<");
+    expect(html).toContain(">More UI controls<");
+    expect(html).toContain(">Provider display controls<");
     expect(html).not.toContain('data-credential-provider-id="cursor"');
     expect(html).toContain('class="settings-back-to-top-fab"');
     expect(html).toContain('aria-label="Back to top"');

@@ -9,7 +9,7 @@ Current packaged release state:
 - package version: `0.1.0-rc.19`
 - Chrome manifest version: `0.1.0.19`
 - packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.19.zip`
-- source status: `rc.19` package bytes are aligned through `Phase 448`; current source is ahead by `Phase 453` UI micro-polish. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
+- source status: `rc.19` package bytes are aligned through `Phase 448`; current source is ahead by `Phase 457` Settings color-picker and disclosure-group polish. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
 - packaged follow-up milestone: [2026-05-14 RC19 Post-RC18 UI Polish Closeout Release Candidate](./Doc/Milestones/2026-05-14_RC19_Post_RC18_UI_Polish_Closeout_Release_Candidate.md)
 - submitted review milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
@@ -47,7 +47,7 @@ Next execution queue:
 
 1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary, but use `0.1.0-rc.19` as the ready follow-up package if review feedback or an explicit resubmission decision asks for a newer build
 2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC19 follow-up milestone](./Doc/Milestones/2026-05-14_RC19_Post_RC18_UI_Polish_Closeout_Release_Candidate.md) as the current packaged-source reference
-3. no numbered phase is currently queued after `Phase 453`; open a new phase only for review feedback, an explicit resubmission handoff, packaging the latest source, or a new scoped product request
+3. no numbered phase is currently queued after `Phase 457`; open a new phase only for review feedback, an explicit resubmission handoff, packaging the latest source, or a new scoped product request
 4. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 5. keep real operator evidence closed and archived; do not open another interaction-audit or theme-recovery operator evidence phase unless a new surface or theme regression creates a fresh review need
 6. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
@@ -79,8 +79,8 @@ Maintenance note:
 - Popup surface-roles rendering now lives in `src/popup/PopupSurfaceRolesSection.tsx`, keeping no-featured-provider route-story markup out of `PopupApp.tsx` while preserving route-owned display gating
 - Popup featured-section rendering now lives in `src/popup/PopupFeaturedSection.tsx`, keeping no-featured-provider featured-section and empty-state markup out of `PopupApp.tsx` while preserving route-owned display gating
 - Popup loading and error cards now live in `src/popup/PopupLoadStateCards.tsx`, keeping bootstrap-state markup out of `PopupApp.tsx` while preserving route-owned retry and open actions
-- Theme customization card rendering now lives in `src/sidepanel/components/ThemeCustomizationCard.tsx`, keeping custom seed validation and generated preview rendering out of `SettingsPreferencesSection.tsx`
-- Settings page derived view models now live in `src/sidepanel/settings-page-view-models.ts`, and custom seed draft behavior now lives in `src/sidepanel/use-settings-theme-custom-seed-draft.ts`, keeping route-local model assembly and seed handlers out of `SettingsPage.tsx`
+- Accent color selection now lives in `src/sidepanel/components/AccentColorSelect.tsx`, backed by `src/sidepanel/components/ColorChoiceDropdown.tsx`, so named theme presets, recommended colors, and visible custom color input stay out of `SettingsPreferencesSection.tsx`
+- Settings page derived view models now live in `src/sidepanel/settings-page-view-models.ts`, while custom accent colors now save directly through the existing `themePreset: "custom"` plus `themeCustomSeedHex` settings path
 - Settings source card rendering now lives in `src/sidepanel/components/SettingsSourceCard.tsx`, keeping source display construction, source preference controls, session-page actions, and detailed diagnostics out of the section wrapper
 - Settings source-card view-model logic now lives in `src/sidepanel/settings-source-card-view-models.ts`, while `src/sidepanel/settings-view-models.ts` keeps compatibility re-exports for existing Settings imports
 - Settings Quick Setup view-model logic now lives in `src/sidepanel/settings-quick-setup-view-models.ts`, while `src/sidepanel/settings-view-models.ts` keeps compatibility re-exports for existing Settings imports
@@ -459,9 +459,9 @@ The side panel, popup, and audit hub now share one persisted theme preference:
 
 - shipped theme modes are `System`, `Light`, and `Dark`
 - shipped accent presets are `Default Blue`, `Meadow`, and `Sunset`
-- shipped custom accent mode is one validated `Custom Seed`
+- shipped custom accent mode is one validated custom color
 - Settings now exposes both `Theme mode` and `Accent preset`
-- Settings now also exposes one validated `#RRGGBB` custom-seed input with preview plus reset-to-default actions
+- Settings now exposes the same validated `#RRGGBB` custom-color path inside the Accent preset dropdown, alongside named presets and recommended swatch choices
 - `System` follows `prefers-color-scheme` and resolves at runtime across the side panel, popup, and audit hub
 - the repo now also ships a repeatable theme review baseline that verifies `Light`, `Dark`, and `System` behavior across settings, dashboard, and popup, including explicit-mode override of the browser theme
 - the repo now also ships a repeatable dark-surface review baseline for warning, error, progress, and supporting surfaces across dashboard, settings, and provider detail
@@ -707,7 +707,7 @@ Output artifact:
 
 Packaging note:
 
-- `rc.19` packages the previous `rc.18` follow-up work plus post-`rc.18` source changes through `Phase 447`, including popup status-chip compactness, progress appearance controls/rendering, soft/gauge ring differentiation, Settings order-control localization, Settings overview responsive help, and responsive Appearance & Sync control grids. Current source is ahead by `Phase 453` UI micro-polish and needs a separate packaging phase before it becomes a release artifact.
+- `rc.19` packages the previous `rc.18` follow-up work plus post-`rc.18` source changes through `Phase 447`, including popup status-chip compactness, progress appearance controls/rendering, soft/gauge ring differentiation, Settings order-control localization, Settings overview responsive help, and responsive Appearance & Sync control grids. Current source is ahead by `Phase 457` Settings color-picker and disclosure-group polish and needs a separate packaging phase before it becomes a release artifact.
 - `rc.15` remains a historical packaged follow-up candidate for the post-`rc.14` maintenance boundary through `Phase 364`.
 - `rc.16` remains a historical packaged follow-up candidate for the post-localization and interaction-audit display/source boundary through `Phase 421`.
 - `rc.17` remains a historical packaged follow-up candidate for the display-preference and Settings-carousel boundary through `Phase 433`.

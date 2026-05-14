@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [453_Phase_Soft_Ring_Visual_Distinction_Polish.md](./Archive/by-phase/400-499/453_Phase_Soft_Ring_Visual_Distinction_Polish.md)
+- latest completed slice: [457_Phase_Color_Dropdown_Localization_Docs_Closeout.md](./Archive/by-phase/400-499/457_Phase_Color_Dropdown_Localization_Docs_Closeout.md)
 - queued phase files:
   - none
 
@@ -848,6 +848,10 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 451` closeout changed the soft ring to CSS conic-gradient rendering with `closest-side` inner cutout geometry so non-100 values show slim visible neutral gaps, while keeping gauge rings on the SVG arc path and preserving storage, provider data, localization, package, and submitted-review boundaries
 - the 2026-05-14 `Phase 452` closeout restored Settings provider-carousel card controls by preventing carousel drag pointer capture from starting on interactive descendants, while preserving provider data, source-page logic, localization, package, and submitted-review boundaries
 - the 2026-05-14 `Phase 453` closeout added halo and slim foreground layers to the soft ring so it is visually distinct from the classic circle while preserving conic percentage correctness, provider data, localization, package, and submitted-review boundaries
+- the 2026-05-14 `Phase 454` closeout split Settings bottom disclosures into UI controls and Provider display controls while preserving provider order, quota item storage, package, and submitted-review boundaries
+- the 2026-05-14 `Phase 455` closeout replaced the visible custom seed card with one accent color dropdown that keeps named presets, adds recommended colors, and routes custom colors through the existing `themePreset: "custom"` plus `themeCustomSeedHex` storage path
+- the 2026-05-14 `Phase 456` closeout added a shared Material-style color dropdown and moved remaining-color-band color editing onto that dropdown while preserving range validation, warning threshold semantics, provider data, package, and submitted-review boundaries
+- the 2026-05-14 `Phase 457` closeout added 14-locale Settings color picker and disclosure-group copy, focused tests, and current-truth docs for the Settings More split and color-dropdown source boundary
 
 ## Delivery Standard For Each Phase
 

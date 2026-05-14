@@ -1,6 +1,7 @@
 import { useEffect, useState, type ChangeEvent } from "react";
 
 import type { ProgressColorBand } from "../../providers/types";
+import { RECOMMENDED_COLOR_CHOICES } from "../../shared/color-choices";
 import type { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
 import {
   PROGRESS_THICKNESS_MAX_PX,
@@ -13,9 +14,11 @@ import {
   removeProgressColorBand,
   splitProgressColorBand,
 } from "../../shared/progress-appearance";
+import { ColorChoiceDropdown } from "./ColorChoiceDropdown";
 
 type ProgressAppearancePreferenceControlsProps = {
   colorBands: ProgressColorBand[];
+  colorChoiceCopy: ReturnType<typeof buildSettingsLocalizedCopy>["colorChoices"];
   copy: ReturnType<typeof buildSettingsLocalizedCopy>["progressAppearance"];
   thicknessPx: number;
   onColorBandsChange: (colorBands: ProgressColorBand[]) => void;
@@ -83,6 +86,7 @@ function isValidColorInput(value: string): boolean {
 
 export function ProgressAppearancePreferenceControls({
   colorBands,
+  colorChoiceCopy,
   copy,
   thicknessPx,
   onColorBandsChange,
@@ -239,11 +243,6 @@ export function ProgressAppearancePreferenceControls({
                   className="progress-appearance-band"
                   data-progress-color-band={band.id}
                 >
-                  <span
-                    className="progress-appearance-band__swatch"
-                    style={{ backgroundColor: colorInputValue }}
-                    aria-hidden="true"
-                  />
                   <div className="progress-appearance-band__fields">
                     <label className="form-field">
                       <span className="form-field__label">
@@ -279,36 +278,29 @@ export function ProgressAppearancePreferenceControls({
                         }
                       />
                     </label>
-                    <label className="form-field">
-                      <span className="form-field__label">
-                        {copy.colorBands.colorLabel}
-                      </span>
-                      <span className="progress-appearance-band__color-controls">
-                        <input
-                          className="progress-appearance-band__native-color"
-                          type="color"
-                          value={colorInputValue}
-                          aria-label={copy.colorBands.colorLabel}
-                          onChange={(event) =>
-                            updateDraftBand(band.id, {
-                              colorHex: normalizeColorDraft(event.target.value),
-                            })
-                          }
-                        />
-                        <input
-                          className="form-field__control"
-                          type="text"
-                          value={band.colorHex}
-                          inputMode="text"
-                          pattern="#[0-9A-Fa-f]{6}"
-                          onChange={(event) =>
-                            updateDraftBand(band.id, {
-                              colorHex: normalizeColorDraft(event.target.value),
-                            })
-                          }
-                        />
-                      </span>
-                    </label>
+                    <ColorChoiceDropdown
+                      label={copy.colorBands.colorLabel}
+                      valueHex={colorInputValue}
+                      selectedLabel={band.colorHex}
+                      fieldIdPrefix={`progress-color-band-${band.id}`}
+                      copy={colorChoiceCopy}
+                      sections={[
+                        {
+                          id: "recommended-colors",
+                          label: colorChoiceCopy.recommendedColorsLabel,
+                          choices: RECOMMENDED_COLOR_CHOICES.map((choice) => ({
+                            id: choice.id,
+                            hex: choice.hex,
+                            label: colorChoiceCopy.colorNames[choice.id],
+                          })),
+                        },
+                      ]}
+                      onChange={(nextColorHex) =>
+                        updateDraftBand(band.id, {
+                          colorHex: normalizeColorDraft(nextColorHex),
+                        })
+                      }
+                    />
                   </div>
                   <span className="meta-chip progress-appearance-band__range">
                     {rangeLabel}

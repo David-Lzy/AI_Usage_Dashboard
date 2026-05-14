@@ -37,4 +37,6 @@ Status note:
 - `Phase 450` fixed select open-ring clipping, hardened soft/gauge SVG ring dash rendering with actual circumference values, and compacted remaining-color-band controls.
 - `Phase 451` changed the soft ring to CSS conic-gradient rendering with `closest-side` inner cutout geometry so non-100 green values show slim visible neutral gaps while gauge remains SVG-based.
 - `Phase 452` restored Settings provider-carousel card controls by preventing carousel drag pointer capture from starting on interactive descendants.
-- `Phase 453` added halo and slim foreground layers to the soft ring so it is visually distinct from the classic circle; current source is ahead of the `0.1.0-rc.19` package by these micro-polish phases.
+- `Phase 453` added halo and slim foreground layers to the soft ring so it is visually distinct from the classic circle.
+- `Phase 454` through `Phase 457` split the Settings bottom disclosures into UI controls and Provider display controls, replaced the visible custom seed card with an accent color dropdown, reused that dropdown for remaining-color bands, and added 14-locale color picker/disclosure copy.
+- Current source is ahead of the `0.1.0-rc.19` package by the `Phase 449` through `Phase 457` UI micro-polish phases.

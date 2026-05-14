@@ -279,12 +279,6 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
               themeCustomSeedHex,
             })
           }
-          onResetThemeCustomSeed={() =>
-            handleUpdateSettings({
-              themePreset: "default",
-              themeCustomSeedHex: null,
-            })
-          }
           onToggleProvider={handleToggleProvider}
           onTogglePermission={handleTogglePermission}
           onSetSourcePreference={handleSetSourcePreference}

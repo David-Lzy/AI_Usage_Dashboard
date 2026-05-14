@@ -73,7 +73,7 @@ Runtime localization now exists for one broader but still partial manifest plus 
   - `settings.sections.*`
   - `settings.summary.*`
   - `settings.preferences.*`
-  - `settings.theme_customization.*`
+  - `settings.theme_customization.*` legacy ids remain in the catalog for compatibility, though the current Settings UI uses structured accent color dropdown copy after `Phase 455`
   - `settings.visibility.*`
   - `settings.credentials.*`
   - `settings.sources.*`

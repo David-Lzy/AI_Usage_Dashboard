@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState } from "react";
 
 import type {
   ActionBadgeSelection,
@@ -24,31 +24,27 @@ import {
   WARNING_THRESHOLD_MAX_PERCENT,
   WARNING_THRESHOLD_MIN_PERCENT,
 } from "../../shared/settings-preferences";
-import type { ResolvedThemeMode } from "../../shared/theme";
 import { buildSettingsPreferenceOptions } from "../settings-preference-options";
 import type { SettingsUserLevelVisibility } from "../settings-user-level-visibility";
+import { AccentColorSelect } from "./AccentColorSelect";
 import { EditableNumberCombobox } from "./EditableNumberCombobox";
 import { MaterialSelect } from "./MaterialSelect";
 import { ProviderOrderPreferenceControls } from "./ProviderOrderPreferenceControls";
 import { ProviderProgressItemPreferenceControls } from "./ProviderProgressItemPreferenceControls";
 import { ProgressAppearancePreferenceControls } from "./ProgressAppearancePreferenceControls";
 import { PopupAppearancePreview } from "./PopupAppearancePreview";
-import { ThemeCustomizationCard } from "./ThemeCustomizationCard";
 
 type SettingsPreferencesSectionProps = {
   i18n: RuntimeI18n;
   providers: ProviderSetting[];
-  resolvedThemeMode: ResolvedThemeMode;
   sectionId?: string;
   settings: AppSettings;
   settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>;
   snapshots: ProviderSnapshot[];
-  themeCustomSeedDraft: string;
   userLevelVisibility: SettingsUserLevelVisibility;
   onActionBadgeSelectionChange: (
     actionBadgeSelection: ActionBadgeSelection,
   ) => void;
-  onApplyThemeCustomSeed: (event: FormEvent<HTMLFormElement>) => void;
   onFullPageProgressStyleChange: (
     progressStyle: ProgressDisplayStyle,
   ) => void;
@@ -65,12 +61,11 @@ type SettingsPreferencesSectionProps = {
   ) => void;
   onProgressColorBandsChange: (progressColorBands: ProgressColorBand[]) => void;
   onProgressThicknessPxChange: (progressThicknessPx: number) => void;
-  onResetThemeCustomSeed: () => void;
   onSidebarProgressStyleChange: (
     progressStyle: ProgressDisplayStyle,
   ) => void;
   onSyncIntervalChange: (minutes: number) => void;
-  onThemeCustomSeedDraftChange: (themeCustomSeedDraft: string) => void;
+  onThemeCustomSeedChange: (themeCustomSeedHex: string) => void;
   onThemeModeChange: (themeMode: ThemeMode) => void;
   onThemePresetChange: (themePreset: ThemePreset) => void;
   onWarningThresholdChange: (percent: number) => void;
@@ -79,15 +74,12 @@ type SettingsPreferencesSectionProps = {
 export function SettingsPreferencesSection({
   i18n,
   providers,
-  resolvedThemeMode,
   sectionId,
   settings,
   settingsCopy,
   snapshots,
-  themeCustomSeedDraft,
   userLevelVisibility: _userLevelVisibility,
   onActionBadgeSelectionChange,
-  onApplyThemeCustomSeed,
   onFullPageProgressStyleChange,
   onLocalePreferenceChange,
   onPopupCornerStyleChange,
@@ -98,10 +90,9 @@ export function SettingsPreferencesSection({
   onProgressItemsBySurfaceChange,
   onProgressColorBandsChange,
   onProgressThicknessPxChange,
-  onResetThemeCustomSeed,
   onSidebarProgressStyleChange,
   onSyncIntervalChange,
-  onThemeCustomSeedDraftChange,
+  onThemeCustomSeedChange,
   onThemeModeChange,
   onThemePresetChange,
   onWarningThresholdChange,
@@ -129,11 +120,12 @@ export function SettingsPreferencesSection({
     settings,
     snapshots,
   });
-  const [moreOpen, setMoreOpen] = useState(settings.themePreset === "custom");
+  const [uiMoreOpen, setUiMoreOpen] = useState(settings.themePreset === "custom");
+  const [providerDisplayOpen, setProviderDisplayOpen] = useState(false);
 
   useEffect(() => {
     if (settings.themePreset === "custom") {
-      setMoreOpen(true);
+      setUiMoreOpen(true);
     }
   }, [settings.themePreset]);
 
@@ -183,12 +175,14 @@ export function SettingsPreferencesSection({
           onChange={onThemeModeChange}
         />
 
-        <MaterialSelect
+        <AccentColorSelect
           label={i18n.t("settings.preferences.accent_preset_label")}
-          value={settings.themePreset}
-          fieldIdPrefix="theme-preset"
-          options={themePresetOptions}
-          onChange={onThemePresetChange}
+          themePreset={settings.themePreset}
+          themeCustomSeedHex={settings.themeCustomSeedHex}
+          themePresetOptions={themePresetOptions}
+          copy={settingsCopy.colorChoices}
+          onThemePresetChange={onThemePresetChange}
+          onThemeCustomSeedChange={onThemeCustomSeedChange}
         />
 
         <MaterialSelect
@@ -201,23 +195,23 @@ export function SettingsPreferencesSection({
       </div>
 
       <details
-        className="source-card__details settings-preferences__more"
-        open={moreOpen}
+        className="source-card__details settings-preferences__more settings-preferences__more--ui"
+        open={uiMoreOpen}
         onToggle={(event) =>
-          setMoreOpen((event.currentTarget as HTMLDetailsElement).open)
+          setUiMoreOpen((event.currentTarget as HTMLDetailsElement).open)
         }
       >
         <summary className="source-card__details-toggle">
           <span>
-            {moreOpen
-              ? settingsCopy.preferences.hideMore
-              : settingsCopy.preferences.showMore}
+            {uiMoreOpen
+              ? settingsCopy.preferenceGroups.uiMoreHide
+              : settingsCopy.preferenceGroups.uiMoreShow}
           </span>
         </summary>
 
         <div className="source-card__details-body settings-preferences__more-body">
           <p className="supporting-copy settings-preferences__more-copy">
-            {settingsCopy.preferences.detail}
+            {settingsCopy.preferenceGroups.uiMoreDetail}
           </p>
 
           <div className="settings-grid">
@@ -272,6 +266,7 @@ export function SettingsPreferencesSection({
 
           <ProgressAppearancePreferenceControls
             copy={settingsCopy.progressAppearance}
+            colorChoiceCopy={settingsCopy.colorChoices}
             thicknessPx={settings.progressThicknessPx}
             colorBands={settings.progressColorBands}
             onThicknessPxChange={onProgressThicknessPxChange}
@@ -279,18 +274,28 @@ export function SettingsPreferencesSection({
           />
 
           <PopupAppearancePreview i18n={i18n} settings={settings} />
+        </div>
+      </details>
 
-          <ThemeCustomizationCard
-            i18n={i18n}
-            resolvedThemeMode={resolvedThemeMode}
-            settings={settings}
-            settingsCopy={settingsCopy}
-            themeCustomSeedDraft={themeCustomSeedDraft}
-            onApplyThemeCustomSeed={onApplyThemeCustomSeed}
-            onResetThemeCustomSeed={onResetThemeCustomSeed}
-            onThemeCustomSeedDraftChange={onThemeCustomSeedDraftChange}
-          />
+      <details
+        className="source-card__details settings-preferences__more settings-preferences__more--provider-display"
+        open={providerDisplayOpen}
+        onToggle={(event) =>
+          setProviderDisplayOpen((event.currentTarget as HTMLDetailsElement).open)
+        }
+      >
+        <summary className="source-card__details-toggle">
+          <span>
+            {providerDisplayOpen
+              ? settingsCopy.preferenceGroups.providerDisplayHide
+              : settingsCopy.preferenceGroups.providerDisplayShow}
+          </span>
+        </summary>
 
+        <div className="source-card__details-body settings-preferences__more-body">
+          <p className="supporting-copy settings-preferences__more-copy">
+            {settingsCopy.preferenceGroups.providerDisplayDetail}
+          </p>
           <ProviderOrderPreferenceControls
             copy={settingsCopy.providerOrder}
             providers={providers}

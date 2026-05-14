@@ -76,13 +76,13 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 453` execution priority:
+Current post-`Phase 457` execution priority:
 
 1. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.13.zip` as the submitted Chrome Web Store review boundary. Do not silently mutate or rewrite the [RC13 upload-candidate milestone](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) while that submission remains the human-reviewed baseline.
-2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.19.zip` as the current packaged follow-up candidate. It includes the previous `rc.18` follow-up work plus post-`rc.18` UI polish through `Phase 447`; current source is ahead by `Phase 453` UI micro-polish and should be packaged only in a separate explicit release phase.
+2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.19.zip` as the current packaged follow-up candidate. It includes the previous `rc.18` follow-up work plus post-`rc.18` UI polish through `Phase 447`; current source is ahead by `Phase 457` Settings color-picker and disclosure-group polish and should be packaged only in a separate explicit release phase.
 3. `P0` - keep the refreshed `Direction 10.3` screenshot evidence archived and ready, not pending: [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) still fulfills the latest reviewed screenshot pack with `5/5` images and `3` explicit truth-boundary notes.
 4. `P1` - if a resubmission becomes necessary, use [2026-05-14_RC19_Post_RC18_UI_Polish_Closeout_Release_Candidate.md](./Milestones/2026-05-14_RC19_Post_RC18_UI_Polish_Closeout_Release_Candidate.md) as the current packaged-source reference and cut a fresh submission milestone from that boundary instead of mutating RC13 history.
-5. `P1` - no numbered phase is currently queued after `Phase 453`; open a new phase only for review feedback, an explicit resubmission handoff, packaging the latest source, or a new scoped product request. This queue does not change the submitted RC13 store-review boundary unless a later submitted-store milestone is explicitly opened.
+5. `P1` - no numbered phase is currently queued after `Phase 457`; open a new phase only for review feedback, an explicit resubmission handoff, packaging the latest source, or a new scoped product request. This queue does not change the submitted RC13 store-review boundary unless a later submitted-store milestone is explicitly opened.
 6. `P2` - keep the `Phase 309` first-provider setup behavior stable: zero-provider Settings now recommends one personal-user provider in Quick Setup and popup zero-provider actions deep-link to that same setup card.
 7. `P2` - keep the `Phase 310` cached-first guard stable: standard dashboard routes must keep rendering cached app state while background bootstrap is still loading.
 8. `P2` - keep the `Phase 311` popup view-model split behavior-only: `src/popup/view-models.ts` remains the public aggregator and the extracted setup-coverage / featured-card modules should not change popup UI semantics.
@@ -393,8 +393,8 @@ Phase status update:
 - `Phase 274` completed the Settings credential draft hook split by moving provider API key and Codex workspace draft state plus save/clear/input handlers into `src/sidepanel/use-settings-credential-drafts.ts`
 - `Phase 275` completed the Settings preference options split by moving select, numeric combobox, and action badge option assembly into `src/sidepanel/settings-preference-options.ts`
 - `Phase 276` completed the Popup appearance preview component split by moving Settings popup preview rendering into `src/sidepanel/components/PopupAppearancePreview.tsx`
-- `Phase 277` completed the Theme customization card component split by moving Settings custom seed form and preview rendering into `src/sidepanel/components/ThemeCustomizationCard.tsx`
-- `Phase 278` completed the Settings page view model and seed hook split by moving route-derived Settings models into `src/sidepanel/settings-page-view-models.ts` and custom seed draft behavior into `src/sidepanel/use-settings-theme-custom-seed-draft.ts`
+- `Phase 277` originally split Settings custom seed rendering into a dedicated card; `Phase 455` superseded that visible card with `src/sidepanel/components/AccentColorSelect.tsx` and the shared color dropdown
+- `Phase 278` originally split Settings custom seed draft behavior into a hook; `Phase 455` removed the separate draft form and now saves custom accent colors directly through the existing `themePreset: "custom"` plus `themeCustomSeedHex` path
 - `Phase 279` completed the Settings source card component split by moving Source Connections article rendering into `src/sidepanel/components/SettingsSourceCard.tsx`
 - `Phase 280` completed the Settings credentials section split by moving credential card rendering into `src/sidepanel/components/SettingsCredentialsSection.tsx`
 - `Phase 281` completed the standard-app settings actions split by moving Settings update, credential, Codex workspace, source-preference, page-binding-clear, and preferences-saved handlers into `src/sidepanel/standard-app-settings-actions.ts`
@@ -484,6 +484,10 @@ Phase status update:
 - `Phase 451` changed the soft ring to CSS conic-gradient rendering with `closest-side` inner cutout geometry so non-100 values show slim visible neutral gaps, while keeping gauge rings on the SVG arc path and preserving storage, provider data, localization, package, and submitted-review boundaries
 - `Phase 452` restored Settings provider-carousel card controls by preventing carousel drag pointer capture from starting on interactive descendants, while preserving provider data, source-page logic, localization, package, and submitted-review boundaries
 - `Phase 453` added halo and slim foreground layers to the soft ring so it is visually distinct from the classic circle while preserving conic percentage correctness, provider data, localization, package, and submitted-review boundaries
+- `Phase 454` split Settings bottom disclosures into UI controls and Provider display controls while preserving provider order, quota item storage, package, and submitted-review boundaries
+- `Phase 455` replaced the visible custom seed card with one accent color dropdown that keeps named presets, adds recommended colors, and routes custom colors through the existing `themePreset: "custom"` plus `themeCustomSeedHex` storage path
+- `Phase 456` added a shared Material-style color dropdown and moved remaining-color-band color editing onto that dropdown while preserving range validation, warning threshold semantics, provider data, package, and submitted-review boundaries
+- `Phase 457` added 14-locale Settings color picker and disclosure-group copy, focused tests, and current-truth docs for the Settings More split and color-dropdown source boundary
 - `Phase 334` split interaction-audit per-surface card rendering into a dedicated component while preserving route-owned audit refs, preset actions, manual checks, and signoff callbacks
 - `Phase 335` split interaction-audit review queue rendering into a dedicated component while preserving route-owned queue construction and jump behavior
 - `Phase 336` split interaction-audit request-scope rendering into a dedicated component while preserving route-owned request-context state plus existing binding, revision, and next-command display

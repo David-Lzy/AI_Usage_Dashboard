@@ -21,7 +21,6 @@ import type {
 } from "../../providers/types";
 import { createRuntimeI18n } from "../../shared/i18n";
 import { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
-import { resolveThemeMode } from "../../shared/theme";
 import { getPreferredScrollBehavior } from "../motion";
 
 import {
@@ -45,7 +44,6 @@ import {
 } from "../route-state";
 import { useSettingsCredentialDrafts } from "../use-settings-credential-drafts";
 import { useSettingsSectionNavigation } from "../use-settings-section-navigation";
-import { useSettingsThemeCustomSeedDraft } from "../use-settings-theme-custom-seed-draft";
 import { SettingsSourceSection } from "../components/SettingsSourceSection";
 import { SettingsPreferencesSection } from "../components/SettingsPreferencesSection";
 
@@ -116,7 +114,6 @@ type SettingsPageProps = {
     actionBadgeSelection: ActionBadgeSelection,
   ) => void;
   onSaveThemeCustomSeed: (themeCustomSeedHex: string) => void;
-  onResetThemeCustomSeed: () => void;
   onToggleProvider: (providerId: ProviderId) => void;
   onTogglePermission: (providerId: ProviderId) => void;
   onSetSourcePreference: (
@@ -171,7 +168,6 @@ export function SettingsPage({
   onProgressColorBandsChange,
   onActionBadgeSelectionChange,
   onSaveThemeCustomSeed,
-  onResetThemeCustomSeed,
   onToggleProvider,
   onTogglePermission,
   onSetSourcePreference,
@@ -207,20 +203,6 @@ export function SettingsPage({
     scrollToSection,
     scrollToSettingsTop,
   } = useSettingsSectionNavigation();
-  const {
-    handleApplyThemeCustomSeed,
-    handleResetThemeCustomSeed,
-    setThemeCustomSeedDraft,
-    themeCustomSeedDraft,
-  } = useSettingsThemeCustomSeedDraft({
-    themeCustomSeedHex: settings.themeCustomSeedHex,
-    onSaveThemeCustomSeed,
-    onResetThemeCustomSeed,
-  });
-  const resolvedThemeMode = resolveThemeMode(
-    settings.themeMode,
-    typeof window !== "undefined" ? window : undefined,
-  );
   const i18n = createRuntimeI18n(
     settings.locale,
     typeof window !== "undefined" ? window : undefined,
@@ -380,8 +362,6 @@ export function SettingsPage({
         snapshots={snapshots}
         i18n={i18n}
         settingsCopy={settingsCopy}
-        resolvedThemeMode={resolvedThemeMode}
-        themeCustomSeedDraft={themeCustomSeedDraft}
         userLevelVisibility={userLevelVisibility}
         onSyncIntervalChange={onSyncIntervalChange}
         onWarningThresholdChange={onWarningThresholdChange}
@@ -399,9 +379,7 @@ export function SettingsPage({
         onProgressThicknessPxChange={onProgressThicknessPxChange}
         onProgressColorBandsChange={onProgressColorBandsChange}
         onActionBadgeSelectionChange={onActionBadgeSelectionChange}
-        onThemeCustomSeedDraftChange={setThemeCustomSeedDraft}
-        onApplyThemeCustomSeed={handleApplyThemeCustomSeed}
-        onResetThemeCustomSeed={handleResetThemeCustomSeed}
+        onThemeCustomSeedChange={onSaveThemeCustomSeed}
       />
 
       {showAdvancedContainer ? (

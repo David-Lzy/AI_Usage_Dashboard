@@ -20,8 +20,6 @@ describe("SettingsPreferencesSection", () => {
         snapshots={SAMPLE_APP_STATE.providers}
         i18n={i18n}
         settingsCopy={settingsCopy}
-        resolvedThemeMode="light"
-        themeCustomSeedDraft="#2f6fed"
         userLevelVisibility={getSettingsUserLevelVisibility("debug")}
         onSyncIntervalChange={() => {}}
         onWarningThresholdChange={() => {}}
@@ -39,9 +37,7 @@ describe("SettingsPreferencesSection", () => {
         onProgressThicknessPxChange={() => {}}
         onProgressColorBandsChange={() => {}}
         onActionBadgeSelectionChange={() => {}}
-        onThemeCustomSeedDraftChange={() => {}}
-        onApplyThemeCustomSeed={() => {}}
-        onResetThemeCustomSeed={() => {}}
+        onThemeCustomSeedChange={() => {}}
       />,
     );
 
@@ -50,7 +46,7 @@ describe("SettingsPreferencesSection", () => {
     expect(html).toContain('data-settings-custom-number-field="warning-threshold"');
     expect(html).toContain('data-settings-material-select="locale-preference"');
     expect(html).toContain('data-settings-material-select="theme-mode"');
-    expect(html).toContain('data-settings-material-select="theme-preset"');
+    expect(html).toContain('data-color-choice-dropdown="accent-color"');
     expect(html).toContain('data-settings-material-select="action-badge-selection"');
     expect(html).toContain('data-provider-order-preferences=""');
     expect(html).toContain('data-provider-progress-preferences=""');
@@ -64,20 +60,17 @@ describe("SettingsPreferencesSection", () => {
     expect(html).toContain("Choose the order per surface");
     expect(html).toContain("Tune thickness and remaining-color bands");
     expect(html).toContain("#B3261E");
-    expect(html).toContain(">More<");
+    expect(html).toContain(">More UI controls<");
+    expect(html).toContain(">Provider display controls<");
     expect(html).toContain('class="popup-appearance-preview-card"');
-    expect(html).toContain('class="theme-customization-form"');
-    expect(html).toContain('class="theme-preview-grid"');
+    expect(html).not.toContain('class="theme-customization-form"');
     expect(
       html.indexOf('data-settings-material-select="locale-preference"'),
-    ).toBeLessThan(html.indexOf(">More<"));
+    ).toBeLessThan(html.indexOf(">More UI controls<"));
     expect(
       html.indexOf('data-progress-appearance-preferences=""'),
     ).toBeLessThan(html.indexOf('class="popup-appearance-preview-card"'));
     expect(html.indexOf('class="popup-appearance-preview-card"')).toBeLessThan(
-      html.indexOf('class="theme-customization-form"'),
-    );
-    expect(html.indexOf('class="theme-customization-form"')).toBeLessThan(
       html.indexOf('data-provider-order-preferences=""'),
     );
     expect(html.indexOf('data-provider-order-preferences=""')).toBeLessThan(

@@ -34,6 +34,8 @@ describe("buildSettingsLocalizedCopy", () => {
     });
     expect(copy.progressAppearance.sectionLabel).toBe("Progress appearance");
     expect(copy.progressAppearance.thickness.unit).toBe("px");
+    expect(copy.colorChoices.colorNames.indigo).toBe("Indigo");
+    expect(copy.preferenceGroups.uiMoreShow).toBe("More UI controls");
     expect(copy.layout.userLevel.options).toEqual({
       basic: "Basic",
       advanced: "Advanced",
@@ -62,6 +64,10 @@ describe("buildSettingsLocalizedCopy", () => {
     expect(copy.progressAppearance.sectionLabel).toBe("进度外观");
     expect(copy.progressAppearance.colorBands.rangeLabel(0, 20)).toBe(
       "剩余 0-20%",
+    );
+    expect(copy.colorChoices.colorNames.indigo).toBe("靛蓝");
+    expect(copy.preferenceGroups.providerDisplayShow).toBe(
+      "Provider 顺序与可见进度",
     );
   });
 
@@ -135,6 +141,12 @@ describe("buildSettingsLocalizedCopy", () => {
       );
       expect(copy.progressAppearance.colorBands.validationError).not.toBe(
         englishCopy.progressAppearance.colorBands.validationError,
+      );
+      expect(copy.colorChoices.customLabel).not.toBe(
+        englishCopy.colorChoices.customLabel,
+      );
+      expect(copy.preferenceGroups.uiMoreShow).not.toBe(
+        englishCopy.preferenceGroups.uiMoreShow,
       );
     }
   });

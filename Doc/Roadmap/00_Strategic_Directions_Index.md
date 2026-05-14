@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-14:
 
-- the numbered phase queue is completed through `Phase 453`; no numbered phase is currently queued after `Phase 453`, and `0.1.0-rc.19` is the current packaged follow-up candidate while current source is ahead by `Phase 453` UI micro-polish and RC13 remains the submitted store-review boundary
+- the numbered phase queue is completed through `Phase 457`; no numbered phase is currently queued after `Phase 457`, and `0.1.0-rc.19` is the current packaged follow-up candidate while current source is ahead by `Phase 457` Settings color-picker and disclosure-group polish and RC13 remains the submitted store-review boundary
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -157,6 +157,10 @@ As of 2026-05-14:
 - `Phase 451` changed the soft ring to CSS conic-gradient rendering with `closest-side` inner cutout geometry so non-100 values show slim visible neutral gaps, while keeping gauge rings on the SVG arc path and preserving storage, provider data, localization, package, and submitted-review boundaries.
 - `Phase 452` restored Settings provider-carousel card controls by preventing carousel drag pointer capture from starting on interactive descendants, while preserving provider data, source-page logic, localization, package, and submitted-review boundaries.
 - `Phase 453` added halo and slim foreground layers to the soft ring so it is visually distinct from the classic circle while preserving conic percentage correctness, provider data, localization, package, and submitted-review boundaries.
+- `Phase 454` split Settings bottom disclosures into UI controls and Provider display controls while preserving provider order, quota item storage, package, and submitted-review boundaries.
+- `Phase 455` replaced the visible custom seed card with one accent color dropdown that keeps named presets, adds recommended colors, and routes custom colors through the existing `themePreset: "custom"` plus `themeCustomSeedHex` storage path.
+- `Phase 456` added a shared Material-style color dropdown and moved remaining-color-band color editing onto that dropdown while preserving range validation, warning threshold semantics, provider data, package, and submitted-review boundaries.
+- `Phase 457` added 14-locale Settings color picker and disclosure-group copy, focused tests, and current-truth docs for the Settings More split and color-dropdown source boundary.
 - `Phase 200` completed a functionality-first Codex personal slice by preserving multiple visible usage windows, expanding Codex page-capture snippets, and surfacing the most constrained visible percentage window across dashboard, provider detail, and popup paths
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without changing the primary percentage-window quota model
 - `Phase 202` completed repeatable unpacked-extension verification for Codex personal multi-window plus flex-balance context, while fixing DOM capture so repeated percentages and single-character balance values are not lost before parsing
@@ -234,8 +238,8 @@ As of 2026-05-14:
 - `Phase 274` completed the Settings credential draft hook split by moving provider API key and Codex workspace draft state plus save/clear/input handlers into `src/sidepanel/use-settings-credential-drafts.ts`
 - `Phase 275` completed the Settings preference options split by moving select, numeric combobox, and action badge option assembly into `src/sidepanel/settings-preference-options.ts`
 - `Phase 276` completed the Popup appearance preview component split by moving Settings popup preview rendering into `src/sidepanel/components/PopupAppearancePreview.tsx`
-- `Phase 277` completed the Theme customization card component split by moving Settings custom seed form and preview rendering into `src/sidepanel/components/ThemeCustomizationCard.tsx`
-- `Phase 278` completed the Settings page view model and seed hook split by moving route-derived Settings models into `src/sidepanel/settings-page-view-models.ts` and custom seed draft behavior into `src/sidepanel/use-settings-theme-custom-seed-draft.ts`
+- `Phase 277` originally split Settings custom seed rendering into a dedicated card; `Phase 455` superseded that visible card with `src/sidepanel/components/AccentColorSelect.tsx` and the shared color dropdown
+- `Phase 278` originally split Settings custom seed draft behavior into a hook; `Phase 455` removed the separate draft form and now saves custom accent colors directly through the existing `themePreset: "custom"` plus `themeCustomSeedHex` path
 - `Phase 279` completed the Settings source card component split by moving Source Connections article rendering into `src/sidepanel/components/SettingsSourceCard.tsx`
 - `Phase 280` completed the Settings credentials section split by moving credential card rendering into `src/sidepanel/components/SettingsCredentialsSection.tsx`
 - `Phase 281` completed the standard-app settings actions split by moving Settings update, credential, Codex workspace, source-preference, page-binding-clear, and preferences-saved handlers into `src/sidepanel/standard-app-settings-actions.ts`
@@ -458,7 +462,7 @@ As of 2026-05-14:
 - `Phase 169` completed the next `Direction 10.3` slice by adding one request-bound manual finalize command plus handoff update, so the remaining real-world work is now the popup capture itself instead of popup capture plus extra repo bookkeeping
 - `Phase 296` completed the mixed candidate screenshot file intake plus archive completion under `10_3_Store_Asset_Pack_And_Submission_TODOs.md`
 - the previous repo-owned engineering default was adapter diagnostic raw fallback regression review for the shipped `en + zh_CN` runtime pilot under Direction 09, captured in `09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`
-- because `0.1.0-rc.19` is packaged as the current follow-up candidate while source is ahead by `Phase 453` UI micro-polish and the RC13 milestone remains the submitted store-review boundary, the active functional priority is now review-feedback, deliberate resubmission follow-up, or an explicit packaging phase for the latest source only if needed
+- because `0.1.0-rc.19` is packaged as the current follow-up candidate while source is ahead by `Phase 457` Settings color-picker and disclosure-group polish and the RC13 milestone remains the submitted store-review boundary, the active functional priority is now review-feedback, deliberate resubmission follow-up, or an explicit packaging phase for the latest source only if needed
 - the remaining high-value work in Direction 05 and Direction 04 is now evidence closure, not more tool-building:
   - `05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md`
   - `04_2_Interaction_Audit_Real_Operator_Closure_TODOs.md`
@@ -525,7 +529,7 @@ As of 2026-05-14:
 
 1. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why first now:
-   `0.1.0-rc.19` is now packaged as the current follow-up candidate, current source is ahead by `Phase 453` UI micro-polish, the mixed screenshot archive is complete, the trimmed transparent icon refresh and Claude Team usage-page path are already in the submitted RC13 boundary, and the next work is only review-feedback, deliberate resubmission follow-up, or explicit latest-source packaging after the human Chrome Web Store flow returns.
+   `0.1.0-rc.19` is now packaged as the current follow-up candidate, current source is ahead by `Phase 457` Settings color-picker and disclosure-group polish, the mixed screenshot archive is complete, the trimmed transparent icon refresh and Claude Team usage-page path are already in the submitted RC13 boundary, and the next work is only review-feedback, deliberate resubmission follow-up, or explicit latest-source packaging after the human Chrome Web Store flow returns.
 
 2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second now:

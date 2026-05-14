@@ -9,6 +9,10 @@ import {
   getSettingsCredentialsCopy,
 } from "./settings-credentials-localized-copy";
 import {
+  getSettingsColorChoiceCopy,
+  getSettingsPreferenceGroupsCopy,
+} from "./settings-color-choice-localized-copy";
+import {
   buildLocalizedSettingsCoreSections,
   getSettingsCoreCopy,
 } from "./settings-core-localized-copy";
@@ -42,6 +46,8 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
     i18n,
     getSettingsProviderOrderCopy(i18n.resolvedLocale),
   );
+  const colorChoices = getSettingsColorChoiceCopy(i18n.resolvedLocale);
+  const preferenceGroups = getSettingsPreferenceGroupsCopy(i18n.resolvedLocale);
 
   if (i18n.resolvedLocale === "zh-CN") {
     return {
@@ -283,6 +289,8 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
       providerOrder,
       progressItems,
       progressAppearance,
+      colorChoices,
+      preferenceGroups,
     };
   }
 
@@ -531,6 +539,8 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
     providerOrder,
     progressItems,
     progressAppearance,
+    colorChoices,
+    preferenceGroups,
   };
 
   const coreCopy = getSettingsCoreCopy(i18n.resolvedLocale);
@@ -558,6 +568,8 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
     providerOrder,
     progressItems,
     progressAppearance,
+    colorChoices,
+    preferenceGroups,
   };
 }
 
