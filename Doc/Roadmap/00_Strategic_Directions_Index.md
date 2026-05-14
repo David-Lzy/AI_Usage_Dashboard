@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-14:
 
-- the numbered phase queue is completed through `Phase 451`; no numbered phase is currently queued after `Phase 451`, and `0.1.0-rc.19` is the current packaged follow-up candidate while current source is ahead by `Phase 451` UI micro-polish and RC13 remains the submitted store-review boundary
+- the numbered phase queue is completed through `Phase 452`; no numbered phase is currently queued after `Phase 452`, and `0.1.0-rc.19` is the current packaged follow-up candidate while current source is ahead by `Phase 452` UI micro-polish and RC13 remains the submitted store-review boundary
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -155,6 +155,7 @@ As of 2026-05-14:
 - `Phase 449` fixed reported UI micro-polish regressions for remaining-color-band row alignment, Settings display-level helper alignment, soft-ring percentage rendering, and provider-carousel motion while preserving storage, provider data, localization, package, and submitted-review boundaries.
 - `Phase 450` fixed select open-ring clipping, hardened soft/gauge SVG ring dash rendering with actual circumference values, and compacted remaining-color-band controls while preserving storage, provider data, localization, package, and submitted-review boundaries.
 - `Phase 451` changed the soft ring to CSS conic-gradient rendering with `closest-side` inner cutout geometry so non-100 values show slim visible neutral gaps, while keeping gauge rings on the SVG arc path and preserving storage, provider data, localization, package, and submitted-review boundaries.
+- `Phase 452` restored Settings provider-carousel card controls by preventing carousel drag pointer capture from starting on interactive descendants, while preserving provider data, source-page logic, localization, package, and submitted-review boundaries.
 - `Phase 200` completed a functionality-first Codex personal slice by preserving multiple visible usage windows, expanding Codex page-capture snippets, and surfacing the most constrained visible percentage window across dashboard, provider detail, and popup paths
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without changing the primary percentage-window quota model
 - `Phase 202` completed repeatable unpacked-extension verification for Codex personal multi-window plus flex-balance context, while fixing DOM capture so repeated percentages and single-character balance values are not lost before parsing
@@ -456,7 +457,7 @@ As of 2026-05-14:
 - `Phase 169` completed the next `Direction 10.3` slice by adding one request-bound manual finalize command plus handoff update, so the remaining real-world work is now the popup capture itself instead of popup capture plus extra repo bookkeeping
 - `Phase 296` completed the mixed candidate screenshot file intake plus archive completion under `10_3_Store_Asset_Pack_And_Submission_TODOs.md`
 - the previous repo-owned engineering default was adapter diagnostic raw fallback regression review for the shipped `en + zh_CN` runtime pilot under Direction 09, captured in `09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`
-- because `0.1.0-rc.19` is packaged as the current follow-up candidate while source is ahead by `Phase 451` UI micro-polish and the RC13 milestone remains the submitted store-review boundary, the active functional priority is now review-feedback, deliberate resubmission follow-up, or an explicit packaging phase for the latest source only if needed
+- because `0.1.0-rc.19` is packaged as the current follow-up candidate while source is ahead by `Phase 452` UI micro-polish and the RC13 milestone remains the submitted store-review boundary, the active functional priority is now review-feedback, deliberate resubmission follow-up, or an explicit packaging phase for the latest source only if needed
 - the remaining high-value work in Direction 05 and Direction 04 is now evidence closure, not more tool-building:
   - `05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md`
   - `04_2_Interaction_Audit_Real_Operator_Closure_TODOs.md`
@@ -523,7 +524,7 @@ As of 2026-05-14:
 
 1. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why first now:
-   `0.1.0-rc.19` is now packaged as the current follow-up candidate, current source is ahead by `Phase 451` UI micro-polish, the mixed screenshot archive is complete, the trimmed transparent icon refresh and Claude Team usage-page path are already in the submitted RC13 boundary, and the next work is only review-feedback, deliberate resubmission follow-up, or explicit latest-source packaging after the human Chrome Web Store flow returns.
+   `0.1.0-rc.19` is now packaged as the current follow-up candidate, current source is ahead by `Phase 452` UI micro-polish, the mixed screenshot archive is complete, the trimmed transparent icon refresh and Claude Team usage-page path are already in the submitted RC13 boundary, and the next work is only review-feedback, deliberate resubmission follow-up, or explicit latest-source packaging after the human Chrome Web Store flow returns.
 
 2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second now:

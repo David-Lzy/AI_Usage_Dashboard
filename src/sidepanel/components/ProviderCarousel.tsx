@@ -22,6 +22,28 @@ type ProviderCarouselProps = {
 };
 
 export const PROVIDER_CAROUSEL_DRAG_THRESHOLD_PX = 44;
+export const PROVIDER_CAROUSEL_INTERACTIVE_SELECTOR = [
+  "a[href]",
+  "button",
+  "input",
+  "label",
+  "select",
+  "summary",
+  "textarea",
+  "[contenteditable='true']",
+  "[role='button']",
+  "[role='checkbox']",
+  "[role='link']",
+  "[role='menuitem']",
+  "[role='option']",
+  "[role='switch']",
+  "[data-provider-carousel-interactive]",
+].join(",");
+
+type ClosestCapableEventTarget = EventTarget & {
+  closest?: (selector: string) => Element | null;
+  parentElement?: ClosestCapableEventTarget | null;
+};
 
 export function clampProviderCarouselIndex(
   index: number,
@@ -107,6 +129,26 @@ export function getProviderCarouselSlidePosition(
   return "hidden";
 }
 
+export function isProviderCarouselInteractiveTarget(
+  target: EventTarget | null,
+): boolean {
+  const closestTarget =
+    typeof (target as ClosestCapableEventTarget | null)?.closest === "function"
+      ? (target as ClosestCapableEventTarget)
+      : (target as ClosestCapableEventTarget | null)?.parentElement;
+
+  if (
+    !closestTarget ||
+    typeof closestTarget.closest !== "function"
+  ) {
+    return false;
+  }
+
+  return Boolean(
+    closestTarget.closest(PROVIDER_CAROUSEL_INTERACTIVE_SELECTOR),
+  );
+}
+
 export function ProviderCarousel({
   ariaLabel,
   emptyState = null,
@@ -155,7 +197,10 @@ export function ProviderCarousel({
   }
 
   function handlePointerDown(event: PointerEvent<HTMLDivElement>) {
-    if (!hasMultipleItems) {
+    if (
+      !hasMultipleItems ||
+      isProviderCarouselInteractiveTarget(event.target)
+    ) {
       return;
     }
 

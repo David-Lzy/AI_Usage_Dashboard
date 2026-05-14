@@ -1,13 +1,15 @@
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import {
+  PROVIDER_CAROUSEL_INTERACTIVE_SELECTOR,
   ProviderCarousel,
   clampProviderCarouselIndex,
   getNextProviderCarouselIndex,
   getProviderCarouselDragMove,
   getProviderCarouselKeyboardMove,
   getProviderCarouselSlidePosition,
+  isProviderCarouselInteractiveTarget,
 } from "./ProviderCarousel";
 
 const sampleItems = [
@@ -98,6 +100,28 @@ describe("ProviderCarousel", () => {
     expect(getProviderCarouselDragMove(44, "ltr")).toBe("previous");
     expect(getProviderCarouselDragMove(-44, "rtl")).toBe("previous");
     expect(getProviderCarouselDragMove(44, "rtl")).toBe("next");
+  });
+
+  it("does not start drag gestures from interactive card controls", () => {
+    const closest = vi.fn((selector: string) =>
+      selector === PROVIDER_CAROUSEL_INTERACTIVE_SELECTOR ? {} : null,
+    );
+
+    expect(
+      isProviderCarouselInteractiveTarget({
+        closest,
+      } as unknown as EventTarget),
+    ).toBe(true);
+    expect(closest).toHaveBeenCalledWith(
+      PROVIDER_CAROUSEL_INTERACTIVE_SELECTOR,
+    );
+    expect(
+      isProviderCarouselInteractiveTarget({
+        parentElement: { closest },
+      } as unknown as EventTarget),
+    ).toBe(true);
+    expect(isProviderCarouselInteractiveTarget(null)).toBe(false);
+    expect(isProviderCarouselInteractiveTarget({} as EventTarget)).toBe(false);
   });
 
   it("marks only the active and neighboring slides as visible layers", () => {

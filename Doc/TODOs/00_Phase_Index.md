@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [451_Phase_Soft_Ring_Conic_Rendering_Closeout.md](./Archive/by-phase/400-499/451_Phase_Soft_Ring_Conic_Rendering_Closeout.md)
+- latest completed slice: [452_Phase_Settings_Carousel_Control_Click_Recovery.md](./Archive/by-phase/400-499/452_Phase_Settings_Carousel_Control_Click_Recovery.md)
 - queued phase files:
   - none
 
@@ -846,6 +846,7 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 449` closeout fixed reported UI micro-polish regressions for remaining-color-band alignment, Settings display-level helper alignment, soft-ring percentage rendering, and provider-carousel motion while preserving storage, provider data, localization, package, and submitted-review boundaries
 - the 2026-05-14 `Phase 450` closeout fixed select open-ring clipping, hardened soft/gauge SVG ring dash rendering with actual circumference values, and compacted remaining-color-band controls while preserving storage, provider data, localization, package, and submitted-review boundaries
 - the 2026-05-14 `Phase 451` closeout changed the soft ring to CSS conic-gradient rendering with `closest-side` inner cutout geometry so non-100 values show slim visible neutral gaps, while keeping gauge rings on the SVG arc path and preserving storage, provider data, localization, package, and submitted-review boundaries
+- the 2026-05-14 `Phase 452` closeout restored Settings provider-carousel card controls by preventing carousel drag pointer capture from starting on interactive descendants, while preserving provider data, source-page logic, localization, package, and submitted-review boundaries
 
 ## Delivery Standard For Each Phase
 
