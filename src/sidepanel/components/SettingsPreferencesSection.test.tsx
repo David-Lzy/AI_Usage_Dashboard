@@ -23,8 +23,6 @@ describe("SettingsPreferencesSection", () => {
         userLevelVisibility={getSettingsUserLevelVisibility("debug")}
         onSyncIntervalChange={() => {}}
         onWarningThresholdChange={() => {}}
-        onLocalePreferenceChange={() => {}}
-        onThemeModeChange={() => {}}
         onThemePresetChange={() => {}}
         onPopupProgressStyleChange={() => {}}
         onSidebarProgressStyleChange={() => {}}
@@ -44,8 +42,8 @@ describe("SettingsPreferencesSection", () => {
     expect(html).toContain(`id="${SETTINGS_SECTION_IDS.appearance}"`);
     expect(html).toContain('data-settings-custom-number-field="sync-interval"');
     expect(html).toContain('data-settings-custom-number-field="warning-threshold"');
-    expect(html).toContain('data-settings-material-select="locale-preference"');
-    expect(html).toContain('data-settings-material-select="theme-mode"');
+    expect(html).not.toContain('data-settings-material-select="locale-preference"');
+    expect(html).not.toContain('data-settings-material-select="theme-mode"');
     expect(html).toContain('data-color-choice-dropdown="accent-color"');
     expect(html).toContain('data-settings-material-select="action-badge-selection"');
     expect(html).toContain('data-provider-order-preferences=""');
@@ -64,9 +62,6 @@ describe("SettingsPreferencesSection", () => {
     expect(html).toContain(">Provider display controls<");
     expect(html).toContain('class="popup-appearance-preview-card"');
     expect(html).not.toContain('class="theme-customization-form"');
-    expect(
-      html.indexOf('data-settings-material-select="locale-preference"'),
-    ).toBeLessThan(html.indexOf(">More UI controls<"));
     expect(
       html.indexOf('data-progress-appearance-preferences=""'),
     ).toBeLessThan(html.indexOf('class="popup-appearance-preview-card"'));

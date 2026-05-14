@@ -1,6 +1,6 @@
 # Phase 460 - Quick Setup All Providers Carousel
 
-Status: queued
+Status: active
 
 ## Goal
 

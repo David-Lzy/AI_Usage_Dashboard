@@ -16,12 +16,21 @@
 
 .settings-overview__controls {
   display: grid;
-  grid-template-columns: minmax(220px, min(320px, 38%)) minmax(260px, 1fr);
+  grid-template-columns: minmax(420px, 1.6fr) repeat(2, minmax(180px, 1fr));
   align-items: start;
   gap: var(--app-space-3);
 }
 
-.settings-overview__controls > .material-select {
+.settings-overview__level-control {
+  display: grid;
+  grid-template-columns: minmax(220px, min(320px, 44%)) minmax(240px, 1fr);
+  align-items: start;
+  gap: var(--app-space-3);
+  min-width: 0;
+}
+
+.settings-overview__controls > .material-select,
+.settings-overview__level-control > .material-select {
   min-width: 0;
 }
 
@@ -310,6 +319,10 @@
   }
 
   .settings-overview__controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .settings-overview__level-control {
     grid-template-columns: minmax(0, min(320px, 100%));
   }
 

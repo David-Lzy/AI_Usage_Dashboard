@@ -37,6 +37,7 @@ import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
 import { getSettingsUserLevelVisibility } from "../settings-user-level-visibility";
 import { Toast } from "../components/Toast";
 import { TopBar } from "../components/TopBar";
+import { buildSettingsPreferenceOptions } from "../settings-preference-options";
 import { buildSettingsPageViewModels } from "../settings-page-view-models";
 import {
   settingsRouteFocusRequiresAdvanced,
@@ -208,6 +209,12 @@ export function SettingsPage({
     typeof window !== "undefined" ? window : undefined,
   );
   const settingsCopy = buildSettingsLocalizedCopy(i18n);
+  const { localeOptions, themeModeOptions } = buildSettingsPreferenceOptions({
+    i18n,
+    providers,
+    settings,
+    snapshots,
+  });
   const userLevelVisibility = getSettingsUserLevelVisibility(settings.userLevel);
   const routeFocusRequiresAdvanced = settingsRouteFocusRequiresAdvanced(routeFocus);
   const showAdvancedContainer =
@@ -308,33 +315,49 @@ export function SettingsPage({
         title={settingsCopy.layout.overview.title}
       >
         <div className="settings-overview__controls">
+          <div className="settings-overview__level-control">
+            <MaterialSelect
+              label={settingsCopy.layout.userLevel.label}
+              value={settings.userLevel}
+              fieldIdPrefix="settings-user-level"
+              options={[
+                {
+                  value: "basic",
+                  label: settingsCopy.layout.userLevel.options.basic,
+                },
+                {
+                  value: "advanced",
+                  label: settingsCopy.layout.userLevel.options.advanced,
+                },
+                {
+                  value: "developer",
+                  label: settingsCopy.layout.userLevel.options.developer,
+                },
+                {
+                  value: "debug",
+                  label: settingsCopy.layout.userLevel.options.debug,
+                },
+              ]}
+              onChange={onUserLevelChange}
+            />
+            <p className="supporting-copy settings-overview__user-level-help">
+              {settingsCopy.layout.userLevel.helpText}
+            </p>
+          </div>
           <MaterialSelect
-            label={settingsCopy.layout.userLevel.label}
-            value={settings.userLevel}
-            fieldIdPrefix="settings-user-level"
-            options={[
-              {
-                value: "basic",
-                label: settingsCopy.layout.userLevel.options.basic,
-              },
-              {
-                value: "advanced",
-                label: settingsCopy.layout.userLevel.options.advanced,
-              },
-              {
-                value: "developer",
-                label: settingsCopy.layout.userLevel.options.developer,
-              },
-              {
-                value: "debug",
-                label: settingsCopy.layout.userLevel.options.debug,
-              },
-            ]}
-            onChange={onUserLevelChange}
+            label={i18n.t("settings.preferences.locale_label")}
+            value={settings.locale}
+            fieldIdPrefix="locale-preference"
+            options={localeOptions}
+            onChange={onLocalePreferenceChange}
           />
-          <p className="supporting-copy settings-overview__user-level-help">
-            {settingsCopy.layout.userLevel.helpText}
-          </p>
+          <MaterialSelect
+            label={i18n.t("settings.preferences.theme_mode_label")}
+            value={settings.themeMode}
+            fieldIdPrefix="theme-mode"
+            options={themeModeOptions}
+            onChange={onThemeModeChange}
+          />
         </div>
       </SettingsOverviewSection>
 
@@ -365,8 +388,6 @@ export function SettingsPage({
         userLevelVisibility={userLevelVisibility}
         onSyncIntervalChange={onSyncIntervalChange}
         onWarningThresholdChange={onWarningThresholdChange}
-        onLocalePreferenceChange={onLocalePreferenceChange}
-        onThemeModeChange={onThemeModeChange}
         onThemePresetChange={onThemePresetChange}
         onPopupProgressStyleChange={onPopupProgressStyleChange}
         onSidebarProgressStyleChange={onSidebarProgressStyleChange}

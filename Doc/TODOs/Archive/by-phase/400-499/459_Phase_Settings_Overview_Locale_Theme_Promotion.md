@@ -1,6 +1,6 @@
 # Phase 459 - Settings Overview Locale Theme Promotion
 
-Status: active
+Status: completed on 2026-05-15
 
 ## Goal
 
@@ -27,11 +27,27 @@ Promote application language and theme mode into the Settings overview so the mo
 
 ## Planned Verification
 
-- `npm run test -- src/sidepanel/routes/SettingsPage.test.tsx src/sidepanel/components/SettingsOverviewSection.test.tsx src/sidepanel/components/SettingsPreferencesSection.test.tsx --run`
+- `npm run test -- src/sidepanel/routes/SettingsPage.test.tsx src/sidepanel/components/SettingsSections.test.tsx src/sidepanel/components/SettingsPreferencesSection.test.tsx --run`
 - `npm run i18n:check`
 - `npm run typecheck`
 - `npm run docs:check`
+- `npm run build`
 - `git diff --check`
+- `npm run docs:check`
+- `git diff --check`
+
+## Completion Notes
+
+- Settings overview now renders display level, application language, and theme mode together.
+- Appearance & Sync no longer renders a second language/theme mode selector, so those settings have one visible Settings control location.
+- The overview controls reuse the existing Material select, locale option registry, theme mode option labels, and settings update handlers.
+- Locale normalization, runtime `lang`/`dir`, theme mode storage, provider settings, credentials, permissions, and source preferences are unchanged.
+
+## Verification
+
+- `npm run test -- src/sidepanel/routes/SettingsPage.test.tsx src/sidepanel/components/SettingsSections.test.tsx src/sidepanel/components/SettingsPreferencesSection.test.tsx --run`
+- `npm run i18n:check`
+- `npm run typecheck`
 
 ## Follow-Up
 

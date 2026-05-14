@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 import type {
   ActionBadgeSelection,
-  AppLocalePreference,
   AppSettings,
   PopupCornerStyle,
   PopupShadowStyle,
@@ -13,7 +12,6 @@ import type {
   ProviderOrderBySurface,
   ProviderSetting,
   ProviderSnapshot,
-  ThemeMode,
   ThemePreset,
 } from "../../providers/types";
 import type { RuntimeI18n } from "../../shared/i18n";
@@ -48,7 +46,6 @@ type SettingsPreferencesSectionProps = {
   onFullPageProgressStyleChange: (
     progressStyle: ProgressDisplayStyle,
   ) => void;
-  onLocalePreferenceChange: (locale: AppLocalePreference) => void;
   onPopupCornerStyleChange: (cornerStyle: PopupCornerStyle) => void;
   onPopupProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onPopupShadowStyleChange: (shadowStyle: PopupShadowStyle) => void;
@@ -66,7 +63,6 @@ type SettingsPreferencesSectionProps = {
   ) => void;
   onSyncIntervalChange: (minutes: number) => void;
   onThemeCustomSeedChange: (themeCustomSeedHex: string) => void;
-  onThemeModeChange: (themeMode: ThemeMode) => void;
   onThemePresetChange: (themePreset: ThemePreset) => void;
   onWarningThresholdChange: (percent: number) => void;
 };
@@ -81,7 +77,6 @@ export function SettingsPreferencesSection({
   userLevelVisibility: _userLevelVisibility,
   onActionBadgeSelectionChange,
   onFullPageProgressStyleChange,
-  onLocalePreferenceChange,
   onPopupCornerStyleChange,
   onPopupProgressStyleChange,
   onPopupShadowStyleChange,
@@ -93,13 +88,11 @@ export function SettingsPreferencesSection({
   onSidebarProgressStyleChange,
   onSyncIntervalChange,
   onThemeCustomSeedChange,
-  onThemeModeChange,
   onThemePresetChange,
   onWarningThresholdChange,
 }: SettingsPreferencesSectionProps) {
   const {
     actionBadgeOptions,
-    localeOptions,
     normalizedActionBadgeSelection,
     popupCornerStyleOptions,
     popupShadowStyleOptions,
@@ -109,7 +102,6 @@ export function SettingsPreferencesSection({
     syncIntervalMenuButtonLabel,
     syncIntervalOptions,
     syncIntervalUnitLabel,
-    themeModeOptions,
     themePresetOptions,
     warningThresholdErrorText,
     warningThresholdMenuButtonLabel,
@@ -157,22 +149,6 @@ export function SettingsPreferencesSection({
           fieldIdPrefix="warning-threshold"
           options={warningThresholdOptions}
           onChange={onWarningThresholdChange}
-        />
-
-        <MaterialSelect
-          label={i18n.t("settings.preferences.locale_label")}
-          value={settings.locale}
-          fieldIdPrefix="locale-preference"
-          options={localeOptions}
-          onChange={onLocalePreferenceChange}
-        />
-
-        <MaterialSelect
-          label={i18n.t("settings.preferences.theme_mode_label")}
-          value={settings.themeMode}
-          fieldIdPrefix="theme-mode"
-          options={themeModeOptions}
-          onChange={onThemeModeChange}
         />
 
         <AccentColorSelect
