@@ -18,10 +18,11 @@ Status note:
 
 - records the packaged follow-up candidate prepared after `Phase 433`
 - this is not a claim that RC17 has already been submitted to Chrome Web Store
+- superseded as the current packaged follow-up reference by [2026-05-14_RC18_UI_Polish_Follow_Up_Release_Candidate.md](./2026-05-14_RC18_UI_Polish_Follow_Up_Release_Candidate.md)
 
 ## Milestone Summary
 
-`0.1.0-rc.17` is the current packaged follow-up candidate.
+`0.1.0-rc.17` was the packaged follow-up candidate prepared after `Phase 433`. The current packaged follow-up reference is RC18.
 
 The follow-up package is:
 

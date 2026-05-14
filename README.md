@@ -6,12 +6,11 @@ Documentation entry point: [Doc/README.md](./Doc/README.md).
 
 Current packaged release state:
 
-- package version: `0.1.0-rc.17`
-- Chrome manifest version: `0.1.0.17`
-- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.17.zip`
-- source status: `rc.17` package bytes are aligned through `Phase 433`, including the `rc.16` localization/interaction-audit display boundary plus post-`rc.16` display-preference storage architecture, per-surface provider ordering, Settings provider-order controls, shared progress-item inventory, Settings quota-item visibility/order controls, per-surface progress item rendering, new soft/gauge progress ring styles, localized Settings progress-style preview/options, Settings provider-section carousel migration, and representative UI QA/doc closeout. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
-- post-`rc.17` source status: UI polish is verified through `Phase 439`; it is not packaged until active `Phase 440` creates the next follow-up candidate.
-- packaged follow-up milestone: [2026-05-14 RC17 Display Preference Follow-Up Release Candidate](./Doc/Milestones/2026-05-14_RC17_Display_Preference_Follow_Up_Release_Candidate.md)
+- package version: `0.1.0-rc.18`
+- Chrome manifest version: `0.1.0.18`
+- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.18.zip`
+- source status: `rc.18` package bytes are aligned through `Phase 440`, including the previous `rc.17` display-preference and Settings-carousel boundary plus post-`rc.17` UI polish for carousel depth layout, circular progress ring labels and geometry, disclosure chevron animation, stale Chrome extension error-log cleanup, Settings quota-item 14-locale copy, and representative UI QA/doc closeout. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
+- packaged follow-up milestone: [2026-05-14 RC18 UI Polish Follow-Up Release Candidate](./Doc/Milestones/2026-05-14_RC18_UI_Polish_Follow_Up_Release_Candidate.md)
 - submitted review milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
 ## Current RC Matrix
@@ -46,9 +45,9 @@ Security posture for this track:
 
 Next execution queue:
 
-1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary, but use `0.1.0-rc.17` as the ready follow-up package if review feedback or an explicit resubmission decision asks for a newer build
-2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC17 follow-up milestone](./Doc/Milestones/2026-05-14_RC17_Display_Preference_Follow_Up_Release_Candidate.md) as the current packaged-source reference
-3. execute active `Phase 440` RC18 packaging from the verified post-RC17 UI polish source; do not mutate the submitted RC13 review boundary
+1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary, but use `0.1.0-rc.18` as the ready follow-up package if review feedback or an explicit resubmission decision asks for a newer build
+2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC18 follow-up milestone](./Doc/Milestones/2026-05-14_RC18_UI_Polish_Follow_Up_Release_Candidate.md) as the current packaged-source reference
+3. no numbered phase is currently queued after `Phase 440`; open a new phase only for explicit resubmission, provider evidence, release feedback, or a scoped maintenance/product task
 4. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 5. keep real operator evidence closed and archived; do not open another interaction-audit or theme-recovery operator evidence phase unless a new surface or theme regression creates a fresh review need
 6. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
@@ -701,14 +700,15 @@ npm run release
 
 Output artifact:
 
-- `release/ai-usage-dashboard-0.1.0-rc.17.zip`
+- `release/ai-usage-dashboard-0.1.0-rc.18.zip`
 
 Packaging note:
 
-- `rc.17` packages the previous `rc.16` follow-up work plus post-`rc.16` source changes through `Phase 433`, including provider display preferences, progress item visibility/order controls, new progress ring variants, Settings provider-section carousels, and Phase 432 UI QA/doc closeout.
+- `rc.18` packages the previous `rc.17` follow-up work plus post-`rc.17` source changes through `Phase 440`, including carousel depth layout polish, circular progress ring label/geometry polish, disclosure chevron animation, Chrome extension error-log cleanup, Settings quota-item 14-locale copy, and Phase 439 UI QA/doc closeout.
 - `rc.15` remains a historical packaged follow-up candidate for the post-`rc.14` maintenance boundary through `Phase 364`.
 - `rc.16` remains a historical packaged follow-up candidate for the post-localization and interaction-audit display/source boundary through `Phase 421`.
-- SHA256 for `rc.17`: `effa7fd1cb61a5573f7c882275042b8245256d52507747bf507faa982d04e9b7`.
+- `rc.17` remains a historical packaged follow-up candidate for the display-preference and Settings-carousel boundary through `Phase 433`.
+- SHA256 for `rc.18`: `e291870988264b07d23cb8cb3c3bd3bf6a1207fcaed7b93fa5e13f829386dfdb`.
 - the `RC13` milestone remains the submitted Chrome Web Store review boundary until a deliberate resubmission replaces it.
 
 The packaging script checks that:

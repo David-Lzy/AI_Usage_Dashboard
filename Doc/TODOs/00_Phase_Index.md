@@ -34,10 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [440_Phase_RC18_UI_Polish_Follow_Up_Packaging.md](./440_Phase_RC18_UI_Polish_Follow_Up_Packaging.md)
-- latest completed slice: [439_Phase_UI_Polish_RDP_QA_And_Doc_Closeout.md](./Archive/by-phase/400-499/439_Phase_UI_Polish_RDP_QA_And_Doc_Closeout.md)
-- queued phase files:
-  - no numbered phase is queued beyond active `Phase 440`
+- active phase file: none
+- latest completed slice: [440_Phase_RC18_UI_Polish_Follow_Up_Packaging.md](./Archive/by-phase/400-499/440_Phase_RC18_UI_Polish_Follow_Up_Packaging.md)
+- queued phase files: none
 
 Completed phases should be moved to:
 
@@ -834,6 +833,7 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 437` closeout triaged the Chrome Extensions `Errors` badge to stale Vite dev-server CORS records from an older `src/sidepanel/index.html?surface=full-page#settings` run, verified current `dist/` has no Vite dev-client references, rebuilt/reloaded the unpacked extension, and cleared the stale Chrome error log so the extension card no longer shows `Errors`
 - the 2026-05-14 `Phase 438` closeout moved Settings quota/progress item controls into 14-locale localized copy, covering headings, helper text, empty states, surface labels, count chips, kind/availability labels, shown/hidden labels, aria labels, move buttons, and all-hidden fallback text while preserving provider/progress ids, raw evidence, diagnostics, and storage behavior
 - the 2026-05-14 `Phase 439` closeout recorded representative Playwright QA for popup, sidebar dashboard, full-page dashboard, German Settings quota controls, and Arabic RTL Settings quota controls, verified numeric-only ring centers and carousel depth layout, and rechecked the RDP Chrome unpacked extension record with zero install, manifest, or runtime errors
+- the 2026-05-14 `Phase 440` closeout packaged the verified post-RC17 UI polish source as `0.1.0-rc.18`, generated `release/ai-usage-dashboard-0.1.0-rc.18.zip`, recorded SHA256 `e291870988264b07d23cb8cb3c3bd3bf6a1207fcaed7b93fa5e13f829386dfdb`, and preserved RC13 as the submitted Chrome Web Store review boundary
 
 ## Delivery Standard For Each Phase
 

@@ -1,6 +1,6 @@
 # Phase 440 - RC18 UI Polish Follow-Up Packaging
 
-Status: active
+Status: completed on 2026-05-14
 
 ## Goal
 
@@ -40,3 +40,19 @@ Package the completed post-RC17 UI polish queue as a new follow-up release candi
 ## Follow-Up
 
 - If a human decides to replace the pending RC13 Chrome Web Store submission, create a separate submitted-store milestone from the new package boundary.
+
+## Completion Notes
+
+- Bumped package and Chrome manifest versions to `0.1.0-rc.18` / `0.1.0.18`.
+- Ran the full release gate from the post-RC17 UI polish source.
+- Generated `release/ai-usage-dashboard-0.1.0-rc.18.zip`.
+- Recorded SHA256 `e291870988264b07d23cb8cb3c3bd3bf6a1207fcaed7b93fa5e13f829386dfdb`.
+- Added the RC18 follow-up milestone while preserving RC13 as the submitted Chrome Web Store review boundary.
+
+## Verification
+
+- `npm run release:check`
+- `npm run release:package`
+- `sha256sum release/ai-usage-dashboard-0.1.0-rc.18.zip`
+- `npm run docs:check`
+- `git diff --check`
