@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 
 import type { ProgressDisplayStyle } from "../../providers/types";
+import { UsageProgressRing } from "./UsageProgressRing";
 
 type UsageProgressProps = {
   used: number | null;
@@ -14,6 +15,16 @@ type UsageProgressProps = {
   valueText?: string;
   detail?: string | null;
 };
+
+function isCircularProgressStyle(
+  displayStyle: ProgressDisplayStyle,
+): displayStyle is "circle" | "circle-soft" | "circle-gauge" {
+  return (
+    displayStyle === "circle" ||
+    displayStyle === "circle-soft" ||
+    displayStyle === "circle-gauge"
+  );
+}
 
 export function UsageProgress({
   used,
@@ -41,7 +52,7 @@ export function UsageProgress({
   const progressValueLabel = isIndeterminate
     ? "Unknown"
     : (valueLabel ??
-      (displayStyle === "circle"
+      (isCircularProgressStyle(displayStyle)
         ? `${roundedPercent}%`
         : valueKind === "remaining"
           ? `${roundedPercent}% remaining`
@@ -79,6 +90,22 @@ export function UsageProgress({
         <p className="usage-progress__ring-label">{label}</p>
         {detail ? <p className="supporting-copy usage-progress__detail">{detail}</p> : null}
       </div>
+    );
+  }
+
+  if (displayStyle === "circle-soft" || displayStyle === "circle-gauge") {
+    return (
+      <UsageProgressRing
+        detail={detail}
+        isIndeterminate={isIndeterminate}
+        label={label}
+        roundedPercent={roundedPercent}
+        tone={tone}
+        valueKind={valueKind}
+        valueLabel={progressValueLabel}
+        valueText={progressValueText}
+        variant={displayStyle}
+      />
     );
   }
 

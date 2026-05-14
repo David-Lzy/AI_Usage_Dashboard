@@ -151,20 +151,27 @@
 }
 
 .provider-card__progress-surface
-  .usage-window-progress-list__item {
+  .usage-window-progress-list__item,
+.provider-card__progress-surface
+  .provider-progress-item-list__item {
   padding: var(--app-space-2) 0;
   border: 0;
   background: transparent;
 }
 
 .provider-card__progress-surface
-  .usage-window-progress-list--line {
+  .usage-window-progress-list--line,
+.provider-card__progress-surface
+  .provider-progress-item-list--line {
   gap: 0;
 }
 
 .provider-card__progress-surface
   .usage-window-progress-list--line
-  .usage-window-progress-list__item {
+  .usage-window-progress-list__item,
+.provider-card__progress-surface
+  .provider-progress-item-list--line
+  .provider-progress-item-list__item {
   position: relative;
   padding-block: var(--app-space-3);
   border-radius: 0;
@@ -172,19 +179,34 @@
 
 .provider-card__progress-surface
   .usage-window-progress-list--line
-  .usage-window-progress-list__item:first-child {
+  .usage-window-progress-list__item:first-child,
+.provider-card__progress-surface
+  .provider-progress-item-list--line
+  .provider-progress-item-list__item:first-child {
   padding-top: 0;
 }
 
 .provider-card__progress-surface
   .usage-window-progress-list--line
-  .usage-window-progress-list__item:last-child {
+  .usage-window-progress-list__item:last-child,
+.provider-card__progress-surface
+  .provider-progress-item-list--line
+  .provider-progress-item-list__item:last-child {
   padding-bottom: 0;
 }
 
 .provider-card__progress-surface
   .usage-window-progress-list--circle
-  .usage-window-progress-list__item {
+  .usage-window-progress-list__item,
+.provider-card__progress-surface
+  .provider-progress-item-list--circle
+  .provider-progress-item-list__item,
+.provider-card__progress-surface
+  .provider-progress-item-list--circle-soft
+  .provider-progress-item-list__item,
+.provider-card__progress-surface
+  .provider-progress-item-list--circle-gauge
+  .provider-progress-item-list__item {
   min-height: 148px;
   padding: var(--app-space-2);
   border: 1px solid var(--app-supporting-surface-border);
@@ -199,7 +221,11 @@
 .provider-card__progress-surface
   .usage-window-progress-list--line
   .usage-window-progress-list__item
-  + .usage-window-progress-list__item::before {
+  + .usage-window-progress-list__item::before,
+.provider-card__progress-surface
+  .provider-progress-item-list--line
+  .provider-progress-item-list__item
+  + .provider-progress-item-list__item::before {
   position: absolute;
   inset-block-start: 0;
   inset-inline: 0;
@@ -211,7 +237,19 @@
 .provider-card__progress-surface
   .usage-window-progress-list--circle
   .usage-window-progress-list__item
-  + .usage-window-progress-list__item {
+  + .usage-window-progress-list__item,
+.provider-card__progress-surface
+  .provider-progress-item-list--circle
+  .provider-progress-item-list__item
+  + .provider-progress-item-list__item,
+.provider-card__progress-surface
+  .provider-progress-item-list--circle-soft
+  .provider-progress-item-list__item
+  + .provider-progress-item-list__item,
+.provider-card__progress-surface
+  .provider-progress-item-list--circle-gauge
+  .provider-progress-item-list__item
+  + .provider-progress-item-list__item {
   padding-top: var(--app-space-2);
   border-top: 1px solid var(--app-supporting-surface-border);
 }

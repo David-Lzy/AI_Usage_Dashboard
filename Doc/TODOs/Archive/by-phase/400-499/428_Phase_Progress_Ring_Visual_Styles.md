@@ -1,6 +1,6 @@
 # Phase 428 - Progress Ring Visual Styles
 
-Status: queued
+Status: completed
 
 ## Goal
 
@@ -32,6 +32,18 @@ Add polished circular progress styles inspired by the user-provided references w
 - `npm run test -- src/sidepanel/components/UsageProgress.test.tsx src/popup/PopupProviderProgress.test.tsx`
 - `npm run typecheck`
 - `git diff --check`
+
+## Completion Summary
+
+- Extended `ProgressDisplayStyle` to `line`, `circle`, `circle-soft`, and `circle-gauge`.
+- Kept `circle` as the existing classic conic ring and added `UsageProgressRing` for SVG-based soft and gauge rings.
+- Changed fresh popup defaults to `circle-soft` while keeping stored `circle` valid through normalization.
+- Added token-driven rounded-cap ring CSS, compact popup sizing for the new ring variants, and reduced-motion-safe transition handling without importing image assets or third-party dependencies.
+
+## Verification
+
+- `npm run test -- src/shared/progress-display.test.ts src/shared/storage.test.ts src/sidepanel/components/UsageProgress.test.tsx src/popup/PopupProviderProgress.test.tsx`
+- `npm run typecheck`
 
 ## Follow-Up
 

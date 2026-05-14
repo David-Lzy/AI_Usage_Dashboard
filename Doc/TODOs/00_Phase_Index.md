@@ -34,9 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [428_Phase_Progress_Ring_Visual_Styles.md](./428_Phase_Progress_Ring_Visual_Styles.md)
-- latest completed slice: [427_Phase_Progress_Item_Rendering_Across_Surfaces.md](./Archive/by-phase/400-499/427_Phase_Progress_Item_Rendering_Across_Surfaces.md)
-- queued phase files: [429_Phase_Progress_Appearance_Settings_Preview.md](./429_Phase_Progress_Appearance_Settings_Preview.md), [430_Phase_Settings_Provider_Carousel_Foundation.md](./430_Phase_Settings_Provider_Carousel_Foundation.md), [431_Phase_Settings_Carousel_All_Provider_Sections.md](./431_Phase_Settings_Carousel_All_Provider_Sections.md), [432_Phase_UI_QA_And_Doc_Closeout.md](./432_Phase_UI_QA_And_Doc_Closeout.md)
+- active phase file: [429_Phase_Progress_Appearance_Settings_Preview.md](./429_Phase_Progress_Appearance_Settings_Preview.md)
+- latest completed slice: [428_Phase_Progress_Ring_Visual_Styles.md](./Archive/by-phase/400-499/428_Phase_Progress_Ring_Visual_Styles.md)
+- queued phase files: [430_Phase_Settings_Provider_Carousel_Foundation.md](./430_Phase_Settings_Provider_Carousel_Foundation.md), [431_Phase_Settings_Carousel_All_Provider_Sections.md](./431_Phase_Settings_Carousel_All_Provider_Sections.md), [432_Phase_UI_QA_And_Doc_Closeout.md](./432_Phase_UI_QA_And_Doc_Closeout.md)
 
 Completed phases should be moved to:
 
@@ -821,6 +821,7 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 425` closeout added a shared provider progress-item inventory model for primary quota, usage window, and usage balance items, wired storage normalization to discovered known item ids, and preserved usage facts, raw evidence, diagnostic bodies, archive/export payloads, and visible rendering behavior
 - the 2026-05-14 `Phase 426` closeout added Settings quota/progress item visibility and order controls for each provider across popup, sidebar, and full-page tab surfaces, with shared preference helpers for hide/show and reorder semantics while preserving current runtime rendering until `Phase 427`
 - the 2026-05-14 `Phase 427` closeout made popup, sidebar dashboard cards, full-page dashboard cards, and provider detail consume the shared progress item selection/rendering path with per-surface visibility/order preferences while keeping usage facts supplemental and preserving provider snapshots, adapter output, raw evidence, export payloads, source truth labels, and popup featured-provider count
+- the 2026-05-14 `Phase 428` closeout added `circle-soft` and `circle-gauge` SVG ring variants, kept `circle` as the classic ring, made fresh popup installs default to `circle-soft`, and preserved progress accessibility semantics, provider values, thresholds, RTL numeric direction, and third-party dependency boundaries
 
 ## Delivery Standard For Each Phase
 

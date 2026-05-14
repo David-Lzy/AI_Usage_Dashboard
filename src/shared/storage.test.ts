@@ -122,7 +122,7 @@ describe("storage normalization", () => {
     expect(state?.settings.themeMode).toBe("system");
     expect(state?.settings.themePreset).toBe("default");
     expect(state?.settings.themeCustomSeedHex).toBeNull();
-    expect(state?.settings.popupProgressStyle).toBe("circle");
+    expect(state?.settings.popupProgressStyle).toBe("circle-soft");
     expect(state?.settings.sidebarProgressStyle).toBe("line");
     expect(state?.settings.fullPageProgressStyle).toBe("line");
     expect(state?.settings.popupSizePreset).toBe("balanced");

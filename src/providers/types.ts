@@ -133,7 +133,11 @@ export type AppLocalePreference =
   | "hi"
   | "id";
 export type SettingsUserLevel = "basic" | "advanced" | "developer" | "debug";
-export type ProgressDisplayStyle = "line" | "circle";
+export type ProgressDisplayStyle =
+  | "line"
+  | "circle"
+  | "circle-soft"
+  | "circle-gauge";
 export type PopupSizePreset = "compact" | "balanced" | "wide";
 export type PopupCornerStyle = "square" | "soft" | "rounded";
 export type PopupShadowStyle = "none" | "soft" | "elevated";

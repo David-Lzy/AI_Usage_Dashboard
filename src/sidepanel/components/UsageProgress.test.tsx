@@ -91,4 +91,67 @@ describe("UsageProgress", () => {
     expect(html).toContain("usage-progress__detail");
     expect(html).toContain("resets 2026-04-29 04:00");
   });
+
+  it("renders soft SVG ring progress semantics when requested", () => {
+    const html = renderToStaticMarkup(
+      <UsageProgress
+        used={65}
+        remaining={35}
+        total={100}
+        tone="warning"
+        label="Weekly usage window"
+        displayStyle="circle-soft"
+        valueKind="remaining"
+        valueText="Weekly usage window: 35% remaining"
+      />,
+    );
+
+    expect(html).toContain("usage-progress--circle-soft");
+    expect(html).toContain("usage-progress-ring--circle-soft");
+    expect(html).toContain("usage-progress-ring--warning");
+    expect(html).toContain('aria-valuenow="35"');
+    expect(html).toContain('aria-valuetext="Weekly usage window: 35% remaining"');
+    expect(html).toContain("--usage-progress-ring-arc:100");
+    expect(html).toContain("--usage-progress-ring-offset:65");
+    expect(html).toContain("<svg");
+    expect(html).not.toContain("usage-progress__track");
+  });
+
+  it("renders gauge SVG ring progress semantics when requested", () => {
+    const html = renderToStaticMarkup(
+      <UsageProgress
+        used={49}
+        remaining={51}
+        total={100}
+        tone="neutral"
+        label="Weekly usage window"
+        displayStyle="circle-gauge"
+        valueKind="remaining"
+        valueText="Weekly usage window: 51% remaining"
+      />,
+    );
+
+    expect(html).toContain("usage-progress--circle-gauge");
+    expect(html).toContain("usage-progress-ring--circle-gauge");
+    expect(html).toContain('aria-valuenow="51"');
+    expect(html).toContain("--usage-progress-ring-arc:76");
+    expect(html).toContain("--usage-progress-ring-offset:37.24");
+  });
+
+  it("keeps soft SVG ring indeterminate semantics accessible", () => {
+    const html = renderToStaticMarkup(
+      <UsageProgress
+        used={null}
+        total={100}
+        tone="warning"
+        label="Weekly usage window"
+        displayStyle="circle-soft"
+      />,
+    );
+
+    expect(html).toContain("usage-progress-ring--indeterminate");
+    expect(html).toContain('aria-valuetext="Usage percentage unavailable"');
+    expect(html).not.toContain("aria-valuenow=");
+    expect(html).toContain(">Unknown<");
+  });
 });

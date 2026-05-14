@@ -1,7 +1,10 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
-import type { ProgressItemsBySurface } from "../providers/types";
+import type {
+  ProgressDisplayStyle,
+  ProgressItemsBySurface,
+} from "../providers/types";
 import { createDefaultProgressItemsBySurface } from "../shared/display-preferences";
 import type { RuntimeI18n } from "../shared/i18n";
 import type { ProviderViewModel } from "../sidepanel/view-models";
@@ -39,11 +42,12 @@ function createProvider(
 function renderPopupProviderProgress(
   provider: ProviderViewModel,
   progressItemsBySurface: ProgressItemsBySurface = createDefaultProgressItemsBySurface(),
+  progressDisplayStyle: ProgressDisplayStyle = "circle",
 ) {
   return renderToStaticMarkup(
     <PopupProviderProgress
       i18n={testI18n}
-      progressDisplayStyle="circle"
+      progressDisplayStyle={progressDisplayStyle}
       progressItemsBySurface={progressItemsBySurface}
       provider={provider}
     />,
@@ -119,5 +123,17 @@ describe("PopupProviderProgress", () => {
     });
 
     expect(html).toBe("");
+  });
+
+  it("renders the new soft circle style in popup progress", () => {
+    const html = renderPopupProviderProgress(
+      createProvider(),
+      createDefaultProgressItemsBySurface(),
+      "circle-soft",
+    );
+
+    expect(html).toContain("provider-progress-item-list--circle-soft");
+    expect(html).toContain("usage-progress-ring--circle-soft");
+    expect(html).toContain('aria-valuenow="42"');
   });
 });

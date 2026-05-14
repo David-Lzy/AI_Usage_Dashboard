@@ -192,26 +192,35 @@ body.popup-page .status-card {
   gap: var(--app-space-2);
 }
 
-.popup-provider-card__progress--circle {
+.popup-provider-card__progress--circle,
+.popup-provider-card__progress--circle-soft,
+.popup-provider-card__progress--circle-gauge {
   gap: var(--app-space-1);
 }
 
-.popup-provider-card__progress .usage-window-progress-list {
+.popup-provider-card__progress .usage-window-progress-list,
+.popup-provider-card__progress .provider-progress-item-list {
   gap: var(--app-space-2);
 }
 
-.popup-provider-card__progress .usage-window-progress-list__item {
+.popup-provider-card__progress .usage-window-progress-list__item,
+.popup-provider-card__progress .provider-progress-item-list__item {
   padding: 0;
   border: 0;
   background: transparent;
 }
 
-.popup-provider-card__progress--circle .usage-window-progress-list {
+.popup-provider-card__progress--circle .usage-window-progress-list,
+.popup-provider-card__progress--circle .provider-progress-item-list,
+.popup-provider-card__progress--circle-soft .provider-progress-item-list,
+.popup-provider-card__progress--circle-gauge .provider-progress-item-list {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--app-space-3) var(--app-space-2);
 }
 
-.popup-provider-card__progress--circle .usage-progress--circle {
+.popup-provider-card__progress--circle .usage-progress--circle,
+.popup-provider-card__progress--circle-soft .usage-progress--circle,
+.popup-provider-card__progress--circle-gauge .usage-progress--circle {
   gap: var(--app-space-1);
 }
 
@@ -219,16 +228,25 @@ body.popup-page .status-card {
   width: 68px;
 }
 
+.popup-provider-card__progress--circle-soft .usage-progress-ring,
+.popup-provider-card__progress--circle-gauge .usage-progress-ring {
+  width: 68px;
+}
+
 .popup-provider-card__progress--circle .usage-progress__ring::before {
   inset: 8px;
 }
 
-.popup-provider-card__progress--circle .usage-progress__ring-value {
+.popup-provider-card__progress--circle .usage-progress__ring-value,
+.popup-provider-card__progress--circle-soft .usage-progress-ring__value,
+.popup-provider-card__progress--circle-gauge .usage-progress-ring__value {
   font-size: var(--md-sys-typescale-title-small-size);
   line-height: var(--md-sys-typescale-title-small-line-height);
 }
 
-.popup-provider-card__progress--circle .usage-progress__ring-label {
+.popup-provider-card__progress--circle .usage-progress__ring-label,
+.popup-provider-card__progress--circle-soft .usage-progress__ring-label,
+.popup-provider-card__progress--circle-gauge .usage-progress__ring-label {
   display: -webkit-box;
   overflow: hidden;
   font-size: var(--md-sys-typescale-label-small-size);
@@ -237,7 +255,9 @@ body.popup-page .status-card {
   -webkit-line-clamp: 2;
 }
 
-.popup-provider-card__progress--circle .usage-progress__detail {
+.popup-provider-card__progress--circle .usage-progress__detail,
+.popup-provider-card__progress--circle-soft .usage-progress__detail,
+.popup-provider-card__progress--circle-gauge .usage-progress__detail {
   display: none;
 }
 
