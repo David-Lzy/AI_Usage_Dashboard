@@ -383,8 +383,8 @@ export const SETTINGS_PREFERENCE_GROUPS_COPY: Record<
   SettingsPreferenceGroupsCopy
 > = {
   en: {
-    uiMoreShow: "More UI controls",
-    uiMoreHide: "Hide UI controls",
+    uiMoreShow: "More UI settings",
+    uiMoreHide: "Collapse UI settings",
     uiMoreDetail:
       "Popup shape, progress style, progress appearance, and accent colors live here.",
     providerDisplayShow: "Provider display controls",
@@ -393,8 +393,8 @@ export const SETTINGS_PREFERENCE_GROUPS_COPY: Record<
       "Manage provider order and visible quota progress items separately for each surface.",
   },
   "zh-CN": {
-    uiMoreShow: "UI 下的更多",
-    uiMoreHide: "收起 UI 更多",
+    uiMoreShow: "更多 UI 设置",
+    uiMoreHide: "收起 UI 设置",
     uiMoreDetail:
       "Popup 形态、额度样式、进度外观和强调色都放在这里。",
     providerDisplayShow: "Provider 顺序与可见进度",
@@ -403,8 +403,8 @@ export const SETTINGS_PREFERENCE_GROUPS_COPY: Record<
       "按 popup、sidebar 和完整页面分别管理 Provider 顺序和可见额度进度项。",
   },
   "zh-TW": {
-    uiMoreShow: "UI 的更多設定",
-    uiMoreHide: "收起 UI 更多設定",
+    uiMoreShow: "更多 UI 設定",
+    uiMoreHide: "收起 UI 設定",
     uiMoreDetail: "Popup 形態、額度樣式、進度外觀和強調色都在這裡。",
     providerDisplayShow: "Provider 順序與可見進度",
     providerDisplayHide: "收起 Provider 顯示設定",
@@ -412,8 +412,8 @@ export const SETTINGS_PREFERENCE_GROUPS_COPY: Record<
       "依 popup、sidebar 和完整頁面分別管理 Provider 順序與可見額度進度項目。",
   },
   ja: {
-    uiMoreShow: "UI の詳細設定",
-    uiMoreHide: "UI の詳細設定を閉じる",
+    uiMoreShow: "その他の UI 設定",
+    uiMoreHide: "UI 設定を閉じる",
     uiMoreDetail: "ポップアップ形状、進捗スタイル、進捗の外観、アクセント色を設定します。",
     providerDisplayShow: "Provider 表示設定",
     providerDisplayHide: "Provider 表示設定を閉じる",
@@ -421,8 +421,8 @@ export const SETTINGS_PREFERENCE_GROUPS_COPY: Record<
       "サーフェスごとに Provider の順序と表示するクォータ進捗項目を管理します。",
   },
   ko: {
-    uiMoreShow: "UI 추가 설정",
-    uiMoreHide: "UI 추가 설정 닫기",
+    uiMoreShow: "더 많은 UI 설정",
+    uiMoreHide: "UI 설정 접기",
     uiMoreDetail: "팝업 모양, 진행률 스타일, 진행률 모양, 강조 색상을 설정합니다.",
     providerDisplayShow: "Provider 표시 설정",
     providerDisplayHide: "Provider 표시 설정 닫기",
@@ -430,8 +430,8 @@ export const SETTINGS_PREFERENCE_GROUPS_COPY: Record<
       "표면별 Provider 순서와 표시할 할당량 진행률 항목을 관리합니다.",
   },
   "es-419": {
-    uiMoreShow: "Más controles de UI",
-    uiMoreHide: "Ocultar controles de UI",
+    uiMoreShow: "Más ajustes de UI",
+    uiMoreHide: "Contraer ajustes de UI",
     uiMoreDetail:
       "Configura forma del popup, estilo de progreso, apariencia del progreso y colores de acento.",
     providerDisplayShow: "Controles de visualización de providers",
@@ -440,8 +440,8 @@ export const SETTINGS_PREFERENCE_GROUPS_COPY: Record<
       "Administra el orden de providers y los elementos de progreso visibles por superficie.",
   },
   "pt-BR": {
-    uiMoreShow: "Mais controles de UI",
-    uiMoreHide: "Ocultar controles de UI",
+    uiMoreShow: "Mais configurações de UI",
+    uiMoreHide: "Recolher configurações de UI",
     uiMoreDetail:
       "Configure formato do popup, estilo de progresso, aparência do progresso e cores de destaque.",
     providerDisplayShow: "Controles de exibição de providers",
@@ -450,8 +450,8 @@ export const SETTINGS_PREFERENCE_GROUPS_COPY: Record<
       "Gerencie a ordem dos providers e os itens de progresso visíveis por superfície.",
   },
   fr: {
-    uiMoreShow: "Plus de contrôles UI",
-    uiMoreHide: "Masquer les contrôles UI",
+    uiMoreShow: "Plus de réglages UI",
+    uiMoreHide: "Réduire les réglages UI",
     uiMoreDetail:
       "Réglez la forme du popup, le style et l'apparence de progression, et les couleurs d'accent.",
     providerDisplayShow: "Contrôles d'affichage des providers",
@@ -460,8 +460,8 @@ export const SETTINGS_PREFERENCE_GROUPS_COPY: Record<
       "Gérez l'ordre des providers et les éléments de progression visibles par surface.",
   },
   de: {
-    uiMoreShow: "Weitere UI-Steuerungen",
-    uiMoreHide: "UI-Steuerungen ausblenden",
+    uiMoreShow: "Weitere UI-Einstellungen",
+    uiMoreHide: "UI-Einstellungen einklappen",
     uiMoreDetail:
       "Popup-Form, Fortschrittsstil, Fortschrittsdarstellung und Akzentfarben einstellen.",
     providerDisplayShow: "Provider-Anzeige steuern",
@@ -470,8 +470,8 @@ export const SETTINGS_PREFERENCE_GROUPS_COPY: Record<
       "Provider-Reihenfolge und sichtbare Fortschrittselemente pro Oberfläche verwalten.",
   },
   it: {
-    uiMoreShow: "Altri controlli UI",
-    uiMoreHide: "Nascondi controlli UI",
+    uiMoreShow: "Altre impostazioni UI",
+    uiMoreHide: "Comprimi impostazioni UI",
     uiMoreDetail:
       "Regola forma popup, stile progresso, aspetto progresso e colori accento.",
     providerDisplayShow: "Controlli visualizzazione provider",
@@ -481,7 +481,7 @@ export const SETTINGS_PREFERENCE_GROUPS_COPY: Record<
   },
   ru: {
     uiMoreShow: "Дополнительные настройки UI",
-    uiMoreHide: "Скрыть настройки UI",
+    uiMoreHide: "Свернуть настройки UI",
     uiMoreDetail:
       "Настройте форму popup, стиль прогресса, внешний вид прогресса и акцентные цвета.",
     providerDisplayShow: "Настройки отображения providers",
@@ -490,8 +490,8 @@ export const SETTINGS_PREFERENCE_GROUPS_COPY: Record<
       "Управляйте порядком providers и видимыми элементами прогресса по поверхностям.",
   },
   ar: {
-    uiMoreShow: "مزيد من عناصر UI",
-    uiMoreHide: "إخفاء عناصر UI",
+    uiMoreShow: "المزيد من إعدادات UI",
+    uiMoreHide: "طي إعدادات UI",
     uiMoreDetail:
       "اضبط شكل popup ونمط التقدم ومظهره وألوان التمييز.",
     providerDisplayShow: "إعدادات عرض Provider",
@@ -500,8 +500,8 @@ export const SETTINGS_PREFERENCE_GROUPS_COPY: Record<
       "أدر ترتيب Providers وعناصر تقدم الحصة المرئية لكل سطح.",
   },
   hi: {
-    uiMoreShow: "अधिक UI controls",
-    uiMoreHide: "UI controls छिपाएँ",
+    uiMoreShow: "अधिक UI सेटिंग्स",
+    uiMoreHide: "UI सेटिंग्स समेटें",
     uiMoreDetail:
       "Popup shape, progress style, progress appearance और accent colors सेट करें।",
     providerDisplayShow: "Provider display controls",
@@ -510,8 +510,8 @@ export const SETTINGS_PREFERENCE_GROUPS_COPY: Record<
       "हर surface के लिए provider order और visible quota progress items प्रबंधित करें।",
   },
   id: {
-    uiMoreShow: "Kontrol UI lainnya",
-    uiMoreHide: "Sembunyikan kontrol UI",
+    uiMoreShow: "Pengaturan UI lainnya",
+    uiMoreHide: "Ciutkan pengaturan UI",
     uiMoreDetail:
       "Atur bentuk popup, gaya progress, tampilan progress, dan warna aksen.",
     providerDisplayShow: "Kontrol tampilan provider",

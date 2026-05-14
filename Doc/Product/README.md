@@ -48,5 +48,6 @@ Status note:
 - `Phase 464` made shared Settings form-control values more legible with explicit body-large typography and tightened progress appearance numeric/color controls while preserving storage and provider behavior.
 - Post-`Phase 464` polish moved the popup circular row-count helper into a hover/focus tooltip so the Settings control no longer carries a full-width always-visible note.
 - Post-`Phase 464` polish also made remaining-color-band rows wrap the color selector below the numeric range at sidepanel widths, avoiding card overflow while preserving wide-layout alignment.
+- Post-`Phase 464` polish renamed the UI disclosure copy to “More UI settings / Collapse UI settings” with synchronized 14-locale labels.
 - Current implementation source is ahead of the `0.1.0-rc.19` package by the `Phase 449` through `Phase 464` UI micro-polish phases.
 - `Phase 465` through `Phase 466` are queued as the next scoped UI polish sequence covering UI font preference and visual QA/docs closeout.

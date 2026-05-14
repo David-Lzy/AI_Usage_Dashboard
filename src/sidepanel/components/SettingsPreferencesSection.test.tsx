@@ -68,7 +68,7 @@ describe("SettingsPreferencesSection", () => {
     expect(html).toContain("Choose the order per surface");
     expect(html).toContain("Tune thickness and remaining-color bands");
     expect(html).toContain("#B3261E");
-    expect(html).toContain(">More UI controls<");
+    expect(html).toContain(">More UI settings<");
     expect(html).toContain(">Provider display controls<");
     expect(html).toContain('class="popup-appearance-preview-card"');
     expect(html).not.toContain('class="theme-customization-form"');

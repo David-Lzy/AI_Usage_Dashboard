@@ -70,7 +70,7 @@ describe("SettingsPage", () => {
     expect(html).toContain('data-provider-order-preferences=""');
     expect(html).toContain('data-provider-progress-preferences=""');
     expect(html).toContain('data-progress-appearance-preferences=""');
-    expect(html).toContain(">More UI controls<");
+    expect(html).toContain(">More UI settings<");
     expect(html).toContain(">Provider display controls<");
     expect(html).not.toContain('data-credential-provider-id="cursor"');
     expect(html).toContain('class="settings-back-to-top-fab"');
