@@ -34,10 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [465_Phase_UI_Font_Family_Preference_Model.md](./465_Phase_UI_Font_Family_Preference_Model.md)
-- latest completed slice: [464_Phase_Form_Control_Typography_And_Auto_Sizing.md](./Archive/by-phase/400-499/464_Phase_Form_Control_Typography_And_Auto_Sizing.md)
+- active phase file: [466_Phase_UI_Polish_Visual_QA_Docs_Closeout.md](./466_Phase_UI_Polish_Visual_QA_Docs_Closeout.md)
+- latest completed slice: [465_Phase_UI_Font_Family_Preference_Model.md](./Archive/by-phase/400-499/465_Phase_UI_Font_Family_Preference_Model.md)
 - queued phase files:
-  - [465_Phase_UI_Font_Family_Preference_Model.md](./465_Phase_UI_Font_Family_Preference_Model.md)
   - [466_Phase_UI_Polish_Visual_QA_Docs_Closeout.md](./466_Phase_UI_Polish_Visual_QA_Docs_Closeout.md)
 
 Completed phases should be moved to:

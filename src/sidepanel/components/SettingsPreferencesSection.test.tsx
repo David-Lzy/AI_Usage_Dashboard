@@ -37,6 +37,7 @@ describe("SettingsPreferencesSection", () => {
         onProgressColorBandsChange={() => {}}
         onActionBadgeSelectionChange={() => {}}
         onThemeCustomSeedChange={() => {}}
+        onUiFontFamilyChange={() => {}}
       />,
     );
 
@@ -47,8 +48,13 @@ describe("SettingsPreferencesSection", () => {
     expect(html).not.toContain('data-settings-material-select="theme-mode"');
     expect(html).toContain('data-color-choice-dropdown="accent-color"');
     expect(html).toContain('data-settings-material-select="popup-circular-row-count"');
+    expect(html).toContain('data-settings-material-select="ui-font-family"');
     expect(html).toContain("Circular items per row");
     expect(html).toContain("2 per row");
+    expect(html).toContain("UI font");
+    expect(html).toContain(
+      "Uses safe local system font stacks across the popup",
+    );
     expect(html).toContain("material-info-tooltip__trigger");
     expect(html).toContain('role="tooltip"');
     expect(html).toContain("Line progress stays one item per row.");

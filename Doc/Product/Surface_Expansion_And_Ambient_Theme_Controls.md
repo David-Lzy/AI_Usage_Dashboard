@@ -101,12 +101,13 @@ Define one stable contract for the next productization slices and keep it aligne
 - Settings remains the only full theme-configuration surface for:
   - `system`
   - preset accents
-  - custom seed
-- quick toggle must not wipe or mutate preset/custom-seed configuration
+  - custom accent colors through the validated seed path
+  - UI font-family preference
+- quick toggle must not wipe or mutate preset/custom-seed/font configuration
 - current implementation note:
   - popup header now ships one quick light-dark toggle
   - standard sidepanel and full-page top bars now ship the same quick toggle
-  - the toggle only rewrites `themeMode`, never `themePreset` or `themeCustomSeedHex`
+  - the toggle only rewrites `themeMode`, never `themePreset`, `themeCustomSeedHex`, or `uiFontFamily`
 
 ### `system` Mode Semantics
 

@@ -117,12 +117,13 @@ export async function handleAppMessage(
         notice:
           typeof message.settings.themeMode === "string" ||
           typeof message.settings.themePreset === "string" ||
-          "themeCustomSeedHex" in message.settings
+          "themeCustomSeedHex" in message.settings ||
+          "uiFontFamily" in message.settings
             ? {
                 tone: "success",
-                title: "Theme preferences updated",
+                title: "Appearance preferences updated",
                 message:
-                  "The shared theme preferences now apply across the side panel, popup, and audit hub.",
+                  "The shared appearance preferences now apply across the side panel, popup, and audit hub.",
               }
             : undefined,
       };

@@ -1,6 +1,6 @@
 # Phase 466 - UI Polish Visual QA Docs Closeout
 
-Status: queued
+Status: active
 
 ## Goal
 

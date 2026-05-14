@@ -14,6 +14,7 @@ import type {
   ProviderSetting,
   ProviderSnapshot,
   ThemePreset,
+  UiFontFamily,
 } from "../../providers/types";
 import type { RuntimeI18n } from "../../shared/i18n";
 import type { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
@@ -69,6 +70,7 @@ type SettingsPreferencesSectionProps = {
   onSyncIntervalChange: (minutes: number) => void;
   onThemeCustomSeedChange: (themeCustomSeedHex: string) => void;
   onThemePresetChange: (themePreset: ThemePreset) => void;
+  onUiFontFamilyChange: (uiFontFamily: UiFontFamily) => void;
   onWarningThresholdChange: (percent: number) => void;
 };
 
@@ -95,6 +97,7 @@ export function SettingsPreferencesSection({
   onSyncIntervalChange,
   onThemeCustomSeedChange,
   onThemePresetChange,
+  onUiFontFamilyChange,
   onWarningThresholdChange,
 }: SettingsPreferencesSectionProps) {
   const {
@@ -110,6 +113,7 @@ export function SettingsPreferencesSection({
     syncIntervalOptions,
     syncIntervalUnitLabel,
     themePresetOptions,
+    uiFontFamilyOptions,
     warningThresholdErrorText,
     warningThresholdMenuButtonLabel,
     warningThresholdOptions,
@@ -124,6 +128,7 @@ export function SettingsPreferencesSection({
   const popupCircularRowCountHelperText = i18n.t(
     "settings.preferences.popup_circular_row_count_helper",
   );
+  const uiFontHelperText = i18n.t("settings.preferences.ui_font_helper");
   const popupCircularProgressItemsPerRowOptionsForSelect =
     popupCircularProgressItemsPerRowOptions.map((option) => ({
       value: String(option.value) as "1" | "2" | "3",
@@ -279,6 +284,19 @@ export function SettingsPreferencesSection({
               options={popupShadowStyleOptions}
               onChange={onPopupShadowStyleChange}
             />
+
+            <div className="settings-preferences__field-with-helper">
+              <MaterialSelect
+                label={i18n.t("settings.preferences.ui_font_label")}
+                value={settings.uiFontFamily}
+                fieldIdPrefix="ui-font-family"
+                options={uiFontFamilyOptions}
+                onChange={onUiFontFamilyChange}
+              />
+              <MaterialInfoTooltip className="settings-preferences__field-note">
+                {uiFontHelperText}
+              </MaterialInfoTooltip>
+            </div>
           </div>
 
           <ProgressAppearancePreferenceControls

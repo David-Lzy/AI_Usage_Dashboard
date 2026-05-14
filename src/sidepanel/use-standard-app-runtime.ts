@@ -150,6 +150,7 @@ export function useStandardAppRuntime(
     appState?.settings.themeCustomSeedHex,
     appState?.settings.themeMode,
     appState?.settings.themePreset,
+    appState?.settings.uiFontFamily,
   ]);
 
   async function applyMessage(

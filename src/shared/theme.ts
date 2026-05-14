@@ -1,4 +1,9 @@
-import type { ThemeMode, ThemePreset } from "../providers/types";
+import type { ThemeMode, ThemePreset, UiFontFamily } from "../providers/types";
+import {
+  DEFAULT_UI_FONT_FAMILY,
+  getUiFontFamilyStack,
+  normalizeUiFontFamily,
+} from "./ui-font-family";
 
 const DARK_COLOR_SCHEME_QUERY = "(prefers-color-scheme: dark)";
 const LIGHT_TEXT_HEX = "#FFFFFF";
@@ -9,6 +14,7 @@ export type ThemeSettings = {
   themeMode: ThemeMode;
   themePreset: ThemePreset;
   themeCustomSeedHex: string | null;
+  uiFontFamily: UiFontFamily;
 };
 export type ThemeRolePalette = {
   primary: string;
@@ -29,6 +35,7 @@ export const DEFAULT_THEME_SETTINGS: ThemeSettings = {
   themeMode: "system",
   themePreset: "default",
   themeCustomSeedHex: null,
+  uiFontFamily: DEFAULT_UI_FONT_FAMILY,
 };
 
 export const THEME_PRESET_OPTIONS: Array<{
@@ -101,6 +108,18 @@ const CUSTOM_THEME_STYLE_VARIABLES = [
   "--md-sys-color-on-tertiary",
   "--md-sys-color-tertiary-container",
   "--md-sys-color-on-tertiary-container",
+] as const;
+
+const THEME_FONT_STYLE_VARIABLES = [
+  "--md-sys-typescale-display-small-font",
+  "--md-sys-typescale-title-large-font",
+  "--md-sys-typescale-title-medium-font",
+  "--md-sys-typescale-title-small-font",
+  "--md-sys-typescale-body-large-font",
+  "--md-sys-typescale-body-medium-font",
+  "--md-sys-typescale-body-small-font",
+  "--md-sys-typescale-label-large-font",
+  "--md-sys-typescale-label-medium-font",
 ] as const;
 
 function clamp(value: number, minimum: number, maximum: number): number {
@@ -383,6 +402,21 @@ function applyCustomThemePalette(
   );
 }
 
+function applyThemeFontFamily(
+  style: ThemeStyleRoot | undefined,
+  uiFontFamily: UiFontFamily,
+) {
+  if (!style?.setProperty) {
+    return;
+  }
+
+  const fontStack = getUiFontFamilyStack(uiFontFamily);
+
+  for (const variableName of THEME_FONT_STYLE_VARIABLES) {
+    style.setProperty(variableName, fontStack);
+  }
+}
+
 export function normalizeThemeMode(value: unknown): ThemeMode {
   return value === "light" || value === "dark" || value === "system"
     ? value
@@ -467,6 +501,7 @@ export function normalizeThemeSettings(
     themeMode: normalizeThemeMode(value?.themeMode),
     themePreset: normalizeThemePreset(value?.themePreset),
     themeCustomSeedHex: normalizeThemeCustomSeedHex(value?.themeCustomSeedHex),
+    uiFontFamily: normalizeUiFontFamily(value?.uiFontFamily),
   };
 }
 
@@ -512,7 +547,7 @@ export function applyThemeMode(
 }
 
 export function applyThemeSettings(
-  settings: ThemeSettings,
+  settings: Partial<ThemeSettings> | null | undefined,
   root: ThemeRoot,
   reader?: MatchMediaReader,
 ): ResolvedThemeMode {
@@ -530,6 +565,7 @@ export function applyThemeSettings(
   root.dataset.themeMode = normalizedSettings.themeMode;
   root.dataset.themePreset = normalizedSettings.themePreset;
   root.dataset.themeResolved = resolvedThemeMode;
+  root.dataset.uiFontFamily = normalizedSettings.uiFontFamily;
 
   if (normalizedSettings.themePreset === "custom") {
     if (normalizedSettings.themeCustomSeedHex) {
@@ -546,6 +582,7 @@ export function applyThemeSettings(
   }
 
   applyCustomThemePalette(root.style, customPalette);
+  applyThemeFontFamily(root.style, normalizedSettings.uiFontFamily);
 
   return resolvedThemeMode;
 }
@@ -566,7 +603,7 @@ export function startThemeModeSync(
 }
 
 export function startThemeSettingsSync(
-  settings: ThemeSettings,
+  settings: Partial<ThemeSettings> | null | undefined,
   root: ThemeRoot,
   reader?: MatchMediaReader,
 ): () => void {

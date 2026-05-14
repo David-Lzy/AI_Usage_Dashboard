@@ -19,6 +19,7 @@ import type {
   ProviderSnapshot,
   ThemeMode,
   ThemePreset,
+  UiFontFamily,
 } from "../../providers/types";
 import { createRuntimeI18n } from "../../shared/i18n";
 import { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
@@ -99,6 +100,7 @@ type SettingsPageProps = {
   onWarningThresholdChange: (percent: number) => void;
   onThemeModeChange: (themeMode: ThemeMode) => void;
   onThemePresetChange: (themePreset: ThemePreset) => void;
+  onUiFontFamilyChange: (uiFontFamily: UiFontFamily) => void;
   onPopupProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onSidebarProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onFullPageProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
@@ -162,6 +164,7 @@ export function SettingsPage({
   onWarningThresholdChange,
   onThemeModeChange,
   onThemePresetChange,
+  onUiFontFamilyChange,
   onPopupProgressStyleChange,
   onSidebarProgressStyleChange,
   onFullPageProgressStyleChange,
@@ -395,6 +398,7 @@ export function SettingsPage({
         onSyncIntervalChange={onSyncIntervalChange}
         onWarningThresholdChange={onWarningThresholdChange}
         onThemePresetChange={onThemePresetChange}
+        onUiFontFamilyChange={onUiFontFamilyChange}
         onPopupProgressStyleChange={onPopupProgressStyleChange}
         onSidebarProgressStyleChange={onSidebarProgressStyleChange}
         onFullPageProgressStyleChange={onFullPageProgressStyleChange}

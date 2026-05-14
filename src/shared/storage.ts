@@ -13,6 +13,7 @@ import {
   normalizeThemeMode,
   normalizeThemePreset,
 } from "./theme";
+import { normalizeUiFontFamily } from "./ui-font-family";
 import {
   DEFAULT_FULL_PAGE_PROGRESS_STYLE,
   DEFAULT_POPUP_PROGRESS_STYLE,
@@ -169,6 +170,7 @@ function normalizeAppState(state: AppState): AppState {
       themeCustomSeedHex: normalizeThemeCustomSeedHex(
         state.settings?.themeCustomSeedHex,
       ),
+      uiFontFamily: normalizeUiFontFamily(state.settings?.uiFontFamily),
       popupProgressStyle: normalizeProgressDisplayStyle(
         state.settings?.popupProgressStyle,
         DEFAULT_POPUP_PROGRESS_STYLE,

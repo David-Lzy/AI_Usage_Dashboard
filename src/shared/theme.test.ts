@@ -45,17 +45,20 @@ describe("theme helpers", () => {
         themeMode: "dark",
         themePreset: "sunset",
         themeCustomSeedHex: "#4f46e5",
+        uiFontFamily: "serif",
       }),
     ).toEqual({
       themeMode: "dark",
       themePreset: "sunset",
       themeCustomSeedHex: "#4F46E5",
+      uiFontFamily: "serif",
     });
     expect(
       normalizeThemeSettings({
         themeMode: "unexpected" as never,
         themePreset: "unexpected" as never,
         themeCustomSeedHex: "bad-value",
+        uiFontFamily: "unexpected" as never,
       }),
     ).toEqual(DEFAULT_THEME_SETTINGS);
   });
@@ -154,7 +157,48 @@ describe("theme helpers", () => {
     expect(root.dataset.themeMode).toBe("light");
     expect(root.dataset.themePreset).toBe("meadow");
     expect(root.dataset.themeResolved).toBe("light");
+    expect(root.dataset.uiFontFamily).toBe("default");
     expect(root.style.colorScheme).toBe("light");
+  });
+
+  it("applies UI font family metadata and typography variables to the root", () => {
+    const properties = new Map<string, string>();
+    const root: {
+      dataset: Record<string, string | undefined>;
+      style: {
+        colorScheme?: string;
+        setProperty: (property: string, value: string) => void;
+        removeProperty: (property: string) => void;
+      };
+    } = {
+      dataset: {},
+      style: {
+        setProperty: (property, value) => {
+          properties.set(property, value);
+        },
+        removeProperty: (property) => {
+          properties.delete(property);
+        },
+      },
+    };
+
+    applyThemeSettings(
+      {
+        themeMode: "light",
+        themePreset: "default",
+        themeCustomSeedHex: null,
+        uiFontFamily: "mono",
+      },
+      root,
+    );
+
+    expect(root.dataset.uiFontFamily).toBe("mono");
+    expect(properties.get("--md-sys-typescale-body-large-font")).toContain(
+      "SFMono-Regular",
+    );
+    expect(properties.get("--md-sys-typescale-label-large-font")).toContain(
+      "SFMono-Regular",
+    );
   });
 
   it("applies custom theme palette metadata and css variables to the root", () => {

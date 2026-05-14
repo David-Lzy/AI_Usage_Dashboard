@@ -11,6 +11,7 @@ function createLegacyState(): AppState {
     themeMode: _themeMode,
     themePreset: _themePreset,
     themeCustomSeedHex: _themeCustomSeedHex,
+    uiFontFamily: _uiFontFamily,
     popupProgressStyle: _popupProgressStyle,
     sidebarProgressStyle: _sidebarProgressStyle,
     fullPageProgressStyle: _fullPageProgressStyle,
@@ -125,6 +126,7 @@ describe("storage normalization", () => {
     expect(state?.settings.themeMode).toBe("system");
     expect(state?.settings.themePreset).toBe("default");
     expect(state?.settings.themeCustomSeedHex).toBeNull();
+    expect(state?.settings.uiFontFamily).toBe("default");
     expect(state?.settings.popupProgressStyle).toBe("circle-soft");
     expect(state?.settings.sidebarProgressStyle).toBe("line");
     expect(state?.settings.fullPageProgressStyle).toBe("line");
@@ -164,6 +166,20 @@ describe("storage normalization", () => {
         colorHex: "#146C2E",
       },
     ]);
+  });
+
+  it("normalizes unsupported UI font preferences to the default", async () => {
+    await writeAppState({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        uiFontFamily: "not-a-font",
+      } as unknown as AppState["settings"],
+    });
+
+    const state = await readAppState();
+
+    expect(state?.settings.uiFontFamily).toBe("default");
   });
 
   it("normalizes display preferences from stale stored state", async () => {

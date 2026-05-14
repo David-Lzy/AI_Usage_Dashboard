@@ -21,6 +21,7 @@ function renderSettingsPage(overrides: Partial<Parameters<typeof SettingsPage>[0
       onWarningThresholdChange={() => {}}
       onThemeModeChange={() => {}}
       onThemePresetChange={() => {}}
+      onUiFontFamilyChange={() => {}}
       onPopupProgressStyleChange={() => {}}
       onSidebarProgressStyleChange={() => {}}
       onFullPageProgressStyleChange={() => {}}

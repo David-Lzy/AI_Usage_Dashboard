@@ -1,6 +1,6 @@
 # Phase 465 - UI Font Family Preference Model
 
-Status: queued
+Status: completed
 
 ## Goal
 
@@ -35,6 +35,20 @@ Add a user-facing UI font preference without making the extension typography inc
 - Representative visual checks for `en`, `zh-CN`, `ja`, `ar`, and `hi`.
 - `npm run docs:check`
 - `git diff --check`
+
+## Completed
+
+- Added a safe local UI font-family registry with default, system UI, serif-friendly, and mono-friendly stacks.
+- Added `uiFontFamily` to settings storage normalization, sample state, theme settings normalization, root theme sync, and the Settings appearance controls.
+- Applied the selected font through Material typography CSS variables so popup, sidepanel, full-page, and provider-detail surfaces inherit the same stack.
+- Added 14-locale labels and helper copy for the UI font control.
+- Kept remote fonts/assets, provider data, quota math, locale registry behavior, and extension permissions unchanged.
+
+## Verification Notes
+
+- `npm run test -- src/shared/storage.test.ts src/shared/theme.test.ts src/shared/ui-font-family.test.ts src/sidepanel/settings-preference-options.test.ts src/sidepanel/components/SettingsPreferencesSection.test.tsx src/sidepanel/routes/SettingsPage.test.tsx --run`
+- `npm run i18n:check`
+- `npm run typecheck`
 
 ## Follow-Up
 

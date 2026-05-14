@@ -176,9 +176,13 @@
     sans-serif;
   --md-sys-typescale-title-medium-font: "Roboto Flex", "Roboto", "Segoe UI",
     sans-serif;
+  --md-sys-typescale-title-small-font: "Roboto Flex", "Roboto", "Segoe UI",
+    sans-serif;
   --md-sys-typescale-body-large-font: "Roboto Flex", "Roboto", "Segoe UI",
     sans-serif;
   --md-sys-typescale-body-medium-font: "Roboto Flex", "Roboto", "Segoe UI",
+    sans-serif;
+  --md-sys-typescale-body-small-font: "Roboto Flex", "Roboto", "Segoe UI",
     sans-serif;
   --md-sys-typescale-label-large-font: "Roboto Flex", "Roboto", "Segoe UI",
     sans-serif;

@@ -24,6 +24,7 @@ import {
   createDefaultProgressColorBands,
 } from "./progress-appearance";
 import { DEFAULT_SETTINGS_USER_LEVEL } from "./settings-user-level";
+import { DEFAULT_UI_FONT_FAMILY } from "./ui-font-family";
 import { DEFAULT_ACTION_BADGE_SELECTION } from "./action-badge-preferences";
 import {
   createDefaultProgressItemsBySurface,
@@ -540,6 +541,7 @@ export const SAMPLE_APP_STATE: AppState = {
     themeMode: "system",
     themePreset: "default",
     themeCustomSeedHex: null,
+    uiFontFamily: DEFAULT_UI_FONT_FAMILY,
     popupProgressStyle: DEFAULT_POPUP_PROGRESS_STYLE,
     sidebarProgressStyle: DEFAULT_SIDEBAR_PROGRESS_STYLE,
     fullPageProgressStyle: DEFAULT_FULL_PAGE_PROGRESS_STYLE,

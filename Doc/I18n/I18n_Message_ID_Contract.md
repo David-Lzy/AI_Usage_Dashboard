@@ -31,6 +31,7 @@ Keep manifest and runtime localization on one stable naming contract so later co
   - `popup.header.title`
   - `dashboard.summary.visible`
   - `settings.preferences.theme_mode_label`
+  - `settings.preferences.ui_font_label`
 - keep one id stable when the product concept stays the same and only wording changes
 - create a new id only when the UI meaning changes enough that old translations would become misleading
 - keep generated runtime explanatory copy grouped behind stable structured builders when a surface would otherwise require dozens of one-off sentence ids
@@ -73,6 +74,7 @@ Runtime localization now exists for one broader but still partial manifest plus 
   - `settings.sections.*`
   - `settings.summary.*`
   - `settings.preferences.*`
+  - `settings.preferences.ui_font.*` covers the Settings UI font-family preference labels/helper added in `Phase 465`
   - `settings.theme_customization.*` legacy ids remain in the catalog for compatibility, though the current Settings UI uses structured accent color dropdown copy after `Phase 455`
   - `settings.visibility.*`
   - `settings.credentials.*`

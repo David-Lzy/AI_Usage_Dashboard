@@ -10,6 +10,7 @@ import type {
   ProviderSnapshot,
   ThemeMode,
   ThemePreset,
+  UiFontFamily,
 } from "../providers/types";
 import type { RuntimeI18n } from "../shared/i18n";
 import {
@@ -37,6 +38,7 @@ import {
   WARNING_THRESHOLD_PRESETS,
 } from "../shared/settings-preferences";
 import { THEME_PRESET_OPTIONS } from "../shared/theme";
+import { UI_FONT_FAMILY_OPTIONS } from "../shared/ui-font-family";
 
 type BuildSettingsPreferenceOptionsInput = {
   i18n: RuntimeI18n;
@@ -56,6 +58,12 @@ export function buildSettingsPreferenceOptions({
     meadow: i18n.t("settings.preferences.theme_preset.meadow"),
     sunset: i18n.t("settings.preferences.theme_preset.sunset"),
     custom: i18n.t("settings.preferences.theme_preset.custom"),
+  };
+  const uiFontFamilyOptionLabels: Record<UiFontFamily, string> = {
+    default: i18n.t("settings.preferences.ui_font.default"),
+    system: i18n.t("settings.preferences.ui_font.system"),
+    serif: i18n.t("settings.preferences.ui_font.serif"),
+    mono: i18n.t("settings.preferences.ui_font.mono"),
   };
   const progressDisplayStyleOptionLabels: Record<ProgressDisplayStyle, string> = {
     line: i18n.t("settings.preferences.progress_style.line"),
@@ -101,6 +109,10 @@ export function buildSettingsPreferenceOptions({
   const themePresetOptions = THEME_PRESET_OPTIONS.map((preset) => ({
     value: preset.value,
     label: themePresetOptionLabels[preset.value],
+  }));
+  const uiFontFamilyOptions = UI_FONT_FAMILY_OPTIONS.map((option) => ({
+    value: option.value,
+    label: uiFontFamilyOptionLabels[option.value],
   }));
   const progressDisplayStyleOptions = PROGRESS_DISPLAY_STYLE_OPTIONS.map(
     (option) => ({
@@ -173,6 +185,7 @@ export function buildSettingsPreferenceOptions({
     syncIntervalUnitLabel,
     themeModeOptions,
     themePresetOptions,
+    uiFontFamilyOptions,
     warningThresholdErrorText,
     warningThresholdMenuButtonLabel,
     warningThresholdOptions,

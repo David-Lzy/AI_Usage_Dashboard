@@ -32,6 +32,12 @@ describe("buildSettingsPreferenceOptions", () => {
       value: "dark",
       label: "Dark",
     });
+    expect(options.uiFontFamilyOptions).toEqual([
+      { value: "default", label: "Default" },
+      { value: "system", label: "System UI" },
+      { value: "serif", label: "Serif" },
+      { value: "mono", label: "Mono" },
+    ]);
     expect(options.syncIntervalOptions).toContainEqual({
       value: 3,
       label: "3 minutes",
@@ -77,6 +83,10 @@ describe("buildSettingsPreferenceOptions", () => {
     expect(options.progressDisplayStyleOptions).toContainEqual({
       value: "circle-gauge",
       label: "仪表圆环",
+    });
+    expect(options.uiFontFamilyOptions).toContainEqual({
+      value: "default",
+      label: "默认字体",
     });
   });
 });

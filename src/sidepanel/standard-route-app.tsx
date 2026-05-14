@@ -240,6 +240,9 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           onThemePresetChange={(themePreset) =>
             handleUpdateSettings({ themePreset })
           }
+          onUiFontFamilyChange={(uiFontFamily) =>
+            handleUpdateSettings({ uiFontFamily })
+          }
           onPopupProgressStyleChange={(popupProgressStyle) =>
             handleUpdateSettings({ popupProgressStyle })
           }

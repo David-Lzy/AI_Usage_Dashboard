@@ -210,6 +210,7 @@ export function SpecialRouteApp({
     themeSettings.themeCustomSeedHex,
     themeSettings.themeMode,
     themeSettings.themePreset,
+    themeSettings.uiFontFamily,
   ]);
 
   useEffect(() => {
