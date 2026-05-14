@@ -9,7 +9,7 @@ Current packaged release state:
 - package version: `0.1.0-rc.19`
 - Chrome manifest version: `0.1.0.19`
 - packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.19.zip`
-- source status: `rc.19` package bytes are aligned through `Phase 448`; current implementation source is ahead through `Phase 464` Settings form-control typography and sizing polish, and tracked docs now queue `Phase 465` through `Phase 466` as the next UI polish work. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
+- source status: `rc.19` package bytes are aligned through `Phase 448`; current implementation source is ahead through `Phase 464` Settings form-control typography/sizing polish plus a post-Phase 464 popup circular-row-count helper tooltip polish, and tracked docs now queue `Phase 465` through `Phase 466` as the next UI polish work. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
 - packaged follow-up milestone: [2026-05-14 RC19 Post-RC18 UI Polish Closeout Release Candidate](./Doc/Milestones/2026-05-14_RC19_Post_RC18_UI_Polish_Closeout_Release_Candidate.md)
 - submitted review milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
@@ -707,7 +707,7 @@ Output artifact:
 
 Packaging note:
 
-- `rc.19` packages the previous `rc.18` follow-up work plus post-`rc.18` source changes through `Phase 447`, including popup status-chip compactness, progress appearance controls/rendering, soft/gauge ring differentiation, Settings order-control localization, Settings overview responsive help, and responsive Appearance & Sync control grids. Current implementation source is ahead through `Phase 464` Settings form-control typography and sizing polish, with `Phase 465` through `Phase 466` still queued as additional UI polish, and needs a separate packaging phase before it becomes a release artifact.
+- `rc.19` packages the previous `rc.18` follow-up work plus post-`rc.18` source changes through `Phase 447`, including popup status-chip compactness, progress appearance controls/rendering, soft/gauge ring differentiation, Settings order-control localization, Settings overview responsive help, and responsive Appearance & Sync control grids. Current implementation source is ahead through `Phase 464` Settings form-control typography/sizing polish plus a post-Phase 464 popup circular-row-count helper tooltip polish, with `Phase 465` through `Phase 466` still queued as additional UI polish, and needs a separate packaging phase before it becomes a release artifact.
 - `rc.15` remains a historical packaged follow-up candidate for the post-`rc.14` maintenance boundary through `Phase 364`.
 - `rc.16` remains a historical packaged follow-up candidate for the post-localization and interaction-audit display/source boundary through `Phase 421`.
 - `rc.17` remains a historical packaged follow-up candidate for the display-preference and Settings-carousel boundary through `Phase 433`.

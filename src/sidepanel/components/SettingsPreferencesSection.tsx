@@ -120,6 +120,9 @@ export function SettingsPreferencesSection({
   });
   const [uiMoreOpen, setUiMoreOpen] = useState(settings.themePreset === "custom");
   const [providerDisplayOpen, setProviderDisplayOpen] = useState(false);
+  const popupCircularRowCountHelperText = i18n.t(
+    "settings.preferences.popup_circular_row_count_helper",
+  );
   const popupCircularProgressItemsPerRowOptionsForSelect =
     popupCircularProgressItemsPerRowOptions.map((option) => ({
       value: String(option.value) as "1" | "2" | "3",
@@ -229,9 +232,23 @@ export function SettingsPreferencesSection({
                   )
                 }
               />
-              <p className="supporting-copy settings-preferences__inline-helper">
-                {i18n.t("settings.preferences.popup_circular_row_count_helper")}
-              </p>
+              <span className="settings-preferences__field-note">
+                <span
+                  className="settings-preferences__field-note-trigger"
+                  tabIndex={0}
+                  aria-label={popupCircularRowCountHelperText}
+                  aria-describedby="popup-circular-row-count-helper-tooltip"
+                >
+                  ?
+                </span>
+                <span
+                  id="popup-circular-row-count-helper-tooltip"
+                  className="settings-preferences__field-note-tooltip"
+                  role="tooltip"
+                >
+                  {popupCircularRowCountHelperText}
+                </span>
+              </span>
             </div>
 
             <MaterialSelect
