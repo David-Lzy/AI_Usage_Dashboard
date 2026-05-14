@@ -26,6 +26,10 @@ describe("ProviderProgressItemPreferenceControls", () => {
     expect(html).toContain('data-provider-progress-surface="popup"');
     expect(html).toContain('data-provider-progress-surface="sidebar"');
     expect(html).toContain('data-provider-progress-surface="fullPage"');
+    expect(html).toContain("Popup");
+    expect(html).toContain("Sidebar");
+    expect(html).toContain("Full-page tab");
+    expect(html).not.toContain("ポップアップ");
     expect(html).toContain('data-provider-progress-item-row="primary"');
     expect(html).toContain("Primary quota");
     expect(html).toContain("Shown");

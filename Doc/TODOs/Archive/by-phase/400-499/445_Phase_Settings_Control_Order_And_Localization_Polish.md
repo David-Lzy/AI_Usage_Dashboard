@@ -1,6 +1,6 @@
 # Phase 445 - Settings Control Order And Localization Polish
 
-Status: active
+Status: completed
 
 ## Goal
 
@@ -43,3 +43,25 @@ Move Provider order and Quota items to the bottom of the Settings appearance sec
 ## Follow-Up
 
 - Continue to `Phase 446` for responsive Settings overview layout.
+
+## Completion Summary
+
+Phase 445 moved the Provider order and Quota items controls to the bottom of the Appearance & Sync advanced section and finished the missing localization boundary for Provider order.
+
+- `ProviderOrderPreferenceControls` now receives structured Settings copy instead of embedding user-facing English strings.
+- Provider order copy covers section labels, helper text, surface labels, provider-count chips, row aria labels, and move buttons for all 14 runtime locales.
+- Quota items English surface labels now render `Popup`, `Sidebar`, and `Full-page tab` instead of Japanese labels; the adjacent Japanese and Korean surface-label drift was corrected at the same boundary.
+- Settings now renders progress-style controls, progress appearance controls, popup preview, theme customization, Provider order, and Quota items in that order inside the expanded Appearance & Sync block.
+
+## Verification
+
+- `npm run test -- src/shared/settings-localized-copy.test.ts src/sidepanel/components/ProviderOrderPreferenceControls.test.tsx src/sidepanel/components/ProviderProgressItemPreferenceControls.test.tsx src/sidepanel/components/SettingsPreferencesSection.test.tsx --run`
+- `npm run typecheck`
+- `npm run i18n:check`
+- `npm run docs:check`
+- `npm run build`
+- `git diff --check`
+
+## Closeout Notes
+
+- No provider order storage, quota item storage, drag/drop semantics, keyboard reorder semantics, provider visibility, permissions, credentials, source preferences, raw diagnostics, or release package changed.

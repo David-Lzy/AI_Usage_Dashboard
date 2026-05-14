@@ -61,6 +61,7 @@ describe("SettingsPreferencesSection", () => {
     expect(html).toContain('data-provider-progress-surface="popup"');
     expect(html).toContain('data-provider-progress-surface="sidebar"');
     expect(html).toContain('data-provider-progress-surface="fullPage"');
+    expect(html).toContain("Choose the order per surface");
     expect(html).toContain("Tune thickness and remaining-color bands");
     expect(html).toContain("#B3261E");
     expect(html).toContain(">More<");
@@ -70,5 +71,17 @@ describe("SettingsPreferencesSection", () => {
     expect(
       html.indexOf('data-settings-material-select="locale-preference"'),
     ).toBeLessThan(html.indexOf(">More<"));
+    expect(
+      html.indexOf('data-progress-appearance-preferences=""'),
+    ).toBeLessThan(html.indexOf('class="popup-appearance-preview-card"'));
+    expect(html.indexOf('class="popup-appearance-preview-card"')).toBeLessThan(
+      html.indexOf('class="theme-customization-form"'),
+    );
+    expect(html.indexOf('class="theme-customization-form"')).toBeLessThan(
+      html.indexOf('data-provider-order-preferences=""'),
+    );
+    expect(html.indexOf('data-provider-order-preferences=""')).toBeLessThan(
+      html.indexOf('data-provider-progress-preferences=""'),
+    );
   });
 });

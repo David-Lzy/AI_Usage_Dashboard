@@ -220,20 +220,6 @@ export function SettingsPreferencesSection({
             {settingsCopy.preferences.detail}
           </p>
 
-          <ProviderOrderPreferenceControls
-            providers={providers}
-            providerOrderBySurface={settings.providerOrderBySurface}
-            onChange={onProviderOrderBySurfaceChange}
-          />
-
-          <ProviderProgressItemPreferenceControls
-            copy={settingsCopy.progressItems}
-            providers={providers}
-            snapshots={snapshots}
-            progressItemsBySurface={settings.progressItemsBySurface}
-            onChange={onProgressItemsBySurfaceChange}
-          />
-
           <div className="settings-grid">
             <MaterialSelect
               label={i18n.t("settings.preferences.popup_progress_style_label")}
@@ -303,6 +289,21 @@ export function SettingsPreferencesSection({
             onApplyThemeCustomSeed={onApplyThemeCustomSeed}
             onResetThemeCustomSeed={onResetThemeCustomSeed}
             onThemeCustomSeedDraftChange={onThemeCustomSeedDraftChange}
+          />
+
+          <ProviderOrderPreferenceControls
+            copy={settingsCopy.providerOrder}
+            providers={providers}
+            providerOrderBySurface={settings.providerOrderBySurface}
+            onChange={onProviderOrderBySurfaceChange}
+          />
+
+          <ProviderProgressItemPreferenceControls
+            copy={settingsCopy.progressItems}
+            providers={providers}
+            snapshots={snapshots}
+            progressItemsBySurface={settings.progressItemsBySurface}
+            onChange={onProgressItemsBySurfaceChange}
           />
         </div>
       </details>

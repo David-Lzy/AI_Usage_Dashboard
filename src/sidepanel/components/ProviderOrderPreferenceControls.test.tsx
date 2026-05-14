@@ -2,6 +2,8 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
 import { SAMPLE_APP_STATE } from "../../shared/constants";
+import { createRuntimeI18n } from "../../shared/i18n";
+import { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
 import {
   moveProviderInOrder,
   reorderProviderBefore,
@@ -10,8 +12,10 @@ import { ProviderOrderPreferenceControls } from "./ProviderOrderPreferenceContro
 
 describe("ProviderOrderPreferenceControls", () => {
   it("renders one reorder surface for popup, sidebar, and full-page tab", () => {
+    const copy = buildSettingsLocalizedCopy(createRuntimeI18n("en"));
     const html = renderToStaticMarkup(
       <ProviderOrderPreferenceControls
+        copy={copy.providerOrder}
         providers={SAMPLE_APP_STATE.providerSettings}
         providerOrderBySurface={SAMPLE_APP_STATE.settings.providerOrderBySurface}
         onChange={() => {}}
@@ -26,6 +30,26 @@ describe("ProviderOrderPreferenceControls", () => {
     expect(html).toContain('draggable="true"');
     expect(html).toContain("ArrowUp");
     expect(html).toContain("ArrowDown");
+    expect(html).toContain("Full-page tab");
+    expect(html).toContain("5 providers");
+    expect(html).toContain("Move Cursor down on Popup");
+  });
+
+  it("renders non-English provider-order copy", () => {
+    const copy = buildSettingsLocalizedCopy(createRuntimeI18n("de"));
+    const html = renderToStaticMarkup(
+      <ProviderOrderPreferenceControls
+        copy={copy.providerOrder}
+        providers={SAMPLE_APP_STATE.providerSettings}
+        providerOrderBySurface={SAMPLE_APP_STATE.settings.providerOrderBySurface}
+        onChange={() => {}}
+      />,
+    );
+
+    expect(html).toContain("Provider-Reihenfolge");
+    expect(html).toContain("Vollseiten-Tab");
+    expect(html).toContain("Nach unten");
+    expect(html).not.toContain("Choose the order per surface");
   });
 
   it("uses shared provider-order helpers for button and drag semantics", () => {

@@ -17,17 +17,13 @@ import {
   reorderProviderBefore,
   resolveProviderOrder,
 } from "../../shared/display-preferences";
+import type { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
 
 type ProviderOrderPreferenceControlsProps = {
+  copy: ReturnType<typeof buildSettingsLocalizedCopy>["providerOrder"];
   providerOrderBySurface: ProviderOrderBySurface;
   providers: ProviderSetting[];
   onChange: (providerOrderBySurface: ProviderOrderBySurface) => void;
-};
-
-const SURFACE_LABELS: Record<DisplaySurface, string> = {
-  popup: "Popup",
-  sidebar: "Sidebar",
-  fullPage: "Full-page tab",
 };
 
 function getProviderLabel(
@@ -38,6 +34,7 @@ function getProviderLabel(
 }
 
 export function ProviderOrderPreferenceControls({
+  copy,
   providerOrderBySurface,
   providers,
   onChange,
@@ -128,15 +125,12 @@ export function ProviderOrderPreferenceControls({
     >
       <div className="provider-order-preferences__header">
         <div>
-          <p className="section-label">Provider order</p>
+          <p className="section-label">{copy.sectionLabel}</p>
           <h3 className="section-title provider-order-preferences__title">
-            Choose the order per surface
+            {copy.title}
           </h3>
         </div>
-        <p className="supporting-copy">
-          Drag providers, use the move buttons, or focus a row and press ArrowUp
-          or ArrowDown. Each surface keeps its own order.
-        </p>
+        <p className="supporting-copy">{copy.detail}</p>
       </div>
 
       <div className="provider-order-preferences__surfaces">
@@ -145,7 +139,7 @@ export function ProviderOrderPreferenceControls({
             providerOrderBySurface[surface],
             providerIds,
           );
-          const surfaceLabel = SURFACE_LABELS[surface];
+          const surfaceLabel = copy.surfaceLabels[surface];
 
           return (
             <section
@@ -156,7 +150,7 @@ export function ProviderOrderPreferenceControls({
               <div className="provider-order-surface__header">
                 <p className="provider-order-surface__title">{surfaceLabel}</p>
                 <span className="meta-chip">
-                  {orderedProviderIds.length} providers
+                  {copy.providerCount(orderedProviderIds.length)}
                 </span>
               </div>
 
@@ -173,7 +167,12 @@ export function ProviderOrderPreferenceControls({
                       data-provider-order-row={providerId}
                       draggable
                       tabIndex={0}
-                      aria-label={`${providerLabel}, ${index + 1} of ${orderedProviderIds.length} on ${surfaceLabel}`}
+                      aria-label={copy.rowAria(
+                        providerLabel,
+                        index + 1,
+                        orderedProviderIds.length,
+                        surfaceLabel,
+                      )}
                       onDragStart={() =>
                         setDraggedProvider({ surface, providerId })
                       }
@@ -198,21 +197,27 @@ export function ProviderOrderPreferenceControls({
                           className="text-button provider-order-list__action"
                           type="button"
                           disabled={isFirst}
-                          aria-label={`Move ${providerLabel} up on ${surfaceLabel}`}
+                          aria-label={copy.moveUpAction(
+                            providerLabel,
+                            surfaceLabel,
+                          )}
                           onClick={() => moveProvider(surface, providerId, "up")}
                         >
-                          Up
+                          {copy.up}
                         </button>
                         <button
                           className="text-button provider-order-list__action"
                           type="button"
                           disabled={isLast}
-                          aria-label={`Move ${providerLabel} down on ${surfaceLabel}`}
+                          aria-label={copy.moveDownAction(
+                            providerLabel,
+                            surfaceLabel,
+                          )}
                           onClick={() =>
                             moveProvider(surface, providerId, "down")
                           }
                         >
-                          Down
+                          {copy.down}
                         </button>
                       </span>
                     </li>

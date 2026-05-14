@@ -20,6 +20,18 @@ describe("buildSettingsLocalizedCopy", () => {
     expect(copy.credentials.saveKey).toBe("Save key");
     expect(copy.sources.preferenceLabel).toBe("Preference");
     expect(copy.layout.userLevel.label).toBe("Display level");
+    expect(copy.providerOrder.sectionLabel).toBe("Provider order");
+    expect(copy.providerOrder.providerCount(5)).toBe("5 providers");
+    expect(copy.providerOrder.surfaceLabels).toEqual({
+      popup: "Popup",
+      sidebar: "Sidebar",
+      fullPage: "Full-page tab",
+    });
+    expect(copy.progressItems.surfaceLabels).toEqual({
+      popup: "Popup",
+      sidebar: "Sidebar",
+      fullPage: "Full-page tab",
+    });
     expect(copy.progressAppearance.sectionLabel).toBe("Progress appearance");
     expect(copy.progressAppearance.thickness.unit).toBe("px");
     expect(copy.layout.userLevel.options).toEqual({
@@ -43,6 +55,8 @@ describe("buildSettingsLocalizedCopy", () => {
     expect(copy.credentials.saveConfig).toBe("保存配置");
     expect(copy.sources.itemCount(3)).toBe("3 项");
     expect(copy.permissions.requestAccess).toBe("请求授权");
+    expect(copy.providerOrder.sectionLabel).toBe("Provider 顺序");
+    expect(copy.providerOrder.providerCount(5)).toBe("5 个 Provider");
     expect(copy.progressItems.sectionLabel).toBe("额度项");
     expect(copy.progressItems.visibleCount(1, 3)).toBe("1/3 已显示");
     expect(copy.progressAppearance.sectionLabel).toBe("进度外观");
@@ -96,6 +110,11 @@ describe("buildSettingsLocalizedCopy", () => {
       expect(copy.permissions.requestAccess).not.toBe(
         englishCopy.permissions.requestAccess,
       );
+      expect(copy.providerOrder.sectionLabel).not.toBe(
+        englishCopy.providerOrder.sectionLabel,
+      );
+      expect(copy.providerOrder.title).not.toBe(englishCopy.providerOrder.title);
+      expect(copy.providerOrder.up).not.toBe(englishCopy.providerOrder.up);
       expect(copy.progressItems.sectionLabel).not.toBe(
         englishCopy.progressItems.sectionLabel,
       );

@@ -54,9 +54,9 @@ export const SETTINGS_PROGRESS_ITEMS_COPY: Record<
         "This provider currently exposes facts, policy text, or raw evidence rather than renderable progress items.",
     },
     surfaceLabels: {
-      popup: "ポップアップ",
-      sidebar: "サイドバー",
-      fullPage: "全画面タブ",
+      popup: "Popup",
+      sidebar: "Sidebar",
+      fullPage: "Full-page tab",
     },
     visibleCount: (visibleLabel, totalLabel) =>
       `${visibleLabel}/${totalLabel} shown`,
@@ -183,9 +183,9 @@ export const SETTINGS_PROGRESS_ITEMS_COPY: Record<
         "この Provider は現在、描画可能な進捗項目ではなく、事実、ポリシー文、または生の証拠を公開しています。",
     },
     surfaceLabels: {
-      popup: "팝업",
-      sidebar: "사이드바",
-      fullPage: "전체 페이지 탭",
+      popup: "ポップアップ",
+      sidebar: "サイドバー",
+      fullPage: "全画面タブ",
     },
     visibleCount: (visibleLabel, totalLabel) =>
       `${visibleLabel}/${totalLabel} 表示中`,
@@ -226,9 +226,9 @@ export const SETTINGS_PROGRESS_ITEMS_COPY: Record<
         "이 Provider는 현재 렌더링 가능한 진행 항목이 아니라 사실, 정책 텍스트 또는 원시 증거를 제공합니다.",
     },
     surfaceLabels: {
-      popup: "पॉपअप",
-      sidebar: "साइडबार",
-      fullPage: "पूर्ण-पृष्ठ टैब",
+      popup: "팝업",
+      sidebar: "사이드바",
+      fullPage: "전체 페이지 탭",
     },
     visibleCount: (visibleLabel, totalLabel) =>
       `${visibleLabel}/${totalLabel} 표시됨`,
