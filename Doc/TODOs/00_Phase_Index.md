@@ -34,9 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [425_Phase_Progress_Item_Inventory_Model.md](./425_Phase_Progress_Item_Inventory_Model.md)
-- latest completed slice: [424_Phase_Settings_Surface_Order_Controls.md](./Archive/by-phase/400-499/424_Phase_Settings_Surface_Order_Controls.md)
-- queued phase files: [426_Phase_Per_Surface_Progress_Visibility_Order_Settings.md](./426_Phase_Per_Surface_Progress_Visibility_Order_Settings.md), [427_Phase_Progress_Item_Rendering_Across_Surfaces.md](./427_Phase_Progress_Item_Rendering_Across_Surfaces.md), [428_Phase_Progress_Ring_Visual_Styles.md](./428_Phase_Progress_Ring_Visual_Styles.md), [429_Phase_Progress_Appearance_Settings_Preview.md](./429_Phase_Progress_Appearance_Settings_Preview.md), [430_Phase_Settings_Provider_Carousel_Foundation.md](./430_Phase_Settings_Provider_Carousel_Foundation.md), [431_Phase_Settings_Carousel_All_Provider_Sections.md](./431_Phase_Settings_Carousel_All_Provider_Sections.md), [432_Phase_UI_QA_And_Doc_Closeout.md](./432_Phase_UI_QA_And_Doc_Closeout.md)
+- active phase file: [426_Phase_Per_Surface_Progress_Visibility_Order_Settings.md](./426_Phase_Per_Surface_Progress_Visibility_Order_Settings.md)
+- latest completed slice: [425_Phase_Progress_Item_Inventory_Model.md](./Archive/by-phase/400-499/425_Phase_Progress_Item_Inventory_Model.md)
+- queued phase files: [427_Phase_Progress_Item_Rendering_Across_Surfaces.md](./427_Phase_Progress_Item_Rendering_Across_Surfaces.md), [428_Phase_Progress_Ring_Visual_Styles.md](./428_Phase_Progress_Ring_Visual_Styles.md), [429_Phase_Progress_Appearance_Settings_Preview.md](./429_Phase_Progress_Appearance_Settings_Preview.md), [430_Phase_Settings_Provider_Carousel_Foundation.md](./430_Phase_Settings_Provider_Carousel_Foundation.md), [431_Phase_Settings_Carousel_All_Provider_Sections.md](./431_Phase_Settings_Carousel_All_Provider_Sections.md), [432_Phase_UI_QA_And_Doc_Closeout.md](./432_Phase_UI_QA_And_Doc_Closeout.md)
 
 Completed phases should be moved to:
 
@@ -818,6 +818,7 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 422` closeout added shared display-surface preference types, defaults, normalizers, and storage migration for provider order plus progress item preferences while preserving current rendering behavior, provider source truth, credentials, host permissions, and release boundaries
 - the 2026-05-14 `Phase 423` closeout made popup, sidebar, and full-page dashboard provider rendering consume the independent provider-order preference while preserving the existing health/status default order, provider source truth, enabled filtering, sync behavior, and release boundaries
 - the 2026-05-14 `Phase 424` closeout added Settings provider-order controls for popup, sidebar, and full-page tab surfaces with move buttons, ArrowUp/ArrowDown row movement, and drag/drop reorder while preserving provider enabled state, permissions, credentials, source preferences, sync behavior, and release boundaries
+- the 2026-05-14 `Phase 425` closeout added a shared provider progress-item inventory model for primary quota, usage window, and usage balance items, wired storage normalization to discovered known item ids, and preserved usage facts, raw evidence, diagnostic bodies, archive/export payloads, and visible rendering behavior
 
 ## Delivery Standard For Each Phase
 

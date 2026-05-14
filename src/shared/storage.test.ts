@@ -187,6 +187,31 @@ describe("storage normalization", () => {
     });
   });
 
+  it("keeps known progress item preferences and appends newly discovered items", async () => {
+    await writeAppState({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        progressItemsBySurface: {
+          popup: {
+            jetbrains: [
+              { id: "primary", visible: false },
+              { id: "unknown", visible: true },
+            ],
+          },
+          sidebar: {},
+          fullPage: {},
+        },
+      } as unknown as AppState["settings"],
+    });
+
+    const state = await readAppState();
+
+    expect(state?.settings.progressItemsBySurface.popup.jetbrains).toEqual([
+      { id: "primary", visible: false },
+    ]);
+  });
+
   it("normalizes invalid popup appearance preferences", async () => {
     await writeAppState({
       ...SAMPLE_APP_STATE,

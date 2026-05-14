@@ -36,6 +36,7 @@ import {
   normalizeProgressItemsBySurface,
   normalizeProviderOrderBySurface,
 } from "./display-preferences";
+import { buildProviderProgressItemIdsByProvider } from "./provider-progress-items";
 import { normalizeSettingsUserLevel } from "./settings-user-level";
 
 let memoryFallbackState: AppState | null = null;
@@ -124,6 +125,8 @@ function normalizeAppState(state: AppState): AppState {
   const knownProviderIds = SAMPLE_APP_STATE.providerSettings.map(
     (provider) => provider.id,
   );
+  const knownProgressItemIdsByProvider =
+    buildProviderProgressItemIdsByProvider(providers);
 
   const extraProviders = state.providers.filter(
     (provider) => !sampleProviders.has(provider.providerId),
@@ -194,6 +197,7 @@ function normalizeAppState(state: AppState): AppState {
       progressItemsBySurface: normalizeProgressItemsBySurface(
         state.settings?.progressItemsBySurface,
         knownProviderIds,
+        knownProgressItemIdsByProvider,
       ),
     },
   };

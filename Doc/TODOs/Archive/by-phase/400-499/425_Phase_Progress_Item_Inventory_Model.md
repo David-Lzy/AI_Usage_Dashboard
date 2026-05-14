@@ -1,6 +1,6 @@
 # Phase 425 - Progress Item Inventory Model
 
-Status: queued
+Status: completed
 
 ## Goal
 
@@ -34,6 +34,18 @@ Create a shared progress-item inventory so primary quotas, usage windows, and us
 - `npm run test -- src/shared/provider-progress-items.test.ts src/shared/display-preferences.test.ts`
 - `npm run typecheck`
 - `git diff --check`
+
+## Completion Summary
+
+- Added a shared provider progress-item inventory builder for primary quota items, usage windows, and usage balances.
+- Added stable item ids for primary quota, per-window usage, and balance cards while leaving usage facts outside progress rendering.
+- Connected app-state storage normalization to discovered progress item ids so unknown ids are dropped and newly discovered known ids can be appended.
+- Preserved provider raw evidence, diagnostic bodies, archive/export payloads, and visible UI rendering behavior.
+
+## Verification
+
+- `npm run test -- src/shared/provider-progress-items.test.ts src/shared/display-preferences.test.ts src/shared/storage.test.ts`
+- `npm run typecheck`
 
 ## Follow-Up
 
