@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
@@ -6,6 +8,11 @@ import {
   getColorChoiceSelectionLabel,
   normalizeColorChoiceHex,
 } from "./ColorChoiceDropdown";
+
+const formControlsCss = readFileSync(
+  new URL("../theme/form-controls.css", import.meta.url),
+  "utf8",
+);
 
 describe("ColorChoiceDropdown", () => {
   const copy = {
@@ -56,6 +63,16 @@ describe("ColorChoiceDropdown", () => {
     );
     expect(getColorChoiceSelectionLabel("#111111", sections, "Custom")).toBe(
       "#111111",
+    );
+  });
+
+  it("uses body-large trigger typography for color names and custom hex values", () => {
+    expect(formControlsCss).toContain(".color-choice-dropdown__button {");
+    expect(formControlsCss).toContain(
+      "font-size: var(--md-sys-typescale-body-large-size);",
+    );
+    expect(formControlsCss).toContain(
+      "line-height: var(--md-sys-typescale-body-large-line-height);",
     );
   });
 });

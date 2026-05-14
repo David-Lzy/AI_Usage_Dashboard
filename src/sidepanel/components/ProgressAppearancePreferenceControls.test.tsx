@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
@@ -8,6 +10,11 @@ import {
   createDefaultProgressColorBands,
 } from "../../shared/progress-appearance";
 import { ProgressAppearancePreferenceControls } from "./ProgressAppearancePreferenceControls";
+
+const settingsAppearanceCss = readFileSync(
+  new URL("../theme/settings-appearance.css", import.meta.url),
+  "utf8",
+);
 
 describe("ProgressAppearancePreferenceControls", () => {
   it("renders localized thickness and color-band controls", () => {
@@ -33,5 +40,14 @@ describe("ProgressAppearancePreferenceControls", () => {
     expect(html).toContain("Farben zurucksetzen");
     expect(html).not.toContain("color-choice-dropdown__hex");
     expect(html).not.toContain('type="color"');
+  });
+
+  it("keeps color-band number and color controls compact but aligned", () => {
+    expect(settingsAppearanceCss).toContain(
+      "grid-template-columns: max-content max-content minmax(148px, 16rem);",
+    );
+    expect(settingsAppearanceCss).toContain("inline-size: 5.5ch;");
+    expect(settingsAppearanceCss).toContain("min-inline-size: 68px;");
+    expect(settingsAppearanceCss).toContain("min-inline-size: 9.5rem;");
   });
 });

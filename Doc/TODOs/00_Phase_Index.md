@@ -34,10 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [464_Phase_Form_Control_Typography_And_Auto_Sizing.md](./464_Phase_Form_Control_Typography_And_Auto_Sizing.md)
-- latest completed slice: [463_Phase_Popup_Circular_Progress_Row_Count.md](./Archive/by-phase/400-499/463_Phase_Popup_Circular_Progress_Row_Count.md)
+- active phase file: [465_Phase_UI_Font_Family_Preference_Model.md](./465_Phase_UI_Font_Family_Preference_Model.md)
+- latest completed slice: [464_Phase_Form_Control_Typography_And_Auto_Sizing.md](./Archive/by-phase/400-499/464_Phase_Form_Control_Typography_And_Auto_Sizing.md)
 - queued phase files:
-  - [464_Phase_Form_Control_Typography_And_Auto_Sizing.md](./464_Phase_Form_Control_Typography_And_Auto_Sizing.md)
   - [465_Phase_UI_Font_Family_Preference_Model.md](./465_Phase_UI_Font_Family_Preference_Model.md)
   - [466_Phase_UI_Polish_Visual_QA_Docs_Closeout.md](./466_Phase_UI_Polish_Visual_QA_Docs_Closeout.md)
 
@@ -860,6 +859,7 @@ Completed phases should be moved to:
 - the 2026-05-15 `Phase 461` closeout stabilized Settings provider-carousel motion by capping depth offsets and slightly slowing the carousel-local transition while preserving reduced-motion handling, keyboard navigation, pointer drag thresholds, RTL semantics, focus behavior, and inactive-slide semantics
 - the 2026-05-15 `Phase 462` closeout moved popup refresh into the title row, added a popup header Settings action, and kept theme, tab, and Settings controls in a compact action row while preserving existing popup route/action handlers and localized common action labels
 - the 2026-05-15 `Phase 463` closeout added a default-two popup circular progress row-count preference, Settings control, 14-locale labels/helper copy, and popup-only circular layout consumption while preserving line progress, provider values, quota visibility/order, warnings, diagnostics, raw evidence, sidebar layout, and full-page layout
+- the 2026-05-15 `Phase 464` closeout made shared Settings form-control values more legible with explicit body-large typography and tightened progress appearance numeric/color controls while preserving storage, settings semantics, provider data, locale behavior, and popup quota rendering
 
 ## Delivery Standard For Each Phase
 

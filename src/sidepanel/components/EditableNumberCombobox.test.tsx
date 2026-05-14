@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
@@ -6,6 +8,11 @@ import {
   isEditableNumberInRange,
   parseEditableNumberDraft,
 } from "./EditableNumberCombobox";
+
+const formControlsCss = readFileSync(
+  new URL("../theme/form-controls.css", import.meta.url),
+  "utf8",
+);
 
 describe("EditableNumberCombobox", () => {
   it("renders an editable combobox instead of a native select", () => {
@@ -52,5 +59,13 @@ describe("EditableNumberCombobox", () => {
     expect(isEditableNumberInRange(14, 15, 240)).toBe(false);
     expect(isEditableNumberInRange(241, 15, 240)).toBe(false);
     expect(isEditableNumberInRange(30.5, 15, 240)).toBe(false);
+  });
+
+  it("keeps editable values readable without inheriting tiny nested text", () => {
+    expect(formControlsCss).toContain(".editable-number-combobox__input {");
+    expect(formControlsCss).toContain(
+      "font-size: var(--md-sys-typescale-body-large-size);",
+    );
+    expect(formControlsCss).toContain("text-align: start;");
   });
 });

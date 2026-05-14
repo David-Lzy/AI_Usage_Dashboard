@@ -361,12 +361,14 @@
 
 .progress-appearance-thickness__control {
   display: grid;
-  grid-template-columns: minmax(88px, 120px) minmax(160px, 1fr) auto;
+  grid-template-columns: minmax(64px, 88px) minmax(160px, 1fr) auto;
   align-items: center;
   gap: var(--app-space-3);
 }
 
 .progress-appearance-thickness__number {
+  inline-size: 6ch;
+  min-inline-size: 0;
   min-height: 44px;
 }
 
@@ -416,7 +418,7 @@
 
 .progress-appearance-band__fields {
   display: grid;
-  grid-template-columns: max-content max-content minmax(168px, 220px);
+  grid-template-columns: max-content max-content minmax(148px, 16rem);
   align-items: center;
   gap: var(--app-space-2);
   justify-content: start;
@@ -437,7 +439,9 @@
 }
 
 .progress-appearance-band__fields > .form-field .form-field__control {
-  width: 72px;
+  inline-size: 5.5ch;
+  min-inline-size: 68px;
+  width: auto;
   min-height: 44px;
   padding-inline: var(--app-space-3);
 }
@@ -445,6 +449,9 @@
 .progress-appearance-band__fields
   > .color-choice-dropdown
   .color-choice-dropdown__button {
+  inline-size: fit-content;
+  min-inline-size: 9.5rem;
+  max-inline-size: 100%;
   min-height: 44px;
   grid-template-columns: auto minmax(0, 1fr) 36px;
 }
@@ -546,6 +553,7 @@
   }
 
   .progress-appearance-band__fields > .form-field .form-field__control {
+    inline-size: 100%;
     width: 100%;
   }
 }

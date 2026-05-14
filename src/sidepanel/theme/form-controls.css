@@ -20,7 +20,10 @@
   background: var(--md-sys-color-surface-container-lowest);
   color: var(--md-sys-color-on-surface);
   width: 100%;
-  font: inherit;
+  font-family: var(--md-sys-typescale-body-large-font);
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: var(--md-sys-typescale-body-large-weight);
+  line-height: var(--md-sys-typescale-body-large-line-height);
   transition:
     background-color var(--app-motion-duration-fast)
       var(--app-motion-easing-standard),
@@ -101,6 +104,10 @@ select.form-field__control {
   border-radius: var(--md-sys-shape-corner-large);
   background: var(--md-sys-color-surface-container-lowest);
   color: var(--md-sys-color-on-surface);
+  font-family: var(--md-sys-typescale-body-large-font);
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: var(--md-sys-typescale-body-large-weight);
+  line-height: var(--md-sys-typescale-body-large-line-height);
   text-align: start;
   cursor: pointer;
   transition:
@@ -267,6 +274,10 @@ html[data-app-direction="rtl"] .material-select__button {
   border-radius: var(--md-sys-shape-corner-large);
   background: var(--md-sys-color-surface-container-lowest);
   color: var(--md-sys-color-on-surface);
+  font-family: var(--md-sys-typescale-body-large-font);
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: var(--md-sys-typescale-body-large-weight);
+  line-height: var(--md-sys-typescale-body-large-line-height);
   text-align: start;
   cursor: pointer;
   transition:
@@ -561,7 +572,11 @@ html[data-app-direction="rtl"] .color-choice-dropdown__menu {
   outline: 0;
   background: transparent;
   color: inherit;
-  font: inherit;
+  font-family: var(--md-sys-typescale-body-large-font);
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: var(--md-sys-typescale-body-large-weight);
+  line-height: var(--md-sys-typescale-body-large-line-height);
+  text-align: start;
 }
 
 html[data-app-direction="rtl"] .editable-number-combobox__input {

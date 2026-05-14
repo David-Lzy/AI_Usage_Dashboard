@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
@@ -5,6 +7,11 @@ import {
   MaterialSelect,
   getNextMaterialSelectOptionIndex,
 } from "./MaterialSelect";
+
+const formControlsCss = readFileSync(
+  new URL("../theme/form-controls.css", import.meta.url),
+  "utf8",
+);
 
 describe("MaterialSelect", () => {
   it("renders a custom select-only combobox instead of a native select", () => {
@@ -58,5 +65,15 @@ describe("MaterialSelect", () => {
     expect(getNextMaterialSelectOptionIndex(-1, "previous", 3)).toBe(2);
     expect(getNextMaterialSelectOptionIndex(2, "next", 3)).toBe(0);
     expect(getNextMaterialSelectOptionIndex(0, "previous", 3)).toBe(2);
+  });
+
+  it("uses readable body-large typography for the selected value", () => {
+    expect(formControlsCss).toContain(".material-select__button {");
+    expect(formControlsCss).toContain(
+      "font-size: var(--md-sys-typescale-body-large-size);",
+    );
+    expect(formControlsCss).toContain(
+      "line-height: var(--md-sys-typescale-body-large-line-height);",
+    );
   });
 });

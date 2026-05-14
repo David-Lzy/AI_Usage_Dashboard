@@ -45,5 +45,6 @@ Status note:
 - `Phase 461` stabilized Settings provider-carousel motion by capping depth offsets and slightly slowing the carousel-local transition while preserving reduced-motion handling and carousel interaction semantics.
 - `Phase 462` moved popup refresh into the title row, added a popup header Settings action, and kept theme, tab, and Settings controls in a compact action row.
 - `Phase 463` added a popup circular progress row-count preference, Settings control, and popup-only circular layout consumption while leaving line progress unchanged.
-- Current implementation source is ahead of the `0.1.0-rc.19` package by the `Phase 449` through `Phase 463` UI micro-polish phases.
-- `Phase 464` through `Phase 466` are queued as the next scoped UI polish sequence covering form-control typography, UI font preference, and visual QA/docs closeout.
+- `Phase 464` made shared Settings form-control values more legible with explicit body-large typography and tightened progress appearance numeric/color controls while preserving storage and provider behavior.
+- Current implementation source is ahead of the `0.1.0-rc.19` package by the `Phase 449` through `Phase 464` UI micro-polish phases.
+- `Phase 465` through `Phase 466` are queued as the next scoped UI polish sequence covering UI font preference and visual QA/docs closeout.

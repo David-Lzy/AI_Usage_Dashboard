@@ -1,6 +1,6 @@
 # Phase 464 - Form Control Typography And Auto Sizing
 
-Status: queued
+Status: completed on 2026-05-15
 
 ## Goal
 
@@ -38,3 +38,17 @@ Improve select/input readability and sizing so control text no longer feels unde
 ## Follow-Up
 
 - If font-size changes disturb popup density, split popup-specific typography tokens into a later phase.
+
+## Completion Notes
+
+- Updated shared Settings form-control CSS so native text inputs, Material selects, editable number comboboxes, and color-choice dropdown triggers use explicit body-large value typography instead of inheriting smaller nested text.
+- Tightened progress appearance numeric controls and remaining-color-band rows so short numeric values and color dropdowns stay compact while repeated rows keep a stable aligned grid.
+- Added focused tests that guard the shared typography tokens and compact color-band sizing rules.
+
+## Verification
+
+- `npm run test -- src/sidepanel/components/MaterialSelect.test.tsx src/sidepanel/components/EditableNumberCombobox.test.tsx src/sidepanel/components/ColorChoiceDropdown.test.tsx src/sidepanel/components/SettingsPreferencesSection.test.tsx src/sidepanel/components/ProgressAppearancePreferenceControls.test.tsx --run`
+- `npm run typecheck`
+- `npm run docs:check`
+- `npm run build`
+- `git diff --check`
