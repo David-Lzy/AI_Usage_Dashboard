@@ -16,8 +16,19 @@
 
 .settings-overview__controls {
   display: grid;
-  grid-template-columns: minmax(0, min(320px, 100%));
+  grid-template-columns: minmax(220px, min(320px, 38%)) minmax(260px, 1fr);
+  align-items: end;
   gap: var(--app-space-3);
+}
+
+.settings-overview__controls > .material-select {
+  min-width: 0;
+}
+
+.settings-overview__user-level-help {
+  align-self: end;
+  max-width: 72ch;
+  margin: 0;
 }
 
 .settings-section-anchor {
@@ -295,6 +306,14 @@
 
   .settings-grid {
     grid-template-columns: 1fr;
+  }
+
+  .settings-overview__controls {
+    grid-template-columns: minmax(0, min(320px, 100%));
+  }
+
+  .settings-overview__user-level-help {
+    max-width: none;
   }
 }
 

@@ -350,7 +350,7 @@ export function SettingsPage({
             ]}
             onChange={onUserLevelChange}
           />
-          <p className="supporting-copy">
+          <p className="supporting-copy settings-overview__user-level-help">
             {settingsCopy.layout.userLevel.helpText}
           </p>
         </div>

@@ -30,3 +30,4 @@ Status note:
 - `Phase 443` applied those appearance settings to progress renderers while preserving quota math, warning diagnostics, action-badge behavior, and raw evidence boundaries.
 - `Phase 444` made soft and gauge SVG rings visually distinct without changing progress values, accessibility text, or provider evidence boundaries.
 - `Phase 445` moved Provider order and Quota items below the visual appearance controls and localized Provider order copy across the 14 runtime locales.
+- `Phase 446` made the Settings overview display-level helper responsive across wide and narrow localized layouts.

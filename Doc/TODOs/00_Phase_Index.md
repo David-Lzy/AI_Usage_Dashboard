@@ -34,10 +34,10 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [446_Phase_Settings_Overview_Responsive_User_Level_Help.md](./446_Phase_Settings_Overview_Responsive_User_Level_Help.md)
-- latest completed slice: [445_Phase_Settings_Control_Order_And_Localization_Polish.md](./Archive/by-phase/400-499/445_Phase_Settings_Control_Order_And_Localization_Polish.md)
+- active phase file: [447_Phase_Settings_Appearance_Responsive_Control_Grid.md](./447_Phase_Settings_Appearance_Responsive_Control_Grid.md)
+- latest completed slice: [446_Phase_Settings_Overview_Responsive_User_Level_Help.md](./Archive/by-phase/400-499/446_Phase_Settings_Overview_Responsive_User_Level_Help.md)
 - queued phase files:
-  - [447_Phase_Settings_Appearance_Responsive_Control_Grid.md](./447_Phase_Settings_Appearance_Responsive_Control_Grid.md)
+  - none
 
 Completed phases should be moved to:
 
@@ -840,6 +840,7 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 443` closeout applied global progress thickness and remaining-percent color bands to line, classic circle, soft ring, and gauge ring renderers across popup, dashboard, provider detail, and preview surfaces while preserving quota math, provider warnings, diagnostics, action-badge behavior, and raw evidence boundaries
 - the 2026-05-14 `Phase 444` closeout made `circle-soft` a full 360-degree ring and `circle-gauge` a shorter instrument-style arc with distinct rotation, track opacity, sizing, and fill emphasis while preserving progress values, aria text, color-band selection, provider warnings, diagnostics, and raw evidence boundaries
 - the 2026-05-14 `Phase 445` closeout moved Provider order and Quota items to the bottom of the expanded Appearance & Sync block, localized Provider order copy across 14 runtime locales, and corrected Quota items English/Japanese/Korean surface-label drift while preserving provider/order storage, drag/drop behavior, provider visibility, credentials, source preferences, diagnostics, and release boundaries
+- the 2026-05-14 `Phase 446` closeout made the Settings overview display-level helper responsive so wide layouts place it beside the selector and narrow `zh-CN`/`ar` layouts stack it below without overflow, while preserving user-level semantics, localized copy, route focus, Settings navigation, MaterialSelect internals, and release boundaries
 
 ## Delivery Standard For Each Phase
 
