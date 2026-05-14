@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-14:
 
-- the numbered phase queue is completed through `Phase 428`, with `Phase 429` now active and `Phase 430` through `Phase 432` queued for Settings progress preview/copy, Settings provider carousel migration, and UI QA closeout
+- the numbered phase queue is completed through `Phase 429`, with `Phase 430` now active and `Phase 431` through `Phase 432` queued for Settings provider carousel migration and UI QA closeout
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -132,6 +132,7 @@ As of 2026-05-14:
 - `Phase 426` added Settings controls for per-provider progress item visibility and order across popup, sidebar, and full-page tab surfaces while preserving existing runtime progress rendering until `Phase 427`.
 - `Phase 427` made popup, sidebar dashboard cards, full-page dashboard cards, and provider detail consume the shared per-surface progress item selection/rendering path while keeping usage facts supplemental and preserving provider snapshots, adapter output, raw evidence, export payloads, source truth labels, and popup featured-provider count.
 - `Phase 428` added soft and gauge SVG ring styles under the same `UsageProgress` API, kept the classic circle ring valid, changed fresh popup defaults to `circle-soft`, and preserved determinate/indeterminate accessibility semantics plus provider value boundaries.
+- `Phase 429` exposed all four progress style choices through localized Settings option labels and made the popup appearance preview render the selected `UsageProgress` style directly while preserving existing stored `line`/`circle` values and provider evidence boundaries.
 - `Phase 200` completed a functionality-first Codex personal slice by preserving multiple visible usage windows, expanding Codex page-capture snippets, and surfacing the most constrained visible percentage window across dashboard, provider detail, and popup paths
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without changing the primary percentage-window quota model
 - `Phase 202` completed repeatable unpacked-extension verification for Codex personal multi-window plus flex-balance context, while fixing DOM capture so repeated percentages and single-character balance values are not lost before parsing

@@ -517,10 +517,15 @@
 }
 
 .popup-appearance-preview-provider {
+  align-items: center;
   padding: var(--app-space-3);
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--popup-appearance-preview-inner-radius);
   background: var(--md-sys-color-surface-container-low);
+}
+
+.popup-appearance-preview-provider > div:first-child {
+  min-width: 0;
 }
 
 .popup-appearance-preview-provider__title {
@@ -534,23 +539,60 @@
 
 .popup-appearance-preview-progress {
   flex: 0 0 auto;
-  width: 54px;
-  height: 54px;
-  padding: 7px;
-  border-radius: var(--md-sys-shape-corner-full);
-  background:
-    conic-gradient(
-      var(--app-color-success) 0 72%,
-      var(--app-progress-track-neutral) 72% 100%
-    );
+  display: grid;
+  place-items: center;
+  min-width: 76px;
 }
 
-.popup-appearance-preview-progress span {
-  display: block;
+.popup-appearance-preview-progress--line {
+  width: min(42vw, 132px);
+  min-width: 104px;
+  place-items: stretch;
+}
+
+.popup-appearance-preview-progress--circle,
+.popup-appearance-preview-progress--circle-soft,
+.popup-appearance-preview-progress--circle-gauge {
+  width: 76px;
+}
+
+.popup-appearance-preview-progress .usage-progress {
   width: 100%;
-  height: 100%;
-  border-radius: inherit;
-  background: var(--md-sys-color-surface-container-lowest);
+}
+
+.popup-appearance-preview-progress .usage-progress__meta {
+  gap: var(--app-space-1);
+}
+
+.popup-appearance-preview-progress .usage-progress__label,
+.popup-appearance-preview-progress .usage-progress__ring-label,
+.popup-appearance-preview-progress .usage-progress__detail {
+  display: none;
+}
+
+.popup-appearance-preview-progress .usage-progress__value {
+  font-size: var(--md-sys-typescale-label-medium-size);
+  line-height: var(--md-sys-typescale-label-medium-line-height);
+}
+
+.popup-appearance-preview-progress .usage-progress__ring,
+.popup-appearance-preview-progress .usage-progress-ring {
+  width: 58px;
+}
+
+.popup-appearance-preview-progress
+  .usage-progress-ring--circle-gauge {
+  width: 64px;
+}
+
+.popup-appearance-preview-progress .usage-progress__ring::before {
+  inset: 7px;
+}
+
+.popup-appearance-preview-progress .usage-progress__ring-value,
+.popup-appearance-preview-progress .usage-progress-ring__value {
+  font-size: var(--md-sys-typescale-label-large-size);
+  line-height: var(--md-sys-typescale-label-large-line-height);
 }
 
 .theme-customization-form {

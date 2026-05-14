@@ -253,6 +253,8 @@ export type RuntimeMessageId =
   | "settings.preferences.full_page_progress_style_label"
   | "settings.preferences.progress_style.line"
   | "settings.preferences.progress_style.circle"
+  | "settings.preferences.progress_style.circle_soft"
+  | "settings.preferences.progress_style.circle_gauge"
   | "settings.preferences.popup_size_label"
   | "settings.preferences.popup_size.compact"
   | "settings.preferences.popup_size.balanced"

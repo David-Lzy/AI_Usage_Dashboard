@@ -14,6 +14,7 @@ describe("PopupAppearancePreview", () => {
         settings={{
           ...SAMPLE_APP_STATE.settings,
           popupCornerStyle: "rounded",
+          popupProgressStyle: "circle-soft",
           popupShadowStyle: "elevated",
           popupSizePreset: "wide",
         }}
@@ -24,6 +25,8 @@ describe("PopupAppearancePreview", () => {
     expect(html).toContain('data-popup-size-preset="wide"');
     expect(html).toContain('data-popup-corner-style="rounded"');
     expect(html).toContain('data-popup-shadow-style="elevated"');
+    expect(html).toContain('data-popup-progress-style="circle-soft"');
+    expect(html).toContain("usage-progress-ring--circle-soft");
     expect(html).toContain("Toolbar bubble shape");
     expect(html).toContain("Weekly usage window");
   });
@@ -39,5 +42,22 @@ describe("PopupAppearancePreview", () => {
 
     expect(html).toContain("工具栏弹窗形态");
     expect(html).toContain("每周使用窗口");
+    expect(html).toContain('aria-valuetext="每周使用窗口: 51% 剩余"');
+  });
+
+  it("renders the selected gauge progress style in the preview", () => {
+    const i18n = createRuntimeI18n("en", undefined);
+    const html = renderToStaticMarkup(
+      <PopupAppearancePreview
+        i18n={i18n}
+        settings={{
+          ...SAMPLE_APP_STATE.settings,
+          popupProgressStyle: "circle-gauge",
+        }}
+      />,
+    );
+
+    expect(html).toContain('data-popup-progress-style="circle-gauge"');
+    expect(html).toContain("usage-progress-ring--circle-gauge");
   });
 });

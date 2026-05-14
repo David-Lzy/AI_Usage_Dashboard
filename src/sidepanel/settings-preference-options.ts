@@ -55,11 +55,11 @@ export function buildSettingsPreferenceOptions({
     sunset: i18n.t("settings.preferences.theme_preset.sunset"),
     custom: i18n.t("settings.preferences.theme_preset.custom"),
   };
-  const progressDisplayStyleOptionLabels: Partial<
-    Record<ProgressDisplayStyle, string>
-  > = {
+  const progressDisplayStyleOptionLabels: Record<ProgressDisplayStyle, string> = {
     line: i18n.t("settings.preferences.progress_style.line"),
     circle: i18n.t("settings.preferences.progress_style.circle"),
+    "circle-soft": i18n.t("settings.preferences.progress_style.circle_soft"),
+    "circle-gauge": i18n.t("settings.preferences.progress_style.circle_gauge"),
   };
   const popupSizePresetOptionLabels: Record<PopupSizePreset, string> = {
     compact: i18n.t("settings.preferences.popup_size.compact"),
@@ -95,7 +95,7 @@ export function buildSettingsPreferenceOptions({
   const progressDisplayStyleOptions = PROGRESS_DISPLAY_STYLE_OPTIONS.map(
     (option) => ({
       value: option.value,
-      label: progressDisplayStyleOptionLabels[option.value] ?? option.label,
+      label: progressDisplayStyleOptionLabels[option.value],
     }),
   );
   const popupSizePresetOptions = POPUP_SIZE_PRESET_OPTIONS.map((option) => ({

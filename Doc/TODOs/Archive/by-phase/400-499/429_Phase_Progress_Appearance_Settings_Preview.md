@@ -1,6 +1,6 @@
 # Phase 429 - Progress Appearance Settings Preview
 
-Status: queued
+Status: completed
 
 ## Goal
 
@@ -34,3 +34,17 @@ Expose the expanded progress style choices in Settings and make the popup appear
 ## Follow-Up
 
 - Phase 430 adds the reusable carousel foundation for Settings provider sections.
+
+## Completion Summary
+
+- Added explicit 14-locale Settings labels for `circle-soft` and `circle-gauge` progress styles.
+- Made Settings progress style options use localized labels for all four stored values without falling back to English option defaults.
+- Updated `PopupAppearancePreview` to render the selected `UsageProgress` style directly, including line, classic circle, soft SVG ring, and gauge SVG ring.
+- Preserved existing `line` and `circle` stored values, provider source truth, raw evidence, release versions, and manifest locale ids.
+
+## Verification
+
+- `npm run i18n:check`
+- `npm run test -- src/sidepanel/settings-preference-options.test.ts src/sidepanel/components/PopupAppearancePreview.test.tsx src/shared/settings-localized-copy.test.ts src/shared/progress-display.test.ts`
+- `npm run typecheck`
+- `git diff --check`

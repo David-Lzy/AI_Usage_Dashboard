@@ -44,6 +44,12 @@ describe("buildSettingsPreferenceOptions", () => {
       value: 80,
       label: "80%",
     });
+    expect(options.progressDisplayStyleOptions).toEqual([
+      { value: "line", label: "Line" },
+      { value: "circle", label: "Circle" },
+      { value: "circle-soft", label: "Soft circle" },
+      { value: "circle-gauge", label: "Gauge circle" },
+    ]);
     expect(options.normalizedActionBadgeSelection).toBe("attention");
     expect(options.actionBadgeOptions[0]).toMatchObject({
       value: "attention",
@@ -64,5 +70,13 @@ describe("buildSettingsPreferenceOptions", () => {
     expect(options.warningThresholdErrorText).toBe("请输入 50-99%。");
     expect(options.syncIntervalMenuButtonLabel).toBe("展开默认同步间隔预设");
     expect(options.warningThresholdMenuButtonLabel).toBe("展开告警阈值预设");
+    expect(options.progressDisplayStyleOptions).toContainEqual({
+      value: "circle-soft",
+      label: "柔和圆环",
+    });
+    expect(options.progressDisplayStyleOptions).toContainEqual({
+      value: "circle-gauge",
+      label: "仪表圆环",
+    });
   });
 });

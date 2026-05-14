@@ -1,11 +1,15 @@
 import type { AppSettings } from "../../providers/types";
-import type { RuntimeI18n } from "../../shared/i18n";
+import { buildRuntimeCommonCopy, type RuntimeI18n } from "../../shared/i18n";
+import { UsageProgress } from "./UsageProgress";
 
 type PopupAppearancePreviewProps = {
   i18n: RuntimeI18n;
   settings: Pick<
     AppSettings,
-    "popupCornerStyle" | "popupShadowStyle" | "popupSizePreset"
+    | "popupCornerStyle"
+    | "popupProgressStyle"
+    | "popupShadowStyle"
+    | "popupSizePreset"
   >;
 };
 
@@ -13,12 +17,20 @@ export function PopupAppearancePreview({
   i18n,
   settings,
 }: PopupAppearancePreviewProps) {
+  const sampleQuotaLabel = i18n.t(
+    "settings.popup_appearance_preview.sample_quota",
+  );
+  const remainingLabel = buildRuntimeCommonCopy(i18n).remaining;
+  const sampleRemainingLabel =
+    settings.popupProgressStyle === "line" ? `51% ${remainingLabel}` : "51%";
+
   return (
     <div
       className="popup-appearance-preview-card"
       data-popup-size-preset={settings.popupSizePreset}
       data-popup-corner-style={settings.popupCornerStyle}
       data-popup-shadow-style={settings.popupShadowStyle}
+      data-popup-progress-style={settings.popupProgressStyle}
     >
       <div className="dashboard-section__header">
         <div>
@@ -58,11 +70,23 @@ export function PopupAppearancePreview({
                 {i18n.t("settings.popup_appearance_preview.sample_provider")}
               </p>
               <p className="supporting-copy">
-                {i18n.t("settings.popup_appearance_preview.sample_quota")}
+                {sampleQuotaLabel}
               </p>
             </div>
-            <div className="popup-appearance-preview-progress">
-              <span />
+            <div
+              className={`popup-appearance-preview-progress popup-appearance-preview-progress--${settings.popupProgressStyle}`}
+            >
+              <UsageProgress
+                used={49}
+                remaining={51}
+                total={100}
+                tone="neutral"
+                label={sampleQuotaLabel}
+                displayStyle={settings.popupProgressStyle}
+                valueKind="remaining"
+                valueLabel={sampleRemainingLabel}
+                valueText={`${sampleQuotaLabel}: 51% ${remainingLabel}`}
+              />
             </div>
           </div>
         </div>
