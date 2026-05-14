@@ -23,6 +23,7 @@ import "./theme/settings-appearance.css";
 import "./theme/theme-recovery.css";
 import "./theme/usage-progress.css";
 import "./theme/provider-card.css";
+import "./theme/provider-carousel.css";
 
 const rootElement = document.getElementById("root")!;
 

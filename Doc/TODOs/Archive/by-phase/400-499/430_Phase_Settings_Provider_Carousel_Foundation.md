@@ -1,6 +1,6 @@
 # Phase 430 - Settings Provider Carousel Foundation
 
-Status: queued
+Status: completed
 
 ## Goal
 
@@ -36,3 +36,16 @@ Build a reusable Settings provider carousel that supports pointer drag, previous
 ## Follow-Up
 
 - Phase 431 migrates all Settings provider sections to the carousel container.
+
+## Completion Summary
+
+- Added reusable `ProviderCarousel` with previous/next controls, slide dots, keyboard ArrowLeft/ArrowRight navigation, pointer drag/swipe threshold handling, and empty-state rendering.
+- Added pure helper coverage for index clamping, cyclic movement, keyboard direction mapping, and LTR/RTL drag semantics.
+- Added provider-carousel CSS with multi-card peek sizing, focus-visible states, RTL control-order handling, and reduced-motion transition suppression.
+- Preserved all existing Settings provider sections and provider business controls for the Phase 431 migration.
+
+## Verification
+
+- `npm run test -- src/sidepanel/components/ProviderCarousel.test.tsx`
+- `npm run typecheck`
+- `git diff --check`

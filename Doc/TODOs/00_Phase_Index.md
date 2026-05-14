@@ -34,9 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [430_Phase_Settings_Provider_Carousel_Foundation.md](./430_Phase_Settings_Provider_Carousel_Foundation.md)
-- latest completed slice: [429_Phase_Progress_Appearance_Settings_Preview.md](./Archive/by-phase/400-499/429_Phase_Progress_Appearance_Settings_Preview.md)
-- queued phase files: [431_Phase_Settings_Carousel_All_Provider_Sections.md](./431_Phase_Settings_Carousel_All_Provider_Sections.md), [432_Phase_UI_QA_And_Doc_Closeout.md](./432_Phase_UI_QA_And_Doc_Closeout.md)
+- active phase file: [431_Phase_Settings_Carousel_All_Provider_Sections.md](./431_Phase_Settings_Carousel_All_Provider_Sections.md)
+- latest completed slice: [430_Phase_Settings_Provider_Carousel_Foundation.md](./Archive/by-phase/400-499/430_Phase_Settings_Provider_Carousel_Foundation.md)
+- queued phase files: [432_Phase_UI_QA_And_Doc_Closeout.md](./432_Phase_UI_QA_And_Doc_Closeout.md)
 
 Completed phases should be moved to:
 
@@ -823,6 +823,7 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 427` closeout made popup, sidebar dashboard cards, full-page dashboard cards, and provider detail consume the shared progress item selection/rendering path with per-surface visibility/order preferences while keeping usage facts supplemental and preserving provider snapshots, adapter output, raw evidence, export payloads, source truth labels, and popup featured-provider count
 - the 2026-05-14 `Phase 428` closeout added `circle-soft` and `circle-gauge` SVG ring variants, kept `circle` as the classic ring, made fresh popup installs default to `circle-soft`, and preserved progress accessibility semantics, provider values, thresholds, RTL numeric direction, and third-party dependency boundaries
 - the 2026-05-14 `Phase 429` closeout exposed all four progress style choices through localized Settings option labels and made the popup appearance preview render the selected `UsageProgress` style directly while preserving existing stored `line`/`circle` values and provider evidence boundaries
+- the 2026-05-14 `Phase 430` closeout added a reusable Settings `ProviderCarousel` foundation with previous/next controls, slide dots, keyboard arrow navigation, pointer drag threshold helpers, RTL direction semantics, focus-visible styling, and reduced-motion CSS while leaving existing Settings provider sections unmigrated
 
 ## Delivery Standard For Each Phase
 

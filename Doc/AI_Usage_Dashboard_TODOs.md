@@ -76,13 +76,13 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 429` execution priority:
+Current post-`Phase 430` execution priority:
 
 1. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.13.zip` as the submitted Chrome Web Store review boundary. Do not silently mutate or rewrite the [RC13 upload-candidate milestone](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) while that submission remains the human-reviewed baseline.
 2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.16.zip` as the current packaged follow-up candidate. It includes the previous `rc.15` follow-up work plus post-`rc.15` local-safe localization and interaction-audit display/source split work through `Phase 421`, and is ready if review feedback or an explicit resubmission decision needs a newer build.
 3. `P0` - keep the refreshed `Direction 10.3` screenshot evidence archived and ready, not pending: [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) still fulfills the latest reviewed screenshot pack with `5/5` images and `3` explicit truth-boundary notes.
 4. `P1` - if a resubmission becomes necessary, use [2026-05-14_RC16_Post_Localization_Closeout_Release_Candidate.md](./Milestones/2026-05-14_RC16_Post_Localization_Closeout_Release_Candidate.md) as the current packaged-source reference and cut a fresh submission milestone from that boundary instead of mutating RC13 history.
-5. `P1` - continue the `Phase 430` through `Phase 432` UI preference queue: add the reusable Settings provider carousel foundation, migrate provider sections into that carousel, and finish visual/doc closeout.
+5. `P1` - continue the `Phase 431` through `Phase 432` UI preference queue: migrate Settings provider sections into the reusable carousel, then finish visual/doc closeout.
 6. `P2` - keep the `Phase 309` first-provider setup behavior stable: zero-provider Settings now recommends one personal-user provider in Quick Setup and popup zero-provider actions deep-link to that same setup card.
 7. `P2` - keep the `Phase 310` cached-first guard stable: standard dashboard routes must keep rendering cached app state while background bootstrap is still loading.
 8. `P2` - keep the `Phase 311` popup view-model split behavior-only: `src/popup/view-models.ts` remains the public aggregator and the extracted setup-coverage / featured-card modules should not change popup UI semantics.
@@ -460,6 +460,7 @@ Phase status update:
 - `Phase 427` made popup, dashboard cards, and provider detail consume the shared per-surface progress item selection/rendering path while keeping usage facts supplemental and preserving source truth labels, diagnostics, provider snapshots, and popup featured-provider count
 - `Phase 428` added soft and gauge SVG progress rings, kept the classic `circle` ring valid, and changed fresh popup defaults to `circle-soft` while preserving progress aria semantics, provider values, thresholds, and dependency boundaries
 - `Phase 429` exposed all four progress style choices through localized Settings option labels and made the popup appearance preview render the selected progress style directly while preserving existing stored `line`/`circle` values and provider evidence boundaries
+- `Phase 430` added a reusable Settings provider carousel foundation with previous/next controls, slide dots, keyboard arrow navigation, pointer drag threshold handling, RTL direction semantics, focus-visible styling, and reduced-motion CSS while leaving existing provider sections unmigrated until `Phase 431`
 - `Phase 334` split interaction-audit per-surface card rendering into a dedicated component while preserving route-owned audit refs, preset actions, manual checks, and signoff callbacks
 - `Phase 335` split interaction-audit review queue rendering into a dedicated component while preserving route-owned queue construction and jump behavior
 - `Phase 336` split interaction-audit request-scope rendering into a dedicated component while preserving route-owned request-context state plus existing binding, revision, and next-command display
