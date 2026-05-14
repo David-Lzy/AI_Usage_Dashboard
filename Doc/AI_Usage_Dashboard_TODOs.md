@@ -76,13 +76,13 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 423` execution priority:
+Current post-`Phase 424` execution priority:
 
 1. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.13.zip` as the submitted Chrome Web Store review boundary. Do not silently mutate or rewrite the [RC13 upload-candidate milestone](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) while that submission remains the human-reviewed baseline.
 2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.16.zip` as the current packaged follow-up candidate. It includes the previous `rc.15` follow-up work plus post-`rc.15` local-safe localization and interaction-audit display/source split work through `Phase 421`, and is ready if review feedback or an explicit resubmission decision needs a newer build.
 3. `P0` - keep the refreshed `Direction 10.3` screenshot evidence archived and ready, not pending: [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) still fulfills the latest reviewed screenshot pack with `5/5` images and `3` explicit truth-boundary notes.
 4. `P1` - if a resubmission becomes necessary, use [2026-05-14_RC16_Post_Localization_Closeout_Release_Candidate.md](./Milestones/2026-05-14_RC16_Post_Localization_Closeout_Release_Candidate.md) as the current packaged-source reference and cut a fresh submission milestone from that boundary instead of mutating RC13 history.
-5. `P1` - continue the `Phase 424` through `Phase 432` UI preference queue: add Settings controls for independent provider order per popup/sidebar/full-page surface, then add per-surface quota item visibility/order, improved progress ring styles, Settings provider carousel migration, and final visual/doc closeout.
+5. `P1` - continue the `Phase 425` through `Phase 432` UI preference queue: add the shared quota/progress item inventory, per-surface quota item visibility/order controls, improved progress ring styles, Settings provider carousel migration, and final visual/doc closeout.
 6. `P2` - keep the `Phase 309` first-provider setup behavior stable: zero-provider Settings now recommends one personal-user provider in Quick Setup and popup zero-provider actions deep-link to that same setup card.
 7. `P2` - keep the `Phase 310` cached-first guard stable: standard dashboard routes must keep rendering cached app state while background bootstrap is still loading.
 8. `P2` - keep the `Phase 311` popup view-model split behavior-only: `src/popup/view-models.ts` remains the public aggregator and the extracted setup-coverage / featured-card modules should not change popup UI semantics.
@@ -454,6 +454,7 @@ Phase status update:
 - post-`Phase 421` closeout packaged the post-localization source boundary as `0.1.0-rc.16`, aligned package and manifest versions, generated `release/ai-usage-dashboard-0.1.0-rc.16.zip`, and recorded the RC16 follow-up milestone while preserving RC13 as the submitted store-review boundary
 - `Phase 422` added shared display preference architecture for per-surface provider order and provider progress-item preferences, with storage normalization and tests while leaving current UI rendering behavior unchanged until later queue phases consume those preferences
 - `Phase 423` made popup, sidebar, and full-page dashboard provider rendering consume independent provider order preferences while preserving the default health/status order when no custom surface order is saved
+- `Phase 424` added Settings controls for popup, sidebar, and full-page provider order with move buttons, keyboard row movement, and drag/drop reorder while preserving provider business controls
 - `Phase 334` split interaction-audit per-surface card rendering into a dedicated component while preserving route-owned audit refs, preset actions, manual checks, and signoff callbacks
 - `Phase 335` split interaction-audit review queue rendering into a dedicated component while preserving route-owned queue construction and jump behavior
 - `Phase 336` split interaction-audit request-scope rendering into a dedicated component while preserving route-owned request-context state plus existing binding, revision, and next-command display

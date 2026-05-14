@@ -258,6 +258,9 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           onPopupShadowStyleChange={(popupShadowStyle) =>
             handleUpdateSettings({ popupShadowStyle })
           }
+          onProviderOrderBySurfaceChange={(providerOrderBySurface) =>
+            handleUpdateSettings({ providerOrderBySurface })
+          }
           onActionBadgeSelectionChange={(
             actionBadgeSelection: ActionBadgeSelection,
           ) => handleUpdateSettings({ actionBadgeSelection })}

@@ -1,6 +1,6 @@
 # Phase 424 - Settings Surface Order Controls
 
-Status: queued
+Status: completed
 
 ## Goal
 
@@ -35,3 +35,16 @@ Add Settings controls for editing provider order independently for popup, sideba
 ## Follow-Up
 
 - Phase 425 introduces quota/progress item inventory so provider-internal progress rows can also become configurable.
+
+## Completion Summary
+
+- Added a Settings provider-order control surface under Appearance & Sync > More.
+- Added one reorder list each for popup, sidebar, and full-page tab surfaces.
+- Supported move buttons, row keyboard ArrowUp/ArrowDown movement, and drag/drop reorder.
+- Wired changes through existing `app:update-settings` via `providerOrderBySurface`.
+
+## Verification
+
+- `npm run test -- src/shared/display-preferences.test.ts src/sidepanel/components/ProviderOrderPreferenceControls.test.tsx src/sidepanel/components/SettingsPreferencesSection.test.tsx src/sidepanel/routes/SettingsPage.test.tsx`
+- `npm run typecheck`
+- `git diff --check`

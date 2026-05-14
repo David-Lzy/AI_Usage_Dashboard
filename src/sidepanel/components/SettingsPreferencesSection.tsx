@@ -8,6 +8,7 @@ import type {
   PopupShadowStyle,
   PopupSizePreset,
   ProgressDisplayStyle,
+  ProviderOrderBySurface,
   ProviderSetting,
   ProviderSnapshot,
   ThemeMode,
@@ -26,6 +27,7 @@ import { buildSettingsPreferenceOptions } from "../settings-preference-options";
 import type { SettingsUserLevelVisibility } from "../settings-user-level-visibility";
 import { EditableNumberCombobox } from "./EditableNumberCombobox";
 import { MaterialSelect } from "./MaterialSelect";
+import { ProviderOrderPreferenceControls } from "./ProviderOrderPreferenceControls";
 import { PopupAppearancePreview } from "./PopupAppearancePreview";
 import { ThemeCustomizationCard } from "./ThemeCustomizationCard";
 
@@ -51,6 +53,9 @@ type SettingsPreferencesSectionProps = {
   onPopupProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onPopupShadowStyleChange: (shadowStyle: PopupShadowStyle) => void;
   onPopupSizePresetChange: (sizePreset: PopupSizePreset) => void;
+  onProviderOrderBySurfaceChange: (
+    providerOrderBySurface: ProviderOrderBySurface,
+  ) => void;
   onResetThemeCustomSeed: () => void;
   onSidebarProgressStyleChange: (
     progressStyle: ProgressDisplayStyle,
@@ -80,6 +85,7 @@ export function SettingsPreferencesSection({
   onPopupProgressStyleChange,
   onPopupShadowStyleChange,
   onPopupSizePresetChange,
+  onProviderOrderBySurfaceChange,
   onResetThemeCustomSeed,
   onSidebarProgressStyleChange,
   onSyncIntervalChange,
@@ -201,6 +207,12 @@ export function SettingsPreferencesSection({
           <p className="supporting-copy settings-preferences__more-copy">
             {settingsCopy.preferences.detail}
           </p>
+
+          <ProviderOrderPreferenceControls
+            providers={providers}
+            providerOrderBySurface={settings.providerOrderBySurface}
+            onChange={onProviderOrderBySurfaceChange}
+          />
 
           <div className="settings-grid">
             <MaterialSelect

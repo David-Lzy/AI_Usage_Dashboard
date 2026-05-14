@@ -34,6 +34,7 @@ describe("SettingsPreferencesSection", () => {
         onPopupSizePresetChange={() => {}}
         onPopupCornerStyleChange={() => {}}
         onPopupShadowStyleChange={() => {}}
+        onProviderOrderBySurfaceChange={() => {}}
         onActionBadgeSelectionChange={() => {}}
         onThemeCustomSeedDraftChange={() => {}}
         onApplyThemeCustomSeed={() => {}}
@@ -48,6 +49,10 @@ describe("SettingsPreferencesSection", () => {
     expect(html).toContain('data-settings-material-select="theme-mode"');
     expect(html).toContain('data-settings-material-select="theme-preset"');
     expect(html).toContain('data-settings-material-select="action-badge-selection"');
+    expect(html).toContain('data-provider-order-preferences=""');
+    expect(html).toContain('data-provider-order-surface="popup"');
+    expect(html).toContain('data-provider-order-surface="sidebar"');
+    expect(html).toContain('data-provider-order-surface="fullPage"');
     expect(html).toContain(">More<");
     expect(html).toContain('class="popup-appearance-preview-card"');
     expect(html).toContain('class="theme-customization-form"');

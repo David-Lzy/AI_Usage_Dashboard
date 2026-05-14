@@ -27,6 +27,7 @@ function renderSettingsPage(overrides: Partial<Parameters<typeof SettingsPage>[0
       onPopupSizePresetChange={() => {}}
       onPopupCornerStyleChange={() => {}}
       onPopupShadowStyleChange={() => {}}
+      onProviderOrderBySurfaceChange={() => {}}
       onActionBadgeSelectionChange={() => {}}
       onSaveThemeCustomSeed={() => {}}
       onResetThemeCustomSeed={() => {}}
@@ -56,6 +57,7 @@ describe("SettingsPage", () => {
     expect(html).toContain('data-settings-material-select="settings-user-level"');
     expect(html).toContain(">Quick Setup<");
     expect(html).toContain('data-settings-material-select="action-badge-selection"');
+    expect(html).toContain('data-provider-order-preferences=""');
     expect(html).toContain(">More<");
     expect(html).not.toContain('data-credential-provider-id="cursor"');
     expect(html).toContain('class="settings-back-to-top-fab"');

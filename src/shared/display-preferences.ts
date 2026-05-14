@@ -99,6 +99,67 @@ export function normalizeProviderOrderBySurface(
   );
 }
 
+export function resolveProviderOrder(
+  providerOrder: readonly ProviderId[],
+  providerIds: readonly ProviderId[],
+): ProviderId[] {
+  const normalizedProviderOrder = normalizeProviderOrder(providerOrder, providerIds);
+  return normalizedProviderOrder.length > 0
+    ? normalizedProviderOrder
+    : [...providerIds];
+}
+
+export function moveProviderInOrder(
+  providerOrder: readonly ProviderId[],
+  providerIds: readonly ProviderId[],
+  providerId: ProviderId,
+  direction: "up" | "down",
+): ProviderId[] {
+  const resolvedProviderOrder = resolveProviderOrder(providerOrder, providerIds);
+  const currentIndex = resolvedProviderOrder.indexOf(providerId);
+
+  if (currentIndex === -1) {
+    return resolvedProviderOrder;
+  }
+
+  const nextIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
+
+  if (nextIndex < 0 || nextIndex >= resolvedProviderOrder.length) {
+    return resolvedProviderOrder;
+  }
+
+  const nextProviderOrder = [...resolvedProviderOrder];
+  const [movedProviderId] = nextProviderOrder.splice(currentIndex, 1);
+  nextProviderOrder.splice(nextIndex, 0, movedProviderId);
+  return nextProviderOrder;
+}
+
+export function reorderProviderBefore(
+  providerOrder: readonly ProviderId[],
+  providerIds: readonly ProviderId[],
+  movedProviderId: ProviderId,
+  targetProviderId: ProviderId,
+): ProviderId[] {
+  const resolvedProviderOrder = resolveProviderOrder(providerOrder, providerIds);
+
+  if (movedProviderId === targetProviderId) {
+    return resolvedProviderOrder;
+  }
+
+  const currentIndex = resolvedProviderOrder.indexOf(movedProviderId);
+  const targetIndex = resolvedProviderOrder.indexOf(targetProviderId);
+
+  if (currentIndex === -1 || targetIndex === -1) {
+    return resolvedProviderOrder;
+  }
+
+  const nextProviderOrder = [...resolvedProviderOrder];
+  const [movedProvider] = nextProviderOrder.splice(currentIndex, 1);
+  const insertionIndex = nextProviderOrder.indexOf(targetProviderId);
+  nextProviderOrder.splice(insertionIndex, 0, movedProvider);
+  return nextProviderOrder;
+}
+
 function normalizeProgressItemPreferences(
   value: unknown,
   knownItemIds: readonly string[],

@@ -7,6 +7,9 @@ import {
   DISPLAY_SURFACES,
   normalizeProgressItemsBySurface,
   normalizeProviderOrderBySurface,
+  moveProviderInOrder,
+  reorderProviderBefore,
+  resolveProviderOrder,
 } from "./display-preferences";
 
 const PROVIDER_IDS: ProviderId[] = [
@@ -53,6 +56,40 @@ describe("display preferences", () => {
       sidebar: ["gemini", "cursor", "jetbrains", "claude-code", "codex"],
       fullPage: [],
     });
+  });
+
+  it("resolves automatic order to the default provider order", () => {
+    expect(resolveProviderOrder([], PROVIDER_IDS)).toEqual(PROVIDER_IDS);
+    expect(resolveProviderOrder(["codex"], PROVIDER_IDS)).toEqual([
+      "codex",
+      "cursor",
+      "jetbrains",
+      "claude-code",
+      "gemini",
+    ]);
+  });
+
+  it("moves providers inside a resolved order", () => {
+    expect(moveProviderInOrder([], PROVIDER_IDS, "jetbrains", "up")).toEqual([
+      "jetbrains",
+      "cursor",
+      "claude-code",
+      "gemini",
+      "codex",
+    ]);
+    expect(
+      moveProviderInOrder(["codex", "cursor"], PROVIDER_IDS, "codex", "down"),
+    ).toEqual(["cursor", "codex", "jetbrains", "claude-code", "gemini"]);
+  });
+
+  it("reorders a dragged provider before a target provider", () => {
+    expect(reorderProviderBefore([], PROVIDER_IDS, "codex", "cursor")).toEqual([
+      "codex",
+      "cursor",
+      "jetbrains",
+      "claude-code",
+      "gemini",
+    ]);
   });
 
   it("falls back to automatic provider order for missing or invalid surfaces", () => {
