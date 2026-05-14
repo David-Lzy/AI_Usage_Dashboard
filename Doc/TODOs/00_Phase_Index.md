@@ -34,9 +34,15 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: none
+- active phase file: [441_Phase_Popup_Status_Chip_Header_Compactness.md](./441_Phase_Popup_Status_Chip_Header_Compactness.md)
 - latest completed slice: [440_Phase_RC18_UI_Polish_Follow_Up_Packaging.md](./Archive/by-phase/400-499/440_Phase_RC18_UI_Polish_Follow_Up_Packaging.md)
-- queued phase files: none
+- queued phase files:
+  - [442_Phase_Progress_Appearance_Model_Controls.md](./442_Phase_Progress_Appearance_Model_Controls.md)
+  - [443_Phase_Progress_Rendering_Thickness_And_Color_Bands.md](./443_Phase_Progress_Rendering_Thickness_And_Color_Bands.md)
+  - [444_Phase_Soft_And_Gauge_Ring_Visual_Differentiation.md](./444_Phase_Soft_And_Gauge_Ring_Visual_Differentiation.md)
+  - [445_Phase_Settings_Control_Order_And_Localization_Polish.md](./445_Phase_Settings_Control_Order_And_Localization_Polish.md)
+  - [446_Phase_Settings_Overview_Responsive_User_Level_Help.md](./446_Phase_Settings_Overview_Responsive_User_Level_Help.md)
+  - [447_Phase_Settings_Appearance_Responsive_Control_Grid.md](./447_Phase_Settings_Appearance_Responsive_Control_Grid.md)
 
 Completed phases should be moved to:
 
