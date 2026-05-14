@@ -18,6 +18,10 @@ import {
   DEFAULT_SYNC_INTERVAL_MINUTES,
   DEFAULT_WARNING_THRESHOLD_PERCENT,
 } from "./settings-preferences";
+import {
+  DEFAULT_PROGRESS_THICKNESS_PX,
+  createDefaultProgressColorBands,
+} from "./progress-appearance";
 import { DEFAULT_SETTINGS_USER_LEVEL } from "./settings-user-level";
 import { DEFAULT_ACTION_BADGE_SELECTION } from "./action-badge-preferences";
 import {
@@ -544,5 +548,7 @@ export const SAMPLE_APP_STATE: AppState = {
     actionBadgeSelection: DEFAULT_ACTION_BADGE_SELECTION,
     providerOrderBySurface: createDefaultProviderOrderBySurface(),
     progressItemsBySurface: createDefaultProgressItemsBySurface(),
+    progressThicknessPx: DEFAULT_PROGRESS_THICKNESS_PX,
+    progressColorBands: createDefaultProgressColorBands(),
   },
 };

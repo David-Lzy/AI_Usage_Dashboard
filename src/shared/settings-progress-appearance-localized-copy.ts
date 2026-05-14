@@ -1,0 +1,462 @@
+import type { ResolvedAppLocale, RuntimeI18n } from "./i18n";
+
+type SettingsProgressAppearanceCopyText = {
+  sectionLabel: string;
+  title: string;
+  detail: string;
+  thickness: {
+    label: string;
+    unit: string;
+    help: string;
+  };
+  colorBands: {
+    label: string;
+    detail: string;
+    fromLabel: string;
+    toLabel: string;
+    colorLabel: string;
+    addBand: string;
+    removeBand: string;
+    moveUp: string;
+    moveDown: string;
+    resetToDefault: string;
+    validationError: string;
+    rangeLabel: (minimumLabel: string, maximumLabel: string) => string;
+  };
+};
+
+export type SettingsProgressAppearanceCopy = Omit<
+  SettingsProgressAppearanceCopyText,
+  "colorBands"
+> & {
+  colorBands: Omit<
+    SettingsProgressAppearanceCopyText["colorBands"],
+    "rangeLabel"
+  > & {
+    rangeLabel: (minimumPercent: number, maximumPercent: number) => string;
+  };
+};
+
+export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
+  ResolvedAppLocale,
+  SettingsProgressAppearanceCopyText
+> = {
+  en: {
+    sectionLabel: "Progress appearance",
+    title: "Tune thickness and remaining-color bands",
+    detail:
+      "These controls only change progress visuals. Provider warnings, diagnostics, and badge counts still use the separate warning threshold.",
+    thickness: {
+      label: "Progress thickness",
+      unit: "px",
+      help: "One global stroke weight is shared by line and ring progress styles.",
+    },
+    colorBands: {
+      label: "Remaining color bands",
+      detail:
+        "Keep ranges contiguous from 0 to 100. Colors use #RRGGBB values and are based on remaining percent.",
+      fromLabel: "From",
+      toLabel: "To",
+      colorLabel: "Color",
+      addBand: "Add band",
+      removeBand: "Remove",
+      moveUp: "Up",
+      moveDown: "Down",
+      resetToDefault: "Reset colors",
+      validationError:
+        "Use valid #RRGGBB colors and non-overlapping ranges that cover 0-100.",
+      rangeLabel: (minimumLabel, maximumLabel) =>
+        `${minimumLabel}-${maximumLabel}% remaining`,
+    },
+  },
+  "zh-CN": {
+    sectionLabel: "进度外观",
+    title: "调整粗细和剩余颜色区间",
+    detail:
+      "这些控件只改变进度视觉。Provider 警告、诊断和工具栏 badge 仍使用独立的警告阈值。",
+    thickness: {
+      label: "进度条粗细",
+      unit: "px",
+      help: "直线和圆环进度样式共用一个全局描边粗细。",
+    },
+    colorBands: {
+      label: "剩余颜色区间",
+      detail:
+        "区间需要从 0 到 100 连续覆盖。颜色使用 #RRGGBB，并按剩余百分比选择。",
+      fromLabel: "从",
+      toLabel: "到",
+      colorLabel: "颜色",
+      addBand: "新增区间",
+      removeBand: "删除",
+      moveUp: "上移",
+      moveDown: "下移",
+      resetToDefault: "重置颜色",
+      validationError:
+        "请使用有效的 #RRGGBB 颜色，并保持区间不重叠且覆盖 0-100。",
+      rangeLabel: (minimumLabel, maximumLabel) =>
+        `剩余 ${minimumLabel}-${maximumLabel}%`,
+    },
+  },
+  "zh-TW": {
+    sectionLabel: "進度外觀",
+    title: "調整粗細與剩餘色彩區間",
+    detail:
+      "這些控制項只改變進度視覺。Provider 警告、診斷與工具列 badge 仍使用獨立的警告門檻。",
+    thickness: {
+      label: "進度條粗細",
+      unit: "px",
+      help: "直線與圓環進度樣式共用一個全域描邊粗細。",
+    },
+    colorBands: {
+      label: "剩餘色彩區間",
+      detail:
+        "區間需從 0 到 100 連續覆蓋。顏色使用 #RRGGBB，並依剩餘百分比選擇。",
+      fromLabel: "從",
+      toLabel: "到",
+      colorLabel: "顏色",
+      addBand: "新增區間",
+      removeBand: "刪除",
+      moveUp: "上移",
+      moveDown: "下移",
+      resetToDefault: "重設顏色",
+      validationError:
+        "請使用有效的 #RRGGBB 顏色，並保持區間不重疊且覆蓋 0-100。",
+      rangeLabel: (minimumLabel, maximumLabel) =>
+        `剩餘 ${minimumLabel}-${maximumLabel}%`,
+    },
+  },
+  ja: {
+    sectionLabel: "進捗の外観",
+    title: "太さと残量カラー帯を調整",
+    detail:
+      "この設定は進捗の見た目だけを変更します。Provider の警告、診断、バッジ数は別の警告しきい値を使います。",
+    thickness: {
+      label: "進捗の太さ",
+      unit: "px",
+      help: "ラインとリングの進捗スタイルで共通のストローク幅を使います。",
+    },
+    colorBands: {
+      label: "残量カラー帯",
+      detail:
+        "範囲は 0 から 100 まで連続させます。色は #RRGGBB で、残量パーセントに基づきます。",
+      fromLabel: "開始",
+      toLabel: "終了",
+      colorLabel: "色",
+      addBand: "帯を追加",
+      removeBand: "削除",
+      moveUp: "上へ",
+      moveDown: "下へ",
+      resetToDefault: "色をリセット",
+      validationError:
+        "有効な #RRGGBB 色と、0-100 を覆う重複しない範囲を使ってください。",
+      rangeLabel: (minimumLabel, maximumLabel) =>
+        `残量 ${minimumLabel}-${maximumLabel}%`,
+    },
+  },
+  ko: {
+    sectionLabel: "진행률 모양",
+    title: "두께와 남은 비율 색상 구간 조정",
+    detail:
+      "이 설정은 진행률 시각 요소만 바꿉니다. Provider 경고, 진단, 배지 수는 별도의 경고 임계값을 계속 사용합니다.",
+    thickness: {
+      label: "진행률 두께",
+      unit: "px",
+      help: "선형 및 원형 진행률 스타일이 하나의 전역 스트로크 두께를 공유합니다.",
+    },
+    colorBands: {
+      label: "남은 비율 색상 구간",
+      detail:
+        "범위는 0부터 100까지 끊기지 않아야 합니다. 색상은 #RRGGBB 값을 사용하고 남은 비율을 기준으로 합니다.",
+      fromLabel: "시작",
+      toLabel: "끝",
+      colorLabel: "색상",
+      addBand: "구간 추가",
+      removeBand: "삭제",
+      moveUp: "위로",
+      moveDown: "아래로",
+      resetToDefault: "색상 초기화",
+      validationError:
+        "유효한 #RRGGBB 색상과 0-100을 덮는 겹치지 않는 범위를 사용하세요.",
+      rangeLabel: (minimumLabel, maximumLabel) =>
+        `남은 비율 ${minimumLabel}-${maximumLabel}%`,
+    },
+  },
+  "es-419": {
+    sectionLabel: "Apariencia del progreso",
+    title: "Ajusta grosor y bandas de color restante",
+    detail:
+      "Estos controles solo cambian lo visual. Las alertas, diagnósticos y conteos del badge siguen usando el umbral de advertencia separado.",
+    thickness: {
+      label: "Grosor del progreso",
+      unit: "px",
+      help: "Los estilos de línea y anillo comparten un grosor global.",
+    },
+    colorBands: {
+      label: "Bandas de color restante",
+      detail:
+        "Mantén rangos continuos de 0 a 100. Los colores usan #RRGGBB y dependen del porcentaje restante.",
+      fromLabel: "Desde",
+      toLabel: "Hasta",
+      colorLabel: "Color",
+      addBand: "Agregar banda",
+      removeBand: "Quitar",
+      moveUp: "Subir",
+      moveDown: "Bajar",
+      resetToDefault: "Restablecer colores",
+      validationError:
+        "Usa colores #RRGGBB válidos y rangos sin solaparse que cubran 0-100.",
+      rangeLabel: (minimumLabel, maximumLabel) =>
+        `${minimumLabel}-${maximumLabel}% restante`,
+    },
+  },
+  "pt-BR": {
+    sectionLabel: "Aparência do progresso",
+    title: "Ajuste espessura e faixas de cor restante",
+    detail:
+      "Estes controles mudam apenas o visual. Alertas, diagnósticos e contagens do badge continuam usando o limite de aviso separado.",
+    thickness: {
+      label: "Espessura do progresso",
+      unit: "px",
+      help: "Os estilos de linha e anel compartilham uma espessura global.",
+    },
+    colorBands: {
+      label: "Faixas de cor restante",
+      detail:
+        "Mantenha faixas contínuas de 0 a 100. As cores usam #RRGGBB e dependem do percentual restante.",
+      fromLabel: "De",
+      toLabel: "Até",
+      colorLabel: "Cor",
+      addBand: "Adicionar faixa",
+      removeBand: "Remover",
+      moveUp: "Subir",
+      moveDown: "Descer",
+      resetToDefault: "Redefinir cores",
+      validationError:
+        "Use cores #RRGGBB válidas e faixas sem sobreposição que cubram 0-100.",
+      rangeLabel: (minimumLabel, maximumLabel) =>
+        `${minimumLabel}-${maximumLabel}% restante`,
+    },
+  },
+  fr: {
+    sectionLabel: "Apparence de la progression",
+    title: "Ajuster l'epaisseur et les plages de couleur",
+    detail:
+      "Ces controles ne changent que l'affichage. Les alertes Provider, diagnostics et compteurs de badge gardent le seuil d'avertissement separe.",
+    thickness: {
+      label: "Epaisseur de progression",
+      unit: "px",
+      help: "Les styles ligne et anneau partagent une epaisseur globale.",
+    },
+    colorBands: {
+      label: "Plages de couleur restante",
+      detail:
+        "Gardez des plages continues de 0 a 100. Les couleurs utilisent #RRGGBB et suivent le pourcentage restant.",
+      fromLabel: "De",
+      toLabel: "A",
+      colorLabel: "Couleur",
+      addBand: "Ajouter",
+      removeBand: "Supprimer",
+      moveUp: "Monter",
+      moveDown: "Descendre",
+      resetToDefault: "Reinitialiser",
+      validationError:
+        "Utilisez des couleurs #RRGGBB valides et des plages sans chevauchement couvrant 0-100.",
+      rangeLabel: (minimumLabel, maximumLabel) =>
+        `${minimumLabel}-${maximumLabel}% restant`,
+    },
+  },
+  de: {
+    sectionLabel: "Fortschrittsdarstellung",
+    title: "Dicke und Restfarben-Bereiche anpassen",
+    detail:
+      "Diese Steuerung andert nur die Darstellung. Provider-Warnungen, Diagnosen und Badge-Zahlen nutzen weiter den separaten Warnschwellwert.",
+    thickness: {
+      label: "Fortschrittsdicke",
+      unit: "px",
+      help: "Linien- und Ringstile teilen sich eine globale Strichdicke.",
+    },
+    colorBands: {
+      label: "Restfarben-Bereiche",
+      detail:
+        "Bereiche mussen 0 bis 100 luckenlos abdecken. Farben nutzen #RRGGBB und basieren auf dem Restprozentsatz.",
+      fromLabel: "Von",
+      toLabel: "Bis",
+      colorLabel: "Farbe",
+      addBand: "Bereich hinzufugen",
+      removeBand: "Entfernen",
+      moveUp: "Nach oben",
+      moveDown: "Nach unten",
+      resetToDefault: "Farben zurucksetzen",
+      validationError:
+        "Nutze gultige #RRGGBB-Farben und nicht uberlappende Bereiche fur 0-100.",
+      rangeLabel: (minimumLabel, maximumLabel) =>
+        `${minimumLabel}-${maximumLabel}% verbleibend`,
+    },
+  },
+  it: {
+    sectionLabel: "Aspetto avanzamento",
+    title: "Regola spessore e fasce colore residue",
+    detail:
+      "Questi controlli cambiano solo l'aspetto. Avvisi Provider, diagnostica e conteggi badge usano ancora la soglia di avviso separata.",
+    thickness: {
+      label: "Spessore avanzamento",
+      unit: "px",
+      help: "Gli stili linea e anello condividono uno spessore globale.",
+    },
+    colorBands: {
+      label: "Fasce colore residuo",
+      detail:
+        "Mantieni intervalli continui da 0 a 100. I colori usano #RRGGBB e dipendono dalla percentuale residua.",
+      fromLabel: "Da",
+      toLabel: "A",
+      colorLabel: "Colore",
+      addBand: "Aggiungi fascia",
+      removeBand: "Rimuovi",
+      moveUp: "Su",
+      moveDown: "Giu",
+      resetToDefault: "Reimposta colori",
+      validationError:
+        "Usa colori #RRGGBB validi e intervalli non sovrapposti che coprono 0-100.",
+      rangeLabel: (minimumLabel, maximumLabel) =>
+        `${minimumLabel}-${maximumLabel}% residuo`,
+    },
+  },
+  ru: {
+    sectionLabel: "Вид прогресса",
+    title: "Настройте толщину и цветовые диапазоны остатка",
+    detail:
+      "Эти настройки меняют только визуальный вид. Предупреждения Provider, диагностика и badge по-прежнему используют отдельный порог.",
+    thickness: {
+      label: "Толщина прогресса",
+      unit: "px",
+      help: "Линейный и кольцевой стили используют одну общую толщину.",
+    },
+    colorBands: {
+      label: "Цветовые диапазоны остатка",
+      detail:
+        "Диапазоны должны непрерывно покрывать 0-100. Цвета задаются #RRGGBB и зависят от процента остатка.",
+      fromLabel: "От",
+      toLabel: "До",
+      colorLabel: "Цвет",
+      addBand: "Добавить диапазон",
+      removeBand: "Удалить",
+      moveUp: "Вверх",
+      moveDown: "Вниз",
+      resetToDefault: "Сбросить цвета",
+      validationError:
+        "Используйте корректные цвета #RRGGBB и непересекающиеся диапазоны 0-100.",
+      rangeLabel: (minimumLabel, maximumLabel) =>
+        `${minimumLabel}-${maximumLabel}% осталось`,
+    },
+  },
+  ar: {
+    sectionLabel: "مظهر التقدم",
+    title: "اضبط السماكة ونطاقات لون المتبقي",
+    detail:
+      "هذه الخيارات تغير العرض فقط. تحذيرات Provider والتشخيصات وعدد الشارة تبقى على عتبة التحذير المنفصلة.",
+    thickness: {
+      label: "سماكة التقدم",
+      unit: "px",
+      help: "أنماط الخط والحلقة تستخدم سماكة عامة واحدة.",
+    },
+    colorBands: {
+      label: "نطاقات لون المتبقي",
+      detail:
+        "اجعل النطاقات متصلة من 0 إلى 100. تستخدم الألوان #RRGGBB وتعتمد على نسبة المتبقي.",
+      fromLabel: "من",
+      toLabel: "إلى",
+      colorLabel: "اللون",
+      addBand: "إضافة نطاق",
+      removeBand: "إزالة",
+      moveUp: "أعلى",
+      moveDown: "أسفل",
+      resetToDefault: "إعادة ضبط الألوان",
+      validationError:
+        "استخدم ألوان #RRGGBB صحيحة ونطاقات غير متداخلة تغطي 0-100.",
+      rangeLabel: (minimumLabel, maximumLabel) =>
+        `${minimumLabel}-${maximumLabel}% متبق`,
+    },
+  },
+  hi: {
+    sectionLabel: "प्रगति रूप",
+    title: "मोटाई और शेष रंग बैंड समायोजित करें",
+    detail:
+      "ये नियंत्रण केवल दृश्य रूप बदलते हैं। Provider चेतावनियां, निदान और badge गिनती अलग चेतावनी सीमा का उपयोग करती रहती हैं।",
+    thickness: {
+      label: "प्रगति मोटाई",
+      unit: "px",
+      help: "लाइन और रिंग प्रगति शैली एक वैश्विक स्ट्रोक मोटाई साझा करती हैं।",
+    },
+    colorBands: {
+      label: "शेष रंग बैंड",
+      detail:
+        "रेंज 0 से 100 तक लगातार रखें। रंग #RRGGBB हैं और शेष प्रतिशत पर आधारित हैं।",
+      fromLabel: "से",
+      toLabel: "तक",
+      colorLabel: "रंग",
+      addBand: "बैंड जोड़ें",
+      removeBand: "हटाएं",
+      moveUp: "ऊपर",
+      moveDown: "नीचे",
+      resetToDefault: "रंग रीसेट करें",
+      validationError:
+        "मान्य #RRGGBB रंग और 0-100 को ढकने वाली बिना ओवरलैप रेंज का उपयोग करें।",
+      rangeLabel: (minimumLabel, maximumLabel) =>
+        `${minimumLabel}-${maximumLabel}% शेष`,
+    },
+  },
+  id: {
+    sectionLabel: "Tampilan progres",
+    title: "Atur ketebalan dan pita warna sisa",
+    detail:
+      "Kontrol ini hanya mengubah visual. Peringatan Provider, diagnostik, dan jumlah badge tetap memakai ambang peringatan terpisah.",
+    thickness: {
+      label: "Ketebalan progres",
+      unit: "px",
+      help: "Gaya garis dan cincin memakai satu ketebalan global.",
+    },
+    colorBands: {
+      label: "Pita warna sisa",
+      detail:
+        "Jaga rentang tetap tersambung dari 0 sampai 100. Warna memakai #RRGGBB dan berdasarkan persen tersisa.",
+      fromLabel: "Dari",
+      toLabel: "Ke",
+      colorLabel: "Warna",
+      addBand: "Tambah pita",
+      removeBand: "Hapus",
+      moveUp: "Naik",
+      moveDown: "Turun",
+      resetToDefault: "Reset warna",
+      validationError:
+        "Gunakan warna #RRGGBB yang valid dan rentang tanpa tumpang tindih yang mencakup 0-100.",
+      rangeLabel: (minimumLabel, maximumLabel) =>
+        `${minimumLabel}-${maximumLabel}% tersisa`,
+    },
+  },
+};
+
+export function buildLocalizedSettingsProgressAppearanceSection(
+  i18n: RuntimeI18n,
+  copy: SettingsProgressAppearanceCopyText,
+): SettingsProgressAppearanceCopy {
+  return {
+    sectionLabel: copy.sectionLabel,
+    title: copy.title,
+    detail: copy.detail,
+    thickness: copy.thickness,
+    colorBands: {
+      ...copy.colorBands,
+      rangeLabel: (minimumPercent, maximumPercent) =>
+        copy.colorBands.rangeLabel(
+          i18n.formatNumber(minimumPercent),
+          i18n.formatNumber(maximumPercent),
+        ),
+    },
+  };
+}
+
+export function getSettingsProgressAppearanceCopy(
+  locale: ResolvedAppLocale,
+): SettingsProgressAppearanceCopyText {
+  return SETTINGS_PROGRESS_APPEARANCE_COPY[locale];
+}

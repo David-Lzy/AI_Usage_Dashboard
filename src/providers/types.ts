@@ -152,6 +152,12 @@ export type ProgressItemsBySurface = Record<
   DisplaySurface,
   Partial<Record<ProviderId, ProviderProgressItemPreference[]>>
 >;
+export type ProgressColorBand = {
+  id: string;
+  minimumPercent: number;
+  maximumPercent: number;
+  colorHex: string;
+};
 
 export type ProviderPageBinding = {
   mode: "auto" | "bound";
@@ -286,6 +292,8 @@ export type AppSettings = {
   actionBadgeSelection: ActionBadgeSelection;
   providerOrderBySurface: ProviderOrderBySurface;
   progressItemsBySurface: ProgressItemsBySurface;
+  progressThicknessPx: number;
+  progressColorBands: ProgressColorBand[];
 };
 
 export type SummaryItem = {

@@ -36,6 +36,10 @@ import {
   normalizeProgressItemsBySurface,
   normalizeProviderOrderBySurface,
 } from "./display-preferences";
+import {
+  normalizeProgressColorBands,
+  normalizeProgressThicknessPx,
+} from "./progress-appearance";
 import { buildProviderProgressItemIdsByProvider } from "./provider-progress-items";
 import { normalizeSettingsUserLevel } from "./settings-user-level";
 
@@ -198,6 +202,12 @@ function normalizeAppState(state: AppState): AppState {
         state.settings?.progressItemsBySurface,
         knownProviderIds,
         knownProgressItemIdsByProvider,
+      ),
+      progressThicknessPx: normalizeProgressThicknessPx(
+        state.settings?.progressThicknessPx,
+      ),
+      progressColorBands: normalizeProgressColorBands(
+        state.settings?.progressColorBands,
       ),
     },
   };

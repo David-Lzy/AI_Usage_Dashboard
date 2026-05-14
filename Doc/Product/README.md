@@ -25,3 +25,5 @@ Status note:
 - `Phase 438` localized the Settings quota/progress item controls for all 14 runtime locales without changing provider order, progress item preference, or raw evidence behavior.
 - `Phase 439` verified the post-RC17 UI polish queue across representative popup, dashboard, Settings carousel, quota localization, and RDP Chrome error-state checks.
 - `Phase 440` packaged those source changes as `0.1.0-rc.18`; RC13 remains the submitted Chrome Web Store review boundary.
+- `Phase 441` compacted popup provider status chips into the title row.
+- `Phase 442` added progress appearance settings for global thickness and remaining-color bands without changing provider warnings or progress renderer behavior; `Phase 443` is the rendering-consumption boundary.

@@ -264,6 +264,12 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           onProgressItemsBySurfaceChange={(progressItemsBySurface) =>
             handleUpdateSettings({ progressItemsBySurface })
           }
+          onProgressThicknessPxChange={(progressThicknessPx) =>
+            handleUpdateSettings({ progressThicknessPx })
+          }
+          onProgressColorBandsChange={(progressColorBands) =>
+            handleUpdateSettings({ progressColorBands })
+          }
           onActionBadgeSelectionChange={(
             actionBadgeSelection: ActionBadgeSelection,
           ) => handleUpdateSettings({ actionBadgeSelection })}

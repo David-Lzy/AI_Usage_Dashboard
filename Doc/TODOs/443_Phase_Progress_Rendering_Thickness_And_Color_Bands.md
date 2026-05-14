@@ -1,6 +1,6 @@
 # Phase 443 - Progress Rendering Thickness And Color Bands
 
-Status: queued
+Status: active
 
 ## Goal
 

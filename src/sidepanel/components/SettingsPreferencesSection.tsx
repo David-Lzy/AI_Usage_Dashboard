@@ -7,6 +7,7 @@ import type {
   PopupCornerStyle,
   PopupShadowStyle,
   PopupSizePreset,
+  ProgressColorBand,
   ProgressDisplayStyle,
   ProgressItemsBySurface,
   ProviderOrderBySurface,
@@ -30,6 +31,7 @@ import { EditableNumberCombobox } from "./EditableNumberCombobox";
 import { MaterialSelect } from "./MaterialSelect";
 import { ProviderOrderPreferenceControls } from "./ProviderOrderPreferenceControls";
 import { ProviderProgressItemPreferenceControls } from "./ProviderProgressItemPreferenceControls";
+import { ProgressAppearancePreferenceControls } from "./ProgressAppearancePreferenceControls";
 import { PopupAppearancePreview } from "./PopupAppearancePreview";
 import { ThemeCustomizationCard } from "./ThemeCustomizationCard";
 
@@ -61,6 +63,8 @@ type SettingsPreferencesSectionProps = {
   onProgressItemsBySurfaceChange: (
     progressItemsBySurface: ProgressItemsBySurface,
   ) => void;
+  onProgressColorBandsChange: (progressColorBands: ProgressColorBand[]) => void;
+  onProgressThicknessPxChange: (progressThicknessPx: number) => void;
   onResetThemeCustomSeed: () => void;
   onSidebarProgressStyleChange: (
     progressStyle: ProgressDisplayStyle,
@@ -92,6 +96,8 @@ export function SettingsPreferencesSection({
   onPopupSizePresetChange,
   onProviderOrderBySurfaceChange,
   onProgressItemsBySurfaceChange,
+  onProgressColorBandsChange,
+  onProgressThicknessPxChange,
   onResetThemeCustomSeed,
   onSidebarProgressStyleChange,
   onSyncIntervalChange,
@@ -277,6 +283,14 @@ export function SettingsPreferencesSection({
               onChange={onPopupShadowStyleChange}
             />
           </div>
+
+          <ProgressAppearancePreferenceControls
+            copy={settingsCopy.progressAppearance}
+            thicknessPx={settings.progressThicknessPx}
+            colorBands={settings.progressColorBands}
+            onThicknessPxChange={onProgressThicknessPxChange}
+            onColorBandsChange={onProgressColorBandsChange}
+          />
 
           <PopupAppearancePreview i18n={i18n} settings={settings} />
 

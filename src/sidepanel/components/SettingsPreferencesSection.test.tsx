@@ -36,6 +36,8 @@ describe("SettingsPreferencesSection", () => {
         onPopupShadowStyleChange={() => {}}
         onProviderOrderBySurfaceChange={() => {}}
         onProgressItemsBySurfaceChange={() => {}}
+        onProgressThicknessPxChange={() => {}}
+        onProgressColorBandsChange={() => {}}
         onActionBadgeSelectionChange={() => {}}
         onThemeCustomSeedDraftChange={() => {}}
         onApplyThemeCustomSeed={() => {}}
@@ -52,12 +54,15 @@ describe("SettingsPreferencesSection", () => {
     expect(html).toContain('data-settings-material-select="action-badge-selection"');
     expect(html).toContain('data-provider-order-preferences=""');
     expect(html).toContain('data-provider-progress-preferences=""');
+    expect(html).toContain('data-progress-appearance-preferences=""');
     expect(html).toContain('data-provider-order-surface="popup"');
     expect(html).toContain('data-provider-order-surface="sidebar"');
     expect(html).toContain('data-provider-order-surface="fullPage"');
     expect(html).toContain('data-provider-progress-surface="popup"');
     expect(html).toContain('data-provider-progress-surface="sidebar"');
     expect(html).toContain('data-provider-progress-surface="fullPage"');
+    expect(html).toContain("Tune thickness and remaining-color bands");
+    expect(html).toContain("#B3261E");
     expect(html).toContain(">More<");
     expect(html).toContain('class="popup-appearance-preview-card"');
     expect(html).toContain('class="theme-customization-form"');

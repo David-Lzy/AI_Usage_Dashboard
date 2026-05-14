@@ -29,6 +29,8 @@ function renderSettingsPage(overrides: Partial<Parameters<typeof SettingsPage>[0
       onPopupShadowStyleChange={() => {}}
       onProviderOrderBySurfaceChange={() => {}}
       onProgressItemsBySurfaceChange={() => {}}
+      onProgressThicknessPxChange={() => {}}
+      onProgressColorBandsChange={() => {}}
       onActionBadgeSelectionChange={() => {}}
       onSaveThemeCustomSeed={() => {}}
       onResetThemeCustomSeed={() => {}}
@@ -61,6 +63,7 @@ describe("SettingsPage", () => {
     expect(html).toContain('data-settings-material-select="action-badge-selection"');
     expect(html).toContain('data-provider-order-preferences=""');
     expect(html).toContain('data-provider-progress-preferences=""');
+    expect(html).toContain('data-progress-appearance-preferences=""');
     expect(html).toContain(">More<");
     expect(html).not.toContain('data-credential-provider-id="cursor"');
     expect(html).toContain('class="settings-back-to-top-fab"');

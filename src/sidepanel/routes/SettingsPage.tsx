@@ -8,6 +8,7 @@ import type {
   PopupCornerStyle,
   PopupShadowStyle,
   PopupSizePreset,
+  ProgressColorBand,
   ProgressDisplayStyle,
   ProgressItemsBySurface,
   ProviderId,
@@ -109,6 +110,8 @@ type SettingsPageProps = {
   onProgressItemsBySurfaceChange: (
     progressItemsBySurface: ProgressItemsBySurface,
   ) => void;
+  onProgressThicknessPxChange: (progressThicknessPx: number) => void;
+  onProgressColorBandsChange: (progressColorBands: ProgressColorBand[]) => void;
   onActionBadgeSelectionChange: (
     actionBadgeSelection: ActionBadgeSelection,
   ) => void;
@@ -164,6 +167,8 @@ export function SettingsPage({
   onPopupShadowStyleChange,
   onProviderOrderBySurfaceChange,
   onProgressItemsBySurfaceChange,
+  onProgressThicknessPxChange,
+  onProgressColorBandsChange,
   onActionBadgeSelectionChange,
   onSaveThemeCustomSeed,
   onResetThemeCustomSeed,
@@ -391,6 +396,8 @@ export function SettingsPage({
         onPopupShadowStyleChange={onPopupShadowStyleChange}
         onProviderOrderBySurfaceChange={onProviderOrderBySurfaceChange}
         onProgressItemsBySurfaceChange={onProgressItemsBySurfaceChange}
+        onProgressThicknessPxChange={onProgressThicknessPxChange}
+        onProgressColorBandsChange={onProgressColorBandsChange}
         onActionBadgeSelectionChange={onActionBadgeSelectionChange}
         onThemeCustomSeedDraftChange={setThemeCustomSeedDraft}
         onApplyThemeCustomSeed={handleApplyThemeCustomSeed}

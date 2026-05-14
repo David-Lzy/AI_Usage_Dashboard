@@ -20,6 +20,8 @@ function createLegacyState(): AppState {
     actionBadgeSelection: _actionBadgeSelection,
     providerOrderBySurface: _providerOrderBySurface,
     progressItemsBySurface: _progressItemsBySurface,
+    progressThicknessPx: _progressThicknessPx,
+    progressColorBands: _progressColorBands,
     ...legacySettings
   } = SAMPLE_APP_STATE.settings;
 
@@ -139,6 +141,27 @@ describe("storage normalization", () => {
       sidebar: {},
       fullPage: {},
     });
+    expect(state?.settings.progressThicknessPx).toBe(10);
+    expect(state?.settings.progressColorBands).toEqual([
+      {
+        id: "low",
+        minimumPercent: 0,
+        maximumPercent: 20,
+        colorHex: "#B3261E",
+      },
+      {
+        id: "medium",
+        minimumPercent: 21,
+        maximumPercent: 49,
+        colorHex: "#8A4B00",
+      },
+      {
+        id: "high",
+        minimumPercent: 50,
+        maximumPercent: 100,
+        colorHex: "#146C2E",
+      },
+    ]);
   });
 
   it("normalizes display preferences from stale stored state", async () => {
@@ -251,6 +274,7 @@ describe("storage normalization", () => {
         ...SAMPLE_APP_STATE.settings,
         syncIntervalMinutes: 2,
         warningThresholdPercent: 100,
+        progressThicknessPx: 99,
       } as unknown as AppState["settings"],
     });
 
@@ -258,6 +282,90 @@ describe("storage normalization", () => {
 
     expect(state?.settings.syncIntervalMinutes).toBe(30);
     expect(state?.settings.warningThresholdPercent).toBe(80);
+    expect(state?.settings.progressThicknessPx).toBe(10);
+  });
+
+  it("normalizes progress color bands independently from the warning threshold", async () => {
+    await writeAppState({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        warningThresholdPercent: 90,
+        progressColorBands: [
+          {
+            id: "healthy",
+            minimumPercent: 50,
+            maximumPercent: 100,
+            colorHex: "#146c2e",
+          },
+          {
+            id: "danger",
+            minimumPercent: 0,
+            maximumPercent: 20,
+            colorHex: "#b3261e",
+          },
+          {
+            id: "middle",
+            minimumPercent: 21,
+            maximumPercent: 49,
+            colorHex: "#8a4b00",
+          },
+        ],
+      } as unknown as AppState["settings"],
+    });
+
+    const state = await readAppState();
+
+    expect(state?.settings.warningThresholdPercent).toBe(90);
+    expect(state?.settings.progressColorBands).toEqual([
+      {
+        id: "healthy",
+        minimumPercent: 50,
+        maximumPercent: 100,
+        colorHex: "#146C2E",
+      },
+      {
+        id: "danger",
+        minimumPercent: 0,
+        maximumPercent: 20,
+        colorHex: "#B3261E",
+      },
+      {
+        id: "middle",
+        minimumPercent: 21,
+        maximumPercent: 49,
+        colorHex: "#8A4B00",
+      },
+    ]);
+  });
+
+  it("falls back invalid progress color bands to the default bands", async () => {
+    await writeAppState({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        progressColorBands: [
+          {
+            id: "overlap-a",
+            minimumPercent: 0,
+            maximumPercent: 60,
+            colorHex: "#B3261E",
+          },
+          {
+            id: "overlap-b",
+            minimumPercent: 60,
+            maximumPercent: 100,
+            colorHex: "#146C2E",
+          },
+        ],
+      } as unknown as AppState["settings"],
+    });
+
+    const state = await readAppState();
+
+    expect(state?.settings.progressColorBands).toEqual(
+      SAMPLE_APP_STATE.settings.progressColorBands,
+    );
   });
 
   it("upgrades stale static provider metadata to the current sample schema", async () => {

@@ -1,6 +1,8 @@
 # Phase 442 - Progress Appearance Model Controls
 
-Status: queued
+Status: completed
+
+Completed: 2026-05-14
 
 ## Goal
 
@@ -48,3 +50,20 @@ Add user-facing progress appearance preferences for global progress thickness an
 ## Follow-Up
 
 - Continue to `Phase 443` to apply the model to all progress renderers.
+
+## Closeout Notes
+
+- Added typed `progressThicknessPx` and `progressColorBands` settings with defaults and storage normalization.
+- Added `src/shared/progress-appearance.ts` for thickness bounds, color-band validation, default cloning, add/remove/reorder helpers, and storage-safe normalization.
+- Added Settings controls for global progress thickness and remaining-percent color bands without changing provider warning thresholds, diagnostics, action-badge behavior, adapter output, or progress rendering.
+- Added explicit 14-locale Settings progress-appearance copy in `src/shared/settings-progress-appearance-localized-copy.ts`.
+- Kept `warningThresholdPercent` visible and independent; color bands are model/UI-only until `Phase 443` applies them to progress renderers.
+
+## Verification Result
+
+- Passed: `npm run test -- src/shared/progress-appearance.test.ts src/shared/storage.test.ts src/shared/settings-localized-copy.test.ts src/sidepanel/components/ProgressAppearancePreferenceControls.test.tsx src/sidepanel/components/SettingsPreferencesSection.test.tsx src/sidepanel/routes/SettingsPage.test.tsx --run`
+- Passed: `npm run typecheck`
+- Passed: `npm run i18n:check`
+- Passed: `npm run docs:check`
+- Passed: `npm run build`
+- Passed: `git diff --check`

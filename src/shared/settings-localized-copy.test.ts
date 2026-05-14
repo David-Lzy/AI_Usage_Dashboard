@@ -20,6 +20,8 @@ describe("buildSettingsLocalizedCopy", () => {
     expect(copy.credentials.saveKey).toBe("Save key");
     expect(copy.sources.preferenceLabel).toBe("Preference");
     expect(copy.layout.userLevel.label).toBe("Display level");
+    expect(copy.progressAppearance.sectionLabel).toBe("Progress appearance");
+    expect(copy.progressAppearance.thickness.unit).toBe("px");
     expect(copy.layout.userLevel.options).toEqual({
       basic: "Basic",
       advanced: "Advanced",
@@ -43,6 +45,10 @@ describe("buildSettingsLocalizedCopy", () => {
     expect(copy.permissions.requestAccess).toBe("请求授权");
     expect(copy.progressItems.sectionLabel).toBe("额度项");
     expect(copy.progressItems.visibleCount(1, 3)).toBe("1/3 已显示");
+    expect(copy.progressAppearance.sectionLabel).toBe("进度外观");
+    expect(copy.progressAppearance.colorBands.rangeLabel(0, 20)).toBe(
+      "剩余 0-20%",
+    );
   });
 
   it("ships Settings core, credential, source, permission, and quota item copy for every non-English locale", () => {
@@ -101,6 +107,15 @@ describe("buildSettingsLocalizedCopy", () => {
       expect(copy.progressItems.up).not.toBe(englishCopy.progressItems.up);
       expect(copy.progressItems.allHidden).not.toBe(
         englishCopy.progressItems.allHidden,
+      );
+      expect(copy.progressAppearance.sectionLabel).not.toBe(
+        englishCopy.progressAppearance.sectionLabel,
+      );
+      expect(copy.progressAppearance.title).not.toBe(
+        englishCopy.progressAppearance.title,
+      );
+      expect(copy.progressAppearance.colorBands.validationError).not.toBe(
+        englishCopy.progressAppearance.colorBands.validationError,
       );
     }
   });
