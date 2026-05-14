@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [432_Phase_UI_QA_And_Doc_Closeout.md](./Archive/by-phase/400-499/432_Phase_UI_QA_And_Doc_Closeout.md)
+- latest completed slice: [433_Phase_RC17_Display_Preference_Follow_Up_Packaging.md](./Archive/by-phase/400-499/433_Phase_RC17_Display_Preference_Follow_Up_Packaging.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -826,6 +826,7 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 430` closeout added a reusable Settings `ProviderCarousel` foundation with previous/next controls, slide dots, keyboard arrow navigation, pointer drag threshold helpers, RTL direction semantics, focus-visible styling, and reduced-motion CSS while leaving existing Settings provider sections unmigrated
 - the 2026-05-14 `Phase 431` closeout migrated Quick Setup, Visibility, Permissions, Credentials, and Source provider-shaped Settings sections onto `ProviderCarousel` while preserving their business controls, stable data hooks, deep-link focused provider behavior, runtime text direction, and advanced/debug visibility boundaries
 - the 2026-05-14 `Phase 432` closeout aligned maintained docs, recorded representative Playwright visual QA for popup, sidebar-sized dashboard, full-page dashboard, and Arabic Settings carousel, documented the current invalid blank RDP capture boundary, and fixed mixed-direction carousel status text in RTL Settings
+- the 2026-05-14 `Phase 433` closeout packaged the post-`rc.16` display-preference and Settings-carousel source boundary as `0.1.0-rc.17`, aligned package and manifest versions, generated `release/ai-usage-dashboard-0.1.0-rc.17.zip`, and recorded SHA256 `effa7fd1cb61a5573f7c882275042b8245256d52507747bf507faa982d04e9b7`
 
 ## Delivery Standard For Each Phase
 

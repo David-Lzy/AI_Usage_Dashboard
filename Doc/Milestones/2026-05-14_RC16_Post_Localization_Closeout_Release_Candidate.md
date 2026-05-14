@@ -18,10 +18,11 @@ Status note:
 
 - records the packaged follow-up candidate prepared after `Phase 421`
 - this is not a claim that RC16 has already been submitted to Chrome Web Store
+- superseded as the current packaged follow-up reference by [2026-05-14_RC17_Display_Preference_Follow_Up_Release_Candidate.md](./2026-05-14_RC17_Display_Preference_Follow_Up_Release_Candidate.md)
 
 ## Milestone Summary
 
-`0.1.0-rc.16` is the current packaged follow-up candidate.
+`0.1.0-rc.16` was the packaged follow-up candidate prepared after `Phase 421`. The current packaged follow-up reference is RC17.
 
 The follow-up package is:
 
