@@ -17,7 +17,15 @@ type UsageProgressRingProps = {
 };
 
 function getRingArcLength(variant: UsageProgressRingProps["variant"]): number {
-  return variant === "circle-gauge" ? 76 : 100;
+  return variant === "circle-gauge" ? 68 : 100;
+}
+
+function getRingRotation(variant: UsageProgressRingProps["variant"]): string {
+  return variant === "circle-gauge" ? "146deg" : "-90deg";
+}
+
+function getRingTrackOpacity(variant: UsageProgressRingProps["variant"]): string {
+  return variant === "circle-gauge" ? "0.46" : "1";
 }
 
 function getRingOffset(
@@ -48,7 +56,9 @@ export function UsageProgressRing({
   const arcLength = getRingArcLength(variant);
   const ringStyle = {
     "--usage-progress-ring-arc": String(arcLength),
+    "--usage-progress-ring-rotation": getRingRotation(variant),
     "--usage-progress-ring-stroke": String(progressThicknessPx),
+    "--usage-progress-ring-track-opacity": getRingTrackOpacity(variant),
     "--usage-progress-ring-offset": String(getRingOffset(variant, roundedPercent)),
     ...(progressColor && !isIndeterminate
       ? {
@@ -58,7 +68,9 @@ export function UsageProgressRing({
   } as CSSProperties & {
     "--usage-progress-ring-arc": string;
     "--usage-progress-ring-fill"?: string;
+    "--usage-progress-ring-rotation": string;
     "--usage-progress-ring-stroke": string;
+    "--usage-progress-ring-track-opacity": string;
     "--usage-progress-ring-offset": string;
   };
 

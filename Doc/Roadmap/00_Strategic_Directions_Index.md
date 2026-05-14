@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-14:
 
-- the numbered phase queue is completed through `Phase 443`; `Phase 444` is active and `Phase 445` through `Phase 447` are queued for scoped post-`rc.18` UI polish without changing the submitted RC13 store-review boundary
+- the numbered phase queue is completed through `Phase 444`; `Phase 445` is active and `Phase 446` through `Phase 447` are queued for scoped post-`rc.18` UI polish without changing the submitted RC13 store-review boundary
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -147,7 +147,8 @@ As of 2026-05-14:
 - `Phase 441` moved popup featured-provider status chips into the provider title row and verified compact, balanced, and wide popup widths with structural Playwright checks across `en`, `zh-CN`, `de`, and `ar`.
 - `Phase 442` added typed progress thickness and remaining-color-band preferences, storage normalization, Settings controls, and 14-locale Settings progress-appearance copy while preserving provider warnings, diagnostics, action-badge behavior, adapter output, raw evidence, and existing progress rendering.
 - `Phase 443` applied global progress thickness and remaining-percent color bands to line, classic circle, soft ring, and gauge ring renderers across popup, dashboard, provider detail, and preview surfaces while preserving quota math, provider warnings, diagnostics, action-badge behavior, and raw evidence boundaries.
-- `Phase 444` through `Phase 447` remain queued as a documentation-backed post-`rc.18` UI polish track for soft-versus-gauge ring differentiation, Settings control ordering/localization, and responsive Settings layouts; this queue does not package a new release candidate by itself.
+- `Phase 444` made `circle-soft` and `circle-gauge` visually distinct by keeping soft as a full 360-degree ring and making gauge a shorter instrument-style arc with separate rotation, track opacity, sizing, and fill emphasis while preserving progress values, aria text, color-band selection, provider warnings, diagnostics, and raw evidence boundaries.
+- `Phase 445` through `Phase 447` remain queued as a documentation-backed post-`rc.18` UI polish track for Settings control ordering/localization and responsive Settings layouts; this queue does not package a new release candidate by itself.
 - `Phase 200` completed a functionality-first Codex personal slice by preserving multiple visible usage windows, expanding Codex page-capture snippets, and surfacing the most constrained visible percentage window across dashboard, provider detail, and popup paths
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without changing the primary percentage-window quota model
 - `Phase 202` completed repeatable unpacked-extension verification for Codex personal multi-window plus flex-balance context, while fixing DOM capture so repeated percentages and single-character balance values are not lost before parsing

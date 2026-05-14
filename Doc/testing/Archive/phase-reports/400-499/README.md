@@ -22,3 +22,4 @@ Status note:
 - [Phase 441 Popup Status Chip Header Compactness](./Phase_441_Popup_Status_Chip_Header_Compactness.md)
 - [Phase 442 Progress Appearance Model Controls](./Phase_442_Progress_Appearance_Model_Controls.md)
 - [Phase 443 Progress Rendering Thickness And Color Bands](./Phase_443_Progress_Rendering_Thickness_And_Color_Bands.md)
+- [Phase 444 Soft And Gauge Ring Visual Differentiation](./Phase_444_Soft_And_Gauge_Ring_Visual_Differentiation.md)

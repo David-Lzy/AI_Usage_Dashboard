@@ -155,6 +155,7 @@
   --usage-progress-ring-size: 84px;
   --usage-progress-ring-stroke: 10;
   --usage-progress-ring-track: var(--app-progress-track-neutral);
+  --usage-progress-ring-track-opacity: 1;
   position: relative;
   display: grid;
   place-items: center;
@@ -178,7 +179,15 @@
 }
 
 .usage-progress-ring--circle-gauge {
-  --usage-progress-ring-size: 90px;
+  --usage-progress-ring-size: 92px;
+  background: color-mix(
+    in srgb,
+    var(--md-sys-color-surface-container-lowest) 88%,
+    var(--usage-progress-ring-track) 12%
+  );
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--usage-progress-ring-track) 26%, transparent),
+    0 10px 24px color-mix(in srgb, var(--md-sys-color-shadow) 14%, transparent);
 }
 
 .usage-progress-ring__svg {
@@ -201,24 +210,30 @@
 .usage-progress-ring__track {
   stroke: var(--usage-progress-ring-track);
   stroke-dasharray: var(--usage-progress-ring-arc) 100;
-  transform: rotate(-90deg);
+  opacity: var(--usage-progress-ring-track-opacity);
+  transform: rotate(var(--usage-progress-ring-rotation, -90deg));
 }
 
 .usage-progress-ring__fill {
   stroke: var(--usage-progress-ring-fill);
   stroke-dasharray: var(--usage-progress-ring-arc) 100;
   stroke-dashoffset: var(--usage-progress-ring-offset);
-  transform: rotate(-90deg);
+  transform: rotate(var(--usage-progress-ring-rotation, -90deg));
   transition: stroke-dashoffset 180ms var(--app-motion-easing-standard);
 }
 
-.usage-progress-ring--circle-gauge .usage-progress-ring__track,
-.usage-progress-ring--circle-gauge .usage-progress-ring__fill {
-  transform: rotate(132deg);
+.usage-progress-ring--circle-soft .usage-progress-ring__track {
+  stroke: color-mix(
+    in srgb,
+    var(--usage-progress-ring-track) 86%,
+    var(--md-sys-color-surface-container-lowest) 14%
+  );
 }
 
-.usage-progress-ring--circle-gauge .usage-progress-ring__track {
-  opacity: 0.78;
+.usage-progress-ring--circle-gauge .usage-progress-ring__fill {
+  filter: drop-shadow(
+    0 0 3px color-mix(in srgb, var(--usage-progress-ring-fill) 42%, transparent)
+  );
 }
 
 .usage-progress-ring--indeterminate .usage-progress-ring__fill {

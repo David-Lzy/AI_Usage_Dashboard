@@ -122,6 +122,8 @@ describe("UsageProgress", () => {
     expect(html).toContain('aria-valuenow="35"');
     expect(html).toContain('aria-valuetext="Weekly usage window: 35% remaining"');
     expect(html).toContain("--usage-progress-ring-arc:100");
+    expect(html).toContain("--usage-progress-ring-rotation:-90deg");
+    expect(html).toContain("--usage-progress-ring-track-opacity:1");
     expect(html).toContain("--usage-progress-ring-stroke:14");
     expect(html).toContain("--usage-progress-ring-offset:65");
     expect(html).toContain("--usage-progress-ring-fill:#8A4B00");
@@ -152,9 +154,11 @@ describe("UsageProgress", () => {
     expect(html).toContain("usage-progress--circle-gauge");
     expect(html).toContain("usage-progress-ring--circle-gauge");
     expect(html).toContain('aria-valuenow="51"');
-    expect(html).toContain("--usage-progress-ring-arc:76");
+    expect(html).toContain("--usage-progress-ring-arc:68");
+    expect(html).toContain("--usage-progress-ring-rotation:146deg");
+    expect(html).toContain("--usage-progress-ring-track-opacity:0.46");
     expect(html).toContain("--usage-progress-ring-stroke:16");
-    expect(html).toContain("--usage-progress-ring-offset:37.24");
+    expect(html).toContain("--usage-progress-ring-offset:33.32");
     expect(html).toContain("--usage-progress-ring-fill:#146C2E");
   });
 

@@ -1,6 +1,6 @@
 # Phase 444 - Soft And Gauge Ring Visual Differentiation
 
-Status: active
+Status: completed
 
 ## Goal
 
@@ -41,3 +41,25 @@ Make `circle-soft` and `circle-gauge` visually distinct so users can clearly tel
 ## Follow-Up
 
 - If the distinction is still not obvious in popup size, open a follow-up visual-only phase for iconography or labels instead of changing the model again.
+
+## Completion Summary
+
+Phase 444 completed the visual split between the two SVG ring variants without changing stored progress-style values or quota semantics.
+
+- `circle-soft` now remains a full 360-degree ring with the existing start rotation and full track emphasis.
+- `circle-gauge` now uses a shorter instrument-style arc, shifted gap rotation, lower track opacity, slightly larger sizing, and a subtle fill emphasis.
+- The shared `UsageProgressRing` renderer still owns both variants through CSS variables instead of duplicate component paths.
+
+## Verification
+
+- `npm run test -- src/sidepanel/components/UsageProgress.test.tsx src/sidepanel/components/UsageProgressRing.test.tsx src/sidepanel/components/PopupAppearancePreview.test.tsx src/popup/PopupProviderProgress.test.tsx --run`
+- `npm run typecheck`
+- `npm run build`
+- Playwright preview smoke against `dist/` captured Settings popup-preview cards for soft and gauge rings under `tmp/phase444-ring-visual-smoke/` and verified:
+  - soft arc `100`, rotation `-90deg`, track opacity `1`
+  - gauge arc `68`, rotation `146deg`, track opacity `0.46`
+
+## Closeout Notes
+
+- No provider data, warnings, diagnostics, action-badge logic, raw evidence, export schema, release package, or i18n catalog changed.
+- The production build still emits the known sidepanel chunk-size warning.
