@@ -158,6 +158,8 @@ describe("SettingsPage", () => {
 
     expect(html).toContain('data-quick-setup-empty-visible="true"');
     expect(html).toContain('data-quick-setup-attention="true"');
+    expect(html).toContain('class="quick-setup-card__more"');
+    expect(html).toContain('class="source-card__details-toggle"');
     expect(html).toContain('data-quick-setup-first-provider-id="codex"');
     expect(html).toContain(">Start with Codex<");
     expect(html).toContain(">Enable Codex<");

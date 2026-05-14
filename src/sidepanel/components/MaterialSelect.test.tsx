@@ -25,6 +25,9 @@ describe("MaterialSelect", () => {
     expect(html).toContain('data-settings-material-select="theme-mode"');
     expect(html).toContain('role="combobox"');
     expect(html).toContain('aria-haspopup="listbox"');
+    expect(html).toContain('aria-expanded="false"');
+    expect(html).toContain('data-open="false"');
+    expect(html).toContain('class="material-select__menu-icon"');
     expect(html).toContain("Light");
     expect(html).not.toContain("<select");
   });

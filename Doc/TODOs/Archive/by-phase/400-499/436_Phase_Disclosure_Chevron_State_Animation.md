@@ -1,6 +1,6 @@
 # Phase 436 - Disclosure Chevron State Animation
 
-Status: queued
+Status: completed
 
 ## Goal
 
@@ -40,3 +40,18 @@ Make disclosure and dropdown chevrons consistently communicate expanded state, i
 ## Follow-Up
 
 - If some dropdowns need component-level API changes, split those controls into a follow-up phase after the shared CSS/state audit is complete.
+
+## Completion Summary
+
+- Generalized the Settings disclosure chevron open-state selector from `.source-card__details[open]` to any `details[open] > .source-card__details-toggle`, fixing the Quick Setup "More Provider" disclosure whose details wrapper uses `quick-setup-card__more`.
+- Aligned details chevron closed/open transforms with the existing MaterialSelect and editable-number combobox arrow treatment.
+- Added reduced-motion handling for details chevron transitions plus custom select and editable combobox menu icons.
+- Added focused render assertions for MaterialSelect, EditableNumberCombobox, and the Quick Setup more-provider disclosure markup.
+- Verified the Quick Setup more-provider chevron rotates in a Playwright preview smoke check.
+
+## Verification
+
+- `npm run test -- src/sidepanel/components/MaterialSelect.test.tsx src/sidepanel/components/EditableNumberCombobox.test.tsx src/sidepanel/routes/SettingsPage.test.tsx src/sidepanel/components/SettingsSourceCard.test.tsx`
+- `npm run typecheck`
+- `npm run build`
+- Playwright Settings disclosure smoke screenshot: `tmp/phase436-disclosure-chevron-smoke/settings-more-provider-open.png`

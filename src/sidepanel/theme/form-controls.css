@@ -428,6 +428,13 @@ html[data-app-direction="rtl"] .editable-number-combobox__input {
   line-height: var(--md-sys-typescale-body-small-line-height);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .material-select__menu-icon,
+  .editable-number-combobox__menu-icon {
+    transition: none;
+  }
+}
+
 .switch-row {
   display: flex;
   align-items: center;

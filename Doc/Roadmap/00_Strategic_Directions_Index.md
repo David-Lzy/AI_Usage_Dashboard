@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-14:
 
-- the numbered phase queue is completed through `Phase 435`; `Phase 436` is active and `Phase 437` through `Phase 440` are queued for post-RC17 UI polish covering disclosure chevrons, Chrome extension error triage, quota-item localization, visual QA/doc closeout, and follow-up packaging
+- the numbered phase queue is completed through `Phase 436`; `Phase 437` is active and `Phase 438` through `Phase 440` are queued for post-RC17 UI polish covering Chrome extension error triage, quota-item localization, visual QA/doc closeout, and follow-up packaging
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -139,7 +139,8 @@ As of 2026-05-14:
 - `Phase 433` packaged the post-`rc.16` display-preference and Settings-carousel source boundary as `0.1.0-rc.17`, preserving RC13 as the submitted Chrome Web Store review boundary and recording RC17 as the current packaged follow-up candidate.
 - `Phase 434` completed Settings provider carousel focused-depth layout by switching provider sections to one active card with blurred adjacent depth layers, inactive-slide `inert`/`aria-hidden` semantics, and safer indicator spacing while preserving provider business controls.
 - `Phase 435` completed circular progress ring label and geometry polish by rendering numeric-only ring centers while preserving full remaining/used aria text and aligning soft/gauge tracks to the same SVG geometry as the foreground arc.
-- `Phase 436` is active for disclosure chevron state animation, with `Phase 437` through `Phase 440` queued for Chrome extension error triage, quota-item 14-locale copy, closeout QA, and RC18 packaging after the fixes land.
+- `Phase 436` completed disclosure chevron state animation by extending open-state rotation to Quick Setup more-provider details and preserving custom select/combobox arrow behavior with reduced-motion handling.
+- `Phase 437` is active for Chrome extension error triage, with `Phase 438` through `Phase 440` queued for quota-item 14-locale copy, closeout QA, and RC18 packaging after the fixes land.
 - `Phase 200` completed a functionality-first Codex personal slice by preserving multiple visible usage windows, expanding Codex page-capture snippets, and surfacing the most constrained visible percentage window across dashboard, provider detail, and popup paths
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without changing the primary percentage-window quota model
 - `Phase 202` completed repeatable unpacked-extension verification for Codex personal multi-window plus flex-balance context, while fixing DOM capture so repeated percentages and single-character balance values are not lost before parsing

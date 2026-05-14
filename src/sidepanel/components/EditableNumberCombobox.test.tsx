@@ -30,7 +30,9 @@ describe("EditableNumberCombobox", () => {
 
     expect(html).toContain('data-settings-custom-number-field="sync-interval"');
     expect(html).toContain('role="combobox"');
+    expect(html).toContain('aria-expanded="false"');
     expect(html).toContain('aria-autocomplete="none"');
+    expect(html).toContain('class="editable-number-combobox__menu-icon"');
     expect(html).toContain("minutes");
     expect(html).not.toContain("<select");
   });

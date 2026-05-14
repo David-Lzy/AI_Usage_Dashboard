@@ -169,13 +169,13 @@
   flex-shrink: 0;
   border-inline-end: 2px solid currentColor;
   border-block-end: 2px solid currentColor;
-  transform: rotate(45deg);
+  transform: translateY(-2px) rotate(45deg);
   transition: transform var(--app-motion-duration-fast)
     var(--app-motion-easing-standard);
 }
 
-.source-card__details[open] .source-card__details-toggle::after {
-  transform: rotate(225deg) translateY(-2px);
+details[open] > .source-card__details-toggle::after {
+  transform: translateY(2px) rotate(225deg);
 }
 
 .source-card__details-toggle:hover {
@@ -277,6 +277,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .source-card__details-toggle,
+  .source-card__details-toggle::after {
+    transition: none;
+  }
+
   .source-card__details[open] .source-card__details-body {
     animation: none;
   }

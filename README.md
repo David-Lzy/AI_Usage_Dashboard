@@ -47,7 +47,7 @@ Next execution queue:
 
 1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary, but use `0.1.0-rc.17` as the ready follow-up package if review feedback or an explicit resubmission decision asks for a newer build
 2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC17 follow-up milestone](./Doc/Milestones/2026-05-14_RC17_Display_Preference_Follow_Up_Release_Candidate.md) as the current packaged-source reference
-3. execute the remaining `Phase 436` through `Phase 440` UI polish follow-up queue: disclosure chevron state animation, Chrome extension error triage, quota-item 14-locale copy, UI QA/doc closeout, and RC18 packaging only after the fixes are verified
+3. execute the remaining `Phase 437` through `Phase 440` UI polish follow-up queue: Chrome extension error triage, quota-item 14-locale copy, UI QA/doc closeout, and RC18 packaging only after the fixes are verified
 4. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 5. keep real operator evidence closed and archived; do not open another interaction-audit or theme-recovery operator evidence phase unless a new surface or theme regression creates a fresh review need
 6. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
