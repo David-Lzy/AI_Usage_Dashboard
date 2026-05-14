@@ -17,11 +17,12 @@ Freshness model:
 Status note:
 
 - records the packaged follow-up candidate prepared after `Phase 440`
+- superseded as the current packaged follow-up reference by [2026-05-14_RC19_Post_RC18_UI_Polish_Closeout_Release_Candidate.md](./2026-05-14_RC19_Post_RC18_UI_Polish_Closeout_Release_Candidate.md)
 - this is not a claim that RC18 has already been submitted to Chrome Web Store
 
 ## Milestone Summary
 
-`0.1.0-rc.18` is the current packaged follow-up candidate.
+`0.1.0-rc.18` was the packaged follow-up candidate prepared after `Phase 440`. The current packaged follow-up reference is RC19.
 
 The follow-up package is:
 

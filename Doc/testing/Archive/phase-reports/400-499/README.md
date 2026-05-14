@@ -26,3 +26,4 @@ Status note:
 - [Phase 445 Settings Control Order And Localization Polish](./Phase_445_Settings_Control_Order_And_Localization_Polish.md)
 - [Phase 446 Settings Overview Responsive User Level Help](./Phase_446_Settings_Overview_Responsive_User_Level_Help.md)
 - [Phase 447 Settings Appearance Responsive Control Grid](./Phase_447_Settings_Appearance_Responsive_Control_Grid.md)
+- [Phase 448 RC19 Post-RC18 UI Polish Closeout Packaging](./Phase_448_RC19_Post_RC18_UI_Polish_Closeout_Packaging.md)

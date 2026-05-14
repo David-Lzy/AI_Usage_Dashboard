@@ -6,11 +6,11 @@ Documentation entry point: [Doc/README.md](./Doc/README.md).
 
 Current packaged release state:
 
-- package version: `0.1.0-rc.18`
-- Chrome manifest version: `0.1.0.18`
-- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.18.zip`
-- source status: `rc.18` package bytes are aligned through `Phase 440`; current source is now ahead with post-`rc.18` UI polish through `Phase 447`, including Settings overview and Appearance & Sync responsive layout polish. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
-- packaged follow-up milestone: [2026-05-14 RC18 UI Polish Follow-Up Release Candidate](./Doc/Milestones/2026-05-14_RC18_UI_Polish_Follow_Up_Release_Candidate.md)
+- package version: `0.1.0-rc.19`
+- Chrome manifest version: `0.1.0.19`
+- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.19.zip`
+- source status: `rc.19` package bytes are aligned through `Phase 448`. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
+- packaged follow-up milestone: [2026-05-14 RC19 Post-RC18 UI Polish Closeout Release Candidate](./Doc/Milestones/2026-05-14_RC19_Post_RC18_UI_Polish_Closeout_Release_Candidate.md)
 - submitted review milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
 ## Current RC Matrix
@@ -45,9 +45,9 @@ Security posture for this track:
 
 Next execution queue:
 
-1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary, but use `0.1.0-rc.18` as the ready follow-up package if review feedback or an explicit resubmission decision asks for a newer build
-2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC18 follow-up milestone](./Doc/Milestones/2026-05-14_RC18_UI_Polish_Follow_Up_Release_Candidate.md) as the current packaged-source reference
-3. no numbered phase is currently queued after `Phase 447`; open a closeout or packaging phase only if post-`rc.18` source changes need a new release package
+1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary, but use `0.1.0-rc.19` as the ready follow-up package if review feedback or an explicit resubmission decision asks for a newer build
+2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC19 follow-up milestone](./Doc/Milestones/2026-05-14_RC19_Post_RC18_UI_Polish_Closeout_Release_Candidate.md) as the current packaged-source reference
+3. no numbered phase is currently queued after `Phase 448`; open a new phase only for review feedback, an explicit resubmission handoff, or a new scoped product request
 4. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 5. keep real operator evidence closed and archived; do not open another interaction-audit or theme-recovery operator evidence phase unless a new surface or theme regression creates a fresh review need
 6. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
@@ -703,16 +703,16 @@ npm run release
 
 Output artifact:
 
-- `release/ai-usage-dashboard-0.1.0-rc.18.zip`
+- `release/ai-usage-dashboard-0.1.0-rc.19.zip`
 
 Packaging note:
 
-- `rc.18` packages the previous `rc.17` follow-up work plus post-`rc.17` source changes through `Phase 440`, including carousel depth layout polish, circular progress ring label/geometry polish, disclosure chevron animation, Chrome extension error-log cleanup, Settings quota-item 14-locale copy, and Phase 439 UI QA/doc closeout.
-- Source after `rc.18` is ahead through `Phase 447` with popup status-chip compactness, progress appearance controls/rendering, soft/gauge ring differentiation, Settings order-control localization, Settings overview responsive help, and responsive Appearance & Sync control grids; no newer package has been cut yet.
+- `rc.19` packages the previous `rc.18` follow-up work plus post-`rc.18` source changes through `Phase 447`, including popup status-chip compactness, progress appearance controls/rendering, soft/gauge ring differentiation, Settings order-control localization, Settings overview responsive help, and responsive Appearance & Sync control grids.
 - `rc.15` remains a historical packaged follow-up candidate for the post-`rc.14` maintenance boundary through `Phase 364`.
 - `rc.16` remains a historical packaged follow-up candidate for the post-localization and interaction-audit display/source boundary through `Phase 421`.
 - `rc.17` remains a historical packaged follow-up candidate for the display-preference and Settings-carousel boundary through `Phase 433`.
-- SHA256 for `rc.18`: `e291870988264b07d23cb8cb3c3bd3bf6a1207fcaed7b93fa5e13f829386dfdb`.
+- `rc.18` remains a historical packaged follow-up candidate for the post-`rc.17` UI polish boundary through `Phase 440`.
+- SHA256 for `rc.19`: `2b3237e4acf0d855de394fdbc2c87b8a0ac4475e2cdf2ae46dabfab9256ee0a1`.
 - the `RC13` milestone remains the submitted Chrome Web Store review boundary until a deliberate resubmission replaces it.
 
 The packaging script checks that:
