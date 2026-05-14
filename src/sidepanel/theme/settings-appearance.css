@@ -595,6 +595,23 @@
   }
 }
 
+@media (max-width: 720px) {
+  .progress-appearance-band__fields {
+    grid-template-columns: max-content max-content;
+  }
+
+  .progress-appearance-band__fields > .color-choice-dropdown {
+    grid-column: 1 / -1;
+  }
+
+  .progress-appearance-band__fields
+    > .color-choice-dropdown
+    .color-choice-dropdown__button {
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+}
+
 @media (max-width: 520px) {
   .provider-order-list__item,
   .provider-progress-list__item {

@@ -49,5 +49,7 @@ describe("ProgressAppearancePreferenceControls", () => {
     expect(settingsAppearanceCss).toContain("inline-size: 5.5ch;");
     expect(settingsAppearanceCss).toContain("min-inline-size: 68px;");
     expect(settingsAppearanceCss).toContain("min-inline-size: 9.5rem;");
+    expect(settingsAppearanceCss).toContain("@media (max-width: 720px)");
+    expect(settingsAppearanceCss).toContain("grid-column: 1 / -1;");
   });
 });
