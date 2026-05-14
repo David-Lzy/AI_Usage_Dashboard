@@ -34,10 +34,10 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [466_Phase_UI_Polish_Visual_QA_Docs_Closeout.md](./466_Phase_UI_Polish_Visual_QA_Docs_Closeout.md)
-- latest completed slice: [465_Phase_UI_Font_Family_Preference_Model.md](./Archive/by-phase/400-499/465_Phase_UI_Font_Family_Preference_Model.md)
+- active phase file: [467_Phase_RC20_UI_Polish_Release_Packaging.md](./467_Phase_RC20_UI_Polish_Release_Packaging.md)
+- latest completed slice: [466_Phase_UI_Polish_Visual_QA_Docs_Closeout.md](./Archive/by-phase/400-499/466_Phase_UI_Polish_Visual_QA_Docs_Closeout.md)
 - queued phase files:
-  - [466_Phase_UI_Polish_Visual_QA_Docs_Closeout.md](./466_Phase_UI_Polish_Visual_QA_Docs_Closeout.md)
+  - [467_Phase_RC20_UI_Polish_Release_Packaging.md](./467_Phase_RC20_UI_Polish_Release_Packaging.md)
 
 Completed phases should be moved to:
 

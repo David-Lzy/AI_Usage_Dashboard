@@ -169,6 +169,7 @@ Define one stable contract for the next productization slices and keep it aligne
 - current popup smoke capture remains useful as runtime QA evidence but is visually wider than the true toolbar bubble because the helper opens the popup route in its own extension app window
 - RDP runtime capture should close old popup windows and tabs between attempts to reduce session buildup and OOM risk
 - Phase 432 RDP extension-window captures opened windows but produced blank or near-blank image files in the current capture path; Playwright/Vite preview covered representative `en`, `zh-CN`, `de`, and `ar` routes with `overflowX=0`, and the RDP blank-capture boundary is recorded under `Doc/testing/Archive/phase-reports/400-499/Phase_432_UI_QA_And_Doc_Closeout.md`
+- Phase 466 reran the post-polish QA closeout with Playwright built-preview checks for `en`, `zh-CN`, `de`, `ar`, and `hi`, plus sequential RDP Chrome extension-window captures for popup, full-page Settings, Chinese Quick Setup, and Arabic full-page Settings; the evidence record is [Phase 466 UI Polish Visual QA Docs Closeout](../testing/Archive/phase-reports/400-499/Phase_466_UI_Polish_Visual_QA_Docs_Closeout.md).
 
 ## Acceptance Boundary
 
