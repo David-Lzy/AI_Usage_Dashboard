@@ -75,8 +75,10 @@ export function UsageProgressRing({
     "--usage-progress-ring-arc": String(arcLength),
     "--usage-progress-ring-circumference": circumference,
     "--usage-progress-ring-fill-arc": fillArcLength,
+    "--usage-progress-ring-percent": `${roundedPercent ?? 0}%`,
     "--usage-progress-ring-rotation": getRingRotation(variant),
     "--usage-progress-ring-stroke": String(progressThicknessPx),
+    "--usage-progress-ring-stroke-px": `${progressThicknessPx}px`,
     "--usage-progress-ring-track-arc": trackArcLength,
     "--usage-progress-ring-track-opacity": getRingTrackOpacity(variant),
     ...(progressColor && !isIndeterminate
@@ -89,8 +91,10 @@ export function UsageProgressRing({
     "--usage-progress-ring-circumference": string;
     "--usage-progress-ring-fill"?: string;
     "--usage-progress-ring-fill-arc": string;
+    "--usage-progress-ring-percent": string;
     "--usage-progress-ring-rotation": string;
     "--usage-progress-ring-stroke": string;
+    "--usage-progress-ring-stroke-px": string;
     "--usage-progress-ring-track-arc": string;
     "--usage-progress-ring-track-opacity": string;
   };
@@ -111,26 +115,28 @@ export function UsageProgressRing({
         className={`usage-progress-ring usage-progress-ring--${variant} usage-progress-ring--${tone}${isIndeterminate ? " usage-progress-ring--indeterminate" : ""}`}
         style={ringStyle}
       >
-        <svg
-          className="usage-progress-ring__svg"
-          viewBox="0 0 120 120"
-          aria-hidden="true"
-        >
-          <circle
-            className="usage-progress-ring__track"
-            cx="60"
-            cy="60"
-            r={RING_RADIUS}
-            strokeDasharray={trackDasharray}
-          />
-          <circle
-            className="usage-progress-ring__fill"
-            cx="60"
-            cy="60"
-            r={RING_RADIUS}
-            strokeDasharray={fillDasharray}
-          />
-        </svg>
+        {variant === "circle-gauge" ? (
+          <svg
+            className="usage-progress-ring__svg"
+            viewBox="0 0 120 120"
+            aria-hidden="true"
+          >
+            <circle
+              className="usage-progress-ring__track"
+              cx="60"
+              cy="60"
+              r={RING_RADIUS}
+              strokeDasharray={trackDasharray}
+            />
+            <circle
+              className="usage-progress-ring__fill"
+              cx="60"
+              cy="60"
+              r={RING_RADIUS}
+              strokeDasharray={fillDasharray}
+            />
+          </svg>
+        ) : null}
         <span className="usage-progress-ring__value">{valueLabel}</span>
       </div>
       <p className="usage-progress__ring-label">{label}</p>

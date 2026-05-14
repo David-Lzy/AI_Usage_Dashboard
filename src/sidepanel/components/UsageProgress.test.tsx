@@ -100,7 +100,7 @@ describe("UsageProgress", () => {
     expect(html).toContain("resets 2026-04-29 04:00");
   });
 
-  it("renders soft SVG ring progress semantics when requested", () => {
+  it("renders soft conic ring progress semantics when requested", () => {
     const html = renderToStaticMarkup(
       <UsageProgress
         used={65}
@@ -122,21 +122,17 @@ describe("UsageProgress", () => {
     expect(html).toContain('aria-valuenow="35"');
     expect(html).toContain('aria-valuetext="Weekly usage window: 35% remaining"');
     expect(html).toContain("--usage-progress-ring-arc:100");
+    expect(html).toContain("--usage-progress-ring-percent:35%");
     expect(html).toContain("--usage-progress-ring-rotation:-90deg");
     expect(html).toContain("--usage-progress-ring-track-opacity:1");
     expect(html).toContain("--usage-progress-ring-stroke:14");
-    expect(html).toContain("--usage-progress-ring-track-arc:301.59");
-    expect(html).toContain("--usage-progress-ring-fill-arc:105.56");
-    expect(html).toContain("--usage-progress-ring-circumference:301.59");
+    expect(html).toContain("--usage-progress-ring-stroke-px:14px");
     expect(html).toContain("--usage-progress-ring-fill:#8A4B00");
-    expect(html).toContain('stroke-dasharray="105.56 301.59"');
-    expect(html).toContain("<svg");
+    expect(html).not.toContain("stroke-dasharray=");
+    expect(html).not.toContain("<svg");
     expect(html).toContain('class="usage-progress-ring__value">35%</span>');
     expect(html).not.toContain(">35% remaining<");
     expect(html).not.toContain("usage-progress__track");
-    expect(html).toContain('cx="60"');
-    expect(html).toContain('cy="60"');
-    expect(html).toContain('r="48"');
   });
 
   it("renders gauge SVG ring progress semantics when requested", () => {
@@ -168,7 +164,7 @@ describe("UsageProgress", () => {
     expect(html).toContain('stroke-dasharray="104.59 301.59"');
   });
 
-  it("keeps soft SVG ring indeterminate semantics accessible", () => {
+  it("keeps soft ring indeterminate semantics accessible", () => {
     const html = renderToStaticMarkup(
       <UsageProgress
         used={null}

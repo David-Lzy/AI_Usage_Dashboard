@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { UsageProgressRing } from "./UsageProgressRing";
 
 describe("UsageProgressRing", () => {
-  it("keeps the soft ring as a full circular arc", () => {
+  it("renders the soft ring with conic-gradient percent variables", () => {
     const html = renderToStaticMarkup(
       <UsageProgressRing
         isIndeterminate={false}
@@ -22,13 +22,12 @@ describe("UsageProgressRing", () => {
 
     expect(html).toContain("usage-progress-ring--circle-soft");
     expect(html).toContain("--usage-progress-ring-arc:100");
-    expect(html).toContain("--usage-progress-ring-track-arc:301.59");
-    expect(html).toContain("--usage-progress-ring-fill-arc:153.81");
-    expect(html).toContain("--usage-progress-ring-circumference:301.59");
-    expect(html).toContain('stroke-dasharray="301.59 301.59"');
-    expect(html).toContain('stroke-dasharray="153.81 301.59"');
+    expect(html).toContain("--usage-progress-ring-percent:51%");
     expect(html).toContain("--usage-progress-ring-rotation:-90deg");
+    expect(html).toContain("--usage-progress-ring-stroke-px:10px");
     expect(html).toContain("--usage-progress-ring-track-opacity:1");
+    expect(html).not.toContain("<svg");
+    expect(html).not.toContain("stroke-dasharray=");
   });
 
   it("renders the gauge ring as a shorter instrument arc", () => {

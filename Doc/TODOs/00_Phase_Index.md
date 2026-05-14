@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [450_Phase_UI_Micro_Polish_Select_Ring_And_Color_Bands.md](./Archive/by-phase/400-499/450_Phase_UI_Micro_Polish_Select_Ring_And_Color_Bands.md)
+- latest completed slice: [451_Phase_Soft_Ring_Conic_Rendering_Closeout.md](./Archive/by-phase/400-499/451_Phase_Soft_Ring_Conic_Rendering_Closeout.md)
 - queued phase files:
   - none
 
@@ -845,6 +845,7 @@ Completed phases should be moved to:
 - the 2026-05-14 `Phase 448` closeout packaged the post-`rc.18` UI polish source boundary through `Phase 447` as `0.1.0-rc.19`, generated `release/ai-usage-dashboard-0.1.0-rc.19.zip`, recorded SHA256 `2b3237e4acf0d855de394fdbc2c87b8a0ac4475e2cdf2ae46dabfab9256ee0a1`, and preserved RC13 as the submitted Chrome Web Store review boundary
 - the 2026-05-14 `Phase 449` closeout fixed reported UI micro-polish regressions for remaining-color-band alignment, Settings display-level helper alignment, soft-ring percentage rendering, and provider-carousel motion while preserving storage, provider data, localization, package, and submitted-review boundaries
 - the 2026-05-14 `Phase 450` closeout fixed select open-ring clipping, hardened soft/gauge SVG ring dash rendering with actual circumference values, and compacted remaining-color-band controls while preserving storage, provider data, localization, package, and submitted-review boundaries
+- the 2026-05-14 `Phase 451` closeout changed the soft ring to CSS conic-gradient rendering with `closest-side` inner cutout geometry so non-100 values show slim visible neutral gaps, while keeping gauge rings on the SVG arc path and preserving storage, provider data, localization, package, and submitted-review boundaries
 
 ## Delivery Standard For Each Phase
 
