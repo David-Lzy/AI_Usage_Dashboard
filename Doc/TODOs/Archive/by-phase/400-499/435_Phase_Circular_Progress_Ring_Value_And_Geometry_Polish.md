@@ -1,6 +1,6 @@
 # Phase 435 - Circular Progress Ring Value And Geometry Polish
 
-Status: queued
+Status: completed
 
 ## Goal
 
@@ -40,3 +40,24 @@ Make circular quota progress controls cleaner and visually symmetric by removing
 ## Follow-Up
 
 - If ring geometry needs broader token changes, queue a separate visual-token phase rather than changing the full progress system here.
+
+## Completion Summary
+
+- Changed circular progress labels so classic, soft, and gauge rings always render compact numeric center text such as `76%`, even when the source value label includes `remaining` or localized equivalents.
+- Preserved full `aria-valuetext` and line-progress display semantics so assistive technology and non-circular rows still expose remaining/used context.
+- Removed the separate radial background groove from SVG ring variants so the visible groove comes from the same SVG circle geometry as the foreground fill.
+- Added shared ring size and stroke variables, non-scaling SVG strokes, and numeric isolation on ring center text to reduce perceived track/fill drift and RTL punctuation risk.
+- Added focused regression coverage for circular center labels, aria text, SVG geometry markers, and popup/appearance preview progress paths.
+
+## Verification
+
+- `npm run test -- src/sidepanel/components/UsageProgress.test.tsx`
+- `npm run test -- src/popup/PopupProviderProgress.test.tsx src/sidepanel/components/PopupAppearancePreview.test.tsx src/shared/progress-display.test.ts src/sidepanel/settings-preference-options.test.ts`
+- `npm run i18n:check`
+- `npm run typecheck`
+- `npm run build`
+- Playwright static ring smoke screenshot: `tmp/phase435-progress-ring-smoke/static-ring-geometry.png`
+
+Note:
+
+- The ordinary HTTP popup preview loaded provider cards without circular percent rings in this local profile, so the visual smoke used a static ring fixture with the built CSS. Extension-mode visual QA remains queued for `Phase 439`.

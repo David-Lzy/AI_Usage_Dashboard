@@ -51,10 +51,10 @@ export function UsageProgress({
   const isIndeterminate = roundedPercent === null;
   const progressValueLabel = isIndeterminate
     ? "Unknown"
-    : (valueLabel ??
-      (isCircularProgressStyle(displayStyle)
-        ? `${roundedPercent}%`
-        : valueKind === "remaining"
+    : isCircularProgressStyle(displayStyle)
+      ? `${roundedPercent}%`
+      : (valueLabel ??
+        (valueKind === "remaining"
           ? `${roundedPercent}% remaining`
           : `${roundedPercent}%`));
   const progressValueText = isIndeterminate
