@@ -24,7 +24,7 @@ import {
   buildProviderProgressItems,
   type ProviderProgressItem,
 } from "../../shared/provider-progress-items";
-import type { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
+import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 
 type ProviderProgressItemPreferenceControlsProps = {

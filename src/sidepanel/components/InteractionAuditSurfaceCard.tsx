@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 
-import type { buildOperatorWorkspaceLocalizedCopy } from "../../shared/localized-copy";
+import type { buildOperatorWorkspaceLocalizedCopy } from "../../shared/operator-workspace-localized-copy";
 import type { InteractionAuditSurface } from "../interaction-audit-surfaces";
 import type {
   InteractionAuditSignoffStatus,

@@ -1,6 +1,6 @@
 import type { ThemePreset } from "../../providers/types";
 import { RECOMMENDED_COLOR_CHOICES } from "../../shared/color-choices";
-import type { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
+import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import { normalizeThemeCustomSeedHex } from "../../shared/theme";
 import type { MaterialSelectOption } from "./MaterialSelect";
 import {

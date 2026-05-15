@@ -6,7 +6,7 @@ import type {
   ProviderSetting,
 } from "../../providers/types";
 import type { ResolvedTextDirection } from "../../shared/i18n";
-import type { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
+import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import {
   ProviderCarousel,
   type ProviderCarouselItem,

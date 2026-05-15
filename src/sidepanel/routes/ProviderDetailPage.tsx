@@ -7,12 +7,12 @@ import type {
   ProviderId,
 } from "../../providers/types";
 import { buildRuntimeCommonCopy, createRuntimeI18n } from "../../shared/i18n";
+import { getProviderDiagnosticPresentation } from "../../shared/provider-diagnostic-presentation";
 import {
   buildProviderDetailLocalizedCopy,
-  getProviderDiagnosticPresentation,
   getPermissionStatusLabel,
   getProviderDetailStatusBadgeLabel,
-} from "../../shared/localized-copy";
+} from "../../shared/provider-detail-localized-copy";
 import { hasVisibleProviderProgressItems } from "../../shared/provider-progress-item-selection";
 import { ProviderProgressItemList } from "../components/ProviderProgressItemList";
 import { StatusBadge } from "../components/StatusBadge";

@@ -2,10 +2,8 @@ import type {
   ProviderSourceKind,
   ProviderTone,
 } from "../providers/types";
-import type {
-  ProviderDiagnosticPresentation,
-  buildSettingsLocalizedCopy,
-} from "../shared/localized-copy";
+import type { ProviderDiagnosticPresentation } from "../shared/provider-diagnostic-presentation";
+import type { buildSettingsLocalizedCopy } from "../shared/settings-localized-copy";
 import {
   getOpenableRouteHint,
   type ProviderSourceDisplay,

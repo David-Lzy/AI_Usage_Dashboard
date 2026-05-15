@@ -5,7 +5,7 @@ import type {
   ProviderSetting,
   ProviderSnapshot,
 } from "../../providers/types";
-import type { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
+import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 import { ProviderOrderPreferenceControls } from "./ProviderOrderPreferenceControls";
 import { ProviderProgressItemPreferenceControls } from "./ProviderProgressItemPreferenceControls";

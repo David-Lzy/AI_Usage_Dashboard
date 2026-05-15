@@ -6,7 +6,7 @@ import {
   DEFAULT_APP_LOCALE_PREFERENCE,
   type RuntimeI18n,
 } from "../../shared/i18n";
-import { buildStoreWorkflowLocalizedCopy } from "../../shared/localized-copy";
+import { buildStoreWorkflowLocalizedCopy } from "../../shared/store-workflow-localized-copy";
 
 type ProbeState =
   | { status: "opening" }

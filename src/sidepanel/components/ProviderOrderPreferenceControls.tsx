@@ -17,7 +17,7 @@ import {
   reorderProviderBefore,
   resolveProviderOrder,
 } from "../../shared/display-preferences";
-import type { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
+import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 
 type ProviderOrderPreferenceControlsProps = {

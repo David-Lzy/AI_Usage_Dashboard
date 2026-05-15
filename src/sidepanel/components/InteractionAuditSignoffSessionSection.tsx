@@ -1,4 +1,4 @@
-import type { buildOperatorWorkspaceLocalizedCopy } from "../../shared/localized-copy";
+import type { buildOperatorWorkspaceLocalizedCopy } from "../../shared/operator-workspace-localized-copy";
 import {
   formatInteractionAuditSignoffRequestBinding,
   formatInteractionAuditSignoffRequestRevision,

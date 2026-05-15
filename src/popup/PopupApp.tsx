@@ -12,10 +12,8 @@ import {
   getQuickThemeToggleCopy,
   syncRuntimeLocaleAttributes,
 } from "../shared/i18n";
-import {
-  buildPopupLocalizedCopy,
-  buildProviderSourceDisplayLocalizedCopy,
-} from "../shared/localized-copy";
+import { buildPopupLocalizedCopy } from "../shared/popup-localized-copy";
+import { buildProviderSourceDisplayLocalizedCopy } from "../shared/provider-source-display-localized-copy";
 import {
   buildQuickThemeToggle,
   DEFAULT_THEME_SETTINGS,

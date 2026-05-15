@@ -1,4 +1,4 @@
-import type { buildOperatorWorkspaceLocalizedCopy } from "../../shared/localized-copy";
+import type { buildOperatorWorkspaceLocalizedCopy } from "../../shared/operator-workspace-localized-copy";
 import type { ThemeRecoveryReviewRequestContext } from "../theme-recovery-review";
 
 type ThemeRecoveryRequestScopeCopy = ReturnType<

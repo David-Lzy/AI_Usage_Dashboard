@@ -9,8 +9,8 @@ import {
   syncRuntimeLocaleAttributes,
 } from "../shared/i18n";
 import { isFullPageSurfaceSearch } from "../shared/extension-surface-paths";
+import { buildProviderSourceDisplayLocalizedCopy } from "../shared/provider-source-display-localized-copy";
 import { buildQuickThemeToggle } from "../shared/theme";
-import { buildProviderSourceDisplayLocalizedCopy } from "../shared/localized-copy";
 import { Toast } from "./components/Toast";
 import { DashboardPage } from "./routes/DashboardPage";
 import { ProviderDetailPage } from "./routes/ProviderDetailPage";

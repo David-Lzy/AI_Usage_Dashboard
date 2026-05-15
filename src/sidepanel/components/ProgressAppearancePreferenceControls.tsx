@@ -2,7 +2,7 @@ import { useEffect, useState, type ChangeEvent } from "react";
 
 import type { ProgressColorBand } from "../../providers/types";
 import { RECOMMENDED_COLOR_CHOICES } from "../../shared/color-choices";
-import type { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
+import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import {
   PROGRESS_THICKNESS_MAX_PX,
   PROGRESS_THICKNESS_MIN_PX,

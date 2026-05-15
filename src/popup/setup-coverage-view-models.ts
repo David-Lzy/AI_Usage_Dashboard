@@ -1,5 +1,5 @@
 import type { ProviderTone, SummaryItem } from "../providers/types";
-import type { buildPopupLocalizedCopy } from "../shared/localized-copy";
+import type { buildPopupLocalizedCopy } from "../shared/popup-localized-copy";
 import type { RuntimeI18n } from "../shared/i18n";
 import type { ProviderViewModel } from "../sidepanel/view-models";
 import type {

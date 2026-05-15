@@ -4,7 +4,7 @@ import type {
   ProviderSetting,
   ProviderSnapshot,
 } from "../providers/types";
-import type { buildSettingsLocalizedCopy } from "../shared/localized-copy";
+import type { buildSettingsLocalizedCopy } from "../shared/settings-localized-copy";
 import {
   SETTINGS_SECTION_IDS,
   type SettingsSectionId,

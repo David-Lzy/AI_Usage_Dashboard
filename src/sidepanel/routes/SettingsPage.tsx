@@ -23,7 +23,7 @@ import type {
   UiFontFamily,
 } from "../../providers/types";
 import { createRuntimeI18n } from "../../shared/i18n";
-import { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
+import { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import { getPreferredScrollBehavior } from "../motion";
 
 import {

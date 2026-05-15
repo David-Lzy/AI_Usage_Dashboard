@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 
 import type { AppLocalePreference, AppSettings } from "../providers/types";
 import { sendAppMessage } from "../shared/app-client";
@@ -15,13 +15,42 @@ import {
   startThemeSettingsSync,
   type ThemeSettings,
 } from "../shared/theme";
-import { CodexFixtureCapturePage } from "./routes/CodexFixtureCapturePage";
-import { CursorFixtureCapturePage } from "./routes/CursorFixtureCapturePage";
-import { InteractionAuditPage } from "./routes/InteractionAuditPage";
-import { JetBrainsFixtureCapturePage } from "./routes/JetBrainsFixtureCapturePage";
-import { StoreScreenshotNativePopupProbePage } from "./routes/StoreScreenshotNativePopupProbePage";
-import { StoreScreenshotSeedPage } from "./routes/StoreScreenshotSeedPage";
-import { ThemeRecoveryReviewPage } from "./routes/ThemeRecoveryReviewPage";
+
+const CodexFixtureCapturePage = lazy(() =>
+  import("./routes/CodexFixtureCapturePage").then((module) => ({
+    default: module.CodexFixtureCapturePage,
+  })),
+);
+const CursorFixtureCapturePage = lazy(() =>
+  import("./routes/CursorFixtureCapturePage").then((module) => ({
+    default: module.CursorFixtureCapturePage,
+  })),
+);
+const InteractionAuditPage = lazy(() =>
+  import("./routes/InteractionAuditPage").then((module) => ({
+    default: module.InteractionAuditPage,
+  })),
+);
+const JetBrainsFixtureCapturePage = lazy(() =>
+  import("./routes/JetBrainsFixtureCapturePage").then((module) => ({
+    default: module.JetBrainsFixtureCapturePage,
+  })),
+);
+const StoreScreenshotNativePopupProbePage = lazy(() =>
+  import("./routes/StoreScreenshotNativePopupProbePage").then((module) => ({
+    default: module.StoreScreenshotNativePopupProbePage,
+  })),
+);
+const StoreScreenshotSeedPage = lazy(() =>
+  import("./routes/StoreScreenshotSeedPage").then((module) => ({
+    default: module.StoreScreenshotSeedPage,
+  })),
+);
+const ThemeRecoveryReviewPage = lazy(() =>
+  import("./routes/ThemeRecoveryReviewPage").then((module) => ({
+    default: module.ThemeRecoveryReviewPage,
+  })),
+);
 
 export type SpecialSidePanelRoute =
   | "debug-capture-codex"
@@ -100,6 +129,24 @@ function parseStoredLocalePreference(rawValue: string | null): AppLocalePreferen
   } catch {
     return DEFAULT_APP_LOCALE_PREFERENCE;
   }
+}
+
+function SpecialRouteLoadingFallback({
+  runtimeI18n,
+}: {
+  runtimeI18n: ReturnType<typeof createRuntimeI18n>;
+}) {
+  return (
+    <main className="app-shell">
+      <section className="hero-card">
+        <p className="section-label">{runtimeI18n.t("app.loading.eyebrow")}</p>
+        <h1 className="display-headline">
+          {runtimeI18n.t("app.loading.title")}
+        </h1>
+        <p className="body-copy">{runtimeI18n.t("app.loading.detail")}</p>
+      </section>
+    </main>
+  );
 }
 
 export function SpecialRouteApp({
@@ -225,22 +272,32 @@ export function SpecialRouteApp({
     );
   }, [runtimeI18n.resolvedLocale, runtimeI18n.resolvedTextDirection]);
 
-  switch (route) {
-    case "debug-capture-codex":
-      return <CodexFixtureCapturePage />;
-    case "debug-capture-cursor":
-      return <CursorFixtureCapturePage />;
-    case "debug-capture-jetbrains":
-      return <JetBrainsFixtureCapturePage />;
-    case "debug-interaction-audit":
-      return <InteractionAuditPage i18n={runtimeI18n} />;
-    case "debug-store-screenshot-seed":
-      return <StoreScreenshotSeedPage i18n={runtimeI18n} />;
-    case "debug-native-popup-probe":
-      return <StoreScreenshotNativePopupProbePage i18n={runtimeI18n} />;
-    case "debug-theme-recovery-review":
-      return <ThemeRecoveryReviewPage i18n={runtimeI18n} />;
-    default:
-      return null;
-  }
+  const routeContent = (() => {
+    switch (route) {
+      case "debug-capture-codex":
+        return <CodexFixtureCapturePage />;
+      case "debug-capture-cursor":
+        return <CursorFixtureCapturePage />;
+      case "debug-capture-jetbrains":
+        return <JetBrainsFixtureCapturePage />;
+      case "debug-interaction-audit":
+        return <InteractionAuditPage i18n={runtimeI18n} />;
+      case "debug-store-screenshot-seed":
+        return <StoreScreenshotSeedPage i18n={runtimeI18n} />;
+      case "debug-native-popup-probe":
+        return <StoreScreenshotNativePopupProbePage i18n={runtimeI18n} />;
+      case "debug-theme-recovery-review":
+        return <ThemeRecoveryReviewPage i18n={runtimeI18n} />;
+      default:
+        return null;
+    }
+  })();
+
+  return (
+    <Suspense
+      fallback={<SpecialRouteLoadingFallback runtimeI18n={runtimeI18n} />}
+    >
+      {routeContent}
+    </Suspense>
+  );
 }

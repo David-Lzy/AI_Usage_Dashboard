@@ -1,5 +1,5 @@
 import type { RuntimeI18n } from "../shared/i18n";
-import { buildPopupLocalizedCopy } from "../shared/localized-copy";
+import { buildPopupLocalizedCopy } from "../shared/popup-localized-copy";
 import { buildLocalizedFeaturedProviderCard } from "./featured-provider-card-view-models";
 import { buildLocalizedFeaturedSection } from "./featured-section-view-models";
 import { buildLocalizedGuidanceCard } from "./guidance-card-view-models";

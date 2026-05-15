@@ -10,7 +10,7 @@ import {
   type ProviderSourceDisplay,
   type ProviderSourceStateKind,
 } from "../shared/provider-sources";
-import type { buildSettingsLocalizedCopy } from "../shared/localized-copy";
+import type { buildSettingsLocalizedCopy } from "../shared/settings-localized-copy";
 
 export type SettingsQuickSetupActionId =
   | "enable_provider"

@@ -16,7 +16,7 @@ import type {
   UiFontFamily,
 } from "../../providers/types";
 import type { RuntimeI18n } from "../../shared/i18n";
-import type { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
+import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import {
   SYNC_INTERVAL_MAX_MINUTES,
   SYNC_INTERVAL_MIN_MINUTES,

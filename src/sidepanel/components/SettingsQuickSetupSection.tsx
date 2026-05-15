@@ -5,8 +5,8 @@ import type {
   SettingsUserLevel,
 } from "../../providers/types";
 import type { ResolvedTextDirection } from "../../shared/i18n";
-import { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
 import { getRecommendedFirstSetupProvider } from "../../shared/first-provider-setup";
+import { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import type { SettingsQuickSetupActionModel } from "../settings-view-models";
 import { buildSettingsQuickSetupCardModel } from "../settings-view-models";
 import {

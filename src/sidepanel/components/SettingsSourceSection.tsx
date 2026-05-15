@@ -5,7 +5,7 @@ import type {
   ProviderSourcePreference,
 } from "../../providers/types";
 import type { RuntimeI18n } from "../../shared/i18n";
-import { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
+import { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import type { SettingsUserLevelVisibility } from "../settings-user-level-visibility";
 import {
   ProviderCarousel,

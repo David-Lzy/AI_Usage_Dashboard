@@ -6,12 +6,12 @@ import type {
 } from "../../providers/types";
 import { buildProviderSourceDisplay } from "../../shared/provider-sources";
 import type { RuntimeI18n } from "../../shared/i18n";
+import { getProviderDiagnosticPresentation } from "../../shared/provider-diagnostic-presentation";
+import { buildProviderSourceDisplayLocalizedCopy } from "../../shared/provider-source-display-localized-copy";
 import {
-  buildProviderSourceDisplayLocalizedCopy,
   buildSettingsLocalizedCopy,
-  getProviderDiagnosticPresentation,
   getSettingsSourcePreferenceLabel,
-} from "../../shared/localized-copy";
+} from "../../shared/settings-localized-copy";
 import type { SettingsUserLevelVisibility } from "../settings-user-level-visibility";
 import {
   buildSettingsSourceCardModel,

@@ -4,7 +4,7 @@ import type { AppState } from "../../providers/types";
 import { sendAppMessage } from "../../shared/app-client";
 import { APP_STATE_STORAGE_KEY } from "../../shared/constants";
 import type { RuntimeI18n } from "../../shared/i18n";
-import { buildOperatorWorkspaceLocalizedCopy } from "../../shared/localized-copy";
+import { buildOperatorWorkspaceLocalizedCopy } from "../../shared/operator-workspace-localized-copy";
 import { TopBar } from "../components/TopBar";
 import { ThemeRecoveryCurrentStateCard } from "../components/ThemeRecoveryCurrentStateCard";
 import {

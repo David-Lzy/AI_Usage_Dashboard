@@ -5,8 +5,8 @@ import {
   DEFAULT_APP_LOCALE_PREFERENCE,
   type RuntimeI18n,
 } from "../../shared/i18n";
-import { buildStoreWorkflowLocalizedCopy } from "../../shared/localized-copy";
 import { clearAppState, readAppState, writeAppState } from "../../shared/storage";
+import { buildStoreWorkflowLocalizedCopy } from "../../shared/store-workflow-localized-copy";
 import { writeStoreScreenshotRuntimeLock } from "../../shared/store-screenshot-runtime-lock";
 import {
   clearStoreScreenshotSeedBackup,

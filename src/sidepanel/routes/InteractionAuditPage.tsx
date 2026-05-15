@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import type { RuntimeI18n } from "../../shared/i18n";
-import { buildOperatorWorkspaceLocalizedCopy } from "../../shared/localized-copy";
+import { buildOperatorWorkspaceLocalizedCopy } from "../../shared/operator-workspace-localized-copy";
 import { InteractionAuditGuidanceCard } from "../components/InteractionAuditGuidanceCard";
 import { InteractionAuditHandoffSummarySection } from "../components/InteractionAuditHandoffSummarySection";
 import { InteractionAuditRequestScopeSection } from "../components/InteractionAuditRequestScopeSection";
