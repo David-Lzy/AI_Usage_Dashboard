@@ -21,7 +21,7 @@ import {
 } from "../shared/i18n";
 import {
   buildActionBadgeSelectOptions,
-  normalizeActionBadgeSelection,
+  getSelectedActionBadgeSelections,
 } from "../shared/action-badge-preferences";
 import {
   POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW_OPTIONS,
@@ -34,6 +34,9 @@ import {
   SYNC_INTERVAL_MAX_MINUTES,
   SYNC_INTERVAL_MIN_MINUTES,
   SYNC_INTERVAL_PRESETS,
+  ACTION_BADGE_ROTATION_INTERVAL_MAX_SECONDS,
+  ACTION_BADGE_ROTATION_INTERVAL_MIN_SECONDS,
+  ACTION_BADGE_ROTATION_INTERVAL_PRESETS,
   WARNING_THRESHOLD_MAX_PERCENT,
   WARNING_THRESHOLD_MIN_PERCENT,
   WARNING_THRESHOLD_PRESETS,
@@ -153,22 +156,25 @@ export function buildSettingsPreferenceOptions({
       value: option.value,
       label: popupCircularProgressItemsPerRowOptionLabels[option.value],
     }));
-  const actionBadgeOptions = buildActionBadgeSelectOptions(
-    {
-      providers: snapshots,
-      providerSettings: providers,
-      settings,
-    },
-    i18n,
-  );
-  const normalizedActionBadgeSelection = normalizeActionBadgeSelection(
-    settings.actionBadgeSelection,
-  );
+  const actionBadgeState = {
+    providers: snapshots,
+    providerSettings: providers,
+    settings,
+  };
+  const actionBadgeOptions = buildActionBadgeSelectOptions(actionBadgeState, i18n);
+  const normalizedActionBadgeSelections =
+    getSelectedActionBadgeSelections(actionBadgeState);
   const syncIntervalUnitLabel = i18n.t("settings.preferences.minutes");
+  const actionBadgeRotationUnitLabel = i18n.t("settings.preferences.seconds");
   const syncIntervalOptions = SYNC_INTERVAL_PRESETS.map((preset) => ({
     value: preset,
     label: `${i18n.formatNumber(preset)} ${syncIntervalUnitLabel}`,
   }));
+  const actionBadgeRotationIntervalOptions =
+    ACTION_BADGE_ROTATION_INTERVAL_PRESETS.map((preset) => ({
+      value: preset,
+      label: `${i18n.formatNumber(preset)} ${actionBadgeRotationUnitLabel}`,
+    }));
   const warningThresholdOptions = WARNING_THRESHOLD_PRESETS.map((preset) => ({
     value: preset,
     label: i18n.formatPercentValue(preset),
@@ -183,13 +189,25 @@ export function buildSettingsPreferenceOptions({
     WARNING_THRESHOLD_MIN_PERCENT,
     WARNING_THRESHOLD_MAX_PERCENT,
   );
+  const actionBadgeRotationIntervalErrorText = commonCopy.syncIntervalRangeError(
+    ACTION_BADGE_ROTATION_INTERVAL_MIN_SECONDS,
+    ACTION_BADGE_ROTATION_INTERVAL_MAX_SECONDS,
+    actionBadgeRotationUnitLabel,
+  );
   const syncIntervalMenuButtonLabel = commonCopy.syncIntervalMenuButton;
   const warningThresholdMenuButtonLabel = commonCopy.warningThresholdMenuButton;
+  const actionBadgeRotationMenuButtonLabel = i18n.t(
+    "settings.preferences.action_badge_rotation_menu_button",
+  );
 
   return {
     actionBadgeOptions,
+    actionBadgeRotationIntervalErrorText,
+    actionBadgeRotationIntervalOptions,
+    actionBadgeRotationMenuButtonLabel,
+    actionBadgeRotationUnitLabel,
     localeOptions,
-    normalizedActionBadgeSelection,
+    normalizedActionBadgeSelections,
     popupCornerStyleOptions,
     popupShadowStyleOptions,
     popupSizePresetOptions,

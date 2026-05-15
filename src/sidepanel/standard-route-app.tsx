@@ -1,9 +1,6 @@
 import { useEffect } from "react";
 
-import type {
-  ActionBadgeSelection,
-  AppLocalePreference,
-} from "../providers/types";
+import type { AppLocalePreference } from "../providers/types";
 import {
   buildDashboardSummaryLabels,
   createRuntimeI18n,
@@ -291,9 +288,15 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           onProgressColorBandsChange={(progressColorBands) =>
             handleUpdateSettings({ progressColorBands })
           }
-          onActionBadgeSelectionChange={(
-            actionBadgeSelection: ActionBadgeSelection,
-          ) => handleUpdateSettings({ actionBadgeSelection })}
+          onActionBadgeSelectionsChange={(actionBadgeSelections) =>
+            handleUpdateSettings({
+              actionBadgeSelection: actionBadgeSelections[0] ?? "attention",
+              actionBadgeSelections,
+            })
+          }
+          onActionBadgeRotationIntervalSecondsChange={(
+            actionBadgeRotationIntervalSeconds,
+          ) => handleUpdateSettings({ actionBadgeRotationIntervalSeconds })}
           onExportConfiguration={handleExportConfiguration}
           onImportConfigurationJson={handleImportConfigurationJson}
           onSaveConfigurationToChromeSync={handleSaveConfigurationToChromeSync}

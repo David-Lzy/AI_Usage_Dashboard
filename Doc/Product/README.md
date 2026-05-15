@@ -61,5 +61,6 @@ Status note:
 - `Phase 473` added Settings toolbar-icon preferences for default, match-badge provider, explicit provider favicon, and custom image modes while preserving store/extension-management icons, provider data, badge behavior, and release packaging.
 - `Phase 474` added Settings configuration backup, JSON export/import, and Chrome Sync save/restore actions while preserving local-only credentials, page bindings, permissions, runtime evidence, provider source truth, and release packaging.
 - `Phase 475` shortened `100%` quota action-badge text to `100` while preserving full tooltip/title semantics, non-100 percent badge text, provider state, and release packaging.
-- Current implementation source is ahead of the `0.1.0-rc.21` package by `Phase 475`.
-- No numbered phase is currently queued after `Phase 475`.
+- `Phase 476` added multi-select toolbar badge sources, configurable badge rotation, a dedicated rotation alarm, default match-badge toolbar icons for fresh settings, and match-badge icon rotation while preserving provider sync and release packaging.
+- Current implementation source is ahead of the `0.1.0-rc.21` package by `Phase 476`.
+- No numbered phase is currently queued after `Phase 476`.

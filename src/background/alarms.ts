@@ -1,10 +1,15 @@
 import type { AppSettings } from "../providers/types";
-import { SYNC_INTERVAL_MIN_MINUTES } from "../shared/settings-preferences";
+import {
+  ACTION_BADGE_ROTATION_INTERVAL_MIN_SECONDS,
+  SYNC_INTERVAL_MIN_MINUTES,
+} from "../shared/settings-preferences";
 
 export const LEGACY_PERIODIC_SYNC_ALARMS = [
   "ai-usage-dashboard.periodic-sync",
 ];
 export const PERIODIC_SYNC_ALARM = "ai-usage-dashboard.periodic-sync.v2";
+export const ACTION_BADGE_ROTATION_ALARM =
+  "ai-usage-dashboard.action-badge-rotation.v1";
 export const INITIAL_PERIODIC_SYNC_DELAY_MINUTES = 1;
 export const PERIODIC_SYNC_INITIAL_JITTER_MAX_MINUTES = 2;
 
@@ -77,6 +82,43 @@ export async function ensurePeriodicSyncAlarm(
   });
 }
 
+export async function ensureActionBadgeRotationAlarm(
+  settings: AppSettings,
+): Promise<void> {
+  if (!supportsChromeAlarms()) {
+    return;
+  }
+
+  const selectedBadgeCount = Array.isArray(settings.actionBadgeSelections)
+    ? settings.actionBadgeSelections.length
+    : 1;
+
+  if (selectedBadgeCount <= 1) {
+    await chrome.alarms.clear(ACTION_BADGE_ROTATION_ALARM);
+    return;
+  }
+
+  const periodInMinutes =
+    Math.max(
+      ACTION_BADGE_ROTATION_INTERVAL_MIN_SECONDS,
+      settings.actionBadgeRotationIntervalSeconds,
+    ) / 60;
+  const currentAlarm = await chrome.alarms.get(ACTION_BADGE_ROTATION_ALARM);
+
+  if (currentAlarm?.periodInMinutes === periodInMinutes) {
+    return;
+  }
+
+  await chrome.alarms.create(ACTION_BADGE_ROTATION_ALARM, {
+    delayInMinutes: periodInMinutes,
+    periodInMinutes,
+  });
+}
+
 export function isPeriodicSyncAlarm(alarm: chrome.alarms.Alarm): boolean {
   return alarm.name === PERIODIC_SYNC_ALARM;
+}
+
+export function isActionBadgeRotationAlarm(alarm: chrome.alarms.Alarm): boolean {
+  return alarm.name === ACTION_BADGE_ROTATION_ALARM;
 }

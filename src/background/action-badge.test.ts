@@ -57,6 +57,7 @@ function createStateWithCodexWindows() {
     settings: {
       ...state.settings,
       actionBadgeSelection: weeklyCandidate?.value ?? "attention",
+      actionBadgeSelections: [weeklyCandidate?.value ?? "attention"],
     },
   };
 }
@@ -119,10 +120,33 @@ describe("action badge", () => {
       settings: {
         ...state.settings,
         actionBadgeSelection: firstWindowCandidate?.value ?? "attention",
+        actionBadgeSelections: [firstWindowCandidate?.value ?? "attention"],
       },
     });
 
     expect(model.text).toBe("100");
     expect(model.title).toContain("  Remaining: 100% remaining");
+  });
+
+  it("uses the active rotated badge selection for toolbar text", () => {
+    const state = createStateWithCodexWindows();
+    const candidateValues = buildActionBadgeQuotaCandidates(state)
+      .filter((candidate) => candidate.providerId === "codex")
+      .map((candidate) => candidate.value);
+    const rotatingState = {
+      ...state,
+      settings: {
+        ...state.settings,
+        actionBadgeSelections: candidateValues,
+        actionBadgeRotationIntervalSeconds: 60,
+      },
+    };
+
+    expect(buildActionBadgeModel(rotatingState, 0).title).toContain(
+      "  Source: 5-hour usage window",
+    );
+    expect(buildActionBadgeModel(rotatingState, 60_000).title).toContain(
+      "  Source: Weekly usage window",
+    );
   });
 });

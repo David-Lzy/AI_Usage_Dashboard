@@ -1,8 +1,8 @@
 import type { AppState, ProviderId } from "../providers/types";
 import {
   ACTION_BADGE_ATTENTION_SELECTION,
+  getEffectiveActionBadgeSelection,
   findActionBadgeQuotaCandidate,
-  normalizeActionBadgeSelection,
 } from "../shared/action-badge-preferences";
 import {
   DEFAULT_TOOLBAR_ACTION_ICON_PATHS,
@@ -29,7 +29,10 @@ function isKnownProviderId(
   );
 }
 
-export function resolveToolbarIconProviderId(state: AppState): ProviderId | null {
+export function resolveToolbarIconProviderId(
+  state: AppState,
+  timestampMs = Date.now(),
+): ProviderId | null {
   switch (state.settings.toolbarIconMode) {
     case "provider":
       return isKnownProviderId(state.settings.toolbarIconProviderId, state)
@@ -37,9 +40,7 @@ export function resolveToolbarIconProviderId(state: AppState): ProviderId | null
         : null;
 
     case "match-badge": {
-      const selection = normalizeActionBadgeSelection(
-        state.settings.actionBadgeSelection,
-      );
+      const selection = getEffectiveActionBadgeSelection(state, timestampMs);
 
       if (selection === ACTION_BADGE_ATTENTION_SELECTION) {
         return null;
@@ -150,7 +151,10 @@ async function setToolbarIconFromSource(sourceUrl: string): Promise<boolean> {
   return true;
 }
 
-export async function syncToolbarIconFromState(state: AppState): Promise<void> {
+export async function syncToolbarIconFromState(
+  state: AppState,
+  timestampMs = Date.now(),
+): Promise<void> {
   if (!hasChromeActionIconApi()) {
     return;
   }
@@ -168,7 +172,7 @@ export async function syncToolbarIconFromState(state: AppState): Promise<void> {
     }
   }
 
-  const providerId = resolveToolbarIconProviderId(state);
+  const providerId = resolveToolbarIconProviderId(state, timestampMs);
 
   if (providerId) {
     const faviconUrl = buildProviderFaviconUrl(providerId, 32);

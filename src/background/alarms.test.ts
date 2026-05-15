@@ -3,6 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { AppSettings } from "../providers/types";
 import { SAMPLE_APP_STATE } from "../shared/constants";
 import {
+  ACTION_BADGE_ROTATION_ALARM,
+  ensureActionBadgeRotationAlarm,
   ensurePeriodicSyncAlarm,
   getPeriodicSyncInitialDelayMinutes,
   INITIAL_PERIODIC_SYNC_DELAY_MINUTES,
@@ -18,7 +20,9 @@ const baseSettings: AppSettings = {
 
 function stubChromeAlarms(currentAlarm?: chrome.alarms.Alarm) {
   const get = vi.fn(async (alarmName: string) =>
-    alarmName === PERIODIC_SYNC_ALARM ? currentAlarm : undefined,
+    alarmName === PERIODIC_SYNC_ALARM || alarmName === ACTION_BADGE_ROTATION_ALARM
+      ? currentAlarm
+      : undefined,
   );
   const create = vi.fn(async () => undefined);
   const clear = vi.fn(async () => true);
@@ -96,5 +100,42 @@ describe("ensurePeriodicSyncAlarm", () => {
         PERIODIC_SYNC_INITIAL_JITTER_MAX_MINUTES,
     );
     expect(getPeriodicSyncInitialDelayMinutes(3, 1)).toBe(3);
+  });
+});
+
+describe("ensureActionBadgeRotationAlarm", () => {
+  beforeEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("creates a thirty-second rotation alarm when multiple badges are selected", async () => {
+    const alarms = stubChromeAlarms();
+
+    await ensureActionBadgeRotationAlarm({
+      ...baseSettings,
+      actionBadgeSelections: ["attention", "quota:codex:primary"],
+      actionBadgeRotationIntervalSeconds: 30,
+    });
+
+    expect(alarms.get).toHaveBeenCalledWith(ACTION_BADGE_ROTATION_ALARM);
+    expect(alarms.create).toHaveBeenCalledWith(ACTION_BADGE_ROTATION_ALARM, {
+      delayInMinutes: 0.5,
+      periodInMinutes: 0.5,
+    });
+  });
+
+  it("clears the rotation alarm when one or zero badges are selected", async () => {
+    const alarms = stubChromeAlarms();
+
+    await ensureActionBadgeRotationAlarm({
+      ...baseSettings,
+      actionBadgeSelections: ["attention"],
+    });
+
+    expect(alarms.clear).toHaveBeenCalledWith(ACTION_BADGE_ROTATION_ALARM);
   });
 });

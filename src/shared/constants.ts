@@ -16,6 +16,7 @@ import {
   DEFAULT_POPUP_SIZE_PRESET,
 } from "./popup-appearance";
 import {
+  DEFAULT_ACTION_BADGE_ROTATION_INTERVAL_SECONDS,
   DEFAULT_SYNC_INTERVAL_MINUTES,
   DEFAULT_WARNING_THRESHOLD_PERCENT,
 } from "./settings-preferences";
@@ -556,6 +557,9 @@ export const SAMPLE_APP_STATE: AppState = {
     popupCircularProgressItemsPerRow:
       DEFAULT_POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW,
     actionBadgeSelection: DEFAULT_ACTION_BADGE_SELECTION,
+    actionBadgeSelections: [DEFAULT_ACTION_BADGE_SELECTION],
+    actionBadgeRotationIntervalSeconds:
+      DEFAULT_ACTION_BADGE_ROTATION_INTERVAL_SECONDS,
     toolbarIconMode: DEFAULT_TOOLBAR_ICON_MODE,
     toolbarIconProviderId: DEFAULT_TOOLBAR_ICON_PROVIDER_ID,
     toolbarIconCustomImageDataUrl: DEFAULT_TOOLBAR_ICON_CUSTOM_IMAGE_DATA_URL,

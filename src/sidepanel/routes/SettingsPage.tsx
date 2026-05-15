@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import type {
-  ActionBadgeSelection,
+  ActionBadgeSelections,
   ApiKeyProviderId,
   AppLocalePreference,
   AppSettings,
@@ -121,9 +121,10 @@ type SettingsPageProps = {
   ) => void;
   onProgressThicknessPxChange: (progressThicknessPx: number) => void;
   onProgressColorBandsChange: (progressColorBands: ProgressColorBand[]) => void;
-  onActionBadgeSelectionChange: (
-    actionBadgeSelection: ActionBadgeSelection,
+  onActionBadgeSelectionsChange: (
+    actionBadgeSelections: ActionBadgeSelections,
   ) => void;
+  onActionBadgeRotationIntervalSecondsChange: (seconds: number) => void;
   onExportConfiguration: () => void;
   onImportConfigurationJson: (rawJson: string) => void;
   onSaveConfigurationToChromeSync: () => void;
@@ -192,7 +193,8 @@ export function SettingsPage({
   onProgressItemsBySurfaceChange,
   onProgressThicknessPxChange,
   onProgressColorBandsChange,
-  onActionBadgeSelectionChange,
+  onActionBadgeSelectionsChange,
+  onActionBadgeRotationIntervalSecondsChange,
   onExportConfiguration,
   onImportConfigurationJson,
   onSaveConfigurationToChromeSync,
@@ -437,7 +439,10 @@ export function SettingsPage({
         onProgressItemsBySurfaceChange={onProgressItemsBySurfaceChange}
         onProgressThicknessPxChange={onProgressThicknessPxChange}
         onProgressColorBandsChange={onProgressColorBandsChange}
-        onActionBadgeSelectionChange={onActionBadgeSelectionChange}
+        onActionBadgeSelectionsChange={onActionBadgeSelectionsChange}
+        onActionBadgeRotationIntervalSecondsChange={
+          onActionBadgeRotationIntervalSecondsChange
+        }
         onExportConfiguration={onExportConfiguration}
         onImportConfigurationJson={onImportConfigurationJson}
         onSaveConfigurationToChromeSync={onSaveConfigurationToChromeSync}

@@ -1,4 +1,9 @@
-import { ensurePeriodicSyncAlarm, isPeriodicSyncAlarm } from "./alarms";
+import {
+  ensureActionBadgeRotationAlarm,
+  ensurePeriodicSyncAlarm,
+  isActionBadgeRotationAlarm,
+  isPeriodicSyncAlarm,
+} from "./alarms";
 import { syncActionBadgeFromState } from "./action-badge";
 import { syncToolbarIconFromState } from "./action-icon";
 import { handleAppMessage, type AppMessage } from "./message-bus";
@@ -15,8 +20,15 @@ import { seedAppStateIfEmpty } from "../shared/storage";
 import { readStoreScreenshotRuntimeLock } from "../shared/store-screenshot-runtime-lock";
 
 async function syncActionToolbarFromState(state: AppState) {
-  await syncActionBadgeFromState(state);
-  await syncToolbarIconFromState(state);
+  const timestampMs = Date.now();
+
+  await syncActionBadgeFromState(state, timestampMs);
+  await syncToolbarIconFromState(state, timestampMs);
+}
+
+async function ensureBackgroundAlarms(state: AppState) {
+  await ensurePeriodicSyncAlarm(state.settings);
+  await ensureActionBadgeRotationAlarm(state.settings);
 }
 
 async function bootstrapBackground() {
@@ -24,14 +36,14 @@ async function bootstrapBackground() {
 
   if (await readStoreScreenshotRuntimeLock()) {
     const state = await seedAppStateIfEmpty();
-    await ensurePeriodicSyncAlarm(state.settings);
+    await ensureBackgroundAlarms(state);
     await syncActionToolbarFromState(state);
     return;
   }
 
   await syncStoredProviderPermissions();
   const state = await syncStoredProviderCredentials();
-  await ensurePeriodicSyncAlarm(state.settings);
+  await ensureBackgroundAlarms(state);
   await syncActionToolbarFromState(state);
 }
 
@@ -55,6 +67,14 @@ chrome.alarms.onAlarm.addListener((alarm) => {
       await syncStoredProviderPermissions();
       await syncStoredProviderCredentials();
       const state = await runSyncEngine({ trigger: "alarm" });
+      await syncActionToolbarFromState(state);
+    })().catch(() => undefined);
+  }
+
+  if (isActionBadgeRotationAlarm(alarm)) {
+    void (async () => {
+      const state = await seedAppStateIfEmpty();
+      await ensureActionBadgeRotationAlarm(state.settings);
       await syncActionToolbarFromState(state);
     })().catch(() => undefined);
   }

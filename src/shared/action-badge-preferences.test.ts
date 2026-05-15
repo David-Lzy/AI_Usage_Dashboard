@@ -6,6 +6,8 @@ import {
   buildActionBadgeQuotaCandidates,
   buildActionBadgeSelectOptions,
   getEffectiveActionBadgeSelection,
+  getSelectedActionBadgeSelections,
+  normalizeActionBadgeSelections,
   normalizeActionBadgeSelection,
 } from "./action-badge-preferences";
 import { createRuntimeI18n } from "./i18n";
@@ -61,6 +63,14 @@ describe("action badge preferences", () => {
     expect(normalizeActionBadgeSelection("quota:codex:primary")).toBe(
       "quota:codex:primary",
     );
+    expect(
+      normalizeActionBadgeSelections([
+        "attention",
+        "quota:codex:primary",
+        "quota:codex:primary",
+        "unknown",
+      ]),
+    ).toEqual(["attention", "quota:codex:primary"]);
   });
 
   it("builds quota candidates only from visible providers with remaining data", () => {
@@ -87,6 +97,33 @@ describe("action badge preferences", () => {
     };
 
     expect(getEffectiveActionBadgeSelection(state)).toBe("attention");
+  });
+
+  it("rotates through selected badge entries by interval", () => {
+    const state = createStateWithCodexWindows();
+    const candidateValues = buildActionBadgeQuotaCandidates(state)
+      .filter((candidate) => candidate.providerId === "codex")
+      .map((candidate) => candidate.value);
+    const rotatingState = {
+      ...state,
+      settings: {
+        ...state.settings,
+        actionBadgeSelections: ["attention", ...candidateValues],
+        actionBadgeRotationIntervalSeconds: 60,
+      },
+    };
+
+    expect(getSelectedActionBadgeSelections(rotatingState)).toEqual([
+      "attention",
+      ...candidateValues,
+    ]);
+    expect(getEffectiveActionBadgeSelection(rotatingState, 0)).toBe("attention");
+    expect(getEffectiveActionBadgeSelection(rotatingState, 60_000)).toBe(
+      candidateValues[0],
+    );
+    expect(getEffectiveActionBadgeSelection(rotatingState, 120_000)).toBe(
+      candidateValues[1],
+    );
   });
 
   it("formats select options with dynamic provider quota entries", () => {

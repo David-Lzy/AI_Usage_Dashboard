@@ -38,7 +38,8 @@ describe("SettingsPreferencesSection", () => {
         onProgressItemsBySurfaceChange={() => {}}
         onProgressThicknessPxChange={() => {}}
         onProgressColorBandsChange={() => {}}
-        onActionBadgeSelectionChange={() => {}}
+        onActionBadgeSelectionsChange={() => {}}
+        onActionBadgeRotationIntervalSecondsChange={() => {}}
         onExportConfiguration={() => {}}
         onImportConfigurationJson={() => {}}
         onSaveConfigurationToChromeSync={() => {}}
@@ -73,7 +74,8 @@ describe("SettingsPreferencesSection", () => {
     expect(html).toContain('role="tooltip"');
     expect(html).toContain("Line progress stays one item per row.");
     expect(html).not.toContain("settings-preferences__inline-helper");
-    expect(html).toContain('data-settings-material-select="action-badge-selection"');
+    expect(html).toContain('data-action-badge-selection-controls=""');
+    expect(html).toContain("Badge rotation interval");
     expect(html).toContain('data-settings-material-select="toolbar-icon-mode"');
     expect(html).toContain('data-configuration-backup=""');
     expect(html).toContain("Configuration backup and sync");

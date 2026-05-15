@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
 import type { AppState } from "../providers/types";
+import { buildActionBadgeQuotaCandidates } from "./action-badge-preferences";
 import { SAMPLE_APP_STATE } from "./constants";
 import { readAppState, writeAppState } from "./storage";
 
@@ -20,6 +21,8 @@ function createLegacyState(): AppState {
     popupShadowStyle: _popupShadowStyle,
     popupCircularProgressItemsPerRow: _popupCircularProgressItemsPerRow,
     actionBadgeSelection: _actionBadgeSelection,
+    actionBadgeSelections: _actionBadgeSelections,
+    actionBadgeRotationIntervalSeconds: _actionBadgeRotationIntervalSeconds,
     toolbarIconMode: _toolbarIconMode,
     toolbarIconProviderId: _toolbarIconProviderId,
     toolbarIconCustomImageDataUrl: _toolbarIconCustomImageDataUrl,
@@ -138,7 +141,9 @@ describe("storage normalization", () => {
     expect(state?.settings.popupShadowStyle).toBe("soft");
     expect(state?.settings.popupCircularProgressItemsPerRow).toBe(2);
     expect(state?.settings.actionBadgeSelection).toBe("attention");
-    expect(state?.settings.toolbarIconMode).toBe("default");
+    expect(state?.settings.actionBadgeSelections).toEqual(["attention"]);
+    expect(state?.settings.actionBadgeRotationIntervalSeconds).toBe(60);
+    expect(state?.settings.toolbarIconMode).toBe("match-badge");
     expect(state?.settings.toolbarIconProviderId).toBeNull();
     expect(state?.settings.toolbarIconCustomImageDataUrl).toBeNull();
     expect(state?.settings.providerOrderBySurface).toEqual({
@@ -291,6 +296,52 @@ describe("storage normalization", () => {
     const state = await readAppState();
 
     expect(state?.settings.actionBadgeSelection).toBe("attention");
+    expect(state?.settings.actionBadgeSelections).toEqual(["attention"]);
+    expect(state?.settings.actionBadgeRotationIntervalSeconds).toBe(60);
+  });
+
+  it("normalizes action badge multi-selection preferences", async () => {
+    const stateWithCodexRemaining: AppState = {
+      ...SAMPLE_APP_STATE,
+      providers: SAMPLE_APP_STATE.providers.map((provider) =>
+        provider.providerId === "codex"
+          ? {
+              ...provider,
+              remaining: 51,
+              quotaUnit: "percent",
+            }
+          : provider,
+      ),
+    };
+    const codexCandidate = buildActionBadgeQuotaCandidates(
+      stateWithCodexRemaining,
+    ).find(
+      (candidate) => candidate.providerId === "codex",
+    );
+
+    expect(codexCandidate).toBeDefined();
+
+    await writeAppState({
+      ...stateWithCodexRemaining,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        actionBadgeSelections: [
+          "attention",
+          codexCandidate?.value ?? "attention",
+          "unknown",
+          "attention",
+        ],
+        actionBadgeRotationIntervalSeconds: 30,
+      } as unknown as AppState["settings"],
+    });
+
+    const state = await readAppState();
+
+    expect(state?.settings.actionBadgeSelections).toEqual([
+      "attention",
+      codexCandidate?.value ?? "attention",
+    ]);
+    expect(state?.settings.actionBadgeRotationIntervalSeconds).toBe(30);
   });
 
   it("normalizes toolbar icon preferences", async () => {
@@ -325,7 +376,7 @@ describe("storage normalization", () => {
 
     const invalidState = await readAppState();
 
-    expect(invalidState?.settings.toolbarIconMode).toBe("default");
+    expect(invalidState?.settings.toolbarIconMode).toBe("match-badge");
     expect(invalidState?.settings.toolbarIconProviderId).toBeNull();
     expect(invalidState?.settings.toolbarIconCustomImageDataUrl).toBeNull();
   });

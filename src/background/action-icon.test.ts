@@ -44,6 +44,7 @@ function createStateWithCodexBadge(): AppState {
     settings: {
       ...state.settings,
       actionBadgeSelection: weeklyCandidate?.value ?? "attention",
+      actionBadgeSelections: [weeklyCandidate?.value ?? "attention"],
       toolbarIconMode: "match-badge",
     },
   };
@@ -73,6 +74,55 @@ describe("action icon", () => {
     );
   });
 
+  it("matches the provider for the active rotated quota badge", () => {
+    const state = {
+      ...SAMPLE_APP_STATE,
+      providers: SAMPLE_APP_STATE.providers.map((provider) => {
+        if (provider.providerId === "codex") {
+          return {
+            ...provider,
+            remaining: 51,
+            quotaUnit: "percent" as const,
+          };
+        }
+
+        if (provider.providerId === "claude-code") {
+          return {
+            ...provider,
+            remaining: 93,
+            quotaUnit: "percent" as const,
+          };
+        }
+
+        return provider;
+      }),
+    };
+    const candidates = buildActionBadgeQuotaCandidates(state);
+    const codexCandidate = candidates.find(
+      (candidate) => candidate.providerId === "codex",
+    );
+    const claudeCandidate = candidates.find(
+      (candidate) => candidate.providerId === "claude-code",
+    );
+    const rotatingState: AppState = {
+      ...state,
+      settings: {
+        ...state.settings,
+        toolbarIconMode: "match-badge",
+        actionBadgeSelections: [
+          codexCandidate?.value ?? "attention",
+          claudeCandidate?.value ?? "attention",
+        ],
+        actionBadgeRotationIntervalSeconds: 60,
+      },
+    };
+
+    expect(resolveToolbarIconProviderId(rotatingState, 0)).toBe("codex");
+    expect(resolveToolbarIconProviderId(rotatingState, 60_000)).toBe(
+      "claude-code",
+    );
+  });
+
   it("falls back to the default icon for attention-count badges", () => {
     const state: AppState = {
       ...SAMPLE_APP_STATE,
@@ -80,6 +130,7 @@ describe("action icon", () => {
         ...SAMPLE_APP_STATE.settings,
         toolbarIconMode: "match-badge",
         actionBadgeSelection: "attention",
+        actionBadgeSelections: ["attention"],
       },
     };
 

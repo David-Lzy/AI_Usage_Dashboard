@@ -66,9 +66,13 @@ describe("buildSettingsPreferenceOptions", () => {
       { value: "circle-soft", label: "Soft circle" },
       { value: "circle-gauge", label: "Gauge circle" },
     ]);
-    expect(options.normalizedActionBadgeSelection).toBe("attention");
+    expect(options.normalizedActionBadgeSelections).toEqual(["attention"]);
     expect(options.actionBadgeOptions[0]).toMatchObject({
       value: "attention",
+    });
+    expect(options.actionBadgeRotationIntervalOptions[0]).toEqual({
+      value: 30,
+      label: "30 seconds",
     });
   });
 

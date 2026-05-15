@@ -2,7 +2,7 @@ import type { AppState } from "../providers/types";
 import {
   ACTION_BADGE_ATTENTION_SELECTION,
   findActionBadgeQuotaCandidate,
-  normalizeActionBadgeSelection,
+  getEffectiveActionBadgeSelection,
   type ActionBadgeQuotaCandidate,
 } from "../shared/action-badge-preferences";
 import {
@@ -325,10 +325,11 @@ function buildQuotaBadgeModel(
   };
 }
 
-export function buildActionBadgeModel(state: AppState): ActionBadgeModel {
-  const selection = normalizeActionBadgeSelection(
-    state.settings.actionBadgeSelection,
-  );
+export function buildActionBadgeModel(
+  state: AppState,
+  timestampMs = Date.now(),
+): ActionBadgeModel {
+  const selection = getEffectiveActionBadgeSelection(state, timestampMs);
 
   if (selection === ACTION_BADGE_ATTENTION_SELECTION) {
     return buildAttentionBadgeModel(state);
@@ -346,12 +347,15 @@ export function buildActionBadgeModel(state: AppState): ActionBadgeModel {
   return buildQuotaBadgeModel(candidate, state);
 }
 
-export async function syncActionBadgeFromState(state: AppState): Promise<void> {
+export async function syncActionBadgeFromState(
+  state: AppState,
+  timestampMs = Date.now(),
+): Promise<void> {
   if (!hasChromeActionApi()) {
     return;
   }
 
-  const badge = buildActionBadgeModel(state);
+  const badge = buildActionBadgeModel(state, timestampMs);
 
   await chrome.action.setBadgeText({ text: badge.text });
   await chrome.action.setBadgeBackgroundColor({

@@ -1,7 +1,7 @@
 import { useEffect, useState, type ChangeEvent } from "react";
 
 import type {
-  ActionBadgeSelection,
+  ActionBadgeSelections,
   AppSettings,
   PopupCircularProgressItemsPerRow,
   PopupCornerStyle,
@@ -24,9 +24,12 @@ import {
   SYNC_INTERVAL_MIN_MINUTES,
   WARNING_THRESHOLD_MAX_PERCENT,
   WARNING_THRESHOLD_MIN_PERCENT,
+  ACTION_BADGE_ROTATION_INTERVAL_MAX_SECONDS,
+  ACTION_BADGE_ROTATION_INTERVAL_MIN_SECONDS,
 } from "../../shared/settings-preferences";
 import { buildSettingsPreferenceOptions } from "../settings-preference-options";
 import type { SettingsUserLevelVisibility } from "../settings-user-level-visibility";
+import { ActionBadgeSelectionControls } from "./ActionBadgeSelectionControls";
 import { AccentColorSelect } from "./AccentColorSelect";
 import { ConfigurationBackupControls } from "./ConfigurationBackupControls";
 import { EditableNumberCombobox } from "./EditableNumberCombobox";
@@ -45,9 +48,10 @@ type SettingsPreferencesSectionProps = {
   settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>;
   snapshots: ProviderSnapshot[];
   userLevelVisibility: SettingsUserLevelVisibility;
-  onActionBadgeSelectionChange: (
-    actionBadgeSelection: ActionBadgeSelection,
+  onActionBadgeSelectionsChange: (
+    actionBadgeSelections: ActionBadgeSelections,
   ) => void;
+  onActionBadgeRotationIntervalSecondsChange: (seconds: number) => void;
   onExportConfiguration: () => void;
   onImportConfigurationJson: (rawJson: string) => void;
   onSaveConfigurationToChromeSync: () => void;
@@ -95,7 +99,8 @@ export function SettingsPreferencesSection({
   settingsCopy,
   snapshots,
   userLevelVisibility: _userLevelVisibility,
-  onActionBadgeSelectionChange,
+  onActionBadgeSelectionsChange,
+  onActionBadgeRotationIntervalSecondsChange,
   onExportConfiguration,
   onImportConfigurationJson,
   onSaveConfigurationToChromeSync,
@@ -122,7 +127,11 @@ export function SettingsPreferencesSection({
 }: SettingsPreferencesSectionProps) {
   const {
     actionBadgeOptions,
-    normalizedActionBadgeSelection,
+    actionBadgeRotationIntervalErrorText,
+    actionBadgeRotationIntervalOptions,
+    actionBadgeRotationMenuButtonLabel,
+    actionBadgeRotationUnitLabel,
+    normalizedActionBadgeSelections,
     popupCornerStyleOptions,
     popupCircularProgressItemsPerRowOptions,
     popupShadowStyleOptions,
@@ -226,12 +235,24 @@ export function SettingsPreferencesSection({
           onThemeCustomSeedChange={onThemeCustomSeedChange}
         />
 
-        <MaterialSelect
+        <ActionBadgeSelectionControls
           label={i18n.t("settings.preferences.action_badge_label")}
-          value={normalizedActionBadgeSelection}
-          fieldIdPrefix="action-badge-selection"
           options={actionBadgeOptions}
-          onChange={onActionBadgeSelectionChange}
+          selectedValues={normalizedActionBadgeSelections}
+          rotationLabel={i18n.t(
+            "settings.preferences.action_badge_rotation_label",
+          )}
+          rotationValue={settings.actionBadgeRotationIntervalSeconds}
+          rotationMinimum={ACTION_BADGE_ROTATION_INTERVAL_MIN_SECONDS}
+          rotationMaximum={ACTION_BADGE_ROTATION_INTERVAL_MAX_SECONDS}
+          rotationUnitLabel={actionBadgeRotationUnitLabel}
+          rotationErrorText={actionBadgeRotationIntervalErrorText}
+          rotationMenuButtonLabel={actionBadgeRotationMenuButtonLabel}
+          rotationOptions={actionBadgeRotationIntervalOptions}
+          onSelectionsChange={onActionBadgeSelectionsChange}
+          onRotationIntervalChange={
+            onActionBadgeRotationIntervalSecondsChange
+          }
         />
 
         <MaterialSelect

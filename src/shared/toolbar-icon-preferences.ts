@@ -1,6 +1,6 @@
 import type { ProviderId, ToolbarIconMode } from "../providers/types";
 
-export const DEFAULT_TOOLBAR_ICON_MODE: ToolbarIconMode = "default";
+export const DEFAULT_TOOLBAR_ICON_MODE: ToolbarIconMode = "match-badge";
 export const DEFAULT_TOOLBAR_ICON_PROVIDER_ID: ProviderId | null = null;
 export const DEFAULT_TOOLBAR_ICON_CUSTOM_IMAGE_DATA_URL: string | null = null;
 

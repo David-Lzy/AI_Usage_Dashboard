@@ -71,6 +71,62 @@ select.form-field__control {
   cursor: pointer;
 }
 
+.action-badge-selection-controls {
+  gap: var(--app-space-3);
+}
+
+.action-badge-selection-controls__list {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, 220px), 1fr)
+  );
+  gap: var(--app-space-2);
+}
+
+.action-badge-selection-controls__option {
+  display: flex;
+  align-items: center;
+  gap: var(--app-space-2);
+  min-block-size: 46px;
+  padding: var(--app-space-2) var(--app-space-3);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--md-sys-color-surface-container-lowest);
+  color: var(--md-sys-color-on-surface);
+  font-family: var(--md-sys-typescale-body-large-font);
+  font-size: var(--md-sys-typescale-body-large-size);
+  line-height: var(--md-sys-typescale-body-large-line-height);
+  cursor: pointer;
+  transition:
+    background-color var(--app-motion-duration-fast)
+      var(--app-motion-easing-standard),
+    border-color var(--app-motion-duration-fast)
+      var(--app-motion-easing-standard),
+    box-shadow var(--app-motion-duration-fast) var(--app-motion-easing-standard);
+}
+
+.action-badge-selection-controls__option:hover {
+  background: var(--app-state-layer-neutral-hover);
+  border-color: color-mix(
+    in srgb,
+    var(--md-sys-color-primary) 22%,
+    var(--md-sys-color-outline-variant) 78%
+  );
+}
+
+.action-badge-selection-controls__option:focus-within {
+  border-color: var(--md-sys-color-primary);
+  box-shadow: var(--app-focus-ring-shadow);
+}
+
+.action-badge-selection-controls__option input {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--md-sys-color-primary);
+  flex: 0 0 auto;
+}
+
 .material-info-tooltip {
   position: relative;
   display: inline-grid;

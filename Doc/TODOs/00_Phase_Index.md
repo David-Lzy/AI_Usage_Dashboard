@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [475_Phase_Action_Badge_Percent_Text_Compactness.md](./Archive/by-phase/400-499/475_Phase_Action_Badge_Percent_Text_Compactness.md)
+- latest completed slice: [476_Phase_Action_Badge_Multi_Select_Rotation.md](./Archive/by-phase/400-499/476_Phase_Action_Badge_Multi_Select_Rotation.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -869,6 +869,7 @@ Completed phases should be moved to:
 - the 2026-05-15 `Phase 473` closeout added Settings toolbar-icon preferences for default, match-badge provider, explicit provider favicon, and custom image modes, using Chrome's action icon and favicon APIs while preserving store/extension-management icons, provider data, badge behavior, and release packaging
 - the 2026-05-15 `Phase 474` closeout added Settings configuration backup, JSON export/import, and Chrome Sync save/restore actions while preserving local-only credentials, page bindings, runtime evidence, provider source truth, and release packaging
 - the 2026-05-15 `Phase 475` closeout shortened `100%` quota action-badge text to `100` while preserving full tooltip/title semantics, non-100 percent badge text, provider state, and release packaging
+- the 2026-05-15 `Phase 476` closeout added multi-select toolbar badge sources, configurable badge rotation, a dedicated rotation alarm, default match-badge toolbar icons for fresh settings, and match-badge icon rotation while preserving provider sync and release packaging
 
 ## Delivery Standard For Each Phase
 

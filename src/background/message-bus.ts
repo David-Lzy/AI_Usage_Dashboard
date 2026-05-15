@@ -17,7 +17,10 @@ import {
   writeAppState,
 } from "../shared/storage";
 import { readStoreScreenshotRuntimeLock } from "../shared/store-screenshot-runtime-lock";
-import { ensurePeriodicSyncAlarm } from "./alarms";
+import {
+  ensureActionBadgeRotationAlarm,
+  ensurePeriodicSyncAlarm,
+} from "./alarms";
 import { syncStoredProviderCredentials } from "./provider-credentials";
 import {
   syncStoredProviderPermissions,
@@ -31,6 +34,7 @@ import {
   readConfigurationBackupFromChromeSync,
   writeConfigurationBackupToChromeSync,
 } from "../shared/configuration-backup";
+import { addProviderActionBadgeSelections } from "../shared/action-badge-preferences";
 
 export type AppMessage =
   | { type: "app:init" }
@@ -82,11 +86,16 @@ export async function handleAppMessage(
 ): Promise<AppMessageResponse> {
   const isStoreScreenshotRuntimeLocked = await readStoreScreenshotRuntimeLock();
 
+  async function ensureBackgroundAlarms(state: AppState): Promise<void> {
+    await ensurePeriodicSyncAlarm(state.settings);
+    await ensureActionBadgeRotationAlarm(state.settings);
+  }
+
   switch (message.type) {
     case "app:init": {
       if (isStoreScreenshotRuntimeLocked) {
         const state = await seedAppStateIfEmpty();
-        await ensurePeriodicSyncAlarm(state.settings);
+        await ensureBackgroundAlarms(state);
         return { ok: true, state };
       }
 
@@ -95,21 +104,21 @@ export async function handleAppMessage(
       const state = await runSyncEngine({
         trigger: "bootstrap",
       });
-      await ensurePeriodicSyncAlarm(state.settings);
+      await ensureBackgroundAlarms(state);
       return { ok: true, state };
     }
 
     case "app:read-state": {
       if (isStoreScreenshotRuntimeLocked) {
         const state = await seedAppStateIfEmpty();
-        await ensurePeriodicSyncAlarm(state.settings);
+        await ensureBackgroundAlarms(state);
         return { ok: true, state };
       }
 
       await syncStoredProviderPermissions();
       await syncStoredProviderCredentials();
       const state = await seedAppStateIfEmpty();
-      await ensurePeriodicSyncAlarm(state.settings);
+      await ensureBackgroundAlarms(state);
       return { ok: true, state };
     }
 
@@ -123,7 +132,7 @@ export async function handleAppMessage(
           },
         }),
       }));
-      await ensurePeriodicSyncAlarm(state.settings);
+      await ensureBackgroundAlarms(state);
 
       return {
         ok: true,
@@ -144,16 +153,32 @@ export async function handleAppMessage(
     }
 
     case "app:set-provider-enabled": {
-      const state = await updateAppState((current) =>
-        reconcileAppStateHealth({
+      const state = await updateAppState((current) => {
+        const nextState = reconcileAppStateHealth({
           ...current,
           providerSettings: current.providerSettings.map((provider) =>
             provider.id === message.providerId
               ? { ...provider, enabled: message.enabled }
               : provider,
           ),
-        }),
-      );
+        });
+
+        if (!message.enabled) {
+          return nextState;
+        }
+
+        return {
+          ...nextState,
+          settings: {
+            ...nextState.settings,
+            actionBadgeSelections: addProviderActionBadgeSelections(
+              nextState,
+              message.providerId,
+            ),
+          },
+        };
+      });
+      await ensureBackgroundAlarms(state);
 
       return { ok: true, state };
     }
@@ -342,7 +367,7 @@ export async function handleAppMessage(
           applyConfigurationBackupToState(currentState, parsedBackup.backup),
         ),
       );
-      await ensurePeriodicSyncAlarm(importedState.settings);
+      await ensureBackgroundAlarms(importedState);
 
       return {
         ok: true,
@@ -415,7 +440,7 @@ export async function handleAppMessage(
           applyConfigurationBackupToState(currentState, backup),
         ),
       );
-      await ensurePeriodicSyncAlarm(restoredState.settings);
+      await ensureBackgroundAlarms(restoredState);
 
       return {
         ok: true,
@@ -431,7 +456,7 @@ export async function handleAppMessage(
 
     case "app:open-action-popup": {
       const state = await seedAppStateIfEmpty();
-      await ensurePeriodicSyncAlarm(state.settings);
+      await ensureBackgroundAlarms(state);
 
       if (typeof chrome.action?.openPopup !== "function") {
         return {

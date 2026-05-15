@@ -33,7 +33,8 @@ function renderSettingsPage(overrides: Partial<Parameters<typeof SettingsPage>[0
       onProgressItemsBySurfaceChange={() => {}}
       onProgressThicknessPxChange={() => {}}
       onProgressColorBandsChange={() => {}}
-      onActionBadgeSelectionChange={() => {}}
+      onActionBadgeSelectionsChange={() => {}}
+      onActionBadgeRotationIntervalSecondsChange={() => {}}
       onExportConfiguration={() => {}}
       onImportConfigurationJson={() => {}}
       onSaveConfigurationToChromeSync={() => {}}
@@ -74,7 +75,7 @@ describe("SettingsPage", () => {
     expect(html).toContain('data-provider-carousel=""');
     expect(html).toContain(">Quick Setup<");
     expect(html).toContain('data-settings-material-select="popup-circular-row-count"');
-    expect(html).toContain('data-settings-material-select="action-badge-selection"');
+    expect(html).toContain('data-action-badge-selection-controls=""');
     expect(html).toContain('data-settings-material-select="toolbar-icon-mode"');
     expect(html).toContain('data-configuration-backup=""');
     expect(html).toContain('data-provider-order-preferences=""');
@@ -99,7 +100,7 @@ describe("SettingsPage", () => {
     expect(html).toContain('data-credential-provider-id="cursor"');
     expect(html).toContain('data-settings-material-select="source-preference-cursor"');
     expect(html).toContain("Detailed diagnostics");
-    expect(html).toContain('data-settings-material-select="action-badge-selection"');
+    expect(html).toContain('data-action-badge-selection-controls=""');
   });
 
   it("reveals the targeted advanced section for a credential-focused deep link", () => {

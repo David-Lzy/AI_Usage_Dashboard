@@ -8,6 +8,11 @@ export const WARNING_THRESHOLD_MAX_PERCENT = 99;
 export const DEFAULT_WARNING_THRESHOLD_PERCENT = 80;
 export const WARNING_THRESHOLD_PRESETS = [70, 80, 90] as const;
 
+export const ACTION_BADGE_ROTATION_INTERVAL_MIN_SECONDS = 30;
+export const ACTION_BADGE_ROTATION_INTERVAL_MAX_SECONDS = 3600;
+export const DEFAULT_ACTION_BADGE_ROTATION_INTERVAL_SECONDS = 60;
+export const ACTION_BADGE_ROTATION_INTERVAL_PRESETS = [30, 60, 120, 300] as const;
+
 function normalizeIntegerInRange(
   value: unknown,
   fallback: number,
@@ -47,5 +52,16 @@ export function normalizeWarningThresholdPercent(value: unknown): number {
     DEFAULT_WARNING_THRESHOLD_PERCENT,
     WARNING_THRESHOLD_MIN_PERCENT,
     WARNING_THRESHOLD_MAX_PERCENT,
+  );
+}
+
+export function normalizeActionBadgeRotationIntervalSeconds(
+  value: unknown,
+): number {
+  return normalizeIntegerInRange(
+    value,
+    DEFAULT_ACTION_BADGE_ROTATION_INTERVAL_SECONDS,
+    ACTION_BADGE_ROTATION_INTERVAL_MIN_SECONDS,
+    ACTION_BADGE_ROTATION_INTERVAL_MAX_SECONDS,
   );
 }

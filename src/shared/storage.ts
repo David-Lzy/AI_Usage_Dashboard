@@ -31,10 +31,15 @@ import {
   normalizePopupSizePreset,
 } from "./popup-appearance";
 import {
+  normalizeActionBadgeRotationIntervalSeconds,
   normalizeSyncIntervalMinutes,
   normalizeWarningThresholdPercent,
 } from "./settings-preferences";
-import { normalizeActionBadgeSelection } from "./action-badge-preferences";
+import {
+  buildActionBadgeQuotaCandidates,
+  normalizeActionBadgeSelection,
+  normalizeActionBadgeSelections,
+} from "./action-badge-preferences";
 import {
   normalizeToolbarIconCustomImageDataUrl,
   normalizeToolbarIconMode,
@@ -139,6 +144,11 @@ function normalizeAppState(state: AppState): AppState {
   );
   const knownProgressItemIdsByProvider =
     buildProviderProgressItemIdsByProvider(providers);
+  const availableActionBadgeSelections = buildActionBadgeQuotaCandidates({
+    providers,
+    providerSettings,
+    settings: SAMPLE_APP_STATE.settings,
+  }).map((candidate) => candidate.value);
 
   const extraProviders = state.providers.filter(
     (provider) => !sampleProviders.has(provider.providerId),
@@ -208,6 +218,15 @@ function normalizeAppState(state: AppState): AppState {
       actionBadgeSelection: normalizeActionBadgeSelection(
         state.settings?.actionBadgeSelection,
       ),
+      actionBadgeSelections: normalizeActionBadgeSelections(
+        state.settings?.actionBadgeSelections,
+        state.settings?.actionBadgeSelection,
+        availableActionBadgeSelections,
+      ),
+      actionBadgeRotationIntervalSeconds:
+        normalizeActionBadgeRotationIntervalSeconds(
+          state.settings?.actionBadgeRotationIntervalSeconds,
+        ),
       toolbarIconMode: normalizeToolbarIconMode(
         state.settings?.toolbarIconMode,
       ),

@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-15:
 
-- the numbered phase queue is completed through `Phase 475`; no numbered phase is currently queued after `Phase 475`, `0.1.0-rc.21` is the latest packaged follow-up candidate, current source is ahead by surface-switch, remaining-color-band UI polish, toolbar-icon preferences, configuration backup/Chrome Sync, and action-badge compactness, and RC13 remains the submitted store-review boundary
+- the numbered phase queue is completed through `Phase 476`; no numbered phase is currently queued after `Phase 476`, `0.1.0-rc.21` is the latest packaged follow-up candidate, current source is ahead by surface-switch, remaining-color-band UI polish, toolbar-icon preferences, configuration backup/Chrome Sync, and action-badge rotation, and RC13 remains the submitted store-review boundary
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -181,6 +181,7 @@ As of 2026-05-15:
 - `Phase 473` added Settings toolbar-icon preferences for default, match-badge provider, explicit provider favicon, and custom image modes while preserving store/extension-management icons, provider data, badge behavior, and release packaging.
 - `Phase 474` added Settings configuration backup, JSON export/import, and Chrome Sync save/restore actions while preserving local-only credentials, page bindings, permissions, runtime evidence, provider source truth, and release packaging.
 - `Phase 475` shortened `100%` quota action-badge text to `100` while preserving full tooltip/title semantics, non-100 percent badge text, provider state, and release packaging.
+- `Phase 476` added multi-select toolbar badge sources, configurable badge rotation, a dedicated rotation alarm, default match-badge toolbar icons for fresh settings, and match-badge icon rotation while preserving provider sync and release packaging.
 - `Phase 200` completed a functionality-first Codex personal slice by preserving multiple visible usage windows, expanding Codex page-capture snippets, and surfacing the most constrained visible percentage window across dashboard, provider detail, and popup paths
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without changing the primary percentage-window quota model
 - `Phase 202` completed repeatable unpacked-extension verification for Codex personal multi-window plus flex-balance context, while fixing DOM capture so repeated percentages and single-character balance values are not lost before parsing
@@ -482,7 +483,7 @@ As of 2026-05-15:
 - `Phase 169` completed the next `Direction 10.3` slice by adding one request-bound manual finalize command plus handoff update, so the remaining real-world work is now the popup capture itself instead of popup capture plus extra repo bookkeeping
 - `Phase 296` completed the mixed candidate screenshot file intake plus archive completion under `10_3_Store_Asset_Pack_And_Submission_TODOs.md`
 - the previous repo-owned engineering default was adapter diagnostic raw fallback regression review for the shipped `en + zh_CN` runtime pilot under Direction 09, captured in `09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`
-- because `0.1.0-rc.21` is packaged as the latest follow-up candidate, current source is ahead by `Phase 475`, and the RC13 milestone remains the submitted store-review boundary, the active functional priority is review-feedback or deliberate resubmission follow-up only if needed
+- because `0.1.0-rc.21` is packaged as the latest follow-up candidate, current source is ahead by `Phase 476`, and the RC13 milestone remains the submitted store-review boundary, the active functional priority is review-feedback or deliberate resubmission follow-up only if needed
 - the remaining high-value work in Direction 05 and Direction 04 is now evidence closure, not more tool-building:
   - `05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md`
   - `04_2_Interaction_Audit_Real_Operator_Closure_TODOs.md`
@@ -549,7 +550,7 @@ As of 2026-05-15:
 
 1. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why first now:
-   `0.1.0-rc.21` is now packaged as the latest follow-up candidate, current source is ahead by `Phase 475`, no numbered phase is currently queued after `Phase 475`, the mixed screenshot archive is complete, and the trimmed transparent icon refresh plus Claude Team usage-page path are already in the submitted RC13 boundary.
+   `0.1.0-rc.21` is now packaged as the latest follow-up candidate, current source is ahead by `Phase 476`, no numbered phase is currently queued after `Phase 476`, the mixed screenshot archive is complete, and the trimmed transparent icon refresh plus Claude Team usage-page path are already in the submitted RC13 boundary.
 
 2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second now:
