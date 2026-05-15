@@ -222,25 +222,37 @@ export function SettingsPreferencesSection({
           onThemeCustomSeedChange={onThemeCustomSeedChange}
         />
 
-        <ActionBadgeSelectionControls
-          label={i18n.t("settings.preferences.action_badge_label")}
-          options={actionBadgeOptions}
-          selectedValues={normalizedActionBadgeSelections}
-          rotationLabel={i18n.t(
-            "settings.preferences.action_badge_rotation_label",
-          )}
-          rotationValue={settings.actionBadgeRotationIntervalSeconds}
-          rotationMinimum={ACTION_BADGE_ROTATION_INTERVAL_MIN_SECONDS}
-          rotationMaximum={ACTION_BADGE_ROTATION_INTERVAL_MAX_SECONDS}
-          rotationUnitLabel={actionBadgeRotationUnitLabel}
-          rotationErrorText={actionBadgeRotationIntervalErrorText}
-          rotationMenuButtonLabel={actionBadgeRotationMenuButtonLabel}
-          rotationOptions={actionBadgeRotationIntervalOptions}
-          onSelectionsChange={onActionBadgeSelectionsChange}
-          onRotationIntervalChange={
-            onActionBadgeRotationIntervalSecondsChange
-          }
-        />
+        <div className="settings-preferences__field-with-helper">
+          <ActionBadgeSelectionControls
+            label={i18n.t("settings.preferences.action_badge_label")}
+            options={actionBadgeOptions}
+            selectedValues={normalizedActionBadgeSelections}
+            onSelectionsChange={onActionBadgeSelectionsChange}
+          />
+          <MaterialInfoTooltip className="settings-preferences__field-note">
+            {i18n.t("settings.preferences.action_badge_helper")}
+          </MaterialInfoTooltip>
+        </div>
+
+        <div className="settings-preferences__field-with-helper">
+          <EditableNumberCombobox
+            label={i18n.t(
+              "settings.preferences.action_badge_rotation_label",
+            )}
+            value={settings.actionBadgeRotationIntervalSeconds}
+            minimum={ACTION_BADGE_ROTATION_INTERVAL_MIN_SECONDS}
+            maximum={ACTION_BADGE_ROTATION_INTERVAL_MAX_SECONDS}
+            unitLabel={actionBadgeRotationUnitLabel}
+            errorText={actionBadgeRotationIntervalErrorText}
+            menuButtonLabel={actionBadgeRotationMenuButtonLabel}
+            fieldIdPrefix="action-badge-rotation-interval"
+            options={actionBadgeRotationIntervalOptions}
+            onChange={onActionBadgeRotationIntervalSecondsChange}
+          />
+          <MaterialInfoTooltip className="settings-preferences__field-note">
+            {i18n.t("settings.preferences.action_badge_rotation_helper")}
+          </MaterialInfoTooltip>
+        </div>
 
         <MaterialSelect
           label={i18n.t("settings.preferences.toolbar_icon_label")}

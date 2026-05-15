@@ -19,7 +19,9 @@
   min-width: 0;
 }
 
-.settings-preferences__field-with-helper > .material-select {
+.settings-preferences__field-with-helper > .material-select,
+.settings-preferences__field-with-helper > .editable-number-combobox,
+.settings-preferences__field-with-helper > .action-badge-selection-controls {
   min-width: 0;
 }
 

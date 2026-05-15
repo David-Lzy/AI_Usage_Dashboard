@@ -9,28 +9,13 @@ import {
 
 import type { ActionBadgeSelection } from "../../providers/types";
 import { ACTION_BADGE_ATTENTION_SELECTION } from "../../shared/action-badge-preferences";
-import { EditableNumberCombobox } from "./EditableNumberCombobox";
 import type { MaterialSelectOption } from "./MaterialSelect";
-
-type NumberOption = {
-  value: number;
-  label: string;
-};
 
 type ActionBadgeSelectionControlsProps = {
   label: string;
   options: Array<MaterialSelectOption<ActionBadgeSelection>>;
   selectedValues: ActionBadgeSelection[];
-  rotationLabel: string;
-  rotationValue: number;
-  rotationMinimum: number;
-  rotationMaximum: number;
-  rotationUnitLabel: string;
-  rotationErrorText: string;
-  rotationMenuButtonLabel: string;
-  rotationOptions: NumberOption[];
   onSelectionsChange: (selections: ActionBadgeSelection[]) => void;
-  onRotationIntervalChange: (seconds: number) => void;
 };
 
 export function getActionBadgeSelectionSummary(
@@ -60,16 +45,7 @@ export function ActionBadgeSelectionControls({
   label,
   options,
   selectedValues,
-  rotationLabel,
-  rotationValue,
-  rotationMinimum,
-  rotationMaximum,
-  rotationUnitLabel,
-  rotationErrorText,
-  rotationMenuButtonLabel,
-  rotationOptions,
   onSelectionsChange,
-  onRotationIntervalChange,
 }: ActionBadgeSelectionControlsProps) {
   const generatedId = useId();
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -211,18 +187,6 @@ export function ActionBadgeSelectionControls({
           </div>
         ) : null}
       </div>
-      <EditableNumberCombobox
-        label={rotationLabel}
-        value={rotationValue}
-        minimum={rotationMinimum}
-        maximum={rotationMaximum}
-        unitLabel={rotationUnitLabel}
-        errorText={rotationErrorText}
-        menuButtonLabel={rotationMenuButtonLabel}
-        fieldIdPrefix="action-badge-rotation-interval"
-        options={rotationOptions}
-        onChange={onRotationIntervalChange}
-      />
     </div>
   );
 }

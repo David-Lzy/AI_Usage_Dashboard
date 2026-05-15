@@ -21,16 +21,7 @@ describe("ActionBadgeSelectionControls", () => {
         label="Toolbar badge"
         options={OPTIONS}
         selectedValues={["attention", "quota:codex:5h"]}
-        rotationLabel="Badge rotation interval"
-        rotationValue={60}
-        rotationMinimum={30}
-        rotationMaximum={3600}
-        rotationUnitLabel="seconds"
-        rotationErrorText="Use 30-3600."
-        rotationMenuButtonLabel="Expand badge rotation presets"
-        rotationOptions={[{ value: 60, label: "60 seconds" }]}
         onSelectionsChange={() => {}}
-        onRotationIntervalChange={() => {}}
       />,
     );
 
@@ -39,7 +30,7 @@ describe("ActionBadgeSelectionControls", () => {
     expect(html).toContain("Attention count · Codex 5-hour window");
     expect(html).not.toContain("action-badge-selection-controls__list");
     expect(html).not.toContain("action-badge-selection-controls__option");
-    expect(html).toContain('data-settings-custom-number-field="action-badge-rotation-interval"');
+    expect(html).not.toContain('data-settings-custom-number-field="action-badge-rotation-interval"');
   });
 
   it("summarizes long badge selections without expanding the field height", () => {
