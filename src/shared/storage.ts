@@ -36,6 +36,11 @@ import {
 } from "./settings-preferences";
 import { normalizeActionBadgeSelection } from "./action-badge-preferences";
 import {
+  normalizeToolbarIconCustomImageDataUrl,
+  normalizeToolbarIconMode,
+  normalizeToolbarIconProviderId,
+} from "./toolbar-icon-preferences";
+import {
   normalizeProgressItemsBySurface,
   normalizeProviderOrderBySurface,
 } from "./display-preferences";
@@ -202,6 +207,16 @@ function normalizeAppState(state: AppState): AppState {
         ),
       actionBadgeSelection: normalizeActionBadgeSelection(
         state.settings?.actionBadgeSelection,
+      ),
+      toolbarIconMode: normalizeToolbarIconMode(
+        state.settings?.toolbarIconMode,
+      ),
+      toolbarIconProviderId: normalizeToolbarIconProviderId(
+        state.settings?.toolbarIconProviderId,
+        knownProviderIds,
+      ),
+      toolbarIconCustomImageDataUrl: normalizeToolbarIconCustomImageDataUrl(
+        state.settings?.toolbarIconCustomImageDataUrl,
       ),
       providerOrderBySurface: normalizeProviderOrderBySurface(
         state.settings?.providerOrderBySurface,

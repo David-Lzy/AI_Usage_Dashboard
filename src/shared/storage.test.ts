@@ -20,6 +20,9 @@ function createLegacyState(): AppState {
     popupShadowStyle: _popupShadowStyle,
     popupCircularProgressItemsPerRow: _popupCircularProgressItemsPerRow,
     actionBadgeSelection: _actionBadgeSelection,
+    toolbarIconMode: _toolbarIconMode,
+    toolbarIconProviderId: _toolbarIconProviderId,
+    toolbarIconCustomImageDataUrl: _toolbarIconCustomImageDataUrl,
     providerOrderBySurface: _providerOrderBySurface,
     progressItemsBySurface: _progressItemsBySurface,
     progressThicknessPx: _progressThicknessPx,
@@ -135,6 +138,9 @@ describe("storage normalization", () => {
     expect(state?.settings.popupShadowStyle).toBe("soft");
     expect(state?.settings.popupCircularProgressItemsPerRow).toBe(2);
     expect(state?.settings.actionBadgeSelection).toBe("attention");
+    expect(state?.settings.toolbarIconMode).toBe("default");
+    expect(state?.settings.toolbarIconProviderId).toBeNull();
+    expect(state?.settings.toolbarIconCustomImageDataUrl).toBeNull();
     expect(state?.settings.providerOrderBySurface).toEqual({
       popup: [],
       sidebar: [],
@@ -285,6 +291,43 @@ describe("storage normalization", () => {
     const state = await readAppState();
 
     expect(state?.settings.actionBadgeSelection).toBe("attention");
+  });
+
+  it("normalizes toolbar icon preferences", async () => {
+    await writeAppState({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        toolbarIconMode: "provider",
+        toolbarIconProviderId: "codex",
+        toolbarIconCustomImageDataUrl:
+          "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB",
+      } as unknown as AppState["settings"],
+    });
+
+    const validState = await readAppState();
+
+    expect(validState?.settings.toolbarIconMode).toBe("provider");
+    expect(validState?.settings.toolbarIconProviderId).toBe("codex");
+    expect(validState?.settings.toolbarIconCustomImageDataUrl).toBe(
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB",
+    );
+
+    await writeAppState({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        toolbarIconMode: "provider-site",
+        toolbarIconProviderId: "unknown-provider",
+        toolbarIconCustomImageDataUrl: "data:text/plain;base64,SGVsbG8=",
+      } as unknown as AppState["settings"],
+    });
+
+    const invalidState = await readAppState();
+
+    expect(invalidState?.settings.toolbarIconMode).toBe("default");
+    expect(invalidState?.settings.toolbarIconProviderId).toBeNull();
+    expect(invalidState?.settings.toolbarIconCustomImageDataUrl).toBeNull();
   });
 
   it("normalizes invalid numeric preference values", async () => {

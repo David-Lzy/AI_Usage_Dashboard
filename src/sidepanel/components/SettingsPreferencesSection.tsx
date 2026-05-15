@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 
 import type {
   ActionBadgeSelection,
@@ -14,6 +14,7 @@ import type {
   ProviderSetting,
   ProviderSnapshot,
   ThemePreset,
+  ToolbarIconMode,
   UiFontFamily,
 } from "../../providers/types";
 import type { RuntimeI18n } from "../../shared/i18n";
@@ -45,6 +46,13 @@ type SettingsPreferencesSectionProps = {
   userLevelVisibility: SettingsUserLevelVisibility;
   onActionBadgeSelectionChange: (
     actionBadgeSelection: ActionBadgeSelection,
+  ) => void;
+  onToolbarIconModeChange: (toolbarIconMode: ToolbarIconMode) => void;
+  onToolbarIconProviderIdChange: (
+    toolbarIconProviderId: AppSettings["toolbarIconProviderId"],
+  ) => void;
+  onToolbarIconCustomImageDataUrlChange: (
+    toolbarIconCustomImageDataUrl: string | null,
   ) => void;
   onFullPageProgressStyleChange: (
     progressStyle: ProgressDisplayStyle,
@@ -83,6 +91,9 @@ export function SettingsPreferencesSection({
   snapshots,
   userLevelVisibility: _userLevelVisibility,
   onActionBadgeSelectionChange,
+  onToolbarIconModeChange,
+  onToolbarIconProviderIdChange,
+  onToolbarIconCustomImageDataUrlChange,
   onFullPageProgressStyleChange,
   onPopupCornerStyleChange,
   onPopupCircularProgressItemsPerRowChange,
@@ -113,6 +124,8 @@ export function SettingsPreferencesSection({
     syncIntervalOptions,
     syncIntervalUnitLabel,
     themePresetOptions,
+    toolbarIconModeOptions,
+    toolbarIconProviderOptions,
     uiFontFamilyOptions,
     warningThresholdErrorText,
     warningThresholdMenuButtonLabel,
@@ -134,6 +147,29 @@ export function SettingsPreferencesSection({
       value: String(option.value) as "1" | "2" | "3",
       label: option.label,
     }));
+  const selectedToolbarIconProviderId =
+    settings.toolbarIconProviderId ?? providers[0]?.id ?? null;
+
+  function handleToolbarIconCustomImageChange(
+    event: ChangeEvent<HTMLInputElement>,
+  ) {
+    const file = event.currentTarget.files?.[0] ?? null;
+
+    if (!file || !file.type.startsWith("image/")) {
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.addEventListener("load", () => {
+      const result = reader.result;
+
+      if (typeof result === "string") {
+        onToolbarIconCustomImageDataUrlChange(result);
+      }
+    });
+    reader.readAsDataURL(file);
+  }
 
   useEffect(() => {
     if (settings.themePreset === "custom") {
@@ -188,6 +224,60 @@ export function SettingsPreferencesSection({
           options={actionBadgeOptions}
           onChange={onActionBadgeSelectionChange}
         />
+
+        <MaterialSelect
+          label={i18n.t("settings.preferences.toolbar_icon_label")}
+          value={settings.toolbarIconMode}
+          fieldIdPrefix="toolbar-icon-mode"
+          options={toolbarIconModeOptions}
+          onChange={onToolbarIconModeChange}
+        />
+
+        {settings.toolbarIconMode === "provider" &&
+        selectedToolbarIconProviderId ? (
+          <MaterialSelect
+            label={i18n.t("settings.preferences.toolbar_icon_provider_label")}
+            value={selectedToolbarIconProviderId}
+            fieldIdPrefix="toolbar-icon-provider"
+            options={toolbarIconProviderOptions}
+            onChange={onToolbarIconProviderIdChange}
+          />
+        ) : null}
+
+        {settings.toolbarIconMode === "custom" ? (
+          <div
+            className="form-field toolbar-icon-custom-field"
+            data-toolbar-icon-custom-field=""
+          >
+            <span className="form-field__label">
+              {i18n.t("settings.preferences.toolbar_icon_custom_label")}
+            </span>
+            <div className="toolbar-icon-custom-field__row">
+              <input
+                className="form-field__control toolbar-icon-custom-field__file"
+                type="file"
+                accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"
+                onChange={handleToolbarIconCustomImageChange}
+              />
+              <span className="meta-chip toolbar-icon-custom-field__status">
+                {settings.toolbarIconCustomImageDataUrl
+                  ? i18n.t(
+                      "settings.preferences.toolbar_icon_custom_selected",
+                    )
+                  : i18n.t("settings.preferences.toolbar_icon_custom_empty")}
+              </span>
+              {settings.toolbarIconCustomImageDataUrl ? (
+                <button
+                  className="text-button toolbar-icon-custom-field__clear"
+                  type="button"
+                  onClick={() => onToolbarIconCustomImageDataUrlChange(null)}
+                >
+                  {i18n.t("settings.preferences.toolbar_icon_custom_clear")}
+                </button>
+              ) : null}
+            </div>
+          </div>
+        ) : null}
       </div>
 
       <details

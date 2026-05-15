@@ -332,6 +332,39 @@
   background: var(--app-supporting-surface-background);
 }
 
+.toolbar-icon-custom-field__row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--app-space-2);
+  min-width: 0;
+}
+
+.toolbar-icon-custom-field__file {
+  flex: 1 1 16rem;
+  min-inline-size: min(100%, 14rem);
+}
+
+.toolbar-icon-custom-field__file::file-selector-button {
+  min-height: 32px;
+  margin-inline-end: var(--app-space-2);
+  padding: 0 var(--app-space-3);
+  border: 1px solid var(--md-sys-color-primary);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: transparent;
+  color: var(--md-sys-color-primary);
+  font: inherit;
+  font-weight: 700;
+}
+
+.toolbar-icon-custom-field__file::file-selector-button:hover {
+  background: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
+}
+
+.toolbar-icon-custom-field__status {
+  flex: 0 0 auto;
+}
+
 .progress-appearance-preferences__header,
 .progress-appearance-bands__header {
   display: flex;

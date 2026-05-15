@@ -1,6 +1,8 @@
 import { ensurePeriodicSyncAlarm, isPeriodicSyncAlarm } from "./alarms";
 import { syncActionBadgeFromState } from "./action-badge";
+import { syncToolbarIconFromState } from "./action-icon";
 import { handleAppMessage, type AppMessage } from "./message-bus";
+import type { AppState } from "../providers/types";
 import {
   markProviderBindingsStaleForRemovedTab,
   markProviderBindingsStaleForTabUrlChange,
@@ -12,20 +14,25 @@ import { runSyncEngine } from "./sync-engine";
 import { seedAppStateIfEmpty } from "../shared/storage";
 import { readStoreScreenshotRuntimeLock } from "../shared/store-screenshot-runtime-lock";
 
+async function syncActionToolbarFromState(state: AppState) {
+  await syncActionBadgeFromState(state);
+  await syncToolbarIconFromState(state);
+}
+
 async function bootstrapBackground() {
   await chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: false });
 
   if (await readStoreScreenshotRuntimeLock()) {
     const state = await seedAppStateIfEmpty();
     await ensurePeriodicSyncAlarm(state.settings);
-    await syncActionBadgeFromState(state);
+    await syncActionToolbarFromState(state);
     return;
   }
 
   await syncStoredProviderPermissions();
   const state = await syncStoredProviderCredentials();
   await ensurePeriodicSyncAlarm(state.settings);
-  await syncActionBadgeFromState(state);
+  await syncActionToolbarFromState(state);
 }
 
 chrome.runtime.onInstalled.addListener(() => {
@@ -41,14 +48,14 @@ chrome.alarms.onAlarm.addListener((alarm) => {
     void (async () => {
       if (await readStoreScreenshotRuntimeLock()) {
         const state = await seedAppStateIfEmpty();
-        await syncActionBadgeFromState(state);
+        await syncActionToolbarFromState(state);
         return;
       }
 
       await syncStoredProviderPermissions();
       await syncStoredProviderCredentials();
       const state = await runSyncEngine({ trigger: "alarm" });
-      await syncActionBadgeFromState(state);
+      await syncActionToolbarFromState(state);
     })().catch(() => undefined);
   }
 });
@@ -62,7 +69,7 @@ chrome.tabs.onRemoved.addListener((tabId) => {
     const state = await markProviderBindingsStaleForRemovedTab(tabId);
 
     if (state) {
-      await syncActionBadgeFromState(state);
+      await syncActionToolbarFromState(state);
     }
   })().catch(() => undefined);
 });
@@ -87,7 +94,7 @@ chrome.tabs.onReplaced.addListener((addedTabId, removedTabId) => {
     );
 
     if (state) {
-      await syncActionBadgeFromState(state);
+      await syncActionToolbarFromState(state);
     }
   })().catch(() => undefined);
 });
@@ -110,7 +117,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
     );
 
     if (state) {
-      await syncActionBadgeFromState(state);
+      await syncActionToolbarFromState(state);
     }
   })().catch(() => undefined);
 });
@@ -127,7 +134,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (typeof message?.type === "string" && message.type.startsWith("app:")) {
     void handleAppMessage(message as AppMessage).then((response) => {
       if (response.ok) {
-        void syncActionBadgeFromState(response.state);
+        void syncActionToolbarFromState(response.state);
       }
 
       sendResponse(response);

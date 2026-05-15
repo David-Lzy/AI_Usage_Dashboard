@@ -19,6 +19,7 @@ import type {
   ProviderSnapshot,
   ThemeMode,
   ThemePreset,
+  ToolbarIconMode,
   UiFontFamily,
 } from "../../providers/types";
 import { createRuntimeI18n } from "../../shared/i18n";
@@ -123,6 +124,13 @@ type SettingsPageProps = {
   onActionBadgeSelectionChange: (
     actionBadgeSelection: ActionBadgeSelection,
   ) => void;
+  onToolbarIconModeChange: (toolbarIconMode: ToolbarIconMode) => void;
+  onToolbarIconProviderIdChange: (
+    toolbarIconProviderId: AppSettings["toolbarIconProviderId"],
+  ) => void;
+  onToolbarIconCustomImageDataUrlChange: (
+    toolbarIconCustomImageDataUrl: string | null,
+  ) => void;
   onSaveThemeCustomSeed: (themeCustomSeedHex: string) => void;
   onToggleProvider: (providerId: ProviderId) => void;
   onTogglePermission: (providerId: ProviderId) => void;
@@ -181,6 +189,9 @@ export function SettingsPage({
   onProgressThicknessPxChange,
   onProgressColorBandsChange,
   onActionBadgeSelectionChange,
+  onToolbarIconModeChange,
+  onToolbarIconProviderIdChange,
+  onToolbarIconCustomImageDataUrlChange,
   onSaveThemeCustomSeed,
   onToggleProvider,
   onTogglePermission,
@@ -419,6 +430,11 @@ export function SettingsPage({
         onProgressThicknessPxChange={onProgressThicknessPxChange}
         onProgressColorBandsChange={onProgressColorBandsChange}
         onActionBadgeSelectionChange={onActionBadgeSelectionChange}
+        onToolbarIconModeChange={onToolbarIconModeChange}
+        onToolbarIconProviderIdChange={onToolbarIconProviderIdChange}
+        onToolbarIconCustomImageDataUrlChange={
+          onToolbarIconCustomImageDataUrlChange
+        }
         onThemeCustomSeedChange={onSaveThemeCustomSeed}
       />
 

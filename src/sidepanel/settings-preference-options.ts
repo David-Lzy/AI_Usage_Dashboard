@@ -10,6 +10,7 @@ import type {
   ProviderSnapshot,
   ThemeMode,
   ThemePreset,
+  ToolbarIconMode,
   UiFontFamily,
 } from "../providers/types";
 import type { RuntimeI18n } from "../shared/i18n";
@@ -38,6 +39,7 @@ import {
   WARNING_THRESHOLD_PRESETS,
 } from "../shared/settings-preferences";
 import { THEME_PRESET_OPTIONS } from "../shared/theme";
+import { TOOLBAR_ICON_MODE_OPTIONS } from "../shared/toolbar-icon-preferences";
 import { UI_FONT_FAMILY_OPTIONS } from "../shared/ui-font-family";
 
 type BuildSettingsPreferenceOptionsInput = {
@@ -64,6 +66,12 @@ export function buildSettingsPreferenceOptions({
     system: i18n.t("settings.preferences.ui_font.system"),
     serif: i18n.t("settings.preferences.ui_font.serif"),
     mono: i18n.t("settings.preferences.ui_font.mono"),
+  };
+  const toolbarIconModeOptionLabels: Record<ToolbarIconMode, string> = {
+    default: i18n.t("settings.preferences.toolbar_icon.default"),
+    "match-badge": i18n.t("settings.preferences.toolbar_icon.match_badge"),
+    provider: i18n.t("settings.preferences.toolbar_icon.provider"),
+    custom: i18n.t("settings.preferences.toolbar_icon.custom"),
   };
   const progressDisplayStyleOptionLabels: Record<ProgressDisplayStyle, string> = {
     line: i18n.t("settings.preferences.progress_style.line"),
@@ -113,6 +121,14 @@ export function buildSettingsPreferenceOptions({
   const uiFontFamilyOptions = UI_FONT_FAMILY_OPTIONS.map((option) => ({
     value: option.value,
     label: uiFontFamilyOptionLabels[option.value],
+  }));
+  const toolbarIconModeOptions = TOOLBAR_ICON_MODE_OPTIONS.map((option) => ({
+    value: option.value,
+    label: toolbarIconModeOptionLabels[option.value],
+  }));
+  const toolbarIconProviderOptions = providers.map((provider) => ({
+    value: provider.id,
+    label: provider.label,
   }));
   const progressDisplayStyleOptions = PROGRESS_DISPLAY_STYLE_OPTIONS.map(
     (option) => ({
@@ -185,6 +201,8 @@ export function buildSettingsPreferenceOptions({
     syncIntervalUnitLabel,
     themeModeOptions,
     themePresetOptions,
+    toolbarIconModeOptions,
+    toolbarIconProviderOptions,
     uiFontFamilyOptions,
     warningThresholdErrorText,
     warningThresholdMenuButtonLabel,

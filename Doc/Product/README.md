@@ -58,5 +58,6 @@ Status note:
 - `Phase 470` made popup Settings actions open the full-page Settings tab, added best-effort side-panel close during tab opens, and added full-page tab to sidebar top-bar switching.
 - `Phase 471` fixed sidebar-to-tab close targeting by trying the current window side-panel target before the active-tab fallback, while preserving popup Settings-to-tab and full-page tab-to-sidebar behavior.
 - `Phase 472` made remaining-color-band summary chips and reorder/remove actions share one responsive row at medium Settings widths while preserving narrow-width wrapping and color-band semantics.
-- Current implementation source is ahead of the `0.1.0-rc.21` package by `Phase 472`.
-- No numbered phase is currently queued after `Phase 472`.
+- `Phase 473` added Settings toolbar-icon preferences for default, match-badge provider, explicit provider favicon, and custom image modes while preserving store/extension-management icons, provider data, badge behavior, and release packaging.
+- Current implementation source is ahead of the `0.1.0-rc.21` package by `Phase 473`.
+- No numbered phase is currently queued after `Phase 473`.

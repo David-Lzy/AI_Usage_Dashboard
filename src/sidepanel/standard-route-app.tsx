@@ -290,6 +290,15 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           onActionBadgeSelectionChange={(
             actionBadgeSelection: ActionBadgeSelection,
           ) => handleUpdateSettings({ actionBadgeSelection })}
+          onToolbarIconModeChange={(toolbarIconMode) =>
+            handleUpdateSettings({ toolbarIconMode })
+          }
+          onToolbarIconProviderIdChange={(toolbarIconProviderId) =>
+            handleUpdateSettings({ toolbarIconProviderId })
+          }
+          onToolbarIconCustomImageDataUrlChange={(
+            toolbarIconCustomImageDataUrl,
+          ) => handleUpdateSettings({ toolbarIconCustomImageDataUrl })}
           onSaveThemeCustomSeed={(themeCustomSeedHex) =>
             handleUpdateSettings({
               themePreset: "custom",

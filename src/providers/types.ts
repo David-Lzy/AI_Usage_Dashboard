@@ -272,6 +272,12 @@ export type ProviderSetting = {
   description: string;
 };
 
+export type ToolbarIconMode =
+  | "default"
+  | "match-badge"
+  | "provider"
+  | "custom";
+
 export type ProviderSyncOutcome = {
   snapshot: ProviderSnapshot;
   setting?: ProviderSetting;
@@ -294,6 +300,9 @@ export type AppSettings = {
   popupShadowStyle: PopupShadowStyle;
   popupCircularProgressItemsPerRow: PopupCircularProgressItemsPerRow;
   actionBadgeSelection: ActionBadgeSelection;
+  toolbarIconMode: ToolbarIconMode;
+  toolbarIconProviderId: ProviderId | null;
+  toolbarIconCustomImageDataUrl: string | null;
   providerOrderBySurface: ProviderOrderBySurface;
   progressItemsBySurface: ProgressItemsBySurface;
   progressThicknessPx: number;

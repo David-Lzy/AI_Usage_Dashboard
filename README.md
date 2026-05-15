@@ -9,7 +9,7 @@ Current packaged release state:
 - package version: `0.1.0-rc.21`
 - Chrome manifest version: `0.1.0.21`
 - packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.21.zip`
-- source status: `rc.21` package bytes are aligned through `Phase 469`; current source is ahead through `Phase 472` remaining-color-band action-row polish, and no numbered phase is currently queued after `Phase 472`. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
+- source status: `rc.21` package bytes are aligned through `Phase 469`; current source is ahead through `Phase 473` toolbar-icon preferences, and no numbered phase is currently queued after `Phase 473`. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
 - packaged follow-up milestone: [2026-05-15 RC21 Settings Tooltip And Form Control Release Candidate](./Doc/Milestones/2026-05-15_RC21_Settings_Tooltip_Form_Control_Release_Candidate.md)
 - submitted review milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
@@ -45,9 +45,9 @@ Security posture for this track:
 
 Next execution queue:
 
-1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary; `0.1.0-rc.21` remains the latest packaged follow-up candidate, but the current source is ahead by `Phase 472` and needs a fresh package before resubmission if this polish should ship
+1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary; `0.1.0-rc.21` remains the latest packaged follow-up candidate, but the current source is ahead by `Phase 473` and needs a fresh package before resubmission if toolbar-icon preferences should ship
 2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC21 follow-up milestone](./Doc/Milestones/2026-05-15_RC21_Settings_Tooltip_Form_Control_Release_Candidate.md) as the latest packaged-source reference before the current post-RC21 source deltas
-3. no numbered phase is currently queued after `Phase 472`; future work should start from a new scoped TODO rather than silently changing the RC21 package boundary
+3. no numbered phase is currently queued after `Phase 473`; future work should start from a new scoped TODO rather than silently changing the RC21 package boundary
 4. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 5. keep real operator evidence closed and archived; do not open another interaction-audit or theme-recovery operator evidence phase unless a new surface or theme regression creates a fresh review need
 6. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
@@ -72,6 +72,7 @@ Maintenance note:
 - Popup appearance preview rendering now lives in `src/sidepanel/components/PopupAppearancePreview.tsx`, keeping the Settings preview card out of `SettingsPreferencesSection.tsx` while preserving the same popup appearance attributes
 - Popup featured-provider list rendering now lives in `src/popup/PopupFeaturedProviderList.tsx`, keeping quota-first provider-card rendering out of `PopupApp.tsx` while preserving route-owned action execution and settings-focus targeting
 - Popup header rendering now lives in `src/popup/PopupHeaderSection.tsx`, keeping refresh, theme-toggle, and dashboard-tab header controls out of `PopupApp.tsx` while preserving route-owned handlers and pending states
+- Toolbar action icon preferences now live in `src/shared/toolbar-icon-preferences.ts`, `src/background/action-icon.ts`, and Settings preference controls, so users can keep the default icon, match a quota badge provider, choose a provider favicon, or upload a bounded custom image without changing Web Store or extension-management icons
 - Popup guidance-card rendering now lives in `src/popup/PopupGuidanceCardSection.tsx`, keeping no-featured-provider guidance-card markup out of `PopupApp.tsx` while preserving route-owned action routing and settings-focus targeting
 - Popup setup-coverage rendering now lives in `src/popup/PopupSetupCoverageSection.tsx`, keeping no-featured-provider setup coverage markup out of `PopupApp.tsx` while preserving route-owned action routing and settings-focus targeting
 - Popup snapshot-status rendering now lives in `src/popup/PopupSnapshotStatusSection.tsx`, keeping no-featured-provider snapshot-status markup out of `PopupApp.tsx` while preserving route-owned display gating
@@ -709,7 +710,7 @@ Output artifact:
 Packaging note:
 
 - `rc.21` packages the previous `rc.20` follow-up work plus `Phase 468` Settings tooltip and form-control polish, then closes the package boundary through `Phase 469`.
-- current source is ahead of `rc.21` by `Phase 472` remaining-color-band action-row polish; package a fresh RC before using this change for a store resubmission.
+- current source is ahead of `rc.21` by `Phase 473` toolbar-icon preferences; package a fresh RC before using this change for a store resubmission.
 - `rc.20` remains a historical packaged follow-up candidate for the UI polish boundary through `Phase 467`.
 - `rc.19` remains a historical packaged follow-up candidate for the post-`rc.18` UI polish boundary through `Phase 448`.
 - `rc.15` remains a historical packaged follow-up candidate for the post-`rc.14` maintenance boundary through `Phase 364`.

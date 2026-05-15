@@ -38,6 +38,16 @@ describe("buildSettingsPreferenceOptions", () => {
       { value: "serif", label: "Serif" },
       { value: "mono", label: "Mono" },
     ]);
+    expect(options.toolbarIconModeOptions).toEqual([
+      { value: "default", label: "Default" },
+      { value: "match-badge", label: "Match toolbar badge" },
+      { value: "provider", label: "Provider icon" },
+      { value: "custom", label: "Custom image" },
+    ]);
+    expect(options.toolbarIconProviderOptions).toContainEqual({
+      value: "codex",
+      label: "Codex",
+    });
     expect(options.syncIntervalOptions).toContainEqual({
       value: 3,
       label: "3 minutes",
@@ -87,6 +97,10 @@ describe("buildSettingsPreferenceOptions", () => {
     expect(options.uiFontFamilyOptions).toContainEqual({
       value: "default",
       label: "默认字体",
+    });
+    expect(options.toolbarIconModeOptions).toContainEqual({
+      value: "match-badge",
+      label: "匹配工具栏标记",
     });
   });
 });

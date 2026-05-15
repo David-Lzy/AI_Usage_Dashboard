@@ -27,6 +27,11 @@ import { DEFAULT_SETTINGS_USER_LEVEL } from "./settings-user-level";
 import { DEFAULT_UI_FONT_FAMILY } from "./ui-font-family";
 import { DEFAULT_ACTION_BADGE_SELECTION } from "./action-badge-preferences";
 import {
+  DEFAULT_TOOLBAR_ICON_CUSTOM_IMAGE_DATA_URL,
+  DEFAULT_TOOLBAR_ICON_MODE,
+  DEFAULT_TOOLBAR_ICON_PROVIDER_ID,
+} from "./toolbar-icon-preferences";
+import {
   createDefaultProgressItemsBySurface,
   createDefaultProviderOrderBySurface,
 } from "./display-preferences";
@@ -551,6 +556,9 @@ export const SAMPLE_APP_STATE: AppState = {
     popupCircularProgressItemsPerRow:
       DEFAULT_POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW,
     actionBadgeSelection: DEFAULT_ACTION_BADGE_SELECTION,
+    toolbarIconMode: DEFAULT_TOOLBAR_ICON_MODE,
+    toolbarIconProviderId: DEFAULT_TOOLBAR_ICON_PROVIDER_ID,
+    toolbarIconCustomImageDataUrl: DEFAULT_TOOLBAR_ICON_CUSTOM_IMAGE_DATA_URL,
     providerOrderBySurface: createDefaultProviderOrderBySurface(),
     progressItemsBySurface: createDefaultProgressItemsBySurface(),
     progressThicknessPx: DEFAULT_PROGRESS_THICKNESS_PX,
