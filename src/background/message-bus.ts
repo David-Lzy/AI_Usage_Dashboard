@@ -11,7 +11,11 @@ import {
   setProviderAdminApiKey,
 } from "../shared/provider-secrets";
 import { clearPageBinding, normalizePageBinding } from "../shared/page-bindings";
-import { seedAppStateIfEmpty, updateAppState } from "../shared/storage";
+import {
+  seedAppStateIfEmpty,
+  updateAppState,
+  writeAppState,
+} from "../shared/storage";
 import { readStoreScreenshotRuntimeLock } from "../shared/store-screenshot-runtime-lock";
 import { ensurePeriodicSyncAlarm } from "./alarms";
 import { syncStoredProviderCredentials } from "./provider-credentials";
@@ -20,6 +24,13 @@ import {
   toggleProviderPermission,
 } from "./provider-permissions";
 import { reconcileAppStateHealth, runSyncEngine } from "./sync-engine";
+import {
+  applyConfigurationBackupToState,
+  buildConfigurationBackup,
+  parseConfigurationBackupJson,
+  readConfigurationBackupFromChromeSync,
+  writeConfigurationBackupToChromeSync,
+} from "../shared/configuration-backup";
 
 export type AppMessage =
   | { type: "app:init" }
@@ -49,6 +60,9 @@ export type AppMessage =
     }
   | { type: "app:toggle-provider-permission"; providerId: ProviderId }
   | { type: "app:request-refresh"; providerId?: ProviderId }
+  | { type: "app:import-configuration-backup"; rawJson: string }
+  | { type: "app:save-configuration-to-sync" }
+  | { type: "app:restore-configuration-from-sync" }
   | { type: "app:open-action-popup" };
 
 export type AppMessageResponse =
@@ -313,6 +327,106 @@ export async function handleAppMessage(
       });
 
       return { ok: true, state };
+    }
+
+    case "app:import-configuration-backup": {
+      const parsedBackup = parseConfigurationBackupJson(message.rawJson);
+
+      if (!parsedBackup.ok) {
+        return { ok: false, error: parsedBackup.error };
+      }
+
+      const currentState = await seedAppStateIfEmpty();
+      const importedState = await writeAppState(
+        reconcileAppStateHealth(
+          applyConfigurationBackupToState(currentState, parsedBackup.backup),
+        ),
+      );
+      await ensurePeriodicSyncAlarm(importedState.settings);
+
+      return {
+        ok: true,
+        state: importedState,
+        notice: {
+          tone: "success",
+          title: "Configuration imported",
+          message:
+            "Portable settings and provider display preferences were restored. API keys, permissions, and page bindings stay local to this browser.",
+        },
+      };
+    }
+
+    case "app:save-configuration-to-sync": {
+      const state = await seedAppStateIfEmpty();
+      const backup = buildConfigurationBackup(state, {
+        includeCustomToolbarIconImage: false,
+      });
+
+      try {
+        await writeConfigurationBackupToChromeSync(backup);
+      } catch (error) {
+        return {
+          ok: false,
+          error:
+            error instanceof Error
+              ? error.message
+              : "Configuration could not be saved to Chrome Sync.",
+        };
+      }
+
+      return {
+        ok: true,
+        state,
+        notice: {
+          tone: "success",
+          title: "Configuration saved to Chrome Sync",
+          message:
+            "Chrome will sync the portable configuration with this signed-in browser profile when extension sync is enabled.",
+        },
+      };
+    }
+
+    case "app:restore-configuration-from-sync": {
+      let backup;
+
+      try {
+        backup = await readConfigurationBackupFromChromeSync();
+      } catch (error) {
+        return {
+          ok: false,
+          error:
+            error instanceof Error
+              ? error.message
+              : "Configuration could not be restored from Chrome Sync.",
+        };
+      }
+
+      if (!backup) {
+        return {
+          ok: false,
+          error:
+            "No AI Usage Dashboard configuration backup was found in Chrome Sync.",
+        };
+      }
+
+      const currentState = await seedAppStateIfEmpty();
+      const restoredState = await writeAppState(
+        reconcileAppStateHealth(
+          applyConfigurationBackupToState(currentState, backup),
+        ),
+      );
+      await ensurePeriodicSyncAlarm(restoredState.settings);
+
+      return {
+        ok: true,
+        state: restoredState,
+        notice: {
+          tone: "success",
+          title: "Configuration restored from Chrome Sync",
+          message:
+            "Portable settings and provider display preferences were restored. API keys, permissions, and page bindings stay local to this browser.",
+        },
+      };
     }
 
     case "app:open-action-popup": {

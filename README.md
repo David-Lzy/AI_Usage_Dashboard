@@ -9,7 +9,7 @@ Current packaged release state:
 - package version: `0.1.0-rc.21`
 - Chrome manifest version: `0.1.0.21`
 - packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.21.zip`
-- source status: `rc.21` package bytes are aligned through `Phase 469`; current source is ahead through `Phase 473` toolbar-icon preferences, and no numbered phase is currently queued after `Phase 473`. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
+- source status: `rc.21` package bytes are aligned through `Phase 469`; current source is ahead through `Phase 474` configuration backup and Chrome Sync, and no numbered phase is currently queued after `Phase 474`. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
 - packaged follow-up milestone: [2026-05-15 RC21 Settings Tooltip And Form Control Release Candidate](./Doc/Milestones/2026-05-15_RC21_Settings_Tooltip_Form_Control_Release_Candidate.md)
 - submitted review milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
@@ -45,9 +45,9 @@ Security posture for this track:
 
 Next execution queue:
 
-1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary; `0.1.0-rc.21` remains the latest packaged follow-up candidate, but the current source is ahead by `Phase 473` and needs a fresh package before resubmission if toolbar-icon preferences should ship
+1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary; `0.1.0-rc.21` remains the latest packaged follow-up candidate, but the current source is ahead by `Phase 474` and needs a fresh package before resubmission if toolbar-icon preferences or configuration backup should ship
 2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC21 follow-up milestone](./Doc/Milestones/2026-05-15_RC21_Settings_Tooltip_Form_Control_Release_Candidate.md) as the latest packaged-source reference before the current post-RC21 source deltas
-3. no numbered phase is currently queued after `Phase 473`; future work should start from a new scoped TODO rather than silently changing the RC21 package boundary
+3. no numbered phase is currently queued after `Phase 474`; future work should start from a new scoped TODO rather than silently changing the RC21 package boundary
 4. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 5. keep real operator evidence closed and archived; do not open another interaction-audit or theme-recovery operator evidence phase unless a new surface or theme regression creates a fresh review need
 6. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
@@ -86,6 +86,7 @@ Maintenance note:
 - Settings source card rendering now lives in `src/sidepanel/components/SettingsSourceCard.tsx`, keeping source display construction, source preference controls, session-page actions, and detailed diagnostics out of the section wrapper
 - Settings source-card view-model logic now lives in `src/sidepanel/settings-source-card-view-models.ts`, while `src/sidepanel/settings-view-models.ts` keeps compatibility re-exports for existing Settings imports
 - Settings Quick Setup view-model logic now lives in `src/sidepanel/settings-quick-setup-view-models.ts`, while `src/sidepanel/settings-view-models.ts` keeps compatibility re-exports for existing Settings imports
+- Configuration backup and Chrome Sync helpers now live in `src/shared/configuration-backup.ts`, with Settings controls routed through the standard background message channel so JSON import/export and `chrome.storage.sync` save/restore preserve local-only credentials, page bindings, permissions, and runtime evidence
 - Page-session tab priority sorting now lives in `src/providers/page-session-tab-priority.ts`, keeping exact URL, hash-stripped URL, prefix URL, matched-title, active-tab boost, and recency weighting covered outside the large page-session client
 - Page-session tab lifecycle helpers now live in `src/providers/page-session-tab-lifecycle.ts`, keeping open/reload/wait/close cleanup semantics covered outside the large page-session client
 - Page-session script capture helpers now live in `src/providers/page-session-script-capture.ts`, keeping script-result execution, isolated DOM snapshots, main-world window-value reads, and selector/key normalization covered outside the large page-session client
@@ -710,7 +711,7 @@ Output artifact:
 Packaging note:
 
 - `rc.21` packages the previous `rc.20` follow-up work plus `Phase 468` Settings tooltip and form-control polish, then closes the package boundary through `Phase 469`.
-- current source is ahead of `rc.21` by `Phase 473` toolbar-icon preferences; package a fresh RC before using this change for a store resubmission.
+- current source is ahead of `rc.21` by `Phase 474` configuration backup and Chrome Sync; package a fresh RC before using these changes for a store resubmission.
 - `rc.20` remains a historical packaged follow-up candidate for the UI polish boundary through `Phase 467`.
 - `rc.19` remains a historical packaged follow-up candidate for the post-`rc.18` UI polish boundary through `Phase 448`.
 - `rc.15` remains a historical packaged follow-up candidate for the post-`rc.14` maintenance boundary through `Phase 364`.

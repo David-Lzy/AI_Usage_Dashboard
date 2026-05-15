@@ -28,6 +28,7 @@ import {
 import { buildSettingsPreferenceOptions } from "../settings-preference-options";
 import type { SettingsUserLevelVisibility } from "../settings-user-level-visibility";
 import { AccentColorSelect } from "./AccentColorSelect";
+import { ConfigurationBackupControls } from "./ConfigurationBackupControls";
 import { EditableNumberCombobox } from "./EditableNumberCombobox";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 import { MaterialSelect } from "./MaterialSelect";
@@ -47,6 +48,10 @@ type SettingsPreferencesSectionProps = {
   onActionBadgeSelectionChange: (
     actionBadgeSelection: ActionBadgeSelection,
   ) => void;
+  onExportConfiguration: () => void;
+  onImportConfigurationJson: (rawJson: string) => void;
+  onSaveConfigurationToChromeSync: () => void;
+  onRestoreConfigurationFromChromeSync: () => void;
   onToolbarIconModeChange: (toolbarIconMode: ToolbarIconMode) => void;
   onToolbarIconProviderIdChange: (
     toolbarIconProviderId: AppSettings["toolbarIconProviderId"],
@@ -91,6 +96,10 @@ export function SettingsPreferencesSection({
   snapshots,
   userLevelVisibility: _userLevelVisibility,
   onActionBadgeSelectionChange,
+  onExportConfiguration,
+  onImportConfigurationJson,
+  onSaveConfigurationToChromeSync,
+  onRestoreConfigurationFromChromeSync,
   onToolbarIconModeChange,
   onToolbarIconProviderIdChange,
   onToolbarIconCustomImageDataUrlChange,
@@ -279,6 +288,14 @@ export function SettingsPreferencesSection({
           </div>
         ) : null}
       </div>
+
+      <ConfigurationBackupControls
+        copy={settingsCopy.configurationBackup}
+        onExportJson={onExportConfiguration}
+        onImportJson={onImportConfigurationJson}
+        onSaveToChromeSync={onSaveConfigurationToChromeSync}
+        onRestoreFromChromeSync={onRestoreConfigurationFromChromeSync}
+      />
 
       <details
         className="source-card__details settings-preferences__more settings-preferences__more--ui"

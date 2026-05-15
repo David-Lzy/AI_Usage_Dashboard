@@ -59,5 +59,6 @@ Status note:
 - `Phase 471` fixed sidebar-to-tab close targeting by trying the current window side-panel target before the active-tab fallback, while preserving popup Settings-to-tab and full-page tab-to-sidebar behavior.
 - `Phase 472` made remaining-color-band summary chips and reorder/remove actions share one responsive row at medium Settings widths while preserving narrow-width wrapping and color-band semantics.
 - `Phase 473` added Settings toolbar-icon preferences for default, match-badge provider, explicit provider favicon, and custom image modes while preserving store/extension-management icons, provider data, badge behavior, and release packaging.
-- Current implementation source is ahead of the `0.1.0-rc.21` package by `Phase 473`.
-- No numbered phase is currently queued after `Phase 473`.
+- `Phase 474` added Settings configuration backup, JSON export/import, and Chrome Sync save/restore actions while preserving local-only credentials, page bindings, permissions, runtime evidence, provider source truth, and release packaging.
+- Current implementation source is ahead of the `0.1.0-rc.21` package by `Phase 474`.
+- No numbered phase is currently queued after `Phase 474`.

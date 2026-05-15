@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [473_Phase_Toolbar_Icon_Provider_Preferences.md](./Archive/by-phase/400-499/473_Phase_Toolbar_Icon_Provider_Preferences.md)
+- latest completed slice: [474_Phase_Configuration_Backup_And_Chrome_Sync.md](./Archive/by-phase/400-499/474_Phase_Configuration_Backup_And_Chrome_Sync.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -867,6 +867,7 @@ Completed phases should be moved to:
 - the 2026-05-15 `Phase 471` closeout fixed sidebar-to-tab close targeting by trying the current window side-panel target before the active-tab fallback, while preserving popup Settings-to-tab and full-page tab-to-sidebar behavior
 - the 2026-05-15 `Phase 472` closeout made remaining-color-band summary chips and reorder/remove actions share one responsive row at medium Settings widths while preserving narrow-width wrapping and color-band semantics
 - the 2026-05-15 `Phase 473` closeout added Settings toolbar-icon preferences for default, match-badge provider, explicit provider favicon, and custom image modes, using Chrome's action icon and favicon APIs while preserving store/extension-management icons, provider data, badge behavior, and release packaging
+- the 2026-05-15 `Phase 474` closeout added Settings configuration backup, JSON export/import, and Chrome Sync save/restore actions while preserving local-only credentials, page bindings, runtime evidence, provider source truth, and release packaging
 
 ## Delivery Standard For Each Phase
 

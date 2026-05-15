@@ -112,11 +112,15 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
     handleClearCodexWorkspaceConfig,
     handleClearPageBinding,
     handleClearProviderAdminApiKey,
+    handleExportConfiguration,
+    handleImportConfigurationJson,
     handleOpenCurrentRouteInFullPage,
     handleOpenCurrentRouteInSidePanel,
     handleOpenSessionPage,
     handleRefresh,
+    handleRestoreConfigurationFromChromeSync,
     handleSaveCodexWorkspaceConfig,
+    handleSaveConfigurationToChromeSync,
     handleSavePreferences,
     handleSaveProviderAdminApiKey,
     handleSetSourcePreference,
@@ -290,6 +294,12 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           onActionBadgeSelectionChange={(
             actionBadgeSelection: ActionBadgeSelection,
           ) => handleUpdateSettings({ actionBadgeSelection })}
+          onExportConfiguration={handleExportConfiguration}
+          onImportConfigurationJson={handleImportConfigurationJson}
+          onSaveConfigurationToChromeSync={handleSaveConfigurationToChromeSync}
+          onRestoreConfigurationFromChromeSync={
+            handleRestoreConfigurationFromChromeSync
+          }
           onToolbarIconModeChange={(toolbarIconMode) =>
             handleUpdateSettings({ toolbarIconMode })
           }

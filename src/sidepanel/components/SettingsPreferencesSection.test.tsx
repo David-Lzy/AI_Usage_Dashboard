@@ -39,6 +39,10 @@ describe("SettingsPreferencesSection", () => {
         onProgressThicknessPxChange={() => {}}
         onProgressColorBandsChange={() => {}}
         onActionBadgeSelectionChange={() => {}}
+        onExportConfiguration={() => {}}
+        onImportConfigurationJson={() => {}}
+        onSaveConfigurationToChromeSync={() => {}}
+        onRestoreConfigurationFromChromeSync={() => {}}
         onToolbarIconModeChange={() => {}}
         onToolbarIconProviderIdChange={() => {}}
         onToolbarIconCustomImageDataUrlChange={() => {}}
@@ -71,6 +75,10 @@ describe("SettingsPreferencesSection", () => {
     expect(html).not.toContain("settings-preferences__inline-helper");
     expect(html).toContain('data-settings-material-select="action-badge-selection"');
     expect(html).toContain('data-settings-material-select="toolbar-icon-mode"');
+    expect(html).toContain('data-configuration-backup=""');
+    expect(html).toContain("Configuration backup and sync");
+    expect(html).toContain("Export JSON");
+    expect(html).toContain("Save to Chrome Sync");
     expect(html).toContain("Toolbar icon");
     expect(html).toContain('data-provider-order-preferences=""');
     expect(html).toContain('data-provider-progress-preferences=""');

@@ -34,6 +34,10 @@ function renderSettingsPage(overrides: Partial<Parameters<typeof SettingsPage>[0
       onProgressThicknessPxChange={() => {}}
       onProgressColorBandsChange={() => {}}
       onActionBadgeSelectionChange={() => {}}
+      onExportConfiguration={() => {}}
+      onImportConfigurationJson={() => {}}
+      onSaveConfigurationToChromeSync={() => {}}
+      onRestoreConfigurationFromChromeSync={() => {}}
       onToolbarIconModeChange={() => {}}
       onToolbarIconProviderIdChange={() => {}}
       onToolbarIconCustomImageDataUrlChange={() => {}}
@@ -72,6 +76,7 @@ describe("SettingsPage", () => {
     expect(html).toContain('data-settings-material-select="popup-circular-row-count"');
     expect(html).toContain('data-settings-material-select="action-badge-selection"');
     expect(html).toContain('data-settings-material-select="toolbar-icon-mode"');
+    expect(html).toContain('data-configuration-backup=""');
     expect(html).toContain('data-provider-order-preferences=""');
     expect(html).toContain('data-provider-progress-preferences=""');
     expect(html).toContain('data-progress-appearance-preferences=""');

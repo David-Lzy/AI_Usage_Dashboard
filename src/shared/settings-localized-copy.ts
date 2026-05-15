@@ -16,6 +16,7 @@ import {
   buildLocalizedSettingsCoreSections,
   getSettingsCoreCopy,
 } from "./settings-core-localized-copy";
+import { getSettingsConfigurationBackupCopy } from "./settings-configuration-backup-localized-copy";
 import {
   buildLocalizedSettingsProgressItemsSection,
   getSettingsProgressItemsCopy,
@@ -48,6 +49,9 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
   );
   const colorChoices = getSettingsColorChoiceCopy(i18n.resolvedLocale);
   const preferenceGroups = getSettingsPreferenceGroupsCopy(i18n.resolvedLocale);
+  const configurationBackup = getSettingsConfigurationBackupCopy(
+    i18n.resolvedLocale,
+  );
 
   if (i18n.resolvedLocale === "zh-CN") {
     return {
@@ -160,6 +164,7 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
         detail:
           "应用语言、Popup 形态和各个 surface 的额度样式都收在这里，需要时再展开。",
       },
+      configurationBackup,
       themeCustomization: {
         previewingSeed: (seed: string, mode: "light" | "dark") =>
           `正在为当前${mode === "dark" ? "夜间" : "白天"}配色预览 ${seed}。应用之后会把 accent preset 切到 Custom Seed。`,
@@ -408,6 +413,7 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
       detail:
         "App language, popup shape, and per-surface quota styling live here when you need them.",
     },
+    configurationBackup,
     themeCustomization: {
       previewingSeed: (seed: string, mode: "light" | "dark") =>
         `Previewing ${seed} for the current ${mode} palette. Apply it to switch the accent preset to Custom Seed.`,

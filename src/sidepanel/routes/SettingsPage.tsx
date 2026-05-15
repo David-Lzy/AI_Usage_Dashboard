@@ -124,6 +124,10 @@ type SettingsPageProps = {
   onActionBadgeSelectionChange: (
     actionBadgeSelection: ActionBadgeSelection,
   ) => void;
+  onExportConfiguration: () => void;
+  onImportConfigurationJson: (rawJson: string) => void;
+  onSaveConfigurationToChromeSync: () => void;
+  onRestoreConfigurationFromChromeSync: () => void;
   onToolbarIconModeChange: (toolbarIconMode: ToolbarIconMode) => void;
   onToolbarIconProviderIdChange: (
     toolbarIconProviderId: AppSettings["toolbarIconProviderId"],
@@ -189,6 +193,10 @@ export function SettingsPage({
   onProgressThicknessPxChange,
   onProgressColorBandsChange,
   onActionBadgeSelectionChange,
+  onExportConfiguration,
+  onImportConfigurationJson,
+  onSaveConfigurationToChromeSync,
+  onRestoreConfigurationFromChromeSync,
   onToolbarIconModeChange,
   onToolbarIconProviderIdChange,
   onToolbarIconCustomImageDataUrlChange,
@@ -430,6 +438,10 @@ export function SettingsPage({
         onProgressThicknessPxChange={onProgressThicknessPxChange}
         onProgressColorBandsChange={onProgressColorBandsChange}
         onActionBadgeSelectionChange={onActionBadgeSelectionChange}
+        onExportConfiguration={onExportConfiguration}
+        onImportConfigurationJson={onImportConfigurationJson}
+        onSaveConfigurationToChromeSync={onSaveConfigurationToChromeSync}
+        onRestoreConfigurationFromChromeSync={onRestoreConfigurationFromChromeSync}
         onToolbarIconModeChange={onToolbarIconModeChange}
         onToolbarIconProviderIdChange={onToolbarIconProviderIdChange}
         onToolbarIconCustomImageDataUrlChange={

@@ -264,12 +264,19 @@ export function createStandardAppActions({
     handleClearPageBinding: settingsActions.handleClearPageBinding,
     handleClearProviderAdminApiKey:
       settingsActions.handleClearProviderAdminApiKey,
+    handleExportConfiguration: settingsActions.handleExportConfiguration,
+    handleImportConfigurationJson:
+      settingsActions.handleImportConfigurationJson,
     handleOpenCurrentRouteInFullPage,
     handleOpenCurrentRouteInSidePanel,
     handleOpenSessionPage: sessionPageActions.handleOpenSessionPage,
     handleRefresh,
+    handleRestoreConfigurationFromChromeSync:
+      settingsActions.handleRestoreConfigurationFromChromeSync,
     handleSaveCodexWorkspaceConfig:
       settingsActions.handleSaveCodexWorkspaceConfig,
+    handleSaveConfigurationToChromeSync:
+      settingsActions.handleSaveConfigurationToChromeSync,
     handleSavePreferences: settingsActions.handleSavePreferences,
     handleSaveProviderAdminApiKey:
       settingsActions.handleSaveProviderAdminApiKey,
