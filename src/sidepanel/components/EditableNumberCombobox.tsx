@@ -7,6 +7,7 @@ import {
   type FocusEvent,
   type KeyboardEvent,
   type MouseEvent,
+  type ReactNode,
 } from "react";
 
 export type EditableNumberComboboxOption = {
@@ -24,6 +25,7 @@ type EditableNumberComboboxProps = {
   errorText: string;
   menuButtonLabel: string;
   fieldIdPrefix: string;
+  labelAccessory?: ReactNode;
   onChange: (value: number) => void;
 };
 
@@ -89,6 +91,7 @@ export function EditableNumberCombobox({
   errorText,
   menuButtonLabel,
   fieldIdPrefix,
+  labelAccessory,
   onChange,
 }: EditableNumberComboboxProps) {
   const generatedId = useId();
@@ -300,9 +303,18 @@ export function EditableNumberCombobox({
       data-settings-custom-number-field={fieldIdPrefix}
       onBlur={handleRootBlur}
     >
-      <label className="form-field__label" htmlFor={inputId}>
-        {label}
-      </label>
+      {labelAccessory ? (
+        <span className="form-field__label-row">
+          <label className="form-field__label" htmlFor={inputId}>
+            {label}
+          </label>
+          {labelAccessory}
+        </span>
+      ) : (
+        <label className="form-field__label" htmlFor={inputId}>
+          {label}
+        </label>
+      )}
       <div
         className="editable-number-combobox__anchor"
         data-open={isOpen ? "true" : "false"}

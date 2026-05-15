@@ -8,7 +8,7 @@
 }
 
 .settings-preferences__more-info {
-  justify-self: end;
+  justify-self: start;
 }
 
 .settings-preferences__field-with-helper {
@@ -26,9 +26,7 @@
 }
 
 .settings-preferences__field-note {
-  margin-block-start: calc(
-    var(--md-sys-typescale-label-medium-line-height) + var(--app-space-2)
-  );
+  margin-block-start: 0;
 }
 
 .settings-provider-display__body {

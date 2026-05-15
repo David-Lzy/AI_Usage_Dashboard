@@ -55,6 +55,7 @@ describe("SettingsPreferencesSection", () => {
     const html = renderPreferencesSection();
 
     expect(html).toContain(`id="${SETTINGS_SECTION_IDS.appearance}"`);
+    expect(html).toContain('class="settings-grid settings-grid--balanced-settings"');
     expect(html).toContain('data-settings-custom-number-field="sync-interval"');
     expect(html).toContain('data-settings-custom-number-field="warning-threshold"');
     expect(html).not.toContain('data-settings-material-select="locale-preference"');
@@ -69,8 +70,10 @@ describe("SettingsPreferencesSection", () => {
       "Uses safe local system font stacks across the popup",
     );
     expect(html).toContain("material-info-tooltip__trigger");
+    expect(html).toContain('class="form-field__label-row"');
     expect(html).toContain('role="tooltip"');
     expect(html).toContain("Line progress stays one item per row.");
+    expect(html).not.toContain("settings-preferences__field-with-helper");
     expect(html).not.toContain("settings-preferences__inline-helper");
     expect(html).toContain('data-action-badge-selection-controls=""');
     expect(html).toContain("Badge rotation interval");

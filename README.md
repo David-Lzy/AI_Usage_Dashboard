@@ -9,7 +9,7 @@ Current packaged release state:
 - package version: `0.1.0-rc.21`
 - Chrome manifest version: `0.1.0.21`
 - packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.21.zip`
-- source status: `rc.21` package bytes are aligned through `Phase 469`; current source is ahead through `Phase 480` Provider quota-item disclosure polish, and no numbered phase is currently queued after `Phase 480`. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
+- source status: `rc.21` package bytes are aligned through `Phase 469`; current source is ahead through `Phase 481` balanced Settings grid and label-tooltip polish, and no numbered phase is currently queued after `Phase 481`. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
 - packaged follow-up milestone: [2026-05-15 RC21 Settings Tooltip And Form Control Release Candidate](./Doc/Milestones/2026-05-15_RC21_Settings_Tooltip_Form_Control_Release_Candidate.md)
 - submitted review milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
@@ -45,9 +45,9 @@ Security posture for this track:
 
 Next execution queue:
 
-1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary; `0.1.0-rc.21` remains the latest packaged follow-up candidate, but the current source is ahead by `Phase 480` and needs a fresh package before resubmission if toolbar-icon preferences, configuration backup, action-badge rotation, provider-display Settings section promotion, action-badge control polish, or Provider quota-item disclosure polish should ship
+1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary; `0.1.0-rc.21` remains the latest packaged follow-up candidate, but the current source is ahead by `Phase 481` and needs a fresh package before resubmission if toolbar-icon preferences, configuration backup, action-badge rotation, provider-display Settings section promotion, action-badge control polish, Provider quota-item disclosure polish, or balanced Settings layout polish should ship
 2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC21 follow-up milestone](./Doc/Milestones/2026-05-15_RC21_Settings_Tooltip_Form_Control_Release_Candidate.md) as the latest packaged-source reference before the current post-RC21 source deltas
-3. no numbered phase is currently queued after `Phase 480`; future work should start from a new scoped TODO rather than silently changing the RC21 package boundary
+3. no numbered phase is currently queued after `Phase 481`; future work should start from a new scoped TODO rather than silently changing the RC21 package boundary
 4. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 5. keep real operator evidence closed and archived; do not open another interaction-audit or theme-recovery operator evidence phase unless a new surface or theme regression creates a fresh review need
 6. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
@@ -151,6 +151,7 @@ Maintenance note:
 - soft and gauge circular progress now render through `src/sidepanel/components/UsageProgressRing.tsx`; `circle-soft` is a full SVG ring, `circle-gauge` is a shorter instrument-style arc, the legacy `circle` style remains the classic conic ring, and fresh popup installs default to `circle-soft`
 - Settings Provider order copy now lives in `src/shared/settings-provider-order-localized-copy.ts`, keeping 14-locale order-control labels, aria text, and surface names out of `ProviderOrderPreferenceControls.tsx`
 - Settings overview display-level help now uses `settings-overview__user-level-help`, so wide layouts place the helper beside the selector and narrow localized layouts stack it below without changing user-level behavior
+- Settings appearance grids now use `settings-grid--balanced-settings`, quick setup/source field grids use count-aware balanced wrapping, and field-level tooltip triggers render in the field label row instead of beside the input frame
 
 ## Source Labels
 
@@ -715,7 +716,7 @@ Output artifact:
 Packaging note:
 
 - `rc.21` packages the previous `rc.20` follow-up work plus `Phase 468` Settings tooltip and form-control polish, then closes the package boundary through `Phase 469`.
-- current source is ahead of `rc.21` by `Phase 480` Provider quota-item disclosure polish; package a fresh RC before using these changes for a store resubmission.
+- current source is ahead of `rc.21` by `Phase 481` balanced Settings grid and label-tooltip polish; package a fresh RC before using these changes for a store resubmission.
 - `rc.20` remains a historical packaged follow-up candidate for the UI polish boundary through `Phase 467`.
 - `rc.19` remains a historical packaged follow-up candidate for the post-`rc.18` UI polish boundary through `Phase 448`.
 - `rc.15` remains a historical packaged follow-up candidate for the post-`rc.14` maintenance boundary through `Phase 364`.

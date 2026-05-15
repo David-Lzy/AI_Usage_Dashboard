@@ -5,6 +5,7 @@ import {
   useState,
   type FocusEvent,
   type KeyboardEvent,
+  type ReactNode,
 } from "react";
 
 import type { ActionBadgeSelection } from "../../providers/types";
@@ -15,6 +16,7 @@ type ActionBadgeSelectionControlsProps = {
   label: string;
   options: Array<MaterialSelectOption<ActionBadgeSelection>>;
   selectedValues: ActionBadgeSelection[];
+  labelAccessory?: ReactNode;
   onSelectionsChange: (selections: ActionBadgeSelection[]) => void;
 };
 
@@ -45,6 +47,7 @@ export function ActionBadgeSelectionControls({
   label,
   options,
   selectedValues,
+  labelAccessory,
   onSelectionsChange,
 }: ActionBadgeSelectionControlsProps) {
   const generatedId = useId();
@@ -134,9 +137,18 @@ export function ActionBadgeSelectionControls({
       data-action-badge-selection-controls=""
       onBlur={handleRootBlur}
     >
-      <span id={labelId} className="form-field__label">
-        {label}
-      </span>
+      {labelAccessory ? (
+        <span className="form-field__label-row">
+          <span id={labelId} className="form-field__label">
+            {label}
+          </span>
+          {labelAccessory}
+        </span>
+      ) : (
+        <span id={labelId} className="form-field__label">
+          {label}
+        </span>
+      )}
       <div className="action-badge-selection-controls__dropdown">
         <button
           ref={buttonRef}

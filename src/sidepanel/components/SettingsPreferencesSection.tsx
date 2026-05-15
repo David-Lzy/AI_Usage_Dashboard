@@ -185,7 +185,7 @@ export function SettingsPreferencesSection({
   return (
     <section className="status-card settings-section-anchor" id={sectionId}>
       <p className="section-label">{i18n.t("settings.preferences.eyebrow")}</p>
-      <div className="settings-grid">
+      <div className="settings-grid settings-grid--balanced-settings">
         <EditableNumberCombobox
           label={i18n.t("settings.preferences.sync_interval_label")}
           value={settings.syncIntervalMinutes}
@@ -222,37 +222,35 @@ export function SettingsPreferencesSection({
           onThemeCustomSeedChange={onThemeCustomSeedChange}
         />
 
-        <div className="settings-preferences__field-with-helper">
-          <ActionBadgeSelectionControls
-            label={i18n.t("settings.preferences.action_badge_label")}
-            options={actionBadgeOptions}
-            selectedValues={normalizedActionBadgeSelections}
-            onSelectionsChange={onActionBadgeSelectionsChange}
-          />
-          <MaterialInfoTooltip className="settings-preferences__field-note">
-            {i18n.t("settings.preferences.action_badge_helper")}
-          </MaterialInfoTooltip>
-        </div>
+        <ActionBadgeSelectionControls
+          label={i18n.t("settings.preferences.action_badge_label")}
+          options={actionBadgeOptions}
+          selectedValues={normalizedActionBadgeSelections}
+          labelAccessory={
+            <MaterialInfoTooltip className="settings-preferences__field-note">
+              {i18n.t("settings.preferences.action_badge_helper")}
+            </MaterialInfoTooltip>
+          }
+          onSelectionsChange={onActionBadgeSelectionsChange}
+        />
 
-        <div className="settings-preferences__field-with-helper">
-          <EditableNumberCombobox
-            label={i18n.t(
-              "settings.preferences.action_badge_rotation_label",
-            )}
-            value={settings.actionBadgeRotationIntervalSeconds}
-            minimum={ACTION_BADGE_ROTATION_INTERVAL_MIN_SECONDS}
-            maximum={ACTION_BADGE_ROTATION_INTERVAL_MAX_SECONDS}
-            unitLabel={actionBadgeRotationUnitLabel}
-            errorText={actionBadgeRotationIntervalErrorText}
-            menuButtonLabel={actionBadgeRotationMenuButtonLabel}
-            fieldIdPrefix="action-badge-rotation-interval"
-            options={actionBadgeRotationIntervalOptions}
-            onChange={onActionBadgeRotationIntervalSecondsChange}
-          />
-          <MaterialInfoTooltip className="settings-preferences__field-note">
-            {i18n.t("settings.preferences.action_badge_rotation_helper")}
-          </MaterialInfoTooltip>
-        </div>
+        <EditableNumberCombobox
+          label={i18n.t("settings.preferences.action_badge_rotation_label")}
+          value={settings.actionBadgeRotationIntervalSeconds}
+          minimum={ACTION_BADGE_ROTATION_INTERVAL_MIN_SECONDS}
+          maximum={ACTION_BADGE_ROTATION_INTERVAL_MAX_SECONDS}
+          unitLabel={actionBadgeRotationUnitLabel}
+          errorText={actionBadgeRotationIntervalErrorText}
+          menuButtonLabel={actionBadgeRotationMenuButtonLabel}
+          fieldIdPrefix="action-badge-rotation-interval"
+          options={actionBadgeRotationIntervalOptions}
+          labelAccessory={
+            <MaterialInfoTooltip className="settings-preferences__field-note">
+              {i18n.t("settings.preferences.action_badge_rotation_helper")}
+            </MaterialInfoTooltip>
+          }
+          onChange={onActionBadgeRotationIntervalSecondsChange}
+        />
 
         <MaterialSelect
           label={i18n.t("settings.preferences.toolbar_icon_label")}
@@ -339,7 +337,7 @@ export function SettingsPreferencesSection({
             </MaterialInfoTooltip>
           </div>
 
-          <div className="settings-grid">
+          <div className="settings-grid settings-grid--balanced-settings">
             <MaterialSelect
               label={i18n.t("settings.preferences.popup_progress_style_label")}
               value={settings.popupProgressStyle}
@@ -348,29 +346,29 @@ export function SettingsPreferencesSection({
               onChange={onPopupProgressStyleChange}
             />
 
-            <div className="settings-preferences__field-with-helper">
-              <MaterialSelect
-                label={i18n.t(
-                  "settings.preferences.popup_circular_row_count_label",
-                )}
-                value={
-                  String(settings.popupCircularProgressItemsPerRow) as
-                    | "1"
-                    | "2"
-                    | "3"
-                }
-                fieldIdPrefix="popup-circular-row-count"
-                options={popupCircularProgressItemsPerRowOptionsForSelect}
-                onChange={(value) =>
-                  onPopupCircularProgressItemsPerRowChange(
-                    Number(value) as PopupCircularProgressItemsPerRow,
-                  )
-                }
-              />
-              <MaterialInfoTooltip className="settings-preferences__field-note">
-                {popupCircularRowCountHelperText}
-              </MaterialInfoTooltip>
-            </div>
+            <MaterialSelect
+              label={i18n.t(
+                "settings.preferences.popup_circular_row_count_label",
+              )}
+              value={
+                String(settings.popupCircularProgressItemsPerRow) as
+                  | "1"
+                  | "2"
+                  | "3"
+              }
+              fieldIdPrefix="popup-circular-row-count"
+              options={popupCircularProgressItemsPerRowOptionsForSelect}
+              labelAccessory={
+                <MaterialInfoTooltip className="settings-preferences__field-note">
+                  {popupCircularRowCountHelperText}
+                </MaterialInfoTooltip>
+              }
+              onChange={(value) =>
+                onPopupCircularProgressItemsPerRowChange(
+                  Number(value) as PopupCircularProgressItemsPerRow,
+                )
+              }
+            />
 
             <MaterialSelect
               label={i18n.t("settings.preferences.sidebar_progress_style_label")}
@@ -412,18 +410,18 @@ export function SettingsPreferencesSection({
               onChange={onPopupShadowStyleChange}
             />
 
-            <div className="settings-preferences__field-with-helper">
-              <MaterialSelect
-                label={i18n.t("settings.preferences.ui_font_label")}
-                value={settings.uiFontFamily}
-                fieldIdPrefix="ui-font-family"
-                options={uiFontFamilyOptions}
-                onChange={onUiFontFamilyChange}
-              />
-              <MaterialInfoTooltip className="settings-preferences__field-note">
-                {uiFontHelperText}
-              </MaterialInfoTooltip>
-            </div>
+            <MaterialSelect
+              label={i18n.t("settings.preferences.ui_font_label")}
+              value={settings.uiFontFamily}
+              fieldIdPrefix="ui-font-family"
+              options={uiFontFamilyOptions}
+              labelAccessory={
+                <MaterialInfoTooltip className="settings-preferences__field-note">
+                  {uiFontHelperText}
+                </MaterialInfoTooltip>
+              }
+              onChange={onUiFontFamilyChange}
+            />
           </div>
 
           <ProgressAppearancePreferenceControls

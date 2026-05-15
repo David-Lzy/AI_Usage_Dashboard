@@ -12,6 +12,18 @@
   line-height: var(--md-sys-typescale-label-large-line-height);
 }
 
+.form-field__label-row {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--app-space-2);
+  min-width: 0;
+}
+
+.form-field__label-row > .form-field__label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .form-field__control {
   min-height: 46px;
   padding: 0 14px;

@@ -6,6 +6,7 @@ import {
   type FocusEvent,
   type KeyboardEvent,
   type MouseEvent,
+  type ReactNode,
 } from "react";
 
 export type MaterialSelectOption<TValue extends string = string> = {
@@ -19,6 +20,7 @@ type MaterialSelectProps<TValue extends string> = {
   options: Array<MaterialSelectOption<TValue>>;
   fieldIdPrefix: string;
   labelHidden?: boolean;
+  labelAccessory?: ReactNode;
   disabled?: boolean;
   onChange: (value: TValue) => void;
 };
@@ -49,6 +51,7 @@ export function MaterialSelect<TValue extends string>({
   options,
   fieldIdPrefix,
   labelHidden = false,
+  labelAccessory,
   disabled = false,
   onChange,
 }: MaterialSelectProps<TValue>) {
@@ -198,14 +201,28 @@ export function MaterialSelect<TValue extends string>({
       data-settings-material-select={fieldIdPrefix}
       onBlur={handleRootBlur}
     >
-      <span
-        id={labelId}
-        className={`form-field__label material-select__label${
-          labelHidden ? " material-select__label--hidden" : ""
-        }`}
-      >
-        {label}
-      </span>
+      {labelAccessory ? (
+        <span className="form-field__label-row">
+          <span
+            id={labelId}
+            className={`form-field__label material-select__label${
+              labelHidden ? " material-select__label--hidden" : ""
+            }`}
+          >
+            {label}
+          </span>
+          {labelAccessory}
+        </span>
+      ) : (
+        <span
+          id={labelId}
+          className={`form-field__label material-select__label${
+            labelHidden ? " material-select__label--hidden" : ""
+          }`}
+        >
+          {label}
+        </span>
+      )}
       <button
         ref={buttonRef}
         id={selectId}

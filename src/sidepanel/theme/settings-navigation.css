@@ -4,6 +4,10 @@
   gap: var(--app-space-3);
 }
 
+.settings-grid--balanced-settings {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .settings-list {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -115,6 +119,36 @@
 
 .quick-setup-card__actions {
   justify-content: flex-start;
+}
+
+@media (min-width: 1280px) {
+  .settings-grid--balanced-settings:has(> :nth-child(7):last-child),
+  .settings-grid--balanced-settings:has(> :nth-child(8):last-child) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 721px) and (max-width: 1180px) {
+  .settings-grid--balanced-settings {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 721px) {
+  .quick-setup-card__fields:has(> :nth-child(4):last-child),
+  .source-card__summary-grid:has(> :nth-child(4):last-child),
+  .source-card__session-grid:has(> :nth-child(4):last-child) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .quick-setup-card__fields:has(> :nth-child(5):last-child),
+  .quick-setup-card__fields:has(> :nth-child(6):last-child),
+  .source-card__summary-grid:has(> :nth-child(5):last-child),
+  .source-card__summary-grid:has(> :nth-child(6):last-child),
+  .source-card__session-grid:has(> :nth-child(5):last-child),
+  .source-card__session-grid:has(> :nth-child(6):last-child) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .settings-section-nav {

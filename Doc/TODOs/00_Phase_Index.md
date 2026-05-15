@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [480_Phase_Provider_Quota_Items_Collapsed_Default.md](./Archive/by-phase/400-499/480_Phase_Provider_Quota_Items_Collapsed_Default.md)
+- latest completed slice: [481_Phase_Balanced_Settings_Grid_And_Label_Tooltips.md](./Archive/by-phase/400-499/481_Phase_Balanced_Settings_Grid_And_Label_Tooltips.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -874,6 +874,7 @@ Completed phases should be moved to:
 - the 2026-05-15 `Phase 478` closeout changed action badge multi-select UI from an always-visible checkbox stack to a compact Material-style dropdown summary while preserving badge rotation, toolbar icon matching, provider sync, and release packaging
 - the 2026-05-15 `Phase 479` closeout split action badge selection and badge rotation interval into separate Settings grid controls with tooltip helper copy while preserving badge rotation, toolbar icon matching, provider sync, and release packaging
 - the 2026-05-15 `Phase 480` closeout made Provider display quota item details default-collapsed per provider while keeping provider summaries visible and preserving per-surface quota item controls, storage, provider state, and release packaging
+- the 2026-05-15 `Phase 481` closeout added balanced Settings/quick-setup field grids and moved field-level help tooltips into label rows while preserving storage, provider truth, toolbar behavior, localization strings, and release packaging
 
 ## Delivery Standard For Each Phase
 
