@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [470_Phase_Surface_Switch_Navigation.md](./Archive/by-phase/400-499/470_Phase_Surface_Switch_Navigation.md)
+- latest completed slice: [471_Phase_Surface_Switch_Close_Target_Fix.md](./Archive/by-phase/400-499/471_Phase_Surface_Switch_Close_Target_Fix.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -864,6 +864,7 @@ Completed phases should be moved to:
 - the 2026-05-15 `Phase 468` closeout polished Settings help tooltips and form controls by making tooltip triggers subtle, rendering tooltip content as an opaque viewport-positioned surface, widening the progress-thickness numeric input, and raising shared field-label typography while preserving settings semantics
 - the 2026-05-15 `Phase 469` closeout packaged the Phase 468 source boundary as `0.1.0-rc.21`, generated `release/ai-usage-dashboard-0.1.0-rc.21.zip`, recorded SHA256 `edcd6546695b89b70a271919a4531c19053216301affbc951eb98569f4aa4079`, and preserved RC13 as the submitted Chrome Web Store review boundary
 - the 2026-05-15 `Phase 470` closeout made popup Settings actions open the full-page Settings tab, added best-effort side-panel close during tab opens, and added full-page tab to sidebar top-bar switching while preserving provider behavior and release packaging
+- the 2026-05-15 `Phase 471` closeout fixed sidebar-to-tab close targeting by trying the current window side-panel target before the active-tab fallback, while preserving popup Settings-to-tab and full-page tab-to-sidebar behavior
 
 ## Delivery Standard For Each Phase
 

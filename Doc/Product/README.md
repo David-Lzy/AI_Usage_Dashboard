@@ -56,5 +56,6 @@ Status note:
 - `Phase 468` polished Settings help tooltips and form controls by making help triggers subtle, tooltip content opaque and viewport-positioned, progress-thickness input wider, and shared field labels more readable.
 - `Phase 469` packaged the Phase 468 source boundary as `0.1.0-rc.21`; RC13 remains the submitted Chrome Web Store review boundary.
 - `Phase 470` made popup Settings actions open the full-page Settings tab, added best-effort side-panel close during tab opens, and added full-page tab to sidebar top-bar switching.
-- Current implementation source is ahead of the `0.1.0-rc.21` package by `Phase 470`.
-- No numbered phase is currently queued after `Phase 470`.
+- `Phase 471` fixed sidebar-to-tab close targeting by trying the current window side-panel target before the active-tab fallback, while preserving popup Settings-to-tab and full-page tab-to-sidebar behavior.
+- Current implementation source is ahead of the `0.1.0-rc.21` package by `Phase 471`.
+- No numbered phase is currently queued after `Phase 471`.

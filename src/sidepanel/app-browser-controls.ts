@@ -3,7 +3,7 @@ import {
   closeSidePanelBestEffort,
   getActiveTabId,
   getCurrentWindowId,
-  resolveSidePanelCloseTarget,
+  resolveSidePanelCloseTargets,
 } from "../shared/extension-side-panel-controls";
 import {
   buildFullPageExtensionPath,
@@ -84,13 +84,15 @@ export async function openFullPageRoute(
     typeof chrome.runtime?.getURL === "function" &&
     typeof chrome.tabs?.create === "function"
   ) {
-    const sidePanelCloseTarget = await resolveSidePanelCloseTarget();
+    const sidePanelCloseTargets = await resolveSidePanelCloseTargets({
+      preferWindow: true,
+    });
 
     await chrome.tabs.create({
       url: chrome.runtime.getURL(path),
       active: true,
     });
-    await closeSidePanelBestEffort(sidePanelCloseTarget);
+    await closeSidePanelBestEffort(sidePanelCloseTargets);
     return;
   }
 
