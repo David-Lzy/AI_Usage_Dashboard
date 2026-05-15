@@ -99,7 +99,9 @@ function formatBadgeNumber(value: number): string {
 
 function formatQuotaBadgeText(candidate: ActionBadgeQuotaCandidate): string {
   if (candidate.quotaUnit === "percent") {
-    return `${Math.round(candidate.remaining)}%`;
+    const roundedPercent = Math.round(candidate.remaining);
+
+    return roundedPercent >= 100 ? "100" : `${roundedPercent}%`;
   }
 
   return formatBadgeNumber(candidate.remaining);

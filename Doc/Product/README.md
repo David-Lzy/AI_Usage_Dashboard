@@ -60,5 +60,6 @@ Status note:
 - `Phase 472` made remaining-color-band summary chips and reorder/remove actions share one responsive row at medium Settings widths while preserving narrow-width wrapping and color-band semantics.
 - `Phase 473` added Settings toolbar-icon preferences for default, match-badge provider, explicit provider favicon, and custom image modes while preserving store/extension-management icons, provider data, badge behavior, and release packaging.
 - `Phase 474` added Settings configuration backup, JSON export/import, and Chrome Sync save/restore actions while preserving local-only credentials, page bindings, permissions, runtime evidence, provider source truth, and release packaging.
-- Current implementation source is ahead of the `0.1.0-rc.21` package by `Phase 474`.
-- No numbered phase is currently queued after `Phase 474`.
+- `Phase 475` shortened `100%` quota action-badge text to `100` while preserving full tooltip/title semantics, non-100 percent badge text, provider state, and release packaging.
+- Current implementation source is ahead of the `0.1.0-rc.21` package by `Phase 475`.
+- No numbered phase is currently queued after `Phase 475`.

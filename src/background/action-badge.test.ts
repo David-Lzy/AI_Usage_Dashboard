@@ -108,4 +108,21 @@ describe("action badge", () => {
     expect(model.title).not.toContain("Details:");
     expect(model.backgroundColor).toEqual([46, 125, 50, 255]);
   });
+
+  it("keeps full percent values short enough for Chrome action badge rendering", () => {
+    const state = createStateWithCodexWindows();
+    const firstWindowCandidate = buildActionBadgeQuotaCandidates(state).find(
+      (candidate) => candidate.sourceLabel === "5-hour usage window",
+    );
+    const model = buildActionBadgeModel({
+      ...state,
+      settings: {
+        ...state.settings,
+        actionBadgeSelection: firstWindowCandidate?.value ?? "attention",
+      },
+    });
+
+    expect(model.text).toBe("100");
+    expect(model.title).toContain("  Remaining: 100% remaining");
+  });
 });
