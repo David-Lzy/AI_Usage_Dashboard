@@ -18,13 +18,13 @@ describe("special-route-app", () => {
     expect(getSpecialSidePanelRoute("#provider/codex")).toBeNull();
   });
 
-  it("renders a special route without the standard app shell state", () => {
+  it("renders a lazy loading fallback without the standard app shell state", () => {
     const html = renderToStaticMarkup(
       <SpecialRouteApp route="debug-native-popup-probe" />,
     );
 
-    expect(html).toContain("Opening native toolbar popup");
+    expect(html).toContain("Preparing dashboard state");
     expect(html).toContain('class="hero-card"');
-    expect(html).toContain('class="status-card"');
+    expect(html).not.toContain("Opening native toolbar popup");
   });
 });

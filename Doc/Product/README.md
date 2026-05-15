@@ -72,5 +72,6 @@ Status note:
 - `Phase 484` consolidated repeated Material select, editable number combobox, and action badge selector label/accessory JSX into `FormFieldLabel` while preserving label ids, `htmlFor`, `aria-labelledby`, visual output, storage, provider truth, and release packaging.
 - `Phase 485` lazy-loaded special/debug sidepanel routes and replaced popup/sidepanel runtime copy imports with focused copy-module imports, reducing `dist/assets/sidepanel.js` from about 861.8 KB to 429.2 KB and eliminating the Vite >500 KB chunk warning while preserving stable extension entry filenames.
 - `Phase 486` consolidated duplicate form label/info row CSS and source-card summary/session grid CSS while preserving existing spacing, wrapping, typography, route behavior, provider truth, storage, localization, and release packaging.
-- Current implementation source is ahead of the `0.1.0-rc.21` package through `Phase 486`.
-- The next deliberate track is `0.1.0-rc.22` packaging.
+- `Phase 487` packaged `0.1.0-rc.22` / manifest `0.1.0.22`, generated `release/ai-usage-dashboard-0.1.0-rc.22.zip`, recorded SHA256 `444440c732880c4c05ab5a3c73c5d488447447c1fb2a539a00c5253b8af30104`, and preserved RC13 as the submitted Chrome Web Store review boundary.
+- Current implementation source is aligned with the `0.1.0-rc.22` package through `Phase 487`.
+- No numbered phase is currently queued after `Phase 487`.
