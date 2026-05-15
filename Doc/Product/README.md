@@ -67,5 +67,6 @@ Status note:
 - `Phase 479` split action badge selection and badge rotation interval into separate Settings grid controls with tooltip helper copy while preserving badge rotation, toolbar icon matching, provider sync, and release packaging.
 - `Phase 480` made Provider display quota item details default-collapsed per provider while keeping provider summaries visible and preserving per-surface quota item controls, storage, provider state, and release packaging.
 - `Phase 481` added balanced Settings/quick-setup field grids and moved field-level help tooltips into label rows while preserving storage, provider truth, toolbar behavior, localization strings, and release packaging.
-- Current implementation source is ahead of the `0.1.0-rc.21` package by `Phase 481`.
-- No numbered phase is currently queued after `Phase 481`.
+- `Phase 482` documented the pre-store maintenance audit, including largest source files, current `dist/` chunks, stale Settings/Form/CSS cleanup candidates, bundle-split targets, and release-safe boundaries before runtime cleanup begins.
+- Current implementation source is ahead of the `0.1.0-rc.21` package through `Phase 482`.
+- The next deliberate track is low-risk stale cleanup, Settings/Form refactor, bundle split, CSS consolidation, and `0.1.0-rc.22` packaging.

@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [481_Phase_Balanced_Settings_Grid_And_Label_Tooltips.md](./Archive/by-phase/400-499/481_Phase_Balanced_Settings_Grid_And_Label_Tooltips.md)
+- latest completed slice: [482_Phase_Pre_Store_Maintenance_Audit.md](./Archive/by-phase/400-499/482_Phase_Pre_Store_Maintenance_Audit.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -875,6 +875,7 @@ Completed phases should be moved to:
 - the 2026-05-15 `Phase 479` closeout split action badge selection and badge rotation interval into separate Settings grid controls with tooltip helper copy while preserving badge rotation, toolbar icon matching, provider sync, and release packaging
 - the 2026-05-15 `Phase 480` closeout made Provider display quota item details default-collapsed per provider while keeping provider summaries visible and preserving per-surface quota item controls, storage, provider state, and release packaging
 - the 2026-05-15 `Phase 481` closeout added balanced Settings/quick-setup field grids and moved field-level help tooltips into label rows while preserving storage, provider truth, toolbar behavior, localization strings, and release packaging
+- the 2026-05-15 `Phase 482` closeout documented the pre-store maintenance audit, including largest source files, current `dist/` chunks, stale Settings/Form/CSS cleanup candidates, bundle-split targets, and explicit release-safe boundaries before any runtime cleanup begins
 
 ## Delivery Standard For Each Phase
 
