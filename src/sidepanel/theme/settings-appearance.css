@@ -11,20 +11,6 @@
   justify-self: start;
 }
 
-.settings-preferences__field-with-helper {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: start;
-  gap: var(--app-space-2);
-  min-width: 0;
-}
-
-.settings-preferences__field-with-helper > .material-select,
-.settings-preferences__field-with-helper > .editable-number-combobox,
-.settings-preferences__field-with-helper > .action-badge-selection-controls {
-  min-width: 0;
-}
-
 .settings-preferences__field-note {
   margin-block-start: 0;
 }

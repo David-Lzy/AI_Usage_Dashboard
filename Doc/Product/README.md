@@ -68,5 +68,6 @@ Status note:
 - `Phase 480` made Provider display quota item details default-collapsed per provider while keeping provider summaries visible and preserving per-surface quota item controls, storage, provider state, and release packaging.
 - `Phase 481` added balanced Settings/quick-setup field grids and moved field-level help tooltips into label rows while preserving storage, provider truth, toolbar behavior, localization strings, and release packaging.
 - `Phase 482` documented the pre-store maintenance audit, including largest source files, current `dist/` chunks, stale Settings/Form/CSS cleanup candidates, bundle-split targets, and release-safe boundaries before runtime cleanup begins.
-- Current implementation source is ahead of the `0.1.0-rc.21` package through `Phase 482`.
-- The next deliberate track is low-risk stale cleanup, Settings/Form refactor, bundle split, CSS consolidation, and `0.1.0-rc.22` packaging.
+- `Phase 483` removed stale `.settings-preferences__field-with-helper` CSS wrapper rules after confirming no runtime JSX uses them, while preserving Settings render semantics, provider truth, storage, archives, generated ledgers, and release packaging.
+- Current implementation source is ahead of the `0.1.0-rc.21` package through `Phase 483`.
+- The next deliberate track is low-risk Settings/Form refactor, bundle split, CSS consolidation, and `0.1.0-rc.22` packaging.
