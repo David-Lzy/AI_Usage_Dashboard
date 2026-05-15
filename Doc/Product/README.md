@@ -69,5 +69,6 @@ Status note:
 - `Phase 481` added balanced Settings/quick-setup field grids and moved field-level help tooltips into label rows while preserving storage, provider truth, toolbar behavior, localization strings, and release packaging.
 - `Phase 482` documented the pre-store maintenance audit, including largest source files, current `dist/` chunks, stale Settings/Form/CSS cleanup candidates, bundle-split targets, and release-safe boundaries before runtime cleanup begins.
 - `Phase 483` removed stale `.settings-preferences__field-with-helper` CSS wrapper rules after confirming no runtime JSX uses them, while preserving Settings render semantics, provider truth, storage, archives, generated ledgers, and release packaging.
-- Current implementation source is ahead of the `0.1.0-rc.21` package through `Phase 483`.
-- The next deliberate track is low-risk Settings/Form refactor, bundle split, CSS consolidation, and `0.1.0-rc.22` packaging.
+- `Phase 484` consolidated repeated Material select, editable number combobox, and action badge selector label/accessory JSX into `FormFieldLabel` while preserving label ids, `htmlFor`, `aria-labelledby`, visual output, storage, provider truth, and release packaging.
+- Current implementation source is ahead of the `0.1.0-rc.21` package through `Phase 484`.
+- The next deliberate track is low-risk bundle split, CSS consolidation, and `0.1.0-rc.22` packaging.

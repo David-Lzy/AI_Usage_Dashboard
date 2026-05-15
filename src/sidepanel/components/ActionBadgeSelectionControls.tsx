@@ -10,6 +10,7 @@ import {
 
 import type { ActionBadgeSelection } from "../../providers/types";
 import { ACTION_BADGE_ATTENTION_SELECTION } from "../../shared/action-badge-preferences";
+import { FormFieldLabel } from "./FormFieldLabel";
 import type { MaterialSelectOption } from "./MaterialSelect";
 
 type ActionBadgeSelectionControlsProps = {
@@ -137,18 +138,11 @@ export function ActionBadgeSelectionControls({
       data-action-badge-selection-controls=""
       onBlur={handleRootBlur}
     >
-      {labelAccessory ? (
-        <span className="form-field__label-row">
-          <span id={labelId} className="form-field__label">
-            {label}
-          </span>
-          {labelAccessory}
-        </span>
-      ) : (
-        <span id={labelId} className="form-field__label">
-          {label}
-        </span>
-      )}
+      <FormFieldLabel
+        id={labelId}
+        label={label}
+        accessory={labelAccessory}
+      />
       <div className="action-badge-selection-controls__dropdown">
         <button
           ref={buttonRef}

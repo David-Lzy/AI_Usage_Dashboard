@@ -10,6 +10,8 @@ import {
   type ReactNode,
 } from "react";
 
+import { FormFieldLabel } from "./FormFieldLabel";
+
 export type EditableNumberComboboxOption = {
   value: number;
   label: string;
@@ -303,18 +305,11 @@ export function EditableNumberCombobox({
       data-settings-custom-number-field={fieldIdPrefix}
       onBlur={handleRootBlur}
     >
-      {labelAccessory ? (
-        <span className="form-field__label-row">
-          <label className="form-field__label" htmlFor={inputId}>
-            {label}
-          </label>
-          {labelAccessory}
-        </span>
-      ) : (
-        <label className="form-field__label" htmlFor={inputId}>
-          {label}
-        </label>
-      )}
+      <FormFieldLabel
+        htmlFor={inputId}
+        label={label}
+        accessory={labelAccessory}
+      />
       <div
         className="editable-number-combobox__anchor"
         data-open={isOpen ? "true" : "false"}

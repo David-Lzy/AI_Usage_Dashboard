@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [483_Phase_Dead_Stale_Code_Cleanup.md](./Archive/by-phase/400-499/483_Phase_Dead_Stale_Code_Cleanup.md)
+- latest completed slice: [484_Phase_Settings_Form_Refactor.md](./Archive/by-phase/400-499/484_Phase_Settings_Form_Refactor.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -877,6 +877,7 @@ Completed phases should be moved to:
 - the 2026-05-15 `Phase 481` closeout added balanced Settings/quick-setup field grids and moved field-level help tooltips into label rows while preserving storage, provider truth, toolbar behavior, localization strings, and release packaging
 - the 2026-05-15 `Phase 482` closeout documented the pre-store maintenance audit, including largest source files, current `dist/` chunks, stale Settings/Form/CSS cleanup candidates, bundle-split targets, and explicit release-safe boundaries before any runtime cleanup begins
 - the 2026-05-15 `Phase 483` closeout removed the stale `.settings-preferences__field-with-helper` CSS wrapper rules after confirming no runtime JSX uses them, while preserving Settings render semantics, provider truth, storage, archives, generated ledgers, and release packaging
+- the 2026-05-15 `Phase 484` closeout consolidated repeated Material select, editable number combobox, and action badge selector label/accessory JSX into `FormFieldLabel` while preserving label ids, `htmlFor`, `aria-labelledby`, visual output, storage, provider truth, and release packaging
 
 ## Delivery Standard For Each Phase
 

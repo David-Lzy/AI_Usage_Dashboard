@@ -9,6 +9,8 @@ import {
   type ReactNode,
 } from "react";
 
+import { FormFieldLabel } from "./FormFieldLabel";
+
 export type MaterialSelectOption<TValue extends string = string> = {
   value: TValue;
   label: string;
@@ -72,6 +74,9 @@ export function MaterialSelect<TValue extends string>({
     isOpen && activeOption
       ? `${listboxId}-option-${activeOption.value}`
       : undefined;
+  const labelClassName = `form-field__label material-select__label${
+    labelHidden ? " material-select__label--hidden" : ""
+  }`;
 
   useEffect(() => {
     if (!isOpen) {
@@ -201,28 +206,12 @@ export function MaterialSelect<TValue extends string>({
       data-settings-material-select={fieldIdPrefix}
       onBlur={handleRootBlur}
     >
-      {labelAccessory ? (
-        <span className="form-field__label-row">
-          <span
-            id={labelId}
-            className={`form-field__label material-select__label${
-              labelHidden ? " material-select__label--hidden" : ""
-            }`}
-          >
-            {label}
-          </span>
-          {labelAccessory}
-        </span>
-      ) : (
-        <span
-          id={labelId}
-          className={`form-field__label material-select__label${
-            labelHidden ? " material-select__label--hidden" : ""
-          }`}
-        >
-          {label}
-        </span>
-      )}
+      <FormFieldLabel
+        id={labelId}
+        className={labelClassName}
+        label={label}
+        accessory={labelAccessory}
+      />
       <button
         ref={buttonRef}
         id={selectId}

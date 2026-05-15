@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-15:
 
-- the numbered phase queue is completed through `Phase 483`; `0.1.0-rc.21` is the latest packaged follow-up candidate, current source is ahead by surface-switch, remaining-color-band UI polish, toolbar-icon preferences, configuration backup/Chrome Sync, action-badge rotation, Settings provider-display section promotion, action-badge control polish, Provider quota-item disclosure polish, balanced Settings layout polish, the pre-store maintenance audit, and stale Settings CSS cleanup, and RC13 remains the submitted store-review boundary
+- the numbered phase queue is completed through `Phase 484`; `0.1.0-rc.21` is the latest packaged follow-up candidate, current source is ahead by surface-switch, remaining-color-band UI polish, toolbar-icon preferences, configuration backup/Chrome Sync, action-badge rotation, Settings provider-display section promotion, action-badge control polish, Provider quota-item disclosure polish, balanced Settings layout polish, the pre-store maintenance audit, stale Settings CSS cleanup, and Settings/Form label refactor, and RC13 remains the submitted store-review boundary
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -189,6 +189,7 @@ As of 2026-05-15:
 - `Phase 481` added balanced Settings/quick-setup field grids and moved field-level help tooltips into label rows while preserving storage, provider truth, toolbar behavior, localization strings, and release packaging.
 - `Phase 482` documented the pre-store maintenance audit, including largest source files, current `dist/` chunks, stale Settings/Form/CSS cleanup candidates, bundle-split targets, and release-safe boundaries before runtime cleanup begins.
 - `Phase 483` removed stale `.settings-preferences__field-with-helper` CSS wrapper rules after confirming no runtime JSX uses them, while preserving Settings render semantics, provider truth, storage, archives, generated ledgers, and release packaging.
+- `Phase 484` consolidated repeated Material select, editable number combobox, and action badge selector label/accessory JSX into `FormFieldLabel` while preserving label ids, `htmlFor`, `aria-labelledby`, visual output, storage, provider truth, and release packaging.
 - `Phase 200` completed a functionality-first Codex personal slice by preserving multiple visible usage windows, expanding Codex page-capture snippets, and surfacing the most constrained visible percentage window across dashboard, provider detail, and popup paths
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without changing the primary percentage-window quota model
 - `Phase 202` completed repeatable unpacked-extension verification for Codex personal multi-window plus flex-balance context, while fixing DOM capture so repeated percentages and single-character balance values are not lost before parsing
@@ -490,7 +491,7 @@ As of 2026-05-15:
 - `Phase 169` completed the next `Direction 10.3` slice by adding one request-bound manual finalize command plus handoff update, so the remaining real-world work is now the popup capture itself instead of popup capture plus extra repo bookkeeping
 - `Phase 296` completed the mixed candidate screenshot file intake plus archive completion under `10_3_Store_Asset_Pack_And_Submission_TODOs.md`
 - the previous repo-owned engineering default was adapter diagnostic raw fallback regression review for the shipped `en + zh_CN` runtime pilot under Direction 09, captured in `09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`
-- because `0.1.0-rc.21` is packaged as the latest follow-up candidate, current source is ahead by `Phase 483`, and the RC13 milestone remains the submitted store-review boundary, the active functional priority is deliberate pre-store maintenance plus `rc.22` packaging before any resubmission
+- because `0.1.0-rc.21` is packaged as the latest follow-up candidate, current source is ahead by `Phase 484`, and the RC13 milestone remains the submitted store-review boundary, the active functional priority is deliberate pre-store maintenance plus `rc.22` packaging before any resubmission
 - the remaining high-value work in Direction 05 and Direction 04 is now evidence closure, not more tool-building:
   - `05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md`
   - `04_2_Interaction_Audit_Real_Operator_Closure_TODOs.md`
@@ -557,7 +558,7 @@ As of 2026-05-15:
 
 1. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why first now:
-   `0.1.0-rc.21` is now packaged as the latest follow-up candidate, current source is ahead by `Phase 483`, the pre-store maintenance track is the next deliberate execution path, the mixed screenshot archive is complete, and the trimmed transparent icon refresh plus Claude Team usage-page path are already in the submitted RC13 boundary.
+   `0.1.0-rc.21` is now packaged as the latest follow-up candidate, current source is ahead by `Phase 484`, the pre-store maintenance track is the next deliberate execution path, the mixed screenshot archive is complete, and the trimmed transparent icon refresh plus Claude Team usage-page path are already in the submitted RC13 boundary.
 
 2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second now:
