@@ -12,7 +12,9 @@
   line-height: var(--md-sys-typescale-label-large-line-height);
 }
 
-.form-field__label-row {
+.form-field__label-row,
+.section-title-with-info,
+.field-label-with-info {
   display: inline-flex;
   align-items: center;
   gap: var(--app-space-2);
@@ -202,14 +204,6 @@ select.form-field__control {
   opacity: 1;
   transform: translateY(0);
   visibility: visible;
-}
-
-.section-title-with-info,
-.field-label-with-info {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--app-space-2);
-  min-width: 0;
 }
 
 .section-title-with-info {

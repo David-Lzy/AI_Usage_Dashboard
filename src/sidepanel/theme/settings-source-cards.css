@@ -57,7 +57,8 @@
   line-height: var(--md-sys-typescale-title-medium-line-height);
 }
 
-.source-card__summary-grid {
+.source-card__summary-grid,
+.source-card__session-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: var(--app-space-3);
@@ -114,12 +115,6 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: var(--app-space-2);
-}
-
-.source-card__session-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: var(--app-space-3);
 }
 
 .source-card__session-actions {

@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [485_Phase_Bundle_Split_Pass.md](./Archive/by-phase/400-499/485_Phase_Bundle_Split_Pass.md)
+- latest completed slice: [486_Phase_CSS_Consolidation.md](./Archive/by-phase/400-499/486_Phase_CSS_Consolidation.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -879,6 +879,7 @@ Completed phases should be moved to:
 - the 2026-05-15 `Phase 483` closeout removed the stale `.settings-preferences__field-with-helper` CSS wrapper rules after confirming no runtime JSX uses them, while preserving Settings render semantics, provider truth, storage, archives, generated ledgers, and release packaging
 - the 2026-05-15 `Phase 484` closeout consolidated repeated Material select, editable number combobox, and action badge selector label/accessory JSX into `FormFieldLabel` while preserving label ids, `htmlFor`, `aria-labelledby`, visual output, storage, provider truth, and release packaging
 - the 2026-05-15 `Phase 485` closeout lazy-loaded special/debug sidepanel routes and replaced popup/sidepanel runtime copy imports with focused copy-module imports, reducing `dist/assets/sidepanel.js` from about 861.8 KB to 429.2 KB and eliminating the Vite >500 KB chunk warning while preserving stable extension entry filenames
+- the 2026-05-15 `Phase 486` closeout consolidated duplicate form label/info row CSS and source-card summary/session grid CSS while preserving existing spacing, wrapping, typography, route behavior, provider truth, storage, localization, and release packaging
 
 ## Delivery Standard For Each Phase
 

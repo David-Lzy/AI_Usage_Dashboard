@@ -71,5 +71,6 @@ Status note:
 - `Phase 483` removed stale `.settings-preferences__field-with-helper` CSS wrapper rules after confirming no runtime JSX uses them, while preserving Settings render semantics, provider truth, storage, archives, generated ledgers, and release packaging.
 - `Phase 484` consolidated repeated Material select, editable number combobox, and action badge selector label/accessory JSX into `FormFieldLabel` while preserving label ids, `htmlFor`, `aria-labelledby`, visual output, storage, provider truth, and release packaging.
 - `Phase 485` lazy-loaded special/debug sidepanel routes and replaced popup/sidepanel runtime copy imports with focused copy-module imports, reducing `dist/assets/sidepanel.js` from about 861.8 KB to 429.2 KB and eliminating the Vite >500 KB chunk warning while preserving stable extension entry filenames.
-- Current implementation source is ahead of the `0.1.0-rc.21` package through `Phase 485`.
-- The next deliberate track is low-risk CSS consolidation and `0.1.0-rc.22` packaging.
+- `Phase 486` consolidated duplicate form label/info row CSS and source-card summary/session grid CSS while preserving existing spacing, wrapping, typography, route behavior, provider truth, storage, localization, and release packaging.
+- Current implementation source is ahead of the `0.1.0-rc.21` package through `Phase 486`.
+- The next deliberate track is `0.1.0-rc.22` packaging.
