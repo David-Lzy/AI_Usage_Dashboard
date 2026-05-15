@@ -76,13 +76,13 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 476` execution priority:
+Current post-`Phase 477` execution priority:
 
 1. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.13.zip` as the submitted Chrome Web Store review boundary. Do not silently mutate or rewrite the [RC13 upload-candidate milestone](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) while that submission remains the human-reviewed baseline.
-2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.21.zip` as the latest packaged follow-up candidate. It includes the previous `rc.20` follow-up work plus `Phase 468` Settings tooltip and form-control polish; current source is ahead through `Phase 476` action-badge multi-select rotation, so package a fresh RC before resubmission if those changes should ship.
+2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.21.zip` as the latest packaged follow-up candidate. It includes the previous `rc.20` follow-up work plus `Phase 468` Settings tooltip and form-control polish; current source is ahead through `Phase 477` Settings provider-display section promotion, so package a fresh RC before resubmission if those changes should ship.
 3. `P0` - keep the refreshed `Direction 10.3` screenshot evidence archived and ready, not pending: [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) still fulfills the latest reviewed screenshot pack with `5/5` images and `3` explicit truth-boundary notes.
 4. `P1` - if a resubmission becomes necessary, use [2026-05-15_RC21_Settings_Tooltip_Form_Control_Release_Candidate.md](./Milestones/2026-05-15_RC21_Settings_Tooltip_Form_Control_Release_Candidate.md) as the latest packaged-source reference before the current post-RC21 source deltas and cut a fresh package/submission milestone instead of mutating RC13 history.
-5. `P1` - no numbered phase is currently queued after `Phase 476`; start the next change from a new scoped TODO so the RC21 package boundary remains stable.
+5. `P1` - no numbered phase is currently queued after `Phase 477`; start the next change from a new scoped TODO so the RC21 package boundary remains stable.
 6. `P2` - keep the `Phase 309` first-provider setup behavior stable: zero-provider Settings now recommends one personal-user provider in Quick Setup and popup zero-provider actions deep-link to that same setup card.
 7. `P2` - keep the `Phase 310` cached-first guard stable: standard dashboard routes must keep rendering cached app state while background bootstrap is still loading.
 8. `P2` - keep the `Phase 311` popup view-model split behavior-only: `src/popup/view-models.ts` remains the public aggregator and the extracted setup-coverage / featured-card modules should not change popup UI semantics.
@@ -152,7 +152,7 @@ Delivery rule for this stage:
 - keep active implementation phases narrow and independently verifiable
 - keep file-splitting separate from release packaging, provider verification, and store evidence closeout
 - preserve the current provider truth boundaries while changing UI presentation
-- treat `rc.13` as the current submitted store-review boundary, and `rc.21` as the latest packaged follow-up candidate before the current Phase 476 source delta; `rc.20`, `rc.19`, `rc.18`, `rc.17`, `rc.16`, `rc.15`, `rc.14`, `rc.12`, and `rc.11` remain historical evidence
+- treat `rc.13` as the current submitted store-review boundary, and `rc.21` as the latest packaged follow-up candidate before the current Phase 477 source delta; `rc.20`, `rc.19`, `rc.18`, `rc.17`, `rc.16`, `rc.15`, `rc.14`, `rc.12`, and `rc.11` remain historical evidence
 
 Phase status update:
 
@@ -509,6 +509,7 @@ Phase status update:
 - `Phase 474` added Settings configuration backup, JSON export/import, and Chrome Sync save/restore actions while preserving local-only credentials, page bindings, permissions, runtime evidence, provider source truth, and release packaging
 - `Phase 475` shortened `100%` quota action-badge text to `100` while preserving full tooltip/title semantics, non-100 percent badge text, provider state, and release packaging
 - `Phase 476` added multi-select toolbar badge sources, configurable badge rotation, a dedicated rotation alarm, default match-badge toolbar icons for fresh settings, and match-badge icon rotation while preserving provider sync and release packaging
+- `Phase 477` promoted Provider display settings into a standalone top-level Settings section with its own navigation chip while preserving provider order, quota item preferences, provider state, and release packaging
 - `Phase 334` split interaction-audit per-surface card rendering into a dedicated component while preserving route-owned audit refs, preset actions, manual checks, and signoff callbacks
 - `Phase 335` split interaction-audit review queue rendering into a dedicated component while preserving route-owned queue construction and jump behavior
 - `Phase 336` split interaction-audit request-scope rendering into a dedicated component while preserving route-owned request-context state plus existing binding, revision, and next-command display

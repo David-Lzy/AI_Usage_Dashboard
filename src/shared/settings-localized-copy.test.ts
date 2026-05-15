@@ -36,6 +36,9 @@ describe("buildSettingsLocalizedCopy", () => {
     expect(copy.progressAppearance.thickness.unit).toBe("px");
     expect(copy.colorChoices.colorNames.indigo).toBe("Indigo");
     expect(copy.preferenceGroups.uiMoreShow).toBe("More UI settings");
+    expect(copy.preferenceGroups.providerDisplayShow).toBe(
+      "Provider display settings",
+    );
     expect(copy.layout.userLevel.options).toEqual({
       basic: "Basic",
       advanced: "Advanced",
@@ -69,7 +72,7 @@ describe("buildSettingsLocalizedCopy", () => {
     expect(copy.preferenceGroups.uiMoreShow).toBe("更多 UI 设置");
     expect(copy.preferenceGroups.uiMoreHide).toBe("收起 UI 设置");
     expect(copy.preferenceGroups.providerDisplayShow).toBe(
-      "Provider 顺序与可见进度",
+      "Provider 显示设置",
     );
   });
 

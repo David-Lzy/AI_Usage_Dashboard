@@ -50,6 +50,7 @@ import { useSettingsCredentialDrafts } from "../use-settings-credential-drafts";
 import { useSettingsSectionNavigation } from "../use-settings-section-navigation";
 import { SettingsSourceSection } from "../components/SettingsSourceSection";
 import { SettingsPreferencesSection } from "../components/SettingsPreferencesSection";
+import { SettingsProviderDisplaySection } from "../components/SettingsProviderDisplaySection";
 import { MaterialInfoTooltip } from "../components/MaterialInfoTooltip";
 
 type SettingsToast = {
@@ -435,8 +436,6 @@ export function SettingsPage({
           onPopupCircularProgressItemsPerRowChange
         }
         onPopupShadowStyleChange={onPopupShadowStyleChange}
-        onProviderOrderBySurfaceChange={onProviderOrderBySurfaceChange}
-        onProgressItemsBySurfaceChange={onProgressItemsBySurfaceChange}
         onProgressThicknessPxChange={onProgressThicknessPxChange}
         onProgressColorBandsChange={onProgressColorBandsChange}
         onActionBadgeSelectionsChange={onActionBadgeSelectionsChange}
@@ -453,6 +452,16 @@ export function SettingsPage({
           onToolbarIconCustomImageDataUrlChange
         }
         onThemeCustomSeedChange={onSaveThemeCustomSeed}
+      />
+
+      <SettingsProviderDisplaySection
+        sectionId={SETTINGS_SECTION_IDS.providerDisplay}
+        settings={settings}
+        providers={providers}
+        snapshots={snapshots}
+        settingsCopy={settingsCopy}
+        onProviderOrderBySurfaceChange={onProviderOrderBySurfaceChange}
+        onProgressItemsBySurfaceChange={onProgressItemsBySurfaceChange}
       />
 
       {showAdvancedContainer ? (

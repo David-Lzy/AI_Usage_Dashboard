@@ -21,6 +21,10 @@ describe("buildSettingsPageViewModels", () => {
       { id: SETTINGS_SECTION_IDS.overview, label: "Overview" },
       { id: SETTINGS_SECTION_IDS.quickSetup, label: "Quick Setup" },
       { id: SETTINGS_SECTION_IDS.appearance, label: "Appearance & Sync" },
+      {
+        id: SETTINGS_SECTION_IDS.providerDisplay,
+        label: "Provider display settings",
+      },
     ]);
     expect(viewModels.settingsSummaryItems.length).toBeGreaterThan(0);
     expect(
@@ -49,6 +53,10 @@ describe("buildSettingsPageViewModels", () => {
     expect(viewModels.settingsSectionNavItems).toContainEqual({
       id: SETTINGS_SECTION_IDS.appearance,
       label: "外观与同步",
+    });
+    expect(viewModels.settingsSectionNavItems).toContainEqual({
+      id: SETTINGS_SECTION_IDS.providerDisplay,
+      label: "Provider 显示设置",
     });
     expect(viewModels.settingsSectionNavItems).toContainEqual({
       id: SETTINGS_SECTION_IDS.advanced,

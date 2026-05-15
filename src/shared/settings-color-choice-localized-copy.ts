@@ -387,7 +387,7 @@ export const SETTINGS_PREFERENCE_GROUPS_COPY: Record<
     uiMoreHide: "Collapse UI settings",
     uiMoreDetail:
       "Popup shape, progress style, progress appearance, and accent colors live here.",
-    providerDisplayShow: "Provider display controls",
+    providerDisplayShow: "Provider display settings",
     providerDisplayHide: "Hide provider display controls",
     providerDisplayDetail:
       "Manage provider order and visible quota progress items separately for each surface.",
@@ -397,7 +397,7 @@ export const SETTINGS_PREFERENCE_GROUPS_COPY: Record<
     uiMoreHide: "收起 UI 设置",
     uiMoreDetail:
       "Popup 形态、额度样式、进度外观和强调色都放在这里。",
-    providerDisplayShow: "Provider 顺序与可见进度",
+    providerDisplayShow: "Provider 显示设置",
     providerDisplayHide: "收起 Provider 显示设置",
     providerDisplayDetail:
       "按 popup、sidebar 和完整页面分别管理 Provider 顺序和可见额度进度项。",

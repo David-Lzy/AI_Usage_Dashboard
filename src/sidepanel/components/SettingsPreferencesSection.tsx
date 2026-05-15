@@ -9,8 +9,6 @@ import type {
   PopupSizePreset,
   ProgressColorBand,
   ProgressDisplayStyle,
-  ProgressItemsBySurface,
-  ProviderOrderBySurface,
   ProviderSetting,
   ProviderSnapshot,
   ThemePreset,
@@ -35,8 +33,6 @@ import { ConfigurationBackupControls } from "./ConfigurationBackupControls";
 import { EditableNumberCombobox } from "./EditableNumberCombobox";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 import { MaterialSelect } from "./MaterialSelect";
-import { ProviderOrderPreferenceControls } from "./ProviderOrderPreferenceControls";
-import { ProviderProgressItemPreferenceControls } from "./ProviderProgressItemPreferenceControls";
 import { ProgressAppearancePreferenceControls } from "./ProgressAppearancePreferenceControls";
 import { PopupAppearancePreview } from "./PopupAppearancePreview";
 
@@ -73,12 +69,6 @@ type SettingsPreferencesSectionProps = {
   onPopupProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onPopupShadowStyleChange: (shadowStyle: PopupShadowStyle) => void;
   onPopupSizePresetChange: (sizePreset: PopupSizePreset) => void;
-  onProviderOrderBySurfaceChange: (
-    providerOrderBySurface: ProviderOrderBySurface,
-  ) => void;
-  onProgressItemsBySurfaceChange: (
-    progressItemsBySurface: ProgressItemsBySurface,
-  ) => void;
   onProgressColorBandsChange: (progressColorBands: ProgressColorBand[]) => void;
   onProgressThicknessPxChange: (progressThicknessPx: number) => void;
   onSidebarProgressStyleChange: (
@@ -114,8 +104,6 @@ export function SettingsPreferencesSection({
   onPopupProgressStyleChange,
   onPopupShadowStyleChange,
   onPopupSizePresetChange,
-  onProviderOrderBySurfaceChange,
-  onProgressItemsBySurfaceChange,
   onProgressColorBandsChange,
   onProgressThicknessPxChange,
   onSidebarProgressStyleChange,
@@ -155,7 +143,6 @@ export function SettingsPreferencesSection({
     snapshots,
   });
   const [uiMoreOpen, setUiMoreOpen] = useState(settings.themePreset === "custom");
-  const [providerDisplayOpen, setProviderDisplayOpen] = useState(false);
   const popupCircularRowCountHelperText = i18n.t(
     "settings.preferences.popup_circular_row_count_helper",
   );
@@ -437,44 +424,6 @@ export function SettingsPreferencesSection({
           />
 
           <PopupAppearancePreview i18n={i18n} settings={settings} />
-        </div>
-      </details>
-
-      <details
-        className="source-card__details settings-preferences__more settings-preferences__more--provider-display"
-        open={providerDisplayOpen}
-        onToggle={(event) =>
-          setProviderDisplayOpen((event.currentTarget as HTMLDetailsElement).open)
-        }
-      >
-        <summary className="source-card__details-toggle">
-          <span>
-            {providerDisplayOpen
-              ? settingsCopy.preferenceGroups.providerDisplayHide
-              : settingsCopy.preferenceGroups.providerDisplayShow}
-          </span>
-        </summary>
-
-        <div className="source-card__details-body settings-preferences__more-body">
-          <div className="settings-preferences__more-info">
-            <MaterialInfoTooltip>
-              {settingsCopy.preferenceGroups.providerDisplayDetail}
-            </MaterialInfoTooltip>
-          </div>
-          <ProviderOrderPreferenceControls
-            copy={settingsCopy.providerOrder}
-            providers={providers}
-            providerOrderBySurface={settings.providerOrderBySurface}
-            onChange={onProviderOrderBySurfaceChange}
-          />
-
-          <ProviderProgressItemPreferenceControls
-            copy={settingsCopy.progressItems}
-            providers={providers}
-            snapshots={snapshots}
-            progressItemsBySurface={settings.progressItemsBySurface}
-            onChange={onProgressItemsBySurfaceChange}
-          />
         </div>
       </details>
     </section>

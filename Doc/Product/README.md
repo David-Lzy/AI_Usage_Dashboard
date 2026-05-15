@@ -62,5 +62,6 @@ Status note:
 - `Phase 474` added Settings configuration backup, JSON export/import, and Chrome Sync save/restore actions while preserving local-only credentials, page bindings, permissions, runtime evidence, provider source truth, and release packaging.
 - `Phase 475` shortened `100%` quota action-badge text to `100` while preserving full tooltip/title semantics, non-100 percent badge text, provider state, and release packaging.
 - `Phase 476` added multi-select toolbar badge sources, configurable badge rotation, a dedicated rotation alarm, default match-badge toolbar icons for fresh settings, and match-badge icon rotation while preserving provider sync and release packaging.
-- Current implementation source is ahead of the `0.1.0-rc.21` package by `Phase 476`.
-- No numbered phase is currently queued after `Phase 476`.
+- `Phase 477` promoted Provider display settings into a standalone top-level Settings section with its own navigation chip while preserving provider order, quota item preferences, provider state, and release packaging.
+- Current implementation source is ahead of the `0.1.0-rc.21` package by `Phase 477`.
+- No numbered phase is currently queued after `Phase 477`.

@@ -2,6 +2,7 @@ export const SETTINGS_SECTION_IDS = {
   overview: "settings-overview",
   quickSetup: "settings-quick-setup",
   appearance: "settings-appearance",
+  providerDisplay: "settings-provider-display",
   advanced: "settings-advanced",
 } as const;
 

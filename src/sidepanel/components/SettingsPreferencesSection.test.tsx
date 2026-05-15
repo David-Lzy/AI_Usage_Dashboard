@@ -34,8 +34,6 @@ describe("SettingsPreferencesSection", () => {
         onPopupCornerStyleChange={() => {}}
         onPopupCircularProgressItemsPerRowChange={() => {}}
         onPopupShadowStyleChange={() => {}}
-        onProviderOrderBySurfaceChange={() => {}}
-        onProgressItemsBySurfaceChange={() => {}}
         onProgressThicknessPxChange={() => {}}
         onProgressColorBandsChange={() => {}}
         onActionBadgeSelectionsChange={() => {}}
@@ -82,31 +80,18 @@ describe("SettingsPreferencesSection", () => {
     expect(html).toContain("Export JSON");
     expect(html).toContain("Save to Chrome Sync");
     expect(html).toContain("Toolbar icon");
-    expect(html).toContain('data-provider-order-preferences=""');
-    expect(html).toContain('data-provider-progress-preferences=""');
     expect(html).toContain('data-progress-appearance-preferences=""');
-    expect(html).toContain('data-provider-order-surface="popup"');
-    expect(html).toContain('data-provider-order-surface="sidebar"');
-    expect(html).toContain('data-provider-order-surface="fullPage"');
-    expect(html).toContain('data-provider-progress-surface="popup"');
-    expect(html).toContain('data-provider-progress-surface="sidebar"');
-    expect(html).toContain('data-provider-progress-surface="fullPage"');
-    expect(html).toContain("Choose the order per surface");
     expect(html).toContain("Tune thickness and remaining-color bands");
     expect(html).toContain("#B3261E");
     expect(html).toContain(">More UI settings<");
-    expect(html).toContain(">Provider display controls<");
+    expect(html).not.toContain('data-provider-order-preferences=""');
+    expect(html).not.toContain('data-provider-progress-preferences=""');
+    expect(html).not.toContain("Provider display settings");
     expect(html).toContain('class="popup-appearance-preview-card"');
     expect(html).not.toContain('class="theme-customization-form"');
     expect(
       html.indexOf('data-progress-appearance-preferences=""'),
     ).toBeLessThan(html.indexOf('class="popup-appearance-preview-card"'));
-    expect(html.indexOf('class="popup-appearance-preview-card"')).toBeLessThan(
-      html.indexOf('data-provider-order-preferences=""'),
-    );
-    expect(html.indexOf('data-provider-order-preferences=""')).toBeLessThan(
-      html.indexOf('data-provider-progress-preferences=""'),
-    );
   });
 
   it("renders provider and custom toolbar icon controls only for matching modes", () => {

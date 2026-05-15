@@ -113,6 +113,10 @@ function buildSettingsSectionNavItems(
       id: SETTINGS_SECTION_IDS.appearance,
       label: settingsCopy.layout.sections.appearance,
     },
+    {
+      id: SETTINGS_SECTION_IDS.providerDisplay,
+      label: settingsCopy.preferenceGroups.providerDisplayShow,
+    },
   ];
 
   if (showAdvancedSection) {

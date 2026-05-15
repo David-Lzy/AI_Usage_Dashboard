@@ -78,11 +78,18 @@ describe("SettingsPage", () => {
     expect(html).toContain('data-action-badge-selection-controls=""');
     expect(html).toContain('data-settings-material-select="toolbar-icon-mode"');
     expect(html).toContain('data-configuration-backup=""');
+    expect(html).toContain('data-settings-provider-display-section=""');
     expect(html).toContain('data-provider-order-preferences=""');
     expect(html).toContain('data-provider-progress-preferences=""');
     expect(html).toContain('data-progress-appearance-preferences=""');
     expect(html).toContain(">More UI settings<");
-    expect(html).toContain(">Provider display controls<");
+    expect(html).toContain(">Provider display settings<");
+    expect(html.indexOf('id="settings-appearance"')).toBeLessThan(
+      html.indexOf('id="settings-provider-display"'),
+    );
+    expect(html.indexOf('id="settings-provider-display"')).toBeLessThan(
+      html.indexOf('class="settings-back-to-top-fab"'),
+    );
     expect(html).not.toContain('data-credential-provider-id="cursor"');
     expect(html).toContain('class="settings-back-to-top-fab"');
     expect(html).toContain('aria-label="Back to top"');

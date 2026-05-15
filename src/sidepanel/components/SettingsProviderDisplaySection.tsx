@@ -1,0 +1,71 @@
+import type {
+  AppSettings,
+  ProgressItemsBySurface,
+  ProviderOrderBySurface,
+  ProviderSetting,
+  ProviderSnapshot,
+} from "../../providers/types";
+import type { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
+import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
+import { ProviderOrderPreferenceControls } from "./ProviderOrderPreferenceControls";
+import { ProviderProgressItemPreferenceControls } from "./ProviderProgressItemPreferenceControls";
+
+type SettingsProviderDisplaySectionProps = {
+  providers: ProviderSetting[];
+  sectionId?: string;
+  settings: AppSettings;
+  settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>;
+  snapshots: ProviderSnapshot[];
+  onProviderOrderBySurfaceChange: (
+    providerOrderBySurface: ProviderOrderBySurface,
+  ) => void;
+  onProgressItemsBySurfaceChange: (
+    progressItemsBySurface: ProgressItemsBySurface,
+  ) => void;
+};
+
+export function SettingsProviderDisplaySection({
+  providers,
+  sectionId,
+  settings,
+  settingsCopy,
+  snapshots,
+  onProviderOrderBySurfaceChange,
+  onProgressItemsBySurfaceChange,
+}: SettingsProviderDisplaySectionProps) {
+  return (
+    <section
+      className="status-card settings-section-anchor settings-provider-display"
+      data-settings-provider-display-section=""
+      id={sectionId}
+    >
+      <div className="dashboard-section__header">
+        <div className="section-title-with-info">
+          <h2 className="section-title">
+            {settingsCopy.preferenceGroups.providerDisplayShow}
+          </h2>
+          <MaterialInfoTooltip>
+            {settingsCopy.preferenceGroups.providerDisplayDetail}
+          </MaterialInfoTooltip>
+        </div>
+      </div>
+
+      <div className="settings-provider-display__body">
+        <ProviderOrderPreferenceControls
+          copy={settingsCopy.providerOrder}
+          providers={providers}
+          providerOrderBySurface={settings.providerOrderBySurface}
+          onChange={onProviderOrderBySurfaceChange}
+        />
+
+        <ProviderProgressItemPreferenceControls
+          copy={settingsCopy.progressItems}
+          providers={providers}
+          snapshots={snapshots}
+          progressItemsBySurface={settings.progressItemsBySurface}
+          onChange={onProgressItemsBySurfaceChange}
+        />
+      </div>
+    </section>
+  );
+}
