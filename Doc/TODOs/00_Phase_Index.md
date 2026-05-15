@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [479_Phase_Action_Badge_Control_Split_And_Tooltips.md](./Archive/by-phase/400-499/479_Phase_Action_Badge_Control_Split_And_Tooltips.md)
+- latest completed slice: [480_Phase_Provider_Quota_Items_Collapsed_Default.md](./Archive/by-phase/400-499/480_Phase_Provider_Quota_Items_Collapsed_Default.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -873,6 +873,7 @@ Completed phases should be moved to:
 - the 2026-05-15 `Phase 477` closeout promoted Provider display settings into a standalone top-level Settings section with its own navigation chip while preserving provider order, quota item preferences, provider state, and release packaging
 - the 2026-05-15 `Phase 478` closeout changed action badge multi-select UI from an always-visible checkbox stack to a compact Material-style dropdown summary while preserving badge rotation, toolbar icon matching, provider sync, and release packaging
 - the 2026-05-15 `Phase 479` closeout split action badge selection and badge rotation interval into separate Settings grid controls with tooltip helper copy while preserving badge rotation, toolbar icon matching, provider sync, and release packaging
+- the 2026-05-15 `Phase 480` closeout made Provider display quota item details default-collapsed per provider while keeping provider summaries visible and preserving per-surface quota item controls, storage, provider state, and release packaging
 
 ## Delivery Standard For Each Phase
 

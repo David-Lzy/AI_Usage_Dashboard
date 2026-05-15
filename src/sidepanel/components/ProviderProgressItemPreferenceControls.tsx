@@ -217,207 +217,223 @@ export function ProviderProgressItemPreferenceControls({
           const progressItemMap = createProgressItemMap(progressItems);
 
           return (
-            <article
+            <details
               key={provider.id}
               className="provider-progress-provider"
               data-provider-progress-preference-provider={provider.id}
             >
-              <div className="provider-progress-provider__header">
-                <div>
-                  <p className="provider-progress-provider__title">
+              <summary
+                className="provider-progress-provider__summary"
+                data-provider-progress-preference-provider-summary={provider.id}
+              >
+                <span className="provider-progress-provider__summary-copy">
+                  <span className="provider-progress-provider__title">
                     {provider.label}
-                  </p>
-                  <p className="supporting-copy provider-progress-provider__detail">
+                  </span>
+                  <span className="supporting-copy provider-progress-provider__detail">
                     {progressItems.length > 0
                       ? copy.provider.count(progressItems.length)
                       : copy.provider.emptyDetail}
+                  </span>
+                </span>
+              </summary>
+
+              <div className="provider-progress-provider__body">
+                {progressItems.length === 0 ? (
+                  <p className="supporting-copy provider-progress-provider__empty">
+                    {copy.provider.emptyBody}
                   </p>
-                </div>
-              </div>
+                ) : (
+                  <div className="provider-progress-surfaces">
+                    {DISPLAY_SURFACES.map((surface) => {
+                      const preferences = resolveSurfaceProviderPreferences(
+                        surface,
+                        provider.id,
+                        progressItemIds,
+                      );
+                      const orderedProgressItems = getOrderedProgressItems(
+                        preferences,
+                        progressItemMap,
+                      );
+                      const visibleCount = preferences.filter(
+                        (preference) => preference.visible,
+                      ).length;
+                      const surfaceLabel = copy.surfaceLabels[surface];
 
-              {progressItems.length === 0 ? (
-                <p className="supporting-copy provider-progress-provider__empty">
-                  {copy.provider.emptyBody}
-                </p>
-              ) : (
-                <div className="provider-progress-surfaces">
-                  {DISPLAY_SURFACES.map((surface) => {
-                    const preferences = resolveSurfaceProviderPreferences(
-                      surface,
-                      provider.id,
-                      progressItemIds,
-                    );
-                    const orderedProgressItems = getOrderedProgressItems(
-                      preferences,
-                      progressItemMap,
-                    );
-                    const visibleCount = preferences.filter(
-                      (preference) => preference.visible,
-                    ).length;
-                    const surfaceLabel = copy.surfaceLabels[surface];
+                      return (
+                        <section
+                          key={surface}
+                          className="provider-progress-surface"
+                          data-provider-progress-surface={surface}
+                        >
+                          <div className="provider-progress-surface__header">
+                            <p className="provider-progress-surface__title">
+                              {surfaceLabel}
+                            </p>
+                            <span className="meta-chip">
+                              {copy.visibleCount(
+                                visibleCount,
+                                preferences.length,
+                              )}
+                            </span>
+                          </div>
 
-                    return (
-                      <section
-                        key={surface}
-                        className="provider-progress-surface"
-                        data-provider-progress-surface={surface}
-                      >
-                        <div className="provider-progress-surface__header">
-                          <p className="provider-progress-surface__title">
-                            {surfaceLabel}
-                          </p>
-                          <span className="meta-chip">
-                            {copy.visibleCount(
-                              visibleCount,
-                              preferences.length,
+                          <ol className="provider-progress-list">
+                            {orderedProgressItems.map(
+                              (progressItem, index) => {
+                                const preference = preferences.find(
+                                  (candidate) =>
+                                    candidate.id === progressItem.id,
+                                );
+                                const isFirst = index === 0;
+                                const isLast =
+                                  index === orderedProgressItems.length - 1;
+                                const isVisible = preference?.visible ?? true;
+
+                                return (
+                                  <li
+                                    key={progressItem.id}
+                                    className="provider-progress-list__item"
+                                    data-provider-progress-item-row={
+                                      progressItem.id
+                                    }
+                                    draggable
+                                    tabIndex={0}
+                                    aria-label={copy.rowAria(
+                                      progressItem.label,
+                                      index + 1,
+                                      orderedProgressItems.length,
+                                      surfaceLabel,
+                                    )}
+                                    onDragStart={() =>
+                                      setDraggedProgressItem({
+                                        surface,
+                                        providerId: provider.id,
+                                        itemId: progressItem.id,
+                                      })
+                                    }
+                                    onDragOver={(event) =>
+                                      event.preventDefault()
+                                    }
+                                    onDragEnd={() =>
+                                      setDraggedProgressItem(null)
+                                    }
+                                    onDrop={(event) =>
+                                      handleDrop(
+                                        surface,
+                                        provider.id,
+                                        progressItemIds,
+                                        progressItem.id,
+                                        event,
+                                      )
+                                    }
+                                    onKeyDown={(event) =>
+                                      handleKeyDown(
+                                        surface,
+                                        provider.id,
+                                        progressItemIds,
+                                        progressItem.id,
+                                        event,
+                                      )
+                                    }
+                                  >
+                                    <label className="provider-progress-list__visibility">
+                                      <input
+                                        type="checkbox"
+                                        checked={isVisible}
+                                        aria-label={copy.visibilityAction(
+                                          isVisible ? "hide" : "show",
+                                          progressItem.label,
+                                          surfaceLabel,
+                                        )}
+                                        onChange={(event) =>
+                                          setItemVisibility(
+                                            surface,
+                                            provider.id,
+                                            progressItemIds,
+                                            progressItem.id,
+                                            event.currentTarget.checked,
+                                          )
+                                        }
+                                      />
+                                      <span>
+                                        {isVisible ? copy.shown : copy.hidden}
+                                      </span>
+                                    </label>
+                                    <span className="provider-progress-list__main">
+                                      <span className="provider-progress-list__label">
+                                        {progressItem.label}
+                                      </span>
+                                      <span className="provider-progress-list__meta">
+                                        {copy.kindLabels[progressItem.kind]}
+                                        {" · "}
+                                        {
+                                          copy.availabilityLabels[
+                                            progressItem.availability
+                                          ]
+                                        }
+                                      </span>
+                                    </span>
+                                    <span className="provider-progress-list__actions">
+                                      <button
+                                        className="text-button provider-progress-list__action"
+                                        type="button"
+                                        disabled={isFirst}
+                                        aria-label={copy.moveUpAction(
+                                          progressItem.label,
+                                          surfaceLabel,
+                                        )}
+                                        onClick={() =>
+                                          moveItem(
+                                            surface,
+                                            provider.id,
+                                            progressItemIds,
+                                            progressItem.id,
+                                            "up",
+                                          )
+                                        }
+                                      >
+                                        {copy.up}
+                                      </button>
+                                      <button
+                                        className="text-button provider-progress-list__action"
+                                        type="button"
+                                        disabled={isLast}
+                                        aria-label={copy.moveDownAction(
+                                          progressItem.label,
+                                          surfaceLabel,
+                                        )}
+                                        onClick={() =>
+                                          moveItem(
+                                            surface,
+                                            provider.id,
+                                            progressItemIds,
+                                            progressItem.id,
+                                            "down",
+                                          )
+                                        }
+                                      >
+                                        {copy.down}
+                                      </button>
+                                    </span>
+                                  </li>
+                                );
+                              },
                             )}
-                          </span>
-                        </div>
+                          </ol>
 
-                        <ol className="provider-progress-list">
-                          {orderedProgressItems.map((progressItem, index) => {
-                            const preference = preferences.find(
-                              (candidate) => candidate.id === progressItem.id,
-                            );
-                            const isFirst = index === 0;
-                            const isLast =
-                              index === orderedProgressItems.length - 1;
-                            const isVisible = preference?.visible ?? true;
-
-                            return (
-                              <li
-                                key={progressItem.id}
-                                className="provider-progress-list__item"
-                                data-provider-progress-item-row={progressItem.id}
-                                draggable
-                                tabIndex={0}
-                                aria-label={copy.rowAria(
-                                  progressItem.label,
-                                  index + 1,
-                                  orderedProgressItems.length,
-                                  surfaceLabel,
-                                )}
-                                onDragStart={() =>
-                                  setDraggedProgressItem({
-                                    surface,
-                                    providerId: provider.id,
-                                    itemId: progressItem.id,
-                                  })
-                                }
-                                onDragOver={(event) => event.preventDefault()}
-                                onDragEnd={() => setDraggedProgressItem(null)}
-                                onDrop={(event) =>
-                                  handleDrop(
-                                    surface,
-                                    provider.id,
-                                    progressItemIds,
-                                    progressItem.id,
-                                    event,
-                                  )
-                                }
-                                onKeyDown={(event) =>
-                                  handleKeyDown(
-                                    surface,
-                                    provider.id,
-                                    progressItemIds,
-                                    progressItem.id,
-                                    event,
-                                  )
-                                }
-                              >
-                                <label className="provider-progress-list__visibility">
-                                  <input
-                                    type="checkbox"
-                                    checked={isVisible}
-                                    aria-label={copy.visibilityAction(
-                                      isVisible ? "hide" : "show",
-                                      progressItem.label,
-                                      surfaceLabel,
-                                    )}
-                                    onChange={(event) =>
-                                      setItemVisibility(
-                                        surface,
-                                        provider.id,
-                                        progressItemIds,
-                                        progressItem.id,
-                                        event.currentTarget.checked,
-                                      )
-                                    }
-                                  />
-                                  <span>
-                                    {isVisible ? copy.shown : copy.hidden}
-                                  </span>
-                                </label>
-                                <span className="provider-progress-list__main">
-                                  <span className="provider-progress-list__label">
-                                    {progressItem.label}
-                                  </span>
-                                  <span className="provider-progress-list__meta">
-                                    {copy.kindLabels[progressItem.kind]}
-                                    {" · "}
-                                    {copy.availabilityLabels[
-                                      progressItem.availability
-                                    ]}
-                                  </span>
-                                </span>
-                                <span className="provider-progress-list__actions">
-                                  <button
-                                    className="text-button provider-progress-list__action"
-                                    type="button"
-                                    disabled={isFirst}
-                                    aria-label={copy.moveUpAction(
-                                      progressItem.label,
-                                      surfaceLabel,
-                                    )}
-                                    onClick={() =>
-                                      moveItem(
-                                        surface,
-                                        provider.id,
-                                        progressItemIds,
-                                        progressItem.id,
-                                        "up",
-                                      )
-                                    }
-                                  >
-                                    {copy.up}
-                                  </button>
-                                  <button
-                                    className="text-button provider-progress-list__action"
-                                    type="button"
-                                    disabled={isLast}
-                                    aria-label={copy.moveDownAction(
-                                      progressItem.label,
-                                      surfaceLabel,
-                                    )}
-                                    onClick={() =>
-                                      moveItem(
-                                        surface,
-                                        provider.id,
-                                        progressItemIds,
-                                        progressItem.id,
-                                        "down",
-                                      )
-                                    }
-                                  >
-                                    {copy.down}
-                                  </button>
-                                </span>
-                              </li>
-                            );
-                          })}
-                        </ol>
-
-                        {visibleCount === 0 ? (
-                          <p className="supporting-copy provider-progress-surface__fallback">
-                            {copy.allHidden}
-                          </p>
-                        ) : null}
-                      </section>
-                    );
-                  })}
-                </div>
-              )}
-            </article>
+                          {visibleCount === 0 ? (
+                            <p className="supporting-copy provider-progress-surface__fallback">
+                              {copy.allHidden}
+                            </p>
+                          ) : null}
+                        </section>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </details>
           );
         })}
       </div>

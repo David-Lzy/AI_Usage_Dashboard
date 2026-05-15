@@ -65,5 +65,6 @@ Status note:
 - `Phase 477` promoted Provider display settings into a standalone top-level Settings section with its own navigation chip while preserving provider order, quota item preferences, provider state, and release packaging.
 - `Phase 478` changed action badge multi-select UI from an always-visible checkbox stack to a compact Material-style dropdown summary while preserving badge rotation, toolbar icon matching, provider sync, and release packaging.
 - `Phase 479` split action badge selection and badge rotation interval into separate Settings grid controls with tooltip helper copy while preserving badge rotation, toolbar icon matching, provider sync, and release packaging.
-- Current implementation source is ahead of the `0.1.0-rc.21` package by `Phase 479`.
-- No numbered phase is currently queued after `Phase 479`.
+- `Phase 480` made Provider display quota item details default-collapsed per provider while keeping provider summaries visible and preserving per-surface quota item controls, storage, provider state, and release packaging.
+- Current implementation source is ahead of the `0.1.0-rc.21` package by `Phase 480`.
+- No numbered phase is currently queued after `Phase 480`.

@@ -37,6 +37,39 @@ describe("ProviderProgressItemPreferenceControls", () => {
     expect(html).not.toContain("Total spend");
   });
 
+  it("keeps each provider quota item detail collapsed by default", () => {
+    const copy = buildSettingsLocalizedCopy(createRuntimeI18n("en"));
+    const html = renderToStaticMarkup(
+      <ProviderProgressItemPreferenceControls
+        copy={copy.progressItems}
+        providers={SAMPLE_APP_STATE.providerSettings}
+        snapshots={SAMPLE_APP_STATE.providers}
+        progressItemsBySurface={SAMPLE_APP_STATE.settings.progressItemsBySurface}
+        onChange={() => {}}
+      />,
+    );
+
+    expect(html).toContain(
+      '<details class="provider-progress-provider" data-provider-progress-preference-provider="jetbrains">',
+    );
+    expect(html).toContain(
+      'data-provider-progress-preference-provider-summary="jetbrains"',
+    );
+    expect(html).toContain("1 configurable quota items");
+    expect(html).not.toMatch(
+      /<details[^>]*data-provider-progress-preference-provider="jetbrains"[^>]*open/,
+    );
+    expect(html).toContain(
+      '<details class="provider-progress-provider" data-provider-progress-preference-provider="codex">',
+    );
+    expect(html).toContain(
+      'data-provider-progress-preference-provider-summary="codex"',
+    );
+    expect(html).not.toMatch(
+      /<details[^>]*data-provider-progress-preference-provider="codex"[^>]*open/,
+    );
+  });
+
   it("renders quota item controls with non-English localized copy", () => {
     const copy = buildSettingsLocalizedCopy(createRuntimeI18n("de"));
     const html = renderToStaticMarkup(

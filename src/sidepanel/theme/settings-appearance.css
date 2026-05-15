@@ -248,31 +248,98 @@
 }
 
 .provider-progress-provider {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--app-space-3);
   min-width: 0;
-  padding: var(--app-space-3);
+  overflow: clip;
   border: 1px solid var(--app-supporting-surface-strong-border);
   border-radius: var(--md-sys-shape-corner-large);
   background: var(--md-sys-color-surface-container-lowest);
 }
 
-.provider-progress-provider__header {
+.provider-progress-provider__summary {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: var(--app-space-3);
+  min-width: 0;
+  min-height: 56px;
+  padding: var(--app-space-3);
+  cursor: pointer;
+  list-style: none;
+  border-radius: inherit;
+  transition:
+    background-color var(--app-motion-duration-fast)
+      var(--app-motion-easing-standard),
+    box-shadow var(--app-motion-duration-fast) var(--app-motion-easing-standard),
+    color var(--app-motion-duration-fast) var(--app-motion-easing-standard);
+}
+
+.provider-progress-provider__summary::-webkit-details-marker {
+  display: none;
+}
+
+.provider-progress-provider__summary::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  flex: 0 0 auto;
+  border-inline-end: 2px solid var(--md-sys-color-primary);
+  border-block-end: 2px solid var(--md-sys-color-primary);
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform var(--app-motion-duration-fast)
+    var(--app-motion-easing-standard);
+}
+
+.provider-progress-provider[open] > .provider-progress-provider__summary {
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.provider-progress-provider[open]
+  > .provider-progress-provider__summary::after {
+  transform: translateY(2px) rotate(225deg);
+}
+
+.provider-progress-provider__summary:hover {
+  background: var(--app-state-layer-primary-hover);
+}
+
+.provider-progress-provider__summary:focus-visible {
+  background: var(--app-state-layer-primary-hover);
+  box-shadow: var(--app-focus-ring-shadow);
+}
+
+.provider-progress-provider__summary:active {
+  background: var(--app-state-layer-primary-press);
+}
+
+.provider-progress-provider__summary-copy {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2px;
+  min-width: 0;
 }
 
 .provider-progress-provider__title,
 .provider-progress-surface__title {
+  display: block;
   margin: 0;
   color: var(--md-sys-color-on-surface);
   font-family: var(--md-sys-typescale-title-small-font);
   font-size: var(--md-sys-typescale-title-small-size);
   font-weight: var(--md-sys-typescale-title-small-weight);
   line-height: var(--md-sys-typescale-title-small-line-height);
+}
+
+.provider-progress-provider__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-3);
+  padding: 0 var(--app-space-3) var(--app-space-3);
+}
+
+.provider-progress-provider[open] .provider-progress-provider__body {
+  animation: app-disclosure-enter var(--app-motion-duration-medium)
+    var(--app-motion-easing-standard) both;
 }
 
 .provider-progress-provider__detail,
