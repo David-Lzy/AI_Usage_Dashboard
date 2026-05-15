@@ -58,6 +58,7 @@ export function TopBar({
             <button
               className="icon-button"
               data-topbar-open-full-page="true"
+              data-topbar-switch-surface="true"
               type="button"
               aria-label={expandActionTitle}
               title={expandActionTitle}

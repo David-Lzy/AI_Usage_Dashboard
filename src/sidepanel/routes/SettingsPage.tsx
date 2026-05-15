@@ -88,6 +88,8 @@ type SettingsPageProps = {
   themeActionTitle?: string;
   onToggleThemeMode?: () => void;
   onOpenFullPage?: () => void;
+  surfaceActionLabel?: string;
+  surfaceActionTitle?: string;
   settings: AppSettings;
   providers: ProviderSetting[];
   snapshots: ProviderSnapshot[];
@@ -152,6 +154,8 @@ export function SettingsPage({
   themeActionTitle,
   onToggleThemeMode,
   onOpenFullPage,
+  surfaceActionLabel,
+  surfaceActionTitle,
   settings,
   providers,
   snapshots,
@@ -296,8 +300,10 @@ export function SettingsPage({
         subtitle={i18n.t("settings.topbar.subtitle")}
         themeActionLabel={themeActionLabel}
         themeActionTitle={themeActionTitle}
-        expandActionLabel={i18n.t("common.actions.tab")}
-        expandActionTitle={i18n.t("common.actions.open_settings_tab")}
+        expandActionLabel={surfaceActionLabel ?? i18n.t("common.actions.tab")}
+        expandActionTitle={
+          surfaceActionTitle ?? i18n.t("common.actions.open_settings_tab")
+        }
         secondaryActionLabel={i18n.t("common.actions.back")}
         primaryActionLabel={i18n.t("common.actions.save")}
         sticky

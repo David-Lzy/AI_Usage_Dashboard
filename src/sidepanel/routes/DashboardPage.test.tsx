@@ -28,4 +28,31 @@ describe("DashboardPage", () => {
     expect(html).toContain(">Open Quick Setup<");
     expect(html).toContain("Start in Quick Setup to enable your first provider");
   });
+
+  it("can render the full-page surface switch as a sidebar action", () => {
+    const html = renderToStaticMarkup(
+      <DashboardPage
+        localePreference="en"
+        progressColorBands={SAMPLE_APP_STATE.settings.progressColorBands}
+        progressDisplayStyle="line"
+        progressItemsBySurface={createDefaultProgressItemsBySurface()}
+        progressThicknessPx={SAMPLE_APP_STATE.settings.progressThicknessPx}
+        progressSurface="fullPage"
+        summaryItems={[]}
+        providers={[]}
+        surfaceActionLabel="Sidebar"
+        surfaceActionTitle="Open sidebar"
+        onOpenFullPage={() => {}}
+        onOpenProvider={() => {}}
+        onOpenSettings={() => {}}
+        onOpenQuickSetup={() => {}}
+        onRefreshProvider={() => {}}
+        onRefreshAll={() => {}}
+      />,
+    );
+
+    expect(html).toContain('data-topbar-open-full-page="true"');
+    expect(html).toContain('aria-label="Open sidebar"');
+    expect(html).toContain(">Sidebar<");
+  });
 });

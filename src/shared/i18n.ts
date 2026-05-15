@@ -181,6 +181,8 @@ export type RuntimeMessageId =
   | "common.actions.open_dashboard_tab"
   | "common.actions.open_settings_tab"
   | "common.actions.tab"
+  | "common.actions.sidebar"
+  | "common.actions.open_sidebar"
   | "common.actions.save"
   | "common.theme.toggle_to_dark_label"
   | "common.theme.toggle_to_dark_title"

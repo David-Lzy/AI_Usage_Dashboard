@@ -31,6 +31,8 @@ type DashboardPageProps = {
   themeActionTitle?: string;
   onToggleThemeMode?: () => void;
   onOpenFullPage?: () => void;
+  surfaceActionLabel?: string;
+  surfaceActionTitle?: string;
   onOpenSettings: () => void;
   onOpenQuickSetup: () => void;
   onRefreshProvider: (providerId: ProviderId) => void;
@@ -52,6 +54,8 @@ export function DashboardPage({
   themeActionTitle,
   onToggleThemeMode,
   onOpenFullPage,
+  surfaceActionLabel,
+  surfaceActionTitle,
   onOpenSettings,
   onOpenQuickSetup,
   onRefreshProvider,
@@ -69,8 +73,10 @@ export function DashboardPage({
         subtitle={i18n.t("dashboard.topbar.subtitle")}
         themeActionLabel={themeActionLabel}
         themeActionTitle={themeActionTitle}
-        expandActionLabel={i18n.t("common.actions.tab")}
-        expandActionTitle={i18n.t("common.actions.open_dashboard_tab")}
+        expandActionLabel={surfaceActionLabel ?? i18n.t("common.actions.tab")}
+        expandActionTitle={
+          surfaceActionTitle ?? i18n.t("common.actions.open_dashboard_tab")
+        }
         secondaryActionLabel={i18n.t("common.actions.refresh_all")}
         primaryActionLabel={i18n.t("common.actions.settings")}
         onThemeAction={onToggleThemeMode}

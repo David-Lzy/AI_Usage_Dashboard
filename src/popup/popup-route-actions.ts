@@ -1,4 +1,8 @@
 import type { ProviderId } from "../providers/types";
+import {
+  closeSidePanelBestEffort,
+  resolveSidePanelCloseTarget,
+} from "../shared/extension-side-panel-controls";
 import { storePendingFullPageEntry } from "../shared/extension-surface-entry";
 import {
   buildFullPageExtensionPath,
@@ -74,10 +78,13 @@ export async function openFullPageRoute(route: SidePanelRouteState) {
     typeof chrome.runtime?.getURL === "function" &&
     typeof chrome.tabs?.create === "function"
   ) {
+    const sidePanelCloseTarget = await resolveSidePanelCloseTarget();
+
     await chrome.tabs.create({
       url: chrome.runtime.getURL(path),
       active: true,
     });
+    await closeSidePanelBestEffort(sidePanelCloseTarget);
     window.close();
     return;
   }
@@ -98,7 +105,7 @@ export async function openFullDashboardTab() {
 }
 
 export async function openSettings(focus?: SettingsRouteFocus) {
-  await openSidePanelRoute({ name: "settings", focus });
+  await openFullPageRoute({ name: "settings", focus });
 }
 
 export async function openProviderDetail(providerId: ProviderId) {

@@ -49,7 +49,7 @@ describe("popup route actions", () => {
     vi.unstubAllGlobals();
   });
 
-  it("opens focused Settings routes through the sidepanel preview fallback", async () => {
+  it("opens focused Settings routes through the full-page preview fallback", async () => {
     const popupWindow = stubPopupWindow();
 
     await openSettings({
@@ -58,11 +58,44 @@ describe("popup route actions", () => {
     });
 
     expect(popupWindow.open).toHaveBeenCalledWith(
-      "http://127.0.0.1:4173/src/sidepanel/index.html#settings/section/settings-quick-setup",
+      "http://127.0.0.1:4173/src/sidepanel/index.html?surface=full-page#settings/section/settings-quick-setup",
       "_blank",
       "noopener,noreferrer",
     );
     expect(popupWindow.close).not.toHaveBeenCalled();
+  });
+
+  it("opens focused Settings routes in Chrome full-page tabs and closes the popup", async () => {
+    const popupWindow = stubPopupWindow();
+    const create = vi.fn(async () => undefined);
+
+    vi.stubGlobal("chrome", {
+      runtime: {
+        id: "extension-id",
+        getURL: (path: string) => `chrome-extension://extension-id/${path}`,
+      },
+      tabs: {
+        create,
+      },
+    });
+
+    await openSettings({
+      kind: "quick-setup-provider",
+      providerId: "cursor",
+    });
+
+    expect(create).toHaveBeenCalledWith({
+      active: true,
+      url: "chrome-extension://extension-id/src/sidepanel/index.html?surface=full-page#settings/quick-setup/cursor",
+    });
+    expect(
+      consumePendingFullPageEntry(
+        "#settings/quick-setup/cursor",
+        popupWindow.localStorage,
+        Date.now(),
+      ),
+    ).toBe("popup-expand");
+    expect(popupWindow.close).toHaveBeenCalled();
   });
 
   it("opens Chrome sidePanel routes against the active tab", async () => {
@@ -190,6 +223,39 @@ describe("popup route actions", () => {
         Date.now(),
       ),
     ).toBe("popup-expand");
+    expect(popupWindow.close).toHaveBeenCalled();
+  });
+
+  it("best-effort closes the side panel when opening a full-page tab", async () => {
+    const popupWindow = stubPopupWindow();
+    const closeSidePanel = vi.fn(async () => undefined);
+    const create = vi.fn(async () => undefined);
+    const query = vi.fn(async () => [{ id: 17 }]);
+
+    vi.stubGlobal("chrome", {
+      runtime: {
+        id: "extension-id",
+        getURL: (path: string) => `chrome-extension://extension-id/${path}`,
+      },
+      sidePanel: {
+        close: closeSidePanel,
+      },
+      tabs: {
+        create,
+        query,
+      },
+    });
+
+    await openSettings();
+
+    expect(create).toHaveBeenCalledWith({
+      active: true,
+      url: "chrome-extension://extension-id/src/sidepanel/index.html?surface=full-page#settings",
+    });
+    expect(query.mock.invocationCallOrder[0]).toBeLessThan(
+      create.mock.invocationCallOrder[0],
+    );
+    expect(closeSidePanel).toHaveBeenCalledWith({ tabId: 17 });
     expect(popupWindow.close).toHaveBeenCalled();
   });
 });

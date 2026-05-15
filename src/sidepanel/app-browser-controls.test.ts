@@ -4,6 +4,7 @@ import {
   hasDirectPermissionControl,
   hasTabNavigationControl,
   openFullPageRoute,
+  openSidePanelRoute,
   sortTabsByPriority,
 } from "./app-browser-controls";
 
@@ -78,5 +79,72 @@ describe("app-browser-controls", () => {
       url: "chrome-extension://extension-id/src/sidepanel/index.html?surface=full-page#provider-detail/codex",
       active: true,
     });
+  });
+
+  it("closes the current side panel after opening a full-page tab when supported", async () => {
+    const create = vi.fn(async () => ({ id: 42 }) as chrome.tabs.Tab);
+    const close = vi.fn(async () => undefined);
+    const query = vi.fn(async () => [{ id: 7 }]);
+    const getURL = vi.fn(
+      (path: string) => `chrome-extension://extension-id/${path}`,
+    );
+
+    vi.stubGlobal("chrome", {
+      runtime: {
+        id: "extension-id",
+        getURL,
+      },
+      sidePanel: {
+        close,
+      },
+      tabs: {
+        create,
+        query,
+      },
+    });
+
+    await openFullPageRoute({ name: "dashboard" });
+
+    expect(create).toHaveBeenCalledWith({
+      url: "chrome-extension://extension-id/src/sidepanel/index.html?surface=full-page#dashboard",
+      active: true,
+    });
+    expect(query.mock.invocationCallOrder[0]).toBeLessThan(
+      create.mock.invocationCallOrder[0],
+    );
+    expect(close).toHaveBeenCalledWith({ tabId: 7 });
+  });
+
+  it("opens side-panel routes from a full-page tab and closes the tab after success", async () => {
+    const setOptions = vi.fn(async () => undefined);
+    const open = vi.fn(async () => undefined);
+    const remove = vi.fn(async () => undefined);
+
+    vi.stubGlobal("chrome", {
+      runtime: {
+        id: "extension-id",
+      },
+      sidePanel: {
+        open,
+        setOptions,
+      },
+      tabs: {
+        getCurrent: vi.fn(async () => ({ id: 88 }) as chrome.tabs.Tab),
+        query: vi.fn(async () => [{ id: 7 }]),
+        remove,
+      },
+      windows: {
+        getCurrent: vi.fn(async () => ({ id: 9 })),
+      },
+    });
+
+    await openSidePanelRoute({ name: "settings" });
+
+    expect(setOptions).toHaveBeenCalledWith({
+      enabled: true,
+      path: "src/sidepanel/index.html#settings",
+    });
+    expect(open).toHaveBeenCalledWith({ windowId: 9 });
+    expect(remove).toHaveBeenCalledWith(88);
   });
 });

@@ -33,6 +33,8 @@ type ProviderDetailPageProps = {
   themeActionTitle?: string;
   onToggleThemeMode?: () => void;
   onOpenFullPage?: () => void;
+  surfaceActionLabel?: string;
+  surfaceActionTitle?: string;
   onOpenSourcePage?: (
     providerId: ProviderId,
     sourceStateKind: ProviderViewModel["currentSourceStateKind"],
@@ -53,6 +55,8 @@ export function ProviderDetailPage({
   themeActionTitle,
   onToggleThemeMode,
   onOpenFullPage,
+  surfaceActionLabel,
+  surfaceActionTitle,
   onOpenSourcePage,
   onRefresh,
 }: ProviderDetailPageProps) {
@@ -173,8 +177,10 @@ export function ProviderDetailPage({
         subtitle={copy.topbarSubtitle}
         themeActionLabel={themeActionLabel}
         themeActionTitle={themeActionTitle}
-        expandActionLabel={i18n.t("common.actions.tab")}
-        expandActionTitle={copy.openDetailTabTitle(provider.providerLabel)}
+        expandActionLabel={surfaceActionLabel ?? i18n.t("common.actions.tab")}
+        expandActionTitle={
+          surfaceActionTitle ?? copy.openDetailTabTitle(provider.providerLabel)
+        }
         secondaryActionLabel={i18n.t("common.actions.back")}
         primaryActionLabel={i18n.t("common.actions.refresh")}
         onThemeAction={onToggleThemeMode}

@@ -8,6 +8,7 @@ import type { RuntimeI18n } from "../shared/i18n";
 import {
   hasDirectPermissionControl,
   openFullPageRoute,
+  openSidePanelRoute,
 } from "./app-browser-controls";
 import {
   findHostAccessRefreshCandidate,
@@ -110,6 +111,14 @@ export function createStandardAppActions({
     }
 
     void openFullPageRoute(route);
+  }
+
+  function handleOpenCurrentRouteInSidePanel() {
+    if (!isFullPageSurface) {
+      return;
+    }
+
+    void openSidePanelRoute(route);
   }
 
   function handleToggleProvider(providerId: ProviderId) {
@@ -256,6 +265,7 @@ export function createStandardAppActions({
     handleClearProviderAdminApiKey:
       settingsActions.handleClearProviderAdminApiKey,
     handleOpenCurrentRouteInFullPage,
+    handleOpenCurrentRouteInSidePanel,
     handleOpenSessionPage: sessionPageActions.handleOpenSessionPage,
     handleRefresh,
     handleSaveCodexWorkspaceConfig:

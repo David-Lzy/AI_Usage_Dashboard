@@ -113,6 +113,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
     handleClearPageBinding,
     handleClearProviderAdminApiKey,
     handleOpenCurrentRouteInFullPage,
+    handleOpenCurrentRouteInSidePanel,
     handleOpenSessionPage,
     handleRefresh,
     handleSaveCodexWorkspaceConfig,
@@ -201,6 +202,12 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
   const progressDisplayStyle = isFullPageSurface
     ? appState.settings.fullPageProgressStyle
     : appState.settings.sidebarProgressStyle;
+  const surfaceActionLabel = isFullPageSurface
+    ? runtimeI18n.t("common.actions.sidebar")
+    : runtimeI18n.t("common.actions.tab");
+  const surfaceActionHandler = isFullPageSurface
+    ? handleOpenCurrentRouteInSidePanel
+    : handleOpenCurrentRouteInFullPage;
 
   return (
     <>
@@ -219,8 +226,12 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           onToggleThemeMode={() =>
             handleUpdateSettings({ themeMode: quickThemeToggle.nextMode })
           }
-          onOpenFullPage={
-            isFullPageSurface ? undefined : handleOpenCurrentRouteInFullPage
+          onOpenFullPage={surfaceActionHandler}
+          surfaceActionLabel={surfaceActionLabel}
+          surfaceActionTitle={
+            isFullPageSurface
+              ? runtimeI18n.t("common.actions.open_sidebar")
+              : runtimeI18n.t("common.actions.open_settings_tab")
           }
           settings={appState.settings}
           providers={appState.providerSettings}
@@ -313,8 +324,12 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           onToggleThemeMode={() =>
             handleUpdateSettings({ themeMode: quickThemeToggle.nextMode })
           }
-          onOpenFullPage={
-            isFullPageSurface ? undefined : handleOpenCurrentRouteInFullPage
+          onOpenFullPage={surfaceActionHandler}
+          surfaceActionLabel={surfaceActionLabel}
+          surfaceActionTitle={
+            isFullPageSurface
+              ? runtimeI18n.t("common.actions.open_sidebar")
+              : undefined
           }
           onOpenSourcePage={handleOpenSessionPage}
           onRefresh={handleRefresh}
@@ -337,8 +352,12 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           onToggleThemeMode={() =>
             handleUpdateSettings({ themeMode: quickThemeToggle.nextMode })
           }
-          onOpenFullPage={
-            isFullPageSurface ? undefined : handleOpenCurrentRouteInFullPage
+          onOpenFullPage={surfaceActionHandler}
+          surfaceActionLabel={surfaceActionLabel}
+          surfaceActionTitle={
+            isFullPageSurface
+              ? runtimeI18n.t("common.actions.open_sidebar")
+              : runtimeI18n.t("common.actions.open_dashboard_tab")
           }
           onOpenSettings={() => navigateToRoute({ name: "settings" })}
           onOpenQuickSetup={() =>

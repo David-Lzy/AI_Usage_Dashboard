@@ -25,6 +25,7 @@ describe("TopBar", () => {
     expect(html).toContain('data-topbar-toggle-theme-mode="true"');
     expect(html).toContain('aria-label="Switch to dark mode"');
     expect(html).toContain('data-topbar-open-full-page="true"');
+    expect(html).toContain('data-topbar-switch-surface="true"');
     expect(html).toContain('aria-label="Open dashboard tab"');
     expect(html).toContain(">Dark<");
     expect(html).toContain(">Tab<");

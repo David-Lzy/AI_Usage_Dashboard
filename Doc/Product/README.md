@@ -55,5 +55,6 @@ Status note:
 - `Phase 467` packaged the completed UI polish source as `0.1.0-rc.20`; RC13 remains the submitted Chrome Web Store review boundary.
 - `Phase 468` polished Settings help tooltips and form controls by making help triggers subtle, tooltip content opaque and viewport-positioned, progress-thickness input wider, and shared field labels more readable.
 - `Phase 469` packaged the Phase 468 source boundary as `0.1.0-rc.21`; RC13 remains the submitted Chrome Web Store review boundary.
-- Current implementation source is aligned with the `0.1.0-rc.21` package through `Phase 469`.
-- No numbered phase is currently queued after `Phase 469`.
+- `Phase 470` made popup Settings actions open the full-page Settings tab, added best-effort side-panel close during tab opens, and added full-page tab to sidebar top-bar switching.
+- Current implementation source is ahead of the `0.1.0-rc.21` package by `Phase 470`.
+- No numbered phase is currently queued after `Phase 470`.
