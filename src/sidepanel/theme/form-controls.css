@@ -75,56 +75,34 @@ select.form-field__control {
   gap: var(--app-space-3);
 }
 
-.action-badge-selection-controls__list {
-  display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(min(100%, 220px), 1fr)
-  );
-  gap: var(--app-space-2);
+.action-badge-selection-controls__dropdown {
+  position: relative;
+  min-width: 0;
 }
 
-.action-badge-selection-controls__option {
-  display: flex;
-  align-items: center;
-  gap: var(--app-space-2);
-  min-block-size: 46px;
-  padding: var(--app-space-2) var(--app-space-3);
-  border: 1px solid var(--md-sys-color-outline-variant);
-  border-radius: var(--md-sys-shape-corner-large);
-  background: var(--md-sys-color-surface-container-lowest);
-  color: var(--md-sys-color-on-surface);
-  font-family: var(--md-sys-typescale-body-large-font);
-  font-size: var(--md-sys-typescale-body-large-size);
-  line-height: var(--md-sys-typescale-body-large-line-height);
-  cursor: pointer;
-  transition:
-    background-color var(--app-motion-duration-fast)
-      var(--app-motion-easing-standard),
-    border-color var(--app-motion-duration-fast)
-      var(--app-motion-easing-standard),
-    box-shadow var(--app-motion-duration-fast) var(--app-motion-easing-standard);
+.action-badge-selection-controls__button {
+  min-block-size: 56px;
 }
 
-.action-badge-selection-controls__option:hover {
-  background: var(--app-state-layer-neutral-hover);
-  border-color: color-mix(
-    in srgb,
-    var(--md-sys-color-primary) 22%,
-    var(--md-sys-color-outline-variant) 78%
-  );
+.action-badge-selection-controls__menu {
+  max-block-size: min(380px, 55vh);
 }
 
-.action-badge-selection-controls__option:focus-within {
-  border-color: var(--md-sys-color-primary);
-  box-shadow: var(--app-focus-ring-shadow);
+.action-badge-selection-controls__menu-option {
+  min-block-size: 52px;
+  padding-block: var(--app-space-2);
 }
 
-.action-badge-selection-controls__option input {
+.action-badge-selection-controls__checkbox {
   width: 22px;
   height: 22px;
   accent-color: var(--md-sys-color-primary);
-  flex: 0 0 auto;
+  cursor: pointer;
+}
+
+.action-badge-selection-controls__menu-option:focus-within {
+  background: var(--app-state-layer-primary-hover);
+  color: var(--md-sys-color-primary);
 }
 
 .material-info-tooltip {

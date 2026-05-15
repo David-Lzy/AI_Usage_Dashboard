@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [477_Phase_Settings_Provider_Display_Top_Level_Section.md](./Archive/by-phase/400-499/477_Phase_Settings_Provider_Display_Top_Level_Section.md)
+- latest completed slice: [478_Phase_Action_Badge_Multi_Select_Dropdown_Polish.md](./Archive/by-phase/400-499/478_Phase_Action_Badge_Multi_Select_Dropdown_Polish.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -871,6 +871,7 @@ Completed phases should be moved to:
 - the 2026-05-15 `Phase 475` closeout shortened `100%` quota action-badge text to `100` while preserving full tooltip/title semantics, non-100 percent badge text, provider state, and release packaging
 - the 2026-05-15 `Phase 476` closeout added multi-select toolbar badge sources, configurable badge rotation, a dedicated rotation alarm, default match-badge toolbar icons for fresh settings, and match-badge icon rotation while preserving provider sync and release packaging
 - the 2026-05-15 `Phase 477` closeout promoted Provider display settings into a standalone top-level Settings section with its own navigation chip while preserving provider order, quota item preferences, provider state, and release packaging
+- the 2026-05-15 `Phase 478` closeout changed action badge multi-select UI from an always-visible checkbox stack to a compact Material-style dropdown summary while preserving badge rotation, toolbar icon matching, provider sync, and release packaging
 
 ## Delivery Standard For Each Phase
 
