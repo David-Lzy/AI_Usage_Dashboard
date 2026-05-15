@@ -56,6 +56,12 @@ describe("ProgressAppearancePreferenceControls", () => {
       "grid-template-columns: repeat(2, minmax(0, 1fr));",
     );
     expect(settingsAppearanceCss).toContain("grid-column: 1 / -1;");
+    expect(settingsAppearanceCss).toContain(
+      ".progress-appearance-band__range {\n    grid-column: 1;",
+    );
+    expect(settingsAppearanceCss).toContain(
+      ".progress-appearance-band__actions {\n    grid-column: 2;",
+    );
   });
 
   it("keeps the thickness number field wide enough for localized controls", () => {

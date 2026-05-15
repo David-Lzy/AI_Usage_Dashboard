@@ -57,5 +57,6 @@ Status note:
 - `Phase 469` packaged the Phase 468 source boundary as `0.1.0-rc.21`; RC13 remains the submitted Chrome Web Store review boundary.
 - `Phase 470` made popup Settings actions open the full-page Settings tab, added best-effort side-panel close during tab opens, and added full-page tab to sidebar top-bar switching.
 - `Phase 471` fixed sidebar-to-tab close targeting by trying the current window side-panel target before the active-tab fallback, while preserving popup Settings-to-tab and full-page tab-to-sidebar behavior.
-- Current implementation source is ahead of the `0.1.0-rc.21` package by `Phase 471`.
-- No numbered phase is currently queued after `Phase 471`.
+- `Phase 472` made remaining-color-band summary chips and reorder/remove actions share one responsive row at medium Settings widths while preserving narrow-width wrapping and color-band semantics.
+- Current implementation source is ahead of the `0.1.0-rc.21` package by `Phase 472`.
+- No numbered phase is currently queued after `Phase 472`.

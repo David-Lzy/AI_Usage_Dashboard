@@ -506,13 +506,21 @@
   }
 
   .progress-appearance-band {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: auto minmax(0, 1fr);
   }
 
-  .progress-appearance-band__range,
-  .progress-appearance-band__actions {
+  .progress-appearance-band__fields {
+    grid-column: 1 / -1;
+  }
+
+  .progress-appearance-band__range {
     grid-column: 1;
     justify-self: start;
+  }
+
+  .progress-appearance-band__actions {
+    grid-column: 2;
+    justify-self: end;
   }
 
   .progress-appearance-band__range,
@@ -555,12 +563,19 @@
   }
 
   .progress-appearance-band {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: auto minmax(0, 1fr);
   }
 
-  .progress-appearance-band__range,
-  .progress-appearance-band__actions {
+  .progress-appearance-band__fields {
+    grid-column: 1 / -1;
+  }
+
+  .progress-appearance-band__range {
     grid-column: 1;
+  }
+
+  .progress-appearance-band__actions {
+    grid-column: 2;
     margin-block-end: 0;
   }
 
@@ -583,6 +598,16 @@
   .progress-appearance-band__fields > .form-field .form-field__control {
     inline-size: 100%;
     width: 100%;
+  }
+
+  .progress-appearance-band {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .progress-appearance-band__range,
+  .progress-appearance-band__actions {
+    grid-column: 1;
+    justify-self: start;
   }
 }
 
