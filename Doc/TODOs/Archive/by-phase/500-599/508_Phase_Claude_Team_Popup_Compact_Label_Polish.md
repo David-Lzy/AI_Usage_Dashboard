@@ -24,7 +24,7 @@ Make Claude Team popup quota labels follow the same compact pattern as Codex so 
 ## Acceptance
 
 - Claude Team all-model weekly popup labels no longer render as `周额度 · All models`
-- zh-CN popup output renders a compact label such as `全模型周额度，重置：周二 00:30`
+- zh-CN popup output renders a compact label such as `周额度，重置：周二 00:30`
 - Codex compact popup labels from Phase 507 continue to render unchanged
 - non-popup surfaces keep the detailed provider labels
 

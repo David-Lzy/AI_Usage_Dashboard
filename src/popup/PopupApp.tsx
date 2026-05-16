@@ -46,17 +46,25 @@ import { PopupFeaturedSection } from "./PopupFeaturedSection";
 import { PopupGuidanceCardSection } from "./PopupGuidanceCardSection";
 import { PopupHeaderSection } from "./PopupHeaderSection";
 import {
+  PopupHideProviderFeedback,
+  type PopupHideProviderFeedbackState,
+} from "./PopupHideProviderFeedback";
+import {
   PopupErrorCard,
   PopupLoadingCard,
 } from "./PopupLoadStateCards";
 import { PopupSnapshotStatusSection } from "./PopupSnapshotStatusSection";
 import { PopupSetupCoverageSection } from "./PopupSetupCoverageSection";
 import { PopupSurfaceRolesSection } from "./PopupSurfaceRolesSection";
+import { buildPopupHideProviderFeedbackCopy } from "./popup-hide-provider-feedback-copy";
 
 type PopupLoadState =
   | { status: "loading" }
   | { status: "ready"; appState: AppState }
   | { status: "error"; message: string };
+
+const HIDE_PROVIDER_UNDO_SECONDS = 3;
+const HIDE_PROVIDER_NOTICE_MS = 4500;
 
 export function PopupApp() {
   const [loadState, setLoadState] = useState<PopupLoadState>({
@@ -64,9 +72,8 @@ export function PopupApp() {
   });
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isThemeTogglePending, setIsThemeTogglePending] = useState(false);
-  const [hiddenPopupProviderIds, setHiddenPopupProviderIds] = useState<
-    ProviderId[]
-  >([]);
+  const [hideProviderFeedback, setHideProviderFeedback] =
+    useState<PopupHideProviderFeedbackState | null>(null);
 
   useEffect(() => {
     let disposed = false;
@@ -157,6 +164,55 @@ export function PopupApp() {
     );
   }, [runtimeI18n.resolvedLocale, runtimeI18n.resolvedTextDirection]);
 
+  useEffect(() => {
+    if (!hideProviderFeedback) {
+      return undefined;
+    }
+
+    if (hideProviderFeedback.kind === "notice") {
+      const timeoutId = setTimeout(() => {
+        setHideProviderFeedback((current) =>
+          current?.kind === "notice" &&
+          current.providerId === hideProviderFeedback.providerId
+            ? null
+            : current,
+        );
+      }, HIDE_PROVIDER_NOTICE_MS);
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    }
+
+    const intervalId = setInterval(() => {
+      setHideProviderFeedback((current) => {
+        if (
+          current?.kind !== "undo" ||
+          current.providerId !== hideProviderFeedback.providerId
+        ) {
+          return current;
+        }
+
+        if (current.secondsRemaining <= 1) {
+          return {
+            kind: "notice",
+            providerId: current.providerId,
+            providerLabel: current.providerLabel,
+          };
+        }
+
+        return {
+          ...current,
+          secondsRemaining: current.secondsRemaining - 1,
+        };
+      });
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [hideProviderFeedback?.kind, hideProviderFeedback?.providerId]);
+
   async function handleToggleThemeMode() {
     if (loadState.status !== "ready") {
       return;
@@ -192,13 +248,14 @@ export function PopupApp() {
   }
 
   const popupCopy = buildPopupLocalizedCopy(runtimeI18n);
+  const hideProviderFeedbackCopy =
+    buildPopupHideProviderFeedbackCopy(runtimeI18n);
   const popupModel = localizePopupViewModel(
     buildPopupViewModel(
       loadState.appState,
       buildPopupSummaryLabels(runtimeI18n),
       runtimeI18n.formatNumber,
       buildProviderSourceDisplayLocalizedCopy(runtimeI18n),
-      hiddenPopupProviderIds,
     ),
     runtimeI18n,
   );
@@ -231,15 +288,48 @@ export function PopupApp() {
   ) {
     if (action.kind === "hide-provider" && action.providerId) {
       const providerId = action.providerId;
-      setHiddenPopupProviderIds((providerIds) =>
-        providerIds.includes(providerId)
-          ? providerIds
-          : [...providerIds, providerId],
-      );
+      const providerLabel =
+        popupModel.featuredProviderCards.find(
+          (card) => card.provider.providerId === providerId,
+        )?.provider.providerLabel ?? providerId;
+      const response = await sendAppMessage({
+        type: "app:set-provider-enabled",
+        providerId,
+        enabled: false,
+      });
+
+      if (!response.ok) {
+        setLoadState({ status: "error", message: response.error });
+        return;
+      }
+
+      setLoadState({ status: "ready", appState: response.state });
+      setHideProviderFeedback({
+        kind: "undo",
+        providerId,
+        providerLabel,
+        secondsRemaining: HIDE_PROVIDER_UNDO_SECONDS,
+      });
       return;
     }
 
     await runPopupGuidanceAction(action, options);
+  }
+
+  async function handleUndoHideProvider(providerId: ProviderId) {
+    const response = await sendAppMessage({
+      type: "app:set-provider-enabled",
+      providerId,
+      enabled: true,
+    });
+
+    if (!response.ok) {
+      setLoadState({ status: "error", message: response.error });
+      return;
+    }
+
+    setLoadState({ status: "ready", appState: response.state });
+    setHideProviderFeedback(null);
   }
 
   return (
@@ -255,6 +345,17 @@ export function PopupApp() {
         isThemeTogglePending={isThemeTogglePending}
         quickThemeToggleCopy={quickThemeToggleCopy}
         runtimeI18n={runtimeI18n}
+        hideProviderFeedback={
+          hideProviderFeedback ? (
+            <PopupHideProviderFeedback
+              copy={hideProviderFeedbackCopy}
+              feedback={hideProviderFeedback}
+              undoSeconds={HIDE_PROVIDER_UNDO_SECONDS}
+              onOpenSettings={openSettings}
+              onUndo={handleUndoHideProvider}
+            />
+          ) : null
+        }
         onOpenDashboardTab={openFullDashboardTab}
         onOpenSettings={openSettings}
         onRefresh={handleRefresh}

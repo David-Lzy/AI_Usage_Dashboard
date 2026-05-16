@@ -30,7 +30,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
   switch (i18n.resolvedLocale) {
     case "zh-CN":
       return {
-        allModelsWeek: "全模型周额度",
+        allModelsWeek: "周额度",
         colon: "：",
         comma: "，",
         day: "日额度",
@@ -44,7 +44,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     case "zh-TW":
       return {
-        allModelsWeek: "全模型週額度",
+        allModelsWeek: "週額度",
         colon: "：",
         comma: "，",
         day: "日額度",
@@ -58,7 +58,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     case "ja":
       return {
-        allModelsWeek: "全モデル週次",
+        allModelsWeek: "週次",
         colon: "：",
         comma: "、",
         day: "日次",
@@ -72,7 +72,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     case "ko":
       return {
-        allModelsWeek: "전체 모델 주간",
+        allModelsWeek: "주간",
         colon: ":",
         comma: ", ",
         day: "일일",
@@ -86,7 +86,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     case "es-419":
       return {
-        allModelsWeek: "semana todos modelos",
+        allModelsWeek: "semana",
         colon: ":",
         comma: ", ",
         day: "día",
@@ -100,7 +100,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     case "pt-BR":
       return {
-        allModelsWeek: "semana todos modelos",
+        allModelsWeek: "semana",
         colon: ":",
         comma: ", ",
         day: "dia",
@@ -114,7 +114,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     case "fr":
       return {
-        allModelsWeek: "semaine tous modèles",
+        allModelsWeek: "semaine",
         colon: ":",
         comma: ", ",
         day: "jour",
@@ -128,7 +128,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     case "de":
       return {
-        allModelsWeek: "Woche alle Modelle",
+        allModelsWeek: "Woche",
         colon: ":",
         comma: ", ",
         day: "Tag",
@@ -142,7 +142,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     case "it":
       return {
-        allModelsWeek: "settimana tutti modelli",
+        allModelsWeek: "settimana",
         colon: ":",
         comma: ", ",
         day: "giorno",
@@ -156,7 +156,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     case "ru":
       return {
-        allModelsWeek: "неделя всех моделей",
+        allModelsWeek: "неделя",
         colon: ":",
         comma: ", ",
         day: "день",
@@ -170,7 +170,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     case "ar":
       return {
-        allModelsWeek: "أسبوعي كل النماذج",
+        allModelsWeek: "أسبوعي",
         colon: ":",
         comma: "، ",
         day: "يومي",
@@ -184,7 +184,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     case "hi":
       return {
-        allModelsWeek: "सभी मॉडल सप्ताह",
+        allModelsWeek: "सप्ताह",
         colon: ":",
         comma: ", ",
         day: "दिन",
@@ -198,7 +198,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     case "id":
       return {
-        allModelsWeek: "minggu semua model",
+        allModelsWeek: "minggu",
         colon: ":",
         comma: ", ",
         day: "hari",
@@ -212,7 +212,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     default:
       return {
-        allModelsWeek: "all models week",
+        allModelsWeek: "week",
         colon: ":",
         comma: ", ",
         day: "day",

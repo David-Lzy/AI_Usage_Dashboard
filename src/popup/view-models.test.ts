@@ -165,7 +165,7 @@ describe("popup view models", () => {
       statusLabel: "Warning",
       action: {
         kind: "provider-detail",
-        label: "Open detail",
+        label: "Details",
         providerId: "codex-personal-page",
       },
     });
@@ -414,7 +414,7 @@ describe("popup view models", () => {
       },
       secondaryAction: {
         kind: "hide-provider",
-        label: "Stop showing",
+        label: "Hide",
         providerId: "cursor-personal-page",
       },
     });
@@ -481,7 +481,7 @@ describe("popup view models", () => {
     });
     expect(localizedModel.featuredProviderCards[0]?.secondaryAction).toEqual({
       kind: "hide-provider",
-      label: "暂不显示",
+      label: "隐藏",
       providerId: "codex-personal-page",
     });
   });
@@ -760,7 +760,7 @@ describe("popup view models", () => {
       },
       secondaryAction: {
         kind: "hide-provider",
-        label: "Stop showing",
+        label: "Hide",
         providerId: "cursor-team-api",
       },
     });
@@ -894,7 +894,7 @@ describe("popup view models", () => {
       secondaryDetail: "Weekly usage window: 41% remaining",
       action: {
         kind: "provider-detail",
-        label: "Open detail",
+        label: "Details",
         providerId: model.featuredProviders[0].providerId,
       },
     });
@@ -1206,7 +1206,7 @@ describe("popup view models", () => {
       },
       secondaryAction: {
         kind: "hide-provider",
-        label: "Stop showing",
+        label: "Hide",
         providerId: "gemini-policy",
       },
     });
@@ -1356,12 +1356,12 @@ describe("popup view models", () => {
       secondaryDetail: "Live sync still needs one provider-specific review.",
       action: {
         kind: "provider-detail",
-        label: "Review detail",
+        label: "Review",
         providerId: "claude-code-team-page",
       },
       secondaryAction: {
         kind: "hide-provider",
-        label: "Stop showing",
+        label: "Hide",
         providerId: "claude-code-team-page",
       },
     });

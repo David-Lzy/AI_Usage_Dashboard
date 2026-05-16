@@ -86,6 +86,38 @@ export function PopupFeaturedProviderList({
                     <p className="popup-provider-card__provider">
                       {provider.providerLabel}
                     </p>
+                    <div className="popup-provider-card__header-actions">
+                      <button
+                        className="text-button text-button--inline popup-provider-card__header-action"
+                        data-theme-local-surface={
+                          index === 0 ? "popup-first-open-detail" : undefined
+                        }
+                        data-popup-featured-action={
+                          index === 0 ? "true" : undefined
+                        }
+                        type="button"
+                        onClick={() => {
+                          void onAction(card.action, {
+                            settingsFocus:
+                              card.action.kind === "settings"
+                                ? getSettingsFocusForProvider(provider)
+                                : null,
+                          });
+                        }}
+                      >
+                        {card.action.label}
+                      </button>
+                      <button
+                        className="text-button text-button--inline popup-provider-card__header-action"
+                        data-popup-hide-provider={provider.providerId}
+                        type="button"
+                        onClick={() => {
+                          void onAction(card.secondaryAction);
+                        }}
+                      >
+                        {card.secondaryAction.label}
+                      </button>
+                    </div>
                     <div
                       className="popup-provider-card__status"
                       data-popup-featured-status={
@@ -145,37 +177,6 @@ export function PopupFeaturedProviderList({
                   </p>
                 </>
               )}
-
-              <div className="popup-actions">
-                <button
-                  className="text-button"
-                  data-theme-local-surface={
-                    index === 0 ? "popup-first-open-detail" : undefined
-                  }
-                  data-popup-featured-action={index === 0 ? "true" : undefined}
-                  type="button"
-                  onClick={() => {
-                    void onAction(card.action, {
-                      settingsFocus:
-                        card.action.kind === "settings"
-                          ? getSettingsFocusForProvider(provider)
-                          : null,
-                    });
-                  }}
-                >
-                  {card.action.label}
-                </button>
-                <button
-                  className="text-button"
-                  data-popup-hide-provider={provider.providerId}
-                  type="button"
-                  onClick={() => {
-                    void onAction(card.secondaryAction);
-                  }}
-                >
-                  {card.secondaryAction.label}
-                </button>
-              </div>
             </article>
           );
         })}

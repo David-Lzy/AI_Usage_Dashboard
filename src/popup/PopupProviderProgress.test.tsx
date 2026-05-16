@@ -164,7 +164,7 @@ describe("PopupProviderProgress", () => {
       />,
     );
 
-    expect(html).toContain("全模型周额度，重置：周二 00:30");
+    expect(html).toContain("周额度，重置：周二 00:30");
     expect(html).not.toContain("All models weekly limit");
   });
 

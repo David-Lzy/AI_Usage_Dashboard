@@ -118,7 +118,7 @@ body.popup-page .status-card {
 
 .popup-header__top-row {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: var(--app-space-2);
   min-width: 0;
@@ -126,6 +126,7 @@ body.popup-page .status-card {
 
 .popup-header__title-copy {
   display: grid;
+  flex: 1 1 auto;
   gap: var(--app-space-1);
   min-width: 0;
 }
@@ -133,6 +134,58 @@ body.popup-page .status-card {
 .popup-header__refresh {
   flex: 0 0 auto;
   white-space: nowrap;
+}
+
+.popup-header__feedback-slot {
+  display: flex;
+  flex: 1 1 auto;
+  justify-content: center;
+  min-width: 0;
+}
+
+.popup-hide-feedback {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  min-height: 32px;
+  gap: var(--app-space-1);
+  padding: 4px 6px 4px var(--app-space-3);
+  overflow: hidden;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--md-sys-color-surface-container-high);
+  box-shadow: var(--app-elevation-1);
+  color: var(--md-sys-color-on-surface);
+}
+
+.popup-hide-feedback--undo::after {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-start: 0;
+  width: var(--popup-hide-feedback-progress, 100%);
+  height: 3px;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--md-sys-color-primary);
+  content: "";
+  transition: width 1s linear;
+}
+
+.popup-hide-feedback__message {
+  min-width: 0;
+  overflow: hidden;
+  font-family: var(--md-sys-typescale-label-medium-font);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: var(--md-sys-typescale-label-medium-weight);
+  line-height: var(--md-sys-typescale-label-medium-line-height);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.popup-hide-feedback__action {
+  flex: 0 0 auto;
+  min-height: 28px;
+  padding-inline: var(--app-space-2);
 }
 
 .popup-header__actions {
@@ -221,14 +274,33 @@ body.popup-page .status-card {
 
 .popup-provider-card__title-row {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-start;
   gap: var(--app-space-2);
   min-width: 0;
 }
 
+.popup-provider-card__header-actions {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 1 auto;
+  gap: var(--app-space-1);
+  min-width: 0;
+}
+
+.popup-provider-card__header-action {
+  min-height: 30px;
+  max-width: 7rem;
+  padding-inline: var(--app-space-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .popup-provider-card__status {
   flex: 0 0 auto;
+  margin-inline-start: auto;
   max-width: 48%;
 }
 
@@ -403,6 +475,7 @@ body.popup-page .status-card {
 }
 
 .popup-provider-card__provider {
+  flex: 1 1 8rem;
   font-family: var(--md-sys-typescale-title-medium-font);
   font-size: var(--md-sys-typescale-title-medium-size);
   font-weight: var(--md-sys-typescale-title-medium-weight);
@@ -439,6 +512,20 @@ body.popup-page .status-card {
 @media (max-width: 480px) {
   .popup-shell {
     min-width: auto;
+  }
+
+  .popup-header__top-row {
+    flex-wrap: wrap;
+  }
+
+  .popup-header__feedback-slot {
+    flex-basis: 100%;
+    justify-content: flex-start;
+    order: 3;
+  }
+
+  .popup-hide-feedback {
+    width: 100%;
   }
 
   .popup-actions > * {

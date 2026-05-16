@@ -32,11 +32,15 @@ describe("PopupFeaturedProviderList", () => {
     const html = renderFeaturedList();
     const titleRowIndex = html.indexOf("popup-provider-card__title-row");
     const providerNameIndex = html.indexOf("popup-provider-card__provider");
+    const actionsIndex = html.indexOf("popup-provider-card__header-actions");
     const statusIndex = html.indexOf("popup-provider-card__status");
 
     expect(titleRowIndex).toBeGreaterThan(-1);
     expect(providerNameIndex).toBeGreaterThan(titleRowIndex);
-    expect(statusIndex).toBeGreaterThan(providerNameIndex);
+    expect(actionsIndex).toBeGreaterThan(providerNameIndex);
+    expect(statusIndex).toBeGreaterThan(actionsIndex);
+    expect(html).toContain("Details");
+    expect(html).toContain("Hide");
     expect(html).toContain('data-popup-featured-status="true"');
   });
 

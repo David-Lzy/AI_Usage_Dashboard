@@ -88,4 +88,5 @@ Status note:
 - `Phase 506` moved the Quick Setup team/API provider toggle into the section header action slot and gave it an outlined Material-style button treatment.
 - `Phase 507` made toolbar popup progress labels compact and folded reset timing into the visible popup label for line and circular progress styles while preserving non-popup detail labels.
 - `Phase 508` tightened Claude Team all-model weekly popup labels and shortened weekday reset text while preserving provider evidence and non-popup detail labels.
-- Current implementation source is ahead of the `0.1.0-rc.23` package through `Phase 508`; no post-Phase-508 package has been cut yet.
+- `Phase 509` moved popup provider card actions into the header, shortened Details/Hide labels, and made popup hide persist through provider display settings with a 3-second undo affordance.
+- Current implementation source is ahead of the `0.1.0-rc.23` package through `Phase 509`; no post-Phase-509 package has been cut yet.

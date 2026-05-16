@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 import type {
   getQuickThemeToggleCopy,
   RuntimeI18n,
@@ -10,6 +12,7 @@ type PopupHeaderSectionProps = {
   isThemeTogglePending: boolean;
   quickThemeToggleCopy: ReturnType<typeof getQuickThemeToggleCopy>;
   runtimeI18n: RuntimeI18n;
+  hideProviderFeedback?: ReactNode;
   onOpenDashboardTab: () => void | Promise<void>;
   onOpenSettings: () => void | Promise<void>;
   onRefresh: () => void | Promise<void>;
@@ -23,6 +26,7 @@ export function PopupHeaderSection({
   isThemeTogglePending,
   quickThemeToggleCopy,
   runtimeI18n,
+  hideProviderFeedback = null,
   onOpenDashboardTab,
   onOpenSettings,
   onRefresh,
@@ -45,6 +49,11 @@ export function PopupHeaderSection({
             <p className="supporting-copy">{headerDetail}</p>
           ) : null}
         </div>
+        {hideProviderFeedback ? (
+          <div className="popup-header__feedback-slot">
+            {hideProviderFeedback}
+          </div>
+        ) : null}
         <button
           className="text-button popup-header__refresh"
           type="button"

@@ -1,6 +1,6 @@
 # Phase Index
 
-Date: 2026-05-16
+Date: 2026-05-17
 
 Process rule:
 
@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [508_Phase_Claude_Team_Popup_Compact_Label_Polish.md](./Archive/by-phase/500-599/508_Phase_Claude_Team_Popup_Compact_Label_Polish.md)
+- latest completed slice: [509_Phase_Popup_Header_Actions_And_Hide_Undo.md](./Archive/by-phase/500-599/509_Phase_Popup_Header_Actions_And_Hide_Undo.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -902,6 +902,7 @@ Completed phases should be moved to:
 - the 2026-05-16 `Phase 506` closeout moved the Quick Setup team/API provider toggle into the section header action slot and gave it an outlined Material-style button treatment while preserving Quick Setup provider semantics
 - the 2026-05-16 `Phase 507` closeout made popup progress item labels compact and folded reset timing into the visible popup label for line and circular progress styles while preserving non-popup detail labels
 - the 2026-05-16 `Phase 508` closeout added Claude Team all-model weekly compact popup labels and shortened weekday reset text while preserving provider evidence and non-popup detail labels
+- the 2026-05-17 `Phase 509` closeout moved popup provider card actions into the card header, shortened Details/Hide labels, made popup hide persist through provider display settings with a 3-second undo affordance, and kept Claude Team all-model weekly popup labels compact
 
 ## Delivery Standard For Each Phase
 

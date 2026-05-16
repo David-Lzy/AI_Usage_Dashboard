@@ -264,14 +264,14 @@ function buildPopupFeaturedAction(provider: ProviderViewModel): PopupGuidanceAct
   if (hasProductReviewIssue) {
     return {
       kind: "provider-detail",
-      label: "Review detail",
+      label: "Review",
       providerId: provider.providerId,
     };
   }
 
   return {
     kind: "provider-detail",
-    label: "Open detail",
+    label: "Details",
     providerId: provider.providerId,
   };
 }
@@ -289,7 +289,7 @@ export function buildPopupFeaturedProviderCard(
     action: buildPopupFeaturedAction(provider),
     secondaryAction: {
       kind: "hide-provider",
-      label: "Stop showing",
+      label: "Hide",
       providerId: provider.providerId,
     },
   };
