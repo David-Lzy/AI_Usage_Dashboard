@@ -1,6 +1,6 @@
 # Store Screenshot Storyboard
 
-Date: 2026-04-24
+Date: 2026-05-16
 
 Process rule:
 
@@ -17,106 +17,107 @@ Freshness model:
 Status note:
 
 - this file is the current maintained storyboard for truthful Chrome Web Store screenshot capture
-- `Phase 161` now treats the first archived screenshot set as a historical baseline rather than the final submission pack after the popup/full-page surface-expansion line
-- `Phase 296` archived the mixed store-candidate pack after RDP Chrome capture: one native toolbar popup quick-glance image plus full-page/provider/source-depth images
+- `Phase 296` archived the earlier mixed store-candidate pack after RDP Chrome capture
+- `Phase 493` archived the public-readiness screenshot set for the open-source/store handoff
 - refresh it when the popup story, provider truth boundary, store positioning, or capture workflow changes materially
 
 Purpose:
 
 - define the minimum truthful screenshot pack for store-facing assets
 - keep screenshot order aligned with the popup and full-depth workspace product story
-- force screenshot capture to come from real extension-mode runtime, not only from browser preview
+- force screenshot capture to come from real extension-mode runtime, not static mocks
 
 ## Capture Rules
 
 1. Use `RDP Chrome` with the unpacked extension reloaded from current `dist/`.
-2. Capture from the real extension runtime, not from standalone preview, whenever the screenshot is intended for store use.
+2. Capture from the real extension runtime whenever the screenshot is intended for store use.
 3. Keep screenshots aligned with Chrome Web Store guidance:
    - actual user experience
    - latest shipped functionality
    - minimal text in the image itself
-4. The leading popup quick-glance screenshot intended for final submission should use the native toolbar action bubble.
-5. Popup app-window smoke capture is still valuable QA evidence, but it is not the final replacement for the real toolbar bubble.
-6. Use full-page, provider-detail, or Settings/source surfaces for depth proof when they tell the store story more clearly than additional popup scroll states.
-7. Do not stage unsupported providers or fake healthy states that the runtime cannot currently reproduce honestly.
+4. Do not stage unsupported providers or fake healthy states that the runtime cannot currently reproduce honestly.
+5. If a screenshot is resized, cropped, or uses an app-window instead of a native toolbar bubble, record that boundary in capture notes.
+6. Do not claim light-mode or split light/dark visuals unless those pixels come from a real light-mode capture pass.
 
 ## Current Candidate Pack
 
-The current user-approved candidate pack is:
+The current public-readiness candidate pack is:
 
-1. native toolbar popup quick glance with Codex usage windows and visible badge-compatible status
-2. full-page dashboard overview with the product promise and summary cards
-3. Codex provider usage detail with visible window percentages and reset timing
-4. Cursor source/settings detail that makes the personal partial contract explicit
-5. Chrome side-panel provider-detail view triggered through the shipped popup path
+1. toolbar popup quick glance with provider cards and quota rings
+2. full-page dashboard overview with multiple provider cards
+3. Codex provider detail with usage-window/source-boundary review
+4. Settings overview showing language/theme/sync/badge/icon/progress configuration
+5. Settings quick-setup and appearance controls showing the provider carousel and display controls
 
-The screenshots were reviewed in the chat thread on `2026-05-04`, then captured
-from RDP Chrome and archived as
-[2026-05-04-rc11-mixed-store-candidate-archive](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md).
+The screenshots were captured from RDP Chrome on `2026-05-16` and archived as
+[2026-05-16-public-store-readiness-request-archive](../testing/store_screenshot_archives/2026-05-16-public-store-readiness-request-archive/README.md).
 
 ## Screenshot Storyboard Order
 
-### 1. Toolbar-first quick glance
+### 1. Toolbar popup quick glance
 
 - Surface:
-  - native toolbar popup bubble
+  - toolbar popup app-window runtime capture
 - Runtime state:
-  - healthy or near-healthy visible-provider state
+  - current dark-mode provider quick-glance state
 - Claim it proves:
-  - one click gives a compact, readable AI usage snapshot
+  - one click gives a compact AI usage snapshot
 - Must visibly show:
-  - popup header, top summary, setup coverage, featured provider, and badge-compatible quick-glance framing
+  - popup header, provider card, quota/progress visualization, and settings/tab actions
 
 ### 2. Dashboard overview
 
 - Surface:
   - full-page shell `Dashboard`
 - Runtime state:
-  - healthy or near-healthy Codex plus Cursor state
+  - current provider overview state
 - Claim it proves:
-  - one panel collects AI coding quota signals and provider status
+  - one dashboard collects AI coding quota signals and provider status
 - Must visibly show:
-  - dashboard headline, product promise, summary cards, and Material 3 release-candidate framing
+  - dashboard navigation, provider cards, quota/progress display, and Material 3 framing
 
-### 3. Provider usage detail
+### 3. Provider detail contract
 
 - Surface:
-  - full-page shell `Dashboard` or provider-detail surface
+  - full-page provider detail
 - Runtime state:
   - Codex usage-window detail
 - Claim it proves:
   - provider cards expose useful usage-window detail without claiming one absolute balance
 - Must visibly show:
-  - Codex status, remaining percentages, reset timing, and source/truth chips
+  - provider status, remaining percentages, reset timing, diagnostic/source sections, and source-truth context
 
-### 4. Honest source boundary
+### 4. Settings overview and theme controls
 
 - Surface:
-  - Settings/source detail
+  - full-page `Settings`
 - Runtime state:
-  - Cursor personal partial session-page state
+  - current dark-mode settings surface
 - Claim it proves:
-  - the extension is honest about partial live paths and does not fake exact remaining requests
+  - users can tune language, theme, sync, toolbar badge/icon, and progress display
 - Must visibly show:
-  - Cursor source route, personal partial labels, availability summary, and explanatory contract text
+  - settings navigation, theme/language controls, appearance/sync controls, and stable responsive layout
 
-### 5. Side-panel provider depth
+### 5. Quick setup and appearance
 
 - Surface:
-  - Chrome side panel `Provider detail`
+  - focused Settings quick-setup/appearance area
 - Runtime state:
-  - Codex provider detail opened through the shipped popup path
+  - current provider setup and appearance controls
 - Claim it proves:
-  - provider review lives in the deeper side-panel workspace instead of a bloated popup
+  - provider setup and visual customization stay in one extension workspace
 - Must visibly show:
-  - side-panel header, provider-detail title, source snapshot, and usage/detail hierarchy
+  - provider carousel or setup controls plus appearance/sync controls
 
-## Optional Sixth Screenshot
+## Optional Promo Follow-Up
 
-- Surface:
-  - theme or audit-related workspace only if it directly supports the store story
-- Default decision:
-  - omit unless it clarifies a real user value without diluting the toolbar-first narrative
+The user asked whether a light/dark split promotional image would help. It would,
+but it should not be fabricated from the current dark-mode screenshots. A future
+promo pass should:
+
+- capture the same store-ready surface once in light mode and once in dark mode
+- compose a `1280x800` split only from those real runtime captures
+- record the source captures and composition notes in a new screenshot archive
 
 ## Screenshot-to-Claim Map
 
@@ -124,28 +125,21 @@ from RDP Chrome and archived as
 | --- | --- |
 | 1 | Quick glance in one click |
 | 2 | One dashboard collects quota and status |
-| 3 | Provider usage detail stays precise about its window scope |
-| 4 | Source contracts stay honest about partial live paths |
-| 5 | Provider depth belongs to the side panel |
-
-## Current Baseline Note
-
-- the first archived screenshot set remains one truthful historical evidence package
-- after `Phase 296`, the current recommended screenshot evidence package is [2026-05-04-rc11-mixed-store-candidate-archive](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
-- after `Phase 299`, the [RC12 upload-candidate milestone](../Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md) is the handoff for human Chrome Web Store listing upload
-- the next store-asset slice should be review-feedback or listing-change follow-up, not another screenshot archive, unless the UI changes again
+| 3 | Provider detail keeps source boundaries visible |
+| 4 | Settings covers language, theme, sync, badge, icon, and progress display |
+| 5 | Quick setup and appearance controls stay inside the extension |
 
 ## Do Not Capture
 
 - preview-only states that are not reproducible in extension mode
 - unsupported provider combinations presented as healthy
-- popup app-window smoke captures as the final replacement for native toolbar-bubble screenshots
+- dark screenshots described as light-mode or split-mode assets
 - screenshots whose only story is internal tooling or debug routes
 - text-heavy mockups that exceed what the product actually shows
 
 ## Related Docs
 
 - [Store_Screenshot_Selection_Pack.md](./Store_Screenshot_Selection_Pack.md)
+- [Store_Listing_Copy_Pack.md](./Store_Listing_Copy_Pack.md)
+- [Store_Public_Release_6_Locale_Handoff.md](./Store_Public_Release_6_Locale_Handoff.md)
 - [Direction 10 - Toolbar Competitive Fit And Store Readiness](../Roadmap/10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
-- [Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md](../Archive/benchmarks/Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md)
-- [Toolbar_Product_Benchmark_Matrix_2026-04-23.md](../Archive/benchmarks/Toolbar_Product_Benchmark_Matrix_2026-04-23.md)

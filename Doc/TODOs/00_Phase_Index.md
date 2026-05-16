@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [490_Phase_Popup_Provider_Visibility_Decoupling.md](./Archive/by-phase/400-499/490_Phase_Popup_Provider_Visibility_Decoupling.md)
+- latest completed slice: [495_Phase_Public_Store_Handoff_Closeout.md](./Archive/by-phase/400-499/495_Phase_Public_Store_Handoff_Closeout.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -884,6 +884,11 @@ Completed phases should be moved to:
 - the 2026-05-16 `Phase 488` closeout added AGPL-3.0 `LICENSE` file, updated `package.json` with author/license/repository/homepage, added `homepage_url` to `src/manifest.json`, added license badge and License section to `README.md`, and added SPDX copyright headers to four entry-point source files
 - the 2026-05-16 `Phase 489` closeout injected `__APP_VERSION__`, `__BUILD_TIMESTAMP__`, `__GIT_COMMIT__`, `__SOURCE_ORIGIN__` build constants via `vite.config.ts` define, created `src/vite-env.d.ts` and `src/shared/build-info.ts`, added copyright `console.info` to `src/background/service-worker.ts`, and added About card to `src/sidepanel/routes/SettingsPage.tsx`
 - the 2026-05-16 `Phase 490` closeout decoupled popup provider candidates from the Settings quick-setup dashboard visibility toggle, kept deferred JetBrains out of popup candidates, preserved popup ordering, and changed popup "Stop showing" to a current-popup-session dismissal instead of writing `provider.enabled=false`
+- the 2026-05-16 `Phase 491` closeout documented public repository readiness for AGPL-3.0-only publication, added `CONTRIBUTING.md`, `SECURITY.md`, `PRIVACY.md`, documented favicon permission rationale, and recorded a narrow high-risk token scan with no matches
+- the 2026-05-16 `Phase 492` closeout prepared six Chrome Web Store product-detail locales (`en`, `zh-CN`, `zh-TW`, `ja`, `es-419`, `pt-BR`) while preserving the 14-locale store draft used by `npm run i18n:check`
+- the 2026-05-16 `Phase 493` closeout generated and fulfilled the `2026-05-16-public-store-readiness-request` screenshot package, archived five dark-mode RDP Chrome runtime screenshots at `1280x800`, and recorded app-window/dark-mode/resizing truth boundaries
+- the 2026-05-16 `Phase 494` closeout aligned store copy, screenshot storyboard, screenshot selection, localization source, privacy, and public-readiness docs around the public repository handoff
+- the 2026-05-16 `Phase 495` closeout updated project indexes and current facts for the public-source/store handoff, with current source ahead of packaged RC22 through Phase 495 and no numbered phase queued
 
 ## Delivery Standard For Each Phase
 

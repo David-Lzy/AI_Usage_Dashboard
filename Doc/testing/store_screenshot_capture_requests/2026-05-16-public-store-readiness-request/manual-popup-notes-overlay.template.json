@@ -1,0 +1,45 @@
+{
+  "requestId": "2026-05-16-public-store-readiness-request",
+  "requestCreatedAt": "2026-05-16T06:30:29.114Z",
+  "notesSchemaVersion": 1,
+  "captureTruthLegend": {
+    "not_reviewed": "placeholder state; replace it before completing the request",
+    "exact_runtime_capture": "the screenshot is an exact extension-mode runtime capture with no special truth boundary to record",
+    "approximated_runtime_state": "the screenshot used an approximated runtime state that still needs an explicit operator note",
+    "policy_only_fallback": "the screenshot truthfully relies on a policy-only or contract-only fallback and must say so explicitly",
+    "provider_omitted": "the screenshot intentionally omits one or more providers and must explain that omission",
+    "other_truth_boundary": "the screenshot has another truthful boundary that needs an explicit operator note"
+  },
+  "notes": [
+    {
+      "filename": "01-popup-quick-glance.png",
+      "captureTruth": "not_reviewed",
+      "stateSummary": "",
+      "operatorNote": ""
+    },
+    {
+      "filename": "02-dashboard-overview.png",
+      "captureTruth": "not_reviewed",
+      "stateSummary": "",
+      "operatorNote": ""
+    },
+    {
+      "filename": "03-provider-detail-contract.png",
+      "captureTruth": "not_reviewed",
+      "stateSummary": "",
+      "operatorNote": ""
+    },
+    {
+      "filename": "04-settings-overview-and-theme.png",
+      "captureTruth": "not_reviewed",
+      "stateSummary": "",
+      "operatorNote": ""
+    },
+    {
+      "filename": "05-settings-quick-setup-and-appearance.png",
+      "captureTruth": "not_reviewed",
+      "stateSummary": "",
+      "operatorNote": ""
+    }
+  ]
+}

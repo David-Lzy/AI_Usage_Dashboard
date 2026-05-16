@@ -1,0 +1,32 @@
+{
+  "storyboardPath": "Doc/Store/Store_Screenshot_Storyboard.md",
+  "selectionPackPath": "Doc/Store/Store_Screenshot_Selection_Pack.md",
+  "baselinePackReadme": "Doc/testing/store_screenshot_capture_packs/2026-04-24-toolbar-storyboard-baseline/README.md",
+  "baselinePackPlan": "Doc/testing/store_screenshot_capture_packs/2026-04-24-toolbar-storyboard-baseline/capture-plan.json",
+  "baselineArchiveReadme": "Doc/testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md",
+  "preferredSize": "1280x800",
+  "fallbackSize": "640x400",
+  "runtimeSource": "RDP Chrome unpacked extension, post-Phase 490 source build",
+  "captureAutomationMode": "manual_capture_required",
+  "requiredScreenshotFilenames": [
+    "01-popup-quick-glance.png",
+    "02-dashboard-overview.png",
+    "03-provider-detail-contract.png",
+    "04-settings-overview-and-theme.png",
+    "05-settings-quick-setup-and-appearance.png"
+  ],
+  "workflow": [
+    "Run a fresh build and reload the unpacked extension in chrome://extensions before trusting any capture state.",
+    "Capture screenshots from real extension runtime surfaces in the RDP Chrome profile, not from static mocks.",
+    "Use the current dark-mode profile state truthfully; do not fabricate a light/dark split asset until a separate light-mode capture pass is complete.",
+    "Resize or crop only to meet the Chrome Web Store screenshot dimensions; do not edit provider numbers or source text.",
+    "Review and complete capture-notes.json so every screenshot has one truthful state summary and one explicit boundary note when needed.",
+    "Treat this request package as pending until the real refreshed screenshots are archived."
+  ],
+  "truthRules": [
+    "A pending screenshot-capture request package is not a completed screenshot set.",
+    "The archive must preserve that these screenshots came from the local RDP profile state and may include live account-specific quota values.",
+    "Do not claim light-mode screenshots if the actual capture is dark-mode.",
+    "Do not claim unsupported provider coverage or exact quota support when a provider only exposes policy or diagnostic state."
+  ]
+}

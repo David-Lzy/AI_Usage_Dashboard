@@ -1,6 +1,6 @@
 # Store Listing Localization Source Pack
 
-Date: 2026-04-24
+Date: 2026-05-16
 
 Process rule:
 
@@ -17,9 +17,10 @@ Freshness model:
 Status note:
 
 - this file is the current English source pack for future Chrome Web Store listing localization work
-- after `Phase 299`, treat it as the current English source pack anchored to the RC12 upload-candidate milestone and refreshed screenshot archive
-- `Phase 296` anchors the screenshot-caption source strings to the user-approved mixed screenshot archive
+- after `Phase 495`, treat it as the current English source pack anchored to the public-repository store handoff and refreshed screenshot archive
+- `Phase 493` anchors the screenshot-caption source strings to the public-readiness screenshot archive
 - `Phase 299` records the upload-candidate handoff in [2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md](../Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md)
+- `Phase 495` records the six-locale handoff in [Store_Public_Release_6_Locale_Handoff.md](./Store_Public_Release_6_Locale_Handoff.md)
 - refresh it when the maintained store-listing copy pack, screenshot selection pack, refreshed screenshot archive, or shipped truth boundary changes materially
 
 Purpose:
@@ -36,6 +37,8 @@ Purpose:
   - [2026-04-24-first-real-store-screenshot-capture-request-archive/README.md](../testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md)
 - current refreshed screenshot archive:
   - [2026-05-04-rc11-mixed-store-candidate-archive/README.md](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
+- public-readiness screenshot archive:
+  - [2026-05-16-public-store-readiness-request-archive/README.md](../testing/store_screenshot_archives/2026-05-16-public-store-readiness-request-archive/README.md)
 - upload-candidate milestone:
   - [2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md](../Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md)
 - screenshot storyboard:
@@ -54,7 +57,7 @@ Purpose:
 - `store.short_description`
   - `Track usage, setup blockers, and sync health across AI coding tools.`
 - `store.overview`
-  - `Get a quick popup summary of visible AI tools, see the next setup step when access or credentials are missing, and open the side panel for deeper provider and contract review.`
+  - `Check AI coding quota, setup blockers, and sync health from one Chrome toolbar popup, then open the side panel when provider source details matter.`
 
 ### Feature Bullets
 
@@ -66,21 +69,23 @@ Purpose:
   - `Honest provider coverage that keeps policy-only and partial live paths explicit.`
 - `store.feature.sidepanel_depth`
   - `Settings and provider detail live in the side panel instead of overloading the popup.`
+- `store.feature.customization`
+  - `Configurable themes, progress styles, provider order, toolbar badge, and toolbar icon.`
 - `store.feature.runtime_evidence`
   - `Real extension-mode screenshots and review archives keep store assets tied to shipped runtime states.`
 
 ### Screenshot Captions
 
 - `store.screenshot_caption.01_toolbar_first`
-  - `Check Codex and Cursor status from one Chrome toolbar popup.`
+  - `Check provider status and quota rings from the toolbar popup.`
 - `store.screenshot_caption.02_setup_guidance`
-  - `Use one dashboard to collect AI coding quota and sync health.`
+  - `Review all enabled providers in one dashboard.`
 - `store.screenshot_caption.03_honest_contract_or_policy_only`
-  - `Review usage windows and reset timing without fake precision.`
+  - `Inspect source boundaries before trusting a number.`
 - `store.screenshot_caption.04_settings_and_setup_depth`
-  - `Keep partial provider contracts visible before you trust a number.`
+  - `Tune language, theme, sync, badge, icon, and progress display.`
 - `store.screenshot_caption.05_provider_or_dashboard_depth`
-  - `Open the side panel for compact provider review.`
+  - `Use quick setup and appearance controls without leaving the extension.`
 
 ## Truth Anchor Map
 
@@ -94,35 +99,39 @@ Purpose:
   - evidence anchor: popup quick-glance story plus side-panel depth story in the maintained listing-copy pack
   - proof surface: popup handles fast state recognition while the side panel owns deeper review
 - `store.feature.quick_glance`
-  - evidence anchor: `01-toolbar-first-quick-glance.png`
-  - truth note: current archive uses a user-reviewed native toolbar popup runtime capture from RDP Chrome
+  - evidence anchor: `01-popup-quick-glance.png`
+  - truth note: current archive uses a real extension popup app-window capture from RDP Chrome and records the app-window boundary in capture notes
 - `store.feature.setup_guidance`
-  - evidence anchor: `02-setup-guidance.png`
-  - truth note: current candidate uses a full-page dashboard overview instead of a dedicated setup-blocker popup slot
+  - evidence anchor: `02-dashboard-overview.png` plus `05-settings-quick-setup-and-appearance.png`
+  - truth note: current candidate uses dashboard overview plus Settings setup controls instead of a dedicated setup-blocker popup slot
 - `store.feature.honest_coverage`
-  - evidence anchor: `03-honest-contract-or-policy-only.png`
-  - truth note: current candidate uses Codex window-scoped detail and Cursor personal partial source context instead of faking exact usage
+  - evidence anchor: `03-provider-detail-contract.png`
+  - truth note: current candidate uses Codex window-scoped detail and source-boundary context instead of faking exact usage
 - `store.feature.sidepanel_depth`
-  - evidence anchor: `04-settings-and-setup-depth.png` plus `05-provider-or-dashboard-depth.png`
+  - evidence anchor: `03-provider-detail-contract.png` plus `04-settings-overview-and-theme.png`
   - truth note: settings owns source/setup depth while provider detail owns compact review depth; the popup must stay compact
+- `store.feature.customization`
+  - evidence anchor: `04-settings-overview-and-theme.png` plus `05-settings-quick-setup-and-appearance.png`
+  - truth note: current screenshots show dark-mode settings controls; do not claim a light/dark split screenshot until that asset is captured
 - `store.feature.runtime_evidence`
   - evidence anchor: screenshot archive package plus archive ledger
   - truth note: this claim depends on archived extension-mode evidence, not on preview-only mockups
 - `store.screenshot_caption.01_toolbar_first`
-  - evidence anchor: `01-toolbar-first-quick-glance.png`
+  - evidence anchor: `01-popup-quick-glance.png`
 - `store.screenshot_caption.02_setup_guidance`
-  - evidence anchor: `02-setup-guidance.png`
+  - evidence anchor: `02-dashboard-overview.png`
 - `store.screenshot_caption.03_honest_contract_or_policy_only`
-  - evidence anchor: `03-honest-contract-or-policy-only.png`
+  - evidence anchor: `03-provider-detail-contract.png`
 - `store.screenshot_caption.04_settings_and_setup_depth`
-  - evidence anchor: `04-settings-and-setup-depth.png`
+  - evidence anchor: `04-settings-overview-and-theme.png`
 - `store.screenshot_caption.05_provider_or_dashboard_depth`
-  - evidence anchor: `05-provider-or-dashboard-depth.png`
+  - evidence anchor: `05-settings-quick-setup-and-appearance.png`
 
 ## Current Asset Boundary
 
-- the current string ids map truthfully to the maintained listing-copy pack and user-approved mixed screenshot candidate pack
-- the screenshot files now live in [2026-05-04-rc11-mixed-store-candidate-archive](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
+- the current string ids map truthfully to the maintained listing-copy pack and public-readiness screenshot candidate pack
+- the screenshot files now live in [2026-05-16-public-store-readiness-request-archive](../testing/store_screenshot_archives/2026-05-16-public-store-readiness-request-archive/README.md)
+- the six-locale handoff lives in [Store_Public_Release_6_Locale_Handoff.md](./Store_Public_Release_6_Locale_Handoff.md)
 - this source pack is submission-prep evidence, not a submitted listing receipt
 
 ## Translation Guardrails
@@ -143,5 +152,5 @@ Purpose:
 ## Follow-up Use
 
 - use this pack as the English source document for future store-listing localization work
-- refresh this pack when a later archived screenshot set replaces the refreshed RC11 archive or when the maintained listing-copy pack changes
-- coordinate future listing-localization rollout with `Direction 09`, but do not wait for full in-product localization before defining truthful listing-source strings
+- refresh this pack when a later archived screenshot set replaces the public-readiness archive or when the maintained listing-copy pack changes
+- coordinate future listing-localization rollout with the 14-locale runtime catalog, but do not wait for every store locale to receive human copy review before maintaining truthful source strings

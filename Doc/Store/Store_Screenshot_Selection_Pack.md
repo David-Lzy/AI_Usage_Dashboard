@@ -1,6 +1,6 @@
 # Store Screenshot Selection Pack
 
-Date: 2026-04-24
+Date: 2026-05-16
 
 Process rule:
 
@@ -17,147 +17,126 @@ Freshness model:
 Status note:
 
 - this file records the current screenshot-slot selection and stale-review decision for Chrome Web Store assets
-- `Phase 161` turned the first archived screenshot set into a historical baseline rather than a final submission pack after the popup/full-page surface-expansion line
-- `Phase 296` archived the user-approved mixed screenshot candidate pack as [2026-05-04-rc11-mixed-store-candidate-archive](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
-- `Phase 299` recorded the RC12 Chrome Web Store upload-candidate milestone that uses this screenshot archive
+- `Phase 296` archived the earlier user-approved mixed screenshot candidate pack as [2026-05-04-rc11-mixed-store-candidate-archive](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
+- `Phase 493` archived the public-repository handoff screenshot set as [2026-05-16-public-store-readiness-request-archive](../testing/store_screenshot_archives/2026-05-16-public-store-readiness-request-archive/README.md)
 - refresh this file whenever a new screenshot archive lands, the popup capture method changes, or the storyboard/copy pack changes materially
 
 Purpose:
 
-- decide which current screenshot slots can still use archived assets
+- decide which current screenshot slots can use archived assets
 - make stale-vs-refresh decisions explicit before a new store screenshot request is created
-- keep the maintained listing-copy pack and localization source pack honest about whether they are final submission assets or pre-refresh baselines
+- keep the maintained listing-copy pack and localization handoff honest about whether assets are final submission candidates or evidence baselines
 
 ## Source Inputs
 
-- first real screenshot archive:
-  - [2026-04-24-first-real-store-screenshot-capture-request-archive/README.md](../testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md)
-- current refreshed screenshot archive:
+- previous mixed screenshot archive:
   - [2026-05-04-rc11-mixed-store-candidate-archive/README.md](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
-- refreshed runtime QA evidence from `Phase 160`:
-  - [phase160-results.json](../../tmp/phase160-rdp-runtime-surface-refresh-review/phase160-results.json)
+- current public-readiness screenshot archive:
+  - [2026-05-16-public-store-readiness-request-archive/README.md](../testing/store_screenshot_archives/2026-05-16-public-store-readiness-request-archive/README.md)
 - current storyboard:
   - [Store_Screenshot_Storyboard.md](./Store_Screenshot_Storyboard.md)
 - maintained listing copy pack:
   - [Store_Listing_Copy_Pack.md](./Store_Listing_Copy_Pack.md)
-- maintained localization source pack:
-  - [Store_Listing_Localization_Source_Pack.md](./Store_Listing_Localization_Source_Pack.md)
+- six-locale store handoff:
+  - [Store_Public_Release_6_Locale_Handoff.md](./Store_Public_Release_6_Locale_Handoff.md)
 
 ## Selection Decision Summary
 
-- archived screenshots retained as final submission assets without recapture:
-  - `01-toolbar-first-quick-glance.png`
-  - `02-setup-guidance.png`
-  - `03-honest-contract-or-policy-only.png`
-  - `04-settings-and-setup-depth.png`
-  - `05-provider-or-dashboard-depth.png`
-- archived screenshots retained as truthful historical baseline only:
-  - the full `2026-04-24` first real screenshot archive
-- immediate next action:
-  - use the [RC12 upload-candidate milestone](../Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md) for the human Chrome Web Store listing upload
+Current selected assets:
 
-## Current Candidate Decision
+- `01-popup-quick-glance.png`
+- `02-dashboard-overview.png`
+- `03-provider-detail-contract.png`
+- `04-settings-overview-and-theme.png`
+- `05-settings-quick-setup-and-appearance.png`
 
-The user accepted a mixed store screenshot pack on `2026-05-04`.
+Current archive:
 
-Preferred candidate order:
+- [2026-05-16-public-store-readiness-request-archive](../testing/store_screenshot_archives/2026-05-16-public-store-readiness-request-archive/README.md)
 
-1. native toolbar popup quick glance showing Codex usage-window rings
-2. full-page dashboard overview showing the product promise and summary cards
-3. Codex provider usage detail showing remaining percentages and reset timing
-4. Cursor source/settings detail showing the personal partial boundary
-5. Chrome side-panel provider-detail view triggered through the shipped popup path
+Boundary:
 
-This decision replaces the old product requirement that the first three final
-slots all be native toolbar popup captures. The first screenshot should still be
-a native toolbar popup capture. Additional popup scroll states are now optional
-rather than blocking the store asset pack.
-
-The selected images were captured from RDP Chrome, saved under the candidate
-intake package, and archived in
-[2026-05-04-rc11-mixed-store-candidate-archive](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md).
+- the current set is dark-mode runtime evidence from RDP Chrome
+- each screenshot was resized/cropped to `1280x800` for Chrome Web Store dimensions
+- provider values and runtime text were not edited
+- a light/dark split promotional image remains pending until a reliable light-mode capture pass exists
 
 ## Slot Decisions
 
-### 1. Toolbar-first quick glance
+### 1. Toolbar popup quick glance
 
-- current refreshed archived asset:
-  - `01-toolbar-first-quick-glance.png`
-- selection status:
-  - `archived final candidate`
+- selected asset:
+  - `01-popup-quick-glance.png`
 - selected target:
-  - native toolbar action-bubble popup capture
-- keep first archive as:
-  - historical baseline only
-- why:
-  - the archived popup shot predates the shipped popup expand control, quick light-dark toggle, and full-page entry motion line
-  - the current smoke helper opens `src/popup/index.html` in its own extension app window, which is truthful QA evidence but not a pixel-identical replacement for the real toolbar bubble
-
-### 2. Setup guidance
-
-- current refreshed archived asset:
-  - `02-setup-guidance.png`
+  - toolbar popup app-window runtime capture
 - selection status:
-  - `archived final candidate`
+  - `public-readiness candidate`
+- claim:
+  - users can check provider status and quota rings quickly
+- boundary:
+  - this is an extension popup app-window capture from RDP Chrome, not a native toolbar-bubble pixel match
+
+### 2. Dashboard overview
+
+- selected asset:
+  - `02-dashboard-overview.png`
 - selected target:
-  - full-page dashboard overview
-- keep first archive as:
-  - historical baseline only
-- why:
-  - after user review, the dashboard overview tells the current product story more clearly than a second popup scroll state
-  - setup guidance remains part of the listing copy and Settings story, but no longer blocks the screenshot pack as a dedicated popup slot
-
-### 3. Honest contract-only or policy-only state
-
-- current refreshed archived asset:
-  - `03-honest-contract-or-policy-only.png`
+  - full-page dashboard
 - selection status:
-  - `archived final candidate`
+  - `public-readiness candidate`
+- claim:
+  - one dashboard collects provider status and quota signals
+- boundary:
+  - runtime values reflect the local RDP profile state
+
+### 3. Provider detail contract
+
+- selected asset:
+  - `03-provider-detail-contract.png`
 - selected target:
-  - Codex provider usage detail plus Cursor source/settings boundary detail
-- keep first archive as:
-  - historical baseline only
-- why:
-  - the honesty claim is clearer in the current full-page/provider/source surfaces than in a narrow policy-only popup scroll state
-  - the chosen Cursor settings/source image explicitly shows `personal partial` and `仅窗口供应商值`, preserving the no-fake-precision boundary
-
-### 4. Settings and setup depth
-
-- current refreshed archived asset:
-  - `04-settings-and-setup-depth.png`
+  - Codex provider detail
 - selection status:
-  - `archived final candidate`
+  - `public-readiness candidate`
+- claim:
+  - provider detail exposes usage-window data and source boundaries before users trust a number
+- boundary:
+  - window-scoped and diagnostic/source-truth semantics are preserved; no plan-wide absolute balance is implied
+
+### 4. Settings overview and theme controls
+
+- selected asset:
+  - `04-settings-overview-and-theme.png`
 - selected target:
-  - full-page shell `Settings`
-- keep first archive as:
-  - historical baseline only
-- why:
-  - the refreshed Settings/source capture shows the deeper source-control workspace without crowding the toolbar popup
-  - the Cursor personal route remains partial by design, so the image preserves that no-fake-precision boundary
-
-### 5. Provider or dashboard depth
-
-- current refreshed archived asset:
-  - `05-provider-or-dashboard-depth.png`
+  - full-page Settings
 - selection status:
-  - `archived final candidate`
+  - `public-readiness candidate`
+- claim:
+  - language, theme, sync, badge, icon, and progress display are configurable
+- boundary:
+  - this is a dark-mode screenshot; do not describe it as a split light/dark promotional image
+
+### 5. Quick setup and appearance controls
+
+- selected asset:
+  - `05-settings-quick-setup-and-appearance.png`
 - selected target:
-  - Chrome side panel `Provider detail`, captured through the shipped popup path
-- keep first archive as:
-  - historical baseline only
-- why:
-  - the side panel remains a shipped deep-review surface, and this capture proves the compact provider-detail hierarchy through the real popup-to-side-panel path
-  - the Codex detail still uses window-scoped usage semantics, not a plan-wide absolute balance
+  - Settings quick setup plus appearance controls
+- selection status:
+  - `public-readiness candidate`
+- claim:
+  - provider setup and appearance controls stay inside the extension settings workspace
+- boundary:
+  - page scroll position comes from the operator capture state
 
-## Current Boundary
+## Historical Baselines
 
-- the first archived screenshot set remains useful as truthful historical evidence
-- [2026-05-04-rc11-mixed-store-candidate-archive](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) is the current refreshed screenshot evidence package
-- the maintained listing-copy pack and localization source pack should point at the refreshed archive for current submission-prep work
+- the 2026-04-24 first real screenshot archive remains truthful historical evidence
+- the 2026-05-04 RC11 mixed store candidate archive remains the earlier user-approved candidate evidence
+- the 2026-05-16 public-readiness archive is the current screenshot handoff for the public repository release path
 
 ## Related Docs
 
 - [Store_Screenshot_Storyboard.md](./Store_Screenshot_Storyboard.md)
 - [Store_Listing_Copy_Pack.md](./Store_Listing_Copy_Pack.md)
-- [Store_Listing_Localization_Source_Pack.md](./Store_Listing_Localization_Source_Pack.md)
+- [Store_Public_Release_6_Locale_Handoff.md](./Store_Public_Release_6_Locale_Handoff.md)
 - [Direction 10.3 - Store Asset Pack And Submission TODOs](../Roadmap/10_3_Store_Asset_Pack_And_Submission_TODOs.md)

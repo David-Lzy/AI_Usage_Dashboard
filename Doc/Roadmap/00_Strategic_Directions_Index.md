@@ -28,9 +28,9 @@ Important scope note:
 
 ## Current Truth Snapshot
 
-As of 2026-05-15:
+As of 2026-05-16:
 
-- the numbered phase queue is completed through `Phase 490`; `0.1.0-rc.22` is the latest packaged follow-up candidate through `Phase 487`, current source is ahead through AGPL-3.0 open-source licensing, digital fingerprint embedding, and popup provider-visibility decoupling, and RC13 remains the submitted store-review boundary
+- the numbered phase queue is completed through `Phase 495`; `0.1.0-rc.22` is the latest packaged follow-up candidate through `Phase 487`, current source is ahead through AGPL-3.0 open-source licensing, digital fingerprint embedding, popup provider-visibility decoupling, public repository readiness, six-locale store listing handoff, and refreshed public-readiness screenshot evidence, and RC13 remains the submitted store-review boundary
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -561,7 +561,7 @@ As of 2026-05-15:
 
 1. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why first now:
-   `0.1.0-rc.22` is now packaged as the latest follow-up candidate through `Phase 487`, current source is complete through `Phase 490`, the mixed screenshot archive is complete, and the trimmed transparent icon refresh plus Claude Team usage-page path are already in the submitted RC13 boundary.
+   `0.1.0-rc.22` is now packaged as the latest follow-up candidate through `Phase 487`, current source is complete through `Phase 495`, the public-readiness screenshot archive and six-locale listing handoff are complete, and the trimmed transparent icon refresh plus Claude Team usage-page path are already in the submitted RC13 boundary.
 
 2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second now:

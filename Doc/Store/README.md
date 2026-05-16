@@ -1,6 +1,6 @@
 # Store Documentation
 
-Date: 2026-05-13
+Date: 2026-05-16
 
 Document class:
 
@@ -20,6 +20,7 @@ Status note:
 - [Store Listing Copy Pack](./Store_Listing_Copy_Pack.md)
 - [Store Listing Localization Source Pack](./Store_Listing_Localization_Source_Pack.md)
 - [Store Listing Localization 14 Locale Draft](./Store_Listing_Localization_14_Locale_Draft.md)
+- [Store Public Release 6 Locale Handoff](./Store_Public_Release_6_Locale_Handoff.md)
 - [Store Screenshot Selection Pack](./Store_Screenshot_Selection_Pack.md)
 - [Store Screenshot Storyboard](./Store_Screenshot_Storyboard.md)
 
@@ -27,3 +28,7 @@ Status note:
 
 - [English Product Description](./Chrome_Web_Store_Product_Description_en-US.md)
 - [Simplified Chinese Product Description](./Chrome_Web_Store_Product_Description_zh-CN.md)
+- [Traditional Chinese Product Description](./Chrome_Web_Store_Product_Description_zh-TW.md)
+- [Japanese Product Description](./Chrome_Web_Store_Product_Description_ja.md)
+- [Latin American Spanish Product Description](./Chrome_Web_Store_Product_Description_es-419.md)
+- [Brazilian Portuguese Product Description](./Chrome_Web_Store_Product_Description_pt-BR.md)

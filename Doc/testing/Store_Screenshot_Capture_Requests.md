@@ -1,6 +1,6 @@
 # Store Screenshot Capture Requests
 
-Date: 2026-05-04
+Date: 2026-05-16
 
 Process rule:
 
@@ -61,6 +61,17 @@ npm run store:refresh-screenshot-capture-request-packages
 
 ## Fulfilled Requests
 
+- [2026-05-16-public-store-readiness-request](./store_screenshot_capture_requests/2026-05-16-public-store-readiness-request/README.md)
+  - status: `fulfilled_operator_capture`
+  - created on 2026-05-16
+  - runtime source: `RDP Chrome unpacked extension, post-Phase 490 source build`
+  - sizes: preferred `1280x800` · fallback `640x400`
+  - required screenshots: `5`
+  - selection pack: `Doc/Store/Store_Screenshot_Selection_Pack.md`
+  - baseline pack: `Doc/testing/store_screenshot_capture_packs/2026-04-24-toolbar-storyboard-baseline/README.md`
+  - automation mode: `manual_capture_required`
+  - capture notes: `5/5` reviewed · truth boundaries `5`
+  - archive: `2026-05-16-public-store-readiness-request-archive` · `Doc/testing/store_screenshot_archives/2026-05-16-public-store-readiness-request-archive/README.md`
 - [2026-04-24-surface-expansion-store-screenshot-refresh-request](./store_screenshot_capture_requests/2026-04-24-surface-expansion-store-screenshot-refresh-request/README.md)
   - status: `fulfilled_operator_capture`
   - created on 2026-04-24

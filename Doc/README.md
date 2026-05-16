@@ -1,6 +1,6 @@
 # Documentation Index
 
-Date: 2026-05-14
+Date: 2026-05-16
 
 Document class:
 
@@ -34,6 +34,8 @@ the shared source of truth.
 - [Phase index](./TODOs/00_Phase_Index.md) - active numbered slice and latest completed slice.
 - [Provider notes](./provider_notes/) - provider-specific implementation and truth-boundary references.
 - [Milestones](./Milestones/) - release and submission handoff records.
+- [Public repository readiness](./Product/Public_Repository_Readiness.md) - AGPL/public-source, privacy, security, and store-permission handoff notes.
+- [Six-locale store handoff](./Store/Store_Public_Release_6_Locale_Handoff.md) - selected Chrome Web Store listing copy for the public-source release path.
 - [Localized operator/store RDP visual QA](./testing/localized_operator_store_rdp_visual_qa/README.md) - representative helper-route locale screenshot evidence.
 
 ## Functional References

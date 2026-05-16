@@ -1,10 +1,53 @@
 {
-  "generatedAt": "2026-05-04T04:12:44.065Z",
+  "generatedAt": "2026-05-16T06:32:32.545Z",
   "requestRoot": "Doc/testing/store_screenshot_capture_requests",
-  "recordCount": 2,
+  "recordCount": 3,
   "pendingRequestCount": 0,
-  "fulfilledRequestCount": 2,
+  "fulfilledRequestCount": 3,
   "records": [
+    {
+      "requestId": "2026-05-16-public-store-readiness-request",
+      "createdAt": "2026-05-16T06:30:29.114Z",
+      "status": "fulfilled_operator_capture",
+      "runtimeSource": "RDP Chrome unpacked extension, post-Phase 490 source build",
+      "preferredSize": "1280x800",
+      "fallbackSize": "640x400",
+      "storyboardPath": "Doc/Store/Store_Screenshot_Storyboard.md",
+      "selectionPackPath": "Doc/Store/Store_Screenshot_Selection_Pack.md",
+      "baselinePackReadme": "Doc/testing/store_screenshot_capture_packs/2026-04-24-toolbar-storyboard-baseline/README.md",
+      "baselineArchiveReadme": "Doc/testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md",
+      "captureAutomationMode": "manual_capture_required",
+      "fulfillment": {
+        "fulfilledAt": "2026-05-16T06:32:32.545Z",
+        "archiveId": "2026-05-16-public-store-readiness-request-archive",
+        "archiveReadmePath": "Doc/testing/store_screenshot_archives/2026-05-16-public-store-readiness-request-archive/README.md",
+        "archiveManifestPath": "Doc/testing/store_screenshot_archives/2026-05-16-public-store-readiness-request-archive/capture-archive.json",
+        "sourceCaptureDir": "Doc/testing/store_screenshot_capture_requests/2026-05-16-public-store-readiness-request/captures",
+        "screenshotFilenames": [
+          "01-popup-quick-glance.png",
+          "02-dashboard-overview.png",
+          "03-provider-detail-contract.png",
+          "04-settings-overview-and-theme.png",
+          "05-settings-quick-setup-and-appearance.png"
+        ]
+      },
+      "requiredScreenshotFilenames": [
+        "01-popup-quick-glance.png",
+        "02-dashboard-overview.png",
+        "03-provider-detail-contract.png",
+        "04-settings-overview-and-theme.png",
+        "05-settings-quick-setup-and-appearance.png"
+      ],
+      "captureNotesPath": "Doc/testing/store_screenshot_capture_requests/2026-05-16-public-store-readiness-request/capture-notes.json",
+      "captureNotesSummary": {
+        "noteCount": 5,
+        "reviewedScreenshotCount": 5,
+        "pendingReviewCount": 0,
+        "truthBoundaryCount": 5
+      },
+      "readmePath": "Doc/testing/store_screenshot_capture_requests/2026-05-16-public-store-readiness-request/README.md",
+      "manifestPath": "Doc/testing/store_screenshot_capture_requests/2026-05-16-public-store-readiness-request/capture-request.json"
+    },
     {
       "requestId": "2026-04-24-surface-expansion-store-screenshot-refresh-request",
       "createdAt": "2026-04-24T08:50:12.783Z",

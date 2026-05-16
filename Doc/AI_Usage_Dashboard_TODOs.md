@@ -76,13 +76,13 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 490` execution priority:
+Current post-`Phase 495` execution priority:
 
 1. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.13.zip` as the submitted Chrome Web Store review boundary. Do not silently mutate or rewrite the [RC13 upload-candidate milestone](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) while that submission remains the human-reviewed baseline.
-2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.22.zip` as the latest packaged follow-up candidate. It includes post-`rc.21` UI polish, toolbar badge/icon preferences, configuration backup and Chrome Sync, pre-store maintenance cleanup, bundle split, and CSS consolidation through `Phase 487`; current source is ahead through `Phase 490` with AGPL-3.0 open-source licensing, digital fingerprint embedding, and the popup provider-visibility fix.
-3. `P0` - keep the refreshed `Direction 10.3` screenshot evidence archived and ready, not pending: [2026-05-04-rc11-mixed-store-candidate-archive](./testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md) still fulfills the latest reviewed screenshot pack with `5/5` images and `3` explicit truth-boundary notes.
-4. `P1` - if a resubmission becomes necessary, use [2026-05-15_RC22_Pre_Store_Maintenance_Release_Candidate.md](./Milestones/2026-05-15_RC22_Pre_Store_Maintenance_Release_Candidate.md) as the latest packaged-source reference and create a fresh submitted-review milestone instead of mutating RC13 history.
-5. `P1` - no numbered phase is currently queued after `Phase 490`; future work should start from a new scoped TODO rather than silently changing the RC22 package boundary.
+2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.22.zip` as the latest packaged follow-up candidate. It includes post-`rc.21` UI polish, toolbar badge/icon preferences, configuration backup and Chrome Sync, pre-store maintenance cleanup, bundle split, and CSS consolidation through `Phase 487`; current source is ahead through `Phase 495` with AGPL-3.0 open-source licensing, digital fingerprint embedding, the popup provider-visibility fix, public repository readiness docs, six-locale store listing copy, and refreshed public-readiness screenshot evidence.
+3. `P0` - keep the latest store screenshot evidence archived and ready, not pending: [2026-05-16-public-store-readiness-request-archive](./testing/store_screenshot_archives/2026-05-16-public-store-readiness-request-archive/README.md) fulfills the public-repository store handoff with `5/5` images and explicit app-window/dark-mode/resizing truth-boundary notes.
+4. `P1` - if a resubmission becomes necessary, use [2026-05-15_RC22_Pre_Store_Maintenance_Release_Candidate.md](./Milestones/2026-05-15_RC22_Pre_Store_Maintenance_Release_Candidate.md), [Public_Repository_Readiness.md](./Product/Public_Repository_Readiness.md), and [Store_Public_Release_6_Locale_Handoff.md](./Store/Store_Public_Release_6_Locale_Handoff.md) as current handoff references, then create a fresh submitted-review milestone instead of mutating RC13 history.
+5. `P1` - no numbered phase is currently queued after `Phase 495`; future work should start from a new scoped TODO rather than silently changing the RC22 package boundary.
 6. `P2` - keep the `Phase 309` first-provider setup behavior stable: zero-provider Settings now recommends one personal-user provider in Quick Setup and popup zero-provider actions deep-link to that same setup card.
 7. `P2` - keep the `Phase 310` cached-first guard stable: standard dashboard routes must keep rendering cached app state while background bootstrap is still loading.
 8. `P2` - keep the `Phase 311` popup view-model split behavior-only: `src/popup/view-models.ts` remains the public aggregator and the extracted setup-coverage / featured-card modules should not change popup UI semantics.
@@ -152,7 +152,7 @@ Delivery rule for this stage:
 - keep active implementation phases narrow and independently verifiable
 - keep file-splitting separate from release packaging, provider verification, and store evidence closeout
 - preserve the current provider truth boundaries while changing UI presentation
-- treat `rc.13` as the current submitted store-review boundary, and `rc.22` as the latest packaged follow-up candidate through the Phase 487 package boundary; current source is ahead through Phase 490, while `rc.21`, `rc.20`, `rc.19`, `rc.18`, `rc.17`, `rc.16`, `rc.15`, `rc.14`, `rc.12`, and `rc.11` remain historical evidence
+- treat `rc.13` as the current submitted store-review boundary, and `rc.22` as the latest packaged follow-up candidate through the Phase 487 package boundary; current source is ahead through Phase 495, while `rc.21`, `rc.20`, `rc.19`, `rc.18`, `rc.17`, `rc.16`, `rc.15`, `rc.14`, `rc.12`, and `rc.11` remain historical evidence
 
 Phase status update:
 
