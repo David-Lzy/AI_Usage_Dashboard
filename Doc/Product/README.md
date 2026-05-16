@@ -1,6 +1,6 @@
 # Product Documentation
 
-Date: 2026-05-15
+Date: 2026-05-16
 
 Document class:
 
@@ -17,6 +17,7 @@ Status note:
 
 ## Current References
 
+- [Provider Setup And Display Product Contract](./Provider_Setup_Display_Product_Contract.md)
 - [Surface Expansion And Ambient Theme Controls](./Surface_Expansion_And_Ambient_Theme_Controls.md)
 
 ## Current Source Boundary
@@ -73,5 +74,7 @@ Status note:
 - `Phase 485` lazy-loaded special/debug sidepanel routes and replaced popup/sidepanel runtime copy imports with focused copy-module imports, reducing `dist/assets/sidepanel.js` from about 861.8 KB to 429.2 KB and eliminating the Vite >500 KB chunk warning while preserving stable extension entry filenames.
 - `Phase 486` consolidated duplicate form label/info row CSS and source-card summary/session grid CSS while preserving existing spacing, wrapping, typography, route behavior, provider truth, storage, localization, and release packaging.
 - `Phase 487` packaged `0.1.0-rc.22` / manifest `0.1.0.22`, generated `release/ai-usage-dashboard-0.1.0-rc.22.zip`, recorded SHA256 `444440c732880c4c05ab5a3c73c5d488447447c1fb2a539a00c5253b8af30104`, and preserved RC13 as the submitted Chrome Web Store review boundary.
+- `Phase 488` through `Phase 495` completed the public-source and Chrome Web Store handoff docs: AGPL-3.0 publication metadata, build fingerprinting, popup provider-visibility decoupling, public repository readiness docs, six-locale store listing copy, refreshed public-readiness screenshots, and current index alignment.
+- `Phase 496` defined the provider setup/display product contract: Quick Setup owns provider connection and source-mode setup; Provider Display owns dashboard visibility, per-surface ordering, and quota item visibility; deferred providers do not enter visible ordering, and policy-only providers must not imply live remaining quota.
 - Current implementation source is aligned with the `0.1.0-rc.22` package through `Phase 487`.
-- No numbered phase is currently queued after `Phase 487`.
+- Current source is ahead of the `0.1.0-rc.22` package through `Phase 496`.

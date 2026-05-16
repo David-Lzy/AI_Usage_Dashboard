@@ -129,6 +129,7 @@ Define one stable contract for the next productization slices and keep it aligne
 
 ## Provider Display Preference Contract
 
+- Current provider setup versus display semantics are defined in [Provider Setup And Display Product Contract](./Provider_Setup_Display_Product_Contract.md). The rules below remain the narrower display-preference subset.
 - Provider order is independent for `popup`, `sidebar`, and `fullPage` surfaces.
 - Surfaces with no saved custom provider order keep the default health/status order.
 - Per-provider quota progress item visibility and order is also independent for `popup`, `sidebar`, and `fullPage`.

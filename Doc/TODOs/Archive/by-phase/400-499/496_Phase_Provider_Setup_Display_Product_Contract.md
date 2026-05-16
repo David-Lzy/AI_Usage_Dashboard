@@ -4,7 +4,7 @@ Date: 2026-05-16
 
 Process rule:
 
-- follow [Development_Guardrails.md](../Development_Guardrails.md)
+- follow [Development_Guardrails.md](../../../../Development_Guardrails.md)
 
 Document class:
 
@@ -16,7 +16,7 @@ Freshness model:
 
 Status:
 
-- active
+- completed
 
 ## Goal
 
@@ -51,6 +51,18 @@ Define the product contract that separates provider connection setup from dashbo
 - Follow-up implementation phases can reference this document without re-deciding the product model.
 
 ## Planned Verification
+
+- `npm run docs:check`
+- `git diff --check`
+
+## Completion Summary
+
+- Added [Provider Setup And Display Product Contract](../../../../Product/Provider_Setup_Display_Product_Contract.md).
+- Defined separate product meanings for configurable provider, source mode, setup state, dashboard display visibility, display eligibility, surface order, and quota item visibility.
+- Documented that Quick Setup is not display-level gated, `show in dashboard` is not sync-enabled, JetBrains deferred state must not enter display ordering, and Gemini policy-only display must not imply live remaining quota.
+- Linked the new contract from Product docs and from the older surface-display contract to prevent split truth.
+
+## Verification
 
 - `npm run docs:check`
 - `git diff --check`
