@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [512_Phase_Settings_About_Card_CSS_Migration.md](./Archive/by-phase/500-599/512_Phase_Settings_About_Card_CSS_Migration.md)
+- latest completed slice: [513_Phase_Provider_Sources_Modularization.md](./Archive/by-phase/500-599/513_Phase_Provider_Sources_Modularization.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -906,6 +906,7 @@ Completed phases should be moved to:
 - the 2026-05-17 `Phase 510` closeout changed popup provider-card status chips to compact accessible icon chips and made the provider-card header single-line first, while preserving full text status badges outside popup cards
 - the 2026-05-17 `Phase 511` closeout changed popup weekly reset labels with concrete timestamps from date-only labels to weekday-plus-time labels, matching Claude-style reset display while preserving monthly/daily date labels
 - the 2026-05-17 `Phase 512` closeout replaced 7 inline style objects on the Settings About card with `.settings-about` CSS classes in surfaces.css, aligning with the project's CSS-class-only convention
+- the 2026-05-17 `Phase 513` closeout extracted `ProviderSourceFidelityKind`, `ProviderSourceDisplayCopy`, and `DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY` into `src/shared/provider-source-copy.ts` and URL-matching helpers into `src/shared/provider-source-url-matchers.ts`, reducing `provider-sources.ts` by ~350 lines while preserving all public import paths via re-exports
 
 ## Delivery Standard For Each Phase
 
