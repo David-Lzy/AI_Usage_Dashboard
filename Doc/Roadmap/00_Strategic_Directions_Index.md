@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-15:
 
-- the numbered phase queue is completed through `Phase 487`; `0.1.0-rc.22` is the latest packaged follow-up candidate, current source is aligned through surface-switch, remaining-color-band UI polish, toolbar-icon preferences, configuration backup/Chrome Sync, action-badge rotation, Settings provider-display section promotion, action-badge control polish, Provider quota-item disclosure polish, balanced Settings layout polish, the pre-store maintenance audit, stale Settings CSS cleanup, Settings/Form label refactor, bundle split, CSS consolidation, and RC22 packaging, and RC13 remains the submitted store-review boundary
+- the numbered phase queue is completed through `Phase 489`; `0.1.0-rc.22` is the latest packaged follow-up candidate, current source is aligned through surface-switch, remaining-color-band UI polish, toolbar-icon preferences, configuration backup/Chrome Sync, action-badge rotation, Settings provider-display section promotion, action-badge control polish, Provider quota-item disclosure polish, balanced Settings layout polish, the pre-store maintenance audit, stale Settings CSS cleanup, Settings/Form label refactor, bundle split, CSS consolidation, RC22 packaging, and AGPL-3.0 open-source licensing with digital fingerprint embedding, and RC13 remains the submitted store-review boundary
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness

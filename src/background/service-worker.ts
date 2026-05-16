@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+// Copyright (c) 2026 David-Lzy (https://github.com/David-Lzy). All rights reserved.
+// Source: https://github.com/David-Lzy/AI_Usage_Dashboard
+
 import {
   ensureActionBadgeRotationAlarm,
   ensurePeriodicSyncAlarm,
@@ -18,6 +22,7 @@ import { syncStoredProviderPermissions } from "./provider-permissions";
 import { runSyncEngine } from "./sync-engine";
 import { seedAppStateIfEmpty } from "../shared/storage";
 import { readStoreScreenshotRuntimeLock } from "../shared/store-screenshot-runtime-lock";
+import { BUILD_INFO } from "../shared/build-info";
 
 async function syncActionToolbarFromState(state: AppState) {
   const timestampMs = Date.now();
@@ -32,6 +37,13 @@ async function ensureBackgroundAlarms(state: AppState) {
 }
 
 async function bootstrapBackground() {
+  console.info(
+    `%cAI Usage Dashboard ${BUILD_INFO.version}`,
+    "font-weight:bold",
+    `| © 2026 David-Lzy | AGPL-3.0 | ${BUILD_INFO.sourceOrigin}`,
+    `| build: ${BUILD_INFO.gitCommit} @ ${BUILD_INFO.buildTimestamp}`,
+  );
+
   await chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: false });
 
   if (await readStoreScreenshotRuntimeLock()) {

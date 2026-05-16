@@ -52,6 +52,7 @@ import { SettingsSourceSection } from "../components/SettingsSourceSection";
 import { SettingsPreferencesSection } from "../components/SettingsPreferencesSection";
 import { SettingsProviderDisplaySection } from "../components/SettingsProviderDisplaySection";
 import { MaterialInfoTooltip } from "../components/MaterialInfoTooltip";
+import { BUILD_INFO } from "../../shared/build-info";
 
 type SettingsToast = {
   tone: "success" | "error";
@@ -555,6 +556,58 @@ export function SettingsPage({
           onDismiss={onDismissToast}
         />
       ) : null}
+
+      <section
+        style={{
+          padding: "16px 16px 8px",
+          borderTop: "1px solid var(--md-sys-color-outline-variant)",
+          marginTop: "8px",
+        }}
+      >
+        <div
+          style={{
+            fontSize: "12px",
+            lineHeight: "1.7",
+            color: "var(--md-sys-color-on-surface-variant)",
+          }}
+        >
+          <div style={{ fontWeight: 600, marginBottom: "2px" }}>
+            AI Usage Dashboard {BUILD_INFO.version}
+          </div>
+          <div>
+            {"© 2026 "}
+            <a
+              href={BUILD_INFO.sourceOrigin}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "inherit" }}
+            >
+              David-Lzy
+            </a>
+            {" · "}
+            <a
+              href={`${BUILD_INFO.sourceOrigin}/blob/main/LICENSE`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "var(--md-sys-color-primary)" }}
+            >
+              AGPL-3.0
+            </a>
+            {" · "}
+            <a
+              href={BUILD_INFO.sourceOrigin}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "var(--md-sys-color-primary)" }}
+            >
+              GitHub
+            </a>
+          </div>
+          <div style={{ marginTop: "2px", opacity: 0.6, fontSize: "11px" }}>
+            {BUILD_INFO.gitCommit} · {BUILD_INFO.buildTimestamp.slice(0, 10)}
+          </div>
+        </div>
+      </section>
 
       <SettingsBackToTopButton
         label={i18n.t("settings.actions.back_to_top")}

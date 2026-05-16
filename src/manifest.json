@@ -44,5 +44,6 @@
       "32": "icons/icon32.png"
     }
   },
-  "default_locale": "en"
+  "default_locale": "en",
+  "homepage_url": "https://github.com/David-Lzy/AI_Usage_Dashboard"
 }

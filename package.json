@@ -1,7 +1,13 @@
 {
   "name": "ai-usage-dashboard",
   "version": "0.1.0-rc.22",
-  "private": true,
+  "license": "AGPL-3.0-only",
+  "author": "David-Lzy (https://github.com/David-Lzy)",
+  "homepage": "https://github.com/David-Lzy/AI_Usage_Dashboard",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/David-Lzy/AI_Usage_Dashboard.git"
+  },
   "type": "module",
   "engines": {
     "node": ">=22.12.0"

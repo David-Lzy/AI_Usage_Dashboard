@@ -1,3 +1,4 @@
+import { execSync } from "node:child_process";
 import { readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -6,6 +7,15 @@ import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
 import manifest from "./src/manifest.json";
+import pkg from "./package.json";
+
+function getGitCommit(): string {
+  try {
+    return execSync("git rev-parse --short HEAD").toString().trim();
+  } catch {
+    return "unknown";
+  }
+}
 
 function normalizeRollupId(id: string | null | undefined) {
   return id?.replaceAll("\\", "/") ?? "";
@@ -82,6 +92,12 @@ function stableExtensionBuildOutputPlugin() {
 }
 
 export default defineConfig({
+  define: {
+    __APP_VERSION__:     JSON.stringify(pkg.version),
+    __BUILD_TIMESTAMP__: JSON.stringify(new Date().toISOString()),
+    __GIT_COMMIT__:      JSON.stringify(getGitCommit()),
+    __SOURCE_ORIGIN__:   JSON.stringify(pkg.homepage),
+  },
   plugins: [react(), crx({ manifest }), stableExtensionBuildOutputPlugin()],
   build: {
     outDir: "dist",

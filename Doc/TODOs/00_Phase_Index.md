@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [487_Phase_RC22_Release_Gate_And_Store_Handoff.md](./Archive/by-phase/400-499/487_Phase_RC22_Release_Gate_And_Store_Handoff.md)
+- latest completed slice: [489_Phase_Digital_Fingerprint_Embedding.md](./Archive/by-phase/400-499/489_Phase_Digital_Fingerprint_Embedding.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -881,6 +881,8 @@ Completed phases should be moved to:
 - the 2026-05-15 `Phase 485` closeout lazy-loaded special/debug sidepanel routes and replaced popup/sidepanel runtime copy imports with focused copy-module imports, reducing `dist/assets/sidepanel.js` from about 861.8 KB to 429.2 KB and eliminating the Vite >500 KB chunk warning while preserving stable extension entry filenames
 - the 2026-05-15 `Phase 486` closeout consolidated duplicate form label/info row CSS and source-card summary/session grid CSS while preserving existing spacing, wrapping, typography, route behavior, provider truth, storage, localization, and release packaging
 - the 2026-05-15 `Phase 487` closeout packaged `0.1.0-rc.22` / manifest `0.1.0.22`, generated `release/ai-usage-dashboard-0.1.0-rc.22.zip`, recorded SHA256 `444440c732880c4c05ab5a3c73c5d488447447c1fb2a539a00c5253b8af30104`, and preserved RC13 as the submitted Chrome Web Store review boundary
+- the 2026-05-16 `Phase 488` closeout added AGPL-3.0 `LICENSE` file, updated `package.json` with author/license/repository/homepage, added `homepage_url` to `src/manifest.json`, added license badge and License section to `README.md`, and added SPDX copyright headers to four entry-point source files
+- the 2026-05-16 `Phase 489` closeout injected `__APP_VERSION__`, `__BUILD_TIMESTAMP__`, `__GIT_COMMIT__`, `__SOURCE_ORIGIN__` build constants via `vite.config.ts` define, created `src/vite-env.d.ts` and `src/shared/build-info.ts`, added copyright `console.info` to `src/background/service-worker.ts`, and added About card to `src/sidepanel/routes/SettingsPage.tsx`
 
 ## Delivery Standard For Each Phase
 
