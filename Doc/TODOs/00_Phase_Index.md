@@ -1,6 +1,6 @@
 # Phase Index
 
-Date: 2026-05-15
+Date: 2026-05-16
 
 Process rule:
 
@@ -34,9 +34,14 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: none
+- active phase file: [496_Phase_Provider_Setup_Display_Product_Contract.md](./496_Phase_Provider_Setup_Display_Product_Contract.md)
 - latest completed slice: [495_Phase_Public_Store_Handoff_Closeout.md](./Archive/by-phase/400-499/495_Phase_Public_Store_Handoff_Closeout.md)
-- queued phase files: none
+- queued phase files:
+  - [497_Phase_Quick_Setup_Source_Mode_Cards.md](./497_Phase_Quick_Setup_Source_Mode_Cards.md)
+  - [498_Phase_Dashboard_Display_Eligibility_Model.md](./498_Phase_Dashboard_Display_Eligibility_Model.md)
+  - [499_Phase_Surface_Order_Eligibility_Alignment.md](./499_Phase_Surface_Order_Eligibility_Alignment.md)
+  - [500_Phase_Quota_Item_Eligibility_And_Popup_Order_QA.md](./500_Phase_Quota_Item_Eligibility_And_Popup_Order_QA.md)
+  - [501_Phase_Provider_Setup_Display_Model_Closeout.md](./501_Phase_Provider_Setup_Display_Model_Closeout.md)
 
 Completed phases should be moved to:
 

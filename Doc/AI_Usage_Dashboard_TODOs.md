@@ -1,6 +1,6 @@
 # AI Usage Dashboard TODOs
 
-Date: 2026-05-15
+Date: 2026-05-16
 
 Process rule:
 
@@ -82,7 +82,7 @@ Current post-`Phase 495` execution priority:
 2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.22.zip` as the latest packaged follow-up candidate. It includes post-`rc.21` UI polish, toolbar badge/icon preferences, configuration backup and Chrome Sync, pre-store maintenance cleanup, bundle split, and CSS consolidation through `Phase 487`; current source is ahead through `Phase 495` with AGPL-3.0 open-source licensing, digital fingerprint embedding, the popup provider-visibility fix, public repository readiness docs, six-locale store listing copy, and refreshed public-readiness screenshot evidence.
 3. `P0` - keep the latest store screenshot evidence archived and ready, not pending: [2026-05-16-public-store-readiness-request-archive](./testing/store_screenshot_archives/2026-05-16-public-store-readiness-request-archive/README.md) fulfills the public-repository store handoff with `5/5` images and explicit app-window/dark-mode/resizing truth-boundary notes.
 4. `P1` - if a resubmission becomes necessary, use [2026-05-15_RC22_Pre_Store_Maintenance_Release_Candidate.md](./Milestones/2026-05-15_RC22_Pre_Store_Maintenance_Release_Candidate.md), [Public_Repository_Readiness.md](./Product/Public_Repository_Readiness.md), and [Store_Public_Release_6_Locale_Handoff.md](./Store/Store_Public_Release_6_Locale_Handoff.md) as current handoff references, then create a fresh submitted-review milestone instead of mutating RC13 history.
-5. `P1` - no numbered phase is currently queued after `Phase 495`; future work should start from a new scoped TODO rather than silently changing the RC22 package boundary.
+5. `P1` - run the new provider setup/display model cleanup queue in order: [Phase 496](./TODOs/496_Phase_Provider_Setup_Display_Product_Contract.md), [Phase 497](./TODOs/497_Phase_Quick_Setup_Source_Mode_Cards.md), [Phase 498](./TODOs/498_Phase_Dashboard_Display_Eligibility_Model.md), [Phase 499](./TODOs/499_Phase_Surface_Order_Eligibility_Alignment.md), [Phase 500](./TODOs/500_Phase_Quota_Item_Eligibility_And_Popup_Order_QA.md), and [Phase 501](./TODOs/501_Phase_Provider_Setup_Display_Model_Closeout.md). This queue separates Quick Setup provider connection/source-mode work from Provider Display ordering and quota-item visibility.
 6. `P2` - keep the `Phase 309` first-provider setup behavior stable: zero-provider Settings now recommends one personal-user provider in Quick Setup and popup zero-provider actions deep-link to that same setup card.
 7. `P2` - keep the `Phase 310` cached-first guard stable: standard dashboard routes must keep rendering cached app state while background bootstrap is still loading.
 8. `P2` - keep the `Phase 311` popup view-model split behavior-only: `src/popup/view-models.ts` remains the public aggregator and the extracted setup-coverage / featured-card modules should not change popup UI semantics.
@@ -152,7 +152,7 @@ Delivery rule for this stage:
 - keep active implementation phases narrow and independently verifiable
 - keep file-splitting separate from release packaging, provider verification, and store evidence closeout
 - preserve the current provider truth boundaries while changing UI presentation
-- treat `rc.13` as the current submitted store-review boundary, and `rc.22` as the latest packaged follow-up candidate through the Phase 487 package boundary; current source is ahead through Phase 495, while `rc.21`, `rc.20`, `rc.19`, `rc.18`, `rc.17`, `rc.16`, `rc.15`, `rc.14`, `rc.12`, and `rc.11` remain historical evidence
+- treat `rc.13` as the current submitted store-review boundary, and `rc.22` as the latest packaged follow-up candidate through the Phase 487 package boundary; current source is ahead through Phase 495, with Phase 496 through Phase 501 queued for provider setup/display model cleanup, while `rc.21`, `rc.20`, `rc.19`, `rc.18`, `rc.17`, `rc.16`, `rc.15`, `rc.14`, `rc.12`, and `rc.11` remain historical evidence
 
 Phase status update:
 
