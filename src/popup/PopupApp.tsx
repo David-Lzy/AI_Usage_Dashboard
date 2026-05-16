@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import type {
   AppLocalePreference,
   AppState,
+  ProviderId,
 } from "../providers/types";
 import { sendAppMessage } from "../shared/app-client";
 import {
@@ -38,7 +39,6 @@ import {
 } from "./popup-route-actions";
 import { runPopupRefreshAction } from "./popup-refresh-action";
 import { runPopupThemeToggleAction } from "./popup-theme-toggle-action";
-import { runPopupHideProviderAction } from "./popup-hide-provider-action";
 import { runPopupGuidanceAction } from "./popup-guidance-action";
 import { PopupActionSection } from "./PopupActionSection";
 import { PopupFeaturedProviderList } from "./PopupFeaturedProviderList";
@@ -64,6 +64,9 @@ export function PopupApp() {
   });
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isThemeTogglePending, setIsThemeTogglePending] = useState(false);
+  const [hiddenPopupProviderIds, setHiddenPopupProviderIds] = useState<
+    ProviderId[]
+  >([]);
 
   useEffect(() => {
     let disposed = false;
@@ -195,6 +198,7 @@ export function PopupApp() {
       buildPopupSummaryLabels(runtimeI18n),
       runtimeI18n.formatNumber,
       buildProviderSourceDisplayLocalizedCopy(runtimeI18n),
+      hiddenPopupProviderIds,
     ),
     runtimeI18n,
   );
@@ -226,11 +230,11 @@ export function PopupApp() {
     } = {},
   ) {
     if (action.kind === "hide-provider" && action.providerId) {
-      const result = await runPopupHideProviderAction(action.providerId);
-      setLoadState(
-        result.status === "ready"
-          ? { status: "ready", appState: result.state }
-          : { status: "error", message: result.message },
+      const providerId = action.providerId;
+      setHiddenPopupProviderIds((providerIds) =>
+        providerIds.includes(providerId)
+          ? providerIds
+          : [...providerIds, providerId],
       );
       return;
     }

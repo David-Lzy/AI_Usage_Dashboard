@@ -19,7 +19,7 @@ Current packaged release state:
 - package version: `0.1.0-rc.22`
 - Chrome manifest version: `0.1.0.22`
 - packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.22.zip`
-- source status: `rc.22` package bytes are aligned through `Phase 489`; no numbered phase is currently queued after `Phase 489`. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
+- source status: `rc.22` package bytes are aligned through `Phase 487`; current source is ahead through `Phase 490` with AGPL/build-fingerprint metadata and a popup provider-visibility fix. No numbered phase is currently queued after `Phase 490`. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
 - packaged follow-up milestone: [2026-05-15 RC22 Pre-Store Maintenance Release Candidate](./Doc/Milestones/2026-05-15_RC22_Pre_Store_Maintenance_Release_Candidate.md)
 - submitted review milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
@@ -57,7 +57,7 @@ Next execution queue:
 
 1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary; `0.1.0-rc.22` is the latest packaged follow-up candidate for a deliberate human resubmission
 2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC22 follow-up milestone](./Doc/Milestones/2026-05-15_RC22_Pre_Store_Maintenance_Release_Candidate.md) as the current packaged-source reference
-3. no numbered phase is currently queued after `Phase 489`; future work should start from a new scoped TODO rather than silently changing the RC22 package boundary
+3. no numbered phase is currently queued after `Phase 490`; future work should start from a new scoped TODO rather than silently changing the RC22 package boundary
 4. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 5. keep real operator evidence closed and archived; do not open another interaction-audit or theme-recovery operator evidence phase unless a new surface or theme regression creates a fresh review need
 6. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes

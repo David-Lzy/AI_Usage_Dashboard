@@ -54,6 +54,23 @@ describe("popup view models", () => {
     ]);
   });
 
+  it("keeps popup provider candidates independent from dashboard visibility toggles", () => {
+    const model = buildPopupViewModel({
+      ...SAMPLE_APP_STATE,
+      providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
+        ...provider,
+        enabled: provider.id === "codex",
+      })),
+    });
+
+    expect(model.visibleProviders.map((provider) => provider.providerId)).toEqual([
+      "claude-code",
+      "codex",
+      "gemini",
+      "cursor",
+    ]);
+  });
+
   it("falls back to the first visible providers when everything is healthy", () => {
     const model = buildPopupViewModel({
       ...SAMPLE_APP_STATE,
@@ -150,6 +167,7 @@ describe("popup view models", () => {
   it("surfaces a start-here guidance card when no visible providers are enabled", () => {
     const model = buildPopupViewModel({
       ...SAMPLE_APP_STATE,
+      providers: [],
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
         ...provider,
         enabled: false,
@@ -267,6 +285,7 @@ describe("popup view models", () => {
     const model = localizePopupViewModel(
       buildPopupViewModel({
         ...SAMPLE_APP_STATE,
+        providers: [],
         providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
           ...provider,
           enabled: false,
@@ -791,11 +810,12 @@ describe("popup view models", () => {
   it("builds circular usage progress for structured popup provider cards", () => {
     const longUsageSummary =
       "Visible Codex usage: 5-hour usage window: 100% remaining · Weekly usage window: 32% remaining · GPT-5.3-Codex-Spark 每周使用限额: 100% remaining · Flex credit balance: 0 credits";
-    const model = buildPopupViewModel({
-      ...SAMPLE_APP_STATE,
-      providers: SAMPLE_APP_STATE.providers.map((provider) =>
-        provider.providerId === "codex"
-          ? {
+    const model = buildPopupViewModel(
+      {
+        ...SAMPLE_APP_STATE,
+        providers: SAMPLE_APP_STATE.providers.map((provider) =>
+          provider.providerId === "codex"
+            ? {
               ...provider,
               planName: "Codex Personal Usage Page (Weekly usage window)",
               quotaUnit: "percent" as const,
@@ -848,23 +868,42 @@ describe("popup view models", () => {
                   detail: null,
                 },
               ],
-            }
-          : provider,
-      ),
-      providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
-        ...provider,
-        enabled: provider.id === "codex",
-        status: provider.id === "codex" ? "granted" : provider.status,
-        credentialStatus:
-          provider.id === "codex" ? "missing" : provider.credentialStatus,
-      })),
-    });
+              }
+            : provider,
+        ),
+        providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
+          ...provider,
+          enabled: provider.id === "codex",
+          status: provider.id === "codex" ? "granted" : provider.status,
+          credentialStatus:
+            provider.id === "codex" ? "missing" : provider.credentialStatus,
+        })),
+        settings: {
+          ...SAMPLE_APP_STATE.settings,
+          providerOrderBySurface: {
+            ...SAMPLE_APP_STATE.settings.providerOrderBySurface,
+            popup: ["codex", "claude-code", "gemini", "cursor", "jetbrains"],
+          },
+        },
+      },
+      undefined,
+      undefined,
+      undefined,
+      ["claude-code", "gemini", "cursor"],
+    );
     const localizedModel = localizePopupViewModel(
       model,
       createRuntimeI18n("zh-CN"),
     );
 
-    expect(model.featuredProviderCards[0]?.usageProgressCircles).toEqual([
+    const codexCard = model.featuredProviderCards.find(
+      (card) => card.provider.providerId === "codex",
+    );
+    const localizedCodexCard = localizedModel.featuredProviderCards.find(
+      (card) => card.provider.providerId === "codex",
+    );
+
+    expect(codexCard?.usageProgressCircles).toEqual([
       {
         label: "5-hour usage window",
         valueLabel: "100%",
@@ -880,10 +919,10 @@ describe("popup view models", () => {
         tone: "warning",
       },
     ]);
-    expect(model.featuredProviderCards[0]?.secondaryDetail).not.toBe(
+    expect(codexCard?.secondaryDetail).not.toBe(
       longUsageSummary,
     );
-    expect(localizedModel.featuredProviderCards[0]?.usageProgressCircles[1]).toEqual(
+    expect(localizedCodexCard?.usageProgressCircles[1]).toEqual(
       {
         label: "Weekly usage window",
         valueLabel: "32%",
@@ -897,11 +936,12 @@ describe("popup view models", () => {
   it("keeps summary-only personal usage context visible in popup provider cards", () => {
     const cursorUsageSummary =
       "Visible Cursor usage: Billing period: Mar 23 - Apr 21 · Visible plans: Pro · Pro+ · Ultra · CSV export available";
-    const model = buildPopupViewModel({
-      ...SAMPLE_APP_STATE,
-      providers: SAMPLE_APP_STATE.providers.map((provider) =>
-        provider.providerId === "cursor"
-          ? {
+    const model = buildPopupViewModel(
+      {
+        ...SAMPLE_APP_STATE,
+        providers: SAMPLE_APP_STATE.providers.map((provider) =>
+          provider.providerId === "cursor"
+            ? {
               ...provider,
               syncStatus: "ok" as const,
               tone: "neutral" as const,
@@ -909,17 +949,33 @@ describe("popup view models", () => {
               usageWindows: undefined,
               usageBalances: undefined,
               usageSummary: cursorUsageSummary,
-            }
-          : provider,
-      ),
-      providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
-        ...provider,
-        enabled: provider.id === "cursor",
-        status: provider.id === "cursor" ? "granted" : provider.status,
-      })),
-    });
+              }
+            : provider,
+        ),
+        providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
+          ...provider,
+          enabled: provider.id === "cursor",
+          status: provider.id === "cursor" ? "granted" : provider.status,
+        })),
+        settings: {
+          ...SAMPLE_APP_STATE.settings,
+          providerOrderBySurface: {
+            ...SAMPLE_APP_STATE.settings.providerOrderBySurface,
+            popup: ["cursor", "claude-code", "codex", "gemini", "jetbrains"],
+          },
+        },
+      },
+      undefined,
+      undefined,
+      undefined,
+      ["claude-code", "codex", "gemini"],
+    );
 
-    expect(model.featuredProviderCards[0]?.secondaryDetail).toBe(
+    const cursorCard = model.featuredProviderCards.find(
+      (card) => card.provider.providerId === "cursor",
+    );
+
+    expect(cursorCard?.secondaryDetail).toBe(
       cursorUsageSummary,
     );
   });
@@ -927,14 +983,16 @@ describe("popup view models", () => {
   it("switches the featured section to policy-only language when every visible provider is policy-only", () => {
     const model = buildPopupViewModel({
       ...SAMPLE_APP_STATE,
-      providers: SAMPLE_APP_STATE.providers.map((provider) => ({
-        ...provider,
-        syncedAt: "2026-04-20 10:42",
-        lastSyncLabel: "Synced just now",
-        syncStatus: "ok",
-        tone: "neutral",
-        warningReason: null,
-      })),
+      providers: SAMPLE_APP_STATE.providers
+        .filter((provider) => provider.providerId === "gemini")
+        .map((provider) => ({
+          ...provider,
+          syncedAt: "2026-04-20 10:42",
+          lastSyncLabel: "Synced just now",
+          syncStatus: "ok",
+          tone: "neutral",
+          warningReason: null,
+        })),
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
         ...provider,
         enabled: provider.id === "gemini",
@@ -1207,6 +1265,7 @@ describe("popup view models", () => {
     const model = localizePopupViewModel(
       buildPopupViewModel({
         ...SAMPLE_APP_STATE,
+        providers: [],
         providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
           ...provider,
           enabled: false,

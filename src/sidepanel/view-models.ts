@@ -12,6 +12,7 @@ import type {
 } from "../providers/types";
 import {
   buildProviderSourceDisplay,
+  getProviderSourceBlueprint,
   getOpenableRouteHint,
   type ProviderSourceDisplayCopy,
 } from "../shared/provider-sources";
@@ -314,6 +315,31 @@ export function getVisibleProviders(
         state.settings.providerOrderBySurface[surface],
       )
     : providers;
+}
+
+export function getPopupProviders(
+  state: AppState,
+  sourceDisplayCopy?: ProviderSourceDisplayCopy,
+): ProviderViewModel[] {
+  const providers = state.providers
+    .filter((provider) =>
+      getProviderSourceBlueprint(provider.providerId).sources.some(
+        (source) => source.rolloutStage === "shipped",
+      ),
+    )
+    .map((provider) =>
+      toProviderViewModel(
+        provider,
+        findProviderSetting(state.providerSettings, provider.providerId),
+        sourceDisplayCopy,
+      ),
+    )
+    .sort(compareProviders);
+
+  return applyProviderOrderPreference(
+    providers,
+    state.settings.providerOrderBySurface.popup,
+  );
 }
 
 export function getProviderViewModel(

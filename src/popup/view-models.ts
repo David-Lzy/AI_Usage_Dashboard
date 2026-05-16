@@ -1,10 +1,11 @@
 import type {
   AppState,
+  ProviderId,
   ProviderSetting,
 } from "../providers/types";
 import { getRecommendedFirstSetupProvider } from "../shared/first-provider-setup";
 import type { ProviderSourceDisplayCopy } from "../shared/provider-sources";
-import { getVisibleProviders } from "../sidepanel/view-models";
+import { getPopupProviders } from "../sidepanel/view-models";
 import type {
   PopupFirstSetupProvider,
   PopupSummaryLabels,
@@ -67,9 +68,14 @@ export function buildPopupViewModel(
   summaryLabels: PopupSummaryLabels = DEFAULT_POPUP_SUMMARY_LABELS,
   formatValue: PopupValueFormatter = DEFAULT_POPUP_VALUE_FORMATTER,
   sourceDisplayCopy?: ProviderSourceDisplayCopy,
+  hiddenProviderIds: readonly ProviderId[] = [],
 ): PopupViewModel {
-  const visibleProviders = getVisibleProviders(state, sourceDisplayCopy, "popup");
-  const attentionProviders = visibleProviders.filter(needsAttention);
+  const visibleProviders = getPopupProviders(state, sourceDisplayCopy);
+  const hiddenProviders = new Set(hiddenProviderIds);
+  const featuredCandidateProviders = visibleProviders.filter(
+    (provider) => !hiddenProviders.has(provider.providerId),
+  );
+  const attentionProviders = featuredCandidateProviders.filter(needsAttention);
   const firstSetupProvider =
     visibleProviders.length === 0
       ? buildFirstSetupProvider(state.providerSettings)
@@ -83,7 +89,7 @@ export function buildPopupViewModel(
   const popupProviders =
     attentionProviders.length > 0
       ? attentionProviders.slice(0, 3)
-      : visibleProviders.slice(0, 3);
+      : featuredCandidateProviders.slice(0, 3);
 
   return {
     headerDetail: buildPopupHeaderDetail(
@@ -111,7 +117,7 @@ export function buildPopupViewModel(
       firstSetupProvider,
     ),
     featuredSection: buildFeaturedSection(
-      visibleProviders,
+      featuredCandidateProviders,
       attentionProviders,
       firstSetupProvider,
     ),
