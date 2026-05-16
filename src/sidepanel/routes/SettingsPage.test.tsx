@@ -76,6 +76,13 @@ describe("SettingsPage", () => {
     expect(html).toContain(">Quick Setup<");
     expect(html).toContain('data-quick-setup-source-modes="cursor-personal-page"');
     expect(html).toContain('data-quick-setup-source-mode="session_page"');
+    expect(html).toContain(
+      'class="dashboard-section__header quick-setup-section__header"',
+    );
+    expect(html).toContain('data-quick-setup-team-api-toggle=""');
+    expect(html).toContain(
+      "text-button--outlined quick-setup-section__team-toggle",
+    );
     expect(html).toContain("Show team/API providers");
     expect(html).not.toContain("Cursor Team Admin API");
     expect(html).toContain("Cursor personal dashboard usage page");

@@ -341,7 +341,7 @@ export function SettingsQuickSetupSection({
 
   return (
     <section className="dashboard-section settings-section-anchor" id={sectionId}>
-      <div className="dashboard-section__header">
+      <div className="dashboard-section__header quick-setup-section__header">
         <div>
           <p className="section-label">{settingsCopy.quickSetup.eyebrow}</p>
           <div className="section-title-with-info">
@@ -352,9 +352,10 @@ export function SettingsQuickSetupSection({
           </div>
         </div>
         <button
-          className="text-button"
+          className="text-button text-button--outlined quick-setup-section__team-toggle"
           type="button"
           aria-expanded={showTeamApiProviders}
+          data-quick-setup-team-api-toggle=""
           onClick={() => setShowTeamApiProviders((current) => !current)}
         >
           {showTeamApiProviders

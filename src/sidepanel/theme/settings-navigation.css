@@ -68,6 +68,17 @@
   gap: var(--app-space-5);
 }
 
+.quick-setup-section__header {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: var(--app-space-4);
+}
+
+.quick-setup-section__team-toggle {
+  justify-self: end;
+  white-space: nowrap;
+}
+
 .quick-setup-card {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -371,6 +382,14 @@
 }
 
 @media (max-width: 720px) {
+  .quick-setup-section__header {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .quick-setup-section__team-toggle {
+    justify-self: start;
+  }
+
   .quick-setup-card__header {
     flex-direction: column;
     align-items: stretch;
