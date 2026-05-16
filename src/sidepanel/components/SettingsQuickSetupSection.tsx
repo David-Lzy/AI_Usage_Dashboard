@@ -1,5 +1,6 @@
 import type {
   ProviderId,
+  ProviderTone,
   ProviderSetting,
   ProviderSnapshot,
   SettingsUserLevel,
@@ -7,6 +8,7 @@ import type {
 import type { ResolvedTextDirection } from "../../shared/i18n";
 import { getRecommendedFirstSetupProvider } from "../../shared/first-provider-setup";
 import { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
+import type { ProviderSourceDisplayCopy } from "../../shared/provider-sources";
 import type { SettingsQuickSetupActionModel } from "../settings-view-models";
 import { buildSettingsQuickSetupCardModel } from "../settings-view-models";
 import {
@@ -19,6 +21,7 @@ type SettingsQuickSetupSectionProps = {
   activeSessionPageAttachAvailable: boolean;
   focusedProviderId?: ProviderId | null;
   providers: ProviderSetting[];
+  providerSourceDisplayCopy: ProviderSourceDisplayCopy;
   sectionId?: string;
   sessionPageNavigationAvailable: boolean;
   settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>;
@@ -36,6 +39,7 @@ export function SettingsQuickSetupSection({
   activeSessionPageAttachAvailable,
   focusedProviderId = null,
   providers,
+  providerSourceDisplayCopy,
   sectionId,
   sessionPageNavigationAvailable,
   settingsCopy,
@@ -110,6 +114,7 @@ export function SettingsQuickSetupSection({
       snapshot,
       settingsCopy,
       userLevel,
+      providerSourceDisplayCopy,
     );
     const secondaryActions = model.secondaryActions.filter(
       (action, index, actions) =>
@@ -206,6 +211,52 @@ export function SettingsQuickSetupSection({
           ) : null}
         </div>
 
+        <div
+          className="quick-setup-card__source-modes"
+          data-quick-setup-source-modes={provider.id}
+        >
+          <div className="quick-setup-card__source-modes-header">
+            <p className="source-card__label">
+              {settingsCopy.sources.preferenceLabel}
+            </p>
+            <p className="source-card__value">{model.sourcePreferenceValue}</p>
+          </div>
+          <div className="quick-setup-card__source-mode-list">
+            {model.sourceModes.map((sourceMode) => (
+              <article
+                key={sourceMode.id}
+                className="quick-setup-card__source-mode"
+                data-quick-setup-source-mode={sourceMode.id}
+                data-quick-setup-source-mode-current={
+                  sourceMode.isCurrent ? "true" : "false"
+                }
+              >
+                <div className="quick-setup-card__source-mode-title-row">
+                  <p className="quick-setup-card__source-mode-title">
+                    {sourceMode.label}
+                  </p>
+                  {sourceMode.isCurrent ? (
+                    <span className="meta-chip">
+                      {settingsCopy.quickSetup.currentSetupLabel}
+                    </span>
+                  ) : null}
+                </div>
+                <div className="quick-setup-card__source-mode-chips">
+                  {sourceMode.chips.map((chip) => (
+                    <span
+                      key={chip.label}
+                      className={getQuickSetupStatusClassName(chip.tone)}
+                    >
+                      {chip.label}
+                    </span>
+                  ))}
+                </div>
+                <p className="supporting-copy">{sourceMode.detail}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+
         {model.primaryAction || secondaryActions.length > 0 ? (
           <div className="credential-actions quick-setup-card__actions">
             {model.primaryAction ? (
@@ -293,7 +344,7 @@ export function SettingsQuickSetupSection({
 }
 
 function getQuickSetupStatusClassName(
-  tone: "error" | "warning" | "neutral",
+  tone: ProviderTone,
 ) {
   return `meta-chip ${
     tone === "error"

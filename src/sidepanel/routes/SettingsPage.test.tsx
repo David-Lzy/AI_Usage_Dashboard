@@ -74,6 +74,11 @@ describe("SettingsPage", () => {
     expect(html).toContain('data-settings-material-select="theme-mode"');
     expect(html).toContain('data-provider-carousel=""');
     expect(html).toContain(">Quick Setup<");
+    expect(html).toContain('data-quick-setup-source-modes="cursor"');
+    expect(html).toContain('data-quick-setup-source-mode="official_api"');
+    expect(html).toContain('data-quick-setup-source-mode="session_page"');
+    expect(html).toContain("Cursor Team Admin API");
+    expect(html).toContain("Cursor personal dashboard usage page");
     expect(html).toContain('data-settings-material-select="popup-circular-row-count"');
     expect(html).toContain('data-action-badge-selection-controls=""');
     expect(html).toContain('data-settings-material-select="toolbar-icon-mode"');
@@ -191,6 +196,7 @@ describe("SettingsPage", () => {
     for (const provider of hiddenProviders) {
       expect(html).toContain(`data-quick-setup-provider-id="${provider.id}"`);
       expect(html).toContain(`data-visibility-toggle="${provider.id}"`);
+      expect(html).toContain(`data-quick-setup-source-modes="${provider.id}"`);
     }
     expect(html).not.toContain('class="quick-setup-card__more"');
     expect(html).not.toContain("More Provider");

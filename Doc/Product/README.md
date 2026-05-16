@@ -76,5 +76,6 @@ Status note:
 - `Phase 487` packaged `0.1.0-rc.22` / manifest `0.1.0.22`, generated `release/ai-usage-dashboard-0.1.0-rc.22.zip`, recorded SHA256 `444440c732880c4c05ab5a3c73c5d488447447c1fb2a539a00c5253b8af30104`, and preserved RC13 as the submitted Chrome Web Store review boundary.
 - `Phase 488` through `Phase 495` completed the public-source and Chrome Web Store handoff docs: AGPL-3.0 publication metadata, build fingerprinting, popup provider-visibility decoupling, public repository readiness docs, six-locale store listing copy, refreshed public-readiness screenshots, and current index alignment.
 - `Phase 496` defined the provider setup/display product contract: Quick Setup owns provider connection and source-mode setup; Provider Display owns dashboard visibility, per-surface ordering, and quota item visibility; deferred providers do not enter visible ordering, and policy-only providers must not imply live remaining quota.
+- `Phase 497` rendered each provider's source paths inside the Quick Setup carousel card, keeping API, session-page, policy-only, and deferred paths visible without changing provider evidence, permissions, storage, or display eligibility.
 - Current implementation source is aligned with the `0.1.0-rc.22` package through `Phase 487`.
-- Current source is ahead of the `0.1.0-rc.22` package through `Phase 496`.
+- Current source is ahead of the `0.1.0-rc.22` package through `Phase 497`.

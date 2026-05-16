@@ -7,7 +7,13 @@ import type {
 } from "../providers/types";
 import {
   buildProviderSourceDisplay,
+  DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY,
+  getConnectionModeLabel,
+  getProviderSourceBlueprint,
+  getRolloutStageLabel,
+  getSourceKindLabel,
   type ProviderSourceDisplay,
+  type ProviderSourceDisplayCopy,
   type ProviderSourceStateKind,
 } from "../shared/provider-sources";
 import type { buildSettingsLocalizedCopy } from "../shared/settings-localized-copy";
@@ -28,6 +34,19 @@ export type SettingsQuickSetupActionModel = {
   label: string;
 };
 
+export type SettingsQuickSetupSourceModeChipModel = {
+  label: string;
+  tone: ProviderTone;
+};
+
+export type SettingsQuickSetupSourceModeModel = {
+  chips: SettingsQuickSetupSourceModeChipModel[];
+  detail: string;
+  id: string;
+  isCurrent: boolean;
+  label: string;
+};
+
 export type SettingsQuickSetupCardModel = {
   currentSetupValue: string;
   enabled: boolean;
@@ -38,6 +57,8 @@ export type SettingsQuickSetupCardModel = {
   providerId: ProviderId;
   providerLabel: string;
   secondaryActions: SettingsQuickSetupActionModel[];
+  sourceModes: SettingsQuickSetupSourceModeModel[];
+  sourcePreferenceValue: string;
   statusLabel: string;
   statusTone: ProviderTone;
 };
@@ -99,12 +120,78 @@ function buildQuickSetupHelperText(
   }
 }
 
+function getQuickSetupSourceModeTone(
+  sourceMode: {
+    kind: string;
+    rolloutStage: string;
+  },
+): ProviderTone {
+  if (sourceMode.rolloutStage === "deferred") {
+    return "warning";
+  }
+
+  if (sourceMode.kind === "policy_only") {
+    return "warning";
+  }
+
+  return "neutral";
+}
+
+function buildQuickSetupSourceModes(
+  provider: ProviderSetting,
+  sourceDisplay: ProviderSourceDisplay,
+  sourceDisplayCopy: ProviderSourceDisplayCopy,
+): SettingsQuickSetupSourceModeModel[] {
+  return getProviderSourceBlueprint(provider.id).sources
+    .slice()
+    .sort((left, right) => left.priority - right.priority)
+    .map((sourcePlan) => ({
+      chips: [
+        {
+          label: getSourceKindLabel(sourcePlan.kind, sourceDisplayCopy),
+          tone: getQuickSetupSourceModeTone(sourcePlan),
+        },
+        {
+          label: getRolloutStageLabel(
+            sourcePlan.rolloutStage,
+            sourceDisplayCopy,
+          ),
+          tone:
+            sourcePlan.rolloutStage === "shipped" ? "neutral" : "warning",
+        },
+        {
+          label: getConnectionModeLabel(
+            sourcePlan.connectionMode,
+            sourceDisplayCopy,
+          ),
+          tone: "neutral",
+        },
+      ],
+      detail: sourcePlan.contractDetail,
+      id: sourcePlan.kind,
+      isCurrent: provider.enabled && sourcePlan.kind === sourceDisplay.currentKind,
+      label: sourcePlan.label,
+    }));
+}
+
 export function buildSettingsQuickSetupCardModel(
   provider: ProviderSetting,
   snapshot: ProviderSnapshot,
   copy: ReturnType<typeof buildSettingsLocalizedCopy>,
   userLevel: SettingsUserLevel,
+  sourceDisplayCopy: ProviderSourceDisplayCopy = DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY,
 ): SettingsQuickSetupCardModel {
+  const sourceDisplay = buildProviderSourceDisplay(
+    snapshot,
+    provider,
+    sourceDisplayCopy,
+  );
+  const sourceModes = buildQuickSetupSourceModes(
+    provider,
+    sourceDisplay,
+    sourceDisplayCopy,
+  );
+
   if (!provider.enabled) {
     return {
       currentSetupValue: copy.quickSetup.currentSetup.disabled,
@@ -119,12 +206,13 @@ export function buildSettingsQuickSetupCardModel(
       providerId: provider.id,
       providerLabel: provider.label,
       secondaryActions: [],
+      sourceModes,
+      sourcePreferenceValue: sourceDisplay.sourcePreferenceLabel,
       statusLabel: copy.quickSetup.currentSetup.disabled,
       statusTone: "neutral",
     };
   }
 
-  const sourceDisplay = buildProviderSourceDisplay(snapshot, provider);
   const stateKind = resolveSettingsSetupStateKind(sourceDisplay, provider);
   const sessionPageAvailable =
     sourceDisplay.sessionPagePlan?.rolloutStage === "shipped";
@@ -211,6 +299,8 @@ export function buildSettingsQuickSetupCardModel(
     providerId: provider.id,
     providerLabel: provider.label,
     secondaryActions,
+    sourceModes,
+    sourcePreferenceValue: sourceDisplay.sourcePreferenceLabel,
     statusLabel:
       stateKind === "host_access_missing"
         ? copy.permissions.hostAccessMissing

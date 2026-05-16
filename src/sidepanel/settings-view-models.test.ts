@@ -129,6 +129,21 @@ describe("settings view models", () => {
 
     expect(quickSetupModel.statusLabel).toBe("Ready to sync");
     expect(quickSetupModel.currentSetupValue).toBe("Signed-in usage page");
+    expect(quickSetupModel.sourcePreferenceValue).toBe("Auto");
+    expect(quickSetupModel.sourceModes.map((mode) => mode.id)).toEqual([
+      "official_api",
+      "session_page",
+    ]);
+    expect(
+      quickSetupModel.sourceModes.find((mode) => mode.id === "session_page"),
+    ).toMatchObject({
+      isCurrent: true,
+      label: "Cursor personal dashboard usage page",
+    });
+    expect(
+      quickSetupModel.sourceModes.find((mode) => mode.id === "official_api")
+        ?.chips.map((chip) => chip.label),
+    ).toEqual(["Official API", "Shipped", "Stored credential"]);
     expect(quickSetupModel.primaryAction).toBeNull();
     expect(
       quickSetupModel.secondaryActions.some(
@@ -225,6 +240,50 @@ describe("settings view models", () => {
       id: "open_page_and_sign_in",
       label: "Open page and sign in",
     });
+  });
+
+  it("keeps source-mode cards available for disabled quick-setup providers", () => {
+    const provider =
+      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "gemini") ??
+      null;
+    const snapshot =
+      SAMPLE_APP_STATE.providers.find(
+        (entry) => entry.providerId === "gemini",
+      ) ?? null;
+    const settingsCopy = buildSettingsLocalizedCopy(createRuntimeI18n("zh-CN"));
+    const sourceDisplayCopy = buildProviderSourceDisplayLocalizedCopy(
+      createRuntimeI18n("zh-CN"),
+    );
+
+    expect(provider).not.toBeNull();
+    expect(snapshot).not.toBeNull();
+
+    const quickSetupModel = buildSettingsQuickSetupCardModel(
+      {
+        ...provider!,
+        enabled: false,
+      },
+      snapshot!,
+      settingsCopy,
+      "basic",
+      sourceDisplayCopy,
+    );
+
+    expect(quickSetupModel.enabled).toBe(false);
+    expect(quickSetupModel.sourcePreferenceValue).toBe("自动");
+    expect(quickSetupModel.sourceModes.map((mode) => mode.id)).toEqual([
+      "policy_only",
+      "session_page",
+    ]);
+    expect(quickSetupModel.sourceModes[0]).toMatchObject({
+      isCurrent: false,
+      label: "Documented Gemini quota policy",
+    });
+    expect(quickSetupModel.sourceModes[0]?.chips.map((chip) => chip.label)).toEqual([
+      "仅策略",
+      "已发布",
+      "无 live 连接",
+    ]);
   });
 
   it("splits source-card data into primary summary fields and diagnostics", () => {

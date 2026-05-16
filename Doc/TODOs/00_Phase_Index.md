@@ -34,10 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [497_Phase_Quick_Setup_Source_Mode_Cards.md](./497_Phase_Quick_Setup_Source_Mode_Cards.md)
-- latest completed slice: [496_Phase_Provider_Setup_Display_Product_Contract.md](./Archive/by-phase/400-499/496_Phase_Provider_Setup_Display_Product_Contract.md)
+- active phase file: [498_Phase_Dashboard_Display_Eligibility_Model.md](./498_Phase_Dashboard_Display_Eligibility_Model.md)
+- latest completed slice: [497_Phase_Quick_Setup_Source_Mode_Cards.md](./Archive/by-phase/400-499/497_Phase_Quick_Setup_Source_Mode_Cards.md)
 - queued phase files:
-  - [498_Phase_Dashboard_Display_Eligibility_Model.md](./498_Phase_Dashboard_Display_Eligibility_Model.md)
   - [499_Phase_Surface_Order_Eligibility_Alignment.md](./499_Phase_Surface_Order_Eligibility_Alignment.md)
   - [500_Phase_Quota_Item_Eligibility_And_Popup_Order_QA.md](./500_Phase_Quota_Item_Eligibility_And_Popup_Order_QA.md)
   - [501_Phase_Provider_Setup_Display_Model_Closeout.md](./501_Phase_Provider_Setup_Display_Model_Closeout.md)
@@ -894,6 +893,7 @@ Completed phases should be moved to:
 - the 2026-05-16 `Phase 494` closeout aligned store copy, screenshot storyboard, screenshot selection, localization source, privacy, and public-readiness docs around the public repository handoff
 - the 2026-05-16 `Phase 495` closeout updated project indexes and current facts for the public-source/store handoff, with current source ahead of packaged RC22 through Phase 495 and no numbered phase queued
 - the 2026-05-16 `Phase 496` closeout defined the provider setup/display product contract, separating Quick Setup source-mode setup from Provider Display visibility/order/quota controls, keeping JetBrains deferred out of visible ordering, and preserving Gemini policy-only truth boundaries
+- the 2026-05-16 `Phase 497` closeout rendered provider source paths inside Quick Setup cards while preserving carousel behavior, source metadata, provider truth, storage, and display eligibility boundaries
 
 ## Delivery Standard For Each Phase
 

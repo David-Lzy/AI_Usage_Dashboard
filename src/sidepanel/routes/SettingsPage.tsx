@@ -24,6 +24,7 @@ import type {
 } from "../../providers/types";
 import { createRuntimeI18n } from "../../shared/i18n";
 import { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
+import { buildProviderSourceDisplayLocalizedCopy } from "../../shared/provider-source-display-localized-copy";
 import { getPreferredScrollBehavior } from "../motion";
 
 import {
@@ -245,6 +246,8 @@ export function SettingsPage({
     typeof window !== "undefined" ? window : undefined,
   );
   const settingsCopy = buildSettingsLocalizedCopy(i18n);
+  const providerSourceDisplayCopy =
+    buildProviderSourceDisplayLocalizedCopy(i18n);
   const { localeOptions, themeModeOptions } = buildSettingsPreferenceOptions({
     i18n,
     providers,
@@ -403,6 +406,7 @@ export function SettingsPage({
         focusedProviderId={quickSetupFocusedProviderId}
         sectionId={SETTINGS_SECTION_IDS.quickSetup}
         providers={providers}
+        providerSourceDisplayCopy={providerSourceDisplayCopy}
         snapshots={snapshots}
         settingsCopy={settingsCopy}
         textDirection={i18n.resolvedTextDirection}

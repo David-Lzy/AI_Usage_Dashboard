@@ -121,6 +121,72 @@
   justify-content: flex-start;
 }
 
+.quick-setup-card__source-modes {
+  display: grid;
+  gap: var(--app-space-3);
+  padding: var(--app-space-3);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--md-sys-color-surface-container-low);
+}
+
+.quick-setup-card__source-modes-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--app-space-3);
+}
+
+.quick-setup-card__source-mode-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: var(--app-space-3);
+}
+
+.quick-setup-card__source-mode {
+  display: grid;
+  gap: var(--app-space-2);
+  padding: var(--app-space-3);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-medium);
+  background: var(--md-sys-color-surface-container-lowest);
+}
+
+.quick-setup-card__source-mode[data-quick-setup-source-mode-current="true"] {
+  border-color: color-mix(
+    in srgb,
+    var(--md-sys-color-primary) 42%,
+    var(--md-sys-color-outline-variant)
+  );
+  background: color-mix(
+    in srgb,
+    var(--md-sys-color-primary-container) 18%,
+    var(--md-sys-color-surface-container-lowest)
+  );
+}
+
+.quick-setup-card__source-mode-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--app-space-2);
+}
+
+.quick-setup-card__source-mode-title {
+  margin: 0;
+  color: var(--md-sys-color-on-surface);
+  font-family: var(--md-sys-typescale-title-small-font);
+  font-size: var(--md-sys-typescale-title-small-size);
+  font-weight: var(--md-sys-typescale-title-small-weight);
+  line-height: var(--md-sys-typescale-title-small-line-height);
+}
+
+.quick-setup-card__source-mode-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--app-space-2);
+}
+
 @media (min-width: 1280px) {
   .settings-grid--balanced-settings:has(> :nth-child(7):last-child),
   .settings-grid--balanced-settings:has(> :nth-child(8):last-child) {

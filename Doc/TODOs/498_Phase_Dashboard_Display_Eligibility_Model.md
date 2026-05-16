@@ -16,7 +16,7 @@ Freshness model:
 
 Status:
 
-- queued
+- active
 
 ## Goal
 

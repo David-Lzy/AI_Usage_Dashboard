@@ -4,7 +4,7 @@ Date: 2026-05-16
 
 Process rule:
 
-- follow [Development_Guardrails.md](../Development_Guardrails.md)
+- follow [Development_Guardrails.md](../../../../Development_Guardrails.md)
 
 Document class:
 
@@ -16,7 +16,7 @@ Freshness model:
 
 Status:
 
-- active
+- completed
 
 ## Goal
 
@@ -54,6 +54,23 @@ Update Quick Setup so every configurable provider exposes its available connecti
 - Keyboard and carousel render tests for source-mode cards.
 - `npm run i18n:check`
 - `npm run typecheck`
+- `npm run docs:check`
+- `git diff --check`
+
+## Completion Summary
+
+- Extended Quick Setup card view-models with source-mode paths for each configurable provider.
+- Rendered provider source paths inside each Quick Setup carousel card, including API, session-page, policy-only, and deferred paths where present.
+- Kept Quick Setup independent from dashboard display eligibility: hidden providers still show their source paths and can still be recovered from Quick Setup.
+- Reused existing source metadata and localized source labels instead of introducing new storage or provider-source contracts.
+- Added focused coverage for source-mode card data and Settings-page rendered source-mode markup.
+
+## Verification
+
+- `npm run test -- src/sidepanel/settings-view-models.test.ts src/sidepanel/routes/SettingsPage.test.tsx`
+- `npm run typecheck`
+- `npm run i18n:check`
+- `npm run build`
 - `npm run docs:check`
 - `git diff --check`
 
