@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-17:
 
-- the numbered phase queue is completed through `Phase 511`; no numbered phase is currently queued after `Phase 511`; `0.1.0-rc.23` is the latest packaged follow-up candidate through `Phase 502`, current source is ahead through the source-level provider-entry migration, long-lived-profile migration fix, popup provider-parity fix, Quick Setup team/API toggle polish, compact popup progress reset labels, Claude Team all-model label polish, popup header hide-undo polish, compact popup status icon polish, and weekly reset weekday-time polish, and RC13 remains the submitted store-review boundary
+- the numbered phase queue is completed through `Phase 512`; no numbered phase is currently queued after `Phase 512`; `0.1.0-rc.23` is the latest packaged follow-up candidate through `Phase 502`, current source is ahead through the source-level provider-entry migration, long-lived-profile migration fix, popup provider-parity fix, Quick Setup team/API toggle polish, compact popup progress reset labels, Claude Team all-model label polish, popup header hide-undo polish, compact popup status icon polish, and weekly reset weekday-time polish, and RC13 remains the submitted store-review boundary
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness

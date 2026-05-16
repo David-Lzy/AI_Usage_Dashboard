@@ -562,55 +562,40 @@ export function SettingsPage({
         />
       ) : null}
 
-      <section
-        style={{
-          padding: "16px 16px 8px",
-          borderTop: "1px solid var(--md-sys-color-outline-variant)",
-          marginTop: "8px",
-        }}
-      >
-        <div
-          style={{
-            fontSize: "12px",
-            lineHeight: "1.7",
-            color: "var(--md-sys-color-on-surface-variant)",
-          }}
-        >
-          <div style={{ fontWeight: 600, marginBottom: "2px" }}>
-            AI Usage Dashboard {BUILD_INFO.version}
-          </div>
-          <div>
-            {"© 2026 "}
-            <a
-              href={BUILD_INFO.sourceOrigin}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: "inherit" }}
-            >
-              David-Lzy
-            </a>
-            {" · "}
-            <a
-              href={`${BUILD_INFO.sourceOrigin}/blob/main/LICENSE`}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: "var(--md-sys-color-primary)" }}
-            >
-              AGPL-3.0
-            </a>
-            {" · "}
-            <a
-              href={BUILD_INFO.sourceOrigin}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: "var(--md-sys-color-primary)" }}
-            >
-              GitHub
-            </a>
-          </div>
-          <div style={{ marginTop: "2px", opacity: 0.6, fontSize: "11px" }}>
-            {BUILD_INFO.gitCommit} · {BUILD_INFO.buildTimestamp.slice(0, 10)}
-          </div>
+      <section className="settings-about">
+        <div className="settings-about__title">
+          AI Usage Dashboard {BUILD_INFO.version}
+        </div>
+        <div>
+          {"© 2026 "}
+          <a
+            href={BUILD_INFO.sourceOrigin}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            David-Lzy
+          </a>
+          {" · "}
+          <a
+            href={`${BUILD_INFO.sourceOrigin}/blob/main/LICENSE`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="settings-about__link--primary"
+          >
+            AGPL-3.0
+          </a>
+          {" · "}
+          <a
+            href={BUILD_INFO.sourceOrigin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="settings-about__link--primary"
+          >
+            GitHub
+          </a>
+        </div>
+        <div className="settings-about__meta">
+          {BUILD_INFO.gitCommit} · {BUILD_INFO.buildTimestamp.slice(0, 10)}
         </div>
       </section>
 

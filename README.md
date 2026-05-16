@@ -25,7 +25,7 @@ Current packaged release state:
 - package version: `0.1.0-rc.23`
 - Chrome manifest version: `0.1.0.23`
 - packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.23.zip`
-- source status: `rc.23` package bytes are aligned through `Phase 502`; current source is ahead through `Phase 511`, and no numbered phase is currently queued after `Phase 511`. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
+- source status: `rc.23` package bytes are aligned through `Phase 502`; current source is ahead through `Phase 512`, and no numbered phase is currently queued after `Phase 512`. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
 - packaged follow-up milestone: [2026-05-16 RC23 Provider Display Cleanup Release Candidate](./Doc/Milestones/2026-05-16_RC23_Provider_Display_Cleanup_Release_Candidate.md)
 - submitted review milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
@@ -63,7 +63,7 @@ Next execution queue:
 
 1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary; `0.1.0-rc.23` is the latest packaged follow-up candidate, while source-level provider-entry work, the long-lived-profile migration fix, the popup provider-parity fix, the Quick Setup team/API toggle polish, compact popup progress reset labels, Claude Team all-model label polish, popup header hide-undo polish, compact popup status icons, and weekly reset weekday-time labels after RC23 need a new package before resubmission
 2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC23 follow-up milestone](./Doc/Milestones/2026-05-16_RC23_Provider_Display_Cleanup_Release_Candidate.md) as the current packaged-source reference
-3. no numbered phase is currently queued after [Phase 511](./Doc/TODOs/Archive/by-phase/500-599/511_Phase_Popup_Weekly_Reset_Weekday_Time_Label.md)
+3. no numbered phase is currently queued after [Phase 512](./Doc/TODOs/Archive/by-phase/500-599/512_Phase_Settings_About_Card_CSS_Migration.md)
 4. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 5. keep real operator evidence closed and archived; do not open another interaction-audit or theme-recovery operator evidence phase unless a new surface or theme regression creates a fresh review need
 6. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes

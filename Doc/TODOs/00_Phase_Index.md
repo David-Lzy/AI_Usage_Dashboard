@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [511_Phase_Popup_Weekly_Reset_Weekday_Time_Label.md](./Archive/by-phase/500-599/511_Phase_Popup_Weekly_Reset_Weekday_Time_Label.md)
+- latest completed slice: [512_Phase_Settings_About_Card_CSS_Migration.md](./Archive/by-phase/500-599/512_Phase_Settings_About_Card_CSS_Migration.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -905,6 +905,7 @@ Completed phases should be moved to:
 - the 2026-05-17 `Phase 509` closeout moved popup provider card actions into the card header, shortened Details/Hide labels, made popup hide persist through provider display settings with a 3-second undo affordance, and kept Claude Team all-model weekly popup labels compact
 - the 2026-05-17 `Phase 510` closeout changed popup provider-card status chips to compact accessible icon chips and made the provider-card header single-line first, while preserving full text status badges outside popup cards
 - the 2026-05-17 `Phase 511` closeout changed popup weekly reset labels with concrete timestamps from date-only labels to weekday-plus-time labels, matching Claude-style reset display while preserving monthly/daily date labels
+- the 2026-05-17 `Phase 512` closeout replaced 7 inline style objects on the Settings About card with `.settings-about` CSS classes in surfaces.css, aligning with the project's CSS-class-only convention
 
 ## Delivery Standard For Each Phase
 

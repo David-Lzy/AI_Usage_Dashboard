@@ -70,3 +70,31 @@
     padding: var(--app-space-4);
   }
 }
+
+.settings-about {
+  padding: 16px 16px 8px;
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.settings-about__title {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.settings-about__meta {
+  margin-top: 2px;
+  opacity: 0.6;
+  font-size: 11px;
+}
+
+.settings-about a {
+  color: inherit;
+}
+
+.settings-about__link--primary {
+  color: var(--md-sys-color-primary);
+}
