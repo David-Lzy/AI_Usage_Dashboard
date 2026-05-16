@@ -47,7 +47,7 @@ describe("SettingsProviderDisplaySection", () => {
     expect(html).toContain('data-provider-order-row="gemini"');
   });
 
-  it("keeps hidden providers out of surface order while preserving quota controls for phase 500", () => {
+  it("keeps hidden providers out of surface order and quota item controls", () => {
     const i18n = createRuntimeI18n("en", undefined);
     const settingsCopy = buildSettingsLocalizedCopy(i18n);
     const providerSourceDisplayCopy =
@@ -74,7 +74,7 @@ describe("SettingsProviderDisplaySection", () => {
 
     expect(html).toContain("3 providers");
     expect(html).not.toContain('data-provider-order-row="cursor"');
-    expect(html).toContain(
+    expect(html).not.toContain(
       'data-provider-progress-preference-provider="cursor"',
     );
   });

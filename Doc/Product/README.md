@@ -79,5 +79,6 @@ Status note:
 - `Phase 497` rendered each provider's source paths inside the Quick Setup carousel card, keeping API, session-page, policy-only, and deferred paths visible without changing provider evidence, permissions, storage, or display eligibility.
 - `Phase 498` added shared provider display eligibility and applied it to dashboard/popup candidates plus Settings Provider Display controls, so deferred/planned providers stay out of display surfaces while shipped live and policy-only providers remain displayable.
 - `Phase 499` aligned popup provider candidates and Settings Provider order controls to the same visible + display-eligible provider list used by dashboard surfaces, while preserving quota item controls for Phase 500.
+- `Phase 500` aligned Settings quota item controls to visible + display-eligible providers, preserving stored preferences while keeping hidden or ineligible providers out of current quota configuration UI.
 - Current implementation source is aligned with the `0.1.0-rc.22` package through `Phase 487`.
-- Current source is ahead of the `0.1.0-rc.22` package through `Phase 499`.
+- Current source is ahead of the `0.1.0-rc.22` package through `Phase 500`.

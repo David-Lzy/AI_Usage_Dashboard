@@ -73,7 +73,7 @@ export function SettingsProviderDisplaySection({
 
         <ProviderProgressItemPreferenceControls
           copy={settingsCopy.progressItems}
-          providers={displayEligibleProviders}
+          providers={displayVisibleProviders}
           snapshots={snapshots}
           progressItemsBySurface={settings.progressItemsBySurface}
           onChange={onProgressItemsBySurfaceChange}

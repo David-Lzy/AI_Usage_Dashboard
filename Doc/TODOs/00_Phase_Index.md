@@ -34,10 +34,10 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [500_Phase_Quota_Item_Eligibility_And_Popup_Order_QA.md](./500_Phase_Quota_Item_Eligibility_And_Popup_Order_QA.md)
-- latest completed slice: [499_Phase_Surface_Order_Eligibility_Alignment.md](./Archive/by-phase/400-499/499_Phase_Surface_Order_Eligibility_Alignment.md)
+- active phase file: [501_Phase_Provider_Setup_Display_Model_Closeout.md](./501_Phase_Provider_Setup_Display_Model_Closeout.md)
+- latest completed slice: [500_Phase_Quota_Item_Eligibility_And_Popup_Order_QA.md](./Archive/by-phase/500-599/500_Phase_Quota_Item_Eligibility_And_Popup_Order_QA.md)
 - queued phase files:
-  - [501_Phase_Provider_Setup_Display_Model_Closeout.md](./501_Phase_Provider_Setup_Display_Model_Closeout.md)
+  - none after active `Phase 501`
 
 Completed phases should be moved to:
 
@@ -894,6 +894,7 @@ Completed phases should be moved to:
 - the 2026-05-16 `Phase 497` closeout rendered provider source paths inside Quick Setup cards while preserving carousel behavior, source metadata, provider truth, storage, and display eligibility boundaries
 - the 2026-05-16 `Phase 498` closeout added shared provider display eligibility, keeping deferred/planned sources out of dashboard/provider-display surfaces while allowing shipped live and policy-only providers
 - the 2026-05-16 `Phase 499` closeout aligned popup and Provider order rendering to visible + display-eligible providers while leaving quota item eligibility to Phase 500
+- the 2026-05-16 `Phase 500` closeout bound quota item controls to visible + display-eligible providers while preserving stored preferences and existing progress rendering behavior
 
 ## Delivery Standard For Each Phase
 

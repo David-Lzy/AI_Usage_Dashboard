@@ -4,7 +4,7 @@ Date: 2026-05-16
 
 Process rule:
 
-- follow [Development_Guardrails.md](../Development_Guardrails.md)
+- follow [Development_Guardrails.md](../../../../Development_Guardrails.md)
 
 Document class:
 
@@ -16,7 +16,7 @@ Freshness model:
 
 Status:
 
-- active
+- completed
 
 ## Goal
 
@@ -51,6 +51,22 @@ Bind quota item visibility controls to display-eligible providers and verify pop
 - Focused tests for popup view-model provider and progress item ordering.
 - Focused tests for sidepanel and full-page provider detail progress rendering.
 - `npm run typecheck`
+- `npm run docs:check`
+- `git diff --check`
+
+## Completion Summary
+
+- Bound Settings quota item controls to the same visible + display-eligible provider list used by Provider order controls.
+- Kept saved quota item preferences for hidden or temporarily ineligible providers intact while excluding those providers from current quota configuration UI.
+- Preserved existing collapsed-by-default provider summaries and compact no-quota summaries.
+- Confirmed popup visibility/order behavior and provider-card/provider-detail progress rendering still honor existing preferences for eligible providers.
+- Added focused coverage so hidden providers no longer appear in either Provider order or quota item controls.
+
+## Verification
+
+- `npm run test -- src/sidepanel/components/SettingsProviderDisplaySection.test.tsx src/sidepanel/components/ProviderProgressItemPreferenceControls.test.tsx src/popup/view-models.test.ts src/sidepanel/components/ProviderCard.test.tsx src/sidepanel/routes/ProviderDetailPage.test.tsx`
+- `npm run typecheck`
+- `npm run build`
 - `npm run docs:check`
 - `git diff --check`
 
