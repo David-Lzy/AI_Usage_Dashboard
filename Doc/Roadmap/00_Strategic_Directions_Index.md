@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-16:
 
-- the numbered phase queue is completed through `Phase 501`; no numbered phase is currently queued after `Phase 501`; `0.1.0-rc.22` is the latest packaged follow-up candidate through `Phase 487`, current source is ahead through AGPL-3.0 open-source licensing, digital fingerprint embedding, popup provider-visibility fix, public repository readiness, six-locale store listing handoff, refreshed public-readiness screenshot evidence, the provider setup/display product contract, Quick Setup source-mode cards, shared provider display eligibility, visible-provider surface order alignment, quota item eligibility alignment, and provider setup/display closeout docs, and RC13 remains the submitted store-review boundary
+- the numbered phase queue is completed through `Phase 502`; no numbered phase is currently queued after `Phase 502`; `0.1.0-rc.23` is the latest packaged follow-up candidate through `Phase 502`, and RC13 remains the submitted store-review boundary
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -494,7 +494,7 @@ As of 2026-05-16:
 - `Phase 169` completed the next `Direction 10.3` slice by adding one request-bound manual finalize command plus handoff update, so the remaining real-world work is now the popup capture itself instead of popup capture plus extra repo bookkeeping
 - `Phase 296` completed the mixed candidate screenshot file intake plus archive completion under `10_3_Store_Asset_Pack_And_Submission_TODOs.md`
 - the previous repo-owned engineering default was adapter diagnostic raw fallback regression review for the shipped `en + zh_CN` runtime pilot under Direction 09, captured in `09_3_Adapter_Diagnostic_Reason_Code_TODOs.md`
-- because `0.1.0-rc.22` is packaged as the latest follow-up candidate and the RC13 milestone remains the submitted store-review boundary, the active functional priority is human resubmission handoff only if needed
+- because `0.1.0-rc.23` is packaged as the latest follow-up candidate and the RC13 milestone remains the submitted store-review boundary, the active functional priority is human resubmission handoff only if needed
 - the remaining high-value work in Direction 05 and Direction 04 is now evidence closure, not more tool-building:
   - `05_2_Theme_Recovery_Real_Operator_Closure_TODOs.md`
   - `04_2_Interaction_Audit_Real_Operator_Closure_TODOs.md`
@@ -561,7 +561,7 @@ As of 2026-05-16:
 
 1. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why first now:
-   `0.1.0-rc.22` is now packaged as the latest follow-up candidate through `Phase 487`, current source is complete through `Phase 501`, no numbered phase is currently queued after `Phase 501`, the public-readiness screenshot archive and six-locale listing handoff are complete, and the trimmed transparent icon refresh plus Claude Team usage-page path are already in the submitted RC13 boundary.
+   `0.1.0-rc.23` is now packaged as the latest follow-up candidate through `Phase 502`, no numbered phase is currently queued after `Phase 502`, the public-readiness screenshot archive and six-locale listing handoff are complete, and the trimmed transparent icon refresh plus Claude Team usage-page path are already in the submitted RC13 boundary.
 
 2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second now:

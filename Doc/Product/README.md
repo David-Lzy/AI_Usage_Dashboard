@@ -81,5 +81,5 @@ Status note:
 - `Phase 499` aligned popup provider candidates and Settings Provider order controls to the same visible + display-eligible provider list used by dashboard surfaces, while preserving quota item controls for Phase 500.
 - `Phase 500` aligned Settings quota item controls to visible + display-eligible providers, preserving stored preferences while keeping hidden or ineligible providers out of current quota configuration UI.
 - `Phase 501` closed the provider setup/display model queue, verified localized copy coverage, and recorded that no new layout screenshots were generated because Phases 498-500 changed filtering semantics without changing CSS/layout.
-- Current implementation source is aligned with the `0.1.0-rc.22` package through `Phase 487`.
-- Current source is ahead of the `0.1.0-rc.22` package through `Phase 501`.
+- `Phase 502` packaged `0.1.0-rc.23` / manifest `0.1.0.23`, generated `release/ai-usage-dashboard-0.1.0-rc.23.zip`, recorded SHA256 `77f69c57a24ec7056b1013db48e27c4e11f095732dbd1d3775aeaf40c88f78a4`, and preserved RC13 as the submitted Chrome Web Store review boundary.
+- Current implementation source is aligned with the `0.1.0-rc.23` package through `Phase 502`.

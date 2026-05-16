@@ -22,11 +22,11 @@ Anyone who distributes this software or a modified version of it must make the c
 
 Current packaged release state:
 
-- package version: `0.1.0-rc.22`
-- Chrome manifest version: `0.1.0.22`
-- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.22.zip`
-- source status: `rc.22` package bytes are aligned through `Phase 487`; current source is ahead through `Phase 501` with AGPL/build-fingerprint metadata, popup provider-visibility fix, public repository readiness docs, six-locale store listing handoff, refreshed public-readiness screenshot evidence, the provider setup/display product contract, Quick Setup source-mode cards, shared provider display eligibility, visible-provider surface order alignment, quota item eligibility alignment, and provider setup/display closeout docs. no numbered phase is currently queued after `Phase 501`. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
-- packaged follow-up milestone: [2026-05-15 RC22 Pre-Store Maintenance Release Candidate](./Doc/Milestones/2026-05-15_RC22_Pre_Store_Maintenance_Release_Candidate.md)
+- package version: `0.1.0-rc.23`
+- Chrome manifest version: `0.1.0.23`
+- packaged artifact: `release/ai-usage-dashboard-0.1.0-rc.23.zip`
+- source status: `rc.23` package bytes are aligned through `Phase 502`; no numbered phase is currently queued after `Phase 502`. The earlier `rc.13` milestone remains the submitted Chrome Web Store review boundary until a human resubmission replaces it.
+- packaged follow-up milestone: [2026-05-16 RC23 Provider Display Cleanup Release Candidate](./Doc/Milestones/2026-05-16_RC23_Provider_Display_Cleanup_Release_Candidate.md)
 - submitted review milestone: [2026-05-11 RC13 Chrome Web Store Upload Candidate](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md)
 
 ## Current RC Matrix
@@ -61,9 +61,9 @@ Security posture for this track:
 
 Next execution queue:
 
-1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary; `0.1.0-rc.22` is the latest packaged follow-up candidate for a deliberate human resubmission
-2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC22 follow-up milestone](./Doc/Milestones/2026-05-15_RC22_Pre_Store_Maintenance_Release_Candidate.md) as the current packaged-source reference
-3. decide whether to open a new packaging phase for a post-RC22 candidate; the provider setup/display cleanup itself is closed through [Phase 501](./Doc/TODOs/Archive/by-phase/500-599/501_Phase_Provider_Setup_Display_Model_Closeout.md)
+1. keep `0.1.0-rc.13` as the current submitted Chrome Web Store review boundary; `0.1.0-rc.23` is the latest packaged follow-up candidate for a deliberate human resubmission
+2. use the [RC13 upload-candidate milestone](./Doc/Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) as the truthful historical submission handoff, and use the [RC23 follow-up milestone](./Doc/Milestones/2026-05-16_RC23_Provider_Display_Cleanup_Release_Candidate.md) as the current packaged-source reference
+3. no numbered phase is currently queued after [Phase 502](./Doc/TODOs/Archive/by-phase/500-599/502_Phase_RC23_Provider_Display_Cleanup_Packaging.md)
 4. keep provider closure account-gated and de-prioritized: Claude Pro/Max, JetBrains org, and Gemini project-metrics decisions should wait until suitable accounts or product evidence are available
 5. keep real operator evidence closed and archived; do not open another interaction-audit or theme-recovery operator evidence phase unless a new surface or theme regression creates a fresh review need
 6. treat additional file splitting as maintenance-only unless a concrete oversized module blocks safe changes
@@ -730,11 +730,12 @@ npm run release
 
 Output artifact:
 
-- `release/ai-usage-dashboard-0.1.0-rc.22.zip`
+- `release/ai-usage-dashboard-0.1.0-rc.23.zip`
 
 Packaging note:
 
-- `rc.22` packages the post-`rc.21` UI polish, toolbar badge/icon preferences, configuration backup and Chrome Sync, pre-store maintenance cleanup, bundle split, and CSS consolidation through `Phase 487`.
+- `rc.23` packages the public-source readiness and provider setup/display cleanup boundary through `Phase 502`.
+- `rc.22` remains a historical packaged follow-up candidate for post-`rc.21` UI polish, toolbar badge/icon preferences, configuration backup and Chrome Sync, pre-store maintenance cleanup, bundle split, and CSS consolidation through `Phase 487`.
 - `rc.21` remains a historical packaged follow-up candidate for the Settings tooltip and form-control boundary through `Phase 469`.
 - `rc.20` remains a historical packaged follow-up candidate for the UI polish boundary through `Phase 467`.
 - `rc.19` remains a historical packaged follow-up candidate for the post-`rc.18` UI polish boundary through `Phase 448`.
@@ -742,6 +743,7 @@ Packaging note:
 - `rc.16` remains a historical packaged follow-up candidate for the post-localization and interaction-audit display/source boundary through `Phase 421`.
 - `rc.17` remains a historical packaged follow-up candidate for the display-preference and Settings-carousel boundary through `Phase 433`.
 - `rc.18` remains a historical packaged follow-up candidate for the post-`rc.17` UI polish boundary through `Phase 440`.
+- SHA256 for `rc.23`: `77f69c57a24ec7056b1013db48e27c4e11f095732dbd1d3775aeaf40c88f78a4`.
 - SHA256 for `rc.22`: `444440c732880c4c05ab5a3c73c5d488447447c1fb2a539a00c5253b8af30104`.
 - the `RC13` milestone remains the submitted Chrome Web Store review boundary until a deliberate resubmission replaces it.
 
