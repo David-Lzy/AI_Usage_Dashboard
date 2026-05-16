@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-17:
 
-- the numbered phase queue is completed through `Phase 509`; no numbered phase is currently queued after `Phase 509`; `0.1.0-rc.23` is the latest packaged follow-up candidate through `Phase 502`, current source is ahead through the source-level provider-entry migration, long-lived-profile migration fix, popup provider-parity fix, Quick Setup team/API toggle polish, compact popup progress reset labels, Claude Team all-model label polish, and popup header hide-undo polish, and RC13 remains the submitted store-review boundary
+- the numbered phase queue is completed through `Phase 510`; no numbered phase is currently queued after `Phase 510`; `0.1.0-rc.23` is the latest packaged follow-up candidate through `Phase 502`, current source is ahead through the source-level provider-entry migration, long-lived-profile migration fix, popup provider-parity fix, Quick Setup team/API toggle polish, compact popup progress reset labels, Claude Team all-model label polish, popup header hide-undo polish, and compact popup status icon polish, and RC13 remains the submitted store-review boundary
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -196,6 +196,7 @@ As of 2026-05-17:
 - `Phase 507` made toolbar popup progress labels compact and folded reset timing into the visible popup label for line and circular progress styles while preserving dashboard, provider detail, provider evidence, and release packaging boundaries.
 - `Phase 508` tightened Claude Team all-model weekly popup labels and shortened weekday reset text while preserving provider evidence and non-popup detail labels.
 - `Phase 509` moved popup provider card actions into the header, shortened Details/Hide labels, and made popup hide persist through provider display settings with a 3-second undo affordance while preserving provider evidence and quota math.
+- `Phase 510` changed popup provider-card status chips to compact accessible icon chips, keeping English card headers single-line first without changing provider health semantics.
 - `Phase 200` completed a functionality-first Codex personal slice by preserving multiple visible usage windows, expanding Codex page-capture snippets, and surfacing the most constrained visible percentage window across dashboard, provider detail, and popup paths
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without changing the primary percentage-window quota model
 - `Phase 202` completed repeatable unpacked-extension verification for Codex personal multi-window plus flex-balance context, while fixing DOM capture so repeated percentages and single-character balance values are not lost before parsing
@@ -564,7 +565,7 @@ As of 2026-05-17:
 
 1. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why first now:
-   `0.1.0-rc.23` is now packaged as the latest follow-up candidate through `Phase 502`, current source is ahead through `Phase 509`, no numbered phase is currently queued after `Phase 509`, the public-readiness screenshot archive and six-locale listing handoff are complete, and the trimmed transparent icon refresh plus Claude Team usage-page path are already in the submitted RC13 boundary.
+   `0.1.0-rc.23` is now packaged as the latest follow-up candidate through `Phase 502`, current source is ahead through `Phase 510`, no numbered phase is currently queued after `Phase 510`, the public-readiness screenshot archive and six-locale listing handoff are complete, and the trimmed transparent icon refresh plus Claude Team usage-page path are already in the submitted RC13 boundary.
 
 2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second now:

@@ -275,7 +275,7 @@ body.popup-page .status-card {
 .popup-provider-card__title-row {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: flex-start;
   gap: var(--app-space-2);
   min-width: 0;
@@ -301,12 +301,20 @@ body.popup-page .status-card {
 .popup-provider-card__status {
   flex: 0 0 auto;
   margin-inline-start: auto;
-  max-width: 48%;
+  max-width: none;
 }
 
 .popup-provider-card__status .status-chip {
   max-width: 100%;
   white-space: nowrap;
+}
+
+.popup-provider-card__status .status-chip--compact {
+  width: 30px;
+  min-width: 30px;
+  padding: 0;
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: 800;
 }
 
 .popup-provider-card__chips {
@@ -475,7 +483,10 @@ body.popup-page .status-card {
 }
 
 .popup-provider-card__provider {
-  flex: 1 1 8rem;
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-family: var(--md-sys-typescale-title-medium-font);
   font-size: var(--md-sys-typescale-title-medium-size);
   font-weight: var(--md-sys-typescale-title-medium-weight);

@@ -125,6 +125,7 @@ export function PopupFeaturedProviderList({
                       }
                     >
                       <StatusBadge
+                        compact
                         label={card.statusLabel}
                         tone={provider.displayTone}
                       />

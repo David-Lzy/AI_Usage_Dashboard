@@ -42,6 +42,8 @@ describe("PopupFeaturedProviderList", () => {
     expect(html).toContain("Details");
     expect(html).toContain("Hide");
     expect(html).toContain('data-popup-featured-status="true"');
+    expect(html).toContain("status-chip--compact");
+    expect(html).toContain('aria-label="');
   });
 
   it("keeps the plan below the title row when quota progress is not rendered", () => {

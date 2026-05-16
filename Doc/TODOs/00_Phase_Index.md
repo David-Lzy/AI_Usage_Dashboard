@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [509_Phase_Popup_Header_Actions_And_Hide_Undo.md](./Archive/by-phase/500-599/509_Phase_Popup_Header_Actions_And_Hide_Undo.md)
+- latest completed slice: [510_Phase_Popup_Compact_Status_Icon_Header_Fit.md](./Archive/by-phase/500-599/510_Phase_Popup_Compact_Status_Icon_Header_Fit.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -903,6 +903,7 @@ Completed phases should be moved to:
 - the 2026-05-16 `Phase 507` closeout made popup progress item labels compact and folded reset timing into the visible popup label for line and circular progress styles while preserving non-popup detail labels
 - the 2026-05-16 `Phase 508` closeout added Claude Team all-model weekly compact popup labels and shortened weekday reset text while preserving provider evidence and non-popup detail labels
 - the 2026-05-17 `Phase 509` closeout moved popup provider card actions into the card header, shortened Details/Hide labels, made popup hide persist through provider display settings with a 3-second undo affordance, and kept Claude Team all-model weekly popup labels compact
+- the 2026-05-17 `Phase 510` closeout changed popup provider-card status chips to compact accessible icon chips and made the provider-card header single-line first, while preserving full text status badges outside popup cards
 
 ## Delivery Standard For Each Phase
 
