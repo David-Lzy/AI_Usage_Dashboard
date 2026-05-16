@@ -34,10 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [501_Phase_Provider_Setup_Display_Model_Closeout.md](./501_Phase_Provider_Setup_Display_Model_Closeout.md)
-- latest completed slice: [500_Phase_Quota_Item_Eligibility_And_Popup_Order_QA.md](./Archive/by-phase/500-599/500_Phase_Quota_Item_Eligibility_And_Popup_Order_QA.md)
-- queued phase files:
-  - none after active `Phase 501`
+- active phase file: none
+- latest completed slice: [501_Phase_Provider_Setup_Display_Model_Closeout.md](./Archive/by-phase/500-599/501_Phase_Provider_Setup_Display_Model_Closeout.md)
+- queued phase files: none
 
 Completed phases should be moved to:
 
@@ -895,6 +894,7 @@ Completed phases should be moved to:
 - the 2026-05-16 `Phase 498` closeout added shared provider display eligibility, keeping deferred/planned sources out of dashboard/provider-display surfaces while allowing shipped live and policy-only providers
 - the 2026-05-16 `Phase 499` closeout aligned popup and Provider order rendering to visible + display-eligible providers while leaving quota item eligibility to Phase 500
 - the 2026-05-16 `Phase 500` closeout bound quota item controls to visible + display-eligible providers while preserving stored preferences and existing progress rendering behavior
+- the 2026-05-16 `Phase 501` closeout aligned project docs, verified 14-locale coverage, and closed the provider setup/display model queue with no numbered phase currently queued
 
 ## Delivery Standard For Each Phase
 

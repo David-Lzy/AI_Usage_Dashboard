@@ -4,7 +4,7 @@ Date: 2026-05-16
 
 Process rule:
 
-- follow [Development_Guardrails.md](../Development_Guardrails.md)
+- follow [Development_Guardrails.md](../../../../Development_Guardrails.md)
 
 Document class:
 
@@ -16,7 +16,7 @@ Freshness model:
 
 Status:
 
-- active
+- completed
 
 ## Goal
 
@@ -52,6 +52,23 @@ Close the provider setup/display model cleanup with documentation, localization,
 - Focused tests for Settings Quick Setup, Provider Order, Provider Progress Items, popup view-models, and sidepanel view-models.
 - `npm run typecheck`
 - `npm run build`
+- `git diff --check`
+
+## Completion Summary
+
+- Closed the provider setup/display cleanup queue by aligning README, Product docs, Roadmap, top-level TODOs, and phase indexes through Phase 501.
+- Confirmed the final product contract: Quick Setup remains the provider connection and source-mode entry point; Provider Display owns dashboard visibility, surface order, and quota item visibility for visible display-eligible providers.
+- Confirmed no new runtime copy was introduced during Phases 498-500 beyond already-covered localized source/display copy; the 14-locale i18n checker passed.
+- Verified Settings Quick Setup, Provider order, Provider progress items, Settings Provider Display, popup view-models, and sidepanel view-models with focused tests.
+- Visual QA note: Phases 498-500 changed filtering and state eligibility only, not CSS/layout. No new RDP screenshots were generated in this closeout; the existing public-readiness screenshot archive remains the current visual evidence, and render/build checks did not expose provider-card overflow or ordering drift.
+
+## Verification
+
+- `npm run test -- src/sidepanel/components/SettingsQuickSetupSection.test.tsx src/sidepanel/components/ProviderOrderPreferenceControls.test.tsx src/sidepanel/components/ProviderProgressItemPreferenceControls.test.tsx src/sidepanel/components/SettingsProviderDisplaySection.test.tsx src/popup/view-models.test.ts src/sidepanel/view-models.test.ts src/sidepanel/routes/SettingsPage.test.tsx`
+- `npm run i18n:check`
+- `npm run typecheck`
+- `npm run build`
+- `npm run docs:check`
 - `git diff --check`
 
 ## Follow-Up

@@ -177,17 +177,25 @@ JetBrains remains retained in the repo but deferred from the active support prom
 - Do not translate raw provider evidence, diagnostic raw bodies, or export schemas.
 - Do not package a release from this contract-only phase.
 
-## Implementation Notes For Follow-Up Phases
+## Implementation Status
 
-- Treat legacy `provider.enabled` carefully because it has historically mixed setup and display meanings.
+- `Phase 497` keeps configurable provider source-mode paths visible inside Quick Setup.
+- `Phase 498` introduced shared display eligibility so deferred/planned providers stay out of display surfaces while shipped live and policy-only providers remain displayable.
+- `Phase 499` aligned popup and Provider order rendering to the same visible + display-eligible provider list.
+- `Phase 500` aligned quota item controls to visible + display-eligible providers while preserving stored preferences.
+- `Phase 501` closed the queue without packaging a new release candidate.
+
+## Implementation Notes For Future Work
+
+- Treat legacy `provider.enabled` carefully because it still represents dashboard display visibility in current UI.
 - New code should prefer explicit concepts from this contract over overloaded booleans.
-- Quick Setup view-models should produce configurable provider cards.
-- Provider Display view-models should produce eligible, dashboard-visible provider controls.
+- Quick Setup view-models should continue producing configurable provider cards.
+- Provider Display view-models should continue producing eligible, dashboard-visible provider controls.
 - Popup view-models should not bypass Provider Display by reading every shipped provider directly.
 
 ## Verification Expectations
 
-Later implementation phases should add focused coverage for:
+Current and future implementation phases should keep focused coverage for:
 
 - Quick Setup lists all configurable providers.
 - Provider Display lists only eligible dashboard-visible providers.
