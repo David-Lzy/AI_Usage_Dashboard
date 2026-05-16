@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [514_Phase_I18n_Locale_Metadata_Extraction.md](./Archive/by-phase/500-599/514_Phase_I18n_Locale_Metadata_Extraction.md)
+- latest completed slice: [515_Phase_Interaction_Audit_Signoff_Split.md](./Archive/by-phase/500-599/515_Phase_Interaction_Audit_Signoff_Split.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -908,6 +908,7 @@ Completed phases should be moved to:
 - the 2026-05-17 `Phase 512` closeout replaced 7 inline style objects on the Settings About card with `.settings-about` CSS classes in surfaces.css, aligning with the project's CSS-class-only convention
 - the 2026-05-17 `Phase 513` closeout extracted `ProviderSourceFidelityKind`, `ProviderSourceDisplayCopy`, and `DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY` into `src/shared/provider-source-copy.ts` and URL-matching helpers into `src/shared/provider-source-url-matchers.ts`, reducing `provider-sources.ts` by ~350 lines while preserving all public import paths via re-exports
 - the 2026-05-17 `Phase 514` closeout extracted locale metadata (`SUPPORTED_APP_LOCALES`, `APP_LOCALE_METADATA`, and related types) from `src/shared/i18n.ts` into `src/shared/i18n-locale-metadata.ts`, reducing `i18n.ts` by ~160 lines while preserving all public import paths via re-exports
+- the 2026-05-17 `Phase 515` closeout split `src/sidepanel/interaction-audit-signoff.ts` (837 lines) into `interaction-audit-signoff-state.ts` (pure state builders and types) and `interaction-audit-signoff-io.ts` (localStorage read/write/clear); the original file became a 2-line barrel re-exporting both
 
 ## Delivery Standard For Each Phase
 
