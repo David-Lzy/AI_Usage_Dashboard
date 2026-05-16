@@ -33,7 +33,7 @@ export function buildFeaturedSection(
       label: "Needs attention",
       headline: "Featured providers",
       detail:
-        "The popup shows up to three providers, preferring the ones that still need setup or in-product review.",
+        "The popup follows your visible provider order and keeps setup, sync, and quota status on each card.",
       emptyStateHeadline: null,
       emptyStateDetail: null,
     };
@@ -58,7 +58,7 @@ export function buildFeaturedSection(
     label: "All clear",
     headline: "Healthy providers",
     detail:
-      "No visible provider currently needs setup or review, so this section keeps the top providers visible for current path and freshness at a glance.",
+      "No visible provider currently needs setup or review, so this section keeps visible providers available for current path and freshness at a glance.",
     emptyStateHeadline: null,
     emptyStateDetail: null,
   };

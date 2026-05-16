@@ -106,6 +106,43 @@ const TONE_PRIORITY: Record<ProviderTone, number> = {
   neutral: 2,
 };
 
+function isUsageThresholdDiagnostic(provider: ProviderViewModel): boolean {
+  return provider.warningDiagnostic?.category === "usage_threshold";
+}
+
+export function hasProviderProductAttention(
+  provider: ProviderViewModel,
+): boolean {
+  if (provider.permissionStatus === "missing") {
+    return true;
+  }
+
+  if (
+    provider.currentSourceStateKind !== "ready" &&
+    provider.currentSourceStateKind !== "policy_only"
+  ) {
+    return true;
+  }
+
+  if (provider.displaySyncStatus === "error") {
+    return true;
+  }
+
+  return (
+    provider.displaySyncStatus === "warning" &&
+    provider.currentSourceStateKind !== "policy_only" &&
+    !isUsageThresholdDiagnostic(provider)
+  );
+}
+
+function getProviderSortSyncStatus(provider: ProviderViewModel): SyncStatus {
+  return hasProviderProductAttention(provider) ? provider.displaySyncStatus : "ok";
+}
+
+function getProviderSortTone(provider: ProviderViewModel): ProviderTone {
+  return hasProviderProductAttention(provider) ? provider.displayTone : "neutral";
+}
+
 function findProviderSetting(
   providerSettings: ProviderSetting[],
   providerId: ProviderId,
@@ -236,8 +273,8 @@ function compareProviders(
   right: ProviderViewModel,
 ): number {
   const syncStatusDelta =
-    SYNC_STATUS_PRIORITY[left.displaySyncStatus] -
-    SYNC_STATUS_PRIORITY[right.displaySyncStatus];
+    SYNC_STATUS_PRIORITY[getProviderSortSyncStatus(left)] -
+    SYNC_STATUS_PRIORITY[getProviderSortSyncStatus(right)];
 
   if (syncStatusDelta !== 0) {
     return syncStatusDelta;
@@ -248,7 +285,8 @@ function compareProviders(
   }
 
   const toneDelta =
-    TONE_PRIORITY[left.displayTone] - TONE_PRIORITY[right.displayTone];
+    TONE_PRIORITY[getProviderSortTone(left)] -
+    TONE_PRIORITY[getProviderSortTone(right)];
 
   if (toneDelta !== 0) {
     return toneDelta;
@@ -383,7 +421,7 @@ export function buildSummaryItems(
       provider.permissionStatus === "granted",
   ).length;
   const attentionCount = visibleProviders.filter(
-    (provider) => provider.displaySyncStatus !== "ok",
+    hasProviderProductAttention,
   ).length;
   const accessGapCount = visibleProviders.filter(
     (provider) => provider.permissionStatus === "missing",

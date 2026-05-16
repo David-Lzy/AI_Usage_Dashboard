@@ -87,10 +87,7 @@ export function buildPopupViewModel(
     formatValue,
     firstSetupProvider,
   );
-  const popupProviders =
-    attentionProviders.length > 0
-      ? attentionProviders.slice(0, 3)
-      : featuredCandidateProviders.slice(0, 3);
+  const popupProviders = featuredCandidateProviders;
 
   return {
     headerDetail: buildPopupHeaderDetail(

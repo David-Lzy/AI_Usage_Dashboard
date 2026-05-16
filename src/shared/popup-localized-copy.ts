@@ -1125,7 +1125,7 @@ const POPUP_FEATURED_COPY: Record<
     needsAttentionLabel: "需要注意",
     featuredProvidersHeadline: "重點 provider",
     needsAttentionDetail:
-      "popup 最多顯示 3 個 provider，優先顯示仍需設定或產品內檢查的 provider。",
+      "popup 依照可見 provider 順序顯示，並在每張卡片保留 setup、sync 和額度狀態。",
     currentContractLabel: "目前合約",
     policyOnlyProvidersHeadline: "Policy-only provider",
     policyOnlyProvidersDetail:
@@ -1133,7 +1133,7 @@ const POPUP_FEATURED_COPY: Record<
     allClearLabel: "狀態正常",
     healthyProvidersHeadline: "健康 provider",
     healthyProvidersDetail:
-      "目前沒有可見 provider 需要設定或檢查，所以這個區塊保留頂部 provider 的目前路徑和 freshness 脈絡。",
+      "目前沒有可見 provider 需要設定或檢查，所以這個區塊保留可見 provider 的目前路徑和 freshness 脈絡。",
     statusNeedsAccess: "需要 host access",
     statusNeedsSetup: "需要設定",
     statusOpenPage: "開啟頁面",
@@ -1172,7 +1172,7 @@ const POPUP_FEATURED_COPY: Record<
     needsAttentionLabel: "注意が必要",
     featuredProvidersHeadline: "注目 provider",
     needsAttentionDetail:
-      "popup は最大 3 つの provider を表示し、まだ setup または製品内確認が必要なものを優先します。",
+      "popup は表示中 provider の順序に従い、各カードに setup、sync、quota 状態を表示します。",
     currentContractLabel: "現在の contract",
     policyOnlyProvidersHeadline: "Policy-only provider",
     policyOnlyProvidersDetail:
@@ -1219,7 +1219,7 @@ const POPUP_FEATURED_COPY: Record<
     needsAttentionLabel: "주의 필요",
     featuredProvidersHeadline: "주요 provider",
     needsAttentionDetail:
-      "popup은 최대 3개 provider를 표시하며 아직 setup 또는 제품 내 검토가 필요한 항목을 우선합니다.",
+      "popup은 표시 provider 순서를 따르고 각 카드에 setup, sync, quota 상태를 유지합니다.",
     currentContractLabel: "현재 contract",
     policyOnlyProvidersHeadline: "Policy-only provider",
     policyOnlyProvidersDetail:
@@ -1266,7 +1266,7 @@ const POPUP_FEATURED_COPY: Record<
     needsAttentionLabel: "Requiere atención",
     featuredProvidersHeadline: "Providers destacados",
     needsAttentionDetail:
-      "El popup muestra hasta tres providers y prioriza los que aún necesitan setup o revisión dentro del producto.",
+      "El popup sigue el orden de providers visibles y mantiene el estado de setup, sync y cuota en cada tarjeta.",
     currentContractLabel: "Contrato actual",
     policyOnlyProvidersHeadline: "Providers policy-only",
     policyOnlyProvidersDetail:
@@ -1274,7 +1274,7 @@ const POPUP_FEATURED_COPY: Record<
     allClearLabel: "Todo correcto",
     healthyProvidersHeadline: "Providers saludables",
     healthyProvidersDetail:
-      "Ningún provider visible necesita setup o revisión, así que esta sección mantiene los providers principales visibles con ruta actual y freshness.",
+      "Ningún provider visible necesita setup o revisión, así que esta sección mantiene los providers visibles con ruta actual y freshness.",
     statusNeedsAccess: "Necesita host access",
     statusNeedsSetup: "Necesita setup",
     statusOpenPage: "Abrir página",
@@ -1313,7 +1313,7 @@ const POPUP_FEATURED_COPY: Record<
     needsAttentionLabel: "Precisa de atenção",
     featuredProvidersHeadline: "Providers em destaque",
     needsAttentionDetail:
-      "O popup mostra até três providers, priorizando os que ainda precisam de setup ou revisão no produto.",
+      "O popup segue a ordem dos providers visíveis e mantém o estado de setup, sync e quota em cada cartão.",
     currentContractLabel: "Contrato atual",
     policyOnlyProvidersHeadline: "Providers policy-only",
     policyOnlyProvidersDetail:
@@ -1321,7 +1321,7 @@ const POPUP_FEATURED_COPY: Record<
     allClearLabel: "Tudo certo",
     healthyProvidersHeadline: "Providers saudáveis",
     healthyProvidersDetail:
-      "Nenhum provider visível precisa de setup ou revisão, então esta seção mantém os providers principais visíveis com rota atual e freshness.",
+      "Nenhum provider visível precisa de setup ou revisão, então esta seção mantém os providers visíveis com rota atual e freshness.",
     statusNeedsAccess: "Precisa de host access",
     statusNeedsSetup: "Precisa de setup",
     statusOpenPage: "Abrir página",
@@ -1360,7 +1360,7 @@ const POPUP_FEATURED_COPY: Record<
     needsAttentionLabel: "Attention requise",
     featuredProvidersHeadline: "Providers en avant",
     needsAttentionDetail:
-      "Le popup affiche jusqu'à trois providers, en priorisant ceux qui ont encore besoin de setup ou d'une revue dans le produit.",
+      "Le popup suit l'ordre des providers visibles et garde l'état de setup, sync et quota sur chaque carte.",
     currentContractLabel: "Contrat actuel",
     policyOnlyProvidersHeadline: "Providers policy-only",
     policyOnlyProvidersDetail:
@@ -1368,7 +1368,7 @@ const POPUP_FEATURED_COPY: Record<
     allClearLabel: "Tout est clair",
     healthyProvidersHeadline: "Providers sains",
     healthyProvidersDetail:
-      "Aucun provider visible n'a besoin de setup ou de revue, donc cette section garde les principaux providers visibles avec route actuelle et freshness.",
+      "Aucun provider visible n'a besoin de setup ou de revue, donc cette section garde les providers visibles avec route actuelle et freshness.",
     statusNeedsAccess: "Host access requis",
     statusNeedsSetup: "Setup requis",
     statusOpenPage: "Ouvrir la page",
@@ -1407,7 +1407,7 @@ const POPUP_FEATURED_COPY: Record<
     needsAttentionLabel: "Benötigt Aufmerksamkeit",
     featuredProvidersHeadline: "Hervorgehobene provider",
     needsAttentionDetail:
-      "Das popup zeigt bis zu drei provider und bevorzugt diejenigen, die noch setup oder Prüfung im Produkt benötigen.",
+      "Das popup folgt der Reihenfolge sichtbarer provider und zeigt setup-, sync- und quota-Status auf jeder Karte.",
     currentContractLabel: "Aktueller Vertrag",
     policyOnlyProvidersHeadline: "Policy-only provider",
     policyOnlyProvidersDetail:
@@ -1415,7 +1415,7 @@ const POPUP_FEATURED_COPY: Record<
     allClearLabel: "Alles klar",
     healthyProvidersHeadline: "Gesunde provider",
     healthyProvidersDetail:
-      "Kein sichtbarer provider benötigt aktuell setup oder Prüfung, daher hält dieser Abschnitt die wichtigsten provider mit aktuellem Pfad und freshness sichtbar.",
+      "Kein sichtbarer provider benötigt aktuell setup oder Prüfung, daher hält dieser Abschnitt sichtbare provider mit aktuellem Pfad und freshness sichtbar.",
     statusNeedsAccess: "Host access nötig",
     statusNeedsSetup: "Setup nötig",
     statusOpenPage: "Seite öffnen",
@@ -1454,7 +1454,7 @@ const POPUP_FEATURED_COPY: Record<
     needsAttentionLabel: "Richiede attenzione",
     featuredProvidersHeadline: "Provider in evidenza",
     needsAttentionDetail:
-      "Il popup mostra fino a tre provider, dando priorità a quelli che richiedono ancora setup o revisione nel prodotto.",
+      "Il popup segue l'ordine dei provider visibili e mantiene stato di setup, sync e quota su ogni scheda.",
     currentContractLabel: "Contratto attuale",
     policyOnlyProvidersHeadline: "Provider policy-only",
     policyOnlyProvidersDetail:
@@ -1462,7 +1462,7 @@ const POPUP_FEATURED_COPY: Record<
     allClearLabel: "Tutto a posto",
     healthyProvidersHeadline: "Provider sani",
     healthyProvidersDetail:
-      "Nessun provider visibile richiede setup o revisione, quindi questa sezione mantiene visibili i provider principali con percorso attuale e freshness.",
+      "Nessun provider visibile richiede setup o revisione, quindi questa sezione mantiene visibili i provider con percorso attuale e freshness.",
     statusNeedsAccess: "Richiede host access",
     statusNeedsSetup: "Richiede setup",
     statusOpenPage: "Apri pagina",
@@ -1603,7 +1603,7 @@ const POPUP_FEATURED_COPY: Record<
     allClearLabel: "सब ठीक",
     healthyProvidersHeadline: "Healthy providers",
     healthyProvidersDetail:
-      "अभी कोई visible provider setup या review नहीं मांगता, इसलिए यह section current path और freshness context के लिए top providers दिखाए रखता है।",
+      "अभी कोई visible provider setup या review नहीं मांगता, इसलिए यह section current path और freshness context के लिए visible providers दिखाए रखता है।",
     statusNeedsAccess: "Host access चाहिए",
     statusNeedsSetup: "Setup चाहिए",
     statusOpenPage: "Page खोलें",
@@ -1642,7 +1642,7 @@ const POPUP_FEATURED_COPY: Record<
     needsAttentionLabel: "Perlu perhatian",
     featuredProvidersHeadline: "Provider unggulan",
     needsAttentionDetail:
-      "popup menampilkan hingga tiga provider, memprioritaskan yang masih perlu setup atau tinjauan di dalam produk.",
+      "popup mengikuti urutan provider yang terlihat dan mempertahankan status setup, sync, dan kuota pada tiap kartu.",
     currentContractLabel: "Kontrak saat ini",
     policyOnlyProvidersHeadline: "Provider policy-only",
     policyOnlyProvidersDetail:
@@ -2446,7 +2446,7 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
         needsAttentionLabel: "需要关注",
         featuredProvidersHeadline: "重点 provider",
         needsAttentionDetail:
-          "popup 最多显示 3 个 provider，并优先展示仍需配置或仍需在产品内复查的 provider。",
+          "popup 按可见 provider 顺序显示，并在每张卡片保留配置、同步和额度状态。",
         currentContractLabel: "当前合同",
         policyOnlyProvidersHeadline: "仅策略 provider",
         policyOnlyProvidersDetail:
@@ -2454,7 +2454,7 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
         allClearLabel: "状态正常",
         healthyProvidersHeadline: "健康 provider",
         healthyProvidersDetail:
-          "当前没有可见 provider 需要配置或复查，所以这里主要保留顶部 provider 的当前路径和 freshness 上下文。",
+          "当前没有可见 provider 需要配置或复查，所以这里主要保留可见 provider 的当前路径和 freshness 上下文。",
       },
       featuredCard: {
         statusNeedsAccess: "需授权",
@@ -2649,7 +2649,7 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
       needsAttentionLabel: "Needs attention",
       featuredProvidersHeadline: "Featured providers",
       needsAttentionDetail:
-        "The popup shows up to three providers, preferring the ones that still need setup or in-product review.",
+        "The popup follows your visible provider order and keeps setup, sync, and quota status on each card.",
       currentContractLabel: "Current contract",
       policyOnlyProvidersHeadline: "Policy-only providers",
       policyOnlyProvidersDetail:
@@ -2657,7 +2657,7 @@ export function buildPopupLocalizedCopy(i18n: RuntimeI18n) {
       allClearLabel: "All clear",
       healthyProvidersHeadline: "Healthy providers",
       healthyProvidersDetail:
-        "No visible provider currently needs setup or review, so this section keeps the top providers visible for current path and freshness at a glance.",
+        "No visible provider currently needs setup or review, so this section keeps visible providers available for current path and freshness at a glance.",
     },
       featuredCard: {
         statusNeedsAccess: "Needs access",

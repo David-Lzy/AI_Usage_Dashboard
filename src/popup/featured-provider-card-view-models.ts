@@ -256,10 +256,12 @@ function buildPopupFeaturedAction(provider: ProviderViewModel): PopupGuidanceAct
     };
   }
 
-  if (
+  const hasProductReviewIssue =
     provider.currentSourceStateKind !== "ready" ||
-    provider.displaySyncStatus !== "ok"
-  ) {
+    (provider.displaySyncStatus !== "ok" &&
+      provider.warningDiagnostic?.category !== "usage_threshold");
+
+  if (hasProductReviewIssue) {
     return {
       kind: "provider-detail",
       label: "Review detail",
@@ -388,7 +390,8 @@ export function buildLocalizedFeaturedProviderCard(
                 sourceStateKind: provider.currentSourceStateKind,
               }
           : provider.currentSourceStateKind !== "ready" ||
-              provider.displaySyncStatus !== "ok"
+              (provider.displaySyncStatus !== "ok" &&
+                provider.warningDiagnostic?.category !== "usage_threshold")
             ? {
                 kind: "provider-detail",
                 label: copy.featuredCard.reviewDetailAction,

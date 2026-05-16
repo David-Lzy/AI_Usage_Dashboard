@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { createPageSessionDiagnostic } from "../providers/diagnostics";
+import {
+  createPageSessionDiagnostic,
+  createUsageThresholdDiagnostic,
+} from "../providers/diagnostics";
 import type { AppState } from "../providers/types";
 import { SAMPLE_APP_STATE } from "../shared/constants";
 import { createRuntimeI18n } from "../shared/i18n";
@@ -18,17 +21,19 @@ function createState(overrides?: Partial<AppState>): AppState {
 }
 
 describe("popup view models", () => {
-  it("prioritizes providers needing attention in the compact popup list", () => {
+  it("keeps every visible provider in popup order even when one needs attention", () => {
     const model = buildPopupViewModel(SAMPLE_APP_STATE);
 
     expect(model.featuredProviders.map((provider) => provider.providerId)).toEqual([
       "claude-code-team-page",
+      "codex-personal-page",
+      "cursor-personal-page",
       "gemini-policy",
     ]);
     expect(model.featuredSection.label).toBe("Needs attention");
   });
 
-  it("uses the popup provider order preference before selecting featured providers", () => {
+  it("uses the popup provider order preference for every featured provider", () => {
     const model = buildPopupViewModel({
       ...SAMPLE_APP_STATE,
       settings: {
@@ -48,7 +53,9 @@ describe("popup view models", () => {
     ]);
     expect(model.featuredProviders.map((provider) => provider.providerId)).toEqual([
       "gemini-policy",
+      "codex-personal-page",
       "claude-code-team-page",
+      "cursor-personal-page",
     ]);
   });
 
@@ -86,7 +93,82 @@ describe("popup view models", () => {
       "codex-personal-page",
       "claude-code-team-page",
       "cursor-personal-page",
+      "gemini-policy",
     ]);
+  });
+
+  it("keeps low-quota warnings as user status without turning the provider into a product issue", () => {
+    const model = buildPopupViewModel({
+      ...SAMPLE_APP_STATE,
+      providers: SAMPLE_APP_STATE.providers.map((provider) => {
+        const baseProvider = {
+          ...provider,
+          syncedAt: "2026-04-20 10:42",
+          lastSyncLabel: "Synced just now",
+          syncStatus: "ok" as const,
+          tone: "neutral" as const,
+          warningReason: null,
+          warningDiagnostic: null,
+        };
+
+        if (provider.providerId !== "codex-personal-page") {
+          return baseProvider;
+        }
+
+        return {
+          ...baseProvider,
+          syncStatus: "warning" as const,
+          tone: "warning" as const,
+          warningReason: "Weekly usage window is nearly exhausted.",
+          warningDiagnostic: createUsageThresholdDiagnostic({
+            providerId: "codex-personal-page",
+            usageThresholdKind: "threshold_warning",
+            rawMessage: "Weekly usage window is nearly exhausted.",
+            usagePercent: 96,
+            thresholdPercent: 80,
+            unitLabel: "percent",
+          }),
+        };
+      }),
+      providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
+        ...provider,
+        displayEnabled: [
+          "cursor-personal-page",
+          "claude-code-team-page",
+          "gemini-policy",
+          "codex-personal-page",
+        ].includes(provider.id),
+        status: [
+          "cursor-personal-page",
+          "claude-code-team-page",
+          "gemini-policy",
+          "codex-personal-page",
+        ].includes(provider.id)
+          ? "granted"
+          : provider.status,
+        credentialStatus:
+          provider.id === "gemini-policy" ? "not_required" : "configured",
+      })),
+    });
+    const codexCard = model.featuredProviderCards.find(
+      (card) => card.provider.providerId === "codex-personal-page",
+    );
+
+    expect(model.featuredSection.label).toBe("All clear");
+    expect(model.featuredProviders.map((provider) => provider.providerId)).toEqual([
+      "codex-personal-page",
+      "claude-code-team-page",
+      "cursor-personal-page",
+      "gemini-policy",
+    ]);
+    expect(codexCard).toMatchObject({
+      statusLabel: "Warning",
+      action: {
+        kind: "provider-detail",
+        label: "Open detail",
+        providerId: "codex-personal-page",
+      },
+    });
   });
 
   it("surfaces mixed cached snapshot freshness in the popup status model", () => {
@@ -798,7 +880,7 @@ describe("popup view models", () => {
       label: "All clear",
       headline: "Healthy providers",
       detail:
-        "No visible provider currently needs setup or review, so this section keeps the top providers visible for current path and freshness at a glance.",
+        "No visible provider currently needs setup or review, so this section keeps visible providers available for current path and freshness at a glance.",
       emptyStateHeadline: null,
       emptyStateDetail: null,
     });

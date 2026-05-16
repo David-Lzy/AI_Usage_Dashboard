@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [504_Phase_Legacy_Source_Entry_Error_Fix.md](./Archive/by-phase/500-599/504_Phase_Legacy_Source_Entry_Error_Fix.md)
+- latest completed slice: [505_Phase_Popup_Provider_Parity_And_Quota_Warning_Fix.md](./Archive/by-phase/500-599/505_Phase_Popup_Provider_Parity_And_Quota_Warning_Fix.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -898,6 +898,7 @@ Completed phases should be moved to:
 - the 2026-05-16 `Phase 502` closeout packaged `0.1.0-rc.23` / manifest `0.1.0.23`, generated `release/ai-usage-dashboard-0.1.0-rc.23.zip`, recorded SHA256 `77f69c57a24ec7056b1013db48e27c4e11f095732dbd1d3775aeaf40c88f78a4`, and preserved RC13 as the submitted Chrome Web Store review boundary
 - the 2026-05-16 `Phase 503` closeout implemented source-level provider entries, migrating brand-level provider settings/secrets/order preferences and aligning Quick Setup plus Provider Display with display-enabled source entries
 - the 2026-05-16 `Phase 504` closeout fixed long-lived Chrome profile migration so legacy brand-level provider ids are not appended back as runtime extras after source-level normalization, resolving the Settings `undefined.sources` extension error
+- the 2026-05-16 `Phase 505` closeout removed the popup three-card cap and stopped treating quota-threshold warnings as product/setup attention, so all visible popup providers remain listed while low-quota warnings stay user-visible
 
 ## Delivery Standard For Each Phase
 

@@ -1,7 +1,10 @@
 import type { ProviderTone, SummaryItem } from "../providers/types";
 import type { buildPopupLocalizedCopy } from "../shared/popup-localized-copy";
 import type { RuntimeI18n } from "../shared/i18n";
-import type { ProviderViewModel } from "../sidepanel/view-models";
+import {
+  hasProviderProductAttention,
+  type ProviderViewModel,
+} from "../sidepanel/view-models";
 import type {
   PopupFirstSetupProvider,
   PopupSetupCoverage,
@@ -25,12 +28,7 @@ function pluralize(count: number, singular: string, plural = `${singular}s`) {
 }
 
 export function needsAttention(provider: ProviderViewModel): boolean {
-  return (
-    provider.permissionStatus === "missing" ||
-    provider.displaySyncStatus !== "ok" ||
-    (provider.currentSourceStateKind !== "ready" &&
-      provider.currentSourceStateKind !== "policy_only")
-  );
+  return hasProviderProductAttention(provider);
 }
 
 export function buildSetupCoverageStats(

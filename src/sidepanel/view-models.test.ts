@@ -27,9 +27,9 @@ describe("sidepanel view models", () => {
 
     expect(providers.map((provider) => provider.providerId)).toEqual([
       "claude-code-team-page",
-      "gemini-policy",
       "codex-personal-page",
       "cursor-personal-page",
+      "gemini-policy",
     ]);
   });
 
@@ -57,9 +57,9 @@ describe("sidepanel view models", () => {
     ).toEqual(["gemini-policy", "codex-personal-page", "cursor-personal-page", "claude-code-team-page"]);
     expect(getVisibleProviders(state).map((provider) => provider.providerId)).toEqual([
       "claude-code-team-page",
-      "gemini-policy",
       "codex-personal-page",
       "cursor-personal-page",
+      "gemini-policy",
     ]);
   });
 
@@ -85,7 +85,7 @@ describe("sidepanel view models", () => {
       { label: "Visible", value: "4", tone: "neutral" },
       { label: "Healthy", value: "2", tone: "neutral" },
       { label: "Needs Access", value: "0", tone: "neutral" },
-      { label: "Needs Attention", value: "2", tone: "error" },
+      { label: "Needs Attention", value: "1", tone: "error" },
     ]);
   });
 
@@ -101,7 +101,7 @@ describe("sidepanel view models", () => {
       { label: "Visible", value: "#4", tone: "neutral" },
       { label: "Healthy", value: "#2", tone: "neutral" },
       { label: "Needs Access", value: "#0", tone: "neutral" },
-      { label: "Needs Attention", value: "#2", tone: "error" },
+      { label: "Needs Attention", value: "#1", tone: "error" },
     ]);
   });
 
