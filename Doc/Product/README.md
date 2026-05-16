@@ -87,4 +87,5 @@ Status note:
 - `Phase 505` removed the popup three-card cap and kept quota-threshold warnings as user-facing quota state rather than product/setup attention.
 - `Phase 506` moved the Quick Setup team/API provider toggle into the section header action slot and gave it an outlined Material-style button treatment.
 - `Phase 507` made toolbar popup progress labels compact and folded reset timing into the visible popup label for line and circular progress styles while preserving non-popup detail labels.
-- Current implementation source is ahead of the `0.1.0-rc.23` package through `Phase 507`; no post-Phase-507 package has been cut yet.
+- `Phase 508` tightened Claude Team all-model weekly popup labels and shortened weekday reset text while preserving provider evidence and non-popup detail labels.
+- Current implementation source is ahead of the `0.1.0-rc.23` package through `Phase 508`; no post-Phase-508 package has been cut yet.

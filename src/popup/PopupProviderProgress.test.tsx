@@ -132,6 +132,42 @@ describe("PopupProviderProgress", () => {
     expect(html).not.toContain("5-hour usage window");
   });
 
+  it("keeps Claude all-model weekly labels compact in localized popup rings", () => {
+    const html = renderToStaticMarkup(
+      <PopupProviderProgress
+        i18n={zhTestI18n}
+        progressColorBands={SAMPLE_APP_STATE.settings.progressColorBands}
+        popupCircularProgressItemsPerRow={
+          SAMPLE_APP_STATE.settings.popupCircularProgressItemsPerRow
+        }
+        progressDisplayStyle="circle-soft"
+        progressItemsBySurface={createDefaultProgressItemsBySurface()}
+        progressThicknessPx={SAMPLE_APP_STATE.settings.progressThicknessPx}
+        provider={createProvider({
+          providerId: "claude-code-team-page",
+          providerLabel: "Claude Team",
+          usageWindows: [
+            {
+              label: "All models weekly limit",
+              normalizedLabel: "All models weekly limit",
+              kind: "weekly",
+              modelLabel: null,
+              quotaUnit: "percent",
+              used: 3,
+              remaining: 97,
+              total: 100,
+              resetAt: "Tue 12:30 AM",
+              resetLabel: "All models weekly limit resets at Tue 12:30 AM",
+            },
+          ],
+        })}
+      />,
+    );
+
+    expect(html).toContain("全模型周额度，重置：周二 00:30");
+    expect(html).not.toContain("All models weekly limit");
+  });
+
   it("renders single-value progress when no usage windows exist", () => {
     const html = renderToStaticMarkup(
       <PopupProviderProgress

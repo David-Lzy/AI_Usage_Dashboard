@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [507_Phase_Popup_Compact_Progress_Reset_Labels.md](./Archive/by-phase/500-599/507_Phase_Popup_Compact_Progress_Reset_Labels.md)
+- latest completed slice: [508_Phase_Claude_Team_Popup_Compact_Label_Polish.md](./Archive/by-phase/500-599/508_Phase_Claude_Team_Popup_Compact_Label_Polish.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -901,6 +901,7 @@ Completed phases should be moved to:
 - the 2026-05-16 `Phase 505` closeout removed the popup three-card cap and stopped treating quota-threshold warnings as product/setup attention, so all visible popup providers remain listed while low-quota warnings stay user-visible
 - the 2026-05-16 `Phase 506` closeout moved the Quick Setup team/API provider toggle into the section header action slot and gave it an outlined Material-style button treatment while preserving Quick Setup provider semantics
 - the 2026-05-16 `Phase 507` closeout made popup progress item labels compact and folded reset timing into the visible popup label for line and circular progress styles while preserving non-popup detail labels
+- the 2026-05-16 `Phase 508` closeout added Claude Team all-model weekly compact popup labels and shortened weekday reset text while preserving provider evidence and non-popup detail labels
 
 ## Delivery Standard For Each Phase
 

@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-16:
 
-- the numbered phase queue is completed through `Phase 507`; no numbered phase is currently queued after `Phase 507`; `0.1.0-rc.23` is the latest packaged follow-up candidate through `Phase 502`, current source is ahead through the source-level provider-entry migration, long-lived-profile migration fix, popup provider-parity fix, Quick Setup team/API toggle polish, and compact popup progress reset labels, and RC13 remains the submitted store-review boundary
+- the numbered phase queue is completed through `Phase 508`; no numbered phase is currently queued after `Phase 508`; `0.1.0-rc.23` is the latest packaged follow-up candidate through `Phase 502`, current source is ahead through the source-level provider-entry migration, long-lived-profile migration fix, popup provider-parity fix, Quick Setup team/API toggle polish, compact popup progress reset labels, and Claude Team all-model label polish, and RC13 remains the submitted store-review boundary
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -194,6 +194,7 @@ As of 2026-05-16:
 - `Phase 486` consolidated duplicate form label/info row CSS and source-card summary/session grid CSS while preserving existing spacing, wrapping, typography, route behavior, provider truth, storage, localization, and release packaging.
 - `Phase 487` packaged `0.1.0-rc.22` / manifest `0.1.0.22`, generated `release/ai-usage-dashboard-0.1.0-rc.22.zip`, recorded SHA256 `444440c732880c4c05ab5a3c73c5d488447447c1fb2a539a00c5253b8af30104`, and preserved RC13 as the submitted Chrome Web Store review boundary.
 - `Phase 507` made toolbar popup progress labels compact and folded reset timing into the visible popup label for line and circular progress styles while preserving dashboard, provider detail, provider evidence, and release packaging boundaries.
+- `Phase 508` tightened Claude Team all-model weekly popup labels and shortened weekday reset text while preserving provider evidence and non-popup detail labels.
 - `Phase 200` completed a functionality-first Codex personal slice by preserving multiple visible usage windows, expanding Codex page-capture snippets, and surfacing the most constrained visible percentage window across dashboard, provider detail, and popup paths
 - `Phase 201` completed the next functionality-first Codex personal slice by preserving visible flex credit balance cards as supplemental usage context without changing the primary percentage-window quota model
 - `Phase 202` completed repeatable unpacked-extension verification for Codex personal multi-window plus flex-balance context, while fixing DOM capture so repeated percentages and single-character balance values are not lost before parsing
@@ -562,7 +563,7 @@ As of 2026-05-16:
 
 1. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why first now:
-   `0.1.0-rc.23` is now packaged as the latest follow-up candidate through `Phase 502`, current source is ahead through `Phase 507`, no numbered phase is currently queued after `Phase 507`, the public-readiness screenshot archive and six-locale listing handoff are complete, and the trimmed transparent icon refresh plus Claude Team usage-page path are already in the submitted RC13 boundary.
+   `0.1.0-rc.23` is now packaged as the latest follow-up candidate through `Phase 502`, current source is ahead through `Phase 508`, no numbered phase is currently queued after `Phase 508`, the public-readiness screenshot archive and six-locale listing handoff are complete, and the trimmed transparent icon refresh plus Claude Team usage-page path are already in the submitted RC13 boundary.
 
 2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second now:

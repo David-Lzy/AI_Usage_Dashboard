@@ -13,6 +13,7 @@ type CompactProgressWindowKind =
   | "unknown";
 
 type CompactProgressCopy = {
+  allModelsWeek: string;
   colon: string;
   comma: string;
   day: string;
@@ -29,6 +30,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
   switch (i18n.resolvedLocale) {
     case "zh-CN":
       return {
+        allModelsWeek: "全模型周额度",
         colon: "：",
         comma: "，",
         day: "日额度",
@@ -42,6 +44,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     case "zh-TW":
       return {
+        allModelsWeek: "全模型週額度",
         colon: "：",
         comma: "，",
         day: "日額度",
@@ -55,6 +58,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     case "ja":
       return {
+        allModelsWeek: "全モデル週次",
         colon: "：",
         comma: "、",
         day: "日次",
@@ -68,6 +72,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     case "ko":
       return {
+        allModelsWeek: "전체 모델 주간",
         colon: ":",
         comma: ", ",
         day: "일일",
@@ -81,6 +86,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     case "es-419":
       return {
+        allModelsWeek: "semana todos modelos",
         colon: ":",
         comma: ", ",
         day: "día",
@@ -94,6 +100,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     case "pt-BR":
       return {
+        allModelsWeek: "semana todos modelos",
         colon: ":",
         comma: ", ",
         day: "dia",
@@ -107,6 +114,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     case "fr":
       return {
+        allModelsWeek: "semaine tous modèles",
         colon: ":",
         comma: ", ",
         day: "jour",
@@ -120,6 +128,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     case "de":
       return {
+        allModelsWeek: "Woche alle Modelle",
         colon: ":",
         comma: ", ",
         day: "Tag",
@@ -133,6 +142,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     case "it":
       return {
+        allModelsWeek: "settimana tutti modelli",
         colon: ":",
         comma: ", ",
         day: "giorno",
@@ -146,6 +156,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     case "ru":
       return {
+        allModelsWeek: "неделя всех моделей",
         colon: ":",
         comma: ", ",
         day: "день",
@@ -159,6 +170,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     case "ar":
       return {
+        allModelsWeek: "أسبوعي كل النماذج",
         colon: ":",
         comma: "، ",
         day: "يومي",
@@ -172,6 +184,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     case "hi":
       return {
+        allModelsWeek: "सभी मॉडल सप्ताह",
         colon: ":",
         comma: ", ",
         day: "दिन",
@@ -185,6 +198,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     case "id":
       return {
+        allModelsWeek: "minggu semua model",
         colon: ":",
         comma: ", ",
         day: "hari",
@@ -198,6 +212,7 @@ function buildCompactProgressCopy(i18n: RuntimeI18n): CompactProgressCopy {
       };
     default:
       return {
+        allModelsWeek: "all models week",
         colon: ":",
         comma: ", ",
         day: "day",
@@ -309,9 +324,7 @@ function formatCompactProgressBaseLabel(
     case "rolling_5h":
       return copy.fiveHour;
     case "weekly":
-      return /all\s+models/i.test(item.label)
-        ? `${copy.week} · ${shortModelLabel ?? "All models"}`
-        : copy.week;
+      return /all\s+models/i.test(item.label) ? copy.allModelsWeek : copy.week;
     case "model_rolling_5h":
       return shortModelLabel ? `${shortModelLabel} ${copy.fiveHour}` : copy.fiveHour;
     case "model_weekly":
@@ -359,6 +372,52 @@ function formatCompactMonthDay(
   return `${day}/${month}`;
 }
 
+function localizeWeekdayReset(
+  i18n: RuntimeI18n,
+  weekday: string,
+  hourText: string,
+  minuteText: string,
+  meridiem: string,
+): string {
+  const normalizedWeekday = weekday.toLowerCase().slice(0, 3);
+  const weekdayLabels: Record<string, Record<string, string>> = {
+    mon: { zh: "周一", ja: "月", ko: "월", default: "Mon" },
+    tue: { zh: "周二", ja: "火", ko: "화", default: "Tue" },
+    wed: { zh: "周三", ja: "水", ko: "수", default: "Wed" },
+    thu: { zh: "周四", ja: "木", ko: "목", default: "Thu" },
+    fri: { zh: "周五", ja: "金", ko: "금", default: "Fri" },
+    sat: { zh: "周六", ja: "土", ko: "토", default: "Sat" },
+    sun: { zh: "周日", ja: "日", ko: "일", default: "Sun" },
+  };
+  const parsedHour = Number(hourText);
+  const hour =
+    meridiem.toLowerCase() === "pm" && parsedHour < 12
+      ? parsedHour + 12
+      : meridiem.toLowerCase() === "am" && parsedHour === 12
+        ? 0
+        : parsedHour;
+  const time = `${String(hour).padStart(2, "0")}:${minuteText}`;
+  const labels = weekdayLabels[normalizedWeekday];
+
+  if (!labels) {
+    return `${weekday} ${time}`;
+  }
+
+  if (i18n.resolvedLocale === "zh-CN" || i18n.resolvedLocale === "zh-TW") {
+    return `${labels.zh} ${time}`;
+  }
+
+  if (i18n.resolvedLocale === "ja") {
+    return `${labels.ja} ${time}`;
+  }
+
+  if (i18n.resolvedLocale === "ko") {
+    return `${labels.ko} ${time}`;
+  }
+
+  return `${labels.default} ${time}`;
+}
+
 function formatCompactResetAt(
   item: ProviderProgressItem,
   i18n: RuntimeI18n,
@@ -384,6 +443,21 @@ function formatCompactResetAt(
 
   if (dateMatch) {
     return formatCompactMonthDay(i18n, dateMatch[2], dateMatch[3]);
+  }
+
+  const weekdayTimeMatch =
+    /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s+(\d{1,2}):(\d{2})\s*(AM|PM)$/i.exec(
+      resetAt,
+    );
+
+  if (weekdayTimeMatch) {
+    return localizeWeekdayReset(
+      i18n,
+      weekdayTimeMatch[1],
+      weekdayTimeMatch[2],
+      weekdayTimeMatch[3],
+      weekdayTimeMatch[4],
+    );
   }
 
   const timeMatch = /\b(\d{1,2}:\d{2}\s*(?:AM|PM)?)\b/i.exec(resetAt);
