@@ -4,7 +4,7 @@ Date: 2026-05-16
 
 Process rule:
 
-- follow [Development_Guardrails.md](../Development_Guardrails.md)
+- follow [Development_Guardrails.md](../../../../Development_Guardrails.md)
 
 Document class:
 
@@ -16,7 +16,7 @@ Freshness model:
 
 Status:
 
-- active
+- completed
 
 ## Goal
 
@@ -53,6 +53,22 @@ Add a single eligibility model for providers that may appear in dashboard, popup
 - Focused tests for provider display eligibility helpers.
 - Focused tests for Settings provider display sections.
 - `npm run typecheck`
+- `npm run docs:check`
+- `git diff --check`
+
+## Completion Summary
+
+- Added a shared provider display eligibility helper that separates displayability from `provider.enabled`.
+- Marked shipped live-source providers and shipped policy-only providers as display eligible.
+- Kept deferred and planned providers out of dashboard/provider-display surfaces until their product contract graduates.
+- Applied the eligibility helper to sidepanel visible providers, popup provider candidates, and Settings Provider Display controls.
+- Confirmed Quick Setup still lists all configurable providers independently from display eligibility.
+
+## Verification
+
+- `npm run test -- src/shared/provider-display-eligibility.test.ts src/sidepanel/view-models.test.ts src/sidepanel/components/SettingsProviderDisplaySection.test.tsx src/sidepanel/routes/SettingsPage.test.tsx`
+- `npm run typecheck`
+- `npm run build`
 - `npm run docs:check`
 - `git diff --check`
 

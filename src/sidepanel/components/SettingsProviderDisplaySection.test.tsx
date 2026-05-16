@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { SAMPLE_APP_STATE } from "../../shared/constants";
 import { createRuntimeI18n } from "../../shared/i18n";
 import { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
+import { buildProviderSourceDisplayLocalizedCopy } from "../../shared/provider-source-display-localized-copy";
 import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
 import { SettingsProviderDisplaySection } from "./SettingsProviderDisplaySection";
 
@@ -11,11 +12,14 @@ describe("SettingsProviderDisplaySection", () => {
   it("renders provider display controls as a standalone Settings section", () => {
     const i18n = createRuntimeI18n("en", undefined);
     const settingsCopy = buildSettingsLocalizedCopy(i18n);
+    const providerSourceDisplayCopy =
+      buildProviderSourceDisplayLocalizedCopy(i18n);
     const html = renderToStaticMarkup(
       <SettingsProviderDisplaySection
         sectionId={SETTINGS_SECTION_IDS.providerDisplay}
         settings={SAMPLE_APP_STATE.settings}
         providers={SAMPLE_APP_STATE.providerSettings}
+        providerSourceDisplayCopy={providerSourceDisplayCopy}
         snapshots={SAMPLE_APP_STATE.providers}
         settingsCopy={settingsCopy}
         onProviderOrderBySurfaceChange={() => {}}
@@ -35,5 +39,11 @@ describe("SettingsProviderDisplaySection", () => {
     expect(html).toContain('data-provider-progress-surface="popup"');
     expect(html).toContain('data-provider-progress-surface="sidebar"');
     expect(html).toContain('data-provider-progress-surface="fullPage"');
+    expect(html).toContain("4 providers");
+    expect(html).not.toContain('data-provider-order-row="jetbrains"');
+    expect(html).not.toContain(
+      'data-provider-progress-preference-provider="jetbrains"',
+    );
+    expect(html).toContain('data-provider-order-row="gemini"');
   });
 });

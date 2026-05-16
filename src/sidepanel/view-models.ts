@@ -12,10 +12,10 @@ import type {
 } from "../providers/types";
 import {
   buildProviderSourceDisplay,
-  getProviderSourceBlueprint,
   getOpenableRouteHint,
   type ProviderSourceDisplayCopy,
 } from "../shared/provider-sources";
+import { isProviderDisplayEligible } from "../shared/provider-display-eligibility";
 import { createEmptyPageBinding } from "../shared/page-bindings";
 
 export type ProviderViewModel = ProviderSnapshot & {
@@ -298,7 +298,10 @@ export function getVisibleProviders(
   const providers = state.providers
     .filter((provider) => {
       const setting = findProviderSetting(state.providerSettings, provider.providerId);
-      return setting?.enabled ?? false;
+      return (
+        (setting?.enabled ?? false) &&
+        isProviderDisplayEligible(provider, setting, sourceDisplayCopy)
+      );
     })
     .map((provider) =>
       toProviderViewModel(
@@ -322,11 +325,10 @@ export function getPopupProviders(
   sourceDisplayCopy?: ProviderSourceDisplayCopy,
 ): ProviderViewModel[] {
   const providers = state.providers
-    .filter((provider) =>
-      getProviderSourceBlueprint(provider.providerId).sources.some(
-        (source) => source.rolloutStage === "shipped",
-      ),
-    )
+    .filter((provider) => {
+      const setting = findProviderSetting(state.providerSettings, provider.providerId);
+      return isProviderDisplayEligible(provider, setting, sourceDisplayCopy);
+    })
     .map((provider) =>
       toProviderViewModel(
         provider,

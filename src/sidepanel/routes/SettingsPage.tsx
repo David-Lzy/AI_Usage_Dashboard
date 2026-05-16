@@ -463,6 +463,7 @@ export function SettingsPage({
         sectionId={SETTINGS_SECTION_IDS.providerDisplay}
         settings={settings}
         providers={providers}
+        providerSourceDisplayCopy={providerSourceDisplayCopy}
         snapshots={snapshots}
         settingsCopy={settingsCopy}
         onProviderOrderBySurfaceChange={onProviderOrderBySurfaceChange}

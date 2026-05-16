@@ -86,6 +86,7 @@ describe("SettingsPage", () => {
     expect(html).toContain('data-settings-provider-display-section=""');
     expect(html).toContain('data-provider-order-preferences=""');
     expect(html).toContain('data-provider-progress-preferences=""');
+    expect(html).not.toContain('data-provider-order-row="jetbrains"');
     expect(html).toContain('data-progress-appearance-preferences=""');
     expect(html).toContain(">More UI settings<");
     expect(html).toContain(">Provider display settings<");

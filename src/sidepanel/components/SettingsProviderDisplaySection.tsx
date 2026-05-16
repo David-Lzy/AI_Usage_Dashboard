@@ -5,6 +5,8 @@ import type {
   ProviderSetting,
   ProviderSnapshot,
 } from "../../providers/types";
+import type { ProviderSourceDisplayCopy } from "../../shared/provider-sources";
+import { filterDisplayEligibleProviderSettings } from "../../shared/provider-display-eligibility";
 import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 import { ProviderOrderPreferenceControls } from "./ProviderOrderPreferenceControls";
@@ -12,6 +14,7 @@ import { ProviderProgressItemPreferenceControls } from "./ProviderProgressItemPr
 
 type SettingsProviderDisplaySectionProps = {
   providers: ProviderSetting[];
+  providerSourceDisplayCopy: ProviderSourceDisplayCopy;
   sectionId?: string;
   settings: AppSettings;
   settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>;
@@ -26,6 +29,7 @@ type SettingsProviderDisplaySectionProps = {
 
 export function SettingsProviderDisplaySection({
   providers,
+  providerSourceDisplayCopy,
   sectionId,
   settings,
   settingsCopy,
@@ -33,6 +37,12 @@ export function SettingsProviderDisplaySection({
   onProviderOrderBySurfaceChange,
   onProgressItemsBySurfaceChange,
 }: SettingsProviderDisplaySectionProps) {
+  const displayEligibleProviders = filterDisplayEligibleProviderSettings(
+    providers,
+    snapshots,
+    providerSourceDisplayCopy,
+  );
+
   return (
     <section
       className="status-card settings-section-anchor settings-provider-display"
@@ -53,14 +63,14 @@ export function SettingsProviderDisplaySection({
       <div className="settings-provider-display__body">
         <ProviderOrderPreferenceControls
           copy={settingsCopy.providerOrder}
-          providers={providers}
+          providers={displayEligibleProviders}
           providerOrderBySurface={settings.providerOrderBySurface}
           onChange={onProviderOrderBySurfaceChange}
         />
 
         <ProviderProgressItemPreferenceControls
           copy={settingsCopy.progressItems}
-          providers={providers}
+          providers={displayEligibleProviders}
           snapshots={snapshots}
           progressItemsBySurface={settings.progressItemsBySurface}
           onChange={onProgressItemsBySurfaceChange}
