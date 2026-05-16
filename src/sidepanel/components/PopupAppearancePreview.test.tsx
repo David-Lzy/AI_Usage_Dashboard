@@ -28,7 +28,7 @@ describe("PopupAppearancePreview", () => {
     expect(html).toContain('data-popup-progress-style="circle-soft"');
     expect(html).toContain("usage-progress-ring--circle-soft");
     expect(html).toContain("Toolbar bubble shape");
-    expect(html).toContain("week, reset: 19/05");
+    expect(html).toContain("week, reset: Tue 09:15");
   });
 
   it("renders the zh-CN pilot preview copy through runtime i18n", () => {
@@ -41,8 +41,10 @@ describe("PopupAppearancePreview", () => {
     );
 
     expect(html).toContain("工具栏弹窗形态");
-    expect(html).toContain("周额度，重置：05/19");
-    expect(html).toContain('aria-valuetext="周额度，重置：05/19: 51% 剩余"');
+    expect(html).toContain("周额度，重置：周二 09:15");
+    expect(html).toContain(
+      'aria-valuetext="周额度，重置：周二 09:15: 51% 剩余"',
+    );
   });
 
   it("renders the selected gauge progress style in the preview", () => {

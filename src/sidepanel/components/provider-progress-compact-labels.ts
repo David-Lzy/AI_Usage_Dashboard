@@ -348,11 +348,14 @@ function formatCompactProgressBaseLabel(
 
 function shouldUseDateResetLabel(windowKind: CompactProgressWindowKind): boolean {
   return (
-    windowKind === "weekly" ||
-    windowKind === "model_weekly" ||
-    windowKind === "monthly" ||
-    windowKind === "daily"
+    windowKind === "monthly" || windowKind === "daily"
   );
+}
+
+function shouldUseWeekdayTimeResetLabel(
+  windowKind: CompactProgressWindowKind,
+): boolean {
+  return windowKind === "weekly" || windowKind === "model_weekly";
 }
 
 function formatCompactMonthDay(
@@ -377,7 +380,7 @@ function localizeWeekdayReset(
   weekday: string,
   hourText: string,
   minuteText: string,
-  meridiem: string,
+  meridiem?: string,
 ): string {
   const normalizedWeekday = weekday.toLowerCase().slice(0, 3);
   const weekdayLabels: Record<string, Record<string, string>> = {
@@ -390,10 +393,11 @@ function localizeWeekdayReset(
     sun: { zh: "周日", ja: "日", ko: "일", default: "Sun" },
   };
   const parsedHour = Number(hourText);
+  const normalizedMeridiem = meridiem?.toLowerCase();
   const hour =
-    meridiem.toLowerCase() === "pm" && parsedHour < 12
+    normalizedMeridiem === "pm" && parsedHour < 12
       ? parsedHour + 12
-      : meridiem.toLowerCase() === "am" && parsedHour === 12
+      : normalizedMeridiem === "am" && parsedHour === 12
         ? 0
         : parsedHour;
   const time = `${String(hour).padStart(2, "0")}:${minuteText}`;
@@ -418,6 +422,24 @@ function localizeWeekdayReset(
   return `${labels.default} ${time}`;
 }
 
+function localizeDateTimeResetAsWeekday(
+  i18n: RuntimeI18n,
+  yearText: string,
+  monthText: string,
+  dayText: string,
+  hourText: string,
+  minuteText: string,
+): string {
+  const weekdayKeys = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+  const year = Number(yearText);
+  const monthIndex = Number(monthText) - 1;
+  const day = Number(dayText);
+  const weekdayIndex = new Date(Date.UTC(year, monthIndex, day)).getUTCDay();
+  const weekday = weekdayKeys[weekdayIndex] ?? "sun";
+
+  return localizeWeekdayReset(i18n, weekday, hourText, minuteText);
+}
+
 function formatCompactResetAt(
   item: ProviderProgressItem,
   i18n: RuntimeI18n,
@@ -434,6 +456,17 @@ function formatCompactResetAt(
     );
 
   if (dateTimeMatch) {
+    if (shouldUseWeekdayTimeResetLabel(windowKind)) {
+      return localizeDateTimeResetAsWeekday(
+        i18n,
+        dateTimeMatch[1],
+        dateTimeMatch[2],
+        dateTimeMatch[3],
+        dateTimeMatch[4],
+        dateTimeMatch[5],
+      );
+    }
+
     return shouldUseDateResetLabel(windowKind)
       ? formatCompactMonthDay(i18n, dateTimeMatch[2], dateTimeMatch[3])
       : `${dateTimeMatch[4]}:${dateTimeMatch[5]}`;
@@ -486,16 +519,16 @@ export function formatPopupProgressItemLabel(
 export function formatPopupPreviewQuotaLabel(i18n: RuntimeI18n): string {
   switch (i18n.resolvedLocale) {
     case "zh-CN":
-      return "周额度，重置：05/19";
+      return "周额度，重置：周二 09:15";
     case "zh-TW":
-      return "週額度，重設：05/19";
+      return "週額度，重設：周二 09:15";
     case "ja":
-      return "週次、リセット：05/19";
+      return "週次、リセット：火 09:15";
     case "ko":
-      return "주간, 리셋: 05/19";
+      return "주간, 리셋: 화 09:15";
     case "ar":
-      return "أسبوعي، إعادة: 19/05";
+      return "أسبوعي، إعادة: Tue 09:15";
     default:
-      return "week, reset: 19/05";
+      return "week, reset: Tue 09:15";
   }
 }

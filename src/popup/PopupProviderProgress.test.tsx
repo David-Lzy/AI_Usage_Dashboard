@@ -84,15 +84,15 @@ describe("PopupProviderProgress", () => {
               used: 65,
               remaining: 35,
               total: 100,
-              resetAt: "2026-05-13 04:00",
-              resetLabel: "Weekly usage window resets at 2026-05-13 04:00",
+              resetAt: "2026-05-13 12:30",
+              resetLabel: "Weekly usage window resets at 2026-05-13 12:30",
             },
           ],
         }),
     );
 
     expect(html).toContain("provider-progress-item-list--circle");
-    expect(html).toContain("week, reset: 13/05");
+    expect(html).toContain("week, reset: Wed 12:30");
     expect(html).not.toContain("Weekly usage window");
     expect(html).toContain("--usage-progress-percent:35%");
     expect(html).not.toContain("Codex weekly window percent");

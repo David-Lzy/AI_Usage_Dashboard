@@ -90,4 +90,5 @@ Status note:
 - `Phase 508` tightened Claude Team all-model weekly popup labels and shortened weekday reset text while preserving provider evidence and non-popup detail labels.
 - `Phase 509` moved popup provider card actions into the header, shortened Details/Hide labels, and made popup hide persist through provider display settings with a 3-second undo affordance.
 - `Phase 510` changed popup provider-card status chips to compact accessible icon chips so English Warning/Healthy labels do not force a second header line.
-- Current implementation source is ahead of the `0.1.0-rc.23` package through `Phase 510`; no post-Phase-510 package has been cut yet.
+- `Phase 511` changed popup weekly reset labels with timestamps to weekday plus time, matching Claude-style reset labels while keeping monthly/daily date labels compact.
+- Current implementation source is ahead of the `0.1.0-rc.23` package through `Phase 511`; no post-Phase-511 package has been cut yet.
