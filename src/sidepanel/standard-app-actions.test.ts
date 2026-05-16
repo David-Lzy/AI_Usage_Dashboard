@@ -44,8 +44,8 @@ describe("createStandardAppActions", () => {
       appState: null,
     });
 
-    actions.handleRefresh("codex");
-    actions.handleToggleProvider("codex");
+    actions.handleRefresh("codex-personal-page");
+    actions.handleToggleProvider("codex-personal-page");
 
     expect(applyMessage).not.toHaveBeenCalled();
   });
@@ -53,11 +53,11 @@ describe("createStandardAppActions", () => {
   it("dispatches provider refresh through the shared sync flow", async () => {
     const { actions, applyMessage } = createActionHarness();
 
-    actions.handleRefresh("codex");
+    actions.handleRefresh("codex-personal-page");
 
     await vi.waitFor(() => {
       expect(applyMessage).toHaveBeenCalledWith(
-        { type: "app:request-refresh", providerId: "codex" },
+        { type: "app:request-refresh", providerId: "codex-personal-page" },
         expect.objectContaining({
           title: "Codex refreshed",
         }),
@@ -68,7 +68,7 @@ describe("createStandardAppActions", () => {
   it("requests missing host access before refreshing one provider", async () => {
     const appState = structuredClone(SAMPLE_APP_STATE);
     const codex = appState.providerSettings.find(
-      (provider) => provider.id === "codex",
+      (provider) => provider.id === "codex-personal-page",
     );
 
     if (!codex) {
@@ -90,14 +90,14 @@ describe("createStandardAppActions", () => {
 
     const { actions, applyMessage } = createActionHarness({ appState });
 
-    actions.handleRefresh("codex");
+    actions.handleRefresh("codex-personal-page");
 
     await vi.waitFor(() => {
       expect(request).toHaveBeenCalledWith({
         origins: codex.hostOrigins,
       });
       expect(applyMessage).toHaveBeenCalledWith(
-        { type: "app:request-refresh", providerId: "codex" },
+        { type: "app:request-refresh", providerId: "codex-personal-page" },
         expect.objectContaining({
           title: "Codex refreshed",
         }),
@@ -108,7 +108,7 @@ describe("createStandardAppActions", () => {
   it("stops refresh when the host access request is denied", async () => {
     const appState = structuredClone(SAMPLE_APP_STATE);
     const codex = appState.providerSettings.find(
-      (provider) => provider.id === "codex",
+      (provider) => provider.id === "codex-personal-page",
     );
 
     if (!codex) {
@@ -128,7 +128,7 @@ describe("createStandardAppActions", () => {
 
     const { actions, applyMessage, setToast } = createActionHarness({ appState });
 
-    actions.handleRefresh("codex");
+    actions.handleRefresh("codex-personal-page");
 
     await vi.waitFor(() => {
       expect(setToast).toHaveBeenCalledWith(
@@ -156,17 +156,17 @@ describe("createStandardAppActions", () => {
   it("toggles provider visibility using current provider state", () => {
     const { actions, appState, applyMessage } = createActionHarness();
     const codex = appState.providerSettings.find(
-      (provider) => provider.id === "codex",
+      (provider) => provider.id === "codex-personal-page",
     );
 
-    expect(codex?.enabled).toBe(true);
+    expect(codex?.displayEnabled).toBe(true);
 
-    actions.handleToggleProvider("codex");
+    actions.handleToggleProvider("codex-personal-page");
 
     expect(applyMessage).toHaveBeenCalledWith(
       {
         type: "app:set-provider-enabled",
-        providerId: "codex",
+        providerId: "codex-personal-page",
         enabled: false,
       },
       expect.objectContaining({

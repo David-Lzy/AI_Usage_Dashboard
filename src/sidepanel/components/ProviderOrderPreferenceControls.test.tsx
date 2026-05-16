@@ -26,13 +26,13 @@ describe("ProviderOrderPreferenceControls", () => {
     expect(html).toContain('data-provider-order-surface="popup"');
     expect(html).toContain('data-provider-order-surface="sidebar"');
     expect(html).toContain('data-provider-order-surface="fullPage"');
-    expect(html).toContain('data-provider-order-row="cursor"');
+    expect(html).toContain('data-provider-order-row="cursor-personal-page"');
     expect(html).toContain('draggable="true"');
     expect(html).toContain("ArrowUp");
     expect(html).toContain("ArrowDown");
     expect(html).toContain("Full-page tab");
-    expect(html).toContain("5 providers");
-    expect(html).toContain("Move Cursor down on Popup");
+    expect(html).toContain("8 providers");
+    expect(html).toContain("Move Cursor Personal Usage Page down on Popup");
   });
 
   it("renders non-English provider-order copy", () => {
@@ -57,19 +57,25 @@ describe("ProviderOrderPreferenceControls", () => {
       (provider) => provider.id,
     );
 
-    expect(moveProviderInOrder([], providerIds, "jetbrains", "up")).toEqual([
-      "jetbrains",
-      "cursor",
-      "claude-code",
-      "gemini",
-      "codex",
+    expect(moveProviderInOrder([], providerIds, "jetbrains-org-page", "up")).toEqual([
+      "cursor-personal-page",
+      "jetbrains-org-page",
+      "cursor-team-api",
+      "claude-code-team-page",
+      "claude-code-admin-api",
+      "gemini-policy",
+      "codex-personal-page",
+      "codex-enterprise-api",
     ]);
-    expect(reorderProviderBefore([], providerIds, "codex", "cursor")).toEqual([
-      "codex",
-      "cursor",
-      "jetbrains",
-      "claude-code",
-      "gemini",
+    expect(reorderProviderBefore([], providerIds, "codex-personal-page", "cursor-personal-page")).toEqual([
+      "codex-personal-page",
+      "cursor-personal-page",
+      "cursor-team-api",
+      "jetbrains-org-page",
+      "claude-code-team-page",
+      "claude-code-admin-api",
+      "gemini-policy",
+      "codex-enterprise-api",
     ]);
   });
 });

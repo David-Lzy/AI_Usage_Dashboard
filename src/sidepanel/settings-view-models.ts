@@ -58,12 +58,12 @@ export function buildSettingsSummaryItems(
   const snapshotMap = new Map(
     snapshots.map((snapshot) => [snapshot.providerId, snapshot]),
   );
-  const enabledCount = providers.filter((provider) => provider.enabled).length;
+  const enabledCount = providers.filter((provider) => provider.displayEnabled).length;
   let connectedCount = 0;
   let needsActionCount = 0;
 
   for (const provider of providers) {
-    if (!provider.enabled) {
+    if (!provider.displayEnabled) {
       continue;
     }
 

@@ -1,10 +1,12 @@
 import type {
   AppSettings,
   AppState,
+  LegacyProviderId,
   ProviderId,
   ProviderSetting,
   ProviderSourcePreference,
 } from "../providers/types";
+import { normalizeProviderId } from "../providers/provider-definitions";
 import { normalizeSourcePreference } from "./provider-sources";
 
 export const CONFIGURATION_BACKUP_FORMAT =
@@ -20,8 +22,10 @@ const CONFIGURATION_SYNC_MAX_CHUNKS = 12;
 
 export type ConfigurationBackupProviderSetting = Pick<
   ProviderSetting,
-  "id" | "enabled" | "sourcePreference"
->;
+  "id" | "displayEnabled" | "sourcePreference"
+> & {
+  enabled?: boolean;
+};
 
 export type ConfigurationBackupDocument = {
   format: typeof CONFIGURATION_BACKUP_FORMAT;
@@ -81,7 +85,7 @@ function buildProviderSettingsBackup(
 ): ConfigurationBackupProviderSetting[] {
   return providerSettings.map((provider) => ({
     id: provider.id,
-    enabled: provider.enabled,
+    displayEnabled: provider.displayEnabled,
     sourcePreference: provider.sourcePreference,
   }));
 }
@@ -174,8 +178,16 @@ export function applyConfigurationBackupToState(
       isRecord(importedProvider) &&
       typeof importedProvider.id === "string"
     ) {
+      const providerId = normalizeProviderId(
+        importedProvider.id as ProviderId | LegacyProviderId,
+      );
+
+      if (!providerId) {
+        continue;
+      }
+
       importedProviderSettings.set(
-        importedProvider.id as ProviderId,
+        providerId,
         importedProvider as Partial<ConfigurationBackupProviderSetting>,
       );
     }
@@ -196,10 +208,12 @@ export function applyConfigurationBackupToState(
 
       return {
         ...provider,
-        enabled:
-          typeof importedProvider.enabled === "boolean"
-            ? importedProvider.enabled
-            : provider.enabled,
+        displayEnabled:
+          typeof importedProvider.displayEnabled === "boolean"
+            ? importedProvider.displayEnabled
+            : typeof importedProvider.enabled === "boolean"
+              ? importedProvider.enabled
+            : provider.displayEnabled,
         sourcePreference: normalizeSourcePreference(
           provider.id,
           importedProvider.sourcePreference as ProviderSourcePreference,

@@ -104,7 +104,7 @@ export function normalizeActionBadgeSelections(
 function getEnabledProviderIds(state: AppState): Set<ProviderId> {
   return new Set(
     state.providerSettings
-      .filter((provider) => provider.enabled)
+      .filter((provider) => provider.displayEnabled)
       .map((provider) => provider.id),
   );
 }

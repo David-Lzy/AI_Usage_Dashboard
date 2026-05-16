@@ -8,7 +8,7 @@ function createStateWithCodexWindows() {
   const state = {
     ...SAMPLE_APP_STATE,
     providers: SAMPLE_APP_STATE.providers.map((provider) =>
-      provider.providerId === "codex"
+      provider.providerId === "codex-personal-page"
         ? {
             ...provider,
             syncStatus: "ok" as const,
@@ -85,8 +85,8 @@ describe("action badge", () => {
   it("shows the number of visible providers needing attention", () => {
     const model = buildActionBadgeModel(SAMPLE_APP_STATE);
 
-    expect(model.text).toBe("3");
-    expect(model.title).toContain("3 visible providers need attention");
+    expect(model.text).toBe("2");
+    expect(model.title).toContain("2 visible providers need attention");
     expect(model.backgroundColor).toEqual([161, 84, 0, 255]);
   });
 
@@ -95,12 +95,12 @@ describe("action badge", () => {
 
     expect(model.text).toBe("32%");
     expect(model.title).toContain("Selected badge");
-    expect(model.title).toContain("  Provider: Codex");
+    expect(model.title).toContain("  Provider: Codex Personal");
     expect(model.title).toContain("  Source: Weekly usage window");
     expect(model.title).toContain("  Remaining: 32% remaining");
     expect(model.title).toContain("  Reset: Resets Thursday");
     expect(model.title).toContain("Visible providers");
-    expect(model.title).toContain("  Cursor: Healthy");
+    expect(model.title).toContain("  Cursor Personal: Healthy");
     expect(model.title).toContain("    Billing period: Mar 23 - Apr 21");
     expect(model.title).toContain(
       "    Total spend: $0; Included: $0; On-demand: $0",
@@ -131,7 +131,7 @@ describe("action badge", () => {
   it("uses the active rotated badge selection for toolbar text", () => {
     const state = createStateWithCodexWindows();
     const candidateValues = buildActionBadgeQuotaCandidates(state)
-      .filter((candidate) => candidate.providerId === "codex")
+      .filter((candidate) => candidate.providerId === "codex-personal-page")
       .map((candidate) => candidate.value);
     const rotatingState = {
       ...state,

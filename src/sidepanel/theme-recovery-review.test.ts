@@ -38,25 +38,27 @@ function isolateRecoveryTargets(state: AppState) {
 
   state.providerSettings = state.providerSettings.map((provider) => ({
     ...provider,
-    enabled: provider.id === "cursor" || provider.id === "codex",
+    displayEnabled:
+      provider.id === "cursor-personal-page" ||
+      provider.id === "codex-personal-page",
   }));
 
-  updateProviderSetting(state, "cursor", (provider) => ({
+  updateProviderSetting(state, "cursor-personal-page", (provider) => ({
     ...provider,
     sourcePreference: "session_page",
   }));
-  updateProviderSetting(state, "codex", (provider) => ({
+  updateProviderSetting(state, "codex-personal-page", (provider) => ({
     ...provider,
     sourcePreference: "session_page",
   }));
 
-  updateProvider(state, "cursor", (provider) => ({
+  updateProvider(state, "cursor-personal-page", (provider) => ({
     ...provider,
     syncSource: "page_parse",
     syncedAt: "2026-04-23 13:20",
     lastSyncLabel: "Synced 1m ago",
   }));
-  updateProvider(state, "codex", (provider) => ({
+  updateProvider(state, "codex-personal-page", (provider) => ({
     ...provider,
     syncSource: "page_parse",
     syncedAt: "2026-04-23 13:20",
@@ -67,22 +69,22 @@ function isolateRecoveryTargets(state: AppState) {
 function setDegradedRecoveryState(state: AppState) {
   isolateRecoveryTargets(state);
 
-  updateProviderSetting(state, "cursor", (provider) => ({
+  updateProviderSetting(state, "cursor-personal-page", (provider) => ({
     ...provider,
     status: "missing",
   }));
-  updateProviderSetting(state, "codex", (provider) => ({
+  updateProviderSetting(state, "codex-personal-page", (provider) => ({
     ...provider,
     status: "missing",
   }));
 
-  updateProvider(state, "cursor", (provider) => ({
+  updateProvider(state, "cursor-personal-page", (provider) => ({
     ...provider,
     syncStatus: "ok",
     tone: "neutral",
     warningReason: "Host access missing for the personal usage page.",
   }));
-  updateProvider(state, "codex", (provider) => ({
+  updateProvider(state, "codex-personal-page", (provider) => ({
     ...provider,
     syncStatus: "ok",
     tone: "neutral",
@@ -93,23 +95,23 @@ function setDegradedRecoveryState(state: AppState) {
 function setRecoveredState(state: AppState) {
   isolateRecoveryTargets(state);
 
-  updateProviderSetting(state, "cursor", (provider) => ({
+  updateProviderSetting(state, "cursor-personal-page", (provider) => ({
     ...provider,
     status: "granted",
   }));
-  updateProviderSetting(state, "codex", (provider) => ({
+  updateProviderSetting(state, "codex-personal-page", (provider) => ({
     ...provider,
     status: "granted",
   }));
 
-  updateProvider(state, "cursor", (provider) => ({
+  updateProvider(state, "cursor-personal-page", (provider) => ({
     ...provider,
     syncStatus: "ok",
     tone: "neutral",
     warningReason: null,
     planName: "Cursor Personal Dashboard",
   }));
-  updateProvider(state, "codex", (provider) => ({
+  updateProvider(state, "codex-personal-page", (provider) => ({
     ...provider,
     syncStatus: "ok",
     tone: "neutral",
@@ -168,9 +170,9 @@ describe("theme recovery review snapshot", () => {
     const state = cloneSampleState();
 
     setRecoveredState(state);
-    updateProviderSetting(state, "claude-code", (provider) => ({
+    updateProviderSetting(state, "claude-code-team-page", (provider) => ({
       ...provider,
-      enabled: true,
+      displayEnabled: true,
     }));
 
     const snapshot = buildThemeRecoveryReviewSnapshot(
@@ -182,7 +184,7 @@ describe("theme recovery review snapshot", () => {
 
     expect(snapshot.scopeIsolationLabel).toBe("Additional providers visible");
     expect(snapshot.overallStage).toBe("mixed");
-    expect(snapshot.extraVisibleProviderLabels).toContain("Claude Code");
+    expect(snapshot.extraVisibleProviderLabels).toContain("Claude Team");
     expect(summary).toContain("Additional providers visible");
   });
 

@@ -17,7 +17,7 @@ describe("SettingsSourceSection", () => {
         eyebrow="Source connections"
         title="Provider sources"
         detail="Choose how each provider is refreshed."
-        focusedProviderId="codex"
+        focusedProviderId="codex-personal-page"
         providers={SAMPLE_APP_STATE.providerSettings}
         snapshots={SAMPLE_APP_STATE.providers}
         i18n={i18n}
@@ -34,12 +34,11 @@ describe("SettingsSourceSection", () => {
 
     expect(html).toContain('id="settings-source-test"');
     expect(html).toContain('data-provider-carousel=""');
-    expect(html).toContain('data-provider-carousel-active-id="codex"');
+    expect(html).toContain('data-provider-carousel-active-id="codex-personal-page"');
     expect(html).toContain('class="source-card"');
-    expect(html).toContain('data-provider-id="cursor"');
-    expect(html).toContain('data-provider-id="codex"');
-    expect(html).toContain(
-      'data-settings-material-select="source-preference-cursor"',
-    );
+    expect(html).toContain('data-provider-id="cursor-personal-page"');
+    expect(html).toContain('data-provider-id="codex-personal-page"');
+    expect(html).toContain('data-provider-id="codex-enterprise-api"');
+    expect(html).not.toContain("data-settings-material-select=");
   });
 });

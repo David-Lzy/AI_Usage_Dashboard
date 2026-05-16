@@ -1,4 +1,5 @@
 import type { ProviderId, ToolbarIconMode } from "../providers/types";
+import { normalizeProviderId } from "../providers/provider-definitions";
 
 export const DEFAULT_TOOLBAR_ICON_MODE: ToolbarIconMode = "match-badge";
 export const DEFAULT_TOOLBAR_ICON_PROVIDER_ID: ProviderId | null = null;
@@ -26,9 +27,9 @@ export function normalizeToolbarIconProviderId(
   value: unknown,
   knownProviderIds: readonly ProviderId[],
 ): ProviderId | null {
-  return typeof value === "string" &&
-    knownProviderIds.includes(value as ProviderId)
-    ? (value as ProviderId)
+  const providerId = normalizeProviderId(value);
+  return providerId && knownProviderIds.includes(providerId)
+    ? providerId
     : DEFAULT_TOOLBAR_ICON_PROVIDER_ID;
 }
 

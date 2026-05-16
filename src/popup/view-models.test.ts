@@ -22,9 +22,8 @@ describe("popup view models", () => {
     const model = buildPopupViewModel(SAMPLE_APP_STATE);
 
     expect(model.featuredProviders.map((provider) => provider.providerId)).toEqual([
-      "claude-code",
-      "codex",
-      "gemini",
+      "claude-code-team-page",
+      "gemini-policy",
     ]);
     expect(model.featuredSection.label).toBe("Needs attention");
   });
@@ -36,21 +35,20 @@ describe("popup view models", () => {
         ...SAMPLE_APP_STATE.settings,
         providerOrderBySurface: {
           ...SAMPLE_APP_STATE.settings.providerOrderBySurface,
-          popup: ["gemini", "codex", "claude-code", "cursor", "jetbrains"],
+          popup: ["gemini-policy", "codex-personal-page", "claude-code-team-page", "cursor-personal-page", "jetbrains-org-page"],
         },
       },
     });
 
     expect(model.visibleProviders.map((provider) => provider.providerId)).toEqual([
-      "gemini",
-      "codex",
-      "claude-code",
-      "cursor",
+      "gemini-policy",
+      "codex-personal-page",
+      "claude-code-team-page",
+      "cursor-personal-page",
     ]);
     expect(model.featuredProviders.map((provider) => provider.providerId)).toEqual([
-      "gemini",
-      "codex",
-      "claude-code",
+      "gemini-policy",
+      "claude-code-team-page",
     ]);
   });
 
@@ -59,12 +57,12 @@ describe("popup view models", () => {
       ...SAMPLE_APP_STATE,
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
         ...provider,
-        enabled: provider.id === "codex",
+        displayEnabled: provider.id === "codex-personal-page",
       })),
     });
 
     expect(model.visibleProviders.map((provider) => provider.providerId)).toEqual([
-      "codex",
+      "codex-personal-page",
     ]);
   });
 
@@ -76,6 +74,7 @@ describe("popup view models", () => {
         syncStatus: "ok",
         tone: "neutral",
         warningReason: null,
+        warningDiagnostic: null,
       })),
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
         ...provider,
@@ -84,9 +83,9 @@ describe("popup view models", () => {
     });
 
     expect(model.featuredProviders.map((provider) => provider.providerId)).toEqual([
-      "claude-code",
-      "codex",
-      "cursor",
+      "codex-personal-page",
+      "claude-code-team-page",
+      "cursor-personal-page",
     ]);
   });
 
@@ -94,7 +93,7 @@ describe("popup view models", () => {
     const model = buildPopupViewModel(SAMPLE_APP_STATE);
 
     expect(model.headerDetail).toBe(
-      "Use this popup for quick freshness and provider triage without reopening the full dashboard.",
+      "Settings setup is clear. Use this popup for quick review and freshness triage.",
     );
     expect(model.summaryItems.map((item) => item.label)).toEqual([
       "Visible",
@@ -107,7 +106,7 @@ describe("popup view models", () => {
       tone: "warning",
       headline: "Synced 2m ago",
       detail:
-        "Newest visible snapshot: Cursor (Synced 2m ago). Oldest visible snapshot: Claude Code (Analytics snapshot 34m ago).",
+        "Newest visible snapshot: Cursor Personal (Synced 2m ago). Oldest visible snapshot: Claude Team (Usage page needed).",
     });
     expect(model.showSnapshotStatus).toBe(true);
   });
@@ -148,7 +147,7 @@ describe("popup view models", () => {
       })),
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
         ...provider,
-        status: provider.enabled ? "granted" : provider.status,
+        status: provider.displayEnabled ? "granted" : provider.status,
       })),
     });
 
@@ -167,7 +166,7 @@ describe("popup view models", () => {
       providers: [],
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
         ...provider,
-        enabled: false,
+        displayEnabled: false,
       })),
     });
 
@@ -180,11 +179,11 @@ describe("popup view models", () => {
       action: {
         kind: "settings",
         label: "Open Quick Setup",
-        providerId: "codex",
+        providerId: "codex-personal-page",
       },
     });
     expect(model.firstSetupProvider).toEqual({
-      providerId: "codex",
+      providerId: "codex-personal-page",
       providerLabel: "Codex",
     });
     expect(model.headerDetail).toBe(
@@ -253,7 +252,7 @@ describe("popup view models", () => {
       action: {
         kind: "settings",
         label: "Open Quick Setup",
-        providerId: "codex",
+        providerId: "codex-personal-page",
       },
     });
     expect(model.actionSection).toEqual({
@@ -285,7 +284,7 @@ describe("popup view models", () => {
         providers: [],
         providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
           ...provider,
-          enabled: false,
+          displayEnabled: false,
         })),
       }),
       createRuntimeI18n("zh-CN"),
@@ -294,7 +293,7 @@ describe("popup view models", () => {
     expect(model.setupCoverage.action).toEqual({
       kind: "settings",
       label: "打开快速设置",
-      providerId: "codex",
+      providerId: "codex-personal-page",
     });
     expect(model.setupCoverage.statusLabel).toBe("开始配置");
   });
@@ -312,10 +311,10 @@ describe("popup view models", () => {
       })),
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
         ...provider,
-        enabled: provider.id === "cursor",
-        status: provider.id === "cursor" ? "missing" : provider.status,
+        displayEnabled: provider.id === "cursor-personal-page",
+        status: provider.id === "cursor-personal-page" ? "missing" : provider.status,
         credentialStatus:
-          provider.id === "cursor" ? "configured" : provider.credentialStatus,
+          provider.id === "cursor-personal-page" ? "configured" : provider.credentialStatus,
       })),
     });
 
@@ -334,7 +333,7 @@ describe("popup view models", () => {
       secondaryAction: {
         kind: "hide-provider",
         label: "Stop showing",
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
       },
     });
   });
@@ -344,7 +343,7 @@ describe("popup view models", () => {
       "The open Codex usage page could not be read by the extension. Reload the page, confirm host access, then refresh again.";
     const state = createState({
       providers: SAMPLE_APP_STATE.providers.map((provider) =>
-        provider.providerId === "codex"
+        provider.providerId === "codex-personal-page"
           ? {
               ...provider,
               planName: "Codex Personal Usage Page",
@@ -353,7 +352,7 @@ describe("popup view models", () => {
               tone: "error",
               warningReason,
               warningDiagnostic: createPageSessionDiagnostic({
-                providerId: "codex",
+                providerId: "codex-personal-page",
                 pageSessionKind: "capture_unavailable",
                 rawMessage: warningReason,
               }),
@@ -367,10 +366,10 @@ describe("popup view models", () => {
       ),
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
         ...provider,
-        enabled: provider.id === "codex",
-        status: provider.id === "codex" ? "granted" : provider.status,
+        displayEnabled: provider.id === "codex-personal-page",
+        status: provider.id === "codex-personal-page" ? "granted" : provider.status,
         sourcePreference:
-          provider.id === "codex" ? "session_page" : provider.sourcePreference,
+          provider.id === "codex-personal-page" ? "session_page" : provider.sourcePreference,
       })),
     });
     const model = buildPopupViewModel(state);
@@ -382,7 +381,7 @@ describe("popup view models", () => {
       action: {
         kind: "source-page",
         label: "Open source page",
-        providerId: "codex",
+        providerId: "codex-personal-page",
         sourceStateKind: "capture_unavailable",
       },
     });
@@ -395,13 +394,13 @@ describe("popup view models", () => {
     expect(localizedModel.featuredProviderCards[0]?.action).toEqual({
       kind: "source-page",
       label: "打开来源页面",
-      providerId: "codex",
+      providerId: "codex-personal-page",
       sourceStateKind: "capture_unavailable",
     });
     expect(localizedModel.featuredProviderCards[0]?.secondaryAction).toEqual({
       kind: "hide-provider",
       label: "暂不显示",
-      providerId: "codex",
+      providerId: "codex-personal-page",
     });
   });
 
@@ -409,7 +408,7 @@ describe("popup view models", () => {
     const model = buildPopupViewModel({
       ...SAMPLE_APP_STATE,
       providers: SAMPLE_APP_STATE.providers.map((provider) => {
-        if (provider.providerId === "claude-code") {
+        if (provider.providerId === "claude-code-admin-api") {
           return {
             ...provider,
             syncStatus: "error",
@@ -418,7 +417,7 @@ describe("popup view models", () => {
           };
         }
 
-        if (provider.providerId === "codex") {
+        if (provider.providerId === "codex-personal-page") {
           return {
             ...provider,
             syncStatus: "ok",
@@ -427,7 +426,7 @@ describe("popup view models", () => {
           };
         }
 
-        if (provider.providerId === "cursor") {
+        if (provider.providerId === "cursor-personal-page") {
           return {
             ...provider,
             syncStatus: "ok",
@@ -439,37 +438,37 @@ describe("popup view models", () => {
         return provider;
       }),
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => {
-        if (provider.id === "cursor") {
+        if (provider.id === "cursor-personal-page") {
           return {
             ...provider,
-            enabled: true,
+            displayEnabled: true,
             status: "missing",
             credentialStatus: "configured",
           };
         }
 
-        if (provider.id === "claude-code") {
+        if (provider.id === "claude-code-admin-api") {
           return {
             ...provider,
-            enabled: true,
+            displayEnabled: true,
             status: "granted",
             credentialStatus: "missing",
           };
         }
 
-        if (provider.id === "codex") {
+        if (provider.id === "codex-personal-page") {
           return {
             ...provider,
-            enabled: true,
+            displayEnabled: true,
             status: "granted",
             credentialStatus: "configured",
           };
         }
 
-        if (provider.id === "gemini") {
+        if (provider.id === "gemini-policy") {
           return {
             ...provider,
-            enabled: true,
+            displayEnabled: true,
             status: "granted",
             credentialStatus: "not_required",
           };
@@ -477,7 +476,7 @@ describe("popup view models", () => {
 
         return {
           ...provider,
-          enabled: false,
+          displayEnabled: false,
         };
       }),
     });
@@ -561,7 +560,7 @@ describe("popup view models", () => {
     const model = buildPopupViewModel({
       ...SAMPLE_APP_STATE,
       providers: SAMPLE_APP_STATE.providers.map((provider) =>
-        provider.providerId === "cursor"
+        provider.providerId === "cursor-personal-page"
           ? {
               ...provider,
               syncStatus: "ok",
@@ -571,7 +570,7 @@ describe("popup view models", () => {
           : provider,
       ),
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) =>
-        provider.id === "cursor"
+        provider.id === "cursor-personal-page"
           ? {
               ...provider,
               status: "missing",
@@ -603,12 +602,12 @@ describe("popup view models", () => {
     const model = buildPopupViewModel({
       ...SAMPLE_APP_STATE,
       providers: SAMPLE_APP_STATE.providers.map((provider) =>
-        provider.providerId === "claude-code"
+        provider.providerId === "cursor-team-api"
           ? {
               ...provider,
               syncStatus: "error",
               tone: "error",
-              warningReason: "Admin API key required before live sync can run.",
+              warningReason: "Add the required provider credential before live sync can run.",
             }
           : {
               ...provider,
@@ -620,17 +619,19 @@ describe("popup view models", () => {
             },
       ),
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) =>
-        provider.id === "claude-code"
+        provider.id === "cursor-team-api"
           ? {
               ...provider,
+              displayEnabled: true,
+              status: "granted",
               credentialStatus: "missing",
             }
           : {
               ...provider,
-              enabled: provider.id !== "jetbrains",
-              status: provider.enabled ? "granted" : provider.status,
+              displayEnabled: false,
+              status: provider.displayEnabled ? "granted" : provider.status,
               credentialStatus:
-                provider.id === "gemini" ? "not_required" : "configured",
+                provider.id === "gemini-policy" ? "not_required" : "configured",
             },
       ),
     });
@@ -638,8 +639,8 @@ describe("popup view models", () => {
     expect(model.guidanceCard).toEqual({
       label: "Next step",
       tone: "warning",
-      headline: "Add credentials for Claude Code",
-      detail: "Admin API key required before live sync can run.",
+      headline: "Add credentials for Cursor Team API",
+      detail: "Add the required provider credential before live sync can run.",
       action: {
         kind: "settings",
         label: "Open settings",
@@ -670,7 +671,7 @@ describe("popup view models", () => {
         model.featuredProviders[0].lastSyncLabel,
       ],
       primaryDetail: "Current path still needs stored credentials.",
-      secondaryDetail: "Admin API key required before live sync can run.",
+      secondaryDetail: "Add the required provider credential before live sync can run.",
       action: {
         kind: "settings",
         label: "Open settings",
@@ -678,7 +679,7 @@ describe("popup view models", () => {
       secondaryAction: {
         kind: "hide-provider",
         label: "Stop showing",
-        providerId: "claude-code",
+        providerId: "cursor-team-api",
       },
     });
   });
@@ -693,13 +694,26 @@ describe("popup view models", () => {
         syncStatus: "ok",
         tone: "neutral",
         warningReason: null,
+        warningDiagnostic: null,
       })),
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
         ...provider,
-        enabled: provider.id !== "jetbrains",
-        status: provider.enabled ? "granted" : provider.status,
+        displayEnabled: [
+          "cursor-personal-page",
+          "claude-code-team-page",
+          "gemini-policy",
+          "codex-personal-page",
+        ].includes(provider.id),
+        status: [
+          "cursor-personal-page",
+          "claude-code-team-page",
+          "gemini-policy",
+          "codex-personal-page",
+        ].includes(provider.id)
+          ? "granted"
+          : provider.status,
         credentialStatus:
-          provider.id === "gemini" ? "not_required" : "configured",
+          provider.id === "gemini-policy" ? "not_required" : "configured",
       })),
     });
 
@@ -795,7 +809,7 @@ describe("popup view models", () => {
         model.featuredProviders[0].lastSyncLabel,
       ],
       primaryDetail: "Current path is live-ready in this profile.",
-      secondaryDetail: model.featuredProviders[0].currentSourceAvailabilitySummary,
+      secondaryDetail: "Weekly usage window: 41% remaining",
       action: {
         kind: "provider-detail",
         label: "Open detail",
@@ -811,7 +825,7 @@ describe("popup view models", () => {
       {
         ...SAMPLE_APP_STATE,
         providers: SAMPLE_APP_STATE.providers.map((provider) =>
-          provider.providerId === "codex"
+          provider.providerId === "codex-personal-page"
             ? {
               ...provider,
               planName: "Codex Personal Usage Page (Weekly usage window)",
@@ -870,23 +884,23 @@ describe("popup view models", () => {
         ),
         providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
           ...provider,
-          enabled: provider.id === "codex",
-          status: provider.id === "codex" ? "granted" : provider.status,
+          displayEnabled: provider.id === "codex-personal-page",
+          status: provider.id === "codex-personal-page" ? "granted" : provider.status,
           credentialStatus:
-            provider.id === "codex" ? "missing" : provider.credentialStatus,
+            provider.id === "codex-personal-page" ? "missing" : provider.credentialStatus,
         })),
         settings: {
           ...SAMPLE_APP_STATE.settings,
           providerOrderBySurface: {
             ...SAMPLE_APP_STATE.settings.providerOrderBySurface,
-            popup: ["codex", "claude-code", "gemini", "cursor", "jetbrains"],
+            popup: ["codex-personal-page", "claude-code-team-page", "gemini-policy", "cursor-personal-page", "jetbrains-org-page"],
           },
         },
       },
       undefined,
       undefined,
       undefined,
-      ["claude-code", "gemini", "cursor"],
+      ["claude-code-team-page", "gemini-policy", "cursor-personal-page"],
     );
     const localizedModel = localizePopupViewModel(
       model,
@@ -894,10 +908,10 @@ describe("popup view models", () => {
     );
 
     const codexCard = model.featuredProviderCards.find(
-      (card) => card.provider.providerId === "codex",
+      (card) => card.provider.providerId === "codex-personal-page",
     );
     const localizedCodexCard = localizedModel.featuredProviderCards.find(
-      (card) => card.provider.providerId === "codex",
+      (card) => card.provider.providerId === "codex-personal-page",
     );
 
     expect(codexCard?.usageProgressCircles).toEqual([
@@ -937,7 +951,7 @@ describe("popup view models", () => {
       {
         ...SAMPLE_APP_STATE,
         providers: SAMPLE_APP_STATE.providers.map((provider) =>
-          provider.providerId === "cursor"
+          provider.providerId === "cursor-personal-page"
             ? {
               ...provider,
               syncStatus: "ok" as const,
@@ -951,25 +965,25 @@ describe("popup view models", () => {
         ),
         providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
           ...provider,
-          enabled: provider.id === "cursor",
-          status: provider.id === "cursor" ? "granted" : provider.status,
+          displayEnabled: provider.id === "cursor-personal-page",
+          status: provider.id === "cursor-personal-page" ? "granted" : provider.status,
         })),
         settings: {
           ...SAMPLE_APP_STATE.settings,
           providerOrderBySurface: {
             ...SAMPLE_APP_STATE.settings.providerOrderBySurface,
-            popup: ["cursor", "claude-code", "codex", "gemini", "jetbrains"],
+            popup: ["cursor-personal-page", "claude-code-team-page", "codex-personal-page", "gemini-policy", "jetbrains-org-page"],
           },
         },
       },
       undefined,
       undefined,
       undefined,
-      ["claude-code", "codex", "gemini"],
+      ["claude-code-team-page", "codex-personal-page", "gemini-policy"],
     );
 
     const cursorCard = model.featuredProviderCards.find(
-      (card) => card.provider.providerId === "cursor",
+      (card) => card.provider.providerId === "cursor-personal-page",
     );
 
     expect(cursorCard?.secondaryDetail).toBe(
@@ -981,7 +995,7 @@ describe("popup view models", () => {
     const model = buildPopupViewModel({
       ...SAMPLE_APP_STATE,
       providers: SAMPLE_APP_STATE.providers
-        .filter((provider) => provider.providerId === "gemini")
+        .filter((provider) => provider.providerId === "gemini-policy")
         .map((provider) => ({
           ...provider,
           syncedAt: "2026-04-20 10:42",
@@ -992,8 +1006,8 @@ describe("popup view models", () => {
         })),
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
         ...provider,
-        enabled: provider.id === "gemini",
-        status: provider.id === "gemini" ? "granted" : provider.status,
+        displayEnabled: provider.id === "gemini-policy",
+        status: provider.id === "gemini-policy" ? "granted" : provider.status,
       })),
     });
 
@@ -1111,7 +1125,7 @@ describe("popup view models", () => {
       secondaryAction: {
         kind: "hide-provider",
         label: "Stop showing",
-        providerId: "gemini",
+        providerId: "gemini-policy",
       },
     });
   });
@@ -1120,12 +1134,13 @@ describe("popup view models", () => {
     const model = buildPopupViewModel({
       ...SAMPLE_APP_STATE,
       providers: SAMPLE_APP_STATE.providers.map((provider) => {
-        if (provider.providerId === "claude-code") {
+        if (provider.providerId === "claude-code-team-page") {
           return {
             ...provider,
             syncStatus: "error",
             tone: "error",
             warningReason: "Live sync still needs one provider-specific review.",
+            warningDiagnostic: null,
           };
         }
 
@@ -1136,14 +1151,27 @@ describe("popup view models", () => {
           syncStatus: "ok",
           tone: "neutral",
           warningReason: null,
+          warningDiagnostic: null,
         };
       }),
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
         ...provider,
-        enabled: provider.id !== "jetbrains",
-        status: provider.id !== "jetbrains" ? "granted" : provider.status,
+        displayEnabled: [
+          "cursor-personal-page",
+          "claude-code-team-page",
+          "gemini-policy",
+          "codex-personal-page",
+        ].includes(provider.id),
+        status: [
+          "cursor-personal-page",
+          "claude-code-team-page",
+          "gemini-policy",
+          "codex-personal-page",
+        ].includes(provider.id)
+          ? "granted"
+          : provider.status,
         credentialStatus:
-          provider.id === "gemini" ? "not_required" : "configured",
+          provider.id === "gemini-policy" ? "not_required" : "configured",
       })),
     });
 
@@ -1206,12 +1234,12 @@ describe("popup view models", () => {
     expect(model.guidanceCard).toEqual({
       label: "Next step",
       tone: "error",
-      headline: "Review Claude Code",
+      headline: "Review Claude Team",
       detail: "Live sync still needs one provider-specific review.",
       action: {
         kind: "provider-detail",
         label: "Open detail",
-        providerId: "claude-code",
+        providerId: "claude-code-team-page",
       },
     });
     expect(model.actionSection).toEqual({
@@ -1247,12 +1275,12 @@ describe("popup view models", () => {
       action: {
         kind: "provider-detail",
         label: "Review detail",
-        providerId: "claude-code",
+        providerId: "claude-code-team-page",
       },
       secondaryAction: {
         kind: "hide-provider",
         label: "Stop showing",
-        providerId: "claude-code",
+        providerId: "claude-code-team-page",
       },
     });
   });
@@ -1265,7 +1293,7 @@ describe("popup view models", () => {
         providers: [],
         providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
           ...provider,
-          enabled: false,
+          displayEnabled: false,
         })),
       }),
       i18n,
@@ -1280,7 +1308,7 @@ describe("popup view models", () => {
       action: {
         kind: "settings",
         label: "打开快速设置",
-        providerId: "codex",
+        providerId: "codex-personal-page",
       },
     });
     expect(model.setupCoverage).toEqual({
@@ -1315,7 +1343,7 @@ describe("popup view models", () => {
       action: {
         kind: "settings",
         label: "打开快速设置",
-        providerId: "codex",
+        providerId: "codex-personal-page",
       },
     });
     expect(model.actionSection).toEqual({
@@ -1351,7 +1379,7 @@ describe("popup view models", () => {
     const model = localizePopupViewModel(buildPopupViewModel(SAMPLE_APP_STATE), i18n);
 
     expect(model.snapshotStatus.headline).toBe("2分钟前同步");
-    expect(model.snapshotStatus.detail).toContain("34分钟前的分析快照");
-    expect(model.featuredProviderCards[0]?.metaChips[1]).toBe("34分钟前的分析快照");
+    expect(model.snapshotStatus.detail).toContain("Usage page needed");
+    expect(model.featuredProviderCards[0]?.metaChips[1]).toBe("Usage page needed");
   });
 });

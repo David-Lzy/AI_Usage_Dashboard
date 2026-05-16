@@ -1,11 +1,12 @@
 import type { ApiKeyProviderId, ProviderId } from "../providers/types";
+import { API_KEY_PROVIDER_IDS, PROVIDER_IDS } from "../providers/provider-definitions";
 import {
   SETTINGS_SECTION_IDS,
   SETTINGS_SECTION_ID_VALUES,
   type SettingsSectionId,
 } from "./settings-section-ids";
 
-export type SettingsCredentialProviderId = ApiKeyProviderId | "codex";
+export type SettingsCredentialProviderId = ApiKeyProviderId;
 
 export type SettingsRouteFocus =
   | { kind: "section"; sectionId: SettingsSectionId }
@@ -18,18 +19,8 @@ export type SidePanelRouteState =
   | { name: "settings"; focus?: SettingsRouteFocus }
   | { name: "provider-detail"; providerId: ProviderId };
 
-const VALID_PROVIDER_IDS = [
-  "cursor",
-  "jetbrains",
-  "claude-code",
-  "gemini",
-  "codex",
-] as const satisfies ProviderId[];
-const VALID_CREDENTIAL_PROVIDER_IDS = [
-  "cursor",
-  "claude-code",
-  "codex",
-] as const satisfies SettingsCredentialProviderId[];
+const VALID_PROVIDER_IDS = PROVIDER_IDS;
+const VALID_CREDENTIAL_PROVIDER_IDS = API_KEY_PROVIDER_IDS;
 
 function isProviderId(value: string): value is ProviderId {
   return VALID_PROVIDER_IDS.includes(value as ProviderId);

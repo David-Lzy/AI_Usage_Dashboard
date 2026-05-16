@@ -21,7 +21,7 @@ describe("ProviderProgressItemPreferenceControls", () => {
 
     expect(html).toContain('data-provider-progress-preferences=""');
     expect(html).toContain(
-      'data-provider-progress-preference-provider="jetbrains"',
+      'data-provider-progress-preference-provider="jetbrains-org-page"',
     );
     expect(html).toContain('data-provider-progress-surface="popup"');
     expect(html).toContain('data-provider-progress-surface="sidebar"');
@@ -50,23 +50,23 @@ describe("ProviderProgressItemPreferenceControls", () => {
     );
 
     expect(html).toContain(
-      '<details class="provider-progress-provider" data-provider-progress-preference-provider="jetbrains">',
+      '<details class="provider-progress-provider" data-provider-progress-preference-provider="jetbrains-org-page">',
     );
     expect(html).toContain(
-      'data-provider-progress-preference-provider-summary="jetbrains"',
+      'data-provider-progress-preference-provider-summary="jetbrains-org-page"',
     );
     expect(html).toContain("1 configurable quota items");
     expect(html).not.toMatch(
-      /<details[^>]*data-provider-progress-preference-provider="jetbrains"[^>]*open/,
+      /<details[^>]*data-provider-progress-preference-provider="jetbrains-org-page"[^>]*open/,
     );
     expect(html).toContain(
-      '<details class="provider-progress-provider" data-provider-progress-preference-provider="codex">',
+      '<details class="provider-progress-provider" data-provider-progress-preference-provider="codex-personal-page">',
     );
     expect(html).toContain(
-      'data-provider-progress-preference-provider-summary="codex"',
+      'data-provider-progress-preference-provider-summary="codex-personal-page"',
     );
     expect(html).not.toMatch(
-      /<details[^>]*data-provider-progress-preference-provider="codex"[^>]*open/,
+      /<details[^>]*data-provider-progress-preference-provider="codex-personal-page"[^>]*open/,
     );
   });
 

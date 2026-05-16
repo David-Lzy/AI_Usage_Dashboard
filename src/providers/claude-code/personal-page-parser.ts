@@ -30,7 +30,7 @@ export type ClaudePersonalUsageFact = {
 };
 
 export type ClaudePersonalUsageSnapshot = {
-  providerId: "claude-code";
+  providerId: "claude-code-team-page";
   providerLabel: "Claude Code";
   measurementKind: "usage_page_context";
   routeKey: ClaudePersonalRouteKey;
@@ -595,7 +595,7 @@ function parseSnapshotFromSummary(
   }
 
   return {
-    providerId: "claude-code",
+    providerId: "claude-code-team-page",
     providerLabel: "Claude Code",
     measurementKind: "usage_page_context",
     routeKey,

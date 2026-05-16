@@ -10,7 +10,7 @@ import {
 } from "./official";
 
 const baseProvider: ProviderSnapshot = {
-  providerId: "gemini",
+  providerId: "gemini-policy",
   providerLabel: "Gemini Code Assist",
   planName: "Unknown",
   quotaUnit: "requests",
@@ -31,11 +31,15 @@ const baseProvider: ProviderSnapshot = {
 };
 
 const grantedSetting: ProviderSetting = {
-  id: "gemini",
+  id: "gemini-policy",
+  brandId: "gemini",
   label: "Gemini Code Assist",
+  displayEnabled: true,
   enabled: true,
   status: "granted",
   credentialStatus: "not_required",
+  sourceKind: "policy_only",
+  connectionMode: "none",
   sourcePreference: "auto",
   pageBinding: createEmptyPageBinding(),
   hostsLabel: "No host access required",
@@ -92,7 +96,7 @@ describe("Gemini static quota policy", () => {
       severity: "warning",
       rawMessage: snapshot.warningReason,
       params: {
-        providerId: "gemini",
+        providerId: "gemini-policy",
         policyOnlyKind: "documented_limit_only",
       },
     });

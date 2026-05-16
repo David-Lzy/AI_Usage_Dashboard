@@ -325,7 +325,7 @@ export type RuntimeMessageId =
   | "settings.theme_customization.preview.secondary_container"
   | "settings.theme_customization.preview.tertiary"
   | "settings.visibility.eyebrow"
-  | "settings.visibility.enabled_detail"
+  | "settings.visibility.displayEnabled_detail"
   | "settings.visibility.disabled_detail"
   | "settings.credentials.eyebrow"
   | "settings.credentials.title"

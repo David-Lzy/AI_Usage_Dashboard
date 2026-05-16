@@ -173,7 +173,7 @@ export function SettingsSourceCard({
           <div
             className={getDetailNoteClassName(sourceCardModel.summaryNoteTone)}
             data-theme-stability-surface={
-              provider.id === "cursor"
+              provider.id === "cursor-personal-page"
                 ? "settings-cursor-operational-note"
                 : undefined
             }
@@ -229,7 +229,7 @@ export function SettingsSourceCard({
                   sourceCardModel.sessionTrack.noteTone,
                 )}
                 data-theme-stability-surface={
-                  provider.id === "cursor"
+                  provider.id === "cursor-personal-page"
                     ? "settings-cursor-session-note"
                     : undefined
                 }

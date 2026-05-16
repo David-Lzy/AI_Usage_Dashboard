@@ -49,7 +49,7 @@ function renderProviderCard(
 
 describe("ProviderCard", () => {
   it("uses the Material provider-card hierarchy for summary, progress, chips, and actions", () => {
-    const html = renderProviderCard(createState(), "jetbrains");
+    const html = renderProviderCard(createState(), "jetbrains-org-page");
 
     expect(html).toContain('<header class="provider-card__header">');
     expect(html).toContain('class="provider-card__identity"');
@@ -69,7 +69,7 @@ describe("ProviderCard", () => {
       "The matched Codex usage page no longer exposed a parseable remaining-percentage window.";
     const state = createState({
       providers: SAMPLE_APP_STATE.providers.map((provider) =>
-        provider.providerId === "codex"
+        provider.providerId === "codex-personal-page"
           ? {
               ...provider,
               planName: "Codex Personal Usage Page",
@@ -86,7 +86,7 @@ describe("ProviderCard", () => {
               tone: "error",
               warningReason,
               warningDiagnostic: createAdapterErrorDiagnostic({
-                providerId: "codex",
+                providerId: "codex-personal-page",
                 adapterErrorKind: "parse_failed",
                 sourceKind: "session_page",
                 failureCode: "route_drift",
@@ -102,7 +102,7 @@ describe("ProviderCard", () => {
       ),
     });
 
-    const html = renderProviderCard(state, "codex");
+    const html = renderProviderCard(state, "codex-personal-page");
 
     expect(html).toContain("Usage window percent unavailable");
     expect(html).toContain("Inspect the live Codex page");
@@ -112,7 +112,7 @@ describe("ProviderCard", () => {
   });
 
   it("does not render policy-only totals as fabricated progress", () => {
-    const html = renderProviderCard(createState(), "gemini");
+    const html = renderProviderCard(createState(), "gemini-policy");
 
     expect(html).not.toContain('role="progressbar"');
     expect(html).toContain("Unknown / 2,000 requests");
@@ -120,7 +120,7 @@ describe("ProviderCard", () => {
   });
 
   it("renders a source-page recovery action for shipped session-page providers", () => {
-    const html = renderProviderCard(createState(), "codex", {
+    const html = renderProviderCard(createState(), "codex-personal-page", {
       onOpenSourcePage: () => undefined,
     });
 
@@ -130,7 +130,7 @@ describe("ProviderCard", () => {
   });
 
   it("renders Cursor personal spend facts as structured usage context", () => {
-    const html = renderProviderCard(createState(), "cursor");
+    const html = renderProviderCard(createState(), "cursor-personal-page");
 
     expect(html).toContain("Visible usage context");
     expect(html).toContain('class="usage-facts usage-facts--compact"');
@@ -145,7 +145,7 @@ describe("ProviderCard", () => {
   it("renders multiple Claude Team usage windows instead of collapsing back to one summary bar", () => {
     const state = createState({
       providers: SAMPLE_APP_STATE.providers.map((provider) =>
-        provider.providerId === "claude-code"
+        provider.providerId === "claude-code-team-page"
           ? {
               ...provider,
               planName: "Claude Team Usage Page (Current session)",
@@ -218,7 +218,7 @@ describe("ProviderCard", () => {
       ),
     });
 
-    const html = renderProviderCard(state, "claude-code");
+    const html = renderProviderCard(state, "claude-code-team-page");
 
     expect(html).toContain('class="provider-progress-item-list');
     expect(html.match(/role="progressbar"/g)).toHaveLength(4);
@@ -236,19 +236,19 @@ describe("ProviderCard", () => {
         progressItemsBySurface: {
           ...SAMPLE_APP_STATE.settings.progressItemsBySurface,
           sidebar: {
-            jetbrains: [{ id: "primary", visible: false }],
+            "jetbrains-org-page": [{ id: "primary", visible: false }],
           },
         },
       },
     });
-    const html = renderProviderCard(state, "jetbrains");
+    const html = renderProviderCard(state, "jetbrains-org-page");
 
     expect(html).not.toContain('role="progressbar"');
     expect(html).toContain("16 / 20 credits");
   });
 
   it("omits the source-page recovery action for deferred session-page providers", () => {
-    const html = renderProviderCard(createState(), "gemini", {
+    const html = renderProviderCard(createState(), "gemini-policy", {
       onOpenSourcePage: () => undefined,
     });
 

@@ -45,8 +45,8 @@ describe("buildSettingsPreferenceOptions", () => {
       { value: "custom", label: "Custom image" },
     ]);
     expect(options.toolbarIconProviderOptions).toContainEqual({
-      value: "codex",
-      label: "Codex",
+      value: "codex-personal-page",
+      label: "Codex Personal Usage Page",
     });
     expect(options.syncIntervalOptions).toContainEqual({
       value: 3,

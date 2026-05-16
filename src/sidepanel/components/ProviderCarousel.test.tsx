@@ -16,19 +16,19 @@ import {
 
 const sampleItems = [
   {
-    id: "cursor",
+    id: "cursor-personal-page",
     label: "Cursor",
-    content: <article data-provider-card="cursor">Cursor card</article>,
+    content: <article data-provider-card="cursor-personal-page">Cursor card</article>,
   },
   {
-    id: "claude-code",
+    id: "claude-code-team-page",
     label: "Claude Code",
-    content: <article data-provider-card="claude-code">Claude card</article>,
+    content: <article data-provider-card="claude-code-team-page">Claude card</article>,
   },
   {
-    id: "codex",
+    id: "codex-personal-page",
     label: "Codex",
-    content: <article data-provider-card="codex">Codex card</article>,
+    content: <article data-provider-card="codex-personal-page">Codex card</article>,
   },
 ];
 
@@ -50,19 +50,19 @@ describe("ProviderCarousel", () => {
     expect(html).toContain('data-provider-carousel=""');
     expect(html).toContain('aria-roledescription="carousel"');
     expect(html).toContain('data-provider-carousel-count="3"');
-    expect(html).toContain('data-provider-carousel-active-id="claude-code"');
+    expect(html).toContain('data-provider-carousel-active-id="claude-code-team-page"');
     expect(html).toContain('data-provider-carousel-action="previous"');
     expect(html).toContain('data-provider-carousel-action="next"');
     expect(html).toContain('tabindex="0"');
     expect(html).toContain("2 / 3 · Claude Code");
-    expect(html).toContain('data-provider-carousel-slide="cursor"');
+    expect(html).toContain('data-provider-carousel-slide="cursor-personal-page"');
     expect(html).toContain(
       'data-provider-carousel-slide-position="previous"',
     );
     expect(html).toContain('data-provider-carousel-slide-active="false"');
     expect(html).toContain('aria-hidden="true"');
     expect(html).toContain("inert=");
-    expect(html).toContain('data-provider-carousel-dot="codex"');
+    expect(html).toContain('data-provider-carousel-dot="codex-personal-page"');
     expect(html).toContain('aria-current="true"');
   });
 

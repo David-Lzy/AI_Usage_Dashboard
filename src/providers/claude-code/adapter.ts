@@ -256,7 +256,7 @@ function finalizeClaudeSnapshot(
   fallbackFailure: SourceAttemptFailure | null,
 ): ProviderSnapshot {
   const sourceSelectionReason = buildSourceSelectionReason(
-    "claude-code",
+    snapshot.providerId,
     sourcePreference,
     selectedKind,
     fallbackFailure !== null,
@@ -270,7 +270,7 @@ function finalizeClaudeSnapshot(
     sourceSelectionReason,
     sourceFallbackReason,
     sourceSelectionDiagnostic: createSourceSelectionDiagnostic({
-      providerId: "claude-code",
+      providerId: snapshot.providerId,
       sourcePreference,
       selectedKind,
       hadFallback: fallbackFailure !== null,
@@ -279,7 +279,7 @@ function finalizeClaudeSnapshot(
     sourceFallbackDiagnostic:
       fallbackFailure && sourceFallbackReason
         ? createSourceFallbackDiagnostic({
-            providerId: "claude-code",
+            providerId: snapshot.providerId,
             sourcePreference,
             failure: fallbackFailure,
             rawMessage: sourceFallbackReason,
@@ -306,7 +306,7 @@ function finalizeClaudeNoSourceSnapshot(
     sourceSelectionDiagnostic: null,
     sourceFallbackDiagnostic: sourceFallbackReason
       ? createNoLiveSourceFallbackDiagnostic({
-          providerId: "claude-code",
+          providerId: snapshot.providerId,
           sourcePreference,
           failureCount: failures.length,
           rawMessage: sourceFallbackReason,
@@ -346,7 +346,7 @@ async function tryClaudeOfficialSource({
         tone: "warning",
         warningReason,
         warningDiagnostic: createHostAccessDiagnostic({
-          providerId: "claude-code",
+          providerId: provider.providerId,
           sourceKind: "official_api",
           hostLabel: setting.hostsLabel,
           rawMessage: warningReason,
@@ -360,7 +360,7 @@ async function tryClaudeOfficialSource({
     };
   }
 
-  if (!secrets["claude-code"].adminApiKey) {
+  if (!secrets["claude-code-admin-api"].adminApiKey) {
     const warningReason =
       "A Claude Admin API key is not configured. Add an organization Admin API key or use the logged-in Claude usage page source.";
 
@@ -379,7 +379,7 @@ async function tryClaudeOfficialSource({
         tone: "error",
         warningReason,
         warningDiagnostic: createCredentialDiagnostic({
-          providerId: "claude-code",
+          providerId: provider.providerId,
           credentialKind: "admin_api_key",
           rawMessage: warningReason,
         }),
@@ -396,7 +396,7 @@ async function tryClaudeOfficialSource({
   try {
     const client = createClaudeCodeAnalyticsClient({
       source: "live",
-      apiKey: secrets["claude-code"].adminApiKey,
+      apiKey: secrets["claude-code-admin-api"].adminApiKey,
     });
     const startingAt = inferStartingAt(now);
     const report = await client.getUsageReport({
@@ -512,7 +512,7 @@ async function tryClaudeOfficialSource({
         tone: "error",
         warningReason: detail,
         warningDiagnostic: createAdapterErrorDiagnostic({
-          providerId: "claude-code",
+          providerId: provider.providerId,
           adapterErrorKind: "unexpected_error",
           sourceKind: "official_api",
           failureCode: "sync_error",
@@ -561,7 +561,7 @@ async function tryClaudePersonalSource({
         tone: "warning",
         warningReason,
         warningDiagnostic: createHostAccessDiagnostic({
-          providerId: "claude-code",
+          providerId: provider.providerId,
           sourceKind: "session_page",
           hostLabel: setting.hostsLabel,
           rawMessage: warningReason,
@@ -638,7 +638,7 @@ async function tryClaudePersonalSource({
           warningDiagnostic:
             result.status === "route_drift"
               ? createAdapterErrorDiagnostic({
-                  providerId: "claude-code",
+                  providerId: provider.providerId,
                   adapterErrorKind: "parse_failed",
                   sourceKind: "session_page",
                   failureCode: "route_drift",
@@ -646,7 +646,7 @@ async function tryClaudePersonalSource({
                   rawMessage: result.reason,
                 })
               : createPageSessionDiagnostic({
-                  providerId: "claude-code",
+                  providerId: provider.providerId,
                   pageSessionKind: getClaudePageSessionDiagnosticKind(
                     result.status,
                   ),
@@ -680,7 +680,7 @@ async function tryClaudePersonalSource({
     const usageThresholdDiagnostic =
       used !== null && usedPercent >= warningThresholdPercent && warningReason
         ? createUsageThresholdDiagnostic({
-            providerId: "claude-code",
+            providerId: provider.providerId,
             usageThresholdKind: "threshold_warning",
             rawMessage: warningReason,
             usagePercent: usedPercent,
@@ -745,7 +745,7 @@ async function tryClaudePersonalSource({
         tone: "error",
         warningReason: detail,
         warningDiagnostic: createAdapterErrorDiagnostic({
-          providerId: "claude-code",
+          providerId: provider.providerId,
           adapterErrorKind: "unexpected_error",
           sourceKind: "session_page",
           failureCode: "sync_error",
@@ -774,10 +774,10 @@ export async function syncClaudeCodeProvider({
 }: ClaudeCodeAdapterContext): Promise<ProviderSyncOutcome> {
   const syncedAt = formatSyncTimestamp(now);
   const sourcePreference = normalizeSourcePreference(
-    "claude-code",
+    provider.providerId,
     setting.sourcePreference,
   );
-  const attemptOrder = getSourceAttemptOrder("claude-code", sourcePreference);
+  const attemptOrder = getSourceAttemptOrder(provider.providerId, sourcePreference);
   const failures: SourceAttemptFailure[] = [];
   let firstFailedSnapshot: ProviderSnapshot | null = null;
 

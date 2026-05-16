@@ -51,14 +51,14 @@ function findProviderSetting(
 describe("page binding lifecycle", () => {
   it("marks a bound provider page stale when the bound tab closes", () => {
     const state = buildStateWithBinding(
-      "cursor",
+      "cursor-personal-page",
       42,
       "https://cursor.com/dashboard/usage",
     );
     const result = reconcilePageBindingsForRemovedTab(state, 42);
-    const cursor = findProviderSetting(result.state, "cursor");
+    const cursor = findProviderSetting(result.state, "cursor-personal-page");
 
-    expect(result.changedProviderIds).toEqual(["cursor"]);
+    expect(result.changedProviderIds).toEqual(["cursor-personal-page"]);
     expect(cursor.pageBinding.status).toBe("stale");
     expect(cursor.pageBinding.tabId).toBe(42);
     expect(cursor.pageBinding.matchedUrl).toBe(
@@ -68,7 +68,7 @@ describe("page binding lifecycle", () => {
 
   it("ignores tab close events for unrelated provider bindings", () => {
     const state = buildStateWithBinding(
-      "codex",
+      "codex-personal-page",
       77,
       "https://chatgpt.com/codex/cloud/settings/analytics#usage",
     );
@@ -80,7 +80,7 @@ describe("page binding lifecycle", () => {
 
   it("moves a binding to the replacement tab when Chrome replaces the bound tab on the same route", () => {
     const state = buildStateWithBinding(
-      "cursor",
+      "cursor-personal-page",
       42,
       "https://cursor.com/dashboard/usage",
     );
@@ -94,9 +94,9 @@ describe("page binding lifecycle", () => {
       },
       "2026-04-29T14:20:00.000Z",
     );
-    const cursor = findProviderSetting(result.state, "cursor");
+    const cursor = findProviderSetting(result.state, "cursor-personal-page");
 
-    expect(result.changedProviderIds).toEqual(["cursor"]);
+    expect(result.changedProviderIds).toEqual(["cursor-personal-page"]);
     expect(cursor.pageBinding).toMatchObject({
       status: "bound",
       mode: "bound",
@@ -109,7 +109,7 @@ describe("page binding lifecycle", () => {
 
   it("marks a binding stale when Chrome replaces the bound tab with a different route", () => {
     const state = buildStateWithBinding(
-      "cursor",
+      "cursor-personal-page",
       42,
       "https://cursor.com/dashboard/usage",
     );
@@ -123,9 +123,9 @@ describe("page binding lifecycle", () => {
       },
       "2026-04-29T14:20:00.000Z",
     );
-    const cursor = findProviderSetting(result.state, "cursor");
+    const cursor = findProviderSetting(result.state, "cursor-personal-page");
 
-    expect(result.changedProviderIds).toEqual(["cursor"]);
+    expect(result.changedProviderIds).toEqual(["cursor-personal-page"]);
     expect(cursor.pageBinding.status).toBe("stale");
     expect(cursor.pageBinding.tabId).toBe(42);
     expect(cursor.pageBinding.matchedUrl).toBe(
@@ -135,7 +135,7 @@ describe("page binding lifecycle", () => {
 
   it("keeps a binding healthy when the bound tab navigates within provider route hints", () => {
     const state = buildStateWithBinding(
-      "codex",
+      "codex-personal-page",
       88,
       "https://chatgpt.com/codex/cloud/settings/analytics#usage",
     );
@@ -151,7 +151,7 @@ describe("page binding lifecycle", () => {
 
   it("marks a binding stale when the bound tab navigates away from provider routes", () => {
     const state = buildStateWithBinding(
-      "codex",
+      "codex-personal-page",
       88,
       "https://chatgpt.com/codex/cloud/settings/analytics#usage",
     );
@@ -160,9 +160,9 @@ describe("page binding lifecycle", () => {
       88,
       "https://chatgpt.com/gpts",
     );
-    const codex = findProviderSetting(result.state, "codex");
+    const codex = findProviderSetting(result.state, "codex-personal-page");
 
-    expect(result.changedProviderIds).toEqual(["codex"]);
+    expect(result.changedProviderIds).toEqual(["codex-personal-page"]);
     expect(codex.pageBinding.status).toBe("stale");
     expect(codex.pageBinding.mode).toBe("bound");
   });

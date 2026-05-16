@@ -1,11 +1,14 @@
 import type { ProviderId } from "../providers/types";
 
 export const PROVIDER_TOOLBAR_ICON_PAGE_URLS: Record<ProviderId, string> = {
-  cursor: "https://cursor.com/",
-  jetbrains: "https://www.jetbrains.com/",
-  "claude-code": "https://claude.ai/",
-  gemini: "https://gemini.google.com/",
-  codex: "https://chatgpt.com/",
+  "cursor-personal-page": "https://cursor.com/",
+  "cursor-team-api": "https://cursor.com/",
+  "jetbrains-org-page": "https://www.jetbrains.com/",
+  "claude-code-team-page": "https://claude.ai/",
+  "claude-code-admin-api": "https://claude.ai/",
+  "gemini-policy": "https://gemini.google.com/",
+  "codex-personal-page": "https://chatgpt.com/",
+  "codex-enterprise-api": "https://chatgpt.com/",
 };
 
 export const DEFAULT_TOOLBAR_ACTION_ICON_PATHS = {

@@ -371,7 +371,7 @@ describe("runtime i18n", () => {
 
   it("builds localized diagnostic presentation from typed codes and params", () => {
     const diagnostic = createUsageThresholdDiagnostic({
-      providerId: "codex",
+      providerId: "codex-personal-page",
       usageThresholdKind: "threshold_warning",
       rawMessage: "5-hour usage window: 7% remaining",
       usagePercent: 93,
@@ -393,14 +393,14 @@ describe("runtime i18n", () => {
 
   it("builds localized source diagnostic presentation from typed codes and params", () => {
     const selectionDiagnostic = createSourceSelectionDiagnostic({
-      providerId: "cursor",
+      providerId: "cursor-personal-page",
       sourcePreference: "auto",
       selectedKind: "session_page",
       hadFallback: true,
       rawMessage: "Auto fell back to Session page.",
     });
     const fallbackDiagnostic = createSourceFallbackDiagnostic({
-      providerId: "cursor",
+      providerId: "cursor-personal-page",
       sourcePreference: "auto",
       failure: {
         kind: "official_api",
@@ -431,7 +431,7 @@ describe("runtime i18n", () => {
 
   it("builds localized page-capture unavailable diagnostic presentation", () => {
     const diagnostic = createPageSessionDiagnostic({
-      providerId: "cursor",
+      providerId: "cursor-personal-page",
       pageSessionKind: "capture_unavailable",
       rawMessage:
         "The open Cursor dashboard usage page could not be read by extension scripting.",
@@ -456,7 +456,7 @@ describe("runtime i18n", () => {
 
   it("builds localized adapter-error diagnostic presentation without translating raw bodies", () => {
     const diagnostic = createAdapterErrorDiagnostic({
-      providerId: "cursor",
+      providerId: "cursor-personal-page",
       adapterErrorKind: "parse_failed",
       sourceKind: "session_page",
       failureCode: "route_drift",

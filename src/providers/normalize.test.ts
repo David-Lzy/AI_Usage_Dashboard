@@ -4,7 +4,7 @@ import { buildUsageSignal } from "./normalize";
 
 describe("buildUsageSignal", () => {
   it("returns typed overage diagnostics while preserving raw warning messages", () => {
-    const signal = buildUsageSignal(320, 1000, 80, "requests", 15, "cursor");
+    const signal = buildUsageSignal(320, 1000, 80, "requests", 15, "cursor-personal-page");
 
     expect(signal.syncStatus).toBe("warning");
     expect(signal.tone).toBe("warning");
@@ -17,7 +17,7 @@ describe("buildUsageSignal", () => {
       severity: "warning",
       rawMessage: signal.warningReason,
       params: {
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         usageThresholdKind: "overage_detected",
         overageCount: 15,
         unitLabel: "requests",
@@ -26,7 +26,7 @@ describe("buildUsageSignal", () => {
   });
 
   it("returns typed threshold diagnostics while preserving raw warning messages", () => {
-    const signal = buildUsageSignal(820, 1000, 80, "credits", 0, "jetbrains");
+    const signal = buildUsageSignal(820, 1000, 80, "credits", 0, "jetbrains-org-page");
 
     expect(signal.syncStatus).toBe("warning");
     expect(signal.tone).toBe("warning");
@@ -37,7 +37,7 @@ describe("buildUsageSignal", () => {
       severity: "warning",
       rawMessage: signal.warningReason,
       params: {
-        providerId: "jetbrains",
+        providerId: "jetbrains-org-page",
         usageThresholdKind: "threshold_warning",
         usagePercent: 82,
         thresholdPercent: 80,

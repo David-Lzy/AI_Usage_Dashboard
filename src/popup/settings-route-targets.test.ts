@@ -34,13 +34,13 @@ describe("popup settings route targets", () => {
         {
           kind: "settings",
           label: "Open Quick Setup",
-          providerId: "codex",
+          providerId: "codex-personal-page",
         },
         [],
       ),
     ).toEqual({
       kind: "quick-setup-provider",
-      providerId: "codex",
+      providerId: "codex-personal-page",
     });
   });
 
@@ -53,12 +53,12 @@ describe("popup settings route targets", () => {
         },
         [
           {
-            providerId: "cursor",
+            providerId: "cursor-personal-page",
             permissionStatus: "granted",
             currentSourceStateKind: "ready",
           },
           {
-            providerId: "claude-code",
+            providerId: "claude-code-admin-api",
             permissionStatus: "granted",
             currentSourceStateKind: "credential_missing",
           },
@@ -66,53 +66,53 @@ describe("popup settings route targets", () => {
       ),
     ).toEqual({
       kind: "credential-provider",
-      providerId: "claude-code",
+      providerId: "claude-code-admin-api",
     });
   });
 
   it("routes missing host access to the matching quick setup provider card", () => {
     expect(
       getSettingsRouteFocusForPopupProvider({
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         permissionStatus: "missing",
         currentSourceStateKind: "ready",
       }),
     ).toEqual({
       kind: "quick-setup-provider",
-      providerId: "cursor",
+      providerId: "cursor-personal-page",
     });
   });
 
   it("routes missing credentials to the matching credential card", () => {
     expect(
       getSettingsRouteFocusForPopupProvider({
-        providerId: "claude-code",
+        providerId: "claude-code-admin-api",
         permissionStatus: "granted",
         currentSourceStateKind: "credential_missing",
       }),
     ).toEqual({
       kind: "credential-provider",
-      providerId: "claude-code",
+      providerId: "claude-code-admin-api",
     });
   });
 
   it("does not force a settings target for non-settings provider states", () => {
     expect(
       getSettingsRouteFocusForPopupProvider({
-        providerId: "gemini",
+        providerId: "gemini-policy",
         permissionStatus: "granted",
         currentSourceStateKind: "policy_only",
       }),
     ).toEqual({
       kind: "source-provider",
-      providerId: "gemini",
+      providerId: "gemini-policy",
     });
   });
 
   it("does not force a settings target for review-only provider states", () => {
     expect(
       getSettingsRouteFocusForPopupProvider({
-        providerId: "claude-code",
+        providerId: "claude-code-team-page",
         permissionStatus: "granted",
         currentSourceStateKind: "sync_error",
       }),

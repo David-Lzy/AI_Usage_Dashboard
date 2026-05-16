@@ -13,16 +13,16 @@ import {
 
 const route: SidePanelRouteState = {
   name: "provider-detail",
-  providerId: "codex",
+  providerId: "codex-personal-page",
 };
 
 describe("extension surface paths", () => {
   it("builds stable sidepanel and full-page extension paths", () => {
     expect(buildSidePanelExtensionPath(route)).toBe(
-      `${SIDEPANEL_ENTRY_PATH}#provider-detail/codex`,
+      `${SIDEPANEL_ENTRY_PATH}#provider-detail/codex-personal-page`,
     );
     expect(buildFullPageExtensionPath(route)).toBe(
-      `${SIDEPANEL_ENTRY_PATH}${FULL_PAGE_SURFACE_SEARCH}#provider-detail/codex`,
+      `${SIDEPANEL_ENTRY_PATH}${FULL_PAGE_SURFACE_SEARCH}#provider-detail/codex-personal-page`,
     );
   });
 
@@ -30,10 +30,10 @@ describe("extension surface paths", () => {
     const currentHref = "http://127.0.0.1:4173/src/popup/index.html";
 
     expect(buildSidePanelPreviewUrl(route, currentHref)).toBe(
-      "http://127.0.0.1:4173/src/sidepanel/index.html#provider-detail/codex",
+      "http://127.0.0.1:4173/src/sidepanel/index.html#provider-detail/codex-personal-page",
     );
     expect(buildFullPagePreviewUrl(route, currentHref)).toBe(
-      "http://127.0.0.1:4173/src/sidepanel/index.html?surface=full-page#provider-detail/codex",
+      "http://127.0.0.1:4173/src/sidepanel/index.html?surface=full-page#provider-detail/codex-personal-page",
     );
   });
 

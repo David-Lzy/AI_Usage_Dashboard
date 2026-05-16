@@ -45,13 +45,13 @@ describe("runPopupGuidanceAction", () => {
       {
         kind: "provider-detail",
         label: "Open provider",
-        providerId: "codex",
+        providerId: "codex-personal-page",
       },
       {},
       { openProvider },
     );
 
-    expect(openProvider).toHaveBeenCalledWith("codex");
+    expect(openProvider).toHaveBeenCalledWith("codex-personal-page");
   });
 
   it("opens source pages with the provider and source state kind", async () => {
@@ -61,7 +61,7 @@ describe("runPopupGuidanceAction", () => {
       {
         kind: "source-page",
         label: "Open source",
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         sourceStateKind: "open_page_required",
       },
       {},
@@ -69,7 +69,7 @@ describe("runPopupGuidanceAction", () => {
     );
 
     expect(openSourcePage).toHaveBeenCalledWith(
-      "cursor",
+      "cursor-personal-page",
       "open_page_required",
     );
   });
@@ -84,7 +84,7 @@ describe("runPopupGuidanceAction", () => {
       {
         kind: "hide-provider",
         label: "Hide",
-        providerId: "gemini",
+        providerId: "gemini-policy",
       },
       {},
       {

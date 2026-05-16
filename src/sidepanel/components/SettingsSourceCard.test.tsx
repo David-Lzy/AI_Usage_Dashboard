@@ -12,10 +12,10 @@ describe("SettingsSourceCard", () => {
     const i18n = createRuntimeI18n("en", undefined);
     const settingsCopy = buildSettingsLocalizedCopy(i18n);
     const provider = SAMPLE_APP_STATE.providerSettings.find(
-      (candidate) => candidate.id === "cursor",
+      (candidate) => candidate.id === "cursor-personal-page",
     );
     const snapshot = SAMPLE_APP_STATE.providers.find(
-      (candidate) => candidate.providerId === "cursor",
+      (candidate) => candidate.providerId === "cursor-personal-page",
     );
 
     if (!provider || !snapshot) {
@@ -39,10 +39,9 @@ describe("SettingsSourceCard", () => {
     );
 
     expect(html).toContain('class="source-card"');
-    expect(html).toContain('data-provider-id="cursor"');
-    expect(html).toContain(
-      'data-settings-material-select="source-preference-cursor"',
-    );
+    expect(html).toContain('data-provider-id="cursor-personal-page"');
+    expect(html).toContain(">Session page<");
+    expect(html).not.toContain("data-settings-material-select=");
     expect(html).toContain('class="source-card__details-toggle"');
     expect(html).toContain("Detailed diagnostics");
   });

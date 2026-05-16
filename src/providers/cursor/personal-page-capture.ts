@@ -335,7 +335,7 @@ async function captureRoute(
   options: CursorPersonalLiveCaptureOptions = {},
 ): Promise<CursorPersonalRouteCapture> {
   const result = await client.capture({
-    providerId: "cursor",
+    providerId: "cursor-personal-page",
     pageLabel: route.pageLabel,
     urlPatterns: route.urlPatterns,
     binding,

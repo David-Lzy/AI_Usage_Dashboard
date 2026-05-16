@@ -17,7 +17,7 @@ describe("buildFeaturedSection", () => {
   it("points zero-provider users to the recommended first provider", () => {
     expect(
       buildFeaturedSection([], [], {
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         providerLabel: "Cursor",
       }),
     ).toEqual({

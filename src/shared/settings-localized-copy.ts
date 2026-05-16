@@ -111,6 +111,8 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
         disabledProvidersSummary: (count: number) =>
           `更多 Provider（${i18n.formatNumber(count)}）`,
         hideDisabledProviders: "收起更多 Provider",
+        showTeamApiProviders: "显示团队 / API Provider",
+        hideTeamApiProviders: "隐藏团队 / API Provider",
         firstProvider: {
           eyebrow: "建议第一步",
           statusLabel: "推荐",
@@ -356,6 +358,8 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
       disabledProvidersSummary: (count: number) =>
         `More providers (${i18n.formatNumber(count)})`,
       hideDisabledProviders: "Hide more providers",
+      showTeamApiProviders: "Show team/API providers",
+      hideTeamApiProviders: "Hide team/API providers",
       firstProvider: {
         eyebrow: "Suggested first step",
         statusLabel: "Recommended",

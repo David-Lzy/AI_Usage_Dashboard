@@ -10,8 +10,8 @@ import { resolveThemeMode, type ResolvedThemeMode } from "../shared/theme";
 import { getProviderViewModel, getVisibleProviders } from "./view-models";
 
 export const THEME_RECOVERY_REVIEW_TARGET_PROVIDER_IDS = [
-  "cursor",
-  "codex",
+  "cursor-personal-page",
+  "codex-personal-page",
 ] as const satisfies readonly ProviderId[];
 
 export type ThemeRecoveryReviewTargetProviderId =

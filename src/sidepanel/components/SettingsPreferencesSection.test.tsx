@@ -101,7 +101,7 @@ describe("SettingsPreferencesSection", () => {
     const providerHtml = renderPreferencesSection({
       ...SAMPLE_APP_STATE.settings,
       toolbarIconMode: "provider",
-      toolbarIconProviderId: "codex",
+      toolbarIconProviderId: "codex-personal-page",
     });
 
     expect(providerHtml).toContain(

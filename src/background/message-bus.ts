@@ -158,7 +158,7 @@ export async function handleAppMessage(
           ...current,
           providerSettings: current.providerSettings.map((provider) =>
             provider.id === message.providerId
-              ? { ...provider, enabled: message.enabled }
+              ? { ...provider, displayEnabled: message.enabled }
               : provider,
           ),
         });
@@ -280,9 +280,11 @@ export async function handleAppMessage(
         null;
       const providerLabel = providerSetting?.label ?? message.providerId;
       const keyLabel =
-        message.providerId === "cursor"
+        message.providerId === "cursor-team-api"
           ? "Cursor Admin API key"
-          : "Claude Admin API key";
+          : message.providerId === "claude-code-admin-api"
+            ? "Claude Admin API key"
+            : "Codex analytics config";
 
       return {
         ok: true,
@@ -316,10 +318,12 @@ export async function handleAppMessage(
 
       const state = await runSyncEngine({
         trigger: "manual",
-        providerId: "codex",
+        providerId: "codex-enterprise-api",
       });
       const providerSetting =
-        state.providerSettings.find((provider) => provider.id === "codex") ?? null;
+        state.providerSettings.find(
+          (provider) => provider.id === "codex-enterprise-api",
+        ) ?? null;
 
       return {
         ok: true,

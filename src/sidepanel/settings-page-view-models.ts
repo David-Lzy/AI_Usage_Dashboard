@@ -30,12 +30,15 @@ export function buildSettingsPageViewModels({
   const resolvedShowAdvancedSection =
     showAdvancedSection ?? settings.userLevel !== "basic";
   const credentialProviders: CredentialProviderSection[] = [];
-  const cursorProvider = findCredentialProvider(providers, "cursor");
-  const claudeProvider = findCredentialProvider(providers, "claude-code");
+  const cursorProvider = findCredentialProvider(providers, "cursor-team-api");
+  const claudeProvider = findCredentialProvider(
+    providers,
+    "claude-code-admin-api",
+  );
   const codexProvider =
     providers.find(
-      (provider): provider is ProviderSetting & { id: "codex" } =>
-        provider.id === "codex",
+      (provider): provider is ProviderSetting & { id: "codex-enterprise-api" } =>
+        provider.id === "codex-enterprise-api",
     ) ?? null;
 
   if (cursorProvider) {

@@ -11,6 +11,7 @@ import { syncCodexProvider } from "./codex/adapter";
 import { syncCursorProvider } from "./cursor/adapter";
 import { syncGeminiProvider } from "./gemini/adapter";
 import { syncJetBrainsProvider } from "./jetbrains/adapter";
+import { getProviderSourcePreference } from "./provider-definitions";
 
 type ProviderSyncContext = {
   attemptedAt: Date;
@@ -27,57 +28,100 @@ type MockProviderAdapter = {
   ) => Promise<ProviderSyncOutcome>;
 };
 
+function withFixedSourcePreference(setting: ProviderSetting): ProviderSetting {
+  return {
+    ...setting,
+    sourcePreference: getProviderSourcePreference(setting.id),
+  };
+}
+
 const providerRegistry: Record<ProviderId, MockProviderAdapter> = {
-  cursor: {
+  "cursor-personal-page": {
     sync(provider, context) {
       return syncCursorProvider({
         provider,
         secrets: context.secrets,
-        setting: context.setting,
+        setting: withFixedSourcePreference(context.setting),
         warningThresholdPercent: context.warningThresholdPercent,
         now: context.attemptedAt,
         trigger: context.trigger,
       });
     },
   },
-  jetbrains: {
+  "cursor-team-api": {
+    sync(provider, context) {
+      return syncCursorProvider({
+        provider,
+        secrets: context.secrets,
+        setting: withFixedSourcePreference(context.setting),
+        warningThresholdPercent: context.warningThresholdPercent,
+        now: context.attemptedAt,
+        trigger: context.trigger,
+      });
+    },
+  },
+  "jetbrains-org-page": {
     sync(provider, context) {
       return syncJetBrainsProvider({
         provider,
-        setting: context.setting,
+        setting: withFixedSourcePreference(context.setting),
         warningThresholdPercent: context.warningThresholdPercent,
         now: context.attemptedAt,
       });
     },
   },
-  "claude-code": {
+  "claude-code-team-page": {
     sync(provider, context) {
       return syncClaudeCodeProvider({
         provider,
         secrets: context.secrets,
-        setting: context.setting,
+        setting: withFixedSourcePreference(context.setting),
         warningThresholdPercent: context.warningThresholdPercent,
         now: context.attemptedAt,
         trigger: context.trigger,
       });
     },
   },
-  gemini: {
+  "claude-code-admin-api": {
+    sync(provider, context) {
+      return syncClaudeCodeProvider({
+        provider,
+        secrets: context.secrets,
+        setting: withFixedSourcePreference(context.setting),
+        warningThresholdPercent: context.warningThresholdPercent,
+        now: context.attemptedAt,
+        trigger: context.trigger,
+      });
+    },
+  },
+  "gemini-policy": {
     sync(provider, context) {
       return syncGeminiProvider({
         provider,
-        setting: context.setting,
+        setting: withFixedSourcePreference(context.setting),
         warningThresholdPercent: context.warningThresholdPercent,
         now: context.attemptedAt,
       });
     },
   },
-  codex: {
+  "codex-personal-page": {
     sync(provider, context) {
       return syncCodexProvider({
         provider,
         secrets: context.secrets,
-        setting: context.setting,
+        setting: withFixedSourcePreference(context.setting),
+        warningThresholdPercent: context.warningThresholdPercent,
+        now: context.attemptedAt,
+        trigger: context.trigger,
+      });
+    },
+  },
+  "codex-enterprise-api": {
+    sync(provider, context) {
+      return syncCodexProvider({
+        provider,
+        secrets: context.secrets,
+        setting: withFixedSourcePreference(context.setting),
         warningThresholdPercent: context.warningThresholdPercent,
         now: context.attemptedAt,
         trigger: context.trigger,

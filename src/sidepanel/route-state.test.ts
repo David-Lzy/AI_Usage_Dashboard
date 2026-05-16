@@ -11,22 +11,22 @@ describe("sidepanel route state", () => {
         name: "settings",
         focus: {
           kind: "quick-setup-provider",
-          providerId: "cursor",
+          providerId: "cursor-personal-page",
         },
       }),
-    ).toBe("#settings/quick-setup/cursor");
+    ).toBe("#settings/quick-setup/cursor-personal-page");
     expect(
       buildSidePanelHash({
         name: "settings",
         focus: {
           kind: "credential-provider",
-          providerId: "codex",
+          providerId: "codex-enterprise-api",
         },
       }),
-    ).toBe("#settings/credentials/codex");
+    ).toBe("#settings/credentials/codex-enterprise-api");
     expect(
-      buildSidePanelHash({ name: "provider-detail", providerId: "codex" }),
-    ).toBe("#provider-detail/codex");
+      buildSidePanelHash({ name: "provider-detail", providerId: "codex-personal-page" }),
+    ).toBe("#provider-detail/codex-personal-page");
   });
 
   it("parses supported hashes back into route state", () => {
@@ -40,23 +40,23 @@ describe("sidepanel route state", () => {
         sectionId: "settings-quick-setup",
       },
     });
-    expect(parseSidePanelHash("#settings/quick-setup/cursor")).toEqual({
+    expect(parseSidePanelHash("#settings/quick-setup/cursor-personal-page")).toEqual({
       name: "settings",
       focus: {
         kind: "quick-setup-provider",
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
       },
     });
-    expect(parseSidePanelHash("#settings/credentials/claude-code")).toEqual({
+    expect(parseSidePanelHash("#settings/credentials/claude-code-admin-api")).toEqual({
       name: "settings",
       focus: {
         kind: "credential-provider",
-        providerId: "claude-code",
+        providerId: "claude-code-admin-api",
       },
     });
-    expect(parseSidePanelHash("#provider-detail/cursor")).toEqual({
+    expect(parseSidePanelHash("#provider-detail/cursor-personal-page")).toEqual({
       name: "provider-detail",
-      providerId: "cursor",
+      providerId: "cursor-personal-page",
     });
   });
 

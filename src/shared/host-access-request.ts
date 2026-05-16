@@ -25,7 +25,7 @@ export function findHostAccessRefreshCandidate(
   }
 
   const candidates = state.providerSettings.filter(
-    (provider) => provider.enabled && canRequestHostAccess(provider),
+    (provider) => provider.displayEnabled && canRequestHostAccess(provider),
   );
 
   return candidates.length === 1 ? candidates[0] : null;

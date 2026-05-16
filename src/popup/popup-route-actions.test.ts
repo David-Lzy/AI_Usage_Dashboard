@@ -81,16 +81,16 @@ describe("popup route actions", () => {
 
     await openSettings({
       kind: "quick-setup-provider",
-      providerId: "cursor",
+      providerId: "cursor-personal-page",
     });
 
     expect(create).toHaveBeenCalledWith({
       active: true,
-      url: "chrome-extension://extension-id/src/sidepanel/index.html?surface=full-page#settings/quick-setup/cursor",
+      url: "chrome-extension://extension-id/src/sidepanel/index.html?surface=full-page#settings/quick-setup/cursor-personal-page",
     });
     expect(
       consumePendingFullPageEntry(
-        "#settings/quick-setup/cursor",
+        "#settings/quick-setup/cursor-personal-page",
         popupWindow.localStorage,
         Date.now(),
       ),
@@ -125,7 +125,7 @@ describe("popup route actions", () => {
       name: "settings",
       focus: {
         kind: "quick-setup-provider",
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
       },
     });
 
@@ -135,7 +135,7 @@ describe("popup route actions", () => {
     });
     expect(setOptions).toHaveBeenCalledWith({
       enabled: true,
-      path: "src/sidepanel/index.html#settings/quick-setup/cursor",
+      path: "src/sidepanel/index.html#settings/quick-setup/cursor-personal-page",
       tabId: 7,
     });
     expect(open).toHaveBeenCalledWith({ tabId: 7 });
@@ -209,16 +209,16 @@ describe("popup route actions", () => {
 
     await openFullPageRoute({
       name: "provider-detail",
-      providerId: "codex",
+      providerId: "codex-personal-page",
     });
 
     expect(create).toHaveBeenCalledWith({
       active: true,
-      url: "chrome-extension://extension-id/src/sidepanel/index.html?surface=full-page#provider-detail/codex",
+      url: "chrome-extension://extension-id/src/sidepanel/index.html?surface=full-page#provider-detail/codex-personal-page",
     });
     expect(
       consumePendingFullPageEntry(
-        "#provider-detail/codex",
+        "#provider-detail/codex-personal-page",
         popupWindow.localStorage,
         Date.now(),
       ),

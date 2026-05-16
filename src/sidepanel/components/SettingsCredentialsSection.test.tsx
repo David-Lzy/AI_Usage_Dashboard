@@ -14,11 +14,11 @@ describe("SettingsCredentialsSection", () => {
       (
         provider,
       ): provider is ProviderSetting & { id: ApiKeyProviderId } =>
-        provider.id === "cursor",
+        provider.id === "cursor-team-api",
     );
     const codexProvider = SAMPLE_APP_STATE.providerSettings.find(
-      (provider): provider is ProviderSetting & { id: "codex" } =>
-        provider.id === "codex",
+      (provider): provider is ProviderSetting & { id: "codex-enterprise-api" } =>
+        provider.id === "codex-enterprise-api",
     );
 
     expect(cursorProvider).toBeDefined();
@@ -42,10 +42,14 @@ describe("SettingsCredentialsSection", () => {
         eyebrow="Credentials"
         title="Provider credentials"
         detail="Add optional provider credentials."
-        focusedProviderId="codex"
+        focusedProviderId="codex-enterprise-api"
         credentialProviders={credentialProviders}
         codexProvider={codexProvider!}
-        credentialInputs={{ cursor: "draft-key", "claude-code": "" }}
+        credentialInputs={{
+          "cursor-team-api": "draft-key",
+          "claude-code-admin-api": "",
+          "codex-enterprise-api": "",
+        }}
         codexAnalyticsApiKeyInput="codex-key"
         codexWorkspaceIdInput="workspace-1"
         labels={{
@@ -89,9 +93,9 @@ describe("SettingsCredentialsSection", () => {
 
     expect(html).toContain('id="settings-credentials-test"');
     expect(html).toContain('data-provider-carousel=""');
-    expect(html).toContain('data-provider-carousel-active-id="codex"');
-    expect(html).toContain('data-credential-provider-id="cursor"');
-    expect(html).toContain('data-credential-provider-id="codex"');
+    expect(html).toContain('data-provider-carousel-active-id="codex-enterprise-api"');
+    expect(html).toContain('data-credential-provider-id="cursor-team-api"');
+    expect(html).toContain('data-credential-provider-id="codex-enterprise-api"');
     expect(html).toContain('class="credential-form"');
     expect(html).toContain('type="password"');
     expect(html).toContain(">Save key<");

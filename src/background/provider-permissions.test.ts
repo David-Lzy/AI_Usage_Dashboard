@@ -58,7 +58,7 @@ describe("provider permissions", () => {
 
   it("reconciles provider access from chrome.permissions.contains", async () => {
     const contains = vi.fn(async ({ origins }: { origins?: string[] }) =>
-      Boolean(origins?.includes("https://api.cursor.com/*")),
+      Boolean(origins?.includes("https://cursor.com/*")),
     );
 
     setChromePermissionsApi({
@@ -70,24 +70,24 @@ describe("provider permissions", () => {
     const state = await reconcileProviderPermissions(createState());
 
     expect(
-      state.providerSettings.find((provider) => provider.id === "cursor")?.status,
+      state.providerSettings.find((provider) => provider.id === "cursor-personal-page")?.status,
     ).toBe("granted");
     expect(
-      state.providerSettings.find((provider) => provider.id === "jetbrains")
+      state.providerSettings.find((provider) => provider.id === "jetbrains-org-page")
         ?.status,
     ).toBe("missing");
     expect(
-      state.providerSettings.find((provider) => provider.id === "gemini")?.status,
+      state.providerSettings.find((provider) => provider.id === "gemini-policy")?.status,
     ).toBe("granted");
     expect(contains).toHaveBeenCalled();
   });
 
   it("simulates local toggles when chrome.permissions is unavailable", async () => {
-    const result = await toggleProviderPermission("jetbrains");
+    const result = await toggleProviderPermission("jetbrains-org-page");
 
     expect(result.notice.title).toContain("simulated");
     expect(
-      result.state.providerSettings.find((provider) => provider.id === "jetbrains")
+      result.state.providerSettings.find((provider) => provider.id === "jetbrains-org-page")
         ?.status,
     ).toBe("granted");
   });
@@ -101,7 +101,7 @@ describe("provider permissions", () => {
       remove: vi.fn(async () => true),
     });
 
-    const result = await toggleProviderPermission("jetbrains");
+    const result = await toggleProviderPermission("jetbrains-org-page");
     const persistedState = await readAppState();
 
     expect(request).toHaveBeenCalledWith({
@@ -110,7 +110,7 @@ describe("provider permissions", () => {
     expect(result.notice.title).toContain("granted");
     expect(
       persistedState?.providerSettings.find(
-        (provider) => provider.id === "jetbrains",
+        (provider) => provider.id === "jetbrains-org-page",
       )?.status,
     ).toBe("granted");
   });

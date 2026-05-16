@@ -19,7 +19,7 @@ function createState(overrides?: Partial<AppState>): AppState {
 
 function renderProviderDetail(
   state: AppState,
-  providerId: "codex" | "cursor" | "gemini",
+  providerId: "codex-personal-page" | "cursor-personal-page" | "gemini-policy",
   options: {
     onOpenSourcePage?: () => void;
   } = {},
@@ -48,7 +48,7 @@ function renderProviderDetail(
 
 describe("ProviderDetailPage", () => {
   it("renders a source-page recovery action for shipped session-page providers", () => {
-    const html = renderProviderDetail(createState(), "codex", {
+    const html = renderProviderDetail(createState(), "codex-personal-page", {
       onOpenSourcePage: () => undefined,
     });
 
@@ -58,7 +58,7 @@ describe("ProviderDetailPage", () => {
   });
 
   it("omits the source-page recovery action for deferred session-page providers", () => {
-    const html = renderProviderDetail(createState(), "gemini", {
+    const html = renderProviderDetail(createState(), "gemini-policy", {
       onOpenSourcePage: () => undefined,
     });
 
@@ -67,7 +67,7 @@ describe("ProviderDetailPage", () => {
   });
 
   it("renders Cursor personal spend facts without claiming request remaining", () => {
-    const html = renderProviderDetail(createState(), "cursor");
+    const html = renderProviderDetail(createState(), "cursor-personal-page");
 
     expect(html).toContain("Visible usage context");
     expect(html).toContain('class="usage-facts usage-facts--regular"');

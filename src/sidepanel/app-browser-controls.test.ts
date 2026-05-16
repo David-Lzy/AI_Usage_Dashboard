@@ -70,13 +70,13 @@ describe("app-browser-controls", () => {
       },
     });
 
-    await openFullPageRoute({ name: "provider-detail", providerId: "codex" });
+    await openFullPageRoute({ name: "provider-detail", providerId: "codex-personal-page" });
 
     expect(getURL).toHaveBeenCalledWith(
-      "src/sidepanel/index.html?surface=full-page#provider-detail/codex",
+      "src/sidepanel/index.html?surface=full-page#provider-detail/codex-personal-page",
     );
     expect(create).toHaveBeenCalledWith({
-      url: "chrome-extension://extension-id/src/sidepanel/index.html?surface=full-page#provider-detail/codex",
+      url: "chrome-extension://extension-id/src/sidepanel/index.html?surface=full-page#provider-detail/codex-personal-page",
       active: true,
     });
   });

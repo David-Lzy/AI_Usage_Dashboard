@@ -39,7 +39,7 @@ describe("createStandardAppSessionPageActions", () => {
   it("surfaces open-page helper unavailability without dispatching messages", () => {
     const { actions, applyMessage, setToast } = createActionHarness();
 
-    actions.handleOpenSessionPage("codex");
+    actions.handleOpenSessionPage("codex-personal-page");
 
     expect(setToast).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -68,7 +68,7 @@ describe("createStandardAppSessionPageActions", () => {
     expect(actions.sessionPageNavigationAvailable).toBe(true);
     expect(actions.activeSessionPageAttachAvailable).toBe(false);
 
-    actions.handleAttachActiveSessionPage("codex");
+    actions.handleAttachActiveSessionPage("codex-personal-page");
 
     expect(setToast).toHaveBeenCalledWith(
       expect.objectContaining({

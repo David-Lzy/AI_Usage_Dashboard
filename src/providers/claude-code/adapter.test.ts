@@ -21,7 +21,7 @@ vi.mock("./personal-page-client", () => ({
 import { syncClaudeCodeProvider } from "./adapter";
 
 const baseProvider: ProviderSnapshot = {
-  providerId: "claude-code",
+  providerId: "claude-code-team-page",
   providerLabel: "Claude Code",
   planName: "Unknown",
   quotaUnit: "sessions",
@@ -42,31 +42,48 @@ const baseProvider: ProviderSnapshot = {
 };
 
 const grantedSetting: ProviderSetting = {
-  id: "claude-code",
+  id: "claude-code-team-page",
+  brandId: "claude-code",
   label: "Claude Code",
+  displayEnabled: true,
   enabled: true,
   status: "granted",
   credentialStatus: "configured",
-  sourcePreference: "auto",
+  sourceKind: "session_page",
+  connectionMode: "page_session",
+  sourcePreference: "session_page",
   pageBinding: createEmptyPageBinding(),
-  hostsLabel: "api.anthropic.com · platform.claude.com · claude.ai",
-  hostOrigins: [
-    "https://api.anthropic.com/*",
-    "https://platform.claude.com/*",
-    "https://claude.ai/*",
-  ],
-  description:
-    "Uses the Claude Code Analytics Admin API when a key is configured, or the logged-in Claude Team usage page when no key is stored.",
+  hostsLabel: "claude.ai",
+  hostOrigins: ["https://claude.ai/*"],
+  description: "Uses the logged-in Claude Team usage page.",
+};
+
+const adminProvider: ProviderSnapshot = {
+  ...baseProvider,
+  providerId: "claude-code-admin-api",
+  providerLabel: "Claude Admin API",
+};
+
+const adminSetting: ProviderSetting = {
+  ...grantedSetting,
+  id: "claude-code-admin-api",
+  label: "Claude Code Analytics Admin API",
+  sourceKind: "official_api",
+  connectionMode: "credential",
+  sourcePreference: "official_api",
+  hostsLabel: "api.anthropic.com · platform.claude.com",
+  hostOrigins: ["https://api.anthropic.com/*", "https://platform.claude.com/*"],
+  description: "Uses the Claude Code Analytics Admin API.",
 };
 
 const emptySecrets: ProviderSecrets = {
-  cursor: {
+  "cursor-team-api": {
     adminApiKey: null,
   },
-  "claude-code": {
+  "claude-code-admin-api": {
     adminApiKey: null,
   },
-  codex: {
+  "codex-enterprise-api": {
     analyticsApiKey: null,
     workspaceId: null,
   },
@@ -85,7 +102,7 @@ describe("syncClaudeCodeProvider", () => {
         result: {
           status: "ok",
           snapshot: {
-            providerId: "claude-code",
+            providerId: "claude-code-team-page",
             providerLabel: "Claude Code",
             measurementKind: "usage_page_context",
             routeKey: "settings_usage",
@@ -147,15 +164,9 @@ describe("syncClaudeCodeProvider", () => {
     );
     expect(snapshot.remaining).toBe(42);
     expect(snapshot.sourceSelectionReason).toBe(
-      "Auto fell back to Session page.",
+      "Session page is the only shipped source for claude-code-team-page.",
     );
-    expect(snapshot.sourceFallbackDiagnostic).toMatchObject({
-      code: "source.official_api_missing_credential",
-      params: {
-        failedSourceKind: "official_api",
-        failureCode: "credential_missing",
-      },
-    });
+    expect(snapshot.sourceFallbackDiagnostic).toBeNull();
     expect(createClaudeCodeAnalyticsClientMock).not.toHaveBeenCalled();
     expect(createClaudePersonalPageClientMock).toHaveBeenCalled();
   });
@@ -260,20 +271,20 @@ describe("syncClaudeCodeProvider", () => {
     });
 
     const { snapshot } = await syncClaudeCodeProvider({
-      provider: baseProvider,
+      provider: adminProvider,
       secrets: {
-        cursor: {
+        "cursor-team-api": {
           adminApiKey: null,
         },
-      "claude-code": {
+      "claude-code-admin-api": {
         adminApiKey: "sk-ant-admin-test",
       },
-      codex: {
+      "codex-enterprise-api": {
         analyticsApiKey: null,
         workspaceId: null,
       },
     },
-      setting: grantedSetting,
+      setting: adminSetting,
       warningThresholdPercent: 80,
       now: attemptedAt,
     });
@@ -308,14 +319,14 @@ describe("syncClaudeCodeProvider", () => {
     });
 
     const { snapshot } = await syncClaudeCodeProvider({
-      provider: baseProvider,
+      provider: adminProvider,
       secrets: {
         ...emptySecrets,
-        "claude-code": {
+        "claude-code-admin-api": {
           adminApiKey: "sk-ant-admin-test",
         },
       },
-      setting: grantedSetting,
+      setting: adminSetting,
       warningThresholdPercent: 80,
       now: attemptedAt,
     });
@@ -331,7 +342,7 @@ describe("syncClaudeCodeProvider", () => {
       severity: "error",
       rawMessage: snapshot.warningReason,
       params: {
-        providerId: "claude-code",
+        providerId: "claude-code-admin-api",
         adapterErrorKind: "unexpected_error",
         sourceKind: "official_api",
         failureCode: "sync_error",
@@ -344,10 +355,10 @@ describe("syncClaudeCodeProvider", () => {
   it("returns a readable host-access message when Claude access is missing", async () => {
     const attemptedAt = new Date(2026, 3, 20, 12, 34);
     const { snapshot } = await syncClaudeCodeProvider({
-      provider: baseProvider,
+      provider: adminProvider,
       secrets: emptySecrets,
       setting: {
-        ...grantedSetting,
+        ...adminSetting,
         status: "missing",
       },
       warningThresholdPercent: 80,
@@ -357,7 +368,7 @@ describe("syncClaudeCodeProvider", () => {
     expect(snapshot.syncStatus).toBe("warning");
     expect(snapshot.tone).toBe("warning");
     expect(snapshot.warningReason).toContain("Host access missing");
-    expect(snapshot.warningReason).toContain("claude.ai");
+    expect(snapshot.warningReason).toContain("api.anthropic.com");
     expect(snapshot.lastSyncLabel).toBe("Claude Admin API access required");
   });
 });

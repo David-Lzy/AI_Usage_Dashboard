@@ -5,6 +5,7 @@ import type {
   ProviderOrderBySurface,
   ProviderProgressItemPreference,
 } from "../providers/types";
+import { normalizeProviderId } from "../providers/provider-definitions";
 
 export const DISPLAY_SURFACES = ["popup", "sidebar", "fullPage"] as const;
 
@@ -57,11 +58,13 @@ function normalizeProviderOrder(
       continue;
     }
 
-    if (!knownProviders.has(candidate as ProviderId)) {
+    const normalizedCandidate = normalizeProviderId(candidate);
+
+    if (!normalizedCandidate || !knownProviders.has(normalizedCandidate)) {
       continue;
     }
 
-    const providerId = candidate as ProviderId;
+    const providerId = normalizedCandidate;
 
     if (seenProviders.has(providerId)) {
       continue;
@@ -331,13 +334,15 @@ export function normalizeProgressItemsBySurface(
   for (const surface of DISPLAY_SURFACES) {
     const surfaceSource = isRecord(source[surface]) ? source[surface] : {};
 
-    for (const providerId of providerIds) {
-      if (!hasOwnRecordKey(surfaceSource, providerId)) {
+    for (const [rawProviderId, preferences] of Object.entries(surfaceSource)) {
+      const providerId = normalizeProviderId(rawProviderId);
+
+      if (!providerId || !providerIds.includes(providerId)) {
         continue;
       }
 
       const normalizedItems = normalizeProgressItemPreferences(
-        surfaceSource[providerId],
+        preferences,
         getKnownProgressItemIds(providerId, knownProgressItemIdsByProvider),
       );
 

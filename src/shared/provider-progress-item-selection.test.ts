@@ -8,7 +8,7 @@ function createWindowState(): AppState {
   return {
     ...SAMPLE_APP_STATE,
     providers: SAMPLE_APP_STATE.providers.map((provider) =>
-      provider.providerId === "codex"
+      provider.providerId === "codex-personal-page"
         ? {
             ...provider,
             quotaUnit: "percent",
@@ -50,7 +50,7 @@ function createWindowState(): AppState {
 describe("provider progress item selection", () => {
   it("defaults to all discovered progress items in inventory order", () => {
     const state = createWindowState();
-    const codex = state.providers.find((provider) => provider.providerId === "codex");
+    const codex = state.providers.find((provider) => provider.providerId === "codex-personal-page");
 
     expect(codex).toBeDefined();
     expect(
@@ -64,13 +64,13 @@ describe("provider progress item selection", () => {
 
   it("applies saved visibility and order for one surface", () => {
     const state = createWindowState();
-    const codex = state.providers.find((provider) => provider.providerId === "codex");
+    const codex = state.providers.find((provider) => provider.providerId === "codex-personal-page");
 
     expect(codex).toBeDefined();
     expect(
       selectVisibleProviderProgressItems(codex!, "popup", {
         popup: {
-          codex: [
+          "codex-personal-page": [
             {
               id: "window:weekly:Weekly%20usage%20window::1",
               visible: true,

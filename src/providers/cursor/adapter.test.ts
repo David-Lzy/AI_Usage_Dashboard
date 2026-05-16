@@ -23,7 +23,7 @@ vi.mock("./personal-page-client", () => ({
 import { syncCursorProvider } from "./adapter";
 
 const baseProvider: ProviderSnapshot = {
-  providerId: "cursor",
+  providerId: "cursor-personal-page",
   providerLabel: "Cursor",
   planName: "Unknown",
   quotaUnit: "requests",
@@ -44,17 +44,39 @@ const baseProvider: ProviderSnapshot = {
 };
 
 const grantedSetting: ProviderSetting = {
-  id: "cursor",
+  id: "cursor-personal-page",
+  brandId: "cursor",
   label: "Cursor",
+  displayEnabled: true,
   enabled: true,
   status: "granted",
   credentialStatus: "configured",
+  sourceKind: "session_page",
+  connectionMode: "page_session",
   sourcePreference: "auto",
   pageBinding: createEmptyPageBinding(),
   hostsLabel: "api.cursor.com · cursor.com",
   hostOrigins: ["https://api.cursor.com/*", "https://cursor.com/*"],
   description:
     "Uses the team Admin API when a key is configured, or the logged-in personal usage page when no key is stored.",
+};
+
+const teamProvider: ProviderSnapshot = {
+  ...baseProvider,
+  providerId: "cursor-team-api",
+  providerLabel: "Cursor Team API",
+};
+
+const teamSetting: ProviderSetting = {
+  ...grantedSetting,
+  id: "cursor-team-api",
+  label: "Cursor Team Admin API",
+  sourceKind: "official_api",
+  connectionMode: "credential",
+  sourcePreference: "official_api",
+  hostsLabel: "api.cursor.com",
+  hostOrigins: ["https://api.cursor.com/*"],
+  description: "Uses the Cursor Team Admin API with a stored API key.",
 };
 
 function buildCursorPersonalPageResponse(result: CursorPersonalParseResult) {
@@ -65,13 +87,13 @@ function buildCursorPersonalPageResponse(result: CursorPersonalParseResult) {
 }
 
 const emptySecrets: ProviderSecrets = {
-  cursor: {
+  "cursor-team-api": {
     adminApiKey: null,
   },
-  "claude-code": {
+  "claude-code-admin-api": {
     adminApiKey: null,
   },
-  codex: {
+  "codex-enterprise-api": {
     analyticsApiKey: null,
     workspaceId: null,
   },
@@ -88,7 +110,7 @@ describe("syncCursorProvider", () => {
     const personalResult: CursorPersonalParseResult = {
       status: "ok",
       snapshot: {
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         providerLabel: "Cursor",
         measurementKind: "billing_period_usage",
         routeKey: "dashboard_usage",
@@ -165,7 +187,7 @@ describe("syncCursorProvider", () => {
       severity: "info",
       rawMessage: snapshot.warningReason,
       params: {
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         usageThresholdKind: "on_demand_off",
         unitLabel: "requests",
       },
@@ -201,34 +223,23 @@ describe("syncCursorProvider", () => {
       "Visible Cursor usage: Visible plans: Pro · Pro+ · Ultra · On-demand usage is off. · CSV export available",
     );
     expect(snapshot.lastSyncLabel).toBe("Cursor personal fixture loaded");
-    expect(snapshot.sourceSelectionReason).toBe("Auto fell back to Session page.");
+    expect(snapshot.sourceSelectionReason).toBe(
+      "Session page is the only shipped source for cursor-personal-page.",
+    );
     expect(snapshot.sourceSelectionDiagnostic).toMatchObject({
-      code: "source.auto_selected_session_page",
+      code: "source.preference_selected_session_page",
       category: "source_selection",
       severity: "info",
       rawMessage: snapshot.sourceSelectionReason,
       params: {
-        providerId: "cursor",
-        sourcePreference: "auto",
+        providerId: "cursor-personal-page",
+        sourcePreference: "session_page",
         selectedKind: "session_page",
-        hadFallback: true,
+        hadFallback: false,
       },
     });
-    expect(snapshot.sourceFallbackReason).toBe(
-      "Official API unavailable: No Cursor Admin API key is stored.",
-    );
-    expect(snapshot.sourceFallbackDiagnostic).toMatchObject({
-      code: "source.official_api_missing_credential",
-      category: "source_fallback",
-      severity: "warning",
-      rawMessage: snapshot.sourceFallbackReason,
-      params: {
-        providerId: "cursor",
-        sourcePreference: "auto",
-        failedSourceKind: "official_api",
-        failureCode: "credential_missing",
-      },
-    });
+    expect(snapshot.sourceFallbackReason).toBeNull();
+    expect(snapshot.sourceFallbackDiagnostic).toBeNull();
     expect(createCursorOfficialClientMock).not.toHaveBeenCalled();
     expect(createCursorPersonalPageClientMock).toHaveBeenCalled();
   });
@@ -287,20 +298,20 @@ describe("syncCursorProvider", () => {
     });
 
     const { snapshot } = await syncCursorProvider({
-      provider: baseProvider,
+      provider: teamProvider,
       secrets: {
-        cursor: {
+        "cursor-team-api": {
           adminApiKey: "cursor-live-key",
         },
-      "claude-code": {
+      "claude-code-admin-api": {
         adminApiKey: null,
       },
-      codex: {
+      "codex-enterprise-api": {
         analyticsApiKey: null,
         workspaceId: null,
       },
     },
-      setting: grantedSetting,
+      setting: teamSetting,
       warningThresholdPercent: 80,
       now: attemptedAt,
     });
@@ -332,22 +343,24 @@ describe("syncCursorProvider", () => {
       severity: "warning",
       rawMessage: snapshot.warningReason,
       params: {
-        providerId: "cursor",
+        providerId: "cursor-team-api",
         usageThresholdKind: "overage_detected",
         overageCount: 15,
         unitLabel: "requests",
       },
     });
     expect(snapshot.lastSyncLabel).toBe("Cursor Admin API synced just now");
-    expect(snapshot.sourceSelectionReason).toBe("Auto selected Official API.");
+    expect(snapshot.sourceSelectionReason).toBe(
+      "Official API is the only shipped source for cursor-team-api.",
+    );
     expect(snapshot.sourceSelectionDiagnostic).toMatchObject({
-      code: "source.auto_selected_official_api",
+      code: "source.preference_selected_official_api",
       category: "source_selection",
       severity: "info",
       rawMessage: snapshot.sourceSelectionReason,
       params: {
-        providerId: "cursor",
-        sourcePreference: "auto",
+        providerId: "cursor-team-api",
+        sourcePreference: "official_api",
         selectedKind: "official_api",
         hadFallback: false,
       },
@@ -361,10 +374,10 @@ describe("syncCursorProvider", () => {
   it("returns a readable host-access state when Cursor access is missing", async () => {
     const attemptedAt = new Date(2026, 3, 20, 14, 18);
     const { snapshot } = await syncCursorProvider({
-      provider: baseProvider,
+      provider: teamProvider,
       secrets: emptySecrets,
       setting: {
-        ...grantedSetting,
+        ...teamSetting,
         status: "missing",
       },
       warningThresholdPercent: 80,
@@ -381,14 +394,14 @@ describe("syncCursorProvider", () => {
       severity: "warning",
       rawMessage: snapshot.warningReason,
       params: {
-        providerId: "cursor",
+        providerId: "cursor-team-api",
         sourceKind: "official_api",
-        hostLabel: "api.cursor.com · cursor.com",
+        hostLabel: "api.cursor.com",
       },
     });
     expect(snapshot.lastSyncLabel).toBe("Cursor Admin API access required");
     expect(snapshot.sourceSelectionReason).toBe(
-      "Auto could not find an available live source.",
+      "Official API preference could not find an available live source.",
     );
     expect(snapshot.sourceSelectionDiagnostic).toBeNull();
     expect(snapshot.sourceFallbackDiagnostic).toBeNull();
@@ -416,38 +429,26 @@ describe("syncCursorProvider", () => {
       now: attemptedAt,
     });
 
-    expect(snapshot.syncSource).toBe("official");
-    expect(snapshot.syncStatus).toBe("error");
-    expect(snapshot.tone).toBe("error");
+    expect(snapshot.syncSource).toBe("page_parse");
+    expect(snapshot.syncStatus).toBe("warning");
+    expect(snapshot.tone).toBe("warning");
     expect(snapshot.warningReason).toContain(
-      "No Cursor Admin API key is stored.",
+      "Open the logged-in Cursor dashboard usage page",
     );
     expect(snapshot.warningDiagnostic).toMatchObject({
-      code: "credential.admin_api_key_missing",
-      category: "credential",
-      severity: "error",
+      code: "page_session.open_page_required",
+      category: "page_session",
+      severity: "warning",
       rawMessage: snapshot.warningReason,
       params: {
-        providerId: "cursor",
-        credentialKind: "admin_api_key",
+        providerId: "cursor-personal-page",
+        pageSessionKind: "open_page_required",
       },
     });
-    expect(snapshot.lastSyncLabel).toBe("Cursor Admin API key required");
+    expect(snapshot.lastSyncLabel).toBe("Cursor usage page not open");
     expect(snapshot.usageSummary).toBeNull();
-    expect(snapshot.sourceFallbackReason).toContain(
-      "Session page unavailable: Open the logged-in Cursor dashboard usage page",
-    );
-    expect(snapshot.sourceFallbackDiagnostic).toMatchObject({
-      code: "source.no_live_path",
-      category: "source_fallback",
-      severity: "error",
-      rawMessage: snapshot.sourceFallbackReason,
-      params: {
-        providerId: "cursor",
-        sourcePreference: "auto",
-        failureCount: 2,
-      },
-    });
+    expect(snapshot.sourceFallbackReason).toBeNull();
+    expect(snapshot.sourceFallbackDiagnostic).toBeNull();
   });
 
   it("keeps page-session diagnostics visible when Session page is preferred and no fallback source succeeds", async () => {
@@ -485,19 +486,14 @@ describe("syncCursorProvider", () => {
       severity: "warning",
       rawMessage: snapshot.warningReason,
       params: {
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         pageSessionKind: "open_page_required",
       },
     });
     expect(snapshot.sourceSelectionReason).toBe(
       "Session page preference could not find an available live source.",
     );
-    expect(snapshot.sourceFallbackReason).toContain(
-      "Session page unavailable: Open the logged-in Cursor dashboard usage page",
-    );
-    expect(snapshot.sourceFallbackReason).toContain(
-      "Official API unavailable: No Cursor Admin API key is stored.",
-    );
+    expect(snapshot.sourceFallbackReason).toBeNull();
   });
 
   it("keeps capture-unavailable page-session diagnostics visible when a bound Cursor tab cannot be read", async () => {
@@ -542,7 +538,7 @@ describe("syncCursorProvider", () => {
       severity: "error",
       rawMessage: snapshot.warningReason,
       params: {
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         pageSessionKind: "capture_unavailable",
       },
     });
@@ -550,12 +546,7 @@ describe("syncCursorProvider", () => {
       "Reload the Cursor dashboard usage page and refresh again",
     );
     expect(snapshot.lastSyncLabel).toBe("Cursor usage page unavailable");
-    expect(snapshot.sourceFallbackReason).toContain(
-      "Session page unavailable: The open Cursor dashboard usage page could not be read",
-    );
-    expect(snapshot.sourceFallbackReason).toContain(
-      "Official API unavailable: No Cursor Admin API key is stored.",
-    );
+    expect(snapshot.sourceFallbackReason).toBeNull();
   });
 
   it("maps Cursor parser route drift to a typed adapter parse diagnostic", async () => {
@@ -593,7 +584,7 @@ describe("syncCursorProvider", () => {
       severity: "error",
       rawMessage: snapshot.warningReason,
       params: {
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         adapterErrorKind: "parse_failed",
         sourceKind: "session_page",
         failureCode: "route_drift",
@@ -601,9 +592,7 @@ describe("syncCursorProvider", () => {
       },
     });
     expect(snapshot.lastSyncLabel).toBe("Cursor usage page parse failed");
-    expect(snapshot.sourceFallbackReason).toContain(
-      "Session page unavailable: The matched Cursor usage page no longer exposed parseable",
-    );
+    expect(snapshot.sourceFallbackReason).toBeNull();
   });
 
   it("falls back to the personal page when Official API is preferred but the Admin API key is missing", async () => {
@@ -611,7 +600,7 @@ describe("syncCursorProvider", () => {
     const personalResult: CursorPersonalParseResult = {
       status: "ok",
       snapshot: {
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         providerLabel: "Cursor",
         measurementKind: "billing_period_usage",
         routeKey: "dashboard_usage",
@@ -656,7 +645,7 @@ describe("syncCursorProvider", () => {
       severity: "info",
       rawMessage: "On-demand usage is off.",
       params: {
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         usageThresholdKind: "on_demand_off",
         unitLabel: "requests",
       },
@@ -665,25 +654,20 @@ describe("syncCursorProvider", () => {
       "Visible Cursor usage: Visible plans: Pro · Pro+ · Ultra · On-demand usage is off. · CSV export available",
     );
     expect(snapshot.sourceSelectionReason).toBe(
-      "Official API preference fell back to Session page.",
+      "Session page is the only shipped source for cursor-personal-page.",
     );
     expect(snapshot.sourceSelectionDiagnostic).toMatchObject({
       code: "source.preference_selected_session_page",
       rawMessage: snapshot.sourceSelectionReason,
       params: {
-        providerId: "cursor",
-        sourcePreference: "official_api",
+        providerId: "cursor-personal-page",
+        sourcePreference: "session_page",
         selectedKind: "session_page",
-        hadFallback: true,
+        hadFallback: false,
       },
     });
-    expect(snapshot.sourceFallbackReason).toBe(
-      "Official API unavailable: No Cursor Admin API key is stored.",
-    );
-    expect(snapshot.sourceFallbackDiagnostic).toMatchObject({
-      code: "source.official_api_missing_credential",
-      rawMessage: snapshot.sourceFallbackReason,
-    });
+    expect(snapshot.sourceFallbackReason).toBeNull();
+    expect(snapshot.sourceFallbackDiagnostic).toBeNull();
   });
 
   it("falls back to Official API when Session page is preferred but the page is not open", async () => {
@@ -749,7 +733,7 @@ describe("syncCursorProvider", () => {
       provider: baseProvider,
       secrets: {
         ...emptySecrets,
-        cursor: {
+        "cursor-team-api": {
           adminApiKey: "cursor-live-key",
         },
       },
@@ -761,35 +745,13 @@ describe("syncCursorProvider", () => {
       now: attemptedAt,
     });
 
-    expect(snapshot.syncSource).toBe("official");
+    expect(snapshot.syncSource).toBe("page_parse");
     expect(snapshot.sourceSelectionReason).toBe(
-      "Session page preference fell back to Official API.",
+      "Session page preference could not find an available live source.",
     );
-    expect(snapshot.sourceSelectionDiagnostic).toMatchObject({
-      code: "source.preference_selected_official_api",
-      rawMessage: snapshot.sourceSelectionReason,
-      params: {
-        providerId: "cursor",
-        sourcePreference: "session_page",
-        selectedKind: "official_api",
-        hadFallback: true,
-      },
-    });
-    expect(snapshot.sourceFallbackReason).toBe(
-      "Session page unavailable: Open the logged-in Cursor dashboard usage page before refreshing personal usage capture.",
-    );
-    expect(snapshot.sourceFallbackDiagnostic).toMatchObject({
-      code: "source.session_page_unavailable",
-      category: "source_fallback",
-      severity: "error",
-      rawMessage: snapshot.sourceFallbackReason,
-      params: {
-        providerId: "cursor",
-        sourcePreference: "session_page",
-        failedSourceKind: "session_page",
-        failureCode: "open_page_required",
-      },
-    });
+    expect(snapshot.sourceSelectionDiagnostic).toBeNull();
+    expect(snapshot.sourceFallbackReason).toBeNull();
+    expect(snapshot.sourceFallbackDiagnostic).toBeNull();
   });
 
   it("enables managed Cursor page opening on alarm after a page binding exists", async () => {

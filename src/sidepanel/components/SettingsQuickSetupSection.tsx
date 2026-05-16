@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import type {
   ProviderId,
   ProviderTone,
@@ -5,6 +7,7 @@ import type {
   ProviderSnapshot,
   SettingsUserLevel,
 } from "../../providers/types";
+import { getProviderDefinition } from "../../providers/provider-definitions";
 import type { ResolvedTextDirection } from "../../shared/i18n";
 import { getRecommendedFirstSetupProvider } from "../../shared/first-provider-setup";
 import { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
@@ -52,10 +55,22 @@ export function SettingsQuickSetupSection({
   onTogglePermission,
   onToggleProvider,
 }: SettingsQuickSetupSectionProps) {
+  const [showTeamApiProviders, setShowTeamApiProviders] = useState(false);
   const snapshotMap = new Map(
     snapshots.map((snapshot) => [snapshot.providerId, snapshot]),
   );
-  const enabledProviders = providers.filter((provider) => provider.enabled);
+  const quickSetupProviders = providers.filter((provider) => {
+    const definition = getProviderDefinition(provider.id);
+
+    return (
+      definition.quickSetupDefaultVisible ||
+      showTeamApiProviders ||
+      provider.id === focusedProviderId
+    );
+  });
+  const enabledProviders = quickSetupProviders.filter(
+    (provider) => provider.displayEnabled,
+  );
   const firstSetupProvider =
     enabledProviders.length === 0
       ? getRecommendedFirstSetupProvider(providers)
@@ -120,6 +135,9 @@ export function SettingsQuickSetupSection({
       (action, index, actions) =>
         actions.findIndex((candidate) => candidate.id === action.id) === index,
     );
+    const starterProviderLabel = isStarter
+      ? getProviderDefinition(provider.id).shortLabel
+      : provider.label;
 
     return (
       <article
@@ -138,12 +156,16 @@ export function SettingsQuickSetupSection({
             ) : null}
             <p className="quick-setup-card__provider">
               {isStarter
-                ? settingsCopy.quickSetup.firstProvider.title(provider.label)
+                ? settingsCopy.quickSetup.firstProvider.title(
+                    starterProviderLabel,
+                  )
                 : model.providerLabel}
             </p>
             <p className="supporting-copy">
               {isStarter
-                ? settingsCopy.quickSetup.firstProvider.detail(provider.label)
+                ? settingsCopy.quickSetup.firstProvider.detail(
+                    starterProviderLabel,
+                  )
                 : model.helperText}
             </p>
           </div>
@@ -162,14 +184,14 @@ export function SettingsQuickSetupSection({
           <label
             className="switch-row quick-setup-card__visibility"
             data-visibility-provider-id={provider.id}
-            data-visibility-enabled={provider.enabled ? "true" : "false"}
+            data-visibility-enabled={provider.displayEnabled ? "true" : "false"}
           >
             <div>
               <p className="switch-row__title">
                 {settingsCopy.quickSetup.visibilityLabel}
               </p>
               <p className="supporting-copy">
-                {provider.enabled
+                {provider.displayEnabled
                   ? settingsCopy.quickSetup.actions.disableProvider
                   : settingsCopy.quickSetup.actions.enableProvider}
               </p>
@@ -177,7 +199,7 @@ export function SettingsQuickSetupSection({
             <input
               className="switch-row__control"
               type="checkbox"
-              checked={provider.enabled}
+              checked={provider.displayEnabled}
               data-visibility-toggle={provider.id}
               onChange={() => onToggleProvider(provider.id)}
             />
@@ -196,7 +218,9 @@ export function SettingsQuickSetupSection({
             </p>
             <p className="source-card__value">
               {isStarter
-                ? settingsCopy.quickSetup.firstProvider.action(provider.label)
+                ? settingsCopy.quickSetup.firstProvider.action(
+                    starterProviderLabel,
+                  )
                 : model.nextStepValue}
             </p>
           </div>
@@ -268,7 +292,9 @@ export function SettingsQuickSetupSection({
                 onClick={() => runAction(provider, model.primaryAction!)}
               >
                 {isStarter && model.primaryAction.id === "enable_provider"
-                  ? settingsCopy.quickSetup.firstProvider.action(provider.label)
+                  ? settingsCopy.quickSetup.firstProvider.action(
+                      starterProviderLabel,
+                    )
                   : model.primaryAction.label}
               </button>
             ) : null}
@@ -291,7 +317,7 @@ export function SettingsQuickSetupSection({
     );
   }
 
-  const quickSetupItems: ProviderCarouselItem[] = providers.flatMap((provider) => {
+  const quickSetupItems: ProviderCarouselItem[] = quickSetupProviders.flatMap((provider) => {
       const snapshot = snapshotMap.get(provider.id);
       const isStarter =
         firstSetupProvider !== null && provider.id === firstSetupProvider.id;
@@ -325,6 +351,16 @@ export function SettingsQuickSetupSection({
             </MaterialInfoTooltip>
           </div>
         </div>
+        <button
+          className="text-button"
+          type="button"
+          aria-expanded={showTeamApiProviders}
+          onClick={() => setShowTeamApiProviders((current) => !current)}
+        >
+          {showTeamApiProviders
+            ? settingsCopy.quickSetup.hideTeamApiProviders
+            : settingsCopy.quickSetup.showTeamApiProviders}
+        </button>
       </div>
 
       <ProviderCarousel

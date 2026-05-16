@@ -6,8 +6,10 @@ import type {
   AppState,
   ProviderId,
   ProviderSecrets,
+  ProviderSetting,
   ProviderSourceBlueprint,
 } from "../providers/types";
+import { getProviderDefinition } from "../providers/provider-definitions";
 import {
   DEFAULT_FULL_PAGE_PROGRESS_STYLE,
   DEFAULT_POPUP_PROGRESS_STYLE,
@@ -41,8 +43,9 @@ import {
   createDefaultProviderOrderBySurface,
 } from "./display-preferences";
 import {
+  createCredentialDiagnostic,
+  createPageSessionDiagnostic,
   createPolicyOnlyDiagnostic,
-  createSourceFallbackDiagnostic,
   createSourceSelectionDiagnostic,
   createUsageThresholdDiagnostic,
 } from "../providers/diagnostics";
@@ -51,34 +54,14 @@ import { createEmptyPageBinding } from "./page-bindings";
 export const APP_STATE_STORAGE_KEY = "ai-usage-dashboard.app-state";
 export const PROVIDER_SECRETS_STORAGE_KEY = "ai-usage-dashboard.provider-secrets";
 
-export const PROVIDER_SOURCE_BLUEPRINTS: Record<
-  ProviderId,
-  ProviderSourceBlueprint
-> = {
-  cursor: {
-    preferredSourceKind: "official_api",
-    fallbackOrder: ["official_api", "session_page"],
+export const PROVIDER_SOURCE_BLUEPRINTS: Record<ProviderId, ProviderSourceBlueprint> = {
+  "cursor-personal-page": {
+    preferredSourceKind: "session_page",
+    fallbackOrder: ["session_page"],
     credentialPersistence: "extension_local_only",
     cookiePersistence: "forbidden",
     manualCookieImport: "forbidden",
     sources: [
-      {
-        kind: "official_api",
-        rolloutStage: "shipped",
-        connectionMode: "credential",
-        contractKind: "shipped_admin_analytics",
-        priority: 1,
-        label: "Cursor Team Admin API",
-        routeHints: ["https://api.cursor.com/*"],
-        usedAvailability: "exact",
-        remainingAvailability: "window_only",
-        resetAvailability: "exact",
-        contractDetail:
-          "Current shipped contract for Cursor team-admin accounts. This live admin API path is separate from the personal dashboard contract.",
-        graduationGateLabel: null,
-        graduationGateDetail: null,
-        note: "Current release path for team-admin accounts.",
-      },
       {
         kind: "session_page",
         rolloutStage: "shipped",
@@ -103,7 +86,33 @@ export const PROVIDER_SOURCE_BLUEPRINTS: Record<
       },
     ],
   },
-  jetbrains: {
+  "cursor-team-api": {
+    preferredSourceKind: "official_api",
+    fallbackOrder: ["official_api"],
+    credentialPersistence: "extension_local_only",
+    cookiePersistence: "forbidden",
+    manualCookieImport: "forbidden",
+    sources: [
+      {
+        kind: "official_api",
+        rolloutStage: "shipped",
+        connectionMode: "credential",
+        contractKind: "shipped_admin_analytics",
+        priority: 1,
+        label: "Cursor Team Admin API",
+        routeHints: ["https://api.cursor.com/*"],
+        usedAvailability: "exact",
+        remainingAvailability: "window_only",
+        resetAvailability: "exact",
+        contractDetail:
+          "Current shipped contract for Cursor team-admin accounts. This live admin API path is separate from the personal dashboard contract.",
+        graduationGateLabel: null,
+        graduationGateDetail: null,
+        note: "Current release path for team-admin accounts.",
+      },
+    ],
+  },
+  "jetbrains-org-page": {
     preferredSourceKind: "session_page",
     fallbackOrder: ["session_page"],
     credentialPersistence: "not_applicable",
@@ -135,9 +144,36 @@ export const PROVIDER_SOURCE_BLUEPRINTS: Record<
       },
     ],
   },
-  "claude-code": {
+  "claude-code-team-page": {
+    preferredSourceKind: "session_page",
+    fallbackOrder: ["session_page"],
+    credentialPersistence: "extension_local_only",
+    cookiePersistence: "forbidden",
+    manualCookieImport: "forbidden",
+    sources: [
+      {
+        kind: "session_page",
+        rolloutStage: "shipped",
+        connectionMode: "page_session",
+        contractKind: "shipped_personal_partial",
+        priority: 2,
+        label: "Claude Team usage page",
+        routeHints: ["https://claude.ai/settings/usage*"],
+        usedAvailability: "window_only",
+        remainingAvailability: "exact",
+        resetAvailability: "window_only",
+        contractDetail:
+          "Current shipped Team-session contract. The logged-in Claude settings usage page can expose visible usage-window context, but the extension only reports fields that are visible in the page session.",
+        graduationGateLabel: null,
+        graduationGateDetail: null,
+        note:
+          "Graduated after a real Claude Team account became available. Upgrade-only or logged-out redirects still remain explicit page-session warning states.",
+      },
+    ],
+  },
+  "claude-code-admin-api": {
     preferredSourceKind: "official_api",
-    fallbackOrder: ["official_api", "session_page"],
+    fallbackOrder: ["official_api"],
     credentialPersistence: "extension_local_only",
     cookiePersistence: "forbidden",
     manualCookieImport: "forbidden",
@@ -160,29 +196,11 @@ export const PROVIDER_SOURCE_BLUEPRINTS: Record<
         note:
           "Current release path for organization analytics. Exact remaining included quota is not exposed.",
       },
-      {
-        kind: "session_page",
-        rolloutStage: "shipped",
-        connectionMode: "page_session",
-        contractKind: "shipped_personal_partial",
-        priority: 2,
-        label: "Claude Team usage page",
-        routeHints: ["https://claude.ai/settings/usage*"],
-        usedAvailability: "window_only",
-        remainingAvailability: "exact",
-        resetAvailability: "window_only",
-        contractDetail:
-          "Current shipped Team-session contract. The logged-in Claude settings usage page can expose visible usage-window context, but the extension only reports fields that are visible in the page session.",
-        graduationGateLabel: null,
-        graduationGateDetail: null,
-        note:
-          "Graduated after a real Claude Team account became available. Upgrade-only or logged-out redirects still remain explicit page-session warning states.",
-      },
     ],
   },
-  gemini: {
+  "gemini-policy": {
     preferredSourceKind: "policy_only",
-    fallbackOrder: ["policy_only", "session_page"],
+    fallbackOrder: ["policy_only"],
     credentialPersistence: "not_applicable",
     cookiePersistence: "forbidden",
     manualCookieImport: "forbidden",
@@ -205,54 +223,15 @@ export const PROVIDER_SOURCE_BLUEPRINTS: Record<
         note:
           "Current shipped behavior. No stable official per-user live usage source is selected in v1.",
       },
-      {
-        kind: "session_page",
-        rolloutStage: "deferred",
-        connectionMode: "page_session",
-        contractKind: "deferred_project_metrics",
-        priority: 2,
-        label: "Google Cloud Gemini metrics page",
-        routeHints: [
-          "https://console.cloud.google.com/gemini-code-assist/metrics",
-        ],
-        usedAvailability: "analytics_only",
-        remainingAvailability: "unavailable",
-        resetAvailability: "window_only",
-        contractDetail:
-          "Deferred project-metrics contract. The observed Google Cloud route is project-scoped rather than a simple personal quota page.",
-        graduationGateLabel: "Accept project-metrics support",
-        graduationGateDetail:
-          "Graduate this path only if the product explicitly accepts bound-tab project metrics as a supported contract.",
-        note:
-          "Deferred after the 2026-04-22 project-metrics spike. The live Chrome session confirmed a project-scoped `metrics?project=...` route with Google Cloud console `dynamicFrame` and `pangolin/iframe` markers, which is materially different from a simple personal usage page. Revisit only if the product explicitly adds bound-tab project metrics support.",
-      },
     ],
   },
-  codex: {
-    preferredSourceKind: "official_api",
-    fallbackOrder: ["official_api", "session_page"],
+  "codex-personal-page": {
+    preferredSourceKind: "session_page",
+    fallbackOrder: ["session_page"],
     credentialPersistence: "extension_local_only",
     cookiePersistence: "forbidden",
     manualCookieImport: "forbidden",
     sources: [
-      {
-        kind: "official_api",
-        rolloutStage: "shipped",
-        connectionMode: "credential",
-        contractKind: "shipped_enterprise_analytics",
-        priority: 1,
-        label: "Codex Enterprise analytics API",
-        routeHints: ["https://api.chatgpt.com/*"],
-        usedAvailability: "analytics_only",
-        remainingAvailability: "unavailable",
-        resetAvailability: "window_only",
-        contractDetail:
-          "Current shipped contract for Codex Enterprise workspaces. This live analytics path is separate from the personal session-page contract and does not expose one absolute remaining credit balance.",
-        graduationGateLabel: null,
-        graduationGateDetail: null,
-        note:
-          "Current release path for Enterprise workspaces. Exact remaining workspace credits are not exposed.",
-      },
       {
         kind: "session_page",
         rolloutStage: "shipped",
@@ -277,26 +256,79 @@ export const PROVIDER_SOURCE_BLUEPRINTS: Record<
       },
     ],
   },
+  "codex-enterprise-api": {
+    preferredSourceKind: "official_api",
+    fallbackOrder: ["official_api"],
+    credentialPersistence: "extension_local_only",
+    cookiePersistence: "forbidden",
+    manualCookieImport: "forbidden",
+    sources: [
+      {
+        kind: "official_api",
+        rolloutStage: "shipped",
+        connectionMode: "credential",
+        contractKind: "shipped_enterprise_analytics",
+        priority: 1,
+        label: "Codex Enterprise analytics API",
+        routeHints: ["https://api.chatgpt.com/*"],
+        usedAvailability: "analytics_only",
+        remainingAvailability: "unavailable",
+        resetAvailability: "window_only",
+        contractDetail:
+          "Current shipped contract for Codex Enterprise workspaces. This live analytics path is separate from the personal session-page contract and does not expose one absolute remaining credit balance.",
+        graduationGateLabel: null,
+        graduationGateDetail: null,
+        note:
+          "Current release path for Enterprise workspaces. Exact remaining workspace credits are not exposed.",
+      },
+    ],
+  },
 };
 
 export const SAMPLE_PROVIDER_SECRETS: ProviderSecrets = {
-  cursor: {
+  "cursor-team-api": {
     adminApiKey: null,
   },
-  "claude-code": {
+  "claude-code-admin-api": {
     adminApiKey: null,
   },
-  codex: {
+  "codex-enterprise-api": {
     analyticsApiKey: null,
     workspaceId: null,
   },
 };
 
+function createProviderSetting(
+  id: ProviderId,
+  values: Omit<
+    ProviderSetting,
+    | "id"
+    | "brandId"
+    | "label"
+    | "displayEnabled"
+    | "sourceKind"
+    | "connectionMode"
+    | "sourcePreference"
+  >,
+): ProviderSetting {
+  const definition = getProviderDefinition(id);
+  return {
+    id,
+    brandId: definition.brandId,
+    label: definition.label,
+    displayEnabled: definition.defaultDisplayEnabled,
+    sourceKind: definition.sourceKind,
+    connectionMode: definition.connectionMode,
+    sourcePreference: definition.fixedSourcePreference,
+    ...values,
+  };
+}
+
 export const SAMPLE_APP_STATE: AppState = {
   providers: [
     {
-      providerId: "cursor",
-      providerLabel: "Cursor",
+      providerId: "cursor-personal-page",
+      providerLabel: "Cursor Personal",
       planName: "Cursor Personal Dashboard",
       quotaUnit: "requests",
       quotaWindow: "monthly",
@@ -310,31 +342,21 @@ export const SAMPLE_APP_STATE: AppState = {
       syncStatus: "ok",
       warningReason: "On-demand usage is off.",
       warningDiagnostic: createUsageThresholdDiagnostic({
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         usageThresholdKind: "on_demand_off",
         rawMessage: "On-demand usage is off.",
         unitLabel: "requests",
       }),
       lastSyncLabel: "Synced 2m ago",
-      sourceSelectionReason: "Auto selected Session page.",
+      sourceSelectionReason: "Session page selected.",
       sourceSelectionDiagnostic: createSourceSelectionDiagnostic({
-        providerId: "cursor",
-        sourcePreference: "auto",
+        providerId: "cursor-personal-page",
+        sourcePreference: "session_page",
         selectedKind: "session_page",
-        hadFallback: true,
-        rawMessage: "Auto selected Session page.",
+        hadFallback: false,
+        rawMessage: "Session page selected.",
       }),
-      sourceFallbackReason: "Official API unavailable: no Cursor Admin API key is stored.",
-      sourceFallbackDiagnostic: createSourceFallbackDiagnostic({
-        providerId: "cursor",
-        sourcePreference: "auto",
-        failure: {
-          kind: "official_api",
-          code: "credential_missing",
-          detail: "no Cursor Admin API key is stored",
-        },
-        rawMessage: "Official API unavailable: no Cursor Admin API key is stored.",
-      }),
+      sourceFallbackReason: null,
       usageFacts: [
         {
           label: "Billing period",
@@ -360,7 +382,47 @@ export const SAMPLE_APP_STATE: AppState = {
       tone: "neutral",
     },
     {
-      providerId: "jetbrains",
+      providerId: "cursor-team-api",
+      providerLabel: "Cursor Team API",
+      planName: "Cursor Team Admin API",
+      quotaUnit: "requests",
+      quotaWindow: "monthly",
+      used: null,
+      remaining: null,
+      total: null,
+      resetAt: "Admin API key required",
+      resetLabel: "Add a Cursor Admin API key to sync team analytics.",
+      syncedAt: "2026-04-20 10:42",
+      syncSource: "official",
+      syncStatus: "warning",
+      warningReason: "Cursor Admin API key is missing.",
+      warningDiagnostic: createCredentialDiagnostic({
+        providerId: "cursor-team-api",
+        credentialKind: "admin_api_key",
+        rawMessage: "Cursor Admin API key is missing.",
+      }),
+      lastSyncLabel: "Credentials needed",
+      sourceSelectionReason: "Official API selected.",
+      sourceSelectionDiagnostic: createSourceSelectionDiagnostic({
+        providerId: "cursor-team-api",
+        sourcePreference: "official_api",
+        selectedKind: "official_api",
+        hadFallback: false,
+        rawMessage: "Official API selected.",
+      }),
+      sourceFallbackReason: null,
+      usageFacts: [
+        {
+          label: "Credential",
+          value: "Missing",
+          detail: "Store a Cursor Admin API key before team analytics can sync.",
+          tone: "warning",
+        },
+      ],
+      tone: "warning",
+    },
+    {
+      providerId: "jetbrains-org-page",
       providerLabel: "JetBrains AI",
       planName: "AI Pro",
       quotaUnit: "credits",
@@ -375,7 +437,7 @@ export const SAMPLE_APP_STATE: AppState = {
       syncStatus: "warning",
       warningReason: "80% of included credits consumed",
       warningDiagnostic: createUsageThresholdDiagnostic({
-        providerId: "jetbrains",
+        providerId: "jetbrains-org-page",
         usageThresholdKind: "threshold_warning",
         rawMessage: "80% of included credits consumed",
         usagePercent: 80,
@@ -389,8 +451,40 @@ export const SAMPLE_APP_STATE: AppState = {
       tone: "warning",
     },
     {
-      providerId: "claude-code",
-      providerLabel: "Claude Code",
+      providerId: "claude-code-team-page",
+      providerLabel: "Claude Team",
+      planName: "Claude Team usage page",
+      quotaUnit: "percent",
+      quotaWindow: "daily",
+      used: null,
+      remaining: null,
+      total: null,
+      resetAt: "Visible Team usage windows",
+      resetLabel: "Open the logged-in Claude usage page to refresh visible windows.",
+      syncedAt: "2026-04-20 10:08",
+      syncSource: "page_parse",
+      syncStatus: "warning",
+      warningReason: "Claude Team usage page has not been attached in this profile.",
+      warningDiagnostic: createPageSessionDiagnostic({
+        providerId: "claude-code-team-page",
+        pageSessionKind: "open_page_required",
+        rawMessage: "Claude Team usage page has not been attached in this profile.",
+      }),
+      lastSyncLabel: "Usage page needed",
+      sourceSelectionReason: "Session page selected.",
+      sourceSelectionDiagnostic: createSourceSelectionDiagnostic({
+        providerId: "claude-code-team-page",
+        sourcePreference: "session_page",
+        selectedKind: "session_page",
+        hadFallback: false,
+        rawMessage: "Session page selected.",
+      }),
+      sourceFallbackReason: null,
+      tone: "warning",
+    },
+    {
+      providerId: "claude-code-admin-api",
+      providerLabel: "Claude Admin API",
       planName: "Analytics Admin API",
       quotaUnit: "sessions",
       quotaWindow: "daily",
@@ -411,7 +505,7 @@ export const SAMPLE_APP_STATE: AppState = {
       tone: "warning",
     },
     {
-      providerId: "gemini",
+      providerId: "gemini-policy",
       providerLabel: "Gemini Code Assist",
       planName: "Gemini Code Assist Enterprise (documented policy)",
       quotaUnit: "requests",
@@ -428,7 +522,7 @@ export const SAMPLE_APP_STATE: AppState = {
       warningReason:
         "120/min and 2000/day per user for Gemini CLI and agent mode. No stable official per-user live usage source is documented.",
       warningDiagnostic: createPolicyOnlyDiagnostic({
-        providerId: "gemini",
+        providerId: "gemini-policy",
         policyOnlyKind: "documented_limit_only",
         rawMessage:
           "120/min and 2000/day per user for Gemini CLI and agent mode. No stable official per-user live usage source is documented.",
@@ -440,8 +534,61 @@ export const SAMPLE_APP_STATE: AppState = {
       tone: "warning",
     },
     {
-      providerId: "codex",
-      providerLabel: "Codex",
+      providerId: "codex-personal-page",
+      providerLabel: "Codex Personal",
+      planName: "Codex personal usage pages",
+      quotaUnit: "percent",
+      quotaWindow: "rolling",
+      used: 25,
+      remaining: 75,
+      total: 100,
+      resetAt: "2026-04-20 15:55",
+      resetLabel: "5-hour usage window resets at 15:55",
+      syncedAt: "2026-04-20 10:18",
+      syncSource: "page_parse",
+      syncStatus: "ok",
+      warningReason: null,
+      lastSyncLabel: "Usage page snapshot 24m ago",
+      sourceSelectionReason: "Session page selected.",
+      sourceSelectionDiagnostic: createSourceSelectionDiagnostic({
+        providerId: "codex-personal-page",
+        sourcePreference: "session_page",
+        selectedKind: "session_page",
+        hadFallback: false,
+        rawMessage: "Session page selected.",
+      }),
+      sourceFallbackReason: null,
+      usageWindows: [
+        {
+          label: "5-hour usage window",
+          normalizedLabel: "5-hour usage window",
+          kind: "rolling_5h",
+          modelLabel: null,
+          quotaUnit: "percent",
+          used: 25,
+          remaining: 75,
+          total: 100,
+          resetAt: "2026-04-20 15:55",
+          resetLabel: "Resets at 15:55",
+        },
+        {
+          label: "Weekly usage window",
+          normalizedLabel: "Weekly usage window",
+          kind: "weekly",
+          modelLabel: null,
+          quotaUnit: "percent",
+          used: 59,
+          remaining: 41,
+          total: 100,
+          resetAt: "2026-04-21 09:15",
+          resetLabel: "Resets Apr 21 09:15",
+        },
+      ],
+      tone: "neutral",
+    },
+    {
+      providerId: "codex-enterprise-api",
+      providerLabel: "Codex Enterprise API",
       planName: "Codex Analytics API (Enterprise workspace)",
       quotaUnit: "credits",
       quotaWindow: "daily",
@@ -457,39 +604,40 @@ export const SAMPLE_APP_STATE: AppState = {
       warningReason:
         "Enterprise analytics API selected. Exact remaining workspace credits are not exposed by the analytics endpoint.",
       lastSyncLabel: "Analytics snapshot 24m ago",
-      sourceSelectionReason: "Auto selected Official API.",
+      sourceSelectionReason: "Official API selected.",
       sourceSelectionDiagnostic: createSourceSelectionDiagnostic({
-        providerId: "codex",
-        sourcePreference: "auto",
+        providerId: "codex-enterprise-api",
+        sourcePreference: "official_api",
         selectedKind: "official_api",
         hadFallback: false,
-        rawMessage: "Auto selected Official API.",
+        rawMessage: "Official API selected.",
       }),
       sourceFallbackReason: null,
       tone: "warning",
     },
   ],
   providerSettings: [
-    {
-      id: "cursor",
-      label: "Cursor",
-      enabled: true,
+    createProviderSetting("cursor-personal-page", {
+      status: "granted",
+      credentialStatus: "not_required",
+      pageBinding: createEmptyPageBinding(),
+      hostsLabel: "cursor.com",
+      hostOrigins: ["https://cursor.com/*"],
+      description:
+        "Uses the logged-in Cursor personal usage page. Display is independent from browser access.",
+    }),
+    createProviderSetting("cursor-team-api", {
       status: "granted",
       credentialStatus: "missing",
-      sourcePreference: "auto",
       pageBinding: createEmptyPageBinding(),
-      hostsLabel: "api.cursor.com · cursor.com",
-      hostOrigins: ["https://api.cursor.com/*", "https://cursor.com/*"],
+      hostsLabel: "api.cursor.com",
+      hostOrigins: ["https://api.cursor.com/*"],
       description:
-        "Uses the team Admin API when a key is configured, or the logged-in personal usage page when no key is stored.",
-    },
-    {
-      id: "jetbrains",
-      label: "JetBrains AI",
-      enabled: false,
+        "Uses the Cursor team Admin API when an API key is configured.",
+    }),
+    createProviderSetting("jetbrains-org-page", {
       status: "missing",
       credentialStatus: "not_required",
-      sourcePreference: "auto",
       pageBinding: createEmptyPageBinding(),
       hostsLabel: "account.jetbrains.com · jetbrains.com",
       hostOrigins: [
@@ -498,50 +646,52 @@ export const SAMPLE_APP_STATE: AppState = {
       ],
       description:
         "Retained repo path for JetBrains organization AI Credits usage pages. Deferred from the active RC until a real org-visible Users and licensing session is reverified.",
-    },
-    {
-      id: "claude-code",
-      label: "Claude Code",
-      enabled: true,
-      status: "granted",
-      credentialStatus: "missing",
-      sourcePreference: "auto",
-      pageBinding: createEmptyPageBinding(),
-      hostsLabel: "api.anthropic.com · platform.claude.com · claude.ai",
-      hostOrigins: [
-        "https://api.anthropic.com/*",
-        "https://platform.claude.com/*",
-        "https://claude.ai/*",
-      ],
-      description:
-        "Uses the Claude Code Analytics Admin API when a key is configured, or the logged-in Claude Team usage page when no key is stored.",
-    },
-    {
-      id: "gemini",
-      label: "Gemini Code Assist",
-      enabled: true,
+    }),
+    createProviderSetting("claude-code-team-page", {
       status: "granted",
       credentialStatus: "not_required",
-      sourcePreference: "auto",
+      pageBinding: createEmptyPageBinding(),
+      hostsLabel: "claude.ai",
+      hostOrigins: ["https://claude.ai/*"],
+      description:
+        "Uses the logged-in Claude Team usage page. Display is independent from browser access.",
+    }),
+    createProviderSetting("claude-code-admin-api", {
+      status: "granted",
+      credentialStatus: "missing",
+      pageBinding: createEmptyPageBinding(),
+      hostsLabel: "api.anthropic.com · platform.claude.com",
+      hostOrigins: ["https://api.anthropic.com/*", "https://platform.claude.com/*"],
+      description:
+        "Uses the Claude Code Analytics Admin API when an API key is configured.",
+    }),
+    createProviderSetting("gemini-policy", {
+      status: "granted",
+      credentialStatus: "not_required",
       pageBinding: createEmptyPageBinding(),
       hostsLabel: "No host access required",
       hostOrigins: [],
       description:
         "Uses documented Gemini quota policy only; no stable live per-user usage source is selected in v1.",
-    },
-    {
-      id: "codex",
-      label: "Codex",
-      enabled: true,
+    }),
+    createProviderSetting("codex-personal-page", {
+      status: "granted",
+      credentialStatus: "not_required",
+      pageBinding: createEmptyPageBinding(),
+      hostsLabel: "chatgpt.com",
+      hostOrigins: ["https://chatgpt.com/*"],
+      description:
+        "Uses logged-in ChatGPT Codex usage pages. Display is independent from browser access.",
+    }),
+    createProviderSetting("codex-enterprise-api", {
       status: "granted",
       credentialStatus: "missing",
-      sourcePreference: "auto",
       pageBinding: createEmptyPageBinding(),
-      hostsLabel: "api.chatgpt.com + chatgpt.com",
-      hostOrigins: ["https://api.chatgpt.com/*", "https://chatgpt.com/*"],
+      hostsLabel: "api.chatgpt.com",
+      hostOrigins: ["https://api.chatgpt.com/*"],
       description:
-        "Targets the Codex Enterprise analytics API today and the logged-in ChatGPT Codex usage pages for the personal-user research track.",
-    },
+        "Uses the Codex Enterprise analytics API when an API key and workspace ID are configured.",
+    }),
   ],
   settings: {
     syncIntervalMinutes: DEFAULT_SYNC_INTERVAL_MINUTES,

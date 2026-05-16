@@ -60,7 +60,7 @@ export function hasSyncRelevantProviderSettingDrift(
   latestSetting: ProviderSetting,
 ): boolean {
   return (
-    startedSetting.enabled !== latestSetting.enabled ||
+    startedSetting.displayEnabled !== latestSetting.displayEnabled ||
     startedSetting.status !== latestSetting.status ||
     startedSetting.credentialStatus !== latestSetting.credentialStatus ||
     startedSetting.sourcePreference !== latestSetting.sourcePreference ||
@@ -182,7 +182,7 @@ export async function runSyncEngine({
 
       const shouldSync = providerId
         ? provider.providerId === providerId
-        : setting.enabled;
+        : setting.displayEnabled;
 
       if (!shouldSync) {
         return {

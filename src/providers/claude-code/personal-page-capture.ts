@@ -282,7 +282,7 @@ async function captureRoute(
   options: ClaudePersonalLiveCaptureOptions = {},
 ): Promise<ClaudePersonalRouteCapture> {
   const result = await client.capture({
-    providerId: "claude-code",
+    providerId: "claude-code-team-page",
     pageLabel: route.pageLabel,
     urlPatterns: route.urlPatterns,
     binding,

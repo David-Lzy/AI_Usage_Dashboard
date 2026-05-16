@@ -170,7 +170,7 @@ describe("provider source host permission contract", () => {
 
   it("keeps deferred Gemini project metrics outside current host permissions", () => {
     const geminiSetting = SAMPLE_APP_STATE.providerSettings.find(
-      (providerSetting) => providerSetting.id === "gemini",
+      (providerSetting) => providerSetting.id === "gemini-policy",
     );
 
     expect(geminiSetting?.hostOrigins).toEqual([]);

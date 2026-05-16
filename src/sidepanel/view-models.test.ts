@@ -26,10 +26,10 @@ describe("sidepanel view models", () => {
     const providers = getVisibleProviders(createState());
 
     expect(providers.map((provider) => provider.providerId)).toEqual([
-      "claude-code",
-      "codex",
-      "gemini",
-      "cursor",
+      "claude-code-team-page",
+      "gemini-policy",
+      "codex-personal-page",
+      "cursor-personal-page",
     ]);
   });
 
@@ -39,8 +39,8 @@ describe("sidepanel view models", () => {
         ...SAMPLE_APP_STATE.settings,
         providerOrderBySurface: {
           ...SAMPLE_APP_STATE.settings.providerOrderBySurface,
-          sidebar: ["cursor", "codex", "gemini", "claude-code", "jetbrains"],
-          fullPage: ["gemini", "codex", "cursor", "claude-code", "jetbrains"],
+          sidebar: ["cursor-personal-page", "codex-personal-page", "gemini-policy", "claude-code-team-page", "jetbrains-org-page"],
+          fullPage: ["gemini-policy", "codex-personal-page", "cursor-personal-page", "claude-code-team-page", "jetbrains-org-page"],
         },
       },
     });
@@ -49,28 +49,28 @@ describe("sidepanel view models", () => {
       getVisibleProviders(state, undefined, "sidebar").map(
         (provider) => provider.providerId,
       ),
-    ).toEqual(["cursor", "codex", "gemini", "claude-code"]);
+    ).toEqual(["cursor-personal-page", "codex-personal-page", "gemini-policy", "claude-code-team-page"]);
     expect(
       getVisibleProviders(state, undefined, "fullPage").map(
         (provider) => provider.providerId,
       ),
-    ).toEqual(["gemini", "codex", "cursor", "claude-code"]);
+    ).toEqual(["gemini-policy", "codex-personal-page", "cursor-personal-page", "claude-code-team-page"]);
     expect(getVisibleProviders(state).map((provider) => provider.providerId)).toEqual([
-      "claude-code",
-      "codex",
-      "gemini",
-      "cursor",
+      "claude-code-team-page",
+      "gemini-policy",
+      "codex-personal-page",
+      "cursor-personal-page",
     ]);
   });
 
   it("escalates a healthy provider to warning when host access is missing", () => {
     const state = createState({
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) =>
-        provider.id === "cursor" ? { ...provider, status: "missing" } : provider,
+        provider.id === "cursor-personal-page" ? { ...provider, status: "missing" } : provider,
       ),
     });
 
-    const cursor = getProviderViewModel(state, "cursor");
+    const cursor = getProviderViewModel(state, "cursor-personal-page");
 
     expect(cursor).not.toBeNull();
     expect(cursor?.displaySyncStatus).toBe("warning");
@@ -83,9 +83,9 @@ describe("sidepanel view models", () => {
 
     expect(summaryItems).toEqual([
       { label: "Visible", value: "4", tone: "neutral" },
-      { label: "Healthy", value: "1", tone: "neutral" },
+      { label: "Healthy", value: "2", tone: "neutral" },
       { label: "Needs Access", value: "0", tone: "neutral" },
-      { label: "Needs Attention", value: "3", tone: "error" },
+      { label: "Needs Attention", value: "2", tone: "error" },
     ]);
   });
 
@@ -99,26 +99,37 @@ describe("sidepanel view models", () => {
 
     expect(summaryItems).toEqual([
       { label: "Visible", value: "#4", tone: "neutral" },
-      { label: "Healthy", value: "#1", tone: "neutral" },
+      { label: "Healthy", value: "#2", tone: "neutral" },
       { label: "Needs Access", value: "#0", tone: "neutral" },
-      { label: "Needs Attention", value: "#3", tone: "error" },
+      { label: "Needs Attention", value: "#2", tone: "error" },
     ]);
   });
 
   it("maps provider snapshots to user-facing source labels", () => {
-    const codex = getProviderViewModel(createState(), "codex");
-    const cursor = getProviderViewModel(createState(), "cursor");
-    const gemini = getProviderViewModel(createState(), "gemini");
-    const jetbrains = getProviderViewModel(createState(), "jetbrains");
+    const codex = getProviderViewModel(createState(), "codex-personal-page");
+    const codexEnterprise = getProviderViewModel(
+      createState(),
+      "codex-enterprise-api",
+    );
+    const cursor = getProviderViewModel(createState(), "cursor-personal-page");
+    const gemini = getProviderViewModel(createState(), "gemini-policy");
+    const jetbrains = getProviderViewModel(createState(), "jetbrains-org-page");
 
-    expect(codex?.currentSourceContractLabel).toBe("Shipped enterprise analytics");
+    expect(codex?.currentSourceContractLabel).toBe("Shipped personal partial");
     expect(codex?.sessionPageContractLabel).toBe("Shipped personal partial");
     expect(codex?.openableSessionPageUrl).toBe(
       "https://chatgpt.com/codex/cloud/settings/analytics",
     );
     expect(codex?.currentSourceGraduationGateLabel).toBeNull();
-    expect(codex?.currentSourceFidelityLabel).toBe("Analytics snapshot");
-    expect(codex?.currentAccessModelLabel).toBe("Stored credential");
+    expect(codex?.currentSourceFidelityLabel).toBe("Window-only vendor value");
+    expect(codex?.currentAccessModelLabel).toBe("Logged-in page session");
+    expect(codexEnterprise?.currentSourceContractLabel).toBe(
+      "Shipped enterprise analytics",
+    );
+    expect(codexEnterprise?.currentSourceFidelityLabel).toBe(
+      "Analytics snapshot",
+    );
+    expect(codexEnterprise?.currentAccessModelLabel).toBe("Stored credential");
     expect(cursor?.currentSourceContractLabel).toBe("Shipped personal partial");
     expect(cursor?.currentSourceFidelityLabel).toBe("Window-only vendor value");
     expect(cursor?.hostAccessRequirementLabel).toBe("Required");
@@ -127,11 +138,9 @@ describe("sidepanel view models", () => {
     );
     expect(gemini?.currentSourceLabel).toBe("Policy only");
     expect(gemini?.currentSourceContractLabel).toBe("Shipped policy only");
-    expect(gemini?.sessionPageContractLabel).toBe("Deferred project metrics");
+    expect(gemini?.sessionPageContractLabel).toBeNull();
     expect(gemini?.openableSessionPageUrl).toBeNull();
-    expect(gemini?.sessionPageGraduationGateLabel).toBe(
-      "Accept project-metrics support",
-    );
+    expect(gemini?.sessionPageGraduationGateLabel).toBeNull();
     expect(gemini?.currentSourceFidelityLabel).toBe("Documented policy");
     expect(gemini?.cookiePolicyLabel).toBe("Forbidden");
     expect(gemini?.currentSourceStateKind).toBe("policy_only");
@@ -149,7 +158,7 @@ describe("sidepanel view models", () => {
   it("accepts localized provider-source display copy while preserving raw diagnostics", () => {
     const cursor = getProviderViewModel(
       createState(),
-      "cursor",
+      "cursor-personal-page",
       buildProviderSourceDisplayLocalizedCopy(createRuntimeI18n("zh-CN")),
     );
 
@@ -159,9 +168,7 @@ describe("sidepanel view models", () => {
     expect(cursor?.currentSourceAvailabilitySummary).toBe(
       "已用：仅窗口 · 剩余：不可用 · 重置：仅窗口",
     );
-    expect(cursor?.sourceFallbackReason).toBe(
-      "Official API unavailable: no Cursor Admin API key is stored.",
-    );
+    expect(cursor?.sourceFallbackReason).toBeNull();
   });
 
   it("keeps provider-detail input raw evidence when typed diagnostics are unknown", () => {
@@ -183,7 +190,7 @@ describe("sidepanel view models", () => {
     };
     const state = createState({
       providers: SAMPLE_APP_STATE.providers.map((provider) =>
-        provider.providerId === "cursor"
+        provider.providerId === "cursor-personal-page"
           ? {
               ...provider,
               warningReason,
@@ -195,7 +202,7 @@ describe("sidepanel view models", () => {
       ),
     });
 
-    const cursor = getProviderViewModel(state, "cursor");
+    const cursor = getProviderViewModel(state, "cursor-personal-page");
 
     expect(cursor?.warningReason).toBe(warningReason);
     expect(cursor?.sourceFallbackReason).toBe(sourceFallbackReason);

@@ -162,7 +162,7 @@ export const CJK_RUNTIME_MESSAGE_OVERRIDES = {
     "settings.theme_customization.preview.secondary_container": "次级容器",
     "settings.theme_customization.preview.tertiary": "第三色",
     "settings.visibility.eyebrow": "Provider 可见性",
-    "settings.visibility.enabled_detail": "在仪表板中可见。",
+    "settings.visibility.displayEnabled_detail": "在仪表板中可见。",
     "settings.visibility.disabled_detail": "已从仪表板隐藏。",
     "settings.credentials.eyebrow": "凭据",
     "settings.credentials.title": "已存密钥与工作区配置",

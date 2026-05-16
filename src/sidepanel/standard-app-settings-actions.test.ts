@@ -41,33 +41,33 @@ describe("createStandardAppSettingsActions", () => {
   it("dispatches source preference changes only when the value differs from current state", () => {
     const { actions, applyMessage } = createSettingsActionHarness();
 
-    actions.handleSetSourcePreference("codex", "auto");
-    actions.handleSetSourcePreference("codex", "session_page");
+    actions.handleSetSourcePreference("codex-enterprise-api", "official_api");
+    actions.handleSetSourcePreference("codex-enterprise-api", "auto");
 
     expect(applyMessage).toHaveBeenCalledTimes(1);
     expect(applyMessage).toHaveBeenCalledWith({
       type: "app:set-provider-source-preference",
-      providerId: "codex",
-      sourcePreference: "session_page",
+      providerId: "codex-enterprise-api",
+      sourcePreference: "auto",
     });
   });
 
   it("dispatches credential and Codex workspace updates", () => {
     const { actions, applyMessage } = createSettingsActionHarness();
 
-    actions.handleSaveProviderAdminApiKey("cursor", "cursor-key");
-    actions.handleClearProviderAdminApiKey("cursor");
+    actions.handleSaveProviderAdminApiKey("cursor-team-api", "cursor-key");
+    actions.handleClearProviderAdminApiKey("cursor-team-api");
     actions.handleSaveCodexWorkspaceConfig("codex-key", "workspace-id");
     actions.handleClearCodexWorkspaceConfig();
 
     expect(applyMessage).toHaveBeenCalledWith({
       type: "app:set-provider-admin-api-key",
-      providerId: "cursor",
+      providerId: "cursor-team-api",
       apiKey: "cursor-key",
     });
     expect(applyMessage).toHaveBeenCalledWith({
       type: "app:set-provider-admin-api-key",
-      providerId: "cursor",
+      providerId: "cursor-team-api",
       apiKey: null,
     });
     expect(applyMessage).toHaveBeenCalledWith({

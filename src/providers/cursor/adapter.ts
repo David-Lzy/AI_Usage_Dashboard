@@ -126,7 +126,7 @@ function buildCursorPersonalUsageFacts(
 }
 
 function hasCursorAdminApiKey(secrets: ProviderSecrets): boolean {
-  return Boolean(secrets.cursor.adminApiKey);
+  return Boolean(secrets["cursor-team-api"].adminApiKey);
 }
 
 function canUseLiveCursorPersonalPage(): boolean {
@@ -189,7 +189,7 @@ function finalizeCursorSnapshot(
   fallbackFailure: SourceAttemptFailure | null,
 ): ProviderSnapshot {
   const sourceSelectionReason = buildSourceSelectionReason(
-    "cursor",
+    snapshot.providerId,
     sourcePreference,
     selectedKind,
     fallbackFailure !== null,
@@ -211,7 +211,7 @@ function finalizeCursorSnapshot(
     sourceSelectionReason,
     sourceFallbackReason,
     sourceSelectionDiagnostic: createSourceSelectionDiagnostic({
-      providerId: "cursor",
+      providerId: snapshot.providerId,
       sourcePreference,
       selectedKind,
       hadFallback: fallbackFailure !== null,
@@ -220,7 +220,7 @@ function finalizeCursorSnapshot(
     sourceFallbackDiagnostic:
       fallbackFailure && sourceFallbackReason
         ? createSourceFallbackDiagnostic({
-            providerId: "cursor",
+            providerId: snapshot.providerId,
             sourcePreference,
             failure: fallbackFailure,
             rawMessage: sourceFallbackReason,
@@ -251,7 +251,7 @@ function finalizeCursorNoSourceSnapshot(
     sourceSelectionDiagnostic: null,
     sourceFallbackDiagnostic: sourceFallbackReason
       ? createNoLiveSourceFallbackDiagnostic({
-          providerId: "cursor",
+          providerId: snapshot.providerId,
           sourcePreference,
           failureCount: failures.length,
           rawMessage: sourceFallbackReason,
@@ -295,7 +295,7 @@ async function tryCursorOfficialSource({
         tone: "warning",
         warningReason,
         warningDiagnostic: createHostAccessDiagnostic({
-          providerId: "cursor",
+          providerId: provider.providerId,
           sourceKind: "official_api",
           hostLabel: setting.hostsLabel,
           rawMessage: warningReason,
@@ -327,7 +327,7 @@ async function tryCursorOfficialSource({
         tone: "error",
         warningReason,
         warningDiagnostic: createCredentialDiagnostic({
-          providerId: "cursor",
+          providerId: provider.providerId,
           credentialKind: "admin_api_key",
           rawMessage: warningReason,
         }),
@@ -340,7 +340,7 @@ async function tryCursorOfficialSource({
   try {
     const client = createCursorOfficialClient({
       source: "live",
-      apiKey: secrets.cursor.adminApiKey!,
+      apiKey: secrets["cursor-team-api"].adminApiKey!,
     });
     const [members, spend] = await Promise.all([
       client.getTeamMembers(),
@@ -372,7 +372,7 @@ async function tryCursorOfficialSource({
       warningThresholdPercent,
       "requests",
       usageBasedRequests,
-      "cursor",
+      provider.providerId,
     );
 
     return {
@@ -422,7 +422,7 @@ async function tryCursorOfficialSource({
         tone: "error",
         warningReason: detail,
         warningDiagnostic: createAdapterErrorDiagnostic({
-          providerId: "cursor",
+          providerId: provider.providerId,
           adapterErrorKind: "unexpected_error",
           sourceKind: "official_api",
           failureCode: "sync_error",
@@ -467,7 +467,7 @@ async function tryCursorPersonalSource({
         tone: "warning",
         warningReason,
         warningDiagnostic: createHostAccessDiagnostic({
-          providerId: "cursor",
+          providerId: provider.providerId,
           sourceKind: "session_page",
           hostLabel: setting.hostsLabel,
           rawMessage: warningReason,
@@ -540,7 +540,7 @@ async function tryCursorPersonalSource({
           warningDiagnostic:
             result.status === "route_drift"
               ? createAdapterErrorDiagnostic({
-                  providerId: "cursor",
+                  providerId: provider.providerId,
                   adapterErrorKind: "parse_failed",
                   sourceKind: "session_page",
                   failureCode: "route_drift",
@@ -548,7 +548,7 @@ async function tryCursorPersonalSource({
                   rawMessage: result.reason,
                 })
               : createPageSessionDiagnostic({
-                  providerId: "cursor",
+                  providerId: provider.providerId,
                   pageSessionKind: getCursorPageSessionDiagnosticKind(
                     result.status,
                   ),
@@ -610,7 +610,7 @@ async function tryCursorPersonalSource({
         warningDiagnostic:
           snapshot.onDemandUsageState === "off" && warningReason
             ? createUsageThresholdDiagnostic({
-                providerId: "cursor",
+                providerId: provider.providerId,
                 usageThresholdKind: "on_demand_off",
                 rawMessage: warningReason,
                 unitLabel: "requests",
@@ -645,7 +645,7 @@ async function tryCursorPersonalSource({
         tone: "error",
         warningReason: detail,
         warningDiagnostic: createAdapterErrorDiagnostic({
-          providerId: "cursor",
+          providerId: provider.providerId,
           adapterErrorKind: "unexpected_error",
           sourceKind: "session_page",
           failureCode: "sync_error",
@@ -671,10 +671,10 @@ export async function syncCursorProvider({
 }: CursorAdapterContext): Promise<ProviderSyncOutcome> {
   const syncedAt = formatSyncTimestamp(now);
   const sourcePreference = normalizeSourcePreference(
-    "cursor",
+    provider.providerId,
     setting.sourcePreference,
   );
-  const attemptOrder = getSourceAttemptOrder("cursor", sourcePreference);
+  const attemptOrder = getSourceAttemptOrder(provider.providerId, sourcePreference);
   const failures: SourceAttemptFailure[] = [];
   let firstFailedSnapshot: ProviderSnapshot | null = null;
 

@@ -234,7 +234,7 @@ async function captureRoute(
 ): Promise<CodexPersonalRouteCapture> {
   const routeBinding = bindingMatchesRoute(route, binding) ? binding : undefined;
   const result = await client.capture({
-    providerId: "codex",
+    providerId: "codex-personal-page",
     pageLabel: route.pageLabel,
     urlPatterns: route.urlPatterns,
     binding: routeBinding,

@@ -87,6 +87,10 @@ export function filterDisplayEligibleProviderSettings(
   );
 
   return providers.filter((provider) => {
+    if (!provider.displayEnabled) {
+      return false;
+    }
+
     const snapshot = snapshotMap.get(provider.id);
 
     return snapshot

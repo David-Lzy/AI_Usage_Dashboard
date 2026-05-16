@@ -29,7 +29,7 @@ function createProvider(
 ): ProviderViewModel {
   return {
     displayTone: "warning",
-    providerId: "codex",
+    providerId: "codex-personal-page",
     providerLabel: "Codex",
     quotaUnit: "percent",
     quotaWindow: "weekly window",
@@ -137,7 +137,7 @@ describe("PopupProviderProgress", () => {
   it("honors hidden popup progress item preferences", () => {
     const html = renderPopupProviderProgress(createProvider(), {
       popup: {
-        codex: [{ id: "primary", visible: false }],
+        "codex-personal-page": [{ id: "primary", visible: false }],
       },
       sidebar: {},
       fullPage: {},

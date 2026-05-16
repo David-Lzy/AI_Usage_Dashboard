@@ -4,6 +4,7 @@ import type {
   ProviderId,
   ProviderSetting,
 } from "../providers/types";
+import { getProviderDefinition } from "../providers/provider-definitions";
 import {
   clearPageBinding,
   createPageBindingFromTab,
@@ -41,10 +42,9 @@ function getProviderLabel(
   providerSettings: ProviderSetting[],
   providerId: ProviderId,
 ): string {
-  return (
-    providerSettings.find((provider) => provider.id === providerId)?.label ??
-    providerId
-  );
+  const provider = providerSettings.find((setting) => setting.id === providerId);
+
+  return provider ? getProviderDefinition(provider.id).shortLabel : providerId;
 }
 
 export function createStandardAppSessionPageActions({

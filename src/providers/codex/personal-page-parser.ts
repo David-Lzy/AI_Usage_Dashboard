@@ -34,7 +34,7 @@ export type CodexPersonalUsageBalance = {
 };
 
 export type CodexPersonalUsageSnapshot = {
-  providerId: "codex";
+  providerId: "codex-personal-page";
   providerLabel: "Codex";
   measurementKind: "window_percent";
   routeKey: CodexPersonalRouteKey;
@@ -501,7 +501,7 @@ export function parseCodexPersonalLiveFixture(
   return {
     status: "ok",
     snapshot: {
-      providerId: "codex",
+      providerId: "codex-personal-page",
       providerLabel: "Codex",
       measurementKind: "window_percent",
       routeKey: matchedRoute.routeKey,

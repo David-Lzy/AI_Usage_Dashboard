@@ -40,11 +40,11 @@ describe("SettingsProviderDisplaySection", () => {
     expect(html).toContain('data-provider-progress-surface="sidebar"');
     expect(html).toContain('data-provider-progress-surface="fullPage"');
     expect(html).toContain("4 providers");
-    expect(html).not.toContain('data-provider-order-row="jetbrains"');
+    expect(html).not.toContain('data-provider-order-row="jetbrains-org-page"');
     expect(html).not.toContain(
-      'data-provider-progress-preference-provider="jetbrains"',
+      'data-provider-progress-preference-provider="jetbrains-org-page"',
     );
-    expect(html).toContain('data-provider-order-row="gemini"');
+    expect(html).toContain('data-provider-order-row="gemini-policy"');
   });
 
   it("keeps hidden providers out of surface order and quota item controls", () => {
@@ -57,10 +57,10 @@ describe("SettingsProviderDisplaySection", () => {
         sectionId={SETTINGS_SECTION_IDS.providerDisplay}
         settings={SAMPLE_APP_STATE.settings}
         providers={SAMPLE_APP_STATE.providerSettings.map((provider) =>
-          provider.id === "cursor"
+          provider.id === "cursor-personal-page"
             ? {
                 ...provider,
-                enabled: false,
+                displayEnabled: false,
               }
             : provider,
         )}
@@ -73,9 +73,9 @@ describe("SettingsProviderDisplaySection", () => {
     );
 
     expect(html).toContain("3 providers");
-    expect(html).not.toContain('data-provider-order-row="cursor"');
+    expect(html).not.toContain('data-provider-order-row="cursor-personal-page"');
     expect(html).not.toContain(
-      'data-provider-progress-preference-provider="cursor"',
+      'data-provider-progress-preference-provider="cursor-personal-page"',
     );
   });
 });

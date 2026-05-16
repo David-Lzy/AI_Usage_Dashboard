@@ -19,7 +19,7 @@ import { getProviderDiagnosticPresentation } from "./provider-diagnostic-present
 describe("getProviderDiagnosticPresentation", () => {
   it("builds localized source-selection presentation", () => {
     const diagnostic = createSourceSelectionDiagnostic({
-      providerId: "cursor",
+      providerId: "cursor-personal-page",
       sourcePreference: "auto",
       selectedKind: "session_page",
       hadFallback: true,
@@ -40,7 +40,7 @@ describe("getProviderDiagnosticPresentation", () => {
 
   it("builds explicit non-English source presentation for every shipped locale", () => {
     const diagnostic = createSourceSelectionDiagnostic({
-      providerId: "cursor",
+      providerId: "cursor-personal-page",
       sourcePreference: "auto",
       selectedKind: "session_page",
       hadFallback: true,
@@ -82,35 +82,35 @@ describe("getProviderDiagnosticPresentation", () => {
   it("covers every source diagnostic code without translating raw source bodies", () => {
     const diagnostics = [
       createSourceSelectionDiagnostic({
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         sourcePreference: "auto",
         selectedKind: "official_api",
         hadFallback: false,
         rawMessage: "Auto selected Official API.",
       })!,
       createSourceSelectionDiagnostic({
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         sourcePreference: "auto",
         selectedKind: "session_page",
         hadFallback: false,
         rawMessage: "Auto selected Session page.",
       })!,
       createSourceSelectionDiagnostic({
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         sourcePreference: "official_api",
         selectedKind: "official_api",
         hadFallback: false,
         rawMessage: "Preferred Official API selected.",
       })!,
       createSourceSelectionDiagnostic({
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         sourcePreference: "session_page",
         selectedKind: "session_page",
         hadFallback: false,
         rawMessage: "Preferred Session page selected.",
       })!,
       createSourceFallbackDiagnostic({
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         sourcePreference: "auto",
         failure: {
           kind: "official_api",
@@ -120,7 +120,7 @@ describe("getProviderDiagnosticPresentation", () => {
         rawMessage: "Official API unavailable: no Cursor Admin API key is stored.",
       }),
       createSourceFallbackDiagnostic({
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         sourcePreference: "auto",
         failure: {
           kind: "official_api",
@@ -130,7 +130,7 @@ describe("getProviderDiagnosticPresentation", () => {
         rawMessage: "Official API request failed.",
       }),
       createSourceFallbackDiagnostic({
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         sourcePreference: "auto",
         failure: {
           kind: "session_page",
@@ -140,7 +140,7 @@ describe("getProviderDiagnosticPresentation", () => {
         rawMessage: "Session page unavailable.",
       }),
       createNoLiveSourceFallbackDiagnostic({
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         sourcePreference: "auto",
         failureCount: 2,
         rawMessage: "No live source path is available.",
@@ -162,7 +162,7 @@ describe("getProviderDiagnosticPresentation", () => {
 
   it("builds localized usage-threshold presentation", () => {
     const diagnostic = createUsageThresholdDiagnostic({
-      providerId: "codex",
+      providerId: "codex-personal-page",
       usageThresholdKind: "threshold_warning",
       rawMessage: "5-hour usage window: 7% remaining",
       usagePercent: 93,
@@ -178,7 +178,7 @@ describe("getProviderDiagnosticPresentation", () => {
 
   it("builds explicit non-English warning presentation for every shipped locale", () => {
     const diagnostic = createUsageThresholdDiagnostic({
-      providerId: "codex",
+      providerId: "codex-personal-page",
       usageThresholdKind: "threshold_warning",
       rawMessage: "5-hour usage window: 7% remaining",
       usagePercent: 93,
@@ -221,17 +221,17 @@ describe("getProviderDiagnosticPresentation", () => {
   it("covers every warning diagnostic code without translating raw warning bodies", () => {
     const diagnostics = [
       createCredentialDiagnostic({
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         credentialKind: "admin_api_key",
         rawMessage: "No Cursor Admin API key is stored.",
       }),
       createCredentialDiagnostic({
-        providerId: "codex",
+        providerId: "codex-personal-page",
         credentialKind: "workspace_config",
         rawMessage: "No Codex workspace config is stored.",
       }),
       createHostAccessDiagnostic({
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         sourceKind: "session_page",
         hostLabel: "Cursor",
         rawMessage: "Cursor host access has not been granted.",
@@ -243,22 +243,22 @@ describe("getProviderDiagnosticPresentation", () => {
         rawMessage: "Cursor host access is required for live sync.",
       },
       createPageSessionDiagnostic({
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         pageSessionKind: "open_page_required",
         rawMessage: "Open the Cursor usage page.",
       }),
       createPageSessionDiagnostic({
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         pageSessionKind: "logged_out",
         rawMessage: "The Cursor usage page is logged out.",
       }),
       createPageSessionDiagnostic({
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         pageSessionKind: "capture_unavailable",
         rawMessage: "The Cursor usage page could not be read.",
       }),
       createUsageThresholdDiagnostic({
-        providerId: "codex",
+        providerId: "codex-personal-page",
         usageThresholdKind: "threshold_warning",
         rawMessage: "5-hour usage window: 7% remaining",
         usagePercent: 93,
@@ -266,36 +266,36 @@ describe("getProviderDiagnosticPresentation", () => {
         unitLabel: "percent",
       }),
       createUsageThresholdDiagnostic({
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         usageThresholdKind: "overage_detected",
         rawMessage: "Cursor overage requests are present.",
         overageCount: 3,
         unitLabel: "requests",
       }),
       createUsageThresholdDiagnostic({
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         usageThresholdKind: "on_demand_off",
         rawMessage: "Cursor on-demand usage is off.",
       }),
       createPolicyOnlyDiagnostic({
-        providerId: "gemini",
+        providerId: "gemini-policy",
         policyOnlyKind: "live_source_unavailable",
         rawMessage: "Gemini is policy-only.",
       }),
       createPolicyOnlyDiagnostic({
-        providerId: "gemini",
+        providerId: "gemini-policy",
         policyOnlyKind: "documented_limit_only",
         rawMessage: "Gemini quota is documented policy only.",
       }),
       createSyncStaleDiagnostic({
-        providerId: "codex",
+        providerId: "codex-personal-page",
         syncStaleKind: "automatic_sync_overdue",
         rawMessage: "Automatic sync is overdue.",
         ageMinutes: 45,
         staleAfterMinutes: 30,
       }),
       createSyncStaleDiagnostic({
-        providerId: "codex",
+        providerId: "codex-personal-page",
         syncStaleKind: "cached_state_stale",
         rawMessage: "Cached state is stale.",
         ageMinutes: 45,
@@ -318,7 +318,7 @@ describe("getProviderDiagnosticPresentation", () => {
 
   it("builds localized adapter-error presentation", () => {
     const diagnostic = createAdapterErrorDiagnostic({
-      providerId: "codex",
+      providerId: "codex-personal-page",
       adapterErrorKind: "parse_failed",
       sourceKind: "session_page",
       rawMessage: "Codex usage page parse failed",
@@ -335,7 +335,7 @@ describe("getProviderDiagnosticPresentation", () => {
 
   it("builds explicit non-English adapter-error presentation for every shipped locale", () => {
     const diagnostic = createAdapterErrorDiagnostic({
-      providerId: "codex",
+      providerId: "codex-personal-page",
       adapterErrorKind: "parse_failed",
       sourceKind: "session_page",
       rawMessage: "Codex usage page parse failed",
@@ -376,19 +376,19 @@ describe("getProviderDiagnosticPresentation", () => {
   it("covers every adapter-error diagnostic code without translating raw adapter bodies", () => {
     const diagnostics = [
       createAdapterErrorDiagnostic({
-        providerId: "codex",
+        providerId: "codex-personal-page",
         adapterErrorKind: "parse_failed",
         sourceKind: "session_page",
         rawMessage: "Codex usage page parse failed",
       }),
       createAdapterErrorDiagnostic({
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         adapterErrorKind: "unsupported_response",
         sourceKind: "official_api",
         rawMessage: "Cursor Admin API returned an unsupported response.",
       }),
       createAdapterErrorDiagnostic({
-        providerId: "claude-code",
+        providerId: "claude-code-team-page",
         adapterErrorKind: "unexpected_error",
         sourceKind: "session_page",
         rawMessage: "Claude usage page adapter hit an unexpected error.",
@@ -410,7 +410,7 @@ describe("getProviderDiagnosticPresentation", () => {
 
   it("preserves the legacy localized-copy export path", () => {
     const diagnostic = createUsageThresholdDiagnostic({
-      providerId: "codex",
+      providerId: "codex-personal-page",
       usageThresholdKind: "threshold_warning",
       rawMessage: "Weekly usage window: 85% used",
       usagePercent: 85,

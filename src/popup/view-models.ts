@@ -5,6 +5,7 @@ import type {
 } from "../providers/types";
 import { getRecommendedFirstSetupProvider } from "../shared/first-provider-setup";
 import type { ProviderSourceDisplayCopy } from "../shared/provider-sources";
+import { getProviderDefinition } from "../providers/provider-definitions";
 import { getPopupProviders } from "../sidepanel/view-models";
 import type {
   PopupFirstSetupProvider,
@@ -59,7 +60,7 @@ function buildFirstSetupProvider(
 
   return {
     providerId: provider.id,
-    providerLabel: provider.label,
+    providerLabel: getProviderDefinition(provider.id).shortLabel,
   };
 }
 

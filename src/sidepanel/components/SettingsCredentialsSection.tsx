@@ -25,7 +25,7 @@ export type CredentialProviderSection = {
 
 type SettingsCredentialsSectionProps = {
   codexAnalyticsApiKeyInput: string;
-  codexProvider: (ProviderSetting & { id: "codex" }) | null;
+  codexProvider: (ProviderSetting & { id: "codex-enterprise-api" }) | null;
   codexWorkspaceIdInput: string;
   credentialInputs: Record<ApiKeyProviderId, string>;
   credentialProviders: CredentialProviderSection[];

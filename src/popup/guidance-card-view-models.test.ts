@@ -15,7 +15,7 @@ function createProvider(
     displayTone: "neutral",
     hostAccessRequirementDetail: "Grant browser access.",
     permissionStatus: "granted",
-    providerId: "codex" as ProviderId,
+    providerId: "codex-personal-page" as ProviderId,
     providerLabel: "Codex",
     warningReason: null,
     ...overrides,
@@ -26,7 +26,7 @@ describe("buildGuidanceCard", () => {
   it("starts zero-provider users with the recommended first provider", () => {
     expect(
       buildGuidanceCard([], {
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         providerLabel: "Cursor",
       }),
     ).toMatchObject({
@@ -36,7 +36,7 @@ describe("buildGuidanceCard", () => {
       action: {
         kind: "settings",
         label: "Open Quick Setup",
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
       },
     });
   });
@@ -85,7 +85,7 @@ describe("buildGuidanceCard", () => {
           currentSourceStateKind: "capture_unavailable",
           displaySyncStatus: "warning",
           displayTone: "warning",
-          providerId: "cursor",
+          providerId: "cursor-personal-page",
           providerLabel: "Cursor",
           warningReason: "Usage page capture is unavailable.",
         }),
@@ -95,7 +95,7 @@ describe("buildGuidanceCard", () => {
       detail: "Usage page capture is unavailable.",
       action: {
         kind: "provider-detail",
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
       },
     });
   });

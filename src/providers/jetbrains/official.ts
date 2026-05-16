@@ -138,7 +138,7 @@ export function createJetBrainsConsoleClient(
         scriptingApi: options.scriptingApi,
       });
       const capture = await pageSessionClient.capture({
-        providerId: "jetbrains",
+        providerId: "jetbrains-org-page",
         pageLabel: "JetBrains Console Users and licensing page",
         urlPatterns: JETBRAINS_TAB_URL_PATTERNS,
         binding: {

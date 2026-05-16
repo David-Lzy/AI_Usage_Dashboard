@@ -24,7 +24,7 @@ describe("provider diagnostics", () => {
       "warning",
       "Official API unavailable: no Cursor Admin API key is stored.",
       {
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         sourceKind: "official_api",
       },
     );
@@ -35,7 +35,7 @@ describe("provider diagnostics", () => {
       severity: "warning",
       rawMessage: "Official API unavailable: no Cursor Admin API key is stored.",
       params: {
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         sourceKind: "official_api",
       },
     });
@@ -43,17 +43,19 @@ describe("provider diagnostics", () => {
 
   it("keeps typed diagnostic fields additive on provider snapshots", () => {
     const cursor = SAMPLE_APP_STATE.providers.find(
-      (provider) => provider.providerId === "cursor",
+      (provider) => provider.providerId === "cursor-personal-page",
     );
 
     expect(cursor).toBeDefined();
 
     const snapshot: ProviderSnapshot = {
       ...cursor!,
+      sourceFallbackReason:
+        "Official API unavailable: no Cursor Admin API key is stored.",
       sourceFallbackDiagnostic: createProviderDiagnostic(
         "source.official_api_missing_credential",
         "warning",
-        cursor!.sourceFallbackReason!,
+        "Official API unavailable: no Cursor Admin API key is stored.",
       ),
     };
 
@@ -77,7 +79,7 @@ describe("provider diagnostics", () => {
 
   it("builds source-selection diagnostics from stable source metadata", () => {
     const diagnostic = createSourceSelectionDiagnostic({
-      providerId: "cursor",
+      providerId: "cursor-personal-page",
       sourcePreference: "auto",
       selectedKind: "session_page",
       hadFallback: true,
@@ -90,7 +92,7 @@ describe("provider diagnostics", () => {
       severity: "info",
       rawMessage: "Auto fell back to Session page.",
       params: {
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         sourcePreference: "auto",
         selectedKind: "session_page",
         hadFallback: true,
@@ -100,7 +102,7 @@ describe("provider diagnostics", () => {
 
   it("builds source-fallback diagnostics without rewriting raw messages", () => {
     const diagnostic = createSourceFallbackDiagnostic({
-      providerId: "cursor",
+      providerId: "cursor-personal-page",
       sourcePreference: "official_api",
       failure: {
         kind: "official_api",
@@ -116,7 +118,7 @@ describe("provider diagnostics", () => {
       severity: "warning",
       rawMessage: "Official API unavailable: No Cursor Admin API key is stored.",
       params: {
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         sourcePreference: "official_api",
         failedSourceKind: "official_api",
         failureCode: "credential_missing",
@@ -126,7 +128,7 @@ describe("provider diagnostics", () => {
 
   it("builds credential diagnostics without rewriting raw warning messages", () => {
     const diagnostic = createCredentialDiagnostic({
-      providerId: "codex",
+      providerId: "codex-personal-page",
       credentialKind: "workspace_config",
       rawMessage:
         "Codex analytics API key and workspace ID are not both configured.",
@@ -139,7 +141,7 @@ describe("provider diagnostics", () => {
       rawMessage:
         "Codex analytics API key and workspace ID are not both configured.",
       params: {
-        providerId: "codex",
+        providerId: "codex-personal-page",
         credentialKind: "workspace_config",
       },
     });
@@ -147,7 +149,7 @@ describe("provider diagnostics", () => {
 
   it("builds host-access diagnostics without rewriting raw warning messages", () => {
     const diagnostic = createHostAccessDiagnostic({
-      providerId: "cursor",
+      providerId: "cursor-personal-page",
       sourceKind: "official_api",
       hostLabel: "api.cursor.com · cursor.com",
       rawMessage:
@@ -161,7 +163,7 @@ describe("provider diagnostics", () => {
       rawMessage:
         "Host access missing; grant Cursor access for api.cursor.com and cursor.com before live sync can run.",
       params: {
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         sourceKind: "official_api",
         hostLabel: "api.cursor.com · cursor.com",
       },
@@ -170,7 +172,7 @@ describe("provider diagnostics", () => {
 
   it("builds page-session diagnostics without rewriting raw warning messages", () => {
     const diagnostic = createPageSessionDiagnostic({
-      providerId: "cursor",
+      providerId: "cursor-personal-page",
       pageSessionKind: "open_page_required",
       rawMessage:
         "Open the logged-in Cursor dashboard usage page before refreshing personal usage capture.",
@@ -183,7 +185,7 @@ describe("provider diagnostics", () => {
       rawMessage:
         "Open the logged-in Cursor dashboard usage page before refreshing personal usage capture.",
       params: {
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         pageSessionKind: "open_page_required",
       },
     });
@@ -191,7 +193,7 @@ describe("provider diagnostics", () => {
 
   it("marks capture-unavailable page-session diagnostics as errors", () => {
     const diagnostic = createPageSessionDiagnostic({
-      providerId: "codex",
+      providerId: "codex-personal-page",
       pageSessionKind: "capture_unavailable",
       rawMessage: "Codex personal usage page sync failed unexpectedly.",
     });
@@ -202,7 +204,7 @@ describe("provider diagnostics", () => {
       severity: "error",
       rawMessage: "Codex personal usage page sync failed unexpectedly.",
       params: {
-        providerId: "codex",
+        providerId: "codex-personal-page",
         pageSessionKind: "capture_unavailable",
       },
     });
@@ -210,7 +212,7 @@ describe("provider diagnostics", () => {
 
   it("builds usage-threshold diagnostics without rewriting raw warning messages", () => {
     const diagnostic = createUsageThresholdDiagnostic({
-      providerId: "cursor",
+      providerId: "cursor-personal-page",
       usageThresholdKind: "overage_detected",
       rawMessage: "15 pay-per-use requests recorded this cycle",
       overageCount: 15,
@@ -223,7 +225,7 @@ describe("provider diagnostics", () => {
       severity: "warning",
       rawMessage: "15 pay-per-use requests recorded this cycle",
       params: {
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         usageThresholdKind: "overage_detected",
         overageCount: 15,
         unitLabel: "requests",
@@ -233,7 +235,7 @@ describe("provider diagnostics", () => {
 
   it("builds policy-only diagnostics without rewriting raw warning messages", () => {
     const diagnostic = createPolicyOnlyDiagnostic({
-      providerId: "gemini",
+      providerId: "gemini-policy",
       policyOnlyKind: "documented_limit_only",
       rawMessage:
         "120/min and 2000/day per user for Gemini CLI and agent mode.",
@@ -246,7 +248,7 @@ describe("provider diagnostics", () => {
       rawMessage:
         "120/min and 2000/day per user for Gemini CLI and agent mode.",
       params: {
-        providerId: "gemini",
+        providerId: "gemini-policy",
         policyOnlyKind: "documented_limit_only",
       },
     });
@@ -254,7 +256,7 @@ describe("provider diagnostics", () => {
 
   it("builds sync-stale diagnostics without rewriting raw warning messages", () => {
     const diagnostic = createSyncStaleDiagnostic({
-      providerId: "cursor",
+      providerId: "cursor-personal-page",
       syncStaleKind: "cached_state_stale",
       rawMessage: "Automatic refresh is overdue; showing cached data.",
       ageMinutes: 240,
@@ -267,7 +269,7 @@ describe("provider diagnostics", () => {
       severity: "warning",
       rawMessage: "Automatic refresh is overdue; showing cached data.",
       params: {
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         syncStaleKind: "cached_state_stale",
         ageMinutes: 240,
         staleAfterMinutes: 60,
@@ -277,7 +279,7 @@ describe("provider diagnostics", () => {
 
   it("builds adapter-error diagnostics without rewriting raw warning messages", () => {
     const diagnostic = createAdapterErrorDiagnostic({
-      providerId: "codex",
+      providerId: "codex-personal-page",
       adapterErrorKind: "parse_failed",
       sourceKind: "session_page",
       failureCode: "route_drift",
@@ -293,7 +295,7 @@ describe("provider diagnostics", () => {
       rawMessage:
         "The matched Codex usage page no longer exposed a parseable remaining-percentage window.",
       params: {
-        providerId: "codex",
+        providerId: "codex-personal-page",
         adapterErrorKind: "parse_failed",
         sourceKind: "session_page",
         failureCode: "route_drift",

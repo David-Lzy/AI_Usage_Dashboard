@@ -53,7 +53,7 @@ function createStaleSchemaState(): AppState {
   return {
     ...SAMPLE_APP_STATE,
     providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => {
-      if (provider.id === "cursor") {
+      if (provider.id === "cursor-personal-page") {
         return {
           ...provider,
           hostsLabel: "api.cursor.com",
@@ -62,7 +62,7 @@ function createStaleSchemaState(): AppState {
         };
       }
 
-      if (provider.id === "codex") {
+      if (provider.id === "codex-personal-page") {
         return {
           ...provider,
           hostsLabel: "api.chatgpt.com",
@@ -89,35 +89,35 @@ describe("storage normalization", () => {
 
     expect(state).not.toBeNull();
     expect(
-      state?.providerSettings.find((provider) => provider.id === "cursor")
-        ?.credentialStatus,
-    ).toBe("missing");
-    expect(
-      state?.providerSettings.find((provider) => provider.id === "claude-code")
-        ?.credentialStatus,
-    ).toBe("missing");
-    expect(
-      state?.providerSettings.find((provider) => provider.id === "codex")
-        ?.credentialStatus,
-    ).toBe("missing");
-    expect(
-      state?.providerSettings.find((provider) => provider.id === "jetbrains")
-        ?.hostOrigins,
-    ).toEqual(["https://account.jetbrains.com/*", "https://*.jetbrains.com/*"]);
-    expect(
-      state?.providerSettings.find((provider) => provider.id === "gemini")
-        ?.hostOrigins,
-    ).toEqual([]);
-    expect(
-      state?.providerSettings.find((provider) => provider.id === "gemini")
+      state?.providerSettings.find((provider) => provider.id === "cursor-personal-page")
         ?.credentialStatus,
     ).toBe("not_required");
     expect(
-      state?.providerSettings.find((provider) => provider.id === "cursor")
-        ?.sourcePreference,
-    ).toBe("auto");
+      state?.providerSettings.find((provider) => provider.id === "claude-code-team-page")
+        ?.credentialStatus,
+    ).toBe("not_required");
     expect(
-      state?.providerSettings.find((provider) => provider.id === "cursor")
+      state?.providerSettings.find((provider) => provider.id === "codex-personal-page")
+        ?.credentialStatus,
+    ).toBe("not_required");
+    expect(
+      state?.providerSettings.find((provider) => provider.id === "jetbrains-org-page")
+        ?.hostOrigins,
+    ).toEqual(["https://account.jetbrains.com/*", "https://*.jetbrains.com/*"]);
+    expect(
+      state?.providerSettings.find((provider) => provider.id === "gemini-policy")
+        ?.hostOrigins,
+    ).toEqual([]);
+    expect(
+      state?.providerSettings.find((provider) => provider.id === "gemini-policy")
+        ?.credentialStatus,
+    ).toBe("not_required");
+    expect(
+      state?.providerSettings.find((provider) => provider.id === "cursor-personal-page")
+        ?.sourcePreference,
+    ).toBe("session_page");
+    expect(
+      state?.providerSettings.find((provider) => provider.id === "cursor-personal-page")
         ?.pageBinding,
     ).toEqual({
       mode: "auto",
@@ -199,13 +199,13 @@ describe("storage normalization", () => {
       settings: {
         ...SAMPLE_APP_STATE.settings,
         providerOrderBySurface: {
-          popup: ["codex", "unknown-provider", "cursor", "codex"],
-          sidebar: "codex",
-          fullPage: ["gemini"],
+          popup: ["codex-personal-page", "unknown-provider", "cursor-personal-page", "codex-personal-page"],
+          sidebar: "codex-personal-page",
+          fullPage: ["gemini-policy"],
         },
         progressItemsBySurface: {
           popup: {
-            codex: [
+            "codex-personal-page": [
               { id: "unknown-window", visible: false },
               { id: 42, visible: true },
             ],
@@ -218,19 +218,25 @@ describe("storage normalization", () => {
     const state = await readAppState();
 
     expect(state?.settings.providerOrderBySurface.popup).toEqual([
-      "codex",
-      "cursor",
-      "jetbrains",
-      "claude-code",
-      "gemini",
+      "codex-personal-page",
+      "cursor-personal-page",
+      "cursor-team-api",
+      "jetbrains-org-page",
+      "claude-code-team-page",
+      "claude-code-admin-api",
+      "gemini-policy",
+      "codex-enterprise-api",
     ]);
     expect(state?.settings.providerOrderBySurface.sidebar).toEqual([]);
     expect(state?.settings.providerOrderBySurface.fullPage).toEqual([
-      "gemini",
-      "cursor",
-      "jetbrains",
-      "claude-code",
-      "codex",
+      "gemini-policy",
+      "cursor-personal-page",
+      "cursor-team-api",
+      "jetbrains-org-page",
+      "claude-code-team-page",
+      "claude-code-admin-api",
+      "codex-personal-page",
+      "codex-enterprise-api",
     ]);
     expect(state?.settings.progressItemsBySurface).toEqual({
       popup: {},
@@ -246,7 +252,7 @@ describe("storage normalization", () => {
         ...SAMPLE_APP_STATE.settings,
         progressItemsBySurface: {
           popup: {
-            jetbrains: [
+            "jetbrains-org-page": [
               { id: "primary", visible: false },
               { id: "unknown", visible: true },
             ],
@@ -259,7 +265,7 @@ describe("storage normalization", () => {
 
     const state = await readAppState();
 
-    expect(state?.settings.progressItemsBySurface.popup.jetbrains).toEqual([
+    expect(state?.settings.progressItemsBySurface.popup["jetbrains-org-page"]).toEqual([
       { id: "primary", visible: false },
     ]);
   });
@@ -304,7 +310,7 @@ describe("storage normalization", () => {
     const stateWithCodexRemaining: AppState = {
       ...SAMPLE_APP_STATE,
       providers: SAMPLE_APP_STATE.providers.map((provider) =>
-        provider.providerId === "codex"
+        provider.providerId === "codex-personal-page"
           ? {
               ...provider,
               remaining: 51,
@@ -316,7 +322,7 @@ describe("storage normalization", () => {
     const codexCandidate = buildActionBadgeQuotaCandidates(
       stateWithCodexRemaining,
     ).find(
-      (candidate) => candidate.providerId === "codex",
+      (candidate) => candidate.providerId === "codex-personal-page",
     );
 
     expect(codexCandidate).toBeDefined();
@@ -350,7 +356,7 @@ describe("storage normalization", () => {
       settings: {
         ...SAMPLE_APP_STATE.settings,
         toolbarIconMode: "provider",
-        toolbarIconProviderId: "codex",
+        toolbarIconProviderId: "codex-personal-page",
         toolbarIconCustomImageDataUrl:
           "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB",
       } as unknown as AppState["settings"],
@@ -359,7 +365,7 @@ describe("storage normalization", () => {
     const validState = await readAppState();
 
     expect(validState?.settings.toolbarIconMode).toBe("provider");
-    expect(validState?.settings.toolbarIconProviderId).toBe("codex");
+    expect(validState?.settings.toolbarIconProviderId).toBe("codex-personal-page");
     expect(validState?.settings.toolbarIconCustomImageDataUrl).toBe(
       "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB",
     );
@@ -489,26 +495,26 @@ describe("storage normalization", () => {
 
     expect(state).not.toBeNull();
     expect(
-      state?.providerSettings.find((provider) => provider.id === "cursor")
+      state?.providerSettings.find((provider) => provider.id === "cursor-personal-page")
         ?.hostsLabel,
-    ).toBe("api.cursor.com · cursor.com");
+    ).toBe("cursor.com");
     expect(
-      state?.providerSettings.find((provider) => provider.id === "cursor")
+      state?.providerSettings.find((provider) => provider.id === "cursor-personal-page")
         ?.hostOrigins,
-    ).toEqual(["https://api.cursor.com/*", "https://cursor.com/*"]);
+    ).toEqual(["https://cursor.com/*"]);
     expect(
-      state?.providerSettings.find((provider) => provider.id === "cursor")
+      state?.providerSettings.find((provider) => provider.id === "cursor-personal-page")
         ?.description,
     ).toBe(
-      "Uses the team Admin API when a key is configured, or the logged-in personal usage page when no key is stored.",
+      "Uses the logged-in Cursor personal usage page. Display is independent from browser access.",
     );
     expect(
-      state?.providerSettings.find((provider) => provider.id === "codex")
+      state?.providerSettings.find((provider) => provider.id === "codex-personal-page")
         ?.hostsLabel,
-    ).toBe("api.chatgpt.com + chatgpt.com");
+    ).toBe("chatgpt.com");
     expect(
-      state?.providerSettings.find((provider) => provider.id === "codex")
+      state?.providerSettings.find((provider) => provider.id === "codex-personal-page")
         ?.hostOrigins,
-    ).toEqual(["https://api.chatgpt.com/*", "https://chatgpt.com/*"]);
+    ).toEqual(["https://chatgpt.com/*"]);
   });
 });

@@ -75,7 +75,10 @@ function buildCodexPersonalRefreshLabel(source: "fixture" | "live"): string {
 }
 
 function hasCodexAnalyticsConfig(secrets: ProviderSecrets): boolean {
-  return Boolean(secrets.codex.analyticsApiKey && secrets.codex.workspaceId);
+  return Boolean(
+    secrets["codex-enterprise-api"].analyticsApiKey &&
+      secrets["codex-enterprise-api"].workspaceId,
+  );
 }
 
 function canUseLiveCodexPersonalPage(): boolean {
@@ -353,7 +356,7 @@ function finalizeCodexSnapshot(
   fallbackFailure: SourceAttemptFailure | null,
 ): ProviderSnapshot {
   const sourceSelectionReason = buildSourceSelectionReason(
-    "codex",
+    snapshot.providerId,
     sourcePreference,
     selectedKind,
     fallbackFailure !== null,
@@ -367,7 +370,7 @@ function finalizeCodexSnapshot(
     sourceSelectionReason,
     sourceFallbackReason,
     sourceSelectionDiagnostic: createSourceSelectionDiagnostic({
-      providerId: "codex",
+      providerId: snapshot.providerId,
       sourcePreference,
       selectedKind,
       hadFallback: fallbackFailure !== null,
@@ -376,7 +379,7 @@ function finalizeCodexSnapshot(
     sourceFallbackDiagnostic:
       fallbackFailure && sourceFallbackReason
         ? createSourceFallbackDiagnostic({
-            providerId: "codex",
+            providerId: snapshot.providerId,
             sourcePreference,
             failure: fallbackFailure,
             rawMessage: sourceFallbackReason,
@@ -403,7 +406,7 @@ function finalizeCodexNoSourceSnapshot(
     sourceSelectionDiagnostic: null,
     sourceFallbackDiagnostic: sourceFallbackReason
       ? createNoLiveSourceFallbackDiagnostic({
-          providerId: "codex",
+          providerId: snapshot.providerId,
           sourcePreference,
           failureCount: failures.length,
           rawMessage: sourceFallbackReason,
@@ -443,7 +446,7 @@ async function tryCodexOfficialSource({
         tone: "warning",
         warningReason,
         warningDiagnostic: createHostAccessDiagnostic({
-          providerId: "codex",
+          providerId: provider.providerId,
           sourceKind: "official_api",
           hostLabel: setting.hostsLabel,
           rawMessage: warningReason,
@@ -479,7 +482,7 @@ async function tryCodexOfficialSource({
         tone: "error",
         warningReason,
         warningDiagnostic: createCredentialDiagnostic({
-          providerId: "codex",
+          providerId: provider.providerId,
           credentialKind: "workspace_config",
           rawMessage: warningReason,
         }),
@@ -496,8 +499,8 @@ async function tryCodexOfficialSource({
   try {
     const client = createCodexAnalyticsClient({
       source: "live",
-      apiKey: secrets.codex.analyticsApiKey!,
-      workspaceId: secrets.codex.workspaceId!,
+      apiKey: secrets["codex-enterprise-api"].analyticsApiKey!,
+      workspaceId: secrets["codex-enterprise-api"].workspaceId!,
     });
     const report = await client.getUsageReport({
       limit: 100,
@@ -594,7 +597,7 @@ async function tryCodexOfficialSource({
         tone: "error",
         warningReason: detail,
         warningDiagnostic: createAdapterErrorDiagnostic({
-          providerId: "codex",
+          providerId: provider.providerId,
           adapterErrorKind: "unexpected_error",
           sourceKind: "official_api",
           failureCode: "sync_error",
@@ -645,7 +648,7 @@ async function tryCodexPersonalSource({
         tone: "warning",
         warningReason,
         warningDiagnostic: createHostAccessDiagnostic({
-          providerId: "codex",
+          providerId: provider.providerId,
           sourceKind: "session_page",
           hostLabel: setting.hostsLabel,
           rawMessage: warningReason,
@@ -722,7 +725,7 @@ async function tryCodexPersonalSource({
           warningDiagnostic:
             result.status === "route_drift"
               ? createAdapterErrorDiagnostic({
-                  providerId: "codex",
+                  providerId: provider.providerId,
                   adapterErrorKind: "parse_failed",
                   sourceKind: "session_page",
                   failureCode: "route_drift",
@@ -730,7 +733,7 @@ async function tryCodexPersonalSource({
                   rawMessage: result.reason,
                 })
               : createPageSessionDiagnostic({
-                  providerId: "codex",
+                  providerId: provider.providerId,
                   pageSessionKind: getCodexPageSessionDiagnosticKind(
                     result.status,
                   ),
@@ -768,7 +771,7 @@ async function tryCodexPersonalSource({
     const usageThresholdDiagnostic =
       used !== null && usedPercent >= warningThresholdPercent && warningReason
         ? createUsageThresholdDiagnostic({
-            providerId: "codex",
+            providerId: provider.providerId,
             usageThresholdKind: "threshold_warning",
             rawMessage: warningReason,
             usagePercent: usedPercent,
@@ -830,7 +833,7 @@ async function tryCodexPersonalSource({
         tone: "error",
         warningReason: detail,
         warningDiagnostic: createAdapterErrorDiagnostic({
-          providerId: "codex",
+          providerId: provider.providerId,
           adapterErrorKind: "unexpected_error",
           sourceKind: "session_page",
           failureCode: "sync_error",
@@ -859,10 +862,10 @@ export async function syncCodexProvider({
 }: CodexAdapterContext): Promise<ProviderSyncOutcome> {
   const syncedAt = formatSyncTimestamp(now);
   const sourcePreference = normalizeSourcePreference(
-    "codex",
+    provider.providerId,
     setting.sourcePreference,
   );
-  const attemptOrder = getSourceAttemptOrder("codex", sourcePreference);
+  const attemptOrder = getSourceAttemptOrder(provider.providerId, sourcePreference);
   const failures: SourceAttemptFailure[] = [];
   let firstFailedSnapshot: ProviderSnapshot | null = null;
 

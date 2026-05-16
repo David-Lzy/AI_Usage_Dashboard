@@ -8,23 +8,23 @@ describe("getRecommendedFirstSetupProvider", () => {
     const provider = getRecommendedFirstSetupProvider(
       SAMPLE_APP_STATE.providerSettings.map((setting) => ({
         ...setting,
-        enabled: false,
+        displayEnabled: false,
       })),
     );
 
-    expect(provider?.id).toBe("codex");
+    expect(provider?.id).toBe("codex-personal-page");
   });
 
   it("keeps JetBrains out of the default recommendation when another disabled provider is available", () => {
     const provider = getRecommendedFirstSetupProvider(
       SAMPLE_APP_STATE.providerSettings
-        .filter((setting) => setting.id === "jetbrains" || setting.id === "cursor")
+        .filter((setting) => setting.id === "jetbrains-org-page" || setting.id === "cursor-personal-page")
         .map((setting) => ({
           ...setting,
-          enabled: false,
+          displayEnabled: false,
         })),
     );
 
-    expect(provider?.id).toBe("cursor");
+    expect(provider?.id).toBe("cursor-personal-page");
   });
 });

@@ -102,18 +102,18 @@ export function SettingsVisibilitySection({
             <label
               className="switch-row"
               data-visibility-provider-id={provider.id}
-              data-visibility-enabled={provider.enabled ? "true" : "false"}
+              data-visibility-enabled={provider.displayEnabled ? "true" : "false"}
             >
               <div>
                 <p className="switch-row__title">{provider.label}</p>
                 <p className="supporting-copy">
-                  {provider.enabled ? enabledDetail : disabledDetail}
+                  {provider.displayEnabled ? enabledDetail : disabledDetail}
                 </p>
               </div>
               <input
                 className="switch-row__control"
                 type="checkbox"
-                checked={provider.enabled}
+                checked={provider.displayEnabled}
                 data-visibility-toggle={provider.id}
                 onChange={() => onToggleProvider(provider.id)}
               />

@@ -46,17 +46,17 @@ describe("openProviderSourcePage", () => {
   it("falls back to provider detail for providers without shipped session-page plans", async () => {
     const openProviderDetail = vi.fn(async () => undefined);
 
-    await openProviderSourcePage("gemini", undefined, {
+    await openProviderSourcePage("gemini-policy", undefined, {
       openProviderDetail,
     });
 
-    expect(openProviderDetail).toHaveBeenCalledWith("gemini");
+    expect(openProviderDetail).toHaveBeenCalledWith("gemini-policy");
   });
 
   it("opens the preferred route directly when Chrome tab controls are unavailable", async () => {
     const popupWindow = stubPopupWindow();
 
-    await openProviderSourcePage("codex");
+    await openProviderSourcePage("codex-personal-page");
 
     expect(popupWindow.open).toHaveBeenCalledWith(
       "https://chatgpt.com/codex/cloud/settings/analytics",
@@ -86,14 +86,14 @@ describe("openProviderSourcePage", () => {
       },
     });
 
-    await openProviderSourcePage("codex", "ready", {
+    await openProviderSourcePage("codex-personal-page", "ready", {
       now: () => "2026-05-13T00:00:00.000Z",
       sendMessage,
     });
 
     expect(sendMessage).toHaveBeenNthCalledWith(1, {
       type: "app:set-provider-page-binding",
-      providerId: "codex",
+      providerId: "codex-personal-page",
       pageBinding: {
         mode: "bound",
         status: "bound",
@@ -106,7 +106,7 @@ describe("openProviderSourcePage", () => {
     });
     expect(sendMessage).toHaveBeenNthCalledWith(2, {
       type: "app:request-refresh",
-      providerId: "codex",
+      providerId: "codex-personal-page",
     });
     expect(update).toHaveBeenCalledWith(7, { active: true });
     expect(popupWindow.close).toHaveBeenCalled();
@@ -130,7 +130,7 @@ describe("openProviderSourcePage", () => {
       },
     });
 
-    await openProviderSourcePage("cursor", "open_page_required", {
+    await openProviderSourcePage("cursor-personal-page", "open_page_required", {
       now: () => "2026-05-13T00:05:00.000Z",
       sendMessage,
     });
@@ -138,7 +138,7 @@ describe("openProviderSourcePage", () => {
     expect(sendMessage).toHaveBeenCalledOnce();
     expect(sendMessage).toHaveBeenCalledWith({
       type: "app:set-provider-page-binding",
-      providerId: "cursor",
+      providerId: "cursor-personal-page",
       pageBinding: {
         mode: "bound",
         status: "bound",

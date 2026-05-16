@@ -12,7 +12,7 @@ Freshness model:
 
 Status note:
 
-- this is the current product contract for separating provider setup, source mode selection, dashboard visibility, provider ordering, and quota item controls
+- this is the current product contract for separating provider setup entries, source permissions/credentials, dashboard visibility, provider ordering, and quota item controls
 - use this document before changing Quick Setup, Provider Display, popup ordering, side panel ordering, full-page ordering, or per-provider quota item settings
 
 ## Purpose
@@ -20,7 +20,7 @@ Status note:
 Recent UI work made provider setup and provider display more configurable, but several concepts are now too easy to confuse:
 
 - enabling or configuring a provider
-- choosing where its data comes from
+- distinguishing personal-page, Team/API, and policy-only sources
 - deciding whether it appears on dashboards
 - deciding each surface's order
 - deciding which quota progress items appear inside a visible provider card
@@ -37,22 +37,28 @@ A configurable provider is a provider the extension knows how to guide or config
 - A configurable provider may be personal-web, Team/Enterprise API, policy-only, or deferred.
 - Provider availability in Quick Setup is not proof that live quota data is shipped.
 
-### Source Mode
+### Provider Brand And Source Entry
 
-Source mode describes where the provider's status or usage data comes from.
+A provider brand is the vendor/product family, such as Cursor, Codex, Claude Code, Gemini Code Assist, or JetBrains AI.
 
-Expected source-mode families:
+A provider source entry is the concrete source-backed unit the UI can show or hide. Source entries are intentionally separate provider ids.
 
-- personal web page or signed-in browser session
-- Team/Enterprise API or admin account surface
-- policy-only reference text
-- auto selection when multiple truthful sources are available
+Current source-level provider entries:
 
-Source modes are options under one provider identity. They must not become duplicate provider rows.
+- `cursor-personal-page`
+- `cursor-team-api`
+- `claude-code-team-page`
+- `claude-code-admin-api`
+- `codex-personal-page`
+- `codex-enterprise-api`
+- `gemini-policy`
+- `jetbrains-org-page`
+
+Each source entry has one fixed source family: personal page/session, Team/API credential, policy-only reference, or deferred organization page. New code should not use one brand-level provider row plus `sourcePreference` to switch between personal and API behavior.
 
 ### Setup State
 
-Setup state describes whether the provider has enough user action, permission, credentials, or source binding to attempt a truthful sync.
+Setup state describes whether a source entry has enough user action, permission, credentials, or source binding to attempt a truthful sync.
 
 Setup state is not the same as dashboard visibility.
 
@@ -65,11 +71,11 @@ Examples:
 
 ### Dashboard Display Visibility
 
-Dashboard display visibility is the user's intent to show or hide a provider on product surfaces.
+Dashboard display visibility is the user's intent to show or hide a source entry on product surfaces.
 
 The card-level `show in dashboard` control means:
 
-- include this provider in display surfaces when it is display-eligible
+- include this source entry in display surfaces when it is display-eligible
 - allow surface order and quota item controls to manage it after eligibility is true
 
 It does not mean:
@@ -98,19 +104,21 @@ Display eligibility plus dashboard display visibility determines whether a provi
 
 ### Quick Setup
 
-- Quick Setup is the provider connection and source-mode entry point.
+- Quick Setup is the source-entry display and setup entry point.
 - Quick Setup must not be hidden behind Advanced, Developer, or Debug display levels.
-- Quick Setup should show all configurable providers, including hidden or not-yet-displayable providers.
-- Each provider card should keep the personal-user path easy to find.
-- Team/Enterprise API setup belongs inside the same provider card as an optional source-mode path, not as a separate provider.
-- Hidden providers must remain recoverable through Quick Setup.
+- Quick Setup should show personal/page/policy source entries by default.
+- Team/Enterprise/API source entries should be available through an explicit "show Team/API providers" control so personal users are not overloaded.
+- Each Quick Setup card's main display switch controls only `displayEnabled`.
+- Hidden source entries must remain recoverable through Quick Setup.
+- Missing personal-page permissions should prompt host access or opening the usage page.
+- Missing API credentials should point users to the matching API credential card instead of pretending the source is connected.
 
 ### Provider Display
 
 Provider Display is the dashboard visibility, ordering, and quota-item configuration area.
 
-- Provider order controls should list providers that are display-eligible and dashboard-visible for the relevant surface.
-- Quota item controls should be scoped to display-eligible and dashboard-visible providers.
+- Provider order controls should list source entries that are display-enabled and display-eligible for the relevant surface.
+- Quota item controls should be scoped to display-enabled and display-eligible source entries.
 - Providers without renderable quota progress items should show a compact summary rather than expanded empty controls.
 - Deferred providers should not appear in Provider Display ordering.
 - Policy-only providers may appear only with policy-only wording and must not imply live remaining quota.
@@ -151,15 +159,15 @@ Rules:
 
 ### Cursor
 
-Cursor can be displayed only from truthful personal-dashboard or provider-source states. Do not imply an exact plan-wide remaining balance if the source only exposes billing-period context.
+Cursor personal-page and Cursor Team/API entries are separate display units. Cursor can be displayed only from truthful personal-dashboard or provider-source states. Do not imply an exact plan-wide remaining balance if the source only exposes billing-period context.
 
 ### Codex
 
-Codex can expose usage-window values and reset timing when available. Do not collapse separate usage windows into one fake plan-wide balance.
+Codex personal-page and Codex Enterprise/API entries are separate display units. Codex can expose usage-window values and reset timing when available. Do not collapse separate usage windows into one fake plan-wide balance.
 
 ### Claude Code
 
-Claude Team usage-page support can be represented when the logged-in usage surface is available. Claude Pro/Max support remains account-gated until directly verified.
+Claude Team usage-page and Claude Admin/API entries are separate display units. Claude Team usage-page support can be represented when the logged-in usage surface is available. Claude Pro/Max support remains account-gated until directly verified.
 
 ### Gemini Code Assist
 
@@ -172,10 +180,10 @@ JetBrains remains retained in the repo but deferred from the active support prom
 ## Non-Goals
 
 - Do not rename or remove provider source-truth evidence fields.
-- Do not migrate storage before the implementation phases define the exact model.
+- Do not reintroduce brand-level provider rows that switch personal/API behavior with `sourcePreference`.
 - Do not change Chrome permissions or manifest host claims.
 - Do not translate raw provider evidence, diagnostic raw bodies, or export schemas.
-- Do not package a release from this contract-only phase.
+- Do not package a release from source-model cleanup unless a separate release phase is opened.
 
 ## Implementation Status
 
@@ -184,10 +192,11 @@ JetBrains remains retained in the repo but deferred from the active support prom
 - `Phase 499` aligned popup and Provider order rendering to the same visible + display-eligible provider list.
 - `Phase 500` aligned quota item controls to visible + display-eligible providers while preserving stored preferences.
 - `Phase 501` closed the queue without packaging a new release candidate.
+- `Phase 503` changed provider ids to source-level entries, migrated legacy brand-level settings and credentials, fixed runtime adapters to use fixed source families per entry, and made Quick Setup default to personal/page/policy entries with an explicit Team/API reveal control.
 
 ## Implementation Notes For Future Work
 
-- Treat legacy `provider.enabled` carefully because it still represents dashboard display visibility in current UI.
+- Treat legacy `provider.enabled` only as storage migration input. New runtime code should use `displayEnabled`.
 - New code should prefer explicit concepts from this contract over overloaded booleans.
 - Quick Setup view-models should continue producing configurable provider cards.
 - Provider Display view-models should continue producing eligible, dashboard-visible provider controls.

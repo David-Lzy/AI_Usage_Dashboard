@@ -29,12 +29,12 @@ describe("buildSettingsPageViewModels", () => {
     expect(viewModels.settingsSummaryItems.length).toBeGreaterThan(0);
     expect(
       viewModels.credentialProviders.map(({ provider }) => provider.id),
-    ).toEqual(["cursor", "claude-code"]);
+    ).toEqual(["cursor-team-api", "claude-code-admin-api"]);
     expect(viewModels.credentialProviders[0]).toMatchObject({
       title: "Cursor Team Admin API key",
       inputLabel: "Admin API key",
     });
-    expect(viewModels.codexProvider?.id).toBe("codex");
+    expect(viewModels.codexProvider?.id).toBe("codex-enterprise-api");
   });
 
   it("uses localized Settings section labels for the zh-CN pilot", () => {

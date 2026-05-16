@@ -1,22 +1,19 @@
-import type { AppState, CredentialStatus } from "../providers/types";
+import type { AppState, CredentialStatus, ProviderSecrets } from "../providers/types";
 import { readProviderSecrets } from "../shared/provider-secrets";
 import { seedAppStateIfEmpty, writeAppState } from "../shared/storage";
 import { readStoreScreenshotRuntimeLock } from "../shared/store-screenshot-runtime-lock";
 
 function getProviderCredentialStatus(
   providerId: AppState["providerSettings"][number]["id"],
-  secrets: {
-    cursor: { adminApiKey: string | null };
-    "claude-code": { adminApiKey: string | null };
-    codex: { analyticsApiKey: string | null; workspaceId: string | null };
-  },
+  secrets: ProviderSecrets,
 ): CredentialStatus {
-  if (providerId === "cursor" || providerId === "claude-code") {
+  if (providerId === "cursor-team-api" || providerId === "claude-code-admin-api") {
     return secrets[providerId].adminApiKey ? "configured" : "missing";
   }
 
-  if (providerId === "codex") {
-    return secrets.codex.analyticsApiKey && secrets.codex.workspaceId
+  if (providerId === "codex-enterprise-api") {
+    return secrets["codex-enterprise-api"].analyticsApiKey &&
+      secrets["codex-enterprise-api"].workspaceId
       ? "configured"
       : "missing";
   }
@@ -26,11 +23,7 @@ function getProviderCredentialStatus(
 
 export function reconcileProviderCredentials(
   state: AppState,
-  secrets: {
-    cursor: { adminApiKey: string | null };
-    "claude-code": { adminApiKey: string | null };
-    codex: { analyticsApiKey: string | null; workspaceId: string | null };
-  },
+  secrets: ProviderSecrets,
 ): AppState {
   return {
     ...state,

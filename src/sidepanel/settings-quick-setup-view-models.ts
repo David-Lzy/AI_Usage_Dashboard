@@ -49,6 +49,7 @@ export type SettingsQuickSetupSourceModeModel = {
 
 export type SettingsQuickSetupCardModel = {
   currentSetupValue: string;
+  displayEnabled: boolean;
   enabled: boolean;
   helperText: string;
   nextStepValue: string;
@@ -169,7 +170,7 @@ function buildQuickSetupSourceModes(
       ],
       detail: sourcePlan.contractDetail,
       id: sourcePlan.kind,
-      isCurrent: provider.enabled && sourcePlan.kind === sourceDisplay.currentKind,
+      isCurrent: provider.displayEnabled && sourcePlan.kind === sourceDisplay.currentKind,
       label: sourcePlan.label,
     }));
 }
@@ -192,9 +193,10 @@ export function buildSettingsQuickSetupCardModel(
     sourceDisplayCopy,
   );
 
-  if (!provider.enabled) {
+  if (!provider.displayEnabled) {
     return {
       currentSetupValue: copy.quickSetup.currentSetup.disabled,
+      displayEnabled: false,
       enabled: false,
       helperText: copy.quickSetup.helperText.disabled,
       nextStepValue: copy.quickSetup.actions.enableProvider,
@@ -285,6 +287,7 @@ export function buildSettingsQuickSetupCardModel(
 
   return {
     currentSetupValue: buildQuickSetupCurrentValue(sourceDisplay, copy),
+    displayEnabled: true,
     enabled: true,
     helperText: buildQuickSetupHelperText(
       sourceDisplay,

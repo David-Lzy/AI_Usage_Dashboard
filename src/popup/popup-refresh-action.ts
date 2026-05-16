@@ -1,4 +1,5 @@
 import type { AppState, ProviderSetting } from "../providers/types";
+import { getProviderDefinition } from "../providers/provider-definitions";
 import { sendAppMessage } from "../shared/app-client";
 import {
   findHostAccessRefreshCandidate,
@@ -17,7 +18,7 @@ type PopupRefreshActionDeps = {
 };
 
 function buildHostAccessDeniedMessage(provider: ProviderSetting): string {
-  return `${provider.label} access was not granted. Reopen the popup and refresh again after granting host access.`;
+  return `${getProviderDefinition(provider.id).shortLabel} access was not granted. Reopen the popup and refresh again after granting host access.`;
 }
 
 export async function runPopupRefreshAction(

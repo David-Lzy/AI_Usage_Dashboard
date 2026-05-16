@@ -14,7 +14,7 @@ vi.mock("./official", () => ({
 import { syncJetBrainsProvider } from "./adapter";
 
 const baseProvider: ProviderSnapshot = {
-  providerId: "jetbrains",
+  providerId: "jetbrains-org-page",
   providerLabel: "JetBrains AI",
   planName: "Unknown",
   quotaUnit: "credits",
@@ -35,11 +35,15 @@ const baseProvider: ProviderSnapshot = {
 };
 
 const grantedSetting: ProviderSetting = {
-  id: "jetbrains",
+  id: "jetbrains-org-page",
+  brandId: "jetbrains",
   label: "JetBrains AI",
+  displayEnabled: true,
   enabled: true,
   status: "granted",
   credentialStatus: "not_required",
+  sourceKind: "session_page",
+  connectionMode: "page_session",
   sourcePreference: "auto",
   pageBinding: createEmptyPageBinding(),
   hostsLabel: "account.jetbrains.com · jetbrains.com",

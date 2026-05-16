@@ -1,4 +1,5 @@
 import type { ProviderId } from "../providers/types";
+import { isApiKeyProviderId } from "../providers/provider-definitions";
 import type { SettingsRouteFocus } from "../sidepanel/route-state";
 import { SETTINGS_SECTION_IDS } from "../sidepanel/settings-section-ids";
 import type { PopupGuidanceAction } from "./view-model-types";
@@ -8,16 +9,6 @@ type PopupSettingsTargetProvider = {
   permissionStatus: string;
   providerId: ProviderId;
 };
-
-function isCredentialSettingsProviderId(
-  providerId: ProviderId,
-): providerId is "cursor" | "claude-code" | "codex" {
-  return (
-    providerId === "cursor" ||
-    providerId === "claude-code" ||
-    providerId === "codex"
-  );
-}
 
 export function getSettingsRouteFocusForPopupProvider(
   provider: PopupSettingsTargetProvider,
@@ -31,7 +22,7 @@ export function getSettingsRouteFocusForPopupProvider(
 
   if (
     provider.currentSourceStateKind === "credential_missing" &&
-    isCredentialSettingsProviderId(provider.providerId)
+    isApiKeyProviderId(provider.providerId)
   ) {
     return {
       kind: "credential-provider",

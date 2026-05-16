@@ -161,7 +161,7 @@ export const EN_RUNTIME_MESSAGES = {
     "settings.theme_customization.preview.secondary_container": "Secondary container",
     "settings.theme_customization.preview.tertiary": "Tertiary",
     "settings.visibility.eyebrow": "Provider Visibility",
-    "settings.visibility.enabled_detail": "Visible in the dashboard.",
+    "settings.visibility.displayEnabled_detail": "Visible in the dashboard.",
     "settings.visibility.disabled_detail": "Hidden from the dashboard.",
     "settings.credentials.eyebrow": "Credentials",
     "settings.credentials.title": "Stored secrets and workspace config",

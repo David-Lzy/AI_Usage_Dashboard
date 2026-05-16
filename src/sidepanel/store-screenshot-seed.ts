@@ -73,7 +73,7 @@ function patchProviderSnapshot(
 
 function disableAllProviders(state: AppState) {
   for (const provider of state.providerSettings) {
-    provider.enabled = false;
+    provider.displayEnabled = false;
   }
 }
 
@@ -88,9 +88,9 @@ function buildToolbarFirstQuickGlanceState(): AppState {
   disableAllProviders(state);
   applySharedStoreTheme(state);
 
-  for (const providerId of ["cursor", "claude-code", "codex"] as const) {
+  for (const providerId of ["cursor-personal-page", "claude-code-team-page", "codex-personal-page"] as const) {
     patchProviderSetting(state, providerId, {
-      enabled: true,
+      displayEnabled: true,
       status: "granted",
       credentialStatus: "configured",
     });
@@ -105,19 +105,19 @@ function buildToolbarFirstQuickGlanceState(): AppState {
     });
   }
 
-  patchProviderSnapshot(state, "cursor", {
+  patchProviderSnapshot(state, "cursor-personal-page", {
     used: 36,
     remaining: null,
     total: null,
     resetLabel: "Current billing-period usage",
   });
-  patchProviderSnapshot(state, "claude-code", {
+  patchProviderSnapshot(state, "claude-code-team-page", {
     used: 4,
     remaining: null,
     total: null,
     resetLabel: "Healthy analytics snapshot",
   });
-  patchProviderSnapshot(state, "codex", {
+  patchProviderSnapshot(state, "codex-personal-page", {
     planName: "Codex personal usage pages",
     quotaUnit: "percent",
     quotaWindow: "workspace",
@@ -129,7 +129,7 @@ function buildToolbarFirstQuickGlanceState(): AppState {
     syncSource: "page_parse",
     sourceSelectionReason: "Auto selected Session page.",
     sourceSelectionDiagnostic: createSourceSelectionDiagnostic({
-      providerId: "codex",
+      providerId: "codex-personal-page",
       sourcePreference: "auto",
       selectedKind: "session_page",
       hadFallback: false,
@@ -147,17 +147,17 @@ function buildSetupGuidanceState(): AppState {
   disableAllProviders(state);
   applySharedStoreTheme(state);
 
-  patchProviderSetting(state, "cursor", {
-    enabled: true,
+  patchProviderSetting(state, "cursor-personal-page", {
+    displayEnabled: true,
     status: "missing",
     credentialStatus: "configured",
   });
-  patchProviderSnapshot(state, "cursor", {
+  patchProviderSnapshot(state, "cursor-personal-page", {
     syncStatus: "warning",
     tone: "warning",
     warningReason: "Grant access to cursor.com before live sync can run.",
     warningDiagnostic: createHostAccessDiagnostic({
-      providerId: "cursor",
+      providerId: "cursor-personal-page",
       sourceKind: "session_page",
       hostLabel: "cursor.com",
       rawMessage: "Grant access to cursor.com before live sync can run.",
@@ -167,17 +167,17 @@ function buildSetupGuidanceState(): AppState {
     sourceFallbackDiagnostic: null,
   });
 
-  patchProviderSetting(state, "codex", {
-    enabled: true,
+  patchProviderSetting(state, "codex-personal-page", {
+    displayEnabled: true,
     status: "granted",
     credentialStatus: "missing",
   });
-  patchProviderSnapshot(state, "codex", {
+  patchProviderSnapshot(state, "codex-personal-page", {
     syncStatus: "error",
     tone: "error",
     warningReason: "Workspace id config required before live sync can run.",
     warningDiagnostic: createCredentialDiagnostic({
-      providerId: "codex",
+      providerId: "codex-personal-page",
       credentialKind: "workspace_config",
       rawMessage: "Workspace id config required before live sync can run.",
     }),
@@ -193,12 +193,12 @@ function buildHonestContractOnlyState(): AppState {
   disableAllProviders(state);
   applySharedStoreTheme(state);
 
-  patchProviderSetting(state, "gemini", {
-    enabled: true,
+  patchProviderSetting(state, "gemini-policy", {
+    displayEnabled: true,
     status: "granted",
     credentialStatus: "not_required",
   });
-  patchProviderSnapshot(state, "gemini", {
+  patchProviderSnapshot(state, "gemini-policy", {
     syncedAt: "2026-04-24 19:39",
     lastSyncLabel: "Documented policy snapshot",
   });
@@ -211,12 +211,12 @@ function buildProviderOrDashboardDepthState(): AppState {
   disableAllProviders(state);
   applySharedStoreTheme(state);
 
-  patchProviderSetting(state, "codex", {
-    enabled: true,
+  patchProviderSetting(state, "codex-personal-page", {
+    displayEnabled: true,
     status: "granted",
     credentialStatus: "configured",
   });
-  patchProviderSnapshot(state, "codex", {
+  patchProviderSnapshot(state, "codex-personal-page", {
     syncStatus: "warning",
     tone: "warning",
     warningReason:

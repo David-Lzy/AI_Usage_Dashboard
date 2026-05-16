@@ -19,10 +19,10 @@ describe("configuration backup", () => {
           "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB",
       },
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) =>
-        provider.id === "cursor"
+        provider.id === "cursor-personal-page"
           ? {
               ...provider,
-              enabled: false,
+              displayEnabled: false,
               sourcePreference: "session_page",
               status: "granted",
               pageBinding: {
@@ -43,8 +43,8 @@ describe("configuration backup", () => {
       "data:image/png",
     );
     expect(backup.payload.providerSettings).toContainEqual({
-      id: "cursor",
-      enabled: false,
+      id: "cursor-personal-page",
+      displayEnabled: false,
       sourcePreference: "session_page",
     });
     expect(JSON.stringify(backup.payload)).not.toContain("tabId");
@@ -82,10 +82,10 @@ describe("configuration backup", () => {
         themeMode: "dark",
       },
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) =>
-        provider.id === "cursor"
+        provider.id === "cursor-personal-page"
           ? {
               ...provider,
-              enabled: false,
+              displayEnabled: false,
               sourcePreference: "session_page",
             }
           : provider,
@@ -94,7 +94,7 @@ describe("configuration backup", () => {
     const currentState: AppState = {
       ...SAMPLE_APP_STATE,
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) =>
-        provider.id === "cursor"
+        provider.id === "cursor-personal-page"
           ? {
               ...provider,
               pageBinding: {
@@ -111,12 +111,12 @@ describe("configuration backup", () => {
     };
     const importedState = applyConfigurationBackupToState(currentState, backup);
     const cursorSetting = importedState.providerSettings.find(
-      (provider) => provider.id === "cursor",
+      (provider) => provider.id === "cursor-personal-page",
     );
 
     expect(importedState.settings.locale).toBe("zh-CN");
     expect(importedState.settings.themeMode).toBe("dark");
-    expect(cursorSetting?.enabled).toBe(false);
+    expect(cursorSetting?.displayEnabled).toBe(false);
     expect(cursorSetting?.sourcePreference).toBe("session_page");
     expect(cursorSetting?.pageBinding.tabId).toBe(456);
   });

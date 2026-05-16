@@ -30,8 +30,8 @@ describe("settings view models", () => {
 
     expect(items).toEqual([
       { label: "Enabled", value: "4", tone: "neutral" },
-      { label: "Connected", value: "3", tone: "neutral" },
-      { label: "Needs action", value: "0", tone: "neutral" },
+      { label: "Connected", value: "2", tone: "neutral" },
+      { label: "Needs action", value: "1", tone: "warning" },
     ]);
   });
 
@@ -52,8 +52,8 @@ describe("settings view models", () => {
 
     expect(items).toEqual([
       { label: "已启用", value: "#4", tone: "neutral" },
-      { label: "已连接", value: "#3", tone: "neutral" },
-      { label: "待处理", value: "#0", tone: "neutral" },
+      { label: "已连接", value: "#2", tone: "neutral" },
+      { label: "待处理", value: "#1", tone: "warning" },
       { label: "已存密钥", value: "#0", tone: "neutral" },
       { label: "已绑定页面", value: "#0", tone: "neutral" },
     ]);
@@ -62,7 +62,7 @@ describe("settings view models", () => {
   it("counts only enabled access gaps and configured local secrets", () => {
     const items = buildSettingsSummaryItems(
       SAMPLE_APP_STATE.providerSettings.map((provider) => {
-        if (provider.id === "cursor") {
+        if (provider.id === "cursor-personal-page") {
           return {
             ...provider,
             status: "missing" as const,
@@ -77,17 +77,17 @@ describe("settings view models", () => {
           };
         }
 
-        if (provider.id === "codex") {
+        if (provider.id === "codex-personal-page") {
           return {
             ...provider,
             credentialStatus: "configured" as const,
           };
         }
 
-        if (provider.id === "jetbrains") {
+        if (provider.id === "jetbrains-org-page") {
           return {
             ...provider,
-            enabled: false,
+            displayEnabled: false,
             status: "missing" as const,
           };
         }
@@ -100,8 +100,8 @@ describe("settings view models", () => {
 
     expect(items).toEqual([
       { label: "Enabled", value: "4", tone: "neutral" },
-      { label: "Connected", value: "2", tone: "neutral" },
-      { label: "Needs action", value: "1", tone: "warning" },
+      { label: "Connected", value: "1", tone: "neutral" },
+      { label: "Needs action", value: "2", tone: "warning" },
       { label: "Stored Secrets", value: "1", tone: "neutral" },
       { label: "Bound Pages", value: "1", tone: "neutral" },
     ]);
@@ -109,11 +109,11 @@ describe("settings view models", () => {
 
   it("builds a quick-setup model for page-backed providers that are ready", () => {
     const provider =
-      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "cursor") ??
+      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "cursor-personal-page") ??
       null;
     const snapshot =
       SAMPLE_APP_STATE.providers.find(
-        (entry) => entry.providerId === "cursor",
+        (entry) => entry.providerId === "cursor-personal-page",
       ) ?? null;
     const settingsCopy = buildSettingsLocalizedCopy(createRuntimeI18n("en"));
 
@@ -129,9 +129,8 @@ describe("settings view models", () => {
 
     expect(quickSetupModel.statusLabel).toBe("Ready to sync");
     expect(quickSetupModel.currentSetupValue).toBe("Signed-in usage page");
-    expect(quickSetupModel.sourcePreferenceValue).toBe("Auto");
+    expect(quickSetupModel.sourcePreferenceValue).toBe("Session page");
     expect(quickSetupModel.sourceModes.map((mode) => mode.id)).toEqual([
-      "official_api",
       "session_page",
     ]);
     expect(
@@ -141,9 +140,9 @@ describe("settings view models", () => {
       label: "Cursor personal dashboard usage page",
     });
     expect(
-      quickSetupModel.sourceModes.find((mode) => mode.id === "official_api")
+      quickSetupModel.sourceModes.find((mode) => mode.id === "session_page")
         ?.chips.map((chip) => chip.label),
-    ).toEqual(["Official API", "Shipped", "Stored credential"]);
+    ).toEqual(["Session page", "Shipped", "Logged-in page session"]);
     expect(quickSetupModel.primaryAction).toBeNull();
     expect(
       quickSetupModel.secondaryActions.some(
@@ -154,11 +153,11 @@ describe("settings view models", () => {
 
   it("maps missing host access to a grant-access quick-setup action", () => {
     const provider =
-      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "cursor") ??
+      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "cursor-personal-page") ??
       null;
     const snapshot =
       SAMPLE_APP_STATE.providers.find(
-        (entry) => entry.providerId === "cursor",
+        (entry) => entry.providerId === "cursor-personal-page",
       ) ?? null;
     const settingsCopy = buildSettingsLocalizedCopy(createRuntimeI18n("en"));
 
@@ -188,11 +187,11 @@ describe("settings view models", () => {
   it("maps open-page-required and logged-out states to the correct page actions", () => {
     const provider =
       SAMPLE_APP_STATE.providerSettings.find(
-        (entry) => entry.id === "claude-code",
+        (entry) => entry.id === "claude-code-team-page",
       ) ?? null;
     const snapshot =
       SAMPLE_APP_STATE.providers.find(
-        (entry) => entry.providerId === "claude-code",
+        (entry) => entry.providerId === "claude-code-team-page",
       ) ?? null;
     const settingsCopy = buildSettingsLocalizedCopy(createRuntimeI18n("en"));
 
@@ -206,7 +205,7 @@ describe("settings view models", () => {
         syncSource: "page_parse",
         warningReason: "Open the required logged-in provider page, then refresh again.",
         warningDiagnostic: createPageSessionDiagnostic({
-          providerId: "claude-code",
+          providerId: "claude-code-team-page",
           pageSessionKind: "open_page_required",
           rawMessage:
             "Open the required logged-in provider page, then refresh again.",
@@ -222,7 +221,7 @@ describe("settings view models", () => {
         syncSource: "page_parse",
         warningReason: "Log in on the provider page again before refreshing the dashboard.",
         warningDiagnostic: createPageSessionDiagnostic({
-          providerId: "claude-code",
+          providerId: "claude-code-team-page",
           pageSessionKind: "logged_out",
           rawMessage:
             "Log in on the provider page again before refreshing the dashboard.",
@@ -244,11 +243,11 @@ describe("settings view models", () => {
 
   it("keeps source-mode cards available for disabled quick-setup providers", () => {
     const provider =
-      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "gemini") ??
+      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "gemini-policy") ??
       null;
     const snapshot =
       SAMPLE_APP_STATE.providers.find(
-        (entry) => entry.providerId === "gemini",
+        (entry) => entry.providerId === "gemini-policy",
       ) ?? null;
     const settingsCopy = buildSettingsLocalizedCopy(createRuntimeI18n("zh-CN"));
     const sourceDisplayCopy = buildProviderSourceDisplayLocalizedCopy(
@@ -261,7 +260,7 @@ describe("settings view models", () => {
     const quickSetupModel = buildSettingsQuickSetupCardModel(
       {
         ...provider!,
-        enabled: false,
+        displayEnabled: false,
       },
       snapshot!,
       settingsCopy,
@@ -269,11 +268,10 @@ describe("settings view models", () => {
       sourceDisplayCopy,
     );
 
-    expect(quickSetupModel.enabled).toBe(false);
+    expect(quickSetupModel.displayEnabled).toBe(false);
     expect(quickSetupModel.sourcePreferenceValue).toBe("自动");
     expect(quickSetupModel.sourceModes.map((mode) => mode.id)).toEqual([
       "policy_only",
-      "session_page",
     ]);
     expect(quickSetupModel.sourceModes[0]).toMatchObject({
       isCurrent: false,
@@ -288,10 +286,10 @@ describe("settings view models", () => {
 
   it("splits source-card data into primary summary fields and diagnostics", () => {
     const provider =
-      SAMPLE_APP_STATE.providers.find((entry) => entry.providerId === "codex") ??
+      SAMPLE_APP_STATE.providers.find((entry) => entry.providerId === "codex-personal-page") ??
       null;
     const setting =
-      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "codex") ??
+      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "codex-personal-page") ??
       null;
 
     expect(provider).not.toBeNull();
@@ -302,12 +300,12 @@ describe("settings view models", () => {
     );
 
     expect(sourceCardModel.primaryFields).toEqual([
-      { label: "Access model", value: "Stored credential" },
+      { label: "Access model", value: "Logged-in page session" },
       {
         label: "Availability summary",
-        value: "Used: Analytics · Remaining: Unavailable · Reset: Window only",
+        value: "Used: Window only · Remaining: Exact · Reset: Exact",
       },
-      { label: "Fallback", value: "Session page" },
+      { label: "Fallback", value: "None" },
     ]);
     expect(sourceCardModel.summaryNoteLines).toEqual([]);
     expect(sourceCardModel.summaryNoteTone).toBeNull();
@@ -337,7 +335,7 @@ describe("settings view models", () => {
         group.fields.some(
           (field) =>
             field.label === "Selection reason" &&
-            field.value === "Auto selected Official API.",
+            field.value === "Session page selected.",
         ),
       ),
     ).toBe(true);
@@ -363,21 +361,29 @@ describe("settings view models", () => {
 
   it("keeps fallback or warning reasons visible when the summary needs explanation", () => {
     const provider =
-      SAMPLE_APP_STATE.providers.find((entry) => entry.providerId === "cursor") ??
+      SAMPLE_APP_STATE.providers.find((entry) => entry.providerId === "cursor-personal-page") ??
       null;
     const setting =
-      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "cursor") ??
+      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "cursor-personal-page") ??
       null;
 
     expect(provider).not.toBeNull();
     expect(setting).not.toBeNull();
 
+    const fallbackReason =
+      "Session page unavailable: no readable Cursor usage page is attached.";
     const sourceCardModel = buildSettingsSourceCardModel(
-      buildProviderSourceDisplay(provider!, setting!),
+      buildProviderSourceDisplay(
+        {
+          ...provider!,
+          sourceFallbackReason: fallbackReason,
+        },
+        setting!,
+      ),
     );
 
     expect(sourceCardModel.summaryNoteLines).toEqual([
-      "Official API unavailable: no Cursor Admin API key is stored.",
+      fallbackReason,
     ]);
     expect(sourceCardModel.summaryNoteTone).toBe("warning");
     expect(
@@ -386,18 +392,17 @@ describe("settings view models", () => {
       )?.fields.some(
         (field) =>
           field.label === "Fallback reason" &&
-          field.value ===
-            "Official API unavailable: no Cursor Admin API key is stored.",
+          field.value === fallbackReason,
       ),
     ).toBe(true);
   });
 
   it("adds localized typed diagnostic presentation without hiding raw diagnostics", () => {
     const provider =
-      SAMPLE_APP_STATE.providers.find((entry) => entry.providerId === "codex") ??
+      SAMPLE_APP_STATE.providers.find((entry) => entry.providerId === "codex-personal-page") ??
       null;
     const setting =
-      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "codex") ??
+      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "codex-personal-page") ??
       null;
 
     expect(provider).not.toBeNull();
@@ -406,7 +411,7 @@ describe("settings view models", () => {
     const i18n = createRuntimeI18n("zh-CN");
     const settingsCopy = buildSettingsLocalizedCopy(i18n);
     const diagnostic = createUsageThresholdDiagnostic({
-      providerId: "codex",
+      providerId: "codex-personal-page",
       usageThresholdKind: "threshold_warning",
       rawMessage: "5-hour usage window: 7% remaining",
       usagePercent: 93,
@@ -444,7 +449,7 @@ describe("settings view models", () => {
         {
           label: "就绪详情",
           value:
-            "Current release path for Enterprise workspaces. Exact remaining workspace credits are not exposed.",
+            "Shipped personal-user path. The 2026-04-21 live-tab capture matched chatgpt.com/codex/cloud/settings/analytics#usage and exposed exact remaining percentages plus reset times in DOM. The extension attaches to the already-running logged-in ChatGPT tab and does not export cookies.",
         },
       ]),
     );
@@ -452,10 +457,10 @@ describe("settings view models", () => {
 
   it("adds localized source diagnostic presentation without hiding raw source reasons", () => {
     const provider =
-      SAMPLE_APP_STATE.providers.find((entry) => entry.providerId === "cursor") ??
+      SAMPLE_APP_STATE.providers.find((entry) => entry.providerId === "cursor-personal-page") ??
       null;
     const setting =
-      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "cursor") ??
+      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "cursor-personal-page") ??
       null;
 
     expect(provider).not.toBeNull();
@@ -464,14 +469,14 @@ describe("settings view models", () => {
     const i18n = createRuntimeI18n("zh-CN");
     const settingsCopy = buildSettingsLocalizedCopy(i18n);
     const sourceSelectionDiagnostic = createSourceSelectionDiagnostic({
-      providerId: "cursor",
+      providerId: "cursor-personal-page",
       sourcePreference: "auto",
       selectedKind: "session_page",
       hadFallback: true,
       rawMessage: "Auto fell back to Session page.",
     });
     const sourceFallbackDiagnostic = createSourceFallbackDiagnostic({
-      providerId: "cursor",
+      providerId: "cursor-personal-page",
       sourcePreference: "auto",
       failure: {
         kind: "official_api",
@@ -531,10 +536,10 @@ describe("settings view models", () => {
 
   it("keeps raw settings evidence visible when typed diagnostic presentation is absent", () => {
     const provider =
-      SAMPLE_APP_STATE.providers.find((entry) => entry.providerId === "cursor") ??
+      SAMPLE_APP_STATE.providers.find((entry) => entry.providerId === "cursor-personal-page") ??
       null;
     const setting =
-      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "cursor") ??
+      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "cursor-personal-page") ??
       null;
 
     expect(provider).not.toBeNull();
@@ -611,10 +616,10 @@ describe("settings view models", () => {
 
   it("builds a compact deferred session-track model with a graduation gate", () => {
     const provider =
-      SAMPLE_APP_STATE.providers.find((entry) => entry.providerId === "gemini") ??
+      SAMPLE_APP_STATE.providers.find((entry) => entry.providerId === "jetbrains-org-page") ??
       null;
     const setting =
-      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "gemini") ??
+      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "jetbrains-org-page") ??
       null;
 
     expect(provider).not.toBeNull();
@@ -632,17 +637,17 @@ describe("settings view models", () => {
       sourceCardModel.sessionTrack?.fields.some(
         (field) =>
           field.label === "Graduation gate" &&
-          field.value === "Accept project-metrics support",
+          field.value === "Reverify org-visible Console session",
       ),
     ).toBe(true);
     expect(sourceCardModel.sessionTrack?.noteTone).toBe("warning");
   });
   it("accepts localized labels for deeper settings helper copy", () => {
     const provider =
-      SAMPLE_APP_STATE.providers.find((entry) => entry.providerId === "codex") ??
+      SAMPLE_APP_STATE.providers.find((entry) => entry.providerId === "codex-personal-page") ??
       null;
     const setting =
-      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "codex") ??
+      SAMPLE_APP_STATE.providerSettings.find((entry) => entry.id === "codex-personal-page") ??
       null;
 
     expect(provider).not.toBeNull();
@@ -663,15 +668,15 @@ describe("settings view models", () => {
 
     expect(sourceCardModel.primaryFields[0]).toEqual({
       label: "访问模型",
-      value: "已存凭据",
+      value: "已登录页面会话",
     });
     expect(sourceCardModel.primaryFields[1]).toEqual({
       label: "可用性摘要",
-      value: "已用：分析 · 剩余：不可用 · 重置：仅窗口",
+      value: "已用：仅窗口 · 剩余：精确 · 重置：精确",
     });
     expect(sourceCardModel.primaryFields[2]).toEqual({
       label: "回退",
-      value: "会话页面",
+      value: "无",
     });
     expect(sourceCardModel.sessionTrack?.chips.map((chip) => chip.label)).toEqual([
       "已发布",

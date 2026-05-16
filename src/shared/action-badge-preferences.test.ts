@@ -16,7 +16,7 @@ function createStateWithCodexWindows(): AppState {
   return {
     ...SAMPLE_APP_STATE,
     providers: SAMPLE_APP_STATE.providers.map((provider) =>
-      provider.providerId === "codex"
+      provider.providerId === "codex-personal-page"
         ? {
             ...provider,
             syncStatus: "ok",
@@ -83,7 +83,7 @@ describe("action badge preferences", () => {
       "Weekly usage window",
     );
     expect(
-      candidates.some((candidate) => candidate.providerId === "claude-code"),
+      candidates.some((candidate) => candidate.providerId === "claude-code-team-page"),
     ).toBe(false);
   });
 
@@ -102,7 +102,7 @@ describe("action badge preferences", () => {
   it("rotates through selected badge entries by interval", () => {
     const state = createStateWithCodexWindows();
     const candidateValues = buildActionBadgeQuotaCandidates(state)
-      .filter((candidate) => candidate.providerId === "codex")
+      .filter((candidate) => candidate.providerId === "codex-personal-page")
       .map((candidate) => candidate.value);
     const rotatingState = {
       ...state,
@@ -138,7 +138,7 @@ describe("action badge preferences", () => {
       label: "异常数量",
     });
     expect(options.map((option) => option.label)).toContain(
-      "Codex · Weekly usage window 剩余",
+      "Codex Personal · Weekly usage window 剩余",
     );
   });
 });

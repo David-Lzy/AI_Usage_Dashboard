@@ -15,19 +15,19 @@ describe("host access refresh helpers", () => {
   it("returns the requested provider when refresh targets one missing grant", () => {
     const state = createState({
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) =>
-        provider.id === "codex"
+        provider.id === "codex-personal-page"
           ? { ...provider, status: "missing" as const }
           : provider,
       ),
     });
 
-    expect(findHostAccessRefreshCandidate(state, "codex")?.id).toBe("codex");
+    expect(findHostAccessRefreshCandidate(state, "codex-personal-page")?.id).toBe("codex-personal-page");
   });
 
   it("does not pick a refresh-all candidate when multiple grants are missing", () => {
     const state = createState({
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) =>
-        provider.id === "codex" || provider.id === "cursor"
+        provider.id === "codex-personal-page" || provider.id === "cursor-personal-page"
           ? { ...provider, status: "missing" as const }
           : provider,
       ),
@@ -39,12 +39,12 @@ describe("host access refresh helpers", () => {
   it("uses the only enabled missing-grant provider for refresh-all", () => {
     const state = createState({
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) =>
-        provider.id === "codex"
+        provider.id === "codex-personal-page"
           ? { ...provider, status: "missing" as const }
           : provider,
       ),
     });
 
-    expect(findHostAccessRefreshCandidate(state)?.id).toBe("codex");
+    expect(findHostAccessRefreshCandidate(state)?.id).toBe("codex-personal-page");
   });
 });

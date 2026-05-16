@@ -414,10 +414,14 @@ function getSelectableSourceKinds(providerId: ProviderId): ProviderSourceKind[] 
 export function getSourcePreferenceOptions(
   providerId: ProviderId,
 ): ProviderSourcePreference[] {
+  const blueprint = getProviderSourceBlueprint(providerId);
   const selectableKinds = getSelectableSourceKinds(providerId);
 
   if (selectableKinds.length < 2) {
-    return ["auto"];
+    return blueprint.preferredSourceKind === "official_api" ||
+      blueprint.preferredSourceKind === "session_page"
+      ? [blueprint.preferredSourceKind]
+      : ["auto"];
   }
 
   return [
@@ -437,7 +441,7 @@ export function normalizeSourcePreference(
 
   return options.includes(value as ProviderSourcePreference)
     ? (value as ProviderSourcePreference)
-    : "auto";
+    : (options[0] ?? "auto");
 }
 
 export function getSourceAttemptOrder(
@@ -475,7 +479,7 @@ export function getSourceAttemptOrder(
 export function inferCurrentSourceKind(
   provider: Pick<ProviderSnapshot, "providerId" | "syncSource">,
 ): ProviderSourceKind {
-  if (provider.providerId === "gemini") {
+  if (provider.providerId === "gemini-policy") {
     return "policy_only";
   }
 

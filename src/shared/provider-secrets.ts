@@ -1,4 +1,8 @@
-import type { ApiKeyProviderId, ProviderSecrets } from "../providers/types";
+import type {
+  ApiKeyProviderId,
+  LegacyProviderId,
+  ProviderSecrets,
+} from "../providers/types";
 import {
   PROVIDER_SECRETS_STORAGE_KEY,
   SAMPLE_PROVIDER_SECRETS,
@@ -28,17 +32,39 @@ function normalizeWorkspaceId(value: unknown): string | null {
   return trimmedValue.length > 0 ? trimmedValue : null;
 }
 
-function normalizeProviderSecrets(secrets: Partial<ProviderSecrets>): ProviderSecrets {
+type StoredProviderSecrets = Partial<ProviderSecrets> &
+  Partial<
+    Record<
+      LegacyProviderId,
+      {
+        adminApiKey?: unknown;
+        analyticsApiKey?: unknown;
+        workspaceId?: unknown;
+      }
+    >
+  >;
+
+function normalizeProviderSecrets(secrets: StoredProviderSecrets): ProviderSecrets {
   return {
-    cursor: {
-      adminApiKey: normalizeApiKey(secrets.cursor?.adminApiKey),
+    "cursor-team-api": {
+      adminApiKey: normalizeApiKey(
+        secrets["cursor-team-api"]?.adminApiKey ?? secrets.cursor?.adminApiKey,
+      ),
     },
-    "claude-code": {
-      adminApiKey: normalizeApiKey(secrets["claude-code"]?.adminApiKey),
+    "claude-code-admin-api": {
+      adminApiKey: normalizeApiKey(
+        secrets["claude-code-admin-api"]?.adminApiKey ??
+          secrets["claude-code"]?.adminApiKey,
+      ),
     },
-    codex: {
-      analyticsApiKey: normalizeApiKey(secrets.codex?.analyticsApiKey),
-      workspaceId: normalizeWorkspaceId(secrets.codex?.workspaceId),
+    "codex-enterprise-api": {
+      analyticsApiKey: normalizeApiKey(
+        secrets["codex-enterprise-api"]?.analyticsApiKey ??
+          secrets.codex?.analyticsApiKey,
+      ),
+      workspaceId: normalizeWorkspaceId(
+        secrets["codex-enterprise-api"]?.workspaceId ?? secrets.codex?.workspaceId,
+      ),
     },
   };
 }
@@ -63,7 +89,7 @@ function readLocalStorageSecrets(): ProviderSecrets {
       return cloneProviderSecrets(SAMPLE_PROVIDER_SECRETS);
     }
 
-    return normalizeProviderSecrets(JSON.parse(rawSecrets) as ProviderSecrets);
+    return normalizeProviderSecrets(JSON.parse(rawSecrets) as StoredProviderSecrets);
   } catch {
     globalThis.localStorage.removeItem(PROVIDER_SECRETS_STORAGE_KEY);
     return cloneProviderSecrets(SAMPLE_PROVIDER_SECRETS);
@@ -81,7 +107,7 @@ export async function readProviderSecrets(): Promise<ProviderSecrets> {
   if (hasChromeStorage()) {
     const stored = await chrome.storage.local.get(PROVIDER_SECRETS_STORAGE_KEY);
     const rawSecrets = stored[PROVIDER_SECRETS_STORAGE_KEY] as
-      | ProviderSecrets
+      | StoredProviderSecrets
       | undefined;
 
     return rawSecrets
@@ -128,6 +154,10 @@ export async function setProviderAdminApiKey(
   providerId: ApiKeyProviderId,
   apiKey: string | null,
 ): Promise<ProviderSecrets> {
+  if (providerId === "codex-enterprise-api") {
+    return readProviderSecrets();
+  }
+
   return updateProviderSecrets((current) => ({
     ...current,
     [providerId]: {
@@ -143,8 +173,8 @@ export async function setCodexWorkspaceConfig(
 ): Promise<ProviderSecrets> {
   return updateProviderSecrets((current) => ({
     ...current,
-    codex: {
-      ...current.codex,
+    "codex-enterprise-api": {
+      ...current["codex-enterprise-api"],
       analyticsApiKey: normalizeApiKey(analyticsApiKey),
       workspaceId: normalizeWorkspaceId(workspaceId),
     },

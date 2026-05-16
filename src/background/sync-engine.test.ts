@@ -62,7 +62,7 @@ describe("sync engine health reconciliation", () => {
       severity: "warning",
       rawMessage: snapshot.warningReason,
       params: {
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         syncStaleKind: "cached_state_stale",
         ageMinutes: 240,
         staleAfterMinutes: 60,
@@ -92,7 +92,7 @@ describe("sync engine health reconciliation", () => {
       severity: "warning",
       rawMessage: snapshot.warningReason,
       params: {
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         syncStaleKind: "automatic_sync_overdue",
         ageMinutes: 240,
         staleAfterMinutes: 60,
@@ -102,7 +102,7 @@ describe("sync engine health reconciliation", () => {
 
   it("does not overwrite existing provider warning diagnostics", () => {
     const existingDiagnostic = createUsageThresholdDiagnostic({
-      providerId: "cursor",
+      providerId: "cursor-personal-page",
       usageThresholdKind: "threshold_warning",
       rawMessage: "80% of included requests consumed",
       usagePercent: 80,
@@ -126,7 +126,7 @@ describe("sync engine health reconciliation", () => {
   it("detects user-visible provider-setting drift during background sync", () => {
     const startedSetting = buildProviderSetting();
     const latestSetting = buildProviderSetting({
-      sourcePreference: "session_page",
+      displayEnabled: false,
     });
 
     expect(

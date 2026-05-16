@@ -24,8 +24,9 @@ export function useSettingsCredentialDrafts({
   const [credentialInputs, setCredentialInputs] = useState<
     Record<ApiKeyProviderId, string>
   >({
-    cursor: "",
-    "claude-code": "",
+    "cursor-team-api": "",
+    "claude-code-admin-api": "",
+    "codex-enterprise-api": "",
   });
   const [codexAnalyticsApiKeyInput, setCodexAnalyticsApiKeyInput] = useState("");
   const [codexWorkspaceIdInput, setCodexWorkspaceIdInput] = useState("");

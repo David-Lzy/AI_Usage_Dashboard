@@ -24,8 +24,8 @@ function getProviderPair(providerId: string) {
 
 describe("provider display eligibility", () => {
   it("allows shipped live providers and policy-only providers", () => {
-    const codex = getProviderPair("codex");
-    const gemini = getProviderPair("gemini");
+    const codex = getProviderPair("codex-personal-page");
+    const gemini = getProviderPair("gemini-policy");
 
     expect(
       resolveProviderDisplayEligibility(codex.snapshot, codex.setting),
@@ -42,7 +42,7 @@ describe("provider display eligibility", () => {
   });
 
   it("does not treat enabled deferred providers as display eligible", () => {
-    const jetbrains = getProviderPair("jetbrains");
+    const jetbrains = getProviderPair("jetbrains-org-page");
 
     expect(
       resolveProviderDisplayEligibility(jetbrains.snapshot, {
@@ -56,7 +56,7 @@ describe("provider display eligibility", () => {
   });
 
   it("keeps hidden but otherwise displayable providers eligible for recovery controls", () => {
-    const cursor = getProviderPair("cursor");
+    const cursor = getProviderPair("cursor-personal-page");
 
     expect(
       resolveProviderDisplayEligibility(cursor.snapshot, {
@@ -69,10 +69,10 @@ describe("provider display eligibility", () => {
     });
   });
 
-  it("filters settings lists by source truth rather than provider.enabled alone", () => {
+  it("filters settings lists by source truth rather than provider.displayEnabled alone", () => {
     const providers = filterDisplayEligibleProviderSettings(
       SAMPLE_APP_STATE.providerSettings.map((provider) =>
-        provider.id === "jetbrains"
+        provider.id === "jetbrains-org-page"
           ? {
               ...provider,
               enabled: true,
@@ -83,10 +83,10 @@ describe("provider display eligibility", () => {
     );
 
     expect(providers.map((provider) => provider.id)).toEqual([
-      "cursor",
-      "claude-code",
-      "gemini",
-      "codex",
+      "cursor-personal-page",
+      "claude-code-team-page",
+      "gemini-policy",
+      "codex-personal-page",
     ]);
   });
 });

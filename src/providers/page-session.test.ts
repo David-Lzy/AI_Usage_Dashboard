@@ -44,7 +44,7 @@ describe("createPageSessionClient", () => {
     });
 
     const result = await client.capture({
-      providerId: "cursor",
+      providerId: "cursor-personal-page",
       pageLabel: "Usage page",
       urlPatterns: ["https://example.com/*"],
       extraction: {
@@ -95,7 +95,7 @@ describe("createPageSessionClient", () => {
     });
 
     const result = await client.capture({
-      providerId: "codex",
+      providerId: "codex-personal-page",
       pageLabel: "Codex usage page",
       urlPatterns: ["https://chatgpt.com/*"],
       binding: {
@@ -154,7 +154,7 @@ describe("createPageSessionClient", () => {
     });
 
     const result = await client.capture({
-      providerId: "codex",
+      providerId: "codex-personal-page",
       pageLabel: "Codex analytics page",
       urlPatterns: ["https://chatgpt.com/codex/*"],
       binding: {
@@ -243,7 +243,7 @@ describe("createPageSessionClient", () => {
     });
 
     const result = await client.capture({
-      providerId: "cursor",
+      providerId: "cursor-personal-page",
       pageLabel: "Cursor usage page",
       urlPatterns: ["https://cursor.com/*"],
       binding: {
@@ -320,7 +320,7 @@ describe("createPageSessionClient", () => {
     });
 
     const result = await client.capture({
-      providerId: "cursor",
+      providerId: "cursor-personal-page",
       pageLabel: "Cursor personal usage page",
       urlPatterns: ["https://cursor.com/*"],
       extraction: {
@@ -410,7 +410,7 @@ describe("createPageSessionClient", () => {
     });
 
     const result = await client.capture({
-      providerId: "gemini",
+      providerId: "gemini-policy",
       pageLabel: "Gemini metrics page",
       urlPatterns: ["https://console.cloud.google.com/*"],
       extraction: {
@@ -467,7 +467,7 @@ describe("createPageSessionClient", () => {
     });
 
     const result = await client.capture({
-      providerId: "codex",
+      providerId: "codex-personal-page",
       pageLabel: "Codex cloud analytics page",
       urlPatterns: ["https://chatgpt.com/codex/*"],
       extraction: {
@@ -532,7 +532,7 @@ describe("createPageSessionClient", () => {
     });
 
     const result = await client.capture({
-      providerId: "codex",
+      providerId: "codex-personal-page",
       pageLabel: "Codex cloud analytics page",
       urlPatterns: ["https://chatgpt.com/codex/*"],
       reloadOnCaptureFailure: {
@@ -621,7 +621,7 @@ describe("createPageSessionClient", () => {
     });
 
     const result = await client.capture({
-      providerId: "codex",
+      providerId: "codex-personal-page",
       pageLabel: "Codex cloud analytics page",
       urlPatterns: ["https://chatgpt.com/codex/*"],
       reloadBeforeCapture: {
@@ -686,7 +686,7 @@ describe("createPageSessionClient", () => {
     });
 
     const result = await client.capture({
-      providerId: "codex",
+      providerId: "codex-personal-page",
       pageLabel: "Codex cloud analytics page",
       urlPatterns: ["https://chatgpt.com/codex/cloud/settings/analytics*"],
       openWhenMissing: {
@@ -760,7 +760,7 @@ describe("createPageSessionClient", () => {
     });
 
     const result = await client.capture({
-      providerId: "codex",
+      providerId: "codex-personal-page",
       pageLabel: "Codex cloud analytics page",
       urlPatterns: ["https://chatgpt.com/codex/cloud/settings/analytics*"],
       openWhenMissing: {

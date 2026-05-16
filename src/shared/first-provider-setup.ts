@@ -1,16 +1,16 @@
 import type { ProviderId, ProviderSetting } from "../providers/types";
 
 const FIRST_PROVIDER_SETUP_PRIORITY: ProviderId[] = [
-  "codex",
-  "cursor",
-  "claude-code",
-  "gemini",
+  "codex-personal-page",
+  "cursor-personal-page",
+  "claude-code-team-page",
+  "gemini-policy",
 ];
 
 export function getRecommendedFirstSetupProvider(
   providers: ProviderSetting[],
 ): ProviderSetting | null {
-  const disabledProviders = providers.filter((provider) => !provider.enabled);
+  const disabledProviders = providers.filter((provider) => !provider.displayEnabled);
   const disabledById = new Map(
     disabledProviders.map((provider) => [provider.id, provider]),
   );
@@ -24,7 +24,7 @@ export function getRecommendedFirstSetupProvider(
   }
 
   return (
-    disabledProviders.find((provider) => provider.id !== "jetbrains") ??
+    disabledProviders.find((provider) => provider.id !== "jetbrains-org-page") ??
     disabledProviders[0] ??
     null
   );

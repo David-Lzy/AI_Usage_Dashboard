@@ -12,7 +12,7 @@ function createStateWithCodexBadge(): AppState {
   const state = {
     ...SAMPLE_APP_STATE,
     providers: SAMPLE_APP_STATE.providers.map((provider) =>
-      provider.providerId === "codex"
+      provider.providerId === "codex-personal-page"
         ? {
             ...provider,
             remaining: 51,
@@ -36,7 +36,7 @@ function createStateWithCodexBadge(): AppState {
     ),
   };
   const weeklyCandidate = buildActionBadgeQuotaCandidates(state).find(
-    (candidate) => candidate.providerId === "codex",
+    (candidate) => candidate.providerId === "codex-personal-page",
   );
 
   return {
@@ -61,16 +61,16 @@ describe("action icon", () => {
       settings: {
         ...SAMPLE_APP_STATE.settings,
         toolbarIconMode: "provider",
-        toolbarIconProviderId: "claude-code",
+        toolbarIconProviderId: "claude-code-team-page",
       },
     };
 
-    expect(resolveToolbarIconProviderId(state)).toBe("claude-code");
+    expect(resolveToolbarIconProviderId(state)).toBe("claude-code-team-page");
   });
 
   it("matches the selected quota badge provider when configured", () => {
     expect(resolveToolbarIconProviderId(createStateWithCodexBadge())).toBe(
-      "codex",
+      "codex-personal-page",
     );
   });
 
@@ -78,7 +78,7 @@ describe("action icon", () => {
     const state = {
       ...SAMPLE_APP_STATE,
       providers: SAMPLE_APP_STATE.providers.map((provider) => {
-        if (provider.providerId === "codex") {
+        if (provider.providerId === "codex-personal-page") {
           return {
             ...provider,
             remaining: 51,
@@ -86,7 +86,7 @@ describe("action icon", () => {
           };
         }
 
-        if (provider.providerId === "claude-code") {
+        if (provider.providerId === "claude-code-team-page") {
           return {
             ...provider,
             remaining: 93,
@@ -99,10 +99,10 @@ describe("action icon", () => {
     };
     const candidates = buildActionBadgeQuotaCandidates(state);
     const codexCandidate = candidates.find(
-      (candidate) => candidate.providerId === "codex",
+      (candidate) => candidate.providerId === "codex-personal-page",
     );
     const claudeCandidate = candidates.find(
-      (candidate) => candidate.providerId === "claude-code",
+      (candidate) => candidate.providerId === "claude-code-team-page",
     );
     const rotatingState: AppState = {
       ...state,
@@ -117,9 +117,9 @@ describe("action icon", () => {
       },
     };
 
-    expect(resolveToolbarIconProviderId(rotatingState, 0)).toBe("codex");
+    expect(resolveToolbarIconProviderId(rotatingState, 0)).toBe("codex-personal-page");
     expect(resolveToolbarIconProviderId(rotatingState, 60_000)).toBe(
-      "claude-code",
+      "claude-code-team-page",
     );
   });
 
@@ -144,7 +144,7 @@ describe("action icon", () => {
       },
     });
 
-    expect(buildProviderFaviconUrl("codex", 32)).toBe(
+    expect(buildProviderFaviconUrl("codex-personal-page", 32)).toBe(
       "chrome-extension://extension-id/_favicon/?pageUrl=https%3A%2F%2Fchatgpt.com%2F&size=32",
     );
   });

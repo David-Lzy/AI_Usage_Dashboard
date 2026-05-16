@@ -65,7 +65,7 @@ function buildProviderState(
 
 describe("provider source helpers", () => {
   it("labels Gemini as policy-only even though it uses the official sync bucket", () => {
-    const { provider, setting } = findProviderState("gemini");
+    const { provider, setting } = findProviderState("gemini-policy");
     const display = buildProviderSourceDisplay(provider, setting);
 
     expect(display.currentLabel).toBe("Policy only");
@@ -76,7 +76,7 @@ describe("provider source helpers", () => {
   });
 
   it("classifies JetBrains as a deferred repo-retained session-page source", () => {
-    const { provider, setting } = findProviderState("jetbrains");
+    const { provider, setting } = findProviderState("jetbrains-org-page");
     const display = buildProviderSourceDisplay(provider, setting);
 
     expect(display.currentLabel).toBe("Session page");
@@ -91,7 +91,7 @@ describe("provider source helpers", () => {
   });
 
   it("classifies Cursor as a shipped session-page source when the current snapshot uses page_parse", () => {
-    const { provider, setting } = findProviderState("cursor");
+    const { provider, setting } = findProviderState("cursor-personal-page");
     const display = buildProviderSourceDisplay(provider, setting);
 
     expect(display.currentLabel).toBe("Session page");
@@ -107,7 +107,7 @@ describe("provider source helpers", () => {
   });
 
   it("derives an openable session-page route from the first concrete hint", () => {
-    const sessionPagePlan = getSessionPagePlan("jetbrains");
+    const sessionPagePlan = getSessionPagePlan("jetbrains-org-page");
 
     expect(sessionPagePlan).not.toBeNull();
     expect(getOpenableRouteHint(sessionPagePlan?.routeHints ?? [])).toBe(
@@ -125,7 +125,7 @@ describe("provider source helpers", () => {
   });
 
   it("marks Codex personal usage pages as a shipped session-page track", () => {
-    const sessionPagePlan = getSessionPagePlan("codex");
+    const sessionPagePlan = getSessionPagePlan("codex-personal-page");
 
     expect(sessionPagePlan).not.toBeNull();
     expect(sessionPagePlan?.rolloutStage).toBe("shipped");
@@ -162,7 +162,7 @@ describe("provider source helpers", () => {
   });
 
   it("rejects non-provider active-tab URLs for provider session-page hints", () => {
-    const codexSessionPagePlan = getSessionPagePlan("codex");
+    const codexSessionPagePlan = getSessionPagePlan("codex-personal-page");
 
     expect(codexSessionPagePlan).not.toBeNull();
     expect(
@@ -173,8 +173,8 @@ describe("provider source helpers", () => {
     ).toBe(false);
   });
 
-  it("distinguishes Codex analytics snapshots from the shipped personal session-page track", () => {
-    const { provider, setting } = findProviderState("codex");
+  it("distinguishes Codex enterprise analytics from the personal session-page track", () => {
+    const { provider, setting } = findProviderState("codex-enterprise-api");
     const display = buildProviderSourceDisplay(provider, setting);
 
     expect(display.currentLabel).toBe("Official API");
@@ -183,15 +183,13 @@ describe("provider source helpers", () => {
     expect(display.accessModelLabel).toBe("Stored credential");
     expect(display.credentialPersistenceLabel).toBe("Extension local only");
     expect(display.cookiePolicyLabel).toBe("Forbidden");
-    expect(display.sessionPageContractLabel).toBe("Shipped personal partial");
-    expect(display.sessionPageFidelityLabel).toBe("Window-only vendor value");
-    expect(display.sessionPageAvailabilitySummary).toBe(
-      "Used: Window only · Remaining: Exact · Reset: Exact",
-    );
+    expect(display.sessionPageContractLabel).toBeNull();
+    expect(display.sessionPageFidelityLabel).toBeNull();
+    expect(display.sessionPageAvailabilitySummary).toBeNull();
   });
 
   it("localizes provider-source wrapper labels without rewriting raw source-truth reasons", () => {
-    const { provider, setting } = findProviderState("codex");
+    const { provider, setting } = findProviderState("codex-enterprise-api");
     const display = buildProviderSourceDisplay(
       provider,
       setting,
@@ -205,21 +203,19 @@ describe("provider source helpers", () => {
     expect(display.availabilitySummary).toBe(
       "已用：分析 · 剩余：不可用 · 重置：仅窗口",
     );
-    expect(display.sessionPageAvailabilitySummary).toBe(
-      "已用：仅窗口 · 剩余：精确 · 重置：精确",
-    );
-    expect(display.sourceSelectionReason).toBe("Auto selected Official API.");
+    expect(display.sessionPageAvailabilitySummary).toBeNull();
+    expect(display.sourceSelectionReason).toBe("Official API selected.");
     expect(display.sourceFallbackReason).toBeNull();
   });
 
   it("prefers typed host-access diagnostics over raw warning pattern matching", () => {
     const warningReason = "Provider permission is blocked for live sync.";
     const { provider, setting } = buildProviderState(
-      "cursor",
+      "cursor-personal-page",
       {
         warningReason,
         warningDiagnostic: createHostAccessDiagnostic({
-          providerId: "cursor",
+          providerId: "cursor-personal-page",
           sourceKind: "session_page",
           hostLabel: "cursor.com",
           rawMessage: warningReason,
@@ -238,12 +234,12 @@ describe("provider source helpers", () => {
 
   it("prefers typed credential diagnostics over raw warning pattern matching", () => {
     const warningReason = "Provider setup is incomplete for live analytics.";
-    const { provider, setting } = buildProviderState("codex", {
+    const { provider, setting } = buildProviderState("codex-personal-page", {
       syncStatus: "error",
       tone: "error",
       warningReason,
       warningDiagnostic: createCredentialDiagnostic({
-        providerId: "codex",
+        providerId: "codex-personal-page",
         credentialKind: "workspace_config",
         rawMessage: warningReason,
       }),
@@ -257,35 +253,35 @@ describe("provider source helpers", () => {
 
   it("prefers typed page-session diagnostics over raw warning pattern matching", () => {
     const loggedOutReason = "Browser session unavailable for usage capture.";
-    const loggedOut = buildProviderState("cursor", {
+    const loggedOut = buildProviderState("cursor-personal-page", {
       syncStatus: "warning",
       tone: "warning",
       warningReason: loggedOutReason,
       warningDiagnostic: createPageSessionDiagnostic({
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         pageSessionKind: "logged_out",
         rawMessage: loggedOutReason,
       }),
     });
     const openPageReason = "Usage capture needs the provider page.";
-    const openPage = buildProviderState("cursor", {
+    const openPage = buildProviderState("cursor-personal-page", {
       syncStatus: "warning",
       tone: "warning",
       warningReason: openPageReason,
       warningDiagnostic: createPageSessionDiagnostic({
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         pageSessionKind: "open_page_required",
         rawMessage: openPageReason,
       }),
     });
     const captureReason =
       "The open Cursor dashboard usage page could not be read by extension scripting.";
-    const captureUnavailable = buildProviderState("cursor", {
+    const captureUnavailable = buildProviderState("cursor-personal-page", {
       syncStatus: "error",
       tone: "error",
       warningReason: captureReason,
       warningDiagnostic: createPageSessionDiagnostic({
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         pageSessionKind: "capture_unavailable",
         rawMessage: captureReason,
       }),
@@ -311,12 +307,12 @@ describe("provider source helpers", () => {
 
   it("keeps usage-threshold and cached-state stale diagnostics source-ready", () => {
     const usageReason = "90% of included requests consumed";
-    const usage = buildProviderState("cursor", {
+    const usage = buildProviderState("cursor-personal-page", {
       syncStatus: "warning",
       tone: "warning",
       warningReason: usageReason,
       warningDiagnostic: createUsageThresholdDiagnostic({
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         usageThresholdKind: "threshold_warning",
         rawMessage: usageReason,
         usagePercent: 90,
@@ -324,12 +320,12 @@ describe("provider source helpers", () => {
       }),
     });
     const staleReason = "Automatic refresh is overdue; showing cached data.";
-    const stale = buildProviderState("cursor", {
+    const stale = buildProviderState("cursor-personal-page", {
       syncStatus: "warning",
       tone: "warning",
       warningReason: staleReason,
       warningDiagnostic: createSyncStaleDiagnostic({
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         syncStaleKind: "cached_state_stale",
         rawMessage: staleReason,
         ageMinutes: 240,
@@ -348,12 +344,12 @@ describe("provider source helpers", () => {
   it("maps automatic-sync overdue diagnostics to the existing sync-error state", () => {
     const warningReason =
       "Automatic sync is overdue; cached state may be stale.";
-    const { provider, setting } = buildProviderState("cursor", {
+    const { provider, setting } = buildProviderState("cursor-personal-page", {
       syncStatus: "error",
       tone: "error",
       warningReason,
       warningDiagnostic: createSyncStaleDiagnostic({
-        providerId: "cursor",
+        providerId: "cursor-personal-page",
         syncStaleKind: "automatic_sync_overdue",
         rawMessage: warningReason,
         ageMinutes: 240,
@@ -375,7 +371,7 @@ describe("provider source helpers", () => {
       severity: "warning",
       rawMessage: warningReason,
     };
-    const { provider, setting } = buildProviderState("cursor", {
+    const { provider, setting } = buildProviderState("cursor-personal-page", {
       warningReason,
       warningDiagnostic: unknownDiagnostic,
     });
@@ -388,7 +384,7 @@ describe("provider source helpers", () => {
   it("keeps raw warning fallback when typed diagnostics are absent", () => {
     const warningReason =
       "No Cursor Admin API key is stored; add an API key before official sync can run.";
-    const { provider, setting } = buildProviderState("cursor", {
+    const { provider, setting } = buildProviderState("cursor-personal-page", {
       warningReason,
       warningDiagnostic: null,
     });
@@ -399,7 +395,7 @@ describe("provider source helpers", () => {
   });
 
   it("classifies the retained JetBrains session-page path as exact vendor values", () => {
-    const { provider, setting } = findProviderState("jetbrains");
+    const { provider, setting } = findProviderState("jetbrains-org-page");
     const display = buildProviderSourceDisplay(provider, setting);
 
     expect(display.fidelityLabel).toBe("Exact vendor value");
@@ -411,7 +407,7 @@ describe("provider source helpers", () => {
   });
 
   it("surfaces policy-only providers as no-live-connection trust boundaries", () => {
-    const { provider, setting } = findProviderState("gemini");
+    const { provider, setting } = findProviderState("gemini-policy");
     const display = buildProviderSourceDisplay(provider, setting);
 
     expect(display.accessModelLabel).toBe("No live connection");
@@ -420,14 +416,14 @@ describe("provider source helpers", () => {
     expect(display.manualCookieImportLabel).toBe("Forbidden");
   });
 
-  it("makes shipped Claude Team and deferred project tracks explicit in source display", () => {
+  it("makes shipped Claude Team and policy-only Gemini tracks explicit in source display", () => {
     const claude = buildProviderSourceDisplay(
-      findProviderState("claude-code").provider,
-      findProviderState("claude-code").setting,
+      findProviderState("claude-code-team-page").provider,
+      findProviderState("claude-code-team-page").setting,
     );
     const gemini = buildProviderSourceDisplay(
-      findProviderState("gemini").provider,
-      findProviderState("gemini").setting,
+      findProviderState("gemini-policy").provider,
+      findProviderState("gemini-policy").setting,
     );
 
     expect(claude.sessionPageContractLabel).toBe("Shipped personal partial");
@@ -436,42 +432,36 @@ describe("provider source helpers", () => {
     );
     expect(claude.sessionPageGraduationGateLabel).toBeNull();
     expect(claude.sessionPageGraduationGateDetail).toBeNull();
-    expect(gemini.sessionPageContractLabel).toBe("Deferred project metrics");
-    expect(gemini.sessionPageContractDetail).toContain("project-scoped");
-    expect(gemini.sessionPageGraduationGateLabel).toBe(
-      "Accept project-metrics support",
-    );
-    expect(gemini.sessionPageGraduationGateDetail).toContain(
-      "bound-tab project metrics",
-    );
+    expect(gemini.currentContractLabel).toBe("Shipped policy only");
+    expect(gemini.sessionPageContractLabel).toBeNull();
+    expect(gemini.sessionPageGraduationGateLabel).toBeNull();
   });
 
-  it("offers explicit source preference options for hybrid providers", () => {
-    expect(getSourcePreferenceOptions("cursor")).toEqual([
-      "auto",
-      "official_api",
+  it("offers fixed source preference options for source-level providers", () => {
+    expect(getSourcePreferenceOptions("cursor-personal-page")).toEqual([
       "session_page",
     ]);
-    expect(getSourcePreferenceOptions("codex")).toEqual([
-      "auto",
+    expect(getSourcePreferenceOptions("cursor-team-api")).toEqual([
       "official_api",
+    ]);
+    expect(getSourcePreferenceOptions("codex-personal-page")).toEqual([
       "session_page",
     ]);
-    expect(getSourcePreferenceOptions("jetbrains")).toEqual(["auto"]);
+    expect(getSourcePreferenceOptions("codex-enterprise-api")).toEqual([
+      "official_api",
+    ]);
+    expect(getSourcePreferenceOptions("gemini-policy")).toEqual(["auto"]);
   });
 
   it("builds deterministic source attempt order from the selected preference", () => {
-    expect(getSourceAttemptOrder("cursor", "auto")).toEqual([
-      "official_api",
+    expect(getSourceAttemptOrder("cursor-personal-page", "auto")).toEqual([
       "session_page",
     ]);
-    expect(getSourceAttemptOrder("cursor", "session_page")).toEqual([
+    expect(getSourceAttemptOrder("cursor-personal-page", "session_page")).toEqual([
       "session_page",
-      "official_api",
     ]);
-    expect(getSourceAttemptOrder("codex", "official_api")).toEqual([
+    expect(getSourceAttemptOrder("codex-enterprise-api", "official_api")).toEqual([
       "official_api",
-      "session_page",
     ]);
   });
 });

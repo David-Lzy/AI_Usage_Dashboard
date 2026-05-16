@@ -61,7 +61,7 @@ export type CursorPersonalSpendCard = {
 };
 
 export type CursorPersonalUsageSnapshot = {
-  providerId: "cursor";
+  providerId: "cursor-personal-page";
   providerLabel: "Cursor";
   measurementKind: "billing_period_usage";
   routeKey: CursorPersonalRouteKey;
@@ -270,7 +270,7 @@ function parseSnapshotFromSummary(
   }
 
   return {
-    providerId: "cursor",
+    providerId: "cursor-personal-page",
     providerLabel: "Cursor",
     measurementKind: "billing_period_usage",
     routeKey,

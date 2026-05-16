@@ -17,11 +17,11 @@ import {
 } from "./display-preferences";
 
 const PROVIDER_IDS: ProviderId[] = [
-  "cursor",
-  "jetbrains",
-  "claude-code",
-  "gemini",
-  "codex",
+  "cursor-personal-page",
+  "jetbrains-org-page",
+  "claude-code-team-page",
+  "gemini-policy",
+  "codex-personal-page",
 ];
 
 describe("display preferences", () => {
@@ -49,50 +49,50 @@ describe("display preferences", () => {
     expect(
       normalizeProviderOrderBySurface(
         {
-          popup: ["codex", "unknown", "cursor", "codex"],
-          sidebar: ["gemini"],
+          popup: ["codex-personal-page", "unknown", "cursor-personal-page", "codex-personal-page"],
+          sidebar: ["gemini-policy"],
           fullPage: [],
         },
         PROVIDER_IDS,
       ),
     ).toEqual({
-      popup: ["codex", "cursor", "jetbrains", "claude-code", "gemini"],
-      sidebar: ["gemini", "cursor", "jetbrains", "claude-code", "codex"],
+      popup: ["codex-personal-page", "cursor-personal-page", "jetbrains-org-page", "claude-code-team-page", "gemini-policy"],
+      sidebar: ["gemini-policy", "cursor-personal-page", "jetbrains-org-page", "claude-code-team-page", "codex-personal-page"],
       fullPage: [],
     });
   });
 
   it("resolves automatic order to the default provider order", () => {
     expect(resolveProviderOrder([], PROVIDER_IDS)).toEqual(PROVIDER_IDS);
-    expect(resolveProviderOrder(["codex"], PROVIDER_IDS)).toEqual([
-      "codex",
-      "cursor",
-      "jetbrains",
-      "claude-code",
-      "gemini",
+    expect(resolveProviderOrder(["codex-personal-page"], PROVIDER_IDS)).toEqual([
+      "codex-personal-page",
+      "cursor-personal-page",
+      "jetbrains-org-page",
+      "claude-code-team-page",
+      "gemini-policy",
     ]);
   });
 
   it("moves providers inside a resolved order", () => {
-    expect(moveProviderInOrder([], PROVIDER_IDS, "jetbrains", "up")).toEqual([
-      "jetbrains",
-      "cursor",
-      "claude-code",
-      "gemini",
-      "codex",
+    expect(moveProviderInOrder([], PROVIDER_IDS, "jetbrains-org-page", "up")).toEqual([
+      "jetbrains-org-page",
+      "cursor-personal-page",
+      "claude-code-team-page",
+      "gemini-policy",
+      "codex-personal-page",
     ]);
     expect(
-      moveProviderInOrder(["codex", "cursor"], PROVIDER_IDS, "codex", "down"),
-    ).toEqual(["cursor", "codex", "jetbrains", "claude-code", "gemini"]);
+      moveProviderInOrder(["codex-personal-page", "cursor-personal-page"], PROVIDER_IDS, "codex-personal-page", "down"),
+    ).toEqual(["cursor-personal-page", "codex-personal-page", "jetbrains-org-page", "claude-code-team-page", "gemini-policy"]);
   });
 
   it("reorders a dragged provider before a target provider", () => {
-    expect(reorderProviderBefore([], PROVIDER_IDS, "codex", "cursor")).toEqual([
-      "codex",
-      "cursor",
-      "jetbrains",
-      "claude-code",
-      "gemini",
+    expect(reorderProviderBefore([], PROVIDER_IDS, "codex-personal-page", "cursor-personal-page")).toEqual([
+      "codex-personal-page",
+      "cursor-personal-page",
+      "jetbrains-org-page",
+      "claude-code-team-page",
+      "gemini-policy",
     ]);
   });
 
@@ -100,7 +100,7 @@ describe("display preferences", () => {
     expect(
       normalizeProviderOrderBySurface(
         {
-          popup: "codex",
+          popup: "codex-personal-page",
           sidebar: ["unknown"],
         },
         PROVIDER_IDS,
@@ -117,7 +117,7 @@ describe("display preferences", () => {
       normalizeProgressItemsBySurface(
         {
           popup: {
-            codex: [
+            "codex-personal-page": [
               { id: "window:weekly", visible: false },
               { id: "unknown", visible: false },
               { id: "window:weekly", visible: true },
@@ -126,27 +126,27 @@ describe("display preferences", () => {
             unknown: [{ id: "primary", visible: false }],
           },
           fullPage: {
-            codex: [{ id: "balance:flex", visible: false }],
+            "codex-personal-page": [{ id: "balance:flex", visible: false }],
           },
         },
         PROVIDER_IDS,
         {
-          codex: ["window:5h", "window:weekly", "balance:flex"],
-          cursor: ["primary"],
+          "codex-personal-page": ["window:5h", "window:weekly", "balance:flex"],
+          "cursor-personal-page": ["primary"],
         },
       ),
     ).toEqual({
       popup: {
-        codex: [
+        "codex-personal-page": [
           { id: "window:weekly", visible: false },
           { id: "window:5h", visible: true },
           { id: "balance:flex", visible: true },
         ],
-        cursor: [{ id: "primary", visible: true }],
+        "cursor-personal-page": [{ id: "primary", visible: true }],
       },
       sidebar: {},
       fullPage: {
-        codex: [
+        "codex-personal-page": [
           { id: "balance:flex", visible: false },
           { id: "window:5h", visible: true },
           { id: "window:weekly", visible: true },
@@ -218,7 +218,7 @@ describe("display preferences", () => {
       normalizeProgressItemsBySurface(
         {
           popup: {
-            codex: [{ id: "window:weekly", visible: false }],
+            "codex-personal-page": [{ id: "window:weekly", visible: false }],
           },
         },
         PROVIDER_IDS,

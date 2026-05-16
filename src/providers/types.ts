@@ -1,11 +1,26 @@
-export type ProviderId =
+export type ProviderBrandId =
   | "cursor"
   | "jetbrains"
   | "claude-code"
   | "gemini"
   | "codex";
 
-export type ApiKeyProviderId = "cursor" | "claude-code";
+export type ProviderId =
+  | "cursor-personal-page"
+  | "cursor-team-api"
+  | "jetbrains-org-page"
+  | "claude-code-team-page"
+  | "claude-code-admin-api"
+  | "gemini-policy"
+  | "codex-personal-page"
+  | "codex-enterprise-api";
+
+export type LegacyProviderId = ProviderBrandId;
+
+export type ApiKeyProviderId =
+  | "cursor-team-api"
+  | "claude-code-admin-api"
+  | "codex-enterprise-api";
 
 export type ProviderTone = "neutral" | "warning" | "error";
 
@@ -262,10 +277,15 @@ export type ProviderUsageFact = {
 
 export type ProviderSetting = {
   id: ProviderId;
+  brandId: ProviderBrandId;
   label: string;
-  enabled: boolean;
+  displayEnabled: boolean;
+  /** @deprecated Storage migration input only. New runtime code must use displayEnabled. */
+  enabled?: boolean;
   status: PermissionStatus;
   credentialStatus: CredentialStatus;
+  sourceKind: ProviderSourceKind;
+  connectionMode: SourceConnectionMode;
   sourcePreference: ProviderSourcePreference;
   pageBinding: ProviderPageBinding;
   hostsLabel: string;
@@ -325,13 +345,13 @@ export type AppState = {
 };
 
 export type ProviderSecrets = {
-  cursor: {
+  "cursor-team-api": {
     adminApiKey: string | null;
   };
-  "claude-code": {
+  "claude-code-admin-api": {
     adminApiKey: string | null;
   };
-  codex: {
+  "codex-enterprise-api": {
     analyticsApiKey: string | null;
     workspaceId: string | null;
   };

@@ -4,6 +4,7 @@ import type {
   ProviderId,
   ProviderSetting,
 } from "../providers/types";
+import { getProviderDefinition } from "../providers/provider-definitions";
 import type { RuntimeI18n } from "../shared/i18n";
 import {
   hasDirectPermissionControl,
@@ -37,10 +38,9 @@ function getProviderLabel(
   providerSettings: ProviderSetting[],
   providerId: ProviderId,
 ): string {
-  return (
-    providerSettings.find((provider) => provider.id === providerId)?.label ??
-    providerId
-  );
+  const provider = providerSettings.find((setting) => setting.id === providerId);
+
+  return provider ? getProviderDefinition(provider.id).shortLabel : providerId;
 }
 
 export function createStandardAppActions({
@@ -74,7 +74,7 @@ export function createStandardAppActions({
           if (!granted) {
             setToast({
               tone: "error",
-              title: `${hostAccessCandidate.label} access denied`,
+              title: `${getProviderDefinition(hostAccessCandidate.id).shortLabel} access denied`,
               message:
                 "The permission request was dismissed or denied, so refresh cannot read the provider page yet.",
             });
@@ -133,19 +133,20 @@ export function createStandardAppActions({
     if (!target) {
       return;
     }
+    const providerLabel = getProviderDefinition(target.id).shortLabel;
 
     void applyMessage(
       {
         type: "app:set-provider-enabled",
         providerId,
-        enabled: !target.enabled,
+        enabled: !target.displayEnabled,
       },
       {
         tone: "success",
-        title: target.enabled
-          ? `${target.label} hidden`
-          : `${target.label} enabled`,
-        message: target.enabled
+        title: target.displayEnabled
+          ? `${providerLabel} hidden`
+          : `${providerLabel} enabled`,
+        message: target.displayEnabled
           ? "The provider was removed from the visible dashboard feed."
           : "The provider is visible in the dashboard feed again.",
       },

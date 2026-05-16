@@ -11,7 +11,7 @@ function createCodexWindowState(): AppState {
   return {
     ...SAMPLE_APP_STATE,
     providers: SAMPLE_APP_STATE.providers.map((provider) =>
-      provider.providerId === "codex"
+      provider.providerId === "codex-personal-page"
         ? {
             ...provider,
             quotaUnit: "percent",
@@ -64,7 +64,7 @@ function createCodexWindowState(): AppState {
 describe("provider progress items", () => {
   it("builds a primary quota item when no usage windows are present", () => {
     const jetbrains = SAMPLE_APP_STATE.providers.find(
-      (provider) => provider.providerId === "jetbrains",
+      (provider) => provider.providerId === "jetbrains-org-page",
     );
 
     expect(jetbrains).toBeDefined();
@@ -72,7 +72,7 @@ describe("provider progress items", () => {
       expect.objectContaining({
         id: "primary",
         kind: "primary_quota",
-        providerId: "jetbrains",
+        providerId: "jetbrains-org-page",
         label: "monthly credits",
         used: 16,
         remaining: 4,
@@ -84,7 +84,7 @@ describe("provider progress items", () => {
 
   it("uses usage windows and balances without duplicating the primary quota", () => {
     const codex = createCodexWindowState().providers.find(
-      (provider) => provider.providerId === "codex",
+      (provider) => provider.providerId === "codex-personal-page",
     );
 
     expect(codex).toBeDefined();
@@ -102,7 +102,7 @@ describe("provider progress items", () => {
 
   it("does not fabricate progress items for policy-only totals", () => {
     const gemini = SAMPLE_APP_STATE.providers.find(
-      (provider) => provider.providerId === "gemini",
+      (provider) => provider.providerId === "gemini-policy",
     );
 
     expect(gemini).toBeDefined();
@@ -114,11 +114,11 @@ describe("provider progress items", () => {
       createCodexWindowState().providers,
     );
 
-    expect(idsByProvider.codex).toEqual([
+    expect(idsByProvider["codex-personal-page"]).toEqual([
       "window:rolling_5h:5-hour%20usage%20window::0",
       "window:weekly:Weekly%20usage%20window::1",
       "balance:flex_credit_balance:Flex%20credits:0",
     ]);
-    expect(idsByProvider.gemini).toEqual([]);
+    expect(idsByProvider["gemini-policy"]).toEqual([]);
   });
 });

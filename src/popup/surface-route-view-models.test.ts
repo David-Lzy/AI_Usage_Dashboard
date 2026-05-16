@@ -22,7 +22,7 @@ function createGuidanceCard(
     action: {
       kind,
       label: "Primary action",
-      providerId: "codex" as ProviderId,
+      providerId: "codex-personal-page" as ProviderId,
     },
   };
 }
@@ -99,7 +99,7 @@ describe("buildSurfaceRolesCard", () => {
   it("points zero-provider states to the recommended first provider setup", () => {
     expect(
       buildSurfaceRolesCard([], createGuidanceCard("settings"), {
-        providerId: "cursor" as ProviderId,
+        providerId: "cursor-personal-page" as ProviderId,
         providerLabel: "Cursor",
       }),
     ).toEqual({

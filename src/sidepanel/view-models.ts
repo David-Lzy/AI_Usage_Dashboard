@@ -15,6 +15,7 @@ import {
   getOpenableRouteHint,
   type ProviderSourceDisplayCopy,
 } from "../shared/provider-sources";
+import { getProviderDefinition } from "../providers/provider-definitions";
 import { isProviderDisplayEligible } from "../shared/provider-display-eligibility";
 import { createEmptyPageBinding } from "../shared/page-bindings";
 
@@ -150,15 +151,19 @@ function toProviderViewModel(
   sourceDisplayCopy?: ProviderSourceDisplayCopy,
 ): ProviderViewModel {
   const permissionStatus = setting?.status ?? "missing";
+  const fallbackDefinition = getProviderDefinition(provider.providerId);
   const sourceDisplay = buildProviderSourceDisplay(
     provider,
     setting ?? {
       id: provider.providerId,
+      brandId: fallbackDefinition.brandId,
       label: provider.providerLabel,
-      enabled: true,
+      displayEnabled: true,
       status: "missing",
       credentialStatus: "not_required",
-      sourcePreference: "auto",
+      sourceKind: fallbackDefinition.sourceKind,
+      connectionMode: fallbackDefinition.connectionMode,
+      sourcePreference: fallbackDefinition.fixedSourcePreference,
       pageBinding: createEmptyPageBinding(),
       hostsLabel: "Host access not configured",
       hostOrigins: [],
@@ -299,7 +304,7 @@ export function getVisibleProviders(
     .filter((provider) => {
       const setting = findProviderSetting(state.providerSettings, provider.providerId);
       return (
-        (setting?.enabled ?? false) &&
+        (setting?.displayEnabled ?? false) &&
         isProviderDisplayEligible(provider, setting, sourceDisplayCopy)
       );
     })
@@ -328,7 +333,7 @@ export function getPopupProviders(
     .filter((provider) => {
       const setting = findProviderSetting(state.providerSettings, provider.providerId);
       return (
-        (setting?.enabled ?? false) &&
+        (setting?.displayEnabled ?? false) &&
         isProviderDisplayEligible(provider, setting, sourceDisplayCopy)
       );
     })

@@ -15,7 +15,7 @@ function createStateWithSingleHostAccessCandidate(): AppState {
   return {
     ...SAMPLE_APP_STATE,
     providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) =>
-      provider.id === "codex"
+      provider.id === "codex-personal-page"
         ? {
             ...provider,
             enabled: true,
@@ -118,7 +118,7 @@ describe("runPopupRefreshAction", () => {
     });
     expect(requestHostAccess).toHaveBeenCalledWith(
       expect.objectContaining({
-        id: "codex",
+        id: "codex-personal-page",
       }),
     );
     expect(sendMessage).toHaveBeenCalledWith({ type: "app:request-refresh" });

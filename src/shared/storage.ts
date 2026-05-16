@@ -1,9 +1,15 @@
 import type {
   AppState,
   CredentialStatus,
+  LegacyProviderId,
   PermissionStatus,
+  ProviderId,
   ProviderSetting,
 } from "../providers/types";
+import {
+  isLegacyProviderId,
+  mapLegacyProviderId,
+} from "../providers/provider-definitions";
 import { APP_STATE_STORAGE_KEY, SAMPLE_APP_STATE } from "./constants";
 import { normalizePageBinding } from "./page-bindings";
 import { normalizeSourcePreference } from "./provider-sources";
@@ -78,17 +84,36 @@ function normalizePermissionStatus(
   return value === "granted" || value === "missing" ? value : fallback;
 }
 
+type StoredProviderSetting = Partial<ProviderSetting> & {
+  id?: ProviderId | LegacyProviderId;
+  enabled?: unknown;
+  displayEnabled?: unknown;
+};
+
+function readStoredDisplayEnabled(
+  sampleProviderSetting: ProviderSetting,
+  storedProviderSetting?: StoredProviderSetting,
+): boolean {
+  if (typeof storedProviderSetting?.displayEnabled === "boolean") {
+    return storedProviderSetting.displayEnabled;
+  }
+
+  if (typeof storedProviderSetting?.enabled === "boolean") {
+    return storedProviderSetting.enabled;
+  }
+
+  return sampleProviderSetting.displayEnabled;
+}
+
 function normalizeProviderSetting(
   sampleProviderSetting: ProviderSetting,
-  storedProviderSetting?: Partial<ProviderSetting>,
+  storedProviderSetting?: StoredProviderSetting,
 ): ProviderSetting {
   return {
     id: sampleProviderSetting.id,
+    brandId: sampleProviderSetting.brandId,
     label: sampleProviderSetting.label,
-    enabled:
-      typeof storedProviderSetting?.enabled === "boolean"
-        ? storedProviderSetting.enabled
-        : sampleProviderSetting.enabled,
+    displayEnabled: readStoredDisplayEnabled(sampleProviderSetting, storedProviderSetting),
     status: normalizePermissionStatus(
       storedProviderSetting?.status,
       sampleProviderSetting.status,
@@ -103,12 +128,39 @@ function normalizeProviderSetting(
     ),
     sourcePreference: normalizeSourcePreference(
       sampleProviderSetting.id,
-      storedProviderSetting?.sourcePreference,
+      sampleProviderSetting.sourcePreference,
     ),
+    sourceKind: sampleProviderSetting.sourceKind,
+    connectionMode: sampleProviderSetting.connectionMode,
     hostsLabel: sampleProviderSetting.hostsLabel,
     hostOrigins: sampleProviderSetting.hostOrigins,
     description: sampleProviderSetting.description,
   };
+}
+
+function normalizeStoredProviderKey(value: unknown): ProviderId | null {
+  if (typeof value !== "string") {
+    return null;
+  }
+
+  if (SAMPLE_APP_STATE.providerSettings.some((provider) => provider.id === value)) {
+    return value as ProviderId;
+  }
+
+  return isLegacyProviderId(value) ? mapLegacyProviderId(value) : null;
+}
+
+function getLegacyApiProviderId(value: unknown): ProviderId | null {
+  if (value === "cursor") {
+    return "cursor-team-api";
+  }
+  if (value === "claude-code") {
+    return "claude-code-admin-api";
+  }
+  if (value === "codex") {
+    return "codex-enterprise-api";
+  }
+  return null;
 }
 
 function normalizeAppState(state: AppState): AppState {
@@ -119,16 +171,34 @@ function normalizeAppState(state: AppState): AppState {
     SAMPLE_APP_STATE.providerSettings.map((provider) => [provider.id, provider]),
   );
   const storedProviders = new Map(
-    state.providers.map((provider) => [provider.providerId, provider]),
+    state.providers.flatMap((provider) => {
+      const providerId = normalizeStoredProviderKey(provider.providerId);
+      return providerId ? [[providerId, provider] as const] : [];
+    }),
   );
   const storedProviderSettings = new Map(
-    state.providerSettings.map((provider) => [provider.id, provider]),
+    state.providerSettings.flatMap((provider) => {
+      const providerId = normalizeStoredProviderKey(provider.id);
+      const entries: Array<readonly [ProviderId, StoredProviderSetting]> = providerId
+        ? [[providerId, provider as StoredProviderSetting] as const]
+        : [];
+      const apiProviderId = getLegacyApiProviderId(provider.id);
+      if (apiProviderId && provider.sourcePreference === "official_api") {
+        entries.push([apiProviderId, provider as StoredProviderSetting] as const);
+      }
+      return entries;
+    }),
   );
 
-  const providers = SAMPLE_APP_STATE.providers.map((sampleProvider) => ({
-    ...sampleProvider,
-    ...storedProviders.get(sampleProvider.providerId),
-  }));
+  const providers = SAMPLE_APP_STATE.providers.map((sampleProvider) => {
+    const storedProvider = storedProviders.get(sampleProvider.providerId);
+    return {
+      ...sampleProvider,
+      ...storedProvider,
+      providerId: sampleProvider.providerId,
+      providerLabel: sampleProvider.providerLabel,
+    };
+  });
 
   const providerSettings = SAMPLE_APP_STATE.providerSettings.map(
     (sampleProviderSetting) => {

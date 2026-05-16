@@ -43,7 +43,7 @@ export function SettingsProviderDisplaySection({
     providerSourceDisplayCopy,
   );
   const displayVisibleProviders = displayEligibleProviders.filter(
-    (provider) => provider.enabled,
+    (provider) => provider.displayEnabled,
   );
 
   return (

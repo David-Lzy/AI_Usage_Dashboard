@@ -53,7 +53,7 @@ export async function syncGeminiProvider({
       tone: "warning",
       warningReason,
       warningDiagnostic: createPolicyOnlyDiagnostic({
-        providerId: "gemini",
+        providerId: provider.providerId,
         policyOnlyKind: "documented_limit_only",
         rawMessage: warningReason,
       }),
