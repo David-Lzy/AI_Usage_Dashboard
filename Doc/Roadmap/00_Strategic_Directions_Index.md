@@ -30,7 +30,7 @@ Important scope note:
 
 As of 2026-05-16:
 
-- the numbered phase queue is completed through `Phase 503`; no numbered phase is currently queued after `Phase 503`; `0.1.0-rc.23` is the latest packaged follow-up candidate through `Phase 502`, current source is ahead through the source-level provider-entry migration, and RC13 remains the submitted store-review boundary
+- the numbered phase queue is completed through `Phase 504`; no numbered phase is currently queued after `Phase 504`; `0.1.0-rc.23` is the latest packaged follow-up candidate through `Phase 502`, current source is ahead through the source-level provider-entry migration plus long-lived-profile migration fix, and RC13 remains the submitted store-review boundary
 - `Phase 154` completed a documentation-only slice that expanded the roadmap into explicit next-step TODO docs for:
   - Direction 10 surface expansion plus ambient theme controls
   - Direction 10 store asset pack plus submission readiness
@@ -561,7 +561,7 @@ As of 2026-05-16:
 
 1. [Direction 10 - Toolbar Competitive Fit And Store Readiness](./10_Direction_Toolbar_Competitive_Fit_And_Store_Readiness.md)
    Why first now:
-   `0.1.0-rc.23` is now packaged as the latest follow-up candidate through `Phase 502`, current source is ahead through `Phase 503`, no numbered phase is currently queued after `Phase 503`, the public-readiness screenshot archive and six-locale listing handoff are complete, and the trimmed transparent icon refresh plus Claude Team usage-page path are already in the submitted RC13 boundary.
+   `0.1.0-rc.23` is now packaged as the latest follow-up candidate through `Phase 502`, current source is ahead through `Phase 504`, no numbered phase is currently queued after `Phase 504`, the public-readiness screenshot archive and six-locale listing handoff are complete, and the trimmed transparent icon refresh plus Claude Team usage-page path are already in the submitted RC13 boundary.
 
 2. [Direction 09 - Internationalization Bootstrap And Pilot Locales](./09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
    Why second now:

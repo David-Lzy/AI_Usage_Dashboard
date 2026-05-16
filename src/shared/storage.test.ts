@@ -77,6 +77,89 @@ function createStaleSchemaState(): AppState {
   };
 }
 
+function createLegacyBrandLevelState(): AppState {
+  const toLegacyProviderSetting = (
+    provider: AppState["providerSettings"][number],
+  ) => {
+    const {
+      brandId: _brandId,
+      displayEnabled: _displayEnabled,
+      sourceKind: _sourceKind,
+      connectionMode: _connectionMode,
+      ...legacyProvider
+    } = provider;
+    return legacyProvider;
+  };
+
+  return {
+    ...SAMPLE_APP_STATE,
+    providers: [
+      {
+        ...SAMPLE_APP_STATE.providers.find(
+          (provider) => provider.providerId === "cursor-personal-page",
+        )!,
+        providerId: "cursor",
+        providerLabel: "Cursor",
+      },
+      {
+        ...SAMPLE_APP_STATE.providers.find(
+          (provider) => provider.providerId === "claude-code-team-page",
+        )!,
+        providerId: "claude-code",
+        providerLabel: "Claude Code",
+      },
+      {
+        ...SAMPLE_APP_STATE.providers.find(
+          (provider) => provider.providerId === "codex-personal-page",
+        )!,
+        providerId: "codex",
+        providerLabel: "Codex",
+      },
+    ] as unknown as AppState["providers"],
+    providerSettings: [
+      {
+        ...toLegacyProviderSetting(
+          SAMPLE_APP_STATE.providerSettings.find(
+            (provider) => provider.id === "cursor-personal-page",
+          )!,
+        ),
+        id: "cursor",
+        label: "Cursor",
+        enabled: true,
+        sourcePreference: "official_api",
+      },
+      {
+        ...toLegacyProviderSetting(
+          SAMPLE_APP_STATE.providerSettings.find(
+            (provider) => provider.id === "claude-code-team-page",
+          )!,
+        ),
+        id: "claude-code",
+        label: "Claude Code",
+        enabled: true,
+      },
+      {
+        ...toLegacyProviderSetting(
+          SAMPLE_APP_STATE.providerSettings.find(
+            (provider) => provider.id === "codex-personal-page",
+          )!,
+        ),
+        id: "codex",
+        label: "Codex",
+        enabled: false,
+      },
+    ] as unknown as AppState["providerSettings"],
+    settings: {
+      ...SAMPLE_APP_STATE.settings,
+      providerOrderBySurface: {
+        popup: ["codex", "claude-code", "cursor"],
+        sidebar: ["cursor"],
+        fullPage: ["unknown-provider", "codex"],
+      },
+    } as unknown as AppState["settings"],
+  };
+}
+
 describe("storage normalization", () => {
   beforeEach(async () => {
     await writeAppState(SAMPLE_APP_STATE);
@@ -243,6 +326,40 @@ describe("storage normalization", () => {
       sidebar: {},
       fullPage: {},
     });
+  });
+
+  it("migrates legacy brand-level providers without keeping stale extra entries", async () => {
+    await writeAppState(createLegacyBrandLevelState());
+
+    const state = await readAppState();
+
+    expect(state).not.toBeNull();
+    expect(state?.providers.map((provider) => provider.providerId)).toEqual(
+      SAMPLE_APP_STATE.providers.map((provider) => provider.providerId),
+    );
+    expect(state?.providerSettings.map((provider) => provider.id)).toEqual(
+      SAMPLE_APP_STATE.providerSettings.map((provider) => provider.id),
+    );
+    expect(
+      state?.providerSettings.find(
+        (provider) => provider.id === "cursor-personal-page",
+      )?.displayEnabled,
+    ).toBe(true);
+    expect(
+      state?.providerSettings.find(
+        (provider) => provider.id === "cursor-team-api",
+      )?.displayEnabled,
+    ).toBe(true);
+    expect(
+      state?.providerSettings.find(
+        (provider) => provider.id === "codex-personal-page",
+      )?.displayEnabled,
+    ).toBe(false);
+    expect(state?.settings.providerOrderBySurface.popup.slice(0, 3)).toEqual([
+      "codex-personal-page",
+      "claude-code-team-page",
+      "cursor-personal-page",
+    ]);
   });
 
   it("keeps known progress item preferences and appends newly discovered items", async () => {

@@ -7,6 +7,7 @@ import type {
   ProviderSetting,
 } from "../providers/types";
 import {
+  isProviderId,
   isLegacyProviderId,
   mapLegacyProviderId,
 } from "../providers/provider-definitions";
@@ -221,10 +222,15 @@ function normalizeAppState(state: AppState): AppState {
   }).map((candidate) => candidate.value);
 
   const extraProviders = state.providers.filter(
-    (provider) => !sampleProviders.has(provider.providerId),
+    (provider) =>
+      isProviderId(provider.providerId) &&
+      !sampleProviders.has(provider.providerId),
   );
   const extraProviderSettings = state.providerSettings
-    .filter((provider) => !sampleProviderSettings.has(provider.id))
+    .filter(
+      (provider) =>
+        isProviderId(provider.id) && !sampleProviderSettings.has(provider.id),
+    )
     .map((provider) =>
       normalizeProviderSetting({
         ...provider,
