@@ -4,7 +4,7 @@ Date: 2026-05-16
 
 Process rule:
 
-- follow [Development_Guardrails.md](../Development_Guardrails.md)
+- follow [Development_Guardrails.md](../../../../Development_Guardrails.md)
 
 Document class:
 
@@ -16,7 +16,7 @@ Freshness model:
 
 Status:
 
-- active
+- completed
 
 ## Goal
 
@@ -50,6 +50,22 @@ Make `popup`, `sidebar`, and `fullPage` provider ordering use the same eligible 
 - Focused tests for `ProviderOrderPreferenceControls`.
 - Focused tests for popup and sidepanel view-model ordering.
 - `npm run typecheck`
+- `npm run docs:check`
+- `git diff --check`
+
+## Completion Summary
+
+- Aligned popup provider candidates with the same visible + display-eligible contract already used by dashboard surfaces.
+- Filtered Settings Provider order controls to only include providers that are both display-eligible and enabled for dashboard display.
+- Preserved quota item controls for eligible providers until Phase 500 owns quota item eligibility and expansion behavior.
+- Kept saved per-surface provider order preferences intact; hidden or ineligible ids are ignored at render time by the resolved visible list.
+- Updated focused popup and Settings tests so the visible order model matches the rendered surfaces.
+
+## Verification
+
+- `npm run test -- src/popup/view-models.test.ts src/sidepanel/view-models.test.ts src/sidepanel/components/SettingsProviderDisplaySection.test.tsx src/sidepanel/routes/SettingsPage.test.tsx`
+- `npm run typecheck`
+- `npm run build`
 - `npm run docs:check`
 - `git diff --check`
 

@@ -78,5 +78,6 @@ Status note:
 - `Phase 496` defined the provider setup/display product contract: Quick Setup owns provider connection and source-mode setup; Provider Display owns dashboard visibility, per-surface ordering, and quota item visibility; deferred providers do not enter visible ordering, and policy-only providers must not imply live remaining quota.
 - `Phase 497` rendered each provider's source paths inside the Quick Setup carousel card, keeping API, session-page, policy-only, and deferred paths visible without changing provider evidence, permissions, storage, or display eligibility.
 - `Phase 498` added shared provider display eligibility and applied it to dashboard/popup candidates plus Settings Provider Display controls, so deferred/planned providers stay out of display surfaces while shipped live and policy-only providers remain displayable.
+- `Phase 499` aligned popup provider candidates and Settings Provider order controls to the same visible + display-eligible provider list used by dashboard surfaces, while preserving quota item controls for Phase 500.
 - Current implementation source is aligned with the `0.1.0-rc.22` package through `Phase 487`.
-- Current source is ahead of the `0.1.0-rc.22` package through `Phase 498`.
+- Current source is ahead of the `0.1.0-rc.22` package through `Phase 499`.

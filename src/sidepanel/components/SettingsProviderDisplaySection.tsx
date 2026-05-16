@@ -42,6 +42,9 @@ export function SettingsProviderDisplaySection({
     snapshots,
     providerSourceDisplayCopy,
   );
+  const displayVisibleProviders = displayEligibleProviders.filter(
+    (provider) => provider.enabled,
+  );
 
   return (
     <section
@@ -63,7 +66,7 @@ export function SettingsProviderDisplaySection({
       <div className="settings-provider-display__body">
         <ProviderOrderPreferenceControls
           copy={settingsCopy.providerOrder}
-          providers={displayEligibleProviders}
+          providers={displayVisibleProviders}
           providerOrderBySurface={settings.providerOrderBySurface}
           onChange={onProviderOrderBySurfaceChange}
         />

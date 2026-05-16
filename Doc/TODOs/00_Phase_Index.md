@@ -34,10 +34,9 @@ Execution rule:
 
 ## Sequence
 
-- active phase file: [499_Phase_Surface_Order_Eligibility_Alignment.md](./499_Phase_Surface_Order_Eligibility_Alignment.md)
-- latest completed slice: [498_Phase_Dashboard_Display_Eligibility_Model.md](./Archive/by-phase/400-499/498_Phase_Dashboard_Display_Eligibility_Model.md)
+- active phase file: [500_Phase_Quota_Item_Eligibility_And_Popup_Order_QA.md](./500_Phase_Quota_Item_Eligibility_And_Popup_Order_QA.md)
+- latest completed slice: [499_Phase_Surface_Order_Eligibility_Alignment.md](./Archive/by-phase/400-499/499_Phase_Surface_Order_Eligibility_Alignment.md)
 - queued phase files:
-  - [500_Phase_Quota_Item_Eligibility_And_Popup_Order_QA.md](./500_Phase_Quota_Item_Eligibility_And_Popup_Order_QA.md)
   - [501_Phase_Provider_Setup_Display_Model_Closeout.md](./501_Phase_Provider_Setup_Display_Model_Closeout.md)
 
 Completed phases should be moved to:
@@ -894,6 +893,7 @@ Completed phases should be moved to:
 - the 2026-05-16 `Phase 496` closeout defined the provider setup/display product contract, separating Quick Setup source-mode setup from Provider Display visibility/order/quota controls, keeping JetBrains deferred out of visible ordering, and preserving Gemini policy-only truth boundaries
 - the 2026-05-16 `Phase 497` closeout rendered provider source paths inside Quick Setup cards while preserving carousel behavior, source metadata, provider truth, storage, and display eligibility boundaries
 - the 2026-05-16 `Phase 498` closeout added shared provider display eligibility, keeping deferred/planned sources out of dashboard/provider-display surfaces while allowing shipped live and policy-only providers
+- the 2026-05-16 `Phase 499` closeout aligned popup and Provider order rendering to visible + display-eligible providers while leaving quota item eligibility to Phase 500
 
 ## Delivery Standard For Each Phase
 

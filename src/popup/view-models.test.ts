@@ -54,7 +54,7 @@ describe("popup view models", () => {
     ]);
   });
 
-  it("keeps popup provider candidates independent from dashboard visibility toggles", () => {
+  it("aligns popup provider candidates with dashboard visibility toggles", () => {
     const model = buildPopupViewModel({
       ...SAMPLE_APP_STATE,
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) => ({
@@ -64,10 +64,7 @@ describe("popup view models", () => {
     });
 
     expect(model.visibleProviders.map((provider) => provider.providerId)).toEqual([
-      "claude-code",
       "codex",
-      "gemini",
-      "cursor",
     ]);
   });
 

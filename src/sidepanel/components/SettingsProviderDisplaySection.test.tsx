@@ -46,4 +46,36 @@ describe("SettingsProviderDisplaySection", () => {
     );
     expect(html).toContain('data-provider-order-row="gemini"');
   });
+
+  it("keeps hidden providers out of surface order while preserving quota controls for phase 500", () => {
+    const i18n = createRuntimeI18n("en", undefined);
+    const settingsCopy = buildSettingsLocalizedCopy(i18n);
+    const providerSourceDisplayCopy =
+      buildProviderSourceDisplayLocalizedCopy(i18n);
+    const html = renderToStaticMarkup(
+      <SettingsProviderDisplaySection
+        sectionId={SETTINGS_SECTION_IDS.providerDisplay}
+        settings={SAMPLE_APP_STATE.settings}
+        providers={SAMPLE_APP_STATE.providerSettings.map((provider) =>
+          provider.id === "cursor"
+            ? {
+                ...provider,
+                enabled: false,
+              }
+            : provider,
+        )}
+        providerSourceDisplayCopy={providerSourceDisplayCopy}
+        snapshots={SAMPLE_APP_STATE.providers}
+        settingsCopy={settingsCopy}
+        onProviderOrderBySurfaceChange={() => {}}
+        onProgressItemsBySurfaceChange={() => {}}
+      />,
+    );
+
+    expect(html).toContain("3 providers");
+    expect(html).not.toContain('data-provider-order-row="cursor"');
+    expect(html).toContain(
+      'data-provider-progress-preference-provider="cursor"',
+    );
+  });
 });

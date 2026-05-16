@@ -327,7 +327,10 @@ export function getPopupProviders(
   const providers = state.providers
     .filter((provider) => {
       const setting = findProviderSetting(state.providerSettings, provider.providerId);
-      return isProviderDisplayEligible(provider, setting, sourceDisplayCopy);
+      return (
+        (setting?.enabled ?? false) &&
+        isProviderDisplayEligible(provider, setting, sourceDisplayCopy)
+      );
     })
     .map((provider) =>
       toProviderViewModel(
