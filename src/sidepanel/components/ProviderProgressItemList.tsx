@@ -13,6 +13,7 @@ import { buildRuntimeCommonCopy } from "../../shared/i18n";
 import { selectVisibleProviderProgressItems } from "../../shared/provider-progress-item-selection";
 import type { ProviderProgressItem } from "../../shared/provider-progress-items";
 import type { ProviderViewModel } from "../view-models";
+import { formatPopupProgressItemLabel } from "./provider-progress-compact-labels";
 import { UsageProgress } from "./UsageProgress";
 
 type ProviderProgressItemListProps = {
@@ -64,10 +65,11 @@ function formatProgressValueLabel(
 function formatProgressValueText(
   item: ProviderProgressItem,
   i18n: RuntimeI18n,
+  label = item.label,
 ): string | undefined {
   const valueLabel = formatProgressValueLabel(item, i18n, "line");
 
-  return valueLabel ? `${item.label}: ${valueLabel}` : undefined;
+  return valueLabel ? `${label}: ${valueLabel}` : undefined;
 }
 
 function formatValueOnlyText(
@@ -165,7 +167,9 @@ export function ProviderProgressItemList({
       style={listStyle}
     >
       {visibleProgressItems.map((item) => {
-        const detail = formatProgressItemDetail(item, i18n);
+        const isPopup = surface === "popup";
+        const label = isPopup ? formatPopupProgressItemLabel(item, i18n) : item.label;
+        const detail = isPopup ? null : formatProgressItemDetail(item, i18n);
         const tone =
           item.kind === "primary_quota" ? provider.displayTone : item.tone;
 
@@ -181,7 +185,7 @@ export function ProviderProgressItemList({
                 remaining={item.remaining}
                 total={item.total}
                 tone={tone}
-                label={item.label}
+                label={label}
                 displayStyle={displayStyle}
                 progressColorBands={progressColorBands}
                 progressThicknessPx={progressThicknessPx}
@@ -191,13 +195,13 @@ export function ProviderProgressItemList({
                   i18n,
                   displayStyle,
                 )}
-                valueText={formatProgressValueText(item, i18n)}
+                valueText={formatProgressValueText(item, i18n, label)}
                 detail={detail}
               />
             ) : (
               <div className="provider-progress-item-list__value-only">
                 <p className="supporting-copy provider-progress-item-list__label">
-                  {item.label}
+                  {label}
                 </p>
                 <p className="provider-progress-item-list__value">
                   {formatValueOnlyText(item, i18n)}

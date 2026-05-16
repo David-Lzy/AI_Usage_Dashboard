@@ -1,6 +1,7 @@
 import type { AppSettings } from "../../providers/types";
 import { buildRuntimeCommonCopy, type RuntimeI18n } from "../../shared/i18n";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
+import { formatPopupPreviewQuotaLabel } from "./provider-progress-compact-labels";
 import { UsageProgress } from "./UsageProgress";
 
 type PopupAppearancePreviewProps = {
@@ -20,9 +21,7 @@ export function PopupAppearancePreview({
   i18n,
   settings,
 }: PopupAppearancePreviewProps) {
-  const sampleQuotaLabel = i18n.t(
-    "settings.popup_appearance_preview.sample_quota",
-  );
+  const sampleQuotaLabel = formatPopupPreviewQuotaLabel(i18n);
   const remainingLabel = buildRuntimeCommonCopy(i18n).remaining;
   const sampleRemainingLabel =
     settings.popupProgressStyle === "line" ? `51% ${remainingLabel}` : "51%";

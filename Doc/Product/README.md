@@ -83,4 +83,8 @@ Status note:
 - `Phase 501` closed the provider setup/display model queue, verified localized copy coverage, and recorded that no new layout screenshots were generated because Phases 498-500 changed filtering semantics without changing CSS/layout.
 - `Phase 502` packaged `0.1.0-rc.23` / manifest `0.1.0.23`, generated `release/ai-usage-dashboard-0.1.0-rc.23.zip`, recorded SHA256 `77f69c57a24ec7056b1013db48e27c4e11f095732dbd1d3775aeaf40c88f78a4`, and preserved RC13 as the submitted Chrome Web Store review boundary.
 - `Phase 503` moved provider runtime identity to source-level entries such as `codex-personal-page` and `codex-enterprise-api`, migrated legacy brand-level settings/secrets/order preferences, and made Quick Setup default to personal/page/policy entries with an explicit Team/API reveal control.
-- Current implementation source is ahead of the `0.1.0-rc.23` package through `Phase 503`; no post-Phase-503 package has been cut yet.
+- `Phase 504` fixed long-lived-profile legacy provider cleanup so stale brand-level provider ids no longer survive source-level entry migration.
+- `Phase 505` removed the popup three-card cap and kept quota-threshold warnings as user-facing quota state rather than product/setup attention.
+- `Phase 506` moved the Quick Setup team/API provider toggle into the section header action slot and gave it an outlined Material-style button treatment.
+- `Phase 507` made toolbar popup progress labels compact and folded reset timing into the visible popup label for line and circular progress styles while preserving non-popup detail labels.
+- Current implementation source is ahead of the `0.1.0-rc.23` package through `Phase 507`; no post-Phase-507 package has been cut yet.

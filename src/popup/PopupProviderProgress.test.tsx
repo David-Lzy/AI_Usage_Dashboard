@@ -24,6 +24,13 @@ const testI18n = {
   localizeResetRuntimeLabel: (rawValue: string) => rawValue,
 } as RuntimeI18n;
 
+const zhTestI18n = {
+  ...testI18n,
+  localePreference: "zh-CN",
+  resolvedLocale: "zh-CN",
+  formatPercentValue: (value: number) => `${value}%`,
+} as RuntimeI18n;
+
 function createProvider(
   overrides: Partial<ProviderViewModel> = {},
 ): ProviderViewModel {
@@ -85,9 +92,44 @@ describe("PopupProviderProgress", () => {
     );
 
     expect(html).toContain("provider-progress-item-list--circle");
-    expect(html).toContain("Weekly usage window");
+    expect(html).toContain("week, reset: 13/05");
+    expect(html).not.toContain("Weekly usage window");
     expect(html).toContain("--usage-progress-percent:35%");
     expect(html).not.toContain("Codex weekly window percent");
+  });
+
+  it("keeps popup circular labels compact while showing reset time", () => {
+    const html = renderToStaticMarkup(
+      <PopupProviderProgress
+        i18n={zhTestI18n}
+        progressColorBands={SAMPLE_APP_STATE.settings.progressColorBands}
+        popupCircularProgressItemsPerRow={
+          SAMPLE_APP_STATE.settings.popupCircularProgressItemsPerRow
+        }
+        progressDisplayStyle="circle-soft"
+        progressItemsBySurface={createDefaultProgressItemsBySurface()}
+        progressThicknessPx={SAMPLE_APP_STATE.settings.progressThicknessPx}
+        provider={createProvider({
+          usageWindows: [
+            {
+              label: "5-hour usage window",
+              normalizedLabel: "5-hour usage window",
+              kind: "rolling_5h",
+              modelLabel: null,
+              quotaUnit: "percent",
+              used: 23,
+              remaining: 77,
+              total: 100,
+              resetAt: "2026-05-17 01:11",
+              resetLabel: "5-hour usage window resets at 2026-05-17 01:11",
+            },
+          ],
+        })}
+      />,
+    );
+
+    expect(html).toContain("5小时，重置：01:11");
+    expect(html).not.toContain("5-hour usage window");
   });
 
   it("renders single-value progress when no usage windows exist", () => {
@@ -107,7 +149,7 @@ describe("PopupProviderProgress", () => {
 
     expect(html).toContain('role="progressbar"');
     expect(html).toContain('aria-valuenow="42"');
-    expect(html).toContain('aria-label="weekly window percent"');
+    expect(html).toContain('aria-label="week"');
     expect(html).toContain("--usage-progress-thickness:10px");
     expect(html).toContain("--usage-progress-color:#8A4B00");
   });
