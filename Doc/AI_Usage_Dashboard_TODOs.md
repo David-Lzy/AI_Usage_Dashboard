@@ -76,13 +76,13 @@ Why this order:
 
 The project is no longer in shell-building or first provider-wiring mode.
 
-Current post-`Phase 516` execution priority:
+Current post-`Phase 517` execution priority:
 
 1. `P0` - keep `release/ai-usage-dashboard-0.1.0-rc.13.zip` as the submitted Chrome Web Store review boundary. Do not silently mutate or rewrite the [RC13 upload-candidate milestone](./Milestones/2026-05-11_RC13_Chrome_Web_Store_Upload_Candidate.md) while that submission remains the human-reviewed baseline.
-2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.23.zip` as the latest packaged follow-up candidate. Current source is ahead of that package through `Phase 511`, which moves provider runtime identity to source-level entries, fixes long-lived-profile legacy-provider migration, keeps popup provider cards unbounded while quota-threshold warnings remain user status rather than product/setup attention, polishes the Quick Setup team/API provider toggle, compacts popup progress labels while preserving reset timing, tightens Claude Team all-model weekly labels, moves popup provider actions into the card header with persistent hide plus undo, compacts popup status chips to accessible icons, and shows weekly reset timestamps as weekday plus time; this source boundary has not been packaged yet.
+2. `P0` - treat `release/ai-usage-dashboard-0.1.0-rc.23.zip` as the latest packaged follow-up candidate. Current source is ahead of that package through `Phase 517`, which moves provider runtime identity to source-level entries, fixes long-lived-profile legacy-provider migration, keeps popup provider cards unbounded while quota-threshold warnings remain user status rather than product/setup attention, polishes the Quick Setup team/API provider toggle, compacts popup progress labels while preserving reset timing, tightens Claude Team all-model weekly labels, moves popup provider actions into the card header with persistent hide plus undo, compacts popup status chips to accessible icons, shows weekly reset timestamps as weekday plus time, extracts recent maintenance modules, and restores the i18n checker after locale metadata extraction; this source boundary has not been packaged yet.
 3. `P0` - keep the latest store screenshot evidence archived and ready, not pending: [2026-05-16-public-store-readiness-request-archive](./testing/store_screenshot_archives/2026-05-16-public-store-readiness-request-archive/README.md) fulfills the public-repository store handoff with `5/5` images and explicit app-window/dark-mode/resizing truth-boundary notes.
 4. `P1` - if a resubmission becomes necessary, use [2026-05-16_RC23_Provider_Display_Cleanup_Release_Candidate.md](./Milestones/2026-05-16_RC23_Provider_Display_Cleanup_Release_Candidate.md), [Public_Repository_Readiness.md](./Product/Public_Repository_Readiness.md), and [Store_Public_Release_6_Locale_Handoff.md](./Store/Store_Public_Release_6_Locale_Handoff.md) as current handoff references, then create a fresh submitted-review milestone instead of mutating RC13 history.
-5. `P1` - no numbered phase is currently queued after `Phase 516`. If a resubmission is needed, decide whether to package a post-Phase-516 candidate. [Phase 516](./TODOs/Archive/by-phase/500-599/516_Phase_Settings_Page_State_Hook_Extraction.md) extracted SettingsPage state and view-model derivations into `use-settings-page.ts`.
+5. `P1` - no numbered phase is currently queued after `Phase 517`. If a resubmission is needed, decide whether to package a post-Phase-517 candidate. [Phase 516](./TODOs/Archive/by-phase/500-599/516_Phase_Settings_Page_State_Hook_Extraction.md) extracted SettingsPage state and view-model derivations into `use-settings-page.ts`; [Phase 517](./TODOs/Archive/by-phase/500-599/517_Phase_I18n_Check_Metadata_Source_Fix.md) restored `npm run i18n:check` after the locale metadata extraction.
 6. `P2` - keep the `Phase 309` first-provider setup behavior stable: zero-provider Settings now recommends one personal-user provider in Quick Setup and popup zero-provider actions deep-link to that same setup card.
 7. `P2` - keep the `Phase 310` cached-first guard stable: standard dashboard routes must keep rendering cached app state while background bootstrap is still loading.
 8. `P2` - keep the `Phase 311` popup view-model split behavior-only: `src/popup/view-models.ts` remains the public aggregator and the extracted setup-coverage / featured-card modules should not change popup UI semantics.
@@ -152,7 +152,7 @@ Delivery rule for this stage:
 - keep active implementation phases narrow and independently verifiable
 - keep file-splitting separate from release packaging, provider verification, and store evidence closeout
 - preserve the current provider truth boundaries while changing UI presentation
-- treat `rc.13` as the current submitted store-review boundary, and `rc.23` as the latest packaged follow-up candidate through the Phase 502 package boundary; current source is ahead through `Phase 511` and has not been packaged, while `rc.22`, `rc.21`, `rc.20`, `rc.19`, `rc.18`, `rc.17`, `rc.16`, `rc.15`, `rc.14`, `rc.12`, and `rc.11` remain historical evidence
+- treat `rc.13` as the current submitted store-review boundary, and `rc.23` as the latest packaged follow-up candidate through the Phase 502 package boundary; current source is ahead through `Phase 517` and has not been packaged, while `rc.22`, `rc.21`, `rc.20`, `rc.19`, `rc.18`, `rc.17`, `rc.16`, `rc.15`, `rc.14`, `rc.12`, and `rc.11` remain historical evidence
 
 Phase status update:
 
@@ -529,7 +529,9 @@ Phase status update:
 - `Phase 508` tightened Claude Team all-model weekly popup labels and shortened weekday reset text.
 - `Phase 509` moved popup provider card actions into the header, shortened Details/Hide labels, and made popup hide persist through provider display settings with a 3-second undo affordance
 - `Phase 510` keeps popup provider card headers single-line first by rendering card-local status as compact accessible icon chips
-- `Phase 511` formats popup weekly reset timestamps as weekday plus time instead of date-only labels; no post-Phase-511 package has been cut yet
+- `Phase 511` formats popup weekly reset timestamps as weekday plus time instead of date-only labels.
+- `Phase 512` through `Phase 516` completed maintenance-only module extractions for Settings About CSS, provider-source helpers, i18n locale metadata, interaction-audit signoff state/IO, and SettingsPage state.
+- `Phase 517` restores the i18n locale checker after the locale metadata extraction; no post-Phase-517 package has been cut yet
 - `Phase 334` split interaction-audit per-surface card rendering into a dedicated component while preserving route-owned audit refs, preset actions, manual checks, and signoff callbacks
 - `Phase 335` split interaction-audit review queue rendering into a dedicated component while preserving route-owned queue construction and jump behavior
 - `Phase 336` split interaction-audit request-scope rendering into a dedicated component while preserving route-owned request-context state plus existing binding, revision, and next-command display

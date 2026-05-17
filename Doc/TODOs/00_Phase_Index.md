@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [516_Phase_Settings_Page_State_Hook_Extraction.md](./Archive/by-phase/500-599/516_Phase_Settings_Page_State_Hook_Extraction.md)
+- latest completed slice: [517_Phase_I18n_Check_Metadata_Source_Fix.md](./Archive/by-phase/500-599/517_Phase_I18n_Check_Metadata_Source_Fix.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -910,6 +910,7 @@ Completed phases should be moved to:
 - the 2026-05-17 `Phase 514` closeout extracted locale metadata (`SUPPORTED_APP_LOCALES`, `APP_LOCALE_METADATA`, and related types) from `src/shared/i18n.ts` into `src/shared/i18n-locale-metadata.ts`, reducing `i18n.ts` by ~160 lines while preserving all public import paths via re-exports
 - the 2026-05-17 `Phase 515` closeout split `src/sidepanel/interaction-audit-signoff.ts` (837 lines) into `interaction-audit-signoff-state.ts` (pure state builders and types) and `interaction-audit-signoff-io.ts` (localStorage read/write/clear); the original file became a 2-line barrel re-exporting both
 - the 2026-05-17 `Phase 516` closeout extracted all hooks, state, and view-model derivations from `SettingsPage.tsx` into `src/sidepanel/use-settings-page.ts`, reducing the component from 609 to 574 lines while preserving the `getSettingsRouteFocusElement` export and the scroll-to-focus useEffect in the component to avoid circular imports
+- the 2026-05-17 `Phase 517` closeout updated `scripts/check-i18n-locales.mjs` to read the locale registry from `src/shared/i18n-locale-metadata.ts`, restoring `npm run i18n:check` after the Phase 514 extraction
 
 ## Delivery Standard For Each Phase
 

@@ -30,8 +30,14 @@ async function readMessagesJson(chromeLocale) {
 }
 
 async function readRuntimeLocaleContract() {
+  const localeMetadataPath = path.join(
+    repoRoot,
+    "src",
+    "shared",
+    "i18n-locale-metadata.ts",
+  );
   const source = await readFile(
-    path.join(repoRoot, "src", "shared", "i18n.ts"),
+    localeMetadataPath,
     "utf8",
   );
   const supportedLocaleMatch = source.match(
@@ -39,7 +45,7 @@ async function readRuntimeLocaleContract() {
   );
   assert(
     supportedLocaleMatch,
-    "Could not read SUPPORTED_APP_LOCALES from src/shared/i18n.ts.",
+    "Could not read SUPPORTED_APP_LOCALES from src/shared/i18n-locale-metadata.ts.",
   );
 
   const runtimeLocales = [...supportedLocaleMatch[1].matchAll(/"([^"]+)"/g)].map(
@@ -55,11 +61,11 @@ async function readRuntimeLocaleContract() {
   );
 
   const metadataBlockMatch = source.match(
-    /export const APP_LOCALE_METADATA:[\s\S]*?=\s*\{([\s\S]*?)\};\n\n(?:export\s+)?type RuntimeMessageId/,
+    /export const APP_LOCALE_METADATA:[\s\S]*?=\s*\{([\s\S]*?)\};\n?$/,
   );
   assert(
     metadataBlockMatch,
-    "Could not read APP_LOCALE_METADATA from src/shared/i18n.ts.",
+    "Could not read APP_LOCALE_METADATA from src/shared/i18n-locale-metadata.ts.",
   );
 
   const metadataLocales = [
