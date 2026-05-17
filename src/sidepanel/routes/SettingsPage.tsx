@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import type {
   ActionBadgeSelections,
@@ -22,11 +22,7 @@ import type {
   ToolbarIconMode,
   UiFontFamily,
 } from "../../providers/types";
-import { createRuntimeI18n } from "../../shared/i18n";
-import { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
-import { buildProviderSourceDisplayLocalizedCopy } from "../../shared/provider-source-display-localized-copy";
 import { getPreferredScrollBehavior } from "../motion";
-
 import {
   SettingsBackToTopButton,
   SettingsSectionNavigation,
@@ -38,22 +34,18 @@ import {
 import { MaterialSelect } from "../components/MaterialSelect";
 import { SettingsQuickSetupSection } from "../components/SettingsQuickSetupSection";
 import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
-import { getSettingsUserLevelVisibility } from "../settings-user-level-visibility";
 import { Toast } from "../components/Toast";
 import { TopBar } from "../components/TopBar";
-import { buildSettingsPreferenceOptions } from "../settings-preference-options";
-import { buildSettingsPageViewModels } from "../settings-page-view-models";
 import {
   settingsRouteFocusRequiresAdvanced,
   type SettingsRouteFocus,
 } from "../route-state";
-import { useSettingsCredentialDrafts } from "../use-settings-credential-drafts";
-import { useSettingsSectionNavigation } from "../use-settings-section-navigation";
 import { SettingsSourceSection } from "../components/SettingsSourceSection";
 import { SettingsPreferencesSection } from "../components/SettingsPreferencesSection";
 import { SettingsProviderDisplaySection } from "../components/SettingsProviderDisplaySection";
 import { MaterialInfoTooltip } from "../components/MaterialInfoTooltip";
 import { BUILD_INFO } from "../../shared/build-info";
+import { useSettingsPage } from "../use-settings-page";
 
 type SettingsToast = {
   tone: "success" | "error";
@@ -230,63 +222,36 @@ export function SettingsPage({
     handleSaveProviderApiKey,
     setCodexAnalyticsApiKeyInput,
     setCodexWorkspaceIdInput,
-  } = useSettingsCredentialDrafts({
+    activeSettingsSection,
+    scrollToSection,
+    scrollToSettingsTop,
+    i18n,
+    settingsCopy,
+    providerSourceDisplayCopy,
+    localeOptions,
+    themeModeOptions,
+    userLevelVisibility,
+    showAdvancedContainer,
+    codexProvider,
+    credentialProviders,
+    settingsSectionNavItems,
+    settingsSummaryItems,
+    advancedOpen,
+    setAdvancedOpen,
+    advancedGroupCount,
+    quickSetupFocusedProviderId,
+    credentialFocusedProviderId,
+    sourceFocusedProviderId,
+  } = useSettingsPage({
+    settings,
+    providers,
+    snapshots,
+    routeFocus,
     onSaveProviderAdminApiKey,
     onClearProviderAdminApiKey,
     onSaveCodexWorkspaceConfig,
     onClearCodexWorkspaceConfig,
   });
-  const {
-    activeSettingsSection,
-    scrollToSection,
-    scrollToSettingsTop,
-  } = useSettingsSectionNavigation();
-  const i18n = createRuntimeI18n(
-    settings.locale,
-    typeof window !== "undefined" ? window : undefined,
-  );
-  const settingsCopy = buildSettingsLocalizedCopy(i18n);
-  const providerSourceDisplayCopy =
-    buildProviderSourceDisplayLocalizedCopy(i18n);
-  const { localeOptions, themeModeOptions } = buildSettingsPreferenceOptions({
-    i18n,
-    providers,
-    settings,
-    snapshots,
-  });
-  const userLevelVisibility = getSettingsUserLevelVisibility(settings.userLevel);
-  const routeFocusRequiresAdvanced = settingsRouteFocusRequiresAdvanced(routeFocus);
-  const showAdvancedContainer =
-    userLevelVisibility.showAdvancedContainer || routeFocusRequiresAdvanced;
-  const {
-    codexProvider,
-    credentialProviders,
-    settingsSectionNavItems,
-    settingsSummaryItems,
-  } = buildSettingsPageViewModels({
-    providers,
-    showAdvancedSection: showAdvancedContainer,
-    settings,
-    settingsCopy,
-    snapshots,
-  });
-  const [advancedOpen, setAdvancedOpen] = useState(
-    userLevelVisibility.advancedInitiallyOpen || routeFocusRequiresAdvanced,
-  );
-  const advancedGroupCount =
-    (credentialProviders.length > 0 || codexProvider ? 1 : 0) + 1;
-  const quickSetupFocusedProviderId =
-    routeFocus?.kind === "quick-setup-provider" ? routeFocus.providerId : null;
-  const credentialFocusedProviderId =
-    routeFocus?.kind === "credential-provider" ? routeFocus.providerId : null;
-  const sourceFocusedProviderId =
-    routeFocus?.kind === "source-provider" ? routeFocus.providerId : null;
-
-  useEffect(() => {
-    setAdvancedOpen(
-      userLevelVisibility.advancedInitiallyOpen || routeFocusRequiresAdvanced,
-    );
-  }, [routeFocusRequiresAdvanced, userLevelVisibility.advancedInitiallyOpen]);
 
   useEffect(() => {
     if (

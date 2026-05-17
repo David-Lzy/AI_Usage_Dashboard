@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [515_Phase_Interaction_Audit_Signoff_Split.md](./Archive/by-phase/500-599/515_Phase_Interaction_Audit_Signoff_Split.md)
+- latest completed slice: [516_Phase_Settings_Page_State_Hook_Extraction.md](./Archive/by-phase/500-599/516_Phase_Settings_Page_State_Hook_Extraction.md)
 - queued phase files: none
 
 Completed phases should be moved to:
@@ -909,6 +909,7 @@ Completed phases should be moved to:
 - the 2026-05-17 `Phase 513` closeout extracted `ProviderSourceFidelityKind`, `ProviderSourceDisplayCopy`, and `DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY` into `src/shared/provider-source-copy.ts` and URL-matching helpers into `src/shared/provider-source-url-matchers.ts`, reducing `provider-sources.ts` by ~350 lines while preserving all public import paths via re-exports
 - the 2026-05-17 `Phase 514` closeout extracted locale metadata (`SUPPORTED_APP_LOCALES`, `APP_LOCALE_METADATA`, and related types) from `src/shared/i18n.ts` into `src/shared/i18n-locale-metadata.ts`, reducing `i18n.ts` by ~160 lines while preserving all public import paths via re-exports
 - the 2026-05-17 `Phase 515` closeout split `src/sidepanel/interaction-audit-signoff.ts` (837 lines) into `interaction-audit-signoff-state.ts` (pure state builders and types) and `interaction-audit-signoff-io.ts` (localStorage read/write/clear); the original file became a 2-line barrel re-exporting both
+- the 2026-05-17 `Phase 516` closeout extracted all hooks, state, and view-model derivations from `SettingsPage.tsx` into `src/sidepanel/use-settings-page.ts`, reducing the component from 609 to 574 lines while preserving the `getSettingsRouteFocusElement` export and the scroll-to-focus useEffect in the component to avoid circular imports
 
 ## Delivery Standard For Each Phase
 
