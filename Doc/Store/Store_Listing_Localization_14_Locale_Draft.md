@@ -7,7 +7,7 @@ Process rule:
 Document class: maintained reference
 Freshness model: maintained current reference
 Last updated: 2026-05-13
-Status note: machine draft for localization expansion; requires human sampling before Chrome Web Store submission.
+Status note: auxiliary machine draft for broader localization expansion; the upload-ready warm product descriptions live in `Chrome_Web_Store_Product_Description_*.md`.
 
 Source pack: `Doc/Store/Store_Listing_Localization_Source_Pack.md`
 

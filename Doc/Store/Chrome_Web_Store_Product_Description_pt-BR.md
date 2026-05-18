@@ -1,17 +1,52 @@
-AI Usage Dashboard reúne cotas de ferramentas de IA para programação, bloqueios de configuração e saúde de sincronização em um popup da barra do Chrome e em um painel lateral.
+AI Usage Dashboard é uma pequena cabine para cotas de ferramentas de IA para programação, bloqueios de configuração e saúde de sincronização.
 
-Ele foi feito para fluxos com Codex, Cursor, Claude Code, Gemini Code Assist e ferramentas relacionadas, onde os dados de cada provider podem ser exatos, parciais, por janela de uso ou apenas baseados em política. A extensão mantém esses limites visíveis em vez de fingir que todos os providers expõem o mesmo número.
+Abra o popup da barra do Chrome para uma olhada rápida; abra o painel lateral ou o dashboard completo quando precisar de detalhes. Menos caça a abas, mais tempo escrevendo código. (^_^)
 
-Você pode verificar:
+Ele funciona com fluxos como Codex, Cursor, Claude Code e Gemini Code Assist, mostrando claramente se cada fonte é exata, parcial, por janela de uso, apenas de política ou indisponível.
+
+Ele não pede cookies nem headers brutos de autenticação do navegador. Configurações, credenciais API opcionais, vínculos de páginas, snapshots em cache, arquivos de importação/exportação e dados do Chrome Sync ficam no seu perfil do Chrome.
+
+O que ele ajuda você a ver
 
 • saúde do provider e bloqueios de configuração
-• janelas de uso e horários de reset quando o provider expõe esses dados
-• tipo de fonte: API, página com login, contexto parcial de página ou política documentada
+• janelas de uso restantes e horários de reset quando o provider expõe esses dados
+• tipo de fonte: API, página com login, contexto parcial de página, política documentada ou fonte indisponível
 • frescor do snapshot e estado de sincronização
-• badge/ícone da barra, temas, estilos de progresso, ordem de providers e importação/exportação de configurações
+• comportamento do badge e do ícone da barra
+• idioma, tema, aparência do popup, estilo de progresso, ordem de providers e importação/exportação
 
-AI Usage Dashboard usa limites de dados conservadores. Ele não pede cookies nem headers brutos de autenticação do navegador. Configurações, credenciais API opcionais, vínculos de página, snapshots em cache e arquivos JSON de importação/exportação ficam no seu perfil do Chrome. Permissões opcionais de host são usadas apenas para origens de providers compatíveis. A permissão favicon é usada para o recurso opcional de ícone da barra combinado com o provider.
+Como ele funciona no dia a dia
 
-Este não é um produto oficial da OpenAI, Cursor, Anthropic, Google, JetBrains ou de qualquer outro provider. Providers podem mudar dashboards, APIs, textos de cota e políticas. Quando uma fonte está indisponível ou fornece apenas dados parciais, o dashboard mostra esse estado em vez de inventar um valor.
+Assistentes de IA para programação são rápidos e úteis, mas páginas de cota e estados de conta podem ficar confusos. Em um momento tudo funciona; no próximo aparece uma janela de cota, falta uma permissão, a sessão expira ou a política de algum provider muda.
 
-O projeto é de código aberto sob AGPL-3.0-only.
+AI Usage Dashboard tenta deixar isso menos misterioso. Ele oferece um lugar tranquilo para conferir o estado atual e abrir detalhes só quando necessário. Um pequeno painel, não mais um projeto para administrar. ✨
+
+A cobertura dos providers é propositalmente honesta
+
+Cada provider expõe tipos diferentes de informação:
+
+• alguns caminhos mostram janelas de uso ao vivo ou quase ao vivo
+• alguns caminhos mostram apenas contexto parcial de página
+• alguns caminhos são apenas de política nesta versão
+• alguns providers exigem página com login, host access opcional ou credenciais API
+• dashboards, APIs, textos de cota e políticas dos providers podem mudar
+
+Quando uma fonte está indisponível ou é parcial, a extensão mostra esse estado em vez de inventar um número.
+
+Privacidade e permissões
+
+AI Usage Dashboard foi desenhado de forma conservadora:
+
+• não pede cookies
+• não pede headers brutos de autenticação do navegador
+• permissões opcionais de host apenas para origens de providers compatíveis
+• permissão favicon apenas para o recurso opcional de ícone da barra combinado com o provider
+• executa apenas scripts empacotados; não carrega código remoto
+• configurações e dados em cache ficam no seu perfil do Chrome, a menos que você os exporte
+
+Este não é um produto oficial da OpenAI, Cursor, Anthropic, Google, JetBrains ou de qualquer outro provider.
+
+Código aberto
+
+O projeto é open source sob AGPL-3.0-only:
+https://github.com/David-Lzy/AI_Usage_Dashboard

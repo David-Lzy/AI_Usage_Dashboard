@@ -32,13 +32,19 @@ Short description:
 
 Collapsed-view abstract:
 
-`AI Usage Dashboard puts AI coding quota, setup blockers, and sync health in one Chrome toolbar popup and side panel. It supports Codex, Cursor, Claude Code, Gemini Code Assist, and related coding workflows where provider data may be exact, partial, window-scoped, policy-only, or unavailable. It does not ask you to paste cookies or raw browser auth headers; settings and cached snapshots stay in your Chrome profile.`
+`AI Usage Dashboard is a small cockpit for AI coding quota, setup blockers, and sync health. Open the Chrome toolbar popup for a quick peek; open the side panel or full-page dashboard when you need details. Less tab-hunting, more coding. (^_^)`
 
 Details:
 
-`Open the toolbar popup for a quick read on provider health, remaining usage windows, reset timing, and setup blockers. Open the side panel or full-page dashboard when you need source type, snapshot freshness, diagnostics, permissions, credentials, display preferences, and provider-specific status.`
+`It supports Codex, Cursor, Claude Code, Gemini Code Assist, and related coding workflows while clearly labeling whether each source is exact, partial, window-scoped, policy-only, or unavailable. It does not ask you to paste cookies or raw browser auth headers. Settings, optional API credentials, page bindings, cached snapshots, import/export files, and Chrome Sync data stay in your Chrome profile.`
 
-`AI Usage Dashboard is intentionally conservative. Optional host permissions are requested only for supported provider origins. The favicon permission is used for the optional provider-matched toolbar icon feature. The extension runs packaged scripts and does not load remote code.`
+`Open the toolbar popup to check provider health, setup blockers, usage windows, reset timing, source type, snapshot freshness, sync status, toolbar badge behavior, toolbar icon behavior, language, theme, popup appearance, progress style, provider order, and import/export settings. Open the side panel or full-page dashboard when source details matter.`
+
+`AI coding assistants are fast and useful, but quota pages and account states can be easy to lose track of. AI Usage Dashboard gives you one calm place to glance at the current state, then lets you open the detail view only when you need it. A tiny dashboard, not another project to manage. ✨`
+
+`Provider coverage is intentionally honest. Some paths can show live or near-live usage windows, some expose partial page context, some are policy-only in this release, and some providers may require a signed-in page, optional host access, or API credentials. When a source is unavailable or partial, the extension labels that state instead of inventing a number.`
+
+`Privacy and permissions stay conservative: no cookie pasting, no raw browser auth header pasting, optional host permissions only for supported provider origins, favicon permission only for the optional provider-matched toolbar icon feature, packaged scripts only, and no remote code loading.`
 
 `This is not an official product from OpenAI, Cursor, Anthropic, Google, JetBrains, or any other provider. Provider dashboards, APIs, quota wording, and policies can change. When a source is unavailable or partial, the dashboard labels that state instead of inventing a value.`
 

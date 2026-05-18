@@ -43,20 +43,20 @@ Purpose:
 - `store.short_description`
   - `Track usage, setup blockers, and sync health across AI coding tools.`
 - `store.overview`
-  - `Check AI coding quota, setup blockers, and sync health from one Chrome toolbar popup, then open the side panel when provider source details matter.`
+  - `AI Usage Dashboard is a small cockpit for AI coding quota, setup blockers, and sync health. Open the Chrome toolbar popup for a quick peek; open the side panel or full-page dashboard when you need details. Less tab-hunting, more coding. (^_^)`
 
 ### Feature Bullets
 
 - `store.feature.quick_glance`
-  - `Quick glance in one click from the Chrome toolbar popup.`
+  - `Quick glance from the Chrome toolbar popup, with deeper detail in the side panel or full-page dashboard.`
 - `store.feature.setup_guidance`
-  - `Clear setup guidance when host access or credentials are blocking live sync.`
+  - `Clear setup guidance when host access, credentials, a signed-in page, or provider policy blocks live sync.`
 - `store.feature.honest_coverage`
-  - `Honest provider coverage that keeps policy-only and partial live paths explicit.`
+  - `Honest provider coverage that labels exact, partial, window-scoped, policy-only, and unavailable sources.`
 - `store.feature.sidepanel_depth`
-  - `Settings and provider detail live in the side panel instead of overloading the popup.`
+  - `Provider detail, source boundaries, diagnostics, permissions, credentials, and display settings stay available without overloading the popup.`
 - `store.feature.customization`
-  - `Configurable themes, progress styles, provider order, toolbar badge, and toolbar icon.`
+  - `Configurable language, themes, popup appearance, progress styles, provider order, toolbar badge, toolbar icon, and import/export settings.`
 - `store.feature.open_source`
   - `Open-source code under AGPL-3.0-only.`
 
