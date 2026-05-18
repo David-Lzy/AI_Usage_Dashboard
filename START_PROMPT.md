@@ -28,17 +28,15 @@ You can start an agent with:
 Before doing any work in this repository, read and follow these files in order:
 
 1. `AGENTS.md`
-2. `Doc/Project_Quickstart.md`
-3. `Doc/Development_Guardrails.md`
-4. `Doc/Documentation_Taxonomy.md`
-5. the relevant `Doc/testing/*.md` or release/runbook doc for the current task
-6. `Doc/TODOs/00_Phase_Index.md`
-7. `Doc/AI_Usage_Dashboard_TODOs.md`
-8. `Doc/Roadmap/00_Strategic_Directions_Index.md`
-9. the active phase file named in the phase index, if one exists
+2. `README.md`
+3. `CONTRIBUTING.md`
+4. `Doc/README.md`
+5. `Doc/AI_Usage_Dashboard_TODOs.md`
+6. the relevant public `Doc/` functional reference for the current task
 
 Rules:
 
 - treat tracked root docs plus `Doc/` as the canonical source of truth
-- treat local `.agent/` content as optional helper material only when present
+- treat local `.local/` and `.agent/` content as private helper material only when present
+- do not duplicate maintained `Doc/` files into private local docs; link to public docs and add only local-only operational notes
 - read the relevant docs first, then start implementation or analysis

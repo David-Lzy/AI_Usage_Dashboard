@@ -4,18 +4,18 @@ Chrome MV3 extension for AI quota, usage, and sync-health visibility across Curs
 
 ## Start Here
 
-1. [`START_PROMPT.md`](./START_PROMPT.md)
-2. [`Doc/README.md`](./Doc/README.md)
-3. [`Doc/TODOs/00_Phase_Index.md`](./Doc/TODOs/00_Phase_Index.md) and the active phase file
+1. [`README.md`](./README.md)
+2. [`CONTRIBUTING.md`](./CONTRIBUTING.md)
+3. [`Doc/README.md`](./Doc/README.md)
 4. [`Doc/AI_Usage_Dashboard_TODOs.md`](./Doc/AI_Usage_Dashboard_TODOs.md)
-5. [`Doc/Roadmap/00_Strategic_Directions_Index.md`](./Doc/Roadmap/00_Strategic_Directions_Index.md)
 
 ## Canonical Split
 
-- `Doc/`: product truth, roadmap, phase files, provider notes, milestones, generated ledgers, and archived evidence
-- `.agent/`: local-only agent scratch/workspace docs when present; do not treat it as canonical or version-controlled
+- `Doc/`: public product truth, store copy, i18n design, provider truth boundaries, milestones, QA indexes, and archived evidence.
+- `.local/`: ignored private workflow memory for this machine. It may contain local agent notes, RDP/screenshot operations, release workflow notes, and historical snapshots.
+- `.agent/`: ignored compatibility scratch space when present; do not treat it as canonical or version-controlled.
 
-Keep project truth in tracked root and `Doc/` files. Local helper material under `.agent/` may exist, but the repo must stay understandable without it.
+Keep public project truth in tracked root and `Doc/` files. Do not create a second maintained copy of `Doc/` content under `.local/` or `.agent/`; private notes may link to public docs and add local-only operational context.
 
 ## Key Commands
 

@@ -23,9 +23,11 @@ Status note:
 4. [Current project TODOs](./AI_Usage_Dashboard_TODOs.md)
 5. [Strategic roadmap index](./Roadmap/00_Strategic_Directions_Index.md)
 
-The repository must remain understandable from tracked files alone. Local `.agent/`
-material may exist for an individual workspace, but it is ignored by git and is not
-the shared source of truth.
+The repository must remain understandable from tracked files alone. Local `.local/`
+and `.agent/` material may exist for an individual workspace, but those directories
+are ignored by git and are not the shared source of truth. Do not maintain a second
+copy of public `Doc/` content in local private docs; private notes should link back
+to this tree and add only machine-local workflow context.
 
 ## Current Project Truth
 
@@ -45,6 +47,15 @@ the shared source of truth.
 - `Doc/I18n/` - localization architecture, message contracts, and source-truth policies.
 - `Doc/Store/` - Chrome Web Store listing, screenshot, and submission-copy references.
 - `Doc/testing/` - generated operational ledgers, active QA indexes, and test evidence.
+
+## Public/Private Boundary
+
+- Public/current docs live in `Doc/`, root `README.md`, `PRIVACY.md`,
+  `SECURITY.md`, and `CONTRIBUTING.md`.
+- Private local workflow notes live under ignored `.local/internal-docs/current/`.
+  They must not duplicate maintained public docs by filename and body.
+- Historical local snapshots belong under ignored `.local/internal-history/`, not
+  under `.local/internal-docs/current/`.
 
 ## Historical Evidence
 
