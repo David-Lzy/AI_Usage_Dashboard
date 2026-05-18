@@ -28,39 +28,41 @@ export function PopupFooterSection({
           {runtimeI18n.t("popup.header.title")}
         </p>
       </div>
-      {!hasFeaturedProviderCards ? (
-        <p className="popup-footer__detail">{headerDetail}</p>
-      ) : null}
-      <div className="popup-footer__about">
-        <div>AI Usage Dashboard {BUILD_INFO.version}</div>
-        <div>
-          {"© 2026 "}
-          <a
-            href={BUILD_INFO.sourceOrigin}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            David-Lzy
-          </a>
-          {" · "}
-          <a
-            href={`${BUILD_INFO.sourceOrigin}/blob/main/LICENSE`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            AGPL-3.0
-          </a>
-          {" · "}
-          <a
-            href={BUILD_INFO.sourceOrigin}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            GitHub
-          </a>
-        </div>
-        <div>
-          {BUILD_INFO.gitCommit} · {BUILD_INFO.buildTimestamp.slice(0, 10)}
+      <div className="popup-footer__meta">
+        {!hasFeaturedProviderCards ? (
+          <p className="popup-footer__detail">{headerDetail}</p>
+        ) : null}
+        <div className="popup-footer__about">
+          <div>AI Usage Dashboard {BUILD_INFO.version}</div>
+          <div>
+            {"© 2026 "}
+            <a
+              href={BUILD_INFO.sourceOrigin}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              David-Lzy
+            </a>
+            {" · "}
+            <a
+              href={`${BUILD_INFO.sourceOrigin}/blob/main/LICENSE`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              AGPL-3.0
+            </a>
+            {" · "}
+            <a
+              href={BUILD_INFO.sourceOrigin}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GitHub
+            </a>
+          </div>
+          <div>
+            {BUILD_INFO.gitCommit} · {BUILD_INFO.buildTimestamp.slice(0, 10)}
+          </div>
         </div>
       </div>
     </footer>

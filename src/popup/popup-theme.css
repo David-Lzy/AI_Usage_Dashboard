@@ -325,15 +325,19 @@ body.popup-page .popup-header--surface-collapsed {
 
 .popup-footer {
   display: grid;
-  gap: 4px;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: center;
+  gap: 4px var(--app-space-3);
   padding: var(--app-space-3) var(--app-space-2) var(--app-space-2);
   color: var(--md-sys-color-on-surface-variant);
-  text-align: center;
 }
 
 .popup-footer__heading {
   display: grid;
   gap: 1px;
+  justify-items: start;
+  min-width: max-content;
+  text-align: start;
 }
 
 .popup-footer__heading .section-label {
@@ -356,6 +360,14 @@ body.popup-page .popup-header--surface-collapsed {
   font-size: var(--md-sys-typescale-body-small-size);
   font-weight: var(--md-sys-typescale-body-small-weight);
   line-height: var(--md-sys-typescale-body-small-line-height);
+}
+
+.popup-footer__meta {
+  display: grid;
+  justify-items: end;
+  min-width: 0;
+  gap: 2px;
+  text-align: end;
 }
 
 .popup-footer__about {
