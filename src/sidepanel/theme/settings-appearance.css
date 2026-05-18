@@ -875,8 +875,9 @@
 
 .popup-appearance-preview-actions {
   display: grid;
-  grid-template-columns: minmax(46px, 1.618fr) repeat(4, minmax(24px, 1fr));
+  grid-template-columns: calc(28px * 1.618) repeat(4, 28px);
   align-items: center;
+  justify-content: center;
   width: 100%;
   gap: var(--app-space-1);
 }
@@ -885,6 +886,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
   min-height: 28px;
   padding: 0;
   border: 1px solid var(--md-sys-color-outline-variant);
