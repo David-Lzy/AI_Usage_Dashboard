@@ -2,6 +2,8 @@ export type PopupMaterialIconName =
   | "clear-day"
   | "dark-mode"
   | "dock-left"
+  | "keyboard-arrow-down"
+  | "keyboard-arrow-up"
   | "refresh"
   | "settings"
   | "tab";
@@ -13,6 +15,10 @@ const PATH_BY_NAME: Record<PopupMaterialIconName, string> = {
     "M12.1 21.5q-3.95 0-6.775-2.825T2.5 11.9q0-3.45 2.25-6.1T10.4 2.5q.4-.075.65.25t.1.7q-.35.725-.525 1.5T10.45 6.5q0 2.95 2.05 5t5 2.05q.8 0 1.562-.175t1.488-.525q.375-.15.7.1t.25.65q-.625 3.4-3.275 5.65T12.1 21.5Z",
   "dock-left":
     "M5 21q-.825 0-1.412-.588T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.412T19 21H5Zm4-2V5H5v14h4Zm2 0h8V5h-8v14Z",
+  "keyboard-arrow-down":
+    "M12 15.4 6 9.4 7.4 8l4.6 4.6L16.6 8 18 9.4l-6 6Z",
+  "keyboard-arrow-up":
+    "M7.4 16 6 14.6l6-6 6 6-1.4 1.4-4.6-4.6L7.4 16Z",
   refresh:
     "M17.65 6.35Q16.5 5.2 15.025 4.6T12 4q-3.35 0-5.675 2.325T4 12h2q0-2.5 1.75-4.25T12 6q1.15 0 2.162.438T15.95 7.65L13 10.6h7V3.6l-2.35 2.75ZM6.35 17.65Q7.5 18.8 8.975 19.4T12 20q3.35 0 5.675-2.325T20 12h-2q0 2.5-1.75 4.25T12 18q-1.15 0-2.162-.438T8.05 16.35L11 13.4H4v7l2.35-2.75Z",
   settings:

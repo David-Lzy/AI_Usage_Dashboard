@@ -9,9 +9,11 @@ import {
 import { PopupHeaderSection } from "./PopupHeaderSection";
 
 function renderPopupHeader({
+  areActionsCollapsed = false,
   isRefreshing = false,
   hideProviderFeedback = null,
 }: {
+  areActionsCollapsed?: boolean;
   isRefreshing?: boolean;
   hideProviderFeedback?: ReactNode;
 } = {}) {
@@ -21,6 +23,7 @@ function renderPopupHeader({
     <PopupHeaderSection
       isRefreshing={isRefreshing}
       isThemeTogglePending={false}
+      areActionsCollapsed={areActionsCollapsed}
       quickThemeToggleCopy={getQuickThemeToggleCopy("dark", runtimeI18n)}
       quickThemeToggleTargetMode="dark"
       refreshCountdownSeconds={15 * 60 + 4}
@@ -30,6 +33,7 @@ function renderPopupHeader({
       onOpenDashboardTab={() => undefined}
       onOpenSettings={() => undefined}
       onRefresh={() => undefined}
+      onToggleActionsCollapsed={() => undefined}
       onToggleThemeMode={() => undefined}
     />,
   );
@@ -40,6 +44,8 @@ describe("PopupHeaderSection", () => {
     const html = renderPopupHeader();
 
     expect(html).toContain('class="popup-header__actions"');
+    expect(html).toContain('aria-expanded="true"');
+    expect(html).toContain('aria-label="Hide top actions"');
     expect(html).toContain('data-popup-toggle-theme-mode="true"');
     expect(html).toContain('data-popup-refresh="true"');
     expect(html).toContain('data-popup-open-dashboard-tab="true"');
@@ -54,6 +60,19 @@ describe("PopupHeaderSection", () => {
     expect(html).not.toContain(">Settings</button>");
     expect(html).not.toContain("Quick glance");
     expect(html).not.toContain('class="popup-actions"');
+  });
+
+  it("keeps the floating collapse toggle when header actions are hidden", () => {
+    const html = renderPopupHeader({
+      areActionsCollapsed: true,
+    });
+
+    expect(html).toContain("popup-header--actions-collapsed");
+    expect(html).toContain("popup-header--surface-collapsed");
+    expect(html).toContain('aria-expanded="false"');
+    expect(html).toContain('aria-label="Show top actions"');
+    expect(html).toContain('id="popup-header-actions"');
+    expect(html).toContain("hidden");
   });
 
   it("uses the refreshing label without title copy", () => {

@@ -74,6 +74,8 @@ export function PopupApp() {
   });
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isThemeTogglePending, setIsThemeTogglePending] = useState(false);
+  const [areHeaderActionsCollapsed, setAreHeaderActionsCollapsed] =
+    useState(false);
   const [refreshCountdownSeconds, setRefreshCountdownSeconds] = useState<
     number | null
   >(null);
@@ -389,6 +391,7 @@ export function PopupApp() {
       <PopupHeaderSection
         isRefreshing={isRefreshing}
         isThemeTogglePending={isThemeTogglePending}
+        areActionsCollapsed={areHeaderActionsCollapsed}
         quickThemeToggleCopy={quickThemeToggleCopy}
         quickThemeToggleTargetMode={quickThemeToggle.nextMode}
         refreshCountdownSeconds={refreshCountdownSeconds}
@@ -408,6 +411,9 @@ export function PopupApp() {
         onOpenDashboardTab={openFullDashboardTab}
         onOpenSettings={openSettings}
         onRefresh={handleRefresh}
+        onToggleActionsCollapsed={() => {
+          setAreHeaderActionsCollapsed((current) => !current);
+        }}
         onToggleThemeMode={handleToggleThemeMode}
       />
 

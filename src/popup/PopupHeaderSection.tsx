@@ -13,6 +13,7 @@ type PopupHeaderSectionProps = {
   isThemeTogglePending: boolean;
   quickThemeToggleCopy: ReturnType<typeof getQuickThemeToggleCopy>;
   quickThemeToggleTargetMode: ResolvedThemeMode;
+  areActionsCollapsed: boolean;
   refreshCountdownSeconds: number | null;
   runtimeI18n: RuntimeI18n;
   hideProviderFeedback?: ReactNode;
@@ -20,6 +21,7 @@ type PopupHeaderSectionProps = {
   onOpenDashboardTab: () => void | Promise<void>;
   onOpenSettings: () => void | Promise<void>;
   onRefresh: () => void | Promise<void>;
+  onToggleActionsCollapsed: () => void;
   onToggleThemeMode: () => void | Promise<void>;
 };
 
@@ -58,6 +60,7 @@ export function PopupHeaderSection({
   isThemeTogglePending,
   quickThemeToggleCopy,
   quickThemeToggleTargetMode,
+  areActionsCollapsed,
   refreshCountdownSeconds,
   runtimeI18n,
   hideProviderFeedback = null,
@@ -65,6 +68,7 @@ export function PopupHeaderSection({
   onOpenDashboardTab,
   onOpenSettings,
   onRefresh,
+  onToggleActionsCollapsed,
   onToggleThemeMode,
 }: PopupHeaderSectionProps) {
   const refreshTitle = buildRefreshTitle({
@@ -78,15 +82,46 @@ export function PopupHeaderSection({
   );
   const themeIcon =
     quickThemeToggleTargetMode === "dark" ? "dark-mode" : "clear-day";
+  const toggleActionsTitle = runtimeI18n.t(
+    areActionsCollapsed
+      ? "popup.actions.show_header_actions"
+      : "popup.actions.hide_header_actions",
+  );
+  const isSurfaceCollapsed = areActionsCollapsed && !hideProviderFeedback;
 
   return (
-    <section className="status-card popup-header">
+    <section
+      className={`status-card popup-header${
+        areActionsCollapsed ? " popup-header--actions-collapsed" : ""
+      }${isSurfaceCollapsed ? " popup-header--surface-collapsed" : ""}`}
+    >
+      <button
+        className="icon-button popup-header__collapse-toggle"
+        type="button"
+        aria-controls="popup-header-actions"
+        aria-expanded={!areActionsCollapsed}
+        aria-label={toggleActionsTitle}
+        title={toggleActionsTitle}
+        onClick={onToggleActionsCollapsed}
+      >
+        <PopupMaterialIcon
+          name={
+            areActionsCollapsed
+              ? "keyboard-arrow-down"
+              : "keyboard-arrow-up"
+          }
+        />
+      </button>
       {hideProviderFeedback ? (
         <div className="popup-header__feedback-slot">
           {hideProviderFeedback}
         </div>
       ) : null}
-      <div className="popup-header__actions">
+      <div
+        id="popup-header-actions"
+        className="popup-header__actions"
+        hidden={areActionsCollapsed}
+      >
         <button
           className="icon-button popup-header__icon-action popup-header__icon-action--refresh"
           type="button"
