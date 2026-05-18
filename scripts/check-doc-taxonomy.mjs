@@ -13,5 +13,5 @@ if (result.issues.length > 0) {
 }
 
 console.log(
-  `docs:check: verified ${result.checkedFileCount} documentation files; latest completed slice matches ${result.latestArchivedPhaseFilename}`,
+  `docs:check: verified ${result.checkedFileCount} public documentation files`,
 );

@@ -4,7 +4,7 @@ Date: 2026-05-18
 
 Process rule:
 
-- follow [Development_Guardrails.md](../Development_Guardrails.md)
+- follow [CONTRIBUTING.md](../../CONTRIBUTING.md)
 
 Document class:
 
@@ -17,7 +17,7 @@ Freshness model:
 Status note:
 
 - this is the current English source copy pack for the RC24 Chrome Web Store resubmission candidate
-- four primary upload locales are prepared in [Store_RC24_Resubmission_Handoff.md](./Store_RC24_Resubmission_Handoff.md)
+- primary upload locale copy is maintained in the product-description files in this directory
 - keep provider/product names unchanged and do not strengthen partial provider support claims
 
 ## Store Fields

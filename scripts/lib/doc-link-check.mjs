@@ -8,8 +8,6 @@ const execFileAsync = promisify(execFile);
 const IGNORED_TARGET_PATTERN = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
 
 export const DOC_LINK_CHECK_SKIPPED_MARKDOWN_PATTERNS = [
-  "Doc/TODOs/Archive/by-phase/*/*.md",
-  "Doc/testing/Archive/phase-reports/*/Phase_*.md",
 ];
 
 function globPatternToRegExp(pattern) {

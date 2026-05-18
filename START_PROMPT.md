@@ -31,8 +31,7 @@ Before doing any work in this repository, read and follow these files in order:
 2. `README.md`
 3. `CONTRIBUTING.md`
 4. `Doc/README.md`
-5. `Doc/AI_Usage_Dashboard_TODOs.md`
-6. the relevant public `Doc/` functional reference for the current task
+5. the relevant public `Doc/` functional reference for the current task
 
 Rules:
 

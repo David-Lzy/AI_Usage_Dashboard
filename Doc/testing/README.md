@@ -1,6 +1,6 @@
 # Testing Documentation
 
-Date: 2026-05-13
+Date: 2026-05-18
 
 Document class:
 
@@ -12,19 +12,27 @@ Freshness model:
 
 Status note:
 
-- this directory holds active generated ledgers, testing stubs, and archived phase reports
-- generated request/archive indexes should be refreshed by scripts instead of hand-maintained line by line
+- this public testing page lists repository verification commands
+- generated operator evidence, screenshot requests, local browser/RDP notes, and account-specific QA history live in ignored `.local/` history
 
-## Active Ledgers
+## Public Verification
 
-- [Interaction Audit Review Requests](./Interaction_Audit_Review_Requests.md)
-- [Interaction Audit Review Archive](./Interaction_Audit_Review_Archive.md)
-- [Theme Recovery Review Requests](./Theme_Recovery_Review_Requests.md)
-- [Theme Recovery Review Archive](./Theme_Recovery_Review_Archive.md)
-- [Store Screenshot Capture Requests](./Store_Screenshot_Capture_Requests.md)
-- [Store Screenshot Capture Archive](./Store_Screenshot_Capture_Archive.md)
-- [Store Screenshot Capture Packs](./Store_Screenshot_Capture_Packs.md)
+Use the smallest command set that proves the change:
 
-## Historical Evidence
+```sh
+npm run docs:check
+npm run i18n:check
+npm run typecheck
+npm run test
+npm run build
+```
 
-- [Phase reports](./Archive/phase-reports/)
+Release candidates should pass:
+
+```sh
+npm run release:check
+npm run release:package
+```
+
+Do not commit screenshots, local browser profile paths, account data, cookies,
+raw auth headers, or personal provider evidence.

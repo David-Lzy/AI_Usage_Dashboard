@@ -81,13 +81,13 @@ describe("doc link check helpers", () => {
     });
   });
 
-  it("skips convention-only closed evidence files by default", async () => {
+  it("checks every tracked markdown file by default", async () => {
     const root = await mkdtemp(path.join(tmpdir(), "doc-link-check-"));
     await writeFixture(root, "README.md", "[Docs](./README.md)\n");
     await writeFixture(
       root,
       "Doc/TODOs/Archive/by-phase/300-399/388_Phase_Closed.md",
-      "[Old broken link](../../../Development_Guardrails.md)\n",
+      "[README](../../../../../README.md)\n",
     );
 
     await expect(
@@ -99,8 +99,8 @@ describe("doc link check helpers", () => {
       }),
     ).resolves.toMatchObject({
       issues: [],
-      checkedFileCount: 1,
-      skippedFileCount: 1,
+      checkedFileCount: 2,
+      skippedFileCount: 0,
     });
   });
 

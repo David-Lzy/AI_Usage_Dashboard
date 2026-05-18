@@ -4,7 +4,7 @@ Date: 2026-04-25
 
 Process rule:
 
-- follow [Development_Guardrails.md](../Development_Guardrails.md)
+- follow [CONTRIBUTING.md](../../CONTRIBUTING.md)
 
 Document class:
 
@@ -17,7 +17,7 @@ Freshness model:
 Status note:
 
 - this file records the provider source-truth localization boundary after `Phase 183`
-- `Phase 184` added [I18n_Adapter_Diagnostic_Reason_Code_Plan.md](./I18n_Adapter_Diagnostic_Reason_Code_Plan.md) as the maintained plan for typed adapter diagnostics
+- typed adapter diagnostics provide localized UI summaries while raw provider evidence fields remain protected from translation or rewrite
 - `Phase 185` added optional typed diagnostic fields while keeping raw provider source-truth fields unchanged
 - `Phase 186` populated Cursor source-selection and fallback typed diagnostics while preserving raw `sourceSelectionReason` and `sourceFallbackReason` strings
 - `Phase 187` populated Codex source-selection and fallback typed diagnostics while preserving raw `sourceSelectionReason` and `sourceFallbackReason` strings

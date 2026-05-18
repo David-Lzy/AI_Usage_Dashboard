@@ -89,13 +89,12 @@ The generated zip is written under `release/`.
 
 - Current package candidate: `0.1.0-rc.24`
 - Current Chrome manifest version: `0.1.0.24`
-- Current package artifact: `release/ai-usage-dashboard-0.1.0-rc.24.zip`
-- Chrome Web Store currently lists an older public version; RC24 is the prepared
-  resubmission candidate.
-- no numbered phase is currently queued after `Phase 524`.
+- Chrome Web Store currently lists an older public version; RC24 is the current
+  prepared resubmission candidate.
+- Public listing copy lives in [Doc/Store](./Doc/Store/).
 
-Detailed release and store handoff records live in [Doc/Milestones](./Doc/Milestones/)
-and [Doc/Store](./Doc/Store/).
+Release zip files, package hashes, upload receipts, and personal submission
+handoff notes are intentionally kept out of the public repository.
 
 ## Contributing
 

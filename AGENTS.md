@@ -7,11 +7,10 @@ Chrome MV3 extension for AI quota, usage, and sync-health visibility across Curs
 1. [`README.md`](./README.md)
 2. [`CONTRIBUTING.md`](./CONTRIBUTING.md)
 3. [`Doc/README.md`](./Doc/README.md)
-4. [`Doc/AI_Usage_Dashboard_TODOs.md`](./Doc/AI_Usage_Dashboard_TODOs.md)
 
 ## Canonical Split
 
-- `Doc/`: public product truth, store copy, i18n design, provider truth boundaries, milestones, QA indexes, and archived evidence.
+- `Doc/`: public product truth, store copy, i18n design, provider truth boundaries, and public verification guidance.
 - `.local/`: ignored private workflow memory for this machine. It may contain local agent notes, RDP/screenshot operations, release workflow notes, and historical snapshots.
 - `.agent/`: ignored compatibility scratch space when present; do not treat it as canonical or version-controlled.
 
@@ -40,7 +39,7 @@ npm run docs:check
 ## Documentation Entry Points
 
 - [Documentation Index](./Doc/README.md)
-- [Phase Index](./Doc/TODOs/00_Phase_Index.md)
-- [Current Project TODOs](./Doc/AI_Usage_Dashboard_TODOs.md)
-- [Strategic Roadmap Index](./Doc/Roadmap/00_Strategic_Directions_Index.md)
-- [Compatibility stubs](./Doc/README.md#compatibility-stubs) for old process-doc paths
+- [Product contracts](./Doc/Product/)
+- [Provider notes](./Doc/provider_notes/)
+- [I18n contracts](./Doc/I18n/)
+- [Store listing copy](./Doc/Store/)

@@ -4,7 +4,7 @@ Date: 2026-04-20
 
 Process rule:
 
-- follow [Development_Guardrails.md](../Development_Guardrails.md)
+- follow [CONTRIBUTING.md](../../CONTRIBUTING.md)
 
 Document class:
 

@@ -4,7 +4,7 @@ Date: 2026-05-13
 
 Process rule:
 
-- follow [Development_Guardrails.md](../Development_Guardrails.md)
+- follow [CONTRIBUTING.md](../../CONTRIBUTING.md)
 
 Document class:
 
@@ -185,10 +185,9 @@ This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still maki
 - vendor-owned provider-page text stays outside the managed localization catalog
 - locale-aware formatting also stays outside raw message ids so generated values can be formatted per locale without multiplying message ids
 - Chrome manifest message ids are guarded by `npm run i18n:check`, which now derives Chrome catalog directories from `APP_LOCALE_METADATA`, verifies the RDP capture helper locale list against `SUPPORTED_APP_LOCALES`, and checks the 14-locale Chrome Web Store listing draft structure
-- operator workspace copy remains governed by [I18n_Operator_Workspace_Boundary_And_Extraction.md](./I18n_Operator_Workspace_Boundary_And_Extraction.md); `Phase 179` localizes shell/navigation/helper copy while preserving English evidence payloads
-- store-screenshot helper copy remains governed by [I18n_Store_Runtime_Helper_Copy.md](./I18n_Store_Runtime_Helper_Copy.md); `Phase 180` localizes visible helper copy and `Phase 181` adds helper-only submission-support captions while preserving automation titles, preset ids, route hashes, final screenshot surfaces, and the manual native-toolbar popup capture truth boundary
+- operator workspace and store-screenshot helper localization records are historical private implementation notes under ignored `.local/` history; public localization contracts should stay focused on shipped user-facing copy and protected evidence fields
 - raw provider source-truth copy remains governed by [I18n_Raw_Provider_Source_Truth_Policy.md](./I18n_Raw_Provider_Source_Truth_Policy.md); `Phase 182` separates protected raw fields from provider-source display wrappers, and `Phase 183` localizes those wrappers through `ProviderSourceDisplayCopy` plus `buildProviderSourceDisplayLocalizedCopy` while preserving raw adapter evidence fields
-- adapter diagnostic body localization remains governed by [I18n_Adapter_Diagnostic_Reason_Code_Plan.md](./I18n_Adapter_Diagnostic_Reason_Code_Plan.md); `Phase 184` defines the typed reason-code plan, `Phase 185` ships the type-only additive model, `Phase 186` populates Cursor source-selection/fallback diagnostics, `Phase 187` populates Codex source-selection/fallback diagnostics, `Phase 188` populates Cursor/Codex credential plus host-access diagnostics, `Phase 189` populates Cursor/Codex page-session diagnostics, `Phase 190` populates usage-threshold plus policy-only diagnostics, `Phase 191` populates sync-stale diagnostics, `Phase 192` makes source-state classification prefer typed diagnostics, `Phase 193` ships localized warning diagnostic presentation, `Phase 194` ships localized source diagnostic presentation, `Phase 195` ships adapter-error diagnostic presentation, and `Phase 398` through `Phase 400` expand typed warning/source/adapter presentation to 14 runtime locales while keeping raw adapter bodies outside translated message ids
+- adapter diagnostic body localization uses typed reason codes for user-facing presentation while keeping raw adapter bodies outside translated message ids
 - `Phase 196` adds compact-width QA for localized diagnostic presentation stacks and keeps raw diagnostic bodies outside translated message ids
 - `Phase 197` adds diagnostic archive/export compatibility review and keeps localized diagnostic presentation out of archive/export schema message ids
 - `Phase 198` aligns maintained sample and store seed typed diagnostic metadata while keeping raw diagnostic strings outside translated message ids
@@ -246,4 +245,4 @@ This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still maki
   - `id`
 - Chrome `_locales` directory names use Chrome format such as `zh_CN`, `zh_TW`, `es_419`, and `pt_BR`; runtime locale tags use BCP-style tags such as `zh-CN`, `zh-TW`, `es-419`, and `pt-BR`
 - `npm run i18n:check` is the drift gate for runtime locale tags, metadata `chromeLocale` values, manifest catalog ids, the RDP capture locale helper, and the store listing localization draft structure
-- translation review and RDP visual QA remain governed by [Direction 09](../Roadmap/09_Direction_Internationalization_Bootstrap_And_Pilot_Locales.md)
+- translation review and visual QA should follow the public localization contracts in this directory plus private local QA notes when browser-profile evidence is required

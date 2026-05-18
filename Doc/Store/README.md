@@ -1,6 +1,6 @@
 # Store Documentation
 
-Date: 2026-05-16
+Date: 2026-05-18
 
 Document class:
 
@@ -12,24 +12,23 @@ Freshness model:
 
 Status note:
 
-- this directory holds Chrome Web Store copy, screenshot, and localization references
-- product descriptions are store-copy artifacts and should keep provider/product names unchanged
+- this directory holds public Chrome Web Store listing copy and localization source material
+- personal upload handoffs, screenshot capture notes, package hashes, and submission receipts live in ignored `.local/` history
 
-## Current References
+## Current Public Copy
 
-- [Store Listing Copy Pack](./Store_Listing_Copy_Pack.md)
-- [Store Listing Localization Source Pack](./Store_Listing_Localization_Source_Pack.md)
-- [Store Listing Localization 14 Locale Draft](./Store_Listing_Localization_14_Locale_Draft.md)
-- [Store Public Release 6 Locale Handoff](./Store_Public_Release_6_Locale_Handoff.md)
-- [Store RC24 Resubmission Handoff](./Store_RC24_Resubmission_Handoff.md)
-- [Store Screenshot Selection Pack](./Store_Screenshot_Selection_Pack.md)
-- [Store Screenshot Storyboard](./Store_Screenshot_Storyboard.md)
+- [English product description](./Chrome_Web_Store_Product_Description_en-US.md)
+- [Simplified Chinese product description](./Chrome_Web_Store_Product_Description_zh-CN.md)
+- [Traditional Chinese product description](./Chrome_Web_Store_Product_Description_zh-TW.md)
+- [Japanese product description](./Chrome_Web_Store_Product_Description_ja.md)
+- [Latin American Spanish draft](./Chrome_Web_Store_Product_Description_es-419.md)
+- [Brazilian Portuguese draft](./Chrome_Web_Store_Product_Description_pt-BR.md)
 
-## Copy Artifacts
+## Source References
 
-- [English Product Description](./Chrome_Web_Store_Product_Description_en-US.md)
-- [Simplified Chinese Product Description](./Chrome_Web_Store_Product_Description_zh-CN.md)
-- [Traditional Chinese Product Description](./Chrome_Web_Store_Product_Description_zh-TW.md)
-- [Japanese Product Description](./Chrome_Web_Store_Product_Description_ja.md)
-- [Latin American Spanish Product Description](./Chrome_Web_Store_Product_Description_es-419.md)
-- [Brazilian Portuguese Product Description](./Chrome_Web_Store_Product_Description_pt-BR.md)
+- [Store listing copy pack](./Store_Listing_Copy_Pack.md)
+- [Store listing localization source pack](./Store_Listing_Localization_Source_Pack.md)
+- [Store listing localization 14-locale draft](./Store_Listing_Localization_14_Locale_Draft.md)
+
+Keep product and provider names unchanged. Do not strengthen partial,
+window-scoped, policy-only, or unavailable provider claims during translation.

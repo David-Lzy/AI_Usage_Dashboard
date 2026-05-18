@@ -59,19 +59,13 @@ describe("doc taxonomy check helpers", () => {
   });
 
   it("exposes the intentional convention-only taxonomy boundary", () => {
-    expect(DOC_TAXONOMY_CONVENTION_ONLY_PATTERNS).toEqual([
-      "Doc/TODOs/Archive/by-phase/*/*.md",
-      "Doc/testing/Archive/phase-reports/*/Phase_*.md",
-      "Doc/testing/operator_reviews/*/interaction-audit-handoff-bundle.md",
-      "Doc/testing/theme_recovery_reviews/*/theme-recovery-summary.md",
-    ]);
+    expect(DOC_TAXONOMY_CONVENTION_ONLY_PATTERNS).toEqual([]);
   });
 
   it("reports unclassified top-level Doc markdown files", () => {
     expect(
       evaluateTopLevelDocFiles([
         "Doc/README.md",
-        "Doc/AI_Usage_Dashboard_TODOs.md",
         "Doc/Loose_Reference.md",
       ]),
     ).toEqual([
