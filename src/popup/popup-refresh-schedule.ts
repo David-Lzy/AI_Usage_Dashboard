@@ -24,7 +24,7 @@ function readChromeAlarms(
   return typeof chrome !== "undefined" ? chrome.alarms : undefined;
 }
 
-export async function readPopupRefreshCountdownMinutes(
+export async function readPopupRefreshCountdownSeconds(
   syncIntervalMinutes: number,
   reader?: PopupRefreshScheduleReader,
 ): Promise<number | null> {
@@ -37,8 +37,8 @@ export async function readPopupRefreshCountdownMinutes(
 
       if (typeof alarm?.scheduledTime === "number") {
         return Math.max(
-          1,
-          Math.ceil((alarm.scheduledTime - now) / 60000),
+          0,
+          Math.ceil((alarm.scheduledTime - now) / 1000),
         );
       }
     } catch {
@@ -47,19 +47,36 @@ export async function readPopupRefreshCountdownMinutes(
   }
 
   if (Number.isFinite(syncIntervalMinutes)) {
-    return Math.max(SYNC_INTERVAL_MIN_MINUTES, Math.ceil(syncIntervalMinutes));
+    return Math.max(
+      SYNC_INTERVAL_MIN_MINUTES * 60,
+      Math.ceil(syncIntervalMinutes * 60),
+    );
   }
 
   return null;
 }
 
 export function formatPopupRefreshCountdownLabel(
-  minutes: number | null,
+  seconds: number | null,
   formatNumber: (value: number) => string,
 ): string | null {
-  if (minutes === null) {
+  if (seconds === null) {
     return null;
   }
 
-  return `~${formatNumber(Math.max(1, minutes))}m`;
+  const safeSeconds = Math.max(0, Math.ceil(seconds));
+  const hours = Math.floor(safeSeconds / 3600);
+  const minutes = Math.floor((safeSeconds % 3600) / 60);
+  const remainingSeconds = safeSeconds % 60;
+
+  const formatTwoDigit = (value: number) =>
+    value < 10 ? `0${formatNumber(value)}` : formatNumber(value);
+
+  if (hours > 0) {
+    return `${formatNumber(hours)}:${formatTwoDigit(minutes)}:${formatTwoDigit(
+      remainingSeconds,
+    )}`;
+  }
+
+  return `${formatNumber(minutes)}:${formatTwoDigit(remainingSeconds)}`;
 }

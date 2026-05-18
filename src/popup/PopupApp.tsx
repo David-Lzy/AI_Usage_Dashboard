@@ -58,7 +58,7 @@ import { PopupSnapshotStatusSection } from "./PopupSnapshotStatusSection";
 import { PopupSetupCoverageSection } from "./PopupSetupCoverageSection";
 import { PopupSurfaceRolesSection } from "./PopupSurfaceRolesSection";
 import { buildPopupHideProviderFeedbackCopy } from "./popup-hide-provider-feedback-copy";
-import { readPopupRefreshCountdownMinutes } from "./popup-refresh-schedule";
+import { readPopupRefreshCountdownSeconds } from "./popup-refresh-schedule";
 
 type PopupLoadState =
   | { status: "loading" }
@@ -74,7 +74,7 @@ export function PopupApp() {
   });
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isThemeTogglePending, setIsThemeTogglePending] = useState(false);
-  const [refreshCountdownMinutes, setRefreshCountdownMinutes] = useState<
+  const [refreshCountdownSeconds, setRefreshCountdownSeconds] = useState<
     number | null
   >(null);
   const [hideProviderFeedback, setHideProviderFeedback] =
@@ -135,7 +135,7 @@ export function PopupApp() {
 
   useEffect(() => {
     if (loadState.status !== "ready") {
-      setRefreshCountdownMinutes(null);
+      setRefreshCountdownSeconds(null);
       return undefined;
     }
 
@@ -146,12 +146,12 @@ export function PopupApp() {
         return;
       }
 
-      const minutes = await readPopupRefreshCountdownMinutes(
+      const seconds = await readPopupRefreshCountdownSeconds(
         loadState.appState.settings.syncIntervalMinutes,
       );
 
       if (!disposed) {
-        setRefreshCountdownMinutes(minutes);
+        setRefreshCountdownSeconds(seconds);
       }
     }
 
@@ -163,7 +163,7 @@ export function PopupApp() {
       };
     }
 
-    const intervalId = window.setInterval(updateRefreshCountdown, 30_000);
+    const intervalId = window.setInterval(updateRefreshCountdown, 1_000);
 
     return () => {
       disposed = true;
@@ -391,7 +391,7 @@ export function PopupApp() {
         isThemeTogglePending={isThemeTogglePending}
         quickThemeToggleCopy={quickThemeToggleCopy}
         quickThemeToggleTargetMode={quickThemeToggle.nextMode}
-        refreshCountdownMinutes={refreshCountdownMinutes}
+        refreshCountdownSeconds={refreshCountdownSeconds}
         runtimeI18n={runtimeI18n}
         hideProviderFeedback={
           hideProviderFeedback ? (

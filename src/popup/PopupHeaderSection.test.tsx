@@ -23,7 +23,7 @@ function renderPopupHeader({
       isThemeTogglePending={false}
       quickThemeToggleCopy={getQuickThemeToggleCopy("dark", runtimeI18n)}
       quickThemeToggleTargetMode="dark"
-      refreshCountdownMinutes={15}
+      refreshCountdownSeconds={15 * 60 + 4}
       runtimeI18n={runtimeI18n}
       hideProviderFeedback={hideProviderFeedback}
       onOpenDashboardTab={() => undefined}
@@ -44,7 +44,10 @@ describe("PopupHeaderSection", () => {
     expect(html).toContain('data-popup-open-dashboard-tab="true"');
     expect(html).toContain('data-popup-open-settings="true"');
     expect(html).toContain('aria-label="Open settings"');
-    expect(html).toContain("~15m");
+    expect(html).toContain("15:04");
+    expect(html.indexOf('data-popup-refresh="true"')).toBeLessThan(
+      html.indexOf('data-popup-toggle-theme-mode="true"'),
+    );
     expect(html).not.toContain(">Settings</button>");
     expect(html).not.toContain("Quick glance");
     expect(html).not.toContain('class="popup-actions"');

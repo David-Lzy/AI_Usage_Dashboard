@@ -60,7 +60,10 @@ export function PopupAppearancePreview({
               className="popup-appearance-preview-actions"
               aria-hidden="true"
             >
-              <span />
+              <span className="popup-appearance-preview-actions__refresh">
+                <span />
+                <strong>14:59</strong>
+              </span>
               <span />
               <span />
               <span />

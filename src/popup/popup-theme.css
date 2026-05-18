@@ -169,7 +169,7 @@ body.popup-page .status-card {
 
 .popup-header__actions {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: minmax(112px, 1fr) repeat(3, 44px);
   align-items: center;
   gap: var(--app-space-1);
 }
@@ -180,30 +180,32 @@ body.popup-page .status-card {
   min-width: 0;
   height: 40px;
   gap: 4px;
-  padding-inline: var(--app-space-2);
+  padding-inline: 0;
   font-size: var(--md-sys-typescale-label-medium-size);
   white-space: nowrap;
 }
 
 .popup-header__action-icon {
-  width: 20px;
-  height: 20px;
+  width: 21px;
+  height: 21px;
   flex: 0 0 auto;
   fill: currentColor;
 }
 
 .popup-header__icon-action--refresh {
-  padding-inline: 6px;
+  padding-inline: var(--app-space-2);
+  justify-content: center;
 }
 
 .popup-header__refresh-countdown {
   min-width: 0;
   overflow: hidden;
   color: var(--md-sys-color-on-surface-variant);
-  font-family: var(--md-sys-typescale-label-small-font);
-  font-size: var(--md-sys-typescale-label-small-size);
-  font-weight: var(--md-sys-typescale-label-small-weight);
-  line-height: var(--md-sys-typescale-label-small-line-height);
+  font-family: var(--md-sys-typescale-label-medium-font);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: var(--md-sys-typescale-label-medium-weight);
+  line-height: var(--md-sys-typescale-label-medium-line-height);
+  font-variant-numeric: tabular-nums;
   text-overflow: ellipsis;
 }
 
