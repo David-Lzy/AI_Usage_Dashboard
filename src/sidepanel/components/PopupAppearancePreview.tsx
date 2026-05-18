@@ -67,6 +67,7 @@ export function PopupAppearancePreview({
               <span />
               <span />
               <span />
+              <span />
             </div>
           </div>
 

@@ -16,6 +16,7 @@ type PopupHeaderSectionProps = {
   refreshCountdownSeconds: number | null;
   runtimeI18n: RuntimeI18n;
   hideProviderFeedback?: ReactNode;
+  onOpenDashboardSidebar: () => void | Promise<void>;
   onOpenDashboardTab: () => void | Promise<void>;
   onOpenSettings: () => void | Promise<void>;
   onRefresh: () => void | Promise<void>;
@@ -60,6 +61,7 @@ export function PopupHeaderSection({
   refreshCountdownSeconds,
   runtimeI18n,
   hideProviderFeedback = null,
+  onOpenDashboardSidebar,
   onOpenDashboardTab,
   onOpenSettings,
   onRefresh,
@@ -129,6 +131,19 @@ export function PopupHeaderSection({
           }}
         >
           <PopupMaterialIcon name="tab" />
+        </button>
+        <button
+          className="icon-button popup-header__icon-action"
+          data-popup-open-dashboard-sidebar="true"
+          data-theme-local-surface="popup-open-dashboard-sidebar"
+          type="button"
+          aria-label={runtimeI18n.t("common.actions.open_sidebar")}
+          title={runtimeI18n.t("common.actions.open_sidebar")}
+          onClick={() => {
+            void onOpenDashboardSidebar();
+          }}
+        >
+          <PopupMaterialIcon name="dock-left" />
         </button>
         <button
           className="icon-button popup-header__icon-action"

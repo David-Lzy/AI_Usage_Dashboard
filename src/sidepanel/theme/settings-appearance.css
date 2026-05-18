@@ -874,13 +874,14 @@
 }
 
 .popup-appearance-preview-actions {
-  display: grid;
-  grid-template-columns: minmax(72px, 1fr) repeat(3, 28px);
+  display: flex;
+  align-items: center;
   width: 100%;
   gap: var(--app-space-1);
 }
 
-.popup-appearance-preview-actions span {
+.popup-appearance-preview-actions > span {
+  flex: 0 0 28px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -899,12 +900,18 @@
 }
 
 .popup-appearance-preview-actions__refresh {
+  flex: 0 1 72px;
   gap: 5px;
   min-width: 0;
   background: var(--md-sys-color-surface-container-lowest);
 }
 
+.popup-appearance-preview-actions__refresh + span {
+  margin-inline-start: auto;
+}
+
 .popup-appearance-preview-actions__refresh span {
+  flex: 0 0 8px;
   width: 8px;
   min-height: 8px;
   border: 0;

@@ -404,6 +404,7 @@ export function PopupApp() {
             />
           ) : null
         }
+        onOpenDashboardSidebar={openFullDashboard}
         onOpenDashboardTab={openFullDashboardTab}
         onOpenSettings={openSettings}
         onRefresh={handleRefresh}
