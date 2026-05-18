@@ -4,13 +4,16 @@ import type {
   getQuickThemeToggleCopy,
   RuntimeI18n,
 } from "../shared/i18n";
+import type { ResolvedThemeMode } from "../shared/theme";
+import { PopupMaterialIcon } from "./PopupMaterialIcon";
+import { formatPopupRefreshCountdownLabel } from "./popup-refresh-schedule";
 
 type PopupHeaderSectionProps = {
-  headerDetail: string;
-  hasFeaturedProviderCards: boolean;
   isRefreshing: boolean;
   isThemeTogglePending: boolean;
   quickThemeToggleCopy: ReturnType<typeof getQuickThemeToggleCopy>;
+  quickThemeToggleTargetMode: ResolvedThemeMode;
+  refreshCountdownMinutes: number | null;
   runtimeI18n: RuntimeI18n;
   hideProviderFeedback?: ReactNode;
   onOpenDashboardTab: () => void | Promise<void>;
@@ -19,12 +22,42 @@ type PopupHeaderSectionProps = {
   onToggleThemeMode: () => void | Promise<void>;
 };
 
+function buildRefreshTitle({
+  isRefreshing,
+  refreshCountdownMinutes,
+  runtimeI18n,
+}: {
+  isRefreshing: boolean;
+  refreshCountdownMinutes: number | null;
+  runtimeI18n: RuntimeI18n;
+}) {
+  if (isRefreshing) {
+    return runtimeI18n.t("popup.actions.refreshing");
+  }
+
+  const minutesLabel =
+    refreshCountdownMinutes === null
+      ? null
+      : [
+          runtimeI18n.formatNumber(Math.max(1, refreshCountdownMinutes)),
+          runtimeI18n.t("settings.preferences.minutes"),
+        ].join(" ");
+
+  return [
+    runtimeI18n.t("popup.actions.refresh_title"),
+    minutesLabel ? `~${minutesLabel}` : null,
+    runtimeI18n.t("popup.actions.refresh_drift_note"),
+  ]
+    .filter(Boolean)
+    .join(" · ");
+}
+
 export function PopupHeaderSection({
-  headerDetail,
-  hasFeaturedProviderCards,
   isRefreshing,
   isThemeTogglePending,
   quickThemeToggleCopy,
+  quickThemeToggleTargetMode,
+  refreshCountdownMinutes,
   runtimeI18n,
   hideProviderFeedback = null,
   onOpenDashboardTab,
@@ -32,45 +65,28 @@ export function PopupHeaderSection({
   onRefresh,
   onToggleThemeMode,
 }: PopupHeaderSectionProps) {
+  const refreshTitle = buildRefreshTitle({
+    isRefreshing,
+    refreshCountdownMinutes,
+    runtimeI18n,
+  });
+  const refreshCountdownLabel = formatPopupRefreshCountdownLabel(
+    refreshCountdownMinutes,
+    runtimeI18n.formatNumber,
+  );
+  const themeIcon =
+    quickThemeToggleTargetMode === "dark" ? "dark-mode" : "clear-day";
+
   return (
     <section className="status-card popup-header">
-      <div className="popup-header__top-row">
-        <div className="popup-header__title-copy">
-          <p
-            className="section-label"
-            data-theme-local-surface="popup-header-label"
-          >
-            {runtimeI18n.t("popup.header.eyebrow")}
-          </p>
-          <h1 className="section-title">
-            {runtimeI18n.t("popup.header.title")}
-          </h1>
-          {!hasFeaturedProviderCards ? (
-            <p className="supporting-copy">{headerDetail}</p>
-          ) : null}
+      {hideProviderFeedback ? (
+        <div className="popup-header__feedback-slot">
+          {hideProviderFeedback}
         </div>
-        {hideProviderFeedback ? (
-          <div className="popup-header__feedback-slot">
-            {hideProviderFeedback}
-          </div>
-        ) : null}
-        <button
-          className="text-button popup-header__refresh"
-          type="button"
-          disabled={isRefreshing}
-          data-popup-refresh="true"
-          onClick={() => {
-            void onRefresh();
-          }}
-        >
-          {isRefreshing
-            ? runtimeI18n.t("popup.actions.refreshing")
-            : runtimeI18n.t("popup.actions.refresh")}
-        </button>
-      </div>
+      ) : null}
       <div className="popup-header__actions">
         <button
-          className="icon-button"
+          className="icon-button popup-header__icon-action"
           data-popup-toggle-theme-mode="true"
           data-theme-local-surface="popup-toggle-theme-mode"
           type="button"
@@ -81,10 +97,28 @@ export function PopupHeaderSection({
             void onToggleThemeMode();
           }}
         >
-          {quickThemeToggleCopy.label}
+          <PopupMaterialIcon name={themeIcon} />
         </button>
         <button
-          className="icon-button"
+          className="icon-button popup-header__icon-action popup-header__icon-action--refresh"
+          type="button"
+          disabled={isRefreshing}
+          data-popup-refresh="true"
+          aria-label={refreshTitle}
+          title={refreshTitle}
+          onClick={() => {
+            void onRefresh();
+          }}
+        >
+          <PopupMaterialIcon name="refresh" />
+          <span className="popup-header__refresh-countdown" aria-hidden="true">
+            {isRefreshing
+              ? runtimeI18n.t("popup.actions.refreshing")
+              : refreshCountdownLabel}
+          </span>
+        </button>
+        <button
+          className="icon-button popup-header__icon-action"
           data-popup-open-dashboard-tab="true"
           data-theme-local-surface="popup-open-dashboard-tab"
           type="button"
@@ -94,10 +128,10 @@ export function PopupHeaderSection({
             void onOpenDashboardTab();
           }}
         >
-          {runtimeI18n.t("common.actions.tab")}
+          <PopupMaterialIcon name="tab" />
         </button>
         <button
-          className="icon-button"
+          className="icon-button popup-header__icon-action"
           data-popup-open-settings="true"
           data-theme-local-surface="popup-open-settings"
           type="button"
@@ -107,7 +141,7 @@ export function PopupHeaderSection({
             void onOpenSettings();
           }}
         >
-          {runtimeI18n.t("common.actions.settings")}
+          <PopupMaterialIcon name="settings" />
         </button>
       </div>
     </section>

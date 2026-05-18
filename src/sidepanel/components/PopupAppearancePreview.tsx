@@ -56,15 +56,14 @@ export function PopupAppearancePreview({
       >
         <div className="popup-appearance-preview-surface">
           <div className="popup-appearance-preview-header">
-            <div>
-              <p className="section-label">{i18n.t("popup.header.eyebrow")}</p>
-              <h3 className="section-title">{i18n.t("popup.header.title")}</h3>
-            </div>
-            <div className="popup-appearance-preview-actions">
-              <span>
-                {i18n.t("settings.popup_appearance_preview.sample_refresh")}
-              </span>
-              <span>{i18n.t("settings.popup_appearance_preview.sample_tab")}</span>
+            <div
+              className="popup-appearance-preview-actions"
+              aria-hidden="true"
+            >
+              <span />
+              <span />
+              <span />
+              <span />
             </div>
           </div>
 
@@ -94,6 +93,11 @@ export function PopupAppearancePreview({
                 valueText={`${sampleQuotaLabel}: 51% ${remainingLabel}`}
               />
             </div>
+          </div>
+
+          <div className="popup-appearance-preview-footer">
+            <p className="section-label">{i18n.t("popup.header.eyebrow")}</p>
+            <p>{i18n.t("popup.header.title")}</p>
           </div>
         </div>
       </div>

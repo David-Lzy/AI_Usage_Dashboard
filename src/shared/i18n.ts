@@ -73,6 +73,8 @@ export type RuntimeMessageId =
   | "popup.actions.eyebrow"
   | "popup.actions.refresh"
   | "popup.actions.refreshing"
+  | "popup.actions.refresh_title"
+  | "popup.actions.refresh_drift_note"
   | "popup.featured.eyebrow"
   | "popup.featured.single_eyebrow"
   | "popup.triage.eyebrow"

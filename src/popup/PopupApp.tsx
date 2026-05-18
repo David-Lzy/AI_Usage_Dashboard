@@ -43,6 +43,7 @@ import { runPopupGuidanceAction } from "./popup-guidance-action";
 import { PopupActionSection } from "./PopupActionSection";
 import { PopupFeaturedProviderList } from "./PopupFeaturedProviderList";
 import { PopupFeaturedSection } from "./PopupFeaturedSection";
+import { PopupFooterSection } from "./PopupFooterSection";
 import { PopupGuidanceCardSection } from "./PopupGuidanceCardSection";
 import { PopupHeaderSection } from "./PopupHeaderSection";
 import {
@@ -57,6 +58,7 @@ import { PopupSnapshotStatusSection } from "./PopupSnapshotStatusSection";
 import { PopupSetupCoverageSection } from "./PopupSetupCoverageSection";
 import { PopupSurfaceRolesSection } from "./PopupSurfaceRolesSection";
 import { buildPopupHideProviderFeedbackCopy } from "./popup-hide-provider-feedback-copy";
+import { readPopupRefreshCountdownMinutes } from "./popup-refresh-schedule";
 
 type PopupLoadState =
   | { status: "loading" }
@@ -72,6 +74,9 @@ export function PopupApp() {
   });
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isThemeTogglePending, setIsThemeTogglePending] = useState(false);
+  const [refreshCountdownMinutes, setRefreshCountdownMinutes] = useState<
+    number | null
+  >(null);
   const [hideProviderFeedback, setHideProviderFeedback] =
     useState<PopupHideProviderFeedbackState | null>(null);
 
@@ -127,6 +132,49 @@ export function PopupApp() {
       document.documentElement,
     );
   }, [loadState]);
+
+  useEffect(() => {
+    if (loadState.status !== "ready") {
+      setRefreshCountdownMinutes(null);
+      return undefined;
+    }
+
+    let disposed = false;
+
+    async function updateRefreshCountdown() {
+      if (loadState.status !== "ready") {
+        return;
+      }
+
+      const minutes = await readPopupRefreshCountdownMinutes(
+        loadState.appState.settings.syncIntervalMinutes,
+      );
+
+      if (!disposed) {
+        setRefreshCountdownMinutes(minutes);
+      }
+    }
+
+    void updateRefreshCountdown();
+
+    if (typeof window === "undefined") {
+      return () => {
+        disposed = true;
+      };
+    }
+
+    const intervalId = window.setInterval(updateRefreshCountdown, 30_000);
+
+    return () => {
+      disposed = true;
+      window.clearInterval(intervalId);
+    };
+  }, [
+    loadState.status,
+    loadState.status === "ready"
+      ? loadState.appState.settings.syncIntervalMinutes
+      : null,
+  ]);
 
   async function handleRefresh() {
     setIsRefreshing(true);
@@ -339,11 +387,11 @@ export function PopupApp() {
       }`}
     >
       <PopupHeaderSection
-        headerDetail={popupModel.headerDetail}
-        hasFeaturedProviderCards={hasFeaturedProviderCards}
         isRefreshing={isRefreshing}
         isThemeTogglePending={isThemeTogglePending}
         quickThemeToggleCopy={quickThemeToggleCopy}
+        quickThemeToggleTargetMode={quickThemeToggle.nextMode}
+        refreshCountdownMinutes={refreshCountdownMinutes}
         runtimeI18n={runtimeI18n}
         hideProviderFeedback={
           hideProviderFeedback ? (
@@ -428,6 +476,12 @@ export function PopupApp() {
           runtimeI18n={runtimeI18n}
         />
       ) : null}
+
+      <PopupFooterSection
+        headerDetail={popupModel.headerDetail}
+        hasFeaturedProviderCards={hasFeaturedProviderCards}
+        runtimeI18n={runtimeI18n}
+      />
     </main>
   );
 }
