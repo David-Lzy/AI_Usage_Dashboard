@@ -1,6 +1,6 @@
 # Store Listing Copy Pack
 
-Date: 2026-05-16
+Date: 2026-05-18
 
 Process rule:
 
@@ -16,134 +16,55 @@ Freshness model:
 
 Status note:
 
-- this file is the current maintained Chrome Web Store copy pack for the shipped extension scope
-- after `Phase 495`, treat it as the current English upload-candidate copy pack anchored to the public-repository store handoff and refreshed screenshot archive
-- `Phase 296` anchors the earlier mixed screenshot captions to the refreshed RC11 screenshot archive
-- `Phase 299` records the upload-candidate handoff in [2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md](../Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md)
-- `Phase 495` records the public-repository handoff in [Store_Public_Release_6_Locale_Handoff.md](./Store_Public_Release_6_Locale_Handoff.md)
-- refresh it when the popup story, provider truth boundary, screenshot selection pack, or refreshed screenshot archive changes materially
+- this is the current English source copy pack for the RC24 Chrome Web Store resubmission candidate
+- four primary upload locales are prepared in [Store_RC24_Resubmission_Handoff.md](./Store_RC24_Resubmission_Handoff.md)
+- keep provider/product names unchanged and do not strengthen partial provider support claims
 
-Purpose:
+## Store Fields
 
-- turn the current shipped toolbar story into one concise store-listing copy pack
-- keep store claims aligned with the refreshed screenshot archive and the current provider truth boundary
-- give future localization work one stable source pack instead of ad-hoc listing prose
+Title:
 
-## Source Anchors
+`AI Usage Dashboard`
 
-- first real screenshot archive:
-  - [2026-04-24-first-real-store-screenshot-capture-request-archive/README.md](../testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md)
-- current refreshed screenshot archive:
-  - [2026-05-04-rc11-mixed-store-candidate-archive/README.md](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
-- public-readiness screenshot archive:
-  - [2026-05-16-public-store-readiness-request-archive/README.md](../testing/store_screenshot_archives/2026-05-16-public-store-readiness-request-archive/README.md)
-- upload-candidate milestone:
-  - [2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md](../Milestones/2026-05-04_RC12_Chrome_Web_Store_Upload_Candidate.md)
-- screenshot storyboard:
-  - [Store_Screenshot_Storyboard.md](./Store_Screenshot_Storyboard.md)
-- screenshot selection pack:
-  - [Store_Screenshot_Selection_Pack.md](./Store_Screenshot_Selection_Pack.md)
-- toolbar competitive-fit decisions:
-  - [Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md](../Archive/benchmarks/Toolbar_Competitive_Fit_Decision_Matrix_2026-04-24.md)
-- current extension manifest:
-  - [src/manifest.json](../../src/manifest.json)
+Short description:
 
-## Store Title
+`Track usage, setup blockers, and sync health across AI coding tools.`
 
-- preferred store title:
-  - `AI Usage Dashboard`
+Collapsed-view abstract:
 
-## Short Description
+`AI Usage Dashboard puts AI coding quota, setup blockers, and sync health in one Chrome toolbar popup and side panel. It supports Codex, Cursor, Claude Code, Gemini Code Assist, and related coding workflows where provider data may be exact, partial, window-scoped, policy-only, or unavailable. It does not ask you to paste cookies or raw browser auth headers; settings and cached snapshots stay in your Chrome profile.`
 
-- preferred short description:
-  - `Track usage, setup blockers, and sync health across AI coding tools.`
-- short-description length:
-  - `68`
-- manifest alignment:
-  - matches the current `manifest.json` description exactly
+Details:
 
-## Overview Paragraph
+`Open the toolbar popup for a quick read on provider health, remaining usage windows, reset timing, and setup blockers. Open the side panel or full-page dashboard when you need source type, snapshot freshness, diagnostics, permissions, credentials, display preferences, and provider-specific status.`
 
-- preferred overview paragraph:
-  - `Check AI coding quota, setup blockers, and sync health from one Chrome toolbar popup, then open the side panel when provider source details matter.`
+`AI Usage Dashboard is intentionally conservative. Optional host permissions are requested only for supported provider origins. The favicon permission is used for the optional provider-matched toolbar icon feature. The extension runs packaged scripts and does not load remote code.`
 
-## Feature Bullets
+`This is not an official product from OpenAI, Cursor, Anthropic, Google, JetBrains, or any other provider. Provider dashboards, APIs, quota wording, and policies can change. When a source is unavailable or partial, the dashboard labels that state instead of inventing a value.`
 
-- `Quick glance in one click from the Chrome toolbar popup.`
-- `Clear setup guidance when host access or credentials are blocking live sync.`
-- `Honest provider coverage that keeps policy-only and partial live paths explicit.`
-- `Settings and provider detail live in the side panel instead of overloading the popup.`
-- `Configurable themes, progress styles, provider order, toolbar badge, and toolbar icon.`
-- `Real extension-mode screenshots and review archives keep store assets tied to shipped runtime states.`
+`The project is open source under AGPL-3.0-only: https://github.com/David-Lzy/AI_Usage_Dashboard`
 
-## Screenshot Caption Pack
+Feature bullets:
 
-The current captions below target the `2026-05-16` public-readiness screenshot
-archive captured from RDP Chrome.
+- `Toolbar popup for quick provider and quota checks`
+- `Side panel and full-page dashboard for deeper review`
+- `Source labels for exact, partial, window-scoped, policy-only, or unavailable data`
+- `Configurable themes, progress styles, provider order, toolbar badge, and toolbar icon`
+- `Import/export and Chrome Sync support for extension settings`
+- `Open-source code under AGPL-3.0-only`
 
-### 1. Toolbar-first quick glance
+Screenshot captions:
 
-- screenshot:
-  - [01-popup-quick-glance.png](../testing/store_screenshot_archives/2026-05-16-public-store-readiness-request-archive/screenshots/01-popup-quick-glance.png)
-- caption:
-  - `Check provider status and quota rings from the toolbar popup.`
-- claim:
-  - one click shows a compact snapshot instead of a second full dashboard
-
-### 2. Dashboard overview
-
-- screenshot:
-  - [02-dashboard-overview.png](../testing/store_screenshot_archives/2026-05-16-public-store-readiness-request-archive/screenshots/02-dashboard-overview.png)
-- caption:
-  - `Review all enabled providers in one dashboard.`
-- claim:
-  - the full-page dashboard gives the product promise, summary cards, and provider overview in one scannable workspace
-
-### 3. Provider usage detail
-
-- screenshot:
-  - [03-provider-detail-contract.png](../testing/store_screenshot_archives/2026-05-16-public-store-readiness-request-archive/screenshots/03-provider-detail-contract.png)
-- caption:
-  - `Inspect source boundaries before trusting a number.`
-- claim:
-  - Codex detail shows window-scoped percentages and reset timing without claiming one plan-wide remaining balance
-
-### 4. Settings and theme controls
-
-- screenshot:
-  - [04-settings-overview-and-theme.png](../testing/store_screenshot_archives/2026-05-16-public-store-readiness-request-archive/screenshots/04-settings-overview-and-theme.png)
-- caption:
-  - `Tune language, theme, sync, badge, icon, and progress display.`
-- claim:
-  - Settings keeps high-value appearance and sync controls visible in the main workspace
-
-### 5. Quick setup and appearance
-
-- screenshot:
-  - [05-settings-quick-setup-and-appearance.png](../testing/store_screenshot_archives/2026-05-16-public-store-readiness-request-archive/screenshots/05-settings-quick-setup-and-appearance.png)
-- caption:
-  - `Use quick setup and appearance controls without leaving the extension.`
-- claim:
-  - provider setup and visual preferences stay inside one extension settings surface
-
-## Current Asset Boundary
-
-- the current title, overview, feature bullets, and captions map to the public-readiness handoff
-- the linked screenshot files point at the 2026-05-16 public-readiness screenshot archive
-- the current screenshot set is dark-mode runtime evidence; a true light/dark split promotional image still requires a separate light-mode capture pass
-- do not claim store submission has happened; this pack is submission-prep evidence, not a submitted listing receipt
+- `Check provider status and quota rings from the toolbar popup.`
+- `Review enabled providers in one dashboard.`
+- `Inspect source boundaries before trusting a number.`
+- `Tune language, theme, sync, badge, icon, and progress display.`
+- `Use quick setup and provider display controls without leaving the extension.`
 
 ## Claim Guardrails
 
-- do not claim live usage for providers that currently ship `policy only`
-- do not claim exact remaining quota where the shipped path is still `partial` or `window-only`
-- do not claim full live quota support for providers that only expose partial, window-scoped, policy-only, or diagnostic-only paths
-- do not claim JetBrains live support in the current RC
-- do not market the popup as a second full dashboard
-
-## Follow-up Use
-
-- use this pack as the source document for future store listing updates
-- use this pack as the English source for future listing-localization work
-- keep the localization handoff aligned with [Store_Listing_Localization_Source_Pack.md](./Store_Listing_Localization_Source_Pack.md)
-- refresh this pack whenever a future screenshot archive replaces the current refreshed archive
+- Do not claim live usage for policy-only providers.
+- Do not claim exact remaining quota where the shipped path is partial or window-scoped.
+- Do not claim JetBrains live support in RC24.
+- Do not market the popup as a second full dashboard.
+- Mention `favicon` only for the provider-matched toolbar icon feature.

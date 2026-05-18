@@ -21,6 +21,7 @@ Status note:
 - [Store Listing Localization Source Pack](./Store_Listing_Localization_Source_Pack.md)
 - [Store Listing Localization 14 Locale Draft](./Store_Listing_Localization_14_Locale_Draft.md)
 - [Store Public Release 6 Locale Handoff](./Store_Public_Release_6_Locale_Handoff.md)
+- [Store RC24 Resubmission Handoff](./Store_RC24_Resubmission_Handoff.md)
 - [Store Screenshot Selection Pack](./Store_Screenshot_Selection_Pack.md)
 - [Store Screenshot Storyboard](./Store_Screenshot_Storyboard.md)
 

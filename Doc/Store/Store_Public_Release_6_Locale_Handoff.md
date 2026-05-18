@@ -16,9 +16,9 @@ Freshness model:
 
 Status note:
 
-- this file is the current six-locale Chrome Web Store handoff for the public repository release path
+- this file is the earlier six-locale Chrome Web Store handoff for the public repository release path
+- RC24 upload preparation now uses [Store_RC24_Resubmission_Handoff.md](./Store_RC24_Resubmission_Handoff.md) as the primary manual handoff
 - it supplements, but does not replace, the 14-locale draft used by `npm run i18n:check`
-- refresh it before Chrome Web Store submission if provider support, permissions, privacy text, or screenshots change materially
 
 ## Scope
 

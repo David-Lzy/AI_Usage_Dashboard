@@ -36,6 +36,7 @@ the shared source of truth.
 - [Milestones](./Milestones/) - release and submission handoff records.
 - [Public repository readiness](./Product/Public_Repository_Readiness.md) - AGPL/public-source, privacy, security, and store-permission handoff notes.
 - [Six-locale store handoff](./Store/Store_Public_Release_6_Locale_Handoff.md) - selected Chrome Web Store listing copy for the public-source release path.
+- [RC24 store resubmission milestone](./Milestones/2026-05-18_RC24_Store_Resubmission_Candidate.md) - current package and manual upload handoff.
 - [Localized operator/store RDP visual QA](./testing/localized_operator_store_rdp_visual_qa/README.md) - representative helper-route locale screenshot evidence.
 
 ## Functional References

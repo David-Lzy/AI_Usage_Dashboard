@@ -35,7 +35,7 @@ Execution rule:
 ## Sequence
 
 - active phase file: none
-- latest completed slice: [517_Phase_I18n_Check_Metadata_Source_Fix.md](./Archive/by-phase/500-599/517_Phase_I18n_Check_Metadata_Source_Fix.md)
+- latest completed slice: [524_Phase_RC24_Store_Handoff_And_Push.md](./Archive/by-phase/500-599/524_Phase_RC24_Store_Handoff_And_Push.md)
 - queued phase files: none
 
 Completed phases should be moved to:

@@ -17,6 +17,7 @@ Freshness model:
 Status note:
 
 - this file records the current screenshot-slot selection and stale-review decision for Chrome Web Store assets
+- after RC24 preparation, this remains the upload asset baseline unless a fresh runtime capture archive replaces it
 - `Phase 296` archived the earlier user-approved mixed screenshot candidate pack as [2026-05-04-rc11-mixed-store-candidate-archive](../testing/store_screenshot_archives/2026-05-04-rc11-mixed-store-candidate-archive/README.md)
 - `Phase 493` archived the public-repository handoff screenshot set as [2026-05-16-public-store-readiness-request-archive](../testing/store_screenshot_archives/2026-05-16-public-store-readiness-request-archive/README.md)
 - refresh this file whenever a new screenshot archive lands, the popup capture method changes, or the storyboard/copy pack changes materially
@@ -59,7 +60,7 @@ Boundary:
 - the current set is dark-mode runtime evidence from RDP Chrome
 - each screenshot was resized/cropped to `1280x800` for Chrome Web Store dimensions
 - provider values and runtime text were not edited
-- a light/dark split promotional image remains pending until a reliable light-mode capture pass exists
+- a light/dark split promotional image remains a follow-up until a reliable light-mode capture pass exists
 
 ## Slot Decisions
 
