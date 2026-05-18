@@ -875,9 +875,8 @@
 
 .popup-appearance-preview-actions {
   display: grid;
-  grid-template-columns: calc(28px * 1.618) repeat(4, 28px);
+  grid-template-columns: minmax(calc(30px * 1.618), 1fr) repeat(4, 30px);
   align-items: center;
-  justify-content: center;
   width: 100%;
   gap: var(--app-space-1);
 }

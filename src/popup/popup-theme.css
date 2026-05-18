@@ -109,7 +109,7 @@ body.popup-page .status-card {
 
 .popup-header {
   --popup-header-action-gap: 10px;
-  --popup-header-control-height: 42px;
+  --popup-header-control-size: 48px;
   display: grid;
   gap: var(--app-space-2);
   padding: var(--popup-header-action-gap);
@@ -183,10 +183,9 @@ body.popup-page .popup-header {
 .popup-header__actions {
   display: grid;
   grid-template-columns:
-    calc(var(--popup-header-control-height) * 1.618)
-    repeat(4, var(--popup-header-control-height));
+    minmax(calc(var(--popup-header-control-size) * 1.618), 1fr)
+    repeat(4, var(--popup-header-control-size));
   align-items: center;
-  justify-content: center;
   gap: var(--popup-header-action-gap);
   min-width: 0;
 }
@@ -195,7 +194,7 @@ body.popup-page .popup-header {
   position: relative;
   width: 100%;
   min-width: 0;
-  height: var(--popup-header-control-height);
+  height: var(--popup-header-control-size);
   gap: 4px;
   padding-inline: 0;
   border-radius: var(--md-sys-shape-corner-full);
