@@ -874,14 +874,14 @@
 }
 
 .popup-appearance-preview-actions {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(46px, 1.618fr) repeat(4, minmax(24px, 1fr));
   align-items: center;
   width: 100%;
   gap: var(--app-space-1);
 }
 
 .popup-appearance-preview-actions > span {
-  flex: 0 0 28px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -900,14 +900,9 @@
 }
 
 .popup-appearance-preview-actions__refresh {
-  flex: 0 1 72px;
   gap: 5px;
   min-width: 0;
   background: var(--md-sys-color-surface-container-lowest);
-}
-
-.popup-appearance-preview-actions__refresh + span {
-  margin-inline-start: auto;
 }
 
 .popup-appearance-preview-actions__refresh span {

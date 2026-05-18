@@ -108,9 +108,11 @@ body.popup-page .status-card {
 }
 
 .popup-header {
+  --popup-header-action-gap: var(--app-space-2);
+  --popup-header-control-height: 40px;
   display: grid;
   gap: var(--app-space-2);
-  padding: var(--app-space-2);
+  padding: var(--popup-header-action-gap);
   border: 1px solid var(--md-sys-color-outline-variant);
   background: var(--md-sys-color-surface-container-lowest);
 }
@@ -179,18 +181,18 @@ body.popup-page .popup-header {
 }
 
 .popup-header__actions {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(76px, 1.618fr) repeat(4, minmax(40px, 1fr));
   align-items: center;
-  gap: var(--app-space-1);
+  gap: var(--popup-header-action-gap);
   min-width: 0;
 }
 
 .popup-header__icon-action {
   position: relative;
-  flex: 0 0 40px;
-  width: 40px;
+  width: 100%;
   min-width: 0;
-  height: 40px;
+  height: var(--popup-header-control-height);
   gap: 4px;
   padding-inline: 0;
   border-radius: var(--md-sys-shape-corner-full);
@@ -206,14 +208,8 @@ body.popup-page .popup-header {
 }
 
 .popup-header__icon-action--refresh {
-  flex: 0 1 108px;
-  width: min(108px, 100%);
   padding-inline: var(--app-space-2);
   justify-content: center;
-}
-
-.popup-header__icon-action--refresh + .popup-header__icon-action {
-  margin-inline-start: auto;
 }
 
 .popup-header__refresh-countdown {
