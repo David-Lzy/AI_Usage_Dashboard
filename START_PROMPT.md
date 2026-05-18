@@ -1,6 +1,6 @@
 # START PROMPT
 
-Date: 2026-05-11
+Date: 2026-05-18
 
 Document class:
 
@@ -32,6 +32,9 @@ Before doing any work in this repository, read and follow these files in order:
 3. `CONTRIBUTING.md`
 4. `Doc/README.md`
 5. the relevant public `Doc/` functional reference for the current task
+
+If this is a local/private checkout and `.local/DIRECTORY_GUIDE.md` exists,
+read it next for file-placement rules before creating or moving docs.
 
 Rules:
 
