@@ -174,6 +174,56 @@ describe("popup route actions", () => {
     expect(popupWindow.close).toHaveBeenCalled();
   });
 
+  it("opens Firefox sidebar routes when sidebarAction is available", async () => {
+    const popupWindow = stubPopupWindow();
+    const setPanel = vi.fn(async () => undefined);
+    const open = vi.fn(async () => undefined);
+
+    vi.stubGlobal("browser", {
+      runtime: {
+        id: "extension-id",
+      },
+      sidebarAction: {
+        open,
+        setPanel,
+      },
+    });
+
+    await openSidePanelRoute({ name: "dashboard" });
+
+    expect(setPanel).toHaveBeenCalledWith({
+      panel: "src/sidepanel/index.html#dashboard",
+    });
+    expect(open).toHaveBeenCalled();
+    expect(popupWindow.close).toHaveBeenCalled();
+  });
+
+  it("opens full-page routes through Firefox tabs when side surfaces are unavailable", async () => {
+    const popupWindow = stubPopupWindow();
+    const create = vi.fn(async () => undefined);
+
+    vi.stubGlobal("browser", {
+      runtime: {
+        id: "extension-id",
+        getURL: (path: string) => `moz-extension://extension-id/${path}`,
+      },
+      tabs: {
+        create,
+      },
+    });
+
+    await openSettings({
+      kind: "section",
+      sectionId: SETTINGS_SECTION_IDS.appearance,
+    });
+
+    expect(create).toHaveBeenCalledWith({
+      active: true,
+      url: "moz-extension://extension-id/src/sidepanel/index.html?surface=full-page#settings/section/settings-appearance",
+    });
+    expect(popupWindow.close).toHaveBeenCalled();
+  });
+
   it("stores the pending full-page entry before preview fallback open", async () => {
     const popupWindow = stubPopupWindow();
 

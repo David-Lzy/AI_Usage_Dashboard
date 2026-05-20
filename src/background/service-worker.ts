@@ -23,6 +23,7 @@ import { runSyncEngine } from "./sync-engine";
 import { seedAppStateIfEmpty } from "../shared/storage";
 import { readStoreScreenshotRuntimeLock } from "../shared/store-screenshot-runtime-lock";
 import { BUILD_INFO } from "../shared/build-info";
+import { configureChromeSidePanelActionBehavior } from "../shared/extension-side-panel-controls";
 
 async function syncActionToolbarFromState(state: AppState) {
   const timestampMs = Date.now();
@@ -44,7 +45,7 @@ async function bootstrapBackground() {
     `| build: ${BUILD_INFO.gitCommit} @ ${BUILD_INFO.buildTimestamp}`,
   );
 
-  await chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: false });
+  await configureChromeSidePanelActionBehavior();
 
   if (await readStoreScreenshotRuntimeLock()) {
     const state = await seedAppStateIfEmpty();

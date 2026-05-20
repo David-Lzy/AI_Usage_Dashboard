@@ -77,6 +77,19 @@ npm run build
 npm run release:check
 ```
 
+Experimental Firefox local build checks:
+
+```sh
+npm run firefox:build
+npm run firefox:lint
+npm run firefox:package
+```
+
+The default `npm run build` output remains the Chrome extension in `dist/`.
+Firefox output is generated separately in `dist-firefox/` for local MVP testing.
+Set `FIREFOX_BIN=/path/to/firefox` when you need to choose a specific Firefox
+binary for `npm run firefox:run`.
+
 Release packaging:
 
 ```sh

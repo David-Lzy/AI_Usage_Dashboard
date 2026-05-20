@@ -15,6 +15,10 @@
   "scripts": {
     "dev": "./scripts/with-preferred-node.sh vite",
     "build": "./scripts/with-preferred-node.sh vite build",
+    "firefox:build": "npm run build && ./scripts/with-preferred-node.sh node ./scripts/build-firefox-package.mjs",
+    "firefox:lint": "npm run firefox:build && web-ext lint --source-dir dist-firefox",
+    "firefox:run": "npm run firefox:build && ./scripts/with-preferred-node.sh node ./scripts/run-firefox-extension.mjs",
+    "firefox:package": "npm run firefox:build && web-ext build --source-dir dist-firefox --artifacts-dir release/firefox --overwrite-dest",
     "preview:dist": "python3 -m http.server 4173 --bind 0.0.0.0 --directory dist",
     "docs:check": "./scripts/with-preferred-node.sh node ./scripts/check-doc-taxonomy.mjs && ./scripts/with-preferred-node.sh node ./scripts/check-doc-links.mjs",
     "docs:links": "./scripts/with-preferred-node.sh node ./scripts/check-doc-links.mjs",
@@ -278,7 +282,8 @@
   },
   "dependencies": {
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "webextension-polyfill": "^0.12.0"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.2.0",
@@ -286,10 +291,12 @@
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
+    "@types/webextension-polyfill": "^0.12.5",
     "@vitejs/plugin-react": "^5.1.0",
     "playwright": "^1.59.1",
     "typescript": "^5.9.3",
     "vite": "^7.1.12",
-    "vitest": "^4.1.4"
+    "vitest": "^4.1.4",
+    "web-ext": "^10.1.0"
   }
 }

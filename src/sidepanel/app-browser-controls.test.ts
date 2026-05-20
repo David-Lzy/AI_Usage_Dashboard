@@ -185,4 +185,32 @@ describe("app-browser-controls", () => {
     expect(open).toHaveBeenCalledWith({ windowId: 9 });
     expect(remove).toHaveBeenCalledWith(88);
   });
+
+  it("opens Firefox sidebar routes from full-page tabs without Chrome sidePanel APIs", async () => {
+    const setPanel = vi.fn(async () => undefined);
+    const open = vi.fn(async () => undefined);
+    const remove = vi.fn(async () => undefined);
+
+    vi.stubGlobal("browser", {
+      runtime: {
+        id: "extension-id",
+      },
+      sidebarAction: {
+        open,
+        setPanel,
+      },
+      tabs: {
+        getCurrent: vi.fn(async () => ({ id: 88 })),
+        remove,
+      },
+    });
+
+    await openSidePanelRoute({ name: "settings" });
+
+    expect(setPanel).toHaveBeenCalledWith({
+      panel: "src/sidepanel/index.html#settings",
+    });
+    expect(open).toHaveBeenCalled();
+    expect(remove).not.toHaveBeenCalled();
+  });
 });

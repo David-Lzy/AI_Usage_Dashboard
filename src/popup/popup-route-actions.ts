@@ -1,6 +1,8 @@
 import type { ProviderId } from "../providers/types";
 import {
   closeSidePanelBestEffort,
+  openExtensionTabPath,
+  openSideSurfacePath,
   resolveSidePanelCloseTarget,
 } from "../shared/extension-side-panel-controls";
 import { storePendingFullPageEntry } from "../shared/extension-surface-entry";
@@ -19,37 +21,7 @@ import {
 export async function openSidePanelRoute(route: SidePanelRouteState) {
   const path = buildSidePanelExtensionPath(route);
 
-  if (
-    typeof chrome !== "undefined" &&
-    Boolean(chrome.runtime?.id) &&
-    typeof chrome.sidePanel?.open === "function" &&
-    typeof chrome.sidePanel?.setOptions === "function" &&
-    typeof chrome.windows?.getCurrent === "function"
-  ) {
-    const [activeTab] =
-      typeof chrome.tabs?.query === "function"
-        ? await chrome.tabs.query({ active: true, currentWindow: true })
-        : [];
-
-    if (typeof activeTab?.id === "number") {
-      await chrome.sidePanel.setOptions({
-        tabId: activeTab.id,
-        enabled: true,
-        path,
-      });
-      await chrome.sidePanel.open({ tabId: activeTab.id });
-    } else {
-      const currentWindow = await chrome.windows.getCurrent();
-
-      if (typeof currentWindow.id === "number") {
-        await chrome.sidePanel.setOptions({
-          enabled: true,
-          path,
-        });
-        await chrome.sidePanel.open({ windowId: currentWindow.id });
-      }
-    }
-
+  if (await openSideSurfacePath(path)) {
     window.close();
     return;
   }
@@ -72,18 +44,9 @@ export async function openFullPageRoute(route: SidePanelRouteState) {
     );
   }
 
-  if (
-    typeof chrome !== "undefined" &&
-    Boolean(chrome.runtime?.id) &&
-    typeof chrome.runtime?.getURL === "function" &&
-    typeof chrome.tabs?.create === "function"
-  ) {
-    const sidePanelCloseTarget = await resolveSidePanelCloseTarget();
+  const sidePanelCloseTarget = await resolveSidePanelCloseTarget();
 
-    await chrome.tabs.create({
-      url: chrome.runtime.getURL(path),
-      active: true,
-    });
+  if (await openExtensionTabPath(path)) {
     await closeSidePanelBestEffort(sidePanelCloseTarget);
     window.close();
     return;

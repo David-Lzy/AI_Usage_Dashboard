@@ -148,4 +148,19 @@ describe("action icon", () => {
       "chrome-extension://extension-id/_favicon/?pageUrl=https%3A%2F%2Fchatgpt.com%2F&size=32",
     );
   });
+
+  it("disables provider favicon URLs when running against Firefox browser APIs", () => {
+    vi.stubGlobal("browser", {
+      runtime: {
+        id: "extension-id",
+        getURL: (path: string) => `moz-extension://extension-id/${path}`,
+      },
+      sidebarAction: {
+        open: vi.fn(),
+        setPanel: vi.fn(),
+      },
+    });
+
+    expect(buildProviderFaviconUrl("codex-personal-page", 32)).toBeNull();
+  });
 });

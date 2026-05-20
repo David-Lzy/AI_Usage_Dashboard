@@ -8,6 +8,7 @@ import {
   DEFAULT_TOOLBAR_ACTION_ICON_PATHS,
   PROVIDER_TOOLBAR_ICON_PAGE_URLS,
 } from "../shared/provider-toolbar-icons";
+import { getBrowserCapabilities } from "../shared/extension-side-panel-controls";
 
 const TOOLBAR_ICON_SIZES = [16, 32] as const;
 const iconImageDataCache = new Map<string, ImageData>();
@@ -59,7 +60,11 @@ export function buildProviderFaviconUrl(
   providerId: ProviderId,
   size: number,
 ): string | null {
-  if (typeof chrome === "undefined" || typeof chrome.runtime?.getURL !== "function") {
+  if (
+    !getBrowserCapabilities().supportsProviderFaviconIcon ||
+    typeof chrome === "undefined" ||
+    typeof chrome.runtime?.getURL !== "function"
+  ) {
     return null;
   }
 

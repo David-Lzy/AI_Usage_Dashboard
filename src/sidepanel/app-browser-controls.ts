@@ -1,8 +1,9 @@
 import { storePendingFullPageEntry } from "../shared/extension-surface-entry";
 import {
   closeSidePanelBestEffort,
-  getActiveTabId,
-  getCurrentWindowId,
+  getBrowserCapabilities,
+  openExtensionTabPath,
+  openSideSurfacePath,
   resolveSidePanelCloseTargets,
 } from "../shared/extension-side-panel-controls";
 import {
@@ -44,27 +45,6 @@ export function sortTabsByPriority(tabs: chrome.tabs.Tab[]): chrome.tabs.Tab[] {
   return [...tabs].sort((left, right) => scoreTab(right) - scoreTab(left));
 }
 
-async function closeCurrentExtensionTabBestEffort(): Promise<void> {
-  if (
-    typeof chrome === "undefined" ||
-    !chrome.runtime?.id ||
-    typeof chrome.tabs?.getCurrent !== "function" ||
-    typeof chrome.tabs?.remove !== "function"
-  ) {
-    return;
-  }
-
-  try {
-    const currentTab = await chrome.tabs.getCurrent();
-
-    if (typeof currentTab?.id === "number") {
-      await chrome.tabs.remove(currentTab.id);
-    }
-  } catch {
-    // If the current surface is not a normal extension tab, keep it open.
-  }
-}
-
 export async function openFullPageRoute(
   route: SidePanelRouteState,
 ): Promise<void> {
@@ -78,20 +58,11 @@ export async function openFullPageRoute(
     );
   }
 
-  if (
-    typeof chrome !== "undefined" &&
-    Boolean(chrome.runtime?.id) &&
-    typeof chrome.runtime?.getURL === "function" &&
-    typeof chrome.tabs?.create === "function"
-  ) {
-    const sidePanelCloseTargets = await resolveSidePanelCloseTargets({
-      preferWindow: true,
-    });
+  const sidePanelCloseTargets = await resolveSidePanelCloseTargets({
+    preferWindow: true,
+  });
 
-    await chrome.tabs.create({
-      url: chrome.runtime.getURL(path),
-      active: true,
-    });
+  if (await openExtensionTabPath(path)) {
     await closeSidePanelBestEffort(sidePanelCloseTargets);
     return;
   }
@@ -113,34 +84,12 @@ export async function openSidePanelRoute(
   const path = buildSidePanelExtensionPath(route);
 
   if (
-    typeof chrome !== "undefined" &&
-    Boolean(chrome.runtime?.id) &&
-    typeof chrome.sidePanel?.open === "function" &&
-    typeof chrome.sidePanel?.setOptions === "function"
+    await openSideSurfacePath(path, {
+      closeCurrentExtensionTab: getBrowserCapabilities().supportsChromeSidePanel,
+      preferWindow: true,
+    })
   ) {
-    const currentWindowId = await getCurrentWindowId();
-
-    if (currentWindowId !== null) {
-      await chrome.sidePanel.setOptions({
-        enabled: true,
-        path,
-      });
-      await chrome.sidePanel.open({ windowId: currentWindowId });
-      await closeCurrentExtensionTabBestEffort();
-      return;
-    }
-
-    const activeTabId = await getActiveTabId();
-
-    if (activeTabId !== null) {
-      await chrome.sidePanel.setOptions({
-        tabId: activeTabId,
-        enabled: true,
-        path,
-      });
-      await chrome.sidePanel.open({ tabId: activeTabId });
-      return;
-    }
+    return;
   }
 
   if (typeof window === "undefined") {
