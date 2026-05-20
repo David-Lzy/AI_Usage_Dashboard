@@ -33,6 +33,7 @@ description after the opening lines.
 - [Store listing copy pack](./Store_Listing_Copy_Pack.md)
 - [Store listing localization source pack](./Store_Listing_Localization_Source_Pack.md)
 - [Store listing localization 14-locale draft](./Store_Listing_Localization_14_Locale_Draft.md) - auxiliary broader-locale draft, not the primary upload copy.
+- [Chrome Web Store publication milestone](./Chrome_Web_Store_Publication_Milestone.md)
 
 Keep product and provider names unchanged. Do not strengthen partial,
 window-scoped, policy-only, or unavailable provider claims during translation.

@@ -87,10 +87,12 @@ The generated zip is written under `release/`.
 
 ## Current Release State
 
-- Current package candidate: `0.1.0-rc.24`
-- Current Chrome manifest version: `0.1.0.24`
-- Chrome Web Store currently lists an older public version; RC24 is the current
-  prepared resubmission candidate.
+- Chrome Web Store listing: published and reachable.
+- Current public-store metadata observed on 2026-05-20: `0.1.0-rc.24`.
+- Current local package version: `0.1.0-rc.24`.
+- Current local Chrome manifest version: `0.1.0.24`.
+- Store publication status is tracked in
+  [Doc/Store/Chrome_Web_Store_Publication_Milestone.md](./Doc/Store/Chrome_Web_Store_Publication_Milestone.md).
 - Public listing copy lives in [Doc/Store](./Doc/Store/).
 
 Release zip files, package hashes, upload receipts, and personal submission
