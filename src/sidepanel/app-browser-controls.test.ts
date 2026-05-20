@@ -41,6 +41,27 @@ describe("app-browser-controls", () => {
     expect(hasTabNavigationControl()).toBe(true);
   });
 
+  it("detects Firefox browser namespace permission and tab controls", () => {
+    vi.stubGlobal("browser", {
+      runtime: {
+        id: "extension-id",
+      },
+      permissions: {
+        contains: vi.fn(),
+        request: vi.fn(),
+        remove: vi.fn(),
+      },
+      tabs: {
+        query: vi.fn(),
+        create: vi.fn(),
+        update: vi.fn(),
+      },
+    });
+
+    expect(hasDirectPermissionControl()).toBe(true);
+    expect(hasTabNavigationControl()).toBe(true);
+  });
+
   it("prioritizes active tabs before recency without mutating input", () => {
     const tabs = [
       { id: 1, active: false, lastAccessed: 100 },

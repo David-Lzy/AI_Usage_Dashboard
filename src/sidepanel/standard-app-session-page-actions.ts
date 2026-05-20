@@ -20,6 +20,7 @@ import {
   shouldReloadBeforeSourcePageRecoveryRefresh,
   type SourcePageRecoverySourceState,
 } from "../shared/source-page-recovery";
+import { getExtensionTabsApi } from "../shared/extension-api";
 import {
   hasTabNavigationControl,
   sortTabsByPriority,
@@ -84,7 +85,9 @@ export function createStandardAppSessionPageActions({
       return;
     }
 
-    if (!hasTabNavigationControl()) {
+    const tabsApi = getExtensionTabsApi();
+
+    if (!hasTabNavigationControl() || !tabsApi) {
       setToast({
         tone: "error",
         title: `${providerLabel} page helper unavailable`,
@@ -96,9 +99,9 @@ export function createStandardAppSessionPageActions({
 
     void (async () => {
       try {
-        const matchedTabs = await chrome.tabs.query({
+        const matchedTabs = await tabsApi.query?.({
           url: sessionPagePlan.routeHints,
-        });
+        }) ?? [];
         const preferredRoute = getOpenableRouteHint(sessionPagePlan.routeHints);
         const exactTabs =
           preferredRoute !== null
@@ -111,7 +114,7 @@ export function createStandardAppSessionPageActions({
           preferredTabs.find((tab) => typeof tab.id === "number") ?? null;
 
         if (preferredTab?.id !== undefined) {
-          await chrome.tabs.update(preferredTab.id, { active: true });
+          await tabsApi.update?.(preferredTab.id, { active: true });
           const shouldReloadBeforeRefresh =
             shouldReloadBeforeSourcePageRecoveryRefresh(
               "existing-tab",
@@ -167,7 +170,7 @@ export function createStandardAppSessionPageActions({
           return;
         }
 
-        const createdTab = await chrome.tabs.create({
+        const createdTab = await tabsApi.create?.({
           url: preferredRoute,
           active: true,
         });
@@ -176,7 +179,7 @@ export function createStandardAppSessionPageActions({
             type: "app:set-provider-page-binding",
             providerId,
             pageBinding:
-              typeof createdTab.id === "number"
+              typeof createdTab?.id === "number"
                 ? createPageBindingFromTab({
                     mode: "bound",
                     tabId: createdTab.id,
@@ -234,7 +237,9 @@ export function createStandardAppSessionPageActions({
       return;
     }
 
-    if (!hasTabNavigationControl()) {
+    const tabsApi = getExtensionTabsApi();
+
+    if (!hasTabNavigationControl() || !tabsApi) {
       setToast({
         tone: "error",
         title: `${providerLabel} active-page attach unavailable`,
@@ -256,10 +261,10 @@ export function createStandardAppSessionPageActions({
 
     void (async () => {
       try {
-        const [activeTab] = await chrome.tabs.query({
+        const [activeTab] = await tabsApi.query?.({
           active: true,
           currentWindow: true,
-        });
+        }) ?? [];
         const preferredRoute = getOpenableRouteHint(sessionPagePlan.routeHints);
 
         if (typeof activeTab?.id !== "number" || !activeTab.url) {

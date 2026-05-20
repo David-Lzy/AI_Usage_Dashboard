@@ -24,6 +24,11 @@ import {
   readMainWorldWindowValues,
   uniqueStrings,
 } from "./page-session-script-capture";
+import {
+  getExtensionScriptingApi,
+  getExtensionTabsApi,
+  hasExtensionRuntime,
+} from "../shared/extension-api";
 
 export type {
   PageSessionNetworkObserverExtraction,
@@ -176,11 +181,14 @@ export type PageSessionClientOptions = {
 
 const NETWORK_BRIDGE_SCRIPT_ID = "__ai_usage_dashboard_page_session_bridge__";
 
-function hasPageSessionApis(): boolean {
+export function hasLivePageSessionApis(): boolean {
+  const tabsApi = getExtensionTabsApi();
+  const scriptingApi = getExtensionScriptingApi();
+
   return (
-    typeof chrome !== "undefined" &&
-    typeof chrome.tabs?.query === "function" &&
-    typeof chrome.scripting?.executeScript === "function"
+    hasExtensionRuntime() &&
+    typeof tabsApi?.query === "function" &&
+    typeof scriptingApi?.executeScript === "function"
   );
 }
 
@@ -191,13 +199,15 @@ function getTabsApi(
     return tabsApi;
   }
 
-  if (!hasPageSessionApis()) {
+  const extensionTabsApi = getExtensionTabsApi();
+
+  if (!hasLivePageSessionApis() || !extensionTabsApi) {
     throw new Error(
       "Live page-session capture requires the extension runtime with tabs and scripting access.",
     );
   }
 
-  return chrome.tabs;
+  return extensionTabsApi as PageSessionTabsApi;
 }
 
 function getScriptingApi(
@@ -207,13 +217,15 @@ function getScriptingApi(
     return scriptingApi;
   }
 
-  if (!hasPageSessionApis()) {
+  const extensionScriptingApi = getExtensionScriptingApi();
+
+  if (!hasLivePageSessionApis() || !extensionScriptingApi) {
     throw new Error(
       "Live page-session capture requires the extension runtime with tabs and scripting access.",
     );
   }
 
-  return chrome.scripting;
+  return extensionScriptingApi as PageSessionScriptingApi;
 }
 
 async function capturePageSessionPage(

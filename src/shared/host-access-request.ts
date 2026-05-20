@@ -1,11 +1,8 @@
 import type { AppState, ProviderId, ProviderSetting } from "../providers/types";
+import { getExtensionPermissionsApi } from "./extension-api";
 
 export function hasDirectHostAccessRequest(): boolean {
-  return (
-    typeof chrome !== "undefined" &&
-    Boolean(chrome.runtime?.id) &&
-    typeof chrome.permissions?.request === "function"
-  );
+  return typeof getExtensionPermissionsApi()?.request === "function";
 }
 
 function canRequestHostAccess(provider: ProviderSetting): boolean {
@@ -34,11 +31,13 @@ export function findHostAccessRefreshCandidate(
 export async function requestHostAccessForProvider(
   provider: ProviderSetting,
 ): Promise<boolean> {
-  if (!hasDirectHostAccessRequest()) {
+  const permissionsApi = getExtensionPermissionsApi();
+
+  if (typeof permissionsApi?.request !== "function") {
     return false;
   }
 
-  return chrome.permissions.request({
+  return permissionsApi.request({
     origins: provider.hostOrigins,
   });
 }

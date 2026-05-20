@@ -36,6 +36,7 @@ import {
   type ClaudeCodeAnalyticsRecord,
 } from "./official";
 import { createClaudePersonalPageClient } from "./personal-page-client";
+import { hasLivePageSessionApis } from "../page-session";
 import type {
   ClaudePersonalUsageFact,
   ClaudePersonalUsageWindow,
@@ -94,12 +95,7 @@ function getActorLabel(record: ClaudeCodeAnalyticsRecord): string {
 }
 
 function canUseLiveClaudePersonalPage(): boolean {
-  return (
-    typeof chrome !== "undefined" &&
-    Boolean(chrome.runtime?.id) &&
-    typeof chrome.tabs?.query === "function" &&
-    typeof chrome.scripting?.executeScript === "function"
-  );
+  return hasLivePageSessionApis();
 }
 
 function shouldOpenClaudePageWhenMissing({

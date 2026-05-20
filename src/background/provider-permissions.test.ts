@@ -27,9 +27,15 @@ function createState(overrides?: Partial<AppState>): AppState {
   };
 }
 
-function setChromePermissionsApi(api: ChromePermissionsApi["permissions"]) {
-  Object.defineProperty(globalThis, "chrome", {
+function setExtensionPermissionsApi(
+  namespace: "browser" | "chrome",
+  api: ChromePermissionsApi["permissions"],
+) {
+  Object.defineProperty(globalThis, namespace, {
     value: {
+      runtime: {
+        id: "extension-id",
+      },
       permissions: api,
     } as unknown as typeof chrome,
     configurable: true,
@@ -37,8 +43,17 @@ function setChromePermissionsApi(api: ChromePermissionsApi["permissions"]) {
   });
 }
 
-function clearChromePermissionsApi() {
+function setChromePermissionsApi(api: ChromePermissionsApi["permissions"]) {
+  setExtensionPermissionsApi("chrome", api);
+}
+
+function clearExtensionPermissionApis() {
   Object.defineProperty(globalThis, "chrome", {
+    value: undefined,
+    configurable: true,
+    writable: true,
+  });
+  Object.defineProperty(globalThis, "browser", {
     value: undefined,
     configurable: true,
     writable: true,
@@ -48,12 +63,12 @@ function clearChromePermissionsApi() {
 describe("provider permissions", () => {
   beforeEach(async () => {
     vi.restoreAllMocks();
-    clearChromePermissionsApi();
+    clearExtensionPermissionApis();
     await writeAppState(createState());
   });
 
   afterEach(() => {
-    clearChromePermissionsApi();
+    clearExtensionPermissionApis();
   });
 
   it("reconciles provider access from chrome.permissions.contains", async () => {
@@ -113,5 +128,22 @@ describe("provider permissions", () => {
         (provider) => provider.id === "jetbrains-org-page",
       )?.status,
     ).toBe("granted");
+  });
+
+  it("requests host access through browser.permissions in Firefox extension mode", async () => {
+    const request = vi.fn(async () => true);
+
+    setExtensionPermissionsApi("browser", {
+      contains: vi.fn(async () => false),
+      request,
+      remove: vi.fn(async () => true),
+    });
+
+    const result = await toggleProviderPermission("jetbrains-org-page");
+
+    expect(request).toHaveBeenCalledWith({
+      origins: ["https://account.jetbrains.com/*", "https://*.jetbrains.com/*"],
+    });
+    expect(result.notice.title).toContain("granted");
   });
 });

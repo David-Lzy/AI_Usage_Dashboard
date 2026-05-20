@@ -37,6 +37,7 @@ import {
 import { createCursorOfficialClient } from "./official";
 import { createCursorPersonalPageClient } from "./personal-page-client";
 import { hasPageBindingFingerprint } from "../../shared/page-bindings";
+import { hasLivePageSessionApis } from "../page-session";
 import type { CursorPersonalUsageSnapshot } from "./personal-page-parser";
 
 type CursorAdapterContext = {
@@ -130,12 +131,7 @@ function hasCursorAdminApiKey(secrets: ProviderSecrets): boolean {
 }
 
 function canUseLiveCursorPersonalPage(): boolean {
-  return (
-    typeof chrome !== "undefined" &&
-    Boolean(chrome.runtime?.id) &&
-    typeof chrome.tabs?.query === "function" &&
-    typeof chrome.scripting?.executeScript === "function"
-  );
+  return hasLivePageSessionApis();
 }
 
 function shouldOpenCursorPageWhenMissing({

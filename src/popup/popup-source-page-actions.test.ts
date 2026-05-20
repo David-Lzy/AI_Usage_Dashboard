@@ -72,6 +72,9 @@ describe("openProviderSourcePage", () => {
     const update = vi.fn(async () => undefined);
 
     vi.stubGlobal("chrome", {
+      runtime: {
+        id: "extension-id",
+      },
       tabs: {
         create: vi.fn(),
         query: vi.fn(async () => [
@@ -117,6 +120,9 @@ describe("openProviderSourcePage", () => {
     const sendMessage = createOkSendMessage();
 
     vi.stubGlobal("chrome", {
+      runtime: {
+        id: "extension-id",
+      },
       tabs: {
         create: vi.fn(async () =>
           tab({

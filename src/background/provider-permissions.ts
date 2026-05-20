@@ -6,6 +6,7 @@ import type {
 } from "../providers/types";
 import { seedAppStateIfEmpty, writeAppState } from "../shared/storage";
 import { readStoreScreenshotRuntimeLock } from "../shared/store-screenshot-runtime-lock";
+import { getExtensionPermissionsApi } from "../shared/extension-api";
 
 export type PermissionNotice = {
   tone: "success" | "error";
@@ -18,13 +19,29 @@ export type PermissionToggleResult = {
   notice: PermissionNotice;
 };
 
-function hasChromePermissionsApi(): boolean {
-  return (
-    typeof chrome !== "undefined" &&
-    typeof chrome.permissions?.contains === "function" &&
-    typeof chrome.permissions?.request === "function" &&
-    typeof chrome.permissions?.remove === "function"
-  );
+type LivePermissionsApi = {
+  contains: (permissions: { origins?: string[] }) => boolean | Promise<boolean>;
+  request: (permissions: { origins?: string[] }) => boolean | Promise<boolean>;
+  remove: (permissions: { origins?: string[] }) => boolean | Promise<boolean>;
+};
+
+function getLivePermissionsApi(): LivePermissionsApi | null {
+  const permissionsApi = getExtensionPermissionsApi();
+
+  if (
+    !permissionsApi ||
+    typeof permissionsApi.contains !== "function" ||
+    typeof permissionsApi.request !== "function" ||
+    typeof permissionsApi.remove !== "function"
+  ) {
+    return null;
+  }
+
+  return {
+    contains: permissionsApi.contains,
+    request: permissionsApi.request,
+    remove: permissionsApi.remove,
+  };
 }
 
 function canRequestHostAccess(setting: ProviderSetting): boolean {
@@ -32,11 +49,13 @@ function canRequestHostAccess(setting: ProviderSetting): boolean {
 }
 
 async function hasGrantedOrigins(origins: string[]): Promise<boolean> {
-  if (!hasChromePermissionsApi() || origins.length === 0) {
+  const permissionsApi = getLivePermissionsApi();
+
+  if (!permissionsApi || origins.length === 0) {
     return origins.length === 0;
   }
 
-  return chrome.permissions.contains({
+  return permissionsApi.contains({
     origins,
   });
 }
@@ -57,7 +76,7 @@ function updateProviderPermission(
 export async function reconcileProviderPermissions(
   state: AppState,
 ): Promise<AppState> {
-  if (!hasChromePermissionsApi()) {
+  if (!getLivePermissionsApi()) {
     return state;
   }
 
@@ -131,7 +150,9 @@ export async function toggleProviderPermission(
     };
   }
 
-  if (!hasChromePermissionsApi()) {
+  const permissionsApi = getLivePermissionsApi();
+
+  if (!permissionsApi) {
     const nextStatus: PermissionStatus =
       target.status === "granted" ? "missing" : "granted";
     const state = await writeAppState(
@@ -147,13 +168,13 @@ export async function toggleProviderPermission(
             ? `${target.label} access simulated`
             : `${target.label} access removed locally`,
         message:
-          "Browser preview mode cannot call chrome.permissions, so this toggle only updates local preview state.",
+          "Browser preview mode cannot call the extension permissions API, so this toggle only updates local preview state.",
       },
     };
   }
 
   if (target.status === "granted") {
-    const removed = await chrome.permissions.remove({
+    const removed = await permissionsApi.remove({
       origins: target.hostOrigins,
     });
     const nextStatus: PermissionStatus = removed ? "missing" : "granted";
@@ -177,7 +198,7 @@ export async function toggleProviderPermission(
     };
   }
 
-  const granted = await chrome.permissions.request({
+  const granted = await permissionsApi.request({
     origins: target.hostOrigins,
   });
   const nextStatus: PermissionStatus = granted ? "granted" : "missing";

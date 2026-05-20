@@ -1,3 +1,5 @@
+import { getExtensionTabsApi } from "./extension-api";
+
 export type SourcePageRecoveryTarget = "existing-tab" | "created-tab";
 
 export type SourcePageRecoverySourceState =
@@ -27,18 +29,17 @@ export async function reloadSourcePageTabBeforeRefresh(
   tabId: number,
   timeoutMs = 8_000,
 ): Promise<boolean> {
-  if (
-    typeof chrome === "undefined" ||
-    typeof chrome.tabs?.reload !== "function"
-  ) {
+  const tabsApi = getExtensionTabsApi();
+
+  if (typeof tabsApi?.reload !== "function") {
     return false;
   }
 
   if (
-    typeof chrome.tabs.onUpdated?.addListener !== "function" ||
-    typeof chrome.tabs.onUpdated?.removeListener !== "function"
+    typeof tabsApi.onUpdated?.addListener !== "function" ||
+    typeof tabsApi.onUpdated?.removeListener !== "function"
   ) {
-    await chrome.tabs.reload(tabId);
+    await tabsApi.reload(tabId);
     return false;
   }
 
@@ -54,7 +55,7 @@ export async function reloadSourcePageTabBeforeRefresh(
     }
 
     if (handleUpdated !== null) {
-      chrome.tabs.onUpdated.removeListener(handleUpdated);
+      tabsApi.onUpdated?.removeListener?.(handleUpdated);
       handleUpdated = null;
     }
   };
@@ -83,11 +84,11 @@ export async function reloadSourcePageTabBeforeRefresh(
 
     timeout = setTimeout(() => finish(false), timeoutMs);
 
-    chrome.tabs.onUpdated.addListener(handleUpdated);
+    tabsApi.onUpdated?.addListener?.(handleUpdated);
   });
 
   try {
-    await chrome.tabs.reload(tabId);
+    await tabsApi.reload(tabId);
   } catch (error) {
     cleanup();
     throw error;

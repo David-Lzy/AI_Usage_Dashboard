@@ -1,6 +1,10 @@
 import personalPageLiveFixture from "../../../fixtures/codex/personal-page-live.fixture.json";
 import type { ProviderPageBinding } from "../types";
-import { createPageSessionClient, type PageSessionClient } from "../page-session";
+import {
+  createPageSessionClient,
+  hasLivePageSessionApis,
+  type PageSessionClient,
+} from "../page-session";
 import {
   normalizePageBinding,
   reconcilePageBindingFromSessionResult,
@@ -33,15 +37,6 @@ export type CodexPersonalPageClient = {
     currentBinding?: ProviderPageBinding,
   ) => Promise<CodexPersonalPageUsageResult>;
 };
-
-function hasLivePageSessionApis(): boolean {
-  return (
-    typeof chrome !== "undefined" &&
-    Boolean(chrome.runtime?.id) &&
-    typeof chrome.tabs?.query === "function" &&
-    typeof chrome.scripting?.executeScript === "function"
-  );
-}
 
 const DEFAULT_HYDRATION_RETRY_ATTEMPTS = 4;
 const DEFAULT_HYDRATION_RETRY_DELAY_MS = 1_000;

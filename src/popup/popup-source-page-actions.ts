@@ -14,6 +14,7 @@ import {
   shouldReloadBeforeSourcePageRecoveryRefresh,
   type SourcePageRecoverySourceState,
 } from "../shared/source-page-recovery";
+import { getExtensionTabsApi, hasExtensionRuntime } from "../shared/extension-api";
 import { openProviderDetail } from "./popup-route-actions";
 import { selectPreferredSourcePageTab } from "./source-page-tab-selection";
 
@@ -24,11 +25,13 @@ type PopupSourcePageActionDeps = {
 };
 
 function hasSourcePageNavigationControl(): boolean {
+  const tabsApi = getExtensionTabsApi();
+
   return (
-    typeof chrome !== "undefined" &&
-    typeof chrome.tabs?.query === "function" &&
-    typeof chrome.tabs?.create === "function" &&
-    typeof chrome.tabs?.update === "function"
+    hasExtensionRuntime() &&
+    typeof tabsApi?.query === "function" &&
+    typeof tabsApi.create === "function" &&
+    typeof tabsApi.update === "function"
   );
 }
 
@@ -55,14 +58,16 @@ export async function openProviderSourcePage(
     return;
   }
 
-  if (!hasSourcePageNavigationControl()) {
+  const tabsApi = getExtensionTabsApi();
+
+  if (!hasSourcePageNavigationControl() || !tabsApi) {
     window.open(preferredRoute, "_blank", "noopener,noreferrer");
     return;
   }
 
-  const matchedTabs = await chrome.tabs.query({
+  const matchedTabs = await tabsApi.query?.({
     url: sessionPagePlan.routeHints,
-  });
+  }) ?? [];
   const preferredTab = selectPreferredSourcePageTab(
     matchedTabs,
     preferredRoute,
@@ -100,12 +105,12 @@ export async function openProviderSourcePage(
       });
     }
 
-    await chrome.tabs.update(preferredTab.id, { active: true });
+    await tabsApi.update?.(preferredTab.id, { active: true });
     window.close();
     return;
   }
 
-  const createdTab = await chrome.tabs.create({
+  const createdTab = await tabsApi.create?.({
     url: preferredRoute,
     active: true,
   });
@@ -113,7 +118,7 @@ export async function openProviderSourcePage(
     type: "app:set-provider-page-binding",
     providerId,
     pageBinding:
-      typeof createdTab.id === "number"
+      typeof createdTab?.id === "number"
         ? createPageBindingFromTab({
             mode: "bound",
             tabId: createdTab.id,

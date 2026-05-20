@@ -1,8 +1,12 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { createPageSessionClient } from "./page-session";
 
 describe("createPageSessionClient", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   it("discovers the highest-priority matching tab in DOM mode", async () => {
     const query = vi.fn(async () => [
       {
@@ -122,6 +126,58 @@ describe("createPageSessionClient", () => {
     expect(query).toHaveBeenCalledWith({
       url: ["https://chatgpt.com/*"],
     });
+  });
+
+  it("uses browser tabs and scripting APIs when chrome namespace is absent", async () => {
+    const query = vi.fn(async () => [
+      {
+        id: 77,
+        active: true,
+        lastAccessed: 5,
+      },
+    ]);
+    const executeScript = vi.fn(async () => [
+      {
+        result: {
+          url: "https://claude.ai/settings/usage",
+          title: "Usage",
+          heading: "Usage",
+          html: "<html><body><h1>Usage</h1></body></html>",
+          scripts: {},
+        },
+      },
+    ]);
+
+    vi.stubGlobal("browser", {
+      runtime: {
+        id: "extension-id",
+      },
+      tabs: {
+        query,
+      },
+      scripting: {
+        executeScript,
+      },
+    });
+
+    const client = createPageSessionClient();
+    const result = await client.capture({
+      providerId: "codex-personal-page",
+      pageLabel: "Claude usage page",
+      urlPatterns: ["https://claude.ai/*"],
+      extraction: {
+        mode: "dom",
+      },
+      match(page) {
+        return page.title === "Usage" ? "matched" : "unmatched";
+      },
+    });
+
+    expect(result.status).toBe("matched");
+    expect(query).toHaveBeenCalledWith({
+      url: ["https://claude.ai/*"],
+    });
+    expect(executeScript).toHaveBeenCalled();
   });
 
   it("falls back to auto discovery when the bound tab is missing", async () => {

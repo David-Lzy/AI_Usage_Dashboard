@@ -13,27 +13,33 @@ import {
   buildSidePanelPreviewUrl,
 } from "../shared/extension-surface-paths";
 import {
+  getExtensionPermissionsApi,
+  getExtensionTabsApi,
+  hasExtensionRuntime,
+} from "../shared/extension-api";
+import {
   buildSidePanelHash,
   type SidePanelRouteState,
 } from "./route-state";
 
 export function hasDirectPermissionControl(): boolean {
+  const permissionsApi = getExtensionPermissionsApi();
+
   return (
-    typeof chrome !== "undefined" &&
-    Boolean(chrome.runtime?.id) &&
-    typeof chrome.permissions?.contains === "function" &&
-    typeof chrome.permissions?.request === "function" &&
-    typeof chrome.permissions?.remove === "function"
+    typeof permissionsApi?.contains === "function" &&
+    typeof permissionsApi.request === "function" &&
+    typeof permissionsApi.remove === "function"
   );
 }
 
 export function hasTabNavigationControl(): boolean {
+  const tabsApi = getExtensionTabsApi();
+
   return (
-    typeof chrome !== "undefined" &&
-    Boolean(chrome.runtime?.id) &&
-    typeof chrome.tabs?.query === "function" &&
-    typeof chrome.tabs?.create === "function" &&
-    typeof chrome.tabs?.update === "function"
+    hasExtensionRuntime() &&
+    typeof tabsApi?.query === "function" &&
+    typeof tabsApi.create === "function" &&
+    typeof tabsApi.update === "function"
   );
 }
 

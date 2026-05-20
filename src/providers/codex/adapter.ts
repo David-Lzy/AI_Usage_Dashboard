@@ -36,6 +36,7 @@ import {
 } from "./official";
 import { createCodexPersonalPageClient } from "./personal-page-client";
 import { hasPageBindingFingerprint } from "../../shared/page-bindings";
+import { hasLivePageSessionApis } from "../page-session";
 import type {
   CodexPersonalUsageBalance,
   CodexPersonalUsageWindow,
@@ -82,12 +83,7 @@ function hasCodexAnalyticsConfig(secrets: ProviderSecrets): boolean {
 }
 
 function canUseLiveCodexPersonalPage(): boolean {
-  return (
-    typeof chrome !== "undefined" &&
-    Boolean(chrome.runtime?.id) &&
-    typeof chrome.tabs?.query === "function" &&
-    typeof chrome.scripting?.executeScript === "function"
-  );
+  return hasLivePageSessionApis();
 }
 
 function shouldOpenCodexPageWhenMissing({

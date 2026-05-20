@@ -15,6 +15,7 @@ import {
   findHostAccessRefreshCandidate,
   requestHostAccessForProvider,
 } from "../shared/host-access-request";
+import { getExtensionPermissionsApi } from "../shared/extension-api";
 import type { SidePanelRouteState } from "./route-state";
 import { createStandardAppSettingsActions } from "./standard-app-settings-actions";
 import { createStandardAppSessionPageActions } from "./standard-app-session-page-actions";
@@ -166,8 +167,11 @@ export function createStandardAppActions({
       return;
     }
 
+    const permissionsApi = getExtensionPermissionsApi();
+
     if (
       !hasDirectPermissionControl() ||
+      !permissionsApi ||
       !Array.isArray(target.hostOrigins) ||
       target.hostOrigins.length === 0
     ) {
@@ -181,9 +185,9 @@ export function createStandardAppActions({
     void (async () => {
       try {
         if (target.status === "granted") {
-          const removed = await chrome.permissions.remove({
+          const removed = await permissionsApi.remove?.({
             origins: target.hostOrigins,
-          });
+          }) ?? false;
 
           await applyMessage(
             {
@@ -206,9 +210,9 @@ export function createStandardAppActions({
           return;
         }
 
-        const granted = await chrome.permissions.request({
+        const granted = await permissionsApi.request?.({
           origins: target.hostOrigins,
-        });
+        }) ?? false;
 
         await applyMessage(
           {
