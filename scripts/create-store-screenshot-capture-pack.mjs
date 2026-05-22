@@ -92,7 +92,7 @@ Status note:
 - runtime source:
   - \`RDP Chrome\` unpacked extension
 - extension state source:
-  - current built \`dist/\`
+  - current built \`dist/chrome/\`
 - screenshot count:
   - \`${screenshotPlan.length}\`
 - preferred size:

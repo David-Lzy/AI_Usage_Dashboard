@@ -6,7 +6,7 @@ import { promisify } from "node:util";
 
 const execFileAsync = promisify(execFile);
 const projectRoot = process.cwd();
-const distDir = path.join(projectRoot, "dist");
+const distDir = path.join(projectRoot, "dist", "chrome");
 const releaseDir = path.join(projectRoot, "release");
 const packageJsonPath = path.join(projectRoot, "package.json");
 const manifestPath = path.join(projectRoot, "src", "manifest.json");
@@ -72,13 +72,13 @@ async function main() {
 
   if (builtManifestVersionName !== packageVersion) {
     throw new Error(
-      `dist/manifest.json version_name (${builtManifestVersionName}) must match package.json version (${packageVersion}). Run \`npm run build\` before packaging.`,
+      `dist/chrome/manifest.json version_name (${builtManifestVersionName}) must match package.json version (${packageVersion}). Run \`npm run build\` before packaging.`,
     );
   }
 
   if (builtManifest.version !== expectedManifestVersion) {
     throw new Error(
-      `dist/manifest.json version (${builtManifest.version}) must match the numeric Chrome version derived from package.json (${expectedManifestVersion}). Run \`npm run build\` before packaging.`,
+      `dist/chrome/manifest.json version (${builtManifest.version}) must match the numeric Chrome version derived from package.json (${expectedManifestVersion}). Run \`npm run build\` before packaging.`,
     );
   }
 

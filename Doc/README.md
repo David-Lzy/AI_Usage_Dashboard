@@ -13,7 +13,7 @@ Freshness model:
 Status note:
 
 - this is the public entry point for project documentation
-- internal phase history, release handoff notes, RDP/operator QA, and personal upload records live in ignored `.local/` history
+- internal phase history, release handoff notes, RDP/operator QA, and personal upload records live in ignored `.local/Doc/archive/` history
 
 ## Start Here
 
@@ -23,8 +23,8 @@ Status note:
 4. [Security policy](../SECURITY.md)
 
 The public repository must be understandable from tracked files alone. Local
-`.local/` and `.agent/` material may exist for an individual workspace, but those
-directories are ignored by git and are not shared project truth.
+ignored material may exist for an individual workspace, but it is not shared
+project truth.
 
 ## Public References
 
@@ -44,6 +44,6 @@ The following material is intentionally not public-facing:
 - generated screenshot/operator review evidence
 - old roadmap and internal planning records
 
-Those files were moved to ignored `.local/internal-history/` so they remain
+Those files were moved to ignored `.local/Doc/archive/` so they remain
 available on this machine without making the public repository look like a
 personal operations log.

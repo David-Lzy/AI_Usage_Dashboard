@@ -6,7 +6,7 @@ import process from "node:process";
 import { chromium } from "playwright";
 
 const projectRoot = process.cwd();
-const extensionPath = path.join(projectRoot, "dist");
+const extensionPath = path.join(projectRoot, "dist", "chrome");
 const previewUrl = "http://127.0.0.1:4173/src/sidepanel/index.html";
 const userDataDir = await mkdtemp(path.join(tmpdir(), "ai-usage-dashboard-"));
 

@@ -3,8 +3,8 @@ import path from "node:path";
 import process from "node:process";
 
 const projectRoot = process.cwd();
-const chromeDistDir = path.join(projectRoot, "dist");
-const firefoxDistDir = path.join(projectRoot, "dist-firefox");
+const chromeDistDir = path.join(projectRoot, "dist", "chrome");
+const firefoxDistDir = path.join(projectRoot, "dist", "firefox");
 const firefoxManifestPath = path.join(firefoxDistDir, "manifest.json");
 
 async function readJson(filePath) {

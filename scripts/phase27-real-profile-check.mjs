@@ -5,7 +5,7 @@ import process from "node:process";
 
 import { chromium } from "playwright";
 
-const extensionPath = path.join(process.cwd(), "dist");
+const extensionPath = path.join(process.cwd(), "dist", "chrome");
 const userDataDir = await mkdtemp(path.join(tmpdir(), "ai-usage-dashboard-phase27-"));
 
 function assert(condition, message) {

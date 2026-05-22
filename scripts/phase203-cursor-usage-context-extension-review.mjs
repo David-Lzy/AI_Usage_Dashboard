@@ -6,7 +6,7 @@ import process from "node:process";
 import { chromium } from "playwright";
 
 const projectRoot = process.cwd();
-const extensionPath = path.join(projectRoot, "dist");
+const extensionPath = path.join(projectRoot, "dist", "chrome");
 const artifactDir = path.join(
   projectRoot,
   "tmp",

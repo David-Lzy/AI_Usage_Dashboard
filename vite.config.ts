@@ -9,6 +9,8 @@ import { defineConfig } from "vite";
 import manifest from "./src/manifest.json";
 import pkg from "./package.json";
 
+const chromeDistRelativeDir = "dist/chrome";
+
 function getGitCommit(): string {
   try {
     return execSync("git rev-parse --short HEAD").toString().trim();
@@ -36,8 +38,16 @@ async function rewriteHtmlEntryToStableFile(
 
   const currentAssetPath = match[1];
   const currentAssetRelativePath = currentAssetPath.replace(/^\//, "");
-  const currentAssetAbsolutePath = path.join(projectRoot, "dist", currentAssetRelativePath);
-  const stableAssetAbsolutePath = path.join(projectRoot, "dist", stableAssetRelativePath);
+  const currentAssetAbsolutePath = path.join(
+    projectRoot,
+    chromeDistRelativeDir,
+    currentAssetRelativePath,
+  );
+  const stableAssetAbsolutePath = path.join(
+    projectRoot,
+    chromeDistRelativeDir,
+    stableAssetRelativePath,
+  );
 
   if (currentAssetRelativePath !== stableAssetRelativePath) {
     await rename(currentAssetAbsolutePath, stableAssetAbsolutePath);
@@ -55,28 +65,39 @@ function stableExtensionBuildOutputPlugin() {
 
       await rewriteHtmlEntryToStableFile(
         projectRoot,
-        "dist/src/popup/index.html",
+        path.join(chromeDistRelativeDir, "src/popup/index.html"),
         "assets/popup.js",
       );
       await rewriteHtmlEntryToStableFile(
         projectRoot,
-        "dist/src/sidepanel/index.html",
+        path.join(chromeDistRelativeDir, "src/sidepanel/index.html"),
         "assets/sidepanel.js",
       );
 
-      const loaderRelativePath = "dist/service-worker-loader.js";
+      const loaderRelativePath = path.join(
+        chromeDistRelativeDir,
+        "service-worker-loader.js",
+      );
       const loaderAbsolutePath = path.join(projectRoot, loaderRelativePath);
       const loader = await readFile(loaderAbsolutePath, "utf8");
       const workerMatch = loader.match(/['"]\.\/assets\/([^'"]+)['"]/);
 
       if (!workerMatch) {
-        throw new Error("Failed to find built service-worker import in dist/service-worker-loader.js");
+        throw new Error(`Failed to find built service-worker import in ${loaderRelativePath}`);
       }
 
       const currentWorkerRelativePath = `assets/${workerMatch[1]}`;
       const stableWorkerRelativePath = "assets/service-worker.js";
-      const currentWorkerAbsolutePath = path.join(projectRoot, "dist", currentWorkerRelativePath);
-      const stableWorkerAbsolutePath = path.join(projectRoot, "dist", stableWorkerRelativePath);
+      const currentWorkerAbsolutePath = path.join(
+        projectRoot,
+        chromeDistRelativeDir,
+        currentWorkerRelativePath,
+      );
+      const stableWorkerAbsolutePath = path.join(
+        projectRoot,
+        chromeDistRelativeDir,
+        stableWorkerRelativePath,
+      );
 
       if (currentWorkerRelativePath !== stableWorkerRelativePath) {
         await rename(currentWorkerAbsolutePath, stableWorkerAbsolutePath);
@@ -100,7 +121,7 @@ export default defineConfig({
   },
   plugins: [react(), crx({ manifest }), stableExtensionBuildOutputPlugin()],
   build: {
-    outDir: "dist",
+    outDir: chromeDistRelativeDir,
     emptyOutDir: true,
     rollupOptions: {
       output: {

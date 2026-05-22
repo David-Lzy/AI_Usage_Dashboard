@@ -97,7 +97,7 @@ async function main() {
       webExtBin,
       "run",
       "--source-dir",
-      "dist-firefox",
+      "dist/firefox",
       "--firefox",
       firefoxPath,
       ...process.argv.slice(2),

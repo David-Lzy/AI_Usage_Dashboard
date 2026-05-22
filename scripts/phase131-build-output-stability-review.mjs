@@ -20,9 +20,9 @@ async function ensureFileExists(relativePath) {
 }
 
 async function main() {
-  const popupHtml = await readRelativeFile("dist/src/popup/index.html");
-  const sidepanelHtml = await readRelativeFile("dist/src/sidepanel/index.html");
-  const serviceWorkerLoader = await readRelativeFile("dist/service-worker-loader.js");
+  const popupHtml = await readRelativeFile("dist/chrome/src/popup/index.html");
+  const sidepanelHtml = await readRelativeFile("dist/chrome/src/sidepanel/index.html");
+  const serviceWorkerLoader = await readRelativeFile("dist/chrome/service-worker-loader.js");
 
   assert(
     popupHtml.includes('/assets/popup.js'),
@@ -33,18 +33,27 @@ async function main() {
     "sidepanel build output should reference /assets/sidepanel.js",
   );
   assert(
-    popupHtml.includes('/assets/material-theme.css') &&
-      sidepanelHtml.includes('/assets/material-theme.css'),
-    "popup and sidepanel HTML should both reference /assets/material-theme.css",
+    popupHtml.includes('/assets/build-info.js') &&
+      sidepanelHtml.includes('/assets/build-info.js'),
+    "popup and sidepanel HTML should both preload /assets/build-info.js",
   );
   assert(
-    popupHtml.includes('/assets/message-bus.js') &&
-      sidepanelHtml.includes('/assets/message-bus.js'),
-    "popup and sidepanel HTML should both reference /assets/message-bus.js",
+    popupHtml.includes('/assets/usage-progress.js') &&
+      sidepanelHtml.includes('/assets/usage-progress.js'),
+    "popup and sidepanel HTML should both preload /assets/usage-progress.js",
   );
   assert(
-    sidepanelHtml.includes('/assets/action-badge.js'),
-    "sidepanel HTML should reference /assets/action-badge.js",
+    popupHtml.includes('/assets/usage-progress.css') &&
+      sidepanelHtml.includes('/assets/usage-progress.css'),
+    "popup and sidepanel HTML should both reference /assets/usage-progress.css",
+  );
+  assert(
+    popupHtml.includes('/assets/index.css'),
+    "popup HTML should reference /assets/index.css",
+  );
+  assert(
+    sidepanelHtml.includes('/assets/index2.css'),
+    "sidepanel HTML should reference /assets/index2.css",
   );
   assert(
     serviceWorkerLoader.includes("./assets/service-worker.js"),
@@ -52,13 +61,16 @@ async function main() {
   );
 
   await Promise.all([
-    ensureFileExists("dist/assets/popup.js"),
-    ensureFileExists("dist/assets/sidepanel.js"),
-    ensureFileExists("dist/assets/message-bus.js"),
-    ensureFileExists("dist/assets/material-theme.js"),
-    ensureFileExists("dist/assets/material-theme.css"),
-    ensureFileExists("dist/assets/action-badge.js"),
-    ensureFileExists("dist/assets/service-worker.js"),
+    ensureFileExists("dist/chrome/assets/popup.js"),
+    ensureFileExists("dist/chrome/assets/sidepanel.js"),
+    ensureFileExists("dist/chrome/assets/build-info.js"),
+    ensureFileExists("dist/chrome/assets/usage-progress.js"),
+    ensureFileExists("dist/chrome/assets/usage-progress.css"),
+    ensureFileExists("dist/chrome/assets/index.css"),
+    ensureFileExists("dist/chrome/assets/index2.css"),
+    ensureFileExists("dist/chrome/assets/view-models.js"),
+    ensureFileExists("dist/chrome/assets/action-badge.js"),
+    ensureFileExists("dist/chrome/assets/service-worker.js"),
   ]);
 
   console.log("phase131: stable build output verified");

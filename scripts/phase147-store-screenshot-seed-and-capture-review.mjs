@@ -13,7 +13,7 @@ import {
 } from "./lib/store-screenshot-rdp-capture.mjs";
 
 const projectRoot = process.cwd();
-const extensionPath = path.join(projectRoot, "dist");
+const extensionPath = path.join(projectRoot, "dist", "chrome");
 const outputDir = path.join(
   projectRoot,
   "tmp",

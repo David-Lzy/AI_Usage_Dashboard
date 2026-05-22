@@ -6,12 +6,12 @@ AI Usage Dashboard is a Chrome extension for tracking AI coding tool usage, setu
 
 1. Install Node.js `>=22.12.0`.
 2. Install dependencies with `npm install`.
-3. Run `npm run build` to produce `dist/`.
-4. Load `dist/` as an unpacked extension from `chrome://extensions`.
+3. Run `npm run build` to produce `dist/chrome/`.
+4. Load `dist/chrome/` as an unpacked extension from `chrome://extensions`.
 
 Firefox compatibility work is kept on the same mainline but remains
 experimental. Use `npm run firefox:build` and `npm run firefox:lint` to verify
-the generated `dist-firefox/` package without changing the Chrome build output.
+the generated `dist/firefox/` package without changing the Chrome build output.
 
 ## Before Sending Changes
 

@@ -47,7 +47,7 @@ async function verifyVersionState() {
   const packageJson = await readJson("package.json");
   const packageLockJson = await readJson("package-lock.json");
   const sourceManifest = await readJson("src/manifest.json");
-  const distManifest = await readJson("dist/manifest.json");
+  const distManifest = await readJson("dist/chrome/manifest.json");
   const archiveStats = await stat(path.join(projectRoot, archiveRelativePath));
 
   assert(packageJson.version === expectedPackageVersion, "package version mismatch");

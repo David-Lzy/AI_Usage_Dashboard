@@ -58,7 +58,7 @@ npm run build
 ```
 
 Then open `chrome://extensions`, enable Developer mode, choose "Load unpacked",
-and select the generated `dist/` directory.
+and select the generated `dist/chrome/` directory.
 
 ## Development
 
@@ -85,8 +85,8 @@ npm run firefox:lint
 npm run firefox:package
 ```
 
-The default `npm run build` output remains the Chrome extension in `dist/`.
-Firefox output is generated separately in `dist-firefox/` for local MVP testing.
+The default `npm run build` output is the Chrome extension in `dist/chrome/`.
+Firefox output is generated under `dist/firefox/` for local MVP testing.
 Set `FIREFOX_BIN=/path/to/firefox` when you need to choose a specific Firefox
 binary for `npm run firefox:run`.
 

@@ -18,7 +18,7 @@ function parseArgs(argv) {
   const args = {
     extensionId: "",
     profileDir: "",
-    manifestPath: path.join(process.cwd(), "dist", "manifest.json"),
+    manifestPath: path.join(process.cwd(), "dist", "chrome", "manifest.json"),
   };
 
   for (const entry of argv) {

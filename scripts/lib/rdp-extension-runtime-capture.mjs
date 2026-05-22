@@ -255,7 +255,7 @@ export async function detectLoadedExtensionRuntime({
   projectRoot,
   browserCandidates = listRdpBrowserCandidates(),
 }) {
-  const expectedPath = path.join(projectRoot, "dist");
+  const expectedPath = path.join(projectRoot, "dist", "chrome");
   const attemptedPreferencesPaths = [];
 
   for (const browser of browserCandidates) {

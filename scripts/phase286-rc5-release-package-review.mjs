@@ -43,7 +43,7 @@ async function verifyVersionState() {
   const packageJson = await readJson("package.json");
   const packageLockJson = await readJson("package-lock.json");
   const sourceManifest = await readJson("src/manifest.json");
-  const distManifest = await readJson("dist/manifest.json");
+  const distManifest = await readJson("dist/chrome/manifest.json");
   const archiveStats = await stat(path.join(projectRoot, archiveRelativePath));
 
   assert(
@@ -68,11 +68,11 @@ async function verifyVersionState() {
   );
   assert(
     distManifest.version === expectedManifestVersion,
-    `dist/manifest.json version must be ${expectedManifestVersion}.`,
+    `dist/chrome/manifest.json version must be ${expectedManifestVersion}.`,
   );
   assert(
     distManifest.version_name === expectedPackageVersion,
-    `dist/manifest.json version_name must be ${expectedPackageVersion}.`,
+    `dist/chrome/manifest.json version_name must be ${expectedPackageVersion}.`,
   );
   assert(
     archiveStats.size > 0,
