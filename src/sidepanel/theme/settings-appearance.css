@@ -1,5 +1,6 @@
 .settings-preferences__more {
   margin-top: var(--app-space-4);
+  container: settings-ui-more / inline-size;
 }
 
 .settings-preferences__more[data-open="true"] {
@@ -1062,63 +1063,6 @@
 .popup-appearance-preview-progress .usage-progress-ring__value {
   font-size: var(--md-sys-typescale-label-large-size);
   line-height: var(--md-sys-typescale-label-large-line-height);
-}
-
-.floating-toolbar-popup-preview {
-  position: fixed;
-  z-index: 70;
-  inset-block-start: 96px;
-  inset-inline-end: 32px;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--app-space-3);
-  width: min(520px, calc(100vw - 32px));
-  padding: var(--app-space-3);
-  border: 1px solid var(--app-supporting-surface-border);
-  border-radius: var(--md-sys-shape-corner-extra-large);
-  background:
-    radial-gradient(
-      circle at 15% 0%,
-      color-mix(in srgb, var(--md-sys-color-primary-container) 26%, transparent)
-        0%,
-      transparent 36%
-    ),
-    var(--md-sys-color-surface-container-lowest);
-  box-shadow: var(--app-elevation-2);
-}
-
-.floating-toolbar-popup-preview__bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--app-space-2);
-  min-height: 44px;
-  padding-inline: var(--app-space-2);
-  border-radius: var(--md-sys-shape-corner-large);
-  color: var(--md-sys-color-on-surface-variant);
-  font-family: var(--md-sys-typescale-label-large-font);
-  font-size: var(--md-sys-typescale-label-large-size);
-  font-weight: var(--md-sys-typescale-label-large-weight);
-  line-height: var(--md-sys-typescale-label-large-line-height);
-  cursor: grab;
-  touch-action: none;
-  user-select: none;
-}
-
-.floating-toolbar-popup-preview__bar:active {
-  cursor: grabbing;
-}
-
-.floating-toolbar-popup-preview__close {
-  width: 40px;
-  min-width: 40px;
-  height: 40px;
-  padding: 0;
-  box-shadow: none;
-}
-
-.floating-toolbar-popup-preview .popup-appearance-preview-surface {
-  justify-self: center;
 }
 
 .theme-preview-grid {

@@ -94,7 +94,7 @@ describe("SettingsPage", () => {
     expect(html).toContain("Show team/API providers");
     expect(html).not.toContain("Cursor Team Admin API");
     expect(html).toContain("Cursor personal dashboard usage page");
-    expect(html).toContain('data-settings-material-select="popup-circular-row-count"');
+    expect(html).not.toContain('data-settings-material-select="popup-circular-row-count"');
     expect(html).toContain('data-action-badge-selection-controls=""');
     expect(html).toContain('data-settings-material-select="toolbar-icon-mode"');
     expect(html).toContain('data-configuration-backup=""');
@@ -102,7 +102,7 @@ describe("SettingsPage", () => {
     expect(html).toContain('data-provider-order-preferences=""');
     expect(html).toContain('data-provider-progress-preferences=""');
     expect(html).not.toContain('data-provider-order-row="jetbrains-org-page"');
-    expect(html).toContain('data-progress-appearance-preferences=""');
+    expect(html).not.toContain('data-progress-appearance-preferences=""');
     expect(html).toContain(">More UI settings<");
     expect(html).toContain(">Provider display settings<");
     expect(html.indexOf('id="settings-appearance"')).toBeLessThan(

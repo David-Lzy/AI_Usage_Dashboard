@@ -24,6 +24,7 @@ import "./theme/settings-navigation.css";
 import "./theme/settings-source-cards.css";
 import "./theme/interaction-audit.css";
 import "./theme/settings-appearance.css";
+import "./theme/toolbar-popup-preview.css";
 import "./theme/theme-recovery.css";
 import "./theme/usage-progress.css";
 import "./theme/provider-card.css";

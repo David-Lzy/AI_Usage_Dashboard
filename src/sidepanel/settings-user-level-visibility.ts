@@ -8,7 +8,6 @@ export type SettingsUserLevelVisibility = {
   showDeveloperAppearanceControls: boolean;
   showDeveloperSourceContext: boolean;
   showDebugDiagnostics: boolean;
-  showPopupAppearancePreview: boolean;
   showSourcePreference: boolean;
   showWarningThreshold: boolean;
 };
@@ -29,7 +28,6 @@ export function getSettingsUserLevelVisibility(
     showDeveloperAppearanceControls: isDeveloper || isDebug,
     showDeveloperSourceContext: isDeveloper || isDebug,
     showDebugDiagnostics: isDebug,
-    showPopupAppearancePreview: isDeveloper || isDebug,
     showSourcePreference: !isBasic,
     showWarningThreshold: !isBasic,
   };

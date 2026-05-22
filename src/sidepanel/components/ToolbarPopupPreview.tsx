@@ -14,7 +14,7 @@ import { UsageProgress } from "./UsageProgress";
 
 export const POPUP_APPEARANCE_PREVIEW_DEFAULT_REMAINING_PERCENT = 51;
 
-type PopupAppearancePreviewSettings = Pick<
+type ToolbarPopupPreviewSettings = Pick<
   AppSettings,
   | "popupCornerStyle"
   | "progressColorBands"
@@ -24,24 +24,28 @@ type PopupAppearancePreviewSettings = Pick<
   | "popupSizePreset"
 >;
 
-type PopupAppearancePreviewProps = {
+type ToolbarPopupPreviewPlacement = "inline" | "floating";
+
+type ToolbarPopupPreviewProps = {
   i18n: RuntimeI18n;
+  placement: ToolbarPopupPreviewPlacement;
   previewRemainingPercent: number;
-  settings: PopupAppearancePreviewSettings;
+  settings: ToolbarPopupPreviewSettings;
   onPreviewRemainingPercentChange: (remainingPercent: number) => void;
+  onClose?: () => void;
 };
 
-type PopupAppearancePreviewSurfaceProps = {
+type ToolbarPopupPreviewSurfaceProps = {
   i18n: RuntimeI18n;
   previewRemainingPercent: number;
-  settings: PopupAppearancePreviewSettings;
+  settings: ToolbarPopupPreviewSettings;
 };
 
-function PopupAppearancePreviewSurface({
+function ToolbarPopupPreviewSurface({
   i18n,
   previewRemainingPercent,
   settings,
-}: PopupAppearancePreviewSurfaceProps) {
+}: ToolbarPopupPreviewSurfaceProps) {
   const sampleQuotaLabel = formatPopupPreviewQuotaLabel(i18n);
   const remainingLabel = buildRuntimeCommonCopy(i18n).remaining;
   const sampleRemainingLabel =
@@ -91,8 +95,8 @@ function normalizePreviewRemainingPercent(value: number): number {
   return Math.min(100, Math.max(0, Math.round(value)));
 }
 
-function buildPopupPreviewShellAttributes(
-  settings: PopupAppearancePreviewSettings,
+function buildToolbarPopupPreviewShellAttributes(
+  settings: ToolbarPopupPreviewSettings,
 ) {
   return {
     "data-popup-size-preset": settings.popupSizePreset,
@@ -102,12 +106,17 @@ function buildPopupPreviewShellAttributes(
   };
 }
 
-export function PopupAppearancePreview({
+function ToolbarPopupPreviewPercentField({
+  helpId,
   i18n,
   previewRemainingPercent,
-  settings,
   onPreviewRemainingPercentChange,
-}: PopupAppearancePreviewProps) {
+}: {
+  helpId: string;
+  i18n: RuntimeI18n;
+  previewRemainingPercent: number;
+  onPreviewRemainingPercentChange: (remainingPercent: number) => void;
+}) {
   const normalizedPreviewRemainingPercent = normalizePreviewRemainingPercent(
     previewRemainingPercent,
   );
@@ -119,69 +128,35 @@ export function PopupAppearancePreview({
   }
 
   return (
-    <div
-      className="popup-appearance-preview-card popup-appearance-preview-shell"
-      {...buildPopupPreviewShellAttributes(settings)}
-    >
-      <div className="dashboard-section__header popup-appearance-preview-header">
-        <div>
-          <p className="section-label">
-            {i18n.t("settings.popup_appearance_preview.eyebrow")}
-          </p>
-          <div className="section-title-with-info">
-            <h2 className="section-title">
-              {i18n.t("settings.popup_appearance_preview.title")}
-            </h2>
-            <MaterialInfoTooltip>
-              {i18n.t("settings.popup_appearance_preview.detail")}
-            </MaterialInfoTooltip>
-          </div>
-        </div>
-        <label className="popup-appearance-preview-percent-field">
-          <span>{i18n.t("settings.popup_appearance_preview.remaining_label")}</span>
-          <span className="popup-appearance-preview-percent-field__control">
-            <input
-              type="number"
-              min={0}
-              max={100}
-              step={1}
-              value={normalizedPreviewRemainingPercent}
-              aria-describedby="popup-preview-percent-help"
-              onChange={handleRemainingPercentChange}
-            />
-            <span aria-hidden="true">%</span>
-          </span>
-          <span id="popup-preview-percent-help" className="sr-only">
-            {i18n.t("settings.popup_appearance_preview.remaining_error")}
-          </span>
-        </label>
-      </div>
-
-      <div
-        className="popup-appearance-preview-frame"
-        aria-label={i18n.t("settings.popup_appearance_preview.title")}
-      >
-        <PopupAppearancePreviewSurface
-          i18n={i18n}
-          previewRemainingPercent={normalizedPreviewRemainingPercent}
-          settings={settings}
+    <label className="popup-appearance-preview-percent-field">
+      <span>{i18n.t("settings.popup_appearance_preview.remaining_label")}</span>
+      <span className="popup-appearance-preview-percent-field__control">
+        <input
+          type="number"
+          min={0}
+          max={100}
+          step={1}
+          value={normalizedPreviewRemainingPercent}
+          aria-describedby={helpId}
+          onChange={handleRemainingPercentChange}
         />
-      </div>
-    </div>
+        <span aria-hidden="true">%</span>
+      </span>
+      <span id={helpId} className="sr-only">
+        {i18n.t("settings.popup_appearance_preview.remaining_error")}
+      </span>
+    </label>
   );
 }
 
-export function FloatingToolbarPopupPreview({
+export function ToolbarPopupPreview({
   i18n,
+  placement,
   previewRemainingPercent,
   settings,
+  onPreviewRemainingPercentChange,
   onClose,
-}: {
-  i18n: RuntimeI18n;
-  previewRemainingPercent: number;
-  settings: PopupAppearancePreviewSettings;
-  onClose: () => void;
-}) {
+}: ToolbarPopupPreviewProps) {
   const dragStartRef = useRef<{
     pointerX: number;
     pointerY: number;
@@ -233,7 +208,7 @@ export function FloatingToolbarPopupPreview({
 
     if (
       event.target instanceof Element &&
-      event.target.closest("button")
+      event.target.closest("button,input,label")
     ) {
       return;
     }
@@ -248,38 +223,90 @@ export function FloatingToolbarPopupPreview({
     setIsDragging(true);
   }
 
-  return (
-    <aside
-      className="floating-toolbar-popup-preview popup-appearance-preview-shell"
-      {...buildPopupPreviewShellAttributes(settings)}
-      style={{
-        transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
-      }}
-      aria-label={i18n.t("settings.popup_appearance_preview.open_test_popup")}
-    >
-      <div
-        className="floating-toolbar-popup-preview__bar"
-        role="toolbar"
-        aria-label={i18n.t("settings.popup_appearance_preview.drag_test_popup")}
-        onPointerDown={handleDragPointerDown}
+  const previewSurface = (
+    <ToolbarPopupPreviewSurface
+      i18n={i18n}
+      previewRemainingPercent={normalizedPreviewRemainingPercent}
+      settings={settings}
+    />
+  );
+  const percentField = (
+    <ToolbarPopupPreviewPercentField
+      helpId={`toolbar-popup-preview-${placement}-percent-help`}
+      i18n={i18n}
+      previewRemainingPercent={normalizedPreviewRemainingPercent}
+      onPreviewRemainingPercentChange={onPreviewRemainingPercentChange}
+    />
+  );
+
+  if (placement === "floating") {
+    return (
+      <aside
+        className="toolbar-popup-preview toolbar-popup-preview--floating popup-appearance-preview-shell"
+        data-toolbar-popup-preview="floating"
+        {...buildToolbarPopupPreviewShellAttributes(settings)}
+        style={{
+          transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
+        }}
+        aria-label={i18n.t("settings.popup_appearance_preview.title")}
       >
-        <span>{i18n.t("settings.popup_appearance_preview.title")}</span>
-        <button
-          className="icon-button floating-toolbar-popup-preview__close"
-          type="button"
-          aria-label={i18n.t(
-            "settings.popup_appearance_preview.close_test_popup",
-          )}
-          onClick={onClose}
+        <div
+          className="toolbar-popup-preview__bar"
+          role="toolbar"
+          aria-label={i18n.t("settings.popup_appearance_preview.drag_test_popup")}
+          onPointerDown={handleDragPointerDown}
         >
-          <span aria-hidden="true">x</span>
-        </button>
+          <span className="toolbar-popup-preview__bar-title">
+            {i18n.t("settings.popup_appearance_preview.title")}
+          </span>
+          <div className="toolbar-popup-preview__bar-field">
+            {percentField}
+          </div>
+          <button
+            className="icon-button toolbar-popup-preview__close"
+            type="button"
+            aria-label={i18n.t(
+              "settings.popup_appearance_preview.close_test_popup",
+            )}
+            onClick={onClose}
+          >
+            <span aria-hidden="true">x</span>
+          </button>
+        </div>
+        {previewSurface}
+      </aside>
+    );
+  }
+
+  return (
+    <div
+      className="toolbar-popup-preview toolbar-popup-preview--inline popup-appearance-preview-card popup-appearance-preview-shell"
+      data-toolbar-popup-preview="inline"
+      {...buildToolbarPopupPreviewShellAttributes(settings)}
+    >
+      <div className="dashboard-section__header popup-appearance-preview-header">
+        <div>
+          <p className="section-label">
+            {i18n.t("settings.popup_appearance_preview.eyebrow")}
+          </p>
+          <div className="section-title-with-info">
+            <h2 className="section-title">
+              {i18n.t("settings.popup_appearance_preview.title")}
+            </h2>
+            <MaterialInfoTooltip>
+              {i18n.t("settings.popup_appearance_preview.detail")}
+            </MaterialInfoTooltip>
+          </div>
+        </div>
+        {percentField}
       </div>
-      <PopupAppearancePreviewSurface
-        i18n={i18n}
-        previewRemainingPercent={normalizedPreviewRemainingPercent}
-        settings={settings}
-      />
-    </aside>
+
+      <div
+        className="popup-appearance-preview-frame"
+        aria-label={i18n.t("settings.popup_appearance_preview.title")}
+      >
+        {previewSurface}
+      </div>
+    </div>
   );
 }

@@ -5,15 +5,16 @@ import { SAMPLE_APP_STATE } from "../../shared/constants";
 import { createRuntimeI18n } from "../../shared/i18n";
 import {
   POPUP_APPEARANCE_PREVIEW_DEFAULT_REMAINING_PERCENT,
-  PopupAppearancePreview,
-} from "./PopupAppearancePreview";
+  ToolbarPopupPreview,
+} from "./ToolbarPopupPreview";
 
-describe("PopupAppearancePreview", () => {
+describe("ToolbarPopupPreview", () => {
   it("renders the current popup appearance attributes and localized sample", () => {
     const i18n = createRuntimeI18n("en", undefined);
     const html = renderToStaticMarkup(
-      <PopupAppearancePreview
+      <ToolbarPopupPreview
         i18n={i18n}
+        placement="inline"
         previewRemainingPercent={
           POPUP_APPEARANCE_PREVIEW_DEFAULT_REMAINING_PERCENT
         }
@@ -29,12 +30,13 @@ describe("PopupAppearancePreview", () => {
     );
 
     expect(html).toContain("popup-appearance-preview-card");
+    expect(html).toContain('data-toolbar-popup-preview="inline"');
     expect(html).toContain('data-popup-size-preset="wide"');
     expect(html).toContain('data-popup-corner-style="rounded"');
     expect(html).toContain('data-popup-shadow-style="elevated"');
     expect(html).toContain('data-popup-progress-style="circle-soft"');
     expect(html).toContain("usage-progress-ring--circle-soft");
-    expect(html).toContain("Toolbar bubble shape");
+    expect(html).toContain("Toolbar popup preview");
     expect(html).toContain("Preview remaining");
     expect(html).toContain('value="51"');
     expect(html).toContain("week, reset: Tue 09:15");
@@ -46,15 +48,16 @@ describe("PopupAppearancePreview", () => {
   it("renders the zh-CN pilot preview copy through runtime i18n", () => {
     const i18n = createRuntimeI18n("zh-CN", undefined);
     const html = renderToStaticMarkup(
-      <PopupAppearancePreview
+      <ToolbarPopupPreview
         i18n={i18n}
+        placement="inline"
         previewRemainingPercent={74}
         settings={SAMPLE_APP_STATE.settings}
         onPreviewRemainingPercentChange={() => {}}
       />,
     );
 
-    expect(html).toContain("工具栏弹窗形态");
+    expect(html).toContain("工具栏弹窗预览");
     expect(html).toContain("预览剩余额度");
     expect(html).toContain("周额度，重置：周二 09:15");
     expect(html).toContain(
@@ -66,8 +69,9 @@ describe("PopupAppearancePreview", () => {
   it("renders the selected gauge progress style in the preview", () => {
     const i18n = createRuntimeI18n("en", undefined);
     const html = renderToStaticMarkup(
-      <PopupAppearancePreview
+      <ToolbarPopupPreview
         i18n={i18n}
+        placement="inline"
         previewRemainingPercent={
           POPUP_APPEARANCE_PREVIEW_DEFAULT_REMAINING_PERCENT
         }
@@ -81,5 +85,26 @@ describe("PopupAppearancePreview", () => {
 
     expect(html).toContain('data-popup-progress-style="circle-gauge"');
     expect(html).toContain("usage-progress-ring--circle-gauge");
+  });
+
+  it("renders the draggable floating shell with the same remaining control", () => {
+    const i18n = createRuntimeI18n("en", undefined);
+    const html = renderToStaticMarkup(
+      <ToolbarPopupPreview
+        i18n={i18n}
+        placement="floating"
+        previewRemainingPercent={63}
+        settings={SAMPLE_APP_STATE.settings}
+        onPreviewRemainingPercentChange={() => {}}
+        onClose={() => {}}
+      />,
+    );
+
+    expect(html).toContain('data-toolbar-popup-preview="floating"');
+    expect(html).toContain("toolbar-popup-preview__bar");
+    expect(html).toContain("Drag toolbar popup preview");
+    expect(html).toContain("Close toolbar popup preview");
+    expect(html).toContain("Preview remaining");
+    expect(html).toContain('value="63"');
   });
 });

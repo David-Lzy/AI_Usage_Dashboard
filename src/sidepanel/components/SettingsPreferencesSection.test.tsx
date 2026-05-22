@@ -63,6 +63,42 @@ describe("SettingsPreferencesSection", () => {
     expect(html).not.toContain('data-settings-material-select="locale-preference"');
     expect(html).not.toContain('data-settings-material-select="theme-mode"');
     expect(html).toContain('data-color-choice-dropdown="accent-color"');
+    expect(html).toContain("material-info-tooltip__trigger");
+    expect(html).toContain('class="form-field__label-row"');
+    expect(html).toContain('role="tooltip"');
+    expect(html).not.toContain("settings-preferences__field-with-helper");
+    expect(html).not.toContain("settings-preferences__inline-helper");
+    expect(html).toContain('data-action-badge-selection-controls=""');
+    expect(html).toContain("Badge rotation interval");
+    expect(html).toContain('data-settings-material-select="toolbar-icon-mode"');
+    expect(html).toContain('data-configuration-backup=""');
+    expect(html).toContain("Configuration backup and sync");
+    expect(html).toContain("Export JSON");
+    expect(html).toContain("Save to Chrome Sync");
+    expect(html).toContain("Initialize configuration");
+    expect(html).toContain("Toolbar icon");
+    expect(html).toContain(">More UI settings<");
+    expect(html).toContain(">Open toolbar popup preview<");
+    expect(html).not.toContain('data-settings-material-select="popup-circular-row-count"');
+    expect(html).not.toContain('data-settings-material-select="ui-font-family"');
+    expect(html).not.toContain('data-progress-appearance-preferences=""');
+    expect(html).not.toContain("Tune thickness and remaining-color bands");
+    expect(html).not.toContain("#B3261E");
+    expect(html).not.toContain('data-toolbar-popup-preview=');
+    expect(html).not.toContain('data-provider-order-preferences=""');
+    expect(html).not.toContain('data-provider-progress-preferences=""');
+    expect(html).not.toContain("Provider display settings");
+    expect(html).not.toContain("Quick glance");
+    expect(html).not.toContain('class="theme-customization-form"');
+  });
+
+  it("renders the advanced UI controls only when the more section starts open", () => {
+    const html = renderPreferencesSection({
+      ...SAMPLE_APP_STATE.settings,
+      themePreset: "custom",
+    });
+
+    expect(html).toContain(">Collapse UI settings<");
     expect(html).toContain('data-settings-material-select="popup-circular-row-count"');
     expect(html).toContain('data-settings-material-select="ui-font-family"');
     expect(html).toContain("Circular items per row");
@@ -77,30 +113,15 @@ describe("SettingsPreferencesSection", () => {
     expect(html).toContain("Line progress stays one item per row.");
     expect(html).not.toContain("settings-preferences__field-with-helper");
     expect(html).not.toContain("settings-preferences__inline-helper");
-    expect(html).toContain('data-action-badge-selection-controls=""');
-    expect(html).toContain("Badge rotation interval");
-    expect(html).toContain('data-settings-material-select="toolbar-icon-mode"');
-    expect(html).toContain('data-configuration-backup=""');
-    expect(html).toContain("Configuration backup and sync");
-    expect(html).toContain("Export JSON");
-    expect(html).toContain("Save to Chrome Sync");
-    expect(html).toContain("Initialize configuration");
-    expect(html).toContain("Toolbar icon");
     expect(html).toContain('data-progress-appearance-preferences=""');
     expect(html).toContain("Tune thickness and remaining-color bands");
     expect(html).toContain("#B3261E");
-    expect(html).toContain(">More UI settings<");
-    expect(html).toContain(">Open test toolbar popup<");
-    expect(html).not.toContain('data-provider-order-preferences=""');
-    expect(html).not.toContain('data-provider-progress-preferences=""');
-    expect(html).not.toContain("Provider display settings");
-    expect(html).toContain("popup-appearance-preview-card");
-    expect(html).toContain("Preview remaining");
-    expect(html).not.toContain("Quick glance");
-    expect(html).not.toContain('class="theme-customization-form"');
+    expect(html).not.toContain('data-toolbar-popup-preview=');
     expect(
       html.indexOf('data-progress-appearance-preferences=""'),
-    ).toBeLessThan(html.indexOf("popup-appearance-preview-card"));
+    ).toBeGreaterThan(
+      html.indexOf('data-settings-material-select="popup-shadow-style"'),
+    );
   });
 
   it("renders provider and custom toolbar icon controls only for matching modes", () => {
@@ -113,7 +134,7 @@ describe("SettingsPreferencesSection", () => {
     expect(providerHtml).toContain(
       'data-settings-material-select="toolbar-icon-provider"',
     );
-    expect(providerHtml).toContain(">Codex<");
+    expect(providerHtml).toContain("Codex Personal Usage Page");
     expect(providerHtml).not.toContain('data-toolbar-icon-custom-field=""');
 
     const customHtml = renderPreferencesSection({
