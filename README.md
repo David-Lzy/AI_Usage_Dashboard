@@ -102,8 +102,8 @@ The generated zip is written under `release/`.
 
 - Chrome Web Store listing: published and reachable.
 - Current public-store metadata observed on 2026-05-20: `0.1.0-rc.24`.
-- Current local package version: `0.1.0-rc.24`.
-- Current local Chrome manifest version: `0.1.0.24`.
+- Current local package version: `0.1.0-rc.25`.
+- Current local Chrome manifest version: `0.1.0.25`.
 - Store publication status is tracked in
   [Doc/Store/Chrome_Web_Store_Publication_Milestone.md](./Doc/Store/Chrome_Web_Store_Publication_Milestone.md).
 - Public listing copy lives in [Doc/Store](./Doc/Store/).
