@@ -7,6 +7,7 @@ import {
   PROVIDER_SECRETS_STORAGE_KEY,
   SAMPLE_PROVIDER_SECRETS,
 } from "./constants";
+import { getSafeLocalStorage } from "./local-storage";
 
 let memoryFallbackSecrets: ProviderSecrets | null = null;
 
@@ -73,17 +74,9 @@ function hasChromeStorage(): boolean {
   return typeof chrome !== "undefined" && typeof chrome.storage?.local !== "undefined";
 }
 
-function hasLocalStorage(): boolean {
-  return (
-    typeof globalThis.localStorage?.getItem === "function" &&
-    typeof globalThis.localStorage?.setItem === "function" &&
-    typeof globalThis.localStorage?.removeItem === "function"
-  );
-}
-
-function readLocalStorageSecrets(): ProviderSecrets {
+function readLocalStorageSecrets(storage: Storage): ProviderSecrets {
   try {
-    const rawSecrets = globalThis.localStorage.getItem(PROVIDER_SECRETS_STORAGE_KEY);
+    const rawSecrets = storage.getItem(PROVIDER_SECRETS_STORAGE_KEY);
 
     if (!rawSecrets) {
       return cloneProviderSecrets(SAMPLE_PROVIDER_SECRETS);
@@ -91,13 +84,13 @@ function readLocalStorageSecrets(): ProviderSecrets {
 
     return normalizeProviderSecrets(JSON.parse(rawSecrets) as StoredProviderSecrets);
   } catch {
-    globalThis.localStorage.removeItem(PROVIDER_SECRETS_STORAGE_KEY);
+    storage.removeItem(PROVIDER_SECRETS_STORAGE_KEY);
     return cloneProviderSecrets(SAMPLE_PROVIDER_SECRETS);
   }
 }
 
-function writeLocalStorageSecrets(secrets: ProviderSecrets) {
-  globalThis.localStorage.setItem(
+function writeLocalStorageSecrets(storage: Storage, secrets: ProviderSecrets) {
+  storage.setItem(
     PROVIDER_SECRETS_STORAGE_KEY,
     JSON.stringify(secrets),
   );
@@ -115,8 +108,10 @@ export async function readProviderSecrets(): Promise<ProviderSecrets> {
       : cloneProviderSecrets(SAMPLE_PROVIDER_SECRETS);
   }
 
-  if (hasLocalStorage()) {
-    return readLocalStorageSecrets();
+  const localStorage = getSafeLocalStorage();
+
+  if (localStorage) {
+    return readLocalStorageSecrets(localStorage);
   }
 
   return memoryFallbackSecrets
@@ -133,10 +128,14 @@ export async function writeProviderSecrets(
     await chrome.storage.local.set({
       [PROVIDER_SECRETS_STORAGE_KEY]: normalizedSecrets,
     });
-  } else if (hasLocalStorage()) {
-    writeLocalStorageSecrets(normalizedSecrets);
   } else {
-    memoryFallbackSecrets = normalizedSecrets;
+    const localStorage = getSafeLocalStorage();
+
+    if (localStorage) {
+      writeLocalStorageSecrets(localStorage, normalizedSecrets);
+    } else {
+      memoryFallbackSecrets = normalizedSecrets;
+    }
   }
 
   return normalizedSecrets;

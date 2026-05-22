@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 
 import type { AppLocalePreference } from "../providers/types";
 import {
@@ -18,7 +18,6 @@ import { buildQuickThemeToggle } from "../shared/theme";
 import { Toast } from "./components/Toast";
 import { DashboardPage } from "./routes/DashboardPage";
 import { ProviderDetailPage } from "./routes/ProviderDetailPage";
-import { SettingsPage } from "./routes/SettingsPage";
 import {
   buildSidePanelHash,
   parseSidePanelHash,
@@ -33,9 +32,35 @@ import {
 } from "./view-models";
 import { SETTINGS_SECTION_IDS } from "./settings-section-ids";
 
+const SettingsPage = lazy(() =>
+  import("./routes/SettingsPage").then((module) => ({
+    default: module.SettingsPage,
+  })),
+);
+
 type StandardRouteAppProps = {
   locationHash: string;
 };
+
+function StandardRouteLoading({
+  eyebrow,
+  title,
+  detail,
+}: {
+  eyebrow: string;
+  title: string;
+  detail: string;
+}) {
+  return (
+    <main className="app-shell">
+      <section className="hero-card">
+        <p className="section-label">{eyebrow}</p>
+        <h1 className="display-headline">{title}</h1>
+        <p className="body-copy">{detail}</p>
+      </section>
+    </main>
+  );
+}
 
 export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
   const isFullPageSurface =
@@ -134,13 +159,11 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
 
   if (isLoading && !appState) {
     return (
-      <main className="app-shell">
-        <section className="hero-card">
-          <p className="section-label">{runtimeI18n.t("app.loading.eyebrow")}</p>
-          <h1 className="display-headline">{runtimeI18n.t("app.loading.title")}</h1>
-          <p className="body-copy">{runtimeI18n.t("app.loading.detail")}</p>
-        </section>
-      </main>
+      <StandardRouteLoading
+        eyebrow={runtimeI18n.t("app.loading.eyebrow")}
+        title={runtimeI18n.t("app.loading.title")}
+        detail={runtimeI18n.t("app.loading.detail")}
+      />
     );
   }
 
@@ -218,136 +241,146 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
   return (
     <>
       {route.name === "settings" ? (
-        <SettingsPage
-          onBack={() => navigateToRoute({ name: "dashboard" })}
-          routeFocus={route.focus}
-          onLocalePreferenceChange={(locale) =>
-            handleUpdateSettings({ locale })
+        <Suspense
+          fallback={
+            <StandardRouteLoading
+              eyebrow={runtimeI18n.t("app.loading.eyebrow")}
+              title={runtimeI18n.t("app.loading.title")}
+              detail={runtimeI18n.t("app.loading.detail")}
+            />
           }
-          onUserLevelChange={(userLevel) =>
-            handleUpdateSettings({ userLevel })
-          }
-          themeActionLabel={quickThemeToggleCopy.label}
-          themeActionTitle={quickThemeToggleCopy.title}
-          onToggleThemeMode={() =>
-            handleUpdateSettings({ themeMode: quickThemeToggle.nextMode })
-          }
-          onOpenFullPage={surfaceActionHandler}
-          surfaceActionLabel={surfaceActionLabel}
-          surfaceActionTitle={
-            isFullPageSurface
-              ? runtimeI18n.t("common.actions.open_sidebar")
-              : runtimeI18n.t("common.actions.open_settings_tab")
-          }
-          settings={appState.settings}
-          providers={appState.providerSettings}
-          snapshots={appState.providers}
-          toast={toast}
-          onDismissToast={() => setToast(null)}
-          onSavePreferences={handleSavePreferences}
-          onSyncIntervalChange={(minutes) =>
-            handleUpdateSettings({ syncIntervalMinutes: minutes })
-          }
-          onWarningThresholdChange={(percent) =>
-            handleUpdateSettings({ warningThresholdPercent: percent })
-          }
-          onThemeModeChange={(themeMode) =>
-            handleUpdateSettings({ themeMode })
-          }
-          onMotionModeChange={(motionMode) =>
-            handleUpdateSettings({ motionMode })
-          }
-          onThemePresetChange={(themePreset) =>
-            handleUpdateSettings({ themePreset })
-          }
-          onUiFontFamilyChange={(uiFontFamily) =>
-            handleUpdateSettings({ uiFontFamily })
-          }
-          onPopupProgressStyleChange={(popupProgressStyle) =>
-            handleUpdateSettings({ popupProgressStyle })
-          }
-          onSidebarProgressStyleChange={(sidebarProgressStyle) =>
-            handleUpdateSettings({ sidebarProgressStyle })
-          }
-          onFullPageProgressStyleChange={(fullPageProgressStyle) =>
-            handleUpdateSettings({ fullPageProgressStyle })
-          }
-          onPopupSizePresetChange={(popupSizePreset) =>
-            handleUpdateSettings({ popupSizePreset })
-          }
-          onPopupCornerStyleChange={(popupCornerStyle) =>
-            handleUpdateSettings({ popupCornerStyle })
-          }
-          onPopupCircularProgressItemsPerRowChange={(
-            popupCircularProgressItemsPerRow,
-          ) => handleUpdateSettings({ popupCircularProgressItemsPerRow })}
-          onPopupShadowStyleChange={(popupShadowStyle) =>
-            handleUpdateSettings({ popupShadowStyle })
-          }
-          onProviderOrderBySurfaceChange={(providerOrderBySurface) =>
-            handleUpdateSettings({ providerOrderBySurface })
-          }
-          onProgressItemsBySurfaceChange={(progressItemsBySurface) =>
-            handleUpdateSettings({ progressItemsBySurface })
-          }
-          onProgressThicknessPxChange={(progressThicknessPx) =>
-            handleUpdateSettings({ progressThicknessPx })
-          }
-          onProgressColorBandsChange={(progressColorBands) =>
-            handleUpdateSettings({ progressColorBands })
-          }
-          onActionBadgeSelectionsChange={(actionBadgeSelections) =>
-            handleUpdateSettings({
-              actionBadgeSelectionMode: "manual",
-              actionBadgeSelection: actionBadgeSelections[0] ?? "attention",
-              actionBadgeSelections,
-            })
-          }
-          onRestoreActionBadgeAutoMode={() =>
-            handleUpdateSettings({
-              actionBadgeSelectionMode: "auto",
-              actionBadgeSelection: DEFAULT_ACTION_BADGE_SELECTION,
-              actionBadgeSelections: [...DEFAULT_ACTION_BADGE_SELECTIONS],
-            })
-          }
-          onActionBadgeRotationIntervalSecondsChange={(
-            actionBadgeRotationIntervalSeconds,
-          ) => handleUpdateSettings({ actionBadgeRotationIntervalSeconds })}
-          onExportConfiguration={handleExportConfiguration}
-          onImportConfigurationJson={handleImportConfigurationJson}
-          onSaveConfigurationToChromeSync={handleSaveConfigurationToChromeSync}
-          onRestoreConfigurationFromChromeSync={
-            handleRestoreConfigurationFromChromeSync
-          }
-          onResetConfigurationToInitial={handleResetConfigurationToInitial}
-          onToolbarIconModeChange={(toolbarIconMode) =>
-            handleUpdateSettings({ toolbarIconMode })
-          }
-          onToolbarIconProviderIdChange={(toolbarIconProviderId) =>
-            handleUpdateSettings({ toolbarIconProviderId })
-          }
-          onToolbarIconCustomImageDataUrlChange={(
-            toolbarIconCustomImageDataUrl,
-          ) => handleUpdateSettings({ toolbarIconCustomImageDataUrl })}
-          onSaveThemeCustomSeed={(themeCustomSeedHex) =>
-            handleUpdateSettings({
-              themePreset: "custom",
-              themeCustomSeedHex,
-            })
-          }
-          onToggleProvider={handleToggleProvider}
-          onTogglePermission={handleTogglePermission}
-          onSetSourcePreference={handleSetSourcePreference}
-          onSaveProviderAdminApiKey={handleSaveProviderAdminApiKey}
-          onClearProviderAdminApiKey={handleClearProviderAdminApiKey}
-          onSaveCodexWorkspaceConfig={handleSaveCodexWorkspaceConfig}
-          onClearCodexWorkspaceConfig={handleClearCodexWorkspaceConfig}
-          onClearPageBinding={handleClearPageBinding}
-          onOpenSessionPage={handleOpenSessionPage}
-          onAttachActiveSessionPage={handleAttachActiveSessionPage}
-          sessionPageNavigationAvailable={sessionPageNavigationAvailable}
-          activeSessionPageAttachAvailable={activeSessionPageAttachAvailable}
-        />
+        >
+          <SettingsPage
+            onBack={() => navigateToRoute({ name: "dashboard" })}
+            routeFocus={route.focus}
+            onLocalePreferenceChange={(locale) =>
+              handleUpdateSettings({ locale })
+            }
+            onUserLevelChange={(userLevel) =>
+              handleUpdateSettings({ userLevel })
+            }
+            themeActionLabel={quickThemeToggleCopy.label}
+            themeActionTitle={quickThemeToggleCopy.title}
+            onToggleThemeMode={() =>
+              handleUpdateSettings({ themeMode: quickThemeToggle.nextMode })
+            }
+            onOpenFullPage={surfaceActionHandler}
+            surfaceActionLabel={surfaceActionLabel}
+            surfaceActionTitle={
+              isFullPageSurface
+                ? runtimeI18n.t("common.actions.open_sidebar")
+                : runtimeI18n.t("common.actions.open_settings_tab")
+            }
+            settings={appState.settings}
+            providers={appState.providerSettings}
+            snapshots={appState.providers}
+            toast={toast}
+            onDismissToast={() => setToast(null)}
+            onSavePreferences={handleSavePreferences}
+            onSyncIntervalChange={(minutes) =>
+              handleUpdateSettings({ syncIntervalMinutes: minutes })
+            }
+            onWarningThresholdChange={(percent) =>
+              handleUpdateSettings({ warningThresholdPercent: percent })
+            }
+            onThemeModeChange={(themeMode) =>
+              handleUpdateSettings({ themeMode })
+            }
+            onMotionModeChange={(motionMode) =>
+              handleUpdateSettings({ motionMode })
+            }
+            onThemePresetChange={(themePreset) =>
+              handleUpdateSettings({ themePreset })
+            }
+            onUiFontFamilyChange={(uiFontFamily) =>
+              handleUpdateSettings({ uiFontFamily })
+            }
+            onPopupProgressStyleChange={(popupProgressStyle) =>
+              handleUpdateSettings({ popupProgressStyle })
+            }
+            onSidebarProgressStyleChange={(sidebarProgressStyle) =>
+              handleUpdateSettings({ sidebarProgressStyle })
+            }
+            onFullPageProgressStyleChange={(fullPageProgressStyle) =>
+              handleUpdateSettings({ fullPageProgressStyle })
+            }
+            onPopupSizePresetChange={(popupSizePreset) =>
+              handleUpdateSettings({ popupSizePreset })
+            }
+            onPopupCornerStyleChange={(popupCornerStyle) =>
+              handleUpdateSettings({ popupCornerStyle })
+            }
+            onPopupCircularProgressItemsPerRowChange={(
+              popupCircularProgressItemsPerRow,
+            ) => handleUpdateSettings({ popupCircularProgressItemsPerRow })}
+            onPopupShadowStyleChange={(popupShadowStyle) =>
+              handleUpdateSettings({ popupShadowStyle })
+            }
+            onProviderOrderBySurfaceChange={(providerOrderBySurface) =>
+              handleUpdateSettings({ providerOrderBySurface })
+            }
+            onProgressItemsBySurfaceChange={(progressItemsBySurface) =>
+              handleUpdateSettings({ progressItemsBySurface })
+            }
+            onProgressThicknessPxChange={(progressThicknessPx) =>
+              handleUpdateSettings({ progressThicknessPx })
+            }
+            onProgressColorBandsChange={(progressColorBands) =>
+              handleUpdateSettings({ progressColorBands })
+            }
+            onActionBadgeSelectionsChange={(actionBadgeSelections) =>
+              handleUpdateSettings({
+                actionBadgeSelectionMode: "manual",
+                actionBadgeSelection: actionBadgeSelections[0] ?? "attention",
+                actionBadgeSelections,
+              })
+            }
+            onRestoreActionBadgeAutoMode={() =>
+              handleUpdateSettings({
+                actionBadgeSelectionMode: "auto",
+                actionBadgeSelection: DEFAULT_ACTION_BADGE_SELECTION,
+                actionBadgeSelections: [...DEFAULT_ACTION_BADGE_SELECTIONS],
+              })
+            }
+            onActionBadgeRotationIntervalSecondsChange={(
+              actionBadgeRotationIntervalSeconds,
+            ) => handleUpdateSettings({ actionBadgeRotationIntervalSeconds })}
+            onExportConfiguration={handleExportConfiguration}
+            onImportConfigurationJson={handleImportConfigurationJson}
+            onSaveConfigurationToChromeSync={handleSaveConfigurationToChromeSync}
+            onRestoreConfigurationFromChromeSync={
+              handleRestoreConfigurationFromChromeSync
+            }
+            onResetConfigurationToInitial={handleResetConfigurationToInitial}
+            onToolbarIconModeChange={(toolbarIconMode) =>
+              handleUpdateSettings({ toolbarIconMode })
+            }
+            onToolbarIconProviderIdChange={(toolbarIconProviderId) =>
+              handleUpdateSettings({ toolbarIconProviderId })
+            }
+            onToolbarIconCustomImageDataUrlChange={(
+              toolbarIconCustomImageDataUrl,
+            ) => handleUpdateSettings({ toolbarIconCustomImageDataUrl })}
+            onSaveThemeCustomSeed={(themeCustomSeedHex) =>
+              handleUpdateSettings({
+                themePreset: "custom",
+                themeCustomSeedHex,
+              })
+            }
+            onToggleProvider={handleToggleProvider}
+            onTogglePermission={handleTogglePermission}
+            onSetSourcePreference={handleSetSourcePreference}
+            onSaveProviderAdminApiKey={handleSaveProviderAdminApiKey}
+            onClearProviderAdminApiKey={handleClearProviderAdminApiKey}
+            onSaveCodexWorkspaceConfig={handleSaveCodexWorkspaceConfig}
+            onClearCodexWorkspaceConfig={handleClearCodexWorkspaceConfig}
+            onClearPageBinding={handleClearPageBinding}
+            onOpenSessionPage={handleOpenSessionPage}
+            onAttachActiveSessionPage={handleAttachActiveSessionPage}
+            sessionPageNavigationAvailable={sessionPageNavigationAvailable}
+            activeSessionPageAttachAvailable={activeSessionPageAttachAvailable}
+          />
+        </Suspense>
       ) : route.name === "provider-detail" && selectedProvider ? (
         <ProviderDetailPage
           localePreference={localePreference}

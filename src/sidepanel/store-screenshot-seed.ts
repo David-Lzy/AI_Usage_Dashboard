@@ -5,6 +5,7 @@ import {
   createSourceSelectionDiagnostic,
 } from "../providers/diagnostics";
 import { SAMPLE_APP_STATE } from "../shared/constants";
+import { getSafeLocalStorage } from "../shared/local-storage";
 
 export type StoreScreenshotSeedPreset =
   | "toolbar-first-quick-glance"
@@ -286,37 +287,35 @@ export function getStoreScreenshotSeedPresetDefinition(
   }
 }
 
-function hasLocalStorageAccess(): boolean {
-  return (
-    typeof globalThis.localStorage?.getItem === "function" &&
-    typeof globalThis.localStorage?.setItem === "function" &&
-    typeof globalThis.localStorage?.removeItem === "function"
-  );
-}
-
 export function isStoreScreenshotSeedLockEnabled(): boolean {
-  if (!hasLocalStorageAccess()) {
+  const localStorage = getSafeLocalStorage();
+
+  if (!localStorage) {
     return false;
   }
 
-  return globalThis.localStorage.getItem(STORE_SCREENSHOT_SEED_LOCK_STORAGE_KEY) === "true";
+  return localStorage.getItem(STORE_SCREENSHOT_SEED_LOCK_STORAGE_KEY) === "true";
 }
 
 export function setStoreScreenshotSeedLockEnabled(enabled: boolean) {
-  if (!hasLocalStorageAccess()) {
+  const localStorage = getSafeLocalStorage();
+
+  if (!localStorage) {
     return;
   }
 
   if (enabled) {
-    globalThis.localStorage.setItem(STORE_SCREENSHOT_SEED_LOCK_STORAGE_KEY, "true");
+    localStorage.setItem(STORE_SCREENSHOT_SEED_LOCK_STORAGE_KEY, "true");
     return;
   }
 
-  globalThis.localStorage.removeItem(STORE_SCREENSHOT_SEED_LOCK_STORAGE_KEY);
+  localStorage.removeItem(STORE_SCREENSHOT_SEED_LOCK_STORAGE_KEY);
 }
 
 export function readStoreScreenshotSeedBackup(): StoreScreenshotSeedBackupEnvelope {
-  if (!hasLocalStorageAccess()) {
+  const localStorage = getSafeLocalStorage();
+
+  if (!localStorage) {
     return {
       hasBackup: false,
       appState: null,
@@ -324,7 +323,7 @@ export function readStoreScreenshotSeedBackup(): StoreScreenshotSeedBackupEnvelo
   }
 
   try {
-    const raw = globalThis.localStorage.getItem(STORE_SCREENSHOT_SEED_BACKUP_STORAGE_KEY);
+    const raw = localStorage.getItem(STORE_SCREENSHOT_SEED_BACKUP_STORAGE_KEY);
 
     if (!raw) {
       return {
@@ -347,7 +346,7 @@ export function readStoreScreenshotSeedBackup(): StoreScreenshotSeedBackupEnvelo
       appState: parsed.appState ?? null,
     };
   } catch {
-    globalThis.localStorage.removeItem(STORE_SCREENSHOT_SEED_BACKUP_STORAGE_KEY);
+    localStorage.removeItem(STORE_SCREENSHOT_SEED_BACKUP_STORAGE_KEY);
 
     return {
       hasBackup: false,
@@ -357,11 +356,13 @@ export function readStoreScreenshotSeedBackup(): StoreScreenshotSeedBackupEnvelo
 }
 
 export function writeStoreScreenshotSeedBackup(appState: AppState | null) {
-  if (!hasLocalStorageAccess()) {
+  const localStorage = getSafeLocalStorage();
+
+  if (!localStorage) {
     return;
   }
 
-  globalThis.localStorage.setItem(
+  localStorage.setItem(
     STORE_SCREENSHOT_SEED_BACKUP_STORAGE_KEY,
     JSON.stringify({
       hasBackup: true,
@@ -371,9 +372,11 @@ export function writeStoreScreenshotSeedBackup(appState: AppState | null) {
 }
 
 export function clearStoreScreenshotSeedBackup() {
-  if (!hasLocalStorageAccess()) {
+  const localStorage = getSafeLocalStorage();
+
+  if (!localStorage) {
     return;
   }
 
-  globalThis.localStorage.removeItem(STORE_SCREENSHOT_SEED_BACKUP_STORAGE_KEY);
+  localStorage.removeItem(STORE_SCREENSHOT_SEED_BACKUP_STORAGE_KEY);
 }

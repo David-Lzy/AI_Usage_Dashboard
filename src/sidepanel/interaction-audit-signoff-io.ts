@@ -13,6 +13,7 @@ import {
   normalizeInteractionAuditSignoffMetadata,
   normalizeInteractionAuditSignoffRequestContext,
 } from "./interaction-audit-signoff-state";
+import { getSafeLocalStorage } from "../shared/local-storage";
 
 let memoryFallbackState: InteractionAuditSignoffState | null = null;
 let memoryFallbackMetadata: InteractionAuditSignoffMetadata | null = null;
@@ -37,22 +38,14 @@ function cloneSignoffRequestContext(
   return structuredClone(requestContext);
 }
 
-function hasLocalStorage(): boolean {
-  return (
-    typeof globalThis.localStorage?.getItem === "function" &&
-    typeof globalThis.localStorage?.setItem === "function" &&
-    typeof globalThis.localStorage?.removeItem === "function"
-  );
-}
-
 export function readInteractionAuditSignoffState(
   definitions: InteractionAuditSurfaceSignoffDefinition[],
 ): InteractionAuditSignoffState {
-  if (hasLocalStorage()) {
+  const localStorage = getSafeLocalStorage();
+
+  if (localStorage) {
     try {
-      const rawState = globalThis.localStorage.getItem(
-        INTERACTION_AUDIT_SIGNOFF_STORAGE_KEY,
-      );
+      const rawState = localStorage.getItem(INTERACTION_AUDIT_SIGNOFF_STORAGE_KEY);
 
       if (!rawState) {
         return buildInitialInteractionAuditSignoffState(definitions);
@@ -63,7 +56,7 @@ export function readInteractionAuditSignoffState(
         definitions,
       );
     } catch {
-      globalThis.localStorage.removeItem(INTERACTION_AUDIT_SIGNOFF_STORAGE_KEY);
+      localStorage.removeItem(INTERACTION_AUDIT_SIGNOFF_STORAGE_KEY);
       return buildInitialInteractionAuditSignoffState(definitions);
     }
   }
@@ -77,9 +70,11 @@ export function readInteractionAuditSignoffState(
 }
 
 export function readInteractionAuditSignoffMetadata(): InteractionAuditSignoffMetadata {
-  if (hasLocalStorage()) {
+  const localStorage = getSafeLocalStorage();
+
+  if (localStorage) {
     try {
-      const rawMetadata = globalThis.localStorage.getItem(
+      const rawMetadata = localStorage.getItem(
         INTERACTION_AUDIT_SIGNOFF_METADATA_STORAGE_KEY,
       );
 
@@ -91,9 +86,7 @@ export function readInteractionAuditSignoffMetadata(): InteractionAuditSignoffMe
         JSON.parse(rawMetadata) as InteractionAuditSignoffMetadata,
       );
     } catch {
-      globalThis.localStorage.removeItem(
-        INTERACTION_AUDIT_SIGNOFF_METADATA_STORAGE_KEY,
-      );
+      localStorage.removeItem(INTERACTION_AUDIT_SIGNOFF_METADATA_STORAGE_KEY);
       return buildInitialInteractionAuditSignoffMetadata();
     }
   }
@@ -106,9 +99,11 @@ export function readInteractionAuditSignoffMetadata(): InteractionAuditSignoffMe
 }
 
 export function readInteractionAuditSignoffRequestContext(): InteractionAuditSignoffRequestContext {
-  if (hasLocalStorage()) {
+  const localStorage = getSafeLocalStorage();
+
+  if (localStorage) {
     try {
-      const rawRequestContext = globalThis.localStorage.getItem(
+      const rawRequestContext = localStorage.getItem(
         INTERACTION_AUDIT_SIGNOFF_REQUEST_CONTEXT_STORAGE_KEY,
       );
 
@@ -120,7 +115,7 @@ export function readInteractionAuditSignoffRequestContext(): InteractionAuditSig
         JSON.parse(rawRequestContext) as InteractionAuditSignoffRequestContext,
       );
     } catch {
-      globalThis.localStorage.removeItem(
+      localStorage.removeItem(
         INTERACTION_AUDIT_SIGNOFF_REQUEST_CONTEXT_STORAGE_KEY,
       );
       return buildInitialInteractionAuditSignoffRequestContext();
@@ -139,9 +134,10 @@ export function writeInteractionAuditSignoffState(
   definitions: InteractionAuditSurfaceSignoffDefinition[],
 ): InteractionAuditSignoffState {
   const normalizedState = normalizeInteractionAuditSignoffState(state, definitions);
+  const localStorage = getSafeLocalStorage();
 
-  if (hasLocalStorage()) {
-    globalThis.localStorage.setItem(
+  if (localStorage) {
+    localStorage.setItem(
       INTERACTION_AUDIT_SIGNOFF_STORAGE_KEY,
       JSON.stringify(normalizedState),
     );
@@ -156,9 +152,10 @@ export function writeInteractionAuditSignoffMetadata(
   metadata: InteractionAuditSignoffMetadata,
 ): InteractionAuditSignoffMetadata {
   const normalizedMetadata = normalizeInteractionAuditSignoffMetadata(metadata);
+  const localStorage = getSafeLocalStorage();
 
-  if (hasLocalStorage()) {
-    globalThis.localStorage.setItem(
+  if (localStorage) {
+    localStorage.setItem(
       INTERACTION_AUDIT_SIGNOFF_METADATA_STORAGE_KEY,
       JSON.stringify(normalizedMetadata),
     );
@@ -174,9 +171,10 @@ export function writeInteractionAuditSignoffRequestContext(
 ): InteractionAuditSignoffRequestContext {
   const normalizedRequestContext =
     normalizeInteractionAuditSignoffRequestContext(requestContext);
+  const localStorage = getSafeLocalStorage();
 
-  if (hasLocalStorage()) {
-    globalThis.localStorage.setItem(
+  if (localStorage) {
+    localStorage.setItem(
       INTERACTION_AUDIT_SIGNOFF_REQUEST_CONTEXT_STORAGE_KEY,
       JSON.stringify(normalizedRequestContext),
     );
@@ -190,8 +188,10 @@ export function writeInteractionAuditSignoffRequestContext(
 }
 
 export function clearInteractionAuditSignoffState() {
-  if (hasLocalStorage()) {
-    globalThis.localStorage.removeItem(INTERACTION_AUDIT_SIGNOFF_STORAGE_KEY);
+  const localStorage = getSafeLocalStorage();
+
+  if (localStorage) {
+    localStorage.removeItem(INTERACTION_AUDIT_SIGNOFF_STORAGE_KEY);
     return;
   }
 
@@ -199,10 +199,10 @@ export function clearInteractionAuditSignoffState() {
 }
 
 export function clearInteractionAuditSignoffMetadata() {
-  if (hasLocalStorage()) {
-    globalThis.localStorage.removeItem(
-      INTERACTION_AUDIT_SIGNOFF_METADATA_STORAGE_KEY,
-    );
+  const localStorage = getSafeLocalStorage();
+
+  if (localStorage) {
+    localStorage.removeItem(INTERACTION_AUDIT_SIGNOFF_METADATA_STORAGE_KEY);
     return;
   }
 
@@ -210,8 +210,10 @@ export function clearInteractionAuditSignoffMetadata() {
 }
 
 export function clearInteractionAuditSignoffRequestContext() {
-  if (hasLocalStorage()) {
-    globalThis.localStorage.removeItem(
+  const localStorage = getSafeLocalStorage();
+
+  if (localStorage) {
+    localStorage.removeItem(
       INTERACTION_AUDIT_SIGNOFF_REQUEST_CONTEXT_STORAGE_KEY,
     );
     return;

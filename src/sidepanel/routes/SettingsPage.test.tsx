@@ -4,10 +4,12 @@ import { describe, expect, it } from "vitest";
 import { SAMPLE_APP_STATE } from "../../shared/constants";
 import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
 import {
-  getSettingsRouteFocusElement,
-  getSettingsRouteFocusKey,
   SettingsPage,
 } from "./SettingsPage";
+import {
+  getSettingsRouteFocusElement,
+  getSettingsRouteFocusKey,
+} from "../settings-route-focus";
 
 function renderSettingsPage(overrides: Partial<Parameters<typeof SettingsPage>[0]> = {}) {
   return renderToStaticMarkup(

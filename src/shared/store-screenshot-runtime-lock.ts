@@ -1,16 +1,10 @@
+import { getSafeLocalStorage } from "./local-storage";
+
 export const STORE_SCREENSHOT_RUNTIME_LOCK_STORAGE_KEY =
   "ai-usage-dashboard.store-screenshot-runtime-lock";
 
 function hasChromeStorage(): boolean {
   return typeof chrome !== "undefined" && typeof chrome.storage?.local !== "undefined";
-}
-
-function hasLocalStorage(): boolean {
-  return (
-    typeof globalThis.localStorage?.getItem === "function" &&
-    typeof globalThis.localStorage?.setItem === "function" &&
-    typeof globalThis.localStorage?.removeItem === "function"
-  );
 }
 
 export async function readStoreScreenshotRuntimeLock(): Promise<boolean> {
@@ -22,10 +16,11 @@ export async function readStoreScreenshotRuntimeLock(): Promise<boolean> {
     return stored[STORE_SCREENSHOT_RUNTIME_LOCK_STORAGE_KEY] === true;
   }
 
-  if (hasLocalStorage()) {
+  const localStorage = getSafeLocalStorage();
+
+  if (localStorage) {
     return (
-      globalThis.localStorage.getItem(STORE_SCREENSHOT_RUNTIME_LOCK_STORAGE_KEY) ===
-      "true"
+      localStorage.getItem(STORE_SCREENSHOT_RUNTIME_LOCK_STORAGE_KEY) === "true"
     );
   }
 
@@ -45,16 +40,16 @@ export async function writeStoreScreenshotRuntimeLock(
     }
   }
 
-  if (hasLocalStorage()) {
+  const localStorage = getSafeLocalStorage();
+
+  if (localStorage) {
     if (enabled) {
-      globalThis.localStorage.setItem(
+      localStorage.setItem(
         STORE_SCREENSHOT_RUNTIME_LOCK_STORAGE_KEY,
         "true",
       );
     } else {
-      globalThis.localStorage.removeItem(
-        STORE_SCREENSHOT_RUNTIME_LOCK_STORAGE_KEY,
-      );
+      localStorage.removeItem(STORE_SCREENSHOT_RUNTIME_LOCK_STORAGE_KEY);
     }
   }
 }
