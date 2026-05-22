@@ -15,6 +15,7 @@ import {
   startThemeSettingsSync,
   type ThemeSettings,
 } from "../shared/theme";
+import { StoreScreenshotSeedPage } from "./routes/StoreScreenshotSeedPage";
 
 const CodexFixtureCapturePage = lazy(() =>
   import("./routes/CodexFixtureCapturePage").then((module) => ({
@@ -39,11 +40,6 @@ const JetBrainsFixtureCapturePage = lazy(() =>
 const StoreScreenshotNativePopupProbePage = lazy(() =>
   import("./routes/StoreScreenshotNativePopupProbePage").then((module) => ({
     default: module.StoreScreenshotNativePopupProbePage,
-  })),
-);
-const StoreScreenshotSeedPage = lazy(() =>
-  import("./routes/StoreScreenshotSeedPage").then((module) => ({
-    default: module.StoreScreenshotSeedPage,
   })),
 );
 const ThemeRecoveryReviewPage = lazy(() =>

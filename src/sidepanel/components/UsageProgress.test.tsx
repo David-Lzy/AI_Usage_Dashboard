@@ -153,15 +153,15 @@ describe("UsageProgress", () => {
     expect(html).toContain("usage-progress--circle-gauge");
     expect(html).toContain("usage-progress-ring--circle-gauge");
     expect(html).toContain('aria-valuenow="51"');
-    expect(html).toContain("--usage-progress-ring-arc:68");
+    expect(html).toContain("--usage-progress-ring-arc:60");
     expect(html).toContain("--usage-progress-ring-rotation:146deg");
     expect(html).toContain("--usage-progress-ring-track-opacity:0.46");
     expect(html).toContain("--usage-progress-ring-stroke:16");
-    expect(html).toContain("--usage-progress-ring-track-arc:205.08");
-    expect(html).toContain("--usage-progress-ring-fill-arc:104.59");
+    expect(html).toContain("--usage-progress-ring-track-arc:180.96");
+    expect(html).toContain("--usage-progress-ring-fill-arc:92.29");
     expect(html).toContain("--usage-progress-ring-circumference:301.59");
     expect(html).toContain("--usage-progress-ring-fill:#146C2E");
-    expect(html).toContain('stroke-dasharray="104.59 301.59"');
+    expect(html).toContain('stroke-dasharray="92.29 301.59"');
   });
 
   it("keeps soft ring indeterminate semantics accessible", () => {

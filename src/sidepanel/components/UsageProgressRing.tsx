@@ -18,13 +18,14 @@ type UsageProgressRingProps = {
 
 const RING_RADIUS = 48;
 const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
+const GAUGE_RING_ARC_PERCENT = 60;
 
 function formatSvgNumber(value: number): string {
   return String(Math.round(value * 100) / 100);
 }
 
 function getRingArcLength(variant: UsageProgressRingProps["variant"]): number {
-  return variant === "circle-gauge" ? 68 : 100;
+  return variant === "circle-gauge" ? GAUGE_RING_ARC_PERCENT : 100;
 }
 
 function getRingRotation(variant: UsageProgressRingProps["variant"]): string {
