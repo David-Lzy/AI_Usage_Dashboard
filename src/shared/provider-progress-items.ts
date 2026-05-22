@@ -62,6 +62,19 @@ function getProgressItemAvailability(
   return "unavailable";
 }
 
+function normalizeProgressTotal(
+  quotaUnit: QuotaUnit,
+  used: number | null,
+  remaining: number | null,
+  total: number | null,
+): number | null {
+  if (quotaUnit === "percent" && (hasFiniteNumber(used) || hasFiniteNumber(remaining))) {
+    return 100;
+  }
+
+  return total;
+}
+
 function getUsageWindowTone(usageWindow: ProviderUsageWindow): ProviderTone {
   if (!hasFiniteNumber(usageWindow.remaining)) {
     return "neutral";
@@ -109,6 +122,13 @@ function buildPrimaryProgressItem(
     return null;
   }
 
+  const total = normalizeProgressTotal(
+    provider.quotaUnit,
+    provider.used,
+    provider.remaining,
+    provider.total,
+  );
+
   return {
     id: "primary",
     kind: "primary_quota",
@@ -118,7 +138,7 @@ function buildPrimaryProgressItem(
     quotaUnit: provider.quotaUnit,
     used: provider.used,
     remaining: provider.remaining,
-    total: provider.total,
+    total,
     resetAt: provider.resetAt || null,
     resetLabel: provider.resetLabel || null,
     detail: provider.usageSummary ?? null,
@@ -126,7 +146,7 @@ function buildPrimaryProgressItem(
     availability: getProgressItemAvailability(
       provider.used,
       provider.remaining,
-      provider.total,
+      total,
     ),
   };
 }
@@ -136,10 +156,16 @@ function buildUsageWindowProgressItem(
   usageWindow: ProviderUsageWindow,
   index: number,
 ): ProviderProgressItem | null {
-  const availability = getProgressItemAvailability(
+  const total = normalizeProgressTotal(
+    usageWindow.quotaUnit,
     usageWindow.used,
     usageWindow.remaining,
     usageWindow.total,
+  );
+  const availability = getProgressItemAvailability(
+    usageWindow.used,
+    usageWindow.remaining,
+    total,
   );
 
   if (availability === "unavailable") {
@@ -155,7 +181,7 @@ function buildUsageWindowProgressItem(
     quotaUnit: usageWindow.quotaUnit,
     used: usageWindow.used,
     remaining: usageWindow.remaining,
-    total: usageWindow.total,
+    total,
     resetAt: usageWindow.resetAt,
     resetLabel: usageWindow.resetLabel,
     detail: usageWindow.modelLabel,
@@ -169,10 +195,16 @@ function buildUsageBalanceProgressItem(
   usageBalance: ProviderUsageBalance,
   index: number,
 ): ProviderProgressItem | null {
-  const availability = getProgressItemAvailability(
+  const total = normalizeProgressTotal(
+    usageBalance.quotaUnit,
     null,
     usageBalance.remaining,
     usageBalance.total,
+  );
+  const availability = getProgressItemAvailability(
+    null,
+    usageBalance.remaining,
+    total,
   );
 
   if (availability === "unavailable") {
@@ -188,7 +220,7 @@ function buildUsageBalanceProgressItem(
     quotaUnit: usageBalance.quotaUnit,
     used: null,
     remaining: usageBalance.remaining,
-    total: usageBalance.total,
+    total,
     resetAt: null,
     resetLabel: null,
     detail: usageBalance.detail,

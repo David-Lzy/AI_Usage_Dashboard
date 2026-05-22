@@ -100,6 +100,38 @@ describe("provider progress items", () => {
     ]);
   });
 
+  it("normalizes percent usage windows to a 100 total", () => {
+    const codex = createCodexWindowState().providers.find(
+      (provider) => provider.providerId === "codex-personal-page",
+    );
+    const driftedCodex = {
+      ...codex!,
+      usageWindows: codex!.usageWindows?.map((usageWindow) =>
+        usageWindow.kind === "weekly"
+          ? {
+              ...usageWindow,
+              used: 17,
+              remaining: 83,
+              total: 83,
+            }
+          : usageWindow,
+      ),
+    };
+
+    const weeklyItem = buildProviderProgressItems(driftedCodex).find(
+      (item) => item.id === "window:weekly:Weekly%20usage%20window::1",
+    );
+
+    expect(weeklyItem).toEqual(
+      expect.objectContaining({
+        availability: "progress",
+        remaining: 83,
+        total: 100,
+        used: 17,
+      }),
+    );
+  });
+
   it("does not fabricate progress items for policy-only totals", () => {
     const gemini = SAMPLE_APP_STATE.providers.find(
       (provider) => provider.providerId === "gemini-policy",

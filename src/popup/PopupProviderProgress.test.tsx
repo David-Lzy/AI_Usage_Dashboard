@@ -236,6 +236,34 @@ describe("PopupProviderProgress", () => {
     expect(html).toContain('aria-valuenow="42"');
   });
 
+  it("keeps gauge rings proportional when percent source totals drift", () => {
+    const html = renderPopupProviderProgress(
+      createProvider({
+        usageWindows: [
+          {
+            label: "Weekly usage window",
+            normalizedLabel: "Weekly usage window",
+            kind: "weekly",
+            modelLabel: null,
+            quotaUnit: "percent",
+            used: 17,
+            remaining: 83,
+            total: 83,
+            resetAt: "2026-05-20 07:00",
+            resetLabel: "Weekly usage window resets at 2026-05-20 07:00",
+          },
+        ],
+      }),
+      createDefaultProgressItemsBySurface(),
+      "circle-gauge",
+    );
+
+    expect(html).toContain("usage-progress-ring--circle-gauge");
+    expect(html).toContain('aria-valuenow="83"');
+    expect(html).toContain("--usage-progress-ring-fill-arc:170.22");
+    expect(html).toContain('stroke-dasharray="170.22 301.59"');
+  });
+
   it("applies the popup circular row count only to circular styles", () => {
     const circularHtml = renderToStaticMarkup(
       <PopupProviderProgress
