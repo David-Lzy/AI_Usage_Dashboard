@@ -207,7 +207,7 @@ describe("app-browser-controls", () => {
     expect(remove).toHaveBeenCalledWith(88);
   });
 
-  it("opens Firefox sidebar routes from full-page tabs without Chrome sidePanel APIs", async () => {
+  it("opens Firefox sidebar routes from full-page tabs and closes the tab after success", async () => {
     const setPanel = vi.fn(async () => undefined);
     const open = vi.fn(async () => undefined);
     const remove = vi.fn(async () => undefined);
@@ -232,6 +232,6 @@ describe("app-browser-controls", () => {
       panel: "src/sidepanel/index.html#settings",
     });
     expect(open).toHaveBeenCalled();
-    expect(remove).not.toHaveBeenCalled();
+    expect(remove).toHaveBeenCalledWith(88);
   });
 });

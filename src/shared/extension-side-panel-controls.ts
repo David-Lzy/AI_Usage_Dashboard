@@ -17,11 +17,20 @@ type ExtensionTabsApi = {
   query?: (queryInfo: {
     active?: boolean;
     currentWindow?: boolean;
-  }) => Promise<Array<{ id?: number; active?: boolean; lastAccessed?: number }>>;
+  }) => Promise<Array<{
+    id?: number;
+    active?: boolean;
+    lastAccessed?: number;
+    url?: string;
+  }>>;
   create?: (createProperties: {
     url: string;
     active?: boolean;
   }) => Promise<unknown>;
+  update?: (
+    tabId: number,
+    updateProperties: { url?: string; active?: boolean },
+  ) => Promise<unknown>;
   getCurrent?: () => Promise<{ id?: number } | undefined>;
   remove?: (tabId: number) => Promise<void>;
 };
@@ -199,6 +208,30 @@ function addUniqueCloseTarget(
   }
 }
 
+function scoreExtensionTab(tab: {
+  active?: boolean;
+  lastAccessed?: number;
+}): number {
+  return (tab.active ? 10_000 : 0) + (tab.lastAccessed ?? 0);
+}
+
+function isFullPageExtensionTabUrl(url: string, fullPageBaseUrl: string): boolean {
+  return (
+    url === fullPageBaseUrl ||
+    url.startsWith(`${fullPageBaseUrl}#`) ||
+    url.startsWith(`${fullPageBaseUrl}&`) ||
+    url.startsWith(`${fullPageBaseUrl}?`) ||
+    url.startsWith(`${fullPageBaseUrl}/`)
+  );
+}
+
+async function removeTabsBestEffort(
+  removeTab: (tabId: number) => Promise<void>,
+  tabIds: number[],
+): Promise<void> {
+  await Promise.all(tabIds.map((tabId) => removeTab(tabId).catch(() => undefined)));
+}
+
 export async function resolveSidePanelCloseTargets(options?: {
   preferWindow?: boolean;
 }): Promise<SidePanelCloseTarget[]> {
@@ -275,6 +308,38 @@ async function closeCurrentExtensionTabBestEffort(): Promise<void> {
   }
 }
 
+async function closeFullPageExtensionTabsBestEffort(): Promise<void> {
+  const api = getExtensionApi();
+  const fullPageBaseUrl = buildExtensionUrl(
+    "src/sidepanel/index.html?surface=full-page",
+  );
+
+  if (
+    !fullPageBaseUrl ||
+    !hasExtensionRuntime(api) ||
+    typeof api?.tabs?.query !== "function" ||
+    typeof api.tabs.remove !== "function"
+  ) {
+    return;
+  }
+
+  try {
+    const currentWindowTabs = await api.tabs.query({ currentWindow: true });
+    const fullPageTabIds = currentWindowTabs
+      .filter(
+        (tab) =>
+          typeof tab.id === "number" &&
+          typeof tab.url === "string" &&
+          isFullPageExtensionTabUrl(tab.url, fullPageBaseUrl),
+      )
+      .map((tab) => tab.id as number);
+
+    await removeTabsBestEffort(api.tabs.remove, fullPageTabIds);
+  } catch {
+    // Keep navigation successful even if duplicate tab cleanup is unavailable.
+  }
+}
+
 async function openChromeSidePanelPath(
   path: string,
   options: { preferWindow?: boolean },
@@ -348,9 +413,14 @@ export async function openSideSurfacePath(
   options: {
     preferWindow?: boolean;
     closeCurrentExtensionTab?: boolean;
+    closeFullPageExtensionTabs?: boolean;
   } = {},
 ): Promise<boolean> {
   if (hasChromeSidePanelApi() && (await openChromeSidePanelPath(path, options))) {
+    if (options.closeFullPageExtensionTabs) {
+      await closeFullPageExtensionTabsBestEffort();
+    }
+
     if (options.closeCurrentExtensionTab) {
       await closeCurrentExtensionTabBestEffort();
     }
@@ -359,6 +429,10 @@ export async function openSideSurfacePath(
   }
 
   if (getFirefoxSidebarActionApi() && (await openFirefoxSidebarPath(path))) {
+    if (options.closeFullPageExtensionTabs) {
+      await closeFullPageExtensionTabsBestEffort();
+    }
+
     if (options.closeCurrentExtensionTab) {
       await closeCurrentExtensionTabBestEffort();
     }
@@ -383,6 +457,50 @@ export async function openExtensionTabPath(path: string): Promise<boolean> {
 
   if (!url || typeof api?.tabs?.create !== "function") {
     return false;
+  }
+
+  const fullPageBaseUrl = buildExtensionUrl(
+    "src/sidepanel/index.html?surface=full-page",
+  );
+
+  if (
+    fullPageBaseUrl &&
+    path.startsWith("src/sidepanel/index.html?surface=full-page") &&
+    typeof api.tabs.query === "function" &&
+    typeof api.tabs.update === "function"
+  ) {
+    try {
+      const currentWindowTabs = await api.tabs.query({ currentWindow: true });
+      const fullPageTabs = currentWindowTabs
+        .filter(
+          (tab) =>
+            typeof tab.id === "number" &&
+            typeof tab.url === "string" &&
+            isFullPageExtensionTabUrl(tab.url, fullPageBaseUrl),
+        )
+        .sort((left, right) => scoreExtensionTab(right) - scoreExtensionTab(left));
+      const [targetTab, ...duplicateTabs] = fullPageTabs;
+
+      if (typeof targetTab?.id === "number") {
+        await api.tabs.update(targetTab.id, {
+          url,
+          active: true,
+        });
+
+        if (typeof api.tabs.remove === "function") {
+          await removeTabsBestEffort(
+            api.tabs.remove,
+            duplicateTabs
+              .filter((tab) => typeof tab.id === "number")
+              .map((tab) => tab.id as number),
+          );
+        }
+
+        return true;
+      }
+    } catch {
+      // Fall through to opening a new tab if query/update is unavailable.
+    }
   }
 
   await api.tabs.create({

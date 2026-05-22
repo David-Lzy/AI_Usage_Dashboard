@@ -88,10 +88,14 @@ export async function openSidePanelRoute(
   route: SidePanelRouteState,
 ): Promise<void> {
   const path = buildSidePanelExtensionPath(route);
+  const capabilities = getBrowserCapabilities();
 
   if (
     await openSideSurfacePath(path, {
-      closeCurrentExtensionTab: getBrowserCapabilities().supportsChromeSidePanel,
+      closeCurrentExtensionTab:
+        capabilities.supportsChromeSidePanel ||
+        capabilities.supportsFirefoxSidebar,
+      closeFullPageExtensionTabs: true,
       preferWindow: true,
     })
   ) {

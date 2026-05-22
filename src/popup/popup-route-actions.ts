@@ -21,7 +21,11 @@ import {
 export async function openSidePanelRoute(route: SidePanelRouteState) {
   const path = buildSidePanelExtensionPath(route);
 
-  if (await openSideSurfacePath(path)) {
+  if (
+    await openSideSurfacePath(path, {
+      closeFullPageExtensionTabs: true,
+    })
+  ) {
     window.close();
     return;
   }
@@ -59,8 +63,12 @@ export async function openFullPageRoute(route: SidePanelRouteState) {
   );
 }
 
-export async function openFullDashboard() {
+export async function openDashboardSidebar() {
   await openSidePanelRoute({ name: "dashboard" });
+}
+
+export async function openFullDashboard() {
+  await openFullPageRoute({ name: "dashboard" });
 }
 
 export async function openFullDashboardTab() {
@@ -72,5 +80,5 @@ export async function openSettings(focus?: SettingsRouteFocus) {
 }
 
 export async function openProviderDetail(providerId: ProviderId) {
-  await openSidePanelRoute({ name: "provider-detail", providerId });
+  await openFullPageRoute({ name: "provider-detail", providerId });
 }

@@ -33,6 +33,7 @@ import {
   getSettingsRouteFocusForPopupProvider,
 } from "./settings-route-targets";
 import {
+  openDashboardSidebar,
   openFullDashboard,
   openFullDashboardTab,
   openSettings,
@@ -407,7 +408,7 @@ export function PopupApp() {
             />
           ) : null
         }
-        onOpenDashboardSidebar={openFullDashboard}
+        onOpenDashboardSidebar={openDashboardSidebar}
         onOpenDashboardTab={openFullDashboardTab}
         onOpenSettings={openSettings}
         onRefresh={handleRefresh}

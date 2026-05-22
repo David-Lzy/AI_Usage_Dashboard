@@ -3,8 +3,11 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { consumePendingFullPageEntry } from "../shared/extension-surface-entry";
 import { SETTINGS_SECTION_IDS } from "../sidepanel/settings-section-ids";
 import {
+  openDashboardSidebar,
+  openFullDashboard,
   openFullDashboardTab,
   openFullPageRoute,
+  openProviderDetail,
   openSidePanelRoute,
   openSettings,
 } from "./popup-route-actions";
@@ -98,6 +101,56 @@ describe("popup route actions", () => {
     expect(popupWindow.close).toHaveBeenCalled();
   });
 
+  it("reuses one full-page tab per current window", async () => {
+    const popupWindow = stubPopupWindow();
+    const create = vi.fn(async () => undefined);
+    const remove = vi.fn(async () => undefined);
+    const update = vi.fn(async () => undefined);
+
+    vi.stubGlobal("chrome", {
+      runtime: {
+        id: "extension-id",
+        getURL: (path: string) => `chrome-extension://extension-id/${path}`,
+      },
+      tabs: {
+        create,
+        query: vi.fn(async (queryInfo: chrome.tabs.QueryInfo) =>
+          queryInfo.active
+            ? [{ id: 2 }]
+            : [
+                {
+                  id: 10,
+                  active: false,
+                  lastAccessed: 200,
+                  url: "chrome-extension://extension-id/src/sidepanel/index.html?surface=full-page#dashboard",
+                },
+                {
+                  id: 11,
+                  active: true,
+                  lastAccessed: 100,
+                  url: "chrome-extension://extension-id/src/sidepanel/index.html?surface=full-page#settings",
+                },
+              ],
+        ),
+        remove,
+        update,
+      },
+    });
+
+    await openSettings({
+      kind: "section",
+      sectionId: SETTINGS_SECTION_IDS.quickSetup,
+    });
+
+    expect(update).toHaveBeenCalledWith(11, {
+      active: true,
+      url: "chrome-extension://extension-id/src/sidepanel/index.html?surface=full-page#settings/section/settings-quick-setup",
+    });
+    expect(remove).toHaveBeenCalledWith(10);
+    expect(create).not.toHaveBeenCalled();
+    expect(popupWindow.close).toHaveBeenCalled();
+  });
+
   it("opens Chrome sidePanel routes against the active tab", async () => {
     const popupWindow = stubPopupWindow();
     const setOptions = vi.fn(async () => undefined);
@@ -140,6 +193,48 @@ describe("popup route actions", () => {
     });
     expect(open).toHaveBeenCalledWith({ tabId: 7 });
     expect(getCurrent).not.toHaveBeenCalled();
+    expect(popupWindow.close).toHaveBeenCalled();
+  });
+
+  it("keeps the explicit popup sidebar action on the side surface", async () => {
+    const popupWindow = stubPopupWindow();
+    const setOptions = vi.fn(async () => undefined);
+    const open = vi.fn(async () => undefined);
+    const remove = vi.fn(async () => undefined);
+
+    vi.stubGlobal("chrome", {
+      runtime: {
+        id: "extension-id",
+        getURL: (path: string) => `chrome-extension://extension-id/${path}`,
+      },
+      sidePanel: {
+        open,
+        setOptions,
+      },
+      tabs: {
+        query: vi.fn(async (queryInfo: chrome.tabs.QueryInfo) =>
+          queryInfo.active
+            ? [{ id: 7 }]
+            : [
+                {
+                  id: 22,
+                  url: "chrome-extension://extension-id/src/sidepanel/index.html?surface=full-page#dashboard",
+                },
+              ],
+        ),
+        remove,
+      },
+    });
+
+    await openDashboardSidebar();
+
+    expect(setOptions).toHaveBeenCalledWith({
+      enabled: true,
+      path: "src/sidepanel/index.html#dashboard",
+      tabId: 7,
+    });
+    expect(open).toHaveBeenCalledWith({ tabId: 7 });
+    expect(remove).toHaveBeenCalledWith(22);
     expect(popupWindow.close).toHaveBeenCalled();
   });
 
@@ -275,6 +370,34 @@ describe("popup route actions", () => {
       "_blank",
       "noopener,noreferrer",
     );
+  });
+
+  it("opens ordinary popup dashboard and provider actions in full-page tabs", async () => {
+    const popupWindow = stubPopupWindow();
+    const create = vi.fn(async () => undefined);
+
+    vi.stubGlobal("chrome", {
+      runtime: {
+        id: "extension-id",
+        getURL: (path: string) => `chrome-extension://extension-id/${path}`,
+      },
+      tabs: {
+        create,
+      },
+    });
+
+    await openFullDashboard();
+    await openProviderDetail("codex-personal-page");
+
+    expect(create).toHaveBeenCalledWith({
+      active: true,
+      url: "chrome-extension://extension-id/src/sidepanel/index.html?surface=full-page#dashboard",
+    });
+    expect(create).toHaveBeenCalledWith({
+      active: true,
+      url: "chrome-extension://extension-id/src/sidepanel/index.html?surface=full-page#provider-detail/codex-personal-page",
+    });
+    expect(popupWindow.close).toHaveBeenCalledTimes(2);
   });
 
   it("opens full-page extension routes in Chrome tabs and closes the popup", async () => {
