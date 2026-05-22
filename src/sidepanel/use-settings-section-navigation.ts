@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import type { MotionMode } from "../providers/types";
 import { getPreferredScrollBehavior } from "./motion";
 import {
   SETTINGS_SECTION_IDS,
@@ -7,7 +8,7 @@ import {
   type SettingsSectionId,
 } from "./settings-section-ids";
 
-export function useSettingsSectionNavigation() {
+export function useSettingsSectionNavigation(motionMode: MotionMode = "system") {
   const [activeSettingsSection, setActiveSettingsSection] =
     useState<SettingsSectionId>(SETTINGS_SECTION_IDS.overview);
 
@@ -69,6 +70,7 @@ export function useSettingsSectionNavigation() {
       block: "start",
       behavior: getPreferredScrollBehavior(
         typeof window === "undefined" ? undefined : window,
+        motionMode,
       ),
     });
   }
@@ -80,7 +82,7 @@ export function useSettingsSectionNavigation() {
 
     window.scrollTo({
       top: 0,
-      behavior: getPreferredScrollBehavior(window),
+      behavior: getPreferredScrollBehavior(window, motionMode),
     });
   }
 

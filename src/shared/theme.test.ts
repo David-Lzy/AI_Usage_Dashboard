@@ -46,12 +46,14 @@ describe("theme helpers", () => {
         themePreset: "sunset",
         themeCustomSeedHex: "#4f46e5",
         uiFontFamily: "serif",
+        motionMode: "reduced",
       }),
     ).toEqual({
       themeMode: "dark",
       themePreset: "sunset",
       themeCustomSeedHex: "#4F46E5",
       uiFontFamily: "serif",
+      motionMode: "reduced",
     });
     expect(
       normalizeThemeSettings({
@@ -59,6 +61,7 @@ describe("theme helpers", () => {
         themePreset: "unexpected" as never,
         themeCustomSeedHex: "bad-value",
         uiFontFamily: "unexpected" as never,
+        motionMode: "unexpected" as never,
       }),
     ).toEqual(DEFAULT_THEME_SETTINGS);
   });
@@ -158,6 +161,7 @@ describe("theme helpers", () => {
     expect(root.dataset.themePreset).toBe("meadow");
     expect(root.dataset.themeResolved).toBe("light");
     expect(root.dataset.uiFontFamily).toBe("default");
+    expect(root.dataset.motionMode).toBe("full");
     expect(root.style.colorScheme).toBe("light");
   });
 

@@ -132,6 +132,7 @@ export type ProviderPageBindingStatus = "unbound" | "bound" | "stale";
 export type ThemeMode = "system" | "light" | "dark";
 export type ThemePreset = "default" | "meadow" | "sunset" | "custom";
 export type UiFontFamily = "default" | "system" | "serif" | "mono";
+export type MotionMode = "system" | "full" | "reduced";
 export type AppLocalePreference =
   | "system"
   | "en"
@@ -314,6 +315,7 @@ export type AppSettings = {
   themePreset: ThemePreset;
   themeCustomSeedHex: string | null;
   uiFontFamily: UiFontFamily;
+  motionMode: MotionMode;
   popupProgressStyle: ProgressDisplayStyle;
   sidebarProgressStyle: ProgressDisplayStyle;
   fullPageProgressStyle: ProgressDisplayStyle;

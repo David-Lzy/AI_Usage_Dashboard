@@ -24,6 +24,7 @@ function renderSettingsPage(overrides: Partial<Parameters<typeof SettingsPage>[0
       onUserLevelChange={() => {}}
       onWarningThresholdChange={() => {}}
       onThemeModeChange={() => {}}
+      onMotionModeChange={() => {}}
       onThemePresetChange={() => {}}
       onUiFontFamilyChange={() => {}}
       onPopupProgressStyleChange={() => {}}
@@ -78,6 +79,7 @@ describe("SettingsPage", () => {
     expect(html).toContain('data-settings-material-select="settings-user-level"');
     expect(html).toContain('data-settings-material-select="locale-preference"');
     expect(html).toContain('data-settings-material-select="theme-mode"');
+    expect(html).toContain('data-settings-material-select="motion-mode"');
     expect(html).toContain('data-provider-carousel=""');
     expect(html).toContain(">Quick Setup<");
     expect(html).toContain('data-quick-setup-source-modes="cursor-personal-page"');

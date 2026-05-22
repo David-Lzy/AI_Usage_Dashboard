@@ -272,14 +272,27 @@ details[open] > .source-card__details-toggle::after {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .source-card__details-toggle,
-  .source-card__details-toggle::after {
+  :root[data-motion-mode="system"] .source-card__details-toggle,
+  :root[data-motion-mode="system"] .source-card__details-toggle::after {
     transition: none;
   }
 
-  .source-card__details[open] .source-card__details-body {
+  :root[data-motion-mode="system"]
+    .source-card__details[open]
+    .source-card__details-body {
     animation: none;
   }
+}
+
+:root[data-motion-mode="reduced"] .source-card__details-toggle,
+:root[data-motion-mode="reduced"] .source-card__details-toggle::after {
+  transition: none;
+}
+
+:root[data-motion-mode="reduced"]
+  .source-card__details[open]
+  .source-card__details-body {
+  animation: none;
 }
 
 @media (max-width: 720px) {

@@ -855,14 +855,23 @@ html[data-app-direction="rtl"] .editable-number-combobox__input {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .material-select__menu-icon,
-  .editable-number-combobox__menu-icon,
-  .color-choice-dropdown__menu-icon,
-  .color-choice-dropdown__custom-icon,
-  .material-info-tooltip__trigger,
-  .material-info-tooltip__content {
+  :root[data-motion-mode="system"] .material-select__menu-icon,
+  :root[data-motion-mode="system"] .editable-number-combobox__menu-icon,
+  :root[data-motion-mode="system"] .color-choice-dropdown__menu-icon,
+  :root[data-motion-mode="system"] .color-choice-dropdown__custom-icon,
+  :root[data-motion-mode="system"] .material-info-tooltip__trigger,
+  :root[data-motion-mode="system"] .material-info-tooltip__content {
     transition: none;
   }
+}
+
+:root[data-motion-mode="reduced"] .material-select__menu-icon,
+:root[data-motion-mode="reduced"] .editable-number-combobox__menu-icon,
+:root[data-motion-mode="reduced"] .color-choice-dropdown__menu-icon,
+:root[data-motion-mode="reduced"] .color-choice-dropdown__custom-icon,
+:root[data-motion-mode="reduced"] .material-info-tooltip__trigger,
+:root[data-motion-mode="reduced"] .material-info-tooltip__content {
+  transition: none;
 }
 
 .switch-row {

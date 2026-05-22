@@ -1,4 +1,13 @@
-import type { ThemeMode, ThemePreset, UiFontFamily } from "../providers/types";
+import type {
+  MotionMode,
+  ThemeMode,
+  ThemePreset,
+  UiFontFamily,
+} from "../providers/types";
+import {
+  DEFAULT_MOTION_MODE,
+  normalizeMotionMode,
+} from "./motion-preferences";
 import {
   DEFAULT_UI_FONT_FAMILY,
   getUiFontFamilyStack,
@@ -15,6 +24,7 @@ export type ThemeSettings = {
   themePreset: ThemePreset;
   themeCustomSeedHex: string | null;
   uiFontFamily: UiFontFamily;
+  motionMode: MotionMode;
 };
 export type ThemeRolePalette = {
   primary: string;
@@ -36,6 +46,7 @@ export const DEFAULT_THEME_SETTINGS: ThemeSettings = {
   themePreset: "default",
   themeCustomSeedHex: null,
   uiFontFamily: DEFAULT_UI_FONT_FAMILY,
+  motionMode: DEFAULT_MOTION_MODE,
 };
 
 export const THEME_PRESET_OPTIONS: Array<{
@@ -502,6 +513,7 @@ export function normalizeThemeSettings(
     themePreset: normalizeThemePreset(value?.themePreset),
     themeCustomSeedHex: normalizeThemeCustomSeedHex(value?.themeCustomSeedHex),
     uiFontFamily: normalizeUiFontFamily(value?.uiFontFamily),
+    motionMode: normalizeMotionMode(value?.motionMode),
   };
 }
 
@@ -566,6 +578,7 @@ export function applyThemeSettings(
   root.dataset.themePreset = normalizedSettings.themePreset;
   root.dataset.themeResolved = resolvedThemeMode;
   root.dataset.uiFontFamily = normalizedSettings.uiFontFamily;
+  root.dataset.motionMode = normalizedSettings.motionMode;
 
   if (normalizedSettings.themePreset === "custom") {
     if (normalizedSettings.themeCustomSeedHex) {

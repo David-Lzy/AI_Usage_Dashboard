@@ -17,6 +17,8 @@ describe("motion helpers", () => {
 
     expect(prefersReducedMotion(reader)).toBe(true);
     expect(getPreferredScrollBehavior(reader)).toBe("auto");
+    expect(prefersReducedMotion(reader, "full")).toBe(false);
+    expect(getPreferredScrollBehavior(reader, "full")).toBe("smooth");
   });
 
   it("keeps smooth scrolling when reduced motion does not match", () => {
@@ -28,5 +30,7 @@ describe("motion helpers", () => {
 
     expect(prefersReducedMotion(reader)).toBe(false);
     expect(getPreferredScrollBehavior(reader)).toBe("smooth");
+    expect(prefersReducedMotion(reader, "reduced")).toBe(true);
+    expect(getPreferredScrollBehavior(reader, "reduced")).toBe("auto");
   });
 });

@@ -151,6 +151,7 @@ export function useStandardAppRuntime(
     appState?.settings.themeMode,
     appState?.settings.themePreset,
     appState?.settings.uiFontFamily,
+    appState?.settings.motionMode,
   ]);
 
   async function applyMessage(

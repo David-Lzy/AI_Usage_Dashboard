@@ -32,6 +32,11 @@ describe("buildSettingsPreferenceOptions", () => {
       value: "dark",
       label: "Dark",
     });
+    expect(options.motionModeOptions).toEqual([
+      { value: "system", label: "Follow system" },
+      { value: "full", label: "On" },
+      { value: "reduced", label: "Reduced" },
+    ]);
     expect(options.uiFontFamilyOptions).toEqual([
       { value: "default", label: "Default" },
       { value: "system", label: "System UI" },
@@ -107,6 +112,10 @@ describe("buildSettingsPreferenceOptions", () => {
     expect(options.toolbarIconModeOptions).toContainEqual({
       value: "match-badge",
       label: "匹配工具栏标记",
+    });
+    expect(options.motionModeOptions).toContainEqual({
+      value: "full",
+      label: "开启",
     });
   });
 });

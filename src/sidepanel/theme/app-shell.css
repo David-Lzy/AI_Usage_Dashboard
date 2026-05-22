@@ -94,12 +94,23 @@ html[data-app-direction="rtl"][data-full-page-entry="sidebar-expand"] .app-shell
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .app-shell > *,
-  .full-page-shell .app-shell,
-  html[data-full-page-entry="popup-expand"] .app-shell,
-  html[data-full-page-entry="sidebar-expand"] .app-shell {
+  :root[data-motion-mode="system"] .app-shell > *,
+  :root[data-motion-mode="system"].full-page-shell .app-shell,
+  :root[data-motion-mode="system"][data-full-page-entry="popup-expand"]
+    .app-shell,
+  :root[data-motion-mode="system"][data-full-page-entry="sidebar-expand"]
+    .app-shell {
     animation: none;
   }
+}
+
+:root[data-motion-mode="reduced"] .app-shell > *,
+:root[data-motion-mode="reduced"].full-page-shell .app-shell,
+:root[data-motion-mode="reduced"][data-full-page-entry="popup-expand"]
+  .app-shell,
+:root[data-motion-mode="reduced"][data-full-page-entry="sidebar-expand"]
+  .app-shell {
+  animation: none;
 }
 
 @media (max-width: 480px) {

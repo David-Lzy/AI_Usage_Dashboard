@@ -458,11 +458,19 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .usage-progress__fill--indeterminate {
+  :root[data-motion-mode="system"] .usage-progress__fill--indeterminate {
     animation: none;
   }
 
-  .usage-progress-ring__fill {
+  :root[data-motion-mode="system"] .usage-progress-ring__fill {
     transition: none;
   }
+}
+
+:root[data-motion-mode="reduced"] .usage-progress__fill--indeterminate {
+  animation: none;
+}
+
+:root[data-motion-mode="reduced"] .usage-progress-ring__fill {
+  transition: none;
 }

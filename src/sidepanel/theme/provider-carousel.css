@@ -193,7 +193,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .provider-carousel__slide {
+  :root[data-motion-mode="system"] .provider-carousel__slide {
     transition: none;
   }
+}
+
+:root[data-motion-mode="reduced"] .provider-carousel__slide {
+  transition: none;
 }

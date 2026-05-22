@@ -680,11 +680,19 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :root {
+  :root[data-motion-mode="system"] {
     --app-motion-duration-fast: 0ms;
     --app-motion-duration-medium: 0ms;
     --app-motion-duration-slow: 0ms;
     --app-motion-distance-1: 0px;
     --app-motion-distance-2: 0px;
   }
+}
+
+:root[data-motion-mode="reduced"] {
+  --app-motion-duration-fast: 0ms;
+  --app-motion-duration-medium: 0ms;
+  --app-motion-duration-slow: 0ms;
+  --app-motion-distance-1: 0px;
+  --app-motion-distance-2: 0px;
 }

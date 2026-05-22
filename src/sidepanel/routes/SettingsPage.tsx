@@ -116,6 +116,7 @@ type SettingsPageProps = {
   onUserLevelChange: (userLevel: AppSettings["userLevel"]) => void;
   onWarningThresholdChange: (percent: number) => void;
   onThemeModeChange: (themeMode: ThemeMode) => void;
+  onMotionModeChange: (motionMode: AppSettings["motionMode"]) => void;
   onThemePresetChange: (themePreset: ThemePreset) => void;
   onUiFontFamilyChange: (uiFontFamily: UiFontFamily) => void;
   onPopupProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
@@ -196,6 +197,7 @@ export function SettingsPage({
   onUserLevelChange,
   onWarningThresholdChange,
   onThemeModeChange,
+  onMotionModeChange,
   onThemePresetChange,
   onUiFontFamilyChange,
   onPopupProgressStyleChange,
@@ -254,6 +256,7 @@ export function SettingsPage({
     settingsCopy,
     providerSourceDisplayCopy,
     localeOptions,
+    motionModeOptions,
     themeModeOptions,
     userLevelVisibility,
     showAdvancedContainer,
@@ -309,7 +312,7 @@ export function SettingsPage({
     const frameId = window.requestAnimationFrame(() => {
       targetElement.scrollIntoView({
         block: "start",
-        behavior: getPreferredScrollBehavior(window),
+        behavior: getPreferredScrollBehavior(window, settings.motionMode),
       });
       lastScrolledRouteFocusKeyRef.current = routeFocusKey;
     });
@@ -398,6 +401,13 @@ export function SettingsPage({
             fieldIdPrefix="theme-mode"
             options={themeModeOptions}
             onChange={onThemeModeChange}
+          />
+          <MaterialSelect
+            label={i18n.t("settings.preferences.motion_mode_label")}
+            value={settings.motionMode}
+            fieldIdPrefix="motion-mode"
+            options={motionModeOptions}
+            onChange={onMotionModeChange}
           />
         </div>
       </SettingsOverviewSection>

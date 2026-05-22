@@ -254,6 +254,7 @@ export function SpecialRouteApp({
     themeSettings.themeMode,
     themeSettings.themePreset,
     themeSettings.uiFontFamily,
+    themeSettings.motionMode,
   ]);
 
   useEffect(() => {

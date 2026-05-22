@@ -217,6 +217,7 @@ describe("storage normalization", () => {
     expect(state?.settings.themePreset).toBe("default");
     expect(state?.settings.themeCustomSeedHex).toBeNull();
     expect(state?.settings.uiFontFamily).toBe("default");
+    expect(state?.settings.motionMode).toBe("full");
     expect(state?.settings.popupProgressStyle).toBe("circle-soft");
     expect(state?.settings.sidebarProgressStyle).toBe("line");
     expect(state?.settings.fullPageProgressStyle).toBe("line");
@@ -531,6 +532,7 @@ describe("storage normalization", () => {
         ...SAMPLE_APP_STATE.settings,
         locale: "zh-CN",
         themeMode: "dark",
+        motionMode: "reduced",
         syncIntervalMinutes: 15,
         popupProgressStyle: "circle-gauge",
         popupCircularProgressItemsPerRow: 3,
@@ -556,6 +558,7 @@ describe("storage normalization", () => {
     expect(state?.settings.warningThresholdPercent).toBe(90);
     expect(state?.settings.locale).toBe("zh-CN");
     expect(state?.settings.themeMode).toBe("dark");
+    expect(state?.settings.motionMode).toBe("reduced");
     expect(state?.settings.syncIntervalMinutes).toBe(15);
     expect(state?.settings.popupProgressStyle).toBe("circle-gauge");
     expect(state?.settings.popupCircularProgressItemsPerRow).toBe(3);

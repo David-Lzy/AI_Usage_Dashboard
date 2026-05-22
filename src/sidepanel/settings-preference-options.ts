@@ -1,6 +1,7 @@
 import type {
   AppLocalePreference,
   AppSettings,
+  MotionMode,
   PopupCornerStyle,
   PopupCircularProgressItemsPerRow,
   PopupShadowStyle,
@@ -30,6 +31,7 @@ import {
   POPUP_SIZE_PRESET_OPTIONS,
 } from "../shared/popup-appearance";
 import { PROGRESS_DISPLAY_STYLE_OPTIONS } from "../shared/progress-display";
+import { MOTION_MODE_OPTIONS } from "../shared/motion-preferences";
 import {
   SYNC_INTERVAL_MAX_MINUTES,
   SYNC_INTERVAL_MIN_MINUTES,
@@ -69,6 +71,11 @@ export function buildSettingsPreferenceOptions({
     system: i18n.t("settings.preferences.ui_font.system"),
     serif: i18n.t("settings.preferences.ui_font.serif"),
     mono: i18n.t("settings.preferences.ui_font.mono"),
+  };
+  const motionModeOptionLabels: Record<MotionMode, string> = {
+    system: i18n.t("settings.preferences.motion_mode.system"),
+    full: i18n.t("settings.preferences.motion_mode.full"),
+    reduced: i18n.t("settings.preferences.motion_mode.reduced"),
   };
   const toolbarIconModeOptionLabels: Record<ToolbarIconMode, string> = {
     default: i18n.t("settings.preferences.toolbar_icon.default"),
@@ -125,6 +132,10 @@ export function buildSettingsPreferenceOptions({
   const uiFontFamilyOptions = UI_FONT_FAMILY_OPTIONS.map((option) => ({
     value: option.value,
     label: uiFontFamilyOptionLabels[option.value],
+  }));
+  const motionModeOptions = MOTION_MODE_OPTIONS.map((option) => ({
+    value: option.value,
+    label: motionModeOptionLabels[option.value],
   }));
   const toolbarIconModeOptions = TOOLBAR_ICON_MODE_OPTIONS.map((option) => ({
     value: option.value,
@@ -208,6 +219,7 @@ export function buildSettingsPreferenceOptions({
     actionBadgeRotationMenuButtonLabel,
     actionBadgeRotationUnitLabel,
     localeOptions,
+    motionModeOptions,
     normalizedActionBadgeSelections,
     popupCornerStyleOptions,
     popupShadowStyleOptions,

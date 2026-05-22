@@ -47,19 +47,20 @@ export function useSettingsPage({
     onSaveCodexWorkspaceConfig,
     onClearCodexWorkspaceConfig,
   });
-  const sectionNavigation = useSettingsSectionNavigation();
+  const sectionNavigation = useSettingsSectionNavigation(settings.motionMode);
   const i18n = createRuntimeI18n(
     settings.locale,
     typeof window !== "undefined" ? window : undefined,
   );
   const settingsCopy = buildSettingsLocalizedCopy(i18n);
   const providerSourceDisplayCopy = buildProviderSourceDisplayLocalizedCopy(i18n);
-  const { localeOptions, themeModeOptions } = buildSettingsPreferenceOptions({
-    i18n,
-    providers,
-    settings,
-    snapshots,
-  });
+  const { localeOptions, motionModeOptions, themeModeOptions } =
+    buildSettingsPreferenceOptions({
+      i18n,
+      providers,
+      settings,
+      snapshots,
+    });
   const userLevelVisibility = getSettingsUserLevelVisibility(settings.userLevel);
   const routeFocusRequiresAdvanced = settingsRouteFocusRequiresAdvanced(routeFocus);
   const showAdvancedContainer =
@@ -101,6 +102,7 @@ export function useSettingsPage({
     settingsCopy,
     providerSourceDisplayCopy,
     localeOptions,
+    motionModeOptions,
     themeModeOptions,
     userLevelVisibility,
     showAdvancedContainer,

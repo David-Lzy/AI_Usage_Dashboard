@@ -254,6 +254,9 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           onThemeModeChange={(themeMode) =>
             handleUpdateSettings({ themeMode })
           }
+          onMotionModeChange={(motionMode) =>
+            handleUpdateSettings({ motionMode })
+          }
           onThemePresetChange={(themePreset) =>
             handleUpdateSettings({ themePreset })
           }

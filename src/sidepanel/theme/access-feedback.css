@@ -159,9 +159,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .toast {
+  :root[data-motion-mode="system"] .toast {
     animation: none;
   }
+}
+
+:root[data-motion-mode="reduced"] .toast {
+  animation: none;
 }
 
 @media (max-width: 720px) {
