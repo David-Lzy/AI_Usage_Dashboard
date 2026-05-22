@@ -34,7 +34,11 @@ import { EditableNumberCombobox } from "./EditableNumberCombobox";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 import { MaterialSelect } from "./MaterialSelect";
 import { ProgressAppearancePreferenceControls } from "./ProgressAppearancePreferenceControls";
-import { PopupAppearancePreview } from "./PopupAppearancePreview";
+import {
+  FloatingToolbarPopupPreview,
+  POPUP_APPEARANCE_PREVIEW_DEFAULT_REMAINING_PERCENT,
+  PopupAppearancePreview,
+} from "./PopupAppearancePreview";
 
 type SettingsPreferencesSectionProps = {
   i18n: RuntimeI18n;
@@ -147,6 +151,9 @@ export function SettingsPreferencesSection({
     snapshots,
   });
   const [uiMoreOpen, setUiMoreOpen] = useState(settings.themePreset === "custom");
+  const [testToolbarPopupOpen, setTestToolbarPopupOpen] = useState(false);
+  const [popupPreviewRemainingPercent, setPopupPreviewRemainingPercent] =
+    useState(POPUP_APPEARANCE_PREVIEW_DEFAULT_REMAINING_PERCENT);
   const popupCircularRowCountHelperText = i18n.t(
     "settings.preferences.popup_circular_row_count_helper",
   );
@@ -344,28 +351,41 @@ export function SettingsPreferencesSection({
         onResetToInitialConfiguration={onResetConfigurationToInitial}
       />
 
-      <details
+      <div
         className="source-card__details settings-preferences__more settings-preferences__more--ui"
-        open={uiMoreOpen}
-        onToggle={(event) =>
-          setUiMoreOpen((event.currentTarget as HTMLDetailsElement).open)
-        }
+        data-open={uiMoreOpen ? "true" : "false"}
       >
-        <summary className="source-card__details-toggle">
-          <span>
-            {uiMoreOpen
-              ? settingsCopy.preferenceGroups.uiMoreHide
-              : settingsCopy.preferenceGroups.uiMoreShow}
-          </span>
-        </summary>
-
-        <div className="source-card__details-body settings-preferences__more-body">
+        <div className="settings-preferences__more-toolbar">
+          <button
+            className="source-card__details-toggle settings-preferences__more-toggle"
+            type="button"
+            aria-expanded={uiMoreOpen}
+            onClick={() => setUiMoreOpen((current) => !current)}
+          >
+            <span>
+              {uiMoreOpen
+                ? settingsCopy.preferenceGroups.uiMoreHide
+                : settingsCopy.preferenceGroups.uiMoreShow}
+            </span>
+          </button>
+          <button
+            className="text-button text-button--outlined settings-preferences__test-popup-button"
+            type="button"
+            onClick={() => setTestToolbarPopupOpen(true)}
+          >
+            {i18n.t("settings.popup_appearance_preview.open_test_popup")}
+          </button>
           <div className="settings-preferences__more-info">
             <MaterialInfoTooltip>
               {settingsCopy.preferenceGroups.uiMoreDetail}
             </MaterialInfoTooltip>
           </div>
+        </div>
 
+        <div
+          className="source-card__details-body settings-preferences__more-body"
+          hidden={!uiMoreOpen}
+        >
           <div className="settings-grid settings-grid--balanced-settings">
             <MaterialSelect
               label={i18n.t("settings.preferences.popup_progress_style_label")}
@@ -463,9 +483,22 @@ export function SettingsPreferencesSection({
             onColorBandsChange={onProgressColorBandsChange}
           />
 
-          <PopupAppearancePreview i18n={i18n} settings={settings} />
+          <PopupAppearancePreview
+            i18n={i18n}
+            previewRemainingPercent={popupPreviewRemainingPercent}
+            settings={settings}
+            onPreviewRemainingPercentChange={setPopupPreviewRemainingPercent}
+          />
         </div>
-      </details>
+      </div>
+      {testToolbarPopupOpen ? (
+        <FloatingToolbarPopupPreview
+          i18n={i18n}
+          previewRemainingPercent={popupPreviewRemainingPercent}
+          settings={settings}
+          onClose={() => setTestToolbarPopupOpen(false)}
+        />
+      ) : null}
     </section>
   );
 }

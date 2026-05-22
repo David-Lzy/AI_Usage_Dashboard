@@ -3,7 +3,10 @@ import { describe, expect, it } from "vitest";
 
 import { SAMPLE_APP_STATE } from "../../shared/constants";
 import { createRuntimeI18n } from "../../shared/i18n";
-import { PopupAppearancePreview } from "./PopupAppearancePreview";
+import {
+  POPUP_APPEARANCE_PREVIEW_DEFAULT_REMAINING_PERCENT,
+  PopupAppearancePreview,
+} from "./PopupAppearancePreview";
 
 describe("PopupAppearancePreview", () => {
   it("renders the current popup appearance attributes and localized sample", () => {
@@ -11,6 +14,9 @@ describe("PopupAppearancePreview", () => {
     const html = renderToStaticMarkup(
       <PopupAppearancePreview
         i18n={i18n}
+        previewRemainingPercent={
+          POPUP_APPEARANCE_PREVIEW_DEFAULT_REMAINING_PERCENT
+        }
         settings={{
           ...SAMPLE_APP_STATE.settings,
           popupCornerStyle: "rounded",
@@ -18,18 +24,22 @@ describe("PopupAppearancePreview", () => {
           popupShadowStyle: "elevated",
           popupSizePreset: "wide",
         }}
+        onPreviewRemainingPercentChange={() => {}}
       />,
     );
 
-    expect(html).toContain('class="popup-appearance-preview-card"');
+    expect(html).toContain("popup-appearance-preview-card");
     expect(html).toContain('data-popup-size-preset="wide"');
     expect(html).toContain('data-popup-corner-style="rounded"');
     expect(html).toContain('data-popup-shadow-style="elevated"');
     expect(html).toContain('data-popup-progress-style="circle-soft"');
     expect(html).toContain("usage-progress-ring--circle-soft");
     expect(html).toContain("Toolbar bubble shape");
+    expect(html).toContain("Preview remaining");
+    expect(html).toContain('value="51"');
     expect(html).toContain("week, reset: Tue 09:15");
     expect(html).not.toContain("popup-appearance-preview-actions");
+    expect(html).not.toContain("Quick glance");
     expect(html).not.toContain("14:59");
   });
 
@@ -38,15 +48,19 @@ describe("PopupAppearancePreview", () => {
     const html = renderToStaticMarkup(
       <PopupAppearancePreview
         i18n={i18n}
+        previewRemainingPercent={74}
         settings={SAMPLE_APP_STATE.settings}
+        onPreviewRemainingPercentChange={() => {}}
       />,
     );
 
     expect(html).toContain("工具栏弹窗形态");
+    expect(html).toContain("预览剩余额度");
     expect(html).toContain("周额度，重置：周二 09:15");
     expect(html).toContain(
-      'aria-valuetext="周额度，重置：周二 09:15: 51% 剩余"',
+      'aria-valuetext="周额度，重置：周二 09:15: 74% 剩余"',
     );
+    expect(html).not.toContain("快速概览");
   });
 
   it("renders the selected gauge progress style in the preview", () => {
@@ -54,10 +68,14 @@ describe("PopupAppearancePreview", () => {
     const html = renderToStaticMarkup(
       <PopupAppearancePreview
         i18n={i18n}
+        previewRemainingPercent={
+          POPUP_APPEARANCE_PREVIEW_DEFAULT_REMAINING_PERCENT
+        }
         settings={{
           ...SAMPLE_APP_STATE.settings,
           popupProgressStyle: "circle-gauge",
         }}
+        onPreviewRemainingPercentChange={() => {}}
       />,
     );
 

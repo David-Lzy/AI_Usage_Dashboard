@@ -90,14 +90,17 @@ describe("SettingsPreferencesSection", () => {
     expect(html).toContain("Tune thickness and remaining-color bands");
     expect(html).toContain("#B3261E");
     expect(html).toContain(">More UI settings<");
+    expect(html).toContain(">Open test toolbar popup<");
     expect(html).not.toContain('data-provider-order-preferences=""');
     expect(html).not.toContain('data-provider-progress-preferences=""');
     expect(html).not.toContain("Provider display settings");
-    expect(html).toContain('class="popup-appearance-preview-card"');
+    expect(html).toContain("popup-appearance-preview-card");
+    expect(html).toContain("Preview remaining");
+    expect(html).not.toContain("Quick glance");
     expect(html).not.toContain('class="theme-customization-form"');
     expect(
       html.indexOf('data-progress-appearance-preferences=""'),
-    ).toBeLessThan(html.indexOf('class="popup-appearance-preview-card"'));
+    ).toBeLessThan(html.indexOf("popup-appearance-preview-card"));
   });
 
   it("renders provider and custom toolbar icon controls only for matching modes", () => {
