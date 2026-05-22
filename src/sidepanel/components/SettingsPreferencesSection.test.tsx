@@ -43,6 +43,7 @@ describe("SettingsPreferencesSection", () => {
         onImportConfigurationJson={() => {}}
         onSaveConfigurationToChromeSync={() => {}}
         onRestoreConfigurationFromChromeSync={() => {}}
+        onResetConfigurationToInitial={() => {}}
         onToolbarIconModeChange={() => {}}
         onToolbarIconProviderIdChange={() => {}}
         onToolbarIconCustomImageDataUrlChange={() => {}}
@@ -83,6 +84,7 @@ describe("SettingsPreferencesSection", () => {
     expect(html).toContain("Configuration backup and sync");
     expect(html).toContain("Export JSON");
     expect(html).toContain("Save to Chrome Sync");
+    expect(html).toContain("Initialize configuration");
     expect(html).toContain("Toolbar icon");
     expect(html).toContain('data-progress-appearance-preferences=""');
     expect(html).toContain("Tune thickness and remaining-color bands");

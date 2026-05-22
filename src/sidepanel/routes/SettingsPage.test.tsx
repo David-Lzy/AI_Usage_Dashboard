@@ -44,6 +44,7 @@ function renderSettingsPage(overrides: Partial<Parameters<typeof SettingsPage>[0
       onImportConfigurationJson={() => {}}
       onSaveConfigurationToChromeSync={() => {}}
       onRestoreConfigurationFromChromeSync={() => {}}
+      onResetConfigurationToInitial={() => {}}
       onToolbarIconModeChange={() => {}}
       onToolbarIconProviderIdChange={() => {}}
       onToolbarIconCustomImageDataUrlChange={() => {}}

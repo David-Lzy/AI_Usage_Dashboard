@@ -13,6 +13,7 @@ type ConfigurationBackupControlsProps = {
   onImportJson: (rawJson: string) => void;
   onSaveToChromeSync: () => void;
   onRestoreFromChromeSync: () => void;
+  onResetToInitialConfiguration: () => void;
 };
 
 export function ConfigurationBackupControls({
@@ -21,6 +22,7 @@ export function ConfigurationBackupControls({
   onImportJson,
   onSaveToChromeSync,
   onRestoreFromChromeSync,
+  onResetToInitialConfiguration,
 }: ConfigurationBackupControlsProps) {
   function handleImportFileChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.currentTarget.files?.[0] ?? null;
@@ -77,6 +79,13 @@ export function ConfigurationBackupControls({
           onClick={onRestoreFromChromeSync}
         >
           {copy.restoreFromChromeSync}
+        </button>
+        <button
+          className="text-button"
+          type="button"
+          onClick={onResetToInitialConfiguration}
+        >
+          {copy.resetToInitial}
         </button>
       </div>
     </div>

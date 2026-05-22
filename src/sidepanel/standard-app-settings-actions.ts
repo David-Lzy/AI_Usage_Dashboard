@@ -11,6 +11,8 @@ import {
   buildConfigurationBackup,
   buildConfigurationBackupFilename,
 } from "../shared/configuration-backup";
+import { SAMPLE_APP_STATE } from "../shared/constants";
+import { getSettingsConfigurationBackupCopy } from "../shared/settings-configuration-backup-localized-copy";
 import { downloadTextFile } from "./download-text-file";
 import type { AppToast } from "./use-standard-app-runtime";
 
@@ -32,6 +34,14 @@ export function createStandardAppSettingsActions({
   runtimeI18n,
   setToast,
 }: StandardAppSettingsActionsOptions) {
+  function getPortableConfigurationSignature(state: AppState): string {
+    return JSON.stringify(
+      buildConfigurationBackup(state, {
+        includeCustomToolbarIconImage: true,
+      }).payload,
+    );
+  }
+
   function handleUpdateSettings(partialSettings: Partial<AppSettings>) {
     void applyMessage({
       type: "app:update-settings",
@@ -190,12 +200,57 @@ export function createStandardAppSettingsActions({
     });
   }
 
+  function handleResetConfigurationToInitial() {
+    const copy = getSettingsConfigurationBackupCopy(runtimeI18n.resolvedLocale);
+
+    if (!appState) {
+      setToast({
+        tone: "error",
+        title: "Configuration reset failed",
+        message: "The current app state is not loaded yet.",
+      });
+      return;
+    }
+
+    const currentSignature = getPortableConfigurationSignature(appState);
+    const initialSignature =
+      getPortableConfigurationSignature(SAMPLE_APP_STATE);
+
+    if (
+      currentSignature !== initialSignature &&
+      typeof globalThis.confirm === "function" &&
+      !globalThis.confirm(copy.resetToInitialConfirm)
+    ) {
+      return;
+    }
+
+    const initialBackup = buildConfigurationBackup(SAMPLE_APP_STATE, {
+      includeCustomToolbarIconImage: true,
+    });
+
+    void (async () => {
+      const didReset = await applyMessage({
+        type: "app:import-configuration-backup",
+        rawJson: `${JSON.stringify(initialBackup, null, 2)}\n`,
+      });
+
+      if (didReset) {
+        setToast({
+          tone: "success",
+          title: copy.resetToInitialSuccessTitle,
+          message: copy.resetToInitialSuccessMessage,
+        });
+      }
+    })();
+  }
+
   return {
     handleClearCodexWorkspaceConfig,
     handleClearPageBinding,
     handleClearProviderAdminApiKey,
     handleExportConfiguration,
     handleImportConfigurationJson,
+    handleResetConfigurationToInitial,
     handleRestoreConfigurationFromChromeSync,
     handleSaveCodexWorkspaceConfig,
     handleSaveConfigurationToChromeSync,

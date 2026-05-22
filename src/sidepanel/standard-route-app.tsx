@@ -119,6 +119,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
     handleOpenCurrentRouteInSidePanel,
     handleOpenSessionPage,
     handleRefresh,
+    handleResetConfigurationToInitial,
     handleRestoreConfigurationFromChromeSync,
     handleSaveCodexWorkspaceConfig,
     handleSaveConfigurationToChromeSync,
@@ -315,6 +316,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           onRestoreConfigurationFromChromeSync={
             handleRestoreConfigurationFromChromeSync
           }
+          onResetConfigurationToInitial={handleResetConfigurationToInitial}
           onToolbarIconModeChange={(toolbarIconMode) =>
             handleUpdateSettings({ toolbarIconMode })
           }

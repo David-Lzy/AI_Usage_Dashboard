@@ -1,6 +1,7 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { AppMessage } from "../background/message-bus";
+import { buildConfigurationBackup } from "../shared/configuration-backup";
 import { SAMPLE_APP_STATE } from "../shared/constants";
 import { createRuntimeI18n } from "../shared/i18n";
 import type { AppToast } from "./use-standard-app-runtime";
@@ -25,7 +26,16 @@ function createSettingsActionHarness(
   return { actions, appState, applyMessage, setToast };
 }
 
+async function flushAsyncActions() {
+  await Promise.resolve();
+  await Promise.resolve();
+}
+
 describe("createStandardAppSettingsActions", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   it("dispatches settings updates without changing settings locally", () => {
     const { actions, appState, applyMessage } = createSettingsActionHarness();
 
@@ -92,5 +102,84 @@ describe("createStandardAppSettingsActions", () => {
       title: "Preferences saved",
       message: "Settings are now persisted in local dashboard state for the preview.",
     });
+  });
+
+  it("resets portable configuration to initial defaults without confirmation when unchanged", async () => {
+    const confirm = vi.fn(() => false);
+    vi.stubGlobal("confirm", confirm);
+    const { actions, applyMessage, setToast } = createSettingsActionHarness();
+
+    actions.handleResetConfigurationToInitial();
+    await flushAsyncActions();
+
+    expect(applyMessage).toHaveBeenCalledTimes(1);
+    expect(confirm).not.toHaveBeenCalled();
+    const message = applyMessage.mock.calls[0]?.[0] as AppMessage;
+    expect(message.type).toBe("app:import-configuration-backup");
+
+    if (message.type === "app:import-configuration-backup") {
+      const backup = JSON.parse(message.rawJson) as ReturnType<
+        typeof buildConfigurationBackup
+      >;
+
+      expect(backup.payload).toEqual(
+        buildConfigurationBackup(SAMPLE_APP_STATE).payload,
+      );
+    }
+    expect(setToast).toHaveBeenCalledWith({
+      tone: "success",
+      title: "Configuration initialized",
+      message:
+        "Portable settings and provider display preferences were reset to the initial defaults.",
+    });
+  });
+
+  it("does not reset changed configuration when the warning is rejected", () => {
+    const confirm = vi.fn(() => false);
+    vi.stubGlobal("confirm", confirm);
+    const appState = structuredClone(SAMPLE_APP_STATE);
+    appState.settings.syncIntervalMinutes = 15;
+    const { actions, applyMessage } = createSettingsActionHarness({
+      appState,
+    });
+
+    actions.handleResetConfigurationToInitial();
+
+    expect(confirm).toHaveBeenCalledWith(
+      expect.stringContaining("Reset portable configuration"),
+    );
+    expect(applyMessage).not.toHaveBeenCalled();
+  });
+
+  it("resets changed configuration after the warning is accepted", async () => {
+    const confirm = vi.fn(() => true);
+    vi.stubGlobal("confirm", confirm);
+    const appState = structuredClone(SAMPLE_APP_STATE);
+    appState.settings.syncIntervalMinutes = 15;
+    appState.providerSettings[0].displayEnabled = false;
+    const { actions, applyMessage } = createSettingsActionHarness({
+      appState,
+    });
+
+    actions.handleResetConfigurationToInitial();
+    await flushAsyncActions();
+
+    expect(applyMessage).toHaveBeenCalledTimes(1);
+    expect(confirm).toHaveBeenCalledTimes(1);
+    const message = applyMessage.mock.calls[0]?.[0] as AppMessage;
+    expect(message.type).toBe("app:import-configuration-backup");
+
+    if (message.type === "app:import-configuration-backup") {
+      const backup = JSON.parse(message.rawJson) as ReturnType<
+        typeof buildConfigurationBackup
+      >;
+
+      expect(backup.payload.settings.syncIntervalMinutes).toBe(
+        SAMPLE_APP_STATE.settings.syncIntervalMinutes,
+      );
+      expect(backup.payload.providerSettings).toEqual(
+        buildConfigurationBackup(SAMPLE_APP_STATE).payload.providerSettings,
+      );
+    }
   });
 });

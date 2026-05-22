@@ -53,6 +53,7 @@ type SettingsPreferencesSectionProps = {
   onImportConfigurationJson: (rawJson: string) => void;
   onSaveConfigurationToChromeSync: () => void;
   onRestoreConfigurationFromChromeSync: () => void;
+  onResetConfigurationToInitial: () => void;
   onToolbarIconModeChange: (toolbarIconMode: ToolbarIconMode) => void;
   onToolbarIconProviderIdChange: (
     toolbarIconProviderId: AppSettings["toolbarIconProviderId"],
@@ -97,6 +98,7 @@ export function SettingsPreferencesSection({
   onImportConfigurationJson,
   onSaveConfigurationToChromeSync,
   onRestoreConfigurationFromChromeSync,
+  onResetConfigurationToInitial,
   onToolbarIconModeChange,
   onToolbarIconProviderIdChange,
   onToolbarIconCustomImageDataUrlChange,
@@ -339,6 +341,7 @@ export function SettingsPreferencesSection({
         onImportJson={onImportConfigurationJson}
         onSaveToChromeSync={onSaveConfigurationToChromeSync}
         onRestoreFromChromeSync={onRestoreConfigurationFromChromeSync}
+        onResetToInitialConfiguration={onResetConfigurationToInitial}
       />
 
       <details

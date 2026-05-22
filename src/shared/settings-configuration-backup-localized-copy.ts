@@ -8,6 +8,10 @@ export type SettingsConfigurationBackupCopy = {
   importJson: string;
   saveToChromeSync: string;
   restoreFromChromeSync: string;
+  resetToInitial: string;
+  resetToInitialConfirm: string;
+  resetToInitialSuccessTitle: string;
+  resetToInitialSuccessMessage: string;
 };
 
 export const SETTINGS_CONFIGURATION_BACKUP_COPY: Record<
@@ -23,6 +27,12 @@ export const SETTINGS_CONFIGURATION_BACKUP_COPY: Record<
     importJson: "Import JSON",
     saveToChromeSync: "Save to Chrome Sync",
     restoreFromChromeSync: "Restore from Chrome Sync",
+    resetToInitial: "Initialize configuration",
+    resetToInitialConfirm:
+      "Reset portable configuration to the initial defaults? This replaces UI, language, theme, provider visibility, source preferences, toolbar, and sync settings. API keys, permissions, page bindings, and runtime snapshots stay local and are not reset.",
+    resetToInitialSuccessTitle: "Configuration initialized",
+    resetToInitialSuccessMessage:
+      "Portable settings and provider display preferences were reset to the initial defaults.",
   },
   "zh-CN": {
     title: "配置备份与同步",
@@ -33,6 +43,12 @@ export const SETTINGS_CONFIGURATION_BACKUP_COPY: Record<
     importJson: "导入 JSON",
     saveToChromeSync: "保存到 Chrome 同步",
     restoreFromChromeSync: "从 Chrome 同步恢复",
+    resetToInitial: "初始化配置",
+    resetToInitialConfirm:
+      "要将可迁移配置重置为初始默认值吗？这会替换界面、语言、主题、Provider 显示、来源偏好、工具栏和同步设置。API key、权限、页面绑定和运行快照仍保留在本机，不会被重置。",
+    resetToInitialSuccessTitle: "配置已初始化",
+    resetToInitialSuccessMessage:
+      "可迁移设置和 Provider 显示偏好已重置为初始默认值。",
   },
   "zh-TW": {
     title: "設定備份與同步",
@@ -43,6 +59,12 @@ export const SETTINGS_CONFIGURATION_BACKUP_COPY: Record<
     importJson: "匯入 JSON",
     saveToChromeSync: "儲存到 Chrome 同步",
     restoreFromChromeSync: "從 Chrome 同步還原",
+    resetToInitial: "初始化設定",
+    resetToInitialConfirm:
+      "要將可攜設定重設為初始預設值嗎？這會取代介面、語言、主題、Provider 顯示、來源偏好、工具列和同步設定。API key、權限、頁面繫結和執行快照仍留在本機，不會被重設。",
+    resetToInitialSuccessTitle: "設定已初始化",
+    resetToInitialSuccessMessage:
+      "可攜設定和 Provider 顯示偏好已重設為初始預設值。",
   },
   ja: {
     title: "設定のバックアップと同期",
@@ -53,6 +75,12 @@ export const SETTINGS_CONFIGURATION_BACKUP_COPY: Record<
     importJson: "JSON をインポート",
     saveToChromeSync: "Chrome Sync に保存",
     restoreFromChromeSync: "Chrome Sync から復元",
+    resetToInitial: "設定を初期化",
+    resetToInitialConfirm:
+      "移行可能な設定を初期状態に戻しますか？UI、言語、テーマ、Provider 表示、ソース設定、ツールバー、同期設定が置き換わります。API key、権限、ページ紐付け、実行時スナップショットはローカルに残り、リセットされません。",
+    resetToInitialSuccessTitle: "設定を初期化しました",
+    resetToInitialSuccessMessage:
+      "移行可能な設定と Provider 表示設定を初期状態に戻しました。",
   },
   ko: {
     title: "구성 백업 및 동기화",
@@ -63,6 +91,12 @@ export const SETTINGS_CONFIGURATION_BACKUP_COPY: Record<
     importJson: "JSON 가져오기",
     saveToChromeSync: "Chrome Sync에 저장",
     restoreFromChromeSync: "Chrome Sync에서 복원",
+    resetToInitial: "구성 초기화",
+    resetToInitialConfirm:
+      "이동 가능한 구성을 초기 기본값으로 재설정할까요? UI, 언어, 테마, Provider 표시, 소스 기본값, 툴바, 동기화 설정이 교체됩니다. API key, 권한, 페이지 바인딩, 런타임 스냅샷은 로컬에 남고 재설정되지 않습니다.",
+    resetToInitialSuccessTitle: "구성이 초기화됨",
+    resetToInitialSuccessMessage:
+      "이동 가능한 설정과 Provider 표시 기본값을 초기 기본값으로 재설정했습니다.",
   },
   "es-419": {
     title: "Respaldo y sincronización de configuración",
@@ -73,6 +107,12 @@ export const SETTINGS_CONFIGURATION_BACKUP_COPY: Record<
     importJson: "Importar JSON",
     saveToChromeSync: "Guardar en Chrome Sync",
     restoreFromChromeSync: "Restaurar desde Chrome Sync",
+    resetToInitial: "Inicializar configuración",
+    resetToInitialConfirm:
+      "¿Restablecer la configuración portable a los valores iniciales? Esto reemplaza UI, idioma, tema, visibilidad de providers, preferencias de origen, barra de herramientas y sincronización. API keys, permisos, vínculos de página y snapshots de ejecución quedan locales y no se restablecen.",
+    resetToInitialSuccessTitle: "Configuración inicializada",
+    resetToInitialSuccessMessage:
+      "Los ajustes portables y las preferencias de visualización de providers volvieron a los valores iniciales.",
   },
   "pt-BR": {
     title: "Backup e sincronização da configuração",
@@ -83,6 +123,12 @@ export const SETTINGS_CONFIGURATION_BACKUP_COPY: Record<
     importJson: "Importar JSON",
     saveToChromeSync: "Salvar no Chrome Sync",
     restoreFromChromeSync: "Restaurar do Chrome Sync",
+    resetToInitial: "Inicializar configuração",
+    resetToInitialConfirm:
+      "Redefinir a configuração portátil para os padrões iniciais? Isso substitui UI, idioma, tema, visibilidade de providers, preferências de origem, barra de ferramentas e sincronização. API keys, permissões, vínculos de página e snapshots de runtime continuam locais e não são redefinidos.",
+    resetToInitialSuccessTitle: "Configuração inicializada",
+    resetToInitialSuccessMessage:
+      "As configurações portáteis e preferências de exibição de providers foram redefinidas para os padrões iniciais.",
   },
   fr: {
     title: "Sauvegarde et synchronisation de la configuration",
@@ -93,6 +139,12 @@ export const SETTINGS_CONFIGURATION_BACKUP_COPY: Record<
     importJson: "Importer JSON",
     saveToChromeSync: "Enregistrer dans Chrome Sync",
     restoreFromChromeSync: "Restaurer depuis Chrome Sync",
+    resetToInitial: "Initialiser la configuration",
+    resetToInitialConfirm:
+      "Réinitialiser la configuration portable aux valeurs initiales ? Cela remplace l'UI, la langue, le thème, la visibilité des providers, les préférences de source, la barre d'outils et la synchronisation. Les API keys, permissions, liens de page et instantanés d'exécution restent locaux et ne sont pas réinitialisés.",
+    resetToInitialSuccessTitle: "Configuration initialisée",
+    resetToInitialSuccessMessage:
+      "Les réglages portables et les préférences d'affichage des providers ont été réinitialisés.",
   },
   de: {
     title: "Konfiguration sichern und synchronisieren",
@@ -103,6 +155,12 @@ export const SETTINGS_CONFIGURATION_BACKUP_COPY: Record<
     importJson: "JSON importieren",
     saveToChromeSync: "In Chrome Sync speichern",
     restoreFromChromeSync: "Aus Chrome Sync wiederherstellen",
+    resetToInitial: "Konfiguration initialisieren",
+    resetToInitialConfirm:
+      "Portable Konfiguration auf die Anfangswerte zurücksetzen? Dadurch werden UI, Sprache, Theme, Provider-Sichtbarkeit, Quellenpräferenzen, Toolbar und Sync-Einstellungen ersetzt. API keys, Berechtigungen, Seitenbindungen und Laufzeit-Snapshots bleiben lokal und werden nicht zurückgesetzt.",
+    resetToInitialSuccessTitle: "Konfiguration initialisiert",
+    resetToInitialSuccessMessage:
+      "Portable Einstellungen und Provider-Anzeigepräferenzen wurden auf die Anfangswerte zurückgesetzt.",
   },
   it: {
     title: "Backup e sincronizzazione della configurazione",
@@ -113,6 +171,12 @@ export const SETTINGS_CONFIGURATION_BACKUP_COPY: Record<
     importJson: "Importa JSON",
     saveToChromeSync: "Salva in Chrome Sync",
     restoreFromChromeSync: "Ripristina da Chrome Sync",
+    resetToInitial: "Inizializza configurazione",
+    resetToInitialConfirm:
+      "Ripristinare la configurazione portabile ai valori iniziali? Verranno sostituiti UI, lingua, tema, visibilità dei provider, preferenze sorgente, toolbar e sincronizzazione. API keys, permessi, collegamenti pagina e snapshot runtime restano locali e non vengono reimpostati.",
+    resetToInitialSuccessTitle: "Configurazione inizializzata",
+    resetToInitialSuccessMessage:
+      "Le impostazioni portabili e le preferenze di visualizzazione dei provider sono tornate ai valori iniziali.",
   },
   ru: {
     title: "Резервная копия и синхронизация настроек",
@@ -123,6 +187,12 @@ export const SETTINGS_CONFIGURATION_BACKUP_COPY: Record<
     importJson: "Импорт JSON",
     saveToChromeSync: "Сохранить в Chrome Sync",
     restoreFromChromeSync: "Восстановить из Chrome Sync",
+    resetToInitial: "Инициализировать настройки",
+    resetToInitialConfirm:
+      "Сбросить переносимую конфигурацию к начальным значениям? Это заменит UI, язык, тему, видимость provider, предпочтения источников, панель инструментов и синхронизацию. API keys, разрешения, привязки страниц и runtime snapshots останутся локально и не будут сброшены.",
+    resetToInitialSuccessTitle: "Конфигурация инициализирована",
+    resetToInitialSuccessMessage:
+      "Переносимые настройки и параметры отображения provider сброшены к начальным значениям.",
   },
   ar: {
     title: "نسخ الإعدادات ومزامنتها",
@@ -133,6 +203,12 @@ export const SETTINGS_CONFIGURATION_BACKUP_COPY: Record<
     importJson: "استيراد JSON",
     saveToChromeSync: "حفظ في Chrome Sync",
     restoreFromChromeSync: "استعادة من Chrome Sync",
+    resetToInitial: "تهيئة الإعدادات",
+    resetToInitialConfirm:
+      "هل تريد إعادة الإعدادات القابلة للنقل إلى القيم الأولية؟ سيستبدل ذلك الواجهة واللغة والسمة وظهور Provider وتفضيلات المصدر وشريط الأدوات والمزامنة. ستبقى API keys والأذونات وروابط الصفحات ولقطات التشغيل محلية ولن تتم إعادة ضبطها.",
+    resetToInitialSuccessTitle: "تمت تهيئة الإعدادات",
+    resetToInitialSuccessMessage:
+      "تمت إعادة الإعدادات القابلة للنقل وتفضيلات عرض Provider إلى القيم الأولية.",
   },
   hi: {
     title: "Configuration backup और sync",
@@ -143,6 +219,12 @@ export const SETTINGS_CONFIGURATION_BACKUP_COPY: Record<
     importJson: "JSON import",
     saveToChromeSync: "Chrome Sync में save",
     restoreFromChromeSync: "Chrome Sync से restore",
+    resetToInitial: "Configuration initialize",
+    resetToInitialConfirm:
+      "Portable configuration को initial defaults पर reset करें? इससे UI, भाषा, theme, Provider visibility, source preferences, toolbar और sync settings बदल जाएंगी. API keys, permissions, page bindings और runtime snapshots local रहेंगे और reset नहीं होंगे.",
+    resetToInitialSuccessTitle: "Configuration initialized",
+    resetToInitialSuccessMessage:
+      "Portable settings और Provider display preferences initial defaults पर reset हो गए.",
   },
   id: {
     title: "Cadangan dan sinkronisasi konfigurasi",
@@ -153,6 +235,12 @@ export const SETTINGS_CONFIGURATION_BACKUP_COPY: Record<
     importJson: "Impor JSON",
     saveToChromeSync: "Simpan ke Chrome Sync",
     restoreFromChromeSync: "Pulihkan dari Chrome Sync",
+    resetToInitial: "Inisialisasi konfigurasi",
+    resetToInitialConfirm:
+      "Reset konfigurasi portabel ke default awal? Ini mengganti UI, bahasa, tema, visibilitas provider, preferensi sumber, toolbar, dan sinkronisasi. API keys, izin, binding halaman, dan snapshot runtime tetap lokal dan tidak direset.",
+    resetToInitialSuccessTitle: "Konfigurasi diinisialisasi",
+    resetToInitialSuccessMessage:
+      "Pengaturan portabel dan preferensi tampilan provider direset ke default awal.",
   },
 };
 

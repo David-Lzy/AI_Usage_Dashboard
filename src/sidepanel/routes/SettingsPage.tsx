@@ -144,6 +144,7 @@ type SettingsPageProps = {
   onImportConfigurationJson: (rawJson: string) => void;
   onSaveConfigurationToChromeSync: () => void;
   onRestoreConfigurationFromChromeSync: () => void;
+  onResetConfigurationToInitial: () => void;
   onToolbarIconModeChange: (toolbarIconMode: ToolbarIconMode) => void;
   onToolbarIconProviderIdChange: (
     toolbarIconProviderId: AppSettings["toolbarIconProviderId"],
@@ -215,6 +216,7 @@ export function SettingsPage({
   onImportConfigurationJson,
   onSaveConfigurationToChromeSync,
   onRestoreConfigurationFromChromeSync,
+  onResetConfigurationToInitial,
   onToolbarIconModeChange,
   onToolbarIconProviderIdChange,
   onToolbarIconCustomImageDataUrlChange,
@@ -450,6 +452,7 @@ export function SettingsPage({
         onImportConfigurationJson={onImportConfigurationJson}
         onSaveConfigurationToChromeSync={onSaveConfigurationToChromeSync}
         onRestoreConfigurationFromChromeSync={onRestoreConfigurationFromChromeSync}
+        onResetConfigurationToInitial={onResetConfigurationToInitial}
         onToolbarIconModeChange={onToolbarIconModeChange}
         onToolbarIconProviderIdChange={onToolbarIconProviderIdChange}
         onToolbarIconCustomImageDataUrlChange={

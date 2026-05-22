@@ -276,6 +276,8 @@ export function createStandardAppActions({
     handleOpenCurrentRouteInSidePanel,
     handleOpenSessionPage: sessionPageActions.handleOpenSessionPage,
     handleRefresh,
+    handleResetConfigurationToInitial:
+      settingsActions.handleResetConfigurationToInitial,
     handleRestoreConfigurationFromChromeSync:
       settingsActions.handleRestoreConfigurationFromChromeSync,
     handleSaveCodexWorkspaceConfig:
