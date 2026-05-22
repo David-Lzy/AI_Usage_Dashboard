@@ -29,6 +29,8 @@ describe("PopupAppearancePreview", () => {
     expect(html).toContain("usage-progress-ring--circle-soft");
     expect(html).toContain("Toolbar bubble shape");
     expect(html).toContain("week, reset: Tue 09:15");
+    expect(html).not.toContain("popup-appearance-preview-actions");
+    expect(html).not.toContain("14:59");
   });
 
   it("renders the zh-CN pilot preview copy through runtime i18n", () => {

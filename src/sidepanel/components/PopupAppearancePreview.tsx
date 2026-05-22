@@ -55,22 +55,6 @@ export function PopupAppearancePreview({
         aria-label={i18n.t("settings.popup_appearance_preview.title")}
       >
         <div className="popup-appearance-preview-surface">
-          <div className="popup-appearance-preview-header">
-            <div
-              className="popup-appearance-preview-actions"
-              aria-hidden="true"
-            >
-              <span className="popup-appearance-preview-actions__refresh">
-                <span />
-                <strong>14:59</strong>
-              </span>
-              <span />
-              <span />
-              <span />
-              <span />
-            </div>
-          </div>
-
           <div className="popup-appearance-preview-provider">
             <div>
               <p className="popup-appearance-preview-provider__title">
