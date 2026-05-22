@@ -198,6 +198,40 @@ describe("popup route actions", () => {
     expect(popupWindow.close).toHaveBeenCalled();
   });
 
+  it("keeps Firefox sidebar open inside the popup user input turn", async () => {
+    const popupWindow = stubPopupWindow();
+    const calls: string[] = [];
+    let resolveSetPanel!: () => void;
+    const setPanel = vi.fn(
+      () =>
+        new Promise<void>((resolve) => {
+          calls.push("setPanel");
+          resolveSetPanel = resolve;
+        }),
+    );
+    const open = vi.fn(async () => {
+      calls.push("open");
+    });
+
+    vi.stubGlobal("browser", {
+      runtime: {
+        id: "extension-id",
+      },
+      sidebarAction: {
+        open,
+        setPanel,
+      },
+    });
+
+    const routePromise = openSidePanelRoute({ name: "dashboard" });
+
+    expect(calls).toEqual(["setPanel", "open"]);
+    resolveSetPanel();
+    await routePromise;
+
+    expect(popupWindow.close).toHaveBeenCalled();
+  });
+
   it("opens full-page routes through Firefox tabs when side surfaces are unavailable", async () => {
     const popupWindow = stubPopupWindow();
     const create = vi.fn(async () => undefined);

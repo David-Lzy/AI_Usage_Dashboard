@@ -335,8 +335,11 @@ async function openFirefoxSidebarPath(path: string): Promise<boolean> {
     return false;
   }
 
-  await sidebarAction.setPanel?.({ panel: path });
-  await sidebarAction.open?.();
+  const setPanelResult = sidebarAction.setPanel?.({ panel: path });
+  const openResult = sidebarAction.open?.();
+
+  await setPanelResult;
+  await openResult;
   return true;
 }
 
@@ -347,7 +350,7 @@ export async function openSideSurfacePath(
     closeCurrentExtensionTab?: boolean;
   } = {},
 ): Promise<boolean> {
-  if (await openChromeSidePanelPath(path, options)) {
+  if (hasChromeSidePanelApi() && (await openChromeSidePanelPath(path, options))) {
     if (options.closeCurrentExtensionTab) {
       await closeCurrentExtensionTabBestEffort();
     }
@@ -355,7 +358,7 @@ export async function openSideSurfacePath(
     return true;
   }
 
-  if (await openFirefoxSidebarPath(path)) {
+  if (getFirefoxSidebarActionApi() && (await openFirefoxSidebarPath(path))) {
     if (options.closeCurrentExtensionTab) {
       await closeCurrentExtensionTabBestEffort();
     }
