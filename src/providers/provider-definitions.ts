@@ -33,7 +33,7 @@ export const PROVIDER_DEFINITIONS: readonly ProviderDefinition[] = [
     sourceKind: "session_page",
     connectionMode: "page_session",
     fixedSourcePreference: "session_page",
-    defaultDisplayEnabled: true,
+    defaultDisplayEnabled: false,
     quickSetupDefaultVisible: true,
   },
   {
@@ -105,7 +105,7 @@ export const PROVIDER_DEFINITIONS: readonly ProviderDefinition[] = [
     sourceKind: "policy_only",
     connectionMode: "none",
     fixedSourcePreference: "auto",
-    defaultDisplayEnabled: true,
+    defaultDisplayEnabled: false,
     quickSetupDefaultVisible: true,
   },
   {

@@ -43,8 +43,8 @@ import {
   normalizeWarningThresholdPercent,
 } from "./settings-preferences";
 import {
-  buildActionBadgeQuotaCandidates,
   normalizeActionBadgeSelection,
+  normalizeActionBadgeSelectionMode,
   normalizeActionBadgeSelections,
 } from "./action-badge-preferences";
 import {
@@ -215,12 +215,6 @@ function normalizeAppState(state: AppState): AppState {
   );
   const knownProgressItemIdsByProvider =
     buildProviderProgressItemIdsByProvider(providers);
-  const availableActionBadgeSelections = buildActionBadgeQuotaCandidates({
-    providers,
-    providerSettings,
-    settings: SAMPLE_APP_STATE.settings,
-  }).map((candidate) => candidate.value);
-
   const extraProviders = state.providers.filter(
     (provider) =>
       isProviderId(provider.providerId) &&
@@ -291,13 +285,17 @@ function normalizeAppState(state: AppState): AppState {
           state.settings?.popupCircularProgressItemsPerRow,
           DEFAULT_POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW,
         ),
+      actionBadgeSelectionMode: normalizeActionBadgeSelectionMode(
+        state.settings?.actionBadgeSelectionMode,
+        state.settings?.actionBadgeSelections,
+        state.settings?.actionBadgeSelection,
+      ),
       actionBadgeSelection: normalizeActionBadgeSelection(
         state.settings?.actionBadgeSelection,
       ),
       actionBadgeSelections: normalizeActionBadgeSelections(
         state.settings?.actionBadgeSelections,
         state.settings?.actionBadgeSelection,
-        availableActionBadgeSelections,
       ),
       actionBadgeRotationIntervalSeconds:
         normalizeActionBadgeRotationIntervalSeconds(

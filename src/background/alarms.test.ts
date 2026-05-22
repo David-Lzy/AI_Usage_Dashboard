@@ -1,7 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { AppSettings } from "../providers/types";
+import type { AppSettings, AppState } from "../providers/types";
 import { SAMPLE_APP_STATE } from "../shared/constants";
+import { buildActionBadgeQuotaCandidates } from "../shared/action-badge-preferences";
 import {
   ACTION_BADGE_ROTATION_ALARM,
   ensureActionBadgeRotationAlarm,
@@ -17,6 +18,16 @@ const baseSettings: AppSettings = {
   ...SAMPLE_APP_STATE.settings,
   syncIntervalMinutes: 30,
 };
+
+function createAlarmState(settings: Partial<AppSettings>): AppState {
+  return {
+    ...SAMPLE_APP_STATE,
+    settings: {
+      ...baseSettings,
+      ...settings,
+    },
+  };
+}
 
 function stubChromeAlarms(currentAlarm?: chrome.alarms.Alarm) {
   const get = vi.fn(async (alarmName: string) =>
@@ -114,12 +125,15 @@ describe("ensureActionBadgeRotationAlarm", () => {
 
   it("creates a thirty-second rotation alarm when multiple badges are selected", async () => {
     const alarms = stubChromeAlarms();
+    const firstQuotaCandidate =
+      buildActionBadgeQuotaCandidates(SAMPLE_APP_STATE)[0]?.value ??
+      "quota:codex-personal-page:primary";
 
-    await ensureActionBadgeRotationAlarm({
-      ...baseSettings,
-      actionBadgeSelections: ["attention", "quota:codex:primary"],
+    await ensureActionBadgeRotationAlarm(createAlarmState({
+      actionBadgeSelectionMode: "manual",
+      actionBadgeSelections: ["attention", firstQuotaCandidate],
       actionBadgeRotationIntervalSeconds: 30,
-    });
+    }));
 
     expect(alarms.get).toHaveBeenCalledWith(ACTION_BADGE_ROTATION_ALARM);
     expect(alarms.create).toHaveBeenCalledWith(ACTION_BADGE_ROTATION_ALARM, {
@@ -131,10 +145,10 @@ describe("ensureActionBadgeRotationAlarm", () => {
   it("clears the rotation alarm when one or zero badges are selected", async () => {
     const alarms = stubChromeAlarms();
 
-    await ensureActionBadgeRotationAlarm({
-      ...baseSettings,
+    await ensureActionBadgeRotationAlarm(createAlarmState({
+      actionBadgeSelectionMode: "manual",
       actionBadgeSelections: ["attention"],
-    });
+    }));
 
     expect(alarms.clear).toHaveBeenCalledWith(ACTION_BADGE_ROTATION_ALARM);
   });

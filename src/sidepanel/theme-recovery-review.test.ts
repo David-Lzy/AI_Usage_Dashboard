@@ -35,6 +35,9 @@ function isolateRecoveryTargets(state: AppState) {
   state.settings.themeMode = "light";
   state.settings.themePreset = "custom";
   state.settings.themeCustomSeedHex = "#4F46E5";
+  state.settings.actionBadgeSelectionMode = "manual";
+  state.settings.actionBadgeSelection = "attention";
+  state.settings.actionBadgeSelections = ["attention"];
 
   state.providerSettings = state.providerSettings.map((provider) => ({
     ...provider,

@@ -138,6 +138,7 @@ type SettingsPageProps = {
   onActionBadgeSelectionsChange: (
     actionBadgeSelections: ActionBadgeSelections,
   ) => void;
+  onRestoreActionBadgeAutoMode: () => void;
   onActionBadgeRotationIntervalSecondsChange: (seconds: number) => void;
   onExportConfiguration: () => void;
   onImportConfigurationJson: (rawJson: string) => void;
@@ -208,6 +209,7 @@ export function SettingsPage({
   onProgressThicknessPxChange,
   onProgressColorBandsChange,
   onActionBadgeSelectionsChange,
+  onRestoreActionBadgeAutoMode,
   onActionBadgeRotationIntervalSecondsChange,
   onExportConfiguration,
   onImportConfigurationJson,
@@ -440,6 +442,7 @@ export function SettingsPage({
         onProgressThicknessPxChange={onProgressThicknessPxChange}
         onProgressColorBandsChange={onProgressColorBandsChange}
         onActionBadgeSelectionsChange={onActionBadgeSelectionsChange}
+        onRestoreActionBadgeAutoMode={onRestoreActionBadgeAutoMode}
         onActionBadgeRotationIntervalSecondsChange={
           onActionBadgeRotationIntervalSecondsChange
         }

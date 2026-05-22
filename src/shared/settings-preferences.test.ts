@@ -14,10 +14,10 @@ describe("settings preference normalization", () => {
   });
 
   it("falls back for unsupported sync intervals", () => {
-    expect(normalizeSyncIntervalMinutes(2)).toBe(30);
-    expect(normalizeSyncIntervalMinutes(241)).toBe(30);
-    expect(normalizeSyncIntervalMinutes(30.5)).toBe(30);
-    expect(normalizeSyncIntervalMinutes("soon")).toBe(30);
+    expect(normalizeSyncIntervalMinutes(2)).toBe(3);
+    expect(normalizeSyncIntervalMinutes(241)).toBe(3);
+    expect(normalizeSyncIntervalMinutes(30.5)).toBe(3);
+    expect(normalizeSyncIntervalMinutes("soon")).toBe(3);
   });
 
   it("accepts integer warning thresholds inside the supported range", () => {

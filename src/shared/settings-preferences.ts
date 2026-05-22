@@ -1,6 +1,6 @@
 export const SYNC_INTERVAL_MIN_MINUTES = 3;
 export const SYNC_INTERVAL_MAX_MINUTES = 240;
-export const DEFAULT_SYNC_INTERVAL_MINUTES = 30;
+export const DEFAULT_SYNC_INTERVAL_MINUTES = 3;
 export const SYNC_INTERVAL_PRESETS = [3, 15, 30, 60] as const;
 
 export const WARNING_THRESHOLD_MIN_PERCENT = 50;

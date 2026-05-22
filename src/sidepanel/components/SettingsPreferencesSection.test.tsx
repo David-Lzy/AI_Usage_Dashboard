@@ -37,6 +37,7 @@ describe("SettingsPreferencesSection", () => {
         onProgressThicknessPxChange={() => {}}
         onProgressColorBandsChange={() => {}}
         onActionBadgeSelectionsChange={() => {}}
+        onRestoreActionBadgeAutoMode={() => {}}
         onActionBadgeRotationIntervalSecondsChange={() => {}}
         onExportConfiguration={() => {}}
         onImportConfigurationJson={() => {}}
@@ -64,7 +65,7 @@ describe("SettingsPreferencesSection", () => {
     expect(html).toContain('data-settings-material-select="popup-circular-row-count"');
     expect(html).toContain('data-settings-material-select="ui-font-family"');
     expect(html).toContain("Circular items per row");
-    expect(html).toContain("2 per row");
+    expect(html).toContain("4 per row");
     expect(html).toContain("UI font");
     expect(html).toContain(
       "Uses safe local system font stacks across the popup",

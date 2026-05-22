@@ -1,7 +1,7 @@
 import type { ProgressColorBand } from "../providers/types";
 
-export const PROGRESS_THICKNESS_MIN_PX = 4;
-export const PROGRESS_THICKNESS_MAX_PX = 18;
+export const PROGRESS_THICKNESS_MIN_PX = 1;
+export const PROGRESS_THICKNESS_MAX_PX = 20;
 export const DEFAULT_PROGRESS_THICKNESS_PX = 10;
 
 const PROGRESS_COLOR_HEX_PATTERN = /^#[0-9a-fA-F]{6}$/;

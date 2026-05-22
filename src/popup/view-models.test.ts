@@ -27,8 +27,6 @@ describe("popup view models", () => {
     expect(model.featuredProviders.map((provider) => provider.providerId)).toEqual([
       "claude-code-team-page",
       "codex-personal-page",
-      "cursor-personal-page",
-      "gemini-policy",
     ]);
     expect(model.featuredSection.label).toBe("Needs attention");
   });
@@ -46,16 +44,12 @@ describe("popup view models", () => {
     });
 
     expect(model.visibleProviders.map((provider) => provider.providerId)).toEqual([
-      "gemini-policy",
       "codex-personal-page",
       "claude-code-team-page",
-      "cursor-personal-page",
     ]);
     expect(model.featuredProviders.map((provider) => provider.providerId)).toEqual([
-      "gemini-policy",
       "codex-personal-page",
       "claude-code-team-page",
-      "cursor-personal-page",
     ]);
   });
 
@@ -92,8 +86,6 @@ describe("popup view models", () => {
     expect(model.featuredProviders.map((provider) => provider.providerId)).toEqual([
       "codex-personal-page",
       "claude-code-team-page",
-      "cursor-personal-page",
-      "gemini-policy",
     ]);
   });
 
@@ -186,9 +178,9 @@ describe("popup view models", () => {
     expect(model.snapshotStatus).toMatchObject({
       label: "Mixed state",
       tone: "warning",
-      headline: "Synced 2m ago",
+      headline: "Usage page snapshot 24m ago",
       detail:
-        "Newest visible snapshot: Cursor Personal (Synced 2m ago). Oldest visible snapshot: Claude Team (Usage page needed).",
+        "Newest visible snapshot: Codex Personal (Usage page snapshot 24m ago). Oldest visible snapshot: Claude Team (Usage page needed).",
     });
     expect(model.showSnapshotStatus).toBe(true);
   });
@@ -237,7 +229,7 @@ describe("popup view models", () => {
       label: "Aligned",
       tone: "neutral",
       headline: "Synced just now",
-      detail: "All 4 visible providers share the same cached snapshot window.",
+      detail: "All 2 visible providers share the same cached snapshot window.",
     });
     expect(model.showSnapshotStatus).toBe(true);
   });
@@ -655,6 +647,7 @@ describe("popup view models", () => {
         provider.id === "cursor-personal-page"
           ? {
               ...provider,
+              displayEnabled: true,
               status: "missing",
             }
           : provider,
@@ -1460,7 +1453,7 @@ describe("popup view models", () => {
     const i18n = createRuntimeI18n("zh-CN");
     const model = localizePopupViewModel(buildPopupViewModel(SAMPLE_APP_STATE), i18n);
 
-    expect(model.snapshotStatus.headline).toBe("2分钟前同步");
+    expect(model.snapshotStatus.headline).toBe("Usage page snapshot 24m ago");
     expect(model.snapshotStatus.detail).toContain("Usage page needed");
     expect(model.featuredProviderCards[0]?.metaChips[1]).toBe("Usage page needed");
   });

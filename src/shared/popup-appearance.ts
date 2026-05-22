@@ -9,7 +9,7 @@ import type {
 export const DEFAULT_POPUP_SIZE_PRESET: PopupSizePreset = "balanced";
 export const DEFAULT_POPUP_CORNER_STYLE: PopupCornerStyle = "rounded";
 export const DEFAULT_POPUP_SHADOW_STYLE: PopupShadowStyle = "soft";
-export const DEFAULT_POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW: PopupCircularProgressItemsPerRow = 2;
+export const DEFAULT_POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW: PopupCircularProgressItemsPerRow = 4;
 
 export const POPUP_SIZE_PRESET_OPTIONS: Array<{
   value: PopupSizePreset;
@@ -81,6 +81,10 @@ export const POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW_OPTIONS: Array<{
     value: 3,
     label: "3 per row",
   },
+  {
+    value: 4,
+    label: "4 per row",
+  },
 ];
 
 export function normalizePopupSizePreset(
@@ -114,7 +118,9 @@ export function normalizePopupCircularProgressItemsPerRow(
   value: unknown,
   fallback: PopupCircularProgressItemsPerRow = DEFAULT_POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW,
 ): PopupCircularProgressItemsPerRow {
-  return value === 1 || value === 2 || value === 3 ? value : fallback;
+  return value === 1 || value === 2 || value === 3 || value === 4
+    ? value
+    : fallback;
 }
 
 export function syncPopupAppearanceAttributes(

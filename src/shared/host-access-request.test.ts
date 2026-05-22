@@ -28,7 +28,7 @@ describe("host access refresh helpers", () => {
     const state = createState({
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) =>
         provider.id === "codex-personal-page" || provider.id === "cursor-personal-page"
-          ? { ...provider, status: "missing" as const }
+          ? { ...provider, displayEnabled: true, status: "missing" as const }
           : provider,
       ),
     });

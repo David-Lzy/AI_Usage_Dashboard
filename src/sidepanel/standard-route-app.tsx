@@ -9,6 +9,10 @@ import {
   syncRuntimeLocaleAttributes,
 } from "../shared/i18n";
 import { isFullPageSurfaceSearch } from "../shared/extension-surface-paths";
+import {
+  DEFAULT_ACTION_BADGE_SELECTION,
+  DEFAULT_ACTION_BADGE_SELECTIONS,
+} from "../shared/action-badge-preferences";
 import { buildProviderSourceDisplayLocalizedCopy } from "../shared/provider-source-display-localized-copy";
 import { buildQuickThemeToggle } from "../shared/theme";
 import { Toast } from "./components/Toast";
@@ -290,8 +294,16 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           }
           onActionBadgeSelectionsChange={(actionBadgeSelections) =>
             handleUpdateSettings({
+              actionBadgeSelectionMode: "manual",
               actionBadgeSelection: actionBadgeSelections[0] ?? "attention",
               actionBadgeSelections,
+            })
+          }
+          onRestoreActionBadgeAutoMode={() =>
+            handleUpdateSettings({
+              actionBadgeSelectionMode: "auto",
+              actionBadgeSelection: DEFAULT_ACTION_BADGE_SELECTION,
+              actionBadgeSelections: [...DEFAULT_ACTION_BADGE_SELECTIONS],
             })
           }
           onActionBadgeRotationIntervalSecondsChange={(

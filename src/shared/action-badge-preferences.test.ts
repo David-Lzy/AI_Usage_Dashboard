@@ -92,7 +92,9 @@ describe("action badge preferences", () => {
       ...SAMPLE_APP_STATE,
       settings: {
         ...SAMPLE_APP_STATE.settings,
+        actionBadgeSelectionMode: "manual" as const,
         actionBadgeSelection: "quota:claude-code:primary",
+        actionBadgeSelections: ["quota:claude-code:primary"],
       },
     };
 
@@ -108,6 +110,7 @@ describe("action badge preferences", () => {
       ...state,
       settings: {
         ...state.settings,
+        actionBadgeSelectionMode: "manual" as const,
         actionBadgeSelections: ["attention", ...candidateValues],
         actionBadgeRotationIntervalSeconds: 60,
       },

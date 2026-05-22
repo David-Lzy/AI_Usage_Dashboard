@@ -104,6 +104,7 @@ export function buildSettingsPreferenceOptions({
     1: i18n.t("settings.preferences.popup_circular_row_count.one"),
     2: i18n.t("settings.preferences.popup_circular_row_count.two"),
     3: i18n.t("settings.preferences.popup_circular_row_count.three"),
+    4: i18n.t("settings.preferences.popup_circular_row_count.four"),
   };
   const localeOptions: Array<{ value: AppLocalePreference; label: string }> = [
     { value: "system", label: i18n.t("settings.preferences.locale.system") },

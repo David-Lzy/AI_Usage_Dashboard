@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import type { AppState } from "../providers/types";
 import { buildActionBadgeQuotaCandidates } from "./action-badge-preferences";
 import { SAMPLE_APP_STATE } from "./constants";
-import { readAppState, writeAppState } from "./storage";
+import { readAppState, updateAppState, writeAppState } from "./storage";
 
 function createLegacyState(): AppState {
   const {
@@ -20,6 +20,7 @@ function createLegacyState(): AppState {
     popupCornerStyle: _popupCornerStyle,
     popupShadowStyle: _popupShadowStyle,
     popupCircularProgressItemsPerRow: _popupCircularProgressItemsPerRow,
+    actionBadgeSelectionMode: _actionBadgeSelectionMode,
     actionBadgeSelection: _actionBadgeSelection,
     actionBadgeSelections: _actionBadgeSelections,
     actionBadgeRotationIntervalSeconds: _actionBadgeRotationIntervalSeconds,
@@ -222,7 +223,8 @@ describe("storage normalization", () => {
     expect(state?.settings.popupSizePreset).toBe("balanced");
     expect(state?.settings.popupCornerStyle).toBe("rounded");
     expect(state?.settings.popupShadowStyle).toBe("soft");
-    expect(state?.settings.popupCircularProgressItemsPerRow).toBe(2);
+    expect(state?.settings.popupCircularProgressItemsPerRow).toBe(4);
+    expect(state?.settings.actionBadgeSelectionMode).toBe("auto");
     expect(state?.settings.actionBadgeSelection).toBe("attention");
     expect(state?.settings.actionBadgeSelections).toEqual(["attention"]);
     expect(state?.settings.actionBadgeRotationIntervalSeconds).toBe(60);
@@ -404,7 +406,7 @@ describe("storage normalization", () => {
     expect(state?.settings.popupSizePreset).toBe("balanced");
     expect(state?.settings.popupCornerStyle).toBe("rounded");
     expect(state?.settings.popupShadowStyle).toBe("soft");
-    expect(state?.settings.popupCircularProgressItemsPerRow).toBe(2);
+    expect(state?.settings.popupCircularProgressItemsPerRow).toBe(4);
   });
 
   it("normalizes invalid action badge preferences", async () => {
@@ -517,9 +519,51 @@ describe("storage normalization", () => {
 
     const state = await readAppState();
 
-    expect(state?.settings.syncIntervalMinutes).toBe(30);
+    expect(state?.settings.syncIntervalMinutes).toBe(3);
     expect(state?.settings.warningThresholdPercent).toBe(80);
     expect(state?.settings.progressThicknessPx).toBe(10);
+  });
+
+  it("preserves unrelated settings during partial state updates", async () => {
+    await writeAppState({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        locale: "zh-CN",
+        themeMode: "dark",
+        syncIntervalMinutes: 15,
+        popupProgressStyle: "circle-gauge",
+        popupCircularProgressItemsPerRow: 3,
+        progressThicknessPx: 7,
+        toolbarIconMode: "provider",
+        toolbarIconProviderId: "codex-personal-page",
+        actionBadgeSelectionMode: "manual",
+        actionBadgeSelection: "attention",
+        actionBadgeSelections: ["attention"],
+      },
+    });
+
+    await updateAppState((current) => ({
+      ...current,
+      settings: {
+        ...current.settings,
+        warningThresholdPercent: 90,
+      },
+    }));
+
+    const state = await readAppState();
+
+    expect(state?.settings.warningThresholdPercent).toBe(90);
+    expect(state?.settings.locale).toBe("zh-CN");
+    expect(state?.settings.themeMode).toBe("dark");
+    expect(state?.settings.syncIntervalMinutes).toBe(15);
+    expect(state?.settings.popupProgressStyle).toBe("circle-gauge");
+    expect(state?.settings.popupCircularProgressItemsPerRow).toBe(3);
+    expect(state?.settings.progressThicknessPx).toBe(7);
+    expect(state?.settings.toolbarIconMode).toBe("provider");
+    expect(state?.settings.toolbarIconProviderId).toBe("codex-personal-page");
+    expect(state?.settings.actionBadgeSelectionMode).toBe("manual");
+    expect(state?.settings.actionBadgeSelections).toEqual(["attention"]);
   });
 
   it("normalizes progress color bands independently from the warning threshold", async () => {

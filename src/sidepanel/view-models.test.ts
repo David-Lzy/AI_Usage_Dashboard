@@ -28,8 +28,6 @@ describe("sidepanel view models", () => {
     expect(providers.map((provider) => provider.providerId)).toEqual([
       "claude-code-team-page",
       "codex-personal-page",
-      "cursor-personal-page",
-      "gemini-policy",
     ]);
   });
 
@@ -49,17 +47,15 @@ describe("sidepanel view models", () => {
       getVisibleProviders(state, undefined, "sidebar").map(
         (provider) => provider.providerId,
       ),
-    ).toEqual(["cursor-personal-page", "codex-personal-page", "gemini-policy", "claude-code-team-page"]);
+    ).toEqual(["codex-personal-page", "claude-code-team-page"]);
     expect(
       getVisibleProviders(state, undefined, "fullPage").map(
         (provider) => provider.providerId,
       ),
-    ).toEqual(["gemini-policy", "codex-personal-page", "cursor-personal-page", "claude-code-team-page"]);
+    ).toEqual(["codex-personal-page", "claude-code-team-page"]);
     expect(getVisibleProviders(state).map((provider) => provider.providerId)).toEqual([
       "claude-code-team-page",
       "codex-personal-page",
-      "cursor-personal-page",
-      "gemini-policy",
     ]);
   });
 
@@ -82,8 +78,8 @@ describe("sidepanel view models", () => {
     const summaryItems = buildSummaryItems(createState());
 
     expect(summaryItems).toEqual([
-      { label: "Visible", value: "4", tone: "neutral" },
-      { label: "Healthy", value: "2", tone: "neutral" },
+      { label: "Visible", value: "2", tone: "neutral" },
+      { label: "Healthy", value: "1", tone: "neutral" },
       { label: "Needs Access", value: "0", tone: "neutral" },
       { label: "Needs Attention", value: "1", tone: "error" },
     ]);
@@ -98,8 +94,8 @@ describe("sidepanel view models", () => {
     );
 
     expect(summaryItems).toEqual([
-      { label: "Visible", value: "#4", tone: "neutral" },
-      { label: "Healthy", value: "#2", tone: "neutral" },
+      { label: "Visible", value: "#2", tone: "neutral" },
+      { label: "Healthy", value: "#1", tone: "neutral" },
       { label: "Needs Access", value: "#0", tone: "neutral" },
       { label: "Needs Attention", value: "#1", tone: "error" },
     ]);

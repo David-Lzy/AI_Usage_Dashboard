@@ -15,10 +15,11 @@ import {
 
 describe("progress appearance preferences", () => {
   it("normalizes progress thickness to a bounded integer default", () => {
+    expect(normalizeProgressThicknessPx(1)).toBe(1);
     expect(normalizeProgressThicknessPx(4)).toBe(4);
-    expect(normalizeProgressThicknessPx("18")).toBe(18);
-    expect(normalizeProgressThicknessPx(3)).toBe(DEFAULT_PROGRESS_THICKNESS_PX);
-    expect(normalizeProgressThicknessPx(19)).toBe(DEFAULT_PROGRESS_THICKNESS_PX);
+    expect(normalizeProgressThicknessPx("20")).toBe(20);
+    expect(normalizeProgressThicknessPx(0)).toBe(DEFAULT_PROGRESS_THICKNESS_PX);
+    expect(normalizeProgressThicknessPx(21)).toBe(DEFAULT_PROGRESS_THICKNESS_PX);
     expect(normalizeProgressThicknessPx(8.5)).toBe(DEFAULT_PROGRESS_THICKNESS_PX);
     expect(normalizeProgressThicknessPx("wide")).toBe(
       DEFAULT_PROGRESS_THICKNESS_PX,

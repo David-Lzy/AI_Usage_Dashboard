@@ -47,6 +47,7 @@ type SettingsPreferencesSectionProps = {
   onActionBadgeSelectionsChange: (
     actionBadgeSelections: ActionBadgeSelections,
   ) => void;
+  onRestoreActionBadgeAutoMode: () => void;
   onActionBadgeRotationIntervalSecondsChange: (seconds: number) => void;
   onExportConfiguration: () => void;
   onImportConfigurationJson: (rawJson: string) => void;
@@ -90,6 +91,7 @@ export function SettingsPreferencesSection({
   snapshots,
   userLevelVisibility: _userLevelVisibility,
   onActionBadgeSelectionsChange,
+  onRestoreActionBadgeAutoMode,
   onActionBadgeRotationIntervalSecondsChange,
   onExportConfiguration,
   onImportConfigurationJson,
@@ -149,7 +151,7 @@ export function SettingsPreferencesSection({
   const uiFontHelperText = i18n.t("settings.preferences.ui_font_helper");
   const popupCircularProgressItemsPerRowOptionsForSelect =
     popupCircularProgressItemsPerRowOptions.map((option) => ({
-      value: String(option.value) as "1" | "2" | "3",
+      value: String(option.value) as "1" | "2" | "3" | "4",
       label: option.label,
     }));
   const selectedToolbarIconProviderId =
@@ -233,6 +235,30 @@ export function SettingsPreferencesSection({
           }
           onSelectionsChange={onActionBadgeSelectionsChange}
         />
+
+        <div
+          className="form-field action-badge-mode-field"
+          data-action-badge-selection-mode={settings.actionBadgeSelectionMode}
+        >
+          <span className="form-field__label">
+            {i18n.t("settings.preferences.action_badge_mode_label")}
+          </span>
+          <div className="action-badge-mode-field__body">
+            <span className="meta-chip">
+              {settings.actionBadgeSelectionMode === "auto"
+                ? i18n.t("settings.preferences.action_badge_mode_auto")
+                : i18n.t("settings.preferences.action_badge_mode_manual")}
+            </span>
+            <button
+              className="text-button action-badge-mode-field__reset"
+              type="button"
+              disabled={settings.actionBadgeSelectionMode === "auto"}
+              onClick={onRestoreActionBadgeAutoMode}
+            >
+              {i18n.t("settings.preferences.action_badge_restore_auto")}
+            </button>
+          </div>
+        </div>
 
         <EditableNumberCombobox
           label={i18n.t("settings.preferences.action_badge_rotation_label")}
@@ -355,6 +381,7 @@ export function SettingsPreferencesSection({
                   | "1"
                   | "2"
                   | "3"
+                  | "4"
               }
               fieldIdPrefix="popup-circular-row-count"
               options={popupCircularProgressItemsPerRowOptionsForSelect}

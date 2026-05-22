@@ -157,9 +157,10 @@ export type ProgressDisplayStyle =
 export type PopupSizePreset = "compact" | "balanced" | "wide";
 export type PopupCornerStyle = "square" | "soft" | "rounded";
 export type PopupShadowStyle = "none" | "soft" | "elevated";
-export type PopupCircularProgressItemsPerRow = 1 | 2 | 3;
+export type PopupCircularProgressItemsPerRow = 1 | 2 | 3 | 4;
 export type ActionBadgeSelection = "attention" | (string & {});
 export type ActionBadgeSelections = ActionBadgeSelection[];
+export type ActionBadgeSelectionMode = "auto" | "manual";
 export type DisplaySurface = "popup" | "sidebar" | "fullPage";
 export type ProviderOrderBySurface = Record<DisplaySurface, ProviderId[]>;
 export type ProviderProgressItemPreference = {
@@ -320,6 +321,7 @@ export type AppSettings = {
   popupCornerStyle: PopupCornerStyle;
   popupShadowStyle: PopupShadowStyle;
   popupCircularProgressItemsPerRow: PopupCircularProgressItemsPerRow;
+  actionBadgeSelectionMode: ActionBadgeSelectionMode;
   actionBadgeSelection: ActionBadgeSelection;
   actionBadgeSelections: ActionBadgeSelections;
   actionBadgeRotationIntervalSeconds: number;

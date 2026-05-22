@@ -124,7 +124,9 @@ describe("sync engine health reconciliation", () => {
   });
 
   it("detects user-visible provider-setting drift during background sync", () => {
-    const startedSetting = buildProviderSetting();
+    const startedSetting = buildProviderSetting({
+      displayEnabled: true,
+    });
     const latestSetting = buildProviderSetting({
       displayEnabled: false,
     });

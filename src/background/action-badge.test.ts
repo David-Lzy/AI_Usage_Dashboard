@@ -56,6 +56,7 @@ function createStateWithCodexWindows() {
     ...state,
     settings: {
       ...state.settings,
+      actionBadgeSelectionMode: "manual" as const,
       actionBadgeSelection: weeklyCandidate?.value ?? "attention",
       actionBadgeSelections: [weeklyCandidate?.value ?? "attention"],
     },
@@ -76,6 +77,12 @@ describe("action badge", () => {
         ...provider,
         status: "granted",
       })),
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        actionBadgeSelectionMode: "manual" as const,
+        actionBadgeSelection: "attention",
+        actionBadgeSelections: ["attention"],
+      },
     });
 
     expect(model.text).toBe("");
@@ -83,10 +90,18 @@ describe("action badge", () => {
   });
 
   it("shows the number of visible providers needing attention", () => {
-    const model = buildActionBadgeModel(SAMPLE_APP_STATE);
+    const model = buildActionBadgeModel({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        actionBadgeSelectionMode: "manual" as const,
+        actionBadgeSelection: "attention",
+        actionBadgeSelections: ["attention"],
+      },
+    });
 
-    expect(model.text).toBe("2");
-    expect(model.title).toContain("2 visible providers need attention");
+    expect(model.text).toBe("1");
+    expect(model.title).toContain("1 visible provider needs attention");
     expect(model.backgroundColor).toEqual([161, 84, 0, 255]);
   });
 
@@ -100,11 +115,8 @@ describe("action badge", () => {
     expect(model.title).toContain("  Remaining: 32% remaining");
     expect(model.title).toContain("  Reset: Resets Thursday");
     expect(model.title).toContain("Visible providers");
-    expect(model.title).toContain("  Cursor Personal: Healthy");
-    expect(model.title).toContain("    Billing period: Mar 23 - Apr 21");
-    expect(model.title).toContain(
-      "    Total spend: $0; Included: $0; On-demand: $0",
-    );
+    expect(model.title).not.toContain("  Cursor Personal:");
+    expect(model.title).toContain("  Codex Personal: Healthy");
     expect(model.title).toContain("    Weekly usage window: 32% remaining");
     expect(model.title).not.toContain("Details:");
     expect(model.backgroundColor).toEqual([46, 125, 50, 255]);
@@ -119,6 +131,7 @@ describe("action badge", () => {
       ...state,
       settings: {
         ...state.settings,
+        actionBadgeSelectionMode: "manual" as const,
         actionBadgeSelection: firstWindowCandidate?.value ?? "attention",
         actionBadgeSelections: [firstWindowCandidate?.value ?? "attention"],
       },
@@ -137,6 +150,7 @@ describe("action badge", () => {
       ...state,
       settings: {
         ...state.settings,
+        actionBadgeSelectionMode: "manual" as const,
         actionBadgeSelections: candidateValues,
         actionBadgeRotationIntervalSeconds: 60,
       },

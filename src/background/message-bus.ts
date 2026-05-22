@@ -34,7 +34,6 @@ import {
   readConfigurationBackupFromChromeSync,
   writeConfigurationBackupToChromeSync,
 } from "../shared/configuration-backup";
-import { addProviderActionBadgeSelections } from "../shared/action-badge-preferences";
 
 export type AppMessage =
   | { type: "app:init" }
@@ -88,7 +87,7 @@ export async function handleAppMessage(
 
   async function ensureBackgroundAlarms(state: AppState): Promise<void> {
     await ensurePeriodicSyncAlarm(state.settings);
-    await ensureActionBadgeRotationAlarm(state.settings);
+    await ensureActionBadgeRotationAlarm(state);
   }
 
   switch (message.type) {
@@ -153,31 +152,16 @@ export async function handleAppMessage(
     }
 
     case "app:set-provider-enabled": {
-      const state = await updateAppState((current) => {
-        const nextState = reconcileAppStateHealth({
+      const state = await updateAppState((current) =>
+        reconcileAppStateHealth({
           ...current,
           providerSettings: current.providerSettings.map((provider) =>
             provider.id === message.providerId
               ? { ...provider, displayEnabled: message.enabled }
               : provider,
           ),
-        });
-
-        if (!message.enabled) {
-          return nextState;
-        }
-
-        return {
-          ...nextState,
-          settings: {
-            ...nextState.settings,
-            actionBadgeSelections: addProviderActionBadgeSelections(
-              nextState,
-              message.providerId,
-            ),
-          },
-        };
-      });
+        }),
+      );
       await ensureBackgroundAlarms(state);
 
       return { ok: true, state };

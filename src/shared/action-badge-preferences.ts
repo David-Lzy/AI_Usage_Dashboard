@@ -1,4 +1,5 @@
 import type {
+  ActionBadgeSelectionMode,
   ActionBadgeSelection,
   ActionBadgeSelections,
   AppState,
@@ -17,6 +18,8 @@ export const DEFAULT_ACTION_BADGE_SELECTION = ACTION_BADGE_ATTENTION_SELECTION;
 export const DEFAULT_ACTION_BADGE_SELECTIONS: ActionBadgeSelections = [
   ACTION_BADGE_ATTENTION_SELECTION,
 ];
+export const DEFAULT_ACTION_BADGE_SELECTION_MODE: ActionBadgeSelectionMode =
+  "auto";
 
 const QUOTA_SELECTION_PREFIX = "quota:";
 
@@ -70,26 +73,12 @@ export function normalizeActionBadgeSelection(
 export function normalizeActionBadgeSelections(
   value: unknown,
   legacyValue: unknown = DEFAULT_ACTION_BADGE_SELECTION,
-  availableSelections?: readonly ActionBadgeSelection[],
 ): ActionBadgeSelections {
-  const availableSelectionSet = availableSelections
-    ? new Set<ActionBadgeSelection>([
-        ACTION_BADGE_ATTENTION_SELECTION,
-        ...availableSelections,
-      ])
-    : null;
   const rawValues = Array.isArray(value) ? value : [legacyValue];
   const normalizedSelections: ActionBadgeSelection[] = [];
 
   for (const rawValue of rawValues) {
     const normalizedSelection = normalizeActionBadgeSelection(rawValue);
-
-    if (
-      availableSelectionSet &&
-      !availableSelectionSet.has(normalizedSelection)
-    ) {
-      continue;
-    }
 
     if (!normalizedSelections.includes(normalizedSelection)) {
       normalizedSelections.push(normalizedSelection);
@@ -99,6 +88,33 @@ export function normalizeActionBadgeSelections(
   return normalizedSelections.length > 0
     ? normalizedSelections
     : [...DEFAULT_ACTION_BADGE_SELECTIONS];
+}
+
+function isDefaultOrEmptyActionBadgeSelection(
+  value: unknown,
+  legacyValue: unknown,
+): boolean {
+  if (Array.isArray(value) && value.length === 0) {
+    return true;
+  }
+
+  return normalizeActionBadgeSelections(value, legacyValue).every(
+    (selection) => selection === ACTION_BADGE_ATTENTION_SELECTION,
+  );
+}
+
+export function normalizeActionBadgeSelectionMode(
+  value: unknown,
+  selections: unknown,
+  legacySelection: unknown,
+): ActionBadgeSelectionMode {
+  if (value === "auto" || value === "manual") {
+    return value;
+  }
+
+  return isDefaultOrEmptyActionBadgeSelection(selections, legacySelection)
+    ? "auto"
+    : "manual";
 }
 
 function getEnabledProviderIds(state: AppState): Set<ProviderId> {
@@ -271,10 +287,40 @@ export function getAvailableActionBadgeSelections(
 export function getSelectedActionBadgeSelections(
   state: AppState,
 ): ActionBadgeSelections {
+  return getEffectiveActionBadgeSelections(state);
+}
+
+export function getEffectiveActionBadgeSelections(
+  state: AppState,
+): ActionBadgeSelections {
+  const quotaSelections = buildActionBadgeQuotaCandidates(state).map(
+    (candidate) => candidate.value,
+  );
+
+  if (state.settings.actionBadgeSelectionMode === "auto") {
+    return quotaSelections.length > 0
+      ? quotaSelections
+      : [...DEFAULT_ACTION_BADGE_SELECTIONS];
+  }
+
+  const availableSelectionSet = new Set<ActionBadgeSelection>([
+    ACTION_BADGE_ATTENTION_SELECTION,
+    ...quotaSelections,
+  ]);
+  const selections = normalizeActionBadgeSelections(
+    state.settings.actionBadgeSelections,
+    state.settings.actionBadgeSelection,
+  ).filter((selection) => availableSelectionSet.has(selection));
+
+  return selections.length > 0 ? selections : [...DEFAULT_ACTION_BADGE_SELECTIONS];
+}
+
+export function getStoredActionBadgeSelections(
+  state: AppState,
+): ActionBadgeSelections {
   return normalizeActionBadgeSelections(
     state.settings.actionBadgeSelections,
     state.settings.actionBadgeSelection,
-    getAvailableActionBadgeSelections(state),
   );
 }
 
@@ -282,7 +328,7 @@ export function getEffectiveActionBadgeSelection(
   state: AppState,
   timestampMs = Date.now(),
 ): ActionBadgeSelection {
-  const selections = getSelectedActionBadgeSelections(state);
+  const selections = getEffectiveActionBadgeSelections(state);
 
   if (selections.length <= 1) {
     return selections[0] ?? ACTION_BADGE_ATTENTION_SELECTION;
@@ -299,24 +345,6 @@ export function getEffectiveActionBadgeSelection(
     selections.length;
 
   return selections[rotationIndex] ?? ACTION_BADGE_ATTENTION_SELECTION;
-}
-
-export function addProviderActionBadgeSelections(
-  state: AppState,
-  providerId: ProviderId,
-): ActionBadgeSelections {
-  const selections = getSelectedActionBadgeSelections(state);
-
-  for (const candidate of buildActionBadgeQuotaCandidates(state)) {
-    if (
-      candidate.providerId === providerId &&
-      !selections.includes(candidate.value)
-    ) {
-      selections.push(candidate.value);
-    }
-  }
-
-  return selections;
 }
 
 function formatCandidateUnit(

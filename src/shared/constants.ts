@@ -32,7 +32,10 @@ import {
 } from "./progress-appearance";
 import { DEFAULT_SETTINGS_USER_LEVEL } from "./settings-user-level";
 import { DEFAULT_UI_FONT_FAMILY } from "./ui-font-family";
-import { DEFAULT_ACTION_BADGE_SELECTION } from "./action-badge-preferences";
+import {
+  DEFAULT_ACTION_BADGE_SELECTION,
+  DEFAULT_ACTION_BADGE_SELECTION_MODE,
+} from "./action-badge-preferences";
 import {
   DEFAULT_TOOLBAR_ICON_CUSTOM_IMAGE_DATA_URL,
   DEFAULT_TOOLBAR_ICON_MODE,
@@ -710,6 +713,7 @@ export const SAMPLE_APP_STATE: AppState = {
     popupShadowStyle: DEFAULT_POPUP_SHADOW_STYLE,
     popupCircularProgressItemsPerRow:
       DEFAULT_POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW,
+    actionBadgeSelectionMode: DEFAULT_ACTION_BADGE_SELECTION_MODE,
     actionBadgeSelection: DEFAULT_ACTION_BADGE_SELECTION,
     actionBadgeSelections: [DEFAULT_ACTION_BADGE_SELECTION],
     actionBadgeRotationIntervalSeconds:

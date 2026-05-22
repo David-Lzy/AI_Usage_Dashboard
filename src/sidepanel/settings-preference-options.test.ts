@@ -66,7 +66,9 @@ describe("buildSettingsPreferenceOptions", () => {
       { value: "circle-soft", label: "Soft circle" },
       { value: "circle-gauge", label: "Gauge circle" },
     ]);
-    expect(options.normalizedActionBadgeSelections).toEqual(["attention"]);
+    expect(options.normalizedActionBadgeSelections).toContain(
+      "quota:codex-personal-page:window:rolling_5h:5-hour%20usage%20window::0",
+    );
     expect(options.actionBadgeOptions[0]).toMatchObject({
       value: "attention",
     });

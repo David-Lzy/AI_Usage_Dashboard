@@ -34,7 +34,7 @@ async function syncActionToolbarFromState(state: AppState) {
 
 async function ensureBackgroundAlarms(state: AppState) {
   await ensurePeriodicSyncAlarm(state.settings);
-  await ensureActionBadgeRotationAlarm(state.settings);
+  await ensureActionBadgeRotationAlarm(state);
 }
 
 async function bootstrapBackground() {
@@ -87,7 +87,7 @@ chrome.alarms.onAlarm.addListener((alarm) => {
   if (isActionBadgeRotationAlarm(alarm)) {
     void (async () => {
       const state = await seedAppStateIfEmpty();
-      await ensureActionBadgeRotationAlarm(state.settings);
+      await ensureActionBadgeRotationAlarm(state);
       await syncActionToolbarFromState(state);
     })().catch(() => undefined);
   }

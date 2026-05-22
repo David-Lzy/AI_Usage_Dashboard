@@ -1,8 +1,9 @@
-import type { AppSettings } from "../providers/types";
+import type { AppSettings, AppState } from "../providers/types";
 import {
   ACTION_BADGE_ROTATION_INTERVAL_MIN_SECONDS,
   SYNC_INTERVAL_MIN_MINUTES,
 } from "../shared/settings-preferences";
+import { getEffectiveActionBadgeSelections } from "../shared/action-badge-preferences";
 
 export const LEGACY_PERIODIC_SYNC_ALARMS = [
   "ai-usage-dashboard.periodic-sync",
@@ -83,15 +84,14 @@ export async function ensurePeriodicSyncAlarm(
 }
 
 export async function ensureActionBadgeRotationAlarm(
-  settings: AppSettings,
+  state: AppState,
 ): Promise<void> {
   if (!supportsChromeAlarms()) {
     return;
   }
 
-  const selectedBadgeCount = Array.isArray(settings.actionBadgeSelections)
-    ? settings.actionBadgeSelections.length
-    : 1;
+  const settings = state.settings;
+  const selectedBadgeCount = getEffectiveActionBadgeSelections(state).length;
 
   if (selectedBadgeCount <= 1) {
     await chrome.alarms.clear(ACTION_BADGE_ROTATION_ALARM);

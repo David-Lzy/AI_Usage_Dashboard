@@ -29,8 +29,8 @@ describe("settings view models", () => {
     );
 
     expect(items).toEqual([
-      { label: "Enabled", value: "4", tone: "neutral" },
-      { label: "Connected", value: "2", tone: "neutral" },
+      { label: "Enabled", value: "2", tone: "neutral" },
+      { label: "Connected", value: "1", tone: "neutral" },
       { label: "Needs action", value: "1", tone: "warning" },
     ]);
   });
@@ -51,8 +51,8 @@ describe("settings view models", () => {
     );
 
     expect(items).toEqual([
-      { label: "已启用", value: "#4", tone: "neutral" },
-      { label: "已连接", value: "#2", tone: "neutral" },
+      { label: "已启用", value: "#2", tone: "neutral" },
+      { label: "已连接", value: "#1", tone: "neutral" },
       { label: "待处理", value: "#1", tone: "warning" },
       { label: "已存密钥", value: "#0", tone: "neutral" },
       { label: "已绑定页面", value: "#0", tone: "neutral" },
@@ -65,6 +65,7 @@ describe("settings view models", () => {
         if (provider.id === "cursor-personal-page") {
           return {
             ...provider,
+            displayEnabled: true,
             status: "missing" as const,
             pageBinding: {
               mode: "bound" as const,
@@ -99,7 +100,7 @@ describe("settings view models", () => {
     );
 
     expect(items).toEqual([
-      { label: "Enabled", value: "4", tone: "neutral" },
+      { label: "Enabled", value: "3", tone: "neutral" },
       { label: "Connected", value: "1", tone: "neutral" },
       { label: "Needs action", value: "2", tone: "warning" },
       { label: "Stored Secrets", value: "1", tone: "neutral" },
@@ -121,7 +122,7 @@ describe("settings view models", () => {
     expect(snapshot).not.toBeNull();
 
     const quickSetupModel = buildSettingsQuickSetupCardModel(
-      provider!,
+      { ...provider!, displayEnabled: true },
       snapshot!,
       settingsCopy,
       "basic",
@@ -167,6 +168,7 @@ describe("settings view models", () => {
     const quickSetupModel = buildSettingsQuickSetupCardModel(
       {
         ...provider!,
+        displayEnabled: true,
         status: "missing",
       },
       {

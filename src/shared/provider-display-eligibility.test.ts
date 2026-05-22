@@ -77,7 +77,13 @@ describe("provider display eligibility", () => {
               ...provider,
               enabled: true,
             }
-          : provider,
+          : {
+              ...provider,
+              displayEnabled:
+                provider.id === "cursor-personal-page" ||
+                provider.id === "gemini-policy" ||
+                provider.displayEnabled,
+            },
       ),
       SAMPLE_APP_STATE.providers,
     );

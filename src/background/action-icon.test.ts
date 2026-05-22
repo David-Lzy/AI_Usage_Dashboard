@@ -43,6 +43,7 @@ function createStateWithCodexBadge(): AppState {
     ...state,
     settings: {
       ...state.settings,
+      actionBadgeSelectionMode: "manual",
       actionBadgeSelection: weeklyCandidate?.value ?? "attention",
       actionBadgeSelections: [weeklyCandidate?.value ?? "attention"],
       toolbarIconMode: "match-badge",
@@ -109,6 +110,7 @@ describe("action icon", () => {
       settings: {
         ...state.settings,
         toolbarIconMode: "match-badge",
+        actionBadgeSelectionMode: "manual",
         actionBadgeSelections: [
           codexCandidate?.value ?? "attention",
           claudeCandidate?.value ?? "attention",
@@ -129,6 +131,7 @@ describe("action icon", () => {
       settings: {
         ...SAMPLE_APP_STATE.settings,
         toolbarIconMode: "match-badge",
+        actionBadgeSelectionMode: "manual",
         actionBadgeSelection: "attention",
         actionBadgeSelections: ["attention"],
       },

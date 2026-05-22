@@ -39,12 +39,12 @@ describe("SettingsProviderDisplaySection", () => {
     expect(html).toContain('data-provider-progress-surface="popup"');
     expect(html).toContain('data-provider-progress-surface="sidebar"');
     expect(html).toContain('data-provider-progress-surface="fullPage"');
-    expect(html).toContain("4 providers");
+    expect(html).toContain("2 providers");
     expect(html).not.toContain('data-provider-order-row="jetbrains-org-page"');
     expect(html).not.toContain(
       'data-provider-progress-preference-provider="jetbrains-org-page"',
     );
-    expect(html).toContain('data-provider-order-row="gemini-policy"');
+    expect(html).not.toContain('data-provider-order-row="gemini-policy"');
   });
 
   it("keeps hidden providers out of surface order and quota item controls", () => {
@@ -72,7 +72,7 @@ describe("SettingsProviderDisplaySection", () => {
       />,
     );
 
-    expect(html).toContain("3 providers");
+    expect(html).toContain("2 providers");
     expect(html).not.toContain('data-provider-order-row="cursor-personal-page"');
     expect(html).not.toContain(
       'data-provider-progress-preference-provider="cursor-personal-page"',
