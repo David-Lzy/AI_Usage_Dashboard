@@ -109,6 +109,7 @@ body.popup-page .status-card {
 
 .popup-header {
   --popup-header-action-gap: 10px;
+  --popup-header-action-safe-inset: 2px;
   --popup-header-control-size: 48px;
   position: relative;
   display: grid;
@@ -280,7 +281,9 @@ body.popup-page .popup-header--surface-collapsed {
     repeat(4, var(--popup-header-control-size));
   align-items: center;
   gap: var(--popup-header-action-gap);
+  inline-size: 100%;
   min-width: 0;
+  padding-inline: var(--popup-header-action-safe-inset);
 }
 
 .popup-header__actions[hidden] {
