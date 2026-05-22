@@ -1,5 +1,5 @@
 import { execSync } from "node:child_process";
-import { readFile, rename, writeFile } from "node:fs/promises";
+import { readdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { crx } from "@crxjs/vite-plugin";
@@ -21,6 +21,41 @@ function getGitCommit(): string {
 
 function normalizeRollupId(id: string | null | undefined) {
   return id?.replaceAll("\\", "/") ?? "";
+}
+
+async function rewriteBuiltAssetReferences(
+  projectRoot: string,
+  previousAssetRelativePath: string,
+  stableAssetRelativePath: string,
+) {
+  const previousAssetPath = normalizeRollupId(previousAssetRelativePath);
+  const stableAssetPath = normalizeRollupId(stableAssetRelativePath);
+
+  if (previousAssetPath === stableAssetPath) {
+    return;
+  }
+
+  const previousAssetFilename = path.posix.basename(previousAssetPath);
+  const stableAssetFilename = path.posix.basename(stableAssetPath);
+  const assetsAbsoluteDir = path.join(projectRoot, chromeDistRelativeDir, "assets");
+  const entries = await readdir(assetsAbsoluteDir, { withFileTypes: true });
+
+  await Promise.all(
+    entries
+      .filter((entry) => entry.isFile() && entry.name.endsWith(".js"))
+      .map(async (entry) => {
+        const assetAbsolutePath = path.join(assetsAbsoluteDir, entry.name);
+        const asset = await readFile(assetAbsolutePath, "utf8");
+        const nextAsset = asset
+          .replaceAll(`./${previousAssetFilename}`, `./${stableAssetFilename}`)
+          .replaceAll(`/${previousAssetPath}`, `/${stableAssetPath}`)
+          .replaceAll(previousAssetPath, stableAssetPath);
+
+        if (nextAsset !== asset) {
+          await writeFile(assetAbsolutePath, nextAsset);
+        }
+      }),
+  );
 }
 
 async function rewriteHtmlEntryToStableFile(
@@ -51,6 +86,11 @@ async function rewriteHtmlEntryToStableFile(
 
   if (currentAssetRelativePath !== stableAssetRelativePath) {
     await rename(currentAssetAbsolutePath, stableAssetAbsolutePath);
+    await rewriteBuiltAssetReferences(
+      projectRoot,
+      currentAssetRelativePath,
+      stableAssetRelativePath,
+    );
   }
 
   const rewrittenHtml = html.replace(currentAssetPath, `/${stableAssetRelativePath}`);
