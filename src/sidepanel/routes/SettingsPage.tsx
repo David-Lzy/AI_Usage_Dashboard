@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import type {
   ActionBadgeSelections,
@@ -74,6 +74,25 @@ export function getSettingsRouteFocusElement(
       return documentRef.querySelector<HTMLElement>(
         `.source-card[data-provider-id="${routeFocus.providerId}"]`,
       );
+  }
+}
+
+export function getSettingsRouteFocusKey(
+  routeFocus: SettingsRouteFocus | undefined,
+): string | null {
+  if (!routeFocus) {
+    return null;
+  }
+
+  switch (routeFocus.kind) {
+    case "section":
+      return `section:${routeFocus.sectionId}`;
+    case "quick-setup-provider":
+      return `quick-setup-provider:${routeFocus.providerId}`;
+    case "credential-provider":
+      return `credential-provider:${routeFocus.providerId}`;
+    case "source-provider":
+      return `source-provider:${routeFocus.providerId}`;
   }
 }
 
@@ -211,6 +230,8 @@ export function SettingsPage({
   sessionPageNavigationAvailable,
   activeSessionPageAttachAvailable,
 }: SettingsPageProps) {
+  const routeFocusKey = getSettingsRouteFocusKey(routeFocus);
+  const lastScrolledRouteFocusKeyRef = useRef<string | null>(null);
   const {
     codexAnalyticsApiKeyInput,
     codexWorkspaceIdInput,
@@ -256,9 +277,18 @@ export function SettingsPage({
   useEffect(() => {
     if (
       !routeFocus ||
+      !routeFocusKey ||
       typeof document === "undefined" ||
       typeof window === "undefined"
     ) {
+      if (!routeFocusKey) {
+        lastScrolledRouteFocusKeyRef.current = null;
+      }
+
+      return undefined;
+    }
+
+    if (lastScrolledRouteFocusKeyRef.current === routeFocusKey) {
       return undefined;
     }
 
@@ -277,12 +307,13 @@ export function SettingsPage({
         block: "start",
         behavior: getPreferredScrollBehavior(window),
       });
+      lastScrolledRouteFocusKeyRef.current = routeFocusKey;
     });
 
     return () => {
       window.cancelAnimationFrame(frameId);
     };
-  }, [advancedOpen, routeFocus]);
+  }, [advancedOpen, routeFocusKey]);
 
   return (
     <main className="app-shell settings-shell">

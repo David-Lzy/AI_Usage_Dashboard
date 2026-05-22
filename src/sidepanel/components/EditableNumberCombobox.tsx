@@ -10,6 +10,7 @@ import {
   type ReactNode,
 } from "react";
 
+import { focusWithoutScroll } from "../focus";
 import { FormFieldLabel } from "./FormFieldLabel";
 
 export type EditableNumberComboboxOption = {
@@ -281,7 +282,7 @@ export function EditableNumberCombobox({
 
   function handleMenuButtonMouseDown(event: MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
-    inputRef.current?.focus();
+    focusWithoutScroll(inputRef.current);
   }
 
   function handleMenuButtonClick() {
@@ -293,7 +294,7 @@ export function EditableNumberCombobox({
     event: MouseEvent<HTMLDivElement>,
   ) {
     event.preventDefault();
-    inputRef.current?.focus();
+    focusWithoutScroll(inputRef.current);
     applyValue(optionValue);
   }
 

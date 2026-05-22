@@ -3,7 +3,11 @@ import { describe, expect, it } from "vitest";
 
 import { SAMPLE_APP_STATE } from "../../shared/constants";
 import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
-import { getSettingsRouteFocusElement, SettingsPage } from "./SettingsPage";
+import {
+  getSettingsRouteFocusElement,
+  getSettingsRouteFocusKey,
+  SettingsPage,
+} from "./SettingsPage";
 
 function renderSettingsPage(overrides: Partial<Parameters<typeof SettingsPage>[0]> = {}) {
   return renderToStaticMarkup(
@@ -186,6 +190,34 @@ describe("SettingsPage", () => {
         fallbackDocument,
       ),
     ).toBe(fallbackSection);
+  });
+
+  it("builds stable route focus keys across equivalent parsed routes", () => {
+    expect(
+      getSettingsRouteFocusKey({
+        kind: "section",
+        sectionId: SETTINGS_SECTION_IDS.appearance,
+      }),
+    ).toBe(`section:${SETTINGS_SECTION_IDS.appearance}`);
+    expect(
+      getSettingsRouteFocusKey({
+        kind: "quick-setup-provider",
+        providerId: "codex-personal-page",
+      }),
+    ).toBe("quick-setup-provider:codex-personal-page");
+    expect(
+      getSettingsRouteFocusKey({
+        kind: "credential-provider",
+        providerId: "cursor-team-api",
+      }),
+    ).toBe("credential-provider:cursor-team-api");
+    expect(
+      getSettingsRouteFocusKey({
+        kind: "source-provider",
+        providerId: "gemini-policy",
+      }),
+    ).toBe("source-provider:gemini-policy");
+    expect(getSettingsRouteFocusKey(undefined)).toBeNull();
   });
 
   it("keeps default personal and policy providers in quick setup when every provider is hidden", () => {

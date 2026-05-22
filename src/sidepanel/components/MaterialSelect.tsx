@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from "react";
 
+import { focusWithoutScroll } from "../focus";
 import { FormFieldLabel } from "./FormFieldLabel";
 
 export type MaterialSelectOption<TValue extends string = string> = {
@@ -194,7 +195,7 @@ export function MaterialSelect<TValue extends string>({
     event: MouseEvent<HTMLDivElement>,
   ) {
     event.preventDefault();
-    buttonRef.current?.focus();
+    focusWithoutScroll(buttonRef.current);
     applyValue(optionValue);
   }
 

@@ -8,6 +8,7 @@ import {
 } from "react";
 
 import { normalizeThemeCustomSeedHex } from "../../shared/theme";
+import { focusWithoutScroll } from "../focus";
 
 export type ColorChoiceDropdownChoice = {
   id: string;
@@ -148,7 +149,7 @@ export function ColorChoiceDropdown({
     setCustomDraft(normalizedHex);
     setIsOpen(false);
     setCustomOpen(false);
-    buttonRef.current?.focus();
+    focusWithoutScroll(buttonRef.current);
     onChange(normalizedHex);
   }
 
@@ -162,7 +163,7 @@ export function ColorChoiceDropdown({
     setCustomDraft(normalizedHex);
     setIsOpen(false);
     setCustomOpen(false);
-    buttonRef.current?.focus();
+    focusWithoutScroll(buttonRef.current);
 
     if (onChoiceSelect) {
       onChoiceSelect({
@@ -180,7 +181,7 @@ export function ColorChoiceDropdown({
       event.preventDefault();
       setIsOpen(false);
       setCustomOpen(false);
-      buttonRef.current?.focus();
+      focusWithoutScroll(buttonRef.current);
     }
   }
 
