@@ -1,6 +1,7 @@
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useState,
   type Dispatch,
   type SetStateAction,
@@ -19,10 +20,15 @@ import {
   type ToolbarPopupPreviewPosition,
 } from "./components/ToolbarPopupPreview";
 
-const SETTINGS_SURFACE_SESSION_ROUTE_KEY = "#settings";
-const SETTINGS_SURFACE_SESSION_STORAGE_KEY = buildSurfaceSessionKey(
+export const SETTINGS_SURFACE_SESSION_ROUTE_KEY = "#settings";
+export const SETTINGS_SURFACE_SESSION_STORAGE_KEY = buildSurfaceSessionKey(
   SETTINGS_SURFACE_SESSION_ROUTE_KEY,
 );
+
+const useBrowserLayoutEffect =
+  typeof window === "undefined" ? useEffect : useLayoutEffect;
+
+let latestSettingsSurfaceSessionStateSnapshot: SurfaceSessionState | null = null;
 
 export type SettingsPreferencesSurfaceSessionControls = {
   uiMoreOpen: boolean;
@@ -63,6 +69,7 @@ type UseSettingsSurfaceSessionStateInput = {
   defaultAdvancedOpen: boolean;
   defaultUiMoreOpen: boolean;
   forceAdvancedOpen: boolean;
+  restoreScroll?: boolean;
 };
 
 function normalizePercent(value: number): number {
@@ -83,6 +90,47 @@ function getWindowScrollY(): number | null {
   return typeof window !== "undefined" && typeof window.scrollY === "number"
     ? window.scrollY
     : null;
+}
+
+function restoreWindowScrollY(scrollY: number) {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  const scrollToPosition = () => {
+    window.scrollTo({
+      top: scrollY,
+      behavior: "auto",
+    });
+  };
+
+  if (typeof window.requestAnimationFrame !== "function") {
+    window.setTimeout(scrollToPosition, 0);
+    return;
+  }
+
+  window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(scrollToPosition);
+  });
+}
+
+export function rememberLatestSettingsSurfaceSessionStateSnapshot(
+  state: SurfaceSessionState | null,
+): void {
+  latestSettingsSurfaceSessionStateSnapshot = state;
+}
+
+export function getLatestSettingsSurfaceSessionStateSnapshot(
+  scrollY: number | null = getWindowScrollY(),
+): SurfaceSessionState | null {
+  if (!latestSettingsSurfaceSessionStateSnapshot) {
+    return null;
+  }
+
+  return {
+    ...latestSettingsSurfaceSessionStateSnapshot,
+    scrollY,
+  };
 }
 
 export function createDefaultSettingsSurfaceSessionUiState({
@@ -168,10 +216,13 @@ export function useSettingsSurfaceSessionState({
   defaultAdvancedOpen,
   defaultUiMoreOpen,
   forceAdvancedOpen,
+  restoreScroll = false,
 }: UseSettingsSurfaceSessionStateInput): SettingsSurfaceSessionControls {
   const [hasRestored, setHasRestored] = useState(
     typeof window === "undefined",
   );
+  const [pendingScrollRestoreY, setPendingScrollRestoreY] =
+    useState<number | null>(null);
   const [uiState, setUiState] = useState(() =>
     createDefaultSettingsSurfaceSessionUiState({
       activeSectionId,
@@ -208,6 +259,7 @@ export function useSettingsSurfaceSessionState({
             restored: restoredState?.settings,
           }),
         );
+        setPendingScrollRestoreY(restoredState?.scrollY ?? null);
       })
       .catch(() => {
         if (!cancelled) {
@@ -228,6 +280,27 @@ export function useSettingsSurfaceSessionState({
       cancelled = true;
     };
   }, [defaultAdvancedOpen, defaultUiMoreOpen, forceAdvancedOpen]);
+
+  useBrowserLayoutEffect(() => {
+    rememberLatestSettingsSurfaceSessionStateSnapshot(
+      buildSettingsSurfaceSessionStateSnapshot(uiState, getWindowScrollY()),
+    );
+  }, [uiState]);
+
+  useEffect(() => {
+    if (!hasRestored || !restoreScroll || pendingScrollRestoreY === null) {
+      return;
+    }
+
+    restoreWindowScrollY(pendingScrollRestoreY);
+    setPendingScrollRestoreY(null);
+  }, [
+    hasRestored,
+    pendingScrollRestoreY,
+    restoreScroll,
+    uiState.advancedOpen,
+    uiState.uiMoreOpen,
+  ]);
 
   useEffect(() => {
     setUiState((current) => ({

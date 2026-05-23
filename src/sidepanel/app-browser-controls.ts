@@ -27,6 +27,11 @@ import {
   buildSidePanelHash,
   type SidePanelRouteState,
 } from "./route-state";
+import {
+  getLatestSettingsSurfaceSessionStateSnapshot,
+  SETTINGS_SURFACE_SESSION_ROUTE_KEY,
+  SETTINGS_SURFACE_SESSION_STORAGE_KEY,
+} from "./use-settings-surface-session-state";
 
 export function hasDirectPermissionControl(): boolean {
   const permissionsApi = getExtensionPermissionsApi();
@@ -72,28 +77,44 @@ async function captureRouteSurfaceSessionState(
 ): Promise<void> {
   const routeKey = buildSidePanelHash(route);
   const storageKey = buildSurfaceSessionKey(routeKey);
+  const scrollY = getWindowScrollY();
 
   try {
-    const existingState =
+    const latestSettingsState =
       route.name === "settings"
-        ? await restoreSurfaceSessionState(storageKey)
+        ? getLatestSettingsSurfaceSessionStateSnapshot(scrollY)
+        : null;
+    const existingState =
+      route.name === "settings" && !latestSettingsState?.settings
+        ? await restoreSurfaceSessionState(SETTINGS_SURFACE_SESSION_STORAGE_KEY)
         : null;
     const nextState = createSurfaceSessionStateForRoute({
       routeName: route.name,
       routeKey,
-      scrollY: getWindowScrollY(),
+      scrollY,
       providerId: getRouteProviderId(route),
     });
-
-    await captureSurfaceSessionState(
-      storageKey,
-      route.name === "settings" && existingState?.settings
+    const settings = latestSettingsState?.settings ?? existingState?.settings;
+    const stateToCapture =
+      route.name === "settings" && settings
         ? {
             ...nextState,
-            settings: existingState.settings,
+            settings,
           }
-        : nextState,
-    );
+        : nextState;
+
+    if (
+      route.name === "settings" &&
+      settings &&
+      storageKey !== SETTINGS_SURFACE_SESSION_STORAGE_KEY
+    ) {
+      await captureSurfaceSessionState(SETTINGS_SURFACE_SESSION_STORAGE_KEY, {
+        ...stateToCapture,
+        routeKey: SETTINGS_SURFACE_SESSION_ROUTE_KEY,
+      });
+    }
+
+    await captureSurfaceSessionState(storageKey, stateToCapture);
   } catch {
     // Surface switching should remain best-effort even if session storage fails.
   }
@@ -137,7 +158,7 @@ export async function openFullPageRoute(
 export async function openSidePanelRoute(
   route: SidePanelRouteState,
 ): Promise<void> {
-  void captureRouteSurfaceSessionState(route);
+  await captureRouteSurfaceSessionState(route);
 
   const path = buildSidePanelExtensionPath(route);
   const capabilities = getBrowserCapabilities();

@@ -91,6 +91,7 @@ export function useSettingsPage({
     defaultAdvancedOpen,
     defaultUiMoreOpen: settings.themePreset === "custom",
     forceAdvancedOpen: routeFocusRequiresAdvanced,
+    restoreScroll: !routeFocus,
   });
 
   return {

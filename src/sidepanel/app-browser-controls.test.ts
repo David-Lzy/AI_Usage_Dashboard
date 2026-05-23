@@ -7,9 +7,11 @@ import {
   openSidePanelRoute,
   sortTabsByPriority,
 } from "./app-browser-controls";
+import { rememberLatestSettingsSurfaceSessionStateSnapshot } from "./use-settings-surface-session-state";
 
 describe("app-browser-controls", () => {
   afterEach(() => {
+    rememberLatestSettingsSurfaceSessionStateSnapshot(null);
     vi.unstubAllGlobals();
   });
 
@@ -150,6 +152,86 @@ describe("app-browser-controls", () => {
     );
   });
 
+  it("flushes latest in-memory settings session state before opening full-page tabs", async () => {
+    const create = vi.fn(async () => ({ id: 42 }) as chrome.tabs.Tab);
+    const set = vi.fn(async () => undefined);
+
+    rememberLatestSettingsSurfaceSessionStateSnapshot({
+      routeName: "settings",
+      routeKey: "#settings",
+      scrollY: 111,
+      settings: {
+        activeSectionId: "settings-appearance",
+        advancedOpen: true,
+        uiMoreOpen: true,
+        toolbarPopupPreview: {
+          open: true,
+          percent: 64,
+          position: {
+            left: 320,
+            top: 120,
+          },
+        },
+        providerProgressDetailsOpen: {
+          "codex-personal-page": true,
+        },
+        carouselIndexById: {
+          quickSetup: 2,
+        },
+      },
+      providerDetail: null,
+    });
+
+    vi.stubGlobal("chrome", {
+      runtime: {
+        id: "extension-id",
+        getURL: (path: string) => `chrome-extension://extension-id/${path}`,
+      },
+      storage: {
+        session: {
+          get: vi.fn(async () => ({})),
+          remove: vi.fn(async () => undefined),
+          set,
+        },
+      },
+      tabs: {
+        create,
+      },
+    });
+    vi.stubGlobal("window", {
+      scrollY: 512,
+    });
+
+    await openFullPageRoute({ name: "settings" });
+
+    expect(set).toHaveBeenCalledWith({
+      "ai-usage-dashboard:surface-session-state:standard:settings":
+        expect.objectContaining({
+          state: expect.objectContaining({
+            routeKey: "#settings",
+            routeName: "settings",
+            scrollY: 512,
+            settings: expect.objectContaining({
+              activeSectionId: "settings-appearance",
+              advancedOpen: true,
+              uiMoreOpen: true,
+              toolbarPopupPreview: {
+                open: true,
+                percent: 64,
+                position: {
+                  left: 320,
+                  top: 120,
+                },
+              },
+            }),
+          }),
+        }),
+    });
+    expect(set.mock.invocationCallOrder[0]).toBeLessThan(
+      create.mock.invocationCallOrder[0],
+    );
+  });
+
   it("continues surface navigation when session capture fails", async () => {
     const create = vi.fn(async () => ({ id: 42 }) as chrome.tabs.Tab);
 
@@ -256,6 +338,7 @@ describe("app-browser-controls", () => {
     const setOptions = vi.fn(async () => undefined);
     const open = vi.fn(async () => undefined);
     const remove = vi.fn(async () => undefined);
+    const set = vi.fn(async () => undefined);
 
     vi.stubGlobal("chrome", {
       runtime: {
@@ -264,6 +347,13 @@ describe("app-browser-controls", () => {
       sidePanel: {
         open,
         setOptions,
+      },
+      storage: {
+        session: {
+          get: vi.fn(async () => ({})),
+          remove: vi.fn(async () => undefined),
+          set,
+        },
       },
       tabs: {
         getCurrent: vi.fn(async () => ({ id: 88 }) as chrome.tabs.Tab),
@@ -277,6 +367,9 @@ describe("app-browser-controls", () => {
 
     await openSidePanelRoute({ name: "settings" });
 
+    expect(set.mock.invocationCallOrder[0]).toBeLessThan(
+      setOptions.mock.invocationCallOrder[0],
+    );
     expect(setOptions).toHaveBeenCalledWith({
       enabled: true,
       path: "src/sidepanel/index.html#settings",
