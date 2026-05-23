@@ -9,6 +9,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 
+import type { SettingsActivePopoverSessionState } from "../../shared/surface-session-state";
 import { normalizeThemeCustomSeedHex } from "../../shared/theme";
 import { focusWithoutScroll } from "../focus";
 import {
@@ -45,6 +46,11 @@ type ColorChoiceDropdownProps = {
   copy: ColorChoiceDropdownCopy;
   fieldIdPrefix: string;
   selectedLabel?: string;
+  sessionPopoverId?: string;
+  activePopover?: SettingsActivePopoverSessionState | null;
+  onActivePopoverChange?: (
+    nextPopover: SettingsActivePopoverSessionState | null,
+  ) => void;
   onChange: (hex: string) => void;
   onChoiceSelect?: (choice: ColorChoiceDropdownChoice) => void;
 };
@@ -83,6 +89,13 @@ function flattenSections(
   return sections.flatMap((section) => section.choices);
 }
 
+function isSurfaceSwitchTarget(target: EventTarget | null): boolean {
+  return (
+    target instanceof Element &&
+    Boolean(target.closest('[data-topbar-switch-surface="true"]'))
+  );
+}
+
 export function ColorChoiceDropdown({
   label,
   valueHex,
@@ -90,6 +103,9 @@ export function ColorChoiceDropdown({
   copy,
   fieldIdPrefix,
   selectedLabel,
+  sessionPopoverId,
+  activePopover,
+  onActivePopoverChange,
   onChange,
   onChoiceSelect,
 }: ColorChoiceDropdownProps) {
@@ -110,10 +126,17 @@ export function ColorChoiceDropdown({
       sections,
       copy.customLabel,
     );
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(
+    () => Boolean(sessionPopoverId) && activePopover?.id === sessionPopoverId,
+  );
   const [menuPosition, setMenuPosition] =
     useState<FloatingMenuPosition | null>(null);
-  const [customOpen, setCustomOpen] = useState(false);
+  const [customOpen, setCustomOpen] = useState(
+    () =>
+      Boolean(sessionPopoverId) &&
+      activePopover?.id === sessionPopoverId &&
+      activePopover?.customPanelOpen === true,
+  );
   const [customDraft, setCustomDraft] = useState(selectedValueHex);
   const normalizedCustomDraft = normalizeColorChoiceHex(customDraft);
   const customPickerValue = normalizedCustomDraft ?? selectedValueHex;
@@ -125,6 +148,77 @@ export function ColorChoiceDropdown({
   useEffect(() => {
     setCustomDraft(selectedValueHex);
   }, [selectedValueHex]);
+
+  function publishActivePopover(customPanelOpen = customOpen) {
+    if (!sessionPopoverId || !onActivePopoverChange) {
+      return;
+    }
+
+    onActivePopoverChange({
+      id: sessionPopoverId,
+      ...(customPanelOpen ? { customPanelOpen: true } : {}),
+    });
+  }
+
+  function clearActivePopover() {
+    if (
+      sessionPopoverId &&
+      onActivePopoverChange &&
+      (!activePopover || activePopover.id === sessionPopoverId)
+    ) {
+      onActivePopoverChange(null);
+    }
+  }
+
+  function closeMenu({
+    keepActivePopover = false,
+    restoreFocus = false,
+  }: {
+    keepActivePopover?: boolean;
+    restoreFocus?: boolean;
+  } = {}) {
+    setIsOpen(false);
+    setCustomOpen(false);
+
+    if (!keepActivePopover) {
+      clearActivePopover();
+    }
+
+    if (restoreFocus) {
+      focusWithoutScroll(buttonRef.current);
+    }
+  }
+
+  function openMenu(nextCustomOpen = customOpen) {
+    updateMenuPosition();
+    setIsOpen(true);
+    setCustomOpen(nextCustomOpen);
+    publishActivePopover(nextCustomOpen);
+  }
+
+  useEffect(() => {
+    if (!sessionPopoverId) {
+      return;
+    }
+
+    if (activePopover?.id === sessionPopoverId) {
+      setIsOpen(true);
+      setCustomOpen(activePopover.customPanelOpen === true);
+      if (typeof window !== "undefined") {
+        window.requestAnimationFrame(updateMenuPosition);
+      }
+      return;
+    }
+
+    if (activePopover && activePopover.id !== sessionPopoverId) {
+      setIsOpen(false);
+      setCustomOpen(false);
+    }
+  }, [
+    activePopover?.customPanelOpen,
+    activePopover?.id,
+    sessionPopoverId,
+  ]);
 
   useEffect(() => {
     if (!isOpen || typeof document === "undefined") {
@@ -141,8 +235,7 @@ export function ColorChoiceDropdown({
         return;
       }
 
-      setIsOpen(false);
-      setCustomOpen(false);
+      closeMenu({ keepActivePopover: isSurfaceSwitchTarget(target) });
     }
 
     document.addEventListener("pointerdown", handlePointerDown);
@@ -220,9 +313,7 @@ export function ColorChoiceDropdown({
     }
 
     setCustomDraft(normalizedHex);
-    setIsOpen(false);
-    setCustomOpen(false);
-    focusWithoutScroll(buttonRef.current);
+    closeMenu({ restoreFocus: true });
     onChange(normalizedHex);
   }
 
@@ -234,9 +325,7 @@ export function ColorChoiceDropdown({
     }
 
     setCustomDraft(normalizedHex);
-    setIsOpen(false);
-    setCustomOpen(false);
-    focusWithoutScroll(buttonRef.current);
+    closeMenu({ restoreFocus: true });
 
     if (onChoiceSelect) {
       onChoiceSelect({
@@ -252,18 +341,25 @@ export function ColorChoiceDropdown({
   function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
     if (event.key === "Escape" && isOpen) {
       event.preventDefault();
-      setIsOpen(false);
-      setCustomOpen(false);
-      focusWithoutScroll(buttonRef.current);
+      closeMenu({ restoreFocus: true });
     }
   }
 
   function toggleMenu() {
-    if (!isOpen) {
-      updateMenuPosition();
+    if (isOpen) {
+      closeMenu();
+      return;
     }
 
-    setIsOpen((current) => !current);
+    openMenu(false);
+  }
+
+  function toggleCustomPanel() {
+    setCustomOpen((current) => {
+      const nextCustomOpen = !current;
+      publishActivePopover(nextCustomOpen);
+      return nextCustomOpen;
+    });
   }
 
   const menuStyle: CSSProperties | undefined = menuPosition
@@ -329,7 +425,7 @@ export function ColorChoiceDropdown({
           className="color-choice-dropdown__custom-toggle"
           type="button"
           aria-expanded={customOpen}
-          onClick={() => setCustomOpen((current) => !current)}
+          onClick={toggleCustomPanel}
         >
           <span
             className="color-choice-dropdown__choice-swatch"
@@ -396,6 +492,7 @@ export function ColorChoiceDropdown({
       ref={rootRef}
       className="form-field color-choice-dropdown"
       data-color-choice-dropdown={fieldIdPrefix}
+      data-session-popover-id={sessionPopoverId}
       onKeyDown={handleKeyDown}
     >
       <span id={labelId} className="form-field__label">

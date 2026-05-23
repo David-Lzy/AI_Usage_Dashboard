@@ -12,6 +12,7 @@ import type {
 } from "../../providers/types";
 import type { RuntimeI18n } from "../../shared/i18n";
 import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
+import type { SettingsActivePopoverSessionState } from "../../shared/surface-session-state";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 import { MaterialSelect, type MaterialSelectOption } from "./MaterialSelect";
 import { ProgressAppearancePreferenceControls } from "./ProgressAppearancePreferenceControls";
@@ -32,6 +33,7 @@ type SettingsUiMoreSectionProps = {
   toolbarPopupPreviewOpen: boolean;
   popupPreviewRemainingPercent: number;
   toolbarPopupPreviewPosition: ToolbarPopupPreviewPosition | null;
+  activePopover: SettingsActivePopoverSessionState | null;
   popupCircularRowCountHelperText: string;
   uiFontHelperText: string;
   progressDisplayStyleOptions: Array<MaterialSelectOption<ProgressDisplayStyle>>;
@@ -48,6 +50,9 @@ type SettingsUiMoreSectionProps = {
   onPreviewRemainingPercentChange: (remainingPercent: number) => void;
   onToolbarPopupPreviewPositionChange: (
     position: ToolbarPopupPreviewPosition | null,
+  ) => void;
+  onActivePopoverChange: (
+    nextPopover: SettingsActivePopoverSessionState | null,
   ) => void;
   onFullPageProgressStyleChange: (
     progressStyle: ProgressDisplayStyle,
@@ -124,6 +129,7 @@ export function SettingsUiMoreSection({
   toolbarPopupPreviewOpen,
   popupPreviewRemainingPercent,
   toolbarPopupPreviewPosition,
+  activePopover,
   popupCircularRowCountHelperText,
   uiFontHelperText,
   progressDisplayStyleOptions,
@@ -137,6 +143,7 @@ export function SettingsUiMoreSection({
   onCloseToolbarPopupPreview,
   onPreviewRemainingPercentChange,
   onToolbarPopupPreviewPositionChange,
+  onActivePopoverChange,
   onFullPageProgressStyleChange,
   onPopupCornerStyleChange,
   onPopupCircularProgressItemsPerRowChange,
@@ -216,6 +223,9 @@ export function SettingsUiMoreSection({
               label={i18n.t("settings.preferences.popup_progress_style_label")}
               value={settings.popupProgressStyle}
               fieldIdPrefix="popup-progress-style"
+              sessionPopoverId="popup-progress-style"
+              activePopover={activePopover}
+              onActivePopoverChange={onActivePopoverChange}
               options={progressDisplayStyleOptions}
               onChange={onPopupProgressStyleChange}
             />
@@ -229,6 +239,9 @@ export function SettingsUiMoreSection({
                   PopupCircularProgressItemsPerRowSelectValue
               }
               fieldIdPrefix="popup-circular-row-count"
+              sessionPopoverId="popup-circular-row-count"
+              activePopover={activePopover}
+              onActivePopoverChange={onActivePopoverChange}
               options={popupCircularProgressItemsPerRowOptions}
               labelAccessory={
                 <MaterialInfoTooltip className="settings-preferences__field-note">
@@ -246,6 +259,9 @@ export function SettingsUiMoreSection({
               label={i18n.t("settings.preferences.sidebar_progress_style_label")}
               value={settings.sidebarProgressStyle}
               fieldIdPrefix="sidebar-progress-style"
+              sessionPopoverId="sidebar-progress-style"
+              activePopover={activePopover}
+              onActivePopoverChange={onActivePopoverChange}
               options={progressDisplayStyleOptions}
               onChange={onSidebarProgressStyleChange}
             />
@@ -254,6 +270,9 @@ export function SettingsUiMoreSection({
               label={i18n.t("settings.preferences.full_page_progress_style_label")}
               value={settings.fullPageProgressStyle}
               fieldIdPrefix="full-page-progress-style"
+              sessionPopoverId="full-page-progress-style"
+              activePopover={activePopover}
+              onActivePopoverChange={onActivePopoverChange}
               options={progressDisplayStyleOptions}
               onChange={onFullPageProgressStyleChange}
             />
@@ -262,6 +281,9 @@ export function SettingsUiMoreSection({
               label={i18n.t("settings.preferences.popup_size_label")}
               value={settings.popupSizePreset}
               fieldIdPrefix="popup-size-preset"
+              sessionPopoverId="popup-size-preset"
+              activePopover={activePopover}
+              onActivePopoverChange={onActivePopoverChange}
               options={popupSizePresetOptions}
               onChange={onPopupSizePresetChange}
             />
@@ -270,6 +292,9 @@ export function SettingsUiMoreSection({
               label={i18n.t("settings.preferences.popup_corner_label")}
               value={settings.popupCornerStyle}
               fieldIdPrefix="popup-corner-style"
+              sessionPopoverId="popup-corner-style"
+              activePopover={activePopover}
+              onActivePopoverChange={onActivePopoverChange}
               options={popupCornerStyleOptions}
               onChange={onPopupCornerStyleChange}
             />
@@ -278,6 +303,9 @@ export function SettingsUiMoreSection({
               label={i18n.t("settings.preferences.popup_shadow_label")}
               value={settings.popupShadowStyle}
               fieldIdPrefix="popup-shadow-style"
+              sessionPopoverId="popup-shadow-style"
+              activePopover={activePopover}
+              onActivePopoverChange={onActivePopoverChange}
               options={popupShadowStyleOptions}
               onChange={onPopupShadowStyleChange}
             />
@@ -286,6 +314,9 @@ export function SettingsUiMoreSection({
               label={i18n.t("settings.preferences.ui_font_label")}
               value={settings.uiFontFamily}
               fieldIdPrefix="ui-font-family"
+              sessionPopoverId="ui-font-family"
+              activePopover={activePopover}
+              onActivePopoverChange={onActivePopoverChange}
               options={uiFontFamilyOptions}
               labelAccessory={
                 <MaterialInfoTooltip className="settings-preferences__field-note">
@@ -301,6 +332,8 @@ export function SettingsUiMoreSection({
             colorChoiceCopy={settingsCopy.colorChoices}
             thicknessPx={settings.progressThicknessPx}
             colorBands={settings.progressColorBands}
+            activePopover={activePopover}
+            onActivePopoverChange={onActivePopoverChange}
             onThicknessPxChange={onProgressThicknessPxChange}
             onColorBandsChange={onProgressColorBandsChange}
           />

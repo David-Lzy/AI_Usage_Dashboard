@@ -175,6 +175,10 @@ describe("app-browser-controls", () => {
         providerProgressDetailsOpen: {
           "codex-personal-page": true,
         },
+        activePopover: {
+          id: "progress-color-band:high:color",
+          customPanelOpen: true,
+        },
         carouselIndexById: {
           quickSetup: 2,
         },
@@ -222,6 +226,10 @@ describe("app-browser-controls", () => {
                   left: 320,
                   top: 120,
                 },
+              },
+              activePopover: {
+                id: "progress-color-band:high:color",
+                customPanelOpen: true,
               },
             }),
           }),

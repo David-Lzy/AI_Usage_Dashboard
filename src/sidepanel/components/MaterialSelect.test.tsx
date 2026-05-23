@@ -60,6 +60,30 @@ describe("MaterialSelect", () => {
     expect(html).toContain("Session page");
   });
 
+  it("can restore an active listbox from session state", () => {
+    const html = renderToStaticMarkup(
+      <MaterialSelect
+        label="Theme mode"
+        value="light"
+        fieldIdPrefix="theme-mode"
+        sessionPopoverId="theme-mode"
+        activePopover={{ id: "theme-mode" }}
+        options={[
+          { value: "system", label: "System" },
+          { value: "light", label: "Light" },
+          { value: "dark", label: "Dark" },
+        ]}
+        onActivePopoverChange={() => undefined}
+        onChange={() => undefined}
+      />,
+    );
+
+    expect(html).toContain('aria-expanded="true"');
+    expect(html).toContain('role="listbox"');
+    expect(html).toContain("System");
+    expect(html).toContain("Dark");
+  });
+
   it("wraps keyboard navigation through option indexes", () => {
     expect(getNextMaterialSelectOptionIndex(-1, "next", 3)).toBe(0);
     expect(getNextMaterialSelectOptionIndex(-1, "previous", 3)).toBe(2);

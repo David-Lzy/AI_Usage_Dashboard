@@ -3,6 +3,7 @@ import { useEffect, useState, type ChangeEvent } from "react";
 import type { ProgressColorBand } from "../../providers/types";
 import { RECOMMENDED_COLOR_CHOICES } from "../../shared/color-choices";
 import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
+import type { SettingsActivePopoverSessionState } from "../../shared/surface-session-state";
 import {
   PROGRESS_THICKNESS_MAX_PX,
   PROGRESS_THICKNESS_MIN_PX,
@@ -22,6 +23,10 @@ type ProgressAppearancePreferenceControlsProps = {
   colorChoiceCopy: ReturnType<typeof buildSettingsLocalizedCopy>["colorChoices"];
   copy: ReturnType<typeof buildSettingsLocalizedCopy>["progressAppearance"];
   thicknessPx: number;
+  activePopover?: SettingsActivePopoverSessionState | null;
+  onActivePopoverChange?: (
+    nextPopover: SettingsActivePopoverSessionState | null,
+  ) => void;
   onColorBandsChange: (colorBands: ProgressColorBand[]) => void;
   onThicknessPxChange: (thicknessPx: number) => void;
 };
@@ -90,6 +95,8 @@ export function ProgressAppearancePreferenceControls({
   colorChoiceCopy,
   copy,
   thicknessPx,
+  activePopover,
+  onActivePopoverChange,
   onColorBandsChange,
   onThicknessPxChange,
 }: ProgressAppearancePreferenceControlsProps) {
@@ -286,6 +293,9 @@ export function ProgressAppearancePreferenceControls({
                       label={copy.colorBands.colorLabel}
                       valueHex={colorInputValue}
                       fieldIdPrefix={`progress-color-band-${band.id}`}
+                      sessionPopoverId={`progress-color-band:${band.id}:color`}
+                      activePopover={activePopover}
+                      onActivePopoverChange={onActivePopoverChange}
                       copy={colorChoiceCopy}
                       sections={[
                         {

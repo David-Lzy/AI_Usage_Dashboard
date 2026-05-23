@@ -11,6 +11,7 @@ import {
   buildSurfaceSessionKey,
   captureSurfaceSessionState,
   restoreSurfaceSessionState,
+  type SettingsActivePopoverSessionState,
   type SettingsSurfaceSessionState,
   type SurfaceSessionState,
   type ToolbarPopupPreviewSessionState,
@@ -41,6 +42,10 @@ export type SettingsPreferencesSurfaceSessionControls = {
   setToolbarPopupPreviewPosition: Dispatch<
     SetStateAction<ToolbarPopupPreviewPosition | null>
   >;
+  activePopover: SettingsActivePopoverSessionState | null;
+  setActivePopover: Dispatch<
+    SetStateAction<SettingsActivePopoverSessionState | null>
+  >;
 };
 
 export type SettingsSurfaceSessionControls = {
@@ -60,6 +65,7 @@ type SettingsSurfaceSessionUiState = {
   toolbarPopupPreviewOpen: boolean;
   popupPreviewRemainingPercent: number;
   toolbarPopupPreviewPosition: ToolbarPopupPreviewPosition | null;
+  activePopover: SettingsActivePopoverSessionState | null;
   providerProgressDetailsOpen: Record<string, boolean>;
   carouselIndexById: Record<string, number>;
 };
@@ -147,6 +153,7 @@ export function createDefaultSettingsSurfaceSessionUiState({
     popupPreviewRemainingPercent:
       POPUP_APPEARANCE_PREVIEW_DEFAULT_REMAINING_PERCENT,
     toolbarPopupPreviewPosition: null,
+    activePopover: null,
     providerProgressDetailsOpen: {},
     carouselIndexById: {},
   };
@@ -178,6 +185,7 @@ export function resolveSettingsSurfaceSessionUiState({
     ),
     toolbarPopupPreviewPosition:
       toolbarPopupPreview?.position ?? defaults.toolbarPopupPreviewPosition,
+    activePopover: restored?.activePopover ?? defaults.activePopover,
     providerProgressDetailsOpen:
       restored?.providerProgressDetailsOpen ??
       defaults.providerProgressDetailsOpen,
@@ -204,6 +212,7 @@ export function buildSettingsSurfaceSessionStateSnapshot(
       advancedOpen: uiState.advancedOpen,
       uiMoreOpen: uiState.uiMoreOpen,
       toolbarPopupPreview,
+      activePopover: uiState.activePopover,
       providerProgressDetailsOpen: uiState.providerProgressDetailsOpen,
       carouselIndexById: uiState.carouselIndexById,
     },
@@ -372,6 +381,14 @@ export function useSettingsSurfaceSessionState({
       ),
     }));
   }, []);
+  const setActivePopover = useCallback<
+    Dispatch<SetStateAction<SettingsActivePopoverSessionState | null>>
+  >((update) => {
+    setUiState((current) => ({
+      ...current,
+      activePopover: resolveUpdate(update, current.activePopover),
+    }));
+  }, []);
   const setProviderProgressDetailsOpen = useCallback<
     Dispatch<SetStateAction<Record<string, boolean>>>
   >((update) => {
@@ -404,6 +421,8 @@ export function useSettingsSurfaceSessionState({
       setPopupPreviewRemainingPercent,
       toolbarPopupPreviewPosition: uiState.toolbarPopupPreviewPosition,
       setToolbarPopupPreviewPosition,
+      activePopover: uiState.activePopover,
+      setActivePopover,
     },
     providerProgressDetailsOpen: uiState.providerProgressDetailsOpen,
     setProviderProgressDetailsOpen,

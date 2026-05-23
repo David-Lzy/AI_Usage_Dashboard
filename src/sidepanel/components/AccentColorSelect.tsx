@@ -1,6 +1,7 @@
 import type { ThemePreset } from "../../providers/types";
 import { RECOMMENDED_COLOR_CHOICES } from "../../shared/color-choices";
 import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
+import type { SettingsActivePopoverSessionState } from "../../shared/surface-session-state";
 import { normalizeThemeCustomSeedHex } from "../../shared/theme";
 import type { MaterialSelectOption } from "./MaterialSelect";
 import {
@@ -21,6 +22,10 @@ type AccentColorSelectProps = {
   themeCustomSeedHex: string | null;
   themePresetOptions: Array<MaterialSelectOption<ThemePreset>>;
   copy: ReturnType<typeof buildSettingsLocalizedCopy>["colorChoices"];
+  activePopover?: SettingsActivePopoverSessionState | null;
+  onActivePopoverChange?: (
+    nextPopover: SettingsActivePopoverSessionState | null,
+  ) => void;
   onThemePresetChange: (themePreset: ThemePreset) => void;
   onThemeCustomSeedChange: (themeCustomSeedHex: string) => void;
 };
@@ -110,6 +115,8 @@ export function AccentColorSelect({
   themeCustomSeedHex,
   themePresetOptions,
   copy,
+  activePopover,
+  onActivePopoverChange,
   onThemePresetChange,
   onThemeCustomSeedChange,
 }: AccentColorSelectProps) {
@@ -147,6 +154,9 @@ export function AccentColorSelect({
       sections={sections}
       copy={copy}
       fieldIdPrefix="accent-color"
+      sessionPopoverId="accent-color"
+      activePopover={activePopover}
+      onActivePopoverChange={onActivePopoverChange}
       onChange={onThemeCustomSeedChange}
       onChoiceSelect={handleChoiceSelect}
     />

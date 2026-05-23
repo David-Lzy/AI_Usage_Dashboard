@@ -73,6 +73,7 @@ function createState(overrides: Partial<SurfaceSessionState> = {}): SurfaceSessi
           top: 96,
         },
       },
+      activePopover: null,
       providerProgressDetailsOpen: {
         "codex-personal-page": true,
       },
@@ -227,6 +228,11 @@ describe("surface session state", () => {
             top: 18.6,
           },
         },
+        activePopover: {
+          id: "  progress-color-band:high:color  ",
+          customPanelOpen: true,
+          apiKeyDraft: "secret",
+        },
         providerProgressDetailsOpen: {
           codex: true,
           cursor: "yes",
@@ -253,6 +259,10 @@ describe("surface session state", () => {
             left: 12,
             top: 19,
           },
+        },
+        activePopover: {
+          id: "progress-color-band:high:color",
+          customPanelOpen: true,
         },
         providerProgressDetailsOpen: {
           codex: true,

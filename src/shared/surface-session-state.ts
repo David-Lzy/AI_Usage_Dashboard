@@ -34,11 +34,17 @@ export type ToolbarPopupPreviewSessionState = {
   } | null;
 };
 
+export type SettingsActivePopoverSessionState = {
+  id: string;
+  customPanelOpen?: boolean;
+};
+
 export type SettingsSurfaceSessionState = {
   activeSectionId: string | null;
   advancedOpen: boolean;
   uiMoreOpen: boolean;
   toolbarPopupPreview: ToolbarPopupPreviewSessionState | null;
+  activePopover: SettingsActivePopoverSessionState | null;
   providerProgressDetailsOpen: Record<string, boolean>;
   carouselIndexById: Record<string, number>;
 };
@@ -160,6 +166,25 @@ function normalizeToolbarPopupPreview(
   };
 }
 
+function normalizeSettingsActivePopover(
+  value: unknown,
+): SettingsActivePopoverSessionState | null {
+  if (!isRecord(value)) {
+    return null;
+  }
+
+  const id = normalizeString(value.id);
+
+  if (!id) {
+    return null;
+  }
+
+  return {
+    id,
+    ...(value.customPanelOpen === true ? { customPanelOpen: true } : {}),
+  };
+}
+
 function normalizeSettingsSurfaceState(
   value: unknown,
 ): SettingsSurfaceSessionState | null {
@@ -174,6 +199,7 @@ function normalizeSettingsSurfaceState(
     toolbarPopupPreview: normalizeToolbarPopupPreview(
       value.toolbarPopupPreview,
     ),
+    activePopover: normalizeSettingsActivePopover(value.activePopover),
     providerProgressDetailsOpen: normalizeBooleanRecord(
       value.providerProgressDetailsOpen,
     ),

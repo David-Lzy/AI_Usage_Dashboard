@@ -11,6 +11,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 
+import type { SettingsActivePopoverSessionState } from "../../shared/surface-session-state";
 import { focusWithoutScroll } from "../focus";
 import {
   resolveFloatingMenuPosition,
@@ -31,6 +32,11 @@ type MaterialSelectProps<TValue extends string> = {
   labelHidden?: boolean;
   labelAccessory?: ReactNode;
   disabled?: boolean;
+  sessionPopoverId?: string;
+  activePopover?: SettingsActivePopoverSessionState | null;
+  onActivePopoverChange?: (
+    nextPopover: SettingsActivePopoverSessionState | null,
+  ) => void;
   onChange: (value: TValue) => void;
 };
 
@@ -54,6 +60,13 @@ export function getNextMaterialSelectOptionIndex(
   return currentIndex <= 0 ? optionCount - 1 : currentIndex - 1;
 }
 
+function isSurfaceSwitchTarget(target: EventTarget | null): boolean {
+  return (
+    target instanceof Element &&
+    Boolean(target.closest('[data-topbar-switch-surface="true"]'))
+  );
+}
+
 export function MaterialSelect<TValue extends string>({
   label,
   value,
@@ -62,6 +75,9 @@ export function MaterialSelect<TValue extends string>({
   labelHidden = false,
   labelAccessory,
   disabled = false,
+  sessionPopoverId,
+  activePopover,
+  onActivePopoverChange,
   onChange,
 }: MaterialSelectProps<TValue>) {
   const generatedId = useId();
@@ -73,7 +89,9 @@ export function MaterialSelect<TValue extends string>({
   const menuRef = useRef<HTMLDivElement | null>(null);
   const selectedIndex = options.findIndex((option) => option.value === value);
   const selectedOption = selectedIndex >= 0 ? options[selectedIndex] : options[0];
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(
+    () => Boolean(sessionPopoverId) && activePopover?.id === sessionPopoverId,
+  );
   const [menuPosition, setMenuPosition] =
     useState<FloatingMenuPosition | null>(null);
   const [activeIndex, setActiveIndex] = useState(
@@ -96,6 +114,49 @@ export function MaterialSelect<TValue extends string>({
     setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
   }, [isOpen, selectedIndex]);
 
+  function publishActivePopover() {
+    if (!sessionPopoverId || !onActivePopoverChange) {
+      return;
+    }
+
+    onActivePopoverChange({ id: sessionPopoverId });
+  }
+
+  function clearActivePopover() {
+    if (
+      sessionPopoverId &&
+      onActivePopoverChange &&
+      (!activePopover || activePopover.id === sessionPopoverId)
+    ) {
+      onActivePopoverChange(null);
+    }
+  }
+
+  function closeMenu({ keepActivePopover = false } = {}) {
+    setIsOpen(false);
+    if (!keepActivePopover) {
+      clearActivePopover();
+    }
+  }
+
+  useEffect(() => {
+    if (!sessionPopoverId) {
+      return;
+    }
+
+    if (activePopover?.id === sessionPopoverId) {
+      setIsOpen(true);
+      if (typeof window !== "undefined") {
+        window.requestAnimationFrame(updateMenuPosition);
+      }
+      return;
+    }
+
+    if (activePopover && activePopover.id !== sessionPopoverId) {
+      setIsOpen(false);
+    }
+  }, [activePopover?.id, sessionPopoverId]);
+
   useEffect(() => {
     if (!isOpen || typeof document === "undefined") {
       return undefined;
@@ -111,7 +172,7 @@ export function MaterialSelect<TValue extends string>({
         return;
       }
 
-      setIsOpen(false);
+      closeMenu({ keepActivePopover: isSurfaceSwitchTarget(target) });
     }
 
     document.addEventListener("pointerdown", handlePointerDown);
@@ -158,6 +219,7 @@ export function MaterialSelect<TValue extends string>({
   function openMenu() {
     updateMenuPosition();
     setIsOpen(true);
+    publishActivePopover();
   }
 
   useEffect(() => {
@@ -187,7 +249,7 @@ export function MaterialSelect<TValue extends string>({
   }, [isOpen]);
 
   function applyValue(nextValue: TValue) {
-    setIsOpen(false);
+    closeMenu();
 
     if (nextValue !== value) {
       onChange(nextValue);
@@ -205,7 +267,7 @@ export function MaterialSelect<TValue extends string>({
       return;
     }
 
-    setIsOpen(false);
+    closeMenu();
   }
 
   function handleButtonKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
@@ -252,7 +314,7 @@ export function MaterialSelect<TValue extends string>({
       case "Escape":
         if (isOpen) {
           event.preventDefault();
-          setIsOpen(false);
+          closeMenu();
         }
         break;
       default:
@@ -266,7 +328,7 @@ export function MaterialSelect<TValue extends string>({
     }
 
     if (isOpen) {
-      setIsOpen(false);
+      closeMenu();
       return;
     }
 
@@ -333,6 +395,7 @@ export function MaterialSelect<TValue extends string>({
       className="form-field material-select"
       data-label-hidden={labelHidden ? "true" : "false"}
       data-settings-material-select={fieldIdPrefix}
+      data-session-popover-id={sessionPopoverId}
       onBlur={handleRootBlur}
     >
       <FormFieldLabel

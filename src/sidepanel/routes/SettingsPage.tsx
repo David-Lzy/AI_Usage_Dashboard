@@ -354,6 +354,11 @@ export function SettingsPage({
               label={settingsCopy.layout.userLevel.label}
               value={settings.userLevel}
               fieldIdPrefix="settings-user-level"
+              sessionPopoverId="settings-user-level"
+              activePopover={settingsSurfaceSession.preferences.activePopover}
+              onActivePopoverChange={
+                settingsSurfaceSession.preferences.setActivePopover
+              }
               options={[
                 {
                   value: "basic",
@@ -382,6 +387,11 @@ export function SettingsPage({
             label={i18n.t("settings.preferences.locale_label")}
             value={settings.locale}
             fieldIdPrefix="locale-preference"
+            sessionPopoverId="locale-preference"
+            activePopover={settingsSurfaceSession.preferences.activePopover}
+            onActivePopoverChange={
+              settingsSurfaceSession.preferences.setActivePopover
+            }
             options={localeOptions}
             onChange={onLocalePreferenceChange}
           />
@@ -389,6 +399,11 @@ export function SettingsPage({
             label={i18n.t("settings.preferences.theme_mode_label")}
             value={settings.themeMode}
             fieldIdPrefix="theme-mode"
+            sessionPopoverId="theme-mode"
+            activePopover={settingsSurfaceSession.preferences.activePopover}
+            onActivePopoverChange={
+              settingsSurfaceSession.preferences.setActivePopover
+            }
             options={themeModeOptions}
             onChange={onThemeModeChange}
           />
@@ -549,6 +564,10 @@ export function SettingsPage({
                 settingsCopy={settingsCopy}
                 carouselIndex={settingsSurfaceSession.carouselIndexById.sources}
                 userLevelVisibility={userLevelVisibility}
+                activePopover={settingsSurfaceSession.preferences.activePopover}
+                onActivePopoverChange={
+                  settingsSurfaceSession.preferences.setActivePopover
+                }
                 sessionPageNavigationAvailable={sessionPageNavigationAvailable}
                 activeSessionPageAttachAvailable={activeSessionPageAttachAvailable}
                 onCarouselIndexChange={handleSourcesCarouselIndexChange}

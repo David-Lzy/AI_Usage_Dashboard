@@ -12,6 +12,7 @@ import {
   buildSettingsLocalizedCopy,
   getSettingsSourcePreferenceLabel,
 } from "../../shared/settings-localized-copy";
+import type { SettingsActivePopoverSessionState } from "../../shared/surface-session-state";
 import type { SettingsUserLevelVisibility } from "../settings-user-level-visibility";
 import {
   buildSettingsSourceCardModel,
@@ -27,6 +28,10 @@ type SettingsSourceCardProps = {
   settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>;
   snapshot: ProviderSnapshot;
   userLevelVisibility: SettingsUserLevelVisibility;
+  activePopover?: SettingsActivePopoverSessionState | null;
+  onActivePopoverChange?: (
+    nextPopover: SettingsActivePopoverSessionState | null,
+  ) => void;
   onAttachActiveSessionPage: (providerId: ProviderId) => void;
   onClearPageBinding: (providerId: ProviderId) => void;
   onOpenSessionPage: (providerId: ProviderId) => void;
@@ -44,6 +49,8 @@ export function SettingsSourceCard({
   settingsCopy,
   snapshot,
   userLevelVisibility,
+  activePopover,
+  onActivePopoverChange,
   onAttachActiveSessionPage,
   onClearPageBinding,
   onOpenSessionPage,
@@ -129,6 +136,9 @@ export function SettingsSourceCard({
                   labelHidden
                   value={sourceDisplay.sourcePreference}
                   fieldIdPrefix={`source-preference-${provider.id}`}
+                  sessionPopoverId={`source-preference:${provider.id}`}
+                  activePopover={activePopover}
+                  onActivePopoverChange={onActivePopoverChange}
                   options={sourceDisplay.sourcePreferenceOptions.map(
                     (preference) => ({
                       value: preference,

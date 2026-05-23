@@ -157,6 +157,8 @@ export function SettingsPreferencesSection({
   const {
     popupPreviewRemainingPercent,
     setPopupPreviewRemainingPercent,
+    activePopover,
+    setActivePopover,
     setToolbarPopupPreviewOpen,
     setToolbarPopupPreviewPosition,
     setUiMoreOpen,
@@ -249,6 +251,8 @@ export function SettingsPreferencesSection({
           themeCustomSeedHex={settings.themeCustomSeedHex}
           themePresetOptions={themePresetOptions}
           copy={settingsCopy.colorChoices}
+          activePopover={activePopover}
+          onActivePopoverChange={setActivePopover}
           onThemePresetChange={onThemePresetChange}
           onThemeCustomSeedChange={onThemeCustomSeedChange}
         />
@@ -257,6 +261,9 @@ export function SettingsPreferencesSection({
           label={i18n.t("settings.preferences.motion_mode_label")}
           value={settings.motionMode}
           fieldIdPrefix="motion-mode"
+          sessionPopoverId="motion-mode"
+          activePopover={activePopover}
+          onActivePopoverChange={setActivePopover}
           options={motionModeOptions}
           onChange={onMotionModeChange}
         />
@@ -305,12 +312,15 @@ export function SettingsPreferencesSection({
         />
 
         <MaterialSelect
-          label={i18n.t("settings.preferences.toolbar_icon_label")}
-          value={settings.toolbarIconMode}
-          fieldIdPrefix="toolbar-icon-mode"
-          options={toolbarIconModeOptions}
-          onChange={onToolbarIconModeChange}
-        />
+            label={i18n.t("settings.preferences.toolbar_icon_label")}
+            value={settings.toolbarIconMode}
+            fieldIdPrefix="toolbar-icon-mode"
+            sessionPopoverId="toolbar-icon-mode"
+            activePopover={activePopover}
+            onActivePopoverChange={setActivePopover}
+            options={toolbarIconModeOptions}
+            onChange={onToolbarIconModeChange}
+          />
 
         {settings.toolbarIconMode === "provider" &&
         selectedToolbarIconProviderId ? (
@@ -318,6 +328,9 @@ export function SettingsPreferencesSection({
             label={i18n.t("settings.preferences.toolbar_icon_provider_label")}
             value={selectedToolbarIconProviderId}
             fieldIdPrefix="toolbar-icon-provider"
+            sessionPopoverId="toolbar-icon-provider"
+            activePopover={activePopover}
+            onActivePopoverChange={setActivePopover}
             options={toolbarIconProviderOptions}
             onChange={onToolbarIconProviderIdChange}
           />
@@ -376,6 +389,7 @@ export function SettingsPreferencesSection({
         toolbarPopupPreviewOpen={toolbarPopupPreviewOpen}
         popupPreviewRemainingPercent={popupPreviewRemainingPercent}
         toolbarPopupPreviewPosition={toolbarPopupPreviewPosition}
+        activePopover={activePopover}
         popupCircularRowCountHelperText={popupCircularRowCountHelperText}
         uiFontHelperText={uiFontHelperText}
         progressDisplayStyleOptions={progressDisplayStyleOptions}
@@ -391,6 +405,7 @@ export function SettingsPreferencesSection({
         onCloseToolbarPopupPreview={() => setToolbarPopupPreviewOpen(false)}
         onPreviewRemainingPercentChange={setPopupPreviewRemainingPercent}
         onToolbarPopupPreviewPositionChange={setToolbarPopupPreviewPosition}
+        onActivePopoverChange={setActivePopover}
         onFullPageProgressStyleChange={onFullPageProgressStyleChange}
         onPopupCornerStyleChange={onPopupCornerStyleChange}
         onPopupCircularProgressItemsPerRowChange={

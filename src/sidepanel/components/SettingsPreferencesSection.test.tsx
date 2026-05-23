@@ -27,6 +27,8 @@ describe("SettingsPreferencesSection", () => {
       setPopupPreviewRemainingPercent: () => {},
       toolbarPopupPreviewPosition: null,
       setToolbarPopupPreviewPosition: () => {},
+      activePopover: null,
+      setActivePopover: () => {},
     };
   }
 

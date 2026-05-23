@@ -66,6 +66,30 @@ describe("ColorChoiceDropdown", () => {
     );
   });
 
+  it("can restore an active dropdown and custom color panel from session state", () => {
+    const html = renderToStaticMarkup(
+      <ColorChoiceDropdown
+        label="Accent preset"
+        valueHex="#4f46e5"
+        sections={sections}
+        copy={copy}
+        fieldIdPrefix="accent-color"
+        sessionPopoverId="accent-color"
+        activePopover={{
+          id: "accent-color",
+          customPanelOpen: true,
+        }}
+        onActivePopoverChange={() => {}}
+        onChange={() => {}}
+      />,
+    );
+
+    expect(html).toContain('aria-expanded="true"');
+    expect(html).toContain("color-choice-dropdown__menu");
+    expect(html).toContain("color-choice-dropdown__custom-panel");
+    expect(html).toContain("Apply custom color");
+  });
+
   it("uses body-large trigger typography for color names and custom hex values", () => {
     expect(formControlsCss).toContain(".color-choice-dropdown__button {");
     expect(formControlsCss).toContain(

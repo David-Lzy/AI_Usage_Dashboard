@@ -26,6 +26,7 @@ describe("settings surface session state", () => {
       popupPreviewRemainingPercent:
         POPUP_APPEARANCE_PREVIEW_DEFAULT_REMAINING_PERCENT,
       toolbarPopupPreviewPosition: null,
+      activePopover: null,
       providerProgressDetailsOpen: {},
       carouselIndexById: {},
     });
@@ -59,6 +60,10 @@ describe("settings surface session state", () => {
           providerProgressDetailsOpen: {
             "codex-personal-page": true,
           },
+          activePopover: {
+            id: "progress-color-band:high:color",
+            customPanelOpen: true,
+          },
           carouselIndexById: {
             "quick-setup": 3,
           },
@@ -73,6 +78,10 @@ describe("settings surface session state", () => {
       toolbarPopupPreviewPosition: {
         left: 300,
         top: 120,
+      },
+      activePopover: {
+        id: "progress-color-band:high:color",
+        customPanelOpen: true,
       },
       providerProgressDetailsOpen: {
         "codex-personal-page": true,
@@ -108,6 +117,9 @@ describe("settings surface session state", () => {
         providerProgressDetailsOpen: {
           "claude-code-team-page": true,
         },
+        activePopover: {
+          id: "popup-progress-style",
+        },
         carouselIndexById: {
           credentials: 1,
         },
@@ -131,6 +143,9 @@ describe("settings surface session state", () => {
             left: 280,
             top: 96,
           },
+        },
+        activePopover: {
+          id: "popup-progress-style",
         },
         providerProgressDetailsOpen: {
           "claude-code-team-page": true,

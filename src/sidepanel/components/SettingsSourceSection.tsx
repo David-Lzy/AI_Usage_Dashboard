@@ -6,6 +6,7 @@ import type {
 } from "../../providers/types";
 import type { RuntimeI18n } from "../../shared/i18n";
 import { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
+import type { SettingsActivePopoverSessionState } from "../../shared/surface-session-state";
 import type { SettingsUserLevelVisibility } from "../settings-user-level-visibility";
 import {
   ProviderCarousel,
@@ -28,6 +29,10 @@ type SettingsSourceSectionProps = {
   snapshots: ProviderSnapshot[];
   title: string;
   userLevelVisibility: SettingsUserLevelVisibility;
+  activePopover?: SettingsActivePopoverSessionState | null;
+  onActivePopoverChange?: (
+    nextPopover: SettingsActivePopoverSessionState | null,
+  ) => void;
   onAttachActiveSessionPage: (providerId: ProviderId) => void;
   onCarouselIndexChange?: (index: number) => void;
   onClearPageBinding: (providerId: ProviderId) => void;
@@ -52,6 +57,8 @@ export function SettingsSourceSection({
   snapshots,
   title,
   userLevelVisibility,
+  activePopover,
+  onActivePopoverChange,
   onAttachActiveSessionPage,
   onCarouselIndexChange,
   onClearPageBinding,
@@ -83,6 +90,8 @@ export function SettingsSourceSection({
                 settingsCopy={settingsCopy}
                 snapshot={snapshot}
                 userLevelVisibility={userLevelVisibility}
+                activePopover={activePopover}
+                onActivePopoverChange={onActivePopoverChange}
                 onAttachActiveSessionPage={onAttachActiveSessionPage}
                 onClearPageBinding={onClearPageBinding}
                 onOpenSessionPage={onOpenSessionPage}
