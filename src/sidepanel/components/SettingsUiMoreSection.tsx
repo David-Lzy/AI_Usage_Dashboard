@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from "react";
+
 import type {
   AppSettings,
   PopupCircularProgressItemsPerRow,
@@ -14,6 +16,8 @@ import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 import { MaterialSelect, type MaterialSelectOption } from "./MaterialSelect";
 import { ProgressAppearancePreferenceControls } from "./ProgressAppearancePreferenceControls";
 import { ToolbarPopupPreview } from "./ToolbarPopupPreview";
+
+export const TOOLBAR_POPUP_PREVIEW_FLOATING_MIN_WIDTH_PX = 640;
 
 type PopupCircularProgressItemsPerRowSelectValue = "1" | "2" | "3" | "4";
 
@@ -56,6 +60,55 @@ type SettingsUiMoreSectionProps = {
   onUiFontFamilyChange: (uiFontFamily: UiFontFamily) => void;
 };
 
+export function canUseFloatingToolbarPopupPreview(
+  containerWidth: number,
+): boolean {
+  return containerWidth >= TOOLBAR_POPUP_PREVIEW_FLOATING_MIN_WIDTH_PX;
+}
+
+function useFloatingToolbarPopupPreviewCapability() {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [canUseFloatingPreview, setCanUseFloatingPreview] = useState(false);
+
+  useEffect(() => {
+    const container = containerRef.current;
+
+    if (!container) {
+      return undefined;
+    }
+
+    function measureContainer() {
+      setCanUseFloatingPreview(
+        canUseFloatingToolbarPopupPreview(
+          container?.getBoundingClientRect().width ?? 0,
+        ),
+      );
+    }
+
+    measureContainer();
+
+    if (typeof ResizeObserver === "undefined") {
+      window.addEventListener("resize", measureContainer);
+
+      return () => {
+        window.removeEventListener("resize", measureContainer);
+      };
+    }
+
+    const resizeObserver = new ResizeObserver(measureContainer);
+    resizeObserver.observe(container);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
+
+  return {
+    canUseFloatingPreview,
+    containerRef,
+  };
+}
+
 export function SettingsUiMoreSection({
   i18n,
   settings,
@@ -86,10 +139,21 @@ export function SettingsUiMoreSection({
   onSidebarProgressStyleChange,
   onUiFontFamilyChange,
 }: SettingsUiMoreSectionProps) {
+  const { canUseFloatingPreview, containerRef } =
+    useFloatingToolbarPopupPreviewCapability();
+  const shouldRenderInlinePreview =
+    toolbarPopupPreviewOpen && uiMoreOpen && !canUseFloatingPreview;
+  const shouldRenderFloatingPreview =
+    toolbarPopupPreviewOpen && canUseFloatingPreview;
+
   return (
     <div
+      ref={containerRef}
       className="source-card__details settings-preferences__more settings-preferences__more--ui"
       data-open={uiMoreOpen ? "true" : "false"}
+      data-toolbar-popup-preview-mode={
+        canUseFloatingPreview ? "floating" : "inline"
+      }
     >
       <div className="settings-preferences__more-toolbar">
         <button
@@ -123,7 +187,7 @@ export function SettingsUiMoreSection({
 
       {uiMoreOpen ? (
         <div className="source-card__details-body settings-preferences__more-body">
-          {toolbarPopupPreviewOpen ? (
+          {shouldRenderInlinePreview ? (
             <ToolbarPopupPreview
               i18n={i18n}
               placement="inline"
@@ -228,7 +292,7 @@ export function SettingsUiMoreSection({
           />
         </div>
       ) : null}
-      {toolbarPopupPreviewOpen ? (
+      {shouldRenderFloatingPreview ? (
         <ToolbarPopupPreview
           i18n={i18n}
           placement="floating"

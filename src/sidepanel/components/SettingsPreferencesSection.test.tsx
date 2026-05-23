@@ -7,6 +7,7 @@ import { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
 import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
 import { getSettingsUserLevelVisibility } from "../settings-user-level-visibility";
 import { SettingsPreferencesSection } from "./SettingsPreferencesSection";
+import { canUseFloatingToolbarPopupPreview } from "./SettingsUiMoreSection";
 
 describe("SettingsPreferencesSection", () => {
   function renderPreferencesSection(
@@ -90,6 +91,12 @@ describe("SettingsPreferencesSection", () => {
     expect(html).not.toContain("Provider display settings");
     expect(html).not.toContain("Quick glance");
     expect(html).not.toContain('class="theme-customization-form"');
+  });
+
+  it("uses the narrow threshold for floating toolbar popup preview", () => {
+    expect(canUseFloatingToolbarPopupPreview(639)).toBe(false);
+    expect(canUseFloatingToolbarPopupPreview(640)).toBe(true);
+    expect(canUseFloatingToolbarPopupPreview(760)).toBe(true);
   });
 
   it("renders the advanced UI controls only when the more section starts open", () => {

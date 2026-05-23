@@ -5,6 +5,7 @@ import {
   type ChangeEvent,
   type PointerEvent as ReactPointerEvent,
 } from "react";
+import { createPortal } from "react-dom";
 
 import type { AppSettings } from "../../providers/types";
 import { buildRuntimeCommonCopy, type RuntimeI18n } from "../../shared/i18n";
@@ -13,6 +14,27 @@ import { formatPopupPreviewQuotaLabel } from "./provider-progress-compact-labels
 import { UsageProgress } from "./UsageProgress";
 
 export const POPUP_APPEARANCE_PREVIEW_DEFAULT_REMAINING_PERCENT = 51;
+
+const FLOATING_PREVIEW_MARGIN_PX = 16;
+const FLOATING_PREVIEW_DEFAULT_WIDTH_PX = 440;
+const FLOATING_PREVIEW_DEFAULT_HEIGHT_PX = 260;
+const FLOATING_PREVIEW_INITIAL_TOP_PX = 96;
+const FLOATING_PREVIEW_INITIAL_RIGHT_PX = 32;
+
+type ToolbarPopupPreviewPosition = {
+  left: number;
+  top: number;
+};
+
+type ToolbarPopupPreviewSize = {
+  width: number;
+  height: number;
+};
+
+type ToolbarPopupPreviewViewport = {
+  width: number;
+  height: number;
+};
 
 type ToolbarPopupPreviewSettings = Pick<
   AppSettings,
@@ -40,6 +62,54 @@ type ToolbarPopupPreviewSurfaceProps = {
   previewRemainingPercent: number;
   settings: ToolbarPopupPreviewSettings;
 };
+
+export function clampToolbarPopupPreviewPosition(
+  position: ToolbarPopupPreviewPosition,
+  viewport: ToolbarPopupPreviewViewport,
+  previewSize: ToolbarPopupPreviewSize,
+  margin = FLOATING_PREVIEW_MARGIN_PX,
+): ToolbarPopupPreviewPosition {
+  const maxLeft = Math.max(margin, viewport.width - previewSize.width - margin);
+  const maxTop = Math.max(margin, viewport.height - previewSize.height - margin);
+
+  return {
+    left: Math.min(Math.max(position.left, margin), maxLeft),
+    top: Math.min(Math.max(position.top, margin), maxTop),
+  };
+}
+
+function getFloatingPreviewViewport(): ToolbarPopupPreviewViewport {
+  if (typeof window === "undefined") {
+    return {
+      width: FLOATING_PREVIEW_DEFAULT_WIDTH_PX + FLOATING_PREVIEW_INITIAL_RIGHT_PX * 2,
+      height: FLOATING_PREVIEW_DEFAULT_HEIGHT_PX + FLOATING_PREVIEW_INITIAL_TOP_PX * 2,
+    };
+  }
+
+  return {
+    width: window.innerWidth,
+    height: window.innerHeight,
+  };
+}
+
+function getInitialFloatingPreviewPosition(): ToolbarPopupPreviewPosition {
+  const viewport = getFloatingPreviewViewport();
+
+  return clampToolbarPopupPreviewPosition(
+    {
+      left:
+        viewport.width -
+        FLOATING_PREVIEW_DEFAULT_WIDTH_PX -
+        FLOATING_PREVIEW_INITIAL_RIGHT_PX,
+      top: FLOATING_PREVIEW_INITIAL_TOP_PX,
+    },
+    viewport,
+    {
+      width: FLOATING_PREVIEW_DEFAULT_WIDTH_PX,
+      height: FLOATING_PREVIEW_DEFAULT_HEIGHT_PX,
+    },
+  );
+}
 
 function ToolbarPopupPreviewSurface({
   i18n,
@@ -157,17 +227,69 @@ export function ToolbarPopupPreview({
   onPreviewRemainingPercentChange,
   onClose,
 }: ToolbarPopupPreviewProps) {
+  const floatingPreviewRef = useRef<HTMLElement | null>(null);
   const dragStartRef = useRef<{
     pointerX: number;
     pointerY: number;
-    originX: number;
-    originY: number;
+    originLeft: number;
+    originTop: number;
   } | null>(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState<ToolbarPopupPreviewPosition>(
+    getInitialFloatingPreviewPosition,
+  );
   const [isDragging, setIsDragging] = useState(false);
   const normalizedPreviewRemainingPercent = normalizePreviewRemainingPercent(
     previewRemainingPercent,
   );
+
+  function getFloatingPreviewSize(): ToolbarPopupPreviewSize {
+    const rect = floatingPreviewRef.current?.getBoundingClientRect();
+
+    return {
+      width: rect?.width ?? FLOATING_PREVIEW_DEFAULT_WIDTH_PX,
+      height: rect?.height ?? FLOATING_PREVIEW_DEFAULT_HEIGHT_PX,
+    };
+  }
+
+  function clampFloatingPreviewPosition(
+    nextPosition: ToolbarPopupPreviewPosition,
+  ): ToolbarPopupPreviewPosition {
+    return clampToolbarPopupPreviewPosition(
+      nextPosition,
+      getFloatingPreviewViewport(),
+      getFloatingPreviewSize(),
+    );
+  }
+
+  useEffect(() => {
+    if (placement !== "floating" || typeof window === "undefined") {
+      return undefined;
+    }
+
+    setPosition((currentPosition) =>
+      clampToolbarPopupPreviewPosition(
+        currentPosition,
+        getFloatingPreviewViewport(),
+        getFloatingPreviewSize(),
+      ),
+    );
+
+    function handleResize() {
+      setPosition((currentPosition) =>
+        clampToolbarPopupPreviewPosition(
+          currentPosition,
+          getFloatingPreviewViewport(),
+          getFloatingPreviewSize(),
+        ),
+      );
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [placement]);
 
   useEffect(() => {
     if (!isDragging || typeof document === "undefined") {
@@ -182,8 +304,10 @@ export function ToolbarPopupPreview({
       }
 
       setPosition({
-        x: dragStart.originX + event.clientX - dragStart.pointerX,
-        y: dragStart.originY + event.clientY - dragStart.pointerY,
+        ...clampFloatingPreviewPosition({
+          left: dragStart.originLeft + event.clientX - dragStart.pointerX,
+          top: dragStart.originTop + event.clientY - dragStart.pointerY,
+        }),
       });
     }
 
@@ -214,11 +338,12 @@ export function ToolbarPopupPreview({
     }
 
     event.preventDefault();
+    event.currentTarget.setPointerCapture?.(event.pointerId);
     dragStartRef.current = {
       pointerX: event.clientX,
       pointerY: event.clientY,
-      originX: position.x,
-      originY: position.y,
+      originLeft: position.left,
+      originTop: position.top,
     };
     setIsDragging(true);
   }
@@ -240,13 +365,16 @@ export function ToolbarPopupPreview({
   );
 
   if (placement === "floating") {
-    return (
+    const floatingPreview = (
       <aside
+        ref={floatingPreviewRef}
         className="toolbar-popup-preview toolbar-popup-preview--floating popup-appearance-preview-shell"
         data-toolbar-popup-preview="floating"
+        data-dragging={isDragging ? "true" : "false"}
         {...buildToolbarPopupPreviewShellAttributes(settings)}
         style={{
-          transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
+          left: `${position.left}px`,
+          top: `${position.top}px`,
         }}
         aria-label={i18n.t("settings.popup_appearance_preview.title")}
       >
@@ -276,6 +404,12 @@ export function ToolbarPopupPreview({
         {previewSurface}
       </aside>
     );
+
+    if (typeof document === "undefined") {
+      return floatingPreview;
+    }
+
+    return createPortal(floatingPreview, document.body);
   }
 
   return (

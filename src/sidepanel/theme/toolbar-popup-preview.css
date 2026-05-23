@@ -1,22 +1,20 @@
 .toolbar-popup-preview {
-  animation: app-disclosure-enter var(--app-motion-duration-medium)
-    var(--app-motion-easing-standard) both;
+  animation: toolbar-popup-preview-enter var(--app-motion-duration-medium)
+    var(--app-motion-easing-emphasized) both;
 }
 
 .toolbar-popup-preview--inline {
-  display: none;
+  display: grid;
 }
 
 .toolbar-popup-preview--floating {
   position: fixed;
   z-index: 70;
-  inset-block-start: 96px;
-  inset-inline-end: 32px;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--app-space-3);
-  width: min(520px, calc(100vw - 32px));
-  padding: var(--app-space-3);
+  gap: var(--app-space-2);
+  width: min(clamp(340px, 42vw, 440px), calc(100vw - 32px));
+  padding: var(--app-space-2);
   border: 1px solid var(--app-supporting-surface-border);
   border-radius: var(--md-sys-shape-corner-extra-large);
   background:
@@ -28,11 +26,12 @@
     ),
     var(--md-sys-color-surface-container-lowest);
   box-shadow: var(--app-elevation-2);
+  will-change: left, top;
 }
 
 .toolbar-popup-preview__bar {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(128px, 160px) auto;
+  grid-template-columns: minmax(0, 1fr) minmax(108px, 140px) auto;
   align-items: center;
   gap: var(--app-space-2);
   min-height: 44px;
@@ -49,6 +48,10 @@
 }
 
 .toolbar-popup-preview__bar:active {
+  cursor: grabbing;
+}
+
+.toolbar-popup-preview--floating[data-dragging="true"] .toolbar-popup-preview__bar {
   cursor: grabbing;
 }
 
@@ -88,14 +91,31 @@
 
 .toolbar-popup-preview--floating .popup-appearance-preview-surface {
   justify-self: center;
+  min-width: min(100%, 248px);
 }
 
-@container settings-ui-more (max-width: 759px) {
-  .toolbar-popup-preview--inline {
-    display: grid;
+.toolbar-popup-preview--floating .popup-appearance-preview-provider {
+  gap: var(--app-space-2);
+}
+
+@keyframes toolbar-popup-preview-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--app-motion-distance-2)) scale(0.98);
   }
 
-  .toolbar-popup-preview--floating {
-    display: none;
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-motion-mode="system"] .toolbar-popup-preview {
+    animation: none;
+  }
+}
+
+:root[data-motion-mode="reduced"] .toolbar-popup-preview {
+  animation: none;
 }

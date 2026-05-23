@@ -6,6 +6,7 @@ import { createRuntimeI18n } from "../../shared/i18n";
 import {
   POPUP_APPEARANCE_PREVIEW_DEFAULT_REMAINING_PERCENT,
   ToolbarPopupPreview,
+  clampToolbarPopupPreviewPosition,
 } from "./ToolbarPopupPreview";
 
 describe("ToolbarPopupPreview", () => {
@@ -106,5 +107,32 @@ describe("ToolbarPopupPreview", () => {
     expect(html).toContain("Close toolbar popup preview");
     expect(html).toContain("Preview remaining");
     expect(html).toContain('value="63"');
+    expect(html).toContain("left:");
+    expect(html).toContain("top:");
+    expect(html).not.toContain("translate3d");
+  });
+
+  it("clamps floating preview coordinates inside the viewport", () => {
+    expect(
+      clampToolbarPopupPreviewPosition(
+        { left: -100, top: 999 },
+        { width: 800, height: 600 },
+        { width: 360, height: 220 },
+      ),
+    ).toEqual({
+      left: 16,
+      top: 364,
+    });
+
+    expect(
+      clampToolbarPopupPreviewPosition(
+        { left: 480, top: 180 },
+        { width: 800, height: 600 },
+        { width: 360, height: 220 },
+      ),
+    ).toEqual({
+      left: 424,
+      top: 180,
+    });
   });
 });
