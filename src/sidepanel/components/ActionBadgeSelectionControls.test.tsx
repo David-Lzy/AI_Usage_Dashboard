@@ -21,11 +21,21 @@ describe("ActionBadgeSelectionControls", () => {
         label="Toolbar badge"
         options={OPTIONS}
         selectedValues={["attention", "quota:codex:5h"]}
+        selectionMode="auto"
+        selectionModeLabel="Badge selection mode"
+        automaticLabel="Automatic"
+        manualLabel="Manual"
+        onSelectionModeChange={() => {}}
         onSelectionsChange={() => {}}
       />,
     );
 
     expect(html).toContain('data-action-badge-selection-controls=""');
+    expect(html).toContain('data-action-badge-selection-mode="auto"');
+    expect(html).toContain('data-action-badge-mode-switch=""');
+    expect(html).toContain('aria-readonly="true"');
+    expect(html).toContain("Automatic");
+    expect(html).toContain("Manual");
     expect(html).toContain("material-select__button");
     expect(html).toContain("Attention count · Codex 5-hour window");
     expect(html).not.toContain("action-badge-selection-controls__list");

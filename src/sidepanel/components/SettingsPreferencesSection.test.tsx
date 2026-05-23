@@ -39,7 +39,7 @@ describe("SettingsPreferencesSection", () => {
         onProgressColorBandsChange={() => {}}
         onMotionModeChange={() => {}}
         onActionBadgeSelectionsChange={() => {}}
-        onRestoreActionBadgeAutoMode={() => {}}
+        onActionBadgeSelectionModeChange={() => {}}
         onActionBadgeRotationIntervalSecondsChange={() => {}}
         onExportConfiguration={() => {}}
         onImportConfigurationJson={() => {}}
@@ -72,13 +72,13 @@ describe("SettingsPreferencesSection", () => {
     expect(html).not.toContain("settings-preferences__field-with-helper");
     expect(html).not.toContain("settings-preferences__inline-helper");
     expect(html).toContain('data-action-badge-selection-controls=""');
+    expect(html).toContain('data-action-badge-mode-switch=""');
     expect(html).toContain("Badge selection mode");
     expect(html).toContain(
       "Automatic mode shows attention count until provider quota badges are available",
     );
-    expect(html).toContain('data-action-badge-mode-control=""');
-    expect(html).toContain('data-action-badge-mode-reset=""');
-    expect(html).toContain("Restore automatic");
+    expect(html).not.toContain('data-action-badge-mode-control=""');
+    expect(html).not.toContain('data-action-badge-mode-reset=""');
     expect(html).toContain("Badge rotation interval");
     expect(html).toContain('data-settings-material-select="toolbar-icon-mode"');
     expect(html).toContain('data-configuration-backup=""');
@@ -102,7 +102,7 @@ describe("SettingsPreferencesSection", () => {
     expect(html).not.toContain('class="theme-customization-form"');
   });
 
-  it("keeps the badge mode reset control present but disabled in automatic mode", () => {
+  it("moves badge auto/manual mode into the badge selector label row", () => {
     const autoHtml = renderPreferencesSection({
       ...SAMPLE_APP_STATE.settings,
       actionBadgeSelectionMode: "auto",
@@ -110,9 +110,9 @@ describe("SettingsPreferencesSection", () => {
 
     expect(autoHtml).toContain('data-action-badge-selection-mode="auto"');
     expect(autoHtml).toContain("Automatic");
-    expect(autoHtml).toMatch(
-      /<button[^>]+data-action-badge-mode-reset=""[^>]+disabled=""/,
-    );
+    expect(autoHtml).toContain('aria-pressed="true"');
+    expect(autoHtml).toContain('aria-readonly="true"');
+    expect(autoHtml).not.toContain("Restore automatic");
 
     const manualHtml = renderPreferencesSection({
       ...SAMPLE_APP_STATE.settings,
@@ -121,9 +121,8 @@ describe("SettingsPreferencesSection", () => {
 
     expect(manualHtml).toContain('data-action-badge-selection-mode="manual"');
     expect(manualHtml).toContain("Manual");
-    expect(manualHtml).toMatch(
-      /<button[^>]+data-action-badge-mode-reset=""(?![^>]+disabled="")/,
-    );
+    expect(manualHtml).toContain('aria-pressed="false"');
+    expect(manualHtml).toContain('aria-readonly="false"');
   });
 
   it("uses the narrow threshold for floating toolbar popup preview", () => {

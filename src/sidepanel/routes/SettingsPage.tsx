@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 
 import type {
   ActionBadgeSelections,
+  ActionBadgeSelectionMode,
   ApiKeyProviderId,
   AppLocalePreference,
   AppSettings,
@@ -100,7 +101,9 @@ type SettingsPageProps = {
   onActionBadgeSelectionsChange: (
     actionBadgeSelections: ActionBadgeSelections,
   ) => void;
-  onRestoreActionBadgeAutoMode: () => void;
+  onActionBadgeSelectionModeChange: (
+    actionBadgeSelectionMode: ActionBadgeSelectionMode,
+  ) => void;
   onActionBadgeRotationIntervalSecondsChange: (seconds: number) => void;
   onExportConfiguration: () => void;
   onImportConfigurationJson: (rawJson: string) => void;
@@ -173,7 +176,7 @@ export function SettingsPage({
   onProgressThicknessPxChange,
   onProgressColorBandsChange,
   onActionBadgeSelectionsChange,
-  onRestoreActionBadgeAutoMode,
+  onActionBadgeSelectionModeChange,
   onActionBadgeRotationIntervalSecondsChange,
   onExportConfiguration,
   onImportConfigurationJson,
@@ -408,7 +411,7 @@ export function SettingsPage({
         onProgressThicknessPxChange={onProgressThicknessPxChange}
         onProgressColorBandsChange={onProgressColorBandsChange}
         onActionBadgeSelectionsChange={onActionBadgeSelectionsChange}
-        onRestoreActionBadgeAutoMode={onRestoreActionBadgeAutoMode}
+        onActionBadgeSelectionModeChange={onActionBadgeSelectionModeChange}
         onActionBadgeRotationIntervalSecondsChange={
           onActionBadgeRotationIntervalSecondsChange
         }

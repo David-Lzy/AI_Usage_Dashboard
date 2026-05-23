@@ -85,37 +85,67 @@ select.form-field__control {
   cursor: pointer;
 }
 
-.action-badge-mode-field__body {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--app-space-3);
-  min-height: 56px;
-  padding-block: 0;
-}
-
-.action-badge-mode-field__body .meta-chip {
-  flex: 0 1 auto;
-  max-width: 52%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.action-badge-mode-field__reset {
-  flex: 0 0 auto;
-  min-width: 116px;
-}
-
-.action-badge-mode-field__reset:disabled {
-  background: transparent;
-  border-color: transparent;
-  color: var(--md-sys-color-outline);
-  opacity: 0.52;
-}
-
 .action-badge-selection-controls {
   gap: var(--app-space-3);
+}
+
+.action-badge-selection-controls__label-row {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--app-space-2);
+  row-gap: var(--app-space-1);
+}
+
+.action-badge-selection-controls__label-row > .form-field__label {
+  margin-inline-end: auto;
+}
+
+.action-badge-selection-controls__mode-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 32px;
+  padding: 2px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--md-sys-color-surface-container-low);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.action-badge-selection-controls__mode-button {
+  min-width: 54px;
+  min-height: 28px;
+  padding: 0 var(--app-space-3);
+  border: 0;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  line-height: var(--md-sys-typescale-label-large-line-height);
+  transition:
+    background-color var(--app-motion-duration-fast)
+      var(--app-motion-easing-standard),
+    box-shadow var(--app-motion-duration-fast) var(--app-motion-easing-standard),
+    color var(--app-motion-duration-fast) var(--app-motion-easing-standard);
+}
+
+.action-badge-selection-controls__mode-button:hover {
+  background: var(--app-state-layer-neutral-hover);
+}
+
+.action-badge-selection-controls__mode-button:focus-visible {
+  box-shadow: var(--app-focus-ring-shadow);
+  outline: 0;
+}
+
+.action-badge-selection-controls__mode-button[data-selected="true"] {
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
 }
 
 .action-badge-selection-controls__dropdown {
@@ -127,6 +157,10 @@ select.form-field__control {
   min-block-size: 56px;
 }
 
+.action-badge-selection-controls__button[data-readonly="true"] {
+  color: color-mix(in srgb, var(--md-sys-color-on-surface) 76%, white 24%);
+}
+
 .action-badge-selection-controls__menu {
   max-block-size: min(380px, 55vh);
 }
@@ -136,11 +170,25 @@ select.form-field__control {
   padding-block: var(--app-space-2);
 }
 
+.action-badge-selection-controls__menu-option[data-readonly="true"] {
+  color: color-mix(
+    in srgb,
+    var(--md-sys-color-on-surface-variant) 78%,
+    white 22%
+  );
+  cursor: not-allowed;
+}
+
 .action-badge-selection-controls__checkbox {
   width: 22px;
   height: 22px;
   accent-color: var(--md-sys-color-primary);
   cursor: pointer;
+}
+
+.action-badge-selection-controls__checkbox:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
 }
 
 .action-badge-selection-controls__menu-option:focus-within {
@@ -998,6 +1046,8 @@ html[data-app-direction="rtl"] .editable-number-combobox__input {
   :root[data-motion-mode="system"] .editable-number-combobox__menu-icon,
   :root[data-motion-mode="system"] .color-choice-dropdown__menu-icon,
   :root[data-motion-mode="system"] .color-choice-dropdown__custom-icon,
+  :root[data-motion-mode="system"]
+    .action-badge-selection-controls__mode-button,
   :root[data-motion-mode="system"] .material-info-tooltip__trigger,
   :root[data-motion-mode="system"] .material-info-tooltip__content {
     transition: none;
@@ -1008,6 +1058,7 @@ html[data-app-direction="rtl"] .editable-number-combobox__input {
 :root[data-motion-mode="reduced"] .editable-number-combobox__menu-icon,
 :root[data-motion-mode="reduced"] .color-choice-dropdown__menu-icon,
 :root[data-motion-mode="reduced"] .color-choice-dropdown__custom-icon,
+:root[data-motion-mode="reduced"] .action-badge-selection-controls__mode-button,
 :root[data-motion-mode="reduced"] .material-info-tooltip__trigger,
 :root[data-motion-mode="reduced"] .material-info-tooltip__content {
   transition: none;

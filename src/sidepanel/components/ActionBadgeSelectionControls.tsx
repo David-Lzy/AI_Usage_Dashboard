@@ -8,16 +8,23 @@ import {
   type ReactNode,
 } from "react";
 
-import type { ActionBadgeSelection } from "../../providers/types";
+import type {
+  ActionBadgeSelection,
+  ActionBadgeSelectionMode,
+} from "../../providers/types";
 import { ACTION_BADGE_ATTENTION_SELECTION } from "../../shared/action-badge-preferences";
-import { FormFieldLabel } from "./FormFieldLabel";
 import type { MaterialSelectOption } from "./MaterialSelect";
 
 type ActionBadgeSelectionControlsProps = {
   label: string;
   options: Array<MaterialSelectOption<ActionBadgeSelection>>;
   selectedValues: ActionBadgeSelection[];
+  selectionMode: ActionBadgeSelectionMode;
+  selectionModeLabel: string;
+  automaticLabel: string;
+  manualLabel: string;
   labelAccessory?: ReactNode;
+  onSelectionModeChange: (mode: ActionBadgeSelectionMode) => void;
   onSelectionsChange: (selections: ActionBadgeSelection[]) => void;
 };
 
@@ -48,7 +55,12 @@ export function ActionBadgeSelectionControls({
   label,
   options,
   selectedValues,
+  selectionMode,
+  selectionModeLabel,
+  automaticLabel,
+  manualLabel,
   labelAccessory,
+  onSelectionModeChange,
   onSelectionsChange,
 }: ActionBadgeSelectionControlsProps) {
   const generatedId = useId();
@@ -59,6 +71,7 @@ export function ActionBadgeSelectionControls({
   const listboxId = `${fieldId}-listbox`;
   const [isOpen, setIsOpen] = useState(false);
   const selectedValueSet = new Set(selectedValues);
+  const isAutomaticMode = selectionMode === "auto";
   const selectionSummary = getActionBadgeSelectionSummary(
     options,
     selectedValues,
@@ -88,6 +101,10 @@ export function ActionBadgeSelectionControls({
   }, [isOpen]);
 
   function handleToggleSelection(value: ActionBadgeSelection) {
+    if (isAutomaticMode) {
+      return;
+    }
+
     const nextSelections = selectedValueSet.has(value)
       ? selectedValues.filter((selection) => selection !== value)
       : [...selectedValues, value];
@@ -131,18 +148,53 @@ export function ActionBadgeSelectionControls({
     }
   }
 
+  function handleSelectionModeChange(nextMode: ActionBadgeSelectionMode) {
+    if (nextMode === selectionMode) {
+      return;
+    }
+
+    onSelectionModeChange(nextMode);
+  }
+
   return (
     <div
       ref={rootRef}
       className="form-field action-badge-selection-controls"
       data-action-badge-selection-controls=""
+      data-action-badge-selection-mode={selectionMode}
       onBlur={handleRootBlur}
     >
-      <FormFieldLabel
-        id={labelId}
-        label={label}
-        accessory={labelAccessory}
-      />
+      <span className="form-field__label-row action-badge-selection-controls__label-row">
+        <span id={labelId} className="form-field__label">
+          {label}
+        </span>
+        <span
+          className="action-badge-selection-controls__mode-switch"
+          role="group"
+          aria-label={selectionModeLabel}
+          data-action-badge-mode-switch=""
+        >
+          <button
+            className="action-badge-selection-controls__mode-button"
+            type="button"
+            aria-pressed={isAutomaticMode}
+            data-selected={isAutomaticMode ? "true" : "false"}
+            onClick={() => handleSelectionModeChange("auto")}
+          >
+            {automaticLabel}
+          </button>
+          <button
+            className="action-badge-selection-controls__mode-button"
+            type="button"
+            aria-pressed={!isAutomaticMode}
+            data-selected={!isAutomaticMode ? "true" : "false"}
+            onClick={() => handleSelectionModeChange("manual")}
+          >
+            {manualLabel}
+          </button>
+        </span>
+        {labelAccessory}
+      </span>
       <div className="action-badge-selection-controls__dropdown">
         <button
           ref={buttonRef}
@@ -152,9 +204,11 @@ export function ActionBadgeSelectionControls({
           role="combobox"
           aria-haspopup="listbox"
           aria-expanded={isOpen}
+          aria-readonly={isAutomaticMode}
           aria-controls={listboxId}
           aria-labelledby={`${labelId} ${fieldId}`}
           data-open={isOpen ? "true" : "false"}
+          data-readonly={isAutomaticMode ? "true" : "false"}
           onClick={() => setIsOpen((current) => !current)}
           onKeyDown={handleButtonKeyDown}
         >
@@ -167,7 +221,9 @@ export function ActionBadgeSelectionControls({
             className="action-badge-selection-controls__menu material-select__menu"
             role="listbox"
             aria-multiselectable="true"
+            aria-readonly={isAutomaticMode}
             aria-labelledby={labelId}
+            data-readonly={isAutomaticMode ? "true" : "false"}
           >
             {options.map((option) => {
               const isSelected = selectedValueSet.has(option.value);
@@ -179,11 +235,13 @@ export function ActionBadgeSelectionControls({
                   role="option"
                   aria-selected={isSelected}
                   data-selected={isSelected ? "true" : "false"}
+                  data-readonly={isAutomaticMode ? "true" : "false"}
                 >
                   <input
                     className="action-badge-selection-controls__checkbox"
                     type="checkbox"
                     checked={isSelected}
+                    disabled={isAutomaticMode}
                     onChange={() => handleToggleSelection(option.value)}
                   />
                   <span>{option.label}</span>

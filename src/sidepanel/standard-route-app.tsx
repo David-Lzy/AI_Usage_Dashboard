@@ -1,6 +1,9 @@
 import { lazy, Suspense, useEffect } from "react";
 
-import type { AppLocalePreference } from "../providers/types";
+import type {
+  ActionBadgeSelectionMode,
+  AppLocalePreference,
+} from "../providers/types";
 import {
   buildDashboardSummaryLabels,
   createRuntimeI18n,
@@ -335,13 +338,20 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
                 actionBadgeSelections,
               })
             }
-            onRestoreActionBadgeAutoMode={() =>
-              handleUpdateSettings({
-                actionBadgeSelectionMode: "auto",
-                actionBadgeSelection: DEFAULT_ACTION_BADGE_SELECTION,
-                actionBadgeSelections: [...DEFAULT_ACTION_BADGE_SELECTIONS],
-              })
-            }
+            onActionBadgeSelectionModeChange={(
+              actionBadgeSelectionMode: ActionBadgeSelectionMode,
+            ) => {
+              if (actionBadgeSelectionMode === "auto") {
+                handleUpdateSettings({
+                  actionBadgeSelectionMode: "auto",
+                  actionBadgeSelection: DEFAULT_ACTION_BADGE_SELECTION,
+                  actionBadgeSelections: [...DEFAULT_ACTION_BADGE_SELECTIONS],
+                });
+                return;
+              }
+
+              handleUpdateSettings({ actionBadgeSelectionMode: "manual" });
+            }}
             onActionBadgeRotationIntervalSecondsChange={(
               actionBadgeRotationIntervalSeconds,
             ) => handleUpdateSettings({ actionBadgeRotationIntervalSeconds })}

@@ -41,7 +41,7 @@ function renderSettingsPage(overrides: Partial<Parameters<typeof SettingsPage>[0
       onProgressThicknessPxChange={() => {}}
       onProgressColorBandsChange={() => {}}
       onActionBadgeSelectionsChange={() => {}}
-      onRestoreActionBadgeAutoMode={() => {}}
+      onActionBadgeSelectionModeChange={() => {}}
       onActionBadgeRotationIntervalSecondsChange={() => {}}
       onExportConfiguration={() => {}}
       onImportConfigurationJson={() => {}}

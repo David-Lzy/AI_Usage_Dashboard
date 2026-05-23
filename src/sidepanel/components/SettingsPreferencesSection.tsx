@@ -2,6 +2,7 @@ import { useEffect, useState, type ChangeEvent } from "react";
 
 import type {
   ActionBadgeSelections,
+  ActionBadgeSelectionMode,
   AppSettings,
   PopupCircularProgressItemsPerRow,
   PopupCornerStyle,
@@ -49,7 +50,9 @@ type SettingsPreferencesSectionProps = {
   onActionBadgeSelectionsChange: (
     actionBadgeSelections: ActionBadgeSelections,
   ) => void;
-  onRestoreActionBadgeAutoMode: () => void;
+  onActionBadgeSelectionModeChange: (
+    actionBadgeSelectionMode: ActionBadgeSelectionMode,
+  ) => void;
   onActionBadgeRotationIntervalSecondsChange: (seconds: number) => void;
   onExportConfiguration: () => void;
   onImportConfigurationJson: (rawJson: string) => void;
@@ -95,7 +98,7 @@ export function SettingsPreferencesSection({
   snapshots,
   userLevelVisibility: _userLevelVisibility,
   onActionBadgeSelectionsChange,
-  onRestoreActionBadgeAutoMode,
+  onActionBadgeSelectionModeChange,
   onActionBadgeRotationIntervalSecondsChange,
   onExportConfiguration,
   onImportConfigurationJson,
@@ -259,46 +262,26 @@ export function SettingsPreferencesSection({
           label={i18n.t("settings.preferences.action_badge_label")}
           options={actionBadgeOptions}
           selectedValues={normalizedActionBadgeSelections}
+          selectionMode={settings.actionBadgeSelectionMode}
+          selectionModeLabel={i18n.t(
+            "settings.preferences.action_badge_mode_label",
+          )}
+          automaticLabel={i18n.t(
+            "settings.preferences.action_badge_mode_auto",
+          )}
+          manualLabel={i18n.t(
+            "settings.preferences.action_badge_mode_manual",
+          )}
           labelAccessory={
             <MaterialInfoTooltip className="settings-preferences__field-note">
-              {i18n.t("settings.preferences.action_badge_helper")}
+              {`${i18n.t("settings.preferences.action_badge_helper")} ${i18n.t(
+                "settings.preferences.action_badge_mode_helper",
+              )}`}
             </MaterialInfoTooltip>
           }
+          onSelectionModeChange={onActionBadgeSelectionModeChange}
           onSelectionsChange={onActionBadgeSelectionsChange}
         />
-
-        <div
-          className="form-field action-badge-mode-field"
-          data-action-badge-selection-mode={settings.actionBadgeSelectionMode}
-        >
-          <span className="form-field__label-row">
-            <span className="form-field__label">
-              {i18n.t("settings.preferences.action_badge_mode_label")}
-            </span>
-            <MaterialInfoTooltip className="settings-preferences__field-note">
-              {i18n.t("settings.preferences.action_badge_mode_helper")}
-            </MaterialInfoTooltip>
-          </span>
-          <div
-            className="form-field__control action-badge-mode-field__body"
-            data-action-badge-mode-control=""
-          >
-            <span className="meta-chip">
-              {settings.actionBadgeSelectionMode === "auto"
-                ? i18n.t("settings.preferences.action_badge_mode_auto")
-                : i18n.t("settings.preferences.action_badge_mode_manual")}
-            </span>
-            <button
-              className="text-button action-badge-mode-field__reset"
-              type="button"
-              data-action-badge-mode-reset=""
-              disabled={settings.actionBadgeSelectionMode === "auto"}
-              onClick={onRestoreActionBadgeAutoMode}
-            >
-              {i18n.t("settings.preferences.action_badge_restore_auto")}
-            </button>
-          </div>
-        </div>
 
         <EditableNumberCombobox
           label={i18n.t("settings.preferences.action_badge_rotation_label")}
