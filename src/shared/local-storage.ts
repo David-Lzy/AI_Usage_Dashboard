@@ -1,10 +1,10 @@
-export function getSafeLocalStorage(): Storage | null {
+function getSafeWindowStorage(kind: "localStorage" | "sessionStorage"): Storage | null {
   if (typeof window === "undefined" || globalThis !== window) {
     return null;
   }
 
   try {
-    const storage = window.localStorage;
+    const storage = window[kind];
 
     if (
       storage &&
@@ -19,4 +19,12 @@ export function getSafeLocalStorage(): Storage | null {
   }
 
   return null;
+}
+
+export function getSafeLocalStorage(): Storage | null {
+  return getSafeWindowStorage("localStorage");
+}
+
+export function getSafeSessionStorage(): Storage | null {
+  return getSafeWindowStorage("sessionStorage");
 }
