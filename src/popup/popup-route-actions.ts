@@ -7,6 +7,11 @@ import {
 } from "../shared/extension-side-panel-controls";
 import { storePendingFullPageEntry } from "../shared/extension-surface-entry";
 import {
+  buildSurfaceSessionKey,
+  captureSurfaceSessionState,
+  createSurfaceSessionStateForRoute,
+} from "../shared/surface-session-state";
+import {
   buildFullPageExtensionPath,
   buildFullPagePreviewUrl,
   buildSidePanelExtensionPath,
@@ -18,7 +23,32 @@ import {
   type SidePanelRouteState,
 } from "../sidepanel/route-state";
 
+function getRouteProviderId(route: SidePanelRouteState): string | null {
+  return route.name === "provider-detail" ? route.providerId : null;
+}
+
+async function capturePopupSurfaceHandoffState(
+  route: SidePanelRouteState,
+): Promise<void> {
+  const routeKey = buildSidePanelHash(route);
+
+  try {
+    await captureSurfaceSessionState(
+      buildSurfaceSessionKey(routeKey),
+      createSurfaceSessionStateForRoute({
+        routeName: route.name,
+        routeKey,
+        providerId: getRouteProviderId(route),
+      }),
+    );
+  } catch {
+    // Popup navigation must keep working even when session storage is missing.
+  }
+}
+
 export async function openSidePanelRoute(route: SidePanelRouteState) {
+  void capturePopupSurfaceHandoffState(route);
+
   const path = buildSidePanelExtensionPath(route);
 
   if (
@@ -38,6 +68,8 @@ export async function openSidePanelRoute(route: SidePanelRouteState) {
 }
 
 export async function openFullPageRoute(route: SidePanelRouteState) {
+  await capturePopupSurfaceHandoffState(route);
+
   const path = buildFullPageExtensionPath(route);
 
   if (typeof window !== "undefined") {

@@ -223,6 +223,32 @@ export function normalizeSurfaceSessionState(
   };
 }
 
+export function createSurfaceSessionStateForRoute({
+  providerId = null,
+  routeKey,
+  routeName,
+  scrollY = null,
+}: {
+  routeName: SurfaceSessionRouteName;
+  routeKey: string;
+  scrollY?: number | null;
+  providerId?: string | null;
+}): SurfaceSessionState {
+  return {
+    routeName,
+    routeKey,
+    scrollY: normalizeFiniteInteger(scrollY),
+    settings: null,
+    providerDetail:
+      routeName === "provider-detail" && providerId
+        ? {
+            providerId,
+            quotaDetailsOpen: {},
+          }
+        : null,
+  };
+}
+
 function normalizeSurfaceFamily(value: string): string {
   return value
     .trim()

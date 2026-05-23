@@ -1,5 +1,10 @@
 import { storePendingFullPageEntry } from "../shared/extension-surface-entry";
 import {
+  buildSurfaceSessionKey,
+  captureSurfaceSessionState,
+  createSurfaceSessionStateForRoute,
+} from "../shared/surface-session-state";
+import {
   closeSidePanelBestEffort,
   getBrowserCapabilities,
   openExtensionTabPath,
@@ -51,9 +56,41 @@ export function sortTabsByPriority(tabs: chrome.tabs.Tab[]): chrome.tabs.Tab[] {
   return [...tabs].sort((left, right) => scoreTab(right) - scoreTab(left));
 }
 
+function getWindowScrollY(): number | null {
+  return typeof window !== "undefined" && typeof window.scrollY === "number"
+    ? window.scrollY
+    : null;
+}
+
+function getRouteProviderId(route: SidePanelRouteState): string | null {
+  return route.name === "provider-detail" ? route.providerId : null;
+}
+
+async function captureRouteSurfaceSessionState(
+  route: SidePanelRouteState,
+): Promise<void> {
+  const routeKey = buildSidePanelHash(route);
+
+  try {
+    await captureSurfaceSessionState(
+      buildSurfaceSessionKey(routeKey),
+      createSurfaceSessionStateForRoute({
+        routeName: route.name,
+        routeKey,
+        scrollY: getWindowScrollY(),
+        providerId: getRouteProviderId(route),
+      }),
+    );
+  } catch {
+    // Surface switching should remain best-effort even if session storage fails.
+  }
+}
+
 export async function openFullPageRoute(
   route: SidePanelRouteState,
 ): Promise<void> {
+  await captureRouteSurfaceSessionState(route);
+
   const path = buildFullPageExtensionPath(route);
 
   if (typeof window !== "undefined") {
@@ -87,6 +124,8 @@ export async function openFullPageRoute(
 export async function openSidePanelRoute(
   route: SidePanelRouteState,
 ): Promise<void> {
+  void captureRouteSurfaceSessionState(route);
+
   const path = buildSidePanelExtensionPath(route);
   const capabilities = getBrowserCapabilities();
 

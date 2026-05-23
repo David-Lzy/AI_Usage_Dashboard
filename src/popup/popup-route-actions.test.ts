@@ -71,11 +71,19 @@ describe("popup route actions", () => {
   it("opens focused Settings routes in Chrome full-page tabs and closes the popup", async () => {
     const popupWindow = stubPopupWindow();
     const create = vi.fn(async () => undefined);
+    const set = vi.fn(async () => undefined);
 
     vi.stubGlobal("chrome", {
       runtime: {
         id: "extension-id",
         getURL: (path: string) => `chrome-extension://extension-id/${path}`,
+      },
+      storage: {
+        session: {
+          get: vi.fn(async () => ({})),
+          remove: vi.fn(async () => undefined),
+          set,
+        },
       },
       tabs: {
         create,
@@ -91,6 +99,18 @@ describe("popup route actions", () => {
       active: true,
       url: "chrome-extension://extension-id/src/sidepanel/index.html?surface=full-page#settings/quick-setup/cursor-personal-page",
     });
+    expect(set.mock.invocationCallOrder[0]).toBeLessThan(
+      create.mock.invocationCallOrder[0],
+    );
+    expect(set).toHaveBeenCalledWith({
+      "ai-usage-dashboard:surface-session-state:standard:settings/quick-setup/cursor-personal-page":
+        expect.objectContaining({
+          state: expect.objectContaining({
+            routeKey: "#settings/quick-setup/cursor-personal-page",
+            routeName: "settings",
+          }),
+        }),
+    });
     expect(
       consumePendingFullPageEntry(
         "#settings/quick-setup/cursor-personal-page",
@@ -98,6 +118,38 @@ describe("popup route actions", () => {
         Date.now(),
       ),
     ).toBe("popup-expand");
+    expect(popupWindow.close).toHaveBeenCalled();
+  });
+
+  it("continues popup navigation when session capture fails", async () => {
+    const popupWindow = stubPopupWindow();
+    const create = vi.fn(async () => undefined);
+
+    vi.stubGlobal("chrome", {
+      runtime: {
+        id: "extension-id",
+        getURL: (path: string) => `chrome-extension://extension-id/${path}`,
+      },
+      storage: {
+        session: {
+          get: vi.fn(async () => ({})),
+          remove: vi.fn(async () => undefined),
+          set: vi.fn(async () => {
+            throw new Error("storage unavailable");
+          }),
+        },
+      },
+      tabs: {
+        create,
+      },
+    });
+
+    await openFullDashboard();
+
+    expect(create).toHaveBeenCalledWith({
+      active: true,
+      url: "chrome-extension://extension-id/src/sidepanel/index.html?surface=full-page#dashboard",
+    });
     expect(popupWindow.close).toHaveBeenCalled();
   });
 

@@ -102,6 +102,84 @@ describe("app-browser-controls", () => {
     });
   });
 
+  it("captures surface session state before opening full-page tabs", async () => {
+    const create = vi.fn(async () => ({ id: 42 }) as chrome.tabs.Tab);
+    const set = vi.fn(async () => undefined);
+
+    vi.stubGlobal("chrome", {
+      runtime: {
+        id: "extension-id",
+        getURL: (path: string) => `chrome-extension://extension-id/${path}`,
+      },
+      storage: {
+        session: {
+          get: vi.fn(async () => ({})),
+          remove: vi.fn(async () => undefined),
+          set,
+        },
+      },
+      tabs: {
+        create,
+      },
+    });
+    vi.stubGlobal("window", {
+      scrollY: 384,
+    });
+
+    await openFullPageRoute({
+      name: "provider-detail",
+      providerId: "codex-personal-page",
+    });
+
+    expect(set).toHaveBeenCalledWith({
+      "ai-usage-dashboard:surface-session-state:standard:provider-detail/codex-personal-page":
+        expect.objectContaining({
+          state: expect.objectContaining({
+            providerDetail: {
+              providerId: "codex-personal-page",
+              quotaDetailsOpen: {},
+            },
+            routeKey: "#provider-detail/codex-personal-page",
+            routeName: "provider-detail",
+            scrollY: 384,
+          }),
+        }),
+    });
+    expect(set.mock.invocationCallOrder[0]).toBeLessThan(
+      create.mock.invocationCallOrder[0],
+    );
+  });
+
+  it("continues surface navigation when session capture fails", async () => {
+    const create = vi.fn(async () => ({ id: 42 }) as chrome.tabs.Tab);
+
+    vi.stubGlobal("chrome", {
+      runtime: {
+        id: "extension-id",
+        getURL: (path: string) => `chrome-extension://extension-id/${path}`,
+      },
+      storage: {
+        session: {
+          get: vi.fn(async () => ({})),
+          remove: vi.fn(async () => undefined),
+          set: vi.fn(async () => {
+            throw new Error("storage unavailable");
+          }),
+        },
+      },
+      tabs: {
+        create,
+      },
+    });
+
+    await openFullPageRoute({ name: "dashboard" });
+
+    expect(create).toHaveBeenCalledWith({
+      url: "chrome-extension://extension-id/src/sidepanel/index.html?surface=full-page#dashboard",
+      active: true,
+    });
+  });
+
   it("closes the current side panel after opening a full-page tab when supported", async () => {
     const create = vi.fn(async () => ({ id: 42 }) as chrome.tabs.Tab);
     const close = vi.fn(async () => undefined);
