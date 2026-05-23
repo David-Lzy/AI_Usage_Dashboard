@@ -62,6 +62,9 @@ describe("EditableNumberCombobox", () => {
   });
 
   it("keeps editable values readable without inheriting tiny nested text", () => {
+    expect(formControlsCss).toContain(
+      "min-height: var(--app-control-height-large);",
+    );
     expect(formControlsCss).toContain(".editable-number-combobox__input {");
     expect(formControlsCss).toContain(
       "font-size: var(--md-sys-typescale-body-large-size);",

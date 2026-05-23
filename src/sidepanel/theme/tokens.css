@@ -222,6 +222,15 @@
   --md-sys-shape-corner-extra-large: 28px;
   --md-sys-shape-corner-full: 999px;
 
+  /* Control rhythm */
+  --app-control-height-compact: 36px;
+  --app-control-height-medium: 44px;
+  --app-control-height-large: 56px;
+  --app-control-padding-inline-compact: 12px;
+  --app-control-padding-inline-medium: 16px;
+  --app-control-padding-inline-large: 14px;
+  --app-control-icon-slot: 48px;
+
   /* Elevation */
   --app-elevation-1: 0 1px 2px var(--md-sys-color-shadow);
   --app-elevation-2: 0 6px 18px rgba(16, 24, 40, 0.08);

@@ -2,9 +2,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 44px;
-  height: 44px;
-  padding: 0 14px;
+  min-width: var(--app-control-height-medium);
+  height: var(--app-control-height-medium);
+  padding: 0 var(--app-control-padding-inline-large);
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--md-sys-shape-corner-full);
   background: var(--md-sys-color-surface-container-lowest);
@@ -73,8 +73,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 36px;
-  padding: 0 12px;
+  min-height: var(--app-control-height-compact);
+  padding: 0 var(--app-control-padding-inline-compact);
   appearance: none;
   -webkit-appearance: none;
   border: 1px solid transparent;
@@ -126,8 +126,8 @@ a.text-button:visited {
 }
 
 .text-button--outlined {
-  min-height: 40px;
-  padding-inline: 16px;
+  min-height: var(--app-control-height-medium);
+  padding-inline: var(--app-control-padding-inline-medium);
   border-color: var(--md-sys-color-outline);
   background: var(--md-sys-color-surface-container-lowest);
 }

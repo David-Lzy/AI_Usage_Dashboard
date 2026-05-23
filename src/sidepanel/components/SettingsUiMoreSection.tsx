@@ -157,16 +157,20 @@ export function SettingsUiMoreSection({
     >
       <div className="settings-preferences__more-toolbar">
         <button
-          className="source-card__details-toggle settings-preferences__more-toggle"
+          className="settings-preferences__more-toggle"
           type="button"
           aria-expanded={uiMoreOpen}
           onClick={onToggleUiMore}
         >
-          <span>
+          <span className="settings-preferences__more-toggle-label">
             {uiMoreOpen
               ? settingsCopy.preferenceGroups.uiMoreHide
               : settingsCopy.preferenceGroups.uiMoreShow}
           </span>
+          <span
+            className="settings-preferences__more-toggle-icon"
+            aria-hidden="true"
+          />
         </button>
         <button
           className="text-button text-button--outlined settings-preferences__test-popup-button"

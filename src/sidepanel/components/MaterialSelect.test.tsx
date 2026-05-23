@@ -70,6 +70,9 @@ describe("MaterialSelect", () => {
   it("uses readable body-large typography for the selected value", () => {
     expect(formControlsCss).toContain(".material-select__button {");
     expect(formControlsCss).toContain(
+      "min-height: var(--app-control-height-large);",
+    );
+    expect(formControlsCss).toContain(
       "font-size: var(--md-sys-typescale-body-large-size);",
     );
     expect(formControlsCss).toContain(

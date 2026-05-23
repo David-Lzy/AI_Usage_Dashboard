@@ -137,7 +137,9 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--app-space-3);
-  padding: 10px 12px;
+  min-height: var(--app-control-height-medium);
+  padding-block: 0;
+  padding-inline: var(--app-space-3);
   border-radius: var(--md-sys-shape-corner-large);
   cursor: pointer;
   color: var(--md-sys-color-primary);
@@ -164,13 +166,13 @@
   flex-shrink: 0;
   border-inline-end: 2px solid currentColor;
   border-block-end: 2px solid currentColor;
-  transform: translateY(-2px) rotate(45deg);
+  transform: rotate(45deg);
   transition: transform var(--app-motion-duration-fast)
     var(--app-motion-easing-standard);
 }
 
 details[open] > .source-card__details-toggle::after {
-  transform: translateY(2px) rotate(225deg);
+  transform: rotate(225deg);
 }
 
 .source-card__details-toggle:hover {

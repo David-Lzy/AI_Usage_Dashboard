@@ -22,6 +22,13 @@ Run the checks that match your change:
 - Firefox-target changes: add `npm run firefox:build` and `npm run firefox:lint`
 - Release candidate changes: `npm run release:check`
 
+## UI Control Rhythm
+
+Settings controls share three height tokens: compact controls use 36px, medium
+controls use 44px, and large select/input/dropdown controls use 56px. Prefer the
+shared tokens in `src/sidepanel/theme/tokens.css` and keep button/select content
+centered with flex or grid alignment instead of one-off vertical padding.
+
 ## Boundaries
 
 - Do not paste cookies, raw auth headers, personal tokens, or private provider data into fixtures, docs, screenshots, or issues.

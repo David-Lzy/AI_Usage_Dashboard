@@ -69,6 +69,9 @@ describe("ColorChoiceDropdown", () => {
   it("uses body-large trigger typography for color names and custom hex values", () => {
     expect(formControlsCss).toContain(".color-choice-dropdown__button {");
     expect(formControlsCss).toContain(
+      "min-height: var(--app-control-height-large);",
+    );
+    expect(formControlsCss).toContain(
       "font-size: var(--md-sys-typescale-body-large-size);",
     );
     expect(formControlsCss).toContain(

@@ -27,8 +27,9 @@
 }
 
 .form-field__control {
-  min-height: 46px;
-  padding: 0 14px;
+  min-height: var(--app-control-height-large);
+  padding-block: 0;
+  padding-inline: var(--app-control-padding-inline-large);
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--md-sys-shape-corner-large);
   background: var(--md-sys-color-surface-container-lowest);
@@ -154,7 +155,7 @@ select.form-field__control {
 }
 
 .action-badge-selection-controls__button {
-  min-block-size: 56px;
+  min-block-size: var(--app-control-height-large);
 }
 
 .action-badge-selection-controls__button[data-readonly="true"] {
@@ -333,11 +334,13 @@ select.form-field__control {
 .material-select__button {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 48px;
+  grid-template-columns: minmax(0, 1fr) var(--app-control-icon-slot);
   align-items: center;
   width: 100%;
-  min-height: 56px;
-  padding: 0 0 0 14px;
+  min-height: var(--app-control-height-large);
+  padding-block: 0;
+  padding-inline-start: var(--app-control-padding-inline-large);
+  padding-inline-end: 0;
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--md-sys-shape-corner-large);
   background: var(--md-sys-color-surface-container-lowest);
@@ -355,10 +358,6 @@ select.form-field__control {
       var(--app-motion-easing-standard),
     box-shadow var(--app-motion-duration-fast) var(--app-motion-easing-standard),
     color var(--app-motion-duration-fast) var(--app-motion-easing-standard);
-}
-
-html[data-app-direction="rtl"] .material-select__button {
-  padding: 0 14px 0 0;
 }
 
 .material-select__button:hover:not(:disabled) {
@@ -406,7 +405,7 @@ html[data-app-direction="rtl"] .material-select__button {
   border-right: 2px solid currentColor;
   border-bottom: 2px solid currentColor;
   color: var(--md-sys-color-on-surface-variant);
-  transform: translateY(-2px) rotate(45deg);
+  transform: rotate(45deg);
   transition:
     color var(--app-motion-duration-fast) var(--app-motion-easing-standard),
     transform var(--app-motion-duration-fast) var(--app-motion-easing-standard);
@@ -419,7 +418,7 @@ html[data-app-direction="rtl"] .material-select__button {
 }
 
 .material-select__button[data-open="true"] .material-select__menu-icon {
-  transform: translateY(2px) rotate(225deg);
+  transform: rotate(225deg);
 }
 
 .material-select__menu {
@@ -512,8 +511,10 @@ html[data-app-direction="rtl"] .material-select__button {
   align-items: center;
   gap: var(--app-space-2);
   width: 100%;
-  min-height: 56px;
-  padding: 0 0 0 var(--app-space-3);
+  min-height: var(--app-control-height-large);
+  padding-block: 0;
+  padding-inline-start: var(--app-space-3);
+  padding-inline-end: 0;
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--md-sys-shape-corner-large);
   background: var(--md-sys-color-surface-container-lowest);
@@ -530,10 +531,6 @@ html[data-app-direction="rtl"] .material-select__button {
     border-color var(--app-motion-duration-fast)
       var(--app-motion-easing-standard),
     box-shadow var(--app-motion-duration-fast) var(--app-motion-easing-standard);
-}
-
-html[data-app-direction="rtl"] .color-choice-dropdown__button {
-  padding: 0 var(--app-space-3) 0 0;
 }
 
 .color-choice-dropdown__button:hover {
@@ -583,7 +580,7 @@ html[data-app-direction="rtl"] .color-choice-dropdown__button {
   border-right: 2px solid currentColor;
   border-bottom: 2px solid currentColor;
   color: var(--md-sys-color-on-surface-variant);
-  transform: translateY(-2px) rotate(45deg);
+  transform: rotate(45deg);
   transition:
     color var(--app-motion-duration-fast) var(--app-motion-easing-standard),
     transform var(--app-motion-duration-fast) var(--app-motion-easing-standard);
@@ -600,7 +597,7 @@ html[data-app-direction="rtl"] .color-choice-dropdown__button {
   .color-choice-dropdown__menu-icon,
 .color-choice-dropdown__custom-toggle[aria-expanded="true"]
   .color-choice-dropdown__custom-icon {
-  transform: translateY(2px) rotate(225deg);
+  transform: rotate(225deg);
 }
 
 .color-choice-dropdown__menu {
@@ -664,7 +661,7 @@ html[data-app-direction="rtl"]
   align-items: center;
   gap: var(--app-space-2);
   min-width: 0;
-  min-height: 44px;
+  min-height: var(--app-control-height-medium);
   padding: 0 var(--app-space-3);
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--md-sys-shape-corner-large);
@@ -862,9 +859,9 @@ html[data-app-direction="rtl"]
 .editable-number-combobox__anchor {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto 48px;
+  grid-template-columns: minmax(0, 1fr) auto var(--app-control-icon-slot);
   align-items: center;
-  min-height: 56px;
+  min-height: var(--app-control-height-large);
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--md-sys-shape-corner-large);
   background: var(--md-sys-color-surface-container-lowest);
@@ -901,8 +898,10 @@ html[data-app-direction="rtl"]
 .editable-number-combobox__input {
   min-width: 0;
   width: 100%;
-  min-height: 54px;
-  padding: 0 0 0 14px;
+  min-height: calc(var(--app-control-height-large) - 2px);
+  padding-block: 0;
+  padding-inline-start: var(--app-control-padding-inline-large);
+  padding-inline-end: 0;
   border: 0;
   outline: 0;
   background: transparent;
@@ -912,10 +911,6 @@ html[data-app-direction="rtl"]
   font-weight: var(--md-sys-typescale-body-large-weight);
   line-height: var(--md-sys-typescale-body-large-line-height);
   text-align: start;
-}
-
-html[data-app-direction="rtl"] .editable-number-combobox__input {
-  padding: 0 14px 0 0;
 }
 
 .editable-number-combobox__suffix {
@@ -931,8 +926,8 @@ html[data-app-direction="rtl"] .editable-number-combobox__input {
 .editable-number-combobox__menu-button {
   display: grid;
   place-items: center;
-  width: 48px;
-  height: 48px;
+  width: var(--app-control-icon-slot);
+  height: var(--app-control-icon-slot);
   border: 0;
   border-radius: var(--md-sys-shape-corner-full);
   background: transparent;
@@ -958,14 +953,14 @@ html[data-app-direction="rtl"] .editable-number-combobox__input {
   height: 10px;
   border-right: 2px solid currentColor;
   border-bottom: 2px solid currentColor;
-  transform: translateY(-2px) rotate(45deg);
+  transform: rotate(45deg);
   transition: transform var(--app-motion-duration-fast)
     var(--app-motion-easing-standard);
 }
 
 .editable-number-combobox__anchor[data-open="true"]
   .editable-number-combobox__menu-icon {
-  transform: translateY(2px) rotate(225deg);
+  transform: rotate(225deg);
 }
 
 .editable-number-combobox__menu {
