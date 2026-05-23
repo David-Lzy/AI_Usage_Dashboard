@@ -3,13 +3,19 @@ import {
   useId,
   useRef,
   useState,
+  type CSSProperties,
   type FocusEvent,
   type KeyboardEvent,
   type MouseEvent,
   type ReactNode,
 } from "react";
+import { createPortal } from "react-dom";
 
 import { focusWithoutScroll } from "../focus";
+import {
+  resolveFloatingMenuPosition,
+  type FloatingMenuPosition,
+} from "../floating-menu-position";
 import { FormFieldLabel } from "./FormFieldLabel";
 
 export type MaterialSelectOption<TValue extends string = string> = {
@@ -64,9 +70,12 @@ export function MaterialSelect<TValue extends string>({
   const listboxId = `${selectId}-listbox`;
   const rootRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
   const selectedIndex = options.findIndex((option) => option.value === value);
   const selectedOption = selectedIndex >= 0 ? options[selectedIndex] : options[0];
   const [isOpen, setIsOpen] = useState(false);
+  const [menuPosition, setMenuPosition] =
+    useState<FloatingMenuPosition | null>(null);
   const [activeIndex, setActiveIndex] = useState(
     selectedIndex >= 0 ? selectedIndex : 0,
   );
@@ -95,7 +104,10 @@ export function MaterialSelect<TValue extends string>({
     function handlePointerDown(event: PointerEvent) {
       const target = event.target;
 
-      if (target instanceof Node && rootRef.current?.contains(target)) {
+      if (
+        target instanceof Node &&
+        (rootRef.current?.contains(target) || menuRef.current?.contains(target))
+      ) {
         return;
       }
 
@@ -106,6 +118,71 @@ export function MaterialSelect<TValue extends string>({
 
     return () => {
       document.removeEventListener("pointerdown", handlePointerDown);
+    };
+  }, [isOpen]);
+
+  function updateMenuPosition() {
+    if (typeof window === "undefined" || typeof document === "undefined") {
+      return;
+    }
+
+    const anchor = buttonRef.current;
+
+    if (!anchor) {
+      return;
+    }
+
+    const direction =
+      document.documentElement.dataset.appDirection === "rtl" ||
+      document.documentElement.dir === "rtl"
+        ? "end"
+        : "start";
+
+    setMenuPosition(
+      resolveFloatingMenuPosition(
+        anchor.getBoundingClientRect(),
+        {
+          width: window.innerWidth,
+          height: window.innerHeight,
+        },
+        {
+          align: direction,
+          minHeight: 160,
+          preferredMaxHeight: 360,
+          preferredWidth: anchor.getBoundingClientRect().width,
+        },
+      ),
+    );
+  }
+
+  function openMenu() {
+    updateMenuPosition();
+    setIsOpen(true);
+  }
+
+  useEffect(() => {
+    if (!isOpen || typeof window === "undefined") {
+      return undefined;
+    }
+
+    updateMenuPosition();
+
+    window.addEventListener("resize", updateMenuPosition);
+    window.addEventListener("scroll", updateMenuPosition, true);
+
+    const resizeObserver =
+      typeof ResizeObserver === "undefined"
+        ? null
+        : new ResizeObserver(updateMenuPosition);
+
+    if (buttonRef.current) {
+      resizeObserver?.observe(buttonRef.current);
+    }
+
+    return () => {
+      window.removeEventListener("resize", updateMenuPosition);
+      window.removeEventListener("scroll", updateMenuPosition, true);
+      resizeObserver?.disconnect();
     };
   }, [isOpen]);
 
@@ -122,7 +199,8 @@ export function MaterialSelect<TValue extends string>({
 
     if (
       nextFocusedElement instanceof Node &&
-      event.currentTarget.contains(nextFocusedElement)
+      (event.currentTarget.contains(nextFocusedElement) ||
+        menuRef.current?.contains(nextFocusedElement))
     ) {
       return;
     }
@@ -134,14 +212,14 @@ export function MaterialSelect<TValue extends string>({
     switch (event.key) {
       case "ArrowDown":
         event.preventDefault();
-        setIsOpen(true);
+        openMenu();
         setActiveIndex((currentIndex) =>
           getNextMaterialSelectOptionIndex(currentIndex, "next", options.length),
         );
         break;
       case "ArrowUp":
         event.preventDefault();
-        setIsOpen(true);
+        openMenu();
         setActiveIndex((currentIndex) =>
           getNextMaterialSelectOptionIndex(
             currentIndex,
@@ -169,7 +247,7 @@ export function MaterialSelect<TValue extends string>({
           applyValue(options[activeIndex].value);
           return;
         }
-        setIsOpen(true);
+        openMenu();
         break;
       case "Escape":
         if (isOpen) {
@@ -187,7 +265,12 @@ export function MaterialSelect<TValue extends string>({
       return;
     }
 
-    setIsOpen((current) => !current);
+    if (isOpen) {
+      setIsOpen(false);
+      return;
+    }
+
+    openMenu();
   }
 
   function handleOptionMouseDown(
@@ -198,6 +281,51 @@ export function MaterialSelect<TValue extends string>({
     focusWithoutScroll(buttonRef.current);
     applyValue(optionValue);
   }
+
+  const menuStyle: CSSProperties | undefined = menuPosition
+    ? {
+        left: `${menuPosition.left}px`,
+        top: `${menuPosition.top}px`,
+        width: `${menuPosition.width}px`,
+        maxHeight: `${menuPosition.maxHeight}px`,
+      }
+    : undefined;
+
+  const menu = isOpen ? (
+    <div
+      ref={menuRef}
+      id={listboxId}
+      className="material-select__menu material-select__menu--floating"
+      role="listbox"
+      aria-labelledby={labelId}
+      data-placement={menuPosition?.placement ?? "below"}
+      style={menuStyle}
+    >
+      {options.map((option, index) => {
+        const isSelected = option.value === value;
+        const isActive = index === activeIndex;
+
+        return (
+          <div
+            key={option.value}
+            id={`${listboxId}-option-${option.value}`}
+            className="material-select__option"
+            role="option"
+            aria-selected={isSelected}
+            data-active={isActive ? "true" : "false"}
+            data-selected={isSelected ? "true" : "false"}
+            onMouseEnter={() => setActiveIndex(index)}
+            onMouseDown={(event) =>
+              handleOptionMouseDown(option.value, event)
+            }
+          >
+            <span className="material-select__option-check" />
+            <span>{option.label}</span>
+          </div>
+        );
+      })}
+    </div>
+  ) : null;
 
   return (
     <div
@@ -234,38 +362,9 @@ export function MaterialSelect<TValue extends string>({
         </span>
         <span className="material-select__menu-icon" aria-hidden="true" />
       </button>
-      {isOpen ? (
-        <div
-          id={listboxId}
-          className="material-select__menu"
-          role="listbox"
-          aria-labelledby={labelId}
-        >
-          {options.map((option, index) => {
-            const isSelected = option.value === value;
-            const isActive = index === activeIndex;
-
-            return (
-              <div
-                key={option.value}
-                id={`${listboxId}-option-${option.value}`}
-                className="material-select__option"
-                role="option"
-                aria-selected={isSelected}
-                data-active={isActive ? "true" : "false"}
-                data-selected={isSelected ? "true" : "false"}
-                onMouseEnter={() => setActiveIndex(index)}
-                onMouseDown={(event) =>
-                  handleOptionMouseDown(option.value, event)
-                }
-              >
-                <span className="material-select__option-check" />
-                <span>{option.label}</span>
-              </div>
-            );
-          })}
-        </div>
-      ) : null}
+      {menu && typeof document !== "undefined"
+        ? createPortal(menu, document.body)
+        : menu}
     </div>
   );
 }

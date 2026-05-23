@@ -350,6 +350,12 @@ html[data-app-direction="rtl"] .material-select__button {
   overflow-y: auto;
 }
 
+.material-select__menu--floating {
+  position: fixed;
+  z-index: 90;
+  inset: auto;
+}
+
 .material-select__option {
   display: grid;
   grid-template-columns: 24px minmax(0, 1fr);
@@ -526,7 +532,14 @@ html[data-app-direction="rtl"] .color-choice-dropdown__button {
   overflow-y: auto;
 }
 
-html[data-app-direction="rtl"] .color-choice-dropdown__menu {
+.color-choice-dropdown__menu--floating {
+  position: fixed;
+  z-index: 90;
+  inset: auto;
+}
+
+html[data-app-direction="rtl"]
+  .color-choice-dropdown__menu:not(.color-choice-dropdown__menu--floating) {
   inset-inline: auto 0;
 }
 

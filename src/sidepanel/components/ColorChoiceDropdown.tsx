@@ -4,11 +4,17 @@ import {
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
   type KeyboardEvent,
 } from "react";
+import { createPortal } from "react-dom";
 
 import { normalizeThemeCustomSeedHex } from "../../shared/theme";
 import { focusWithoutScroll } from "../focus";
+import {
+  resolveFloatingMenuPosition,
+  type FloatingMenuPosition,
+} from "../floating-menu-position";
 
 export type ColorChoiceDropdownChoice = {
   id: string;
@@ -89,6 +95,7 @@ export function ColorChoiceDropdown({
   const generatedId = useId();
   const rootRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
   const fieldId = `${fieldIdPrefix}-${generatedId}`;
   const labelId = `${fieldId}-label`;
   const menuId = `${fieldId}-menu`;
@@ -103,6 +110,8 @@ export function ColorChoiceDropdown({
       copy.customLabel,
     );
   const [isOpen, setIsOpen] = useState(false);
+  const [menuPosition, setMenuPosition] =
+    useState<FloatingMenuPosition | null>(null);
   const [customOpen, setCustomOpen] = useState(false);
   const [customDraft, setCustomDraft] = useState(selectedValueHex);
   const normalizedCustomDraft = normalizeColorChoiceHex(customDraft);
@@ -124,7 +133,10 @@ export function ColorChoiceDropdown({
     function handlePointerDown(event: PointerEvent) {
       const target = event.target;
 
-      if (target instanceof Node && rootRef.current?.contains(target)) {
+      if (
+        target instanceof Node &&
+        (rootRef.current?.contains(target) || menuRef.current?.contains(target))
+      ) {
         return;
       }
 
@@ -136,6 +148,66 @@ export function ColorChoiceDropdown({
 
     return () => {
       document.removeEventListener("pointerdown", handlePointerDown);
+    };
+  }, [isOpen]);
+
+  function updateMenuPosition() {
+    if (typeof window === "undefined" || typeof document === "undefined") {
+      return;
+    }
+
+    const anchor = buttonRef.current;
+
+    if (!anchor) {
+      return;
+    }
+
+    const direction =
+      document.documentElement.dataset.appDirection === "rtl" ||
+      document.documentElement.dir === "rtl"
+        ? "end"
+        : "start";
+
+    setMenuPosition(
+      resolveFloatingMenuPosition(
+        anchor.getBoundingClientRect(),
+        {
+          width: window.innerWidth,
+          height: window.innerHeight,
+        },
+        {
+          align: direction,
+          minHeight: 180,
+          preferredMaxHeight: 560,
+          preferredWidth: 520,
+        },
+      ),
+    );
+  }
+
+  useEffect(() => {
+    if (!isOpen || typeof window === "undefined") {
+      return undefined;
+    }
+
+    updateMenuPosition();
+
+    window.addEventListener("resize", updateMenuPosition);
+    window.addEventListener("scroll", updateMenuPosition, true);
+
+    const resizeObserver =
+      typeof ResizeObserver === "undefined"
+        ? null
+        : new ResizeObserver(updateMenuPosition);
+
+    if (buttonRef.current) {
+      resizeObserver?.observe(buttonRef.current);
+    }
+
+    return () => {
+      window.removeEventListener("resize", updateMenuPosition);
+      window.removeEventListener("scroll", updateMenuPosition, true);
+      resizeObserver?.disconnect();
     };
   }, [isOpen]);
 
@@ -185,6 +257,148 @@ export function ColorChoiceDropdown({
     }
   }
 
+  function toggleMenu() {
+    if (!isOpen) {
+      updateMenuPosition();
+    }
+
+    setIsOpen((current) => !current);
+  }
+
+  const menuStyle: CSSProperties | undefined = menuPosition
+    ? {
+        left: `${menuPosition.left}px`,
+        top: `${menuPosition.top}px`,
+        width: `${menuPosition.width}px`,
+        maxHeight: `${menuPosition.maxHeight}px`,
+      }
+    : undefined;
+
+  const menu = isOpen ? (
+    <div
+      ref={menuRef}
+      id={menuId}
+      className="color-choice-dropdown__menu color-choice-dropdown__menu--floating"
+      aria-labelledby={labelId}
+      data-placement={menuPosition?.placement ?? "below"}
+      style={menuStyle}
+    >
+      {sections.map((section) => (
+        <section
+          key={section.id}
+          className="color-choice-dropdown__section"
+        >
+          <p className="color-choice-dropdown__section-label">
+            {section.label}
+          </p>
+          <div className="color-choice-dropdown__choice-grid">
+            {section.choices.map((choice) => {
+              const normalizedChoiceHex =
+                normalizeColorChoiceHex(choice.hex) ?? choice.hex;
+              const isSelected =
+                selectedChoiceId === choice.id ||
+                (selectedChoiceId === null &&
+                  normalizedValueHex === normalizedChoiceHex);
+
+              return (
+                <button
+                  key={choice.id}
+                  className="color-choice-dropdown__choice"
+                  type="button"
+                  data-selected={isSelected ? "true" : "false"}
+                  onClick={() => selectChoice(choice)}
+                >
+                  <span
+                    className="color-choice-dropdown__choice-swatch"
+                    style={{ backgroundColor: normalizedChoiceHex }}
+                    aria-hidden="true"
+                  />
+                  <span className="color-choice-dropdown__choice-label">
+                    {choice.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </section>
+      ))}
+
+      <section className="color-choice-dropdown__section color-choice-dropdown__custom">
+        <button
+          className="color-choice-dropdown__custom-toggle"
+          type="button"
+          aria-expanded={customOpen}
+          onClick={() => setCustomOpen((current) => !current)}
+        >
+          <span
+            className="color-choice-dropdown__choice-swatch"
+            style={{ backgroundColor: customPickerValue }}
+            aria-hidden="true"
+          />
+          <span>{copy.customLabel}</span>
+          <span
+            className="color-choice-dropdown__custom-icon"
+            aria-hidden="true"
+          />
+        </button>
+
+        {customOpen ? (
+          <div className="color-choice-dropdown__custom-panel">
+            <p className="supporting-copy color-choice-dropdown__custom-help">
+              {copy.customHelp}
+            </p>
+            <div className="color-choice-dropdown__custom-fields">
+              <label className="form-field">
+                <span className="form-field__label">
+                  {copy.customHexLabel}
+                </span>
+                <input
+                  className="form-field__control"
+                  type="text"
+                  inputMode="text"
+                  autoComplete="off"
+                  spellCheck={false}
+                  pattern="#[0-9A-Fa-f]{6}"
+                  value={customDraft}
+                  onChange={(event) =>
+                    setCustomDraft(event.target.value.toUpperCase())
+                  }
+                />
+              </label>
+              <label className="color-choice-dropdown__native-picker">
+                <span
+                  className="color-choice-dropdown__native-picker-swatch"
+                  style={{ backgroundColor: customPickerValue }}
+                  aria-hidden="true"
+                />
+                <span>{copy.customPickerLabel}</span>
+                <input
+                  type="color"
+                  value={customPickerValue}
+                  aria-label={copy.customPickerLabel}
+                  onChange={(event) => selectHex(event.target.value)}
+                />
+              </label>
+            </div>
+            {normalizedCustomDraft ? null : (
+              <p className="supporting-copy color-choice-dropdown__error">
+                {copy.invalidHex}
+              </p>
+            )}
+            <button
+              className="text-button color-choice-dropdown__apply"
+              type="button"
+              disabled={!normalizedCustomDraft}
+              onClick={() => selectHex(customDraft)}
+            >
+              {copy.applyCustom}
+            </button>
+          </div>
+        ) : null}
+      </section>
+    </div>
+  ) : null;
+
   return (
     <div
       ref={rootRef}
@@ -204,7 +418,7 @@ export function ColorChoiceDropdown({
         aria-controls={menuId}
         aria-labelledby={`${labelId} ${fieldId}`}
         data-open={isOpen ? "true" : "false"}
-        onClick={() => setIsOpen((current) => !current)}
+        onClick={toggleMenu}
       >
         <span
           className="color-choice-dropdown__swatch"
@@ -217,127 +431,9 @@ export function ColorChoiceDropdown({
         <span className="color-choice-dropdown__menu-icon" aria-hidden="true" />
       </button>
 
-      {isOpen ? (
-        <div
-          id={menuId}
-          className="color-choice-dropdown__menu"
-          aria-labelledby={labelId}
-        >
-          {sections.map((section) => (
-            <section
-              key={section.id}
-              className="color-choice-dropdown__section"
-            >
-              <p className="color-choice-dropdown__section-label">
-                {section.label}
-              </p>
-              <div className="color-choice-dropdown__choice-grid">
-                {section.choices.map((choice) => {
-                  const normalizedChoiceHex =
-                    normalizeColorChoiceHex(choice.hex) ?? choice.hex;
-                  const isSelected =
-                    selectedChoiceId === choice.id ||
-                    (selectedChoiceId === null &&
-                      normalizedValueHex === normalizedChoiceHex);
-
-                  return (
-                    <button
-                      key={choice.id}
-                      className="color-choice-dropdown__choice"
-                      type="button"
-                      data-selected={isSelected ? "true" : "false"}
-                      onClick={() => selectChoice(choice)}
-                    >
-                      <span
-                        className="color-choice-dropdown__choice-swatch"
-                        style={{ backgroundColor: normalizedChoiceHex }}
-                        aria-hidden="true"
-                      />
-                      <span className="color-choice-dropdown__choice-label">
-                        {choice.label}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </section>
-          ))}
-
-          <section className="color-choice-dropdown__section color-choice-dropdown__custom">
-            <button
-              className="color-choice-dropdown__custom-toggle"
-              type="button"
-              aria-expanded={customOpen}
-              onClick={() => setCustomOpen((current) => !current)}
-            >
-              <span
-                className="color-choice-dropdown__choice-swatch"
-                style={{ backgroundColor: customPickerValue }}
-                aria-hidden="true"
-              />
-              <span>{copy.customLabel}</span>
-              <span
-                className="color-choice-dropdown__custom-icon"
-                aria-hidden="true"
-              />
-            </button>
-
-            {customOpen ? (
-              <div className="color-choice-dropdown__custom-panel">
-                <p className="supporting-copy color-choice-dropdown__custom-help">
-                  {copy.customHelp}
-                </p>
-                <div className="color-choice-dropdown__custom-fields">
-                  <label className="form-field">
-                    <span className="form-field__label">
-                      {copy.customHexLabel}
-                    </span>
-                    <input
-                      className="form-field__control"
-                      type="text"
-                      inputMode="text"
-                      autoComplete="off"
-                      spellCheck={false}
-                      pattern="#[0-9A-Fa-f]{6}"
-                      value={customDraft}
-                      onChange={(event) =>
-                        setCustomDraft(event.target.value.toUpperCase())
-                      }
-                    />
-                  </label>
-                  <label className="color-choice-dropdown__native-picker">
-                    <span
-                      className="color-choice-dropdown__native-picker-swatch"
-                      style={{ backgroundColor: customPickerValue }}
-                      aria-hidden="true"
-                    />
-                    <span>{copy.customPickerLabel}</span>
-                    <input
-                      type="color"
-                      value={customPickerValue}
-                      aria-label={copy.customPickerLabel}
-                      onChange={(event) => selectHex(event.target.value)}
-                    />
-                  </label>
-                </div>
-                {normalizedCustomDraft ? null : (
-                  <p className="supporting-copy color-choice-dropdown__error">
-                    {copy.invalidHex}
-                  </p>
-                )}
-                <button
-                  className="text-button color-choice-dropdown__apply"
-                  type="button"
-                  disabled={!normalizedCustomDraft}
-                  onClick={() => selectHex(customDraft)}
-                >
-                  {copy.applyCustom}
-                </button>
-              </div>
-            ) : null}
-          </section>
-        </div>
-      ) : null}
+      {menu && typeof document !== "undefined"
+        ? createPortal(menu, document.body)
+        : menu}
     </div>
   );
 }
