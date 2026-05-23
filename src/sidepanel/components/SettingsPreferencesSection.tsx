@@ -271,10 +271,18 @@ export function SettingsPreferencesSection({
           className="form-field action-badge-mode-field"
           data-action-badge-selection-mode={settings.actionBadgeSelectionMode}
         >
-          <span className="form-field__label">
-            {i18n.t("settings.preferences.action_badge_mode_label")}
+          <span className="form-field__label-row">
+            <span className="form-field__label">
+              {i18n.t("settings.preferences.action_badge_mode_label")}
+            </span>
+            <MaterialInfoTooltip className="settings-preferences__field-note">
+              {i18n.t("settings.preferences.action_badge_mode_helper")}
+            </MaterialInfoTooltip>
           </span>
-          <div className="action-badge-mode-field__body">
+          <div
+            className="form-field__control action-badge-mode-field__body"
+            data-action-badge-mode-control=""
+          >
             <span className="meta-chip">
               {settings.actionBadgeSelectionMode === "auto"
                 ? i18n.t("settings.preferences.action_badge_mode_auto")
@@ -283,6 +291,7 @@ export function SettingsPreferencesSection({
             <button
               className="text-button action-badge-mode-field__reset"
               type="button"
+              data-action-badge-mode-reset=""
               disabled={settings.actionBadgeSelectionMode === "auto"}
               onClick={onRestoreActionBadgeAutoMode}
             >

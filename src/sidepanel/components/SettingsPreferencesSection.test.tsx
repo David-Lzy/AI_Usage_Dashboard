@@ -72,6 +72,13 @@ describe("SettingsPreferencesSection", () => {
     expect(html).not.toContain("settings-preferences__field-with-helper");
     expect(html).not.toContain("settings-preferences__inline-helper");
     expect(html).toContain('data-action-badge-selection-controls=""');
+    expect(html).toContain("Badge selection mode");
+    expect(html).toContain(
+      "Automatic mode shows attention count until provider quota badges are available",
+    );
+    expect(html).toContain('data-action-badge-mode-control=""');
+    expect(html).toContain('data-action-badge-mode-reset=""');
+    expect(html).toContain("Restore automatic");
     expect(html).toContain("Badge rotation interval");
     expect(html).toContain('data-settings-material-select="toolbar-icon-mode"');
     expect(html).toContain('data-configuration-backup=""');
@@ -93,6 +100,30 @@ describe("SettingsPreferencesSection", () => {
     expect(html).not.toContain("Provider display settings");
     expect(html).not.toContain("Quick glance");
     expect(html).not.toContain('class="theme-customization-form"');
+  });
+
+  it("keeps the badge mode reset control present but disabled in automatic mode", () => {
+    const autoHtml = renderPreferencesSection({
+      ...SAMPLE_APP_STATE.settings,
+      actionBadgeSelectionMode: "auto",
+    });
+
+    expect(autoHtml).toContain('data-action-badge-selection-mode="auto"');
+    expect(autoHtml).toContain("Automatic");
+    expect(autoHtml).toMatch(
+      /<button[^>]+data-action-badge-mode-reset=""[^>]+disabled=""/,
+    );
+
+    const manualHtml = renderPreferencesSection({
+      ...SAMPLE_APP_STATE.settings,
+      actionBadgeSelectionMode: "manual",
+    });
+
+    expect(manualHtml).toContain('data-action-badge-selection-mode="manual"');
+    expect(manualHtml).toContain("Manual");
+    expect(manualHtml).toMatch(
+      /<button[^>]+data-action-badge-mode-reset=""(?![^>]+disabled="")/,
+    );
   });
 
   it("uses the narrow threshold for floating toolbar popup preview", () => {

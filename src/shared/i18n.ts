@@ -138,6 +138,7 @@ export type RuntimeMessageId =
   | "settings.preferences.action_badge_label"
   | "settings.preferences.action_badge_helper"
   | "settings.preferences.action_badge_mode_label"
+  | "settings.preferences.action_badge_mode_helper"
   | "settings.preferences.action_badge_mode_auto"
   | "settings.preferences.action_badge_mode_manual"
   | "settings.preferences.action_badge_restore_auto"
