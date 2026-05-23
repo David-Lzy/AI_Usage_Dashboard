@@ -16,6 +16,7 @@ import {
   resolveFloatingMenuPosition,
   type FloatingMenuPosition,
 } from "../floating-menu-position";
+import { shouldPreservePopoverForSurfaceSwitch } from "../surface-switch-intent";
 import { MaterialColorPicker } from "./MaterialColorPicker";
 
 export type ColorChoiceDropdownChoice = {
@@ -87,13 +88,6 @@ function flattenSections(
   sections: readonly ColorChoiceDropdownSection[],
 ): ColorChoiceDropdownChoice[] {
   return sections.flatMap((section) => section.choices);
-}
-
-function isSurfaceSwitchTarget(target: EventTarget | null): boolean {
-  return (
-    target instanceof Element &&
-    Boolean(target.closest('[data-topbar-switch-surface="true"]'))
-  );
 }
 
 export function ColorChoiceDropdown({
@@ -235,7 +229,9 @@ export function ColorChoiceDropdown({
         return;
       }
 
-      closeMenu({ keepActivePopover: isSurfaceSwitchTarget(target) });
+      closeMenu({
+        keepActivePopover: shouldPreservePopoverForSurfaceSwitch(target),
+      });
     }
 
     document.addEventListener("pointerdown", handlePointerDown);

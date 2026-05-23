@@ -220,6 +220,12 @@ export function buildSettingsSurfaceSessionStateSnapshot(
   };
 }
 
+function rememberUiStateSnapshot(uiState: SettingsSurfaceSessionUiState): void {
+  rememberLatestSettingsSurfaceSessionStateSnapshot(
+    buildSettingsSurfaceSessionStateSnapshot(uiState, getWindowScrollY()),
+  );
+}
+
 export function useSettingsSurfaceSessionState({
   activeSectionId,
   defaultAdvancedOpen,
@@ -384,10 +390,16 @@ export function useSettingsSurfaceSessionState({
   const setActivePopover = useCallback<
     Dispatch<SetStateAction<SettingsActivePopoverSessionState | null>>
   >((update) => {
-    setUiState((current) => ({
-      ...current,
-      activePopover: resolveUpdate(update, current.activePopover),
-    }));
+    setUiState((current) => {
+      const nextUiState = {
+        ...current,
+        activePopover: resolveUpdate(update, current.activePopover),
+      };
+
+      rememberUiStateSnapshot(nextUiState);
+
+      return nextUiState;
+    });
   }, []);
   const setProviderProgressDetailsOpen = useCallback<
     Dispatch<SetStateAction<Record<string, boolean>>>

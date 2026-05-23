@@ -17,6 +17,7 @@ import {
   resolveFloatingMenuPosition,
   type FloatingMenuPosition,
 } from "../floating-menu-position";
+import { shouldPreservePopoverForSurfaceSwitch } from "../surface-switch-intent";
 import { FormFieldLabel } from "./FormFieldLabel";
 
 export type MaterialSelectOption<TValue extends string = string> = {
@@ -58,13 +59,6 @@ export function getNextMaterialSelectOptionIndex(
   }
 
   return currentIndex <= 0 ? optionCount - 1 : currentIndex - 1;
-}
-
-function isSurfaceSwitchTarget(target: EventTarget | null): boolean {
-  return (
-    target instanceof Element &&
-    Boolean(target.closest('[data-topbar-switch-surface="true"]'))
-  );
 }
 
 export function MaterialSelect<TValue extends string>({
@@ -172,7 +166,9 @@ export function MaterialSelect<TValue extends string>({
         return;
       }
 
-      closeMenu({ keepActivePopover: isSurfaceSwitchTarget(target) });
+      closeMenu({
+        keepActivePopover: shouldPreservePopoverForSurfaceSwitch(target),
+      });
     }
 
     document.addEventListener("pointerdown", handlePointerDown);
@@ -267,7 +263,11 @@ export function MaterialSelect<TValue extends string>({
       return;
     }
 
-    closeMenu();
+    closeMenu({
+      keepActivePopover: shouldPreservePopoverForSurfaceSwitch(
+        nextFocusedElement,
+      ),
+    });
   }
 
   function handleButtonKeyDown(event: KeyboardEvent<HTMLButtonElement>) {

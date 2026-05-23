@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { markSurfaceSwitchIntent } from "../surface-switch-intent";
+
 type TopBarProps = {
   title: string;
   subtitle: string;
@@ -62,6 +64,7 @@ export function TopBar({
               type="button"
               aria-label={expandActionTitle}
               title={expandActionTitle}
+              onPointerDown={() => markSurfaceSwitchIntent()}
               onClick={onExpandAction}
             >
               {expandActionLabel}
