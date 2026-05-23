@@ -29,9 +29,17 @@ describe("MaterialInfoTooltip", () => {
 
   it("uses a subtle trigger and fixed opaque tooltip surface", () => {
     expect(formControlsCss).toContain(".material-info-tooltip__trigger {");
+    expect(formControlsCss).toContain("border: 1px solid transparent;");
+    expect(formControlsCss).toContain("background: transparent;");
     expect(formControlsCss).toContain("opacity: 0.48;");
     expect(formControlsCss).toContain("filter: blur(0.18px) saturate(0.8);");
     expect(formControlsCss).toContain(".material-info-tooltip__trigger .material-icon");
+    expect(formControlsCss).toContain(
+      ".material-info-tooltip__trigger:hover {\n  box-shadow: none;\n}",
+    );
+    expect(formControlsCss).toContain(
+      ".material-info-tooltip__trigger:focus-visible {\n  box-shadow: var(--app-focus-ring-shadow);\n}",
+    );
     expect(formControlsCss).toContain("position: fixed;");
     expect(formControlsCss).toContain("display: block;");
     expect(formControlsCss).toContain(

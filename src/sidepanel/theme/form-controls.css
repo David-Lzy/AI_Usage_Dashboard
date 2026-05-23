@@ -163,9 +163,9 @@ select.form-field__control {
   place-items: center;
   width: 28px;
   height: 28px;
-  border: 1px solid var(--md-sys-color-outline-variant);
+  border: 1px solid transparent;
   border-radius: var(--md-sys-shape-corner-full);
-  background: var(--md-sys-color-surface-container-low);
+  background: transparent;
   color: var(--md-sys-color-primary);
   filter: blur(0.18px) saturate(0.8);
   line-height: 1;
@@ -198,15 +198,18 @@ select.form-field__control {
 .material-info-tooltip__trigger:hover,
 .material-info-tooltip__trigger:focus-visible {
   background: var(--app-state-layer-primary-hover);
-  border-color: color-mix(
-    in srgb,
-    var(--md-sys-color-primary) 34%,
-    var(--md-sys-color-outline-variant) 66%
-  );
-  box-shadow: var(--app-focus-ring-shadow);
+  border-color: transparent;
   filter: none;
   opacity: 1;
   outline: 0;
+}
+
+.material-info-tooltip__trigger:hover {
+  box-shadow: none;
+}
+
+.material-info-tooltip__trigger:focus-visible {
+  box-shadow: var(--app-focus-ring-shadow);
 }
 
 .material-info-tooltip__content {
