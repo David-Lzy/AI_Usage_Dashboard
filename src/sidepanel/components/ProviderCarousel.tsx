@@ -2,6 +2,7 @@ import type { KeyboardEvent, PointerEvent, ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 
 import type { ResolvedTextDirection } from "../../shared/i18n";
+import { MaterialIcon } from "./MaterialIcon";
 
 export type ProviderCarouselItem = {
   id: string;
@@ -266,7 +267,7 @@ export function ProviderCarousel({
               data-provider-carousel-action="previous"
               onClick={() => moveCarousel("previous")}
             >
-              <span aria-hidden="true">‹</span>
+              <MaterialIcon name="keyboard-arrow-left" />
             </button>
             <button
               className="provider-carousel__button"
@@ -275,7 +276,7 @@ export function ProviderCarousel({
               data-provider-carousel-action="next"
               onClick={() => moveCarousel("next")}
             >
-              <span aria-hidden="true">›</span>
+              <MaterialIcon name="keyboard-arrow-right" />
             </button>
           </div>
         ) : null}

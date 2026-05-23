@@ -139,9 +139,6 @@ select.form-field__control {
   background: var(--md-sys-color-surface-container-low);
   color: var(--md-sys-color-primary);
   filter: blur(0.18px) saturate(0.8);
-  font-family: var(--md-sys-typescale-label-large-font);
-  font-size: var(--md-sys-typescale-label-large-size);
-  font-weight: 700;
   line-height: 1;
   opacity: 0.48;
   cursor: help;
@@ -154,6 +151,19 @@ select.form-field__control {
     filter var(--app-motion-duration-fast) var(--app-motion-easing-standard),
     opacity var(--app-motion-duration-fast) var(--app-motion-easing-standard),
     color var(--app-motion-duration-fast) var(--app-motion-easing-standard);
+}
+
+.material-icon {
+  display: block;
+  width: 1em;
+  height: 1em;
+  flex: 0 0 auto;
+  fill: currentColor;
+}
+
+.material-info-tooltip__trigger .material-icon {
+  width: 20px;
+  height: 20px;
 }
 
 .material-info-tooltip__trigger:hover,

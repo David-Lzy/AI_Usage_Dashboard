@@ -8,6 +8,8 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 
+import { MaterialIcon } from "./MaterialIcon";
+
 type MaterialInfoTooltipProps = {
   children: ReactNode;
   className?: string;
@@ -118,7 +120,7 @@ export function MaterialInfoTooltip({
         onPointerEnter={() => setIsOpen(true)}
         onPointerLeave={() => setIsOpen(false)}
       >
-        ?
+        <MaterialIcon name="help-outline" />
       </button>
       {typeof document === "undefined"
         ? tooltipContent

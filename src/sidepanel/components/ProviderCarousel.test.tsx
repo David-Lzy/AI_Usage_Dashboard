@@ -53,6 +53,8 @@ describe("ProviderCarousel", () => {
     expect(html).toContain('data-provider-carousel-active-id="claude-code-team-page"');
     expect(html).toContain('data-provider-carousel-action="previous"');
     expect(html).toContain('data-provider-carousel-action="next"');
+    expect(html).toContain('data-material-icon="keyboard-arrow-left"');
+    expect(html).toContain('data-material-icon="keyboard-arrow-right"');
     expect(html).toContain('tabindex="0"');
     expect(html).toContain("2 / 3 · Claude Code");
     expect(html).toContain('data-provider-carousel-slide="cursor-personal-page"');
@@ -151,6 +153,7 @@ describe("ProviderCarousel", () => {
     expect(providerCarouselCss).toContain(
       "--provider-carousel-depth-offset: clamp(28px, 8vw, 44px);",
     );
+    expect(providerCarouselCss).toContain(".provider-carousel__button .material-icon");
     expect(providerCarouselCss).toContain(
       "@media (prefers-reduced-motion: reduce)",
     );

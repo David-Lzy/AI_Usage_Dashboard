@@ -20,6 +20,7 @@ describe("MaterialInfoTooltip", () => {
     expect(html).toContain('data-open="false"');
     expect(html).toContain('data-positioned="false"');
     expect(html).toContain('class="material-info-tooltip__trigger"');
+    expect(html).toContain('data-material-icon="help-outline"');
     expect(html).toContain('class="material-info-tooltip__content"');
     expect(html).toContain('aria-label="Helpful settings detail."');
     expect(html).toContain('role="tooltip"');
@@ -30,6 +31,7 @@ describe("MaterialInfoTooltip", () => {
     expect(formControlsCss).toContain(".material-info-tooltip__trigger {");
     expect(formControlsCss).toContain("opacity: 0.48;");
     expect(formControlsCss).toContain("filter: blur(0.18px) saturate(0.8);");
+    expect(formControlsCss).toContain(".material-info-tooltip__trigger .material-icon");
     expect(formControlsCss).toContain("position: fixed;");
     expect(formControlsCss).toContain("display: block;");
     expect(formControlsCss).toContain(
