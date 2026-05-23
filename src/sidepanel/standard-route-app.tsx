@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, useRef } from "react";
 
 import type {
   ActionBadgeSelectionMode,
@@ -19,6 +19,11 @@ import {
 import { buildProviderSourceDisplayLocalizedCopy } from "../shared/provider-source-display-localized-copy";
 import { buildQuickThemeToggle } from "../shared/theme";
 import { Toast } from "./components/Toast";
+import {
+  buildSurfaceSessionKey,
+  restoreSurfaceSessionState,
+  type SurfaceSessionState,
+} from "../shared/surface-session-state";
 import { DashboardPage } from "./routes/DashboardPage";
 import { ProviderDetailPage } from "./routes/ProviderDetailPage";
 import {
@@ -65,7 +70,53 @@ function StandardRouteLoading({
   );
 }
 
+export function shouldRestoreSurfaceSessionStateForRoute(
+  route: SidePanelRouteState,
+  state: SurfaceSessionState | null,
+): boolean {
+  if (!state || state.routeName !== route.name) {
+    return false;
+  }
+
+  if (state.routeKey !== buildSidePanelHash(route)) {
+    return false;
+  }
+
+  if (route.name === "settings" && route.focus) {
+    return false;
+  }
+
+  if (route.name === "provider-detail") {
+    return state.providerDetail?.providerId === route.providerId;
+  }
+
+  return true;
+}
+
+function restoreScrollAfterRouteMount(scrollY: number) {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  const scrollToPosition = () => {
+    window.scrollTo({
+      top: scrollY,
+      behavior: "auto",
+    });
+  };
+
+  if (typeof window.requestAnimationFrame !== "function") {
+    window.setTimeout(scrollToPosition, 0);
+    return;
+  }
+
+  window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(scrollToPosition);
+  });
+}
+
 export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
+  const restoredRouteKeysRef = useRef(new Set<string>());
   const isFullPageSurface =
     typeof window !== "undefined" &&
     isFullPageSurfaceSearch(window.location.search);
@@ -81,6 +132,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
     preferCachedBootstrap: true,
   });
   const route = parseSidePanelHash(locationHash) ?? { name: "dashboard" };
+  const routeKey = buildSidePanelHash(route);
 
   function navigateToRoute(nextRoute: SidePanelRouteState) {
     const nextHash = buildSidePanelHash(nextRoute);
@@ -107,6 +159,41 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
       navigateToRoute({ name: "dashboard" });
     }
   }, [appState, route]);
+
+  useEffect(() => {
+    if (
+      !appState ||
+      typeof window === "undefined" ||
+      restoredRouteKeysRef.current.has(routeKey)
+    ) {
+      return undefined;
+    }
+
+    let cancelled = false;
+    restoredRouteKeysRef.current.add(routeKey);
+
+    void (async () => {
+      const state = await restoreSurfaceSessionState(
+        buildSurfaceSessionKey(routeKey),
+      );
+      const scrollY = state?.scrollY;
+
+      if (
+        cancelled ||
+        scrollY === null ||
+        scrollY === undefined ||
+        !shouldRestoreSurfaceSessionStateForRoute(route, state)
+      ) {
+        return;
+      }
+
+      restoreScrollAfterRouteMount(scrollY);
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [appState, route, routeKey]);
 
   const localePreference: AppLocalePreference =
     appState?.settings.locale ?? DEFAULT_APP_LOCALE_PREFERENCE;

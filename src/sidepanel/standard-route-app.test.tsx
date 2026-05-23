@@ -3,7 +3,10 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { AppMessage } from "../background/message-bus";
 import { SAMPLE_APP_STATE } from "../shared/constants";
-import { StandardRouteApp } from "./standard-route-app";
+import {
+  shouldRestoreSurfaceSessionStateForRoute,
+  StandardRouteApp,
+} from "./standard-route-app";
 import { useStandardAppRuntime } from "./use-standard-app-runtime";
 
 vi.mock("./use-standard-app-runtime", () => ({
@@ -61,5 +64,79 @@ describe("StandardRouteApp cached-first rendering", () => {
 
     expect(html).toContain("Preparing dashboard state");
     expect(html).not.toContain("Provider cards");
+  });
+});
+
+describe("surface session restore route matching", () => {
+  it("allows route-matched scroll restore without explicit URL focus", () => {
+    expect(
+      shouldRestoreSurfaceSessionStateForRoute(
+        { name: "settings" },
+        {
+          routeName: "settings",
+          routeKey: "#settings",
+          scrollY: 400,
+          settings: null,
+          providerDetail: null,
+        },
+      ),
+    ).toBe(true);
+  });
+
+  it("does not restore old scroll over explicit URL focus", () => {
+    expect(
+      shouldRestoreSurfaceSessionStateForRoute(
+        {
+          name: "settings",
+          focus: {
+            kind: "section",
+            sectionId: "settings-appearance",
+          },
+        },
+        {
+          routeName: "settings",
+          routeKey: "#settings/section/settings-appearance",
+          scrollY: 400,
+          settings: null,
+          providerDetail: null,
+        },
+      ),
+    ).toBe(false);
+  });
+
+  it("does not restore provider detail state for another provider", () => {
+    expect(
+      shouldRestoreSurfaceSessionStateForRoute(
+        {
+          name: "provider-detail",
+          providerId: "cursor-personal-page",
+        },
+        {
+          routeName: "provider-detail",
+          routeKey: "#provider-detail/cursor-personal-page",
+          scrollY: 300,
+          settings: null,
+          providerDetail: {
+            providerId: "codex-personal-page",
+            quotaDetailsOpen: {},
+          },
+        },
+      ),
+    ).toBe(false);
+  });
+
+  it("does not restore stale state into a different route", () => {
+    expect(
+      shouldRestoreSurfaceSessionStateForRoute(
+        { name: "dashboard" },
+        {
+          routeName: "settings",
+          routeKey: "#settings",
+          scrollY: 300,
+          settings: null,
+          providerDetail: null,
+        },
+      ),
+    ).toBe(false);
   });
 });
