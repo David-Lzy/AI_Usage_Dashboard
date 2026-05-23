@@ -79,6 +79,7 @@ type SettingsPreferencesSectionProps = {
     progressStyle: ProgressDisplayStyle,
   ) => void;
   onSyncIntervalChange: (minutes: number) => void;
+  onMotionModeChange: (motionMode: AppSettings["motionMode"]) => void;
   onThemeCustomSeedChange: (themeCustomSeedHex: string) => void;
   onThemePresetChange: (themePreset: ThemePreset) => void;
   onUiFontFamilyChange: (uiFontFamily: UiFontFamily) => void;
@@ -114,6 +115,7 @@ export function SettingsPreferencesSection({
   onProgressThicknessPxChange,
   onSidebarProgressStyleChange,
   onSyncIntervalChange,
+  onMotionModeChange,
   onThemeCustomSeedChange,
   onThemePresetChange,
   onUiFontFamilyChange,
@@ -125,6 +127,7 @@ export function SettingsPreferencesSection({
     actionBadgeRotationIntervalOptions,
     actionBadgeRotationMenuButtonLabel,
     actionBadgeRotationUnitLabel,
+    motionModeOptions,
     normalizedActionBadgeSelections,
     popupCornerStyleOptions,
     popupCircularProgressItemsPerRowOptions,
@@ -242,6 +245,14 @@ export function SettingsPreferencesSection({
           copy={settingsCopy.colorChoices}
           onThemePresetChange={onThemePresetChange}
           onThemeCustomSeedChange={onThemeCustomSeedChange}
+        />
+
+        <MaterialSelect
+          label={i18n.t("settings.preferences.motion_mode_label")}
+          value={settings.motionMode}
+          fieldIdPrefix="motion-mode"
+          options={motionModeOptions}
+          onChange={onMotionModeChange}
         />
 
         <ActionBadgeSelectionControls

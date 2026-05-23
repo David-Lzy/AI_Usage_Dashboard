@@ -82,6 +82,9 @@ describe("SettingsPage", () => {
     expect(html).toContain('data-settings-material-select="locale-preference"');
     expect(html).toContain('data-settings-material-select="theme-mode"');
     expect(html).toContain('data-settings-material-select="motion-mode"');
+    expect(html.indexOf('id="settings-appearance"')).toBeLessThan(
+      html.indexOf('data-settings-material-select="motion-mode"'),
+    );
     expect(html).toContain('data-provider-carousel=""');
     expect(html).toContain(">Quick Setup<");
     expect(html).toContain('data-quick-setup-source-modes="cursor-personal-page"');

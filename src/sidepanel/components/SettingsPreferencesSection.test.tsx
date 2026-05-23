@@ -37,6 +37,7 @@ describe("SettingsPreferencesSection", () => {
         onPopupShadowStyleChange={() => {}}
         onProgressThicknessPxChange={() => {}}
         onProgressColorBandsChange={() => {}}
+        onMotionModeChange={() => {}}
         onActionBadgeSelectionsChange={() => {}}
         onRestoreActionBadgeAutoMode={() => {}}
         onActionBadgeRotationIntervalSecondsChange={() => {}}
@@ -64,6 +65,7 @@ describe("SettingsPreferencesSection", () => {
     expect(html).not.toContain('data-settings-material-select="locale-preference"');
     expect(html).not.toContain('data-settings-material-select="theme-mode"');
     expect(html).toContain('data-color-choice-dropdown="accent-color"');
+    expect(html).toContain('data-settings-material-select="motion-mode"');
     expect(html).toContain("material-info-tooltip__trigger");
     expect(html).toContain('class="form-field__label-row"');
     expect(html).toContain('role="tooltip"');

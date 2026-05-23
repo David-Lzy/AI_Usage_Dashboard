@@ -217,7 +217,6 @@ export function SettingsPage({
     settingsCopy,
     providerSourceDisplayCopy,
     localeOptions,
-    motionModeOptions,
     themeModeOptions,
     userLevelVisibility,
     showAdvancedContainer,
@@ -363,13 +362,6 @@ export function SettingsPage({
             options={themeModeOptions}
             onChange={onThemeModeChange}
           />
-          <MaterialSelect
-            label={i18n.t("settings.preferences.motion_mode_label")}
-            value={settings.motionMode}
-            fieldIdPrefix="motion-mode"
-            options={motionModeOptions}
-            onChange={onMotionModeChange}
-          />
         </div>
       </SettingsOverviewSection>
 
@@ -401,6 +393,7 @@ export function SettingsPage({
         userLevelVisibility={userLevelVisibility}
         onSyncIntervalChange={onSyncIntervalChange}
         onWarningThresholdChange={onWarningThresholdChange}
+        onMotionModeChange={onMotionModeChange}
         onThemePresetChange={onThemePresetChange}
         onUiFontFamilyChange={onUiFontFamilyChange}
         onPopupProgressStyleChange={onPopupProgressStyleChange}
