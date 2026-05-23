@@ -12,9 +12,9 @@
   z-index: 70;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--app-space-2);
+  gap: var(--app-space-1);
   width: min(clamp(240px, 28vw, 300px), calc(100vw - 32px));
-  padding: var(--app-space-2);
+  padding: var(--app-space-1);
   border: 1px solid var(--app-supporting-surface-border);
   border-radius: var(--md-sys-shape-corner-extra-large);
   background:
@@ -91,7 +91,9 @@
 
 .toolbar-popup-preview--floating .popup-appearance-preview-surface {
   justify-self: center;
-  min-width: min(100%, 220px);
+  width: 100%;
+  min-width: 0;
+  padding: var(--app-space-2);
 }
 
 .toolbar-popup-preview--floating .popup-appearance-preview-provider {
