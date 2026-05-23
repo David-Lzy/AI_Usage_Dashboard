@@ -3,6 +3,7 @@ import {
   buildSurfaceSessionKey,
   captureSurfaceSessionState,
   createSurfaceSessionStateForRoute,
+  restoreSurfaceSessionState,
 } from "../shared/surface-session-state";
 import {
   closeSidePanelBestEffort,
@@ -70,16 +71,28 @@ async function captureRouteSurfaceSessionState(
   route: SidePanelRouteState,
 ): Promise<void> {
   const routeKey = buildSidePanelHash(route);
+  const storageKey = buildSurfaceSessionKey(routeKey);
 
   try {
+    const existingState =
+      route.name === "settings"
+        ? await restoreSurfaceSessionState(storageKey)
+        : null;
+    const nextState = createSurfaceSessionStateForRoute({
+      routeName: route.name,
+      routeKey,
+      scrollY: getWindowScrollY(),
+      providerId: getRouteProviderId(route),
+    });
+
     await captureSurfaceSessionState(
-      buildSurfaceSessionKey(routeKey),
-      createSurfaceSessionStateForRoute({
-        routeName: route.name,
-        routeKey,
-        scrollY: getWindowScrollY(),
-        providerId: getRouteProviderId(route),
-      }),
+      storageKey,
+      route.name === "settings" && existingState?.settings
+        ? {
+            ...nextState,
+            settings: existingState.settings,
+          }
+        : nextState,
     );
   } catch {
     // Surface switching should remain best-effort even if session storage fails.

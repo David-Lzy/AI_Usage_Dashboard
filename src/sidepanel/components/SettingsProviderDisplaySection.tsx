@@ -19,11 +19,15 @@ type SettingsProviderDisplaySectionProps = {
   settings: AppSettings;
   settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>;
   snapshots: ProviderSnapshot[];
+  providerProgressDetailsOpen?: Record<string, boolean>;
   onProviderOrderBySurfaceChange: (
     providerOrderBySurface: ProviderOrderBySurface,
   ) => void;
   onProgressItemsBySurfaceChange: (
     progressItemsBySurface: ProgressItemsBySurface,
+  ) => void;
+  onProviderProgressDetailsOpenChange?: (
+    providerProgressDetailsOpen: Record<string, boolean>,
   ) => void;
 };
 
@@ -34,8 +38,10 @@ export function SettingsProviderDisplaySection({
   settings,
   settingsCopy,
   snapshots,
+  providerProgressDetailsOpen,
   onProviderOrderBySurfaceChange,
   onProgressItemsBySurfaceChange,
+  onProviderProgressDetailsOpenChange,
 }: SettingsProviderDisplaySectionProps) {
   const displayEligibleProviders = filterDisplayEligibleProviderSettings(
     providers,
@@ -73,10 +79,12 @@ export function SettingsProviderDisplaySection({
 
         <ProviderProgressItemPreferenceControls
           copy={settingsCopy.progressItems}
+          detailsOpenByProvider={providerProgressDetailsOpen}
           providers={displayVisibleProviders}
           snapshots={snapshots}
           progressItemsBySurface={settings.progressItemsBySurface}
           onChange={onProgressItemsBySurfaceChange}
+          onDetailsOpenByProviderChange={onProviderProgressDetailsOpenChange}
         />
       </div>
     </section>

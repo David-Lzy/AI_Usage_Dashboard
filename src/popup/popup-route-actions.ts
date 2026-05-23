@@ -10,6 +10,7 @@ import {
   buildSurfaceSessionKey,
   captureSurfaceSessionState,
   createSurfaceSessionStateForRoute,
+  restoreSurfaceSessionState,
 } from "../shared/surface-session-state";
 import {
   buildFullPageExtensionPath,
@@ -31,15 +32,27 @@ async function capturePopupSurfaceHandoffState(
   route: SidePanelRouteState,
 ): Promise<void> {
   const routeKey = buildSidePanelHash(route);
+  const storageKey = buildSurfaceSessionKey(routeKey);
 
   try {
+    const existingState =
+      route.name === "settings"
+        ? await restoreSurfaceSessionState(storageKey)
+        : null;
+    const nextState = createSurfaceSessionStateForRoute({
+      routeName: route.name,
+      routeKey,
+      providerId: getRouteProviderId(route),
+    });
+
     await captureSurfaceSessionState(
-      buildSurfaceSessionKey(routeKey),
-      createSurfaceSessionStateForRoute({
-        routeName: route.name,
-        routeKey,
-        providerId: getRouteProviderId(route),
-      }),
+      storageKey,
+      route.name === "settings" && existingState?.settings
+        ? {
+            ...nextState,
+            settings: existingState.settings,
+          }
+        : nextState,
     );
   } catch {
     // Popup navigation must keep working even when session storage is missing.

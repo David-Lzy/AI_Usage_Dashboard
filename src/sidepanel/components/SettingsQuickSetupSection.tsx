@@ -25,6 +25,7 @@ type SettingsQuickSetupSectionProps = {
   focusedProviderId?: ProviderId | null;
   providers: ProviderSetting[];
   providerSourceDisplayCopy: ProviderSourceDisplayCopy;
+  carouselIndex?: number;
   sectionId?: string;
   sessionPageNavigationAvailable: boolean;
   settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>;
@@ -33,6 +34,7 @@ type SettingsQuickSetupSectionProps = {
   userLevel: SettingsUserLevel;
   onAttachActiveSessionPage: (providerId: ProviderId) => void;
   onClearPageBinding: (providerId: ProviderId) => void;
+  onCarouselIndexChange?: (index: number) => void;
   onOpenSessionPage: (providerId: ProviderId) => void;
   onTogglePermission: (providerId: ProviderId) => void;
   onToggleProvider: (providerId: ProviderId) => void;
@@ -43,6 +45,7 @@ export function SettingsQuickSetupSection({
   focusedProviderId = null,
   providers,
   providerSourceDisplayCopy,
+  carouselIndex,
   sectionId,
   sessionPageNavigationAvailable,
   settingsCopy,
@@ -51,6 +54,7 @@ export function SettingsQuickSetupSection({
   userLevel,
   onAttachActiveSessionPage,
   onClearPageBinding,
+  onCarouselIndexChange,
   onOpenSessionPage,
   onTogglePermission,
   onToggleProvider,
@@ -369,12 +373,15 @@ export function SettingsQuickSetupSection({
         initialIndex={
           focusedQuickSetupIndex > -1
             ? focusedQuickSetupIndex
+            : carouselIndex !== undefined
+              ? carouselIndex
             : firstSetupIndex > -1
               ? firstSetupIndex
               : 0
         }
         items={quickSetupItems}
         textDirection={textDirection}
+        onActiveItemChange={(_item, index) => onCarouselIndexChange?.(index)}
       />
     </section>
   );

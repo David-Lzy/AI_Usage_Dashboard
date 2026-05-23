@@ -70,6 +70,24 @@ describe("ProviderProgressItemPreferenceControls", () => {
     );
   });
 
+  it("can restore a provider quota item detail open state", () => {
+    const copy = buildSettingsLocalizedCopy(createRuntimeI18n("en"));
+    const html = renderToStaticMarkup(
+      <ProviderProgressItemPreferenceControls
+        copy={copy.progressItems}
+        providers={SAMPLE_APP_STATE.providerSettings}
+        snapshots={SAMPLE_APP_STATE.providers}
+        detailsOpenByProvider={{ "codex-personal-page": true }}
+        progressItemsBySurface={SAMPLE_APP_STATE.settings.progressItemsBySurface}
+        onChange={() => {}}
+      />,
+    );
+
+    expect(html).toMatch(
+      /<details[^>]*data-provider-progress-preference-provider="codex-personal-page"[^>]*open/,
+    );
+  });
+
   it("renders quota item controls with non-English localized copy", () => {
     const copy = buildSettingsLocalizedCopy(createRuntimeI18n("de"));
     const html = renderToStaticMarkup(

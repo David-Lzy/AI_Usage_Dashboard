@@ -15,7 +15,10 @@ import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 import { MaterialSelect, type MaterialSelectOption } from "./MaterialSelect";
 import { ProgressAppearancePreferenceControls } from "./ProgressAppearancePreferenceControls";
-import { ToolbarPopupPreview } from "./ToolbarPopupPreview";
+import {
+  ToolbarPopupPreview,
+  type ToolbarPopupPreviewPosition,
+} from "./ToolbarPopupPreview";
 
 export const TOOLBAR_POPUP_PREVIEW_FLOATING_MIN_WIDTH_PX = 640;
 
@@ -28,6 +31,7 @@ type SettingsUiMoreSectionProps = {
   uiMoreOpen: boolean;
   toolbarPopupPreviewOpen: boolean;
   popupPreviewRemainingPercent: number;
+  toolbarPopupPreviewPosition: ToolbarPopupPreviewPosition | null;
   popupCircularRowCountHelperText: string;
   uiFontHelperText: string;
   progressDisplayStyleOptions: Array<MaterialSelectOption<ProgressDisplayStyle>>;
@@ -42,6 +46,9 @@ type SettingsUiMoreSectionProps = {
   onToggleToolbarPopupPreview: () => void;
   onCloseToolbarPopupPreview: () => void;
   onPreviewRemainingPercentChange: (remainingPercent: number) => void;
+  onToolbarPopupPreviewPositionChange: (
+    position: ToolbarPopupPreviewPosition | null,
+  ) => void;
   onFullPageProgressStyleChange: (
     progressStyle: ProgressDisplayStyle,
   ) => void;
@@ -116,6 +123,7 @@ export function SettingsUiMoreSection({
   uiMoreOpen,
   toolbarPopupPreviewOpen,
   popupPreviewRemainingPercent,
+  toolbarPopupPreviewPosition,
   popupCircularRowCountHelperText,
   uiFontHelperText,
   progressDisplayStyleOptions,
@@ -128,6 +136,7 @@ export function SettingsUiMoreSection({
   onToggleToolbarPopupPreview,
   onCloseToolbarPopupPreview,
   onPreviewRemainingPercentChange,
+  onToolbarPopupPreviewPositionChange,
   onFullPageProgressStyleChange,
   onPopupCornerStyleChange,
   onPopupCircularProgressItemsPerRowChange,
@@ -198,6 +207,7 @@ export function SettingsUiMoreSection({
               previewRemainingPercent={popupPreviewRemainingPercent}
               settings={settings}
               onPreviewRemainingPercentChange={onPreviewRemainingPercentChange}
+              onFloatingPositionChange={onToolbarPopupPreviewPositionChange}
             />
           ) : null}
 
@@ -301,8 +311,10 @@ export function SettingsUiMoreSection({
           i18n={i18n}
           placement="floating"
           previewRemainingPercent={popupPreviewRemainingPercent}
+          floatingPosition={toolbarPopupPreviewPosition}
           settings={settings}
           onPreviewRemainingPercentChange={onPreviewRemainingPercentChange}
+          onFloatingPositionChange={onToolbarPopupPreviewPositionChange}
           onClose={onCloseToolbarPopupPreview}
         />
       ) : null}

@@ -1,4 +1,4 @@
-import { useEffect, useState, type ChangeEvent } from "react";
+import { useEffect, type ChangeEvent } from "react";
 
 import type {
   ActionBadgeSelections,
@@ -28,15 +28,13 @@ import {
 } from "../../shared/settings-preferences";
 import { buildSettingsPreferenceOptions } from "../settings-preference-options";
 import type { SettingsUserLevelVisibility } from "../settings-user-level-visibility";
+import type { SettingsPreferencesSurfaceSessionControls } from "../use-settings-surface-session-state";
 import { ActionBadgeSelectionControls } from "./ActionBadgeSelectionControls";
 import { AccentColorSelect } from "./AccentColorSelect";
 import { ConfigurationBackupControls } from "./ConfigurationBackupControls";
 import { EditableNumberCombobox } from "./EditableNumberCombobox";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 import { MaterialSelect } from "./MaterialSelect";
-import {
-  POPUP_APPEARANCE_PREVIEW_DEFAULT_REMAINING_PERCENT,
-} from "./ToolbarPopupPreview";
 import { SettingsUiMoreSection } from "./SettingsUiMoreSection";
 
 type SettingsPreferencesSectionProps = {
@@ -46,6 +44,7 @@ type SettingsPreferencesSectionProps = {
   settings: AppSettings;
   settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>;
   snapshots: ProviderSnapshot[];
+  surfaceSessionState: SettingsPreferencesSurfaceSessionControls;
   userLevelVisibility: SettingsUserLevelVisibility;
   onActionBadgeSelectionsChange: (
     actionBadgeSelections: ActionBadgeSelections,
@@ -96,6 +95,7 @@ export function SettingsPreferencesSection({
   settings,
   settingsCopy,
   snapshots,
+  surfaceSessionState,
   userLevelVisibility: _userLevelVisibility,
   onActionBadgeSelectionsChange,
   onActionBadgeSelectionModeChange,
@@ -154,11 +154,16 @@ export function SettingsPreferencesSection({
     settings,
     snapshots,
   });
-  const [uiMoreOpen, setUiMoreOpen] = useState(settings.themePreset === "custom");
-  const [toolbarPopupPreviewOpen, setToolbarPopupPreviewOpen] =
-    useState(false);
-  const [popupPreviewRemainingPercent, setPopupPreviewRemainingPercent] =
-    useState(POPUP_APPEARANCE_PREVIEW_DEFAULT_REMAINING_PERCENT);
+  const {
+    popupPreviewRemainingPercent,
+    setPopupPreviewRemainingPercent,
+    setToolbarPopupPreviewOpen,
+    setToolbarPopupPreviewPosition,
+    setUiMoreOpen,
+    toolbarPopupPreviewOpen,
+    toolbarPopupPreviewPosition,
+    uiMoreOpen,
+  } = surfaceSessionState;
   const popupCircularRowCountHelperText = i18n.t(
     "settings.preferences.popup_circular_row_count_helper",
   );
@@ -193,15 +198,13 @@ export function SettingsPreferencesSection({
   }
 
   function handleToolbarPopupPreviewToggle() {
-    setToolbarPopupPreviewOpen((current) => {
-      const nextOpen = !current;
+    const nextOpen = !toolbarPopupPreviewOpen;
 
-      if (nextOpen) {
-        setUiMoreOpen(true);
-      }
+    if (nextOpen) {
+      setUiMoreOpen(true);
+    }
 
-      return nextOpen;
-    });
+    setToolbarPopupPreviewOpen(nextOpen);
   }
 
   useEffect(() => {
@@ -372,6 +375,7 @@ export function SettingsPreferencesSection({
         uiMoreOpen={uiMoreOpen}
         toolbarPopupPreviewOpen={toolbarPopupPreviewOpen}
         popupPreviewRemainingPercent={popupPreviewRemainingPercent}
+        toolbarPopupPreviewPosition={toolbarPopupPreviewPosition}
         popupCircularRowCountHelperText={popupCircularRowCountHelperText}
         uiFontHelperText={uiFontHelperText}
         progressDisplayStyleOptions={progressDisplayStyleOptions}
@@ -386,6 +390,7 @@ export function SettingsPreferencesSection({
         onToggleToolbarPopupPreview={handleToolbarPopupPreviewToggle}
         onCloseToolbarPopupPreview={() => setToolbarPopupPreviewOpen(false)}
         onPreviewRemainingPercentChange={setPopupPreviewRemainingPercent}
+        onToolbarPopupPreviewPositionChange={setToolbarPopupPreviewPosition}
         onFullPageProgressStyleChange={onFullPageProgressStyleChange}
         onPopupCornerStyleChange={onPopupCornerStyleChange}
         onPopupCircularProgressItemsPerRowChange={

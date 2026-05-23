@@ -16,6 +16,7 @@ import { SettingsSourceCard } from "./SettingsSourceCard";
 
 type SettingsSourceSectionProps = {
   activeSessionPageAttachAvailable: boolean;
+  carouselIndex?: number;
   detail: string;
   eyebrow: string;
   focusedProviderId?: ProviderId | null;
@@ -28,6 +29,7 @@ type SettingsSourceSectionProps = {
   title: string;
   userLevelVisibility: SettingsUserLevelVisibility;
   onAttachActiveSessionPage: (providerId: ProviderId) => void;
+  onCarouselIndexChange?: (index: number) => void;
   onClearPageBinding: (providerId: ProviderId) => void;
   onOpenSessionPage: (providerId: ProviderId) => void;
   onSetSourcePreference: (
@@ -38,6 +40,7 @@ type SettingsSourceSectionProps = {
 
 export function SettingsSourceSection({
   activeSessionPageAttachAvailable,
+  carouselIndex,
   detail,
   eyebrow,
   focusedProviderId = null,
@@ -50,6 +53,7 @@ export function SettingsSourceSection({
   title,
   userLevelVisibility,
   onAttachActiveSessionPage,
+  onCarouselIndexChange,
   onClearPageBinding,
   onOpenSessionPage,
   onSetSourcePreference,
@@ -107,9 +111,12 @@ export function SettingsSourceSection({
 
       <ProviderCarousel
         ariaLabel={title}
-        initialIndex={focusedSourceIndex > -1 ? focusedSourceIndex : 0}
+        initialIndex={
+          focusedSourceIndex > -1 ? focusedSourceIndex : (carouselIndex ?? 0)
+        }
         items={sourceItems}
         textDirection={i18n.resolvedTextDirection}
+        onActiveItemChange={(_item, index) => onCarouselIndexChange?.(index)}
       />
     </section>
   );

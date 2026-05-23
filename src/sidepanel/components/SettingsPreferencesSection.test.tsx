@@ -5,11 +5,31 @@ import { SAMPLE_APP_STATE } from "../../shared/constants";
 import { createRuntimeI18n } from "../../shared/i18n";
 import { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
 import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
+import type { SettingsPreferencesSurfaceSessionControls } from "../use-settings-surface-session-state";
 import { getSettingsUserLevelVisibility } from "../settings-user-level-visibility";
 import { SettingsPreferencesSection } from "./SettingsPreferencesSection";
 import { canUseFloatingToolbarPopupPreview } from "./SettingsUiMoreSection";
+import {
+  POPUP_APPEARANCE_PREVIEW_DEFAULT_REMAINING_PERCENT,
+} from "./ToolbarPopupPreview";
 
 describe("SettingsPreferencesSection", () => {
+  function createSurfaceSessionControls(
+    settings = SAMPLE_APP_STATE.settings,
+  ): SettingsPreferencesSurfaceSessionControls {
+    return {
+      uiMoreOpen: settings.themePreset === "custom",
+      setUiMoreOpen: () => {},
+      toolbarPopupPreviewOpen: false,
+      setToolbarPopupPreviewOpen: () => {},
+      popupPreviewRemainingPercent:
+        POPUP_APPEARANCE_PREVIEW_DEFAULT_REMAINING_PERCENT,
+      setPopupPreviewRemainingPercent: () => {},
+      toolbarPopupPreviewPosition: null,
+      setToolbarPopupPreviewPosition: () => {},
+    };
+  }
+
   function renderPreferencesSection(
     settings = SAMPLE_APP_STATE.settings,
   ): string {
@@ -24,6 +44,7 @@ describe("SettingsPreferencesSection", () => {
         snapshots={SAMPLE_APP_STATE.providers}
         i18n={i18n}
         settingsCopy={settingsCopy}
+        surfaceSessionState={createSurfaceSessionControls(settings)}
         userLevelVisibility={getSettingsUserLevelVisibility("debug")}
         onSyncIntervalChange={() => {}}
         onWarningThresholdChange={() => {}}

@@ -4,6 +4,7 @@ import {
   useState,
   type ChangeEvent,
   type PointerEvent as ReactPointerEvent,
+  type SetStateAction,
 } from "react";
 import { createPortal } from "react-dom";
 
@@ -21,7 +22,7 @@ const FLOATING_PREVIEW_DEFAULT_HEIGHT_PX = 260;
 const FLOATING_PREVIEW_INITIAL_TOP_PX = 96;
 const FLOATING_PREVIEW_INITIAL_RIGHT_PX = 32;
 
-type ToolbarPopupPreviewPosition = {
+export type ToolbarPopupPreviewPosition = {
   left: number;
   top: number;
 };
@@ -52,8 +53,10 @@ type ToolbarPopupPreviewProps = {
   i18n: RuntimeI18n;
   placement: ToolbarPopupPreviewPlacement;
   previewRemainingPercent: number;
+  floatingPosition?: ToolbarPopupPreviewPosition | null;
   settings: ToolbarPopupPreviewSettings;
   onPreviewRemainingPercentChange: (remainingPercent: number) => void;
+  onFloatingPositionChange?: (position: ToolbarPopupPreviewPosition | null) => void;
   onClose?: () => void;
 };
 
@@ -223,8 +226,10 @@ export function ToolbarPopupPreview({
   i18n,
   placement,
   previewRemainingPercent,
+  floatingPosition = null,
   settings,
   onPreviewRemainingPercentChange,
+  onFloatingPositionChange,
   onClose,
 }: ToolbarPopupPreviewProps) {
   const floatingPreviewRef = useRef<HTMLElement | null>(null);
@@ -235,7 +240,7 @@ export function ToolbarPopupPreview({
     originTop: number;
   } | null>(null);
   const [position, setPosition] = useState<ToolbarPopupPreviewPosition>(
-    getInitialFloatingPreviewPosition,
+    () => floatingPosition ?? getInitialFloatingPreviewPosition(),
   );
   const [isDragging, setIsDragging] = useState(false);
   const normalizedPreviewRemainingPercent = normalizePreviewRemainingPercent(
@@ -261,12 +266,34 @@ export function ToolbarPopupPreview({
     );
   }
 
+  function setFloatingPreviewPosition(
+    update: SetStateAction<ToolbarPopupPreviewPosition>,
+  ) {
+    setPosition((currentPosition) => {
+      const nextPosition =
+        typeof update === "function"
+          ? (update as (position: ToolbarPopupPreviewPosition) => ToolbarPopupPreviewPosition)(
+              currentPosition,
+            )
+          : update;
+
+      onFloatingPositionChange?.(nextPosition);
+      return nextPosition;
+    });
+  }
+
+  useEffect(() => {
+    if (floatingPosition) {
+      setPosition(floatingPosition);
+    }
+  }, [floatingPosition]);
+
   useEffect(() => {
     if (placement !== "floating" || typeof window === "undefined") {
       return undefined;
     }
 
-    setPosition((currentPosition) =>
+    setFloatingPreviewPosition((currentPosition) =>
       clampToolbarPopupPreviewPosition(
         currentPosition,
         getFloatingPreviewViewport(),
@@ -275,7 +302,7 @@ export function ToolbarPopupPreview({
     );
 
     function handleResize() {
-      setPosition((currentPosition) =>
+      setFloatingPreviewPosition((currentPosition) =>
         clampToolbarPopupPreviewPosition(
           currentPosition,
           getFloatingPreviewViewport(),
@@ -303,7 +330,7 @@ export function ToolbarPopupPreview({
         return;
       }
 
-      setPosition({
+      setFloatingPreviewPosition({
         ...clampFloatingPreviewPosition({
           left: dragStart.originLeft + event.clientX - dragStart.pointerX,
           top: dragStart.originTop + event.clientY - dragStart.pointerY,

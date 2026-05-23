@@ -29,10 +29,14 @@ import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 
 type ProviderProgressItemPreferenceControlsProps = {
   copy: ReturnType<typeof buildSettingsLocalizedCopy>["progressItems"];
+  detailsOpenByProvider?: Record<string, boolean>;
   progressItemsBySurface: ProgressItemsBySurface;
   providers: ProviderSetting[];
   snapshots: ProviderSnapshot[];
   onChange: (progressItemsBySurface: ProgressItemsBySurface) => void;
+  onDetailsOpenByProviderChange?: (
+    detailsOpenByProvider: Record<string, boolean>,
+  ) => void;
 };
 
 type DraggedProgressItem = {
@@ -58,10 +62,12 @@ function getOrderedProgressItems(
 
 export function ProviderProgressItemPreferenceControls({
   copy,
+  detailsOpenByProvider = {},
   progressItemsBySurface,
   providers,
   snapshots,
   onChange,
+  onDetailsOpenByProviderChange,
 }: ProviderProgressItemPreferenceControlsProps) {
   const [draggedProgressItem, setDraggedProgressItem] =
     useState<DraggedProgressItem | null>(null);
@@ -221,6 +227,13 @@ export function ProviderProgressItemPreferenceControls({
               key={provider.id}
               className="provider-progress-provider"
               data-provider-progress-preference-provider={provider.id}
+              open={detailsOpenByProvider[provider.id] === true}
+              onToggle={(event) => {
+                onDetailsOpenByProviderChange?.({
+                  ...detailsOpenByProvider,
+                  [provider.id]: (event.currentTarget as HTMLDetailsElement).open,
+                });
+              }}
             >
               <summary
                 className="provider-progress-provider__summary"

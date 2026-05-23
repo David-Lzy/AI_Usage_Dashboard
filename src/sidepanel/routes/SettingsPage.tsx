@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 import type {
   ActionBadgeSelections,
@@ -229,6 +229,7 @@ export function SettingsPage({
     settingsSummaryItems,
     advancedOpen,
     setAdvancedOpen,
+    settingsSurfaceSession,
     advancedGroupCount,
     quickSetupFocusedProviderId,
     credentialFocusedProviderId,
@@ -284,6 +285,32 @@ export function SettingsPage({
       window.cancelAnimationFrame(frameId);
     };
   }, [advancedOpen, routeFocusKey]);
+
+  const handleSettingsCarouselIndexChange = useCallback(
+    (carouselId: string, index: number) => {
+      settingsSurfaceSession.setCarouselIndexById((current) =>
+        current[carouselId] === index
+          ? current
+          : {
+              ...current,
+              [carouselId]: index,
+            },
+      );
+    },
+    [settingsSurfaceSession.setCarouselIndexById],
+  );
+  const handleQuickSetupCarouselIndexChange = useCallback(
+    (index: number) => handleSettingsCarouselIndexChange("quickSetup", index),
+    [handleSettingsCarouselIndexChange],
+  );
+  const handleCredentialsCarouselIndexChange = useCallback(
+    (index: number) => handleSettingsCarouselIndexChange("credentials", index),
+    [handleSettingsCarouselIndexChange],
+  );
+  const handleSourcesCarouselIndexChange = useCallback(
+    (index: number) => handleSettingsCarouselIndexChange("sources", index),
+    [handleSettingsCarouselIndexChange],
+  );
 
   return (
     <main className="app-shell settings-shell">
@@ -377,8 +404,10 @@ export function SettingsPage({
         settingsCopy={settingsCopy}
         textDirection={i18n.resolvedTextDirection}
         userLevel={settings.userLevel}
+        carouselIndex={settingsSurfaceSession.carouselIndexById.quickSetup}
         sessionPageNavigationAvailable={sessionPageNavigationAvailable}
         activeSessionPageAttachAvailable={activeSessionPageAttachAvailable}
+        onCarouselIndexChange={handleQuickSetupCarouselIndexChange}
         onToggleProvider={onToggleProvider}
         onTogglePermission={onTogglePermission}
         onOpenSessionPage={onOpenSessionPage}
@@ -393,6 +422,7 @@ export function SettingsPage({
         snapshots={snapshots}
         i18n={i18n}
         settingsCopy={settingsCopy}
+        surfaceSessionState={settingsSurfaceSession.preferences}
         userLevelVisibility={userLevelVisibility}
         onSyncIntervalChange={onSyncIntervalChange}
         onWarningThresholdChange={onWarningThresholdChange}
@@ -435,8 +465,14 @@ export function SettingsPage({
         providerSourceDisplayCopy={providerSourceDisplayCopy}
         snapshots={snapshots}
         settingsCopy={settingsCopy}
+        providerProgressDetailsOpen={
+          settingsSurfaceSession.providerProgressDetailsOpen
+        }
         onProviderOrderBySurfaceChange={onProviderOrderBySurfaceChange}
         onProgressItemsBySurfaceChange={onProgressItemsBySurfaceChange}
+        onProviderProgressDetailsOpenChange={
+          settingsSurfaceSession.setProviderProgressDetailsOpen
+        }
       />
 
       {showAdvancedContainer ? (
@@ -488,8 +524,10 @@ export function SettingsPage({
                 credentialInputs={credentialInputs}
                 codexAnalyticsApiKeyInput={codexAnalyticsApiKeyInput}
                 codexWorkspaceIdInput={codexWorkspaceIdInput}
+                carouselIndex={settingsSurfaceSession.carouselIndexById.credentials}
                 labels={settingsCopy.credentials}
                 textDirection={i18n.resolvedTextDirection}
+                onCarouselIndexChange={handleCredentialsCarouselIndexChange}
                 onSaveProviderApiKey={handleSaveProviderApiKey}
                 onClearProviderApiKey={handleClearProviderApiKey}
                 onProviderApiKeyInputChange={handleProviderApiKeyInputChange}
@@ -509,9 +547,11 @@ export function SettingsPage({
                 snapshots={snapshots}
                 i18n={i18n}
                 settingsCopy={settingsCopy}
+                carouselIndex={settingsSurfaceSession.carouselIndexById.sources}
                 userLevelVisibility={userLevelVisibility}
                 sessionPageNavigationAvailable={sessionPageNavigationAvailable}
                 activeSessionPageAttachAvailable={activeSessionPageAttachAvailable}
+                onCarouselIndexChange={handleSourcesCarouselIndexChange}
                 onSetSourcePreference={onSetSourcePreference}
                 onOpenSessionPage={onOpenSessionPage}
                 onAttachActiveSessionPage={onAttachActiveSessionPage}

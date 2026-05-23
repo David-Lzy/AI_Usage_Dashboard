@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 import type {
   ApiKeyProviderId,
   AppSettings,
@@ -19,6 +17,7 @@ import {
 import { useSettingsCredentialDrafts } from "./use-settings-credential-drafts";
 import { useSettingsSectionNavigation } from "./use-settings-section-navigation";
 import { getSettingsUserLevelVisibility } from "./settings-user-level-visibility";
+import { useSettingsSurfaceSessionState } from "./use-settings-surface-session-state";
 
 type UseSettingsPageInput = {
   settings: AppSettings;
@@ -65,6 +64,8 @@ export function useSettingsPage({
   const routeFocusRequiresAdvanced = settingsRouteFocusRequiresAdvanced(routeFocus);
   const showAdvancedContainer =
     userLevelVisibility.showAdvancedContainer || routeFocusRequiresAdvanced;
+  const defaultAdvancedOpen =
+    userLevelVisibility.advancedInitiallyOpen || routeFocusRequiresAdvanced;
   const {
     codexProvider,
     credentialProviders,
@@ -77,9 +78,6 @@ export function useSettingsPage({
     settingsCopy,
     snapshots,
   });
-  const [advancedOpen, setAdvancedOpen] = useState(
-    userLevelVisibility.advancedInitiallyOpen || routeFocusRequiresAdvanced,
-  );
   const advancedGroupCount =
     (credentialProviders.length > 0 || codexProvider ? 1 : 0) + 1;
   const quickSetupFocusedProviderId =
@@ -88,12 +86,12 @@ export function useSettingsPage({
     routeFocus?.kind === "credential-provider" ? routeFocus.providerId : null;
   const sourceFocusedProviderId =
     routeFocus?.kind === "source-provider" ? routeFocus.providerId : null;
-
-  useEffect(() => {
-    setAdvancedOpen(
-      userLevelVisibility.advancedInitiallyOpen || routeFocusRequiresAdvanced,
-    );
-  }, [routeFocusRequiresAdvanced, userLevelVisibility.advancedInitiallyOpen]);
+  const settingsSurfaceSession = useSettingsSurfaceSessionState({
+    activeSectionId: sectionNavigation.activeSettingsSection,
+    defaultAdvancedOpen,
+    defaultUiMoreOpen: settings.themePreset === "custom",
+    forceAdvancedOpen: routeFocusRequiresAdvanced,
+  });
 
   return {
     ...credentialDrafts,
@@ -110,8 +108,9 @@ export function useSettingsPage({
     credentialProviders,
     settingsSectionNavItems,
     settingsSummaryItems,
-    advancedOpen,
-    setAdvancedOpen,
+    advancedOpen: settingsSurfaceSession.advancedOpen,
+    setAdvancedOpen: settingsSurfaceSession.setAdvancedOpen,
+    settingsSurfaceSession,
     advancedGroupCount,
     quickSetupFocusedProviderId,
     credentialFocusedProviderId,

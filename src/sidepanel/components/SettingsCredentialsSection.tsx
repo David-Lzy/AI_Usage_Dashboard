@@ -27,6 +27,7 @@ type SettingsCredentialsSectionProps = {
   codexAnalyticsApiKeyInput: string;
   codexProvider: (ProviderSetting & { id: "codex-enterprise-api" }) | null;
   codexWorkspaceIdInput: string;
+  carouselIndex?: number;
   credentialInputs: Record<ApiKeyProviderId, string>;
   credentialProviders: CredentialProviderSection[];
   detail: string;
@@ -38,6 +39,7 @@ type SettingsCredentialsSectionProps = {
   title: string;
   onClearCodexConfig: () => void;
   onClearProviderApiKey: (providerId: ApiKeyProviderId) => void;
+  onCarouselIndexChange?: (index: number) => void;
   onCodexAnalyticsApiKeyInputChange: (value: string) => void;
   onCodexWorkspaceIdInputChange: (value: string) => void;
   onProviderApiKeyInputChange: (
@@ -55,6 +57,7 @@ export function SettingsCredentialsSection({
   codexAnalyticsApiKeyInput,
   codexProvider,
   codexWorkspaceIdInput,
+  carouselIndex,
   credentialInputs,
   credentialProviders,
   detail,
@@ -66,6 +69,7 @@ export function SettingsCredentialsSection({
   title,
   onClearCodexConfig,
   onClearProviderApiKey,
+  onCarouselIndexChange,
   onCodexAnalyticsApiKeyInputChange,
   onCodexWorkspaceIdInputChange,
   onProviderApiKeyInputChange,
@@ -284,9 +288,14 @@ export function SettingsCredentialsSection({
 
       <ProviderCarousel
         ariaLabel={title}
-        initialIndex={focusedCredentialIndex > -1 ? focusedCredentialIndex : 0}
+        initialIndex={
+          focusedCredentialIndex > -1
+            ? focusedCredentialIndex
+            : (carouselIndex ?? 0)
+        }
         items={credentialItems}
         textDirection={textDirection}
+        onActiveItemChange={(_item, index) => onCarouselIndexChange?.(index)}
       />
     </section>
   );
