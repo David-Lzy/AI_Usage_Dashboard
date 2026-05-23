@@ -464,7 +464,7 @@ html[data-app-direction="rtl"] .color-choice-dropdown__button {
 
 .color-choice-dropdown__swatch,
 .color-choice-dropdown__choice-swatch,
-.color-choice-dropdown__native-picker-swatch {
+.color-choice-dropdown__picker-preview-swatch {
   display: inline-block;
   width: 22px;
   aspect-ratio: 1;
@@ -568,8 +568,7 @@ html[data-app-direction="rtl"]
 }
 
 .color-choice-dropdown__choice,
-.color-choice-dropdown__custom-toggle,
-.color-choice-dropdown__native-picker {
+.color-choice-dropdown__custom-toggle {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
@@ -597,8 +596,7 @@ html[data-app-direction="rtl"]
 }
 
 .color-choice-dropdown__choice:hover,
-.color-choice-dropdown__custom-toggle:hover,
-.color-choice-dropdown__native-picker:hover {
+.color-choice-dropdown__custom-toggle:hover {
   background: var(--app-state-layer-neutral-hover);
   border-color: color-mix(
     in srgb,
@@ -608,9 +606,7 @@ html[data-app-direction="rtl"]
 }
 
 .color-choice-dropdown__choice:focus-visible,
-.color-choice-dropdown__custom-toggle:focus-visible,
-.color-choice-dropdown__native-picker:focus-within,
-.color-choice-dropdown__native-picker:focus-visible {
+.color-choice-dropdown__custom-toggle:focus-visible {
   outline: 2px solid var(--md-sys-color-primary);
   outline-offset: 2px;
 }
@@ -644,26 +640,114 @@ html[data-app-direction="rtl"]
   color: var(--md-sys-color-error);
 }
 
+.color-choice-dropdown__material-picker {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-3);
+  padding: var(--app-space-3);
+  border: 1px solid color-mix(
+    in srgb,
+    var(--md-sys-color-outline-variant) 78%,
+    transparent
+  );
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--md-sys-color-surface-container-lowest);
+}
+
+.color-choice-dropdown__picker-plane {
+  position: relative;
+  min-height: 168px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-large);
+  background:
+    linear-gradient(to top, black 0%, transparent 100%),
+    linear-gradient(to right, white 0%, transparent 100%),
+    hsl(var(--color-choice-picker-hue) 100% 50%);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, white 22%, transparent);
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.color-choice-dropdown__picker-plane:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 3px;
+}
+
+.color-choice-dropdown__picker-thumb {
+  position: absolute;
+  width: 22px;
+  aspect-ratio: 1;
+  border: 3px solid white;
+  border-radius: 999px;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, black 74%, transparent),
+    var(--app-elevation-1);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.color-choice-dropdown__hue-control {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--app-space-3);
+  min-width: 0;
+}
+
+.color-choice-dropdown__hue-range {
+  width: 100%;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--color-choice-picker-color);
+  appearance: none;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: linear-gradient(
+    to right,
+    #f44336 0%,
+    #ffeb3b 16.7%,
+    #4caf50 33.3%,
+    #00bcd4 50%,
+    #3f51b5 66.7%,
+    #e91e63 83.3%,
+    #f44336 100%
+  );
+  cursor: pointer;
+}
+
+.color-choice-dropdown__hue-range:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 4px;
+}
+
+.color-choice-dropdown__hue-range::-webkit-slider-thumb {
+  width: 22px;
+  height: 22px;
+  appearance: none;
+  border: 3px solid white;
+  border-radius: 999px;
+  background: var(--color-choice-picker-color);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, black 44%, transparent),
+    var(--app-elevation-1);
+}
+
+.color-choice-dropdown__hue-range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: 3px solid white;
+  border-radius: 999px;
+  background: var(--color-choice-picker-color);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, black 44%, transparent),
+    var(--app-elevation-1);
+}
+
 .color-choice-dropdown__custom-fields {
   display: grid;
-  grid-template-columns: minmax(132px, 1fr) minmax(156px, auto);
+  grid-template-columns: minmax(0, 1fr);
   align-items: end;
   gap: var(--app-space-2);
-}
-
-.color-choice-dropdown__native-picker {
-  position: relative;
-  min-height: 56px;
-  overflow: hidden;
-}
-
-.color-choice-dropdown__native-picker input[type="color"] {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  cursor: pointer;
 }
 
 .color-choice-dropdown__apply {

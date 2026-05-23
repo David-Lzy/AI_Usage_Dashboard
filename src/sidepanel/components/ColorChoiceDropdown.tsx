@@ -15,6 +15,7 @@ import {
   resolveFloatingMenuPosition,
   type FloatingMenuPosition,
 } from "../floating-menu-position";
+import { MaterialColorPicker } from "./MaterialColorPicker";
 
 export type ColorChoiceDropdownChoice = {
   id: string;
@@ -347,6 +348,11 @@ export function ColorChoiceDropdown({
             <p className="supporting-copy color-choice-dropdown__custom-help">
               {copy.customHelp}
             </p>
+            <MaterialColorPicker
+              label={copy.customPickerLabel}
+              valueHex={customPickerValue}
+              onChange={setCustomDraft}
+            />
             <div className="color-choice-dropdown__custom-fields">
               <label className="form-field">
                 <span className="form-field__label">
@@ -363,20 +369,6 @@ export function ColorChoiceDropdown({
                   onChange={(event) =>
                     setCustomDraft(event.target.value.toUpperCase())
                   }
-                />
-              </label>
-              <label className="color-choice-dropdown__native-picker">
-                <span
-                  className="color-choice-dropdown__native-picker-swatch"
-                  style={{ backgroundColor: customPickerValue }}
-                  aria-hidden="true"
-                />
-                <span>{copy.customPickerLabel}</span>
-                <input
-                  type="color"
-                  value={customPickerValue}
-                  aria-label={copy.customPickerLabel}
-                  onChange={(event) => selectHex(event.target.value)}
                 />
               </label>
             </div>

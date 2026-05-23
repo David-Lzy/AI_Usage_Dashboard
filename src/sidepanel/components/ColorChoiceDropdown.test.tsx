@@ -75,4 +75,13 @@ describe("ColorChoiceDropdown", () => {
       "line-height: var(--md-sys-typescale-body-large-line-height);",
     );
   });
+
+  it("uses an in-app Material-style custom color picker instead of native color input styling", () => {
+    expect(formControlsCss).toContain(
+      ".color-choice-dropdown__material-picker {",
+    );
+    expect(formControlsCss).toContain(".color-choice-dropdown__picker-plane {");
+    expect(formControlsCss).toContain(".color-choice-dropdown__hue-range {");
+    expect(formControlsCss).not.toContain('input[type="color"]');
+  });
 });
