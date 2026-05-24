@@ -29,7 +29,13 @@ describe("SettingsSections", () => {
     expect(html).toContain(
       'class="status-card settings-overview settings-section-anchor"',
     );
+    expect(html).toContain(
+      'class="dashboard-section__header settings-overview__header"',
+    );
     expect(html).toContain('aria-label="Settings summary"');
+    expect(html).toContain(
+      'class="summary-strip summary-strip--compact settings-overview__summary"',
+    );
     expect(html).toContain('class="summary-pill summary-pill--neutral"');
     expect(html).toContain('class="summary-pill summary-pill--warning"');
     expect(html).toContain(">Settings<");

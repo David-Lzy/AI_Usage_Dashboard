@@ -18,6 +18,21 @@
   gap: var(--app-space-4);
 }
 
+.settings-overview__header {
+  grid-template-columns: minmax(0, 1fr) minmax(min(100%, 280px), 460px);
+  align-items: center;
+  gap: var(--app-space-4);
+}
+
+.settings-overview__title {
+  min-width: 0;
+}
+
+.settings-overview__summary {
+  justify-self: end;
+  width: min(100%, 460px);
+}
+
 .settings-overview__controls {
   display: grid;
   grid-template-columns: minmax(420px, 1.6fr) repeat(2, minmax(180px, 1fr));
@@ -382,6 +397,17 @@
 }
 
 @media (max-width: 720px) {
+  .settings-overview__header {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: stretch;
+    gap: var(--app-space-3);
+  }
+
+  .settings-overview__summary {
+    justify-self: stretch;
+    width: 100%;
+  }
+
   .quick-setup-section__header {
     grid-template-columns: minmax(0, 1fr);
   }

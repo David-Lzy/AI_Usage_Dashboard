@@ -64,17 +64,22 @@ export function SettingsOverviewSection({
       className="status-card settings-overview settings-section-anchor"
       id={sectionId}
     >
-      <div className="dashboard-section__header">
-        <div>
+      <div className="dashboard-section__header settings-overview__header">
+        <div className="settings-overview__title">
           <p className="section-label">{eyebrow}</p>
           <div className="section-title-with-info">
             <h2 className="section-title">{title}</h2>
             <MaterialInfoTooltip>{detail}</MaterialInfoTooltip>
           </div>
         </div>
+        <SummaryStrip
+          ariaLabel={ariaLabel}
+          className="settings-overview__summary"
+          items={items}
+          variant="compact"
+        />
       </div>
 
-      <SummaryStrip ariaLabel={ariaLabel} items={items} />
       {children}
     </section>
   );
