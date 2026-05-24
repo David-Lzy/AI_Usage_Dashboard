@@ -261,7 +261,7 @@ describe("PopupProviderProgress", () => {
     expect(html).toContain("usage-progress-ring--circle-gauge");
     expect(html).toContain('aria-valuenow="83"');
     expect(html).toContain("--usage-progress-ring-fill-arc:150.19");
-    expect(html).toContain('stroke-dasharray="150.19 301.59"');
+    expect(html).toContain('stroke-dasharray="140.19 301.59"');
   });
 
   it("applies the popup circular row count only to circular styles", () => {

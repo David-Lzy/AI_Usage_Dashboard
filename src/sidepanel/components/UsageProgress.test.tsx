@@ -161,7 +161,8 @@ describe("UsageProgress", () => {
     expect(html).toContain("--usage-progress-ring-fill-arc:92.29");
     expect(html).toContain("--usage-progress-ring-circumference:301.59");
     expect(html).toContain("--usage-progress-ring-fill:#146C2E");
-    expect(html).toContain('stroke-dasharray="92.29 301.59"');
+    expect(html).toContain('stroke-dasharray="164.96 301.59"');
+    expect(html).toContain('stroke-dasharray="76.29 301.59"');
   });
 
   it("keeps soft ring indeterminate semantics accessible", () => {

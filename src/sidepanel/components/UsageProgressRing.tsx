@@ -47,6 +47,19 @@ function getRingFillArcLength(
   return getRingTrackArcLength(variant) * (roundedPercent / 100);
 }
 
+function getRoundCapDashLength(
+  visibleArcLength: number,
+  progressThicknessPx: number,
+): number {
+  if (visibleArcLength <= 0) {
+    return 0;
+  }
+
+  // SVG round caps add half a stroke at both ends; subtract one stroke so the
+  // visible filled arc still matches the quota percent at thick settings.
+  return Math.max(0, visibleArcLength - progressThicknessPx);
+}
+
 function getRingTrackArcLength(
   variant: UsageProgressRingProps["variant"],
 ): number {
@@ -72,6 +85,15 @@ export function UsageProgressRing({
     getRingFillArcLength(variant, roundedPercent),
   );
   const trackArcLength = formatSvgNumber(getRingTrackArcLength(variant));
+  const svgTrackArcLength = formatSvgNumber(
+    getRoundCapDashLength(getRingTrackArcLength(variant), progressThicknessPx),
+  );
+  const svgFillArcLength = formatSvgNumber(
+    getRoundCapDashLength(
+      getRingFillArcLength(variant, roundedPercent),
+      progressThicknessPx,
+    ),
+  );
   const ringStyle = {
     "--usage-progress-ring-arc": String(arcLength),
     "--usage-progress-ring-circumference": circumference,
@@ -99,8 +121,8 @@ export function UsageProgressRing({
     "--usage-progress-ring-track-arc": string;
     "--usage-progress-ring-track-opacity": string;
   };
-  const trackDasharray = `${trackArcLength} ${circumference}`;
-  const fillDasharray = `${fillArcLength} ${circumference}`;
+  const trackDasharray = `${svgTrackArcLength} ${circumference}`;
+  const fillDasharray = `${svgFillArcLength} ${circumference}`;
 
   return (
     <div
