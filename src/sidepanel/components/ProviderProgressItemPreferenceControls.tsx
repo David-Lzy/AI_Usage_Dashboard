@@ -350,6 +350,12 @@ export function ProviderProgressItemPreferenceControls({
                                       )
                                     }
                                   >
+                                    <span
+                                      className="provider-progress-list__handle"
+                                      aria-hidden="true"
+                                    >
+                                      ::
+                                    </span>
                                     <label className="provider-progress-list__visibility">
                                       <input
                                         type="checkbox"

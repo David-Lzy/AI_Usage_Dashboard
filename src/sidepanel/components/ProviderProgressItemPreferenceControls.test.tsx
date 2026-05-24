@@ -31,6 +31,7 @@ describe("ProviderProgressItemPreferenceControls", () => {
     expect(html).toContain("Full-page tab");
     expect(html).not.toContain("ポップアップ");
     expect(html).toContain('data-provider-progress-item-row="primary"');
+    expect(html).toContain('class="provider-progress-list__handle"');
     expect(html).toContain("Primary quota");
     expect(html).toContain("Shown");
     expect(html).not.toContain("Billing period");

@@ -273,12 +273,17 @@
 }
 
 .provider-order-list__handle,
+.provider-progress-list__handle,
 .provider-order-list__position {
   flex: 0 0 auto;
   color: var(--md-sys-color-on-surface-variant);
   font-family: var(--md-sys-typescale-label-medium-font);
   font-size: var(--md-sys-typescale-label-medium-size);
   font-weight: var(--md-sys-typescale-label-medium-weight);
+}
+
+.provider-progress-list__handle {
+  cursor: grab;
 }
 
 .provider-order-list__name {
