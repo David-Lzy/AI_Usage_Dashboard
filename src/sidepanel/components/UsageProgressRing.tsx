@@ -19,6 +19,9 @@ type UsageProgressRingProps = {
 const RING_RADIUS = 48;
 const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 const GAUGE_RING_ARC_PERCENT = 60;
+const GAUGE_RING_MAX_READABLE_GAP_RATIO = 0.08;
+const GAUGE_RING_MIN_READABLE_GAP_PX = 6;
+const GAUGE_RING_MIN_READABLE_GAP_STROKE_RATIO = 0.72;
 
 function formatSvgNumber(value: number): string {
   return String(Math.round(value * 100) / 100);
@@ -45,6 +48,44 @@ function getRingFillArcLength(
   }
 
   return getRingTrackArcLength(variant) * (roundedPercent / 100);
+}
+
+function getGaugeReadableGapLength(
+  trackArcLength: number,
+  progressThicknessPx: number,
+): number {
+  return Math.min(
+    trackArcLength * GAUGE_RING_MAX_READABLE_GAP_RATIO,
+    Math.max(
+      GAUGE_RING_MIN_READABLE_GAP_PX,
+      progressThicknessPx * GAUGE_RING_MIN_READABLE_GAP_STROKE_RATIO,
+    ),
+  );
+}
+
+function getRingVisibleFillArcLength(
+  variant: UsageProgressRingProps["variant"],
+  roundedPercent: number | null,
+  progressThicknessPx: number,
+): number {
+  const fillArcLength = getRingFillArcLength(variant, roundedPercent);
+
+  if (
+    variant !== "circle-gauge" ||
+    roundedPercent === null ||
+    roundedPercent <= 0 ||
+    roundedPercent >= 100
+  ) {
+    return fillArcLength;
+  }
+
+  const trackArcLength = getRingTrackArcLength(variant);
+  const minimumReadableGap = getGaugeReadableGapLength(
+    trackArcLength,
+    progressThicknessPx,
+  );
+
+  return Math.min(fillArcLength, Math.max(0, trackArcLength - minimumReadableGap));
 }
 
 function getRoundCapDashLength(
@@ -84,13 +125,16 @@ export function UsageProgressRing({
   const fillArcLength = formatSvgNumber(
     getRingFillArcLength(variant, roundedPercent),
   );
+  const visibleFillArcLength = formatSvgNumber(
+    getRingVisibleFillArcLength(variant, roundedPercent, progressThicknessPx),
+  );
   const trackArcLength = formatSvgNumber(getRingTrackArcLength(variant));
   const svgTrackArcLength = formatSvgNumber(
     getRoundCapDashLength(getRingTrackArcLength(variant), progressThicknessPx),
   );
   const svgFillArcLength = formatSvgNumber(
     getRoundCapDashLength(
-      getRingFillArcLength(variant, roundedPercent),
+      getRingVisibleFillArcLength(variant, roundedPercent, progressThicknessPx),
       progressThicknessPx,
     ),
   );
@@ -104,6 +148,7 @@ export function UsageProgressRing({
     "--usage-progress-ring-stroke-px": `${progressThicknessPx}px`,
     "--usage-progress-ring-track-arc": trackArcLength,
     "--usage-progress-ring-track-opacity": getRingTrackOpacity(variant),
+    "--usage-progress-ring-visible-fill-arc": visibleFillArcLength,
     ...(progressColor && !isIndeterminate
       ? {
           "--usage-progress-ring-fill": progressColor,
@@ -120,6 +165,7 @@ export function UsageProgressRing({
     "--usage-progress-ring-stroke-px": string;
     "--usage-progress-ring-track-arc": string;
     "--usage-progress-ring-track-opacity": string;
+    "--usage-progress-ring-visible-fill-arc": string;
   };
   const trackDasharray = `${svgTrackArcLength} ${circumference}`;
   const fillDasharray = `${svgFillArcLength} ${circumference}`;

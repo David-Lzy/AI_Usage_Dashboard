@@ -50,6 +50,7 @@ describe("UsageProgressRing", () => {
     expect(html).toContain("--usage-progress-ring-arc:60");
     expect(html).toContain("--usage-progress-ring-track-arc:180.96");
     expect(html).toContain("--usage-progress-ring-fill-arc:92.29");
+    expect(html).toContain("--usage-progress-ring-visible-fill-arc:92.29");
     expect(html).toContain("--usage-progress-ring-circumference:301.59");
     expect(html).toContain('stroke-dasharray="170.96 301.59"');
     expect(html).toContain('stroke-dasharray="82.29 301.59"');
@@ -57,7 +58,7 @@ describe("UsageProgressRing", () => {
     expect(html).toContain("--usage-progress-ring-track-opacity:0.46");
   });
 
-  it("compensates gauge round caps so thick near-full arcs keep a visible used gap", () => {
+  it("keeps a readable non-full gauge gap when thick arcs are nearly full", () => {
     const html = renderToStaticMarkup(
       <UsageProgressRing
         isIndeterminate={false}
@@ -75,7 +76,30 @@ describe("UsageProgressRing", () => {
 
     expect(html).toContain("--usage-progress-ring-track-arc:180.96");
     expect(html).toContain("--usage-progress-ring-fill-arc:179.15");
+    expect(html).toContain("--usage-progress-ring-visible-fill-arc:166.56");
     expect(html).toContain('stroke-dasharray="160.96 301.59"');
-    expect(html).toContain('stroke-dasharray="159.15 301.59"');
+    expect(html).toContain('stroke-dasharray="146.56 301.59"');
+  });
+
+  it("still renders a full gauge arc at exactly 100 percent", () => {
+    const html = renderToStaticMarkup(
+      <UsageProgressRing
+        isIndeterminate={false}
+        label="Gauge"
+        progressColor="#146C2E"
+        progressThicknessPx={20}
+        roundedPercent={100}
+        tone="neutral"
+        valueKind="remaining"
+        valueLabel="100%"
+        valueText="Gauge: 100% remaining"
+        variant="circle-gauge"
+      />,
+    );
+
+    expect(html).toContain("--usage-progress-ring-track-arc:180.96");
+    expect(html).toContain("--usage-progress-ring-fill-arc:180.96");
+    expect(html).toContain("--usage-progress-ring-visible-fill-arc:180.96");
+    expect(html).toContain('stroke-dasharray="160.96 301.59"');
   });
 });
