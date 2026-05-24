@@ -71,6 +71,32 @@ describe("runPopupGuidanceAction", () => {
     expect(openSourcePage).toHaveBeenCalledWith(
       "cursor-personal-page",
       "open_page_required",
+      {
+        skipExistingTabRefresh: false,
+      },
+    );
+  });
+
+  it("opens source-page title links in view mode without the recovery refresh", async () => {
+    const openSourcePage = vi.fn(async () => undefined);
+
+    await runPopupGuidanceAction(
+      {
+        kind: "source-page",
+        label: "Open source",
+        providerId: "cursor-personal-page",
+        sourcePageNavigationMode: "view",
+      },
+      {},
+      { openSourcePage },
+    );
+
+    expect(openSourcePage).toHaveBeenCalledWith(
+      "cursor-personal-page",
+      undefined,
+      {
+        skipExistingTabRefresh: true,
+      },
     );
   });
 

@@ -22,6 +22,7 @@ export type PopupGuidanceAction = {
   label: string;
   providerId?: ProviderId;
   sourceStateKind?: ProviderViewModel["currentSourceStateKind"];
+  sourcePageNavigationMode?: "recover" | "view";
 };
 
 export type PopupGuidanceCard = {

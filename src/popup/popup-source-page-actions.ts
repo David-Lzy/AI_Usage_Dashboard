@@ -22,6 +22,7 @@ type PopupSourcePageActionDeps = {
   now?: () => string;
   openProviderDetail?: (providerId: ProviderId) => Promise<void>;
   sendMessage?: typeof sendAppMessage;
+  skipExistingTabRefresh?: boolean;
 };
 
 function hasSourcePageNavigationControl(): boolean {
@@ -42,6 +43,7 @@ export async function openProviderSourcePage(
     now = () => new Date().toISOString(),
     openProviderDetail: openDetail = openProviderDetail,
     sendMessage = sendAppMessage,
+    skipExistingTabRefresh = false,
   }: PopupSourcePageActionDeps = {},
 ) {
   const sessionPagePlan = getSessionPagePlan(providerId);
@@ -74,6 +76,25 @@ export async function openProviderSourcePage(
   );
 
   if (preferredTab?.id !== undefined) {
+    const pageBinding = createPageBindingFromTab({
+      mode: "bound",
+      tabId: preferredTab.id,
+      matchedUrl: preferredTab.url ?? preferredRoute,
+      matchedTitle: preferredTab.title ?? null,
+      updatedAt: now(),
+    });
+
+    if (skipExistingTabRefresh) {
+      await tabsApi.update?.(preferredTab.id, { active: true });
+      await sendMessage({
+        type: "app:set-provider-page-binding",
+        providerId,
+        pageBinding,
+      });
+      window.close();
+      return;
+    }
+
     if (
       shouldReloadBeforeSourcePageRecoveryRefresh(
         "existing-tab",
@@ -86,13 +107,7 @@ export async function openProviderSourcePage(
     const bindingResponse = await sendMessage({
       type: "app:set-provider-page-binding",
       providerId,
-      pageBinding: createPageBindingFromTab({
-        mode: "bound",
-        tabId: preferredTab.id,
-        matchedUrl: preferredTab.url ?? preferredRoute,
-        matchedTitle: preferredTab.title ?? null,
-        updatedAt: now(),
-      }),
+      pageBinding,
     });
 
     if (

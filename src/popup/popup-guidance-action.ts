@@ -46,6 +46,8 @@ export async function runPopupGuidanceAction(
   }
 
   if (action.kind === "source-page" && action.providerId) {
-    await openSourcePage(action.providerId, action.sourceStateKind);
+    await openSourcePage(action.providerId, action.sourceStateKind, {
+      skipExistingTabRefresh: action.sourcePageNavigationMode === "view",
+    });
   }
 }

@@ -70,6 +70,7 @@ describe("openProviderSourcePage", () => {
     const popupWindow = stubPopupWindow();
     const sendMessage = createOkSendMessage();
     const update = vi.fn(async () => undefined);
+    const reload = vi.fn(async () => undefined);
 
     vi.stubGlobal("chrome", {
       runtime: {
@@ -85,6 +86,7 @@ describe("openProviderSourcePage", () => {
             url: "https://chatgpt.com/codex/cloud/settings/analytics#usage",
           }),
         ]),
+        reload,
         update,
       },
     });
@@ -111,7 +113,61 @@ describe("openProviderSourcePage", () => {
       type: "app:request-refresh",
       providerId: "codex-personal-page",
     });
+    expect(reload).not.toHaveBeenCalled();
     expect(update).toHaveBeenCalledWith(7, { active: true });
+    expect(popupWindow.close).toHaveBeenCalled();
+  });
+
+  it("activates existing source-page tabs without reload or refresh in view mode", async () => {
+    const popupWindow = stubPopupWindow();
+    const sendMessage = createOkSendMessage();
+    const reload = vi.fn(async () => undefined);
+    const update = vi.fn(async () => undefined);
+
+    vi.stubGlobal("chrome", {
+      runtime: {
+        id: "extension-id",
+      },
+      tabs: {
+        create: vi.fn(),
+        query: vi.fn(async () => [
+          tab({
+            id: 17,
+            active: false,
+            title: "Codex usage",
+            url: "https://chatgpt.com/codex/cloud/settings/analytics#usage",
+          }),
+        ]),
+        reload,
+        update,
+      },
+    });
+
+    await openProviderSourcePage("codex-personal-page", undefined, {
+      now: () => "2026-05-13T00:10:00.000Z",
+      sendMessage,
+      skipExistingTabRefresh: true,
+    });
+
+    expect(reload).not.toHaveBeenCalled();
+    expect(sendMessage).toHaveBeenCalledOnce();
+    expect(sendMessage).toHaveBeenCalledWith({
+      type: "app:set-provider-page-binding",
+      providerId: "codex-personal-page",
+      pageBinding: {
+        mode: "bound",
+        status: "bound",
+        tabId: 17,
+        matchedUrl:
+          "https://chatgpt.com/codex/cloud/settings/analytics#usage",
+        matchedTitle: "Codex usage",
+        updatedAt: "2026-05-13T00:10:00.000Z",
+      },
+    });
+    expect(update).toHaveBeenCalledWith(17, { active: true });
+    expect(update.mock.invocationCallOrder[0]).toBeLessThan(
+      sendMessage.mock.invocationCallOrder[0],
+    );
     expect(popupWindow.close).toHaveBeenCalled();
   });
 

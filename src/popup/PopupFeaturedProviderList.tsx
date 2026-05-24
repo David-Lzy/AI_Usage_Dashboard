@@ -77,7 +77,7 @@ export function PopupFeaturedProviderList({
                   kind: "source-page",
                   label: sourcePageActionLabel,
                   providerId: provider.providerId,
-                  sourceStateKind: provider.currentSourceStateKind,
+                  sourcePageNavigationMode: "view",
                 } satisfies PopupGuidanceAction
               : null;
 
