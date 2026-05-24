@@ -33,16 +33,16 @@ describe("progress appearance preferences", () => {
     );
   });
 
-  it("maps the progress thickness slider on a gentle logarithmic scale", () => {
+  it("maps the progress thickness slider on a continuous logarithmic scale", () => {
     expect(progressThicknessPxToSliderValue(1)).toBe(0);
-    expect(progressThicknessPxToSliderValue(10)).toBe(500);
+    expect(progressThicknessPxToSliderValue(2)).toBe(231);
+    expect(progressThicknessPxToSliderValue(10)).toBe(769);
     expect(progressThicknessPxToSliderValue(20)).toBe(1000);
-    expect(progressThicknessPxToSliderValue(2)).toBeGreaterThan(100);
-    expect(progressThicknessPxToSliderValue(2)).toBeLessThan(200);
     expect(progressThicknessSliderValueToPx(0)).toBe(1);
-    expect(progressThicknessSliderValueToPx(500)).toBe(10);
+    expect(progressThicknessSliderValueToPx(231)).toBe(2);
+    expect(progressThicknessSliderValueToPx(500)).toBe(4.47);
+    expect(progressThicknessSliderValueToPx(769)).toBe(10.01);
     expect(progressThicknessSliderValueToPx(1000)).toBe(20);
-    expect(progressThicknessSliderValueToPx(151)).toBe(2);
     expect(progressThicknessSliderValueToPx("invalid")).toBe(
       DEFAULT_PROGRESS_THICKNESS_PX,
     );

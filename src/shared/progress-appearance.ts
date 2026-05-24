@@ -4,8 +4,6 @@ export const PROGRESS_THICKNESS_MIN_PX = 1;
 export const PROGRESS_THICKNESS_MAX_PX = 20;
 export const PROGRESS_THICKNESS_SLIDER_MIN = 0;
 export const PROGRESS_THICKNESS_SLIDER_MAX = 1000;
-export const PROGRESS_THICKNESS_SLIDER_MIDPOINT = 500;
-export const PROGRESS_THICKNESS_SCALE_PIVOT_PX = 10;
 export const DEFAULT_PROGRESS_THICKNESS_PX = 10;
 
 const PROGRESS_COLOR_HEX_PATTERN = /^#[0-9a-fA-F]{6}$/;
@@ -153,24 +151,14 @@ export function normalizeProgressThicknessPx(value: unknown): number {
 
 export function progressThicknessPxToSliderValue(value: unknown): number {
   const thicknessPx = normalizeProgressThicknessPx(value);
-
-  if (thicknessPx <= PROGRESS_THICKNESS_SCALE_PIVOT_PX) {
-    const ratio =
-      Math.log(thicknessPx / PROGRESS_THICKNESS_MIN_PX) /
-      Math.log(PROGRESS_THICKNESS_SCALE_PIVOT_PX / PROGRESS_THICKNESS_MIN_PX);
-
-    return Math.round(ratio * PROGRESS_THICKNESS_SLIDER_MIDPOINT);
-  }
-
-  const ratio =
-    Math.log(thicknessPx / PROGRESS_THICKNESS_SCALE_PIVOT_PX) /
-    Math.log(PROGRESS_THICKNESS_MAX_PX / PROGRESS_THICKNESS_SCALE_PIVOT_PX);
+  const sliderRatio =
+    Math.log(thicknessPx / PROGRESS_THICKNESS_MIN_PX) /
+    Math.log(PROGRESS_THICKNESS_MAX_PX / PROGRESS_THICKNESS_MIN_PX);
 
   return Math.round(
-    PROGRESS_THICKNESS_SLIDER_MIDPOINT +
-      ratio *
-        (PROGRESS_THICKNESS_SLIDER_MAX -
-          PROGRESS_THICKNESS_SLIDER_MIDPOINT),
+    PROGRESS_THICKNESS_SLIDER_MIN +
+      clampNumber(sliderRatio, 0, 1) *
+        (PROGRESS_THICKNESS_SLIDER_MAX - PROGRESS_THICKNESS_SLIDER_MIN),
   );
 }
 
@@ -186,31 +174,15 @@ export function progressThicknessSliderValueToPx(value: unknown): number {
     PROGRESS_THICKNESS_SLIDER_MIN,
     PROGRESS_THICKNESS_SLIDER_MAX,
   );
-
-  if (sliderValue <= PROGRESS_THICKNESS_SLIDER_MIDPOINT) {
-    const ratio = sliderValue / PROGRESS_THICKNESS_SLIDER_MIDPOINT;
-
-    return normalizeProgressThicknessPx(
-      PROGRESS_THICKNESS_MIN_PX *
-        Math.exp(
-          ratio *
-            Math.log(
-              PROGRESS_THICKNESS_SCALE_PIVOT_PX /
-                PROGRESS_THICKNESS_MIN_PX,
-            ),
-        ),
-    );
-  }
-
-  const ratio =
-    (sliderValue - PROGRESS_THICKNESS_SLIDER_MIDPOINT) /
-    (PROGRESS_THICKNESS_SLIDER_MAX - PROGRESS_THICKNESS_SLIDER_MIDPOINT);
+  const sliderRatio =
+    (sliderValue - PROGRESS_THICKNESS_SLIDER_MIN) /
+    (PROGRESS_THICKNESS_SLIDER_MAX - PROGRESS_THICKNESS_SLIDER_MIN);
 
   return normalizeProgressThicknessPx(
-    PROGRESS_THICKNESS_SCALE_PIVOT_PX *
+    PROGRESS_THICKNESS_MIN_PX *
       Math.exp(
-        ratio *
-          Math.log(PROGRESS_THICKNESS_MAX_PX / PROGRESS_THICKNESS_SCALE_PIVOT_PX),
+        sliderRatio *
+          Math.log(PROGRESS_THICKNESS_MAX_PX / PROGRESS_THICKNESS_MIN_PX),
       ),
   );
 }
