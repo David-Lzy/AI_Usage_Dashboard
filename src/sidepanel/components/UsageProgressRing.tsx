@@ -19,9 +19,9 @@ type UsageProgressRingProps = {
 const RING_RADIUS = 48;
 const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 const GAUGE_RING_ARC_PERCENT = 60;
-const GAUGE_RING_MAX_READABLE_GAP_RATIO = 0.08;
-const GAUGE_RING_MIN_READABLE_GAP_PX = 6;
-const GAUGE_RING_MIN_READABLE_GAP_STROKE_RATIO = 0.72;
+const GAUGE_RING_MAX_READABLE_GAP_RATIO = 0.14;
+const GAUGE_RING_MIN_READABLE_GAP_PX = 12;
+const GAUGE_RING_MIN_READABLE_GAP_STROKE_RATIO = 1.6;
 
 function formatSvgNumber(value: number): string {
   return String(Math.round(value * 100) / 100);

@@ -76,9 +76,9 @@ describe("UsageProgressRing", () => {
 
     expect(html).toContain("--usage-progress-ring-track-arc:180.96");
     expect(html).toContain("--usage-progress-ring-fill-arc:179.15");
-    expect(html).toContain("--usage-progress-ring-visible-fill-arc:166.56");
+    expect(html).toContain("--usage-progress-ring-visible-fill-arc:155.62");
     expect(html).toContain('stroke-dasharray="160.96 301.59"');
-    expect(html).toContain('stroke-dasharray="146.56 301.59"');
+    expect(html).toContain('stroke-dasharray="135.62 301.59"');
   });
 
   it("still renders a full gauge arc at exactly 100 percent", () => {

@@ -314,7 +314,7 @@
 
 .usage-progress-ring--circle-gauge .usage-progress-ring__fill {
   filter: drop-shadow(
-    0 0 3px color-mix(in srgb, var(--usage-progress-ring-fill) 42%, transparent)
+    0 0 2px color-mix(in srgb, var(--usage-progress-ring-fill) 24%, transparent)
   );
 }
 
