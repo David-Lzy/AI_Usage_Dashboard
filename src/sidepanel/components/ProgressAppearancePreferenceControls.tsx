@@ -7,11 +7,15 @@ import type { SettingsActivePopoverSessionState } from "../../shared/surface-ses
 import {
   PROGRESS_THICKNESS_MAX_PX,
   PROGRESS_THICKNESS_MIN_PX,
+  PROGRESS_THICKNESS_SLIDER_MAX,
+  PROGRESS_THICKNESS_SLIDER_MIN,
   areProgressColorBandsValid,
   createDefaultProgressColorBands,
   moveProgressColorBand,
   normalizeProgressColorBands,
   normalizeProgressThicknessPx,
+  progressThicknessPxToSliderValue,
+  progressThicknessSliderValueToPx,
   removeProgressColorBand,
   splitProgressColorBand,
 } from "../../shared/progress-appearance";
@@ -37,6 +41,36 @@ type ProgressColorBandDraft = {
   maximumPercent: string;
   colorHex: string;
 };
+
+function formatThicknessDraft(thicknessPx: number): string {
+  return String(normalizeProgressThicknessPx(thicknessPx));
+}
+
+function hasValidThicknessDraftShape(value: string): boolean {
+  return /^\d*(?:\.\d{0,2})?$/.test(value);
+}
+
+function parseCompleteThicknessDraft(value: string): number | null {
+  if (
+    value.length === 0 ||
+    value.endsWith(".") ||
+    !/^\d+(?:\.\d{1,2})?$/.test(value)
+  ) {
+    return null;
+  }
+
+  const parsedValue = Number(value);
+
+  if (
+    !Number.isFinite(parsedValue) ||
+    parsedValue < PROGRESS_THICKNESS_MIN_PX ||
+    parsedValue > PROGRESS_THICKNESS_MAX_PX
+  ) {
+    return null;
+  }
+
+  return normalizeProgressThicknessPx(parsedValue);
+}
 
 function toDraftBands(
   colorBands: readonly ProgressColorBand[],
@@ -101,12 +135,19 @@ export function ProgressAppearancePreferenceControls({
   onThicknessPxChange,
 }: ProgressAppearancePreferenceControlsProps) {
   const [draftBands, setDraftBands] = useState(() => toDraftBands(colorBands));
+  const [thicknessDraft, setThicknessDraft] = useState(() =>
+    formatThicknessDraft(thicknessPx),
+  );
   const [hasBandError, setHasBandError] = useState(false);
 
   useEffect(() => {
     setDraftBands(toDraftBands(colorBands));
     setHasBandError(false);
   }, [colorBands]);
+
+  useEffect(() => {
+    setThicknessDraft(formatThicknessDraft(thicknessPx));
+  }, [thicknessPx]);
 
   function commitDraftBands(nextDraftBands: ProgressColorBandDraft[]) {
     setDraftBands(nextDraftBands);
@@ -138,8 +179,24 @@ export function ProgressAppearancePreferenceControls({
     );
   }
 
-  function handleThicknessChange(event: ChangeEvent<HTMLInputElement>) {
-    onThicknessPxChange(normalizeProgressThicknessPx(event.target.value));
+  function handleThicknessNumberChange(event: ChangeEvent<HTMLInputElement>) {
+    const nextDraft = event.target.value;
+
+    if (!hasValidThicknessDraftShape(nextDraft)) {
+      return;
+    }
+
+    setThicknessDraft(nextDraft);
+
+    const parsedThickness = parseCompleteThicknessDraft(nextDraft);
+
+    if (parsedThickness !== null) {
+      onThicknessPxChange(parsedThickness);
+    }
+  }
+
+  function handleThicknessRangeChange(event: ChangeEvent<HTMLInputElement>) {
+    onThicknessPxChange(progressThicknessSliderValueToPx(event.target.value));
   }
 
   function addBand() {
@@ -189,17 +246,22 @@ export function ProgressAppearancePreferenceControls({
               type="number"
               min={PROGRESS_THICKNESS_MIN_PX}
               max={PROGRESS_THICKNESS_MAX_PX}
-              value={thicknessPx}
-              onChange={handleThicknessChange}
+              step="0.01"
+              inputMode="decimal"
+              value={thicknessDraft}
+              onBlur={() => setThicknessDraft(formatThicknessDraft(thicknessPx))}
+              onChange={handleThicknessNumberChange}
             />
             <input
               className="progress-appearance-thickness__range"
               type="range"
-              min={PROGRESS_THICKNESS_MIN_PX}
-              max={PROGRESS_THICKNESS_MAX_PX}
-              value={thicknessPx}
+              min={PROGRESS_THICKNESS_SLIDER_MIN}
+              max={PROGRESS_THICKNESS_SLIDER_MAX}
+              step="1"
+              value={progressThicknessPxToSliderValue(thicknessPx)}
               aria-label={copy.thickness.label}
-              onChange={handleThicknessChange}
+              aria-valuetext={`${thicknessPx} ${copy.thickness.unit}`}
+              onChange={handleThicknessRangeChange}
             />
             <span className="meta-chip">{copy.thickness.unit}</span>
           </div>

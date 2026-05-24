@@ -33,6 +33,9 @@ describe("ProgressAppearancePreferenceControls", () => {
     expect(html).toContain('data-progress-appearance-preferences=""');
     expect(html).toContain("Fortschrittsdarstellung");
     expect(html).toContain('id="progress-thickness-input"');
+    expect(html).toContain('step="0.01"');
+    expect(html).toContain('inputMode="decimal"');
+    expect(html).toContain('aria-valuetext="10 px"');
     expect(html).toContain('data-progress-color-band="low"');
     expect(html).toContain('data-color-choice-dropdown="progress-color-band-low"');
     expect(html).toContain(

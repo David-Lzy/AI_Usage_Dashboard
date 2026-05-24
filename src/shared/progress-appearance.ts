@@ -2,6 +2,10 @@ import type { ProgressColorBand } from "../providers/types";
 
 export const PROGRESS_THICKNESS_MIN_PX = 1;
 export const PROGRESS_THICKNESS_MAX_PX = 20;
+export const PROGRESS_THICKNESS_SLIDER_MIN = 0;
+export const PROGRESS_THICKNESS_SLIDER_MAX = 1000;
+export const PROGRESS_THICKNESS_SLIDER_MIDPOINT = 500;
+export const PROGRESS_THICKNESS_SCALE_PIVOT_PX = 10;
 export const DEFAULT_PROGRESS_THICKNESS_PX = 10;
 
 const PROGRESS_COLOR_HEX_PATTERN = /^#[0-9a-fA-F]{6}$/;
@@ -52,6 +56,25 @@ function normalizeInteger(value: unknown): number | null {
         : Number.NaN;
 
   return Number.isInteger(parsedValue) ? parsedValue : null;
+}
+
+function normalizeFiniteNumber(value: unknown): number | null {
+  const parsedValue =
+    typeof value === "number"
+      ? value
+      : typeof value === "string"
+        ? Number(value.trim())
+        : Number.NaN;
+
+  return Number.isFinite(parsedValue) ? parsedValue : null;
+}
+
+function roundToTwoDecimals(value: number): number {
+  return Math.round((value + Number.EPSILON) * 100) / 100;
+}
+
+function clampNumber(value: number, minimumValue: number, maximumValue: number) {
+  return Math.min(maximumValue, Math.max(minimumValue, value));
 }
 
 function normalizeColorHex(value: unknown): string | null {
@@ -115,7 +138,7 @@ export function createDefaultProgressColorBands(): ProgressColorBand[] {
 }
 
 export function normalizeProgressThicknessPx(value: unknown): number {
-  const parsedValue = normalizeInteger(value);
+  const parsedValue = normalizeFiniteNumber(value);
 
   if (
     parsedValue === null ||
@@ -125,7 +148,71 @@ export function normalizeProgressThicknessPx(value: unknown): number {
     return DEFAULT_PROGRESS_THICKNESS_PX;
   }
 
-  return parsedValue;
+  return roundToTwoDecimals(parsedValue);
+}
+
+export function progressThicknessPxToSliderValue(value: unknown): number {
+  const thicknessPx = normalizeProgressThicknessPx(value);
+
+  if (thicknessPx <= PROGRESS_THICKNESS_SCALE_PIVOT_PX) {
+    const ratio =
+      Math.log(thicknessPx / PROGRESS_THICKNESS_MIN_PX) /
+      Math.log(PROGRESS_THICKNESS_SCALE_PIVOT_PX / PROGRESS_THICKNESS_MIN_PX);
+
+    return Math.round(ratio * PROGRESS_THICKNESS_SLIDER_MIDPOINT);
+  }
+
+  const ratio =
+    Math.log(thicknessPx / PROGRESS_THICKNESS_SCALE_PIVOT_PX) /
+    Math.log(PROGRESS_THICKNESS_MAX_PX / PROGRESS_THICKNESS_SCALE_PIVOT_PX);
+
+  return Math.round(
+    PROGRESS_THICKNESS_SLIDER_MIDPOINT +
+      ratio *
+        (PROGRESS_THICKNESS_SLIDER_MAX -
+          PROGRESS_THICKNESS_SLIDER_MIDPOINT),
+  );
+}
+
+export function progressThicknessSliderValueToPx(value: unknown): number {
+  const parsedValue = normalizeFiniteNumber(value);
+
+  if (parsedValue === null) {
+    return DEFAULT_PROGRESS_THICKNESS_PX;
+  }
+
+  const sliderValue = clampNumber(
+    parsedValue,
+    PROGRESS_THICKNESS_SLIDER_MIN,
+    PROGRESS_THICKNESS_SLIDER_MAX,
+  );
+
+  if (sliderValue <= PROGRESS_THICKNESS_SLIDER_MIDPOINT) {
+    const ratio = sliderValue / PROGRESS_THICKNESS_SLIDER_MIDPOINT;
+
+    return normalizeProgressThicknessPx(
+      PROGRESS_THICKNESS_MIN_PX *
+        Math.exp(
+          ratio *
+            Math.log(
+              PROGRESS_THICKNESS_SCALE_PIVOT_PX /
+                PROGRESS_THICKNESS_MIN_PX,
+            ),
+        ),
+    );
+  }
+
+  const ratio =
+    (sliderValue - PROGRESS_THICKNESS_SLIDER_MIDPOINT) /
+    (PROGRESS_THICKNESS_SLIDER_MAX - PROGRESS_THICKNESS_SLIDER_MIDPOINT);
+
+  return normalizeProgressThicknessPx(
+    PROGRESS_THICKNESS_SCALE_PIVOT_PX *
+      Math.exp(
+        ratio *
+          Math.log(PROGRESS_THICKNESS_MAX_PX / PROGRESS_THICKNESS_SCALE_PIVOT_PX),
+      ),
+  );
 }
 
 export function areProgressColorBandsValid(

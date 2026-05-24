@@ -8,23 +8,42 @@ import {
   moveProgressColorBand,
   normalizeProgressColorBands,
   normalizeProgressThicknessPx,
+  progressThicknessPxToSliderValue,
+  progressThicknessSliderValueToPx,
   removeProgressColorBand,
   resolveProgressColorForRemainingPercent,
   splitProgressColorBand,
 } from "./progress-appearance";
 
 describe("progress appearance preferences", () => {
-  it("normalizes progress thickness to a bounded integer default", () => {
+  it("normalizes progress thickness to a bounded two-decimal value", () => {
     expect(normalizeProgressThicknessPx(1)).toBe(1);
     expect(normalizeProgressThicknessPx(4)).toBe(4);
+    expect(normalizeProgressThicknessPx(1.25)).toBe(1.25);
+    expect(normalizeProgressThicknessPx("2.5")).toBe(2.5);
+    expect(normalizeProgressThicknessPx(8.555)).toBe(8.56);
     expect(normalizeProgressThicknessPx("20")).toBe(20);
     expect(normalizeProgressThicknessPx(0)).toBe(DEFAULT_PROGRESS_THICKNESS_PX);
     expect(normalizeProgressThicknessPx(21)).toBe(DEFAULT_PROGRESS_THICKNESS_PX);
-    expect(normalizeProgressThicknessPx(8.5)).toBe(DEFAULT_PROGRESS_THICKNESS_PX);
     expect(normalizeProgressThicknessPx("wide")).toBe(
       DEFAULT_PROGRESS_THICKNESS_PX,
     );
     expect(normalizeProgressThicknessPx(undefined)).toBe(
+      DEFAULT_PROGRESS_THICKNESS_PX,
+    );
+  });
+
+  it("maps the progress thickness slider on a gentle logarithmic scale", () => {
+    expect(progressThicknessPxToSliderValue(1)).toBe(0);
+    expect(progressThicknessPxToSliderValue(10)).toBe(500);
+    expect(progressThicknessPxToSliderValue(20)).toBe(1000);
+    expect(progressThicknessPxToSliderValue(2)).toBeGreaterThan(100);
+    expect(progressThicknessPxToSliderValue(2)).toBeLessThan(200);
+    expect(progressThicknessSliderValueToPx(0)).toBe(1);
+    expect(progressThicknessSliderValueToPx(500)).toBe(10);
+    expect(progressThicknessSliderValueToPx(1000)).toBe(20);
+    expect(progressThicknessSliderValueToPx(151)).toBe(2);
+    expect(progressThicknessSliderValueToPx("invalid")).toBe(
       DEFAULT_PROGRESS_THICKNESS_PX,
     );
   });
