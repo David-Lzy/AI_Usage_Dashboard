@@ -229,10 +229,10 @@ export function ProgressAppearancePreferenceControls({
       </div>
 
       <div className="progress-appearance-preferences__body">
-        <div className="progress-appearance-thickness">
+        <div className="progress-appearance-card progress-appearance-thickness">
           <div className="field-label-with-info">
             <label
-              className="form-field__label"
+              className="form-field__label progress-appearance-card__title"
               htmlFor="progress-thickness-input"
             >
               {copy.thickness.label}
@@ -267,10 +267,10 @@ export function ProgressAppearancePreferenceControls({
           </div>
         </div>
 
-        <div className="progress-appearance-bands">
+        <div className="progress-appearance-card progress-appearance-bands">
           <div className="progress-appearance-bands__header">
             <div className="section-title-with-info">
-              <p className="provider-progress-provider__title">
+              <p className="progress-appearance-card__title">
                 {copy.colorBands.label}
               </p>
               <MaterialInfoTooltip>{copy.colorBands.detail}</MaterialInfoTooltip>

@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
@@ -9,7 +11,22 @@ import {
   SettingsVisibilitySection,
 } from "./SettingsSections";
 
+const typographyCss = readFileSync(
+  new URL("../theme/typography.css", import.meta.url),
+  "utf8",
+);
+
 describe("SettingsSections", () => {
+  it("keeps section labels neutral instead of tertiary accent colored", () => {
+    expect(typographyCss).toContain(".section-label {");
+    expect(typographyCss).toContain(
+      "color: var(--md-sys-color-on-surface-variant);",
+    );
+    expect(typographyCss).not.toContain(
+      ".section-label {\n  margin: 0;\n  color: var(--md-sys-color-tertiary);",
+    );
+  });
+
   it("renders the settings overview summary", () => {
     const html = renderToStaticMarkup(
       <SettingsOverviewSection

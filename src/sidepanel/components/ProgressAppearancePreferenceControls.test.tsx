@@ -32,6 +32,17 @@ describe("ProgressAppearancePreferenceControls", () => {
 
     expect(html).toContain('data-progress-appearance-preferences=""');
     expect(html).toContain("Fortschrittsdarstellung");
+    expect(html).toContain(
+      'class="progress-appearance-card progress-appearance-thickness"',
+    );
+    expect(html).toContain(
+      'class="form-field__label progress-appearance-card__title"',
+    );
+    expect(html).toContain(
+      'class="progress-appearance-card progress-appearance-bands"',
+    );
+    expect(html).toContain('class="progress-appearance-card__title"');
+    expect(html).not.toContain("provider-progress-provider__title");
     expect(html).toContain('id="progress-thickness-input"');
     expect(html).toContain('step="0.01"');
     expect(html).toContain('inputMode="decimal"');
@@ -49,6 +60,8 @@ describe("ProgressAppearancePreferenceControls", () => {
   });
 
   it("keeps color-band number and color controls compact but aligned", () => {
+    expect(settingsAppearanceCss).toContain(".progress-appearance-card {");
+    expect(settingsAppearanceCss).toContain(".progress-appearance-card__title {");
     expect(settingsAppearanceCss).toContain(
       "grid-template-columns: repeat(\n    auto-fit,",
     );
