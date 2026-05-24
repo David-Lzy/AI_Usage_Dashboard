@@ -32,6 +32,7 @@ import {
   SETTINGS_SURFACE_SESSION_ROUTE_KEY,
   SETTINGS_SURFACE_SESSION_STORAGE_KEY,
 } from "./use-settings-surface-session-state";
+import { getSurfaceScrollY } from "./surface-scroll-position";
 
 export function hasDirectPermissionControl(): boolean {
   const permissionsApi = getExtensionPermissionsApi();
@@ -62,12 +63,6 @@ export function sortTabsByPriority(tabs: chrome.tabs.Tab[]): chrome.tabs.Tab[] {
   return [...tabs].sort((left, right) => scoreTab(right) - scoreTab(left));
 }
 
-function getWindowScrollY(): number | null {
-  return typeof window !== "undefined" && typeof window.scrollY === "number"
-    ? window.scrollY
-    : null;
-}
-
 function getRouteProviderId(route: SidePanelRouteState): string | null {
   return route.name === "provider-detail" ? route.providerId : null;
 }
@@ -77,7 +72,7 @@ async function captureRouteSurfaceSessionState(
 ): Promise<void> {
   const routeKey = buildSidePanelHash(route);
   const storageKey = buildSurfaceSessionKey(routeKey);
-  const scrollY = getWindowScrollY();
+  const scrollY = getSurfaceScrollY();
 
   try {
     const latestSettingsState =
@@ -87,6 +82,8 @@ async function captureRouteSurfaceSessionState(
     const existingState =
       route.name === "settings" && !latestSettingsState?.settings
         ? await restoreSurfaceSessionState(SETTINGS_SURFACE_SESSION_STORAGE_KEY)
+        : route.name === "provider-detail"
+          ? await restoreSurfaceSessionState(storageKey)
         : null;
     const nextState = createSurfaceSessionStateForRoute({
       routeName: route.name,
@@ -95,12 +92,22 @@ async function captureRouteSurfaceSessionState(
       providerId: getRouteProviderId(route),
     });
     const settings = latestSettingsState?.settings ?? existingState?.settings;
+    const providerDetail =
+      route.name === "provider-detail" &&
+      existingState?.providerDetail?.providerId === route.providerId
+        ? existingState.providerDetail
+        : nextState.providerDetail;
     const stateToCapture =
       route.name === "settings" && settings
         ? {
             ...nextState,
             settings,
           }
+        : route.name === "provider-detail"
+          ? {
+              ...nextState,
+              providerDetail,
+            }
         : nextState;
 
     if (

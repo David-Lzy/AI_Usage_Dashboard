@@ -31,6 +31,7 @@ import {
   parseSidePanelHash,
   type SidePanelRouteState,
 } from "./route-state";
+import { restoreSurfaceScrollYAfterLayout } from "./surface-scroll-position";
 import { createStandardAppActions } from "./standard-app-actions";
 import { useStandardAppRuntime } from "./use-standard-app-runtime";
 import {
@@ -91,28 +92,6 @@ export function shouldRestoreSurfaceSessionStateForRoute(
   }
 
   return true;
-}
-
-function restoreScrollAfterRouteMount(scrollY: number) {
-  if (typeof window === "undefined") {
-    return;
-  }
-
-  const scrollToPosition = () => {
-    window.scrollTo({
-      top: scrollY,
-      behavior: "auto",
-    });
-  };
-
-  if (typeof window.requestAnimationFrame !== "function") {
-    window.setTimeout(scrollToPosition, 0);
-    return;
-  }
-
-  window.requestAnimationFrame(() => {
-    window.requestAnimationFrame(scrollToPosition);
-  });
 }
 
 export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
@@ -187,7 +166,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
         return;
       }
 
-      restoreScrollAfterRouteMount(scrollY);
+      await restoreSurfaceScrollYAfterLayout(scrollY);
     })();
 
     return () => {

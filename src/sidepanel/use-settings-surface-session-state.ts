@@ -20,6 +20,10 @@ import {
   POPUP_APPEARANCE_PREVIEW_DEFAULT_REMAINING_PERCENT,
   type ToolbarPopupPreviewPosition,
 } from "./components/ToolbarPopupPreview";
+import {
+  getSurfaceScrollY,
+  restoreSurfaceScrollYAfterLayout,
+} from "./surface-scroll-position";
 
 export const SETTINGS_SURFACE_SESSION_ROUTE_KEY = "#settings";
 export const SETTINGS_SURFACE_SESSION_STORAGE_KEY = buildSurfaceSessionKey(
@@ -92,34 +96,6 @@ function resolveUpdate<T>(update: SetStateAction<T>, current: T): T {
     : update;
 }
 
-function getWindowScrollY(): number | null {
-  return typeof window !== "undefined" && typeof window.scrollY === "number"
-    ? window.scrollY
-    : null;
-}
-
-function restoreWindowScrollY(scrollY: number) {
-  if (typeof window === "undefined") {
-    return;
-  }
-
-  const scrollToPosition = () => {
-    window.scrollTo({
-      top: scrollY,
-      behavior: "auto",
-    });
-  };
-
-  if (typeof window.requestAnimationFrame !== "function") {
-    window.setTimeout(scrollToPosition, 0);
-    return;
-  }
-
-  window.requestAnimationFrame(() => {
-    window.requestAnimationFrame(scrollToPosition);
-  });
-}
-
 export function rememberLatestSettingsSurfaceSessionStateSnapshot(
   state: SurfaceSessionState | null,
 ): void {
@@ -127,7 +103,7 @@ export function rememberLatestSettingsSurfaceSessionStateSnapshot(
 }
 
 export function getLatestSettingsSurfaceSessionStateSnapshot(
-  scrollY: number | null = getWindowScrollY(),
+  scrollY: number | null = getSurfaceScrollY(),
 ): SurfaceSessionState | null {
   if (!latestSettingsSurfaceSessionStateSnapshot) {
     return null;
@@ -222,7 +198,7 @@ export function buildSettingsSurfaceSessionStateSnapshot(
 
 function rememberUiStateSnapshot(uiState: SettingsSurfaceSessionUiState): void {
   rememberLatestSettingsSurfaceSessionStateSnapshot(
-    buildSettingsSurfaceSessionStateSnapshot(uiState, getWindowScrollY()),
+    buildSettingsSurfaceSessionStateSnapshot(uiState, getSurfaceScrollY()),
   );
 }
 
@@ -298,17 +274,26 @@ export function useSettingsSurfaceSessionState({
 
   useBrowserLayoutEffect(() => {
     rememberLatestSettingsSurfaceSessionStateSnapshot(
-      buildSettingsSurfaceSessionStateSnapshot(uiState, getWindowScrollY()),
+      buildSettingsSurfaceSessionStateSnapshot(uiState, getSurfaceScrollY()),
     );
   }, [uiState]);
 
   useEffect(() => {
     if (!hasRestored || !restoreScroll || pendingScrollRestoreY === null) {
-      return;
+      return undefined;
     }
 
-    restoreWindowScrollY(pendingScrollRestoreY);
-    setPendingScrollRestoreY(null);
+    let cancelled = false;
+
+    void restoreSurfaceScrollYAfterLayout(pendingScrollRestoreY).finally(() => {
+      if (!cancelled) {
+        setPendingScrollRestoreY(null);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
   }, [
     hasRestored,
     pendingScrollRestoreY,
@@ -327,15 +312,15 @@ export function useSettingsSurfaceSessionState({
   }, [activeSectionId, defaultUiMoreOpen, forceAdvancedOpen]);
 
   useEffect(() => {
-    if (!hasRestored) {
+    if (!hasRestored || pendingScrollRestoreY !== null) {
       return;
     }
 
     void captureSurfaceSessionState(
       SETTINGS_SURFACE_SESSION_STORAGE_KEY,
-      buildSettingsSurfaceSessionStateSnapshot(uiState, getWindowScrollY()),
+      buildSettingsSurfaceSessionStateSnapshot(uiState, getSurfaceScrollY()),
     );
-  }, [hasRestored, uiState]);
+  }, [hasRestored, pendingScrollRestoreY, uiState]);
 
   const setAdvancedOpen = useCallback<Dispatch<SetStateAction<boolean>>>(
     (update) => {

@@ -152,6 +152,69 @@ describe("app-browser-controls", () => {
     );
   });
 
+  it("preserves existing provider detail UI state while updating scroll before surface switches", async () => {
+    const create = vi.fn(async () => ({ id: 42 }) as chrome.tabs.Tab);
+    const set = vi.fn(async () => undefined);
+    const routeStorageKey =
+      "ai-usage-dashboard:surface-session-state:standard:provider-detail/codex-personal-page";
+
+    vi.stubGlobal("chrome", {
+      runtime: {
+        id: "extension-id",
+        getURL: (path: string) => `chrome-extension://extension-id/${path}`,
+      },
+      storage: {
+        session: {
+          get: vi.fn(async (key: string) => ({
+            [key]: {
+              version: 1,
+              expiresAt: Date.now() + 60_000,
+              state: {
+                routeName: "provider-detail",
+                routeKey: "#provider-detail/codex-personal-page",
+                scrollY: 41,
+                settings: null,
+                providerDetail: {
+                  providerId: "codex-personal-page",
+                  quotaDetailsOpen: {
+                    usage: true,
+                  },
+                },
+              },
+            },
+          })),
+          remove: vi.fn(async () => undefined),
+          set,
+        },
+      },
+      tabs: {
+        create,
+      },
+    });
+    vi.stubGlobal("window", {
+      scrollY: 584,
+    });
+
+    await openFullPageRoute({
+      name: "provider-detail",
+      providerId: "codex-personal-page",
+    });
+
+    expect(set).toHaveBeenCalledWith({
+      [routeStorageKey]: expect.objectContaining({
+        state: expect.objectContaining({
+          providerDetail: {
+            providerId: "codex-personal-page",
+            quotaDetailsOpen: {
+              usage: true,
+            },
+          },
+          scrollY: 584,
+        }),
+      }),
+    });
+  });
+
   it("flushes latest in-memory settings session state before opening full-page tabs", async () => {
     const create = vi.fn(async () => ({ id: 42 }) as chrome.tabs.Tab);
     const set = vi.fn(async () => undefined);
