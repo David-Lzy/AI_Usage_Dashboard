@@ -14,6 +14,7 @@ function renderFeaturedList(
       ariaLabel="Featured providers"
       cards={cards}
       i18n={createRuntimeI18n("en")}
+      sourcePageActionLabel="Open source page"
       progressColorBands={SAMPLE_APP_STATE.settings.progressColorBands}
       popupCircularProgressItemsPerRow={
         SAMPLE_APP_STATE.settings.popupCircularProgressItemsPerRow
@@ -44,6 +45,37 @@ describe("PopupFeaturedProviderList", () => {
     expect(html).toContain('data-popup-featured-status="true"');
     expect(html).toContain("status-chip--compact");
     expect(html).toContain('aria-label="');
+  });
+
+  it("links provider names to shipped source pages without relying on browser visited styles", () => {
+    const [card] = buildPopupViewModel(SAMPLE_APP_STATE).featuredProviderCards;
+    const html = renderFeaturedList([card]);
+
+    expect(html).toContain(
+      `data-popup-provider-source-link="${card.provider.providerId}"`,
+    );
+    expect(html).toContain(`href="${card.provider.openableSessionPageUrl}"`);
+    expect(html).toContain(
+      `Open source page: ${card.provider.providerLabel}`,
+    );
+    expect(html).toContain("popup-provider-card__provider-link");
+  });
+
+  it("keeps provider names as plain text when no source page can be opened", () => {
+    const [card] = buildPopupViewModel(SAMPLE_APP_STATE).featuredProviderCards;
+    const html = renderFeaturedList([
+      {
+        ...card,
+        provider: {
+          ...card.provider,
+          openableSessionPageUrl: null,
+        },
+      },
+    ]);
+
+    expect(html).not.toContain("data-popup-provider-source-link");
+    expect(html).not.toContain("popup-provider-card__provider-link");
+    expect(html).toContain(card.provider.providerLabel);
   });
 
   it("keeps the plan below the title row when quota progress is not rendered", () => {

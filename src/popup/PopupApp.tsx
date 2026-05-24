@@ -422,6 +422,7 @@ export function PopupApp() {
         ariaLabel={popupCopy.aria.featuredProviders}
         cards={popupModel.featuredProviderCards}
         i18n={runtimeI18n}
+        sourcePageActionLabel={popupCopy.featuredCard.openSourcePageAction}
         progressColorBands={loadState.appState.settings.progressColorBands}
         popupCircularProgressItemsPerRow={
           loadState.appState.settings.popupCircularProgressItemsPerRow

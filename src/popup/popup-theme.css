@@ -689,6 +689,35 @@ body.popup-page .popup-header--surface-collapsed {
   line-height: var(--md-sys-typescale-title-medium-line-height);
 }
 
+.popup-provider-card__provider-link,
+.popup-provider-card__provider-link:visited {
+  display: inline-flex;
+  align-items: center;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+  color: inherit;
+  text-decoration: none;
+  border-radius: var(--md-sys-shape-corner-small);
+  outline: none;
+}
+
+.popup-provider-card__provider-link:hover {
+  color: var(--md-sys-color-primary);
+  text-decoration-line: underline;
+  text-decoration-thickness: 0.12em;
+  text-underline-offset: 0.18em;
+}
+
+.popup-provider-card__provider-link:focus-visible {
+  box-shadow: var(--app-focus-ring-shadow);
+}
+
+.popup-provider-card__provider-link-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .popup-provider-card__plan {
   color: var(--md-sys-color-on-surface-variant);
   font-family: var(--md-sys-typescale-body-medium-font);

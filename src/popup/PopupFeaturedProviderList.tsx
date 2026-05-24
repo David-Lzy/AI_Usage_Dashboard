@@ -18,6 +18,7 @@ type PopupFeaturedProviderListProps = {
   ariaLabel: string;
   cards: PopupFeaturedProviderCard[];
   i18n: RuntimeI18n;
+  sourcePageActionLabel: string;
   progressColorBands: readonly ProgressColorBand[];
   popupCircularProgressItemsPerRow: PopupCircularProgressItemsPerRow;
   progressDisplayStyle: ProgressDisplayStyle;
@@ -36,6 +37,7 @@ export function PopupFeaturedProviderList({
   ariaLabel,
   cards,
   i18n,
+  sourcePageActionLabel,
   progressColorBands,
   popupCircularProgressItemsPerRow,
   progressDisplayStyle,
@@ -69,6 +71,15 @@ export function PopupFeaturedProviderList({
             "popup",
             progressItemsBySurface,
           );
+          const sourcePageAction =
+            provider.openableSessionPageUrl !== null
+              ? {
+                  kind: "source-page",
+                  label: sourcePageActionLabel,
+                  providerId: provider.providerId,
+                  sourceStateKind: provider.currentSourceStateKind,
+                } satisfies PopupGuidanceAction
+              : null;
 
           return (
             <article
@@ -84,7 +95,25 @@ export function PopupFeaturedProviderList({
                 <div className="popup-provider-card__identity">
                   <div className="popup-provider-card__title-row">
                     <p className="popup-provider-card__provider">
-                      {provider.providerLabel}
+                      {sourcePageAction ? (
+                        <a
+                          aria-label={`${sourcePageAction.label}: ${provider.providerLabel}`}
+                          className="popup-provider-card__provider-link"
+                          data-popup-provider-source-link={provider.providerId}
+                          href={provider.openableSessionPageUrl ?? undefined}
+                          title={sourcePageAction.label}
+                          onClick={(event) => {
+                            event.preventDefault();
+                            void onAction(sourcePageAction);
+                          }}
+                        >
+                          <span className="popup-provider-card__provider-link-label">
+                            {provider.providerLabel}
+                          </span>
+                        </a>
+                      ) : (
+                        provider.providerLabel
+                      )}
                     </p>
                     <div className="popup-provider-card__header-actions">
                       <button
