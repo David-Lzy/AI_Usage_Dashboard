@@ -60,6 +60,7 @@ function createState(overrides: Partial<SurfaceSessionState> = {}): SurfaceSessi
   return {
     routeName: "settings",
     routeKey: "settings",
+    scrollProgress: 0.4,
     scrollY: 640,
     settings: {
       activeSectionId: "appearance",
@@ -210,6 +211,7 @@ describe("surface session state", () => {
     const normalized = normalizeSurfaceSessionState({
       routeName: "settings",
       routeKey: "settings",
+      scrollProgress: 1.25,
       scrollY: 42.4,
       apiKeyDraft: "secret",
       importJson: "{}",
@@ -247,6 +249,7 @@ describe("surface session state", () => {
     expect(normalized).toEqual({
       routeName: "settings",
       routeKey: "settings",
+      scrollProgress: 1,
       scrollY: 42,
       settings: {
         activeSectionId: "appearance",

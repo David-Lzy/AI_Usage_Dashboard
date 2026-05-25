@@ -21,8 +21,10 @@ import {
   type ToolbarPopupPreviewPosition,
 } from "./components/ToolbarPopupPreview";
 import {
+  getSurfaceScrollProgress,
   getSurfaceScrollY,
-  restoreSurfaceScrollYAfterLayout,
+  restoreSurfacePopoverAnchorAfterLayout,
+  restoreSurfaceScrollPositionAfterLayout,
 } from "./surface-scroll-position";
 
 export const SETTINGS_SURFACE_SESSION_ROUTE_KEY = "#settings";
@@ -104,6 +106,7 @@ export function rememberLatestSettingsSurfaceSessionStateSnapshot(
 
 export function getLatestSettingsSurfaceSessionStateSnapshot(
   scrollY: number | null = getSurfaceScrollY(),
+  scrollProgress: number | null = getSurfaceScrollProgress(),
 ): SurfaceSessionState | null {
   if (!latestSettingsSurfaceSessionStateSnapshot) {
     return null;
@@ -111,7 +114,9 @@ export function getLatestSettingsSurfaceSessionStateSnapshot(
 
   return {
     ...latestSettingsSurfaceSessionStateSnapshot,
-    scrollY,
+    scrollProgress:
+      scrollProgress ?? latestSettingsSurfaceSessionStateSnapshot.scrollProgress,
+    scrollY: scrollY ?? latestSettingsSurfaceSessionStateSnapshot.scrollY,
   };
 }
 
@@ -172,6 +177,7 @@ export function resolveSettingsSurfaceSessionUiState({
 export function buildSettingsSurfaceSessionStateSnapshot(
   uiState: SettingsSurfaceSessionUiState,
   scrollY: number | null = null,
+  scrollProgress: number | null = null,
 ): SurfaceSessionState {
   const toolbarPopupPreview: ToolbarPopupPreviewSessionState = {
     open: uiState.toolbarPopupPreviewOpen,
@@ -183,6 +189,7 @@ export function buildSettingsSurfaceSessionStateSnapshot(
     routeName: "settings",
     routeKey: SETTINGS_SURFACE_SESSION_ROUTE_KEY,
     scrollY,
+    scrollProgress,
     settings: {
       activeSectionId: uiState.activeSectionId,
       advancedOpen: uiState.advancedOpen,
@@ -198,7 +205,11 @@ export function buildSettingsSurfaceSessionStateSnapshot(
 
 function rememberUiStateSnapshot(uiState: SettingsSurfaceSessionUiState): void {
   rememberLatestSettingsSurfaceSessionStateSnapshot(
-    buildSettingsSurfaceSessionStateSnapshot(uiState, getSurfaceScrollY()),
+    buildSettingsSurfaceSessionStateSnapshot(
+      uiState,
+      getSurfaceScrollY(),
+      getSurfaceScrollProgress(),
+    ),
   );
 }
 
@@ -214,6 +225,10 @@ export function useSettingsSurfaceSessionState({
   );
   const [pendingScrollRestoreY, setPendingScrollRestoreY] =
     useState<number | null>(null);
+  const [pendingScrollRestoreProgress, setPendingScrollRestoreProgress] =
+    useState<number | null>(null);
+  const [pendingPopoverAnchorRestoreId, setPendingPopoverAnchorRestoreId] =
+    useState<string | null>(null);
   const [uiState, setUiState] = useState(() =>
     createDefaultSettingsSurfaceSessionUiState({
       activeSectionId,
@@ -251,6 +266,10 @@ export function useSettingsSurfaceSessionState({
           }),
         );
         setPendingScrollRestoreY(restoredState?.scrollY ?? null);
+        setPendingScrollRestoreProgress(restoredState?.scrollProgress ?? null);
+        setPendingPopoverAnchorRestoreId(
+          restoredState?.settings?.activePopover?.id ?? null,
+        );
       })
       .catch(() => {
         if (!cancelled) {
@@ -274,28 +293,67 @@ export function useSettingsSurfaceSessionState({
 
   useBrowserLayoutEffect(() => {
     rememberLatestSettingsSurfaceSessionStateSnapshot(
-      buildSettingsSurfaceSessionStateSnapshot(uiState, getSurfaceScrollY()),
+      buildSettingsSurfaceSessionStateSnapshot(
+        uiState,
+        getSurfaceScrollY(),
+        getSurfaceScrollProgress(),
+      ),
     );
   }, [uiState]);
 
   useEffect(() => {
-    if (!hasRestored || !restoreScroll || pendingScrollRestoreY === null) {
+    const hasPendingScrollPosition =
+      pendingScrollRestoreY !== null ||
+      pendingScrollRestoreProgress !== null ||
+      pendingPopoverAnchorRestoreId !== null;
+
+    if (!hasRestored || !restoreScroll || !hasPendingScrollPosition) {
       return undefined;
     }
 
     let cancelled = false;
 
-    void restoreSurfaceScrollYAfterLayout(pendingScrollRestoreY).finally(() => {
-      if (!cancelled) {
-        setPendingScrollRestoreY(null);
+    void (async () => {
+      const restoredPopoverAnchor = pendingPopoverAnchorRestoreId
+        ? await restoreSurfacePopoverAnchorAfterLayout(
+            pendingPopoverAnchorRestoreId,
+          )
+        : false;
+
+      if (!restoredPopoverAnchor) {
+        await restoreSurfaceScrollPositionAfterLayout({
+          scrollProgress: pendingScrollRestoreProgress,
+          scrollY: pendingScrollRestoreY,
+        });
       }
-    });
+
+      if (cancelled) {
+        return;
+      }
+
+      if (pendingPopoverAnchorRestoreId && !restoredPopoverAnchor) {
+        setUiState((current) =>
+          current.activePopover?.id === pendingPopoverAnchorRestoreId
+            ? {
+                ...current,
+                activePopover: null,
+              }
+            : current,
+        );
+      }
+
+      setPendingScrollRestoreY(null);
+      setPendingScrollRestoreProgress(null);
+      setPendingPopoverAnchorRestoreId(null);
+    })();
 
     return () => {
       cancelled = true;
     };
   }, [
     hasRestored,
+    pendingPopoverAnchorRestoreId,
+    pendingScrollRestoreProgress,
     pendingScrollRestoreY,
     restoreScroll,
     uiState.advancedOpen,
@@ -312,15 +370,30 @@ export function useSettingsSurfaceSessionState({
   }, [activeSectionId, defaultUiMoreOpen, forceAdvancedOpen]);
 
   useEffect(() => {
-    if (!hasRestored || pendingScrollRestoreY !== null) {
+    if (
+      !hasRestored ||
+      pendingScrollRestoreY !== null ||
+      pendingScrollRestoreProgress !== null ||
+      pendingPopoverAnchorRestoreId !== null
+    ) {
       return;
     }
 
     void captureSurfaceSessionState(
       SETTINGS_SURFACE_SESSION_STORAGE_KEY,
-      buildSettingsSurfaceSessionStateSnapshot(uiState, getSurfaceScrollY()),
+      buildSettingsSurfaceSessionStateSnapshot(
+        uiState,
+        getSurfaceScrollY(),
+        getSurfaceScrollProgress(),
+      ),
     );
-  }, [hasRestored, pendingScrollRestoreY, uiState]);
+  }, [
+    hasRestored,
+    pendingPopoverAnchorRestoreId,
+    pendingScrollRestoreProgress,
+    pendingScrollRestoreY,
+    uiState,
+  ]);
 
   const setAdvancedOpen = useCallback<Dispatch<SetStateAction<boolean>>>(
     (update) => {

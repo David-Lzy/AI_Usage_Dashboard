@@ -58,6 +58,7 @@ export type SurfaceSessionState = {
   routeName: SurfaceSessionRouteName;
   routeKey: string;
   scrollY: number | null;
+  scrollProgress: number | null;
   settings: SettingsSurfaceSessionState | null;
   providerDetail: ProviderDetailSurfaceSessionState | null;
 };
@@ -85,6 +86,14 @@ function normalizeFiniteInteger(value: unknown): number | null {
   }
 
   return Math.max(0, Math.round(value));
+}
+
+function normalizeFiniteRatio(value: unknown): number | null {
+  if (typeof value !== "number" || !Number.isFinite(value)) {
+    return null;
+  }
+
+  return Math.min(1, Math.max(0, value));
 }
 
 function normalizePercent(value: unknown): number {
@@ -244,6 +253,7 @@ export function normalizeSurfaceSessionState(
     routeName,
     routeKey,
     scrollY: normalizeFiniteInteger(value.scrollY),
+    scrollProgress: normalizeFiniteRatio(value.scrollProgress),
     settings: normalizeSettingsSurfaceState(value.settings),
     providerDetail: normalizeProviderDetailSurfaceState(value.providerDetail),
   };
@@ -253,17 +263,20 @@ export function createSurfaceSessionStateForRoute({
   providerId = null,
   routeKey,
   routeName,
+  scrollProgress = null,
   scrollY = null,
 }: {
   routeName: SurfaceSessionRouteName;
   routeKey: string;
   scrollY?: number | null;
+  scrollProgress?: number | null;
   providerId?: string | null;
 }): SurfaceSessionState {
   return {
     routeName,
     routeKey,
     scrollY: normalizeFiniteInteger(scrollY),
+    scrollProgress: normalizeFiniteRatio(scrollProgress),
     settings: null,
     providerDetail:
       routeName === "provider-detail" && providerId

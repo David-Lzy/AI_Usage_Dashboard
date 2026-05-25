@@ -126,11 +126,12 @@ describe("settings surface session state", () => {
       },
     });
 
-    const snapshot = buildSettingsSurfaceSessionStateSnapshot(uiState, 512);
+    const snapshot = buildSettingsSurfaceSessionStateSnapshot(uiState, 512, 0.5);
 
     expect(snapshot).toEqual({
       routeName: "settings",
       routeKey: "#settings",
+      scrollProgress: 0.5,
       scrollY: 512,
       settings: {
         activeSectionId: "settings-appearance",

@@ -125,7 +125,24 @@ describe("app-browser-controls", () => {
       },
     });
     vi.stubGlobal("window", {
+      innerHeight: 400,
       scrollY: 384,
+    });
+    vi.stubGlobal("document", {
+      body: {
+        clientHeight: 400,
+        scrollHeight: 1_200,
+        scrollTop: 0,
+      },
+      documentElement: {
+        clientHeight: 400,
+        scrollHeight: 1_200,
+        scrollTop: 384,
+      },
+      scrollingElement: {
+        scrollHeight: 1_200,
+        scrollTop: 384,
+      },
     });
 
     await openFullPageRoute({
@@ -143,6 +160,7 @@ describe("app-browser-controls", () => {
             },
             routeKey: "#provider-detail/codex-personal-page",
             routeName: "provider-detail",
+            scrollProgress: 0.48,
             scrollY: 384,
           }),
         }),
@@ -222,6 +240,7 @@ describe("app-browser-controls", () => {
     rememberLatestSettingsSurfaceSessionStateSnapshot({
       routeName: "settings",
       routeKey: "#settings",
+      scrollProgress: 0.25,
       scrollY: 111,
       settings: {
         activeSectionId: "settings-appearance",
@@ -277,6 +296,7 @@ describe("app-browser-controls", () => {
           state: expect.objectContaining({
             routeKey: "#settings",
             routeName: "settings",
+            scrollProgress: 0.25,
             scrollY: 512,
             settings: expect.objectContaining({
               activeSectionId: "settings-appearance",

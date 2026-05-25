@@ -32,7 +32,10 @@ import {
   SETTINGS_SURFACE_SESSION_ROUTE_KEY,
   SETTINGS_SURFACE_SESSION_STORAGE_KEY,
 } from "./use-settings-surface-session-state";
-import { getSurfaceScrollY } from "./surface-scroll-position";
+import {
+  getSurfaceScrollProgress,
+  getSurfaceScrollY,
+} from "./surface-scroll-position";
 
 export function hasDirectPermissionControl(): boolean {
   const permissionsApi = getExtensionPermissionsApi();
@@ -73,22 +76,35 @@ async function captureRouteSurfaceSessionState(
   const routeKey = buildSidePanelHash(route);
   const storageKey = buildSurfaceSessionKey(routeKey);
   const scrollY = getSurfaceScrollY();
+  const scrollProgress = getSurfaceScrollProgress();
 
   try {
     const latestSettingsState =
       route.name === "settings"
-        ? getLatestSettingsSurfaceSessionStateSnapshot(scrollY)
+        ? getLatestSettingsSurfaceSessionStateSnapshot(
+            scrollY,
+            scrollProgress,
+          )
         : null;
     const existingState =
       route.name === "settings" && !latestSettingsState?.settings
         ? await restoreSurfaceSessionState(SETTINGS_SURFACE_SESSION_STORAGE_KEY)
         : route.name === "provider-detail"
           ? await restoreSurfaceSessionState(storageKey)
-        : null;
+          : null;
+    const effectiveScrollProgress =
+      route.name === "settings"
+        ? (latestSettingsState?.scrollProgress ?? scrollProgress)
+        : scrollProgress;
+    const effectiveScrollY =
+      route.name === "settings"
+        ? (latestSettingsState?.scrollY ?? scrollY)
+        : scrollY;
     const nextState = createSurfaceSessionStateForRoute({
       routeName: route.name,
       routeKey,
-      scrollY,
+      scrollProgress: effectiveScrollProgress,
+      scrollY: effectiveScrollY,
       providerId: getRouteProviderId(route),
     });
     const settings = latestSettingsState?.settings ?? existingState?.settings;

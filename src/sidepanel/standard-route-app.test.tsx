@@ -75,6 +75,7 @@ describe("surface session restore route matching", () => {
         {
           routeName: "settings",
           routeKey: "#settings",
+          scrollProgress: 0.5,
           scrollY: 400,
           settings: null,
           providerDetail: null,
@@ -96,6 +97,7 @@ describe("surface session restore route matching", () => {
         {
           routeName: "settings",
           routeKey: "#settings/section/settings-appearance",
+          scrollProgress: 0.5,
           scrollY: 400,
           settings: null,
           providerDetail: null,
@@ -114,6 +116,7 @@ describe("surface session restore route matching", () => {
         {
           routeName: "provider-detail",
           routeKey: "#provider-detail/cursor-personal-page",
+          scrollProgress: 0.25,
           scrollY: 300,
           settings: null,
           providerDetail: {
@@ -132,6 +135,7 @@ describe("surface session restore route matching", () => {
         {
           routeName: "settings",
           routeKey: "#settings",
+          scrollProgress: 0.25,
           scrollY: 300,
           settings: null,
           providerDetail: null,

@@ -31,7 +31,7 @@ import {
   parseSidePanelHash,
   type SidePanelRouteState,
 } from "./route-state";
-import { restoreSurfaceScrollYAfterLayout } from "./surface-scroll-position";
+import { restoreSurfaceScrollPositionAfterLayout } from "./surface-scroll-position";
 import { createStandardAppActions } from "./standard-app-actions";
 import { useStandardAppRuntime } from "./use-standard-app-runtime";
 import {
@@ -155,18 +155,21 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
       const state = await restoreSurfaceSessionState(
         buildSurfaceSessionKey(routeKey),
       );
-      const scrollY = state?.scrollY;
+      const scrollY = state?.scrollY ?? null;
+      const scrollProgress = state?.scrollProgress ?? null;
 
       if (
         cancelled ||
-        scrollY === null ||
-        scrollY === undefined ||
+        (scrollProgress === null && scrollY === null) ||
         !shouldRestoreSurfaceSessionStateForRoute(route, state)
       ) {
         return;
       }
 
-      await restoreSurfaceScrollYAfterLayout(scrollY);
+      await restoreSurfaceScrollPositionAfterLayout({
+        scrollProgress,
+        scrollY,
+      });
     })();
 
     return () => {

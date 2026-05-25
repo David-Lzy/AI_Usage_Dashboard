@@ -4,6 +4,12 @@ function normalizeScrollY(value: unknown): number | null {
     : null;
 }
 
+function normalizeScrollProgress(value: unknown): number | null {
+  return typeof value === "number" && Number.isFinite(value)
+    ? Math.min(1, Math.max(0, value))
+    : null;
+}
+
 function getDocumentScrollCandidates(): number[] {
   if (typeof document === "undefined") {
     return [];
@@ -33,6 +39,52 @@ export function getSurfaceScrollY(): number | null {
   }
 
   return Math.max(...candidates);
+}
+
+function getSurfaceScrollHeight(): number | null {
+  if (typeof document === "undefined") {
+    return null;
+  }
+
+  const candidates = [
+    document.scrollingElement?.scrollHeight,
+    document.documentElement?.scrollHeight,
+    document.body?.scrollHeight,
+  ].filter((value): value is number =>
+    typeof value === "number" && Number.isFinite(value),
+  );
+
+  return candidates.length > 0 ? Math.max(...candidates) : null;
+}
+
+function getSurfaceViewportHeight(): number | null {
+  const candidates = [
+    typeof window !== "undefined" ? window.innerHeight : undefined,
+    typeof document !== "undefined" ? document.documentElement?.clientHeight : undefined,
+    typeof document !== "undefined" ? document.body?.clientHeight : undefined,
+  ].filter((value): value is number =>
+    typeof value === "number" && Number.isFinite(value) && value > 0,
+  );
+
+  return candidates.length > 0 ? Math.max(...candidates) : null;
+}
+
+export function getSurfaceScrollProgress(): number | null {
+  const scrollY = getSurfaceScrollY();
+  const scrollHeight = getSurfaceScrollHeight();
+  const viewportHeight = getSurfaceViewportHeight();
+
+  if (scrollY === null || scrollHeight === null || viewportHeight === null) {
+    return null;
+  }
+
+  const maxScrollY = scrollHeight - viewportHeight;
+
+  if (maxScrollY <= 0) {
+    return null;
+  }
+
+  return Math.min(1, Math.max(0, scrollY / maxScrollY));
 }
 
 function setDocumentScrollY(scrollY: number): void {
@@ -89,4 +141,97 @@ export function restoreSurfaceScrollYAfterLayout(
       window.requestAnimationFrame(scrollToPosition);
     });
   });
+}
+
+function getScrollYFromProgress(scrollProgress: number): number | null {
+  const normalizedProgress = normalizeScrollProgress(scrollProgress);
+  const scrollHeight = getSurfaceScrollHeight();
+  const viewportHeight = getSurfaceViewportHeight();
+
+  if (
+    normalizedProgress === null ||
+    scrollHeight === null ||
+    viewportHeight === null
+  ) {
+    return null;
+  }
+
+  const maxScrollY = scrollHeight - viewportHeight;
+
+  if (maxScrollY <= 0) {
+    return null;
+  }
+
+  return Math.round(maxScrollY * normalizedProgress);
+}
+
+function findSessionPopoverAnchor(popoverId: string): Element | null {
+  if (typeof document === "undefined") {
+    return null;
+  }
+
+  for (const element of document.querySelectorAll("[data-session-popover-id]")) {
+    if (element.getAttribute("data-session-popover-id") === popoverId) {
+      return element;
+    }
+  }
+
+  return null;
+}
+
+export function restoreSurfacePopoverAnchorAfterLayout(
+  popoverId: string,
+): Promise<boolean> {
+  if (typeof window === "undefined") {
+    return Promise.resolve(false);
+  }
+
+  return new Promise((resolve) => {
+    const scrollToAnchor = () => {
+      const anchor = findSessionPopoverAnchor(popoverId);
+
+      if (!anchor || typeof anchor.scrollIntoView !== "function") {
+        resolve(false);
+        return;
+      }
+
+      anchor.scrollIntoView({
+        block: "center",
+        inline: "nearest",
+        behavior: "auto",
+      });
+      resolve(true);
+    };
+
+    if (typeof window.requestAnimationFrame !== "function") {
+      window.setTimeout(scrollToAnchor, 0);
+      return;
+    }
+
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(scrollToAnchor);
+    });
+  });
+}
+
+export function restoreSurfaceScrollPositionAfterLayout({
+  scrollProgress,
+  scrollY,
+}: {
+  scrollProgress: number | null | undefined;
+  scrollY: number | null | undefined;
+}): Promise<void> {
+  const normalizedProgress = normalizeScrollProgress(scrollProgress);
+
+  if (normalizedProgress !== null) {
+    const scrollYFromProgress = getScrollYFromProgress(normalizedProgress);
+
+    if (scrollYFromProgress !== null) {
+      return restoreSurfaceScrollYAfterLayout(scrollYFromProgress);
+    }
+  }
+
+  return typeof scrollY === "number"
+    ? restoreSurfaceScrollYAfterLayout(scrollY)
+    : Promise.resolve();
 }
