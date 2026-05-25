@@ -1,5 +1,5 @@
-import { SummaryStrip } from "../sidepanel/components/SummaryStrip";
-import { StatusBadge } from "../sidepanel/components/StatusBadge";
+import { StatusBadge } from "../shared/components/StatusBadge";
+import { SummaryStrip } from "../shared/components/SummaryStrip";
 import type { SettingsRouteFocus } from "../shared/sidepanel-route-state";
 import type {
   PopupGuidanceAction,

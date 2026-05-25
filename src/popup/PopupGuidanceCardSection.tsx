@@ -1,5 +1,5 @@
 import type { RuntimeI18n } from "../shared/i18n";
-import { StatusBadge } from "../sidepanel/components/StatusBadge";
+import { StatusBadge } from "../shared/components/StatusBadge";
 import type { SettingsRouteFocus } from "../shared/sidepanel-route-state";
 import type {
   PopupGuidanceAction,

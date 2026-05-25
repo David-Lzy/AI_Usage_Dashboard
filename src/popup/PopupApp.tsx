@@ -20,7 +20,7 @@ import {
   DEFAULT_THEME_SETTINGS,
   startThemeSettingsSync,
 } from "../shared/theme";
-import { SummaryStrip } from "../sidepanel/components/SummaryStrip";
+import { SummaryStrip } from "../shared/components/SummaryStrip";
 import type { SettingsRouteFocus } from "../shared/sidepanel-route-state";
 import { syncPopupAppearanceAttributes } from "../shared/popup-appearance";
 import {
