@@ -8,6 +8,10 @@ import {
   getColorChoiceSelectionLabel,
   normalizeColorChoiceHex,
 } from "./ColorChoiceDropdown";
+import {
+  resolveAdaptiveDropdownMenuChoiceWidth,
+  resolveAdaptiveDropdownMenuColumnCount,
+} from "./AdaptiveDropdownMenuGrid";
 
 const formControlsCss = readFileSync(
   new URL("../theme/form-controls.css", import.meta.url),
@@ -141,14 +145,40 @@ describe("ColorChoiceDropdown", () => {
   it("keeps the custom color entry in the menu header and stretches color choices responsively", () => {
     expect(formControlsCss).toContain(".color-choice-dropdown__menu-header {");
     expect(formControlsCss).toContain(
-      "grid-template-columns: repeat(auto-fit, minmax(min(100%, 136px), 1fr));",
+      "var(--adaptive-dropdown-menu-choice-min)",
     );
     expect(formControlsCss).toContain(
-      ".color-choice-dropdown__menu--compact {",
+      ".adaptive-dropdown-menu-grid__measurer {",
     );
     expect(formControlsCss).toContain(
-      "grid-template-columns: repeat(auto-fit, minmax(min(100%, 92px), 1fr));",
+      ".adaptive-dropdown-menu-grid__measure-choice--compact {",
     );
+  });
+
+  it("uses the shared dropdown menu grid formula", () => {
+    const columnCount = resolveAdaptiveDropdownMenuColumnCount({
+      availableWidthPx: 480,
+      columnGapPx: 8,
+      itemCount: 16,
+      minWidthPx: 112,
+    });
+
+    expect(columnCount).toBe(4);
+    expect(
+      resolveAdaptiveDropdownMenuChoiceWidth({
+        availableWidthPx: 480,
+        columnCount: columnCount ?? 1,
+        columnGapPx: 8,
+      }),
+    ).toBe(114);
+    expect(
+      resolveAdaptiveDropdownMenuColumnCount({
+        availableWidthPx: 220,
+        columnGapPx: 8,
+        itemCount: 16,
+        minWidthPx: 112,
+      }),
+    ).toBe(1);
   });
 
   it("keeps closed triggers and floating menus bounded in adaptive grids", () => {

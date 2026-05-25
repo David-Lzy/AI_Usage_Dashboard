@@ -17,6 +17,7 @@ import {
   type FloatingMenuPosition,
 } from "../floating-menu-position";
 import { shouldPreservePopoverForSurfaceSwitch } from "../surface-switch-intent";
+import { useAdaptiveDropdownMenuGrid } from "./AdaptiveDropdownMenuGrid";
 import { MaterialColorPicker } from "./MaterialColorPicker";
 
 export type ColorChoiceDropdownChoice = {
@@ -91,6 +92,12 @@ function flattenSections(
   return sections.flatMap((section) => section.choices);
 }
 
+function getMenuMeasurementLabels(
+  sections: readonly ColorChoiceDropdownSection[],
+): string[] {
+  return flattenSections(sections).map((choice) => choice.label);
+}
+
 export function ColorChoiceDropdown({
   label,
   valueHex,
@@ -115,6 +122,18 @@ export function ColorChoiceDropdown({
   const normalizedValueHex = normalizeColorChoiceHex(valueHex);
   const selectedValueHex = normalizedValueHex ?? "#4F46E5";
   const allChoices = useMemo(() => flattenSections(sections), [sections]);
+  const menuMeasurementLabels = useMemo(
+    () => getMenuMeasurementLabels(sections),
+    [sections],
+  );
+  const {
+    labelsToMeasure: menuLabelsToMeasure,
+    measurerRef: menuMeasurerRef,
+    style: adaptiveMenuGridStyle,
+  } = useAdaptiveDropdownMenuGrid({
+    measurementLabels: menuMeasurementLabels,
+    minFallbackPx: menuDensity === "compact" ? 92 : 136,
+  });
   const computedSelectedLabel =
     selectedLabel ??
     getColorChoiceSelectionLabel(
@@ -453,6 +472,32 @@ export function ColorChoiceDropdown({
 
       {customPanel}
 
+      <div
+        ref={menuMeasurerRef}
+        className="adaptive-dropdown-menu-grid__measurer"
+        aria-hidden="true"
+      >
+        {menuLabelsToMeasure.map((measurementLabel) => (
+          <span
+            key={measurementLabel}
+            className={`adaptive-dropdown-menu-grid__measure-choice${
+              menuDensity === "compact"
+                ? " adaptive-dropdown-menu-grid__measure-choice--compact"
+                : ""
+            }`}
+            data-adaptive-dropdown-menu-measure-choice=""
+          >
+            <span
+              className="color-choice-dropdown__choice-swatch"
+              aria-hidden="true"
+            />
+            <span className="adaptive-dropdown-menu-grid__measure-label">
+              {measurementLabel}
+            </span>
+          </span>
+        ))}
+      </div>
+
       {sections.map((section, sectionIndex) => (
         <section
           key={section.id}
@@ -463,7 +508,10 @@ export function ColorChoiceDropdown({
               {section.label}
             </p>
           )}
-          <div className="color-choice-dropdown__choice-grid">
+          <div
+            className="adaptive-dropdown-menu-grid color-choice-dropdown__choice-grid"
+            style={adaptiveMenuGridStyle}
+          >
             {section.choices.map((choice) => {
               const normalizedChoiceHex =
                 normalizeColorChoiceHex(choice.hex) ?? choice.hex;
