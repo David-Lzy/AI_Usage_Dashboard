@@ -3,6 +3,7 @@ import path from "node:path";
 import process from "node:process";
 
 import { chromium } from "playwright";
+import { installSafeLocalStorageHelpers } from "./lib/browser-local-storage-helpers.mjs";
 
 const projectRoot = process.cwd();
 const artifactDir = path.join(
@@ -53,7 +54,16 @@ async function seedDiagnosticStressState(page) {
 
   await page.evaluate(
     ({ appKey, runtimeLockKey, seedLockKey, rawBodies }) => {
-      const rawState = globalThis.localStorage.getItem(appKey);
+      const storage = globalThis.__aiUsageDashboardSafeLocalStorage;
+      const rawStateResult = storage.getItem(appKey);
+
+      if (!rawStateResult.ok) {
+        throw new Error(
+          `Unable to read app state from localStorage: ${rawStateResult.error}`,
+        );
+      }
+
+      const rawState = rawStateResult.value;
 
       if (!rawState) {
         throw new Error("App state was not initialized before diagnostic QA seeding.");
@@ -135,9 +145,19 @@ async function seedDiagnosticStressState(page) {
           : provider,
       );
 
-      globalThis.localStorage.setItem(runtimeLockKey, "true");
-      globalThis.localStorage.setItem(seedLockKey, "true");
-      globalThis.localStorage.setItem(appKey, JSON.stringify(state));
+      for (const [key, value, label] of [
+        [runtimeLockKey, "true", "store screenshot runtime lock"],
+        [seedLockKey, "true", "store screenshot seed lock"],
+        [appKey, JSON.stringify(state), "diagnostic app state"],
+      ]) {
+        const writeResult = storage.setItem(key, value);
+
+        if (!writeResult.ok) {
+          throw new Error(
+            `Unable to write ${label} to localStorage: ${writeResult.error}`,
+          );
+        }
+      }
     },
     {
       appKey: appStateStorageKey,
@@ -369,6 +389,7 @@ async function runReview() {
     headless: true,
   });
   const page = await browser.newPage();
+  await installSafeLocalStorageHelpers(page);
 
   try {
     await seedDiagnosticStressState(page);

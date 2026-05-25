@@ -11,6 +11,7 @@ import {
   STORE_SCREENSHOT_SEED_APPLIED_TITLE,
   STORE_SCREENSHOT_SEED_CLEARED_TITLE,
 } from "./lib/store-screenshot-rdp-capture.mjs";
+import { installSafeLocalStorageHelpers } from "./lib/browser-local-storage-helpers.mjs";
 
 const projectRoot = process.cwd();
 const extensionPath = path.join(projectRoot, "dist", "chrome");
@@ -78,6 +79,7 @@ async function openExtensionPage(context, extensionId, relativePathWithHash) {
   const hash =
     hashIndex === -1 ? "" : relativePathWithHash.slice(hashIndex);
   const page = await context.newPage();
+  await installSafeLocalStorageHelpers(page);
   await page.goto(buildExtensionUrl(extensionId, pathWithSearch), {
     waitUntil: "load",
   });
@@ -116,13 +118,25 @@ async function readChromeStorageValue(page, storageKey) {
 
 async function readSeedLock(page) {
   return page.evaluate((storageKey) => {
-    return window.localStorage.getItem(storageKey);
+    const result = globalThis.__aiUsageDashboardSafeLocalStorage.getItem(storageKey);
+
+    if (!result.ok) {
+      throw new Error(`Unable to read store screenshot seed lock: ${result.error}`);
+    }
+
+    return result.value;
   }, STORE_SCREENSHOT_SEED_LOCK_STORAGE_KEY);
 }
 
 async function readSeedBackup(page) {
   return page.evaluate((storageKey) => {
-    const raw = window.localStorage.getItem(storageKey);
+    const result = globalThis.__aiUsageDashboardSafeLocalStorage.getItem(storageKey);
+
+    if (!result.ok) {
+      throw new Error(`Unable to read store screenshot seed backup: ${result.error}`);
+    }
+
+    const raw = result.value;
     return raw ? JSON.parse(raw) : null;
   }, STORE_SCREENSHOT_SEED_BACKUP_STORAGE_KEY);
 }
