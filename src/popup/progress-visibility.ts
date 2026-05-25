@@ -1,5 +1,5 @@
 import { shouldShowSingleUsageProgress } from "../sidepanel/usage-progress-visibility";
-import type { ProviderViewModel } from "../sidepanel/view-models";
+import type { ProviderViewModel } from "../shared/provider-view-models";
 
 type PopupProgressVisibilityProvider = Pick<
   ProviderViewModel,

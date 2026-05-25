@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import type { ProviderViewModel } from "../sidepanel/view-models";
+import type { ProviderViewModel } from "../shared/provider-view-models";
 import { buildFeaturedSection } from "./featured-section-view-models";
 
 function createProvider(

@@ -9,7 +9,7 @@ import type {
 import { SAMPLE_APP_STATE } from "../shared/constants";
 import { createDefaultProgressItemsBySurface } from "../shared/display-preferences";
 import type { RuntimeI18n } from "../shared/i18n";
-import type { ProviderViewModel } from "../sidepanel/view-models";
+import type { ProviderViewModel } from "../shared/provider-view-models";
 import { PopupProviderProgress } from "./PopupProviderProgress";
 
 const testI18n = {

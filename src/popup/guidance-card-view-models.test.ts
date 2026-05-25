@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { ProviderId } from "../providers/types";
-import type { ProviderViewModel } from "../sidepanel/view-models";
+import type { ProviderViewModel } from "../shared/provider-view-models";
 import { buildGuidanceCard } from "./guidance-card-view-models";
 
 function createProvider(

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import type { ProviderViewModel } from "../sidepanel/view-models";
+import type { ProviderViewModel } from "../shared/provider-view-models";
 import { buildSnapshotStatus } from "./snapshot-status-view-models";
 
 function createProvider(

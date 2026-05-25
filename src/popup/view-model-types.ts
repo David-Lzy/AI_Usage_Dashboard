@@ -3,7 +3,7 @@ import type {
   ProviderTone,
   SummaryItem,
 } from "../providers/types";
-import type { ProviderViewModel } from "../sidepanel/view-models";
+import type { ProviderViewModel } from "../shared/provider-view-models";
 
 export type PopupSnapshotStatus = {
   label: string;

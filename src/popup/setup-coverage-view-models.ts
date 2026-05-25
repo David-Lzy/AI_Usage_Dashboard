@@ -4,7 +4,7 @@ import type { RuntimeI18n } from "../shared/i18n";
 import {
   hasProviderProductAttention,
   type ProviderViewModel,
-} from "../sidepanel/view-models";
+} from "../shared/provider-view-models";
 import type {
   PopupFirstSetupProvider,
   PopupSetupCoverage,

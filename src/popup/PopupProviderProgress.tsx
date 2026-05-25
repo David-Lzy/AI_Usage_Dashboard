@@ -5,8 +5,8 @@ import type {
   ProgressItemsBySurface,
 } from "../providers/types";
 import type { RuntimeI18n } from "../shared/i18n";
+import type { ProviderViewModel } from "../shared/provider-view-models";
 import { ProviderProgressItemList } from "../sidepanel/components/ProviderProgressItemList";
-import type { ProviderViewModel } from "../sidepanel/view-models";
 
 type PopupProviderProgressProps = {
   i18n: RuntimeI18n;

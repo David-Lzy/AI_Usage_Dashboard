@@ -5,8 +5,8 @@ import type {
 } from "../providers/types";
 import { getRecommendedFirstSetupProvider } from "../shared/first-provider-setup";
 import type { ProviderSourceDisplayCopy } from "../shared/provider-sources";
+import { getPopupProviders } from "../shared/provider-view-models";
 import { getProviderDefinition } from "../providers/provider-definitions";
-import { getPopupProviders } from "../sidepanel/view-models";
 import type {
   PopupFirstSetupProvider,
   PopupSummaryLabels,

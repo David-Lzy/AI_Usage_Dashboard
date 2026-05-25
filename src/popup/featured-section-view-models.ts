@@ -1,5 +1,5 @@
 import { buildPopupLocalizedCopy } from "../shared/popup-localized-copy";
-import type { ProviderViewModel } from "../sidepanel/view-models";
+import type { ProviderViewModel } from "../shared/provider-view-models";
 import type {
   PopupFeaturedSection,
   PopupFirstSetupProvider,
