@@ -45,6 +45,24 @@ function normalizeUrlWithoutHash(value: string | null | undefined): string | nul
   }
 }
 
+function isBoundaryUrlPrefixMatch(tabUrl: string, matchedUrl: string): boolean {
+  if (!tabUrl.startsWith(matchedUrl)) {
+    return false;
+  }
+
+  if (tabUrl.length === matchedUrl.length) {
+    return true;
+  }
+
+  if (matchedUrl.endsWith("/")) {
+    return true;
+  }
+
+  const nextCharacter = tabUrl.charAt(matchedUrl.length);
+
+  return nextCharacter === "/" || nextCharacter === "?";
+}
+
 function buildUrlPriorityScore(
   tabUrl: string | null | undefined,
   matchedUrl: string | null | undefined,
@@ -67,7 +85,7 @@ function buildUrlPriorityScore(
     return 2;
   }
 
-  return normalizedTabUrl.startsWith(normalizedMatchedUrl) ? 1 : 0;
+  return isBoundaryUrlPrefixMatch(normalizedTabUrl, normalizedMatchedUrl) ? 1 : 0;
 }
 
 function buildTitlePriorityScore(

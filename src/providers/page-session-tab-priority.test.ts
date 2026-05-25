@@ -99,6 +99,54 @@ describe("sortTabsByPriority", () => {
     expect(sorted.map((tab) => tab.id)).toEqual([2, 1]);
   });
 
+  it("does not treat adjacent URL paths as prefix matches", () => {
+    const sorted = sortTabsByPriority(
+      [
+        {
+          id: 1,
+          active: true,
+          lastAccessed: 1_765_000_000_000,
+          url: "https://cursor.com/dashboard2",
+        },
+        {
+          id: 2,
+          active: false,
+          lastAccessed: 1,
+          url: "https://cursor.com/dashboard/usage",
+        },
+      ],
+      {
+        matchedUrl: "https://cursor.com/dashboard",
+      },
+    );
+
+    expect(sorted.map((tab) => tab.id)).toEqual([2, 1]);
+  });
+
+  it("keeps query variants eligible for boundary prefix matching", () => {
+    const sorted = sortTabsByPriority(
+      [
+        {
+          id: 1,
+          active: true,
+          lastAccessed: 1_765_000_000_000,
+          url: "https://cursor.com/dashboard2?view=usage",
+        },
+        {
+          id: 2,
+          active: false,
+          lastAccessed: 1,
+          url: "https://cursor.com/dashboard?view=usage",
+        },
+      ],
+      {
+        matchedUrl: "https://cursor.com/dashboard",
+      },
+    );
+
+    expect(sorted.map((tab) => tab.id)).toEqual([2, 1]);
+  });
+
   it("keeps prefix URL matches ahead of Chrome epoch recency fallback", () => {
     const sorted = sortTabsByPriority(
       [
