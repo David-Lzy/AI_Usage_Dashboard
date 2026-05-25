@@ -72,7 +72,10 @@
 }
 
 .settings-preferences__more-toggle-label {
+  display: inline-flex;
+  align-items: center;
   min-width: 0;
+  min-height: var(--md-sys-typescale-label-large-line-height);
   overflow-wrap: anywhere;
 }
 

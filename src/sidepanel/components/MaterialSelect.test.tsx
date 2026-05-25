@@ -102,6 +102,9 @@ describe("MaterialSelect", () => {
     expect(formControlsCss).toContain(
       "line-height: var(--md-sys-typescale-body-large-line-height);",
     );
+    expect(formControlsCss).toContain(".material-select__value {");
+    expect(formControlsCss).toContain("display: inline-flex;");
+    expect(formControlsCss).toContain("align-items: center;");
   });
 
   it("uses label-large typography for visible field labels", () => {

@@ -551,7 +551,10 @@ select.form-field__control {
 }
 
 .material-select__value {
+  display: inline-flex;
+  align-items: center;
   min-width: 0;
+  min-height: var(--md-sys-typescale-body-large-line-height);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -728,7 +731,9 @@ select.form-field__control {
 }
 
 .color-choice-dropdown__value {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--md-sys-typescale-body-large-line-height);
 }
 
 .color-choice-dropdown__menu-icon,
@@ -1087,6 +1092,7 @@ html[data-app-direction="rtl"]
 .editable-number-combobox__input {
   min-width: 0;
   width: 100%;
+  height: calc(var(--app-control-height-large) - 2px);
   min-height: calc(var(--app-control-height-large) - 2px);
   padding-block: 0;
   padding-inline-start: var(--app-control-padding-inline-large);
@@ -1103,12 +1109,15 @@ html[data-app-direction="rtl"]
 }
 
 .editable-number-combobox__suffix {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--md-sys-typescale-body-large-line-height);
   padding-inline: var(--app-space-2);
   color: var(--md-sys-color-on-surface-variant);
-  font-family: var(--md-sys-typescale-label-large-font);
-  font-size: var(--md-sys-typescale-label-large-size);
+  font-family: var(--md-sys-typescale-body-large-font);
+  font-size: var(--md-sys-typescale-body-large-size);
   font-weight: var(--md-sys-typescale-label-large-weight);
-  line-height: var(--md-sys-typescale-label-large-line-height);
+  line-height: var(--md-sys-typescale-body-large-line-height);
   white-space: nowrap;
 }
 

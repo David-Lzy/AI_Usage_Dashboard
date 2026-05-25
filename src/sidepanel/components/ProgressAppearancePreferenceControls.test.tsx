@@ -90,4 +90,15 @@ describe("ProgressAppearancePreferenceControls", () => {
     );
     expect(settingsAppearanceCss).toContain("min-inline-size: 7.5rem;");
   });
+
+  it("centers the UI settings toggle label with its icon", () => {
+    expect(settingsAppearanceCss).toContain(
+      ".settings-preferences__more-toggle-label {",
+    );
+    expect(settingsAppearanceCss).toContain("display: inline-flex;");
+    expect(settingsAppearanceCss).toContain("align-items: center;");
+    expect(settingsAppearanceCss).toContain(
+      "min-height: var(--md-sys-typescale-label-large-line-height);",
+    );
+  });
 });

@@ -72,6 +72,15 @@ describe("EditableNumberCombobox", () => {
     expect(formControlsCss).toContain("text-align: start;");
   });
 
+  it("aligns numeric values and suffix text on the same control center line", () => {
+    expect(formControlsCss).toContain(".editable-number-combobox__suffix {");
+    expect(formControlsCss).toContain("display: inline-flex;");
+    expect(formControlsCss).toContain("align-items: center;");
+    expect(formControlsCss).toContain(
+      "line-height: var(--md-sys-typescale-body-large-line-height);",
+    );
+  });
+
   it("participates in adaptive control grids without inner width overflow", () => {
     expect(formControlsCss).toContain(
       ".adaptive-control-grid .editable-number-combobox__anchor,",

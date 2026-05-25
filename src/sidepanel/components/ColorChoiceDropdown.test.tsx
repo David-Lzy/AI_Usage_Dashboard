@@ -124,6 +124,9 @@ describe("ColorChoiceDropdown", () => {
     expect(formControlsCss).toContain(
       "line-height: var(--md-sys-typescale-body-large-line-height);",
     );
+    expect(formControlsCss).toContain(".color-choice-dropdown__value {");
+    expect(formControlsCss).toContain("display: inline-flex;");
+    expect(formControlsCss).toContain("align-items: center;");
   });
 
   it("uses an in-app Material-style custom color picker instead of native color input styling", () => {
