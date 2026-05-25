@@ -59,6 +59,7 @@ describe("SettingsPreferencesSection", () => {
         onPopupCircularProgressItemsPerRowChange={() => {}}
         onPopupShadowStyleChange={() => {}}
         onProgressThicknessPxChange={() => {}}
+        onProgressColorAppearanceChange={() => {}}
         onProgressColorBandsChange={() => {}}
         onMotionModeChange={() => {}}
         onActionBadgeSelectionsChange={() => {}}

@@ -9,6 +9,11 @@ type SettingsProgressAppearanceCopyText = {
     unit: string;
     help: string;
   };
+  mode?: {
+    label: string;
+    traditional: string;
+    gradient: string;
+  };
   colorBands: {
     label: string;
     detail: string;
@@ -23,18 +28,61 @@ type SettingsProgressAppearanceCopyText = {
     validationError: string;
     rangeLabel: (minimumLabel: string, maximumLabel: string) => string;
   };
+  gradient?: {
+    label: string;
+    detail: string;
+    trackHelp: string;
+    stopHelp: string;
+    positionLabel: string;
+    colorLabel: string;
+    deleteStop: string;
+    resetToDefault: string;
+    endpointLocked: string;
+    minimumStopHelp: string;
+    stopAriaLabel: (stopNumberLabel: string, positionLabel: string) => string;
+  };
 };
 
 export type SettingsProgressAppearanceCopy = Omit<
   SettingsProgressAppearanceCopyText,
-  "colorBands"
+  "colorBands" | "gradient" | "mode"
 > & {
+  mode: NonNullable<SettingsProgressAppearanceCopyText["mode"]>;
   colorBands: Omit<
     SettingsProgressAppearanceCopyText["colorBands"],
     "rangeLabel"
   > & {
     rangeLabel: (minimumPercent: number, maximumPercent: number) => string;
   };
+  gradient: Omit<
+    NonNullable<SettingsProgressAppearanceCopyText["gradient"]>,
+    "stopAriaLabel"
+  > & {
+    stopAriaLabel: (stopNumber: number, positionPercent: number) => string;
+  };
+};
+
+const DEFAULT_PROGRESS_APPEARANCE_MODE_COPY = {
+  label: "Color mode",
+  traditional: "Traditional",
+  gradient: "Gradient",
+};
+
+const DEFAULT_PROGRESS_APPEARANCE_GRADIENT_COPY = {
+  label: "Remaining gradient",
+  detail:
+    "Click the bar to add a stop. Select a stop to edit its position and color.",
+  trackHelp: "Click to add a gradient stop at that remaining percentage.",
+  stopHelp:
+    "Select this stop. Use Left and Right arrow keys to move non-endpoint stops.",
+  positionLabel: "Position",
+  colorLabel: "Color",
+  deleteStop: "Delete stop",
+  resetToDefault: "Reset gradient",
+  endpointLocked: "Endpoint stops stay locked at 0% and 100%.",
+  minimumStopHelp: "Keep at least the 0% and 100% stops.",
+  stopAriaLabel: (stopNumberLabel: string, positionLabel: string) =>
+    `Gradient stop ${stopNumberLabel}, ${positionLabel}% remaining`,
 };
 
 export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
@@ -51,6 +99,7 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       unit: "px",
       help: "One global stroke weight is shared by line and ring progress styles.",
     },
+    mode: DEFAULT_PROGRESS_APPEARANCE_MODE_COPY,
     colorBands: {
       label: "Remaining color bands",
       detail:
@@ -68,6 +117,7 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       rangeLabel: (minimumLabel, maximumLabel) =>
         `${minimumLabel}-${maximumLabel}% remaining`,
     },
+    gradient: DEFAULT_PROGRESS_APPEARANCE_GRADIENT_COPY,
   },
   "zh-CN": {
     sectionLabel: "进度外观",
@@ -78,6 +128,11 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       label: "进度条粗细",
       unit: "px",
       help: "直线和圆环进度样式共用一个全局描边粗细。",
+    },
+    mode: {
+      label: "颜色模式",
+      traditional: "传统",
+      gradient: "渐变",
     },
     colorBands: {
       label: "剩余颜色区间",
@@ -96,6 +151,20 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       rangeLabel: (minimumLabel, maximumLabel) =>
         `剩余 ${minimumLabel}-${maximumLabel}%`,
     },
+    gradient: {
+      label: "剩余渐变",
+      detail: "点击颜色条可新增停止点。选中停止点后可编辑位置和颜色。",
+      trackHelp: "点击即可在对应剩余百分比处新增渐变停止点。",
+      stopHelp: "选中该停止点。非端点可用左右方向键移动。",
+      positionLabel: "位置",
+      colorLabel: "颜色",
+      deleteStop: "删除停止点",
+      resetToDefault: "重置渐变",
+      endpointLocked: "端点停止点固定在 0% 和 100%。",
+      minimumStopHelp: "至少保留 0% 和 100% 两个停止点。",
+      stopAriaLabel: (stopNumberLabel, positionLabel) =>
+        `渐变停止点 ${stopNumberLabel}，剩余 ${positionLabel}%`,
+    },
   },
   "zh-TW": {
     sectionLabel: "進度外觀",
@@ -106,6 +175,11 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       label: "進度條粗細",
       unit: "px",
       help: "直線與圓環進度樣式共用一個全域描邊粗細。",
+    },
+    mode: {
+      label: "色彩模式",
+      traditional: "傳統",
+      gradient: "漸層",
     },
     colorBands: {
       label: "剩餘色彩區間",
@@ -123,6 +197,20 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
         "請使用有效的 #RRGGBB 顏色，並保持區間不重疊且覆蓋 0-100。",
       rangeLabel: (minimumLabel, maximumLabel) =>
         `剩餘 ${minimumLabel}-${maximumLabel}%`,
+    },
+    gradient: {
+      label: "剩餘漸層",
+      detail: "點擊色條可新增停止點。選取停止點後可編輯位置與色彩。",
+      trackHelp: "點擊即可在對應剩餘百分比新增漸層停止點。",
+      stopHelp: "選取此停止點。非端點可用左右方向鍵移動。",
+      positionLabel: "位置",
+      colorLabel: "色彩",
+      deleteStop: "刪除停止點",
+      resetToDefault: "重設漸層",
+      endpointLocked: "端點停止點固定在 0% 與 100%。",
+      minimumStopHelp: "至少保留 0% 與 100% 兩個停止點。",
+      stopAriaLabel: (stopNumberLabel, positionLabel) =>
+        `漸層停止點 ${stopNumberLabel}，剩餘 ${positionLabel}%`,
     },
   },
   ja: {
@@ -444,12 +532,28 @@ export function buildLocalizedSettingsProgressAppearanceSection(
     title: copy.title,
     detail: copy.detail,
     thickness: copy.thickness,
+    mode: {
+      ...DEFAULT_PROGRESS_APPEARANCE_MODE_COPY,
+      ...copy.mode,
+    },
     colorBands: {
       ...copy.colorBands,
       rangeLabel: (minimumPercent, maximumPercent) =>
         copy.colorBands.rangeLabel(
           i18n.formatNumber(minimumPercent),
           i18n.formatNumber(maximumPercent),
+        ),
+    },
+    gradient: {
+      ...DEFAULT_PROGRESS_APPEARANCE_GRADIENT_COPY,
+      ...copy.gradient,
+      stopAriaLabel: (stopNumber, positionPercent) =>
+        (
+          copy.gradient?.stopAriaLabel ??
+          DEFAULT_PROGRESS_APPEARANCE_GRADIENT_COPY.stopAriaLabel
+        )(
+          i18n.formatNumber(stopNumber),
+          i18n.formatNumber(positionPercent),
         ),
     },
   };

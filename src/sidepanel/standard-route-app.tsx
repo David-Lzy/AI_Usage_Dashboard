@@ -397,6 +397,9 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
             onProgressThicknessPxChange={(progressThicknessPx) =>
               handleUpdateSettings({ progressThicknessPx })
             }
+            onProgressColorAppearanceChange={(progressColorAppearance) =>
+              handleUpdateSettings({ progressColorAppearance })
+            }
             onProgressColorBandsChange={(progressColorBands) =>
               handleUpdateSettings({
                 progressColorBands,

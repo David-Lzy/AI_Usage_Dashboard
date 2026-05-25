@@ -39,6 +39,7 @@ function renderSettingsPage(overrides: Partial<Parameters<typeof SettingsPage>[0
       onProviderOrderBySurfaceChange={() => {}}
       onProgressItemsBySurfaceChange={() => {}}
       onProgressThicknessPxChange={() => {}}
+      onProgressColorAppearanceChange={() => {}}
       onProgressColorBandsChange={() => {}}
       onActionBadgeSelectionsChange={() => {}}
       onActionBadgeSelectionModeChange={() => {}}

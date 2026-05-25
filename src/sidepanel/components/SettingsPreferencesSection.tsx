@@ -8,6 +8,7 @@ import type {
   PopupCornerStyle,
   PopupShadowStyle,
   PopupSizePreset,
+  ProgressColorAppearance,
   ProgressColorBand,
   ProgressDisplayStyle,
   ProviderSetting,
@@ -76,6 +77,9 @@ type SettingsPreferencesSectionProps = {
   onPopupProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onPopupShadowStyleChange: (shadowStyle: PopupShadowStyle) => void;
   onPopupSizePresetChange: (sizePreset: PopupSizePreset) => void;
+  onProgressColorAppearanceChange: (
+    colorAppearance: ProgressColorAppearance,
+  ) => void;
   onProgressColorBandsChange: (progressColorBands: ProgressColorBand[]) => void;
   onProgressThicknessPxChange: (progressThicknessPx: number) => void;
   onSidebarProgressStyleChange: (
@@ -115,6 +119,7 @@ export function SettingsPreferencesSection({
   onPopupProgressStyleChange,
   onPopupShadowStyleChange,
   onPopupSizePresetChange,
+  onProgressColorAppearanceChange,
   onProgressColorBandsChange,
   onProgressThicknessPxChange,
   onSidebarProgressStyleChange,
@@ -433,6 +438,7 @@ export function SettingsPreferencesSection({
         onPopupProgressStyleChange={onPopupProgressStyleChange}
         onPopupShadowStyleChange={onPopupShadowStyleChange}
         onPopupSizePresetChange={onPopupSizePresetChange}
+        onProgressColorAppearanceChange={onProgressColorAppearanceChange}
         onProgressColorBandsChange={onProgressColorBandsChange}
         onProgressThicknessPxChange={onProgressThicknessPxChange}
         onSidebarProgressStyleChange={onSidebarProgressStyleChange}

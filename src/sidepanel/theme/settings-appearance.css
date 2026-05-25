@@ -664,6 +664,57 @@
   gap: var(--app-space-2);
 }
 
+.progress-appearance-bands__header-actions {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.progress-appearance-mode-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 32px;
+  padding: 2px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--md-sys-color-surface-container-low);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.progress-appearance-mode-switch__button {
+  min-width: 72px;
+  min-height: 28px;
+  padding: 0 var(--app-space-3);
+  border: 0;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  line-height: var(--md-sys-typescale-label-large-line-height);
+  transition:
+    background-color var(--app-motion-duration-fast)
+      var(--app-motion-easing-standard),
+    box-shadow var(--app-motion-duration-fast) var(--app-motion-easing-standard),
+    color var(--app-motion-duration-fast) var(--app-motion-easing-standard);
+}
+
+.progress-appearance-mode-switch__button:hover {
+  background: var(--app-state-layer-neutral-hover);
+}
+
+.progress-appearance-mode-switch__button:focus-visible {
+  box-shadow: var(--app-focus-ring-shadow);
+  outline: 0;
+}
+
+.progress-appearance-mode-switch__button[data-selected="true"] {
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
 .progress-appearance-band-list {
   margin: 0;
   padding: 0;
@@ -747,6 +798,122 @@
   color: var(--md-sys-color-error);
 }
 
+.progress-gradient-editor {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-3);
+  min-width: 0;
+}
+
+.progress-gradient-editor__track {
+  position: relative;
+  min-height: 64px;
+  padding-block: 24px 18px;
+  cursor: copy;
+}
+
+.progress-gradient-editor__track::before {
+  position: absolute;
+  inset: 24px 0 auto;
+  height: 18px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--progress-gradient-track);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, white 35%, transparent);
+  content: "";
+}
+
+.progress-gradient-editor__ticks {
+  position: absolute;
+  inset: 21px 0 auto;
+  height: 24px;
+  pointer-events: none;
+}
+
+.progress-gradient-editor__tick {
+  position: absolute;
+  top: 0;
+  width: 1px;
+  height: 24px;
+  background: color-mix(in srgb, white 70%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, black 14%, transparent);
+  transform: translateX(-50%);
+}
+
+.progress-gradient-editor__stop {
+  position: absolute;
+  top: 14px;
+  width: 24px;
+  height: 36px;
+  border: 2px solid var(--md-sys-color-surface-container-lowest);
+  border-radius: var(--md-sys-shape-corner-small);
+  box-shadow:
+    0 0 0 1px var(--md-sys-color-outline),
+    var(--app-elevation-1);
+  cursor: pointer;
+  transform: translateX(-50%);
+}
+
+.progress-gradient-editor__stop::after {
+  position: absolute;
+  inset-inline: 6px;
+  bottom: -7px;
+  height: 10px;
+  border-inline: 2px solid var(--md-sys-color-surface-container-lowest);
+  border-bottom: 2px solid var(--md-sys-color-surface-container-lowest);
+  background: inherit;
+  box-shadow: 0 1px 0 var(--md-sys-color-outline);
+  content: "";
+  transform: rotate(45deg);
+}
+
+.progress-gradient-editor__stop[data-selected="true"] {
+  box-shadow:
+    0 0 0 3px var(--md-sys-color-primary),
+    var(--app-elevation-2);
+}
+
+.progress-gradient-editor__stop:focus-visible {
+  outline: 0;
+  box-shadow:
+    var(--app-focus-ring-shadow),
+    0 0 0 3px var(--md-sys-color-primary),
+    var(--app-elevation-2);
+}
+
+.progress-gradient-editor__stop[data-endpoint="true"] {
+  border-radius: var(--md-sys-shape-corner-extra-small);
+}
+
+.progress-gradient-editor__selected {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.6fr) minmax(13rem, 1fr) auto;
+  align-items: end;
+  gap: var(--app-space-2);
+  min-width: 0;
+}
+
+.progress-gradient-editor__selected > .form-field,
+.progress-gradient-editor__selected > .color-choice-dropdown {
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+}
+
+.progress-gradient-editor__selected .form-field__control,
+.progress-gradient-editor__selected .color-choice-dropdown__button {
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-height: 44px;
+}
+
+.progress-gradient-editor__delete {
+  min-height: 44px;
+}
+
+.progress-gradient-editor__help {
+  margin: 0;
+}
+
 @media (max-width: 920px) {
   .provider-order-preferences__header,
   .provider-order-preferences__surfaces,
@@ -793,6 +960,15 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .progress-gradient-editor__selected {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .progress-gradient-editor__delete {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
   .progress-appearance-band__fields > .color-choice-dropdown {
     grid-column: 1 / -1;
   }
@@ -818,6 +994,10 @@
   }
 
   .progress-appearance-thickness__control {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .progress-gradient-editor__selected {
     grid-template-columns: minmax(0, 1fr);
   }
 

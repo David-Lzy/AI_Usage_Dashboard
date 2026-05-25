@@ -7,6 +7,7 @@ import { createRuntimeI18n } from "../../shared/i18n";
 import { buildSettingsLocalizedCopy } from "../../shared/localized-copy";
 import {
   DEFAULT_PROGRESS_THICKNESS_PX,
+  createDefaultProgressColorAppearance,
   createDefaultProgressColorBands,
 } from "../../shared/progress-appearance";
 import { ProgressAppearancePreferenceControls } from "./ProgressAppearancePreferenceControls";
@@ -24,8 +25,10 @@ describe("ProgressAppearancePreferenceControls", () => {
         copy={copy.progressAppearance}
         colorChoiceCopy={copy.colorChoices}
         thicknessPx={DEFAULT_PROGRESS_THICKNESS_PX}
+        colorAppearance={createDefaultProgressColorAppearance()}
         colorBands={createDefaultProgressColorBands()}
         onThicknessPxChange={() => {}}
+        onColorAppearanceChange={() => {}}
         onColorBandsChange={() => {}}
       />,
     );
@@ -56,8 +59,54 @@ describe("ProgressAppearancePreferenceControls", () => {
     expect(html).toContain("Rot");
     expect(html).toContain("#B3261E");
     expect(html).toContain("Farben zurucksetzen");
+    expect(html).toContain("Traditional");
+    expect(html).toContain("Gradient");
     expect(html).not.toContain("color-choice-dropdown__hex");
     expect(html).not.toContain('type="color"');
+  });
+
+  it("renders gradient stop editor when the gradient mode is selected", () => {
+    const copy = buildSettingsLocalizedCopy(createRuntimeI18n("zh-CN"));
+    const html = renderToStaticMarkup(
+      <ProgressAppearancePreferenceControls
+        copy={copy.progressAppearance}
+        colorChoiceCopy={copy.colorChoices}
+        thicknessPx={DEFAULT_PROGRESS_THICKNESS_PX}
+        colorAppearance={{
+          mode: "gradient",
+          stops: [
+            {
+              id: "empty",
+              positionPercent: 0,
+              colorHex: "#B3261E",
+            },
+            {
+              id: "middle",
+              positionPercent: 50,
+              colorHex: "#8A4B00",
+            },
+            {
+              id: "full",
+              positionPercent: 100,
+              colorHex: "#146C2E",
+            },
+          ],
+        }}
+        colorBands={createDefaultProgressColorBands()}
+        onThicknessPxChange={() => {}}
+        onColorAppearanceChange={() => {}}
+        onColorBandsChange={() => {}}
+      />,
+    );
+
+    expect(html).toContain('data-progress-gradient-editor=""');
+    expect(html).toContain("剩余渐变");
+    expect(html).toContain("--progress-gradient-track");
+    expect(html).toContain('role="slider"');
+    expect(html).toContain('aria-valuenow="50"');
+    expect(html).toContain('data-selected="true"');
+    expect(html).toContain('data-color-choice-dropdown="progress-gradient-stop-empty"');
+    expect(html).toContain("删除停止点");
   });
 
   it("keeps color-band number and color controls compact but aligned", () => {

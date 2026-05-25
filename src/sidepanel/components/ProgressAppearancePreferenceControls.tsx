@@ -1,6 +1,18 @@
-import { useEffect, useState, type ChangeEvent } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+  type CSSProperties,
+  type ChangeEvent,
+  type KeyboardEvent,
+  type MouseEvent,
+} from "react";
 
-import type { ProgressColorBand } from "../../providers/types";
+import type {
+  ProgressColorAppearance,
+  ProgressColorBand,
+  ProgressGradientStop,
+} from "../../providers/types";
 import { RECOMMENDED_COLOR_CHOICES } from "../../shared/color-choices";
 import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import type { SettingsActivePopoverSessionState } from "../../shared/surface-session-state";
@@ -11,18 +23,23 @@ import {
   PROGRESS_THICKNESS_SLIDER_MIN,
   areProgressColorBandsValid,
   createDefaultProgressColorBands,
+  createDefaultProgressGradientStops,
   moveProgressColorBand,
+  normalizeProgressColorAppearance,
   normalizeProgressColorBands,
+  normalizeProgressGradientStops,
   normalizeProgressThicknessPx,
   progressThicknessPxToSliderValue,
   progressThicknessSliderValueToPx,
   removeProgressColorBand,
+  resolveProgressGradientColorForRemainingPercent,
   splitProgressColorBand,
 } from "../../shared/progress-appearance";
 import { ColorChoiceDropdown } from "./ColorChoiceDropdown";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 
 type ProgressAppearancePreferenceControlsProps = {
+  colorAppearance: ProgressColorAppearance;
   colorBands: ProgressColorBand[];
   colorChoiceCopy: ReturnType<typeof buildSettingsLocalizedCopy>["colorChoices"];
   copy: ReturnType<typeof buildSettingsLocalizedCopy>["progressAppearance"];
@@ -31,6 +48,7 @@ type ProgressAppearancePreferenceControlsProps = {
   onActivePopoverChange?: (
     nextPopover: SettingsActivePopoverSessionState | null,
   ) => void;
+  onColorAppearanceChange: (colorAppearance: ProgressColorAppearance) => void;
   onColorBandsChange: (colorBands: ProgressColorBand[]) => void;
   onThicknessPxChange: (thicknessPx: number) => void;
 };
@@ -124,13 +142,83 @@ function isValidColorInput(value: string): boolean {
   return /^#[0-9A-Fa-f]{6}$/.test(value);
 }
 
+function roundGradientStopPosition(value: number): number {
+  return Math.round((value + Number.EPSILON) * 100) / 100;
+}
+
+function clampGradientStopPosition(value: number): number {
+  return Math.min(99.99, Math.max(0.01, roundGradientStopPosition(value)));
+}
+
+function isGradientEndpointStop(stop: ProgressGradientStop): boolean {
+  return stop.positionPercent === 0 || stop.positionPercent === 100;
+}
+
+function findAvailableGradientStopPosition(
+  positionPercent: number,
+  stops: readonly ProgressGradientStop[],
+  ignoredStopId?: string,
+): number {
+  const usedPositions = new Set(
+    stops
+      .filter((stop) => stop.id !== ignoredStopId)
+      .map((stop) => stop.positionPercent),
+  );
+  const preferredPosition = clampGradientStopPosition(positionPercent);
+
+  if (!usedPositions.has(preferredPosition)) {
+    return preferredPosition;
+  }
+
+  for (let offset = 1; offset <= 9999; offset += 1) {
+    const forwardPosition = roundGradientStopPosition(
+      preferredPosition + offset / 100,
+    );
+
+    if (forwardPosition <= 99.99 && !usedPositions.has(forwardPosition)) {
+      return forwardPosition;
+    }
+
+    const backwardPosition = roundGradientStopPosition(
+      preferredPosition - offset / 100,
+    );
+
+    if (backwardPosition >= 0.01 && !usedPositions.has(backwardPosition)) {
+      return backwardPosition;
+    }
+  }
+
+  return preferredPosition;
+}
+
+function createGradientStopId(stops: readonly ProgressGradientStop[]): string {
+  const existingIds = new Set(stops.map((stop) => stop.id));
+  let customIndex = stops.length + 1;
+
+  while (existingIds.has(`stop-${customIndex}`)) {
+    customIndex += 1;
+  }
+
+  return `stop-${customIndex}`;
+}
+
+function buildGradientTrackBackground(
+  stops: readonly ProgressGradientStop[],
+): string {
+  return `linear-gradient(90deg, ${stops
+    .map((stop) => `${stop.colorHex} ${stop.positionPercent}%`)
+    .join(", ")})`;
+}
+
 export function ProgressAppearancePreferenceControls({
+  colorAppearance,
   colorBands,
   colorChoiceCopy,
   copy,
   thicknessPx,
   activePopover,
   onActivePopoverChange,
+  onColorAppearanceChange,
   onColorBandsChange,
   onThicknessPxChange,
 }: ProgressAppearancePreferenceControlsProps) {
@@ -139,6 +227,27 @@ export function ProgressAppearancePreferenceControls({
     formatThicknessDraft(thicknessPx),
   );
   const [hasBandError, setHasBandError] = useState(false);
+  const [selectedGradientStopId, setSelectedGradientStopId] = useState<
+    string | null
+  >(null);
+  const normalizedColorAppearance = useMemo(
+    () => normalizeProgressColorAppearance(colorAppearance, colorBands),
+    [colorAppearance, colorBands],
+  );
+  const activeColorMode = normalizedColorAppearance.mode;
+  const gradientStops =
+    normalizedColorAppearance.mode === "gradient"
+      ? normalizedColorAppearance.stops
+      : createDefaultProgressGradientStops();
+  const selectedGradientStop =
+    gradientStops.find((stop) => stop.id === selectedGradientStopId) ??
+    gradientStops[0] ??
+    null;
+  const gradientTrackStyle = {
+    "--progress-gradient-track": buildGradientTrackBackground(gradientStops),
+  } as CSSProperties & {
+    "--progress-gradient-track": string;
+  };
 
   useEffect(() => {
     setDraftBands(toDraftBands(colorBands));
@@ -148,6 +257,63 @@ export function ProgressAppearancePreferenceControls({
   useEffect(() => {
     setThicknessDraft(formatThicknessDraft(thicknessPx));
   }, [thicknessPx]);
+
+  useEffect(() => {
+    if (activeColorMode !== "gradient") {
+      return;
+    }
+
+    if (
+      selectedGradientStopId &&
+      gradientStops.some((stop) => stop.id === selectedGradientStopId)
+    ) {
+      return;
+    }
+
+    setSelectedGradientStopId(gradientStops[0]?.id ?? null);
+  }, [activeColorMode, gradientStops, selectedGradientStopId]);
+
+  function commitGradientStops(
+    nextStops: readonly ProgressGradientStop[],
+    nextSelectedStopId = selectedGradientStopId,
+  ) {
+    const normalizedStops = normalizeProgressGradientStops(nextStops);
+
+    onColorAppearanceChange({
+      mode: "gradient",
+      stops: normalizedStops,
+    });
+    setSelectedGradientStopId(
+      normalizedStops.some((stop) => stop.id === nextSelectedStopId)
+        ? nextSelectedStopId
+        : (normalizedStops[0]?.id ?? null),
+    );
+  }
+
+  function switchColorMode(nextMode: ProgressColorAppearance["mode"]) {
+    if (nextMode === activeColorMode) {
+      return;
+    }
+
+    if (nextMode === "traditional") {
+      onColorAppearanceChange({
+        mode: "traditional",
+        bands: normalizeProgressColorBands(colorBands),
+      });
+      return;
+    }
+
+    const stops =
+      normalizedColorAppearance.mode === "gradient"
+        ? normalizedColorAppearance.stops
+        : createDefaultProgressGradientStops();
+
+    setSelectedGradientStopId(stops[0]?.id ?? null);
+    onColorAppearanceChange({
+      mode: "gradient",
+      stops,
+    });
+  }
 
   function commitDraftBands(nextDraftBands: ProgressColorBandDraft[]) {
     setDraftBands(nextDraftBands);
@@ -209,6 +375,156 @@ export function ProgressAppearancePreferenceControls({
 
   function moveBand(bandId: string, direction: "up" | "down") {
     onColorBandsChange(moveProgressColorBand(colorBands, bandId, direction));
+  }
+
+  function resetGradientStops() {
+    const defaultStops = createDefaultProgressGradientStops();
+
+    commitGradientStops(defaultStops, defaultStops[0]?.id ?? null);
+  }
+
+  function updateGradientStopPosition(stopId: string, nextPosition: number) {
+    const targetStop = gradientStops.find((stop) => stop.id === stopId);
+
+    if (!targetStop || isGradientEndpointStop(targetStop)) {
+      return;
+    }
+
+    const positionPercent = findAvailableGradientStopPosition(
+      nextPosition,
+      gradientStops,
+      stopId,
+    );
+
+    commitGradientStops(
+      gradientStops.map((stop) =>
+        stop.id === stopId
+          ? {
+              ...stop,
+              positionPercent,
+            }
+          : stop,
+      ),
+      stopId,
+    );
+  }
+
+  function updateGradientStopColor(stopId: string, nextColorHex: string) {
+    commitGradientStops(
+      gradientStops.map((stop) =>
+        stop.id === stopId
+          ? {
+              ...stop,
+              colorHex: normalizeColorDraft(nextColorHex),
+            }
+          : stop,
+      ),
+      stopId,
+    );
+  }
+
+  function addGradientStop(event: MouseEvent<HTMLDivElement>) {
+    const target = event.target;
+
+    if (
+      target instanceof Element &&
+      target.closest("[data-progress-gradient-stop-handle]")
+    ) {
+      return;
+    }
+
+    const rect = event.currentTarget.getBoundingClientRect();
+
+    if (rect.width <= 0) {
+      return;
+    }
+
+    const rawPosition = ((event.clientX - rect.left) / rect.width) * 100;
+    const positionPercent = findAvailableGradientStopPosition(
+      rawPosition,
+      gradientStops,
+    );
+    const colorHex =
+      resolveProgressGradientColorForRemainingPercent(
+        positionPercent,
+        gradientStops,
+      ) ??
+      selectedGradientStop?.colorHex ??
+      "#146C2E";
+    const nextStop: ProgressGradientStop = {
+      id: createGradientStopId(gradientStops),
+      positionPercent,
+      colorHex,
+    };
+
+    commitGradientStops([...gradientStops, nextStop], nextStop.id);
+  }
+
+  function removeSelectedGradientStop() {
+    if (
+      !selectedGradientStop ||
+      isGradientEndpointStop(selectedGradientStop) ||
+      gradientStops.length <= 2
+    ) {
+      return;
+    }
+
+    const selectedIndex = gradientStops.findIndex(
+      (stop) => stop.id === selectedGradientStop.id,
+    );
+    const nextStops = gradientStops.filter(
+      (stop) => stop.id !== selectedGradientStop.id,
+    );
+    const nextSelectedStopId =
+      nextStops[Math.max(0, selectedIndex - 1)]?.id ?? nextStops[0]?.id ?? null;
+
+    commitGradientStops(nextStops, nextSelectedStopId);
+  }
+
+  function handleGradientStopKeyDown(
+    event: KeyboardEvent<HTMLButtonElement>,
+    stop: ProgressGradientStop,
+  ) {
+    if (isGradientEndpointStop(stop)) {
+      return;
+    }
+
+    const smallStep = event.shiftKey ? 5 : 1;
+
+    if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
+      event.preventDefault();
+      updateGradientStopPosition(stop.id, stop.positionPercent - smallStep);
+      return;
+    }
+
+    if (event.key === "ArrowRight" || event.key === "ArrowUp") {
+      event.preventDefault();
+      updateGradientStopPosition(stop.id, stop.positionPercent + smallStep);
+      return;
+    }
+
+    if (event.key === "PageDown") {
+      event.preventDefault();
+      updateGradientStopPosition(stop.id, stop.positionPercent - 5);
+      return;
+    }
+
+    if (event.key === "PageUp") {
+      event.preventDefault();
+      updateGradientStopPosition(stop.id, stop.positionPercent + 5);
+      return;
+    }
+
+    if (event.key === "Home") {
+      event.preventDefault();
+      updateGradientStopPosition(stop.id, 0.01);
+      return;
+    }
+
+    if (event.key === "End") {
+      event.preventDefault();
+      updateGradientStopPosition(stop.id, 99.99);
+    }
   }
 
   return (
@@ -276,21 +592,63 @@ export function ProgressAppearancePreferenceControls({
               <MaterialInfoTooltip>{copy.colorBands.detail}</MaterialInfoTooltip>
             </div>
             <div className="progress-appearance-bands__header-actions">
-              <button className="text-button" type="button" onClick={addBand}>
-                {copy.colorBands.addBand}
-              </button>
-              <button
-                className="text-button"
-                type="button"
-                onClick={() => onColorBandsChange(createDefaultProgressColorBands())}
+              <span
+                className="progress-appearance-mode-switch"
+                role="group"
+                aria-label={copy.mode.label}
               >
-                {copy.colorBands.resetToDefault}
-              </button>
+                <button
+                  className="progress-appearance-mode-switch__button"
+                  type="button"
+                  aria-pressed={activeColorMode === "traditional"}
+                  data-selected={
+                    activeColorMode === "traditional" ? "true" : "false"
+                  }
+                  onClick={() => switchColorMode("traditional")}
+                >
+                  {copy.mode.traditional}
+                </button>
+                <button
+                  className="progress-appearance-mode-switch__button"
+                  type="button"
+                  aria-pressed={activeColorMode === "gradient"}
+                  data-selected={activeColorMode === "gradient" ? "true" : "false"}
+                  onClick={() => switchColorMode("gradient")}
+                >
+                  {copy.mode.gradient}
+                </button>
+              </span>
+              {activeColorMode === "traditional" ? (
+                <>
+                  <button className="text-button" type="button" onClick={addBand}>
+                    {copy.colorBands.addBand}
+                  </button>
+                  <button
+                    className="text-button"
+                    type="button"
+                    onClick={() =>
+                      onColorBandsChange(createDefaultProgressColorBands())
+                    }
+                  >
+                    {copy.colorBands.resetToDefault}
+                  </button>
+                </>
+              ) : (
+                <button
+                  className="text-button"
+                  type="button"
+                  onClick={resetGradientStops}
+                >
+                  {copy.gradient.resetToDefault}
+                </button>
+              )}
             </div>
           </div>
 
-          <ol className="progress-appearance-band-list">
-            {draftBands.map((band, index) => {
+          {activeColorMode === "traditional" ? (
+            <>
+              <ol className="progress-appearance-band-list">
+                {draftBands.map((band, index) => {
               const colorInputValue = isValidColorInput(band.colorHex)
                 ? band.colorHex
                 : "#000000";
@@ -310,113 +668,266 @@ export function ProgressAppearancePreferenceControls({
                   )
                 : copy.colorBands.validationError;
 
-              return (
-                <li
-                  key={band.id}
-                  className="progress-appearance-band"
-                  data-progress-color-band={band.id}
+                  return (
+                    <li
+                      key={band.id}
+                      className="progress-appearance-band"
+                      data-progress-color-band={band.id}
+                    >
+                      <div className="progress-appearance-band__fields">
+                        <label className="form-field">
+                          <span className="form-field__label">
+                            {copy.colorBands.fromLabel}
+                          </span>
+                          <input
+                            className="form-field__control"
+                            type="number"
+                            min={0}
+                            max={100}
+                            value={band.minimumPercent}
+                            onChange={(event) =>
+                              updateDraftBand(band.id, {
+                                minimumPercent: event.target.value,
+                              })
+                            }
+                          />
+                        </label>
+                        <label className="form-field">
+                          <span className="form-field__label">
+                            {copy.colorBands.toLabel}
+                          </span>
+                          <input
+                            className="form-field__control"
+                            type="number"
+                            min={0}
+                            max={100}
+                            value={band.maximumPercent}
+                            onChange={(event) =>
+                              updateDraftBand(band.id, {
+                                maximumPercent: event.target.value,
+                              })
+                            }
+                          />
+                        </label>
+                        <ColorChoiceDropdown
+                          label={copy.colorBands.colorLabel}
+                          valueHex={colorInputValue}
+                          fieldIdPrefix={`progress-color-band-${band.id}`}
+                          menuDensity="compact"
+                          sessionPopoverId={`progress-color-band:${band.id}:color`}
+                          activePopover={activePopover}
+                          onActivePopoverChange={onActivePopoverChange}
+                          copy={colorChoiceCopy}
+                          sections={[
+                            {
+                              id: "recommended-colors",
+                              label: colorChoiceCopy.recommendedColorsLabel,
+                              choices: RECOMMENDED_COLOR_CHOICES.map(
+                                (choice) => ({
+                                  id: choice.id,
+                                  hex: choice.hex,
+                                  label: colorChoiceCopy.colorNames[choice.id],
+                                }),
+                              ),
+                            },
+                          ]}
+                          onChange={(nextColorHex) =>
+                            updateDraftBand(band.id, {
+                              colorHex: normalizeColorDraft(nextColorHex),
+                            })
+                          }
+                        />
+                      </div>
+                      <span className="meta-chip progress-appearance-band__range">
+                        {rangeLabel}
+                      </span>
+                      <span className="progress-appearance-band__actions">
+                        <button
+                          className="text-button progress-appearance-band__action"
+                          type="button"
+                          disabled={isFirst}
+                          onClick={() => moveBand(band.id, "up")}
+                        >
+                          {copy.colorBands.moveUp}
+                        </button>
+                        <button
+                          className="text-button progress-appearance-band__action"
+                          type="button"
+                          disabled={isLast}
+                          onClick={() => moveBand(band.id, "down")}
+                        >
+                          {copy.colorBands.moveDown}
+                        </button>
+                        <button
+                          className="text-button progress-appearance-band__action"
+                          type="button"
+                          disabled={draftBands.length <= 1}
+                          onClick={() => removeBand(band.id)}
+                        >
+                          {copy.colorBands.removeBand}
+                        </button>
+                      </span>
+                    </li>
+                  );
+                })}
+              </ol>
+
+              {hasBandError ? (
+                <p className="supporting-copy progress-appearance-bands__error">
+                  {copy.colorBands.validationError}
+                </p>
+              ) : null}
+            </>
+          ) : (
+            <div
+              className="progress-gradient-editor"
+              data-progress-gradient-editor=""
+            >
+              <div className="section-title-with-info">
+                <p className="progress-appearance-card__title">
+                  {copy.gradient.label}
+                </p>
+                <MaterialInfoTooltip>{copy.gradient.detail}</MaterialInfoTooltip>
+              </div>
+              <div
+                className="progress-gradient-editor__track"
+                role="presentation"
+                title={copy.gradient.trackHelp}
+                style={gradientTrackStyle}
+                onClick={addGradientStop}
+              >
+                <div
+                  className="progress-gradient-editor__ticks"
+                  aria-hidden="true"
                 >
-                  <div className="progress-appearance-band__fields">
-                    <label className="form-field">
-                      <span className="form-field__label">
-                        {copy.colorBands.fromLabel}
-                      </span>
-                      <input
-                        className="form-field__control"
-                        type="number"
-                        min={0}
-                        max={100}
-                        value={band.minimumPercent}
-                        onChange={(event) =>
-                          updateDraftBand(band.id, {
-                            minimumPercent: event.target.value,
-                          })
-                        }
-                      />
-                    </label>
-                    <label className="form-field">
-                      <span className="form-field__label">
-                        {copy.colorBands.toLabel}
-                      </span>
-                      <input
-                        className="form-field__control"
-                        type="number"
-                        min={0}
-                        max={100}
-                        value={band.maximumPercent}
-                        onChange={(event) =>
-                          updateDraftBand(band.id, {
-                            maximumPercent: event.target.value,
-                          })
-                        }
-                      />
-                    </label>
-                    <ColorChoiceDropdown
-                      label={copy.colorBands.colorLabel}
-                      valueHex={colorInputValue}
-                      fieldIdPrefix={`progress-color-band-${band.id}`}
-                      menuDensity="compact"
-                      sessionPopoverId={`progress-color-band:${band.id}:color`}
-                      activePopover={activePopover}
-                      onActivePopoverChange={onActivePopoverChange}
-                      copy={colorChoiceCopy}
-                      sections={[
-                        {
-                          id: "recommended-colors",
-                          label: colorChoiceCopy.recommendedColorsLabel,
-                          choices: RECOMMENDED_COLOR_CHOICES.map((choice) => ({
-                            id: choice.id,
-                            hex: choice.hex,
-                            label: colorChoiceCopy.colorNames[choice.id],
-                          })),
-                        },
-                      ]}
-                      onChange={(nextColorHex) =>
-                        updateDraftBand(band.id, {
-                          colorHex: normalizeColorDraft(nextColorHex),
-                        })
+                  {[0, 25, 50, 75, 100].map((tick) => (
+                    <span
+                      key={tick}
+                      className="progress-gradient-editor__tick"
+                      style={{ left: `${tick}%` }}
+                    />
+                  ))}
+                </div>
+                {gradientStops.map((stop, index) => {
+                  const isSelected = selectedGradientStop?.id === stop.id;
+
+                  return (
+                    <button
+                      key={stop.id}
+                      className="progress-gradient-editor__stop"
+                      type="button"
+                      role="slider"
+                      aria-label={copy.gradient.stopAriaLabel(
+                        index + 1,
+                        stop.positionPercent,
+                      )}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      aria-valuenow={stop.positionPercent}
+                      aria-valuetext={`${stop.positionPercent}%`}
+                      data-progress-gradient-stop-handle=""
+                      data-selected={isSelected ? "true" : "false"}
+                      data-endpoint={
+                        isGradientEndpointStop(stop) ? "true" : "false"
+                      }
+                      title={copy.gradient.stopHelp}
+                      style={{
+                        left: `${stop.positionPercent}%`,
+                        backgroundColor: stop.colorHex,
+                      }}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        setSelectedGradientStopId(stop.id);
+                      }}
+                      onKeyDown={(event) =>
+                        handleGradientStopKeyDown(event, stop)
                       }
                     />
-                  </div>
-                  <span className="meta-chip progress-appearance-band__range">
-                    {rangeLabel}
-                  </span>
-                  <span className="progress-appearance-band__actions">
-                    <button
-                      className="text-button progress-appearance-band__action"
-                      type="button"
-                      disabled={isFirst}
-                      onClick={() => moveBand(band.id, "up")}
-                    >
-                      {copy.colorBands.moveUp}
-                    </button>
-                    <button
-                      className="text-button progress-appearance-band__action"
-                      type="button"
-                      disabled={isLast}
-                      onClick={() => moveBand(band.id, "down")}
-                    >
-                      {copy.colorBands.moveDown}
-                    </button>
-                    <button
-                      className="text-button progress-appearance-band__action"
-                      type="button"
-                      disabled={draftBands.length <= 1}
-                      onClick={() => removeBand(band.id)}
-                    >
-                      {copy.colorBands.removeBand}
-                    </button>
-                  </span>
-                </li>
-              );
-            })}
-          </ol>
+                  );
+                })}
+              </div>
 
-          {hasBandError ? (
-            <p className="supporting-copy progress-appearance-bands__error">
-              {copy.colorBands.validationError}
-            </p>
-          ) : null}
+              {selectedGradientStop ? (
+                <div className="progress-gradient-editor__selected">
+                  <label className="form-field">
+                    <span className="form-field__label">
+                      {copy.gradient.positionLabel}
+                    </span>
+                    <input
+                      className="form-field__control"
+                      type="number"
+                      min={0}
+                      max={100}
+                      step={0.01}
+                      inputMode="decimal"
+                      value={selectedGradientStop.positionPercent}
+                      disabled={isGradientEndpointStop(selectedGradientStop)}
+                      aria-describedby={
+                        isGradientEndpointStop(selectedGradientStop)
+                          ? "progress-gradient-endpoint-help"
+                          : undefined
+                      }
+                      onChange={(event) =>
+                        updateGradientStopPosition(
+                          selectedGradientStop.id,
+                          Number(event.target.value),
+                        )
+                      }
+                    />
+                  </label>
+                  <ColorChoiceDropdown
+                    label={copy.gradient.colorLabel}
+                    valueHex={selectedGradientStop.colorHex}
+                    fieldIdPrefix={`progress-gradient-stop-${selectedGradientStop.id}`}
+                    menuDensity="compact"
+                    sessionPopoverId={`progress-gradient-stop:${selectedGradientStop.id}:color`}
+                    activePopover={activePopover}
+                    onActivePopoverChange={onActivePopoverChange}
+                    copy={colorChoiceCopy}
+                    sections={[
+                      {
+                        id: "recommended-colors",
+                        label: colorChoiceCopy.recommendedColorsLabel,
+                        choices: RECOMMENDED_COLOR_CHOICES.map((choice) => ({
+                          id: choice.id,
+                          hex: choice.hex,
+                          label: colorChoiceCopy.colorNames[choice.id],
+                        })),
+                      },
+                    ]}
+                    onChange={(nextColorHex) =>
+                      updateGradientStopColor(
+                        selectedGradientStop.id,
+                        nextColorHex,
+                      )
+                    }
+                  />
+                  <button
+                    className="text-button progress-gradient-editor__delete"
+                    type="button"
+                    disabled={
+                      gradientStops.length <= 2 ||
+                      isGradientEndpointStop(selectedGradientStop)
+                    }
+                    title={
+                      isGradientEndpointStop(selectedGradientStop)
+                        ? copy.gradient.endpointLocked
+                        : copy.gradient.minimumStopHelp
+                    }
+                    onClick={removeSelectedGradientStop}
+                  >
+                    {copy.gradient.deleteStop}
+                  </button>
+                </div>
+              ) : null}
+              <p
+                id="progress-gradient-endpoint-help"
+                className="supporting-copy progress-gradient-editor__help"
+              >
+                {copy.gradient.endpointLocked}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </section>

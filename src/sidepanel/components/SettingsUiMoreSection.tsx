@@ -6,6 +6,7 @@ import type {
   PopupCornerStyle,
   PopupShadowStyle,
   PopupSizePreset,
+  ProgressColorAppearance,
   ProgressColorBand,
   ProgressDisplayStyle,
   UiFontFamily,
@@ -66,6 +67,9 @@ type SettingsUiMoreSectionProps = {
   onPopupProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onPopupShadowStyleChange: (shadowStyle: PopupShadowStyle) => void;
   onPopupSizePresetChange: (sizePreset: PopupSizePreset) => void;
+  onProgressColorAppearanceChange: (
+    colorAppearance: ProgressColorAppearance,
+  ) => void;
   onProgressColorBandsChange: (progressColorBands: ProgressColorBand[]) => void;
   onProgressThicknessPxChange: (progressThicknessPx: number) => void;
   onSidebarProgressStyleChange: (
@@ -152,6 +156,7 @@ export function SettingsUiMoreSection({
   onPopupProgressStyleChange,
   onPopupShadowStyleChange,
   onPopupSizePresetChange,
+  onProgressColorAppearanceChange,
   onProgressColorBandsChange,
   onProgressThicknessPxChange,
   onSidebarProgressStyleChange,
@@ -348,10 +353,12 @@ export function SettingsUiMoreSection({
             copy={settingsCopy.progressAppearance}
             colorChoiceCopy={settingsCopy.colorChoices}
             thicknessPx={settings.progressThicknessPx}
+            colorAppearance={settings.progressColorAppearance}
             colorBands={settings.progressColorBands}
             activePopover={activePopover}
             onActivePopoverChange={onActivePopoverChange}
             onThicknessPxChange={onProgressThicknessPxChange}
+            onColorAppearanceChange={onProgressColorAppearanceChange}
             onColorBandsChange={onProgressColorBandsChange}
           />
         </div>

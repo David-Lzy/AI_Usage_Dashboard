@@ -10,6 +10,7 @@ import type {
   PopupCircularProgressItemsPerRow,
   PopupShadowStyle,
   PopupSizePreset,
+  ProgressColorAppearance,
   ProgressColorBand,
   ProgressDisplayStyle,
   ProgressItemsBySurface,
@@ -98,6 +99,9 @@ type SettingsPageProps = {
     progressItemsBySurface: ProgressItemsBySurface,
   ) => void;
   onProgressThicknessPxChange: (progressThicknessPx: number) => void;
+  onProgressColorAppearanceChange: (
+    colorAppearance: ProgressColorAppearance,
+  ) => void;
   onProgressColorBandsChange: (progressColorBands: ProgressColorBand[]) => void;
   onActionBadgeSelectionsChange: (
     actionBadgeSelections: ActionBadgeSelections,
@@ -175,6 +179,7 @@ export function SettingsPage({
   onProviderOrderBySurfaceChange,
   onProgressItemsBySurfaceChange,
   onProgressThicknessPxChange,
+  onProgressColorAppearanceChange,
   onProgressColorBandsChange,
   onActionBadgeSelectionsChange,
   onActionBadgeSelectionModeChange,
@@ -469,6 +474,7 @@ export function SettingsPage({
         }
         onPopupShadowStyleChange={onPopupShadowStyleChange}
         onProgressThicknessPxChange={onProgressThicknessPxChange}
+        onProgressColorAppearanceChange={onProgressColorAppearanceChange}
         onProgressColorBandsChange={onProgressColorBandsChange}
         onActionBadgeSelectionsChange={onActionBadgeSelectionsChange}
         onActionBadgeSelectionModeChange={onActionBadgeSelectionModeChange}
