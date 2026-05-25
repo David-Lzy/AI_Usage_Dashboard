@@ -355,6 +355,7 @@ export function ProgressAppearancePreferenceControls({
                       label={copy.colorBands.colorLabel}
                       valueHex={colorInputValue}
                       fieldIdPrefix={`progress-color-band-${band.id}`}
+                      menuDensity="compact"
                       sessionPopoverId={`progress-color-band:${band.id}:color`}
                       activePopover={activePopover}
                       onActivePopoverChange={onActivePopoverChange}

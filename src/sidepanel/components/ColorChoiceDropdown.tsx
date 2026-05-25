@@ -46,6 +46,7 @@ type ColorChoiceDropdownProps = {
   sections: ColorChoiceDropdownSection[];
   copy: ColorChoiceDropdownCopy;
   fieldIdPrefix: string;
+  menuDensity?: "default" | "compact";
   selectedLabel?: string;
   sessionPopoverId?: string;
   activePopover?: SettingsActivePopoverSessionState | null;
@@ -96,6 +97,7 @@ export function ColorChoiceDropdown({
   sections,
   copy,
   fieldIdPrefix,
+  menuDensity = "default",
   selectedLabel,
   sessionPopoverId,
   activePopover,
@@ -211,6 +213,7 @@ export function ColorChoiceDropdown({
   }, [
     activePopover?.customPanelOpen,
     activePopover?.id,
+    menuDensity,
     sessionPopoverId,
   ]);
 
@@ -239,7 +242,7 @@ export function ColorChoiceDropdown({
     return () => {
       document.removeEventListener("pointerdown", handlePointerDown);
     };
-  }, [isOpen]);
+  }, [isOpen, menuDensity]);
 
   function updateMenuPosition() {
     if (typeof window === "undefined" || typeof document === "undefined") {
@@ -269,7 +272,7 @@ export function ColorChoiceDropdown({
           align: direction,
           minHeight: 180,
           preferredMaxHeight: 560,
-          preferredWidth: 640,
+          preferredWidth: menuDensity === "compact" ? 420 : 640,
         },
       ),
     );
@@ -434,7 +437,9 @@ export function ColorChoiceDropdown({
     <div
       ref={menuRef}
       id={menuId}
-      className="color-choice-dropdown__menu color-choice-dropdown__menu--floating"
+      className={`color-choice-dropdown__menu color-choice-dropdown__menu--floating${
+        menuDensity === "compact" ? " color-choice-dropdown__menu--compact" : ""
+      }`}
       aria-labelledby={labelId}
       data-placement={menuPosition?.placement ?? "below"}
       style={menuStyle}
@@ -497,6 +502,7 @@ export function ColorChoiceDropdown({
       ref={rootRef}
       className="form-field color-choice-dropdown"
       data-color-choice-dropdown={fieldIdPrefix}
+      data-color-choice-menu-density={menuDensity}
       data-session-popover-id={sessionPopoverId}
       onKeyDown={handleKeyDown}
     >

@@ -49,6 +49,7 @@ describe("ProgressAppearancePreferenceControls", () => {
     expect(html).toContain('aria-valuetext="10 px"');
     expect(html).toContain('data-progress-color-band="low"');
     expect(html).toContain('data-color-choice-dropdown="progress-color-band-low"');
+    expect(html).toContain('data-color-choice-menu-density="compact"');
     expect(html).toContain(
       'data-session-popover-id="progress-color-band:low:color"',
     );

@@ -625,6 +625,10 @@ select.form-field__control {
   inset: auto;
 }
 
+.color-choice-dropdown__menu--compact {
+  min-inline-size: min(420px, calc(100vw - 32px));
+}
+
 html[data-app-direction="rtl"]
   .color-choice-dropdown__menu:not(.color-choice-dropdown__menu--floating) {
   inset-inline: auto 0;
@@ -662,6 +666,10 @@ html[data-app-direction="rtl"]
   gap: var(--app-space-2);
 }
 
+.color-choice-dropdown__menu--compact .color-choice-dropdown__choice-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .color-choice-dropdown__choice,
 .color-choice-dropdown__custom-toggle {
   display: grid;
@@ -683,6 +691,10 @@ html[data-app-direction="rtl"]
     border-color var(--app-motion-duration-fast)
       var(--app-motion-easing-standard),
     box-shadow var(--app-motion-duration-fast) var(--app-motion-easing-standard);
+}
+
+.color-choice-dropdown__menu--compact .color-choice-dropdown__choice {
+  padding-inline: var(--app-space-2);
 }
 
 .color-choice-dropdown__custom-toggle {

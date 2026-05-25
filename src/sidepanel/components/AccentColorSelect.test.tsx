@@ -39,7 +39,7 @@ describe("AccentColorSelect", () => {
     expect(html).not.toContain('data-settings-material-select="theme-preset"');
   });
 
-  it("keeps named presets and at least ten recommended colors in one model", () => {
+  it("keeps named presets and a 16-color recommended palette in one model", () => {
     const sections = buildAccentColorChoiceSections(
       themePresetOptions,
       copy.colorChoices,
@@ -50,7 +50,7 @@ describe("AccentColorSelect", () => {
       "preset-meadow",
       "preset-sunset",
     ]);
-    expect(buildRecommendedColorChoices(copy.colorChoices)).toHaveLength(13);
+    expect(buildRecommendedColorChoices(copy.colorChoices)).toHaveLength(16);
   });
 
   it("resolves preset and custom seed labels for the closed trigger", () => {

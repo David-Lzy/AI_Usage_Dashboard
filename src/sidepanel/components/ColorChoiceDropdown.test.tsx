@@ -91,6 +91,28 @@ describe("ColorChoiceDropdown", () => {
     expect(html).toContain("Apply custom color");
   });
 
+  it("can render a compact floating menu for dense color-band rows", () => {
+    const html = renderToStaticMarkup(
+      <ColorChoiceDropdown
+        label="Band color"
+        valueHex="#4f46e5"
+        sections={sections}
+        copy={copy}
+        fieldIdPrefix="progress-color-band-low"
+        menuDensity="compact"
+        sessionPopoverId="progress-color-band:low:color"
+        activePopover={{
+          id: "progress-color-band:low:color",
+        }}
+        onActivePopoverChange={() => {}}
+        onChange={() => {}}
+      />,
+    );
+
+    expect(html).toContain('data-color-choice-menu-density="compact"');
+    expect(html).toContain("color-choice-dropdown__menu--compact");
+  });
+
   it("uses body-large trigger typography for color names and custom hex values", () => {
     expect(formControlsCss).toContain(".color-choice-dropdown__button {");
     expect(formControlsCss).toContain(
@@ -117,6 +139,12 @@ describe("ColorChoiceDropdown", () => {
     expect(formControlsCss).toContain(".color-choice-dropdown__menu-header {");
     expect(formControlsCss).toContain(
       "grid-template-columns: repeat(auto-fit, minmax(min(100%, 136px), 1fr));",
+    );
+    expect(formControlsCss).toContain(
+      ".color-choice-dropdown__menu--compact {",
+    );
+    expect(formControlsCss).toContain(
+      "grid-template-columns: repeat(4, minmax(0, 1fr));",
     );
   });
 });
