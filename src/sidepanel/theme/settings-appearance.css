@@ -805,95 +805,210 @@
   min-width: 0;
 }
 
-.progress-gradient-presets {
+.progress-gradient-scheme-dropdown {
+  position: relative;
+}
+
+.progress-gradient-scheme-dropdown__button {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: minmax(64px, 0.7fr) minmax(0, 1fr) 40px;
+  align-items: center;
   gap: var(--app-space-2);
-  min-width: 0;
-}
-
-.progress-gradient-presets__help {
-  margin: var(--app-space-1) 0 0;
-}
-
-.progress-gradient-presets__list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr));
-  gap: var(--app-space-2);
-  min-width: 0;
-}
-
-.progress-gradient-preset {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--app-space-1);
-  min-height: 44px;
-  padding: var(--app-space-2);
+  width: 100%;
+  min-height: var(--app-control-height-large);
+  padding-block: 0;
+  padding-inline-start: var(--app-space-3);
+  padding-inline-end: 0;
   border: 1px solid var(--md-sys-color-outline-variant);
-  border-radius: var(--md-sys-shape-corner-medium);
-  background: var(--md-sys-color-surface-container-low);
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--md-sys-color-surface-container-lowest);
   color: var(--md-sys-color-on-surface);
   cursor: pointer;
-  font-family: var(--md-sys-typescale-label-large-font);
-  font-size: var(--md-sys-typescale-label-large-size);
-  font-weight: var(--md-sys-typescale-label-large-weight);
-  line-height: var(--md-sys-typescale-label-large-line-height);
+  font-family: var(--md-sys-typescale-body-large-font);
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: var(--md-sys-typescale-body-large-weight);
+  line-height: var(--md-sys-typescale-body-large-line-height);
   text-align: start;
 }
 
-.progress-gradient-preset:hover {
-  background: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
-  border-color: var(--md-sys-color-primary);
+.progress-gradient-scheme-dropdown__button:hover {
+  background: var(--app-state-layer-neutral-hover);
+  border-color: color-mix(
+    in srgb,
+    var(--md-sys-color-primary) 22%,
+    var(--md-sys-color-outline-variant) 78%
+  );
 }
 
-.progress-gradient-preset:focus-visible {
-  box-shadow: var(--app-focus-ring-shadow);
+.progress-gradient-scheme-dropdown__button:focus-visible,
+.progress-gradient-scheme-dropdown__button[data-open="true"] {
+  background: var(--md-sys-color-surface-container-lowest);
+  border-color: var(--md-sys-color-primary);
+  box-shadow: inset 0 0 0 1px var(--md-sys-color-primary);
   outline: 0;
 }
 
-.progress-gradient-preset__swatch {
+.progress-gradient-scheme-dropdown__value-preview,
+.progress-gradient-scheme-dropdown__option-preview,
+.progress-gradient-scheme-dropdown__measure-preview {
   display: block;
   width: 100%;
-  height: 10px;
+  height: 12px;
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--md-sys-shape-corner-full);
   background: var(--progress-gradient-track);
 }
 
-.progress-gradient-image-import {
-  display: flex;
+.progress-gradient-scheme-dropdown__value {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.progress-gradient-scheme-dropdown__menu-icon {
+  justify-self: center;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  color: var(--md-sys-color-on-surface-variant);
+  transform: rotate(45deg);
+  transition:
+    color var(--app-motion-duration-fast) var(--app-motion-easing-standard),
+    transform var(--app-motion-duration-fast) var(--app-motion-easing-standard);
+}
+
+.progress-gradient-scheme-dropdown__button:hover
+  .progress-gradient-scheme-dropdown__menu-icon,
+.progress-gradient-scheme-dropdown__button:focus-visible
+  .progress-gradient-scheme-dropdown__menu-icon,
+.progress-gradient-scheme-dropdown__button[data-open="true"]
+  .progress-gradient-scheme-dropdown__menu-icon {
+  color: var(--md-sys-color-primary);
+}
+
+.progress-gradient-scheme-dropdown__button[data-open="true"]
+  .progress-gradient-scheme-dropdown__menu-icon {
+  transform: rotate(225deg);
+}
+
+.progress-gradient-scheme-dropdown__help {
+  margin: var(--app-space-1) 0 0;
+}
+
+.progress-gradient-scheme-dropdown__menu {
+  position: fixed;
+  z-index: 90;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-3);
+  max-inline-size: calc(100vw - 32px);
+  max-block-size: min(520px, calc(100vh - 24px));
+  padding: var(--app-space-3);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--md-sys-color-surface-container);
+  box-shadow: var(--app-elevation-2);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.progress-gradient-scheme-dropdown__menu-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
   align-items: center;
-  flex-wrap: wrap;
   gap: var(--app-space-2);
   min-width: 0;
 }
 
-.progress-gradient-image-import > .field-label-with-info {
-  flex: 1 1 15rem;
-  min-width: 0;
+.progress-gradient-scheme-dropdown__menu-label {
+  margin: 0;
+  color: var(--md-sys-color-on-surface-variant);
+  font-family: var(--md-sys-typescale-label-medium-font);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: var(--md-sys-typescale-label-medium-line-height);
+  text-transform: uppercase;
 }
 
-.progress-gradient-image-import__button {
+.progress-gradient-scheme-dropdown__image-import {
   position: relative;
-  flex: 0 0 auto;
   overflow: hidden;
   min-height: 40px;
 }
 
-.progress-gradient-image-import__button input {
+.progress-gradient-scheme-dropdown__image-import input {
   position: absolute;
   inset: 0;
   opacity: 0;
   cursor: pointer;
 }
 
-.progress-gradient-image-import__button:has(input:disabled) {
+.progress-gradient-scheme-dropdown__image-import:has(input:disabled) {
   opacity: 0.68;
   pointer-events: none;
 }
 
-.progress-gradient-image-import__error {
-  flex-basis: 100%;
+.progress-gradient-scheme-dropdown__grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, var(--adaptive-dropdown-menu-choice-min)), 1fr)
+  );
+  gap: var(--app-space-2);
+}
+
+.progress-gradient-scheme-dropdown__option,
+.progress-gradient-scheme-dropdown__measure-choice {
+  display: grid;
+  grid-template-columns: minmax(64px, 0.72fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--app-space-2);
+  min-height: var(--app-control-height-medium);
+  padding: 0 var(--app-space-2);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--md-sys-color-surface-container-lowest);
+  color: var(--md-sys-color-on-surface);
+  cursor: pointer;
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  font-weight: var(--md-sys-typescale-body-medium-weight);
+  line-height: var(--md-sys-typescale-body-medium-line-height);
+  text-align: start;
+}
+
+.progress-gradient-scheme-dropdown__measure-choice {
+  inline-size: max-content;
+  border-color: transparent;
+  cursor: default;
+  white-space: nowrap;
+}
+
+.progress-gradient-scheme-dropdown__option:hover {
+  background: var(--app-state-layer-neutral-hover);
+  border-color: color-mix(
+    in srgb,
+    var(--md-sys-color-primary) 24%,
+    var(--md-sys-color-outline-variant) 76%
+  );
+}
+
+.progress-gradient-scheme-dropdown__option:focus-visible {
+  box-shadow: var(--app-focus-ring-shadow);
+  outline: 0;
+}
+
+.progress-gradient-scheme-dropdown__option-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.progress-gradient-scheme-dropdown__error {
   margin: 0;
   color: var(--md-sys-color-error);
 }

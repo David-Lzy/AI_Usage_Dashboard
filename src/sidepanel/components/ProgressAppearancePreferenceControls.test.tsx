@@ -96,18 +96,25 @@ describe("ProgressAppearancePreferenceControls", () => {
         onThicknessPxChange={() => {}}
         onColorAppearanceChange={() => {}}
         onColorBandsChange={() => {}}
+        activePopover={{
+          id: "progress-gradient-scheme",
+        }}
+        onActivePopoverChange={() => {}}
       />,
     );
 
     expect(html).toContain('data-progress-gradient-editor=""');
     expect(html).toContain("剩余渐变");
-    expect(html).toContain("渐变预设");
-    expect(html).toContain('data-progress-gradient-preset="ocean"');
-    expect(html).toContain('data-progress-gradient-preset="calm-blue"');
+    expect(html).toContain("渐变方案");
+    expect(html).toContain('data-progress-gradient-scheme-dropdown=""');
+    expect(html).toContain('data-progress-gradient-scheme="ocean"');
+    expect(html).toContain('data-progress-gradient-scheme="calm-blue"');
+    expect(html).toContain('data-progress-gradient-scheme="slate"');
     expect(html).toContain("海洋");
     expect(html).toContain("静蓝");
-    expect(html).toContain("导入图片");
-    expect(html).toContain("选择图片");
+    expect(html).toContain("石青");
+    expect(html).toContain("自定义渐变");
+    expect(html).toContain("从图片生成");
     expect(html).toContain('accept="image/png,image/jpeg,image/webp"');
     expect(html).toContain("--progress-gradient-track");
     expect(html).toContain('role="slider"');

@@ -31,6 +31,7 @@ import {
   createDefaultProgressColorBands,
   createDefaultProgressGradientStops,
   createProgressGradientPresetStops,
+  findProgressGradientPresetIdForStops,
   moveProgressColorBand,
   normalizeProgressColorAppearance,
   normalizeProgressColorBands,
@@ -44,6 +45,7 @@ import {
 } from "../../shared/progress-appearance";
 import { ColorChoiceDropdown } from "./ColorChoiceDropdown";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
+import { ProgressGradientSchemeDropdown } from "./ProgressGradientSchemeDropdown";
 
 type ProgressAppearancePreferenceControlsProps = {
   colorAppearance: ProgressColorAppearance;
@@ -239,6 +241,9 @@ export function ProgressAppearancePreferenceControls({
   >(null);
   const [imageImportError, setImageImportError] = useState<string | null>(null);
   const [isImageImporting, setIsImageImporting] = useState(false);
+  const [gradientSchemeSource, setGradientSchemeSource] = useState<
+    "image" | null
+  >(null);
   const normalizedColorAppearance = useMemo(
     () => normalizeProgressColorAppearance(colorAppearance, colorBands),
     [colorAppearance, colorBands],
@@ -252,6 +257,15 @@ export function ProgressAppearancePreferenceControls({
     gradientStops.find((stop) => stop.id === selectedGradientStopId) ??
     gradientStops[0] ??
     null;
+  const matchedGradientPresetId =
+    activeColorMode === "gradient"
+      ? findProgressGradientPresetIdForStops(gradientStops)
+      : null;
+  const selectedGradientSchemeLabel = matchedGradientPresetId
+    ? copy.gradient.presetNames[matchedGradientPresetId]
+    : gradientSchemeSource === "image"
+      ? copy.gradient.imageGeneratedSchemeLabel
+      : copy.gradient.customSchemeLabel;
   const gradientTrackStyle = {
     "--progress-gradient-track": buildGradientTrackBackground(gradientStops),
   } as CSSProperties & {
@@ -285,6 +299,7 @@ export function ProgressAppearancePreferenceControls({
   function commitGradientStops(
     nextStops: readonly ProgressGradientStop[],
     nextSelectedStopId = selectedGradientStopId,
+    nextGradientSchemeSource: "image" | null = null,
   ) {
     const normalizedStops = normalizeProgressGradientStops(nextStops);
 
@@ -297,6 +312,7 @@ export function ProgressAppearancePreferenceControls({
         ? nextSelectedStopId
         : (normalizedStops[0]?.id ?? null),
     );
+    setGradientSchemeSource(nextGradientSchemeSource);
   }
 
   function switchColorMode(nextMode: ProgressColorAppearance["mode"]) {
@@ -318,6 +334,7 @@ export function ProgressAppearancePreferenceControls({
         : createDefaultProgressGradientStops();
 
     setSelectedGradientStopId(stops[0]?.id ?? null);
+    setGradientSchemeSource(null);
     onColorAppearanceChange({
       mode: "gradient",
       stops,
@@ -437,7 +454,7 @@ export function ProgressAppearancePreferenceControls({
 
     try {
       const stops = await createProgressGradientStopsFromImageFile(file);
-      commitGradientStops(stops, stops[0]?.id ?? null);
+    commitGradientStops(stops, stops[0]?.id ?? null, "image");
     } catch (error) {
       setImageImportError(getImageImportErrorMessage(error));
     } finally {
@@ -851,69 +868,32 @@ export function ProgressAppearancePreferenceControls({
                 </p>
                 <MaterialInfoTooltip>{copy.gradient.detail}</MaterialInfoTooltip>
               </div>
-              <div className="progress-gradient-presets">
-                <div>
-                  <p className="form-field__label">
-                    {copy.gradient.presetsLabel}
-                  </p>
-                  <p className="supporting-copy progress-gradient-presets__help">
-                    {copy.gradient.presetsHelp}
-                  </p>
-                </div>
-                <div className="progress-gradient-presets__list">
-                  {PROGRESS_GRADIENT_PRESETS.map((preset) => (
-                    <button
-                      key={preset.id}
-                      className="progress-gradient-preset"
-                      type="button"
-                      data-progress-gradient-preset={preset.id}
-                      onClick={() => applyGradientPreset(preset.id)}
-                    >
-                      <span
-                        className="progress-gradient-preset__swatch"
-                        style={
-                          {
-                            "--progress-gradient-track":
-                              buildGradientTrackBackground(preset.stops),
-                          } as CSSProperties & {
-                            "--progress-gradient-track": string;
-                          }
-                        }
-                        aria-hidden="true"
-                      />
-                      <span>{copy.gradient.presetNames[preset.id]}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div className="progress-gradient-image-import">
-                <div className="field-label-with-info">
-                  <span className="form-field__label">
-                    {copy.gradient.imageImportLabel}
-                  </span>
-                  <MaterialInfoTooltip>
-                    {copy.gradient.imageImportHelp}
-                  </MaterialInfoTooltip>
-                </div>
-                <label className="text-button progress-gradient-image-import__button">
-                  <span>
-                    {isImageImporting
-                      ? copy.gradient.imageImportBusy
-                      : copy.gradient.imageImportAction}
-                  </span>
-                  <input
-                    type="file"
-                    accept={PROGRESS_GRADIENT_IMAGE_ACCEPT}
-                    disabled={isImageImporting}
-                    onChange={handleGradientImageImport}
-                  />
-                </label>
-                {imageImportError ? (
-                  <p className="supporting-copy progress-gradient-image-import__error">
-                    {imageImportError}
-                  </p>
-                ) : null}
-              </div>
+              <ProgressGradientSchemeDropdown
+                label={copy.gradient.presetsLabel}
+                helperText={copy.gradient.presetsHelp}
+                valueLabel={selectedGradientSchemeLabel}
+                valueStops={gradientStops}
+                options={PROGRESS_GRADIENT_PRESETS.map((preset) => ({
+                  id: preset.id,
+                  label: copy.gradient.presetNames[preset.id],
+                  stops: preset.stops,
+                }))}
+                imageImportAction={copy.gradient.imageImportAction}
+                imageImportBusy={copy.gradient.imageImportBusy}
+                imageImportHelp={copy.gradient.imageImportHelp}
+                imageImportAccept={PROGRESS_GRADIENT_IMAGE_ACCEPT}
+                isImageImporting={isImageImporting}
+                sessionPopoverId="progress-gradient-scheme"
+                activePopover={activePopover}
+                onActivePopoverChange={onActivePopoverChange}
+                onSchemeSelect={applyGradientPreset}
+                onImageImport={handleGradientImageImport}
+              />
+              {imageImportError ? (
+                <p className="supporting-copy progress-gradient-scheme-dropdown__error">
+                  {imageImportError}
+                </p>
+              ) : null}
               <div
                 className="progress-gradient-editor__track"
                 role="presentation"

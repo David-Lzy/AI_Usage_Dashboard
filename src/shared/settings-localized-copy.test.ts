@@ -34,11 +34,12 @@ describe("buildSettingsLocalizedCopy", () => {
     });
     expect(copy.progressAppearance.sectionLabel).toBe("Progress appearance");
     expect(copy.progressAppearance.thickness.unit).toBe("px");
-    expect(copy.progressAppearance.gradient.presetsLabel).toBe(
-      "Gradient presets",
-    );
+    expect(copy.progressAppearance.gradient.presetsLabel).toBe("Gradient scheme");
     expect(copy.progressAppearance.gradient.presetNames["calm-blue"]).toBe(
       "Calm blue",
+    );
+    expect(copy.progressAppearance.gradient.imageImportAction).toBe(
+      "Generate from image",
     );
     expect(copy.progressAppearance.gradient.imageImportHelp).toContain(
       "not uploaded or saved",
@@ -77,11 +78,14 @@ describe("buildSettingsLocalizedCopy", () => {
     expect(copy.progressAppearance.colorBands.rangeLabel(0, 20)).toBe(
       "剩余 0-20%",
     );
-    expect(copy.progressAppearance.gradient.presetsLabel).toBe("渐变预设");
+    expect(copy.progressAppearance.gradient.presetsLabel).toBe("渐变方案");
     expect(copy.progressAppearance.gradient.presetsHelp).toContain(
-      "应用本地预设",
+      "选择本地方案",
     );
     expect(copy.progressAppearance.gradient.presetNames.ocean).toBe("海洋");
+    expect(copy.progressAppearance.gradient.imageImportAction).toBe(
+      "从图片生成",
+    );
     expect(copy.progressAppearance.gradient.imageImportHelp).toContain(
       "原图不会上传或保存",
     );

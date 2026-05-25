@@ -83,12 +83,22 @@ describe("progress appearance preferences", () => {
 
   it("ships valid local gradient presets as editable stop definitions", () => {
     expect(PROGRESS_GRADIENT_PRESETS.map((preset) => preset.id)).toEqual([
+      "warning",
       "ocean",
       "sunset",
       "meadow",
       "aurora",
-      "warning",
       "calm-blue",
+      "fire",
+      "glacier",
+      "forest",
+      "rose-gold",
+      "violet",
+      "neon",
+      "lake",
+      "citrus",
+      "berry",
+      "slate",
     ]);
 
     for (const preset of PROGRESS_GRADIENT_PRESETS) {

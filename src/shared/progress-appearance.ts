@@ -5,12 +5,22 @@ import type {
 } from "../providers/types";
 
 export type ProgressGradientPresetId =
+  | "warning"
   | "ocean"
   | "sunset"
   | "meadow"
   | "aurora"
-  | "warning"
-  | "calm-blue";
+  | "calm-blue"
+  | "fire"
+  | "glacier"
+  | "forest"
+  | "rose-gold"
+  | "violet"
+  | "neon"
+  | "lake"
+  | "citrus"
+  | "berry"
+  | "slate";
 
 export type ProgressGradientPreset = {
   id: ProgressGradientPresetId;
@@ -82,6 +92,14 @@ export const DEFAULT_PROGRESS_GRADIENT_STOPS: readonly ProgressGradientStop[] = 
 
 export const PROGRESS_GRADIENT_PRESETS: readonly ProgressGradientPreset[] = [
   {
+    id: "warning",
+    stops: [
+      { id: "warning-critical", positionPercent: 0, colorHex: "#B3261E" },
+      { id: "warning-watch", positionPercent: 49, colorHex: "#8A4B00" },
+      { id: "warning-clear", positionPercent: 100, colorHex: "#146C2E" },
+    ],
+  },
+  {
     id: "ocean",
     stops: [
       { id: "ocean-deep", positionPercent: 0, colorHex: "#006874" },
@@ -114,19 +132,91 @@ export const PROGRESS_GRADIENT_PRESETS: readonly ProgressGradientPreset[] = [
     ],
   },
   {
-    id: "warning",
-    stops: [
-      { id: "warning-critical", positionPercent: 0, colorHex: "#B3261E" },
-      { id: "warning-watch", positionPercent: 48, colorHex: "#B26A00" },
-      { id: "warning-clear", positionPercent: 100, colorHex: "#146C2E" },
-    ],
-  },
-  {
     id: "calm-blue",
     stops: [
       { id: "calm-shadow", positionPercent: 0, colorHex: "#006A60" },
       { id: "calm-blue", positionPercent: 52, colorHex: "#005AC1" },
       { id: "calm-lavender", positionPercent: 100, colorHex: "#6D43A6" },
+    ],
+  },
+  {
+    id: "fire",
+    stops: [
+      { id: "fire-coal", positionPercent: 0, colorHex: "#7A1C12" },
+      { id: "fire-ember", positionPercent: 44, colorHex: "#D65A00" },
+      { id: "fire-gold", positionPercent: 100, colorHex: "#FFD166" },
+    ],
+  },
+  {
+    id: "glacier",
+    stops: [
+      { id: "glacier-deep", positionPercent: 0, colorHex: "#005C73" },
+      { id: "glacier-ice", positionPercent: 50, colorHex: "#6EC6E8" },
+      { id: "glacier-snow", positionPercent: 100, colorHex: "#E6F7FF" },
+    ],
+  },
+  {
+    id: "forest",
+    stops: [
+      { id: "forest-moss", positionPercent: 0, colorHex: "#3F5300" },
+      { id: "forest-leaf", positionPercent: 52, colorHex: "#146C2E" },
+      { id: "forest-bright", positionPercent: 100, colorHex: "#00A36C" },
+    ],
+  },
+  {
+    id: "rose-gold",
+    stops: [
+      { id: "rose-gold-rose", positionPercent: 0, colorHex: "#A7356B" },
+      { id: "rose-gold-amber", positionPercent: 48, colorHex: "#C77700" },
+      { id: "rose-gold-soft", positionPercent: 100, colorHex: "#F4C7B8" },
+    ],
+  },
+  {
+    id: "violet",
+    stops: [
+      { id: "violet-deep", positionPercent: 0, colorHex: "#4527A0" },
+      { id: "violet-clear", positionPercent: 50, colorHex: "#7B3DB2" },
+      { id: "violet-soft", positionPercent: 100, colorHex: "#C77DFF" },
+    ],
+  },
+  {
+    id: "neon",
+    stops: [
+      { id: "neon-night", positionPercent: 0, colorHex: "#0B132B" },
+      { id: "neon-teal", positionPercent: 50, colorHex: "#00D1B2" },
+      { id: "neon-pink", positionPercent: 100, colorHex: "#F72585" },
+    ],
+  },
+  {
+    id: "lake",
+    stops: [
+      { id: "lake-deep", positionPercent: 0, colorHex: "#004E64" },
+      { id: "lake-bright", positionPercent: 50, colorHex: "#00A6A6" },
+      { id: "lake-mint", positionPercent: 100, colorHex: "#7AE7C7" },
+    ],
+  },
+  {
+    id: "citrus",
+    stops: [
+      { id: "citrus-brown", positionPercent: 0, colorHex: "#7A4F00" },
+      { id: "citrus-orange", positionPercent: 50, colorHex: "#B26A00" },
+      { id: "citrus-lemon", positionPercent: 100, colorHex: "#D9A300" },
+    ],
+  },
+  {
+    id: "berry",
+    stops: [
+      { id: "berry-deep", positionPercent: 0, colorHex: "#6D214F" },
+      { id: "berry-rose", positionPercent: 50, colorHex: "#A7356B" },
+      { id: "berry-bright", positionPercent: 100, colorHex: "#E84A8A" },
+    ],
+  },
+  {
+    id: "slate",
+    stops: [
+      { id: "slate-ink", positionPercent: 0, colorHex: "#374151" },
+      { id: "slate-teal", positionPercent: 50, colorHex: "#007A78" },
+      { id: "slate-blue", positionPercent: 100, colorHex: "#2563EB" },
     ],
   },
 ];
@@ -294,6 +384,34 @@ export function createProgressGradientPresetStops(
     null;
 
   return preset ? cloneProgressGradientPresetStops(preset) : null;
+}
+
+export function findProgressGradientPresetIdForStops(
+  stops: readonly ProgressGradientStop[],
+): ProgressGradientPresetId | null {
+  const normalizedStops = normalizeProgressGradientStops(stops);
+
+  for (const preset of PROGRESS_GRADIENT_PRESETS) {
+    if (normalizedStops.length !== preset.stops.length) {
+      continue;
+    }
+
+    const matches = normalizedStops.every((stop, index) => {
+      const presetStop = preset.stops[index];
+
+      return (
+        presetStop !== undefined &&
+        stop.positionPercent === presetStop.positionPercent &&
+        stop.colorHex === presetStop.colorHex
+      );
+    });
+
+    if (matches) {
+      return preset.id;
+    }
+  }
+
+  return null;
 }
 
 export function createDefaultProgressColorAppearance(): ProgressColorAppearance {

@@ -43,6 +43,8 @@ type SettingsProgressAppearanceCopyText = {
     presetsLabel?: string;
     presetsHelp?: string;
     presetNames?: Partial<Record<ProgressGradientPresetId, string>>;
+    customSchemeLabel?: string;
+    imageGeneratedSchemeLabel?: string;
     imageImportLabel?: string;
     imageImportHelp?: string;
     imageImportAction?: string;
@@ -69,6 +71,8 @@ export type SettingsProgressAppearanceCopy = Omit<
   gradient: Omit<
     NonNullable<SettingsProgressAppearanceCopyText["gradient"]>,
     "presetNames" | "presetsHelp" | "presetsLabel" | "stopAriaLabel"
+    | "customSchemeLabel"
+    | "imageGeneratedSchemeLabel"
     | "imageImportAction"
     | "imageImportBusy"
     | "imageImportCanvasUnavailable"
@@ -81,6 +85,8 @@ export type SettingsProgressAppearanceCopy = Omit<
     presetsLabel: string;
     presetsHelp: string;
     presetNames: Record<ProgressGradientPresetId, string>;
+    customSchemeLabel: string;
+    imageGeneratedSchemeLabel: string;
     imageImportLabel: string;
     imageImportHelp: string;
     imageImportAction: string;
@@ -112,20 +118,32 @@ const DEFAULT_PROGRESS_APPEARANCE_GRADIENT_COPY = {
   resetToDefault: "Reset gradient",
   endpointLocked: "Endpoint stops stay locked at 0% and 100%.",
   minimumStopHelp: "Keep at least the 0% and 100% stops.",
-  presetsLabel: "Gradient presets",
-  presetsHelp: "Apply a local preset, then adjust stops normally.",
+  presetsLabel: "Gradient scheme",
+  presetsHelp: "Choose a local scheme, then adjust stops normally.",
   presetNames: {
+    warning: "Warning",
     ocean: "Ocean",
     sunset: "Sunset",
     meadow: "Meadow",
     aurora: "Aurora",
-    warning: "Warning",
     "calm-blue": "Calm blue",
+    fire: "Fire",
+    glacier: "Glacier",
+    forest: "Forest",
+    "rose-gold": "Rose gold",
+    violet: "Violet",
+    neon: "Neon",
+    lake: "Lake",
+    citrus: "Citrus",
+    berry: "Berry",
+    slate: "Slate",
   } satisfies Record<ProgressGradientPresetId, string>,
+  customSchemeLabel: "Custom gradient",
+  imageGeneratedSchemeLabel: "Generated from image",
   imageImportLabel: "Import image",
   imageImportHelp:
     "PNG, JPEG, and WebP files are processed locally in this browser. The source image is not uploaded or saved; only generated gradient stops are stored.",
-  imageImportAction: "Choose image",
+  imageImportAction: "Generate from image",
   imageImportBusy: "Processing image...",
   imageImportUnsupported: "Choose a PNG, JPEG, or WebP image.",
   imageImportTooLarge: "Choose an image under 5 MB.",
@@ -212,20 +230,32 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       resetToDefault: "重置渐变",
       endpointLocked: "端点停止点固定在 0% 和 100%。",
       minimumStopHelp: "至少保留 0% 和 100% 两个停止点。",
-      presetsLabel: "渐变预设",
-      presetsHelp: "应用本地预设后，仍可像普通停止点一样调整。",
+      presetsLabel: "渐变方案",
+      presetsHelp: "选择本地方案后，仍可像普通停止点一样调整。",
       presetNames: {
+        warning: "警示",
         ocean: "海洋",
         sunset: "日落",
         meadow: "草地",
         aurora: "极光",
-        warning: "警示",
         "calm-blue": "静蓝",
+        fire: "火焰",
+        glacier: "冰川",
+        forest: "森林",
+        "rose-gold": "玫瑰金",
+        violet: "紫霞",
+        neon: "霓虹",
+        lake: "湖蓝",
+        citrus: "沙金",
+        berry: "莓果",
+        slate: "石青",
       },
+      customSchemeLabel: "自定义渐变",
+      imageGeneratedSchemeLabel: "图片生成",
       imageImportLabel: "导入图片",
       imageImportHelp:
         "PNG、JPEG 和 WebP 会在当前浏览器本地处理。原图不会上传或保存，只会保存生成后的渐变停止点。",
-      imageImportAction: "选择图片",
+      imageImportAction: "从图片生成",
       imageImportBusy: "正在处理图片...",
       imageImportUnsupported: "请选择 PNG、JPEG 或 WebP 图片。",
       imageImportTooLarge: "请选择小于 5 MB 的图片。",
@@ -278,20 +308,32 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       resetToDefault: "重設漸層",
       endpointLocked: "端點停止點固定在 0% 與 100%。",
       minimumStopHelp: "至少保留 0% 與 100% 兩個停止點。",
-      presetsLabel: "漸層預設",
-      presetsHelp: "套用本機預設後，仍可像一般停止點一樣調整。",
+      presetsLabel: "漸層方案",
+      presetsHelp: "選擇本機方案後，仍可像一般停止點一樣調整。",
       presetNames: {
+        warning: "警示",
         ocean: "海洋",
         sunset: "日落",
         meadow: "草地",
         aurora: "極光",
-        warning: "警示",
         "calm-blue": "靜藍",
+        fire: "火焰",
+        glacier: "冰川",
+        forest: "森林",
+        "rose-gold": "玫瑰金",
+        violet: "紫霞",
+        neon: "霓虹",
+        lake: "湖藍",
+        citrus: "沙金",
+        berry: "莓果",
+        slate: "石青",
       },
+      customSchemeLabel: "自訂漸層",
+      imageGeneratedSchemeLabel: "圖片產生",
       imageImportLabel: "匯入圖片",
       imageImportHelp:
         "PNG、JPEG 與 WebP 會在目前瀏覽器本機處理。原圖不會上傳或儲存，只會保存產生的漸層停止點。",
-      imageImportAction: "選擇圖片",
+      imageImportAction: "從圖片產生",
       imageImportBusy: "正在處理圖片...",
       imageImportUnsupported: "請選擇 PNG、JPEG 或 WebP 圖片。",
       imageImportTooLarge: "請選擇小於 5 MB 的圖片。",
