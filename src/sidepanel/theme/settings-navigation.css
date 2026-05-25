@@ -53,7 +53,7 @@
 
 .settings-overview__controls {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 168px), 1fr));
   align-items: start;
   gap: var(--app-space-3);
 }
@@ -61,23 +61,10 @@
 .settings-overview__level-control {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  inline-size: min(
-    100%,
-    max(240px, calc((100% - var(--app-space-3) * 2) / 3))
-  );
-  max-inline-size: 320px;
   min-width: 0;
 }
 
-.settings-overview__paired-controls {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 168px), 1fr));
-  align-items: start;
-  gap: var(--app-space-3);
-  inline-size: 100%;
-}
-
-.settings-overview__paired-controls > .material-select,
+.settings-overview__controls > .material-select,
 .settings-overview__level-control > .material-select {
   min-width: 0;
 }

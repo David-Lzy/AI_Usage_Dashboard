@@ -385,32 +385,30 @@ export function SettingsPage({
               onChange={onUserLevelChange}
             />
           </div>
-          <div className="settings-overview__paired-controls">
-            <MaterialSelect
-              label={i18n.t("settings.preferences.locale_label")}
-              value={settings.locale}
-              fieldIdPrefix="locale-preference"
-              sessionPopoverId="locale-preference"
-              activePopover={settingsSurfaceSession.preferences.activePopover}
-              onActivePopoverChange={
-                settingsSurfaceSession.preferences.setActivePopover
-              }
-              options={localeOptions}
-              onChange={onLocalePreferenceChange}
-            />
-            <MaterialSelect
-              label={i18n.t("settings.preferences.theme_mode_label")}
-              value={settings.themeMode}
-              fieldIdPrefix="theme-mode"
-              sessionPopoverId="theme-mode"
-              activePopover={settingsSurfaceSession.preferences.activePopover}
-              onActivePopoverChange={
-                settingsSurfaceSession.preferences.setActivePopover
-              }
-              options={themeModeOptions}
-              onChange={onThemeModeChange}
-            />
-          </div>
+          <MaterialSelect
+            label={i18n.t("settings.preferences.locale_label")}
+            value={settings.locale}
+            fieldIdPrefix="locale-preference"
+            sessionPopoverId="locale-preference"
+            activePopover={settingsSurfaceSession.preferences.activePopover}
+            onActivePopoverChange={
+              settingsSurfaceSession.preferences.setActivePopover
+            }
+            options={localeOptions}
+            onChange={onLocalePreferenceChange}
+          />
+          <MaterialSelect
+            label={i18n.t("settings.preferences.theme_mode_label")}
+            value={settings.themeMode}
+            fieldIdPrefix="theme-mode"
+            sessionPopoverId="theme-mode"
+            activePopover={settingsSurfaceSession.preferences.activePopover}
+            onActivePopoverChange={
+              settingsSurfaceSession.preferences.setActivePopover
+            }
+            options={themeModeOptions}
+            onChange={onThemeModeChange}
+          />
         </div>
       </SettingsOverviewSection>
 

@@ -75,16 +75,11 @@ describe("SettingsSections", () => {
       ".settings-overview__level-control {",
     );
     expect(settingsNavigationCss).toContain(
-      "max(240px, calc((100% - var(--app-space-3) * 2) / 3))",
-    );
-    expect(settingsNavigationCss).toContain("max-inline-size: 320px;");
-    expect(settingsNavigationCss).toContain(
-      ".settings-overview__paired-controls {",
-    );
-    expect(settingsNavigationCss).toContain(
       "grid-template-columns: repeat(auto-fit, minmax(min(100%, 168px), 1fr));",
     );
-    expect(settingsNavigationCss).toContain("inline-size: 100%;");
+    expect(settingsNavigationCss).not.toContain(
+      ".settings-overview__paired-controls",
+    );
   });
 
   it("renders visibility switch rows with stable provider hooks", () => {
