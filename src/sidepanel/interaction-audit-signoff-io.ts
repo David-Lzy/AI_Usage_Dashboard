@@ -13,7 +13,12 @@ import {
   normalizeInteractionAuditSignoffMetadata,
   normalizeInteractionAuditSignoffRequestContext,
 } from "./interaction-audit-signoff-state";
-import { getSafeLocalStorage } from "../shared/local-storage";
+import {
+  getSafeLocalStorage,
+  getSafeStorageItem,
+  removeSafeStorageItem,
+  setSafeStorageItem,
+} from "../shared/local-storage";
 
 let memoryFallbackState: InteractionAuditSignoffState | null = null;
 let memoryFallbackMetadata: InteractionAuditSignoffMetadata | null = null;
@@ -38,95 +43,144 @@ function cloneSignoffRequestContext(
   return structuredClone(requestContext);
 }
 
+function readMemoryFallbackState(
+  definitions: InteractionAuditSurfaceSignoffDefinition[],
+): InteractionAuditSignoffState | null {
+  return memoryFallbackState
+    ? normalizeInteractionAuditSignoffState(
+        cloneSignoffState(memoryFallbackState),
+        definitions,
+      )
+    : null;
+}
+
+function readMemoryFallbackMetadata(): InteractionAuditSignoffMetadata | null {
+  return memoryFallbackMetadata
+    ? normalizeInteractionAuditSignoffMetadata(
+        cloneSignoffMetadata(memoryFallbackMetadata),
+      )
+    : null;
+}
+
+function readMemoryFallbackRequestContext(): InteractionAuditSignoffRequestContext | null {
+  return memoryFallbackRequestContext
+    ? normalizeInteractionAuditSignoffRequestContext(
+        cloneSignoffRequestContext(memoryFallbackRequestContext),
+      )
+    : null;
+}
+
 export function readInteractionAuditSignoffState(
   definitions: InteractionAuditSurfaceSignoffDefinition[],
 ): InteractionAuditSignoffState {
   const localStorage = getSafeLocalStorage();
 
   if (localStorage) {
+    const rawState = getSafeStorageItem(
+      localStorage,
+      INTERACTION_AUDIT_SIGNOFF_STORAGE_KEY,
+    );
+
+    if (!rawState) {
+      return (
+        readMemoryFallbackState(definitions) ??
+        buildInitialInteractionAuditSignoffState(definitions)
+      );
+    }
+
     try {
-      const rawState = localStorage.getItem(INTERACTION_AUDIT_SIGNOFF_STORAGE_KEY);
-
-      if (!rawState) {
-        return buildInitialInteractionAuditSignoffState(definitions);
-      }
-
       return normalizeInteractionAuditSignoffState(
         JSON.parse(rawState) as InteractionAuditSignoffState,
         definitions,
       );
     } catch {
-      localStorage.removeItem(INTERACTION_AUDIT_SIGNOFF_STORAGE_KEY);
-      return buildInitialInteractionAuditSignoffState(definitions);
+      removeSafeStorageItem(localStorage, INTERACTION_AUDIT_SIGNOFF_STORAGE_KEY);
+      return (
+        readMemoryFallbackState(definitions) ??
+        buildInitialInteractionAuditSignoffState(definitions)
+      );
     }
   }
 
-  return memoryFallbackState
-    ? normalizeInteractionAuditSignoffState(
-        cloneSignoffState(memoryFallbackState),
-        definitions,
-      )
-    : buildInitialInteractionAuditSignoffState(definitions);
+  return (
+    readMemoryFallbackState(definitions) ??
+    buildInitialInteractionAuditSignoffState(definitions)
+  );
 }
 
 export function readInteractionAuditSignoffMetadata(): InteractionAuditSignoffMetadata {
   const localStorage = getSafeLocalStorage();
 
   if (localStorage) {
-    try {
-      const rawMetadata = localStorage.getItem(
-        INTERACTION_AUDIT_SIGNOFF_METADATA_STORAGE_KEY,
+    const rawMetadata = getSafeStorageItem(
+      localStorage,
+      INTERACTION_AUDIT_SIGNOFF_METADATA_STORAGE_KEY,
+    );
+
+    if (!rawMetadata) {
+      return (
+        readMemoryFallbackMetadata() ??
+        buildInitialInteractionAuditSignoffMetadata()
       );
+    }
 
-      if (!rawMetadata) {
-        return buildInitialInteractionAuditSignoffMetadata();
-      }
-
+    try {
       return normalizeInteractionAuditSignoffMetadata(
         JSON.parse(rawMetadata) as InteractionAuditSignoffMetadata,
       );
     } catch {
-      localStorage.removeItem(INTERACTION_AUDIT_SIGNOFF_METADATA_STORAGE_KEY);
-      return buildInitialInteractionAuditSignoffMetadata();
+      removeSafeStorageItem(
+        localStorage,
+        INTERACTION_AUDIT_SIGNOFF_METADATA_STORAGE_KEY,
+      );
+      return (
+        readMemoryFallbackMetadata() ??
+        buildInitialInteractionAuditSignoffMetadata()
+      );
     }
   }
 
-  return memoryFallbackMetadata
-    ? normalizeInteractionAuditSignoffMetadata(
-        cloneSignoffMetadata(memoryFallbackMetadata),
-      )
-    : buildInitialInteractionAuditSignoffMetadata();
+  return (
+    readMemoryFallbackMetadata() ?? buildInitialInteractionAuditSignoffMetadata()
+  );
 }
 
 export function readInteractionAuditSignoffRequestContext(): InteractionAuditSignoffRequestContext {
   const localStorage = getSafeLocalStorage();
 
   if (localStorage) {
-    try {
-      const rawRequestContext = localStorage.getItem(
-        INTERACTION_AUDIT_SIGNOFF_REQUEST_CONTEXT_STORAGE_KEY,
+    const rawRequestContext = getSafeStorageItem(
+      localStorage,
+      INTERACTION_AUDIT_SIGNOFF_REQUEST_CONTEXT_STORAGE_KEY,
+    );
+
+    if (!rawRequestContext) {
+      return (
+        readMemoryFallbackRequestContext() ??
+        buildInitialInteractionAuditSignoffRequestContext()
       );
+    }
 
-      if (!rawRequestContext) {
-        return buildInitialInteractionAuditSignoffRequestContext();
-      }
-
+    try {
       return normalizeInteractionAuditSignoffRequestContext(
         JSON.parse(rawRequestContext) as InteractionAuditSignoffRequestContext,
       );
     } catch {
-      localStorage.removeItem(
+      removeSafeStorageItem(
+        localStorage,
         INTERACTION_AUDIT_SIGNOFF_REQUEST_CONTEXT_STORAGE_KEY,
       );
-      return buildInitialInteractionAuditSignoffRequestContext();
+      return (
+        readMemoryFallbackRequestContext() ??
+        buildInitialInteractionAuditSignoffRequestContext()
+      );
     }
   }
 
-  return memoryFallbackRequestContext
-    ? normalizeInteractionAuditSignoffRequestContext(
-        cloneSignoffRequestContext(memoryFallbackRequestContext),
-      )
-    : buildInitialInteractionAuditSignoffRequestContext();
+  return (
+    readMemoryFallbackRequestContext() ??
+    buildInitialInteractionAuditSignoffRequestContext()
+  );
 }
 
 export function writeInteractionAuditSignoffState(
@@ -136,11 +190,15 @@ export function writeInteractionAuditSignoffState(
   const normalizedState = normalizeInteractionAuditSignoffState(state, definitions);
   const localStorage = getSafeLocalStorage();
 
-  if (localStorage) {
-    localStorage.setItem(
+  if (
+    localStorage &&
+    setSafeStorageItem(
+      localStorage,
       INTERACTION_AUDIT_SIGNOFF_STORAGE_KEY,
       JSON.stringify(normalizedState),
-    );
+    )
+  ) {
+    memoryFallbackState = null;
   } else {
     memoryFallbackState = cloneSignoffState(normalizedState);
   }
@@ -154,11 +212,15 @@ export function writeInteractionAuditSignoffMetadata(
   const normalizedMetadata = normalizeInteractionAuditSignoffMetadata(metadata);
   const localStorage = getSafeLocalStorage();
 
-  if (localStorage) {
-    localStorage.setItem(
+  if (
+    localStorage &&
+    setSafeStorageItem(
+      localStorage,
       INTERACTION_AUDIT_SIGNOFF_METADATA_STORAGE_KEY,
       JSON.stringify(normalizedMetadata),
-    );
+    )
+  ) {
+    memoryFallbackMetadata = null;
   } else {
     memoryFallbackMetadata = cloneSignoffMetadata(normalizedMetadata);
   }
@@ -173,11 +235,15 @@ export function writeInteractionAuditSignoffRequestContext(
     normalizeInteractionAuditSignoffRequestContext(requestContext);
   const localStorage = getSafeLocalStorage();
 
-  if (localStorage) {
-    localStorage.setItem(
+  if (
+    localStorage &&
+    setSafeStorageItem(
+      localStorage,
       INTERACTION_AUDIT_SIGNOFF_REQUEST_CONTEXT_STORAGE_KEY,
       JSON.stringify(normalizedRequestContext),
-    );
+    )
+  ) {
+    memoryFallbackRequestContext = null;
   } else {
     memoryFallbackRequestContext = cloneSignoffRequestContext(
       normalizedRequestContext,
@@ -191,8 +257,7 @@ export function clearInteractionAuditSignoffState() {
   const localStorage = getSafeLocalStorage();
 
   if (localStorage) {
-    localStorage.removeItem(INTERACTION_AUDIT_SIGNOFF_STORAGE_KEY);
-    return;
+    removeSafeStorageItem(localStorage, INTERACTION_AUDIT_SIGNOFF_STORAGE_KEY);
   }
 
   memoryFallbackState = null;
@@ -202,8 +267,10 @@ export function clearInteractionAuditSignoffMetadata() {
   const localStorage = getSafeLocalStorage();
 
   if (localStorage) {
-    localStorage.removeItem(INTERACTION_AUDIT_SIGNOFF_METADATA_STORAGE_KEY);
-    return;
+    removeSafeStorageItem(
+      localStorage,
+      INTERACTION_AUDIT_SIGNOFF_METADATA_STORAGE_KEY,
+    );
   }
 
   memoryFallbackMetadata = null;
@@ -213,10 +280,10 @@ export function clearInteractionAuditSignoffRequestContext() {
   const localStorage = getSafeLocalStorage();
 
   if (localStorage) {
-    localStorage.removeItem(
+    removeSafeStorageItem(
+      localStorage,
       INTERACTION_AUDIT_SIGNOFF_REQUEST_CONTEXT_STORAGE_KEY,
     );
-    return;
   }
 
   memoryFallbackRequestContext = null;

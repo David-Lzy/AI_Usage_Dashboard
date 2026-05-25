@@ -5,7 +5,12 @@ import {
   createSourceSelectionDiagnostic,
 } from "../providers/diagnostics";
 import { SAMPLE_APP_STATE } from "../shared/constants";
-import { getSafeLocalStorage } from "../shared/local-storage";
+import {
+  getSafeLocalStorage,
+  getSafeStorageItem,
+  removeSafeStorageItem,
+  setSafeStorageItem,
+} from "../shared/local-storage";
 
 export type StoreScreenshotSeedPreset =
   | "toolbar-first-quick-glance"
@@ -294,7 +299,8 @@ export function isStoreScreenshotSeedLockEnabled(): boolean {
     return false;
   }
 
-  return localStorage.getItem(STORE_SCREENSHOT_SEED_LOCK_STORAGE_KEY) === "true";
+  return getSafeStorageItem(localStorage, STORE_SCREENSHOT_SEED_LOCK_STORAGE_KEY) ===
+    "true";
 }
 
 export function setStoreScreenshotSeedLockEnabled(enabled: boolean) {
@@ -305,11 +311,15 @@ export function setStoreScreenshotSeedLockEnabled(enabled: boolean) {
   }
 
   if (enabled) {
-    localStorage.setItem(STORE_SCREENSHOT_SEED_LOCK_STORAGE_KEY, "true");
+    setSafeStorageItem(
+      localStorage,
+      STORE_SCREENSHOT_SEED_LOCK_STORAGE_KEY,
+      "true",
+    );
     return;
   }
 
-  localStorage.removeItem(STORE_SCREENSHOT_SEED_LOCK_STORAGE_KEY);
+  removeSafeStorageItem(localStorage, STORE_SCREENSHOT_SEED_LOCK_STORAGE_KEY);
 }
 
 export function readStoreScreenshotSeedBackup(): StoreScreenshotSeedBackupEnvelope {
@@ -323,7 +333,10 @@ export function readStoreScreenshotSeedBackup(): StoreScreenshotSeedBackupEnvelo
   }
 
   try {
-    const raw = localStorage.getItem(STORE_SCREENSHOT_SEED_BACKUP_STORAGE_KEY);
+    const raw = getSafeStorageItem(
+      localStorage,
+      STORE_SCREENSHOT_SEED_BACKUP_STORAGE_KEY,
+    );
 
     if (!raw) {
       return {
@@ -346,7 +359,7 @@ export function readStoreScreenshotSeedBackup(): StoreScreenshotSeedBackupEnvelo
       appState: parsed.appState ?? null,
     };
   } catch {
-    localStorage.removeItem(STORE_SCREENSHOT_SEED_BACKUP_STORAGE_KEY);
+    removeSafeStorageItem(localStorage, STORE_SCREENSHOT_SEED_BACKUP_STORAGE_KEY);
 
     return {
       hasBackup: false,
@@ -362,7 +375,8 @@ export function writeStoreScreenshotSeedBackup(appState: AppState | null) {
     return;
   }
 
-  localStorage.setItem(
+  setSafeStorageItem(
+    localStorage,
     STORE_SCREENSHOT_SEED_BACKUP_STORAGE_KEY,
     JSON.stringify({
       hasBackup: true,
@@ -378,5 +392,5 @@ export function clearStoreScreenshotSeedBackup() {
     return;
   }
 
-  localStorage.removeItem(STORE_SCREENSHOT_SEED_BACKUP_STORAGE_KEY);
+  removeSafeStorageItem(localStorage, STORE_SCREENSHOT_SEED_BACKUP_STORAGE_KEY);
 }
