@@ -352,6 +352,11 @@ export function SettingsPage({
           <div className="settings-overview__level-control">
             <MaterialSelect
               label={settingsCopy.layout.userLevel.label}
+              labelAccessory={
+                <MaterialInfoTooltip>
+                  {settingsCopy.layout.userLevel.helpText}
+                </MaterialInfoTooltip>
+              }
               value={settings.userLevel}
               fieldIdPrefix="settings-user-level"
               sessionPopoverId="settings-user-level"
@@ -379,9 +384,6 @@ export function SettingsPage({
               ]}
               onChange={onUserLevelChange}
             />
-            <MaterialInfoTooltip className="settings-overview__user-level-help">
-              {settingsCopy.layout.userLevel.helpText}
-            </MaterialInfoTooltip>
           </div>
           <div className="settings-overview__paired-controls">
             <MaterialSelect

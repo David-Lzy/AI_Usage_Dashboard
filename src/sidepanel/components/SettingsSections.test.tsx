@@ -53,6 +53,7 @@ describe("SettingsSections", () => {
     expect(html).toContain(
       'class="dashboard-section__header settings-overview__header"',
     );
+    expect(html).toContain('class="settings-overview__eyebrow"');
     expect(html).toContain('aria-label="Settings summary"');
     expect(html).toContain(
       'class="summary-strip summary-strip--compact settings-overview__summary"',
@@ -66,6 +67,7 @@ describe("SettingsSections", () => {
     expect(settingsNavigationCss).toContain(
       ".settings-overview__summary.summary-strip--compact {",
     );
+    expect(settingsNavigationCss).toContain(".settings-overview__eyebrow {");
     expect(settingsNavigationCss).toContain(
       "grid-template-columns: repeat(auto-fit, minmax(min(100%, 96px), 1fr));",
     );

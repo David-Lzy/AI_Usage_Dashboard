@@ -25,6 +25,20 @@
 }
 
 .settings-overview__title {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-1);
+  min-width: 0;
+}
+
+.settings-overview__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--app-space-2);
+  min-width: 0;
+}
+
+.settings-overview__eyebrow > .section-label {
   min-width: 0;
 }
 
@@ -46,9 +60,7 @@
 
 .settings-overview__level-control {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: end;
-  gap: var(--app-space-3);
+  grid-template-columns: minmax(0, 1fr);
   inline-size: min(
     100%,
     max(240px, calc((100% - var(--app-space-3) * 2) / 3))
@@ -68,11 +80,6 @@
 .settings-overview__paired-controls > .material-select,
 .settings-overview__level-control > .material-select {
   min-width: 0;
-}
-
-.settings-overview__user-level-help {
-  align-self: end;
-  margin-block-end: 14px;
 }
 
 .settings-section-anchor {
@@ -464,11 +471,7 @@
   }
 
   .settings-overview__level-control {
-    grid-template-columns: minmax(0, 1fr) auto;
-  }
-
-  .settings-overview__user-level-help {
-    margin-block-end: 14px;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 

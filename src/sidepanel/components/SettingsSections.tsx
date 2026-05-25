@@ -66,11 +66,11 @@ export function SettingsOverviewSection({
     >
       <div className="dashboard-section__header settings-overview__header">
         <div className="settings-overview__title">
-          <p className="section-label">{eyebrow}</p>
-          <div className="section-title-with-info">
-            <h2 className="section-title">{title}</h2>
+          <div className="settings-overview__eyebrow">
+            <p className="section-label">{eyebrow}</p>
             <MaterialInfoTooltip>{detail}</MaterialInfoTooltip>
           </div>
+          <h2 className="section-title">{title}</h2>
         </div>
         <SummaryStrip
           ariaLabel={ariaLabel}
