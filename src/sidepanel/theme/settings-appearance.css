@@ -860,6 +860,44 @@
   background: var(--progress-gradient-track);
 }
 
+.progress-gradient-image-import {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--app-space-2);
+  min-width: 0;
+}
+
+.progress-gradient-image-import > .field-label-with-info {
+  flex: 1 1 15rem;
+  min-width: 0;
+}
+
+.progress-gradient-image-import__button {
+  position: relative;
+  flex: 0 0 auto;
+  overflow: hidden;
+  min-height: 40px;
+}
+
+.progress-gradient-image-import__button input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.progress-gradient-image-import__button:has(input:disabled) {
+  opacity: 0.68;
+  pointer-events: none;
+}
+
+.progress-gradient-image-import__error {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--md-sys-color-error);
+}
+
 .progress-gradient-editor__track {
   position: relative;
   min-height: 64px;

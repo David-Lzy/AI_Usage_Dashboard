@@ -43,6 +43,14 @@ type SettingsProgressAppearanceCopyText = {
     presetsLabel?: string;
     presetsHelp?: string;
     presetNames?: Partial<Record<ProgressGradientPresetId, string>>;
+    imageImportLabel?: string;
+    imageImportHelp?: string;
+    imageImportAction?: string;
+    imageImportBusy?: string;
+    imageImportUnsupported?: string;
+    imageImportTooLarge?: string;
+    imageImportDecodeFailed?: string;
+    imageImportCanvasUnavailable?: string;
     stopAriaLabel: (stopNumberLabel: string, positionLabel: string) => string;
   };
 };
@@ -61,10 +69,26 @@ export type SettingsProgressAppearanceCopy = Omit<
   gradient: Omit<
     NonNullable<SettingsProgressAppearanceCopyText["gradient"]>,
     "presetNames" | "presetsHelp" | "presetsLabel" | "stopAriaLabel"
+    | "imageImportAction"
+    | "imageImportBusy"
+    | "imageImportCanvasUnavailable"
+    | "imageImportDecodeFailed"
+    | "imageImportHelp"
+    | "imageImportLabel"
+    | "imageImportTooLarge"
+    | "imageImportUnsupported"
   > & {
     presetsLabel: string;
     presetsHelp: string;
     presetNames: Record<ProgressGradientPresetId, string>;
+    imageImportLabel: string;
+    imageImportHelp: string;
+    imageImportAction: string;
+    imageImportBusy: string;
+    imageImportUnsupported: string;
+    imageImportTooLarge: string;
+    imageImportDecodeFailed: string;
+    imageImportCanvasUnavailable: string;
     stopAriaLabel: (stopNumber: number, positionPercent: number) => string;
   };
 };
@@ -98,6 +122,15 @@ const DEFAULT_PROGRESS_APPEARANCE_GRADIENT_COPY = {
     warning: "Warning",
     "calm-blue": "Calm blue",
   } satisfies Record<ProgressGradientPresetId, string>,
+  imageImportLabel: "Import image",
+  imageImportHelp:
+    "PNG, JPEG, and WebP files are processed locally in this browser. The source image is not uploaded or saved; only generated gradient stops are stored.",
+  imageImportAction: "Choose image",
+  imageImportBusy: "Processing image...",
+  imageImportUnsupported: "Choose a PNG, JPEG, or WebP image.",
+  imageImportTooLarge: "Choose an image under 5 MB.",
+  imageImportDecodeFailed: "The image could not be decoded.",
+  imageImportCanvasUnavailable: "Image processing is not available here.",
   stopAriaLabel: (stopNumberLabel: string, positionLabel: string) =>
     `Gradient stop ${stopNumberLabel}, ${positionLabel}% remaining`,
 };
@@ -189,6 +222,15 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
         warning: "警示",
         "calm-blue": "静蓝",
       },
+      imageImportLabel: "导入图片",
+      imageImportHelp:
+        "PNG、JPEG 和 WebP 会在当前浏览器本地处理。原图不会上传或保存，只会保存生成后的渐变停止点。",
+      imageImportAction: "选择图片",
+      imageImportBusy: "正在处理图片...",
+      imageImportUnsupported: "请选择 PNG、JPEG 或 WebP 图片。",
+      imageImportTooLarge: "请选择小于 5 MB 的图片。",
+      imageImportDecodeFailed: "无法解析这张图片。",
+      imageImportCanvasUnavailable: "当前环境无法处理图片。",
       stopAriaLabel: (stopNumberLabel, positionLabel) =>
         `渐变停止点 ${stopNumberLabel}，剩余 ${positionLabel}%`,
     },
@@ -246,6 +288,15 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
         warning: "警示",
         "calm-blue": "靜藍",
       },
+      imageImportLabel: "匯入圖片",
+      imageImportHelp:
+        "PNG、JPEG 與 WebP 會在目前瀏覽器本機處理。原圖不會上傳或儲存，只會保存產生的漸層停止點。",
+      imageImportAction: "選擇圖片",
+      imageImportBusy: "正在處理圖片...",
+      imageImportUnsupported: "請選擇 PNG、JPEG 或 WebP 圖片。",
+      imageImportTooLarge: "請選擇小於 5 MB 的圖片。",
+      imageImportDecodeFailed: "無法解析這張圖片。",
+      imageImportCanvasUnavailable: "目前環境無法處理圖片。",
       stopAriaLabel: (stopNumberLabel, positionLabel) =>
         `漸層停止點 ${stopNumberLabel}，剩餘 ${positionLabel}%`,
     },

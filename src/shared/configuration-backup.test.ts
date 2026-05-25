@@ -210,6 +210,37 @@ describe("configuration backup", () => {
     ).toBe("official_api");
   });
 
+  it("stores only generated gradient stops after image import", () => {
+    const backup = buildConfigurationBackup({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        progressColorAppearance: {
+          mode: "gradient",
+          stops: [
+            {
+              id: "image-1",
+              positionPercent: 0,
+              colorHex: "#800080",
+            },
+            {
+              id: "image-2",
+              positionPercent: 100,
+              colorHex: "#80FF80",
+            },
+          ],
+        },
+      },
+    });
+    const serializedSettings = JSON.stringify(backup.payload.settings);
+
+    expect(serializedSettings).toContain("image-1");
+    expect(serializedSettings).toContain("#80FF80");
+    expect(serializedSettings).not.toContain("data:image");
+    expect(serializedSettings).not.toContain("sample.png");
+    expect(serializedSettings).not.toContain("base64");
+  });
+
   it("rejects malformed backup JSON", () => {
     expect(parseConfigurationBackupJson("{")).toEqual({
       ok: false,

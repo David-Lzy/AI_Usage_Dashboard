@@ -106,6 +106,9 @@ describe("ProgressAppearancePreferenceControls", () => {
     expect(html).toContain('data-progress-gradient-preset="calm-blue"');
     expect(html).toContain("海洋");
     expect(html).toContain("静蓝");
+    expect(html).toContain("导入图片");
+    expect(html).toContain("选择图片");
+    expect(html).toContain('accept="image/png,image/jpeg,image/webp"');
     expect(html).toContain("--progress-gradient-track");
     expect(html).toContain('role="slider"');
     expect(html).toContain('aria-valuenow="50"');

@@ -17,6 +17,11 @@ import { RECOMMENDED_COLOR_CHOICES } from "../../shared/color-choices";
 import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import type { SettingsActivePopoverSessionState } from "../../shared/surface-session-state";
 import {
+  PROGRESS_GRADIENT_IMAGE_ACCEPT,
+  ProgressGradientImageImportError,
+  createProgressGradientStopsFromImageFile,
+} from "../../shared/progress-gradient-image-import";
+import {
   PROGRESS_THICKNESS_MAX_PX,
   PROGRESS_THICKNESS_MIN_PX,
   PROGRESS_THICKNESS_SLIDER_MAX,
@@ -232,6 +237,8 @@ export function ProgressAppearancePreferenceControls({
   const [selectedGradientStopId, setSelectedGradientStopId] = useState<
     string | null
   >(null);
+  const [imageImportError, setImageImportError] = useState<string | null>(null);
+  const [isImageImporting, setIsImageImporting] = useState(false);
   const normalizedColorAppearance = useMemo(
     () => normalizeProgressColorAppearance(colorAppearance, colorBands),
     [colorAppearance, colorBands],
@@ -395,6 +402,47 @@ export function ProgressAppearancePreferenceControls({
     }
 
     commitGradientStops(presetStops, presetStops[0]?.id ?? null);
+    setImageImportError(null);
+  }
+
+  function getImageImportErrorMessage(error: unknown): string {
+    if (error instanceof ProgressGradientImageImportError) {
+      switch (error.code) {
+        case "unsupported_type":
+          return copy.gradient.imageImportUnsupported;
+        case "file_too_large":
+          return copy.gradient.imageImportTooLarge;
+        case "canvas_unavailable":
+          return copy.gradient.imageImportCanvasUnavailable;
+        case "decode_failed":
+        default:
+          return copy.gradient.imageImportDecodeFailed;
+      }
+    }
+
+    return copy.gradient.imageImportDecodeFailed;
+  }
+
+  async function handleGradientImageImport(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0] ?? null;
+
+    event.target.value = "";
+
+    if (!file) {
+      return;
+    }
+
+    setIsImageImporting(true);
+    setImageImportError(null);
+
+    try {
+      const stops = await createProgressGradientStopsFromImageFile(file);
+      commitGradientStops(stops, stops[0]?.id ?? null);
+    } catch (error) {
+      setImageImportError(getImageImportErrorMessage(error));
+    } finally {
+      setIsImageImporting(false);
+    }
   }
 
   function updateGradientStopPosition(stopId: string, nextPosition: number) {
@@ -837,6 +885,34 @@ export function ProgressAppearancePreferenceControls({
                     </button>
                   ))}
                 </div>
+              </div>
+              <div className="progress-gradient-image-import">
+                <div className="field-label-with-info">
+                  <span className="form-field__label">
+                    {copy.gradient.imageImportLabel}
+                  </span>
+                  <MaterialInfoTooltip>
+                    {copy.gradient.imageImportHelp}
+                  </MaterialInfoTooltip>
+                </div>
+                <label className="text-button progress-gradient-image-import__button">
+                  <span>
+                    {isImageImporting
+                      ? copy.gradient.imageImportBusy
+                      : copy.gradient.imageImportAction}
+                  </span>
+                  <input
+                    type="file"
+                    accept={PROGRESS_GRADIENT_IMAGE_ACCEPT}
+                    disabled={isImageImporting}
+                    onChange={handleGradientImageImport}
+                  />
+                </label>
+                {imageImportError ? (
+                  <p className="supporting-copy progress-gradient-image-import__error">
+                    {imageImportError}
+                  </p>
+                ) : null}
               </div>
               <div
                 className="progress-gradient-editor__track"

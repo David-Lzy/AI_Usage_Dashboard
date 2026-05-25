@@ -40,6 +40,9 @@ describe("buildSettingsLocalizedCopy", () => {
     expect(copy.progressAppearance.gradient.presetNames["calm-blue"]).toBe(
       "Calm blue",
     );
+    expect(copy.progressAppearance.gradient.imageImportHelp).toContain(
+      "not uploaded or saved",
+    );
     expect(copy.colorChoices.colorNames.indigo).toBe("Indigo");
     expect(copy.preferenceGroups.uiMoreShow).toBe("More UI settings");
     expect(copy.preferenceGroups.providerDisplayShow).toBe(
@@ -79,6 +82,9 @@ describe("buildSettingsLocalizedCopy", () => {
       "应用本地预设",
     );
     expect(copy.progressAppearance.gradient.presetNames.ocean).toBe("海洋");
+    expect(copy.progressAppearance.gradient.imageImportHelp).toContain(
+      "原图不会上传或保存",
+    );
     expect(copy.colorChoices.colorNames.indigo).toBe("靛蓝");
     expect(copy.preferenceGroups.uiMoreShow).toBe("更多 UI 设置");
     expect(copy.preferenceGroups.uiMoreHide).toBe("收起 UI 设置");
