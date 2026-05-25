@@ -23,7 +23,7 @@ import {
   buildSidePanelHash,
   type SettingsRouteFocus,
   type SidePanelRouteState,
-} from "../sidepanel/route-state";
+} from "../shared/sidepanel-route-state";
 
 function getRouteProviderId(route: SidePanelRouteState): string | null {
   return route.name === "provider-detail" ? route.providerId : null;

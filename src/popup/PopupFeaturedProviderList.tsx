@@ -7,7 +7,7 @@ import type {
 import type { RuntimeI18n } from "../shared/i18n";
 import { hasVisibleProviderProgressItems } from "../shared/provider-progress-item-selection";
 import { StatusBadge } from "../sidepanel/components/StatusBadge";
-import type { SettingsRouteFocus } from "../sidepanel/route-state";
+import type { SettingsRouteFocus } from "../shared/sidepanel-route-state";
 import { PopupProviderProgress } from "./PopupProviderProgress";
 import type {
   PopupFeaturedProviderCard,

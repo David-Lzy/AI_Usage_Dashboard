@@ -1,7 +1,7 @@
 import {
   buildSidePanelHash,
   type SidePanelRouteState,
-} from "../sidepanel/route-state";
+} from "./sidepanel-route-state";
 
 export const SIDEPANEL_ENTRY_PATH = "src/sidepanel/index.html";
 export const FULL_PAGE_SURFACE_SEARCH = "?surface=full-page";

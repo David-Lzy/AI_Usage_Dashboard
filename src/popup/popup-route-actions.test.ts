@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { consumePendingFullPageEntry } from "../shared/extension-surface-entry";
-import { SETTINGS_SECTION_IDS } from "../sidepanel/settings-section-ids";
+import { SETTINGS_SECTION_IDS } from "../shared/settings-section-ids";
 import {
   openDashboardSidebar,
   openFullDashboard,

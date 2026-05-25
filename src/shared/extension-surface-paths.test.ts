@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import type { SidePanelRouteState } from "../sidepanel/route-state";
+import type { SidePanelRouteState } from "./sidepanel-route-state";
 import {
   FULL_PAGE_SURFACE_SEARCH,
   SIDEPANEL_ENTRY_PATH,

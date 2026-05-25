@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { SETTINGS_SECTION_IDS } from "../sidepanel/settings-section-ids";
+import { SETTINGS_SECTION_IDS } from "../shared/settings-section-ids";
 import {
   getSettingsRouteFocusForPopupAction,
   getSettingsRouteFocusForPopupProvider,

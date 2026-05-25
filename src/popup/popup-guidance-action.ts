@@ -1,4 +1,4 @@
-import type { SettingsRouteFocus } from "../sidepanel/route-state";
+import type { SettingsRouteFocus } from "../shared/sidepanel-route-state";
 import {
   openFullDashboard,
   openProviderDetail,

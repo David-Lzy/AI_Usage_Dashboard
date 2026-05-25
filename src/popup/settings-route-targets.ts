@@ -1,7 +1,7 @@
 import type { ProviderId } from "../providers/types";
 import { isApiKeyProviderId } from "../providers/provider-definitions";
-import type { SettingsRouteFocus } from "../sidepanel/route-state";
-import { SETTINGS_SECTION_IDS } from "../sidepanel/settings-section-ids";
+import { SETTINGS_SECTION_IDS } from "../shared/settings-section-ids";
+import type { SettingsRouteFocus } from "../shared/sidepanel-route-state";
 import type { PopupGuidanceAction } from "./view-model-types";
 
 type PopupSettingsTargetProvider = {

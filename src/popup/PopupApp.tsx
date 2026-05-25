@@ -21,7 +21,7 @@ import {
   startThemeSettingsSync,
 } from "../shared/theme";
 import { SummaryStrip } from "../sidepanel/components/SummaryStrip";
-import type { SettingsRouteFocus } from "../sidepanel/route-state";
+import type { SettingsRouteFocus } from "../shared/sidepanel-route-state";
 import { syncPopupAppearanceAttributes } from "../shared/popup-appearance";
 import {
   buildPopupViewModel,
