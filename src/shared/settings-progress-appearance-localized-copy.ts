@@ -1,4 +1,5 @@
 import type { ResolvedAppLocale, RuntimeI18n } from "./i18n";
+import type { ProgressGradientPresetId } from "./progress-appearance";
 
 type SettingsProgressAppearanceCopyText = {
   sectionLabel: string;
@@ -39,6 +40,9 @@ type SettingsProgressAppearanceCopyText = {
     resetToDefault: string;
     endpointLocked: string;
     minimumStopHelp: string;
+    presetsLabel?: string;
+    presetsHelp?: string;
+    presetNames?: Partial<Record<ProgressGradientPresetId, string>>;
     stopAriaLabel: (stopNumberLabel: string, positionLabel: string) => string;
   };
 };
@@ -56,8 +60,11 @@ export type SettingsProgressAppearanceCopy = Omit<
   };
   gradient: Omit<
     NonNullable<SettingsProgressAppearanceCopyText["gradient"]>,
-    "stopAriaLabel"
+    "presetNames" | "presetsHelp" | "presetsLabel" | "stopAriaLabel"
   > & {
+    presetsLabel: string;
+    presetsHelp: string;
+    presetNames: Record<ProgressGradientPresetId, string>;
     stopAriaLabel: (stopNumber: number, positionPercent: number) => string;
   };
 };
@@ -81,6 +88,16 @@ const DEFAULT_PROGRESS_APPEARANCE_GRADIENT_COPY = {
   resetToDefault: "Reset gradient",
   endpointLocked: "Endpoint stops stay locked at 0% and 100%.",
   minimumStopHelp: "Keep at least the 0% and 100% stops.",
+  presetsLabel: "Gradient presets",
+  presetsHelp: "Apply a local preset, then adjust stops normally.",
+  presetNames: {
+    ocean: "Ocean",
+    sunset: "Sunset",
+    meadow: "Meadow",
+    aurora: "Aurora",
+    warning: "Warning",
+    "calm-blue": "Calm blue",
+  } satisfies Record<ProgressGradientPresetId, string>,
   stopAriaLabel: (stopNumberLabel: string, positionLabel: string) =>
     `Gradient stop ${stopNumberLabel}, ${positionLabel}% remaining`,
 };
@@ -162,6 +179,16 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       resetToDefault: "重置渐变",
       endpointLocked: "端点停止点固定在 0% 和 100%。",
       minimumStopHelp: "至少保留 0% 和 100% 两个停止点。",
+      presetsLabel: "渐变预设",
+      presetsHelp: "应用本地预设后，仍可像普通停止点一样调整。",
+      presetNames: {
+        ocean: "海洋",
+        sunset: "日落",
+        meadow: "草地",
+        aurora: "极光",
+        warning: "警示",
+        "calm-blue": "静蓝",
+      },
       stopAriaLabel: (stopNumberLabel, positionLabel) =>
         `渐变停止点 ${stopNumberLabel}，剩余 ${positionLabel}%`,
     },
@@ -209,6 +236,16 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       resetToDefault: "重設漸層",
       endpointLocked: "端點停止點固定在 0% 與 100%。",
       minimumStopHelp: "至少保留 0% 與 100% 兩個停止點。",
+      presetsLabel: "漸層預設",
+      presetsHelp: "套用本機預設後，仍可像一般停止點一樣調整。",
+      presetNames: {
+        ocean: "海洋",
+        sunset: "日落",
+        meadow: "草地",
+        aurora: "極光",
+        warning: "警示",
+        "calm-blue": "靜藍",
+      },
       stopAriaLabel: (stopNumberLabel, positionLabel) =>
         `漸層停止點 ${stopNumberLabel}，剩餘 ${positionLabel}%`,
     },
@@ -547,6 +584,10 @@ export function buildLocalizedSettingsProgressAppearanceSection(
     gradient: {
       ...DEFAULT_PROGRESS_APPEARANCE_GRADIENT_COPY,
       ...copy.gradient,
+      presetNames: {
+        ...DEFAULT_PROGRESS_APPEARANCE_GRADIENT_COPY.presetNames,
+        ...copy.gradient?.presetNames,
+      },
       stopAriaLabel: (stopNumber, positionPercent) =>
         (
           copy.gradient?.stopAriaLabel ??

@@ -805,6 +805,61 @@
   min-width: 0;
 }
 
+.progress-gradient-presets {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-2);
+  min-width: 0;
+}
+
+.progress-gradient-presets__help {
+  margin: var(--app-space-1) 0 0;
+}
+
+.progress-gradient-presets__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr));
+  gap: var(--app-space-2);
+  min-width: 0;
+}
+
+.progress-gradient-preset {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-1);
+  min-height: 44px;
+  padding: var(--app-space-2);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-medium);
+  background: var(--md-sys-color-surface-container-low);
+  color: var(--md-sys-color-on-surface);
+  cursor: pointer;
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  line-height: var(--md-sys-typescale-label-large-line-height);
+  text-align: start;
+}
+
+.progress-gradient-preset:hover {
+  background: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
+  border-color: var(--md-sys-color-primary);
+}
+
+.progress-gradient-preset:focus-visible {
+  box-shadow: var(--app-focus-ring-shadow);
+  outline: 0;
+}
+
+.progress-gradient-preset__swatch {
+  display: block;
+  width: 100%;
+  height: 10px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--progress-gradient-track);
+}
+
 .progress-gradient-editor__track {
   position: relative;
   min-height: 64px;

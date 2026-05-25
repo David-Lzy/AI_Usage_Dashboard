@@ -34,6 +34,12 @@ describe("buildSettingsLocalizedCopy", () => {
     });
     expect(copy.progressAppearance.sectionLabel).toBe("Progress appearance");
     expect(copy.progressAppearance.thickness.unit).toBe("px");
+    expect(copy.progressAppearance.gradient.presetsLabel).toBe(
+      "Gradient presets",
+    );
+    expect(copy.progressAppearance.gradient.presetNames["calm-blue"]).toBe(
+      "Calm blue",
+    );
     expect(copy.colorChoices.colorNames.indigo).toBe("Indigo");
     expect(copy.preferenceGroups.uiMoreShow).toBe("More UI settings");
     expect(copy.preferenceGroups.providerDisplayShow).toBe(
@@ -68,6 +74,11 @@ describe("buildSettingsLocalizedCopy", () => {
     expect(copy.progressAppearance.colorBands.rangeLabel(0, 20)).toBe(
       "剩余 0-20%",
     );
+    expect(copy.progressAppearance.gradient.presetsLabel).toBe("渐变预设");
+    expect(copy.progressAppearance.gradient.presetsHelp).toContain(
+      "应用本地预设",
+    );
+    expect(copy.progressAppearance.gradient.presetNames.ocean).toBe("海洋");
     expect(copy.colorChoices.colorNames.indigo).toBe("靛蓝");
     expect(copy.preferenceGroups.uiMoreShow).toBe("更多 UI 设置");
     expect(copy.preferenceGroups.uiMoreHide).toBe("收起 UI 设置");

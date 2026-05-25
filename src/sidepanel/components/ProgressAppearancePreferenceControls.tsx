@@ -21,9 +21,11 @@ import {
   PROGRESS_THICKNESS_MIN_PX,
   PROGRESS_THICKNESS_SLIDER_MAX,
   PROGRESS_THICKNESS_SLIDER_MIN,
+  PROGRESS_GRADIENT_PRESETS,
   areProgressColorBandsValid,
   createDefaultProgressColorBands,
   createDefaultProgressGradientStops,
+  createProgressGradientPresetStops,
   moveProgressColorBand,
   normalizeProgressColorAppearance,
   normalizeProgressColorBands,
@@ -381,6 +383,18 @@ export function ProgressAppearancePreferenceControls({
     const defaultStops = createDefaultProgressGradientStops();
 
     commitGradientStops(defaultStops, defaultStops[0]?.id ?? null);
+  }
+
+  function applyGradientPreset(
+    presetId: (typeof PROGRESS_GRADIENT_PRESETS)[number]["id"],
+  ) {
+    const presetStops = createProgressGradientPresetStops(presetId);
+
+    if (!presetStops) {
+      return;
+    }
+
+    commitGradientStops(presetStops, presetStops[0]?.id ?? null);
   }
 
   function updateGradientStopPosition(stopId: string, nextPosition: number) {
@@ -788,6 +802,41 @@ export function ProgressAppearancePreferenceControls({
                   {copy.gradient.label}
                 </p>
                 <MaterialInfoTooltip>{copy.gradient.detail}</MaterialInfoTooltip>
+              </div>
+              <div className="progress-gradient-presets">
+                <div>
+                  <p className="form-field__label">
+                    {copy.gradient.presetsLabel}
+                  </p>
+                  <p className="supporting-copy progress-gradient-presets__help">
+                    {copy.gradient.presetsHelp}
+                  </p>
+                </div>
+                <div className="progress-gradient-presets__list">
+                  {PROGRESS_GRADIENT_PRESETS.map((preset) => (
+                    <button
+                      key={preset.id}
+                      className="progress-gradient-preset"
+                      type="button"
+                      data-progress-gradient-preset={preset.id}
+                      onClick={() => applyGradientPreset(preset.id)}
+                    >
+                      <span
+                        className="progress-gradient-preset__swatch"
+                        style={
+                          {
+                            "--progress-gradient-track":
+                              buildGradientTrackBackground(preset.stops),
+                          } as CSSProperties & {
+                            "--progress-gradient-track": string;
+                          }
+                        }
+                        aria-hidden="true"
+                      />
+                      <span>{copy.gradient.presetNames[preset.id]}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
               <div
                 className="progress-gradient-editor__track"

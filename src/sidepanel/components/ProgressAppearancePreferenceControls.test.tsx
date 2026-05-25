@@ -101,6 +101,11 @@ describe("ProgressAppearancePreferenceControls", () => {
 
     expect(html).toContain('data-progress-gradient-editor=""');
     expect(html).toContain("剩余渐变");
+    expect(html).toContain("渐变预设");
+    expect(html).toContain('data-progress-gradient-preset="ocean"');
+    expect(html).toContain('data-progress-gradient-preset="calm-blue"');
+    expect(html).toContain("海洋");
+    expect(html).toContain("静蓝");
     expect(html).toContain("--progress-gradient-track");
     expect(html).toContain('role="slider"');
     expect(html).toContain('aria-valuenow="50"');

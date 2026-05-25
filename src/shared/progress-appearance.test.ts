@@ -5,11 +5,13 @@ import {
   DEFAULT_PROGRESS_COLOR_BANDS,
   DEFAULT_PROGRESS_GRADIENT_STOPS,
   DEFAULT_PROGRESS_THICKNESS_PX,
+  PROGRESS_GRADIENT_PRESETS,
   areProgressColorBandsValid,
   areProgressGradientStopsValid,
   createDefaultProgressColorAppearance,
   createDefaultProgressColorBands,
   createDefaultProgressGradientStops,
+  createProgressGradientPresetStops,
   moveProgressColorBand,
   normalizeProgressColorAppearance,
   normalizeProgressColorBands,
@@ -77,6 +79,29 @@ describe("progress appearance preferences", () => {
       mode: "traditional",
       bands: DEFAULT_PROGRESS_COLOR_BANDS,
     });
+  });
+
+  it("ships valid local gradient presets as editable stop definitions", () => {
+    expect(PROGRESS_GRADIENT_PRESETS.map((preset) => preset.id)).toEqual([
+      "ocean",
+      "sunset",
+      "meadow",
+      "aurora",
+      "warning",
+      "calm-blue",
+    ]);
+
+    for (const preset of PROGRESS_GRADIENT_PRESETS) {
+      expect(areProgressGradientStopsValid(preset.stops)).toBe(true);
+      expect(createProgressGradientPresetStops(preset.id)).toEqual(preset.stops);
+    }
+
+    const firstOcean = createProgressGradientPresetStops("ocean");
+    const secondOcean = createProgressGradientPresetStops("ocean");
+
+    firstOcean![0].colorHex = "#000000";
+
+    expect(secondOcean?.[0].colorHex).toBe("#006874");
   });
 
   it("normalizes valid color bands and uppercases colors", () => {
