@@ -7,6 +7,7 @@ import ReactDOM from "react-dom/client";
 
 import { consumePendingFullPageEntry } from "../shared/extension-surface-entry";
 import { isFullPageSurfaceSearch } from "../shared/extension-surface-paths";
+import { getSafeLocalStorage } from "../shared/local-storage";
 import { App } from "./App";
 import "./theme/tokens.css";
 import "./theme/material-theme.css";
@@ -39,7 +40,7 @@ if (isFullPageSurfaceSearch(window.location.search)) {
 
   const fullPageEntry = consumePendingFullPageEntry(
     window.location.hash,
-    window.localStorage,
+    getSafeLocalStorage(),
   );
 
   if (fullPageEntry) {

@@ -54,4 +54,58 @@ describe("extension surface entry helpers", () => {
     expect(consumePendingFullPageEntry("#dashboard", storage, 20_101)).toBeNull();
     expect(values.size).toBe(0);
   });
+
+  it("ignores storage write failures", () => {
+    expect(() =>
+      storePendingFullPageEntry(
+        "popup-expand",
+        "#dashboard",
+        {
+          getItem: () => null,
+          setItem: () => {
+            throw new Error("localStorage unavailable");
+          },
+          removeItem: () => undefined,
+        },
+        100,
+      ),
+    ).not.toThrow();
+  });
+
+  it("ignores storage read failures", () => {
+    expect(
+      consumePendingFullPageEntry(
+        "#dashboard",
+        {
+          getItem: () => {
+            throw new Error("localStorage unavailable");
+          },
+          setItem: () => undefined,
+          removeItem: () => undefined,
+        },
+        200,
+      ),
+    ).toBeNull();
+  });
+
+  it("keeps matching entry consumption resilient when cleanup fails", () => {
+    expect(
+      consumePendingFullPageEntry(
+        "#dashboard",
+        {
+          getItem: () =>
+            JSON.stringify({
+              source: "sidebar-expand",
+              targetHash: "#dashboard",
+              createdAt: 100,
+            }),
+          setItem: () => undefined,
+          removeItem: () => {
+            throw new Error("localStorage unavailable");
+          },
+        },
+        200,
+      ),
+    ).toBe("sidebar-expand");
+  });
 });

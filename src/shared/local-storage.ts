@@ -1,5 +1,5 @@
 function getSafeWindowStorage(kind: "localStorage" | "sessionStorage"): Storage | null {
-  if (typeof window === "undefined" || globalThis !== window) {
+  if (typeof window === "undefined") {
     return null;
   }
 

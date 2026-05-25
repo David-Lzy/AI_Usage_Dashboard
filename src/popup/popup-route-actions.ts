@@ -6,6 +6,7 @@ import {
   resolveSidePanelCloseTarget,
 } from "../shared/extension-side-panel-controls";
 import { storePendingFullPageEntry } from "../shared/extension-surface-entry";
+import { getSafeLocalStorage } from "../shared/local-storage";
 import {
   buildSurfaceSessionKey,
   captureSurfaceSessionState,
@@ -89,7 +90,7 @@ export async function openFullPageRoute(route: SidePanelRouteState) {
     storePendingFullPageEntry(
       "popup-expand",
       buildSidePanelHash(route),
-      window.localStorage,
+      getSafeLocalStorage(),
     );
   }
 

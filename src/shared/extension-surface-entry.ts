@@ -31,7 +31,13 @@ function isFullPageEntrySource(value: unknown): value is FullPageEntrySource {
 function readPendingFullPageEntry(
   storage: StorageLike,
 ): PendingFullPageEntry | null {
-  const rawValue = storage.getItem(PENDING_FULL_PAGE_ENTRY_KEY);
+  let rawValue: string | null;
+
+  try {
+    rawValue = storage.getItem(PENDING_FULL_PAGE_ENTRY_KEY);
+  } catch {
+    return null;
+  }
 
   if (!rawValue) {
     return null;
@@ -46,7 +52,7 @@ function readPendingFullPageEntry(
       typeof parsedValue.createdAt !== "number" ||
       !Number.isFinite(parsedValue.createdAt)
     ) {
-      storage.removeItem(PENDING_FULL_PAGE_ENTRY_KEY);
+      removePendingFullPageEntry(storage);
       return null;
     }
 
@@ -56,8 +62,16 @@ function readPendingFullPageEntry(
       createdAt: parsedValue.createdAt,
     };
   } catch {
-    storage.removeItem(PENDING_FULL_PAGE_ENTRY_KEY);
+    removePendingFullPageEntry(storage);
     return null;
+  }
+}
+
+function removePendingFullPageEntry(storage: StorageLike): void {
+  try {
+    storage.removeItem(PENDING_FULL_PAGE_ENTRY_KEY);
+  } catch {
+    // Pending entry cleanup is best-effort; navigation must keep going.
   }
 }
 
@@ -71,14 +85,18 @@ export function storePendingFullPageEntry(
     return;
   }
 
-  storage.setItem(
-    PENDING_FULL_PAGE_ENTRY_KEY,
-    JSON.stringify({
-      source,
-      targetHash: normalizeHash(targetHash),
-      createdAt: now,
-    }),
-  );
+  try {
+    storage.setItem(
+      PENDING_FULL_PAGE_ENTRY_KEY,
+      JSON.stringify({
+        source,
+        targetHash: normalizeHash(targetHash),
+        createdAt: now,
+      }),
+    );
+  } catch {
+    // Surface handoff animation hints are optional.
+  }
 }
 
 export function consumePendingFullPageEntry(
@@ -97,7 +115,7 @@ export function consumePendingFullPageEntry(
   }
 
   if (now - pendingEntry.createdAt > PENDING_FULL_PAGE_ENTRY_TTL_MS) {
-    storage.removeItem(PENDING_FULL_PAGE_ENTRY_KEY);
+    removePendingFullPageEntry(storage);
     return null;
   }
 
@@ -105,6 +123,6 @@ export function consumePendingFullPageEntry(
     return null;
   }
 
-  storage.removeItem(PENDING_FULL_PAGE_ENTRY_KEY);
+  removePendingFullPageEntry(storage);
   return pendingEntry.source;
 }

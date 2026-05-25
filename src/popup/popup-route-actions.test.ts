@@ -47,6 +47,27 @@ function stubPopupWindow() {
   };
 }
 
+function stubPopupWindowWithThrowingLocalStorage() {
+  const open = vi.fn();
+  const close = vi.fn();
+
+  vi.stubGlobal("window", {
+    close,
+    get localStorage() {
+      throw new Error("localStorage unavailable");
+    },
+    location: {
+      href: "http://127.0.0.1:4173/src/popup/index.html",
+    },
+    open,
+  });
+
+  return {
+    close,
+    open,
+  };
+}
+
 describe("popup route actions", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
@@ -138,6 +159,29 @@ describe("popup route actions", () => {
             throw new Error("storage unavailable");
           }),
         },
+      },
+      tabs: {
+        create,
+      },
+    });
+
+    await openFullDashboard();
+
+    expect(create).toHaveBeenCalledWith({
+      active: true,
+      url: "chrome-extension://extension-id/src/sidepanel/index.html?surface=full-page#dashboard",
+    });
+    expect(popupWindow.close).toHaveBeenCalled();
+  });
+
+  it("continues popup navigation when localStorage is unavailable", async () => {
+    const popupWindow = stubPopupWindowWithThrowingLocalStorage();
+    const create = vi.fn(async () => undefined);
+
+    vi.stubGlobal("chrome", {
+      runtime: {
+        id: "extension-id",
+        getURL: (path: string) => `chrome-extension://extension-id/${path}`,
       },
       tabs: {
         create,

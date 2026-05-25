@@ -18,6 +18,7 @@ import {
   buildSidePanelExtensionPath,
   buildSidePanelPreviewUrl,
 } from "../shared/extension-surface-paths";
+import { getSafeLocalStorage } from "../shared/local-storage";
 import {
   getExtensionPermissionsApi,
   getExtensionTabsApi,
@@ -154,7 +155,7 @@ export async function openFullPageRoute(
     storePendingFullPageEntry(
       "sidebar-expand",
       buildSidePanelHash(route),
-      window.localStorage,
+      getSafeLocalStorage(),
     );
   }
 

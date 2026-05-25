@@ -353,6 +353,32 @@ describe("app-browser-controls", () => {
     });
   });
 
+  it("continues surface navigation when localStorage is unavailable", async () => {
+    const create = vi.fn(async () => ({ id: 42 }) as chrome.tabs.Tab);
+
+    vi.stubGlobal("chrome", {
+      runtime: {
+        id: "extension-id",
+        getURL: (path: string) => `chrome-extension://extension-id/${path}`,
+      },
+      tabs: {
+        create,
+      },
+    });
+    vi.stubGlobal("window", {
+      get localStorage() {
+        throw new Error("localStorage unavailable");
+      },
+    });
+
+    await openFullPageRoute({ name: "dashboard" });
+
+    expect(create).toHaveBeenCalledWith({
+      url: "chrome-extension://extension-id/src/sidepanel/index.html?surface=full-page#dashboard",
+      active: true,
+    });
+  });
+
   it("closes the current side panel after opening a full-page tab when supported", async () => {
     const create = vi.fn(async () => ({ id: 42 }) as chrome.tabs.Tab);
     const close = vi.fn(async () => undefined);
