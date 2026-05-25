@@ -3,6 +3,7 @@ import path from "node:path";
 import process from "node:process";
 
 import { chromium } from "playwright";
+import { installSafeLocalStorageHelpers } from "./lib/browser-local-storage-helpers.mjs";
 
 const projectRoot = process.cwd();
 const artifactDir = path.join(
@@ -64,6 +65,7 @@ function sourcePreferenceSelector(providerId) {
 }
 
 async function waitForSettingsReady(page) {
+  await installSafeLocalStorageHelpers(page);
   await page.goto(settingsUrl, { waitUntil: "load" });
   await page.waitForSelector("text=Global Preferences");
 }
@@ -85,8 +87,21 @@ async function resetPreviewStorage(page) {
 
   await page.evaluate(
     ({ appKey, secretsKey }) => {
-      localStorage.removeItem(appKey);
-      localStorage.removeItem(secretsKey);
+      const storage = globalThis.__aiUsageDashboardSafeLocalStorage;
+
+      for (const [key, label] of [
+        [appKey, "app state"],
+        [secretsKey, "provider secrets"],
+      ]) {
+        const removeResult = storage?.removeItem(key) ?? {
+          ok: false,
+          error: "Safe localStorage helper was not installed.",
+        };
+
+        if (!removeResult.ok) {
+          throw new Error(`Unable to clear ${label}: ${removeResult.error}`);
+        }
+      }
     },
     {
       appKey: APP_STATE_STORAGE_KEY,

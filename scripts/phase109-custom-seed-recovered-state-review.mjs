@@ -3,6 +3,7 @@ import path from "node:path";
 import process from "node:process";
 
 import { chromium } from "playwright";
+import { installSafeLocalStorageHelpers } from "./lib/browser-local-storage-helpers.mjs";
 
 const projectRoot = process.cwd();
 const artifactDir = path.join(
@@ -101,13 +102,27 @@ function createScenarioState(baseState, mode, scenario) {
 }
 
 async function resetPreviewStorage(page) {
+  await installSafeLocalStorageHelpers(page);
   await page.goto(settingsUrl, { waitUntil: "load" });
   await page.waitForSelector("text=Global Preferences");
 
   await page.evaluate(
     ({ appKey, secretsKey }) => {
-      localStorage.removeItem(appKey);
-      localStorage.removeItem(secretsKey);
+      const storage = globalThis.__aiUsageDashboardSafeLocalStorage;
+
+      for (const [key, label] of [
+        [appKey, "app state"],
+        [secretsKey, "provider secrets"],
+      ]) {
+        const removeResult = storage?.removeItem(key) ?? {
+          ok: false,
+          error: "Safe localStorage helper was not installed.",
+        };
+
+        if (!removeResult.ok) {
+          throw new Error(`Unable to clear ${label}: ${removeResult.error}`);
+        }
+      }
     },
     {
       appKey: APP_STATE_STORAGE_KEY,
@@ -120,8 +135,20 @@ async function resetPreviewStorage(page) {
 }
 
 async function readStoredAppState(page) {
+  await installSafeLocalStorageHelpers(page);
   return page.evaluate((storageKey) => {
-    const rawState = localStorage.getItem(storageKey);
+    const storage = globalThis.__aiUsageDashboardSafeLocalStorage;
+    const rawStateResult = storage?.getItem(storageKey) ?? {
+      ok: false,
+      error: "Safe localStorage helper was not installed.",
+    };
+
+    if (!rawStateResult.ok) {
+      throw new Error(`Unable to read stored app state: ${rawStateResult.error}`);
+    }
+
+    const rawState = rawStateResult.value;
+
     if (!rawState) {
       throw new Error("Missing stored app state after preview reset.");
     }
@@ -130,20 +157,32 @@ async function readStoredAppState(page) {
 }
 
 async function writeSeededScenario(page, state) {
+  await installSafeLocalStorageHelpers(page);
   await page.evaluate(
     ({ appKey, secretsKey, nextState }) => {
-      localStorage.setItem(appKey, JSON.stringify(nextState));
-      localStorage.setItem(
-        secretsKey,
-        JSON.stringify({
-          cursor: { adminApiKey: null },
-          "claude-code": { adminApiKey: null },
-          codex: {
-            analyticsApiKey: null,
-            workspaceId: null,
-          },
-        }),
-      );
+      const storage = globalThis.__aiUsageDashboardSafeLocalStorage;
+      const emptySecrets = JSON.stringify({
+        cursor: { adminApiKey: null },
+        "claude-code": { adminApiKey: null },
+        codex: {
+          analyticsApiKey: null,
+          workspaceId: null,
+        },
+      });
+
+      for (const [key, value, label] of [
+        [appKey, JSON.stringify(nextState), "seeded app state"],
+        [secretsKey, emptySecrets, "empty provider secrets"],
+      ]) {
+        const writeResult = storage?.setItem(key, value) ?? {
+          ok: false,
+          error: "Safe localStorage helper was not installed.",
+        };
+
+        if (!writeResult.ok) {
+          throw new Error(`Unable to write ${label}: ${writeResult.error}`);
+        }
+      }
     },
     {
       appKey: APP_STATE_STORAGE_KEY,

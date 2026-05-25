@@ -3,6 +3,7 @@ import path from "node:path";
 import process from "node:process";
 
 import { chromium } from "playwright";
+import { installSafeLocalStorageHelpers } from "./lib/browser-local-storage-helpers.mjs";
 
 const projectRoot = process.cwd();
 const artifactDir = path.join(
@@ -73,6 +74,7 @@ function assert(condition, message) {
 }
 
 async function waitForWorkspace(page) {
+  await installSafeLocalStorageHelpers(page);
   await page.goto(reviewUrl, { waitUntil: "load" });
   await page.waitForSelector("[data-theme-recovery-page='true']");
   await page.waitForSelector("[data-theme-recovery-summary-draft]");
@@ -81,7 +83,19 @@ async function waitForWorkspace(page) {
 async function seedScenario(page, scenario) {
   await page.evaluate(
     ({ appKey, themeMode, customSeedHex: seedHex, cursorPermission, codexPermission, extraVisibleProviders }) => {
-      const rawState = localStorage.getItem(appKey);
+      const storage = globalThis.__aiUsageDashboardSafeLocalStorage;
+      const rawStateResult = storage?.getItem(appKey) ?? {
+        ok: false,
+        error: "Safe localStorage helper was not installed.",
+      };
+
+      if (!rawStateResult.ok) {
+        throw new Error(
+          `Unable to read theme recovery review state: ${rawStateResult.error}`,
+        );
+      }
+
+      const rawState = rawStateResult.value;
 
       if (!rawState) {
         throw new Error("Theme recovery review storage was not initialized.");
@@ -144,7 +158,13 @@ async function seedScenario(page, scenario) {
         return provider;
       });
 
-      localStorage.setItem(appKey, JSON.stringify(state));
+      const writeResult = storage.setItem(appKey, JSON.stringify(state));
+
+      if (!writeResult.ok) {
+        throw new Error(
+          `Unable to write theme recovery review state: ${writeResult.error}`,
+        );
+      }
     },
     {
       appKey: APP_STATE_STORAGE_KEY,
