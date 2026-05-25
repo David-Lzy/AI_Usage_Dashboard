@@ -87,6 +87,9 @@ describe("SettingsSections", () => {
     expect(settingsNavigationCss).not.toContain(
       "grid-template-columns: repeat(auto-fit, minmax(min(100%, 168px), 1fr));",
     );
+    expect(settingsNavigationCss).toContain(
+      ".settings-grid--balanced-settings:not(.adaptive-control-grid):has(",
+    );
     expect(settingsNavigationCss).not.toContain(
       ".settings-overview__paired-controls",
     );

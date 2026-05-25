@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
@@ -13,6 +15,10 @@ const OPTIONS: Array<MaterialSelectOption<ActionBadgeSelection>> = [
   { value: "quota:codex:5h", label: "Codex 5-hour window" },
   { value: "quota:codex:weekly", label: "Codex weekly window" },
 ];
+const formControlsCss = readFileSync(
+  new URL("../theme/form-controls.css", import.meta.url),
+  "utf8",
+);
 
 describe("ActionBadgeSelectionControls", () => {
   it("renders multi-select badges as one dropdown trigger by default", () => {
@@ -51,5 +57,17 @@ describe("ActionBadgeSelectionControls", () => {
         "Attention count",
       ),
     ).toBe("Attention count · Codex 5-hour window +1");
+  });
+
+  it("keeps the dropdown wrapper aligned inside adaptive control grids", () => {
+    expect(formControlsCss).toContain(
+      ".adaptive-control-grid .action-badge-selection-controls__dropdown,",
+    );
+    expect(formControlsCss).toContain(
+      ".adaptive-control-grid .action-badge-selection-controls__button {",
+    );
+    expect(formControlsCss).toContain(
+      ".adaptive-control-grid .action-badge-selection-controls__label-row {",
+    );
   });
 });

@@ -147,4 +147,12 @@ describe("ColorChoiceDropdown", () => {
       "grid-template-columns: repeat(auto-fit, minmax(min(100%, 92px), 1fr));",
     );
   });
+
+  it("keeps closed triggers and floating menus bounded in adaptive grids", () => {
+    expect(formControlsCss).toContain(
+      ".adaptive-control-grid .color-choice-dropdown__button,",
+    );
+    expect(formControlsCss).toContain(".color-choice-dropdown__menu--floating {");
+    expect(formControlsCss).toContain("max-inline-size: calc(100vw - 32px);");
+  });
 });

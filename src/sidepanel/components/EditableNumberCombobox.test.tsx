@@ -71,4 +71,12 @@ describe("EditableNumberCombobox", () => {
     );
     expect(formControlsCss).toContain("text-align: start;");
   });
+
+  it("participates in adaptive control grids without inner width overflow", () => {
+    expect(formControlsCss).toContain(
+      ".adaptive-control-grid .editable-number-combobox__anchor,",
+    );
+    expect(formControlsCss).toContain("width: 100%;");
+    expect(formControlsCss).toContain("min-width: 0;");
+  });
 });

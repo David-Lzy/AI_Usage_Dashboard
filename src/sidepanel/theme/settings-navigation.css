@@ -222,8 +222,12 @@
 }
 
 @media (min-width: 1280px) {
-  .settings-grid--balanced-settings:has(> :nth-child(7):last-child),
-  .settings-grid--balanced-settings:has(> :nth-child(8):last-child) {
+  .settings-grid--balanced-settings:not(.adaptive-control-grid):has(
+      > :nth-child(7):last-child
+    ),
+  .settings-grid--balanced-settings:not(.adaptive-control-grid):has(
+      > :nth-child(8):last-child
+    ) {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }

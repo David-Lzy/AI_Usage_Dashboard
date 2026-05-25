@@ -114,6 +114,18 @@ select.form-field__control {
   height: 100%;
 }
 
+.adaptive-control-grid .editable-number-combobox__anchor,
+.adaptive-control-grid .color-choice-dropdown__button,
+.adaptive-control-grid .action-badge-selection-controls__dropdown,
+.adaptive-control-grid .action-badge-selection-controls__button {
+  width: 100%;
+  min-width: 0;
+}
+
+.adaptive-control-grid .action-badge-selection-controls__label-row {
+  min-width: 0;
+}
+
 .adaptive-control-grid__measurer {
   position: absolute;
   inset-block-start: 0;
@@ -698,6 +710,7 @@ select.form-field__control {
   position: fixed;
   z-index: 90;
   inset: auto;
+  max-inline-size: calc(100vw - 32px);
 }
 
 .color-choice-dropdown__menu--compact {
