@@ -34,6 +34,7 @@ describe("AccentColorSelect", () => {
     );
 
     expect(html).toContain('data-color-choice-dropdown="accent-color"');
+    expect(html).toContain('data-color-choice-menu-density="compact"');
     expect(html).toContain("Indigo");
     expect(html).toContain("#4F46E5");
     expect(html).not.toContain('data-settings-material-select="theme-preset"');

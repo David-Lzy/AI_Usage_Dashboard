@@ -154,6 +154,7 @@ export function AccentColorSelect({
       sections={sections}
       copy={copy}
       fieldIdPrefix="accent-color"
+      menuDensity="compact"
       sessionPopoverId="accent-color"
       activePopover={activePopover}
       onActivePopoverChange={onActivePopoverChange}
