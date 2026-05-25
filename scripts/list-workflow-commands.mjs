@@ -29,6 +29,10 @@ const groups = [
     match: (name) => name.startsWith("firefox:"),
   },
   {
+    title: "QA",
+    match: (name) => name.startsWith("qa:") || /^phase(?:556|565):/.test(name),
+  },
+  {
     title: "Store",
     match: (name) => name.startsWith("store:"),
   },

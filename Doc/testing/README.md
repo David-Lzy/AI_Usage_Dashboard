@@ -27,6 +27,13 @@ npm run test
 npm run build
 ```
 
+Surface browser QA that writes local JSON artifacts should use the aggregate
+command so privacy scanning runs immediately after capture:
+
+```sh
+npm run qa:surface:check
+```
+
 Release candidates should pass:
 
 ```sh
