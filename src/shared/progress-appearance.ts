@@ -1,4 +1,8 @@
-import type { ProgressColorBand } from "../providers/types";
+import type {
+  ProgressColorAppearance,
+  ProgressColorBand,
+  ProgressGradientStop,
+} from "../providers/types";
 
 export const PROGRESS_THICKNESS_MIN_PX = 1;
 export const PROGRESS_THICKNESS_MAX_PX = 20;
@@ -12,6 +16,16 @@ const PROGRESS_COLOR_BAND_KEYS = new Set([
   "minimumPercent",
   "maximumPercent",
   "colorHex",
+]);
+const PROGRESS_GRADIENT_STOP_KEYS = new Set([
+  "id",
+  "positionPercent",
+  "colorHex",
+]);
+const PROGRESS_COLOR_APPEARANCE_KEYS = new Set([
+  "mode",
+  "bands",
+  "stops",
 ]);
 
 export const DEFAULT_PROGRESS_COLOR_BANDS: readonly ProgressColorBand[] = [
@@ -35,6 +49,24 @@ export const DEFAULT_PROGRESS_COLOR_BANDS: readonly ProgressColorBand[] = [
   },
 ];
 
+export const DEFAULT_PROGRESS_GRADIENT_STOPS: readonly ProgressGradientStop[] = [
+  {
+    id: "low",
+    positionPercent: 0,
+    colorHex: "#B3261E",
+  },
+  {
+    id: "medium",
+    positionPercent: 49,
+    colorHex: "#8A4B00",
+  },
+  {
+    id: "high",
+    positionPercent: 100,
+    colorHex: "#146C2E",
+  },
+];
+
 type UnknownRecord = Record<string, unknown>;
 
 function isRecord(value: unknown): value is UnknownRecord {
@@ -43,6 +75,10 @@ function isRecord(value: unknown): value is UnknownRecord {
 
 function cloneDefaultProgressColorBands(): ProgressColorBand[] {
   return DEFAULT_PROGRESS_COLOR_BANDS.map((band) => ({ ...band }));
+}
+
+function cloneDefaultProgressGradientStops(): ProgressGradientStop[] {
+  return DEFAULT_PROGRESS_GRADIENT_STOPS.map((stop) => ({ ...stop }));
 }
 
 function normalizeInteger(value: unknown): number | null {
@@ -97,6 +133,20 @@ function normalizeBandId(value: unknown, index: number): string | null {
   return trimmedValue || `band-${index + 1}`;
 }
 
+function normalizeGradientStopId(value: unknown, index: number): string | null {
+  if (typeof value !== "string") {
+    return null;
+  }
+
+  const trimmedValue = value.trim();
+
+  if (!/^[a-zA-Z0-9_-]{1,64}$/.test(trimmedValue)) {
+    return null;
+  }
+
+  return trimmedValue || `stop-${index + 1}`;
+}
+
 function parseProgressColorBand(
   value: unknown,
   index: number,
@@ -131,8 +181,46 @@ function parseProgressColorBand(
   };
 }
 
+function parseProgressGradientStop(
+  value: unknown,
+  index: number,
+): ProgressGradientStop | null {
+  if (!isRecord(value)) {
+    return null;
+  }
+
+  if (Object.keys(value).some((key) => !PROGRESS_GRADIENT_STOP_KEYS.has(key))) {
+    return null;
+  }
+
+  const id = normalizeGradientStopId(value.id, index);
+  const positionPercent = normalizeFiniteNumber(value.positionPercent);
+  const colorHex = normalizeColorHex(value.colorHex);
+
+  if (id === null || positionPercent === null || colorHex === null) {
+    return null;
+  }
+
+  return {
+    id,
+    positionPercent: roundToTwoDecimals(positionPercent),
+    colorHex,
+  };
+}
+
 export function createDefaultProgressColorBands(): ProgressColorBand[] {
   return cloneDefaultProgressColorBands();
+}
+
+export function createDefaultProgressGradientStops(): ProgressGradientStop[] {
+  return cloneDefaultProgressGradientStops();
+}
+
+export function createDefaultProgressColorAppearance(): ProgressColorAppearance {
+  return {
+    mode: "traditional",
+    bands: createDefaultProgressColorBands(),
+  };
 }
 
 export function normalizeProgressThicknessPx(value: unknown): number {
@@ -256,6 +344,122 @@ export function normalizeProgressColorBands(value: unknown): ProgressColorBand[]
   }));
 }
 
+export function areProgressGradientStopsValid(
+  stops: readonly ProgressGradientStop[],
+): boolean {
+  if (stops.length < 2) {
+    return false;
+  }
+
+  const seenIds = new Set<string>();
+  const seenPositions = new Set<number>();
+  const sortedStops = [...stops].sort(
+    (firstStop, secondStop) =>
+      firstStop.positionPercent - secondStop.positionPercent,
+  );
+
+  for (const stop of sortedStops) {
+    if (
+      !/^[a-zA-Z0-9_-]{1,64}$/.test(stop.id) ||
+      seenIds.has(stop.id) ||
+      !PROGRESS_COLOR_HEX_PATTERN.test(stop.colorHex) ||
+      !Number.isFinite(stop.positionPercent) ||
+      stop.positionPercent < 0 ||
+      stop.positionPercent > 100 ||
+      seenPositions.has(stop.positionPercent)
+    ) {
+      return false;
+    }
+
+    seenIds.add(stop.id);
+    seenPositions.add(stop.positionPercent);
+  }
+
+  return (
+    sortedStops[0]?.positionPercent === 0 &&
+    sortedStops[sortedStops.length - 1]?.positionPercent === 100
+  );
+}
+
+function parseNormalizedProgressGradientStops(
+  value: unknown,
+): ProgressGradientStop[] | null {
+  if (!Array.isArray(value)) {
+    return null;
+  }
+
+  const normalizedStops = value.map(parseProgressGradientStop);
+
+  if (
+    normalizedStops.some((stop) => stop === null) ||
+    !areProgressGradientStopsValid(normalizedStops as ProgressGradientStop[])
+  ) {
+    return null;
+  }
+
+  return (normalizedStops as ProgressGradientStop[])
+    .map((stop) => ({
+      ...stop,
+      colorHex: stop.colorHex.toUpperCase(),
+    }))
+    .sort(
+      (firstStop, secondStop) =>
+        firstStop.positionPercent - secondStop.positionPercent,
+    );
+}
+
+export function normalizeProgressGradientStops(
+  value: unknown,
+): ProgressGradientStop[] {
+  return (
+    parseNormalizedProgressGradientStops(value) ??
+    cloneDefaultProgressGradientStops()
+  );
+}
+
+export function normalizeProgressColorAppearance(
+  value: unknown,
+  fallbackBands?: unknown,
+): ProgressColorAppearance {
+  const normalizedFallbackBands = normalizeProgressColorBands(fallbackBands);
+  const fallbackAppearance: ProgressColorAppearance = {
+    mode: "traditional",
+    bands: normalizedFallbackBands,
+  };
+
+  if (!isRecord(value)) {
+    return fallbackAppearance;
+  }
+
+  if (
+    Object.keys(value).some((key) => !PROGRESS_COLOR_APPEARANCE_KEYS.has(key))
+  ) {
+    return fallbackAppearance;
+  }
+
+  if (value.mode === "traditional") {
+    return {
+      mode: "traditional",
+      bands: normalizeProgressColorBands(value.bands ?? normalizedFallbackBands),
+    };
+  }
+
+  if (value.mode === "gradient") {
+    const stops = parseNormalizedProgressGradientStops(value.stops);
+
+    if (stops === null) {
+      return fallbackAppearance;
+    }
+
+    return {
+      mode: "gradient",
+      stops,
+    };
+  }
+
+  return fallbackAppearance;
+}
+
 export function resolveProgressColorBandForRemainingPercent(
   remainingPercent: number | null,
   colorBands: readonly ProgressColorBand[],
@@ -283,6 +487,121 @@ export function resolveProgressColorForRemainingPercent(
   return (
     resolveProgressColorBandForRemainingPercent(remainingPercent, colorBands)
       ?.colorHex ?? null
+  );
+}
+
+type RgbColor = {
+  red: number;
+  green: number;
+  blue: number;
+};
+
+function parseRgbColorHex(colorHex: string): RgbColor {
+  return {
+    red: Number.parseInt(colorHex.slice(1, 3), 16),
+    green: Number.parseInt(colorHex.slice(3, 5), 16),
+    blue: Number.parseInt(colorHex.slice(5, 7), 16),
+  };
+}
+
+function formatRgbColorHex(color: RgbColor): string {
+  const toHexPair = (channel: number) =>
+    Math.round(clampNumber(channel, 0, 255))
+      .toString(16)
+      .padStart(2, "0")
+      .toUpperCase();
+
+  return `#${toHexPair(color.red)}${toHexPair(color.green)}${toHexPair(
+    color.blue,
+  )}`;
+}
+
+function interpolateRgbColor(
+  fromColor: RgbColor,
+  toColor: RgbColor,
+  ratio: number,
+): RgbColor {
+  return {
+    red: fromColor.red + (toColor.red - fromColor.red) * ratio,
+    green: fromColor.green + (toColor.green - fromColor.green) * ratio,
+    blue: fromColor.blue + (toColor.blue - fromColor.blue) * ratio,
+  };
+}
+
+export function resolveProgressGradientColorForRemainingPercent(
+  remainingPercent: number | null,
+  stops: readonly ProgressGradientStop[],
+): string | null {
+  if (remainingPercent === null || !Number.isFinite(remainingPercent)) {
+    return null;
+  }
+
+  const normalizedPercent = clampNumber(remainingPercent, 0, 100);
+  const normalizedStops = normalizeProgressGradientStops(stops);
+  const firstStop = normalizedStops[0];
+
+  if (!firstStop) {
+    return null;
+  }
+
+  if (normalizedPercent <= firstStop.positionPercent) {
+    return firstStop.colorHex;
+  }
+
+  for (let index = 1; index < normalizedStops.length; index += 1) {
+    const previousStop = normalizedStops[index - 1];
+    const nextStop = normalizedStops[index];
+
+    if (!previousStop || !nextStop) {
+      continue;
+    }
+
+    if (normalizedPercent > nextStop.positionPercent) {
+      continue;
+    }
+
+    if (normalizedPercent === nextStop.positionPercent) {
+      return nextStop.colorHex;
+    }
+
+    const span = nextStop.positionPercent - previousStop.positionPercent;
+    const ratio =
+      span <= 0
+        ? 0
+        : (normalizedPercent - previousStop.positionPercent) / span;
+
+    return formatRgbColorHex(
+      interpolateRgbColor(
+        parseRgbColorHex(previousStop.colorHex),
+        parseRgbColorHex(nextStop.colorHex),
+        ratio,
+      ),
+    );
+  }
+
+  return normalizedStops[normalizedStops.length - 1]?.colorHex ?? null;
+}
+
+export function resolveProgressColorForAppearance(
+  remainingPercent: number | null,
+  colorAppearance: ProgressColorAppearance | null | undefined,
+  fallbackBands: readonly ProgressColorBand[] = DEFAULT_PROGRESS_COLOR_BANDS,
+): string | null {
+  const normalizedAppearance = normalizeProgressColorAppearance(
+    colorAppearance,
+    fallbackBands,
+  );
+
+  if (normalizedAppearance.mode === "gradient") {
+    return resolveProgressGradientColorForRemainingPercent(
+      remainingPercent,
+      normalizedAppearance.stops,
+    );
+  }
+
+  return resolveProgressColorForRemainingPercent(
+    remainingPercent,
+    normalizedAppearance.bands,
   );
 }
 

@@ -40,6 +40,7 @@ type ToolbarPopupPreviewViewport = {
 type ToolbarPopupPreviewSettings = Pick<
   AppSettings,
   | "popupCornerStyle"
+  | "progressColorAppearance"
   | "progressColorBands"
   | "progressThicknessPx"
   | "popupProgressStyle"
@@ -148,6 +149,7 @@ function ToolbarPopupPreviewSurface({
             tone="neutral"
             label={sampleQuotaLabel}
             displayStyle={settings.popupProgressStyle}
+            progressColorAppearance={settings.progressColorAppearance}
             progressColorBands={settings.progressColorBands}
             progressThicknessPx={settings.progressThicknessPx}
             valueKind="remaining"

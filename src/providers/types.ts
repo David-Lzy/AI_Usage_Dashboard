@@ -178,6 +178,20 @@ export type ProgressColorBand = {
   maximumPercent: number;
   colorHex: string;
 };
+export type ProgressGradientStop = {
+  id: string;
+  positionPercent: number;
+  colorHex: string;
+};
+export type ProgressColorAppearance =
+  | {
+      mode: "traditional";
+      bands: ProgressColorBand[];
+    }
+  | {
+      mode: "gradient";
+      stops: ProgressGradientStop[];
+    };
 
 export type ProviderPageBinding = {
   mode: "auto" | "bound";
@@ -334,6 +348,7 @@ export type AppSettings = {
   progressItemsBySurface: ProgressItemsBySurface;
   progressThicknessPx: number;
   progressColorBands: ProgressColorBand[];
+  progressColorAppearance: ProgressColorAppearance;
 };
 
 export type SummaryItem = {

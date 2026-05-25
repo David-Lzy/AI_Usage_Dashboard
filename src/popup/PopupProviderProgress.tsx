@@ -1,5 +1,6 @@
 import type {
   PopupCircularProgressItemsPerRow,
+  ProgressColorAppearance,
   ProgressColorBand,
   ProgressDisplayStyle,
   ProgressItemsBySurface,
@@ -10,6 +11,7 @@ import { ProviderProgressItemList } from "../shared/components/ProviderProgressI
 
 type PopupProviderProgressProps = {
   i18n: RuntimeI18n;
+  progressColorAppearance?: ProgressColorAppearance;
   progressColorBands: readonly ProgressColorBand[];
   popupCircularProgressItemsPerRow: PopupCircularProgressItemsPerRow;
   progressDisplayStyle: ProgressDisplayStyle;
@@ -20,6 +22,7 @@ type PopupProviderProgressProps = {
 
 export function PopupProviderProgress({
   i18n,
+  progressColorAppearance,
   progressColorBands,
   popupCircularProgressItemsPerRow,
   progressDisplayStyle,
@@ -32,6 +35,7 @@ export function PopupProviderProgress({
       density="compact"
       displayStyle={progressDisplayStyle}
       i18n={i18n}
+      progressColorAppearance={progressColorAppearance}
       progressColorBands={progressColorBands}
       popupCircularProgressItemsPerRow={popupCircularProgressItemsPerRow}
       progressItemsBySurface={progressItemsBySurface}

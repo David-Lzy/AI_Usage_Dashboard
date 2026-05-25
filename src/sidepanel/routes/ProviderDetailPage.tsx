@@ -1,6 +1,7 @@
 import type {
   AppLocalePreference,
   DisplaySurface,
+  ProgressColorAppearance,
   ProgressColorBand,
   ProgressDisplayStyle,
   ProgressItemsBySurface,
@@ -22,6 +23,7 @@ import type { ProviderViewModel } from "../view-models";
 
 type ProviderDetailPageProps = {
   localePreference: AppLocalePreference;
+  progressColorAppearance?: ProgressColorAppearance;
   progressColorBands: readonly ProgressColorBand[];
   progressDisplayStyle: ProgressDisplayStyle;
   progressItemsBySurface: ProgressItemsBySurface;
@@ -44,6 +46,7 @@ type ProviderDetailPageProps = {
 
 export function ProviderDetailPage({
   localePreference,
+  progressColorAppearance,
   progressColorBands,
   progressDisplayStyle,
   progressItemsBySurface,
@@ -427,6 +430,7 @@ export function ProviderDetailPage({
           <ProviderProgressItemList
             displayStyle={progressDisplayStyle}
             i18n={i18n}
+            progressColorAppearance={progressColorAppearance}
             progressColorBands={progressColorBands}
             progressItemsBySurface={progressItemsBySurface}
             progressThicknessPx={progressThicknessPx}

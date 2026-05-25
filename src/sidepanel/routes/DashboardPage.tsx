@@ -1,6 +1,7 @@
 import type {
   AppLocalePreference,
   DisplaySurface,
+  ProgressColorAppearance,
   ProgressColorBand,
   ProgressDisplayStyle,
   ProgressItemsBySurface,
@@ -15,6 +16,7 @@ import type { ProviderViewModel } from "../view-models";
 
 type DashboardPageProps = {
   localePreference: AppLocalePreference;
+  progressColorAppearance?: ProgressColorAppearance;
   progressColorBands: readonly ProgressColorBand[];
   progressDisplayStyle: ProgressDisplayStyle;
   progressItemsBySurface: ProgressItemsBySurface;
@@ -41,6 +43,7 @@ type DashboardPageProps = {
 
 export function DashboardPage({
   localePreference,
+  progressColorAppearance,
   progressColorBands,
   progressDisplayStyle,
   progressItemsBySurface,
@@ -109,6 +112,7 @@ export function DashboardPage({
               <ProviderCard
                 key={provider.providerId}
                 localePreference={localePreference}
+                progressColorAppearance={progressColorAppearance}
                 progressColorBands={progressColorBands}
                 progressDisplayStyle={progressDisplayStyle}
                 progressItemsBySurface={progressItemsBySurface}

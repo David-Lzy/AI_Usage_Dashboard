@@ -28,6 +28,7 @@ import {
 } from "./settings-preferences";
 import {
   DEFAULT_PROGRESS_THICKNESS_PX,
+  createDefaultProgressColorAppearance,
   createDefaultProgressColorBands,
 } from "./progress-appearance";
 import { DEFAULT_SETTINGS_USER_LEVEL } from "./settings-user-level";
@@ -727,5 +728,6 @@ export const SAMPLE_APP_STATE: AppState = {
     progressItemsBySurface: createDefaultProgressItemsBySurface(),
     progressThicknessPx: DEFAULT_PROGRESS_THICKNESS_PX,
     progressColorBands: createDefaultProgressColorBands(),
+    progressColorAppearance: createDefaultProgressColorAppearance(),
   },
 };

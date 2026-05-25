@@ -122,6 +122,54 @@ describe("configuration backup", () => {
     expect(cursorSetting?.pageBinding.tabId).toBe(456);
   });
 
+  it("imports legacy progress color bands as traditional color appearance", async () => {
+    const backup = buildConfigurationBackup({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        progressColorBands: [
+          {
+            id: "all",
+            minimumPercent: 0,
+            maximumPercent: 100,
+            colorHex: "#146C2E",
+          },
+        ],
+      },
+    });
+    const {
+      progressColorAppearance: _progressColorAppearance,
+      ...legacySettings
+    } = backup.payload.settings;
+    const legacyBackup = {
+      ...backup,
+      payload: {
+        ...backup.payload,
+        settings: legacySettings as AppState["settings"],
+      },
+    };
+    const importedState = applyConfigurationBackupToState(
+      SAMPLE_APP_STATE,
+      legacyBackup,
+    );
+
+    await writeAppState(importedState);
+
+    const storedState = await readAppState();
+
+    expect(storedState?.settings.progressColorAppearance).toEqual({
+      mode: "traditional",
+      bands: [
+        {
+          id: "all",
+          minimumPercent: 0,
+          maximumPercent: 100,
+          colorHex: "#146C2E",
+        },
+      ],
+    });
+  });
+
   it("keeps imported provider source preferences after storage normalization", async () => {
     const backup = buildConfigurationBackup({
       ...SAMPLE_APP_STATE,

@@ -1,17 +1,26 @@
 import { describe, expect, it } from "vitest";
 
+import type { ProgressColorAppearance } from "../providers/types";
 import {
   DEFAULT_PROGRESS_COLOR_BANDS,
+  DEFAULT_PROGRESS_GRADIENT_STOPS,
   DEFAULT_PROGRESS_THICKNESS_PX,
   areProgressColorBandsValid,
+  areProgressGradientStopsValid,
+  createDefaultProgressColorAppearance,
   createDefaultProgressColorBands,
+  createDefaultProgressGradientStops,
   moveProgressColorBand,
+  normalizeProgressColorAppearance,
   normalizeProgressColorBands,
+  normalizeProgressGradientStops,
   normalizeProgressThicknessPx,
   progressThicknessPxToSliderValue,
   progressThicknessSliderValueToPx,
   removeProgressColorBand,
+  resolveProgressColorForAppearance,
   resolveProgressColorForRemainingPercent,
+  resolveProgressGradientColorForRemainingPercent,
   splitProgressColorBand,
 } from "./progress-appearance";
 
@@ -55,6 +64,19 @@ describe("progress appearance preferences", () => {
     firstDefault[0].colorHex = "#000000";
 
     expect(secondDefault).toEqual(DEFAULT_PROGRESS_COLOR_BANDS);
+  });
+
+  it("clones default gradient stops and creates a traditional color appearance", () => {
+    const firstDefault = createDefaultProgressGradientStops();
+    const secondDefault = createDefaultProgressGradientStops();
+
+    firstDefault[0].colorHex = "#000000";
+
+    expect(secondDefault).toEqual(DEFAULT_PROGRESS_GRADIENT_STOPS);
+    expect(createDefaultProgressColorAppearance()).toEqual({
+      mode: "traditional",
+      bands: DEFAULT_PROGRESS_COLOR_BANDS,
+    });
   });
 
   it("normalizes valid color bands and uppercases colors", () => {
@@ -181,6 +203,157 @@ describe("progress appearance preferences", () => {
     }
   });
 
+  it("normalizes valid gradient stops and uppercases colors", () => {
+    expect(
+      normalizeProgressGradientStops([
+        {
+          id: "high",
+          positionPercent: 100,
+          colorHex: "#ffffff",
+        },
+        {
+          id: "low",
+          positionPercent: "0",
+          colorHex: "#000000",
+        },
+        {
+          id: "middle",
+          positionPercent: "50.555",
+          colorHex: "#808080",
+        },
+      ]),
+    ).toEqual([
+      {
+        id: "low",
+        positionPercent: 0,
+        colorHex: "#000000",
+      },
+      {
+        id: "middle",
+        positionPercent: 50.56,
+        colorHex: "#808080",
+      },
+      {
+        id: "high",
+        positionPercent: 100,
+        colorHex: "#FFFFFF",
+      },
+    ]);
+  });
+
+  it("rejects invalid gradient stops", () => {
+    expect(
+      areProgressGradientStopsValid([
+        {
+          id: "low",
+          positionPercent: 0,
+          colorHex: "#000000",
+        },
+        {
+          id: "middle",
+          positionPercent: 50,
+          colorHex: "#808080",
+        },
+      ]),
+    ).toBe(false);
+    expect(
+      normalizeProgressGradientStops([
+        {
+          id: "duplicate",
+          positionPercent: 0,
+          colorHex: "#000000",
+        },
+        {
+          id: "duplicate",
+          positionPercent: 100,
+          colorHex: "#FFFFFF",
+        },
+      ]),
+    ).toEqual(DEFAULT_PROGRESS_GRADIENT_STOPS);
+  });
+
+  it("normalizes progress color appearance with legacy band fallback", () => {
+    const customBands = [
+      {
+        id: "danger",
+        minimumPercent: 0,
+        maximumPercent: 100,
+        colorHex: "#b3261e",
+      },
+    ];
+
+    expect(normalizeProgressColorAppearance(undefined, customBands)).toEqual({
+      mode: "traditional",
+      bands: [
+        {
+          id: "danger",
+          minimumPercent: 0,
+          maximumPercent: 100,
+          colorHex: "#B3261E",
+        },
+      ],
+    });
+    expect(
+      normalizeProgressColorAppearance(
+        {
+          mode: "gradient",
+          stops: [
+            {
+              id: "end",
+              positionPercent: 100,
+              colorHex: "#ffffff",
+            },
+            {
+              id: "start",
+              positionPercent: 0,
+              colorHex: "#000000",
+            },
+          ],
+        },
+        customBands,
+      ),
+    ).toEqual({
+      mode: "gradient",
+      stops: [
+        {
+          id: "start",
+          positionPercent: 0,
+          colorHex: "#000000",
+        },
+        {
+          id: "end",
+          positionPercent: 100,
+          colorHex: "#FFFFFF",
+        },
+      ],
+    });
+    expect(
+      normalizeProgressColorAppearance(
+        {
+          mode: "gradient",
+          stops: [
+            {
+              id: "only",
+              positionPercent: 0,
+              colorHex: "#000000",
+            },
+          ],
+        },
+        customBands,
+      ),
+    ).toEqual({
+      mode: "traditional",
+      bands: [
+        {
+          id: "danger",
+          minimumPercent: 0,
+          maximumPercent: 100,
+          colorHex: "#B3261E",
+        },
+      ],
+    });
+  });
+
   it("splits, removes, and reorders valid color bands without creating gaps", () => {
     const splitBands = splitProgressColorBand(DEFAULT_PROGRESS_COLOR_BANDS);
 
@@ -238,5 +411,34 @@ describe("progress appearance preferences", () => {
       "#146C2E",
     );
     expect(resolveProgressColorForRemainingPercent(null, DEFAULT_PROGRESS_COLOR_BANDS)).toBeNull();
+  });
+
+  it("resolves gradient colors through the shared appearance resolver", () => {
+    const gradientAppearance: ProgressColorAppearance = {
+      mode: "gradient",
+      stops: [
+        {
+          id: "empty",
+          positionPercent: 0,
+          colorHex: "#000000",
+        },
+        {
+          id: "full",
+          positionPercent: 100,
+          colorHex: "#FFFFFF",
+        },
+      ],
+    };
+
+    expect(
+      resolveProgressGradientColorForRemainingPercent(
+        50,
+        gradientAppearance.stops,
+      ),
+    ).toBe("#808080");
+    expect(resolveProgressColorForAppearance(50, gradientAppearance)).toBe(
+      "#808080",
+    );
+    expect(resolveProgressColorForAppearance(20, undefined)).toBe("#B3261E");
   });
 });

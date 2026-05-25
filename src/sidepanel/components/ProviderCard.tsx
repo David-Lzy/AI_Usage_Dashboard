@@ -1,6 +1,7 @@
 import type {
   AppLocalePreference,
   DisplaySurface,
+  ProgressColorAppearance,
   ProgressColorBand,
   ProgressDisplayStyle,
   ProgressItemsBySurface,
@@ -15,6 +16,7 @@ import { UsageFactsList } from "./UsageFactsList";
 
 type ProviderCardProps = {
   localePreference: AppLocalePreference;
+  progressColorAppearance?: ProgressColorAppearance;
   progressColorBands: readonly ProgressColorBand[];
   progressDisplayStyle: ProgressDisplayStyle;
   progressItemsBySurface: ProgressItemsBySurface;
@@ -31,6 +33,7 @@ type ProviderCardProps = {
 
 export function ProviderCard({
   localePreference,
+  progressColorAppearance,
   progressColorBands,
   progressDisplayStyle,
   progressItemsBySurface,
@@ -139,6 +142,7 @@ export function ProviderCard({
               density="compact"
               displayStyle={progressDisplayStyle}
               i18n={i18n}
+              progressColorAppearance={progressColorAppearance}
               progressColorBands={progressColorBands}
               progressItemsBySurface={progressItemsBySurface}
               progressThicknessPx={progressThicknessPx}

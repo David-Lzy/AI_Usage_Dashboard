@@ -62,6 +62,10 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+function hasOwnProperty(value: object, key: string): boolean {
+  return Object.prototype.hasOwnProperty.call(value, key);
+}
+
 function getUtf8ByteLength(value: string): number {
   if (typeof TextEncoder !== "undefined") {
     return new TextEncoder().encode(value).byteLength;
@@ -168,6 +172,22 @@ export function applyConfigurationBackupToState(
   state: AppState,
   backup: ConfigurationBackupDocument,
 ): AppState {
+  const importedSettings = backup.payload.settings;
+  const settings = {
+    ...state.settings,
+    ...importedSettings,
+  };
+
+  if (
+    !hasOwnProperty(importedSettings, "progressColorAppearance") &&
+    Array.isArray(importedSettings.progressColorBands)
+  ) {
+    settings.progressColorAppearance = {
+      mode: "traditional",
+      bands: structuredClone(importedSettings.progressColorBands),
+    };
+  }
+
   const importedProviderSettings = new Map<
     ProviderId,
     Partial<ConfigurationBackupProviderSetting>
@@ -195,10 +215,7 @@ export function applyConfigurationBackupToState(
 
   return {
     ...state,
-    settings: {
-      ...state.settings,
-      ...backup.payload.settings,
-    },
+    settings,
     providerSettings: state.providerSettings.map((provider) => {
       const importedProvider = importedProviderSettings.get(provider.id);
 

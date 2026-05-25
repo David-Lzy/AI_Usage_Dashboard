@@ -1,4 +1,5 @@
 import type {
+  ProgressColorAppearance,
   ProgressColorBand,
   ProgressDisplayStyle,
 } from "../../providers/types";
@@ -16,6 +17,7 @@ type UsageWindowProgressListProps = {
   i18n: RuntimeI18n;
   density?: "compact" | "detail";
   displayStyle?: ProgressDisplayStyle;
+  progressColorAppearance?: ProgressColorAppearance;
   progressColorBands?: readonly ProgressColorBand[];
   progressThicknessPx?: number;
 };
@@ -88,6 +90,7 @@ export function UsageWindowProgressList({
   i18n,
   density = "detail",
   displayStyle = "line",
+  progressColorAppearance,
   progressColorBands = DEFAULT_PROGRESS_COLOR_BANDS,
   progressThicknessPx = DEFAULT_PROGRESS_THICKNESS_PX,
 }: UsageWindowProgressListProps) {
@@ -112,6 +115,7 @@ export function UsageWindowProgressList({
             tone={getUsageWindowProgressTone(usageWindow)}
             label={usageWindow.normalizedLabel}
             displayStyle={displayStyle}
+            progressColorAppearance={progressColorAppearance}
             progressColorBands={progressColorBands}
             progressThicknessPx={progressThicknessPx}
             valueKind="remaining"

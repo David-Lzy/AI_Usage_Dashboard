@@ -398,7 +398,13 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
               handleUpdateSettings({ progressThicknessPx })
             }
             onProgressColorBandsChange={(progressColorBands) =>
-              handleUpdateSettings({ progressColorBands })
+              handleUpdateSettings({
+                progressColorBands,
+                progressColorAppearance: {
+                  mode: "traditional",
+                  bands: progressColorBands,
+                },
+              })
             }
             onActionBadgeSelectionsChange={(actionBadgeSelections) =>
               handleUpdateSettings({
@@ -463,6 +469,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
       ) : route.name === "provider-detail" && selectedProvider ? (
         <ProviderDetailPage
           localePreference={localePreference}
+          progressColorAppearance={appState.settings.progressColorAppearance}
           progressColorBands={appState.settings.progressColorBands}
           progressDisplayStyle={progressDisplayStyle}
           progressItemsBySurface={appState.settings.progressItemsBySurface}
@@ -488,6 +495,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
       ) : (
         <DashboardPage
           localePreference={localePreference}
+          progressColorAppearance={appState.settings.progressColorAppearance}
           progressColorBands={appState.settings.progressColorBands}
           progressDisplayStyle={progressDisplayStyle}
           progressItemsBySurface={appState.settings.progressItemsBySurface}

@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 
 import type {
+  ProgressColorAppearance,
   ProgressColorBand,
   ProgressDisplayStyle,
 } from "../../providers/types";
@@ -8,7 +9,7 @@ import {
   DEFAULT_PROGRESS_COLOR_BANDS,
   DEFAULT_PROGRESS_THICKNESS_PX,
   normalizeProgressThicknessPx,
-  resolveProgressColorForRemainingPercent,
+  resolveProgressColorForAppearance,
 } from "../progress-appearance";
 import { UsageProgressRing } from "./UsageProgressRing";
 
@@ -19,6 +20,7 @@ type UsageProgressProps = {
   tone: "neutral" | "warning" | "error";
   label: string;
   displayStyle?: ProgressDisplayStyle;
+  progressColorAppearance?: ProgressColorAppearance;
   progressColorBands?: readonly ProgressColorBand[];
   progressThicknessPx?: number;
   valueKind?: "used" | "remaining";
@@ -44,6 +46,7 @@ export function UsageProgress({
   tone,
   label,
   displayStyle = "line",
+  progressColorAppearance,
   progressColorBands = DEFAULT_PROGRESS_COLOR_BANDS,
   progressThicknessPx = DEFAULT_PROGRESS_THICKNESS_PX,
   valueKind = "used",
@@ -66,8 +69,9 @@ export function UsageProgress({
       ? Math.min(100, Math.max(0, (remaining / total) * 100))
       : null;
   const resolvedThicknessPx = normalizeProgressThicknessPx(progressThicknessPx);
-  const resolvedProgressColor = resolveProgressColorForRemainingPercent(
+  const resolvedProgressColor = resolveProgressColorForAppearance(
     remainingPercent,
+    progressColorAppearance,
     progressColorBands,
   );
   const isIndeterminate = roundedPercent === null;

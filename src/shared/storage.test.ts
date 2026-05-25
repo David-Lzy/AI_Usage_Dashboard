@@ -31,6 +31,7 @@ function createLegacyState(): AppState {
     progressItemsBySurface: _progressItemsBySurface,
     progressThicknessPx: _progressThicknessPx,
     progressColorBands: _progressColorBands,
+    progressColorAppearance: _progressColorAppearance,
     ...legacySettings
   } = SAMPLE_APP_STATE.settings;
 
@@ -290,6 +291,10 @@ describe("storage normalization", () => {
         colorHex: "#146C2E",
       },
     ]);
+    expect(state?.settings.progressColorAppearance).toEqual({
+      mode: "traditional",
+      bands: SAMPLE_APP_STATE.settings.progressColorBands,
+    });
   });
 
   it("normalizes unsupported UI font preferences to the default", async () => {
@@ -699,6 +704,93 @@ describe("storage normalization", () => {
         colorHex: "#8A4B00",
       },
     ]);
+  });
+
+  it("upgrades legacy progress color bands into traditional color appearance", async () => {
+    const progressColorBands = [
+      {
+        id: "all",
+        minimumPercent: 0,
+        maximumPercent: 100,
+        colorHex: "#146c2e",
+      },
+    ];
+    const {
+      progressColorAppearance: _progressColorAppearance,
+      ...legacySettings
+    } = {
+      ...SAMPLE_APP_STATE.settings,
+      progressColorBands,
+    };
+
+    await writeAppState({
+      ...SAMPLE_APP_STATE,
+      settings: legacySettings as AppState["settings"],
+    });
+
+    const state = await readAppState();
+
+    expect(state?.settings.progressColorBands).toEqual([
+      {
+        id: "all",
+        minimumPercent: 0,
+        maximumPercent: 100,
+        colorHex: "#146C2E",
+      },
+    ]);
+    expect(state?.settings.progressColorAppearance).toEqual({
+      mode: "traditional",
+      bands: [
+        {
+          id: "all",
+          minimumPercent: 0,
+          maximumPercent: 100,
+          colorHex: "#146C2E",
+        },
+      ],
+    });
+  });
+
+  it("normalizes stored gradient progress color appearance", async () => {
+    await writeAppState({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        progressColorAppearance: {
+          mode: "gradient",
+          stops: [
+            {
+              id: "full",
+              positionPercent: 100,
+              colorHex: "#ffffff",
+            },
+            {
+              id: "empty",
+              positionPercent: 0,
+              colorHex: "#000000",
+            },
+          ],
+        },
+      } as unknown as AppState["settings"],
+    });
+
+    const state = await readAppState();
+
+    expect(state?.settings.progressColorAppearance).toEqual({
+      mode: "gradient",
+      stops: [
+        {
+          id: "empty",
+          positionPercent: 0,
+          colorHex: "#000000",
+        },
+        {
+          id: "full",
+          positionPercent: 100,
+          colorHex: "#FFFFFF",
+        },
+      ],
+    });
   });
 
   it("falls back invalid progress color bands to the default bands", async () => {

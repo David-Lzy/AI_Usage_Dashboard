@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 import type {
   DisplaySurface,
   PopupCircularProgressItemsPerRow,
+  ProgressColorAppearance,
   ProgressColorBand,
   ProgressDisplayStyle,
   ProgressItemsBySurface,
@@ -20,6 +21,7 @@ type ProviderProgressItemListProps = {
   density?: "compact" | "detail";
   displayStyle: ProgressDisplayStyle;
   i18n: RuntimeI18n;
+  progressColorAppearance?: ProgressColorAppearance;
   progressColorBands: readonly ProgressColorBand[];
   popupCircularProgressItemsPerRow?: PopupCircularProgressItemsPerRow;
   progressItemsBySurface: ProgressItemsBySurface;
@@ -128,6 +130,7 @@ export function ProviderProgressItemList({
   density = "detail",
   displayStyle,
   i18n,
+  progressColorAppearance,
   progressColorBands,
   popupCircularProgressItemsPerRow,
   progressItemsBySurface,
@@ -187,6 +190,7 @@ export function ProviderProgressItemList({
                 tone={tone}
                 label={label}
                 displayStyle={displayStyle}
+                progressColorAppearance={progressColorAppearance}
                 progressColorBands={progressColorBands}
                 progressThicknessPx={progressThicknessPx}
                 valueKind={getProgressItemValueKind(item)}

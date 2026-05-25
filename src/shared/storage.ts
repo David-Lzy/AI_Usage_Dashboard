@@ -58,6 +58,7 @@ import {
   normalizeProviderOrderBySurface,
 } from "./display-preferences";
 import {
+  normalizeProgressColorAppearance,
   normalizeProgressColorBands,
   normalizeProgressThicknessPx,
 } from "./progress-appearance";
@@ -243,6 +244,9 @@ function normalizeAppState(state: AppState): AppState {
         ),
       }),
     );
+  const progressColorBands = normalizeProgressColorBands(
+    state.settings?.progressColorBands,
+  );
 
   return {
     providers: [...providers, ...extraProviders],
@@ -332,8 +336,10 @@ function normalizeAppState(state: AppState): AppState {
       progressThicknessPx: normalizeProgressThicknessPx(
         state.settings?.progressThicknessPx,
       ),
-      progressColorBands: normalizeProgressColorBands(
-        state.settings?.progressColorBands,
+      progressColorBands,
+      progressColorAppearance: normalizeProgressColorAppearance(
+        state.settings?.progressColorAppearance,
+        progressColorBands,
       ),
     },
   };
