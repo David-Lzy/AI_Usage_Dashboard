@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { INTERACTION_AUDIT_SURFACES } from "../sidepanel/interaction-audit-surfaces";
+import { INTERACTION_AUDIT_SURFACES } from "./interaction-audit-surfaces";
 import { createRuntimeI18n, SUPPORTED_APP_LOCALES } from "./i18n";
 import { buildOperatorWorkspaceLocalizedCopy as buildReexportedCopy } from "./localized-copy";
 import { buildOperatorWorkspaceLocalizedCopy } from "./operator-workspace-localized-copy";
