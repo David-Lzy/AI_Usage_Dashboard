@@ -77,6 +77,7 @@ describe("SettingsPage", () => {
     expect(html).toContain('class="settings-section-nav"');
     expect(html).toContain('class="settings-overview__controls"');
     expect(html).toContain('class="settings-overview__level-control"');
+    expect(html).toContain('class="settings-overview__paired-controls"');
     expect(html).toContain('settings-overview__user-level-help');
     expect(html).toContain('data-settings-material-select="settings-user-level"');
     expect(html).toContain('data-settings-material-select="locale-preference"');

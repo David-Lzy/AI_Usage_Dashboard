@@ -19,7 +19,7 @@
 }
 
 .settings-overview__header {
-  grid-template-columns: minmax(0, 1fr) minmax(min(100%, 280px), 460px);
+  grid-template-columns: minmax(0, 1fr) minmax(min(100%, 320px), 560px);
   align-items: center;
   gap: var(--app-space-4);
 }
@@ -30,25 +30,42 @@
 
 .settings-overview__summary {
   justify-self: end;
-  width: min(100%, 460px);
+  inline-size: min(100%, 560px);
+}
+
+.settings-overview__summary.summary-strip--compact {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 96px), 1fr));
 }
 
 .settings-overview__controls {
   display: grid;
-  grid-template-columns: minmax(420px, 1.6fr) repeat(2, minmax(180px, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   align-items: start;
   gap: var(--app-space-3);
 }
 
 .settings-overview__level-control {
   display: grid;
-  grid-template-columns: minmax(0, min(320px, 100%)) auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: end;
   gap: var(--app-space-3);
+  inline-size: min(
+    100%,
+    max(240px, calc((100% - var(--app-space-3) * 2) / 3))
+  );
+  max-inline-size: 320px;
   min-width: 0;
 }
 
-.settings-overview__controls > .material-select,
+.settings-overview__paired-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 168px), 1fr));
+  align-items: start;
+  gap: var(--app-space-3);
+  inline-size: 100%;
+}
+
+.settings-overview__paired-controls > .material-select,
 .settings-overview__level-control > .material-select {
   min-width: 0;
 }
@@ -405,7 +422,7 @@
 
   .settings-overview__summary {
     justify-self: stretch;
-    width: 100%;
+    inline-size: 100%;
   }
 
   .quick-setup-section__header {
@@ -444,10 +461,6 @@
 
   .settings-grid {
     grid-template-columns: 1fr;
-  }
-
-  .settings-overview__controls {
-    grid-template-columns: minmax(0, 1fr);
   }
 
   .settings-overview__level-control {

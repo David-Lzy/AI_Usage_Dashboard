@@ -15,6 +15,10 @@ const typographyCss = readFileSync(
   new URL("../theme/typography.css", import.meta.url),
   "utf8",
 );
+const settingsNavigationCss = readFileSync(
+  new URL("../theme/settings-navigation.css", import.meta.url),
+  "utf8",
+);
 
 describe("SettingsSections", () => {
   it("keeps section labels neutral instead of tertiary accent colored", () => {
@@ -56,6 +60,29 @@ describe("SettingsSections", () => {
     expect(html).toContain('class="summary-pill summary-pill--neutral"');
     expect(html).toContain('class="summary-pill summary-pill--warning"');
     expect(html).toContain(">Settings<");
+  });
+
+  it("keeps overview summary and preference controls compact and adaptive", () => {
+    expect(settingsNavigationCss).toContain(
+      ".settings-overview__summary.summary-strip--compact {",
+    );
+    expect(settingsNavigationCss).toContain(
+      "grid-template-columns: repeat(auto-fit, minmax(min(100%, 96px), 1fr));",
+    );
+    expect(settingsNavigationCss).toContain(
+      ".settings-overview__level-control {",
+    );
+    expect(settingsNavigationCss).toContain(
+      "max(240px, calc((100% - var(--app-space-3) * 2) / 3))",
+    );
+    expect(settingsNavigationCss).toContain("max-inline-size: 320px;");
+    expect(settingsNavigationCss).toContain(
+      ".settings-overview__paired-controls {",
+    );
+    expect(settingsNavigationCss).toContain(
+      "grid-template-columns: repeat(auto-fit, minmax(min(100%, 168px), 1fr));",
+    );
+    expect(settingsNavigationCss).toContain("inline-size: 100%;");
   });
 
   it("renders visibility switch rows with stable provider hooks", () => {
