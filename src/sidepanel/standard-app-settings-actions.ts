@@ -1,4 +1,4 @@
-import type { AppMessage } from "../background/message-bus";
+import type { AppMessage } from "../shared/app-message-types";
 import type {
   ApiKeyProviderId,
   AppSettings,

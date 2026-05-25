@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { sendAppMessage } from "./app-client";
-import type { AppMessageResponse } from "../background/message-bus";
+import type { AppMessageResponse } from "./app-message-types";
 
 const handleAppMessageMock = vi.hoisted(() => vi.fn());
 

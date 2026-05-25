@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import type { AppMessage } from "../background/message-bus";
+import type { AppMessage } from "../shared/app-message-types";
 import { buildConfigurationBackup } from "../shared/configuration-backup";
 import { SAMPLE_APP_STATE } from "../shared/constants";
 import { createRuntimeI18n } from "../shared/i18n";

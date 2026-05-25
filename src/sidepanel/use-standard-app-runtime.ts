@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import type { AppMessage } from "../background/message-bus";
+import type { AppMessage } from "../shared/app-message-types";
 import type { AppState } from "../providers/types";
 import { sendAppMessage } from "../shared/app-client";
 import {

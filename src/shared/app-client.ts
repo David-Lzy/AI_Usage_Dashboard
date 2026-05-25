@@ -1,7 +1,7 @@
 import type {
   AppMessage,
   AppMessageResponse,
-} from "../background/message-bus";
+} from "./app-message-types";
 
 function hasExtensionMessaging(): boolean {
   return (

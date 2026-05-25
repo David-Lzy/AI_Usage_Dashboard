@@ -8,9 +8,10 @@ import {
   isActionBadgeRotationAlarm,
   isPeriodicSyncAlarm,
 } from "./alarms";
+import type { AppMessage } from "../shared/app-message-types";
 import { syncActionBadgeFromState } from "./action-badge";
 import { syncToolbarIconFromState } from "./action-icon";
-import { handleAppMessage, type AppMessage } from "./message-bus";
+import { handleAppMessage } from "./message-bus";
 import type { AppState } from "../providers/types";
 import {
   markProviderBindingsStaleForRemovedTab,
