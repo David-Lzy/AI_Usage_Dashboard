@@ -1,4 +1,4 @@
-import { PERIODIC_SYNC_ALARM } from "../background/alarms";
+import { PERIODIC_SYNC_ALARM } from "../shared/alarm-names";
 import { SYNC_INTERVAL_MIN_MINUTES } from "../shared/settings-preferences";
 
 type ChromeAlarmsReader = {

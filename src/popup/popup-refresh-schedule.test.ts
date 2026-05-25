@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { PERIODIC_SYNC_ALARM } from "../shared/alarm-names";
 import {
   formatPopupRefreshCountdownLabel,
   readPopupRefreshCountdownSeconds,
@@ -13,7 +14,7 @@ describe("popup refresh schedule", () => {
         chrome: {
           alarms: {
             get: async () => ({
-              name: "ai-usage-dashboard.periodic-sync.v2",
+              name: PERIODIC_SYNC_ALARM,
               scheduledTime: 1_000 + 12.2 * 60_000 + 4_000,
             }),
           },

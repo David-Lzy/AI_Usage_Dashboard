@@ -5,13 +5,15 @@ import { SAMPLE_APP_STATE } from "../shared/constants";
 import { buildActionBadgeQuotaCandidates } from "../shared/action-badge-preferences";
 import {
   ACTION_BADGE_ROTATION_ALARM,
+  LEGACY_PERIODIC_SYNC_ALARMS,
+  PERIODIC_SYNC_ALARM,
+} from "../shared/alarm-names";
+import {
   ensureActionBadgeRotationAlarm,
   ensurePeriodicSyncAlarm,
   getPeriodicSyncInitialDelayMinutes,
   INITIAL_PERIODIC_SYNC_DELAY_MINUTES,
-  LEGACY_PERIODIC_SYNC_ALARMS,
   PERIODIC_SYNC_INITIAL_JITTER_MAX_MINUTES,
-  PERIODIC_SYNC_ALARM,
 } from "./alarms";
 
 const baseSettings: AppSettings = {
