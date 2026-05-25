@@ -86,6 +86,7 @@ describe("ColorChoiceDropdown", () => {
 
     expect(html).toContain('aria-expanded="true"');
     expect(html).toContain("color-choice-dropdown__menu");
+    expect(html).toContain("color-choice-dropdown__menu-header");
     expect(html).toContain("color-choice-dropdown__custom-panel");
     expect(html).toContain("Apply custom color");
   });
@@ -110,5 +111,12 @@ describe("ColorChoiceDropdown", () => {
     expect(formControlsCss).toContain(".color-choice-dropdown__picker-plane {");
     expect(formControlsCss).toContain(".color-choice-dropdown__hue-range {");
     expect(formControlsCss).not.toContain('input[type="color"]');
+  });
+
+  it("keeps the custom color entry in the menu header and stretches color choices responsively", () => {
+    expect(formControlsCss).toContain(".color-choice-dropdown__menu-header {");
+    expect(formControlsCss).toContain(
+      "grid-template-columns: repeat(auto-fit, minmax(min(100%, 136px), 1fr));",
+    );
   });
 });
