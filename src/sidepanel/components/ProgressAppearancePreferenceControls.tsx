@@ -5,7 +5,7 @@ import {
   type CSSProperties,
   type ChangeEvent,
   type KeyboardEvent,
-  type MouseEvent,
+  type MouseEvent as ReactMouseEvent,
 } from "react";
 
 import type {
@@ -244,6 +244,26 @@ export function shouldSkipGradientStopCreation({
     (stop) =>
       Math.abs(stop.positionPercent - positionPercent) < thresholdPercent,
   );
+}
+
+export function resolveGradientStopDragPosition({
+  currentClientX,
+  initialClientX,
+  initialPositionPercent,
+  trackWidthPx,
+}: {
+  currentClientX: number;
+  initialClientX: number;
+  initialPositionPercent: number;
+  trackWidthPx: number;
+}): number {
+  if (!Number.isFinite(trackWidthPx) || trackWidthPx <= 0) {
+    return clampGradientStopPosition(initialPositionPercent);
+  }
+
+  const deltaPercent = ((currentClientX - initialClientX) / trackWidthPx) * 100;
+
+  return clampGradientStopPosition(initialPositionPercent + deltaPercent);
 }
 
 export function ProgressAppearancePreferenceControls({
@@ -529,7 +549,7 @@ export function ProgressAppearancePreferenceControls({
     );
   }
 
-  function addGradientStop(event: MouseEvent<HTMLDivElement>) {
+  function addGradientStop(event: ReactMouseEvent<HTMLDivElement>) {
     const target = event.target;
 
     if (
@@ -645,6 +665,62 @@ export function ProgressAppearancePreferenceControls({
     }
   }
 
+  function handleGradientStopMouseDown(
+    event: ReactMouseEvent<HTMLButtonElement>,
+    stop: ProgressGradientStop,
+  ) {
+    event.stopPropagation();
+    setSelectedGradientStopId(stop.id);
+
+    if (event.button !== 0 || isGradientEndpointStop(stop)) {
+      return;
+    }
+
+    const target = event.currentTarget;
+    const rail = target.closest("[data-progress-gradient-rail]");
+
+    if (!(rail instanceof HTMLElement)) {
+      return;
+    }
+
+    const railElement = rail;
+
+    event.preventDefault();
+    const initialClientX = event.clientX;
+    const initialPositionPercent = stop.positionPercent;
+
+    function updatePositionFromPointer(clientX: number) {
+      const rect = railElement.getBoundingClientRect();
+
+      if (rect.width <= 0) {
+        return;
+      }
+
+      updateGradientStopPosition(
+        stop.id,
+        resolveGradientStopDragPosition({
+          currentClientX: clientX,
+          initialClientX,
+          initialPositionPercent,
+          trackWidthPx: rect.width,
+        }),
+      );
+    }
+
+    function handleMouseMove(mouseEvent: MouseEvent) {
+      mouseEvent.preventDefault();
+      updatePositionFromPointer(mouseEvent.clientX);
+    }
+
+    function cleanup() {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", cleanup);
+    }
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", cleanup);
+  }
+
   return (
     <section
       className="progress-appearance-preferences"
@@ -703,13 +779,71 @@ export function ProgressAppearancePreferenceControls({
 
         <div className="progress-appearance-card progress-appearance-bands">
           <div className="progress-appearance-bands__header">
-            <div className="section-title-with-info">
-              <p className="progress-appearance-card__title">
-                {copy.colorBands.label}
-              </p>
-              <MaterialInfoTooltip>{copy.colorBands.detail}</MaterialInfoTooltip>
+            <div className="progress-appearance-bands__title-row">
+              <div className="section-title-with-info">
+                <p className="progress-appearance-card__title">
+                  {copy.colorBands.label}
+                </p>
+                <MaterialInfoTooltip>{copy.colorBands.detail}</MaterialInfoTooltip>
+              </div>
+              {activeColorMode === "gradient" ? (
+                <div className="progress-gradient-editor__summary">
+                  <div className="section-title-with-info progress-gradient-editor__summary-title">
+                    <p className="progress-appearance-card__title">
+                      {copy.gradient.label}
+                    </p>
+                    <MaterialInfoTooltip>{copy.gradient.detail}</MaterialInfoTooltip>
+                  </div>
+                  <ProgressGradientSchemeDropdown
+                    label={copy.gradient.presetsLabel}
+                    helperText={copy.gradient.presetsHelp}
+                    layout="inline"
+                    valueLabel={selectedGradientSchemeLabel}
+                    valueStops={gradientStops}
+                    options={PROGRESS_GRADIENT_PRESETS.map((preset) => ({
+                      id: preset.id,
+                      label: copy.gradient.presetNames[preset.id],
+                      stops: preset.stops,
+                    }))}
+                    imageImportAction={copy.gradient.imageImportAction}
+                    imageImportBusy={copy.gradient.imageImportBusy}
+                    imageImportHelp={copy.gradient.imageImportHelp}
+                    imageImportAccept={PROGRESS_GRADIENT_IMAGE_ACCEPT}
+                    isImageImporting={isImageImporting}
+                    sessionPopoverId="progress-gradient-scheme"
+                    activePopover={activePopover}
+                    onActivePopoverChange={onActivePopoverChange}
+                    onSchemeSelect={applyGradientPreset}
+                    onImageImport={handleGradientImageImport}
+                  />
+                </div>
+              ) : null}
             </div>
             <div className="progress-appearance-bands__header-actions">
+              {activeColorMode === "traditional" ? (
+                <>
+                  <button className="text-button" type="button" onClick={addBand}>
+                    {copy.colorBands.addBand}
+                  </button>
+                  <button
+                    className="text-button"
+                    type="button"
+                    onClick={() =>
+                      onColorBandsChange(createDefaultProgressColorBands())
+                    }
+                  >
+                    {copy.colorBands.resetToDefault}
+                  </button>
+                </>
+              ) : (
+                <button
+                  className="text-button"
+                  type="button"
+                  onClick={resetGradientStops}
+                >
+                  {copy.gradient.resetToDefault}
+                </button>
+              )}
               <span
                 className="progress-appearance-mode-switch"
                 role="group"
@@ -736,30 +870,6 @@ export function ProgressAppearancePreferenceControls({
                   {copy.mode.gradient}
                 </button>
               </span>
-              {activeColorMode === "traditional" ? (
-                <>
-                  <button className="text-button" type="button" onClick={addBand}>
-                    {copy.colorBands.addBand}
-                  </button>
-                  <button
-                    className="text-button"
-                    type="button"
-                    onClick={() =>
-                      onColorBandsChange(createDefaultProgressColorBands())
-                    }
-                  >
-                    {copy.colorBands.resetToDefault}
-                  </button>
-                </>
-              ) : (
-                <button
-                  className="text-button"
-                  type="button"
-                  onClick={resetGradientStops}
-                >
-                  {copy.gradient.resetToDefault}
-                </button>
-              )}
             </div>
           </div>
 
@@ -901,33 +1011,6 @@ export function ProgressAppearancePreferenceControls({
               className="progress-gradient-editor"
               data-progress-gradient-editor=""
             >
-              <div className="section-title-with-info">
-                <p className="progress-appearance-card__title">
-                  {copy.gradient.label}
-                </p>
-                <MaterialInfoTooltip>{copy.gradient.detail}</MaterialInfoTooltip>
-              </div>
-              <ProgressGradientSchemeDropdown
-                label={copy.gradient.presetsLabel}
-                helperText={copy.gradient.presetsHelp}
-                valueLabel={selectedGradientSchemeLabel}
-                valueStops={gradientStops}
-                options={PROGRESS_GRADIENT_PRESETS.map((preset) => ({
-                  id: preset.id,
-                  label: copy.gradient.presetNames[preset.id],
-                  stops: preset.stops,
-                }))}
-                imageImportAction={copy.gradient.imageImportAction}
-                imageImportBusy={copy.gradient.imageImportBusy}
-                imageImportHelp={copy.gradient.imageImportHelp}
-                imageImportAccept={PROGRESS_GRADIENT_IMAGE_ACCEPT}
-                isImageImporting={isImageImporting}
-                sessionPopoverId="progress-gradient-scheme"
-                activePopover={activePopover}
-                onActivePopoverChange={onActivePopoverChange}
-                onSchemeSelect={applyGradientPreset}
-                onImageImport={handleGradientImageImport}
-              />
               {imageImportError ? (
                 <p className="supporting-copy progress-gradient-scheme-dropdown__error">
                   {imageImportError}
@@ -941,6 +1024,7 @@ export function ProgressAppearancePreferenceControls({
                 <div
                   className="progress-gradient-editor__rail"
                   style={gradientTrackStyle}
+                  data-progress-gradient-rail=""
                   onClick={addGradientStop}
                 >
                   <div
@@ -977,6 +1061,9 @@ export function ProgressAppearancePreferenceControls({
                         data-endpoint={
                           isGradientEndpointStop(stop) ? "true" : "false"
                         }
+                        data-draggable={
+                          isGradientEndpointStop(stop) ? "false" : "true"
+                        }
                         title={copy.gradient.stopHelp}
                         style={{
                           left: `${stop.positionPercent}%`,
@@ -988,6 +1075,9 @@ export function ProgressAppearancePreferenceControls({
                           event.stopPropagation();
                           setSelectedGradientStopId(stop.id);
                         }}
+                        onMouseDown={(event) =>
+                          handleGradientStopMouseDown(event, stop)
+                        }
                         onKeyDown={(event) =>
                           handleGradientStopKeyDown(event, stop)
                         }

@@ -10,6 +10,7 @@ const DEFAULT_ADAPTIVE_DROPDOWN_MENU_MIN_WIDTH_PX = 92;
 
 type AdaptiveDropdownMenuGridStyle = CSSProperties & {
   "--adaptive-dropdown-menu-choice-min": string;
+  "--adaptive-dropdown-menu-choice-width": string;
 };
 
 export function resolveAdaptiveDropdownMenuColumnCount({
@@ -102,12 +103,17 @@ export function resolveAdaptiveDropdownMenuMinWidth(
 }
 
 export function useAdaptiveDropdownMenuGrid({
+  itemCount,
+  layoutSignal,
   measurementLabels,
   minFallbackPx = DEFAULT_ADAPTIVE_DROPDOWN_MENU_MIN_WIDTH_PX,
 }: {
+  itemCount?: number;
+  layoutSignal?: unknown;
   measurementLabels: readonly string[];
   minFallbackPx?: number;
 }) {
+  const gridRef = useRef<HTMLDivElement | null>(null);
   const measurerRef = useRef<HTMLDivElement | null>(null);
   const labelsToMeasure = useMemo(
     () => normalizeMeasurementLabels(measurementLabels),
@@ -116,11 +122,12 @@ export function useAdaptiveDropdownMenuGrid({
   const measurementKey = labelsToMeasure.join("\u0000");
   const fallbackWidth = resolveAdaptiveDropdownMenuMinWidth([], minFallbackPx);
   const [minWidthPx, setMinWidthPx] = useState(fallbackWidth);
+  const [choiceWidthPx, setChoiceWidthPx] = useState(fallbackWidth);
 
   useEffect(() => {
     let cancelled = false;
 
-    function measure() {
+    function measureText() {
       const measurer = measurerRef.current;
 
       if (!measurer) {
@@ -148,25 +155,25 @@ export function useAdaptiveDropdownMenuGrid({
       }
     }
 
-    measure();
+    measureText();
 
     const resizeObserver =
       typeof ResizeObserver === "undefined"
         ? null
-        : new ResizeObserver(measure);
+        : new ResizeObserver(measureText);
 
     if (measurerRef.current) {
       resizeObserver?.observe(measurerRef.current);
     }
 
     if (typeof window !== "undefined") {
-      window.addEventListener("resize", measure);
+      window.addEventListener("resize", measureText);
     }
 
     if (typeof document !== "undefined") {
       void document.fonts?.ready.then(() => {
         if (!cancelled) {
-          measure();
+          measureText();
         }
       });
     }
@@ -176,21 +183,94 @@ export function useAdaptiveDropdownMenuGrid({
       resizeObserver?.disconnect();
 
       if (typeof window !== "undefined") {
-        window.removeEventListener("resize", measure);
+        window.removeEventListener("resize", measureText);
       }
     };
-  }, [fallbackWidth, measurementKey]);
+  }, [fallbackWidth, layoutSignal, measurementKey]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    function measureGrid() {
+      const grid = gridRef.current;
+
+      if (!grid) {
+        setChoiceWidthPx(minWidthPx);
+        return;
+      }
+
+      if (typeof window === "undefined") {
+        setChoiceWidthPx(minWidthPx);
+        return;
+      }
+
+      const computedStyle = window.getComputedStyle(grid);
+      const columnGapPx = Number.parseFloat(computedStyle.columnGap) || 0;
+      const resolvedItemCount =
+        typeof itemCount === "number" && Number.isFinite(itemCount)
+          ? itemCount
+          : measurementLabels.length;
+      const columnCount = resolveAdaptiveDropdownMenuColumnCount({
+        availableWidthPx: grid.clientWidth,
+        columnGapPx,
+        itemCount: resolvedItemCount,
+        minWidthPx,
+      });
+
+      if (!columnCount) {
+        setChoiceWidthPx(minWidthPx);
+        return;
+      }
+
+      const nextChoiceWidth = resolveAdaptiveDropdownMenuChoiceWidth({
+        availableWidthPx: grid.clientWidth,
+        columnCount,
+        columnGapPx,
+      });
+
+      if (!cancelled) {
+        setChoiceWidthPx(Math.max(minWidthPx, nextChoiceWidth ?? minWidthPx));
+      }
+    }
+
+    measureGrid();
+
+    const resizeObserver =
+      typeof ResizeObserver === "undefined"
+        ? null
+        : new ResizeObserver(measureGrid);
+
+    if (gridRef.current) {
+      resizeObserver?.observe(gridRef.current);
+    }
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("resize", measureGrid);
+    }
+
+    return () => {
+      cancelled = true;
+      resizeObserver?.disconnect();
+
+      if (typeof window !== "undefined") {
+        window.removeEventListener("resize", measureGrid);
+      }
+    };
+  }, [itemCount, layoutSignal, measurementLabels.length, minWidthPx]);
 
   const style = useMemo<AdaptiveDropdownMenuGridStyle>(
     () => ({
       "--adaptive-dropdown-menu-choice-min": `${minWidthPx}px`,
+      "--adaptive-dropdown-menu-choice-width": `${choiceWidthPx}px`,
     }),
-    [minWidthPx],
+    [choiceWidthPx, minWidthPx],
   );
 
   return {
+    gridRef,
     labelsToMeasure,
     measurerRef,
+    choiceWidthPx,
     minWidthPx,
     style,
   };

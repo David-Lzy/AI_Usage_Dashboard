@@ -12,6 +12,7 @@ import {
 } from "../../shared/progress-appearance";
 import {
   ProgressAppearancePreferenceControls,
+  resolveGradientStopDragPosition,
   shouldSkipGradientStopCreation,
 } from "./ProgressAppearancePreferenceControls";
 
@@ -109,7 +110,9 @@ describe("ProgressAppearancePreferenceControls", () => {
     expect(html).toContain('data-progress-gradient-editor=""');
     expect(html).toContain("剩余渐变");
     expect(html).toContain("渐变方案");
+    expect(html).toContain("progress-gradient-editor__summary");
     expect(html).toContain('data-progress-gradient-scheme-dropdown=""');
+    expect(html).toContain("progress-gradient-scheme-dropdown--inline");
     expect(html).toContain('data-progress-gradient-scheme="ocean"');
     expect(html).toContain('data-progress-gradient-scheme="calm-blue"');
     expect(html).toContain('data-progress-gradient-scheme="slate"');
@@ -120,9 +123,11 @@ describe("ProgressAppearancePreferenceControls", () => {
     expect(html).toContain("从图片生成");
     expect(html).toContain('accept="image/png,image/jpeg,image/webp"');
     expect(html).toContain("--progress-gradient-track");
+    expect(html).toContain('data-progress-gradient-rail=""');
     expect(html).toContain('role="slider"');
     expect(html).toContain('aria-valuenow="50"');
     expect(html).toContain('data-selected="true"');
+    expect(html).toContain('data-draggable="true"');
     expect(html).toContain('data-color-choice-dropdown="progress-gradient-stop-empty"');
     expect(html).toContain("删除停止点");
   });
@@ -200,7 +205,34 @@ describe("ProgressAppearancePreferenceControls", () => {
     ).toBe(true);
   });
 
-  it("keeps the gradient track inset and stop marker label-shaped", () => {
+  it("resolves draggable gradient stop positions from pointer movement", () => {
+    expect(
+      resolveGradientStopDragPosition({
+        currentClientX: 240,
+        initialClientX: 200,
+        initialPositionPercent: 50,
+        trackWidthPx: 400,
+      }),
+    ).toBe(60);
+    expect(
+      resolveGradientStopDragPosition({
+        currentClientX: -400,
+        initialClientX: 200,
+        initialPositionPercent: 50,
+        trackWidthPx: 400,
+      }),
+    ).toBe(0.01);
+    expect(
+      resolveGradientStopDragPosition({
+        currentClientX: 800,
+        initialClientX: 200,
+        initialPositionPercent: 50,
+        trackWidthPx: 400,
+      }),
+    ).toBe(99.99);
+  });
+
+  it("keeps the gradient header compact and stop marker draggable", () => {
     expect(settingsAppearanceCss).toContain(
       "--progress-gradient-track-padding-inline: var(--app-space-3);",
     );
@@ -208,9 +240,18 @@ describe("ProgressAppearancePreferenceControls", () => {
       ".progress-gradient-editor__rail {",
     );
     expect(settingsAppearanceCss).toContain(
-      "clip-path: polygon(0 0, 72% 0, 100% 50%, 72% 100%, 0 100%);",
+      ".progress-gradient-editor__summary {",
     );
-    expect(settingsAppearanceCss).toContain("transform: rotate(90deg);");
+    expect(settingsAppearanceCss).toContain(
+      ".progress-gradient-scheme-dropdown--inline {",
+    );
+    expect(settingsAppearanceCss).toContain(
+      "var(--adaptive-dropdown-menu-choice-width)",
+    );
+    expect(settingsAppearanceCss).toContain(
+      ".progress-gradient-editor__stop[data-draggable=\"true\"] {",
+    );
+    expect(settingsAppearanceCss).toContain("cursor: grabbing;");
     expect(settingsAppearanceCss).toContain(
       "background: var(--progress-gradient-stop-color);",
     );

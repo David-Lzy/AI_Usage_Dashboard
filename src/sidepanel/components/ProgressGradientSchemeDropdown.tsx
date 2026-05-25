@@ -28,6 +28,7 @@ export type ProgressGradientSchemeOption = {
 type ProgressGradientSchemeDropdownProps = {
   label: string;
   helperText: string;
+  layout?: "default" | "inline";
   valueLabel: string;
   valueStops: readonly ProgressGradientStop[];
   options: readonly ProgressGradientSchemeOption[];
@@ -56,6 +57,7 @@ function buildGradientTrackBackground(
 export function ProgressGradientSchemeDropdown({
   label,
   helperText,
+  layout = "default",
   valueLabel,
   valueStops,
   options,
@@ -83,11 +85,14 @@ export function ProgressGradientSchemeDropdown({
     useState<FloatingMenuPosition | null>(null);
   const {
     labelsToMeasure,
+    gridRef,
     measurerRef,
     style: adaptiveMenuGridStyle,
   } = useAdaptiveDropdownMenuGrid({
     measurementLabels: options.map((option) => option.label),
-    minFallbackPx: 156,
+    itemCount: options.length,
+    layoutSignal: isOpen ? (menuPosition?.width ?? "open") : "closed",
+    minFallbackPx: 132,
   });
   const valueTrackStyle = {
     "--progress-gradient-track": buildGradientTrackBackground(valueStops),
@@ -220,6 +225,15 @@ export function ProgressGradientSchemeDropdown({
       return undefined;
     }
 
+    function handleKeyDown(event: globalThis.KeyboardEvent) {
+      if (event.key !== "Escape") {
+        return;
+      }
+
+      event.preventDefault();
+      closeMenu({ restoreFocus: true });
+    }
+
     function handlePointerDown(event: PointerEvent) {
       const target = event.target;
 
@@ -235,9 +249,11 @@ export function ProgressGradientSchemeDropdown({
       });
     }
 
+    document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("pointerdown", handlePointerDown);
 
     return () => {
+      document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("pointerdown", handlePointerDown);
     };
   }, [isOpen]);
@@ -320,6 +336,7 @@ export function ProgressGradientSchemeDropdown({
         ))}
       </div>
       <div
+        ref={gridRef}
         className="adaptive-dropdown-menu-grid progress-gradient-scheme-dropdown__grid"
         style={adaptiveMenuGridStyle}
       >
@@ -356,12 +373,21 @@ export function ProgressGradientSchemeDropdown({
   return (
     <div
       ref={rootRef}
-      className="form-field progress-gradient-scheme-dropdown"
+      className={`form-field progress-gradient-scheme-dropdown${
+        layout === "inline" ? " progress-gradient-scheme-dropdown--inline" : ""
+      }`}
       data-progress-gradient-scheme-dropdown=""
       data-session-popover-id={sessionPopoverId}
       onKeyDown={handleKeyDown}
     >
-      <span id={labelId} className="form-field__label">
+      <span
+        id={labelId}
+        className={`form-field__label${
+          layout === "inline"
+            ? " progress-gradient-scheme-dropdown__label--hidden"
+            : ""
+        }`}
+      >
         {label}
       </span>
       <button
@@ -388,9 +414,11 @@ export function ProgressGradientSchemeDropdown({
           aria-hidden="true"
         />
       </button>
-      <p className="supporting-copy progress-gradient-scheme-dropdown__help">
-        {helperText}
-      </p>
+      {layout === "inline" ? null : (
+        <p className="supporting-copy progress-gradient-scheme-dropdown__help">
+          {helperText}
+        </p>
+      )}
       {menu && typeof document !== "undefined"
         ? createPortal(menu, document.body)
         : menu}
