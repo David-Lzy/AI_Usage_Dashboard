@@ -144,7 +144,7 @@ describe("ColorChoiceDropdown", () => {
       ".color-choice-dropdown__menu--compact {",
     );
     expect(formControlsCss).toContain(
-      "grid-template-columns: repeat(4, minmax(0, 1fr));",
+      "grid-template-columns: repeat(auto-fit, minmax(min(100%, 92px), 1fr));",
     );
   });
 });
