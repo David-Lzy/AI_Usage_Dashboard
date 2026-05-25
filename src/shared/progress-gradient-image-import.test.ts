@@ -1,13 +1,18 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   PROGRESS_GRADIENT_IMAGE_MAX_BYTES,
   ProgressGradientImageImportError,
+  createProgressGradientStopsFromImageFile,
   createProgressGradientStopsFromImageData,
   validateProgressGradientImageFile,
 } from "./progress-gradient-image-import";
 
 describe("progress gradient image import", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   it("averages image columns vertically into normalized editable stops", () => {
     const stops = createProgressGradientStopsFromImageData(
       {
@@ -61,5 +66,40 @@ describe("progress gradient image import", () => {
         }),
       ),
     ).toThrow(ProgressGradientImageImportError);
+  });
+
+  it("closes decoded bitmaps when canvas work fails", async () => {
+    const close = vi.fn();
+
+    vi.stubGlobal(
+      "createImageBitmap",
+      vi.fn(async () => ({
+        width: 2,
+        height: 2,
+        close,
+      }) as unknown as ImageBitmap),
+    );
+    vi.stubGlobal("document", {
+      createElement: () => ({
+        width: 0,
+        height: 0,
+        getContext: () => ({
+          drawImage: () => {
+            throw new Error("draw failed");
+          },
+          getImageData: vi.fn(),
+        }),
+      }),
+    });
+
+    await expect(
+      createProgressGradientStopsFromImageFile(
+        new File(["image"], "gradient.png", { type: "image/png" }),
+      ),
+    ).rejects.toMatchObject({
+      code: "decode_failed",
+    });
+
+    expect(close).toHaveBeenCalledTimes(1);
   });
 });

@@ -6,6 +6,7 @@ import { buildActionBadgeQuotaCandidates } from "../shared/action-badge-preferen
 import {
   buildProviderFaviconUrl,
   resolveToolbarIconProviderId,
+  syncToolbarIconFromState,
 } from "./action-icon";
 
 function createStateWithCodexBadge(): AppState {
@@ -165,5 +166,116 @@ describe("action icon", () => {
     });
 
     expect(buildProviderFaviconUrl("codex-personal-page", 32)).toBeNull();
+  });
+
+  it("closes decoded toolbar icon bitmaps after building icon image data", async () => {
+    const close = vi.fn();
+    const setIcon = vi.fn(async () => {});
+    const createImageBitmap = vi.fn(async () => ({
+      width: 32,
+      height: 32,
+      close,
+    }) as unknown as ImageBitmap);
+
+    vi.stubGlobal("chrome", {
+      action: {
+        setIcon,
+      },
+    });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({
+        ok: true,
+        blob: async () => new Blob(["icon"], { type: "image/png" }),
+      })),
+    );
+    vi.stubGlobal("createImageBitmap", createImageBitmap);
+    vi.stubGlobal(
+      "OffscreenCanvas",
+      class {
+        constructor(
+          readonly width: number,
+          readonly height: number,
+        ) {}
+
+        getContext() {
+          return {
+            clearRect: vi.fn(),
+            drawImage: vi.fn(),
+            getImageData: vi.fn(() => ({
+              width: this.width,
+              height: this.height,
+              data: new Uint8ClampedArray(this.width * this.height * 4),
+            }) as ImageData),
+          };
+        }
+      },
+    );
+
+    await syncToolbarIconFromState({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        toolbarIconMode: "custom",
+        toolbarIconCustomImageDataUrl: "data:image/png;base64,phase593-success",
+      },
+    });
+
+    expect(createImageBitmap).toHaveBeenCalledTimes(2);
+    expect(close).toHaveBeenCalledTimes(2);
+    expect(setIcon).toHaveBeenCalledWith({
+      imageData: expect.objectContaining({
+        16: expect.objectContaining({ width: 16, height: 16 }),
+        32: expect.objectContaining({ width: 32, height: 32 }),
+      }),
+    });
+  });
+
+  it("closes decoded toolbar icon bitmaps before falling back on canvas failure", async () => {
+    const close = vi.fn();
+    const setIcon = vi.fn(async () => {});
+
+    vi.stubGlobal("chrome", {
+      action: {
+        setIcon,
+      },
+    });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({
+        ok: true,
+        blob: async () => new Blob(["icon"], { type: "image/png" }),
+      })),
+    );
+    vi.stubGlobal(
+      "createImageBitmap",
+      vi.fn(async () => ({
+        width: 32,
+        height: 32,
+        close,
+      }) as unknown as ImageBitmap),
+    );
+    vi.stubGlobal(
+      "OffscreenCanvas",
+      class {
+        getContext() {
+          return null;
+        }
+      },
+    );
+
+    await syncToolbarIconFromState({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        toolbarIconMode: "custom",
+        toolbarIconCustomImageDataUrl: "data:image/png;base64,phase593-fallback",
+      },
+    });
+
+    expect(close).toHaveBeenCalledTimes(1);
+    expect(setIcon).toHaveBeenCalledWith({
+      path: expect.any(Object),
+    });
   });
 });

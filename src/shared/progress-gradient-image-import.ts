@@ -142,8 +142,10 @@ export async function createProgressGradientStopsFromImageFile(
     throw new ProgressGradientImageImportError("canvas_unavailable");
   }
 
+  let bitmap: ImageBitmap | null = null;
+
   try {
-    const bitmap = await createImageBitmap(file);
+    bitmap = await createImageBitmap(file);
     const { width, height } = getScaledImageSize(bitmap.width, bitmap.height);
     const canvas = document.createElement("canvas");
     canvas.width = width;
@@ -151,13 +153,11 @@ export async function createProgressGradientStopsFromImageFile(
     const context = canvas.getContext("2d", { willReadFrequently: true });
 
     if (!context) {
-      bitmap.close?.();
       throw new ProgressGradientImageImportError("canvas_unavailable");
     }
 
     context.drawImage(bitmap, 0, 0, width, height);
     const imageData = context.getImageData(0, 0, width, height);
-    bitmap.close?.();
     return createProgressGradientStopsFromImageData(imageData);
   } catch (error) {
     if (error instanceof ProgressGradientImageImportError) {
@@ -165,5 +165,7 @@ export async function createProgressGradientStopsFromImageFile(
     }
 
     throw new ProgressGradientImageImportError("decode_failed");
+  } finally {
+    bitmap?.close();
   }
 }

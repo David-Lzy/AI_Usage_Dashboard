@@ -95,6 +95,8 @@ async function loadImageData(
     return cachedImageData;
   }
 
+  let bitmap: ImageBitmap | null = null;
+
   try {
     const response = await fetch(sourceUrl);
 
@@ -102,7 +104,7 @@ async function loadImageData(
       return null;
     }
 
-    const bitmap = await createImageBitmap(await response.blob());
+    bitmap = await createImageBitmap(await response.blob());
     const canvas = new OffscreenCanvas(size, size);
     const context = canvas.getContext("2d");
 
@@ -118,6 +120,8 @@ async function loadImageData(
     return imageData;
   } catch {
     return null;
+  } finally {
+    bitmap?.close();
   }
 }
 
