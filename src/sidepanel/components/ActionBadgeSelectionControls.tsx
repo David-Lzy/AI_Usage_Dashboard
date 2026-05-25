@@ -188,11 +188,13 @@ export function ActionBadgeSelectionControls({
     () => groupActionBadgeSelectionOptions(options),
     [options],
   );
-  const selectionSummary = getActionBadgeSelectionSummary(
-    options,
-    selectedValues,
-    options[0]?.label ?? label,
-  );
+  const selectionSummary = isAutomaticMode
+    ? automaticLabel
+    : getActionBadgeSelectionSummary(
+        options,
+        selectedValues,
+        options[0]?.label ?? label,
+      );
 
   useEffect(() => {
     if (!isOpen || typeof document === "undefined") {

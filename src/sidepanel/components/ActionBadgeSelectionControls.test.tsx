@@ -43,9 +43,11 @@ describe("ActionBadgeSelectionControls", () => {
     expect(html).toContain('data-action-badge-selection-mode="auto"');
     expect(html).toContain('aria-readonly="true"');
     expect(html).toContain("material-select__button");
-    expect(html).toContain("Attention count · Codex · 5-hour window remaining");
+    expect(html).toContain("Automatic");
+    expect(html).not.toContain(
+      "Attention count · Codex · 5-hour window remaining",
+    );
     expect(html).not.toContain('data-action-badge-mode-switch=""');
-    expect(html).not.toContain("Automatic");
     expect(html).not.toContain("Manual");
     expect(html).not.toContain("action-badge-selection-controls__list");
     expect(html).not.toContain("action-badge-selection-controls__option");
