@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { SAMPLE_APP_STATE } from "../shared/constants";
 import { buildActionBadgeQuotaCandidates } from "../shared/action-badge-preferences";
-import { buildActionBadgeModel } from "./action-badge";
+import { buildActionBadgeModel } from "../sidepanel/action-badge-model";
 
 function createStateWithCodexWindows() {
   const state = {

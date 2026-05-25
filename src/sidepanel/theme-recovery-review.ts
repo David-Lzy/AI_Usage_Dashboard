@@ -1,4 +1,4 @@
-import { buildActionBadgeModel } from "../background/action-badge";
+import { buildActionBadgeModel } from "./action-badge-model";
 import type {
   AppState,
   ProviderId,
