@@ -26,9 +26,11 @@ function buildFirefoxManifest(chromeManifest) {
   );
 
   if (manifest.background?.service_worker) {
+    const { service_worker, ...background } = manifest.background;
+
     manifest.background = {
-      ...manifest.background,
-      scripts: [manifest.background.service_worker],
+      ...background,
+      scripts: [service_worker],
     };
   }
 
@@ -45,7 +47,7 @@ function buildFirefoxManifest(chromeManifest) {
         required: ["none"],
       },
       id: "ai-usage-dashboard@david-lzy.github.io",
-      strict_min_version: "140.0",
+      strict_min_version: "142.0",
     },
   };
 
