@@ -829,9 +829,13 @@ html[data-app-direction="rtl"]
   display: grid;
   grid-template-columns: repeat(
     auto-fit,
-    minmax(min(100%, var(--adaptive-dropdown-menu-choice-min)), 1fr)
+    minmax(
+      min(100%, var(--adaptive-dropdown-menu-choice-width)),
+      var(--adaptive-dropdown-menu-choice-width)
+    )
   );
   gap: var(--app-space-2);
+  justify-content: start;
 }
 
 .adaptive-dropdown-menu-grid__measurer {

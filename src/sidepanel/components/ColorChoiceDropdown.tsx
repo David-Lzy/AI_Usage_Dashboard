@@ -126,14 +126,6 @@ export function ColorChoiceDropdown({
     () => getMenuMeasurementLabels(sections),
     [sections],
   );
-  const {
-    labelsToMeasure: menuLabelsToMeasure,
-    measurerRef: menuMeasurerRef,
-    style: adaptiveMenuGridStyle,
-  } = useAdaptiveDropdownMenuGrid({
-    measurementLabels: menuMeasurementLabels,
-    minFallbackPx: menuDensity === "compact" ? 92 : 136,
-  });
   const computedSelectedLabel =
     selectedLabel ??
     getColorChoiceSelectionLabel(
@@ -146,6 +138,17 @@ export function ColorChoiceDropdown({
   );
   const [menuPosition, setMenuPosition] =
     useState<FloatingMenuPosition | null>(null);
+  const {
+    gridRef: menuGridRef,
+    labelsToMeasure: menuLabelsToMeasure,
+    measurerRef: menuMeasurerRef,
+    style: adaptiveMenuGridStyle,
+  } = useAdaptiveDropdownMenuGrid({
+    itemCount: allChoices.length,
+    layoutSignal: isOpen ? (menuPosition?.width ?? "open") : "closed",
+    measurementLabels: menuMeasurementLabels,
+    minFallbackPx: menuDensity === "compact" ? 92 : 136,
+  });
   const [customOpen, setCustomOpen] = useState(
     () =>
       Boolean(sessionPopoverId) &&
@@ -509,6 +512,7 @@ export function ColorChoiceDropdown({
             </p>
           )}
           <div
+            ref={menuGridRef}
             className="adaptive-dropdown-menu-grid color-choice-dropdown__choice-grid"
             style={adaptiveMenuGridStyle}
           >

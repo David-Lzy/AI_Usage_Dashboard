@@ -142,11 +142,12 @@ describe("ColorChoiceDropdown", () => {
     expect(formControlsCss).not.toContain('input[type="color"]');
   });
 
-  it("keeps the custom color entry in the menu header and stretches color choices responsively", () => {
+  it("keeps the custom color entry in the menu header and sizes color choices with the adaptive width", () => {
     expect(formControlsCss).toContain(".color-choice-dropdown__menu-header {");
     expect(formControlsCss).toContain(
-      "var(--adaptive-dropdown-menu-choice-min)",
+      "var(--adaptive-dropdown-menu-choice-width)",
     );
+    expect(formControlsCss).toContain("justify-content: start;");
     expect(formControlsCss).toContain(
       ".adaptive-dropdown-menu-grid__measurer {",
     );
@@ -179,6 +180,24 @@ describe("ColorChoiceDropdown", () => {
         minWidthPx: 112,
       }),
     ).toBe(1);
+  });
+
+  it("balances the last dropdown menu row when the full-width column count would leave a short tail", () => {
+    const columnCount = resolveAdaptiveDropdownMenuColumnCount({
+      availableWidthPx: 900,
+      columnGapPx: 12,
+      itemCount: 16,
+      minWidthPx: 112,
+    });
+
+    expect(columnCount).toBe(6);
+    expect(
+      resolveAdaptiveDropdownMenuChoiceWidth({
+        availableWidthPx: 900,
+        columnCount: columnCount ?? 1,
+        columnGapPx: 12,
+      }),
+    ).toBe(140);
   });
 
   it("keeps closed triggers and floating menus bounded in adaptive grids", () => {

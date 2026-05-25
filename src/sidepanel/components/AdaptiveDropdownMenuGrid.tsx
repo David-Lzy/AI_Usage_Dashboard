@@ -40,7 +40,33 @@ export function resolveAdaptiveDropdownMenuColumnCount({
     (availableWidthPx + resolvedGapPx) / (minWidthPx + resolvedGapPx),
   );
 
-  return Math.max(1, Math.min(itemCount, columnCount));
+  const clampedColumnCount = Math.max(1, Math.min(itemCount, columnCount));
+  const rowCount = Math.ceil(itemCount / clampedColumnCount);
+  const lastRowCount = itemCount % clampedColumnCount || clampedColumnCount;
+
+  if (rowCount <= 1 || lastRowCount === clampedColumnCount) {
+    return clampedColumnCount;
+  }
+
+  let balancedColumnCount = clampedColumnCount;
+
+  for (
+    let pulledPerFullRow = 1;
+    pulledPerFullRow < clampedColumnCount;
+    pulledPerFullRow += 1
+  ) {
+    const candidateColumnCount = clampedColumnCount - pulledPerFullRow;
+    const candidateLastRowCount =
+      lastRowCount + pulledPerFullRow * (rowCount - 1);
+
+    if (candidateLastRowCount > candidateColumnCount) {
+      break;
+    }
+
+    balancedColumnCount = candidateColumnCount;
+  }
+
+  return balancedColumnCount;
 }
 
 export function resolveAdaptiveDropdownMenuChoiceWidth({
