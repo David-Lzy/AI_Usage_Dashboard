@@ -236,6 +236,16 @@ describe("app-browser-controls", () => {
   it("flushes latest in-memory settings session state before opening full-page tabs", async () => {
     const create = vi.fn(async () => ({ id: 42 }) as chrome.tabs.Tab);
     const set = vi.fn(async () => undefined);
+    const carouselSlides = [
+      {
+        getAttribute: (name: string) =>
+          name === "data-provider-carousel-slide-active" ? "false" : null,
+      },
+      {
+        getAttribute: (name: string) =>
+          name === "data-provider-carousel-slide-active" ? "true" : null,
+      },
+    ];
 
     rememberLatestSettingsSurfaceSessionStateSnapshot({
       routeName: "settings",
@@ -287,6 +297,15 @@ describe("app-browser-controls", () => {
     vi.stubGlobal("window", {
       scrollY: 512,
     });
+    vi.stubGlobal("document", {
+      querySelector: vi.fn((selector: string) =>
+        selector === "#settings-quick-setup [data-provider-carousel]"
+          ? {
+              querySelectorAll: () => carouselSlides,
+            }
+          : null,
+      ),
+    });
 
     await openFullPageRoute({ name: "settings" });
 
@@ -313,6 +332,9 @@ describe("app-browser-controls", () => {
               activePopover: {
                 id: "progress-color-band:high:color",
                 customPanelOpen: true,
+              },
+              carouselIndexById: {
+                quickSetup: 1,
               },
             }),
           }),

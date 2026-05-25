@@ -4,6 +4,7 @@ import {
   captureSurfaceSessionState,
   createSurfaceSessionStateForRoute,
   restoreSurfaceSessionState,
+  type SettingsSurfaceSessionState,
 } from "../shared/surface-session-state";
 import {
   closeSidePanelBestEffort,
@@ -71,6 +72,68 @@ function getRouteProviderId(route: SidePanelRouteState): string | null {
   return route.name === "provider-detail" ? route.providerId : null;
 }
 
+const settingsCarouselDomBindings = [
+  {
+    key: "quickSetup",
+    selector: "#settings-quick-setup [data-provider-carousel]",
+  },
+  {
+    key: "credentials",
+    selector: "#settings-advanced-credentials [data-provider-carousel]",
+  },
+  {
+    key: "sources",
+    selector: "#settings-advanced-sources [data-provider-carousel]",
+  },
+] as const;
+
+function readActiveCarouselIndexFromElement(element: Element): number | null {
+  const slides = Array.from(
+    element.querySelectorAll("[data-provider-carousel-slide]"),
+  );
+  const activeIndex = slides.findIndex(
+    (slide) =>
+      slide.getAttribute("data-provider-carousel-slide-active") === "true",
+  );
+
+  return activeIndex > -1 ? activeIndex : null;
+}
+
+function readLiveSettingsCarouselIndexById(): Record<string, number> {
+  if (typeof document === "undefined") {
+    return {};
+  }
+
+  return Object.fromEntries(
+    settingsCarouselDomBindings.flatMap(({ key, selector }) => {
+      const carousel = document.querySelector(selector);
+      const activeIndex = carousel
+        ? readActiveCarouselIndexFromElement(carousel)
+        : null;
+
+      return activeIndex === null ? [] : [[key, activeIndex] as const];
+    }),
+  );
+}
+
+function mergeLiveSettingsCarouselState(
+  settings: SettingsSurfaceSessionState,
+): SettingsSurfaceSessionState {
+  const liveCarouselIndexById = readLiveSettingsCarouselIndexById();
+
+  if (Object.keys(liveCarouselIndexById).length === 0) {
+    return settings;
+  }
+
+  return {
+    ...settings,
+    carouselIndexById: {
+      ...settings.carouselIndexById,
+      ...liveCarouselIndexById,
+    },
+  };
+}
+
 async function captureRouteSurfaceSessionState(
   route: SidePanelRouteState,
 ): Promise<void> {
@@ -108,17 +171,22 @@ async function captureRouteSurfaceSessionState(
       scrollY: effectiveScrollY,
       providerId: getRouteProviderId(route),
     });
-    const settings = latestSettingsState?.settings ?? existingState?.settings;
+    const settings =
+      latestSettingsState?.settings ?? existingState?.settings ?? null;
+    const settingsToCapture =
+      route.name === "settings" && settings
+        ? mergeLiveSettingsCarouselState(settings)
+        : settings;
     const providerDetail =
       route.name === "provider-detail" &&
       existingState?.providerDetail?.providerId === route.providerId
         ? existingState.providerDetail
         : nextState.providerDetail;
     const stateToCapture =
-      route.name === "settings" && settings
+      route.name === "settings" && settingsToCapture
         ? {
             ...nextState,
-            settings,
+            settings: settingsToCapture,
           }
         : route.name === "provider-detail"
           ? {
@@ -129,7 +197,7 @@ async function captureRouteSurfaceSessionState(
 
     if (
       route.name === "settings" &&
-      settings &&
+      settingsToCapture &&
       storageKey !== SETTINGS_SURFACE_SESSION_STORAGE_KEY
     ) {
       await captureSurfaceSessionState(SETTINGS_SURFACE_SESSION_STORAGE_KEY, {

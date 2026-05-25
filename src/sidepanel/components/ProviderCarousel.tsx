@@ -159,18 +159,31 @@ export function ProviderCarousel({
   onActiveItemChange,
 }: ProviderCarouselProps) {
   const itemCount = items.length;
+  const clampedInitialIndex = clampProviderCarouselIndex(initialIndex, itemCount);
   const [activeIndex, setActiveIndex] = useState(() =>
-    clampProviderCarouselIndex(initialIndex, itemCount),
+    clampedInitialIndex,
   );
+  const pendingInitialIndexSyncRef = useRef<number | null>(null);
   const pointerStartXRef = useRef<number | null>(null);
   const activeItem = items[activeIndex] ?? null;
   const hasMultipleItems = itemCount > 1;
 
   useEffect(() => {
-    setActiveIndex(clampProviderCarouselIndex(initialIndex, itemCount));
-  }, [initialIndex, itemCount]);
+    pendingInitialIndexSyncRef.current = clampedInitialIndex;
+    setActiveIndex(clampedInitialIndex);
+  }, [clampedInitialIndex]);
 
   useEffect(() => {
+    const pendingInitialIndex = pendingInitialIndexSyncRef.current;
+
+    if (pendingInitialIndex !== null) {
+      if (activeIndex !== pendingInitialIndex) {
+        return;
+      }
+
+      pendingInitialIndexSyncRef.current = null;
+    }
+
     if (activeItem) {
       onActiveItemChange?.(activeItem, activeIndex);
     }
