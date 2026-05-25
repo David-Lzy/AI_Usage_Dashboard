@@ -18,8 +18,9 @@ dashboard.
 - Keeps provider data boundaries visible: exact values, partial values,
   window-scoped values, policy-only data, or unavailable data are labeled
   differently.
-- Lets users tune language, theme, popup appearance, progress style, provider
-  order, toolbar badge behavior, and toolbar icon behavior.
+- Lets users tune language, theme, popup appearance, progress style,
+  remaining-color appearance, provider order, toolbar badge behavior, and
+  toolbar icon behavior.
 - Supports configuration import/export and Chrome Sync for extension settings.
 
 ## Supported Providers
@@ -49,6 +50,18 @@ AI Usage Dashboard is intentionally conservative:
 - It does not load or execute remote code.
 
 See [PRIVACY.md](./PRIVACY.md) and [SECURITY.md](./SECURITY.md).
+
+## Progress Appearance
+
+The Settings page can keep progress colors in the traditional remaining-percent
+bands, or switch them to a one-dimensional gradient used by popup, side panel,
+full-page dashboard, provider detail, and preview progress surfaces. Gradient
+mode includes local presets and editable stops.
+
+Users can also generate a gradient from a local PNG, JPEG, or WebP image. The
+image is processed in the browser by averaging pixels vertically across the
+image width; the original image, filename, metadata, and image bytes are not
+uploaded or saved. Only the generated gradient stops are stored as settings.
 
 ## Install From Source
 

@@ -15,6 +15,10 @@ Depending on which providers and features a user enables, the extension may stor
 
 These values are stored in the user's Chrome profile through Chrome extension storage. If the user enables Chrome Sync support for extension settings, Chrome may sync eligible settings through the user's signed-in Chrome account according to Chrome's own sync behavior.
 
+## Local Image Gradient Import
+
+If a user imports an image to generate a progress-color gradient, the image is decoded and sampled locally in the browser. The extension uses the image only to compute a small list of gradient stops. It does not upload the image, and it does not store the original image bytes, data URL, filename, EXIF metadata, or raw pixel data.
+
 ## Provider Page Access
 
 The extension requests optional host access only for supported provider origins. When the user grants access to a supported signed-in usage page, packaged extension code reads visible usage information needed for quota and sync status. If the page is signed out, unavailable, or no longer exposes parseable usage information, the extension reports that state instead of inventing a value.
