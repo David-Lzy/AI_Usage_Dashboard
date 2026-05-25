@@ -213,6 +213,13 @@ function rememberUiStateSnapshot(uiState: SettingsSurfaceSessionUiState): void {
   );
 }
 
+function rememberAndReturnUiState(
+  uiState: SettingsSurfaceSessionUiState,
+): SettingsSurfaceSessionUiState {
+  rememberUiStateSnapshot(uiState);
+  return uiState;
+}
+
 export function useSettingsSurfaceSessionState({
   activeSectionId,
   defaultAdvancedOpen,
@@ -255,15 +262,18 @@ export function useSettingsSurfaceSessionState({
         }
 
         setUiState((current) =>
-          resolveSettingsSurfaceSessionUiState({
-            defaults: {
-              ...defaults,
-              activeSectionId: current.activeSectionId ?? defaults.activeSectionId,
-            },
-            forceAdvancedOpen,
-            forceUiMoreOpen: defaultUiMoreOpen,
-            restored: restoredState?.settings,
-          }),
+          rememberAndReturnUiState(
+            resolveSettingsSurfaceSessionUiState({
+              defaults: {
+                ...defaults,
+                activeSectionId:
+                  current.activeSectionId ?? defaults.activeSectionId,
+              },
+              forceAdvancedOpen,
+              forceUiMoreOpen: defaultUiMoreOpen,
+              restored: restoredState?.settings,
+            }),
+          ),
         );
         setPendingScrollRestoreY(restoredState?.scrollY ?? null);
         setPendingScrollRestoreProgress(restoredState?.scrollProgress ?? null);
@@ -273,11 +283,13 @@ export function useSettingsSurfaceSessionState({
       })
       .catch(() => {
         if (!cancelled) {
-          setUiState((current) => ({
-            ...current,
-            advancedOpen: forceAdvancedOpen || current.advancedOpen,
-            uiMoreOpen: defaultUiMoreOpen || current.uiMoreOpen,
-          }));
+          setUiState((current) =>
+            rememberAndReturnUiState({
+              ...current,
+              advancedOpen: forceAdvancedOpen || current.advancedOpen,
+              uiMoreOpen: defaultUiMoreOpen || current.uiMoreOpen,
+            }),
+          );
         }
       })
       .finally(() => {
@@ -334,10 +346,10 @@ export function useSettingsSurfaceSessionState({
       if (pendingPopoverAnchorRestoreId && !restoredPopoverAnchor) {
         setUiState((current) =>
           current.activePopover?.id === pendingPopoverAnchorRestoreId
-            ? {
+            ? rememberAndReturnUiState({
                 ...current,
                 activePopover: null,
-              }
+              })
             : current,
         );
       }
@@ -361,12 +373,14 @@ export function useSettingsSurfaceSessionState({
   ]);
 
   useEffect(() => {
-    setUiState((current) => ({
-      ...current,
-      activeSectionId,
-      advancedOpen: forceAdvancedOpen || current.advancedOpen,
-      uiMoreOpen: defaultUiMoreOpen || current.uiMoreOpen,
-    }));
+    setUiState((current) =>
+      rememberAndReturnUiState({
+        ...current,
+        activeSectionId,
+        advancedOpen: forceAdvancedOpen || current.advancedOpen,
+        uiMoreOpen: defaultUiMoreOpen || current.uiMoreOpen,
+      }),
+    );
   }, [activeSectionId, defaultUiMoreOpen, forceAdvancedOpen]);
 
   useEffect(() => {
@@ -397,53 +411,63 @@ export function useSettingsSurfaceSessionState({
 
   const setAdvancedOpen = useCallback<Dispatch<SetStateAction<boolean>>>(
     (update) => {
-      setUiState((current) => ({
-        ...current,
-        advancedOpen: resolveUpdate(update, current.advancedOpen),
-      }));
+      setUiState((current) =>
+        rememberAndReturnUiState({
+          ...current,
+          advancedOpen: resolveUpdate(update, current.advancedOpen),
+        }),
+      );
     },
     [],
   );
   const setUiMoreOpen = useCallback<Dispatch<SetStateAction<boolean>>>(
     (update) => {
-      setUiState((current) => ({
-        ...current,
-        uiMoreOpen: resolveUpdate(update, current.uiMoreOpen),
-      }));
+      setUiState((current) =>
+        rememberAndReturnUiState({
+          ...current,
+          uiMoreOpen: resolveUpdate(update, current.uiMoreOpen),
+        }),
+      );
     },
     [],
   );
   const setToolbarPopupPreviewOpen = useCallback<
     Dispatch<SetStateAction<boolean>>
   >((update) => {
-    setUiState((current) => ({
-      ...current,
-      toolbarPopupPreviewOpen: resolveUpdate(
-        update,
-        current.toolbarPopupPreviewOpen,
-      ),
-    }));
+    setUiState((current) =>
+      rememberAndReturnUiState({
+        ...current,
+        toolbarPopupPreviewOpen: resolveUpdate(
+          update,
+          current.toolbarPopupPreviewOpen,
+        ),
+      }),
+    );
   }, []);
   const setPopupPreviewRemainingPercent = useCallback<
     Dispatch<SetStateAction<number>>
   >((update) => {
-    setUiState((current) => ({
-      ...current,
-      popupPreviewRemainingPercent: normalizePercent(
-        resolveUpdate(update, current.popupPreviewRemainingPercent),
-      ),
-    }));
+    setUiState((current) =>
+      rememberAndReturnUiState({
+        ...current,
+        popupPreviewRemainingPercent: normalizePercent(
+          resolveUpdate(update, current.popupPreviewRemainingPercent),
+        ),
+      }),
+    );
   }, []);
   const setToolbarPopupPreviewPosition = useCallback<
     Dispatch<SetStateAction<ToolbarPopupPreviewPosition | null>>
   >((update) => {
-    setUiState((current) => ({
-      ...current,
-      toolbarPopupPreviewPosition: resolveUpdate(
-        update,
-        current.toolbarPopupPreviewPosition,
-      ),
-    }));
+    setUiState((current) =>
+      rememberAndReturnUiState({
+        ...current,
+        toolbarPopupPreviewPosition: resolveUpdate(
+          update,
+          current.toolbarPopupPreviewPosition,
+        ),
+      }),
+    );
   }, []);
   const setActivePopover = useCallback<
     Dispatch<SetStateAction<SettingsActivePopoverSessionState | null>>
@@ -454,29 +478,31 @@ export function useSettingsSurfaceSessionState({
         activePopover: resolveUpdate(update, current.activePopover),
       };
 
-      rememberUiStateSnapshot(nextUiState);
-
-      return nextUiState;
+      return rememberAndReturnUiState(nextUiState);
     });
   }, []);
   const setProviderProgressDetailsOpen = useCallback<
     Dispatch<SetStateAction<Record<string, boolean>>>
   >((update) => {
-    setUiState((current) => ({
-      ...current,
-      providerProgressDetailsOpen: resolveUpdate(
-        update,
-        current.providerProgressDetailsOpen,
-      ),
-    }));
+    setUiState((current) =>
+      rememberAndReturnUiState({
+        ...current,
+        providerProgressDetailsOpen: resolveUpdate(
+          update,
+          current.providerProgressDetailsOpen,
+        ),
+      }),
+    );
   }, []);
   const setCarouselIndexById = useCallback<
     Dispatch<SetStateAction<Record<string, number>>>
   >((update) => {
-    setUiState((current) => ({
-      ...current,
-      carouselIndexById: resolveUpdate(update, current.carouselIndexById),
-    }));
+    setUiState((current) =>
+      rememberAndReturnUiState({
+        ...current,
+        carouselIndexById: resolveUpdate(update, current.carouselIndexById),
+      }),
+    );
   }, []);
 
   return {
