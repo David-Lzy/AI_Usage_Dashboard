@@ -1,7 +1,6 @@
-import {
-  handleAppMessage,
-  type AppMessage,
-  type AppMessageResponse,
+import type {
+  AppMessage,
+  AppMessageResponse,
 } from "../background/message-bus";
 
 function hasExtensionMessaging(): boolean {
@@ -19,9 +18,17 @@ export async function sendAppMessage(
     try {
       return (await chrome.runtime.sendMessage(message)) as AppMessageResponse;
     } catch {
-      return handleAppMessage(message);
+      return handleAppMessageFallback(message);
     }
   }
+
+  return handleAppMessageFallback(message);
+}
+
+async function handleAppMessageFallback(
+  message: AppMessage,
+): Promise<AppMessageResponse> {
+  const { handleAppMessage } = await import("../background/message-bus");
 
   return handleAppMessage(message);
 }
