@@ -5,6 +5,8 @@ function serializeStorageError(error) {
 }
 
 export function installSafeLocalStorageHelpersInPage() {
+  const helperName = "__aiUsageDashboardSafeLocalStorage";
+
   function getStorage() {
     try {
       const storage = globalThis.localStorage;
@@ -33,7 +35,7 @@ export function installSafeLocalStorageHelpersInPage() {
     }
   }
 
-  globalThis[HELPER_NAME] = {
+  globalThis[helperName] = {
     getItem(key) {
       const result = getStorage();
 

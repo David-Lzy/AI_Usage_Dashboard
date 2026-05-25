@@ -46,6 +46,33 @@ describe("browser localStorage helpers", () => {
     });
   });
 
+  it("installs after Playwright-style function serialization", () => {
+    const values = new Map();
+
+    vi.stubGlobal("localStorage", {
+      getItem: (key) => values.get(key) ?? null,
+      removeItem: (key) => {
+        values.delete(key);
+      },
+      setItem: (key, value) => {
+        values.set(key, value);
+      },
+    });
+
+    const serializedInstaller = Function(
+      `return (${installSafeLocalStorageHelpersInPage.toString()})`,
+    )();
+    serializedInstaller();
+
+    expect(writeSafeLocalStorageResult(globalThis, "key", "value")).toEqual({
+      ok: true,
+    });
+    expect(readSafeLocalStorageResult(globalThis, "key")).toEqual({
+      ok: true,
+      value: "value",
+    });
+  });
+
   it("returns explicit errors when localStorage operations throw", () => {
     vi.stubGlobal("localStorage", {
       getItem: () => {

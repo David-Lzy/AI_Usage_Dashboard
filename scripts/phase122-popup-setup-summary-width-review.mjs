@@ -3,6 +3,7 @@ import path from "node:path";
 import process from "node:process";
 
 import { chromium } from "playwright";
+import { installSafeLocalStorageHelpers } from "./lib/browser-local-storage-helpers.mjs";
 
 const projectRoot = process.cwd();
 const artifactDir = path.join(
@@ -48,18 +49,38 @@ function assert(condition, message) {
 }
 
 async function seedScenario(page, scenarioSlug) {
+  await installSafeLocalStorageHelpers(page);
   await page.goto(popupUrl, { waitUntil: "domcontentloaded" });
-  await page.waitForSelector("text=Quick glance");
+  await page.waitForFunction((storageKey) => {
+    const result = globalThis.__aiUsageDashboardSafeLocalStorage?.getItem(storageKey);
+    return result?.ok && Boolean(result.value);
+  }, appStateStorageKey);
 
   await page.evaluate(
     ({ storageKey, slug }) => {
-      const rawState = globalThis.localStorage.getItem(storageKey);
+      const storage = globalThis.__aiUsageDashboardSafeLocalStorage;
+      const rawStateResult = storage?.getItem(storageKey) ?? {
+        ok: false,
+        error: "Safe localStorage helper was not installed.",
+      };
+
+      if (!rawStateResult.ok) {
+        throw new Error(
+          `Unable to read popup preview state: ${rawStateResult.error}`,
+        );
+      }
+
+      const rawState = rawStateResult.value;
 
       if (!rawState) {
         throw new Error("Popup preview state was not seeded before scenario setup.");
       }
 
       const state = JSON.parse(rawState);
+      state.settings = {
+        ...state.settings,
+        locale: "en",
+      };
       const normalizeHealthyProvider = (provider) => ({
         ...provider,
         syncedAt: "2026-04-20 10:42",
@@ -164,7 +185,13 @@ async function seedScenario(page, scenarioSlug) {
         });
       }
 
-      globalThis.localStorage.setItem(storageKey, JSON.stringify(state));
+      const writeResult = storage.setItem(storageKey, JSON.stringify(state));
+
+      if (!writeResult.ok) {
+        throw new Error(
+          `Unable to write popup preview state: ${writeResult.error}`,
+        );
+      }
     },
     {
       storageKey: appStateStorageKey,
@@ -175,14 +202,14 @@ async function seedScenario(page, scenarioSlug) {
   await page.reload({ waitUntil: "domcontentloaded" });
   await page.waitForFunction(() => {
     const bodyText = document.body?.innerText ?? "";
+    const isReady =
+      bodyText.includes("Quick glance") || bodyText.includes("快速概览");
 
-    return (
-      bodyText.includes("Quick glance") || bodyText.includes("Popup load failed")
-    );
+    return isReady || bodyText.includes("Popup load failed");
   });
   const bodyText = await page.evaluate(() => document.body?.innerText ?? "");
   assert(
-    bodyText.includes("Quick glance"),
+    bodyText.includes("Quick glance") || bodyText.includes("快速概览"),
     `${scenarioSlug}: popup did not return to the ready state after reload`,
   );
 }
