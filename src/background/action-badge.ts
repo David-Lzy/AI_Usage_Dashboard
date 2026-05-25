@@ -1,10 +1,10 @@
 import type { AppState } from "../providers/types";
-import { buildActionBadgeModel } from "../sidepanel/action-badge-model";
+import { buildActionBadgeModel } from "../shared/action-badge-model";
 
 export {
   buildActionBadgeModel,
   type ActionBadgeModel,
-} from "../sidepanel/action-badge-model";
+} from "../shared/action-badge-model";
 
 function hasChromeActionApi(): boolean {
   return (

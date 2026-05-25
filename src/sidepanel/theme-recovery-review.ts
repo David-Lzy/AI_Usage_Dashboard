@@ -1,4 +1,4 @@
-import { buildActionBadgeModel } from "./action-badge-model";
+import { buildActionBadgeModel } from "../shared/action-badge-model";
 import type {
   AppState,
   ProviderId,

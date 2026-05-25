@@ -4,8 +4,11 @@ import {
   findActionBadgeQuotaCandidate,
   getEffectiveActionBadgeSelection,
   type ActionBadgeQuotaCandidate,
-} from "../shared/action-badge-preferences";
-import { getVisibleProviders, type ProviderViewModel } from "./view-models";
+} from "./action-badge-preferences";
+import {
+  getVisibleProviders,
+  type ProviderViewModel,
+} from "./provider-view-models";
 
 export type ActionBadgeModel = {
   text: string;
