@@ -7,6 +7,7 @@ import {
   buildConfigurationBackup,
   parseConfigurationBackupJson,
 } from "./configuration-backup";
+import { readAppState, writeAppState } from "./storage";
 
 describe("configuration backup", () => {
   it("exports only portable configuration fields", () => {
@@ -119,6 +120,46 @@ describe("configuration backup", () => {
     expect(cursorSetting?.displayEnabled).toBe(false);
     expect(cursorSetting?.sourcePreference).toBe("session_page");
     expect(cursorSetting?.pageBinding.tabId).toBe(456);
+  });
+
+  it("keeps imported provider source preferences after storage normalization", async () => {
+    const backup = buildConfigurationBackup({
+      ...SAMPLE_APP_STATE,
+      providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) =>
+        provider.id === "cursor-personal-page"
+          ? {
+              ...provider,
+              displayEnabled: true,
+              sourcePreference: "session_page",
+            }
+          : provider.id === "cursor-team-api"
+            ? {
+                ...provider,
+                displayEnabled: true,
+                sourcePreference: "official_api",
+              }
+            : provider,
+      ),
+    });
+    const importedState = applyConfigurationBackupToState(
+      SAMPLE_APP_STATE,
+      backup,
+    );
+
+    await writeAppState(importedState);
+
+    const storedState = await readAppState();
+
+    expect(
+      storedState?.providerSettings.find(
+        (provider) => provider.id === "cursor-personal-page",
+      )?.sourcePreference,
+    ).toBe("session_page");
+    expect(
+      storedState?.providerSettings.find(
+        (provider) => provider.id === "cursor-team-api",
+      )?.sourcePreference,
+    ).toBe("official_api");
   });
 
   it("rejects malformed backup JSON", () => {

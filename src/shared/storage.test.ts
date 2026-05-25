@@ -279,6 +279,57 @@ describe("storage normalization", () => {
     expect(state?.settings.uiFontFamily).toBe("default");
   });
 
+  it("preserves stored provider source preferences across normalized writes", async () => {
+    await writeAppState({
+      ...SAMPLE_APP_STATE,
+      providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) =>
+        provider.id === "cursor-personal-page"
+          ? {
+              ...provider,
+              sourcePreference: "session_page",
+            }
+          : provider.id === "cursor-team-api"
+            ? {
+                ...provider,
+                sourcePreference: "official_api",
+              }
+            : provider,
+      ),
+    });
+
+    const writtenState = await readAppState();
+
+    expect(
+      writtenState?.providerSettings.find(
+        (provider) => provider.id === "cursor-personal-page",
+      )?.sourcePreference,
+    ).toBe("session_page");
+    expect(
+      writtenState?.providerSettings.find(
+        (provider) => provider.id === "cursor-team-api",
+      )?.sourcePreference,
+    ).toBe("official_api");
+
+    const updatedState = await updateAppState((current) => ({
+      ...current,
+      settings: {
+        ...current.settings,
+        warningThresholdPercent: 81,
+      },
+    }));
+
+    expect(
+      updatedState.providerSettings.find(
+        (provider) => provider.id === "cursor-personal-page",
+      )?.sourcePreference,
+    ).toBe("session_page");
+    expect(
+      updatedState.providerSettings.find(
+        (provider) => provider.id === "cursor-team-api",
+      )?.sourcePreference,
+    ).toBe("official_api");
+  });
+
   it("normalizes display preferences from stale stored state", async () => {
     await writeAppState({
       ...SAMPLE_APP_STATE,

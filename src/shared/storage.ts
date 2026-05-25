@@ -131,7 +131,8 @@ function normalizeProviderSetting(
     ),
     sourcePreference: normalizeSourcePreference(
       sampleProviderSetting.id,
-      sampleProviderSetting.sourcePreference,
+      storedProviderSetting?.sourcePreference ??
+        sampleProviderSetting.sourcePreference,
     ),
     sourceKind: sampleProviderSetting.sourceKind,
     connectionMode: sampleProviderSetting.connectionMode,
