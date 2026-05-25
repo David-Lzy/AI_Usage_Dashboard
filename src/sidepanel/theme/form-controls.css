@@ -86,6 +86,72 @@ select.form-field__control {
   cursor: pointer;
 }
 
+.adaptive-control-grid {
+  --adaptive-control-min: 168px;
+
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, var(--adaptive-control-min)), 1fr)
+  );
+  gap: var(--app-space-3);
+  align-items: stretch;
+}
+
+.adaptive-control-grid > :not(.adaptive-control-grid__measurer) {
+  min-width: 0;
+}
+
+.adaptive-control-grid > .form-field {
+  height: 100%;
+}
+
+.adaptive-control-grid__measurer {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  display: inline-grid;
+  grid-template-columns: max-content;
+  width: max-content;
+  max-width: none;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+  visibility: hidden;
+  contain: layout style;
+}
+
+.adaptive-control-grid__measure-button {
+  display: inline-grid;
+  grid-template-columns: max-content var(--app-control-icon-slot);
+  align-items: center;
+  width: max-content;
+  min-height: var(--app-control-height-large);
+  padding-block: 0;
+  padding-inline-start: var(--app-control-padding-inline-large);
+  padding-inline-end: 0;
+  border: 1px solid transparent;
+  border-radius: var(--md-sys-shape-corner-large);
+  font-family: var(--md-sys-typescale-body-large-font);
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: var(--md-sys-typescale-body-large-weight);
+  line-height: var(--md-sys-typescale-body-large-line-height);
+  white-space: nowrap;
+}
+
+.adaptive-control-grid__measure-value {
+  display: block;
+}
+
+.adaptive-control-grid__measure-icon {
+  justify-self: center;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+}
+
 .action-badge-selection-controls {
   gap: var(--app-space-3);
 }
