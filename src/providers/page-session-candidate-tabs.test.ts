@@ -117,7 +117,7 @@ describe("getCandidateTabs", () => {
             {
               id: 1,
               active: true,
-              lastAccessed: 10_000,
+              lastAccessed: 1_765_000_000_000,
               url: "https://cursor.com/dashboard",
             },
             {
@@ -149,7 +149,7 @@ describe("getCandidateTabs", () => {
         {
           id: 1,
           active: true,
-          lastAccessed: 10_000,
+          lastAccessed: 1_765_000_000_000,
           url: "https://cursor.com/dashboard",
           bindingMode: "auto",
         },

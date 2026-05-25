@@ -10,6 +10,13 @@ export type PageSessionTabPriorityBinding = {
   matchedUrl?: string | null;
 };
 
+type PageSessionTabPriorityScore = {
+  urlMatch: number;
+  titleMatch: number;
+  active: number;
+  lastAccessed: number;
+};
+
 function normalizeUrl(value: string | null | undefined): string | null {
   if (typeof value !== "string" || value.length === 0) {
     return null;
@@ -50,17 +57,17 @@ function buildUrlPriorityScore(
   }
 
   if (normalizedTabUrl === normalizedMatchedUrl) {
-    return 1_000_000_000;
+    return 3;
   }
 
   if (
     normalizeUrlWithoutHash(normalizedTabUrl) ===
     normalizeUrlWithoutHash(normalizedMatchedUrl)
   ) {
-    return 900_000_000;
+    return 2;
   }
 
-  return normalizedTabUrl.startsWith(normalizedMatchedUrl) ? 800_000_000 : 0;
+  return normalizedTabUrl.startsWith(normalizedMatchedUrl) ? 1 : 0;
 }
 
 function buildTitlePriorityScore(
@@ -71,18 +78,34 @@ function buildTitlePriorityScore(
     return 0;
   }
 
-  return tabTitle.trim() === matchedTitle.trim() ? 50_000_000 : 0;
+  return tabTitle.trim() === matchedTitle.trim() ? 1 : 0;
+}
+
+function normalizeLastAccessed(value: number | null | undefined): number {
+  return typeof value === "number" && Number.isFinite(value) ? value : 0;
 }
 
 function scoreTab(
   tab: PageSessionTabPriorityCandidate,
   binding?: PageSessionTabPriorityBinding,
+): PageSessionTabPriorityScore {
+  return {
+    urlMatch: buildUrlPriorityScore(tab.url, binding?.matchedUrl),
+    titleMatch: buildTitlePriorityScore(tab.title, binding?.matchedTitle),
+    active: tab.active ? 1 : 0,
+    lastAccessed: normalizeLastAccessed(tab.lastAccessed),
+  };
+}
+
+function compareScore(
+  left: PageSessionTabPriorityScore,
+  right: PageSessionTabPriorityScore,
 ): number {
   return (
-    buildUrlPriorityScore(tab.url, binding?.matchedUrl) +
-    buildTitlePriorityScore(tab.title, binding?.matchedTitle) +
-    (tab.active ? 10_000 : 0) +
-    (tab.lastAccessed ?? 0)
+    right.urlMatch - left.urlMatch ||
+    right.titleMatch - left.titleMatch ||
+    right.active - left.active ||
+    right.lastAccessed - left.lastAccessed
   );
 }
 
@@ -90,7 +113,7 @@ export function sortTabsByPriority<T extends PageSessionTabPriorityCandidate>(
   tabs: T[],
   binding?: PageSessionTabPriorityBinding,
 ): T[] {
-  return [...tabs].sort(
-    (left, right) => scoreTab(right, binding) - scoreTab(left, binding),
+  return [...tabs].sort((left, right) =>
+    compareScore(scoreTab(left, binding), scoreTab(right, binding)),
   );
 }
