@@ -6,7 +6,7 @@ import type {
 } from "../providers/types";
 import type { RuntimeI18n } from "../shared/i18n";
 import type { ProviderViewModel } from "../shared/provider-view-models";
-import { ProviderProgressItemList } from "../sidepanel/components/ProviderProgressItemList";
+import { ProviderProgressItemList } from "../shared/components/ProviderProgressItemList";
 
 type PopupProviderProgressProps = {
   i18n: RuntimeI18n;
