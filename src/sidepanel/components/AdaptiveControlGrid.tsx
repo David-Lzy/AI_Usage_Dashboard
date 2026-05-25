@@ -1,4 +1,5 @@
 import {
+  Children,
   useEffect,
   useMemo,
   useRef,
@@ -11,6 +12,7 @@ const DEFAULT_ADAPTIVE_CONTROL_MIN_WIDTH_PX = 168;
 
 type AdaptiveControlGridStyle = CSSProperties & {
   "--adaptive-control-min": string;
+  "--adaptive-control-columns"?: string;
 };
 
 type UseAdaptiveControlMinWidthOptions = {
@@ -64,6 +66,99 @@ export function resolveAdaptiveControlMinWidth(
   );
 
   return Math.max(fallbackWidth, measuredWidth);
+}
+
+export function resolveAdaptiveControlBaseColumnCount({
+  availableWidthPx,
+  columnGapPx = 0,
+  itemCount,
+  minWidthPx,
+}: {
+  availableWidthPx: number;
+  columnGapPx?: number;
+  itemCount: number;
+  minWidthPx: number;
+}): number | null {
+  if (
+    itemCount <= 0 ||
+    !Number.isFinite(availableWidthPx) ||
+    availableWidthPx <= 0 ||
+    !Number.isFinite(minWidthPx) ||
+    minWidthPx <= 0
+  ) {
+    return null;
+  }
+
+  const resolvedGapPx =
+    Number.isFinite(columnGapPx) && columnGapPx > 0 ? columnGapPx : 0;
+  const maxColumnsByWidth = Math.floor(
+    (availableWidthPx + resolvedGapPx) / (minWidthPx + resolvedGapPx),
+  );
+
+  return Math.max(1, Math.min(itemCount, maxColumnsByWidth));
+}
+
+export function rebalanceAdaptiveControlColumnCount(
+  baseColumnCount: number,
+  itemCount: number,
+): number {
+  if (baseColumnCount <= 1 || itemCount <= baseColumnCount) {
+    return Math.max(1, baseColumnCount);
+  }
+
+  const rowCount = Math.ceil(itemCount / baseColumnCount);
+  const lastRowCount = itemCount % baseColumnCount || baseColumnCount;
+
+  if (rowCount <= 1 || lastRowCount >= baseColumnCount) {
+    return baseColumnCount;
+  }
+
+  let bestTransferCount = 0;
+
+  for (
+    let transferCount = 1;
+    transferCount < baseColumnCount;
+    transferCount += 1
+  ) {
+    const nextLeadingRowCount = baseColumnCount - transferCount;
+    const nextLastRowCount =
+      lastRowCount + transferCount * (rowCount - 1);
+
+    if (nextLastRowCount <= nextLeadingRowCount) {
+      bestTransferCount = transferCount;
+    }
+  }
+
+  return Math.max(1, baseColumnCount - bestTransferCount);
+}
+
+export function resolveAdaptiveControlColumnCount({
+  availableWidthPx,
+  columnGapPx = 0,
+  itemCount,
+  minWidthPx,
+}: {
+  availableWidthPx: number;
+  columnGapPx?: number;
+  itemCount: number;
+  minWidthPx: number;
+}): number | null {
+  const baseColumnCount = resolveAdaptiveControlBaseColumnCount({
+    availableWidthPx,
+    columnGapPx,
+    itemCount,
+    minWidthPx,
+  });
+
+  return baseColumnCount === null
+    ? null
+    : rebalanceAdaptiveControlColumnCount(baseColumnCount, itemCount);
+}
+
+function parseCssPixelValue(value: string): number {
+  const parsedValue = Number.parseFloat(value);
+
+  return Number.isFinite(parsedValue) ? parsedValue : 0;
 }
 
 export function useAdaptiveControlMinWidth({
@@ -163,6 +258,77 @@ export function useAdaptiveControlMinWidth({
   };
 }
 
+function useAdaptiveControlColumnCount({
+  itemCount,
+  minWidthPx,
+}: {
+  itemCount: number;
+  minWidthPx: number;
+}) {
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const [columnCount, setColumnCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    function measure() {
+      const root = rootRef.current;
+
+      if (!root) {
+        setColumnCount(null);
+        return;
+      }
+
+      const computedStyle = getComputedStyle(root);
+      const columnGapPx = parseCssPixelValue(
+        computedStyle.columnGap || computedStyle.gap,
+      );
+      const renderedItemCount = Array.from(root.children).filter(
+        (child) => !child.classList.contains("adaptive-control-grid__measurer"),
+      ).length;
+      const nextColumnCount = resolveAdaptiveControlColumnCount({
+        availableWidthPx: root.getBoundingClientRect().width,
+        columnGapPx,
+        itemCount: renderedItemCount || itemCount,
+        minWidthPx,
+      });
+
+      if (!cancelled) {
+        setColumnCount(nextColumnCount);
+      }
+    }
+
+    measure();
+
+    const resizeObserver =
+      typeof ResizeObserver === "undefined"
+        ? null
+        : new ResizeObserver(measure);
+
+    if (rootRef.current) {
+      resizeObserver?.observe(rootRef.current);
+    }
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("resize", measure);
+    }
+
+    return () => {
+      cancelled = true;
+      resizeObserver?.disconnect();
+
+      if (typeof window !== "undefined") {
+        window.removeEventListener("resize", measure);
+      }
+    };
+  }, [itemCount, minWidthPx]);
+
+  return {
+    columnCount,
+    rootRef,
+  };
+}
+
 export function AdaptiveControlGrid({
   measurementLabels,
   measurementCapLabel,
@@ -170,19 +336,39 @@ export function AdaptiveControlGrid({
   className,
   children,
 }: AdaptiveControlGridProps) {
-  const { labelsToMeasure, measurerRef, style } = useAdaptiveControlMinWidth({
-    measurementLabels,
-    measurementCapLabel,
-    minFallbackPx,
+  const { labelsToMeasure, measurerRef, minWidthPx } =
+    useAdaptiveControlMinWidth({
+      measurementLabels,
+      measurementCapLabel,
+      minFallbackPx,
+    });
+  const itemCount = Children.toArray(children).length;
+  const { columnCount, rootRef } = useAdaptiveControlColumnCount({
+    itemCount,
+    minWidthPx,
   });
+  const style = useMemo<AdaptiveControlGridStyle>(
+    () => ({
+      "--adaptive-control-min": `${minWidthPx}px`,
+      ...(columnCount
+        ? {
+            "--adaptive-control-columns": String(columnCount),
+            gridTemplateColumns: `repeat(${columnCount}, minmax(min(100%, var(--adaptive-control-min)), 1fr))`,
+          }
+        : {}),
+    }),
+    [columnCount, minWidthPx],
+  );
   const rootClassName = className
     ? `adaptive-control-grid ${className}`
     : "adaptive-control-grid";
 
   return (
     <div
+      ref={rootRef}
       className={rootClassName}
       data-adaptive-control-grid=""
+      data-adaptive-control-columns={columnCount ?? undefined}
       style={style}
     >
       <div

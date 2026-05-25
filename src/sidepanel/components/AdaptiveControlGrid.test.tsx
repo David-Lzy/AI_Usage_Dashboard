@@ -6,6 +6,9 @@ import { describe, expect, it } from "vitest";
 import {
   AdaptiveControlGrid,
   getAdaptiveControlMeasurementLabels,
+  rebalanceAdaptiveControlColumnCount,
+  resolveAdaptiveControlBaseColumnCount,
+  resolveAdaptiveControlColumnCount,
   resolveAdaptiveControlMinWidth,
 } from "./AdaptiveControlGrid";
 
@@ -53,6 +56,67 @@ describe("AdaptiveControlGrid", () => {
     expect(resolveAdaptiveControlMinWidth([], 168)).toBe(168);
     expect(resolveAdaptiveControlMinWidth([82.1, 191.2], 168)).toBe(192);
     expect(resolveAdaptiveControlMinWidth([0, Number.NaN], 144.2)).toBe(145);
+  });
+
+  it("resolves base column counts from available width and gap", () => {
+    expect(
+      resolveAdaptiveControlBaseColumnCount({
+        availableWidthPx: 760,
+        columnGapPx: 10,
+        itemCount: 8,
+        minWidthPx: 100,
+      }),
+    ).toBe(7);
+    expect(
+      resolveAdaptiveControlBaseColumnCount({
+        availableWidthPx: 320,
+        columnGapPx: 12,
+        itemCount: 8,
+        minWidthPx: 148,
+      }),
+    ).toBe(2);
+    expect(
+      resolveAdaptiveControlBaseColumnCount({
+        availableWidthPx: 0,
+        itemCount: 8,
+        minWidthPx: 100,
+      }),
+    ).toBeNull();
+  });
+
+  it("rebalances short final rows by transferring columns from previous rows", () => {
+    expect(rebalanceAdaptiveControlColumnCount(7, 8)).toBe(4);
+    expect(rebalanceAdaptiveControlColumnCount(6, 8)).toBe(4);
+    expect(rebalanceAdaptiveControlColumnCount(7, 15)).toBe(5);
+    expect(rebalanceAdaptiveControlColumnCount(7, 13)).toBe(7);
+    expect(rebalanceAdaptiveControlColumnCount(4, 8)).toBe(4);
+  });
+
+  it("resolves balanced column counts without going below measured control width", () => {
+    expect(
+      resolveAdaptiveControlColumnCount({
+        availableWidthPx: 760,
+        columnGapPx: 10,
+        itemCount: 8,
+        minWidthPx: 100,
+      }),
+    ).toBe(4);
+    expect(
+      resolveAdaptiveControlColumnCount({
+        availableWidthPx: 430,
+        columnGapPx: 10,
+        itemCount: 8,
+        minWidthPx: 100,
+      }),
+    ).toBe(4);
+    expect(
+      resolveAdaptiveControlColumnCount({
+        availableWidthPx: 210,
+        columnGapPx: 10,
+        itemCount: 8,
+        minWidthPx: 100,
+      }),
+    ).toBe(2);
   });
 
   it("defines the adaptive grid and hidden DOM measurer in shared CSS", () => {
