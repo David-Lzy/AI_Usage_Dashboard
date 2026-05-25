@@ -4,6 +4,14 @@ import path from "node:path";
 import process from "node:process";
 
 import { chromium } from "playwright";
+import {
+  assert,
+  assertVisibleTop,
+  collectSettingsSnapshot,
+  waitForDashboard,
+  waitForProviderDetail,
+  waitForSettings,
+} from "./lib/surface-qa-browser-harness.mjs";
 
 const projectRoot = process.cwd();
 const extensionPath = path.join(projectRoot, "dist", "chrome");
@@ -19,12 +27,6 @@ const artifactPath = path.join(
 const settingsSessionStorageKey =
   "ai-usage-dashboard:surface-session-state:standard:settings";
 const surfaceSessionStateTtlMs = 30 * 60 * 1000;
-
-function assert(condition, message) {
-  if (!condition) {
-    throw new Error(message);
-  }
-}
 
 function serializeError(error) {
   return {
@@ -173,25 +175,6 @@ async function openExtensionPage(context, extensionId, relativePathWithHash) {
   return page;
 }
 
-async function waitForDashboard(page) {
-  await page.waitForSelector(".dashboard-section");
-  await page.waitForTimeout(250);
-}
-
-async function waitForSettings(page) {
-  await page.waitForSelector("#settings-appearance");
-  await page.waitForSelector("[data-topbar-open-full-page='true']");
-  await page.waitForTimeout(250);
-}
-
-async function waitForProviderDetail(page) {
-  await page.waitForSelector(
-    "[data-theme-stability-surface='provider-detail-sync-status-card']",
-  );
-  await page.waitForSelector("[data-topbar-open-full-page='true']");
-  await page.waitForTimeout(250);
-}
-
 async function collectExtensionCapabilities(page) {
   return page.evaluate(() => ({
     runtimeId: globalThis.chrome?.runtime?.id ?? null,
@@ -264,50 +247,6 @@ function createSettingsEnvelope(statePatch = {}) {
       ...statePatch,
     },
   };
-}
-
-async function collectSettingsSnapshot(page) {
-  return page.evaluate(() => {
-    function rectTop(selector) {
-      const element = document.querySelector(selector);
-
-      return element ? Math.round(element.getBoundingClientRect().top) : null;
-    }
-
-    const colorDropdownButton = document.querySelector(
-      "[data-session-popover-id='progress-color-band:high:color'] button",
-    );
-    const uiMore = document.querySelector(".settings-preferences__more");
-    const toolbarPreviewButton = document.querySelector(
-      ".settings-preferences__test-popup-button",
-    );
-
-    return {
-      urlProtocol: window.location.protocol,
-      hash: window.location.hash,
-      search: window.location.search,
-      viewportHeight: window.innerHeight,
-      colorDropdownOpen: colorDropdownButton?.getAttribute("data-open") ?? null,
-      colorDropdownTop: rectTop(
-        "[data-session-popover-id='progress-color-band:high:color']",
-      ),
-      quickSetupTop: rectTop("#settings-quick-setup"),
-      advancedTop: rectTop("#settings-advanced"),
-      uiMoreOpen: uiMore?.getAttribute("data-open") ?? null,
-      toolbarPreviewOpen:
-        toolbarPreviewButton?.getAttribute("aria-pressed") ?? null,
-    };
-  });
-}
-
-function assertVisibleTop(snapshot, key, label) {
-  const top = snapshot[key];
-
-  assert(typeof top === "number", `${label} top was not available.`);
-  assert(
-    top >= -120 && top <= snapshot.viewportHeight * 0.8,
-    `${label} was not restored into view; top=${top}, viewport=${snapshot.viewportHeight}.`,
-  );
 }
 
 async function runSettingsSessionRestoreCheck(context, extensionId, seedPage) {
