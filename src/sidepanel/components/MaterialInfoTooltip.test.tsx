@@ -33,7 +33,12 @@ describe("MaterialInfoTooltip", () => {
     expect(formControlsCss).toContain("align-items: center;");
     expect(formControlsCss).toContain("justify-content: center;");
     expect(formControlsCss).toContain("line-height: 0;");
-    expect(formControlsCss).toContain("transform: translateY(-1px);");
+    expect(formControlsCss).toContain("width: 20px;");
+    expect(formControlsCss).toContain("height: 20px;");
+    expect(formControlsCss).toContain("position: absolute;");
+    expect(formControlsCss).toContain("inset-block-start: 50%;");
+    expect(formControlsCss).toContain("inset-inline-start: 50%;");
+    expect(formControlsCss).toContain("transform: translate(-50%, -50%);");
     expect(formControlsCss).toContain("box-sizing: border-box;");
     expect(formControlsCss).toContain("padding: 0;");
     expect(formControlsCss).toContain("border: 1px solid transparent;");

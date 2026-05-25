@@ -377,16 +377,18 @@ select.form-field__control {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 20px;
+  height: 20px;
   flex: 0 0 auto;
   line-height: 0;
-  transform: translateY(-1px);
   vertical-align: middle;
 }
 
 .material-info-tooltip__trigger {
   box-sizing: border-box;
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -400,6 +402,7 @@ select.form-field__control {
   filter: blur(0.18px) saturate(0.8);
   line-height: 0;
   opacity: 0.48;
+  transform: translate(-50%, -50%);
   cursor: help;
   transition:
     background-color var(--app-motion-duration-fast)
