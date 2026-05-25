@@ -63,7 +63,12 @@ import {
 } from "./progress-appearance";
 import { buildProviderProgressItemIdsByProvider } from "./provider-progress-items";
 import { normalizeSettingsUserLevel } from "./settings-user-level";
-import { getSafeLocalStorage } from "./local-storage";
+import {
+  getSafeLocalStorage,
+  getSafeStorageItem,
+  removeSafeStorageItem,
+  setSafeStorageItem,
+} from "./local-storage";
 
 let memoryFallbackState: AppState | null = null;
 
@@ -339,22 +344,22 @@ function hasChromeStorage(): boolean {
 }
 
 function readLocalStorageState(storage: Storage): AppState | null {
+  const rawState = getSafeStorageItem(storage, APP_STATE_STORAGE_KEY);
+
+  if (!rawState) {
+    return null;
+  }
+
   try {
-    const rawState = storage.getItem(APP_STATE_STORAGE_KEY);
-
-    if (!rawState) {
-      return null;
-    }
-
     return normalizeAppState(JSON.parse(rawState) as AppState);
   } catch {
-    storage.removeItem(APP_STATE_STORAGE_KEY);
+    removeSafeStorageItem(storage, APP_STATE_STORAGE_KEY);
     return null;
   }
 }
 
-function writeLocalStorageState(storage: Storage, state: AppState) {
-  storage.setItem(APP_STATE_STORAGE_KEY, JSON.stringify(state));
+function writeLocalStorageState(storage: Storage, state: AppState): boolean {
+  return setSafeStorageItem(storage, APP_STATE_STORAGE_KEY, JSON.stringify(state));
 }
 
 export async function readAppState(): Promise<AppState | null> {
@@ -367,7 +372,10 @@ export async function readAppState(): Promise<AppState | null> {
   const localStorage = getSafeLocalStorage();
 
   if (localStorage) {
-    return readLocalStorageState(localStorage);
+    const localState = readLocalStorageState(localStorage);
+    return localState ?? (
+      memoryFallbackState ? normalizeAppState(cloneAppState(memoryFallbackState)) : null
+    );
   }
 
   return memoryFallbackState ? normalizeAppState(cloneAppState(memoryFallbackState)) : null;
@@ -383,8 +391,8 @@ export async function writeAppState(state: AppState): Promise<AppState> {
   } else {
     const localStorage = getSafeLocalStorage();
 
-    if (localStorage) {
-      writeLocalStorageState(localStorage, clonedState);
+    if (localStorage && writeLocalStorageState(localStorage, clonedState)) {
+      memoryFallbackState = null;
     } else {
       memoryFallbackState = clonedState;
     }
@@ -402,8 +410,7 @@ export async function clearAppState(): Promise<void> {
   const localStorage = getSafeLocalStorage();
 
   if (localStorage) {
-    localStorage.removeItem(APP_STATE_STORAGE_KEY);
-    return;
+    removeSafeStorageItem(localStorage, APP_STATE_STORAGE_KEY);
   }
 
   memoryFallbackState = null;

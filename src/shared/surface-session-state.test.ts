@@ -35,6 +35,27 @@ function createMemoryStorage(): Storage {
   };
 }
 
+function createThrowingStorage(): Storage {
+  return {
+    get length() {
+      return 0;
+    },
+    clear() {},
+    getItem() {
+      throw new Error("getItem failed");
+    },
+    key() {
+      return null;
+    },
+    removeItem() {
+      throw new Error("removeItem failed");
+    },
+    setItem() {
+      throw new Error("setItem failed");
+    },
+  };
+}
+
 function createExtensionSessionStorage() {
   const values = new Map<string, unknown>();
 
@@ -172,6 +193,69 @@ describe("surface session state", () => {
         now: () => 10_500,
       }),
     ).resolves.toEqual(state);
+  });
+
+  it("falls back to localStorage when sessionStorage operations throw", async () => {
+    const sessionStorage = createThrowingStorage();
+    const localStorage = createMemoryStorage();
+    const key = buildSurfaceSessionKey("settings");
+    const state = createState();
+
+    await expect(
+      captureSurfaceSessionState(key, state, {
+        extensionStorage: null,
+        sessionStorage,
+        localStorage,
+        now: () => 1_000,
+      }),
+    ).resolves.toBeUndefined();
+    expect(localStorage.getItem(key)).not.toBeNull();
+
+    await expect(
+      restoreSurfaceSessionState(key, {
+        extensionStorage: null,
+        sessionStorage,
+        localStorage,
+        now: () => 1_500,
+      }),
+    ).resolves.toEqual(state);
+
+    await expect(
+      clearSurfaceSessionState(key, {
+        extensionStorage: null,
+        sessionStorage,
+        localStorage,
+      }),
+    ).resolves.toBeUndefined();
+    expect(localStorage.getItem(key)).toBeNull();
+  });
+
+  it("keeps fallback storage failures best-effort", async () => {
+    const sessionStorage = createThrowingStorage();
+    const localStorage = createThrowingStorage();
+    const key = buildSurfaceSessionKey("dashboard");
+
+    await expect(
+      captureSurfaceSessionState(key, createState({ routeName: "dashboard" }), {
+        extensionStorage: null,
+        sessionStorage,
+        localStorage,
+      }),
+    ).resolves.toBeUndefined();
+    await expect(
+      restoreSurfaceSessionState(key, {
+        extensionStorage: null,
+        sessionStorage,
+        localStorage,
+      }),
+    ).resolves.toBeNull();
+    await expect(
+      clearSurfaceSessionState(key, {
+        extensionStorage: null,
+        sessionStorage,
+        localStorage,
+      }),
+    ).resolves.toBeUndefined();
   });
 
   it("removes expired and malformed payloads", async () => {

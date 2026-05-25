@@ -1,4 +1,9 @@
-import { getSafeLocalStorage } from "./local-storage";
+import {
+  getSafeLocalStorage,
+  getSafeStorageItem,
+  removeSafeStorageItem,
+  setSafeStorageItem,
+} from "./local-storage";
 
 export const STORE_SCREENSHOT_RUNTIME_LOCK_STORAGE_KEY =
   "ai-usage-dashboard.store-screenshot-runtime-lock";
@@ -20,7 +25,8 @@ export async function readStoreScreenshotRuntimeLock(): Promise<boolean> {
 
   if (localStorage) {
     return (
-      localStorage.getItem(STORE_SCREENSHOT_RUNTIME_LOCK_STORAGE_KEY) === "true"
+      getSafeStorageItem(localStorage, STORE_SCREENSHOT_RUNTIME_LOCK_STORAGE_KEY) ===
+      "true"
     );
   }
 
@@ -44,12 +50,13 @@ export async function writeStoreScreenshotRuntimeLock(
 
   if (localStorage) {
     if (enabled) {
-      localStorage.setItem(
+      setSafeStorageItem(
+        localStorage,
         STORE_SCREENSHOT_RUNTIME_LOCK_STORAGE_KEY,
         "true",
       );
     } else {
-      localStorage.removeItem(STORE_SCREENSHOT_RUNTIME_LOCK_STORAGE_KEY);
+      removeSafeStorageItem(localStorage, STORE_SCREENSHOT_RUNTIME_LOCK_STORAGE_KEY);
     }
   }
 }

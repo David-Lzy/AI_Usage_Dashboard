@@ -1,4 +1,11 @@
-import { getSafeLocalStorage, getSafeSessionStorage } from "./local-storage";
+import {
+  getSafeLocalStorage,
+  getSafeSessionStorage,
+  getSafeStorageItem,
+  removeSafeStorageItem,
+  setSafeStorageItem,
+  type WebStorageLike,
+} from "./local-storage";
 
 export const SURFACE_SESSION_STATE_TTL_MS = 30 * 60 * 1000;
 
@@ -7,12 +14,6 @@ const SURFACE_SESSION_STATE_KEY_PREFIX =
 const SURFACE_SESSION_STATE_SCHEMA_VERSION = 1;
 
 type UnknownRecord = Record<string, unknown>;
-
-type StorageLike = {
-  getItem: (key: string) => string | null;
-  setItem: (key: string, value: string) => void;
-  removeItem: (key: string) => void;
-};
 
 type ExtensionSessionStorageArea = {
   get?: (key: string) => Promise<Record<string, unknown>> | Record<string, unknown>;
@@ -72,8 +73,8 @@ type StoredSurfaceSessionStateEnvelope = {
 export type SurfaceSessionStateStorageOptions = {
   now?: () => number;
   extensionStorage?: ExtensionSessionStorageArea | null;
-  sessionStorage?: StorageLike | null;
-  localStorage?: StorageLike | null;
+  sessionStorage?: WebStorageLike | null;
+  localStorage?: WebStorageLike | null;
 };
 
 function isRecord(value: unknown): value is UnknownRecord {
@@ -402,14 +403,15 @@ async function removeFromStorage(
       : options.sessionStorage;
 
   if (sessionStorage) {
-    sessionStorage.removeItem(key);
-    return;
+    if (removeSafeStorageItem(sessionStorage, key)) {
+      return;
+    }
   }
 
   const localStorage =
     options.localStorage === undefined ? getSafeLocalStorage() : options.localStorage;
 
-  localStorage?.removeItem(key);
+  removeSafeStorageItem(localStorage, key);
 }
 
 export async function captureSurfaceSessionState(
@@ -436,14 +438,15 @@ export async function captureSurfaceSessionState(
       : options.sessionStorage;
 
   if (sessionStorage) {
-    sessionStorage.setItem(key, serialized);
-    return;
+    if (setSafeStorageItem(sessionStorage, key, serialized)) {
+      return;
+    }
   }
 
   const localStorage =
     options.localStorage === undefined ? getSafeLocalStorage() : options.localStorage;
 
-  localStorage?.setItem(key, serialized);
+  setSafeStorageItem(localStorage, key, serialized);
 }
 
 export async function restoreSurfaceSessionState(
@@ -476,29 +479,34 @@ export async function restoreSurfaceSessionState(
       : options.sessionStorage;
   const localStorage =
     options.localStorage === undefined ? getSafeLocalStorage() : options.localStorage;
-  const fallbackStorage = sessionStorage ?? localStorage;
+  const fallbackStorages = [sessionStorage, localStorage].filter(
+    (storage): storage is WebStorageLike => Boolean(storage),
+  );
 
-  if (!fallbackStorage) {
+  if (fallbackStorages.length === 0) {
     return null;
   }
 
-  const raw = fallbackStorage.getItem(key);
+  for (const fallbackStorage of fallbackStorages) {
+    const raw = getSafeStorageItem(fallbackStorage, key);
 
-  if (!raw) {
-    return null;
-  }
-
-  try {
-    const envelope = normalizeEnvelope(JSON.parse(raw) as unknown, now);
-
-    if (envelope) {
-      return envelope.state;
+    if (!raw) {
+      continue;
     }
-  } catch {
-    // Malformed session state should be discarded below.
+
+    try {
+      const envelope = normalizeEnvelope(JSON.parse(raw) as unknown, now);
+
+      if (envelope) {
+        return envelope.state;
+      }
+    } catch {
+      // Malformed session state should be discarded below.
+    }
+
+    removeSafeStorageItem(fallbackStorage, key);
   }
 
-  fallbackStorage.removeItem(key);
   return null;
 }
 

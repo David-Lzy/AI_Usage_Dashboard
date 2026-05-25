@@ -1,9 +1,9 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { AppState } from "../providers/types";
 import { buildActionBadgeQuotaCandidates } from "./action-badge-preferences";
 import { SAMPLE_APP_STATE } from "./constants";
-import { readAppState, updateAppState, writeAppState } from "./storage";
+import { clearAppState, readAppState, updateAppState, writeAppState } from "./storage";
 
 function createLegacyState(): AppState {
   const {
@@ -161,9 +161,36 @@ function createLegacyBrandLevelState(): AppState {
   };
 }
 
+function createThrowingStorage(): Storage {
+  return {
+    get length() {
+      return 0;
+    },
+    clear() {},
+    getItem() {
+      throw new Error("getItem failed");
+    },
+    key() {
+      return null;
+    },
+    removeItem() {
+      throw new Error("removeItem failed");
+    },
+    setItem() {
+      throw new Error("setItem failed");
+    },
+  };
+}
+
 describe("storage normalization", () => {
   beforeEach(async () => {
+    vi.unstubAllGlobals();
+    await clearAppState();
     await writeAppState(SAMPLE_APP_STATE);
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
   });
 
   it("fills missing provider setting fields from the sample schema", async () => {
@@ -731,5 +758,28 @@ describe("storage normalization", () => {
       state?.providerSettings.find((provider) => provider.id === "codex-personal-page")
         ?.hostOrigins,
     ).toEqual(["https://chatgpt.com/*"]);
+  });
+
+  it("falls back to memory when localStorage operations throw", async () => {
+    vi.stubGlobal("window", {
+      localStorage: createThrowingStorage(),
+    });
+
+    await writeAppState({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        locale: "zh-CN",
+      },
+    });
+
+    await expect(readAppState()).resolves.toMatchObject({
+      settings: {
+        locale: "zh-CN",
+      },
+    });
+
+    await expect(clearAppState()).resolves.toBeUndefined();
+    await expect(readAppState()).resolves.toBeNull();
   });
 });

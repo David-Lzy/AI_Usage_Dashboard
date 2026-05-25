@@ -7,7 +7,12 @@ import {
   PROVIDER_SECRETS_STORAGE_KEY,
   SAMPLE_PROVIDER_SECRETS,
 } from "./constants";
-import { getSafeLocalStorage } from "./local-storage";
+import {
+  getSafeLocalStorage,
+  getSafeStorageItem,
+  removeSafeStorageItem,
+  setSafeStorageItem,
+} from "./local-storage";
 
 let memoryFallbackSecrets: ProviderSecrets | null = null;
 
@@ -74,23 +79,30 @@ function hasChromeStorage(): boolean {
   return typeof chrome !== "undefined" && typeof chrome.storage?.local !== "undefined";
 }
 
-function readLocalStorageSecrets(storage: Storage): ProviderSecrets {
+function readMemoryFallbackSecrets(): ProviderSecrets | null {
+  return memoryFallbackSecrets
+    ? normalizeProviderSecrets(cloneProviderSecrets(memoryFallbackSecrets))
+    : null;
+}
+
+function readLocalStorageSecrets(storage: Storage): ProviderSecrets | null {
+  const rawSecrets = getSafeStorageItem(storage, PROVIDER_SECRETS_STORAGE_KEY);
+
+  if (!rawSecrets) {
+    return null;
+  }
+
   try {
-    const rawSecrets = storage.getItem(PROVIDER_SECRETS_STORAGE_KEY);
-
-    if (!rawSecrets) {
-      return cloneProviderSecrets(SAMPLE_PROVIDER_SECRETS);
-    }
-
     return normalizeProviderSecrets(JSON.parse(rawSecrets) as StoredProviderSecrets);
   } catch {
-    storage.removeItem(PROVIDER_SECRETS_STORAGE_KEY);
-    return cloneProviderSecrets(SAMPLE_PROVIDER_SECRETS);
+    removeSafeStorageItem(storage, PROVIDER_SECRETS_STORAGE_KEY);
+    return null;
   }
 }
 
-function writeLocalStorageSecrets(storage: Storage, secrets: ProviderSecrets) {
-  storage.setItem(
+function writeLocalStorageSecrets(storage: Storage, secrets: ProviderSecrets): boolean {
+  return setSafeStorageItem(
+    storage,
     PROVIDER_SECRETS_STORAGE_KEY,
     JSON.stringify(secrets),
   );
@@ -111,12 +123,14 @@ export async function readProviderSecrets(): Promise<ProviderSecrets> {
   const localStorage = getSafeLocalStorage();
 
   if (localStorage) {
-    return readLocalStorageSecrets(localStorage);
+    return (
+      readLocalStorageSecrets(localStorage) ??
+      readMemoryFallbackSecrets() ??
+      cloneProviderSecrets(SAMPLE_PROVIDER_SECRETS)
+    );
   }
 
-  return memoryFallbackSecrets
-    ? normalizeProviderSecrets(cloneProviderSecrets(memoryFallbackSecrets))
-    : cloneProviderSecrets(SAMPLE_PROVIDER_SECRETS);
+  return readMemoryFallbackSecrets() ?? cloneProviderSecrets(SAMPLE_PROVIDER_SECRETS);
 }
 
 export async function writeProviderSecrets(
@@ -131,8 +145,8 @@ export async function writeProviderSecrets(
   } else {
     const localStorage = getSafeLocalStorage();
 
-    if (localStorage) {
-      writeLocalStorageSecrets(localStorage, normalizedSecrets);
+    if (localStorage && writeLocalStorageSecrets(localStorage, normalizedSecrets)) {
+      memoryFallbackSecrets = null;
     } else {
       memoryFallbackSecrets = normalizedSecrets;
     }
