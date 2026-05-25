@@ -95,6 +95,10 @@ describe("ActionBadgeSelectionControls", () => {
       ".adaptive-control-grid .action-badge-selection-controls__label-row {",
     );
     expect(formControlsCss).toContain(
+      ".adaptive-control-grid > .action-badge-selection-controls {",
+    );
+    expect(formControlsCss).toContain("gap: var(--app-space-2);");
+    expect(formControlsCss).toContain(
       ".action-badge-selection-controls__menu-header {",
     );
     expect(formControlsCss).toContain(

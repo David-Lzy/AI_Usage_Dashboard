@@ -128,6 +128,10 @@ describe("AdaptiveControlGrid", () => {
     );
     expect(formControlsCss).toContain(".adaptive-control-grid__measurer {");
     expect(formControlsCss).toContain(
+      "grid-template-rows: minmax(28px, auto) minmax(",
+    );
+    expect(formControlsCss).toContain("min-block-size: 28px;");
+    expect(formControlsCss).toContain(
       "font-size: var(--md-sys-typescale-body-large-size);",
     );
     expect(formControlsCss).toContain(

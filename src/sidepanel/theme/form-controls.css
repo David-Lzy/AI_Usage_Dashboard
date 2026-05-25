@@ -111,7 +111,25 @@ select.form-field__control {
 }
 
 .adaptive-control-grid > .form-field {
+  grid-template-rows: minmax(28px, auto) minmax(
+      var(--app-control-height-large),
+      auto
+    );
+  align-content: start;
   height: 100%;
+}
+
+.adaptive-control-grid
+  > .form-field
+  > .form-field__label:not(.material-select__label--hidden),
+.adaptive-control-grid > .form-field > .form-field__label-row {
+  display: flex;
+  align-items: center;
+  min-block-size: 28px;
+}
+
+.adaptive-control-grid > .action-badge-selection-controls {
+  gap: var(--app-space-2);
 }
 
 .adaptive-control-grid .editable-number-combobox__anchor,
@@ -356,18 +374,21 @@ select.form-field__control {
 
 .material-info-tooltip {
   position: relative;
-  display: inline-grid;
-  place-items: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 28px;
   height: 28px;
   flex: 0 0 auto;
+  line-height: 0;
   vertical-align: middle;
 }
 
 .material-info-tooltip__trigger {
   box-sizing: border-box;
-  display: inline-grid;
-  place-items: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 28px;
   height: 28px;
   padding: 0;
@@ -376,7 +397,7 @@ select.form-field__control {
   background: transparent;
   color: var(--md-sys-color-primary);
   filter: blur(0.18px) saturate(0.8);
-  line-height: 1;
+  line-height: 0;
   opacity: 0.48;
   cursor: help;
   transition:

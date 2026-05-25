@@ -29,6 +29,10 @@ describe("MaterialInfoTooltip", () => {
 
   it("uses a subtle trigger and fixed opaque tooltip surface", () => {
     expect(formControlsCss).toContain(".material-info-tooltip__trigger {");
+    expect(formControlsCss).toContain("display: inline-flex;");
+    expect(formControlsCss).toContain("align-items: center;");
+    expect(formControlsCss).toContain("justify-content: center;");
+    expect(formControlsCss).toContain("line-height: 0;");
     expect(formControlsCss).toContain("box-sizing: border-box;");
     expect(formControlsCss).toContain("padding: 0;");
     expect(formControlsCss).toContain("border: 1px solid transparent;");
