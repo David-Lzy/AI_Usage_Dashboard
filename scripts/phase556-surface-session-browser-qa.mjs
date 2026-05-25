@@ -427,7 +427,11 @@ async function runProviderDetailRoundTrip(context, baseUrl) {
   const fullPageSnapshot = await fullPage.evaluate(() => ({
     hash: window.location.hash,
     search: window.location.search,
-    bodyText: document.body?.innerText ?? "",
+    hasProviderDetailSurface: Boolean(
+      document.querySelector(
+        "[data-theme-stability-surface='provider-detail-sync-status-card']",
+      ),
+    ),
   }));
 
   assert(
@@ -447,7 +451,11 @@ async function runProviderDetailRoundTrip(context, baseUrl) {
   const sidebarReturnSnapshot = await sidebarReturnPage.evaluate(() => ({
     hash: window.location.hash,
     search: window.location.search,
-    bodyText: document.body?.innerText ?? "",
+    hasProviderDetailSurface: Boolean(
+      document.querySelector(
+        "[data-theme-stability-surface='provider-detail-sync-status-card']",
+      ),
+    ),
   }));
 
   assert(
