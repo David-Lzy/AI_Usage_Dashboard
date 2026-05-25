@@ -119,7 +119,8 @@ describe("ProgressAppearancePreferenceControls", () => {
     expect(html).toContain("海洋");
     expect(html).toContain("静蓝");
     expect(html).toContain("石青");
-    expect(html).toContain("自定义渐变");
+    expect(html).toContain("警示");
+    expect(html).not.toContain("自定义渐变");
     expect(html).toContain("从图片生成");
     expect(html).toContain('accept="image/png,image/jpeg,image/webp"');
     expect(html).toContain("--progress-gradient-track");
@@ -245,12 +246,14 @@ describe("ProgressAppearancePreferenceControls", () => {
     expect(settingsAppearanceCss).toContain(
       ".progress-gradient-scheme-dropdown--inline {",
     );
+    expect(settingsAppearanceCss).toContain("min-height: 40px;");
     expect(settingsAppearanceCss).toContain(
       "var(--adaptive-dropdown-menu-choice-width)",
     );
     expect(settingsAppearanceCss).toContain(
       ".progress-gradient-editor__stop[data-draggable=\"true\"] {",
     );
+    expect(settingsAppearanceCss).toContain("top: 16px;");
     expect(settingsAppearanceCss).toContain("cursor: grabbing;");
     expect(settingsAppearanceCss).toContain(
       "background: var(--progress-gradient-stop-color);",

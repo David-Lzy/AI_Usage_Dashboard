@@ -382,11 +382,7 @@ export function ProgressGradientSchemeDropdown({
     >
       <span
         id={labelId}
-        className={`form-field__label${
-          layout === "inline"
-            ? " progress-gradient-scheme-dropdown__label--hidden"
-            : ""
-        }`}
+        className="form-field__label"
       >
         {label}
       </span>

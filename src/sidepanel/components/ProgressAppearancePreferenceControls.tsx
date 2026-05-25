@@ -312,7 +312,7 @@ export function ProgressAppearancePreferenceControls({
     ? copy.gradient.presetNames[matchedGradientPresetId]
     : gradientSchemeSource === "image"
       ? copy.gradient.imageGeneratedSchemeLabel
-      : copy.gradient.customSchemeLabel;
+      : copy.gradient.presetNames.warning;
   const gradientTrackStyle = {
     "--progress-gradient-track": buildGradientTrackBackground(gradientStops),
   } as CSSProperties & {

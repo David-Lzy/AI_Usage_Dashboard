@@ -685,6 +685,7 @@
 
 .progress-gradient-editor__summary {
   flex: 1 1 28rem;
+  align-items: center;
 }
 
 .progress-gradient-editor__summary-title {
@@ -838,20 +839,30 @@
 }
 
 .progress-gradient-scheme-dropdown--inline {
-  gap: 0;
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: center;
+  column-gap: var(--app-space-2);
+  row-gap: 0;
 }
 
-.progress-gradient-scheme-dropdown__label--hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  border: 0;
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  overflow: hidden;
+.progress-gradient-scheme-dropdown--inline > .form-field__label {
   white-space: nowrap;
+}
+
+.progress-gradient-scheme-dropdown--inline
+  .progress-gradient-scheme-dropdown__button {
+  grid-template-columns: minmax(92px, 1fr) max-content 34px;
+  min-height: 40px;
+  padding-inline-start: var(--app-space-2);
+  border-radius: var(--md-sys-shape-corner-medium);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  line-height: var(--md-sys-typescale-body-medium-line-height);
+}
+
+.progress-gradient-scheme-dropdown--inline
+  .progress-gradient-scheme-dropdown__value-preview {
+  height: 10px;
 }
 
 .progress-gradient-scheme-dropdown__button {
@@ -1011,11 +1022,11 @@
 
 .progress-gradient-scheme-dropdown__option {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  align-items: start;
-  gap: var(--app-space-1);
-  min-height: 52px;
-  padding: var(--app-space-2);
+  grid-template-columns: minmax(88px, 1fr) max-content;
+  align-items: center;
+  gap: var(--app-space-2);
+  min-height: 40px;
+  padding: 0 var(--app-space-2);
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--md-sys-shape-corner-medium);
   background: var(--md-sys-color-surface-container-lowest);
@@ -1034,12 +1045,13 @@
 
 .progress-gradient-scheme-dropdown__measure-choice {
   display: inline-grid;
-  grid-template-columns: max-content;
-  gap: var(--app-space-1);
+  grid-template-columns: 112px max-content;
+  align-items: center;
+  gap: var(--app-space-2);
   inline-size: max-content;
   min-inline-size: 132px;
-  min-height: 52px;
-  padding: var(--app-space-2);
+  min-height: 40px;
+  padding: 0 var(--app-space-2);
   border-color: transparent;
   cursor: default;
   white-space: nowrap;
@@ -1127,7 +1139,7 @@
 .progress-gradient-editor__stop {
   position: absolute;
   z-index: 1;
-  top: 6px;
+  top: 16px;
   width: 34px;
   height: 42px;
   border: 0;
