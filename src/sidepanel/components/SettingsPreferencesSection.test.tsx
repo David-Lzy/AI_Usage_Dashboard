@@ -98,8 +98,7 @@ describe("SettingsPreferencesSection", () => {
     expect(html).not.toContain("settings-preferences__field-with-helper");
     expect(html).not.toContain("settings-preferences__inline-helper");
     expect(html).toContain('data-action-badge-selection-controls=""');
-    expect(html).toContain('data-action-badge-mode-switch=""');
-    expect(html).toContain("Badge selection mode");
+    expect(html).not.toContain('data-action-badge-mode-switch=""');
     expect(html).toContain(
       "Automatic mode shows attention count until provider quota badges are available",
     );
@@ -134,15 +133,14 @@ describe("SettingsPreferencesSection", () => {
     expect(html).not.toContain('class="theme-customization-form"');
   });
 
-  it("moves badge auto/manual mode into the badge selector label row", () => {
+  it("renders badge selection mode as a closed dropdown setting", () => {
     const autoHtml = renderPreferencesSection({
       ...SAMPLE_APP_STATE.settings,
       actionBadgeSelectionMode: "auto",
     });
 
     expect(autoHtml).toContain('data-action-badge-selection-mode="auto"');
-    expect(autoHtml).toContain("Automatic");
-    expect(autoHtml).toContain('aria-pressed="true"');
+    expect(autoHtml).not.toContain('data-action-badge-mode-switch=""');
     expect(autoHtml).toContain('aria-readonly="true"');
     expect(autoHtml).not.toContain("Restore automatic");
 
@@ -152,8 +150,7 @@ describe("SettingsPreferencesSection", () => {
     });
 
     expect(manualHtml).toContain('data-action-badge-selection-mode="manual"');
-    expect(manualHtml).toContain("Manual");
-    expect(manualHtml).toContain('aria-pressed="false"');
+    expect(manualHtml).not.toContain('data-action-badge-mode-switch=""');
     expect(manualHtml).toContain('aria-readonly="false"');
   });
 

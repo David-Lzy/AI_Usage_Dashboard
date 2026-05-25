@@ -1,18 +1,25 @@
 import {
   useEffect,
   useId,
+  useMemo,
   useRef,
   useState,
+  type CSSProperties,
   type FocusEvent,
   type KeyboardEvent,
   type ReactNode,
 } from "react";
+import { createPortal } from "react-dom";
 
 import type {
   ActionBadgeSelection,
   ActionBadgeSelectionMode,
 } from "../../providers/types";
 import { ACTION_BADGE_ATTENTION_SELECTION } from "../../shared/action-badge-preferences";
+import {
+  resolveFloatingMenuPosition,
+  type FloatingMenuPosition,
+} from "../floating-menu-position";
 import type { MaterialSelectOption } from "./MaterialSelect";
 
 type ActionBadgeSelectionControlsProps = {
@@ -27,6 +34,21 @@ type ActionBadgeSelectionControlsProps = {
   onSelectionModeChange: (mode: ActionBadgeSelectionMode) => void;
   onSelectionsChange: (selections: ActionBadgeSelection[]) => void;
 };
+
+type ActionBadgeSelectionOptionGroup = {
+  id: string;
+  label: string;
+  options: Array<MaterialSelectOption<ActionBadgeSelection>>;
+};
+
+type ActionBadgeSelectionOptionGroups = {
+  attentionOptions: Array<MaterialSelectOption<ActionBadgeSelection>>;
+  providerGroups: ActionBadgeSelectionOptionGroup[];
+  fallbackOptions: Array<MaterialSelectOption<ActionBadgeSelection>>;
+};
+
+const ACTION_BADGE_LABEL_SEPARATOR = " · ";
+const QUOTA_ACTION_BADGE_SELECTION_PREFIX = "quota:";
 
 export function getActionBadgeSelectionSummary(
   options: Array<MaterialSelectOption<ActionBadgeSelection>>,
@@ -51,6 +73,93 @@ export function getActionBadgeSelectionSummary(
   }`;
 }
 
+function formatActionBadgeProviderIdLabel(value: ActionBadgeSelection): string {
+  if (!value.startsWith(QUOTA_ACTION_BADGE_SELECTION_PREFIX)) {
+    return "";
+  }
+
+  const providerId = value
+    .slice(QUOTA_ACTION_BADGE_SELECTION_PREFIX.length)
+    .split(":")[0];
+
+  if (!providerId) {
+    return "";
+  }
+
+  return providerId
+    .split(/[-_]/)
+    .filter(Boolean)
+    .map((part) => `${part.charAt(0).toUpperCase()}${part.slice(1)}`)
+    .join(" ");
+}
+
+export function getActionBadgeSelectionOptionDisplayLabel(
+  option: MaterialSelectOption<ActionBadgeSelection>,
+): string {
+  if (!option.value.startsWith(QUOTA_ACTION_BADGE_SELECTION_PREFIX)) {
+    return option.label;
+  }
+
+  const labelParts = option.label
+    .split(ACTION_BADGE_LABEL_SEPARATOR)
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+  return labelParts.length > 1
+    ? labelParts.slice(1).join(ACTION_BADGE_LABEL_SEPARATOR)
+    : option.label;
+}
+
+export function groupActionBadgeSelectionOptions(
+  options: Array<MaterialSelectOption<ActionBadgeSelection>>,
+): ActionBadgeSelectionOptionGroups {
+  const attentionOptions: Array<MaterialSelectOption<ActionBadgeSelection>> = [];
+  const providerGroups: ActionBadgeSelectionOptionGroup[] = [];
+  const fallbackOptions: Array<MaterialSelectOption<ActionBadgeSelection>> = [];
+  const providerGroupByLabel = new Map<string, ActionBadgeSelectionOptionGroup>();
+
+  for (const option of options) {
+    if (option.value === ACTION_BADGE_ATTENTION_SELECTION) {
+      attentionOptions.push(option);
+      continue;
+    }
+
+    if (!option.value.startsWith(QUOTA_ACTION_BADGE_SELECTION_PREFIX)) {
+      fallbackOptions.push(option);
+      continue;
+    }
+
+    const providerLabelFromOption = option.label
+      .split(ACTION_BADGE_LABEL_SEPARATOR)[0]
+      ?.trim();
+    const providerLabel =
+      providerLabelFromOption || formatActionBadgeProviderIdLabel(option.value);
+
+    if (!providerLabel) {
+      fallbackOptions.push(option);
+      continue;
+    }
+
+    const existingGroup = providerGroupByLabel.get(providerLabel);
+
+    if (existingGroup) {
+      existingGroup.options.push(option);
+      continue;
+    }
+
+    const nextGroup: ActionBadgeSelectionOptionGroup = {
+      id: `provider-${providerGroups.length}-${providerLabel}`,
+      label: providerLabel,
+      options: [option],
+    };
+
+    providerGroupByLabel.set(providerLabel, nextGroup);
+    providerGroups.push(nextGroup);
+  }
+
+  return { attentionOptions, providerGroups, fallbackOptions };
+}
+
 export function ActionBadgeSelectionControls({
   label,
   options,
@@ -66,12 +175,19 @@ export function ActionBadgeSelectionControls({
   const generatedId = useId();
   const rootRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
   const fieldId = `action-badge-selection-${generatedId}`;
   const labelId = `${fieldId}-label`;
   const listboxId = `${fieldId}-listbox`;
   const [isOpen, setIsOpen] = useState(false);
+  const [menuPosition, setMenuPosition] =
+    useState<FloatingMenuPosition | null>(null);
   const selectedValueSet = new Set(selectedValues);
   const isAutomaticMode = selectionMode === "auto";
+  const optionGroups = useMemo(
+    () => groupActionBadgeSelectionOptions(options),
+    [options],
+  );
   const selectionSummary = getActionBadgeSelectionSummary(
     options,
     selectedValues,
@@ -86,7 +202,10 @@ export function ActionBadgeSelectionControls({
     function handlePointerDown(event: PointerEvent) {
       const target = event.target;
 
-      if (target instanceof Node && rootRef.current?.contains(target)) {
+      if (
+        target instanceof Node &&
+        (rootRef.current?.contains(target) || menuRef.current?.contains(target))
+      ) {
         return;
       }
 
@@ -97,6 +216,75 @@ export function ActionBadgeSelectionControls({
 
     return () => {
       document.removeEventListener("pointerdown", handlePointerDown);
+    };
+  }, [isOpen]);
+
+  function updateMenuPosition() {
+    if (typeof window === "undefined" || typeof document === "undefined") {
+      return;
+    }
+
+    const anchor = buttonRef.current;
+
+    if (!anchor) {
+      return;
+    }
+
+    const direction =
+      document.documentElement.dataset.appDirection === "rtl" ||
+      document.documentElement.dir === "rtl"
+        ? "end"
+        : "start";
+
+    setMenuPosition(
+      resolveFloatingMenuPosition(
+        anchor.getBoundingClientRect(),
+        {
+          width: window.innerWidth,
+          height: window.innerHeight,
+        },
+        {
+          align: direction,
+          minHeight: 180,
+          preferredMaxHeight: 460,
+          preferredWidth: 520,
+        },
+      ),
+    );
+  }
+
+  function closeMenu() {
+    setIsOpen(false);
+  }
+
+  function openMenu() {
+    updateMenuPosition();
+    setIsOpen(true);
+  }
+
+  useEffect(() => {
+    if (!isOpen || typeof window === "undefined") {
+      return undefined;
+    }
+
+    updateMenuPosition();
+
+    window.addEventListener("resize", updateMenuPosition);
+    window.addEventListener("scroll", updateMenuPosition, true);
+
+    const resizeObserver =
+      typeof ResizeObserver === "undefined"
+        ? null
+        : new ResizeObserver(updateMenuPosition);
+
+    if (buttonRef.current) {
+      resizeObserver?.observe(buttonRef.current);
+    }
+
+    return () => {
+      window.removeEventListener("resize", updateMenuPosition);
+      window.removeEventListener("scroll", updateMenuPosition, true);
+      resizeObserver?.disconnect();
     };
   }, [isOpen]);
 
@@ -116,17 +304,18 @@ export function ActionBadgeSelectionControls({
     );
   }
 
-  function handleRootBlur(event: FocusEvent<HTMLDivElement>) {
+  function handleControlBlur(event: FocusEvent<HTMLElement>) {
     const nextFocusedElement = event.relatedTarget;
 
     if (
       nextFocusedElement instanceof Node &&
-      event.currentTarget.contains(nextFocusedElement)
+      (rootRef.current?.contains(nextFocusedElement) ||
+        menuRef.current?.contains(nextFocusedElement))
     ) {
       return;
     }
 
-    setIsOpen(false);
+    closeMenu();
   }
 
   function handleButtonKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
@@ -135,17 +324,27 @@ export function ActionBadgeSelectionControls({
       case "Enter":
       case " ":
         event.preventDefault();
-        setIsOpen(true);
+        openMenu();
         break;
       case "Escape":
         if (isOpen) {
           event.preventDefault();
-          setIsOpen(false);
+          closeMenu();
         }
         break;
       default:
         break;
     }
+  }
+
+  function handleMenuKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    if (event.key !== "Escape") {
+      return;
+    }
+
+    event.preventDefault();
+    closeMenu();
+    buttonRef.current?.focus();
   }
 
   function handleSelectionModeChange(nextMode: ActionBadgeSelectionMode) {
@@ -156,17 +355,75 @@ export function ActionBadgeSelectionControls({
     onSelectionModeChange(nextMode);
   }
 
-  return (
+  function handleButtonClick() {
+    if (isOpen) {
+      closeMenu();
+      return;
+    }
+
+    openMenu();
+  }
+
+  function renderOption(
+    option: MaterialSelectOption<ActionBadgeSelection>,
+    extraClassName = "",
+  ) {
+    const isSelected = selectedValueSet.has(option.value);
+    const displayLabel = getActionBadgeSelectionOptionDisplayLabel(option);
+    const optionClassName = [
+      "action-badge-selection-controls__menu-option",
+      "material-select__option",
+      extraClassName,
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+    return (
+      <label
+        key={option.value}
+        className={optionClassName}
+        role="option"
+        aria-selected={isSelected}
+        data-selected={isSelected ? "true" : "false"}
+        data-readonly={isAutomaticMode ? "true" : "false"}
+        title={option.label}
+      >
+        <input
+          className="action-badge-selection-controls__checkbox"
+          type="checkbox"
+          checked={isSelected}
+          disabled={isAutomaticMode}
+          onChange={() => handleToggleSelection(option.value)}
+        />
+        <span className="action-badge-selection-controls__option-label">
+          {displayLabel}
+        </span>
+      </label>
+    );
+  }
+
+  const menuStyle: CSSProperties | undefined = menuPosition
+    ? {
+        left: `${menuPosition.left}px`,
+        top: `${menuPosition.top}px`,
+        width: `${menuPosition.width}px`,
+        maxHeight: `${menuPosition.maxHeight}px`,
+      }
+    : undefined;
+  const menu = isOpen ? (
     <div
-      ref={rootRef}
-      className="form-field action-badge-selection-controls"
-      data-action-badge-selection-controls=""
-      data-action-badge-selection-mode={selectionMode}
-      onBlur={handleRootBlur}
+      ref={menuRef}
+      className="action-badge-selection-controls__menu material-select__menu material-select__menu--floating"
+      aria-labelledby={labelId}
+      data-placement={menuPosition?.placement ?? "below"}
+      data-readonly={isAutomaticMode ? "true" : "false"}
+      style={menuStyle}
+      onBlur={handleControlBlur}
+      onKeyDown={handleMenuKeyDown}
     >
-      <span className="form-field__label-row action-badge-selection-controls__label-row">
-        <span id={labelId} className="form-field__label">
-          {label}
+      <div className="action-badge-selection-controls__menu-header">
+        <span className="action-badge-selection-controls__menu-mode-label">
+          {selectionModeLabel}
         </span>
         <span
           className="action-badge-selection-controls__mode-switch"
@@ -193,6 +450,54 @@ export function ActionBadgeSelectionControls({
             {manualLabel}
           </button>
         </span>
+      </div>
+      <div
+        id={listboxId}
+        className="action-badge-selection-controls__menu-body"
+        role="listbox"
+        aria-multiselectable="true"
+        aria-readonly={isAutomaticMode}
+        aria-labelledby={labelId}
+        data-readonly={isAutomaticMode ? "true" : "false"}
+      >
+        {optionGroups.attentionOptions.map((option) =>
+          renderOption(
+            option,
+            "action-badge-selection-controls__menu-option--attention",
+          ),
+        )}
+        {optionGroups.providerGroups.map((group) => (
+          <section
+            key={group.id}
+            className="action-badge-selection-controls__provider-group"
+            role="group"
+            aria-label={group.label}
+          >
+            <p className="action-badge-selection-controls__provider-label">
+              {group.label}
+            </p>
+            <div className="action-badge-selection-controls__provider-options">
+              {group.options.map((option) => renderOption(option))}
+            </div>
+          </section>
+        ))}
+        {optionGroups.fallbackOptions.map((option) => renderOption(option))}
+      </div>
+    </div>
+  ) : null;
+
+  return (
+    <div
+      ref={rootRef}
+      className="form-field action-badge-selection-controls"
+      data-action-badge-selection-controls=""
+      data-action-badge-selection-mode={selectionMode}
+      onBlur={handleControlBlur}
+    >
+      <span className="form-field__label-row action-badge-selection-controls__label-row">
+        <span id={labelId} className="form-field__label">
+          {label}
+        </span>
         {labelAccessory}
       </span>
       <div className="action-badge-selection-controls__dropdown">
@@ -209,47 +514,15 @@ export function ActionBadgeSelectionControls({
           aria-labelledby={`${labelId} ${fieldId}`}
           data-open={isOpen ? "true" : "false"}
           data-readonly={isAutomaticMode ? "true" : "false"}
-          onClick={() => setIsOpen((current) => !current)}
+          onClick={handleButtonClick}
           onKeyDown={handleButtonKeyDown}
         >
           <span className="material-select__value">{selectionSummary}</span>
           <span className="material-select__menu-icon" aria-hidden="true" />
         </button>
-        {isOpen ? (
-          <div
-            id={listboxId}
-            className="action-badge-selection-controls__menu material-select__menu"
-            role="listbox"
-            aria-multiselectable="true"
-            aria-readonly={isAutomaticMode}
-            aria-labelledby={labelId}
-            data-readonly={isAutomaticMode ? "true" : "false"}
-          >
-            {options.map((option) => {
-              const isSelected = selectedValueSet.has(option.value);
-
-              return (
-                <label
-                  key={option.value}
-                  className="action-badge-selection-controls__menu-option material-select__option"
-                  role="option"
-                  aria-selected={isSelected}
-                  data-selected={isSelected ? "true" : "false"}
-                  data-readonly={isAutomaticMode ? "true" : "false"}
-                >
-                  <input
-                    className="action-badge-selection-controls__checkbox"
-                    type="checkbox"
-                    checked={isSelected}
-                    disabled={isAutomaticMode}
-                    onChange={() => handleToggleSelection(option.value)}
-                  />
-                  <span>{option.label}</span>
-                </label>
-              );
-            })}
-          </div>
-        ) : null}
+        {menu && typeof document !== "undefined"
+          ? createPortal(menu, document.body)
+          : menu}
       </div>
     </div>
   );
