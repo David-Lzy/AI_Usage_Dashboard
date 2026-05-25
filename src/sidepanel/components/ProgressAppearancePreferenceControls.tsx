@@ -219,6 +219,33 @@ function buildGradientTrackBackground(
     .join(", ")})`;
 }
 
+export const PROGRESS_GRADIENT_STOP_CREATION_MIN_DISTANCE_PERCENT = 5;
+export const PROGRESS_GRADIENT_STOP_CREATION_MIN_DISTANCE_PX = 16;
+
+export function shouldSkipGradientStopCreation({
+  positionPercent,
+  stops,
+  trackWidthPx,
+}: {
+  positionPercent: number;
+  stops: readonly ProgressGradientStop[];
+  trackWidthPx: number;
+}): boolean {
+  const pixelThresholdPercent =
+    trackWidthPx > 0
+      ? (PROGRESS_GRADIENT_STOP_CREATION_MIN_DISTANCE_PX / trackWidthPx) * 100
+      : 0;
+  const thresholdPercent = Math.max(
+    PROGRESS_GRADIENT_STOP_CREATION_MIN_DISTANCE_PERCENT,
+    pixelThresholdPercent,
+  );
+
+  return stops.some(
+    (stop) =>
+      Math.abs(stop.positionPercent - positionPercent) < thresholdPercent,
+  );
+}
+
 export function ProgressAppearancePreferenceControls({
   colorAppearance,
   colorBands,
@@ -454,7 +481,7 @@ export function ProgressAppearancePreferenceControls({
 
     try {
       const stops = await createProgressGradientStopsFromImageFile(file);
-    commitGradientStops(stops, stops[0]?.id ?? null, "image");
+      commitGradientStops(stops, stops[0]?.id ?? null, "image");
     } catch (error) {
       setImageImportError(getImageImportErrorMessage(error));
     } finally {
@@ -519,8 +546,20 @@ export function ProgressAppearancePreferenceControls({
     }
 
     const rawPosition = ((event.clientX - rect.left) / rect.width) * 100;
+    const boundedPosition = Math.min(100, Math.max(0, rawPosition));
+
+    if (
+      shouldSkipGradientStopCreation({
+        positionPercent: boundedPosition,
+        stops: gradientStops,
+        trackWidthPx: rect.width,
+      })
+    ) {
+      return;
+    }
+
     const positionPercent = findAvailableGradientStopPosition(
-      rawPosition,
+      boundedPosition,
       gradientStops,
     );
     const colorHex =
@@ -898,58 +937,64 @@ export function ProgressAppearancePreferenceControls({
                 className="progress-gradient-editor__track"
                 role="presentation"
                 title={copy.gradient.trackHelp}
-                style={gradientTrackStyle}
-                onClick={addGradientStop}
               >
                 <div
-                  className="progress-gradient-editor__ticks"
-                  aria-hidden="true"
+                  className="progress-gradient-editor__rail"
+                  style={gradientTrackStyle}
+                  onClick={addGradientStop}
                 >
-                  {[0, 25, 50, 75, 100].map((tick) => (
-                    <span
-                      key={tick}
-                      className="progress-gradient-editor__tick"
-                      style={{ left: `${tick}%` }}
-                    />
-                  ))}
-                </div>
-                {gradientStops.map((stop, index) => {
-                  const isSelected = selectedGradientStop?.id === stop.id;
+                  <div
+                    className="progress-gradient-editor__ticks"
+                    aria-hidden="true"
+                  >
+                    {[0, 25, 50, 75, 100].map((tick) => (
+                      <span
+                        key={tick}
+                        className="progress-gradient-editor__tick"
+                        style={{ left: `${tick}%` }}
+                      />
+                    ))}
+                  </div>
+                  {gradientStops.map((stop, index) => {
+                    const isSelected = selectedGradientStop?.id === stop.id;
 
-                  return (
-                    <button
-                      key={stop.id}
-                      className="progress-gradient-editor__stop"
-                      type="button"
-                      role="slider"
-                      aria-label={copy.gradient.stopAriaLabel(
-                        index + 1,
-                        stop.positionPercent,
-                      )}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                      aria-valuenow={stop.positionPercent}
-                      aria-valuetext={`${stop.positionPercent}%`}
-                      data-progress-gradient-stop-handle=""
-                      data-selected={isSelected ? "true" : "false"}
-                      data-endpoint={
-                        isGradientEndpointStop(stop) ? "true" : "false"
-                      }
-                      title={copy.gradient.stopHelp}
-                      style={{
-                        left: `${stop.positionPercent}%`,
-                        backgroundColor: stop.colorHex,
-                      }}
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        setSelectedGradientStopId(stop.id);
-                      }}
-                      onKeyDown={(event) =>
-                        handleGradientStopKeyDown(event, stop)
-                      }
-                    />
-                  );
-                })}
+                    return (
+                      <button
+                        key={stop.id}
+                        className="progress-gradient-editor__stop"
+                        type="button"
+                        role="slider"
+                        aria-label={copy.gradient.stopAriaLabel(
+                          index + 1,
+                          stop.positionPercent,
+                        )}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                        aria-valuenow={stop.positionPercent}
+                        aria-valuetext={`${stop.positionPercent}%`}
+                        data-progress-gradient-stop-handle=""
+                        data-selected={isSelected ? "true" : "false"}
+                        data-endpoint={
+                          isGradientEndpointStop(stop) ? "true" : "false"
+                        }
+                        title={copy.gradient.stopHelp}
+                        style={{
+                          left: `${stop.positionPercent}%`,
+                          "--progress-gradient-stop-color": stop.colorHex,
+                        } as CSSProperties & {
+                          "--progress-gradient-stop-color": string;
+                        }}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          setSelectedGradientStopId(stop.id);
+                        }}
+                        onKeyDown={(event) =>
+                          handleGradientStopKeyDown(event, stop)
+                        }
+                      />
+                    );
+                  })}
+                </div>
               </div>
 
               {selectedGradientStop ? (

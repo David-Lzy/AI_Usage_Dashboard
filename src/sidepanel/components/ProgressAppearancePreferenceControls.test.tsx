@@ -10,7 +10,10 @@ import {
   createDefaultProgressColorAppearance,
   createDefaultProgressColorBands,
 } from "../../shared/progress-appearance";
-import { ProgressAppearancePreferenceControls } from "./ProgressAppearancePreferenceControls";
+import {
+  ProgressAppearancePreferenceControls,
+  shouldSkipGradientStopCreation,
+} from "./ProgressAppearancePreferenceControls";
 
 const settingsAppearanceCss = readFileSync(
   new URL("../theme/settings-appearance.css", import.meta.url),
@@ -153,6 +156,64 @@ describe("ProgressAppearancePreferenceControls", () => {
       "grid-template-columns: minmax(112px, 132px) minmax(160px, 1fr) auto;",
     );
     expect(settingsAppearanceCss).toContain("min-inline-size: 7.5rem;");
+  });
+
+  it("suppresses new gradient stops close to existing stops", () => {
+    const stops = [
+      {
+        id: "empty",
+        positionPercent: 0,
+        colorHex: "#B3261E",
+      },
+      {
+        id: "middle",
+        positionPercent: 50,
+        colorHex: "#8A4B00",
+      },
+      {
+        id: "full",
+        positionPercent: 100,
+        colorHex: "#146C2E",
+      },
+    ];
+
+    expect(
+      shouldSkipGradientStopCreation({
+        positionPercent: 54.9,
+        stops,
+        trackWidthPx: 400,
+      }),
+    ).toBe(true);
+    expect(
+      shouldSkipGradientStopCreation({
+        positionPercent: 56,
+        stops,
+        trackWidthPx: 400,
+      }),
+    ).toBe(false);
+    expect(
+      shouldSkipGradientStopCreation({
+        positionPercent: 12,
+        stops,
+        trackWidthPx: 120,
+      }),
+    ).toBe(true);
+  });
+
+  it("keeps the gradient track inset and stop marker label-shaped", () => {
+    expect(settingsAppearanceCss).toContain(
+      "--progress-gradient-track-padding-inline: var(--app-space-3);",
+    );
+    expect(settingsAppearanceCss).toContain(
+      ".progress-gradient-editor__rail {",
+    );
+    expect(settingsAppearanceCss).toContain(
+      "clip-path: polygon(0 0, 72% 0, 100% 50%, 72% 100%, 0 100%);",
+    );
+    expect(settingsAppearanceCss).toContain("transform: rotate(90deg);");
+    expect(settingsAppearanceCss).toContain(
+      "background: var(--progress-gradient-stop-color);",
+    );
   });
 
   it("centers the UI settings toggle label with its icon", () => {

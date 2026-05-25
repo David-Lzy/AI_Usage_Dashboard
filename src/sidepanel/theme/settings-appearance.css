@@ -1015,12 +1015,18 @@
 
 .progress-gradient-editor__track {
   position: relative;
+  --progress-gradient-track-padding-inline: var(--app-space-3);
+  padding-inline: var(--progress-gradient-track-padding-inline);
+}
+
+.progress-gradient-editor__rail {
+  position: relative;
   min-height: 64px;
   padding-block: 24px 18px;
   cursor: copy;
 }
 
-.progress-gradient-editor__track::before {
+.progress-gradient-editor__rail::before {
   position: absolute;
   inset: 24px 0 auto;
   height: 18px;
@@ -1050,32 +1056,41 @@
 
 .progress-gradient-editor__stop {
   position: absolute;
-  top: 14px;
-  width: 24px;
-  height: 36px;
-  border: 2px solid var(--md-sys-color-surface-container-lowest);
-  border-radius: var(--md-sys-shape-corner-small);
-  box-shadow:
-    0 0 0 1px var(--md-sys-color-outline),
-    var(--app-elevation-1);
+  top: 16px;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  background: transparent;
   cursor: pointer;
   transform: translateX(-50%);
 }
 
-.progress-gradient-editor__stop::after {
+.progress-gradient-editor__stop::before {
   position: absolute;
-  inset-inline: 6px;
-  bottom: -7px;
-  height: 10px;
-  border-inline: 2px solid var(--md-sys-color-surface-container-lowest);
-  border-bottom: 2px solid var(--md-sys-color-surface-container-lowest);
-  background: inherit;
-  box-shadow: 0 1px 0 var(--md-sys-color-outline);
+  inset: 4px;
+  border: 2px solid var(--md-sys-color-surface-container-lowest);
+  border-radius: 7px 4px 4px 7px;
+  background: var(--progress-gradient-stop-color);
+  box-shadow:
+    0 0 0 1px var(--md-sys-color-outline),
+    var(--app-elevation-1);
+  clip-path: polygon(0 0, 72% 0, 100% 50%, 72% 100%, 0 100%);
   content: "";
-  transform: rotate(45deg);
+  transform: rotate(90deg);
 }
 
-.progress-gradient-editor__stop[data-selected="true"] {
+.progress-gradient-editor__stop::after {
+  position: absolute;
+  top: 14px;
+  left: 13px;
+  width: 5px;
+  height: 5px;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--md-sys-color-surface-container-lowest);
+  content: "";
+}
+
+.progress-gradient-editor__stop[data-selected="true"]::before {
   box-shadow:
     0 0 0 3px var(--md-sys-color-primary),
     var(--app-elevation-2);
@@ -1083,14 +1098,17 @@
 
 .progress-gradient-editor__stop:focus-visible {
   outline: 0;
+}
+
+.progress-gradient-editor__stop:focus-visible::before {
   box-shadow:
     var(--app-focus-ring-shadow),
     0 0 0 3px var(--md-sys-color-primary),
     var(--app-elevation-2);
 }
 
-.progress-gradient-editor__stop[data-endpoint="true"] {
-  border-radius: var(--md-sys-shape-corner-extra-small);
+.progress-gradient-editor__stop[data-endpoint="true"]::before {
+  border-radius: 6px 4px 4px 6px;
 }
 
 .progress-gradient-editor__selected {
