@@ -13,6 +13,7 @@ import type {
 import type { RuntimeI18n } from "../../shared/i18n";
 import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import type { SettingsActivePopoverSessionState } from "../../shared/surface-session-state";
+import { MaterialIcon } from "./MaterialIcon";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 import { MaterialSelect, type MaterialSelectOption } from "./MaterialSelect";
 import { ProgressAppearancePreferenceControls } from "./ProgressAppearancePreferenceControls";
@@ -186,7 +187,11 @@ export function SettingsUiMoreSection({
           <span
             className="settings-preferences__more-toggle-icon"
             aria-hidden="true"
-          />
+          >
+            <MaterialIcon
+              name={uiMoreOpen ? "keyboard-arrow-up" : "keyboard-arrow-down"}
+            />
+          </span>
         </button>
         <button
           className="text-button text-button--outlined settings-preferences__test-popup-button"

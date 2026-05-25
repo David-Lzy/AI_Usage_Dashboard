@@ -113,6 +113,7 @@ describe("SettingsPreferencesSection", () => {
     expect(html).toContain(">More UI settings<");
     expect(html).toContain('class="settings-preferences__more-toggle"');
     expect(html).toContain("settings-preferences__more-toggle-icon");
+    expect(html).toContain('data-material-icon="keyboard-arrow-down"');
     expect(html).not.toContain(
       'class="source-card__details-toggle settings-preferences__more-toggle"',
     );
@@ -167,6 +168,7 @@ describe("SettingsPreferencesSection", () => {
 
     expect(html).toContain(">Collapse UI settings<");
     expect(html).toContain("settings-preferences__more-toggle-icon");
+    expect(html).toContain('data-material-icon="keyboard-arrow-up"');
     expect(html).toContain('data-settings-material-select="popup-circular-row-count"');
     expect(html).toContain('data-settings-material-select="ui-font-family"');
     expect(html).toContain("Circular items per row");

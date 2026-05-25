@@ -77,19 +77,17 @@
 }
 
 .settings-preferences__more-toggle-icon {
-  width: 10px;
-  height: 10px;
-  flex: 0 0 auto;
-  border-inline-end: 2px solid currentColor;
-  border-block-end: 2px solid currentColor;
-  transform: rotate(45deg);
-  transition: transform var(--app-motion-duration-fast)
-    var(--app-motion-easing-standard);
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  line-height: 1;
 }
 
-.settings-preferences__more[data-open="true"]
-  .settings-preferences__more-toggle-icon {
-  transform: rotate(225deg);
+.settings-preferences__more-toggle-icon .material-icon {
+  width: 24px;
+  height: 24px;
 }
 
 .settings-preferences__more[data-open="true"] .source-card__details-body {
@@ -867,16 +865,6 @@
     grid-column: 1;
     justify-self: start;
   }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :root[data-motion-mode="system"] .settings-preferences__more-toggle-icon {
-    transition: none;
-  }
-}
-
-:root[data-motion-mode="reduced"] .settings-preferences__more-toggle-icon {
-  transition: none;
 }
 
 .sr-only {
