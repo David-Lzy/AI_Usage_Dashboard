@@ -13,6 +13,7 @@ import type {
 import type { RuntimeI18n } from "../../shared/i18n";
 import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import type { SettingsActivePopoverSessionState } from "../../shared/surface-session-state";
+import { AdaptiveControlGrid } from "./AdaptiveControlGrid";
 import { MaterialIcon } from "./MaterialIcon";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 import { MaterialSelect, type MaterialSelectOption } from "./MaterialSelect";
@@ -162,6 +163,14 @@ export function SettingsUiMoreSection({
     toolbarPopupPreviewOpen && uiMoreOpen && !canUseFloatingPreview;
   const shouldRenderFloatingPreview =
     toolbarPopupPreviewOpen && canUseFloatingPreview;
+  const uiMoreMeasurementLabels = [
+    ...progressDisplayStyleOptions.map((option) => option.label),
+    ...popupCircularProgressItemsPerRowOptions.map((option) => option.label),
+    ...popupSizePresetOptions.map((option) => option.label),
+    ...popupCornerStyleOptions.map((option) => option.label),
+    ...popupShadowStyleOptions.map((option) => option.label),
+    ...uiFontFamilyOptions.map((option) => option.label),
+  ];
 
   return (
     <div
@@ -223,7 +232,10 @@ export function SettingsUiMoreSection({
             />
           ) : null}
 
-          <div className="settings-grid settings-grid--balanced-settings">
+          <AdaptiveControlGrid
+            className="settings-grid settings-grid--balanced-settings"
+            measurementLabels={uiMoreMeasurementLabels}
+          >
             <MaterialSelect
               label={i18n.t("settings.preferences.popup_progress_style_label")}
               value={settings.popupProgressStyle}
@@ -330,7 +342,7 @@ export function SettingsUiMoreSection({
               }
               onChange={onUiFontFamilyChange}
             />
-          </div>
+          </AdaptiveControlGrid>
 
           <ProgressAppearancePreferenceControls
             copy={settingsCopy.progressAppearance}

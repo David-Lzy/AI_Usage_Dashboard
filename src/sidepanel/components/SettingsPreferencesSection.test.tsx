@@ -82,7 +82,10 @@ describe("SettingsPreferencesSection", () => {
     const html = renderPreferencesSection();
 
     expect(html).toContain(`id="${SETTINGS_SECTION_IDS.appearance}"`);
-    expect(html).toContain('class="settings-grid settings-grid--balanced-settings"');
+    expect(html).toContain(
+      'class="adaptive-control-grid settings-grid settings-grid--balanced-settings"',
+    );
+    expect(html).toContain('data-adaptive-control-grid=""');
     expect(html).toContain('data-settings-custom-number-field="sync-interval"');
     expect(html).toContain('data-settings-custom-number-field="warning-threshold"');
     expect(html).not.toContain('data-settings-material-select="locale-preference"');
@@ -167,6 +170,9 @@ describe("SettingsPreferencesSection", () => {
     });
 
     expect(html).toContain(">Collapse UI settings<");
+    expect(html).toContain(
+      'class="adaptive-control-grid settings-grid settings-grid--balanced-settings"',
+    );
     expect(html).toContain("settings-preferences__more-toggle-icon");
     expect(html).toContain('data-material-icon="keyboard-arrow-up"');
     expect(html).toContain('data-settings-material-select="popup-circular-row-count"');

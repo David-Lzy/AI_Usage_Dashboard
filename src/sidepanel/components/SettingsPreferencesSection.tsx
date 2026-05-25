@@ -29,6 +29,7 @@ import {
 import { buildSettingsPreferenceOptions } from "../settings-preference-options";
 import type { SettingsUserLevelVisibility } from "../settings-user-level-visibility";
 import type { SettingsPreferencesSurfaceSessionControls } from "../use-settings-surface-session-state";
+import { AdaptiveControlGrid } from "./AdaptiveControlGrid";
 import { ActionBadgeSelectionControls } from "./ActionBadgeSelectionControls";
 import { AccentColorSelect } from "./AccentColorSelect";
 import { ConfigurationBackupControls } from "./ConfigurationBackupControls";
@@ -177,6 +178,21 @@ export function SettingsPreferencesSection({
     }));
   const selectedToolbarIconProviderId =
     settings.toolbarIconProviderId ?? providers[0]?.id ?? null;
+  const actionBadgeMeasurementLabel =
+    actionBadgeOptions[0]?.label ??
+    i18n.t("settings.preferences.action_badge_label");
+  const basePreferenceMeasurementLabels = [
+    ...syncIntervalOptions.map((option) => option.label),
+    ...warningThresholdOptions.map((option) => option.label),
+    ...themePresetOptions.map((option) => option.label),
+    ...motionModeOptions.map((option) => option.label),
+    actionBadgeMeasurementLabel,
+    ...actionBadgeRotationIntervalOptions.map((option) => option.label),
+    ...toolbarIconModeOptions.map((option) => option.label),
+    ...(settings.toolbarIconMode === "provider"
+      ? toolbarIconProviderOptions.map((option) => option.label)
+      : []),
+  ];
 
   function handleToolbarIconCustomImageChange(
     event: ChangeEvent<HTMLInputElement>,
@@ -218,7 +234,10 @@ export function SettingsPreferencesSection({
   return (
     <section className="status-card settings-section-anchor" id={sectionId}>
       <p className="section-label">{i18n.t("settings.preferences.eyebrow")}</p>
-      <div className="settings-grid settings-grid--balanced-settings">
+      <AdaptiveControlGrid
+        className="settings-grid settings-grid--balanced-settings"
+        measurementLabels={basePreferenceMeasurementLabels}
+      >
         <EditableNumberCombobox
           label={i18n.t("settings.preferences.sync_interval_label")}
           value={settings.syncIntervalMinutes}
@@ -312,15 +331,15 @@ export function SettingsPreferencesSection({
         />
 
         <MaterialSelect
-            label={i18n.t("settings.preferences.toolbar_icon_label")}
-            value={settings.toolbarIconMode}
-            fieldIdPrefix="toolbar-icon-mode"
-            sessionPopoverId="toolbar-icon-mode"
-            activePopover={activePopover}
-            onActivePopoverChange={setActivePopover}
-            options={toolbarIconModeOptions}
-            onChange={onToolbarIconModeChange}
-          />
+          label={i18n.t("settings.preferences.toolbar_icon_label")}
+          value={settings.toolbarIconMode}
+          fieldIdPrefix="toolbar-icon-mode"
+          sessionPopoverId="toolbar-icon-mode"
+          activePopover={activePopover}
+          onActivePopoverChange={setActivePopover}
+          options={toolbarIconModeOptions}
+          onChange={onToolbarIconModeChange}
+        />
 
         {settings.toolbarIconMode === "provider" &&
         selectedToolbarIconProviderId ? (
@@ -370,7 +389,7 @@ export function SettingsPreferencesSection({
             </div>
           </div>
         ) : null}
-      </div>
+      </AdaptiveControlGrid>
 
       <ConfigurationBackupControls
         copy={settingsCopy.configurationBackup}

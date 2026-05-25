@@ -99,6 +99,13 @@ select.form-field__control {
   align-items: stretch;
 }
 
+.adaptive-control-grid.adaptive-control-grid {
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, var(--adaptive-control-min)), 1fr)
+  );
+}
+
 .adaptive-control-grid > :not(.adaptive-control-grid__measurer) {
   min-width: 0;
 }

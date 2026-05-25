@@ -52,10 +52,7 @@
 }
 
 .settings-overview__controls {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 168px), 1fr));
   align-items: start;
-  gap: var(--app-space-3);
 }
 
 .settings-overview__level-control {

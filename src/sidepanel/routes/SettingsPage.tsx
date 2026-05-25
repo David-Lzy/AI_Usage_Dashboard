@@ -32,6 +32,7 @@ import {
   SettingsCredentialsSection,
   SettingsOverviewSection,
 } from "../components/SettingsSections";
+import { AdaptiveControlGrid } from "../components/AdaptiveControlGrid";
 import { MaterialSelect } from "../components/MaterialSelect";
 import { SettingsQuickSetupSection } from "../components/SettingsQuickSetupSection";
 import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
@@ -311,6 +312,32 @@ export function SettingsPage({
     (index: number) => handleSettingsCarouselIndexChange("sources", index),
     [handleSettingsCarouselIndexChange],
   );
+  const userLevelOptions: Array<{
+    value: AppSettings["userLevel"];
+    label: string;
+  }> = [
+    {
+      value: "basic",
+      label: settingsCopy.layout.userLevel.options.basic,
+    },
+    {
+      value: "advanced",
+      label: settingsCopy.layout.userLevel.options.advanced,
+    },
+    {
+      value: "developer",
+      label: settingsCopy.layout.userLevel.options.developer,
+    },
+    {
+      value: "debug",
+      label: settingsCopy.layout.userLevel.options.debug,
+    },
+  ];
+  const overviewControlMeasurementLabels = [
+    ...userLevelOptions.map((option) => option.label),
+    ...localeOptions.map((option) => option.label),
+    ...themeModeOptions.map((option) => option.label),
+  ];
 
   return (
     <main className="app-shell settings-shell">
@@ -348,7 +375,10 @@ export function SettingsPage({
         items={settingsSummaryItems}
         title={settingsCopy.layout.overview.title}
       >
-        <div className="settings-overview__controls">
+        <AdaptiveControlGrid
+          className="settings-overview__controls"
+          measurementLabels={overviewControlMeasurementLabels}
+        >
           <div className="settings-overview__level-control">
             <MaterialSelect
               label={settingsCopy.layout.userLevel.label}
@@ -364,24 +394,7 @@ export function SettingsPage({
               onActivePopoverChange={
                 settingsSurfaceSession.preferences.setActivePopover
               }
-              options={[
-                {
-                  value: "basic",
-                  label: settingsCopy.layout.userLevel.options.basic,
-                },
-                {
-                  value: "advanced",
-                  label: settingsCopy.layout.userLevel.options.advanced,
-                },
-                {
-                  value: "developer",
-                  label: settingsCopy.layout.userLevel.options.developer,
-                },
-                {
-                  value: "debug",
-                  label: settingsCopy.layout.userLevel.options.debug,
-                },
-              ]}
+              options={userLevelOptions}
               onChange={onUserLevelChange}
             />
           </div>
@@ -409,7 +422,7 @@ export function SettingsPage({
             options={themeModeOptions}
             onChange={onThemeModeChange}
           />
-        </div>
+        </AdaptiveControlGrid>
       </SettingsOverviewSection>
 
       <SettingsQuickSetupSection

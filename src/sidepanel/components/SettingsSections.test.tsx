@@ -19,6 +19,10 @@ const settingsNavigationCss = readFileSync(
   new URL("../theme/settings-navigation.css", import.meta.url),
   "utf8",
 );
+const formControlsCss = readFileSync(
+  new URL("../theme/form-controls.css", import.meta.url),
+  "utf8",
+);
 
 describe("SettingsSections", () => {
   it("keeps section labels neutral instead of tertiary accent colored", () => {
@@ -74,7 +78,13 @@ describe("SettingsSections", () => {
     expect(settingsNavigationCss).toContain(
       ".settings-overview__level-control {",
     );
-    expect(settingsNavigationCss).toContain(
+    expect(formControlsCss).toContain(
+      ".adaptive-control-grid.adaptive-control-grid {",
+    );
+    expect(formControlsCss).toContain(
+      "grid-template-columns: repeat(\n    auto-fit,\n    minmax(min(100%, var(--adaptive-control-min)), 1fr)\n  );",
+    );
+    expect(settingsNavigationCss).not.toContain(
       "grid-template-columns: repeat(auto-fit, minmax(min(100%, 168px), 1fr));",
     );
     expect(settingsNavigationCss).not.toContain(
