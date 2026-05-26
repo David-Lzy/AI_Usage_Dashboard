@@ -32,6 +32,8 @@
 }
 
 .settings-overview__eyebrow {
+  --material-info-tooltip-size: var(--md-sys-typescale-label-medium-size);
+
   display: inline-flex;
   align-items: center;
   gap: var(--app-space-2);

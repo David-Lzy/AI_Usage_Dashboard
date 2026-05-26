@@ -73,6 +73,9 @@ describe("SettingsSections", () => {
     );
     expect(settingsNavigationCss).toContain(".settings-overview__eyebrow {");
     expect(settingsNavigationCss).toContain(
+      "--material-info-tooltip-size: var(--md-sys-typescale-label-medium-size);",
+    );
+    expect(settingsNavigationCss).toContain(
       "grid-template-columns: repeat(auto-fit, minmax(min(100%, 96px), 1fr));",
     );
     expect(settingsNavigationCss).toContain(

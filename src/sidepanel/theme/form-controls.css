@@ -15,6 +15,8 @@
 .form-field__label-row,
 .section-title-with-info,
 .field-label-with-info {
+  --material-info-tooltip-size: var(--md-sys-typescale-label-large-size);
+
   display: inline-flex;
   align-items: center;
   gap: var(--app-space-2);
@@ -377,8 +379,14 @@ select.form-field__control {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: var(
+    --material-info-tooltip-size,
+    var(--md-sys-typescale-label-large-size)
+  );
+  height: var(
+    --material-info-tooltip-size,
+    var(--md-sys-typescale-label-large-size)
+  );
   flex: 0 0 auto;
   line-height: 0;
   vertical-align: middle;
@@ -424,8 +432,14 @@ select.form-field__control {
 }
 
 .material-info-tooltip__trigger .material-icon {
-  width: 20px;
-  height: 20px;
+  width: var(
+    --material-info-tooltip-size,
+    var(--md-sys-typescale-label-large-size)
+  );
+  height: var(
+    --material-info-tooltip-size,
+    var(--md-sys-typescale-label-large-size)
+  );
 }
 
 .material-info-tooltip__trigger:hover,
@@ -482,7 +496,14 @@ select.form-field__control {
 }
 
 .section-title-with-info {
+  --material-info-tooltip-size: var(--md-sys-typescale-title-medium-size);
+
   flex-wrap: wrap;
+}
+
+.section-title-with-info:has(> .progress-appearance-card__title),
+.field-label-with-info {
+  --material-info-tooltip-size: var(--md-sys-typescale-label-large-size);
 }
 
 .section-title-with-info > .section-title,

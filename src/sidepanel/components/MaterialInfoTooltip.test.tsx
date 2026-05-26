@@ -33,8 +33,15 @@ describe("MaterialInfoTooltip", () => {
     expect(formControlsCss).toContain("align-items: center;");
     expect(formControlsCss).toContain("justify-content: center;");
     expect(formControlsCss).toContain("line-height: 0;");
-    expect(formControlsCss).toContain("width: 20px;");
-    expect(formControlsCss).toContain("height: 20px;");
+    expect(formControlsCss).toContain(
+      "--material-info-tooltip-size: var(--md-sys-typescale-label-large-size);",
+    );
+    expect(formControlsCss).toContain(
+      "width: var(\n    --material-info-tooltip-size,",
+    );
+    expect(formControlsCss).toContain(
+      "height: var(\n    --material-info-tooltip-size,",
+    );
     expect(formControlsCss).toContain("position: absolute;");
     expect(formControlsCss).toContain("inset-block-start: 50%;");
     expect(formControlsCss).toContain("inset-inline-start: 50%;");
@@ -46,6 +53,9 @@ describe("MaterialInfoTooltip", () => {
     expect(formControlsCss).toContain("opacity: 0.48;");
     expect(formControlsCss).toContain("filter: blur(0.18px) saturate(0.8);");
     expect(formControlsCss).toContain(".material-info-tooltip__trigger .material-icon");
+    expect(formControlsCss).toContain(
+      ".section-title-with-info {\n  --material-info-tooltip-size: var(--md-sys-typescale-title-medium-size);",
+    );
     expect(formControlsCss).toContain(
       ".material-info-tooltip__trigger:hover {\n  box-shadow: none;\n}",
     );
