@@ -50,7 +50,7 @@ describe("StandardRouteApp cached-first rendering", () => {
     expect(mockedUseStandardAppRuntime).toHaveBeenCalledWith({
       preferCachedBootstrap: true,
     });
-    expect(html).toContain("One panel for AI coding quotas");
+    expect(html).toContain("AI coding quota overview");
     expect(html).toContain("Provider cards");
     expect(html).not.toContain("Preparing dashboard state");
   });

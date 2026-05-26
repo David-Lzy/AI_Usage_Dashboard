@@ -142,14 +142,14 @@ describe("runtime i18n", () => {
   it("returns translated runtime strings for the first zh-CN shell slice", () => {
     const i18n = createRuntimeI18n("zh-CN");
 
-    expect(i18n.t("dashboard.hero.title")).toBe("一个面板掌握 AI 编码配额");
+    expect(i18n.t("dashboard.hero.title")).toBe("AI 编码额度概览");
     expect(i18n.t("popup.header.title")).toBe("快速概览");
   });
 
   it("returns translated runtime strings for the first zh-TW shell slice", () => {
     const i18n = createRuntimeI18n("zh-TW");
 
-    expect(i18n.t("dashboard.hero.title")).toBe("一個面板掌握 AI 編碼配額");
+    expect(i18n.t("dashboard.hero.title")).toBe("AI 編碼額度概覽");
     expect(i18n.t("popup.header.title")).toBe("快速概覽");
     expect(i18n.t("settings.topbar.title")).toBe("設定");
     expect(i18n.t("settings.preferences.locale.system")).toBe("跟隨系統");
@@ -159,7 +159,7 @@ describe("runtime i18n", () => {
     const i18n = createRuntimeI18n("ja");
 
     expect(i18n.t("dashboard.hero.title")).toBe(
-      "AI コーディングクォータを一画面で把握",
+      "AI コーディングクォータ概要",
     );
     expect(i18n.t("popup.header.title")).toBe("クイック確認");
     expect(i18n.t("settings.topbar.title")).toBe("設定");
@@ -170,7 +170,7 @@ describe("runtime i18n", () => {
     const i18n = createRuntimeI18n("ko");
 
     expect(i18n.t("dashboard.hero.title")).toBe(
-      "AI 코딩 할당량을 한 화면에서 확인",
+      "AI 코딩 할당량 개요",
     );
     expect(i18n.t("popup.header.title")).toBe("빠른 보기");
     expect(i18n.t("settings.topbar.title")).toBe("설정");
@@ -181,7 +181,7 @@ describe("runtime i18n", () => {
     const i18n = createRuntimeI18n("es-419");
 
     expect(i18n.t("dashboard.hero.title")).toBe(
-      "Un panel para las cuotas de codificación con IA",
+      "Resumen de cuotas de codificación con IA",
     );
     expect(i18n.t("popup.header.title")).toBe("Vista rápida");
     expect(i18n.t("settings.topbar.title")).toBe("Configuración");
@@ -192,7 +192,7 @@ describe("runtime i18n", () => {
     const i18n = createRuntimeI18n("pt-BR");
 
     expect(i18n.t("dashboard.hero.title")).toBe(
-      "Um painel para cotas de codificação com IA",
+      "Visão geral das cotas de codificação com IA",
     );
     expect(i18n.t("popup.header.title")).toBe("Vista rápida");
     expect(i18n.t("settings.topbar.title")).toBe("Configurações");
@@ -203,7 +203,7 @@ describe("runtime i18n", () => {
     const i18n = createRuntimeI18n("fr");
 
     expect(i18n.t("dashboard.hero.title")).toBe(
-      "Un tableau de bord pour les quotas de codage IA",
+      "Aperçu des quotas de codage IA",
     );
     expect(i18n.t("popup.header.title")).toBe("Coup d'oeil rapide");
     expect(i18n.t("settings.topbar.title")).toBe("Paramètres");
@@ -214,7 +214,7 @@ describe("runtime i18n", () => {
     const i18n = createRuntimeI18n("de");
 
     expect(i18n.t("dashboard.hero.title")).toBe(
-      "Ein Dashboard für KI-Coding-Kontingente",
+      "Überblick über KI-Coding-Kontingente",
     );
     expect(i18n.t("popup.header.title")).toBe("Schnellüberblick");
     expect(i18n.t("settings.topbar.title")).toBe("Einstellungen");
@@ -225,7 +225,7 @@ describe("runtime i18n", () => {
     const i18n = createRuntimeI18n("it");
 
     expect(i18n.t("dashboard.hero.title")).toBe(
-      "Una dashboard per le quote di coding IA",
+      "Panoramica delle quote di coding IA",
     );
     expect(i18n.t("popup.header.title")).toBe("Vista rapida");
     expect(i18n.t("settings.topbar.title")).toBe("Impostazioni");
@@ -236,7 +236,7 @@ describe("runtime i18n", () => {
     const i18n = createRuntimeI18n("ru");
 
     expect(i18n.t("dashboard.hero.title")).toBe(
-      "Одна панель для квот AI coding",
+      "Обзор квот AI coding",
     );
     expect(i18n.t("popup.header.title")).toBe("Быстрый обзор");
     expect(i18n.t("settings.topbar.title")).toBe("Настройки");
@@ -246,7 +246,9 @@ describe("runtime i18n", () => {
   it("returns translated runtime strings for the first ar shell slice", () => {
     const i18n = createRuntimeI18n("ar");
 
-    expect(i18n.t("dashboard.hero.title")).toBe("لوحة واحدة لحصص AI coding");
+    expect(i18n.t("dashboard.hero.title")).toBe(
+      "نظرة عامة على حصص AI coding",
+    );
     expect(i18n.t("popup.header.title")).toBe("نظرة سريعة");
     expect(i18n.t("settings.topbar.title")).toBe("الإعدادات");
     expect(i18n.t("settings.preferences.locale.system")).toBe("اتباع النظام");
@@ -257,7 +259,7 @@ describe("runtime i18n", () => {
     const i18n = createRuntimeI18n("hi");
 
     expect(i18n.t("dashboard.hero.title")).toBe(
-      "AI coding quotas के लिए एक डैशबोर्ड",
+      "AI coding quotas का अवलोकन",
     );
     expect(i18n.t("popup.header.title")).toBe("त्वरित झलक");
     expect(i18n.t("settings.topbar.title")).toBe("सेटिंग्स");
@@ -271,7 +273,7 @@ describe("runtime i18n", () => {
     const i18n = createRuntimeI18n("id");
 
     expect(i18n.t("dashboard.hero.title")).toBe(
-      "Satu dasbor untuk kuota AI coding",
+      "Ringkasan kuota AI coding",
     );
     expect(i18n.t("popup.header.title")).toBe("Ringkasan cepat");
     expect(i18n.t("settings.topbar.title")).toBe("Pengaturan");

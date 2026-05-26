@@ -27,7 +27,7 @@ export const EN_RUNTIME_MESSAGES = {
     "dashboard.topbar.title": "AI Usage Dashboard",
     "dashboard.topbar.subtitle": "Usage, credits, and sync health",
     "dashboard.hero.eyebrow": "Overview",
-    "dashboard.hero.title": "One panel for AI coding quotas",
+    "dashboard.hero.title": "AI coding quota overview",
     "dashboard.hero.detail": "Official APIs, documented quota policies, and guarded page-parse sources are collected into one release-ready dashboard for refreshes, settings, and provider drill-downs.",
     "dashboard.hero.release_chip": "Material 3 · Release Candidate",
     "dashboard.providers.eyebrow": "Providers",

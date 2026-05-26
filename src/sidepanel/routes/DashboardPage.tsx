@@ -88,14 +88,22 @@ export function DashboardPage({
         onPrimaryAction={onOpenSettings}
       />
 
-      <section className="hero-card">
-        <p className="section-label">{i18n.t("dashboard.hero.eyebrow")}</p>
-        <h2 className="display-headline">{i18n.t("dashboard.hero.title")}</h2>
-        <p className="body-copy">{i18n.t("dashboard.hero.detail")}</p>
-        <span className="token-chip">{i18n.t("dashboard.hero.release_chip")}</span>
-      </section>
+      <section className="hero-card dashboard-hero-card">
+        <div className="dashboard-hero-card__main">
+          <p className="section-label">{i18n.t("dashboard.hero.eyebrow")}</p>
+          <h2 className="display-headline">{i18n.t("dashboard.hero.title")}</h2>
+          <p className="body-copy">{i18n.t("dashboard.hero.detail")}</p>
+        </div>
 
-      <SummaryStrip ariaLabel={i18n.t("dashboard.summary.aria")} items={summaryItems} />
+        {summaryItems.length > 0 ? (
+          <SummaryStrip
+            ariaLabel={i18n.t("dashboard.summary.aria")}
+            className="dashboard-hero-card__summary"
+            items={summaryItems}
+            variant="compact"
+          />
+        ) : null}
+      </section>
 
       <section className="dashboard-section">
         <div className="dashboard-section__header">

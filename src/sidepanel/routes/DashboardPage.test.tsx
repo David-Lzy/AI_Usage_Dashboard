@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
@@ -5,7 +7,55 @@ import { createDefaultProgressItemsBySurface } from "../../shared/display-prefer
 import { SAMPLE_APP_STATE } from "../../shared/constants";
 import { DashboardPage } from "./DashboardPage";
 
+const layoutPrimitivesCss = readFileSync(
+  new URL("../theme/layout-primitives.css", import.meta.url),
+  "utf8",
+);
+
 describe("DashboardPage", () => {
+  it("renders compact dashboard summary inside the overview hero", () => {
+    const html = renderToStaticMarkup(
+      <DashboardPage
+        localePreference="en"
+        progressColorBands={SAMPLE_APP_STATE.settings.progressColorBands}
+        progressDisplayStyle="line"
+        progressItemsBySurface={createDefaultProgressItemsBySurface()}
+        progressThicknessPx={SAMPLE_APP_STATE.settings.progressThicknessPx}
+        progressSurface="sidebar"
+        summaryItems={[
+          { label: "Visible", value: "1", tone: "neutral" },
+          { label: "Healthy", value: "1", tone: "neutral" },
+          { label: "Needs Access", value: "0", tone: "warning" },
+          { label: "Needs Attention", value: "0", tone: "error" },
+        ]}
+        providers={[]}
+        onOpenProvider={() => {}}
+        onOpenSettings={() => {}}
+        onOpenQuickSetup={() => {}}
+        onRefreshProvider={() => {}}
+        onRefreshAll={() => {}}
+      />,
+    );
+
+    expect(html).toContain('class="hero-card dashboard-hero-card"');
+    expect(html).toContain(
+      'class="summary-strip summary-strip--compact dashboard-hero-card__summary"',
+    );
+    expect(html).toContain(">AI coding quota overview<");
+    expect(html).toContain(">Visible<");
+    expect(html).not.toContain("Material 3");
+    expect(layoutPrimitivesCss).toContain(".dashboard-hero-card {");
+    expect(layoutPrimitivesCss).toContain(
+      "grid-template-columns: minmax(0, 1fr) minmax(240px, 420px);",
+    );
+    expect(layoutPrimitivesCss).toContain(
+      ".dashboard-hero-card__summary.summary-strip--compact {",
+    );
+    expect(layoutPrimitivesCss).toContain(
+      "grid-template-columns: repeat(4, minmax(64px, 1fr));",
+    );
+  });
+
   it("renders a direct Quick Setup action in the empty provider state", () => {
     const html = renderToStaticMarkup(
       <DashboardPage
