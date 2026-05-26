@@ -108,6 +108,13 @@ describe("MaterialInfoTooltip", () => {
     );
     expect(formControlsCss).toContain("justify-self: start;");
     expect(formControlsCss).toContain(
+      ".form-field__label-row > .form-field__label {\n  display: inline-flex;",
+    );
+    expect(formControlsCss).toContain(
+      "min-block-size: var(--material-info-tooltip-size);",
+    );
+    expect(formControlsCss).toContain("line-height: 1;");
+    expect(formControlsCss).toContain(
       "calc((100% - var(--material-info-tooltip-hover-min-block)) / 2)",
     );
     expect(formControlsCss).toContain("inset-inline: -6px;");

@@ -64,7 +64,11 @@
 }
 
 .form-field__label-row > .form-field__label {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--material-info-tooltip-size);
   min-width: 0;
+  line-height: 1;
   overflow-wrap: anywhere;
 }
 
