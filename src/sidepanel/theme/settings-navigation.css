@@ -19,7 +19,7 @@
 }
 
 .settings-overview__header {
-  grid-template-columns: minmax(0, 1fr) minmax(min(100%, 320px), 560px);
+  grid-template-columns: minmax(min(100%, 320px), 1fr) max-content;
   align-items: center;
   gap: var(--app-space-4);
 }

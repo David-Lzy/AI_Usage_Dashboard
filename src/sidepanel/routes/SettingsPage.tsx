@@ -339,10 +339,10 @@ export function SettingsPage({
     },
   ];
   const overviewControlMeasurementLabels = [
-    ...userLevelOptions.map((option) => option.label),
-    ...localeOptions.map((option) => option.label),
-    ...themeModeOptions.map((option) => option.label),
-  ];
+    userLevelOptions.find((option) => option.value === settings.userLevel)?.label,
+    localeOptions.find((option) => option.value === settings.locale)?.label,
+    themeModeOptions.find((option) => option.value === settings.themeMode)?.label,
+  ].filter((label): label is string => Boolean(label));
 
   return (
     <main className="app-shell settings-shell">

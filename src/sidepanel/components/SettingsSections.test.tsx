@@ -76,6 +76,9 @@ describe("SettingsSections", () => {
       "--material-info-tooltip-size: var(--md-sys-typescale-label-medium-size);",
     );
     expect(settingsNavigationCss).toContain(
+      "grid-template-columns: minmax(min(100%, 320px), 1fr) max-content;",
+    );
+    expect(settingsNavigationCss).toContain(
       "inline-size: min(100%, 280px);",
     );
     expect(settingsNavigationCss).toContain(
