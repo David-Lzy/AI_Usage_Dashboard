@@ -786,36 +786,38 @@ export function ProgressAppearancePreferenceControls({
               <MaterialInfoTooltip>{copy.colorBands.detail}</MaterialInfoTooltip>
             </div>
             {activeColorMode === "gradient" ? (
-              <div className="progress-gradient-editor__summary">
-                <div className="section-title-with-info progress-gradient-editor__summary-title">
+              <>
+                <div className="section-title-with-info progress-gradient-editor__summary">
                   <p className="progress-appearance-card__title">
                     {copy.gradient.label}
                   </p>
                   <MaterialInfoTooltip>{copy.gradient.detail}</MaterialInfoTooltip>
                 </div>
-                <ProgressGradientSchemeDropdown
-                  label={copy.gradient.presetsLabel}
-                  helperText={copy.gradient.presetsHelp}
-                  layout="inline"
-                  valueLabel={selectedGradientSchemeLabel}
-                  valueStops={gradientStops}
-                  options={PROGRESS_GRADIENT_PRESETS.map((preset) => ({
-                    id: preset.id,
-                    label: copy.gradient.presetNames[preset.id],
-                    stops: preset.stops,
-                  }))}
-                  imageImportAction={copy.gradient.imageImportAction}
-                  imageImportBusy={copy.gradient.imageImportBusy}
-                  imageImportHelp={copy.gradient.imageImportHelp}
-                  imageImportAccept={PROGRESS_GRADIENT_IMAGE_ACCEPT}
-                  isImageImporting={isImageImporting}
-                  sessionPopoverId="progress-gradient-scheme"
-                  activePopover={activePopover}
-                  onActivePopoverChange={onActivePopoverChange}
-                  onSchemeSelect={applyGradientPreset}
-                  onImageImport={handleGradientImageImport}
-                />
-              </div>
+                <div className="progress-gradient-editor__scheme">
+                  <ProgressGradientSchemeDropdown
+                    label={copy.gradient.presetsLabel}
+                    helperText={copy.gradient.presetsHelp}
+                    layout="inline"
+                    valueLabel={selectedGradientSchemeLabel}
+                    valueStops={gradientStops}
+                    options={PROGRESS_GRADIENT_PRESETS.map((preset) => ({
+                      id: preset.id,
+                      label: copy.gradient.presetNames[preset.id],
+                      stops: preset.stops,
+                    }))}
+                    imageImportAction={copy.gradient.imageImportAction}
+                    imageImportBusy={copy.gradient.imageImportBusy}
+                    imageImportHelp={copy.gradient.imageImportHelp}
+                    imageImportAccept={PROGRESS_GRADIENT_IMAGE_ACCEPT}
+                    isImageImporting={isImageImporting}
+                    sessionPopoverId="progress-gradient-scheme"
+                    activePopover={activePopover}
+                    onActivePopoverChange={onActivePopoverChange}
+                    onSchemeSelect={applyGradientPreset}
+                    onImageImport={handleGradientImageImport}
+                  />
+                </div>
+              </>
             ) : null}
             <div className="progress-appearance-bands__header-actions">
               {activeColorMode === "traditional" ? (

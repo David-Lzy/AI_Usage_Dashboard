@@ -114,6 +114,7 @@ describe("ProgressAppearancePreferenceControls", () => {
     expect(html).toContain("剩余渐变");
     expect(html).toContain("渐变方案");
     expect(html).toContain("progress-gradient-editor__summary");
+    expect(html).toContain("progress-gradient-editor__scheme");
     expect(html).toContain('data-progress-gradient-scheme-dropdown=""');
     expect(html).toContain("progress-gradient-scheme-dropdown--inline");
     expect(html).toContain('data-progress-gradient-scheme="ocean"');
@@ -238,13 +239,18 @@ describe("ProgressAppearancePreferenceControls", () => {
 
   it("keeps the gradient header compact and stop marker draggable", () => {
     expect(settingsAppearanceCss).toContain(
-      'grid-template-areas: "title summary actions mode";',
+      'grid-template-areas: "title summary scheme actions mode";',
     );
     expect(settingsAppearanceCss).toContain(
-      "grid-template-areas:\n      \"title mode\"\n      \"summary actions\";",
+      "grid-template-areas:\n      \"title summary actions mode\"\n      \". scheme scheme scheme\";",
     );
-    expect(settingsAppearanceCss).toContain("flex: 1 1 13rem;");
-    expect(settingsAppearanceCss).toContain("min-inline-size: min(100%, 11rem);");
+    expect(settingsAppearanceCss).toContain(
+      "grid-template-areas:\n      \"title mode\"\n      \"summary actions\"\n      \"scheme scheme\";",
+    );
+    expect(settingsAppearanceCss).toContain(
+      "grid-template-areas:\n      \"title mode\"\n      \"summary summary\"\n      \"scheme scheme\"\n      \"actions actions\";",
+    );
+    expect(settingsAppearanceCss).toContain("grid-area: scheme;");
     expect(settingsAppearanceCss).toContain("grid-area: mode;");
     expect(settingsAppearanceCss).toContain(
       ".progress-appearance-mode-switch__button {\n    min-width: 60px;",

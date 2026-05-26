@@ -599,8 +599,10 @@
 
 .progress-appearance-bands__header {
   display: grid;
-  grid-template-columns: max-content minmax(0, 1fr) max-content max-content;
-  grid-template-areas: "title summary actions mode";
+  grid-template-columns:
+    max-content max-content minmax(14rem, 1fr) max-content
+    max-content;
+  grid-template-areas: "title summary scheme actions mode";
   align-items: center;
   gap: var(--app-space-3);
 }
@@ -682,20 +684,18 @@
 }
 
 .progress-gradient-editor__summary {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--app-space-3);
+  grid-area: summary;
   min-width: 0;
 }
 
-.progress-gradient-editor__summary {
-  grid-area: summary;
-  align-items: center;
+.progress-gradient-editor__scheme {
+  grid-area: scheme;
+  min-width: 0;
 }
 
-.progress-gradient-editor__summary-title {
-  flex: 0 0 auto;
+.progress-gradient-editor__scheme .progress-gradient-scheme-dropdown {
+  min-inline-size: 0;
+  max-inline-size: none;
 }
 
 .progress-appearance-mode-switch {
@@ -840,10 +840,8 @@
   position: relative;
 }
 
-.progress-gradient-editor__summary .progress-gradient-scheme-dropdown {
-  flex: 1 1 18rem;
-  min-inline-size: min(100%, 15rem);
-  max-inline-size: 34rem;
+.progress-gradient-editor__scheme .progress-gradient-scheme-dropdown {
+  inline-size: 100%;
 }
 
 .progress-gradient-scheme-dropdown--inline {
@@ -1277,22 +1275,23 @@
   }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 860px) {
+  .progress-appearance-bands__header {
+    grid-template-columns: max-content max-content minmax(0, 1fr) max-content;
+    grid-template-areas:
+      "title summary actions mode"
+      ". scheme scheme scheme";
+  }
+}
+
+@media (max-width: 640px) {
   .progress-appearance-bands__header {
     grid-template-columns: minmax(0, 1fr) max-content;
     grid-template-areas:
       "title mode"
-      "summary actions";
+      "summary actions"
+      "scheme scheme";
     align-items: center;
-  }
-
-  .progress-gradient-editor__summary {
-    justify-self: stretch;
-  }
-
-  .progress-gradient-editor__summary .progress-gradient-scheme-dropdown {
-    flex: 1 1 13rem;
-    min-inline-size: min(100%, 11rem);
   }
 
   .progress-appearance-bands__header-actions {
@@ -1362,6 +1361,18 @@
 
   .progress-appearance-mode-switch__button {
     min-width: 52px;
+  }
+
+  .progress-appearance-bands__header {
+    grid-template-areas:
+      "title mode"
+      "summary summary"
+      "scheme scheme"
+      "actions actions";
+  }
+
+  .progress-appearance-bands__header-actions {
+    justify-self: start;
   }
 
   .progress-gradient-editor__selected {
