@@ -23,7 +23,11 @@
   display: inline-flex;
   align-items: center;
   gap: var(--app-space-2);
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  min-block-size: var(--material-info-tooltip-hover-min-block);
   min-width: 0;
+  justify-self: start;
   border-radius: var(--md-sys-shape-corner-full);
   isolation: isolate;
 }
