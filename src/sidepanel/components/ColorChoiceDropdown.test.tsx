@@ -147,6 +147,9 @@ describe("ColorChoiceDropdown", () => {
     expect(formControlsCss).toContain(
       "var(--adaptive-dropdown-menu-choice-width)",
     );
+    expect(formControlsCss).toContain(
+      "min(100%, var(--adaptive-dropdown-menu-choice-width)),\n      1fr",
+    );
     expect(formControlsCss).toContain("justify-content: start;");
     expect(formControlsCss).toContain(
       ".adaptive-dropdown-menu-grid__measurer {",

@@ -1013,7 +1013,7 @@
     auto-fit,
     minmax(
       min(100%, var(--adaptive-dropdown-menu-choice-width)),
-      var(--adaptive-dropdown-menu-choice-width)
+      1fr
     )
   );
   gap: var(--app-space-2);

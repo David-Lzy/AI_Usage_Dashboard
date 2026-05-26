@@ -251,6 +251,9 @@ describe("ProgressAppearancePreferenceControls", () => {
       "var(--adaptive-dropdown-menu-choice-width)",
     );
     expect(settingsAppearanceCss).toContain(
+      "min(100%, var(--adaptive-dropdown-menu-choice-width)),\n      1fr",
+    );
+    expect(settingsAppearanceCss).toContain(
       ".progress-gradient-editor__stop[data-draggable=\"true\"] {",
     );
     expect(settingsAppearanceCss).toContain("top: 16px;");
