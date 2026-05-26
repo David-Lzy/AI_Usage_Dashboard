@@ -17,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       package-version: ${{ steps.package-metadata.outputs.package-version }}
+      manifest-version: ${{ steps.package-metadata.outputs.manifest-version }}
 
     steps:
       - name: Checkout
@@ -36,7 +37,9 @@ jobs:
         run: |
           set -euo pipefail
           package_version="$(node -p "require('./package.json').version")"
+          manifest_version="$(node -p "require('./src/manifest.json').version")"
           echo "package-version=${package_version}" >> "${GITHUB_OUTPUT}"
+          echo "manifest-version=${manifest_version}" >> "${GITHUB_OUTPUT}"
 
       - name: Check localized copy
         run: npm run i18n:check
@@ -60,7 +63,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: chrome-extension-package
-          path: release/*.zip
+          path: release/ai-usage-dashboard-${{ steps.package-metadata.outputs.package-version }}.zip
           if-no-files-found: error
           retention-days: 30
 
@@ -68,7 +71,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: firefox-extension-package
-          path: release/firefox/*.zip
+          path: release/firefox/ai_usage_dashboard-${{ steps.package-metadata.outputs.manifest-version }}.zip
           if-no-files-found: error
           retention-days: 30
 
@@ -88,7 +91,10 @@ jobs:
         run: |
           set -euo pipefail
           package_version="${{ needs.build.outputs.package-version }}"
+          manifest_version="${{ needs.build.outputs.manifest-version }}"
           release_tag="v${package_version}"
+          chrome_asset="ai-usage-dashboard-${package_version}.zip"
+          firefox_asset="ai_usage_dashboard-${manifest_version}.zip"
 
           if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
             release_tag="${GITHUB_REF_NAME}"
@@ -106,9 +112,23 @@ jobs:
           fi
 
           if gh release view "${release_tag}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
-            echo "GitHub Release ${release_tag} already exists; skipping."
-            echo "should-release=false" >> "${GITHUB_OUTPUT}"
-            exit 0
+            current_assets="$(gh release view "${release_tag}" \
+              --repo "${GITHUB_REPOSITORY}" \
+              --json assets \
+              --jq '.assets[].name' | sort)"
+            expected_assets="$(printf '%s\n' \
+              "${chrome_asset}" \
+              "${firefox_asset}" \
+              "SHA256SUMS.txt" | sort)"
+
+            echo "release-exists=true" >> "${GITHUB_OUTPUT}"
+            if [[ "${current_assets}" == "${expected_assets}" ]]; then
+              echo "GitHub Release ${release_tag} already has the expected assets; skipping."
+              echo "should-release=false" >> "${GITHUB_OUTPUT}"
+              exit 0
+            fi
+          else
+            echo "release-exists=false" >> "${GITHUB_OUTPUT}"
           fi
 
           echo "release-tag=${release_tag}" >> "${GITHUB_OUTPUT}"
@@ -141,14 +161,31 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           PACKAGE_VERSION: ${{ needs.build.outputs.package-version }}
           RELEASE_TAG: ${{ steps.release-target.outputs.release-tag }}
+          RELEASE_EXISTS: ${{ steps.release-target.outputs.release-exists }}
         run: |
           set -euo pipefail
-          release_flags=()
-          if [[ "${PACKAGE_VERSION}" == *-* ]]; then
-            release_flags+=(--prerelease)
+          if [[ "${RELEASE_EXISTS}" == "true" ]]; then
+            while IFS= read -r asset_name; do
+              [[ -z "${asset_name}" ]] && continue
+              gh release delete-asset "${RELEASE_TAG}" "${asset_name}" \
+                --repo "${GITHUB_REPOSITORY}" \
+                --yes
+            done < <(gh release view "${RELEASE_TAG}" \
+              --repo "${GITHUB_REPOSITORY}" \
+              --json assets \
+              --jq '.assets[].name')
+
+            gh release upload "${RELEASE_TAG}" release-upload/* \
+              --repo "${GITHUB_REPOSITORY}" \
+              --clobber
+          else
+            release_flags=()
+            if [[ "${PACKAGE_VERSION}" == *-* ]]; then
+              release_flags+=(--prerelease)
+            fi
+            gh release create "${RELEASE_TAG}" release-upload/* \
+              --repo "${GITHUB_REPOSITORY}" \
+              --title "${RELEASE_TAG}" \
+              --notes "Automated extension package build for ${RELEASE_TAG}." \
+              "${release_flags[@]}"
           fi
-          gh release create "${RELEASE_TAG}" release-upload/* \
-            --repo "${GITHUB_REPOSITORY}" \
-            --title "${RELEASE_TAG}" \
-            --notes "Automated extension package build for ${RELEASE_TAG}." \
-            "${release_flags[@]}"
