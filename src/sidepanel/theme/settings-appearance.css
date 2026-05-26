@@ -1010,11 +1010,8 @@
 .progress-gradient-scheme-dropdown__grid {
   display: grid;
   grid-template-columns: repeat(
-    auto-fit,
-    minmax(
-      min(100%, var(--adaptive-dropdown-menu-choice-width)),
-      1fr
-    )
+    var(--adaptive-dropdown-menu-column-count, 1),
+    minmax(0, 1fr)
   );
   gap: var(--app-space-2);
   justify-content: start;

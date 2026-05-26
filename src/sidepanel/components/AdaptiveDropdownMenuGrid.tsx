@@ -9,6 +9,7 @@ import {
 const DEFAULT_ADAPTIVE_DROPDOWN_MENU_MIN_WIDTH_PX = 92;
 
 type AdaptiveDropdownMenuGridStyle = CSSProperties & {
+  "--adaptive-dropdown-menu-column-count": string;
   "--adaptive-dropdown-menu-choice-min": string;
   "--adaptive-dropdown-menu-choice-width": string;
 };
@@ -147,6 +148,7 @@ export function useAdaptiveDropdownMenuGrid({
   );
   const measurementKey = labelsToMeasure.join("\u0000");
   const fallbackWidth = resolveAdaptiveDropdownMenuMinWidth([], minFallbackPx);
+  const [columnCount, setColumnCount] = useState(1);
   const [minWidthPx, setMinWidthPx] = useState(fallbackWidth);
   const [choiceWidthPx, setChoiceWidthPx] = useState(fallbackWidth);
 
@@ -221,11 +223,13 @@ export function useAdaptiveDropdownMenuGrid({
       const grid = gridRef.current;
 
       if (!grid) {
+        setColumnCount(1);
         setChoiceWidthPx(minWidthPx);
         return;
       }
 
       if (typeof window === "undefined") {
+        setColumnCount(1);
         setChoiceWidthPx(minWidthPx);
         return;
       }
@@ -236,25 +240,27 @@ export function useAdaptiveDropdownMenuGrid({
         typeof itemCount === "number" && Number.isFinite(itemCount)
           ? itemCount
           : measurementLabels.length;
-      const columnCount = resolveAdaptiveDropdownMenuColumnCount({
+      const nextColumnCount = resolveAdaptiveDropdownMenuColumnCount({
         availableWidthPx: grid.clientWidth,
         columnGapPx,
         itemCount: resolvedItemCount,
         minWidthPx,
       });
 
-      if (!columnCount) {
+      if (!nextColumnCount) {
+        setColumnCount(1);
         setChoiceWidthPx(minWidthPx);
         return;
       }
 
       const nextChoiceWidth = resolveAdaptiveDropdownMenuChoiceWidth({
         availableWidthPx: grid.clientWidth,
-        columnCount,
+        columnCount: nextColumnCount,
         columnGapPx,
       });
 
       if (!cancelled) {
+        setColumnCount(nextColumnCount);
         setChoiceWidthPx(Math.max(minWidthPx, nextChoiceWidth ?? minWidthPx));
       }
     }
@@ -286,10 +292,11 @@ export function useAdaptiveDropdownMenuGrid({
 
   const style = useMemo<AdaptiveDropdownMenuGridStyle>(
     () => ({
+      "--adaptive-dropdown-menu-column-count": `${columnCount}`,
       "--adaptive-dropdown-menu-choice-min": `${minWidthPx}px`,
       "--adaptive-dropdown-menu-choice-width": `${choiceWidthPx}px`,
     }),
-    [choiceWidthPx, minWidthPx],
+    [choiceWidthPx, columnCount, minWidthPx],
   );
 
   return {
@@ -297,6 +304,7 @@ export function useAdaptiveDropdownMenuGrid({
     labelsToMeasure,
     measurerRef,
     choiceWidthPx,
+    columnCount,
     minWidthPx,
     style,
   };

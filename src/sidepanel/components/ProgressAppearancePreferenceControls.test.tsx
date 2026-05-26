@@ -248,10 +248,10 @@ describe("ProgressAppearancePreferenceControls", () => {
     );
     expect(settingsAppearanceCss).toContain("min-height: 40px;");
     expect(settingsAppearanceCss).toContain(
-      "var(--adaptive-dropdown-menu-choice-width)",
+      "var(--adaptive-dropdown-menu-column-count, 1)",
     );
     expect(settingsAppearanceCss).toContain(
-      "min(100%, var(--adaptive-dropdown-menu-choice-width)),\n      1fr",
+      "var(--adaptive-dropdown-menu-column-count, 1),\n    minmax(0, 1fr)",
     );
     expect(settingsAppearanceCss).toContain(
       ".progress-gradient-editor__stop[data-draggable=\"true\"] {",

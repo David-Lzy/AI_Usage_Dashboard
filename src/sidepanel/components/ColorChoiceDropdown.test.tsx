@@ -145,10 +145,10 @@ describe("ColorChoiceDropdown", () => {
   it("keeps the custom color entry in the menu header and sizes color choices with the adaptive width", () => {
     expect(formControlsCss).toContain(".color-choice-dropdown__menu-header {");
     expect(formControlsCss).toContain(
-      "var(--adaptive-dropdown-menu-choice-width)",
+      "var(--adaptive-dropdown-menu-column-count, 1)",
     );
     expect(formControlsCss).toContain(
-      "min(100%, var(--adaptive-dropdown-menu-choice-width)),\n      1fr",
+      "var(--adaptive-dropdown-menu-column-count, 1),\n    minmax(0, 1fr)",
     );
     expect(formControlsCss).toContain("justify-content: start;");
     expect(formControlsCss).toContain(
@@ -183,6 +183,24 @@ describe("ColorChoiceDropdown", () => {
         minWidthPx: 112,
       }),
     ).toBe(1);
+  });
+
+  it("locks a five-column short-tail menu to four balanced columns", () => {
+    const columnCount = resolveAdaptiveDropdownMenuColumnCount({
+      availableWidthPx: 840,
+      columnGapPx: 8,
+      itemCount: 16,
+      minWidthPx: 150,
+    });
+
+    expect(columnCount).toBe(4);
+    expect(
+      resolveAdaptiveDropdownMenuChoiceWidth({
+        availableWidthPx: 840,
+        columnCount: columnCount ?? 1,
+        columnGapPx: 8,
+      }),
+    ).toBe(204);
   });
 
   it("balances the last dropdown menu row when the full-width column count would leave a short tail", () => {
