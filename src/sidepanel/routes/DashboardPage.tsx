@@ -89,10 +89,6 @@ export function DashboardPage({
       />
 
       <section className="hero-card dashboard-hero-card">
-        <p className="body-copy dashboard-hero-card__detail">
-          {i18n.t("dashboard.hero.detail")}
-        </p>
-
         <div className="dashboard-hero-card__body">
           <div className="dashboard-hero-card__main">
             <p className="section-label">{i18n.t("dashboard.hero.eyebrow")}</p>
@@ -108,6 +104,10 @@ export function DashboardPage({
             />
           ) : null}
         </div>
+
+        <p className="body-copy dashboard-hero-card__detail">
+          {i18n.t("dashboard.hero.detail")}
+        </p>
       </section>
 
       <section className="dashboard-section">

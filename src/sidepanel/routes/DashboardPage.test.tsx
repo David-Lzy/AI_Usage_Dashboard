@@ -39,7 +39,7 @@ describe("DashboardPage", () => {
 
     expect(html).toContain('class="hero-card dashboard-hero-card"');
     expect(html).toContain('class="body-copy dashboard-hero-card__detail"');
-    expect(html.indexOf("dashboard-hero-card__detail")).toBeLessThan(
+    expect(html.indexOf("dashboard-hero-card__detail")).toBeGreaterThan(
       html.indexOf("dashboard-hero-card__body"),
     );
     expect(html).toContain(
