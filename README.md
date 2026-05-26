@@ -124,6 +124,10 @@ review, and manual testing. The Firefox package is currently a local beta build;
 ordinary Firefox installation needs a signed AMO/self-distribution package in a
 future release flow.
 
+Release push rules, browser-specific asset names, and the GitHub Release notes
+template are documented in
+[Doc/Store/GitHub_Release_Push_And_Notes.md](./Doc/Store/GitHub_Release_Push_And_Notes.md).
+
 ## Current Release State
 
 - Chrome Web Store listing: published and reachable.
