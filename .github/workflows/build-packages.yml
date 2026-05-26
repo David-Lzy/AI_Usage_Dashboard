@@ -75,28 +75,53 @@ jobs:
   release:
     name: Publish GitHub Release
     needs: build
-    if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
+    if: (github.ref_type == 'tag' && startsWith(github.ref_name, 'v')) || github.ref_name == 'main'
     runs-on: ubuntu-latest
     permissions:
       contents: write
 
     steps:
-      - name: Validate release tag
+      - name: Resolve release target
+        id: release-target
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          tag_version="${GITHUB_REF_NAME#v}"
           package_version="${{ needs.build.outputs.package-version }}"
-          if [[ "${tag_version}" != "${package_version}" ]]; then
-            echo "Tag version ${tag_version} does not match package.json version ${package_version}." >&2
-            exit 1
+          release_tag="v${package_version}"
+
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            release_tag="${GITHUB_REF_NAME}"
+            tag_version="${release_tag#v}"
+            if [[ "${tag_version}" != "${package_version}" ]]; then
+              echo "Tag version ${tag_version} does not match package.json version ${package_version}." >&2
+              exit 1
+            fi
+          elif ! git ls-remote --exit-code --tags \
+            "https://github.com/${GITHUB_REPOSITORY}.git" \
+            "refs/tags/${release_tag}" >/dev/null; then
+            echo "Matching release tag ${release_tag} does not exist yet; skipping GitHub Release."
+            echo "should-release=false" >> "${GITHUB_OUTPUT}"
+            exit 0
           fi
 
+          if gh release view "${release_tag}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
+            echo "GitHub Release ${release_tag} already exists; skipping."
+            echo "should-release=false" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+
+          echo "release-tag=${release_tag}" >> "${GITHUB_OUTPUT}"
+          echo "should-release=true" >> "${GITHUB_OUTPUT}"
+
       - name: Download packages
+        if: steps.release-target.outputs.should-release == 'true'
         uses: actions/download-artifact@v4
         with:
           path: release-artifacts
 
       - name: Prepare release assets
+        if: steps.release-target.outputs.should-release == 'true'
         run: |
           set -euo pipefail
           mkdir -p release-upload
@@ -111,16 +136,19 @@ jobs:
           )
 
       - name: Create GitHub Release
+        if: steps.release-target.outputs.should-release == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           PACKAGE_VERSION: ${{ needs.build.outputs.package-version }}
+          RELEASE_TAG: ${{ steps.release-target.outputs.release-tag }}
         run: |
           set -euo pipefail
           release_flags=()
           if [[ "${PACKAGE_VERSION}" == *-* ]]; then
             release_flags+=(--prerelease)
           fi
-          gh release create "${GITHUB_REF_NAME}" release-upload/* \
-            --title "${GITHUB_REF_NAME}" \
-            --notes "Automated extension package build for ${GITHUB_REF_NAME}." \
+          gh release create "${RELEASE_TAG}" release-upload/* \
+            --repo "${GITHUB_REPOSITORY}" \
+            --title "${RELEASE_TAG}" \
+            --notes "Automated extension package build for ${RELEASE_TAG}." \
             "${release_flags[@]}"
