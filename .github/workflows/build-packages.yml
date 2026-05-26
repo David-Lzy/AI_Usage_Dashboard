@@ -93,8 +93,8 @@ jobs:
           package_version="${{ needs.build.outputs.package-version }}"
           manifest_version="${{ needs.build.outputs.manifest-version }}"
           release_tag="v${package_version}"
-          chrome_asset="ai-usage-dashboard-${package_version}.zip"
-          firefox_asset="ai_usage_dashboard-${manifest_version}.zip"
+          chrome_asset="ai-usage-dashboard-chrome-${package_version}.zip"
+          firefox_asset="ai-usage-dashboard-firefox-${package_version}.zip"
 
           if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
             release_tag="${GITHUB_REF_NAME}"
@@ -132,6 +132,8 @@ jobs:
           fi
 
           echo "release-tag=${release_tag}" >> "${GITHUB_OUTPUT}"
+          echo "chrome-asset=${chrome_asset}" >> "${GITHUB_OUTPUT}"
+          echo "firefox-asset=${firefox_asset}" >> "${GITHUB_OUTPUT}"
           echo "should-release=true" >> "${GITHUB_OUTPUT}"
 
       - name: Download packages
@@ -145,15 +147,49 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p release-upload
-          find release-artifacts -type f -name '*.zip' -exec cp '{}' release-upload/ \;
-          if [[ -z "$(find release-upload -type f -name '*.zip' -print -quit)" ]]; then
-            echo "No release zip files were downloaded." >&2
+
+          package_version="${{ needs.build.outputs.package-version }}"
+          manifest_version="${{ needs.build.outputs.manifest-version }}"
+          chrome_asset="${{ steps.release-target.outputs.chrome-asset }}"
+          firefox_asset="${{ steps.release-target.outputs.firefox-asset }}"
+          chrome_source="release-artifacts/chrome-extension-package/ai-usage-dashboard-${package_version}.zip"
+          firefox_source="release-artifacts/firefox-extension-package/ai_usage_dashboard-${manifest_version}.zip"
+
+          if [[ ! -f "${chrome_source}" ]]; then
+            echo "Chrome package not found at ${chrome_source}." >&2
             exit 1
           fi
+          if [[ ! -f "${firefox_source}" ]]; then
+            echo "Firefox package not found at ${firefox_source}." >&2
+            exit 1
+          fi
+
+          cp "${chrome_source}" "release-upload/${chrome_asset}"
+          cp "${firefox_source}" "release-upload/${firefox_asset}"
+
           (
             cd release-upload
-            sha256sum *.zip > SHA256SUMS.txt
+            sha256sum "${chrome_asset}" "${firefox_asset}" > SHA256SUMS.txt
           )
+
+          cat > release-notes.md <<NOTES
+          ## AI Usage Dashboard ${package_version}
+
+          Release candidate package for manual review, extension-store handoff, and browser-specific testing.
+
+          ### Downloads
+
+          - Chrome: \`${chrome_asset}\`
+            - Use this zip for Chrome Web Store upload, review, or manual developer-mode testing after extracting it.
+          - Firefox local beta: \`${firefox_asset}\`
+            - Unsigned local beta package generated from the Firefox manifest transform. Normal Firefox installation still needs a signed AMO/self-distribution package.
+          - Checksums: \`SHA256SUMS.txt\`
+
+          ### Notes
+
+          - Chrome Web Store remains the recommended install path for everyday Chrome users.
+          - This release includes the latest responsive Settings and progress color/gradient UI polish, plus automated package publishing.
+          NOTES
 
       - name: Create GitHub Release
         if: steps.release-target.outputs.should-release == 'true'
@@ -175,7 +211,12 @@ jobs:
               --json assets \
               --jq '.assets[].name')
 
-            gh release upload "${RELEASE_TAG}" release-upload/* \
+            gh release edit "${RELEASE_TAG}" \
+              --repo "${GITHUB_REPOSITORY}" \
+              --title "${RELEASE_TAG}" \
+              --notes-file release-notes.md
+
+            gh release upload "${RELEASE_TAG}" release-upload/*.zip release-upload/SHA256SUMS.txt \
               --repo "${GITHUB_REPOSITORY}" \
               --clobber
           else
@@ -183,9 +224,9 @@ jobs:
             if [[ "${PACKAGE_VERSION}" == *-* ]]; then
               release_flags+=(--prerelease)
             fi
-            gh release create "${RELEASE_TAG}" release-upload/* \
+            gh release create "${RELEASE_TAG}" release-upload/*.zip release-upload/SHA256SUMS.txt \
               --repo "${GITHUB_REPOSITORY}" \
               --title "${RELEASE_TAG}" \
-              --notes "Automated extension package build for ${RELEASE_TAG}." \
+              --notes-file release-notes.md \
               "${release_flags[@]}"
           fi
