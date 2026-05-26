@@ -259,9 +259,12 @@
 
 .settings-section-nav {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: center;
   gap: var(--app-space-2);
+  inline-size: max-content;
+  max-inline-size: 100%;
+  margin-inline: auto;
   min-width: 0;
 }
 
@@ -269,6 +272,7 @@
   grid-template-columns: minmax(180px, max-content) minmax(0, 1fr) auto;
   align-items: center;
   column-gap: var(--app-space-4);
+  row-gap: var(--app-space-3);
 }
 
 .settings-shell .top-app-bar__main {
@@ -283,15 +287,30 @@
 .settings-shell .top-app-bar__actions {
   grid-column: 3;
   grid-row: 1;
-  flex-wrap: wrap;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  align-items: center;
+  gap: var(--app-space-2);
   justify-content: flex-end;
+  justify-self: end;
+  inline-size: max-content;
+  width: auto;
+  max-inline-size: 100%;
+}
+
+.settings-shell .top-app-bar__actions .icon-button {
+  flex: none;
+  white-space: nowrap;
 }
 
 .settings-shell .top-app-bar__bottom {
   grid-column: 2;
   grid-row: 1;
   align-self: center;
+  justify-self: center;
   min-width: 0;
+  max-inline-size: 100%;
   margin-top: 0;
   padding-inline-start: 0;
 }
@@ -465,9 +484,9 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1120px) {
   .settings-section-anchor {
-    scroll-margin-top: 232px;
+    scroll-margin-top: 244px;
   }
 
   .settings-shell .top-app-bar {
@@ -484,18 +503,69 @@
   .settings-shell .top-app-bar__actions {
     grid-column: 1;
     grid-row: 2;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
     justify-content: center;
-    width: 100%;
+    justify-self: center;
+    inline-size: max-content;
+    width: auto;
+    max-inline-size: 100%;
   }
 
   .settings-shell .top-app-bar__bottom {
     grid-column: 1;
     grid-row: 3;
     justify-self: center;
-    width: 100%;
+    inline-size: 100%;
   }
 
   .settings-section-nav {
+    flex-wrap: wrap;
     justify-content: center;
+    inline-size: auto;
+    width: 100%;
+  }
+}
+
+@media (max-width: 520px) {
+  .settings-section-anchor {
+    scroll-margin-top: 336px;
+  }
+
+  .settings-shell .top-app-bar__actions {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    inline-size: min(100%, 360px);
+    width: min(100%, 360px);
+  }
+
+  .settings-shell .top-app-bar__actions .icon-button {
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  .settings-section-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    inline-size: min(100%, 360px);
+    width: auto;
+    justify-content: stretch;
+  }
+
+  .settings-nav-chip {
+    inline-size: 100%;
+    min-inline-size: 0;
+    padding-inline: 10px;
+  }
+}
+
+@media (max-width: 340px) {
+  .settings-section-anchor {
+    scroll-margin-top: 392px;
+  }
+
+  .settings-section-nav {
+    grid-template-columns: minmax(0, 1fr);
+    inline-size: 100%;
   }
 }
