@@ -62,6 +62,11 @@ describe("SettingsNavigation", () => {
     );
     expect(settingsNavigationCss).toContain("flex: none;");
     expect(settingsNavigationCss).toContain("@media (max-width: 1120px) {");
+    expect(settingsNavigationCss).toContain(
+      "grid-template-columns: minmax(0, 1fr) max-content;",
+    );
+    expect(settingsNavigationCss).toContain("grid-column: 1 / -1;");
+    expect(settingsNavigationCss).toContain("@media (max-width: 620px) {");
     expect(settingsNavigationCss).toContain("@media (max-width: 520px) {");
     expect(settingsNavigationCss).toContain(
       "grid-template-columns: repeat(2, minmax(0, 1fr));",
