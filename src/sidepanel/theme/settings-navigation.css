@@ -46,11 +46,11 @@
 
 .settings-overview__summary {
   justify-self: end;
-  inline-size: min(100%, 560px);
+  inline-size: min(100%, 280px);
 }
 
 .settings-overview__summary.summary-strip--compact {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 96px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 80px), 1fr));
 }
 
 .settings-overview__controls {
@@ -437,8 +437,8 @@
   }
 
   .settings-overview__summary {
-    justify-self: stretch;
-    inline-size: 100%;
+    justify-self: start;
+    inline-size: min(100%, 280px);
   }
 
   .quick-setup-section__header {
