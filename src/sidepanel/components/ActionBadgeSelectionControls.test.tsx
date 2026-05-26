@@ -95,6 +95,10 @@ describe("ActionBadgeSelectionControls", () => {
       ".adaptive-control-grid .action-badge-selection-controls__label-row {",
     );
     expect(formControlsCss).toContain(
+      ".action-badge-selection-controls__label-row {\n  display: flex;\n  inline-size: fit-content;\n  width: fit-content;",
+    );
+    expect(formControlsCss).toContain("max-inline-size: 100%;");
+    expect(formControlsCss).toContain(
       ".adaptive-control-grid > .action-badge-selection-controls {",
     );
     expect(formControlsCss).toContain("gap: var(--app-space-2);");

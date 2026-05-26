@@ -241,7 +241,9 @@ select.form-field__control {
 
 .action-badge-selection-controls__label-row {
   display: flex;
-  width: 100%;
+  inline-size: fit-content;
+  width: fit-content;
+  max-inline-size: 100%;
   flex-wrap: wrap;
   align-items: center;
   justify-content: flex-start;
