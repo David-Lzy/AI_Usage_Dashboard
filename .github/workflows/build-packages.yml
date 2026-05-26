@@ -1,0 +1,126 @@
+name: Build extension packages
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Test and package
+    runs-on: ubuntu-latest
+    outputs:
+      package-version: ${{ steps.package-metadata.outputs.package-version }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Read package metadata
+        id: package-metadata
+        run: |
+          set -euo pipefail
+          package_version="$(node -p "require('./package.json').version")"
+          echo "package-version=${package_version}" >> "${GITHUB_OUTPUT}"
+
+      - name: Check localized copy
+        run: npm run i18n:check
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm run test
+
+      - name: Build Chrome extension
+        run: npm run build
+
+      - name: Package Chrome extension
+        run: npm run release:package
+
+      - name: Package Firefox extension
+        run: npm run firefox:package
+
+      - name: Upload Chrome package
+        uses: actions/upload-artifact@v4
+        with:
+          name: chrome-extension-package
+          path: release/*.zip
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload Firefox package
+        uses: actions/upload-artifact@v4
+        with:
+          name: firefox-extension-package
+          path: release/firefox/*.zip
+          if-no-files-found: error
+          retention-days: 30
+
+  release:
+    name: Publish GitHub Release
+    needs: build
+    if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Validate release tag
+        run: |
+          set -euo pipefail
+          tag_version="${GITHUB_REF_NAME#v}"
+          package_version="${{ needs.build.outputs.package-version }}"
+          if [[ "${tag_version}" != "${package_version}" ]]; then
+            echo "Tag version ${tag_version} does not match package.json version ${package_version}." >&2
+            exit 1
+          fi
+
+      - name: Download packages
+        uses: actions/download-artifact@v4
+        with:
+          path: release-artifacts
+
+      - name: Prepare release assets
+        run: |
+          set -euo pipefail
+          mkdir -p release-upload
+          find release-artifacts -type f -name '*.zip' -exec cp '{}' release-upload/ \;
+          if [[ -z "$(find release-upload -type f -name '*.zip' -print -quit)" ]]; then
+            echo "No release zip files were downloaded." >&2
+            exit 1
+          fi
+          (
+            cd release-upload
+            sha256sum *.zip > SHA256SUMS.txt
+          )
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PACKAGE_VERSION: ${{ needs.build.outputs.package-version }}
+        run: |
+          set -euo pipefail
+          release_flags=()
+          if [[ "${PACKAGE_VERSION}" == *-* ]]; then
+            release_flags+=(--prerelease)
+          fi
+          gh release create "${GITHUB_REF_NAME}" release-upload/* \
+            --title "${GITHUB_REF_NAME}" \
+            --notes "Automated extension package build for ${GITHUB_REF_NAME}." \
+            "${release_flags[@]}"

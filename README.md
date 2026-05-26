@@ -111,6 +111,19 @@ npm run release:package
 
 The generated zip is written under `release/`.
 
+## Automated Packages
+
+Pushes to `main` run GitHub Actions checks and upload temporary Chrome and
+Firefox package artifacts from the workflow run. Version tags such as
+`v0.1.0-rc.26` create a GitHub Release with Chrome and Firefox package zips plus
+SHA-256 checksums.
+
+For everyday Chrome users, the Chrome Web Store listing remains the recommended
+install path. GitHub Chrome zips are intended for developer-mode loading,
+review, and manual testing. The Firefox package is currently a local beta build;
+ordinary Firefox installation needs a signed AMO/self-distribution package in a
+future release flow.
+
 ## Current Release State
 
 - Chrome Web Store listing: published and reachable.
