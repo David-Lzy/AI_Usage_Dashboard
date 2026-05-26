@@ -106,9 +106,20 @@
 }
 
 .dashboard-hero-card {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-3);
+}
+
+.dashboard-hero-card__detail {
+  max-inline-size: none;
+}
+
+.dashboard-hero-card__body {
+  display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(240px, 420px);
   align-items: start;
   gap: var(--app-space-4);
+  min-width: 0;
 }
 
 .dashboard-hero-card__main {
@@ -133,7 +144,7 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .dashboard-hero-card {
+  .dashboard-hero-card__body {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--app-space-3);
   }

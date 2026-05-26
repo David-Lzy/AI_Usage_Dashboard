@@ -38,6 +38,10 @@ describe("DashboardPage", () => {
     );
 
     expect(html).toContain('class="hero-card dashboard-hero-card"');
+    expect(html).toContain('class="body-copy dashboard-hero-card__detail"');
+    expect(html.indexOf("dashboard-hero-card__detail")).toBeLessThan(
+      html.indexOf("dashboard-hero-card__body"),
+    );
     expect(html).toContain(
       'class="summary-strip summary-strip--compact dashboard-hero-card__summary"',
     );
@@ -45,6 +49,11 @@ describe("DashboardPage", () => {
     expect(html).toContain(">Visible<");
     expect(html).not.toContain("Material 3");
     expect(layoutPrimitivesCss).toContain(".dashboard-hero-card {");
+    expect(layoutPrimitivesCss).toContain(
+      ".dashboard-hero-card__detail {",
+    );
+    expect(layoutPrimitivesCss).toContain("max-inline-size: none;");
+    expect(layoutPrimitivesCss).toContain(".dashboard-hero-card__body {");
     expect(layoutPrimitivesCss).toContain(
       "grid-template-columns: minmax(0, 1fr) minmax(240px, 420px);",
     );

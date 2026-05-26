@@ -89,20 +89,25 @@ export function DashboardPage({
       />
 
       <section className="hero-card dashboard-hero-card">
-        <div className="dashboard-hero-card__main">
-          <p className="section-label">{i18n.t("dashboard.hero.eyebrow")}</p>
-          <h2 className="display-headline">{i18n.t("dashboard.hero.title")}</h2>
-          <p className="body-copy">{i18n.t("dashboard.hero.detail")}</p>
-        </div>
+        <p className="body-copy dashboard-hero-card__detail">
+          {i18n.t("dashboard.hero.detail")}
+        </p>
 
-        {summaryItems.length > 0 ? (
-          <SummaryStrip
-            ariaLabel={i18n.t("dashboard.summary.aria")}
-            className="dashboard-hero-card__summary"
-            items={summaryItems}
-            variant="compact"
-          />
-        ) : null}
+        <div className="dashboard-hero-card__body">
+          <div className="dashboard-hero-card__main">
+            <p className="section-label">{i18n.t("dashboard.hero.eyebrow")}</p>
+            <h2 className="display-headline">{i18n.t("dashboard.hero.title")}</h2>
+          </div>
+
+          {summaryItems.length > 0 ? (
+            <SummaryStrip
+              ariaLabel={i18n.t("dashboard.summary.aria")}
+              className="dashboard-hero-card__summary"
+              items={summaryItems}
+              variant="compact"
+            />
+          ) : null}
+        </div>
       </section>
 
       <section className="dashboard-section">
