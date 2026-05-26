@@ -9,6 +9,10 @@ const formControlsCss = readFileSync(
   new URL("../theme/form-controls.css", import.meta.url),
   "utf8",
 );
+const materialInfoTooltipSource = readFileSync(
+  new URL("./MaterialInfoTooltip.tsx", import.meta.url),
+  "utf8",
+);
 
 describe("MaterialInfoTooltip", () => {
   it("renders a focusable trigger and hidden tooltip content", () => {
@@ -69,6 +73,34 @@ describe("MaterialInfoTooltip", () => {
     );
     expect(formControlsCss).toContain(
       '.material-info-tooltip__content[data-open="true"][data-positioned="true"]',
+    );
+  });
+
+  it("extends hover and focus feedback to nearby label rows", () => {
+    expect(materialInfoTooltipSource).toContain("const rootRef");
+    expect(materialInfoTooltipSource).toContain("root.closest<HTMLElement>");
+    expect(materialInfoTooltipSource).toContain(".form-field__label-row");
+    expect(materialInfoTooltipSource).toContain(".section-title-with-info");
+    expect(materialInfoTooltipSource).toContain(".field-label-with-info");
+    expect(materialInfoTooltipSource).toContain(".settings-overview__eyebrow");
+    expect(materialInfoTooltipSource).toContain(
+      'hoverTarget.addEventListener("pointerenter", openTooltip);',
+    );
+    expect(materialInfoTooltipSource).toContain(
+      'hoverTarget.addEventListener("focusin", openTooltip);',
+    );
+    expect(materialInfoTooltipSource).toContain(
+      "hoverTarget.contains(relatedTarget as Node)",
+    );
+
+    expect(formControlsCss).toContain(
+      ".form-field__label-row:hover .material-info-tooltip__trigger,",
+    );
+    expect(formControlsCss).toContain(
+      ".section-title-with-info:focus-within .material-info-tooltip__trigger,",
+    );
+    expect(formControlsCss).toContain(
+      ".settings-overview__eyebrow:focus-within .material-info-tooltip__trigger,",
     );
   });
 });

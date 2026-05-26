@@ -442,6 +442,14 @@ select.form-field__control {
   );
 }
 
+.form-field__label-row:hover .material-info-tooltip__trigger,
+.form-field__label-row:focus-within .material-info-tooltip__trigger,
+.section-title-with-info:hover .material-info-tooltip__trigger,
+.section-title-with-info:focus-within .material-info-tooltip__trigger,
+.field-label-with-info:hover .material-info-tooltip__trigger,
+.field-label-with-info:focus-within .material-info-tooltip__trigger,
+.settings-overview__eyebrow:hover .material-info-tooltip__trigger,
+.settings-overview__eyebrow:focus-within .material-info-tooltip__trigger,
 .material-info-tooltip__trigger:hover,
 .material-info-tooltip__trigger:focus-visible {
   background: var(--app-state-layer-primary-hover);

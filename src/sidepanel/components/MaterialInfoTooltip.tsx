@@ -20,6 +20,7 @@ export function MaterialInfoTooltip({
   className = "",
 }: MaterialInfoTooltipProps) {
   const tooltipId = useId();
+  const rootRef = useRef<HTMLSpanElement | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const contentRef = useRef<HTMLSpanElement | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -48,6 +49,49 @@ export function MaterialInfoTooltip({
       {children}
     </span>
   );
+
+  useEffect(() => {
+    const root = rootRef.current;
+
+    if (!root) {
+      return undefined;
+    }
+
+    const hoverTarget =
+      root.closest<HTMLElement>(
+        ".form-field__label-row, .section-title-with-info, .field-label-with-info, .settings-overview__eyebrow",
+      ) ?? root;
+
+    function openTooltip() {
+      setIsOpen(true);
+    }
+
+    function closeTooltip() {
+      setIsOpen(false);
+    }
+
+    function handleFocusOut(event: FocusEvent) {
+      const relatedTarget = event.relatedTarget;
+
+      if (relatedTarget && hoverTarget.contains(relatedTarget as Node)) {
+        return;
+      }
+
+      closeTooltip();
+    }
+
+    hoverTarget.addEventListener("pointerenter", openTooltip);
+    hoverTarget.addEventListener("pointerleave", closeTooltip);
+    hoverTarget.addEventListener("focusin", openTooltip);
+    hoverTarget.addEventListener("focusout", handleFocusOut);
+
+    return () => {
+      hoverTarget.removeEventListener("pointerenter", openTooltip);
+      hoverTarget.removeEventListener("pointerleave", closeTooltip);
+      hoverTarget.removeEventListener("focusin", openTooltip);
+      hoverTarget.removeEventListener("focusout", handleFocusOut);
+    };
+  }, []);
 
   useEffect(() => {
     if (!isOpen || typeof window === "undefined") {
@@ -105,6 +149,7 @@ export function MaterialInfoTooltip({
 
   return (
     <span
+      ref={rootRef}
       className={rootClassName}
       data-open={isOpen ? "true" : "false"}
       data-positioned={position === null ? "false" : "true"}
@@ -115,10 +160,6 @@ export function MaterialInfoTooltip({
         type="button"
         aria-label={accessibleLabel}
         aria-describedby={tooltipId}
-        onBlur={() => setIsOpen(false)}
-        onFocus={() => setIsOpen(true)}
-        onPointerEnter={() => setIsOpen(true)}
-        onPointerLeave={() => setIsOpen(false)}
       >
         <MaterialIcon name="help-outline" />
       </button>
