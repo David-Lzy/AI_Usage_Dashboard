@@ -96,11 +96,28 @@ describe("MaterialInfoTooltip", () => {
     expect(formControlsCss).toContain(
       ".form-field__label-row:hover .material-info-tooltip__trigger,",
     );
+    expect(formControlsCss).toContain(".form-field__label-row::before,");
+    expect(formControlsCss).toContain(".section-title-with-info::before,");
+    expect(formControlsCss).toContain(".settings-overview__eyebrow::before");
+    expect(formControlsCss).toContain(
+      "--material-info-tooltip-hover-min-block: 28px;",
+    );
+    expect(formControlsCss).toContain(
+      "calc((100% - var(--material-info-tooltip-hover-min-block)) / 2)",
+    );
+    expect(formControlsCss).toContain("inset-inline: -6px;");
+    expect(formControlsCss).toContain(
+      ".field-label-with-info:focus-within::before,",
+    );
     expect(formControlsCss).toContain(
       ".section-title-with-info:focus-within .material-info-tooltip__trigger,",
     );
     expect(formControlsCss).toContain(
-      ".settings-overview__eyebrow:focus-within .material-info-tooltip__trigger,",
+      ".settings-overview__eyebrow:focus-within .material-info-tooltip__trigger {",
     );
+    expect(formControlsCss).toContain(
+      ".form-field__label-row .material-info-tooltip__trigger:hover,",
+    );
+    expect(formControlsCss).toContain("background: transparent;");
   });
 });

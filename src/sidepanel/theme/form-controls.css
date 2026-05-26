@@ -14,13 +14,49 @@
 
 .form-field__label-row,
 .section-title-with-info,
-.field-label-with-info {
+.field-label-with-info,
+.settings-overview__eyebrow {
   --material-info-tooltip-size: var(--md-sys-typescale-label-large-size);
+  --material-info-tooltip-hover-min-block: 28px;
 
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: var(--app-space-2);
   min-width: 0;
+  border-radius: var(--md-sys-shape-corner-full);
+  isolation: isolate;
+}
+
+.form-field__label-row::before,
+.section-title-with-info::before,
+.field-label-with-info::before,
+.settings-overview__eyebrow::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset-block: min(
+    0px,
+    calc((100% - var(--material-info-tooltip-hover-min-block)) / 2)
+  );
+  inset-inline: -6px;
+  border-radius: inherit;
+  background: var(--app-state-layer-primary-hover);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--app-motion-duration-fast)
+    var(--app-motion-easing-standard);
+}
+
+.form-field__label-row:hover::before,
+.form-field__label-row:focus-within::before,
+.section-title-with-info:hover::before,
+.section-title-with-info:focus-within::before,
+.field-label-with-info:hover::before,
+.field-label-with-info:focus-within::before,
+.settings-overview__eyebrow:hover::before,
+.settings-overview__eyebrow:focus-within::before {
+  opacity: 1;
 }
 
 .form-field__label-row > .form-field__label {
@@ -449,7 +485,12 @@ select.form-field__control {
 .field-label-with-info:hover .material-info-tooltip__trigger,
 .field-label-with-info:focus-within .material-info-tooltip__trigger,
 .settings-overview__eyebrow:hover .material-info-tooltip__trigger,
-.settings-overview__eyebrow:focus-within .material-info-tooltip__trigger,
+.settings-overview__eyebrow:focus-within .material-info-tooltip__trigger {
+  filter: none;
+  opacity: 1;
+  outline: 0;
+}
+
 .material-info-tooltip__trigger:hover,
 .material-info-tooltip__trigger:focus-visible {
   background: var(--app-state-layer-primary-hover);
@@ -457,6 +498,17 @@ select.form-field__control {
   filter: none;
   opacity: 1;
   outline: 0;
+}
+
+.form-field__label-row .material-info-tooltip__trigger:hover,
+.form-field__label-row .material-info-tooltip__trigger:focus-visible,
+.section-title-with-info .material-info-tooltip__trigger:hover,
+.section-title-with-info .material-info-tooltip__trigger:focus-visible,
+.field-label-with-info .material-info-tooltip__trigger:hover,
+.field-label-with-info .material-info-tooltip__trigger:focus-visible,
+.settings-overview__eyebrow .material-info-tooltip__trigger:hover,
+.settings-overview__eyebrow .material-info-tooltip__trigger:focus-visible {
+  background: transparent;
 }
 
 .material-info-tooltip__trigger:hover {
@@ -1324,6 +1376,10 @@ html[data-app-direction="rtl"]
 }
 
 @media (prefers-reduced-motion: reduce) {
+  :root[data-motion-mode="system"] .form-field__label-row::before,
+  :root[data-motion-mode="system"] .section-title-with-info::before,
+  :root[data-motion-mode="system"] .field-label-with-info::before,
+  :root[data-motion-mode="system"] .settings-overview__eyebrow::before,
   :root[data-motion-mode="system"] .material-select__menu-icon,
   :root[data-motion-mode="system"] .editable-number-combobox__menu-icon,
   :root[data-motion-mode="system"] .color-choice-dropdown__menu-icon,
@@ -1336,6 +1392,10 @@ html[data-app-direction="rtl"]
   }
 }
 
+:root[data-motion-mode="reduced"] .form-field__label-row::before,
+:root[data-motion-mode="reduced"] .section-title-with-info::before,
+:root[data-motion-mode="reduced"] .field-label-with-info::before,
+:root[data-motion-mode="reduced"] .settings-overview__eyebrow::before,
 :root[data-motion-mode="reduced"] .material-select__menu-icon,
 :root[data-motion-mode="reduced"] .editable-number-combobox__menu-icon,
 :root[data-motion-mode="reduced"] .color-choice-dropdown__menu-icon,
