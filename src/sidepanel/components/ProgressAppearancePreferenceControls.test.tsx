@@ -48,6 +48,9 @@ describe("ProgressAppearancePreferenceControls", () => {
     expect(html).toContain(
       'class="progress-appearance-card progress-appearance-bands"',
     );
+    expect(html).toContain(
+      'class="section-title-with-info progress-appearance-bands__title"',
+    );
     expect(html).toContain('class="progress-appearance-card__title"');
     expect(html).not.toContain("provider-progress-provider__title");
     expect(html).toContain('id="progress-thickness-input"');
@@ -234,6 +237,21 @@ describe("ProgressAppearancePreferenceControls", () => {
   });
 
   it("keeps the gradient header compact and stop marker draggable", () => {
+    expect(settingsAppearanceCss).toContain(
+      'grid-template-areas: "title summary actions mode";',
+    );
+    expect(settingsAppearanceCss).toContain(
+      "grid-template-areas:\n      \"title mode\"\n      \"summary actions\";",
+    );
+    expect(settingsAppearanceCss).toContain("flex: 1 1 13rem;");
+    expect(settingsAppearanceCss).toContain("min-inline-size: min(100%, 11rem);");
+    expect(settingsAppearanceCss).toContain("grid-area: mode;");
+    expect(settingsAppearanceCss).toContain(
+      ".progress-appearance-mode-switch__button {\n    min-width: 60px;",
+    );
+    expect(settingsAppearanceCss).toContain(
+      ".progress-gradient-scheme-dropdown--inline\n    .progress-gradient-scheme-dropdown__value {\n    display: none;",
+    );
     expect(settingsAppearanceCss).toContain(
       "--progress-gradient-track-padding-inline: var(--app-space-3);",
     );

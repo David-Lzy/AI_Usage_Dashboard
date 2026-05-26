@@ -779,46 +779,44 @@ export function ProgressAppearancePreferenceControls({
 
         <div className="progress-appearance-card progress-appearance-bands">
           <div className="progress-appearance-bands__header">
-            <div className="progress-appearance-bands__title-row">
-              <div className="section-title-with-info">
-                <p className="progress-appearance-card__title">
-                  {copy.colorBands.label}
-                </p>
-                <MaterialInfoTooltip>{copy.colorBands.detail}</MaterialInfoTooltip>
-              </div>
-              {activeColorMode === "gradient" ? (
-                <div className="progress-gradient-editor__summary">
-                  <div className="section-title-with-info progress-gradient-editor__summary-title">
-                    <p className="progress-appearance-card__title">
-                      {copy.gradient.label}
-                    </p>
-                    <MaterialInfoTooltip>{copy.gradient.detail}</MaterialInfoTooltip>
-                  </div>
-                  <ProgressGradientSchemeDropdown
-                    label={copy.gradient.presetsLabel}
-                    helperText={copy.gradient.presetsHelp}
-                    layout="inline"
-                    valueLabel={selectedGradientSchemeLabel}
-                    valueStops={gradientStops}
-                    options={PROGRESS_GRADIENT_PRESETS.map((preset) => ({
-                      id: preset.id,
-                      label: copy.gradient.presetNames[preset.id],
-                      stops: preset.stops,
-                    }))}
-                    imageImportAction={copy.gradient.imageImportAction}
-                    imageImportBusy={copy.gradient.imageImportBusy}
-                    imageImportHelp={copy.gradient.imageImportHelp}
-                    imageImportAccept={PROGRESS_GRADIENT_IMAGE_ACCEPT}
-                    isImageImporting={isImageImporting}
-                    sessionPopoverId="progress-gradient-scheme"
-                    activePopover={activePopover}
-                    onActivePopoverChange={onActivePopoverChange}
-                    onSchemeSelect={applyGradientPreset}
-                    onImageImport={handleGradientImageImport}
-                  />
-                </div>
-              ) : null}
+            <div className="section-title-with-info progress-appearance-bands__title">
+              <p className="progress-appearance-card__title">
+                {copy.colorBands.label}
+              </p>
+              <MaterialInfoTooltip>{copy.colorBands.detail}</MaterialInfoTooltip>
             </div>
+            {activeColorMode === "gradient" ? (
+              <div className="progress-gradient-editor__summary">
+                <div className="section-title-with-info progress-gradient-editor__summary-title">
+                  <p className="progress-appearance-card__title">
+                    {copy.gradient.label}
+                  </p>
+                  <MaterialInfoTooltip>{copy.gradient.detail}</MaterialInfoTooltip>
+                </div>
+                <ProgressGradientSchemeDropdown
+                  label={copy.gradient.presetsLabel}
+                  helperText={copy.gradient.presetsHelp}
+                  layout="inline"
+                  valueLabel={selectedGradientSchemeLabel}
+                  valueStops={gradientStops}
+                  options={PROGRESS_GRADIENT_PRESETS.map((preset) => ({
+                    id: preset.id,
+                    label: copy.gradient.presetNames[preset.id],
+                    stops: preset.stops,
+                  }))}
+                  imageImportAction={copy.gradient.imageImportAction}
+                  imageImportBusy={copy.gradient.imageImportBusy}
+                  imageImportHelp={copy.gradient.imageImportHelp}
+                  imageImportAccept={PROGRESS_GRADIENT_IMAGE_ACCEPT}
+                  isImageImporting={isImageImporting}
+                  sessionPopoverId="progress-gradient-scheme"
+                  activePopover={activePopover}
+                  onActivePopoverChange={onActivePopoverChange}
+                  onSchemeSelect={applyGradientPreset}
+                  onImageImport={handleGradientImageImport}
+                />
+              </div>
+            ) : null}
             <div className="progress-appearance-bands__header-actions">
               {activeColorMode === "traditional" ? (
                 <>
@@ -844,33 +842,33 @@ export function ProgressAppearancePreferenceControls({
                   {copy.gradient.resetToDefault}
                 </button>
               )}
-              <span
-                className="progress-appearance-mode-switch"
-                role="group"
-                aria-label={copy.mode.label}
-              >
-                <button
-                  className="progress-appearance-mode-switch__button"
-                  type="button"
-                  aria-pressed={activeColorMode === "traditional"}
-                  data-selected={
-                    activeColorMode === "traditional" ? "true" : "false"
-                  }
-                  onClick={() => switchColorMode("traditional")}
-                >
-                  {copy.mode.traditional}
-                </button>
-                <button
-                  className="progress-appearance-mode-switch__button"
-                  type="button"
-                  aria-pressed={activeColorMode === "gradient"}
-                  data-selected={activeColorMode === "gradient" ? "true" : "false"}
-                  onClick={() => switchColorMode("gradient")}
-                >
-                  {copy.mode.gradient}
-                </button>
-              </span>
             </div>
+            <span
+              className="progress-appearance-mode-switch"
+              role="group"
+              aria-label={copy.mode.label}
+            >
+              <button
+                className="progress-appearance-mode-switch__button"
+                type="button"
+                aria-pressed={activeColorMode === "traditional"}
+                data-selected={
+                  activeColorMode === "traditional" ? "true" : "false"
+                }
+                onClick={() => switchColorMode("traditional")}
+              >
+                {copy.mode.traditional}
+              </button>
+              <button
+                className="progress-appearance-mode-switch__button"
+                type="button"
+                aria-pressed={activeColorMode === "gradient"}
+                data-selected={activeColorMode === "gradient" ? "true" : "false"}
+                onClick={() => switchColorMode("gradient")}
+              >
+                {copy.mode.gradient}
+              </button>
+            </span>
           </div>
 
           {activeColorMode === "traditional" ? (
