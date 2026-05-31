@@ -39,6 +39,10 @@
   min-width: 0;
 }
 
+.top-app-bar__actions .icon-button {
+  white-space: nowrap;
+}
+
 .top-app-bar__title {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -95,6 +99,17 @@
 
   .top-app-bar__actions .icon-button {
     flex: 1 1 120px;
+  }
+}
+
+@media (max-width: 520px) {
+  .top-app-bar__actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .top-app-bar__actions .icon-button {
+    inline-size: 100%;
   }
 }
 

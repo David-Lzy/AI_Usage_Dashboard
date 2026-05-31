@@ -1,7 +1,14 @@
+import { readFileSync } from "node:fs";
+
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
 import { TopBar } from "./TopBar";
+
+const topAppBarCss = readFileSync(
+  new URL("../theme/top-app-bar.css", import.meta.url),
+  "utf8",
+);
 
 describe("TopBar", () => {
   it("renders optional theme and full-page actions ahead of the standard actions", () => {
@@ -65,5 +72,14 @@ describe("TopBar", () => {
     expect(html).toContain('class="top-app-bar__bottom"');
     expect(html).toContain('aria-label="Sections"');
     expect(html).toContain("Section chips");
+  });
+
+  it("keeps narrow action rows from wrapping action labels", () => {
+    expect(topAppBarCss).toContain(".top-app-bar__actions .icon-button {");
+    expect(topAppBarCss).toContain("white-space: nowrap;");
+    expect(topAppBarCss).toContain("@media (max-width: 520px)");
+    expect(topAppBarCss).toContain(
+      "grid-template-columns: repeat(2, minmax(0, 1fr));",
+    );
   });
 });

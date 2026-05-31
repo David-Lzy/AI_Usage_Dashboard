@@ -139,10 +139,10 @@ export function DashboardPage({
             ))}
           </div>
         ) : (
-          <section className="status-card" aria-live="polite">
+          <section className="status-card dashboard-empty-state" aria-live="polite">
             <p className="section-label">{i18n.t("dashboard.empty.eyebrow")}</p>
             <p className="body-copy">{i18n.t("dashboard.empty.detail")}</p>
-            <div className="credential-actions">
+            <div className="credential-actions dashboard-empty-state__actions">
               <button
                 className="text-button"
                 type="button"

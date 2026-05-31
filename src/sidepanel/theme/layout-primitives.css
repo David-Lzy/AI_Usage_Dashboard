@@ -105,6 +105,15 @@
   min-width: 0;
 }
 
+.dashboard-empty-state {
+  justify-items: start;
+  max-inline-size: 720px;
+}
+
+.dashboard-empty-state__actions {
+  justify-content: flex-start;
+}
+
 .dashboard-hero-card {
   grid-template-columns: minmax(0, 1fr);
   gap: var(--app-space-3);

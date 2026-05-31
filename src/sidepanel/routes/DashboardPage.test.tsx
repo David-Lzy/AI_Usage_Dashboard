@@ -86,6 +86,12 @@ describe("DashboardPage", () => {
 
     expect(html).toContain(">Open Quick Setup<");
     expect(html).toContain("Start in Quick Setup to enable your first provider");
+    expect(html).toContain('class="status-card dashboard-empty-state"');
+    expect(html).toContain(
+      'class="credential-actions dashboard-empty-state__actions"',
+    );
+    expect(layoutPrimitivesCss).toContain(".dashboard-empty-state {");
+    expect(layoutPrimitivesCss).toContain("max-inline-size: 720px;");
   });
 
   it("can render the full-page surface switch as a sidebar action", () => {
