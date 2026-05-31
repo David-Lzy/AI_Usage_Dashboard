@@ -95,11 +95,14 @@ Experimental Firefox local build checks:
 ```sh
 npm run firefox:build
 npm run firefox:lint
+npm run firefox:lint:baseline
 npm run firefox:package
 ```
 
 The default `npm run build` output is the Chrome extension in `dist/chrome/`.
 Firefox output is generated under `dist/firefox/` for local MVP testing.
+`npm run firefox:lint:baseline` keeps the local beta lint surface pinned to the
+current known React runtime warnings and fails if new web-ext warnings appear.
 Set `FIREFOX_BIN=/path/to/firefox` when you need to choose a specific Firefox
 binary for `npm run firefox:run`.
 

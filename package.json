@@ -17,6 +17,7 @@
     "build": "./scripts/with-preferred-node.sh vite build",
     "firefox:build": "npm run build && ./scripts/with-preferred-node.sh node ./scripts/build-firefox-package.mjs",
     "firefox:lint": "npm run firefox:build && web-ext lint --source-dir dist/firefox",
+    "firefox:lint:baseline": "npm run firefox:build && ./scripts/with-preferred-node.sh node ./scripts/check-firefox-lint-baseline.mjs",
     "firefox:run": "npm run firefox:build && ./scripts/with-preferred-node.sh node ./scripts/run-firefox-extension.mjs",
     "firefox:package": "npm run firefox:build && web-ext build --source-dir dist/firefox --artifacts-dir release/firefox --overwrite-dest",
     "preview:dist": "python3 -m http.server 4173 --bind 0.0.0.0 --directory dist/chrome",
