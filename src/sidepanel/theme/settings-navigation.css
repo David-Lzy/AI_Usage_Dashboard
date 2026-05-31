@@ -19,11 +19,12 @@
 }
 
 .settings-overview__header {
-  grid-template-columns: minmax(min(100%, 320px), 1fr) minmax(
+  grid-template-columns: minmax(0, max-content) minmax(
       min(100%, 280px),
       280px
     );
   align-items: center;
+  justify-content: space-between;
   gap: var(--app-space-4);
 }
 
@@ -32,6 +33,12 @@
   grid-template-columns: minmax(0, 1fr);
   gap: var(--app-space-1);
   min-width: 0;
+}
+
+.settings-overview__title > .section-title {
+  overflow-wrap: normal;
+  text-wrap: pretty;
+  word-break: normal;
 }
 
 .settings-overview__eyebrow {

@@ -76,10 +76,14 @@ describe("SettingsSections", () => {
       "--material-info-tooltip-size: var(--md-sys-typescale-label-medium-size);",
     );
     expect(settingsNavigationCss).toContain(
-      "grid-template-columns: minmax(min(100%, 320px), 1fr) minmax(",
+      "grid-template-columns: minmax(0, max-content) minmax(",
     );
     expect(settingsNavigationCss).toContain(
       "min(100%, 280px),\n      280px",
+    );
+    expect(settingsNavigationCss).toContain("justify-content: space-between;");
+    expect(settingsNavigationCss).toContain(
+      ".settings-overview__title > .section-title {",
     );
     expect(settingsNavigationCss).toContain(
       "inline-size: min(100%, 280px);",
