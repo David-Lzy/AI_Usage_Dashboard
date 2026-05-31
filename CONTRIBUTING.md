@@ -12,6 +12,8 @@ AI Usage Dashboard is a Chrome extension for tracking AI coding tool usage, setu
 Firefox compatibility work is kept on the same mainline but remains
 experimental. Use `npm run firefox:build` and `npm run firefox:lint` to verify
 the generated `dist/firefox/` package without changing the Chrome build output.
+Use `npm run firefox:lint:baseline` before Firefox-targeted changes are sent so
+the known local beta lint warnings do not drift.
 
 ## Before Sending Changes
 
@@ -19,7 +21,7 @@ Run the checks that match your change:
 
 - Documentation only: `npm run docs:check` and `git diff --check`
 - Runtime or script changes: `npm run i18n:check`, `npm run typecheck`, focused tests, `npm run build`, and `git diff --check`
-- Firefox-target changes: add `npm run firefox:build` and `npm run firefox:lint`
+- Firefox-target changes: add `npm run firefox:build`, `npm run firefox:lint`, and `npm run firefox:lint:baseline`
 - Release candidate changes: `npm run release:check`
 
 ## UI Control Rhythm
