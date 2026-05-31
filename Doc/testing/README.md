@@ -41,5 +41,16 @@ npm run release:check
 npm run release:package
 ```
 
+Firefox local beta checks should pass when a change touches browser packaging,
+manifest conversion, popup/sidepanel browser compatibility, or Firefox-specific
+release notes:
+
+```sh
+npm run firefox:build
+npm run firefox:lint
+npm run firefox:lint:baseline
+npm run firefox:package
+```
+
 Do not commit screenshots, local browser profile paths, account data, cookies,
 raw auth headers, or personal provider evidence.
