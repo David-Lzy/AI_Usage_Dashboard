@@ -59,6 +59,9 @@ jobs:
       - name: Package Firefox extension
         run: npm run firefox:package
 
+      - name: Check Firefox lint baseline
+        run: node scripts/check-firefox-lint-baseline.mjs
+
       - name: Upload Chrome package
         uses: actions/upload-artifact@v4
         with:
