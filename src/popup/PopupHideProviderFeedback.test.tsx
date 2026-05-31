@@ -1,9 +1,15 @@
+import { readFileSync } from "node:fs";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
 import { createRuntimeI18n } from "../shared/i18n";
 import { PopupHideProviderFeedback } from "./PopupHideProviderFeedback";
 import { buildPopupHideProviderFeedbackCopy } from "./popup-hide-provider-feedback-copy";
+
+const popupThemeCss = readFileSync(
+  new URL("./popup-theme.css", import.meta.url),
+  "utf8",
+);
 
 describe("PopupHideProviderFeedback", () => {
   it("renders the undo countdown as a compact Material-style status chip", () => {
@@ -48,5 +54,15 @@ describe("PopupHideProviderFeedback", () => {
     expect(html).toContain("popup-hide-feedback--notice");
     expect(html).toContain("Cursor Personal can be shown again from Settings.");
     expect(html).toContain(">Settings</button>");
+  });
+
+  it("stretches the undo surface while keeping the action visible", () => {
+    expect(popupThemeCss).toContain(".popup-header__feedback-slot");
+    expect(popupThemeCss).toContain("align-items: stretch;");
+    expect(popupThemeCss).toContain(".popup-hide-feedback");
+    expect(popupThemeCss).toContain("inline-size: 100%;");
+    expect(popupThemeCss).toContain("justify-content: space-between;");
+    expect(popupThemeCss).toContain(".popup-hide-feedback__action");
+    expect(popupThemeCss).toContain("flex: 0 0 auto;");
   });
 });

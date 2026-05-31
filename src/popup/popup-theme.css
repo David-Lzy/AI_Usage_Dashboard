@@ -225,6 +225,7 @@ body.popup-page .popup-header--surface-collapsed {
 
 .popup-header__feedback-slot {
   display: flex;
+  align-items: stretch;
   justify-content: stretch;
   min-width: 0;
 }
@@ -233,8 +234,11 @@ body.popup-page .popup-header--surface-collapsed {
   position: relative;
   display: inline-flex;
   align-items: center;
-  max-width: 100%;
+  flex: 1 1 auto;
+  inline-size: 100%;
+  max-inline-size: 100%;
   min-height: 32px;
+  justify-content: space-between;
   gap: var(--app-space-1);
   padding: 4px 6px 4px var(--app-space-3);
   overflow: hidden;
@@ -402,6 +406,46 @@ body.popup-page .popup-header--surface-collapsed {
   display: flex;
   flex-wrap: wrap;
   gap: var(--app-space-2);
+}
+
+.popup-load-state-card {
+  align-content: start;
+  gap: var(--app-space-3);
+  min-block-size: 180px;
+}
+
+.popup-load-state-card__indicator {
+  display: block;
+  block-size: 4px;
+  inline-size: 100%;
+  overflow: hidden;
+  border-radius: var(--md-sys-shape-corner-full);
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in srgb, var(--md-sys-color-primary) 28%, transparent) 18%,
+      var(--md-sys-color-primary) 50%,
+      color-mix(in srgb, var(--md-sys-color-primary) 28%, transparent) 82%,
+      transparent 100%
+    ),
+    var(--md-sys-color-surface-container-highest);
+}
+
+.popup-load-state-card--error {
+  gap: var(--app-space-4);
+}
+
+.popup-load-state-card__actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
+  align-items: center;
+  inline-size: 100%;
+}
+
+.popup-load-state-card__actions > * {
+  min-inline-size: 0;
+  padding-inline: var(--app-space-3);
 }
 
 .popup-setup-coverage .summary-strip {
