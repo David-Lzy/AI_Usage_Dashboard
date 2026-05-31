@@ -37,6 +37,7 @@ npm run qa:surface:check
 Release candidates should pass:
 
 ```sh
+npm run release:workflow:check
 npm run release:check
 npm run release:package
 ```
