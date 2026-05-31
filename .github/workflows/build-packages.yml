@@ -121,21 +121,7 @@ jobs:
           fi
 
           if gh release view "${release_tag}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
-            current_assets="$(gh release view "${release_tag}" \
-              --repo "${GITHUB_REPOSITORY}" \
-              --json assets \
-              --jq '.assets[].name' | sort)"
-            expected_assets="$(printf '%s\n' \
-              "${chrome_asset}" \
-              "${firefox_asset}" \
-              "SHA256SUMS.txt" | sort)"
-
             echo "release-exists=true" >> "${GITHUB_OUTPUT}"
-            if [[ "${current_assets}" == "${expected_assets}" ]]; then
-              echo "GitHub Release ${release_tag} already has the expected assets; skipping."
-              echo "should-release=false" >> "${GITHUB_OUTPUT}"
-              exit 0
-            fi
           else
             echo "release-exists=false" >> "${GITHUB_OUTPUT}"
           fi

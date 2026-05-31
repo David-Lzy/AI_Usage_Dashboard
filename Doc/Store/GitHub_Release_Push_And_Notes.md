@@ -36,8 +36,10 @@ example, `package.json` version `0.1.0-rc.26` must use tag `v0.1.0-rc.26`.
 If they do not match, the release workflow must fail rather than publishing a
 misnamed package.
 
-When a matching tag already exists, a later `main` push may backfill that
-release if the package assets or notes need to be regenerated.
+When a matching tag already exists, a later `main` push refreshes that release's
+assets and notes from the current workflow template. This keeps browser-specific
+asset names and generated release notes aligned with the latest publishing
+rules for the current package version.
 
 ## Package Asset Names
 

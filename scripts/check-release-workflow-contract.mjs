@@ -16,6 +16,12 @@ function assertIncludes(source, snippet, label) {
   }
 }
 
+function assertNotIncludes(source, snippet, label) {
+  if (source.includes(snippet)) {
+    throw new Error(`Release workflow contract failed: unexpected ${label}.`);
+  }
+}
+
 function assertMatches(source, pattern, label) {
   if (!pattern.test(source)) {
     throw new Error(`Release workflow contract failed: missing ${label}.`);
@@ -49,6 +55,11 @@ assertIncludes(
 );
 assertIncludes(workflow, "name: chrome-extension-package", "Chrome artifact name");
 assertIncludes(workflow, "name: firefox-extension-package", "Firefox artifact name");
+assertNotIncludes(
+  workflow,
+  "already has the expected assets; skipping",
+  "asset-only release skip path",
+);
 assertIncludes(
   workflow,
   'sha256sum "${chrome_asset}" "${firefox_asset}" > SHA256SUMS.txt',
