@@ -104,6 +104,8 @@ jobs:
           release_tag="v${package_version}"
           chrome_asset="ai-usage-dashboard-chrome-${package_version}.zip"
           firefox_asset="ai-usage-dashboard-firefox-${package_version}.zip"
+          release_exists="false"
+          should_upload_assets="false"
 
           if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
             release_tag="${GITHUB_REF_NAME}"
@@ -112,33 +114,72 @@ jobs:
               echo "Tag version ${tag_version} does not match package.json version ${package_version}." >&2
               exit 1
             fi
-          elif ! git ls-remote --exit-code --tags \
-            "https://github.com/${GITHUB_REPOSITORY}.git" \
-            "refs/tags/${release_tag}" >/dev/null; then
-            echo "Matching release tag ${release_tag} does not exist yet; skipping GitHub Release."
-            echo "should-release=false" >> "${GITHUB_OUTPUT}"
-            exit 0
+            should_upload_assets="true"
+          else
+            if ! git ls-remote --exit-code --tags \
+              "https://github.com/${GITHUB_REPOSITORY}.git" \
+              "refs/tags/${release_tag}" >/dev/null; then
+              echo "Matching release tag ${release_tag} does not exist yet; skipping GitHub Release."
+              echo "should-release=false" >> "${GITHUB_OUTPUT}"
+              exit 0
+            fi
+            if ! gh release view "${release_tag}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
+              echo "Matching GitHub Release ${release_tag} does not exist yet; skipping notes refresh."
+              echo "should-release=false" >> "${GITHUB_OUTPUT}"
+              exit 0
+            fi
+            release_exists="true"
           fi
 
-          if gh release view "${release_tag}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
-            echo "release-exists=true" >> "${GITHUB_OUTPUT}"
-          else
-            echo "release-exists=false" >> "${GITHUB_OUTPUT}"
+          if [[ "${should_upload_assets}" == "true" ]]; then
+            if gh release view "${release_tag}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
+              release_exists="true"
+            fi
           fi
 
           echo "release-tag=${release_tag}" >> "${GITHUB_OUTPUT}"
           echo "chrome-asset=${chrome_asset}" >> "${GITHUB_OUTPUT}"
           echo "firefox-asset=${firefox_asset}" >> "${GITHUB_OUTPUT}"
+          echo "release-exists=${release_exists}" >> "${GITHUB_OUTPUT}"
+          echo "should-upload-assets=${should_upload_assets}" >> "${GITHUB_OUTPUT}"
           echo "should-release=true" >> "${GITHUB_OUTPUT}"
 
       - name: Download packages
-        if: steps.release-target.outputs.should-release == 'true'
+        if: steps.release-target.outputs.should-upload-assets == 'true'
         uses: actions/download-artifact@v4
         with:
           path: release-artifacts
 
-      - name: Prepare release assets
+      - name: Prepare release notes
         if: steps.release-target.outputs.should-release == 'true'
+        run: |
+          set -euo pipefail
+
+          package_version="${{ needs.build.outputs.package-version }}"
+          chrome_asset="${{ steps.release-target.outputs.chrome-asset }}"
+          firefox_asset="${{ steps.release-target.outputs.firefox-asset }}"
+
+          cat > release-notes.md <<NOTES
+          ## AI Usage Dashboard ${package_version}
+
+          Release candidate package for manual review, extension-store handoff, and browser-specific testing.
+
+          ### Downloads
+
+          - Chrome: \`${chrome_asset}\`
+            - Use this zip for Chrome Web Store upload, review, or manual developer-mode testing after extracting it.
+          - Firefox local beta: \`${firefox_asset}\`
+            - Unsigned local beta package generated from the Firefox manifest transform. Normal Firefox installation still needs a signed AMO/self-distribution package.
+          - Checksums: \`SHA256SUMS.txt\`
+
+          ### Notes
+
+          - Chrome Web Store remains the recommended install path for everyday Chrome users.
+          - This release includes the latest responsive Settings and progress color/gradient UI polish, plus automated package publishing.
+          NOTES
+
+      - name: Prepare release assets
+        if: steps.release-target.outputs.should-upload-assets == 'true'
         run: |
           set -euo pipefail
           mkdir -p release-upload
@@ -167,25 +208,6 @@ jobs:
             sha256sum "${chrome_asset}" "${firefox_asset}" > SHA256SUMS.txt
           )
 
-          cat > release-notes.md <<NOTES
-          ## AI Usage Dashboard ${package_version}
-
-          Release candidate package for manual review, extension-store handoff, and browser-specific testing.
-
-          ### Downloads
-
-          - Chrome: \`${chrome_asset}\`
-            - Use this zip for Chrome Web Store upload, review, or manual developer-mode testing after extracting it.
-          - Firefox local beta: \`${firefox_asset}\`
-            - Unsigned local beta package generated from the Firefox manifest transform. Normal Firefox installation still needs a signed AMO/self-distribution package.
-          - Checksums: \`SHA256SUMS.txt\`
-
-          ### Notes
-
-          - Chrome Web Store remains the recommended install path for everyday Chrome users.
-          - This release includes the latest responsive Settings and progress color/gradient UI polish, plus automated package publishing.
-          NOTES
-
       - name: Create GitHub Release
         if: steps.release-target.outputs.should-release == 'true'
         env:
@@ -193,28 +215,37 @@ jobs:
           PACKAGE_VERSION: ${{ needs.build.outputs.package-version }}
           RELEASE_TAG: ${{ steps.release-target.outputs.release-tag }}
           RELEASE_EXISTS: ${{ steps.release-target.outputs.release-exists }}
+          SHOULD_UPLOAD_ASSETS: ${{ steps.release-target.outputs.should-upload-assets }}
         run: |
           set -euo pipefail
           if [[ "${RELEASE_EXISTS}" == "true" ]]; then
-            while IFS= read -r asset_name; do
-              [[ -z "${asset_name}" ]] && continue
-              gh release delete-asset "${RELEASE_TAG}" "${asset_name}" \
+            if [[ "${SHOULD_UPLOAD_ASSETS}" == "true" ]]; then
+              while IFS= read -r asset_name; do
+                [[ -z "${asset_name}" ]] && continue
+                gh release delete-asset "${RELEASE_TAG}" "${asset_name}" \
+                  --repo "${GITHUB_REPOSITORY}" \
+                  --yes
+              done < <(gh release view "${RELEASE_TAG}" \
                 --repo "${GITHUB_REPOSITORY}" \
-                --yes
-            done < <(gh release view "${RELEASE_TAG}" \
-              --repo "${GITHUB_REPOSITORY}" \
-              --json assets \
-              --jq '.assets[].name')
+                --json assets \
+                --jq '.assets[].name')
+            fi
 
             gh release edit "${RELEASE_TAG}" \
               --repo "${GITHUB_REPOSITORY}" \
               --title "${RELEASE_TAG}" \
               --notes-file release-notes.md
 
-            gh release upload "${RELEASE_TAG}" release-upload/*.zip release-upload/SHA256SUMS.txt \
-              --repo "${GITHUB_REPOSITORY}" \
-              --clobber
+            if [[ "${SHOULD_UPLOAD_ASSETS}" == "true" ]]; then
+              gh release upload "${RELEASE_TAG}" release-upload/*.zip release-upload/SHA256SUMS.txt \
+                --repo "${GITHUB_REPOSITORY}" \
+                --clobber
+            fi
           else
+            if [[ "${SHOULD_UPLOAD_ASSETS}" != "true" ]]; then
+              echo "Refusing to create ${RELEASE_TAG} without tag-scoped release assets." >&2
+              exit 1
+            fi
             release_flags=()
             if [[ "${PACKAGE_VERSION}" == *-* ]]; then
               release_flags+=(--prerelease)

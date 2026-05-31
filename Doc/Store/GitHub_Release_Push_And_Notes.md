@@ -36,10 +36,13 @@ example, `package.json` version `0.1.0-rc.26` must use tag `v0.1.0-rc.26`.
 If they do not match, the release workflow must fail rather than publishing a
 misnamed package.
 
-When a matching tag already exists, a later `main` push refreshes that release's
-assets and notes from the current workflow template. This keeps browser-specific
-asset names and generated release notes aligned with the latest publishing
-rules for the current package version.
+Release assets are tag-scoped: Chrome and Firefox package zips attached to a
+GitHub Release should come from the version tag workflow, not a later `main`
+commit with the same package version.
+
+When a matching tag and GitHub Release already exist, a later `main` push may
+refresh the release notes from the current workflow template, but it must not
+re-upload public package assets built from `main`.
 
 ## Package Asset Names
 

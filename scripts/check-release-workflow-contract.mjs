@@ -62,6 +62,31 @@ assertNotIncludes(
 );
 assertIncludes(
   workflow,
+  "should-upload-assets=${should_upload_assets}",
+  "release asset upload output",
+);
+assertIncludes(
+  workflow,
+  "Matching GitHub Release ${release_tag} does not exist yet; skipping notes refresh.",
+  "main notes-only release skip",
+);
+assertIncludes(
+  workflow,
+  "if: steps.release-target.outputs.should-upload-assets == 'true'",
+  "tag-scoped package artifact download",
+);
+assertIncludes(
+  workflow,
+  "if [[ \"${SHOULD_UPLOAD_ASSETS}\" == \"true\" ]]; then",
+  "conditional release asset upload",
+);
+assertIncludes(
+  workflow,
+  "Refusing to create ${RELEASE_TAG} without tag-scoped release assets.",
+  "release creation asset provenance guard",
+);
+assertIncludes(
+  workflow,
   'sha256sum "${chrome_asset}" "${firefox_asset}" > SHA256SUMS.txt',
   "release checksums",
 );
