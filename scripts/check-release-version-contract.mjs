@@ -32,10 +32,17 @@ function assertEqual(actual, expected, label) {
   }
 }
 
-const [packageJson, packageLock, manifest] = await Promise.all([
+function assertIncludes(source, snippet, label) {
+  if (!source.includes(snippet)) {
+    throw new Error(`Release version contract failed: missing ${label}.`);
+  }
+}
+
+const [packageJson, packageLock, manifest, readme] = await Promise.all([
   readJson("package.json"),
   readJson("package-lock.json"),
   readJson("src/manifest.json"),
+  readFile(path.join(projectRoot, "README.md"), "utf8"),
 ]);
 
 const packageVersion = packageJson.version;
@@ -57,6 +64,16 @@ assertEqual(
   manifest.version,
   expectedManifestVersion,
   "src/manifest.json numeric version",
+);
+assertIncludes(
+  readme,
+  `- Current local package version: \`${packageVersion}\`.`,
+  "README current local package version",
+);
+assertIncludes(
+  readme,
+  `- Current local Chrome manifest version: \`${expectedManifestVersion}\`.`,
+  "README current local Chrome manifest version",
 );
 
 console.log(
