@@ -168,6 +168,27 @@
     var(--md-sys-color-outline-variant) 92%,
     white 8%
   );
+  --app-surface-card-background: color-mix(
+    in srgb,
+    var(--md-sys-color-surface-container-lowest) 96%,
+    var(--md-sys-color-surface-container-low) 4%
+  );
+  --app-surface-card-border: color-mix(
+    in srgb,
+    var(--md-sys-color-outline-variant) 90%,
+    var(--md-sys-color-surface-container-lowest) 10%
+  );
+  --app-surface-card-footer-background: color-mix(
+    in srgb,
+    var(--md-sys-color-surface-container-low) 72%,
+    transparent
+  );
+  --app-surface-card-subtle-background: color-mix(
+    in srgb,
+    var(--md-sys-color-surface-container-lowest) 72%,
+    transparent
+  );
+  --app-surface-card-shadow: var(--app-elevation-1);
 
   /* Typography */
   --md-sys-typescale-display-small-font: "Roboto Flex", "Roboto", "Segoe UI",
@@ -232,8 +253,12 @@
   --app-control-icon-slot: 48px;
 
   /* Elevation */
-  --app-elevation-1: 0 1px 2px var(--md-sys-color-shadow);
-  --app-elevation-2: 0 6px 18px rgba(16, 24, 40, 0.08);
+  --app-elevation-1: 0 1px 2px
+    color-mix(in srgb, var(--md-sys-color-shadow) 78%, transparent);
+  --app-elevation-2:
+    0 3px 8px color-mix(in srgb, var(--md-sys-color-shadow) 16%, transparent),
+    0 10px 24px
+      color-mix(in srgb, var(--md-sys-color-shadow) 18%, transparent);
 
   /* Motion */
   --app-motion-duration-fast: 140ms;
@@ -423,7 +448,10 @@
     black 8%
   );
 
-  --app-elevation-2: 0 10px 26px rgba(0, 0, 0, 0.28);
+  --app-elevation-2:
+    0 3px 10px color-mix(in srgb, var(--md-sys-color-shadow) 34%, transparent),
+    0 12px 28px
+      color-mix(in srgb, var(--md-sys-color-shadow) 30%, transparent);
 
   --app-state-layer-primary-hover: color-mix(
     in srgb,
@@ -590,7 +618,11 @@
       black 8%
     );
 
-    --app-elevation-2: 0 10px 26px rgba(0, 0, 0, 0.28);
+    --app-elevation-2:
+      0 3px 10px
+        color-mix(in srgb, var(--md-sys-color-shadow) 34%, transparent),
+      0 12px 28px
+        color-mix(in srgb, var(--md-sys-color-shadow) 30%, transparent);
 
     --app-state-layer-primary-hover: color-mix(
       in srgb,

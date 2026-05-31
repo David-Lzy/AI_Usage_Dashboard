@@ -10,10 +10,10 @@
   grid-template-columns: minmax(0, 1fr);
   gap: var(--app-space-3);
   padding: var(--app-space-5);
-  border: 1px solid var(--md-sys-color-outline-variant);
+  border: 1px solid var(--app-surface-card-border);
   border-radius: var(--md-sys-shape-corner-extra-large);
-  background: var(--md-sys-color-surface-container-lowest);
-  box-shadow: var(--app-elevation-1);
+  background: var(--app-surface-card-background);
+  box-shadow: var(--app-surface-card-shadow);
 }
 
 .provider-card {
@@ -57,12 +57,8 @@
   justify-content: flex-end;
   flex-wrap: wrap;
   padding: var(--app-space-3) var(--app-space-5) var(--app-space-4);
-  border-top: 1px solid var(--md-sys-color-outline-variant);
-  background: color-mix(
-    in srgb,
-    var(--md-sys-color-surface-container-low) 68%,
-    transparent
-  );
+  border-top: 1px solid var(--app-surface-card-border);
+  background: var(--app-surface-card-footer-background);
 }
 
 .provider-shell-card__body,
@@ -213,7 +209,7 @@
   border-radius: var(--md-sys-shape-corner-large);
   background: color-mix(
     in srgb,
-    var(--md-sys-color-surface-container-lowest) 66%,
+    var(--app-surface-card-background) 66%,
     transparent
   );
 }
@@ -271,11 +267,7 @@
   padding: var(--app-space-3);
   border: 1px solid var(--app-supporting-surface-border);
   border-radius: var(--md-sys-shape-corner-medium);
-  background: color-mix(
-    in srgb,
-    var(--md-sys-color-surface-container-lowest) 72%,
-    transparent
-  );
+  background: var(--app-surface-card-subtle-background);
 }
 
 .usage-fact--warning {
@@ -287,7 +279,7 @@
   background: color-mix(
     in srgb,
     var(--app-surface-warning-background) 72%,
-    var(--md-sys-color-surface-container-lowest) 28%
+    var(--app-surface-card-background) 28%
   );
 }
 
@@ -300,7 +292,7 @@
   background: color-mix(
     in srgb,
     var(--app-surface-error-background) 72%,
-    var(--md-sys-color-surface-container-lowest) 28%
+    var(--app-surface-card-background) 28%
   );
 }
 
@@ -355,7 +347,7 @@
   background: color-mix(
     in srgb,
     var(--app-surface-warning-background) 72%,
-    var(--md-sys-color-surface-container-lowest) 28%
+    var(--app-surface-card-background) 28%
   );
   border-color: color-mix(
     in srgb,
@@ -369,7 +361,7 @@
   background: color-mix(
     in srgb,
     var(--app-surface-error-background) 72%,
-    var(--md-sys-color-surface-container-lowest) 28%
+    var(--app-surface-card-background) 28%
   );
   border-color: color-mix(
     in srgb,

@@ -112,10 +112,10 @@
   grid-template-columns: minmax(0, 1fr);
   gap: var(--app-space-3);
   padding: var(--app-space-5);
-  border: 1px solid var(--md-sys-color-outline-variant);
+  border: 1px solid var(--app-surface-card-border);
   border-radius: var(--md-sys-shape-corner-extra-large);
-  background: var(--md-sys-color-surface-container-lowest);
-  box-shadow: var(--app-elevation-1);
+  background: var(--app-surface-card-background);
+  box-shadow: var(--app-surface-card-shadow);
 }
 
 .quick-setup-card--starter {

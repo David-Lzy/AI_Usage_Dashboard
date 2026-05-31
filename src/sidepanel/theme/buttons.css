@@ -5,11 +5,11 @@
   min-width: var(--app-control-height-medium);
   height: var(--app-control-height-medium);
   padding: 0 var(--app-control-padding-inline-large);
-  border: 1px solid var(--md-sys-color-outline-variant);
+  border: 1px solid var(--app-surface-card-border);
   border-radius: var(--md-sys-shape-corner-full);
-  background: var(--md-sys-color-surface-container-lowest);
+  background: var(--app-surface-card-background);
   color: var(--md-sys-color-on-surface);
-  box-shadow: var(--app-elevation-1);
+  box-shadow: var(--app-surface-card-shadow);
   cursor: pointer;
   transition:
     transform var(--app-motion-duration-fast) var(--app-motion-easing-standard),
@@ -129,7 +129,7 @@ a.text-button:visited {
   min-height: var(--app-control-height-medium);
   padding-inline: var(--app-control-padding-inline-medium);
   border-color: var(--md-sys-color-outline);
-  background: var(--md-sys-color-surface-container-lowest);
+  background: var(--app-surface-card-background);
 }
 
 .text-button--outlined:hover:not(:disabled) {

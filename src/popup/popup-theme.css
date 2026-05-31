@@ -23,7 +23,7 @@ html.popup-page {
   --app-popup-shell-radius: var(--md-sys-shape-corner-extra-large);
   --app-popup-card-radius: var(--md-sys-shape-corner-extra-large);
   --app-popup-provider-card-radius: var(--md-sys-shape-corner-large);
-  --app-popup-card-shadow: var(--app-elevation-1);
+  --app-popup-card-shadow: var(--app-surface-card-shadow);
 }
 
 html.popup-page[data-popup-size-preset="compact"] {
@@ -67,7 +67,7 @@ html.popup-page[data-popup-shadow-style="none"] {
 }
 
 html.popup-page[data-popup-shadow-style="soft"] {
-  --app-popup-card-shadow: var(--app-elevation-1);
+  --app-popup-card-shadow: var(--app-surface-card-shadow);
 }
 
 html.popup-page[data-popup-shadow-style="elevated"] {
@@ -115,8 +115,8 @@ body.popup-page .status-card {
   display: grid;
   gap: var(--app-space-2);
   padding: var(--popup-header-action-gap);
-  border: 1px solid var(--md-sys-color-outline-variant);
-  background: var(--md-sys-color-surface-container-lowest);
+  border: 1px solid var(--app-surface-card-border);
+  background: var(--app-surface-card-background);
   overflow: visible;
   transition:
     background-color var(--app-motion-duration-fast)
@@ -167,7 +167,7 @@ body.popup-page .popup-header--surface-collapsed {
   min-height: 18px;
   padding: 0;
   border-radius: var(--md-sys-shape-corner-full);
-  background: var(--md-sys-color-surface-container-lowest);
+  background: var(--app-surface-card-background);
   color: var(--md-sys-color-on-surface-variant);
   opacity: 0.16;
   transform: translateX(-50%);
@@ -238,7 +238,7 @@ body.popup-page .popup-header--surface-collapsed {
   gap: var(--app-space-1);
   padding: 4px 6px 4px var(--app-space-3);
   overflow: hidden;
-  border: 1px solid var(--md-sys-color-outline-variant);
+  border: 1px solid var(--app-surface-card-border);
   border-radius: var(--md-sys-shape-corner-full);
   background: var(--md-sys-color-surface-container-high);
   box-shadow: var(--app-elevation-1);
@@ -429,12 +429,12 @@ body.popup-page .popup-header--surface-collapsed {
   grid-template-columns: minmax(0, 1fr);
   gap: var(--app-space-2);
   padding: var(--app-space-4);
-  border: 1px solid var(--md-sys-color-outline-variant);
+  border: 1px solid var(--app-surface-card-border);
   border-radius: var(
     --app-popup-provider-card-radius,
     var(--md-sys-shape-corner-large)
   );
-  background: var(--md-sys-color-surface-container-lowest);
+  background: var(--app-surface-card-background);
   box-shadow: var(--app-popup-card-shadow, var(--app-elevation-1));
 }
 
@@ -641,7 +641,7 @@ body.popup-page .popup-header--surface-collapsed {
   position: absolute;
   inset: 9px;
   border-radius: inherit;
-  background: var(--md-sys-color-surface-container-lowest);
+  background: var(--app-surface-card-background);
   content: "";
 }
 

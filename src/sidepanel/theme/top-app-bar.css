@@ -8,9 +8,9 @@
     var(--md-sys-color-surface-container-high) 88%,
     white 12%
   );
-  border: 1px solid var(--md-sys-color-outline-variant);
+  border: 1px solid var(--app-surface-card-border);
   border-radius: var(--md-sys-shape-corner-extra-large);
-  box-shadow: var(--app-elevation-1);
+  box-shadow: var(--app-surface-card-shadow);
 }
 
 .top-app-bar--sticky {
