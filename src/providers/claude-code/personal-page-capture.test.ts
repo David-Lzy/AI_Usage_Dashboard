@@ -60,15 +60,15 @@ describe("summarizeClaudePersonalPage", () => {
     ]);
     expect(capturedDefinitions[0]?.reloadBeforeCapture).toEqual({
       bypassCache: true,
-      waitForLoadTimeoutMs: 10_000,
+      waitForLoadTimeoutMs: 15_000,
       loadPollIntervalMs: 250,
-      postLoadDelayMs: 2_000,
+      postLoadDelayMs: 3_500,
     });
     expect(capturedDefinitions[0]?.reloadOnCaptureFailure).toEqual({
       bypassCache: true,
-      waitForLoadTimeoutMs: 10_000,
+      waitForLoadTimeoutMs: 15_000,
       loadPollIntervalMs: 250,
-      postLoadDelayMs: 2_000,
+      postLoadDelayMs: 3_500,
     });
     expect(capturedDefinitions[0]?.openWhenMissing).toEqual({
       url: "https://claude.ai/settings/usage",

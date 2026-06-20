@@ -111,9 +111,17 @@ function shouldOpenClaudePageWhenMissing({
     return false;
   }
 
+  // P0 fix: A previous implementation stopped auto-opening whenever an alarm
+  // sync returned logged_out. For personal Pro/Max accounts a background tab
+  // opened by the extension may transiently show the upgrade page before the
+  // real usage page renders, producing a false logged_out result. We now only
+  // block auto-opening when there is no prior page-binding fingerprint,
+  // meaning the account genuinely never reached a usable usage page. When a
+  // fingerprint exists the extension previously succeeded, so we keep retrying.
   if (
     trigger === "alarm" &&
-    provider.warningDiagnostic?.code === "page_session.logged_out"
+    provider.warningDiagnostic?.code === "page_session.logged_out" &&
+    !hasPageBindingFingerprint(setting.pageBinding)
   ) {
     return false;
   }
@@ -648,9 +656,19 @@ async function tryClaudePersonalSource({
                   ),
                   rawMessage: result.reason,
                 }),
-          usageWindows: undefined,
-          usageFacts: undefined,
-          usageSummary: null,
+          // P2 fix: preserve the last successful usage windows and facts as
+          // stale context instead of clearing them on every error. The warning
+          // banner already signals that the data is not live, so showing the
+          // last-seen percentages is more useful than showing nothing.
+          usageWindows:
+            provider.usageWindows && provider.usageWindows.length > 0
+              ? provider.usageWindows
+              : undefined,
+          usageFacts:
+            provider.usageFacts && provider.usageFacts.length > 0
+              ? provider.usageFacts
+              : undefined,
+          usageSummary: provider.usageSummary ?? null,
           lastSyncLabel:
             result.status === "logged_out"
               ? "Claude usage page session missing"
