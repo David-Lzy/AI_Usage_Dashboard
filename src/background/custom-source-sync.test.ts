@@ -51,6 +51,43 @@ function createResponse(
   );
 }
 
+function createChunkedResponse(
+  chunks: readonly string[],
+  init: ResponseInit = {},
+): { response: Response; wasCanceled: () => boolean } {
+  const encoder = new TextEncoder();
+  let chunkIndex = 0;
+  let canceled = false;
+  const stream = new ReadableStream<Uint8Array>({
+    pull(controller) {
+      const chunk = chunks[chunkIndex];
+      chunkIndex += 1;
+
+      if (typeof chunk === "undefined") {
+        controller.close();
+        return;
+      }
+
+      controller.enqueue(encoder.encode(chunk));
+    },
+    cancel() {
+      canceled = true;
+    },
+  });
+
+  return {
+    response: new Response(stream, {
+      status: 200,
+      headers: {
+        "content-type": "application/json",
+        ...init.headers,
+      },
+      ...init,
+    }),
+    wasCanceled: () => canceled,
+  };
+}
+
 function createValidResponse(overrides: Record<string, unknown> = {}) {
   return {
     schema: CUSTOM_SOURCE_SCHEMA_V1,
@@ -235,6 +272,47 @@ describe("custom source fetch client", () => {
       ok: false,
       code: "response_too_large",
     });
+  });
+
+  it("reads chunked response bodies with the same size limit", async () => {
+    const validJson = JSON.stringify(createValidResponse());
+    const validResponse = createChunkedResponse([
+      validJson.slice(0, 24),
+      validJson.slice(24, 96),
+      validJson.slice(96),
+    ]);
+
+    await expect(
+      fetchCustomSourceSnapshot(createCustomSourceSetting(), {
+        fetchImpl: async () => validResponse.response,
+        now: NOW,
+      }),
+    ).resolves.toMatchObject({
+      ok: true,
+      snapshot: {
+        sourceId: "custom:build_quota",
+        remaining: 90,
+      },
+    });
+    expect(validResponse.wasCanceled()).toBe(false);
+
+    const oversizedResponse = createChunkedResponse([
+      "{\"schema\":",
+      `"${CUSTOM_SOURCE_SCHEMA_V1}",`,
+      "\"label\":\"Build Quota\"",
+    ]);
+
+    await expect(
+      fetchCustomSourceSnapshot(createCustomSourceSetting(), {
+        fetchImpl: async () => oversizedResponse.response,
+        maxResponseChars: 24,
+        now: NOW,
+      }),
+    ).resolves.toMatchObject({
+      ok: false,
+      code: "response_too_large",
+    });
+    expect(oversizedResponse.wasCanceled()).toBe(true);
   });
 });
 

@@ -41,8 +41,8 @@ displayed separately from built-in providers and use a `Custom` label.
 - The raw response body is parsed, normalized, and then discarded.
 - HTML is never rendered, and scripts are never executed.
 
-The response body is capped at 128 KB. Oversized responses are rejected before
-display.
+The response body is capped at 128 KB. Oversized responses are rejected while
+the body is read and never reach display.
 
 ## JSON Schema
 

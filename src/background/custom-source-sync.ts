@@ -93,6 +93,78 @@ function formatFailureMessage(error: unknown): string {
     : "Custom source request failed.";
 }
 
+function formatResponseTooLargeMessage(maxResponseChars: number): string {
+  return `Custom source response exceeds ${maxResponseChars} characters.`;
+}
+
+type ResponseTextReadResult =
+  | {
+      ok: true;
+      text: string;
+    }
+  | {
+      ok: false;
+      code: "response_too_large";
+      message: string;
+    };
+
+async function readResponseTextWithLimit(
+  response: Response,
+  maxResponseChars: number,
+): Promise<ResponseTextReadResult> {
+  const body = response.body;
+
+  if (!body || typeof body.getReader !== "function") {
+    const text = await response.text();
+
+    return text.length > maxResponseChars
+      ? {
+          ok: false,
+          code: "response_too_large",
+          message: formatResponseTooLargeMessage(maxResponseChars),
+        }
+      : { ok: true, text };
+  }
+
+  const reader = body.getReader();
+  const decoder = new TextDecoder();
+  let text = "";
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+
+      if (done) {
+        break;
+      }
+
+      text += decoder.decode(value, { stream: true });
+
+      if (text.length > maxResponseChars) {
+        await reader.cancel().catch(() => undefined);
+
+        return {
+          ok: false,
+          code: "response_too_large",
+          message: formatResponseTooLargeMessage(maxResponseChars),
+        };
+      }
+    }
+
+    text += decoder.decode();
+
+    return text.length > maxResponseChars
+      ? {
+          ok: false,
+          code: "response_too_large",
+          message: formatResponseTooLargeMessage(maxResponseChars),
+        }
+      : { ok: true, text };
+  } finally {
+    reader.releaseLock();
+  }
+}
+
 export async function fetchCustomSourceSnapshot(
   setting: CustomSourceSetting,
   options: FetchCustomSourceOptions = {},
@@ -149,21 +221,20 @@ export async function fetchCustomSourceSnapshot(
       return {
         ok: false,
         code: "response_too_large",
-        message: `Custom source response exceeds ${maxResponseChars} characters.`,
+        message: formatResponseTooLargeMessage(maxResponseChars),
       };
     }
 
-    const rawResponseText = await response.text();
+    const rawResponseText = await readResponseTextWithLimit(
+      response,
+      maxResponseChars,
+    );
 
-    if (rawResponseText.length > maxResponseChars) {
-      return {
-        ok: false,
-        code: "response_too_large",
-        message: `Custom source response exceeds ${maxResponseChars} characters.`,
-      };
+    if (!rawResponseText.ok) {
+      return rawResponseText;
     }
 
-    const parsed = parseCustomSourceResponseJson(rawResponseText, {
+    const parsed = parseCustomSourceResponseJson(rawResponseText.text, {
       sourceId: setting.id,
       fetchedAt: (options.now ?? new Date()).toISOString(),
     });
