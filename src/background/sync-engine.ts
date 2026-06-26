@@ -8,6 +8,7 @@ import type {
   SyncTrigger,
 } from "../providers/types";
 import { hasCustomSourceHostAccess } from "../shared/custom-source-host-access";
+import { mapWithConcurrency } from "../shared/async-concurrency";
 import { readProviderSecrets } from "../shared/provider-secrets";
 import { seedAppStateIfEmpty, writeAppState } from "../shared/storage";
 import { syncCustomSources } from "./custom-source-sync";
@@ -23,37 +24,6 @@ type SyncEngineOutcome = {
   snapshot: ProviderSnapshot;
   startedSetting: ProviderSetting | null;
 };
-
-async function mapWithConcurrency<TItem, TResult>(
-  items: readonly TItem[],
-  concurrencyLimit: number,
-  mapper: (item: TItem, index: number) => Promise<TResult>,
-): Promise<TResult[]> {
-  if (items.length === 0) {
-    return [];
-  }
-
-  const resolvedConcurrencyLimit = Math.max(
-    1,
-    Math.min(items.length, Math.floor(concurrencyLimit)),
-  );
-  const results = new Array<TResult>(items.length);
-  let nextIndex = 0;
-
-  async function runWorker() {
-    while (nextIndex < items.length) {
-      const currentIndex = nextIndex;
-      nextIndex += 1;
-      results[currentIndex] = await mapper(items[currentIndex], currentIndex);
-    }
-  }
-
-  await Promise.all(
-    Array.from({ length: resolvedConcurrencyLimit }, () => runWorker()),
-  );
-
-  return results;
-}
 
 function parseTimestamp(rawValue: string): Date | null {
   const normalizedValue = rawValue.includes("T")

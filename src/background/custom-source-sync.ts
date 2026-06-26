@@ -1,4 +1,5 @@
 import type { AppState, SyncTrigger } from "../providers/types";
+import { mapWithConcurrency } from "../shared/async-concurrency";
 import {
   CUSTOM_SOURCE_RESPONSE_MAX_CHARS,
   createEmptyCustomSourceSyncState,
@@ -11,6 +12,7 @@ import {
 } from "../shared/custom-sources";
 
 export const CUSTOM_SOURCE_FETCH_TIMEOUT_MS = 10_000;
+export const CUSTOM_SOURCE_SYNC_CONCURRENCY_LIMIT = 2;
 
 type FetchLike = (
   input: RequestInfo | URL,
@@ -408,8 +410,10 @@ export async function syncCustomSources(
     ]),
   );
 
-  await Promise.all(
-    customSources.map(async (setting) => {
+  await mapWithConcurrency(
+    customSources,
+    CUSTOM_SOURCE_SYNC_CONCURRENCY_LIMIT,
+    async (setting) => {
       const previousState = previousStates.get(setting.id) ?? null;
 
       if (
@@ -422,7 +426,7 @@ export async function syncCustomSources(
         setting.id,
         await syncOneCustomSource(setting, previousState, options, now),
       );
-    }),
+    },
   );
 
   return {

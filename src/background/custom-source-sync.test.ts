@@ -11,6 +11,7 @@ import {
 import { SAMPLE_APP_STATE } from "../shared/constants";
 import {
   CUSTOM_SOURCE_HOST_ACCESS_MISSING_MESSAGE,
+  CUSTOM_SOURCE_SYNC_CONCURRENCY_LIMIT,
   fetchCustomSourceSnapshot,
   shouldRefreshCustomSource,
   syncCustomSources,
@@ -339,6 +340,39 @@ describe("custom source scheduler", () => {
         remaining: 90,
       },
     });
+  });
+
+  it("caps concurrent custom source endpoint fetches", async () => {
+    const settings = Array.from({ length: 5 }, (_entry, index) =>
+      createCustomSourceSetting({
+        id: `custom:quota_${index}`,
+        label: `Quota ${index}`,
+        endpointUrl: `https://example.com/quota-${index}.json`,
+      }),
+    );
+    let activeFetchCount = 0;
+    let maxActiveFetchCount = 0;
+    const fetchImpl = vi.fn(async () => {
+      activeFetchCount += 1;
+      maxActiveFetchCount = Math.max(maxActiveFetchCount, activeFetchCount);
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      activeFetchCount -= 1;
+
+      return createResponse(createValidResponse());
+    });
+
+    const state = await syncCustomSources(createState(settings), {
+      trigger: "manual",
+      fetchImpl,
+      now: NOW,
+    });
+
+    expect(fetchImpl).toHaveBeenCalledTimes(settings.length);
+    expect(maxActiveFetchCount).toBeLessThanOrEqual(
+      CUSTOM_SOURCE_SYNC_CONCURRENCY_LIMIT,
+    );
+    expect(maxActiveFetchCount).toBeGreaterThan(1);
+    expect(state.customSourceStates).toHaveLength(settings.length);
   });
 
   it("reports missing host access without fetching the endpoint", async () => {
