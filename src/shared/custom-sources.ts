@@ -9,6 +9,9 @@ export const CUSTOM_SOURCE_RESPONSE_MAX_CHARS = 128 * 1024;
 export const CUSTOM_SOURCE_MAX_WINDOWS = 8;
 export const CUSTOM_SOURCE_MAX_BALANCES = 8;
 export const CUSTOM_SOURCE_MAX_FACTS = 16;
+export const CUSTOM_SOURCE_DEFAULT_REFRESH_INTERVAL_MINUTES = 15;
+export const CUSTOM_SOURCE_MIN_REFRESH_INTERVAL_MINUTES = 3;
+export const CUSTOM_SOURCE_MAX_REFRESH_INTERVAL_MINUTES = 24 * 60;
 
 const CUSTOM_SOURCE_ID_PART_PATTERN = /^[a-z0-9][a-z0-9_-]{0,63}$/u;
 const UNSAFE_DISPLAY_TEXT_PATTERN = /[<>]/u;
@@ -125,6 +128,27 @@ export type CustomSourceSnapshot = {
   facts: CustomSourceFact[];
 };
 
+export type CustomSourceSetting = {
+  id: CustomSourceId;
+  label: string;
+  endpointUrl: string;
+  displayEnabled: boolean;
+  refreshIntervalMinutes: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type CustomSourceSyncState = {
+  sourceId: CustomSourceId;
+  status: CustomSourceStatus;
+  snapshot: CustomSourceSnapshot | null;
+  lastAttemptAt: string | null;
+  lastSuccessAt: string | null;
+  lastFailureAt: string | null;
+  lastFailureReason: string | null;
+  stale: boolean;
+};
+
 export type NormalizeCustomSourceResponseOptions = {
   sourceId: CustomSourceId;
   fetchedAt?: string;
@@ -221,6 +245,24 @@ function normalizeOptionalNumber(
   }
 
   return value;
+}
+
+function normalizeOptionalTimestamp(
+  value: unknown,
+  path: string,
+  issues: CustomSourceValidationIssue[],
+): string | null {
+  const timestamp = normalizeDisplayString(value, path, issues, {
+    maxLength: 96,
+  });
+
+  if (!timestamp) {
+    return null;
+  }
+
+  const parsedTimestamp = new Date(timestamp);
+
+  return Number.isNaN(parsedTimestamp.getTime()) ? null : timestamp;
 }
 
 function normalizeStatus(
@@ -507,6 +549,179 @@ export function normalizeCustomSourceEndpointUrl(
       ],
     };
   }
+}
+
+export function normalizeCustomSourceRefreshIntervalMinutes(
+  value: unknown,
+): number {
+  const parsedValue =
+    typeof value === "number"
+      ? value
+      : typeof value === "string"
+        ? Number.parseInt(value, 10)
+        : NaN;
+
+  if (
+    !Number.isInteger(parsedValue) ||
+    parsedValue < CUSTOM_SOURCE_MIN_REFRESH_INTERVAL_MINUTES ||
+    parsedValue > CUSTOM_SOURCE_MAX_REFRESH_INTERVAL_MINUTES
+  ) {
+    return CUSTOM_SOURCE_DEFAULT_REFRESH_INTERVAL_MINUTES;
+  }
+
+  return parsedValue;
+}
+
+export function createEmptyCustomSourceSyncState(
+  sourceId: CustomSourceId,
+): CustomSourceSyncState {
+  return {
+    sourceId,
+    status: "warning",
+    snapshot: null,
+    lastAttemptAt: null,
+    lastSuccessAt: null,
+    lastFailureAt: null,
+    lastFailureReason: null,
+    stale: false,
+  };
+}
+
+export function normalizeCustomSourceSettings(
+  value: unknown,
+): CustomSourceSetting[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  const seenIds = new Set<CustomSourceId>();
+
+  return value.flatMap((entry) => {
+    if (!isRecord(entry)) {
+      return [];
+    }
+
+    const id = typeof entry.id === "string" ? toCustomSourceId(entry.id) : null;
+
+    if (!id || seenIds.has(id)) {
+      return [];
+    }
+
+    const endpointUrl = normalizeCustomSourceEndpointUrl(entry.endpointUrl);
+
+    if (!endpointUrl.ok) {
+      return [];
+    }
+
+    const issues: CustomSourceValidationIssue[] = [];
+    const label =
+      normalizeDisplayString(entry.label, "label", issues, {
+        maxLength: 80,
+      }) ?? id.slice(CUSTOM_SOURCE_ID_PREFIX.length);
+    const createdAt =
+      normalizeOptionalTimestamp(entry.createdAt, "createdAt", issues) ??
+      new Date(0).toISOString();
+    const updatedAt =
+      normalizeOptionalTimestamp(entry.updatedAt, "updatedAt", issues) ??
+      createdAt;
+
+    seenIds.add(id);
+
+    return [
+      {
+        id,
+        label,
+        endpointUrl: endpointUrl.value,
+        displayEnabled:
+          typeof entry.displayEnabled === "boolean"
+            ? entry.displayEnabled
+            : typeof entry.enabled === "boolean"
+              ? entry.enabled
+              : true,
+        refreshIntervalMinutes: normalizeCustomSourceRefreshIntervalMinutes(
+          entry.refreshIntervalMinutes,
+        ),
+        createdAt,
+        updatedAt,
+      },
+    ];
+  });
+}
+
+function normalizeStoredCustomSourceSnapshot(
+  value: unknown,
+  sourceId: CustomSourceId,
+): CustomSourceSnapshot | null {
+  if (!isRecord(value) || value.sourceId !== sourceId) {
+    return null;
+  }
+
+  return value as CustomSourceSnapshot;
+}
+
+export function normalizeCustomSourceSyncStates(
+  value: unknown,
+  knownSourceIds: readonly CustomSourceId[] = [],
+): CustomSourceSyncState[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  const knownIds = new Set(knownSourceIds);
+  const seenIds = new Set<CustomSourceId>();
+
+  return value.flatMap((entry) => {
+    if (!isRecord(entry) || typeof entry.sourceId !== "string") {
+      return [];
+    }
+
+    const sourceId = toCustomSourceId(entry.sourceId);
+
+    if (
+      !sourceId ||
+      seenIds.has(sourceId) ||
+      (knownIds.size > 0 && !knownIds.has(sourceId))
+    ) {
+      return [];
+    }
+
+    const issues: CustomSourceValidationIssue[] = [];
+    const status = normalizeStatus(entry.status, "status", issues) ?? "warning";
+
+    seenIds.add(sourceId);
+
+    return [
+      {
+        sourceId,
+        status,
+        snapshot: normalizeStoredCustomSourceSnapshot(entry.snapshot, sourceId),
+        lastAttemptAt: normalizeOptionalTimestamp(
+          entry.lastAttemptAt,
+          "lastAttemptAt",
+          issues,
+        ),
+        lastSuccessAt: normalizeOptionalTimestamp(
+          entry.lastSuccessAt,
+          "lastSuccessAt",
+          issues,
+        ),
+        lastFailureAt: normalizeOptionalTimestamp(
+          entry.lastFailureAt,
+          "lastFailureAt",
+          issues,
+        ),
+        lastFailureReason: normalizeDisplayString(
+          entry.lastFailureReason,
+          "lastFailureReason",
+          issues,
+          {
+            maxLength: 220,
+          },
+        ),
+        stale: entry.stale === true,
+      },
+    ];
+  });
 }
 
 export function normalizeCustomSourceResponse(

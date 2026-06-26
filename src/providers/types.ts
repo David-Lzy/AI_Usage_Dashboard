@@ -1,3 +1,8 @@
+import type {
+  CustomSourceSetting,
+  CustomSourceSyncState,
+} from "../shared/custom-sources";
+
 export type ProviderBrandId =
   | "cursor"
   | "jetbrains"
@@ -361,6 +366,8 @@ export type AppState = {
   providers: ProviderSnapshot[];
   providerSettings: ProviderSetting[];
   settings: AppSettings;
+  customSources?: CustomSourceSetting[];
+  customSourceStates?: CustomSourceSyncState[];
 };
 
 export type ProviderSecrets = {

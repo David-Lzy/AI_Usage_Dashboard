@@ -9,6 +9,7 @@ import type {
 } from "../providers/types";
 import { readProviderSecrets } from "../shared/provider-secrets";
 import { seedAppStateIfEmpty, writeAppState } from "../shared/storage";
+import { syncCustomSources } from "./custom-source-sync";
 
 const STALE_MULTIPLIER = 2;
 const MIN_STALE_MINUTES = 60;
@@ -271,6 +272,9 @@ export async function runSyncEngine({
     },
     now,
   );
+  const nextStateWithCustomSources = providerId
+    ? nextState
+    : await syncCustomSources(nextState, { trigger, now });
 
-  return writeAppState(nextState);
+  return writeAppState(nextStateWithCustomSources);
 }

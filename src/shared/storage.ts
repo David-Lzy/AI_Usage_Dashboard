@@ -70,6 +70,10 @@ import {
   removeSafeStorageItem,
   setSafeStorageItem,
 } from "./local-storage";
+import {
+  normalizeCustomSourceSettings,
+  normalizeCustomSourceSyncStates,
+} from "./custom-sources";
 
 let memoryFallbackState: AppState | null = null;
 
@@ -247,10 +251,17 @@ function normalizeAppState(state: AppState): AppState {
   const progressColorBands = normalizeProgressColorBands(
     state.settings?.progressColorBands,
   );
+  const customSources = normalizeCustomSourceSettings(state.customSources);
+  const customSourceStates = normalizeCustomSourceSyncStates(
+    state.customSourceStates,
+    customSources.map((source) => source.id),
+  );
 
   return {
     providers: [...providers, ...extraProviders],
     providerSettings: [...providerSettings, ...extraProviderSettings],
+    customSources,
+    customSourceStates,
     settings: {
       ...SAMPLE_APP_STATE.settings,
       ...state.settings,
