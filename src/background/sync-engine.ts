@@ -7,6 +7,7 @@ import type {
   ProviderSnapshot,
   SyncTrigger,
 } from "../providers/types";
+import { hasCustomSourceHostAccess } from "../shared/custom-source-host-access";
 import { readProviderSecrets } from "../shared/provider-secrets";
 import { seedAppStateIfEmpty, writeAppState } from "../shared/storage";
 import { syncCustomSources } from "./custom-source-sync";
@@ -274,7 +275,11 @@ export async function runSyncEngine({
   );
   const nextStateWithCustomSources = providerId
     ? nextState
-    : await syncCustomSources(nextState, { trigger, now });
+    : await syncCustomSources(nextState, {
+        trigger,
+        hasHostAccess: hasCustomSourceHostAccess,
+        now,
+      });
 
   return writeAppState(nextStateWithCustomSources);
 }

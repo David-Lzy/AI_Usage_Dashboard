@@ -20,6 +20,7 @@ type FetchLike = (
 export type CustomSourceFetchFailureCode =
   | "invalid_url"
   | "unsupported_url_scheme"
+  | "host_access_missing"
   | "network_error"
   | "timeout"
   | "http_error"
@@ -47,8 +48,12 @@ type FetchCustomSourceOptions = {
 };
 
 type SyncCustomSourcesOptions = FetchCustomSourceOptions & {
+  hasHostAccess?: (endpointUrl: unknown) => Promise<boolean>;
   trigger: SyncTrigger;
 };
+
+export const CUSTOM_SOURCE_HOST_ACCESS_MISSING_MESSAGE =
+  "Custom source host access was not granted for this endpoint.";
 
 function getFetchImpl(fetchImpl?: FetchLike): FetchLike {
   if (fetchImpl) {
@@ -269,6 +274,24 @@ async function syncOneCustomSource(
   now: Date,
 ): Promise<CustomSourceSyncState> {
   const attemptedAt = now.toISOString();
+  const hasHostAccess =
+    typeof options.hasHostAccess === "function"
+      ? await options.hasHostAccess(setting.endpointUrl).catch(() => true)
+      : true;
+
+  if (!hasHostAccess) {
+    return createFailedSyncState(
+      setting.id,
+      previousState,
+      {
+        ok: false,
+        code: "host_access_missing",
+        message: CUSTOM_SOURCE_HOST_ACCESS_MISSING_MESSAGE,
+      },
+      attemptedAt,
+    );
+  }
+
   const result = await fetchCustomSourceSnapshot(setting, {
     fetchImpl: options.fetchImpl,
     maxResponseChars: options.maxResponseChars,

@@ -211,6 +211,10 @@ uses the configured interval on the extension's normal alarm path. If a fetch
 fails after a previous success, the old normalized snapshot can remain visible
 with a stale or warning state.
 
+If endpoint host access is not granted, Settings test and background sync report
+that missing access explicitly instead of treating it as a generic network
+failure.
+
 Custom source snapshots can appear in:
 
 - toolbar popup

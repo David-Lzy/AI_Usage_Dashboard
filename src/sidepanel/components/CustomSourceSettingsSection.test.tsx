@@ -1,7 +1,28 @@
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
-import { CustomSourceSettingsSection } from "./CustomSourceSettingsSection";
+import {
+  CustomSourceSettingsSection,
+  testCustomSourceEndpoint,
+} from "./CustomSourceSettingsSection";
+import { CUSTOM_SOURCE_HOST_ACCESS_MISSING_MESSAGE } from "../../background/custom-source-sync";
+import type { CustomSourceSetting } from "../../shared/custom-sources";
+
+function createCustomSourceSetting(
+  overrides: Partial<CustomSourceSetting> = {},
+): CustomSourceSetting {
+  return {
+    id: "custom:build_quota",
+    label: "Build Quota",
+    description: null,
+    endpointUrl: "https://example.com/quota.json",
+    displayEnabled: true,
+    refreshIntervalMinutes: 30,
+    createdAt: "2026-06-26T00:00:00.000Z",
+    updatedAt: "2026-06-26T00:00:00.000Z",
+    ...overrides,
+  };
+}
 
 describe("CustomSourceSettingsSection", () => {
   it("renders custom source CRUD fields and JSON protocol help", () => {
@@ -59,5 +80,25 @@ describe("CustomSourceSettingsSection", () => {
     expect(html).toContain("自定义 JSON 来源");
     expect(html).toContain("新增来源");
     expect(html).toContain("还没有自定义来源");
+  });
+
+  it("returns a host-access failure without fetching when permission is denied", async () => {
+    const requestHostAccess = vi.fn(async () => false);
+    const fetchSnapshot = vi.fn();
+
+    await expect(
+      testCustomSourceEndpoint(createCustomSourceSetting(), {
+        fetchSnapshot,
+        requestHostAccess,
+      }),
+    ).resolves.toEqual({
+      ok: false,
+      code: "host_access_missing",
+      message: CUSTOM_SOURCE_HOST_ACCESS_MISSING_MESSAGE,
+    });
+    expect(requestHostAccess).toHaveBeenCalledWith(
+      "https://example.com/quota.json",
+    );
+    expect(fetchSnapshot).not.toHaveBeenCalled();
   });
 });

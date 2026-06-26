@@ -10,6 +10,7 @@ import {
 } from "../shared/custom-sources";
 import { SAMPLE_APP_STATE } from "../shared/constants";
 import {
+  CUSTOM_SOURCE_HOST_ACCESS_MISSING_MESSAGE,
   fetchCustomSourceSnapshot,
   shouldRefreshCustomSource,
   syncCustomSources,
@@ -259,6 +260,30 @@ describe("custom source scheduler", () => {
         sourceId: setting.id,
         remaining: 90,
       },
+    });
+  });
+
+  it("reports missing host access without fetching the endpoint", async () => {
+    const setting = createCustomSourceSetting();
+    const fetchImpl = vi.fn(async () => createResponse(createValidResponse()));
+    const hasHostAccess = vi.fn(async () => false);
+    const state = await syncCustomSources(createState([setting]), {
+      trigger: "manual",
+      fetchImpl,
+      hasHostAccess,
+      now: NOW,
+    });
+
+    expect(hasHostAccess).toHaveBeenCalledWith(setting.endpointUrl);
+    expect(fetchImpl).not.toHaveBeenCalled();
+    expect(state.customSourceStates?.[0]).toMatchObject({
+      sourceId: setting.id,
+      status: "error",
+      lastAttemptAt: NOW.toISOString(),
+      lastFailureAt: NOW.toISOString(),
+      lastFailureReason: CUSTOM_SOURCE_HOST_ACCESS_MISSING_MESSAGE,
+      stale: false,
+      snapshot: null,
     });
   });
 

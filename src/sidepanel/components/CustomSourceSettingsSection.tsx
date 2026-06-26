@@ -11,7 +11,11 @@ import {
   type CustomSourceSnapshot,
   type CustomSourceSyncState,
 } from "../../shared/custom-sources";
-import { fetchCustomSourceSnapshot } from "../../background/custom-source-sync";
+import {
+  CUSTOM_SOURCE_HOST_ACCESS_MISSING_MESSAGE,
+  fetchCustomSourceSnapshot,
+  type CustomSourceFetchResult,
+} from "../../background/custom-source-sync";
 import { requestCustomSourceHostAccess } from "../../shared/custom-source-host-access";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 
@@ -254,6 +258,35 @@ function getStateForSource(
   return states.find((state) => state.sourceId === sourceId) ?? null;
 }
 
+type TestCustomSourceEndpointOptions = {
+  fetchSnapshot?: (
+    setting: CustomSourceSetting,
+  ) => Promise<CustomSourceFetchResult>;
+  requestHostAccess?: (endpointUrl: unknown) => Promise<boolean>;
+};
+
+export async function testCustomSourceEndpoint(
+  setting: CustomSourceSetting,
+  options: TestCustomSourceEndpointOptions = {},
+): Promise<CustomSourceFetchResult> {
+  const requestHostAccess =
+    options.requestHostAccess ?? requestCustomSourceHostAccess;
+  const fetchSnapshot = options.fetchSnapshot ?? fetchCustomSourceSnapshot;
+  const hasHostAccess = await requestHostAccess(setting.endpointUrl).catch(
+    () => false,
+  );
+
+  if (!hasHostAccess) {
+    return {
+      ok: false,
+      code: "host_access_missing",
+      message: CUSTOM_SOURCE_HOST_ACCESS_MISSING_MESSAGE,
+    };
+  }
+
+  return fetchSnapshot(setting);
+}
+
 export function CustomSourceSettingsSection({
   customSources,
   customSourceStates,
@@ -370,8 +403,7 @@ export function CustomSourceSettingsSection({
     setTestingSourceId(draft.id);
 
     try {
-      await requestCustomSourceHostAccess(setting.endpointUrl).catch(() => false);
-      const result = await fetchCustomSourceSnapshot(setting);
+      const result = await testCustomSourceEndpoint(setting);
 
       setTestResults((current) => ({
         ...current,
