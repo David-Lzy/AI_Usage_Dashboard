@@ -171,8 +171,29 @@ function isLoggedOutOrUpgradeClaudePage(page: PageSessionCapturedPage): boolean 
     return true;
   }
 
+  // Fast path: URL is the settings/usage path and the shell is fully rendered.
   if (isClaudeSettingsUsagePath(parsedUrl) && hasClaudeUsageShell(page)) {
     return false;
+  }
+
+  // P1a fix: Personal Pro/Max accounts navigate to /settings/usage but their
+  // page hydrates in two phases. The Next.js server render may include upgrade-
+  // adjacent navigation copy while the client-side usage section is still
+  // loading. If the URL is already on /settings/usage and any usage signal is
+  // present, treat the page as still loading rather than classifying it as a
+  // logged-out upgrade gate.
+  if (isClaudeSettingsUsagePath(parsedUrl)) {
+    const hasPartialUsageSignal =
+      visibleText.includes("usage") ||
+      visibleText.includes("remaining") ||
+      visibleText.includes("quota") ||
+      visibleText.includes("limit") ||
+      visibleText.includes("使用") ||
+      visibleText.includes("剩余") ||
+      visibleText.includes("额度");
+    if (hasPartialUsageSignal) {
+      return false;
+    }
   }
 
   if (
@@ -286,17 +307,21 @@ async function captureRoute(
     pageLabel: route.pageLabel,
     urlPatterns: route.urlPatterns,
     binding,
+    // P3 fix: background tabs opened by the extension are throttled by Chrome.
+    // Next.js / React pages need extra time for client-side hydration before
+    // usage percentages appear in the DOM. Increased from 10 s / 2 s to
+    // 15 s / 3.5 s so personal Pro/Max account pages fully render before capture.
     reloadBeforeCapture: {
       bypassCache: true,
-      waitForLoadTimeoutMs: 10_000,
+      waitForLoadTimeoutMs: 15_000,
       loadPollIntervalMs: 250,
-      postLoadDelayMs: 2_000,
+      postLoadDelayMs: 3_500,
     },
     reloadOnCaptureFailure: {
       bypassCache: true,
-      waitForLoadTimeoutMs: 10_000,
+      waitForLoadTimeoutMs: 15_000,
       loadPollIntervalMs: 250,
-      postLoadDelayMs: 2_000,
+      postLoadDelayMs: 3_500,
     },
     ...(options.openPageWhenMissing
       ? {

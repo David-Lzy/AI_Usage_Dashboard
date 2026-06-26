@@ -96,9 +96,9 @@ describe("createClaudePersonalPageClient", () => {
       },
       reloadBeforeCapture: {
         bypassCache: true,
-        waitForLoadTimeoutMs: 10_000,
+        waitForLoadTimeoutMs: 15_000,
         loadPollIntervalMs: 250,
-        postLoadDelayMs: 2_000,
+        postLoadDelayMs: 3_500,
       },
     });
   });

@@ -56,8 +56,20 @@ function delay(ms: number): Promise<void> {
 function shouldRetryHydratingClaudeRoute(
   fixture: ClaudePersonalLiveFixture,
   result: ClaudePersonalParseResult,
+  openedPageWhenMissing: boolean,
 ): boolean {
-  return result.status === "route_drift" && fixture.decision.chosenRoute !== null;
+  // Route drift: the matched page exists but no parseable usage signal was found.
+  if (result.status === "route_drift" && fixture.decision.chosenRoute !== null) {
+    return true;
+  }
+  // P1b fix: When the extension just opened a new background tab, the tab may
+  // still be loading during the first capture attempt, returning not_found /
+  // open_page_required. Retrying gives the tab time to finish rendering before
+  // surfacing a permanent error to the user.
+  if (result.status === "open_page_required" && openedPageWhenMissing) {
+    return true;
+  }
+  return false;
 }
 
 function buildBindingFromRouteCapture(
@@ -169,11 +181,12 @@ export function createClaudePersonalPageClient(
       let result = parseClaudePersonalLiveFixture(
         fixture as ClaudePersonalLiveFixture,
       );
+      const openedPageWhenMissing = captureOptions.openPageWhenMissing ?? false;
 
       for (
         let attempt = 0;
         attempt < retryAttempts &&
-        shouldRetryHydratingClaudeRoute(fixture, result);
+        shouldRetryHydratingClaudeRoute(fixture, result, openedPageWhenMissing);
         attempt += 1
       ) {
         await delay(retryDelayMs);
