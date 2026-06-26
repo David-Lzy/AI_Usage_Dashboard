@@ -157,7 +157,48 @@ type RunSyncEngineParams = {
   providerId?: ProviderId;
 };
 
-export async function runSyncEngine({
+const activeSyncEngineRuns = new Map<string, Promise<AppState>>();
+
+export function getSyncEngineCoalescingKey({
+  trigger,
+  providerId,
+}: RunSyncEngineParams): string | null {
+  return providerId ? null : `all-providers:${trigger}`;
+}
+
+export function runSyncEngine(params: RunSyncEngineParams): Promise<AppState> {
+  const coalescingKey = getSyncEngineCoalescingKey(params);
+
+  if (!coalescingKey) {
+    return runSyncEngineOnce(params);
+  }
+
+  const activeRun = activeSyncEngineRuns.get(coalescingKey);
+
+  if (activeRun) {
+    return activeRun;
+  }
+
+  const nextRun = runSyncEngineOnce(params);
+  activeSyncEngineRuns.set(coalescingKey, nextRun);
+
+  void nextRun.then(
+    () => {
+      if (activeSyncEngineRuns.get(coalescingKey) === nextRun) {
+        activeSyncEngineRuns.delete(coalescingKey);
+      }
+    },
+    () => {
+      if (activeSyncEngineRuns.get(coalescingKey) === nextRun) {
+        activeSyncEngineRuns.delete(coalescingKey);
+      }
+    },
+  );
+
+  return nextRun;
+}
+
+async function runSyncEngineOnce({
   trigger,
   providerId,
 }: RunSyncEngineParams): Promise<AppState> {

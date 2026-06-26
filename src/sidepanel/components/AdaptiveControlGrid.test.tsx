@@ -16,6 +16,10 @@ const formControlsCss = readFileSync(
   new URL("../theme/form-controls.css", import.meta.url),
   "utf8",
 );
+const adaptiveControlGridSource = readFileSync(
+  new URL("./AdaptiveControlGrid.tsx", import.meta.url),
+  "utf8",
+);
 
 describe("AdaptiveControlGrid", () => {
   it("renders an adaptive grid with explicit measurement labels", () => {
@@ -136,6 +140,15 @@ describe("AdaptiveControlGrid", () => {
     );
     expect(formControlsCss).toContain(
       "grid-template-columns: max-content var(--app-control-icon-slot);",
+    );
+  });
+
+  it("keeps hidden text measurement out of ResizeObserver loops", () => {
+    expect(adaptiveControlGridSource).not.toContain(
+      "resizeObserver?.observe(measurerRef.current)",
+    );
+    expect(adaptiveControlGridSource).toContain(
+      'document.addEventListener("visibilitychange", handleVisibilityChange);',
     );
   });
 });

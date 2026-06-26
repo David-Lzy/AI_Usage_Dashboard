@@ -11,7 +11,6 @@ const DEFAULT_ADAPTIVE_DROPDOWN_MENU_MIN_WIDTH_PX = 92;
 type AdaptiveDropdownMenuGridStyle = CSSProperties & {
   "--adaptive-dropdown-menu-column-count": string;
   "--adaptive-dropdown-menu-choice-min": string;
-  "--adaptive-dropdown-menu-choice-width": string;
 };
 
 export function resolveAdaptiveDropdownMenuColumnCount({
@@ -150,7 +149,6 @@ export function useAdaptiveDropdownMenuGrid({
   const fallbackWidth = resolveAdaptiveDropdownMenuMinWidth([], minFallbackPx);
   const [columnCount, setColumnCount] = useState(1);
   const [minWidthPx, setMinWidthPx] = useState(fallbackWidth);
-  const [choiceWidthPx, setChoiceWidthPx] = useState(fallbackWidth);
 
   useEffect(() => {
     let cancelled = false;
@@ -217,15 +215,6 @@ export function useAdaptiveDropdownMenuGrid({
 
     measureTextNow();
 
-    const resizeObserver =
-      typeof ResizeObserver === "undefined"
-        ? null
-        : new ResizeObserver(scheduleMeasureText);
-
-    if (measurerRef.current) {
-      resizeObserver?.observe(measurerRef.current);
-    }
-
     if (typeof window !== "undefined") {
       window.addEventListener("resize", scheduleMeasureText);
     }
@@ -234,6 +223,16 @@ export function useAdaptiveDropdownMenuGrid({
       void document.fonts?.ready.then(() => {
         scheduleMeasureText();
       });
+    }
+
+    function handleVisibilityChange() {
+      if (document.visibilityState !== "hidden") {
+        scheduleMeasureText();
+      }
+    }
+
+    if (typeof document !== "undefined") {
+      document.addEventListener("visibilitychange", handleVisibilityChange);
     }
 
     return () => {
@@ -247,10 +246,15 @@ export function useAdaptiveDropdownMenuGrid({
         window.cancelAnimationFrame(animationFrameId);
       }
 
-      resizeObserver?.disconnect();
-
       if (typeof window !== "undefined") {
         window.removeEventListener("resize", scheduleMeasureText);
+      }
+
+      if (typeof document !== "undefined") {
+        document.removeEventListener(
+          "visibilitychange",
+          handleVisibilityChange,
+        );
       }
     };
   }, [fallbackWidth, layoutSignal, measurementKey]);
@@ -260,10 +264,8 @@ export function useAdaptiveDropdownMenuGrid({
     let animationFrameId: number | null = null;
 
     function updateGridMeasurements({
-      nextChoiceWidthPx,
       nextColumnCount,
     }: {
-      nextChoiceWidthPx: number;
       nextColumnCount: number;
     }) {
       if (cancelled) {
@@ -275,11 +277,6 @@ export function useAdaptiveDropdownMenuGrid({
           ? currentColumnCount
           : nextColumnCount,
       );
-      setChoiceWidthPx((currentChoiceWidthPx) =>
-        currentChoiceWidthPx === nextChoiceWidthPx
-          ? currentChoiceWidthPx
-          : nextChoiceWidthPx,
-      );
     }
 
     function measureGridNow() {
@@ -288,7 +285,6 @@ export function useAdaptiveDropdownMenuGrid({
       if (!grid) {
         updateGridMeasurements({
           nextColumnCount: 1,
-          nextChoiceWidthPx: minWidthPx,
         });
         return;
       }
@@ -296,7 +292,6 @@ export function useAdaptiveDropdownMenuGrid({
       if (typeof window === "undefined") {
         updateGridMeasurements({
           nextColumnCount: 1,
-          nextChoiceWidthPx: minWidthPx,
         });
         return;
       }
@@ -317,23 +312,12 @@ export function useAdaptiveDropdownMenuGrid({
       if (!nextColumnCount) {
         updateGridMeasurements({
           nextColumnCount: 1,
-          nextChoiceWidthPx: minWidthPx,
         });
         return;
       }
 
-      const nextChoiceWidth = resolveAdaptiveDropdownMenuChoiceWidth({
-        availableWidthPx: grid.clientWidth,
-        columnCount: nextColumnCount,
-        columnGapPx,
-      });
-
       updateGridMeasurements({
         nextColumnCount,
-        nextChoiceWidthPx: Math.max(
-          minWidthPx,
-          nextChoiceWidth ?? minWidthPx,
-        ),
       });
     }
 
@@ -398,16 +382,14 @@ export function useAdaptiveDropdownMenuGrid({
     () => ({
       "--adaptive-dropdown-menu-column-count": `${columnCount}`,
       "--adaptive-dropdown-menu-choice-min": `${minWidthPx}px`,
-      "--adaptive-dropdown-menu-choice-width": `${choiceWidthPx}px`,
     }),
-    [choiceWidthPx, columnCount, minWidthPx],
+    [columnCount, minWidthPx],
   );
 
   return {
     gridRef,
     labelsToMeasure,
     measurerRef,
-    choiceWidthPx,
     columnCount,
     minWidthPx,
     style,

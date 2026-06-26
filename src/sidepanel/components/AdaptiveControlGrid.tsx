@@ -244,15 +244,6 @@ export function useAdaptiveControlMinWidth({
 
     measureNow();
 
-    const resizeObserver =
-      typeof ResizeObserver === "undefined"
-        ? null
-        : new ResizeObserver(scheduleMeasure);
-
-    if (measurerRef.current) {
-      resizeObserver?.observe(measurerRef.current);
-    }
-
     if (typeof window !== "undefined") {
       window.addEventListener("resize", scheduleMeasure);
     }
@@ -261,6 +252,16 @@ export function useAdaptiveControlMinWidth({
       void document.fonts?.ready.then(() => {
         scheduleMeasure();
       });
+    }
+
+    function handleVisibilityChange() {
+      if (document.visibilityState !== "hidden") {
+        scheduleMeasure();
+      }
+    }
+
+    if (typeof document !== "undefined") {
+      document.addEventListener("visibilitychange", handleVisibilityChange);
     }
 
     return () => {
@@ -274,10 +275,15 @@ export function useAdaptiveControlMinWidth({
         window.cancelAnimationFrame(animationFrameId);
       }
 
-      resizeObserver?.disconnect();
-
       if (typeof window !== "undefined") {
         window.removeEventListener("resize", scheduleMeasure);
+      }
+
+      if (typeof document !== "undefined") {
+        document.removeEventListener(
+          "visibilitychange",
+          handleVisibilityChange,
+        );
       }
     };
   }, [fallbackWidth, measurementKey]);

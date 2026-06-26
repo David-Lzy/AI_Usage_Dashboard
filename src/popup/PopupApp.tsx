@@ -153,6 +153,13 @@ export function PopupApp() {
         return;
       }
 
+      if (
+        typeof document !== "undefined" &&
+        document.visibilityState === "hidden"
+      ) {
+        return;
+      }
+
       if (refreshCountdownInFlight) {
         return;
       }
@@ -186,9 +193,26 @@ export function PopupApp() {
 
     const intervalId = window.setInterval(updateRefreshCountdown, 1_000);
 
+    function handleVisibilityChange() {
+      if (document.visibilityState !== "hidden") {
+        void updateRefreshCountdown();
+      }
+    }
+
+    if (typeof document !== "undefined") {
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+    }
+
     return () => {
       disposed = true;
       window.clearInterval(intervalId);
+
+      if (typeof document !== "undefined") {
+        document.removeEventListener(
+          "visibilitychange",
+          handleVisibilityChange,
+        );
+      }
     };
   }, [
     loadState.status,

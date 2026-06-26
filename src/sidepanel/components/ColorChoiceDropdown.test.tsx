@@ -17,6 +17,10 @@ const formControlsCss = readFileSync(
   new URL("../theme/form-controls.css", import.meta.url),
   "utf8",
 );
+const adaptiveDropdownMenuGridSource = readFileSync(
+  new URL("./AdaptiveDropdownMenuGrid.tsx", import.meta.url),
+  "utf8",
+);
 
 describe("ColorChoiceDropdown", () => {
   const copy = {
@@ -227,5 +231,17 @@ describe("ColorChoiceDropdown", () => {
     );
     expect(formControlsCss).toContain(".color-choice-dropdown__menu--floating {");
     expect(formControlsCss).toContain("max-inline-size: calc(100vw - 32px);");
+  });
+
+  it("keeps hidden menu text measurement out of ResizeObserver loops", () => {
+    expect(adaptiveDropdownMenuGridSource).not.toContain(
+      "resizeObserver?.observe(measurerRef.current)",
+    );
+    expect(adaptiveDropdownMenuGridSource).not.toContain(
+      "--adaptive-dropdown-menu-choice-width",
+    );
+    expect(adaptiveDropdownMenuGridSource).toContain(
+      'document.addEventListener("visibilitychange", handleVisibilityChange);',
+    );
   });
 });
