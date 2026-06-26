@@ -14,6 +14,7 @@ import { syncCustomSources } from "./custom-source-sync";
 
 const STALE_MULTIPLIER = 2;
 const MIN_STALE_MINUTES = 60;
+export const PROVIDER_SYNC_CONCURRENCY_LIMIT = 2;
 
 type SyncEngineOutcome = {
   didSync: boolean;
@@ -22,6 +23,37 @@ type SyncEngineOutcome = {
   snapshot: ProviderSnapshot;
   startedSetting: ProviderSetting | null;
 };
+
+async function mapWithConcurrency<TItem, TResult>(
+  items: readonly TItem[],
+  concurrencyLimit: number,
+  mapper: (item: TItem, index: number) => Promise<TResult>,
+): Promise<TResult[]> {
+  if (items.length === 0) {
+    return [];
+  }
+
+  const resolvedConcurrencyLimit = Math.max(
+    1,
+    Math.min(items.length, Math.floor(concurrencyLimit)),
+  );
+  const results = new Array<TResult>(items.length);
+  let nextIndex = 0;
+
+  async function runWorker() {
+    while (nextIndex < items.length) {
+      const currentIndex = nextIndex;
+      nextIndex += 1;
+      results[currentIndex] = await mapper(items[currentIndex], currentIndex);
+    }
+  }
+
+  await Promise.all(
+    Array.from({ length: resolvedConcurrencyLimit }, () => runWorker()),
+  );
+
+  return results;
+}
 
 function parseTimestamp(rawValue: string): Date | null {
   const normalizedValue = rawValue.includes("T")
@@ -209,8 +241,10 @@ async function runSyncEngineOnce({
     current.providerSettings.map((provider) => [provider.id, provider]),
   );
 
-  const outcomes = await Promise.all(
-    current.providers.map(async (provider) => {
+  const outcomes = await mapWithConcurrency(
+    current.providers,
+    PROVIDER_SYNC_CONCURRENCY_LIMIT,
+    async (provider) => {
       const setting = providerSettings.get(provider.providerId);
 
       if (!setting) {
@@ -253,7 +287,7 @@ async function runSyncEngineOnce({
         setting: outcome.setting ?? setting,
         startedSetting: setting,
       };
-    }),
+    },
   );
   const latest = await seedAppStateIfEmpty();
   const latestProviderSettings = new Map<ProviderId, ProviderSetting>(

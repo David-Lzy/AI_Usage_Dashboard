@@ -6,7 +6,11 @@ import { getProviderSyncAdapter } from "../providers/registry";
 import { readProviderSecrets } from "../shared/provider-secrets";
 import { seedAppStateIfEmpty, writeAppState } from "../shared/storage";
 import { syncCustomSources } from "./custom-source-sync";
-import { getSyncEngineCoalescingKey, runSyncEngine } from "./sync-engine";
+import {
+  getSyncEngineCoalescingKey,
+  PROVIDER_SYNC_CONCURRENCY_LIMIT,
+  runSyncEngine,
+} from "./sync-engine";
 
 vi.mock("../providers/registry", () => ({
   getProviderSyncAdapter: vi.fn(),
@@ -83,5 +87,41 @@ describe("sync engine run coalescing", () => {
     expect(getSyncEngineCoalescingKey({ trigger: "bootstrap" })).not.toBe(
       getSyncEngineCoalescingKey({ trigger: "alarm" }),
     );
+  });
+
+  it("caps provider adapter concurrency inside an all-provider sync run", async () => {
+    const allEnabledState = cloneState();
+    allEnabledState.providerSettings = allEnabledState.providerSettings.map(
+      (setting) => ({
+        ...setting,
+        displayEnabled: true,
+      }),
+    );
+    vi.mocked(seedAppStateIfEmpty).mockImplementation(async () =>
+      JSON.parse(JSON.stringify(allEnabledState)) as AppState,
+    );
+
+    let activeSyncCount = 0;
+    let maxActiveSyncCount = 0;
+    const sync = vi.fn(async (provider: ProviderSnapshot) => {
+      activeSyncCount += 1;
+      maxActiveSyncCount = Math.max(maxActiveSyncCount, activeSyncCount);
+
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      activeSyncCount -= 1;
+
+      return { snapshot: provider };
+    });
+
+    vi.mocked(getProviderSyncAdapter).mockReturnValue({ sync });
+
+    await runSyncEngine({ trigger: "manual" });
+
+    expect(sync).toHaveBeenCalledTimes(allEnabledState.providers.length);
+    expect(maxActiveSyncCount).toBeLessThanOrEqual(
+      PROVIDER_SYNC_CONCURRENCY_LIMIT,
+    );
+    expect(maxActiveSyncCount).toBeGreaterThan(1);
   });
 });
