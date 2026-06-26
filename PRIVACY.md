@@ -11,6 +11,8 @@ Depending on which providers and features a user enables, the extension may stor
 - optional API credentials entered by the user
 - page bindings for supported signed-in provider usage pages
 - cached usage snapshots and sync diagnostics
+- custom JSON source settings, including endpoint URLs and refresh intervals
+- normalized custom JSON source snapshots and sync diagnostics
 - exported/imported configuration JSON files
 
 These values are stored in the user's Chrome profile through Chrome extension storage. If the user enables Chrome Sync support for extension settings, Chrome may sync eligible settings through the user's signed-in Chrome account according to Chrome's own sync behavior.
@@ -18,6 +20,21 @@ These values are stored in the user's Chrome profile through Chrome extension st
 ## Local Image Gradient Import
 
 If a user imports an image to generate a progress-color gradient, the image is decoded and sampled locally in the browser. The extension uses the image only to compute a small list of gradient stops. It does not upload the image, and it does not store the original image bytes, data URL, filename, EXIF metadata, or raw pixel data.
+
+## Custom JSON Sources
+
+If a user configures a custom JSON source, the extension fetches the configured
+HTTP or HTTPS endpoint with browser credentials omitted. The current custom
+source feature does not store or send custom request headers, API tokens,
+cookies, or raw browser authentication material.
+
+The extension validates the JSON response, stores only the normalized custom
+source snapshot and sync diagnostics, and discards the raw response body. HTML
+from a custom endpoint is not rendered, and scripts are not executed.
+
+Configuration export can include custom source settings such as endpoint URL,
+display name, description, enabled state, and refresh interval. Export does not
+include raw response bodies.
 
 ## Provider Page Access
 

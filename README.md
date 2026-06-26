@@ -18,6 +18,8 @@ dashboard.
 - Keeps provider data boundaries visible: exact values, partial values,
   window-scoped values, policy-only data, or unavailable data are labeled
   differently.
+- Can display user-configured custom HTTP or HTTPS JSON quota sources as
+  separate, clearly labeled custom sources.
 - Lets users tune language, theme, popup appearance, progress style,
   remaining-color appearance, provider order, toolbar badge behavior, and
   toolbar icon behavior.
@@ -43,8 +45,11 @@ AI Usage Dashboard is intentionally conservative:
 - It does not ask you to paste cookies.
 - It does not ask you to paste raw browser auth headers.
 - It stores extension settings, optional API credentials, page bindings, cached
-  snapshots, and import/export files in your Chrome profile.
+  snapshots, custom source settings, normalized custom source snapshots, and
+  import/export files in your Chrome profile.
 - Optional host permissions are requested only for supported provider origins.
+- Custom JSON sources fetch user-configured HTTP or HTTPS endpoints with
+  browser credentials omitted; raw response bodies are not stored or rendered.
 - The `favicon` permission is used only for the optional provider-matched
   toolbar icon feature.
 - It does not load or execute remote code.
@@ -62,6 +67,15 @@ Users can also generate a gradient from a local PNG, JPEG, or WebP image. The
 image is processed in the browser by averaging pixels vertically across the
 image width; the original image, filename, metadata, and image bytes are not
 uploaded or saved. Only the generated gradient stops are stored as settings.
+
+## Custom JSON Sources
+
+Settings can add client-provided HTTP or HTTPS JSON endpoints for quota data
+outside the verified built-in providers. Responses are validated against the
+public `ai-usage-dashboard.custom-source.v1` schema, displayed with a `Custom`
+label, and never treated as official provider data. See
+[Doc/Product/Custom_JSON_Sources.md](./Doc/Product/Custom_JSON_Sources.md) for
+the JSON contract and examples.
 
 ## Install From Source
 
