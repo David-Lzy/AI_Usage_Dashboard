@@ -118,7 +118,7 @@ The generated zip is written under `release/`.
 
 Pushes to `main` run GitHub Actions checks and upload temporary Chrome and
 Firefox package artifacts from the workflow run. Version tags such as
-`v0.1.0-rc.26` create a GitHub Release with Chrome and Firefox package zips plus
+`v0.1.0-rc.27` create a GitHub Release with Chrome and Firefox package zips plus
 SHA-256 checksums.
 
 For everyday Chrome users, the Chrome Web Store listing remains the recommended
@@ -135,8 +135,8 @@ template are documented in
 
 - Chrome Web Store listing: published and reachable.
 - Current public-store metadata observed on 2026-05-20: `0.1.0-rc.24`.
-- Current local package version: `0.1.0-rc.26`.
-- Current local Chrome manifest version: `0.1.0.26`.
+- Current local package version: `0.1.0-rc.27`.
+- Current local Chrome manifest version: `0.1.0.27`.
 - Store publication status is tracked in
   [Doc/Store/Chrome_Web_Store_Publication_Milestone.md](./Doc/Store/Chrome_Web_Store_Publication_Milestone.md).
 - Public listing copy lives in [Doc/Store](./Doc/Store/).
