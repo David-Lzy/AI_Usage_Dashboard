@@ -108,8 +108,8 @@ body.popup-page .status-card {
 }
 
 .popup-header {
-  --popup-header-action-gap: 10px;
-  --popup-header-action-safe-inset: 2px;
+  --popup-header-action-gap: clamp(8px, 2.5vw, 10px);
+  --popup-header-action-safe-inset: clamp(6px, 2vw, 10px);
   --popup-header-control-size: 48px;
   position: relative;
   display: grid;
@@ -287,7 +287,11 @@ body.popup-page .popup-header--surface-collapsed {
   gap: var(--popup-header-action-gap);
   inline-size: 100%;
   min-width: 0;
-  padding-inline: var(--popup-header-action-safe-inset);
+  padding-inline: max(
+    var(--popup-header-action-safe-inset),
+    env(safe-area-inset-left, 0px)
+  )
+  max(var(--popup-header-action-safe-inset), env(safe-area-inset-right, 0px));
 }
 
 .popup-header__actions[hidden] {
@@ -809,5 +813,22 @@ body.popup-page .popup-header--surface-collapsed {
   .popup-actions > * {
     flex: 1 1 calc(50% - var(--app-space-2));
     min-inline-size: 0;
+  }
+}
+
+@media (max-width: 360px) {
+  .popup-header {
+    --popup-header-action-gap: 8px;
+    --popup-header-action-safe-inset: 8px;
+    --popup-header-control-size: 44px;
+  }
+
+  .popup-header__icon-action--refresh {
+    padding-inline: 6px;
+  }
+
+  .popup-header__action-icon {
+    width: 20px;
+    height: 20px;
   }
 }

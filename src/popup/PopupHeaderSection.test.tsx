@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import { renderToStaticMarkup } from "react-dom/server";
 import type { ReactNode } from "react";
 import { describe, expect, it } from "vitest";
@@ -7,6 +9,11 @@ import {
   getQuickThemeToggleCopy,
 } from "../shared/i18n";
 import { PopupHeaderSection } from "./PopupHeaderSection";
+
+const popupThemeCss = readFileSync(
+  new URL("./popup-theme.css", import.meta.url),
+  "utf8",
+);
 
 function renderPopupHeader({
   areActionsCollapsed = false,
@@ -95,5 +102,15 @@ describe("PopupHeaderSection", () => {
     expect(html.indexOf('data-test-feedback="true"')).toBeLessThan(
       html.indexOf('class="popup-header__actions"'),
     );
+  });
+
+  it("keeps high-DPI action row padding and narrow-width compaction in CSS", () => {
+    expect(popupThemeCss).toContain(
+      "--popup-header-action-safe-inset: clamp(6px, 2vw, 10px);",
+    );
+    expect(popupThemeCss).toContain("env(safe-area-inset-right, 0px)");
+    expect(popupThemeCss).toContain("@media (max-width: 360px)");
+    expect(popupThemeCss).toContain("--popup-header-control-size: 44px;");
+    expect(popupThemeCss).toContain("--popup-header-action-gap: 8px;");
   });
 });
