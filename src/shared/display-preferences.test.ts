@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { ProviderId } from "../providers/types";
+import type { DashboardSourceId } from "./custom-sources";
 import {
   createDefaultProgressItemsBySurface,
   createDefaultProviderOrderBySurface,
@@ -22,6 +23,10 @@ const PROVIDER_IDS: ProviderId[] = [
   "claude-code-team-page",
   "gemini-policy",
   "codex-personal-page",
+];
+const DASHBOARD_SOURCE_IDS: DashboardSourceId[] = [
+  ...PROVIDER_IDS,
+  "custom:build_quota",
 ];
 
 describe("display preferences", () => {
@@ -60,6 +65,29 @@ describe("display preferences", () => {
       sidebar: ["gemini-policy", "cursor-personal-page", "jetbrains-org-page", "claude-code-team-page", "codex-personal-page"],
       fullPage: [],
     });
+  });
+
+  it("keeps custom source ids in display order normalization", () => {
+    expect(
+      normalizeProviderOrderBySurface(
+        {
+          popup: [
+            "custom:build_quota",
+            "codex-personal-page",
+            "custom:build_quota",
+            "unknown",
+          ],
+        },
+        DASHBOARD_SOURCE_IDS,
+      ).popup,
+    ).toEqual([
+      "custom:build_quota",
+      "codex-personal-page",
+      "cursor-personal-page",
+      "jetbrains-org-page",
+      "claude-code-team-page",
+      "gemini-policy",
+    ]);
   });
 
   it("resolves automatic order to the default provider order", () => {
@@ -152,6 +180,31 @@ describe("display preferences", () => {
           { id: "window:weekly", visible: true },
         ],
       },
+    });
+  });
+
+  it("normalizes progress item preferences for custom source ids", () => {
+    expect(
+      normalizeProgressItemsBySurface(
+        {
+          popup: {
+            "custom:build_quota": [
+              { id: "primary", visible: false },
+              { id: "unknown", visible: true },
+            ],
+          },
+        },
+        DASHBOARD_SOURCE_IDS,
+        {
+          "custom:build_quota": ["primary"],
+        },
+      ),
+    ).toEqual({
+      popup: {
+        "custom:build_quota": [{ id: "primary", visible: false }],
+      },
+      sidebar: {},
+      fullPage: {},
     });
   });
 

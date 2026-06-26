@@ -8,6 +8,10 @@ import type {
 } from "../providers/types";
 import { normalizeProviderId } from "../providers/provider-definitions";
 import { normalizeSourcePreference } from "./provider-sources";
+import {
+  normalizeCustomSourceSettings,
+  type CustomSourceSetting,
+} from "./custom-sources";
 
 export const CONFIGURATION_BACKUP_FORMAT =
   "ai-usage-dashboard.configuration";
@@ -27,6 +31,19 @@ export type ConfigurationBackupProviderSetting = Pick<
   enabled?: boolean;
 };
 
+export type ConfigurationBackupCustomSourceSetting = Pick<
+  CustomSourceSetting,
+  | "id"
+  | "label"
+  | "endpointUrl"
+  | "displayEnabled"
+  | "refreshIntervalMinutes"
+  | "createdAt"
+  | "updatedAt"
+> & {
+  enabled?: boolean;
+};
+
 export type ConfigurationBackupDocument = {
   format: typeof CONFIGURATION_BACKUP_FORMAT;
   schemaVersion: typeof CONFIGURATION_BACKUP_SCHEMA_VERSION;
@@ -34,6 +51,7 @@ export type ConfigurationBackupDocument = {
   payload: {
     settings: AppSettings;
     providerSettings: ConfigurationBackupProviderSetting[];
+    customSources?: ConfigurationBackupCustomSourceSetting[];
   };
   excludedFields: string[];
 };
@@ -94,6 +112,20 @@ function buildProviderSettingsBackup(
   }));
 }
 
+function buildCustomSourcesBackup(
+  customSources: readonly CustomSourceSetting[] | undefined,
+): ConfigurationBackupCustomSourceSetting[] {
+  return (customSources ?? []).map((source) => ({
+    id: source.id,
+    label: source.label,
+    endpointUrl: source.endpointUrl,
+    displayEnabled: source.displayEnabled,
+    refreshIntervalMinutes: source.refreshIntervalMinutes,
+    createdAt: source.createdAt,
+    updatedAt: source.updatedAt,
+  }));
+}
+
 export function buildConfigurationBackup(
   state: AppState,
   options: ConfigurationBackupOptions = {},
@@ -109,6 +141,10 @@ export function buildConfigurationBackup(
     "providerSettings.hostOrigins",
     "providerSettings.hostsLabel",
     "providerSettings.description",
+    "customSourceStates",
+    "customSources.headers",
+    "customSources.apiTokens",
+    "customSources.lastResponseBody",
     "providerSecrets",
   ];
 
@@ -129,6 +165,7 @@ export function buildConfigurationBackup(
     payload: {
       settings,
       providerSettings: buildProviderSettingsBackup(state.providerSettings),
+      customSources: buildCustomSourcesBackup(state.customSources),
     },
     excludedFields,
   };
@@ -154,7 +191,11 @@ export function parseConfigurationBackupJson(
     parsed.schemaVersion !== CONFIGURATION_BACKUP_SCHEMA_VERSION ||
     !isRecord(parsed.payload) ||
     !isRecord(parsed.payload.settings) ||
-    !Array.isArray(parsed.payload.providerSettings)
+    !Array.isArray(parsed.payload.providerSettings) ||
+    (
+      parsed.payload.customSources !== undefined &&
+      !Array.isArray(parsed.payload.customSources)
+    )
   ) {
     return {
       ok: false,
@@ -216,6 +257,7 @@ export function applyConfigurationBackupToState(
   return {
     ...state,
     settings,
+    customSources: normalizeCustomSourceSettings(backup.payload.customSources),
     providerSettings: state.providerSettings.map((provider) => {
       const importedProvider = importedProviderSettings.get(provider.id);
 

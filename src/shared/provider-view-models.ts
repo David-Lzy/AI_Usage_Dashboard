@@ -18,6 +18,7 @@ import {
 import { getProviderDefinition } from "../providers/provider-definitions";
 import { isProviderDisplayEligible } from "./provider-display-eligibility";
 import { createEmptyPageBinding } from "./page-bindings";
+import type { DashboardSourceId } from "./custom-sources";
 
 export type ProviderViewModel = ProviderSnapshot & {
   permissionStatus: PermissionStatus;
@@ -303,7 +304,7 @@ function compareProviders(
 
 function applyProviderOrderPreference(
   providers: ProviderViewModel[],
-  providerOrder: ProviderId[],
+  providerOrder: readonly DashboardSourceId[],
 ): ProviderViewModel[] {
   if (providerOrder.length === 0) {
     return providers;

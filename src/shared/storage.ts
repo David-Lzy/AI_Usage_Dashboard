@@ -256,6 +256,16 @@ function normalizeAppState(state: AppState): AppState {
     state.customSourceStates,
     customSources.map((source) => source.id),
   );
+  const knownDashboardSourceIds = [
+    ...knownProviderIds,
+    ...customSources.map((source) => source.id),
+  ];
+  const knownProgressItemIdsBySource = {
+    ...knownProgressItemIdsByProvider,
+    ...Object.fromEntries(
+      customSources.map((source) => [source.id, ["primary"] as const]),
+    ),
+  };
 
   return {
     providers: [...providers, ...extraProviders],
@@ -337,12 +347,12 @@ function normalizeAppState(state: AppState): AppState {
       ),
       providerOrderBySurface: normalizeProviderOrderBySurface(
         state.settings?.providerOrderBySurface,
-        knownProviderIds,
+        knownDashboardSourceIds,
       ),
       progressItemsBySurface: normalizeProgressItemsBySurface(
         state.settings?.progressItemsBySurface,
-        knownProviderIds,
-        knownProgressItemIdsByProvider,
+        knownDashboardSourceIds,
+        knownProgressItemIdsBySource,
       ),
       progressThicknessPx: normalizeProgressThicknessPx(
         state.settings?.progressThicknessPx,

@@ -414,6 +414,102 @@ describe("storage normalization", () => {
     });
   });
 
+  it("normalizes custom source configs, snapshots, order, and progress visibility", async () => {
+    await writeAppState({
+      ...SAMPLE_APP_STATE,
+      customSources: [
+        {
+          id: "custom:Build_Quota",
+          label: "Build Quota",
+          endpointUrl: "http://localhost:4173/quota.json",
+          displayEnabled: true,
+          refreshIntervalMinutes: 30,
+          createdAt: "2026-06-26T00:00:00.000Z",
+          updatedAt: "2026-06-26T01:00:00.000Z",
+        },
+        {
+          id: "custom:bad",
+          label: "Bad",
+          endpointUrl: "file:///tmp/source.json",
+          displayEnabled: true,
+          refreshIntervalMinutes: 30,
+          createdAt: "2026-06-26T00:00:00.000Z",
+          updatedAt: "2026-06-26T01:00:00.000Z",
+        },
+      ],
+      customSourceStates: [
+        {
+          sourceId: "custom:build_quota",
+          status: "ok",
+          snapshot: null,
+          lastAttemptAt: "2026-06-26T02:00:00.000Z",
+          lastSuccessAt: "2026-06-26T02:00:00.000Z",
+          lastFailureAt: null,
+          lastFailureReason: null,
+          stale: false,
+        },
+        {
+          sourceId: "custom:orphan",
+          status: "ok",
+          snapshot: null,
+          lastAttemptAt: "2026-06-26T02:00:00.000Z",
+          lastSuccessAt: "2026-06-26T02:00:00.000Z",
+          lastFailureAt: null,
+          lastFailureReason: null,
+          stale: false,
+        },
+      ],
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        providerOrderBySurface: {
+          popup: ["custom:Build_Quota", "codex-personal-page"],
+          sidebar: [],
+          fullPage: [],
+        },
+        progressItemsBySurface: {
+          popup: {
+            "custom:Build_Quota": [{ id: "primary", visible: false }],
+          },
+          sidebar: {},
+          fullPage: {},
+        },
+      } as unknown as AppState["settings"],
+    } as unknown as AppState);
+
+    const state = await readAppState();
+
+    expect(state?.customSources).toEqual([
+      {
+        id: "custom:build_quota",
+        label: "Build Quota",
+        endpointUrl: "http://localhost:4173/quota.json",
+        displayEnabled: true,
+        refreshIntervalMinutes: 30,
+        createdAt: "2026-06-26T00:00:00.000Z",
+        updatedAt: "2026-06-26T01:00:00.000Z",
+      },
+    ]);
+    expect(state?.customSourceStates).toEqual([
+      {
+        sourceId: "custom:build_quota",
+        status: "ok",
+        snapshot: null,
+        lastAttemptAt: "2026-06-26T02:00:00.000Z",
+        lastSuccessAt: "2026-06-26T02:00:00.000Z",
+        lastFailureAt: null,
+        lastFailureReason: null,
+        stale: false,
+      },
+    ]);
+    expect(state?.settings.providerOrderBySurface.popup.slice(0, 2)).toEqual([
+      "custom:build_quota",
+      "codex-personal-page",
+    ]);
+    expect(
+      state?.settings.progressItemsBySurface.popup["custom:build_quota"],
+    ).toEqual([{ id: "primary", visible: false }]);
+  });
+
   it("migrates legacy brand-level providers without keeping stale extra entries", async () => {
     await writeAppState(createLegacyBrandLevelState());
 

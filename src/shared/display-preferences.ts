@@ -6,10 +6,17 @@ import type {
   ProviderProgressItemPreference,
 } from "../providers/types";
 import { normalizeProviderId } from "../providers/provider-definitions";
+import {
+  isDashboardSourceId,
+  toCustomSourceId,
+  type DashboardSourceId,
+} from "./custom-sources";
 
 export const DISPLAY_SURFACES = ["popup", "sidebar", "fullPage"] as const;
 
-type KnownProgressItemIdsByProvider = Partial<Record<ProviderId, readonly string[]>>;
+type KnownProgressItemIdsBySource = Partial<
+  Record<DashboardSourceId, readonly string[]>
+>;
 
 type UnknownRecord = Record<string, unknown>;
 
@@ -21,8 +28,14 @@ function hasOwnRecordKey(record: UnknownRecord, key: string): boolean {
   return Object.prototype.hasOwnProperty.call(record, key);
 }
 
-function createKnownProviderSet(providerIds: readonly ProviderId[]): Set<ProviderId> {
-  return new Set(providerIds);
+function createKnownSourceSet<T extends DashboardSourceId>(
+  sourceIds: readonly T[],
+): Set<T> {
+  return new Set(sourceIds);
+}
+
+function normalizeDashboardSourceId(value: string): DashboardSourceId | null {
+  return normalizeProviderId(value) ?? toCustomSourceId(value);
 }
 
 export function createDefaultProviderOrderBySurface(): ProviderOrderBySurface {
@@ -41,84 +54,82 @@ export function createDefaultProgressItemsBySurface(): ProgressItemsBySurface {
   };
 }
 
-function normalizeProviderOrder(
+function normalizeProviderOrder<T extends DashboardSourceId>(
   value: unknown,
-  providerIds: readonly ProviderId[],
-): ProviderId[] {
+  sourceIds: readonly T[],
+): T[] {
   if (!Array.isArray(value)) {
     return [];
   }
 
-  const knownProviders = createKnownProviderSet(providerIds);
-  const seenProviders = new Set<ProviderId>();
-  const orderedProviders: ProviderId[] = [];
+  const knownSources = createKnownSourceSet(sourceIds);
+  const seenSources = new Set<T>();
+  const orderedSources: T[] = [];
 
   for (const candidate of value) {
     if (typeof candidate !== "string") {
       continue;
     }
 
-    const normalizedCandidate = normalizeProviderId(candidate);
+    const normalizedCandidate = normalizeDashboardSourceId(candidate);
 
-    if (!normalizedCandidate || !knownProviders.has(normalizedCandidate)) {
+    if (!normalizedCandidate || !knownSources.has(normalizedCandidate as T)) {
       continue;
     }
 
-    const providerId = normalizedCandidate;
+    const sourceId = normalizedCandidate as T;
 
-    if (seenProviders.has(providerId)) {
+    if (seenSources.has(sourceId)) {
       continue;
     }
 
-    seenProviders.add(providerId);
-    orderedProviders.push(providerId);
+    seenSources.add(sourceId);
+    orderedSources.push(sourceId);
   }
 
-  if (orderedProviders.length === 0) {
+  if (orderedSources.length === 0) {
     return [];
   }
 
-  for (const providerId of providerIds) {
-    if (!seenProviders.has(providerId)) {
-      orderedProviders.push(providerId);
+  for (const sourceId of sourceIds) {
+    if (!seenSources.has(sourceId)) {
+      orderedSources.push(sourceId);
     }
   }
 
-  return orderedProviders;
+  return orderedSources;
 }
 
 export function normalizeProviderOrderBySurface(
   value: unknown,
-  providerIds: readonly ProviderId[],
+  sourceIds: readonly DashboardSourceId[],
 ): ProviderOrderBySurface {
   const source = isRecord(value) ? value : {};
 
   return DISPLAY_SURFACES.reduce<ProviderOrderBySurface>(
     (normalized, surface) => ({
       ...normalized,
-      [surface]: normalizeProviderOrder(source[surface], providerIds),
+      [surface]: normalizeProviderOrder(source[surface], sourceIds),
     }),
     createDefaultProviderOrderBySurface(),
   );
 }
 
-export function resolveProviderOrder(
-  providerOrder: readonly ProviderId[],
-  providerIds: readonly ProviderId[],
-): ProviderId[] {
-  const normalizedProviderOrder = normalizeProviderOrder(providerOrder, providerIds);
-  return normalizedProviderOrder.length > 0
-    ? normalizedProviderOrder
-    : [...providerIds];
+export function resolveProviderOrder<T extends DashboardSourceId>(
+  providerOrder: readonly DashboardSourceId[],
+  sourceIds: readonly T[],
+): T[] {
+  const normalizedProviderOrder = normalizeProviderOrder(providerOrder, sourceIds);
+  return normalizedProviderOrder.length > 0 ? normalizedProviderOrder : [...sourceIds];
 }
 
-export function moveProviderInOrder(
-  providerOrder: readonly ProviderId[],
-  providerIds: readonly ProviderId[],
-  providerId: ProviderId,
+export function moveProviderInOrder<T extends DashboardSourceId>(
+  providerOrder: readonly DashboardSourceId[],
+  sourceIds: readonly T[],
+  providerId: T,
   direction: "up" | "down",
-): ProviderId[] {
-  const resolvedProviderOrder = resolveProviderOrder(providerOrder, providerIds);
+): T[] {
+  const resolvedProviderOrder = resolveProviderOrder(providerOrder, sourceIds);
   const currentIndex = resolvedProviderOrder.indexOf(providerId);
 
   if (currentIndex === -1) {
@@ -137,13 +148,13 @@ export function moveProviderInOrder(
   return nextProviderOrder;
 }
 
-export function reorderProviderBefore(
-  providerOrder: readonly ProviderId[],
-  providerIds: readonly ProviderId[],
-  movedProviderId: ProviderId,
-  targetProviderId: ProviderId,
-): ProviderId[] {
-  const resolvedProviderOrder = resolveProviderOrder(providerOrder, providerIds);
+export function reorderProviderBefore<T extends DashboardSourceId>(
+  providerOrder: readonly DashboardSourceId[],
+  sourceIds: readonly T[],
+  movedProviderId: T,
+  targetProviderId: T,
+): T[] {
+  const resolvedProviderOrder = resolveProviderOrder(providerOrder, sourceIds);
 
   if (movedProviderId === targetProviderId) {
     return resolvedProviderOrder;
@@ -317,37 +328,38 @@ export function reorderProgressItemPreferenceBefore(
 }
 
 function getKnownProgressItemIds(
-  providerId: ProviderId,
-  knownProgressItemIdsByProvider: KnownProgressItemIdsByProvider,
+  sourceId: DashboardSourceId,
+  knownProgressItemIdsBySource: KnownProgressItemIdsBySource,
 ): readonly string[] {
-  return knownProgressItemIdsByProvider[providerId] ?? [];
+  return knownProgressItemIdsBySource[sourceId] ?? [];
 }
 
 export function normalizeProgressItemsBySurface(
   value: unknown,
-  providerIds: readonly ProviderId[],
-  knownProgressItemIdsByProvider: KnownProgressItemIdsByProvider = {},
+  sourceIds: readonly DashboardSourceId[],
+  knownProgressItemIdsBySource: KnownProgressItemIdsBySource = {},
 ): ProgressItemsBySurface {
   const source = isRecord(value) ? value : {};
   const normalized = createDefaultProgressItemsBySurface();
+  const sourceIdSet = new Set(sourceIds);
 
   for (const surface of DISPLAY_SURFACES) {
     const surfaceSource = isRecord(source[surface]) ? source[surface] : {};
 
-    for (const [rawProviderId, preferences] of Object.entries(surfaceSource)) {
-      const providerId = normalizeProviderId(rawProviderId);
+    for (const [rawSourceId, preferences] of Object.entries(surfaceSource)) {
+      const sourceId = normalizeDashboardSourceId(rawSourceId);
 
-      if (!providerId || !providerIds.includes(providerId)) {
+      if (!sourceId || !sourceIdSet.has(sourceId) || !isDashboardSourceId(sourceId)) {
         continue;
       }
 
       const normalizedItems = normalizeProgressItemPreferences(
         preferences,
-        getKnownProgressItemIds(providerId, knownProgressItemIdsByProvider),
+        getKnownProgressItemIds(sourceId, knownProgressItemIdsBySource),
       );
 
       if (normalizedItems.length > 0) {
-        normalized[surface][providerId] = normalizedItems;
+        normalized[surface][sourceId] = normalizedItems;
       }
     }
   }

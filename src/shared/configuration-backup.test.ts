@@ -13,6 +13,29 @@ describe("configuration backup", () => {
   it("exports only portable configuration fields", () => {
     const backup = buildConfigurationBackup({
       ...SAMPLE_APP_STATE,
+      customSources: [
+        {
+          id: "custom:build_quota",
+          label: "Build Quota",
+          endpointUrl: "https://example.com/quota.json",
+          displayEnabled: true,
+          refreshIntervalMinutes: 30,
+          createdAt: "2026-06-26T00:00:00.000Z",
+          updatedAt: "2026-06-26T01:00:00.000Z",
+        },
+      ],
+      customSourceStates: [
+        {
+          sourceId: "custom:build_quota",
+          status: "ok",
+          snapshot: null,
+          lastAttemptAt: "2026-06-26T02:00:00.000Z",
+          lastSuccessAt: "2026-06-26T02:00:00.000Z",
+          lastFailureAt: null,
+          lastFailureReason: "raw server detail",
+          stale: false,
+        },
+      ],
       settings: {
         ...SAMPLE_APP_STATE.settings,
         toolbarIconMode: "custom",
@@ -51,6 +74,21 @@ describe("configuration backup", () => {
     expect(JSON.stringify(backup.payload)).not.toContain("tabId");
     expect(JSON.stringify(backup.payload)).not.toContain("hostOrigins");
     expect(JSON.stringify(backup.payload)).not.toContain("credentialStatus");
+    expect(backup.payload.customSources).toEqual([
+      {
+        id: "custom:build_quota",
+        label: "Build Quota",
+        endpointUrl: "https://example.com/quota.json",
+        displayEnabled: true,
+        refreshIntervalMinutes: 30,
+        createdAt: "2026-06-26T00:00:00.000Z",
+        updatedAt: "2026-06-26T01:00:00.000Z",
+      },
+    ]);
+    expect(JSON.stringify(backup.payload)).not.toContain("raw server detail");
+    expect(JSON.stringify(backup.payload)).not.toContain("customSourceStates");
+    expect(backup.excludedFields).toContain("customSourceStates");
+    expect(backup.excludedFields).toContain("customSources.headers");
   });
 
   it("excludes local-only custom icon data from Chrome Sync backups", () => {
@@ -120,6 +158,77 @@ describe("configuration backup", () => {
     expect(cursorSetting?.displayEnabled).toBe(false);
     expect(cursorSetting?.sourcePreference).toBe("session_page");
     expect(cursorSetting?.pageBinding.tabId).toBe(456);
+  });
+
+  it("imports valid custom source configs and drops invalid custom source entries", async () => {
+    const backup = buildConfigurationBackup({
+      ...SAMPLE_APP_STATE,
+      customSources: [
+        {
+          id: "custom:build_quota",
+          label: "Build Quota",
+          endpointUrl: "https://example.com/quota.json",
+          displayEnabled: true,
+          refreshIntervalMinutes: 30,
+          createdAt: "2026-06-26T00:00:00.000Z",
+          updatedAt: "2026-06-26T01:00:00.000Z",
+        },
+      ],
+    });
+    const rawBackup = JSON.parse(JSON.stringify(backup)) as typeof backup & {
+      payload: {
+        customSources: Array<Record<string, unknown>>;
+      };
+    };
+    rawBackup.payload.customSources.push({
+      id: "custom:bad",
+      label: "Bad",
+      endpointUrl: "file:///tmp/source.json",
+      displayEnabled: true,
+      refreshIntervalMinutes: 30,
+      headers: {
+        Authorization: "Bearer secret",
+      },
+    });
+    const importedState = applyConfigurationBackupToState(
+      {
+        ...SAMPLE_APP_STATE,
+        customSources: [],
+        customSourceStates: [
+          {
+            sourceId: "custom:old",
+            status: "ok",
+            snapshot: null,
+            lastAttemptAt: "2026-06-26T02:00:00.000Z",
+            lastSuccessAt: "2026-06-26T02:00:00.000Z",
+            lastFailureAt: null,
+            lastFailureReason: null,
+            stale: false,
+          },
+        ],
+      },
+      rawBackup,
+    );
+
+    await writeAppState(importedState);
+
+    const storedState = await readAppState();
+
+    expect(storedState?.customSources).toEqual([
+      {
+        id: "custom:build_quota",
+        label: "Build Quota",
+        endpointUrl: "https://example.com/quota.json",
+        displayEnabled: true,
+        refreshIntervalMinutes: 30,
+        createdAt: "2026-06-26T00:00:00.000Z",
+        updatedAt: "2026-06-26T01:00:00.000Z",
+      },
+    ]);
+    expect(JSON.stringify(storedState?.customSources)).not.toContain(
+      "Authorization",
+    );
+    expect(storedState?.customSourceStates).toEqual([]);
   });
 
   it("imports legacy progress color bands as traditional color appearance", async () => {

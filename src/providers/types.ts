@@ -1,4 +1,5 @@
 import type {
+  DashboardSourceId,
   CustomSourceSetting,
   CustomSourceSyncState,
 } from "../shared/custom-sources";
@@ -168,14 +169,14 @@ export type ActionBadgeSelection = "attention" | (string & {});
 export type ActionBadgeSelections = ActionBadgeSelection[];
 export type ActionBadgeSelectionMode = "auto" | "manual";
 export type DisplaySurface = "popup" | "sidebar" | "fullPage";
-export type ProviderOrderBySurface = Record<DisplaySurface, ProviderId[]>;
+export type ProviderOrderBySurface = Record<DisplaySurface, DashboardSourceId[]>;
 export type ProviderProgressItemPreference = {
   id: string;
   visible: boolean;
 };
 export type ProgressItemsBySurface = Record<
   DisplaySurface,
-  Partial<Record<ProviderId, ProviderProgressItemPreference[]>>
+  Partial<Record<DashboardSourceId, ProviderProgressItemPreference[]>>
 >;
 export type ProgressColorBand = {
   id: string;
