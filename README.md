@@ -47,7 +47,8 @@ AI Usage Dashboard is intentionally conservative:
 - It stores extension settings, optional API credentials, page bindings, cached
   snapshots, custom source settings, normalized custom source snapshots, and
   import/export files in your Chrome profile.
-- Optional host permissions are requested only for supported provider origins.
+- Optional host permissions are requested for supported provider origins and
+  for user-approved custom source HTTP/HTTPS endpoint origins.
 - Custom JSON sources fetch user-configured HTTP or HTTPS endpoints with
   browser credentials omitted; raw response bodies are not stored or rendered.
 - The `favicon` permission is used only for the optional provider-matched

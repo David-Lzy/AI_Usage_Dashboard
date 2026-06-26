@@ -28,6 +28,10 @@ HTTP or HTTPS endpoint with browser credentials omitted. The current custom
 source feature does not store or send custom request headers, API tokens,
 cookies, or raw browser authentication material.
 
+Chrome may ask the user to grant optional host access for the configured custom
+source endpoint origin. That access is used only so the extension can fetch the
+user-configured JSON endpoint; requests still use `credentials: omit`.
+
 The extension validates the JSON response, stores only the normalized custom
 source snapshot and sync diagnostics, and discards the raw response body. HTML
 from a custom endpoint is not rendered, and scripts are not executed.
@@ -38,7 +42,12 @@ include raw response bodies.
 
 ## Provider Page Access
 
-The extension requests optional host access only for supported provider origins. When the user grants access to a supported signed-in usage page, packaged extension code reads visible usage information needed for quota and sync status. If the page is signed out, unavailable, or no longer exposes parseable usage information, the extension reports that state instead of inventing a value.
+For built-in provider page sources, the extension requests optional host access
+only for supported provider origins. When the user grants access to a supported
+signed-in usage page, packaged extension code reads visible usage information
+needed for quota and sync status. If the page is signed out, unavailable, or no
+longer exposes parseable usage information, the extension reports that state
+instead of inventing a value.
 
 The extension does not ask users to paste cookies or raw browser authentication headers.
 

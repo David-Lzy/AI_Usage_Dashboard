@@ -30,6 +30,7 @@ displayed separately from built-in providers and use a `Custom` label.
 - Endpoints may use `http://` or `https://`.
 - Non-network schemes such as `file:`, `data:`, `javascript:`,
   `chrome-extension:`, and `moz-extension:` are rejected.
+- Chrome may prompt for optional host access to the configured endpoint origin.
 - The extension sends a `GET` request with `Accept: application/json`.
 - Requests use `credentials: omit`; browser cookies are not sent.
 - Current custom sources do not store or send custom headers, auth tokens, or

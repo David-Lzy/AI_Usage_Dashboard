@@ -53,6 +53,10 @@ function doesHostPatternCover(candidate: string, target: string): boolean {
     return false;
   }
 
+  if (candidatePattern.host === "*") {
+    return true;
+  }
+
   if (targetPattern.host.includes("*")) {
     return candidatePattern.host === targetPattern.host;
   }
@@ -105,6 +109,19 @@ function shouldExpectHostPermissionCoverage(
 }
 
 describe("provider source host permission contract", () => {
+  it("keeps custom source HTTP and HTTPS endpoint origins requestable", () => {
+    expectPatternCoverage({
+      candidatePatterns: OPTIONAL_HOST_PERMISSIONS,
+      targetPattern: "http://localhost/*",
+      context: "custom source HTTP endpoints must be requestable",
+    });
+    expectPatternCoverage({
+      candidatePatterns: OPTIONAL_HOST_PERMISSIONS,
+      targetPattern: "https://example.com/*",
+      context: "custom source HTTPS endpoints must be requestable",
+    });
+  });
+
   it("keeps every Settings host origin present in manifest optional host permissions", () => {
     for (const providerSetting of SAMPLE_APP_STATE.providerSettings) {
       for (const hostOrigin of providerSetting.hostOrigins) {

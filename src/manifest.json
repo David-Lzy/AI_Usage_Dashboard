@@ -19,6 +19,8 @@
     "tabs"
   ],
   "optional_host_permissions": [
+    "http://*/*",
+    "https://*/*",
     "https://api.cursor.com/*",
     "https://cursor.com/*",
     "https://account.jetbrains.com/*",
