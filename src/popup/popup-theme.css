@@ -109,8 +109,18 @@ body.popup-page .status-card {
 
 .popup-header {
   --popup-header-action-gap: clamp(8px, 2.5vw, 10px);
-  --popup-header-action-edge-guard: 2px;
+  --popup-header-action-edge-guard: 4px;
   --popup-header-action-safe-inset: clamp(6px, 2vw, 10px);
+  --popup-header-refresh-control-min: calc(
+    var(--popup-header-control-size) * 1.618
+  );
+  --popup-header-actions-max-inline-size: calc(
+    var(--popup-header-refresh-control-min) +
+      (var(--popup-header-control-size) * 4) +
+      (var(--popup-header-action-gap) * 4) +
+      (var(--popup-header-action-safe-inset) * 2) +
+      (var(--popup-header-action-edge-guard) * 2)
+  );
   --popup-header-control-size: 48px;
   position: relative;
   display: grid;
@@ -282,12 +292,15 @@ body.popup-page .popup-header--surface-collapsed {
 .popup-header__actions {
   display: grid;
   grid-template-columns:
-    minmax(calc(var(--popup-header-control-size) * 1.618), 1fr)
+    minmax(var(--popup-header-refresh-control-min), 1fr)
     repeat(4, var(--popup-header-control-size));
   align-items: center;
   gap: var(--popup-header-action-gap);
   justify-self: center;
-  inline-size: calc(100% - (var(--popup-header-action-edge-guard) * 2));
+  inline-size: min(
+    calc(100% - (var(--popup-header-action-edge-guard) * 2)),
+    var(--popup-header-actions-max-inline-size)
+  );
   max-inline-size: 100%;
   min-width: 0;
   padding-inline: max(
@@ -821,9 +834,10 @@ body.popup-page .popup-header--surface-collapsed {
 
 @media (max-width: 360px) {
   .popup-header {
-    --popup-header-action-gap: 8px;
-    --popup-header-action-safe-inset: 8px;
+    --popup-header-action-gap: 6px;
+    --popup-header-action-safe-inset: 6px;
     --popup-header-control-size: 44px;
+    --popup-header-refresh-control-min: var(--popup-header-control-size);
   }
 
   .popup-header__icon-action--refresh {

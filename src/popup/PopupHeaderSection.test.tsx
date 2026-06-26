@@ -108,14 +108,26 @@ describe("PopupHeaderSection", () => {
     expect(popupThemeCss).toContain(
       "--popup-header-action-safe-inset: clamp(6px, 2vw, 10px);",
     );
-    expect(popupThemeCss).toContain("--popup-header-action-edge-guard: 2px;");
+    expect(popupThemeCss).toContain("--popup-header-action-edge-guard: 4px;");
+    expect(popupThemeCss).toContain(
+      "--popup-header-refresh-control-min: calc(",
+    );
+    expect(popupThemeCss).toContain(
+      "--popup-header-actions-max-inline-size: calc(",
+    );
     expect(popupThemeCss).toContain("justify-self: center;");
     expect(popupThemeCss).toContain(
-      "inline-size: calc(100% - (var(--popup-header-action-edge-guard) * 2));",
+      "calc(100% - (var(--popup-header-action-edge-guard) * 2)),",
+    );
+    expect(popupThemeCss).toContain(
+      "var(--popup-header-actions-max-inline-size)",
     );
     expect(popupThemeCss).toContain("env(safe-area-inset-right, 0px)");
     expect(popupThemeCss).toContain("@media (max-width: 360px)");
     expect(popupThemeCss).toContain("--popup-header-control-size: 44px;");
-    expect(popupThemeCss).toContain("--popup-header-action-gap: 8px;");
+    expect(popupThemeCss).toContain("--popup-header-action-gap: 6px;");
+    expect(popupThemeCss).toContain(
+      "--popup-header-refresh-control-min: var(--popup-header-control-size);",
+    );
   });
 });
