@@ -181,12 +181,23 @@ export function useAdaptiveControlMinWidth({
 
   useEffect(() => {
     let cancelled = false;
+    let animationFrameId: number | null = null;
 
-    function measure() {
+    function updateMinWidth(nextMinWidth: number) {
+      if (cancelled) {
+        return;
+      }
+
+      setMinWidthPx((currentMinWidth) =>
+        currentMinWidth === nextMinWidth ? currentMinWidth : nextMinWidth,
+      );
+    }
+
+    function measureNow() {
       const measurer = measurerRef.current;
 
       if (!measurer) {
-        setMinWidthPx(fallbackWidth);
+        updateMinWidth(fallbackWidth);
         return;
       }
 
@@ -205,40 +216,68 @@ export function useAdaptiveControlMinWidth({
         fallbackWidth,
       );
 
-      if (!cancelled) {
-        setMinWidthPx(nextMinWidth);
-      }
+      updateMinWidth(nextMinWidth);
     }
 
-    measure();
+    function scheduleMeasure() {
+      if (cancelled) {
+        return;
+      }
+
+      if (
+        typeof window === "undefined" ||
+        typeof window.requestAnimationFrame !== "function"
+      ) {
+        measureNow();
+        return;
+      }
+
+      if (animationFrameId !== null) {
+        return;
+      }
+
+      animationFrameId = window.requestAnimationFrame(() => {
+        animationFrameId = null;
+        measureNow();
+      });
+    }
+
+    measureNow();
 
     const resizeObserver =
       typeof ResizeObserver === "undefined"
         ? null
-        : new ResizeObserver(measure);
+        : new ResizeObserver(scheduleMeasure);
 
     if (measurerRef.current) {
       resizeObserver?.observe(measurerRef.current);
     }
 
     if (typeof window !== "undefined") {
-      window.addEventListener("resize", measure);
+      window.addEventListener("resize", scheduleMeasure);
     }
 
     if (typeof document !== "undefined") {
       void document.fonts?.ready.then(() => {
-        if (!cancelled) {
-          measure();
-        }
+        scheduleMeasure();
       });
     }
 
     return () => {
       cancelled = true;
+
+      if (
+        animationFrameId !== null &&
+        typeof window !== "undefined" &&
+        typeof window.cancelAnimationFrame === "function"
+      ) {
+        window.cancelAnimationFrame(animationFrameId);
+      }
+
       resizeObserver?.disconnect();
 
       if (typeof window !== "undefined") {
-        window.removeEventListener("resize", measure);
+        window.removeEventListener("resize", scheduleMeasure);
       }
     };
   }, [fallbackWidth, measurementKey]);
@@ -270,12 +309,25 @@ function useAdaptiveControlColumnCount({
 
   useEffect(() => {
     let cancelled = false;
+    let animationFrameId: number | null = null;
 
-    function measure() {
+    function updateColumnCount(nextColumnCount: number | null) {
+      if (cancelled) {
+        return;
+      }
+
+      setColumnCount((currentColumnCount) =>
+        currentColumnCount === nextColumnCount
+          ? currentColumnCount
+          : nextColumnCount,
+      );
+    }
+
+    function measureNow() {
       const root = rootRef.current;
 
       if (!root) {
-        setColumnCount(null);
+        updateColumnCount(null);
         return;
       }
 
@@ -293,32 +345,62 @@ function useAdaptiveControlColumnCount({
         minWidthPx,
       });
 
-      if (!cancelled) {
-        setColumnCount(nextColumnCount);
-      }
+      updateColumnCount(nextColumnCount);
     }
 
-    measure();
+    function scheduleMeasure() {
+      if (cancelled) {
+        return;
+      }
+
+      if (
+        typeof window === "undefined" ||
+        typeof window.requestAnimationFrame !== "function"
+      ) {
+        measureNow();
+        return;
+      }
+
+      if (animationFrameId !== null) {
+        return;
+      }
+
+      animationFrameId = window.requestAnimationFrame(() => {
+        animationFrameId = null;
+        measureNow();
+      });
+    }
+
+    measureNow();
 
     const resizeObserver =
       typeof ResizeObserver === "undefined"
         ? null
-        : new ResizeObserver(measure);
+        : new ResizeObserver(scheduleMeasure);
 
     if (rootRef.current) {
       resizeObserver?.observe(rootRef.current);
     }
 
     if (typeof window !== "undefined") {
-      window.addEventListener("resize", measure);
+      window.addEventListener("resize", scheduleMeasure);
     }
 
     return () => {
       cancelled = true;
+
+      if (
+        animationFrameId !== null &&
+        typeof window !== "undefined" &&
+        typeof window.cancelAnimationFrame === "function"
+      ) {
+        window.cancelAnimationFrame(animationFrameId);
+      }
+
       resizeObserver?.disconnect();
 
       if (typeof window !== "undefined") {
-        window.removeEventListener("resize", measure);
+        window.removeEventListener("resize", scheduleMeasure);
       }
     };
   }, [itemCount, minWidthPx]);

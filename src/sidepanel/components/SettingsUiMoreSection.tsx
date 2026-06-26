@@ -90,33 +90,76 @@ function useFloatingToolbarPopupPreviewCapability() {
 
   useEffect(() => {
     const container = containerRef.current;
+    let animationFrameId: number | null = null;
 
     if (!container) {
       return undefined;
     }
 
-    function measureContainer() {
-      setCanUseFloatingPreview(
-        canUseFloatingToolbarPopupPreview(
-          container?.getBoundingClientRect().width ?? 0,
-        ),
+    function measureContainerNow() {
+      const nextCanUseFloatingPreview = canUseFloatingToolbarPopupPreview(
+        container?.getBoundingClientRect().width ?? 0,
+      );
+
+      setCanUseFloatingPreview((currentCanUseFloatingPreview) =>
+        currentCanUseFloatingPreview === nextCanUseFloatingPreview
+          ? currentCanUseFloatingPreview
+          : nextCanUseFloatingPreview,
       );
     }
 
-    measureContainer();
+    function scheduleMeasureContainer() {
+      if (
+        typeof window === "undefined" ||
+        typeof window.requestAnimationFrame !== "function"
+      ) {
+        measureContainerNow();
+        return;
+      }
+
+      if (animationFrameId !== null) {
+        return;
+      }
+
+      animationFrameId = window.requestAnimationFrame(() => {
+        animationFrameId = null;
+        measureContainerNow();
+      });
+    }
+
+    measureContainerNow();
 
     if (typeof ResizeObserver === "undefined") {
-      window.addEventListener("resize", measureContainer);
+      if (typeof window === "undefined") {
+        return undefined;
+      }
+
+      window.addEventListener("resize", scheduleMeasureContainer);
 
       return () => {
-        window.removeEventListener("resize", measureContainer);
+        if (
+          animationFrameId !== null &&
+          typeof window.cancelAnimationFrame === "function"
+        ) {
+          window.cancelAnimationFrame(animationFrameId);
+        }
+
+        window.removeEventListener("resize", scheduleMeasureContainer);
       };
     }
 
-    const resizeObserver = new ResizeObserver(measureContainer);
+    const resizeObserver = new ResizeObserver(scheduleMeasureContainer);
     resizeObserver.observe(container);
 
     return () => {
+      if (
+        animationFrameId !== null &&
+        typeof window !== "undefined" &&
+        typeof window.cancelAnimationFrame === "function"
+      ) {
+        window.cancelAnimationFrame(animationFrameId);
+      }
+
       resizeObserver.disconnect();
     };
   }, []);

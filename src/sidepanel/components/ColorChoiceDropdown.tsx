@@ -13,6 +13,7 @@ import type { SettingsActivePopoverSessionState } from "../../shared/surface-ses
 import { normalizeThemeCustomSeedHex } from "../../shared/theme";
 import { focusWithoutScroll } from "../focus";
 import {
+  areFloatingMenuPositionsEqual,
   resolveFloatingMenuPosition,
   type FloatingMenuPosition,
 } from "../floating-menu-position";
@@ -283,20 +284,24 @@ export function ColorChoiceDropdown({
         ? "end"
         : "start";
 
-    setMenuPosition(
-      resolveFloatingMenuPosition(
-        anchor.getBoundingClientRect(),
-        {
-          width: window.innerWidth,
-          height: window.innerHeight,
-        },
-        {
-          align: direction,
-          minHeight: 180,
-          preferredMaxHeight: 560,
-          preferredWidth: menuDensity === "compact" ? 420 : 640,
-        },
-      ),
+    const nextMenuPosition = resolveFloatingMenuPosition(
+      anchor.getBoundingClientRect(),
+      {
+        width: window.innerWidth,
+        height: window.innerHeight,
+      },
+      {
+        align: direction,
+        minHeight: 180,
+        preferredMaxHeight: 560,
+        preferredWidth: menuDensity === "compact" ? 420 : 640,
+      },
+    );
+
+    setMenuPosition((currentMenuPosition) =>
+      areFloatingMenuPositionsEqual(currentMenuPosition, nextMenuPosition)
+        ? currentMenuPosition
+        : nextMenuPosition,
     );
   }
 

@@ -14,6 +14,7 @@ import { createPortal } from "react-dom";
 import type { SettingsActivePopoverSessionState } from "../../shared/surface-session-state";
 import { focusWithoutScroll } from "../focus";
 import {
+  areFloatingMenuPositionsEqual,
   resolveFloatingMenuPosition,
   type FloatingMenuPosition,
 } from "../floating-menu-position";
@@ -195,20 +196,25 @@ export function MaterialSelect<TValue extends string>({
         ? "end"
         : "start";
 
-    setMenuPosition(
-      resolveFloatingMenuPosition(
-        anchor.getBoundingClientRect(),
-        {
-          width: window.innerWidth,
-          height: window.innerHeight,
-        },
-        {
-          align: direction,
-          minHeight: 160,
-          preferredMaxHeight: 360,
-          preferredWidth: anchor.getBoundingClientRect().width,
-        },
-      ),
+    const anchorRect = anchor.getBoundingClientRect();
+    const nextMenuPosition = resolveFloatingMenuPosition(
+      anchorRect,
+      {
+        width: window.innerWidth,
+        height: window.innerHeight,
+      },
+      {
+        align: direction,
+        minHeight: 160,
+        preferredMaxHeight: 360,
+        preferredWidth: anchorRect.width,
+      },
+    );
+
+    setMenuPosition((currentMenuPosition) =>
+      areFloatingMenuPositionsEqual(currentMenuPosition, nextMenuPosition)
+        ? currentMenuPosition
+        : nextMenuPosition,
     );
   }
 

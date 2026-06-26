@@ -34,9 +34,34 @@ const DEFAULT_MARGIN_PX = 16;
 const DEFAULT_MIN_HEIGHT_PX = 160;
 const DEFAULT_MAX_HEIGHT_PX = 360;
 const DEFAULT_SPACING_PX = 6;
+const FLOATING_MENU_POSITION_EPSILON_PX = 0.5;
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
+}
+
+function arePixelValuesClose(left: number, right: number): boolean {
+  return Math.abs(left - right) <= FLOATING_MENU_POSITION_EPSILON_PX;
+}
+
+export function areFloatingMenuPositionsEqual(
+  left: FloatingMenuPosition | null,
+  right: FloatingMenuPosition | null,
+): boolean {
+  if (left === right) {
+    return true;
+  }
+
+  if (!left || !right || left.placement !== right.placement) {
+    return false;
+  }
+
+  return (
+    arePixelValuesClose(left.left, right.left) &&
+    arePixelValuesClose(left.top, right.top) &&
+    arePixelValuesClose(left.width, right.width) &&
+    arePixelValuesClose(left.maxHeight, right.maxHeight)
+  );
 }
 
 export function resolveFloatingMenuPosition(

@@ -146,18 +146,33 @@ export function PopupApp() {
     }
 
     let disposed = false;
+    let refreshCountdownInFlight = false;
 
     async function updateRefreshCountdown() {
       if (loadState.status !== "ready") {
         return;
       }
 
-      const seconds = await readPopupRefreshCountdownSeconds(
-        loadState.appState.settings.syncIntervalMinutes,
-      );
+      if (refreshCountdownInFlight) {
+        return;
+      }
 
-      if (!disposed) {
-        setRefreshCountdownSeconds(seconds);
+      refreshCountdownInFlight = true;
+
+      try {
+        const seconds = await readPopupRefreshCountdownSeconds(
+          loadState.appState.settings.syncIntervalMinutes,
+        );
+
+        if (!disposed) {
+          setRefreshCountdownSeconds((currentSeconds) =>
+            currentSeconds === seconds ? currentSeconds : seconds,
+          );
+        }
+      } catch {
+        // The countdown is advisory; a failed read should not keep the popup busy.
+      } finally {
+        refreshCountdownInFlight = false;
       }
     }
 

@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { resolveFloatingMenuPosition } from "./floating-menu-position";
+import {
+  areFloatingMenuPositionsEqual,
+  resolveFloatingMenuPosition,
+} from "./floating-menu-position";
 
 describe("resolveFloatingMenuPosition", () => {
   it("opens below when there is enough room", () => {
@@ -43,5 +46,62 @@ describe("resolveFloatingMenuPosition", () => {
         { align: "end", preferredWidth: 520, preferredMaxHeight: 360 },
       ).left,
     ).toBe(240);
+  });
+
+  it("compares positions with subpixel tolerance", () => {
+    expect(
+      areFloatingMenuPositionsEqual(
+        {
+          left: 12,
+          top: 24,
+          width: 320,
+          maxHeight: 360,
+          placement: "below",
+        },
+        {
+          left: 12.4,
+          top: 23.6,
+          width: 320.2,
+          maxHeight: 359.7,
+          placement: "below",
+        },
+      ),
+    ).toBe(true);
+    expect(
+      areFloatingMenuPositionsEqual(
+        {
+          left: 12,
+          top: 24,
+          width: 320,
+          maxHeight: 360,
+          placement: "below",
+        },
+        {
+          left: 12,
+          top: 28,
+          width: 320,
+          maxHeight: 360,
+          placement: "below",
+        },
+      ),
+    ).toBe(false);
+    expect(
+      areFloatingMenuPositionsEqual(
+        {
+          left: 12,
+          top: 24,
+          width: 320,
+          maxHeight: 360,
+          placement: "below",
+        },
+        {
+          left: 12,
+          top: 24,
+          width: 320,
+          maxHeight: 360,
+          placement: "above",
+        },
+      ),
+    ).toBe(false);
   });
 });

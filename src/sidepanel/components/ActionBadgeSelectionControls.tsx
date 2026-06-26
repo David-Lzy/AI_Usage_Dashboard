@@ -17,6 +17,7 @@ import type {
 } from "../../providers/types";
 import { ACTION_BADGE_ATTENTION_SELECTION } from "../../shared/action-badge-preferences";
 import {
+  areFloatingMenuPositionsEqual,
   resolveFloatingMenuPosition,
   type FloatingMenuPosition,
 } from "../floating-menu-position";
@@ -238,20 +239,24 @@ export function ActionBadgeSelectionControls({
         ? "end"
         : "start";
 
-    setMenuPosition(
-      resolveFloatingMenuPosition(
-        anchor.getBoundingClientRect(),
-        {
-          width: window.innerWidth,
-          height: window.innerHeight,
-        },
-        {
-          align: direction,
-          minHeight: 180,
-          preferredMaxHeight: 460,
-          preferredWidth: 520,
-        },
-      ),
+    const nextMenuPosition = resolveFloatingMenuPosition(
+      anchor.getBoundingClientRect(),
+      {
+        width: window.innerWidth,
+        height: window.innerHeight,
+      },
+      {
+        align: direction,
+        minHeight: 180,
+        preferredMaxHeight: 460,
+        preferredWidth: 520,
+      },
+    );
+
+    setMenuPosition((currentMenuPosition) =>
+      areFloatingMenuPositionsEqual(currentMenuPosition, nextMenuPosition)
+        ? currentMenuPosition
+        : nextMenuPosition,
     );
   }
 

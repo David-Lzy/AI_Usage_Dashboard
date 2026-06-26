@@ -154,12 +154,23 @@ export function useAdaptiveDropdownMenuGrid({
 
   useEffect(() => {
     let cancelled = false;
+    let animationFrameId: number | null = null;
 
-    function measureText() {
+    function updateMinWidth(nextMinWidth: number) {
+      if (cancelled) {
+        return;
+      }
+
+      setMinWidthPx((currentMinWidth) =>
+        currentMinWidth === nextMinWidth ? currentMinWidth : nextMinWidth,
+      );
+    }
+
+    function measureTextNow() {
       const measurer = measurerRef.current;
 
       if (!measurer) {
-        setMinWidthPx(fallbackWidth);
+        updateMinWidth(fallbackWidth);
         return;
       }
 
@@ -178,59 +189,115 @@ export function useAdaptiveDropdownMenuGrid({
         fallbackWidth,
       );
 
-      if (!cancelled) {
-        setMinWidthPx(nextMinWidth);
-      }
+      updateMinWidth(nextMinWidth);
     }
 
-    measureText();
+    function scheduleMeasureText() {
+      if (cancelled) {
+        return;
+      }
+
+      if (
+        typeof window === "undefined" ||
+        typeof window.requestAnimationFrame !== "function"
+      ) {
+        measureTextNow();
+        return;
+      }
+
+      if (animationFrameId !== null) {
+        return;
+      }
+
+      animationFrameId = window.requestAnimationFrame(() => {
+        animationFrameId = null;
+        measureTextNow();
+      });
+    }
+
+    measureTextNow();
 
     const resizeObserver =
       typeof ResizeObserver === "undefined"
         ? null
-        : new ResizeObserver(measureText);
+        : new ResizeObserver(scheduleMeasureText);
 
     if (measurerRef.current) {
       resizeObserver?.observe(measurerRef.current);
     }
 
     if (typeof window !== "undefined") {
-      window.addEventListener("resize", measureText);
+      window.addEventListener("resize", scheduleMeasureText);
     }
 
     if (typeof document !== "undefined") {
       void document.fonts?.ready.then(() => {
-        if (!cancelled) {
-          measureText();
-        }
+        scheduleMeasureText();
       });
     }
 
     return () => {
       cancelled = true;
+
+      if (
+        animationFrameId !== null &&
+        typeof window !== "undefined" &&
+        typeof window.cancelAnimationFrame === "function"
+      ) {
+        window.cancelAnimationFrame(animationFrameId);
+      }
+
       resizeObserver?.disconnect();
 
       if (typeof window !== "undefined") {
-        window.removeEventListener("resize", measureText);
+        window.removeEventListener("resize", scheduleMeasureText);
       }
     };
   }, [fallbackWidth, layoutSignal, measurementKey]);
 
   useEffect(() => {
     let cancelled = false;
+    let animationFrameId: number | null = null;
 
-    function measureGrid() {
+    function updateGridMeasurements({
+      nextChoiceWidthPx,
+      nextColumnCount,
+    }: {
+      nextChoiceWidthPx: number;
+      nextColumnCount: number;
+    }) {
+      if (cancelled) {
+        return;
+      }
+
+      setColumnCount((currentColumnCount) =>
+        currentColumnCount === nextColumnCount
+          ? currentColumnCount
+          : nextColumnCount,
+      );
+      setChoiceWidthPx((currentChoiceWidthPx) =>
+        currentChoiceWidthPx === nextChoiceWidthPx
+          ? currentChoiceWidthPx
+          : nextChoiceWidthPx,
+      );
+    }
+
+    function measureGridNow() {
       const grid = gridRef.current;
 
       if (!grid) {
-        setColumnCount(1);
-        setChoiceWidthPx(minWidthPx);
+        updateGridMeasurements({
+          nextColumnCount: 1,
+          nextChoiceWidthPx: minWidthPx,
+        });
         return;
       }
 
       if (typeof window === "undefined") {
-        setColumnCount(1);
-        setChoiceWidthPx(minWidthPx);
+        updateGridMeasurements({
+          nextColumnCount: 1,
+          nextChoiceWidthPx: minWidthPx,
+        });
         return;
       }
 
@@ -248,8 +315,10 @@ export function useAdaptiveDropdownMenuGrid({
       });
 
       if (!nextColumnCount) {
-        setColumnCount(1);
-        setChoiceWidthPx(minWidthPx);
+        updateGridMeasurements({
+          nextColumnCount: 1,
+          nextChoiceWidthPx: minWidthPx,
+        });
         return;
       }
 
@@ -259,33 +328,68 @@ export function useAdaptiveDropdownMenuGrid({
         columnGapPx,
       });
 
-      if (!cancelled) {
-        setColumnCount(nextColumnCount);
-        setChoiceWidthPx(Math.max(minWidthPx, nextChoiceWidth ?? minWidthPx));
-      }
+      updateGridMeasurements({
+        nextColumnCount,
+        nextChoiceWidthPx: Math.max(
+          minWidthPx,
+          nextChoiceWidth ?? minWidthPx,
+        ),
+      });
     }
 
-    measureGrid();
+    function scheduleMeasureGrid() {
+      if (cancelled) {
+        return;
+      }
+
+      if (
+        typeof window === "undefined" ||
+        typeof window.requestAnimationFrame !== "function"
+      ) {
+        measureGridNow();
+        return;
+      }
+
+      if (animationFrameId !== null) {
+        return;
+      }
+
+      animationFrameId = window.requestAnimationFrame(() => {
+        animationFrameId = null;
+        measureGridNow();
+      });
+    }
+
+    measureGridNow();
 
     const resizeObserver =
       typeof ResizeObserver === "undefined"
         ? null
-        : new ResizeObserver(measureGrid);
+        : new ResizeObserver(scheduleMeasureGrid);
 
     if (gridRef.current) {
       resizeObserver?.observe(gridRef.current);
     }
 
     if (typeof window !== "undefined") {
-      window.addEventListener("resize", measureGrid);
+      window.addEventListener("resize", scheduleMeasureGrid);
     }
 
     return () => {
       cancelled = true;
+
+      if (
+        animationFrameId !== null &&
+        typeof window !== "undefined" &&
+        typeof window.cancelAnimationFrame === "function"
+      ) {
+        window.cancelAnimationFrame(animationFrameId);
+      }
+
       resizeObserver?.disconnect();
 
       if (typeof window !== "undefined") {
-        window.removeEventListener("resize", measureGrid);
+        window.removeEventListener("resize", scheduleMeasureGrid);
       }
     };
   }, [itemCount, layoutSignal, measurementLabels.length, minWidthPx]);
