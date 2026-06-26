@@ -1,6 +1,8 @@
 import { PERIODIC_SYNC_ALARM } from "../shared/alarm-names";
 import { SYNC_INTERVAL_MIN_MINUTES } from "../shared/settings-preferences";
 
+export const POPUP_REFRESH_COUNTDOWN_ALARM_RESYNC_MS = 30_000;
+
 type ChromeAlarmsReader = {
   alarms?: {
     get?: (
@@ -13,6 +15,16 @@ export type PopupRefreshScheduleReader = {
   chrome?: ChromeAlarmsReader;
   now?: () => number;
 };
+
+export function decrementPopupRefreshCountdownSeconds(
+  currentSeconds: number | null,
+): number | null {
+  if (currentSeconds === null) {
+    return null;
+  }
+
+  return Math.max(0, Math.ceil(currentSeconds) - 1);
+}
 
 function readChromeAlarms(
   reader?: PopupRefreshScheduleReader,

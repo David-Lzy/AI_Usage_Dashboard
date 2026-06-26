@@ -62,7 +62,11 @@ import { PopupSnapshotStatusSection } from "./PopupSnapshotStatusSection";
 import { PopupSetupCoverageSection } from "./PopupSetupCoverageSection";
 import { PopupSurfaceRolesSection } from "./PopupSurfaceRolesSection";
 import { buildPopupHideProviderFeedbackCopy } from "./popup-hide-provider-feedback-copy";
-import { readPopupRefreshCountdownSeconds } from "./popup-refresh-schedule";
+import {
+  decrementPopupRefreshCountdownSeconds,
+  POPUP_REFRESH_COUNTDOWN_ALARM_RESYNC_MS,
+  readPopupRefreshCountdownSeconds,
+} from "./popup-refresh-schedule";
 
 type PopupLoadState =
   | { status: "loading" }
@@ -148,15 +152,19 @@ export function PopupApp() {
     let disposed = false;
     let refreshCountdownInFlight = false;
 
-    async function updateRefreshCountdown() {
+    function isPopupHidden() {
+      return (
+        typeof document !== "undefined" &&
+        document.visibilityState === "hidden"
+      );
+    }
+
+    async function syncRefreshCountdownFromAlarm() {
       if (loadState.status !== "ready") {
         return;
       }
 
-      if (
-        typeof document !== "undefined" &&
-        document.visibilityState === "hidden"
-      ) {
+      if (isPopupHidden()) {
         return;
       }
 
@@ -183,7 +191,31 @@ export function PopupApp() {
       }
     }
 
-    void updateRefreshCountdown();
+    function tickRefreshCountdown() {
+      if (isPopupHidden()) {
+        return;
+      }
+
+      let shouldResyncAtZero = false;
+
+      setRefreshCountdownSeconds((currentSeconds) => {
+        const nextSeconds =
+          decrementPopupRefreshCountdownSeconds(currentSeconds);
+
+        shouldResyncAtZero =
+          currentSeconds !== null &&
+          currentSeconds > 0 &&
+          nextSeconds === 0;
+
+        return currentSeconds === nextSeconds ? currentSeconds : nextSeconds;
+      });
+
+      if (shouldResyncAtZero) {
+        void syncRefreshCountdownFromAlarm();
+      }
+    }
+
+    void syncRefreshCountdownFromAlarm();
 
     if (typeof window === "undefined") {
       return () => {
@@ -191,11 +223,15 @@ export function PopupApp() {
       };
     }
 
-    const intervalId = window.setInterval(updateRefreshCountdown, 1_000);
+    const tickIntervalId = window.setInterval(tickRefreshCountdown, 1_000);
+    const resyncIntervalId = window.setInterval(
+      syncRefreshCountdownFromAlarm,
+      POPUP_REFRESH_COUNTDOWN_ALARM_RESYNC_MS,
+    );
 
     function handleVisibilityChange() {
       if (document.visibilityState !== "hidden") {
-        void updateRefreshCountdown();
+        void syncRefreshCountdownFromAlarm();
       }
     }
 
@@ -205,7 +241,8 @@ export function PopupApp() {
 
     return () => {
       disposed = true;
-      window.clearInterval(intervalId);
+      window.clearInterval(tickIntervalId);
+      window.clearInterval(resyncIntervalId);
 
       if (typeof document !== "undefined") {
         document.removeEventListener(
