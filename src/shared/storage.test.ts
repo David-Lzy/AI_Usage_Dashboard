@@ -421,6 +421,7 @@ describe("storage normalization", () => {
         {
           id: "custom:Build_Quota",
           label: "Build Quota",
+          description: "Internal build minutes",
           endpointUrl: "http://localhost:4173/quota.json",
           displayEnabled: true,
           refreshIntervalMinutes: 30,
@@ -430,6 +431,7 @@ describe("storage normalization", () => {
         {
           id: "custom:bad",
           label: "Bad",
+          description: null,
           endpointUrl: "file:///tmp/source.json",
           displayEnabled: true,
           refreshIntervalMinutes: 30,
@@ -482,6 +484,7 @@ describe("storage normalization", () => {
       {
         id: "custom:build_quota",
         label: "Build Quota",
+        description: "Internal build minutes",
         endpointUrl: "http://localhost:4173/quota.json",
         displayEnabled: true,
         refreshIntervalMinutes: 30,

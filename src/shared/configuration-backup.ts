@@ -35,6 +35,7 @@ export type ConfigurationBackupCustomSourceSetting = Pick<
   CustomSourceSetting,
   | "id"
   | "label"
+  | "description"
   | "endpointUrl"
   | "displayEnabled"
   | "refreshIntervalMinutes"
@@ -118,6 +119,7 @@ function buildCustomSourcesBackup(
   return (customSources ?? []).map((source) => ({
     id: source.id,
     label: source.label,
+    description: source.description,
     endpointUrl: source.endpointUrl,
     displayEnabled: source.displayEnabled,
     refreshIntervalMinutes: source.refreshIntervalMinutes,

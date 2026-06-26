@@ -124,6 +124,176 @@
   margin-block-start: var(--app-space-4);
 }
 
+.custom-source-settings {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-4);
+}
+
+.custom-source-settings__header {
+  align-items: flex-start;
+}
+
+.custom-source-settings__detail,
+.custom-source-settings__empty {
+  margin: 0;
+}
+
+.custom-source-settings__list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-3);
+}
+
+.custom-source-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-3);
+  padding: var(--app-space-4);
+  border: 1px solid var(--app-supporting-surface-border);
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--app-supporting-surface-background);
+}
+
+.custom-source-card__top,
+.custom-source-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--app-space-2);
+}
+
+.custom-source-card__title {
+  margin: 0;
+  color: var(--md-sys-color-on-surface);
+  font-family: var(--md-sys-typescale-title-medium-font);
+  font-size: var(--md-sys-typescale-title-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-weight);
+  line-height: var(--md-sys-typescale-title-medium-line-height);
+}
+
+.custom-source-card__meta {
+  margin: var(--app-space-1) 0 0;
+  color: var(--md-sys-color-on-surface-variant);
+  font-family: var(--md-sys-typescale-label-medium-font);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  line-height: var(--md-sys-typescale-label-medium-line-height);
+  overflow-wrap: anywhere;
+}
+
+.custom-source-card__form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: var(--app-space-3);
+  align-items: end;
+}
+
+.custom-source-card__endpoint {
+  grid-column: span 2;
+}
+
+.custom-source-card__interval {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--app-space-2);
+}
+
+.custom-source-card__actions {
+  justify-content: flex-start;
+}
+
+.custom-source-card__delete {
+  color: var(--md-sys-color-error);
+}
+
+.custom-source-card__result {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-1);
+  padding: var(--app-space-3);
+  border: 1px solid var(--app-supporting-surface-border);
+  border-radius: var(--md-sys-shape-corner-medium);
+  color: var(--md-sys-color-on-surface);
+  background: var(--md-sys-color-surface);
+}
+
+.custom-source-card__result[data-tone="success"] {
+  border-color: color-mix(
+    in srgb,
+    var(--app-usage-good) 45%,
+    var(--app-supporting-surface-border) 55%
+  );
+}
+
+.custom-source-card__result[data-tone="error"] {
+  border-color: color-mix(
+    in srgb,
+    var(--md-sys-color-error) 45%,
+    var(--app-supporting-surface-border) 55%
+  );
+}
+
+.custom-source-card__preview {
+  margin: 0;
+}
+
+.custom-source-card__preview div {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--app-space-2);
+}
+
+.custom-source-card__preview dt {
+  color: var(--md-sys-color-on-surface-variant);
+  font-weight: 600;
+}
+
+.custom-source-card__preview dd {
+  margin: 0;
+}
+
+.custom-source-protocol {
+  padding: var(--app-space-4);
+  border: 1px dashed var(--app-supporting-surface-border);
+  border-radius: var(--md-sys-shape-corner-large);
+}
+
+.custom-source-protocol summary {
+  cursor: pointer;
+  color: var(--md-sys-color-primary);
+  font-weight: 700;
+}
+
+.custom-source-protocol__examples {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: var(--app-space-3);
+}
+
+.custom-source-protocol pre {
+  max-width: 100%;
+  margin: 0;
+  padding: var(--app-space-3);
+  overflow: auto;
+  border-radius: var(--md-sys-shape-corner-medium);
+  background: color-mix(
+    in srgb,
+    var(--md-sys-color-surface-variant) 42%,
+    transparent
+  );
+  color: var(--md-sys-color-on-surface);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 560px) {
+  .custom-source-card__endpoint {
+    grid-column: auto;
+  }
+}
+
 .configuration-backup-controls {
   display: grid;
   grid-template-columns: minmax(0, 1fr);

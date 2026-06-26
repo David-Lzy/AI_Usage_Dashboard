@@ -13,6 +13,7 @@ import {
   updateAppState,
   writeAppState,
 } from "../shared/storage";
+import { normalizeCustomSourceSettings } from "../shared/custom-sources";
 import { readStoreScreenshotRuntimeLock } from "../shared/store-screenshot-runtime-lock";
 import {
   ensureActionBadgeRotationAlarm,
@@ -105,6 +106,32 @@ export async function handleAppMessage(
                   "The shared appearance preferences now apply across the side panel, popup, and audit hub.",
               }
             : undefined,
+      };
+    }
+
+    case "app:update-custom-sources": {
+      const customSources = normalizeCustomSourceSettings(message.customSources);
+      const customSourceIds = new Set(customSources.map((source) => source.id));
+      const state = await updateAppState((current) =>
+        reconcileAppStateHealth({
+          ...current,
+          customSources,
+          customSourceStates: (current.customSourceStates ?? []).filter(
+            (entry) => customSourceIds.has(entry.sourceId),
+          ),
+        }),
+      );
+      await ensureBackgroundAlarms(state);
+
+      return {
+        ok: true,
+        state,
+        notice: {
+          tone: "success",
+          title: "Custom sources updated",
+          message:
+            "Custom JSON sources were saved locally. Use refresh to fetch the latest endpoint data.",
+        },
       };
     }
 

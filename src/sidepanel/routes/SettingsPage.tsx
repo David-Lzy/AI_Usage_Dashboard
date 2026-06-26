@@ -24,6 +24,10 @@ import type {
   ToolbarIconMode,
   UiFontFamily,
 } from "../../providers/types";
+import type {
+  CustomSourceSetting,
+  CustomSourceSyncState,
+} from "../../shared/custom-sources";
 import { getPreferredScrollBehavior } from "../motion";
 import {
   SettingsBackToTopButton,
@@ -50,6 +54,7 @@ import {
 import { SettingsSourceSection } from "../components/SettingsSourceSection";
 import { SettingsPreferencesSection } from "../components/SettingsPreferencesSection";
 import { SettingsProviderDisplaySection } from "../components/SettingsProviderDisplaySection";
+import { CustomSourceSettingsSection } from "../components/CustomSourceSettingsSection";
 import { MaterialInfoTooltip } from "../components/MaterialInfoTooltip";
 import { BUILD_INFO } from "../../shared/build-info";
 import { useSettingsPage } from "../use-settings-page";
@@ -71,6 +76,8 @@ type SettingsPageProps = {
   surfaceActionTitle?: string;
   settings: AppSettings;
   providers: ProviderSetting[];
+  customSources?: CustomSourceSetting[];
+  customSourceStates?: CustomSourceSyncState[];
   snapshots: ProviderSnapshot[];
   toast: SettingsToast | null;
   onDismissToast: () => void;
@@ -98,6 +105,7 @@ type SettingsPageProps = {
   onProgressItemsBySurfaceChange: (
     progressItemsBySurface: ProgressItemsBySurface,
   ) => void;
+  onCustomSourcesChange: (customSources: CustomSourceSetting[]) => void;
   onProgressThicknessPxChange: (progressThicknessPx: number) => void;
   onProgressColorAppearanceChange: (
     colorAppearance: ProgressColorAppearance,
@@ -157,6 +165,8 @@ export function SettingsPage({
   surfaceActionTitle,
   settings,
   providers,
+  customSources = [],
+  customSourceStates = [],
   snapshots,
   toast,
   onDismissToast,
@@ -178,6 +188,7 @@ export function SettingsPage({
   onPopupShadowStyleChange,
   onProviderOrderBySurfaceChange,
   onProgressItemsBySurfaceChange,
+  onCustomSourcesChange,
   onProgressThicknessPxChange,
   onProgressColorAppearanceChange,
   onProgressColorBandsChange,
@@ -509,6 +520,13 @@ export function SettingsPage({
         onProviderProgressDetailsOpenChange={
           settingsSurfaceSession.setProviderProgressDetailsOpen
         }
+      />
+
+      <CustomSourceSettingsSection
+        customSources={customSources}
+        customSourceStates={customSourceStates}
+        locale={i18n.resolvedLocale}
+        onChange={onCustomSourcesChange}
       />
 
       {showAdvancedContainer ? (

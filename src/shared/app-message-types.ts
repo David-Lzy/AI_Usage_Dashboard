@@ -6,11 +6,16 @@ import type {
   ProviderPageBinding,
   ProviderSourcePreference,
 } from "../providers/types";
+import type { CustomSourceSetting } from "./custom-sources";
 
 export type AppMessage =
   | { type: "app:init" }
   | { type: "app:read-state" }
   | { type: "app:update-settings"; settings: Partial<AppSettings> }
+  | {
+      type: "app:update-custom-sources";
+      customSources: CustomSourceSetting[];
+    }
   | { type: "app:set-provider-enabled"; providerId: ProviderId; enabled: boolean }
   | {
       type: "app:set-provider-source-preference";

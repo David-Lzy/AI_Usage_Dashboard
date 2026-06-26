@@ -38,6 +38,7 @@ function renderSettingsPage(overrides: Partial<Parameters<typeof SettingsPage>[0
       onPopupShadowStyleChange={() => {}}
       onProviderOrderBySurfaceChange={() => {}}
       onProgressItemsBySurfaceChange={() => {}}
+      onCustomSourcesChange={() => {}}
       onProgressThicknessPxChange={() => {}}
       onProgressColorAppearanceChange={() => {}}
       onProgressColorBandsChange={() => {}}
@@ -109,6 +110,7 @@ describe("SettingsPage", () => {
     expect(html).toContain('data-settings-material-select="toolbar-icon-mode"');
     expect(html).toContain('data-configuration-backup=""');
     expect(html).toContain('data-settings-provider-display-section=""');
+    expect(html).toContain('data-custom-source-settings=""');
     expect(html).toContain('data-provider-order-preferences=""');
     expect(html).toContain('data-provider-progress-preferences=""');
     expect(html).not.toContain('data-provider-order-row="jetbrains-org-page"');

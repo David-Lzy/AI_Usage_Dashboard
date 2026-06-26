@@ -17,6 +17,7 @@ describe("configuration backup", () => {
         {
           id: "custom:build_quota",
           label: "Build Quota",
+          description: "Internal build minutes",
           endpointUrl: "https://example.com/quota.json",
           displayEnabled: true,
           refreshIntervalMinutes: 30,
@@ -78,6 +79,7 @@ describe("configuration backup", () => {
       {
         id: "custom:build_quota",
         label: "Build Quota",
+        description: "Internal build minutes",
         endpointUrl: "https://example.com/quota.json",
         displayEnabled: true,
         refreshIntervalMinutes: 30,
@@ -167,6 +169,7 @@ describe("configuration backup", () => {
         {
           id: "custom:build_quota",
           label: "Build Quota",
+          description: "Internal build minutes",
           endpointUrl: "https://example.com/quota.json",
           displayEnabled: true,
           refreshIntervalMinutes: 30,
@@ -183,6 +186,7 @@ describe("configuration backup", () => {
     rawBackup.payload.customSources.push({
       id: "custom:bad",
       label: "Bad",
+      description: null,
       endpointUrl: "file:///tmp/source.json",
       displayEnabled: true,
       refreshIntervalMinutes: 30,
@@ -218,6 +222,7 @@ describe("configuration backup", () => {
       {
         id: "custom:build_quota",
         label: "Build Quota",
+        description: "Internal build minutes",
         endpointUrl: "https://example.com/quota.json",
         displayEnabled: true,
         refreshIntervalMinutes: 30,

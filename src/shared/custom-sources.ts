@@ -131,6 +131,7 @@ export type CustomSourceSnapshot = {
 export type CustomSourceSetting = {
   id: CustomSourceId;
   label: string;
+  description: string | null;
   endpointUrl: string;
   displayEnabled: boolean;
   refreshIntervalMinutes: number;
@@ -618,6 +619,14 @@ export function normalizeCustomSourceSettings(
       normalizeDisplayString(entry.label, "label", issues, {
         maxLength: 80,
       }) ?? id.slice(CUSTOM_SOURCE_ID_PREFIX.length);
+    const description = normalizeDisplayString(
+      entry.description,
+      "description",
+      issues,
+      {
+        maxLength: 180,
+      },
+    );
     const createdAt =
       normalizeOptionalTimestamp(entry.createdAt, "createdAt", issues) ??
       new Date(0).toISOString();
@@ -631,6 +640,7 @@ export function normalizeCustomSourceSettings(
       {
         id,
         label,
+        description,
         endpointUrl: endpointUrl.value,
         displayEnabled:
           typeof entry.displayEnabled === "boolean"

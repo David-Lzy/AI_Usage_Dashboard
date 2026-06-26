@@ -225,6 +225,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
     handleSetSourcePreference,
     handleTogglePermission,
     handleToggleProvider,
+    handleUpdateCustomSources,
     handleUpdateSettings,
     sessionPageNavigationAvailable,
   } = standardAppActions;
@@ -345,6 +346,8 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
             }
             settings={appState.settings}
             providers={appState.providerSettings}
+            customSources={appState.customSources}
+            customSourceStates={appState.customSourceStates}
             snapshots={appState.providers}
             toast={toast}
             onDismissToast={() => setToast(null)}
@@ -394,6 +397,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
             onProgressItemsBySurfaceChange={(progressItemsBySurface) =>
               handleUpdateSettings({ progressItemsBySurface })
             }
+            onCustomSourcesChange={handleUpdateCustomSources}
             onProgressThicknessPxChange={(progressThicknessPx) =>
               handleUpdateSettings({ progressThicknessPx })
             }

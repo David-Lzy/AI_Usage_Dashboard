@@ -153,6 +153,29 @@ describe("createStandardAppActions", () => {
     expect(appState.settings.syncIntervalMinutes).not.toBe(45);
   });
 
+  it("dispatches custom source updates through the app message bus", () => {
+    const { actions, applyMessage } = createActionHarness();
+    const customSources = [
+      {
+        id: "custom:build_quota" as const,
+        label: "Build Quota",
+        description: "Internal build minutes",
+        endpointUrl: "https://example.com/quota.json",
+        displayEnabled: true,
+        refreshIntervalMinutes: 30,
+        createdAt: "2026-06-26T00:00:00.000Z",
+        updatedAt: "2026-06-26T01:00:00.000Z",
+      },
+    ];
+
+    actions.handleUpdateCustomSources(customSources);
+
+    expect(applyMessage).toHaveBeenCalledWith({
+      type: "app:update-custom-sources",
+      customSources,
+    });
+  });
+
   it("toggles provider visibility using current provider state", () => {
     const { actions, appState, applyMessage } = createActionHarness();
     const codex = appState.providerSettings.find(

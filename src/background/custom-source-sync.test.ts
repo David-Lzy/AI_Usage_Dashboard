@@ -23,6 +23,7 @@ function createCustomSourceSetting(
   return {
     id: "custom:build_quota",
     label: "Build Quota",
+    description: null,
     endpointUrl: "https://example.com/quota.json",
     displayEnabled: true,
     refreshIntervalMinutes: 15,

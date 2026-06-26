@@ -20,6 +20,7 @@ import type { SidePanelRouteState } from "./route-state";
 import { createStandardAppSettingsActions } from "./standard-app-settings-actions";
 import { createStandardAppSessionPageActions } from "./standard-app-session-page-actions";
 import type { AppToast } from "./use-standard-app-runtime";
+import type { CustomSourceSetting } from "../shared/custom-sources";
 
 type ApplyAppMessage = (
   message: AppMessage,
@@ -246,6 +247,13 @@ export function createStandardAppActions({
     })();
   }
 
+  function handleUpdateCustomSources(customSources: CustomSourceSetting[]) {
+    void applyMessage({
+      type: "app:update-custom-sources",
+      customSources,
+    });
+  }
+
   const settingsActions = createStandardAppSettingsActions({
     appState,
     applyMessage,
@@ -290,6 +298,7 @@ export function createStandardAppActions({
     handleSetSourcePreference: settingsActions.handleSetSourcePreference,
     handleTogglePermission,
     handleToggleProvider,
+    handleUpdateCustomSources,
     handleUpdateSettings: settingsActions.handleUpdateSettings,
     sessionPageNavigationAvailable:
       sessionPageActions.sessionPageNavigationAvailable,
