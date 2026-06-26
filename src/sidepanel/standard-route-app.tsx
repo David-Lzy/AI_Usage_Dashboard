@@ -39,6 +39,7 @@ import {
   getProviderViewModel,
   getVisibleProviders,
 } from "./view-models";
+import { getVisibleCustomSources } from "../shared/custom-source-view-models";
 import { SETTINGS_SECTION_IDS } from "./settings-section-ids";
 
 const SettingsPage = lazy(() =>
@@ -285,6 +286,10 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
     providerSourceDisplayCopy,
     providerDisplaySurface,
   );
+  const visibleCustomSources = getVisibleCustomSources(
+    appState,
+    providerDisplaySurface,
+  );
   const selectedProvider =
     route.name === "provider-detail"
       ? getProviderViewModel(
@@ -510,8 +515,21 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           progressSurface={providerDisplaySurface}
           summaryItems={summaryItems}
           providers={visibleProviders}
+          customSources={visibleCustomSources}
+          sourceOrder={
+            appState.settings.providerOrderBySurface[providerDisplaySurface]
+          }
           onOpenProvider={(providerId) =>
             navigateToRoute({ name: "provider-detail", providerId })
+          }
+          onOpenCustomSourcesSettings={() =>
+            navigateToRoute({
+              name: "settings",
+              focus: {
+                kind: "section",
+                sectionId: SETTINGS_SECTION_IDS.providerDisplay,
+              },
+            })
           }
           themeActionLabel={quickThemeToggleCopy.label}
           themeActionTitle={quickThemeToggleCopy.title}

@@ -19,6 +19,10 @@ import { getProviderDefinition } from "../providers/provider-definitions";
 import { isProviderDisplayEligible } from "./provider-display-eligibility";
 import { createEmptyPageBinding } from "./page-bindings";
 import type { DashboardSourceId } from "./custom-sources";
+import {
+  getVisibleCustomSources,
+  hasCustomSourceAttention,
+} from "./custom-source-view-models";
 
 export type ProviderViewModel = ProviderSnapshot & {
   permissionStatus: PermissionStatus;
@@ -416,14 +420,20 @@ export function buildSummaryItems(
   formatValue: SummaryValueFormatter = DEFAULT_SUMMARY_VALUE_FORMATTER,
 ): SummaryItem[] {
   const visibleProviders = getVisibleProviders(state);
+  const visibleCustomSources = getVisibleCustomSources(state);
   const healthyCount = visibleProviders.filter(
     (provider) =>
       provider.displaySyncStatus === "ok" &&
       provider.permissionStatus === "granted",
+  ).length + visibleCustomSources.filter(
+    (source) =>
+      source.syncStatus === "ok" &&
+      source.displayTone === "neutral" &&
+      !source.stale,
   ).length;
-  const attentionCount = visibleProviders.filter(
-    hasProviderProductAttention,
-  ).length;
+  const attentionCount =
+    visibleProviders.filter(hasProviderProductAttention).length +
+    visibleCustomSources.filter(hasCustomSourceAttention).length;
   const accessGapCount = visibleProviders.filter(
     (provider) => provider.permissionStatus === "missing",
   ).length;
@@ -431,7 +441,7 @@ export function buildSummaryItems(
   return [
     {
       label: labels.visible,
-      value: formatValue(visibleProviders.length),
+      value: formatValue(visibleProviders.length + visibleCustomSources.length),
       tone: "neutral",
     },
     {

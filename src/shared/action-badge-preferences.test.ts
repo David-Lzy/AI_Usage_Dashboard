@@ -57,6 +57,68 @@ function createStateWithCodexWindows(): AppState {
   };
 }
 
+function createStateWithCustomSource(): AppState {
+  return {
+    ...SAMPLE_APP_STATE,
+    customSources: [
+      {
+        id: "custom:build_quota",
+        label: "Build Quota",
+        description: "Internal quota endpoint",
+        endpointUrl: "https://example.com/ai-usage.json",
+        displayEnabled: true,
+        refreshIntervalMinutes: 15,
+        createdAt: "2026-06-26T00:00:00.000Z",
+        updatedAt: "2026-06-26T00:00:00.000Z",
+      },
+    ],
+    customSourceStates: [
+      {
+        sourceId: "custom:build_quota",
+        status: "ok",
+        snapshot: {
+          sourceId: "custom:build_quota",
+          endpointId: "build_quota",
+          label: "Build Quota",
+          description: "Internal quota endpoint",
+          planName: "Custom",
+          quotaUnit: "percent",
+          quotaWindow: "daily",
+          used: 72,
+          remaining: 28,
+          total: 100,
+          resetAt: "2026-06-27T10:00:00.000Z",
+          resetLabel: "Resets tomorrow",
+          syncedAt: "2026-06-26T10:00:00.000Z",
+          syncStatus: "ok",
+          tone: "neutral",
+          warningReason: null,
+          lastSyncLabel: "Just now",
+          usageSummary: "28% daily quota remaining",
+          quota: {
+            label: "Daily quota",
+            unit: "percent",
+            window: "daily",
+            used: 72,
+            remaining: 28,
+            total: 100,
+            resetAt: null,
+            resetLabel: "Resets tomorrow",
+          },
+          windows: [],
+          balances: [],
+          facts: [],
+        },
+        lastAttemptAt: "2026-06-26T10:00:00.000Z",
+        lastSuccessAt: "2026-06-26T10:00:00.000Z",
+        lastFailureAt: null,
+        lastFailureReason: null,
+        stale: false,
+      },
+    ],
+  };
+}
+
 describe("action badge preferences", () => {
   it("normalizes unknown values to the attention badge", () => {
     expect(normalizeActionBadgeSelection("codex-weekly")).toBe("attention");
@@ -142,6 +204,28 @@ describe("action badge preferences", () => {
     });
     expect(options.map((option) => option.label)).toContain(
       "Codex Personal · Weekly usage window 剩余",
+    );
+  });
+
+  it("includes visible custom source remaining values as badge candidates", () => {
+    const state = createStateWithCustomSource();
+    const candidates = buildActionBadgeQuotaCandidates(state);
+    const customCandidate = candidates.find(
+      (candidate) => candidate.providerId === "custom:build_quota",
+    );
+
+    expect(customCandidate).toMatchObject({
+      kind: "custom_source",
+      providerLabel: "Build Quota",
+      sourceLabel: "Daily quota",
+      remaining: 28,
+      quotaUnit: "percent",
+    });
+    expect(buildActionBadgeSelectOptions(state, createRuntimeI18n("en"))).toContainEqual(
+      {
+        value: "quota:custom:build_quota:primary",
+        label: "Build Quota · Daily quota remaining",
+      },
     );
   });
 });

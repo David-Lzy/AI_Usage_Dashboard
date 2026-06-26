@@ -1,10 +1,16 @@
 import type {
+  AppState,
   AppSettings,
   ProgressItemsBySurface,
   ProviderOrderBySurface,
   ProviderSetting,
   ProviderSnapshot,
 } from "../../providers/types";
+import type {
+  CustomSourceSetting,
+  CustomSourceSyncState,
+} from "../../shared/custom-sources";
+import { getVisibleCustomSources } from "../../shared/custom-source-view-models";
 import type { ProviderSourceDisplayCopy } from "../../shared/provider-sources";
 import { filterDisplayEligibleProviderSettings } from "../../shared/provider-display-eligibility";
 import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
@@ -20,6 +26,8 @@ type SettingsProviderDisplaySectionProps = {
   settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>;
   snapshots: ProviderSnapshot[];
   providerProgressDetailsOpen?: Record<string, boolean>;
+  customSources?: readonly CustomSourceSetting[];
+  customSourceStates?: readonly CustomSourceSyncState[];
   onProviderOrderBySurfaceChange: (
     providerOrderBySurface: ProviderOrderBySurface,
   ) => void;
@@ -38,6 +46,8 @@ export function SettingsProviderDisplaySection({
   settings,
   settingsCopy,
   snapshots,
+  customSources = [],
+  customSourceStates = [],
   providerProgressDetailsOpen,
   onProviderOrderBySurfaceChange,
   onProgressItemsBySurfaceChange,
@@ -51,6 +61,28 @@ export function SettingsProviderDisplaySection({
   const displayVisibleProviders = displayEligibleProviders.filter(
     (provider) => provider.displayEnabled,
   );
+  const customSourceViewModels = getVisibleCustomSources({
+    providers: snapshots,
+    providerSettings: providers,
+    settings,
+    customSources: [...customSources],
+    customSourceStates: [...customSourceStates],
+  } satisfies AppState);
+  const orderSources = [
+    ...displayVisibleProviders.map((provider) => ({
+      id: provider.id,
+      label: provider.label,
+    })),
+    ...customSourceViewModels.map((source) => ({
+      id: source.sourceId,
+      label: `${source.label} · Custom`,
+    })),
+  ];
+  const customProgressSources = customSourceViewModels.map((source) => ({
+    id: source.sourceId,
+    label: `${source.label} · Custom`,
+    progressItems: source.progressItems,
+  }));
 
   return (
     <section
@@ -72,13 +104,14 @@ export function SettingsProviderDisplaySection({
       <div className="settings-provider-display__body">
         <ProviderOrderPreferenceControls
           copy={settingsCopy.providerOrder}
-          providers={displayVisibleProviders}
+          providers={orderSources}
           providerOrderBySurface={settings.providerOrderBySurface}
           onChange={onProviderOrderBySurfaceChange}
         />
 
         <ProviderProgressItemPreferenceControls
           copy={settingsCopy.progressItems}
+          customSources={customProgressSources}
           detailsOpenByProvider={providerProgressDetailsOpen}
           providers={displayVisibleProviders}
           snapshots={snapshots}

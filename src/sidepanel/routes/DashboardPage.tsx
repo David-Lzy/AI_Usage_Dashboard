@@ -9,6 +9,9 @@ import type {
   SummaryItem,
 } from "../../providers/types";
 import { createRuntimeI18n } from "../../shared/i18n";
+import type { DashboardSourceId } from "../../shared/custom-sources";
+import type { CustomSourceViewModel } from "../../shared/custom-source-view-models";
+import { CustomSourceCard } from "../components/CustomSourceCard";
 import { ProviderCard } from "../components/ProviderCard";
 import { SummaryStrip } from "../components/SummaryStrip";
 import { TopBar } from "../components/TopBar";
@@ -24,7 +27,10 @@ type DashboardPageProps = {
   progressSurface: DisplaySurface;
   summaryItems: SummaryItem[];
   providers: ProviderViewModel[];
+  customSources?: CustomSourceViewModel[];
+  sourceOrder?: readonly DashboardSourceId[];
   onOpenProvider: (providerId: ProviderId) => void;
+  onOpenCustomSourcesSettings?: () => void;
   onOpenSourcePage?: (
     providerId: ProviderId,
     sourceStateKind: ProviderViewModel["currentSourceStateKind"],
@@ -51,7 +57,10 @@ export function DashboardPage({
   progressSurface,
   summaryItems,
   providers,
+  customSources = [],
+  sourceOrder = [],
   onOpenProvider,
+  onOpenCustomSourcesSettings,
   onOpenSourcePage,
   themeActionLabel,
   themeActionTitle,
@@ -68,6 +77,38 @@ export function DashboardPage({
     localePreference,
     typeof window !== "undefined" ? window : undefined,
   );
+  const sourceOrderIndex = new Map(
+    sourceOrder.map((sourceId, index) => [sourceId, index]),
+  );
+  const sourceCards = [
+    ...providers.map((provider) => ({
+      kind: "provider" as const,
+      sourceId: provider.providerId as DashboardSourceId,
+      provider,
+    })),
+    ...customSources.map((source) => ({
+      kind: "custom" as const,
+      sourceId: source.sourceId as DashboardSourceId,
+      source,
+    })),
+  ].sort((left, right) => {
+    const leftIndex = sourceOrderIndex.get(left.sourceId);
+    const rightIndex = sourceOrderIndex.get(right.sourceId);
+
+    if (leftIndex !== undefined && rightIndex !== undefined) {
+      return leftIndex - rightIndex;
+    }
+
+    if (leftIndex !== undefined) {
+      return -1;
+    }
+
+    if (rightIndex !== undefined) {
+      return 1;
+    }
+
+    return 0;
+  });
 
   return (
     <main className="app-shell">
@@ -119,24 +160,40 @@ export function DashboardPage({
           <p className="supporting-copy">{i18n.t("dashboard.providers.detail")}</p>
         </div>
 
-        {providers.length > 0 ? (
+        {sourceCards.length > 0 ? (
           <div className="provider-shell-list" aria-label={i18n.t("dashboard.providers.aria")}>
-            {providers.map((provider) => (
-              <ProviderCard
-                key={provider.providerId}
-                localePreference={localePreference}
-                progressColorAppearance={progressColorAppearance}
-                progressColorBands={progressColorBands}
-                progressDisplayStyle={progressDisplayStyle}
-                progressItemsBySurface={progressItemsBySurface}
-                progressThicknessPx={progressThicknessPx}
-                progressSurface={progressSurface}
-                provider={provider}
-                onOpen={onOpenProvider}
-                onOpenSourcePage={onOpenSourcePage}
-                onRefresh={onRefreshProvider}
-              />
-            ))}
+            {sourceCards.map((sourceCard) =>
+              sourceCard.kind === "provider" ? (
+                <ProviderCard
+                  key={sourceCard.provider.providerId}
+                  localePreference={localePreference}
+                  progressColorAppearance={progressColorAppearance}
+                  progressColorBands={progressColorBands}
+                  progressDisplayStyle={progressDisplayStyle}
+                  progressItemsBySurface={progressItemsBySurface}
+                  progressThicknessPx={progressThicknessPx}
+                  progressSurface={progressSurface}
+                  provider={sourceCard.provider}
+                  onOpen={onOpenProvider}
+                  onOpenSourcePage={onOpenSourcePage}
+                  onRefresh={onRefreshProvider}
+                />
+              ) : (
+                <CustomSourceCard
+                  key={sourceCard.source.sourceId}
+                  localePreference={localePreference}
+                  progressColorAppearance={progressColorAppearance}
+                  progressColorBands={progressColorBands}
+                  progressDisplayStyle={progressDisplayStyle}
+                  progressItemsBySurface={progressItemsBySurface}
+                  progressThicknessPx={progressThicknessPx}
+                  progressSurface={progressSurface}
+                  source={sourceCard.source}
+                  onOpenSettings={onOpenCustomSourcesSettings ?? onOpenSettings}
+                  onRefresh={onRefreshAll}
+                />
+              ),
+            )}
           </div>
         ) : (
           <section className="status-card dashboard-empty-state" aria-live="polite">

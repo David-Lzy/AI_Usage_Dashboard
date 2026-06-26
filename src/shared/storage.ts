@@ -74,6 +74,7 @@ import {
   normalizeCustomSourceSettings,
   normalizeCustomSourceSyncStates,
 } from "./custom-sources";
+import { buildCustomSourceProgressItemIdsBySource } from "./custom-source-view-models";
 
 let memoryFallbackState: AppState | null = null;
 
@@ -262,8 +263,9 @@ function normalizeAppState(state: AppState): AppState {
   ];
   const knownProgressItemIdsBySource = {
     ...knownProgressItemIdsByProvider,
-    ...Object.fromEntries(
-      customSources.map((source) => [source.id, ["primary"] as const]),
+    ...buildCustomSourceProgressItemIdsBySource(
+      customSources,
+      customSourceStates,
     ),
   };
 

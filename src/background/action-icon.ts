@@ -21,11 +21,11 @@ function hasChromeActionIconApi(): boolean {
 }
 
 function isKnownProviderId(
-  providerId: ProviderId | null,
+  providerId: unknown,
   state: AppState,
 ): providerId is ProviderId {
   return (
-    providerId !== null &&
+    typeof providerId === "string" &&
     state.providerSettings.some((provider) => provider.id === providerId)
   );
 }
@@ -47,7 +47,10 @@ export function resolveToolbarIconProviderId(
         return null;
       }
 
-      return findActionBadgeQuotaCandidate(state, selection)?.providerId ?? null;
+      const providerId =
+        findActionBadgeQuotaCandidate(state, selection)?.providerId ?? null;
+
+      return isKnownProviderId(providerId, state) ? providerId : null;
     }
 
     case "custom":

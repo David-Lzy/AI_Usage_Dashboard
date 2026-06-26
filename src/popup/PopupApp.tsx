@@ -21,6 +21,8 @@ import {
   startThemeSettingsSync,
 } from "../shared/theme";
 import { SummaryStrip } from "../shared/components/SummaryStrip";
+import { getVisibleCustomSources } from "../shared/custom-source-view-models";
+import { SETTINGS_SECTION_IDS } from "../shared/settings-section-ids";
 import type { SettingsRouteFocus } from "../shared/sidepanel-route-state";
 import { syncPopupAppearanceAttributes } from "../shared/popup-appearance";
 import {
@@ -42,6 +44,7 @@ import { runPopupRefreshAction } from "./popup-refresh-action";
 import { runPopupThemeToggleAction } from "./popup-theme-toggle-action";
 import { runPopupGuidanceAction } from "./popup-guidance-action";
 import { PopupActionSection } from "./PopupActionSection";
+import { PopupCustomSourceList } from "./PopupCustomSourceList";
 import { PopupFeaturedProviderList } from "./PopupFeaturedProviderList";
 import { PopupFeaturedSection } from "./PopupFeaturedSection";
 import { PopupFooterSection } from "./PopupFooterSection";
@@ -320,7 +323,14 @@ export function PopupApp() {
     runtimeI18n,
   );
   const popupProgressStyle = loadState.appState.settings.popupProgressStyle;
-  const hasFeaturedProviderCards = popupModel.featuredProviderCards.length > 0;
+  const popupCustomSources = getVisibleCustomSources(loadState.appState, "popup");
+  const customSourceSettingsFocus: SettingsRouteFocus = {
+    kind: "section",
+    sectionId: SETTINGS_SECTION_IDS.providerDisplay,
+  };
+  const hasFeaturedProviderCards =
+    popupModel.featuredProviderCards.length > 0 ||
+    popupCustomSources.length > 0;
   const settingsFocusForGuidance =
     getSettingsRouteFocusForPopupAction(
       guidanceCard?.action,
@@ -435,6 +445,36 @@ export function PopupApp() {
         progressThicknessPx={loadState.appState.settings.progressThicknessPx}
         getSettingsFocusForProvider={getSettingsRouteFocusForPopupProvider}
         onAction={handlePopupAction}
+      />
+
+      <PopupCustomSourceList
+        ariaLabel={
+          runtimeI18n.resolvedLocale === "zh-CN"
+            ? "自定义来源"
+            : "Custom sources"
+        }
+        sources={popupCustomSources}
+        i18n={runtimeI18n}
+        progressColorAppearance={
+          loadState.appState.settings.progressColorAppearance
+        }
+        progressColorBands={loadState.appState.settings.progressColorBands}
+        popupCircularProgressItemsPerRow={
+          loadState.appState.settings.popupCircularProgressItemsPerRow
+        }
+        progressDisplayStyle={popupProgressStyle}
+        progressItemsBySurface={loadState.appState.settings.progressItemsBySurface}
+        progressThicknessPx={loadState.appState.settings.progressThicknessPx}
+        settingsFocus={customSourceSettingsFocus}
+        onOpenSettings={(settingsFocus) =>
+          runPopupGuidanceAction(
+            {
+              kind: "settings",
+              label: runtimeI18n.t("common.actions.settings"),
+            },
+            { settingsFocus },
+          )
+        }
       />
 
       {!hasFeaturedProviderCards ? (

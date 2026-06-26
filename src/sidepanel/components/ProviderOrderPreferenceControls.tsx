@@ -7,10 +7,9 @@ import {
 
 import type {
   DisplaySurface,
-  ProviderId,
   ProviderOrderBySurface,
-  ProviderSetting,
 } from "../../providers/types";
+import type { DashboardSourceId } from "../../shared/custom-sources";
 import {
   DISPLAY_SURFACES,
   moveProviderInOrder,
@@ -23,13 +22,16 @@ import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 type ProviderOrderPreferenceControlsProps = {
   copy: ReturnType<typeof buildSettingsLocalizedCopy>["providerOrder"];
   providerOrderBySurface: ProviderOrderBySurface;
-  providers: ProviderSetting[];
+  providers: Array<{
+    id: DashboardSourceId;
+    label: string;
+  }>;
   onChange: (providerOrderBySurface: ProviderOrderBySurface) => void;
 };
 
 function getProviderLabel(
-  providerLabels: Map<ProviderId, string>,
-  providerId: ProviderId,
+  providerLabels: Map<DashboardSourceId, string>,
+  providerId: DashboardSourceId,
 ): string {
   return providerLabels.get(providerId) ?? providerId;
 }
@@ -42,7 +44,7 @@ export function ProviderOrderPreferenceControls({
 }: ProviderOrderPreferenceControlsProps) {
   const [draggedProvider, setDraggedProvider] = useState<{
     surface: DisplaySurface;
-    providerId: ProviderId;
+    providerId: DashboardSourceId;
   } | null>(null);
   const providerIds = useMemo(
     () => providers.map((provider) => provider.id),
@@ -56,7 +58,10 @@ export function ProviderOrderPreferenceControls({
     [providers],
   );
 
-  function updateSurfaceOrder(surface: DisplaySurface, providerIds: ProviderId[]) {
+  function updateSurfaceOrder(
+    surface: DisplaySurface,
+    providerIds: DashboardSourceId[],
+  ) {
     onChange({
       ...providerOrderBySurface,
       [surface]: providerIds,
@@ -65,7 +70,7 @@ export function ProviderOrderPreferenceControls({
 
   function moveProvider(
     surface: DisplaySurface,
-    providerId: ProviderId,
+    providerId: DashboardSourceId,
     direction: "up" | "down",
   ) {
     updateSurfaceOrder(
@@ -81,7 +86,7 @@ export function ProviderOrderPreferenceControls({
 
   function handleDrop(
     surface: DisplaySurface,
-    targetProviderId: ProviderId,
+    targetProviderId: DashboardSourceId,
     event: DragEvent<HTMLLIElement>,
   ) {
     event.preventDefault();
@@ -104,7 +109,7 @@ export function ProviderOrderPreferenceControls({
 
   function handleKeyDown(
     surface: DisplaySurface,
-    providerId: ProviderId,
+    providerId: DashboardSourceId,
     event: KeyboardEvent<HTMLLIElement>,
   ) {
     if (event.key === "ArrowUp") {

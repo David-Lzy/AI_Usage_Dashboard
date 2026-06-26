@@ -7,8 +7,9 @@ import type {
   ProviderSnapshot,
   ProviderUsageBalance,
   ProviderUsageWindow,
-  QuotaUnit,
 } from "../providers/types";
+import type { DashboardSourceId } from "./custom-sources";
+import { getVisibleCustomSources } from "./custom-source-view-models";
 import type { RuntimeI18n } from "./i18n";
 import { buildRuntimeCommonCopy } from "./i18n";
 import { normalizeActionBadgeRotationIntervalSeconds } from "./settings-preferences";
@@ -26,16 +27,17 @@ const QUOTA_SELECTION_PREFIX = "quota:";
 export type ActionBadgeQuotaCandidateKind =
   | "provider_remaining"
   | "usage_window"
-  | "usage_balance";
+  | "usage_balance"
+  | "custom_source";
 
 export type ActionBadgeQuotaCandidate = {
   value: ActionBadgeSelection;
   kind: ActionBadgeQuotaCandidateKind;
-  providerId: ProviderId;
+  providerId: DashboardSourceId;
   providerLabel: string;
   sourceLabel: string;
   remaining: number;
-  quotaUnit: QuotaUnit;
+  quotaUnit: string;
   total: number | null;
   resetLabel: string | null;
   syncedAt: string;
@@ -255,6 +257,29 @@ export function buildActionBadgeQuotaCandidates(
     }
 
     candidates.push(...usageBalanceCandidates);
+  }
+
+  for (const source of getVisibleCustomSources(state)) {
+    for (const item of source.progressItems) {
+      if (!isFiniteNumber(item.remaining)) {
+        continue;
+      }
+
+      candidates.push({
+        value: `${QUOTA_SELECTION_PREFIX}${source.sourceId}:${item.id}`,
+        kind: "custom_source",
+        providerId: source.sourceId,
+        providerLabel: source.label,
+        sourceLabel: item.label,
+        remaining: item.remaining,
+        quotaUnit: item.quotaUnit,
+        total: item.total,
+        resetLabel: item.resetLabel ?? item.resetAt,
+        syncedAt: source.lastSyncLabel,
+        usageSummary: source.usageSummary,
+        warningReason: source.warningReason,
+      });
+    }
   }
 
   return candidates;

@@ -65,6 +65,85 @@ function createCodexQuotaState(remaining: number): AppState {
   };
 }
 
+function createCustomQuotaState(remaining: number): AppState {
+  const state: AppState = {
+    ...withVisibleProviders([]),
+    customSources: [
+      {
+        id: "custom:build_quota",
+        label: "Build Quota",
+        description: "Internal quota endpoint",
+        endpointUrl: "https://example.com/ai-usage.json",
+        displayEnabled: true,
+        refreshIntervalMinutes: 15,
+        createdAt: "2026-06-26T00:00:00.000Z",
+        updatedAt: "2026-06-26T00:00:00.000Z",
+      },
+    ],
+    customSourceStates: [
+      {
+        sourceId: "custom:build_quota",
+        status: "ok",
+        snapshot: {
+          sourceId: "custom:build_quota",
+          endpointId: "build_quota",
+          label: "Build Quota",
+          description: "Internal quota endpoint",
+          planName: "Custom",
+          quotaUnit: "percent",
+          quotaWindow: "daily",
+          used: 100 - remaining,
+          remaining,
+          total: 100,
+          resetAt: "2026-06-27T10:00:00.000Z",
+          resetLabel: "Resets tomorrow",
+          syncedAt: "2026-06-26T10:00:00.000Z",
+          syncStatus: "ok",
+          tone: "neutral",
+          warningReason: null,
+          lastSyncLabel: "Just now",
+          usageSummary: `${remaining}% daily quota remaining`,
+          quota: {
+            label: "Daily quota",
+            unit: "percent",
+            window: "daily",
+            used: 100 - remaining,
+            remaining,
+            total: 100,
+            resetAt: null,
+            resetLabel: "Resets tomorrow",
+          },
+          windows: [],
+          balances: [],
+          facts: [],
+        },
+        lastAttemptAt: "2026-06-26T10:00:00.000Z",
+        lastSuccessAt: "2026-06-26T10:00:00.000Z",
+        lastFailureAt: null,
+        lastFailureReason: null,
+        stale: false,
+      },
+    ],
+  };
+  const [customCandidate] = buildActionBadgeQuotaCandidates(state).filter(
+    (candidate) => candidate.providerId === "custom:build_quota",
+  );
+
+  if (!customCandidate) {
+    throw new Error("Expected custom quota badge candidate.");
+  }
+
+  return {
+    ...state,
+    settings: {
+      ...state.settings,
+      actionBadgeSelectionMode: "manual",
+      actionBadgeSelection: customCandidate.value,
+      actionBadgeSelections: [customCandidate.value],
+    },
+  };
+}
+
 describe("action badge model", () => {
   it("uses an empty transparent badge when no visible provider needs attention", () => {
     const model = buildActionBadgeModel(withVisibleProviders([]));
@@ -106,5 +185,14 @@ describe("action badge model", () => {
 
     expect(model.text).toBe("5%");
     expect(model.backgroundColor).toEqual([179, 38, 30, 255]);
+  });
+
+  it("formats selected custom source quota badges", () => {
+    const model = buildActionBadgeModel(createCustomQuotaState(28));
+
+    expect(model.text).toBe("28%");
+    expect(model.title).toContain("Provider: Build Quota");
+    expect(model.title).toContain("Source: Daily quota");
+    expect(model.title).toContain("Remaining: 28% remaining");
   });
 });

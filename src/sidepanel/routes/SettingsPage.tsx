@@ -511,6 +511,8 @@ export function SettingsPage({
         providers={providers}
         providerSourceDisplayCopy={providerSourceDisplayCopy}
         snapshots={snapshots}
+        customSources={customSources}
+        customSourceStates={customSourceStates}
         settingsCopy={settingsCopy}
         providerProgressDetailsOpen={
           settingsSurfaceSession.providerProgressDetailsOpen

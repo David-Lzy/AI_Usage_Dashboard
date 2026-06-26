@@ -501,6 +501,10 @@ body.popup-page .popup-header--surface-collapsed {
   border-color: var(--app-surface-error-border);
 }
 
+.popup-provider-card--custom {
+  border-style: dashed;
+}
+
 .popup-provider-card__header {
   min-width: 0;
 }

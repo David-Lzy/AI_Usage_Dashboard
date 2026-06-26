@@ -38,6 +38,10 @@
   border-color: var(--app-surface-error-border);
 }
 
+.provider-card--custom {
+  border-style: dashed;
+}
+
 .provider-shell-card__header,
 .provider-shell-card__footer,
 .provider-card__header,

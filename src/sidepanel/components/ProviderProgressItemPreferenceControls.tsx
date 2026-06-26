@@ -8,11 +8,12 @@ import {
 import type {
   DisplaySurface,
   ProgressItemsBySurface,
-  ProviderId,
   ProviderProgressItemPreference,
   ProviderSetting,
   ProviderSnapshot,
 } from "../../providers/types";
+import type { DashboardSourceId } from "../../shared/custom-sources";
+import type { CustomSourceProgressItem } from "../../shared/custom-source-view-models";
 import {
   DISPLAY_SURFACES,
   moveProgressItemPreference,
@@ -29,6 +30,11 @@ import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 
 type ProviderProgressItemPreferenceControlsProps = {
   copy: ReturnType<typeof buildSettingsLocalizedCopy>["progressItems"];
+  customSources?: Array<{
+    id: DashboardSourceId;
+    label: string;
+    progressItems: CustomSourceProgressItem[];
+  }>;
   detailsOpenByProvider?: Record<string, boolean>;
   progressItemsBySurface: ProgressItemsBySurface;
   providers: ProviderSetting[];
@@ -41,27 +47,39 @@ type ProviderProgressItemPreferenceControlsProps = {
 
 type DraggedProgressItem = {
   surface: DisplaySurface;
-  providerId: ProviderId;
+  providerId: DashboardSourceId;
   itemId: string;
 };
 
+type ProgressPreferenceItem = Pick<
+  ProviderProgressItem | CustomSourceProgressItem,
+  "id" | "label" | "kind" | "availability"
+>;
+
+type ProgressPreferenceSource = {
+  id: DashboardSourceId;
+  label: string;
+  progressItems: ProgressPreferenceItem[];
+};
+
 function createProgressItemMap(
-  items: readonly ProviderProgressItem[],
-): Map<string, ProviderProgressItem> {
+  items: readonly ProgressPreferenceItem[],
+): Map<string, ProgressPreferenceItem> {
   return new Map(items.map((item) => [item.id, item]));
 }
 
 function getOrderedProgressItems(
   preferences: readonly ProviderProgressItemPreference[],
-  progressItemMap: Map<string, ProviderProgressItem>,
-): ProviderProgressItem[] {
+  progressItemMap: Map<string, ProgressPreferenceItem>,
+): ProgressPreferenceItem[] {
   return preferences
     .map((preference) => progressItemMap.get(preference.id) ?? null)
-    .filter((item): item is ProviderProgressItem => item !== null);
+    .filter((item): item is ProgressPreferenceItem => item !== null);
 }
 
 export function ProviderProgressItemPreferenceControls({
   copy,
+  customSources = [],
   detailsOpenByProvider = {},
   progressItemsBySurface,
   providers,
@@ -71,25 +89,31 @@ export function ProviderProgressItemPreferenceControls({
 }: ProviderProgressItemPreferenceControlsProps) {
   const [draggedProgressItem, setDraggedProgressItem] =
     useState<DraggedProgressItem | null>(null);
-  const progressItemsByProvider = useMemo(() => {
+  const progressSources = useMemo<ProgressPreferenceSource[]>(() => {
     const snapshotMap = new Map(
       snapshots.map((snapshot) => [snapshot.providerId, snapshot] as const),
     );
+    const providerSources = providers.map((provider) => {
+      const snapshot = snapshotMap.get(provider.id);
 
-    return new Map(
-      providers.map((provider) => {
-        const snapshot = snapshotMap.get(provider.id);
-        return [
-          provider.id,
-          snapshot ? buildProviderProgressItems(snapshot) : [],
-        ] as const;
-      }),
-    );
-  }, [providers, snapshots]);
+      return {
+        id: provider.id,
+        label: provider.label,
+        progressItems: snapshot ? buildProviderProgressItems(snapshot) : [],
+      } satisfies ProgressPreferenceSource;
+    });
+    const customProgressSources = customSources.map((source) => ({
+      id: source.id,
+      label: source.label,
+      progressItems: source.progressItems,
+    }));
+
+    return [...providerSources, ...customProgressSources];
+  }, [customSources, providers, snapshots]);
 
   function updateSurfaceProviderPreferences(
     surface: DisplaySurface,
-    providerId: ProviderId,
+    providerId: DashboardSourceId,
     preferences: ProviderProgressItemPreference[],
   ) {
     onChange({
@@ -103,7 +127,7 @@ export function ProviderProgressItemPreferenceControls({
 
   function resolveSurfaceProviderPreferences(
     surface: DisplaySurface,
-    providerId: ProviderId,
+    providerId: DashboardSourceId,
     itemIds: readonly string[],
   ): ProviderProgressItemPreference[] {
     return resolveProgressItemPreferences(
@@ -114,7 +138,7 @@ export function ProviderProgressItemPreferenceControls({
 
   function setItemVisibility(
     surface: DisplaySurface,
-    providerId: ProviderId,
+    providerId: DashboardSourceId,
     itemIds: readonly string[],
     itemId: string,
     visible: boolean,
@@ -133,7 +157,7 @@ export function ProviderProgressItemPreferenceControls({
 
   function moveItem(
     surface: DisplaySurface,
-    providerId: ProviderId,
+    providerId: DashboardSourceId,
     itemIds: readonly string[],
     itemId: string,
     direction: "up" | "down",
@@ -152,7 +176,7 @@ export function ProviderProgressItemPreferenceControls({
 
   function handleDrop(
     surface: DisplaySurface,
-    providerId: ProviderId,
+    providerId: DashboardSourceId,
     itemIds: readonly string[],
     targetItemId: string,
     event: DragEvent<HTMLLIElement>,
@@ -182,7 +206,7 @@ export function ProviderProgressItemPreferenceControls({
 
   function handleKeyDown(
     surface: DisplaySurface,
-    providerId: ProviderId,
+    providerId: DashboardSourceId,
     itemIds: readonly string[],
     itemId: string,
     event: KeyboardEvent<HTMLLIElement>,
@@ -217,42 +241,41 @@ export function ProviderProgressItemPreferenceControls({
       </div>
 
       <div className="provider-progress-preferences__providers">
-        {providers.map((provider) => {
-          const progressItems = progressItemsByProvider.get(provider.id) ?? [];
-          const progressItemIds = progressItems.map((item) => item.id);
-          const progressItemMap = createProgressItemMap(progressItems);
+        {progressSources.map((source) => {
+          const progressItemIds = source.progressItems.map((item) => item.id);
+          const progressItemMap = createProgressItemMap(source.progressItems);
 
           return (
             <details
-              key={provider.id}
+              key={source.id}
               className="provider-progress-provider"
-              data-provider-progress-preference-provider={provider.id}
-              open={detailsOpenByProvider[provider.id] === true}
+              data-provider-progress-preference-provider={source.id}
+              open={detailsOpenByProvider[source.id] === true}
               onToggle={(event) => {
                 onDetailsOpenByProviderChange?.({
                   ...detailsOpenByProvider,
-                  [provider.id]: (event.currentTarget as HTMLDetailsElement).open,
+                  [source.id]: (event.currentTarget as HTMLDetailsElement).open,
                 });
               }}
             >
               <summary
                 className="provider-progress-provider__summary"
-                data-provider-progress-preference-provider-summary={provider.id}
+                data-provider-progress-preference-provider-summary={source.id}
               >
                 <span className="provider-progress-provider__summary-copy">
                   <span className="provider-progress-provider__title">
-                    {provider.label}
+                    {source.label}
                   </span>
                   <span className="supporting-copy provider-progress-provider__detail">
-                    {progressItems.length > 0
-                      ? copy.provider.count(progressItems.length)
+                    {source.progressItems.length > 0
+                      ? copy.provider.count(source.progressItems.length)
                       : copy.provider.emptyDetail}
                   </span>
                 </span>
               </summary>
 
               <div className="provider-progress-provider__body">
-                {progressItems.length === 0 ? (
+                {source.progressItems.length === 0 ? (
                   <p className="supporting-copy provider-progress-provider__empty">
                     {copy.provider.emptyBody}
                   </p>
@@ -261,7 +284,7 @@ export function ProviderProgressItemPreferenceControls({
                     {DISPLAY_SURFACES.map((surface) => {
                       const preferences = resolveSurfaceProviderPreferences(
                         surface,
-                        provider.id,
+                        source.id,
                         progressItemIds,
                       );
                       const orderedProgressItems = getOrderedProgressItems(
@@ -321,7 +344,7 @@ export function ProviderProgressItemPreferenceControls({
                                     onDragStart={() =>
                                       setDraggedProgressItem({
                                         surface,
-                                        providerId: provider.id,
+                                        providerId: source.id,
                                         itemId: progressItem.id,
                                       })
                                     }
@@ -334,7 +357,7 @@ export function ProviderProgressItemPreferenceControls({
                                     onDrop={(event) =>
                                       handleDrop(
                                         surface,
-                                        provider.id,
+                                        source.id,
                                         progressItemIds,
                                         progressItem.id,
                                         event,
@@ -343,7 +366,7 @@ export function ProviderProgressItemPreferenceControls({
                                     onKeyDown={(event) =>
                                       handleKeyDown(
                                         surface,
-                                        provider.id,
+                                        source.id,
                                         progressItemIds,
                                         progressItem.id,
                                         event,
@@ -368,7 +391,7 @@ export function ProviderProgressItemPreferenceControls({
                                         onChange={(event) =>
                                           setItemVisibility(
                                             surface,
-                                            provider.id,
+                                            source.id,
                                             progressItemIds,
                                             progressItem.id,
                                             event.currentTarget.checked,
@@ -405,7 +428,7 @@ export function ProviderProgressItemPreferenceControls({
                                         onClick={() =>
                                           moveItem(
                                             surface,
-                                            provider.id,
+                                            source.id,
                                             progressItemIds,
                                             progressItem.id,
                                             "up",
@@ -425,7 +448,7 @@ export function ProviderProgressItemPreferenceControls({
                                         onClick={() =>
                                           moveItem(
                                             surface,
-                                            provider.id,
+                                            source.id,
                                             progressItemIds,
                                             progressItem.id,
                                             "down",

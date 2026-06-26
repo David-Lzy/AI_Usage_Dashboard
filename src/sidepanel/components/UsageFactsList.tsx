@@ -1,7 +1,14 @@
-import type { ProviderViewModel } from "../view-models";
+import type { ProviderTone } from "../../providers/types";
+
+type UsageFactLike = {
+  label: string;
+  value: string;
+  detail: string | null;
+  tone?: ProviderTone;
+};
 
 type UsageFactsListProps = {
-  facts: NonNullable<ProviderViewModel["usageFacts"]>;
+  facts: readonly UsageFactLike[];
   density?: "compact" | "regular";
 };
 

@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 
 import { createDefaultProgressItemsBySurface } from "../../shared/display-preferences";
 import { SAMPLE_APP_STATE } from "../../shared/constants";
+import type { CustomSourceViewModel } from "../../shared/custom-source-view-models";
 import { DashboardPage } from "./DashboardPage";
 
 const layoutPrimitivesCss = readFileSync(
@@ -63,6 +64,53 @@ describe("DashboardPage", () => {
     expect(layoutPrimitivesCss).toContain(
       "grid-template-columns: repeat(4, minmax(64px, 1fr));",
     );
+  });
+
+  it("renders custom source cards as dashboard sources", () => {
+    const customSource: CustomSourceViewModel = {
+      sourceId: "custom:build_quota",
+      label: "Build Quota",
+      description: "Internal quota endpoint",
+      endpointUrl: "https://example.com/ai-usage.json",
+      refreshIntervalMinutes: 15,
+      displayEnabled: true,
+      syncStatus: "ok",
+      displayTone: "neutral",
+      statusLabel: "Healthy",
+      lastSyncLabel: "Just now",
+      warningReason: null,
+      stale: false,
+      hasSnapshot: true,
+      usageSummary: "28% daily quota remaining",
+      quota: null,
+      windows: [],
+      balances: [],
+      facts: [],
+      progressItems: [],
+    };
+    const html = renderToStaticMarkup(
+      <DashboardPage
+        localePreference="en"
+        progressColorBands={SAMPLE_APP_STATE.settings.progressColorBands}
+        progressDisplayStyle="line"
+        progressItemsBySurface={createDefaultProgressItemsBySurface()}
+        progressThicknessPx={SAMPLE_APP_STATE.settings.progressThicknessPx}
+        progressSurface="sidebar"
+        summaryItems={[]}
+        providers={[]}
+        customSources={[customSource]}
+        sourceOrder={["custom:build_quota"]}
+        onOpenProvider={() => {}}
+        onOpenSettings={() => {}}
+        onOpenQuickSetup={() => {}}
+        onRefreshProvider={() => {}}
+        onRefreshAll={() => {}}
+      />,
+    );
+
+    expect(html).toContain('data-custom-source-id="custom:build_quota"');
+    expect(html).toContain(">Build Quota<");
+    expect(html).not.toContain("Start in Quick Setup");
   });
 
   it("renders a direct Quick Setup action in the empty provider state", () => {

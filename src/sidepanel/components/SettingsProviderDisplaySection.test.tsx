@@ -78,4 +78,86 @@ describe("SettingsProviderDisplaySection", () => {
       'data-provider-progress-preference-provider="cursor-personal-page"',
     );
   });
+
+  it("includes custom sources in surface order and progress item controls", () => {
+    const i18n = createRuntimeI18n("en", undefined);
+    const settingsCopy = buildSettingsLocalizedCopy(i18n);
+    const providerSourceDisplayCopy =
+      buildProviderSourceDisplayLocalizedCopy(i18n);
+    const html = renderToStaticMarkup(
+      <SettingsProviderDisplaySection
+        sectionId={SETTINGS_SECTION_IDS.providerDisplay}
+        settings={SAMPLE_APP_STATE.settings}
+        providers={SAMPLE_APP_STATE.providerSettings}
+        providerSourceDisplayCopy={providerSourceDisplayCopy}
+        snapshots={SAMPLE_APP_STATE.providers}
+        customSources={[
+          {
+            id: "custom:build_quota",
+            label: "Build Quota",
+            description: "Internal quota endpoint",
+            endpointUrl: "https://example.com/ai-usage.json",
+            displayEnabled: true,
+            refreshIntervalMinutes: 15,
+            createdAt: "2026-06-26T00:00:00.000Z",
+            updatedAt: "2026-06-26T00:00:00.000Z",
+          },
+        ]}
+        customSourceStates={[
+          {
+            sourceId: "custom:build_quota",
+            status: "ok",
+            snapshot: {
+              sourceId: "custom:build_quota",
+              endpointId: "build_quota",
+              label: "Build Quota",
+              description: "Internal quota endpoint",
+              planName: "Custom",
+              quotaUnit: "percent",
+              quotaWindow: "daily",
+              used: 72,
+              remaining: 28,
+              total: 100,
+              resetAt: "2026-06-27T10:00:00.000Z",
+              resetLabel: "Resets tomorrow",
+              syncedAt: "2026-06-26T10:00:00.000Z",
+              syncStatus: "ok",
+              tone: "neutral",
+              warningReason: null,
+              lastSyncLabel: "Just now",
+              usageSummary: "28% daily quota remaining",
+              quota: {
+                label: "Daily quota",
+                unit: "percent",
+                window: "daily",
+                used: 72,
+                remaining: 28,
+                total: 100,
+                resetAt: null,
+                resetLabel: "Resets tomorrow",
+              },
+              windows: [],
+              balances: [],
+              facts: [],
+            },
+            lastAttemptAt: "2026-06-26T10:00:00.000Z",
+            lastSuccessAt: "2026-06-26T10:00:00.000Z",
+            lastFailureAt: null,
+            lastFailureReason: null,
+            stale: false,
+          },
+        ]}
+        settingsCopy={settingsCopy}
+        onProviderOrderBySurfaceChange={() => {}}
+        onProgressItemsBySurfaceChange={() => {}}
+      />,
+    );
+
+    expect(html).toContain('data-provider-order-row="custom:build_quota"');
+    expect(html).toContain(
+      'data-provider-progress-preference-provider="custom:build_quota"',
+    );
+    expect(html).toContain(">Build Quota · Custom<");
+    expect(html).toContain(">Daily quota<");
+  });
 });
