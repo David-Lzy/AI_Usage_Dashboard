@@ -11,6 +11,10 @@ import {
 import { getBrowserCapabilities } from "../shared/extension-side-panel-controls";
 
 const TOOLBAR_ICON_SIZES = [16, 32] as const;
+const LOCAL_TOOLBAR_ICON_PROVIDER_IDS = new Set<ProviderId>([
+  "codex-personal-page",
+  "codex-enterprise-api",
+]);
 const iconImageDataCache = new Map<string, ImageData>();
 
 function hasChromeActionIconApi(): boolean {
@@ -163,6 +167,85 @@ async function setToolbarIconFromSource(sourceUrl: string): Promise<boolean> {
   return true;
 }
 
+function buildCodexToolbarIconImageData(size: number): ImageData | null {
+  if (typeof OffscreenCanvas === "undefined") {
+    return null;
+  }
+
+  const canvas = new OffscreenCanvas(size, size);
+  const context = canvas.getContext("2d");
+
+  if (!context) {
+    return null;
+  }
+
+  const center = size / 2;
+  const outerRadius = center - Math.max(1, size * 0.06);
+  const innerRadius = size * 0.27;
+  const ringWidth = Math.max(1.5, size * 0.12);
+  const chevronWidth = Math.max(1.5, size * 0.1);
+
+  context.clearRect(0, 0, size, size);
+  context.fillStyle = "#101828";
+  context.beginPath();
+  context.arc(center, center, outerRadius, 0, Math.PI * 2);
+  context.fill();
+
+  context.strokeStyle = "#34D399";
+  context.lineWidth = ringWidth;
+  context.lineCap = "round";
+  context.beginPath();
+  context.arc(center, center, innerRadius, Math.PI * 0.42, Math.PI * 1.78);
+  context.stroke();
+
+  context.strokeStyle = "#A7F3D0";
+  context.lineWidth = chevronWidth;
+  context.lineJoin = "round";
+  context.lineCap = "round";
+  context.beginPath();
+  context.moveTo(size * 0.61, size * 0.34);
+  context.lineTo(size * 0.74, size * 0.5);
+  context.lineTo(size * 0.61, size * 0.66);
+  context.stroke();
+
+  return context.getImageData(0, 0, size, size);
+}
+
+function buildLocalProviderIconImageDataMap(
+  providerId: ProviderId,
+): Record<number, ImageData> | null {
+  if (!LOCAL_TOOLBAR_ICON_PROVIDER_IDS.has(providerId)) {
+    return null;
+  }
+
+  const entries: Array<[number, ImageData]> = [];
+
+  for (const size of TOOLBAR_ICON_SIZES) {
+    const imageData = buildCodexToolbarIconImageData(size);
+
+    if (!imageData) {
+      return null;
+    }
+
+    entries.push([size, imageData]);
+  }
+
+  return Object.fromEntries(entries) as Record<number, ImageData>;
+}
+
+async function setToolbarIconFromLocalProvider(
+  providerId: ProviderId,
+): Promise<boolean> {
+  const imageData = buildLocalProviderIconImageDataMap(providerId);
+
+  if (!imageData) {
+    return false;
+  }
+
+  await chrome.action.setIcon({ imageData });
+  return true;
+}
+
 export async function syncToolbarIconFromState(
   state: AppState,
   timestampMs = Date.now(),
@@ -187,6 +270,10 @@ export async function syncToolbarIconFromState(
   const providerId = resolveToolbarIconProviderId(state, timestampMs);
 
   if (providerId) {
+    if (await setToolbarIconFromLocalProvider(providerId)) {
+      return;
+    }
+
     const faviconUrl = buildProviderFaviconUrl(providerId, 32);
 
     if (faviconUrl && await setToolbarIconFromSource(faviconUrl)) {

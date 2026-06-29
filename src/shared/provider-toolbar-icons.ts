@@ -7,8 +7,8 @@ export const PROVIDER_TOOLBAR_ICON_PAGE_URLS: Record<ProviderId, string> = {
   "claude-code-team-page": "https://claude.ai/",
   "claude-code-admin-api": "https://claude.ai/",
   "gemini-policy": "https://gemini.google.com/",
-  "codex-personal-page": "https://chatgpt.com/",
-  "codex-enterprise-api": "https://chatgpt.com/",
+  "codex-personal-page": "https://chatgpt.com/codex/cloud/settings/analytics",
+  "codex-enterprise-api": "https://chatgpt.com/codex/cloud/settings/analytics",
 };
 
 export const DEFAULT_TOOLBAR_ACTION_ICON_PATHS = {

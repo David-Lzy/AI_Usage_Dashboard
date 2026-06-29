@@ -149,7 +149,7 @@ describe("action icon", () => {
     });
 
     expect(buildProviderFaviconUrl("codex-personal-page", 32)).toBe(
-      "chrome-extension://extension-id/_favicon/?pageUrl=https%3A%2F%2Fchatgpt.com%2F&size=32",
+      "chrome-extension://extension-id/_favicon/?pageUrl=https%3A%2F%2Fchatgpt.com%2Fcodex%2Fcloud%2Fsettings%2Fanalytics&size=32",
     );
   });
 
@@ -166,6 +166,59 @@ describe("action icon", () => {
     });
 
     expect(buildProviderFaviconUrl("codex-personal-page", 32)).toBeNull();
+  });
+
+  it("uses the bundled Codex provider icon without depending on favicon fetch", async () => {
+    const setIcon = vi.fn(async () => {});
+    const fetch = vi.fn();
+
+    vi.stubGlobal("chrome", {
+      action: {
+        setIcon,
+      },
+    });
+    vi.stubGlobal("fetch", fetch);
+    vi.stubGlobal(
+      "OffscreenCanvas",
+      class {
+        constructor(
+          readonly width: number,
+          readonly height: number,
+        ) {}
+
+        getContext() {
+          return {
+            clearRect: vi.fn(),
+            fillStyle: "",
+            strokeStyle: "",
+            lineWidth: 1,
+            lineCap: "round",
+            lineJoin: "round",
+            beginPath: vi.fn(),
+            arc: vi.fn(),
+            fill: vi.fn(),
+            stroke: vi.fn(),
+            moveTo: vi.fn(),
+            lineTo: vi.fn(),
+            getImageData: vi.fn(() => ({
+              width: this.width,
+              height: this.height,
+              data: new Uint8ClampedArray(this.width * this.height * 4),
+            }) as ImageData),
+          };
+        }
+      },
+    );
+
+    await syncToolbarIconFromState(createStateWithCodexBadge());
+
+    expect(fetch).not.toHaveBeenCalled();
+    expect(setIcon).toHaveBeenCalledWith({
+      imageData: expect.objectContaining({
+        16: expect.objectContaining({ width: 16, height: 16 }),
+        32: expect.objectContaining({ width: 32, height: 32 }),
+      }),
+    });
   });
 
   it("closes decoded toolbar icon bitmaps after building icon image data", async () => {
