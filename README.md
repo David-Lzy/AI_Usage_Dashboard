@@ -133,7 +133,7 @@ The generated zip is written under `release/`.
 
 Pushes to `main` run GitHub Actions checks and upload temporary Chrome and
 Firefox package artifacts from the workflow run. Version tags such as
-`v0.1.0-rc.27` create a GitHub Release with Chrome and Firefox package zips plus
+`v0.1.0-rc.28` create a GitHub Release with Chrome and Firefox package zips plus
 SHA-256 checksums.
 
 For everyday Chrome users, the Chrome Web Store listing remains the recommended
@@ -150,8 +150,8 @@ template are documented in
 
 - Chrome Web Store listing: published and reachable.
 - Current public-store metadata observed on 2026-05-20: `0.1.0-rc.24`.
-- Current local package version: `0.1.0-rc.27`.
-- Current local Chrome manifest version: `0.1.0.27`.
+- Current local package version: `0.1.0-rc.28`.
+- Current local Chrome manifest version: `0.1.0.28`.
 - Store publication status is tracked in
   [Doc/Store/Chrome_Web_Store_Publication_Milestone.md](./Doc/Store/Chrome_Web_Store_Publication_Milestone.md).
 - Public listing copy lives in [Doc/Store](./Doc/Store/).
@@ -170,6 +170,12 @@ Contributions are welcome. Start with:
 Please keep provider source claims conservative. If a provider exposes only
 partial, window-scoped, or policy-only data, UI and docs should say that
 plainly.
+
+## Contributors
+
+- [donaldpeng17](https://github.com/donaldpeng17) - fixed a Claude Code
+  personal-user dashboard issue in
+  [#1](https://github.com/David-Lzy/AI_Usage_Dashboard/pull/1).
 
 ## License
 

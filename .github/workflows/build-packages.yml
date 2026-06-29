@@ -175,7 +175,7 @@ jobs:
           ### Notes
 
           - Chrome Web Store remains the recommended install path for everyday Chrome users.
-          - This release includes the latest responsive Settings and progress color/gradient UI polish, plus automated package publishing.
+          - This release includes custom HTTP/HTTPS JSON sources, progress color gradient controls, first-run empty-state fixes, Codex toolbar icon fallback, and popup/background performance hardening.
           NOTES
 
       - name: Prepare release assets
