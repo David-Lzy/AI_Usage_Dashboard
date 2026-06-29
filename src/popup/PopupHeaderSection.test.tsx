@@ -106,22 +106,18 @@ describe("PopupHeaderSection", () => {
 
   it("keeps high-DPI action row padding and narrow-width compaction in CSS", () => {
     expect(popupThemeCss).toContain(
-      "--popup-header-action-safe-inset: clamp(6px, 2vw, 10px);",
+      "--popup-header-action-even-gap-min: var(--popup-header-action-gap);",
     );
-    expect(popupThemeCss).toContain("--popup-header-action-edge-guard: 4px;");
     expect(popupThemeCss).toContain(
       "--popup-header-refresh-control-min: calc(",
     );
-    expect(popupThemeCss).toContain(
-      "--popup-header-actions-max-inline-size: calc(",
-    );
-    expect(popupThemeCss).toContain("justify-self: center;");
-    expect(popupThemeCss).toContain(
-      "calc(100% - (var(--popup-header-action-edge-guard) * 2)),",
-    );
-    expect(popupThemeCss).toContain(
-      "var(--popup-header-actions-max-inline-size)",
-    );
+    const evenGapColumns =
+      popupThemeCss.match(
+        /minmax\(var\(--popup-header-action-even-gap-min\), 1fr\)/g,
+      ) ?? [];
+    expect(evenGapColumns).toHaveLength(6);
+    expect(popupThemeCss).toContain("justify-self: stretch;");
+    expect(popupThemeCss).toContain("grid-column: 10;");
     expect(popupThemeCss).toContain("env(safe-area-inset-right, 0px)");
     expect(popupThemeCss).toContain("@media (max-width: 360px)");
     expect(popupThemeCss).toContain("--popup-header-control-size: 44px;");

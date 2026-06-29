@@ -109,23 +109,16 @@ body.popup-page .status-card {
 
 .popup-header {
   --popup-header-action-gap: clamp(8px, 2.5vw, 10px);
-  --popup-header-action-edge-guard: 4px;
-  --popup-header-action-safe-inset: clamp(6px, 2vw, 10px);
+  --popup-header-action-even-gap-min: var(--popup-header-action-gap);
   --popup-header-refresh-control-min: calc(
     var(--popup-header-control-size) * 1.618
-  );
-  --popup-header-actions-max-inline-size: calc(
-    var(--popup-header-refresh-control-min) +
-      (var(--popup-header-control-size) * 4) +
-      (var(--popup-header-action-gap) * 4) +
-      (var(--popup-header-action-safe-inset) * 2) +
-      (var(--popup-header-action-edge-guard) * 2)
   );
   --popup-header-control-size: 48px;
   position: relative;
   display: grid;
   gap: var(--app-space-2);
-  padding: var(--popup-header-action-gap);
+  padding-block: var(--popup-header-action-gap);
+  padding-inline: 0;
   border: 1px solid var(--app-surface-card-border);
   background: var(--app-surface-card-background);
   overflow: visible;
@@ -146,7 +139,8 @@ body.popup-page .popup-header {
 }
 
 .popup-shell--quota-first .popup-header {
-  padding: var(--app-space-2);
+  padding-block: var(--app-space-2);
+  padding-inline: 0;
 }
 
 .popup-header--surface-collapsed {
@@ -239,6 +233,7 @@ body.popup-page .popup-header--surface-collapsed {
   align-items: stretch;
   justify-content: stretch;
   min-width: 0;
+  padding-inline: var(--popup-header-action-gap);
 }
 
 .popup-hide-feedback {
@@ -292,22 +287,45 @@ body.popup-page .popup-header--surface-collapsed {
 .popup-header__actions {
   display: grid;
   grid-template-columns:
-    minmax(var(--popup-header-refresh-control-min), 1fr)
-    repeat(4, var(--popup-header-control-size));
+    minmax(var(--popup-header-action-even-gap-min), 1fr)
+    var(--popup-header-refresh-control-min)
+    minmax(var(--popup-header-action-even-gap-min), 1fr)
+    var(--popup-header-control-size)
+    minmax(var(--popup-header-action-even-gap-min), 1fr)
+    var(--popup-header-control-size)
+    minmax(var(--popup-header-action-even-gap-min), 1fr)
+    var(--popup-header-control-size)
+    minmax(var(--popup-header-action-even-gap-min), 1fr)
+    var(--popup-header-control-size)
+    minmax(var(--popup-header-action-even-gap-min), 1fr);
   align-items: center;
-  gap: var(--popup-header-action-gap);
-  justify-self: center;
-  inline-size: min(
-    calc(100% - (var(--popup-header-action-edge-guard) * 2)),
-    var(--popup-header-actions-max-inline-size)
-  );
+  gap: 0;
+  justify-self: stretch;
+  inline-size: 100%;
   max-inline-size: 100%;
   min-width: 0;
-  padding-inline: max(
-    var(--popup-header-action-safe-inset),
-    env(safe-area-inset-left, 0px)
-  )
-  max(var(--popup-header-action-safe-inset), env(safe-area-inset-right, 0px));
+  padding-inline: env(safe-area-inset-left, 0px)
+    env(safe-area-inset-right, 0px);
+}
+
+.popup-header__actions > :nth-child(1) {
+  grid-column: 2;
+}
+
+.popup-header__actions > :nth-child(2) {
+  grid-column: 4;
+}
+
+.popup-header__actions > :nth-child(3) {
+  grid-column: 6;
+}
+
+.popup-header__actions > :nth-child(4) {
+  grid-column: 8;
+}
+
+.popup-header__actions > :nth-child(5) {
+  grid-column: 10;
 }
 
 .popup-header__actions[hidden] {
@@ -835,7 +853,6 @@ body.popup-page .popup-header--surface-collapsed {
 @media (max-width: 360px) {
   .popup-header {
     --popup-header-action-gap: 6px;
-    --popup-header-action-safe-inset: 6px;
     --popup-header-control-size: 44px;
     --popup-header-refresh-control-min: var(--popup-header-control-size);
   }

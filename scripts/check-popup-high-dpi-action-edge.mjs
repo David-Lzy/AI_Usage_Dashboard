@@ -21,6 +21,7 @@ const cssFiles = [
 const viewports = [320, 344, 360, 392, 420, 520];
 const deviceScaleFactors = [1, 1.25, 1.5, 2];
 const minimumRightInsetPx = 12;
+const maximumActionGapDeltaPx = 2;
 
 function assert(condition, message) {
   if (!condition) {
@@ -136,10 +137,21 @@ async function inspectScenario(browser, css, { width, deviceScaleFactor }) {
 
     const headerRect = header.getBoundingClientRect();
     const actionsRect = actions.getBoundingClientRect();
+    const buttonRects = buttons.map((button) => button.getBoundingClientRect());
     const lastButtonRect = lastButton.getBoundingClientRect();
+    const actionGaps = [
+      buttonRects[0].left - actionsRect.left,
+      ...buttonRects
+        .slice(1)
+        .map((rect, index) => rect.left - buttonRects[index].right),
+      actionsRect.right - lastButtonRect.right,
+    ];
+    const actionGapRange = Math.max(...actionGaps) - Math.min(...actionGaps);
 
     return {
       actionCount: buttons.length,
+      actionGapRange,
+      actionGaps,
       actionsInlineSize: actionsRect.width,
       actionsRightInset: headerRect.right - actionsRect.right,
       bodyWidth: document.body.getBoundingClientRect().width,
@@ -165,6 +177,12 @@ async function inspectScenario(browser, css, { width, deviceScaleFactor }) {
   assert(
     snapshot.rightInset >= minimumRightInsetPx,
     `${width}@${deviceScaleFactor}: rightmost action inset ${snapshot.rightInset}px below ${minimumRightInsetPx}px`,
+  );
+  assert(
+    snapshot.actionGapRange <= maximumActionGapDeltaPx,
+    `${width}@${deviceScaleFactor}: action gaps are not evenly distributed (${snapshot.actionGaps
+      .map((gap) => `${gap.toFixed(2)}px`)
+      .join(", ")})`,
   );
   assert(
     snapshot.actionsRightInset >= 0,
@@ -203,6 +221,7 @@ try {
       {
         checkedAt: new Date().toISOString(),
         deviceScaleFactors,
+        maximumActionGapDeltaPx,
         minimumRightInsetPx,
         results,
         viewports,
