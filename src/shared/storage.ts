@@ -11,7 +11,11 @@ import {
   isLegacyProviderId,
   mapLegacyProviderId,
 } from "../providers/provider-definitions";
-import { APP_STATE_STORAGE_KEY, SAMPLE_APP_STATE } from "./constants";
+import {
+  APP_STATE_STORAGE_KEY,
+  DEFAULT_APP_STATE,
+  SAMPLE_APP_STATE,
+} from "./constants";
 import { normalizePageBinding } from "./page-bindings";
 import { normalizeSourcePreference } from "./provider-sources";
 import { normalizeAppLocalePreference } from "./i18n";
@@ -452,7 +456,7 @@ export async function seedAppStateIfEmpty(): Promise<AppState> {
     return existing;
   }
 
-  return writeAppState(cloneAppState(SAMPLE_APP_STATE));
+  return writeAppState(cloneAppState(DEFAULT_APP_STATE));
 }
 
 export async function updateAppState(

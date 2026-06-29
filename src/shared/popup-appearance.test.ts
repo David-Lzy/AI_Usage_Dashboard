@@ -21,7 +21,7 @@ describe("popup appearance preferences", () => {
     expect(DEFAULT_POPUP_SIZE_PRESET).toBe("balanced");
     expect(DEFAULT_POPUP_CORNER_STYLE).toBe("rounded");
     expect(DEFAULT_POPUP_SHADOW_STYLE).toBe("soft");
-    expect(DEFAULT_POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW).toBe(4);
+    expect(DEFAULT_POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW).toBe(2);
   });
 
   it("exposes popup options in settings display order", () => {

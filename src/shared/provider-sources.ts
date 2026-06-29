@@ -584,10 +584,6 @@ function classifySourceState(
     copy,
   );
 
-  if (typedSourceState) {
-    return typedSourceState;
-  }
-
   if (currentPlan.kind === "policy_only") {
     return createPolicyOnlySourceState(currentPlan, copy);
   }
@@ -616,6 +612,10 @@ function classifySourceState(
       provider.syncStatus === "error")
   ) {
     return createCredentialMissingSourceState(warningReason, copy);
+  }
+
+  if (typedSourceState) {
+    return typedSourceState;
   }
 
   if (

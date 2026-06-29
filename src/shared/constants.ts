@@ -7,6 +7,7 @@ import type {
   ProviderId,
   ProviderSecrets,
   ProviderSetting,
+  ProviderSnapshot,
   ProviderSourceBlueprint,
 } from "../providers/types";
 import { getProviderDefinition } from "../providers/provider-definitions";
@@ -727,6 +728,110 @@ export const SAMPLE_APP_STATE: AppState = {
     providerOrderBySurface: createDefaultProviderOrderBySurface(),
     progressItemsBySurface: createDefaultProgressItemsBySurface(),
     progressThicknessPx: DEFAULT_PROGRESS_THICKNESS_PX,
+    progressColorBands: createDefaultProgressColorBands(),
+    progressColorAppearance: createDefaultProgressColorAppearance(),
+  },
+};
+
+function createInitialWarningDiagnostic(
+  provider: ProviderSnapshot,
+  setting: ProviderSetting,
+): ProviderSnapshot["warningDiagnostic"] {
+  if (setting.connectionMode === "credential") {
+    return createCredentialDiagnostic({
+      providerId: provider.providerId,
+      credentialKind:
+        provider.providerId === "codex-enterprise-api"
+          ? "workspace_config"
+          : "admin_api_key",
+      rawMessage: `${setting.label} credentials are not configured yet.`,
+    });
+  }
+
+  if (setting.connectionMode === "page_session") {
+    return createPageSessionDiagnostic({
+      providerId: provider.providerId,
+      pageSessionKind: "open_page_required",
+      rawMessage: `${setting.label} has not been opened in this profile yet.`,
+    });
+  }
+
+  if (setting.sourceKind === "policy_only") {
+    return createPolicyOnlyDiagnostic({
+      providerId: provider.providerId,
+      policyOnlyKind: "documented_limit_only",
+      rawMessage: `${setting.label} uses documented policy only.`,
+    });
+  }
+
+  return null;
+}
+
+function createInitialProviderSnapshot(
+  provider: ProviderSnapshot,
+  setting: ProviderSetting,
+): ProviderSnapshot {
+  const warningDiagnostic = createInitialWarningDiagnostic(provider, setting);
+
+  return {
+    ...provider,
+    used: null,
+    remaining: null,
+    total: null,
+    resetAt: "",
+    resetLabel:
+      setting.connectionMode === "page_session"
+        ? "Grant access, open the provider page, then refresh."
+        : "Complete setup, then refresh.",
+    syncedAt: "",
+    syncStatus: "warning",
+    warningReason: warningDiagnostic?.rawMessage ?? "Setup is not complete yet.",
+    warningDiagnostic,
+    lastSyncLabel: "Not synced yet",
+    sourceSelectionReason: "No source has been refreshed yet.",
+    sourceSelectionDiagnostic: null,
+    sourceFallbackReason: null,
+    sourceFallbackDiagnostic: null,
+    usageWindows: [],
+    usageBalances: [],
+    usageFacts: [],
+    usageSummary: null,
+    tone: "warning",
+  };
+}
+
+function createInitialProviderSetting(setting: ProviderSetting): ProviderSetting {
+  return {
+    ...setting,
+    status: setting.hostOrigins.length > 0 ? "missing" : "granted",
+    credentialStatus:
+      setting.connectionMode === "credential" ? "missing" : "not_required",
+    pageBinding: createEmptyPageBinding(),
+  };
+}
+
+export const DEFAULT_APP_STATE: AppState = {
+  providers: SAMPLE_APP_STATE.providers.map((provider) => {
+    const sampleSetting = SAMPLE_APP_STATE.providerSettings.find(
+      (setting) => setting.id === provider.providerId,
+    );
+
+    if (!sampleSetting) {
+      return provider;
+    }
+
+    return createInitialProviderSnapshot(
+      provider,
+      createInitialProviderSetting(sampleSetting),
+    );
+  }),
+  providerSettings: SAMPLE_APP_STATE.providerSettings.map(
+    createInitialProviderSetting,
+  ),
+  settings: {
+    ...SAMPLE_APP_STATE.settings,
+    providerOrderBySurface: createDefaultProviderOrderBySurface(),
+    progressItemsBySurface: createDefaultProgressItemsBySurface(),
     progressColorBands: createDefaultProgressColorBands(),
     progressColorAppearance: createDefaultProgressColorAppearance(),
   },

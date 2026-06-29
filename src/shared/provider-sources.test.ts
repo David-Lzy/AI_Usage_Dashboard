@@ -305,6 +305,36 @@ describe("provider source helpers", () => {
     expect(captureDisplay.stateTone).toBe("error");
   });
 
+  it("prioritizes missing host access before page-session diagnostics", () => {
+    const warningReason = "Cursor usage page has not been opened yet.";
+    const { provider, setting } = buildProviderState(
+      "cursor-personal-page",
+      {
+        syncStatus: "warning",
+        tone: "warning",
+        warningReason,
+        warningDiagnostic: createPageSessionDiagnostic({
+          providerId: "cursor-personal-page",
+          pageSessionKind: "open_page_required",
+          rawMessage: warningReason,
+        }),
+      },
+      {
+        status: "missing",
+      },
+    );
+
+    expect(buildProviderSourceDisplay(provider, setting).stateKind).toBe(
+      "host_access_missing",
+    );
+    expect(
+      buildProviderSourceDisplay(provider, {
+        ...setting,
+        status: "granted",
+      }).stateKind,
+    ).toBe("open_page_required");
+  });
+
   it("keeps usage-threshold and cached-state stale diagnostics source-ready", () => {
     const usageReason = "90% of included requests consumed";
     const usage = buildProviderState("cursor-personal-page", {

@@ -3,7 +3,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { AppState } from "../providers/types";
 import { buildActionBadgeQuotaCandidates } from "./action-badge-preferences";
 import { SAMPLE_APP_STATE } from "./constants";
-import { clearAppState, readAppState, updateAppState, writeAppState } from "./storage";
+import {
+  clearAppState,
+  readAppState,
+  seedAppStateIfEmpty,
+  updateAppState,
+  writeAppState,
+} from "./storage";
 
 function createLegacyState(): AppState {
   const {
@@ -194,6 +200,27 @@ describe("storage normalization", () => {
     vi.unstubAllGlobals();
   });
 
+  it("seeds first-run state without sample provider usage values", async () => {
+    await clearAppState();
+
+    const state = await seedAppStateIfEmpty();
+    const codexProvider = state.providers.find(
+      (provider) => provider.providerId === "codex-personal-page",
+    );
+    const codexSetting = state.providerSettings.find(
+      (provider) => provider.id === "codex-personal-page",
+    );
+
+    expect(codexProvider?.used).toBeNull();
+    expect(codexProvider?.remaining).toBeNull();
+    expect(codexProvider?.total).toBeNull();
+    expect(codexProvider?.usageWindows).toEqual([]);
+    expect(codexProvider?.lastSyncLabel).toBe("Not synced yet");
+    expect(codexProvider?.warningDiagnostic?.category).toBe("page_session");
+    expect(codexSetting?.status).toBe("missing");
+    expect(state.settings.popupCircularProgressItemsPerRow).toBe(2);
+  });
+
   it("fills missing provider setting fields from the sample schema", async () => {
     await writeAppState(createLegacyState());
 
@@ -252,7 +279,7 @@ describe("storage normalization", () => {
     expect(state?.settings.popupSizePreset).toBe("balanced");
     expect(state?.settings.popupCornerStyle).toBe("rounded");
     expect(state?.settings.popupShadowStyle).toBe("soft");
-    expect(state?.settings.popupCircularProgressItemsPerRow).toBe(4);
+    expect(state?.settings.popupCircularProgressItemsPerRow).toBe(2);
     expect(state?.settings.actionBadgeSelectionMode).toBe("auto");
     expect(state?.settings.actionBadgeSelection).toBe("attention");
     expect(state?.settings.actionBadgeSelections).toEqual(["attention"]);
@@ -589,7 +616,7 @@ describe("storage normalization", () => {
     expect(state?.settings.popupSizePreset).toBe("balanced");
     expect(state?.settings.popupCornerStyle).toBe("rounded");
     expect(state?.settings.popupShadowStyle).toBe("soft");
-    expect(state?.settings.popupCircularProgressItemsPerRow).toBe(4);
+    expect(state?.settings.popupCircularProgressItemsPerRow).toBe(2);
   });
 
   it("normalizes invalid action badge preferences", async () => {

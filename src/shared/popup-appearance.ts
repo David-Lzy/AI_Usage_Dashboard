@@ -9,7 +9,7 @@ import type {
 export const DEFAULT_POPUP_SIZE_PRESET: PopupSizePreset = "balanced";
 export const DEFAULT_POPUP_CORNER_STYLE: PopupCornerStyle = "rounded";
 export const DEFAULT_POPUP_SHADOW_STYLE: PopupShadowStyle = "soft";
-export const DEFAULT_POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW: PopupCircularProgressItemsPerRow = 4;
+export const DEFAULT_POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW: PopupCircularProgressItemsPerRow = 2;
 
 export const POPUP_SIZE_PRESET_OPTIONS: Array<{
   value: PopupSizePreset;
