@@ -854,7 +854,6 @@ body.popup-page .popup-header--surface-collapsed {
   .popup-header {
     --popup-header-action-gap: 6px;
     --popup-header-control-size: 44px;
-    --popup-header-refresh-control-min: var(--popup-header-control-size);
   }
 
   .popup-header__icon-action--refresh {

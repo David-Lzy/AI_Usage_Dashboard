@@ -122,7 +122,7 @@ describe("PopupHeaderSection", () => {
     expect(popupThemeCss).toContain("@media (max-width: 360px)");
     expect(popupThemeCss).toContain("--popup-header-control-size: 44px;");
     expect(popupThemeCss).toContain("--popup-header-action-gap: 6px;");
-    expect(popupThemeCss).toContain(
+    expect(popupThemeCss).not.toContain(
       "--popup-header-refresh-control-min: var(--popup-header-control-size);",
     );
   });

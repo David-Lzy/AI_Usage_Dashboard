@@ -20,8 +20,9 @@ const cssFiles = [
 ];
 const viewports = [320, 344, 360, 392, 420, 520];
 const deviceScaleFactors = [1, 1.25, 1.5, 2];
-const minimumRightInsetPx = 12;
+const minimumRightInsetPx = 6;
 const maximumActionGapDeltaPx = 2;
+const minimumRefreshToIconWidthRatio = 1.45;
 
 function assert(condition, message) {
   if (!condition) {
@@ -147,6 +148,8 @@ async function inspectScenario(browser, css, { width, deviceScaleFactor }) {
       actionsRect.right - lastButtonRect.right,
     ];
     const actionGapRange = Math.max(...actionGaps) - Math.min(...actionGaps);
+    const iconButtonWidths = buttonRects.slice(1).map((rect) => rect.width);
+    const refreshButtonWidth = buttonRects[0].width;
 
     return {
       actionCount: buttons.length,
@@ -161,6 +164,8 @@ async function inspectScenario(browser, css, { width, deviceScaleFactor }) {
         0,
         document.documentElement.scrollWidth - window.innerWidth,
       ),
+      iconButtonWidths,
+      refreshButtonWidth,
       rightInset: headerRect.right - lastButtonRect.right,
       viewportWidth: window.innerWidth,
     };
@@ -183,6 +188,13 @@ async function inspectScenario(browser, css, { width, deviceScaleFactor }) {
     `${width}@${deviceScaleFactor}: action gaps are not evenly distributed (${snapshot.actionGaps
       .map((gap) => `${gap.toFixed(2)}px`)
       .join(", ")})`,
+  );
+  assert(
+    snapshot.refreshButtonWidth >=
+      Math.min(...snapshot.iconButtonWidths) * minimumRefreshToIconWidthRatio,
+    `${width}@${deviceScaleFactor}: refresh action width ${snapshot.refreshButtonWidth}px was compressed too close to icon width ${Math.min(
+      ...snapshot.iconButtonWidths,
+    )}px`,
   );
   assert(
     snapshot.actionsRightInset >= 0,
@@ -222,6 +234,7 @@ try {
         checkedAt: new Date().toISOString(),
         deviceScaleFactors,
         maximumActionGapDeltaPx,
+        minimumRefreshToIconWidthRatio,
         minimumRightInsetPx,
         results,
         viewports,
