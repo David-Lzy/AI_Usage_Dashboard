@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "__MSG_manifest_ext_name__",
-  "version": "0.1.0.30",
-  "version_name": "0.1.0-rc.30",
+  "version": "0.1.0.31",
+  "version_name": "0.1.0-rc.31",
   "description": "__MSG_manifest_ext_description__",
   "icons": {
     "16": "icons/icon16.png",
