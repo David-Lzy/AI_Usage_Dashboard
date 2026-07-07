@@ -51,6 +51,7 @@
     "release:check": "npm run release:version:check && npm run release:workflow:check && npm run i18n:check && npm run typecheck && npm run test && npm run build",
     "release:package": "./scripts/with-preferred-node.sh node ./scripts/package-release.mjs",
     "release": "npm run release:check && npm run release:package",
+    "perf:extension:profile": "./scripts/with-preferred-node.sh node ./scripts/profile-extension-cpu.mjs",
     "phase27:check": "./scripts/with-preferred-node.sh node ./scripts/phase27-real-profile-check.mjs",
     "phase55:review": "./scripts/with-preferred-node.sh node ./scripts/phase55-multi-width-visual-review.mjs",
     "phase60:review": "./scripts/with-preferred-node.sh node ./scripts/phase60-compact-settings-review.mjs",

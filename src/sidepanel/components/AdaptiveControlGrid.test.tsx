@@ -170,10 +170,11 @@ describe("AdaptiveControlGrid", () => {
     );
   });
 
-  it("keeps hidden text measurement out of ResizeObserver loops", () => {
+  it("keeps adaptive measurement out of self-observing ResizeObserver loops", () => {
     expect(adaptiveControlGridSource).not.toContain(
       "resizeObserver?.observe(measurerRef.current)",
     );
+    expect(adaptiveControlGridSource).not.toContain("new ResizeObserver");
     expect(adaptiveControlGridSource).toContain(
       "lastColumnMeasurementKeyRef",
     );

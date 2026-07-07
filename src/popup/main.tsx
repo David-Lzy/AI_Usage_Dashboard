@@ -5,6 +5,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
+import { installPerformanceDebugCounters } from "../shared/perf-debug";
 import { PopupApp } from "./PopupApp";
 import "../sidepanel/theme/tokens.css";
 import "../sidepanel/theme/material-theme.css";
@@ -16,6 +17,8 @@ import "../sidepanel/theme/surfaces.css";
 import "../sidepanel/theme/layout-primitives.css";
 import "../sidepanel/theme/usage-progress.css";
 import "./popup-theme.css";
+
+installPerformanceDebugCounters();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

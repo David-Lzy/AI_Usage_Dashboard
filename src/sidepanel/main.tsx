@@ -8,6 +8,7 @@ import ReactDOM from "react-dom/client";
 import { consumePendingFullPageEntry } from "../shared/extension-surface-entry";
 import { isFullPageSurfaceSearch } from "../shared/extension-surface-paths";
 import { getSafeLocalStorage } from "../shared/local-storage";
+import { installPerformanceDebugCounters } from "../shared/perf-debug";
 import { App } from "./App";
 import "./theme/tokens.css";
 import "./theme/material-theme.css";
@@ -32,6 +33,8 @@ import "./theme/provider-card.css";
 import "./theme/provider-carousel.css";
 
 const rootElement = document.getElementById("root")!;
+
+installPerformanceDebugCounters();
 
 if (isFullPageSurfaceSearch(window.location.search)) {
   document.documentElement.classList.add("full-page-shell");

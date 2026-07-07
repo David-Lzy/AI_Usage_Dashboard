@@ -435,17 +435,18 @@ function useAdaptiveControlColumnCount({
 
     measureNow();
 
-    const resizeObserver =
-      typeof ResizeObserver === "undefined"
-        ? null
-        : new ResizeObserver(scheduleMeasure);
-
-    if (rootRef.current) {
-      resizeObserver?.observe(rootRef.current);
-    }
-
     if (typeof window !== "undefined") {
       window.addEventListener("resize", scheduleMeasure);
+    }
+
+    function handleVisibilityChange() {
+      if (document.visibilityState !== "hidden") {
+        scheduleMeasure();
+      }
+    }
+
+    if (typeof document !== "undefined") {
+      document.addEventListener("visibilitychange", handleVisibilityChange);
     }
 
     return () => {
@@ -459,10 +460,15 @@ function useAdaptiveControlColumnCount({
         window.cancelAnimationFrame(animationFrameId);
       }
 
-      resizeObserver?.disconnect();
-
       if (typeof window !== "undefined") {
         window.removeEventListener("resize", scheduleMeasure);
+      }
+
+      if (typeof document !== "undefined") {
+        document.removeEventListener(
+          "visibilitychange",
+          handleVisibilityChange,
+        );
       }
     };
   }, [itemCount, minWidthPx]);

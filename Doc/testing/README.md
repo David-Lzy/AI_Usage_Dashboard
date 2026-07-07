@@ -54,5 +54,19 @@ npm run firefox:lint:baseline
 npm run firefox:package
 ```
 
+Extension CPU profiling uses an ignored local artifact directory:
+
+```sh
+npm run build
+npm run perf:extension:profile
+```
+
+When Chrome Task Manager already shows a hot extension renderer, sample the
+reported process directly:
+
+```sh
+npm run perf:extension:profile -- --pid=<chrome-task-manager-process-id>
+```
+
 Do not commit screenshots, local browser profile paths, account data, cookies,
 raw auth headers, or personal provider evidence.
