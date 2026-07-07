@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import { describe, expect, it } from "vitest";
 
 import {
@@ -8,6 +10,11 @@ import {
   createDefaultSettingsSurfaceSessionUiState,
   resolveSettingsSurfaceSessionUiState,
 } from "./use-settings-surface-session-state";
+
+const settingsSurfaceSessionStateSource = readFileSync(
+  new URL("./use-settings-surface-session-state.ts", import.meta.url),
+  "utf8",
+);
 
 describe("settings surface session state", () => {
   it("creates conservative default UI state without sensitive drafts", () => {
@@ -160,5 +167,14 @@ describe("settings surface session state", () => {
     expect(JSON.stringify(snapshot)).not.toContain("apiKey");
     expect(JSON.stringify(snapshot)).not.toContain("importJson");
     expect(JSON.stringify(snapshot)).not.toContain("cookie");
+  });
+
+  it("avoids carousel session writes when the index map is unchanged", () => {
+    expect(settingsSurfaceSessionStateSource).toContain(
+      "const nextCarouselIndexById = resolveUpdate(",
+    );
+    expect(settingsSurfaceSessionStateSource).toContain(
+      "Object.is(nextCarouselIndexById, current.carouselIndexById)",
+    );
   });
 });

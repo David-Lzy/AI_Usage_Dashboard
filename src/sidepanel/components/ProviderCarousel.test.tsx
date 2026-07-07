@@ -36,6 +36,10 @@ const providerCarouselCss = readFileSync(
   new URL("../theme/provider-carousel.css", import.meta.url),
   "utf8",
 );
+const providerCarouselSource = readFileSync(
+  new URL("./ProviderCarousel.tsx", import.meta.url),
+  "utf8",
+);
 
 describe("ProviderCarousel", () => {
   it("renders arbitrary provider cards with controls, status, and dots", () => {
@@ -158,5 +162,17 @@ describe("ProviderCarousel", () => {
       "@media (prefers-reduced-motion: reduce)",
     );
     expect(providerCarouselCss).toContain("transition: none;");
+  });
+
+  it("keeps the active item effect keyed by stable identity", () => {
+    expect(providerCarouselSource).toContain(
+      "const activeItemId = activeItem?.id ?? null;",
+    );
+    expect(providerCarouselSource).toContain(
+      "}, [activeIndex, activeItemId, onActiveItemChange]);",
+    );
+    expect(providerCarouselSource).not.toContain(
+      "}, [activeIndex, activeItem, onActiveItemChange]);",
+    );
   });
 });

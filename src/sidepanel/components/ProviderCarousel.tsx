@@ -166,6 +166,7 @@ export function ProviderCarousel({
   const pendingInitialIndexSyncRef = useRef<number | null>(null);
   const pointerStartXRef = useRef<number | null>(null);
   const activeItem = items[activeIndex] ?? null;
+  const activeItemId = activeItem?.id ?? null;
   const hasMultipleItems = itemCount > 1;
 
   useEffect(() => {
@@ -187,7 +188,7 @@ export function ProviderCarousel({
     if (activeItem) {
       onActiveItemChange?.(activeItem, activeIndex);
     }
-  }, [activeIndex, activeItem, onActiveItemChange]);
+  }, [activeIndex, activeItemId, onActiveItemChange]);
 
   function moveCarousel(move: ProviderCarouselMove) {
     setActiveIndex((currentIndex) =>

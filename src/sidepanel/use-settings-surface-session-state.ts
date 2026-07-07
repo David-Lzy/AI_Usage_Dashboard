@@ -497,12 +497,21 @@ export function useSettingsSurfaceSessionState({
   const setCarouselIndexById = useCallback<
     Dispatch<SetStateAction<Record<string, number>>>
   >((update) => {
-    setUiState((current) =>
-      rememberAndReturnUiState({
+    setUiState((current) => {
+      const nextCarouselIndexById = resolveUpdate(
+        update,
+        current.carouselIndexById,
+      );
+
+      if (Object.is(nextCarouselIndexById, current.carouselIndexById)) {
+        return current;
+      }
+
+      return rememberAndReturnUiState({
         ...current,
-        carouselIndexById: resolveUpdate(update, current.carouselIndexById),
-      }),
-    );
+        carouselIndexById: nextCarouselIndexById,
+      });
+    });
   }, []);
 
   return {
