@@ -11,6 +11,7 @@ Depending on which providers and features a user enables, the extension may stor
 - optional API credentials entered by the user
 - page bindings for supported signed-in provider usage pages
 - cached usage snapshots and sync diagnostics
+- locally cached provider favicon images for toolbar icon matching
 - custom JSON source settings, including endpoint URLs and refresh intervals
 - normalized custom JSON source snapshots and sync diagnostics
 - exported/imported configuration JSON files
@@ -53,7 +54,7 @@ The extension does not ask users to paste cookies or raw browser authentication 
 
 ## Favicon Permission
 
-The Chrome `favicon` permission is used for the toolbar icon matching feature. When enabled by the user, the extension can display an icon that matches the selected provider badge/source, such as the favicon associated with a supported provider page. The permission is not used for browsing-history collection.
+The Chrome `favicon` permission is used for the toolbar icon matching feature. When enabled by the user, the extension can display an icon that matches the selected provider badge/source, such as the favicon associated with a supported provider page. Successfully resolved provider favicon images may be cached locally for up to 7 days so the extension does not repeatedly ask Chrome for the same icon. The permission is not used for browsing-history collection.
 
 ## Remote Code
 

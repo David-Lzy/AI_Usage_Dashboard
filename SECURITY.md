@@ -12,7 +12,9 @@ AI Usage Dashboard is designed to avoid collecting raw browser authentication ma
 
 - It does not ask users to paste cookies.
 - It does not ask users to paste raw browser auth headers.
-- It stores settings, optional API credentials, page bindings, cached snapshots, and import/export payloads in the user's Chrome profile.
+- It stores settings, optional API credentials, page bindings, cached snapshots,
+  locally cached provider favicon images for toolbar icon matching, and
+  import/export payloads in the user's Chrome profile.
 - It uses optional host permissions for supported provider origins and
   user-approved custom source HTTP/HTTPS endpoint origins.
 - It uses packaged extension scripts and does not load remote executable code.

@@ -102,6 +102,82 @@ function stubDrawableOffscreenCanvas(drawnStyles: string[] = []) {
   );
 }
 
+function createStorageLocalMock(initialValues: Record<string, unknown> = {}) {
+  const values = { ...initialValues };
+
+  return {
+    values,
+    get: vi.fn(async (key: string) => ({
+      [key]: values[key],
+    })),
+    set: vi.fn(async (items: Record<string, unknown>) => {
+      Object.assign(values, items);
+    }),
+  };
+}
+
+function stubImageDataConstructor() {
+  vi.stubGlobal(
+    "ImageData",
+    class {
+      readonly data: Uint8ClampedArray;
+      readonly width: number;
+      readonly height: number;
+
+      constructor(data: Uint8ClampedArray, width: number, height: number) {
+        this.data = data;
+        this.width = width;
+        this.height = height;
+      }
+    },
+  );
+}
+
+function stubDecodedIconPipeline(fetchSpy = vi.fn()) {
+  const close = vi.fn();
+  const createImageBitmap = vi.fn(async () => ({
+    width: 32,
+    height: 32,
+    close,
+  }) as unknown as ImageBitmap);
+
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(async (sourceUrl: string) => {
+      fetchSpy(sourceUrl);
+
+      return {
+        ok: true,
+        blob: async () => new Blob(["icon"], { type: "image/png" }),
+      };
+    }),
+  );
+  vi.stubGlobal("createImageBitmap", createImageBitmap);
+  vi.stubGlobal(
+    "OffscreenCanvas",
+    class {
+      constructor(
+        readonly width: number,
+        readonly height: number,
+      ) {}
+
+      getContext() {
+        return {
+          clearRect: vi.fn(),
+          drawImage: vi.fn(),
+          getImageData: vi.fn(() => ({
+            width: this.width,
+            height: this.height,
+            data: new Uint8ClampedArray(this.width * this.height * 4),
+          }) as ImageData),
+        };
+      }
+    },
+  );
+
+  return { close, createImageBitmap };
+}
+
 describe("action icon", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
@@ -199,7 +275,7 @@ describe("action icon", () => {
     });
 
     expect(buildProviderFaviconUrl("codex-personal-page", 32)).toBe(
-      "chrome-extension://extension-id/_favicon/?pageUrl=https%3A%2F%2Fchatgpt.com%2Fcodex%2Fcloud%2Fsettings%2Fanalytics&size=32",
+      "chrome-extension://extension-id/_favicon/?pageUrl=https%3A%2F%2Fchatgpt.com%2Fcodex&size=32",
     );
   });
 
@@ -218,26 +294,185 @@ describe("action icon", () => {
     expect(buildProviderFaviconUrl("codex-personal-page", 32)).toBeNull();
   });
 
-  it("uses the bundled Codex provider icon without depending on favicon fetch", async () => {
+  it("uses the matched provider website favicon before Codex local fallback", async () => {
     const setIcon = vi.fn(async () => {});
-    const fetch = vi.fn();
+    const fetchSpy = vi.fn();
+    const storageLocal = createStorageLocalMock();
+    const { createImageBitmap } = stubDecodedIconPipeline(fetchSpy);
     const drawnStyles: string[] = [];
 
     vi.stubGlobal("chrome", {
       action: {
         setIcon,
       },
+      runtime: {
+        getURL: (path: string) =>
+          `chrome-extension://extension-id-provider-first${path}`,
+      },
+      storage: {
+        local: storageLocal,
+      },
+    });
+
+    await syncToolbarIconFromState(createStateWithCodexBadge(), 1_000);
+
+    expect(fetchSpy).toHaveBeenCalledWith(
+      "chrome-extension://extension-id-provider-first/_favicon/?pageUrl=https%3A%2F%2Fchatgpt.com%2Fcodex&size=32",
+    );
+    expect(createImageBitmap).toHaveBeenCalledTimes(2);
+    expect(storageLocal.set).toHaveBeenCalledWith(
+      expect.objectContaining({
+        "toolbarIconProviderFaviconCache:v1:codex-personal-page":
+          expect.objectContaining({
+            cachedAt: 1_000,
+            pageUrl: "https://chatgpt.com/codex",
+          }),
+      }),
+    );
+    expect(drawnStyles).toEqual([]);
+    expect(setIcon).toHaveBeenCalledWith({
+      imageData: expect.objectContaining({
+        16: expect.objectContaining({ width: 16, height: 16 }),
+        32: expect.objectContaining({ width: 32, height: 32 }),
+      }),
+    });
+  });
+
+  it("uses the cached provider favicon for seven days without refetching", async () => {
+    const setIcon = vi.fn(async () => {});
+    const fetch = vi.fn();
+    const storageLocal = createStorageLocalMock({
+      "toolbarIconProviderFaviconCache:v1:codex-personal-page": {
+        cachedAt: 86_400_000,
+        pageUrl: "https://chatgpt.com/codex",
+        images: {
+          16: {
+            width: 16,
+            height: 16,
+            data: Array.from(new Uint8ClampedArray(16 * 16 * 4)),
+          },
+          32: {
+            width: 32,
+            height: 32,
+            data: Array.from(new Uint8ClampedArray(32 * 32 * 4)),
+          },
+        },
+      },
+    });
+
+    vi.stubGlobal("chrome", {
+      action: {
+        setIcon,
+      },
+      runtime: {
+        getURL: (path: string) => `chrome-extension://extension-id-cache${path}`,
+      },
+      storage: {
+        local: storageLocal,
+      },
     });
     vi.stubGlobal("fetch", fetch);
+    stubImageDataConstructor();
+
+    await syncToolbarIconFromState(createStateWithCodexBadge(), 86_400_000 + 60_000);
+
+    expect(fetch).not.toHaveBeenCalled();
+    expect(storageLocal.set).not.toHaveBeenCalled();
+    expect(setIcon).toHaveBeenCalledWith({
+      imageData: expect.objectContaining({
+        16: expect.objectContaining({ width: 16, height: 16 }),
+        32: expect.objectContaining({ width: 32, height: 32 }),
+      }),
+    });
+  });
+
+  it("refetches provider favicon after the seven-day cache window expires", async () => {
+    const setIcon = vi.fn(async () => {});
+    const fetchSpy = vi.fn();
+    const storageLocal = createStorageLocalMock({
+      "toolbarIconProviderFaviconCache:v1:codex-personal-page": {
+        cachedAt: 1_000,
+        pageUrl: "https://chatgpt.com/codex",
+        images: {
+          16: {
+            width: 16,
+            height: 16,
+            data: Array.from(new Uint8ClampedArray(16 * 16 * 4)),
+          },
+          32: {
+            width: 32,
+            height: 32,
+            data: Array.from(new Uint8ClampedArray(32 * 32 * 4)),
+          },
+        },
+      },
+    });
+
+    vi.stubGlobal("chrome", {
+      action: {
+        setIcon,
+      },
+      runtime: {
+        getURL: (path: string) =>
+          `chrome-extension://extension-id-cache-expired${path}`,
+      },
+      storage: {
+        local: storageLocal,
+      },
+    });
+    stubDecodedIconPipeline(fetchSpy);
+
+    await syncToolbarIconFromState(
+      createStateWithCodexBadge(),
+      1_000 + 7 * 24 * 60 * 60 * 1000,
+    );
+
+    expect(fetchSpy).toHaveBeenCalledTimes(2);
+    expect(storageLocal.set).toHaveBeenCalledWith(
+      expect.objectContaining({
+        "toolbarIconProviderFaviconCache:v1:codex-personal-page":
+          expect.objectContaining({
+            cachedAt: 1_000 + 7 * 24 * 60 * 60 * 1000,
+            pageUrl: "https://chatgpt.com/codex",
+          }),
+      }),
+    );
+  });
+
+  it("falls back to the bundled Codex icon when provider favicon loading fails", async () => {
+    const setIcon = vi.fn(async () => {});
+    const fetch = vi.fn(async () => ({
+      ok: false,
+      blob: async () => new Blob(["missing"], { type: "image/png" }),
+    }));
+    const drawnStyles: string[] = [];
+
+    vi.stubGlobal("chrome", {
+      action: {
+        setIcon,
+      },
+      runtime: {
+        getURL: (path: string) =>
+          `chrome-extension://extension-id-favicon-fail${path}`,
+      },
+    });
+    vi.stubGlobal("fetch", fetch);
+    vi.stubGlobal(
+      "createImageBitmap",
+      vi.fn(async () => ({
+        width: 32,
+        height: 32,
+        close: vi.fn(),
+      }) as unknown as ImageBitmap),
+    );
     stubDrawableOffscreenCanvas(drawnStyles);
 
     await syncToolbarIconFromState(createStateWithCodexBadge());
 
-    expect(fetch).not.toHaveBeenCalled();
+    expect(fetch).toHaveBeenCalledTimes(1);
     expect(drawnStyles).toEqual(
       expect.arrayContaining(["#F8FAFC", "#0F172A", "#2563EB", "#10B981"]),
     );
-    expect(drawnStyles).not.toContain("#101828");
     expect(setIcon).toHaveBeenCalledWith({
       imageData: expect.objectContaining({
         16: expect.objectContaining({ width: 16, height: 16 }),
@@ -246,46 +481,31 @@ describe("action icon", () => {
     });
   });
 
-  it("uses the bundled Codex icon for enterprise provider mode", async () => {
+  it("falls back to the default icon when favicon decoding and local drawing are unavailable", async () => {
     const setIcon = vi.fn(async () => {});
-    const fetch = vi.fn();
+    const fetch = vi.fn(async () => ({
+      ok: false,
+      blob: async () => new Blob(["missing"], { type: "image/png" }),
+    }));
 
     vi.stubGlobal("chrome", {
       action: {
         setIcon,
       },
-    });
-    vi.stubGlobal("fetch", fetch);
-    stubDrawableOffscreenCanvas();
-
-    await syncToolbarIconFromState({
-      ...SAMPLE_APP_STATE,
-      settings: {
-        ...SAMPLE_APP_STATE.settings,
-        toolbarIconMode: "provider",
-        toolbarIconProviderId: "codex-enterprise-api",
-      },
-    });
-
-    expect(fetch).not.toHaveBeenCalled();
-    expect(setIcon).toHaveBeenCalledWith({
-      imageData: expect.objectContaining({
-        16: expect.objectContaining({ width: 16, height: 16 }),
-        32: expect.objectContaining({ width: 32, height: 32 }),
-      }),
-    });
-  });
-
-  it("falls back to the default icon when Codex local drawing is unavailable", async () => {
-    const setIcon = vi.fn(async () => {});
-    const fetch = vi.fn();
-
-    vi.stubGlobal("chrome", {
-      action: {
-        setIcon,
+      runtime: {
+        getURL: (path: string) =>
+          `chrome-extension://extension-id-local-unavailable${path}`,
       },
     });
     vi.stubGlobal("fetch", fetch);
+    vi.stubGlobal(
+      "createImageBitmap",
+      vi.fn(async () => ({
+        width: 32,
+        height: 32,
+        close: vi.fn(),
+      }) as unknown as ImageBitmap),
+    );
 
     await syncToolbarIconFromState({
       ...SAMPLE_APP_STATE,

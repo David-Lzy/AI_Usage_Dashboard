@@ -47,7 +47,8 @@ AI Usage Dashboard is intentionally conservative:
 - It does not ask you to paste cookies.
 - It does not ask you to paste raw browser auth headers.
 - It stores extension settings, optional API credentials, page bindings, cached
-  snapshots, custom source settings, normalized custom source snapshots, and
+  snapshots, custom source settings, normalized custom source snapshots,
+  locally cached provider favicon images for toolbar icon matching, and
   import/export files in your Chrome profile.
 - Optional host permissions are requested for supported provider origins and
   for user-approved custom source HTTP/HTTPS endpoint origins.
