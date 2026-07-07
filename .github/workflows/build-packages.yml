@@ -175,7 +175,7 @@ jobs:
           ### Notes
 
           - Chrome Web Store remains the recommended install path for everyday Chrome users.
-          - This release includes popup toolbar spacing polish for compact and high-DPI Chrome windows, custom HTTP/HTTPS JSON sources, progress color gradient controls, first-run empty-state fixes, Codex toolbar icon fallback, and popup/background performance hardening.
+          - This release includes Settings CPU loop fixes, provider toolbar favicon fallback hardening, popup/background performance profiling, first-run empty-state fixes, custom HTTP/HTTPS JSON sources, and progress color gradient controls.
           NOTES
 
       - name: Prepare release assets
