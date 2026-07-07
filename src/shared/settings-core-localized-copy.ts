@@ -202,7 +202,7 @@ export const SETTINGS_CORE_COPY: Record<
       actions: {
         enableProvider: "啟用 provider",
         disableProvider: "隱藏 provider",
-        grantAccess: "授予 access",
+        grantAccess: "授予存取權",
         openUsagePage: "打開 usage page",
         openAndSignIn: "打開頁面並登入",
         retryPage: "重試頁面",
@@ -324,7 +324,7 @@ export const SETTINGS_CORE_COPY: Record<
       actions: {
         enableProvider: "provider を有効化",
         disableProvider: "provider を隠す",
-        grantAccess: "access を許可",
+        grantAccess: "アクセスを許可",
         openUsagePage: "usage page を開く",
         openAndSignIn: "ページを開いてサインイン",
         retryPage: "ページを再試行",
@@ -444,7 +444,7 @@ export const SETTINGS_CORE_COPY: Record<
       actions: {
         enableProvider: "provider 활성화",
         disableProvider: "provider 숨기기",
-        grantAccess: "access 허용",
+        grantAccess: "접근 허용",
         openUsagePage: "usage page 열기",
         openAndSignIn: "페이지 열고 로그인",
         retryPage: "페이지 재시도",
@@ -566,7 +566,7 @@ export const SETTINGS_CORE_COPY: Record<
       actions: {
         enableProvider: "Activar provider",
         disableProvider: "Ocultar provider",
-        grantAccess: "Conceder access",
+        grantAccess: "Conceder acceso",
         openUsagePage: "Abrir usage page",
         openAndSignIn: "Abrir página e iniciar sesión",
         retryPage: "Reintentar página",
@@ -688,7 +688,7 @@ export const SETTINGS_CORE_COPY: Record<
       actions: {
         enableProvider: "Ativar provider",
         disableProvider: "Ocultar provider",
-        grantAccess: "Conceder access",
+        grantAccess: "Conceder acesso",
         openUsagePage: "Abrir usage page",
         openAndSignIn: "Abrir página e entrar",
         retryPage: "Tentar página de novo",
@@ -810,7 +810,7 @@ export const SETTINGS_CORE_COPY: Record<
       actions: {
         enableProvider: "Activer provider",
         disableProvider: "Masquer provider",
-        grantAccess: "Accorder access",
+        grantAccess: "Accorder l'accès",
         openUsagePage: "Ouvrir usage page",
         openAndSignIn: "Ouvrir la page et se connecter",
         retryPage: "Réessayer la page",
@@ -932,7 +932,7 @@ export const SETTINGS_CORE_COPY: Record<
       actions: {
         enableProvider: "provider aktivieren",
         disableProvider: "provider ausblenden",
-        grantAccess: "access gewähren",
+        grantAccess: "Zugriff gewähren",
         openUsagePage: "usage page öffnen",
         openAndSignIn: "Seite öffnen und anmelden",
         retryPage: "Seite erneut versuchen",
@@ -1054,7 +1054,7 @@ export const SETTINGS_CORE_COPY: Record<
       actions: {
         enableProvider: "Abilita provider",
         disableProvider: "Nascondi provider",
-        grantAccess: "Concedi access",
+        grantAccess: "Concedi accesso",
         openUsagePage: "Apri usage page",
         openAndSignIn: "Apri pagina e accedi",
         retryPage: "Riprova pagina",
@@ -1176,7 +1176,7 @@ export const SETTINGS_CORE_COPY: Record<
       actions: {
         enableProvider: "Включить provider",
         disableProvider: "Скрыть provider",
-        grantAccess: "Выдать access",
+        grantAccess: "Разрешить доступ",
         openUsagePage: "Открыть usage page",
         openAndSignIn: "Открыть страницу и войти",
         retryPage: "Повторить страницу",
@@ -1297,7 +1297,7 @@ export const SETTINGS_CORE_COPY: Record<
       actions: {
         enableProvider: "تفعيل provider",
         disableProvider: "إخفاء provider",
-        grantAccess: "منح access",
+        grantAccess: "منح الوصول",
         openUsagePage: "فتح usage page",
         openAndSignIn: "فتح الصفحة وتسجيل الدخول",
         retryPage: "إعادة محاولة الصفحة",
@@ -1419,7 +1419,7 @@ export const SETTINGS_CORE_COPY: Record<
       actions: {
         enableProvider: "provider enable करें",
         disableProvider: "provider छिपाएं",
-        grantAccess: "access दें",
+        grantAccess: "पहुँच दें",
         openUsagePage: "usage page खोलें",
         openAndSignIn: "page खोलें और sign in करें",
         retryPage: "page retry करें",
@@ -1541,7 +1541,7 @@ export const SETTINGS_CORE_COPY: Record<
       actions: {
         enableProvider: "Aktifkan provider",
         disableProvider: "Sembunyikan provider",
-        grantAccess: "Beri access",
+        grantAccess: "Beri akses",
         openUsagePage: "Buka usage page",
         openAndSignIn: "Buka halaman dan login",
         retryPage: "Coba ulang halaman",

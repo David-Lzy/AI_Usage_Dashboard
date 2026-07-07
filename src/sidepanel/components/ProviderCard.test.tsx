@@ -49,7 +49,7 @@ function renderProviderCard(
 
 describe("ProviderCard", () => {
   it("uses the Material provider-card hierarchy for summary, progress, chips, and actions", () => {
-    const html = renderProviderCard(createState(), "jetbrains-org-page");
+    const html = renderProviderCard(createState(), "codex-personal-page");
 
     expect(html).toContain('<header class="provider-card__header">');
     expect(html).toContain('class="provider-card__identity"');
@@ -62,6 +62,14 @@ describe("ProviderCard", () => {
     expect(html).toContain(
       'class="text-button provider-card__action provider-card__action--primary"',
     );
+  });
+
+  it("does not render stale progress when host access is missing", () => {
+    const html = renderProviderCard(createState(), "jetbrains-org-page");
+
+    expect(html).toContain("Host access missing");
+    expect(html).not.toContain('class="provider-card__progress-surface"');
+    expect(html).not.toContain('role="progressbar"');
   });
 
   it("does not render empty percent progress when Codex page parsing fails", () => {

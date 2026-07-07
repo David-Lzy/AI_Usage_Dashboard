@@ -13,6 +13,8 @@ O que ele ajuda você a ver
 • tipo de fonte: API, página com login, contexto parcial de página, política documentada ou fonte indisponível
 • frescor do snapshot e estado de sincronização
 • comportamento do badge e do ícone da barra
+• fontes JSON HTTP/HTTPS personalizadas para seus próprios endpoints de cota
+• faixas tradicionais de progresso ou exibição de cor restante com gradiente editável
 • idioma, tema, aparência do popup, estilo de progresso, ordem de providers e importação/exportação
 
 Como ele funciona no dia a dia
@@ -29,6 +31,7 @@ Cada provider expõe tipos diferentes de informação:
 • alguns caminhos mostram apenas contexto parcial de página
 • alguns caminhos são apenas de política nesta versão
 • alguns providers exigem página com login, host access opcional ou credenciais API
+• no primeiro uso, se o bloqueio for permissão de host, o cartão do Provider mostra uma ação focada de “Conceder acesso”
 • dashboards, APIs, textos de cota e políticas dos providers podem mudar
 
 Quando uma fonte está indisponível ou é parcial, a extensão mostra esse estado em vez de inventar um número.
@@ -40,7 +43,9 @@ AI Usage Dashboard foi desenhado de forma conservadora:
 • não pede cookies
 • não pede headers brutos de autenticação do navegador
 • permissões opcionais de host apenas para origens de providers compatíveis
+• fontes JSON personalizadas consultam endpoints HTTP ou HTTPS aprovados pelo usuário, sem credenciais do navegador
 • permissão favicon apenas para o recurso opcional de ícone da barra combinado com o provider
+• gradientes gerados de uma imagem local são processados no navegador; os bytes originais não são enviados nem salvos
 • executa apenas scripts empacotados; não carrega código remoto
 • configurações e dados em cache ficam no seu perfil do Chrome, a menos que você os exporte
 

@@ -44,6 +44,22 @@ describe("popup settings route targets", () => {
     });
   });
 
+  it("routes grant-access actions to the matching quick setup card", () => {
+    expect(
+      getSettingsRouteFocusForPopupAction(
+        {
+          kind: "grant-access",
+          label: "Grant access",
+          providerId: "codex-personal-page",
+        },
+        [],
+      ),
+    ).toEqual({
+      kind: "quick-setup-provider",
+      providerId: "codex-personal-page",
+    });
+  });
+
   it("routes generic settings actions from the first relevant visible provider", () => {
     expect(
       getSettingsRouteFocusForPopupAction(

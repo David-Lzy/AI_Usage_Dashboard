@@ -13,6 +13,8 @@ What it helps you see
 • source type: API, signed-in page, partial page context, documented policy, or unavailable source
 • snapshot freshness and sync status
 • toolbar badge and toolbar icon behavior
+• custom HTTP/HTTPS JSON sources for your own quota endpoints
+• traditional progress bands or editable gradient remaining-color display
 • language, theme, popup appearance, progress style, provider order, and import/export settings
 
 How it feels in daily use
@@ -29,6 +31,7 @@ Different providers expose different kinds of information:
 • some paths only expose partial page context
 • some paths are policy-only in this release
 • some providers may require a signed-in page, optional host access, or API credentials
+• first-run provider cards show a focused Grant access action when host permission is the blocker
 • provider dashboards, APIs, quota wording, and policies can change
 
 When a source is unavailable or partial, the extension labels that state instead of inventing a number.
@@ -40,7 +43,9 @@ AI Usage Dashboard is conservative by design:
 • no cookie pasting
 • no raw browser auth header pasting
 • optional host permissions only for supported provider origins
+• custom JSON sources fetch user-approved HTTP or HTTPS endpoints with browser credentials omitted
 • favicon permission only for the optional provider-matched toolbar icon feature
+• local image-based gradients are processed in your browser; original image bytes are not uploaded or saved
 • packaged extension scripts only; no remote code loading
 • settings and cached data stay in your Chrome profile unless you export them
 

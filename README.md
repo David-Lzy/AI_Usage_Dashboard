@@ -15,6 +15,8 @@ dashboard.
 - Shows a compact toolbar popup for quick provider health and quota checks.
 - Opens a side panel or full-page dashboard for provider detail, source labels,
   setup guidance, and sync diagnostics.
+- Shows focused first-run access actions when a provider needs optional host
+  permission before live sync can run.
 - Keeps provider data boundaries visible: exact values, partial values,
   window-scoped values, policy-only data, or unavailable data are labeled
   differently.

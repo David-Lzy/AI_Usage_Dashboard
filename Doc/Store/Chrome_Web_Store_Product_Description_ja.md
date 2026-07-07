@@ -13,6 +13,8 @@ cookie や生のブラウザー auth header の貼り付けは求めません。
 • source 種別：API、ログイン済みページ、部分的なページ情報、documented policy、または利用不可
 • snapshot の鮮度と同期状態
 • toolbar badge と toolbar icon の動作
+• 独自のクォータ endpoint 向けのカスタム HTTP/HTTPS JSON source
+• 従来の進捗バンド、または編集可能な残量カラー gradient 表示
 • 言語、テーマ、popup 外観、進捗スタイル、provider 順序、import/export 設定
 
 日常での使いどころ
@@ -29,6 +31,7 @@ provider によって公開される情報は異なります：
 • 部分的なページ情報だけを取得できるもの
 • このリリースでは policy-only のもの
 • ログイン済みページ、任意の host access、API 認証情報が必要なもの
+• 初回利用時、host permission が blocker の場合は Provider card が focused な「アクセスを許可」action を表示するもの
 • dashboard、API、クォータ表現、ポリシーが変更される可能性があるもの
 
 source が利用不可または部分的な場合、拡張機能は数値を推測せず、その状態を表示します。
@@ -40,7 +43,9 @@ AI Usage Dashboard は保守的な設計です：
 • cookie の貼り付けは不要
 • 生のブラウザー auth header の貼り付けは不要
 • 任意の host permission は対応 provider の origin にのみ使用
+• custom JSON source はユーザーが承認した HTTP または HTTPS endpoint だけを、ブラウザー credential なしで取得します
 • favicon permission は任意の provider-matched toolbar icon 機能にのみ使用
+• ローカル画像から gradient を生成するとき、画像はブラウザー内で処理され、元の画像 bytes はアップロードも保存もされません
 • packaged script のみを実行し、remote code は読み込みません
 • 設定とキャッシュデータは、明示的に export しない限り Chrome プロファイルに保存されます
 

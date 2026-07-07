@@ -17,6 +17,7 @@ export type PopupGuidanceAction = {
     | "settings"
     | "dashboard"
     | "provider-detail"
+    | "grant-access"
     | "source-page"
     | "hide-provider";
   label: string;

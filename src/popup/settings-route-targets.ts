@@ -62,6 +62,13 @@ export function getSettingsRouteFocusForPopupAction(
   action: PopupGuidanceAction | null | undefined,
   visibleProviders: PopupSettingsTargetProvider[],
 ): SettingsRouteFocus | null {
+  if (action?.kind === "grant-access" && action.providerId) {
+    return {
+      kind: "quick-setup-provider",
+      providerId: action.providerId,
+    };
+  }
+
   if (action?.kind !== "settings") {
     return null;
   }

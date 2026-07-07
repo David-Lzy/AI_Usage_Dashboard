@@ -1,4 +1,5 @@
 import type { SettingsRouteFocus } from "../shared/sidepanel-route-state";
+import { SETTINGS_SECTION_IDS } from "../shared/settings-section-ids";
 import {
   openFullDashboard,
   openProviderDetail,
@@ -32,6 +33,23 @@ export async function runPopupGuidanceAction(
 
   if (action.kind === "settings") {
     await openSettingsRoute(options.settingsFocus ?? undefined);
+    return;
+  }
+
+  if (action.kind === "grant-access") {
+    const fallbackFocus =
+      options.settingsFocus ??
+      (action.providerId
+        ? ({
+            kind: "quick-setup-provider",
+            providerId: action.providerId,
+          } satisfies SettingsRouteFocus)
+        : {
+            kind: "section",
+            sectionId: SETTINGS_SECTION_IDS.quickSetup,
+          });
+
+    await openSettingsRoute(fallbackFocus);
     return;
   }
 

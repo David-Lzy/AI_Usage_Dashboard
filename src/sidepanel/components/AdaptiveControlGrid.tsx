@@ -155,6 +155,42 @@ export function resolveAdaptiveControlColumnCount({
     : rebalanceAdaptiveControlColumnCount(baseColumnCount, itemCount);
 }
 
+export function resolveAdaptiveControlLayoutSignature({
+  availableWidthPx,
+  columnGapPx = 0,
+  itemCount,
+  minWidthPx,
+}: {
+  availableWidthPx: number;
+  columnGapPx?: number;
+  itemCount: number;
+  minWidthPx: number;
+}): string | null {
+  if (
+    itemCount <= 0 ||
+    !Number.isFinite(availableWidthPx) ||
+    availableWidthPx <= 0 ||
+    !Number.isFinite(minWidthPx) ||
+    minWidthPx <= 0
+  ) {
+    return null;
+  }
+
+  const roundedWidthPx = Math.max(1, Math.round(availableWidthPx));
+  const roundedGapPx =
+    Number.isFinite(columnGapPx) && columnGapPx > 0
+      ? Math.round(columnGapPx)
+      : 0;
+  const roundedMinWidthPx = Math.max(1, Math.ceil(minWidthPx));
+
+  return [
+    roundedWidthPx,
+    roundedGapPx,
+    Math.max(1, itemCount),
+    roundedMinWidthPx,
+  ].join(":");
+}
+
 function parseCssPixelValue(value: string): number {
   const parsedValue = Number.parseFloat(value);
 
@@ -311,11 +347,13 @@ function useAdaptiveControlColumnCount({
   minWidthPx: number;
 }) {
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const lastColumnMeasurementKeyRef = useRef<string | null>(null);
   const [columnCount, setColumnCount] = useState<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
     let animationFrameId: number | null = null;
+    lastColumnMeasurementKeyRef.current = null;
 
     function updateColumnCount(nextColumnCount: number | null) {
       if (cancelled) {
@@ -344,10 +382,28 @@ function useAdaptiveControlColumnCount({
       const renderedItemCount = Array.from(root.children).filter(
         (child) => !child.classList.contains("adaptive-control-grid__measurer"),
       ).length;
-      const nextColumnCount = resolveAdaptiveControlColumnCount({
-        availableWidthPx: root.getBoundingClientRect().width,
+      const resolvedItemCount = renderedItemCount || itemCount;
+      const availableWidthPx = root.getBoundingClientRect().width;
+      const nextMeasurementKey = resolveAdaptiveControlLayoutSignature({
+        availableWidthPx,
         columnGapPx,
-        itemCount: renderedItemCount || itemCount,
+        itemCount: resolvedItemCount,
+        minWidthPx,
+      });
+
+      if (
+        nextMeasurementKey !== null &&
+        lastColumnMeasurementKeyRef.current === nextMeasurementKey
+      ) {
+        return;
+      }
+
+      lastColumnMeasurementKeyRef.current = nextMeasurementKey;
+
+      const nextColumnCount = resolveAdaptiveControlColumnCount({
+        availableWidthPx,
+        columnGapPx,
+        itemCount: resolvedItemCount,
         minWidthPx,
       });
 

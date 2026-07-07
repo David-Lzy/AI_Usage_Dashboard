@@ -9,11 +9,29 @@ import {
   type ProviderProgressItem,
 } from "./provider-progress-items";
 
+type ProviderProgressSelectableSnapshot = ProviderSnapshot & {
+  currentSourceStateKind?: string;
+  permissionStatus?: string;
+};
+
+export function canDisplayProviderProgressItems(
+  provider: ProviderProgressSelectableSnapshot,
+): boolean {
+  return (
+    provider.permissionStatus !== "missing" &&
+    provider.currentSourceStateKind !== "host_access_missing"
+  );
+}
+
 export function selectVisibleProviderProgressItems(
-  provider: ProviderSnapshot,
+  provider: ProviderProgressSelectableSnapshot,
   surface: DisplaySurface,
   progressItemsBySurface: ProgressItemsBySurface,
 ): ProviderProgressItem[] {
+  if (!canDisplayProviderProgressItems(provider)) {
+    return [];
+  }
+
   const progressItems = buildProviderProgressItems(provider);
   const progressItemMap = new Map(progressItems.map((item) => [item.id, item]));
   const preferences = resolveProgressItemPreferences(
@@ -28,7 +46,7 @@ export function selectVisibleProviderProgressItems(
 }
 
 export function hasVisibleProviderProgressItems(
-  provider: ProviderSnapshot,
+  provider: ProviderProgressSelectableSnapshot,
   surface: DisplaySurface,
   progressItemsBySurface: ProgressItemsBySurface,
 ): boolean {

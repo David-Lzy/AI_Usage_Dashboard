@@ -102,4 +102,41 @@ describe("PopupFeaturedProviderList", () => {
     expect(planIndex).toBeGreaterThan(statusIndex);
     expect(html).toContain("Codex Long Provider Name For Wrapping Review");
   });
+
+  it("suppresses cached progress surfaces while provider host access is missing", () => {
+    const [card] = buildPopupViewModel(SAMPLE_APP_STATE).featuredProviderCards;
+    const html = renderFeaturedList([
+      {
+        ...card,
+        action: {
+          kind: "grant-access",
+          label: "Grant access",
+          providerId: card.provider.providerId,
+        },
+        provider: {
+          ...card.provider,
+          currentSourceStateKind: "host_access_missing",
+          permissionStatus: "missing",
+          usageWindows: [
+            {
+              label: "Weekly usage window",
+              normalizedLabel: "Weekly usage window",
+              kind: "weekly",
+              modelLabel: null,
+              quotaUnit: "percent",
+              used: 59,
+              remaining: 41,
+              total: 100,
+              resetAt: "2026-05-19T09:15:00.000Z",
+              resetLabel: "Resets Tuesday",
+            },
+          ],
+        },
+      },
+    ]);
+
+    expect(html).toContain("Grant access");
+    expect(html).not.toContain("popup-provider-card__progress");
+    expect(html).not.toContain(">41%<");
+  });
 });

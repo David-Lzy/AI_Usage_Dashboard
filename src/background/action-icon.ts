@@ -180,32 +180,82 @@ function buildCodexToolbarIconImageData(size: number): ImageData | null {
   }
 
   const center = size / 2;
-  const outerRadius = center - Math.max(1, size * 0.06);
-  const innerRadius = size * 0.27;
-  const ringWidth = Math.max(1.5, size * 0.12);
-  const chevronWidth = Math.max(1.5, size * 0.1);
+  const tileInset = Math.max(1, size * 0.08);
+  const tileRadius = Math.max(3, size * 0.22);
+  const terminalStrokeWidth = Math.max(1.6, size * 0.1);
+  const accentStrokeWidth = Math.max(1.4, size * 0.09);
 
   context.clearRect(0, 0, size, size);
-  context.fillStyle = "#101828";
+  context.fillStyle = "#F8FAFC";
+  context.strokeStyle = "#0F172A";
+  context.lineWidth = Math.max(1, size * 0.06);
   context.beginPath();
-  context.arc(center, center, outerRadius, 0, Math.PI * 2);
+  context.moveTo(tileInset + tileRadius, tileInset);
+  context.lineTo(size - tileInset - tileRadius, tileInset);
+  context.arcTo(
+    size - tileInset,
+    tileInset,
+    size - tileInset,
+    tileInset + tileRadius,
+    tileRadius,
+  );
+  context.lineTo(size - tileInset, size - tileInset - tileRadius);
+  context.arcTo(
+    size - tileInset,
+    size - tileInset,
+    size - tileInset - tileRadius,
+    size - tileInset,
+    tileRadius,
+  );
+  context.lineTo(tileInset + tileRadius, size - tileInset);
+  context.arcTo(
+    tileInset,
+    size - tileInset,
+    tileInset,
+    size - tileInset - tileRadius,
+    tileRadius,
+  );
+  context.lineTo(tileInset, tileInset + tileRadius);
+  context.arcTo(
+    tileInset,
+    tileInset,
+    tileInset + tileRadius,
+    tileInset,
+    tileRadius,
+  );
+  context.closePath();
   context.fill();
-
-  context.strokeStyle = "#34D399";
-  context.lineWidth = ringWidth;
-  context.lineCap = "round";
-  context.beginPath();
-  context.arc(center, center, innerRadius, Math.PI * 0.42, Math.PI * 1.78);
   context.stroke();
 
-  context.strokeStyle = "#A7F3D0";
-  context.lineWidth = chevronWidth;
-  context.lineJoin = "round";
+  context.strokeStyle = "#2563EB";
+  context.lineWidth = accentStrokeWidth;
   context.lineCap = "round";
   context.beginPath();
-  context.moveTo(size * 0.61, size * 0.34);
-  context.lineTo(size * 0.74, size * 0.5);
-  context.lineTo(size * 0.61, size * 0.66);
+  context.arc(
+    center,
+    center,
+    size * 0.31,
+    Math.PI * 0.72,
+    Math.PI * 1.72,
+  );
+  context.stroke();
+
+  context.strokeStyle = "#0F172A";
+  context.lineWidth = terminalStrokeWidth;
+  context.lineCap = "round";
+  context.lineJoin = "round";
+  context.beginPath();
+  context.moveTo(size * 0.42, size * 0.35);
+  context.lineTo(size * 0.58, size * 0.5);
+  context.lineTo(size * 0.42, size * 0.65);
+  context.stroke();
+
+  context.strokeStyle = "#10B981";
+  context.lineWidth = terminalStrokeWidth;
+  context.lineCap = "round";
+  context.beginPath();
+  context.moveTo(size * 0.63, size * 0.66);
+  context.lineTo(size * 0.73, size * 0.66);
   context.stroke();
 
   return context.getImageData(0, 0, size, size);

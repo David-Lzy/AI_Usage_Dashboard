@@ -52,6 +52,56 @@ function createStateWithCodexBadge(): AppState {
   };
 }
 
+function stubDrawableOffscreenCanvas(drawnStyles: string[] = []) {
+  vi.stubGlobal(
+    "OffscreenCanvas",
+    class {
+      constructor(
+        readonly width: number,
+        readonly height: number,
+      ) {}
+
+      getContext() {
+        const context = {
+          clearRect: vi.fn(),
+          lineWidth: 1,
+          lineCap: "round",
+          lineJoin: "round",
+          beginPath: vi.fn(),
+          moveTo: vi.fn(),
+          lineTo: vi.fn(),
+          arc: vi.fn(),
+          arcTo: vi.fn(),
+          closePath: vi.fn(),
+          fill: vi.fn(),
+          stroke: vi.fn(),
+          drawImage: vi.fn(),
+          getImageData: vi.fn(() => ({
+            width: this.width,
+            height: this.height,
+            data: new Uint8ClampedArray(this.width * this.height * 4),
+          }) as ImageData),
+        };
+
+        Object.defineProperty(context, "fillStyle", {
+          get: () => "",
+          set: (value: string) => {
+            drawnStyles.push(value);
+          },
+        });
+        Object.defineProperty(context, "strokeStyle", {
+          get: () => "",
+          set: (value: string) => {
+            drawnStyles.push(value);
+          },
+        });
+
+        return context;
+      }
+    },
+  );
+}
+
 describe("action icon", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
@@ -171,6 +221,7 @@ describe("action icon", () => {
   it("uses the bundled Codex provider icon without depending on favicon fetch", async () => {
     const setIcon = vi.fn(async () => {});
     const fetch = vi.fn();
+    const drawnStyles: string[] = [];
 
     vi.stubGlobal("chrome", {
       action: {
@@ -178,39 +229,43 @@ describe("action icon", () => {
       },
     });
     vi.stubGlobal("fetch", fetch);
-    vi.stubGlobal(
-      "OffscreenCanvas",
-      class {
-        constructor(
-          readonly width: number,
-          readonly height: number,
-        ) {}
-
-        getContext() {
-          return {
-            clearRect: vi.fn(),
-            fillStyle: "",
-            strokeStyle: "",
-            lineWidth: 1,
-            lineCap: "round",
-            lineJoin: "round",
-            beginPath: vi.fn(),
-            arc: vi.fn(),
-            fill: vi.fn(),
-            stroke: vi.fn(),
-            moveTo: vi.fn(),
-            lineTo: vi.fn(),
-            getImageData: vi.fn(() => ({
-              width: this.width,
-              height: this.height,
-              data: new Uint8ClampedArray(this.width * this.height * 4),
-            }) as ImageData),
-          };
-        }
-      },
-    );
+    stubDrawableOffscreenCanvas(drawnStyles);
 
     await syncToolbarIconFromState(createStateWithCodexBadge());
+
+    expect(fetch).not.toHaveBeenCalled();
+    expect(drawnStyles).toEqual(
+      expect.arrayContaining(["#F8FAFC", "#0F172A", "#2563EB", "#10B981"]),
+    );
+    expect(drawnStyles).not.toContain("#101828");
+    expect(setIcon).toHaveBeenCalledWith({
+      imageData: expect.objectContaining({
+        16: expect.objectContaining({ width: 16, height: 16 }),
+        32: expect.objectContaining({ width: 32, height: 32 }),
+      }),
+    });
+  });
+
+  it("uses the bundled Codex icon for enterprise provider mode", async () => {
+    const setIcon = vi.fn(async () => {});
+    const fetch = vi.fn();
+
+    vi.stubGlobal("chrome", {
+      action: {
+        setIcon,
+      },
+    });
+    vi.stubGlobal("fetch", fetch);
+    stubDrawableOffscreenCanvas();
+
+    await syncToolbarIconFromState({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        toolbarIconMode: "provider",
+        toolbarIconProviderId: "codex-enterprise-api",
+      },
+    });
 
     expect(fetch).not.toHaveBeenCalled();
     expect(setIcon).toHaveBeenCalledWith({
@@ -218,6 +273,32 @@ describe("action icon", () => {
         16: expect.objectContaining({ width: 16, height: 16 }),
         32: expect.objectContaining({ width: 32, height: 32 }),
       }),
+    });
+  });
+
+  it("falls back to the default icon when Codex local drawing is unavailable", async () => {
+    const setIcon = vi.fn(async () => {});
+    const fetch = vi.fn();
+
+    vi.stubGlobal("chrome", {
+      action: {
+        setIcon,
+      },
+    });
+    vi.stubGlobal("fetch", fetch);
+
+    await syncToolbarIconFromState({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        toolbarIconMode: "provider",
+        toolbarIconProviderId: "codex-personal-page",
+      },
+    });
+
+    expect(fetch).not.toHaveBeenCalled();
+    expect(setIcon).toHaveBeenCalledWith({
+      path: expect.any(Object),
     });
   });
 

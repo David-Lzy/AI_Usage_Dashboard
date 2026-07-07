@@ -54,6 +54,25 @@ describe("runPopupGuidanceAction", () => {
     expect(openProvider).toHaveBeenCalledWith("codex-personal-page");
   });
 
+  it("falls back to focused Settings for grant-access actions", async () => {
+    const openSettingsRoute = vi.fn(async () => undefined);
+
+    await runPopupGuidanceAction(
+      {
+        kind: "grant-access",
+        label: "Grant access",
+        providerId: "codex-personal-page",
+      },
+      {},
+      { openSettingsRoute },
+    );
+
+    expect(openSettingsRoute).toHaveBeenCalledWith({
+      kind: "quick-setup-provider",
+      providerId: "codex-personal-page",
+    });
+  });
+
   it("opens source pages with the provider and source state kind", async () => {
     const openSourcePage = vi.fn(async () => undefined);
 

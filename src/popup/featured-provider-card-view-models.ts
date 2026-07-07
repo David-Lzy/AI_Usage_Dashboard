@@ -1,13 +1,31 @@
 import type { ProviderTone } from "../providers/types";
-import type { RuntimeI18n } from "../shared/i18n";
+import type { ResolvedAppLocale, RuntimeI18n } from "../shared/i18n";
 import { buildRuntimeCommonCopy } from "../shared/i18n";
 import type { buildPopupLocalizedCopy } from "../shared/popup-localized-copy";
+import { canDisplayProviderProgressItems } from "../shared/provider-progress-item-selection";
 import type { ProviderViewModel } from "../shared/provider-view-models";
 import type {
   PopupFeaturedProviderCard,
   PopupGuidanceAction,
   PopupUsageProgressCircle,
 } from "./view-model-types";
+
+const POPUP_GRANT_ACCESS_ACTION_LABELS: Record<ResolvedAppLocale, string> = {
+  en: "Grant access",
+  "zh-CN": "授予访问",
+  "zh-TW": "授予存取權",
+  ja: "アクセスを許可",
+  ko: "접근 허용",
+  "es-419": "Conceder acceso",
+  "pt-BR": "Conceder acesso",
+  fr: "Accorder l'accès",
+  de: "Zugriff gewähren",
+  it: "Concedi accesso",
+  ru: "Разрешить доступ",
+  ar: "منح الوصول",
+  hi: "पहुँच दें",
+  id: "Beri akses",
+};
 
 function buildPopupFeaturedStatusLabel(provider: ProviderViewModel): string {
   if (provider.permissionStatus === "missing") {
@@ -155,6 +173,10 @@ function buildPopupUsageProgressCircles(
   provider: ProviderViewModel,
   i18n?: RuntimeI18n,
 ): PopupUsageProgressCircle[] {
+  if (!canDisplayProviderProgressItems(provider)) {
+    return [];
+  }
+
   const remainingLabel = i18n
     ? buildRuntimeCommonCopy(i18n).remaining
     : "remaining";
@@ -225,10 +247,15 @@ function buildLocalizedPopupFeaturedMetaChips(
 }
 
 function buildPopupFeaturedAction(provider: ProviderViewModel): PopupGuidanceAction {
-  if (
-    provider.permissionStatus === "missing" ||
-    provider.currentSourceStateKind === "credential_missing"
-  ) {
+  if (provider.permissionStatus === "missing") {
+    return {
+      kind: "grant-access",
+      label: "Grant access",
+      providerId: provider.providerId,
+    };
+  }
+
+  if (provider.currentSourceStateKind === "credential_missing") {
     return {
       kind: "settings",
       label: "Open settings",
@@ -368,8 +395,13 @@ export function buildLocalizedFeaturedProviderCard(
     secondaryDetail: buildPopupFeaturedSecondaryDetail(provider, i18n),
     usageProgressCircles: buildPopupUsageProgressCircles(provider, i18n),
     action:
-      provider.permissionStatus === "missing" ||
-      provider.currentSourceStateKind === "credential_missing"
+      provider.permissionStatus === "missing"
+        ? {
+            kind: "grant-access",
+            label: POPUP_GRANT_ACCESS_ACTION_LABELS[i18n.resolvedLocale],
+            providerId: provider.providerId,
+          }
+        : provider.currentSourceStateKind === "credential_missing"
         ? {
             kind: "settings",
             label: i18n.t("common.actions.open_settings"),

@@ -50,9 +50,13 @@ Purpose:
 - `store.feature.quick_glance`
   - `Quick glance from the Chrome toolbar popup, with deeper detail in the side panel or full-page dashboard.`
 - `store.feature.setup_guidance`
-  - `Clear setup guidance when host access, credentials, a signed-in page, or provider policy blocks live sync.`
+  - `Clear setup guidance when host access, credentials, a signed-in page, or provider policy blocks live sync, including a focused Grant access action for first-run host permission blockers.`
 - `store.feature.honest_coverage`
   - `Honest provider coverage that labels exact, partial, window-scoped, policy-only, and unavailable sources.`
+- `store.feature.custom_sources`
+  - `User-approved HTTP/HTTPS JSON sources can add clearly labeled custom quota endpoints without treating them as official provider data.`
+- `store.feature.gradient_progress`
+  - `Traditional progress bands and editable remaining-color gradients, including local presets and in-browser image-derived gradients.`
 - `store.feature.sidepanel_depth`
   - `Provider detail, source boundaries, diagnostics, permissions, credentials, and display settings stay available without overloading the popup.`
 - `store.feature.customization`
@@ -81,3 +85,5 @@ Purpose:
 - Do not claim exact remaining quota where the product only exposes partial or window-scoped usage.
 - Preserve the distinction between toolbar popup quick glance and side-panel/full-page detail.
 - Mention the `favicon` permission only for the optional provider-matched toolbar icon feature.
+- Mention custom JSON sources as user-approved HTTP/HTTPS endpoints with browser credentials omitted.
+- Mention local image gradients only as in-browser processing; original image bytes are not uploaded or saved.

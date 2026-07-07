@@ -23,6 +23,10 @@ const formControlsCss = readFileSync(
   new URL("../theme/form-controls.css", import.meta.url),
   "utf8",
 );
+const accessFeedbackCss = readFileSync(
+  new URL("../theme/access-feedback.css", import.meta.url),
+  "utf8",
+);
 
 describe("SettingsSections", () => {
   it("keeps section labels neutral instead of tertiary accent colored", () => {
@@ -157,6 +161,20 @@ describe("SettingsSections", () => {
     expect(html).toContain('data-provider-id="cursor-personal-page"');
     expect(html).toContain('data-permission-status=');
     expect(html).toContain('data-permission-action=');
+  });
+
+  it("highlights grant-access actions while preserving reduced-motion opt out", () => {
+    expect(accessFeedbackCss).toContain("@keyframes app-access-cta-pulse");
+    expect(accessFeedbackCss).toContain(
+      '[data-quick-setup-primary-action="grant_access"]:not(:disabled)',
+    );
+    expect(accessFeedbackCss).toContain(
+      '[data-permission-action="request"]:not(:disabled)',
+    );
+    expect(accessFeedbackCss).toContain(
+      ':root[data-motion-mode="reduced"]',
+    );
+    expect(accessFeedbackCss).toContain("animation: none;");
   });
 
 });

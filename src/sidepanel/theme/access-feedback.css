@@ -10,6 +10,19 @@
   }
 }
 
+@keyframes app-access-cta-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0
+      color-mix(in srgb, var(--md-sys-color-primary) 0%, transparent);
+  }
+
+  50% {
+    box-shadow: 0 0 0 6px
+      color-mix(in srgb, var(--md-sys-color-primary) 18%, transparent);
+  }
+}
+
 .permission-prompt {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -39,6 +52,12 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--app-space-2);
+}
+
+[data-quick-setup-primary-action="grant_access"]:not(:disabled),
+[data-permission-action="request"]:not(:disabled) {
+  animation: app-access-cta-pulse 2600ms var(--app-motion-easing-standard)
+    infinite;
 }
 
 .credential-state {
@@ -162,9 +181,23 @@
   :root[data-motion-mode="system"] .toast {
     animation: none;
   }
+
+  :root[data-motion-mode="system"]
+    [data-quick-setup-primary-action="grant_access"]:not(:disabled),
+  :root[data-motion-mode="system"]
+    [data-permission-action="request"]:not(:disabled) {
+    animation: none;
+  }
 }
 
 :root[data-motion-mode="reduced"] .toast {
+  animation: none;
+}
+
+:root[data-motion-mode="reduced"]
+  [data-quick-setup-primary-action="grant_access"]:not(:disabled),
+:root[data-motion-mode="reduced"]
+  [data-permission-action="request"]:not(:disabled) {
   animation: none;
 }
 

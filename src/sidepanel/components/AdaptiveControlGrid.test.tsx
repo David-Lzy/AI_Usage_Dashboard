@@ -9,6 +9,7 @@ import {
   rebalanceAdaptiveControlColumnCount,
   resolveAdaptiveControlBaseColumnCount,
   resolveAdaptiveControlColumnCount,
+  resolveAdaptiveControlLayoutSignature,
   resolveAdaptiveControlMinWidth,
 } from "./AdaptiveControlGrid";
 
@@ -123,6 +124,32 @@ describe("AdaptiveControlGrid", () => {
     ).toBe(2);
   });
 
+  it("builds stable rounded layout signatures for ResizeObserver guards", () => {
+    expect(
+      resolveAdaptiveControlLayoutSignature({
+        availableWidthPx: 430.4,
+        columnGapPx: 10.2,
+        itemCount: 8,
+        minWidthPx: 100.1,
+      }),
+    ).toBe("430:10:8:101");
+    expect(
+      resolveAdaptiveControlLayoutSignature({
+        availableWidthPx: 430.49,
+        columnGapPx: 10.49,
+        itemCount: 8,
+        minWidthPx: 100.1,
+      }),
+    ).toBe("430:10:8:101");
+    expect(
+      resolveAdaptiveControlLayoutSignature({
+        availableWidthPx: 0,
+        itemCount: 8,
+        minWidthPx: 100,
+      }),
+    ).toBeNull();
+  });
+
   it("defines the adaptive grid and hidden DOM measurer in shared CSS", () => {
     expect(formControlsCss).toContain(".adaptive-control-grid {");
     expect(formControlsCss).toContain("repeat(");
@@ -146,6 +173,12 @@ describe("AdaptiveControlGrid", () => {
   it("keeps hidden text measurement out of ResizeObserver loops", () => {
     expect(adaptiveControlGridSource).not.toContain(
       "resizeObserver?.observe(measurerRef.current)",
+    );
+    expect(adaptiveControlGridSource).toContain(
+      "lastColumnMeasurementKeyRef",
+    );
+    expect(adaptiveControlGridSource).toContain(
+      "resolveAdaptiveControlLayoutSignature",
     );
     expect(adaptiveControlGridSource).toContain(
       'document.addEventListener("visibilitychange", handleVisibilityChange);',

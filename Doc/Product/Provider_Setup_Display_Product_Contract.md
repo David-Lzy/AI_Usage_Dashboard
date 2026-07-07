@@ -111,6 +111,9 @@ Display eligibility plus dashboard display visibility determines whether a provi
 - Each Quick Setup card's main display switch controls only `displayEnabled`.
 - Hidden source entries must remain recoverable through Quick Setup.
 - Missing personal-page permissions should prompt host access or opening the usage page.
+- Popup and Settings first-run surfaces should show a focused host-access action
+  when browser host permission is the blocker, and should not render stale
+  quota progress as if the source were readable.
 - Missing API credentials should point users to the matching API credential card instead of pretending the source is connected.
 
 ### Provider Display

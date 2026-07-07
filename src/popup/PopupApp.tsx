@@ -31,6 +31,11 @@ import {
   type PopupGuidanceAction,
 } from "./view-models";
 import {
+  findHostAccessRefreshCandidate,
+  hasDirectHostAccessRequest,
+  requestHostAccessForProvider,
+} from "../shared/host-access-request";
+import {
   getSettingsRouteFocusForPopupAction,
   getSettingsRouteFocusForPopupProvider,
 } from "./settings-route-targets";
@@ -377,12 +382,13 @@ export function PopupApp() {
     );
   }
 
+  const appState = loadState.appState;
   const popupCopy = buildPopupLocalizedCopy(runtimeI18n);
   const hideProviderFeedbackCopy =
     buildPopupHideProviderFeedbackCopy(runtimeI18n);
   const popupModel = localizePopupViewModel(
     buildPopupViewModel(
-      loadState.appState,
+      appState,
       buildPopupSummaryLabels(runtimeI18n),
       runtimeI18n.formatNumber,
       buildProviderSourceDisplayLocalizedCopy(runtimeI18n),
@@ -391,15 +397,15 @@ export function PopupApp() {
   );
   const guidanceCard = popupModel.guidanceCard;
   const quickThemeToggle = buildQuickThemeToggle(
-    loadState.appState.settings.themeMode,
+    appState.settings.themeMode,
     typeof window !== "undefined" ? window : undefined,
   );
   const quickThemeToggleCopy = getQuickThemeToggleCopy(
     quickThemeToggle.nextMode,
     runtimeI18n,
   );
-  const popupProgressStyle = loadState.appState.settings.popupProgressStyle;
-  const popupCustomSources = getVisibleCustomSources(loadState.appState, "popup");
+  const popupProgressStyle = appState.settings.popupProgressStyle;
+  const popupCustomSources = getVisibleCustomSources(appState, "popup");
   const customSourceSettingsFocus: SettingsRouteFocus = {
     kind: "section",
     sectionId: SETTINGS_SECTION_IDS.providerDisplay,
@@ -423,6 +429,46 @@ export function PopupApp() {
       settingsFocus?: SettingsRouteFocus | null;
     } = {},
   ) {
+    if (action.kind === "grant-access" && action.providerId) {
+      const target = findHostAccessRefreshCandidate(
+        appState,
+        action.providerId,
+      );
+
+      if (target && hasDirectHostAccessRequest()) {
+        try {
+          const granted = await requestHostAccessForProvider(target);
+
+          if (!granted) {
+            return;
+          }
+
+          const response = await sendAppMessage({
+            type: "app:request-refresh",
+            providerId: target.id,
+          });
+
+          if (!response.ok) {
+            setLoadState({ status: "error", message: response.error });
+            return;
+          }
+
+          setLoadState({ status: "ready", appState: response.state });
+
+          return;
+        } catch (error) {
+          setLoadState({
+            status: "error",
+            message:
+              error instanceof Error
+                ? error.message
+                : "The browser rejected the host access request.",
+          });
+          return;
+        }
+      }
+    }
+
     if (action.kind === "hide-provider" && action.providerId) {
       const providerId = action.providerId;
       const providerLabel =
@@ -510,15 +556,15 @@ export function PopupApp() {
         i18n={runtimeI18n}
         sourcePageActionLabel={popupCopy.featuredCard.openSourcePageAction}
         progressColorAppearance={
-          loadState.appState.settings.progressColorAppearance
+          appState.settings.progressColorAppearance
         }
-        progressColorBands={loadState.appState.settings.progressColorBands}
+        progressColorBands={appState.settings.progressColorBands}
         popupCircularProgressItemsPerRow={
-          loadState.appState.settings.popupCircularProgressItemsPerRow
+          appState.settings.popupCircularProgressItemsPerRow
         }
         progressDisplayStyle={popupProgressStyle}
-        progressItemsBySurface={loadState.appState.settings.progressItemsBySurface}
-        progressThicknessPx={loadState.appState.settings.progressThicknessPx}
+        progressItemsBySurface={appState.settings.progressItemsBySurface}
+        progressThicknessPx={appState.settings.progressThicknessPx}
         getSettingsFocusForProvider={getSettingsRouteFocusForPopupProvider}
         onAction={handlePopupAction}
       />
@@ -532,15 +578,15 @@ export function PopupApp() {
         sources={popupCustomSources}
         i18n={runtimeI18n}
         progressColorAppearance={
-          loadState.appState.settings.progressColorAppearance
+          appState.settings.progressColorAppearance
         }
-        progressColorBands={loadState.appState.settings.progressColorBands}
+        progressColorBands={appState.settings.progressColorBands}
         popupCircularProgressItemsPerRow={
-          loadState.appState.settings.popupCircularProgressItemsPerRow
+          appState.settings.popupCircularProgressItemsPerRow
         }
         progressDisplayStyle={popupProgressStyle}
-        progressItemsBySurface={loadState.appState.settings.progressItemsBySurface}
-        progressThicknessPx={loadState.appState.settings.progressThicknessPx}
+        progressItemsBySurface={appState.settings.progressItemsBySurface}
+        progressThicknessPx={appState.settings.progressThicknessPx}
         settingsFocus={customSourceSettingsFocus}
         onOpenSettings={(settingsFocus) =>
           runPopupGuidanceAction(

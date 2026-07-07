@@ -2,7 +2,10 @@ import { describe, expect, it } from "vitest";
 
 import type { AppState } from "../providers/types";
 import { SAMPLE_APP_STATE } from "./constants";
-import { selectVisibleProviderProgressItems } from "./provider-progress-item-selection";
+import {
+  canDisplayProviderProgressItems,
+  selectVisibleProviderProgressItems,
+} from "./provider-progress-item-selection";
 
 function createWindowState(): AppState {
   return {
@@ -85,5 +88,29 @@ describe("provider progress item selection", () => {
         fullPage: {},
       }).map((item) => item.label),
     ).toEqual(["Weekly usage window"]);
+  });
+
+  it("suppresses cached progress when host access is missing", () => {
+    const state = createWindowState();
+    const codex = state.providers.find((provider) => provider.providerId === "codex-personal-page");
+
+    expect(codex).toBeDefined();
+    expect(
+      canDisplayProviderProgressItems({
+        ...codex!,
+        permissionStatus: "missing",
+      }),
+    ).toBe(false);
+    expect(
+      selectVisibleProviderProgressItems(
+        {
+          ...codex!,
+          currentSourceStateKind: "host_access_missing",
+          permissionStatus: "missing",
+        },
+        "popup",
+        state.settings.progressItemsBySurface,
+      ),
+    ).toEqual([]);
   });
 });

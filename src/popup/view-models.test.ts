@@ -6,7 +6,7 @@ import {
 } from "../providers/diagnostics";
 import type { AppState } from "../providers/types";
 import { SAMPLE_APP_STATE } from "../shared/constants";
-import { createRuntimeI18n } from "../shared/i18n";
+import { SUPPORTED_APP_LOCALES, createRuntimeI18n } from "../shared/i18n";
 import { buildPopupViewModel, localizePopupViewModel } from "./view-models";
 
 function createState(overrides?: Partial<AppState>): AppState {
@@ -18,6 +18,30 @@ function createState(overrides?: Partial<AppState>): AppState {
       overrides?.providerSettings ?? SAMPLE_APP_STATE.providerSettings,
     settings: overrides?.settings ?? SAMPLE_APP_STATE.settings,
   };
+}
+
+function createMissingAccessPopupState(providerId = "cursor-personal-page"): AppState {
+  return createState({
+    providers: SAMPLE_APP_STATE.providers.map((provider) =>
+      provider.providerId === providerId
+        ? {
+            ...provider,
+            syncStatus: "ok",
+            tone: "neutral",
+            warningReason: null,
+          }
+        : provider,
+    ),
+    providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) =>
+      provider.id === providerId
+        ? {
+            ...provider,
+            displayEnabled: true,
+            status: "missing",
+          }
+        : provider,
+    ),
+  });
 }
 
 describe("popup view models", () => {
@@ -401,8 +425,9 @@ describe("popup view models", () => {
       primaryDetail: "Current path is blocked on host access.",
       secondaryDetail: model.featuredProviders[0].hostAccessRequirementDetail,
       action: {
-        kind: "settings",
-        label: "Open settings",
+        kind: "grant-access",
+        label: "Grant access",
+        providerId: "cursor-personal-page",
       },
       secondaryAction: {
         kind: "hide-provider",
@@ -410,6 +435,7 @@ describe("popup view models", () => {
         providerId: "cursor-personal-page",
       },
     });
+    expect(model.featuredProviderCards[0]?.usageProgressCircles).toEqual([]);
   });
 
   it("uses direct source-page recovery for shipped session-page source states", () => {
@@ -631,28 +657,7 @@ describe("popup view models", () => {
   });
 
   it("surfaces settings guidance when one visible provider is missing host access", () => {
-    const model = buildPopupViewModel({
-      ...SAMPLE_APP_STATE,
-      providers: SAMPLE_APP_STATE.providers.map((provider) =>
-        provider.providerId === "cursor-personal-page"
-          ? {
-              ...provider,
-              syncStatus: "ok",
-              tone: "neutral",
-              warningReason: null,
-            }
-          : provider,
-      ),
-      providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) =>
-        provider.id === "cursor-personal-page"
-          ? {
-              ...provider,
-              displayEnabled: true,
-              status: "missing",
-            }
-          : provider,
-      ),
-    });
+    const model = buildPopupViewModel(createMissingAccessPopupState());
 
     expect(model.guidanceCard?.action).toEqual({
       kind: "settings",
@@ -671,6 +676,39 @@ describe("popup view models", () => {
         },
       ],
     });
+  });
+
+  it("localizes featured-card grant-access actions for every supported locale", () => {
+    const expectedLabels = {
+      en: "Grant access",
+      "zh-CN": "授予访问",
+      "zh-TW": "授予存取權",
+      ja: "アクセスを許可",
+      ko: "접근 허용",
+      "es-419": "Conceder acceso",
+      "pt-BR": "Conceder acesso",
+      fr: "Accorder l'accès",
+      de: "Zugriff gewähren",
+      it: "Concedi accesso",
+      ru: "Разрешить доступ",
+      ar: "منح الوصول",
+      hi: "पहुँच दें",
+      id: "Beri akses",
+    } satisfies Record<(typeof SUPPORTED_APP_LOCALES)[number], string>;
+
+    for (const locale of SUPPORTED_APP_LOCALES) {
+      const i18n = createRuntimeI18n(locale);
+      const model = localizePopupViewModel(
+        buildPopupViewModel(createMissingAccessPopupState()),
+        i18n,
+      );
+
+      expect(model.featuredProviderCards[0]?.action).toEqual({
+        kind: "grant-access",
+        label: expectedLabels[locale],
+        providerId: "cursor-personal-page",
+      });
+    }
   });
 
   it("surfaces settings guidance when one visible provider is blocked on a missing credential", () => {
