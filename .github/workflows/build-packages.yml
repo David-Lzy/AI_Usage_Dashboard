@@ -175,7 +175,7 @@ jobs:
           ### Notes
 
           - Chrome Web Store remains the recommended install path for everyday Chrome users.
-          - This release expands runtime and structured-copy localization across all 14 shipped locales, adds repeatable locale visual QA for popup/dashboard/settings, and improves popup provider-card layout so longer translated actions wrap instead of clipping.
+          - This release keeps the toolbar popup's collapsed top-action and footer-info preferences across reopen, removes build hash/date clutter from the popup footer, and adds a matching collapsible footer control.
           NOTES
 
       - name: Prepare release assets

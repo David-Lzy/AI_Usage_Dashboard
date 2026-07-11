@@ -91,6 +91,24 @@ describe("popup view models", () => {
     ]);
   });
 
+  it("keeps a popup-hidden provider out after display visibility is disabled", () => {
+    const model = buildPopupViewModel({
+      ...SAMPLE_APP_STATE,
+      providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) =>
+        provider.id === "codex-personal-page"
+          ? { ...provider, displayEnabled: false }
+          : provider,
+      ),
+    });
+
+    expect(model.visibleProviders.map((provider) => provider.providerId)).not.toContain(
+      "codex-personal-page",
+    );
+    expect(
+      model.featuredProviderCards.map((card) => card.provider.providerId),
+    ).not.toContain("codex-personal-page");
+  });
+
   it("falls back to the first visible providers when everything is healthy", () => {
     const model = buildPopupViewModel({
       ...SAMPLE_APP_STATE,

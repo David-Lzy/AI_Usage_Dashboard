@@ -68,6 +68,10 @@ import { PopupSetupCoverageSection } from "./PopupSetupCoverageSection";
 import { PopupSurfaceRolesSection } from "./PopupSurfaceRolesSection";
 import { buildPopupHideProviderFeedbackCopy } from "./popup-hide-provider-feedback-copy";
 import {
+  readPopupCollapsePreference,
+  writePopupCollapsePreference,
+} from "./popup-collapse-preferences";
+import {
   decrementPopupRefreshCountdownSeconds,
   POPUP_REFRESH_COUNTDOWN_ALARM_RESYNC_MS,
   readPopupRefreshCountdownSeconds,
@@ -87,8 +91,12 @@ export function PopupApp() {
   });
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isThemeTogglePending, setIsThemeTogglePending] = useState(false);
-  const [areHeaderActionsCollapsed, setAreHeaderActionsCollapsed] =
-    useState(false);
+  const [areHeaderActionsCollapsed, setAreHeaderActionsCollapsed] = useState(
+    () => readPopupCollapsePreference("headerActions"),
+  );
+  const [isFooterCollapsed, setIsFooterCollapsed] = useState(() =>
+    readPopupCollapsePreference("footerInfo"),
+  );
   const [refreshCountdownSeconds, setRefreshCountdownSeconds] = useState<
     number | null
   >(null);
@@ -545,7 +553,11 @@ export function PopupApp() {
         onOpenSettings={openSettings}
         onRefresh={handleRefresh}
         onToggleActionsCollapsed={() => {
-          setAreHeaderActionsCollapsed((current) => !current);
+          setAreHeaderActionsCollapsed((current) => {
+            const next = !current;
+            writePopupCollapsePreference("headerActions", next);
+            return next;
+          });
         }}
         onToggleThemeMode={handleToggleThemeMode}
       />
@@ -654,7 +666,15 @@ export function PopupApp() {
       <PopupFooterSection
         headerDetail={popupModel.headerDetail}
         hasFeaturedProviderCards={hasFeaturedProviderCards}
+        isCollapsed={isFooterCollapsed}
         runtimeI18n={runtimeI18n}
+        onToggleCollapsed={() => {
+          setIsFooterCollapsed((current) => {
+            const next = !current;
+            writePopupCollapsePreference("footerInfo", next);
+            return next;
+          });
+        }}
       />
     </main>
   );
