@@ -20,6 +20,7 @@ import {
   resolveAppTextDirection,
   syncRuntimeLocaleAttributes,
 } from "./i18n";
+import type { RuntimeMessageId } from "./i18n";
 import {
   buildOperatorWorkspaceLocalizedCopy,
   buildPopupLocalizedCopy,
@@ -30,7 +31,6 @@ import {
   getProviderDiagnosticPresentation,
 } from "./localized-copy";
 import {
-  RUNTIME_SHELL_MESSAGE_IDS,
   getRuntimeMessageOverrideIds,
 } from "./runtime-message-catalogs";
 
@@ -127,11 +127,15 @@ describe("runtime i18n", () => {
     }
   });
 
-  it("keeps first shell pilot overrides explicit for every non-English locale", () => {
+  it("keeps runtime overrides explicit for every non-English locale", () => {
+    const runtimeMessageIds = Object.keys(
+      getRuntimeMessageCatalog("en"),
+    ) as RuntimeMessageId[];
+
     for (const locale of SUPPORTED_APP_LOCALES.filter((locale) => locale !== "en")) {
       const overrideIds = new Set(getRuntimeMessageOverrideIds(locale));
 
-      for (const messageId of RUNTIME_SHELL_MESSAGE_IDS) {
+      for (const messageId of runtimeMessageIds) {
         expect(overrideIds.has(messageId), `${locale} missing ${messageId}`).toBe(
           true,
         );

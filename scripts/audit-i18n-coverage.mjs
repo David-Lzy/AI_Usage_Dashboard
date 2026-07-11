@@ -20,6 +20,10 @@ const runtimeOverrideFiles = [
     relativePath: "src/shared/runtime-message-catalog-data/overrides-other.ts",
     variableName: "OTHER_RUNTIME_MESSAGE_OVERRIDES",
   },
+  {
+    relativePath: "src/shared/runtime-message-catalog-data/overrides-completion.ts",
+    variableName: "COMPLETION_RUNTIME_MESSAGE_OVERRIDES",
+  },
 ];
 
 const structuredCopyTargets = [
@@ -518,8 +522,13 @@ async function readRuntimeCoverage(locales) {
       const copyKeys = extractObjectProperties(
         assertObjectExpression(localeNode, `${overrideFile.variableName}.${locale}`),
       ).keys();
+      const mergedKeys = localeOverrides.get(locale) ?? new Set();
 
-      localeOverrides.set(locale, new Set(copyKeys));
+      for (const copyKey of copyKeys) {
+        mergedKeys.add(copyKey);
+      }
+
+      localeOverrides.set(locale, mergedKeys);
     }
   }
 

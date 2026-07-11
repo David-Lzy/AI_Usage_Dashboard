@@ -45,9 +45,10 @@ Keep manifest and runtime localization on one stable naming contract so later co
 - `manifest_action_default_title`
   - maps to manifest `action.default_title`
 
-## Shipped Runtime IDs Through Phase 367
+## Shipped Runtime IDs Through Phase 648
 
-Runtime localization now exists for one broader but still partial manifest plus runtime pilot slice. Current shipped groups are:
+Runtime localization now exists for the stable manifest plus runtime message id
+catalog across all 14 shipped locales. Current shipped groups are:
 
 - app shell status ids:
   - `app.loading.*`
@@ -130,7 +131,12 @@ Instead, these localized surfaces now ship through shared structured builders in
   - short adapter diagnostic summaries generated from typed params
   - raw adapter warning bodies kept outside translated message ids
 
-This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still making the broader `en + zh-CN` reviewed pilot executable. `Phase 367` expands the runtime catalog shape to 14 locales with English fallback for non-reviewed runtime copy, so key completeness is now enforced separately from translation-review completeness.
+This keeps `src/shared/i18n.ts` focused on stable app-shell ids while larger
+localized surfaces can continue to use typed structured builders. `Phase 367`
+expanded the runtime catalog shape to 14 locales with English fallback for
+non-reviewed runtime copy. `Phase 648` replaced the remaining runtime catalog
+fallback ids with explicit shipped-locale entries, so key completeness and
+explicit runtime translation coverage are both enforced for managed runtime ids.
 
 ## Locale Preference Contract
 
@@ -160,28 +166,28 @@ This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still maki
 - `ar` resolves to `rtl`; all other shipped locales resolve to `ltr`
 - popup and sidepanel HTML entry roots declare notranslate so browser translation overlays do not obscure already-localized extension UI
 - preview and QA can still force `?app-dir=rtl` or `?app-dir=ltr`, and `Phase 367` adds `?app-locale=<supported-locale>` for extension-window visual checks without mutating saved settings
-- `Phase 368` keeps English fallback text readable under RTL roots with shared typography-level bidirectional isolation; this is a rendering guard, not a replacement for reviewed Arabic runtime translations
+- `Phase 368` added bidirectional isolation for fallback rendering; after `Phase 648`, shipped runtime message ids have explicit Arabic entries, but the isolation guard remains useful for structured-copy base branches and raw evidence boundaries
 - `Phase 369` validates RDP extension-window `--locale` values against the shipped runtime locale tags before opening a Chrome window
 
 ## Runtime Direction
 
-- runtime React localization is now partially shipped, not fully rolled out
+- runtime React localization is broadly shipped for stable runtime ids; some structured-copy surfaces still use base branches or documented raw evidence boundaries
 - runtime message catalog public helpers now live in `src/shared/runtime-message-catalogs.ts`, internal catalog data lives in `src/shared/runtime-message-catalog-data/`, and `src/shared/i18n.ts` owns the locale registry, locale resolution, text direction, formatting, and public runtime helper functions
-- runtime locale architecture now covers 14 locales; `zh-CN` has broad reviewed non-English runtime copy, every other non-English locale in the 14-locale set has a first shell-level runtime pilot, and deeper runtime copy currently relies on English fallback until a translation-review phase replaces those entries
-- `RUNTIME_SHELL_MESSAGE_IDS` and focused i18n tests guard explicit first-shell override coverage for every non-English runtime locale
+- runtime locale architecture now covers 14 locales; shipped runtime message ids have explicit entries for every non-English locale in the 14-locale set
+- focused i18n tests guard explicit runtime override coverage for every non-English runtime locale
 - runtime document roots now sync `lang` and `dir` for popup, sidepanel, and full-page surfaces
 - the current localized slice covers:
   - popup shell
   - popup explanatory copy
   - dashboard shell
-  - the first settings-shell slice
+  - the settings runtime catalog
   - deeper settings helper copy
   - provider-detail shell and static copy
   - operator-workspace shell copy
   - store-screenshot runtime helper copy
   - screenshot-adjacent submission-support captions in the store seed helper route
   - shared quick theme-toggle labels
-- raw provider source-truth detail strings and deeper operator evidence/export payload copy still remain outside the shipped localized slice
+- raw provider source-truth detail strings and deeper operator evidence/export payload copy still remain outside managed runtime localization
 - vendor-owned provider-page text stays outside the managed localization catalog
 - locale-aware formatting also stays outside raw message ids so generated values can be formatted per locale without multiplying message ids
 - Chrome manifest message ids are guarded by `npm run i18n:check`, which now derives Chrome catalog directories from `APP_LOCALE_METADATA`, verifies the RDP capture helper locale list against `SUPPORTED_APP_LOCALES`, and checks the 14-locale Chrome Web Store listing draft structure
@@ -213,9 +219,9 @@ This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still maki
 
 - baseline locale:
   - `en`
-- reviewed runtime pilot locale:
+- first reviewed broad runtime locale:
   - `zh-CN`
-- first shell-level runtime pilot locales:
+- explicit runtime catalog locales:
   - `zh-TW`
   - `ja`
   - `ko`
@@ -228,6 +234,9 @@ This keeps `src/shared/i18n.ts` focused on stable app-shell ids while still maki
   - `ar`
   - `hi`
   - `id`
+- structured-copy base branches may still use `en` plus `zh-CN` with explicit
+  records for other shipped locales depending on the module; audit this with
+  `npm run i18n:audit`
 - shipped architecture and manifest locale set:
   - `en`
   - `zh-CN`
