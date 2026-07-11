@@ -557,7 +557,7 @@ body.popup-page .popup-header--surface-collapsed {
 .popup-provider-card__title-row {
   display: flex;
   align-items: center;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: flex-start;
   gap: var(--app-space-2);
   min-width: 0;
@@ -566,18 +566,21 @@ body.popup-page .popup-header--surface-collapsed {
 .popup-provider-card__header-actions {
   display: inline-flex;
   align-items: center;
+  flex-wrap: wrap;
   flex: 0 1 auto;
   gap: var(--app-space-1);
+  justify-content: flex-end;
   min-width: 0;
+  max-inline-size: 100%;
 }
 
 .popup-provider-card__header-action {
   min-height: 30px;
-  max-width: 7rem;
+  max-width: none;
   padding-inline: var(--app-space-2);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow: visible;
+  text-align: center;
+  white-space: normal;
 }
 
 .popup-provider-card__status {
@@ -765,7 +768,7 @@ body.popup-page .popup-header--surface-collapsed {
 }
 
 .popup-provider-card__provider {
-  flex: 1 1 auto;
+  flex: 1 1 10rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

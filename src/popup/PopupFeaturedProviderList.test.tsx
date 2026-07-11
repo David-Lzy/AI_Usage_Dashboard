@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
@@ -5,6 +7,11 @@ import { createRuntimeI18n } from "../shared/i18n";
 import { SAMPLE_APP_STATE } from "../shared/constants";
 import { buildPopupViewModel } from "./view-models";
 import { PopupFeaturedProviderList } from "./PopupFeaturedProviderList";
+
+const popupThemeCss = readFileSync(
+  new URL("./popup-theme.css", import.meta.url),
+  "utf8",
+);
 
 function renderFeaturedList(
   cards = buildPopupViewModel(SAMPLE_APP_STATE).featuredProviderCards,
@@ -138,5 +145,17 @@ describe("PopupFeaturedProviderList", () => {
     expect(html).toContain("Grant access");
     expect(html).not.toContain("popup-provider-card__progress");
     expect(html).not.toContain(">41%<");
+  });
+
+  it("allows localized header actions to wrap instead of clipping translated labels", () => {
+    expect(popupThemeCss).toContain(".popup-provider-card__title-row {");
+    expect(popupThemeCss).toContain("flex-wrap: wrap;");
+    expect(popupThemeCss).toContain(".popup-provider-card__header-actions {");
+    expect(popupThemeCss).toContain("max-inline-size: 100%;");
+    expect(popupThemeCss).toContain(".popup-provider-card__header-action {");
+    expect(popupThemeCss).toContain("max-width: none;");
+    expect(popupThemeCss).toContain("overflow: visible;");
+    expect(popupThemeCss).toContain("white-space: normal;");
+    expect(popupThemeCss).not.toContain("max-width: 7rem;");
   });
 });

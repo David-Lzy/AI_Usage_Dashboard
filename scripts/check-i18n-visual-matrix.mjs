@@ -510,14 +510,21 @@ async function collectStickyOverlapSnapshot(page, routeId) {
   const snapshots = [];
 
   for (const anchor of anchors) {
-    const locator = page.locator(anchor).first();
+    const exists = await page.evaluate((selector) => {
+      return Boolean(document.querySelector(selector));
+    }, anchor);
 
-    if ((await locator.count()) === 0) {
+    if (!exists) {
       continue;
     }
 
-    await locator.scrollIntoViewIfNeeded();
-    await page.waitForTimeout(150);
+    await page.evaluate((selector) => {
+      document.querySelector(selector)?.scrollIntoView({
+        block: "start",
+        inline: "nearest",
+      });
+    }, anchor);
+    await page.waitForTimeout(250);
 
     snapshots.push(
       await page.evaluate((selector) => {
