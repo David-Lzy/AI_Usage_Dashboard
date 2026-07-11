@@ -137,7 +137,9 @@ The generated zip is written under `release/`.
 Pushes to `main` run GitHub Actions checks and upload temporary Chrome and
 Firefox package artifacts from the workflow run. Version tags such as
 `v0.1.0-rc.28` create a GitHub Release with Chrome and Firefox package zips plus
-SHA-256 checksums.
+SHA-256 checksums. When the Chrome Web Store API variables and service-account
+secret are configured, version tags can also upload the Chrome zip to the
+Chrome Web Store and submit it for review automatically.
 
 For everyday Chrome users, the Chrome Web Store listing remains the recommended
 install path. GitHub Chrome zips are intended for developer-mode loading,
@@ -146,7 +148,7 @@ ordinary Firefox installation needs a signed AMO/self-distribution package in a
 future release flow.
 
 Release push rules, browser-specific asset names, and the GitHub Release notes
-template are documented in
+template, including the optional Chrome Web Store API handoff, are documented in
 [Doc/Store/GitHub_Release_Push_And_Notes.md](./Doc/Store/GitHub_Release_Push_And_Notes.md).
 
 ## Current Release State

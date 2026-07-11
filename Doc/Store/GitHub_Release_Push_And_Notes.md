@@ -12,7 +12,8 @@ Freshness model:
 
 Status note:
 
-- this is the public guide for GitHub Actions package publishing and release notes
+- this is the public guide for GitHub Actions package publishing, Chrome Web
+  Store API submission, and release notes
 - private upload receipts, local package hashes, browser profile notes, and operator handoff details stay out of the public repository
 
 ## Release Flow
@@ -43,6 +44,43 @@ commit with the same package version.
 When a matching tag and GitHub Release already exist, a later `main` push may
 refresh the release notes from the current workflow template, but it must not
 re-upload public package assets built from `main`.
+
+## Chrome Web Store API Submission
+
+The tag workflow can optionally upload the Chrome package to the Chrome Web
+Store and submit it for review after the package build succeeds. This uses the
+Chrome Web Store API v2 with a Google Cloud service account linked to the
+publisher account.
+
+Required GitHub Actions repository variable values:
+
+- `CWS_AUTO_SUBMIT`: set to `true` to submit Chrome Web Store updates on
+  version tags.
+- `CWS_PUBLISHER_ID`: the Chrome Web Store publisher ID.
+- `CWS_EXTENSION_ID`: the public extension ID.
+
+Required GitHub Actions repository secret:
+
+- `CWS_SERVICE_ACCOUNT_JSON`: the full JSON key for the linked service account.
+
+Optional GitHub Actions repository variable values:
+
+- `CWS_PUBLISH_TYPE`: `DEFAULT_PUBLISH` by default. Use `STAGED_PUBLISH` when
+  the reviewed submission should wait for a later manual publish action.
+- `CWS_DEPLOY_PERCENTAGE`: optional integer from `0` to `100` for the initial
+  rollout percentage.
+- `CWS_BLOCK_ON_WARNINGS`: defaults to `true`, causing API warnings to fail the
+  submission instead of being ignored.
+
+Manual workflow runs expose a `submit_chrome_web_store` checkbox. Use it only
+when the current package version is ready for Chrome Web Store review.
+
+Chrome Web Store API submission does not bypass review. The `publish` call
+submits the uploaded package for review; public availability still follows the
+store review result and the listing's existing visibility settings.
+
+Do not commit service-account JSON, upload receipts, package hashes, or Chrome
+Web Store account screenshots.
 
 ## Package Asset Names
 

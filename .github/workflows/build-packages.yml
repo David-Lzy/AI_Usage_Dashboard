@@ -7,6 +7,12 @@ on:
     tags:
       - "v*"
   workflow_dispatch:
+    inputs:
+      submit_chrome_web_store:
+        description: "Upload the Chrome package to Chrome Web Store and submit it for review"
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -256,3 +262,39 @@ jobs:
               --notes-file release-notes.md \
               "${release_flags[@]}"
           fi
+
+  chrome-web-store:
+    name: Submit Chrome Web Store
+    needs: build
+    if: >-
+      (github.ref_type == 'tag' && startsWith(github.ref_name, 'v') && vars.CWS_AUTO_SUBMIT == 'true') ||
+      (github.event_name == 'workflow_dispatch' && inputs.submit_chrome_web_store)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Download Chrome package
+        uses: actions/download-artifact@v4
+        with:
+          name: chrome-extension-package
+          path: release-artifacts/chrome-extension-package
+
+      - name: Upload and submit Chrome Web Store package
+        env:
+          CWS_SERVICE_ACCOUNT_JSON: ${{ secrets.CWS_SERVICE_ACCOUNT_JSON }}
+          CWS_PUBLISHER_ID: ${{ vars.CWS_PUBLISHER_ID }}
+          CWS_EXTENSION_ID: ${{ vars.CWS_EXTENSION_ID }}
+          CWS_PUBLISH_TYPE: ${{ vars.CWS_PUBLISH_TYPE || 'DEFAULT_PUBLISH' }}
+          CWS_DEPLOY_PERCENTAGE: ${{ vars.CWS_DEPLOY_PERCENTAGE }}
+          CWS_BLOCK_ON_WARNINGS: ${{ vars.CWS_BLOCK_ON_WARNINGS || 'true' }}
+          CWS_CHROME_PACKAGE: release-artifacts/chrome-extension-package/ai-usage-dashboard-${{ needs.build.outputs.package-version }}.zip
+        run: node ./scripts/chrome-web-store-submit.mjs --publish

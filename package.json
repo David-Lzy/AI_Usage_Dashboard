@@ -52,6 +52,8 @@
     "release:workflow:check": "./scripts/with-preferred-node.sh node ./scripts/check-release-workflow-contract.mjs",
     "release:check": "npm run release:version:check && npm run release:workflow:check && npm run i18n:check && npm run typecheck && npm run test && npm run build",
     "release:package": "./scripts/with-preferred-node.sh node ./scripts/package-release.mjs",
+    "release:cws:status": "./scripts/with-preferred-node.sh node ./scripts/chrome-web-store-submit.mjs --status",
+    "release:cws:submit": "./scripts/with-preferred-node.sh node ./scripts/chrome-web-store-submit.mjs --publish",
     "release": "npm run release:check && npm run release:package",
     "perf:extension:profile": "./scripts/with-preferred-node.sh node ./scripts/profile-extension-cpu.mjs",
     "phase27:check": "./scripts/with-preferred-node.sh node ./scripts/phase27-real-profile-check.mjs",

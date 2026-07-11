@@ -106,6 +106,41 @@ assertIncludes(
 );
 assertIncludes(
   workflow,
+  "submit_chrome_web_store",
+  "manual Chrome Web Store submission input",
+);
+assertIncludes(
+  workflow,
+  "name: Submit Chrome Web Store",
+  "Chrome Web Store submission job",
+);
+assertIncludes(
+  workflow,
+  "vars.CWS_AUTO_SUBMIT == 'true'",
+  "Chrome Web Store tag submission gate",
+);
+assertIncludes(
+  workflow,
+  "secrets.CWS_SERVICE_ACCOUNT_JSON",
+  "Chrome Web Store service account secret",
+);
+assertIncludes(
+  workflow,
+  "vars.CWS_PUBLISHER_ID",
+  "Chrome Web Store publisher variable",
+);
+assertIncludes(
+  workflow,
+  "vars.CWS_EXTENSION_ID",
+  "Chrome Web Store extension variable",
+);
+assertIncludes(
+  workflow,
+  "node ./scripts/chrome-web-store-submit.mjs --publish",
+  "Chrome Web Store submit script",
+);
+assertIncludes(
+  workflow,
   "Normal Firefox installation still needs a signed AMO/self-distribution package",
   "Firefox unsigned package boundary note",
 );
@@ -129,6 +164,21 @@ assertIncludes(
   releaseGuide,
   "## Release Notes Template",
   "public release notes template",
+);
+assertIncludes(
+  releaseGuide,
+  "## Chrome Web Store API Submission",
+  "public Chrome Web Store API submission guide",
+);
+assertIncludes(
+  releaseGuide,
+  "CWS_SERVICE_ACCOUNT_JSON",
+  "public Chrome Web Store service account secret guide",
+);
+assertIncludes(
+  releaseGuide,
+  "does not bypass review",
+  "public Chrome Web Store review boundary",
 );
 assertIncludes(
   releaseGuide,
