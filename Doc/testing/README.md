@@ -22,10 +22,29 @@ Use the smallest command set that proves the change:
 ```sh
 npm run docs:check
 npm run i18n:check
+npm run i18n:audit
 npm run typecheck
 npm run test
 npm run build
 ```
+
+Localization or responsive UI changes that can vary by language length should
+also run the visual locale matrix against `dist/chrome/`:
+
+```sh
+npm run build
+npm run i18n:visual-check -- --smoke
+```
+
+Before release-oriented localization or layout changes, run the full matrix and
+fail on detected layout issues:
+
+```sh
+npm run i18n:visual-check -- --fail-on-issues
+```
+
+The visual matrix writes screenshots and JSON reports under ignored
+`.local/visual-checks/i18n/` paths.
 
 Surface browser QA that writes local JSON artifacts should use the aggregate
 command so privacy scanning runs immediately after capture:

@@ -140,6 +140,9 @@ expanded the runtime catalog shape to 14 locales with English fallback for
 non-reviewed runtime copy. `Phase 648` replaced the remaining runtime catalog
 fallback ids with explicit shipped-locale entries, so key completeness and
 explicit runtime translation coverage are both enforced for managed runtime ids.
+`Phase 649` added 14-locale structured copy for Custom JSON source cards while
+keeping user-defined labels, endpoint URLs, fetched summaries, and raw
+response-derived values unchanged.
 
 ## Locale Preference Contract
 
@@ -194,6 +197,10 @@ explicit runtime translation coverage are both enforced for managed runtime ids.
 - vendor-owned provider-page text stays outside the managed localization catalog
 - locale-aware formatting also stays outside raw message ids so generated values can be formatted per locale without multiplying message ids
 - Chrome manifest message ids are guarded by `npm run i18n:check`, which now derives Chrome catalog directories from `APP_LOCALE_METADATA`, verifies the RDP capture helper locale list against `SUPPORTED_APP_LOCALES`, and checks the 14-locale Chrome Web Store listing draft structure
+- runtime and structured-copy coverage can be audited with `npm run i18n:audit`;
+  the audit reports explicit runtime message coverage, structured copy locale
+  coverage, protected raw evidence fields, and layout-stress locales for manual
+  review
 - operator workspace and store-screenshot helper localization records are historical private implementation notes under ignored `.local/` history; public localization contracts should stay focused on shipped user-facing copy and protected evidence fields
 - raw provider source-truth copy remains governed by [I18n_Raw_Provider_Source_Truth_Policy.md](./I18n_Raw_Provider_Source_Truth_Policy.md); `Phase 182` separates protected raw fields from provider-source display wrappers, and `Phase 183` localizes those wrappers through `ProviderSourceDisplayCopy` plus `buildProviderSourceDisplayLocalizedCopy` while preserving raw adapter evidence fields
 - adapter diagnostic body localization uses typed reason codes for user-facing presentation while keeping raw adapter bodies outside translated message ids
@@ -258,3 +265,44 @@ explicit runtime translation coverage are both enforced for managed runtime ids.
 - Chrome `_locales` directory names use Chrome format such as `zh_CN`, `zh_TW`, `es_419`, and `pt_BR`; runtime locale tags use BCP-style tags such as `zh-CN`, `zh-TW`, `es-419`, and `pt-BR`
 - `npm run i18n:check` is the drift gate for runtime locale tags, metadata `chromeLocale` values, manifest catalog ids, the RDP capture locale helper, and the store listing localization draft structure
 - translation review and visual QA should follow the public localization contracts in this directory plus private local QA notes when browser-profile evidence is required
+
+## Cross-Language Visual QA
+
+`npm run i18n:visual-check` runs a local Playwright/Chrome visual matrix against
+the built Chrome extension output in `dist/chrome/`. It serves popup,
+dashboard, and settings routes with locale and direction preview parameters,
+captures screenshots, and writes a JSON summary.
+
+The default matrix covers:
+
+- routes:
+  - popup
+  - dashboard full page
+  - settings full page
+- widths:
+  - `360px`
+  - `430px`
+  - `720px`
+  - `1280px`
+- all 14 shipped runtime locales
+
+The report flags:
+
+- document horizontal overflow
+- visible elements extending outside the viewport
+- controls whose text scrolls inside the control
+- Settings sticky-header/section-anchor overlap
+- runtime direction mismatches such as Arabic rendering outside RTL
+
+Use `--smoke` for a small `en`, `de`, and `ar` subset, and
+`--fail-on-issues` when a release or layout-hardening change should fail on any
+flagged issue:
+
+```sh
+npm run build
+npm run i18n:visual-check -- --smoke
+npm run i18n:visual-check -- --fail-on-issues
+```
+
+Screenshots and visual reports are local QA evidence and are written under
+ignored `.local/visual-checks/i18n/` paths. Do not commit them.
