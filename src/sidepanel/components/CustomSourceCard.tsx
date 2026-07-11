@@ -7,6 +7,8 @@ import type {
   ProgressItemsBySurface,
 } from "../../providers/types";
 import { CustomSourceProgressItemList } from "../../shared/components/CustomSourceProgressItemList";
+import type { CustomSourceCardCopy } from "../../shared/custom-source-card-localized-copy";
+import { getCustomSourceCardCopy } from "../../shared/custom-source-card-localized-copy";
 import type { CustomSourceViewModel } from "../../shared/custom-source-view-models";
 import { createRuntimeI18n } from "../../shared/i18n";
 import { StatusBadge } from "./StatusBadge";
@@ -25,22 +27,10 @@ type CustomSourceCardProps = {
   onRefresh: () => void;
 };
 
-function buildCustomSourceCopy(localePreference: AppLocalePreference) {
-  const zh = localePreference === "zh-CN";
-
-  return {
-    custom: zh ? "自定义" : "Custom",
-    openSettings: zh ? "设置" : "Settings",
-    refresh: zh ? "刷新" : "Refresh",
-    noSnapshot: zh ? "尚未同步到可显示的数据。" : "No synced data yet.",
-    sourceContract: zh ? "自定义 JSON 端点" : "Custom JSON endpoint",
-    endpoint: zh ? "端点" : "Endpoint",
-    syncEvery: zh ? "同步间隔" : "Sync interval",
-    minutes: zh ? "分钟" : "min",
-  };
-}
-
-function getUsageLabel(source: CustomSourceViewModel): string {
+function getUsageLabel(
+  source: CustomSourceViewModel,
+  copy: CustomSourceCardCopy,
+): string {
   if (source.usageSummary) {
     return source.usageSummary;
   }
@@ -50,19 +40,19 @@ function getUsageLabel(source: CustomSourceViewModel): string {
     const unit = metric.unit;
 
     if (metric.remaining !== null && metric.total !== null) {
-      return `${metric.remaining} / ${metric.total} ${unit} remaining`;
+      return `${metric.remaining} / ${metric.total} ${unit} ${copy.remaining}`;
     }
 
     if (metric.used !== null && metric.total !== null) {
-      return `${metric.used} / ${metric.total} ${unit} used`;
+      return `${metric.used} / ${metric.total} ${unit} ${copy.used}`;
     }
 
     if (metric.remaining !== null) {
-      return `${metric.remaining} ${unit} remaining`;
+      return `${metric.remaining} ${unit} ${copy.remaining}`;
     }
 
     if (metric.used !== null) {
-      return `${metric.used} ${unit} tracked`;
+      return `${metric.used} ${unit} ${copy.tracked}`;
     }
   }
 
@@ -85,8 +75,8 @@ export function CustomSourceCard({
     localePreference,
     typeof window !== "undefined" ? window : undefined,
   );
-  const copy = buildCustomSourceCopy(localePreference);
-  const usageLabel = getUsageLabel(source);
+  const copy = getCustomSourceCardCopy(i18n.resolvedLocale);
+  const usageLabel = getUsageLabel(source, copy);
   const hasProgressItems = source.progressItems.length > 0;
   const hasFacts = source.facts.length > 0;
 
@@ -110,7 +100,7 @@ export function CustomSourceCard({
       <div className="provider-card__body">
         <section
           className="provider-card__summary"
-          aria-label={`${source.label} custom source summary`}
+          aria-label={`${source.label} ${copy.summaryAriaSuffix}`}
         >
           <p className="provider-card__usage-label">
             {usageLabel || copy.noSnapshot}
@@ -143,14 +133,14 @@ export function CustomSourceCard({
           </section>
         ) : null}
 
-        <div className="provider-card__meta" aria-label="Custom source context">
+        <div className="provider-card__meta" aria-label={copy.contextAria}>
           <span className="meta-chip">{copy.custom}</span>
           <span className="meta-chip">{source.lastSyncLabel}</span>
           <span className="meta-chip">
             {copy.syncEvery} {source.refreshIntervalMinutes} {copy.minutes}
           </span>
           {source.stale ? (
-            <span className="meta-chip meta-chip--warning">Stale</span>
+            <span className="meta-chip meta-chip--warning">{copy.stale}</span>
           ) : null}
           {source.warningReason ? (
             <span className="meta-chip meta-chip--warning">

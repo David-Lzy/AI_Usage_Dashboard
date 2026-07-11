@@ -130,6 +130,9 @@ Instead, these localized surfaces now ship through shared structured builders in
   - known `adapter.*` diagnostic labels
   - short adapter diagnostic summaries generated from typed params
   - raw adapter warning bodies kept outside translated message ids
+- custom JSON source cards:
+  - card action labels, endpoint/sync labels, empty-state copy, warning chips, and aria labels
+  - user-defined source labels, endpoint URLs, descriptions, fetched summaries, and raw response-derived values remain unchanged
 
 This keeps `src/shared/i18n.ts` focused on stable app-shell ids while larger
 localized surfaces can continue to use typed structured builders. `Phase 367`

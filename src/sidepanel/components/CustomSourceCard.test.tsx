@@ -75,12 +75,13 @@ function createCustomSourceState(): AppState {
 }
 
 describe("CustomSourceCard", () => {
-  it("renders custom source status, progress, facts, and safe endpoint context", () => {
+  function renderCard(localePreference: AppState["settings"]["locale"]) {
     const state = createCustomSourceState();
     const [source] = getVisibleCustomSources(state);
-    const html = renderToStaticMarkup(
+
+    return renderToStaticMarkup(
       <CustomSourceCard
-        localePreference="en"
+        localePreference={localePreference}
         progressColorBands={state.settings.progressColorBands}
         progressDisplayStyle="line"
         progressItemsBySurface={state.settings.progressItemsBySurface}
@@ -91,6 +92,10 @@ describe("CustomSourceCard", () => {
         onRefresh={() => {}}
       />,
     );
+  }
+
+  it("renders custom source status, progress, facts, and safe endpoint context", () => {
+    const html = renderCard("en");
 
     expect(html).toContain('data-custom-source-id="custom:build_quota"');
     expect(html).toContain(">Build Quota Live<");
@@ -100,5 +105,26 @@ describe("CustomSourceCard", () => {
     expect(html).toContain(">Healthy<");
     expect(html).toContain("https://example.com/ai-usage.json");
     expect(html).toContain('data-custom-source-progress-item="primary"');
+  });
+
+  it("localizes static custom source card labels without translating user data", () => {
+    const zhHtml = renderCard("zh-CN");
+    const deHtml = renderCard("de");
+
+    expect(zhHtml).toContain(">自定义<");
+    expect(zhHtml).toContain(">设置<");
+    expect(zhHtml).toContain(">刷新<");
+    expect(zhHtml).toContain("自定义 JSON 端点");
+    expect(zhHtml).toContain(">Live custom usage<");
+    expect(zhHtml).toContain(">28% daily quota remaining<");
+    expect(zhHtml).toContain("https://example.com/ai-usage.json");
+
+    expect(deHtml).toContain(">Eigene Quelle<");
+    expect(deHtml).toContain(">Einstellungen<");
+    expect(deHtml).toContain(">Aktualisieren<");
+    expect(deHtml).toContain("Eigener JSON-Endpunkt");
+    expect(deHtml).toContain(">Live custom usage<");
+    expect(deHtml).toContain(">28% daily quota remaining<");
+    expect(deHtml).toContain("https://example.com/ai-usage.json");
   });
 });

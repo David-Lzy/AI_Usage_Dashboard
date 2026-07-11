@@ -120,11 +120,9 @@ const structuredCopyTargets = [
   },
   {
     surface: "custom JSON sources",
-    relativePath: "src/sidepanel/components/CustomSourceCard.tsx",
-    constants: [],
+    relativePath: "src/shared/custom-source-card-localized-copy.ts",
+    constants: ["CUSTOM_SOURCE_CARD_COPY"],
     baseLocales: [],
-    note:
-      "Uses an inline zh-CN/English helper today; no 14-locale structured-copy module exists yet.",
   },
 ];
 
