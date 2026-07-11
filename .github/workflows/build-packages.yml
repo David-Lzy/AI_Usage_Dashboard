@@ -175,7 +175,7 @@ jobs:
           ### Notes
 
           - Chrome Web Store remains the recommended install path for everyday Chrome users.
-          - This release includes Settings CPU loop fixes, provider toolbar favicon fallback hardening, popup/background performance profiling, first-run empty-state fixes, custom HTTP/HTTPS JSON sources, and progress color gradient controls.
+          - This release expands runtime and structured-copy localization across all 14 shipped locales, adds repeatable locale visual QA for popup/dashboard/settings, and improves popup provider-card layout so longer translated actions wrap instead of clipping.
           NOTES
 
       - name: Prepare release assets
