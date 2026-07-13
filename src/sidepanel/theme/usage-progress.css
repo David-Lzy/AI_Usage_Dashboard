@@ -427,6 +427,20 @@
   align-items: start;
 }
 
+.usage-window-progress-list--single-circular,
+.provider-progress-item-list--single-circular {
+  grid-template-columns: minmax(0, 1fr);
+  justify-content: center;
+}
+
+.usage-window-progress-list--single-circular
+  > .usage-window-progress-list__item,
+.provider-progress-item-list--single-circular
+  > .provider-progress-item-list__item {
+  width: min(100%, 240px);
+  justify-self: center;
+}
+
 .provider-progress-item-list__item {
   display: grid;
   gap: var(--app-space-2);

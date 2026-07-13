@@ -26,6 +26,16 @@ export const PROGRESS_DISPLAY_STYLE_OPTIONS: Array<{
   },
 ];
 
+export function isCircularProgressDisplayStyle(
+  displayStyle: ProgressDisplayStyle,
+): displayStyle is "circle" | "circle-soft" | "circle-gauge" {
+  return (
+    displayStyle === "circle" ||
+    displayStyle === "circle-soft" ||
+    displayStyle === "circle-gauge"
+  );
+}
+
 export function normalizeProgressDisplayStyle(
   value: unknown,
   fallback: ProgressDisplayStyle = "line",

@@ -7,6 +7,7 @@ import {
   DEFAULT_PROGRESS_COLOR_BANDS,
   DEFAULT_PROGRESS_THICKNESS_PX,
 } from "../../shared/progress-appearance";
+import { isCircularProgressDisplayStyle } from "../../shared/progress-display";
 import type { RuntimeI18n } from "../../shared/i18n";
 import { buildRuntimeCommonCopy } from "../../shared/i18n";
 import type { ProviderViewModel } from "../view-models";
@@ -98,9 +99,15 @@ export function UsageWindowProgressList({
     return null;
   }
 
+  const hasSingleCircularProgressItem =
+    windows.length === 1 && isCircularProgressDisplayStyle(displayStyle);
+
   return (
     <div
-      className={`usage-window-progress-list usage-window-progress-list--${density} usage-window-progress-list--${displayStyle}`}
+      className={`usage-window-progress-list usage-window-progress-list--${density} usage-window-progress-list--${displayStyle}${hasSingleCircularProgressItem ? " usage-window-progress-list--single-circular" : ""}`}
+      data-single-circular-progress={
+        hasSingleCircularProgressItem ? "" : undefined
+      }
       data-usage-window-progress-list=""
     >
       {windows.map((usageWindow) => (

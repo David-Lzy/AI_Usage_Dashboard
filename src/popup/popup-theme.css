@@ -698,6 +698,13 @@ body.popup-page .popup-header--surface-collapsed {
   gap: var(--app-space-3) var(--app-space-2);
 }
 
+.popup-provider-card__progress
+  .provider-progress-item-list--single-circular,
+.popup-provider-card__progress
+  .usage-window-progress-list--single-circular {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .popup-provider-card__progress--circle .usage-progress--circle,
 .popup-provider-card__progress--circle-soft .usage-progress--circle,
 .popup-provider-card__progress--circle-gauge .usage-progress--circle {

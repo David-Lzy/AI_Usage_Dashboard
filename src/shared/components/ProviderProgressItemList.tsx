@@ -14,6 +14,7 @@ import { buildRuntimeCommonCopy } from "../i18n";
 import { selectVisibleProviderProgressItems } from "../provider-progress-item-selection";
 import type { ProviderProgressItem } from "../provider-progress-items";
 import type { ProviderViewModel } from "../provider-view-models";
+import { isCircularProgressDisplayStyle } from "../progress-display";
 import { formatPopupProgressItemLabel } from "./provider-progress-compact-labels";
 import { UsageProgress } from "./UsageProgress";
 
@@ -149,10 +150,11 @@ export function ProviderProgressItemList({
   }
 
   const isPopupCircularLayout =
-    surface === "popup" &&
-    (displayStyle === "circle" ||
-      displayStyle === "circle-soft" ||
-      displayStyle === "circle-gauge");
+    surface === "popup" && isCircularProgressDisplayStyle(displayStyle);
+  const hasSingleCircularProgressItem =
+    isCircularProgressDisplayStyle(displayStyle) &&
+    visibleProgressItems.length === 1 &&
+    visibleProgressItems[0]?.availability === "progress";
   const popupCircularItemsPerRow = popupCircularProgressItemsPerRow ?? 2;
   const listStyle = isPopupCircularLayout
     ? ({
@@ -162,7 +164,10 @@ export function ProviderProgressItemList({
 
   return (
     <div
-      className={`provider-progress-item-list provider-progress-item-list--${density} provider-progress-item-list--${displayStyle}`}
+      className={`provider-progress-item-list provider-progress-item-list--${density} provider-progress-item-list--${displayStyle}${hasSingleCircularProgressItem ? " provider-progress-item-list--single-circular" : ""}`}
+      data-single-circular-progress={
+        hasSingleCircularProgressItem ? "" : undefined
+      }
       data-popup-circular-items-per-row={
         isPopupCircularLayout ? popupCircularItemsPerRow : undefined
       }

@@ -11,6 +11,7 @@ import {
   normalizeProgressThicknessPx,
   resolveProgressColorForAppearance,
 } from "../progress-appearance";
+import { isCircularProgressDisplayStyle } from "../progress-display";
 import { UsageProgressRing } from "./UsageProgressRing";
 
 type UsageProgressProps = {
@@ -28,16 +29,6 @@ type UsageProgressProps = {
   valueText?: string;
   detail?: string | null;
 };
-
-function isCircularProgressStyle(
-  displayStyle: ProgressDisplayStyle,
-): displayStyle is "circle" | "circle-soft" | "circle-gauge" {
-  return (
-    displayStyle === "circle" ||
-    displayStyle === "circle-soft" ||
-    displayStyle === "circle-gauge"
-  );
-}
 
 export function UsageProgress({
   used,
@@ -77,7 +68,7 @@ export function UsageProgress({
   const isIndeterminate = roundedPercent === null;
   const progressValueLabel = isIndeterminate
     ? "Unknown"
-    : isCircularProgressStyle(displayStyle)
+    : isCircularProgressDisplayStyle(displayStyle)
       ? `${roundedPercent}%`
       : (valueLabel ??
         (valueKind === "remaining"

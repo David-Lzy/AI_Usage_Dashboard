@@ -70,4 +70,27 @@ describe("PopupCustomSourceList", () => {
     expect(html).toContain(">Settings<");
     expect(html).toContain('data-custom-source-progress-item="primary"');
   });
+
+  it("centers a single custom-source circular quota item", () => {
+    const html = renderToStaticMarkup(
+      <PopupCustomSourceList
+        ariaLabel="Custom sources"
+        sources={[CUSTOM_SOURCE]}
+        i18n={createRuntimeI18n("en")}
+        progressColorBands={SAMPLE_APP_STATE.settings.progressColorBands}
+        popupCircularProgressItemsPerRow={2}
+        progressDisplayStyle="circle-soft"
+        progressItemsBySurface={SAMPLE_APP_STATE.settings.progressItemsBySurface}
+        progressThicknessPx={SAMPLE_APP_STATE.settings.progressThicknessPx}
+        settingsFocus={{
+          kind: "section",
+          sectionId: "settings-provider-display",
+        }}
+        onOpenSettings={() => {}}
+      />,
+    );
+
+    expect(html).toContain("provider-progress-item-list--single-circular");
+    expect(html).toContain('data-single-circular-progress=""');
+  });
 });

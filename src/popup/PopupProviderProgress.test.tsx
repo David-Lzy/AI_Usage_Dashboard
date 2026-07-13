@@ -92,6 +92,8 @@ describe("PopupProviderProgress", () => {
     );
 
     expect(html).toContain("provider-progress-item-list--circle");
+    expect(html).toContain("provider-progress-item-list--single-circular");
+    expect(html).toContain('data-single-circular-progress=""');
     expect(html).toContain("week, reset: Wed 12:30");
     expect(html).not.toContain("Weekly usage window");
     expect(html).toContain("--usage-progress-percent:35%");
@@ -188,6 +190,7 @@ describe("PopupProviderProgress", () => {
     expect(html).toContain('aria-label="week"');
     expect(html).toContain("--usage-progress-thickness:10px");
     expect(html).toContain("--usage-progress-color:#8A4B00");
+    expect(html).not.toContain("provider-progress-item-list--single-circular");
   });
 
   it("renders nothing for empty percent-only providers", () => {
@@ -262,6 +265,43 @@ describe("PopupProviderProgress", () => {
     expect(html).toContain('aria-valuenow="83"');
     expect(html).toContain("--usage-progress-ring-fill-arc:150.19");
     expect(html).toContain('stroke-dasharray="140.19 301.59"');
+  });
+
+  it("keeps multiple circular items in the configured responsive grid", () => {
+    const html = renderPopupProviderProgress(
+      createProvider({
+        usageWindows: [
+          {
+            label: "Weekly usage window",
+            normalizedLabel: "Weekly usage window",
+            kind: "weekly",
+            modelLabel: null,
+            quotaUnit: "percent",
+            used: 17,
+            remaining: 83,
+            total: 100,
+            resetAt: null,
+            resetLabel: null,
+          },
+          {
+            label: "GPT-5.3-Codex-Spark",
+            normalizedLabel: "GPT-5.3-Codex-Spark",
+            kind: "unknown",
+            modelLabel: "GPT-5.3-Codex-Spark",
+            quotaUnit: "percent",
+            used: 9,
+            remaining: 91,
+            total: 100,
+            resetAt: null,
+            resetLabel: null,
+          },
+        ],
+      }),
+    );
+
+    expect(html.match(/role="progressbar"/g)).toHaveLength(2);
+    expect(html).not.toContain("provider-progress-item-list--single-circular");
+    expect(html).not.toContain('data-single-circular-progress=""');
   });
 
   it("applies the popup circular row count only to circular styles", () => {

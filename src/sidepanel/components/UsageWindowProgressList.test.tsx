@@ -117,5 +117,32 @@ describe("UsageWindowProgressList", () => {
     expect(html).toContain(">37%<");
     expect(html).toContain(">35%<");
     expect(html).not.toContain(">37% remaining<");
+    expect(html).not.toContain("usage-window-progress-list--single-circular");
+  });
+
+  it("marks a single circular usage window for centered layout", () => {
+    const html = renderToStaticMarkup(
+      <UsageWindowProgressList
+        i18n={testI18n}
+        displayStyle="circle-soft"
+        windows={[
+          {
+            label: "Weekly usage window",
+            normalizedLabel: "Weekly usage window",
+            kind: "weekly",
+            modelLabel: null,
+            quotaUnit: "percent",
+            used: 27,
+            remaining: 73,
+            total: 100,
+            resetAt: null,
+            resetLabel: null,
+          },
+        ]}
+      />,
+    );
+
+    expect(html).toContain("usage-window-progress-list--single-circular");
+    expect(html).toContain('data-single-circular-progress=""');
   });
 });

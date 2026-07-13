@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   DEFAULT_POPUP_PROGRESS_STYLE,
+  isCircularProgressDisplayStyle,
   normalizeProgressDisplayStyle,
   PROGRESS_DISPLAY_STYLE_OPTIONS,
 } from "./progress-display";
@@ -23,5 +24,9 @@ describe("progress display preferences", () => {
     expect(normalizeProgressDisplayStyle("circle-soft")).toBe("circle-soft");
     expect(normalizeProgressDisplayStyle("circle-gauge")).toBe("circle-gauge");
     expect(normalizeProgressDisplayStyle("unknown", "circle")).toBe("circle");
+    expect(isCircularProgressDisplayStyle("line")).toBe(false);
+    expect(isCircularProgressDisplayStyle("circle")).toBe(true);
+    expect(isCircularProgressDisplayStyle("circle-soft")).toBe(true);
+    expect(isCircularProgressDisplayStyle("circle-gauge")).toBe(true);
   });
 });
