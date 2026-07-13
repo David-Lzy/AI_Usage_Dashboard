@@ -193,3 +193,44 @@ export function moveProviderUsageHistoryModulePreference(
     },
   };
 }
+
+export function reorderProviderUsageHistoryModulePreference(
+  value: UsageHistoryModulesBySurface,
+  surface: DisplaySurface,
+  providerId: ProviderId,
+  movedModuleId: ProviderUsageHistoryModuleId,
+  targetModuleId: ProviderUsageHistoryModuleId,
+): UsageHistoryModulesBySurface {
+  const preferences = resolveProviderUsageHistoryModules(
+    value,
+    surface,
+    providerId,
+  );
+
+  if (movedModuleId === targetModuleId) {
+    return value;
+  }
+
+  const movedIndex = preferences.findIndex(
+    (preference) => preference.id === movedModuleId,
+  );
+  const targetIndex = preferences.findIndex(
+    (preference) => preference.id === targetModuleId,
+  );
+
+  if (movedIndex === -1 || targetIndex === -1) {
+    return value;
+  }
+
+  const nextPreferences = [...preferences];
+  const [movedPreference] = nextPreferences.splice(movedIndex, 1);
+  nextPreferences.splice(targetIndex, 0, movedPreference);
+
+  return {
+    ...value,
+    [surface]: {
+      ...value[surface],
+      [providerId]: nextPreferences,
+    },
+  };
+}

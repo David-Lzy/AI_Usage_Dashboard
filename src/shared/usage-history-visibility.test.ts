@@ -4,6 +4,7 @@ import {
   isProviderUsageHistoryModuleVisible,
   moveProviderUsageHistoryModulePreference,
   normalizeUsageHistoryModulesBySurface,
+  reorderProviderUsageHistoryModulePreference,
   resolveProviderUsageHistoryModules,
   setProviderUsageHistoryModuleVisibility,
 } from "./usage-history-visibility";
@@ -117,6 +118,34 @@ describe("usage history visibility", () => {
     ).toEqual([
       { id: "personal_usage_by_surface", visible: true },
       { id: "turns_history", visible: true },
+    ]);
+  });
+
+  it("reorders a dragged module at the target row", () => {
+    const current = setProviderUsageHistoryModuleVisibility(
+      createDefaultUsageHistoryModulesBySurface(),
+      "popup",
+      "codex-personal-page",
+      "turns_history",
+      false,
+    );
+    const updated = reorderProviderUsageHistoryModulePreference(
+      current,
+      "popup",
+      "codex-personal-page",
+      "personal_usage_by_surface",
+      "turns_history",
+    );
+
+    expect(
+      resolveProviderUsageHistoryModules(
+        updated,
+        "popup",
+        "codex-personal-page",
+      ),
+    ).toEqual([
+      { id: "turns_history", visible: false },
+      { id: "personal_usage_by_surface", visible: true },
     ]);
   });
 });

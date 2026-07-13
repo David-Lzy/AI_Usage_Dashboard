@@ -44,9 +44,19 @@ describe("SettingsProviderDisplaySection", () => {
     expect(html).toContain(
       "Choose and order personal usage and turns independently",
     );
+    expect(html).toContain('class="section-title-with-info"');
+    expect(html).toContain('class="material-info-tooltip"');
+    expect(html).toContain('data-open="false"');
     expect(html).toContain(
       "provider-progress-list__item usage-history-preferences__item",
     );
+    expect(html).toContain('class="provider-progress-list__handle"');
+    expect(html).toContain(
+      'data-usage-history-module-row="personal_usage_by_surface"',
+    );
+    expect(html).toContain('data-usage-history-module-row="turns_history"');
+    expect(html).toContain('draggable="true"');
+    expect(html).toContain('tabindex="0"');
     expect(html).toContain("Hide Personal usage on Popup");
     expect(html).toContain("Move Turns trend up on Popup");
     expect(html).toContain("Move Personal usage down on Popup");

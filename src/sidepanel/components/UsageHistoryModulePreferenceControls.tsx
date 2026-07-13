@@ -1,5 +1,12 @@
+import {
+  useState,
+  type DragEvent,
+  type KeyboardEvent,
+} from "react";
+
 import type {
   DisplaySurface,
+  ProviderId,
   ProviderSetting,
   ProviderSnapshot,
   ProviderUsageHistoryModuleId,
@@ -10,12 +17,20 @@ import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized
 import { buildUsageHistoryLocalizedCopy } from "../../shared/usage-history-localized-copy";
 import {
   moveProviderUsageHistoryModulePreference,
+  reorderProviderUsageHistoryModulePreference,
   resolveProviderUsageHistoryModules,
   setProviderUsageHistoryModuleVisibility,
 } from "../../shared/usage-history-visibility";
 import "../../shared/components/usage-history-charts.css";
+import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 
 const SURFACES: readonly DisplaySurface[] = ["popup", "sidebar", "fullPage"];
+
+type DraggedHistoryModule = {
+  surface: DisplaySurface;
+  providerId: ProviderId;
+  moduleId: ProviderUsageHistoryModuleId;
+};
 
 export function UsageHistoryModulePreferenceControls({
   locale,
@@ -32,6 +47,8 @@ export function UsageHistoryModulePreferenceControls({
   value: UsageHistoryModulesBySurface;
   onChange: (value: UsageHistoryModulesBySurface) => void;
 }) {
+  const [draggedModule, setDraggedModule] =
+    useState<DraggedHistoryModule | null>(null);
   const copy = buildUsageHistoryLocalizedCopy(locale);
   const historyProviderIds = new Set(
     snapshots
@@ -52,12 +69,64 @@ export function UsageHistoryModulePreferenceControls({
     turns_history: copy.turns,
   };
 
+  function handleDrop(
+    surface: DisplaySurface,
+    providerId: ProviderId,
+    targetModuleId: ProviderUsageHistoryModuleId,
+    event: DragEvent<HTMLLIElement>,
+  ) {
+    event.preventDefault();
+
+    if (
+      !draggedModule ||
+      draggedModule.surface !== surface ||
+      draggedModule.providerId !== providerId
+    ) {
+      return;
+    }
+
+    onChange(
+      reorderProviderUsageHistoryModulePreference(
+        value,
+        surface,
+        providerId,
+        draggedModule.moduleId,
+        targetModuleId,
+      ),
+    );
+    setDraggedModule(null);
+  }
+
+  function handleKeyDown(
+    surface: DisplaySurface,
+    providerId: ProviderId,
+    moduleId: ProviderUsageHistoryModuleId,
+    event: KeyboardEvent<HTMLLIElement>,
+  ) {
+    if (event.key !== "ArrowUp" && event.key !== "ArrowDown") {
+      return;
+    }
+
+    event.preventDefault();
+    onChange(
+      moveProviderUsageHistoryModulePreference(
+        value,
+        surface,
+        providerId,
+        moduleId,
+        event.key === "ArrowUp" ? "up" : "down",
+      ),
+    );
+  }
+
   return (
     <section className="usage-history-preferences" data-usage-history-preferences="">
       <div>
         <p className="section-label">{copy.settingsSectionLabel}</p>
-        <h3 className="section-title">{copy.settingsTitle}</h3>
-        <p className="supporting-copy">{copy.settingsDetail}</p>
+        <div className="section-title-with-info">
+          <h3 className="section-title">{copy.settingsTitle}</h3>
+          <MaterialInfoTooltip>{copy.settingsDetail}</MaterialInfoTooltip>
+        </div>
       </div>
       {configurableProviders.map((provider) => (
         <div className="usage-history-preferences__provider" key={provider.id}>
@@ -101,7 +170,47 @@ export function UsageHistoryModulePreferenceControls({
                         <li
                           key={preference.id}
                           className="provider-progress-list__item usage-history-preferences__item"
+                          data-usage-history-module-row={preference.id}
+                          draggable
+                          tabIndex={0}
+                          aria-label={settingsCopy.progressItems.rowAria(
+                            moduleLabel,
+                            index + 1,
+                            preferences.length,
+                            surfaceLabel,
+                          )}
+                          onDragStart={() =>
+                            setDraggedModule({
+                              surface,
+                              providerId: provider.id,
+                              moduleId: preference.id,
+                            })
+                          }
+                          onDragOver={(event) => event.preventDefault()}
+                          onDragEnd={() => setDraggedModule(null)}
+                          onDrop={(event) =>
+                            handleDrop(
+                              surface,
+                              provider.id,
+                              preference.id,
+                              event,
+                            )
+                          }
+                          onKeyDown={(event) =>
+                            handleKeyDown(
+                              surface,
+                              provider.id,
+                              preference.id,
+                              event,
+                            )
+                          }
                         >
+                          <span
+                            className="provider-progress-list__handle"
+                            aria-hidden="true"
+                          >
+                            ::
+                          </span>
                           <label className="provider-progress-list__visibility">
                             <input
                               type="checkbox"
