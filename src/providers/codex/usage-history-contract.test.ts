@@ -32,10 +32,10 @@ describe("Codex usage history contract", () => {
     expect(fixture.dailyTokenUsageBreakdown.data[0]).toMatchObject({
       date: "2026-06-14",
       product_surface_usage_values: {
-        desktop_app: 55,
-        vscode: 25,
-        exec: 15,
-        unknown: 5,
+        desktop_app: 35,
+        vscode: 8,
+        exec: 4,
+        unknown: 1,
       },
     });
     expect(fixture.dailyWorkspaceUsageCounts.data[0]).toMatchObject({

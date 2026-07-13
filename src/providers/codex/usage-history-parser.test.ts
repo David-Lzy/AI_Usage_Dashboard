@@ -7,7 +7,7 @@ import {
 import { parseCodexUsageHistory } from "./usage-history-parser";
 
 describe("Codex usage history parser", () => {
-  it("normalizes personal usage percentages and turn breakdowns", () => {
+  it("preserves daily personal usage percentages and normalizes turn breakdowns", () => {
     const source = fixture as CodexUsageHistoryContractFixture;
     const contract: CodexObservedUsageHistoryContract = {
       dailyTokenUsageBreakdown: source.dailyTokenUsageBreakdown,
@@ -28,7 +28,12 @@ describe("Codex usage history parser", () => {
     ).toMatchObject({ id: "desktop_app", label: "Desktop App" });
     expect(
       history?.personalUsageBySurface?.points[0]?.values[0]?.value,
-    ).toBeCloseTo(55);
+    ).toBeCloseTo(35);
+    expect(
+      history?.personalUsageBySurface?.points.map((point) =>
+        point.values.reduce((sum, value) => sum + value.value, 0),
+      ),
+    ).toEqual([48, 75]);
     expect(history?.turns?.byModel[0]?.values).toMatchObject([
       { id: "gpt-5.3-codex-spark", value: 75 },
       { id: "gpt-5.4", value: 45 },

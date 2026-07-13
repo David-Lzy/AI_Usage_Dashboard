@@ -90,6 +90,10 @@ export function PopupFeaturedProviderList({
             "popup",
             progressItemsBySurface,
           );
+          const cardSurfaceTone =
+            hasProviderProgress && provider.displayTone === "error"
+              ? "neutral"
+              : provider.displayTone;
           const sourcePageAction =
             provider.openableSessionPageUrl !== null
               ? {
@@ -103,7 +107,7 @@ export function PopupFeaturedProviderList({
           return (
             <article
               key={provider.providerId}
-              className={`popup-provider-card popup-provider-card--${provider.displayTone}${
+              className={`popup-provider-card popup-provider-card--${cardSurfaceTone}${
                 hasProviderProgress ? " popup-provider-card--quota-first" : ""
               }`}
               data-theme-local-surface={

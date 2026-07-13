@@ -4,6 +4,11 @@ export type ExtensionPermissionsRequest = {
 };
 
 export type ExtensionPermissionsApi = {
+  addHostAccessRequest?: (request: {
+    documentId?: string;
+    pattern?: string;
+    tabId?: number;
+  }) => Promise<void>;
   contains?: (
     permissions: ExtensionPermissionsRequest,
   ) => boolean | Promise<boolean>;

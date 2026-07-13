@@ -14,7 +14,11 @@ import {
   shouldReloadBeforeSourcePageRecoveryRefresh,
   type SourcePageRecoverySourceState,
 } from "../shared/source-page-recovery";
-import { getExtensionTabsApi, hasExtensionRuntime } from "../shared/extension-api";
+import {
+  getExtensionPermissionsApi,
+  getExtensionTabsApi,
+  hasExtensionRuntime,
+} from "../shared/extension-api";
 import { openProviderDetail } from "./popup-route-actions";
 import { selectPreferredSourcePageTab } from "./source-page-tab-selection";
 
@@ -34,6 +38,24 @@ function hasSourcePageNavigationControl(): boolean {
     typeof tabsApi.create === "function" &&
     typeof tabsApi.update === "function"
   );
+}
+
+async function addHostAccessRequest(
+  tabId: number,
+  sourcePageUrl: string,
+): Promise<void> {
+  const permissionsApi = getExtensionPermissionsApi();
+
+  if (typeof permissionsApi?.addHostAccessRequest !== "function") {
+    return;
+  }
+
+  try {
+    const pattern = `${new URL(sourcePageUrl).origin}/*`;
+    await permissionsApi.addHostAccessRequest({ tabId, pattern });
+  } catch {
+    // Older browsers and already-granted sites keep the existing flow.
+  }
 }
 
 export async function openProviderSourcePage(
@@ -76,6 +98,10 @@ export async function openProviderSourcePage(
   );
 
   if (preferredTab?.id !== undefined) {
+    await addHostAccessRequest(
+      preferredTab.id,
+      preferredTab.url ?? preferredRoute,
+    );
     const pageBinding = createPageBindingFromTab({
       mode: "bound",
       tabId: preferredTab.id,
@@ -129,6 +155,12 @@ export async function openProviderSourcePage(
     url: preferredRoute,
     active: true,
   });
+  if (typeof createdTab?.id === "number") {
+    await addHostAccessRequest(
+      createdTab.id,
+      createdTab.url ?? preferredRoute,
+    );
+  }
   await sendMessage({
     type: "app:set-provider-page-binding",
     providerId,

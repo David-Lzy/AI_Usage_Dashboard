@@ -6,19 +6,19 @@
       {
         "date": "2026-06-14",
         "product_surface_usage_values": {
-          "desktop_app": 55,
-          "vscode": 25,
-          "exec": 15,
-          "unknown": 5
+          "desktop_app": 35,
+          "vscode": 8,
+          "exec": 4,
+          "unknown": 1
         }
       },
       {
         "date": "2026-06-15",
         "product_surface_usage_values": {
-          "desktop_app": 45,
-          "vscode": 35,
-          "exec": 10,
-          "unknown": 10
+          "desktop_app": 56,
+          "vscode": 12,
+          "exec": 5,
+          "unknown": 2
         }
       }
     ]

@@ -35,20 +35,16 @@ function buildPersonalUsagePoints(
   contract: CodexObservedUsageHistoryContract,
 ): ProviderUsageHistoryPoint[] {
   return (contract.dailyTokenUsageBreakdown?.data ?? []).map((entry) => {
-    const rawValues = Object.entries(entry.product_surface_usage_values).flatMap(
+    const values = Object.entries(entry.product_surface_usage_values).flatMap(
       ([id, value]) =>
         typeof value === "number" && Number.isFinite(value) && value >= 0
           ? [{ id, label: normalizeSeriesLabel(id), value }]
           : [],
     );
-    const total = rawValues.reduce((sum, item) => sum + item.value, 0);
 
     return {
       date: entry.date,
-      values: rawValues.map((item) => ({
-        ...item,
-        value: total > 0 ? (item.value / total) * 100 : 0,
-      })),
+      values,
     };
   });
 }

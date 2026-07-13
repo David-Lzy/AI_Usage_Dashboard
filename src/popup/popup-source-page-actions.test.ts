@@ -123,10 +123,14 @@ describe("openProviderSourcePage", () => {
     const sendMessage = createOkSendMessage();
     const reload = vi.fn(async () => undefined);
     const update = vi.fn(async () => undefined);
+    const addHostAccessRequest = vi.fn(async () => undefined);
 
     vi.stubGlobal("chrome", {
       runtime: {
         id: "extension-id",
+      },
+      permissions: {
+        addHostAccessRequest,
       },
       tabs: {
         create: vi.fn(),
@@ -165,6 +169,10 @@ describe("openProviderSourcePage", () => {
       },
     });
     expect(update).toHaveBeenCalledWith(17, { active: true });
+    expect(addHostAccessRequest).toHaveBeenCalledWith({
+      tabId: 17,
+      pattern: "https://chatgpt.com/*",
+    });
     expect(update.mock.invocationCallOrder[0]).toBeLessThan(
       sendMessage.mock.invocationCallOrder[0],
     );

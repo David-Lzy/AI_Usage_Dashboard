@@ -626,6 +626,7 @@ body.popup-page .popup-header--surface-collapsed {
   flex: 0 1 auto;
   gap: var(--app-space-1);
   justify-content: flex-end;
+  margin-inline-start: auto;
   min-width: 0;
   max-inline-size: 100%;
 }
@@ -831,7 +832,7 @@ body.popup-page .popup-header--surface-collapsed {
 }
 
 .popup-provider-card__provider {
-  flex: 1 1 10rem;
+  flex: 1 1 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

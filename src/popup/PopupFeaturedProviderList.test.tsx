@@ -169,15 +169,43 @@ describe("PopupFeaturedProviderList", () => {
     expect(html).not.toContain("No history data yet");
   });
 
+  it("keeps a stale quota card surface neutral while preserving its error status", () => {
+    const card = buildPopupViewModel(SAMPLE_APP_STATE).featuredProviderCards.find(
+      (candidate) => candidate.provider.providerId === "codex-personal-page",
+    );
+
+    if (!card) {
+      throw new Error("Missing Codex popup card fixture.");
+    }
+
+    const html = renderFeaturedList([
+      {
+        ...card,
+        provider: {
+          ...card.provider,
+          displayTone: "error",
+          syncStatus: "error",
+        },
+      },
+    ]);
+
+    expect(html).toContain(
+      "popup-provider-card popup-provider-card--neutral popup-provider-card--quota-first",
+    );
+    expect(html).toContain("status-chip--error");
+  });
+
   it("allows localized header actions to wrap instead of clipping translated labels", () => {
     expect(popupThemeCss).toContain(".popup-provider-card__title-row {");
     expect(popupThemeCss).toContain("flex-wrap: wrap;");
     expect(popupThemeCss).toContain(".popup-provider-card__header-actions {");
+    expect(popupThemeCss).toContain("margin-inline-start: auto;");
     expect(popupThemeCss).toContain("max-inline-size: 100%;");
     expect(popupThemeCss).toContain(".popup-provider-card__header-action {");
     expect(popupThemeCss).toContain("max-width: none;");
     expect(popupThemeCss).toContain("overflow: visible;");
     expect(popupThemeCss).toContain("white-space: normal;");
     expect(popupThemeCss).not.toContain("max-width: 7rem;");
+    expect(popupThemeCss).toContain("flex: 1 1 0;");
   });
 });
