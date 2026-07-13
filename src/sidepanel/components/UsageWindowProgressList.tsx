@@ -101,10 +101,16 @@ export function UsageWindowProgressList({
 
   const hasSingleCircularProgressItem =
     windows.length === 1 && isCircularProgressDisplayStyle(displayStyle);
+  const listClassName =
+    `usage-window-progress-list usage-window-progress-list--${density} ` +
+    `usage-window-progress-list--${displayStyle}` +
+    (hasSingleCircularProgressItem
+      ? " usage-window-progress-list--single-circular"
+      : "");
 
   return (
     <div
-      className={`usage-window-progress-list usage-window-progress-list--${density} usage-window-progress-list--${displayStyle}${hasSingleCircularProgressItem ? " usage-window-progress-list--single-circular" : ""}`}
+      className={listClassName}
       data-single-circular-progress={
         hasSingleCircularProgressItem ? "" : undefined
       }

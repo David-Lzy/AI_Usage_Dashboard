@@ -80,6 +80,59 @@ describe("parseCodexPersonalLiveFixture", () => {
     });
   });
 
+  it("falls back to another captured Codex route when the preferred route has not hydrated", () => {
+    const fixture = structuredClone(
+      personalPageLiveFixture as CodexPersonalLiveFixture,
+    );
+    const preferredRoute = fixture.routes.find(
+      (route) => route.routeKey === "cloud_analytics",
+    );
+    const fallbackRoute = fixture.routes.find(
+      (route) => route.routeKey === "personal_usage",
+    );
+
+    if (!preferredRoute?.summary || !fallbackRoute) {
+      throw new Error("expected current and fallback Codex fixture routes");
+    }
+
+    preferredRoute.summary.textSnippets = ["Usage limits loading"];
+    fallbackRoute.status = "matched";
+    fallbackRoute.matchedUrl = "https://chatgpt.com/codex/settings/usage";
+    fallbackRoute.matchedTitle = "Codex";
+    fallbackRoute.summary = {
+      url: "https://chatgpt.com/codex/settings/usage",
+      title: "Codex",
+      heading: "Usage",
+      recommendedSurface: "dom",
+      textSnippets: ["Weekly usage limit", "64% remaining"],
+      scriptMarkers: {
+        hasNextDataScript: false,
+        hasNextFlightStream: false,
+        hasCloudflareChallenge: false,
+      },
+      keywordSignals: {
+        hasUsageSignal: true,
+        hasRemainingSignal: true,
+        hasCreditSignal: false,
+        hasResetSignal: false,
+      },
+    };
+
+    const result = parseCodexPersonalLiveFixture(fixture);
+
+    expect(result).toMatchObject({
+      status: "ok",
+      snapshot: {
+        routeKey: "personal_usage",
+        sourceUrl: "https://chatgpt.com/codex/settings/usage",
+        primaryWindow: {
+          normalizedLabel: "Weekly usage window",
+          remainingPercent: 64,
+        },
+      },
+    });
+  });
+
   it("keeps the lower weekly Codex window visible when the five-hour window is full", () => {
     const fixture: CodexPersonalLiveFixture = {
       capturedAt: "2026-04-25T00:00:00.000Z",

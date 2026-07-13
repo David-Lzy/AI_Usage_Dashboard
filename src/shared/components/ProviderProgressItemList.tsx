@@ -161,10 +161,16 @@ export function ProviderProgressItemList({
         "--popup-circular-items-per-row": popupCircularItemsPerRow,
       } as CSSProperties)
     : undefined;
+  const listClassName =
+    `provider-progress-item-list provider-progress-item-list--${density} ` +
+    `provider-progress-item-list--${displayStyle}` +
+    (hasSingleCircularProgressItem
+      ? " provider-progress-item-list--single-circular"
+      : "");
 
   return (
     <div
-      className={`provider-progress-item-list provider-progress-item-list--${density} provider-progress-item-list--${displayStyle}${hasSingleCircularProgressItem ? " provider-progress-item-list--single-circular" : ""}`}
+      className={listClassName}
       data-single-circular-progress={
         hasSingleCircularProgressItem ? "" : undefined
       }

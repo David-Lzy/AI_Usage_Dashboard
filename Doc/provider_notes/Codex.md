@@ -441,6 +441,8 @@ Parser consequences:
 
 - standalone model cards are accepted only when a nearby percentage follows
   the model label
+- if the preferred page is captured before its quota cards hydrate, the parser
+  tries other already-captured compatible Codex routes before reporting drift
 - a missing model interval stays `unknown`; the extension does not infer a
   weekly or five-hour window
 - duplicate credit-balance cards are collapsed

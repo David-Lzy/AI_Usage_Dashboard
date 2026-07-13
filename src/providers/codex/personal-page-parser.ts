@@ -430,22 +430,28 @@ function buildBalances(
   return balances;
 }
 
-function chooseMatchedRoute(
-  fixture: CodexPersonalLiveFixture,
-): CodexPersonalRouteCapture | null {
-  if (fixture.decision.chosenRoute) {
-    const matchedByDecision =
-      fixture.routes.find(
-        (route) =>
-          route.matchedUrl === fixture.decision.chosenRoute && route.summary,
-      ) ?? null;
+type MatchedCodexPersonalRoute = CodexPersonalRouteCapture & {
+  summary: CodexPersonalPageSummary;
+};
 
-    if (matchedByDecision?.summary) {
-      return matchedByDecision;
-    }
+function getMatchedRoutesInPriorityOrder(
+  fixture: CodexPersonalLiveFixture,
+): MatchedCodexPersonalRoute[] {
+  const matchedRoutes = fixture.routes.filter(
+    (route): route is MatchedCodexPersonalRoute => route.summary !== null,
+  );
+  const chosenRoute = matchedRoutes.find(
+    (route) => route.matchedUrl === fixture.decision.chosenRoute,
+  );
+
+  if (!chosenRoute) {
+    return matchedRoutes;
   }
 
-  return fixture.routes.find((route) => route.summary) ?? null;
+  return [
+    chosenRoute,
+    ...matchedRoutes.filter((route) => route !== chosenRoute),
+  ];
 }
 
 function choosePrimaryWindow(
@@ -490,9 +496,9 @@ function buildFailure(
 export function parseCodexPersonalLiveFixture(
   fixture: CodexPersonalLiveFixture,
 ): CodexPersonalParseResult {
-  const matchedRoute = chooseMatchedRoute(fixture);
+  const matchedRoutes = getMatchedRoutesInPriorityOrder(fixture);
 
-  if (!matchedRoute?.summary) {
+  if (matchedRoutes.length === 0) {
     const hasLoggedOutRoute = fixture.routes.some(
       (route) => route.status === "logged_out",
     );
@@ -523,32 +529,35 @@ export function parseCodexPersonalLiveFixture(
     );
   }
 
-  const windows = buildWindows(matchedRoute.summary);
-  const balances = buildBalances(matchedRoute.summary);
-  const primaryWindow = choosePrimaryWindow(windows);
+  for (const matchedRoute of matchedRoutes) {
+    const windows = buildWindows(matchedRoute.summary);
+    const primaryWindow = choosePrimaryWindow(windows);
 
-  if (!primaryWindow) {
-    return buildFailure(
-      fixture,
-      "route_drift",
-      "The matched Codex usage page no longer exposed a parseable remaining-percentage window. Inspect the live route and update the parser.",
-    );
+    if (!primaryWindow) {
+      continue;
+    }
+
+    return {
+      status: "ok",
+      snapshot: {
+        providerId: "codex-personal-page",
+        providerLabel: "Codex",
+        measurementKind: "window_percent",
+        routeKey: matchedRoute.routeKey,
+        sourceUrl: matchedRoute.summary.url,
+        sourceHeading: matchedRoute.summary.heading,
+        primaryWindow,
+        windows,
+        balances: buildBalances(matchedRoute.summary),
+        note:
+          "Personal Codex session-page data currently exposes exact remaining percentages, reset timestamps, and optional flex credit balance cards for visible usage context, not one absolute workspace-wide remaining limit.",
+      },
+    };
   }
 
-  return {
-    status: "ok",
-    snapshot: {
-      providerId: "codex-personal-page",
-      providerLabel: "Codex",
-      measurementKind: "window_percent",
-      routeKey: matchedRoute.routeKey,
-      sourceUrl: matchedRoute.summary.url,
-      sourceHeading: matchedRoute.summary.heading,
-      primaryWindow,
-      windows,
-      balances,
-      note:
-        "Personal Codex session-page data currently exposes exact remaining percentages, reset timestamps, and optional flex credit balance cards for visible usage context, not one absolute workspace-wide remaining limit.",
-    },
-  };
+  return buildFailure(
+    fixture,
+    "route_drift",
+    "The matched Codex usage pages no longer exposed a parseable remaining-percentage window. Inspect the live routes and update the parser.",
+  );
 }
