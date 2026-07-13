@@ -1,0 +1,118 @@
+{
+  "capturedAt": "2026-07-13T00:00:00.000Z",
+  "dailyTokenUsageBreakdown": {
+    "units": "credits",
+    "data": [
+      {
+        "date": "2026-06-14",
+        "product_surface_usage_values": {
+          "desktop_app": 55,
+          "vscode": 25,
+          "exec": 15,
+          "unknown": 5
+        }
+      },
+      {
+        "date": "2026-06-15",
+        "product_surface_usage_values": {
+          "desktop_app": 45,
+          "vscode": 35,
+          "exec": 10,
+          "unknown": 10
+        }
+      }
+    ]
+  },
+  "dailyWorkspaceUsageCounts": {
+    "data": [
+      {
+        "date": "2026-06-14",
+        "totals": {
+          "users": 1,
+          "threads": 18,
+          "turns": 120,
+          "credits": 48
+        },
+        "clients": [
+          {
+            "client_id": "CODEX_DESKTOP_APP",
+            "users": 1,
+            "threads": 10,
+            "turns": 72,
+            "credits": 30
+          },
+          {
+            "client_id": "CODEX_IDE_VSCODE",
+            "users": 1,
+            "threads": 5,
+            "turns": 35,
+            "credits": 13
+          },
+          {
+            "client_id": "CODEX_SERVICE_EXEC",
+            "users": 1,
+            "threads": 3,
+            "turns": 13,
+            "credits": 5
+          }
+        ],
+        "models": [
+          {
+            "model": "gpt-5.3-codex-spark",
+            "turns": 75,
+            "credits": 29
+          },
+          {
+            "model": "gpt-5.4",
+            "turns": 45,
+            "credits": 19
+          }
+        ]
+      },
+      {
+        "date": "2026-06-15",
+        "totals": {
+          "users": 1,
+          "threads": 16,
+          "turns": 96,
+          "credits": 39
+        },
+        "clients": [
+          {
+            "client_id": "CODEX_DESKTOP_APP",
+            "users": 1,
+            "threads": 8,
+            "turns": 52,
+            "credits": 22
+          },
+          {
+            "client_id": "CODEX_IDE_VSCODE",
+            "users": 1,
+            "threads": 5,
+            "turns": 31,
+            "credits": 12
+          },
+          {
+            "client_id": "CODEX_SERVICE_EXEC",
+            "users": 1,
+            "threads": 3,
+            "turns": 13,
+            "credits": 5
+          }
+        ],
+        "models": [
+          {
+            "model": "gpt-5.3-codex-spark",
+            "turns": 60,
+            "credits": 24
+          },
+          {
+            "model": "gpt-5.4",
+            "turns": 36,
+            "credits": 15
+          }
+        ]
+      }
+    ]
+  }
+}
