@@ -258,7 +258,7 @@ export const PROVIDER_SOURCE_BLUEPRINTS: Record<ProviderId, ProviderSourceBluepr
         graduationGateLabel: null,
         graduationGateDetail: null,
         note:
-          "Shipped personal-user path. The 2026-04-21 live-tab capture matched chatgpt.com/codex/cloud/settings/analytics#usage and exposed exact remaining percentages plus reset times in DOM. The extension attaches to the already-running logged-in ChatGPT tab and does not export cookies.",
+          "Shipped personal-user path. The 2026-07-13 live-tab refresh confirmed chatgpt.com/codex/cloud/settings/analytics#usage still exposes visible weekly and model quota percentages, reset timing when present, and optional credit balance context in DOM. The extension attaches to the already-running logged-in ChatGPT tab and does not export cookies.",
       },
     ],
   },

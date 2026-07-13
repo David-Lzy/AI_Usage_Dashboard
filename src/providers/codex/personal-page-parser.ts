@@ -71,12 +71,15 @@ const INLINE_PERCENT_PATTERN = /(\d{1,3})\s*[%％]/;
 const WINDOW_LABEL_PATTERN =
   /(?:usage limit|usage window|weekly|week|5\s*hour|5小时|5 小时|每周|限额)/i;
 const MODEL_PATTERN = /(gpt[-\w.]+)/i;
+const STANDALONE_MODEL_LABEL_PATTERN = /^gpt-[a-z0-9][a-z0-9._-]*$/i;
 const REMAINING_MARKER_PATTERN = /(?:remaining|left|available|剩余|可用)/i;
-const RESET_LINE_PATTERN = /(?:重置时间|reset(?: time)?|renews?)(?:[:：]\s*)?(.+)/i;
+const RESET_LINE_PATTERN = /(?:重置时间|resets?(?: time)?|renews?)(?:[:：]\s*)?(.+)/i;
 const BALANCE_LABEL_PATTERN =
   /(?:余额额度|credit balance|credits balance|remaining credits|usage credits|flex credits)/i;
 const BALANCE_DETAIL_PATTERN =
   /(?:使用积分|超出套餐|continue using codex|beyond.*plan|over.*limit|credit|credits|积分|套餐|Codex)/i;
+const USAGE_HISTORY_BOUNDARY_PATTERN =
+  /(?:usage details|personal usage|credit usage history|usage history|使用详情|个人使用|额度使用记录)/i;
 
 function normalizeWhitespace(value: string): string {
   return value.replace(/\s+/g, " ").trim();
@@ -88,7 +91,9 @@ function parsePercentValue(rawValue: string | undefined): number | null {
   }
 
   const parsed = Number(rawValue);
-  return Number.isFinite(parsed) ? parsed : null;
+  return Number.isFinite(parsed) && parsed >= 0 && parsed <= 100
+    ? parsed
+    : null;
 }
 
 function parsePercent(value: string): number | null {
@@ -202,7 +207,7 @@ function normalizeWindowLabel(
 function stripInlineWindowRuntimeValues(label: string): string {
   const stripped = normalizeWhitespace(label)
     .replace(
-      /\s*(?:重置时间|reset(?: time)?|renews?)(?:[:：]\s*)?.*$/i,
+      /\s*(?:重置时间|resets?(?: time)?|renews?)(?:[:：]\s*)?.*$/i,
       " ",
     )
     .replace(
@@ -222,6 +227,23 @@ function extractModelLabel(label: string): string | null {
 
 function isWindowLabel(value: string): boolean {
   return WINDOW_LABEL_PATTERN.test(value);
+}
+
+function isStandaloneModelLabel(value: string): boolean {
+  return STANDALONE_MODEL_LABEL_PATTERN.test(normalizeWhitespace(value));
+}
+
+function isStandaloneModelWindowLabel(
+  snippets: string[],
+  index: number,
+): boolean {
+  if (!isStandaloneModelLabel(snippets[index] ?? "")) {
+    return false;
+  }
+
+  return snippets
+    .slice(index + 1, index + 3)
+    .some((candidate) => parsePercent(candidate) !== null);
 }
 
 function isBalanceLabel(value: string): boolean {
@@ -252,17 +274,19 @@ function finalizeWindow(
 }
 
 function buildWindows(summary: CodexPersonalPageSummary): CodexPersonalUsageWindow[] {
+  const snippets = summary.textSnippets.map(normalizeWhitespace).filter(Boolean);
   const windows: CodexPersonalUsageWindow[] = [];
   let currentWindow: CodexPersonalUsageWindow | null = null;
 
-  for (const rawSnippet of summary.textSnippets) {
-    const snippet = normalizeWhitespace(rawSnippet);
+  for (let index = 0; index < snippets.length; index += 1) {
+    const snippet = snippets[index]!;
 
-    if (!snippet) {
-      continue;
+    if (USAGE_HISTORY_BOUNDARY_PATTERN.test(snippet)) {
+      currentWindow = finalizeWindow(currentWindow, windows);
+      break;
     }
 
-    if (isWindowLabel(snippet)) {
+    if (isWindowLabel(snippet) || isStandaloneModelWindowLabel(snippets, index)) {
       currentWindow = finalizeWindow(currentWindow, windows);
       const label = stripInlineWindowRuntimeValues(snippet) || snippet;
       const kind = classifyWindowKind(label);
@@ -378,7 +402,7 @@ function buildBalances(
       }
     }
 
-    balances.push({
+    const balance: CodexPersonalUsageBalance = {
       label: snippet,
       normalizedLabel: normalizeBalanceLabel(snippet),
       kind: BALANCE_LABEL_PATTERN.test(snippet)
@@ -387,7 +411,20 @@ function buildBalances(
       remainingCredits,
       totalCredits: null,
       detail,
-    });
+    };
+    const duplicateIndex = balances.findIndex(
+      (candidate) =>
+        candidate.kind === balance.kind &&
+        candidate.normalizedLabel === balance.normalizedLabel &&
+        candidate.remainingCredits === balance.remainingCredits &&
+        candidate.totalCredits === balance.totalCredits,
+    );
+
+    if (duplicateIndex === -1) {
+      balances.push(balance);
+    } else if (!balances[duplicateIndex]!.detail && balance.detail) {
+      balances[duplicateIndex] = balance;
+    }
   }
 
   return balances;

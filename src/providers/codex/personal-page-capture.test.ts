@@ -131,13 +131,16 @@ describe("summarizeCodexPersonalPage", () => {
       loadPollIntervalMs: 250,
       postLoadDelayMs: 3_000,
     });
-    expect(capturedDefinitions[0].openWhenMissing).toBeUndefined();
-    expect(capturedDefinitions[1].openWhenMissing).toBeUndefined();
-    expect(capturedDefinitions[2].openWhenMissing).toEqual({
+    expect(capturedDefinitions[0].urlPatterns).toEqual([
+      "https://chatgpt.com/codex/cloud/settings/analytics*",
+    ]);
+    expect(capturedDefinitions[0].openWhenMissing).toEqual({
       url: "https://chatgpt.com/codex/cloud/settings/analytics",
       active: false,
       closeOnUnmatched: true,
     });
+    expect(capturedDefinitions[1].openWhenMissing).toBeUndefined();
+    expect(capturedDefinitions[2].openWhenMissing).toBeUndefined();
   });
 
   it("does not reuse a bound cloud analytics tab for unrelated Codex routes", async () => {
@@ -159,13 +162,13 @@ describe("summarizeCodexPersonalPage", () => {
       matchedTitle: "Codex",
     });
 
-    expect(capturedDefinitions[0].binding).toBeUndefined();
-    expect(capturedDefinitions[1].binding).toBeUndefined();
-    expect(capturedDefinitions[2].binding).toEqual({
+    expect(capturedDefinitions[0].binding).toEqual({
       mode: "auto",
       tabId: 42,
       matchedUrl: "https://chatgpt.com/codex/cloud/settings/analytics#usage",
       matchedTitle: "Codex",
     });
+    expect(capturedDefinitions[1].binding).toBeUndefined();
+    expect(capturedDefinitions[2].binding).toBeUndefined();
   });
 });

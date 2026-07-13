@@ -1,6 +1,6 @@
 # Codex Provider Note
 
-Date: 2026-04-21
+Date: 2026-07-13
 
 Process rule:
 
@@ -414,3 +414,49 @@ Current honesty boundary:
 Next remaining gap:
 
 - source preference and fallback rules are still heuristic in this phase and will be formalized later in the dedicated hybrid-source selection phase
+
+## 20. 2026-07-13 Live Surface Refresh
+
+The current signed-in Codex usage page was rechecked in the local Chrome
+profile after the Codex settings redesign.
+
+Current route result:
+
+- opening `https://chatgpt.com/codex/settings/usage` resolves to the existing
+  `https://chatgpt.com/codex/cloud/settings/analytics#usage` surface
+- the proven analytics route therefore remains the primary personal-page source
+- the older personal and cloud usage route patterns remain as compatibility
+  candidates, but no longer take precedence over the proven route
+
+Current visible card structure:
+
+- a general weekly usage-limit card exposes an exact remaining percentage and
+  reset timestamp
+- a model-specific card can expose only a standalone model name and remaining
+  percentage, without naming a five-hour or weekly interval
+- the remaining-credit card can appear more than once in the page text because
+  the page also contains credit history
+
+Parser consequences:
+
+- standalone model cards are accepted only when a nearby percentage follows
+  the model label
+- a missing model interval stays `unknown`; the extension does not infer a
+  weekly or five-hour window
+- duplicate credit-balance cards are collapsed
+- percentages outside `0..100` and usage-history chart ticks do not become
+  quota windows
+
+The checked-in fixture keeps the observed structure but uses sanitized values,
+a synthetic tab ID, and no raw page body, cookie, header, or account data.
+
+Official product guidance reviewed on 2026-07-13:
+
+- https://help.openai.com/en/articles/11369540-using-codex-with-chatgpt
+- https://help.openai.com/en/articles/20001106-codex-rate-card-2
+
+The official guidance confirms that Codex usage counts toward the applicable
+agentic usage limit and directs users to the Codex Settings usage panel for
+visible limits and credit options. It does not define a stable public DOM
+schema, so the extension continues to treat the live page parser as a
+best-effort session-page integration with explicit route-drift failure.

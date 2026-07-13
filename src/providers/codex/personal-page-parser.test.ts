@@ -6,7 +6,7 @@ import type { CodexPersonalLiveFixture } from "./personal-page-capture";
 import { parseCodexPersonalLiveFixture } from "./personal-page-parser";
 
 describe("parseCodexPersonalLiveFixture", () => {
-  it("parses the proven live Codex analytics route into window-percent snapshots", () => {
+  it("parses the current Codex analytics cards without treating chart ticks as windows", () => {
     const result = parseCodexPersonalLiveFixture(
       personalPageLiveFixture as CodexPersonalLiveFixture,
     );
@@ -22,30 +22,62 @@ describe("parseCodexPersonalLiveFixture", () => {
       "https://chatgpt.com/codex/cloud/settings/analytics#usage",
     );
     expect(result.snapshot.primaryWindow.normalizedLabel).toBe(
-      "5-hour usage window",
+      "Weekly usage window",
     );
-    expect(result.snapshot.primaryWindow.remainingPercent).toBe(92);
-    expect(result.snapshot.primaryWindow.usedPercent).toBe(8);
+    expect(result.snapshot.primaryWindow.remainingPercent).toBe(73);
+    expect(result.snapshot.primaryWindow.usedPercent).toBe(27);
     expect(result.snapshot.primaryWindow.totalPercent).toBe(100);
-    expect(result.snapshot.primaryWindow.resetAt).toBe("2026-04-22 01:11");
+    expect(result.snapshot.primaryWindow.resetAt).toBe("2026-07-20 05:17");
     expect(result.snapshot.windows).toEqual(
-      expect.arrayContaining([
+      [
         expect.objectContaining({
           normalizedLabel: "Weekly usage window",
-          remainingPercent: 97,
-          usedPercent: 3,
-          resetAt: "2026-04-28 09:15",
+          kind: "weekly",
+          remainingPercent: 73,
+          usedPercent: 27,
+          resetAt: "2026-07-20 05:17",
         }),
         expect.objectContaining({
-          label: "GPT-5.3-Codex-Spark 5 小时使用限额",
-          kind: "model_rolling_5h",
+          label: "GPT-5.3-Codex-Spark",
+          kind: "unknown",
           modelLabel: "GPT-5.3-Codex-Spark",
-          remainingPercent: 100,
+          remainingPercent: 91,
         }),
-      ]),
+      ],
     );
-    expect(result.snapshot.balances).toEqual([]);
+    expect(result.snapshot.balances).toEqual([
+      expect.objectContaining({
+        normalizedLabel: "Flex credit balance",
+        remainingCredits: 0,
+        detail: "Use credits to continue using Codex beyond your plan limit",
+      }),
+    ]);
     expect(result.snapshot.note).toContain("remaining percentages");
+  });
+
+  it("rejects percentages outside the valid quota range", () => {
+    const fixture = structuredClone(
+      personalPageLiveFixture as CodexPersonalLiveFixture,
+    );
+    const matchedRoute = fixture.routes.find(
+      (route) => route.routeKey === "cloud_analytics",
+    );
+
+    if (!matchedRoute?.summary) {
+      throw new Error("expected current Codex fixture summary");
+    }
+
+    matchedRoute.summary.textSnippets = [
+      "Weekly usage limit",
+      "175% remaining",
+      "Usage details",
+      "0%",
+      "100%",
+    ];
+
+    expect(parseCodexPersonalLiveFixture(fixture)).toMatchObject({
+      status: "route_drift",
+    });
   });
 
   it("keeps the lower weekly Codex window visible when the five-hour window is full", () => {

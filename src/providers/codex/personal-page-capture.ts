@@ -71,6 +71,11 @@ type CodexPersonalLiveCaptureOptions = {
 
 const CODEX_PERSONAL_ROUTE_DEFINITIONS: CodexRouteDefinition[] = [
   {
+    routeKey: "cloud_analytics",
+    pageLabel: "Codex cloud analytics page",
+    urlPatterns: ["https://chatgpt.com/codex/cloud/settings/analytics*"],
+  },
+  {
     routeKey: "personal_usage",
     pageLabel: "Codex personal usage page",
     urlPatterns: ["https://chatgpt.com/codex/settings/usage*"],
@@ -79,11 +84,6 @@ const CODEX_PERSONAL_ROUTE_DEFINITIONS: CodexRouteDefinition[] = [
     routeKey: "cloud_usage",
     pageLabel: "Codex cloud usage page",
     urlPatterns: ["https://chatgpt.com/codex/cloud/settings/usage*"],
-  },
-  {
-    routeKey: "cloud_analytics",
-    pageLabel: "Codex cloud analytics page",
-    urlPatterns: ["https://chatgpt.com/codex/cloud/settings/analytics*"],
   },
 ];
 
@@ -300,9 +300,9 @@ function buildDecision(
   routes: CodexPersonalRouteCapture[],
 ): CodexPersonalLiveFixture["decision"] {
   const preferredOrder: CodexPersonalRouteKey[] = [
+    "cloud_analytics",
     "personal_usage",
     "cloud_usage",
-    "cloud_analytics",
   ];
   const chosen = preferredOrder
     .map((routeKey) => routes.find((route) => route.routeKey === routeKey))
@@ -321,9 +321,9 @@ function buildDecision(
     chosenRoute: chosen.summary.url,
     chosenSurface: chosen.summary.recommendedSurface,
     rationale:
-      chosen.routeKey === "personal_usage"
-        ? "Selected the non-cloud Codex usage route first because it is the cleanest personal-user candidate. Its structural markers decide the next extraction surface."
-        : "Selected the highest-priority matched Codex page from the current live ChatGPT tabs.",
+      chosen.routeKey === "cloud_analytics"
+        ? "Selected the currently proven Codex usage route from the live ChatGPT tabs."
+        : "Selected the highest-priority compatible Codex page from the current live ChatGPT tabs.",
   };
 }
 
@@ -341,7 +341,8 @@ export async function captureCodexPersonalLiveFixture(
   return {
     capturedAt: new Date().toISOString(),
     extractionMode: "dom",
-    primaryCandidateRoute: "https://chatgpt.com/codex/settings/usage",
+    primaryCandidateRoute:
+      "https://chatgpt.com/codex/cloud/settings/analytics#usage",
     routes,
     decision: buildDecision(routes),
   };
