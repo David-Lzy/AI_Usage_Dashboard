@@ -6,6 +6,8 @@ import type {
   ProgressDisplayStyle,
   ProgressItemsBySurface,
   ProviderId,
+  ProviderUsageHistoryModuleId,
+  UsageHistoryModulesBySurface,
 } from "../../providers/types";
 import { buildRuntimeCommonCopy, createRuntimeI18n } from "../../shared/i18n";
 import { hasVisibleProviderProgressItems } from "../../shared/provider-progress-item-selection";
@@ -13,6 +15,9 @@ import type { ProviderViewModel } from "../view-models";
 import { ProviderProgressItemList } from "./ProviderProgressItemList";
 import { StatusBadge } from "./StatusBadge";
 import { UsageFactsList } from "./UsageFactsList";
+import { UsageHistoryCompact } from "../../shared/components/UsageHistoryCharts";
+import { buildUsageHistoryLocalizedCopy } from "../../shared/usage-history-localized-copy";
+import { createDefaultUsageHistoryModulesBySurface, isProviderUsageHistoryModuleVisible } from "../../shared/usage-history-visibility";
 
 type ProviderCardProps = {
   localePreference: AppLocalePreference;
@@ -22,6 +27,7 @@ type ProviderCardProps = {
   progressItemsBySurface: ProgressItemsBySurface;
   progressThicknessPx: number;
   progressSurface: DisplaySurface;
+  usageHistoryModulesBySurface?: UsageHistoryModulesBySurface;
   provider: ProviderViewModel;
   onOpen: (providerId: ProviderId) => void;
   onOpenSourcePage?: (
@@ -29,6 +35,11 @@ type ProviderCardProps = {
     sourceStateKind: ProviderViewModel["currentSourceStateKind"],
   ) => void;
   onRefresh: (providerId: ProviderId) => void;
+  onUsageHistoryVisibilityChange?: (
+    providerId: ProviderId,
+    moduleId: ProviderUsageHistoryModuleId,
+    visible: boolean,
+  ) => void;
 };
 
 export function ProviderCard({
@@ -39,15 +50,18 @@ export function ProviderCard({
   progressItemsBySurface,
   progressThicknessPx,
   progressSurface,
+  usageHistoryModulesBySurface = createDefaultUsageHistoryModulesBySurface(),
   provider,
   onOpen,
   onOpenSourcePage,
   onRefresh,
+  onUsageHistoryVisibilityChange,
 }: ProviderCardProps) {
   const i18n = createRuntimeI18n(
     localePreference,
     typeof window !== "undefined" ? window : undefined,
   );
+  const usageHistoryCopy = buildUsageHistoryLocalizedCopy(i18n.resolvedLocale);
   const showSessionPageContract =
     provider.sessionPageContractLabel !== null &&
     provider.sessionPageContractLabel !== provider.currentSourceContractLabel;
@@ -157,6 +171,36 @@ export function ProviderCard({
             <UsageFactsList facts={provider.usageFacts} density="compact" />
           </section>
         ) : null}
+
+        {provider.providerId === "codex-personal-page" || provider.usageHistory
+          ? (["personal_usage_by_surface", "turns_history"] as const).map(
+              (moduleId) =>
+                isProviderUsageHistoryModuleVisible(
+                  usageHistoryModulesBySurface,
+                  progressSurface,
+                  provider.providerId,
+                  moduleId,
+                ) ? (
+                  <UsageHistoryCompact
+                    key={moduleId}
+                    copy={usageHistoryCopy}
+                    history={provider.usageHistory}
+                    moduleId={moduleId}
+                    onHide={
+                      onUsageHistoryVisibilityChange
+                        ? () =>
+                            onUsageHistoryVisibilityChange(
+                              provider.providerId,
+                              moduleId,
+                              false,
+                            )
+                        : undefined
+                    }
+                    onOpenDetails={() => onOpen(provider.providerId)}
+                  />
+                ) : null,
+            )
+          : null}
 
         <div className="provider-card__meta" aria-label="Provider source context">
           <span className="meta-chip">{provider.currentSourceLabel}</span>

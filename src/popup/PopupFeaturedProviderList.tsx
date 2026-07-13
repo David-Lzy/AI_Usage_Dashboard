@@ -4,6 +4,9 @@ import type {
   ProgressColorBand,
   ProgressDisplayStyle,
   ProgressItemsBySurface,
+  ProviderId,
+  ProviderUsageHistoryModuleId,
+  UsageHistoryModulesBySurface,
 } from "../providers/types";
 import type { RuntimeI18n } from "../shared/i18n";
 import { hasVisibleProviderProgressItems } from "../shared/provider-progress-item-selection";
@@ -14,6 +17,9 @@ import type {
   PopupFeaturedProviderCard,
   PopupGuidanceAction,
 } from "./view-models";
+import { UsageHistoryCompact } from "../shared/components/UsageHistoryCharts";
+import { buildUsageHistoryLocalizedCopy } from "../shared/usage-history-localized-copy";
+import { createDefaultUsageHistoryModulesBySurface, isProviderUsageHistoryModuleVisible } from "../shared/usage-history-visibility";
 
 type PopupFeaturedProviderListProps = {
   ariaLabel: string;
@@ -26,12 +32,18 @@ type PopupFeaturedProviderListProps = {
   progressDisplayStyle: ProgressDisplayStyle;
   progressItemsBySurface: ProgressItemsBySurface;
   progressThicknessPx: number;
+  usageHistoryModulesBySurface?: UsageHistoryModulesBySurface;
   getSettingsFocusForProvider: (
     provider: PopupFeaturedProviderCard["provider"],
   ) => SettingsRouteFocus | null;
   onAction: (
     action: PopupGuidanceAction,
     options?: { settingsFocus?: SettingsRouteFocus | null },
+  ) => void | Promise<void>;
+  onUsageHistoryVisibilityChange?: (
+    providerId: ProviderId,
+    moduleId: ProviderUsageHistoryModuleId,
+    visible: boolean,
   ) => void | Promise<void>;
 };
 
@@ -46,12 +58,15 @@ export function PopupFeaturedProviderList({
   progressDisplayStyle,
   progressItemsBySurface,
   progressThicknessPx,
+  usageHistoryModulesBySurface = createDefaultUsageHistoryModulesBySurface(),
   getSettingsFocusForProvider,
   onAction,
+  onUsageHistoryVisibilityChange,
 }: PopupFeaturedProviderListProps) {
   if (cards.length === 0) {
     return null;
   }
+  const usageHistoryCopy = buildUsageHistoryLocalizedCopy(i18n.resolvedLocale);
 
   return (
     <section className="popup-quota-section" aria-label={ariaLabel}>
@@ -211,6 +226,39 @@ export function PopupFeaturedProviderList({
                   </p>
                 </>
               )}
+
+              {provider.providerId === "codex-personal-page" || provider.usageHistory
+                ? (["personal_usage_by_surface", "turns_history"] as const).map(
+                    (moduleId) =>
+                      isProviderUsageHistoryModuleVisible(
+                        usageHistoryModulesBySurface,
+                        "popup",
+                        provider.providerId,
+                        moduleId,
+                      ) ? (
+                        <UsageHistoryCompact
+                          key={moduleId}
+                          copy={usageHistoryCopy}
+                          history={provider.usageHistory}
+                          moduleId={moduleId}
+                          onHide={onUsageHistoryVisibilityChange ? () =>
+                            void onUsageHistoryVisibilityChange(
+                              provider.providerId,
+                              moduleId,
+                              false,
+                            )
+                          : undefined}
+                          onOpenDetails={() =>
+                            void onAction({
+                              kind: "provider-detail",
+                              label: usageHistoryCopy.openDetails,
+                              providerId: provider.providerId,
+                            })
+                          }
+                        />
+                      ) : null,
+                  )
+                : null}
             </article>
           );
         })}

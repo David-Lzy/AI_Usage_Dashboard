@@ -182,12 +182,12 @@ function UsageHistoryLegend({ data }: { data: UsageHistoryChartData }) {
 }
 
 function getModulePoints(
-  history: ProviderUsageHistory,
+  history: ProviderUsageHistory | undefined,
   moduleId: ProviderUsageHistoryModuleId,
 ) {
   return moduleId === "personal_usage_by_surface"
-    ? history.personalUsageBySurface?.points ?? []
-    : history.turns?.byModel ?? [];
+    ? history?.personalUsageBySurface?.points ?? []
+    : history?.turns?.byModel ?? [];
 }
 
 export function UsageHistoryCompact({
@@ -197,7 +197,7 @@ export function UsageHistoryCompact({
   onHide,
   onOpenDetails,
 }: {
-  history: ProviderUsageHistory;
+  history?: ProviderUsageHistory;
   moduleId: ProviderUsageHistoryModuleId;
   copy: UsageHistoryChartCopy;
   onHide?: () => void;

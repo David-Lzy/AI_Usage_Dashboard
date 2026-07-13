@@ -39,6 +39,8 @@ describe("SettingsProviderDisplaySection", () => {
     expect(html).toContain('data-provider-progress-surface="popup"');
     expect(html).toContain('data-provider-progress-surface="sidebar"');
     expect(html).toContain('data-provider-progress-surface="fullPage"');
+    expect(html).toContain('data-usage-history-preferences=""');
+    expect(html).toContain("Show history modules by surface");
     expect(html).toContain("2 providers");
     expect(html).not.toContain('data-provider-order-row="jetbrains-org-page"');
     expect(html).not.toContain(

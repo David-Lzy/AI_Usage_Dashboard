@@ -120,3 +120,27 @@ export function isProviderUsageHistoryModuleVisible(
     )?.visible ?? true
   );
 }
+
+export function setProviderUsageHistoryModuleVisibility(
+  value: UsageHistoryModulesBySurface,
+  surface: DisplaySurface,
+  providerId: ProviderId,
+  moduleId: ProviderUsageHistoryModuleId,
+  visible: boolean,
+): UsageHistoryModulesBySurface {
+  const preferences = resolveProviderUsageHistoryModules(
+    value,
+    surface,
+    providerId,
+  ).map((preference) =>
+    preference.id === moduleId ? { ...preference, visible } : preference,
+  );
+
+  return {
+    ...value,
+    [surface]: {
+      ...value[surface],
+      [providerId]: preferences,
+    },
+  };
+}

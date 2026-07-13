@@ -23,6 +23,7 @@ function renderProviderCard(
   providerId: ProviderId,
   options: {
     onOpenSourcePage?: () => void;
+    usageHistoryModulesBySurface?: AppState["settings"]["usageHistoryModulesBySurface"];
   } = {},
 ) {
   const provider = getProviderViewModel(state, providerId);
@@ -39,6 +40,7 @@ function renderProviderCard(
       progressItemsBySurface={state.settings.progressItemsBySurface}
       progressThicknessPx={state.settings.progressThicknessPx}
       progressSurface="sidebar"
+      usageHistoryModulesBySurface={options.usageHistoryModulesBySurface}
       provider={provider}
       onOpen={() => undefined}
       onOpenSourcePage={options.onOpenSourcePage}
@@ -48,6 +50,42 @@ function renderProviderCard(
 }
 
 describe("ProviderCard", () => {
+  it("renders available history and unmounts a hidden surface module", () => {
+    const state = createState({
+      providers: SAMPLE_APP_STATE.providers.map((provider) =>
+        provider.providerId === "codex-personal-page"
+          ? {
+              ...provider,
+              usageHistory: {
+                capturedAt: "2026-07-13T00:00:00.000Z",
+                rangeStart: "2026-07-13",
+                rangeEnd: "2026-07-13",
+                granularity: "day" as const,
+                personalUsageBySurface: { unit: "percent" as const, points: [{ date: "2026-07-13", values: [{ id: "desktop", label: "Desktop", value: 50 }] }] },
+                turns: { total: 7, byModel: [{ date: "2026-07-13", values: [{ id: "gpt", label: "GPT", value: 7 }] }], bySurface: [] },
+              },
+            }
+          : provider,
+      ),
+    });
+    const visibleHtml = renderProviderCard(state, "codex-personal-page");
+    const hiddenHtml = renderProviderCard(state, "codex-personal-page", {
+      usageHistoryModulesBySurface: {
+        popup: {},
+        fullPage: {},
+        sidebar: { "codex-personal-page": [
+          { id: "personal_usage_by_surface", visible: true },
+          { id: "turns_history", visible: false },
+        ] },
+      },
+    });
+
+    expect(visibleHtml).toContain("Personal usage");
+    expect(visibleHtml).toContain("Turns trend");
+    expect(hiddenHtml).toContain("Personal usage");
+    expect(hiddenHtml).not.toContain("Turns trend");
+  });
+
   it("uses the Material provider-card hierarchy for summary, progress, chips, and actions", () => {
     const html = renderProviderCard(createState(), "codex-personal-page");
 

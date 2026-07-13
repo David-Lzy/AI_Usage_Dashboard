@@ -23,6 +23,7 @@ import type {
   ThemePreset,
   ToolbarIconMode,
   UiFontFamily,
+  UsageHistoryModulesBySurface,
 } from "../../providers/types";
 import type {
   CustomSourceSetting,
@@ -104,6 +105,9 @@ type SettingsPageProps = {
   ) => void;
   onProgressItemsBySurfaceChange: (
     progressItemsBySurface: ProgressItemsBySurface,
+  ) => void;
+  onUsageHistoryModulesBySurfaceChange?: (
+    usageHistoryModulesBySurface: UsageHistoryModulesBySurface,
   ) => void;
   onCustomSourcesChange: (customSources: CustomSourceSetting[]) => void;
   onProgressThicknessPxChange: (progressThicknessPx: number) => void;
@@ -188,6 +192,7 @@ export function SettingsPage({
   onPopupShadowStyleChange,
   onProviderOrderBySurfaceChange,
   onProgressItemsBySurfaceChange,
+  onUsageHistoryModulesBySurfaceChange = () => undefined,
   onCustomSourcesChange,
   onProgressThicknessPxChange,
   onProgressColorAppearanceChange,
@@ -511,6 +516,7 @@ export function SettingsPage({
         providers={providers}
         providerSourceDisplayCopy={providerSourceDisplayCopy}
         snapshots={snapshots}
+        locale={i18n.resolvedLocale}
         customSources={customSources}
         customSourceStates={customSourceStates}
         settingsCopy={settingsCopy}
@@ -519,6 +525,9 @@ export function SettingsPage({
         }
         onProviderOrderBySurfaceChange={onProviderOrderBySurfaceChange}
         onProgressItemsBySurfaceChange={onProgressItemsBySurfaceChange}
+        onUsageHistoryModulesBySurfaceChange={
+          onUsageHistoryModulesBySurfaceChange
+        }
         onProviderProgressDetailsOpenChange={
           settingsSurfaceSession.setProviderProgressDetailsOpen
         }

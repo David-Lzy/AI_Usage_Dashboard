@@ -5,6 +5,7 @@ import type {
   ProviderOrderBySurface,
   ProviderSetting,
   ProviderSnapshot,
+  UsageHistoryModulesBySurface,
 } from "../../providers/types";
 import type {
   CustomSourceSetting,
@@ -17,6 +18,8 @@ import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 import { ProviderOrderPreferenceControls } from "./ProviderOrderPreferenceControls";
 import { ProviderProgressItemPreferenceControls } from "./ProviderProgressItemPreferenceControls";
+import { UsageHistoryModulePreferenceControls } from "./UsageHistoryModulePreferenceControls";
+import type { ResolvedAppLocale } from "../../shared/i18n";
 
 type SettingsProviderDisplaySectionProps = {
   providers: ProviderSetting[];
@@ -25,6 +28,7 @@ type SettingsProviderDisplaySectionProps = {
   settings: AppSettings;
   settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>;
   snapshots: ProviderSnapshot[];
+  locale?: ResolvedAppLocale;
   providerProgressDetailsOpen?: Record<string, boolean>;
   customSources?: readonly CustomSourceSetting[];
   customSourceStates?: readonly CustomSourceSyncState[];
@@ -33,6 +37,9 @@ type SettingsProviderDisplaySectionProps = {
   ) => void;
   onProgressItemsBySurfaceChange: (
     progressItemsBySurface: ProgressItemsBySurface,
+  ) => void;
+  onUsageHistoryModulesBySurfaceChange?: (
+    usageHistoryModulesBySurface: UsageHistoryModulesBySurface,
   ) => void;
   onProviderProgressDetailsOpenChange?: (
     providerProgressDetailsOpen: Record<string, boolean>,
@@ -46,11 +53,13 @@ export function SettingsProviderDisplaySection({
   settings,
   settingsCopy,
   snapshots,
+  locale = "en",
   customSources = [],
   customSourceStates = [],
   providerProgressDetailsOpen,
   onProviderOrderBySurfaceChange,
   onProgressItemsBySurfaceChange,
+  onUsageHistoryModulesBySurfaceChange = () => undefined,
   onProviderProgressDetailsOpenChange,
 }: SettingsProviderDisplaySectionProps) {
   const displayEligibleProviders = filterDisplayEligibleProviderSettings(
@@ -118,6 +127,15 @@ export function SettingsProviderDisplaySection({
           progressItemsBySurface={settings.progressItemsBySurface}
           onChange={onProgressItemsBySurfaceChange}
           onDetailsOpenByProviderChange={onProviderProgressDetailsOpenChange}
+        />
+
+        <UsageHistoryModulePreferenceControls
+          locale={locale}
+          providers={displayVisibleProviders}
+          settingsCopy={settingsCopy}
+          snapshots={snapshots}
+          value={settings.usageHistoryModulesBySurface}
+          onChange={onUsageHistoryModulesBySurfaceChange}
         />
       </div>
     </section>

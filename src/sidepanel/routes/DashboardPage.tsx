@@ -6,7 +6,9 @@ import type {
   ProgressDisplayStyle,
   ProgressItemsBySurface,
   ProviderId,
+  ProviderUsageHistoryModuleId,
   SummaryItem,
+  UsageHistoryModulesBySurface,
 } from "../../providers/types";
 import { createRuntimeI18n } from "../../shared/i18n";
 import type { DashboardSourceId } from "../../shared/custom-sources";
@@ -16,6 +18,7 @@ import { ProviderCard } from "../components/ProviderCard";
 import { SummaryStrip } from "../components/SummaryStrip";
 import { TopBar } from "../components/TopBar";
 import type { ProviderViewModel } from "../view-models";
+import { createDefaultUsageHistoryModulesBySurface } from "../../shared/usage-history-visibility";
 
 type DashboardPageProps = {
   localePreference: AppLocalePreference;
@@ -25,6 +28,7 @@ type DashboardPageProps = {
   progressItemsBySurface: ProgressItemsBySurface;
   progressThicknessPx: number;
   progressSurface: DisplaySurface;
+  usageHistoryModulesBySurface?: UsageHistoryModulesBySurface;
   summaryItems: SummaryItem[];
   providers: ProviderViewModel[];
   customSources?: CustomSourceViewModel[];
@@ -45,6 +49,11 @@ type DashboardPageProps = {
   onOpenQuickSetup: () => void;
   onRefreshProvider: (providerId: ProviderId) => void;
   onRefreshAll: () => void;
+  onUsageHistoryVisibilityChange?: (
+    providerId: ProviderId,
+    moduleId: ProviderUsageHistoryModuleId,
+    visible: boolean,
+  ) => void;
 };
 
 export function DashboardPage({
@@ -55,6 +64,7 @@ export function DashboardPage({
   progressItemsBySurface,
   progressThicknessPx,
   progressSurface,
+  usageHistoryModulesBySurface = createDefaultUsageHistoryModulesBySurface(),
   summaryItems,
   providers,
   customSources = [],
@@ -72,6 +82,7 @@ export function DashboardPage({
   onOpenQuickSetup,
   onRefreshProvider,
   onRefreshAll,
+  onUsageHistoryVisibilityChange,
 }: DashboardPageProps) {
   const i18n = createRuntimeI18n(
     localePreference,
@@ -173,10 +184,14 @@ export function DashboardPage({
                   progressItemsBySurface={progressItemsBySurface}
                   progressThicknessPx={progressThicknessPx}
                   progressSurface={progressSurface}
+                  usageHistoryModulesBySurface={usageHistoryModulesBySurface}
                   provider={sourceCard.provider}
                   onOpen={onOpenProvider}
                   onOpenSourcePage={onOpenSourcePage}
                   onRefresh={onRefreshProvider}
+                  onUsageHistoryVisibilityChange={
+                    onUsageHistoryVisibilityChange
+                  }
                 />
               ) : (
                 <CustomSourceCard

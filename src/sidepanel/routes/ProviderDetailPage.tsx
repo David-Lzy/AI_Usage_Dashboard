@@ -6,6 +6,7 @@ import type {
   ProgressDisplayStyle,
   ProgressItemsBySurface,
   ProviderId,
+  UsageHistoryModulesBySurface,
 } from "../../providers/types";
 import { buildRuntimeCommonCopy, createRuntimeI18n } from "../../shared/i18n";
 import { getProviderDiagnosticPresentation } from "../../shared/provider-diagnostic-presentation";
@@ -20,6 +21,9 @@ import { StatusBadge } from "../components/StatusBadge";
 import { TopBar } from "../components/TopBar";
 import { UsageFactsList } from "../components/UsageFactsList";
 import type { ProviderViewModel } from "../view-models";
+import { UsageHistoryDetail } from "../../shared/components/UsageHistoryCharts";
+import { buildUsageHistoryLocalizedCopy } from "../../shared/usage-history-localized-copy";
+import { createDefaultUsageHistoryModulesBySurface, isProviderUsageHistoryModuleVisible } from "../../shared/usage-history-visibility";
 
 type ProviderDetailPageProps = {
   localePreference: AppLocalePreference;
@@ -29,6 +33,7 @@ type ProviderDetailPageProps = {
   progressItemsBySurface: ProgressItemsBySurface;
   progressThicknessPx: number;
   progressSurface: DisplaySurface;
+  usageHistoryModulesBySurface?: UsageHistoryModulesBySurface;
   provider: ProviderViewModel;
   onBack: () => void;
   themeActionLabel?: string;
@@ -52,6 +57,7 @@ export function ProviderDetailPage({
   progressItemsBySurface,
   progressThicknessPx,
   progressSurface,
+  usageHistoryModulesBySurface = createDefaultUsageHistoryModulesBySurface(),
   provider,
   onBack,
   themeActionLabel,
@@ -68,6 +74,7 @@ export function ProviderDetailPage({
     typeof window !== "undefined" ? window : undefined,
   );
   const copy = buildProviderDetailLocalizedCopy(i18n);
+  const usageHistoryCopy = buildUsageHistoryLocalizedCopy(i18n.resolvedLocale);
   const visibleUsageContextLabel =
     buildRuntimeCommonCopy(i18n).visibleUsageContext;
   const showSessionPageContract =
@@ -570,6 +577,31 @@ export function ProviderDetailPage({
           </div>
         ) : null}
       </section>
+
+      {provider.providerId === "codex-personal-page" ? (
+        <section className="status-card" data-provider-usage-history-detail="">
+          {provider.usageHistory ? (
+            <UsageHistoryDetail
+              copy={usageHistoryCopy}
+              history={provider.usageHistory}
+              showPersonalUsage={isProviderUsageHistoryModuleVisible(
+                usageHistoryModulesBySurface,
+                progressSurface,
+                provider.providerId,
+                "personal_usage_by_surface",
+              )}
+              showTurns={isProviderUsageHistoryModuleVisible(
+                usageHistoryModulesBySurface,
+                progressSurface,
+                provider.providerId,
+                "turns_history",
+              )}
+            />
+          ) : (
+            <p className="supporting-copy">{usageHistoryCopy.noData}</p>
+          )}
+        </section>
+      ) : null}
     </main>
   );
 }
