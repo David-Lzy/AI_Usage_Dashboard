@@ -79,6 +79,8 @@ import {
   normalizeCustomSourceSyncStates,
 } from "./custom-sources";
 import { buildCustomSourceProgressItemIdsBySource } from "./custom-source-view-models";
+import { normalizeProviderUsageHistory } from "./provider-usage-history";
+import { normalizeUsageHistoryModulesBySurface } from "./usage-history-visibility";
 
 let memoryFallbackState: AppState | null = null;
 
@@ -211,12 +213,20 @@ function normalizeAppState(state: AppState): AppState {
 
   const providers = SAMPLE_APP_STATE.providers.map((sampleProvider) => {
     const storedProvider = storedProviders.get(sampleProvider.providerId);
-    return {
+    const provider = {
       ...sampleProvider,
       ...storedProvider,
       providerId: sampleProvider.providerId,
       providerLabel: sampleProvider.providerLabel,
     };
+    const usageHistory = normalizeProviderUsageHistory(provider.usageHistory);
+
+    if (usageHistory) {
+      return { ...provider, usageHistory };
+    }
+
+    const { usageHistory: _usageHistory, ...providerWithoutHistory } = provider;
+    return providerWithoutHistory;
   });
 
   const providerSettings = SAMPLE_APP_STATE.providerSettings.map(
@@ -359,6 +369,10 @@ function normalizeAppState(state: AppState): AppState {
         state.settings?.progressItemsBySurface,
         knownDashboardSourceIds,
         knownProgressItemIdsBySource,
+      ),
+      usageHistoryModulesBySurface: normalizeUsageHistoryModulesBySurface(
+        state.settings?.usageHistoryModulesBySurface,
+        knownProviderIds,
       ),
       progressThicknessPx: normalizeProgressThicknessPx(
         state.settings?.progressThicknessPx,

@@ -35,6 +35,7 @@ function createLegacyState(): AppState {
     toolbarIconCustomImageDataUrl: _toolbarIconCustomImageDataUrl,
     providerOrderBySurface: _providerOrderBySurface,
     progressItemsBySurface: _progressItemsBySurface,
+    usageHistoryModulesBySurface: _usageHistoryModulesBySurface,
     progressThicknessPx: _progressThicknessPx,
     progressColorBands: _progressColorBands,
     progressColorAppearance: _progressColorAppearance,
@@ -293,6 +294,11 @@ describe("storage normalization", () => {
       fullPage: [],
     });
     expect(state?.settings.progressItemsBySurface).toEqual({
+      popup: {},
+      sidebar: {},
+      fullPage: {},
+    });
+    expect(state?.settings.usageHistoryModulesBySurface).toEqual({
       popup: {},
       sidebar: {},
       fullPage: {},

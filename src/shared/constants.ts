@@ -48,6 +48,7 @@ import {
   createDefaultProgressItemsBySurface,
   createDefaultProviderOrderBySurface,
 } from "./display-preferences";
+import { createDefaultUsageHistoryModulesBySurface } from "./usage-history-visibility";
 import {
   createCredentialDiagnostic,
   createPageSessionDiagnostic,
@@ -727,6 +728,7 @@ export const SAMPLE_APP_STATE: AppState = {
     toolbarIconCustomImageDataUrl: DEFAULT_TOOLBAR_ICON_CUSTOM_IMAGE_DATA_URL,
     providerOrderBySurface: createDefaultProviderOrderBySurface(),
     progressItemsBySurface: createDefaultProgressItemsBySurface(),
+    usageHistoryModulesBySurface: createDefaultUsageHistoryModulesBySurface(),
     progressThicknessPx: DEFAULT_PROGRESS_THICKNESS_PX,
     progressColorBands: createDefaultProgressColorBands(),
     progressColorAppearance: createDefaultProgressColorAppearance(),
@@ -832,6 +834,7 @@ export const DEFAULT_APP_STATE: AppState = {
     ...SAMPLE_APP_STATE.settings,
     providerOrderBySurface: createDefaultProviderOrderBySurface(),
     progressItemsBySurface: createDefaultProgressItemsBySurface(),
+    usageHistoryModulesBySurface: createDefaultUsageHistoryModulesBySurface(),
     progressColorBands: createDefaultProgressColorBands(),
     progressColorAppearance: createDefaultProgressColorAppearance(),
   },

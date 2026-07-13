@@ -178,6 +178,17 @@ export type ProgressItemsBySurface = Record<
   DisplaySurface,
   Partial<Record<DashboardSourceId, ProviderProgressItemPreference[]>>
 >;
+export type ProviderUsageHistoryModuleId =
+  | "personal_usage_by_surface"
+  | "turns_history";
+export type ProviderUsageHistoryModulePreference = {
+  id: ProviderUsageHistoryModuleId;
+  visible: boolean;
+};
+export type UsageHistoryModulesBySurface = Record<
+  DisplaySurface,
+  Partial<Record<ProviderId, ProviderUsageHistoryModulePreference[]>>
+>;
 export type ProgressColorBand = {
   id: string;
   minimumPercent: number;
@@ -259,7 +270,35 @@ export type ProviderSnapshot = {
   usageBalances?: ProviderUsageBalance[];
   usageFacts?: ProviderUsageFact[];
   usageSummary?: string | null;
+  usageHistory?: ProviderUsageHistory;
   tone: ProviderTone;
+};
+
+export type ProviderUsageHistoryValue = {
+  id: string;
+  label: string;
+  value: number;
+};
+
+export type ProviderUsageHistoryPoint = {
+  date: string;
+  values: ProviderUsageHistoryValue[];
+};
+
+export type ProviderUsageHistory = {
+  capturedAt: string;
+  rangeStart: string;
+  rangeEnd: string;
+  granularity: "day";
+  personalUsageBySurface: {
+    unit: "percent";
+    points: ProviderUsageHistoryPoint[];
+  } | null;
+  turns: {
+    total: number | null;
+    byModel: ProviderUsageHistoryPoint[];
+    bySurface: ProviderUsageHistoryPoint[];
+  } | null;
 };
 
 export type ProviderUsageWindow = {
@@ -352,6 +391,7 @@ export type AppSettings = {
   toolbarIconCustomImageDataUrl: string | null;
   providerOrderBySurface: ProviderOrderBySurface;
   progressItemsBySurface: ProgressItemsBySurface;
+  usageHistoryModulesBySurface: UsageHistoryModulesBySurface;
   progressThicknessPx: number;
   progressColorBands: ProgressColorBand[];
   progressColorAppearance: ProgressColorAppearance;
