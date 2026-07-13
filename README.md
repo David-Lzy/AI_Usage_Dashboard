@@ -17,6 +17,9 @@ dashboard.
   setup guidance, and sync diagnostics.
 - Shows focused first-run access actions when a provider needs optional host
   permission before live sync can run.
+- Shows normalized Codex daily usage history and turn trends when the signed-in
+  Codex page exposes the verified structured history responses. Each history
+  module can be hidden independently per popup, side-panel, or full-page surface.
 - Keeps provider data boundaries visible: exact values, partial values,
   window-scoped values, policy-only data, or unavailable data are labeled
   differently.
@@ -54,6 +57,9 @@ AI Usage Dashboard is intentionally conservative:
   for user-approved custom source HTTP/HTTPS endpoint origins.
 - Custom JSON sources fetch user-configured HTTP or HTTPS endpoints with
   browser credentials omitted; raw response bodies are not stored or rendered.
+- Codex history capture keeps only bounded normalized daily aggregates in the
+  cached provider snapshot. Raw network responses, page body text, cookies,
+  request headers, and account identifiers are not stored.
 - The `favicon` permission is used only for the optional provider-matched
   toolbar icon feature.
 - It does not load or execute remote code.

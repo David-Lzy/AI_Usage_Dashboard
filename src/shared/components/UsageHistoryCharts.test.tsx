@@ -19,6 +19,13 @@ const copy: UsageHistoryChartCopy = {
   totalTurns: "Total turns",
   percentUnit: "%",
   turnsUnit: "turns",
+  surfaceLabels: { desktop: "Desktop" },
+  chartLegend: "Chart legend",
+  dateRange: "Date range",
+  grouping: "Grouping",
+  settingsSectionLabel: "Usage history",
+  settingsTitle: "Show history modules by surface",
+  settingsDetail: "History modules can be hidden per surface.",
 };
 
 const history: ProviderUsageHistory = {

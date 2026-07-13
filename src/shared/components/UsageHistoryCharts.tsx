@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import type {
   ProviderUsageHistory,
   ProviderUsageHistoryModuleId,
+  ProviderUsageHistoryPoint,
 } from "../../providers/types";
 import {
   buildUsageHistoryChartData,
@@ -25,6 +26,13 @@ export type UsageHistoryChartCopy = {
   totalTurns: string;
   percentUnit: string;
   turnsUnit: string;
+  surfaceLabels: Record<string, string>;
+  chartLegend: string;
+  dateRange: string;
+  grouping: string;
+  settingsSectionLabel: string;
+  settingsTitle: string;
+  settingsDetail: string;
 };
 
 type ChartKind = "bars" | "area";
@@ -164,9 +172,15 @@ function UsageHistorySvg({
   );
 }
 
-function UsageHistoryLegend({ data }: { data: UsageHistoryChartData }) {
+function UsageHistoryLegend({
+  data,
+  label,
+}: {
+  data: UsageHistoryChartData;
+  label: string;
+}) {
   return (
-    <ul className="usage-history-legend" aria-label="Chart legend">
+    <ul className="usage-history-legend" aria-label={label}>
       {data.series.map((series, index) => (
         <li key={series.id} className="usage-history-legend__item">
           <span
@@ -190,6 +204,19 @@ function getModulePoints(
     : history?.turns?.byModel ?? [];
 }
 
+function localizeSurfacePoints(
+  points: readonly ProviderUsageHistoryPoint[],
+  surfaceLabels: Record<string, string>,
+) {
+  return points.map((point) => ({
+    ...point,
+    values: point.values.map((value) => ({
+      ...value,
+      label: surfaceLabels[value.id] ?? value.label,
+    })),
+  }));
+}
+
 export function UsageHistoryCompact({
   history,
   moduleId,
@@ -203,7 +230,12 @@ export function UsageHistoryCompact({
   onHide?: () => void;
   onOpenDetails?: () => void;
 }) {
-  const points = getModulePoints(history, moduleId);
+  const points = useMemo(() => {
+    const sourcePoints = getModulePoints(history, moduleId);
+    return moduleId === "personal_usage_by_surface"
+      ? localizeSurfacePoints(sourcePoints, copy.surfaceLabels)
+      : sourcePoints;
+  }, [copy.surfaceLabels, history, moduleId]);
   const data = useMemo(
     () => buildUsageHistoryChartData(points, { days: 31, maxSeries: 3, otherLabel: copy.other }),
     [copy.other, points],
@@ -234,7 +266,7 @@ export function UsageHistoryCompact({
             label={title}
             unit={moduleId === "personal_usage_by_surface" ? copy.percentUnit : copy.turnsUnit}
           />
-          <UsageHistoryLegend data={data} />
+          <UsageHistoryLegend data={data} label={copy.chartLegend} />
         </>
       ) : <p className="supporting-copy">{copy.noData}</p>}
     </section>
@@ -274,19 +306,42 @@ export function UsageHistoryDetail({
   copy,
   showPersonalUsage = true,
   showTurns = true,
+  formatCapturedAt = (value) => value,
 }: {
   history: ProviderUsageHistory;
   copy: UsageHistoryChartCopy;
   showPersonalUsage?: boolean;
   showTurns?: boolean;
+  formatCapturedAt?: (value: string) => string;
 }) {
   const [days, setDays] = useState<7 | 31>(31);
   const [grouping, setGrouping] = useState<"model" | "surface">("model");
-  const personalData = useMemo(
-    () => buildUsageHistoryChartData(history.personalUsageBySurface?.points ?? [], { days, maxSeries: 6, otherLabel: copy.other }),
-    [copy.other, days, history.personalUsageBySurface?.points],
+  const personalPoints = useMemo(
+    () =>
+      localizeSurfacePoints(
+        history.personalUsageBySurface?.points ?? [],
+        copy.surfaceLabels,
+      ),
+    [copy.surfaceLabels, history.personalUsageBySurface?.points],
   );
-  const turnPoints = grouping === "model" ? history.turns?.byModel ?? [] : history.turns?.bySurface ?? [];
+  const personalData = useMemo(
+    () =>
+      buildUsageHistoryChartData(personalPoints, {
+        days,
+        maxSeries: 6,
+        otherLabel: copy.other,
+      }),
+    [copy.other, days, personalPoints],
+  );
+  const turnPoints = useMemo(() => {
+    const points =
+      grouping === "model"
+        ? history.turns?.byModel ?? []
+        : history.turns?.bySurface ?? [];
+    return grouping === "surface"
+      ? localizeSurfacePoints(points, copy.surfaceLabels)
+      : points;
+  }, [copy.surfaceLabels, grouping, history.turns?.byModel, history.turns?.bySurface]);
   const turnsData = useMemo(
     () => buildUsageHistoryChartData(turnPoints, { days, maxSeries: 6, otherLabel: copy.other }),
     [copy.other, days, turnPoints],
@@ -295,9 +350,11 @@ export function UsageHistoryDetail({
   return (
     <section className="usage-history-detail" aria-label={`${copy.personalUsage}, ${copy.turns}`}>
       <header className="usage-history-detail__toolbar">
-        <p className="supporting-copy">{copy.capturedAt}: {history.capturedAt}</p>
+        <p className="supporting-copy">
+          {copy.capturedAt}: {formatCapturedAt(history.capturedAt)}
+        </p>
         <SegmentedControl
-          label="Date range"
+          label={copy.dateRange}
           value={days}
           options={[{ value: 7, label: copy.sevenDays }, { value: 31, label: copy.oneMonth }] as const}
           onChange={setDays}
@@ -306,7 +363,23 @@ export function UsageHistoryDetail({
       {showPersonalUsage ? (
         <section className="usage-history-detail__module">
           <h3 className="section-title">{copy.personalUsage}</h3>
-          {personalData.dates.length ? <><UsageHistorySvg compact={false} data={personalData} kind="bars" label={copy.personalUsage} unit={copy.percentUnit} /><UsageHistoryLegend data={personalData} /></> : <p className="supporting-copy">{copy.noData}</p>}
+          {personalData.dates.length ? (
+            <>
+              <UsageHistorySvg
+                compact={false}
+                data={personalData}
+                kind="bars"
+                label={copy.personalUsage}
+                unit={copy.percentUnit}
+              />
+              <UsageHistoryLegend
+                data={personalData}
+                label={copy.chartLegend}
+              />
+            </>
+          ) : (
+            <p className="supporting-copy">{copy.noData}</p>
+          )}
         </section>
       ) : null}
       {showTurns ? (
@@ -314,13 +387,29 @@ export function UsageHistoryDetail({
           <header className="usage-history-detail__module-header">
             <div><h3 className="section-title">{copy.turns}</h3><p className="usage-history-compact__metric">{copy.totalTurns}: {turnsData.total}</p></div>
             <SegmentedControl
-              label="Grouping"
+              label={copy.grouping}
               value={grouping}
               options={[{ value: "model", label: copy.byModel }, { value: "surface", label: copy.bySurface }] as const}
               onChange={setGrouping}
             />
           </header>
-          {turnsData.dates.length ? <><UsageHistorySvg compact={false} data={turnsData} kind="area" label={copy.turns} unit={copy.turnsUnit} /><UsageHistoryLegend data={turnsData} /></> : <p className="supporting-copy">{copy.noData}</p>}
+          {turnsData.dates.length ? (
+            <>
+              <UsageHistorySvg
+                compact={false}
+                data={turnsData}
+                kind="area"
+                label={copy.turns}
+                unit={copy.turnsUnit}
+              />
+              <UsageHistoryLegend
+                data={turnsData}
+                label={copy.chartLegend}
+              />
+            </>
+          ) : (
+            <p className="supporting-copy">{copy.noData}</p>
+          )}
         </section>
       ) : null}
     </section>

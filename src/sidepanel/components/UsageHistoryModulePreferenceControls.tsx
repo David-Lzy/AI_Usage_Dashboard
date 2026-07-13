@@ -55,15 +55,9 @@ export function UsageHistoryModulePreferenceControls({
   return (
     <section className="usage-history-preferences" data-usage-history-preferences="">
       <div>
-        <p className="section-label">{locale === "zh-CN" ? "使用历史" : "Usage history"}</p>
-        <h3 className="section-title">
-          {locale === "zh-CN" ? "按界面显示历史模块" : "Show history modules by surface"}
-        </h3>
-        <p className="supporting-copy">
-          {locale === "zh-CN"
-            ? "个人使用和轮次趋势可以在 Popup、侧栏和完整页面中分别隐藏。"
-            : "Personal usage and turns can be hidden independently on popup, sidebar, and full-page surfaces."}
-        </p>
+        <p className="section-label">{copy.settingsSectionLabel}</p>
+        <h3 className="section-title">{copy.settingsTitle}</h3>
+        <p className="supporting-copy">{copy.settingsDetail}</p>
       </div>
       {configurableProviders.map((provider) => (
         <div className="usage-history-preferences__provider" key={provider.id}>
@@ -105,4 +99,3 @@ export function UsageHistoryModulePreferenceControls({
     </section>
   );
 }
-

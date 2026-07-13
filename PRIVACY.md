@@ -11,6 +11,8 @@ Depending on which providers and features a user enables, the extension may stor
 - optional API credentials entered by the user
 - page bindings for supported signed-in provider usage pages
 - cached usage snapshots and sync diagnostics
+- bounded normalized daily provider history aggregates when a supported signed-in
+  page exposes a verified structured history response
 - locally cached provider favicon images for toolbar icon matching
 - custom JSON source settings, including endpoint URLs and refresh intervals
 - normalized custom JSON source snapshots and sync diagnostics
@@ -51,6 +53,16 @@ longer exposes parseable usage information, the extension reports that state
 instead of inventing a value.
 
 The extension does not ask users to paste cookies or raw browser authentication headers.
+
+For Codex usage history, the extension observes only the verified structured
+history responses while a user-triggered or scheduled provider refresh is in
+progress. It validates and normalizes at most 31 daily buckets into the cached
+provider snapshot, then removes the temporary observer. It does not store the
+raw response, page body text, cookies, request headers, account identifiers, or
+unrelated response fields. History is not included in configuration backups or
+raw evidence exports. If the page response contract changes, history display
+can become temporarily unavailable without replacing prior history with fake
+zero values or blocking current quota refresh.
 
 ## Favicon Permission
 

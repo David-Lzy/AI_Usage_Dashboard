@@ -462,3 +462,29 @@ agentic usage limit and directs users to the Codex Settings usage panel for
 visible limits and credit options. It does not define a stable public DOM
 schema, so the extension continues to treat the live page parser as a
 best-effort session-page integration with explicit route-drift failure.
+
+## 21. 2026-07-13 Structured Usage History
+
+The signed-in Codex Analytics page also loads bounded structured daily-history
+responses for personal usage by product surface and workspace turn counts by
+model and client surface. The extension observes those responses only during
+the existing Codex refresh and does not add a separate history timer.
+
+Shipped history behavior:
+
+- at most 31 daily buckets and 16 source series per view are normalized into the
+  cached Codex snapshot
+- model names remain source labels; known client surfaces can be localized in
+  the UI, while unknown labels remain visible instead of being discarded
+- compact summaries appear in popup and provider cards; detailed stacked charts
+  appear in Provider detail
+- personal usage and turn trends can be hidden independently on popup, sidebar,
+  and full-page surfaces and restored in Provider display settings
+- raw responses, page body text, cookies, headers, account identifiers, and
+  unrelated response fields are not persisted
+- a failed or changed history response preserves the last valid history and
+  does not block current quota, balance, reset-time, or authorization behavior
+
+The history endpoints are an observed signed-in page contract, not a documented
+public API. A future Codex page change may therefore temporarily disable the
+history modules until the structured contract is reverified.

@@ -584,6 +584,7 @@ export function ProviderDetailPage({
             <UsageHistoryDetail
               copy={usageHistoryCopy}
               history={provider.usageHistory}
+              formatCapturedAt={(value) => i18n.formatTemporalValue(value) ?? value}
               showPersonalUsage={isProviderUsageHistoryModuleVisible(
                 usageHistoryModulesBySurface,
                 progressSurface,
