@@ -5,6 +5,7 @@ import {
   installNetworkObserverBridge,
   prepareNetworkObserverForReload,
   readNetworkObserverBridge,
+  recoverNetworkObserverFromPerformanceResources,
   type PageSessionObservedNetworkEntry,
 } from "./page-session-network-observer";
 import type { PageSessionScriptingApi } from "./page-session-script-capture";
@@ -75,6 +76,58 @@ describe("page-session network observer helpers", () => {
       maxEntries: 5,
       entries: [entry],
     });
+  });
+
+  it("recovers only missing matched same-origin resources", async () => {
+    const capturedEntry: PageSessionObservedNetworkEntry = {
+      url: "https://chatgpt.com/backend-api/wham/usage/daily-token-usage-breakdown?days=31",
+      method: "GET",
+      status: 200,
+      ok: true,
+      contentType: "application/json",
+      bodyText: '{"data":[]}',
+      capturedAt: "2026-07-13T00:00:00.000Z",
+      transport: "fetch",
+    };
+    const recoveredEntry: PageSessionObservedNetworkEntry = {
+      url: "https://chatgpt.com/backend-api/wham/analytics/daily-workspace-usage-counts?days=31",
+      method: "GET",
+      status: 200,
+      ok: true,
+      contentType: "application/json",
+      bodyText: '{"data":[]}',
+      capturedAt: "2026-07-13T00:00:01.000Z",
+      transport: "fetch",
+    };
+    const scriptingApi = createResultApi([recoveredEntry]);
+    const result = await recoverNetworkObserverFromPerformanceResources(
+      31,
+      scriptingApi,
+      {
+        mode: "network_observer",
+        matchUrlSubstrings: [
+          "/daily-token-usage-breakdown",
+          "/daily-workspace-usage-counts",
+        ],
+        maxEntries: 4,
+        maxBodyLength: 200_000,
+        recoverFromPerformanceResources: true,
+      },
+      {
+        matchUrlSubstrings: ["/daily-token-usage-breakdown"],
+        maxEntries: 4,
+        entries: [capturedEntry],
+      },
+    );
+
+    expect(result.entries).toEqual([capturedEntry, recoveredEntry]);
+    expect(scriptingApi.executeScript).toHaveBeenCalledWith(
+      expect.objectContaining({
+        target: { tabId: 31 },
+        world: "MAIN",
+        args: [["/daily-workspace-usage-counts"], 4, 200_000],
+      }),
+    );
   });
 
   it("installs the observer bridge with stable defaults", async () => {

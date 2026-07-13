@@ -26,6 +26,7 @@ export type PageSessionNetworkObserverExtraction = {
   maxEntries?: number;
   maxBodyLength?: number;
   observeReload?: boolean;
+  recoverFromPerformanceResources?: boolean;
 };
 
 const NETWORK_BRIDGE_SCRIPT_ID = "__ai_usage_dashboard_page_session_bridge__";
@@ -491,4 +492,128 @@ export async function readNetworkObserverBridge(
   } catch {
     return buildEmptyNetworkObserverState();
   }
+}
+
+export async function recoverNetworkObserverFromPerformanceResources(
+  tabId: number,
+  scriptingApi: PageSessionScriptingApi,
+  extraction: PageSessionNetworkObserverExtraction,
+  current: PageSessionObservedNetworkState,
+): Promise<PageSessionObservedNetworkState> {
+  if (!extraction.recoverFromPerformanceResources) {
+    return current;
+  }
+
+  const missingUrlSubstrings = extraction.matchUrlSubstrings.filter(
+    (substring) =>
+      !current.entries.some((entry) => entry.url.includes(substring)),
+  );
+
+  if (missingUrlSubstrings.length === 0) {
+    return current;
+  }
+
+  const recovered = await executeScriptResult<PageSessionObservedNetworkEntry[]>(
+    scriptingApi,
+    {
+      tabId,
+      world: "MAIN",
+      func: async (
+        rawMatchUrlSubstrings: unknown,
+        rawMaxEntries: unknown,
+        rawMaxBodyLength: unknown,
+      ) => {
+        const matchUrlSubstrings = Array.isArray(rawMatchUrlSubstrings)
+          ? rawMatchUrlSubstrings.filter(
+              (value): value is string =>
+                typeof value === "string" && value.length > 0,
+            )
+          : [];
+        const maxEntries =
+          typeof rawMaxEntries === "number" && rawMaxEntries > 0
+            ? Math.min(10, Math.floor(rawMaxEntries))
+            : 4;
+        const maxBodyLength =
+          typeof rawMaxBodyLength === "number" && rawMaxBodyLength > 0
+            ? Math.min(250_000, Math.floor(rawMaxBodyLength))
+            : 20_000;
+        const resourceNames = globalThis.performance
+          .getEntriesByType("resource")
+          .map((entry) => entry.name);
+        const urls = matchUrlSubstrings.flatMap((substring) => {
+          const matchedUrl = [...resourceNames]
+            .reverse()
+            .find((name) => {
+              try {
+                const url = new URL(name, globalThis.location.href);
+                return (
+                  url.origin === globalThis.location.origin &&
+                  url.href.includes(substring)
+                );
+              } catch {
+                return false;
+              }
+            });
+          return matchedUrl ? [matchedUrl] : [];
+        });
+        const uniqueUrls = [...new Set(urls)].slice(0, maxEntries);
+        const storeKey = "__AI_USAGE_DASHBOARD_PAGE_SESSION__";
+        const root = globalThis as typeof globalThis & {
+          [storeKey]?: { originalFetch?: typeof fetch };
+        };
+        const fetchResource =
+          root[storeKey]?.originalFetch ?? globalThis.fetch.bind(globalThis);
+        const entries: PageSessionObservedNetworkEntry[] = [];
+
+        for (const url of uniqueUrls) {
+          try {
+            const response = await fetchResource(url, {
+              method: "GET",
+              credentials: "same-origin",
+              cache: "no-cache",
+            });
+            const contentType = response.headers.get("content-type");
+
+            if (contentType && !contentType.toLowerCase().includes("json")) {
+              continue;
+            }
+
+            const bodyText = (await response.text()).slice(0, maxBodyLength);
+            entries.push({
+              url: response.url || url,
+              method: "GET",
+              status: response.status,
+              ok: response.ok,
+              contentType,
+              bodyText,
+              capturedAt: new Date().toISOString(),
+              transport: "fetch",
+            });
+          } catch {
+            // Recovery is best effort; the original page request remains intact.
+          }
+        }
+
+        return entries;
+      },
+      args: [
+        missingUrlSubstrings,
+        extraction.maxEntries ?? 20,
+        extraction.maxBodyLength ?? 20_000,
+      ],
+    },
+  ).catch(() => []);
+  const maxEntries = extraction.maxEntries ?? 20;
+  const entries = [...current.entries, ...(Array.isArray(recovered) ? recovered : [])]
+    .filter(
+      (entry, index, allEntries) =>
+        allEntries.findIndex((candidate) => candidate.url === entry.url) === index,
+    )
+    .slice(0, maxEntries);
+
+  return {
+    matchUrlSubstrings: extraction.matchUrlSubstrings,
+    maxEntries,
+    entries,
+  };
 }

@@ -273,6 +273,7 @@ async function captureRoute(
             maxEntries: 4,
             maxBodyLength: 200_000,
             observeReload: true,
+            recoverFromPerformanceResources: true,
           }
         : { mode: "dom" as const }),
     },

@@ -86,6 +86,13 @@ describe("ProviderCard", () => {
     expect(hiddenHtml).not.toContain("Turns trend");
   });
 
+  it("does not reserve two empty modules before history is captured", () => {
+    const html = renderProviderCard(createState(), "codex-personal-page");
+
+    expect(html).not.toContain("usage-history-compact");
+    expect(html).not.toContain("No history data yet");
+  });
+
   it("uses the Material provider-card hierarchy for summary, progress, chips, and actions", () => {
     const html = renderProviderCard(createState(), "codex-personal-page");
 

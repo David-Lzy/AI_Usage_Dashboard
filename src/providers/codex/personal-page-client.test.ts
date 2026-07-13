@@ -45,6 +45,11 @@ describe("createCodexPersonalPageClient", () => {
         };
       }
 
+      expect(definition.extraction).toMatchObject({
+        mode: "network_observer",
+        recoverFromPerformanceResources: true,
+      });
+
       analyticsCaptureCount += 1;
 
       if (analyticsCaptureCount === 1) {

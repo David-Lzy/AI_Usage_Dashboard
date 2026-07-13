@@ -15,6 +15,16 @@
   min-width: 0;
 }
 
+.usage-history-compact__header {
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.usage-history-compact__header > :first-child {
+  min-width: 0;
+  flex: 1 1 120px;
+}
+
 .usage-history-compact__title {
   margin: 0;
   color: var(--md-sys-color-on-surface);
@@ -37,7 +47,9 @@
 .usage-history-compact__actions {
   display: flex;
   align-items: center;
+  flex: 0 0 auto;
   gap: 4px;
+  margin-inline-start: auto;
 }
 
 .usage-history-chart {
@@ -138,7 +150,6 @@
 }
 
 @media (max-width: 520px) {
-  .usage-history-compact__header,
   .usage-history-detail__toolbar,
   .usage-history-detail__module-header {
     align-items: flex-start;

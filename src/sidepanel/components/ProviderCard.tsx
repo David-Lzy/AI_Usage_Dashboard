@@ -172,7 +172,7 @@ export function ProviderCard({
           </section>
         ) : null}
 
-        {provider.providerId === "codex-personal-page" || provider.usageHistory
+        {provider.usageHistory
           ? (["personal_usage_by_surface", "turns_history"] as const).map(
               (moduleId) =>
                 isProviderUsageHistoryModuleVisible(

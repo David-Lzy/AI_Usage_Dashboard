@@ -1,8 +1,15 @@
+import { readFileSync } from "node:fs";
+
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
 import type { ProviderUsageHistory } from "../../providers/types";
 import { UsageHistoryCompact, UsageHistoryDetail, type UsageHistoryChartCopy } from "./UsageHistoryCharts";
+
+const chartsCss = readFileSync(
+  new URL("./usage-history-charts.css", import.meta.url),
+  "utf8",
+);
 
 const copy: UsageHistoryChartCopy = {
   personalUsage: "Personal usage",
@@ -58,5 +65,15 @@ describe("UsageHistoryCharts", () => {
     expect(html).toContain("1 month");
     expect(html).toContain("By model");
     expect(html).toContain("Personal usage");
+  });
+
+  it("keeps compact actions at the inline end on narrow surfaces", () => {
+    expect(chartsCss).toContain(".usage-history-compact__header {");
+    expect(chartsCss).toContain("flex-wrap: wrap;");
+    expect(chartsCss).toContain(".usage-history-compact__actions {");
+    expect(chartsCss).toContain("margin-inline-start: auto;");
+    expect(chartsCss).not.toContain(
+      ".usage-history-compact__header,\n  .usage-history-detail__toolbar",
+    );
   });
 });

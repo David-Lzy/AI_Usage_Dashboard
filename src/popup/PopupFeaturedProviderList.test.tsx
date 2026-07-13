@@ -147,6 +147,28 @@ describe("PopupFeaturedProviderList", () => {
     expect(html).not.toContain(">41%<");
   });
 
+  it("does not render duplicate empty history modules before history is captured", () => {
+    const codexCard = buildPopupViewModel(
+      SAMPLE_APP_STATE,
+    ).featuredProviderCards.find(
+      (card) => card.provider.providerId === "codex-personal-page",
+    );
+
+    if (!codexCard) {
+      throw new Error("Missing Codex popup card fixture.");
+    }
+
+    const html = renderFeaturedList([
+      {
+        ...codexCard,
+        provider: { ...codexCard.provider, usageHistory: undefined },
+      },
+    ]);
+
+    expect(html).not.toContain("usage-history-compact");
+    expect(html).not.toContain("No history data yet");
+  });
+
   it("allows localized header actions to wrap instead of clipping translated labels", () => {
     expect(popupThemeCss).toContain(".popup-provider-card__title-row {");
     expect(popupThemeCss).toContain("flex-wrap: wrap;");
