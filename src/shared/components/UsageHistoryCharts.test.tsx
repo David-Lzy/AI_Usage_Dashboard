@@ -68,6 +68,7 @@ describe("UsageHistoryCharts", () => {
     expect(html).toContain('aria-label="Collapse: Personal usage"');
     expect(html).toContain('aria-expanded="true"');
     expect(html).toContain("usage-history-compact__collapse-toggle");
+    expect(html).toContain("usage-history-compact__heading");
     expect(html).toContain("tabindex=\"0\"");
   });
 
@@ -109,7 +110,15 @@ describe("UsageHistoryCharts", () => {
     expect(chartsCss).toContain("--app-usage-history-series-1");
     expect(chartsCss).toContain(':root[data-theme-resolved="dark"]');
     expect(chartsCss).toContain(".usage-history-compact__header {");
-    expect(chartsCss).toContain(".usage-history-compact__collapse-toggle {");
+    expect(chartsCss).toContain(
+      ".icon-button.usage-history-compact__collapse-toggle {",
+    );
+    expect(chartsCss).toContain("width: 56px;");
+    expect(chartsCss).toContain("height: 18px;");
+    expect(chartsCss).toContain(".usage-history-compact--collapsed {");
+    expect(chartsCss).toContain(
+      ".usage-history-chart--compact .usage-history-chart__grid {",
+    );
     expect(chartsCss).toContain("margin-inline-start: auto;");
     expect(chartsCss).toContain(".usage-history-chart__bar {");
   });

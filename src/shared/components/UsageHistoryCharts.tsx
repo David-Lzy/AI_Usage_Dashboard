@@ -286,13 +286,18 @@ export function UsageHistoryCompact({
   const title = moduleId === "personal_usage_by_surface" ? copy.personalUsage : copy.turns;
 
   return (
-    <section className="usage-history-compact" aria-label={title}>
+    <section
+      className={`usage-history-compact${isExpanded ? "" : " usage-history-compact--collapsed"}`}
+      aria-label={title}
+    >
       <header className="usage-history-compact__header">
-        <div>
+        <div className="usage-history-compact__heading">
           <h3 className="usage-history-compact__title">{title}</h3>
-          <p className="usage-history-compact__range">
-            {formatDateRange(data, copy.locale)}
-          </p>
+          {isExpanded ? (
+            <p className="usage-history-compact__range">
+              {formatDateRange(data, copy.locale)}
+            </p>
+          ) : null}
         </div>
         <button
           className="icon-button usage-history-compact__collapse-toggle"
