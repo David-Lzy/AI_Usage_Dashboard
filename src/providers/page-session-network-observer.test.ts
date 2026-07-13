@@ -1,7 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 
 import {
+  cleanupPreparedNetworkObserver,
   installNetworkObserverBridge,
+  prepareNetworkObserverForReload,
   readNetworkObserverBridge,
   type PageSessionObservedNetworkEntry,
 } from "./page-session-network-observer";
@@ -103,5 +105,49 @@ describe("page-session network observer helpers", () => {
         ],
       }),
     );
+  });
+
+  it("registers and cleans up a bounded document-start observer", async () => {
+    const executeScript = vi.fn().mockResolvedValue([{ result: true }]);
+    const registerContentScripts = vi.fn().mockResolvedValue(undefined);
+    const unregisterContentScripts = vi.fn().mockResolvedValue(undefined);
+    const scriptingApi: PageSessionScriptingApi = {
+      executeScript,
+      registerContentScripts,
+      unregisterContentScripts,
+    };
+
+    const prepared = await prepareNetworkObserverForReload(
+      23,
+      scriptingApi,
+      {
+        mode: "network_observer",
+        matchUrlSubstrings: ["/daily-usage"],
+        maxEntries: 4,
+        maxBodyLength: 200_000,
+        observeReload: true,
+      },
+      ["https://chatgpt.com/codex/*"],
+    );
+
+    expect(prepared).toEqual({
+      registrationId: "ai-usage-dashboard-network-23",
+    });
+    expect(registerContentScripts).toHaveBeenCalledWith([
+      expect.objectContaining({
+        id: "ai-usage-dashboard-network-23",
+        matches: ["https://chatgpt.com/codex/*"],
+        js: ["page-session-network-observer-document-start.js"],
+        runAt: "document_start",
+        world: "MAIN",
+        persistAcrossSessions: false,
+      }),
+    ]);
+
+    await cleanupPreparedNetworkObserver(23, scriptingApi, prepared);
+
+    expect(unregisterContentScripts).toHaveBeenLastCalledWith({
+      ids: ["ai-usage-dashboard-network-23"],
+    });
   });
 });

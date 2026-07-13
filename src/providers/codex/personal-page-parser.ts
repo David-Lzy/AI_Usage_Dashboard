@@ -4,6 +4,8 @@ import type {
   CodexPersonalRouteCapture,
   CodexPersonalRouteKey,
 } from "./personal-page-capture";
+import type { ProviderUsageHistory } from "../types";
+import { parseCodexUsageHistory } from "./usage-history-parser";
 
 export type CodexPersonalWindowKind =
   | "rolling_5h"
@@ -43,6 +45,7 @@ export type CodexPersonalUsageSnapshot = {
   primaryWindow: CodexPersonalUsageWindow;
   windows: CodexPersonalUsageWindow[];
   balances: CodexPersonalUsageBalance[];
+  usageHistory?: ProviderUsageHistory;
   note: string;
 };
 
@@ -549,6 +552,10 @@ export function parseCodexPersonalLiveFixture(
         primaryWindow,
         windows,
         balances: buildBalances(matchedRoute.summary),
+        usageHistory: parseCodexUsageHistory(
+          matchedRoute.usageHistoryContract,
+          fixture.capturedAt,
+        ),
         note:
           "Personal Codex session-page data currently exposes exact remaining percentages, reset timestamps, and optional flex credit balance cards for visible usage context, not one absolute workspace-wide remaining limit.",
       },

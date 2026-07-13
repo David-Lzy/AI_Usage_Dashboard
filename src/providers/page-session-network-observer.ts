@@ -25,9 +25,18 @@ export type PageSessionNetworkObserverExtraction = {
   matchUrlSubstrings: string[];
   maxEntries?: number;
   maxBodyLength?: number;
+  observeReload?: boolean;
 };
 
 const NETWORK_BRIDGE_SCRIPT_ID = "__ai_usage_dashboard_page_session_bridge__";
+const NETWORK_CONFIG_SESSION_KEY =
+  "__ai_usage_dashboard_page_session_network_config__";
+const NETWORK_DOCUMENT_START_SCRIPT =
+  "page-session-network-observer-document-start.js";
+
+export type PreparedPageSessionNetworkObserver = {
+  registrationId: string;
+};
 
 function buildEmptyNetworkObserverState(): PageSessionObservedNetworkState {
   return {
@@ -78,6 +87,9 @@ export async function installNetworkObserverBridge(
           maxBodyLength: number;
           entries: PageSessionObservedNetworkEntry[];
           originalFetch?: typeof fetch;
+          patchedFetch?: typeof fetch;
+          originalXhrOpen?: typeof XMLHttpRequest.prototype.open;
+          originalXhrSend?: typeof XMLHttpRequest.prototype.send;
           xhrPatched?: boolean;
         };
       };
@@ -165,7 +177,7 @@ export async function installNetworkObserverBridge(
 
       if (!store.installed) {
         store.originalFetch = globalThis.fetch.bind(globalThis);
-        globalThis.fetch = async (...args) => {
+        store.patchedFetch = async (...args) => {
           const response = await store.originalFetch!(...args);
           const requestUrl =
             typeof args[0] === "string"
@@ -188,9 +200,12 @@ export async function installNetworkObserverBridge(
 
           return response;
         };
+        globalThis.fetch = store.patchedFetch;
 
         const originalOpen = XMLHttpRequest.prototype.open;
         const originalSend = XMLHttpRequest.prototype.send;
+        store.originalXhrOpen = originalOpen;
+        store.originalXhrSend = originalSend;
 
         XMLHttpRequest.prototype.open = function patchedOpen(
           method: string,
@@ -294,6 +309,147 @@ export async function installNetworkObserverBridge(
       extraction.maxBodyLength ?? 20_000,
     ],
   });
+}
+
+export async function prepareNetworkObserverForReload(
+  tabId: number,
+  scriptingApi: PageSessionScriptingApi,
+  extraction: PageSessionNetworkObserverExtraction,
+  matches: string[],
+): Promise<PreparedPageSessionNetworkObserver | null> {
+  if (
+    !extraction.observeReload ||
+    typeof scriptingApi.registerContentScripts !== "function" ||
+    typeof scriptingApi.unregisterContentScripts !== "function"
+  ) {
+    return null;
+  }
+
+  const registrationId = `ai-usage-dashboard-network-${tabId}`;
+  const config = {
+    matchUrlSubstrings: extraction.matchUrlSubstrings,
+    maxEntries: extraction.maxEntries ?? 20,
+    maxBodyLength: extraction.maxBodyLength ?? 20_000,
+  };
+
+  await executeScriptResult(scriptingApi, {
+    tabId,
+    world: "MAIN",
+    func: (rawKey: unknown, rawConfig: unknown) => {
+      const key = typeof rawKey === "string" ? rawKey : "";
+      if (!key) {
+        return false;
+      }
+
+      try {
+        globalThis.sessionStorage.setItem(key, JSON.stringify(rawConfig));
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    args: [NETWORK_CONFIG_SESSION_KEY, config],
+  });
+
+  await scriptingApi.unregisterContentScripts({ ids: [registrationId] }).catch(
+    () => undefined,
+  );
+
+  try {
+    await scriptingApi.registerContentScripts([
+      {
+        id: registrationId,
+        matches,
+        js: [NETWORK_DOCUMENT_START_SCRIPT],
+        runAt: "document_start",
+        world: "MAIN",
+        allFrames: false,
+        persistAcrossSessions: false,
+      },
+    ]);
+  } catch {
+    await executeScriptResult(scriptingApi, {
+      tabId,
+      world: "MAIN",
+      func: (rawKey: unknown) => {
+        if (typeof rawKey === "string") {
+          try {
+            globalThis.sessionStorage.removeItem(rawKey);
+          } catch {
+            // Ignore unavailable session storage during cleanup.
+          }
+        }
+        return true;
+      },
+      args: [NETWORK_CONFIG_SESSION_KEY],
+    }).catch(() => undefined);
+    return null;
+  }
+
+  return { registrationId };
+}
+
+export async function cleanupPreparedNetworkObserver(
+  tabId: number,
+  scriptingApi: PageSessionScriptingApi,
+  prepared: PreparedPageSessionNetworkObserver | null,
+): Promise<void> {
+  await executeScriptResult(scriptingApi, {
+    tabId,
+    world: "MAIN",
+    func: (rawStoreKey: unknown, rawBridgeScriptId: unknown, rawConfigKey: unknown) => {
+      const storeKey = typeof rawStoreKey === "string" ? rawStoreKey : "";
+      const bridgeScriptId =
+        typeof rawBridgeScriptId === "string" ? rawBridgeScriptId : "";
+      const configKey = typeof rawConfigKey === "string" ? rawConfigKey : "";
+      const root = globalThis as typeof globalThis & Record<string, unknown>;
+      const store = root[storeKey] as
+        | {
+            originalFetch?: typeof fetch;
+            patchedFetch?: typeof fetch;
+            originalXhrOpen?: typeof XMLHttpRequest.prototype.open;
+            originalXhrSend?: typeof XMLHttpRequest.prototype.send;
+          }
+        | undefined;
+
+      if (store?.originalFetch && globalThis.fetch === store.patchedFetch) {
+        globalThis.fetch = store.originalFetch;
+      }
+      if (store?.originalXhrOpen) {
+        XMLHttpRequest.prototype.open = store.originalXhrOpen;
+      }
+      if (store?.originalXhrSend) {
+        XMLHttpRequest.prototype.send = store.originalXhrSend;
+      }
+
+      if (storeKey) {
+        delete root[storeKey];
+      }
+      if (bridgeScriptId) {
+        globalThis.document.getElementById(bridgeScriptId)?.remove();
+      }
+      if (configKey) {
+        try {
+          globalThis.sessionStorage.removeItem(configKey);
+        } catch {
+          // Ignore unavailable session storage during cleanup.
+        }
+      }
+
+      return true;
+    },
+    args: [
+      "__AI_USAGE_DASHBOARD_PAGE_SESSION__",
+      NETWORK_BRIDGE_SCRIPT_ID,
+      NETWORK_CONFIG_SESSION_KEY,
+    ],
+  }).catch(() => undefined);
+
+  if (prepared && typeof scriptingApi.unregisterContentScripts === "function") {
+    await scriptingApi
+      .unregisterContentScripts({ ids: [prepared.registrationId] })
+      .catch(() => undefined);
+  }
 }
 
 export async function readNetworkObserverBridge(

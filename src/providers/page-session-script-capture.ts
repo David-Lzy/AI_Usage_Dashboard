@@ -9,6 +9,18 @@ export type PageSessionScriptingApi = {
     func: (...args: unknown[]) => unknown;
     args?: unknown[];
   }) => Promise<Array<{ result?: unknown }>>;
+  registerContentScripts?: (
+    scripts: Array<{
+      id: string;
+      matches: string[];
+      js: string[];
+      runAt?: "document_start" | "document_end" | "document_idle";
+      world?: `${chrome.scripting.ExecutionWorld}`;
+      allFrames?: boolean;
+      persistAcrossSessions?: boolean;
+    }>,
+  ) => Promise<void>;
+  unregisterContentScripts?: (filter?: { ids?: string[] }) => Promise<void>;
 };
 
 export type PageSessionIsolatedPageSnapshot = {

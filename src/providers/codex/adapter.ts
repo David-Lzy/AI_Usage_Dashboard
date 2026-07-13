@@ -800,6 +800,7 @@ async function tryCodexPersonalSource({
         warningDiagnostic: usageThresholdDiagnostic,
         usageWindows: buildCodexUsageWindows(result.snapshot.windows),
         usageBalances: buildCodexUsageBalances(result.snapshot.balances),
+        usageHistory: result.snapshot.usageHistory ?? provider.usageHistory,
         usageSummary: buildPersonalUsageSummary(
           result.snapshot.windows,
           result.snapshot.balances,

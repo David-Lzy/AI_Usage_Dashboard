@@ -11,7 +11,9 @@ import type {
   PageSessionObservedNetworkState,
 } from "./page-session-network-observer";
 import {
+  cleanupPreparedNetworkObserver,
   installNetworkObserverBridge,
+  prepareNetworkObserverForReload,
   readNetworkObserverBridge,
 } from "./page-session-network-observer";
 import type {
@@ -279,6 +281,53 @@ async function capturePageSessionPage(
   };
 }
 
+async function reloadAndCapturePageSessionPage({
+  tabId,
+  tabsApi,
+  scriptingApi,
+  extraction,
+  urlPatterns,
+  reloadOptions,
+}: {
+  tabId: number;
+  tabsApi: PageSessionTabsApi;
+  scriptingApi: PageSessionScriptingApi;
+  extraction: PageSessionExtraction;
+  urlPatterns: string[];
+  reloadOptions: PageSessionReloadOptions;
+}): Promise<{
+  reloadedTab: PageSessionTabQueryResult | null;
+  page: PageSessionCapturedPage;
+}> {
+  const preparedObserver =
+    extraction.mode === "network_observer"
+      ? await prepareNetworkObserverForReload(
+          tabId,
+          scriptingApi,
+          extraction,
+          urlPatterns,
+        )
+      : null;
+
+  try {
+    const reloadedTab = await reloadPageSessionTab(
+      tabsApi,
+      tabId,
+      reloadOptions,
+    );
+    const page = await capturePageSessionPage(tabId, scriptingApi, extraction);
+    return { reloadedTab, page };
+  } finally {
+    if (extraction.mode === "network_observer") {
+      await cleanupPreparedNetworkObserver(
+        tabId,
+        scriptingApi,
+        preparedObserver,
+      );
+    }
+  }
+}
+
 export type PageSessionClient = {
   capture: (definition: PageSessionDefinition) => Promise<PageSessionResult>;
 };
@@ -352,16 +401,22 @@ export function createPageSessionClient(
           if (
             reloadBeforeCapture &&
             typeof tabsApi.reload === "function" &&
-            tab.id !== openedTabId &&
+            (tab.id !== openedTabId ||
+              (definition.extraction.mode === "network_observer" &&
+                definition.extraction.observeReload)) &&
             !reloadedBeforeCaptureTabIds.has(tab.id)
           ) {
             reloadedBeforeCaptureTabIds.add(tab.id);
 
-            const reloadedTab = await reloadPageSessionTab(
-              tabsApi,
-              tab.id,
-              reloadBeforeCapture,
-            );
+            const { reloadedTab, page } =
+              await reloadAndCapturePageSessionPage({
+                tabId: tab.id,
+                tabsApi,
+                scriptingApi,
+                extraction: definition.extraction,
+                urlPatterns: definition.urlPatterns,
+                reloadOptions: reloadBeforeCapture,
+              });
 
             currentTab = {
               ...currentTab,
@@ -369,6 +424,39 @@ export function createPageSessionClient(
               id: tab.id,
               bindingMode: tab.bindingMode,
             };
+
+            const matchStatus = definition.match(page);
+
+            attempts.push({
+              tabId: tab.id,
+              bindingMode: tab.bindingMode,
+              status: matchStatus === "matched" ? "matched" : matchStatus,
+              url: page.url,
+              title: page.title,
+            });
+
+            if (matchStatus === "matched") {
+              return {
+                status: "matched",
+                page,
+                target: {
+                  tabId: tab.id,
+                  bindingMode: tab.bindingMode,
+                  active: Boolean(currentTab.active),
+                  lastAccessed:
+                    typeof currentTab.lastAccessed === "number"
+                      ? currentTab.lastAccessed
+                      : null,
+                },
+                attempts,
+              };
+            }
+
+            if (matchStatus === "logged_out") {
+              sawLoggedOut = true;
+            }
+
+            continue;
           }
 
           const page = await capturePageSessionPage(
@@ -423,17 +511,15 @@ export function createPageSessionClient(
             reloadedAfterCaptureFailureTabIds.add(tab.id);
 
             try {
-              const reloadedTab =
-                await reloadPageSessionTab(
+              const { reloadedTab, page } =
+                await reloadAndCapturePageSessionPage({
+                  tabId: tab.id,
                   tabsApi,
-                  tab.id,
-                  reloadOnCaptureFailure,
-                );
-              const page = await capturePageSessionPage(
-                tab.id,
-                scriptingApi,
-                definition.extraction,
-              );
+                  scriptingApi,
+                  extraction: definition.extraction,
+                  urlPatterns: definition.urlPatterns,
+                  reloadOptions: reloadOnCaptureFailure,
+                });
               const matchStatus = definition.match(page);
 
               attempts.push({

@@ -5,6 +5,11 @@ import {
   type PageSessionClient,
   type PageSessionResult,
 } from "../page-session";
+import {
+  CODEX_USAGE_HISTORY_PATHS,
+  extractCodexObservedUsageHistoryContract,
+  type CodexObservedUsageHistoryContract,
+} from "./usage-history-contract";
 
 export type CodexPersonalRouteKey =
   | "personal_usage"
@@ -45,11 +50,12 @@ export type CodexPersonalRouteCapture = {
   matchedUrl: string | null;
   matchedTitle: string | null;
   summary: CodexPersonalPageSummary | null;
+  usageHistoryContract?: CodexObservedUsageHistoryContract | null;
 };
 
 export type CodexPersonalLiveFixture = {
   capturedAt: string;
-  extractionMode: "dom";
+  extractionMode: "dom" | "network_observer";
   primaryCandidateRoute: string;
   routes: CodexPersonalRouteCapture[];
   decision: {
@@ -260,7 +266,15 @@ async function captureRoute(
         }
       : {}),
     extraction: {
-      mode: "dom",
+      ...(route.routeKey === "cloud_analytics"
+        ? {
+            mode: "network_observer" as const,
+            matchUrlSubstrings: [...CODEX_USAGE_HISTORY_PATHS],
+            maxEntries: 4,
+            maxBodyLength: 200_000,
+            observeReload: true,
+          }
+        : { mode: "dom" as const }),
     },
     match(page) {
       if (isLoggedOutChatGptPage(page)) {
@@ -281,6 +295,7 @@ async function captureRoute(
       matchedUrl: null,
       matchedTitle: null,
       summary: null,
+      usageHistoryContract: null,
     };
   }
 
@@ -293,6 +308,9 @@ async function captureRoute(
     matchedUrl: result.page.url,
     matchedTitle: result.page.title,
     summary: summarizeCodexPersonalPage(result.page),
+    usageHistoryContract: extractCodexObservedUsageHistoryContract(
+      result.page.observedNetwork?.entries,
+    ),
   };
 }
 
@@ -340,7 +358,7 @@ export async function captureCodexPersonalLiveFixture(
 
   return {
     capturedAt: new Date().toISOString(),
-    extractionMode: "dom",
+    extractionMode: "network_observer",
     primaryCandidateRoute:
       "https://chatgpt.com/codex/cloud/settings/analytics#usage",
     routes,
