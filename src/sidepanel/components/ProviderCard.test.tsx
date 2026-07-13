@@ -86,6 +86,47 @@ describe("ProviderCard", () => {
     expect(hiddenHtml).not.toContain("Turns trend");
   });
 
+  it("renders visible history modules in the configured surface order", () => {
+    const state = createState({
+      providers: SAMPLE_APP_STATE.providers.map((provider) =>
+        provider.providerId === "codex-personal-page"
+          ? {
+              ...provider,
+              usageHistory: {
+                capturedAt: "2026-07-13T00:00:00.000Z",
+                rangeStart: "2026-07-13",
+                rangeEnd: "2026-07-13",
+                granularity: "day" as const,
+                personalUsageBySurface: {
+                  unit: "percent" as const,
+                  points: [],
+                },
+                turns: { total: 0, byModel: [], bySurface: [] },
+              },
+            }
+          : provider,
+      ),
+    });
+    const html = renderProviderCard(state, "codex-personal-page", {
+      usageHistoryModulesBySurface: {
+        popup: {},
+        fullPage: {},
+        sidebar: {
+          "codex-personal-page": [
+            { id: "turns_history", visible: true },
+            { id: "personal_usage_by_surface", visible: true },
+          ],
+        },
+      },
+    });
+
+    expect(
+      html.indexOf('usage-history-compact__title">Turns trend<'),
+    ).toBeLessThan(
+      html.indexOf('usage-history-compact__title">Personal usage<'),
+    );
+  });
+
   it("does not reserve two empty modules before history is captured", () => {
     const html = renderProviderCard(createState(), "codex-personal-page");
 

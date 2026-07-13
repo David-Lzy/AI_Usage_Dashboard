@@ -41,7 +41,6 @@ import {
 } from "./view-models";
 import { getVisibleCustomSources } from "../shared/custom-source-view-models";
 import { SETTINGS_SECTION_IDS } from "./settings-section-ids";
-import { setProviderUsageHistoryModuleVisibility } from "../shared/usage-history-visibility";
 
 const SettingsPage = lazy(() =>
   import("./routes/SettingsPage").then((module) => ({
@@ -566,18 +565,6 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           onOpenSourcePage={handleOpenSessionPage}
           onRefreshProvider={handleRefresh}
           onRefreshAll={() => handleRefresh()}
-          onUsageHistoryVisibilityChange={(providerId, moduleId, visible) =>
-            handleUpdateSettings({
-              usageHistoryModulesBySurface:
-                setProviderUsageHistoryModuleVisibility(
-                  appState.settings.usageHistoryModulesBySurface,
-                  providerDisplaySurface,
-                  providerId,
-                  moduleId,
-                  visible,
-                ),
-            })
-          }
         />
       )}
 

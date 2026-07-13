@@ -10,6 +10,9 @@ describe("usage history localized copy", () => {
       expect(copy.personalUsage).not.toBe("");
       expect(copy.turns).not.toBe("");
       expect(copy.noData).not.toBe("");
+      expect(copy.collapse).not.toBe("");
+      expect(copy.expand).not.toBe("");
+      expect(copy.locale).toBe(locale);
       expect(copy.surfaceLabels.desktop_app).not.toBe("");
       expect(copy.surfaceLabels.vscode).not.toBe("");
       expect(copy.surfaceLabels.unknown).not.toBe("");

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 
 import type {
   ProviderUsageHistory,
@@ -12,6 +12,7 @@ import {
 import "./usage-history-charts.css";
 
 export type UsageHistoryChartCopy = {
+  locale: string;
   personalUsage: string;
   turns: string;
   byModel: string;
@@ -20,8 +21,8 @@ export type UsageHistoryChartCopy = {
   oneMonth: string;
   other: string;
   noData: string;
-  hide: string;
-  openDetails: string;
+  collapse: string;
+  expand: string;
   capturedAt: string;
   totalTurns: string;
   percentUnit: string;
@@ -38,32 +39,70 @@ export type UsageHistoryChartCopy = {
 type ChartKind = "bars" | "area";
 
 const CHART_COLORS = [
-  "var(--md-sys-color-primary)",
-  "var(--md-sys-color-tertiary)",
-  "var(--md-sys-color-secondary)",
-  "var(--md-sys-color-error)",
-  "var(--md-sys-color-primary-container)",
-  "var(--md-sys-color-outline)",
+  "var(--app-usage-history-series-1)",
+  "var(--app-usage-history-series-2)",
+  "var(--app-usage-history-series-3)",
+  "var(--app-usage-history-series-4)",
+  "var(--app-usage-history-series-5)",
+  "var(--app-usage-history-series-6)",
 ];
 
-function formatDateRange(data: UsageHistoryChartData): string {
+export function formatUsageHistoryDate(value: string, locale: string): string {
+  const date = new Date(`${value}T00:00:00.000Z`);
+
+  if (!Number.isFinite(date.getTime())) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat(locale, {
+    day: "numeric",
+    month: "short",
+    timeZone: "UTC",
+  }).format(date);
+}
+
+export function formatUsageHistoryValue(
+  value: number,
+  locale: string,
+  unit: string,
+): string {
+  if (unit.trim() === "%") {
+    return new Intl.NumberFormat(locale, {
+      maximumFractionDigits: 2,
+      style: "percent",
+    }).format(value / 100);
+  }
+
+  const formattedValue = new Intl.NumberFormat(locale, {
+    maximumFractionDigits: 2,
+  }).format(value);
+  return `${formattedValue} ${unit}`.trim();
+}
+
+function formatDateRange(data: UsageHistoryChartData, locale: string): string {
   if (data.dates.length === 0) {
     return "";
   }
 
-  return `${data.dates[0]} – ${data.dates.at(-1)}`;
+  return `${formatUsageHistoryDate(data.dates[0], locale)} – ${formatUsageHistoryDate(data.dates.at(-1) ?? data.dates[0], locale)}`;
 }
 
 function buildPointLabel(
   data: UsageHistoryChartData,
   pointIndex: number,
   unit: string,
+  locale: string,
 ): string {
   const values = data.series
     .filter((series) => series.values[pointIndex] > 0)
-    .map((series) => `${series.label}: ${series.values[pointIndex]} ${unit}`)
+    .map(
+      (series) =>
+        `${series.label}: ${formatUsageHistoryValue(series.values[pointIndex], locale, unit)}`,
+    )
     .join(", ");
-  return `${data.dates[pointIndex]} — ${values || `0 ${unit}`}`;
+  return `${formatUsageHistoryDate(data.dates[pointIndex], locale)} — ${
+    values || formatUsageHistoryValue(0, locale, unit)
+  }`;
 }
 
 function UsageHistorySvg({
@@ -71,12 +110,14 @@ function UsageHistorySvg({
   kind,
   label,
   unit,
+  locale,
   compact,
 }: {
   data: UsageHistoryChartData;
   kind: ChartKind;
   label: string;
   unit: string;
+  locale: string;
   compact: boolean;
 }) {
   const width = 720;
@@ -92,7 +133,7 @@ function UsageHistorySvg({
     <svg
       className={`usage-history-chart usage-history-chart--${kind}${compact ? " usage-history-chart--compact" : ""}`}
       role="img"
-      aria-label={`${label}, ${formatDateRange(data)}`}
+      aria-label={`${label}, ${formatDateRange(data, locale)}`}
       viewBox={`0 0 ${width} ${height}`}
       preserveAspectRatio="none"
     >
@@ -117,6 +158,7 @@ function UsageHistorySvg({
                   return (
                     <rect
                       key={series.id}
+                      className="usage-history-chart__bar"
                       x={pointIndex * xStep + Math.max(1.5, xStep * 0.12)}
                       y={y}
                       width={Math.max(1, xStep * 0.76)}
@@ -151,6 +193,9 @@ function UsageHistorySvg({
                 className="usage-history-chart__area"
                 points={[...topPoints, ...bottomPoints].join(" ")}
                 fill={CHART_COLORS[seriesIndex % CHART_COLORS.length]}
+                stroke={CHART_COLORS[seriesIndex % CHART_COLORS.length]}
+                strokeWidth="0.75"
+                vectorEffect="non-scaling-stroke"
               />
             );
           })}
@@ -163,9 +208,9 @@ function UsageHistorySvg({
           width={xStep}
           height={chartHeight}
           tabIndex={0}
-          aria-label={buildPointLabel(data, pointIndex, unit)}
+          aria-label={buildPointLabel(data, pointIndex, unit, locale)}
         >
-          <title>{buildPointLabel(data, pointIndex, unit)}</title>
+          <title>{buildPointLabel(data, pointIndex, unit, locale)}</title>
         </rect>
       ))}
     </svg>
@@ -221,15 +266,13 @@ export function UsageHistoryCompact({
   history,
   moduleId,
   copy,
-  onHide,
-  onOpenDetails,
 }: {
   history?: ProviderUsageHistory;
   moduleId: ProviderUsageHistoryModuleId;
   copy: UsageHistoryChartCopy;
-  onHide?: () => void;
-  onOpenDetails?: () => void;
 }) {
+  const [isExpanded, setIsExpanded] = useState(true);
+  const contentId = useId();
   const points = useMemo(() => {
     const sourcePoints = getModulePoints(history, moduleId);
     return moduleId === "personal_usage_by_surface"
@@ -247,28 +290,57 @@ export function UsageHistoryCompact({
       <header className="usage-history-compact__header">
         <div>
           <h3 className="usage-history-compact__title">{title}</h3>
-          <p className="usage-history-compact__range">{formatDateRange(data)}</p>
+          <p className="usage-history-compact__range">
+            {formatDateRange(data, copy.locale)}
+          </p>
         </div>
-        <div className="usage-history-compact__actions">
-          {onOpenDetails ? <button className="text-button" type="button" onClick={onOpenDetails}>{copy.openDetails}</button> : null}
-          {onHide ? <button className="text-button" type="button" onClick={onHide}>{copy.hide}</button> : null}
-        </div>
-      </header>
-      {data.dates.length > 0 ? (
-        <>
-          {moduleId === "turns_history" ? (
-            <p className="usage-history-compact__metric">{copy.totalTurns}: {data.total}</p>
-          ) : null}
-          <UsageHistorySvg
-            compact
-            data={data}
-            kind={moduleId === "personal_usage_by_surface" ? "bars" : "area"}
-            label={title}
-            unit={moduleId === "personal_usage_by_surface" ? copy.percentUnit : copy.turnsUnit}
+        <button
+          className="icon-button usage-history-compact__collapse-toggle"
+          type="button"
+          aria-controls={contentId}
+          aria-expanded={isExpanded}
+          aria-label={`${isExpanded ? copy.collapse : copy.expand}: ${title}`}
+          title={isExpanded ? copy.collapse : copy.expand}
+          onClick={() => setIsExpanded((current) => !current)}
+        >
+          <span
+            className="usage-history-compact__collapse-icon"
+            aria-hidden="true"
           />
-          <UsageHistoryLegend data={data} label={copy.chartLegend} />
-        </>
-      ) : <p className="supporting-copy">{copy.noData}</p>}
+        </button>
+      </header>
+      <div
+        id={contentId}
+        className="usage-history-compact__content"
+        hidden={!isExpanded}
+      >
+        {data.dates.length > 0 ? (
+          <>
+            {moduleId === "turns_history" ? (
+              <p className="usage-history-compact__metric">
+                {copy.totalTurns}: {data.total}
+              </p>
+            ) : null}
+            <UsageHistorySvg
+              compact
+              data={data}
+              kind={
+                moduleId === "personal_usage_by_surface" ? "bars" : "area"
+              }
+              label={title}
+              locale={copy.locale}
+              unit={
+                moduleId === "personal_usage_by_surface"
+                  ? copy.percentUnit
+                  : copy.turnsUnit
+              }
+            />
+            <UsageHistoryLegend data={data} label={copy.chartLegend} />
+          </>
+        ) : (
+          <p className="supporting-copy">{copy.noData}</p>
+        )}
+      </div>
     </section>
   );
 }
@@ -304,14 +376,12 @@ function SegmentedControl<T extends string | number>({
 export function UsageHistoryDetail({
   history,
   copy,
-  showPersonalUsage = true,
-  showTurns = true,
+  moduleOrder = ["personal_usage_by_surface", "turns_history"],
   formatCapturedAt = (value) => value,
 }: {
   history: ProviderUsageHistory;
   copy: UsageHistoryChartCopy;
-  showPersonalUsage?: boolean;
-  showTurns?: boolean;
+  moduleOrder?: readonly ProviderUsageHistoryModuleId[];
   formatCapturedAt?: (value: string) => string;
 }) {
   const [days, setDays] = useState<7 | 31>(31);
@@ -360,58 +430,71 @@ export function UsageHistoryDetail({
           onChange={setDays}
         />
       </header>
-      {showPersonalUsage ? (
-        <section className="usage-history-detail__module">
-          <h3 className="section-title">{copy.personalUsage}</h3>
-          {personalData.dates.length ? (
-            <>
-              <UsageHistorySvg
-                compact={false}
-                data={personalData}
-                kind="bars"
-                label={copy.personalUsage}
-                unit={copy.percentUnit}
+      {moduleOrder.map((moduleId) =>
+        moduleId === "personal_usage_by_surface" ? (
+          <section key={moduleId} className="usage-history-detail__module">
+            <h3 className="section-title">{copy.personalUsage}</h3>
+            {personalData.dates.length ? (
+              <>
+                <UsageHistorySvg
+                  compact={false}
+                  data={personalData}
+                  kind="bars"
+                  label={copy.personalUsage}
+                  locale={copy.locale}
+                  unit={copy.percentUnit}
+                />
+                <UsageHistoryLegend
+                  data={personalData}
+                  label={copy.chartLegend}
+                />
+              </>
+            ) : (
+              <p className="supporting-copy">{copy.noData}</p>
+            )}
+          </section>
+        ) : (
+          <section key={moduleId} className="usage-history-detail__module">
+            <header className="usage-history-detail__module-header">
+              <div>
+                <h3 className="section-title">{copy.turns}</h3>
+                <p className="usage-history-compact__metric">
+                  {copy.totalTurns}: {turnsData.total}
+                </p>
+              </div>
+              <SegmentedControl
+                label={copy.grouping}
+                value={grouping}
+                options={
+                  [
+                    { value: "model", label: copy.byModel },
+                    { value: "surface", label: copy.bySurface },
+                  ] as const
+                }
+                onChange={setGrouping}
               />
-              <UsageHistoryLegend
-                data={personalData}
-                label={copy.chartLegend}
-              />
-            </>
-          ) : (
-            <p className="supporting-copy">{copy.noData}</p>
-          )}
-        </section>
-      ) : null}
-      {showTurns ? (
-        <section className="usage-history-detail__module">
-          <header className="usage-history-detail__module-header">
-            <div><h3 className="section-title">{copy.turns}</h3><p className="usage-history-compact__metric">{copy.totalTurns}: {turnsData.total}</p></div>
-            <SegmentedControl
-              label={copy.grouping}
-              value={grouping}
-              options={[{ value: "model", label: copy.byModel }, { value: "surface", label: copy.bySurface }] as const}
-              onChange={setGrouping}
-            />
-          </header>
-          {turnsData.dates.length ? (
-            <>
-              <UsageHistorySvg
-                compact={false}
-                data={turnsData}
-                kind="area"
-                label={copy.turns}
-                unit={copy.turnsUnit}
-              />
-              <UsageHistoryLegend
-                data={turnsData}
-                label={copy.chartLegend}
-              />
-            </>
-          ) : (
-            <p className="supporting-copy">{copy.noData}</p>
-          )}
-        </section>
-      ) : null}
+            </header>
+            {turnsData.dates.length ? (
+              <>
+                <UsageHistorySvg
+                  compact={false}
+                  data={turnsData}
+                  kind="area"
+                  label={copy.turns}
+                  locale={copy.locale}
+                  unit={copy.turnsUnit}
+                />
+                <UsageHistoryLegend
+                  data={turnsData}
+                  label={copy.chartLegend}
+                />
+              </>
+            ) : (
+              <p className="supporting-copy">{copy.noData}</p>
+            )}
+          </section>
+        ),
+      )}
     </section>
   );
 }

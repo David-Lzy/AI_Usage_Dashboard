@@ -4,7 +4,6 @@ import type {
   AppLocalePreference,
   AppState,
   ProviderId,
-  ProviderUsageHistoryModuleId,
 } from "../providers/types";
 import { sendAppMessage } from "../shared/app-client";
 import {
@@ -77,7 +76,6 @@ import {
   POPUP_REFRESH_COUNTDOWN_ALARM_RESYNC_MS,
   readPopupRefreshCountdownSeconds,
 } from "./popup-refresh-schedule";
-import { setProviderUsageHistoryModuleVisibility } from "../shared/usage-history-visibility";
 
 type PopupLoadState =
   | { status: "loading" }
@@ -525,36 +523,6 @@ export function PopupApp() {
     setHideProviderFeedback(null);
   }
 
-  async function handleUsageHistoryVisibilityChange(
-    providerId: ProviderId,
-    moduleId: ProviderUsageHistoryModuleId,
-    visible: boolean,
-  ) {
-    if (loadState.status !== "ready") {
-      return;
-    }
-
-    const response = await sendAppMessage({
-      type: "app:update-settings",
-      settings: {
-        usageHistoryModulesBySurface:
-          setProviderUsageHistoryModuleVisibility(
-            loadState.appState.settings.usageHistoryModulesBySurface,
-            "popup",
-            providerId,
-            moduleId,
-            visible,
-          ),
-      },
-    });
-
-    setLoadState(
-      response.ok
-        ? { status: "ready", appState: response.state }
-        : { status: "error", message: response.error },
-    );
-  }
-
   return (
     <main
       className={`app-shell popup-shell${
@@ -614,9 +582,6 @@ export function PopupApp() {
         }
         getSettingsFocusForProvider={getSettingsRouteFocusForPopupProvider}
         onAction={handlePopupAction}
-        onUsageHistoryVisibilityChange={
-          handleUsageHistoryVisibilityChange
-        }
       />
 
       <PopupCustomSourceList

@@ -12,6 +12,7 @@ const chartsCss = readFileSync(
 );
 
 const copy: UsageHistoryChartCopy = {
+  locale: "en",
   personalUsage: "Personal usage",
   turns: "Turns",
   byModel: "By model",
@@ -20,8 +21,8 @@ const copy: UsageHistoryChartCopy = {
   oneMonth: "1 month",
   other: "Other",
   noData: "No history data",
-  hide: "Hide",
-  openDetails: "Details",
+  collapse: "Collapse",
+  expand: "Expand",
   capturedAt: "Captured",
   totalTurns: "Total turns",
   percentUnit: "%",
@@ -41,7 +42,7 @@ const history: ProviderUsageHistory = {
   rangeEnd: "2026-07-13",
   granularity: "day",
   personalUsageBySurface: { unit: "percent", points: [
-    { date: "2026-07-12", values: [{ id: "desktop", label: "Desktop", value: 40 }] },
+    { date: "2026-07-12", values: [{ id: "desktop", label: "Desktop", value: 59.599564941441386 }] },
     { date: "2026-07-13", values: [{ id: "desktop", label: "Desktop", value: 50 }] },
   ] },
   turns: { total: 12, byModel: [
@@ -51,12 +52,35 @@ const history: ProviderUsageHistory = {
 };
 
 describe("UsageHistoryCharts", () => {
-  it("renders compact accessible data points and actions", () => {
-    const html = renderToStaticMarkup(<UsageHistoryCompact history={history} moduleId="turns_history" copy={copy} onHide={() => undefined} onOpenDetails={() => undefined} />);
-    expect(html).toContain("Total turns: 12");
+  it("renders compact localized dates, rounded values, and a disclosure toggle", () => {
+    const html = renderToStaticMarkup(
+      <UsageHistoryCompact
+        history={history}
+        moduleId="personal_usage_by_surface"
+        copy={copy}
+      />,
+    );
+
+    expect(html).toContain("Jul 12 – Jul 13");
+    expect(html).toContain("59.6%");
+    expect(html).not.toContain("59.599564941441386");
+    expect(html).not.toContain("2026-07-12");
+    expect(html).toContain('aria-label="Collapse: Personal usage"');
+    expect(html).toContain('aria-expanded="true"');
+    expect(html).toContain("usage-history-compact__collapse-toggle");
     expect(html).toContain("tabindex=\"0\"");
-    expect(html).toContain("Details");
-    expect(html).toContain("Hide");
+  });
+
+  it("keeps total turns in the compact turns module", () => {
+    const html = renderToStaticMarkup(
+      <UsageHistoryCompact
+        history={history}
+        moduleId="turns_history"
+        copy={copy}
+      />,
+    );
+
+    expect(html).toContain("Total turns: 12");
   });
 
   it("renders detail controls and both chart modules", () => {
@@ -67,13 +91,26 @@ describe("UsageHistoryCharts", () => {
     expect(html).toContain("Personal usage");
   });
 
-  it("keeps compact actions at the inline end on narrow surfaces", () => {
-    expect(chartsCss).toContain(".usage-history-compact__header {");
-    expect(chartsCss).toContain("flex-wrap: wrap;");
-    expect(chartsCss).toContain(".usage-history-compact__actions {");
-    expect(chartsCss).toContain("margin-inline-start: auto;");
-    expect(chartsCss).not.toContain(
-      ".usage-history-compact__header,\n  .usage-history-detail__toolbar",
+  it("renders detail modules in the configured order", () => {
+    const html = renderToStaticMarkup(
+      <UsageHistoryDetail
+        history={history}
+        copy={copy}
+        moduleOrder={["turns_history", "personal_usage_by_surface"]}
+      />,
     );
+
+    expect(html.indexOf('section-title">Turns<')).toBeLessThan(
+      html.indexOf('section-title">Personal usage<'),
+    );
+  });
+
+  it("uses theme-aware chart colors and keeps the disclosure at inline end", () => {
+    expect(chartsCss).toContain("--app-usage-history-series-1");
+    expect(chartsCss).toContain(':root[data-theme-resolved="dark"]');
+    expect(chartsCss).toContain(".usage-history-compact__header {");
+    expect(chartsCss).toContain(".usage-history-compact__collapse-toggle {");
+    expect(chartsCss).toContain("margin-inline-start: auto;");
+    expect(chartsCss).toContain(".usage-history-chart__bar {");
   });
 });

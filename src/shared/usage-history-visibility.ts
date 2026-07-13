@@ -96,16 +96,27 @@ export function resolveProviderUsageHistoryModules(
   surface: DisplaySurface,
   providerId: ProviderId,
 ): ProviderUsageHistoryModulePreference[] {
-  const storedPreferences = new Map(
-    (value[surface][providerId] ?? []).map((preference) => [
-      preference.id,
-      preference,
-    ]),
-  );
+  const storedPreferences = value[surface][providerId] ?? [];
+  const seen = new Set<ProviderUsageHistoryModuleId>();
+  const resolved = storedPreferences.flatMap((preference) => {
+    if (
+      !PROVIDER_USAGE_HISTORY_MODULE_IDS.includes(preference.id) ||
+      seen.has(preference.id)
+    ) {
+      return [];
+    }
 
-  return createDefaultProviderUsageHistoryModules().map(
-    (preference) => storedPreferences.get(preference.id) ?? preference,
-  );
+    seen.add(preference.id);
+    return [{ ...preference }];
+  });
+
+  for (const preference of createDefaultProviderUsageHistoryModules()) {
+    if (!seen.has(preference.id)) {
+      resolved.push(preference);
+    }
+  }
+
+  return resolved;
 }
 
 export function isProviderUsageHistoryModuleVisible(
@@ -141,6 +152,44 @@ export function setProviderUsageHistoryModuleVisibility(
     [surface]: {
       ...value[surface],
       [providerId]: preferences,
+    },
+  };
+}
+
+export function moveProviderUsageHistoryModulePreference(
+  value: UsageHistoryModulesBySurface,
+  surface: DisplaySurface,
+  providerId: ProviderId,
+  moduleId: ProviderUsageHistoryModuleId,
+  direction: "up" | "down",
+): UsageHistoryModulesBySurface {
+  const preferences = resolveProviderUsageHistoryModules(
+    value,
+    surface,
+    providerId,
+  );
+  const currentIndex = preferences.findIndex(
+    (preference) => preference.id === moduleId,
+  );
+  const nextIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
+
+  if (
+    currentIndex === -1 ||
+    nextIndex < 0 ||
+    nextIndex >= preferences.length
+  ) {
+    return value;
+  }
+
+  const nextPreferences = [...preferences];
+  const [movedPreference] = nextPreferences.splice(currentIndex, 1);
+  nextPreferences.splice(nextIndex, 0, movedPreference);
+
+  return {
+    ...value,
+    [surface]: {
+      ...value[surface],
+      [providerId]: nextPreferences,
     },
   };
 }

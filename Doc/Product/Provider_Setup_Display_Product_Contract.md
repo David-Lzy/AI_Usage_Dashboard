@@ -126,9 +126,9 @@ Provider Display is the dashboard visibility, ordering, and quota-item configura
 - Deferred providers should not appear in Provider Display ordering.
 - Policy-only providers may appear only with policy-only wording and must not imply live remaining quota.
 - Supported provider history modules are configured independently from quota
-  progress items. Personal-usage history and turn trends can each be shown or
-  hidden per popup, sidebar, and full-page surface without changing provider
-  enablement, provider order, or the stored source snapshot.
+  progress items. Personal-usage history and turn trends can each be shown,
+  hidden, and ordered per popup, sidebar, and full-page surface without changing
+  provider enablement, provider order, or the stored source snapshot.
 
 ### Surface Order
 

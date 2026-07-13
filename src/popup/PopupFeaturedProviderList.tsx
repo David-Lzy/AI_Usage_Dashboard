@@ -4,8 +4,6 @@ import type {
   ProgressColorBand,
   ProgressDisplayStyle,
   ProgressItemsBySurface,
-  ProviderId,
-  ProviderUsageHistoryModuleId,
   UsageHistoryModulesBySurface,
 } from "../providers/types";
 import type { RuntimeI18n } from "../shared/i18n";
@@ -19,7 +17,10 @@ import type {
 } from "./view-models";
 import { UsageHistoryCompact } from "../shared/components/UsageHistoryCharts";
 import { buildUsageHistoryLocalizedCopy } from "../shared/usage-history-localized-copy";
-import { createDefaultUsageHistoryModulesBySurface, isProviderUsageHistoryModuleVisible } from "../shared/usage-history-visibility";
+import {
+  createDefaultUsageHistoryModulesBySurface,
+  resolveProviderUsageHistoryModules,
+} from "../shared/usage-history-visibility";
 
 type PopupFeaturedProviderListProps = {
   ariaLabel: string;
@@ -40,11 +41,6 @@ type PopupFeaturedProviderListProps = {
     action: PopupGuidanceAction,
     options?: { settingsFocus?: SettingsRouteFocus | null },
   ) => void | Promise<void>;
-  onUsageHistoryVisibilityChange?: (
-    providerId: ProviderId,
-    moduleId: ProviderUsageHistoryModuleId,
-    visible: boolean,
-  ) => void | Promise<void>;
 };
 
 export function PopupFeaturedProviderList({
@@ -61,7 +57,6 @@ export function PopupFeaturedProviderList({
   usageHistoryModulesBySurface = createDefaultUsageHistoryModulesBySurface(),
   getSettingsFocusForProvider,
   onAction,
-  onUsageHistoryVisibilityChange,
 }: PopupFeaturedProviderListProps) {
   if (cards.length === 0) {
     return null;
@@ -232,35 +227,19 @@ export function PopupFeaturedProviderList({
               )}
 
               {provider.usageHistory
-                ? (["personal_usage_by_surface", "turns_history"] as const).map(
-                    (moduleId) =>
-                      isProviderUsageHistoryModuleVisible(
-                        usageHistoryModulesBySurface,
-                        "popup",
-                        provider.providerId,
-                        moduleId,
-                      ) ? (
-                        <UsageHistoryCompact
-                          key={moduleId}
-                          copy={usageHistoryCopy}
-                          history={provider.usageHistory}
-                          moduleId={moduleId}
-                          onHide={onUsageHistoryVisibilityChange ? () =>
-                            void onUsageHistoryVisibilityChange(
-                              provider.providerId,
-                              moduleId,
-                              false,
-                            )
-                          : undefined}
-                          onOpenDetails={() =>
-                            void onAction({
-                              kind: "provider-detail",
-                              label: usageHistoryCopy.openDetails,
-                              providerId: provider.providerId,
-                            })
-                          }
-                        />
-                      ) : null,
+                ? resolveProviderUsageHistoryModules(
+                    usageHistoryModulesBySurface,
+                    "popup",
+                    provider.providerId,
+                  ).map((preference) =>
+                    preference.visible ? (
+                      <UsageHistoryCompact
+                        key={preference.id}
+                        copy={usageHistoryCopy}
+                        history={provider.usageHistory}
+                        moduleId={preference.id}
+                      />
+                    ) : null,
                   )
                 : null}
             </article>

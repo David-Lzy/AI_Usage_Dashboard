@@ -41,6 +41,15 @@ describe("SettingsProviderDisplaySection", () => {
     expect(html).toContain('data-provider-progress-surface="fullPage"');
     expect(html).toContain('data-usage-history-preferences=""');
     expect(html).toContain("Show history modules by surface");
+    expect(html).toContain(
+      "Choose and order personal usage and turns independently",
+    );
+    expect(html).toContain(
+      "provider-progress-list__item usage-history-preferences__item",
+    );
+    expect(html).toContain("Hide Personal usage on Popup");
+    expect(html).toContain("Move Turns trend up on Popup");
+    expect(html).toContain("Move Personal usage down on Popup");
     expect(html).toContain("2 providers");
     expect(html).not.toContain('data-provider-order-row="jetbrains-org-page"');
     expect(html).not.toContain(

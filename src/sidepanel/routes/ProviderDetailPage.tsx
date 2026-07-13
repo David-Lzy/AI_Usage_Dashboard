@@ -23,7 +23,10 @@ import { UsageFactsList } from "../components/UsageFactsList";
 import type { ProviderViewModel } from "../view-models";
 import { UsageHistoryDetail } from "../../shared/components/UsageHistoryCharts";
 import { buildUsageHistoryLocalizedCopy } from "../../shared/usage-history-localized-copy";
-import { createDefaultUsageHistoryModulesBySurface, isProviderUsageHistoryModuleVisible } from "../../shared/usage-history-visibility";
+import {
+  createDefaultUsageHistoryModulesBySurface,
+  resolveProviderUsageHistoryModules,
+} from "../../shared/usage-history-visibility";
 
 type ProviderDetailPageProps = {
   localePreference: AppLocalePreference;
@@ -75,6 +78,14 @@ export function ProviderDetailPage({
   );
   const copy = buildProviderDetailLocalizedCopy(i18n);
   const usageHistoryCopy = buildUsageHistoryLocalizedCopy(i18n.resolvedLocale);
+  const visibleUsageHistoryModuleOrder =
+    resolveProviderUsageHistoryModules(
+      usageHistoryModulesBySurface,
+      progressSurface,
+      provider.providerId,
+    )
+      .filter((preference) => preference.visible)
+      .map((preference) => preference.id);
   const visibleUsageContextLabel =
     buildRuntimeCommonCopy(i18n).visibleUsageContext;
   const showSessionPageContract =
@@ -585,18 +596,7 @@ export function ProviderDetailPage({
               copy={usageHistoryCopy}
               history={provider.usageHistory}
               formatCapturedAt={(value) => i18n.formatTemporalValue(value) ?? value}
-              showPersonalUsage={isProviderUsageHistoryModuleVisible(
-                usageHistoryModulesBySurface,
-                progressSurface,
-                provider.providerId,
-                "personal_usage_by_surface",
-              )}
-              showTurns={isProviderUsageHistoryModuleVisible(
-                usageHistoryModulesBySurface,
-                progressSurface,
-                provider.providerId,
-                "turns_history",
-              )}
+              moduleOrder={visibleUsageHistoryModuleOrder}
             />
           ) : (
             <p className="supporting-copy">{usageHistoryCopy.noData}</p>

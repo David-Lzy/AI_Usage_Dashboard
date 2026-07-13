@@ -1,3 +1,32 @@
+:root {
+  --app-usage-history-series-1: #315f9f;
+  --app-usage-history-series-2: #76558a;
+  --app-usage-history-series-3: #276f65;
+  --app-usage-history-series-4: #9a5046;
+  --app-usage-history-series-5: #776300;
+  --app-usage-history-series-6: #586579;
+}
+
+:root[data-theme-resolved="dark"] {
+  --app-usage-history-series-1: #9fc4ff;
+  --app-usage-history-series-2: #d6b6e8;
+  --app-usage-history-series-3: #8fd5c6;
+  --app-usage-history-series-4: #f1b7a7;
+  --app-usage-history-series-5: #dfcb7d;
+  --app-usage-history-series-6: #b8c6dc;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme-resolved]) {
+    --app-usage-history-series-1: #9fc4ff;
+    --app-usage-history-series-2: #d6b6e8;
+    --app-usage-history-series-3: #8fd5c6;
+    --app-usage-history-series-4: #f1b7a7;
+    --app-usage-history-series-5: #dfcb7d;
+    --app-usage-history-series-6: #b8c6dc;
+  }
+}
+
 .usage-history-compact,
 .usage-history-detail__module {
   min-width: 0;
@@ -16,8 +45,7 @@
 }
 
 .usage-history-compact__header {
-  align-items: flex-start;
-  flex-wrap: wrap;
+  align-items: center;
 }
 
 .usage-history-compact__header > :first-child {
@@ -44,12 +72,45 @@
   line-height: var(--md-sys-typescale-label-medium-line-height);
 }
 
-.usage-history-compact__actions {
-  display: flex;
-  align-items: center;
+.usage-history-compact__collapse-toggle {
+  width: 30px;
+  min-width: 30px;
+  min-height: 30px;
+  padding: 0;
   flex: 0 0 auto;
-  gap: 4px;
   margin-inline-start: auto;
+  color: var(--md-sys-color-primary);
+  background: transparent;
+}
+
+.usage-history-compact__collapse-toggle:hover,
+.usage-history-compact__collapse-toggle:focus-visible {
+  background: var(--app-state-layer-primary-hover);
+}
+
+.usage-history-compact__collapse-icon {
+  width: 8px;
+  height: 8px;
+  border-inline-end: 2px solid currentColor;
+  border-block-end: 2px solid currentColor;
+  transform: rotate(45deg) translate(-1px, -1px);
+  transition: transform var(--app-motion-duration-fast)
+    var(--app-motion-easing-standard);
+}
+
+.usage-history-compact__collapse-toggle[aria-expanded="true"]
+  .usage-history-compact__collapse-icon {
+  transform: rotate(225deg) translate(-1px, -1px);
+}
+
+.usage-history-compact__content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2px;
+}
+
+.usage-history-compact__content[hidden] {
+  display: none;
 }
 
 .usage-history-chart {
@@ -66,12 +127,20 @@
 
 .usage-history-chart__grid {
   stroke: var(--md-sys-color-outline-variant);
+  opacity: 0.72;
   stroke-width: 1;
   vector-effect: non-scaling-stroke;
 }
 
+.usage-history-chart__bar {
+  stroke: var(--md-sys-color-surface-container-lowest);
+  stroke-width: 0.75;
+  vector-effect: non-scaling-stroke;
+}
+
 .usage-history-chart__area {
-  opacity: 0.82;
+  opacity: 0.74;
+  stroke-linejoin: round;
 }
 
 .usage-history-chart__focus-target {
@@ -112,6 +181,11 @@
   height: 8px;
   flex: 0 0 8px;
   border-radius: 2px;
+  outline: 1px solid color-mix(
+    in srgb,
+    var(--md-sys-color-outline) 42%,
+    transparent
+  );
 }
 
 .usage-history-detail {
@@ -196,37 +270,14 @@
 
 .usage-history-preferences__surface-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   gap: 10px;
 }
 
 .usage-history-preferences__surface {
-  display: grid;
-  gap: 8px;
   min-width: 0;
-  margin: 0;
-  padding: 10px 12px;
-  border: 1px solid var(--md-sys-color-outline-variant);
-  border-radius: var(--md-sys-shape-corner-medium);
 }
 
-.usage-history-preferences__surface legend {
-  padding-inline: 4px;
-  color: var(--md-sys-color-on-surface-variant);
-  font-family: var(--md-sys-typescale-label-large-font);
-  font-size: var(--md-sys-typescale-label-large-size);
-  font-weight: var(--md-sys-typescale-label-large-weight);
-  line-height: var(--md-sys-typescale-label-large-line-height);
-}
-
-.usage-history-preferences__option {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 32px;
-  color: var(--md-sys-color-on-surface);
-  font-family: var(--md-sys-typescale-body-medium-font);
-  font-size: var(--md-sys-typescale-body-medium-size);
-  font-weight: var(--md-sys-typescale-body-medium-weight);
-  line-height: var(--md-sys-typescale-body-medium-line-height);
+.usage-history-preferences__item {
+  cursor: default;
 }

@@ -2,6 +2,7 @@ import type { ResolvedAppLocale } from "./i18n";
 import type { UsageHistoryChartCopy } from "./components/UsageHistoryCharts";
 
 const ENGLISH_COPY: UsageHistoryChartCopy = {
+  locale: "en",
   personalUsage: "Personal usage",
   turns: "Turns trend",
   byModel: "By model",
@@ -10,8 +11,8 @@ const ENGLISH_COPY: UsageHistoryChartCopy = {
   oneMonth: "1 month",
   other: "Other",
   noData: "No history data yet",
-  hide: "Hide",
-  openDetails: "Details",
+  collapse: "Collapse",
+  expand: "Expand",
   capturedAt: "Captured",
   totalTurns: "Total turns",
   percentUnit: "%",
@@ -31,23 +32,23 @@ const ENGLISH_COPY: UsageHistoryChartCopy = {
   grouping: "Grouping",
   settingsSectionLabel: "Usage history",
   settingsTitle: "Show history modules by surface",
-  settingsDetail: "Personal usage and turns can be hidden independently on popup, sidebar, and full-page surfaces.",
+  settingsDetail: "Choose and order personal usage and turns independently for popup, sidebar, and full-page surfaces.",
 };
 
 const UI_COPY_OVERRIDES: Partial<Record<ResolvedAppLocale, Partial<UsageHistoryChartCopy>>> = {
-  "zh-CN": { chartLegend: "图表图例", dateRange: "日期范围", grouping: "分组方式", settingsSectionLabel: "使用历史", settingsTitle: "按界面显示历史模块", settingsDetail: "个人使用和轮次趋势可以在 Popup、侧栏和完整页面中分别隐藏。" },
-  "zh-TW": { chartLegend: "圖表圖例", dateRange: "日期範圍", grouping: "分組方式", settingsSectionLabel: "使用歷史", settingsTitle: "依介面顯示歷史模組", settingsDetail: "個人使用與輪次趨勢可在 Popup、側欄和完整頁面中分別隱藏。" },
-  ja: { chartLegend: "グラフの凡例", dateRange: "期間", grouping: "グループ化", settingsSectionLabel: "使用履歴", settingsTitle: "画面ごとの履歴モジュール", settingsDetail: "個人使用とターンの推移は、ポップアップ、サイドバー、全画面で個別に非表示にできます。" },
-  ko: { chartLegend: "차트 범례", dateRange: "날짜 범위", grouping: "그룹화", settingsSectionLabel: "사용 기록", settingsTitle: "화면별 기록 모듈 표시", settingsDetail: "개인 사용량과 턴 추이를 팝업, 사이드바, 전체 페이지에서 각각 숨길 수 있습니다." },
-  "es-419": { chartLegend: "Leyenda del gráfico", dateRange: "Rango de fechas", grouping: "Agrupación", settingsSectionLabel: "Historial de uso", settingsTitle: "Mostrar módulos por superficie", settingsDetail: "El uso personal y los turnos se pueden ocultar por separado en el popup, la barra lateral y la página completa." },
-  "pt-BR": { chartLegend: "Legenda do gráfico", dateRange: "Intervalo de datas", grouping: "Agrupamento", settingsSectionLabel: "Histórico de uso", settingsTitle: "Mostrar módulos por superfície", settingsDetail: "O uso pessoal e os turnos podem ser ocultados separadamente no popup, na barra lateral e na página completa." },
-  fr: { chartLegend: "Légende du graphique", dateRange: "Plage de dates", grouping: "Regroupement", settingsSectionLabel: "Historique d’utilisation", settingsTitle: "Afficher les modules par surface", settingsDetail: "L’utilisation personnelle et les tours peuvent être masqués séparément dans le popup, la barre latérale et la page complète." },
-  de: { chartLegend: "Diagrammlegende", dateRange: "Datumsbereich", grouping: "Gruppierung", settingsSectionLabel: "Nutzungsverlauf", settingsTitle: "Verlaufsmodule je Oberfläche", settingsDetail: "Persönliche Nutzung und Turns können in Popup, Seitenleiste und Vollbildansicht getrennt ausgeblendet werden." },
-  it: { chartLegend: "Legenda del grafico", dateRange: "Intervallo di date", grouping: "Raggruppamento", settingsSectionLabel: "Cronologia utilizzo", settingsTitle: "Mostra moduli per superficie", settingsDetail: "Uso personale e turni possono essere nascosti separatamente nel popup, nella barra laterale e nella pagina completa." },
-  ru: { chartLegend: "Легенда графика", dateRange: "Диапазон дат", grouping: "Группировка", settingsSectionLabel: "История использования", settingsTitle: "Модули истории по интерфейсам", settingsDetail: "Личное использование и запросы можно скрывать отдельно во всплывающем окне, боковой панели и полноэкранном режиме." },
-  ar: { chartLegend: "وسيلة إيضاح الرسم", dateRange: "نطاق التاريخ", grouping: "التجميع", settingsSectionLabel: "سجل الاستخدام", settingsTitle: "إظهار وحدات السجل حسب الواجهة", settingsDetail: "يمكن إخفاء الاستخدام الشخصي والجولات بشكل مستقل في النافذة المنبثقة والشريط الجانبي والصفحة الكاملة." },
-  hi: { chartLegend: "चार्ट संकेत", dateRange: "तारीख सीमा", grouping: "समूहीकरण", settingsSectionLabel: "उपयोग इतिहास", settingsTitle: "सतह के अनुसार इतिहास मॉड्यूल", settingsDetail: "व्यक्तिगत उपयोग और टर्न को पॉपअप, साइडबार और पूरे पेज पर अलग-अलग छिपाया जा सकता है।" },
-  id: { chartLegend: "Legenda bagan", dateRange: "Rentang tanggal", grouping: "Pengelompokan", settingsSectionLabel: "Riwayat penggunaan", settingsTitle: "Tampilkan modul menurut permukaan", settingsDetail: "Penggunaan pribadi dan giliran dapat disembunyikan secara terpisah di popup, bilah sisi, dan halaman penuh." },
+  "zh-CN": { chartLegend: "图表图例", dateRange: "日期范围", grouping: "分组方式", settingsSectionLabel: "使用历史", settingsTitle: "按界面显示历史模块", settingsDetail: "可分别选择并调整个人使用和轮次趋势在 Popup、侧栏与完整页面中的顺序。" },
+  "zh-TW": { chartLegend: "圖表圖例", dateRange: "日期範圍", grouping: "分組方式", settingsSectionLabel: "使用歷史", settingsTitle: "依介面顯示歷史模組", settingsDetail: "可分別選擇並調整個人使用與輪次趨勢在 Popup、側欄和完整頁面中的順序。" },
+  ja: { chartLegend: "グラフの凡例", dateRange: "期間", grouping: "グループ化", settingsSectionLabel: "使用履歴", settingsTitle: "画面ごとの履歴モジュール", settingsDetail: "ポップアップ、サイドバー、全画面ごとに個人使用とターンの推移を選択し、並べ替えられます。" },
+  ko: { chartLegend: "차트 범례", dateRange: "날짜 범위", grouping: "그룹화", settingsSectionLabel: "사용 기록", settingsTitle: "화면별 기록 모듈 표시", settingsDetail: "팝업, 사이드바, 전체 페이지별로 개인 사용량과 턴 추이를 선택하고 순서를 조정할 수 있습니다." },
+  "es-419": { chartLegend: "Leyenda del gráfico", dateRange: "Rango de fechas", grouping: "Agrupación", settingsSectionLabel: "Historial de uso", settingsTitle: "Mostrar módulos por superficie", settingsDetail: "Selecciona y ordena el uso personal y los turnos por separado en el popup, la barra lateral y la página completa." },
+  "pt-BR": { chartLegend: "Legenda do gráfico", dateRange: "Intervalo de datas", grouping: "Agrupamento", settingsSectionLabel: "Histórico de uso", settingsTitle: "Mostrar módulos por superfície", settingsDetail: "Selecione e ordene o uso pessoal e os turnos separadamente no popup, na barra lateral e na página completa." },
+  fr: { chartLegend: "Légende du graphique", dateRange: "Plage de dates", grouping: "Regroupement", settingsSectionLabel: "Historique d’utilisation", settingsTitle: "Afficher les modules par surface", settingsDetail: "Sélectionnez et ordonnez séparément l’utilisation personnelle et les tours dans le popup, la barre latérale et la page complète." },
+  de: { chartLegend: "Diagrammlegende", dateRange: "Datumsbereich", grouping: "Gruppierung", settingsSectionLabel: "Nutzungsverlauf", settingsTitle: "Verlaufsmodule je Oberfläche", settingsDetail: "Persönliche Nutzung und Turns lassen sich für Popup, Seitenleiste und Vollbildansicht getrennt auswählen und anordnen." },
+  it: { chartLegend: "Legenda del grafico", dateRange: "Intervallo di date", grouping: "Raggruppamento", settingsSectionLabel: "Cronologia utilizzo", settingsTitle: "Mostra moduli per superficie", settingsDetail: "Seleziona e ordina separatamente uso personale e turni nel popup, nella barra laterale e nella pagina completa." },
+  ru: { chartLegend: "Легенда графика", dateRange: "Диапазон дат", grouping: "Группировка", settingsSectionLabel: "История использования", settingsTitle: "Модули истории по интерфейсам", settingsDetail: "Выбирайте и меняйте порядок личного использования и запросов отдельно для всплывающего окна, боковой панели и полноэкранного режима." },
+  ar: { chartLegend: "وسيلة إيضاح الرسم", dateRange: "نطاق التاريخ", grouping: "التجميع", settingsSectionLabel: "سجل الاستخدام", settingsTitle: "إظهار وحدات السجل حسب الواجهة", settingsDetail: "اختر ورتب الاستخدام الشخصي والجولات بشكل مستقل للنافذة المنبثقة والشريط الجانبي والصفحة الكاملة." },
+  hi: { chartLegend: "चार्ट संकेत", dateRange: "तारीख सीमा", grouping: "समूहीकरण", settingsSectionLabel: "उपयोग इतिहास", settingsTitle: "सतह के अनुसार इतिहास मॉड्यूल", settingsDetail: "पॉपअप, साइडबार और पूरे पेज के लिए व्यक्तिगत उपयोग और टर्न को अलग-अलग चुनें और क्रम बदलें।" },
+  id: { chartLegend: "Legenda bagan", dateRange: "Rentang tanggal", grouping: "Pengelompokan", settingsSectionLabel: "Riwayat penggunaan", settingsTitle: "Tampilkan modul menurut permukaan", settingsDetail: "Pilih dan urutkan penggunaan pribadi dan giliran secara terpisah untuk popup, bilah sisi, dan halaman penuh." },
 };
 
 const SURFACE_LABEL_OVERRIDES: Partial<Record<ResolvedAppLocale, Record<string, string>>> = {
@@ -67,19 +68,19 @@ const SURFACE_LABEL_OVERRIDES: Partial<Record<ResolvedAppLocale, Record<string, 
 };
 
 const COPY_OVERRIDES: Partial<Record<ResolvedAppLocale, Partial<UsageHistoryChartCopy>>> = {
-  "zh-CN": { personalUsage: "个人使用", turns: "轮次趋势", byModel: "按模型", bySurface: "按使用方式", sevenDays: "7天", oneMonth: "1个月", other: "其他", noData: "暂无历史数据", hide: "隐藏", openDetails: "详情", capturedAt: "采集时间", totalTurns: "总轮次", turnsUnit: "轮次" },
-  "zh-TW": { personalUsage: "個人使用", turns: "輪次趨勢", byModel: "依模型", bySurface: "依使用方式", sevenDays: "7 天", oneMonth: "1 個月", other: "其他", noData: "暫無歷史資料", hide: "隱藏", openDetails: "詳情", capturedAt: "擷取時間", totalTurns: "總輪次", turnsUnit: "輪次" },
-  ja: { personalUsage: "個人使用", turns: "ターンの推移", byModel: "モデル別", bySurface: "利用方法別", sevenDays: "7日", oneMonth: "1か月", other: "その他", noData: "履歴データはまだありません", hide: "非表示", openDetails: "詳細", capturedAt: "取得日時", totalTurns: "合計ターン", turnsUnit: "ターン" },
-  ko: { personalUsage: "개인 사용량", turns: "턴 추이", byModel: "모델별", bySurface: "사용 방식별", sevenDays: "7일", oneMonth: "1개월", other: "기타", noData: "아직 사용 기록이 없습니다", hide: "숨기기", openDetails: "세부정보", capturedAt: "수집 시각", totalTurns: "총 턴", turnsUnit: "턴" },
-  "es-419": { personalUsage: "Uso personal", turns: "Tendencia de turnos", byModel: "Por modelo", bySurface: "Por superficie", sevenDays: "7 días", oneMonth: "1 mes", other: "Otros", noData: "Aún no hay historial", hide: "Ocultar", openDetails: "Detalles", capturedAt: "Capturado", totalTurns: "Turnos totales", turnsUnit: "turnos" },
-  "pt-BR": { personalUsage: "Uso pessoal", turns: "Tendência de turnos", byModel: "Por modelo", bySurface: "Por superfície", sevenDays: "7 dias", oneMonth: "1 mês", other: "Outros", noData: "Ainda não há histórico", hide: "Ocultar", openDetails: "Detalhes", capturedAt: "Capturado", totalTurns: "Total de turnos", turnsUnit: "turnos" },
-  fr: { personalUsage: "Utilisation personnelle", turns: "Tendance des tours", byModel: "Par modèle", bySurface: "Par interface", sevenDays: "7 jours", oneMonth: "1 mois", other: "Autres", noData: "Aucun historique pour le moment", hide: "Masquer", openDetails: "Détails", capturedAt: "Capturé", totalTurns: "Total des tours", turnsUnit: "tours" },
-  de: { personalUsage: "Persönliche Nutzung", turns: "Turn-Verlauf", byModel: "Nach Modell", bySurface: "Nach Oberfläche", sevenDays: "7 Tage", oneMonth: "1 Monat", other: "Andere", noData: "Noch keine Verlaufsdaten", hide: "Ausblenden", openDetails: "Details", capturedAt: "Erfasst", totalTurns: "Turns gesamt", turnsUnit: "Turns" },
-  it: { personalUsage: "Uso personale", turns: "Andamento turni", byModel: "Per modello", bySurface: "Per superficie", sevenDays: "7 giorni", oneMonth: "1 mese", other: "Altro", noData: "Nessun dato storico", hide: "Nascondi", openDetails: "Dettagli", capturedAt: "Acquisito", totalTurns: "Turni totali", turnsUnit: "turni" },
-  ru: { personalUsage: "Личное использование", turns: "Динамика запросов", byModel: "По моделям", bySurface: "По способу использования", sevenDays: "7 дней", oneMonth: "1 месяц", other: "Другое", noData: "История пока недоступна", hide: "Скрыть", openDetails: "Подробнее", capturedAt: "Получено", totalTurns: "Всего запросов", turnsUnit: "запросов" },
-  ar: { personalUsage: "الاستخدام الشخصي", turns: "اتجاه الجولات", byModel: "حسب النموذج", bySurface: "حسب الواجهة", sevenDays: "7 أيام", oneMonth: "شهر واحد", other: "أخرى", noData: "لا توجد بيانات سجل بعد", hide: "إخفاء", openDetails: "التفاصيل", capturedAt: "وقت الالتقاط", totalTurns: "إجمالي الجولات", turnsUnit: "جولات" },
-  hi: { personalUsage: "व्यक्तिगत उपयोग", turns: "टर्न रुझान", byModel: "मॉडल के अनुसार", bySurface: "सतह के अनुसार", sevenDays: "7 दिन", oneMonth: "1 महीना", other: "अन्य", noData: "अभी कोई इतिहास डेटा नहीं", hide: "छिपाएँ", openDetails: "विवरण", capturedAt: "कैप्चर समय", totalTurns: "कुल टर्न", turnsUnit: "टर्न" },
-  id: { personalUsage: "Penggunaan pribadi", turns: "Tren giliran", byModel: "Menurut model", bySurface: "Menurut permukaan", sevenDays: "7 hari", oneMonth: "1 bulan", other: "Lainnya", noData: "Belum ada data riwayat", hide: "Sembunyikan", openDetails: "Detail", capturedAt: "Diambil", totalTurns: "Total giliran", turnsUnit: "giliran" },
+  "zh-CN": { personalUsage: "个人使用", turns: "轮次趋势", byModel: "按模型", bySurface: "按使用方式", sevenDays: "7天", oneMonth: "1个月", other: "其他", noData: "暂无历史数据", collapse: "折叠", expand: "展开", capturedAt: "采集时间", totalTurns: "总轮次", turnsUnit: "轮次" },
+  "zh-TW": { personalUsage: "個人使用", turns: "輪次趨勢", byModel: "依模型", bySurface: "依使用方式", sevenDays: "7 天", oneMonth: "1 個月", other: "其他", noData: "暫無歷史資料", collapse: "收合", expand: "展開", capturedAt: "擷取時間", totalTurns: "總輪次", turnsUnit: "輪次" },
+  ja: { personalUsage: "個人使用", turns: "ターンの推移", byModel: "モデル別", bySurface: "利用方法別", sevenDays: "7日", oneMonth: "1か月", other: "その他", noData: "履歴データはまだありません", collapse: "折りたたむ", expand: "展開", capturedAt: "取得日時", totalTurns: "合計ターン", turnsUnit: "ターン" },
+  ko: { personalUsage: "개인 사용량", turns: "턴 추이", byModel: "모델별", bySurface: "사용 방식별", sevenDays: "7일", oneMonth: "1개월", other: "기타", noData: "아직 사용 기록이 없습니다", collapse: "접기", expand: "펼치기", capturedAt: "수집 시각", totalTurns: "총 턴", turnsUnit: "턴" },
+  "es-419": { personalUsage: "Uso personal", turns: "Tendencia de turnos", byModel: "Por modelo", bySurface: "Por superficie", sevenDays: "7 días", oneMonth: "1 mes", other: "Otros", noData: "Aún no hay historial", collapse: "Contraer", expand: "Expandir", capturedAt: "Capturado", totalTurns: "Turnos totales", turnsUnit: "turnos" },
+  "pt-BR": { personalUsage: "Uso pessoal", turns: "Tendência de turnos", byModel: "Por modelo", bySurface: "Por superfície", sevenDays: "7 dias", oneMonth: "1 mês", other: "Outros", noData: "Ainda não há histórico", collapse: "Recolher", expand: "Expandir", capturedAt: "Capturado", totalTurns: "Total de turnos", turnsUnit: "turnos" },
+  fr: { personalUsage: "Utilisation personnelle", turns: "Tendance des tours", byModel: "Par modèle", bySurface: "Par interface", sevenDays: "7 jours", oneMonth: "1 mois", other: "Autres", noData: "Aucun historique pour le moment", collapse: "Réduire", expand: "Développer", capturedAt: "Capturé", totalTurns: "Total des tours", turnsUnit: "tours" },
+  de: { personalUsage: "Persönliche Nutzung", turns: "Turn-Verlauf", byModel: "Nach Modell", bySurface: "Nach Oberfläche", sevenDays: "7 Tage", oneMonth: "1 Monat", other: "Andere", noData: "Noch keine Verlaufsdaten", collapse: "Einklappen", expand: "Ausklappen", capturedAt: "Erfasst", totalTurns: "Turns gesamt", turnsUnit: "Turns" },
+  it: { personalUsage: "Uso personale", turns: "Andamento turni", byModel: "Per modello", bySurface: "Per superficie", sevenDays: "7 giorni", oneMonth: "1 mese", other: "Altro", noData: "Nessun dato storico", collapse: "Comprimi", expand: "Espandi", capturedAt: "Acquisito", totalTurns: "Turni totali", turnsUnit: "turni" },
+  ru: { personalUsage: "Личное использование", turns: "Динамика запросов", byModel: "По моделям", bySurface: "По способу использования", sevenDays: "7 дней", oneMonth: "1 месяц", other: "Другое", noData: "История пока недоступна", collapse: "Свернуть", expand: "Развернуть", capturedAt: "Получено", totalTurns: "Всего запросов", turnsUnit: "запросов" },
+  ar: { personalUsage: "الاستخدام الشخصي", turns: "اتجاه الجولات", byModel: "حسب النموذج", bySurface: "حسب الواجهة", sevenDays: "7 أيام", oneMonth: "شهر واحد", other: "أخرى", noData: "لا توجد بيانات سجل بعد", collapse: "طي", expand: "توسيع", capturedAt: "وقت الالتقاط", totalTurns: "إجمالي الجولات", turnsUnit: "جولات" },
+  hi: { personalUsage: "व्यक्तिगत उपयोग", turns: "टर्न रुझान", byModel: "मॉडल के अनुसार", bySurface: "सतह के अनुसार", sevenDays: "7 दिन", oneMonth: "1 महीना", other: "अन्य", noData: "अभी कोई इतिहास डेटा नहीं", collapse: "संक्षिप्त करें", expand: "विस्तृत करें", capturedAt: "कैप्चर समय", totalTurns: "कुल टर्न", turnsUnit: "टर्न" },
+  id: { personalUsage: "Penggunaan pribadi", turns: "Tren giliran", byModel: "Menurut model", bySurface: "Menurut permukaan", sevenDays: "7 hari", oneMonth: "1 bulan", other: "Lainnya", noData: "Belum ada data riwayat", collapse: "Ciutkan", expand: "Perluas", capturedAt: "Diambil", totalTurns: "Total giliran", turnsUnit: "giliran" },
 };
 
 export function buildUsageHistoryLocalizedCopy(locale: ResolvedAppLocale): UsageHistoryChartCopy {
@@ -87,6 +88,7 @@ export function buildUsageHistoryLocalizedCopy(locale: ResolvedAppLocale): Usage
     ...ENGLISH_COPY,
     ...COPY_OVERRIDES[locale],
     ...UI_COPY_OVERRIDES[locale],
+    locale,
     surfaceLabels: {
       ...ENGLISH_COPY.surfaceLabels,
       ...SURFACE_LABEL_OVERRIDES[locale],

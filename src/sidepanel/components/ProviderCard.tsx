@@ -6,7 +6,6 @@ import type {
   ProgressDisplayStyle,
   ProgressItemsBySurface,
   ProviderId,
-  ProviderUsageHistoryModuleId,
   UsageHistoryModulesBySurface,
 } from "../../providers/types";
 import { buildRuntimeCommonCopy, createRuntimeI18n } from "../../shared/i18n";
@@ -17,7 +16,10 @@ import { StatusBadge } from "./StatusBadge";
 import { UsageFactsList } from "./UsageFactsList";
 import { UsageHistoryCompact } from "../../shared/components/UsageHistoryCharts";
 import { buildUsageHistoryLocalizedCopy } from "../../shared/usage-history-localized-copy";
-import { createDefaultUsageHistoryModulesBySurface, isProviderUsageHistoryModuleVisible } from "../../shared/usage-history-visibility";
+import {
+  createDefaultUsageHistoryModulesBySurface,
+  resolveProviderUsageHistoryModules,
+} from "../../shared/usage-history-visibility";
 
 type ProviderCardProps = {
   localePreference: AppLocalePreference;
@@ -35,11 +37,6 @@ type ProviderCardProps = {
     sourceStateKind: ProviderViewModel["currentSourceStateKind"],
   ) => void;
   onRefresh: (providerId: ProviderId) => void;
-  onUsageHistoryVisibilityChange?: (
-    providerId: ProviderId,
-    moduleId: ProviderUsageHistoryModuleId,
-    visible: boolean,
-  ) => void;
 };
 
 export function ProviderCard({
@@ -55,7 +52,6 @@ export function ProviderCard({
   onOpen,
   onOpenSourcePage,
   onRefresh,
-  onUsageHistoryVisibilityChange,
 }: ProviderCardProps) {
   const i18n = createRuntimeI18n(
     localePreference,
@@ -173,32 +169,19 @@ export function ProviderCard({
         ) : null}
 
         {provider.usageHistory
-          ? (["personal_usage_by_surface", "turns_history"] as const).map(
-              (moduleId) =>
-                isProviderUsageHistoryModuleVisible(
-                  usageHistoryModulesBySurface,
-                  progressSurface,
-                  provider.providerId,
-                  moduleId,
-                ) ? (
-                  <UsageHistoryCompact
-                    key={moduleId}
-                    copy={usageHistoryCopy}
-                    history={provider.usageHistory}
-                    moduleId={moduleId}
-                    onHide={
-                      onUsageHistoryVisibilityChange
-                        ? () =>
-                            onUsageHistoryVisibilityChange(
-                              provider.providerId,
-                              moduleId,
-                              false,
-                            )
-                        : undefined
-                    }
-                    onOpenDetails={() => onOpen(provider.providerId)}
-                  />
-                ) : null,
+          ? resolveProviderUsageHistoryModules(
+              usageHistoryModulesBySurface,
+              progressSurface,
+              provider.providerId,
+            ).map((preference) =>
+              preference.visible ? (
+                <UsageHistoryCompact
+                  key={preference.id}
+                  copy={usageHistoryCopy}
+                  history={provider.usageHistory}
+                  moduleId={preference.id}
+                />
+              ) : null,
             )
           : null}
 

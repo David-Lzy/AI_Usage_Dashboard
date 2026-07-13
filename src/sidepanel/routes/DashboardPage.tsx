@@ -6,7 +6,6 @@ import type {
   ProgressDisplayStyle,
   ProgressItemsBySurface,
   ProviderId,
-  ProviderUsageHistoryModuleId,
   SummaryItem,
   UsageHistoryModulesBySurface,
 } from "../../providers/types";
@@ -49,11 +48,6 @@ type DashboardPageProps = {
   onOpenQuickSetup: () => void;
   onRefreshProvider: (providerId: ProviderId) => void;
   onRefreshAll: () => void;
-  onUsageHistoryVisibilityChange?: (
-    providerId: ProviderId,
-    moduleId: ProviderUsageHistoryModuleId,
-    visible: boolean,
-  ) => void;
 };
 
 export function DashboardPage({
@@ -82,7 +76,6 @@ export function DashboardPage({
   onOpenQuickSetup,
   onRefreshProvider,
   onRefreshAll,
-  onUsageHistoryVisibilityChange,
 }: DashboardPageProps) {
   const i18n = createRuntimeI18n(
     localePreference,
@@ -189,9 +182,6 @@ export function DashboardPage({
                   onOpen={onOpenProvider}
                   onOpenSourcePage={onOpenSourcePage}
                   onRefresh={onRefreshProvider}
-                  onUsageHistoryVisibilityChange={
-                    onUsageHistoryVisibilityChange
-                  }
                 />
               ) : (
                 <CustomSourceCard
