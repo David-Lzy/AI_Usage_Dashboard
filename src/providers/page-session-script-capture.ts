@@ -36,7 +36,7 @@ export async function executeScriptResult<T>(
   injection: {
     tabId: number;
     world?: `${chrome.scripting.ExecutionWorld}`;
-    func: (...args: unknown[]) => T | Promise<T>;
+    func: (...args: unknown[]) => T;
     args?: unknown[];
   },
 ): Promise<T> {

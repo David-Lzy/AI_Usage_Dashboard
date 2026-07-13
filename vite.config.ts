@@ -8,6 +8,7 @@ import { defineConfig } from "vite";
 
 import manifest from "./src/manifest.json";
 import pkg from "./package.json";
+import { ensureLegacyChromeDistAliases } from "./scripts/lib/chrome-dist-aliases";
 
 const chromeDistRelativeDir = "dist/chrome";
 
@@ -148,6 +149,7 @@ function stableExtensionBuildOutputPlugin() {
         `./${stableWorkerRelativePath}`,
       );
       await writeFile(loaderAbsolutePath, rewrittenLoader);
+      await ensureLegacyChromeDistAliases(projectRoot);
     },
   };
 }
