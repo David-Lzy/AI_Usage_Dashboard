@@ -4,6 +4,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
   type ReactNode,
 } from "react";
 
@@ -264,73 +265,97 @@ function UsageHistoryLegend({
   data: UsageHistoryChartData;
   label: string;
 }) {
-  const listRef = useRef<HTMLUListElement>(null);
-  const [overflowState, setOverflowState] = useState<
-    "none" | "start" | "middle" | "end"
-  >("none");
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const groupRef = useRef<HTMLUListElement>(null);
+  const [marqueeState, setMarqueeState] = useState({
+    isOverflowing: false,
+    durationSeconds: 16,
+  });
 
   useEffect(() => {
-    const list = listRef.current;
-    if (!list) {
+    const viewport = viewportRef.current;
+    const group = groupRef.current;
+    if (!viewport || !group) {
       return undefined;
     }
 
-    const updateOverflowState = () => {
-      const maximumScroll = Math.max(0, list.scrollWidth - list.clientWidth);
-      const logicalScroll = Math.min(maximumScroll, Math.abs(list.scrollLeft));
-      const nextState =
-        maximumScroll <= 1
-          ? "none"
-          : logicalScroll <= 1
-            ? "start"
-            : logicalScroll >= maximumScroll - 1
-              ? "end"
-              : "middle";
-      setOverflowState((current) =>
-        current === nextState ? current : nextState,
+    const updateMarqueeState = () => {
+      const groupWidth = group.scrollWidth;
+      const isOverflowing = groupWidth > viewport.clientWidth + 1;
+      const durationSeconds = Math.max(12, Math.min(30, groupWidth / 24));
+      setMarqueeState((current) =>
+        current.isOverflowing === isOverflowing &&
+        Math.abs(current.durationSeconds - durationSeconds) < 0.1
+          ? current
+          : { isOverflowing, durationSeconds },
       );
     };
 
-    updateOverflowState();
-    list.addEventListener("scroll", updateOverflowState, { passive: true });
+    updateMarqueeState();
 
     const resizeObserver =
       typeof ResizeObserver === "function"
-        ? new ResizeObserver(updateOverflowState)
+        ? new ResizeObserver(updateMarqueeState)
         : null;
-    resizeObserver?.observe(list);
+    resizeObserver?.observe(viewport);
+    resizeObserver?.observe(group);
     if (!resizeObserver) {
-      window.addEventListener("resize", updateOverflowState);
+      window.addEventListener("resize", updateMarqueeState);
     }
 
     return () => {
-      list.removeEventListener("scroll", updateOverflowState);
       resizeObserver?.disconnect();
       if (!resizeObserver) {
-        window.removeEventListener("resize", updateOverflowState);
+        window.removeEventListener("resize", updateMarqueeState);
       }
     };
   }, [data.series]);
 
+  const renderItems = () =>
+    data.series.map((series, index) => (
+      <li key={series.id} className="usage-history-legend__item">
+        <span
+          className="usage-history-legend__swatch"
+          style={{ backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }}
+          aria-hidden="true"
+        />
+        <span>{series.label}</span>
+      </li>
+    ));
+
   return (
-    <ul
-      ref={listRef}
+    <div
+      ref={viewportRef}
       className="usage-history-legend"
-      data-overflow-state={overflowState}
-      aria-label={label}
-      tabIndex={overflowState === "none" ? undefined : 0}
+      data-overflow={marqueeState.isOverflowing ? "true" : "false"}
+      aria-label={marqueeState.isOverflowing ? label : undefined}
+      tabIndex={marqueeState.isOverflowing ? 0 : undefined}
     >
-      {data.series.map((series, index) => (
-        <li key={series.id} className="usage-history-legend__item">
-          <span
-            className="usage-history-legend__swatch"
-            style={{ backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }}
+      <div
+        className="usage-history-legend__track"
+        style={
+          {
+            "--usage-history-legend-duration": `${marqueeState.durationSeconds}s`,
+          } as CSSProperties
+        }
+      >
+        <ul
+          ref={groupRef}
+          className="usage-history-legend__group"
+          aria-label={label}
+        >
+          {renderItems()}
+        </ul>
+        {marqueeState.isOverflowing ? (
+          <ul
+            className="usage-history-legend__group usage-history-legend__group--duplicate"
             aria-hidden="true"
-          />
-          <span>{series.label}</span>
-        </li>
-      ))}
-    </ul>
+          >
+            {renderItems()}
+          </ul>
+        ) : null}
+      </div>
+    </div>
   );
 }
 

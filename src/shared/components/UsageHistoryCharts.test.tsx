@@ -188,8 +188,11 @@ describe("UsageHistoryCharts", () => {
     expect(chartsCss).toContain("margin-inline-start: auto;");
     expect(chartsCss).toContain("justify-content: space-between;");
     expect(chartsCss).toContain("flex-wrap: nowrap;");
-    expect(chartsCss).toContain("overflow-x: auto;");
-    expect(chartsCss).toContain('data-overflow-state="middle"');
+    expect(chartsCss).toContain('data-overflow="true"');
+    expect(chartsCss).toContain("usage-history-legend-marquee");
+    expect(chartsCss).toContain("animation-play-state: paused;");
+    expect(chartsCss).toContain("prefers-reduced-motion: reduce");
+    expect(chartsCss).toContain("scrollbar-width: none;");
     expect(chartsCss).toContain("white-space: nowrap;");
     expect(chartsCss).toContain(".usage-history-range-toggle {");
     expect(chartsCss).toContain(".usage-history-range-toggle__dates {");
