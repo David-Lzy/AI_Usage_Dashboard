@@ -190,6 +190,10 @@ describe("UsageHistoryCharts", () => {
     expect(chartsCss).toContain("flex-wrap: nowrap;");
     expect(chartsCss).toContain('data-overflow="true"');
     expect(chartsCss).toContain("usage-history-legend-marquee");
+    expect(chartsCss).toContain("gap: 8px;");
+    expect(chartsCss).toContain("calc(-50% - 4px)");
+    expect(chartsCss).toContain("calc(50% + 4px)");
+    expect(chartsCss).toContain("padding-block-end: 8px;");
     expect(chartsCss).toContain("animation-play-state: paused;");
     expect(chartsCss).toContain("prefers-reduced-motion: reduce");
     expect(chartsCss).toContain("scrollbar-width: none;");

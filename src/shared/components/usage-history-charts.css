@@ -46,6 +46,10 @@
   border-top: 1px solid var(--md-sys-color-outline-variant);
 }
 
+.usage-history-compact {
+  padding-block-end: 8px;
+}
+
 .usage-history-compact__header,
 .usage-history-detail__toolbar,
 .usage-history-detail__module-header {
@@ -333,7 +337,7 @@
 .usage-history-legend[data-overflow="true"] .usage-history-legend__track {
   display: flex;
   width: max-content;
-  gap: 24px;
+  gap: 8px;
   animation: usage-history-legend-marquee
     var(--usage-history-legend-duration, 16s) linear infinite;
   will-change: transform;
@@ -372,7 +376,7 @@
   }
 
   to {
-    transform: translate3d(calc(-50% - 12px), 0, 0);
+    transform: translate3d(calc(-50% - 4px), 0, 0);
   }
 }
 
@@ -382,7 +386,7 @@
   }
 
   to {
-    transform: translate3d(calc(50% + 12px), 0, 0);
+    transform: translate3d(calc(50% + 4px), 0, 0);
   }
 }
 
