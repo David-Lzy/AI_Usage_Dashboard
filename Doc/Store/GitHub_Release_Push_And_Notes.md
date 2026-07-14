@@ -47,15 +47,14 @@ re-upload public package assets built from `main`.
 
 ## Chrome Web Store API Submission
 
-The tag workflow can optionally upload the Chrome package to the Chrome Web
-Store and submit it for review after the package build succeeds. This uses the
-Chrome Web Store API v2 with a Google Cloud service account linked to the
+The tag workflow uploads the Chrome package to the Chrome Web Store and submits
+it for review automatically after the package build succeeds. Creating a
+version tag is therefore also the explicit store-submission action. This uses
+the Chrome Web Store API v2 with a Google Cloud service account linked to the
 publisher account.
 
 Required GitHub Actions repository variable values:
 
-- `CWS_AUTO_SUBMIT`: set to `true` to submit Chrome Web Store updates on
-  version tags.
 - `CWS_PUBLISHER_ID`: the Chrome Web Store publisher ID.
 - `CWS_EXTENSION_ID`: the public extension ID.
 

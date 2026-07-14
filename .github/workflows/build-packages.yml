@@ -269,7 +269,7 @@ jobs:
     name: Submit Chrome Web Store
     needs: build
     if: >-
-      (github.ref_type == 'tag' && startsWith(github.ref_name, 'v') && vars.CWS_AUTO_SUBMIT == 'true') ||
+      (github.ref_type == 'tag' && startsWith(github.ref_name, 'v')) ||
       (github.event_name == 'workflow_dispatch' && inputs.submit_chrome_web_store)
     runs-on: ubuntu-latest
     permissions:

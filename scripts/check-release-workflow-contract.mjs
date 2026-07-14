@@ -116,8 +116,13 @@ assertIncludes(
 );
 assertIncludes(
   workflow,
-  "vars.CWS_AUTO_SUBMIT == 'true'",
-  "Chrome Web Store tag submission gate",
+  "github.ref_type == 'tag' && startsWith(github.ref_name, 'v')",
+  "automatic Chrome Web Store tag submission",
+);
+assertNotIncludes(
+  workflow,
+  "CWS_AUTO_SUBMIT",
+  "obsolete Chrome Web Store tag opt-in variable",
 );
 assertIncludes(
   workflow,
