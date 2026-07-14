@@ -266,12 +266,16 @@ export function UsageHistoryCompact({
   history,
   moduleId,
   copy,
+  defaultExpanded = true,
+  onExpandedChange,
 }: {
   history?: ProviderUsageHistory;
   moduleId: ProviderUsageHistoryModuleId;
   copy: UsageHistoryChartCopy;
+  defaultExpanded?: boolean;
+  onExpandedChange?: (isExpanded: boolean) => void;
 }) {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(defaultExpanded);
   const contentId = useId();
   const points = useMemo(() => {
     const sourcePoints = getModulePoints(history, moduleId);
@@ -306,7 +310,13 @@ export function UsageHistoryCompact({
           aria-expanded={isExpanded}
           aria-label={`${isExpanded ? copy.collapse : copy.expand}: ${title}`}
           title={isExpanded ? copy.collapse : copy.expand}
-          onClick={() => setIsExpanded((current) => !current)}
+          onClick={() =>
+            setIsExpanded((current) => {
+              const next = !current;
+              onExpandedChange?.(next);
+              return next;
+            })
+          }
         >
           <span
             className="usage-history-compact__collapse-icon"

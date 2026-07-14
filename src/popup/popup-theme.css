@@ -611,38 +611,44 @@ body.popup-page .popup-header--surface-collapsed {
 }
 
 .popup-provider-card__title-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
   align-items: center;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: var(--app-space-2);
+  gap: var(--app-space-1);
+  min-height: 30px;
   min-width: 0;
 }
 
 .popup-provider-card__header-actions {
   display: inline-flex;
   align-items: center;
-  flex-wrap: wrap;
-  flex: 0 1 auto;
+  flex-wrap: nowrap;
   gap: var(--app-space-1);
   justify-content: flex-end;
-  margin-inline-start: auto;
+  justify-self: end;
+  margin-inline-start: 0;
   min-width: 0;
   max-inline-size: 100%;
 }
 
 .popup-provider-card__header-action {
+  height: 30px;
   min-height: 30px;
   max-width: none;
-  padding-inline: var(--app-space-2);
+  padding-block: 0;
+  padding-inline: var(--app-space-1);
   overflow: visible;
   text-align: center;
-  white-space: normal;
+  white-space: nowrap;
 }
 
 .popup-provider-card__status {
+  display: flex;
+  align-items: center;
+  align-self: center;
   flex: 0 0 auto;
-  margin-inline-start: auto;
+  justify-self: end;
+  margin-inline-start: 0;
   max-width: none;
 }
 
@@ -668,6 +674,11 @@ body.popup-page .popup-header--surface-collapsed {
 .popup-provider-card__progress {
   display: grid;
   gap: var(--app-space-2);
+}
+
+.popup-provider-card__history {
+  display: grid;
+  min-width: 0;
 }
 
 .popup-provider-card__progress--circle,
@@ -832,7 +843,9 @@ body.popup-page .popup-header--surface-collapsed {
 }
 
 .popup-provider-card__provider {
-  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  min-height: 30px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -930,5 +943,20 @@ body.popup-page .popup-header--surface-collapsed {
   .popup-header__action-icon {
     width: 20px;
     height: 20px;
+  }
+
+  .popup-provider-card__title-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .popup-provider-card__header-actions {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+  }
+
+  .popup-provider-card__status {
+    grid-column: 2;
+    grid-row: 1 / span 2;
   }
 }

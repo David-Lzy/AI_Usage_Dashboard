@@ -476,6 +476,9 @@ describe("popup view models", () => {
               }),
               sourceFallbackReason:
                 "Official API unavailable: Codex analytics API key and workspace ID are not both configured.",
+              used: null,
+              remaining: null,
+              total: null,
               usageWindows: undefined,
               usageBalances: undefined,
               usageSummary: null,
@@ -518,6 +521,27 @@ describe("popup view models", () => {
     expect(localizedModel.featuredProviderCards[0]?.secondaryAction).toEqual({
       kind: "hide-provider",
       label: "隐藏",
+      providerId: "codex-personal-page",
+    });
+
+    const cachedUsageWindows = SAMPLE_APP_STATE.providers.find(
+      (provider) => provider.providerId === "codex-personal-page",
+    )?.usageWindows;
+    const cachedLocalizedModel = localizePopupViewModel(
+      buildPopupViewModel({
+        ...state,
+        providers: state.providers.map((provider) =>
+          provider.providerId === "codex-personal-page"
+            ? { ...provider, usageWindows: cachedUsageWindows }
+            : provider,
+        ),
+      }),
+      createRuntimeI18n("zh-CN"),
+    );
+
+    expect(cachedLocalizedModel.featuredProviderCards[0]?.action).toEqual({
+      kind: "provider-detail",
+      label: "详情",
       providerId: "codex-personal-page",
     });
   });

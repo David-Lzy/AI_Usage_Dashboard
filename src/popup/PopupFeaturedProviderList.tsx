@@ -1,9 +1,14 @@
+import { useState } from "react";
+
 import type {
   PopupCircularProgressItemsPerRow,
   ProgressColorAppearance,
   ProgressColorBand,
   ProgressDisplayStyle,
   ProgressItemsBySurface,
+  ProviderId,
+  ProviderUsageHistory,
+  ProviderUsageHistoryModuleId,
   UsageHistoryModulesBySurface,
 } from "../providers/types";
 import type { RuntimeI18n } from "../shared/i18n";
@@ -15,12 +20,19 @@ import type {
   PopupFeaturedProviderCard,
   PopupGuidanceAction,
 } from "./view-models";
-import { UsageHistoryCompact } from "../shared/components/UsageHistoryCharts";
+import {
+  UsageHistoryCompact,
+  type UsageHistoryChartCopy,
+} from "../shared/components/UsageHistoryCharts";
 import { buildUsageHistoryLocalizedCopy } from "../shared/usage-history-localized-copy";
 import {
   createDefaultUsageHistoryModulesBySurface,
   resolveProviderUsageHistoryModules,
 } from "../shared/usage-history-visibility";
+import {
+  readPopupUsageHistoryCollapsePreference,
+  writePopupUsageHistoryCollapsePreference,
+} from "./popup-collapse-preferences";
 
 type PopupFeaturedProviderListProps = {
   ariaLabel: string;
@@ -42,6 +54,38 @@ type PopupFeaturedProviderListProps = {
     options?: { settingsFocus?: SettingsRouteFocus | null },
   ) => void | Promise<void>;
 };
+
+function PopupUsageHistoryModule({
+  copy,
+  history,
+  moduleId,
+  providerId,
+}: {
+  copy: UsageHistoryChartCopy;
+  history: ProviderUsageHistory;
+  moduleId: ProviderUsageHistoryModuleId;
+  providerId: ProviderId;
+}) {
+  const [defaultExpanded] = useState(
+    () => !readPopupUsageHistoryCollapsePreference(providerId, moduleId),
+  );
+
+  return (
+    <UsageHistoryCompact
+      copy={copy}
+      defaultExpanded={defaultExpanded}
+      history={history}
+      moduleId={moduleId}
+      onExpandedChange={(isExpanded) =>
+        writePopupUsageHistoryCollapsePreference(
+          providerId,
+          moduleId,
+          !isExpanded,
+        )
+      }
+    />
+  );
+}
 
 export function PopupFeaturedProviderList({
   ariaLabel,
@@ -85,9 +129,22 @@ export function PopupFeaturedProviderList({
             "popup",
             progressItemsBySurface,
           );
+          const visibleUsageHistoryModules = provider.usageHistory
+            ? resolveProviderUsageHistoryModules(
+                usageHistoryModulesBySurface,
+                "popup",
+                provider.providerId,
+              ).filter((preference) => preference.visible)
+            : [];
+          const hasCachedProviderContent =
+            hasProviderProgress || visibleUsageHistoryModules.length > 0;
           const cardSurfaceTone =
-            hasProviderProgress && provider.displayTone === "error"
+            hasCachedProviderContent && provider.displayTone === "error"
               ? "neutral"
+              : provider.displayTone;
+          const cardStatusTone =
+            hasCachedProviderContent && provider.displayTone === "error"
+              ? "warning"
               : provider.displayTone;
           const sourcePageAction =
             provider.openableSessionPageUrl !== null
@@ -174,7 +231,7 @@ export function PopupFeaturedProviderList({
                       <StatusBadge
                         compact
                         label={card.statusLabel}
-                        tone={provider.displayTone}
+                        tone={cardStatusTone}
                       />
                     </div>
                   </div>
@@ -226,22 +283,19 @@ export function PopupFeaturedProviderList({
                 </>
               )}
 
-              {provider.usageHistory
-                ? resolveProviderUsageHistoryModules(
-                    usageHistoryModulesBySurface,
-                    "popup",
-                    provider.providerId,
-                  ).map((preference) =>
-                    preference.visible ? (
-                      <UsageHistoryCompact
-                        key={preference.id}
-                        copy={usageHistoryCopy}
-                        history={provider.usageHistory}
-                        moduleId={preference.id}
-                      />
-                    ) : null,
-                  )
-                : null}
+              {provider.usageHistory && visibleUsageHistoryModules.length > 0 ? (
+                <div className="popup-provider-card__history">
+                  {visibleUsageHistoryModules.map((preference) => (
+                    <PopupUsageHistoryModule
+                      key={preference.id}
+                      copy={usageHistoryCopy}
+                      history={provider.usageHistory}
+                      moduleId={preference.id}
+                      providerId={provider.providerId}
+                    />
+                  ))}
+                </div>
+              ) : null}
             </article>
           );
         })}

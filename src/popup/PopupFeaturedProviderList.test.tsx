@@ -169,7 +169,62 @@ describe("PopupFeaturedProviderList", () => {
     expect(html).not.toContain("No history data yet");
   });
 
-  it("keeps a stale quota card surface neutral while preserving its error status", () => {
+  it("groups adjacent history modules without provider-card grid gaps", () => {
+    const baseCard = buildPopupViewModel(
+      SAMPLE_APP_STATE,
+    ).featuredProviderCards.find(
+      (candidate) => candidate.provider.providerId === "codex-personal-page",
+    );
+
+    if (!baseCard) {
+      throw new Error("Missing Codex popup card fixture.");
+    }
+
+    const html = renderFeaturedList([
+      {
+        ...baseCard,
+        provider: {
+          ...baseCard.provider,
+          usageHistory: {
+            capturedAt: "2026-07-13T00:00:00.000Z",
+            rangeStart: "2026-07-12",
+            rangeEnd: "2026-07-13",
+            granularity: "day",
+            personalUsageBySurface: {
+              unit: "percent",
+              points: [
+                {
+                  date: "2026-07-13",
+                  values: [
+                    {
+                      id: "desktop",
+                      label: "Desktop",
+                      value: 50,
+                    },
+                  ],
+                },
+              ],
+            },
+            turns: {
+              total: 7,
+              byModel: [
+                {
+                  date: "2026-07-13",
+                  values: [{ id: "gpt", label: "GPT", value: 7 }],
+                },
+              ],
+              bySurface: [],
+            },
+          },
+        },
+      },
+    ]);
+
+    expect(html).toContain('class="popup-provider-card__history"');
+    expect(html).toContain("usage-history-compact");
+  });
+
+  it("keeps cached quota content neutral and presents a failed refresh as a warning", () => {
     const card = buildPopupViewModel(SAMPLE_APP_STATE).featuredProviderCards.find(
       (candidate) => candidate.provider.providerId === "codex-personal-page",
     );
@@ -192,20 +247,26 @@ describe("PopupFeaturedProviderList", () => {
     expect(html).toContain(
       "popup-provider-card popup-provider-card--neutral popup-provider-card--quota-first",
     );
-    expect(html).toContain("status-chip--error");
+    expect(html).toContain("status-chip--warning");
+    expect(html).not.toContain("status-chip--error");
   });
 
-  it("allows localized header actions to wrap instead of clipping translated labels", () => {
+  it("aligns provider identity, compact actions, and status on a stable header grid", () => {
     expect(popupThemeCss).toContain(".popup-provider-card__title-row {");
-    expect(popupThemeCss).toContain("flex-wrap: wrap;");
+    expect(popupThemeCss).toContain(
+      "grid-template-columns: minmax(0, 1fr) auto auto;",
+    );
+    expect(popupThemeCss).toContain("min-height: 30px;");
     expect(popupThemeCss).toContain(".popup-provider-card__header-actions {");
-    expect(popupThemeCss).toContain("margin-inline-start: auto;");
+    expect(popupThemeCss).toContain("flex-wrap: nowrap;");
+    expect(popupThemeCss).toContain("justify-self: end;");
     expect(popupThemeCss).toContain("max-inline-size: 100%;");
     expect(popupThemeCss).toContain(".popup-provider-card__header-action {");
+    expect(popupThemeCss).toContain("height: 30px;");
     expect(popupThemeCss).toContain("max-width: none;");
     expect(popupThemeCss).toContain("overflow: visible;");
-    expect(popupThemeCss).toContain("white-space: normal;");
+    expect(popupThemeCss).toContain("white-space: nowrap;");
     expect(popupThemeCss).not.toContain("max-width: 7rem;");
-    expect(popupThemeCss).toContain("flex: 1 1 0;");
+    expect(popupThemeCss).toContain(".popup-provider-card__history {");
   });
 });

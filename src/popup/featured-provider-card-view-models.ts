@@ -3,6 +3,7 @@ import type { ResolvedAppLocale, RuntimeI18n } from "../shared/i18n";
 import { buildRuntimeCommonCopy } from "../shared/i18n";
 import type { buildPopupLocalizedCopy } from "../shared/popup-localized-copy";
 import { canDisplayProviderProgressItems } from "../shared/provider-progress-item-selection";
+import { buildProviderProgressItems } from "../shared/provider-progress-items";
 import type { ProviderViewModel } from "../shared/provider-view-models";
 import type {
   PopupFeaturedProviderCard,
@@ -26,6 +27,22 @@ const POPUP_GRANT_ACCESS_ACTION_LABELS: Record<ResolvedAppLocale, string> = {
   hi: "पहुँच दें",
   id: "Beri akses",
 };
+
+function isSourcePageRecoveryState(provider: ProviderViewModel): boolean {
+  return (
+    provider.currentSourceStateKind === "open_page_required" ||
+    provider.currentSourceStateKind === "logged_out" ||
+    provider.currentSourceStateKind === "capture_unavailable"
+  );
+}
+
+function hasCachedProviderDisplayData(provider: ProviderViewModel): boolean {
+  return (
+    canDisplayProviderProgressItems(provider) &&
+    (buildProviderProgressItems(provider).length > 0 ||
+      provider.usageHistory !== undefined)
+  );
+}
 
 function buildPopupFeaturedStatusLabel(provider: ProviderViewModel): string {
   if (provider.permissionStatus === "missing") {
@@ -270,10 +287,19 @@ function buildPopupFeaturedAction(provider: ProviderViewModel): PopupGuidanceAct
   }
 
   if (
+    isSourcePageRecoveryState(provider) &&
+    hasCachedProviderDisplayData(provider)
+  ) {
+    return {
+      kind: "provider-detail",
+      label: "Details",
+      providerId: provider.providerId,
+    };
+  }
+
+  if (
     provider.openableSessionPageUrl !== null &&
-    (provider.currentSourceStateKind === "open_page_required" ||
-      provider.currentSourceStateKind === "logged_out" ||
-      provider.currentSourceStateKind === "capture_unavailable")
+    isSourcePageRecoveryState(provider)
   ) {
     return {
       kind: "source-page",
@@ -406,15 +432,20 @@ export function buildLocalizedFeaturedProviderCard(
             kind: "settings",
             label: i18n.t("common.actions.open_settings"),
           }
-        : provider.currentSourceStateKind === "policy_only"
+          : provider.currentSourceStateKind === "policy_only"
           ? {
               kind: "settings",
               label: i18n.t("common.actions.open_settings"),
             }
+          : isSourcePageRecoveryState(provider) &&
+              hasCachedProviderDisplayData(provider)
+            ? {
+                kind: "provider-detail",
+                label: copy.featuredCard.openDetailAction,
+                providerId: provider.providerId,
+              }
           : provider.openableSessionPageUrl !== null &&
-              (provider.currentSourceStateKind === "open_page_required" ||
-                provider.currentSourceStateKind === "logged_out" ||
-                provider.currentSourceStateKind === "capture_unavailable")
+              isSourcePageRecoveryState(provider)
             ? {
                 kind: "source-page",
                 label: copy.featuredCard.openSourcePageAction,

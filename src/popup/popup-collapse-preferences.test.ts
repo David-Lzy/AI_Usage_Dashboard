@@ -3,7 +3,9 @@ import { describe, expect, it } from "vitest";
 import type { WebStorageLike } from "../shared/local-storage";
 import {
   readPopupCollapsePreference,
+  readPopupUsageHistoryCollapsePreference,
   writePopupCollapsePreference,
+  writePopupUsageHistoryCollapsePreference,
 } from "./popup-collapse-preferences";
 
 function createMemoryStorage(): WebStorageLike {
@@ -72,6 +74,67 @@ describe("popup collapse preferences", () => {
       writePopupCollapsePreference("footerInfo", true, {
         storage: throwingStorage,
       }),
+    ).not.toThrow();
+  });
+
+  it("stores usage history modules independently by provider and module", () => {
+    const storage = createMemoryStorage();
+
+    expect(
+      readPopupUsageHistoryCollapsePreference(
+        "codex-personal-page",
+        "personal_usage_by_surface",
+        { storage },
+      ),
+    ).toBe(false);
+
+    writePopupUsageHistoryCollapsePreference(
+      "codex-personal-page",
+      "personal_usage_by_surface",
+      true,
+      { storage },
+    );
+
+    expect(
+      readPopupUsageHistoryCollapsePreference(
+        "codex-personal-page",
+        "personal_usage_by_surface",
+        { storage },
+      ),
+    ).toBe(true);
+    expect(
+      readPopupUsageHistoryCollapsePreference(
+        "codex-personal-page",
+        "turns_history",
+        { storage },
+      ),
+    ).toBe(false);
+    expect(
+      readPopupUsageHistoryCollapsePreference(
+        "cursor-personal-page",
+        "personal_usage_by_surface",
+        { storage },
+      ),
+    ).toBe(false);
+  });
+
+  it("silently falls back when usage history preference storage fails", () => {
+    const storage = createThrowingStorage();
+
+    expect(
+      readPopupUsageHistoryCollapsePreference(
+        "codex-personal-page",
+        "turns_history",
+        { storage },
+      ),
+    ).toBe(false);
+    expect(() =>
+      writePopupUsageHistoryCollapsePreference(
+        "codex-personal-page",
+        "turns_history",
+        true,
+        { storage },
+      ),
     ).not.toThrow();
   });
 });

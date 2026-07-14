@@ -84,6 +84,25 @@ describe("UsageHistoryCharts", () => {
     expect(html).toContain("Total turns: 12");
   });
 
+  it("can start a compact module collapsed for a persisted surface preference", () => {
+    const html = renderToStaticMarkup(
+      <UsageHistoryCompact
+        history={history}
+        moduleId="personal_usage_by_surface"
+        copy={copy}
+        defaultExpanded={false}
+      />,
+    );
+
+    expect(html).toContain("usage-history-compact--collapsed");
+    expect(html).toContain('aria-expanded="false"');
+    expect(html).toContain('aria-label="Expand: Personal usage"');
+    expect(html).toContain("hidden");
+    expect(html).not.toContain(
+      '<p class="usage-history-compact__range">',
+    );
+  });
+
   it("renders detail controls and both chart modules", () => {
     const html = renderToStaticMarkup(<UsageHistoryDetail history={history} copy={copy} />);
     expect(html).toContain("7 days");
