@@ -51,6 +51,27 @@ const history: ProviderUsageHistory = {
   ], bySurface: [] },
 };
 
+const tenDayHistory: ProviderUsageHistory = {
+  ...history,
+  rangeStart: "2026-07-01",
+  rangeEnd: "2026-07-10",
+  personalUsageBySurface: {
+    unit: "percent",
+    points: Array.from({ length: 10 }, (_, index) => ({
+      date: `2026-07-${String(index + 1).padStart(2, "0")}`,
+      values: [{ id: "desktop", label: "Desktop", value: index + 1 }],
+    })),
+  },
+  turns: {
+    total: 55,
+    byModel: Array.from({ length: 10 }, (_, index) => ({
+      date: `2026-07-${String(index + 1).padStart(2, "0")}`,
+      values: [{ id: "gpt", label: "GPT", value: index + 1 }],
+    })),
+    bySurface: [],
+  },
+};
+
 describe("UsageHistoryCharts", () => {
   it("renders compact localized dates, rounded values, and a disclosure toggle", () => {
     const html = renderToStaticMarkup(
@@ -69,7 +90,26 @@ describe("UsageHistoryCharts", () => {
     expect(html).toContain('aria-expanded="true"');
     expect(html).toContain("usage-history-compact__collapse-toggle");
     expect(html).toContain("usage-history-compact__heading");
+    expect(html).toContain('data-usage-history-range-days="31"');
+    expect(html).toContain("1 month");
     expect(html).toContain("tabindex=\"0\"");
+  });
+
+  it("renders an explicit seven-day range when controlled by a surface", () => {
+    const html = renderToStaticMarkup(
+      <UsageHistoryCompact
+        history={tenDayHistory}
+        moduleId="turns_history"
+        copy={copy}
+        rangeDays={7}
+      />,
+    );
+
+    expect(html).toContain('data-usage-history-range-days="7"');
+    expect(html).toContain("7 days");
+    expect(html).toContain("Jul 4 – Jul 10");
+    expect(html).toContain("Total turns: 49");
+    expect(html).not.toContain("Jul 1 – Jul 10");
   });
 
   it("keeps total turns in the compact turns module", () => {
@@ -102,9 +142,7 @@ describe("UsageHistoryCharts", () => {
     expect(html).toContain('aria-expanded="false"');
     expect(html).toContain('aria-label="Expand: Personal usage"');
     expect(html).toContain("hidden");
-    expect(html).not.toContain(
-      '<p class="usage-history-compact__range">',
-    );
+    expect(html).not.toContain("usage-history-range-toggle");
   });
 
   it("renders detail controls and both chart modules", () => {
@@ -145,6 +183,8 @@ describe("UsageHistoryCharts", () => {
     expect(chartsCss).toContain("margin-inline-start: auto;");
     expect(chartsCss).toContain("justify-content: space-between;");
     expect(chartsCss).toContain("white-space: nowrap;");
+    expect(chartsCss).toContain(".usage-history-range-toggle {");
+    expect(chartsCss).toContain(".usage-history-range-toggle__dates {");
     expect(chartsCss).toContain("usage-history-chart-frame__metric");
     expect(chartsCss).toContain("height: 70px;");
     expect(chartsCss).toContain(".usage-history-chart__bar {");

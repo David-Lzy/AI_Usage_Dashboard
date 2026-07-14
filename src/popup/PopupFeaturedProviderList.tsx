@@ -23,6 +23,7 @@ import type {
 import {
   UsageHistoryCompact,
   type UsageHistoryChartCopy,
+  type UsageHistoryRangeDays,
 } from "../shared/components/UsageHistoryCharts";
 import { buildUsageHistoryLocalizedCopy } from "../shared/usage-history-localized-copy";
 import {
@@ -60,11 +61,15 @@ function PopupUsageHistoryModule({
   history,
   moduleId,
   providerId,
+  rangeDays,
+  onRangeDaysChange,
 }: {
   copy: UsageHistoryChartCopy;
   history: ProviderUsageHistory;
   moduleId: ProviderUsageHistoryModuleId;
   providerId: ProviderId;
+  rangeDays: UsageHistoryRangeDays;
+  onRangeDaysChange: (days: UsageHistoryRangeDays) => void;
 }) {
   const [defaultExpanded] = useState(
     () => !readPopupUsageHistoryCollapsePreference(providerId, moduleId),
@@ -76,6 +81,8 @@ function PopupUsageHistoryModule({
       defaultExpanded={defaultExpanded}
       history={history}
       moduleId={moduleId}
+      rangeDays={rangeDays}
+      onRangeDaysChange={onRangeDaysChange}
       onExpandedChange={(isExpanded) =>
         writePopupUsageHistoryCollapsePreference(
           providerId,
@@ -85,6 +92,32 @@ function PopupUsageHistoryModule({
       }
     />
   );
+}
+
+function PopupUsageHistoryModules({
+  copy,
+  history,
+  moduleIds,
+  providerId,
+}: {
+  copy: UsageHistoryChartCopy;
+  history: ProviderUsageHistory;
+  moduleIds: readonly ProviderUsageHistoryModuleId[];
+  providerId: ProviderId;
+}) {
+  const [rangeDays, setRangeDays] = useState<UsageHistoryRangeDays>(31);
+
+  return moduleIds.map((moduleId) => (
+    <PopupUsageHistoryModule
+      key={moduleId}
+      copy={copy}
+      history={history}
+      moduleId={moduleId}
+      providerId={providerId}
+      rangeDays={rangeDays}
+      onRangeDaysChange={setRangeDays}
+    />
+  ));
 }
 
 export function PopupFeaturedProviderList({
@@ -286,15 +319,14 @@ export function PopupFeaturedProviderList({
 
               {usageHistory && visibleUsageHistoryModules.length > 0 ? (
                 <div className="popup-provider-card__history">
-                  {visibleUsageHistoryModules.map((preference) => (
-                    <PopupUsageHistoryModule
-                      key={preference.id}
-                      copy={usageHistoryCopy}
-                      history={usageHistory}
-                      moduleId={preference.id}
-                      providerId={provider.providerId}
-                    />
-                  ))}
+                  <PopupUsageHistoryModules
+                    copy={usageHistoryCopy}
+                    history={usageHistory}
+                    moduleIds={visibleUsageHistoryModules.map(
+                      (preference) => preference.id,
+                    )}
+                    providerId={provider.providerId}
+                  />
                 </div>
               ) : null}
             </article>

@@ -41,6 +41,8 @@ export type UsageHistoryChartCopy = {
   settingsDetail: string;
 };
 
+export type UsageHistoryRangeDays = 7 | 31;
+
 type ChartKind = "bars" | "area";
 
 const CHART_COLORS = [
@@ -90,6 +92,38 @@ function formatDateRange(data: UsageHistoryChartData, locale: string): string {
   }
 
   return `${formatUsageHistoryDate(data.dates[0], locale)} – ${formatUsageHistoryDate(data.dates.at(-1) ?? data.dates[0], locale)}`;
+}
+
+function UsageHistoryRangeToggle({
+  copy,
+  data,
+  days,
+  onChange,
+}: {
+  copy: UsageHistoryChartCopy;
+  data: UsageHistoryChartData;
+  days: UsageHistoryRangeDays;
+  onChange: (days: UsageHistoryRangeDays) => void;
+}) {
+  const periodLabel = days === 7 ? copy.sevenDays : copy.oneMonth;
+  const nextDays: UsageHistoryRangeDays = days === 7 ? 31 : 7;
+  const nextPeriodLabel = nextDays === 7 ? copy.sevenDays : copy.oneMonth;
+  const dateRange = formatDateRange(data, copy.locale);
+  const accessibleLabel = `${copy.dateRange}: ${periodLabel}, ${dateRange}. ${nextPeriodLabel}`;
+
+  return (
+    <button
+      className="usage-history-range-toggle"
+      data-usage-history-range-days={days}
+      type="button"
+      aria-label={accessibleLabel}
+      title={accessibleLabel}
+      onClick={() => onChange(nextDays)}
+    >
+      <span className="usage-history-range-toggle__period">{periodLabel}</span>
+      <span className="usage-history-range-toggle__dates">{dateRange}</span>
+    </button>
+  );
 }
 
 function buildPointLabel(
@@ -289,15 +323,22 @@ export function UsageHistoryCompact({
   moduleId,
   copy,
   defaultExpanded = true,
+  rangeDays,
   onExpandedChange,
+  onRangeDaysChange,
 }: {
   history?: ProviderUsageHistory;
   moduleId: ProviderUsageHistoryModuleId;
   copy: UsageHistoryChartCopy;
   defaultExpanded?: boolean;
+  rangeDays?: UsageHistoryRangeDays;
   onExpandedChange?: (isExpanded: boolean) => void;
+  onRangeDaysChange?: (days: UsageHistoryRangeDays) => void;
 }) {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
+  const [localRangeDays, setLocalRangeDays] =
+    useState<UsageHistoryRangeDays>(31);
+  const selectedRangeDays = rangeDays ?? localRangeDays;
   const contentId = useId();
   const points = useMemo(() => {
     const sourcePoints = getModulePoints(history, moduleId);
@@ -306,10 +347,22 @@ export function UsageHistoryCompact({
       : sourcePoints;
   }, [copy.surfaceLabels, history, moduleId]);
   const data = useMemo(
-    () => buildUsageHistoryChartData(points, { days: 31, maxSeries: 3, otherLabel: copy.other }),
-    [copy.other, points],
+    () =>
+      buildUsageHistoryChartData(points, {
+        days: selectedRangeDays,
+        maxSeries: 3,
+        otherLabel: copy.other,
+      }),
+    [copy.other, points, selectedRangeDays],
   );
   const title = moduleId === "personal_usage_by_surface" ? copy.personalUsage : copy.turns;
+
+  function updateRangeDays(nextDays: UsageHistoryRangeDays) {
+    if (rangeDays === undefined) {
+      setLocalRangeDays(nextDays);
+    }
+    onRangeDaysChange?.(nextDays);
+  }
 
   return (
     <section
@@ -319,10 +372,13 @@ export function UsageHistoryCompact({
       <header className="usage-history-compact__header">
         <div className="usage-history-compact__heading">
           <h3 className="usage-history-compact__title">{title}</h3>
-          {isExpanded ? (
-            <p className="usage-history-compact__range">
-              {formatDateRange(data, copy.locale)}
-            </p>
+          {isExpanded && data.dates.length > 0 ? (
+            <UsageHistoryRangeToggle
+              copy={copy}
+              data={data}
+              days={selectedRangeDays}
+              onChange={updateRangeDays}
+            />
           ) : null}
         </div>
         <button
@@ -424,7 +480,7 @@ export function UsageHistoryDetail({
   moduleOrder?: readonly ProviderUsageHistoryModuleId[];
   formatCapturedAt?: (value: string) => string;
 }) {
-  const [days, setDays] = useState<7 | 31>(31);
+  const [days, setDays] = useState<UsageHistoryRangeDays>(31);
   const [grouping, setGrouping] = useState<"model" | "surface">("model");
   const personalPoints = useMemo(
     () =>
@@ -463,17 +519,21 @@ export function UsageHistoryDetail({
         <p className="supporting-copy">
           {copy.capturedAt}: {formatCapturedAt(history.capturedAt)}
         </p>
-        <SegmentedControl
-          label={copy.dateRange}
-          value={days}
-          options={[{ value: 7, label: copy.sevenDays }, { value: 31, label: copy.oneMonth }] as const}
-          onChange={setDays}
-        />
       </header>
       {moduleOrder.map((moduleId) =>
         moduleId === "personal_usage_by_surface" ? (
           <section key={moduleId} className="usage-history-detail__module">
-            <h3 className="section-title">{copy.personalUsage}</h3>
+            <header className="usage-history-detail__module-header">
+              <h3 className="section-title">{copy.personalUsage}</h3>
+              {personalData.dates.length ? (
+                <UsageHistoryRangeToggle
+                  copy={copy}
+                  data={personalData}
+                  days={days}
+                  onChange={setDays}
+                />
+              ) : null}
+            </header>
             {personalData.dates.length ? (
               <>
                 <UsageHistorySvg
@@ -497,17 +557,27 @@ export function UsageHistoryDetail({
           <section key={moduleId} className="usage-history-detail__module">
             <header className="usage-history-detail__module-header">
               <h3 className="section-title">{copy.turns}</h3>
-              <SegmentedControl
-                label={copy.grouping}
-                value={grouping}
-                options={
-                  [
-                    { value: "model", label: copy.byModel },
-                    { value: "surface", label: copy.bySurface },
-                  ] as const
-                }
-                onChange={setGrouping}
-              />
+              <div className="usage-history-detail__module-actions">
+                {turnsData.dates.length ? (
+                  <UsageHistoryRangeToggle
+                    copy={copy}
+                    data={turnsData}
+                    days={days}
+                    onChange={setDays}
+                  />
+                ) : null}
+                <SegmentedControl
+                  label={copy.grouping}
+                  value={grouping}
+                  options={
+                    [
+                      { value: "model", label: copy.byModel },
+                      { value: "surface", label: copy.bySurface },
+                    ] as const
+                  }
+                  onChange={setGrouping}
+                />
+              </div>
             </header>
             {turnsData.dates.length ? (
               <>

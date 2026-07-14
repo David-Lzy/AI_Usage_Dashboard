@@ -129,6 +129,9 @@ Provider Display is the dashboard visibility, ordering, and quota-item configura
   progress items. Personal-usage history and turn trends can each be shown,
   hidden, and ordered per popup, sidebar, and full-page surface without changing
   provider enablement, provider order, or the stored source snapshot.
+- History modules on the same Provider card share a 7-day or 1-month display
+  range. Switching the range filters the normalized daily buckets locally and
+  must update the visible dates, chart values, and range total together.
 
 ### Surface Order
 

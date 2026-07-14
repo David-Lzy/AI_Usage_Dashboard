@@ -222,6 +222,7 @@ describe("PopupFeaturedProviderList", () => {
 
     expect(html).toContain('class="popup-provider-card__history"');
     expect(html).toContain("usage-history-compact");
+    expect(html.match(/data-usage-history-range-days="31"/g)).toHaveLength(2);
   });
 
   it("keeps cached quota content neutral and presents a failed refresh as a warning", () => {
