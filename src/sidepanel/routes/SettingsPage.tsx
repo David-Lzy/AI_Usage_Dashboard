@@ -433,6 +433,11 @@ export function SettingsPage({
           />
           <MaterialSelect
             label={i18n.t("settings.preferences.theme_mode_label")}
+            labelAccessory={
+              <MaterialInfoTooltip>
+                {i18n.t("settings.preferences.theme_mode_helper")}
+              </MaterialInfoTooltip>
+            }
             value={settings.themeMode}
             fieldIdPrefix="theme-mode"
             sessionPopoverId="theme-mode"

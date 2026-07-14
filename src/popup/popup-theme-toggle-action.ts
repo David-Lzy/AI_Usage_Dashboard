@@ -1,30 +1,28 @@
-import type { AppState } from "../providers/types";
+import type { AppState, ThemeMode } from "../providers/types";
 import { sendAppMessage } from "../shared/app-client";
-import { buildQuickThemeToggle } from "../shared/theme";
 
 export type PopupThemeToggleActionResult =
   | { status: "ready"; state: AppState }
   | { status: "error"; message: string };
 
 type PopupThemeToggleActionDeps = {
-  reader?: Parameters<typeof buildQuickThemeToggle>[1];
   sendMessage?: typeof sendAppMessage;
 };
 
 export async function runPopupThemeToggleAction(
   appState: AppState,
+  targetMode: ThemeMode,
   {
-    reader,
     sendMessage = sendAppMessage,
   }: PopupThemeToggleActionDeps = {},
 ): Promise<PopupThemeToggleActionResult> {
-  const quickThemeToggle = buildQuickThemeToggle(
-    appState.settings.themeMode,
-    reader,
-  );
+  if (appState.settings.themeMode === targetMode) {
+    return { status: "ready", state: appState };
+  }
+
   const response = await sendMessage({
     type: "app:update-settings",
-    settings: { themeMode: quickThemeToggle.nextMode },
+    settings: { themeMode: targetMode },
   });
 
   if (!response.ok) {

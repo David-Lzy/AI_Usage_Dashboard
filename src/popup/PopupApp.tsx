@@ -4,19 +4,18 @@ import type {
   AppLocalePreference,
   AppState,
   ProviderId,
+  ThemeMode,
 } from "../providers/types";
 import { sendAppMessage } from "../shared/app-client";
 import {
   buildPopupSummaryLabels,
   createRuntimeI18n,
   DEFAULT_APP_LOCALE_PREFERENCE,
-  getQuickThemeToggleCopy,
   syncRuntimeLocaleAttributes,
 } from "../shared/i18n";
 import { buildPopupLocalizedCopy } from "../shared/popup-localized-copy";
 import { buildProviderSourceDisplayLocalizedCopy } from "../shared/provider-source-display-localized-copy";
 import {
-  buildQuickThemeToggle,
   DEFAULT_THEME_SETTINGS,
   startThemeSettingsSync,
 } from "../shared/theme";
@@ -356,15 +355,16 @@ export function PopupApp() {
     };
   }, [hideProviderFeedback?.kind, hideProviderFeedback?.providerId]);
 
-  async function handleToggleThemeMode() {
+  async function handleSetThemeMode(themeMode: ThemeMode) {
     if (loadState.status !== "ready") {
       return;
     }
 
     setIsThemeTogglePending(true);
-    const result = await runPopupThemeToggleAction(loadState.appState, {
-      reader: typeof window !== "undefined" ? window : undefined,
-    });
+    const result = await runPopupThemeToggleAction(
+      loadState.appState,
+      themeMode,
+    );
 
     setLoadState(
       result.status === "ready"
@@ -404,14 +404,6 @@ export function PopupApp() {
     runtimeI18n,
   );
   const guidanceCard = popupModel.guidanceCard;
-  const quickThemeToggle = buildQuickThemeToggle(
-    appState.settings.themeMode,
-    typeof window !== "undefined" ? window : undefined,
-  );
-  const quickThemeToggleCopy = getQuickThemeToggleCopy(
-    quickThemeToggle.nextMode,
-    runtimeI18n,
-  );
   const popupProgressStyle = appState.settings.popupProgressStyle;
   const popupCustomSources = getVisibleCustomSources(appState, "popup");
   const customSourceSettingsFocus: SettingsRouteFocus = {
@@ -533,8 +525,7 @@ export function PopupApp() {
         isRefreshing={isRefreshing}
         isThemeTogglePending={isThemeTogglePending}
         areActionsCollapsed={areHeaderActionsCollapsed}
-        quickThemeToggleCopy={quickThemeToggleCopy}
-        quickThemeToggleTargetMode={quickThemeToggle.nextMode}
+        currentThemeMode={appState.settings.themeMode}
         refreshCountdownSeconds={refreshCountdownSeconds}
         runtimeI18n={runtimeI18n}
         hideProviderFeedback={
@@ -559,7 +550,7 @@ export function PopupApp() {
             return next;
           });
         }}
-        onToggleThemeMode={handleToggleThemeMode}
+        onSetThemeMode={handleSetThemeMode}
       />
 
       <PopupFeaturedProviderList

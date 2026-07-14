@@ -1,4 +1,9 @@
-import { useId, useMemo, useState } from "react";
+import {
+  useId,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 
 import type {
   ProviderUsageHistory,
@@ -121,9 +126,9 @@ function UsageHistorySvg({
   compact: boolean;
 }) {
   const width = 720;
-  const height = compact ? 112 : 220;
-  const top = compact ? 8 : 16;
-  const bottom = compact ? 12 : 28;
+  const height = compact ? 90 : 176;
+  const top = compact ? 6 : 12;
+  const bottom = compact ? 8 : 20;
   const chartHeight = height - top - bottom;
   const count = Math.max(1, data.dates.length);
   const maximum = kind === "bars" ? 100 : Math.max(1, data.maximumDailyTotal);
@@ -240,6 +245,23 @@ function UsageHistoryLegend({
   );
 }
 
+function UsageHistoryChartFrame({
+  metric,
+  children,
+}: {
+  metric?: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="usage-history-chart-frame">
+      {metric ? (
+        <p className="usage-history-chart-frame__metric">{metric}</p>
+      ) : null}
+      {children}
+    </div>
+  );
+}
+
 function getModulePoints(
   history: ProviderUsageHistory | undefined,
   moduleId: ProviderUsageHistoryModuleId,
@@ -331,25 +353,28 @@ export function UsageHistoryCompact({
       >
         {data.dates.length > 0 ? (
           <>
-            {moduleId === "turns_history" ? (
-              <p className="usage-history-compact__metric">
-                {copy.totalTurns}: {data.total}
-              </p>
-            ) : null}
-            <UsageHistorySvg
-              compact
-              data={data}
-              kind={
-                moduleId === "personal_usage_by_surface" ? "bars" : "area"
+            <UsageHistoryChartFrame
+              metric={
+                moduleId === "turns_history"
+                  ? `${copy.totalTurns}: ${data.total}`
+                  : undefined
               }
-              label={title}
-              locale={copy.locale}
-              unit={
-                moduleId === "personal_usage_by_surface"
-                  ? copy.percentUnit
-                  : copy.turnsUnit
-              }
-            />
+            >
+              <UsageHistorySvg
+                compact
+                data={data}
+                kind={
+                  moduleId === "personal_usage_by_surface" ? "bars" : "area"
+                }
+                label={title}
+                locale={copy.locale}
+                unit={
+                  moduleId === "personal_usage_by_surface"
+                    ? copy.percentUnit
+                    : copy.turnsUnit
+                }
+              />
+            </UsageHistoryChartFrame>
             <UsageHistoryLegend data={data} label={copy.chartLegend} />
           </>
         ) : (
@@ -471,12 +496,7 @@ export function UsageHistoryDetail({
         ) : (
           <section key={moduleId} className="usage-history-detail__module">
             <header className="usage-history-detail__module-header">
-              <div>
-                <h3 className="section-title">{copy.turns}</h3>
-                <p className="usage-history-compact__metric">
-                  {copy.totalTurns}: {turnsData.total}
-                </p>
-              </div>
+              <h3 className="section-title">{copy.turns}</h3>
               <SegmentedControl
                 label={copy.grouping}
                 value={grouping}
@@ -491,14 +511,18 @@ export function UsageHistoryDetail({
             </header>
             {turnsData.dates.length ? (
               <>
-                <UsageHistorySvg
-                  compact={false}
-                  data={turnsData}
-                  kind="area"
-                  label={copy.turns}
-                  locale={copy.locale}
-                  unit={copy.turnsUnit}
-                />
+                <UsageHistoryChartFrame
+                  metric={`${copy.totalTurns}: ${turnsData.total}`}
+                >
+                  <UsageHistorySvg
+                    compact={false}
+                    data={turnsData}
+                    kind="area"
+                    label={copy.turns}
+                    locale={copy.locale}
+                    unit={copy.turnsUnit}
+                  />
+                </UsageHistoryChartFrame>
                 <UsageHistoryLegend
                   data={turnsData}
                   label={copy.chartLegend}

@@ -6,6 +6,7 @@ import { SAMPLE_APP_STATE } from "../shared/constants";
 import {
   hasSyncRelevantProviderSettingDrift,
   reconcileAppStateHealth,
+  shouldReconcileHealthAfterSettingsUpdate,
 } from "./sync-engine";
 
 const NOW = new Date("2026-04-25T10:00:00.000Z");
@@ -121,6 +122,21 @@ describe("sync engine health reconciliation", () => {
     expect(snapshot.lastSyncLabel).toBe("Cached snapshot stale by 4h");
     expect(snapshot.warningReason).toBe(existingDiagnostic.rawMessage);
     expect(snapshot.warningDiagnostic).toEqual(existingDiagnostic);
+  });
+
+  it("does not reclassify provider health for appearance-only settings", () => {
+    expect(
+      shouldReconcileHealthAfterSettingsUpdate({ themeMode: "dark" }),
+    ).toBe(false);
+    expect(
+      shouldReconcileHealthAfterSettingsUpdate({ themeMode: "time" }),
+    ).toBe(false);
+  });
+
+  it("reclassifies provider health when the sync interval changes", () => {
+    expect(
+      shouldReconcileHealthAfterSettingsUpdate({ syncIntervalMinutes: 15 }),
+    ).toBe(true);
   });
 
   it("detects user-visible provider-setting drift during background sync", () => {

@@ -1,5 +1,5 @@
 import type { AppLocalePreference } from "../providers/types";
-import type { ResolvedThemeMode } from "./theme";
+import type { ThemeMode } from "../providers/types";
 import { buildRuntimeMessages } from "./runtime-message-catalogs";
 import {
   SUPPORTED_APP_LOCALES,
@@ -42,6 +42,10 @@ export type RuntimeMessageId =
   | "common.theme.toggle_to_dark_title"
   | "common.theme.toggle_to_light_label"
   | "common.theme.toggle_to_light_title"
+  | "common.theme.toggle_to_system_label"
+  | "common.theme.toggle_to_system_title"
+  | "common.theme.toggle_to_time_label"
+  | "common.theme.toggle_to_time_title"
   | "dashboard.topbar.title"
   | "dashboard.topbar.subtitle"
   | "dashboard.hero.eyebrow"
@@ -182,6 +186,8 @@ export type RuntimeMessageId =
   | "settings.preferences.theme_mode.system"
   | "settings.preferences.theme_mode.light"
   | "settings.preferences.theme_mode.dark"
+  | "settings.preferences.theme_mode.time"
+  | "settings.preferences.theme_mode_helper"
   | "settings.preferences.motion_mode.system"
   | "settings.preferences.motion_mode.full"
   | "settings.preferences.motion_mode.reduced"
@@ -816,16 +822,29 @@ export function buildSettingsSummaryLabels(i18n: RuntimeI18n) {
 }
 
 export function getQuickThemeToggleCopy(
-  nextMode: ResolvedThemeMode,
+  nextMode: ThemeMode,
   i18n: RuntimeI18n,
 ) {
-  return nextMode === "dark"
-    ? {
-        label: i18n.t("common.theme.toggle_to_dark_label"),
-        title: i18n.t("common.theme.toggle_to_dark_title"),
-      }
-    : {
-        label: i18n.t("common.theme.toggle_to_light_label"),
-        title: i18n.t("common.theme.toggle_to_light_title"),
-      };
+  if (nextMode === "dark") {
+    return {
+      label: i18n.t("common.theme.toggle_to_dark_label"),
+      title: i18n.t("common.theme.toggle_to_dark_title"),
+    };
+  }
+  if (nextMode === "light") {
+    return {
+      label: i18n.t("common.theme.toggle_to_light_label"),
+      title: i18n.t("common.theme.toggle_to_light_title"),
+    };
+  }
+  if (nextMode === "system") {
+    return {
+      label: i18n.t("common.theme.toggle_to_system_label"),
+      title: i18n.t("common.theme.toggle_to_system_title"),
+    };
+  }
+  return {
+    label: i18n.t("common.theme.toggle_to_time_label"),
+    title: i18n.t("common.theme.toggle_to_time_title"),
+  };
 }

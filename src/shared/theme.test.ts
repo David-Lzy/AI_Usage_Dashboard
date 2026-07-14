@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import {
   DEFAULT_THEME_SETTINGS,
@@ -6,11 +6,13 @@ import {
   applyThemeSettings,
   applyThemeMode,
   buildQuickThemeToggle,
+  getMillisecondsUntilNextTimeThemeBoundary,
   normalizeThemeCustomSeedHex,
   normalizeThemeSettings,
   normalizeThemePreset,
   normalizeThemeMode,
   resolveThemeMode,
+  resolveTimeThemeMode,
   startThemeSettingsSync,
   startThemeModeSync,
 } from "./theme";
@@ -20,6 +22,7 @@ describe("theme helpers", () => {
     expect(normalizeThemeMode("system")).toBe("system");
     expect(normalizeThemeMode("light")).toBe("light");
     expect(normalizeThemeMode("dark")).toBe("dark");
+    expect(normalizeThemeMode("time")).toBe("time");
     expect(normalizeThemeMode("unexpected")).toBe("system");
   });
 
@@ -90,31 +93,40 @@ describe("theme helpers", () => {
     ).toBe("light");
   });
 
-  it("builds a quick light-dark toggle from the current resolved mode", () => {
+  it("resolves time mode from the device local clock", () => {
+    expect(resolveTimeThemeMode(new Date(2026, 6, 14, 6, 59))).toBe("dark");
+    expect(resolveTimeThemeMode(new Date(2026, 6, 14, 7, 0))).toBe("light");
+    expect(resolveTimeThemeMode(new Date(2026, 6, 14, 18, 59))).toBe("light");
+    expect(resolveTimeThemeMode(new Date(2026, 6, 14, 19, 0))).toBe("dark");
+    expect(
+      resolveThemeMode("time", {
+        now: () => new Date(2026, 6, 14, 12, 0),
+      }),
+    ).toBe("light");
+    expect(
+      getMillisecondsUntilNextTimeThemeBoundary(
+        new Date(2026, 6, 14, 18, 0),
+      ),
+    ).toBe(60 * 60 * 1_000);
+  });
+
+  it("cycles the quick theme action across all four modes", () => {
     expect(buildQuickThemeToggle("light")).toEqual({
       nextMode: "dark",
       label: "Dark",
       title: "Switch to dark mode",
     });
     expect(buildQuickThemeToggle("dark")).toEqual({
-      nextMode: "light",
-      label: "Light",
-      title: "Switch to light mode",
+      nextMode: "system",
+      label: "System",
+      title: "Switch to system mode",
     });
-    expect(
-      buildQuickThemeToggle("system", {
-        matchMedia: () => ({ matches: false }),
-      }),
-    ).toEqual({
-      nextMode: "dark",
-      label: "Dark",
-      title: "Switch to dark mode",
+    expect(buildQuickThemeToggle("system")).toEqual({
+      nextMode: "time",
+      label: "Time",
+      title: "Switch to time mode",
     });
-    expect(
-      buildQuickThemeToggle("system", {
-        matchMedia: () => ({ matches: true }),
-      }),
-    ).toEqual({
+    expect(buildQuickThemeToggle("time")).toEqual({
       nextMode: "light",
       label: "Light",
       title: "Switch to light mode",
@@ -275,6 +287,30 @@ describe("theme helpers", () => {
 
     stop();
     expect(triggerChange).not.toBeNull();
+  });
+
+  it("reschedules time mode only at the next local boundary", () => {
+    vi.useFakeTimers();
+    try {
+      const root: {
+        dataset: Record<string, string | undefined>;
+        style: { colorScheme?: string };
+      } = { dataset: {}, style: {} };
+      let currentTime = new Date(2026, 6, 14, 18, 59, 59);
+      const stop = startThemeModeSync("time", root, {
+        now: () => currentTime,
+      });
+
+      expect(root.dataset.themeResolved).toBe("light");
+      currentTime = new Date(2026, 6, 14, 19, 0, 0);
+      vi.advanceTimersByTime(1_050);
+      expect(root.dataset.themeResolved).toBe("dark");
+
+      stop();
+      expect(vi.getTimerCount()).toBe(0);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("keeps theme preset metadata while system theme changes", () => {

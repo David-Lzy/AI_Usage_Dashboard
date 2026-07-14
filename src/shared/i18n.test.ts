@@ -296,6 +296,14 @@ describe("runtime i18n", () => {
       label: "白天",
       title: "切换到白天模式",
     });
+    expect(getQuickThemeToggleCopy("system", i18n)).toEqual({
+      label: "系统",
+      title: "切换到跟随系统",
+    });
+    expect(getQuickThemeToggleCopy("time", i18n)).toEqual({
+      label: "按时间",
+      title: "切换到根据当地时间自动调整",
+    });
   });
 
 

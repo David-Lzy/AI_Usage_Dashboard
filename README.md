@@ -28,6 +28,9 @@ dashboard.
 - Lets users tune language, theme, popup appearance, progress style,
   remaining-color appearance, provider order, toolbar badge behavior, and
   toolbar icon behavior.
+- Theme choices include light, dark, system, and a local-time schedule. The
+  schedule uses only the device clock (light from 07:00 to 19:00) and does not
+  request or read location.
 - Supports configuration import/export and Chrome Sync for extension settings.
 
 ## Supported Providers

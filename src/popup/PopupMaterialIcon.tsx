@@ -1,6 +1,8 @@
 export type PopupMaterialIconName =
+  | "brightness-auto"
   | "clear-day"
   | "dark-mode"
+  | "devices"
   | "dock-left"
   | "keyboard-arrow-down"
   | "keyboard-arrow-up"
@@ -9,10 +11,14 @@ export type PopupMaterialIconName =
   | "tab";
 
 const PATH_BY_NAME: Record<PopupMaterialIconName, string> = {
+  "brightness-auto":
+    "M312-320h64l32-92h146l32 92h62L512-680h-64L312-320Zm114-144 52-150h4l52 150H426Zm54 436L346-160H160v-186L28-480l132-134v-186h186l134-132 134 132h186v186l132 134-132 134v186H614L480-28Zm0-112 100-100h140v-140l100-100-100-100v-140H580L480-820 380-720H240v140L140-480l100 100v140h140l100 100Zm0-340Z",
   "clear-day":
     "M11 4V1h2v3h-2Zm0 19v-3h2v3h-2Zm9-10v-2h3v2h-3ZM1 13v-2h3v2H1Zm16.95-5.55-1.4-1.4 2.1-2.15 1.45 1.45-2.15 2.1ZM5.35 20.1 3.9 18.65l2.15-2.1 1.4 1.4-2.1 2.15Zm13.3 0-2.1-2.15 1.4-1.4 2.15 2.1-1.45 1.45ZM6.05 7.45 3.9 5.35 5.35 3.9l2.1 2.15-1.4 1.4ZM12 18q-2.5 0-4.25-1.75T6 12q0-2.5 1.75-4.25T12 6q2.5 0 4.25 1.75T18 12q0 2.5-1.75 4.25T12 18Zm0-2q1.65 0 2.825-1.175T16 12q0-1.65-1.175-2.825T12 8q-1.65 0-2.825 1.175T8 12q0 1.65 1.175 2.825T12 16Z",
   "dark-mode":
     "M12.1 21.5q-3.95 0-6.775-2.825T2.5 11.9q0-3.45 2.25-6.1T10.4 2.5q.4-.075.65.25t.1.7q-.35.725-.525 1.5T10.45 6.5q0 2.95 2.05 5t5 2.05q.8 0 1.562-.175t1.488-.525q.375-.15.7.1t.25.65q-.625 3.4-3.275 5.65T12.1 21.5Z",
+  devices:
+    "M80-160v-120h80v-440q0-33 23.5-56.5T240-800h600v80H240v440h240v120H80Zm520 0q-17 0-28.5-11.5T560-200v-400q0-17 11.5-28.5T600-640h240q17 0 28.5 11.5T880-600v400q0 17-11.5 28.5T840-160H600Zm40-120h160v-280H640v280Zm0 0h160-160Z",
   "dock-left":
     "M5 21q-.825 0-1.412-.588T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.412T19 21H5Zm4-2V5H5v14h4Zm2 0h8V5h-8v14Z",
   "keyboard-arrow-down":
@@ -28,12 +34,15 @@ const PATH_BY_NAME: Record<PopupMaterialIconName, string> = {
 };
 
 export function PopupMaterialIcon({ name }: { name: PopupMaterialIconName }) {
+  const usesMaterialSymbolsViewBox =
+    name === "brightness-auto" || name === "devices";
   return (
     <svg
       aria-hidden="true"
       className="popup-header__action-icon"
+      data-popup-material-icon={name}
       focusable="false"
-      viewBox="0 0 24 24"
+      viewBox={usesMaterialSymbolsViewBox ? "0 -960 960 960" : "0 0 24 24"}
     >
       <path d={PATH_BY_NAME[name]} />
     </svg>

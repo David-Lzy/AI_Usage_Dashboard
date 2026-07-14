@@ -23,7 +23,7 @@ describe("runPopupThemeToggleAction", () => {
     }));
 
     await expect(
-      runPopupThemeToggleAction(state, { sendMessage }),
+      runPopupThemeToggleAction(state, "dark", { sendMessage }),
     ).resolves.toEqual({
       status: "ready",
       state,
@@ -34,34 +34,46 @@ describe("runPopupThemeToggleAction", () => {
     });
   });
 
-  it("updates dark mode to light mode", async () => {
+  it("updates dark mode to system mode", async () => {
     const state = createStateWithThemeMode("dark");
     const sendMessage = vi.fn(async () => ({
       ok: true as const,
       state,
     }));
 
-    await runPopupThemeToggleAction(state, { sendMessage });
+    await runPopupThemeToggleAction(state, "system", { sendMessage });
 
     expect(sendMessage).toHaveBeenCalledWith({
       type: "app:update-settings",
-      settings: { themeMode: "light" },
+      settings: { themeMode: "system" },
     });
   });
 
-  it("uses resolved system mode before choosing the next mode", async () => {
+  it("updates system mode to time mode", async () => {
     const state = createStateWithThemeMode("system");
     const sendMessage = vi.fn(async () => ({
       ok: true as const,
       state,
     }));
 
-    await runPopupThemeToggleAction(state, {
-      reader: {
-        matchMedia: () => ({ matches: true }),
-      },
+    await runPopupThemeToggleAction(state, "time", {
       sendMessage,
     });
+
+    expect(sendMessage).toHaveBeenCalledWith({
+      type: "app:update-settings",
+      settings: { themeMode: "time" },
+    });
+  });
+
+  it("updates time mode to light mode", async () => {
+    const state = createStateWithThemeMode("time");
+    const sendMessage = vi.fn(async () => ({
+      ok: true as const,
+      state,
+    }));
+
+    await runPopupThemeToggleAction(state, "light", { sendMessage });
 
     expect(sendMessage).toHaveBeenCalledWith({
       type: "app:update-settings",
@@ -77,10 +89,20 @@ describe("runPopupThemeToggleAction", () => {
     }));
 
     await expect(
-      runPopupThemeToggleAction(state, { sendMessage }),
+      runPopupThemeToggleAction(state, "dark", { sendMessage }),
     ).resolves.toEqual({
       status: "error",
       message: "Settings update failed.",
     });
+  });
+
+  it("does not write when the selected mode is already active", async () => {
+    const state = createStateWithThemeMode("system");
+    const sendMessage = vi.fn();
+
+    await expect(
+      runPopupThemeToggleAction(state, "system", { sendMessage }),
+    ).resolves.toEqual({ status: "ready", state });
+    expect(sendMessage).not.toHaveBeenCalled();
   });
 });

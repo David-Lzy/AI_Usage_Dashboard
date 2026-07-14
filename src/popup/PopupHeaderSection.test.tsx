@@ -4,10 +4,8 @@ import { renderToStaticMarkup } from "react-dom/server";
 import type { ReactNode } from "react";
 import { describe, expect, it } from "vitest";
 
-import {
-  createRuntimeI18n,
-  getQuickThemeToggleCopy,
-} from "../shared/i18n";
+import { createRuntimeI18n } from "../shared/i18n";
+import type { ThemeMode } from "../providers/types";
 import { PopupHeaderSection } from "./PopupHeaderSection";
 
 const popupThemeCss = readFileSync(
@@ -19,10 +17,12 @@ function renderPopupHeader({
   areActionsCollapsed = false,
   isRefreshing = false,
   hideProviderFeedback = null,
+  currentThemeMode = "light",
 }: {
   areActionsCollapsed?: boolean;
   isRefreshing?: boolean;
   hideProviderFeedback?: ReactNode;
+  currentThemeMode?: ThemeMode;
 } = {}) {
   const runtimeI18n = createRuntimeI18n("en");
 
@@ -31,8 +31,7 @@ function renderPopupHeader({
       isRefreshing={isRefreshing}
       isThemeTogglePending={false}
       areActionsCollapsed={areActionsCollapsed}
-      quickThemeToggleCopy={getQuickThemeToggleCopy("dark", runtimeI18n)}
-      quickThemeToggleTargetMode="dark"
+      currentThemeMode={currentThemeMode}
       refreshCountdownSeconds={15 * 60 + 4}
       runtimeI18n={runtimeI18n}
       hideProviderFeedback={hideProviderFeedback}
@@ -41,7 +40,7 @@ function renderPopupHeader({
       onOpenSettings={() => undefined}
       onRefresh={() => undefined}
       onToggleActionsCollapsed={() => undefined}
-      onToggleThemeMode={() => undefined}
+      onSetThemeMode={() => undefined}
     />,
   );
 }
@@ -54,6 +53,8 @@ describe("PopupHeaderSection", () => {
     expect(html).toContain('aria-expanded="true"');
     expect(html).toContain('aria-label="Hide top actions"');
     expect(html).toContain('data-popup-toggle-theme-mode="true"');
+    expect(html).toContain('aria-haspopup="menu"');
+    expect(html).toContain('role="menuitemradio"');
     expect(html).toContain('data-popup-refresh="true"');
     expect(html).toContain('data-popup-open-dashboard-tab="true"');
     expect(html).toContain('data-popup-open-dashboard-sidebar="true"');
@@ -67,6 +68,21 @@ describe("PopupHeaderSection", () => {
     expect(html).not.toContain(">Settings</button>");
     expect(html).not.toContain("Quick glance");
     expect(html).not.toContain('class="popup-actions"');
+  });
+
+  it("shows the current system or local-time mode on the trigger", () => {
+    expect(renderPopupHeader({ currentThemeMode: "system" })).toContain(
+      'data-theme-mode="system"',
+    );
+    expect(renderPopupHeader({ currentThemeMode: "system" })).toContain(
+      'data-popup-material-icon="devices"',
+    );
+    expect(renderPopupHeader({ currentThemeMode: "time" })).toContain(
+      'data-theme-mode="time"',
+    );
+    expect(renderPopupHeader({ currentThemeMode: "time" })).toContain(
+      'data-popup-material-icon="brightness-auto"',
+    );
   });
 
   it("keeps the floating collapse toggle when header actions are hidden", () => {
@@ -119,6 +135,8 @@ describe("PopupHeaderSection", () => {
     expect(popupThemeCss).toContain("justify-self: stretch;");
     expect(popupThemeCss).toContain("grid-column: 10;");
     expect(popupThemeCss).toContain("env(safe-area-inset-right, 0px)");
+    expect(popupThemeCss).toContain(".popup-header__theme-mode-menu");
+    expect(popupThemeCss).toContain("grid-template-columns: repeat(2");
     expect(popupThemeCss).toContain("@media (max-width: 360px)");
     expect(popupThemeCss).toContain("--popup-header-control-size: 44px;");
     expect(popupThemeCss).toContain("--popup-header-action-gap: 6px;");

@@ -82,6 +82,10 @@ describe("UsageHistoryCharts", () => {
     );
 
     expect(html).toContain("Total turns: 12");
+    expect(html).toContain("usage-history-chart-frame__metric");
+    expect(html.indexOf("Total turns: 12")).toBeLessThan(
+      html.indexOf("usage-history-chart--area"),
+    );
   });
 
   it("can start a compact module collapsed for a persisted surface preference", () => {
@@ -139,6 +143,10 @@ describe("UsageHistoryCharts", () => {
       ".usage-history-chart--compact .usage-history-chart__grid {",
     );
     expect(chartsCss).toContain("margin-inline-start: auto;");
+    expect(chartsCss).toContain("justify-content: space-between;");
+    expect(chartsCss).toContain("white-space: nowrap;");
+    expect(chartsCss).toContain("usage-history-chart-frame__metric");
+    expect(chartsCss).toContain("height: 70px;");
     expect(chartsCss).toContain(".usage-history-chart__bar {");
     expect(chartsCss).toContain("--app-usage-history-bar-opacity");
     expect(chartsCss).toContain("--app-usage-history-area-fill-opacity");

@@ -135,7 +135,7 @@ export type SyncTrigger = "manual" | "alarm" | "bootstrap";
 
 export type ProviderPageBindingStatus = "unbound" | "bound" | "stale";
 
-export type ThemeMode = "system" | "light" | "dark";
+export type ThemeMode = "system" | "light" | "dark" | "time";
 export type ThemePreset = "default" | "meadow" | "sunset" | "custom";
 export type UiFontFamily = "default" | "system" | "serif" | "mono";
 export type MotionMode = "system" | "full" | "reduced";

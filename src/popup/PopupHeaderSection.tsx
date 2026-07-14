@@ -1,18 +1,20 @@
-import type { ReactNode } from "react";
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 
-import type {
-  getQuickThemeToggleCopy,
-  RuntimeI18n,
-} from "../shared/i18n";
-import type { ResolvedThemeMode } from "../shared/theme";
+import type { RuntimeI18n } from "../shared/i18n";
+import type { ThemeMode } from "../providers/types";
 import { PopupMaterialIcon } from "./PopupMaterialIcon";
 import { formatPopupRefreshCountdownLabel } from "./popup-refresh-schedule";
 
 type PopupHeaderSectionProps = {
   isRefreshing: boolean;
   isThemeTogglePending: boolean;
-  quickThemeToggleCopy: ReturnType<typeof getQuickThemeToggleCopy>;
-  quickThemeToggleTargetMode: ResolvedThemeMode;
+  currentThemeMode: ThemeMode;
   areActionsCollapsed: boolean;
   refreshCountdownSeconds: number | null;
   runtimeI18n: RuntimeI18n;
@@ -22,8 +24,37 @@ type PopupHeaderSectionProps = {
   onOpenSettings: () => void | Promise<void>;
   onRefresh: () => void | Promise<void>;
   onToggleActionsCollapsed: () => void;
-  onToggleThemeMode: () => void | Promise<void>;
+  onSetThemeMode: (themeMode: ThemeMode) => void | Promise<void>;
 };
+
+const THEME_MODE_OPTIONS: readonly ThemeMode[] = [
+  "light",
+  "dark",
+  "system",
+  "time",
+];
+
+function getThemeModeIcon(themeMode: ThemeMode) {
+  return themeMode === "dark"
+    ? "dark-mode"
+    : themeMode === "light"
+      ? "clear-day"
+      : themeMode === "system"
+        ? "devices"
+        : "brightness-auto";
+}
+
+function getThemeModeLabel(themeMode: ThemeMode, runtimeI18n: RuntimeI18n) {
+  return runtimeI18n.t(
+    themeMode === "dark"
+      ? "settings.preferences.theme_mode.dark"
+      : themeMode === "light"
+        ? "settings.preferences.theme_mode.light"
+        : themeMode === "system"
+          ? "settings.preferences.theme_mode.system"
+          : "settings.preferences.theme_mode.time",
+  );
+}
 
 function buildRefreshTitle({
   isRefreshing,
@@ -58,8 +89,7 @@ function buildRefreshTitle({
 export function PopupHeaderSection({
   isRefreshing,
   isThemeTogglePending,
-  quickThemeToggleCopy,
-  quickThemeToggleTargetMode,
+  currentThemeMode,
   areActionsCollapsed,
   refreshCountdownSeconds,
   runtimeI18n,
@@ -69,8 +99,11 @@ export function PopupHeaderSection({
   onOpenSettings,
   onRefresh,
   onToggleActionsCollapsed,
-  onToggleThemeMode,
+  onSetThemeMode,
 }: PopupHeaderSectionProps) {
+  const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
+  const themeMenuId = useId();
+  const themeMenuRef = useRef<HTMLDivElement>(null);
   const refreshTitle = buildRefreshTitle({
     isRefreshing,
     refreshCountdownSeconds,
@@ -80,14 +113,44 @@ export function PopupHeaderSection({
     refreshCountdownSeconds,
     runtimeI18n.formatNumber,
   );
-  const themeIcon =
-    quickThemeToggleTargetMode === "dark" ? "dark-mode" : "clear-day";
+  const currentThemeLabel = getThemeModeLabel(currentThemeMode, runtimeI18n);
+  const themeButtonTitle = `${runtimeI18n.t(
+    "settings.preferences.theme_mode_label",
+  )}: ${currentThemeLabel}`;
   const toggleActionsTitle = runtimeI18n.t(
     areActionsCollapsed
       ? "popup.actions.show_header_actions"
       : "popup.actions.hide_header_actions",
   );
   const isSurfaceCollapsed = areActionsCollapsed && !hideProviderFeedback;
+
+  useEffect(() => {
+    if (!isThemeMenuOpen) {
+      return undefined;
+    }
+
+    function closeWhenFocusLeaves(event: PointerEvent) {
+      if (
+        event.target instanceof Node &&
+        !themeMenuRef.current?.contains(event.target)
+      ) {
+        setIsThemeMenuOpen(false);
+      }
+    }
+
+    function closeOnEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsThemeMenuOpen(false);
+      }
+    }
+
+    document.addEventListener("pointerdown", closeWhenFocusLeaves);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeWhenFocusLeaves);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [isThemeMenuOpen]);
 
   return (
     <section
@@ -140,20 +203,64 @@ export function PopupHeaderSection({
               : refreshCountdownLabel}
           </span>
         </button>
-        <button
-          className="icon-button popup-header__icon-action"
-          data-popup-toggle-theme-mode="true"
-          data-theme-local-surface="popup-toggle-theme-mode"
-          type="button"
-          aria-label={quickThemeToggleCopy.title}
-          title={quickThemeToggleCopy.title}
-          disabled={isThemeTogglePending}
-          onClick={() => {
-            void onToggleThemeMode();
-          }}
-        >
-          <PopupMaterialIcon name={themeIcon} />
-        </button>
+        <div className="popup-header__theme-menu" ref={themeMenuRef}>
+          <button
+            className="icon-button popup-header__icon-action"
+            data-popup-toggle-theme-mode="true"
+            data-theme-local-surface="popup-toggle-theme-mode"
+            data-theme-mode={currentThemeMode}
+            type="button"
+            aria-controls={themeMenuId}
+            aria-expanded={isThemeMenuOpen}
+            aria-haspopup="menu"
+            aria-label={themeButtonTitle}
+            title={themeButtonTitle}
+            disabled={isThemeTogglePending}
+            onClick={() => {
+              setIsThemeMenuOpen((current) => !current);
+            }}
+          >
+            <PopupMaterialIcon name={getThemeModeIcon(currentThemeMode)} />
+          </button>
+          <div
+            id={themeMenuId}
+            className="popup-header__theme-mode-menu"
+            role="menu"
+            aria-label={runtimeI18n.t(
+              "settings.preferences.theme_mode_label",
+            )}
+            hidden={!isThemeMenuOpen}
+          >
+            {THEME_MODE_OPTIONS.map((themeMode) => {
+              const isSelected = themeMode === currentThemeMode;
+              const label = getThemeModeLabel(themeMode, runtimeI18n);
+
+              return (
+                <button
+                  key={themeMode}
+                  className={`popup-header__theme-mode-option${
+                    isSelected
+                      ? " popup-header__theme-mode-option--selected"
+                      : ""
+                  }`}
+                  type="button"
+                  role="menuitemradio"
+                  aria-checked={isSelected}
+                  disabled={isThemeTogglePending}
+                  onClick={() => {
+                    setIsThemeMenuOpen(false);
+                    if (!isSelected) {
+                      void onSetThemeMode(themeMode);
+                    }
+                  }}
+                >
+                  <PopupMaterialIcon name={getThemeModeIcon(themeMode)} />
+                  <span>{label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
         <button
           className="icon-button popup-header__icon-action"
           data-popup-open-dashboard-tab="true"

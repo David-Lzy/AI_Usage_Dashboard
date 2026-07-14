@@ -24,7 +24,11 @@ import {
   syncStoredProviderPermissions,
   toggleProviderPermission,
 } from "./provider-permissions";
-import { reconcileAppStateHealth, runSyncEngine } from "./sync-engine";
+import {
+  reconcileAppStateHealth,
+  runSyncEngine,
+  shouldReconcileHealthAfterSettingsUpdate,
+} from "./sync-engine";
 import {
   applyConfigurationBackupToState,
   buildConfigurationBackup,
@@ -80,15 +84,19 @@ export async function handleAppMessage(
     }
 
     case "app:update-settings": {
-      const state = await updateAppState((current) => ({
-        ...reconcileAppStateHealth({
+      const state = await updateAppState((current) => {
+        const nextState = {
           ...current,
           settings: {
             ...current.settings,
             ...message.settings,
           },
-        }),
-      }));
+        };
+
+        return shouldReconcileHealthAfterSettingsUpdate(message.settings)
+          ? reconcileAppStateHealth(nextState)
+          : nextState;
+      });
       await ensureBackgroundAlarms(state);
 
       return {

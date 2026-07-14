@@ -21,16 +21,6 @@ function assert(condition, message) {
   }
 }
 
-async function waitForCaseInsensitiveText(page, text) {
-  await page.waitForFunction(
-    (expectedText) =>
-      (document.body?.innerText ?? "")
-        .toLowerCase()
-        .includes(expectedText.toLowerCase()),
-    text,
-  );
-}
-
 async function collectThemeSnapshot(page) {
   return page.evaluate(() => {
     const html = document.documentElement;
@@ -41,8 +31,16 @@ async function collectThemeSnapshot(page) {
     return {
       themeMode: html.dataset.themeMode ?? null,
       themeResolved: html.dataset.themeResolved ?? null,
+      popupThemeMode: popupToggle?.getAttribute("data-theme-mode") ?? null,
       toggleLabel: toggle?.textContent?.trim() ?? null,
       toggleAriaLabel: toggle?.getAttribute("aria-label") ?? null,
+      themeMenuExpanded: popupToggle?.getAttribute("aria-expanded") ?? null,
+      providerCardClassName:
+        document.querySelector(".popup-provider-card")?.className ?? null,
+      providerStatusText:
+        document
+          .querySelector(".popup-provider-card__status")
+          ?.textContent?.trim() ?? null,
       hasPopupToggle: Boolean(popupToggle),
       hasTopBarToggle: Boolean(topBarToggle),
     };
@@ -52,7 +50,7 @@ async function collectThemeSnapshot(page) {
 await mkdir(artifactDir, { recursive: true });
 
 const popupSource = await readFile(
-  path.join(projectRoot, "src", "popup", "PopupApp.tsx"),
+  path.join(projectRoot, "src", "popup", "PopupHeaderSection.tsx"),
   "utf8",
 );
 assert(
@@ -79,19 +77,46 @@ try {
   const popupPage = await popupContext.newPage();
   popupPage.setDefaultTimeout(20_000);
   await popupPage.goto(popupUrl, { waitUntil: "domcontentloaded" });
-  await waitForCaseInsensitiveText(popupPage, "Quick glance");
+  await popupPage.waitForSelector("[data-popup-toggle-theme-mode='true']");
 
   const popupBefore = await collectThemeSnapshot(popupPage);
   assert(popupBefore.hasPopupToggle, "Popup did not render the quick theme toggle.");
-  assert(popupBefore.toggleLabel === "Dark", `Popup toggle label was ${JSON.stringify(popupBefore.toggleLabel)} instead of "Dark".`);
-  assert(popupBefore.toggleAriaLabel === "Switch to dark mode", `Popup toggle aria-label was ${JSON.stringify(popupBefore.toggleAriaLabel)} instead of "Switch to dark mode".`);
+  assert(
+    popupBefore.toggleAriaLabel?.startsWith("Theme mode:"),
+    `Popup toggle aria-label did not describe the current mode: ${JSON.stringify(popupBefore.toggleAriaLabel)}.`,
+  );
 
   await popupPage.locator("[data-popup-toggle-theme-mode='true']").click();
+  const popupMenuOptions = popupPage.locator('[role="menuitemradio"]');
+  assert(
+    (await popupMenuOptions.count()) === 4,
+    "Popup theme menu did not expose four explicit modes.",
+  );
+  const popupThemeMenuScreenshotPath = path.join(
+    artifactDir,
+    "popup-theme-menu.png",
+  );
+  await popupPage.screenshot({
+    path: popupThemeMenuScreenshotPath,
+    fullPage: true,
+  });
+  await popupPage.getByRole("menuitemradio", { name: "Dark" }).click();
   await popupPage.waitForFunction(() => document.documentElement.dataset.themeMode === "dark");
   const popupAfter = await collectThemeSnapshot(popupPage);
   assert(popupAfter.themeMode === "dark", `Popup theme mode was ${popupAfter.themeMode} instead of dark.`);
   assert(popupAfter.themeResolved === "dark", `Popup resolved theme was ${popupAfter.themeResolved} instead of dark.`);
-  assert(popupAfter.toggleLabel === "Light", `Popup toggle label after click was ${JSON.stringify(popupAfter.toggleLabel)} instead of "Light".`);
+  assert(
+    popupAfter.popupThemeMode === "dark",
+    `Popup trigger showed ${popupAfter.popupThemeMode} instead of the active dark mode.`,
+  );
+  assert(
+    popupAfter.providerCardClassName === popupBefore.providerCardClassName,
+    "Popup theme selection changed the Provider card status surface.",
+  );
+  assert(
+    popupAfter.providerStatusText === popupBefore.providerStatusText,
+    "Popup theme selection changed the Provider status indicator.",
+  );
 
   const sidepanelContext = await browser.newContext({
     viewport: { width: 1440, height: 1100 },
@@ -100,19 +125,22 @@ try {
   const sidepanelPage = await sidepanelContext.newPage();
   sidepanelPage.setDefaultTimeout(20_000);
   await sidepanelPage.goto(sidepanelDashboardUrl, { waitUntil: "domcontentloaded" });
-  await waitForCaseInsensitiveText(sidepanelPage, "One panel for AI coding quotas");
+  await sidepanelPage.waitForSelector("[data-topbar-toggle-theme-mode='true']");
 
   const sidepanelBefore = await collectThemeSnapshot(sidepanelPage);
   assert(sidepanelBefore.hasTopBarToggle, "Sidepanel dashboard did not render the top-bar theme toggle.");
-  assert(sidepanelBefore.toggleLabel === "Dark", `Sidepanel toggle label was ${JSON.stringify(sidepanelBefore.toggleLabel)} instead of "Dark".`);
-  assert(sidepanelBefore.toggleAriaLabel === "Switch to dark mode", `Sidepanel toggle aria-label was ${JSON.stringify(sidepanelBefore.toggleAriaLabel)} instead of "Switch to dark mode".`);
 
   await sidepanelPage.locator("[data-topbar-toggle-theme-mode='true']").click();
-  await sidepanelPage.waitForFunction(() => document.documentElement.dataset.themeMode === "dark");
+  await sidepanelPage.waitForFunction(
+    (previousMode) =>
+      document.documentElement.dataset.themeMode !== previousMode,
+    sidepanelBefore.themeMode,
+  );
   const sidepanelAfter = await collectThemeSnapshot(sidepanelPage);
-  assert(sidepanelAfter.themeMode === "dark", `Sidepanel theme mode was ${sidepanelAfter.themeMode} instead of dark.`);
-  assert(sidepanelAfter.themeResolved === "dark", `Sidepanel resolved theme was ${sidepanelAfter.themeResolved} instead of dark.`);
-  assert(sidepanelAfter.toggleLabel === "Light", `Sidepanel toggle label after click was ${JSON.stringify(sidepanelAfter.toggleLabel)} instead of "Light".`);
+  assert(
+    sidepanelAfter.themeMode !== sidepanelBefore.themeMode,
+    "Sidepanel quick theme action did not advance the theme mode.",
+  );
 
   const fullPageContext = await browser.newContext({
     viewport: { width: 1440, height: 1100 },
@@ -121,18 +149,22 @@ try {
   const fullPage = await fullPageContext.newPage();
   fullPage.setDefaultTimeout(20_000);
   await fullPage.goto(fullPageSettingsUrl, { waitUntil: "domcontentloaded" });
-  await waitForCaseInsensitiveText(fullPage, "Control surface summary");
+  await fullPage.waitForSelector("[data-topbar-toggle-theme-mode='true']");
 
   const fullPageBefore = await collectThemeSnapshot(fullPage);
   assert(fullPageBefore.hasTopBarToggle, "Full-page settings did not inherit the top-bar theme toggle.");
-  assert(fullPageBefore.toggleLabel === "Dark", `Full-page toggle label was ${JSON.stringify(fullPageBefore.toggleLabel)} instead of "Dark".`);
 
   await fullPage.locator("[data-topbar-toggle-theme-mode='true']").click();
-  await fullPage.waitForFunction(() => document.documentElement.dataset.themeMode === "dark");
+  await fullPage.waitForFunction(
+    (previousMode) =>
+      document.documentElement.dataset.themeMode !== previousMode,
+    fullPageBefore.themeMode,
+  );
   const fullPageAfter = await collectThemeSnapshot(fullPage);
-  assert(fullPageAfter.themeMode === "dark", `Full-page theme mode was ${fullPageAfter.themeMode} instead of dark.`);
-  assert(fullPageAfter.themeResolved === "dark", `Full-page resolved theme was ${fullPageAfter.themeResolved} instead of dark.`);
-  assert(fullPageAfter.toggleLabel === "Light", `Full-page toggle label after click was ${JSON.stringify(fullPageAfter.toggleLabel)} instead of "Light".`);
+  assert(
+    fullPageAfter.themeMode !== fullPageBefore.themeMode,
+    "Full-page quick theme action did not advance the theme mode.",
+  );
 
   const popupScreenshotPath = path.join(artifactDir, "popup-theme-toggle.png");
   const sidepanelScreenshotPath = path.join(artifactDir, "sidepanel-theme-toggle.png");
@@ -151,6 +183,7 @@ try {
         fullPageSettingsUrl,
         popupBefore,
         popupAfter,
+        popupThemeMenuScreenshotPath,
         sidepanelBefore,
         sidepanelAfter,
         fullPageBefore,

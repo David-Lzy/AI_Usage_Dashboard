@@ -57,6 +57,8 @@ catalog across all 14 shipped locales. Current shipped groups are:
   - `common.actions.*`
   - `common.theme.toggle_to_dark_*`
   - `common.theme.toggle_to_light_*`
+  - `common.theme.toggle_to_system_*`
+  - `common.theme.toggle_to_time_*`
 - dashboard shell ids:
   - `dashboard.topbar.*`
   - `dashboard.hero.*`

@@ -32,6 +32,10 @@ describe("buildSettingsPreferenceOptions", () => {
       value: "dark",
       label: "Dark",
     });
+    expect(options.themeModeOptions).toContainEqual({
+      value: "time",
+      label: "By local time",
+    });
     expect(options.motionModeOptions).toEqual([
       { value: "system", label: "Follow system" },
       { value: "full", label: "On" },

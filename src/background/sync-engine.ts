@@ -2,6 +2,7 @@ import { createSyncStaleDiagnostic } from "../providers/diagnostics";
 import { getProviderSyncAdapter } from "../providers/registry";
 import type {
   AppState,
+  AppSettings,
   ProviderId,
   ProviderSetting,
   ProviderSnapshot,
@@ -152,6 +153,12 @@ export function reconcileAppStateHealth(
       markProviderStale(provider, state.settings.syncIntervalMinutes, now),
     ),
   };
+}
+
+export function shouldReconcileHealthAfterSettingsUpdate(
+  settings: Partial<AppSettings>,
+): boolean {
+  return typeof settings.syncIntervalMinutes === "number";
 }
 
 type RunSyncEngineParams = {

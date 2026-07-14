@@ -124,6 +124,7 @@ export function buildSettingsPreferenceOptions({
     { value: "system", label: i18n.t("settings.preferences.theme_mode.system") },
     { value: "light", label: i18n.t("settings.preferences.theme_mode.light") },
     { value: "dark", label: i18n.t("settings.preferences.theme_mode.dark") },
+    { value: "time", label: i18n.t("settings.preferences.theme_mode.time") },
   ];
   const themePresetOptions = THEME_PRESET_OPTIONS.map((preset) => ({
     value: preset.value,

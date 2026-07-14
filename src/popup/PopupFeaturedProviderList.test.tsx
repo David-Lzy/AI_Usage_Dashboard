@@ -268,5 +268,8 @@ describe("PopupFeaturedProviderList", () => {
     expect(popupThemeCss).toContain("white-space: nowrap;");
     expect(popupThemeCss).not.toContain("max-width: 7rem;");
     expect(popupThemeCss).toContain(".popup-provider-card__history {");
+    expect(popupThemeCss).not.toContain(
+      ".popup-provider-card__header-actions {\n    grid-column: 1;",
+    );
   });
 });

@@ -17,6 +17,8 @@ import {
 const DARK_COLOR_SCHEME_QUERY = "(prefers-color-scheme: dark)";
 const LIGHT_TEXT_HEX = "#FFFFFF";
 const DARK_TEXT_HEX = "#111418";
+export const TIME_THEME_LIGHT_START_HOUR = 7;
+export const TIME_THEME_DARK_START_HOUR = 19;
 
 export type ResolvedThemeMode = "light" | "dark";
 export type ThemeSettings = {
@@ -73,6 +75,7 @@ export const THEME_PRESET_OPTIONS: Array<{
 
 type MatchMediaReader = {
   matchMedia?: ((query: string) => MediaQueryListLike) | undefined;
+  now?: (() => Date) | undefined;
 };
 
 type MediaQueryListLike = {
@@ -429,7 +432,10 @@ function applyThemeFontFamily(
 }
 
 export function normalizeThemeMode(value: unknown): ThemeMode {
-  return value === "light" || value === "dark" || value === "system"
+  return value === "light" ||
+    value === "dark" ||
+    value === "system" ||
+    value === "time"
     ? value
     : "system";
 }
@@ -525,16 +531,56 @@ export function resolveThemeMode(
     return themeMode;
   }
 
+  if (themeMode === "time") {
+    return resolveTimeThemeMode(reader?.now?.() ?? new Date());
+  }
+
   return reader?.matchMedia?.(DARK_COLOR_SCHEME_QUERY).matches ? "dark" : "light";
+}
+
+export function resolveTimeThemeMode(date: Date): ResolvedThemeMode {
+  const hour = date.getHours();
+  return hour >= TIME_THEME_LIGHT_START_HOUR &&
+    hour < TIME_THEME_DARK_START_HOUR
+    ? "light"
+    : "dark";
+}
+
+export function getMillisecondsUntilNextTimeThemeBoundary(date: Date): number {
+  const nextBoundary = new Date(date);
+  const hour = date.getHours();
+
+  if (hour < TIME_THEME_LIGHT_START_HOUR) {
+    nextBoundary.setHours(TIME_THEME_LIGHT_START_HOUR, 0, 0, 0);
+  } else if (hour < TIME_THEME_DARK_START_HOUR) {
+    nextBoundary.setHours(TIME_THEME_DARK_START_HOUR, 0, 0, 0);
+  } else {
+    nextBoundary.setDate(nextBoundary.getDate() + 1);
+    nextBoundary.setHours(TIME_THEME_LIGHT_START_HOUR, 0, 0, 0);
+  }
+
+  return Math.max(1_000, nextBoundary.getTime() - date.getTime());
 }
 
 export function buildQuickThemeToggle(
   themeMode: ThemeMode,
-  reader?: MatchMediaReader,
-): { nextMode: ResolvedThemeMode; label: "Light" | "Dark"; title: string } {
-  const resolvedThemeMode = resolveThemeMode(themeMode, reader);
-  const nextMode = resolvedThemeMode === "dark" ? "light" : "dark";
-  const label = nextMode === "dark" ? "Dark" : "Light";
+  _reader?: MatchMediaReader,
+): {
+  nextMode: ThemeMode;
+  label: "Light" | "Dark" | "System" | "Time";
+  title: string;
+} {
+  const modeOrder: readonly ThemeMode[] = ["light", "dark", "system", "time"];
+  const currentIndex = modeOrder.indexOf(themeMode);
+  const nextMode = modeOrder[(currentIndex + 1) % modeOrder.length];
+  const label =
+    nextMode === "light"
+      ? "Light"
+      : nextMode === "dark"
+        ? "Dark"
+        : nextMode === "system"
+          ? "System"
+          : "Time";
 
   return {
     nextMode,
@@ -623,6 +669,30 @@ export function startThemeSettingsSync(
   const normalizedSettings = normalizeThemeSettings(settings);
 
   applyThemeSettings(normalizedSettings, root, reader);
+
+  if (normalizedSettings.themeMode === "time") {
+    let timeoutId: ReturnType<typeof globalThis.setTimeout> | null = null;
+    let stopped = false;
+
+    const scheduleNextBoundary = () => {
+      const now = reader?.now?.() ?? new Date();
+      timeoutId = globalThis.setTimeout(() => {
+        if (stopped) {
+          return;
+        }
+        applyThemeSettings(normalizedSettings, root, reader);
+        scheduleNextBoundary();
+      }, getMillisecondsUntilNextTimeThemeBoundary(now) + 50);
+    };
+
+    scheduleNextBoundary();
+    return () => {
+      stopped = true;
+      if (timeoutId !== null) {
+        globalThis.clearTimeout(timeoutId);
+      }
+    };
+  }
 
   if (normalizedSettings.themeMode !== "system") {
     return () => {};
