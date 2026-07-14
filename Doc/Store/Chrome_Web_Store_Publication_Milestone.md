@@ -1,6 +1,6 @@
 # Chrome Web Store Publication Milestone
 
-Date: 2026-05-20
+Date: 2026-07-15
 
 Document class:
 
@@ -14,7 +14,8 @@ Freshness model:
 Status note:
 
 - AI Usage Dashboard has a live Chrome Web Store listing
-- public Chrome Web Store metadata now shows `0.1.0-rc.24`
+- public Chrome Web Store metadata now shows `0.1.0-rc.34`
+- local source is prepared as `0.1.0-rc.35` for the next review submission
 - no known critical user-facing bug is blocking normal use at this milestone
 - private upload receipts, package hashes, screenshots-in-progress, and
   submission handoff notes stay in ignored `.local/` material
@@ -23,16 +24,18 @@ Status note:
 
 - Chrome Web Store:
   https://chromewebstore.google.com/detail/ai-usage-dashboard/mjfhaifoapcpbkffacidgjijcpiegjea
-- Public page status checked on 2026-05-20: reachable and listed.
-- Public page metadata observed on 2026-05-20 showed `0.1.0-rc.24`,
-  updated 2026-05-19, size `507KiB`, and 14 languages.
-- Local source package at this milestone is `0.1.0-rc.24` with manifest
-  version `0.1.0.24`.
+- Public page status checked on 2026-07-15: reachable and listed.
+- Public page metadata observed on 2026-07-15 showed `0.1.0-rc.34`,
+  updated 2026-07-12, 17 users, and 14 languages.
+- Local source prepared after this public milestone is `0.1.0-rc.35` with
+  manifest version `0.1.0.35`; it remains a review candidate until the store
+  listing updates.
 
 This means the project has crossed the public-store baseline milestone. Future
 store uploads should be treated as resubmissions from an already-published
-extension, not as a first submission. The `rc.24` resubmission has also reached
-the public listing metadata.
+extension, not as a first submission. The `rc.34` resubmission has reached the
+public listing metadata; later candidates must not be described as published
+until the public listing changes.
 
 ## Stable Baseline
 
@@ -46,6 +49,8 @@ At this milestone, the project has the following public-facing baseline:
   policy-only, or unavailable data
 - configurable language, theme, popup layout, progress style, provider order,
   toolbar badge, toolbar icon behavior, and import/export settings
+- bounded normalized Codex usage-history summaries when the signed-in Codex
+  Analytics page exposes the verified structured responses
 - public store copy and localization drafts under `Doc/Store/`
 - public privacy, security, contribution, i18n, provider-note, and product
   boundary docs

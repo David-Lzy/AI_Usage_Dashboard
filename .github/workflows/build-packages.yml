@@ -181,7 +181,9 @@ jobs:
           ### Notes
 
           - Chrome Web Store remains the recommended install path for everyday Chrome users.
-          - This release keeps the toolbar popup's collapsed top-action and footer-info preferences across reopen, removes build hash/date clutter from the popup footer, and adds a matching collapsible footer control.
+          - Adds bounded Codex personal-usage and turn-history views across popup, dashboard, side panel, and Provider detail surfaces, with independent 7-day or 1-month ranges and per-surface visibility/order controls.
+          - Improves Codex refresh reliability when the signed-in Analytics page hydrates lazily, while preserving the last valid history module when a partial response is unavailable.
+          - Refines compact history charts, legends, collapse controls, theme scheduling, and toolbar interactions without changing provider source-truth boundaries.
           NOTES
 
       - name: Prepare release assets
