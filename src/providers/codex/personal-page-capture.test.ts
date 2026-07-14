@@ -143,6 +143,38 @@ describe("summarizeCodexPersonalPage", () => {
     expect(capturedDefinitions[2].openWhenMissing).toBeUndefined();
   });
 
+  it("can inspect a hydrating page again without triggering another reload", async () => {
+    const capturedDefinitions: Parameters<PageSessionClient["capture"]>[0][] = [];
+    const client: PageSessionClient = {
+      async capture(definition) {
+        capturedDefinitions.push(definition);
+        return {
+          status: "not_found",
+          attempts: [],
+        };
+      },
+    };
+
+    await captureCodexPersonalLiveFixture(
+      client,
+      {
+        mode: "auto",
+        tabId: 42,
+        matchedUrl: "https://chatgpt.com/codex/cloud/settings/analytics",
+      },
+      {
+        reloadPageBeforeCapture: false,
+      },
+    );
+
+    expect(capturedDefinitions[0].reloadBeforeCapture).toBeUndefined();
+    expect(capturedDefinitions[0].reloadOnCaptureFailure).toBeUndefined();
+    expect(capturedDefinitions[0].extraction).toMatchObject({
+      mode: "network_observer",
+      observeReload: false,
+    });
+  });
+
   it("does not reuse a bound cloud analytics tab for unrelated Codex routes", async () => {
     const capturedDefinitions: Parameters<PageSessionClient["capture"]>[0][] = [];
     const client: PageSessionClient = {

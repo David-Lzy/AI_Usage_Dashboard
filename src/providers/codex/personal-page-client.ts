@@ -14,6 +14,7 @@ import {
   type CodexPersonalLiveFixture,
   type CodexPersonalRouteCapture,
 } from "./personal-page-capture";
+import type { CodexObservedUsageHistoryContract } from "./usage-history-contract";
 import {
   parseCodexPersonalLiveFixture,
   type CodexPersonalParseResult,
@@ -38,7 +39,7 @@ export type CodexPersonalPageClient = {
   ) => Promise<CodexPersonalPageUsageResult>;
 };
 
-const DEFAULT_HYDRATION_RETRY_ATTEMPTS = 4;
+const DEFAULT_HYDRATION_RETRY_ATTEMPTS = 8;
 const DEFAULT_HYDRATION_RETRY_DELAY_MS = 1_000;
 
 function delay(ms: number): Promise<void> {
@@ -53,7 +54,57 @@ function shouldRetryHydratingCodexRoute(
   fixture: CodexPersonalLiveFixture,
   result: CodexPersonalParseResult,
 ): boolean {
-  return result.status === "route_drift" && fixture.decision.chosenRoute !== null;
+  if (result.status === "route_drift") {
+    return fixture.decision.chosenRoute !== null;
+  }
+
+  return (
+    result.status === "capture_unavailable" &&
+    fixture.routes.some(
+      (route) =>
+        route.status === "capture_unavailable" && route.attempts.length > 0,
+    )
+  );
+}
+
+function mergeUsageHistoryContract(
+  current: CodexObservedUsageHistoryContract | null | undefined,
+  previous: CodexObservedUsageHistoryContract | null | undefined,
+): CodexObservedUsageHistoryContract | null {
+  if (!current && !previous) {
+    return null;
+  }
+
+  return {
+    dailyTokenUsageBreakdown:
+      current?.dailyTokenUsageBreakdown ??
+      previous?.dailyTokenUsageBreakdown ??
+      null,
+    dailyWorkspaceUsageCounts:
+      current?.dailyWorkspaceUsageCounts ??
+      previous?.dailyWorkspaceUsageCounts ??
+      null,
+  };
+}
+
+function retainObservedUsageHistory(
+  current: CodexPersonalLiveFixture,
+  previous: CodexPersonalLiveFixture,
+): CodexPersonalLiveFixture {
+  const previousRoutes = new Map(
+    previous.routes.map((route) => [route.routeKey, route] as const),
+  );
+
+  return {
+    ...current,
+    routes: current.routes.map((route) => ({
+      ...route,
+      usageHistoryContract: mergeUsageHistoryContract(
+        route.usageHistoryContract,
+        previousRoutes.get(route.routeKey)?.usageHistoryContract,
+      ),
+    })),
+  };
 }
 
 function buildBindingFromRouteCapture(
@@ -144,6 +195,10 @@ export function createCodexPersonalPageClient(
       const captureOptions = {
         openPageWhenMissing: options.openPageWhenMissing ?? false,
       };
+      const hydrationCaptureOptions = {
+        openPageWhenMissing: false,
+        reloadPageBeforeCapture: false,
+      };
       const retryAttempts = Math.max(
         0,
         options.hydrationRetryAttempts ?? DEFAULT_HYDRATION_RETRY_ATTEMPTS,
@@ -166,11 +221,12 @@ export function createCodexPersonalPageClient(
         attempt += 1
       ) {
         await delay(retryDelayMs);
-        fixture = await captureCodexPersonalLiveFixture(
+        const hydratedFixture = await captureCodexPersonalLiveFixture(
           pageSessionClient,
           pageSessionBinding,
-          captureOptions,
+          hydrationCaptureOptions,
         );
+        fixture = retainObservedUsageHistory(hydratedFixture, fixture);
         result = parseCodexPersonalLiveFixture(fixture);
       }
 

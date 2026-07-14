@@ -140,5 +140,9 @@ describe("UsageHistoryCharts", () => {
     );
     expect(chartsCss).toContain("margin-inline-start: auto;");
     expect(chartsCss).toContain(".usage-history-chart__bar {");
+    expect(chartsCss).toContain("--app-usage-history-bar-opacity");
+    expect(chartsCss).toContain("--app-usage-history-area-fill-opacity");
+    expect(chartsCss).toContain("fill-opacity: var(--app-usage-history-area-fill-opacity);");
+    expect(chartsCss).toContain("stroke-opacity: var(--app-usage-history-area-stroke-opacity);");
   });
 });

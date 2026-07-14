@@ -14,6 +14,7 @@ describe("usage history localized copy", () => {
       expect(copy.expand).not.toBe("");
       expect(copy.locale).toBe(locale);
       expect(copy.surfaceLabels.desktop_app).not.toBe("");
+      expect(copy.surfaceLabels.work_desktop).not.toBe("");
       expect(copy.surfaceLabels.vscode).not.toBe("");
       expect(copy.surfaceLabels.unknown).not.toBe("");
     }
@@ -22,5 +23,12 @@ describe("usage history localized copy", () => {
   it("keeps model labels outside the localization map", () => {
     const copy = buildUsageHistoryLocalizedCopy("zh-CN");
     expect(copy.surfaceLabels).not.toHaveProperty("gpt-5.4");
+  });
+
+  it("labels the observed work desktop surface without exposing its raw id", () => {
+    expect(buildUsageHistoryLocalizedCopy("zh-CN").surfaceLabels.work_desktop)
+      .toBe("桌面工作区");
+    expect(buildUsageHistoryLocalizedCopy("en").surfaceLabels.work_desktop)
+      .toBe("Desktop workspace");
   });
 });

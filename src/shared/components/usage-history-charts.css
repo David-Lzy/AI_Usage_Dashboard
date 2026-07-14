@@ -1,29 +1,41 @@
 :root {
-  --app-usage-history-series-1: #315f9f;
+  --app-usage-history-series-1: #3569a8;
   --app-usage-history-series-2: #76558a;
-  --app-usage-history-series-3: #276f65;
-  --app-usage-history-series-4: #9a5046;
-  --app-usage-history-series-5: #776300;
-  --app-usage-history-series-6: #586579;
+  --app-usage-history-series-3: #28766d;
+  --app-usage-history-series-4: #a45149;
+  --app-usage-history-series-5: #7f6500;
+  --app-usage-history-series-6: #59677a;
+  --app-usage-history-bar-opacity: 0.9;
+  --app-usage-history-area-fill-opacity: 0.42;
+  --app-usage-history-area-stroke-opacity: 0.94;
+  --app-usage-history-grid-opacity: 0.52;
 }
 
 :root[data-theme-resolved="dark"] {
-  --app-usage-history-series-1: #9fc4ff;
-  --app-usage-history-series-2: #d6b6e8;
-  --app-usage-history-series-3: #8fd5c6;
-  --app-usage-history-series-4: #f1b7a7;
-  --app-usage-history-series-5: #dfcb7d;
-  --app-usage-history-series-6: #b8c6dc;
+  --app-usage-history-series-1: #78a9ff;
+  --app-usage-history-series-2: #be95ff;
+  --app-usage-history-series-3: #5cc8b2;
+  --app-usage-history-series-4: #ff9f8f;
+  --app-usage-history-series-5: #d8c063;
+  --app-usage-history-series-6: #a7b6c8;
+  --app-usage-history-bar-opacity: 0.84;
+  --app-usage-history-area-fill-opacity: 0.48;
+  --app-usage-history-area-stroke-opacity: 0.9;
+  --app-usage-history-grid-opacity: 0.4;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme-resolved]) {
-    --app-usage-history-series-1: #9fc4ff;
-    --app-usage-history-series-2: #d6b6e8;
-    --app-usage-history-series-3: #8fd5c6;
-    --app-usage-history-series-4: #f1b7a7;
-    --app-usage-history-series-5: #dfcb7d;
-    --app-usage-history-series-6: #b8c6dc;
+    --app-usage-history-series-1: #78a9ff;
+    --app-usage-history-series-2: #be95ff;
+    --app-usage-history-series-3: #5cc8b2;
+    --app-usage-history-series-4: #ff9f8f;
+    --app-usage-history-series-5: #d8c063;
+    --app-usage-history-series-6: #a7b6c8;
+    --app-usage-history-bar-opacity: 0.84;
+    --app-usage-history-area-fill-opacity: 0.48;
+    --app-usage-history-area-stroke-opacity: 0.9;
+    --app-usage-history-grid-opacity: 0.4;
   }
 }
 
@@ -166,20 +178,28 @@
 
 .usage-history-chart__grid {
   stroke: var(--md-sys-color-outline-variant);
-  opacity: 0.72;
+  opacity: var(--app-usage-history-grid-opacity);
   stroke-width: 1;
   vector-effect: non-scaling-stroke;
 }
 
 .usage-history-chart__bar {
-  stroke: var(--md-sys-color-surface-container-lowest);
-  stroke-width: 0.75;
+  stroke: color-mix(
+    in srgb,
+    var(--md-sys-color-surface-container-lowest) 72%,
+    transparent
+  );
+  stroke-width: 0.5;
+  opacity: var(--app-usage-history-bar-opacity);
   vector-effect: non-scaling-stroke;
 }
 
 .usage-history-chart__area {
-  opacity: 0.74;
+  fill-opacity: var(--app-usage-history-area-fill-opacity);
+  stroke-opacity: var(--app-usage-history-area-stroke-opacity);
+  stroke-width: 1.1;
   stroke-linejoin: round;
+  stroke-linecap: round;
 }
 
 .usage-history-chart__focus-target {

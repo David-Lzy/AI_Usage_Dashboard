@@ -1,6 +1,6 @@
 # Codex Provider Note
 
-Date: 2026-07-13
+Date: 2026-07-14
 
 Process rule:
 
@@ -488,3 +488,25 @@ Shipped history behavior:
 The history endpoints are an observed signed-in page contract, not a documented
 public API. A future Codex page change may therefore temporarily disable the
 history modules until the structured contract is reverified.
+
+## 22. 2026-07-14 Hydration And History Display Follow-Up
+
+The current Codex Analytics route can report browser load completion before its
+quota cards finish hydrating. Reloading the route again for every parser retry
+can interrupt that hydration and produce a transient page-capture or route-drift
+failure even when the signed-in page is valid.
+
+Current refresh behavior:
+
+- the first capture performs one controlled reload so the bounded history
+  observer can see the structured responses
+- subsequent hydration retries inspect the same page without reloading it again
+- retries are time-bounded and retain any valid structured history response
+  observed during the first capture
+- a current quota-capture failure can coexist with last-known-good history in
+  storage; cached history does not by itself mean the latest refresh succeeded
+- the observed `work_desktop` history series keeps its source id in stored data
+  but receives a localized human-readable label in the chart legend
+
+This retry behavior does not add a timer or background polling path. It runs
+only inside the existing user/background Codex refresh operation.

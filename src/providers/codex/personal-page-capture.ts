@@ -73,6 +73,7 @@ type CodexRouteDefinition = {
 
 type CodexPersonalLiveCaptureOptions = {
   openPageWhenMissing?: boolean;
+  reloadPageBeforeCapture?: boolean;
 };
 
 const CODEX_PERSONAL_ROUTE_DEFINITIONS: CodexRouteDefinition[] = [
@@ -239,23 +240,24 @@ async function captureRoute(
   options: CodexPersonalLiveCaptureOptions = {},
 ): Promise<CodexPersonalRouteCapture> {
   const routeBinding = bindingMatchesRoute(route, binding) ? binding : undefined;
+  const reloadPageBeforeCapture = options.reloadPageBeforeCapture ?? true;
+  const reloadOptions = {
+    bypassCache: true,
+    waitForLoadTimeoutMs: 10_000,
+    loadPollIntervalMs: 250,
+    postLoadDelayMs: 3_000,
+  };
   const result = await client.capture({
     providerId: "codex-personal-page",
     pageLabel: route.pageLabel,
     urlPatterns: route.urlPatterns,
     binding: routeBinding,
-    reloadBeforeCapture: {
-      bypassCache: true,
-      waitForLoadTimeoutMs: 10_000,
-      loadPollIntervalMs: 250,
-      postLoadDelayMs: 3_000,
-    },
-    reloadOnCaptureFailure: {
-      bypassCache: true,
-      waitForLoadTimeoutMs: 10_000,
-      loadPollIntervalMs: 250,
-      postLoadDelayMs: 3_000,
-    },
+    ...(reloadPageBeforeCapture
+      ? {
+          reloadBeforeCapture: reloadOptions,
+          reloadOnCaptureFailure: reloadOptions,
+        }
+      : {}),
     ...(options.openPageWhenMissing && route.routeKey === "cloud_analytics"
       ? {
           openWhenMissing: {
@@ -272,7 +274,7 @@ async function captureRoute(
             matchUrlSubstrings: [...CODEX_USAGE_HISTORY_PATHS],
             maxEntries: 4,
             maxBodyLength: 200_000,
-            observeReload: true,
+            observeReload: reloadPageBeforeCapture,
           }
         : { mode: "dom" as const }),
     },

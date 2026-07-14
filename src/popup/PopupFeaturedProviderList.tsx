@@ -129,7 +129,8 @@ export function PopupFeaturedProviderList({
             "popup",
             progressItemsBySurface,
           );
-          const visibleUsageHistoryModules = provider.usageHistory
+          const usageHistory = provider.usageHistory;
+          const visibleUsageHistoryModules = usageHistory
             ? resolveProviderUsageHistoryModules(
                 usageHistoryModulesBySurface,
                 "popup",
@@ -283,13 +284,13 @@ export function PopupFeaturedProviderList({
                 </>
               )}
 
-              {provider.usageHistory && visibleUsageHistoryModules.length > 0 ? (
+              {usageHistory && visibleUsageHistoryModules.length > 0 ? (
                 <div className="popup-provider-card__history">
                   {visibleUsageHistoryModules.map((preference) => (
                     <PopupUsageHistoryModule
                       key={preference.id}
                       copy={usageHistoryCopy}
-                      history={provider.usageHistory}
+                      history={usageHistory}
                       moduleId={preference.id}
                       providerId={provider.providerId}
                     />

@@ -67,6 +67,22 @@ const SURFACE_LABEL_OVERRIDES: Partial<Record<ResolvedAppLocale, Record<string, 
   id: { desktop_app: "Aplikasi desktop", vscode: "Ekstensi", exec: "Eksekusi", cli: "CLI", web: "Cloud", github: "Giliran GitHub", github_code_review: "Tinjauan kode GitHub", unknown: "Tanpa kategori" },
 };
 
+const WORK_DESKTOP_LABELS: Partial<Record<ResolvedAppLocale, string>> = {
+  "zh-CN": "桌面工作区",
+  "zh-TW": "桌面工作區",
+  ja: "デスクトップワークスペース",
+  ko: "데스크톱 작업 공간",
+  "es-419": "Espacio de trabajo de escritorio",
+  "pt-BR": "Espaço de trabalho desktop",
+  fr: "Espace de travail de bureau",
+  de: "Desktop-Arbeitsbereich",
+  it: "Area di lavoro desktop",
+  ru: "Рабочее пространство на ПК",
+  ar: "مساحة عمل سطح المكتب",
+  hi: "डेस्कटॉप कार्यस्थान",
+  id: "Ruang kerja desktop",
+};
+
 const COPY_OVERRIDES: Partial<Record<ResolvedAppLocale, Partial<UsageHistoryChartCopy>>> = {
   "zh-CN": { personalUsage: "个人使用", turns: "轮次趋势", byModel: "按模型", bySurface: "按使用方式", sevenDays: "7天", oneMonth: "1个月", other: "其他", noData: "暂无历史数据", collapse: "折叠", expand: "展开", capturedAt: "采集时间", totalTurns: "总轮次", turnsUnit: "轮次" },
   "zh-TW": { personalUsage: "個人使用", turns: "輪次趨勢", byModel: "依模型", bySurface: "依使用方式", sevenDays: "7 天", oneMonth: "1 個月", other: "其他", noData: "暫無歷史資料", collapse: "收合", expand: "展開", capturedAt: "擷取時間", totalTurns: "總輪次", turnsUnit: "輪次" },
@@ -92,6 +108,7 @@ export function buildUsageHistoryLocalizedCopy(locale: ResolvedAppLocale): Usage
     surfaceLabels: {
       ...ENGLISH_COPY.surfaceLabels,
       ...SURFACE_LABEL_OVERRIDES[locale],
+      work_desktop: WORK_DESKTOP_LABELS[locale] ?? "Desktop workspace",
     },
   };
 }
