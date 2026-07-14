@@ -36,6 +36,9 @@ import {
 } from "./official";
 import { createCodexPersonalPageClient } from "./personal-page-client";
 import { hasPageBindingFingerprint } from "../../shared/page-bindings";
+import {
+  mergeProviderUsageHistoryModules,
+} from "../../shared/provider-usage-history";
 import { hasLivePageSessionApis } from "../page-session";
 import type {
   CodexPersonalUsageBalance,
@@ -800,7 +803,10 @@ async function tryCodexPersonalSource({
         warningDiagnostic: usageThresholdDiagnostic,
         usageWindows: buildCodexUsageWindows(result.snapshot.windows),
         usageBalances: buildCodexUsageBalances(result.snapshot.balances),
-        usageHistory: result.snapshot.usageHistory ?? provider.usageHistory,
+        usageHistory: mergeProviderUsageHistoryModules(
+          result.snapshot.usageHistory,
+          provider.usageHistory,
+        ),
         usageSummary: buildPersonalUsageSummary(
           result.snapshot.windows,
           result.snapshot.balances,

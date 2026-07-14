@@ -500,9 +500,14 @@ Current refresh behavior:
 
 - the first capture performs one controlled reload so the bounded history
   observer can see the structured responses
+- after browser load completion, that observer remains active until both known
+  history responses arrive or a bounded timeout expires; the refresh no longer
+  treats one fixed post-load delay as proof that lazy hydration is complete
 - subsequent hydration retries inspect the same page without reloading it again
 - retries are time-bounded and retain any valid structured history response
   observed during the first capture
+- if only one history response arrives before the timeout, that module is
+  updated while the other module keeps its last valid normalized data
 - a current quota-capture failure can coexist with last-known-good history in
   storage; cached history does not by itself mean the latest refresh succeeded
 - the observed `work_desktop` history series keeps its source id in stored data

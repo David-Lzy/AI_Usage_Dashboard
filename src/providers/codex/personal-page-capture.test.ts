@@ -134,6 +134,14 @@ describe("summarizeCodexPersonalPage", () => {
     expect(capturedDefinitions[0].urlPatterns).toEqual([
       "https://chatgpt.com/codex/cloud/settings/analytics*",
     ]);
+    expect(capturedDefinitions[0].extraction).toMatchObject({
+      mode: "network_observer",
+      requiredMatchUrlSubstrings: expect.arrayContaining([
+        "/backend-api/wham/usage/daily-token-usage-breakdown",
+        "/backend-api/wham/analytics/daily-workspace-usage-counts",
+      ]),
+      waitForRequiredEntriesTimeoutMs: 9_000,
+    });
     expect(capturedDefinitions[0].openWhenMissing).toEqual({
       url: "https://chatgpt.com/codex/cloud/settings/analytics",
       active: false,
@@ -173,6 +181,9 @@ describe("summarizeCodexPersonalPage", () => {
       mode: "network_observer",
       observeReload: false,
     });
+    expect(capturedDefinitions[0].extraction).not.toHaveProperty(
+      "waitForRequiredEntriesTimeoutMs",
+    );
   });
 
   it("does not reuse a bound cloud analytics tab for unrelated Codex routes", async () => {

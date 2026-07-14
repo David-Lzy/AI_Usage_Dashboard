@@ -26,11 +26,15 @@ export type PageSessionNetworkObserverExtraction = {
   maxEntries?: number;
   maxBodyLength?: number;
   observeReload?: boolean;
+  requiredMatchUrlSubstrings?: string[];
+  waitForRequiredEntriesTimeoutMs?: number;
 };
 
 const NETWORK_BRIDGE_SCRIPT_ID = "__ai_usage_dashboard_page_session_bridge__";
 const NETWORK_CONFIG_SESSION_KEY =
   "__ai_usage_dashboard_page_session_network_config__";
+const NETWORK_BRIDGE_EVENT_NAME =
+  "ai-usage-dashboard:page-session-updated";
 const NETWORK_DOCUMENT_START_SCRIPT =
   "page-session-network-observer-document-start.js";
 
@@ -449,6 +453,113 @@ export async function cleanupPreparedNetworkObserver(
     await scriptingApi
       .unregisterContentScripts({ ids: [prepared.registrationId] })
       .catch(() => undefined);
+  }
+}
+
+export async function waitForRequiredNetworkObserverEntries(
+  tabId: number,
+  scriptingApi: PageSessionScriptingApi,
+  extraction: PageSessionNetworkObserverExtraction,
+): Promise<boolean> {
+  const requiredMatchUrlSubstrings = [
+    ...new Set(
+      (extraction.requiredMatchUrlSubstrings ?? []).filter(Boolean),
+    ),
+  ];
+  const timeoutMs = Math.min(
+    30_000,
+    Math.max(0, extraction.waitForRequiredEntriesTimeoutMs ?? 0),
+  );
+
+  if (requiredMatchUrlSubstrings.length === 0 || timeoutMs === 0) {
+    return true;
+  }
+
+  try {
+    return await executeScriptResult<boolean>(scriptingApi, {
+      tabId,
+      world: "MAIN",
+      func: (
+        rawStoreKey: unknown,
+        rawEventName: unknown,
+        rawRequiredMatches: unknown,
+        rawTimeoutMs: unknown,
+      ) => {
+        const storeKey = typeof rawStoreKey === "string" ? rawStoreKey : "";
+        const eventName = typeof rawEventName === "string" ? rawEventName : "";
+        const requiredMatches = Array.isArray(rawRequiredMatches)
+          ? rawRequiredMatches.filter(
+              (value): value is string =>
+                typeof value === "string" && value.length > 0,
+            )
+          : [];
+        const boundedTimeoutMs =
+          typeof rawTimeoutMs === "number" && rawTimeoutMs > 0
+            ? Math.min(30_000, rawTimeoutMs)
+            : 0;
+        const root = globalThis as typeof globalThis & Record<string, unknown>;
+
+        function hasRequiredEntries(): boolean {
+          const store = root[storeKey] as
+            | { entries?: Array<Record<string, unknown>> }
+            | undefined;
+          const entries = Array.isArray(store?.entries) ? store.entries : [];
+
+          return requiredMatches.every((requiredMatch) =>
+            entries.some(
+              (entry) =>
+                typeof entry.url === "string" &&
+                entry.url.includes(requiredMatch) &&
+                entry.ok === true &&
+                typeof entry.bodyText === "string" &&
+                entry.bodyText.trim().length > 0,
+            ),
+          );
+        }
+
+        if (requiredMatches.length === 0 || hasRequiredEntries()) {
+          return Promise.resolve(true);
+        }
+
+        if (!storeKey || !eventName || boundedTimeoutMs === 0) {
+          return Promise.resolve(false);
+        }
+
+        return new Promise<boolean>((resolve) => {
+          let settled = false;
+
+          const finish = (matched: boolean) => {
+            if (settled) {
+              return;
+            }
+            settled = true;
+            globalThis.removeEventListener(eventName, handleUpdate);
+            globalThis.clearTimeout(timeoutId);
+            resolve(matched);
+          };
+          const handleUpdate = () => {
+            if (hasRequiredEntries()) {
+              finish(true);
+            }
+          };
+          const timeoutId = globalThis.setTimeout(
+            () => finish(hasRequiredEntries()),
+            boundedTimeoutMs,
+          );
+
+          globalThis.addEventListener(eventName, handleUpdate);
+          handleUpdate();
+        });
+      },
+      args: [
+        "__AI_USAGE_DASHBOARD_PAGE_SESSION__",
+        NETWORK_BRIDGE_EVENT_NAME,
+        requiredMatchUrlSubstrings,
+        timeoutMs,
+      ],
+    });
+  } catch {
+    return false;
   }
 }
 

@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { normalizeProviderUsageHistory } from "./provider-usage-history";
+import {
+  mergeProviderUsageHistoryModules,
+  normalizeProviderUsageHistory,
+} from "./provider-usage-history";
 
 describe("provider usage history normalization", () => {
   it("sorts and deduplicates dates while normalizing values", () => {
@@ -69,5 +72,49 @@ describe("provider usage history normalization", () => {
         turns: { total: 0, byModel: [], bySurface: [] },
       }),
     ).toBeUndefined();
+  });
+
+  it("preserves the last valid module when a refresh captures only one endpoint", () => {
+    const previous = normalizeProviderUsageHistory({
+      capturedAt: "2026-07-14T00:00:00.000Z",
+      personalUsageBySurface: {
+        points: [
+          {
+            date: "2026-07-14",
+            values: [{ id: "desktop", label: "Desktop", value: 40 }],
+          },
+        ],
+      },
+      turns: null,
+    });
+    const current = normalizeProviderUsageHistory({
+      capturedAt: "2026-07-15T00:00:00.000Z",
+      personalUsageBySurface: null,
+      turns: {
+        total: 12,
+        byModel: [
+          {
+            date: "2026-07-15",
+            values: [{ id: "gpt", label: "GPT", value: 12 }],
+          },
+        ],
+        bySurface: [],
+      },
+    });
+
+    const merged = mergeProviderUsageHistoryModules(current, previous);
+
+    expect(merged).toMatchObject({
+      capturedAt: "2026-07-15T00:00:00.000Z",
+      rangeStart: "2026-07-14",
+      rangeEnd: "2026-07-15",
+      personalUsageBySurface: {
+        points: [{ date: "2026-07-14" }],
+      },
+      turns: {
+        total: 12,
+        byModel: [{ date: "2026-07-15" }],
+      },
+    });
   });
 });

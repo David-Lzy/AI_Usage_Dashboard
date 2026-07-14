@@ -5,6 +5,7 @@ import {
   installNetworkObserverBridge,
   prepareNetworkObserverForReload,
   readNetworkObserverBridge,
+  waitForRequiredNetworkObserverEntries,
   type PageSessionObservedNetworkEntry,
 } from "./page-session-network-observer";
 import type { PageSessionScriptingApi } from "./page-session-script-capture";
@@ -105,6 +106,53 @@ describe("page-session network observer helpers", () => {
         ],
       }),
     );
+  });
+
+  it("waits for every required response with a bounded main-world listener", async () => {
+    const executeScript = vi.fn().mockResolvedValue([{ result: true }]);
+
+    await expect(
+      waitForRequiredNetworkObserverEntries(
+        11,
+        { executeScript },
+        {
+          mode: "network_observer",
+          matchUrlSubstrings: ["/tokens", "/turns"],
+          requiredMatchUrlSubstrings: ["/tokens", "/turns", "/tokens"],
+          waitForRequiredEntriesTimeoutMs: 9_000,
+        },
+      ),
+    ).resolves.toBe(true);
+
+    expect(executeScript).toHaveBeenCalledWith(
+      expect.objectContaining({
+        target: { tabId: 11 },
+        world: "MAIN",
+        args: [
+          "__AI_USAGE_DASHBOARD_PAGE_SESSION__",
+          "ai-usage-dashboard:page-session-updated",
+          ["/tokens", "/turns"],
+          9_000,
+        ],
+      }),
+    );
+  });
+
+  it("does not inject a waiter when no required response timeout is configured", async () => {
+    const executeScript = vi.fn();
+
+    await expect(
+      waitForRequiredNetworkObserverEntries(
+        11,
+        { executeScript },
+        {
+          mode: "network_observer",
+          matchUrlSubstrings: ["/tokens"],
+        },
+      ),
+    ).resolves.toBe(true);
+
+    expect(executeScript).not.toHaveBeenCalled();
   });
 
   it("registers and cleans up a bounded document-start observer", async () => {

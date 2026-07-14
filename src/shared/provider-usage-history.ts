@@ -176,3 +176,26 @@ export function normalizeProviderUsageHistory(
         : null,
   };
 }
+
+export function mergeProviderUsageHistoryModules(
+  current: ProviderUsageHistory | undefined,
+  previous: ProviderUsageHistory | undefined,
+): ProviderUsageHistory | undefined {
+  const normalizedCurrent = normalizeProviderUsageHistory(current);
+  const normalizedPrevious = normalizeProviderUsageHistory(previous);
+
+  if (!normalizedCurrent) {
+    return normalizedPrevious;
+  }
+  if (!normalizedPrevious) {
+    return normalizedCurrent;
+  }
+
+  return normalizeProviderUsageHistory({
+    capturedAt: normalizedCurrent.capturedAt,
+    personalUsageBySurface:
+      normalizedCurrent.personalUsageBySurface ??
+      normalizedPrevious.personalUsageBySurface,
+    turns: normalizedCurrent.turns ?? normalizedPrevious.turns,
+  });
+}

@@ -275,6 +275,14 @@ async function captureRoute(
             maxEntries: 4,
             maxBodyLength: 200_000,
             observeReload: reloadPageBeforeCapture,
+            ...(reloadPageBeforeCapture
+              ? {
+                  requiredMatchUrlSubstrings: [
+                    ...CODEX_USAGE_HISTORY_PATHS,
+                  ],
+                  waitForRequiredEntriesTimeoutMs: 9_000,
+                }
+              : {}),
           }
         : { mode: "dom" as const }),
     },

@@ -120,7 +120,11 @@ export function parseCodexUsageHistory(
 
   return normalizeProviderUsageHistory({
     capturedAt,
-    personalUsageBySurface: { points: personalPoints },
-    turns: { total, byModel, bySurface },
+    personalUsageBySurface:
+      personalPoints.length > 0 ? { points: personalPoints } : null,
+    turns:
+      byModel.length > 0 || bySurface.length > 0
+        ? { total, byModel, bySurface }
+        : null,
   });
 }

@@ -15,6 +15,7 @@ import {
   installNetworkObserverBridge,
   prepareNetworkObserverForReload,
   readNetworkObserverBridge,
+  waitForRequiredNetworkObserverEntries,
 } from "./page-session-network-observer";
 import type {
   PageSessionCapturedScriptMap,
@@ -268,6 +269,11 @@ async function capturePageSessionPage(
 
   if (extraction.mode === "network_observer") {
     await installNetworkObserverBridge(tabId, scriptingApi, extraction);
+    await waitForRequiredNetworkObserverEntries(
+      tabId,
+      scriptingApi,
+      extraction,
+    );
     observedNetwork = await readNetworkObserverBridge(tabId, scriptingApi);
   }
 

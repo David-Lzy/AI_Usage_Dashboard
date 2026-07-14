@@ -4,6 +4,7 @@
   const configKey = "__ai_usage_dashboard_page_session_network_config__";
   const storeKey = "__AI_USAGE_DASHBOARD_PAGE_SESSION__";
   const bridgeScriptId = "__ai_usage_dashboard_page_session_bridge__";
+  const bridgeEventName = "ai-usage-dashboard:page-session-updated";
   let rawConfig = null;
 
   try {
@@ -78,6 +79,11 @@
       maxEntries: store.maxEntries,
       entries: store.entries,
     });
+    globalThis.dispatchEvent(
+      new CustomEvent(bridgeEventName, {
+        detail: { entryCount: store.entries.length },
+      }),
+    );
   }
 
   function pushEntry(entry) {

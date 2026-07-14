@@ -44,4 +44,18 @@ describe("Codex usage history parser", () => {
       { id: "exec", label: "Exec", value: 13 },
     ]);
   });
+
+  it("keeps a missing delayed endpoint as a null module instead of fake empty data", () => {
+    const source = fixture as CodexUsageHistoryContractFixture;
+    const history = parseCodexUsageHistory(
+      {
+        dailyTokenUsageBreakdown: null,
+        dailyWorkspaceUsageCounts: source.dailyWorkspaceUsageCounts,
+      },
+      source.capturedAt,
+    );
+
+    expect(history?.personalUsageBySurface).toBeNull();
+    expect(history?.turns?.byModel).not.toHaveLength(0);
+  });
 });
