@@ -95,14 +95,11 @@
   max-width: 100%;
   min-height: 24px;
   padding: 2px 8px;
-  border: 1px solid var(--md-sys-color-outline-variant);
+  border: 1px solid
+    color-mix(in srgb, var(--md-sys-color-outline-variant) 28%, transparent);
   border-radius: var(--md-sys-shape-corner-full);
   color: var(--md-sys-color-on-surface-variant);
-  background: color-mix(
-    in srgb,
-    var(--app-surface-card-background) 88%,
-    transparent
-  );
+  background: transparent;
   font: inherit;
   line-height: 1;
   cursor: pointer;
@@ -122,16 +119,6 @@
 .usage-history-range-toggle:focus-visible {
   outline: none;
   box-shadow: var(--app-focus-ring-shadow);
-}
-
-.usage-history-range-toggle__period {
-  flex: 0 0 auto;
-  color: var(--md-sys-color-primary);
-  font-family: var(--md-sys-typescale-label-small-font);
-  font-size: var(--md-sys-typescale-label-small-size);
-  font-weight: 700;
-  line-height: var(--md-sys-typescale-label-small-line-height);
-  white-space: nowrap;
 }
 
 .usage-history-range-toggle__dates {
@@ -238,7 +225,7 @@
   position: absolute;
   z-index: 1;
   inset-block-start: 6px;
-  inset-inline-start: 4px;
+  inset-inline-start: 0;
   margin: 0;
   padding: 2px 6px;
   border: 1px solid
@@ -301,19 +288,126 @@
 
 .usage-history-legend {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: start;
   justify-content: space-between;
   gap: 4px 8px;
   margin: 0;
-  padding: 0;
+  padding: 0 0 3px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  scroll-behavior: smooth;
+  scrollbar-color: color-mix(
+      in srgb,
+      var(--md-sys-color-outline) 38%,
+      transparent
+    )
+    transparent;
+  scrollbar-width: thin;
+  touch-action: pan-x;
   list-style: none;
+}
+
+.usage-history-legend::-webkit-scrollbar {
+  height: 3px;
+}
+
+.usage-history-legend::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.usage-history-legend::-webkit-scrollbar-thumb {
+  border-radius: var(--md-sys-shape-corner-full);
+  background: color-mix(
+    in srgb,
+    var(--md-sys-color-outline) 38%,
+    transparent
+  );
+}
+
+.usage-history-legend[data-overflow-state="start"] {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    #000 0,
+    #000 calc(100% - 24px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    #000 0,
+    #000 calc(100% - 24px),
+    transparent 100%
+  );
+}
+
+.usage-history-legend[data-overflow-state="middle"] {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 24px,
+    #000 calc(100% - 24px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 24px,
+    #000 calc(100% - 24px),
+    transparent 100%
+  );
+}
+
+.usage-history-legend[data-overflow-state="end"] {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 24px,
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 24px,
+    #000 100%
+  );
+}
+
+:root[dir="rtl"] .usage-history-legend[data-overflow-state="start"] {
+  -webkit-mask-image: linear-gradient(
+    to left,
+    #000 0,
+    #000 calc(100% - 24px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to left,
+    #000 0,
+    #000 calc(100% - 24px),
+    transparent 100%
+  );
+}
+
+:root[dir="rtl"] .usage-history-legend[data-overflow-state="end"] {
+  -webkit-mask-image: linear-gradient(
+    to left,
+    transparent 0,
+    #000 24px,
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to left,
+    transparent 0,
+    #000 24px,
+    #000 100%
+  );
 }
 
 .usage-history-legend__item {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex: 0 0 auto;
   gap: 5px;
   min-width: 0;
   color: var(--md-sys-color-on-surface-variant);

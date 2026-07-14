@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import type {
   AppLocalePreference,
   DisplaySurface,
@@ -16,10 +14,7 @@ import type { ProviderViewModel } from "../view-models";
 import { ProviderProgressItemList } from "./ProviderProgressItemList";
 import { StatusBadge } from "./StatusBadge";
 import { UsageFactsList } from "./UsageFactsList";
-import {
-  UsageHistoryCompact,
-  type UsageHistoryRangeDays,
-} from "../../shared/components/UsageHistoryCharts";
+import { UsageHistoryCompact } from "../../shared/components/UsageHistoryCharts";
 import { buildUsageHistoryLocalizedCopy } from "../../shared/usage-history-localized-copy";
 import {
   createDefaultUsageHistoryModulesBySurface,
@@ -63,8 +58,6 @@ export function ProviderCard({
     typeof window !== "undefined" ? window : undefined,
   );
   const usageHistoryCopy = buildUsageHistoryLocalizedCopy(i18n.resolvedLocale);
-  const [usageHistoryRangeDays, setUsageHistoryRangeDays] =
-    useState<UsageHistoryRangeDays>(31);
   const showSessionPageContract =
     provider.sessionPageContractLabel !== null &&
     provider.sessionPageContractLabel !== provider.currentSourceContractLabel;
@@ -187,8 +180,6 @@ export function ProviderCard({
                   copy={usageHistoryCopy}
                   history={provider.usageHistory}
                   moduleId={preference.id}
-                  rangeDays={usageHistoryRangeDays}
-                  onRangeDaysChange={setUsageHistoryRangeDays}
                 />
               ) : null,
             )

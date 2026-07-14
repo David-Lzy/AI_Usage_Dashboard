@@ -20,7 +20,7 @@ dashboard.
 - Shows normalized Codex daily usage history and turn trends when the signed-in
   Codex page exposes the verified structured history responses. Each history
   module can be hidden independently per popup, side-panel, or full-page surface,
-  with a shared 7-day or 1-month view on each Provider card.
+  with an independent 7-day or 1-month view selected from its date-range button.
 - Keeps provider data boundaries visible: exact values, partial values,
   window-scoped values, policy-only data, or unavailable data are labeled
   differently.

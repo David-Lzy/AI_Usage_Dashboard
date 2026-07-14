@@ -92,6 +92,10 @@ describe("UsageHistoryCharts", () => {
     expect(html).toContain("usage-history-compact__heading");
     expect(html).toContain('data-usage-history-range-days="31"');
     expect(html).toContain("1 month");
+    expect(html).toContain(
+      '<span class="usage-history-range-toggle__dates">Jul 12 – Jul 13</span>',
+    );
+    expect(html).not.toContain("usage-history-range-toggle__period");
     expect(html).toContain("tabindex=\"0\"");
   });
 
@@ -151,6 +155,7 @@ describe("UsageHistoryCharts", () => {
     expect(html).toContain("1 month");
     expect(html).toContain("By model");
     expect(html).toContain("Personal usage");
+    expect(html.match(/data-usage-history-range-days="31"/g)).toHaveLength(2);
   });
 
   it("renders detail modules in the configured order", () => {
@@ -182,9 +187,13 @@ describe("UsageHistoryCharts", () => {
     );
     expect(chartsCss).toContain("margin-inline-start: auto;");
     expect(chartsCss).toContain("justify-content: space-between;");
+    expect(chartsCss).toContain("flex-wrap: nowrap;");
+    expect(chartsCss).toContain("overflow-x: auto;");
+    expect(chartsCss).toContain('data-overflow-state="middle"');
     expect(chartsCss).toContain("white-space: nowrap;");
     expect(chartsCss).toContain(".usage-history-range-toggle {");
     expect(chartsCss).toContain(".usage-history-range-toggle__dates {");
+    expect(chartsCss).toContain("inset-inline-start: 0;");
     expect(chartsCss).toContain("usage-history-chart-frame__metric");
     expect(chartsCss).toContain("height: 70px;");
     expect(chartsCss).toContain(".usage-history-chart__bar {");

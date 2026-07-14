@@ -1,6 +1,8 @@
 import {
+  useEffect,
   useId,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -120,7 +122,6 @@ function UsageHistoryRangeToggle({
       title={accessibleLabel}
       onClick={() => onChange(nextDays)}
     >
-      <span className="usage-history-range-toggle__period">{periodLabel}</span>
       <span className="usage-history-range-toggle__dates">{dateRange}</span>
     </button>
   );
@@ -263,8 +264,62 @@ function UsageHistoryLegend({
   data: UsageHistoryChartData;
   label: string;
 }) {
+  const listRef = useRef<HTMLUListElement>(null);
+  const [overflowState, setOverflowState] = useState<
+    "none" | "start" | "middle" | "end"
+  >("none");
+
+  useEffect(() => {
+    const list = listRef.current;
+    if (!list) {
+      return undefined;
+    }
+
+    const updateOverflowState = () => {
+      const maximumScroll = Math.max(0, list.scrollWidth - list.clientWidth);
+      const logicalScroll = Math.min(maximumScroll, Math.abs(list.scrollLeft));
+      const nextState =
+        maximumScroll <= 1
+          ? "none"
+          : logicalScroll <= 1
+            ? "start"
+            : logicalScroll >= maximumScroll - 1
+              ? "end"
+              : "middle";
+      setOverflowState((current) =>
+        current === nextState ? current : nextState,
+      );
+    };
+
+    updateOverflowState();
+    list.addEventListener("scroll", updateOverflowState, { passive: true });
+
+    const resizeObserver =
+      typeof ResizeObserver === "function"
+        ? new ResizeObserver(updateOverflowState)
+        : null;
+    resizeObserver?.observe(list);
+    if (!resizeObserver) {
+      window.addEventListener("resize", updateOverflowState);
+    }
+
+    return () => {
+      list.removeEventListener("scroll", updateOverflowState);
+      resizeObserver?.disconnect();
+      if (!resizeObserver) {
+        window.removeEventListener("resize", updateOverflowState);
+      }
+    };
+  }, [data.series]);
+
   return (
-    <ul className="usage-history-legend" aria-label={label}>
+    <ul
+      ref={listRef}
+      className="usage-history-legend"
+      data-overflow-state={overflowState}
+      aria-label={label}
+      tabIndex={overflowState === "none" ? undefined : 0}
+    >
       {data.series.map((series, index) => (
         <li key={series.id} className="usage-history-legend__item">
           <span
@@ -480,7 +535,9 @@ export function UsageHistoryDetail({
   moduleOrder?: readonly ProviderUsageHistoryModuleId[];
   formatCapturedAt?: (value: string) => string;
 }) {
-  const [days, setDays] = useState<UsageHistoryRangeDays>(31);
+  const [personalDays, setPersonalDays] =
+    useState<UsageHistoryRangeDays>(31);
+  const [turnsDays, setTurnsDays] = useState<UsageHistoryRangeDays>(31);
   const [grouping, setGrouping] = useState<"model" | "surface">("model");
   const personalPoints = useMemo(
     () =>
@@ -493,11 +550,11 @@ export function UsageHistoryDetail({
   const personalData = useMemo(
     () =>
       buildUsageHistoryChartData(personalPoints, {
-        days,
+        days: personalDays,
         maxSeries: 6,
         otherLabel: copy.other,
       }),
-    [copy.other, days, personalPoints],
+    [copy.other, personalDays, personalPoints],
   );
   const turnPoints = useMemo(() => {
     const points =
@@ -509,8 +566,13 @@ export function UsageHistoryDetail({
       : points;
   }, [copy.surfaceLabels, grouping, history.turns?.byModel, history.turns?.bySurface]);
   const turnsData = useMemo(
-    () => buildUsageHistoryChartData(turnPoints, { days, maxSeries: 6, otherLabel: copy.other }),
-    [copy.other, days, turnPoints],
+    () =>
+      buildUsageHistoryChartData(turnPoints, {
+        days: turnsDays,
+        maxSeries: 6,
+        otherLabel: copy.other,
+      }),
+    [copy.other, turnsDays, turnPoints],
   );
 
   return (
@@ -529,8 +591,8 @@ export function UsageHistoryDetail({
                 <UsageHistoryRangeToggle
                   copy={copy}
                   data={personalData}
-                  days={days}
-                  onChange={setDays}
+                  days={personalDays}
+                  onChange={setPersonalDays}
                 />
               ) : null}
             </header>
@@ -562,8 +624,8 @@ export function UsageHistoryDetail({
                   <UsageHistoryRangeToggle
                     copy={copy}
                     data={turnsData}
-                    days={days}
-                    onChange={setDays}
+                    days={turnsDays}
+                    onChange={setTurnsDays}
                   />
                 ) : null}
                 <SegmentedControl

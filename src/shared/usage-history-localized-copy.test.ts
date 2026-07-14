@@ -12,6 +12,9 @@ describe("usage history localized copy", () => {
       expect(copy.noData).not.toBe("");
       expect(copy.collapse).not.toBe("");
       expect(copy.expand).not.toBe("");
+      expect(copy.sevenDays).not.toBe("");
+      expect(copy.oneMonth).not.toBe("");
+      expect(copy.dateRange).not.toBe("");
       expect(copy.locale).toBe(locale);
       expect(copy.surfaceLabels.desktop_app).not.toBe("");
       expect(copy.surfaceLabels.work_desktop).not.toBe("");
