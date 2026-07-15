@@ -81,6 +81,7 @@ import {
 import { buildCustomSourceProgressItemIdsBySource } from "./custom-source-view-models";
 import { normalizeProviderUsageHistory } from "./provider-usage-history";
 import { normalizeUsageHistoryModulesBySurface } from "./usage-history-visibility";
+import { normalizeCursorUsageBilling } from "./cursor-usage-billing";
 
 let memoryFallbackState: AppState | null = null;
 
@@ -220,13 +221,18 @@ function normalizeAppState(state: AppState): AppState {
       providerLabel: sampleProvider.providerLabel,
     };
     const usageHistory = normalizeProviderUsageHistory(provider.usageHistory);
+    const cursorUsage = normalizeCursorUsageBilling(provider.cursorUsage);
+    const {
+      usageHistory: _usageHistory,
+      cursorUsage: _cursorUsage,
+      ...providerWithoutUsageExtensions
+    } = provider;
 
-    if (usageHistory) {
-      return { ...provider, usageHistory };
-    }
-
-    const { usageHistory: _usageHistory, ...providerWithoutHistory } = provider;
-    return providerWithoutHistory;
+    return {
+      ...providerWithoutUsageExtensions,
+      ...(usageHistory ? { usageHistory } : {}),
+      ...(cursorUsage ? { cursorUsage } : {}),
+    };
   });
 
   const providerSettings = SAMPLE_APP_STATE.providerSettings.map(

@@ -271,7 +271,75 @@ export type ProviderSnapshot = {
   usageFacts?: ProviderUsageFact[];
   usageSummary?: string | null;
   usageHistory?: ProviderUsageHistory;
+  cursorUsage?: CursorUsageBilling;
   tone: ProviderTone;
+};
+
+export type CursorUsageMetric = {
+  requests: number;
+  inputTokens: number | null;
+  outputTokens: number | null;
+  cacheReadTokens: number | null;
+  apiValueCents: number | null;
+  chargedCents: number | null;
+};
+
+export type CursorUsageBreakdown = CursorUsageMetric & {
+  id: string;
+  label: string;
+};
+
+export type CursorUsageDailyAggregate = {
+  date: string;
+  totals: CursorUsageMetric;
+  byModel: CursorUsageBreakdown[];
+  byKind: CursorUsageBreakdown[];
+};
+
+export type CursorUsageAggregateHistory = {
+  rangeStart: string;
+  rangeEnd: string;
+  granularity: "day";
+  sourceEventCount: number;
+  capturedEventCount: number;
+  complete: boolean;
+  days: CursorUsageDailyAggregate[];
+};
+
+export type CursorUsagePool = {
+  enabled: boolean;
+  usedCents: number | null;
+  limitCents: number | null;
+  remainingCents: number | null;
+};
+
+export type CursorPlanUsagePool = CursorUsagePool & {
+  includedUsageCents: number | null;
+  bonusUsageCents: number | null;
+  totalUsageCents: number | null;
+  autoPercentUsed: number | null;
+  apiPercentUsed: number | null;
+  totalPercentUsed: number | null;
+};
+
+export type CursorUsageBilling = {
+  capturedAt: string;
+  billingCapturedAt: string | null;
+  historyCapturedAt: string | null;
+  billingCycleStart: string | null;
+  billingCycleEnd: string | null;
+  membershipType: string | null;
+  limitType: string | null;
+  isUnlimited: boolean | null;
+  currency: "USD";
+  planName: string | null;
+  planIncludedAmountCents: number | null;
+  planPriceLabel: string | null;
+  planOwner: string | null;
+  plan: CursorPlanUsagePool | null;
+  onDemand: CursorUsagePool | null;
+  noUsageBasedAllowed: boolean | null;
+  history: CursorUsageAggregateHistory | null;
 };
 
 export type ProviderUsageHistoryValue = {

@@ -330,6 +330,78 @@ describe("storage normalization", () => {
     });
   });
 
+  it("preserves valid Cursor usage summaries and removes malformed ones", async () => {
+    const cursorProvider = SAMPLE_APP_STATE.providers.find(
+      (provider) => provider.providerId === "cursor-personal-page",
+    )!;
+    const validCursorUsage = {
+      capturedAt: "2026-07-15T00:00:00.000Z",
+      billingCapturedAt: "2026-07-15T00:00:00.000Z",
+      historyCapturedAt: null,
+      billingCycleStart: "2026-07-01T00:00:00.000Z",
+      billingCycleEnd: "2026-08-01T00:00:00.000Z",
+      membershipType: "pro",
+      limitType: "plan",
+      isUnlimited: false,
+      currency: "USD" as const,
+      planName: "Pro",
+      planIncludedAmountCents: 10000,
+      planPriceLabel: "$20",
+      planOwner: "individual",
+      plan: {
+        enabled: true,
+        usedCents: 4200,
+        limitCents: 10000,
+        remainingCents: 5800,
+        includedUsageCents: 4000,
+        bonusUsageCents: 200,
+        totalUsageCents: 4200,
+        autoPercentUsed: 18,
+        apiPercentUsed: 24,
+        totalPercentUsed: 42,
+      },
+      onDemand: null,
+      noUsageBasedAllowed: false,
+      history: null,
+    };
+
+    await writeAppState({
+      ...SAMPLE_APP_STATE,
+      providers: SAMPLE_APP_STATE.providers.map((provider) =>
+        provider.providerId === cursorProvider.providerId
+          ? { ...provider, cursorUsage: validCursorUsage }
+          : provider,
+      ),
+    });
+
+    expect(
+      (await readAppState())?.providers.find(
+        (provider) => provider.providerId === cursorProvider.providerId,
+      )?.cursorUsage,
+    ).toEqual(validCursorUsage);
+
+    await writeAppState({
+      ...SAMPLE_APP_STATE,
+      providers: SAMPLE_APP_STATE.providers.map((provider) =>
+        provider.providerId === cursorProvider.providerId
+          ? {
+              ...provider,
+              cursorUsage: {
+                ...validCursorUsage,
+                currency: "EUR",
+              },
+            }
+          : provider,
+      ) as AppState["providers"],
+    });
+
+    expect(
+      (await readAppState())?.providers.find(
+        (provider) => provider.providerId === cursorProvider.providerId,
+      )?.cursorUsage,
+    ).toBeUndefined();
+  });
+
   it("normalizes unsupported UI font preferences to the default", async () => {
     await writeAppState({
       ...SAMPLE_APP_STATE,

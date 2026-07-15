@@ -358,8 +358,8 @@ async function tryCursorOfficialSource({
       (sum, row) => sum + row.usageBasedReqs,
       0,
     );
-    const total = billableUserCount > 0 ? billableUserCount * 500 : null;
-    const remaining = total !== null ? Math.max(total - includedUsed, 0) : null;
+    const total = null;
+    const remaining = null;
     const cycleStart = new Date(spend.subscriptionCycleStart);
     const cycleReset = inferNextBillingReset(cycleStart, now);
     const usageSignal = buildUsageSignal(

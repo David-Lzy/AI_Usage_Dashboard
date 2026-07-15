@@ -326,8 +326,8 @@ describe("syncCursorProvider", () => {
     });
     expect(snapshot.planName).toBe("Cursor Team (2 billed)");
     expect(snapshot.used).toBe(320);
-    expect(snapshot.total).toBe(1000);
-    expect(snapshot.remaining).toBe(680);
+    expect(snapshot.total).toBeNull();
+    expect(snapshot.remaining).toBeNull();
     expect(snapshot.resetAt).toBe("2026-05-07");
     expect(snapshot.syncStatus).toBe("warning");
     expect(snapshot.tone).toBe("warning");
