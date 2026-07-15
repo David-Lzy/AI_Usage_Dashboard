@@ -3,10 +3,22 @@ import {
   type PageSessionCapturedPage,
   type PageSessionBinding,
   type PageSessionClient,
+  type PageSessionObservedNetworkEntry,
   type PageSessionResult,
 } from "../page-session";
+import {
+  CURSOR_FILTERED_USAGE_EVENTS_PATH,
+  CURSOR_USAGE_BILLING_PATHS,
+  CURSOR_USAGE_SUMMARY_PATH,
+  extractCursorObservedUsageBillingContract,
+  mergeCursorObservedUsageBillingContracts,
+  parseCursorFilteredUsageEventsBodyText,
+  type CursorObservedUsageBillingContract,
+} from "./usage-billing-contract";
 
-export type CursorPersonalRouteKey = "dashboard_usage";
+export type CursorPersonalRouteKey =
+  | "dashboard_usage"
+  | "dashboard_spending";
 
 export type CursorRecommendedExtractionSurface =
   | "boot_data"
@@ -45,11 +57,12 @@ export type CursorPersonalRouteCapture = {
   matchedUrl: string | null;
   matchedTitle: string | null;
   summary: CursorPersonalPageSummary | null;
+  usageBillingContract: CursorObservedUsageBillingContract | null;
 };
 
 export type CursorPersonalLiveFixture = {
   capturedAt: string;
-  extractionMode: "dom";
+  extractionMode: "network_observer";
   routes: CursorPersonalRouteCapture[];
   decision: {
     chosenRoute: string | null;
@@ -78,7 +91,20 @@ const CURSOR_PERSONAL_ROUTE_DEFINITIONS: CursorRouteDefinition[] = [
       "https://cursor.com/*/dashboard/usage*",
     ],
   },
+  {
+    routeKey: "dashboard_spending",
+    pageLabel: "Cursor personal dashboard spending page",
+    urlPatterns: [
+      "https://cursor.com/cn/dashboard/spending*",
+      "https://cursor.com/dashboard/spending*",
+      "https://cursor.com/*/dashboard/spending*",
+    ],
+  },
 ];
+
+const CURSOR_USAGE_PAGE_URL = "https://cursor.com/cn/dashboard/usage";
+const MAX_CURSOR_USAGE_EVENT_PAGES = 10;
+const MAX_CURSOR_USAGE_RESPONSE_LENGTH = 240_000;
 
 const TEXT_SIGNAL_PATTERN =
   /usage|remaining|request|requests|billing|reset|limit|quota|plan|included|spend|on-demand|overage|usage-based|premium|fast|period|cycle|requests used|requests left|使用|剩余|请求|额度|配额|计划|周期|重置|刷新/i;
@@ -168,17 +194,22 @@ function detectLocalePrefix(url: string): string | null {
   return null;
 }
 
-function isCursorUsageDashboardPath(parsedUrl: URL | null): boolean {
+function getCursorDashboardRouteKey(
+  parsedUrl: URL | null,
+): CursorPersonalRouteKey | null {
   if (!parsedUrl || parsedUrl.hostname !== "cursor.com") {
-    return false;
+    return null;
   }
 
-  return (
-    /^\/dashboard\/usage\/?$/i.test(parsedUrl.pathname) ||
-    /^\/[a-z]{2}(?:-[a-z]{2})?\/dashboard\/usage\/?$/i.test(
-      parsedUrl.pathname,
-    )
+  const match = parsedUrl.pathname.match(
+    /^\/(?:[a-z]{2}(?:-[a-z]{2})?\/)?dashboard\/(usage|spending)\/?$/i,
   );
+
+  return match?.[1]?.toLowerCase() === "usage"
+    ? "dashboard_usage"
+    : match?.[1]?.toLowerCase() === "spending"
+      ? "dashboard_spending"
+      : null;
 }
 
 function hasCursorUsageDashboardShell(page: PageSessionCapturedPage): boolean {
@@ -225,8 +256,11 @@ function isLoggedOutCursorPage(page: PageSessionCapturedPage): boolean {
   }
 
   if (
-    isCursorUsageDashboardPath(parsedUrl) &&
-    hasCursorUsageDashboardShell(page)
+    getCursorDashboardRouteKey(parsedUrl) !== null &&
+    (hasCursorUsageDashboardShell(page) ||
+      extractCursorObservedUsageBillingContract(
+        page.observedNetwork?.entries,
+      ) !== null)
   ) {
     return false;
   }
@@ -251,11 +285,7 @@ function matchesCursorRoute(
     return false;
   }
 
-  if (!isCursorUsageDashboardPath(parsedUrl)) {
-    return false;
-  }
-
-  if (route.routeKey !== "dashboard_usage") {
+  if (getCursorDashboardRouteKey(parsedUrl) !== route.routeKey) {
     return false;
   }
 
@@ -263,6 +293,17 @@ function matchesCursorRoute(
     page.title.toLowerCase().includes("cursor") ||
     page.html.toLowerCase().includes("cursor")
   );
+}
+
+function bindingMatchesRoute(
+  binding: PageSessionBinding | undefined,
+  route: CursorRouteDefinition,
+): boolean {
+  if (!binding?.matchedUrl) {
+    return binding?.mode !== "bound";
+  }
+
+  return getCursorDashboardRouteKey(parseUrl(binding.matchedUrl)) === route.routeKey;
 }
 
 function chooseRecommendedSurface(
@@ -328,6 +369,183 @@ export function summarizeCursorPersonalPage(
   };
 }
 
+type CursorUsageEventsRequestBody = {
+  startDate: string;
+  endDate: string;
+  page: number;
+  pageSize: number;
+  teamId: number;
+};
+
+function parseUsageEventsRequestBody(
+  requestBodyText: string | null | undefined,
+): CursorUsageEventsRequestBody | null {
+  if (!requestBodyText) {
+    return null;
+  }
+
+  try {
+    const value = JSON.parse(requestBodyText) as Record<string, unknown>;
+    const startDate = typeof value.startDate === "string" ? value.startDate : "";
+    const endDate = typeof value.endDate === "string" ? value.endDate : "";
+    const page = typeof value.page === "number" ? value.page : Number.NaN;
+    const pageSize =
+      typeof value.pageSize === "number" ? value.pageSize : Number.NaN;
+    const teamId = typeof value.teamId === "number" ? value.teamId : Number.NaN;
+
+    if (
+      !startDate ||
+      startDate.length > 64 ||
+      !endDate ||
+      endDate.length > 64 ||
+      !Number.isInteger(page) ||
+      page < 0 ||
+      !Number.isInteger(pageSize) ||
+      pageSize < 1 ||
+      pageSize > 100 ||
+      !Number.isInteger(teamId) ||
+      teamId < 0
+    ) {
+      return null;
+    }
+
+    return { startDate, endDate, page, pageSize, teamId };
+  } catch {
+    return null;
+  }
+}
+
+async function captureAdditionalUsageEventPages(
+  client: PageSessionClient,
+  tabId: number,
+  entries: readonly PageSessionObservedNetworkEntry[],
+  contract: CursorObservedUsageBillingContract | null,
+): Promise<CursorObservedUsageBillingContract | null> {
+  const initialEvents = contract?.usageEvents;
+  if (
+    !initialEvents ||
+    initialEvents.usageEventsDisplay.length >=
+      initialEvents.totalUsageEventsCount ||
+    !client.executeMainWorld
+  ) {
+    return contract;
+  }
+
+  const sourceEntry = entries.find(
+    (entry) =>
+      entry.ok === true &&
+      entry.url.includes(CURSOR_FILTERED_USAGE_EVENTS_PATH) &&
+      typeof entry.requestBodyText === "string",
+  );
+  const requestBody = parseUsageEventsRequestBody(sourceEntry?.requestBodyText);
+  if (!sourceEntry || !requestBody) {
+    return contract;
+  }
+
+  const firstPage = requestBody.page === 0 ? 0 : 1;
+  const totalPages = Math.ceil(
+    initialEvents.totalUsageEventsCount / requestBody.pageSize,
+  );
+  const pages = Array.from(
+    { length: Math.min(totalPages, MAX_CURSOR_USAGE_EVENT_PAGES) },
+    (_, index) => firstPage + index,
+  ).filter((page) => page !== requestBody.page);
+
+  if (pages.length === 0) {
+    return contract;
+  }
+
+  const bodyTexts = await client
+    .executeMainWorld<string[]>(
+      tabId,
+      async (...rawArgs: unknown[]) => {
+        const rawUrl = rawArgs[0];
+        const rawBody = rawArgs[1];
+        const rawPages = rawArgs[2];
+        const rawMaxBodyLength = rawArgs[3];
+        if (
+          typeof rawUrl !== "string" ||
+          typeof rawBody !== "object" ||
+          rawBody === null ||
+          !Array.isArray(rawPages)
+        ) {
+          return [];
+        }
+
+        const target = new URL(rawUrl, globalThis.location.href);
+        if (target.origin !== globalThis.location.origin) {
+          return [];
+        }
+
+        const maxBodyLength =
+          typeof rawMaxBodyLength === "number" && rawMaxBodyLength > 0
+            ? Math.min(250_000, rawMaxBodyLength)
+            : 240_000;
+        const boundedPages = rawPages
+          .filter(
+            (page): page is number =>
+              typeof page === "number" && Number.isInteger(page) && page >= 0,
+          )
+          .slice(0, 9);
+        const responseBodies: string[] = [];
+
+        for (const page of boundedPages) {
+          const controller = new AbortController();
+          const timeoutId = globalThis.setTimeout(
+            () => controller.abort(),
+            8_000,
+          );
+
+          try {
+            const response = await globalThis.fetch(target.href, {
+              method: "POST",
+              credentials: "include",
+              headers: { "content-type": "application/json" },
+              body: JSON.stringify({
+                ...(rawBody as Record<string, unknown>),
+                page,
+              }),
+              signal: controller.signal,
+            });
+            if (!response.ok) {
+              break;
+            }
+
+            const bodyText = await response.text();
+            if (bodyText.length > maxBodyLength) {
+              break;
+            }
+            responseBodies.push(bodyText);
+          } catch {
+            break;
+          } finally {
+            globalThis.clearTimeout(timeoutId);
+          }
+        }
+
+        return responseBodies;
+      },
+      [
+        sourceEntry.url,
+        requestBody,
+        pages,
+        MAX_CURSOR_USAGE_RESPONSE_LENGTH,
+      ],
+    )
+    .catch(() => []);
+  const additionalContracts = bodyTexts.flatMap((bodyText) => {
+    const usageEvents = parseCursorFilteredUsageEventsBodyText(bodyText);
+    return usageEvents
+      ? [{ usageSummary: null, planInfo: null, hardLimit: null, usageEvents }]
+      : [];
+  });
+
+  return mergeCursorObservedUsageBillingContracts([
+    contract,
+    ...additionalContracts,
+  ]);
+}
+
 async function captureRoute(
   client: PageSessionClient,
   route: CursorRouteDefinition,
@@ -338,23 +556,35 @@ async function captureRoute(
     providerId: "cursor-personal-page",
     pageLabel: route.pageLabel,
     urlPatterns: route.urlPatterns,
-    binding,
-    reloadOnCaptureFailure: {
+    binding: bindingMatchesRoute(binding, route) ? binding : undefined,
+    reloadBeforeCapture: {
       bypassCache: true,
-      waitForLoadTimeoutMs: 10_000,
+      waitForLoadTimeoutMs: 12_000,
       loadPollIntervalMs: 250,
+      postLoadDelayMs: 250,
     },
-    ...(options.openPageWhenMissing
+    ...(options.openPageWhenMissing && route.routeKey === "dashboard_usage"
       ? {
           openWhenMissing: {
-            url: "https://cursor.com/cn/dashboard/usage",
+            url: CURSOR_USAGE_PAGE_URL,
             active: false,
             closeOnUnmatched: true,
           },
         }
       : {}),
     extraction: {
-      mode: "dom",
+      mode: "network_observer",
+      matchUrlSubstrings: [...CURSOR_USAGE_BILLING_PATHS],
+      requiredMatchUrlSubstrings:
+        route.routeKey === "dashboard_usage"
+          ? [CURSOR_USAGE_SUMMARY_PATH, CURSOR_FILTERED_USAGE_EVENTS_PATH]
+          : [CURSOR_USAGE_SUMMARY_PATH],
+      maxEntries: 10,
+      maxBodyLength: MAX_CURSOR_USAGE_RESPONSE_LENGTH,
+      captureRequestBody: route.routeKey === "dashboard_usage",
+      maxRequestBodyLength: 4_000,
+      observeReload: true,
+      waitForRequiredEntriesTimeoutMs: 15_000,
     },
     match(page) {
       if (isLoggedOutCursorPage(page)) {
@@ -375,8 +605,24 @@ async function captureRoute(
       matchedUrl: null,
       matchedTitle: null,
       summary: null,
+      usageBillingContract: null,
     };
   }
+
+  const observedEntries = result.page.observedNetwork?.entries ?? [];
+  const observedContract = extractCursorObservedUsageBillingContract(
+    observedEntries,
+  );
+  const usageBillingContract =
+    route.routeKey === "dashboard_usage"
+      ? await captureAdditionalUsageEventPages(
+          client,
+          result.target.tabId,
+          observedEntries,
+          observedContract,
+        )
+      : observedContract;
+  const summary = summarizeCursorPersonalPage(result.page);
 
   return {
     routeKey: route.routeKey,
@@ -386,7 +632,10 @@ async function captureRoute(
     attempts: result.attempts,
     matchedUrl: result.page.url,
     matchedTitle: result.page.title,
-    summary: summarizeCursorPersonalPage(result.page),
+    summary: usageBillingContract
+      ? { ...summary, recommendedSurface: "network_observer" }
+      : summary,
+    usageBillingContract,
   };
 }
 
@@ -395,16 +644,19 @@ export async function captureCursorPersonalLiveFixture(
   binding?: PageSessionBinding,
   options: CursorPersonalLiveCaptureOptions = {},
 ): Promise<CursorPersonalLiveFixture> {
-  const routes = await Promise.all(
-    CURSOR_PERSONAL_ROUTE_DEFINITIONS.map((route) =>
-      captureRoute(client, route, binding, options),
-    ),
-  );
-  const matchedRoute = routes.find((route) => route.status === "matched");
+  const routes: CursorPersonalRouteCapture[] = [];
+  for (const route of CURSOR_PERSONAL_ROUTE_DEFINITIONS) {
+    routes.push(await captureRoute(client, route, binding, options));
+  }
+  const matchedRoute =
+    routes.find(
+      (route) =>
+        route.routeKey === "dashboard_usage" && route.status === "matched",
+    ) ?? routes.find((route) => route.status === "matched");
 
   return {
     capturedAt: new Date().toISOString(),
-    extractionMode: "dom",
+    extractionMode: "network_observer",
     routes,
     decision: matchedRoute?.summary
       ? {

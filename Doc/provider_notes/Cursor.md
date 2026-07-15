@@ -19,6 +19,18 @@ Status note:
 - this provider note should track the current selected source path, support boundary, and official-source basis for Cursor
 - refresh it whenever the chosen source path, active release promise, or relevant official docs change
 
+Post-rc36 structured capture update:
+
+- Cursor personal refresh now observes the verified Usage/Spending JSON
+  responses during a bounded managed-page reload instead of depending only on
+  rendered DOM text.
+- Usage-event pagination is finite and allowlisted. The extension normalizes at
+  most 31 daily buckets and does not persist request rows, raw responses,
+  request bodies, cookies, headers, or account identifiers.
+- Billing and aggregate-history sections retain their own last successful
+  values. A delayed or changed endpoint can degrade one section without
+  replacing the other with zeroes or breaking the existing provider card.
+
 Phase 291 runtime update:
 
 - Cursor personal usage now follows the same managed session-page boundary as Codex.

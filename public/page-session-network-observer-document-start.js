@@ -38,6 +38,12 @@
     Number.isFinite(parsedConfig.maxBodyLength) && parsedConfig.maxBodyLength > 0
       ? Math.min(250000, Math.floor(parsedConfig.maxBodyLength))
       : 20000;
+  const captureRequestBody = parsedConfig.captureRequestBody === true;
+  const maxRequestBodyLength =
+    Number.isFinite(parsedConfig.maxRequestBodyLength) &&
+    parsedConfig.maxRequestBodyLength > 0
+      ? Math.min(20000, Math.floor(parsedConfig.maxRequestBodyLength))
+      : 4000;
 
   if (matchUrlSubstrings.length === 0) {
     return;
@@ -48,6 +54,8 @@
     matchUrlSubstrings,
     maxEntries,
     maxBodyLength,
+    captureRequestBody,
+    maxRequestBodyLength,
     entries: [],
     originalFetch: globalThis.fetch.bind(globalThis),
     patchedFetch: null,
@@ -91,7 +99,13 @@
     reflectStore();
   }
 
-  async function captureResponse(response, requestUrl, method, transport) {
+  async function captureResponse(
+    response,
+    requestUrl,
+    method,
+    transport,
+    requestBodyText,
+  ) {
     const contentType = response.headers.get("content-type");
     if (contentType && !contentType.toLowerCase().includes("json")) {
       return;
@@ -112,12 +126,17 @@
       ok: response.ok,
       contentType,
       bodyText,
+      ...(store.captureRequestBody ? { requestBodyText } : {}),
       capturedAt: new Date().toISOString(),
       transport,
     });
   }
 
   store.patchedFetch = async (...args) => {
+    const requestBodyText =
+      store.captureRequestBody && typeof args[1]?.body === "string"
+        ? args[1].body.slice(0, store.maxRequestBodyLength)
+        : null;
     const response = await store.originalFetch(...args);
     const requestUrl =
       typeof args[0] === "string"
@@ -132,6 +151,7 @@
         requestUrl,
         args[1]?.method ?? (args[0] instanceof Request ? args[0].method : "GET"),
         "fetch",
+        requestBodyText,
       );
     }
 
@@ -145,6 +165,10 @@
   };
 
   XMLHttpRequest.prototype.send = function patchedSend(...args) {
+    const requestBodyText =
+      store.captureRequestBody && typeof args[0] === "string"
+        ? args[0].slice(0, store.maxRequestBodyLength)
+        : null;
     this.addEventListener(
       "loadend",
       () => {
@@ -175,6 +199,7 @@
           ok: this.status >= 200 && this.status < 400,
           contentType,
           bodyText,
+          ...(store.captureRequestBody ? { requestBodyText } : {}),
           capturedAt: new Date().toISOString(),
           transport: "xhr",
         });

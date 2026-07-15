@@ -103,6 +103,8 @@ describe("page-session network observer helpers", () => {
           ["/metrics"],
           20,
           20_000,
+          false,
+          4_000,
         ],
       }),
     );
@@ -173,6 +175,8 @@ describe("page-session network observer helpers", () => {
         matchUrlSubstrings: ["/daily-usage"],
         maxEntries: 4,
         maxBodyLength: 200_000,
+        captureRequestBody: true,
+        maxRequestBodyLength: 3_000,
         observeReload: true,
       },
       ["https://chatgpt.com/codex/*"],
@@ -191,6 +195,17 @@ describe("page-session network observer helpers", () => {
         persistAcrossSessions: false,
       }),
     ]);
+    expect(executeScript).toHaveBeenCalledWith(
+      expect.objectContaining({
+        args: [
+          "__ai_usage_dashboard_page_session_network_config__",
+          expect.objectContaining({
+            captureRequestBody: true,
+            maxRequestBodyLength: 3_000,
+          }),
+        ],
+      }),
+    );
 
     await cleanupPreparedNetworkObserver(23, scriptingApi, prepared);
 

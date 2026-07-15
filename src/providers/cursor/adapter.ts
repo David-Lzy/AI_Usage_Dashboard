@@ -39,6 +39,10 @@ import { createCursorPersonalPageClient } from "./personal-page-client";
 import { hasPageBindingFingerprint } from "../../shared/page-bindings";
 import { hasLivePageSessionApis } from "../page-session";
 import type { CursorPersonalUsageSnapshot } from "./personal-page-parser";
+import {
+  buildCursorUsageBillingFromContract,
+  mergeCursorUsageBilling,
+} from "../../shared/cursor-usage-billing";
 
 type CursorAdapterContext = {
   provider: ProviderSnapshot;
@@ -564,6 +568,15 @@ async function tryCursorPersonalSource({
     }
 
     const snapshot = result.snapshot;
+    const cursorUsage = mergeCursorUsageBilling(
+      snapshot.usageBillingContract
+        ? buildCursorUsageBillingFromContract(
+            snapshot.usageBillingContract,
+            snapshot.capturedAt,
+          )
+        : undefined,
+      provider.cursorUsage,
+    );
     const usageSummary = buildCursorPersonalUsageSummary(snapshot);
     const usageFacts = buildCursorPersonalUsageFacts(snapshot);
     const visiblePlanLabel =
@@ -616,6 +629,7 @@ async function tryCursorPersonalSource({
         usageBalances: undefined,
         usageFacts,
         usageSummary,
+        ...(cursorUsage ? { cursorUsage } : {}),
         lastSyncLabel: buildCursorPersonalRefreshLabel(personalSource),
       },
       setting: nextSetting,

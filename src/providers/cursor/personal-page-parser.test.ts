@@ -1,4 +1,5 @@
 import personalPageLiveEvidenceFixture from "../../../fixtures/cursor/personal-page-live-evidence.fixture.json";
+import usageBillingFixture from "../../../fixtures/cursor/usage-billing.fixture.json";
 import { describe, expect, it } from "vitest";
 
 import type {
@@ -11,6 +12,7 @@ import {
   parseCursorPersonalPageSummary,
   type CursorPersonalEvidenceFixture,
 } from "./personal-page-parser";
+import type { CursorUsageBillingContractFixture } from "./usage-billing-contract";
 
 describe("parseCursorPersonalEvidenceFixture", () => {
   it("parses the captured live evidence into a billing-period usage snapshot", () => {
@@ -121,10 +123,75 @@ describe("parseCursorPersonalPageSummary", () => {
 });
 
 describe("parseCursorPersonalLiveFixture", () => {
+  it("uses verified structured responses when the page DOM is still loading", () => {
+    const contractFixture =
+      usageBillingFixture as CursorUsageBillingContractFixture;
+    const fixture: CursorPersonalLiveFixture = {
+      capturedAt: "2026-07-15T00:00:00.000Z",
+      extractionMode: "network_observer",
+      routes: [
+        {
+          routeKey: "dashboard_usage",
+          pageLabel: "Cursor personal dashboard usage page",
+          urlPatterns: ["https://cursor.com/dashboard/usage*"],
+          status: "matched",
+          attempts: [],
+          matchedUrl: "https://cursor.com/dashboard/usage",
+          matchedTitle: "Cursor",
+          summary: {
+            url: "https://cursor.com/dashboard/usage",
+            title: "Cursor",
+            heading: "Usage",
+            localePrefix: null,
+            recommendedSurface: "network_observer",
+            textSnippets: ["Loading"],
+            scriptMarkers: {
+              hasNextDataScript: false,
+              hasNextFlightStream: false,
+              hasBuildManifest: false,
+              hasCloudflareChallenge: false,
+            },
+            keywordSignals: {
+              hasUsageSignal: false,
+              hasRemainingSignal: false,
+              hasRequestSignal: false,
+              hasResetSignal: false,
+              hasPlanSignal: false,
+            },
+          },
+          usageBillingContract: {
+            usageSummary: contractFixture.usageSummary,
+            planInfo: contractFixture.planInfo,
+            hardLimit: contractFixture.hardLimit,
+            usageEvents: contractFixture.usageEvents,
+          },
+        },
+      ],
+      decision: {
+        chosenRoute: "https://cursor.com/dashboard/usage",
+        chosenSurface: "network_observer",
+        rationale: "Matched structured usage responses.",
+      },
+    };
+
+    const result = parseCursorPersonalLiveFixture(fixture);
+
+    expect(result.status).toBe("ok");
+    if (result.status !== "ok") {
+      throw new Error("expected a parsed structured Cursor snapshot");
+    }
+    expect(result.snapshot.billingPeriodLabel).toBe(
+      `${contractFixture.usageSummary.billingCycleStart.slice(0, 10)} - ${contractFixture.usageSummary.billingCycleEnd.slice(0, 10)}`,
+    );
+    expect(result.snapshot.usageBillingContract?.usageEvents).toMatchObject({
+      totalUsageEventsCount: 2,
+    });
+  });
+
   it("returns logged_out when the matched Cursor route is a sign-in page", () => {
     const fixture: CursorPersonalLiveFixture = {
       capturedAt: "2026-04-22T00:00:00.000Z",
-      extractionMode: "dom",
+      extractionMode: "network_observer",
       routes: [
         {
           routeKey: "dashboard_usage",
@@ -135,6 +202,7 @@ describe("parseCursorPersonalLiveFixture", () => {
           matchedUrl: null,
           matchedTitle: null,
           summary: null,
+          usageBillingContract: null,
         },
       ],
       decision: {
@@ -159,7 +227,7 @@ describe("parseCursorPersonalLiveFixture", () => {
   it("returns capture_unavailable when the open Cursor tab cannot be read", () => {
     const fixture: CursorPersonalLiveFixture = {
       capturedAt: "2026-04-22T00:00:00.000Z",
-      extractionMode: "dom",
+      extractionMode: "network_observer",
       routes: [
         {
           routeKey: "dashboard_usage",
@@ -177,6 +245,7 @@ describe("parseCursorPersonalLiveFixture", () => {
           matchedUrl: null,
           matchedTitle: null,
           summary: null,
+          usageBillingContract: null,
         },
       ],
       decision: {
@@ -208,7 +277,7 @@ describe("parseCursorPersonalLiveFixture", () => {
   it("returns route_drift when a matched page loses billing-period signals", () => {
     const fixture: CursorPersonalLiveFixture = {
       capturedAt: "2026-04-22T00:00:00.000Z",
-      extractionMode: "dom",
+      extractionMode: "network_observer",
       routes: [
         {
           routeKey: "dashboard_usage",
@@ -239,6 +308,7 @@ describe("parseCursorPersonalLiveFixture", () => {
               hasPlanSignal: false,
             },
           },
+          usageBillingContract: null,
         },
       ],
       decision: {

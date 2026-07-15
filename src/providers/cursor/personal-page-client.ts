@@ -17,6 +17,7 @@ import {
   type CursorPersonalEvidenceFixture,
   type CursorPersonalParseResult,
 } from "./personal-page-parser";
+import { mergeCursorObservedUsageBillingContracts } from "./usage-billing-contract";
 
 export type CursorPersonalPageClientOptions = {
   source?: "fixture" | "live";
@@ -37,7 +38,7 @@ export type CursorPersonalPageClient = {
   ) => Promise<CursorPersonalPageUsageResult>;
 };
 
-const DEFAULT_HYDRATION_RETRY_ATTEMPTS = 4;
+const DEFAULT_HYDRATION_RETRY_ATTEMPTS = 2;
 const DEFAULT_HYDRATION_RETRY_DELAY_MS = 1_000;
 
 function delay(ms: number): Promise<void> {
@@ -52,7 +53,52 @@ function shouldRetryHydratingCursorRoute(
   fixture: CursorPersonalLiveFixture,
   result: CursorPersonalParseResult,
 ): boolean {
-  return result.status === "route_drift" && fixture.decision.chosenRoute !== null;
+  if (fixture.decision.chosenRoute === null) {
+    return false;
+  }
+
+  if (result.status === "route_drift") {
+    return true;
+  }
+
+  const contract = result.status === "ok"
+    ? result.snapshot.usageBillingContract
+    : null;
+  return (
+    result.status === "ok" &&
+    (!contract?.usageSummary || !contract.usageEvents)
+  );
+}
+
+function mergeCursorCaptureFixtures(
+  current: CursorPersonalLiveFixture,
+  previous: CursorPersonalLiveFixture,
+): CursorPersonalLiveFixture {
+  const decision = current.decision.chosenRoute
+    ? current.decision
+    : previous.decision;
+
+  return {
+    ...current,
+    decision,
+    routes: current.routes.map((route) => {
+      const previousRoute = previous.routes.find(
+        (candidate) => candidate.routeKey === route.routeKey,
+      );
+      const routeBase =
+        route.status === "matched" || previousRoute?.status !== "matched"
+          ? route
+          : previousRoute;
+      return {
+        ...routeBase,
+        summary: route.summary ?? previousRoute?.summary ?? null,
+        usageBillingContract: mergeCursorObservedUsageBillingContracts([
+          route.usageBillingContract,
+          previousRoute?.usageBillingContract,
+        ]),
+      };
+    }),
+  };
 }
 
 function buildBindingFromRouteCapture(
@@ -184,11 +230,12 @@ export function createCursorPersonalPageClient(
         attempt += 1
       ) {
         await delay(retryDelayMs);
-        fixture = await captureCursorPersonalLiveFixture(
+        const retryFixture = await captureCursorPersonalLiveFixture(
           pageSessionClient,
           pageSessionBinding,
-          captureOptions,
+          { openPageWhenMissing: false },
         );
+        fixture = mergeCursorCaptureFixtures(retryFixture, fixture);
         result = parseCursorPersonalLiveFixture(
           fixture as CursorPersonalLiveFixture,
         );

@@ -8,6 +8,8 @@ import {
   CURSOR_USAGE_SUMMARY_PATH,
   extractCursorObservedUsageBillingContract,
   isCursorUsageBillingUrl,
+  mergeCursorObservedUsageBillingContracts,
+  parseCursorFilteredUsageEventsBodyText,
   type CursorUsageBillingContractFixture,
 } from "./usage-billing-contract";
 
@@ -115,5 +117,49 @@ describe("Cursor usage and billing contract", () => {
         },
       ]),
     ).toBeNull();
+  });
+
+  it("merges bounded paginated usage events without duplicating rows", () => {
+    const fixture = usageBillingFixture as CursorUsageBillingContractFixture;
+    const firstPage = parseCursorFilteredUsageEventsBodyText(
+      JSON.stringify({
+        totalUsageEventsCount: 3,
+        usageEventsDisplay: [fixture.usageEvents.usageEventsDisplay[0]],
+      }),
+    );
+    const secondPage = parseCursorFilteredUsageEventsBodyText(
+      JSON.stringify({
+        totalUsageEventsCount: 3,
+        usageEventsDisplay: [
+          fixture.usageEvents.usageEventsDisplay[0],
+          fixture.usageEvents.usageEventsDisplay[1],
+        ],
+      }),
+    );
+    const merged = mergeCursorObservedUsageBillingContracts([
+      {
+        usageSummary: fixture.usageSummary,
+        planInfo: null,
+        hardLimit: null,
+        usageEvents: firstPage,
+      },
+      {
+        usageSummary: null,
+        planInfo: fixture.planInfo,
+        hardLimit: fixture.hardLimit,
+        usageEvents: secondPage,
+      },
+    ]);
+
+    expect(merged).toMatchObject({
+      usageSummary: fixture.usageSummary,
+      planInfo: fixture.planInfo,
+      hardLimit: fixture.hardLimit,
+    });
+    expect(merged?.usageEvents).toMatchObject({
+      totalUsageEventsCount: 3,
+    });
+    expect(merged?.usageEvents?.usageEventsDisplay).toHaveLength(2);
+    expect(parseCursorFilteredUsageEventsBodyText("not-json")).toBeNull();
   });
 });

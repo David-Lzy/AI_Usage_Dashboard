@@ -10,6 +10,7 @@ export type PageSessionObservedNetworkEntry = {
   ok: boolean | null;
   contentType: string | null;
   bodyText: string | null;
+  requestBodyText?: string | null;
   capturedAt: string;
   transport: "fetch" | "xhr";
 };
@@ -25,6 +26,8 @@ export type PageSessionNetworkObserverExtraction = {
   matchUrlSubstrings: string[];
   maxEntries?: number;
   maxBodyLength?: number;
+  captureRequestBody?: boolean;
+  maxRequestBodyLength?: number;
   observeReload?: boolean;
   requiredMatchUrlSubstrings?: string[];
   waitForRequiredEntriesTimeoutMs?: number;
@@ -63,6 +66,8 @@ export async function installNetworkObserverBridge(
       rawMatchUrlSubstrings: unknown,
       rawMaxEntries: unknown,
       rawMaxBodyLength: unknown,
+      rawCaptureRequestBody: unknown,
+      rawMaxRequestBodyLength: unknown,
     ) => {
       const bridgeScriptId =
         typeof rawBridgeScriptId === "string"
@@ -89,6 +94,8 @@ export async function installNetworkObserverBridge(
           matchUrlSubstrings: string[];
           maxEntries: number;
           maxBodyLength: number;
+          captureRequestBody: boolean;
+          maxRequestBodyLength: number;
           entries: PageSessionObservedNetworkEntry[];
           originalFetch?: typeof fetch;
           patchedFetch?: typeof fetch;
@@ -104,6 +111,8 @@ export async function installNetworkObserverBridge(
           matchUrlSubstrings: [],
           maxEntries,
           maxBodyLength,
+          captureRequestBody: false,
+          maxRequestBodyLength: 4_000,
           entries: [],
         };
       }
@@ -114,6 +123,14 @@ export async function installNetworkObserverBridge(
       );
       store.maxEntries = Math.max(store.maxEntries, maxEntries);
       store.maxBodyLength = Math.max(store.maxBodyLength, maxBodyLength);
+      store.captureRequestBody ||= rawCaptureRequestBody === true;
+      store.maxRequestBodyLength = Math.max(
+        store.maxRequestBodyLength,
+        typeof rawMaxRequestBodyLength === "number" &&
+          rawMaxRequestBodyLength > 0
+          ? Math.min(20_000, rawMaxRequestBodyLength)
+          : 4_000,
+      );
 
       function shouldCapture(url: string): boolean {
         return store.matchUrlSubstrings.some((substring) => url.includes(substring));
@@ -153,6 +170,7 @@ export async function installNetworkObserverBridge(
 
       async function captureFetchResponse(
         response: Response,
+        requestBodyText: string | null,
       ): Promise<PageSessionObservedNetworkEntry> {
         const contentType = response.headers.get("content-type");
         let bodyText: string | null = null;
@@ -174,6 +192,7 @@ export async function installNetworkObserverBridge(
           ok: response.ok,
           contentType,
           bodyText,
+          ...(store.captureRequestBody ? { requestBodyText } : {}),
           capturedAt: new Date().toISOString(),
           transport: "fetch",
         };
@@ -182,6 +201,10 @@ export async function installNetworkObserverBridge(
       if (!store.installed) {
         store.originalFetch = globalThis.fetch.bind(globalThis);
         store.patchedFetch = async (...args) => {
+          const requestBodyText =
+            store.captureRequestBody && typeof args[1]?.body === "string"
+              ? args[1].body.slice(0, store.maxRequestBodyLength)
+              : null;
           const response = await store.originalFetch!(...args);
           const requestUrl =
             typeof args[0] === "string"
@@ -192,7 +215,10 @@ export async function installNetworkObserverBridge(
 
           if (shouldCapture(requestUrl)) {
             try {
-              const entry = await captureFetchResponse(response);
+              const entry = await captureFetchResponse(
+                response,
+                requestBodyText,
+              );
               entry.method =
                 args[1]?.method ??
                 (args[0] instanceof Request ? args[0].method : "GET");
@@ -249,6 +275,10 @@ export async function installNetworkObserverBridge(
         };
 
         XMLHttpRequest.prototype.send = function patchedSend(...rest: unknown[]) {
+          const requestBodyText =
+            store.captureRequestBody && typeof rest[0] === "string"
+              ? rest[0].slice(0, store.maxRequestBodyLength)
+              : null;
           this.addEventListener(
             "loadend",
             () => {
@@ -278,6 +308,7 @@ export async function installNetworkObserverBridge(
                 ok: this.status >= 200 && this.status < 400,
                 contentType: this.getResponseHeader("content-type"),
                 bodyText,
+                ...(store.captureRequestBody ? { requestBodyText } : {}),
                 capturedAt: new Date().toISOString(),
                 transport: "xhr",
               });
@@ -311,6 +342,8 @@ export async function installNetworkObserverBridge(
       extraction.matchUrlSubstrings,
       extraction.maxEntries ?? 20,
       extraction.maxBodyLength ?? 20_000,
+      extraction.captureRequestBody ?? false,
+      extraction.maxRequestBodyLength ?? 4_000,
     ],
   });
 }
@@ -334,6 +367,8 @@ export async function prepareNetworkObserverForReload(
     matchUrlSubstrings: extraction.matchUrlSubstrings,
     maxEntries: extraction.maxEntries ?? 20,
     maxBodyLength: extraction.maxBodyLength ?? 20_000,
+    captureRequestBody: extraction.captureRequestBody ?? false,
+    maxRequestBodyLength: extraction.maxRequestBodyLength ?? 4_000,
   };
 
   await executeScriptResult(scriptingApi, {

@@ -23,6 +23,7 @@ import type {
   PageSessionScriptingApi,
 } from "./page-session-script-capture";
 import {
+  executeScriptResult,
   readIsolatedPageSnapshot,
   readMainWorldWindowValues,
   uniqueStrings,
@@ -343,12 +344,29 @@ async function reloadAndCapturePageSessionPage({
 
 export type PageSessionClient = {
   capture: (definition: PageSessionDefinition) => Promise<PageSessionResult>;
+  executeMainWorld?: <T>(
+    tabId: number,
+    func: (...args: unknown[]) => T | Promise<T>,
+    args?: unknown[],
+  ) => Promise<T>;
 };
 
 export function createPageSessionClient(
   options: PageSessionClientOptions = {},
 ): PageSessionClient {
   return {
+    async executeMainWorld<T>(
+      tabId: number,
+      func: (...args: unknown[]) => T | Promise<T>,
+      args?: unknown[],
+    ) {
+      return executeScriptResult<T>(getScriptingApi(options.scriptingApi), {
+        tabId,
+        world: "MAIN",
+        func,
+        args,
+      });
+    },
     async capture(definition) {
       const tabsApi = getTabsApi(options.tabsApi);
       const scriptingApi = getScriptingApi(options.scriptingApi);

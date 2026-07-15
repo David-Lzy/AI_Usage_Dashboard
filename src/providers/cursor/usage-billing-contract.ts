@@ -11,6 +11,8 @@ export const CURSOR_USAGE_BILLING_PATHS = [
   CURSOR_FILTERED_USAGE_EVENTS_PATH,
 ] as const;
 
+export const MAX_CURSOR_CAPTURED_USAGE_EVENTS = 1_000;
+
 export type CursorUsagePoolContract = {
   enabled: boolean;
   used: number | null;
@@ -270,6 +272,61 @@ function sanitizeUsageEvents(
   };
 }
 
+function usageEventKey(event: CursorUsageEventContract): string {
+  return JSON.stringify([
+    event.timestamp,
+    event.model,
+    event.kind,
+    event.requestsCosts,
+    event.usageBasedCosts,
+    event.isTokenBasedCall,
+    event.tokenUsage?.inputTokens ?? null,
+    event.tokenUsage?.outputTokens ?? null,
+    event.tokenUsage?.cacheReadTokens ?? null,
+    event.tokenUsage?.totalCents ?? null,
+    event.isChargeable,
+    event.chargedCents,
+  ]);
+}
+
+function mergeUsageEvents(
+  contracts: readonly CursorFilteredUsageEventsContract[],
+): CursorFilteredUsageEventsContract | null {
+  if (contracts.length === 0) {
+    return null;
+  }
+
+  const seen = new Set<string>();
+  const usageEventsDisplay: CursorUsageEventContract[] = [];
+
+  for (const contract of contracts) {
+    for (const event of contract.usageEventsDisplay) {
+      const key = usageEventKey(event);
+      if (seen.has(key)) {
+        continue;
+      }
+
+      seen.add(key);
+      usageEventsDisplay.push(event);
+      if (usageEventsDisplay.length >= MAX_CURSOR_CAPTURED_USAGE_EVENTS) {
+        break;
+      }
+    }
+
+    if (usageEventsDisplay.length >= MAX_CURSOR_CAPTURED_USAGE_EVENTS) {
+      break;
+    }
+  }
+
+  return {
+    totalUsageEventsCount: Math.max(
+      usageEventsDisplay.length,
+      ...contracts.map((contract) => contract.totalUsageEventsCount),
+    ),
+    usageEventsDisplay,
+  };
+}
+
 function parseBody(entry: ObservedEntry): unknown {
   if (entry.ok !== true || !entry.bodyText) {
     return null;
@@ -307,6 +364,49 @@ export function extractCursorObservedUsageBillingContract(
       usageEvents = sanitizeUsageEvents(parseBody(entry));
     }
   }
+
+  return usageSummary || planInfo || hardLimit || usageEvents
+    ? { usageSummary, planInfo, hardLimit, usageEvents }
+    : null;
+}
+
+export function parseCursorFilteredUsageEventsBodyText(
+  bodyText: string | null | undefined,
+): CursorFilteredUsageEventsContract | null {
+  if (!bodyText) {
+    return null;
+  }
+
+  try {
+    return sanitizeUsageEvents(JSON.parse(bodyText));
+  } catch {
+    return null;
+  }
+}
+
+export function mergeCursorObservedUsageBillingContracts(
+  contracts: readonly (CursorObservedUsageBillingContract | null | undefined)[],
+): CursorObservedUsageBillingContract | null {
+  const present = contracts.filter(
+    (contract): contract is CursorObservedUsageBillingContract =>
+      contract !== null && contract !== undefined,
+  );
+
+  if (present.length === 0) {
+    return null;
+  }
+
+  const usageEvents = mergeUsageEvents(
+    present.flatMap((contract) =>
+      contract.usageEvents ? [contract.usageEvents] : [],
+    ),
+  );
+  const usageSummary =
+    present.find((contract) => contract.usageSummary)?.usageSummary ?? null;
+  const planInfo =
+    present.find((contract) => contract.planInfo)?.planInfo ?? null;
+  const hardLimit =
+    present.find((contract) => contract.hardLimit)?.hardLimit ?? null;
 
   return usageSummary || planInfo || hardLimit || usageEvents
     ? { usageSummary, planInfo, hardLimit, usageEvents }

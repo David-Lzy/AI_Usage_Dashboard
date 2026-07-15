@@ -1,8 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import usageBillingFixture from "../../../fixtures/cursor/usage-billing.fixture.json";
 
 import type { ProviderSecrets, ProviderSetting, ProviderSnapshot } from "../types";
 import { createEmptyPageBinding } from "../../shared/page-bindings";
 import type { CursorPersonalParseResult } from "./personal-page-parser";
+import type { CursorUsageBillingContractFixture } from "./usage-billing-contract";
 
 const {
   createCursorOfficialClientMock,
@@ -107,11 +109,14 @@ describe("syncCursorProvider", () => {
 
   it("uses the personal usage-page path when no Cursor Admin API key is configured", async () => {
     const attemptedAt = new Date(2026, 3, 20, 14, 18);
+    const contractFixture =
+      usageBillingFixture as CursorUsageBillingContractFixture;
     const personalResult: CursorPersonalParseResult = {
       status: "ok",
       snapshot: {
         providerId: "cursor-personal-page",
         providerLabel: "Cursor",
+        capturedAt: "2026-04-20T04:48:00.000Z",
         measurementKind: "billing_period_usage",
         routeKey: "dashboard_usage",
         sourceUrl: "https://cursor.com/cn/dashboard/usage",
@@ -147,6 +152,12 @@ describe("syncCursorProvider", () => {
         ],
         onDemandUsageState: "off",
         exportCsvAvailable: true,
+        usageBillingContract: {
+          usageSummary: contractFixture.usageSummary,
+          planInfo: contractFixture.planInfo,
+          hardLimit: contractFixture.hardLimit,
+          usageEvents: contractFixture.usageEvents,
+        },
         usedAvailability: "window_only",
         remainingAvailability: "unavailable",
         resetAvailability: "window_only",
@@ -174,6 +185,14 @@ describe("syncCursorProvider", () => {
     expect(snapshot.used).toBeNull();
     expect(snapshot.remaining).toBeNull();
     expect(snapshot.total).toBeNull();
+    expect(snapshot.cursorUsage).toMatchObject({
+      billingCycleStart: contractFixture.usageSummary.billingCycleStart,
+      planName: contractFixture.planInfo.planInfo?.planName,
+      history: {
+        capturedEventCount: 2,
+        complete: true,
+      },
+    });
     expect(snapshot.resetAt).toBe("Mar 23 - Apr 21");
     expect(snapshot.resetLabel).toBe(
       "Your usage per day across this billing period",
@@ -602,6 +621,7 @@ describe("syncCursorProvider", () => {
       snapshot: {
         providerId: "cursor-personal-page",
         providerLabel: "Cursor",
+        capturedAt: "2026-04-20T04:48:00.000Z",
         measurementKind: "billing_period_usage",
         routeKey: "dashboard_usage",
         sourceUrl: "https://cursor.com/cn/dashboard/usage",
@@ -615,6 +635,7 @@ describe("syncCursorProvider", () => {
         spendCards: [],
         onDemandUsageState: "off",
         exportCsvAvailable: true,
+        usageBillingContract: null,
         usedAvailability: "window_only",
         remainingAvailability: "unavailable",
         resetAvailability: "window_only",

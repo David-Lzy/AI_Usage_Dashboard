@@ -1,12 +1,23 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { createEmptyPageBinding } from "../../shared/page-bindings";
+import usageBillingFixture from "../../../fixtures/cursor/usage-billing.fixture.json";
 import type { PageSessionClient, PageSessionResult } from "../page-session";
 import { createCursorPersonalPageClient } from "./personal-page-client";
+import {
+  CURSOR_FILTERED_USAGE_EVENTS_PATH,
+  CURSOR_USAGE_SUMMARY_PATH,
+  type CursorUsageBillingContractFixture,
+} from "./usage-billing-contract";
 
 const CURSOR_USAGE_URL = "https://cursor.com/cn/dashboard/usage";
 
-function buildMatchedCursorResult(html: string): PageSessionResult {
+function buildMatchedCursorResult(
+  html: string,
+  observedEntries: NonNullable<
+    Extract<PageSessionResult, { status: "matched" }>["page"]["observedNetwork"]
+  >["entries"] = [],
+): PageSessionResult {
   return {
     status: "matched",
     page: {
@@ -14,6 +25,11 @@ function buildMatchedCursorResult(html: string): PageSessionResult {
       title: "Cursor - Usage",
       heading: "Usage",
       html,
+      observedNetwork: {
+        matchUrlSubstrings: [],
+        maxEntries: 10,
+        entries: observedEntries,
+      },
     },
     target: {
       tabId: 91,
@@ -71,7 +87,32 @@ describe("createCursorPersonalPageClient", () => {
             <p>Mar 23 - Apr 21</p>
           </body>
         </html>
-      `);
+      `, (() => {
+        const fixture = usageBillingFixture as CursorUsageBillingContractFixture;
+        const capturedAt = "2026-07-15T00:00:00.000Z";
+        return [
+          {
+            url: `https://cursor.com${CURSOR_USAGE_SUMMARY_PATH}`,
+            method: "GET",
+            status: 200,
+            ok: true,
+            contentType: "application/json",
+            bodyText: JSON.stringify(fixture.usageSummary),
+            capturedAt,
+            transport: "fetch" as const,
+          },
+          {
+            url: `https://cursor.com${CURSOR_FILTERED_USAGE_EVENTS_PATH}`,
+            method: "POST",
+            status: 200,
+            ok: true,
+            contentType: "application/json",
+            bodyText: JSON.stringify(fixture.usageEvents),
+            capturedAt,
+            transport: "fetch" as const,
+          },
+        ];
+      })());
     });
     const client = createCursorPersonalPageClient({
       source: "live",
@@ -98,11 +139,16 @@ describe("createCursorPersonalPageClient", () => {
         active: false,
         closeOnUnmatched: true,
       },
-      reloadOnCaptureFailure: {
+      reloadBeforeCapture: {
         bypassCache: true,
-        waitForLoadTimeoutMs: 10_000,
+        waitForLoadTimeoutMs: 12_000,
         loadPollIntervalMs: 250,
+        postLoadDelayMs: 250,
       },
+      extraction: expect.objectContaining({
+        mode: "network_observer",
+        observeReload: true,
+      }),
     });
   });
 });

@@ -5,6 +5,10 @@ import type {
   CursorPersonalRouteKey,
   CursorRecommendedExtractionSurface,
 } from "./personal-page-capture";
+import {
+  mergeCursorObservedUsageBillingContracts,
+  type CursorObservedUsageBillingContract,
+} from "./usage-billing-contract";
 
 export type CursorPersonalEvidenceFixture = {
   capturedAt: string;
@@ -63,6 +67,7 @@ export type CursorPersonalSpendCard = {
 export type CursorPersonalUsageSnapshot = {
   providerId: "cursor-personal-page";
   providerLabel: "Cursor";
+  capturedAt: string;
   measurementKind: "billing_period_usage";
   routeKey: CursorPersonalRouteKey;
   sourceUrl: string;
@@ -76,6 +81,7 @@ export type CursorPersonalUsageSnapshot = {
   spendCards: CursorPersonalSpendCard[];
   onDemandUsageState: CursorOnDemandUsageState;
   exportCsvAvailable: boolean;
+  usageBillingContract: CursorObservedUsageBillingContract | null;
   usedAvailability: "window_only";
   remainingAvailability: "unavailable";
   resetAvailability: "window_only";
@@ -243,27 +249,45 @@ function parseSpendCards(textSnippets: string[]): CursorPersonalSpendCard[] {
 function parseSnapshotFromSummary(
   routeKey: CursorPersonalRouteKey,
   summary: CursorPersonalPageSummary,
+  usageBillingContract: CursorObservedUsageBillingContract | null = null,
+  capturedAt = new Date(0).toISOString(),
 ): CursorPersonalUsageSnapshot | null {
   const rawTextSnippets = summary.textSnippets
     .map(normalizeWhitespace)
     .filter(Boolean);
   const textSnippets = uniqueStrings(rawTextSnippets);
-  const billingPeriodLabel = parseBillingPeriodLabel(textSnippets);
+  const contractSummary = usageBillingContract?.usageSummary;
+  const billingPeriodLabel =
+    parseBillingPeriodLabel(textSnippets) ??
+    (contractSummary
+      ? `${contractSummary.billingCycleStart.slice(0, 10)} - ${contractSummary.billingCycleEnd.slice(0, 10)}`
+      : null);
   const usageSeriesLabel = parseUsageSeriesLabel(textSnippets);
-  const visiblePlanLabels = parseVisiblePlanLabels(textSnippets);
+  const visiblePlanLabels = uniqueStrings([
+    ...parseVisiblePlanLabels(textSnippets),
+    usageBillingContract?.planInfo?.planInfo?.planName ?? "",
+    contractSummary?.membershipType ?? "",
+  ]);
   const visibleSectionLabels = parseVisibleSectionLabels(textSnippets);
   const spendCards = parseSpendCards(rawTextSnippets);
-  const onDemandUsageState = parseOnDemandUsageState(textSnippets);
+  const onDemandUsageState =
+    parseOnDemandUsageState(textSnippets) ??
+    (contractSummary?.individualUsage.onDemand
+      ? contractSummary.individualUsage.onDemand.enabled
+        ? "on"
+        : "off"
+      : null);
   const exportCsvAvailable = parseExportCsvAvailable(textSnippets);
 
   const hasEnoughUsageSignals =
-    summary.keywordSignals.hasUsageSignal &&
+    (summary.keywordSignals.hasUsageSignal || usageBillingContract !== null) &&
     (billingPeriodLabel !== null ||
       usageSeriesLabel !== null ||
       onDemandUsageState !== null ||
       exportCsvAvailable ||
       spendCards.length > 0 ||
-      visibleSectionLabels.length > 0);
+      visibleSectionLabels.length > 0 ||
+      usageBillingContract !== null);
 
   if (!hasEnoughUsageSignals) {
     return null;
@@ -272,6 +296,7 @@ function parseSnapshotFromSummary(
   return {
     providerId: "cursor-personal-page",
     providerLabel: "Cursor",
+    capturedAt,
     measurementKind: "billing_period_usage",
     routeKey,
     sourceUrl: summary.url,
@@ -285,6 +310,7 @@ function parseSnapshotFromSummary(
     spendCards,
     onDemandUsageState,
     exportCsvAvailable,
+    usageBillingContract,
     usedAvailability: "window_only",
     remainingAvailability: "unavailable",
     resetAvailability: "window_only",
@@ -308,7 +334,11 @@ function chooseMatchedRoute(
     }
   }
 
-  return fixture.routes.find((route) => route.summary) ?? null;
+  return (
+    fixture.routes.find(
+      (route) => route.routeKey === "dashboard_usage" && route.summary,
+    ) ?? fixture.routes.find((route) => route.summary) ?? null
+  );
 }
 
 export function parseCursorPersonalPageSummary(
@@ -357,6 +387,10 @@ export function parseCursorPersonalLiveFixture(
   const snapshot = parseSnapshotFromSummary(
     matchedRoute.routeKey,
     matchedRoute.summary,
+    mergeCursorObservedUsageBillingContracts(
+      fixture.routes.map((route) => route.usageBillingContract),
+    ),
+    fixture.capturedAt,
   );
 
   if (!snapshot) {
@@ -398,5 +432,5 @@ export function parseCursorPersonalEvidenceFixture(
       hasResetSignal: true,
       hasPlanSignal: fixture.visiblePageSignals.planMetadataVisible,
     },
-  });
+  }, null, fixture.capturedAt);
 }

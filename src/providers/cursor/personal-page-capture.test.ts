@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+import usageBillingFixture from "../../../fixtures/cursor/usage-billing.fixture.json";
 
 import type {
   PageSessionCapturedPage,
@@ -9,6 +10,11 @@ import {
   captureCursorPersonalLiveFixture,
   summarizeCursorPersonalPage,
 } from "./personal-page-capture";
+import {
+  CURSOR_FILTERED_USAGE_EVENTS_PATH,
+  CURSOR_USAGE_SUMMARY_PATH,
+  type CursorUsageBillingContractFixture,
+} from "./usage-billing-contract";
 
 function buildCaptureClient(page: PageSessionCapturedPage): PageSessionClient {
   return {
@@ -210,6 +216,123 @@ describe("summarizeCursorPersonalPage", () => {
     expect(fixture.routes[0]).toMatchObject({
       status: "logged_out",
       matchedUrl: null,
+    });
+  });
+
+  it("captures structured usage data and follows bounded event pagination", async () => {
+    const contractFixture =
+      usageBillingFixture as CursorUsageBillingContractFixture;
+    const firstEvent = contractFixture.usageEvents.usageEventsDisplay[0]!;
+    const secondEvent = contractFixture.usageEvents.usageEventsDisplay[1]!;
+    const thirdEvent = {
+      ...secondEvent,
+      timestamp: "2026-07-15T12:00:00.000Z",
+    };
+    const page: PageSessionCapturedPage = {
+      url: "https://cursor.com/dashboard/usage?from=2026-06-15&to=2026-07-15",
+      title: "Cursor",
+      heading: "Usage",
+      html: "<html><body><h1>Usage</h1><p>Loading</p></body></html>",
+      observedNetwork: {
+        matchUrlSubstrings: [],
+        maxEntries: 10,
+        entries: [
+          {
+            url: `https://cursor.com${CURSOR_USAGE_SUMMARY_PATH}`,
+            method: "GET",
+            status: 200,
+            ok: true,
+            contentType: "application/json",
+            bodyText: JSON.stringify(contractFixture.usageSummary),
+            capturedAt: "2026-07-15T00:00:00.000Z",
+            transport: "fetch",
+          },
+          {
+            url: `https://cursor.com${CURSOR_FILTERED_USAGE_EVENTS_PATH}`,
+            method: "POST",
+            status: 200,
+            ok: true,
+            contentType: "application/json",
+            bodyText: JSON.stringify({
+              totalUsageEventsCount: 3,
+              usageEventsDisplay: [firstEvent],
+            }),
+            requestBodyText: JSON.stringify({
+              startDate: "2026-06-15",
+              endDate: "2026-07-15",
+              page: 1,
+              pageSize: 1,
+              teamId: 7,
+            }),
+            capturedAt: "2026-07-15T00:00:00.000Z",
+            transport: "fetch",
+          },
+        ],
+      },
+    };
+    const capture = vi.fn<PageSessionClient["capture"]>(async (definition) => {
+      if (!definition.urlPatterns.some((pattern) => pattern.includes("/usage"))) {
+        return { status: "not_found", attempts: [] };
+      }
+      return {
+        status: "matched",
+        page,
+        target: {
+          tabId: 77,
+          bindingMode: "auto",
+          active: false,
+          lastAccessed: null,
+        },
+        attempts: [
+          {
+            tabId: 77,
+            bindingMode: "auto",
+            status: "matched",
+            url: page.url,
+            title: page.title,
+          },
+        ],
+      };
+    });
+    const executeMainWorldMock = vi.fn(async () => [
+      JSON.stringify({
+        totalUsageEventsCount: 3,
+        usageEventsDisplay: [secondEvent],
+      }),
+      JSON.stringify({
+        totalUsageEventsCount: 3,
+        usageEventsDisplay: [thirdEvent],
+      }),
+    ]);
+    const executeMainWorld: NonNullable<PageSessionClient["executeMainWorld"]> =
+      async <T>() => (await executeMainWorldMock()) as T;
+
+    const fixture = await captureCursorPersonalLiveFixture({
+      capture,
+      executeMainWorld,
+    });
+
+    expect(fixture.extractionMode).toBe("network_observer");
+    expect(fixture.routes).toHaveLength(2);
+    expect(fixture.routes[0]?.usageBillingContract?.usageEvents).toMatchObject({
+      totalUsageEventsCount: 3,
+    });
+    expect(
+      fixture.routes[0]?.usageBillingContract?.usageEvents?.usageEventsDisplay,
+    ).toHaveLength(3);
+    expect(executeMainWorldMock).toHaveBeenCalledTimes(1);
+    expect(capture.mock.calls[0]?.[0]).toMatchObject({
+      reloadBeforeCapture: {
+        bypassCache: true,
+        waitForLoadTimeoutMs: 12_000,
+        loadPollIntervalMs: 250,
+        postLoadDelayMs: 250,
+      },
+      extraction: {
+        mode: "network_observer",
+        captureRequestBody: true,
+        observeReload: true,
+      },
     });
   });
 });
