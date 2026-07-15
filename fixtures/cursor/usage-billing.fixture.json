@@ -1,0 +1,81 @@
+{
+  "capturedAt": "2026-07-15T00:00:00.000Z",
+  "usageSummary": {
+    "billingCycleStart": "2026-07-01T00:00:00.000Z",
+    "billingCycleEnd": "2026-08-01T00:00:00.000Z",
+    "membershipType": "pro",
+    "limitType": "plan",
+    "isUnlimited": false,
+    "individualUsage": {
+      "plan": {
+        "enabled": true,
+        "used": 4200,
+        "limit": 10000,
+        "remaining": 5800,
+        "breakdown": {
+          "included": 4000,
+          "bonus": 200,
+          "total": 4200
+        },
+        "autoPercentUsed": 18,
+        "apiPercentUsed": 24,
+        "totalPercentUsed": 42
+      },
+      "onDemand": {
+        "enabled": true,
+        "used": 350,
+        "limit": 2000,
+        "remaining": 1650
+      }
+    }
+  },
+  "planInfo": {
+    "planInfo": {
+      "planName": "Pro",
+      "includedAmountCents": 10000,
+      "price": "$20",
+      "billingCycleEnd": "2026-08-01T00:00:00.000Z",
+      "planOwner": "individual"
+    }
+  },
+  "hardLimit": {
+    "noUsageBasedAllowed": false
+  },
+  "usageEvents": {
+    "totalUsageEventsCount": 2,
+    "usageEventsDisplay": [
+      {
+        "timestamp": "2026-07-14T10:00:00.000Z",
+        "model": "cursor-model-a",
+        "kind": "Included",
+        "requestsCosts": 1,
+        "usageBasedCosts": "0.12",
+        "isTokenBasedCall": true,
+        "tokenUsage": {
+          "inputTokens": 1200,
+          "outputTokens": 300,
+          "cacheReadTokens": 500,
+          "totalCents": 12
+        },
+        "isChargeable": false,
+        "chargedCents": 0
+      },
+      {
+        "timestamp": "2026-07-15T11:00:00.000Z",
+        "model": "cursor-model-b",
+        "kind": "On-Demand",
+        "requestsCosts": 1,
+        "usageBasedCosts": "0.20",
+        "isTokenBasedCall": true,
+        "tokenUsage": {
+          "inputTokens": 1500,
+          "outputTokens": 450,
+          "cacheReadTokens": 700,
+          "totalCents": 20
+        },
+        "isChargeable": true,
+        "chargedCents": 20
+      }
+    ]
+  }
+}
