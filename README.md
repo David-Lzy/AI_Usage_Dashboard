@@ -169,6 +169,8 @@ template, including the optional Chrome Web Store API handoff, are documented in
 
 - Chrome Web Store listing: published and reachable.
 - Current public-store metadata observed on 2026-07-15: `0.1.0-rc.34`.
+- Chrome Web Store API status observed on 2026-07-15: manifest version
+  `0.1.0.36` published and `0.2.0.1` submitted for review.
 - Current local package version: `0.2.0-rc.1`.
 - Current local Chrome manifest version: `0.2.0.1`.
 - Store publication status is tracked in

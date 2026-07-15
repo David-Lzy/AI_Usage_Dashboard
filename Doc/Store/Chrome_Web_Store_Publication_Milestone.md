@@ -15,7 +15,8 @@ Status note:
 
 - AI Usage Dashboard has a live Chrome Web Store listing
 - public Chrome Web Store metadata now shows `0.1.0-rc.34`
-- local source is prepared as `0.2.0-rc.1` for the next review submission
+- Chrome Web Store API status shows manifest version `0.1.0.36` published
+- local source `0.2.0-rc.1` / manifest `0.2.0.1` is submitted for review
 - no known critical user-facing bug is blocking normal use at this milestone
 - private upload receipts, package hashes, screenshots-in-progress, and
   submission handoff notes stay in ignored `.local/` material
@@ -27,15 +28,17 @@ Status note:
 - Public page status checked on 2026-07-15: reachable and listed.
 - Public page metadata observed on 2026-07-15 showed `0.1.0-rc.34`,
   updated 2026-07-12, 17 users, and 14 languages.
-- Local source prepared after this public milestone is `0.2.0-rc.1` with
-  manifest version `0.2.0.1`; it remains a review candidate until the store
-  listing updates.
+- Chrome Web Store API status observed on 2026-07-15 showed manifest version
+  `0.1.0.36` published at 100% and manifest version `0.2.0.1` submitted with
+  state `PENDING_REVIEW`.
+- Local source for that submission is `0.2.0-rc.1`; it remains a review
+  candidate until the submitted revision is approved and published.
 
 This means the project has crossed the public-store baseline milestone. Future
 store uploads should be treated as resubmissions from an already-published
-extension, not as a first submission. The `rc.34` resubmission has reached the
-public listing metadata; later candidates must not be described as published
-until the public listing changes.
+extension, not as a first submission. Public listing metadata can lag the
+Chrome Web Store API state; submitted candidates must not be described as
+published until the API reports the submitted revision as published.
 
 ## Stable Baseline
 
