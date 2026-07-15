@@ -169,7 +169,13 @@ Rules:
 
 ### Cursor
 
-Cursor personal-page and Cursor Team/API entries are separate display units. Cursor can be displayed only from truthful personal-dashboard or provider-source states. Do not imply an exact plan-wide remaining balance if the source only exposes billing-period context.
+Cursor personal-page and Cursor Team/API entries are separate display units.
+Cursor can be displayed only from truthful personal-dashboard or provider-source
+states. Personal billing summaries must keep plan-included API value separate
+from actual On-Demand charges, and the UI must not imply an exact plan-wide
+remaining request balance when the source does not expose one. Billing and
+aggregate-history modules may retain their last successful values independently;
+a partial refresh must not replace a valid module with a fabricated zero.
 
 ### Codex
 

@@ -102,6 +102,12 @@ const structuredCopyTargets = [
   },
   {
     surface: "provider cards and provider detail",
+    relativePath: "src/shared/cursor-usage-localized-copy.ts",
+    constants: ["CURSOR_USAGE_COPY"],
+    baseLocales: [],
+  },
+  {
+    surface: "provider cards and provider detail",
     relativePath: "src/shared/provider-diagnostic-warning-copy.ts",
     constants: ["WARNING_DIAGNOSTIC_COPY"],
     baseLocales: [],

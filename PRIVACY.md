@@ -64,6 +64,17 @@ raw evidence exports. If the page response contract changes, history display
 can become temporarily unavailable without replacing prior history with fake
 zero values or blocking current quota refresh.
 
+For Cursor personal usage and billing, the extension observes only verified
+structured responses from the signed-in Cursor Usage and Spending pages during
+a bounded provider refresh. It stores the normalized billing-cycle summary and
+at most 31 daily aggregate buckets. It does not store individual request rows,
+raw responses, page body text, cookies, request headers, account identifiers,
+or unrelated response fields. Billing and history retain their last successful
+values independently, so a delayed or changed page contract can produce a
+partial or saved-data state without replacing valid data with fake zeroes.
+Cursor aggregates are not included in configuration backups or raw evidence
+exports.
+
 ## Favicon Permission
 
 The Chrome `favicon` permission is used for the toolbar icon matching feature. When enabled by the user, the extension can display an icon that matches the selected provider badge/source, such as the favicon associated with a supported provider page. Successfully resolved provider favicon images may be cached locally for up to 7 days so the extension does not repeatedly ask Chrome for the same icon. The permission is not used for browsing-history collection.

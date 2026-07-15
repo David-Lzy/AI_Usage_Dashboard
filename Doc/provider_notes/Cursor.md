@@ -1,6 +1,6 @@
 # Cursor Provider Note
 
-Date: 2026-05-04
+Date: 2026-07-15
 
 Process rule:
 
@@ -30,6 +30,15 @@ Post-rc36 structured capture update:
 - Billing and aggregate-history sections retain their own last successful
   values. A delayed or changed endpoint can degrade one section without
   replacing the other with zeroes or breaking the existing provider card.
+- The normalized personal model keeps plan-included API value, Free/Bonus value,
+  and actual On-Demand charges as distinct amounts. Plan value is not presented
+  as money already charged.
+- Popup, side panel, dashboard, and Provider detail can show a compact billing
+  summary and bounded 7/30-day aggregates. Billing and history modules can be
+  hidden and reordered independently per surface; Provider detail also links
+  back to Cursor Usage and Spending.
+- These modules store summaries only. Individual Usage request rows remain on
+  the Cursor source page and are not persisted or rendered by the extension.
 
 Phase 291 runtime update:
 
@@ -214,10 +223,10 @@ Proposed field mapping:
 - `used`
   - sum `subscriptionIncludedReqs` across the current billing cycle from `POST /teams/daily-usage-data`
 - `total`
-  - infer as `billableUserCount * 500`
-  - `billableUserCount` is derived from `GET /teams/members`
-  - count roles `owner` and `member`
-  - exclude `free-owner`
+  - use an explicit allowance returned by the current contract when available
+  - only use the historical `billableUserCount * 500` rule for a live response
+    that explicitly identifies the older request-based cohort
+  - otherwise keep the total and remaining request count unknown
 - `remaining`
   - `max(total - used, 0)`
   - unavailable on the personal dashboard usage page until a proven exact remaining counter is exposed
@@ -240,9 +249,12 @@ Supplemental detail fields for later detail pages:
 - `apiKeyReqs`
 - `usageBasedReqs`
 
-Inference note:
+Historical inference note:
 
-- the `500 requests per paid user per month` mapping comes from the reviewed official pricing docs and should be validated against a live team before shipping the production adapter
+- the earlier `500 requests per paid user per month` mapping described an older
+  request-based plan model; it is no longer an unconditional current default
+- current adapters must prefer explicit live contract fields and retain an
+  unknown or partial state when the account cohort cannot be proven
 
 ## 7. Required Secrets And Extension Permissions
 
@@ -278,7 +290,8 @@ Fixture source note:
 Still needs a live team-admin credential before the production adapter phase:
 
 - confirm the exact request and response shapes returned today by the live API
-- confirm whether the team’s current plan still maps cleanly to `500` included requests per billable user
+- confirm the active team cohort and any explicit included allowance instead of
+  assuming a fixed request count
 - confirm whether `subscriptionCycleStart` is sufficient to compute the reset date without extra billing metadata
 - confirm rate limits and pagination behavior for the chosen endpoints under real usage
 

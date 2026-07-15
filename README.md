@@ -21,6 +21,10 @@ dashboard.
   Codex page exposes the verified structured history responses. Each history
   module can be hidden independently per popup, side-panel, or full-page surface,
   with an independent 7-day or 1-month view selected from its date-range button.
+- Shows normalized Cursor billing-cycle value, included model/API pools,
+  On-Demand charges, and bounded 7/30-day aggregate trends when the signed-in
+  Cursor pages expose the verified structured responses. Billing and history
+  modules can be hidden and reordered independently on each surface.
 - Keeps provider data boundaries visible: exact values, partial values,
   window-scoped values, policy-only data, or unavailable data are labeled
   differently.
@@ -39,7 +43,7 @@ dashboard.
 | Provider | Current source path | Current boundary |
 | --- | --- | --- |
 | Codex | Enterprise analytics or signed-in Codex usage page | Live usage windows where visible; no plan-wide absolute remaining balance is invented. |
-| Cursor | Team Admin API or signed-in personal dashboard page | Team/API data or personal billing-period context; exact remaining included personal requests are not claimed. |
+| Cursor | Team Admin API or signed-in Usage/Spending pages | Team/API data or normalized personal billing pools and aggregate history; plan value is kept separate from actual On-Demand charges, and exact remaining personal requests are not invented. |
 | Claude Code | Admin analytics or signed-in Claude Team usage page | Partial/window-scoped usage where available; exact all-plan remaining subscription quota is not claimed. |
 | Gemini Code Assist | Documented quota policy | Policy-only in this release. |
 | JetBrains AI | Retained implementation path | Deferred from the active release promise until org-visible usage evidence is reverified. |

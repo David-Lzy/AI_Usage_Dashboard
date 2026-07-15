@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import type { ReactNode } from "react";
 
 import type {
   CursorUsageBilling,
@@ -268,6 +269,8 @@ export function CursorUsageSummary({
   const historyPreference = modulePreferences.find(
     (preference) => preference.id === "usage_history",
   );
+  const isBillingVisible = Boolean(billingPreference?.visible);
+  const isHistoryVisible = Boolean(historyPreference?.visible);
   const cycleStart = formatDate(usage.billingCycleStart, locale);
   const cycleEnd = formatDate(usage.billingCycleEnd, locale);
   const updatedAt = formatDate(usage.capturedAt, locale);
@@ -283,8 +286,9 @@ export function CursorUsageSummary({
       ? clampPercent((usage.onDemand.usedCents / usage.onDemand.limitCents) * 100)
       : null;
   const visibleDays = useMemo(
-    () => usage.history?.days.slice(-rangeDays) ?? [],
-    [rangeDays, usage.history?.days],
+    () =>
+      isHistoryVisible ? (usage.history?.days.slice(-rangeDays) ?? []) : [],
+    [isHistoryVisible, rangeDays, usage.history?.days],
   );
   const dailyValues = useMemo(
     () => visibleDays.map((day) => metricValue(day.totals)),
@@ -309,151 +313,165 @@ export function CursorUsageSummary({
       ? `${visibleRangeStart} – ${visibleRangeEnd}`
       : null;
 
-  if (!billingPreference?.visible && !historyPreference?.visible) {
+  if (!isBillingVisible && !isHistoryVisible) {
     return null;
   }
+
+  const billingModule = (
+    <section
+      className={`cursor-usage-module${billingExpanded ? "" : " cursor-usage-module--collapsed"}`}
+      data-cursor-usage-module="billing_summary"
+      key="billing_summary"
+    >
+      <header className="cursor-usage-module__header">
+        <div className="cursor-usage-module__heading">
+          <p>{copy.billingSummary}</p>
+          {cycleStart && cycleEnd ? (
+            <span>{`${cycleStart} – ${cycleEnd}`}</span>
+          ) : updatedAt ? (
+            <span>{`${copy.updated} ${updatedAt}`}</span>
+          ) : null}
+        </div>
+        <CursorCollapseToggle
+          copy={copy}
+          expanded={billingExpanded}
+          onToggle={() => setBillingExpanded(!billingExpanded)}
+        />
+      </header>
+      {billingExpanded ? (
+        <div className="cursor-usage-module__content">
+          {usage.plan ? (
+            <>
+              <CursorProgressRow
+                label={copy.planUsage}
+                percent={planPercent}
+                valueLabel={planValue ?? copy.unavailable}
+              />
+              {usage.plan.autoPercentUsed !== null ? (
+                <CursorProgressRow
+                  label={copy.firstPartyPool}
+                  percent={clampPercent(usage.plan.autoPercentUsed)}
+                  valueLabel={`${new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(usage.plan.autoPercentUsed)}%`}
+                />
+              ) : null}
+              {usage.plan.apiPercentUsed !== null ? (
+                <CursorProgressRow
+                  label={copy.apiPool}
+                  percent={clampPercent(usage.plan.apiPercentUsed)}
+                  valueLabel={`${new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(usage.plan.apiPercentUsed)}%`}
+                />
+              ) : null}
+            </>
+          ) : (
+            <p className="cursor-usage-module__empty">{copy.unavailable}</p>
+          )}
+          {usage.onDemand ? (
+            <CursorProgressRow
+              label={copy.onDemand}
+              percent={onDemandPercent}
+              valueLabel={
+                usage.onDemand.enabled
+                  ? onDemandUsed && onDemandLimit
+                    ? `${onDemandUsed} / ${onDemandLimit}`
+                    : onDemandUsed ?? copy.enabled
+                  : copy.disabled
+              }
+            />
+          ) : null}
+          <div className="cursor-usage-module__facts">
+            {usage.plan?.includedUsageCents !== null &&
+            usage.plan?.includedUsageCents !== undefined ? (
+              <span>{`${copy.includedValue}: ${formatCurrency(usage.plan.includedUsageCents, locale)}`}</span>
+            ) : null}
+            {usage.plan?.bonusUsageCents !== null &&
+            usage.plan?.bonusUsageCents !== undefined ? (
+              <span>{`${copy.bonusValue}: ${formatCurrency(usage.plan.bonusUsageCents, locale)}`}</span>
+            ) : null}
+            {usage.onDemand?.usedCents !== null &&
+            usage.onDemand?.usedCents !== undefined ? (
+              <span>{`${copy.actualCharge}: ${formatCurrency(usage.onDemand.usedCents, locale)}`}</span>
+            ) : null}
+          </div>
+        </div>
+      ) : null}
+    </section>
+  );
+
+  const historyModule = (
+    <section
+      className={`cursor-usage-module${historyExpanded ? "" : " cursor-usage-module--collapsed"}`}
+      data-cursor-usage-module="usage_history"
+      key="usage_history"
+    >
+      <header className="cursor-usage-module__header">
+        <div className="cursor-usage-module__heading">
+          <p>{copy.recentUsage}</p>
+          {historyExpanded && usage.history ? (
+            <button
+              className="cursor-usage-module__range-toggle"
+              type="button"
+              onClick={() => setRangeDays(rangeDays === 7 ? 30 : 7)}
+            >
+              <span>{rangeDays === 7 ? copy.sevenDays : copy.thirtyDays}</span>
+              {visibleRangeLabel ? <span>{visibleRangeLabel}</span> : null}
+            </button>
+          ) : null}
+        </div>
+        <CursorCollapseToggle
+          copy={copy}
+          expanded={historyExpanded}
+          onToggle={() => setHistoryExpanded(!historyExpanded)}
+        />
+      </header>
+      {historyExpanded ? (
+        <div className="cursor-usage-module__content">
+          {visibleDays.length > 0 && maxDailyValue > 0 ? (
+            <>
+              <div
+                className="cursor-usage-daily-bars"
+                aria-label={`${copy.recentUsage}: ${rangeDays}`}
+              >
+                {dailyValues.map((value, index) => (
+                  <span
+                    key={visibleDays[index]?.date ?? index}
+                    style={{
+                      height: `${Math.max(3, (value / maxDailyValue) * 100)}%`,
+                    }}
+                    title={`${visibleDays[index]?.date}: ${new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(value)}`}
+                  />
+                ))}
+              </div>
+              <CursorBreakdownLegend
+                entries={modelBreakdowns}
+                label={copy.models}
+                locale={locale}
+              />
+              <CursorBreakdownLegend
+                entries={kindBreakdowns}
+                label={copy.usageTypes}
+                locale={locale}
+              />
+            </>
+          ) : (
+            <p className="cursor-usage-module__empty">{copy.noHistory}</p>
+          )}
+        </div>
+      ) : null}
+    </section>
+  );
+
+  const modules: Record<CursorUsageUiModuleId, ReactNode> = {
+    billing_summary: billingModule,
+    usage_history: historyModule,
+  };
 
   return (
     <div
       className={`cursor-usage-summary cursor-usage-summary--${surface} cursor-usage-summary--${density}`}
     >
-      {billingPreference?.visible ? (
-        <section
-          className={`cursor-usage-module${billingExpanded ? "" : " cursor-usage-module--collapsed"}`}
-          data-cursor-usage-module="billing_summary"
-          style={{ order: modulePreferences.indexOf(billingPreference) }}
-        >
-          <header className="cursor-usage-module__header">
-            <div className="cursor-usage-module__heading">
-              <p>{copy.billingSummary}</p>
-              {cycleStart && cycleEnd ? (
-                <span>{`${cycleStart} – ${cycleEnd}`}</span>
-              ) : updatedAt ? (
-                <span>{`${copy.updated} ${updatedAt}`}</span>
-              ) : null}
-            </div>
-            <CursorCollapseToggle
-              copy={copy}
-              expanded={billingExpanded}
-              onToggle={() => setBillingExpanded(!billingExpanded)}
-            />
-          </header>
-          {billingExpanded ? (
-            <div className="cursor-usage-module__content">
-            {usage.plan ? (
-              <>
-                <CursorProgressRow
-                  label={copy.planUsage}
-                  percent={planPercent}
-                  valueLabel={planValue ?? copy.unavailable}
-                />
-                {usage.plan.autoPercentUsed !== null ? (
-                  <CursorProgressRow
-                    label={copy.firstPartyPool}
-                    percent={clampPercent(usage.plan.autoPercentUsed)}
-                    valueLabel={`${new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(usage.plan.autoPercentUsed)}%`}
-                  />
-                ) : null}
-                {usage.plan.apiPercentUsed !== null ? (
-                  <CursorProgressRow
-                    label={copy.apiPool}
-                    percent={clampPercent(usage.plan.apiPercentUsed)}
-                    valueLabel={`${new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(usage.plan.apiPercentUsed)}%`}
-                  />
-                ) : null}
-              </>
-            ) : (
-              <p className="cursor-usage-module__empty">{copy.unavailable}</p>
-            )}
-            {usage.onDemand ? (
-              <CursorProgressRow
-                label={copy.onDemand}
-                percent={onDemandPercent}
-                valueLabel={
-                  usage.onDemand.enabled
-                    ? onDemandUsed && onDemandLimit
-                      ? `${onDemandUsed} / ${onDemandLimit}`
-                      : onDemandUsed ?? copy.enabled
-                    : copy.disabled
-                }
-              />
-            ) : null}
-            <div className="cursor-usage-module__facts">
-              {usage.plan?.includedUsageCents !== null && usage.plan?.includedUsageCents !== undefined ? (
-                <span>{`${copy.includedValue}: ${formatCurrency(usage.plan.includedUsageCents, locale)}`}</span>
-              ) : null}
-              {usage.plan?.bonusUsageCents !== null && usage.plan?.bonusUsageCents !== undefined ? (
-                <span>{`${copy.bonusValue}: ${formatCurrency(usage.plan.bonusUsageCents, locale)}`}</span>
-              ) : null}
-              {usage.onDemand?.usedCents !== null && usage.onDemand?.usedCents !== undefined ? (
-                <span>{`${copy.actualCharge}: ${formatCurrency(usage.onDemand.usedCents, locale)}`}</span>
-              ) : null}
-            </div>
-            </div>
-          ) : null}
-        </section>
-      ) : null}
-
-      {historyPreference?.visible ? (
-        <section
-          className={`cursor-usage-module${historyExpanded ? "" : " cursor-usage-module--collapsed"}`}
-          data-cursor-usage-module="usage_history"
-          style={{ order: modulePreferences.indexOf(historyPreference) }}
-        >
-          <header className="cursor-usage-module__header">
-            <div className="cursor-usage-module__heading">
-              <p>{copy.recentUsage}</p>
-              {historyExpanded && usage.history ? (
-                <button
-                  className="cursor-usage-module__range-toggle"
-                  type="button"
-                  onClick={() => setRangeDays(rangeDays === 7 ? 30 : 7)}
-                >
-                  <span>{rangeDays === 7 ? copy.sevenDays : copy.thirtyDays}</span>
-                  {visibleRangeLabel ? <span>{visibleRangeLabel}</span> : null}
-                </button>
-              ) : null}
-            </div>
-            <CursorCollapseToggle
-              copy={copy}
-              expanded={historyExpanded}
-              onToggle={() => setHistoryExpanded(!historyExpanded)}
-            />
-          </header>
-          {historyExpanded ? (
-            <div className="cursor-usage-module__content">
-            {visibleDays.length > 0 && maxDailyValue > 0 ? (
-              <>
-                <div
-                  className="cursor-usage-daily-bars"
-                  aria-label={`${copy.recentUsage}: ${rangeDays}`}
-                >
-                  {dailyValues.map((value, index) => (
-                    <span
-                      key={visibleDays[index]?.date ?? index}
-                      style={{ height: `${Math.max(3, (value / maxDailyValue) * 100)}%` }}
-                      title={`${visibleDays[index]?.date}: ${new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(value)}`}
-                    />
-                  ))}
-                </div>
-                <CursorBreakdownLegend
-                  entries={modelBreakdowns}
-                  label={copy.models}
-                  locale={locale}
-                />
-                <CursorBreakdownLegend
-                  entries={kindBreakdowns}
-                  label={copy.usageTypes}
-                  locale={locale}
-                />
-              </>
-            ) : (
-              <p className="cursor-usage-module__empty">{copy.noHistory}</p>
-            )}
-            </div>
-          ) : null}
-        </section>
-      ) : null}
+      {modulePreferences.map((preference) =>
+        preference.visible ? modules[preference.id] : null,
+      )}
     </div>
   );
 }

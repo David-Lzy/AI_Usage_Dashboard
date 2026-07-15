@@ -1,9 +1,24 @@
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { CursorUsageBilling } from "../../providers/types";
 import { buildCursorUsageLocalizedCopy } from "../cursor-usage-localized-copy";
+import type { WebStorageLike } from "../local-storage";
 import { CursorUsageSummary } from "./CursorUsageSummary";
+
+function useModulePreferences(
+  preferences: unknown,
+): void {
+  const storage: WebStorageLike = {
+    getItem: (key) =>
+      key === "ai-usage-dashboard:cursor-usage:module-preferences"
+        ? JSON.stringify(preferences)
+        : null,
+    setItem: () => undefined,
+    removeItem: () => undefined,
+  };
+  vi.stubGlobal("window", { localStorage: storage });
+}
 
 const USAGE: CursorUsageBilling = {
   capturedAt: "2026-07-15T00:00:00.000Z",
@@ -86,6 +101,10 @@ const USAGE: CursorUsageBilling = {
 };
 
 describe("CursorUsageSummary", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   it("distinguishes plan value from actual On-Demand charges", () => {
     const html = renderToStaticMarkup(
       <CursorUsageSummary
@@ -138,5 +157,49 @@ describe("CursorUsageSummary", () => {
     expect(html).toContain("Jul 14 – Jul 14");
     expect(html).toContain('data-cursor-usage-module="billing_summary"');
     expect(html).toContain('data-cursor-usage-module="usage_history"');
+  });
+
+  it("renders modules in the saved surface order", () => {
+    useModulePreferences({
+      popup: [
+        { id: "usage_history", visible: true },
+        { id: "billing_summary", visible: true },
+      ],
+    });
+
+    const html = renderToStaticMarkup(
+      <CursorUsageSummary
+        copy={buildCursorUsageLocalizedCopy("en")}
+        locale="en"
+        providerId="cursor-personal-page"
+        surface="popup"
+        usage={USAGE}
+      />,
+    );
+
+    expect(html.indexOf('data-cursor-usage-module="usage_history"')).toBeLessThan(
+      html.indexOf('data-cursor-usage-module="billing_summary"'),
+    );
+  });
+
+  it("does not mount an empty wrapper when both modules are hidden", () => {
+    useModulePreferences({
+      sidebar: [
+        { id: "billing_summary", visible: false },
+        { id: "usage_history", visible: false },
+      ],
+    });
+
+    const html = renderToStaticMarkup(
+      <CursorUsageSummary
+        copy={buildCursorUsageLocalizedCopy("en")}
+        locale="en"
+        providerId="cursor-personal-page"
+        surface="sidebar"
+        usage={USAGE}
+      />,
+    );
+
+    expect(html).toBe("");
   });
 });

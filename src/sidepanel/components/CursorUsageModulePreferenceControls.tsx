@@ -46,9 +46,7 @@ export function CursorUsageModulePreferenceControls({
         <p className="section-label">Cursor</p>
         <div className="section-title-with-info">
           <h3 className="section-title">{copy.billingSummary}</h3>
-          <MaterialInfoTooltip>
-            {`${copy.billingSummary} and ${copy.recentUsage} can be shown and reordered independently on each surface.`}
-          </MaterialInfoTooltip>
+          <MaterialInfoTooltip>{copy.settingsDetail}</MaterialInfoTooltip>
         </div>
       </div>
       <div className="usage-history-preferences__surface-grid">

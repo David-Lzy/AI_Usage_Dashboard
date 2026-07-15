@@ -621,7 +621,7 @@ export function ProviderDetailPage({
             usage={provider.cursorUsage}
           />
           <nav
-            aria-label="Cursor usage source links"
+            aria-label={cursorUsageCopy.sourceLinksLabel}
             className="cursor-usage-source-actions"
           >
             <a
@@ -630,7 +630,7 @@ export function ProviderDetailPage({
               rel="noreferrer"
               target="_blank"
             >
-              Cursor Usage
+              {cursorUsageCopy.usagePage}
             </a>
             <a
               className="text-button text-button--inline"
@@ -638,11 +638,13 @@ export function ProviderDetailPage({
               rel="noreferrer"
               target="_blank"
             >
-              Cursor Spending
+              {cursorUsageCopy.spendingPage}
             </a>
-            <span className="supporting-copy">
-              CSV export is available from the Cursor Usage page.
-            </span>
+            {provider.usageSummary?.includes("CSV export available") ? (
+              <span className="supporting-copy">
+                {cursorUsageCopy.csvAvailable}
+              </span>
+            ) : null}
           </nav>
         </section>
       ) : null}
