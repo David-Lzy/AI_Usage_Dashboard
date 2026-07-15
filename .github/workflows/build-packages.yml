@@ -181,9 +181,10 @@ jobs:
           ### Notes
 
           - Chrome Web Store remains the recommended install path for everyday Chrome users.
-          - Improves Codex refresh reliability when the signed-in Analytics page takes more than ten seconds to finish rendering its usage data.
-          - Performs at most one controlled page reload, reads the latest DOM after the bounded history wait, and continues bounded same-page recovery without replacing last-known-good history with false zero values.
-          - Keeps existing provider source-truth, privacy, permission, and browser-package boundaries unchanged.
+          - Adds normalized Cursor billing-cycle summaries for plan-included value, model/API pools, and actual On-Demand charges when the signed-in Cursor Usage and Spending pages expose the verified structured responses.
+          - Adds bounded 7-day and 30-day aggregate trends across popup, side panel, dashboard, and Provider detail, with per-surface visibility and ordering controls.
+          - Handles lazy or partial Cursor page responses without replacing last-known-good modules with false zero values, and stores no raw request rows, cookies, headers, or account identifiers.
+          - Keeps provider source-truth, manifest-permission, and browser-package boundaries unchanged.
           NOTES
 
       - name: Prepare release assets
