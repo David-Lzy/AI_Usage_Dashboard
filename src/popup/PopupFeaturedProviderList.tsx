@@ -33,6 +33,8 @@ import {
   readPopupUsageHistoryCollapsePreference,
   writePopupUsageHistoryCollapsePreference,
 } from "./popup-collapse-preferences";
+import { CursorUsageSummary } from "../shared/components/CursorUsageSummary";
+import { buildCursorUsageLocalizedCopy } from "../shared/cursor-usage-localized-copy";
 
 type PopupFeaturedProviderListProps = {
   ariaLabel: string;
@@ -106,6 +108,7 @@ export function PopupFeaturedProviderList({
     return null;
   }
   const usageHistoryCopy = buildUsageHistoryLocalizedCopy(i18n.resolvedLocale);
+  const cursorUsageCopy = buildCursorUsageLocalizedCopy(i18n.resolvedLocale);
 
   return (
     <section className="popup-quota-section" aria-label={ariaLabel}>
@@ -138,7 +141,9 @@ export function PopupFeaturedProviderList({
               ).filter((preference) => preference.visible)
             : [];
           const hasCachedProviderContent =
-            hasProviderProgress || visibleUsageHistoryModules.length > 0;
+            hasProviderProgress ||
+            visibleUsageHistoryModules.length > 0 ||
+            provider.cursorUsage !== undefined;
           const cardSurfaceTone =
             hasCachedProviderContent && provider.displayTone === "error"
               ? "neutral"
@@ -253,7 +258,7 @@ export function PopupFeaturedProviderList({
                 >
                   {providerProgress}
                 </div>
-              ) : (
+              ) : provider.cursorUsage ? null : (
                 <>
                   <div
                     className="popup-provider-card__chips"
@@ -267,17 +272,13 @@ export function PopupFeaturedProviderList({
                   </div>
                   <p
                     className="supporting-copy"
-                    data-popup-featured-primary={
-                      index === 0 ? "true" : undefined
-                    }
+                    data-popup-featured-primary={index === 0 ? "true" : undefined}
                   >
                     {card.primaryDetail}
                   </p>
                   <p
                     className="supporting-copy"
-                    data-popup-featured-secondary={
-                      index === 0 ? "true" : undefined
-                    }
+                    data-popup-featured-secondary={index === 0 ? "true" : undefined}
                   >
                     {card.secondaryDetail}
                   </p>
@@ -296,6 +297,15 @@ export function PopupFeaturedProviderList({
                     />
                   ))}
                 </div>
+              ) : null}
+              {provider.cursorUsage ? (
+                <CursorUsageSummary
+                  copy={cursorUsageCopy}
+                  locale={i18n.resolvedLocale}
+                  providerId={provider.providerId}
+                  surface="popup"
+                  usage={provider.cursorUsage}
+                />
               ) : null}
             </article>
           );

@@ -20,6 +20,8 @@ import {
   createDefaultUsageHistoryModulesBySurface,
   resolveProviderUsageHistoryModules,
 } from "../../shared/usage-history-visibility";
+import { CursorUsageSummary } from "../../shared/components/CursorUsageSummary";
+import { buildCursorUsageLocalizedCopy } from "../../shared/cursor-usage-localized-copy";
 
 type ProviderCardProps = {
   localePreference: AppLocalePreference;
@@ -58,6 +60,7 @@ export function ProviderCard({
     typeof window !== "undefined" ? window : undefined,
   );
   const usageHistoryCopy = buildUsageHistoryLocalizedCopy(i18n.resolvedLocale);
+  const cursorUsageCopy = buildCursorUsageLocalizedCopy(i18n.resolvedLocale);
   const showSessionPageContract =
     provider.sessionPageContractLabel !== null &&
     provider.sessionPageContractLabel !== provider.currentSourceContractLabel;
@@ -81,6 +84,15 @@ export function ProviderCard({
   );
   const visibleUsageContextLabel =
     buildRuntimeCommonCopy(i18n).visibleUsageContext;
+  const hasCursorUsage = provider.cursorUsage !== undefined;
+  const cardSurfaceTone =
+    hasCursorUsage && provider.displayTone === "error"
+      ? "neutral"
+      : provider.displayTone;
+  const cardStatusTone =
+    hasCursorUsage && provider.displayTone === "error"
+      ? "warning"
+      : provider.displayTone;
   const fidelityChipClassName =
     provider.currentSourceFidelityTone === "error"
       ? "meta-chip meta-chip--error"
@@ -108,7 +120,7 @@ export function ProviderCard({
 
   return (
     <article
-      className={`provider-card provider-card--${provider.displayTone}`}
+      className={`provider-card provider-card--${cardSurfaceTone}`}
       data-provider-id={provider.providerId}
     >
       <header className="provider-card__header">
@@ -127,24 +139,26 @@ export function ProviderCard({
                     ? "Warning"
                     : "Sync issue"
             }
-            tone={provider.displayTone}
+            tone={cardStatusTone}
           />
         </div>
       </header>
 
       <div className="provider-card__body">
-        <section
-          className="provider-card__summary"
-          aria-label={`${provider.providerLabel} usage summary`}
-        >
-          <p className="provider-card__usage-label">{usageLabel}</p>
-          <div className="provider-card__summary-details">
-            <p className="supporting-copy">{localizedResetLabel}</p>
-            <p className="supporting-copy">
-              {provider.currentSourceContractDetail}
-            </p>
-          </div>
-        </section>
+        {!hasCursorUsage ? (
+          <section
+            className="provider-card__summary"
+            aria-label={`${provider.providerLabel} usage summary`}
+          >
+            <p className="provider-card__usage-label">{usageLabel}</p>
+            <div className="provider-card__summary-details">
+              <p className="supporting-copy">{localizedResetLabel}</p>
+              <p className="supporting-copy">
+                {provider.currentSourceContractDetail}
+              </p>
+            </div>
+          </section>
+        ) : null}
 
         {hasProviderProgressItems ? (
           <section className="provider-card__progress-surface">
@@ -162,7 +176,7 @@ export function ProviderCard({
           </section>
         ) : null}
 
-        {hasUsageFacts && provider.usageFacts ? (
+        {!hasCursorUsage && hasUsageFacts && provider.usageFacts ? (
           <section className="provider-card__progress-surface">
             <UsageFactsList facts={provider.usageFacts} density="compact" />
           </section>
@@ -185,46 +199,65 @@ export function ProviderCard({
             )
           : null}
 
-        <div className="provider-card__meta" aria-label="Provider source context">
-          <span className="meta-chip">{provider.currentSourceLabel}</span>
-          <span className="meta-chip">{provider.currentSourceContractLabel}</span>
-          <span className={fidelityChipClassName}>
-            {provider.currentSourceFidelityLabel}
-          </span>
-          <span className="meta-chip">{localizedLastSyncLabel}</span>
-          {provider.currentSourceStateKind === "credential_missing" ||
-          provider.currentSourceStateKind === "open_page_required" ||
-          provider.currentSourceStateKind === "logged_out" ||
-          provider.currentSourceStateKind === "capture_unavailable" ? (
-            <span
-              className={`meta-chip ${provider.currentSourceStateTone === "error" ? "meta-chip--error" : "meta-chip--warning"}`}
-            >
-              {provider.currentSourceStateLabel}
-            </span>
-          ) : null}
-          {provider.permissionStatus === "missing" ? (
-            <span className="meta-chip meta-chip--warning">
-              Host access missing
-            </span>
-          ) : null}
-          {provider.warningReason ? (
-            <span className="meta-chip meta-chip--warning">
-              {provider.warningReason}
-            </span>
-          ) : null}
-        </div>
-        <p className="supporting-copy provider-card__availability">
-          {provider.currentSourceAvailabilitySummary}
-        </p>
-        {showUsageSummary ? (
-          <p className="supporting-copy provider-card__availability">
-            {provider.usageSummary}
-          </p>
+        {provider.cursorUsage ? (
+          <CursorUsageSummary
+            copy={cursorUsageCopy}
+            locale={i18n.resolvedLocale}
+            providerId={provider.providerId}
+            surface={progressSurface}
+            usage={provider.cursorUsage}
+          />
         ) : null}
-        {showSessionPageContract ? (
-          <p className="supporting-copy provider-card__availability">
-            Session-page track: {provider.sessionPageContractLabel}
-          </p>
+
+        {!hasCursorUsage ? (
+          <>
+            <div
+              className="provider-card__meta"
+              aria-label="Provider source context"
+            >
+              <span className="meta-chip">{provider.currentSourceLabel}</span>
+              <span className="meta-chip">
+                {provider.currentSourceContractLabel}
+              </span>
+              <span className={fidelityChipClassName}>
+                {provider.currentSourceFidelityLabel}
+              </span>
+              <span className="meta-chip">{localizedLastSyncLabel}</span>
+              {provider.currentSourceStateKind === "credential_missing" ||
+              provider.currentSourceStateKind === "open_page_required" ||
+              provider.currentSourceStateKind === "logged_out" ||
+              provider.currentSourceStateKind === "capture_unavailable" ? (
+                <span
+                  className={`meta-chip ${provider.currentSourceStateTone === "error" ? "meta-chip--error" : "meta-chip--warning"}`}
+                >
+                  {provider.currentSourceStateLabel}
+                </span>
+              ) : null}
+              {provider.permissionStatus === "missing" ? (
+                <span className="meta-chip meta-chip--warning">
+                  Host access missing
+                </span>
+              ) : null}
+              {provider.warningReason ? (
+                <span className="meta-chip meta-chip--warning">
+                  {provider.warningReason}
+                </span>
+              ) : null}
+            </div>
+            <p className="supporting-copy provider-card__availability">
+              {provider.currentSourceAvailabilitySummary}
+            </p>
+            {showUsageSummary ? (
+              <p className="supporting-copy provider-card__availability">
+                {provider.usageSummary}
+              </p>
+            ) : null}
+            {showSessionPageContract ? (
+              <p className="supporting-copy provider-card__availability">
+                Session-page track: {provider.sessionPageContractLabel}
+              </p>
+            ) : null}
+          </>
         ) : null}
       </div>
 
