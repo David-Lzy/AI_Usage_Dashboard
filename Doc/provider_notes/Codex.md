@@ -515,3 +515,28 @@ Current refresh behavior:
 
 This retry behavior does not add a timer or background polling path. It runs
 only inside the existing user/background Codex refresh operation.
+
+## 23. 2026-07-15 Slow Page Hydration Recovery
+
+The Codex Analytics page can remain in a browser-complete but data-incomplete
+state for more than ten seconds, especially in a background tab. The refresh
+flow now treats browser load completion and usable Codex content as separate
+readiness signals.
+
+Current recovery behavior:
+
+- one refresh operation performs at most one controlled page reload
+- a script-execution failure after that reload is retried against the same page
+  instead of immediately causing a second reload that restarts hydration
+- the bounded structured-history wait is now 15 seconds
+- the DOM snapshot is taken after that history wait, so quota parsing sees the
+  newest rendered page rather than the loading shell captured before responses
+  arrived
+- if the route is valid but its quota cards are still incomplete, the client
+  continues bounded same-page inspection for up to about 18 additional seconds
+- every retry keeps the first capture's valid history responses and does not
+  persist raw page text, cookies, headers, or unfiltered network responses
+
+If the page remains unreadable after the bounded recovery window, the provider
+still reports an explicit capture failure and preserves the last valid history.
+It does not convert a slow or failed page into zero usage.

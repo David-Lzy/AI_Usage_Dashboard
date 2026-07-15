@@ -240,11 +240,6 @@ async function capturePageSessionPage(
     extraction.mode === "boot_data"
       ? uniqueStrings(extraction.scriptSelectors)
       : [];
-  const baseSnapshot = await readIsolatedPageSnapshot(
-    tabId,
-    scriptingApi,
-    scriptSelectors,
-  );
   let bootData:
     | {
         scripts: PageSessionCapturedScriptMap;
@@ -252,6 +247,24 @@ async function capturePageSessionPage(
       }
     | undefined;
   let observedNetwork: PageSessionObservedNetworkState | undefined;
+
+  if (extraction.mode === "network_observer") {
+    await installNetworkObserverBridge(tabId, scriptingApi, extraction);
+    await waitForRequiredNetworkObserverEntries(
+      tabId,
+      scriptingApi,
+      extraction,
+    );
+  }
+
+  // Read the DOM after the bounded network wait. React/Next pages can finish
+  // rendering while their data requests settle, so an earlier snapshot would
+  // preserve a stale loading shell even when the requested data has arrived.
+  const baseSnapshot = await readIsolatedPageSnapshot(
+    tabId,
+    scriptingApi,
+    scriptSelectors,
+  );
 
   if (extraction.mode === "boot_data") {
     const windowValues = await readMainWorldWindowValues(
@@ -268,12 +281,6 @@ async function capturePageSessionPage(
   }
 
   if (extraction.mode === "network_observer") {
-    await installNetworkObserverBridge(tabId, scriptingApi, extraction);
-    await waitForRequiredNetworkObserverEntries(
-      tabId,
-      scriptingApi,
-      extraction,
-    );
     observedNetwork = await readNetworkObserverBridge(tabId, scriptingApi);
   }
 

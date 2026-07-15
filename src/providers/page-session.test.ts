@@ -406,6 +406,7 @@ describe("createPageSessionClient", () => {
   });
 
   it("installs the network observer bridge and reads observed responses", async () => {
+    const captureOrder: string[] = [];
     const executeScript = vi.fn(
       async ({
         world,
@@ -415,10 +416,17 @@ describe("createPageSessionClient", () => {
         args?: unknown[];
       }) => {
         if (world === "MAIN") {
+          if (args?.[0] === "__AI_USAGE_DASHBOARD_PAGE_SESSION__") {
+            captureOrder.push("wait-for-network");
+            return [{ result: true }];
+          }
+
+          captureOrder.push("install-observer");
           return [{ result: { installed: true, entryCount: 1 } }];
         }
 
         if (Array.isArray(args?.[0])) {
+          captureOrder.push("read-dom");
           return [
             {
               result: {
@@ -433,6 +441,7 @@ describe("createPageSessionClient", () => {
         }
 
         if (typeof args?.[0] === "string") {
+          captureOrder.push("read-network");
           return [
             {
               result: JSON.stringify({
@@ -473,6 +482,8 @@ describe("createPageSessionClient", () => {
         mode: "network_observer",
         matchUrlSubstrings: ["/metrics"],
         maxEntries: 5,
+        requiredMatchUrlSubstrings: ["/metrics"],
+        waitForRequiredEntriesTimeoutMs: 9_000,
       },
       match() {
         return "matched";
@@ -501,6 +512,12 @@ describe("createPageSessionClient", () => {
         },
       ],
     });
+    expect(captureOrder).toEqual([
+      "install-observer",
+      "wait-for-network",
+      "read-dom",
+      "read-network",
+    ]);
   });
 
   it("reports capture_unavailable when a candidate tab cannot be read", async () => {

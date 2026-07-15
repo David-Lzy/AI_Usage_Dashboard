@@ -125,12 +125,7 @@ describe("summarizeCodexPersonalPage", () => {
       loadPollIntervalMs: 250,
       postLoadDelayMs: 3_000,
     });
-    expect(capturedDefinitions[0].reloadOnCaptureFailure).toEqual({
-      bypassCache: true,
-      waitForLoadTimeoutMs: 10_000,
-      loadPollIntervalMs: 250,
-      postLoadDelayMs: 3_000,
-    });
+    expect(capturedDefinitions[0].reloadOnCaptureFailure).toBeUndefined();
     expect(capturedDefinitions[0].urlPatterns).toEqual([
       "https://chatgpt.com/codex/cloud/settings/analytics*",
     ]);
@@ -140,7 +135,7 @@ describe("summarizeCodexPersonalPage", () => {
         "/backend-api/wham/usage/daily-token-usage-breakdown",
         "/backend-api/wham/analytics/daily-workspace-usage-counts",
       ]),
-      waitForRequiredEntriesTimeoutMs: 9_000,
+      waitForRequiredEntriesTimeoutMs: 15_000,
     });
     expect(capturedDefinitions[0].openWhenMissing).toEqual({
       url: "https://chatgpt.com/codex/cloud/settings/analytics",

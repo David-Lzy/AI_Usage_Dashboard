@@ -255,7 +255,6 @@ async function captureRoute(
     ...(reloadPageBeforeCapture
       ? {
           reloadBeforeCapture: reloadOptions,
-          reloadOnCaptureFailure: reloadOptions,
         }
       : {}),
     ...(options.openPageWhenMissing && route.routeKey === "cloud_analytics"
@@ -280,7 +279,7 @@ async function captureRoute(
                   requiredMatchUrlSubstrings: [
                     ...CODEX_USAGE_HISTORY_PATHS,
                   ],
-                  waitForRequiredEntriesTimeoutMs: 9_000,
+                  waitForRequiredEntriesTimeoutMs: 15_000,
                 }
               : {}),
           }

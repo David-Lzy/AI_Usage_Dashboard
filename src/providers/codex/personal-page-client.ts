@@ -39,8 +39,8 @@ export type CodexPersonalPageClient = {
   ) => Promise<CodexPersonalPageUsageResult>;
 };
 
-const DEFAULT_HYDRATION_RETRY_ATTEMPTS = 8;
-const DEFAULT_HYDRATION_RETRY_DELAY_MS = 1_000;
+const DEFAULT_HYDRATION_RETRY_ATTEMPTS = 12;
+const DEFAULT_HYDRATION_RETRY_DELAY_MS = 1_500;
 
 function delay(ms: number): Promise<void> {
   if (ms <= 0) {

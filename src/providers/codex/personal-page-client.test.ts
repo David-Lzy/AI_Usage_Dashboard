@@ -186,4 +186,61 @@ describe("createCodexPersonalPageClient", () => {
     expect(result.status).toBe("ok");
     expect(analyticsCaptureCount).toBe(2);
   });
+
+  it("keeps inspecting the same slow page without reloading it again", async () => {
+    let analyticsCaptureCount = 0;
+    const analyticsDefinitions: Parameters<PageSessionClient["capture"]>[0][] = [];
+    const capture = vi.fn<PageSessionClient["capture"]>(async (definition) => {
+      if (!definition.urlPatterns.includes(`${CODEX_ANALYTICS_URL}*`)) {
+        return {
+          status: "not_found",
+          attempts: [],
+        };
+      }
+
+      analyticsCaptureCount += 1;
+      analyticsDefinitions.push(definition);
+
+      if (analyticsCaptureCount <= 10) {
+        return buildMatchedCodexResult(`
+          <html>
+            <body>
+              <h1>Codex analysis</h1>
+              <p>Usage limits loading</p>
+            </body>
+          </html>
+        `);
+      }
+
+      return buildMatchedCodexResult(`
+        <html>
+          <body>
+            <h1>Codex analysis</h1>
+            <p>Weekly usage limit</p>
+            <p>71%</p>
+            <p>remaining</p>
+          </body>
+        </html>
+      `);
+    });
+    const client = createCodexPersonalPageClient({
+      source: "live",
+      pageSessionClient: { capture },
+      hydrationRetryAttempts: 12,
+      hydrationRetryDelayMs: 0,
+    });
+
+    const { result } = await client.getUsageSnapshot(createEmptyPageBinding());
+
+    expect(result.status).toBe("ok");
+    expect(analyticsCaptureCount).toBe(11);
+    expect(analyticsDefinitions[0].reloadBeforeCapture).toBeDefined();
+    expect(
+      analyticsDefinitions.slice(1).every(
+        (definition) =>
+          definition.reloadBeforeCapture === undefined &&
+          definition.reloadOnCaptureFailure === undefined,
+      ),
+    ).toBe(true);
+  });
 });
