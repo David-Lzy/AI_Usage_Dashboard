@@ -15,7 +15,7 @@ Status note:
 
 - AI Usage Dashboard has a live Chrome Web Store listing
 - public Chrome Web Store metadata now shows `0.1.0-rc.34`
-- local source is prepared as `0.1.0-rc.35` for the next review submission
+- local source is prepared as `0.1.0-rc.36` for the next review submission
 - no known critical user-facing bug is blocking normal use at this milestone
 - private upload receipts, package hashes, screenshots-in-progress, and
   submission handoff notes stay in ignored `.local/` material
@@ -27,8 +27,8 @@ Status note:
 - Public page status checked on 2026-07-15: reachable and listed.
 - Public page metadata observed on 2026-07-15 showed `0.1.0-rc.34`,
   updated 2026-07-12, 17 users, and 14 languages.
-- Local source prepared after this public milestone is `0.1.0-rc.35` with
-  manifest version `0.1.0.35`; it remains a review candidate until the store
+- Local source prepared after this public milestone is `0.1.0-rc.36` with
+  manifest version `0.1.0.36`; it remains a review candidate until the store
   listing updates.
 
 This means the project has crossed the public-store baseline milestone. Future

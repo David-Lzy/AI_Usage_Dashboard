@@ -181,9 +181,9 @@ jobs:
           ### Notes
 
           - Chrome Web Store remains the recommended install path for everyday Chrome users.
-          - Adds bounded Codex personal-usage and turn-history views across popup, dashboard, side panel, and Provider detail surfaces, with independent 7-day or 1-month ranges and per-surface visibility/order controls.
-          - Improves Codex refresh reliability when the signed-in Analytics page hydrates lazily, while preserving the last valid history module when a partial response is unavailable.
-          - Refines compact history charts, legends, collapse controls, theme scheduling, and toolbar interactions without changing provider source-truth boundaries.
+          - Improves Codex refresh reliability when the signed-in Analytics page takes more than ten seconds to finish rendering its usage data.
+          - Performs at most one controlled page reload, reads the latest DOM after the bounded history wait, and continues bounded same-page recovery without replacing last-known-good history with false zero values.
+          - Keeps existing provider source-truth, privacy, permission, and browser-package boundaries unchanged.
           NOTES
 
       - name: Prepare release assets
