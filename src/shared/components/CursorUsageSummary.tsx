@@ -10,6 +10,7 @@ import type {
 } from "../../providers/types";
 import {
   readCursorUsageCollapsePreference,
+  readCursorUsageUiPreferences,
   writeCursorUsageCollapsePreference,
   type CursorUsageUiModuleId,
 } from "../cursor-usage-ui-preferences";
@@ -24,6 +25,7 @@ type CursorUsageSummaryProps = {
   providerId: ProviderId;
   surface: DisplaySurface;
   usage: CursorUsageBilling;
+  density?: "compact" | "detail";
 };
 
 type AggregateBreakdown = {
@@ -44,6 +46,25 @@ function formatDate(value: string | null, locale: string): string | null {
     return null;
   }
   const date = new Date(value);
+  if (!Number.isFinite(date.getTime())) {
+    return null;
+  }
+  return new Intl.DateTimeFormat(locale, {
+    month: "short",
+    day: "numeric",
+  }).format(date);
+}
+
+function formatHistoryDate(value: string | undefined, locale: string): string | null {
+  if (!value) {
+    return null;
+  }
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+  if (!match) {
+    return null;
+  }
+  const [, year, month, day] = match;
+  const date = new Date(Number(year), Number(month) - 1, Number(day));
   if (!Number.isFinite(date.getTime())) {
     return null;
   }
@@ -225,6 +246,7 @@ export function CursorUsageSummary({
   providerId,
   surface,
   usage,
+  density = "compact",
 }: CursorUsageSummaryProps) {
   const [billingExpanded, setBillingExpanded] = usePersistedExpandedState(
     providerId,
@@ -236,7 +258,16 @@ export function CursorUsageSummary({
     surface,
     "usage_history",
   );
-  const [rangeDays, setRangeDays] = useState<CursorUsageRangeDays>(7);
+  const [rangeDays, setRangeDays] = useState<CursorUsageRangeDays>(
+    density === "detail" ? 30 : 7,
+  );
+  const modulePreferences = readCursorUsageUiPreferences()[surface];
+  const billingPreference = modulePreferences.find(
+    (preference) => preference.id === "billing_summary",
+  );
+  const historyPreference = modulePreferences.find(
+    (preference) => preference.id === "usage_history",
+  );
   const cycleStart = formatDate(usage.billingCycleStart, locale);
   const cycleEnd = formatDate(usage.billingCycleEnd, locale);
   const updatedAt = formatDate(usage.capturedAt, locale);
@@ -268,27 +299,47 @@ export function CursorUsageSummary({
     () => aggregateBreakdowns(visibleDays, (day) => day.byKind),
     [visibleDays],
   );
+  const visibleRangeStart = formatHistoryDate(visibleDays[0]?.date, locale);
+  const visibleRangeEnd = formatHistoryDate(
+    visibleDays[visibleDays.length - 1]?.date,
+    locale,
+  );
+  const visibleRangeLabel =
+    visibleRangeStart && visibleRangeEnd
+      ? `${visibleRangeStart} – ${visibleRangeEnd}`
+      : null;
+
+  if (!billingPreference?.visible && !historyPreference?.visible) {
+    return null;
+  }
 
   return (
-    <div className={`cursor-usage-summary cursor-usage-summary--${surface}`}>
-      <section className={`cursor-usage-module${billingExpanded ? "" : " cursor-usage-module--collapsed"}`}>
-        <header className="cursor-usage-module__header">
-          <div className="cursor-usage-module__heading">
-            <p>{copy.billingSummary}</p>
-            {cycleStart && cycleEnd ? (
-              <span>{`${cycleStart} – ${cycleEnd}`}</span>
-            ) : updatedAt ? (
-              <span>{`${copy.updated} ${updatedAt}`}</span>
-            ) : null}
-          </div>
-          <CursorCollapseToggle
-            copy={copy}
-            expanded={billingExpanded}
-            onToggle={() => setBillingExpanded(!billingExpanded)}
-          />
-        </header>
-        {billingExpanded ? (
-          <div className="cursor-usage-module__content">
+    <div
+      className={`cursor-usage-summary cursor-usage-summary--${surface} cursor-usage-summary--${density}`}
+    >
+      {billingPreference?.visible ? (
+        <section
+          className={`cursor-usage-module${billingExpanded ? "" : " cursor-usage-module--collapsed"}`}
+          data-cursor-usage-module="billing_summary"
+          style={{ order: modulePreferences.indexOf(billingPreference) }}
+        >
+          <header className="cursor-usage-module__header">
+            <div className="cursor-usage-module__heading">
+              <p>{copy.billingSummary}</p>
+              {cycleStart && cycleEnd ? (
+                <span>{`${cycleStart} – ${cycleEnd}`}</span>
+              ) : updatedAt ? (
+                <span>{`${copy.updated} ${updatedAt}`}</span>
+              ) : null}
+            </div>
+            <CursorCollapseToggle
+              copy={copy}
+              expanded={billingExpanded}
+              onToggle={() => setBillingExpanded(!billingExpanded)}
+            />
+          </header>
+          {billingExpanded ? (
+            <div className="cursor-usage-module__content">
             {usage.plan ? (
               <>
                 <CursorProgressRow
@@ -338,32 +389,39 @@ export function CursorUsageSummary({
                 <span>{`${copy.actualCharge}: ${formatCurrency(usage.onDemand.usedCents, locale)}`}</span>
               ) : null}
             </div>
-          </div>
-        ) : null}
-      </section>
+            </div>
+          ) : null}
+        </section>
+      ) : null}
 
-      <section className={`cursor-usage-module${historyExpanded ? "" : " cursor-usage-module--collapsed"}`}>
-        <header className="cursor-usage-module__header">
-          <div className="cursor-usage-module__heading">
-            <p>{copy.recentUsage}</p>
-            {historyExpanded && usage.history ? (
-              <button
-                className="cursor-usage-module__range-toggle"
-                type="button"
-                onClick={() => setRangeDays(rangeDays === 7 ? 30 : 7)}
-              >
-                {rangeDays === 7 ? copy.sevenDays : copy.thirtyDays}
-              </button>
-            ) : null}
-          </div>
-          <CursorCollapseToggle
-            copy={copy}
-            expanded={historyExpanded}
-            onToggle={() => setHistoryExpanded(!historyExpanded)}
-          />
-        </header>
-        {historyExpanded ? (
-          <div className="cursor-usage-module__content">
+      {historyPreference?.visible ? (
+        <section
+          className={`cursor-usage-module${historyExpanded ? "" : " cursor-usage-module--collapsed"}`}
+          data-cursor-usage-module="usage_history"
+          style={{ order: modulePreferences.indexOf(historyPreference) }}
+        >
+          <header className="cursor-usage-module__header">
+            <div className="cursor-usage-module__heading">
+              <p>{copy.recentUsage}</p>
+              {historyExpanded && usage.history ? (
+                <button
+                  className="cursor-usage-module__range-toggle"
+                  type="button"
+                  onClick={() => setRangeDays(rangeDays === 7 ? 30 : 7)}
+                >
+                  <span>{rangeDays === 7 ? copy.sevenDays : copy.thirtyDays}</span>
+                  {visibleRangeLabel ? <span>{visibleRangeLabel}</span> : null}
+                </button>
+              ) : null}
+            </div>
+            <CursorCollapseToggle
+              copy={copy}
+              expanded={historyExpanded}
+              onToggle={() => setHistoryExpanded(!historyExpanded)}
+            />
+          </header>
+          {historyExpanded ? (
+            <div className="cursor-usage-module__content">
             {visibleDays.length > 0 && maxDailyValue > 0 ? (
               <>
                 <div
@@ -392,9 +450,10 @@ export function CursorUsageSummary({
             ) : (
               <p className="cursor-usage-module__empty">{copy.noHistory}</p>
             )}
-          </div>
-        ) : null}
-      </section>
+            </div>
+          ) : null}
+        </section>
+      ) : null}
     </div>
   );
 }

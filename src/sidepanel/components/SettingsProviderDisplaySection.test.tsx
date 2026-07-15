@@ -68,6 +68,37 @@ describe("SettingsProviderDisplaySection", () => {
     expect(html).not.toContain('data-provider-order-row="gemini-policy"');
   });
 
+  it("shows Cursor aggregate module controls when Cursor is visible", () => {
+    const i18n = createRuntimeI18n("en", undefined);
+    const settingsCopy = buildSettingsLocalizedCopy(i18n);
+    const providerSourceDisplayCopy =
+      buildProviderSourceDisplayLocalizedCopy(i18n);
+    const html = renderToStaticMarkup(
+      <SettingsProviderDisplaySection
+        settings={SAMPLE_APP_STATE.settings}
+        providers={SAMPLE_APP_STATE.providerSettings.map((provider) =>
+          provider.id === "cursor-personal-page"
+            ? { ...provider, displayEnabled: true }
+            : provider,
+        )}
+        providerSourceDisplayCopy={providerSourceDisplayCopy}
+        snapshots={SAMPLE_APP_STATE.providers}
+        settingsCopy={settingsCopy}
+        onProviderOrderBySurfaceChange={() => {}}
+        onProgressItemsBySurfaceChange={() => {}}
+      />,
+    );
+
+    expect(html).toContain('data-cursor-usage-preferences=""');
+    expect(html).toContain(
+      'data-cursor-usage-module-row="billing_summary"',
+    );
+    expect(html).toContain(
+      'data-cursor-usage-module-row="usage_history"',
+    );
+    expect(html.match(/data-cursor-usage-module-row=/g)).toHaveLength(6);
+  });
+
   it("keeps hidden providers out of surface order and quota item controls", () => {
     const i18n = createRuntimeI18n("en", undefined);
     const settingsCopy = buildSettingsLocalizedCopy(i18n);
@@ -98,6 +129,7 @@ describe("SettingsProviderDisplaySection", () => {
     expect(html).not.toContain(
       'data-provider-progress-preference-provider="cursor-personal-page"',
     );
+    expect(html).not.toContain('data-cursor-usage-preferences=""');
   });
 
   it("includes custom sources in surface order and progress item controls", () => {

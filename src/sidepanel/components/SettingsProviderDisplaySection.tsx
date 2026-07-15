@@ -20,6 +20,7 @@ import { ProviderOrderPreferenceControls } from "./ProviderOrderPreferenceContro
 import { ProviderProgressItemPreferenceControls } from "./ProviderProgressItemPreferenceControls";
 import { UsageHistoryModulePreferenceControls } from "./UsageHistoryModulePreferenceControls";
 import type { ResolvedAppLocale } from "../../shared/i18n";
+import { CursorUsageModulePreferenceControls } from "./CursorUsageModulePreferenceControls";
 
 type SettingsProviderDisplaySectionProps = {
   providers: ProviderSetting[];
@@ -137,6 +138,15 @@ export function SettingsProviderDisplaySection({
           value={settings.usageHistoryModulesBySurface}
           onChange={onUsageHistoryModulesBySurfaceChange}
         />
+
+        {displayVisibleProviders.some(
+          (provider) => provider.id === "cursor-personal-page",
+        ) ? (
+          <CursorUsageModulePreferenceControls
+            locale={locale}
+            settingsCopy={settingsCopy}
+          />
+        ) : null}
       </div>
     </section>
   );

@@ -27,6 +27,8 @@ import {
   createDefaultUsageHistoryModulesBySurface,
   resolveProviderUsageHistoryModules,
 } from "../../shared/usage-history-visibility";
+import { CursorUsageSummary } from "../../shared/components/CursorUsageSummary";
+import { buildCursorUsageLocalizedCopy } from "../../shared/cursor-usage-localized-copy";
 
 type ProviderDetailPageProps = {
   localePreference: AppLocalePreference;
@@ -78,6 +80,7 @@ export function ProviderDetailPage({
   );
   const copy = buildProviderDetailLocalizedCopy(i18n);
   const usageHistoryCopy = buildUsageHistoryLocalizedCopy(i18n.resolvedLocale);
+  const cursorUsageCopy = buildCursorUsageLocalizedCopy(i18n.resolvedLocale);
   const visibleUsageHistoryModuleOrder =
     resolveProviderUsageHistoryModules(
       usageHistoryModulesBySurface,
@@ -601,6 +604,46 @@ export function ProviderDetailPage({
           ) : (
             <p className="supporting-copy">{usageHistoryCopy.noData}</p>
           )}
+        </section>
+      ) : null}
+
+      {provider.providerId === "cursor-personal-page" && provider.cursorUsage ? (
+        <section
+          className="status-card cursor-usage-detail"
+          data-cursor-usage-detail=""
+        >
+          <CursorUsageSummary
+            copy={cursorUsageCopy}
+            density="detail"
+            locale={i18n.resolvedLocale}
+            providerId={provider.providerId}
+            surface="fullPage"
+            usage={provider.cursorUsage}
+          />
+          <nav
+            aria-label="Cursor usage source links"
+            className="cursor-usage-source-actions"
+          >
+            <a
+              className="text-button text-button--inline"
+              href="https://cursor.com/dashboard/usage"
+              rel="noreferrer"
+              target="_blank"
+            >
+              Cursor Usage
+            </a>
+            <a
+              className="text-button text-button--inline"
+              href="https://cursor.com/dashboard/spending"
+              rel="noreferrer"
+              target="_blank"
+            >
+              Cursor Spending
+            </a>
+            <span className="supporting-copy">
+              CSV export is available from the Cursor Usage page.
+            </span>
+          </nav>
         </section>
       ) : null}
     </main>

@@ -120,4 +120,23 @@ describe("CursorUsageSummary", () => {
     expect(html).toContain("No aggregate usage history yet");
     expect(html).not.toContain("$0");
   });
+
+  it("uses detail density and a locale-aware selected range", () => {
+    const html = renderToStaticMarkup(
+      <CursorUsageSummary
+        copy={buildCursorUsageLocalizedCopy("en")}
+        density="detail"
+        locale="en"
+        providerId="cursor-personal-page"
+        surface="fullPage"
+        usage={USAGE}
+      />,
+    );
+
+    expect(html).toContain("cursor-usage-summary--detail");
+    expect(html).toContain(">30 days<");
+    expect(html).toContain("Jul 14 – Jul 14");
+    expect(html).toContain('data-cursor-usage-module="billing_summary"');
+    expect(html).toContain('data-cursor-usage-module="usage_history"');
+  });
 });
