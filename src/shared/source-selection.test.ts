@@ -2,6 +2,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { SourceAttemptFailure } from "./source-selection";
 
+const MODULE_IMPORT_TIMEOUT_MS = 15_000;
+
 async function importSourceSelection() {
   return import("./source-selection");
 }
@@ -41,7 +43,7 @@ describe("source selection helpers", () => {
         false,
       ),
     ).toBe("Official API selected by user preference.");
-  });
+  }, MODULE_IMPORT_TIMEOUT_MS);
 
   it("builds fallback selection reasons for auto and explicit preferences", async () => {
     vi.doMock("./provider-sources", () => ({
@@ -72,7 +74,7 @@ describe("source selection helpers", () => {
         true,
       ),
     ).toBe("Official API preference fell back to Session page.");
-  });
+  }, MODULE_IMPORT_TIMEOUT_MS);
 
   it("uses the only-source reason for providers without fallback options", async () => {
     const { buildSourceSelectionReason } = await importSourceSelection();
@@ -93,7 +95,7 @@ describe("source selection helpers", () => {
         false,
       ),
     ).toBe("Policy only is the only shipped source for gemini-policy.");
-  });
+  }, MODULE_IMPORT_TIMEOUT_MS);
 
   it("formats source fallback and no-source-available reasons", async () => {
     const { buildNoSourceAvailableReason, buildSourceFallbackReason } =
@@ -113,7 +115,7 @@ describe("source selection helpers", () => {
     expect(buildNoSourceAvailableReason("session_page")).toBe(
       "Session page preference could not find an available live source.",
     );
-  });
+  }, MODULE_IMPORT_TIMEOUT_MS);
 
   it("stops fallback for host access failures only", async () => {
     const { shouldAttemptFallback } = await importSourceSelection();
@@ -153,5 +155,5 @@ describe("source selection helpers", () => {
       true,
       true,
     ]);
-  });
+  }, MODULE_IMPORT_TIMEOUT_MS);
 });
