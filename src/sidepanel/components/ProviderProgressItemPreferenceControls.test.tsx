@@ -71,6 +71,48 @@ describe("ProviderProgressItemPreferenceControls", () => {
     );
   });
 
+  it("lists Flex credits as hidden by default on every display surface", () => {
+    const copy = buildSettingsLocalizedCopy(createRuntimeI18n("en"));
+    const flexItemId = "balance:flex_credit_balance:Flex%20credits:0";
+    const snapshots = SAMPLE_APP_STATE.providers.map((snapshot) =>
+      snapshot.providerId === "codex-personal-page"
+        ? {
+            ...snapshot,
+            usageBalances: [
+              {
+                label: "Flex credits",
+                normalizedLabel: "Flex credits",
+                kind: "flex_credit_balance" as const,
+                quotaUnit: "credits" as const,
+                remaining: 0,
+                total: null,
+                detail: "Optional balance",
+              },
+            ],
+          }
+        : snapshot,
+    );
+    const html = renderToStaticMarkup(
+      <ProviderProgressItemPreferenceControls
+        copy={copy.progressItems}
+        providers={SAMPLE_APP_STATE.providerSettings}
+        snapshots={snapshots}
+        progressItemsBySurface={SAMPLE_APP_STATE.settings.progressItemsBySurface}
+        onChange={() => {}}
+      />,
+    );
+    const rowMarker = `data-provider-progress-item-row="${flexItemId}"`;
+    const flexRows = html
+      .split(rowMarker)
+      .slice(1)
+      .map((row) => row.slice(0, row.indexOf("</li>")));
+
+    expect(flexRows).toHaveLength(3);
+    expect(flexRows.every((row) => row.includes('type="checkbox"'))).toBe(true);
+    expect(flexRows.every((row) => !row.includes("checked"))).toBe(true);
+    expect(flexRows.every((row) => row.includes("Hidden"))).toBe(true);
+  });
+
   it("can restore a provider quota item detail open state", () => {
     const copy = buildSettingsLocalizedCopy(createRuntimeI18n("en"));
     const html = renderToStaticMarkup(

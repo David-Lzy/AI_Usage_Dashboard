@@ -38,6 +38,21 @@ export type ProviderProgressItemIdsByProvider = Partial<
   Record<ProviderId, string[]>
 >;
 
+const FLEX_CREDIT_BALANCE_ITEM_ID_PREFIX = "balance:flex_credit_balance:";
+
+export function isFlexCreditBalanceProgressItemId(itemId: string): boolean {
+  return itemId.startsWith(FLEX_CREDIT_BALANCE_ITEM_ID_PREFIX);
+}
+
+export function isFlexCreditBalanceProgressItem(
+  item: ProviderProgressItem,
+): boolean {
+  return (
+    item.kind === "usage_balance" &&
+    isFlexCreditBalanceProgressItemId(item.id)
+  );
+}
+
 function encodeProgressItemPart(value: string | null | undefined): string {
   return encodeURIComponent(value ?? "");
 }

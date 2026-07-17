@@ -12,7 +12,10 @@ import type {
 import type { RuntimeI18n } from "../i18n";
 import { buildRuntimeCommonCopy } from "../i18n";
 import { selectVisibleProviderProgressItems } from "../provider-progress-item-selection";
-import type { ProviderProgressItem } from "../provider-progress-items";
+import {
+  isFlexCreditBalanceProgressItem,
+  type ProviderProgressItem,
+} from "../provider-progress-items";
 import type { ProviderViewModel } from "../provider-view-models";
 import { isCircularProgressDisplayStyle } from "../progress-display";
 import { formatPopupProgressItemLabel } from "./provider-progress-compact-labels";
@@ -184,13 +187,18 @@ export function ProviderProgressItemList({
         const isPopup = surface === "popup";
         const label = isPopup ? formatPopupProgressItemLabel(item, i18n) : item.label;
         const detail = isPopup ? null : formatProgressItemDetail(item, i18n);
+        const isFlexCreditBalance = isFlexCreditBalanceProgressItem(item);
         const tone =
           item.kind === "primary_quota" ? provider.displayTone : item.tone;
 
         return (
           <div
             key={item.id}
-            className={`provider-progress-item-list__item provider-progress-item-list__item--${item.availability}`}
+            className={`provider-progress-item-list__item provider-progress-item-list__item--${item.availability}${
+              isFlexCreditBalance
+                ? " provider-progress-item-list__item--flex-credit"
+                : ""
+            }`}
             data-provider-progress-item={item.id}
           >
             {item.availability === "progress" ? (
@@ -214,7 +222,13 @@ export function ProviderProgressItemList({
                 detail={detail}
               />
             ) : (
-              <div className="provider-progress-item-list__value-only">
+              <div
+                className={`provider-progress-item-list__value-only${
+                  isFlexCreditBalance
+                    ? " provider-progress-item-list__value-only--inline"
+                    : ""
+                }`}
+              >
                 <p className="supporting-copy provider-progress-item-list__label">
                   {label}
                 </p>

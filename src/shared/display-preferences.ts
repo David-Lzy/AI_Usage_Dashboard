@@ -11,6 +11,7 @@ import {
   toCustomSourceId,
   type DashboardSourceId,
 } from "./custom-sources";
+import { isFlexCreditBalanceProgressItemId } from "./provider-progress-items";
 
 export const DISPLAY_SURFACES = ["popup", "sidebar", "fullPage"] as const;
 
@@ -211,7 +212,7 @@ function normalizeProgressItemPreferences(
     if (!seenItems.has(itemId)) {
       normalizedItems.push({
         id: itemId,
-        visible: true,
+        visible: !isFlexCreditBalanceProgressItemId(itemId),
       });
     }
   }
@@ -219,12 +220,12 @@ function normalizeProgressItemPreferences(
   return normalizedItems;
 }
 
-function createVisibleProgressItemPreferences(
+function createDefaultProgressItemPreferences(
   itemIds: readonly string[],
 ): ProviderProgressItemPreference[] {
   return itemIds.map((id) => ({
     id,
-    visible: true,
+    visible: !isFlexCreditBalanceProgressItemId(id),
   }));
 }
 
@@ -239,7 +240,7 @@ export function resolveProgressItemPreferences(
 
   return normalizedPreferences.length > 0
     ? normalizedPreferences
-    : createVisibleProgressItemPreferences(knownItemIds);
+    : createDefaultProgressItemPreferences(knownItemIds);
 }
 
 export function setProgressItemVisibility(

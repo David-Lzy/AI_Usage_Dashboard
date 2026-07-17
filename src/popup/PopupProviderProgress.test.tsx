@@ -227,6 +227,44 @@ describe("PopupProviderProgress", () => {
     expect(html).toBe("");
   });
 
+  it("hides Flex credits by default and renders an explicitly enabled balance inline", () => {
+    const flexItemId = "balance:flex_credit_balance:Flex%20credits:0";
+    const provider = createProvider({
+      usageBalances: [
+        {
+          label: "Flex credits",
+          normalizedLabel: "Flex credits",
+          kind: "flex_credit_balance",
+          quotaUnit: "credits",
+          remaining: 0,
+          total: null,
+          detail: "Optional balance",
+        },
+      ],
+    });
+    const defaultHtml = renderPopupProviderProgress(provider);
+    const visibleHtml = renderPopupProviderProgress(provider, {
+      popup: {
+        "codex-personal-page": [
+          { id: "primary", visible: true },
+          { id: flexItemId, visible: true },
+        ],
+      },
+      sidebar: {},
+      fullPage: {},
+    });
+
+    expect(defaultHtml).not.toContain("Flex credits");
+    expect(visibleHtml).toContain("Flex credits");
+    expect(visibleHtml).toContain("0 credits remaining");
+    expect(visibleHtml).toContain(
+      "provider-progress-item-list__item--flex-credit",
+    );
+    expect(visibleHtml).toContain(
+      "provider-progress-item-list__value-only--inline",
+    );
+  });
+
   it("renders the new soft circle style in popup progress", () => {
     const html = renderPopupProviderProgress(
       createProvider(),

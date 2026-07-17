@@ -224,6 +224,27 @@ describe("display preferences", () => {
     ]);
   });
 
+  it("defaults normalized Flex credit balances to hidden while preserving explicit visibility", () => {
+    const flexItemId =
+      "balance:flex_credit_balance:Flex%20credit%20balance:0";
+
+    expect(
+      resolveProgressItemPreferences(undefined, ["window:weekly", flexItemId]),
+    ).toEqual([
+      { id: "window:weekly", visible: true },
+      { id: flexItemId, visible: false },
+    ]);
+    expect(
+      resolveProgressItemPreferences(
+        [{ id: flexItemId, visible: true }],
+        ["window:weekly", flexItemId],
+      ),
+    ).toEqual([
+      { id: flexItemId, visible: true },
+      { id: "window:weekly", visible: true },
+    ]);
+  });
+
   it("updates progress item visibility while preserving all known items", () => {
     expect(
       setProgressItemVisibility(undefined, ["window:5h", "window:weekly"], "window:5h", false),

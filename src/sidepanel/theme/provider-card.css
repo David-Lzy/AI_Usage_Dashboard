@@ -219,6 +219,20 @@
 }
 
 .provider-card__progress-surface
+  .provider-progress-item-list--circle
+  .provider-progress-item-list__item--flex-credit,
+.provider-card__progress-surface
+  .provider-progress-item-list--circle-soft
+  .provider-progress-item-list__item--flex-credit,
+.provider-card__progress-surface
+  .provider-progress-item-list--circle-gauge
+  .provider-progress-item-list__item--flex-credit {
+  grid-column: 1 / -1;
+  min-height: 0;
+  padding-block: var(--app-space-2);
+}
+
+.provider-card__progress-surface
   .usage-window-progress-list--line
   .usage-window-progress-list__item
   + .usage-window-progress-list__item::before,

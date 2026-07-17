@@ -450,10 +450,34 @@
   background: var(--app-supporting-surface-background);
 }
 
+.provider-progress-item-list__item--flex-credit {
+  grid-column: 1 / -1;
+}
+
 .provider-progress-item-list__value-only {
   display: grid;
   gap: var(--app-space-1);
   min-width: 0;
+}
+
+.provider-progress-item-list__value-only--inline {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  align-items: baseline;
+  justify-content: start;
+  gap: var(--app-space-1) var(--app-space-2);
+}
+
+.provider-progress-item-list__value-only--inline
+  > .provider-progress-item-list__label,
+.provider-progress-item-list__value-only--inline
+  > .provider-progress-item-list__value {
+  white-space: nowrap;
+}
+
+.provider-progress-item-list__value-only--inline
+  > .provider-progress-item-list__detail {
+  grid-column: 1 / -1;
 }
 
 .provider-progress-item-list__label,

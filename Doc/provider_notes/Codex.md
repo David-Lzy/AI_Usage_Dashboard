@@ -446,6 +446,8 @@ Parser consequences:
 - a missing model interval stays `unknown`; the extension does not infer a
   weekly or five-hour window
 - duplicate credit-balance cards are collapsed
+- the normalized Flex credit balance remains available as a per-surface quota
+  item, but defaults to hidden and uses one compact label/value row when enabled
 - percentages outside `0..100` and usage-history chart ticks do not become
   quota windows
 

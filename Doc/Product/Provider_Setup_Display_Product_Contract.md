@@ -162,6 +162,9 @@ Rules:
 - quota item ids are stable within a provider but are not a cross-provider contract
 - unknown item ids are ignored at render time
 - newly discovered item ids append after saved preferences
+- normalized Codex Flex credit balances are default-hidden because they are a
+  secondary value-only balance; users can enable and order them independently
+  for popup, sidebar, and full-page surfaces
 - usage facts, raw diagnostic bodies, provider evidence, and archive/export payloads stay source-truth data, not configurable progress bars
 - hidden-provider quota item settings must not affect visible popup, sidebar, or full-page rendering
 
