@@ -540,3 +540,53 @@ Current recovery behavior:
 If the page remains unreadable after the bounded recovery window, the provider
 still reports an explicit capture failure and preserves the last valid history.
 It does not convert a slow or failed page into zero usage.
+
+## 24. 2026-07-17 Direct Session Usage And Request Budget
+
+Codex personal refresh now tries the current ChatGPT browser session's
+structured usage responses before relying on page hydration. The observed
+paths are:
+
+- `/backend-api/wham/usage`
+- `/backend-api/wham/usage/daily-token-usage-breakdown`
+- `/backend-api/wham/analytics/daily-workspace-usage-counts`
+
+These paths are internal signed-in page contracts, not documented public OpenAI
+APIs. The extension must continue to label this integration as best effort and
+retain the page parser plus last-successful snapshot as fallback paths.
+
+Credential handling:
+
+- one short-lived access token is discovered from the local ChatGPT session and
+  cached in `chrome.storage.session`
+- Firefox or another browser without compatible session storage degrades to
+  service-worker memory
+- concurrent callers share one credential-acquisition promise and one Codex
+  refresh promise
+- a usable token is reused until it nears JWT expiry; `401` clears it and permits
+  one renewal attempt
+- Advanced Settings can accept one bare temporary access token when automatic
+  discovery is unavailable; cookie text, authentication JSON, refresh tokens,
+  and complete Authorization headers are rejected
+- token values never enter AppState, Chrome Sync, configuration backup, logs,
+  fixtures, diagnostics, raw evidence, or provider snapshots
+- session tokens are sent only to `https://chatgpt.com`
+
+Request budget:
+
+- automatic current-quota refreshes reuse results for 60 seconds
+- daily history reuses results for 15 minutes; repeated manual history refreshes
+  inside 60 seconds also reuse the cached result
+- `401` renews once, `403` waits for account or credential recovery, `429`
+  respects `Retry-After` or waits 15 minutes, and network or `5xx` failures use
+  bounded 1/5/15-minute backoff
+- the complete automatic path settles within 12 seconds and the manual recovery
+  path within 20 seconds
+- a direct failure can fall back to the existing page-session parser without
+  opening a page during automatic refresh
+- a failed direct request or page fallback preserves previous quota and history
+  with a stale warning instead of replacing valid values with zeroes
+
+This section supersedes the older page-first timing assumptions above. Page
+hydration remains a compatibility fallback, but it is no longer the primary
+current-quota transport when local session authentication succeeds.

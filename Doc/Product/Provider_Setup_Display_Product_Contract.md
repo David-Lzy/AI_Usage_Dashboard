@@ -179,7 +179,15 @@ a partial refresh must not replace a valid module with a fabricated zero.
 
 ### Codex
 
-Codex personal-page and Codex Enterprise/API entries are separate display units. Codex can expose usage-window values and reset timing when available. Do not collapse separate usage windows into one fake plan-wide balance.
+Codex personal-session and Codex Enterprise/API entries are separate display
+units. The personal entry first uses the current local ChatGPT session's
+internal structured usage responses, then falls back to the signed-in Codex
+page and finally to the last successful snapshot. The internal endpoints are
+not a supported public API. Codex can expose usage-window values and reset
+timing when available; do not collapse separate usage windows into one fake
+plan-wide balance. Session credentials are browser-session-only and must never
+enter AppState, Chrome Sync, configuration backup, logs, fixtures, or provider
+snapshots.
 
 ### Claude Code
 

@@ -18,9 +18,11 @@ dashboard.
 - Shows focused first-run access actions when a provider needs optional host
   permission before live sync can run.
 - Shows normalized Codex daily usage history and turn trends when the signed-in
-  Codex page exposes the verified structured history responses. Each history
-  module can be hidden independently per popup, side-panel, or full-page surface,
-  with an independent 7-day or 1-month view selected from its date-range button.
+  ChatGPT session exposes the verified structured usage responses. Current
+  quota uses a local session request first and falls back to the signed-in page;
+  each history module can be hidden independently per popup, side-panel, or
+  full-page surface, with an independent 7-day or 1-month view selected from
+  its date-range button.
 - Shows normalized Cursor billing-cycle value, included model/API pools,
   On-Demand charges, and bounded 7/30-day aggregate trends when the signed-in
   Cursor pages expose the verified structured responses. Billing and history
@@ -65,9 +67,16 @@ AI Usage Dashboard is intentionally conservative:
   for user-approved custom source HTTP/HTTPS endpoint origins.
 - Custom JSON sources fetch user-configured HTTP or HTTPS endpoints with
   browser credentials omitted; raw response bodies are not stored or rendered.
+- Codex personal sync reuses a short-lived ChatGPT access token in
+  `chrome.storage.session` and sends it only to `chatgpt.com`. It is not added
+  to AppState, Chrome Sync, configuration backups, logs, or fixtures. Advanced
+  recovery can accept a bare temporary access token, but rejects cookies,
+  authentication JSON, refresh tokens, and complete Authorization headers.
 - Codex history capture keeps only bounded normalized daily aggregates in the
   cached provider snapshot. Raw network responses, page body text, cookies,
-  request headers, and account identifiers are not stored.
+  request headers, and account identifiers are not stored. The personal
+  session endpoints are internal page contracts rather than a public API and
+  can temporarily degrade to the page fallback when ChatGPT changes them.
 - The `favicon` permission is used only for the optional provider-matched
   toolbar icon feature.
 - It does not load or execute remote code.

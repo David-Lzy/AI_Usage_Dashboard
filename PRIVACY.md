@@ -20,6 +20,14 @@ Depending on which providers and features a user enables, the extension may stor
 
 These values are stored in the user's Chrome profile through Chrome extension storage. If the user enables Chrome Sync support for extension settings, Chrome may sync eligible settings through the user's signed-in Chrome account according to Chrome's own sync behavior.
 
+Codex personal sync may temporarily cache a short-lived ChatGPT access token in
+`chrome.storage.session`. This session credential is separate from AppState and
+is not included in Chrome Sync, configuration backups, import/export files,
+logs, fixtures, or cached provider snapshots. If `storage.session` is
+unavailable, including on a browser implementation that does not expose it,
+the credential remains only in service-worker memory. It is cleared with the
+browser session or extension lifecycle.
+
 ## Local Image Gradient Import
 
 If a user imports an image to generate a progress-color gradient, the image is decoded and sampled locally in the browser. The extension uses the image only to compute a small list of gradient stops. It does not upload the image, and it does not store the original image bytes, data URL, filename, EXIF metadata, or raw pixel data.
@@ -54,6 +62,19 @@ instead of inventing a value.
 
 The extension does not ask users to paste cookies or raw browser authentication headers.
 
+Codex personal sync first tries the signed-in ChatGPT session's internal usage
+endpoints. Every request requires the same still-valid access token, but the
+extension does not reacquire it for every request: it reuses the session cache,
+merges concurrent refreshes, and reacquires only when the token is missing,
+near expiry, or rejected as unauthorized. The token is sent only to
+`https://chatgpt.com`.
+
+If automatic local session discovery is unavailable, Advanced Settings offers
+an optional temporary recovery field for the bare access-token value. The
+field rejects cookies, authentication JSON, refresh tokens, whitespace-bearing
+payloads, and complete `Authorization` headers. The input is cleared after use
+and the stored token is never displayed.
+
 For Codex usage history, the extension observes only the verified structured
 history responses while a user-triggered or scheduled provider refresh is in
 progress. It validates and normalizes at most 31 daily buckets into the cached
@@ -63,6 +84,13 @@ unrelated response fields. History is not included in configuration backups or
 raw evidence exports. If the page response contract changes, history display
 can become temporarily unavailable without replacing prior history with fake
 zero values or blocking current quota refresh.
+
+Current quota results are reused for 60 seconds during automatic refreshes;
+daily history is reused for 15 minutes. Concurrent popup, side-panel,
+full-page, and background refreshes share one in-flight request. Rate limits and
+temporary failures enter bounded local cooldowns. If direct session access
+fails, the extension can fall back to the signed-in page and otherwise retains
+the last successful normalized snapshot with a stale warning.
 
 For Cursor personal usage and billing, the extension observes only verified
 structured responses from the signed-in Cursor Usage and Spending pages during
