@@ -243,9 +243,9 @@ async function captureRoute(
   const reloadPageBeforeCapture = options.reloadPageBeforeCapture ?? true;
   const reloadOptions = {
     bypassCache: true,
-    waitForLoadTimeoutMs: 10_000,
+    waitForLoadTimeoutMs: 3_000,
     loadPollIntervalMs: 250,
-    postLoadDelayMs: 3_000,
+    postLoadDelayMs: 500,
   };
   const result = await client.capture({
     providerId: "codex-personal-page",
@@ -279,7 +279,7 @@ async function captureRoute(
                   requiredMatchUrlSubstrings: [
                     ...CODEX_USAGE_HISTORY_PATHS,
                   ],
-                  waitForRequiredEntriesTimeoutMs: 15_000,
+                  waitForRequiredEntriesTimeoutMs: 5_000,
                 }
               : {}),
           }

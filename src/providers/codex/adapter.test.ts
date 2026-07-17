@@ -943,6 +943,7 @@ describe("syncCodexProvider", () => {
 
     expect(createCodexPersonalPageClientMock).toHaveBeenCalledWith({
       source: "fixture",
+      trigger: "alarm",
       openPageWhenMissing: true,
     });
     expect(getUsageSnapshot).toHaveBeenCalledWith(
@@ -983,6 +984,7 @@ describe("syncCodexProvider", () => {
 
     expect(createCodexPersonalPageClientMock).toHaveBeenCalledWith({
       source: "fixture",
+      trigger: "alarm",
       openPageWhenMissing: true,
     });
     expect(getUsageSnapshot).toHaveBeenCalledWith(
@@ -1038,6 +1040,7 @@ describe("syncCodexProvider", () => {
 
     expect(createCodexPersonalPageClientMock).toHaveBeenCalledWith({
       source: "fixture",
+      trigger: "alarm",
       openPageWhenMissing: false,
     });
   });

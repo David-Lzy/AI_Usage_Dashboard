@@ -1,5 +1,5 @@
 import personalPageLiveFixture from "../../../fixtures/codex/personal-page-live.fixture.json";
-import type { ProviderPageBinding } from "../types";
+import type { ProviderPageBinding, SyncTrigger } from "../types";
 import {
   createPageSessionClient,
   hasLivePageSessionApis,
@@ -19,6 +19,11 @@ import {
   parseCodexPersonalLiveFixture,
   type CodexPersonalParseResult,
 } from "./personal-page-parser";
+import {
+  codexSessionApiClient,
+  type CodexSessionApiClient,
+  type CodexSessionApiFailureCode,
+} from "./session-api-client";
 
 export type CodexPersonalPageClientOptions = {
   source?: "fixture" | "live";
@@ -26,9 +31,18 @@ export type CodexPersonalPageClientOptions = {
   openPageWhenMissing?: boolean;
   hydrationRetryAttempts?: number;
   hydrationRetryDelayMs?: number;
+  sessionApiClient?: CodexSessionApiClient;
+  trigger?: SyncTrigger;
 };
 
 export type CodexPersonalPageUsageResult = {
+  captureSource: "fixture" | "page_parse" | "session_api";
+  directApiFailure?: {
+    code: CodexSessionApiFailureCode;
+    reason: string;
+    retryAt: number | null;
+  };
+  replacePreviousSnapshot?: boolean;
   result: CodexPersonalParseResult;
   pageBinding: ProviderPageBinding;
 };
@@ -39,8 +53,8 @@ export type CodexPersonalPageClient = {
   ) => Promise<CodexPersonalPageUsageResult>;
 };
 
-const DEFAULT_HYDRATION_RETRY_ATTEMPTS = 12;
-const DEFAULT_HYDRATION_RETRY_DELAY_MS = 1_500;
+const DEFAULT_HYDRATION_RETRY_ATTEMPTS = 2;
+const DEFAULT_HYDRATION_RETRY_DELAY_MS = 750;
 
 function delay(ms: number): Promise<void> {
   if (ms <= 0) {
@@ -177,9 +191,24 @@ export function createCodexPersonalPageClient(
 
       if (source === "fixture") {
         return {
+          captureSource: "fixture",
           result: parseCodexPersonalLiveFixture(
             personalPageLiveFixture as CodexPersonalLiveFixture,
           ),
+          pageBinding: normalizedBinding,
+        };
+      }
+
+      const trigger = options.trigger ?? "manual";
+      const directResult = await (
+        options.sessionApiClient ?? codexSessionApiClient
+      ).getUsageSnapshot(trigger);
+
+      if (directResult.ok) {
+        return {
+          captureSource: "session_api",
+          replacePreviousSnapshot: directResult.replacePreviousSnapshot,
+          result: directResult.result,
           pageBinding: normalizedBinding,
         };
       }
@@ -193,7 +222,9 @@ export function createCodexPersonalPageClient(
         matchedTitle: normalizedBinding.matchedTitle,
       };
       const captureOptions = {
-        openPageWhenMissing: options.openPageWhenMissing ?? false,
+        openPageWhenMissing:
+          trigger === "manual" && (options.openPageWhenMissing ?? false),
+        reloadPageBeforeCapture: trigger === "manual",
       };
       const hydrationCaptureOptions = {
         openPageWhenMissing: false,
@@ -233,6 +264,8 @@ export function createCodexPersonalPageClient(
       const routeForBinding = chooseBindingRoute(fixture);
 
       return {
+        captureSource: "page_parse",
+        directApiFailure: directResult,
         result,
         pageBinding: routeForBinding
           ? buildBindingFromRouteCapture(

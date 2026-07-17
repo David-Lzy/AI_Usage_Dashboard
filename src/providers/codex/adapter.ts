@@ -72,9 +72,15 @@ function buildCodexRefreshLabel(): string {
   return "Codex Analytics API synced just now";
 }
 
-function buildCodexPersonalRefreshLabel(source: "fixture" | "live"): string {
-  return source === "fixture"
-    ? "Codex personal fixture loaded"
+function buildCodexPersonalRefreshLabel(
+  source: "fixture" | "page_parse" | "session_api",
+): string {
+  if (source === "fixture") {
+    return "Codex personal fixture loaded";
+  }
+
+  return source === "session_api"
+    ? "Codex session usage synced just now"
     : "Codex personal usage page synced just now";
 }
 
@@ -668,15 +674,19 @@ async function tryCodexPersonalSource({
       : "fixture";
     const client = createCodexPersonalPageClient({
       source: personalSource,
+      trigger,
       openPageWhenMissing: shouldOpenCodexPageWhenMissing({
         provider,
         setting,
         trigger,
       }),
     });
-    const { result, pageBinding } = await client.getUsageSnapshot(
-      setting.pageBinding,
-    );
+    const {
+      captureSource,
+      replacePreviousSnapshot,
+      result,
+      pageBinding,
+    } = await client.getUsageSnapshot(setting.pageBinding);
     const nextSetting: ProviderSetting = {
       ...setting,
       pageBinding,
@@ -805,13 +815,15 @@ async function tryCodexPersonalSource({
         usageBalances: buildCodexUsageBalances(result.snapshot.balances),
         usageHistory: mergeProviderUsageHistoryModules(
           result.snapshot.usageHistory,
-          provider.usageHistory,
+          replacePreviousSnapshot ? undefined : provider.usageHistory,
         ),
         usageSummary: buildPersonalUsageSummary(
           result.snapshot.windows,
           result.snapshot.balances,
         ),
-        lastSyncLabel: buildCodexPersonalRefreshLabel(personalSource),
+        lastSyncLabel: buildCodexPersonalRefreshLabel(
+          captureSource ?? (personalSource === "fixture" ? "fixture" : "page_parse"),
+        ),
       },
       setting: nextSetting,
     };
