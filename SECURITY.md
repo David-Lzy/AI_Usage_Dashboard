@@ -17,6 +17,12 @@ AI Usage Dashboard is designed to avoid persistent collection of raw browser aut
   storage is unavailable. The token is sent only to `chatgpt.com` and is not
   written to AppState, Chrome Sync, configuration backups, logs, fixtures, or
   provider snapshots.
+- Codex automatic authentication first uses a bounded background request to the
+  signed-in `chatgpt.com` session. Eligible cookies are attached by the browser
+  only to that origin; extension code does not inspect or persist them, and the
+  raw session response is discarded after extracting the temporary credential.
+  Existing-tab script capture remains a compatibility fallback, not a required
+  foreground workflow.
 - Advanced Codex recovery accepts only a bare temporary access-token value. It
   rejects cookies, authentication JSON, refresh tokens, and complete
   Authorization headers, and provides an immediate clear action.

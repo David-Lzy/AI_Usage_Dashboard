@@ -561,6 +561,15 @@ Credential handling:
 
 - one short-lived access token is discovered from the local ChatGPT session and
   cached in `chrome.storage.session`
+- the service worker first requests `https://chatgpt.com/api/auth/session` with
+  the browser's existing signed-in session; it does not open, focus, activate,
+  or wait for a ChatGPT tab renderer
+- the background response is bounded to 64 KiB and an eight-second timeout; only
+  the token and an explicit optional account identifier are retained, while the
+  raw session response and browser cookies are never stored
+- if that internal session contract is unavailable or rejected, discovery falls
+  back to the existing open-tab capture path without creating or activating a
+  tab
 - Firefox or another browser without compatible session storage degrades to
   service-worker memory
 - concurrent callers share one credential-acquisition promise and one Codex
@@ -592,3 +601,17 @@ Request budget:
 This section supersedes the older page-first timing assumptions above. Page
 hydration remains a compatibility fallback, but it is no longer the primary
 current-quota transport when local session authentication succeeds.
+
+## 25. 2026-07-17 Background Session Discovery
+
+The credential-discovery step no longer requires a live ChatGPT renderer in the
+normal Chrome path. The extension service worker performs the bounded local
+session request first, so a frozen, discarded, lazily hydrated, or backgrounded
+Codex tab does not by itself block current quota refresh.
+
+This is still an internal signed-in page contract rather than a public OpenAI
+API. A missing login session, blocked eligible cookies, revoked host access, an
+endpoint rejection, or protocol drift can still prevent automatic discovery.
+Those cases enter the existing local cooldown and compatibility fallback rather
+than opening pages repeatedly or producing a request storm. The last successful
+normalized snapshot remains visible with a stale warning.

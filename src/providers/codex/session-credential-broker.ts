@@ -3,7 +3,7 @@ import {
   isCodexSessionCredentialUsable,
   type CodexSessionCredential,
 } from "./session-credential";
-import { acquireCodexCredentialFromOpenTabs } from "./session-credential-page";
+import { acquireCodexCredentialAutomatically } from "./session-credential-page";
 
 export const CODEX_SESSION_CREDENTIAL_STORAGE_KEY =
   "ai-usage-dashboard:codex-session-credential";
@@ -104,7 +104,7 @@ export function createCodexCredentialBroker(
   const storage = options.storage === undefined ? getDefaultStorage() : options.storage;
   const now = options.now ?? Date.now;
   const acquireFromWebSession =
-    options.acquireFromWebSession ?? acquireCodexCredentialFromOpenTabs;
+    options.acquireFromWebSession ?? acquireCodexCredentialAutomatically;
   let memoryCredential: CodexSessionCredential | null = null;
   let authCooldownUntil = 0;
   let activeAcquisition: Promise<CodexCredentialResult> | null = null;

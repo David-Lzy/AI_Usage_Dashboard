@@ -62,12 +62,22 @@ instead of inventing a value.
 
 The extension does not ask users to paste cookies or raw browser authentication headers.
 
-Codex personal sync first tries the signed-in ChatGPT session's internal usage
-endpoints. Every request requires the same still-valid access token, but the
-extension does not reacquire it for every request: it reuses the session cache,
-merges concurrent refreshes, and reacquires only when the token is missing,
-near expiry, or rejected as unauthorized. The token is sent only to
-`https://chatgpt.com`.
+Codex personal sync first asks the signed-in ChatGPT session endpoint for a
+short-lived access token from the extension background worker. This request
+uses the already granted `chatgpt.com` host access and does not open, activate,
+or wait for a ChatGPT tab. The browser attaches only cookies eligible for
+`https://chatgpt.com`; extension code does not read, copy, log, persist, export,
+or synchronize those cookies. The raw session response is discarded after the
+temporary token and an optional explicit account identifier are extracted.
+
+The extension then requests the signed-in ChatGPT session's internal usage
+endpoints. Every usage request requires the same still-valid access token, but
+the extension does not reacquire it for every request: it reuses the session
+cache, merges concurrent refreshes, and reacquires only when the token is
+missing, near expiry, or rejected as unauthorized. The token is sent only to
+`https://chatgpt.com`. If background session discovery is rejected by browser
+policy or a changed internal contract, the extension can use an already open
+ChatGPT tab as a bounded compatibility fallback.
 
 If automatic local session discovery is unavailable, Advanced Settings offers
 an optional temporary recovery field for the bare access-token value. The
@@ -89,8 +99,9 @@ Current quota results are reused for 60 seconds during automatic refreshes;
 daily history is reused for 15 minutes. Concurrent popup, side-panel,
 full-page, and background refreshes share one in-flight request. Rate limits and
 temporary failures enter bounded local cooldowns. If direct session access
-fails, the extension can fall back to the signed-in page and otherwise retains
-the last successful normalized snapshot with a stale warning.
+fails, the extension can fall back to the signed-in page without creating or
+activating a tab and otherwise retains the last successful normalized snapshot
+with a stale warning.
 
 For Cursor personal usage and billing, the extension first requests the known
 billing-summary endpoints from its background worker with the browser's

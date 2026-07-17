@@ -19,10 +19,12 @@ dashboard.
   permission before live sync can run.
 - Shows normalized Codex daily usage history and turn trends when the signed-in
   ChatGPT session exposes the verified structured usage responses. Current
-  quota uses a local session request first and falls back to the signed-in page;
-  each history module can be hidden independently per popup, side-panel, or
-  full-page surface, with an independent 7-day or 1-month view selected from
-  its date-range button.
+  quota first discovers the local session from the extension background worker
+  without opening or activating a ChatGPT tab, then falls back to the signed-in
+  page when browser policy or protocol changes block that path. Each history
+  module can be hidden independently per popup, side-panel, or full-page
+  surface, with an independent 7-day or 1-month view selected from its
+  date-range button.
 - Shows normalized Cursor billing-cycle value, included model/API pools,
   On-Demand charges, and bounded 7/30-day aggregate trends when the signed-in
   Cursor session exposes the verified structured responses. Billing summary
@@ -74,7 +76,10 @@ AI Usage Dashboard is intentionally conservative:
   `chrome.storage.session` and sends it only to `chatgpt.com`. It is not added
   to AppState, Chrome Sync, configuration backups, logs, or fixtures. Advanced
   recovery can accept a bare temporary access token, but rejects cookies,
-  authentication JSON, refresh tokens, and complete Authorization headers.
+  authentication JSON, refresh tokens, and complete Authorization headers. The
+  background worker asks the signed-in ChatGPT session for this temporary token;
+  browser cookies and the raw session response are neither read nor stored by
+  the extension.
 - Codex history capture keeps only bounded normalized daily aggregates in the
   cached provider snapshot. Raw network responses, page body text, cookies,
   request headers, and account identifiers are not stored. The personal
