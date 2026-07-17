@@ -24,6 +24,11 @@ Post-rc36 structured capture update:
 - Cursor personal refresh now observes the verified Usage/Spending JSON
   responses during a bounded managed-page reload instead of depending only on
   rendered DOM text.
+- When Cursor's lazy dashboard does not replay the billing-summary request, the
+  extension performs one bounded, same-origin read of the known summary, plan,
+  and hard-limit JSON endpoints from the already logged-in page. Responses pass
+  through the same allowlist and sanitizers as observed traffic; raw bodies and
+  credentials are not persisted.
 - Usage-event pagination is finite and allowlisted. The extension normalizes at
   most 31 daily buckets and does not persist request rows, raw responses,
   request bodies, cookies, headers, or account identifiers.
@@ -39,6 +44,9 @@ Post-rc36 structured capture update:
   back to Cursor Usage and Spending.
 - These modules store summaries only. Individual Usage request rows remain on
   the Cursor source page and are not persisted or rendered by the extension.
+- A disabled On-Demand setting is displayed as account information, not as a
+  synchronization warning. Access, authentication, protocol, and parsing
+  failures continue to produce a warning while retaining the last valid data.
 
 Phase 291 runtime update:
 

@@ -32,7 +32,6 @@ import {
   createPageSessionDiagnostic,
   createSourceFallbackDiagnostic,
   createSourceSelectionDiagnostic,
-  createUsageThresholdDiagnostic,
 } from "../diagnostics";
 import { createCursorOfficialClient } from "./official";
 import { createCursorPersonalPageClient } from "./personal-page-client";
@@ -579,19 +578,6 @@ async function tryCursorPersonalSource({
     );
     const usageSummary = buildCursorPersonalUsageSummary(snapshot);
     const usageFacts = buildCursorPersonalUsageFacts(snapshot);
-    const visiblePlanLabel =
-      snapshot.visiblePlanLabels.length > 0
-        ? `Visible plans: ${snapshot.visiblePlanLabels.join(" · ")}`
-        : null;
-    const onDemandNote =
-      snapshot.onDemandUsageState !== null
-        ? `On-demand usage is ${snapshot.onDemandUsageState}.`
-        : null;
-    const warningReason =
-      onDemandNote ??
-      (snapshot.exportCsvAvailable
-        ? "CSV export is available on the current billing-period page."
-        : visiblePlanLabel);
 
     return {
       ok: true,
@@ -615,16 +601,8 @@ async function tryCursorPersonalSource({
         syncSource: "page_parse",
         syncStatus: "ok",
         tone: "neutral",
-        warningReason,
-        warningDiagnostic:
-          snapshot.onDemandUsageState === "off" && warningReason
-            ? createUsageThresholdDiagnostic({
-                providerId: provider.providerId,
-                usageThresholdKind: "on_demand_off",
-                rawMessage: warningReason,
-                unitLabel: "requests",
-              })
-            : null,
+        warningReason: null,
+        warningDiagnostic: null,
         usageWindows: undefined,
         usageBalances: undefined,
         usageFacts,

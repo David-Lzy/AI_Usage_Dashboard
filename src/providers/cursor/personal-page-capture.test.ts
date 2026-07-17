@@ -12,6 +12,8 @@ import {
 } from "./personal-page-capture";
 import {
   CURSOR_FILTERED_USAGE_EVENTS_PATH,
+  CURSOR_HARD_LIMIT_PATH,
+  CURSOR_PLAN_INFO_PATH,
   CURSOR_USAGE_SUMMARY_PATH,
   type CursorUsageBillingContractFixture,
 } from "./usage-billing-contract";
@@ -334,5 +336,73 @@ describe("summarizeCursorPersonalPage", () => {
         observeReload: true,
       },
     });
+  });
+
+  it("recovers a lazy-loaded billing summary through bounded same-origin requests", async () => {
+    const contractFixture =
+      usageBillingFixture as CursorUsageBillingContractFixture;
+    const page: PageSessionCapturedPage = {
+      url: "https://cursor.com/dashboard/usage",
+      title: "Cursor",
+      heading: "Usage",
+      html: "<html><body><h1>Usage</h1><p>Loading</p></body></html>",
+      observedNetwork: {
+        matchUrlSubstrings: [],
+        maxEntries: 10,
+        entries: [],
+      },
+    };
+    const capture = vi.fn<PageSessionClient["capture"]>(async (definition) => {
+      if (!definition.urlPatterns.some((pattern) => pattern.includes("/usage"))) {
+        return { status: "not_found", attempts: [] };
+      }
+
+      return {
+        status: "matched",
+        page,
+        target: {
+          tabId: 77,
+          bindingMode: "auto",
+          active: false,
+          lastAccessed: null,
+        },
+        attempts: [],
+      };
+    });
+    const executeMainWorldMock = vi.fn(async () => [
+      {
+        url: `https://cursor.com${CURSOR_USAGE_SUMMARY_PATH}`,
+        ok: true,
+        bodyText: JSON.stringify(contractFixture.usageSummary),
+      },
+      {
+        url: `https://cursor.com${CURSOR_PLAN_INFO_PATH}`,
+        ok: true,
+        bodyText: JSON.stringify(contractFixture.planInfo),
+      },
+      {
+        url: `https://cursor.com${CURSOR_HARD_LIMIT_PATH}`,
+        ok: true,
+        bodyText: JSON.stringify(contractFixture.hardLimit),
+      },
+    ]);
+    const executeMainWorld: NonNullable<PageSessionClient["executeMainWorld"]> =
+      async <T>() => (await executeMainWorldMock()) as T;
+
+    const fixture = await captureCursorPersonalLiveFixture({
+      capture,
+      executeMainWorld,
+    });
+
+    expect(fixture.routes[0]?.usageBillingContract).toEqual({
+      usageSummary: contractFixture.usageSummary,
+      planInfo: contractFixture.planInfo,
+      hardLimit: contractFixture.hardLimit,
+      usageEvents: null,
+    });
+    expect(fixture.routes[0]?.summary?.recommendedSurface).toBe(
+      "network_observer",
+    );
+    expect(executeMainWorldMock).toHaveBeenCalledTimes(1);
   });
 });

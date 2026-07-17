@@ -8,6 +8,8 @@ import {
 } from "../page-session";
 import {
   CURSOR_FILTERED_USAGE_EVENTS_PATH,
+  CURSOR_HARD_LIMIT_PATH,
+  CURSOR_PLAN_INFO_PATH,
   CURSOR_USAGE_BILLING_PATHS,
   CURSOR_USAGE_SUMMARY_PATH,
   extractCursorObservedUsageBillingContract,
@@ -105,6 +107,11 @@ const CURSOR_PERSONAL_ROUTE_DEFINITIONS: CursorRouteDefinition[] = [
 const CURSOR_USAGE_PAGE_URL = "https://cursor.com/cn/dashboard/usage";
 const MAX_CURSOR_USAGE_EVENT_PAGES = 10;
 const MAX_CURSOR_USAGE_RESPONSE_LENGTH = 240_000;
+const CURSOR_DIRECT_SUMMARY_PATHS = [
+  CURSOR_USAGE_SUMMARY_PATH,
+  CURSOR_PLAN_INFO_PATH,
+  CURSOR_HARD_LIMIT_PATH,
+] as const;
 
 const TEXT_SIGNAL_PATTERN =
   /usage|remaining|request|requests|billing|reset|limit|quota|plan|included|spend|on-demand|overage|usage-based|premium|fast|period|cycle|requests used|requests left|使用|剩余|请求|额度|配额|计划|周期|重置|刷新/i;
@@ -415,6 +422,87 @@ function parseUsageEventsRequestBody(
   }
 }
 
+async function captureDirectUsageSummary(
+  client: PageSessionClient,
+  tabId: number,
+): Promise<CursorObservedUsageBillingContract | null> {
+  if (!client.executeMainWorld) {
+    return null;
+  }
+
+  const entries = await client
+    .executeMainWorld<
+      Array<{ url: string; ok: boolean; bodyText: string | null }>
+    >(
+      tabId,
+      async (...rawArgs: unknown[]) => {
+        const rawPaths = rawArgs[0];
+        const rawMaxBodyLength = rawArgs[1];
+        if (!Array.isArray(rawPaths)) {
+          return [];
+        }
+
+        const origin = globalThis.location.origin;
+        if (globalThis.location.hostname !== "cursor.com") {
+          return [];
+        }
+
+        const maxBodyLength =
+          typeof rawMaxBodyLength === "number" && rawMaxBodyLength > 0
+            ? Math.min(250_000, rawMaxBodyLength)
+            : 240_000;
+        const paths = rawPaths
+          .filter(
+            (path): path is string =>
+              typeof path === "string" &&
+              path.startsWith("/") &&
+              !path.startsWith("//"),
+          )
+          .slice(0, 3);
+
+        return Promise.all(
+          paths.map(async (path) => {
+            const target = new URL(path, origin);
+            if (target.origin !== origin) {
+              return { url: target.href, ok: false, bodyText: null };
+            }
+
+            const controller = new AbortController();
+            const timeoutId = globalThis.setTimeout(
+              () => controller.abort(),
+              8_000,
+            );
+
+            try {
+              const response = await globalThis.fetch(target.href, {
+                method: "GET",
+                credentials: "include",
+                cache: "no-store",
+                signal: controller.signal,
+              });
+              if (!response.ok) {
+                return { url: target.href, ok: false, bodyText: null };
+              }
+
+              const bodyText = await response.text();
+              return bodyText.length <= maxBodyLength
+                ? { url: target.href, ok: true, bodyText }
+                : { url: target.href, ok: false, bodyText: null };
+            } catch {
+              return { url: target.href, ok: false, bodyText: null };
+            } finally {
+              globalThis.clearTimeout(timeoutId);
+            }
+          }),
+        );
+      },
+      [[...CURSOR_DIRECT_SUMMARY_PATHS], MAX_CURSOR_USAGE_RESPONSE_LENGTH],
+    )
+    .catch(() => []);
+
+  return extractCursorObservedUsageBillingContract(entries);
+}
+
 async function captureAdditionalUsageEventPages(
   client: PageSessionClient,
   tabId: number,
@@ -613,15 +701,23 @@ async function captureRoute(
   const observedContract = extractCursorObservedUsageBillingContract(
     observedEntries,
   );
+  const directSummaryContract =
+    route.routeKey === "dashboard_usage" && !observedContract?.usageSummary
+      ? await captureDirectUsageSummary(client, result.target.tabId)
+      : null;
+  const recoveredContract = mergeCursorObservedUsageBillingContracts([
+    observedContract,
+    directSummaryContract,
+  ]);
   const usageBillingContract =
     route.routeKey === "dashboard_usage"
       ? await captureAdditionalUsageEventPages(
           client,
           result.target.tabId,
           observedEntries,
-          observedContract,
+          recoveredContract,
         )
-      : observedContract;
+      : recoveredContract;
   const summary = summarizeCursorPersonalPage(result.page);
 
   return {

@@ -199,18 +199,8 @@ describe("syncCursorProvider", () => {
     );
     expect(snapshot.syncStatus).toBe("ok");
     expect(snapshot.tone).toBe("neutral");
-    expect(snapshot.warningReason).toBe("On-demand usage is off.");
-    expect(snapshot.warningDiagnostic).toMatchObject({
-      code: "usage.on_demand_off",
-      category: "usage_threshold",
-      severity: "info",
-      rawMessage: snapshot.warningReason,
-      params: {
-        providerId: "cursor-personal-page",
-        usageThresholdKind: "on_demand_off",
-        unitLabel: "requests",
-      },
-    });
+    expect(snapshot.warningReason).toBeNull();
+    expect(snapshot.warningDiagnostic).toBeNull();
     expect(snapshot.usageWindows).toBeUndefined();
     expect(snapshot.usageBalances).toBeUndefined();
     expect(snapshot.usageFacts).toEqual([
@@ -660,17 +650,8 @@ describe("syncCursorProvider", () => {
     });
 
     expect(snapshot.syncSource).toBe("page_parse");
-    expect(snapshot.warningDiagnostic).toMatchObject({
-      code: "usage.on_demand_off",
-      category: "usage_threshold",
-      severity: "info",
-      rawMessage: "On-demand usage is off.",
-      params: {
-        providerId: "cursor-personal-page",
-        usageThresholdKind: "on_demand_off",
-        unitLabel: "requests",
-      },
-    });
+    expect(snapshot.warningReason).toBeNull();
+    expect(snapshot.warningDiagnostic).toBeNull();
     expect(snapshot.usageSummary).toBe(
       "Visible Cursor usage: Visible plans: Pro · Pro+ · Ultra · On-demand usage is off. · CSV export available",
     );
