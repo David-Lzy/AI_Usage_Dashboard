@@ -13,6 +13,8 @@ type UseSettingsCredentialDraftsOptions = {
     workspaceId: string,
   ) => void;
   onClearCodexWorkspaceConfig: () => void;
+  onSaveCodexSessionToken: (accessToken: string) => void;
+  onClearCodexSessionToken: () => void;
 };
 
 export function useSettingsCredentialDrafts({
@@ -20,6 +22,8 @@ export function useSettingsCredentialDrafts({
   onClearProviderAdminApiKey,
   onSaveCodexWorkspaceConfig,
   onClearCodexWorkspaceConfig,
+  onSaveCodexSessionToken,
+  onClearCodexSessionToken,
 }: UseSettingsCredentialDraftsOptions) {
   const [credentialInputs, setCredentialInputs] = useState<
     Record<ApiKeyProviderId, string>
@@ -30,6 +34,7 @@ export function useSettingsCredentialDrafts({
   });
   const [codexAnalyticsApiKeyInput, setCodexAnalyticsApiKeyInput] = useState("");
   const [codexWorkspaceIdInput, setCodexWorkspaceIdInput] = useState("");
+  const [codexSessionTokenInput, setCodexSessionTokenInput] = useState("");
 
   function handleSaveProviderApiKey(
     providerId: ApiKeyProviderId,
@@ -78,6 +83,23 @@ export function useSettingsCredentialDrafts({
     onClearCodexWorkspaceConfig();
   }
 
+  function handleSaveCodexSessionToken(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const accessToken = codexSessionTokenInput.trim();
+
+    if (!accessToken) {
+      return;
+    }
+
+    onSaveCodexSessionToken(accessToken);
+    setCodexSessionTokenInput("");
+  }
+
+  function handleClearCodexSessionToken() {
+    setCodexSessionTokenInput("");
+    onClearCodexSessionToken();
+  }
+
   function handleProviderApiKeyInputChange(
     providerId: ApiKeyProviderId,
     value: string,
@@ -91,13 +113,17 @@ export function useSettingsCredentialDrafts({
   return {
     codexAnalyticsApiKeyInput,
     codexWorkspaceIdInput,
+    codexSessionTokenInput,
     credentialInputs,
     handleClearCodexConfig,
+    handleClearCodexSessionToken,
     handleClearProviderApiKey,
     handleProviderApiKeyInputChange,
     handleSaveCodexConfig,
+    handleSaveCodexSessionToken,
     handleSaveProviderApiKey,
     setCodexAnalyticsApiKeyInput,
+    setCodexSessionTokenInput,
     setCodexWorkspaceIdInput,
   };
 }

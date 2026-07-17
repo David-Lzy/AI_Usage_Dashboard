@@ -274,6 +274,8 @@ export function createStandardAppActions({
       sessionPageActions.handleAttachActiveSessionPage,
     handleClearCodexWorkspaceConfig:
       settingsActions.handleClearCodexWorkspaceConfig,
+    handleClearCodexSessionToken:
+      settingsActions.handleClearCodexSessionToken,
     handleClearPageBinding: settingsActions.handleClearPageBinding,
     handleClearProviderAdminApiKey:
       settingsActions.handleClearProviderAdminApiKey,
@@ -290,6 +292,8 @@ export function createStandardAppActions({
       settingsActions.handleRestoreConfigurationFromChromeSync,
     handleSaveCodexWorkspaceConfig:
       settingsActions.handleSaveCodexWorkspaceConfig,
+    handleSaveCodexSessionToken:
+      settingsActions.handleSaveCodexSessionToken,
     handleSaveConfigurationToChromeSync:
       settingsActions.handleSaveConfigurationToChromeSync,
     handleSavePreferences: settingsActions.handleSavePreferences,

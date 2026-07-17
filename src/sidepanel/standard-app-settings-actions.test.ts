@@ -69,6 +69,8 @@ describe("createStandardAppSettingsActions", () => {
     actions.handleClearProviderAdminApiKey("cursor-team-api");
     actions.handleSaveCodexWorkspaceConfig("codex-key", "workspace-id");
     actions.handleClearCodexWorkspaceConfig();
+    actions.handleSaveCodexSessionToken("temporary-token");
+    actions.handleClearCodexSessionToken();
 
     expect(applyMessage).toHaveBeenCalledWith({
       type: "app:set-provider-admin-api-key",
@@ -89,6 +91,14 @@ describe("createStandardAppSettingsActions", () => {
       type: "app:set-codex-workspace-config",
       analyticsApiKey: null,
       workspaceId: null,
+    });
+    expect(applyMessage).toHaveBeenCalledWith({
+      type: "app:set-codex-session-token",
+      accessToken: "temporary-token",
+    });
+    expect(applyMessage).toHaveBeenCalledWith({
+      type: "app:set-codex-session-token",
+      accessToken: null,
     });
   });
 

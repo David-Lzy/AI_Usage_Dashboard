@@ -209,6 +209,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
     activeSessionPageAttachAvailable,
     handleAttachActiveSessionPage,
     handleClearCodexWorkspaceConfig,
+    handleClearCodexSessionToken,
     handleClearPageBinding,
     handleClearProviderAdminApiKey,
     handleExportConfiguration,
@@ -220,6 +221,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
     handleResetConfigurationToInitial,
     handleRestoreConfigurationFromChromeSync,
     handleSaveCodexWorkspaceConfig,
+    handleSaveCodexSessionToken,
     handleSaveConfigurationToChromeSync,
     handleSavePreferences,
     handleSaveProviderAdminApiKey,
@@ -474,6 +476,8 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
             onClearProviderAdminApiKey={handleClearProviderAdminApiKey}
             onSaveCodexWorkspaceConfig={handleSaveCodexWorkspaceConfig}
             onClearCodexWorkspaceConfig={handleClearCodexWorkspaceConfig}
+            onSaveCodexSessionToken={handleSaveCodexSessionToken}
+            onClearCodexSessionToken={handleClearCodexSessionToken}
             onClearPageBinding={handleClearPageBinding}
             onOpenSessionPage={handleOpenSessionPage}
             onAttachActiveSessionPage={handleAttachActiveSessionPage}

@@ -61,6 +61,8 @@ function renderSettingsPage(overrides: Partial<Parameters<typeof SettingsPage>[0
       onClearProviderAdminApiKey={() => {}}
       onSaveCodexWorkspaceConfig={() => {}}
       onClearCodexWorkspaceConfig={() => {}}
+      onSaveCodexSessionToken={() => {}}
+      onClearCodexSessionToken={() => {}}
       onClearPageBinding={() => {}}
       onOpenSessionPage={() => {}}
       onAttachActiveSessionPage={() => {}}

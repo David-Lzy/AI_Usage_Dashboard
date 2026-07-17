@@ -4,6 +4,7 @@ import {
   buildCodexSessionCredential,
   isCodexSessionCredentialUsable,
   readCodexJwtExpiryMs,
+  validateCodexManualSessionToken,
 } from "./session-credential";
 
 function encodeBase64Url(value: string): string {
@@ -17,6 +18,24 @@ function buildJwt(payload: Record<string, unknown>): string {
 }
 
 describe("Codex session credential", () => {
+  it("rejects headers, cookies, auth JSON, and refresh tokens for manual entry", () => {
+    expect(validateCodexManualSessionToken("plain-session-token")).toBe("ok");
+    expect(validateCodexManualSessionToken("Bearer token-value")).toBe(
+      "authorization_header",
+    );
+    expect(validateCodexManualSessionToken("Authorization: Bearer token")).toBe(
+      "authorization_header",
+    );
+    expect(validateCodexManualSessionToken("session_id=private; a=b")).toBe(
+      "cookie",
+    );
+    expect(validateCodexManualSessionToken('{"accessToken":"private"}')).toBe(
+      "auth_json",
+    );
+    expect(validateCodexManualSessionToken("refresh_token-value")).toBe(
+      "refresh_token",
+    );
+  });
   it("reads only the JWT expiry timestamp", () => {
     const token = buildJwt({ exp: 1_800_000_000, email: "not-returned@example.com" });
 

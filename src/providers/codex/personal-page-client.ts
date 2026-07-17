@@ -33,6 +33,7 @@ export type CodexPersonalPageClientOptions = {
   hydrationRetryDelayMs?: number;
   sessionApiClient?: CodexSessionApiClient;
   trigger?: SyncTrigger;
+  deadlineMs?: number;
 };
 
 export type CodexPersonalPageUsageResult = {
@@ -55,6 +56,8 @@ export type CodexPersonalPageClient = {
 
 const DEFAULT_HYDRATION_RETRY_ATTEMPTS = 2;
 const DEFAULT_HYDRATION_RETRY_DELAY_MS = 750;
+export const CODEX_AUTOMATIC_REFRESH_DEADLINE_MS = 12_000;
+export const CODEX_MANUAL_REFRESH_DEADLINE_MS = 20_000;
 
 function delay(ms: number): Promise<void> {
   if (ms <= 0) {
@@ -62,6 +65,27 @@ function delay(ms: number): Promise<void> {
   }
 
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function settleWithinDeadline<T>(
+  promise: Promise<T>,
+  deadlineMs: number,
+  fallback: () => T,
+): Promise<T> {
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+  try {
+    return await Promise.race([
+      promise,
+      new Promise<T>((resolve) => {
+        timeoutId = setTimeout(() => resolve(fallback()), deadlineMs);
+      }),
+    ]);
+  } finally {
+    if (timeoutId !== undefined) {
+      clearTimeout(timeoutId);
+    }
+  }
 }
 
 function shouldRetryHydratingCodexRoute(
@@ -200,81 +224,108 @@ export function createCodexPersonalPageClient(
       }
 
       const trigger = options.trigger ?? "manual";
-      const directResult = await (
-        options.sessionApiClient ?? codexSessionApiClient
-      ).getUsageSnapshot(trigger);
+      const refreshPromise = (async (): Promise<CodexPersonalPageUsageResult> => {
+        const directResult = await (
+          options.sessionApiClient ?? codexSessionApiClient
+        ).getUsageSnapshot(trigger);
 
-      if (directResult.ok) {
-        return {
-          captureSource: "session_api",
-          replacePreviousSnapshot: directResult.replacePreviousSnapshot,
-          result: directResult.result,
-          pageBinding: normalizedBinding,
+        if (directResult.ok) {
+          return {
+            captureSource: "session_api",
+            replacePreviousSnapshot: directResult.replacePreviousSnapshot,
+            result: directResult.result,
+            pageBinding: normalizedBinding,
+          };
+        }
+
+        const pageSessionClient =
+          options.pageSessionClient ?? createPageSessionClient();
+        const pageSessionBinding = {
+          mode: normalizedBinding.mode,
+          tabId: normalizedBinding.tabId,
+          matchedUrl: normalizedBinding.matchedUrl,
+          matchedTitle: normalizedBinding.matchedTitle,
         };
-      }
-
-      const pageSessionClient =
-        options.pageSessionClient ?? createPageSessionClient();
-      const pageSessionBinding = {
-        mode: normalizedBinding.mode,
-        tabId: normalizedBinding.tabId,
-        matchedUrl: normalizedBinding.matchedUrl,
-        matchedTitle: normalizedBinding.matchedTitle,
-      };
-      const captureOptions = {
-        openPageWhenMissing:
-          trigger === "manual" && (options.openPageWhenMissing ?? false),
-        reloadPageBeforeCapture: trigger === "manual",
-      };
-      const hydrationCaptureOptions = {
-        openPageWhenMissing: false,
-        reloadPageBeforeCapture: false,
-      };
-      const retryAttempts = Math.max(
-        0,
-        options.hydrationRetryAttempts ?? DEFAULT_HYDRATION_RETRY_ATTEMPTS,
-      );
-      const retryDelayMs = Math.max(
-        0,
-        options.hydrationRetryDelayMs ?? DEFAULT_HYDRATION_RETRY_DELAY_MS,
-      );
-      let fixture = await captureCodexPersonalLiveFixture(
-        pageSessionClient,
-        pageSessionBinding,
-        captureOptions,
-      );
-      let result = parseCodexPersonalLiveFixture(fixture);
-
-      for (
-        let attempt = 0;
-        attempt < retryAttempts &&
-        shouldRetryHydratingCodexRoute(fixture, result);
-        attempt += 1
-      ) {
-        await delay(retryDelayMs);
-        const hydratedFixture = await captureCodexPersonalLiveFixture(
+        const captureOptions = {
+          openPageWhenMissing:
+            trigger === "manual" && (options.openPageWhenMissing ?? false),
+          reloadPageBeforeCapture: trigger === "manual",
+        };
+        const hydrationCaptureOptions = {
+          openPageWhenMissing: false,
+          reloadPageBeforeCapture: false,
+        };
+        const retryAttempts = Math.max(
+          0,
+          options.hydrationRetryAttempts ?? DEFAULT_HYDRATION_RETRY_ATTEMPTS,
+        );
+        const retryDelayMs = Math.max(
+          0,
+          options.hydrationRetryDelayMs ?? DEFAULT_HYDRATION_RETRY_DELAY_MS,
+        );
+        let fixture = await captureCodexPersonalLiveFixture(
           pageSessionClient,
           pageSessionBinding,
-          hydrationCaptureOptions,
+          captureOptions,
         );
-        fixture = retainObservedUsageHistory(hydratedFixture, fixture);
-        result = parseCodexPersonalLiveFixture(fixture);
-      }
+        let result = parseCodexPersonalLiveFixture(fixture);
 
-      const routeForBinding = chooseBindingRoute(fixture);
+        for (
+          let attempt = 0;
+          attempt < retryAttempts &&
+          shouldRetryHydratingCodexRoute(fixture, result);
+          attempt += 1
+        ) {
+          await delay(retryDelayMs);
+          const hydratedFixture = await captureCodexPersonalLiveFixture(
+            pageSessionClient,
+            pageSessionBinding,
+            hydrationCaptureOptions,
+          );
+          fixture = retainObservedUsageHistory(hydratedFixture, fixture);
+          result = parseCodexPersonalLiveFixture(fixture);
+        }
 
-      return {
+        const routeForBinding = chooseBindingRoute(fixture);
+
+        return {
+          captureSource: "page_parse",
+          directApiFailure: directResult,
+          result,
+          pageBinding: routeForBinding
+            ? buildBindingFromRouteCapture(
+                routeForBinding,
+                normalizedBinding,
+                fixture.capturedAt,
+              )
+            : normalizedBinding,
+        };
+      })();
+      const deadlineMs = Math.max(
+        1,
+        options.deadlineMs ??
+          (trigger === "manual"
+            ? CODEX_MANUAL_REFRESH_DEADLINE_MS
+            : CODEX_AUTOMATIC_REFRESH_DEADLINE_MS),
+      );
+
+      return settleWithinDeadline(refreshPromise, deadlineMs, () => ({
         captureSource: "page_parse",
-        directApiFailure: directResult,
-        result,
-        pageBinding: routeForBinding
-          ? buildBindingFromRouteCapture(
-              routeForBinding,
-              normalizedBinding,
-              fixture.capturedAt,
-            )
-          : normalizedBinding,
-      };
+        directApiFailure: {
+          code: "request_timeout",
+          reason:
+            "The Codex refresh exceeded its local deadline before a complete result was available.",
+          retryAt: null,
+        },
+        result: {
+          status: "capture_unavailable",
+          reason:
+            "The Codex page fallback did not finish before the local refresh deadline.",
+          chosenRoute: null,
+          routeStatuses: [],
+        },
+        pageBinding: normalizedBinding,
+      }));
     },
   };
 }

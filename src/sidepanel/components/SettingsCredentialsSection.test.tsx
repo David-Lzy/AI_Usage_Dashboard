@@ -51,7 +51,18 @@ describe("SettingsCredentialsSection", () => {
           "codex-enterprise-api": "",
         }}
         codexAnalyticsApiKeyInput="codex-key"
+        codexSessionTokenInput="temporary-token"
         codexWorkspaceIdInput="workspace-1"
+        codexSessionLabels={{
+          title: "Codex temporary session token",
+          state: "Session only",
+          help: "Advanced recovery only.",
+          input: "Temporary access token",
+          placeholder: "Paste only the token value",
+          save: "Use for this browser session",
+          clear: "Clear temporary token",
+          footer: "Stored in session only.",
+        }}
         labels={{
           sectionLabel: "Provider credential",
           configured: "Configured",
@@ -86,7 +97,10 @@ describe("SettingsCredentialsSection", () => {
         onProviderApiKeyInputChange={() => {}}
         onSaveCodexConfig={() => {}}
         onClearCodexConfig={() => {}}
+        onSaveCodexSessionToken={() => {}}
+        onClearCodexSessionToken={() => {}}
         onCodexAnalyticsApiKeyInputChange={() => {}}
+        onCodexSessionTokenInputChange={() => {}}
         onCodexWorkspaceIdInputChange={() => {}}
       />,
     );
@@ -96,9 +110,12 @@ describe("SettingsCredentialsSection", () => {
     expect(html).toContain('data-provider-carousel-active-id="codex-enterprise-api"');
     expect(html).toContain('data-credential-provider-id="cursor-team-api"');
     expect(html).toContain('data-credential-provider-id="codex-enterprise-api"');
+    expect(html).toContain('data-credential-provider-id="codex-session-token"');
+    expect(html).toContain('data-codex-session-token-input=""');
     expect(html).toContain('class="credential-form"');
     expect(html).toContain('type="password"');
     expect(html).toContain(">Save key<");
     expect(html).toContain(">Save config<");
+    expect(html).toContain(">Use for this browser session<");
   });
 });

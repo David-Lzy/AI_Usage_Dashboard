@@ -151,6 +151,8 @@ type SettingsPageProps = {
     workspaceId: string,
   ) => void;
   onClearCodexWorkspaceConfig: () => void;
+  onSaveCodexSessionToken: (accessToken: string) => void;
+  onClearCodexSessionToken: () => void;
   onClearPageBinding: (providerId: ProviderId) => void;
   onOpenSessionPage: (providerId: ProviderId) => void;
   onAttachActiveSessionPage: (providerId: ProviderId) => void;
@@ -216,6 +218,8 @@ export function SettingsPage({
   onClearProviderAdminApiKey,
   onSaveCodexWorkspaceConfig,
   onClearCodexWorkspaceConfig,
+  onSaveCodexSessionToken,
+  onClearCodexSessionToken,
   onClearPageBinding,
   onOpenSessionPage,
   onAttachActiveSessionPage,
@@ -227,13 +231,17 @@ export function SettingsPage({
   const {
     codexAnalyticsApiKeyInput,
     codexWorkspaceIdInput,
+    codexSessionTokenInput,
     credentialInputs,
     handleClearCodexConfig,
+    handleClearCodexSessionToken,
     handleClearProviderApiKey,
     handleProviderApiKeyInputChange,
     handleSaveCodexConfig,
+    handleSaveCodexSessionToken,
     handleSaveProviderApiKey,
     setCodexAnalyticsApiKeyInput,
+    setCodexSessionTokenInput,
     setCodexWorkspaceIdInput,
     activeSettingsSection,
     scrollToSection,
@@ -265,6 +273,8 @@ export function SettingsPage({
     onClearProviderAdminApiKey,
     onSaveCodexWorkspaceConfig,
     onClearCodexWorkspaceConfig,
+    onSaveCodexSessionToken,
+    onClearCodexSessionToken,
   });
 
   useEffect(() => {
@@ -594,8 +604,21 @@ export function SettingsPage({
                 credentialInputs={credentialInputs}
                 codexAnalyticsApiKeyInput={codexAnalyticsApiKeyInput}
                 codexWorkspaceIdInput={codexWorkspaceIdInput}
+                codexSessionTokenInput={codexSessionTokenInput}
                 carouselIndex={settingsSurfaceSession.carouselIndexById.credentials}
                 labels={settingsCopy.credentials}
+                codexSessionLabels={{
+                  title: i18n.t("settings.credentials.codex_session_title"),
+                  state: i18n.t("settings.credentials.codex_session_state"),
+                  help: i18n.t("settings.credentials.codex_session_help"),
+                  input: i18n.t("settings.credentials.codex_session_input"),
+                  placeholder: i18n.t(
+                    "settings.credentials.codex_session_placeholder",
+                  ),
+                  save: i18n.t("settings.credentials.codex_session_save"),
+                  clear: i18n.t("settings.credentials.codex_session_clear"),
+                  footer: i18n.t("settings.credentials.codex_session_footer"),
+                }}
                 textDirection={i18n.resolvedTextDirection}
                 onCarouselIndexChange={handleCredentialsCarouselIndexChange}
                 onSaveProviderApiKey={handleSaveProviderApiKey}
@@ -603,7 +626,10 @@ export function SettingsPage({
                 onProviderApiKeyInputChange={handleProviderApiKeyInputChange}
                 onSaveCodexConfig={handleSaveCodexConfig}
                 onClearCodexConfig={handleClearCodexConfig}
+                onSaveCodexSessionToken={handleSaveCodexSessionToken}
+                onClearCodexSessionToken={handleClearCodexSessionToken}
                 onCodexAnalyticsApiKeyInputChange={setCodexAnalyticsApiKeyInput}
+                onCodexSessionTokenInputChange={setCodexSessionTokenInput}
                 onCodexWorkspaceIdInputChange={setCodexWorkspaceIdInput}
               />
 

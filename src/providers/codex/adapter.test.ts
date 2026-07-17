@@ -730,6 +730,62 @@ describe("syncCodexProvider", () => {
     expect(snapshot.sourceFallbackReason).toBeNull();
   });
 
+  it("keeps the last successful Codex values when the direct API and page fallback both fail", async () => {
+    const attemptedAt = new Date(2026, 3, 21, 11, 8);
+    createCodexPersonalPageClientMock.mockReturnValue({
+      getUsageSnapshot: vi.fn(async () => ({
+        captureSource: "page_parse",
+        directApiFailure: {
+          code: "rate_limited",
+          reason:
+            "The Codex usage endpoint asked the extension to wait before retrying.",
+          retryAt: attemptedAt.getTime() + 60_000,
+        },
+        result: {
+          status: "capture_unavailable",
+          reason: "The fallback Codex page was not ready.",
+          chosenRoute: null,
+          routeStatuses: [],
+        } satisfies CodexPersonalParseResult,
+        pageBinding: createEmptyPageBinding(),
+      })),
+    });
+
+    const { snapshot } = await syncCodexProvider({
+      provider: {
+        ...baseProvider,
+        planName: "Codex Personal Usage Page (Weekly usage window)",
+        quotaUnit: "percent",
+        quotaWindow: "rolling",
+        used: 24,
+        remaining: 76,
+        total: 100,
+        resetAt: "2026-04-22 01:11",
+        resetLabel: "Weekly usage window resets at 2026-04-22 01:11",
+      },
+      secrets: emptySecrets,
+      setting: grantedSetting,
+      warningThresholdPercent: 80,
+      now: attemptedAt,
+    });
+
+    expect(snapshot.used).toBe(24);
+    expect(snapshot.remaining).toBe(76);
+    expect(snapshot.total).toBe(100);
+    expect(snapshot.syncStatus).toBe("warning");
+    expect(snapshot.tone).toBe("warning");
+    expect(snapshot.warningReason).toContain("asked the extension to wait");
+    expect(snapshot.warningReason).toContain("Page fallback");
+    expect(snapshot.warningDiagnostic).toMatchObject({
+      code: "adapter.unexpected_error",
+      params: {
+        failureCode: "rate_limited",
+        parserStage: "session_usage_api",
+      },
+    });
+    expect(snapshot.lastSyncLabel).toContain("showing last successful data");
+  });
+
   it("maps Codex parser route drift to a typed adapter parse diagnostic", async () => {
     const attemptedAt = new Date(2026, 3, 21, 11, 8);
     createCodexPersonalPageClientMock.mockReturnValue({

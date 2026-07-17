@@ -7,6 +7,52 @@ export type CodexSessionCredential = {
 
 export const CODEX_CREDENTIAL_EXPIRY_SKEW_MS = 60_000;
 
+export type CodexManualTokenValidationCode =
+  | "ok"
+  | "empty"
+  | "authorization_header"
+  | "cookie"
+  | "auth_json"
+  | "refresh_token"
+  | "invalid_whitespace";
+
+export function validateCodexManualSessionToken(
+  accessToken: string,
+): CodexManualTokenValidationCode {
+  const normalizedToken = accessToken.trim();
+
+  if (!normalizedToken) {
+    return "empty";
+  }
+  if (/^(?:authorization\s*:|bearer\s+)/i.test(normalizedToken)) {
+    return "authorization_header";
+  }
+  if (
+    /^[\[{]/.test(normalizedToken) ||
+    /["'](?:access[_-]?token|account|user|session)["']\s*:/i.test(
+      normalizedToken,
+    )
+  ) {
+    return "auth_json";
+  }
+  if (
+    /(?:^|;)\s*(?:__secure-|__host-|cf_clearance|session|cookie)[^=]*=/i.test(
+      normalizedToken,
+    ) ||
+    (/;/.test(normalizedToken) && /=/.test(normalizedToken))
+  ) {
+    return "cookie";
+  }
+  if (/^(?:refresh[_-]?token|refresh\.)/i.test(normalizedToken)) {
+    return "refresh_token";
+  }
+  if (/\s/.test(normalizedToken)) {
+    return "invalid_whitespace";
+  }
+
+  return "ok";
+}
+
 function decodeBase64Url(value: string): string | null {
   const normalized = value.replaceAll("-", "+").replaceAll("_", "/");
   const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, "=");
@@ -56,7 +102,12 @@ export function buildCodexSessionCredential({
 }): CodexSessionCredential | null {
   const normalizedToken = accessToken.trim();
 
-  if (!normalizedToken || /\s/.test(normalizedToken)) {
+  if (
+    !normalizedToken ||
+    (source === "manual_session" &&
+      validateCodexManualSessionToken(normalizedToken) !== "ok") ||
+    /\s/.test(normalizedToken)
+  ) {
     return null;
   }
 

@@ -38,6 +38,7 @@ export type AppMessage =
       analyticsApiKey: string | null;
       workspaceId: string | null;
     }
+  | { type: "app:set-codex-session-token"; accessToken: string | null }
   | { type: "app:toggle-provider-permission"; providerId: ProviderId }
   | { type: "app:request-refresh"; providerId?: ProviderId }
   | { type: "app:import-configuration-backup"; rawJson: string }

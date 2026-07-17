@@ -137,6 +137,20 @@ export function createStandardAppSettingsActions({
     });
   }
 
+  function handleSaveCodexSessionToken(accessToken: string) {
+    void applyMessage({
+      type: "app:set-codex-session-token",
+      accessToken,
+    });
+  }
+
+  function handleClearCodexSessionToken() {
+    void applyMessage({
+      type: "app:set-codex-session-token",
+      accessToken: null,
+    });
+  }
+
   function handleSavePreferences() {
     setToast({
       tone: "success",
@@ -246,6 +260,7 @@ export function createStandardAppSettingsActions({
 
   return {
     handleClearCodexWorkspaceConfig,
+    handleClearCodexSessionToken,
     handleClearPageBinding,
     handleClearProviderAdminApiKey,
     handleExportConfiguration,
@@ -253,6 +268,7 @@ export function createStandardAppSettingsActions({
     handleResetConfigurationToInitial,
     handleRestoreConfigurationFromChromeSync,
     handleSaveCodexWorkspaceConfig,
+    handleSaveCodexSessionToken,
     handleSaveConfigurationToChromeSync,
     handleSavePreferences,
     handleSaveProviderAdminApiKey,

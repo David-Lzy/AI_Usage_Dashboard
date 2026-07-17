@@ -28,6 +28,8 @@ type UseSettingsPageInput = {
   onClearProviderAdminApiKey: (providerId: ApiKeyProviderId) => void;
   onSaveCodexWorkspaceConfig: (analyticsApiKey: string, workspaceId: string) => void;
   onClearCodexWorkspaceConfig: () => void;
+  onSaveCodexSessionToken: (accessToken: string) => void;
+  onClearCodexSessionToken: () => void;
 };
 
 export function useSettingsPage({
@@ -39,12 +41,16 @@ export function useSettingsPage({
   onClearProviderAdminApiKey,
   onSaveCodexWorkspaceConfig,
   onClearCodexWorkspaceConfig,
+  onSaveCodexSessionToken,
+  onClearCodexSessionToken,
 }: UseSettingsPageInput) {
   const credentialDrafts = useSettingsCredentialDrafts({
     onSaveProviderAdminApiKey,
     onClearProviderAdminApiKey,
     onSaveCodexWorkspaceConfig,
     onClearCodexWorkspaceConfig,
+    onSaveCodexSessionToken,
+    onClearCodexSessionToken,
   });
   const sectionNavigation = useSettingsSectionNavigation(settings.motionMode);
   const i18n = createRuntimeI18n(

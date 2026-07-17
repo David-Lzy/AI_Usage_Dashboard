@@ -35,6 +35,7 @@ import {
   type CodexAnalyticsUsageRecord,
 } from "./official";
 import { createCodexPersonalPageClient } from "./personal-page-client";
+import type { CodexSessionApiFailureCode } from "./session-api-client";
 import { hasPageBindingFingerprint } from "../../shared/page-bindings";
 import {
   mergeProviderUsageHistoryModules,
@@ -82,6 +83,41 @@ function buildCodexPersonalRefreshLabel(
   return source === "session_api"
     ? "Codex session usage synced just now"
     : "Codex personal usage page synced just now";
+}
+
+function hasRetainableCodexData(provider: ProviderSnapshot): boolean {
+  return Boolean(
+    provider.used !== null ||
+      provider.remaining !== null ||
+      provider.usageWindows?.length ||
+      provider.usageBalances?.length ||
+      provider.usageHistory,
+  );
+}
+
+function buildCodexDirectFailureLabel(
+  code: CodexSessionApiFailureCode,
+): string {
+  switch (code) {
+    case "auth_missing":
+      return "Codex session authentication required";
+    case "auth_cooldown":
+      return "Codex session authentication cooling down";
+    case "unauthorized":
+      return "Codex session authentication expired";
+    case "forbidden":
+      return "Codex session account access unavailable";
+    case "rate_limited":
+      return "Codex session usage temporarily rate limited";
+    case "request_timeout":
+      return "Codex session usage request timed out";
+    case "network_error":
+      return "Codex session usage network unavailable";
+    case "server_error":
+      return "Codex session usage service unavailable";
+    case "protocol_drift":
+      return "Codex session usage protocol changed";
+  }
 }
 
 function hasCodexAnalyticsConfig(secrets: ProviderSecrets): boolean {
@@ -634,6 +670,7 @@ async function tryCodexPersonalSource({
   trigger: SyncTrigger;
 }): Promise<CodexSourceAttemptResult> {
   if (setting.status === "missing") {
+    const hasPreviousData = hasRetainableCodexData(provider);
     const warningReason =
       "Host access missing; grant Codex access for api.chatgpt.com and chatgpt.com before live sync can run.";
 
@@ -658,10 +695,13 @@ async function tryCodexPersonalSource({
           hostLabel: setting.hostsLabel,
           rawMessage: warningReason,
         }),
-        usageWindows: undefined,
-        usageBalances: undefined,
-        usageSummary: null,
-        lastSyncLabel: "Codex usage page access required",
+        usageWindows: hasPreviousData ? provider.usageWindows : undefined,
+        usageBalances: hasPreviousData ? provider.usageBalances : undefined,
+        usageSummary: hasPreviousData ? provider.usageSummary : null,
+        usageHistory: hasPreviousData ? provider.usageHistory : undefined,
+        lastSyncLabel: hasPreviousData
+          ? "Codex access required; showing last successful data"
+          : "Codex usage page access required",
         resetLabel:
           "Grant Codex host access to read the logged-in ChatGPT usage page",
       },
@@ -683,6 +723,7 @@ async function tryCodexPersonalSource({
     });
     const {
       captureSource,
+      directApiFailure,
       replacePreviousSnapshot,
       result,
       pageBinding,
@@ -693,8 +734,15 @@ async function tryCodexPersonalSource({
     };
 
     if (result.status !== "ok") {
+      const hasPreviousData = hasRetainableCodexData(provider);
       const isRecoverable =
         result.status === "open_page_required" || result.status === "logged_out";
+      const failureReason = directApiFailure
+        ? `${directApiFailure.reason} Page fallback: ${result.reason}`
+        : result.reason;
+      const directFailureLabel = directApiFailure
+        ? buildCodexDirectFailureLabel(directApiFailure.code)
+        : null;
 
       return {
         ok: false,
@@ -706,7 +754,7 @@ async function tryCodexPersonalSource({
               : result.status === "open_page_required"
                 ? "open_page_required"
                 : "sync_error",
-          detail: result.reason,
+          detail: failureReason,
         },
         snapshot: {
           ...provider,
@@ -714,10 +762,12 @@ async function tryCodexPersonalSource({
           planName: "Codex Personal Usage Page",
           quotaUnit: "percent",
           quotaWindow: "rolling",
-          used: null,
-          remaining: null,
-          total: 100,
-          resetAt: "Visible usage-window reset time",
+          used: hasPreviousData ? provider.used : null,
+          remaining: hasPreviousData ? provider.remaining : null,
+          total: hasPreviousData ? provider.total : 100,
+          resetAt: hasPreviousData
+            ? provider.resetAt
+            : "Visible usage-window reset time",
           resetLabel:
             result.status === "logged_out"
               ? "Log back into ChatGPT and reopen the Codex usage page"
@@ -728,31 +778,47 @@ async function tryCodexPersonalSource({
                   : "Inspect the live Codex page and update the parser assumptions",
           syncedAt,
           syncSource: "page_parse",
-          syncStatus: isRecoverable ? "warning" : "error",
-          tone: isRecoverable ? "warning" : "error",
-          warningReason: result.reason,
+          syncStatus: hasPreviousData || isRecoverable ? "warning" : "error",
+          tone: hasPreviousData || isRecoverable ? "warning" : "error",
+          warningReason: failureReason,
           warningDiagnostic:
-            result.status === "route_drift"
+            directApiFailure
+              ? createAdapterErrorDiagnostic({
+                  providerId: provider.providerId,
+                  adapterErrorKind:
+                    directApiFailure.code === "protocol_drift"
+                      ? "unsupported_response"
+                      : "unexpected_error",
+                  sourceKind: "session_page",
+                  failureCode: directApiFailure.code,
+                  parserStage: "session_usage_api",
+                  rawMessage: failureReason,
+                })
+              : result.status === "route_drift"
               ? createAdapterErrorDiagnostic({
                   providerId: provider.providerId,
                   adapterErrorKind: "parse_failed",
                   sourceKind: "session_page",
                   failureCode: "route_drift",
                   parserStage: "personal_usage_page",
-                  rawMessage: result.reason,
+                  rawMessage: failureReason,
                 })
               : createPageSessionDiagnostic({
                   providerId: provider.providerId,
                   pageSessionKind: getCodexPageSessionDiagnosticKind(
                     result.status,
                   ),
-                  rawMessage: result.reason,
+                  rawMessage: failureReason,
                 }),
-          usageWindows: undefined,
-          usageBalances: undefined,
-          usageSummary: null,
-          lastSyncLabel:
-            result.status === "logged_out"
+          usageWindows: hasPreviousData ? provider.usageWindows : undefined,
+          usageBalances: hasPreviousData ? provider.usageBalances : undefined,
+          usageSummary: hasPreviousData ? provider.usageSummary : null,
+          usageHistory: hasPreviousData ? provider.usageHistory : undefined,
+          lastSyncLabel: directFailureLabel
+            ? hasPreviousData
+              ? `${directFailureLabel}; showing last successful data`
+              : directFailureLabel
+            : result.status === "logged_out"
               ? "Codex usage page session missing"
               : result.status === "open_page_required"
                 ? "Codex usage page not open"
@@ -828,6 +894,7 @@ async function tryCodexPersonalSource({
       setting: nextSetting,
     };
   } catch (error) {
+    const hasPreviousData = hasRetainableCodexData(provider);
     const detail =
       error instanceof Error
         ? error.message
@@ -844,8 +911,8 @@ async function tryCodexPersonalSource({
         ...provider,
         syncedAt,
         syncSource: "page_parse",
-        syncStatus: "error",
-        tone: "error",
+        syncStatus: hasPreviousData ? "warning" : "error",
+        tone: hasPreviousData ? "warning" : "error",
         warningReason: detail,
         warningDiagnostic: createAdapterErrorDiagnostic({
           providerId: provider.providerId,
@@ -855,10 +922,13 @@ async function tryCodexPersonalSource({
           parserStage: "personal_usage_page",
           rawMessage: detail,
         }),
-        usageWindows: undefined,
-        usageBalances: undefined,
-        usageSummary: null,
-        lastSyncLabel: "Codex personal usage page sync failed just now",
+        usageWindows: hasPreviousData ? provider.usageWindows : undefined,
+        usageBalances: hasPreviousData ? provider.usageBalances : undefined,
+        usageSummary: hasPreviousData ? provider.usageSummary : null,
+        usageHistory: hasPreviousData ? provider.usageHistory : undefined,
+        lastSyncLabel: hasPreviousData
+          ? "Codex sync failed; showing last successful data"
+          : "Codex personal usage page sync failed just now",
         resetLabel:
           "Retry after checking the logged-in Codex page and parser assumptions",
       },

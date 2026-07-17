@@ -1,5 +1,6 @@
 import type { ResolvedAppLocale, RuntimeMessageId, RuntimeMessages } from "./i18n";
 import { EN_RUNTIME_MESSAGES } from "./runtime-message-catalog-data/base";
+import { CODEX_SESSION_RUNTIME_MESSAGE_OVERRIDES } from "./runtime-message-catalog-data/overrides-codex-session";
 import { COMPLETION_RUNTIME_MESSAGE_OVERRIDES } from "./runtime-message-catalog-data/overrides-completion";
 import { CJK_RUNTIME_MESSAGE_OVERRIDES } from "./runtime-message-catalog-data/overrides-cjk";
 import { LATIN_RUNTIME_MESSAGE_OVERRIDES } from "./runtime-message-catalog-data/overrides-latin";
@@ -14,6 +15,7 @@ const RUNTIME_MESSAGE_OVERRIDE_SOURCES: ReadonlyArray<
   LATIN_RUNTIME_MESSAGE_OVERRIDES,
   OTHER_RUNTIME_MESSAGE_OVERRIDES,
   COMPLETION_RUNTIME_MESSAGE_OVERRIDES,
+  CODEX_SESSION_RUNTIME_MESSAGE_OVERRIDES,
 ];
 
 const RUNTIME_MESSAGE_OVERRIDES =

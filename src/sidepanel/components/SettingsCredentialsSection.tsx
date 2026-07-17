@@ -26,6 +26,17 @@ export type CredentialProviderSection = {
 type SettingsCredentialsSectionProps = {
   codexAnalyticsApiKeyInput: string;
   codexProvider: (ProviderSetting & { id: "codex-enterprise-api" }) | null;
+  codexSessionLabels: {
+    title: string;
+    state: string;
+    help: string;
+    input: string;
+    placeholder: string;
+    save: string;
+    clear: string;
+    footer: string;
+  };
+  codexSessionTokenInput: string;
   codexWorkspaceIdInput: string;
   carouselIndex?: number;
   credentialInputs: Record<ApiKeyProviderId, string>;
@@ -38,15 +49,18 @@ type SettingsCredentialsSectionProps = {
   textDirection?: ResolvedTextDirection;
   title: string;
   onClearCodexConfig: () => void;
+  onClearCodexSessionToken: () => void;
   onClearProviderApiKey: (providerId: ApiKeyProviderId) => void;
   onCarouselIndexChange?: (index: number) => void;
   onCodexAnalyticsApiKeyInputChange: (value: string) => void;
+  onCodexSessionTokenInputChange: (value: string) => void;
   onCodexWorkspaceIdInputChange: (value: string) => void;
   onProviderApiKeyInputChange: (
     providerId: ApiKeyProviderId,
     value: string,
   ) => void;
   onSaveCodexConfig: (event: FormEvent<HTMLFormElement>) => void;
+  onSaveCodexSessionToken: (event: FormEvent<HTMLFormElement>) => void;
   onSaveProviderApiKey: (
     providerId: ApiKeyProviderId,
     event: FormEvent<HTMLFormElement>,
@@ -56,6 +70,8 @@ type SettingsCredentialsSectionProps = {
 export function SettingsCredentialsSection({
   codexAnalyticsApiKeyInput,
   codexProvider,
+  codexSessionLabels,
+  codexSessionTokenInput,
   codexWorkspaceIdInput,
   carouselIndex,
   credentialInputs,
@@ -68,18 +84,17 @@ export function SettingsCredentialsSection({
   textDirection = "ltr",
   title,
   onClearCodexConfig,
+  onClearCodexSessionToken,
   onClearProviderApiKey,
   onCarouselIndexChange,
   onCodexAnalyticsApiKeyInputChange,
+  onCodexSessionTokenInputChange,
   onCodexWorkspaceIdInputChange,
   onProviderApiKeyInputChange,
   onSaveCodexConfig,
+  onSaveCodexSessionToken,
   onSaveProviderApiKey,
 }: SettingsCredentialsSectionProps) {
-  if (credentialProviders.length === 0 && !codexProvider) {
-    return null;
-  }
-
   const credentialItems: ProviderCarouselItem[] = [
     ...credentialProviders.map((item) => {
       const isConfigured = item.provider.credentialStatus === "configured";
@@ -285,6 +300,60 @@ export function SettingsCredentialsSection({
           </div>
         </div>
       </div>
+
+      <article
+        className="status-card"
+        data-credential-provider-id="codex-session-token"
+      >
+        <div className="dashboard-section__header">
+          <div>
+            <p className="section-label">{labels.sectionLabel}</p>
+            <h2 className="section-title">{codexSessionLabels.title}</h2>
+          </div>
+          <p className="meta-chip">{codexSessionLabels.state}</p>
+        </div>
+
+        <div className="credential-card">
+          <p className="supporting-copy">{codexSessionLabels.help}</p>
+          <form className="credential-form" onSubmit={onSaveCodexSessionToken}>
+            <label className="form-field">
+              <span className="form-field__label">
+                {codexSessionLabels.input}
+              </span>
+              <input
+                className="form-field__control"
+                data-codex-session-token-input=""
+                type="password"
+                autoComplete="off"
+                spellCheck={false}
+                value={codexSessionTokenInput}
+                placeholder={codexSessionLabels.placeholder}
+                onChange={(event) =>
+                  onCodexSessionTokenInputChange(event.target.value)
+                }
+              />
+            </label>
+
+            <div className="credential-actions">
+              <button
+                className="text-button"
+                type="submit"
+                disabled={!codexSessionTokenInput.trim()}
+              >
+                {codexSessionLabels.save}
+              </button>
+              <button
+                className="text-button"
+                type="button"
+                onClick={onClearCodexSessionToken}
+              >
+                {codexSessionLabels.clear}
+              </button>
+            </div>
+          </form>
+          <p className="supporting-copy">{codexSessionLabels.footer}</p>
+        </div>
+      </article>
 
       <ProviderCarousel
         ariaLabel={title}

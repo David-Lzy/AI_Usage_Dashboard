@@ -243,4 +243,26 @@ describe("createCodexPersonalPageClient", () => {
       ),
     ).toBe(true);
   });
+
+  it("settles at the global deadline when direct session recovery never completes", async () => {
+    const client = createCodexPersonalPageClient({
+      source: "live",
+      deadlineMs: 5,
+      sessionApiClient: {
+        getUsageSnapshot: vi.fn(() => new Promise<never>(() => {})),
+      },
+    });
+
+    const result = await client.getUsageSnapshot(createEmptyPageBinding());
+
+    expect(result.captureSource).toBe("page_parse");
+    expect(result.directApiFailure).toMatchObject({
+      code: "request_timeout",
+      retryAt: null,
+    });
+    expect(result.result).toMatchObject({
+      status: "capture_unavailable",
+      chosenRoute: null,
+    });
+  });
 });

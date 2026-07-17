@@ -36,11 +36,36 @@ import {
   readConfigurationBackupFromChromeSync,
   writeConfigurationBackupToChromeSync,
 } from "../shared/configuration-backup";
+import { codexCredentialBroker } from "../providers/codex/session-credential-broker";
+import { validateCodexManualSessionToken } from "../providers/codex/session-credential";
 
 export type {
   AppMessage,
   AppMessageResponse,
 } from "../shared/app-message-types";
+
+function getCodexManualTokenValidationError(accessToken: string): string | null {
+  const validation = validateCodexManualSessionToken(accessToken);
+
+  if (validation === "ok") {
+    return null;
+  }
+
+  if (validation === "authorization_header") {
+    return "Paste only the token value, without 'Bearer' or an Authorization header.";
+  }
+  if (validation === "cookie") {
+    return "Cookie text is not accepted. Paste only a temporary ChatGPT access token.";
+  }
+  if (validation === "auth_json") {
+    return "Authentication JSON is not accepted. Paste only the access token value.";
+  }
+  if (validation === "refresh_token") {
+    return "Refresh tokens are not accepted. Use only a temporary access token.";
+  }
+
+  return "Enter one temporary access token without spaces or surrounding data.";
+}
 
 export async function handleAppMessage(
   message: AppMessage,
@@ -320,6 +345,59 @@ export async function handleAppMessage(
                 message:
                   "The stored Codex analytics key and workspace ID were removed. Codex will stay in a clear missing-configuration state until both values are added again.",
               },
+      };
+    }
+
+    case "app:set-codex-session-token": {
+      if (message.accessToken === null) {
+        await codexCredentialBroker.clearCredential();
+        const state = await seedAppStateIfEmpty();
+
+        return {
+          ok: true,
+          state,
+          notice: {
+            tone: "success",
+            title: "Temporary Codex token cleared",
+            message:
+              "The session-only token was removed. The next refresh can try local ChatGPT session discovery again.",
+          },
+        };
+      }
+
+      const validationError = getCodexManualTokenValidationError(
+        message.accessToken,
+      );
+      if (validationError) {
+        return { ok: false, error: validationError };
+      }
+
+      const saved = await codexCredentialBroker.setManualCredential(
+        message.accessToken,
+      );
+      if (!saved.ok) {
+        return {
+          ok: false,
+          error:
+            "The temporary Codex token is expired or could not be used for this browser session.",
+        };
+      }
+
+      await syncStoredProviderPermissions();
+      const state = await runSyncEngine({
+        trigger: "manual",
+        providerId: "codex-personal-page",
+      });
+
+      return {
+        ok: true,
+        state,
+        notice: {
+          tone: "success",
+          title: "Temporary Codex token saved",
+          message:
+            "The token is available only for this browser session. Check the Codex card for the latest local sync result.",
+        },
       };
     }
 
