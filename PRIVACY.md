@@ -92,16 +92,24 @@ temporary failures enter bounded local cooldowns. If direct session access
 fails, the extension can fall back to the signed-in page and otherwise retains
 the last successful normalized snapshot with a stale warning.
 
-For Cursor personal usage and billing, the extension observes only verified
-structured responses from the signed-in Cursor Usage and Spending pages during
-a bounded provider refresh. It stores the normalized billing-cycle summary and
-at most 31 daily aggregate buckets. It does not store individual request rows,
-raw responses, page body text, cookies, request headers, account identifiers,
-or unrelated response fields. Billing and history retain their last successful
-values independently, so a delayed or changed page contract can produce a
-partial or saved-data state without replacing valid data with fake zeroes.
-Cursor aggregates are not included in configuration backups or raw evidence
-exports.
+For Cursor personal usage and billing, the extension first requests the known
+billing-summary endpoints from its background worker with the browser's
+existing `cursor.com` session. The browser attaches eligible site cookies only
+to `https://cursor.com`; the extension does not read, copy, log, or persist
+those cookies. This path uses the optional Cursor host access already granted
+by the user and does not activate or focus a Cursor tab.
+
+The extension also observes verified structured responses from the signed-in
+Cursor Usage and Spending pages during bounded fallback and history refreshes.
+It stores the normalized billing-cycle summary and at most 31 daily aggregate
+buckets. It does not store individual request rows, raw responses, page body
+text, cookies, request headers, account identifiers, or unrelated response
+fields. Concurrent surfaces share one in-flight summary request, recent
+automatic results are reused briefly, and failures enter bounded cooldowns.
+Billing and history retain their last successful values independently, so a
+delayed or changed page contract can produce a partial or saved-data state
+without replacing valid data with fake zeroes. Cursor aggregates are not
+included in configuration backups or raw evidence exports.
 
 ## Favicon Permission
 

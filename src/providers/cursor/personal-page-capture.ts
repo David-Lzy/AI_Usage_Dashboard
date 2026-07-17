@@ -26,6 +26,7 @@ export type CursorRecommendedExtractionSurface =
   | "boot_data"
   | "dom"
   | "network_observer"
+  | "session_api"
   | "blocked";
 
 export type CursorPersonalPageSummary = {

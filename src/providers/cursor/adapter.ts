@@ -70,10 +70,14 @@ function buildCursorRefreshLabel(): string {
   return "Cursor Admin API synced just now";
 }
 
-function buildCursorPersonalRefreshLabel(source: "fixture" | "live"): string {
+function buildCursorPersonalRefreshLabel(
+  source: "fixture" | "page_parse" | "session_api",
+): string {
   return source === "fixture"
     ? "Cursor personal fixture loaded"
-    : "Cursor personal usage page synced just now";
+    : source === "session_api"
+      ? "Cursor personal session synced just now"
+      : "Cursor personal usage page synced just now";
 }
 
 function buildCursorPersonalUsageSummary(
@@ -483,13 +487,14 @@ async function tryCursorPersonalSource({
       : "fixture";
     const client = createCursorPersonalPageClient({
       source: personalSource,
+      trigger,
       openPageWhenMissing: shouldOpenCursorPageWhenMissing({
         provider,
         setting,
         trigger,
       }),
     });
-    const { result, pageBinding } = await client.getUsageSnapshot(
+    const { result, pageBinding, captureSource } = await client.getUsageSnapshot(
       setting.pageBinding,
     );
     const nextSetting: ProviderSetting = {
@@ -608,7 +613,7 @@ async function tryCursorPersonalSource({
         usageFacts,
         usageSummary,
         ...(cursorUsage ? { cursorUsage } : {}),
-        lastSyncLabel: buildCursorPersonalRefreshLabel(personalSource),
+        lastSyncLabel: buildCursorPersonalRefreshLabel(captureSource),
       },
       setting: nextSetting,
     };

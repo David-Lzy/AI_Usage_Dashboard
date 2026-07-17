@@ -348,6 +348,40 @@ export function parseCursorPersonalPageSummary(
   return parseSnapshotFromSummary(routeKey, summary);
 }
 
+export function parseCursorPersonalUsageContract(
+  usageBillingContract: CursorObservedUsageBillingContract,
+  capturedAt = new Date().toISOString(),
+): Extract<CursorPersonalParseResult, { status: "ok" }> | null {
+  const snapshot = parseSnapshotFromSummary(
+    "dashboard_usage",
+    {
+      url: "https://cursor.com/api/usage-summary",
+      title: "Cursor personal session usage",
+      heading: "Usage",
+      localePrefix: null,
+      recommendedSurface: "session_api",
+      textSnippets: [],
+      scriptMarkers: {
+        hasNextDataScript: false,
+        hasNextFlightStream: false,
+        hasBuildManifest: false,
+        hasCloudflareChallenge: false,
+      },
+      keywordSignals: {
+        hasUsageSignal: true,
+        hasRemainingSignal: false,
+        hasRequestSignal: false,
+        hasResetSignal: false,
+        hasPlanSignal: usageBillingContract.planInfo !== null,
+      },
+    },
+    usageBillingContract,
+    capturedAt,
+  );
+
+  return snapshot ? { status: "ok", snapshot } : null;
+}
+
 export function parseCursorPersonalLiveFixture(
   fixture: CursorPersonalLiveFixture,
 ): CursorPersonalParseResult {

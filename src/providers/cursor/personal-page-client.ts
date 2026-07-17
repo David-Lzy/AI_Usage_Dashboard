@@ -1,6 +1,6 @@
 import personalPageLiveEvidenceFixture from "../../../fixtures/cursor/personal-page-live-evidence.fixture.json";
 import { normalizePageBinding, reconcilePageBindingFromSessionResult } from "../../shared/page-bindings";
-import type { ProviderPageBinding } from "../types";
+import type { ProviderPageBinding, SyncTrigger } from "../types";
 import {
   createPageSessionClient,
   hasLivePageSessionApis,
@@ -17,11 +17,18 @@ import {
   type CursorPersonalEvidenceFixture,
   type CursorPersonalParseResult,
 } from "./personal-page-parser";
+import {
+  cursorSessionApiClient,
+  type CursorSessionApiClient,
+  type CursorSessionApiFailureCode,
+} from "./session-api-client";
 import { mergeCursorObservedUsageBillingContracts } from "./usage-billing-contract";
 
 export type CursorPersonalPageClientOptions = {
   source?: "fixture" | "live";
   pageSessionClient?: PageSessionClient;
+  sessionApiClient?: CursorSessionApiClient;
+  trigger?: SyncTrigger;
   openPageWhenMissing?: boolean;
   hydrationRetryAttempts?: number;
   hydrationRetryDelayMs?: number;
@@ -30,6 +37,12 @@ export type CursorPersonalPageClientOptions = {
 export type CursorPersonalPageUsageResult = {
   result: CursorPersonalParseResult;
   pageBinding: ProviderPageBinding;
+  captureSource: "fixture" | "page_parse" | "session_api";
+  directApiFailure?: {
+    code: CursorSessionApiFailureCode;
+    reason: string;
+    retryAt: number | null;
+  };
 };
 
 export type CursorPersonalPageClient = {
@@ -183,6 +196,7 @@ export function createCursorPersonalPageClient(
               ],
             } satisfies CursorPersonalParseResult,
             pageBinding: normalizedBinding,
+            captureSource: "fixture",
           };
         }
 
@@ -192,6 +206,18 @@ export function createCursorPersonalPageClient(
             snapshot,
           } satisfies CursorPersonalParseResult,
           pageBinding: normalizedBinding,
+          captureSource: "fixture",
+        };
+      }
+
+      const directResult = await (
+        options.sessionApiClient ?? cursorSessionApiClient
+      ).getUsageSnapshot(options.trigger ?? "manual");
+      if (directResult.ok) {
+        return {
+          result: directResult.result,
+          pageBinding: normalizedBinding,
+          captureSource: "session_api",
         };
       }
 
@@ -244,6 +270,8 @@ export function createCursorPersonalPageClient(
 
       return {
         result,
+        captureSource: "page_parse",
+        directApiFailure: directResult,
         pageBinding: routeForBinding
           ? buildBindingFromRouteCapture(
               routeForBinding,

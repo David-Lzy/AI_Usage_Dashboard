@@ -20,6 +20,10 @@ AI Usage Dashboard is designed to avoid persistent collection of raw browser aut
 - Advanced Codex recovery accepts only a bare temporary access-token value. It
   rejects cookies, authentication JSON, refresh tokens, and complete
   Authorization headers, and provides an immediate clear action.
+- Cursor personal summary requests reuse the browser's existing signed-in
+  `cursor.com` session with optional host access. Eligible cookies are attached
+  by the browser only to `cursor.com`; extension code does not read, persist,
+  export, synchronize, or log them.
 - It stores settings, optional API credentials, page bindings, cached snapshots,
   locally cached provider favicon images for toolbar icon matching, and
   import/export payloads in the user's Chrome profile.

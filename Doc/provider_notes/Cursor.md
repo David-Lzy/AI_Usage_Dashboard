@@ -1,6 +1,6 @@
 # Cursor Provider Note
 
-Date: 2026-07-15
+Date: 2026-07-17
 
 Process rule:
 
@@ -18,6 +18,24 @@ Status note:
 
 - this provider note should track the current selected source path, support boundary, and official-source basis for Cursor
 - refresh it whenever the chosen source path, active release promise, or relevant official docs change
+
+Post-0.2.0-rc.1 background session update:
+
+- Cursor personal billing summary refresh now starts in the extension service
+  worker and requests the verified summary, plan, and hard-limit endpoints with
+  the browser's existing `cursor.com` session.
+- The background summary path does not activate, focus, reload, or depend on a
+  Cursor dashboard renderer. It therefore remains available when Chrome
+  throttles or freezes an open background Cursor tab.
+- The browser attaches eligible cookies to `cursor.com`; extension code does
+  not read or persist cookies, headers, account identifiers, or raw response
+  bodies.
+- Concurrent surfaces share one in-flight request. Automatic refreshes reuse a
+  short sanitized cache and apply bounded timeout, rate-limit, and transient
+  failure cooldowns.
+- The direct path requires a valid usage summary before it can replace billing
+  state. Page observation remains the aggregate-history enrichment and fallback
+  path, and a summary-only refresh preserves the last valid history.
 
 Post-rc36 structured capture update:
 

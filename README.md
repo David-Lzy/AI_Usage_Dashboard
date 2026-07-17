@@ -25,8 +25,11 @@ dashboard.
   its date-range button.
 - Shows normalized Cursor billing-cycle value, included model/API pools,
   On-Demand charges, and bounded 7/30-day aggregate trends when the signed-in
-  Cursor pages expose the verified structured responses. Billing and history
-  modules can be hidden and reordered independently on each surface.
+  Cursor session exposes the verified structured responses. Billing summary
+  refresh runs from the extension background worker without activating the
+  Cursor tab; signed-in page capture remains the bounded history and fallback
+  path. Billing and history modules can be hidden and reordered independently
+  on each surface.
 - Keeps provider data boundaries visible: exact values, partial values,
   window-scoped values, policy-only data, or unavailable data are labeled
   differently.

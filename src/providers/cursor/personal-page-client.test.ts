@@ -4,6 +4,7 @@ import { createEmptyPageBinding } from "../../shared/page-bindings";
 import usageBillingFixture from "../../../fixtures/cursor/usage-billing.fixture.json";
 import type { PageSessionClient, PageSessionResult } from "../page-session";
 import { createCursorPersonalPageClient } from "./personal-page-client";
+import { parseCursorPersonalUsageContract } from "./personal-page-parser";
 import {
   CURSOR_FILTERED_USAGE_EVENTS_PATH,
   CURSOR_USAGE_SUMMARY_PATH,
@@ -50,6 +51,36 @@ function buildMatchedCursorResult(
 }
 
 describe("createCursorPersonalPageClient", () => {
+  it("uses the background session API without touching the page renderer", async () => {
+    const fixture = usageBillingFixture as CursorUsageBillingContractFixture;
+    const result = parseCursorPersonalUsageContract({
+      usageSummary: fixture.usageSummary,
+      planInfo: fixture.planInfo,
+      hardLimit: fixture.hardLimit,
+      usageEvents: null,
+    });
+    expect(result).not.toBeNull();
+
+    const capture = vi.fn<PageSessionClient["capture"]>();
+    const getUsageSnapshot = vi.fn(async () => ({
+      ok: true as const,
+      result: result!,
+    }));
+    const client = createCursorPersonalPageClient({
+      source: "live",
+      pageSessionClient: { capture },
+      sessionApiClient: { getUsageSnapshot },
+      trigger: "alarm",
+    });
+
+    const response = await client.getUsageSnapshot(createEmptyPageBinding());
+
+    expect(response.captureSource).toBe("session_api");
+    expect(response.result.status).toBe("ok");
+    expect(getUsageSnapshot).toHaveBeenCalledWith("alarm");
+    expect(capture).not.toHaveBeenCalled();
+  });
+
   it("opens and retries the Cursor usage route while the dashboard hydrates", async () => {
     let usageCaptureCount = 0;
     const capture = vi.fn<PageSessionClient["capture"]>(async (definition) => {
@@ -117,16 +148,25 @@ describe("createCursorPersonalPageClient", () => {
     const client = createCursorPersonalPageClient({
       source: "live",
       pageSessionClient: { capture },
+      sessionApiClient: {
+        getUsageSnapshot: vi.fn(async () => ({
+          ok: false as const,
+          code: "network_error" as const,
+          reason: "Background session unavailable in this page fallback test.",
+          retryAt: null,
+        })),
+      },
       openPageWhenMissing: true,
       hydrationRetryAttempts: 2,
       hydrationRetryDelayMs: 0,
     });
 
-    const { result, pageBinding } = await client.getUsageSnapshot(
+    const { result, pageBinding, captureSource } = await client.getUsageSnapshot(
       createEmptyPageBinding(),
     );
 
     expect(result.status).toBe("ok");
+    expect(captureSource).toBe("page_parse");
     expect(usageCaptureCount).toBe(2);
     expect(pageBinding).toMatchObject({
       status: "bound",

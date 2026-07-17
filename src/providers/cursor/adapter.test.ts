@@ -85,6 +85,7 @@ function buildCursorPersonalPageResponse(result: CursorPersonalParseResult) {
   return {
     result,
     pageBinding: createEmptyPageBinding(),
+    captureSource: "fixture" as const,
   };
 }
 
@@ -793,6 +794,7 @@ describe("syncCursorProvider", () => {
 
     expect(createCursorPersonalPageClientMock).toHaveBeenCalledWith({
       source: "fixture",
+      trigger: "alarm",
       openPageWhenMissing: true,
     });
     expect(getUsageSnapshot).toHaveBeenCalledWith(
@@ -833,6 +835,7 @@ describe("syncCursorProvider", () => {
 
     expect(createCursorPersonalPageClientMock).toHaveBeenCalledWith({
       source: "fixture",
+      trigger: "alarm",
       openPageWhenMissing: true,
     });
     expect(getUsageSnapshot).toHaveBeenCalledWith(
@@ -888,6 +891,7 @@ describe("syncCursorProvider", () => {
 
     expect(createCursorPersonalPageClientMock).toHaveBeenCalledWith({
       source: "fixture",
+      trigger: "alarm",
       openPageWhenMissing: false,
     });
   });
