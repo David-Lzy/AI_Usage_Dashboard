@@ -181,9 +181,10 @@ jobs:
           ### Notes
 
           - Chrome Web Store remains the recommended install path for everyday Chrome users.
-          - Adds normalized Cursor billing-cycle summaries for plan-included value, model/API pools, and actual On-Demand charges when the signed-in Cursor Usage and Spending pages expose the verified structured responses.
-          - Adds bounded 7-day and 30-day aggregate trends across popup, side panel, dashboard, and Provider detail, with per-surface visibility and ordering controls.
-          - Handles lazy or partial Cursor page responses without replacing last-known-good modules with false zero values, and stores no raw request rows, cookies, headers, or account identifiers.
+          - Improves Codex current-quota refresh by discovering the signed-in ChatGPT session from the extension background worker before using the lazy page fallback.
+          - Reuses one short-lived session credential and bounded request budget across popup, side panel, dashboard, and background refreshes without storing cookies or raw session responses.
+          - Improves Cursor billing-summary recovery with direct background session requests while preserving the signed-in page path for bounded aggregate history and compatibility fallback.
+          - Adds a compact, default-hidden Codex Flex credit item and preserves last-known-good Codex and Cursor data when provider pages are delayed or incomplete.
           - Keeps provider source-truth, manifest-permission, and browser-package boundaries unchanged.
           NOTES
 
