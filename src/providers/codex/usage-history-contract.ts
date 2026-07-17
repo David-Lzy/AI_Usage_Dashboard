@@ -81,7 +81,9 @@ function toFiniteNumber(value: unknown): number | null {
   return Number.isFinite(numberValue) ? numberValue : null;
 }
 
-function sanitizeTokenResponse(value: unknown): CodexDailyTokenUsageResponse | null {
+export function parseCodexDailyTokenUsageResponse(
+  value: unknown,
+): CodexDailyTokenUsageResponse | null {
   if (!isRecord(value) || !Array.isArray(value.data)) {
     return null;
   }
@@ -120,7 +122,7 @@ function sanitizeTokenResponse(value: unknown): CodexDailyTokenUsageResponse | n
     : null;
 }
 
-function sanitizeWorkspaceResponse(
+export function parseCodexDailyWorkspaceUsageResponse(
   value: unknown,
 ): CodexDailyWorkspaceUsageResponse | null {
   if (!isRecord(value) || !Array.isArray(value.data)) {
@@ -184,10 +186,12 @@ export function extractCodexObservedUsageHistoryContract(
 
   for (const entry of entries ?? []) {
     if (!dailyTokenUsageBreakdown && entry.url.includes(CODEX_DAILY_TOKEN_USAGE_PATH)) {
-      dailyTokenUsageBreakdown = sanitizeTokenResponse(parseBody(entry));
+      dailyTokenUsageBreakdown = parseCodexDailyTokenUsageResponse(parseBody(entry));
     }
     if (!dailyWorkspaceUsageCounts && entry.url.includes(CODEX_DAILY_WORKSPACE_USAGE_PATH)) {
-      dailyWorkspaceUsageCounts = sanitizeWorkspaceResponse(parseBody(entry));
+      dailyWorkspaceUsageCounts = parseCodexDailyWorkspaceUsageResponse(
+        parseBody(entry),
+      );
     }
   }
 
