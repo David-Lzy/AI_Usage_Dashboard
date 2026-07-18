@@ -15,10 +15,7 @@ import {
 } from "../shared/i18n";
 import { buildPopupLocalizedCopy } from "../shared/popup-localized-copy";
 import { buildProviderSourceDisplayLocalizedCopy } from "../shared/provider-source-display-localized-copy";
-import {
-  DEFAULT_THEME_SETTINGS,
-  startThemeSettingsSync,
-} from "../shared/theme";
+import { startThemeSettingsSync } from "../shared/theme";
 import { SummaryStrip } from "../shared/components/SummaryStrip";
 import { getVisibleCustomSources } from "../shared/custom-source-view-models";
 import { SETTINGS_SECTION_IDS } from "../shared/settings-section-ids";
@@ -58,10 +55,7 @@ import {
   PopupHideProviderFeedback,
   type PopupHideProviderFeedbackState,
 } from "./PopupHideProviderFeedback";
-import {
-  PopupErrorCard,
-  PopupLoadingCard,
-} from "./PopupLoadStateCards";
+import { PopupErrorCard } from "./PopupLoadStateCards";
 import { PopupSnapshotStatusSection } from "./PopupSnapshotStatusSection";
 import { PopupSetupCoverageSection } from "./PopupSetupCoverageSection";
 import { PopupSurfaceRolesSection } from "./PopupSurfaceRolesSection";
@@ -132,12 +126,15 @@ export function PopupApp() {
       return undefined;
     }
 
-    const themeSettings =
-      loadState.status === "ready"
-        ? loadState.appState.settings
-        : DEFAULT_THEME_SETTINGS;
+    if (loadState.status !== "ready") {
+      return undefined;
+    }
 
-    return startThemeSettingsSync(themeSettings, document.documentElement, window);
+    return startThemeSettingsSync(
+      loadState.appState.settings,
+      document.documentElement,
+      window,
+    );
   }, [loadState]);
 
   useEffect(() => {
@@ -375,7 +372,7 @@ export function PopupApp() {
   }
 
   if (loadState.status === "loading") {
-    return <PopupLoadingCard runtimeI18n={runtimeI18n} />;
+    return null;
   }
 
   if (loadState.status === "error") {

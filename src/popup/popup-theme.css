@@ -579,24 +579,6 @@ body.popup-page .popup-header--surface-collapsed {
   min-block-size: 180px;
 }
 
-.popup-load-state-card__indicator {
-  display: block;
-  block-size: 4px;
-  inline-size: 100%;
-  overflow: hidden;
-  border-radius: var(--md-sys-shape-corner-full);
-  background:
-    linear-gradient(
-      90deg,
-      transparent 0%,
-      color-mix(in srgb, var(--md-sys-color-primary) 28%, transparent) 18%,
-      var(--md-sys-color-primary) 50%,
-      color-mix(in srgb, var(--md-sys-color-primary) 28%, transparent) 82%,
-      transparent 100%
-    ),
-    var(--md-sys-color-surface-container-highest);
-}
-
 .popup-load-state-card--error {
   gap: var(--app-space-4);
 }

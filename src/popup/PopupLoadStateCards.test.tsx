@@ -3,10 +3,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
 import { createRuntimeI18n } from "../shared/i18n";
-import {
-  PopupErrorCard,
-  PopupLoadingCard,
-} from "./PopupLoadStateCards";
+import { PopupErrorCard } from "./PopupLoadStateCards";
 
 const popupThemeCss = readFileSync(
   new URL("./popup-theme.css", import.meta.url),
@@ -14,17 +11,6 @@ const popupThemeCss = readFileSync(
 );
 
 describe("PopupLoadStateCards", () => {
-  it("renders loading as a polite Material state card with a stable indicator", () => {
-    const html = renderToStaticMarkup(
-      <PopupLoadingCard runtimeI18n={createRuntimeI18n("en")} />,
-    );
-
-    expect(html).toContain("popup-load-state-card--loading");
-    expect(html).toContain('aria-live="polite"');
-    expect(html).toContain("popup-load-state-card__indicator");
-    expect(html).toContain("Loading cached dashboard state");
-  });
-
   it("renders errors as a toned alert card with retry first", () => {
     const html = renderToStaticMarkup(
       <PopupErrorCard
@@ -50,6 +36,5 @@ describe("PopupLoadStateCards", () => {
     expect(popupThemeCss).toContain(
       "grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));",
     );
-    expect(popupThemeCss).toContain(".popup-load-state-card__indicator");
   });
 });

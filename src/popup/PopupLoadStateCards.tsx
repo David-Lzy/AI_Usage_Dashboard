@@ -1,9 +1,5 @@
 import type { RuntimeI18n } from "../shared/i18n";
 
-type PopupLoadingCardProps = {
-  runtimeI18n: RuntimeI18n;
-};
-
 type PopupErrorCardProps = {
   message: string;
   runtimeI18n: RuntimeI18n;
@@ -11,22 +7,6 @@ type PopupErrorCardProps = {
   onOpenSettings: () => void | Promise<void>;
   onRetry: () => void | Promise<void>;
 };
-
-export function PopupLoadingCard({ runtimeI18n }: PopupLoadingCardProps) {
-  return (
-    <main className="app-shell popup-shell">
-      <section
-        className="status-card popup-load-state-card popup-load-state-card--loading"
-        aria-live="polite"
-      >
-        <p className="section-label">{runtimeI18n.t("popup.loading.eyebrow")}</p>
-        <h1 className="section-title">{runtimeI18n.t("popup.loading.title")}</h1>
-        <p className="supporting-copy">{runtimeI18n.t("popup.loading.detail")}</p>
-        <span className="popup-load-state-card__indicator" aria-hidden="true" />
-      </section>
-    </main>
-  );
-}
 
 export function PopupErrorCard({
   message,

@@ -38,6 +38,15 @@ async function ensureBackgroundAlarms(state: AppState) {
   await ensureActionBadgeRotationAlarm(state);
 }
 
+async function syncProviderPermissionState() {
+  if (await readStoreScreenshotRuntimeLock()) {
+    return;
+  }
+
+  const state = await syncStoredProviderPermissions();
+  await syncActionToolbarFromState(state);
+}
+
 async function bootstrapBackground() {
   console.info(
     `%cAI Usage Dashboard ${BUILD_INFO.version}`,
@@ -67,6 +76,14 @@ chrome.runtime.onInstalled.addListener(() => {
 
 chrome.runtime.onStartup.addListener(() => {
   void bootstrapBackground();
+});
+
+chrome.permissions.onAdded.addListener(() => {
+  void syncProviderPermissionState().catch(() => undefined);
+});
+
+chrome.permissions.onRemoved.addListener(() => {
+  void syncProviderPermissionState().catch(() => undefined);
 });
 
 chrome.alarms.onAlarm.addListener((alarm) => {
@@ -167,7 +184,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 
   if (typeof message?.type === "string" && message.type.startsWith("app:")) {
     void handleAppMessage(message as AppMessage).then((response) => {
-      if (response.ok) {
+      if (response.ok && message.type !== "app:read-state") {
         void syncActionToolbarFromState(response.state);
       }
 

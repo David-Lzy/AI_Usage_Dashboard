@@ -70,6 +70,11 @@ function getCodexManualTokenValidationError(accessToken: string): string | null 
 export async function handleAppMessage(
   message: AppMessage,
 ): Promise<AppMessageResponse> {
+  if (message.type === "app:read-state") {
+    const state = await seedAppStateIfEmpty();
+    return { ok: true, state };
+  }
+
   const isStoreScreenshotRuntimeLocked = await readStoreScreenshotRuntimeLock();
 
   async function ensureBackgroundAlarms(state: AppState): Promise<void> {
@@ -90,20 +95,6 @@ export async function handleAppMessage(
       const state = await runSyncEngine({
         trigger: "bootstrap",
       });
-      await ensureBackgroundAlarms(state);
-      return { ok: true, state };
-    }
-
-    case "app:read-state": {
-      if (isStoreScreenshotRuntimeLocked) {
-        const state = await seedAppStateIfEmpty();
-        await ensureBackgroundAlarms(state);
-        return { ok: true, state };
-      }
-
-      await syncStoredProviderPermissions();
-      await syncStoredProviderCredentials();
-      const state = await seedAppStateIfEmpty();
       await ensureBackgroundAlarms(state);
       return { ok: true, state };
     }
