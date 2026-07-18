@@ -181,11 +181,9 @@ jobs:
           ### Notes
 
           - Chrome Web Store remains the recommended install path for everyday Chrome users.
-          - Reduces popup startup work and removes the transient loading card while cached dashboard state is restored.
-          - Adds localized, responsive quota reset labels with configurable date and weekday formats.
-          - Synchronizes theme changes across already-open popup, side panel, dashboard, settings, and provider detail surfaces.
-          - Makes the Animation effects preference authoritative across all extension surfaces, including explicit reduced motion and Follow system behavior.
-          - Polishes Material action icons, popup theme controls, and long translated Settings labels across narrow and wide layouts.
+          - Tightens the popup theme chooser so short and long mode labels use space more evenly.
+          - Expands the turns trend to keep every model above the 10% share threshold visible while grouping smaller series into Other.
+          - Smooths the stacked turns chart and reuses the compact scrolling legend when model labels exceed the available width.
           - Keeps provider source-truth, manifest-permission, and browser-package boundaries unchanged.
           NOTES
 
