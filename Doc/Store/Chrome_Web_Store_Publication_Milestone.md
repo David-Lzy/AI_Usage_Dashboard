@@ -15,7 +15,7 @@ Status note:
 
 - AI Usage Dashboard has a live Chrome Web Store listing
 - Chrome Web Store API status shows manifest version `0.2.0.4` published at 100%
-- source `0.2.0-rc.5` / manifest `0.2.0.5` is prepared for release and review
+- source `0.2.0-rc.5` / manifest `0.2.0.5` is submitted for review at 100%
 - no known critical user-facing bug is blocking normal use at this milestone
 - private upload receipts, package hashes, screenshots-in-progress, and
   submission handoff notes stay in ignored `.local/` material
@@ -27,8 +27,8 @@ Status note:
 - Public page status checked on 2026-07-18: reachable and listed.
 - Chrome Web Store API status observed on 2026-07-18 showed manifest version
   `0.2.0.4` published at 100%.
-- Source `0.2.0-rc.5` / manifest `0.2.0.5` is the next prepared release
-  candidate and has not yet been described as submitted or published.
+- Source `0.2.0-rc.5` / manifest `0.2.0.5` was uploaded successfully and is
+  separately reported as `PENDING_REVIEW` at 100% deployment.
 
 This means the project has crossed the public-store baseline milestone. Future
 store uploads are resubmissions from an already-published extension, not first
