@@ -38,4 +38,39 @@ describe("buildUsageHistoryChartData", () => {
     expect(data.dates).toHaveLength(7);
     expect(data.dates[0]).toBe("2026-07-04");
   });
+
+  it("keeps every series above the selected-range share threshold", () => {
+    const data = buildUsageHistoryChartData(
+      [
+        {
+          date: "2026-07-12",
+          values: [
+            { id: "a", label: "A", value: 25 },
+            { id: "b", label: "B", value: 20 },
+            { id: "c", label: "C", value: 15 },
+            { id: "d", label: "D", value: 12 },
+            { id: "e", label: "E", value: 10 },
+            { id: "f", label: "F", value: 9 },
+            { id: "g", label: "G", value: 9 },
+          ],
+        },
+      ],
+      {
+        days: 31,
+        maxSeries: 9,
+        minimumSeriesShare: 0.1,
+        otherLabel: "Other",
+      },
+    );
+
+    expect(data.series.map((series) => series.id)).toEqual([
+      "a",
+      "b",
+      "c",
+      "d",
+      "other",
+    ]);
+    expect(data.series.at(-1)?.total).toBe(28);
+    expect(data.total).toBe(100);
+  });
 });

@@ -48,6 +48,9 @@ export type UsageHistoryRangeDays = 7 | 31;
 
 type ChartKind = "bars" | "area";
 
+const TURN_SERIES_MINIMUM_SHARE = 0.1;
+const MAX_TURN_SERIES = 9;
+
 const CHART_COLORS = [
   "var(--app-usage-history-series-1)",
   "var(--app-usage-history-series-2)",
@@ -55,7 +58,86 @@ const CHART_COLORS = [
   "var(--app-usage-history-series-4)",
   "var(--app-usage-history-series-5)",
   "var(--app-usage-history-series-6)",
+  "var(--app-usage-history-series-7)",
+  "var(--app-usage-history-series-8)",
+  "var(--app-usage-history-series-9)",
+  "var(--app-usage-history-series-10)",
 ];
+
+type UsageHistoryChartPoint = {
+  x: number;
+  y: number;
+};
+
+function formatChartCoordinate(value: number): string {
+  return String(Number(value.toFixed(3)));
+}
+
+function buildMonotoneCurveCommands(
+  points: readonly UsageHistoryChartPoint[],
+  startCommand: "M" | "L",
+): string {
+  const first = points[0];
+  if (!first) {
+    return "";
+  }
+
+  const commands = [
+    `${startCommand}${formatChartCoordinate(first.x)},${formatChartCoordinate(first.y)}`,
+  ];
+  if (points.length === 1) {
+    return commands[0];
+  }
+
+  const slopes = points.slice(0, -1).map((point, index) => {
+    const next = points[index + 1];
+    return (next?.y ?? point.y) - point.y;
+  });
+  const tangents = points.map((_, index) => {
+    if (index === 0) {
+      return slopes[0] ?? 0;
+    }
+    if (index === points.length - 1) {
+      return slopes.at(-1) ?? 0;
+    }
+
+    const previousSlope = slopes[index - 1] ?? 0;
+    const nextSlope = slopes[index] ?? 0;
+    if (
+      previousSlope === 0 ||
+      nextSlope === 0 ||
+      Math.sign(previousSlope) !== Math.sign(nextSlope)
+    ) {
+      return 0;
+    }
+
+    return (2 * previousSlope * nextSlope) / (previousSlope + nextSlope);
+  });
+
+  for (let index = 0; index < points.length - 1; index += 1) {
+    const point = points[index];
+    const next = points[index + 1];
+    if (!point || !next) {
+      continue;
+    }
+
+    const deltaX = next.x - point.x;
+    commands.push(
+      `C${formatChartCoordinate(point.x + deltaX / 3)},${formatChartCoordinate(point.y + (tangents[index] ?? 0) / 3)} ` +
+        `${formatChartCoordinate(next.x - deltaX / 3)},${formatChartCoordinate(next.y - (tangents[index + 1] ?? 0) / 3)} ` +
+        `${formatChartCoordinate(next.x)},${formatChartCoordinate(next.y)}`,
+    );
+  }
+
+  return commands.join(" ");
+}
+
+function buildStackedAreaPath(
+  upperPoints: readonly UsageHistoryChartPoint[],
+  lowerPoints: readonly UsageHistoryChartPoint[],
+): string {
+  return `${buildMonotoneCurveCommands(upperPoints, "M")} ${buildMonotoneCurveCommands([...lowerPoints].reverse(), "L")} Z`;
+}
 
 export function formatUsageHistoryDate(value: string, locale: string): string {
   const date = new Date(`${value}T00:00:00.000Z`);
@@ -220,19 +302,20 @@ function UsageHistorySvg({
             const upper = lower.map(
               (value, pointIndex) => value + (series.values[pointIndex] ?? 0),
             );
-            const topPoints = upper.map((value, pointIndex) =>
-              `${pointIndex * xStep + xStep / 2},${top + chartHeight - (value / maximum) * chartHeight}`,
-            );
-            const bottomPoints = lower
-              .map((value, pointIndex) =>
-                `${pointIndex * xStep + xStep / 2},${top + chartHeight - (value / maximum) * chartHeight}`,
-              )
-              .reverse();
+            const topPoints = upper.map((value, pointIndex) => ({
+              x: pointIndex * xStep + xStep / 2,
+              y: top + chartHeight - (value / maximum) * chartHeight,
+            }));
+            const bottomPoints = lower.map((value, pointIndex) => ({
+              x: pointIndex * xStep + xStep / 2,
+              y: top + chartHeight - (value / maximum) * chartHeight,
+            }));
             return (
-              <polygon
+              <path
                 key={series.id}
                 className="usage-history-chart__area"
-                points={[...topPoints, ...bottomPoints].join(" ")}
+                data-curve="monotone"
+                d={buildStackedAreaPath(topPoints, bottomPoints)}
                 fill={CHART_COLORS[seriesIndex % CHART_COLORS.length]}
                 stroke={CHART_COLORS[seriesIndex % CHART_COLORS.length]}
                 strokeWidth="0.75"
@@ -430,10 +513,15 @@ export function UsageHistoryCompact({
     () =>
       buildUsageHistoryChartData(points, {
         days: selectedRangeDays,
-        maxSeries: 3,
+        maxSeries:
+          moduleId === "turns_history" ? MAX_TURN_SERIES : 3,
+        minimumSeriesShare:
+          moduleId === "turns_history"
+            ? TURN_SERIES_MINIMUM_SHARE
+            : undefined,
         otherLabel: copy.other,
       }),
-    [copy.other, points, selectedRangeDays],
+    [copy.other, moduleId, points, selectedRangeDays],
   );
   const title = moduleId === "personal_usage_by_surface" ? copy.personalUsage : copy.turns;
 
@@ -448,6 +536,7 @@ export function UsageHistoryCompact({
     <section
       className={`usage-history-compact${isExpanded ? "" : " usage-history-compact--collapsed"}`}
       aria-label={title}
+      data-usage-history-module={moduleId}
     >
       <header className="usage-history-compact__header">
         <div className="usage-history-compact__heading">
@@ -594,7 +683,8 @@ export function UsageHistoryDetail({
     () =>
       buildUsageHistoryChartData(turnPoints, {
         days: turnsDays,
-        maxSeries: 6,
+        maxSeries: MAX_TURN_SERIES,
+        minimumSeriesShare: TURN_SERIES_MINIMUM_SHARE,
         otherLabel: copy.other,
       }),
     [copy.other, turnsDays, turnPoints],

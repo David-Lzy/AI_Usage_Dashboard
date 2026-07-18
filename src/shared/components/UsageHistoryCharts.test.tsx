@@ -89,6 +89,9 @@ describe("UsageHistoryCharts", () => {
     expect(html).toContain('aria-label="Collapse: Personal usage"');
     expect(html).toContain('aria-expanded="true"');
     expect(html).toContain("usage-history-compact__collapse-toggle");
+    expect(html).toContain(
+      'data-usage-history-module="personal_usage_by_surface"',
+    );
     expect(html).toContain("usage-history-compact__heading");
     expect(html).toContain('data-usage-history-range-days="31"');
     expect(html).toContain("1 month");
@@ -130,6 +133,10 @@ describe("UsageHistoryCharts", () => {
     expect(html.indexOf("Total turns: 12")).toBeLessThan(
       html.indexOf("usage-history-chart--area"),
     );
+    expect(html).toContain('data-curve="monotone"');
+    expect(html).toContain('data-usage-history-module="turns_history"');
+    expect(html).toContain("<path");
+    expect(html).not.toContain("<polygon");
   });
 
   it("can start a compact module collapsed for a persisted surface preference", () => {

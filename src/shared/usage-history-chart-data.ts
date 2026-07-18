@@ -21,6 +21,7 @@ export type UsageHistoryChartData = {
 type BuildUsageHistoryChartDataOptions = {
   days: 7 | 31;
   maxSeries: number;
+  minimumSeriesShare?: number;
   otherLabel: string;
 };
 
@@ -30,7 +31,12 @@ function sumValues(values: readonly ProviderUsageHistoryValue[]): number {
 
 export function buildUsageHistoryChartData(
   points: readonly ProviderUsageHistoryPoint[],
-  { days, maxSeries, otherLabel }: BuildUsageHistoryChartDataOptions,
+  {
+    days,
+    maxSeries,
+    minimumSeriesShare,
+    otherLabel,
+  }: BuildUsageHistoryChartDataOptions,
 ): UsageHistoryChartData {
   const visiblePoints = points.slice(-days);
   const totalsBySeries = new Map<string, { label: string; total: number }>();
@@ -48,9 +54,25 @@ export function buildUsageHistoryChartData(
   const rankedIds = [...totalsBySeries.entries()]
     .sort((left, right) => right[1].total - left[1].total)
     .map(([id]) => id);
-  const hasOther = rankedIds.length > maxSeries;
-  const visibleIds = rankedIds.slice(0, maxSeries);
+  const total = [...totalsBySeries.values()].reduce(
+    (sum, series) => sum + series.total,
+    0,
+  );
+  const normalizedMinimumShare =
+    minimumSeriesShare === undefined
+      ? undefined
+      : Math.min(1, Math.max(0, minimumSeriesShare));
+  const eligibleIds =
+    normalizedMinimumShare === undefined || total <= 0
+      ? rankedIds
+      : rankedIds.filter(
+          (id) =>
+            (totalsBySeries.get(id)?.total ?? 0) / total >
+            normalizedMinimumShare,
+        );
+  const visibleIds = eligibleIds.slice(0, Math.max(0, maxSeries));
   const visibleIdSet = new Set(visibleIds);
+  const hasOther = rankedIds.some((id) => !visibleIdSet.has(id));
   const series = visibleIds.map<UsageHistoryChartSeries>((id) => ({
     id,
     label: totalsBySeries.get(id)?.label ?? id,
@@ -81,6 +103,6 @@ export function buildUsageHistoryChartData(
     series,
     dailyTotals,
     maximumDailyTotal: Math.max(0, ...dailyTotals),
-    total: dailyTotals.reduce((sum, value) => sum + value, 0),
+    total,
   };
 }

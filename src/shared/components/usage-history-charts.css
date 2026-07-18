@@ -5,6 +5,10 @@
   --app-usage-history-series-4: #a45149;
   --app-usage-history-series-5: #7f6500;
   --app-usage-history-series-6: #59677a;
+  --app-usage-history-series-7: #2f7185;
+  --app-usage-history-series-8: #9b4f76;
+  --app-usage-history-series-9: #667a2c;
+  --app-usage-history-series-10: #815846;
   --app-usage-history-bar-opacity: 0.9;
   --app-usage-history-area-fill-opacity: 0.42;
   --app-usage-history-area-stroke-opacity: 0.94;
@@ -18,6 +22,10 @@
   --app-usage-history-series-4: #ff9f8f;
   --app-usage-history-series-5: #d8c063;
   --app-usage-history-series-6: #a7b6c8;
+  --app-usage-history-series-7: #69b7cf;
+  --app-usage-history-series-8: #e58ab8;
+  --app-usage-history-series-9: #b6cc72;
+  --app-usage-history-series-10: #d39a7e;
   --app-usage-history-bar-opacity: 0.84;
   --app-usage-history-area-fill-opacity: 0.48;
   --app-usage-history-area-stroke-opacity: 0.9;
@@ -32,6 +40,10 @@
     --app-usage-history-series-4: #ff9f8f;
     --app-usage-history-series-5: #d8c063;
     --app-usage-history-series-6: #a7b6c8;
+    --app-usage-history-series-7: #69b7cf;
+    --app-usage-history-series-8: #e58ab8;
+    --app-usage-history-series-9: #b6cc72;
+    --app-usage-history-series-10: #d39a7e;
     --app-usage-history-bar-opacity: 0.84;
     --app-usage-history-area-fill-opacity: 0.48;
     --app-usage-history-area-stroke-opacity: 0.9;
