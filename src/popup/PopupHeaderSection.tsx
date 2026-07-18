@@ -29,8 +29,8 @@ type PopupHeaderSectionProps = {
 
 const THEME_MODE_OPTIONS: readonly ThemeMode[] = [
   "light",
-  "dark",
   "system",
+  "dark",
   "time",
 ];
 

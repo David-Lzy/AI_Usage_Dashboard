@@ -85,6 +85,19 @@ describe("PopupHeaderSection", () => {
     );
   });
 
+  it("places system beside light and dark beside local time", () => {
+    const html = renderPopupHeader();
+    const lightIndex = html.indexOf(">Light</span>");
+    const systemIndex = html.indexOf(">System</span>");
+    const darkIndex = html.indexOf(">Dark</span>");
+    const timeIndex = html.indexOf(">By local time</span>");
+
+    expect(lightIndex).toBeGreaterThan(-1);
+    expect(systemIndex).toBeGreaterThan(lightIndex);
+    expect(darkIndex).toBeGreaterThan(systemIndex);
+    expect(timeIndex).toBeGreaterThan(darkIndex);
+  });
+
   it("keeps the floating collapse toggle when header actions are hidden", () => {
     const html = renderPopupHeader({
       areActionsCollapsed: true,
