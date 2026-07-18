@@ -185,6 +185,7 @@ jobs:
           - Reuses one short-lived session credential and bounded request budget across popup, side panel, dashboard, and background refreshes without storing cookies or raw session responses.
           - Improves Cursor billing-summary recovery with direct background session requests while preserving the signed-in page path for bounded aggregate history and compatibility fallback.
           - Adds a compact, default-hidden Codex Flex credit item and preserves last-known-good Codex and Cursor data when provider pages are delayed or incomplete.
+          - Keeps default-hidden quota items out of automatic toolbar badge rotation and normalizes relative reset countdowns for consistent popup and toolbar status.
           - Keeps provider source-truth, manifest-permission, and browser-package boundaries unchanged.
           NOTES
 
