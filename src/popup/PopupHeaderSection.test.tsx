@@ -152,10 +152,23 @@ describe("PopupHeaderSection", () => {
     expect(popupThemeCss).toContain(
       "grid-template-columns: max-content max-content;",
     );
-    expect(popupThemeCss).toContain("justify-content: space-evenly;");
-    expect(popupThemeCss).toContain("column-gap: 0;");
-    expect(popupThemeCss).toContain("width: max-content;");
-    expect(popupThemeCss).toContain("min-width: min(228px, calc(100vw - 24px));");
+    expect(popupThemeCss).toContain("justify-content: center;");
+    expect(popupThemeCss).toContain("column-gap: var(--app-space-1);");
+    expect(popupThemeCss).toContain("width: fit-content;");
+    expect(popupThemeCss).toContain("padding-inline: var(--app-space-2);");
+    expect(popupThemeCss).not.toContain(
+      "min-width: min(228px, calc(100vw - 24px));",
+    );
+    expect(popupThemeCss).toContain(
+      "max-width: calc((100vw - 64px) / 2);",
+    );
+    expect(popupThemeCss).toContain("text-wrap: balance;");
+    expect(popupThemeCss).toContain(
+      "transform: translateX(calc(-50% + var(--app-space-2)));",
+    );
+    expect(popupThemeCss).toContain(
+      "transform: translateX(calc(50% - var(--app-space-2)));",
+    );
     expect(popupThemeCss).toContain(
       'html[data-app-direction="rtl"] .popup-header__theme-mode-menu',
     );
