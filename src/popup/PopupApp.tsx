@@ -8,6 +8,9 @@ import type {
 } from "../providers/types";
 import { sendAppMessage } from "../shared/app-client";
 import {
+  subscribeToAppStateStorageChanges,
+} from "../shared/app-state-storage-events";
+import {
   buildPopupSummaryLabels,
   createRuntimeI18n,
   DEFAULT_APP_LOCALE_PREFERENCE,
@@ -120,6 +123,14 @@ export function PopupApp() {
       disposed = true;
     };
   }, []);
+
+  useEffect(
+    () =>
+      subscribeToAppStateStorageChanges((appState) => {
+        setLoadState({ status: "ready", appState });
+      }),
+    [],
+  );
 
   useEffect(() => {
     if (typeof document === "undefined" || typeof window === "undefined") {

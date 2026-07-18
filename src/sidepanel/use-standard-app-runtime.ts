@@ -4,6 +4,9 @@ import type { AppMessage } from "../shared/app-message-types";
 import type { AppState } from "../providers/types";
 import { sendAppMessage } from "../shared/app-client";
 import {
+  subscribeToAppStateStorageChanges,
+} from "../shared/app-state-storage-events";
+import {
   normalizeThemeSettings,
   startThemeSettingsSync,
 } from "../shared/theme";
@@ -135,6 +138,15 @@ export function useStandardAppRuntime(
       disposed = true;
     };
   }, [appState, isLoading, preferCachedBootstrap]);
+
+  useEffect(
+    () =>
+      subscribeToAppStateStorageChanges((nextAppState) => {
+        setAppState(nextAppState);
+        setLoadError(null);
+      }),
+    [],
+  );
 
   useEffect(() => {
     if (typeof document === "undefined" || typeof window === "undefined") {
