@@ -80,6 +80,83 @@ describe("parseCodexPersonalLiveFixture", () => {
     });
   });
 
+  it("anchors clearly relative reset countdowns to the capture timestamp", () => {
+    const fixture = structuredClone(
+      personalPageLiveFixture as CodexPersonalLiveFixture,
+    );
+    const matchedRoute = fixture.routes.find(
+      (route) => route.routeKey === "cloud_analytics",
+    );
+
+    if (!matchedRoute?.summary) {
+      throw new Error("expected current Codex fixture summary");
+    }
+
+    fixture.capturedAt = "2026-07-18T00:00:00.000Z";
+    matchedRoute.summary.textSnippets = [
+      "Weekly usage limit",
+      "100% remaining",
+      "Resets: 36:23",
+      "GPT-5.3-Codex-Spark",
+      "100% remaining",
+      "Resets in 53:37",
+      "Usage details",
+    ];
+
+    const result = parseCodexPersonalLiveFixture(fixture);
+
+    expect(result.status).toBe("ok");
+
+    if (result.status !== "ok") {
+      throw new Error("expected ok result");
+    }
+
+    expect(result.snapshot.windows).toEqual([
+      expect.objectContaining({
+        normalizedLabel: "Weekly usage window",
+        resetAt: "2026-07-19T12:23:00.000Z",
+        resetText: "36:23",
+      }),
+      expect.objectContaining({
+        modelLabel: "GPT-5.3-Codex-Spark",
+        resetAt: "2026-07-20T05:37:00.000Z",
+        resetText: "in 53:37",
+      }),
+    ]);
+  });
+
+  it("does not invent an absolute reset time for an ambiguous clock value", () => {
+    const fixture = structuredClone(
+      personalPageLiveFixture as CodexPersonalLiveFixture,
+    );
+    const matchedRoute = fixture.routes.find(
+      (route) => route.routeKey === "cloud_analytics",
+    );
+
+    if (!matchedRoute?.summary) {
+      throw new Error("expected current Codex fixture summary");
+    }
+
+    matchedRoute.summary.textSnippets = [
+      "Weekly usage limit",
+      "100% remaining",
+      "Resets: 05:17",
+      "Usage details",
+    ];
+
+    const result = parseCodexPersonalLiveFixture(fixture);
+
+    expect(result).toMatchObject({
+      status: "ok",
+      snapshot: {
+        primaryWindow: {
+          resetAt: "05:17",
+          resetText: "05:17",
+        },
+      },
+    });
+  });
+
   it("falls back to another captured Codex route when the preferred route has not hydrated", () => {
     const fixture = structuredClone(
       personalPageLiveFixture as CodexPersonalLiveFixture,

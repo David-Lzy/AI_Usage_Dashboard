@@ -57,6 +57,36 @@ function createStateWithCodexWindows(): AppState {
   };
 }
 
+function createStateWithCodexFlexBalance(): AppState {
+  const state = createStateWithCodexWindows();
+
+  return {
+    ...state,
+    providers: state.providers.map((provider) =>
+      provider.providerId === "codex-personal-page"
+        ? {
+            ...provider,
+            usageBalances: [
+              {
+                label: "Flex credit balance",
+                normalizedLabel: "Flex credit balance",
+                kind: "flex_credit_balance",
+                quotaUnit: "credits",
+                remaining: 0,
+                total: null,
+                detail: "Use credits beyond the plan limit",
+              },
+            ],
+          }
+        : provider,
+    ),
+    settings: {
+      ...state.settings,
+      actionBadgeSelectionMode: "auto",
+    },
+  };
+}
+
 function createStateWithCustomSource(): AppState {
   return {
     ...SAMPLE_APP_STATE,
@@ -147,6 +177,72 @@ describe("action badge preferences", () => {
     expect(
       candidates.some((candidate) => candidate.providerId === "claude-code-team-page"),
     ).toBe(false);
+  });
+
+  it("keeps default-hidden Flex credits out of automatic rotation", () => {
+    const state = createStateWithCodexFlexBalance();
+    const flexCandidate = buildActionBadgeQuotaCandidates(state).find(
+      (candidate) => candidate.kind === "usage_balance",
+    );
+
+    expect(flexCandidate).toBeDefined();
+    expect(getSelectedActionBadgeSelections(state)).not.toContain(
+      flexCandidate?.value,
+    );
+  });
+
+  it("allows Flex credits in automatic rotation once visible on a surface", () => {
+    const state = createStateWithCodexFlexBalance();
+    const flexCandidate = buildActionBadgeQuotaCandidates(state).find(
+      (candidate) => candidate.kind === "usage_balance",
+    );
+
+    if (!flexCandidate) {
+      throw new Error("Expected Flex credit badge candidate.");
+    }
+
+    const visibleState: AppState = {
+      ...state,
+      settings: {
+        ...state.settings,
+        progressItemsBySurface: {
+          ...state.settings.progressItemsBySurface,
+          popup: {
+            ...state.settings.progressItemsBySurface.popup,
+            [flexCandidate.providerId]: [
+              { id: flexCandidate.progressItemId, visible: true },
+            ],
+          },
+        },
+      },
+    };
+
+    expect(getSelectedActionBadgeSelections(visibleState)).toContain(
+      flexCandidate.value,
+    );
+  });
+
+  it("keeps hidden Flex credits available for explicit manual selection", () => {
+    const state = createStateWithCodexFlexBalance();
+    const flexCandidate = buildActionBadgeQuotaCandidates(state).find(
+      (candidate) => candidate.kind === "usage_balance",
+    );
+
+    if (!flexCandidate) {
+      throw new Error("Expected Flex credit badge candidate.");
+    }
+
+    expect(
+      getSelectedActionBadgeSelections({
+        ...state,
+        settings: {
+          ...state.settings,
+          actionBadgeSelectionMode: "manual",
+          actionBadgeSelection: flexCandidate.value,
+          actionBadgeSelections: [flexCandidate.value],
+        },
+      }),
+    ).toEqual([flexCandidate.value]);
   });
 
   it("falls back to attention when a stored quota selection is no longer available", () => {

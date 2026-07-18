@@ -10,8 +10,13 @@ import type {
 } from "../providers/types";
 import type { DashboardSourceId } from "./custom-sources";
 import { getVisibleCustomSources } from "./custom-source-view-models";
+import {
+  DISPLAY_SURFACES,
+  resolveProgressItemPreferences,
+} from "./display-preferences";
 import type { RuntimeI18n } from "./i18n";
 import { buildRuntimeCommonCopy } from "./i18n";
+import { buildProviderProgressItems } from "./provider-progress-items";
 import { normalizeActionBadgeRotationIntervalSeconds } from "./settings-preferences";
 
 export const ACTION_BADGE_ATTENTION_SELECTION: ActionBadgeSelection = "attention";
@@ -34,6 +39,7 @@ export type ActionBadgeQuotaCandidate = {
   value: ActionBadgeSelection;
   kind: ActionBadgeQuotaCandidateKind;
   providerId: DashboardSourceId;
+  progressItemId: string;
   providerLabel: string;
   sourceLabel: string;
   remaining: number;
@@ -138,6 +144,7 @@ function buildProviderRemainingCandidate(
     value: `${QUOTA_SELECTION_PREFIX}${provider.providerId}:primary`,
     kind: "provider_remaining",
     providerId: provider.providerId,
+    progressItemId: "primary",
     providerLabel: provider.providerLabel,
     sourceLabel: provider.planName || provider.providerLabel,
     remaining: provider.remaining,
@@ -172,6 +179,7 @@ function buildUsageWindowCandidate(
     value: `${QUOTA_SELECTION_PREFIX}${provider.providerId}:window:${sourceKey}`,
     kind: "usage_window",
     providerId: provider.providerId,
+    progressItemId: `window:${sourceKey}`,
     providerLabel: provider.providerLabel,
     sourceLabel: usageWindow.normalizedLabel || usageWindow.label,
     remaining: usageWindow.remaining,
@@ -205,6 +213,7 @@ function buildUsageBalanceCandidate(
     value: `${QUOTA_SELECTION_PREFIX}${provider.providerId}:balance:${sourceKey}`,
     kind: "usage_balance",
     providerId: provider.providerId,
+    progressItemId: `balance:${sourceKey}`,
     providerLabel: provider.providerLabel,
     sourceLabel: usageBalance.normalizedLabel || usageBalance.label,
     remaining: usageBalance.remaining,
@@ -269,6 +278,7 @@ export function buildActionBadgeQuotaCandidates(
         value: `${QUOTA_SELECTION_PREFIX}${source.sourceId}:${item.id}`,
         kind: "custom_source",
         providerId: source.sourceId,
+        progressItemId: item.id,
         providerLabel: source.label,
         sourceLabel: item.label,
         remaining: item.remaining,
@@ -283,6 +293,50 @@ export function buildActionBadgeQuotaCandidates(
   }
 
   return candidates;
+}
+
+function buildKnownProgressItemIdsBySource(
+  state: AppState,
+): Map<DashboardSourceId, readonly string[]> {
+  const knownItemIds = new Map<DashboardSourceId, readonly string[]>();
+
+  for (const provider of state.providers) {
+    knownItemIds.set(
+      provider.providerId,
+      buildProviderProgressItems(provider).map((item) => item.id),
+    );
+  }
+
+  for (const source of getVisibleCustomSources(state)) {
+    knownItemIds.set(
+      source.sourceId,
+      source.progressItems.map((item) => item.id),
+    );
+  }
+
+  return knownItemIds;
+}
+
+function isCandidateVisibleOnAnySurface(
+  state: AppState,
+  candidate: ActionBadgeQuotaCandidate,
+  knownItemIdsBySource: ReadonlyMap<DashboardSourceId, readonly string[]>,
+): boolean {
+  const knownItemIds = knownItemIdsBySource.get(candidate.providerId) ?? [];
+
+  if (!knownItemIds.includes(candidate.progressItemId)) {
+    return false;
+  }
+
+  return DISPLAY_SURFACES.some((surface) =>
+    resolveProgressItemPreferences(
+      state.settings.progressItemsBySurface[surface][candidate.providerId],
+      knownItemIds,
+    ).some(
+      (preference) =>
+        preference.id === candidate.progressItemId && preference.visible,
+    ),
+  );
 }
 
 export function findActionBadgeQuotaCandidate(
@@ -318,15 +372,26 @@ export function getSelectedActionBadgeSelections(
 export function getEffectiveActionBadgeSelections(
   state: AppState,
 ): ActionBadgeSelections {
-  const quotaSelections = buildActionBadgeQuotaCandidates(state).map(
-    (candidate) => candidate.value,
-  );
+  const quotaCandidates = buildActionBadgeQuotaCandidates(state);
 
   if (state.settings.actionBadgeSelectionMode === "auto") {
+    const knownItemIdsBySource = buildKnownProgressItemIdsBySource(state);
+    const quotaSelections = quotaCandidates
+      .filter((candidate) =>
+        isCandidateVisibleOnAnySurface(
+          state,
+          candidate,
+          knownItemIdsBySource,
+        ),
+      )
+      .map((candidate) => candidate.value);
+
     return quotaSelections.length > 0
       ? quotaSelections
       : [...DEFAULT_ACTION_BADGE_SELECTIONS];
   }
+
+  const quotaSelections = quotaCandidates.map((candidate) => candidate.value);
 
   const availableSelectionSet = new Set<ActionBadgeSelection>([
     ACTION_BADGE_ATTENTION_SELECTION,

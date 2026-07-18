@@ -144,6 +144,48 @@ function createCustomQuotaState(remaining: number): AppState {
   };
 }
 
+function createZeroFlexCreditState(): AppState {
+  const state = createCodexQuotaState(51);
+  const stateWithFlex: AppState = {
+    ...state,
+    providers: state.providers.map((provider) =>
+      provider.providerId === "codex-personal-page"
+        ? {
+            ...provider,
+            usageBalances: [
+              {
+                label: "Flex credit balance",
+                normalizedLabel: "Flex credit balance",
+                kind: "flex_credit_balance",
+                quotaUnit: "credits",
+                remaining: 0,
+                total: null,
+                detail: null,
+              },
+            ],
+          }
+        : provider,
+    ),
+  };
+  const flexCandidate = buildActionBadgeQuotaCandidates(stateWithFlex).find(
+    (candidate) => candidate.kind === "usage_balance",
+  );
+
+  if (!flexCandidate) {
+    throw new Error("Expected Flex credit badge candidate.");
+  }
+
+  return {
+    ...stateWithFlex,
+    settings: {
+      ...stateWithFlex.settings,
+      actionBadgeSelectionMode: "manual",
+      actionBadgeSelection: flexCandidate.value,
+      actionBadgeSelections: [flexCandidate.value],
+    },
+  };
+}
+
 describe("action badge model", () => {
   it("uses an empty transparent badge when no visible provider needs attention", () => {
     const model = buildActionBadgeModel(withVisibleProviders([]));
@@ -184,6 +226,13 @@ describe("action badge model", () => {
     const model = buildActionBadgeModel(createCodexQuotaState(5));
 
     expect(model.text).toBe("5%");
+    expect(model.backgroundColor).toEqual([179, 38, 30, 255]);
+  });
+
+  it("uses the error color for a zero balance with no known total", () => {
+    const model = buildActionBadgeModel(createZeroFlexCreditState());
+
+    expect(model.text).toBe("0");
     expect(model.backgroundColor).toEqual([179, 38, 30, 255]);
   });
 

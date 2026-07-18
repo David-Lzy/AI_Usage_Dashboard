@@ -143,7 +143,37 @@ function parseBalanceNumber(value: string): number | null {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
-function normalizeResetAt(value: string): string {
+function normalizeRelativeResetAt(
+  value: string,
+  capturedAt: string,
+): string | null {
+  const matched = value.match(
+    /^(?:(in|after|within)\s+|((?:剩余|还有))\s*)?(\d{1,3}):([0-5]\d)(?::([0-5]\d))?$/i,
+  );
+
+  if (!matched) {
+    return null;
+  }
+
+  const hours = Number(matched[3]);
+  const minutes = Number(matched[4]);
+  const seconds = Number(matched[5] ?? "0");
+  const hasRelativeMarker = Boolean(matched[1] || matched[2]);
+  const capturedAtMs = Date.parse(capturedAt);
+
+  if (
+    !Number.isFinite(capturedAtMs) ||
+    (!hasRelativeMarker && hours < 24) ||
+    hours > 31 * 24
+  ) {
+    return null;
+  }
+
+  const durationMs = ((hours * 60 + minutes) * 60 + seconds) * 1000;
+  return new Date(capturedAtMs + durationMs).toISOString();
+}
+
+function normalizeResetAt(value: string, capturedAt: string): string {
   const trimmedValue = normalizeWhitespace(value);
   const zhMatch = trimmedValue.match(
     /(\d{4})年(\d{1,2})月(\d{1,2})日\s+(\d{1,2}):(\d{2})/,
@@ -161,6 +191,12 @@ function normalizeResetAt(value: string): string {
   if (isoLikeMatch) {
     const [, year, month, day, hour, minute] = isoLikeMatch;
     return `${year}-${month!.padStart(2, "0")}-${day!.padStart(2, "0")} ${hour!.padStart(2, "0")}:${minute}`;
+  }
+
+  const relativeResetAt = normalizeRelativeResetAt(trimmedValue, capturedAt);
+
+  if (relativeResetAt) {
+    return relativeResetAt;
   }
 
   return trimmedValue;
@@ -276,7 +312,10 @@ function finalizeWindow(
   return null;
 }
 
-function buildWindows(summary: CodexPersonalPageSummary): CodexPersonalUsageWindow[] {
+function buildWindows(
+  summary: CodexPersonalPageSummary,
+  capturedAt: string,
+): CodexPersonalUsageWindow[] {
   const snippets = summary.textSnippets.map(normalizeWhitespace).filter(Boolean);
   const windows: CodexPersonalUsageWindow[] = [];
   let currentWindow: CodexPersonalUsageWindow | null = null;
@@ -305,7 +344,7 @@ function buildWindows(summary: CodexPersonalPageSummary): CodexPersonalUsageWind
         usedPercent:
           remainingPercent === null ? null : Math.max(0, 100 - remainingPercent),
         totalPercent: remainingPercent === null ? null : 100,
-        resetAt: resetText ? normalizeResetAt(resetText) : null,
+        resetAt: resetText ? normalizeResetAt(resetText, capturedAt) : null,
         resetText,
       };
       continue;
@@ -332,7 +371,7 @@ function buildWindows(summary: CodexPersonalPageSummary): CodexPersonalUsageWind
 
     if (resetText) {
       currentWindow.resetText = resetText;
-      currentWindow.resetAt = normalizeResetAt(resetText);
+      currentWindow.resetAt = normalizeResetAt(resetText, capturedAt);
     }
   }
 
@@ -533,7 +572,7 @@ export function parseCodexPersonalLiveFixture(
   }
 
   for (const matchedRoute of matchedRoutes) {
-    const windows = buildWindows(matchedRoute.summary);
+    const windows = buildWindows(matchedRoute.summary, fixture.capturedAt);
     const primaryWindow = choosePrimaryWindow(windows);
 
     if (!primaryWindow) {

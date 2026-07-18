@@ -274,7 +274,9 @@ function getQuotaBadgeBackgroundColor(
   const remainingPercent = getRemainingPercent(candidate);
 
   if (remainingPercent === null) {
-    return [46, 125, 50, 255];
+    return candidate.remaining <= 0
+      ? [179, 38, 30, 255]
+      : [46, 125, 50, 255];
   }
 
   if (remainingPercent <= 10) {

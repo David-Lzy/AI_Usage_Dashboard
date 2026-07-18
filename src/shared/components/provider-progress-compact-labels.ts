@@ -450,6 +450,38 @@ function formatCompactResetAt(
 
   const resetAt = item.resetAt.trim();
   const windowKind = getCompactProgressWindowKind(item);
+  const isoTimestamp =
+    /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/i.test(resetAt)
+      ? Date.parse(resetAt)
+      : Number.NaN;
+
+  if (Number.isFinite(isoTimestamp)) {
+    const resetDate = new Date(isoTimestamp);
+    const locale = i18n.resolvedLocale;
+
+    if (shouldUseWeekdayTimeResetLabel(windowKind)) {
+      return new Intl.DateTimeFormat(locale, {
+        weekday: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23",
+      }).format(resetDate);
+    }
+
+    if (shouldUseDateResetLabel(windowKind)) {
+      return new Intl.DateTimeFormat(locale, {
+        month: "2-digit",
+        day: "2-digit",
+      }).format(resetDate);
+    }
+
+    return new Intl.DateTimeFormat(locale, {
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    }).format(resetDate);
+  }
+
   const dateTimeMatch =
     /^(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2})(?:\s+UTC)?$/i.exec(
       resetAt,

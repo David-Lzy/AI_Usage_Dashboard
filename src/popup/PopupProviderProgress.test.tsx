@@ -170,6 +170,47 @@ describe("PopupProviderProgress", () => {
     expect(html).not.toContain("All models weekly limit");
   });
 
+  it("formats absolute ISO weekly resets in the active locale", () => {
+    const resetAt = "2026-05-19T10:30:00.000Z";
+    const expectedReset = new Intl.DateTimeFormat("zh-CN", {
+      weekday: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    }).format(new Date(resetAt));
+    const html = renderToStaticMarkup(
+      <PopupProviderProgress
+        i18n={zhTestI18n}
+        progressColorBands={SAMPLE_APP_STATE.settings.progressColorBands}
+        popupCircularProgressItemsPerRow={
+          SAMPLE_APP_STATE.settings.popupCircularProgressItemsPerRow
+        }
+        progressDisplayStyle="circle-soft"
+        progressItemsBySurface={createDefaultProgressItemsBySurface()}
+        progressThicknessPx={SAMPLE_APP_STATE.settings.progressThicknessPx}
+        provider={createProvider({
+          usageWindows: [
+            {
+              label: "Weekly usage window",
+              normalizedLabel: "Weekly usage window",
+              kind: "weekly",
+              modelLabel: null,
+              quotaUnit: "percent",
+              used: 0,
+              remaining: 100,
+              total: 100,
+              resetAt,
+              resetLabel: "Resets in 36:23",
+            },
+          ],
+        })}
+      />,
+    );
+
+    expect(html).toContain(`周额度，重置：${expectedReset}`);
+    expect(html).not.toContain("36:23");
+  });
+
   it("renders single-value progress when no usage windows exist", () => {
     const html = renderToStaticMarkup(
       <PopupProviderProgress
