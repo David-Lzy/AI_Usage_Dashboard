@@ -10,6 +10,9 @@ import type {
   UsageHistoryModulesBySurface,
 } from "../../providers/types";
 import { buildRuntimeCommonCopy, createRuntimeI18n } from "../../shared/i18n";
+import type {
+  MaterialActionIconName,
+} from "../../shared/components/MaterialActionIcon";
 import { getProviderDiagnosticPresentation } from "../../shared/provider-diagnostic-presentation";
 import {
   buildProviderDetailLocalizedCopy,
@@ -46,6 +49,7 @@ type ProviderDetailPageProps = {
   onBack: () => void;
   themeActionLabel?: string;
   themeActionTitle?: string;
+  themeActionIconName?: MaterialActionIconName;
   onToggleThemeMode?: () => void;
   onOpenFullPage?: () => void;
   surfaceActionLabel?: string;
@@ -71,6 +75,7 @@ export function ProviderDetailPage({
   onBack,
   themeActionLabel,
   themeActionTitle,
+  themeActionIconName,
   onToggleThemeMode,
   onOpenFullPage,
   surfaceActionLabel,
@@ -205,6 +210,7 @@ export function ProviderDetailPage({
         subtitle={copy.topbarSubtitle}
         themeActionLabel={themeActionLabel}
         themeActionTitle={themeActionTitle}
+        themeActionIconName={themeActionIconName}
         expandActionLabel={surfaceActionLabel ?? i18n.t("common.actions.tab")}
         expandActionTitle={
           surfaceActionTitle ?? copy.openDetailTabTitle(provider.providerLabel)

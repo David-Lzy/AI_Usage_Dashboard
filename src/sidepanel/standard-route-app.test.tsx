@@ -3,7 +3,9 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { AppMessage } from "../shared/app-message-types";
 import { SAMPLE_APP_STATE } from "../shared/constants";
+import { createRuntimeI18n } from "../shared/i18n";
 import {
+  buildStandardRouteThemeAction,
   shouldRestoreSurfaceSessionStateForRoute,
   StandardRouteApp,
 } from "./standard-route-app";
@@ -64,6 +66,25 @@ describe("StandardRouteApp cached-first rendering", () => {
 
     expect(html).toContain("Preparing dashboard state");
     expect(html).not.toContain("Provider cards");
+  });
+});
+
+describe("standard route theme action", () => {
+  const i18n = createRuntimeI18n("zh-CN");
+
+  it("shows the current mode while describing the next click target", () => {
+    expect(buildStandardRouteThemeAction("light", i18n)).toEqual({
+      label: "白天",
+      title: "切换到夜间模式",
+      iconName: "clear-day",
+      nextMode: "dark",
+    });
+    expect(buildStandardRouteThemeAction("dark", i18n)).toEqual({
+      label: "夜间",
+      title: "切换到跟随系统",
+      iconName: "dark-mode",
+      nextMode: "system",
+    });
   });
 });
 

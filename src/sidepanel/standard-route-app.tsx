@@ -11,6 +11,7 @@ import {
   createRuntimeI18n,
   DEFAULT_APP_LOCALE_PREFERENCE,
   getQuickThemeToggleCopy,
+  type RuntimeI18n,
   syncRuntimeLocaleAttributes,
 } from "../shared/i18n";
 import { isFullPageSurfaceSearch } from "../shared/extension-surface-paths";
@@ -55,9 +56,9 @@ type StandardRouteAppProps = {
 };
 
 function getThemeActionIconName(
-  nextMode: ThemeMode,
+  themeMode: ThemeMode,
 ): MaterialActionIconName {
-  switch (nextMode) {
+  switch (themeMode) {
     case "light":
       return "clear-day";
     case "dark":
@@ -68,6 +69,27 @@ function getThemeActionIconName(
     default:
       return "devices";
   }
+}
+
+export function buildStandardRouteThemeAction(
+  themeMode: ThemeMode,
+  i18n: RuntimeI18n,
+): {
+  label: string;
+  title: string;
+  iconName: MaterialActionIconName;
+  nextMode: ThemeMode;
+} {
+  const { nextMode } = buildQuickThemeToggle(themeMode);
+  const currentModeCopy = getQuickThemeToggleCopy(themeMode, i18n);
+  const nextModeCopy = getQuickThemeToggleCopy(nextMode, i18n);
+
+  return {
+    label: currentModeCopy.label,
+    title: nextModeCopy.title,
+    iconName: getThemeActionIconName(themeMode),
+    nextMode,
+  };
 }
 
 function StandardRouteLoading({
@@ -318,12 +340,8 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           providerSourceDisplayCopy,
         )
       : null;
-  const quickThemeToggle = buildQuickThemeToggle(
+  const themeAction = buildStandardRouteThemeAction(
     appState.settings.themeMode,
-    typeof window !== "undefined" ? window : undefined,
-  );
-  const quickThemeToggleCopy = getQuickThemeToggleCopy(
-    quickThemeToggle.nextMode,
     runtimeI18n,
   );
   const progressDisplayStyle = isFullPageSurface
@@ -357,13 +375,11 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
             onUserLevelChange={(userLevel) =>
               handleUpdateSettings({ userLevel })
             }
-            themeActionLabel={quickThemeToggleCopy.label}
-            themeActionTitle={quickThemeToggleCopy.title}
-            themeActionIconName={getThemeActionIconName(
-              quickThemeToggle.nextMode,
-            )}
+            themeActionLabel={themeAction.label}
+            themeActionTitle={themeAction.title}
+            themeActionIconName={themeAction.iconName}
             onToggleThemeMode={() =>
-              handleUpdateSettings({ themeMode: quickThemeToggle.nextMode })
+              handleUpdateSettings({ themeMode: themeAction.nextMode })
             }
             onOpenFullPage={surfaceActionHandler}
             surfaceActionLabel={surfaceActionLabel}
@@ -527,10 +543,11 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           provider={selectedProvider}
           resetTimeDisplayMode={appState.settings.resetTimeDisplayMode}
           onBack={() => navigateToRoute({ name: "dashboard" })}
-          themeActionLabel={quickThemeToggleCopy.label}
-          themeActionTitle={quickThemeToggleCopy.title}
+          themeActionLabel={themeAction.label}
+          themeActionTitle={themeAction.title}
+          themeActionIconName={themeAction.iconName}
           onToggleThemeMode={() =>
-            handleUpdateSettings({ themeMode: quickThemeToggle.nextMode })
+            handleUpdateSettings({ themeMode: themeAction.nextMode })
           }
           onOpenFullPage={surfaceActionHandler}
           surfaceActionLabel={surfaceActionLabel}
@@ -573,10 +590,11 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
               },
             })
           }
-          themeActionLabel={quickThemeToggleCopy.label}
-          themeActionTitle={quickThemeToggleCopy.title}
+          themeActionLabel={themeAction.label}
+          themeActionTitle={themeAction.title}
+          themeActionIconName={themeAction.iconName}
           onToggleThemeMode={() =>
-            handleUpdateSettings({ themeMode: quickThemeToggle.nextMode })
+            handleUpdateSettings({ themeMode: themeAction.nextMode })
           }
           onOpenFullPage={surfaceActionHandler}
           surfaceActionLabel={surfaceActionLabel}

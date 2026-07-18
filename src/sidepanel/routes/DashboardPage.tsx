@@ -11,6 +11,9 @@ import type {
   UsageHistoryModulesBySurface,
 } from "../../providers/types";
 import { createRuntimeI18n } from "../../shared/i18n";
+import type {
+  MaterialActionIconName,
+} from "../../shared/components/MaterialActionIcon";
 import type { DashboardSourceId } from "../../shared/custom-sources";
 import type { CustomSourceViewModel } from "../../shared/custom-source-view-models";
 import { CustomSourceCard } from "../components/CustomSourceCard";
@@ -43,6 +46,7 @@ type DashboardPageProps = {
   ) => void;
   themeActionLabel?: string;
   themeActionTitle?: string;
+  themeActionIconName?: MaterialActionIconName;
   onToggleThemeMode?: () => void;
   onOpenFullPage?: () => void;
   surfaceActionLabel?: string;
@@ -72,6 +76,7 @@ export function DashboardPage({
   onOpenSourcePage,
   themeActionLabel,
   themeActionTitle,
+  themeActionIconName,
   onToggleThemeMode,
   onOpenFullPage,
   surfaceActionLabel,
@@ -125,6 +130,7 @@ export function DashboardPage({
         subtitle={i18n.t("dashboard.topbar.subtitle")}
         themeActionLabel={themeActionLabel}
         themeActionTitle={themeActionTitle}
+        themeActionIconName={themeActionIconName}
         expandActionLabel={surfaceActionLabel ?? i18n.t("common.actions.tab")}
         expandActionTitle={
           surfaceActionTitle ?? i18n.t("common.actions.open_dashboard_tab")
