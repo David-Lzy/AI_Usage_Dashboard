@@ -279,21 +279,40 @@ jobs:
       contents: read
 
     steps:
+      - name: Check Chrome Web Store configuration
+        id: cws-config
+        env:
+          CWS_SERVICE_ACCOUNT_JSON: ${{ secrets.CWS_SERVICE_ACCOUNT_JSON }}
+          CWS_PUBLISHER_ID: ${{ vars.CWS_PUBLISHER_ID }}
+          CWS_EXTENSION_ID: ${{ vars.CWS_EXTENSION_ID }}
+        run: |
+          set -euo pipefail
+          if [[ -n "${CWS_SERVICE_ACCOUNT_JSON}" && -n "${CWS_PUBLISHER_ID}" && -n "${CWS_EXTENSION_ID}" ]]; then
+            echo "enabled=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "enabled=false" >> "${GITHUB_OUTPUT}"
+            echo "::notice::Chrome Web Store submission skipped because the required repository variables or secret are not configured."
+          fi
+
       - name: Checkout
+        if: steps.cws-config.outputs.enabled == 'true'
         uses: actions/checkout@v4
 
       - name: Set up Node.js
+        if: steps.cws-config.outputs.enabled == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: "22"
 
       - name: Download Chrome package
+        if: steps.cws-config.outputs.enabled == 'true'
         uses: actions/download-artifact@v4
         with:
           name: chrome-extension-package
           path: release-artifacts/chrome-extension-package
 
       - name: Upload and submit Chrome Web Store package
+        if: steps.cws-config.outputs.enabled == 'true'
         env:
           CWS_SERVICE_ACCOUNT_JSON: ${{ secrets.CWS_SERVICE_ACCOUNT_JSON }}
           CWS_PUBLISHER_ID: ${{ vars.CWS_PUBLISHER_ID }}

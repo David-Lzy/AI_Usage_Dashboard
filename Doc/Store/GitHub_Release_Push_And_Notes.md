@@ -62,6 +62,11 @@ Required GitHub Actions repository secret:
 
 - `CWS_SERVICE_ACCOUNT_JSON`: the full JSON key for the linked service account.
 
+If any required repository variable or secret is missing, the workflow skips
+the Chrome Web Store handoff with an Actions notice. The GitHub Release and its
+browser packages still complete successfully; the missing store configuration
+must be fixed before a later automated submission can run.
+
 Optional GitHub Actions repository variable values:
 
 - `CWS_PUBLISH_TYPE`: `DEFAULT_PUBLISH` by default. Use `STAGED_PUBLISH` when
