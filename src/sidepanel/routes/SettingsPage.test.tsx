@@ -78,6 +78,10 @@ describe("SettingsPage", () => {
     const html = renderSettingsPage();
 
     expect(html).toContain('class="top-app-bar__bottom"');
+    expect(html).toContain(
+      'data-material-action-icon="keyboard-backspace"',
+    );
+    expect(html).toContain('data-material-action-icon="save"');
     expect(html).toContain('class="settings-section-nav"');
     expect(html).toContain(
       'class="adaptive-control-grid settings-overview__controls"',
@@ -128,6 +132,26 @@ describe("SettingsPage", () => {
     expect(html).not.toContain('data-credential-provider-id="cursor-team-api"');
     expect(html).toContain('class="settings-back-to-top-fab"');
     expect(html).toContain('aria-label="Back to top"');
+  });
+
+  it("renders the popup theme and surface icons in Settings actions", () => {
+    const html = renderSettingsPage({
+      themeActionLabel: "System",
+      themeActionTitle: "Follow system theme",
+      themeActionIconName: "devices",
+      onToggleThemeMode: () => {},
+      surfaceActionLabel: "Tab",
+      surfaceActionTitle: "Open settings tab",
+      surfaceActionIconName: "tab",
+      onOpenFullPage: () => {},
+    });
+
+    expect(html).toContain('data-material-action-icon="devices"');
+    expect(html).toContain('data-material-action-icon="tab"');
+    expect(html).toContain(
+      'data-material-action-icon="keyboard-backspace"',
+    );
+    expect(html).toContain('data-material-action-icon="save"');
   });
 
   it("reveals advanced credentials and debug diagnostics at debug level", () => {

@@ -40,7 +40,19 @@
 }
 
 .top-app-bar__actions .icon-button {
+  gap: var(--app-space-2);
   white-space: nowrap;
+}
+
+.top-app-bar__action-icon {
+  flex: 0 0 auto;
+  inline-size: 20px;
+  block-size: 20px;
+  fill: currentColor;
+}
+
+.top-app-bar__action-label {
+  min-inline-size: 0;
 }
 
 .top-app-bar__title {

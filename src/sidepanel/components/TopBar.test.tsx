@@ -18,10 +18,14 @@ describe("TopBar", () => {
         subtitle="Usage, credits, and sync health"
         themeActionLabel="Dark"
         themeActionTitle="Switch to dark mode"
+        themeActionIconName="dark-mode"
         expandActionLabel="Tab"
         expandActionTitle="Open dashboard tab"
+        expandActionIconName="tab"
         secondaryActionLabel="Refresh All"
+        secondaryActionIconName="refresh"
         primaryActionLabel="Settings"
+        primaryActionIconName="settings"
         onThemeAction={() => {}}
         onExpandAction={() => {}}
         onSecondaryAction={() => {}}
@@ -34,6 +38,10 @@ describe("TopBar", () => {
     expect(html).toContain('data-topbar-open-full-page="true"');
     expect(html).toContain('data-topbar-switch-surface="true"');
     expect(html).toContain('aria-label="Open dashboard tab"');
+    expect(html).toContain('data-material-action-icon="dark-mode"');
+    expect(html).toContain('data-material-action-icon="tab"');
+    expect(html).toContain('data-material-action-icon="refresh"');
+    expect(html).toContain('data-material-action-icon="settings"');
     expect(html).toContain(">Dark<");
     expect(html).toContain(">Tab<");
     expect(html).toContain(">Refresh All<");
@@ -77,6 +85,10 @@ describe("TopBar", () => {
   it("keeps narrow action rows from wrapping action labels", () => {
     expect(topAppBarCss).toContain(".top-app-bar__actions .icon-button {");
     expect(topAppBarCss).toContain("white-space: nowrap;");
+    expect(topAppBarCss).toContain(
+      ".top-app-bar__action-icon {",
+    );
+    expect(topAppBarCss).toContain("inline-size: 20px;");
     expect(topAppBarCss).toContain("@media (max-width: 520px)");
     expect(topAppBarCss).toContain(
       "grid-template-columns: repeat(2, minmax(0, 1fr));",

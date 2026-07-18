@@ -1,50 +1,16 @@
-export type PopupMaterialIconName =
-  | "brightness-auto"
-  | "clear-day"
-  | "dark-mode"
-  | "devices"
-  | "dock-left"
-  | "keyboard-arrow-down"
-  | "keyboard-arrow-up"
-  | "refresh"
-  | "settings"
-  | "tab";
+import {
+  MaterialActionIcon,
+  type MaterialActionIconName,
+} from "../shared/components/MaterialActionIcon";
 
-const PATH_BY_NAME: Record<PopupMaterialIconName, string> = {
-  "brightness-auto":
-    "M312-320h64l32-92h146l32 92h62L512-680h-64L312-320Zm114-144 52-150h4l52 150H426Zm54 436L346-160H160v-186L28-480l132-134v-186h186l134-132 134 132h186v186l132 134-132 134v186H614L480-28Zm0-112 100-100h140v-140l100-100-100-100v-140H580L480-820 380-720H240v140L140-480l100 100v140h140l100 100Zm0-340Z",
-  "clear-day":
-    "M11 4V1h2v3h-2Zm0 19v-3h2v3h-2Zm9-10v-2h3v2h-3ZM1 13v-2h3v2H1Zm16.95-5.55-1.4-1.4 2.1-2.15 1.45 1.45-2.15 2.1ZM5.35 20.1 3.9 18.65l2.15-2.1 1.4 1.4-2.1 2.15Zm13.3 0-2.1-2.15 1.4-1.4 2.15 2.1-1.45 1.45ZM6.05 7.45 3.9 5.35 5.35 3.9l2.1 2.15-1.4 1.4ZM12 18q-2.5 0-4.25-1.75T6 12q0-2.5 1.75-4.25T12 6q2.5 0 4.25 1.75T18 12q0 2.5-1.75 4.25T12 18Zm0-2q1.65 0 2.825-1.175T16 12q0-1.65-1.175-2.825T12 8q-1.65 0-2.825 1.175T8 12q0 1.65 1.175 2.825T12 16Z",
-  "dark-mode":
-    "M12.1 21.5q-3.95 0-6.775-2.825T2.5 11.9q0-3.45 2.25-6.1T10.4 2.5q.4-.075.65.25t.1.7q-.35.725-.525 1.5T10.45 6.5q0 2.95 2.05 5t5 2.05q.8 0 1.562-.175t1.488-.525q.375-.15.7.1t.25.65q-.625 3.4-3.275 5.65T12.1 21.5Z",
-  devices:
-    "M80-160v-120h80v-440q0-33 23.5-56.5T240-800h600v80H240v440h240v120H80Zm520 0q-17 0-28.5-11.5T560-200v-400q0-17 11.5-28.5T600-640h240q17 0 28.5 11.5T880-600v400q0 17-11.5 28.5T840-160H600Zm40-120h160v-280H640v280Zm0 0h160-160Z",
-  "dock-left":
-    "M5 21q-.825 0-1.412-.588T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.412T19 21H5Zm4-2V5H5v14h4Zm2 0h8V5h-8v14Z",
-  "keyboard-arrow-down":
-    "M12 15.4 6 9.4 7.4 8l4.6 4.6L16.6 8 18 9.4l-6 6Z",
-  "keyboard-arrow-up":
-    "M7.4 16 6 14.6l6-6 6 6-1.4 1.4-4.6-4.6L7.4 16Z",
-  refresh:
-    "M17.65 6.35Q16.5 5.2 15.025 4.6T12 4q-3.35 0-5.675 2.325T4 12h2q0-2.5 1.75-4.25T12 6q1.15 0 2.162.438T15.95 7.65L13 10.6h7V3.6l-2.35 2.75ZM6.35 17.65Q7.5 18.8 8.975 19.4T12 20q3.35 0 5.675-2.325T20 12h-2q0 2.5-1.75 4.25T12 18q-1.15 0-2.162-.438T8.05 16.35L11 13.4H4v7l2.35-2.75Z",
-  settings:
-    "M19.43 12.98q.04-.32.055-.655T19.5 11.65q0-.32-.015-.64t-.055-.63l2.11-1.65q.19-.15.23-.39t-.08-.45l-2-3.46q-.12-.22-.35-.3t-.47.02l-2.49 1q-.52-.4-1.08-.69t-1.2-.49L13.73 1.35q-.04-.24-.22-.395T13.08.8h-4q-.25 0-.43.155t-.22.395L8.05 3.97q-.64.2-1.2.49t-1.08.69l-2.49-1q-.24-.1-.47-.02t-.35.3l-2 3.46q-.12.21-.08.45t.23.39l2.11 1.65q-.04.31-.055.63t-.015.64q0 .34.015.675t.055.655L.61 14.63q-.19.15-.23.39t.08.45l2 3.46q.12.22.35.3t.47-.02l2.49-1q.52.4 1.08.69t1.2.49l.38 2.62q.04.24.22.395t.43.155h4q.25 0 .43-.155t.22-.395l.38-2.62q.64-.2 1.2-.49t1.08-.69l2.49 1q.24.1.47.02t.35-.3l2-3.46q.12-.21.08-.45t-.23-.39l-2.11-1.65ZM11.08 15.2q-1.45 0-2.475-1.025T7.58 11.7q0-1.45 1.025-2.475T11.08 8.2q1.45 0 2.475 1.025T14.58 11.7q0 1.45-1.025 2.475T11.08 15.2Z",
-  tab:
-    "M4 19q-.825 0-1.412-.588T2 17V7q0-.825.588-1.412T4 5h16q.825 0 1.413.588T22 7v10q0 .825-.587 1.412T20 19H4Zm0-2h16v-6h-9V7H4v10Z",
-};
+export type PopupMaterialIconName = MaterialActionIconName;
 
 export function PopupMaterialIcon({ name }: { name: PopupMaterialIconName }) {
-  const usesMaterialSymbolsViewBox =
-    name === "brightness-auto" || name === "devices";
   return (
-    <svg
-      aria-hidden="true"
+    <MaterialActionIcon
       className="popup-header__action-icon"
       data-popup-material-icon={name}
-      focusable="false"
-      viewBox={usesMaterialSymbolsViewBox ? "0 -960 960 960" : "0 0 24 24"}
-    >
-      <path d={PATH_BY_NAME[name]} />
-    </svg>
+      name={name}
+    />
   );
 }

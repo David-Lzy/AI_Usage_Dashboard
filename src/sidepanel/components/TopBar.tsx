@@ -1,5 +1,9 @@
 import type { ReactNode } from "react";
 
+import {
+  MaterialActionIcon,
+  type MaterialActionIconName,
+} from "../../shared/components/MaterialActionIcon";
 import { markSurfaceSwitchIntent } from "../surface-switch-intent";
 
 type TopBarProps = {
@@ -7,10 +11,14 @@ type TopBarProps = {
   subtitle: string;
   themeActionLabel?: string;
   themeActionTitle?: string;
+  themeActionIconName?: MaterialActionIconName;
   expandActionLabel?: string;
   expandActionTitle?: string;
+  expandActionIconName?: MaterialActionIconName;
   secondaryActionLabel?: string;
+  secondaryActionIconName?: MaterialActionIconName;
   primaryActionLabel?: string;
+  primaryActionIconName?: MaterialActionIconName;
   bottomContent?: ReactNode;
   sticky?: boolean;
   onThemeAction?: () => void;
@@ -24,10 +32,14 @@ export function TopBar({
   subtitle,
   themeActionLabel = "Dark",
   themeActionTitle = "Switch to dark mode",
+  themeActionIconName,
   expandActionLabel = "Tab",
   expandActionTitle = "Open full-page tab",
+  expandActionIconName,
   secondaryActionLabel = "Refresh",
+  secondaryActionIconName,
   primaryActionLabel = "Settings",
+  primaryActionIconName,
   bottomContent,
   sticky = false,
   onThemeAction,
@@ -53,7 +65,15 @@ export function TopBar({
               title={themeActionTitle}
               onClick={onThemeAction}
             >
-              {themeActionLabel}
+              {themeActionIconName ? (
+                <MaterialActionIcon
+                  className="top-app-bar__action-icon"
+                  name={themeActionIconName}
+                />
+              ) : null}
+              <span className="top-app-bar__action-label">
+                {themeActionLabel}
+              </span>
             </button>
           ) : null}
           {onExpandAction ? (
@@ -67,18 +87,42 @@ export function TopBar({
               onPointerDown={() => markSurfaceSwitchIntent()}
               onClick={onExpandAction}
             >
-              {expandActionLabel}
+              {expandActionIconName ? (
+                <MaterialActionIcon
+                  className="top-app-bar__action-icon"
+                  name={expandActionIconName}
+                />
+              ) : null}
+              <span className="top-app-bar__action-label">
+                {expandActionLabel}
+              </span>
             </button>
           ) : null}
           <button className="icon-button" type="button" onClick={onSecondaryAction}>
-            {secondaryActionLabel}
+            {secondaryActionIconName ? (
+              <MaterialActionIcon
+                className="top-app-bar__action-icon"
+                name={secondaryActionIconName}
+              />
+            ) : null}
+            <span className="top-app-bar__action-label">
+              {secondaryActionLabel}
+            </span>
           </button>
           <button
             className="icon-button icon-button--primary"
             type="button"
             onClick={onPrimaryAction}
           >
-            {primaryActionLabel}
+            {primaryActionIconName ? (
+              <MaterialActionIcon
+                className="top-app-bar__action-icon"
+                name={primaryActionIconName}
+              />
+            ) : null}
+            <span className="top-app-bar__action-label">
+              {primaryActionLabel}
+            </span>
           </button>
         </div>
       </div>

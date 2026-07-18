@@ -3,7 +3,9 @@ import { lazy, Suspense, useEffect, useRef } from "react";
 import type {
   ActionBadgeSelectionMode,
   AppLocalePreference,
+  ThemeMode,
 } from "../providers/types";
+import type { MaterialActionIconName } from "../shared/components/MaterialActionIcon";
 import {
   buildDashboardSummaryLabels,
   createRuntimeI18n,
@@ -51,6 +53,22 @@ const SettingsPage = lazy(() =>
 type StandardRouteAppProps = {
   locationHash: string;
 };
+
+function getThemeActionIconName(
+  nextMode: ThemeMode,
+): MaterialActionIconName {
+  switch (nextMode) {
+    case "light":
+      return "clear-day";
+    case "dark":
+      return "dark-mode";
+    case "time":
+      return "brightness-auto";
+    case "system":
+    default:
+      return "devices";
+  }
+}
 
 function StandardRouteLoading({
   eyebrow,
@@ -341,11 +359,17 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
             }
             themeActionLabel={quickThemeToggleCopy.label}
             themeActionTitle={quickThemeToggleCopy.title}
+            themeActionIconName={getThemeActionIconName(
+              quickThemeToggle.nextMode,
+            )}
             onToggleThemeMode={() =>
               handleUpdateSettings({ themeMode: quickThemeToggle.nextMode })
             }
             onOpenFullPage={surfaceActionHandler}
             surfaceActionLabel={surfaceActionLabel}
+            surfaceActionIconName={
+              isFullPageSurface ? "dock-left" : "tab"
+            }
             surfaceActionTitle={
               isFullPageSurface
                 ? runtimeI18n.t("common.actions.open_sidebar")

@@ -59,6 +59,7 @@ import { CustomSourceSettingsSection } from "../components/CustomSourceSettingsS
 import { MaterialInfoTooltip } from "../components/MaterialInfoTooltip";
 import { BUILD_INFO } from "../../shared/build-info";
 import { useSettingsPage } from "../use-settings-page";
+import type { MaterialActionIconName } from "../../shared/components/MaterialActionIcon";
 
 type SettingsToast = {
   tone: "success" | "error";
@@ -71,10 +72,12 @@ type SettingsPageProps = {
   routeFocus?: SettingsRouteFocus;
   themeActionLabel?: string;
   themeActionTitle?: string;
+  themeActionIconName?: MaterialActionIconName;
   onToggleThemeMode?: () => void;
   onOpenFullPage?: () => void;
   surfaceActionLabel?: string;
   surfaceActionTitle?: string;
+  surfaceActionIconName?: MaterialActionIconName;
   settings: AppSettings;
   providers: ProviderSetting[];
   customSources?: CustomSourceSetting[];
@@ -165,10 +168,12 @@ export function SettingsPage({
   routeFocus,
   themeActionLabel,
   themeActionTitle,
+  themeActionIconName,
   onToggleThemeMode,
   onOpenFullPage,
   surfaceActionLabel,
   surfaceActionTitle,
+  surfaceActionIconName,
   settings,
   providers,
   customSources = [],
@@ -377,12 +382,16 @@ export function SettingsPage({
         subtitle={i18n.t("settings.topbar.subtitle")}
         themeActionLabel={themeActionLabel}
         themeActionTitle={themeActionTitle}
+        themeActionIconName={themeActionIconName}
         expandActionLabel={surfaceActionLabel ?? i18n.t("common.actions.tab")}
         expandActionTitle={
           surfaceActionTitle ?? i18n.t("common.actions.open_settings_tab")
         }
+        expandActionIconName={surfaceActionIconName}
         secondaryActionLabel={i18n.t("common.actions.back")}
+        secondaryActionIconName="keyboard-backspace"
         primaryActionLabel={i18n.t("common.actions.save")}
+        primaryActionIconName="save"
         sticky
         bottomContent={
           <SettingsSectionNavigation
