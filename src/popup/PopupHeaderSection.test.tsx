@@ -149,7 +149,13 @@ describe("PopupHeaderSection", () => {
     expect(popupThemeCss).toContain("grid-column: 10;");
     expect(popupThemeCss).toContain("env(safe-area-inset-right, 0px)");
     expect(popupThemeCss).toContain(".popup-header__theme-mode-menu");
-    expect(popupThemeCss).toContain("grid-template-columns: repeat(2");
+    expect(popupThemeCss).toContain(
+      "grid-template-columns: max-content minmax(min-content, 1fr);",
+    );
+    expect(popupThemeCss).toContain(
+      ".popup-header__theme-mode-option:nth-child(odd)",
+    );
+    expect(popupThemeCss).toContain("min-width: 82px;");
     expect(popupThemeCss).toContain("@media (max-width: 360px)");
     expect(popupThemeCss).toContain("--popup-header-control-size: 44px;");
     expect(popupThemeCss).toContain("--popup-header-action-gap: 6px;");

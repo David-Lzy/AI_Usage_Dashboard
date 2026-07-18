@@ -370,7 +370,7 @@ body.popup-page .popup-header--surface-collapsed {
   inset-block-start: calc(100% + var(--app-space-2));
   inset-inline-start: 50%;
   display: grid;
-  grid-template-columns: repeat(2, minmax(88px, 1fr));
+  grid-template-columns: max-content minmax(min-content, 1fr);
   gap: var(--app-space-1);
   width: min(228px, calc(100vw - 24px));
   padding: var(--app-space-2);
@@ -405,6 +405,10 @@ body.popup-page .popup-header--surface-collapsed {
   line-height: var(--md-sys-typescale-label-medium-line-height);
   text-align: start;
   white-space: nowrap;
+}
+
+.popup-header__theme-mode-option:nth-child(odd) {
+  min-width: 82px;
 }
 
 .popup-header__theme-mode-option:hover:not(:disabled),
