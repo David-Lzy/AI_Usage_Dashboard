@@ -9,9 +9,14 @@ import type {
   ProgressColorAppearance,
   ProgressColorBand,
   ProgressDisplayStyle,
+  ResetTimeDisplayMode,
   UiFontFamily,
 } from "../../providers/types";
 import type { RuntimeI18n } from "../../shared/i18n";
+import {
+  buildResetTimeDisplayCopy,
+  RESET_TIME_DISPLAY_MODES,
+} from "../../shared/reset-time-display";
 import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import type { SettingsActivePopoverSessionState } from "../../shared/surface-session-state";
 import { AdaptiveControlGrid } from "./AdaptiveControlGrid";
@@ -74,6 +79,9 @@ type SettingsUiMoreSectionProps = {
   onProgressThicknessPxChange: (progressThicknessPx: number) => void;
   onSidebarProgressStyleChange: (
     progressStyle: ProgressDisplayStyle,
+  ) => void;
+  onResetTimeDisplayModeChange: (
+    resetTimeDisplayMode: ResetTimeDisplayMode,
   ) => void;
   onUiFontFamilyChange: (uiFontFamily: UiFontFamily) => void;
 };
@@ -203,6 +211,7 @@ export function SettingsUiMoreSection({
   onProgressColorBandsChange,
   onProgressThicknessPxChange,
   onSidebarProgressStyleChange,
+  onResetTimeDisplayModeChange,
   onUiFontFamilyChange,
 }: SettingsUiMoreSectionProps) {
   const { canUseFloatingPreview, containerRef } =
@@ -211,6 +220,18 @@ export function SettingsUiMoreSection({
     toolbarPopupPreviewOpen && uiMoreOpen && !canUseFloatingPreview;
   const shouldRenderFloatingPreview =
     toolbarPopupPreviewOpen && canUseFloatingPreview;
+  const resetTimeDisplayCopy = buildResetTimeDisplayCopy(i18n.resolvedLocale);
+  const resetTimeDisplayModeOptions: Array<
+    MaterialSelectOption<ResetTimeDisplayMode>
+  > = RESET_TIME_DISPLAY_MODES.map((value) => ({
+    value,
+    label:
+      value === "date"
+        ? resetTimeDisplayCopy.dateOption
+        : value === "weekday"
+          ? resetTimeDisplayCopy.weekdayOption
+          : resetTimeDisplayCopy.dateAndWeekdayOption,
+  }));
   const uiMoreMeasurementLabels = [
     ...progressDisplayStyleOptions.map((option) => option.label),
     ...popupCircularProgressItemsPerRowOptions.map((option) => option.label),
@@ -218,6 +239,7 @@ export function SettingsUiMoreSection({
     ...popupCornerStyleOptions.map((option) => option.label),
     ...popupShadowStyleOptions.map((option) => option.label),
     ...uiFontFamilyOptions.map((option) => option.label),
+    ...resetTimeDisplayModeOptions.map((option) => option.label),
   ];
 
   return (
@@ -373,6 +395,17 @@ export function SettingsUiMoreSection({
               onActivePopoverChange={onActivePopoverChange}
               options={popupShadowStyleOptions}
               onChange={onPopupShadowStyleChange}
+            />
+
+            <MaterialSelect
+              label={resetTimeDisplayCopy.settingLabel}
+              value={settings.resetTimeDisplayMode}
+              fieldIdPrefix="reset-time-display-mode"
+              sessionPopoverId="reset-time-display-mode"
+              activePopover={activePopover}
+              onActivePopoverChange={onActivePopoverChange}
+              options={resetTimeDisplayModeOptions}
+              onChange={onResetTimeDisplayModeChange}
             />
 
             <MaterialSelect

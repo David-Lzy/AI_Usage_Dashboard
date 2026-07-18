@@ -11,8 +11,8 @@ import { createPortal } from "react-dom";
 import type { AppSettings } from "../../providers/types";
 import { buildRuntimeCommonCopy, type RuntimeI18n } from "../../shared/i18n";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
-import { formatPopupPreviewQuotaLabel } from "./provider-progress-compact-labels";
 import { UsageProgress } from "./UsageProgress";
+import { buildQuotaResetLabelParts } from "../../shared/reset-time-display";
 
 export const POPUP_APPEARANCE_PREVIEW_DEFAULT_REMAINING_PERCENT = 51;
 
@@ -44,6 +44,7 @@ type ToolbarPopupPreviewSettings = Pick<
   | "progressColorBands"
   | "progressThicknessPx"
   | "popupProgressStyle"
+  | "resetTimeDisplayMode"
   | "popupShadowStyle"
   | "popupSizePreset"
 >;
@@ -120,7 +121,18 @@ function ToolbarPopupPreviewSurface({
   previewRemainingPercent,
   settings,
 }: ToolbarPopupPreviewSurfaceProps) {
-  const sampleQuotaLabel = formatPopupPreviewQuotaLabel(i18n);
+  const sampleQuotaLabel = buildQuotaResetLabelParts(
+    {
+      id: "window:weekly:weekly:preview:0",
+      kind: "usage_window",
+      label: "Weekly limit",
+      detail: null,
+      resetAt: "Mon 05:17",
+      resetLabel: null,
+    },
+    settings.resetTimeDisplayMode,
+    i18n,
+  );
   const remainingLabel = buildRuntimeCommonCopy(i18n).remaining;
   const sampleRemainingLabel =
     settings.popupProgressStyle === "line"
@@ -136,7 +148,7 @@ function ToolbarPopupPreviewSurface({
             {i18n.t("settings.popup_appearance_preview.sample_provider")}
           </p>
           <p className="supporting-copy">
-            {sampleQuotaLabel}
+            {sampleQuotaLabel.name}
           </p>
         </div>
         <div
@@ -147,14 +159,15 @@ function ToolbarPopupPreviewSurface({
             remaining={previewRemainingPercent}
             total={100}
             tone="neutral"
-            label={sampleQuotaLabel}
+            label={sampleQuotaLabel.name}
+            labelSecondary={sampleQuotaLabel.reset}
             displayStyle={settings.popupProgressStyle}
             progressColorAppearance={settings.progressColorAppearance}
             progressColorBands={settings.progressColorBands}
             progressThicknessPx={settings.progressThicknessPx}
             valueKind="remaining"
             valueLabel={sampleRemainingLabel}
-            valueText={`${sampleQuotaLabel}: ${previewRemainingPercent}% ${remainingLabel}`}
+            valueText={`${sampleQuotaLabel.name}: ${previewRemainingPercent}% ${remainingLabel}`}
           />
         </div>
       </div>

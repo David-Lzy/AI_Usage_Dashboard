@@ -136,6 +136,10 @@ export type SyncTrigger = "manual" | "alarm" | "bootstrap";
 export type ProviderPageBindingStatus = "unbound" | "bound" | "stale";
 
 export type ThemeMode = "system" | "light" | "dark" | "time";
+export type ResetTimeDisplayMode =
+  | "date"
+  | "weekday"
+  | "date_and_weekday";
 export type ThemePreset = "default" | "meadow" | "sunset" | "custom";
 export type UiFontFamily = "default" | "system" | "serif" | "mono";
 export type MotionMode = "system" | "full" | "reduced";
@@ -443,6 +447,7 @@ export type AppSettings = {
   themeCustomSeedHex: string | null;
   uiFontFamily: UiFontFamily;
   motionMode: MotionMode;
+  resetTimeDisplayMode: ResetTimeDisplayMode;
   popupProgressStyle: ProgressDisplayStyle;
   sidebarProgressStyle: ProgressDisplayStyle;
   fullPageProgressStyle: ProgressDisplayStyle;

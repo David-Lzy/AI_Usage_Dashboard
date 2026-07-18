@@ -123,6 +123,9 @@ describe("SettingsPreferencesSection", () => {
     expect(html).toContain(">Open toolbar popup preview<");
     expect(html).not.toContain('data-settings-material-select="popup-circular-row-count"');
     expect(html).not.toContain('data-settings-material-select="ui-font-family"');
+    expect(html).not.toContain(
+      'data-settings-material-select="reset-time-display-mode"',
+    );
     expect(html).not.toContain('data-progress-appearance-preferences=""');
     expect(html).not.toContain("Tune thickness and remaining-color bands");
     expect(html).not.toContain("#B3261E");
@@ -175,9 +178,14 @@ describe("SettingsPreferencesSection", () => {
     expect(html).toContain('data-material-icon="keyboard-arrow-up"');
     expect(html).toContain('data-settings-material-select="popup-circular-row-count"');
     expect(html).toContain('data-settings-material-select="ui-font-family"');
+    expect(html).toContain(
+      'data-settings-material-select="reset-time-display-mode"',
+    );
     expect(html).toContain("Circular items per row");
     expect(html).toContain("4 per row");
     expect(html).toContain("UI font");
+    expect(html).toContain("Reset time format");
+    expect(html).toContain("Date and time");
     expect(html).toContain(
       "Uses safe local system font stacks across the popup",
     );

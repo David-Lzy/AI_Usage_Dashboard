@@ -20,6 +20,7 @@ type UsageProgressProps = {
   total: number | null;
   tone: "neutral" | "warning" | "error";
   label: string;
+  labelSecondary?: string | null;
   displayStyle?: ProgressDisplayStyle;
   progressColorAppearance?: ProgressColorAppearance;
   progressColorBands?: readonly ProgressColorBand[];
@@ -36,6 +37,7 @@ export function UsageProgress({
   total,
   tone,
   label,
+  labelSecondary,
   displayStyle = "line",
   progressColorAppearance,
   progressColorBands = DEFAULT_PROGRESS_COLOR_BANDS,
@@ -78,6 +80,9 @@ export function UsageProgress({
     ? "Usage percentage unavailable"
     : (valueText ??
       `${roundedPercent}% ${valueKind === "remaining" ? "remaining" : "used"}`);
+  const accessibleLabel = labelSecondary
+    ? `${label}. ${labelSecondary}`
+    : label;
   const progressStyle = {
     "--usage-progress-thickness": `${resolvedThicknessPx}px`,
     ...(roundedPercent === null
@@ -103,7 +108,7 @@ export function UsageProgress({
       >
         <div
           role="progressbar"
-          aria-label={label}
+          aria-label={accessibleLabel}
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={roundedPercent ?? undefined}
@@ -115,7 +120,14 @@ export function UsageProgress({
             {progressValueLabel}
           </span>
         </div>
-        <p className="usage-progress__ring-label">{label}</p>
+        <p className="usage-progress__ring-label">
+          <span className="usage-progress__label-name">{label}</span>
+          {labelSecondary ? (
+            <span className="usage-progress__label-reset">
+              {labelSecondary}
+            </span>
+          ) : null}
+        </p>
         {detail ? <p className="supporting-copy usage-progress__detail">{detail}</p> : null}
       </div>
     );
@@ -127,6 +139,7 @@ export function UsageProgress({
         detail={detail}
         isIndeterminate={isIndeterminate}
         label={label}
+        labelSecondary={labelSecondary}
         roundedPercent={roundedPercent}
         progressColor={resolvedProgressColor}
         progressThicknessPx={resolvedThicknessPx}
@@ -145,7 +158,12 @@ export function UsageProgress({
     >
       <div className="usage-progress__meta">
         <p className="supporting-copy usage-progress__label">
-          <span>{label}</span>
+          <span className="usage-progress__label-name">{label}</span>
+          {labelSecondary ? (
+            <span className="usage-progress__label-reset">
+              {labelSecondary}
+            </span>
+          ) : null}
           {detail ? (
             <span className="usage-progress__meta-detail"> · {detail}</span>
           ) : null}
@@ -159,7 +177,7 @@ export function UsageProgress({
 
       <div
         role="progressbar"
-        aria-label={label}
+        aria-label={accessibleLabel}
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={roundedPercent ?? undefined}

@@ -9,6 +9,7 @@ import type {
   ProviderId,
   ProviderUsageHistory,
   ProviderUsageHistoryModuleId,
+  ResetTimeDisplayMode,
   UsageHistoryModulesBySurface,
 } from "../providers/types";
 import type { RuntimeI18n } from "../shared/i18n";
@@ -35,6 +36,7 @@ import {
 } from "./popup-collapse-preferences";
 import { CursorUsageSummary } from "../shared/components/CursorUsageSummary";
 import { buildCursorUsageLocalizedCopy } from "../shared/cursor-usage-localized-copy";
+import { DEFAULT_RESET_TIME_DISPLAY_MODE } from "../shared/reset-time-display";
 
 type PopupFeaturedProviderListProps = {
   ariaLabel: string;
@@ -47,6 +49,7 @@ type PopupFeaturedProviderListProps = {
   progressDisplayStyle: ProgressDisplayStyle;
   progressItemsBySurface: ProgressItemsBySurface;
   progressThicknessPx: number;
+  resetTimeDisplayMode?: ResetTimeDisplayMode;
   usageHistoryModulesBySurface?: UsageHistoryModulesBySurface;
   getSettingsFocusForProvider: (
     provider: PopupFeaturedProviderCard["provider"],
@@ -100,6 +103,7 @@ export function PopupFeaturedProviderList({
   progressDisplayStyle,
   progressItemsBySurface,
   progressThicknessPx,
+  resetTimeDisplayMode = DEFAULT_RESET_TIME_DISPLAY_MODE,
   usageHistoryModulesBySurface = createDefaultUsageHistoryModulesBySurface(),
   getSettingsFocusForProvider,
   onAction,
@@ -124,6 +128,7 @@ export function PopupFeaturedProviderList({
               progressDisplayStyle={progressDisplayStyle}
               progressItemsBySurface={progressItemsBySurface}
               progressThicknessPx={progressThicknessPx}
+              resetTimeDisplayMode={resetTimeDisplayMode}
               i18n={i18n}
             />
           );

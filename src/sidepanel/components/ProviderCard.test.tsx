@@ -317,7 +317,7 @@ describe("ProviderCard", () => {
     expect(html).toContain('class="provider-progress-item-list');
     expect(html.match(/role="progressbar"/g)).toHaveLength(4);
     expect(html).toContain("Current session");
-    expect(html).toContain("All models weekly limit");
+    expect(html).toContain("Weekly limit");
     expect(html).toContain("Claude Design");
     expect(html).toContain("Daily included routine runs");
     expect(html).not.toContain("rolling percent");

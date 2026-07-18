@@ -140,6 +140,12 @@
 }
 
 .usage-progress__ring-label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  column-gap: 6px;
+  row-gap: 1px;
   margin: 0;
   color: var(--md-sys-color-on-surface-variant);
   font-family: var(--md-sys-typescale-label-medium-font);
@@ -148,6 +154,25 @@
   line-height: var(--md-sys-typescale-label-medium-line-height);
   text-align: center;
   overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.usage-progress__label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 6px;
+  row-gap: 1px;
+  text-wrap: balance;
+}
+
+.usage-progress__label-name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.usage-progress__label-reset {
+  white-space: nowrap;
 }
 
 .usage-progress-ring {

@@ -39,7 +39,8 @@ dashboard.
   separate, clearly labeled custom sources.
 - Lets users tune language, theme, popup appearance, progress style,
   remaining-color appearance, provider order, toolbar badge behavior, and
-  toolbar icon behavior.
+  toolbar icon behavior. Quota reset labels can use localized date-and-time,
+  weekday-and-time, or combined formatting across all display surfaces.
 - Theme choices include light, dark, system, and a local-time schedule. The
   schedule uses only the device clock (light from 07:00 to 19:00) and does not
   request or read location.

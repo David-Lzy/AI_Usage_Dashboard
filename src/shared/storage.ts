@@ -82,6 +82,7 @@ import { buildCustomSourceProgressItemIdsBySource } from "./custom-source-view-m
 import { normalizeProviderUsageHistory } from "./provider-usage-history";
 import { normalizeUsageHistoryModulesBySurface } from "./usage-history-visibility";
 import { normalizeCursorUsageBilling } from "./cursor-usage-billing";
+import { normalizeResetTimeDisplayMode } from "./reset-time-display";
 
 let memoryFallbackState: AppState | null = null;
 
@@ -312,6 +313,9 @@ function normalizeAppState(state: AppState): AppState {
       ),
       uiFontFamily: normalizeUiFontFamily(state.settings?.uiFontFamily),
       motionMode: normalizeMotionMode(state.settings?.motionMode),
+      resetTimeDisplayMode: normalizeResetTimeDisplayMode(
+        state.settings?.resetTimeDisplayMode,
+      ),
       popupProgressStyle: normalizeProgressDisplayStyle(
         state.settings?.popupProgressStyle,
         DEFAULT_POPUP_PROGRESS_STYLE,

@@ -33,4 +33,28 @@ describe("shared UsageProgress", () => {
 
     expect(html).toContain("--usage-progress-color:#808080");
   });
+
+  it("keeps quota names and reset timestamps in separate label spans", () => {
+    const html = renderToStaticMarkup(
+      <UsageProgress
+        used={10}
+        remaining={90}
+        total={100}
+        tone="neutral"
+        label="Weekly limit"
+        labelSecondary="Resets Jul 20, 5:17 AM"
+        displayStyle="circle-soft"
+      />,
+    );
+
+    expect(html).toContain(
+      '<span class="usage-progress__label-name">Weekly limit</span>',
+    );
+    expect(html).toContain(
+      '<span class="usage-progress__label-reset">Resets Jul 20, 5:17 AM</span>',
+    );
+    expect(html).toContain(
+      'aria-label="Weekly limit. Resets Jul 20, 5:17 AM"',
+    );
+  });
 });

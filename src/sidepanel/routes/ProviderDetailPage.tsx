@@ -5,6 +5,7 @@ import type {
   ProgressColorBand,
   ProgressDisplayStyle,
   ProgressItemsBySurface,
+  ResetTimeDisplayMode,
   ProviderId,
   UsageHistoryModulesBySurface,
 } from "../../providers/types";
@@ -29,6 +30,7 @@ import {
 } from "../../shared/usage-history-visibility";
 import { CursorUsageSummary } from "../../shared/components/CursorUsageSummary";
 import { buildCursorUsageLocalizedCopy } from "../../shared/cursor-usage-localized-copy";
+import { DEFAULT_RESET_TIME_DISPLAY_MODE } from "../../shared/reset-time-display";
 
 type ProviderDetailPageProps = {
   localePreference: AppLocalePreference;
@@ -40,6 +42,7 @@ type ProviderDetailPageProps = {
   progressSurface: DisplaySurface;
   usageHistoryModulesBySurface?: UsageHistoryModulesBySurface;
   provider: ProviderViewModel;
+  resetTimeDisplayMode?: ResetTimeDisplayMode;
   onBack: () => void;
   themeActionLabel?: string;
   themeActionTitle?: string;
@@ -64,6 +67,7 @@ export function ProviderDetailPage({
   progressSurface,
   usageHistoryModulesBySurface = createDefaultUsageHistoryModulesBySurface(),
   provider,
+  resetTimeDisplayMode = DEFAULT_RESET_TIME_DISPLAY_MODE,
   onBack,
   themeActionLabel,
   themeActionTitle,
@@ -456,6 +460,7 @@ export function ProviderDetailPage({
             progressItemsBySurface={progressItemsBySurface}
             progressThicknessPx={progressThicknessPx}
             provider={provider}
+            resetTimeDisplayMode={resetTimeDisplayMode}
             surface={progressSurface}
           />
         ) : null}

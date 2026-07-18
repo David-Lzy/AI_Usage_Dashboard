@@ -6,6 +6,7 @@ type UsageProgressRingProps = {
   detail?: string | null;
   isIndeterminate: boolean;
   label: string;
+  labelSecondary?: string | null;
   progressColor: string | null;
   progressThicknessPx: number;
   roundedPercent: number | null;
@@ -111,6 +112,7 @@ export function UsageProgressRing({
   detail,
   isIndeterminate,
   label,
+  labelSecondary,
   progressColor,
   progressThicknessPx,
   roundedPercent,
@@ -169,6 +171,9 @@ export function UsageProgressRing({
   };
   const trackDasharray = `${svgTrackArcLength} ${circumference}`;
   const fillDasharray = `${svgFillArcLength} ${circumference}`;
+  const accessibleLabel = labelSecondary
+    ? `${label}. ${labelSecondary}`
+    : label;
 
   return (
     <div
@@ -176,7 +181,7 @@ export function UsageProgressRing({
     >
       <div
         role="progressbar"
-        aria-label={label}
+        aria-label={accessibleLabel}
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={roundedPercent ?? undefined}
@@ -208,7 +213,12 @@ export function UsageProgressRing({
         ) : null}
         <span className="usage-progress-ring__value">{valueLabel}</span>
       </div>
-      <p className="usage-progress__ring-label">{label}</p>
+      <p className="usage-progress__ring-label">
+        <span className="usage-progress__label-name">{label}</span>
+        {labelSecondary ? (
+          <span className="usage-progress__label-reset">{labelSecondary}</span>
+        ) : null}
+      </p>
       {detail ? <p className="supporting-copy usage-progress__detail">{detail}</p> : null}
     </div>
   );

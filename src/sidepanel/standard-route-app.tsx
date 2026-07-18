@@ -401,6 +401,9 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
             onUiFontFamilyChange={(uiFontFamily) =>
               handleUpdateSettings({ uiFontFamily })
             }
+            onResetTimeDisplayModeChange={(resetTimeDisplayMode) =>
+              handleUpdateSettings({ resetTimeDisplayMode })
+            }
             onPopupProgressStyleChange={(popupProgressStyle) =>
               handleUpdateSettings({ popupProgressStyle })
             }
@@ -522,6 +525,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
             appState.settings.usageHistoryModulesBySurface
           }
           provider={selectedProvider}
+          resetTimeDisplayMode={appState.settings.resetTimeDisplayMode}
           onBack={() => navigateToRoute({ name: "dashboard" })}
           themeActionLabel={quickThemeToggleCopy.label}
           themeActionTitle={quickThemeToggleCopy.title}
@@ -552,6 +556,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           }
           summaryItems={summaryItems}
           providers={visibleProviders}
+          resetTimeDisplayMode={appState.settings.resetTimeDisplayMode}
           customSources={visibleCustomSources}
           sourceOrder={
             appState.settings.providerOrderBySurface[providerDisplaySurface]

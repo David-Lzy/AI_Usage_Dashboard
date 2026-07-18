@@ -94,6 +94,9 @@ type SettingsPageProps = {
   onMotionModeChange: (motionMode: AppSettings["motionMode"]) => void;
   onThemePresetChange: (themePreset: ThemePreset) => void;
   onUiFontFamilyChange: (uiFontFamily: UiFontFamily) => void;
+  onResetTimeDisplayModeChange?: (
+    resetTimeDisplayMode: AppSettings["resetTimeDisplayMode"],
+  ) => void;
   onPopupProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onSidebarProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onFullPageProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
@@ -190,6 +193,7 @@ export function SettingsPage({
   onMotionModeChange,
   onThemePresetChange,
   onUiFontFamilyChange,
+  onResetTimeDisplayModeChange = () => undefined,
   onPopupProgressStyleChange,
   onSidebarProgressStyleChange,
   onFullPageProgressStyleChange,
@@ -504,6 +508,7 @@ export function SettingsPage({
         onMotionModeChange={onMotionModeChange}
         onThemePresetChange={onThemePresetChange}
         onUiFontFamilyChange={onUiFontFamilyChange}
+        onResetTimeDisplayModeChange={onResetTimeDisplayModeChange}
         onPopupProgressStyleChange={onPopupProgressStyleChange}
         onSidebarProgressStyleChange={onSidebarProgressStyleChange}
         onFullPageProgressStyleChange={onFullPageProgressStyleChange}

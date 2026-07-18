@@ -615,3 +615,20 @@ endpoint rejection, or protocol drift can still prevent automatic discovery.
 Those cases enter the existing local cooldown and compatibility fallback rather
 than opening pages repeatedly or producing a request storm. The last successful
 normalized snapshot remains visible with a stale warning.
+
+## 26. 2026-07-18 Usage Window Labels
+
+Quota labels follow the normalized window returned by the active Codex source:
+
+- a `604800`-second normalized window is shown as a localized weekly limit
+- if that window is absent, no weekly item or placeholder is rendered
+- an unrecognized period is shown as a generic usage limit rather than being
+  relabeled as weekly
+- a model-specific window uses the model name as its primary label
+
+The quota name and reset timestamp are rendered as separate text spans. They
+remain on one line when space permits and wrap only between the name and the
+complete timestamp at narrower widths. Users can choose localized date,
+weekday, or combined reset-time formatting under More UI settings. Formatting
+uses `Intl.DateTimeFormat`; provider adapters continue to supply normalized
+window kinds and do not generate display-language strings.

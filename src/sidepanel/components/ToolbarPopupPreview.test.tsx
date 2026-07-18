@@ -40,7 +40,10 @@ describe("ToolbarPopupPreview", () => {
     expect(html).toContain("Toolbar popup preview");
     expect(html).toContain("Preview remaining");
     expect(html).toContain('value="51"');
-    expect(html).toContain("week, reset: Tue 09:15");
+    expect(html).toContain(
+      '<span class="usage-progress__label-name">Weekly limit</span>',
+    );
+    expect(html).toContain('class="usage-progress__label-reset"');
     expect(html).not.toContain("popup-appearance-preview-actions");
     expect(html).not.toContain("Quick glance");
     expect(html).not.toContain("14:59");
@@ -60,9 +63,12 @@ describe("ToolbarPopupPreview", () => {
 
     expect(html).toContain("工具栏弹窗预览");
     expect(html).toContain("预览剩余额度");
-    expect(html).toContain("周额度，重置：周二 09:15");
     expect(html).toContain(
-      'aria-valuetext="周额度，重置：周二 09:15: 74% 剩余"',
+      '<span class="usage-progress__label-name">每周限额</span>',
+    );
+    expect(html).toContain("重置");
+    expect(html).toContain(
+      'aria-valuetext="每周限额: 74% 剩余"',
     );
     expect(html).not.toContain("快速概览");
   });

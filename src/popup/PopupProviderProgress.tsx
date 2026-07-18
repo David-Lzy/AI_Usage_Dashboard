@@ -4,10 +4,12 @@ import type {
   ProgressColorBand,
   ProgressDisplayStyle,
   ProgressItemsBySurface,
+  ResetTimeDisplayMode,
 } from "../providers/types";
 import type { RuntimeI18n } from "../shared/i18n";
 import type { ProviderViewModel } from "../shared/provider-view-models";
 import { ProviderProgressItemList } from "../shared/components/ProviderProgressItemList";
+import { DEFAULT_RESET_TIME_DISPLAY_MODE } from "../shared/reset-time-display";
 
 type PopupProviderProgressProps = {
   i18n: RuntimeI18n;
@@ -18,6 +20,7 @@ type PopupProviderProgressProps = {
   progressItemsBySurface: ProgressItemsBySurface;
   progressThicknessPx: number;
   provider: ProviderViewModel;
+  resetTimeDisplayMode?: ResetTimeDisplayMode;
 };
 
 export function PopupProviderProgress({
@@ -29,6 +32,7 @@ export function PopupProviderProgress({
   progressItemsBySurface,
   progressThicknessPx,
   provider,
+  resetTimeDisplayMode = DEFAULT_RESET_TIME_DISPLAY_MODE,
 }: PopupProviderProgressProps) {
   return (
     <ProviderProgressItemList
@@ -41,6 +45,7 @@ export function PopupProviderProgress({
       progressItemsBySurface={progressItemsBySurface}
       progressThicknessPx={progressThicknessPx}
       provider={provider}
+      resetTimeDisplayMode={resetTimeDisplayMode}
       surface="popup"
     />
   );

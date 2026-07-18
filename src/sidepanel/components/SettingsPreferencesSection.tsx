@@ -85,6 +85,9 @@ type SettingsPreferencesSectionProps = {
   onSidebarProgressStyleChange: (
     progressStyle: ProgressDisplayStyle,
   ) => void;
+  onResetTimeDisplayModeChange?: (
+    resetTimeDisplayMode: AppSettings["resetTimeDisplayMode"],
+  ) => void;
   onSyncIntervalChange: (minutes: number) => void;
   onMotionModeChange: (motionMode: AppSettings["motionMode"]) => void;
   onThemeCustomSeedChange: (themeCustomSeedHex: string) => void;
@@ -123,6 +126,7 @@ export function SettingsPreferencesSection({
   onProgressColorBandsChange,
   onProgressThicknessPxChange,
   onSidebarProgressStyleChange,
+  onResetTimeDisplayModeChange = () => undefined,
   onSyncIntervalChange,
   onMotionModeChange,
   onThemeCustomSeedChange,
@@ -442,6 +446,7 @@ export function SettingsPreferencesSection({
         onProgressColorBandsChange={onProgressColorBandsChange}
         onProgressThicknessPxChange={onProgressThicknessPxChange}
         onSidebarProgressStyleChange={onSidebarProgressStyleChange}
+        onResetTimeDisplayModeChange={onResetTimeDisplayModeChange}
         onUiFontFamilyChange={onUiFontFamilyChange}
       />
     </section>

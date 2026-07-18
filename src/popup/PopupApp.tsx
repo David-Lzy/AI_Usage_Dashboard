@@ -565,6 +565,7 @@ export function PopupApp() {
         progressDisplayStyle={popupProgressStyle}
         progressItemsBySurface={appState.settings.progressItemsBySurface}
         progressThicknessPx={appState.settings.progressThicknessPx}
+        resetTimeDisplayMode={appState.settings.resetTimeDisplayMode}
         usageHistoryModulesBySurface={
           appState.settings.usageHistoryModulesBySurface
         }

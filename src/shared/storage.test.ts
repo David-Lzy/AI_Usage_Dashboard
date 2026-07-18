@@ -416,6 +416,30 @@ describe("storage normalization", () => {
     expect(state?.settings.uiFontFamily).toBe("default");
   });
 
+  it("normalizes and preserves the reset time display preference", async () => {
+    await writeAppState({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        resetTimeDisplayMode: "date_and_weekday",
+      },
+    });
+
+    expect((await readAppState())?.settings.resetTimeDisplayMode).toBe(
+      "date_and_weekday",
+    );
+
+    await writeAppState({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        resetTimeDisplayMode: "timestamp",
+      } as unknown as AppState["settings"],
+    });
+
+    expect((await readAppState())?.settings.resetTimeDisplayMode).toBe("date");
+  });
+
   it("preserves stored provider source preferences across normalized writes", async () => {
     await writeAppState({
       ...SAMPLE_APP_STATE,

@@ -5,6 +5,7 @@ import type {
   ProgressColorBand,
   ProgressDisplayStyle,
   ProgressItemsBySurface,
+  ResetTimeDisplayMode,
   ProviderId,
   SummaryItem,
   UsageHistoryModulesBySurface,
@@ -18,6 +19,7 @@ import { SummaryStrip } from "../components/SummaryStrip";
 import { TopBar } from "../components/TopBar";
 import type { ProviderViewModel } from "../view-models";
 import { createDefaultUsageHistoryModulesBySurface } from "../../shared/usage-history-visibility";
+import { DEFAULT_RESET_TIME_DISPLAY_MODE } from "../../shared/reset-time-display";
 
 type DashboardPageProps = {
   localePreference: AppLocalePreference;
@@ -27,6 +29,7 @@ type DashboardPageProps = {
   progressItemsBySurface: ProgressItemsBySurface;
   progressThicknessPx: number;
   progressSurface: DisplaySurface;
+  resetTimeDisplayMode?: ResetTimeDisplayMode;
   usageHistoryModulesBySurface?: UsageHistoryModulesBySurface;
   summaryItems: SummaryItem[];
   providers: ProviderViewModel[];
@@ -58,6 +61,7 @@ export function DashboardPage({
   progressItemsBySurface,
   progressThicknessPx,
   progressSurface,
+  resetTimeDisplayMode = DEFAULT_RESET_TIME_DISPLAY_MODE,
   usageHistoryModulesBySurface = createDefaultUsageHistoryModulesBySurface(),
   summaryItems,
   providers,
@@ -179,6 +183,7 @@ export function DashboardPage({
                   progressSurface={progressSurface}
                   usageHistoryModulesBySurface={usageHistoryModulesBySurface}
                   provider={sourceCard.provider}
+                  resetTimeDisplayMode={resetTimeDisplayMode}
                   onOpen={onOpenProvider}
                   onOpenSourcePage={onOpenSourcePage}
                   onRefresh={onRefreshProvider}

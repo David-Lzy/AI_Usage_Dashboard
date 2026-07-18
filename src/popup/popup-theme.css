@@ -803,12 +803,13 @@ body.popup-page .popup-header--surface-collapsed {
 .popup-provider-card__progress--circle .usage-progress__ring-label,
 .popup-provider-card__progress--circle-soft .usage-progress__ring-label,
 .popup-provider-card__progress--circle-gauge .usage-progress__ring-label {
-  display: -webkit-box;
-  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
   font-size: var(--md-sys-typescale-label-small-size);
   line-height: var(--md-sys-typescale-label-small-line-height);
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  text-wrap: balance;
 }
 
 .popup-provider-card__progress--circle .usage-progress__detail,

@@ -94,7 +94,11 @@ describe("PopupProviderProgress", () => {
     expect(html).toContain("provider-progress-item-list--circle");
     expect(html).toContain("provider-progress-item-list--single-circular");
     expect(html).toContain('data-single-circular-progress=""');
-    expect(html).toContain("week, reset: Wed 12:30");
+    expect(html).toContain(
+      '<span class="usage-progress__label-name">Weekly limit</span>',
+    );
+    expect(html).toContain('class="usage-progress__label-reset"');
+    expect(html).toContain("Resets");
     expect(html).not.toContain("Weekly usage window");
     expect(html).toContain("--usage-progress-percent:35%");
     expect(html).not.toContain("Codex weekly window percent");
@@ -130,7 +134,11 @@ describe("PopupProviderProgress", () => {
       />,
     );
 
-    expect(html).toContain("5小时，重置：01:11");
+    expect(html).toContain(
+      '<span class="usage-progress__label-name">5 小时限额</span>',
+    );
+    expect(html).toContain("5月17日");
+    expect(html).toContain("重置");
     expect(html).not.toContain("5-hour usage window");
   });
 
@@ -166,17 +174,20 @@ describe("PopupProviderProgress", () => {
       />,
     );
 
-    expect(html).toContain("周额度，重置：周二 00:30");
+    expect(html).toContain(
+      '<span class="usage-progress__label-name">每周限额</span>',
+    );
+    expect(html).toContain("重置");
     expect(html).not.toContain("All models weekly limit");
   });
 
   it("formats absolute ISO weekly resets in the active locale", () => {
     const resetAt = "2026-05-19T10:30:00.000Z";
     const expectedReset = new Intl.DateTimeFormat("zh-CN", {
-      weekday: "short",
-      hour: "2-digit",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
       minute: "2-digit",
-      hourCycle: "h23",
     }).format(new Date(resetAt));
     const html = renderToStaticMarkup(
       <PopupProviderProgress
@@ -207,7 +218,8 @@ describe("PopupProviderProgress", () => {
       />,
     );
 
-    expect(html).toContain(`周额度，重置：${expectedReset}`);
+    expect(html).toContain("每周限额");
+    expect(html).toContain(`${expectedReset} 重置`);
     expect(html).not.toContain("36:23");
   });
 
@@ -228,7 +240,7 @@ describe("PopupProviderProgress", () => {
 
     expect(html).toContain('role="progressbar"');
     expect(html).toContain('aria-valuenow="42"');
-    expect(html).toContain('aria-label="week"');
+    expect(html).toContain('aria-label="Weekly limit"');
     expect(html).toContain("--usage-progress-thickness:10px");
     expect(html).toContain("--usage-progress-color:#8A4B00");
     expect(html).not.toContain("provider-progress-item-list--single-circular");

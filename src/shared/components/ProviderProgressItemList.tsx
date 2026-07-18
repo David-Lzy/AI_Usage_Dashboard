@@ -8,6 +8,7 @@ import type {
   ProgressDisplayStyle,
   ProgressItemsBySurface,
   QuotaUnit,
+  ResetTimeDisplayMode,
 } from "../../providers/types";
 import type { RuntimeI18n } from "../i18n";
 import { buildRuntimeCommonCopy } from "../i18n";
@@ -18,7 +19,10 @@ import {
 } from "../provider-progress-items";
 import type { ProviderViewModel } from "../provider-view-models";
 import { isCircularProgressDisplayStyle } from "../progress-display";
-import { formatPopupProgressItemLabel } from "./provider-progress-compact-labels";
+import {
+  buildQuotaResetLabelParts,
+  DEFAULT_RESET_TIME_DISPLAY_MODE,
+} from "../reset-time-display";
 import { UsageProgress } from "./UsageProgress";
 
 type ProviderProgressItemListProps = {
@@ -31,6 +35,7 @@ type ProviderProgressItemListProps = {
   progressItemsBySurface: ProgressItemsBySurface;
   progressThicknessPx: number;
   provider: ProviderViewModel;
+  resetTimeDisplayMode?: ResetTimeDisplayMode;
   surface: DisplaySurface;
 };
 
@@ -104,26 +109,6 @@ function formatValueOnlyText(
   return "Unavailable";
 }
 
-function formatProgressItemDetail(
-  item: ProviderProgressItem,
-  i18n: RuntimeI18n,
-): string | null {
-  const resetAt = item.resetAt
-    ? (i18n.formatTemporalValue(item.resetAt) ?? item.resetAt)
-    : null;
-  const resetLabel = item.resetLabel
-    ? i18n.localizeResetRuntimeLabel(item.resetLabel)
-    : null;
-  const resetDetail = resetAt
-    ? `${buildRuntimeCommonCopy(i18n).reset} ${resetAt}`
-    : resetLabel;
-  const detailParts = [resetDetail, item.detail].filter(
-    (part): part is string => Boolean(part),
-  );
-
-  return detailParts.length > 0 ? detailParts.join(" · ") : null;
-}
-
 function getProgressItemValueKind(
   item: ProviderProgressItem,
 ): "remaining" | "used" {
@@ -140,6 +125,7 @@ export function ProviderProgressItemList({
   progressItemsBySurface,
   progressThicknessPx,
   provider,
+  resetTimeDisplayMode = DEFAULT_RESET_TIME_DISPLAY_MODE,
   surface,
 }: ProviderProgressItemListProps) {
   const visibleProgressItems = selectVisibleProviderProgressItems(
@@ -184,9 +170,12 @@ export function ProviderProgressItemList({
       style={listStyle}
     >
       {visibleProgressItems.map((item) => {
-        const isPopup = surface === "popup";
-        const label = isPopup ? formatPopupProgressItemLabel(item, i18n) : item.label;
-        const detail = isPopup ? null : formatProgressItemDetail(item, i18n);
+        const labelParts = buildQuotaResetLabelParts(
+          item,
+          resetTimeDisplayMode,
+          i18n,
+        );
+        const label = labelParts.name;
         const isFlexCreditBalance = isFlexCreditBalanceProgressItem(item);
         const tone =
           item.kind === "primary_quota" ? provider.displayTone : item.tone;
@@ -208,6 +197,7 @@ export function ProviderProgressItemList({
                 total={item.total}
                 tone={tone}
                 label={label}
+                labelSecondary={labelParts.reset}
                 displayStyle={displayStyle}
                 progressColorAppearance={progressColorAppearance}
                 progressColorBands={progressColorBands}
@@ -219,7 +209,6 @@ export function ProviderProgressItemList({
                   displayStyle,
                 )}
                 valueText={formatProgressValueText(item, i18n, label)}
-                detail={detail}
               />
             ) : (
               <div
@@ -235,9 +224,9 @@ export function ProviderProgressItemList({
                 <p className="provider-progress-item-list__value">
                   {formatValueOnlyText(item, i18n)}
                 </p>
-                {detail ? (
+                {labelParts.reset ? (
                   <p className="supporting-copy provider-progress-item-list__detail">
-                    {detail}
+                    {labelParts.reset}
                   </p>
                 ) : null}
               </div>
