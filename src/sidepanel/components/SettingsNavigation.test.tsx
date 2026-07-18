@@ -13,6 +13,10 @@ const settingsNavigationCss = readFileSync(
   new URL("../theme/settings-navigation.css", import.meta.url),
   "utf8",
 );
+const settingsAppearanceCss = readFileSync(
+  new URL("../theme/settings-appearance.css", import.meta.url),
+  "utf8",
+);
 
 describe("SettingsNavigation", () => {
   it("renders section chips with one active section", () => {
@@ -62,10 +66,11 @@ describe("SettingsNavigation", () => {
     );
     expect(settingsNavigationCss).toContain("flex: none;");
     expect(settingsNavigationCss).toContain("@media (max-width: 1120px) {");
-    expect(settingsNavigationCss).toContain(
-      "grid-template-columns: minmax(0, 1fr) max-content;",
-    );
-    expect(settingsNavigationCss).toContain("grid-column: 1 / -1;");
+    expect(settingsNavigationCss).toContain("display: flex;");
+    expect(settingsNavigationCss).toContain("flex-direction: row;");
+    expect(settingsNavigationCss).toContain("flex-wrap: wrap;");
+    expect(settingsNavigationCss).toContain("flex: 1 1 220px;");
+    expect(settingsNavigationCss).toContain("flex: 1 0 100%;");
     expect(settingsNavigationCss).toContain("@media (max-width: 620px) {");
     expect(settingsNavigationCss).toContain("@media (max-width: 520px) {");
     expect(settingsNavigationCss).toContain(
@@ -75,5 +80,8 @@ describe("SettingsNavigation", () => {
     expect(settingsNavigationCss).toContain(
       "grid-template-columns: minmax(0, 1fr);",
     );
+    expect(settingsAppearanceCss).toContain("container-type: inline-size;");
+    expect(settingsAppearanceCss).toContain("@container (max-width: 430px) {");
+    expect(settingsAppearanceCss).toContain("flex-wrap: wrap;");
   });
 });

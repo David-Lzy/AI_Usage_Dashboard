@@ -500,32 +500,31 @@
   }
 
   .settings-shell .top-app-bar {
-    grid-template-columns: minmax(0, 1fr) max-content;
-    justify-items: stretch;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: var(--app-space-4);
     row-gap: var(--app-space-3);
   }
 
   .settings-shell .top-app-bar__title {
-    grid-column: 1;
-    grid-row: 1;
+    flex: 1 1 220px;
+    min-inline-size: min(100%, 220px);
   }
 
   .settings-shell .top-app-bar__actions {
-    grid-column: 2;
-    grid-row: 1;
+    flex: 0 0 auto;
     grid-auto-flow: column;
     grid-auto-columns: max-content;
     justify-content: end;
-    justify-self: end;
     inline-size: max-content;
     width: auto;
     max-inline-size: 100%;
   }
 
   .settings-shell .top-app-bar__bottom {
-    grid-column: 1 / -1;
-    grid-row: 2;
-    justify-self: center;
+    flex: 1 0 100%;
     inline-size: 100%;
   }
 
@@ -538,20 +537,9 @@
 }
 
 @media (max-width: 620px) {
-  .settings-shell .top-app-bar {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
   .settings-shell .top-app-bar__actions {
-    grid-column: 1;
-    grid-row: 2;
+    flex: 1 0 100%;
     justify-content: center;
-    justify-self: center;
-  }
-
-  .settings-shell .top-app-bar__bottom {
-    grid-column: 1;
-    grid-row: 3;
   }
 }
 

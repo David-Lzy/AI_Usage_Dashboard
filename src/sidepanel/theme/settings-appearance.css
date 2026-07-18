@@ -624,6 +624,7 @@
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--md-sys-shape-corner-medium);
   background: var(--md-sys-color-surface-container-low);
+  container-type: inline-size;
 }
 
 .provider-progress-surface__header,
@@ -715,6 +716,17 @@
 .provider-progress-list__action {
   min-height: 32px;
   padding: 0 var(--app-space-2);
+}
+
+@container (max-width: 430px) {
+  .provider-progress-list__item {
+    flex-wrap: wrap;
+  }
+
+  .provider-progress-list__actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
 }
 
 .progress-appearance-preferences {
