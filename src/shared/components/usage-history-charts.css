@@ -396,27 +396,30 @@
   animation-name: usage-history-legend-marquee-rtl;
 }
 
-@media (prefers-reduced-motion: reduce) {
+:root[data-motion-resolved="reduced"]
   .usage-history-legend[data-overflow="true"] {
-    overflow-x: auto;
-    overflow-y: hidden;
-    overscroll-behavior-inline: contain;
-    scrollbar-width: none;
-    touch-action: pan-x;
-  }
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: none;
+  touch-action: pan-x;
+}
 
+:root[data-motion-resolved="reduced"]
   .usage-history-legend[data-overflow="true"]::-webkit-scrollbar {
-    display: none;
-  }
+  display: none;
+}
 
-  .usage-history-legend[data-overflow="true"] .usage-history-legend__track {
-    animation: none;
-    will-change: auto;
-  }
+:root[data-motion-resolved="reduced"]
+  .usage-history-legend[data-overflow="true"]
+  .usage-history-legend__track {
+  animation: none;
+  will-change: auto;
+}
 
+:root[data-motion-resolved="reduced"]
   .usage-history-legend__group--duplicate {
-    display: none;
-  }
+  display: none;
 }
 
 .usage-history-legend__item {
@@ -512,12 +515,10 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .usage-history-chart *,
-  .usage-history-segmented__button {
-    animation: none !important;
-    transition: none !important;
-  }
+:root[data-motion-resolved="reduced"] .usage-history-chart *,
+:root[data-motion-resolved="reduced"] .usage-history-segmented__button {
+  animation: none !important;
+  transition: none !important;
 }
 
 .usage-history-preferences {

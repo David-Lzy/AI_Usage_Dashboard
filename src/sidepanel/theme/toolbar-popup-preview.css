@@ -113,12 +113,6 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  :root[data-motion-mode="system"] .toolbar-popup-preview {
-    animation: none;
-  }
-}
-
-:root[data-motion-mode="reduced"] .toolbar-popup-preview {
+:root[data-motion-resolved="reduced"] .toolbar-popup-preview {
   animation: none;
 }

@@ -207,24 +207,11 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  :root[data-motion-mode="system"] .provider-carousel__button,
-  :root[data-motion-mode="system"] .provider-carousel__slide {
-    transition: none;
-  }
-}
-
-:root[data-motion-mode="reduced"] .provider-carousel__button,
-:root[data-motion-mode="reduced"] .provider-carousel__slide {
+:root[data-motion-resolved="reduced"] .provider-carousel__button,
+:root[data-motion-resolved="reduced"] .provider-carousel__slide {
   transition: none;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  :root[data-motion-mode="system"] .provider-carousel__button:hover {
-    transform: none;
-  }
-}
-
-:root[data-motion-mode="reduced"] .provider-carousel__button:hover {
+:root[data-motion-resolved="reduced"] .provider-carousel__button:hover {
   transform: none;
 }

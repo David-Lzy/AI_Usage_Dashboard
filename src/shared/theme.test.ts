@@ -174,7 +174,76 @@ describe("theme helpers", () => {
     expect(root.dataset.themeResolved).toBe("light");
     expect(root.dataset.uiFontFamily).toBe("default");
     expect(root.dataset.motionMode).toBe("full");
+    expect(root.dataset.motionResolved).toBe("full");
     expect(root.style.colorScheme).toBe("light");
+  });
+
+  it("publishes the effective motion state without letting the system override On", () => {
+    const root: {
+      dataset: Record<string, string | undefined>;
+      style: { colorScheme?: string };
+    } = { dataset: {}, style: {} };
+    const reader = {
+      matchMedia: (query: string) => ({
+        matches: query === "(prefers-reduced-motion: reduce)",
+      }),
+    };
+
+    applyThemeSettings(
+      { themeMode: "light", motionMode: "full" },
+      root,
+      reader,
+    );
+    expect(root.dataset.motionMode).toBe("full");
+    expect(root.dataset.motionResolved).toBe("full");
+
+    applyThemeSettings(
+      { themeMode: "light", motionMode: "system" },
+      root,
+      reader,
+    );
+    expect(root.dataset.motionMode).toBe("system");
+    expect(root.dataset.motionResolved).toBe("reduced");
+  });
+
+  it("tracks live system motion changes only in Follow System mode", () => {
+    const root: {
+      dataset: Record<string, string | undefined>;
+      style: { colorScheme?: string };
+    } = { dataset: {}, style: {} };
+    let reducedMotion = false;
+    let triggerChange = () => {};
+    const stop = startThemeSettingsSync(
+      { themeMode: "light", motionMode: "system" },
+      root,
+      {
+        matchMedia: (query: string) => ({
+          get matches() {
+            return (
+              query === "(prefers-reduced-motion: reduce)" && reducedMotion
+            );
+          },
+          addEventListener: (_type, listener) => {
+            triggerChange = listener;
+          },
+          removeEventListener: (_type, listener) => {
+            if (triggerChange === listener) {
+              triggerChange = () => {};
+            }
+          },
+        }),
+      },
+    );
+
+    expect(root.dataset.motionResolved).toBe("full");
+    reducedMotion = true;
+    triggerChange();
+    expect(root.dataset.motionResolved).toBe("reduced");
+
+    stop();
+    reducedMotion = false;
+    triggerChange();
+    expect(root.dataset.motionResolved).toBe("reduced");
   });
 
   it("applies UI font family metadata and typography variables to the root", () => {

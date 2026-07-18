@@ -104,6 +104,15 @@ image is processed in the browser by averaging pixels vertically across the
 image width; the original image, filename, metadata, and image bytes are not
 uploaded or saved. Only the generated gradient stops are stored as settings.
 
+## Motion Preferences
+
+The Animation effects preference under Appearance & Sync controls motion across
+popup, side panel, full-page, Settings, and preview surfaces. `On` is the
+default and keeps app motion enabled even when the operating system requests
+reduced motion; `Reduced` consistently minimizes animation, transitions, and
+smooth scrolling; `Follow system` tracks the browser's current reduced-motion
+preference.
+
 ## Custom JSON Sources
 
 Settings can add client-provided HTTP or HTTPS JSON endpoints for quota data

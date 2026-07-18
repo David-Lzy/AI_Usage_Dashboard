@@ -520,20 +520,10 @@
   overflow-wrap: anywhere;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  :root[data-motion-mode="system"] .usage-progress__fill--indeterminate {
-    animation: none;
-  }
-
-  :root[data-motion-mode="system"] .usage-progress-ring__fill {
-    transition: none;
-  }
-}
-
-:root[data-motion-mode="reduced"] .usage-progress__fill--indeterminate {
+:root[data-motion-resolved="reduced"] .usage-progress__fill--indeterminate {
   animation: none;
 }
 
-:root[data-motion-mode="reduced"] .usage-progress-ring__fill {
+:root[data-motion-resolved="reduced"] .usage-progress-ring__fill {
   transition: none;
 }

@@ -1382,34 +1382,18 @@ html[data-app-direction="rtl"]
   line-height: var(--md-sys-typescale-body-small-line-height);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  :root[data-motion-mode="system"] .form-field__label-row::before,
-  :root[data-motion-mode="system"] .section-title-with-info::before,
-  :root[data-motion-mode="system"] .field-label-with-info::before,
-  :root[data-motion-mode="system"] .settings-overview__eyebrow::before,
-  :root[data-motion-mode="system"] .material-select__menu-icon,
-  :root[data-motion-mode="system"] .editable-number-combobox__menu-icon,
-  :root[data-motion-mode="system"] .color-choice-dropdown__menu-icon,
-  :root[data-motion-mode="system"] .color-choice-dropdown__custom-icon,
-  :root[data-motion-mode="system"]
-    .action-badge-selection-controls__mode-button,
-  :root[data-motion-mode="system"] .material-info-tooltip__trigger,
-  :root[data-motion-mode="system"] .material-info-tooltip__content {
-    transition: none;
-  }
-}
-
-:root[data-motion-mode="reduced"] .form-field__label-row::before,
-:root[data-motion-mode="reduced"] .section-title-with-info::before,
-:root[data-motion-mode="reduced"] .field-label-with-info::before,
-:root[data-motion-mode="reduced"] .settings-overview__eyebrow::before,
-:root[data-motion-mode="reduced"] .material-select__menu-icon,
-:root[data-motion-mode="reduced"] .editable-number-combobox__menu-icon,
-:root[data-motion-mode="reduced"] .color-choice-dropdown__menu-icon,
-:root[data-motion-mode="reduced"] .color-choice-dropdown__custom-icon,
-:root[data-motion-mode="reduced"] .action-badge-selection-controls__mode-button,
-:root[data-motion-mode="reduced"] .material-info-tooltip__trigger,
-:root[data-motion-mode="reduced"] .material-info-tooltip__content {
+:root[data-motion-resolved="reduced"] .form-field__label-row::before,
+:root[data-motion-resolved="reduced"] .section-title-with-info::before,
+:root[data-motion-resolved="reduced"] .field-label-with-info::before,
+:root[data-motion-resolved="reduced"] .settings-overview__eyebrow::before,
+:root[data-motion-resolved="reduced"] .material-select__menu-icon,
+:root[data-motion-resolved="reduced"] .editable-number-combobox__menu-icon,
+:root[data-motion-resolved="reduced"] .color-choice-dropdown__menu-icon,
+:root[data-motion-resolved="reduced"] .color-choice-dropdown__custom-icon,
+:root[data-motion-resolved="reduced"]
+  .action-badge-selection-controls__mode-button,
+:root[data-motion-resolved="reduced"] .material-info-tooltip__trigger,
+:root[data-motion-resolved="reduced"] .material-info-tooltip__content {
   transition: none;
 }
 

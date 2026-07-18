@@ -195,7 +195,8 @@ describe("UsageHistoryCharts", () => {
     expect(chartsCss).toContain("calc(50% + 4px)");
     expect(chartsCss).toContain("padding-block-end: 8px;");
     expect(chartsCss).toContain("animation-play-state: paused;");
-    expect(chartsCss).toContain("prefers-reduced-motion: reduce");
+    expect(chartsCss).toContain(':root[data-motion-resolved="reduced"]');
+    expect(chartsCss).not.toContain("prefers-reduced-motion");
     expect(chartsCss).toContain("scrollbar-width: none;");
     expect(chartsCss).toContain("white-space: nowrap;");
     expect(chartsCss).toContain(".usage-history-range-toggle {");

@@ -7,6 +7,8 @@ import type {
 import {
   DEFAULT_MOTION_MODE,
   normalizeMotionMode,
+  REDUCED_MOTION_QUERY,
+  resolveMotionMode,
 } from "./motion-preferences";
 import {
   DEFAULT_UI_FONT_FAMILY,
@@ -625,6 +627,10 @@ export function applyThemeSettings(
   root.dataset.themeResolved = resolvedThemeMode;
   root.dataset.uiFontFamily = normalizedSettings.uiFontFamily;
   root.dataset.motionMode = normalizedSettings.motionMode;
+  root.dataset.motionResolved = resolveMotionMode(
+    normalizedSettings.motionMode,
+    reader,
+  );
 
   if (normalizedSettings.themePreset === "custom") {
     if (normalizedSettings.themeCustomSeedHex) {
@@ -667,62 +673,71 @@ export function startThemeSettingsSync(
   reader?: MatchMediaReader,
 ): () => void {
   const normalizedSettings = normalizeThemeSettings(settings);
+  const cleanupCallbacks: Array<() => void> = [];
+  let stopped = false;
+  let timeoutId: ReturnType<typeof globalThis.setTimeout> | null = null;
+
+  const refreshThemeSettings = () => {
+    if (!stopped) {
+      applyThemeSettings(normalizedSettings, root, reader);
+    }
+  };
+
+  const subscribeToMediaQuery = (
+    mediaQuery: MediaQueryListLike | undefined,
+  ) => {
+    if (!mediaQuery) {
+      return;
+    }
+
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", refreshThemeSettings);
+      cleanupCallbacks.push(() => {
+        mediaQuery.removeEventListener?.("change", refreshThemeSettings);
+      });
+      return;
+    }
+
+    if (typeof mediaQuery.addListener === "function") {
+      mediaQuery.addListener(refreshThemeSettings);
+      cleanupCallbacks.push(() => {
+        mediaQuery.removeListener?.(refreshThemeSettings);
+      });
+    }
+  };
 
   applyThemeSettings(normalizedSettings, root, reader);
 
   if (normalizedSettings.themeMode === "time") {
-    let timeoutId: ReturnType<typeof globalThis.setTimeout> | null = null;
-    let stopped = false;
-
     const scheduleNextBoundary = () => {
       const now = reader?.now?.() ?? new Date();
       timeoutId = globalThis.setTimeout(() => {
         if (stopped) {
           return;
         }
-        applyThemeSettings(normalizedSettings, root, reader);
+        refreshThemeSettings();
         scheduleNextBoundary();
       }, getMillisecondsUntilNextTimeThemeBoundary(now) + 50);
     };
 
     scheduleNextBoundary();
-    return () => {
-      stopped = true;
-      if (timeoutId !== null) {
-        globalThis.clearTimeout(timeoutId);
-      }
-    };
   }
 
-  if (normalizedSettings.themeMode !== "system") {
-    return () => {};
+  if (normalizedSettings.themeMode === "system") {
+    subscribeToMediaQuery(reader?.matchMedia?.(DARK_COLOR_SCHEME_QUERY));
   }
 
-  const mediaQuery = reader?.matchMedia?.(DARK_COLOR_SCHEME_QUERY);
-
-  if (!mediaQuery) {
-    return () => {};
+  if (normalizedSettings.motionMode === "system") {
+    subscribeToMediaQuery(reader?.matchMedia?.(REDUCED_MOTION_QUERY));
   }
 
-  const handleChange = () => {
-    applyThemeSettings(normalizedSettings, root, reader);
+  return () => {
+    stopped = true;
+    if (timeoutId !== null) {
+      globalThis.clearTimeout(timeoutId);
+    }
+    for (const cleanup of cleanupCallbacks) {
+      cleanup();
+    }
   };
-
-  if (typeof mediaQuery.addEventListener === "function") {
-    mediaQuery.addEventListener("change", handleChange);
-
-    return () => {
-      mediaQuery.removeEventListener?.("change", handleChange);
-    };
-  }
-
-  if (typeof mediaQuery.addListener === "function") {
-    mediaQuery.addListener(handleChange);
-
-    return () => {
-      mediaQuery.removeListener?.(handleChange);
-    };
-  }
-
-  return () => {};
 }

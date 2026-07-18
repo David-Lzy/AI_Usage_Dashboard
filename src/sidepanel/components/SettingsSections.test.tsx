@@ -172,7 +172,7 @@ describe("SettingsSections", () => {
       '[data-permission-action="request"]:not(:disabled)',
     );
     expect(accessFeedbackCss).toContain(
-      ':root[data-motion-mode="reduced"]',
+      ':root[data-motion-resolved="reduced"]',
     );
     expect(accessFeedbackCss).toContain("animation: none;");
   });

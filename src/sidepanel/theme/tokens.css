@@ -720,20 +720,21 @@
   --md-sys-color-on-tertiary-container: #ebdcff;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  :root[data-motion-mode="system"] {
-    --app-motion-duration-fast: 0ms;
-    --app-motion-duration-medium: 0ms;
-    --app-motion-duration-slow: 0ms;
-    --app-motion-distance-1: 0px;
-    --app-motion-distance-2: 0px;
-  }
-}
-
-:root[data-motion-mode="reduced"] {
+:root[data-motion-resolved="reduced"] {
   --app-motion-duration-fast: 0ms;
   --app-motion-duration-medium: 0ms;
   --app-motion-duration-slow: 0ms;
   --app-motion-distance-1: 0px;
   --app-motion-distance-2: 0px;
+}
+
+:root[data-motion-resolved="reduced"] *,
+:root[data-motion-resolved="reduced"] *::before,
+:root[data-motion-resolved="reduced"] *::after {
+  animation-delay: 0ms !important;
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  scroll-behavior: auto !important;
+  transition-delay: 0ms !important;
+  transition-duration: 0.001ms !important;
 }

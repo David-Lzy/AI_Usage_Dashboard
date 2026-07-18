@@ -273,25 +273,12 @@ details[open] > .source-card__details-toggle::after {
   word-break: break-word;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  :root[data-motion-mode="system"] .source-card__details-toggle,
-  :root[data-motion-mode="system"] .source-card__details-toggle::after {
-    transition: none;
-  }
-
-  :root[data-motion-mode="system"]
-    .source-card__details[open]
-    .source-card__details-body {
-    animation: none;
-  }
-}
-
-:root[data-motion-mode="reduced"] .source-card__details-toggle,
-:root[data-motion-mode="reduced"] .source-card__details-toggle::after {
+:root[data-motion-resolved="reduced"] .source-card__details-toggle,
+:root[data-motion-resolved="reduced"] .source-card__details-toggle::after {
   transition: none;
 }
 
-:root[data-motion-mode="reduced"]
+:root[data-motion-resolved="reduced"]
   .source-card__details[open]
   .source-card__details-body {
   animation: none;

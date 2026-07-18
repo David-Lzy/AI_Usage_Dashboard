@@ -147,7 +147,7 @@ describe("ProviderCarousel", () => {
     expect(getProviderCarouselSlidePosition(1, 0, 2)).toBe("next");
   });
 
-  it("uses capped local motion tokens and preserves reduced-motion escape", () => {
+  it("uses capped local motion tokens and the global reduced-motion state", () => {
     expect(providerCarouselCss).toContain(
       "--provider-carousel-motion-duration: 560ms;",
     );
@@ -159,8 +159,9 @@ describe("ProviderCarousel", () => {
     );
     expect(providerCarouselCss).toContain(".provider-carousel__button .material-icon");
     expect(providerCarouselCss).toContain(
-      "@media (prefers-reduced-motion: reduce)",
+      ':root[data-motion-resolved="reduced"]',
     );
+    expect(providerCarouselCss).not.toContain("prefers-reduced-motion");
     expect(providerCarouselCss).toContain("transition: none;");
   });
 
