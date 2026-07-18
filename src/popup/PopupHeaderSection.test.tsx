@@ -150,12 +150,19 @@ describe("PopupHeaderSection", () => {
     expect(popupThemeCss).toContain("env(safe-area-inset-right, 0px)");
     expect(popupThemeCss).toContain(".popup-header__theme-mode-menu");
     expect(popupThemeCss).toContain(
-      "grid-template-columns: max-content minmax(min-content, 1fr);",
+      "grid-template-columns: max-content max-content;",
     );
+    expect(popupThemeCss).toContain("justify-content: space-evenly;");
+    expect(popupThemeCss).toContain("column-gap: 0;");
+    expect(popupThemeCss).toContain("width: max-content;");
+    expect(popupThemeCss).toContain("min-width: min(228px, calc(100vw - 24px));");
     expect(popupThemeCss).toContain(
+      'html[data-app-direction="rtl"] .popup-header__theme-mode-menu',
+    );
+    expect(popupThemeCss).toContain("transform: translateX(50%);");
+    expect(popupThemeCss).not.toContain(
       ".popup-header__theme-mode-option:nth-child(odd)",
     );
-    expect(popupThemeCss).toContain("min-width: 82px;");
     expect(popupThemeCss).toContain("@media (max-width: 360px)");
     expect(popupThemeCss).toContain("--popup-header-control-size: 44px;");
     expect(popupThemeCss).toContain("--popup-header-action-gap: 6px;");
