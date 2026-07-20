@@ -446,7 +446,7 @@ describe("provider source helpers", () => {
     expect(display.manualCookieImportLabel).toBe("Forbidden");
   });
 
-  it("makes shipped Claude Team and policy-only Gemini tracks explicit in source display", () => {
+  it("makes shipped Claude personal and policy-only Gemini tracks explicit in source display", () => {
     const claude = buildProviderSourceDisplay(
       findProviderState("claude-code-team-page").provider,
       findProviderState("claude-code-team-page").setting,
@@ -458,7 +458,7 @@ describe("provider source helpers", () => {
 
     expect(claude.sessionPageContractLabel).toBe("Shipped personal partial");
     expect(claude.sessionPageContractDetail).toContain(
-      "Current shipped Team-session contract",
+      "Current shipped personal-session contract",
     );
     expect(claude.sessionPageGraduationGateLabel).toBeNull();
     expect(claude.sessionPageGraduationGateDetail).toBeNull();

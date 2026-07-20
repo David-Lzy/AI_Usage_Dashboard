@@ -51,8 +51,8 @@ export const PROVIDER_DEFINITIONS: readonly ProviderDefinition[] = [
   {
     id: "claude-code-team-page",
     brandId: "claude-code",
-    label: "Claude Team Usage Page",
-    shortLabel: "Claude Team",
+    label: "Claude Personal Usage Page",
+    shortLabel: "Claude Personal",
     audience: "personal",
     sourceKind: "session_page",
     connectionMode: "page_session",

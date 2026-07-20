@@ -222,7 +222,7 @@ describe("popup view models", () => {
       tone: "warning",
       headline: "Usage page snapshot 24m ago",
       detail:
-        "Newest visible snapshot: Codex Personal (Usage page snapshot 24m ago). Oldest visible snapshot: Claude Team (Usage page needed).",
+        "Newest visible snapshot: Codex Personal (Usage page snapshot 24m ago). Oldest visible snapshot: Claude Personal (Usage page needed).",
     });
     expect(model.showSnapshotStatus).toBe(true);
   });
@@ -1389,7 +1389,7 @@ describe("popup view models", () => {
     expect(model.guidanceCard).toEqual({
       label: "Next step",
       tone: "error",
-      headline: "Review Claude Team",
+      headline: "Review Claude Personal",
       detail: "Live sync still needs one provider-specific review.",
       action: {
         kind: "provider-detail",

@@ -31,7 +31,7 @@ export type ClaudePersonalUsageFact = {
 
 export type ClaudePersonalUsageSnapshot = {
   providerId: "claude-code-team-page";
-  providerLabel: "Claude Code";
+  providerLabel: "Claude Personal";
   measurementKind: "usage_page_context";
   routeKey: ClaudePersonalRouteKey;
   sourceUrl: string;
@@ -596,7 +596,7 @@ function parseSnapshotFromSummary(
 
   return {
     providerId: "claude-code-team-page",
-    providerLabel: "Claude Code",
+    providerLabel: "Claude Personal",
     measurementKind: "usage_page_context",
     routeKey,
     sourceUrl: summary.url,
@@ -612,7 +612,7 @@ function parseSnapshotFromSummary(
       ? "window_only"
       : "unavailable",
     note:
-      "Claude Team usage-page sync reads visible page context only. It does not claim an absolute remaining included quota unless the page exposes a visible remaining percentage.",
+      "Claude personal usage-page sync reads shared plan usage context only. It does not claim an absolute remaining allowance unless the verified source exposes an exact percentage.",
   };
 }
 
@@ -657,7 +657,7 @@ export function parseClaudePersonalLiveFixture(
     if (hasLoggedOutRoute) {
       return buildFailure(
         "logged_out",
-        "The current Claude usage page is logged out, redirected to an upgrade gate, or otherwise not exposing a usable Team usage surface. Sign in with the Team account and reopen the usage page.",
+        "The current Claude usage page is logged out, redirected to an upgrade gate, or otherwise not exposing a usable personal usage surface. Sign in with the paid personal account and reopen the usage page.",
         fixture,
       );
     }
@@ -672,7 +672,7 @@ export function parseClaudePersonalLiveFixture(
 
     return buildFailure(
       "open_page_required",
-      "Open the logged-in Claude settings usage page before refreshing Claude Team usage capture.",
+      "Open the logged-in Claude personal usage page before refreshing Claude usage capture.",
       fixture,
     );
   }

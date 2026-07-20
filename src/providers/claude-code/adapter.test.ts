@@ -160,7 +160,7 @@ describe("syncClaudeCodeProvider", () => {
     expect(snapshot.tone).toBe("neutral");
     expect(snapshot.syncSource).toBe("page_parse");
     expect(snapshot.planName).toBe(
-      "Claude Team Usage Page (Weekly usage window)",
+      "Claude personal usage page (Weekly usage window)",
     );
     expect(snapshot.remaining).toBe(42);
     expect(snapshot.sourceSelectionReason).toBe(

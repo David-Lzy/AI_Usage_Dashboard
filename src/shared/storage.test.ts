@@ -330,6 +330,75 @@ describe("storage normalization", () => {
     });
   });
 
+  it("migrates the stale Claude Team label without changing stored personal-source settings", async () => {
+    const oldState: AppState = {
+      ...SAMPLE_APP_STATE,
+      providers: SAMPLE_APP_STATE.providers.map((provider) =>
+        provider.providerId === "claude-code-team-page"
+          ? {
+              ...provider,
+              providerLabel: "Claude Team",
+              planName: "Claude Team usage page",
+            }
+          : provider,
+      ),
+      providerSettings: SAMPLE_APP_STATE.providerSettings.map((setting) =>
+        setting.id === "claude-code-team-page"
+          ? {
+              ...setting,
+              displayEnabled: false,
+              pageBinding: {
+                mode: "bound",
+                status: "bound",
+                tabId: 321,
+                matchedUrl: "https://claude.ai/settings/usage",
+                matchedTitle: "Claude",
+                updatedAt: "2026-07-20T00:00:00.000Z",
+              },
+            }
+          : setting,
+      ),
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        providerOrderBySurface: {
+          ...SAMPLE_APP_STATE.settings.providerOrderBySurface,
+          popup: [
+            "claude-code-team-page",
+            ...SAMPLE_APP_STATE.settings.providerOrderBySurface.popup.filter(
+              (providerId) => providerId !== "claude-code-team-page",
+            ),
+          ],
+        },
+      },
+    };
+
+    await writeAppState(oldState);
+    const state = await readAppState();
+    const provider = state?.providers.find(
+      (entry) => entry.providerId === "claude-code-team-page",
+    );
+    const setting = state?.providerSettings.find(
+      (entry) => entry.id === "claude-code-team-page",
+    );
+
+    expect(provider).toMatchObject({
+      providerId: "claude-code-team-page",
+      providerLabel: "Claude Personal",
+    });
+    expect(setting).toMatchObject({
+      id: "claude-code-team-page",
+      displayEnabled: false,
+      pageBinding: {
+        mode: "bound",
+        status: "bound",
+        tabId: 321,
+      },
+    });
+    expect(state?.settings.providerOrderBySurface.popup[0]).toBe(
+      "claude-code-team-page",
+    );
+  });
+
   it("preserves valid Cursor usage summaries and removes malformed ones", async () => {
     const cursorProvider = SAMPLE_APP_STATE.providers.find(
       (provider) => provider.providerId === "cursor-personal-page",

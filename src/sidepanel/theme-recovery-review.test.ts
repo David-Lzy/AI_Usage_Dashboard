@@ -187,7 +187,7 @@ describe("theme recovery review snapshot", () => {
 
     expect(snapshot.scopeIsolationLabel).toBe("Additional providers visible");
     expect(snapshot.overallStage).toBe("mixed");
-    expect(snapshot.extraVisibleProviderLabels).toContain("Claude Team");
+    expect(snapshot.extraVisibleProviderLabels).toContain("Claude Personal");
     expect(summary).toContain("Additional providers visible");
   });
 

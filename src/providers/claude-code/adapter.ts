@@ -618,8 +618,8 @@ async function tryClaudePersonalSource({
         },
         snapshot: {
           ...provider,
-          providerLabel: "Claude Code",
-          planName: "Claude Team Usage Page",
+          providerLabel: "Claude Personal",
+          planName: "Claude personal usage page",
           quotaUnit: "percent",
           quotaWindow: "rolling",
           used: null,
@@ -628,7 +628,7 @@ async function tryClaudePersonalSource({
           resetAt: "Visible Claude usage page",
           resetLabel:
             result.status === "logged_out"
-              ? "Log back into Claude Team and reopen the usage page"
+              ? "Log back into Claude and reopen the personal usage page"
               : result.status === "open_page_required"
                 ? "Open the logged-in Claude settings usage page and refresh again"
                 : result.status === "capture_unavailable"
@@ -708,10 +708,10 @@ async function tryClaudePersonalSource({
       kind: "session_page",
       snapshot: {
         ...provider,
-        providerLabel: "Claude Code",
+        providerLabel: "Claude Personal",
         planName: primaryWindow
-          ? `Claude Team Usage Page (${primaryWindow.normalizedLabel})`
-          : "Claude Team Usage Page",
+          ? `Claude personal usage page (${primaryWindow.normalizedLabel})`
+          : "Claude personal usage page",
         quotaUnit: primaryWindow ? "percent" : "requests",
         quotaWindow: primaryWindow?.kind === "monthly" ? "monthly" : "rolling",
         used,

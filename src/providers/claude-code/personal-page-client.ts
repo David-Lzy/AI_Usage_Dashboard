@@ -125,7 +125,7 @@ function buildUpgradeGateFixtureResult(): ClaudePersonalParseResult {
   return {
     status: "logged_out",
     reason:
-      "The stored Claude evidence fixture is an upgrade-only page, not a usable Team usage page. Use the live extension runtime with a logged-in Claude Team session.",
+      "The stored Claude evidence fixture is an upgrade-only page, not a usable personal usage page. Use the live extension runtime with a logged-in Claude paid-plan session.",
     chosenRoute: fixture.finalRoute ?? "https://claude.ai/upgrade",
     routeStatuses: [
       {

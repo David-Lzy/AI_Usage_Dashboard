@@ -70,7 +70,7 @@ type ClaudePersonalLiveCaptureOptions = {
 const CLAUDE_PERSONAL_ROUTE_DEFINITIONS: ClaudeRouteDefinition[] = [
   {
     routeKey: "settings_usage",
-    pageLabel: "Claude Team usage settings page",
+    pageLabel: "Claude personal usage settings surface",
     urlPatterns: ["https://claude.ai/settings/usage*"],
   },
 ];
