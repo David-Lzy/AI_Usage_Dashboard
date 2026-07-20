@@ -208,6 +208,11 @@
   gap: 2px;
 }
 
+.usage-history-compact__content:not([hidden]) {
+  animation: app-disclosure-enter var(--app-motion-duration-medium)
+    var(--app-motion-easing-standard) both;
+}
+
 .usage-history-compact__content[hidden] {
   display: none;
 }
@@ -528,7 +533,8 @@
 }
 
 :root[data-motion-resolved="reduced"] .usage-history-chart *,
-:root[data-motion-resolved="reduced"] .usage-history-segmented__button {
+:root[data-motion-resolved="reduced"] .usage-history-segmented__button,
+:root[data-motion-resolved="reduced"] .usage-history-compact__content {
   animation: none !important;
   transition: none !important;
 }

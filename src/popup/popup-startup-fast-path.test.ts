@@ -43,6 +43,7 @@ describe("popup startup fast path", () => {
     expect(themeSyncStart).toBeGreaterThan(-1);
     expect(readyGuard).toBeGreaterThan(-1);
     expect(readyGuard).toBeLessThan(themeSyncStart);
+    expect(popupAppSource).toContain("useLayoutEffect(() => {");
   });
 
   it("keeps read-state ahead of maintenance work as a one-read fast path", () => {

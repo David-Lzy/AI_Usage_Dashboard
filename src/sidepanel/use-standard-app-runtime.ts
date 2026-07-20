@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import type { AppMessage } from "../shared/app-message-types";
 import type { AppState } from "../providers/types";
@@ -148,7 +148,7 @@ export function useStandardAppRuntime(
     [],
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (typeof document === "undefined" || typeof window === "undefined") {
       return undefined;
     }

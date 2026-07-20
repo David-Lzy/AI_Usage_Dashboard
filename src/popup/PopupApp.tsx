@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 import type {
   AppLocalePreference,
@@ -132,7 +132,7 @@ export function PopupApp() {
     [],
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (typeof document === "undefined" || typeof window === "undefined") {
       return undefined;
     }

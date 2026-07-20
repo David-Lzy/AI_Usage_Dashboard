@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useLayoutEffect, useState } from "react";
 
 import type { AppLocalePreference, AppSettings } from "../providers/types";
 import { sendAppMessage } from "../shared/app-client";
@@ -239,7 +239,7 @@ export function SpecialRouteApp({
     };
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (typeof document === "undefined" || typeof window === "undefined") {
       return undefined;
     }

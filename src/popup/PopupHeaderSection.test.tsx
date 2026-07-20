@@ -156,6 +156,16 @@ describe("PopupHeaderSection", () => {
     expect(popupThemeCss).toContain("column-gap: var(--app-space-1);");
     expect(popupThemeCss).toContain("width: fit-content;");
     expect(popupThemeCss).toContain("padding-inline: var(--app-space-2);");
+    expect(popupThemeCss).toContain(
+      ".popup-header__theme-mode-menu:not([hidden])",
+    );
+    expect(popupThemeCss).toContain(
+      "animation: popup-menu-enter var(--app-motion-duration-medium)",
+    );
+    expect(popupThemeCss).toContain("translate: 0 0;");
+    expect(popupThemeCss).toContain(
+      ':root[data-motion-resolved="reduced"] .popup-header__theme-mode-menu',
+    );
     expect(popupThemeCss).not.toContain(
       "min-width: min(228px, calc(100vw - 24px));",
     );

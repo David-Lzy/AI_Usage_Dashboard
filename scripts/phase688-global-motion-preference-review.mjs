@@ -84,20 +84,30 @@ async function waitForMotionState(page, motionMode, motionResolved) {
 async function readMotionStyles(page) {
   return page.evaluate(() => {
     const rootStyles = getComputedStyle(document.documentElement);
+    const surface = document.querySelector(".app-shell > *");
     const carouselSlide = document.querySelector(".provider-carousel__slide");
     const grantAccessAction = document.querySelector(
       '[data-quick-setup-primary-action="grant_access"]',
+    );
+    const popupThemeMenu = document.querySelector(
+      ".popup-header__theme-mode-menu:not([hidden])",
     );
 
     return {
       mediumDuration: rootStyles
         .getPropertyValue("--app-motion-duration-medium")
         .trim(),
+      surfaceAnimationDuration: surface
+        ? getComputedStyle(surface).animationDuration
+        : null,
       carouselTransitionDuration: carouselSlide
         ? getComputedStyle(carouselSlide).transitionDuration
         : null,
       grantAccessAnimationName: grantAccessAction
         ? getComputedStyle(grantAccessAction).animationName
+        : null,
+      popupDisclosureAnimationDuration: popupThemeMenu
+        ? getComputedStyle(popupThemeMenu).animationDuration
         : null,
     };
   });
@@ -125,6 +135,7 @@ try {
 
   const settingsPage = await context.newPage();
   const popupPage = await context.newPage();
+  await popupPage.setViewportSize({ width: 392, height: 900 });
   const settingsUrl = `chrome-extension://${extensionId}/src/sidepanel/index.html?surface=full-page#settings`;
   const popupUrl = `chrome-extension://${extensionId}/src/popup/index.html`;
 
@@ -140,6 +151,11 @@ try {
   ]);
 
   const fullStyles = await readMotionStyles(settingsPage);
+  await popupPage.click('[data-popup-toggle-theme-mode="true"]');
+  await popupPage.waitForSelector(
+    ".popup-header__theme-mode-menu:not([hidden])",
+  );
+  const fullPopupStyles = await readMotionStyles(popupPage);
   assert(
     parseCssDurationMilliseconds(fullStyles.mediumDuration) === 220,
     `On did not preserve the motion token: ${fullStyles.mediumDuration}.`,
@@ -154,6 +170,21 @@ try {
       "On did not preserve the Quick Setup access animation.",
     );
   }
+  assert(
+    fullPopupStyles.surfaceAnimationDuration !== null &&
+      !hasOnlyEffectivelyZeroDurations(
+        fullPopupStyles.surfaceAnimationDuration,
+      ),
+    `On did not preserve popup surface entry motion: ${fullPopupStyles.surfaceAnimationDuration}.`,
+  );
+  assert(
+    fullPopupStyles.popupDisclosureAnimationDuration !== null &&
+      !hasOnlyEffectivelyZeroDurations(
+        fullPopupStyles.popupDisclosureAnimationDuration,
+      ),
+    `On did not preserve popup disclosure motion: ${fullPopupStyles.popupDisclosureAnimationDuration}.`,
+  );
+  await popupPage.click('[data-popup-toggle-theme-mode="true"]');
 
   await setMotionMode(settingsPage, "reduced");
   await Promise.all([
@@ -162,6 +193,11 @@ try {
   ]);
 
   const reducedStyles = await readMotionStyles(settingsPage);
+  await popupPage.click('[data-popup-toggle-theme-mode="true"]');
+  await popupPage.waitForSelector(
+    ".popup-header__theme-mode-menu:not([hidden])",
+  );
+  const reducedPopupStyles = await readMotionStyles(popupPage);
   assert(
     parseCssDurationMilliseconds(reducedStyles.mediumDuration) === 0,
     `Reduced did not zero the global motion token: ${reducedStyles.mediumDuration}.`,
@@ -179,6 +215,21 @@ try {
       "Reduced did not stop the Quick Setup access animation.",
     );
   }
+  assert(
+    reducedPopupStyles.surfaceAnimationDuration !== null &&
+      hasOnlyEffectivelyZeroDurations(
+        reducedPopupStyles.surfaceAnimationDuration,
+      ),
+    `Reduced did not stop popup surface entry motion: ${reducedPopupStyles.surfaceAnimationDuration}.`,
+  );
+  assert(
+    reducedPopupStyles.popupDisclosureAnimationDuration !== null &&
+      hasOnlyEffectivelyZeroDurations(
+        reducedPopupStyles.popupDisclosureAnimationDuration,
+      ),
+    `Reduced did not stop popup disclosure motion: ${reducedPopupStyles.popupDisclosureAnimationDuration}.`,
+  );
+  await popupPage.click('[data-popup-toggle-theme-mode="true"]');
 
   await setMotionMode(settingsPage, "system");
   await Promise.all([
@@ -207,6 +258,14 @@ try {
 
   await settingsPage.screenshot({
     path: path.join(artifactDir, "settings-motion-on-system-reduced.png"),
+    fullPage: true,
+  });
+  await popupPage.click('[data-popup-toggle-theme-mode="true"]');
+  await popupPage.waitForSelector(
+    ".popup-header__theme-mode-menu:not([hidden])",
+  );
+  await popupPage.screenshot({
+    path: path.join(artifactDir, "popup-motion-on-system-reduced.png"),
     fullPage: true,
   });
 

@@ -268,6 +268,7 @@
   --app-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
   --app-motion-distance-1: 6px;
   --app-motion-distance-2: 12px;
+  --app-motion-distance-3: 18px;
 
   /* Interaction states */
   --app-state-layer-primary-hover: color-mix(
@@ -720,12 +721,22 @@
   --md-sys-color-on-tertiary-container: #ebdcff;
 }
 
+:root[data-motion-resolved="full"] {
+  --app-motion-duration-fast: 140ms;
+  --app-motion-duration-medium: 220ms;
+  --app-motion-duration-slow: 320ms;
+  --app-motion-distance-1: 6px;
+  --app-motion-distance-2: 12px;
+  --app-motion-distance-3: 18px;
+}
+
 :root[data-motion-resolved="reduced"] {
   --app-motion-duration-fast: 0ms;
   --app-motion-duration-medium: 0ms;
   --app-motion-duration-slow: 0ms;
   --app-motion-distance-1: 0px;
   --app-motion-distance-2: 0px;
+  --app-motion-distance-3: 0px;
 }
 
 :root[data-motion-resolved="reduced"] *,

@@ -63,7 +63,10 @@ describe("motion preferences", () => {
   });
 
   it("uses one resolved root state to reduce all CSS motion", () => {
+    expect(tokensCss).toContain(':root[data-motion-resolved="full"]');
+    expect(tokensCss).toContain("--app-motion-distance-3: 18px;");
     expect(tokensCss).toContain(':root[data-motion-resolved="reduced"] *');
+    expect(tokensCss).toContain("--app-motion-distance-3: 0px;");
     expect(tokensCss).toContain("animation-duration: 0.001ms !important;");
     expect(tokensCss).toContain("transition-duration: 0.001ms !important;");
     expect(tokensCss).toContain("scroll-behavior: auto !important;");
