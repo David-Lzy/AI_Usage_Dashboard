@@ -683,6 +683,8 @@ async function tryClaudePersonalSource({
     }
 
     const primaryWindow = result.snapshot.primaryWindow;
+    const personalPlanLabel =
+      result.snapshot.planIdentity?.label ?? "Claude personal usage page";
     const warningReason = buildPersonalWarningReason(
       primaryWindow,
       warningThresholdPercent,
@@ -710,8 +712,8 @@ async function tryClaudePersonalSource({
         ...provider,
         providerLabel: "Claude Personal",
         planName: primaryWindow
-          ? `Claude personal usage page (${primaryWindow.normalizedLabel})`
-          : "Claude personal usage page",
+          ? `${personalPlanLabel} (${primaryWindow.normalizedLabel})`
+          : personalPlanLabel,
         quotaUnit: primaryWindow ? "percent" : "requests",
         quotaWindow: primaryWindow?.kind === "monthly" ? "monthly" : "rolling",
         used,

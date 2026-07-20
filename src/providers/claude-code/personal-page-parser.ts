@@ -5,6 +5,11 @@ import type {
   ClaudePersonalRouteKey,
   ClaudeRecommendedExtractionSurface,
 } from "./personal-page-capture";
+import type {
+  ClaudePersonalPlanIdentity,
+  ClaudePersonalStructuredLimit,
+  ClaudePersonalUsageContract,
+} from "./personal-usage-contract";
 
 export type ClaudePersonalWindowKind =
   | "rolling_5h"
@@ -38,6 +43,7 @@ export type ClaudePersonalUsageSnapshot = {
   sourceTitle: string;
   sourceHeading: string | null;
   recommendedSurface: ClaudeRecommendedExtractionSurface;
+  planIdentity?: ClaudePersonalPlanIdentity | null;
   primaryWindow: ClaudePersonalUsageWindow | null;
   windows: ClaudePersonalUsageWindow[];
   facts: ClaudePersonalUsageFact[];
@@ -603,6 +609,7 @@ function parseSnapshotFromSummary(
     sourceTitle: summary.title,
     sourceHeading: summary.heading,
     recommendedSurface: summary.recommendedSurface,
+    planIdentity: null,
     primaryWindow,
     windows,
     facts,
@@ -613,6 +620,142 @@ function parseSnapshotFromSummary(
       : "unavailable",
     note:
       "Claude personal usage-page sync reads shared plan usage context only. It does not claim an absolute remaining allowance unless the verified source exposes an exact percentage.",
+  };
+}
+
+function normalizeStructuredLimitLabel(
+  limit: ClaudePersonalStructuredLimit,
+): string {
+  if (limit.kind === "session" || limit.group === "session") {
+    return "Current session";
+  }
+  if (limit.kind === "weekly_all") {
+    return "All models weekly limit";
+  }
+  if (limit.scope) {
+    return limit.scope;
+  }
+
+  return limit.kind.replace(/[_-]+/g, " ").replace(/^./, (value) =>
+    value.toUpperCase(),
+  );
+}
+
+function structuredLimitToWindow(
+  limit: ClaudePersonalStructuredLimit,
+): ClaudePersonalUsageWindow {
+  const normalizedLabel = normalizeStructuredLimitLabel(limit);
+  return {
+    label: normalizedLabel,
+    normalizedLabel,
+    kind:
+      limit.kind === "session" || limit.group === "session"
+        ? "rolling_5h"
+        : limit.group === "weekly" || limit.kind.startsWith("weekly")
+          ? "weekly"
+          : "unknown",
+    remainingPercent: limit.remainingPercent,
+    usedPercent: limit.usedPercent,
+    totalPercent: 100,
+    resetAt: limit.resetsAt,
+    resetText: limit.resetsAt,
+  };
+}
+
+function formatMinorCurrency(
+  amountMinor: number,
+  currency: string,
+  exponent: number,
+): string {
+  const divisor = 10 ** Math.min(Math.max(Math.trunc(exponent), 0), 6);
+  return `${currency} ${(amountMinor / divisor).toFixed(Math.min(exponent, 2))}`;
+}
+
+function buildStructuredUsageFacts(
+  contract: ClaudePersonalUsageContract,
+): ClaudePersonalUsageFact[] {
+  const facts: ClaudePersonalUsageFact[] = [];
+  const extraUsage = contract.extraUsage;
+  if (extraUsage) {
+    facts.push({
+      label: "Usage credits",
+      value: extraUsage.isEnabled ? "Enabled" : "Disabled",
+      detail: extraUsage.disabledReason,
+    });
+
+    if (
+      extraUsage.spentAmountMinor !== null &&
+      (extraUsage.spentAmountMinor > 0 || extraUsage.isEnabled) &&
+      extraUsage.spentCurrency &&
+      extraUsage.spentExponent !== null
+    ) {
+      facts.push({
+        label: "Extra usage spent",
+        value: formatMinorCurrency(
+          extraUsage.spentAmountMinor,
+          extraUsage.spentCurrency,
+          extraUsage.spentExponent,
+        ),
+        detail: null,
+      });
+    }
+  }
+
+  if (contract.credits && contract.credits.balanceCredits !== null) {
+    facts.push({
+      label: "Credit balance",
+      value: String(contract.credits.balanceCredits),
+      detail: contract.credits.nextExpiresAt,
+    });
+  } else if (
+    contract.credits?.amount !== null &&
+    contract.credits?.currency
+  ) {
+    facts.push({
+      label: "Credit balance",
+      value: `${contract.credits.currency} ${contract.credits.amount}`,
+      detail: contract.credits.nextExpiresAt,
+    });
+  }
+
+  return facts;
+}
+
+function parseSnapshotFromStructuredContract(
+  routeKey: ClaudePersonalRouteKey,
+  summary: ClaudePersonalPageSummary,
+  contract: ClaudePersonalUsageContract,
+): ClaudePersonalUsageSnapshot | null {
+  const windows = contract.limits
+    .filter((limit) => limit.isActive)
+    .map(structuredLimitToWindow);
+  const facts = buildStructuredUsageFacts(contract);
+  const primaryWindow = choosePrimaryWindow(windows);
+
+  if (windows.length === 0 && facts.length === 0 && !contract.planIdentity) {
+    return null;
+  }
+
+  return {
+    providerId: "claude-code-team-page",
+    providerLabel: "Claude Personal",
+    measurementKind: "usage_page_context",
+    routeKey,
+    sourceUrl: summary.url,
+    sourceTitle: summary.title,
+    sourceHeading: summary.heading,
+    recommendedSurface: "network_observer",
+    planIdentity: contract.planIdentity,
+    primaryWindow,
+    windows,
+    facts,
+    usedAvailability: "window_only",
+    remainingAvailability: primaryWindow ? "exact" : "unavailable",
+    resetAvailability: windows.some((window) => window.resetAt)
+      ? "window_only"
+      : "unavailable",
+    note:
+      "Claude personal usage sync reads bounded aggregate plan windows and separate usage-credit state. It does not store raw responses or claim a synthetic plan-wide balance.",
   };
 }
 
@@ -681,8 +824,15 @@ export function parseClaudePersonalLiveFixture(
     matchedRoute.routeKey,
     matchedRoute.summary,
   );
+  const preferredSnapshot = matchedRoute.usageContract
+    ? parseSnapshotFromStructuredContract(
+        matchedRoute.routeKey,
+        matchedRoute.summary,
+        matchedRoute.usageContract,
+      ) ?? snapshot
+    : snapshot;
 
-  if (!snapshot) {
+  if (!preferredSnapshot) {
     return buildFailure(
       "route_drift",
       "The matched Claude usage page no longer exposed parseable usage, plan, or quota signals. Inspect the live route and update the parser.",
@@ -692,6 +842,6 @@ export function parseClaudePersonalLiveFixture(
 
   return {
     status: "ok",
-    snapshot,
+    snapshot: preferredSnapshot,
   };
 }

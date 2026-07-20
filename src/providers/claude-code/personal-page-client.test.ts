@@ -5,6 +5,7 @@ import type { PageSessionClient, PageSessionResult } from "../page-session";
 import { createClaudePersonalPageClient } from "./personal-page-client";
 
 const CLAUDE_USAGE_URL = "https://claude.ai/settings/usage";
+const CLAUDE_USAGE_MODAL_URL = "https://claude.ai/new#settings/usage";
 
 function buildMatchedClaudeResult(html: string): PageSessionResult {
   return {
@@ -90,17 +91,16 @@ describe("createClaudePersonalPageClient", () => {
     });
     expect(capture.mock.calls[0]?.[0]).toMatchObject({
       openWhenMissing: {
-        url: CLAUDE_USAGE_URL,
+        url: CLAUDE_USAGE_MODAL_URL,
         active: false,
         closeOnUnmatched: true,
       },
       reloadBeforeCapture: {
         bypassCache: true,
-        waitForLoadTimeoutMs: 15_000,
+        waitForLoadTimeoutMs: 12_000,
         loadPollIntervalMs: 250,
-        postLoadDelayMs: 3_500,
+        postLoadDelayMs: 250,
       },
     });
   });
 });
-

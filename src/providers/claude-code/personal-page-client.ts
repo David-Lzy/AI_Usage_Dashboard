@@ -42,8 +42,10 @@ type ClaudeUpgradeGateFixture = {
   finalRoute: string;
 };
 
-const DEFAULT_HYDRATION_RETRY_ATTEMPTS = 4;
-const DEFAULT_HYDRATION_RETRY_DELAY_MS = 1_000;
+// The network observer already waits through one bounded reload/recovery cycle.
+// Avoid multiplying that work with page-level hydration polling by default.
+const DEFAULT_HYDRATION_RETRY_ATTEMPTS = 0;
+const DEFAULT_HYDRATION_RETRY_DELAY_MS = 500;
 
 function delay(ms: number): Promise<void> {
   if (ms <= 0) {

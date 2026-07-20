@@ -5,6 +5,13 @@ import {
   type PageSessionClient,
   type PageSessionResult,
 } from "../page-session";
+import {
+  CLAUDE_PERSONAL_USAGE_MATCH_SUBSTRINGS,
+  CLAUDE_USAGE_ENDPOINT_SUFFIX,
+  extractClaudePersonalUsageContract,
+  MAX_CLAUDE_PERSONAL_RESPONSE_LENGTH,
+  type ClaudePersonalUsageContract,
+} from "./personal-usage-contract";
 
 export type ClaudePersonalRouteKey = "settings_usage";
 
@@ -44,11 +51,12 @@ export type ClaudePersonalRouteCapture = {
   matchedUrl: string | null;
   matchedTitle: string | null;
   summary: ClaudePersonalPageSummary | null;
+  usageContract: ClaudePersonalUsageContract | null;
 };
 
 export type ClaudePersonalLiveFixture = {
   capturedAt: string;
-  extractionMode: "dom";
+  extractionMode: "network_observer";
   routes: ClaudePersonalRouteCapture[];
   decision: {
     chosenRoute: string | null;
@@ -71,7 +79,10 @@ const CLAUDE_PERSONAL_ROUTE_DEFINITIONS: ClaudeRouteDefinition[] = [
   {
     routeKey: "settings_usage",
     pageLabel: "Claude personal usage settings surface",
-    urlPatterns: ["https://claude.ai/settings/usage*"],
+    urlPatterns: [
+      "https://claude.ai/new*",
+      "https://claude.ai/settings/usage*",
+    ],
   },
 ];
 
@@ -139,7 +150,9 @@ function parseUrl(url: string): URL | null {
 function isClaudeSettingsUsagePath(parsedUrl: URL | null): boolean {
   return (
     parsedUrl?.hostname === "claude.ai" &&
-    /^\/settings\/usage\/?$/i.test(parsedUrl.pathname)
+    (/^\/settings\/usage\/?$/i.test(parsedUrl.pathname) ||
+      (/^\/new\/?$/i.test(parsedUrl.pathname) &&
+        parsedUrl.hash.toLowerCase() === "#settings/usage"))
   );
 }
 
@@ -307,33 +320,37 @@ async function captureRoute(
     pageLabel: route.pageLabel,
     urlPatterns: route.urlPatterns,
     binding,
-    // P3 fix: background tabs opened by the extension are throttled by Chrome.
-    // Next.js / React pages need extra time for client-side hydration before
-    // usage percentages appear in the DOM. Increased from 10 s / 2 s to
-    // 15 s / 3.5 s so personal Pro/Max account pages fully render before capture.
+    // Install the network observer before the reload and let it wait for the
+    // required usage response. DOM hydration is only the bounded fallback.
     reloadBeforeCapture: {
       bypassCache: true,
-      waitForLoadTimeoutMs: 15_000,
+      waitForLoadTimeoutMs: 12_000,
       loadPollIntervalMs: 250,
-      postLoadDelayMs: 3_500,
+      postLoadDelayMs: 250,
     },
     reloadOnCaptureFailure: {
       bypassCache: true,
-      waitForLoadTimeoutMs: 15_000,
+      waitForLoadTimeoutMs: 12_000,
       loadPollIntervalMs: 250,
-      postLoadDelayMs: 3_500,
+      postLoadDelayMs: 250,
     },
     ...(options.openPageWhenMissing
       ? {
           openWhenMissing: {
-            url: "https://claude.ai/settings/usage",
+            url: "https://claude.ai/new#settings/usage",
             active: false,
             closeOnUnmatched: true,
           },
         }
       : {}),
     extraction: {
-      mode: "dom",
+      mode: "network_observer",
+      matchUrlSubstrings: [...CLAUDE_PERSONAL_USAGE_MATCH_SUBSTRINGS],
+      requiredMatchUrlSubstrings: [CLAUDE_USAGE_ENDPOINT_SUFFIX],
+      maxEntries: 8,
+      maxBodyLength: MAX_CLAUDE_PERSONAL_RESPONSE_LENGTH,
+      observeReload: true,
+      waitForRequiredEntriesTimeoutMs: 15_000,
     },
     match(page) {
       if (isLoggedOutOrUpgradeClaudePage(page)) {
@@ -354,8 +371,15 @@ async function captureRoute(
       matchedUrl: null,
       matchedTitle: null,
       summary: null,
+      usageContract: null,
     };
   }
+
+  const summary = summarizeClaudePersonalPage(result.page);
+  const usageContract = extractClaudePersonalUsageContract(
+    result.page.observedNetwork?.entries ?? [],
+    [summary.heading ?? "", ...summary.textSnippets],
+  );
 
   return {
     routeKey: route.routeKey,
@@ -365,7 +389,10 @@ async function captureRoute(
     attempts: result.attempts,
     matchedUrl: result.page.url,
     matchedTitle: result.page.title,
-    summary: summarizeClaudePersonalPage(result.page),
+    summary: usageContract
+      ? { ...summary, recommendedSurface: "network_observer" }
+      : summary,
+    usageContract,
   };
 }
 
@@ -383,7 +410,7 @@ export async function captureClaudePersonalLiveFixture(
 
   return {
     capturedAt: new Date().toISOString(),
-    extractionMode: "dom",
+    extractionMode: "network_observer",
     routes,
     decision: matchedRoute?.summary
       ? {

@@ -1,12 +1,10 @@
 /**
- * Test suite: Claude render timeout configuration (P3 fix)
+ * Test suite: Claude structured-capture timeout configuration
  * Module under test: src/providers/claude-code/personal-page-capture.ts
  *
- * Before the fix, background tabs were given 10 s to load and 2 s post-load
- * delay. Chrome throttles background tabs and Next.js / React pages need client-
- * side hydration time before usage percentages appear in the DOM. The fix raises
- * the limits to 15 s / 3.5 s so personal Pro/Max account pages fully render
- * before the extension attempts to extract data.
+ * The document-start network observer now owns the bounded wait for the usage
+ * response. Reload waits stay short and deterministic; DOM hydration remains a
+ * fallback instead of adding a second multi-second delay.
  */
 import { describe, expect, it, vi } from "vitest";
 
@@ -39,9 +37,9 @@ function makeCapturingClient(): {
   return { client, captured };
 }
 
-describe("captureClaudePersonalLiveFixture / background tab render timeouts (P3)", () => {
+describe("captureClaudePersonalLiveFixture / structured capture budgets", () => {
   describe("reloadBeforeCapture options", () => {
-    it("should use waitForLoadTimeoutMs of 15 000 ms (increased from 10 000 ms)", async () => {
+    it("uses a bounded 12 second page-load wait", async () => {
       const { client, captured } = makeCapturingClient();
       await captureClaudePersonalLiveFixture(client, { mode: "auto", tabId: null });
 
@@ -49,33 +47,33 @@ describe("captureClaudePersonalLiveFixture / background tab render timeouts (P3)
       expect(definition).toBeDefined();
       const reload = definition?.reloadBeforeCapture;
       expect(typeof reload).toBe("object");
-      expect((reload as PageSessionReloadOptions).waitForLoadTimeoutMs).toBe(15_000);
+      expect((reload as PageSessionReloadOptions).waitForLoadTimeoutMs).toBe(12_000);
     });
 
-    it("should use postLoadDelayMs of 3 500 ms (increased from 2 000 ms)", async () => {
+    it("keeps only a short DOM fallback delay", async () => {
       const { client, captured } = makeCapturingClient();
       await captureClaudePersonalLiveFixture(client, { mode: "auto", tabId: null });
 
       const reload = captured[0]?.reloadBeforeCapture;
-      expect((reload as PageSessionReloadOptions).postLoadDelayMs).toBe(3_500);
+      expect((reload as PageSessionReloadOptions).postLoadDelayMs).toBe(250);
     });
   });
 
   describe("reloadOnCaptureFailure options", () => {
-    it("should use waitForLoadTimeoutMs of 15 000 ms on capture failure reload", async () => {
+    it("uses the same bounded load wait on one recovery reload", async () => {
       const { client, captured } = makeCapturingClient();
       await captureClaudePersonalLiveFixture(client, { mode: "auto", tabId: null });
 
       const reload = captured[0]?.reloadOnCaptureFailure;
-      expect((reload as PageSessionReloadOptions).waitForLoadTimeoutMs).toBe(15_000);
+      expect((reload as PageSessionReloadOptions).waitForLoadTimeoutMs).toBe(12_000);
     });
 
-    it("should use postLoadDelayMs of 3 500 ms on capture failure reload", async () => {
+    it("does not reintroduce a long hydration delay on recovery", async () => {
       const { client, captured } = makeCapturingClient();
       await captureClaudePersonalLiveFixture(client, { mode: "auto", tabId: null });
 
       const reload = captured[0]?.reloadOnCaptureFailure;
-      expect((reload as PageSessionReloadOptions).postLoadDelayMs).toBe(3_500);
+      expect((reload as PageSessionReloadOptions).postLoadDelayMs).toBe(250);
     });
   });
 
@@ -94,6 +92,18 @@ describe("captureClaudePersonalLiveFixture / background tab render timeouts (P3)
 
       const reload = captured[0]?.reloadBeforeCapture;
       expect((reload as PageSessionReloadOptions).loadPollIntervalMs).toBe(250);
+    });
+  });
+
+  it("waits for the required usage response through the network observer", async () => {
+    const { client, captured } = makeCapturingClient();
+    await captureClaudePersonalLiveFixture(client, { mode: "auto", tabId: null });
+
+    expect(captured[0]?.extraction).toMatchObject({
+      mode: "network_observer",
+      requiredMatchUrlSubstrings: ["/usage"],
+      observeReload: true,
+      waitForRequiredEntriesTimeoutMs: 15_000,
     });
   });
 });

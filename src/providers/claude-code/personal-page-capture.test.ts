@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 
+import personalUsageContractFixture from "../../../fixtures/claude/personal-usage-contract.fixture.json";
+
 import {
   captureClaudePersonalLiveFixture,
   summarizeClaudePersonalPage,
@@ -56,24 +58,88 @@ describe("summarizeClaudePersonalPage", () => {
 
     expect(capturedDefinitions).toHaveLength(1);
     expect(capturedDefinitions[0]?.urlPatterns).toEqual([
+      "https://claude.ai/new*",
       "https://claude.ai/settings/usage*",
     ]);
     expect(capturedDefinitions[0]?.reloadBeforeCapture).toEqual({
       bypassCache: true,
-      waitForLoadTimeoutMs: 15_000,
+      waitForLoadTimeoutMs: 12_000,
       loadPollIntervalMs: 250,
-      postLoadDelayMs: 3_500,
+      postLoadDelayMs: 250,
     });
     expect(capturedDefinitions[0]?.reloadOnCaptureFailure).toEqual({
       bypassCache: true,
-      waitForLoadTimeoutMs: 15_000,
+      waitForLoadTimeoutMs: 12_000,
       loadPollIntervalMs: 250,
-      postLoadDelayMs: 3_500,
+      postLoadDelayMs: 250,
     });
     expect(capturedDefinitions[0]?.openWhenMissing).toEqual({
-      url: "https://claude.ai/settings/usage",
+      url: "https://claude.ai/new#settings/usage",
       active: false,
       closeOnUnmatched: true,
+    });
+    expect(capturedDefinitions[0]?.extraction).toMatchObject({
+      mode: "network_observer",
+      maxEntries: 8,
+      observeReload: true,
+      waitForRequiredEntriesTimeoutMs: 15_000,
+    });
+  });
+
+  it("captures the structured usage contract from the current settings modal route", async () => {
+    const client: PageSessionClient = {
+      async capture() {
+        return {
+          status: "matched",
+          page: {
+            url: "https://claude.ai/new#settings/usage",
+            title: "New chat - Claude",
+            heading: "Plan usage limits Pro",
+            html: "<main><h2>Plan usage limits Pro</h2><p>Current session</p></main>",
+            observedNetwork: {
+              matchUrlSubstrings: ["/usage"],
+              maxEntries: 8,
+              entries: [
+                {
+                  url: "https://claude.ai/api/organizations/redacted/usage",
+                  method: "GET",
+                  status: 200,
+                  ok: true,
+                  contentType: "application/json",
+                  bodyText: JSON.stringify(personalUsageContractFixture.usage),
+                  capturedAt: "2026-07-21T00:00:00.000Z",
+                  transport: "fetch",
+                },
+              ],
+            },
+          },
+          target: {
+            tabId: 108,
+            bindingMode: "auto",
+            active: false,
+            lastAccessed: null,
+          },
+          attempts: [
+            {
+              tabId: 108,
+              bindingMode: "auto",
+              status: "matched",
+              url: "https://claude.ai/new#settings/usage",
+              title: "New chat - Claude",
+            },
+          ],
+        };
+      },
+    };
+
+    const liveFixture = await captureClaudePersonalLiveFixture(client);
+
+    expect(liveFixture.extractionMode).toBe("network_observer");
+    expect(liveFixture.routes[0]?.usageContract).toMatchObject({
+      planIdentity: { kind: "pro", label: "Claude Pro" },
+      limits: expect.arrayContaining([
+        expect.objectContaining({ kind: "session", remainingPercent: 77 }),
+      ]),
     });
   });
 

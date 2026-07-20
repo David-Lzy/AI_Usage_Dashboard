@@ -110,6 +110,10 @@ describe("syncClaudeCodeProvider", () => {
             sourceTitle: "Claude",
             sourceHeading: "Usage",
             recommendedSurface: "dom",
+            planIdentity: {
+              kind: "pro",
+              label: "Claude Pro",
+            },
             primaryWindow: {
               label: "Team weekly usage",
               normalizedLabel: "Weekly usage window",
@@ -160,7 +164,7 @@ describe("syncClaudeCodeProvider", () => {
     expect(snapshot.tone).toBe("neutral");
     expect(snapshot.syncSource).toBe("page_parse");
     expect(snapshot.planName).toBe(
-      "Claude personal usage page (Weekly usage window)",
+      "Claude Pro (Weekly usage window)",
     );
     expect(snapshot.remaining).toBe(42);
     expect(snapshot.sourceSelectionReason).toBe(

@@ -1,8 +1,97 @@
 import { describe, expect, it } from "vitest";
 
-import { parseClaudePersonalPageSummary } from "./personal-page-parser";
+import personalUsageContractFixture from "../../../fixtures/claude/personal-usage-contract.fixture.json";
+
+import {
+  parseClaudePersonalLiveFixture,
+  parseClaudePersonalPageSummary,
+} from "./personal-page-parser";
+import { extractClaudePersonalUsageContract } from "./personal-usage-contract";
 
 describe("parseClaudePersonalPageSummary", () => {
+  it("prefers structured shared-plan windows and separates credit state", () => {
+    const usageContract = extractClaudePersonalUsageContract(
+      [
+        {
+          url: "https://claude.ai/api/organizations/redacted/usage",
+          method: "GET",
+          status: 200,
+          ok: true,
+          contentType: "application/json",
+          bodyText: JSON.stringify(personalUsageContractFixture.usage),
+          capturedAt: "2026-07-21T00:00:00.000Z",
+          transport: "fetch",
+        },
+      ],
+      [personalUsageContractFixture.domFallback.heading],
+    );
+    const result = parseClaudePersonalLiveFixture({
+      capturedAt: "2026-07-21T00:00:00.000Z",
+      extractionMode: "network_observer",
+      routes: [
+        {
+          routeKey: "settings_usage",
+          pageLabel: "Claude personal usage settings surface",
+          urlPatterns: ["https://claude.ai/new*"],
+          status: "matched",
+          attempts: [],
+          matchedUrl: "https://claude.ai/new#settings/usage",
+          matchedTitle: "New chat - Claude",
+          summary: {
+            url: "https://claude.ai/new#settings/usage",
+            title: "New chat - Claude",
+            heading: "Plan usage limits Pro",
+            recommendedSurface: "network_observer",
+            textSnippets: ["Plan usage limits Pro"],
+            scriptMarkers: {
+              hasNextDataScript: false,
+              hasNextFlightStream: false,
+              hasCloudflareChallenge: false,
+            },
+            keywordSignals: {
+              hasUsageSignal: true,
+              hasRemainingSignal: false,
+              hasResetSignal: false,
+              hasPlanSignal: true,
+              hasTeamSignal: false,
+              hasUpgradeSignal: false,
+            },
+          },
+          usageContract,
+        },
+      ],
+      decision: {
+        chosenRoute: "https://claude.ai/new#settings/usage",
+        chosenSurface: "network_observer",
+        rationale: "test",
+      },
+    });
+
+    expect(result.status).toBe("ok");
+    if (result.status !== "ok") {
+      return;
+    }
+    expect(result.snapshot.planIdentity).toEqual({
+      kind: "pro",
+      label: "Claude Pro",
+    });
+    expect(result.snapshot.windows).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          normalizedLabel: "Current session",
+          remainingPercent: 77,
+        }),
+        expect.objectContaining({
+          normalizedLabel: "All models weekly limit",
+          remainingPercent: 89,
+        }),
+      ]),
+    );
+    expect(result.snapshot.facts).toEqual([
+      expect.objectContaining({ label: "Usage credits", value: "Disabled" }),
+    ]);
+  });
+
   it("extracts visible Claude Team usage windows with reset context", () => {
     const snapshot = parseClaudePersonalPageSummary("settings_usage", {
       url: "https://claude.ai/settings/usage",
