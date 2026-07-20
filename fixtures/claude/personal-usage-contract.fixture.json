@@ -1,0 +1,99 @@
+{
+  "capturedAt": "2026-07-21T00:00:00.000Z",
+  "route": {
+    "canonical": "https://claude.ai/new#settings/usage",
+    "legacyEntry": "https://claude.ai/settings/usage"
+  },
+  "identity": {
+    "planLabel": "Pro",
+    "accountClass": "individual_paid",
+    "source": "rendered_usage_dialog"
+  },
+  "usage": {
+    "five_hour": {
+      "utilization": 23,
+      "resets_at": "2026-07-21T10:00:00.000Z",
+      "limit_dollars": null,
+      "used_dollars": null,
+      "remaining_dollars": null
+    },
+    "seven_day": {
+      "utilization": 11,
+      "resets_at": "2026-07-27T10:00:00.000Z",
+      "limit_dollars": null,
+      "used_dollars": null,
+      "remaining_dollars": null
+    },
+    "limits": [
+      {
+        "kind": "session",
+        "group": "session",
+        "percent": 23,
+        "severity": "normal",
+        "resets_at": "2026-07-21T10:00:00.000Z",
+        "scope": null,
+        "is_active": true
+      },
+      {
+        "kind": "weekly_all",
+        "group": "weekly",
+        "percent": 11,
+        "severity": "normal",
+        "resets_at": "2026-07-27T10:00:00.000Z",
+        "scope": null,
+        "is_active": true
+      }
+    ],
+    "extra_usage": {
+      "is_enabled": false,
+      "monthly_limit": null,
+      "used_credits": null,
+      "utilization": null,
+      "currency": null,
+      "decimal_places": null,
+      "disabled_reason": null
+    },
+    "spend": {
+      "used": {
+        "amount_minor": 0,
+        "currency": "USD",
+        "exponent": 2
+      },
+      "limit": null,
+      "percent": 0,
+      "severity": "normal",
+      "enabled": false,
+      "disabled_reason": null,
+      "cap": null,
+      "balance": null,
+      "auto_reload": null,
+      "disclaimer": "Synthetic fixture",
+      "can_purchase_credits": true,
+      "can_toggle": true
+    },
+    "member_dashboard_available": false
+  },
+  "credits": {
+    "amount": 0,
+    "currency": null,
+    "balance_credits": null,
+    "auto_reload_settings": null,
+    "pending_invoice_amount_cents": null,
+    "last_paid_purchase_cents": null,
+    "expiry_policy_months": null,
+    "tranches": null,
+    "promo_tranches": null,
+    "next_expires_at": null
+  },
+  "domFallback": {
+    "heading": "Plan usage limits Pro",
+    "rows": [
+      "Current session",
+      "23% used",
+      "Weekly limits",
+      "All models",
+      "11% used",
+      "Usage credits"
+    ]
+  }
+}
