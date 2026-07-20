@@ -32,6 +32,7 @@ export async function runPopupRefreshAction(
   const hostAccessCandidate = appState
     ? findHostAccessRefreshCandidate(appState)
     : null;
+  let grantedProviderId: ProviderSetting["id"] | undefined;
 
   if (hostAccessCandidate && hasDirectHostAccess()) {
     try {
@@ -43,6 +44,8 @@ export async function runPopupRefreshAction(
           message: buildHostAccessDeniedMessage(hostAccessCandidate),
         };
       }
+
+      grantedProviderId = hostAccessCandidate.id;
     } catch (error) {
       return {
         status: "error",
@@ -54,7 +57,10 @@ export async function runPopupRefreshAction(
     }
   }
 
-  const response = await sendMessage({ type: "app:request-refresh" });
+  const response = await sendMessage({
+    type: "app:request-refresh",
+    ...(grantedProviderId ? { providerId: grantedProviderId } : {}),
+  });
 
   if (!response.ok) {
     return {

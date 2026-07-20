@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import type {
   AppLocalePreference,
@@ -86,6 +86,7 @@ export function PopupApp() {
     status: "loading",
   });
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const refreshInFlightRef = useRef(false);
   const [isThemeTogglePending, setIsThemeTogglePending] = useState(false);
   const [areHeaderActionsCollapsed, setAreHeaderActionsCollapsed] = useState(
     () => readPopupCollapsePreference("headerActions"),
@@ -279,18 +280,35 @@ export function PopupApp() {
   ]);
 
   async function handleRefresh() {
+    if (refreshInFlightRef.current) {
+      return;
+    }
+
+    refreshInFlightRef.current = true;
     setIsRefreshing(true);
 
-    const result = await runPopupRefreshAction(
-      loadState.status === "ready" ? loadState.appState : null,
-    );
+    try {
+      const result = await runPopupRefreshAction(
+        loadState.status === "ready" ? loadState.appState : null,
+      );
 
-    setLoadState(
-      result.status === "ready"
-        ? { status: "ready", appState: result.state }
-        : { status: "error", message: result.message },
-    );
-    setIsRefreshing(false);
+      setLoadState(
+        result.status === "ready"
+          ? { status: "ready", appState: result.state }
+          : { status: "error", message: result.message },
+      );
+    } catch (error) {
+      setLoadState({
+        status: "error",
+        message:
+          error instanceof Error
+            ? error.message
+            : "The refresh request could not be completed.",
+      });
+    } finally {
+      refreshInFlightRef.current = false;
+      setIsRefreshing(false);
+    }
   }
 
   const localePreference: AppLocalePreference =

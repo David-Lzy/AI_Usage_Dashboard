@@ -26,6 +26,16 @@ type SyncEngineOutcome = {
   startedSetting: ProviderSetting | null;
 };
 
+type ProviderAdapterSyncResult = {
+  setting?: ProviderSetting;
+  snapshot: ProviderSnapshot;
+};
+
+type ActiveProviderAdapterRun = {
+  promise: Promise<ProviderAdapterSyncResult>;
+  trigger: SyncTrigger;
+};
+
 function parseTimestamp(rawValue: string): Date | null {
   const normalizedValue = rawValue.includes("T")
     ? rawValue
@@ -167,12 +177,61 @@ type RunSyncEngineParams = {
 };
 
 const activeSyncEngineRuns = new Map<string, Promise<AppState>>();
+const activeProviderAdapterRuns = new Map<
+  ProviderId,
+  ActiveProviderAdapterRun
+>();
+
+function trackProviderAdapterRun(
+  providerId: ProviderId,
+  trigger: SyncTrigger,
+  promise: Promise<ProviderAdapterSyncResult>,
+): Promise<ProviderAdapterSyncResult> {
+  const trackedRun = { promise, trigger };
+  activeProviderAdapterRuns.set(providerId, trackedRun);
+
+  const cleanup = () => {
+    if (activeProviderAdapterRuns.get(providerId) === trackedRun) {
+      activeProviderAdapterRuns.delete(providerId);
+    }
+  };
+
+  void promise.then(cleanup, cleanup);
+
+  return promise;
+}
+
+function runProviderAdapterCoalesced({
+  providerId,
+  trigger,
+  run,
+}: {
+  providerId: ProviderId;
+  trigger: SyncTrigger;
+  run: () => Promise<ProviderAdapterSyncResult>;
+}): Promise<ProviderAdapterSyncResult> {
+  const activeRun = activeProviderAdapterRuns.get(providerId);
+
+  if (!activeRun) {
+    return trackProviderAdapterRun(providerId, trigger, run());
+  }
+
+  if (trigger === "manual" && activeRun.trigger !== "manual") {
+    const queuedManualRun = activeRun.promise.then(run, run);
+
+    return trackProviderAdapterRun(providerId, trigger, queuedManualRun);
+  }
+
+  return activeRun.promise;
+}
 
 export function getSyncEngineCoalescingKey({
   trigger,
   providerId,
 }: RunSyncEngineParams): string | null {
-  return providerId ? null : `all-providers:${trigger}`;
+  return providerId
+    ? `provider:${providerId}`
+    : `all-providers:${trigger}`;
 }
 
 export function runSyncEngine(params: RunSyncEngineParams): Promise<AppState> {
@@ -249,12 +308,17 @@ async function runSyncEngineOnce({
       }
 
       const adapter = getProviderSyncAdapter(provider.providerId);
-      const outcome = await adapter.sync(provider, {
-        attemptedAt: now,
+      const outcome = await runProviderAdapterCoalesced({
+        providerId: provider.providerId,
         trigger,
-        secrets,
-        setting,
-        warningThresholdPercent: current.settings.warningThresholdPercent,
+        run: () =>
+          adapter.sync(provider, {
+            attemptedAt: now,
+            trigger,
+            secrets,
+            setting,
+            warningThresholdPercent: current.settings.warningThresholdPercent,
+          }),
       });
 
       return {

@@ -58,15 +58,12 @@ export function createStandardAppActions({
       return;
     }
 
-    const providerLabel = providerId
-      ? getProviderLabel(appState.providerSettings, providerId)
-      : "All providers";
-
     void (async () => {
       const hostAccessCandidate = findHostAccessRefreshCandidate(
         appState,
         providerId,
       );
+      let refreshProviderId = providerId;
 
       if (hostAccessCandidate && hasDirectPermissionControl()) {
         try {
@@ -82,6 +79,11 @@ export function createStandardAppActions({
             });
             return;
           }
+
+          // Make the permission grant useful immediately. A global refresh can
+          // still run on the next scheduled/manual cycle, while this bounded
+          // request opens and captures the newly authorized provider first.
+          refreshProviderId = hostAccessCandidate.id;
         } catch (error) {
           setToast({
             tone: "error",
@@ -95,8 +97,12 @@ export function createStandardAppActions({
         }
       }
 
+      const providerLabel = refreshProviderId
+        ? getProviderLabel(appState.providerSettings, refreshProviderId)
+        : "All providers";
+
       await applyMessage(
-        { type: "app:request-refresh", providerId },
+        { type: "app:request-refresh", providerId: refreshProviderId },
         {
           tone: "success",
           title: `${providerLabel} refreshed`,
@@ -215,24 +221,27 @@ export function createStandardAppActions({
           origins: target.hostOrigins,
         }) ?? false;
 
+        if (!granted) {
+          setToast({
+            tone: "error",
+            title: `${target.label} access denied`,
+            message:
+              "The permission request was dismissed or denied, so live host access is still unavailable.",
+          });
+          return;
+        }
+
         await applyMessage(
           {
             type: "app:request-refresh",
             providerId,
           },
-          granted
-            ? {
-                tone: "success",
-                title: `${target.label} access granted`,
-                message:
-                  "The extension can now request the configured host origins.",
-              }
-            : {
-                tone: "error",
-                title: `${target.label} access denied`,
-                message:
-                  "The permission request was dismissed or denied, so live host access is still unavailable.",
-              },
+          {
+            tone: "success",
+            title: `${target.label} access granted`,
+            message:
+              "The extension can now request the configured host origins and started an immediate refresh.",
+          },
         );
       } catch (error) {
         setToast({

@@ -141,6 +141,82 @@ describe("createStandardAppActions", () => {
     expect(applyMessage).not.toHaveBeenCalled();
   });
 
+  it("refreshes the provider immediately after its permission toggle is granted", async () => {
+    const appState = structuredClone(SAMPLE_APP_STATE);
+    const codex = appState.providerSettings.find(
+      (provider) => provider.id === "codex-personal-page",
+    );
+
+    if (!codex) {
+      throw new Error("Missing Codex provider setting.");
+    }
+
+    codex.status = "missing";
+    const request = vi.fn(async () => true);
+
+    vi.stubGlobal("chrome", {
+      runtime: { id: "extension-id" },
+      permissions: {
+        request,
+        contains: vi.fn(),
+        remove: vi.fn(),
+      },
+    });
+
+    const { actions, applyMessage } = createActionHarness({ appState });
+
+    actions.handleTogglePermission("codex-personal-page");
+
+    await vi.waitFor(() => {
+      expect(applyMessage).toHaveBeenCalledWith(
+        {
+          type: "app:request-refresh",
+          providerId: "codex-personal-page",
+        },
+        expect.objectContaining({
+          title: `${codex.label} access granted`,
+          message: expect.stringContaining("immediate refresh"),
+        }),
+      );
+    });
+  });
+
+  it("does not refresh after its permission toggle is denied", async () => {
+    const appState = structuredClone(SAMPLE_APP_STATE);
+    const codex = appState.providerSettings.find(
+      (provider) => provider.id === "codex-personal-page",
+    );
+
+    if (!codex) {
+      throw new Error("Missing Codex provider setting.");
+    }
+
+    codex.status = "missing";
+
+    vi.stubGlobal("chrome", {
+      runtime: { id: "extension-id" },
+      permissions: {
+        request: vi.fn(async () => false),
+        contains: vi.fn(),
+        remove: vi.fn(),
+      },
+    });
+
+    const { actions, applyMessage, setToast } = createActionHarness({ appState });
+
+    actions.handleTogglePermission("codex-personal-page");
+
+    await vi.waitFor(() => {
+      expect(setToast).toHaveBeenCalledWith(
+        expect.objectContaining({
+          tone: "error",
+          title: `${codex.label} access denied`,
+        }),
+      );
+    });
+    expect(applyMessage).not.toHaveBeenCalled();
+  });
+
   it("dispatches settings updates without changing settings locally", () => {
     const { actions, appState, applyMessage } = createActionHarness();
 

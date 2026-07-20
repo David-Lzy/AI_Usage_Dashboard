@@ -121,6 +121,9 @@ describe("runPopupRefreshAction", () => {
         id: "codex-personal-page",
       }),
     );
-    expect(sendMessage).toHaveBeenCalledWith({ type: "app:request-refresh" });
+    expect(sendMessage).toHaveBeenCalledWith({
+      type: "app:request-refresh",
+      providerId: "codex-personal-page",
+    });
   });
 });
