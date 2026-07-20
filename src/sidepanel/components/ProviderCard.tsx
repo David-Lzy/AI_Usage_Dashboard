@@ -24,6 +24,12 @@ import {
 import { CursorUsageSummary } from "../../shared/components/CursorUsageSummary";
 import { buildCursorUsageLocalizedCopy } from "../../shared/cursor-usage-localized-copy";
 import { DEFAULT_RESET_TIME_DISPLAY_MODE } from "../../shared/reset-time-display";
+import {
+  buildProviderDetailLocalizedCopy,
+  getProviderDetailStatusBadgeLabel,
+} from "../../shared/provider-detail-localized-copy";
+
+const CLAUDE_PERSONAL_PROVIDER_ID = "claude-code-team-page";
 
 type ProviderCardProps = {
   localePreference: AppLocalePreference;
@@ -65,6 +71,9 @@ export function ProviderCard({
   );
   const usageHistoryCopy = buildUsageHistoryLocalizedCopy(i18n.resolvedLocale);
   const cursorUsageCopy = buildCursorUsageLocalizedCopy(i18n.resolvedLocale);
+  const providerDetailCopy = buildProviderDetailLocalizedCopy(i18n);
+  const isClaudePersonal =
+    provider.providerId === CLAUDE_PERSONAL_PROVIDER_ID;
   const showSessionPageContract =
     provider.sessionPageContractLabel !== null &&
     provider.sessionPageContractLabel !== provider.currentSourceContractLabel;
@@ -89,14 +98,23 @@ export function ProviderCard({
   const visibleUsageContextLabel =
     buildRuntimeCommonCopy(i18n).visibleUsageContext;
   const hasCursorUsage = provider.cursorUsage !== undefined;
+  const hasCachedProviderContent =
+    hasProviderProgressItems ||
+    hasUsageFacts ||
+    provider.usageHistory !== undefined ||
+    hasCursorUsage;
   const cardSurfaceTone =
-    hasCursorUsage && provider.displayTone === "error"
+    hasCachedProviderContent && provider.displayTone === "error"
       ? "neutral"
       : provider.displayTone;
   const cardStatusTone =
-    hasCursorUsage && provider.displayTone === "error"
+    hasCachedProviderContent && provider.displayTone === "error"
       ? "warning"
       : provider.displayTone;
+  const showClaudeRecoveryState =
+    isClaudePersonal &&
+    (provider.permissionStatus === "missing" ||
+      provider.currentSourceStateKind !== "ready");
   const fidelityChipClassName =
     provider.currentSourceFidelityTone === "error"
       ? "meta-chip meta-chip--error"
@@ -134,22 +152,18 @@ export function ProviderCard({
         </div>
         <div className="provider-card__status">
           <StatusBadge
-            label={
-              provider.permissionStatus === "missing"
-                ? "Needs access"
-                : provider.displaySyncStatus === "ok"
-                  ? "Healthy"
-                  : provider.displaySyncStatus === "warning"
-                    ? "Warning"
-                    : "Sync issue"
-            }
+            label={getProviderDetailStatusBadgeLabel(
+              provider.permissionStatus,
+              provider.displaySyncStatus,
+              providerDetailCopy,
+            )}
             tone={cardStatusTone}
           />
         </div>
       </header>
 
       <div className="provider-card__body">
-        {!hasCursorUsage ? (
+        {!hasCursorUsage && !isClaudePersonal ? (
           <section
             className="provider-card__summary"
             aria-label={`${provider.providerLabel} usage summary`}
@@ -187,6 +201,29 @@ export function ProviderCard({
           </section>
         ) : null}
 
+        {isClaudePersonal ? (
+          <section
+            className="provider-card__product-context"
+            aria-label={`${provider.providerLabel} sync context`}
+          >
+            <div className="provider-card__product-context-meta">
+              <span className="meta-chip">{localizedLastSyncLabel}</span>
+              {showClaudeRecoveryState ? (
+                <span
+                  className={`meta-chip ${provider.currentSourceStateTone === "error" ? "meta-chip--error" : "meta-chip--warning"}`}
+                >
+                  {provider.currentSourceStateLabel}
+                </span>
+              ) : null}
+            </div>
+            {showClaudeRecoveryState && !hasCachedProviderContent ? (
+              <p className="supporting-copy provider-card__availability">
+                {provider.currentSourceStateDetail}
+              </p>
+            ) : null}
+          </section>
+        ) : null}
+
         {provider.usageHistory
           ? resolveProviderUsageHistoryModules(
               usageHistoryModulesBySurface,
@@ -214,7 +251,7 @@ export function ProviderCard({
           />
         ) : null}
 
-        {!hasCursorUsage ? (
+        {!hasCursorUsage && !isClaudePersonal ? (
           <>
             <div
               className="provider-card__meta"
@@ -276,7 +313,11 @@ export function ProviderCard({
         </button>
         {showSourcePageAction ? (
           <button
-            className="text-button provider-card__action"
+            className={`text-button provider-card__action${
+              showClaudeRecoveryState
+                ? " provider-card__action--primary"
+                : ""
+            }`}
             data-provider-card-open-source-page="true"
             type="button"
             title="Open source page"
@@ -290,13 +331,15 @@ export function ProviderCard({
             Source page
           </button>
         ) : null}
-        <button
-          className="text-button provider-card__action provider-card__action--primary"
-          type="button"
-          onClick={() => onRefresh(provider.providerId)}
-        >
-          Refresh
-        </button>
+        {!isClaudePersonal || !showSourcePageAction || !showClaudeRecoveryState ? (
+          <button
+            className="text-button provider-card__action provider-card__action--primary"
+            type="button"
+            onClick={() => onRefresh(provider.providerId)}
+          >
+            Refresh
+          </button>
+        ) : null}
       </footer>
     </article>
   );

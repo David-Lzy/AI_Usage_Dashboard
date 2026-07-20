@@ -60,6 +60,15 @@ type PopupFeaturedProviderListProps = {
   ) => void | Promise<void>;
 };
 
+function shouldShowPlanWithProviderProgress(
+  provider: PopupFeaturedProviderCard["provider"],
+): boolean {
+  return (
+    provider.providerId === "claude-code-team-page" &&
+    !/^Claude personal usage page(?:\s|$)/i.test(provider.planName)
+  );
+}
+
 function PopupUsageHistoryModule({
   copy,
   history,
@@ -246,7 +255,8 @@ export function PopupFeaturedProviderList({
                       />
                     </div>
                   </div>
-                  {!hasProviderProgress ? (
+                  {!hasProviderProgress ||
+                  shouldShowPlanWithProviderProgress(provider) ? (
                     <p className="popup-provider-card__plan">
                       {provider.planName}
                     </p>

@@ -104,6 +104,78 @@ describe("SettingsProviderDisplaySection", () => {
     expect(html.match(/data-cursor-usage-module-row=/g)).toHaveLength(6);
   });
 
+  it("exposes Claude Personal usage windows through the shared surface controls", () => {
+    const i18n = createRuntimeI18n("en", undefined);
+    const settingsCopy = buildSettingsLocalizedCopy(i18n);
+    const providerSourceDisplayCopy =
+      buildProviderSourceDisplayLocalizedCopy(i18n);
+    const html = renderToStaticMarkup(
+      <SettingsProviderDisplaySection
+        settings={SAMPLE_APP_STATE.settings}
+        providers={SAMPLE_APP_STATE.providerSettings}
+        providerSourceDisplayCopy={providerSourceDisplayCopy}
+        snapshots={SAMPLE_APP_STATE.providers.map((snapshot) =>
+          snapshot.providerId === "claude-code-team-page"
+            ? {
+                ...snapshot,
+                planName: "Claude Pro",
+                usageWindows: [
+                  {
+                    label: "Current session",
+                    normalizedLabel: "Current session",
+                    kind: "rolling_5h" as const,
+                    modelLabel: null,
+                    quotaUnit: "percent" as const,
+                    used: 20,
+                    remaining: 80,
+                    total: 100,
+                    resetAt: "2026-07-21T15:00:00.000Z",
+                    resetLabel: "Current session resets at 15:00",
+                  },
+                  {
+                    label: "All models",
+                    normalizedLabel: "All models weekly limit",
+                    kind: "weekly" as const,
+                    modelLabel: null,
+                    quotaUnit: "percent" as const,
+                    used: 35,
+                    remaining: 65,
+                    total: 100,
+                    resetAt: "2026-07-25T15:00:00.000Z",
+                    resetLabel: "All models weekly limit resets Saturday",
+                  },
+                ],
+              }
+            : snapshot,
+        )}
+        settingsCopy={settingsCopy}
+        onProviderOrderBySurfaceChange={() => {}}
+        onProgressItemsBySurfaceChange={() => {}}
+      />,
+    );
+
+    expect(html).toContain(
+      'data-provider-progress-preference-provider="claude-code-team-page"',
+    );
+    expect(html).toContain("Current session");
+    expect(html).toContain("All models weekly limit");
+    const claudeSectionStart = html.indexOf(
+      'data-provider-progress-preference-provider="claude-code-team-page"',
+    );
+    const nextProviderStart = html.indexOf(
+      'data-provider-progress-preference-provider=',
+      claudeSectionStart + 1,
+    );
+    const claudeSection = html.slice(
+      claudeSectionStart,
+      nextProviderStart === -1 ? undefined : nextProviderStart,
+    );
+
+    expect(claudeSection.match(/data-provider-progress-surface=/g)).toHaveLength(
+      3,
+    );
+  });
+
   it("keeps hidden providers out of surface order and quota item controls", () => {
     const i18n = createRuntimeI18n("en", undefined);
     const settingsCopy = buildSettingsLocalizedCopy(i18n);

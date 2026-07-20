@@ -22,6 +22,7 @@ function renderProviderCard(
   state: AppState,
   providerId: ProviderId,
   options: {
+    localePreference?: AppState["settings"]["localePreference"];
     onOpenSourcePage?: () => void;
     usageHistoryModulesBySurface?: AppState["settings"]["usageHistoryModulesBySurface"];
   } = {},
@@ -34,7 +35,7 @@ function renderProviderCard(
 
   return renderToStaticMarkup(
     <ProviderCard
-      localePreference="en"
+      localePreference={options.localePreference ?? "en"}
       progressColorBands={state.settings.progressColorBands}
       progressDisplayStyle="line"
       progressItemsBySurface={state.settings.progressItemsBySurface}
@@ -236,13 +237,13 @@ describe("ProviderCard", () => {
     expect(html).not.toContain("Visible Cursor usage:");
   });
 
-  it("renders multiple Claude Team usage windows instead of collapsing back to one summary bar", () => {
+  it("renders Claude Personal plan, windows, and freshness without primary-card diagnostics", () => {
     const state = createState({
       providers: SAMPLE_APP_STATE.providers.map((provider) =>
         provider.providerId === "claude-code-team-page"
           ? {
               ...provider,
-              planName: "Claude Team Usage Page (Current session)",
+              planName: "Claude Pro (Current session)",
               quotaUnit: "percent",
               quotaWindow: "rolling",
               used: 49,
@@ -320,7 +321,30 @@ describe("ProviderCard", () => {
     expect(html).toContain("Weekly limit");
     expect(html).toContain("Claude Design");
     expect(html).toContain("Daily included routine runs");
+    expect(html).toContain("Claude Pro (Current session)");
+    expect(html).toContain("Claude usage page synced just now");
+    expect(html).not.toContain("Shipped personal partial");
+    expect(html).not.toContain("Provider source context");
+    expect(html).not.toContain("Usage window percent unavailable");
     expect(html).not.toContain("rolling percent");
+  });
+
+  it("keeps an empty Claude recovery card compact and localizes its status", () => {
+    const html = renderProviderCard(
+      createState(),
+      "claude-code-team-page",
+      {
+        localePreference: "zh-CN",
+        onOpenSourcePage: () => undefined,
+      },
+    );
+
+    expect(html).toContain("告警");
+    expect(html).toContain("provider-card__product-context");
+    expect(html).toContain('data-provider-card-open-source-page="true"');
+    expect(html).not.toContain("Shipped personal partial");
+    expect(html).not.toContain("Provider source context");
+    expect(html).not.toContain(">Refresh<");
   });
 
   it("honors hidden sidebar progress item preferences", () => {

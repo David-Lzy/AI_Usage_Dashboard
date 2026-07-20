@@ -77,6 +77,11 @@ describe("PopupFooterSection", () => {
     expect(popupThemeCss).toContain(
       "grid-template-columns: max-content minmax(0, 1fr);",
     );
+    expect(popupThemeCss).toContain(
+      "grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);",
+    );
+    expect(popupThemeCss).toContain(".popup-footer__heading {");
+    expect(popupThemeCss).toContain("min-width: 0;");
     expect(popupThemeCss).toContain("font-size: 0.6875rem;");
     expect(popupThemeCss).toContain("flex-wrap: nowrap;");
     expect(popupThemeCss).toContain(

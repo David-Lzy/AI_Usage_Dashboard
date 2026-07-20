@@ -136,6 +136,25 @@
   gap: var(--app-space-1);
 }
 
+.provider-card__product-context {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-2);
+  padding-block: var(--app-space-1);
+}
+
+.provider-card__product-context-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--app-space-2);
+  min-width: 0;
+}
+
+.provider-card__product-context .meta-chip {
+  max-width: 100%;
+}
+
 .provider-card__progress-surface {
   display: grid;
   grid-template-columns: minmax(0, 1fr);

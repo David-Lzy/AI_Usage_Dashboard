@@ -539,7 +539,7 @@ html[data-app-direction="rtl"] .popup-header__theme-mode-menu {
   display: grid;
   gap: 1px;
   justify-items: start;
-  min-width: max-content;
+  min-width: 0;
   text-align: start;
 }
 
@@ -617,6 +617,7 @@ html[data-app-direction="rtl"] .popup-header__theme-mode-menu {
 
 @container popup-footer (max-width: 420px) {
   .popup-footer__content {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
     column-gap: 6px;
     padding-inline: 6px;
   }
@@ -1030,6 +1031,11 @@ html[data-app-direction="rtl"] .popup-header__theme-mode-menu {
   font-size: var(--md-sys-typescale-body-medium-size);
   font-weight: var(--md-sys-typescale-body-medium-weight);
   line-height: var(--md-sys-typescale-body-medium-line-height);
+}
+
+.popup-provider-card--quota-first .popup-provider-card__plan {
+  font-size: var(--md-sys-typescale-label-large-size);
+  line-height: var(--md-sys-typescale-label-large-line-height);
 }
 
 .popup-provider-card--warning .popup-provider-card__provider,

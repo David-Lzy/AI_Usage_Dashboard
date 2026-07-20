@@ -110,6 +110,47 @@ describe("PopupFeaturedProviderList", () => {
     expect(html).toContain("Codex Long Provider Name For Wrapping Review");
   });
 
+  it("keeps an explicit Claude Personal plan visible with quota progress", () => {
+    const claudeCard = buildPopupViewModel(
+      SAMPLE_APP_STATE,
+    ).featuredProviderCards.find(
+      (card) => card.provider.providerId === "claude-code-team-page",
+    );
+
+    if (!claudeCard) {
+      throw new Error("Missing Claude Personal popup card fixture.");
+    }
+
+    const html = renderFeaturedList([
+      {
+        ...claudeCard,
+        provider: {
+          ...claudeCard.provider,
+          planName: "Claude Pro (Current session)",
+          usageWindows: [
+            {
+              label: "Current session",
+              normalizedLabel: "Current session",
+              kind: "rolling_5h",
+              modelLabel: null,
+              quotaUnit: "percent",
+              used: 20,
+              remaining: 80,
+              total: 100,
+              resetAt: "2026-07-21T15:00:00.000Z",
+              resetLabel: "Current session resets at 15:00",
+            },
+          ],
+        },
+      },
+    ]);
+
+    expect(html).toContain("popup-provider-card--quota-first");
+    expect(html).toContain("Claude Pro (Current session)");
+    expect(html).toContain('class="popup-provider-card__progress');
+    expect(html).not.toContain("Shipped personal partial");
+  });
+
   it("suppresses cached progress surfaces while provider host access is missing", () => {
     const [card] = buildPopupViewModel(SAMPLE_APP_STATE).featuredProviderCards;
     const html = renderFeaturedList([
