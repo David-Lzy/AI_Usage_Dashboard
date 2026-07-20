@@ -27,7 +27,11 @@ export function SettingsSectionNavigation({
   onSelectSection,
 }: SettingsSectionNavigationProps) {
   return (
-    <nav className="settings-section-nav" aria-label={ariaLabel}>
+    <nav
+      className="settings-section-nav"
+      aria-label={ariaLabel}
+      data-i18n-layout-contract="settings-navigation"
+    >
       {items.map((item) => {
         const isActive = activeSectionId === item.id;
 

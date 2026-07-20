@@ -41,6 +41,8 @@ describe("PopupFooterSection", () => {
     expect(html).toContain("AI Usage Dashboard");
     expect(html).toContain("AGPL-3.0");
     expect(html).toContain("GitHub");
+    expect(html).toContain('data-i18n-layout-contract="popup-footer"');
+    expect(html).toContain('class="popup-footer__public-links"');
     expect(html).not.toContain(BUILD_INFO.gitCommit);
     expect(html).not.toContain(BUILD_INFO.buildTimestamp.slice(0, 10));
   });
@@ -71,5 +73,9 @@ describe("PopupFooterSection", () => {
     expect(popupThemeCss).toContain(".popup-footer__collapse-toggle");
     expect(popupThemeCss).toContain("transform: translate(-50%, -50%);");
     expect(popupThemeCss).toContain(".popup-footer__content[hidden]");
+    expect(popupThemeCss).toContain("container: popup-footer / inline-size;");
+    expect(popupThemeCss).toContain(
+      "@container popup-footer (max-width: 420px)",
+    );
   });
 });

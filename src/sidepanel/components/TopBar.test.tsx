@@ -34,6 +34,7 @@ describe("TopBar", () => {
     );
 
     expect(html).toContain('data-topbar-toggle-theme-mode="true"');
+    expect(html).toContain('data-i18n-layout-contract="top-app-bar"');
     expect(html).toContain('aria-label="Switch to dark mode"');
     expect(html).toContain('data-topbar-open-full-page="true"');
     expect(html).toContain('data-topbar-switch-surface="true"');

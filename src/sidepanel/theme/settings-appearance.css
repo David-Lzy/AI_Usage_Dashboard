@@ -719,11 +719,12 @@
 }
 
 @container (max-width: 430px) {
-  .provider-progress-list__item {
+  .provider-progress-list__item:not(.usage-history-preferences__item) {
     flex-wrap: wrap;
   }
 
-  .provider-progress-list__actions {
+  .provider-progress-list__item:not(.usage-history-preferences__item)
+    .provider-progress-list__actions {
     width: 100%;
     justify-content: flex-end;
   }
@@ -1527,12 +1528,13 @@
 
 @media (max-width: 520px) {
   .provider-order-list__item,
-  .provider-progress-list__item {
+  .provider-progress-list__item:not(.usage-history-preferences__item) {
     flex-wrap: wrap;
   }
 
   .provider-order-list__actions,
-  .provider-progress-list__actions {
+  .provider-progress-list__item:not(.usage-history-preferences__item)
+    .provider-progress-list__actions {
     width: 100%;
     justify-content: flex-end;
   }

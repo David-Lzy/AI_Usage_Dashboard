@@ -23,6 +23,7 @@ import {
 } from "../../shared/usage-history-visibility";
 import "../../shared/components/usage-history-charts.css";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
+import { MaterialIcon } from "./MaterialIcon";
 
 const SURFACES: readonly DisplaySurface[] = ["popup", "sidebar", "fullPage"];
 
@@ -170,6 +171,7 @@ export function UsageHistoryModulePreferenceControls({
                         <li
                           key={preference.id}
                           className="provider-progress-list__item usage-history-preferences__item"
+                          data-i18n-layout-contract="compact-order-row"
                           data-usage-history-module-row={preference.id}
                           draggable
                           tabIndex={0}
@@ -245,10 +247,14 @@ export function UsageHistoryModulePreferenceControls({
                           </span>
                           <span className="provider-progress-list__actions">
                             <button
-                              className="text-button provider-progress-list__action"
+                              className="text-button provider-progress-list__action provider-progress-list__action--icon"
                               type="button"
                               disabled={isFirst}
                               aria-label={settingsCopy.progressItems.moveUpAction(
+                                moduleLabel,
+                                surfaceLabel,
+                              )}
+                              title={settingsCopy.progressItems.moveUpAction(
                                 moduleLabel,
                                 surfaceLabel,
                               )}
@@ -264,13 +270,17 @@ export function UsageHistoryModulePreferenceControls({
                                 )
                               }
                             >
-                              {settingsCopy.progressItems.up}
+                              <MaterialIcon name="keyboard-arrow-up" />
                             </button>
                             <button
-                              className="text-button provider-progress-list__action"
+                              className="text-button provider-progress-list__action provider-progress-list__action--icon"
                               type="button"
                               disabled={isLast}
                               aria-label={settingsCopy.progressItems.moveDownAction(
+                                moduleLabel,
+                                surfaceLabel,
+                              )}
+                              title={settingsCopy.progressItems.moveDownAction(
                                 moduleLabel,
                                 surfaceLabel,
                               )}
@@ -286,7 +296,7 @@ export function UsageHistoryModulePreferenceControls({
                                 )
                               }
                             >
-                              {settingsCopy.progressItems.down}
+                              <MaterialIcon name="keyboard-arrow-down" />
                             </button>
                           </span>
                         </li>

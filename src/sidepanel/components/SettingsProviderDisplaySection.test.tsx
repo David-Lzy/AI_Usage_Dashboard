@@ -54,6 +54,11 @@ describe("SettingsProviderDisplaySection", () => {
     expect(html).toContain(
       'data-usage-history-module-row="personal_usage_by_surface"',
     );
+    expect(html).toContain(
+      'data-i18n-layout-contract="compact-order-row"',
+    );
+    expect(html).toContain('data-material-icon="keyboard-arrow-up"');
+    expect(html).toContain('data-material-icon="keyboard-arrow-down"');
     expect(html).toContain('data-usage-history-module-row="turns_history"');
     expect(html).toContain('draggable="true"');
     expect(html).toContain('tabindex="0"');

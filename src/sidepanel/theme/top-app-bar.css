@@ -71,8 +71,9 @@
   line-height: var(--md-sys-typescale-label-medium-line-height);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  overflow-wrap: anywhere;
-  word-break: break-word;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+  word-break: normal;
 }
 
 .top-app-bar__headline {
@@ -81,8 +82,9 @@
   font-size: var(--md-sys-typescale-title-large-size);
   font-weight: var(--md-sys-typescale-title-large-weight);
   line-height: var(--md-sys-typescale-title-large-line-height);
-  overflow-wrap: anywhere;
-  word-break: break-word;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+  word-break: normal;
 }
 
 @media (max-width: 720px) {

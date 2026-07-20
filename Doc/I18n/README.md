@@ -63,6 +63,30 @@ npm run i18n:visual-check -- --fail-on-issues
 Visual matrix screenshots and JSON reports are local QA evidence under ignored
 `.local/visual-checks/i18n/` paths and should not be committed.
 
+## Layout Resilience
+
+Localized layout should respond to the width of the component that owns the
+content, not only to the browser viewport. Use inline-size container queries for
+reusable surfaces such as the Settings top app bar and Popup footer when their
+available width can differ from the viewport.
+
+- keep short command labels intact and reflow the surrounding group first
+- split metadata into semantic groups so public links and related values do not
+  become orphaned lines
+- use balanced wrapping for short headings, while preserving normal word
+  boundaries for translated copy
+- use logical properties and inherit the document direction for RTL locales
+- replace familiar move actions with accessible icon controls when translated
+  text would consume layout space; retain localized `aria-label` and `title`
+- reserve emergency word breaking for untrusted or user-defined values, not
+  ordinary localized interface labels
+
+Key compact components expose `data-i18n-layout-contract` markers. The visual
+matrix checks those contracts for overlapping controls, unexpectedly tall
+compact rows, and oversized Settings navigation or action controls. This makes
+the screenshots supporting evidence rather than the primary way regressions are
+found.
+
 ## Boundary
 
 Runtime UI, manifest strings, and store listing copy may be localized. Raw

@@ -13,6 +13,7 @@ import { buildCursorUsageLocalizedCopy } from "../../shared/cursor-usage-localiz
 import type { ResolvedAppLocale } from "../../shared/i18n";
 import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
+import { MaterialIcon } from "./MaterialIcon";
 
 const SURFACES: readonly DisplaySurface[] = ["popup", "sidebar", "fullPage"];
 
@@ -80,6 +81,7 @@ export function CursorUsageModulePreferenceControls({
                   return (
                     <li
                       className="provider-progress-list__item usage-history-preferences__item"
+                      data-i18n-layout-contract="compact-order-row"
                       data-cursor-usage-module-row={preference.id}
                       key={preference.id}
                     >
@@ -117,9 +119,17 @@ export function CursorUsageModulePreferenceControls({
                       </span>
                       <span className="provider-progress-list__actions">
                         <button
-                          className="text-button provider-progress-list__action"
+                          className="text-button provider-progress-list__action provider-progress-list__action--icon"
                           disabled={isFirst}
                           type="button"
+                          aria-label={settingsCopy.progressItems.moveUpAction(
+                            moduleLabel,
+                            surfaceLabel,
+                          )}
+                          title={settingsCopy.progressItems.moveUpAction(
+                            moduleLabel,
+                            surfaceLabel,
+                          )}
                           onClick={() =>
                             updatePreferences(
                               moveCursorUsageModulePreference(
@@ -131,12 +141,20 @@ export function CursorUsageModulePreferenceControls({
                             )
                           }
                         >
-                          {settingsCopy.progressItems.up}
+                          <MaterialIcon name="keyboard-arrow-up" />
                         </button>
                         <button
-                          className="text-button provider-progress-list__action"
+                          className="text-button provider-progress-list__action provider-progress-list__action--icon"
                           disabled={isLast}
                           type="button"
+                          aria-label={settingsCopy.progressItems.moveDownAction(
+                            moduleLabel,
+                            surfaceLabel,
+                          )}
+                          title={settingsCopy.progressItems.moveDownAction(
+                            moduleLabel,
+                            surfaceLabel,
+                          )}
                           onClick={() =>
                             updatePreferences(
                               moveCursorUsageModulePreference(
@@ -148,7 +166,7 @@ export function CursorUsageModulePreferenceControls({
                             )
                           }
                         >
-                          {settingsCopy.progressItems.down}
+                          <MaterialIcon name="keyboard-arrow-down" />
                         </button>
                       </span>
                     </li>

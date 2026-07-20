@@ -33,6 +33,9 @@ describe("SettingsNavigation", () => {
     );
 
     expect(html).toContain('class="settings-section-nav"');
+    expect(html).toContain(
+      'data-i18n-layout-contract="settings-navigation"',
+    );
     expect(html).toContain(">Overview<");
     expect(html).toContain(">Quick Setup<");
     expect(html).toContain('aria-current="true"');
@@ -65,18 +68,24 @@ describe("SettingsNavigation", () => {
       ".settings-shell .top-app-bar__actions .icon-button {",
     );
     expect(settingsNavigationCss).toContain("flex: none;");
-    expect(settingsNavigationCss).toContain("@media (max-width: 1120px) {");
-    expect(settingsNavigationCss).toContain("display: flex;");
-    expect(settingsNavigationCss).toContain("flex-direction: row;");
-    expect(settingsNavigationCss).toContain("flex-wrap: wrap;");
-    expect(settingsNavigationCss).toContain("flex: 1 1 220px;");
-    expect(settingsNavigationCss).toContain("flex: 1 0 100%;");
-    expect(settingsNavigationCss).toContain("@media (max-width: 620px) {");
-    expect(settingsNavigationCss).toContain("@media (max-width: 520px) {");
+    expect(settingsNavigationCss).toContain(
+      "container: settings-shell / inline-size;",
+    );
+    expect(settingsNavigationCss).toContain(
+      "@container settings-shell (max-width: 1840px)",
+    );
+    expect(settingsNavigationCss).toContain(
+      "@container settings-shell (max-width: 940px)",
+    );
+    expect(settingsNavigationCss).toContain(
+      "@container settings-shell (max-width: 820px)",
+    );
     expect(settingsNavigationCss).toContain(
       "grid-template-columns: repeat(2, minmax(0, 1fr));",
     );
-    expect(settingsNavigationCss).toContain("@media (max-width: 340px) {");
+    expect(settingsNavigationCss).toContain(
+      "@container settings-shell (max-width: 360px)",
+    );
     expect(settingsNavigationCss).toContain(
       "grid-template-columns: minmax(0, 1fr);",
     );

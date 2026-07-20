@@ -441,6 +441,86 @@ async function collectLayoutSnapshot(page, routeId, expectedDir) {
             (entry.horizontalClip > 1 || entry.verticalClip > 2),
         )
         .slice(0, 20);
+      const layoutContracts = Array.from(
+        document.querySelectorAll("[data-i18n-layout-contract]"),
+      )
+        .filter(visibleElement)
+        .map((element) => {
+          const contract = element.getAttribute("data-i18n-layout-contract") ?? "";
+          const rect = element.getBoundingClientRect();
+          const controls = Array.from(
+            element.querySelectorAll(
+              "a, button, input, select, textarea, summary, [role='button']",
+            ),
+          ).filter(visibleElement);
+          const overlaps = [];
+
+          for (let leftIndex = 0; leftIndex < controls.length; leftIndex += 1) {
+            const leftControl = controls[leftIndex];
+            const leftRect = leftControl.getBoundingClientRect();
+
+            for (
+              let rightIndex = leftIndex + 1;
+              rightIndex < controls.length;
+              rightIndex += 1
+            ) {
+              const rightControl = controls[rightIndex];
+              const rightRect = rightControl.getBoundingClientRect();
+              const overlapWidth =
+                Math.min(leftRect.right, rightRect.right) -
+                Math.max(leftRect.left, rightRect.left);
+              const overlapHeight =
+                Math.min(leftRect.bottom, rightRect.bottom) -
+                Math.max(leftRect.top, rightRect.top);
+
+              if (overlapWidth > 2 && overlapHeight > 2) {
+                overlaps.push({
+                  left: describeElement(leftControl),
+                  right: describeElement(rightControl),
+                  overlapWidth: Math.round(overlapWidth),
+                  overlapHeight: Math.round(overlapHeight),
+                });
+              }
+            }
+          }
+
+          const oversizedControls = controls
+            .filter((control) => {
+              const controlRect = control.getBoundingClientRect();
+
+              if (contract === "top-app-bar") {
+                return (
+                  (control.matches(".settings-nav-chip") ||
+                    control.matches(".top-app-bar__actions .icon-button")) &&
+                  controlRect.height > 64
+                );
+              }
+
+              if (contract === "settings-navigation") {
+                return control.matches(".settings-nav-chip") && controlRect.height > 64;
+              }
+
+              return false;
+            })
+            .map((control) => ({
+              selector: describeElement(control),
+              text: elementText(control),
+              height: Math.round(control.getBoundingClientRect().height),
+            }));
+          const unexpectedlyTall =
+            contract === "compact-order-row" && rect.width >= 340 && rect.height > 72;
+
+          return {
+            contract,
+            selector: describeElement(element),
+            text: elementText(element),
+            width: Math.round(rect.width),
+            height: Math.round(rect.height),
+            overlaps: overlaps.slice(0, 10),
+            oversizedControls: oversizedControls.slice(0, 10),
+            unexpectedlyTall,
+          };
+        });
       const issues = [];
       const rootOverflow = Math.max(
         0,
@@ -473,6 +553,37 @@ async function collectLayoutSnapshot(page, routeId, expectedDir) {
         });
       }
 
+      const overlappingContracts = layoutContracts.filter(
+        (entry) => entry.overlaps.length > 0,
+      );
+      const oversizedContractControls = layoutContracts.filter(
+        (entry) => entry.oversizedControls.length > 0,
+      );
+      const unexpectedlyTallContracts = layoutContracts.filter(
+        (entry) => entry.unexpectedlyTall,
+      );
+
+      if (overlappingContracts.length > 0) {
+        issues.push({
+          code: "interactive_control_overlap",
+          message: `${overlappingContracts.length} layout contracts contain overlapping interactive controls.`,
+        });
+      }
+
+      if (oversizedContractControls.length > 0) {
+        issues.push({
+          code: "oversized_compact_control",
+          message: `${oversizedContractControls.length} compact layout contracts contain controls taller than 64px.`,
+        });
+      }
+
+      if (unexpectedlyTallContracts.length > 0) {
+        issues.push({
+          code: "unexpected_compact_row_wrap",
+          message: `${unexpectedlyTallContracts.length} compact ordering rows wrap despite having at least 340px available.`,
+        });
+      }
+
       if (htmlDir !== evaluatedExpectedDir || datasetDirection !== evaluatedExpectedDir) {
         issues.push({
           code: "direction_mismatch",
@@ -494,6 +605,7 @@ async function collectLayoutSnapshot(page, routeId, expectedDir) {
         datasetDirection,
         offscreenElements,
         clippedControls,
+        layoutContracts,
         issues,
       };
     },

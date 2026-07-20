@@ -48,7 +48,10 @@ export function TopBar({
   onPrimaryAction,
 }: TopBarProps) {
   return (
-    <header className={`top-app-bar${sticky ? " top-app-bar--sticky" : ""}`}>
+    <header
+      className={`top-app-bar${sticky ? " top-app-bar--sticky" : ""}`}
+      data-i18n-layout-contract="top-app-bar"
+    >
       <div className="top-app-bar__main">
         <div className="top-app-bar__title">
           <p className="top-app-bar__eyebrow">{subtitle}</p>

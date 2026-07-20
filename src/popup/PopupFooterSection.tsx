@@ -46,6 +46,7 @@ export function PopupFooterSection({
       <div
         id="popup-footer-content"
         className="popup-footer__content"
+        data-i18n-layout-contract="popup-footer"
         hidden={isCollapsed}
       >
         <div className="popup-footer__heading">
@@ -65,31 +66,34 @@ export function PopupFooterSection({
           ) : null}
           <div className="popup-footer__about">
             <div>AI Usage Dashboard {BUILD_INFO.version}</div>
-            <div>
-              {"© 2026 "}
-              <a
-                href={BUILD_INFO.sourceOrigin}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                David-Lzy
-              </a>
-              {" · "}
-              <a
-                href={`${BUILD_INFO.sourceOrigin}/blob/main/LICENSE`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                AGPL-3.0
-              </a>
-              {" · "}
-              <a
-                href={BUILD_INFO.sourceOrigin}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                GitHub
-              </a>
+            <div className="popup-footer__legal">
+              <span className="popup-footer__owner">
+                {"© 2026 "}
+                <a
+                  href={BUILD_INFO.sourceOrigin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  David-Lzy
+                </a>
+              </span>
+              <span className="popup-footer__public-links">
+                <a
+                  href={`${BUILD_INFO.sourceOrigin}/blob/main/LICENSE`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  AGPL-3.0
+                </a>
+                <span aria-hidden="true">·</span>
+                <a
+                  href={BUILD_INFO.sourceOrigin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  GitHub
+                </a>
+              </span>
             </div>
           </div>
         </div>
