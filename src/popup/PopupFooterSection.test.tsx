@@ -75,6 +75,11 @@ describe("PopupFooterSection", () => {
     expect(popupThemeCss).toContain(".popup-footer__content[hidden]");
     expect(popupThemeCss).toContain("container: popup-footer / inline-size;");
     expect(popupThemeCss).toContain(
+      "grid-template-columns: max-content minmax(0, 1fr);",
+    );
+    expect(popupThemeCss).toContain("font-size: 0.6875rem;");
+    expect(popupThemeCss).toContain("flex-wrap: nowrap;");
+    expect(popupThemeCss).toContain(
       "@container popup-footer (max-width: 420px)",
     );
   });
