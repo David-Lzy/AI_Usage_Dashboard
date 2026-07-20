@@ -1,6 +1,6 @@
 # Store Listing Copy Pack
 
-Date: 2026-05-18
+Date: 2026-07-21
 
 Process rule:
 
@@ -16,7 +16,7 @@ Freshness model:
 
 Status note:
 
-- this is the current English source copy pack for the RC24 Chrome Web Store resubmission candidate
+- this is the maintained English source copy pack for the current Chrome Web Store listing
 - primary upload locale copy is maintained in the product-description files in this directory
 - keep provider/product names unchanged and do not strengthen partial provider support claims
 
@@ -36,7 +36,7 @@ Collapsed-view abstract:
 
 Details:
 
-`It supports Codex, Cursor, Claude Code, Gemini Code Assist, and related coding workflows while clearly labeling whether each source is exact, partial, window-scoped, policy-only, or unavailable. It does not ask you to paste cookies or raw browser auth headers. Settings, optional API credentials, page bindings, cached snapshots, import/export files, and Chrome Sync data stay in your Chrome profile.`
+`It supports Codex, Cursor, Claude Personal, Claude Code organization analytics, Gemini Code Assist, and related coding workflows while clearly labeling whether each source is exact, partial, window-scoped, policy-only, or unavailable. It does not ask you to paste cookies or raw browser auth headers. Settings, optional API credentials, page bindings, cached snapshots, import/export files, and Chrome Sync data stay in your Chrome profile.`
 
 `Open the toolbar popup to check provider health, setup blockers, usage windows, reset timing, source type, snapshot freshness, sync status, toolbar badge behavior, toolbar icon behavior, custom HTTP/HTTPS JSON sources, language, theme, popup appearance, progress style, remaining-color gradients, provider order, and import/export settings. Open the side panel or full-page dashboard when source details matter.`
 
@@ -73,7 +73,7 @@ Screenshot captions:
 
 - Do not claim live usage for policy-only providers.
 - Do not claim exact remaining quota where the shipped path is partial or window-scoped.
-- Do not claim JetBrains live support in RC24.
+- Do not claim JetBrains live support while its shipped source remains policy-only.
 - Do not market the popup as a second full dashboard.
 - Mention `favicon` only for the provider-matched toolbar icon feature.
 - Mention custom JSON sources as user-approved HTTP/HTTPS endpoints with browser credentials omitted.

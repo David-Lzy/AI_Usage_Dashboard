@@ -1,6 +1,6 @@
 # Store Listing Localization Source Pack
 
-Date: 2026-05-18
+Date: 2026-07-21
 
 Process rule:
 
@@ -80,7 +80,7 @@ Purpose:
 ## Translation Guardrails
 
 - Keep the product name `AI Usage Dashboard` unchanged unless a store locale explicitly requires a translated title variant.
-- Keep provider names unchanged: `Codex`, `Cursor`, `Claude Code`, `Gemini Code Assist`, and `JetBrains AI`.
+- Keep provider names unchanged: `Codex`, `Cursor`, `Claude Personal`, `Claude Code`, `Gemini Code Assist`, and `JetBrains AI`.
 - Do not claim live usage for policy-only or deferred providers.
 - Do not claim exact remaining quota where the product only exposes partial or window-scoped usage.
 - Preserve the distinction between toolbar popup quick glance and side-panel/full-page detail.

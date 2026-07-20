@@ -181,10 +181,11 @@ jobs:
           ### Notes
 
           - Chrome Web Store remains the recommended install path for everyday Chrome users.
-          - Hardens responsive layouts for English and other longer interface languages across the popup, Settings navigation, and display-order controls.
-          - Compacts the popup footer into a stable two-line layout without dropping version, author, license, or repository information.
-          - Makes the explicit Animation effects On mode override browser and operating-system reduced-motion preferences across popup, sidebar, and full-page surfaces.
-          - Adds consistent popup disclosure motion while preserving Follow system and Reduced behavior.
+          - Renames the individual signed-in source to Claude Personal while preserving existing settings and display order.
+          - Reads bounded Claude Personal usage windows and usage-credit state from the signed-in Claude Usage page when the source exposes them.
+          - Refreshes immediately after host access is granted and keeps the last valid snapshot readable during later source warnings.
+          - Separates individual Claude Personal usage from organization-scoped Claude Code Analytics Admin API data.
+          - Improves Claude recovery actions, responsive cards, locale coverage, and cross-surface session restoration QA.
           - Keeps provider source-truth, manifest-permission, and browser-package boundaries unchanged.
           NOTES
 

@@ -6,14 +6,14 @@ Process rule:
 
 Document class: maintained reference
 Freshness model: maintained current reference
-Last updated: 2026-05-13
+Last updated: 2026-07-21
 Status note: auxiliary machine draft for broader localization expansion; the upload-ready warm product descriptions live in `Chrome_Web_Store_Product_Description_*.md`.
 
 Source pack: `Doc/Store/Store_Listing_Localization_Source_Pack.md`
 
 Guardrails:
 - Keep product name `AI Usage Dashboard` unchanged in listing titles.
-- Keep provider/tool names and platform names unchanged: Chrome, Codex, Cursor, Claude Code, Gemini, Provider.
+- Keep provider/tool names and platform names unchanged: Chrome, Codex, Cursor, Claude Personal, Claude Code, Gemini, Provider.
 - Do not upgrade partial, policy-only, setup-blocked, or documented-policy paths into claims of full live support.
 - Raw provider evidence, diagnostic raw bodies, archive payloads, and export schemas remain source-truth English unless a future phase explicitly localizes a presentation wrapper.
 

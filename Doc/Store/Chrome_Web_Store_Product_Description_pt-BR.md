@@ -2,7 +2,7 @@ AI Usage Dashboard é uma pequena cabine para cotas de ferramentas de IA para pr
 
 Abra o popup da barra do Chrome para uma olhada rápida; abra o painel lateral ou o dashboard completo quando precisar de detalhes. Menos caça a abas, mais tempo escrevendo código. (^_^)
 
-Ele funciona com fluxos como Codex, Cursor, Claude Code e Gemini Code Assist, mostrando claramente se cada fonte é exata, parcial, por janela de uso, apenas de política ou indisponível.
+Ele funciona com fluxos como Codex, Cursor, Claude Personal, análises organizacionais do Claude Code e Gemini Code Assist, mostrando claramente se cada fonte é exata, parcial, por janela de uso, apenas de política ou indisponível.
 
 Ele não pede cookies nem headers brutos de autenticação do navegador. Configurações, credenciais API opcionais, vínculos de páginas, snapshots em cache, arquivos de importação/exportação e dados do Chrome Sync ficam no seu perfil do Chrome.
 

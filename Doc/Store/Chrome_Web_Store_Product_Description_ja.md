@@ -2,7 +2,7 @@ AI Usage Dashboard は、AI コーディングのクォータ、設定ブロッ�
 
 Chrome ツールバーの popup でまずはさっと確認。詳しく見たいときは side panel や full-page dashboard を開けます。タブ探しを減らして、コードを書く時間を少し増やします。(^_^)
 
-Codex、Cursor、Claude Code、Gemini Code Assist などのワークフローを対象に、各 source が正確な値、部分的な情報、使用ウィンドウ、policy-only、または利用不可のどれなのかを明示します。
+Codex、Cursor、Claude Personal、Claude Code の組織向け分析、Gemini Code Assist などのワークフローを対象に、各 source が正確な値、部分的な情報、使用ウィンドウ、policy-only、または利用不可のどれなのかを明示します。
 
 cookie や生のブラウザー auth header の貼り付けは求めません。設定、任意の API 認証情報、ページの関連付け、キャッシュされた snapshot、import/export ファイル、Chrome Sync データは Chrome プロファイルに保存されます。
 

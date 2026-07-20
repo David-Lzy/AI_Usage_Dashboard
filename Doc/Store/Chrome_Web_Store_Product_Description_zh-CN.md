@@ -2,7 +2,7 @@ AI 使用仪表盘是一个小小的 AI 编码配额驾驶舱：配额、设置�
 
 打开 Chrome 工具栏弹窗，先快速瞄一眼；需要细节时，再进入侧边栏或完整页面仪表板。少翻几个页面，多写几行代码。(^_^)
 
-它支持 Codex、Cursor、Claude Code、Gemini Code Assist 等编码工作流，并清楚标出每个来源是精确值、部分信息、使用窗口、策略说明，还是暂时不可用。
+它支持 Codex、Cursor、Claude Personal、Claude Code 组织分析、Gemini Code Assist 等编码工作流，并清楚标出每个来源是精确值、部分信息、使用窗口、策略说明，还是暂时不可用。
 
 它不要求你粘贴 cookie，也不要求你粘贴原始浏览器 auth header。设置、可选 API 凭据、页面绑定、缓存快照、导入导出文件和 Chrome Sync 数据都保存在你的 Chrome 配置里。
 

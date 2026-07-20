@@ -2,7 +2,7 @@ AI 使用儀表板是一個小小的 AI 編碼配額駕駛艙：配額、設定�
 
 打開 Chrome 工具列彈窗，先快速瞄一眼；需要細節時，再進入側邊欄或完整頁面儀表板。少翻幾個頁面，多寫幾行程式。(^_^)
 
-它支援 Codex、Cursor、Claude Code、Gemini Code Assist 等編碼工作流程，並清楚標出每個來源是精確值、部分資訊、使用視窗、政策說明，或暫時不可用。
+它支援 Codex、Cursor、Claude Personal、Claude Code 組織分析、Gemini Code Assist 等編碼工作流程，並清楚標出每個來源是精確值、部分資訊、使用視窗、政策說明，或暫時不可用。
 
 它不要求你貼上 cookie，也不要求你貼上原始瀏覽器 auth header。設定、可選 API 憑證、頁面綁定、快取快照、匯入匯出檔案和 Chrome Sync 資料都保存在你的 Chrome 設定檔中。
 

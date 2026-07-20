@@ -2,7 +2,7 @@ AI Usage Dashboard is a small cockpit for AI coding quota, setup blockers, and s
 
 Open the Chrome toolbar popup for a quick peek; open the side panel or full-page dashboard when you need details. Less tab-hunting, more coding. (^_^)
 
-It supports Codex, Cursor, Claude Code, Gemini Code Assist, and related coding workflows while clearly labeling whether each source is exact, partial, window-scoped, policy-only, or unavailable.
+It supports Codex, Cursor, Claude Personal, Claude Code organization analytics, Gemini Code Assist, and related coding workflows while clearly labeling whether each source is exact, partial, window-scoped, policy-only, or unavailable.
 
 It does not ask you to paste cookies or raw browser auth headers. Settings, optional API credentials, page bindings, cached snapshots, import/export files, and Chrome Sync data stay in your Chrome profile.
 
