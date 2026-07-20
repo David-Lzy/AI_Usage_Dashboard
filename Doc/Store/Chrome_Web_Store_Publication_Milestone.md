@@ -1,6 +1,6 @@
 # Chrome Web Store Publication Milestone
 
-Date: 2026-07-18
+Date: 2026-07-21
 
 Document class:
 
@@ -14,8 +14,8 @@ Freshness model:
 Status note:
 
 - AI Usage Dashboard has a live Chrome Web Store listing
-- Chrome Web Store API status shows manifest version `0.2.0.4` published at 100%
-- source `0.2.0-rc.5` / manifest `0.2.0.5` is submitted for review at 100%
+- Chrome Web Store API status shows manifest version `0.2.0.5` published at 100%
+- source `0.2.0-rc.6` / manifest `0.2.0.6` is prepared for the next review submission
 - no known critical user-facing bug is blocking normal use at this milestone
 - private upload receipts, package hashes, screenshots-in-progress, and
   submission handoff notes stay in ignored `.local/` material
@@ -24,17 +24,17 @@ Status note:
 
 - Chrome Web Store:
   https://chromewebstore.google.com/detail/ai-usage-dashboard/mjfhaifoapcpbkffacidgjijcpiegjea
-- Public page status checked on 2026-07-18: reachable and listed.
-- Chrome Web Store API status observed on 2026-07-18 showed manifest version
-  `0.2.0.4` published at 100%.
-- Source `0.2.0-rc.5` / manifest `0.2.0.5` was uploaded successfully and is
-  separately reported as `PENDING_REVIEW` at 100% deployment.
+- Public page status checked on 2026-07-21: reachable and listed.
+- Chrome Web Store API status observed on 2026-07-21 showed manifest version
+  `0.2.0.5` published at 100%.
+- Source `0.2.0-rc.6` / manifest `0.2.0.6` is prepared for the next GitHub
+  Release and Chrome Web Store review submission.
 
 This means the project has crossed the public-store baseline milestone. Future
 store uploads are resubmissions from an already-published extension, not first
 submissions. Public listing metadata can lag the Chrome Web Store API state;
-submitted candidates must not be described as published until the API reports
-the submitted revision as published.
+release candidates must not be described as submitted or published until the
+API reports the candidate's real state.
 
 ## Stable Baseline
 

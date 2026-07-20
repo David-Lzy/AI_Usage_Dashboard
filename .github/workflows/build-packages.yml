@@ -181,9 +181,10 @@ jobs:
           ### Notes
 
           - Chrome Web Store remains the recommended install path for everyday Chrome users.
-          - Tightens the popup theme chooser so short and long mode labels use space more evenly.
-          - Expands the turns trend to keep every model above the 10% share threshold visible while grouping smaller series into Other.
-          - Smooths the stacked turns chart and reuses the compact scrolling legend when model labels exceed the available width.
+          - Hardens responsive layouts for English and other longer interface languages across the popup, Settings navigation, and display-order controls.
+          - Compacts the popup footer into a stable two-line layout without dropping version, author, license, or repository information.
+          - Makes the explicit Animation effects On mode override browser and operating-system reduced-motion preferences across popup, sidebar, and full-page surfaces.
+          - Adds consistent popup disclosure motion while preserving Follow system and Reduced behavior.
           - Keeps provider source-truth, manifest-permission, and browser-package boundaries unchanged.
           NOTES
 
