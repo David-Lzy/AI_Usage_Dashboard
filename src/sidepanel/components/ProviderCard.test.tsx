@@ -2,7 +2,11 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
 import { createAdapterErrorDiagnostic } from "../../providers/diagnostics";
-import type { AppState, ProviderId } from "../../providers/types";
+import type {
+  AppLocalePreference,
+  AppState,
+  ProviderId,
+} from "../../providers/types";
 import { SAMPLE_APP_STATE } from "../../shared/constants";
 import { getProviderViewModel } from "../view-models";
 import { ProviderCard } from "./ProviderCard";
@@ -22,7 +26,7 @@ function renderProviderCard(
   state: AppState,
   providerId: ProviderId,
   options: {
-    localePreference?: AppState["settings"]["localePreference"];
+    localePreference?: AppLocalePreference;
     onOpenSourcePage?: () => void;
     usageHistoryModulesBySurface?: AppState["settings"]["usageHistoryModulesBySurface"];
   } = {},

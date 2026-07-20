@@ -1,6 +1,6 @@
 # Claude Provider Note
 
-Date: 2026-05-11
+Date: 2026-07-21
 
 Process rule:
 
@@ -16,380 +16,191 @@ Freshness model:
 
 Status note:
 
-- this provider note should track the current selected source path, support boundary, and official-source basis for Claude
-- refresh it whenever the chosen source path, active release promise, or relevant official docs change
+- this note describes the current Claude Personal and organization analytics
+  source contracts
+- update it when the Claude Settings > Usage contract, Claude plan behavior, or
+  Claude Code Analytics Admin API changes
 
-## 1. Decision
+## Current Decision
 
-Selected source paths:
+Claude is represented by two independent source entries:
 
-- `A1`: Claude Code Analytics Admin API
-- `B1`: logged-in Claude Team settings usage page at `https://claude.ai/settings/usage`
+| Persisted provider id | Product label | Source | Scope |
+| --- | --- | --- | --- |
+| `claude-code-team-page` | Claude Personal | Signed-in Claude Settings > Usage page | Individual paid-plan usage windows and usage-credit state |
+| `claude-code-admin-api` | Claude Admin API | Claude Code Analytics Admin API | Organization activity and cost analytics |
 
-Selected support scope:
+The historical `claude-code-team-page` id is retained so existing visibility,
+page binding, and per-surface ordering settings migrate without data loss. It is
+an implementation identifier, not the current user-facing account classification.
 
-- Claude organizations with Admin API access
-- usage-based Enterprise or Console-style organization setups where an Admin API key can be provisioned
-- Claude Team accounts whose logged-in `claude.ai/settings/usage` page exposes visible usage-page context
+The two source entries must not be merged:
 
-Deferred from MVP:
+- Claude Personal does not require an Admin API key.
+- The Admin API does not represent an individual's Pro or Max subscription
+  balance.
+- Organization analytics must not replace or supplement a personal usage window
+  unless the source explicitly exposes that personal value.
 
-- seat-based Enterprise accounts that only expose analytics through the web dashboard
-- individual personal Pro or Max accounts until that exact account type is captured directly
-- CLI-local `/cost` output as an account-level source
+## Claude Personal Contract
 
-Reason:
+Current routes:
 
-- Anthropic now has an official structured Claude Code Analytics API
-- the API is a cleaner and more stable source than page parsing
-- the Team settings usage page is now available in the operator Chrome profile, but it remains a session-page partial source: the extension reports visible page values only and does not claim a private API or one absolute remaining balance
-- the web analytics dashboards document usage and adoption metrics, but the reviewed docs do not promise exact remaining included usage or a machine-readable quota endpoint for Team or seat-based Enterprise plans
+- canonical: `https://claude.ai/new#settings/usage`
+- supported legacy entry: `https://claude.ai/settings/usage`
 
-## 2. Official Sources Reviewed
+The live contract was verified on 2026-07-21 with an individual Claude Pro
+account. The source exposed structured plan-window usage and reset timing plus
+separate usage-credit state. Plan detection also accepts `Claude Max`, `Claude
+Max 5x`, and `Claude Max 20x` labels, with parser tests covering those forms;
+those Max variants were not independently live-captured during this review.
 
-Reviewed on 2026-04-20 using official Anthropic / Claude documentation:
+Anthropic documents that Pro and Max subscriptions cover Claude and Claude Code
+under one subscription and that usage limits are shared across those surfaces.
+Accordingly, the extension labels this source `Claude Personal`; it does not
+present the values as a Claude Code-only allowance.
 
-- Claude Code usage analytics help article:
-  - https://support.claude.com/en/articles/12157520-claude-code-usage-analytics
-- Claude Code analytics product docs:
-  - https://code.claude.com/docs/en/analytics
-- Claude Code Analytics API:
-  - https://platform.claude.com/docs/en/build-with-claude/claude-code-analytics-api
-- Admin API overview:
-  - https://platform.claude.com/docs/en/api/administration-api
-- Team / Enterprise usage and billing behavior:
-  - https://support.claude.com/en/articles/11845131-use-claude-code-with-your-team-or-enterprise-plan
-- Team / seat-based Enterprise extra usage:
-  - https://support.claude.com/en/articles/12005970-extra-usage-for-claude-for-work-team-and-enterprise-plans
-- Claude platform release notes:
-  - https://platform.claude.com/docs/en/release-notes/overview
+### Capture Order
 
-## 3. Why This Source Wins
+During a bounded personal refresh, the extension:
 
-Chosen source:
+1. reuses the stored page binding when it still matches a Claude usage route
+2. installs a temporary network observer before controlled navigation or reload
+3. accepts only same-origin structured responses matching the verified usage,
+   prepaid-credit, and extra-usage-limit endpoint shapes
+4. validates and normalizes bounded fields in memory
+5. removes the observer after success or timeout
+6. falls back to conservative visible-page parsing when the structured response
+   is not available
+7. retains the last successful normalized snapshot if the current source cannot
+   be read
 
-- `GET /v1/organizations/usage_report/claude_code`
+Granting Claude host access triggers an immediate provider-scoped refresh.
+Concurrent popup, side-panel, full-page, and background refresh requests share
+the same in-flight provider refresh instead of reloading the source repeatedly.
 
-Why this source:
+### Normalized Values
 
-- official API path
-- structured JSON with documented request parameters and response fields
-- organization-level access via Admin API key
-- stable enough for adapter work without DOM parsing
+When the source exposes them, the personal snapshot may contain:
 
-Why the dashboard is not the MVP primary path:
+- plan identity: Pro, Max, Max 5x, or Max 20x
+- up to 16 active usage windows
+- used and remaining percentage for each verified window
+- reset timestamp and source-visible scope
+- usage-credit enabled or disabled state
+- bounded extra-usage spend or credit-balance facts
+- source freshness and recovery state
 
-- Team / Enterprise dashboards at `claude.ai/analytics/claude-code` and `platform.claude.com/claude-code` expose analytics, but the reviewed docs do not document a stable JSON contract behind those pages
-- contribution metrics on `claude.ai` also depend on optional GitHub setup and are intentionally broader than the quota dashboard need
+The extension does not turn missing values into zero. It does not combine
+separate windows into one synthetic plan-wide remaining balance.
 
-## 4. Account-Type Matrix
+### Recovery States
 
-### 4.1 Selected for v1
+The personal source distinguishes:
 
-- organizations with Admin API access
-- practical first target:
-  - usage-based Enterprise / Console organizations that can provision `sk-ant-admin...` keys
+- optional host access missing
+- signed-out or upgrade-only account state
+- source page still hydrating
+- capture unavailable
+- route or response contract drift
+- partial result with a prior valid snapshot
+- stale cached data
 
-### 4.2 Explicitly Deferred
+The primary card shows one recovery action. Detailed rollout, parser, and raw
+diagnostic context stays in Provider detail rather than leading the popup or
+dashboard card.
 
-- seat-based Enterprise plans that rely on included seat usage plus optional extra usage
-- individual Pro / Max subscribers
-- Team analytics dashboards that are not the `settings/usage` page
+## Claude Code Analytics Admin API
 
-Reason for the defer:
+The organization source uses:
 
-- these account types clearly have analytics or usage-limit pages, but the reviewed official docs do not expose an exact official API for "remaining included Claude Code usage" on those plans
-- Team and seat-based Enterprise limits are described in approximate hours and 5-hour windows, which do not map cleanly to the current normalized provider model
+- `GET https://api.anthropic.com/v1/organizations/usage_report/claude_code`
+- an organization-scoped Anthropic Admin API key
+- daily aggregated records with documented activity, token, model, and estimated
+  cost fields
 
-## 5. What The Official Docs Say
+This path is intended for supported organization roles. Anthropic documents
+Claude Code usage analytics for Console users and Team or Enterprise owners and
+admins; individual Pro and Max accounts do not receive that organization
+analytics product.
 
-Web dashboards:
+The normalized Admin API card is analytics-first:
 
-- Team / Enterprise analytics live at `claude.ai/analytics/claude-code`
-- API / Console analytics live at `platform.claude.com/claude-code`
-- Team / Enterprise usage analytics show:
-  - lines of code accepted
-  - suggestion accept rate
-  - active users and sessions
-  - user-level monthly lines accepted
-- Team / Enterprise contribution metrics are optional and require GitHub integration
+- activity or daily sessions may be shown when returned
+- remaining and total subscription quota stay unavailable
+- reporting-window labels are not presented as personal quota reset timestamps
 
-Plan behavior:
+## Privacy And Security Boundary
 
-- Team and seat-based Enterprise plans have included usage windows and can enable extra usage after limits are reached
-- usage-based Enterprise plans do not have per-seat usage limits; usage is billed by consumption
+Claude Personal requires user-granted optional `claude.ai` host access. Chrome
+keeps eligible cookies attached to `claude.ai`; the extension does not read,
+copy, log, persist, export, or synchronize them.
 
-Admin API behavior:
+The temporary personal-page observer discards:
 
-- the Admin API is unavailable for individual accounts
-- the Claude Code Analytics API requires an Admin API key
-- the endpoint returns one record per actor per UTC day
+- raw response bodies
+- page body text
+- request headers
+- cookies or bearer credentials
+- organization and account identifiers
+- unrelated response fields
 
-Release timing:
+Only bounded normalized plan identity, usage windows, reset timing, credit facts,
+and source diagnostics may enter the cached provider snapshot. These values are
+not added to configuration backup, Chrome Sync, or raw evidence export.
 
-- the Claude platform release notes record the Claude Code Analytics API launch on 2025-09-10
+The organization Admin API key is stored separately in extension-managed local
+storage and is never used by the personal source.
 
-## 6. Fields The API Exposes
+## Official Sources
 
-Documented dimensions:
+Reviewed on 2026-07-21:
 
-- `date`
-- `actor`
-- `organization_id`
-- `customer_type`
-- `terminal_type`
+- [Use Claude Code with your Pro or Max plan](https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan)
+- [Manage usage credits for paid Claude plans](https://support.claude.com/en/articles/12429409-manage-usage-credits-for-paid-claude-plans)
+- [Claude Code usage analytics](https://support.claude.com/en/articles/12157520-claude-code-usage-analytics)
+- [Track team usage with analytics](https://code.claude.com/docs/en/analytics)
+- [Claude Code Analytics API](https://platform.claude.com/docs/en/manage-claude/claude-code-analytics-api)
 
-Documented core metrics:
+Official-source conclusions:
 
-- `num_sessions`
-- `lines_of_code.added`
-- `lines_of_code.removed`
-- `commits_by_claude_code`
-- `pull_requests_by_claude_code`
+- Pro and Max usage is shared across Claude and Claude Code.
+- Paid individual plans can use separate usage credits after included limits.
+- Organization Claude Code analytics is distinct from individual plan usage.
+- The personal Settings > Usage responses used by the extension are an internal
+  page contract, not a public supported API.
 
-Documented tool metrics:
+## Fixtures And Verification
 
-- `edit_tool.accepted`
-- `edit_tool.rejected`
-- `write_tool.accepted`
-- `write_tool.rejected`
-- `notebook_edit_tool.accepted`
-- `notebook_edit_tool.rejected`
+Public sanitized fixtures:
 
-Documented model breakdown fields:
-
-- `model`
-- `tokens.input`
-- `tokens.output`
-- `tokens.cache_read`
-- `tokens.cache_creation`
-- `estimated_cost.amount`
-- `estimated_cost.currency`
-
-Important API constraints:
-
-- request parameter `starting_at` is a single UTC day in `YYYY-MM-DD`
-- data is daily aggregated, not real-time
-- data freshness is up to about 1 hour
-
-## 7. What The API Does Not Expose Clearly
-
-Not clearly exposed in the reviewed official docs:
-
-- exact remaining included Claude Code hours for Team premium seats
-- exact remaining included Claude Code hours for seat-based Enterprise plans
-- exact next reset timestamp for Team / seat-based Enterprise limits
-- a documented "current weekly limit consumed" field
-
-Inference:
-
-- the Claude Code Analytics API is excellent for usage, activity, and cost analytics
-- it is not a documented quota-remaining API for subscription seats
-
-## 8. Normalized Mapping Proposal
-
-Selected normalized strategy for the first Claude adapter:
-
-- `providerId`: `claude-code`
-- `providerLabel`: `Claude Code`
-- `syncSource`: `official`
-- support scope label:
-  - `Claude Code Analytics Admin API`
-
-Mapping note:
-
-- the current shared provider model is quota-centric
-- Claude's official API is analytics-centric
-
-Proposed first adapter behavior:
-
-- use the API as the source of truth for sync health and current usage activity
-- aggregate daily sessions or daily estimated cost for detail surfaces
-- keep `used`, `remaining`, and `total` as `null` unless a future live source exposes quota values precisely
-- surface a user-readable `warningReason` when the workspace is analytics-only and not quota-exact
-- treat `resetAt` as a reporting-window label rather than a hard quota reset timestamp until a better official field is confirmed
-
-Implication for implementation:
-
-- `Phase 13` may need either:
-  - a narrow analytics-only Claude adapter under the existing model, or
-  - a subphase split if the shared model needs to grow
-
-## 9. Fixtures
-
-Docs-derived fixtures created in this phase:
-
+- [personal-usage-contract.fixture.json](../../fixtures/claude/personal-usage-contract.fixture.json)
+- [personal-upgrade-gate.fixture.json](../../fixtures/claude/personal-upgrade-gate.fixture.json)
 - [analytics-api.fixture.json](../../fixtures/claude/analytics-api.fixture.json)
 - [analytics-api-extracted.fixture.json](../../fixtures/claude/analytics-api-extracted.fixture.json)
 
-Fixture note:
+The personal usage fixture contains synthetic normalized values and no real
+account identifiers, cookies, headers, or raw private response. The upgrade-gate
+fixture preserves the signed-out/free-account boundary. Admin API fixtures are
+schema-derived scaffolding rather than a real organization export.
 
-- these fixtures are sanitized and derived from the official response schema
-- they are scaffolding fixtures, not captures from a live organization
+Current verification covers:
 
-## 10. Open Validation Items
+- live individual Pro route and structured response contract
+- Max plan label normalization through bounded parser tests
+- permission grant followed by immediate refresh
+- refresh serialization and coalescing
+- slow hydration, route drift, logged-out, partial, and stale-data behavior
+- popup, side panel, full-page, Provider detail, and Settings presentation
+- representative LTR, long-label, and RTL visual matrices
 
-Still needs a real organization before adapter implementation is finalized:
+## Known Limitations
 
-- confirm the exact live response shape and field names from a real Admin API call
-- confirm whether the endpoint returns `customer_type: subscription` records for Team / seat-based Enterprise org activity in practice
-- confirm how far back daily data is retained in a real org
-- confirm whether a second official endpoint exists for exact subscription-seat quota consumption
-
-## 11. Research Result
-
-This phase selects:
-
-- Claude Code Analytics Admin API as the MVP source path
-
-This phase does not select:
-
-- Team / Enterprise dashboard parsing as the primary path
-- Pro / Max individual usage support in v1
-
-## 12. Implementation Status
-
-Phase 22 implementation landed on 2026-04-20.
-
-Current implementation details:
-
-- the runtime adapter now calls the live Claude Code Analytics Admin API at `https://api.anthropic.com/v1/organizations/usage_report/claude_code`
-- the extension stores the Anthropic Admin API key in extension-managed local storage under the shared provider-secrets store, separate from app state
-- the Settings page now exposes a Claude-specific Admin API credential card alongside the existing Cursor credential card
-- the live client sends `x-api-key` and `anthropic-version: 2023-06-01` headers and follows `next_page` cursors until the daily report is exhausted
-- the normalized dashboard remains analytics-first:
-  - `used` is the number of sessions in the daily report
-  - `remaining` and `total` stay `null`
-  - `resetAt` remains a reporting-window label, not a hard subscription reset timestamp
-
-Still not validated against a real organization in this repository:
-
-- current production response shape from an Admin API key
-- real authorization failures and role-mismatch errors
-- whether some subscription organizations return materially different `customer_type` mixes than the fixture-backed test cases
-
-## 13. Phase 32 Personal-User Spike
-
-Observed in the current live Chrome session on 2026-04-22:
-
-- requested route: `https://claude.ai/settings/usage`
-- final route after navigation: `https://claude.ai/upgrade`
-- visible page heading: `Plans that grow with you`
-- visible plan tabs:
-  - `Individual`
-  - `Team and Enterprise`
-- visible individual plan cards:
-  - `Free`
-  - `Pro`
-  - `Max`
-- visible prices in this browser locale:
-  - `A$0`
-  - `A$29 AUD / month billed annually (includes GST)`
-  - `From A$169.99 AUD / month billed monthly (includes GST)`
-
-What the live page did not expose:
-
-- a usage meter
-- a rolling-window status
-- remaining Claude or Claude Code allowance
-- a reset time
-- a user-facing usage history view
-
-Real-state classification from this browser session:
-
-- account state: `free_or_upgrade_only`
-- route state: `redirected_or_gated`
-
-## 14. Personal-User Decision
-
-Current shipped decision for personal Claude support:
-
-- unsupported for now
-
-Why this is the current decision:
-
-- the current logged-in free account does not reach a usable usage page
-- the route resolves to an upgrade page rather than a quota surface
-- no exact or approximate remaining-usage signals were exposed in the live page
-- supporting this route today would mean showing only upgrade-state copy, not real usage data
-
-What remains possible later:
-
-- a real Pro or Max account may still expose a distinct usage page
-- if that page exists, it should be treated as a separate follow-up capture rather than inferred from the free-account redirect
-
-Important product boundary:
-
-- the extension should treat redirected or upgrade-only Claude states as first-class account states
-- it should not pretend that a personal usage source exists when the browser session only exposes plan marketing and upgrade controls
-
-## 15. Personal Fixtures
-
-Phase 32 added one live redacted evidence fixture:
-
-- [personal-upgrade-gate.fixture.json](../../fixtures/claude/personal-upgrade-gate.fixture.json)
-
-Why this fixture matters:
-
-- it records the exact live redirect outcome from `claude.ai/settings/usage`
-- it preserves the old free-account decision: upgrade-only Claude states remain unsupported and should not be confused with the later Team usage-page path
-
-## 16. Phase 300 Claude Team Usage Page Support
-
-Phase 300 updates the Claude support boundary after the user provided access to a real Claude Team account in RDP Chrome.
-
-Current implementation decision:
-
-- `https://claude.ai/settings/usage` is now a shipped session-page partial source for Claude Team usage context
-- the source is selected after the Admin API path when `sourcePreference` is `auto`
-- if the Admin API key is missing, `auto` can fall back to the session page
-- if host access is missing, the provider remains blocked until Chrome grants the configured optional host origins
-
-Runtime behavior:
-
-- the extension uses the existing `chrome.tabs` + `chrome.scripting` page-session capture framework
-- stale or unreadable usage tabs are reloaded with `bypassCache: true` before capture
-- newly opened pages get hydration retry before route drift is surfaced
-- logged-out, upgrade-only, capture-unavailable, and route-drift states remain explicit warning/error states
-
-Security and truth boundary:
-
-- no Claude cookies are read from disk, copied by the user, or persisted by the extension
-- no bearer tokens or private Claude API responses are imported
-- no internal Claude API is called directly by this implementation
-- the parser only normalizes visible page text into usage windows and facts
-- exact remaining quota is only shown when the visible page exposes a remaining percentage for a window
-- individual Pro / Max behavior remains unclaimed until observed with that exact account type
-
-## 17. Phase 301 Claude Usage Page Noise Filtering
-
-Phase 301 tightens the Team usage-page parser after RDP Chrome showed that the live Claude settings page includes helper and navigation copy near visible usage percentages.
-
-Observed live rows that should be preserved:
-
-- `Current session`
-- `All models`
-- `Claude Design`
-- `Daily included routine runs`
-
-Observed noisy labels that should be filtered:
-
-- `Your limits`
-- `Learn more about limits`
-- `Starts when a message is sent`
-- generic navigation labels such as `Projects`, `Invite team members`, `Claude Code`, and `Team`
-
-Current parser behavior:
-
-- usage-window parsing preserves original text order and duplicate percent snippets so repeated `0% used` values are not accidentally deduplicated before label pairing
-- progress windows are emitted for the meaningful Claude usage rows above plus named quota/window labels such as weekly, monthly, 5-hour, message, quota, premium, standard, Opus, Sonnet, and localized equivalents
-- detail rows such as `Starts when a message is sent` or `You haven't used Claude Design yet` are retained as row detail, not promoted to standalone progress rows
-- absolute count rows such as `0 / 25` are converted into a percent progress value while retaining the visible count text as row detail
-- generic helper labels are filtered from both progress windows and structured usage facts
-- relative reset strings such as `in 21 hr 56 min` are formatted as `resets in ...` rather than `resets at in ...`
-
-Truth boundary:
-
-- this phase does not add a new Claude data source
-- it does not change Admin API behavior
-- it only makes the shipped Team session-page partial source more conservative about what it presents as a quota progress row
+- Claude may change its internal Settings > Usage response contract without
+  notice; personal sync can temporarily fall back or become unavailable.
+- The extension reports only source-visible windows and credit facts.
+- No exact all-plan remaining balance is inferred.
+- Max plan behavior is supported by the normalized contract but still benefits
+  from future live account verification.
+- Organization analytics can be delayed and does not provide an individual
+  subscription quota.

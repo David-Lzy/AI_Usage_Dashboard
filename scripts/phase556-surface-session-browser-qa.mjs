@@ -91,7 +91,7 @@ async function startStaticServer(rootDir) {
   };
 }
 
-async function switchSurface(page) {
+async function switchSurface(page, viewport) {
   const openedPagePromise = page.context().waitForEvent("page");
 
   await page.locator("[data-topbar-open-full-page='true']").click();
@@ -99,6 +99,7 @@ async function switchSurface(page) {
   const nextPage = await openedPagePromise;
 
   nextPage.setDefaultTimeout(20_000);
+  await nextPage.setViewportSize(viewport);
   await nextPage.waitForLoadState("domcontentloaded");
   await nextPage.waitForTimeout(1_500);
 
@@ -289,9 +290,10 @@ async function runSettingsSurfaceRoundTrip(context, baseUrl) {
   await waitForSettings(sidebarPage);
 
   const prepared = await prepareSettingsSession(sidebarPage);
-  const fullPage = await switchSurface(sidebarPage);
-
-  await fullPage.setViewportSize({ width: 1360, height: 920 });
+  const fullPage = await switchSurface(sidebarPage, {
+    width: 1360,
+    height: 920,
+  });
   await waitForSettings(fullPage);
 
   const fullPageSnapshot = await collectSettingsSnapshot(fullPage);
@@ -307,9 +309,10 @@ async function runSettingsSurfaceRoundTrip(context, baseUrl) {
     "sidebar->full-page",
   );
 
-  const sidebarReturnPage = await switchSurface(fullPage);
-
-  await sidebarReturnPage.setViewportSize({ width: 430, height: 900 });
+  const sidebarReturnPage = await switchSurface(fullPage, {
+    width: 430,
+    height: 900,
+  });
   await waitForSettings(sidebarReturnPage);
 
   const sidebarReturnSnapshot = await collectSettingsSnapshot(sidebarReturnPage);
@@ -344,9 +347,10 @@ async function runProviderDetailRoundTrip(context, baseUrl) {
   );
   await waitForProviderDetail(page);
 
-  const fullPage = await switchSurface(page);
-
-  await fullPage.setViewportSize({ width: 1360, height: 920 });
+  const fullPage = await switchSurface(page, {
+    width: 1360,
+    height: 920,
+  });
   await waitForProviderDetail(fullPage);
 
   const fullPageSnapshot = await fullPage.evaluate(() => ({
@@ -368,9 +372,10 @@ async function runProviderDetailRoundTrip(context, baseUrl) {
     `provider detail full-page search was ${fullPageSnapshot.search}.`,
   );
 
-  const sidebarReturnPage = await switchSurface(fullPage);
-
-  await sidebarReturnPage.setViewportSize({ width: 430, height: 900 });
+  const sidebarReturnPage = await switchSurface(fullPage, {
+    width: 430,
+    height: 900,
+  });
   await waitForProviderDetail(sidebarReturnPage);
 
   const sidebarReturnSnapshot = await sidebarReturnPage.evaluate(() => ({

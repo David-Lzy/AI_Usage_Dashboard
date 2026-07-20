@@ -52,7 +52,7 @@ dashboard.
 | --- | --- | --- |
 | Codex | Enterprise analytics or signed-in Codex usage page | Live usage windows where visible; no plan-wide absolute remaining balance is invented. |
 | Cursor | Team Admin API or signed-in Usage/Spending pages | Team/API data or normalized personal billing pools and aggregate history; plan value is kept separate from actual On-Demand charges, and exact remaining personal requests are not invented. |
-| Claude Code | Admin analytics or signed-in Claude Team usage page | Partial/window-scoped usage where available; exact all-plan remaining subscription quota is not claimed. |
+| Claude | Signed-in Claude Personal usage page or Claude Code Analytics Admin API | Personal Pro usage windows and usage-credit state where source-visible, or separate organization analytics; exact plan-wide remaining quota is not invented. |
 | Gemini Code Assist | Documented quota policy | Policy-only in this release. |
 | JetBrains AI | Retained implementation path | Deferred from the active release promise until org-visible usage evidence is reverified. |
 

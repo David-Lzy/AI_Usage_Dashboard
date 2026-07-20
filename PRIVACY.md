@@ -122,6 +122,25 @@ delayed or changed page contract can produce a partial or saved-data state
 without replacing valid data with fake zeroes. Cursor aggregates are not
 included in configuration backups or raw evidence exports.
 
+For Claude Personal, the extension uses optional `claude.ai` host access to
+attach to the signed-in Settings > Usage surface. During a bounded refresh it
+may temporarily observe only the allowlisted same-origin usage, prepaid-credit,
+and extra-usage-limit responses needed to normalize plan identity, usage
+windows, reset timing, and usage-credit state. The observer is removed when the
+refresh completes or times out. Browser cookies remain attached by Chrome to
+`claude.ai`; extension code does not read, copy, log, persist, export, or
+synchronize them.
+
+Claude Personal snapshots store only bounded normalized values such as the plan
+label, active window percentages, reset timestamps, and available usage-credit
+facts. Raw network responses, page body text, request headers, organization or
+account identifiers, cookies, and unrelated response fields are discarded and
+are not included in AppState, configuration backups, Chrome Sync, fixtures, or
+raw evidence exports. A changed page contract can make the personal source
+temporarily unavailable without replacing the last successful snapshot with
+fake zero values. The separate Claude Code Analytics Admin API credential is an
+organization-scoped optional secret and is not used by Claude Personal sync.
+
 ## Favicon Permission
 
 The Chrome `favicon` permission is used for the toolbar icon matching feature. When enabled by the user, the extension can display an icon that matches the selected provider badge/source, such as the favicon associated with a supported provider page. Successfully resolved provider favicon images may be cached locally for up to 7 days so the extension does not repeatedly ask Chrome for the same icon. The permission is not used for browsing-history collection.

@@ -179,39 +179,64 @@ function findSessionPopoverAnchor(popoverId: string): Element | null {
   return null;
 }
 
-export function restoreSurfacePopoverAnchorAfterLayout(
-  popoverId: string,
-): Promise<boolean> {
+function waitForLayoutFrame(): Promise<void> {
   if (typeof window === "undefined") {
-    return Promise.resolve(false);
+    return Promise.resolve();
   }
 
   return new Promise((resolve) => {
-    const scrollToAnchor = () => {
-      const anchor = findSessionPopoverAnchor(popoverId);
+    if (typeof window.requestAnimationFrame === "function") {
+      window.requestAnimationFrame(() => resolve());
+      return;
+    }
 
-      if (!anchor || typeof anchor.scrollIntoView !== "function") {
-        resolve(false);
-        return;
-      }
+    window.setTimeout(resolve, 0);
+  });
+}
 
+function isAnchorInsideViewport(anchor: Element): boolean {
+  if (
+    typeof window === "undefined" ||
+    typeof anchor.getBoundingClientRect !== "function"
+  ) {
+    return true;
+  }
+
+  const rect = anchor.getBoundingClientRect();
+
+  return rect.bottom > 0 && rect.top < window.innerHeight;
+}
+
+export async function restoreSurfacePopoverAnchorAfterLayout(
+  popoverId: string,
+): Promise<boolean> {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  await waitForLayoutFrame();
+  await waitForLayoutFrame();
+
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    const anchor = findSessionPopoverAnchor(popoverId);
+
+    if (anchor && typeof anchor.scrollIntoView === "function") {
       anchor.scrollIntoView({
         block: "center",
         inline: "nearest",
         behavior: "auto",
       });
-      resolve(true);
-    };
+      await waitForLayoutFrame();
 
-    if (typeof window.requestAnimationFrame !== "function") {
-      window.setTimeout(scrollToAnchor, 0);
-      return;
+      if (isAnchorInsideViewport(anchor)) {
+        return true;
+      }
     }
 
-    window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(scrollToAnchor);
-    });
-  });
+    await waitForLayoutFrame();
+  }
+
+  return false;
 }
 
 export function restoreSurfaceScrollPositionAfterLayout({

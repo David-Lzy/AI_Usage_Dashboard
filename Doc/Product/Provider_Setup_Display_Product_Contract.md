@@ -192,9 +192,17 @@ plan-wide balance. Session credentials are browser-session-only and must never
 enter AppState, Chrome Sync, configuration backup, logs, fixtures, or provider
 snapshots.
 
-### Claude Code
+### Claude
 
-Claude Team usage-page and Claude Admin/API entries are separate display units. Claude Team usage-page support can be represented when the logged-in usage surface is available. Claude Pro/Max support remains account-gated until directly verified.
+Claude Personal and Claude Code Analytics Admin API entries are separate display
+units. The personal entry uses the signed-in Claude Settings > Usage surface and
+reports only verified source-visible plan windows, reset timing, and usage-credit
+facts. The organization entry uses the Admin API and remains analytics-only; it
+does not supply an individual subscription balance. The persisted personal
+provider id remains `claude-code-team-page` for migration compatibility, but no
+new UI or documentation should describe that source as Team-only. Max plan
+labels are normalized when exposed, while the currently verified live personal
+contract is a Pro account.
 
 ### Gemini Code Assist
 

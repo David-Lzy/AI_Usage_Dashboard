@@ -151,4 +151,40 @@ describe("surface scroll position", () => {
       behavior: "auto",
     });
   });
+
+  it("retries until a late popover anchor is mounted and visible", async () => {
+    const scrollIntoView = vi.fn();
+    const getBoundingClientRect = vi
+      .fn()
+      .mockReturnValueOnce({ bottom: -20, top: -80 })
+      .mockReturnValue({ bottom: 220, top: 160 });
+    const matchingElement = {
+      getAttribute: vi.fn((attribute: string) =>
+        attribute === "data-session-popover-id" ? "late-popover" : null,
+      ),
+      getBoundingClientRect,
+      scrollIntoView,
+    };
+    const querySelectorAll = vi
+      .fn()
+      .mockReturnValueOnce([])
+      .mockReturnValue([matchingElement]);
+
+    vi.stubGlobal("window", {
+      innerHeight: 500,
+      requestAnimationFrame: vi.fn((callback: FrameRequestCallback) => {
+        callback(0);
+        return 1;
+      }),
+    });
+    vi.stubGlobal("document", {
+      querySelectorAll,
+    });
+
+    await expect(
+      restoreSurfacePopoverAnchorAfterLayout("late-popover"),
+    ).resolves.toBe(true);
+    expect(querySelectorAll).toHaveBeenCalledTimes(3);
+    expect(scrollIntoView).toHaveBeenCalledTimes(2);
+  });
 });
