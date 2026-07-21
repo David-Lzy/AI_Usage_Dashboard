@@ -91,6 +91,13 @@ When the source exposes them, the personal snapshot may contain:
 - bounded extra-usage spend or credit-balance facts
 - source freshness and recovery state
 
+The source can keep a top-level `five_hour` or `seven_day` window visible while
+the duplicate row in its structured `limits` array reports `is_active: false`.
+The extension treats the valid top-level window as display evidence in that
+case. This preserves a source-visible current-session or all-model weekly
+window around reset boundaries without inventing a missing value; inactive
+structured rows with no matching top-level window remain filtered.
+
 The extension does not turn missing values into zero. It does not combine
 separate windows into one synthetic plan-wide remaining balance.
 

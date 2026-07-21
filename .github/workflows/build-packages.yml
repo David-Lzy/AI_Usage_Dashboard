@@ -181,12 +181,9 @@ jobs:
           ### Notes
 
           - Chrome Web Store remains the recommended install path for everyday Chrome users.
-          - Renames the individual signed-in source to Claude Personal while preserving existing settings and display order.
-          - Reads bounded Claude Personal usage windows and usage-credit state from the signed-in Claude Usage page when the source exposes them.
-          - Refreshes immediately after host access is granted and keeps the last valid snapshot readable during later source warnings.
-          - Separates individual Claude Personal usage from organization-scoped Claude Code Analytics Admin API data.
-          - Improves Claude recovery actions, responsive cards, locale coverage, and cross-surface session restoration QA.
-          - Keeps provider source-truth, manifest-permission, and browser-package boundaries unchanged.
+          - Restores both source-visible Claude Personal current-session and all-model weekly windows when Claude marks one duplicate structured limit row inactive around a reset boundary.
+          - Keeps unmatched inactive limits filtered and does not invent missing quota values.
+          - Adds regression coverage for both current-session and weekly inactive-row response shapes.
           NOTES
 
       - name: Prepare release assets
