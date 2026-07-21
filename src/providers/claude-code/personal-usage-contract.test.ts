@@ -78,6 +78,50 @@ describe("Claude personal usage contract", () => {
     ]);
   });
 
+  it("keeps a top-level session window when its limits row is not currently active", () => {
+    const contract = extractClaudePersonalUsageContract([
+      observedEntry("/usage", {
+        five_hour: { utilization: 1, resets_at: "2026-07-21T10:09:59Z" },
+        seven_day: { utilization: 6, resets_at: "2026-07-27T11:59:59Z" },
+        limits: [
+          {
+            kind: "session",
+            group: "session",
+            percent: 1,
+            resets_at: "2026-07-21T10:09:59Z",
+            is_active: false,
+          },
+          {
+            kind: "weekly_all",
+            group: "weekly",
+            percent: 6,
+            resets_at: "2026-07-27T11:59:59Z",
+            is_active: true,
+          },
+        ],
+      }),
+    ]);
+
+    expect(contract?.limits).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          kind: "session",
+          usedPercent: 1,
+          remainingPercent: 99,
+          resetsAt: "2026-07-21T10:09:59Z",
+          isActive: true,
+        }),
+        expect.objectContaining({
+          kind: "weekly_all",
+          usedPercent: 6,
+          remainingPercent: 94,
+          resetsAt: "2026-07-27T11:59:59Z",
+          isActive: true,
+        }),
+      ]),
+    );
+  });
+
   it("distinguishes only explicit individual plan labels", () => {
     expect(detectClaudePersonalPlanIdentity(["Plan usage limits Pro"])).toEqual({
       kind: "pro",

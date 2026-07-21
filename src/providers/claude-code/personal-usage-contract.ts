@@ -226,14 +226,29 @@ function parseLimits(body: UnknownRecord): ClaudePersonalStructuredLimit[] {
   );
 
   for (const compatibilityLimit of compatibilityLimits) {
-    if (
-      !limits.some(
-        (limit) =>
-          limit.kind === compatibilityLimit.kind ||
-          limit.group === compatibilityLimit.group,
-      )
-    ) {
+    const existingIndex = limits.findIndex(
+      (limit) =>
+        limit.kind === compatibilityLimit.kind ||
+        limit.group === compatibilityLimit.group,
+    );
+
+    if (existingIndex === -1) {
       limits.push(compatibilityLimit);
+      continue;
+    }
+
+    const existingLimit = limits[existingIndex];
+    if (existingLimit && !existingLimit.isActive) {
+      // Claude can mark the weekly limits[] row as inactive while still
+      // exposing the corresponding top-level seven_day window in the Usage
+      // UI. The top-level window is display evidence, not a synthetic value.
+      limits[existingIndex] = {
+        ...existingLimit,
+        usedPercent: compatibilityLimit.usedPercent,
+        remainingPercent: compatibilityLimit.remainingPercent,
+        resetsAt: compatibilityLimit.resetsAt ?? existingLimit.resetsAt,
+        isActive: true,
+      };
     }
   }
 
