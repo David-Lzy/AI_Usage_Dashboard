@@ -71,6 +71,14 @@ the descriptor with its sync function and rejects snapshot or setting ids that
 do not match that source entry. Provider-specific parsing and normalization
 remain inside the owner adapter; the registry only performs typed dispatch.
 
+Source-entry adapters may pass an explicit ordered list of browser-native
+strategies to the shared source-strategy orchestrator. The orchestrator owns
+only bounded timeout, cancellation, in-flight coalescing, cooldown, backoff,
+attempt diagnostics, and preservation of the previous valid result. It does
+not choose a provider protocol, parse a provider response, cross source-entry
+boundaries, start polling, or invoke a local companion. Strategy order and
+truthful partial-data merge rules remain explicit in the owning adapter.
+
 Capability flags describe code the extension has implemented for that source
 entry. They do not claim that the current account, response, or stored snapshot
 contains matching data:
