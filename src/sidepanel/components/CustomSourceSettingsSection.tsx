@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   CUSTOM_SOURCE_DEFAULT_REFRESH_INTERVAL_MINUTES,
   CUSTOM_SOURCE_SCHEMA_V1,
+  isManagedCustomSource,
   normalizeCustomSourceRefreshIntervalMinutes,
   normalizeCustomSourceSettings,
   toCustomSourceId,
@@ -294,8 +295,12 @@ export function CustomSourceSettingsSection({
   onChange,
 }: CustomSourceSettingsSectionProps) {
   const copy = getCopy(locale);
+  const editableCustomSources = useMemo(
+    () => customSources.filter((source) => !isManagedCustomSource(source)),
+    [customSources],
+  );
   const [drafts, setDrafts] = useState<CustomSourceDraft[]>(() =>
-    customSources.map(createDraftFromSource),
+    editableCustomSources.map(createDraftFromSource),
   );
   const [testingSourceId, setTestingSourceId] = useState<CustomSourceId | null>(
     null,
@@ -304,12 +309,12 @@ export function CustomSourceSettingsSection({
     Partial<Record<CustomSourceId, TestResult>>
   >({});
   const sourceSignature = useMemo(
-    () => JSON.stringify(customSources),
-    [customSources],
+    () => JSON.stringify(editableCustomSources),
+    [editableCustomSources],
   );
 
   useEffect(() => {
-    setDrafts(customSources.map(createDraftFromSource));
+    setDrafts(editableCustomSources.map(createDraftFromSource));
   }, [sourceSignature]);
 
   function updateDraft(sourceId: CustomSourceId, update: Partial<CustomSourceDraft>) {

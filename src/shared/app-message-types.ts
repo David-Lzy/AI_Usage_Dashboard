@@ -17,6 +17,13 @@ export type AppMessage =
       type: "app:update-custom-sources";
       customSources: CustomSourceSetting[];
     }
+  | {
+      type: "app:connect-codexbar-dashboard";
+      endpointUrl: string;
+      token: string | null;
+    }
+  | { type: "app:disconnect-codexbar-dashboard" }
+  | { type: "app:clear-codexbar-dashboard-token" }
   | { type: "app:set-provider-enabled"; providerId: ProviderId; enabled: boolean }
   | {
       type: "app:set-provider-active-account";

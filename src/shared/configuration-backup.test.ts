@@ -38,6 +38,17 @@ describe("configuration backup", () => {
           createdAt: "2026-06-26T00:00:00.000Z",
           updatedAt: "2026-06-26T01:00:00.000Z",
         },
+        {
+          id: "custom:codexbar-codex-1a2b3c4d",
+          label: "CodexBar · Codex",
+          description: "Authenticated local CodexBar dashboard snapshot",
+          endpointUrl: "http://127.0.0.1:8080/dashboard/v1/snapshot",
+          displayEnabled: true,
+          refreshIntervalMinutes: 15,
+          createdAt: "2026-07-25T00:00:00.000Z",
+          updatedAt: "2026-07-25T01:00:00.000Z",
+          managedBy: "codexbar-dashboard",
+        },
       ],
       customSourceStates: [
         {
@@ -105,8 +116,49 @@ describe("configuration backup", () => {
     ]);
     expect(JSON.stringify(backup.payload)).not.toContain("raw server detail");
     expect(JSON.stringify(backup.payload)).not.toContain("customSourceStates");
+    expect(JSON.stringify(backup.payload)).not.toContain("codexbar-dashboard");
+    expect(JSON.stringify(backup.payload)).not.toContain("127.0.0.1:8080");
     expect(backup.excludedFields).toContain("customSourceStates");
     expect(backup.excludedFields).toContain("customSources.headers");
+  });
+
+  it("preserves local managed sources while importing portable custom sources", () => {
+    const managedSource = {
+      id: "custom:codexbar-codex-1a2b3c4d" as const,
+      label: "CodexBar · Codex",
+      description: "Authenticated local CodexBar dashboard snapshot",
+      endpointUrl: "http://127.0.0.1:8080/dashboard/v1/snapshot",
+      displayEnabled: true,
+      refreshIntervalMinutes: 15,
+      createdAt: "2026-07-25T00:00:00.000Z",
+      updatedAt: "2026-07-25T01:00:00.000Z",
+      managedBy: "codexbar-dashboard" as const,
+    };
+    const backup = buildConfigurationBackup({
+      ...SAMPLE_APP_STATE,
+      customSources: [
+        {
+          id: "custom:portable",
+          label: "Portable",
+          description: null,
+          endpointUrl: "https://example.com/quota.json",
+          displayEnabled: true,
+          refreshIntervalMinutes: 30,
+          createdAt: "2026-07-25T00:00:00.000Z",
+          updatedAt: "2026-07-25T01:00:00.000Z",
+        },
+      ],
+    });
+
+    const imported = applyConfigurationBackupToState(
+      { ...SAMPLE_APP_STATE, customSources: [managedSource] },
+      backup,
+    );
+
+    expect(imported.customSources).toEqual([
+      managedSource,
+      expect.objectContaining({ id: "custom:portable" }),
+    ]);
   });
 
   it("excludes local-only custom icon data from Chrome Sync backups", () => {

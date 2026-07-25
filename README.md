@@ -133,8 +133,10 @@ the JSON contract and examples.
 The repository also includes an experimental, manually started Node
 [Local Companion Bridge](./Doc/Product/Local_Companion_Bridge.md) for serving
 explicitly selected local `custom-source.v1` files over authenticated loopback.
-It is a developer-preview protocol foundation, not an automatically installed
-or currently shipped Provider integration.
+Settings additionally offers an opt-in adapter for the authenticated,
+schema-versioned `codexbar serve` dashboard snapshot. Neither local process is
+installed, started, discovered, or updated by the extension, and accepted
+CodexBar rows remain separate Custom Sources rather than built-in Providers.
 
 ## Install From Source
 

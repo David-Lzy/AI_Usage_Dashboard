@@ -59,6 +59,7 @@ import { SettingsSourceSection } from "../components/SettingsSourceSection";
 import { SettingsPreferencesSection } from "../components/SettingsPreferencesSection";
 import { SettingsProviderDisplaySection } from "../components/SettingsProviderDisplaySection";
 import { CustomSourceSettingsSection } from "../components/CustomSourceSettingsSection";
+import { CodexBarDashboardBridgeSettings } from "../components/CodexBarDashboardBridgeSettings";
 import { MaterialInfoTooltip } from "../components/MaterialInfoTooltip";
 import { BUILD_INFO } from "../../shared/build-info";
 import { useSettingsPage } from "../use-settings-page";
@@ -589,6 +590,12 @@ export function SettingsPage({
         customSourceStates={customSourceStates}
         locale={i18n.resolvedLocale}
         onChange={onCustomSourcesChange}
+      />
+
+      <CodexBarDashboardBridgeSettings
+        customSources={customSources}
+        customSourceStates={customSourceStates}
+        locale={i18n.resolvedLocale}
       />
 
       {showAdvancedContainer ? (

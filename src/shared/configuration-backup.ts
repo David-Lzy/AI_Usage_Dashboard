@@ -9,6 +9,7 @@ import type {
 import { normalizeProviderId } from "../providers/provider-definitions";
 import { normalizeSourcePreference } from "./provider-sources";
 import {
+  isManagedCustomSource,
   normalizeCustomSourceSettings,
   type CustomSourceSetting,
 } from "./custom-sources";
@@ -116,7 +117,7 @@ function buildProviderSettingsBackup(
 function buildCustomSourcesBackup(
   customSources: readonly CustomSourceSetting[] | undefined,
 ): ConfigurationBackupCustomSourceSetting[] {
-  return (customSources ?? []).map((source) => ({
+  return (customSources ?? []).filter((source) => !isManagedCustomSource(source)).map((source) => ({
     id: source.id,
     label: source.label,
     description: source.description,
@@ -148,6 +149,7 @@ export function buildConfigurationBackup(
     "customSources.headers",
     "customSources.apiTokens",
     "customSources.lastResponseBody",
+    "customSources.managedConnections",
     "providerSecrets",
   ];
 
@@ -260,7 +262,10 @@ export function applyConfigurationBackupToState(
   return {
     ...state,
     settings,
-    customSources: normalizeCustomSourceSettings(backup.payload.customSources),
+    customSources: [
+      ...(state.customSources ?? []).filter(isManagedCustomSource),
+      ...normalizeCustomSourceSettings(backup.payload.customSources),
+    ],
     providerSettings: state.providerSettings.map((provider) => {
       const importedProvider = importedProviderSettings.get(provider.id);
 

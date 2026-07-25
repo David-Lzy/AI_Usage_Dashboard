@@ -43,6 +43,11 @@ import {
   getActiveProviderAccountId,
   selectActiveProviderAccount,
 } from "../shared/provider-accounts";
+import {
+  clearCodexBarDashboardToken,
+  connectCodexBarDashboard,
+  disconnectCodexBarDashboard,
+} from "./codexbar-dashboard-sync";
 
 export type {
   AppMessage,
@@ -165,6 +170,68 @@ export async function handleAppMessage(
           title: "Custom sources updated",
           message:
             "Custom JSON sources were saved locally. Use refresh to fetch the latest endpoint data.",
+        },
+      };
+    }
+
+    case "app:connect-codexbar-dashboard": {
+      const current = await seedAppStateIfEmpty();
+      const result = await connectCodexBarDashboard(
+        current,
+        message.endpointUrl,
+        message.token,
+      );
+      const state = await writeAppState(
+        reconcileAppStateHealth(result.state),
+      );
+      await ensureBackgroundAlarms(state);
+      return {
+        ok: true,
+        state,
+        notice: result.ok
+          ? {
+              tone: "success",
+              title: "CodexBar connected",
+              message: `${result.snapshot.sources.length} sanitized local source rows are available.`,
+            }
+          : {
+              tone: "error",
+              title: "CodexBar connection failed",
+              message: result.failure.message,
+            },
+      };
+    }
+
+    case "app:disconnect-codexbar-dashboard": {
+      const state = await writeAppState(
+        reconcileAppStateHealth(
+          await disconnectCodexBarDashboard(await seedAppStateIfEmpty()),
+        ),
+      );
+      return {
+        ok: true,
+        state,
+        notice: {
+          tone: "success",
+          title: "CodexBar disconnected",
+          message: "The local token and CodexBar-managed source rows were removed.",
+        },
+      };
+    }
+
+    case "app:clear-codexbar-dashboard-token": {
+      const state = await writeAppState(
+        reconcileAppStateHealth(
+          await clearCodexBarDashboardToken(await seedAppStateIfEmpty()),
+        ),
+      );
+      return {
+        ok: true,
+        state,
+        notice: {
+          tone: "success",
+          title: "CodexBar token cleared",
+          message: "The loopback connection stays configured but cannot refresh until a new token is saved.",
         },
       };
     }

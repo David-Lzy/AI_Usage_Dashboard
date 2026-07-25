@@ -24,7 +24,7 @@ export const LOCAL_COMPANION_BRIDGE_PATHS = {
 } as const;
 
 const PAIRING_CODE_PATTERN = /^[A-Z0-9]{4}-[A-Z0-9]{4}$/u;
-const BEARER_TOKEN_PATTERN = /^[A-Za-z0-9_-]{32,256}$/u;
+const BEARER_TOKEN_PATTERN = /^[\x21-\x7E]{32,256}$/u;
 const SAFE_LABEL_PATTERN = /^[^<>\u0000-\u001F\u007F]{1,96}$/u;
 
 export type LocalCompanionBridgeSourceIndexEntry = {

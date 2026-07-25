@@ -3,6 +3,7 @@ import { mapWithConcurrency } from "../shared/async-concurrency";
 import {
   CUSTOM_SOURCE_RESPONSE_MAX_CHARS,
   createEmptyCustomSourceSyncState,
+  isManagedCustomSource,
   normalizeCustomSourceEndpointUrl,
   parseCustomSourceResponseJson,
   type CustomSourceSetting,
@@ -392,7 +393,10 @@ export async function syncCustomSources(
   state: AppState,
   options: SyncCustomSourcesOptions,
 ): Promise<AppState> {
-  const customSources = state.customSources ?? [];
+  const allCustomSources = state.customSources ?? [];
+  const customSources = allCustomSources.filter(
+    (source) => !isManagedCustomSource(source),
+  );
 
   if (customSources.length === 0) {
     return state;
@@ -431,9 +435,17 @@ export async function syncCustomSources(
 
   return {
     ...state,
-    customSourceStates: customSources.flatMap((setting) => {
-      const nextState = nextStates.get(setting.id);
-      return nextState ? [nextState] : [];
-    }),
+    customSourceStates: [
+      ...(state.customSourceStates ?? []).filter((entry) =>
+        allCustomSources.some(
+          (source) =>
+            source.id === entry.sourceId && isManagedCustomSource(source),
+        ),
+      ),
+      ...customSources.flatMap((setting) => {
+        const nextState = nextStates.get(setting.id);
+        return nextState ? [nextState] : [];
+      }),
+    ],
   };
 }

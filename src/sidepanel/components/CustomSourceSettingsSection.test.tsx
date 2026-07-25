@@ -82,6 +82,27 @@ describe("CustomSourceSettingsSection", () => {
     expect(html).toContain("还没有自定义来源");
   });
 
+  it("does not expose managed CodexBar rows in the generic JSON editor", () => {
+    const html = renderToStaticMarkup(
+      <CustomSourceSettingsSection
+        locale="en"
+        customSources={[
+          createCustomSourceSetting({
+            id: "custom:codexbar-codex-1a2b3c4d",
+            label: "CodexBar · Codex",
+            endpointUrl: "http://127.0.0.1:8080/dashboard/v1/snapshot",
+            managedBy: "codexbar-dashboard",
+          }),
+        ]}
+        customSourceStates={[]}
+        onChange={() => {}}
+      />,
+    );
+
+    expect(html).toContain("No custom sources yet.");
+    expect(html).not.toContain('data-custom-source-card="custom:codexbar');
+  });
+
   it("returns a host-access failure without fetching when permission is denied", async () => {
     const requestHostAccess = vi.fn(async () => false);
     const fetchSnapshot = vi.fn();

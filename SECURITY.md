@@ -57,6 +57,13 @@ AI Usage Dashboard is designed to avoid persistent collection of raw browser aut
   starts. It cannot accept arbitrary paths over HTTP, scan user directories,
   execute commands, inspect browser profiles, or replace a built-in Provider
   source entry.
+- The optional CodexBar dashboard adapter accepts only the exact authenticated
+  `http://127.0.0.1:<port>/dashboard/v1/snapshot` route after a user-initiated
+  optional host grant. It rejects `localhost`, LAN or remote hosts, redirects,
+  query credentials, and CodexBar's unauthenticated `/usage` and `/cost`
+  routes. Its independently implemented parser enforces schema, response-size,
+  provider-count, numeric-range, timestamp, and staleness bounds before
+  creating separate `custom:codexbar-*` rows.
 
 ## Sensitive Data Rules
 
@@ -74,3 +81,6 @@ AI Usage Dashboard is designed to avoid persistent collection of raw browser aut
 - Do not log, fixture, export, synchronize, or place Local Companion pairing
   codes or bearer tokens in URLs. Do not weaken bridge authentication for a
   third-party loopback service.
+- Do not store, log, fixture, export, synchronize, or place a CodexBar dashboard
+  token in AppState, configuration backup, diagnostics, or a URL. Do not use
+  CodexBar's unauthenticated loopback routes as a fallback.

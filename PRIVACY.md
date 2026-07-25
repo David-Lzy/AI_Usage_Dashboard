@@ -76,9 +76,21 @@ normalized source snapshots, or user-facing errors. The token is sent only to
 the explicitly configured loopback bridge. Restarting the reference process
 invalidates its in-memory token.
 
-The current product UI does not expose the bridge as a shipped Provider
-integration. Any future local companion adapter must retain these boundaries
-and update this document before release.
+Settings exposes an experimental, opt-in adapter for the versioned CodexBar
+dashboard snapshot. CodexBar is separately installed third-party local
+software; the extension does not install, start, discover, update, or control
+it. A user must explicitly start `codexbar serve` with a strong dashboard
+token, grant optional access to the configured `127.0.0.1` origin, and connect
+the exact authenticated dashboard endpoint.
+
+The CodexBar token is sent only in the `Authorization` header to that exact
+loopback origin and remains in extension-managed local secret storage. It is
+excluded from AppState, Chrome Sync, configuration backups, logs, fixtures,
+exports, diagnostics, and user-facing errors. The saved connection contains
+only the loopback endpoint. Accepted rows are schema-validated, stripped of
+identity fields and raw error objects, and stored as bounded normalized Custom
+Source snapshots. They never replace or merge with built-in Provider source
+truth. Disconnecting removes the token and all CodexBar-managed rows.
 
 ## Provider Page Access
 

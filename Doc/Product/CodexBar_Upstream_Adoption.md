@@ -14,7 +14,7 @@ Freshness model:
 Status note:
 
 - this document records bounded upstream influence and attribution policy; it
-  does not claim that a CodexBar runtime integration is currently shipped
+  also records the independently implemented experimental dashboard adapter
 
 ## Purpose
 
@@ -60,9 +60,9 @@ extension must not install, launch, discover, or control that software.
 - Pace, reset-window, Claude, Cursor, and Codex parsing helpers: reviewed but
   not adopted because equivalent local code already enforces this project's
   source semantics and privacy boundaries.
-- `codexbar serve` dashboard snapshot: eligible only as an explicit,
-  authenticated loopback Bridge integration after browser access and schema
-  validation pass.
+- `codexbar serve` dashboard snapshot: independently implemented as an
+  explicit, authenticated, schema-versioned loopback adapter. Accepted rows
+  use a separate `custom:codexbar-*` namespace and discard identity fields.
 - Platform-specific credential, CLI, WebView, cookie-database, and filesystem
   code: rejected for in-extension adoption.
 

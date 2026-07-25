@@ -12,19 +12,53 @@ Freshness model:
 
 Status note:
 
-- reference CLI and extension-side protocol foundation only
-- no shipped Settings connection or built-in Provider adapter yet
+- reference CLI plus an experimental Settings connection for the authenticated
+  CodexBar dashboard snapshot
+- local companion rows remain Custom Sources and are not built-in Providers
 
 ## Status
 
 The repository includes an experimental Node reference bridge for development
 and protocol testing. The extension does not install, start, download, or
-update this process, and the current Settings UI does not present it as a
-shipped Provider connection.
+update this process, and the generic reference CLI is not presented as a
+built-in Provider connection. Settings separately exposes the bounded CodexBar
+dashboard adapter described below.
 
 The bridge proves a narrow local-source boundary before any future desktop
 companion or CodexBar adapter is exposed to users. It is not a way for the
 extension to obtain arbitrary machine access.
+
+## Experimental CodexBar Dashboard Connection
+
+Settings includes an experimental adapter for the versioned CodexBar dashboard
+snapshot. CodexBar is optional third-party local software; this project does
+not install, start, update, discover, or control it.
+
+Start a current CodexBar release explicitly with a strong token:
+
+```sh
+CODEXBAR_DASHBOARD_TOKEN="$(openssl rand -hex 32)" codexbar serve --port 8080
+```
+
+Keep the generated token available long enough to paste it into Settings, then
+configure this exact endpoint:
+
+```text
+http://127.0.0.1:8080/dashboard/v1/snapshot
+```
+
+The extension requests optional access to `http://127.0.0.1/*` only after the
+user selects Connect. It rejects `localhost`, LAN addresses, remote hosts,
+query tokens, redirects, `/usage`, and `/cost`. Every request uses
+`Authorization: Bearer` and requires an `application/json` response matching
+dashboard schema version 1.
+
+Accepted rows are mapped to ids beginning with `custom:codexbar-`. They are
+displayed as local companion sources and never replace or merge with an
+AI Usage Dashboard built-in Provider. Upstream identity fields and raw error
+objects are discarded before storage. Disconnect removes the token and all
+managed rows; clearing only the token preserves cached rows as stale until a
+new token is supplied.
 
 ## Start The Reference Bridge
 
@@ -136,11 +170,11 @@ remain responsible for the contents and permissions of those files.
 
 ## External Companion Adapters
 
-A future adapter may translate data from an explicitly enabled local companion,
-including a separately installed CodexBar CLI or server, into the same
-`custom-source.v1` payload. Such an adapter must still use this authenticated,
-bounded bridge contract. An unauthenticated third-party `/usage` or `/cost`
-route is not trusted merely because it uses loopback.
+An explicitly enabled local companion adapter may translate data from a
+separately installed tool into the same `custom-source.v1` payload. The
+CodexBar dashboard adapter is the first such bounded integration. An
+unauthenticated third-party `/usage` or `/cost` route is not trusted merely
+because it uses loopback.
 
 No adapter may execute arbitrary commands, override built-in Provider source
 truth, persist raw credentials, or copy direct account identifiers into

@@ -14,6 +14,7 @@ import { readProviderSecrets } from "../shared/provider-secrets";
 import { getActiveProviderAccountIds } from "../shared/provider-accounts";
 import { seedAppStateIfEmpty, writeAppState } from "../shared/storage";
 import { syncCustomSources } from "./custom-source-sync";
+import { syncCodexBarDashboardSources } from "./codexbar-dashboard-sync";
 import { syncProviderServiceStatuses } from "./provider-service-status-sync";
 
 const STALE_MULTIPLIER = 2;
@@ -391,9 +392,16 @@ async function runSyncEngineOnce({
     },
     now,
   );
-  const nextStateWithCustomSources = providerId
+  const nextStateWithCodexBar = providerId
     ? nextState
-    : await syncCustomSources(nextState, {
+    : await syncCodexBarDashboardSources(nextState, {
+        trigger,
+        hasHostAccess: hasCustomSourceHostAccess,
+        now,
+      });
+  const nextStateWithCustomSources = providerId
+    ? nextStateWithCodexBar
+    : await syncCustomSources(nextStateWithCodexBar, {
         trigger,
         hasHostAccess: hasCustomSourceHostAccess,
         now,
