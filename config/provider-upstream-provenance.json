@@ -42,6 +42,20 @@
       "maintenanceOwner": "AI Usage Dashboard maintainers",
       "independentVerification": "The exact route and bearer contract are exercised against a deterministic loopback HTTP server, parser fixtures are synthetic, and public security documentation records the stricter local trust boundary.",
       "noticeId": null
+    },
+    {
+      "id": "sub2api-user-usage-protocol",
+      "classification": "protocol lead",
+      "repositoryUrl": "https://github.com/Wei-Shaw/sub2api",
+      "upstreamFilePath": "backend/internal/handler/gateway_handler.go; frontend/src/api/usage.ts; backend/internal/server/routes/user.go",
+      "pinnedCommit": "2730c1c43b29be003925b033f3f9e645e726bb8c",
+      "copyrightHolder": "Sub2API contributors",
+      "license": "LGPL-3.0-or-later",
+      "localDestination": "Doc/Product/Sub2API_User_Usage_Contract.md",
+      "modificationSummary": "The API-key and account-scope usage contracts were independently modeled as bounded JavaScript probes with fully synthetic fixtures; no upstream Go, TypeScript, or account response was copied or translated.",
+      "maintenanceOwner": "AI Usage Dashboard maintainers",
+      "independentVerification": "The pinned route implementation, response builders, public frontend client types, and upstream contract tests were cross-checked; local tests independently enforce scope separation, units, limits, and redaction.",
+      "noticeId": null
     }
   ]
 }

@@ -23,3 +23,4 @@ Status note:
 - [Experimental Local Companion Bridge](./Local_Companion_Bridge.md)
 - [Official Provider Service Status Feeds](./Official_Provider_Service_Status_Feeds.md)
 - [CodexBar Upstream Adoption](./CodexBar_Upstream_Adoption.md)
+- [Sub2API User Usage Contract](./Sub2API_User_Usage_Contract.md)

@@ -1,0 +1,57 @@
+{
+  "fixtureSchema": "ai-usage-dashboard.sub2api-usage-discovery.v1",
+  "fixtureKind": "synthetic_contract_example",
+  "fixtureId": "sub2api-api-key-subscription",
+  "scope": "api_key",
+  "deployment": {
+    "baseUrl": "https://gateway.example.test"
+  },
+  "request": {
+    "path": "/v1/usage",
+    "auth": "bearer_api_key"
+  },
+  "response": {
+    "mode": "unrestricted",
+    "isValid": true,
+    "planName": "Synthetic subscription",
+    "remaining": 7.75,
+    "unit": "USD",
+    "subscription": {
+      "daily_usage_usd": 2.25,
+      "weekly_usage_usd": 11.5,
+      "monthly_usage_usd": 37.8,
+      "daily_limit_usd": 10,
+      "weekly_limit_usd": 60,
+      "monthly_limit_usd": 200,
+      "weekly_window_start": "2026-07-21T00:00:00Z",
+      "expires_at": "2026-08-25T00:00:00Z"
+    },
+    "usage": {
+      "today": {
+        "requests": 24,
+        "input_tokens": 9200,
+        "output_tokens": 2200,
+        "cache_creation_tokens": 1000,
+        "cache_read_tokens": 3100,
+        "total_tokens": 15500,
+        "cost": 3.1,
+        "actual_cost": 2.25
+      },
+      "total": {
+        "requests": 360,
+        "input_tokens": 131000,
+        "output_tokens": 33000,
+        "cache_creation_tokens": 12700,
+        "cache_read_tokens": 48000,
+        "total_tokens": 224700,
+        "cost": 51.2,
+        "actual_cost": 37.8
+      },
+      "average_duration_ms": 1350,
+      "rpm": 3,
+      "tpm": 2100
+    },
+    "daily_usage": [],
+    "model_stats": []
+  }
+}

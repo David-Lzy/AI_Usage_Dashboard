@@ -1,0 +1,71 @@
+{
+  "fixtureSchema": "ai-usage-dashboard.sub2api-usage-discovery.v1",
+  "fixtureKind": "synthetic_contract_example",
+  "fixtureId": "sub2api-account-dashboard",
+  "scope": "account",
+  "deployment": {
+    "baseUrl": "https://gateway.example.test"
+  },
+  "request": {
+    "path": "/api/v1/usage/dashboard/snapshot-v2",
+    "auth": "bearer_user_session"
+  },
+  "response": {
+    "code": 0,
+    "message": "success",
+    "data": {
+      "generated_at": "2026-07-25T06:00:00Z",
+      "start_date": "2026-07-24",
+      "end_date": "2026-07-25",
+      "granularity": "day",
+      "trend": [
+        {
+          "date": "2026-07-24",
+          "requests": 35,
+          "input_tokens": 12000,
+          "output_tokens": 2900,
+          "cache_creation_tokens": 1500,
+          "cache_read_tokens": 4600,
+          "total_tokens": 21000,
+          "cost": 4.3,
+          "actual_cost": 3.2
+        },
+        {
+          "date": "2026-07-25",
+          "requests": 42,
+          "input_tokens": 15100,
+          "output_tokens": 3500,
+          "cache_creation_tokens": 1700,
+          "cache_read_tokens": 5900,
+          "total_tokens": 26200,
+          "cost": 5.25,
+          "actual_cost": 3.95
+        }
+      ],
+      "models": [
+        {
+          "model": "synthetic-model-primary",
+          "requests": 70,
+          "input_tokens": 25000,
+          "output_tokens": 5900,
+          "cache_creation_tokens": 2800,
+          "cache_read_tokens": 9800,
+          "total_tokens": 43500,
+          "cost": 8.75,
+          "actual_cost": 6.55
+        },
+        {
+          "model": "synthetic-model-secondary",
+          "requests": 7,
+          "input_tokens": 2100,
+          "output_tokens": 500,
+          "cache_creation_tokens": 400,
+          "cache_read_tokens": 700,
+          "total_tokens": 3700,
+          "cost": 0.8,
+          "actual_cost": 0.6
+        }
+      ]
+    }
+  }
+}

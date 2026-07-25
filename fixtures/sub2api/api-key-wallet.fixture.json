@@ -1,0 +1,94 @@
+{
+  "fixtureSchema": "ai-usage-dashboard.sub2api-usage-discovery.v1",
+  "fixtureKind": "synthetic_contract_example",
+  "fixtureId": "sub2api-api-key-wallet",
+  "scope": "api_key",
+  "deployment": {
+    "baseUrl": "http://gateway.example.test"
+  },
+  "request": {
+    "path": "/v1/usage",
+    "auth": "bearer_api_key"
+  },
+  "response": {
+    "mode": "unrestricted",
+    "isValid": true,
+    "planName": "Wallet balance",
+    "remaining": 18.75,
+    "unit": "USD",
+    "balance": 18.75,
+    "usage": {
+      "today": {
+        "requests": 12,
+        "input_tokens": 4200,
+        "output_tokens": 900,
+        "cache_creation_tokens": 400,
+        "cache_read_tokens": 1800,
+        "total_tokens": 7300,
+        "cost": 1.25,
+        "actual_cost": 0.92
+      },
+      "total": {
+        "requests": 80,
+        "input_tokens": 26800,
+        "output_tokens": 6100,
+        "cache_creation_tokens": 2100,
+        "cache_read_tokens": 9700,
+        "total_tokens": 44700,
+        "cost": 8.4,
+        "actual_cost": 6.35
+      },
+      "average_duration_ms": 1840,
+      "rpm": 2,
+      "tpm": 1450
+    },
+    "daily_usage": [
+      {
+        "date": "2026-07-24",
+        "requests": 8,
+        "input_tokens": 2800,
+        "output_tokens": 600,
+        "cache_read_tokens": 1200,
+        "cache_write_tokens": 240,
+        "total_tokens": 4840,
+        "cost": 0.82,
+        "actual_cost": 0.61
+      },
+      {
+        "date": "2026-07-25",
+        "requests": 12,
+        "input_tokens": 4200,
+        "output_tokens": 900,
+        "cache_read_tokens": 1800,
+        "cache_write_tokens": 400,
+        "total_tokens": 7300,
+        "cost": 1.25,
+        "actual_cost": 0.92
+      }
+    ],
+    "model_stats": [
+      {
+        "model": "synthetic-model-primary",
+        "requests": 18,
+        "input_tokens": 6400,
+        "output_tokens": 1300,
+        "cache_creation_tokens": 540,
+        "cache_read_tokens": 2700,
+        "total_tokens": 10940,
+        "cost": 1.91,
+        "actual_cost": 1.42
+      },
+      {
+        "model": "synthetic-model-secondary",
+        "requests": 2,
+        "input_tokens": 600,
+        "output_tokens": 200,
+        "cache_creation_tokens": 100,
+        "cache_read_tokens": 300,
+        "total_tokens": 1200,
+        "cost": 0.16,
+        "actual_cost": 0.11
+      }
+    ]
+  }
+}

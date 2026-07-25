@@ -29,7 +29,7 @@
     "i18n:check": "./scripts/with-preferred-node.sh node ./scripts/check-i18n-locales.mjs",
     "i18n:audit": "./scripts/with-preferred-node.sh node ./scripts/audit-i18n-coverage.mjs",
     "i18n:visual-check": "./scripts/with-preferred-node.sh node ./scripts/check-i18n-visual-matrix.mjs",
-    "provider:quality": "./scripts/with-preferred-node.sh vitest run src/providers/provider-authoring-contract.test.ts scripts/lib/provider-authoring-quality.test.mjs && ./scripts/with-preferred-node.sh node ./scripts/check-provider-authoring-quality.mjs",
+    "provider:quality": "./scripts/with-preferred-node.sh vitest run src/providers/provider-authoring-contract.test.ts scripts/lib/provider-authoring-quality.test.mjs scripts/lib/sub2api-usage-contract.test.mjs && ./scripts/with-preferred-node.sh node ./scripts/check-provider-authoring-quality.mjs",
     "qa:artifacts:check": "./scripts/with-preferred-node.sh node ./scripts/check-qa-artifact-privacy.mjs",
     "qa:surface:check": "npm run build && npm run phase556:browser-qa && npm run phase565:extension-qa && npm run qa:artifacts:check",
     "docs:refresh-generated-package-readmes": "./scripts/with-preferred-node.sh node ./scripts/refresh-generated-review-package-readmes.mjs",
