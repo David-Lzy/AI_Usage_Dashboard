@@ -7,6 +7,7 @@ import type {
   ProgressDisplayStyle,
   ProgressItemsBySurface,
   ProviderId,
+  ProviderAccountsByProvider,
   ProviderUsageHistory,
   ProviderUsageHistoryModuleId,
   ProviderServiceStatus as ProviderServiceStatusModel,
@@ -38,6 +39,9 @@ import {
 } from "./popup-collapse-preferences";
 import { CursorUsageSummary } from "../shared/components/CursorUsageSummary";
 import { buildCursorUsageLocalizedCopy } from "../shared/cursor-usage-localized-copy";
+import { ApiGatewayMeteringSummary } from "../shared/components/ApiGatewayMeteringSummary";
+import { buildApiGatewayMeteringLocalizedCopy } from "../shared/api-gateway-metering-localized-copy";
+import { getActiveProviderAccountMetadata } from "../shared/provider-accounts";
 import { DEFAULT_RESET_TIME_DISPLAY_MODE } from "../shared/reset-time-display";
 import { ProviderServiceStatus } from "../shared/components/ProviderServiceStatus";
 import {
@@ -61,6 +65,7 @@ type PopupFeaturedProviderListProps = {
   usageHistoryModulesBySurface?: UsageHistoryModulesBySurface;
   providerServiceStatuses?: readonly ProviderServiceStatusModel[];
   providerServiceStatusVisibilityBySurface?: ProviderServiceStatusVisibilityBySurface;
+  providerAccounts?: ProviderAccountsByProvider;
   getSettingsFocusForProvider: (
     provider: PopupFeaturedProviderCard["provider"],
   ) => SettingsRouteFocus | null;
@@ -127,6 +132,7 @@ export function PopupFeaturedProviderList({
   providerServiceStatuses = [],
   providerServiceStatusVisibilityBySurface =
     createDefaultProviderServiceStatusVisibilityBySurface(),
+  providerAccounts = {},
   getSettingsFocusForProvider,
   onAction,
 }: PopupFeaturedProviderListProps) {
@@ -135,12 +141,22 @@ export function PopupFeaturedProviderList({
   }
   const usageHistoryCopy = buildUsageHistoryLocalizedCopy(i18n.resolvedLocale);
   const cursorUsageCopy = buildCursorUsageLocalizedCopy(i18n.resolvedLocale);
+  const apiGatewayMeteringCopy = buildApiGatewayMeteringLocalizedCopy(
+    i18n.resolvedLocale,
+  );
 
   return (
     <section className="popup-quota-section" aria-label={ariaLabel}>
       <div className="popup-provider-list">
         {cards.map((card, index) => {
           const { provider } = card;
+          const apiGatewayMeteringDisplayPreferences =
+            getActiveProviderAccountMetadata(
+              { providerAccounts },
+              provider.providerId,
+            )?.apiGatewayMeteringDisplayPreferences;
+          const hasApiGatewayMetering =
+            provider.apiGatewayMetering !== undefined;
           const providerProgress = (
             <PopupProviderProgress
               provider={provider}
@@ -182,6 +198,7 @@ export function PopupFeaturedProviderList({
             hasProviderProgress ||
             visibleUsageHistoryModules.length > 0 ||
             provider.cursorUsage !== undefined ||
+            hasApiGatewayMetering ||
             showProviderServiceStatus;
           const cardSurfaceTone =
             hasCachedProviderContent && provider.displayTone === "error"
@@ -298,7 +315,7 @@ export function PopupFeaturedProviderList({
                 >
                   {providerProgress}
                 </div>
-              ) : provider.cursorUsage ? null : (
+              ) : provider.cursorUsage || hasApiGatewayMetering ? null : (
                 <>
                   <div
                     className="popup-provider-card__chips"
@@ -345,6 +362,16 @@ export function PopupFeaturedProviderList({
                   providerId={provider.providerId}
                   surface="popup"
                   usage={provider.cursorUsage}
+                />
+              ) : null}
+              {provider.apiGatewayMetering ? (
+                <ApiGatewayMeteringSummary
+                  copy={apiGatewayMeteringCopy}
+                  locale={i18n.resolvedLocale}
+                  metering={provider.apiGatewayMetering}
+                  preferences={apiGatewayMeteringDisplayPreferences}
+                  providerId={provider.providerId}
+                  surface="popup"
                 />
               ) : null}
               {showProviderServiceStatus ? (

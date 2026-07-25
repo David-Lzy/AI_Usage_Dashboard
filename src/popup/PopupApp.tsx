@@ -602,6 +602,7 @@ export function PopupApp() {
         providerServiceStatusVisibilityBySurface={
           appState.settings.providerServiceStatusVisibilityBySurface
         }
+        providerAccounts={appState.providerAccounts}
         getSettingsFocusForProvider={getSettingsRouteFocusForPopupProvider}
         onAction={handlePopupAction}
       />

@@ -1,4 +1,5 @@
 import type {
+  ProviderAccountsByProvider,
   AppLocalePreference,
   DisplaySurface,
   ProgressColorAppearance,
@@ -25,8 +26,10 @@ import { TopBar } from "../components/TopBar";
 import type { ProviderViewModel } from "../view-models";
 import { createDefaultUsageHistoryModulesBySurface } from "../../shared/usage-history-visibility";
 import { DEFAULT_RESET_TIME_DISPLAY_MODE } from "../../shared/reset-time-display";
+import { getActiveProviderAccountMetadata } from "../../shared/provider-accounts";
 
 type DashboardPageProps = {
+  providerAccounts?: ProviderAccountsByProvider;
   localePreference: AppLocalePreference;
   progressColorAppearance?: ProgressColorAppearance;
   progressColorBands: readonly ProgressColorBand[];
@@ -62,6 +65,7 @@ type DashboardPageProps = {
 };
 
 export function DashboardPage({
+  providerAccounts = {},
   localePreference,
   progressColorAppearance,
   progressColorBands,
@@ -186,6 +190,12 @@ export function DashboardPage({
               sourceCard.kind === "provider" ? (
                 <ProviderCard
                   key={sourceCard.provider.providerId}
+                  apiGatewayMeteringDisplayPreferences={
+                    getActiveProviderAccountMetadata(
+                      { providerAccounts },
+                      sourceCard.provider.providerId,
+                    )?.apiGatewayMeteringDisplayPreferences
+                  }
                   localePreference={localePreference}
                   progressColorAppearance={progressColorAppearance}
                   progressColorBands={progressColorBands}

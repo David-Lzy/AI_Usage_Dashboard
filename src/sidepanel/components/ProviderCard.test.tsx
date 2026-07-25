@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest";
 
 import { createAdapterErrorDiagnostic } from "../../providers/diagnostics";
 import type {
+  ApiGatewayMeteringDisplayPreferences,
+  ApiGatewayMeteringSnapshot,
   AppLocalePreference,
   AppState,
   ProviderId,
@@ -26,6 +28,7 @@ function renderProviderCard(
   state: AppState,
   providerId: ProviderId,
   options: {
+    apiGatewayMeteringDisplayPreferences?: ApiGatewayMeteringDisplayPreferences;
     localePreference?: AppLocalePreference;
     onOpenSourcePage?: () => void;
     usageHistoryModulesBySurface?: AppState["settings"]["usageHistoryModulesBySurface"];
@@ -39,6 +42,9 @@ function renderProviderCard(
 
   return renderToStaticMarkup(
     <ProviderCard
+      apiGatewayMeteringDisplayPreferences={
+        options.apiGatewayMeteringDisplayPreferences
+      }
       localePreference={options.localePreference ?? "en"}
       progressColorBands={state.settings.progressColorBands}
       progressDisplayStyle="line"
@@ -59,6 +65,47 @@ function renderProviderCard(
 }
 
 describe("ProviderCard", () => {
+  it("renders API gateway metering without the generic unknown-usage block", () => {
+    const metering: ApiGatewayMeteringSnapshot = {
+      schemaVersion: 1,
+      accountId: "account_12345678",
+      productKind: "metered_api_gateway",
+      displayLabel: "Gateway 1",
+      origin: "https://gateway.example.test",
+      transport: "https",
+      scope: "api_key",
+      billingMode: "wallet",
+      capturedAt: "2026-07-25T10:00:00.000Z",
+      stale: false,
+      isValid: true,
+      status: "active",
+      planName: "Wallet",
+      remaining: { amount: 18.75, unit: "USD" },
+      balance: { amount: 18.75, unit: "USD" },
+      quota: null,
+      subscription: null,
+      rateLimits: [],
+      usage: null,
+      dailyUsage: [],
+      modelUsage: [],
+      modelSeriesTruncated: false,
+    };
+    const state = createState({
+      providers: SAMPLE_APP_STATE.providers.map((provider) =>
+        provider.providerId === "sub2api-api-key"
+          ? { ...provider, apiGatewayMetering: metering }
+          : provider,
+      ),
+    });
+    const html = renderProviderCard(state, "sub2api-api-key");
+
+    expect(html).toContain("Usage summary");
+    expect(html).toContain("Available balance");
+    expect(html).toContain("$18.75");
+    expect(html).not.toContain("Provider source context");
+    expect(html).not.toContain("Usage unknown");
+  });
+
   it("renders available history and unmounts a hidden surface module", () => {
     const state = createState({
       providers: SAMPLE_APP_STATE.providers.map((provider) =>

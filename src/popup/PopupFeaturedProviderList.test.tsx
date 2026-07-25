@@ -4,7 +4,9 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
 import { createRuntimeI18n } from "../shared/i18n";
+import type { ApiGatewayMeteringSnapshot, AppState } from "../providers/types";
 import { SAMPLE_APP_STATE } from "../shared/constants";
+import { getProviderViewModel } from "../sidepanel/view-models";
 import { buildPopupViewModel } from "./view-models";
 import { PopupFeaturedProviderList } from "./PopupFeaturedProviderList";
 
@@ -36,11 +38,65 @@ function renderFeaturedList(
       providerServiceStatusVisibilityBySurface={
         state.settings.providerServiceStatusVisibilityBySurface
       }
+      providerAccounts={state.providerAccounts}
     />,
   );
 }
 
 describe("PopupFeaturedProviderList", () => {
+  it("renders compact API gateway metering instead of generic diagnostics", () => {
+    const metering: ApiGatewayMeteringSnapshot = {
+      schemaVersion: 1,
+      accountId: "account_12345678",
+      productKind: "metered_api_gateway",
+      displayLabel: "Gateway 1",
+      origin: "https://gateway.example.test",
+      transport: "https",
+      scope: "api_key",
+      billingMode: "wallet",
+      capturedAt: "2026-07-25T10:00:00.000Z",
+      stale: false,
+      isValid: true,
+      status: "active",
+      planName: "Wallet",
+      remaining: { amount: 18.75, unit: "USD" },
+      balance: { amount: 18.75, unit: "USD" },
+      quota: null,
+      subscription: null,
+      rateLimits: [],
+      usage: null,
+      dailyUsage: [],
+      modelUsage: [],
+      modelSeriesTruncated: false,
+    };
+    const state: AppState = {
+      ...SAMPLE_APP_STATE,
+      providers: SAMPLE_APP_STATE.providers.map((provider) =>
+        provider.providerId === "sub2api-api-key"
+          ? { ...provider, apiGatewayMetering: metering }
+          : provider,
+      ),
+    };
+    const [baseCard] = buildPopupViewModel(state).featuredProviderCards;
+    const provider = getProviderViewModel(
+      state,
+      "sub2api-api-key",
+    );
+
+    if (!baseCard || !provider) {
+      throw new Error("Missing popup card or Sub2API provider fixture.");
+    }
+
+    const card = { ...baseCard, provider };
+
+    const html = renderFeaturedList([card], state);
+    expect(html).toContain("Usage summary");
+    expect(html).toContain("Available balance");
+    expect(html).toContain("$18.75");
+    expect(html).not.toContain(card.primaryDetail);
+    expect(html).not.toContain(card.secondaryDetail);
+  });
+
   it("keeps the featured status chip in the provider title row", () => {
     const html = renderFeaturedList();
     const titleRowIndex = html.indexOf("popup-provider-card__title-row");

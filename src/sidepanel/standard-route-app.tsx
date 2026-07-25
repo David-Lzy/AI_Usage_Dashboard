@@ -583,6 +583,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
         />
       ) : (
         <DashboardPage
+          providerAccounts={appState.providerAccounts}
           localePreference={localePreference}
           progressColorAppearance={appState.settings.progressColorAppearance}
           progressColorBands={appState.settings.progressColorBands}

@@ -1,4 +1,5 @@
 import type {
+  ApiGatewayMeteringDisplayPreferences,
   AppLocalePreference,
   DisplaySurface,
   ProgressColorAppearance,
@@ -25,6 +26,8 @@ import {
 } from "../../shared/usage-history-visibility";
 import { CursorUsageSummary } from "../../shared/components/CursorUsageSummary";
 import { buildCursorUsageLocalizedCopy } from "../../shared/cursor-usage-localized-copy";
+import { ApiGatewayMeteringSummary } from "../../shared/components/ApiGatewayMeteringSummary";
+import { buildApiGatewayMeteringLocalizedCopy } from "../../shared/api-gateway-metering-localized-copy";
 import { DEFAULT_RESET_TIME_DISPLAY_MODE } from "../../shared/reset-time-display";
 import {
   buildProviderDetailLocalizedCopy,
@@ -40,6 +43,7 @@ import {
 const CLAUDE_PERSONAL_PROVIDER_ID = "claude-code-team-page";
 
 type ProviderCardProps = {
+  apiGatewayMeteringDisplayPreferences?: ApiGatewayMeteringDisplayPreferences;
   localePreference: AppLocalePreference;
   progressColorAppearance?: ProgressColorAppearance;
   progressColorBands: readonly ProgressColorBand[];
@@ -61,6 +65,7 @@ type ProviderCardProps = {
 };
 
 export function ProviderCard({
+  apiGatewayMeteringDisplayPreferences,
   localePreference,
   progressColorAppearance,
   progressColorBands,
@@ -84,6 +89,9 @@ export function ProviderCard({
   );
   const usageHistoryCopy = buildUsageHistoryLocalizedCopy(i18n.resolvedLocale);
   const cursorUsageCopy = buildCursorUsageLocalizedCopy(i18n.resolvedLocale);
+  const apiGatewayMeteringCopy = buildApiGatewayMeteringLocalizedCopy(
+    i18n.resolvedLocale,
+  );
   const providerDetailCopy = buildProviderDetailLocalizedCopy(i18n);
   const isClaudePersonal =
     provider.providerId === CLAUDE_PERSONAL_PROVIDER_ID;
@@ -111,6 +119,7 @@ export function ProviderCard({
   const visibleUsageContextLabel =
     buildRuntimeCommonCopy(i18n).visibleUsageContext;
   const hasCursorUsage = provider.cursorUsage !== undefined;
+  const hasApiGatewayMetering = provider.apiGatewayMetering !== undefined;
   const showProviderServiceStatus = isProviderServiceStatusVisible(
     providerServiceStatusVisibilityBySurface,
     progressSurface,
@@ -127,6 +136,7 @@ export function ProviderCard({
     hasUsageFacts ||
     provider.usageHistory !== undefined ||
     hasCursorUsage ||
+    hasApiGatewayMetering ||
     showProviderServiceStatus;
   const cardSurfaceTone =
     hasCachedProviderContent && provider.displayTone === "error"
@@ -188,7 +198,7 @@ export function ProviderCard({
       </header>
 
       <div className="provider-card__body">
-        {!hasCursorUsage && !isClaudePersonal ? (
+        {!hasCursorUsage && !isClaudePersonal && !hasApiGatewayMetering ? (
           <section
             className="provider-card__summary"
             aria-label={`${provider.providerLabel} usage summary`}
@@ -276,6 +286,17 @@ export function ProviderCard({
           />
         ) : null}
 
+        {provider.apiGatewayMetering ? (
+          <ApiGatewayMeteringSummary
+            copy={apiGatewayMeteringCopy}
+            locale={i18n.resolvedLocale}
+            metering={provider.apiGatewayMetering}
+            preferences={apiGatewayMeteringDisplayPreferences}
+            providerId={provider.providerId}
+            surface={progressSurface}
+          />
+        ) : null}
+
         {showProviderServiceStatus ? (
           <ProviderServiceStatus
             locale={i18n.resolvedLocale}
@@ -283,7 +304,7 @@ export function ProviderCard({
           />
         ) : null}
 
-        {!hasCursorUsage && !isClaudePersonal ? (
+        {!hasCursorUsage && !isClaudePersonal && !hasApiGatewayMetering ? (
           <>
             <div
               className="provider-card__meta"

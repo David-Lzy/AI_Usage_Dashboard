@@ -228,7 +228,7 @@ function buildPointLabel(
   }`;
 }
 
-function UsageHistorySvg({
+export function UsageHistorySvg({
   data,
   kind,
   label,
@@ -341,7 +341,7 @@ function UsageHistorySvg({
   );
 }
 
-function UsageHistoryLegend({
+export function UsageHistoryLegend({
   data,
   label,
 }: {
