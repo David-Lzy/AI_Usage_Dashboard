@@ -6,9 +6,11 @@ import {
   DEFAULT_PROVIDER_ACCOUNT_ID,
   addInactiveProviderAccount,
   createOpaqueProviderAccountId,
+  getActiveProviderAccountMetadata,
   getProviderAccountOptions,
   normalizeProviderAccounts,
   selectActiveProviderAccount,
+  updateActiveProviderAccountConnection,
 } from "./provider-accounts";
 
 const TEST_PROVIDER_ID: ProviderId = "cursor-team-api";
@@ -252,5 +254,83 @@ describe("provider accounts", () => {
       collection?.inactiveAccounts[TEST_ACCOUNT_ID]?.snapshot
         .apiGatewayMetering,
     ).toBeUndefined();
+  });
+
+  it("derives Sub2API host access from the active account connection", () => {
+    const providerId = "sub2api-api-key" as const;
+    const connected = updateActiveProviderAccountConnection(
+      createTestState(),
+      providerId,
+      {
+        schemaVersion: 1,
+        displayLabel: "Primary gateway",
+        baseUrl: "https://gateway.example.test",
+        insecureTransportAcknowledged: false,
+      },
+    );
+
+    expect(getActiveProviderAccountMetadata(connected, providerId)).toMatchObject({
+      apiGatewayConnection: {
+        displayLabel: "Primary gateway",
+        baseUrl: "https://gateway.example.test",
+      },
+    });
+    expect(
+      connected.providerSettings.find((setting) => setting.id === providerId),
+    ).toMatchObject({
+      status: "missing",
+      hostsLabel: "https://gateway.example.test",
+      hostOrigins: ["https://gateway.example.test/*"],
+    });
+
+    const disconnected = updateActiveProviderAccountConnection(
+      connected,
+      providerId,
+      null,
+    );
+    expect(getActiveProviderAccountMetadata(disconnected, providerId)).not.toHaveProperty(
+      "apiGatewayConnection",
+    );
+    expect(
+      disconnected.providerSettings.find((setting) => setting.id === providerId),
+    ).toMatchObject({
+      status: "granted",
+      hostsLabel: "No deployment configured",
+      hostOrigins: [],
+    });
+  });
+
+  it("keeps host access when only the Sub2API display label changes", () => {
+    const providerId = "sub2api-api-key" as const;
+    const connected = updateActiveProviderAccountConnection(
+      createTestState(),
+      providerId,
+      {
+        schemaVersion: 1,
+        displayLabel: "Gateway",
+        baseUrl: "https://gateway.example.test",
+        insecureTransportAcknowledged: false,
+      },
+    );
+    const granted = {
+      ...connected,
+      providerSettings: connected.providerSettings.map((setting) =>
+        setting.id === providerId ? { ...setting, status: "granted" as const } : setting,
+      ),
+    };
+    const renamed = updateActiveProviderAccountConnection(
+      granted,
+      providerId,
+      {
+        schemaVersion: 1,
+        displayLabel: "Renamed gateway",
+        baseUrl: "https://gateway.example.test",
+        insecureTransportAcknowledged: false,
+      },
+    );
+
+    expect(
+      renamed.providerSettings.find((setting) => setting.id === providerId)?.status,
+    ).toBe("granted");
   });
 });

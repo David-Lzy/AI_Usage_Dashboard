@@ -9,6 +9,7 @@ export const PROVIDER_TOOLBAR_ICON_PAGE_URLS: Record<ProviderId, string> = {
   "gemini-policy": "https://gemini.google.com/",
   "codex-personal-page": "https://chatgpt.com/codex",
   "codex-enterprise-api": "https://chatgpt.com/codex",
+  "sub2api-api-key": "https://github.com/Wei-Shaw/sub2api",
 };
 
 export const DEFAULT_TOOLBAR_ACTION_ICON_PATHS = {

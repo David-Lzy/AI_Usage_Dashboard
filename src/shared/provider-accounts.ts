@@ -1,5 +1,6 @@
 import { hasRegisteredProviderCapability } from "../providers/registry";
 import type {
+  ApiGatewayConnectionMetadata,
   AppState,
   ProviderAccountCollection,
   ProviderAccountId,
@@ -9,6 +10,10 @@ import type {
   ProviderSetting,
   ProviderSnapshot,
 } from "../providers/types";
+import {
+  getSub2ApiHostOriginPattern,
+  normalizeStoredSub2ApiConnection,
+} from "../providers/sub2api/connection";
 import {
   createDefaultApiGatewayMeteringDisplayPreferences,
   normalizeApiGatewayMeteringDisplayPreferences,
@@ -93,11 +98,15 @@ function normalizeMetadata(
       : normalizeApiGatewayMeteringDisplayPreferences(
           value.apiGatewayMeteringDisplayPreferences,
         );
+  const apiGatewayConnection = normalizeStoredSub2ApiConnection(
+    value.apiGatewayConnection,
+  );
   return {
     id,
     label: normalizeAccountLabel(value.label, `Account ${fallbackIndex + 1}`),
     createdAt: normalizeTimestamp(value.createdAt),
     lastSuccessAt: normalizeTimestamp(value.lastSuccessAt),
+    ...(apiGatewayConnection ? { apiGatewayConnection } : {}),
     ...(apiGatewayMeteringDisplayPreferences
       ? { apiGatewayMeteringDisplayPreferences }
       : {}),
@@ -267,6 +276,7 @@ export function addInactiveProviderAccount(
     setting: ProviderSetting;
     accountId?: ProviderAccountId;
     createdAt?: string;
+    apiGatewayConnection?: ApiGatewayConnectionMetadata;
   }>,
   capabilityResolver: ProviderMultiAccountCapabilityResolver =
     defaultCapabilityResolver,
@@ -300,11 +310,20 @@ export function addInactiveProviderAccount(
     throw new Error(`Duplicate provider account ID: ${accountId}`);
   }
 
+  const normalizedConnection = input.apiGatewayConnection
+    ? normalizeStoredSub2ApiConnection(input.apiGatewayConnection)
+    : null;
+  if (input.apiGatewayConnection && !normalizedConnection) {
+    throw new Error("Invalid API gateway connection metadata");
+  }
   collection.accounts.push({
     id: accountId,
     label: normalizeAccountLabel(input.label, "Account"),
     createdAt: normalizeTimestamp(input.createdAt ?? new Date().toISOString()),
     lastSuccessAt: getLastSuccessAt(input.snapshot),
+    ...(normalizedConnection
+      ? { apiGatewayConnection: normalizedConnection }
+      : {}),
     ...(input.snapshot.apiGatewayMetering
       ? {
           apiGatewayMeteringDisplayPreferences:
@@ -401,4 +420,107 @@ export function getProviderAccountOptions(
         accounts: collection.accounts,
       }
     : null;
+}
+
+export function getActiveProviderAccountMetadata(
+  state: Pick<AppState, "providerAccounts">,
+  providerId: ProviderId,
+): ProviderAccountMetadata | null {
+  const collection = state.providerAccounts?.[providerId];
+  if (!collection) {
+    return null;
+  }
+  return (
+    collection.accounts.find(
+      (account) => account.id === collection.activeAccountId,
+    ) ?? null
+  );
+}
+
+export function applyActiveProviderAccountConnections(
+  providerSettings: readonly ProviderSetting[],
+  providerAccounts: ProviderAccountsByProvider,
+): ProviderSetting[] {
+  return providerSettings.map((setting) => {
+    if (setting.id !== "sub2api-api-key") {
+      return setting;
+    }
+    const collection = providerAccounts[setting.id];
+    const metadata = collection?.accounts.find(
+      (account) => account.id === collection.activeAccountId,
+    );
+    const connection = metadata?.apiGatewayConnection;
+
+    return connection
+      ? {
+          ...setting,
+          hostsLabel: connection.baseUrl,
+          hostOrigins: [getSub2ApiHostOriginPattern(connection)],
+        }
+      : {
+          ...setting,
+          status: "granted",
+          hostsLabel: "No deployment configured",
+          hostOrigins: [],
+        };
+  });
+}
+
+export function updateActiveProviderAccountConnection(
+  state: AppState,
+  providerId: ProviderId,
+  connection: ApiGatewayConnectionMetadata | null,
+  capabilityResolver: ProviderMultiAccountCapabilityResolver =
+    defaultCapabilityResolver,
+): AppState {
+  if (!capabilityResolver(providerId)) {
+    throw new Error(`${providerId} does not support account-scoped connections`);
+  }
+  const providerAccounts = normalizeProviderAccounts(
+    state.providers,
+    state.providerAccounts,
+    capabilityResolver,
+  );
+  const collection = providerAccounts[providerId];
+  const metadata = collection?.accounts.find(
+    (account) => account.id === collection.activeAccountId,
+  );
+  if (!collection || !metadata) {
+    throw new Error(`Missing active provider account: ${providerId}`);
+  }
+  const normalizedConnection = connection
+    ? normalizeStoredSub2ApiConnection(connection)
+    : null;
+  if (connection && !normalizedConnection) {
+    throw new Error("Invalid API gateway connection metadata");
+  }
+  const previousOrigin = metadata.apiGatewayConnection
+    ? getSub2ApiHostOriginPattern(metadata.apiGatewayConnection)
+    : null;
+  const nextOrigin = normalizedConnection
+    ? getSub2ApiHostOriginPattern(normalizedConnection)
+    : null;
+  if (normalizedConnection) {
+    metadata.apiGatewayConnection = normalizedConnection;
+  } else {
+    delete metadata.apiGatewayConnection;
+  }
+
+  const providerSettings: ProviderSetting[] = state.providerSettings.map((setting) =>
+    setting.id === providerId && previousOrigin !== nextOrigin
+      ? {
+          ...setting,
+          status: normalizedConnection ? "missing" : "granted",
+        }
+      : setting,
+  );
+
+  return {
+    ...state,
+    providerAccounts,
+    providerSettings: applyActiveProviderAccountConnections(
+      providerSettings,
+      providerAccounts,
+    ),
+  };
 }

@@ -8,7 +8,12 @@ import type {
   SourceConnectionMode,
 } from "./types";
 
-export type ProviderAudience = "personal" | "team-api" | "policy" | "deferred";
+export type ProviderAudience =
+  | "personal"
+  | "team-api"
+  | "api-gateway"
+  | "policy"
+  | "deferred";
 
 export const PROVIDER_CAPABILITY_IDS = [
   "quotaWindows",
@@ -194,6 +199,30 @@ export const PROVIDER_DEFINITIONS: readonly ProviderDescriptor[] = [
         spending: false,
         serviceStatus: true,
         multiAccount: false,
+      },
+    },
+  },
+  {
+    id: "sub2api-api-key",
+    brandId: "sub2api",
+    label: "Sub2API API Key Usage",
+    shortLabel: "Sub2API",
+    audience: "api-gateway",
+    sourceKind: "official_api",
+    connectionMode: "credential",
+    fixedSourcePreference: "official_api",
+    defaultDisplayEnabled: false,
+    quickSetupDefaultVisible: false,
+    runtime: {
+      syncAdapterOwner: "sub2api",
+      executionMode: "shared_strategy",
+      capabilities: {
+        quotaWindows: true,
+        balances: true,
+        aggregateHistory: true,
+        spending: true,
+        serviceStatus: false,
+        multiAccount: true,
       },
     },
   },

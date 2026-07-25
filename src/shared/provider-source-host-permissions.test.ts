@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
 import manifest from "../manifest.json";
+import {
+  getSub2ApiHostOriginPattern,
+  normalizeSub2ApiConnection,
+} from "../providers/sub2api/connection";
 import type { ProviderId, ProviderSourcePlan } from "../providers/types";
 import { PROVIDER_SOURCE_BLUEPRINTS, SAMPLE_APP_STATE } from "./constants";
 
@@ -108,6 +112,10 @@ function shouldExpectHostPermissionCoverage(
   );
 }
 
+function isDynamicRouteHint(value: string): boolean {
+  return value.startsWith("<configured-origin>");
+}
+
 describe("provider source host permission contract", () => {
   it("keeps custom source HTTP and HTTPS endpoint origins requestable", () => {
     expectPatternCoverage({
@@ -149,6 +157,9 @@ describe("provider source host permission contract", () => {
         }
 
         for (const routeHint of sourcePlan.routeHints) {
+          if (isDynamicRouteHint(routeHint)) {
+            continue;
+          }
           expectPatternCoverage({
             candidatePatterns: providerSetting.hostOrigins,
             targetPattern: routeHint,
@@ -175,6 +186,9 @@ describe("provider source host permission contract", () => {
         }
 
         for (const routeHint of sourcePlan.routeHints) {
+          if (isDynamicRouteHint(routeHint)) {
+            continue;
+          }
           expectPatternCoverage({
             candidatePatterns: OPTIONAL_HOST_PERMISSIONS,
             targetPattern: routeHint,
@@ -182,6 +196,37 @@ describe("provider source host permission contract", () => {
           });
         }
       }
+    }
+  });
+
+  it("derives requestable Sub2API host access from the configured deployment", () => {
+    const setting = SAMPLE_APP_STATE.providerSettings.find(
+      (providerSetting) => providerSetting.id === "sub2api-api-key",
+    );
+    const blueprint = PROVIDER_SOURCE_BLUEPRINTS["sub2api-api-key"];
+
+    expect(setting?.hostOrigins).toEqual([]);
+    expect(blueprint.sources[0]?.routeHints).toContain(
+      "<configured-origin>/v1/usage",
+    );
+
+    for (const baseUrl of [
+      "https://gateway.example.test",
+      "http://127.0.0.1:8080",
+    ]) {
+      const connection = normalizeSub2ApiConnection({
+        displayLabel: "Test gateway",
+        baseUrl,
+        insecureTransportAcknowledged: baseUrl.startsWith("http:"),
+      });
+      if (!connection.ok) {
+        throw new Error("Expected a valid synthetic Sub2API connection");
+      }
+      expectPatternCoverage({
+        candidatePatterns: OPTIONAL_HOST_PERMISSIONS,
+        targetPattern: getSub2ApiHostOriginPattern(connection.value),
+        context: "configured Sub2API origins must be requestable",
+      });
     }
   });
 

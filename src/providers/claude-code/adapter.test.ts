@@ -87,6 +87,7 @@ const emptySecrets: ProviderSecrets = {
     analyticsApiKey: null,
     workspaceId: null,
   },
+  "sub2api-api-key": { apiKey: null },
 };
 
 describe("syncClaudeCodeProvider", () => {
@@ -287,6 +288,7 @@ describe("syncClaudeCodeProvider", () => {
         analyticsApiKey: null,
         workspaceId: null,
       },
+      "sub2api-api-key": { apiKey: null },
     },
       setting: adminSetting,
       warningThresholdPercent: 80,

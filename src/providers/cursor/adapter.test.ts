@@ -100,6 +100,7 @@ const emptySecrets: ProviderSecrets = {
     analyticsApiKey: null,
     workspaceId: null,
   },
+  "sub2api-api-key": { apiKey: null },
 };
 
 describe("syncCursorProvider", () => {
@@ -320,6 +321,7 @@ describe("syncCursorProvider", () => {
         analyticsApiKey: null,
         workspaceId: null,
       },
+      "sub2api-api-key": { apiKey: null },
     },
       setting: teamSetting,
       warningThresholdPercent: 80,

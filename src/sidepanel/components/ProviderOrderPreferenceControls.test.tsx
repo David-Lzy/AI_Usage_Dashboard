@@ -31,7 +31,7 @@ describe("ProviderOrderPreferenceControls", () => {
     expect(html).toContain("ArrowUp");
     expect(html).toContain("ArrowDown");
     expect(html).toContain("Full-page tab");
-    expect(html).toContain("8 providers");
+    expect(html).toContain("9 providers");
     expect(html).toContain("Move Cursor Personal Usage Page down on Popup");
   });
 
@@ -66,6 +66,7 @@ describe("ProviderOrderPreferenceControls", () => {
       "gemini-policy",
       "codex-personal-page",
       "codex-enterprise-api",
+      "sub2api-api-key",
     ]);
     expect(reorderProviderBefore([], providerIds, "codex-personal-page", "cursor-personal-page")).toEqual([
       "codex-personal-page",
@@ -76,6 +77,7 @@ describe("ProviderOrderPreferenceControls", () => {
       "claude-code-admin-api",
       "gemini-policy",
       "codex-enterprise-api",
+      "sub2api-api-key",
     ]);
   });
 });

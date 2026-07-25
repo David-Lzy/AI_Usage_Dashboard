@@ -102,6 +102,7 @@ const emptySecrets: ProviderSecrets = {
   "cursor-team-api": { adminApiKey: null },
   "claude-code-admin-api": { adminApiKey: null },
   "codex-enterprise-api": { analyticsApiKey: null, workspaceId: null },
+  "sub2api-api-key": { apiKey: null },
 };
 
 function makeOpenPageRequiredClient() {

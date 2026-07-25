@@ -89,7 +89,10 @@ import {
   normalizeProviderServiceStatuses,
   normalizeProviderServiceStatusVisibilityBySurface,
 } from "./provider-service-status";
-import { normalizeProviderAccounts } from "./provider-accounts";
+import {
+  applyActiveProviderAccountConnections,
+  normalizeProviderAccounts,
+} from "./provider-accounts";
 
 let memoryFallbackState: AppState | null = null;
 
@@ -302,13 +305,20 @@ function normalizeAppState(state: AppState): AppState {
     ),
   };
 
+  const normalizedProviders = [...providers, ...extraProviders];
+  const providerAccounts = normalizeProviderAccounts(
+    normalizedProviders,
+    state.providerAccounts,
+  );
+  const normalizedProviderSettings = applyActiveProviderAccountConnections(
+    [...providerSettings, ...extraProviderSettings],
+    providerAccounts,
+  );
+
   return {
-    providers: [...providers, ...extraProviders],
-    providerSettings: [...providerSettings, ...extraProviderSettings],
-    providerAccounts: normalizeProviderAccounts(
-      [...providers, ...extraProviders],
-      state.providerAccounts,
-    ),
+    providers: normalizedProviders,
+    providerSettings: normalizedProviderSettings,
+    providerAccounts,
     providerServiceStatuses: normalizeProviderServiceStatuses(
       state.providerServiceStatuses,
     ),

@@ -23,6 +23,7 @@ const adapterMocks = vi.hoisted(() => {
     claudeCode: createAdapter(),
     gemini: createAdapter(),
     codex: createAdapter(),
+    sub2api: createAdapter(),
   };
 });
 
@@ -40,6 +41,9 @@ vi.mock("./gemini/adapter", () => ({
 }));
 vi.mock("./codex/adapter", () => ({
   syncCodexProvider: adapterMocks.codex,
+}));
+vi.mock("./sub2api/adapter", () => ({
+  syncSub2ApiProvider: adapterMocks.sub2api,
 }));
 
 import {
@@ -71,6 +75,8 @@ function getProviderState(providerId: ProviderSnapshot["providerId"]): {
 
 function buildContext(setting: ProviderSetting) {
   return {
+    accountId: "default",
+    accountMetadata: null,
     attemptedAt: new Date("2026-07-23T10:00:00.000Z"),
     trigger: "manual" as const,
     secrets: SAMPLE_PROVIDER_SECRETS,
@@ -127,6 +133,7 @@ describe("provider runtime registry", () => {
     expect(adapterMocks.claudeCode).toHaveBeenCalledTimes(2);
     expect(adapterMocks.gemini).toHaveBeenCalledTimes(1);
     expect(adapterMocks.codex).toHaveBeenCalledTimes(2);
+    expect(adapterMocks.sub2api).toHaveBeenCalledTimes(1);
 
     for (const mock of Object.values(adapterMocks)) {
       for (const [input] of mock.mock.calls) {

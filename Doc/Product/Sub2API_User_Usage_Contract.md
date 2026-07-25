@@ -12,8 +12,8 @@ Freshness model:
 
 Status note:
 
-- this document records discovery evidence and a bounded first-release contract
-- no Sub2API runtime connector is shipped by this phase
+- this document records discovery evidence and the shipped API-key contract
+- account-dashboard enrichment remains gated and is not shipped yet
 
 ## Identity And Trust Boundary
 

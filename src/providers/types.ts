@@ -9,7 +9,8 @@ export type ProviderBrandId =
   | "jetbrains"
   | "claude-code"
   | "gemini"
-  | "codex";
+  | "codex"
+  | "sub2api";
 
 export type ProviderId =
   | "cursor-personal-page"
@@ -19,11 +20,12 @@ export type ProviderId =
   | "claude-code-admin-api"
   | "gemini-policy"
   | "codex-personal-page"
-  | "codex-enterprise-api";
+  | "codex-enterprise-api"
+  | "sub2api-api-key";
 
 export type ProviderAccountId = string;
 
-export type LegacyProviderId = ProviderBrandId;
+export type LegacyProviderId = Exclude<ProviderBrandId, "sub2api">;
 
 export type ApiKeyProviderId =
   | "cursor-team-api"
@@ -112,6 +114,7 @@ export type SourceConnectionMode = "credential" | "page_session" | "none";
 export type ProviderSourceContractKind =
   | "shipped_admin_analytics"
   | "shipped_enterprise_analytics"
+  | "shipped_api_gateway_metering"
   | "shipped_personal_partial"
   | "shipped_policy_only"
   | "deferred_personal_page"
@@ -645,7 +648,15 @@ export type ProviderAccountMetadata = {
   label: string;
   createdAt: string | null;
   lastSuccessAt: string | null;
+  apiGatewayConnection?: ApiGatewayConnectionMetadata;
   apiGatewayMeteringDisplayPreferences?: ApiGatewayMeteringDisplayPreferences;
+};
+
+export type ApiGatewayConnectionMetadata = {
+  schemaVersion: 1;
+  displayLabel: string;
+  baseUrl: string;
+  insecureTransportAcknowledged: boolean;
 };
 
 export type ProviderInactiveAccountState = {
@@ -674,5 +685,8 @@ export type ProviderSecrets = {
   "codex-enterprise-api": {
     analyticsApiKey: string | null;
     workspaceId: string | null;
+  };
+  "sub2api-api-key": {
+    apiKey: string | null;
   };
 };

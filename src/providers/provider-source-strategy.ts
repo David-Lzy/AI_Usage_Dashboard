@@ -27,6 +27,9 @@ export type FailedProviderSourceAttempt = Readonly<{
   failure: SourceAttemptFailure;
   snapshot: ProviderSnapshot;
   setting?: ProviderSetting;
+  disposition?: "unavailable" | "retryable_failure" | "terminal_failure";
+  retryAfterMs?: number;
+  cooldownMs?: number;
 }>;
 
 export type ProviderSourceAttempt =
@@ -85,6 +88,24 @@ function classifyFailure(
     detail: attempt.failure.detail,
     context: { attempt },
   };
+
+  if (attempt.disposition === "terminal_failure") {
+    return {
+      status: "terminal_failure" as const,
+      failure,
+      cooldownMs: attempt.cooldownMs,
+    };
+  }
+  if (attempt.disposition === "retryable_failure") {
+    return {
+      status: "retryable_failure" as const,
+      failure,
+      retryAfterMs: attempt.retryAfterMs,
+    };
+  }
+  if (attempt.disposition === "unavailable") {
+    return { status: "unavailable" as const, failure };
+  }
 
   if (!shouldAttemptFallback(attempt.failure)) {
     return {

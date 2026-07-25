@@ -148,7 +148,11 @@ export function getSourceContractLabel(
   kind: ProviderSourceContractKind,
   copy: ProviderSourceDisplayCopy = DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY,
 ): string {
-  return copy.sourceContractLabels[kind];
+  return (
+    copy.sourceContractLabels[kind] ??
+    DEFAULT_PROVIDER_SOURCE_DISPLAY_COPY.sourceContractLabels[kind] ??
+    kind
+  );
 }
 
 export function getProviderSourceBlueprint(providerId: ProviderId) {

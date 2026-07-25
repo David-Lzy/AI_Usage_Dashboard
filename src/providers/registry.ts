@@ -1,4 +1,6 @@
 import type {
+  ProviderAccountId,
+  ProviderAccountMetadata,
   ProviderBrandId,
   ProviderId,
   ProviderSecrets,
@@ -13,6 +15,7 @@ import { syncCodexProvider } from "./codex/adapter";
 import { syncCursorProvider } from "./cursor/adapter";
 import { syncGeminiProvider } from "./gemini/adapter";
 import { syncJetBrainsProvider } from "./jetbrains/adapter";
+import { syncSub2ApiProvider } from "./sub2api/adapter";
 import {
   PROVIDER_DESCRIPTORS,
   PROVIDER_IDS,
@@ -21,6 +24,8 @@ import {
 } from "./provider-definitions";
 
 export type ProviderSyncContext = {
+  accountId: ProviderAccountId;
+  accountMetadata: ProviderAccountMetadata | null;
   attemptedAt: Date;
   trigger: SyncTrigger;
   secrets: ProviderSecrets;
@@ -104,6 +109,19 @@ const PROVIDER_ADAPTERS_BY_OWNER: Readonly<
         secrets: context.secrets,
         setting: context.setting,
         warningThresholdPercent: context.warningThresholdPercent,
+        now: context.attemptedAt,
+        trigger: context.trigger,
+      });
+    },
+  },
+  sub2api: {
+    sync(provider, context) {
+      return syncSub2ApiProvider({
+        provider,
+        secrets: context.secrets,
+        setting: context.setting,
+        accountId: context.accountId,
+        accountMetadata: context.accountMetadata,
         now: context.attemptedAt,
         trigger: context.trigger,
       });

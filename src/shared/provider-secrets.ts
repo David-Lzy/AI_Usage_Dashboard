@@ -19,8 +19,10 @@ import { DEFAULT_PROVIDER_ACCOUNT_ID } from "./provider-accounts";
 
 const PROVIDER_SECRETS_SCHEMA_VERSION = 2 as const;
 
+type ProviderSecretProviderId = ApiKeyProviderId | "sub2api-api-key";
+
 type ProviderSecretAccountMap = {
-  [Provider in ApiKeyProviderId]: Record<
+  [Provider in ProviderSecretProviderId]: Record<
     ProviderAccountId,
     ProviderSecrets[Provider]
   >;
@@ -112,6 +114,14 @@ function normalizeCodexSecret(
   };
 }
 
+function normalizeSub2ApiSecret(
+  value: unknown,
+): ProviderSecrets["sub2api-api-key"] {
+  return {
+    apiKey: normalizeApiKey(isRecord(value) ? value.apiKey : null),
+  };
+}
+
 function normalizeLegacyProviderSecrets(
   secrets: LegacyStoredProviderSecrets,
 ): ProviderSecrets {
@@ -125,6 +135,7 @@ function normalizeLegacyProviderSecrets(
     "codex-enterprise-api": normalizeCodexSecret(
       secrets["codex-enterprise-api"] ?? secrets.codex,
     ),
+    "sub2api-api-key": normalizeSub2ApiSecret(secrets["sub2api-api-key"]),
   };
 }
 
@@ -135,6 +146,7 @@ function createEmptySecretStore(): StoredProviderSecretsV2 {
       "cursor-team-api": {},
       "claude-code-admin-api": {},
       "codex-enterprise-api": {},
+      "sub2api-api-key": {},
     },
   };
 }
@@ -154,6 +166,9 @@ function createStoreFromLegacySecrets(
       },
       "codex-enterprise-api": {
         [DEFAULT_PROVIDER_ACCOUNT_ID]: normalized["codex-enterprise-api"],
+      },
+      "sub2api-api-key": {
+        [DEFAULT_PROVIDER_ACCOUNT_ID]: normalized["sub2api-api-key"],
       },
     },
   };
@@ -202,6 +217,10 @@ function normalizeStoredProviderSecrets(value: unknown): {
           "codex-enterprise-api": normalizeAccountMap(
             value.accounts["codex-enterprise-api"],
             normalizeCodexSecret,
+          ),
+          "sub2api-api-key": normalizeAccountMap(
+            value.accounts["sub2api-api-key"],
+            normalizeSub2ApiSecret,
           ),
         },
       },
@@ -309,7 +328,7 @@ async function readSecretStore(): Promise<StoredProviderSecretsV2> {
 
 function getSelectedAccountId(
   accountIds: ActiveProviderAccountIds,
-  providerId: ApiKeyProviderId,
+  providerId: ProviderSecretProviderId,
 ): ProviderAccountId {
   return accountIds[providerId] ?? DEFAULT_PROVIDER_ACCOUNT_ID;
 }
@@ -334,6 +353,11 @@ function selectProviderSecrets(
         getSelectedAccountId(accountIds, "codex-enterprise-api")
       ],
     ),
+    "sub2api-api-key": normalizeSub2ApiSecret(
+      store.accounts["sub2api-api-key"][
+        getSelectedAccountId(accountIds, "sub2api-api-key")
+      ],
+    ),
   };
 }
 
@@ -355,6 +379,7 @@ export async function writeProviderSecrets(
     "codex-enterprise-api": normalizeCodexSecret(
       secrets["codex-enterprise-api"],
     ),
+    "sub2api-api-key": normalizeSub2ApiSecret(secrets["sub2api-api-key"]),
   });
   const store = await readSecretStore();
 
@@ -367,6 +392,9 @@ export async function writeProviderSecrets(
   store.accounts["codex-enterprise-api"][
     getSelectedAccountId(accountIds, "codex-enterprise-api")
   ] = normalizedSecrets["codex-enterprise-api"];
+  store.accounts["sub2api-api-key"][
+    getSelectedAccountId(accountIds, "sub2api-api-key")
+  ] = normalizedSecrets["sub2api-api-key"];
 
   await persistSecretStore(store);
   return normalizedSecrets;
@@ -399,6 +427,21 @@ export async function setProviderAdminApiKey(
       },
     }),
     { [providerId]: accountId },
+  );
+}
+
+export async function setSub2ApiKey(
+  apiKey: string | null,
+  accountId: ProviderAccountId = DEFAULT_PROVIDER_ACCOUNT_ID,
+): Promise<ProviderSecrets> {
+  return updateProviderSecrets(
+    (current) => ({
+      ...current,
+      "sub2api-api-key": {
+        apiKey: normalizeApiKey(apiKey),
+      },
+    }),
+    { "sub2api-api-key": accountId },
   );
 }
 

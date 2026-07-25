@@ -19,6 +19,10 @@ function getProviderCredentialStatus(
       : "missing";
   }
 
+  if (providerId === "sub2api-api-key") {
+    return secrets[providerId].apiKey ? "configured" : "missing";
+  }
+
   return "not_required";
 }
 

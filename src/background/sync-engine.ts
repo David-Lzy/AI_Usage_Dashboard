@@ -3,6 +3,7 @@ import { getProviderSyncAdapter } from "../providers/registry";
 import type {
   AppState,
   AppSettings,
+  ProviderAccountId,
   ProviderId,
   ProviderSetting,
   ProviderSnapshot,
@@ -11,7 +12,12 @@ import type {
 import { hasCustomSourceHostAccess } from "../shared/custom-source-host-access";
 import { mapWithConcurrency } from "../shared/async-concurrency";
 import { readProviderSecrets } from "../shared/provider-secrets";
-import { getActiveProviderAccountIds } from "../shared/provider-accounts";
+import {
+  DEFAULT_PROVIDER_ACCOUNT_ID,
+  getActiveProviderAccountId,
+  getActiveProviderAccountIds,
+  getActiveProviderAccountMetadata,
+} from "../shared/provider-accounts";
 import { seedAppStateIfEmpty, writeAppState } from "../shared/storage";
 import { syncCustomSources } from "./custom-source-sync";
 import { syncCodexBarDashboardSources } from "./codexbar-dashboard-sync";
@@ -22,6 +28,7 @@ const MIN_STALE_MINUTES = 60;
 export const PROVIDER_SYNC_CONCURRENCY_LIMIT = 2;
 
 type SyncEngineOutcome = {
+  accountId: ProviderAccountId;
   didSync: boolean;
   providerId: ProviderId;
   setting: ProviderSetting | null;
@@ -274,7 +281,8 @@ async function runSyncEngineOnce({
   providerId,
 }: RunSyncEngineParams): Promise<AppState> {
   const current = await seedAppStateIfEmpty();
-  const secrets = await readProviderSecrets(getActiveProviderAccountIds(current));
+  const activeAccountIds = getActiveProviderAccountIds(current);
+  const secrets = await readProviderSecrets(activeAccountIds);
   const now = new Date();
   const providerSettings = new Map(
     current.providerSettings.map((provider) => [provider.id, provider]),
@@ -285,9 +293,12 @@ async function runSyncEngineOnce({
     PROVIDER_SYNC_CONCURRENCY_LIMIT,
     async (provider) => {
       const setting = providerSettings.get(provider.providerId);
+      const accountId =
+        activeAccountIds[provider.providerId] ?? DEFAULT_PROVIDER_ACCOUNT_ID;
 
       if (!setting) {
         return {
+          accountId,
           didSync: false,
           providerId: provider.providerId,
           snapshot: provider,
@@ -302,6 +313,7 @@ async function runSyncEngineOnce({
 
       if (!shouldSync) {
         return {
+          accountId,
           didSync: false,
           providerId: provider.providerId,
           snapshot: provider,
@@ -316,6 +328,11 @@ async function runSyncEngineOnce({
         trigger,
         run: () =>
           adapter.sync(provider, {
+            accountId,
+            accountMetadata: getActiveProviderAccountMetadata(
+              current,
+              provider.providerId,
+            ),
             attemptedAt: now,
             trigger,
             secrets,
@@ -325,6 +342,7 @@ async function runSyncEngineOnce({
       });
 
       return {
+        accountId,
         didSync: true,
         providerId: provider.providerId,
         snapshot: outcome.snapshot,
@@ -348,6 +366,8 @@ async function runSyncEngineOnce({
 
     if (
       !latestSetting ||
+      getActiveProviderAccountId(latest, outcome.providerId) !==
+        outcome.accountId ||
       hasSyncRelevantProviderSettingDrift(outcome.startedSetting, latestSetting)
     ) {
       continue;
@@ -374,6 +394,10 @@ async function runSyncEngineOnce({
 
     nextProviderSettings.set(outcome.providerId, {
       ...latestSetting,
+      status: outcome.setting.status,
+      credentialStatus: outcome.setting.credentialStatus,
+      hostsLabel: outcome.setting.hostsLabel,
+      hostOrigins: outcome.setting.hostOrigins,
       pageBinding: outcome.setting.pageBinding,
     });
   }

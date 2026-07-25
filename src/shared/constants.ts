@@ -300,6 +300,33 @@ export const PROVIDER_SOURCE_BLUEPRINTS: Record<ProviderId, ProviderSourceBluepr
       },
     ],
   },
+  "sub2api-api-key": {
+    preferredSourceKind: "official_api",
+    fallbackOrder: ["official_api"],
+    credentialPersistence: "extension_local_only",
+    cookiePersistence: "forbidden",
+    manualCookieImport: "forbidden",
+    sources: [
+      {
+        kind: "official_api",
+        rolloutStage: "shipped",
+        connectionMode: "credential",
+        contractKind: "shipped_api_gateway_metering",
+        priority: 1,
+        label: "Sub2API API-key usage endpoint",
+        routeHints: ["<configured-origin>/v1/usage"],
+        usedAvailability: "exact",
+        remainingAvailability: "exact",
+        resetAvailability: "window_only",
+        contractDetail:
+          "Account-scoped connector for a user-configured Sub2API deployment. The API-key usage endpoint reports key-level metering and may not represent deployment-wide account totals.",
+        graduationGateLabel: null,
+        graduationGateDetail: null,
+        note:
+          "The deployment origin and API key are configured locally. No dashboard page session is opened or inspected.",
+      },
+    ],
+  },
 };
 
 export const SAMPLE_PROVIDER_SECRETS: ProviderSecrets = {
@@ -312,6 +339,9 @@ export const SAMPLE_PROVIDER_SECRETS: ProviderSecrets = {
   "codex-enterprise-api": {
     analyticsApiKey: null,
     workspaceId: null,
+  },
+  "sub2api-api-key": {
+    apiKey: null,
   },
 };
 
@@ -626,6 +656,31 @@ export const SAMPLE_APP_STATE: AppState = {
       sourceFallbackReason: null,
       tone: "warning",
     },
+    {
+      providerId: "sub2api-api-key",
+      providerLabel: "Sub2API",
+      planName: "Sub2API API-key usage",
+      quotaUnit: "credits",
+      quotaWindow: "daily",
+      used: null,
+      remaining: null,
+      total: null,
+      resetAt: "Not configured",
+      resetLabel: "Connect a deployment and API key in Settings",
+      syncedAt: "Not synced",
+      syncSource: "official",
+      syncStatus: "warning",
+      warningReason: "Sub2API deployment and API key are not configured.",
+      warningDiagnostic: createCredentialDiagnostic({
+        providerId: "sub2api-api-key",
+        credentialKind: "admin_api_key",
+        rawMessage: "Sub2API deployment and API key are not configured.",
+      }),
+      lastSyncLabel: "Not connected",
+      sourceSelectionReason: "Official API selected.",
+      sourceFallbackReason: null,
+      tone: "warning",
+    },
   ],
   providerSettings: [
     createProviderSetting("cursor-personal-page", {
@@ -702,6 +757,15 @@ export const SAMPLE_APP_STATE: AppState = {
       hostOrigins: ["https://api.chatgpt.com/*"],
       description:
         "Uses the Codex Enterprise analytics API when an API key and workspace ID are configured.",
+    }),
+    createProviderSetting("sub2api-api-key", {
+      status: "missing",
+      credentialStatus: "missing",
+      pageBinding: createEmptyPageBinding(),
+      hostsLabel: "No deployment configured",
+      hostOrigins: [],
+      description:
+        "Uses a user-configured Sub2API deployment and account-scoped API key without opening its dashboard.",
     }),
   ],
   settings: {

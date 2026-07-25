@@ -68,6 +68,17 @@
       "displayEligibility": "shipped"
     },
     {
+      "id": "sub2api-api-key",
+      "adapterOwner": "sub2api",
+      "adapterTest": "src/providers/sub2api/adapter.test.ts",
+      "providerNote": "Doc/provider_notes/Sub2API.md",
+      "sourceContract": "Doc/Product/Sub2API_User_Usage_Contract.md",
+      "i18nPolicy": "Doc/I18n/I18n_Raw_Provider_Source_Truth_Policy.md",
+      "localizedCopyOwner": "src/shared/provider-source-display-localized-copy.ts",
+      "hostAccessContract": "optional_api_origin",
+      "displayEligibility": "shipped"
+    },
+    {
       "id": "gemini-policy",
       "adapterOwner": "gemini",
       "adapterTest": "src/providers/gemini/adapter.test.ts",

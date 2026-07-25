@@ -33,7 +33,7 @@ export type ProviderSourceDisplayCopy = {
       detail: string;
     }
   >;
-  sourceContractLabels: Record<ProviderSourceContractKind, string>;
+  sourceContractLabels: Partial<Record<ProviderSourceContractKind, string>>;
   credentialPersistence: {
     extensionLocalOnlyLabel: string;
     extensionLocalOnlyDetail: string;
@@ -137,6 +137,7 @@ const SOURCE_CONTRACT_LABELS: Record<ProviderSourceContractKind, string> = {
   shipped_admin_analytics: "Shipped admin analytics",
   shipped_enterprise_analytics: "Shipped enterprise analytics",
   shipped_personal_partial: "Shipped personal partial",
+  shipped_api_gateway_metering: "Shipped API gateway metering",
   shipped_policy_only: "Shipped policy only",
   deferred_personal_page: "Deferred personal page",
   deferred_project_metrics: "Deferred project metrics",

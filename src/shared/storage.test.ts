@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { AppState } from "../providers/types";
 import { buildActionBadgeQuotaCandidates } from "./action-badge-preferences";
 import { SAMPLE_APP_STATE } from "./constants";
+import { updateActiveProviderAccountConnection } from "./provider-accounts";
 import {
   clearAppState,
   readAppState,
@@ -700,6 +701,7 @@ describe("storage normalization", () => {
       "claude-code-admin-api",
       "gemini-policy",
       "codex-enterprise-api",
+      "sub2api-api-key",
     ]);
     expect(state?.settings.providerOrderBySurface.sidebar).toEqual([]);
     expect(state?.settings.providerOrderBySurface.fullPage).toEqual([
@@ -711,11 +713,46 @@ describe("storage normalization", () => {
       "claude-code-admin-api",
       "codex-personal-page",
       "codex-enterprise-api",
+      "sub2api-api-key",
     ]);
     expect(state?.settings.progressItemsBySurface).toEqual({
       popup: {},
       sidebar: {},
       fullPage: {},
+    });
+  });
+
+  it("persists dynamic Sub2API host access from normalized account metadata", async () => {
+    const connected = updateActiveProviderAccountConnection(
+      structuredClone(SAMPLE_APP_STATE),
+      "sub2api-api-key",
+      {
+        schemaVersion: 1,
+        displayLabel: "Primary gateway",
+        baseUrl: "https://gateway.example.test",
+        insecureTransportAcknowledged: false,
+      },
+    );
+
+    await writeAppState(connected);
+    const state = await readAppState();
+
+    expect(
+      state?.providerSettings.find(
+        (setting) => setting.id === "sub2api-api-key",
+      ),
+    ).toMatchObject({
+      status: "missing",
+      hostsLabel: "https://gateway.example.test",
+      hostOrigins: ["https://gateway.example.test/*"],
+    });
+    expect(
+      state?.providerAccounts?.["sub2api-api-key"]?.accounts[0],
+    ).toMatchObject({
+      apiGatewayConnection: {
+        displayLabel: "Primary gateway",
+        baseUrl: "https://gateway.example.test",
+      },
     });
   });
 

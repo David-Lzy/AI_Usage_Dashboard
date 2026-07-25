@@ -19,6 +19,7 @@ const EXPECTED_PROVIDER_ID_RECORD = {
   "claude-code-admin-api": true,
   "codex-personal-page": true,
   "codex-enterprise-api": true,
+  "sub2api-api-key": true,
   "gemini-policy": true,
   "jetbrains-org-page": true,
 } satisfies Record<ProviderId, true>;
