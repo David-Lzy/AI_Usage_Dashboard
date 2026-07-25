@@ -56,6 +56,46 @@ Current source-level provider entries:
 
 Each source entry has one fixed source family: personal page/session, Team/API credential, policy-only reference, or deferred organization page. New code should not use one brand-level provider row plus `sourcePreference` to switch between personal and API behavior.
 
+### Static Provider Descriptor
+
+Each source entry has one static descriptor in
+`src/providers/provider-definitions.ts`. The descriptor keeps stable identity,
+bootstrap display defaults, connection mode, runtime adapter ownership, and
+implemented capability flags together. Runtime registration may consume this
+metadata, but the descriptor must not import adapter implementations or create
+another source-attempt path.
+
+Capability flags describe code the extension has implemented for that source
+entry. They do not claim that the current account, response, or stored snapshot
+contains matching data:
+
+- `quotaWindows` means the adapter can normalize reset-bounded quota progress.
+- `balances` means it can normalize a remaining balance or usage pool.
+- `aggregateHistory` means it can normalize bounded multi-day aggregate data.
+- `spending` means it can normalize currency-denominated spend or cost signals.
+- `serviceStatus` means an independently verified official status contract is
+  implemented.
+- `multiAccount` means the source entry can keep more than one local account
+  identity isolated. It never means that account quotas are combined.
+
+Current capability ownership:
+
+| Source entry | Adapter owner | Quota windows | Balances | Aggregate history | Spending |
+| --- | --- | --- | --- | --- | --- |
+| `cursor-personal-page` | Cursor | Yes | Yes | Yes | Yes |
+| `cursor-team-api` | Cursor | No | No | No | Yes |
+| `claude-code-team-page` | Claude Code | Yes | No | No | Yes |
+| `claude-code-admin-api` | Claude Code | No | No | No | Yes |
+| `codex-personal-page` | Codex | Yes | Yes | Yes | No |
+| `codex-enterprise-api` | Codex | No | No | No | No |
+| `gemini-policy` | Gemini | No | No | No | No |
+| `jetbrains-org-page` | JetBrains | Yes | No | No | No |
+
+`serviceStatus` and `multiAccount` are currently false for every source entry.
+JetBrains remains deferred even though its retained adapter has quota-window
+normalization code; the capability flag does not override rollout stage,
+display eligibility, permissions, or runtime data availability.
+
 ### Setup State
 
 Setup state describes whether a source entry has enough user action, permission, credentials, or source binding to attempt a truthful sync.

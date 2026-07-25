@@ -10,6 +10,27 @@ import type {
 
 export type ProviderAudience = "personal" | "team-api" | "policy" | "deferred";
 
+export const PROVIDER_CAPABILITY_IDS = [
+  "quotaWindows",
+  "balances",
+  "aggregateHistory",
+  "spending",
+  "serviceStatus",
+  "multiAccount",
+] as const;
+
+export type ProviderCapabilityId = (typeof PROVIDER_CAPABILITY_IDS)[number];
+
+/** Static implementation support. This does not describe current snapshot data. */
+export type ProviderCapabilitySet = Readonly<
+  Record<ProviderCapabilityId, boolean>
+>;
+
+export type ProviderRuntimeDescriptor = Readonly<{
+  syncAdapterOwner: ProviderBrandId;
+  capabilities: ProviderCapabilitySet;
+}>;
+
 export type ProviderDefinition = {
   id: ProviderId;
   brandId: ProviderBrandId;
@@ -23,7 +44,11 @@ export type ProviderDefinition = {
   quickSetupDefaultVisible: boolean;
 };
 
-export const PROVIDER_DEFINITIONS: readonly ProviderDefinition[] = [
+export type ProviderDescriptor = ProviderDefinition & {
+  runtime: ProviderRuntimeDescriptor;
+};
+
+export const PROVIDER_DEFINITIONS: readonly ProviderDescriptor[] = [
   {
     id: "cursor-personal-page",
     brandId: "cursor",
@@ -35,6 +60,17 @@ export const PROVIDER_DEFINITIONS: readonly ProviderDefinition[] = [
     fixedSourcePreference: "session_page",
     defaultDisplayEnabled: false,
     quickSetupDefaultVisible: true,
+    runtime: {
+      syncAdapterOwner: "cursor",
+      capabilities: {
+        quotaWindows: true,
+        balances: true,
+        aggregateHistory: true,
+        spending: true,
+        serviceStatus: false,
+        multiAccount: false,
+      },
+    },
   },
   {
     id: "cursor-team-api",
@@ -47,6 +83,17 @@ export const PROVIDER_DEFINITIONS: readonly ProviderDefinition[] = [
     fixedSourcePreference: "official_api",
     defaultDisplayEnabled: false,
     quickSetupDefaultVisible: false,
+    runtime: {
+      syncAdapterOwner: "cursor",
+      capabilities: {
+        quotaWindows: false,
+        balances: false,
+        aggregateHistory: false,
+        spending: true,
+        serviceStatus: false,
+        multiAccount: false,
+      },
+    },
   },
   {
     id: "claude-code-team-page",
@@ -59,6 +106,17 @@ export const PROVIDER_DEFINITIONS: readonly ProviderDefinition[] = [
     fixedSourcePreference: "session_page",
     defaultDisplayEnabled: true,
     quickSetupDefaultVisible: true,
+    runtime: {
+      syncAdapterOwner: "claude-code",
+      capabilities: {
+        quotaWindows: true,
+        balances: false,
+        aggregateHistory: false,
+        spending: true,
+        serviceStatus: false,
+        multiAccount: false,
+      },
+    },
   },
   {
     id: "claude-code-admin-api",
@@ -71,6 +129,17 @@ export const PROVIDER_DEFINITIONS: readonly ProviderDefinition[] = [
     fixedSourcePreference: "official_api",
     defaultDisplayEnabled: false,
     quickSetupDefaultVisible: false,
+    runtime: {
+      syncAdapterOwner: "claude-code",
+      capabilities: {
+        quotaWindows: false,
+        balances: false,
+        aggregateHistory: false,
+        spending: true,
+        serviceStatus: false,
+        multiAccount: false,
+      },
+    },
   },
   {
     id: "codex-personal-page",
@@ -83,6 +152,17 @@ export const PROVIDER_DEFINITIONS: readonly ProviderDefinition[] = [
     fixedSourcePreference: "session_page",
     defaultDisplayEnabled: true,
     quickSetupDefaultVisible: true,
+    runtime: {
+      syncAdapterOwner: "codex",
+      capabilities: {
+        quotaWindows: true,
+        balances: true,
+        aggregateHistory: true,
+        spending: false,
+        serviceStatus: false,
+        multiAccount: false,
+      },
+    },
   },
   {
     id: "codex-enterprise-api",
@@ -95,6 +175,17 @@ export const PROVIDER_DEFINITIONS: readonly ProviderDefinition[] = [
     fixedSourcePreference: "official_api",
     defaultDisplayEnabled: false,
     quickSetupDefaultVisible: false,
+    runtime: {
+      syncAdapterOwner: "codex",
+      capabilities: {
+        quotaWindows: false,
+        balances: false,
+        aggregateHistory: false,
+        spending: false,
+        serviceStatus: false,
+        multiAccount: false,
+      },
+    },
   },
   {
     id: "gemini-policy",
@@ -107,6 +198,17 @@ export const PROVIDER_DEFINITIONS: readonly ProviderDefinition[] = [
     fixedSourcePreference: "auto",
     defaultDisplayEnabled: false,
     quickSetupDefaultVisible: true,
+    runtime: {
+      syncAdapterOwner: "gemini",
+      capabilities: {
+        quotaWindows: false,
+        balances: false,
+        aggregateHistory: false,
+        spending: false,
+        serviceStatus: false,
+        multiAccount: false,
+      },
+    },
   },
   {
     id: "jetbrains-org-page",
@@ -119,15 +221,28 @@ export const PROVIDER_DEFINITIONS: readonly ProviderDefinition[] = [
     fixedSourcePreference: "session_page",
     defaultDisplayEnabled: false,
     quickSetupDefaultVisible: false,
+    runtime: {
+      syncAdapterOwner: "jetbrains",
+      capabilities: {
+        quotaWindows: true,
+        balances: false,
+        aggregateHistory: false,
+        spending: false,
+        serviceStatus: false,
+        multiAccount: false,
+      },
+    },
   },
 ] as const;
+
+export const PROVIDER_DESCRIPTORS = PROVIDER_DEFINITIONS;
 
 export const PROVIDER_IDS = PROVIDER_DEFINITIONS.map(
   (provider) => provider.id,
 ) as ProviderId[];
 
 export const API_KEY_PROVIDER_IDS = PROVIDER_DEFINITIONS.filter(
-  (provider): provider is ProviderDefinition & { id: ApiKeyProviderId } =>
+  (provider): provider is ProviderDescriptor & { id: ApiKeyProviderId } =>
     provider.connectionMode === "credential",
 ).map((provider) => provider.id) as ApiKeyProviderId[];
 
@@ -139,7 +254,7 @@ export const LEGACY_PROVIDER_ID_MAP: Record<LegacyProviderId, ProviderId> = {
   codex: "codex-personal-page",
 };
 
-const PROVIDER_DEFINITION_BY_ID = new Map(
+const PROVIDER_DEFINITION_BY_ID = new Map<ProviderId, ProviderDescriptor>(
   PROVIDER_DEFINITIONS.map((provider) => [provider.id, provider] as const),
 );
 
@@ -164,11 +279,22 @@ export function isApiKeyProviderId(value: unknown): value is ApiKeyProviderId {
 }
 
 export function getProviderDefinition(providerId: ProviderId): ProviderDefinition {
+  return getProviderDescriptor(providerId);
+}
+
+export function getProviderDescriptor(providerId: ProviderId): ProviderDescriptor {
   const definition = PROVIDER_DEFINITION_BY_ID.get(providerId);
   if (!definition) {
     throw new Error(`Unknown provider id: ${providerId}`);
   }
   return definition;
+}
+
+export function hasProviderCapability(
+  providerId: ProviderId,
+  capability: ProviderCapabilityId,
+): boolean {
+  return getProviderDescriptor(providerId).runtime.capabilities[capability];
 }
 
 export function getProviderBrandId(providerId: ProviderId): ProviderBrandId {
