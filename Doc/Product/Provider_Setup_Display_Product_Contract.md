@@ -65,6 +65,12 @@ implemented capability flags together. Runtime registration may consume this
 metadata, but the descriptor must not import adapter implementations or create
 another source-attempt path.
 
+The runtime registry groups implementation functions by adapter owner, then
+builds exactly one registry entry from each descriptor. A registry entry pairs
+the descriptor with its sync function and rejects snapshot or setting ids that
+do not match that source entry. Provider-specific parsing and normalization
+remain inside the owner adapter; the registry only performs typed dispatch.
+
 Capability flags describe code the extension has implemented for that source
 entry. They do not claim that the current account, response, or stored snapshot
 contains matching data:
