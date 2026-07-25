@@ -262,6 +262,29 @@ describe("provider source strategy orchestrator", () => {
     });
   });
 
+  it("does not retain a zero-duration terminal cooldown", async () => {
+    const run = vi.fn(async () => ({
+      status: "terminal_failure" as const,
+      failure: { code: "host_access_missing", detail: "Grant access." },
+      cooldownMs: 0,
+    }));
+    const orchestrator = createSourceStrategyOrchestrator<
+      Snapshot,
+      PartialSnapshot
+    >();
+    const options = {
+      sourceEntryId: "codex-personal-page" as const,
+      previousValue: PREVIOUS_SNAPSHOT,
+      mergePartial,
+      strategies: [strategy("page", run)],
+    };
+
+    expect((await orchestrator.run(options)).status).toBe("terminal_failure");
+    expect((await orchestrator.run(options)).status).toBe("terminal_failure");
+    expect(run).toHaveBeenCalledTimes(2);
+    expect(orchestrator.getDebugSnapshot().cooldownCount).toBe(0);
+  });
+
   it("aborts timed-out attempts and releases the in-flight entry", async () => {
     vi.useFakeTimers();
     const observedSignals: AbortSignal[] = [];

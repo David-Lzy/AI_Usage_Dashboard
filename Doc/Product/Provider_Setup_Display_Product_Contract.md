@@ -79,6 +79,12 @@ not choose a provider protocol, parse a provider response, cross source-entry
 boundaries, start polling, or invoke a local companion. Strategy order and
 truthful partial-data merge rules remain explicit in the owning adapter.
 
+Personal Codex, Cursor, and Claude entries use this shared source-entry layer
+for refresh coalescing, cooldown, timeout, and previous-result preservation.
+Their provider-specific session API, observed-response, and page-hydration
+sequence remains inside the existing bounded personal-page client so that
+credential handling and request budgets are not duplicated by the registry.
+
 Capability flags describe code the extension has implemented for that source
 entry. They do not claim that the current account, response, or stored snapshot
 contains matching data:

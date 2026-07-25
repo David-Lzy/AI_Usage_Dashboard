@@ -7,33 +7,43 @@ export type BrowserSourceStrategyKind =
   | "page_capture"
   | "policy";
 
-export type SourceStrategyFailure = Readonly<{
+export type SourceStrategyFailure<TContext = never> = Readonly<{
   code: string;
   detail: string;
+  context?: TContext;
 }>;
 
-export type SourceStrategyAttemptOutcome<TValue, TPartial> =
+export type SourceStrategyAttemptOutcome<
+  TValue,
+  TPartial,
+  TFailureContext = never,
+> =
   | Readonly<{ status: "success"; value: TValue }>
   | Readonly<{ status: "partial"; value: TPartial }>
-  | Readonly<{ status: "unavailable"; failure: SourceStrategyFailure }>
+  | Readonly<{
+      status: "unavailable";
+      failure: SourceStrategyFailure<TFailureContext>;
+    }>
   | Readonly<{
       status: "retryable_failure";
-      failure: SourceStrategyFailure;
+      failure: SourceStrategyFailure<TFailureContext>;
       retryAfterMs?: number;
     }>
   | Readonly<{
       status: "terminal_failure";
-      failure: SourceStrategyFailure;
+      failure: SourceStrategyFailure<TFailureContext>;
       cooldownMs?: number;
     }>;
 
-export type SourceStrategy<TValue, TPartial> = Readonly<{
+export type SourceStrategy<TValue, TPartial, TFailureContext = never> = Readonly<{
   id: string;
   kind: BrowserSourceStrategyKind;
   timeoutMs?: number;
   run: (context: {
     signal: AbortSignal;
-  }) => Promise<SourceStrategyAttemptOutcome<TValue, TPartial>>;
+  }) => Promise<
+    SourceStrategyAttemptOutcome<TValue, TPartial, TFailureContext>
+  >;
 }>;
 
 export type SourceStrategyAttemptDiagnostic = Readonly<{
@@ -58,17 +68,21 @@ export type SourceStrategyRunStatus =
   | "cooldown"
   | "cancelled";
 
-export type SourceStrategyRunResult<TValue> = Readonly<{
+export type SourceStrategyRunResult<TValue, TFailureContext = never> = Readonly<{
   status: SourceStrategyRunStatus;
   value: TValue | null;
   selectedStrategyId: string | null;
-  failure: SourceStrategyFailure | null;
+  failure: SourceStrategyFailure<TFailureContext> | null;
   attempts: readonly SourceStrategyAttemptDiagnostic[];
 }>;
 
-export type SourceStrategyRunOptions<TValue, TPartial> = Readonly<{
+export type SourceStrategyRunOptions<
+  TValue,
+  TPartial,
+  TFailureContext = never,
+> = Readonly<{
   sourceEntryId: ProviderId;
-  strategies: readonly SourceStrategy<TValue, TPartial>[];
+  strategies: readonly SourceStrategy<TValue, TPartial, TFailureContext>[];
   previousValue: TValue | null;
   mergePartial: (previous: TValue | null, partial: TPartial) => TValue;
   bypassCooldown?: boolean;
@@ -93,28 +107,36 @@ export type SourceStrategyOrchestratorOptions = Readonly<{
   now?: () => number;
 }>;
 
-export type SourceStrategyOrchestrator<TValue, TPartial> = Readonly<{
+export type SourceStrategyOrchestrator<
+  TValue,
+  TPartial,
+  TFailureContext = never,
+> = Readonly<{
   run: (
-    options: SourceStrategyRunOptions<TValue, TPartial>,
-  ) => Promise<SourceStrategyRunResult<TValue>>;
+    options: SourceStrategyRunOptions<TValue, TPartial, TFailureContext>,
+  ) => Promise<SourceStrategyRunResult<TValue, TFailureContext>>;
   getDebugSnapshot: () => SourceStrategyDebugSnapshot;
 }>;
 
-type RetryCooldown = {
+type RetryCooldown<TFailureContext> = {
   failureCount: number;
-  failure: SourceStrategyFailure;
+  failure: SourceStrategyFailure<TFailureContext>;
   until: number;
 };
 
-type TerminalCooldown = {
-  failure: SourceStrategyFailure;
+type TerminalCooldown<TFailureContext> = {
+  failure: SourceStrategyFailure<TFailureContext>;
   until: number;
 };
 
-type AttemptExecution<TValue, TPartial> =
+type AttemptExecution<TValue, TPartial, TFailureContext> =
   | {
       kind: "outcome";
-      outcome: SourceStrategyAttemptOutcome<TValue, TPartial>;
+      outcome: SourceStrategyAttemptOutcome<
+        TValue,
+        TPartial,
+        TFailureContext
+      >;
     }
   | { kind: "timeout" }
   | { kind: "cancelled" };
@@ -132,8 +154,8 @@ function buildCooldownKey(sourceEntryId: ProviderId, strategyId: string): string
   return `${sourceEntryId}:${strategyId}`;
 }
 
-function assertUniqueStrategies<TValue, TPartial>(
-  strategies: readonly SourceStrategy<TValue, TPartial>[],
+function assertUniqueStrategies<TValue, TPartial, TFailureContext>(
+  strategies: readonly SourceStrategy<TValue, TPartial, TFailureContext>[],
 ): void {
   const ids = new Set<string>();
   for (const strategy of strategies) {
@@ -147,9 +169,13 @@ function assertUniqueStrategies<TValue, TPartial>(
   }
 }
 
-export function createSourceStrategyOrchestrator<TValue, TPartial>(
+export function createSourceStrategyOrchestrator<
+  TValue,
+  TPartial,
+  TFailureContext = never,
+>(
   options: SourceStrategyOrchestratorOptions = {},
-): SourceStrategyOrchestrator<TValue, TPartial> {
+): SourceStrategyOrchestrator<TValue, TPartial, TFailureContext> {
   const defaultTimeoutMs = Math.min(
     MAX_TIMEOUT_MS,
     Math.max(1, options.defaultTimeoutMs ?? DEFAULT_TIMEOUT_MS),
@@ -165,10 +191,13 @@ export function createSourceStrategyOrchestrator<TValue, TPartial>(
   const now = options.now ?? Date.now;
   const activeRuns = new Map<
     ProviderId,
-    Promise<SourceStrategyRunResult<TValue>>
+    Promise<SourceStrategyRunResult<TValue, TFailureContext>>
   >();
-  const retryCooldowns = new Map<string, RetryCooldown>();
-  const terminalCooldowns = new Map<ProviderId, TerminalCooldown>();
+  const retryCooldowns = new Map<string, RetryCooldown<TFailureContext>>();
+  const terminalCooldowns = new Map<
+    ProviderId,
+    TerminalCooldown<TFailureContext>
+  >();
   const counters = {
     runsStarted: 0,
     coalescedRuns: 0,
@@ -179,9 +208,9 @@ export function createSourceStrategyOrchestrator<TValue, TPartial>(
   };
 
   async function executeAttempt(
-    strategy: SourceStrategy<TValue, TPartial>,
+    strategy: SourceStrategy<TValue, TPartial, TFailureContext>,
     parentSignal: AbortSignal | undefined,
-  ): Promise<AttemptExecution<TValue, TPartial>> {
+  ): Promise<AttemptExecution<TValue, TPartial, TFailureContext>> {
     if (parentSignal?.aborted) {
       return { kind: "cancelled" };
     }
@@ -194,7 +223,9 @@ export function createSourceStrategyOrchestrator<TValue, TPartial>(
     let timeoutId: ReturnType<typeof globalThis.setTimeout> | null = null;
     let removeParentAbortListener = () => {};
 
-    const interruption = new Promise<AttemptExecution<TValue, TPartial>>(
+    const interruption = new Promise<
+      AttemptExecution<TValue, TPartial, TFailureContext>
+    >(
       (resolve) => {
         const cancel = () => {
           controller.abort();
@@ -219,11 +250,11 @@ export function createSourceStrategyOrchestrator<TValue, TPartial>(
 
     const attempt = Promise.resolve()
       .then(() => strategy.run({ signal: controller.signal }))
-      .then<AttemptExecution<TValue, TPartial>>((outcome) => ({
+      .then<AttemptExecution<TValue, TPartial, TFailureContext>>((outcome) => ({
         kind: "outcome",
         outcome,
       }))
-      .catch<AttemptExecution<TValue, TPartial>>(() => ({
+      .catch<AttemptExecution<TValue, TPartial, TFailureContext>>(() => ({
         kind: "outcome",
         outcome: {
           status: "retryable_failure",
@@ -245,8 +276,12 @@ export function createSourceStrategyOrchestrator<TValue, TPartial>(
   }
 
   async function executeRun(
-    runOptions: SourceStrategyRunOptions<TValue, TPartial>,
-  ): Promise<SourceStrategyRunResult<TValue>> {
+    runOptions: SourceStrategyRunOptions<
+      TValue,
+      TPartial,
+      TFailureContext
+    >,
+  ): Promise<SourceStrategyRunResult<TValue, TFailureContext>> {
     assertUniqueStrategies(runOptions.strategies);
     const attempts: SourceStrategyAttemptDiagnostic[] = [];
     const startedAt = now();
@@ -266,6 +301,10 @@ export function createSourceStrategyOrchestrator<TValue, TPartial>(
 
     const terminalCooldown = terminalCooldowns.get(runOptions.sourceEntryId);
 
+    if (terminalCooldown && terminalCooldown.until <= startedAt) {
+      terminalCooldowns.delete(runOptions.sourceEntryId);
+    }
+
     if (
       !runOptions.bypassCooldown &&
       terminalCooldown &&
@@ -282,7 +321,7 @@ export function createSourceStrategyOrchestrator<TValue, TPartial>(
     }
 
     let finalStatus: SourceStrategyRunStatus = "unavailable";
-    let finalFailure: SourceStrategyFailure | null = null;
+    let finalFailure: SourceStrategyFailure<TFailureContext> | null = null;
     let attemptedStrategy = false;
 
     for (const strategy of runOptions.strategies) {
@@ -492,11 +531,15 @@ export function createSourceStrategyOrchestrator<TValue, TPartial>(
         outcome.cooldownMs ?? terminalCooldownMs,
         terminalCooldownMs,
       );
-      const cooldownUntil = now() + delay;
-      terminalCooldowns.set(runOptions.sourceEntryId, {
-        failure: outcome.failure,
-        until: cooldownUntil,
-      });
+      const cooldownUntil = delay > 0 ? now() + delay : null;
+      if (cooldownUntil === null) {
+        terminalCooldowns.delete(runOptions.sourceEntryId);
+      } else {
+        terminalCooldowns.set(runOptions.sourceEntryId, {
+          failure: outcome.failure,
+          until: cooldownUntil,
+        });
+      }
       attempts.push({
         strategyId: strategy.id,
         kind: strategy.kind,
@@ -524,8 +567,12 @@ export function createSourceStrategyOrchestrator<TValue, TPartial>(
   }
 
   function run(
-    runOptions: SourceStrategyRunOptions<TValue, TPartial>,
-  ): Promise<SourceStrategyRunResult<TValue>> {
+    runOptions: SourceStrategyRunOptions<
+      TValue,
+      TPartial,
+      TFailureContext
+    >,
+  ): Promise<SourceStrategyRunResult<TValue, TFailureContext>> {
     const activeRun = activeRuns.get(runOptions.sourceEntryId);
     if (activeRun) {
       counters.coalescedRuns += 1;
@@ -543,10 +590,18 @@ export function createSourceStrategyOrchestrator<TValue, TPartial>(
   }
 
   function getDebugSnapshot(): SourceStrategyDebugSnapshot {
+    const observedAt = now();
+    const activeRetryCooldownCount = [...retryCooldowns.values()].filter(
+      ({ until }) => until > observedAt,
+    ).length;
+    const activeTerminalCooldownCount = [...terminalCooldowns.values()].filter(
+      ({ until }) => until > observedAt,
+    ).length;
+
     return {
       ...counters,
       activeSourceEntries: [...activeRuns.keys()],
-      cooldownCount: retryCooldowns.size + terminalCooldowns.size,
+      cooldownCount: activeRetryCooldownCount + activeTerminalCooldownCount,
     };
   }
 

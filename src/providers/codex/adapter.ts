@@ -41,6 +41,7 @@ import {
   mergeProviderUsageHistoryModules,
 } from "../../shared/provider-usage-history";
 import { hasLivePageSessionApis } from "../page-session";
+import { personalSourceStrategyRunner } from "../personal-source-strategy";
 import type {
   CodexPersonalUsageBalance,
   CodexPersonalUsageWindow,
@@ -950,6 +951,64 @@ export async function syncCodexProvider({
     provider.providerId,
     setting.sourcePreference,
   );
+
+  if (provider.providerId === "codex-personal-page") {
+    const strategyResult = await personalSourceStrategyRunner.run({
+      sourceEntryId: provider.providerId,
+      trigger,
+      strategyId: "codex_personal_session",
+      runAttempt: () =>
+        tryCodexPersonalSource({
+          provider,
+          syncedAt,
+          setting,
+          warningThresholdPercent,
+          trigger,
+        }),
+    });
+    const attempt = strategyResult.attempt;
+
+    if (attempt?.ok) {
+      return {
+        snapshot: finalizeCodexSnapshot(
+          attempt.snapshot,
+          sourcePreference,
+          attempt.kind,
+          null,
+        ),
+        ...(attempt.setting ? { setting: attempt.setting } : {}),
+      };
+    }
+
+    const failures = strategyResult.failure ? [strategyResult.failure] : [];
+    const failureSnapshot =
+      attempt && !attempt.ok
+        ? attempt.snapshot
+        : {
+            ...provider,
+            syncedAt,
+            syncSource: "page_parse" as const,
+            syncStatus: "warning" as const,
+            tone: "warning" as const,
+            warningReason:
+              strategyResult.failure?.detail ??
+              "Codex personal source orchestration did not complete.",
+            lastSyncLabel: "Codex personal sync did not complete",
+            resetLabel: "Retry the bounded Codex personal source refresh",
+          };
+
+    return {
+      snapshot: finalizeCodexNoSourceSnapshot(
+        failureSnapshot,
+        sourcePreference,
+        failures,
+      ),
+      ...(attempt && !attempt.ok && attempt.setting
+        ? { setting: attempt.setting }
+        : {}),
+    };
+  }
+
   const attemptOrder = getSourceAttemptOrder(provider.providerId, sourcePreference);
   const failures: SourceAttemptFailure[] = [];
   let firstFailedSnapshot: ProviderSnapshot | null = null;

@@ -37,6 +37,7 @@ import {
 } from "./official";
 import { createClaudePersonalPageClient } from "./personal-page-client";
 import { hasLivePageSessionApis } from "../page-session";
+import { personalSourceStrategyRunner } from "../personal-source-strategy";
 import type {
   ClaudePersonalUsageFact,
   ClaudePersonalUsageWindow,
@@ -793,6 +794,64 @@ export async function syncClaudeCodeProvider({
     provider.providerId,
     setting.sourcePreference,
   );
+
+  if (provider.providerId === "claude-code-team-page") {
+    const strategyResult = await personalSourceStrategyRunner.run({
+      sourceEntryId: provider.providerId,
+      trigger,
+      strategyId: "claude_personal_session",
+      runAttempt: () =>
+        tryClaudePersonalSource({
+          provider,
+          syncedAt,
+          setting,
+          warningThresholdPercent,
+          trigger,
+        }),
+    });
+    const attempt = strategyResult.attempt;
+
+    if (attempt?.ok) {
+      return {
+        snapshot: finalizeClaudeSnapshot(
+          attempt.snapshot,
+          sourcePreference,
+          attempt.kind,
+          null,
+        ),
+        ...(attempt.setting ? { setting: attempt.setting } : {}),
+      };
+    }
+
+    const failures = strategyResult.failure ? [strategyResult.failure] : [];
+    const failureSnapshot =
+      attempt && !attempt.ok
+        ? attempt.snapshot
+        : {
+            ...provider,
+            syncedAt,
+            syncSource: "page_parse" as const,
+            syncStatus: "warning" as const,
+            tone: "warning" as const,
+            warningReason:
+              strategyResult.failure?.detail ??
+              "Claude personal source orchestration did not complete.",
+            lastSyncLabel: "Claude personal sync did not complete",
+            resetLabel: "Retry the bounded Claude personal source refresh",
+          };
+
+    return {
+      snapshot: finalizeClaudeNoSourceSnapshot(
+        failureSnapshot,
+        sourcePreference,
+        failures,
+      ),
+      ...(attempt && !attempt.ok && attempt.setting
+        ? { setting: attempt.setting }
+        : {}),
+    };
+  }
+
   const attemptOrder = getSourceAttemptOrder(provider.providerId, sourcePreference);
   const failures: SourceAttemptFailure[] = [];
   let firstFailedSnapshot: ProviderSnapshot | null = null;
