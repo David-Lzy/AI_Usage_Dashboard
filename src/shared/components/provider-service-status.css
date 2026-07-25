@@ -1,0 +1,99 @@
+.provider-service-status {
+  --provider-service-status-color: var(--md-sys-color-outline);
+  display: grid;
+  gap: var(--app-space-2);
+  min-inline-size: 0;
+  padding-block: var(--app-space-3);
+  border-block-start: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.provider-service-status[data-provider-service-status-level="operational"] {
+  --provider-service-status-color: var(--app-color-success);
+}
+
+.provider-service-status[data-provider-service-status-level="degraded"],
+.provider-service-status[data-provider-service-status-level="maintenance"] {
+  --provider-service-status-color: var(--md-sys-color-tertiary);
+}
+
+.provider-service-status[data-provider-service-status-level="outage"] {
+  --provider-service-status-color: var(--md-sys-color-error);
+}
+
+.provider-service-status__summary {
+  display: flex;
+  align-items: center;
+  gap: var(--app-space-2);
+  min-inline-size: 0;
+  font-size: var(--md-sys-typescale-label-large-size);
+}
+
+.provider-service-status__dot {
+  inline-size: 0.625rem;
+  block-size: 0.625rem;
+  flex: none;
+  border-radius: 50%;
+  background: var(--provider-service-status-color);
+  box-shadow: 0 0 0 0.1875rem color-mix(in srgb, var(--provider-service-status-color) 16%, transparent);
+}
+
+.provider-service-status__label,
+.provider-service-status__value,
+.provider-service-status__stale {
+  white-space: nowrap;
+}
+
+.provider-service-status__value {
+  color: var(--provider-service-status-color);
+}
+
+.provider-service-status__stale {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.provider-service-status__link {
+  margin-inline-start: auto;
+  color: var(--md-sys-color-primary);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.provider-service-status__link:hover,
+.provider-service-status__link:focus-visible,
+.provider-service-status__incident:hover,
+.provider-service-status__incident:focus-visible {
+  text-decoration: underline;
+}
+
+.provider-service-status__detail,
+.provider-service-status__incident {
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: var(--md-sys-typescale-body-medium-size);
+}
+
+.provider-service-status__detail {
+  display: grid;
+  gap: var(--app-space-1);
+  padding-inline-start: calc(0.625rem + var(--app-space-2));
+}
+
+.provider-service-status__detail p {
+  margin: 0;
+}
+
+.provider-service-status__incident {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 28rem) {
+  .provider-service-status__summary {
+    flex-wrap: wrap;
+  }
+
+  .provider-service-status__link {
+    margin-inline-start: 0;
+  }
+}

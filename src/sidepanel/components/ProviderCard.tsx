@@ -7,6 +7,8 @@ import type {
   ProgressItemsBySurface,
   ResetTimeDisplayMode,
   ProviderId,
+  ProviderServiceStatus as ProviderServiceStatusModel,
+  ProviderServiceStatusVisibilityBySurface,
   UsageHistoryModulesBySurface,
 } from "../../providers/types";
 import { buildRuntimeCommonCopy, createRuntimeI18n } from "../../shared/i18n";
@@ -28,6 +30,12 @@ import {
   buildProviderDetailLocalizedCopy,
   getProviderDetailStatusBadgeLabel,
 } from "../../shared/provider-detail-localized-copy";
+import { ProviderServiceStatus } from "../../shared/components/ProviderServiceStatus";
+import {
+  createDefaultProviderServiceStatusVisibilityBySurface,
+  getProviderServiceStatusForProvider,
+  isProviderServiceStatusVisible,
+} from "../../shared/provider-service-status";
 
 const CLAUDE_PERSONAL_PROVIDER_ID = "claude-code-team-page";
 
@@ -40,6 +48,8 @@ type ProviderCardProps = {
   progressThicknessPx: number;
   progressSurface: DisplaySurface;
   usageHistoryModulesBySurface?: UsageHistoryModulesBySurface;
+  providerServiceStatuses?: readonly ProviderServiceStatusModel[];
+  providerServiceStatusVisibilityBySurface?: ProviderServiceStatusVisibilityBySurface;
   provider: ProviderViewModel;
   resetTimeDisplayMode?: ResetTimeDisplayMode;
   onOpen: (providerId: ProviderId) => void;
@@ -59,6 +69,9 @@ export function ProviderCard({
   progressThicknessPx,
   progressSurface,
   usageHistoryModulesBySurface = createDefaultUsageHistoryModulesBySurface(),
+  providerServiceStatuses = [],
+  providerServiceStatusVisibilityBySurface =
+    createDefaultProviderServiceStatusVisibilityBySurface(),
   provider,
   resetTimeDisplayMode = DEFAULT_RESET_TIME_DISPLAY_MODE,
   onOpen,
@@ -98,11 +111,23 @@ export function ProviderCard({
   const visibleUsageContextLabel =
     buildRuntimeCommonCopy(i18n).visibleUsageContext;
   const hasCursorUsage = provider.cursorUsage !== undefined;
+  const showProviderServiceStatus = isProviderServiceStatusVisible(
+    providerServiceStatusVisibilityBySurface,
+    progressSurface,
+    provider.providerId,
+  );
+  const providerServiceStatus = showProviderServiceStatus
+    ? getProviderServiceStatusForProvider(
+        providerServiceStatuses,
+        provider.providerId,
+      )
+    : null;
   const hasCachedProviderContent =
     hasProviderProgressItems ||
     hasUsageFacts ||
     provider.usageHistory !== undefined ||
-    hasCursorUsage;
+    hasCursorUsage ||
+    showProviderServiceStatus;
   const cardSurfaceTone =
     hasCachedProviderContent && provider.displayTone === "error"
       ? "neutral"
@@ -248,6 +273,13 @@ export function ProviderCard({
             providerId={provider.providerId}
             surface={progressSurface}
             usage={provider.cursorUsage}
+          />
+        ) : null}
+
+        {showProviderServiceStatus ? (
+          <ProviderServiceStatus
+            locale={i18n.resolvedLocale}
+            status={providerServiceStatus}
           />
         ) : null}
 

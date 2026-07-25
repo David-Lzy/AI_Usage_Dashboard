@@ -7,6 +7,8 @@ import type {
   ProgressItemsBySurface,
   ResetTimeDisplayMode,
   ProviderId,
+  ProviderServiceStatus,
+  ProviderServiceStatusVisibilityBySurface,
   SummaryItem,
   UsageHistoryModulesBySurface,
 } from "../../providers/types";
@@ -34,6 +36,8 @@ type DashboardPageProps = {
   progressSurface: DisplaySurface;
   resetTimeDisplayMode?: ResetTimeDisplayMode;
   usageHistoryModulesBySurface?: UsageHistoryModulesBySurface;
+  providerServiceStatuses?: readonly ProviderServiceStatus[];
+  providerServiceStatusVisibilityBySurface?: ProviderServiceStatusVisibilityBySurface;
   summaryItems: SummaryItem[];
   providers: ProviderViewModel[];
   customSources?: CustomSourceViewModel[];
@@ -67,6 +71,8 @@ export function DashboardPage({
   progressSurface,
   resetTimeDisplayMode = DEFAULT_RESET_TIME_DISPLAY_MODE,
   usageHistoryModulesBySurface = createDefaultUsageHistoryModulesBySurface(),
+  providerServiceStatuses = [],
+  providerServiceStatusVisibilityBySurface,
   summaryItems,
   providers,
   customSources = [],
@@ -188,6 +194,10 @@ export function DashboardPage({
                   progressThicknessPx={progressThicknessPx}
                   progressSurface={progressSurface}
                   usageHistoryModulesBySurface={usageHistoryModulesBySurface}
+                  providerServiceStatuses={providerServiceStatuses}
+                  providerServiceStatusVisibilityBySurface={
+                    providerServiceStatusVisibilityBySurface
+                  }
                   provider={sourceCard.provider}
                   resetTimeDisplayMode={resetTimeDisplayMode}
                   onOpen={onOpenProvider}

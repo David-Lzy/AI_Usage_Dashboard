@@ -58,6 +58,7 @@ function renderProviderDetail(
   providerId: "codex-personal-page" | "cursor-personal-page" | "gemini-policy",
   options: {
     onOpenSourcePage?: () => void;
+    progressSurface?: "sidebar" | "fullPage";
     quotaPaceForecastEnabled?: boolean;
     quotaPaceNow?: Date;
   } = {},
@@ -75,10 +76,14 @@ function renderProviderDetail(
       progressDisplayStyle="line"
       progressItemsBySurface={state.settings.progressItemsBySurface}
       progressThicknessPx={state.settings.progressThicknessPx}
-      progressSurface="sidebar"
+      progressSurface={options.progressSurface ?? "sidebar"}
       provider={provider}
       quotaPaceForecastEnabled={options.quotaPaceForecastEnabled}
       quotaPaceNow={options.quotaPaceNow}
+      providerServiceStatuses={state.providerServiceStatuses}
+      providerServiceStatusVisibilityBySurface={
+        state.settings.providerServiceStatusVisibilityBySurface
+      }
       onBack={() => undefined}
       onOpenSourcePage={options.onOpenSourcePage}
       onRefresh={() => undefined}
@@ -180,5 +185,46 @@ describe("ProviderDetailPage", () => {
     expect(html).toContain("Quota pace");
     expect(html).toContain("Estimate");
     expect(html).toContain("May run out around");
+  });
+
+  it("renders detailed official status only when full-page visibility is enabled", () => {
+    const status = {
+      vendorId: "openai" as const,
+      brandId: "codex" as const,
+      level: "maintenance" as const,
+      description: "Scheduled maintenance",
+      statusPageUrl: "https://status.openai.com",
+      checkedAt: "2026-07-25T06:00:00.000Z",
+      sourceUpdatedAt: null,
+      retryAt: null,
+      stale: false,
+      failureReason: null,
+      components: [],
+      incidents: [],
+    };
+    const enabledState = createState({
+      providerServiceStatuses: [status],
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        providerServiceStatusVisibilityBySurface: {
+          ...SAMPLE_APP_STATE.settings
+            .providerServiceStatusVisibilityBySurface,
+          fullPage: {
+            ...SAMPLE_APP_STATE.settings
+              .providerServiceStatusVisibilityBySurface.fullPage,
+            codex: true,
+          },
+        },
+      },
+    });
+
+    expect(renderProviderDetail(createState(), "codex-personal-page")).not.toContain(
+      "data-provider-service-status-detail",
+    );
+    const html = renderProviderDetail(enabledState, "codex-personal-page", {
+      progressSurface: "fullPage",
+    });
+    expect(html).toContain("data-provider-service-status-detail");
+    expect(html).toContain("Scheduled maintenance");
   });
 });

@@ -13,6 +13,7 @@ import { mapWithConcurrency } from "../shared/async-concurrency";
 import { readProviderSecrets } from "../shared/provider-secrets";
 import { seedAppStateIfEmpty, writeAppState } from "../shared/storage";
 import { syncCustomSources } from "./custom-source-sync";
+import { syncProviderServiceStatuses } from "./provider-service-status-sync";
 
 const STALE_MULTIPLIER = 2;
 const MIN_STALE_MINUTES = 60;
@@ -396,6 +397,9 @@ async function runSyncEngineOnce({
         hasHostAccess: hasCustomSourceHostAccess,
         now,
       });
+  const nextStateWithServiceStatuses = providerId
+    ? nextStateWithCustomSources
+    : await syncProviderServiceStatuses(nextStateWithCustomSources, { now });
 
-  return writeAppState(nextStateWithCustomSources);
+  return writeAppState(nextStateWithServiceStatuses);
 }

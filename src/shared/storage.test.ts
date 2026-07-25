@@ -36,6 +36,8 @@ function createLegacyState(): AppState {
     providerOrderBySurface: _providerOrderBySurface,
     progressItemsBySurface: _progressItemsBySurface,
     usageHistoryModulesBySurface: _usageHistoryModulesBySurface,
+    providerServiceStatusVisibilityBySurface:
+      _providerServiceStatusVisibilityBySurface,
     progressThicknessPx: _progressThicknessPx,
     progressColorBands: _progressColorBands,
     progressColorAppearance: _progressColorAppearance,
@@ -302,6 +304,11 @@ describe("storage normalization", () => {
       popup: {},
       sidebar: {},
       fullPage: {},
+    });
+    expect(state?.settings.providerServiceStatusVisibilityBySurface).toEqual({
+      popup: { codex: false, "claude-code": false, cursor: false },
+      sidebar: { codex: false, "claude-code": false, cursor: false },
+      fullPage: { codex: false, "claude-code": false, cursor: false },
     });
     expect(state?.settings.progressThicknessPx).toBe(10);
     expect(state?.settings.progressColorBands).toEqual([

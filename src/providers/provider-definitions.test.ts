@@ -86,5 +86,12 @@ describe("provider descriptors", () => {
       hasProviderCapability("codex-personal-page", "aggregateHistory"),
     ).toBe(true);
     expect(hasProviderCapability("gemini-policy", "quotaWindows")).toBe(false);
+    expect(hasProviderCapability("codex-personal-page", "serviceStatus")).toBe(
+      true,
+    );
+    expect(hasProviderCapability("cursor-team-api", "serviceStatus")).toBe(
+      true,
+    );
+    expect(hasProviderCapability("gemini-policy", "serviceStatus")).toBe(false);
   });
 });

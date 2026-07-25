@@ -51,6 +51,7 @@ import {
   createDefaultProviderOrderBySurface,
 } from "./display-preferences";
 import { createDefaultUsageHistoryModulesBySurface } from "./usage-history-visibility";
+import { createDefaultProviderServiceStatusVisibilityBySurface } from "./provider-service-status";
 import {
   createCredentialDiagnostic,
   createPageSessionDiagnostic,
@@ -730,6 +731,8 @@ export const SAMPLE_APP_STATE: AppState = {
     providerOrderBySurface: createDefaultProviderOrderBySurface(),
     progressItemsBySurface: createDefaultProgressItemsBySurface(),
     usageHistoryModulesBySurface: createDefaultUsageHistoryModulesBySurface(),
+    providerServiceStatusVisibilityBySurface:
+      createDefaultProviderServiceStatusVisibilityBySurface(),
     progressThicknessPx: DEFAULT_PROGRESS_THICKNESS_PX,
     progressColorBands: createDefaultProgressColorBands(),
     progressColorAppearance: createDefaultProgressColorAppearance(),
@@ -836,6 +839,8 @@ export const DEFAULT_APP_STATE: AppState = {
     providerOrderBySurface: createDefaultProviderOrderBySurface(),
     progressItemsBySurface: createDefaultProgressItemsBySurface(),
     usageHistoryModulesBySurface: createDefaultUsageHistoryModulesBySurface(),
+    providerServiceStatusVisibilityBySurface:
+      createDefaultProviderServiceStatusVisibilityBySurface(),
     progressColorBands: createDefaultProgressColorBands(),
     progressColorAppearance: createDefaultProgressColorAppearance(),
   },

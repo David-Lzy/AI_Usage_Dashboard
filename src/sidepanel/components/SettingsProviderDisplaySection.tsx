@@ -6,6 +6,7 @@ import type {
   ProviderSetting,
   ProviderSnapshot,
   UsageHistoryModulesBySurface,
+  ProviderServiceStatusVisibilityBySurface,
 } from "../../providers/types";
 import type {
   CustomSourceSetting,
@@ -21,6 +22,7 @@ import { ProviderProgressItemPreferenceControls } from "./ProviderProgressItemPr
 import { UsageHistoryModulePreferenceControls } from "./UsageHistoryModulePreferenceControls";
 import type { ResolvedAppLocale } from "../../shared/i18n";
 import { CursorUsageModulePreferenceControls } from "./CursorUsageModulePreferenceControls";
+import { ProviderServiceStatusPreferenceControls } from "./ProviderServiceStatusPreferenceControls";
 
 type SettingsProviderDisplaySectionProps = {
   providers: ProviderSetting[];
@@ -42,6 +44,9 @@ type SettingsProviderDisplaySectionProps = {
   onUsageHistoryModulesBySurfaceChange?: (
     usageHistoryModulesBySurface: UsageHistoryModulesBySurface,
   ) => void;
+  onProviderServiceStatusVisibilityBySurfaceChange?: (
+    value: ProviderServiceStatusVisibilityBySurface,
+  ) => void;
   onProviderProgressDetailsOpenChange?: (
     providerProgressDetailsOpen: Record<string, boolean>,
   ) => void;
@@ -61,6 +66,7 @@ export function SettingsProviderDisplaySection({
   onProviderOrderBySurfaceChange,
   onProgressItemsBySurfaceChange,
   onUsageHistoryModulesBySurfaceChange = () => undefined,
+  onProviderServiceStatusVisibilityBySurfaceChange = () => undefined,
   onProviderProgressDetailsOpenChange,
 }: SettingsProviderDisplaySectionProps) {
   const displayEligibleProviders = filterDisplayEligibleProviderSettings(
@@ -137,6 +143,13 @@ export function SettingsProviderDisplaySection({
           snapshots={snapshots}
           value={settings.usageHistoryModulesBySurface}
           onChange={onUsageHistoryModulesBySurfaceChange}
+        />
+
+        <ProviderServiceStatusPreferenceControls
+          locale={locale}
+          settingsCopy={settingsCopy}
+          value={settings.providerServiceStatusVisibilityBySurface}
+          onChange={onProviderServiceStatusVisibilityBySurfaceChange}
         />
 
         {displayVisibleProviders.some(

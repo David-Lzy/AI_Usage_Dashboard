@@ -46,6 +46,10 @@ function renderProviderCard(
       progressThicknessPx={state.settings.progressThicknessPx}
       progressSurface="sidebar"
       usageHistoryModulesBySurface={options.usageHistoryModulesBySurface}
+      providerServiceStatuses={state.providerServiceStatuses}
+      providerServiceStatusVisibilityBySurface={
+        state.settings.providerServiceStatusVisibilityBySurface
+      }
       provider={provider}
       onOpen={() => undefined}
       onOpenSourcePage={options.onOpenSourcePage}
@@ -137,6 +141,46 @@ describe("ProviderCard", () => {
 
     expect(html).not.toContain("usage-history-compact");
     expect(html).not.toContain("No history data yet");
+  });
+
+  it("mounts service status only when it is enabled for the current surface", () => {
+    const status = {
+      vendorId: "openai" as const,
+      brandId: "codex" as const,
+      level: "operational" as const,
+      description: "All Systems Operational",
+      statusPageUrl: "https://status.openai.com",
+      checkedAt: "2026-07-25T06:00:00.000Z",
+      sourceUpdatedAt: null,
+      retryAt: null,
+      stale: false,
+      failureReason: null,
+      components: [],
+      incidents: [],
+    };
+    const hiddenState = createState({ providerServiceStatuses: [status] });
+    const visibleState = createState({
+      providerServiceStatuses: [status],
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        providerServiceStatusVisibilityBySurface: {
+          ...SAMPLE_APP_STATE.settings
+            .providerServiceStatusVisibilityBySurface,
+          sidebar: {
+            ...SAMPLE_APP_STATE.settings
+              .providerServiceStatusVisibilityBySurface.sidebar,
+            codex: true,
+          },
+        },
+      },
+    });
+
+    expect(renderProviderCard(hiddenState, "codex-personal-page")).not.toContain(
+      "data-provider-service-status=",
+    );
+    expect(renderProviderCard(visibleState, "codex-personal-page")).toContain(
+      'data-provider-service-status="openai"',
+    );
   });
 
   it("uses the Material provider-card hierarchy for summary, progress, chips, and actions", () => {

@@ -84,6 +84,10 @@ import { normalizeProviderUsageHistory } from "./provider-usage-history";
 import { normalizeUsageHistoryModulesBySurface } from "./usage-history-visibility";
 import { normalizeCursorUsageBilling } from "./cursor-usage-billing";
 import { normalizeResetTimeDisplayMode } from "./reset-time-display";
+import {
+  normalizeProviderServiceStatuses,
+  normalizeProviderServiceStatusVisibilityBySurface,
+} from "./provider-service-status";
 
 let memoryFallbackState: AppState | null = null;
 
@@ -294,6 +298,9 @@ function normalizeAppState(state: AppState): AppState {
   return {
     providers: [...providers, ...extraProviders],
     providerSettings: [...providerSettings, ...extraProviderSettings],
+    providerServiceStatuses: normalizeProviderServiceStatuses(
+      state.providerServiceStatuses,
+    ),
     customSources,
     customSourceStates,
     settings: {
@@ -388,6 +395,10 @@ function normalizeAppState(state: AppState): AppState {
         state.settings?.usageHistoryModulesBySurface,
         knownProviderIds,
       ),
+      providerServiceStatusVisibilityBySurface:
+        normalizeProviderServiceStatusVisibilityBySurface(
+          state.settings?.providerServiceStatusVisibilityBySurface,
+        ),
       progressThicknessPx: normalizeProgressThicknessPx(
         state.settings?.progressThicknessPx,
       ),

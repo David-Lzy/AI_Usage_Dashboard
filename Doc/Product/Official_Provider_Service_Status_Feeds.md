@@ -12,8 +12,9 @@ Freshness model:
 
 Status note:
 
-- this document records discovery evidence and a candidate contract
-- the extension does not fetch or display these feeds yet
+- this document records discovery evidence and the shipped runtime contract
+- official service status is optional, disabled by default, and independent
+  from Provider synchronization health
 
 ## Purpose
 
@@ -82,17 +83,16 @@ are not required for the first status module. The initial runtime should report
 current service state and ongoing incidents rather than building an incident
 archive.
 
-## Candidate Normalized Model
+## Runtime Normalized Model
 
-The candidate model is deliberately independent from `ProviderSnapshot` and
-its sync status:
+The runtime model is deliberately stored outside `ProviderSnapshot` and its
+sync status:
 
 ```ts
 type ProviderServiceStatusLevel =
   | "operational"
   | "degraded"
-  | "partial_outage"
-  | "major_outage"
+  | "outage"
   | "maintenance"
   | "unknown";
 
@@ -101,20 +101,21 @@ interface ProviderServiceStatusIncident {
   name: string;
   level: ProviderServiceStatusLevel;
   status: string;
-  startedAt: string | null;
   updatedAt: string | null;
-  url: string | null;
-  affectedComponents: string[];
+  url: string;
 }
 
 interface ProviderServiceStatus {
-  vendor: "openai" | "anthropic" | "cursor";
-  fetchedAt: string;
-  sourceUrl: string;
-  publicStatusUrl: string;
+  vendorId: "openai" | "anthropic" | "cursor";
+  brandId: "codex" | "claude-code" | "cursor";
   level: ProviderServiceStatusLevel;
-  summary: string | null;
-  updatedAt: string | null;
+  description: string | null;
+  statusPageUrl: string;
+  checkedAt: string;
+  sourceUpdatedAt: string | null;
+  retryAt: string | null;
+  stale: boolean;
+  failureReason: string | null;
   components: Array<{
     id: string;
     name: string;
@@ -129,8 +130,8 @@ Statuspage values map as follows:
 
 - `none` and `operational` -> `operational`
 - `minor` and `degraded_performance` -> `degraded`
-- `partial_outage` -> `partial_outage`
-- `major`, `critical`, and `major_outage` -> `major_outage`
+- `partial_outage` -> `outage`
+- `major`, `critical`, and `major_outage` -> `outage`
 - `maintenance` and `under_maintenance` -> `maintenance`
 - missing or unknown values -> `unknown`
 
@@ -140,7 +141,7 @@ as application-controlled instructions.
 
 ## Fetch And Failure Policy
 
-The recommended runtime policy for a later phase is:
+The shipped runtime policy is:
 
 - default off per vendor and per surface
 - use the existing alarm path, never a new timer
@@ -155,10 +156,28 @@ The recommended runtime policy for a later phase is:
   error
 - never parse an HTML error page as status data
 
-The first implementation should fetch the Statuspage-compatible summary for
-all three vendors. OpenAI's Incident.io compatibility response may add grouped
-components and ongoing incidents only when its contract validates; failure of
-that enhancement must not discard a valid compatibility summary.
+The implementation fetches the Statuspage-compatible summary for all three
+vendors. OpenAI's Incident.io compatibility response remains discovery-only;
+it is not requested by the extension.
+
+## User Controls And Surfaces
+
+Official status controls are available in Provider display settings for
+OpenAI, Anthropic, and Cursor. Popup, sidebar, and full-page visibility can be
+enabled independently. All switches are off by default.
+
+Enabling a vendor requests only that vendor's exact optional status-page
+origin. A denied optional permission leaves the switch off. Once enabled, the
+status appears as a compact row in Provider cards and as a detailed row in the
+Provider detail view. Disabling every surface for a vendor stops future status
+requests and unmounts the status UI; an already normalized cached result may
+remain in local application state for later reuse.
+
+Status refresh uses the existing background synchronization path. Successful
+results have a minimum five-minute TTL, concurrent requests are coalesced, and
+failures enter a bounded retry cooldown. A later failure preserves the last
+successful status as stale instead of replacing it with a fabricated healthy
+or unknown result.
 
 ## Sanitized Fixtures
 

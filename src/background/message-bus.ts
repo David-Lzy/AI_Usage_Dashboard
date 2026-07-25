@@ -38,6 +38,7 @@ import {
 } from "../shared/configuration-backup";
 import { codexCredentialBroker } from "../providers/codex/session-credential-broker";
 import { validateCodexManualSessionToken } from "../providers/codex/session-credential";
+import { syncProviderServiceStatuses } from "./provider-service-status-sync";
 
 export type {
   AppMessage,
@@ -100,7 +101,7 @@ export async function handleAppMessage(
     }
 
     case "app:update-settings": {
-      const state = await updateAppState((current) => {
+      let state = await updateAppState((current) => {
         const nextState = {
           ...current,
           settings: {
@@ -113,6 +114,11 @@ export async function handleAppMessage(
           ? reconcileAppStateHealth(nextState)
           : nextState;
       });
+      if (message.settings.providerServiceStatusVisibilityBySurface) {
+        state = await writeAppState(
+          await syncProviderServiceStatuses(state),
+        );
+      }
       await ensureBackgroundAlarms(state);
 
       return {

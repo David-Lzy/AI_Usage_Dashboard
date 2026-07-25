@@ -598,6 +598,10 @@ export function PopupApp() {
         usageHistoryModulesBySurface={
           appState.settings.usageHistoryModulesBySurface
         }
+        providerServiceStatuses={appState.providerServiceStatuses}
+        providerServiceStatusVisibilityBySurface={
+          appState.settings.providerServiceStatusVisibilityBySurface
+        }
         getSettingsFocusForProvider={getSettingsRouteFocusForPopupProvider}
         onAction={handlePopupAction}
       />

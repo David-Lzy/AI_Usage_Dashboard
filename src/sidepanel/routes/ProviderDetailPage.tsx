@@ -7,6 +7,8 @@ import type {
   ProgressItemsBySurface,
   ResetTimeDisplayMode,
   ProviderId,
+  ProviderServiceStatus as ProviderServiceStatusModel,
+  ProviderServiceStatusVisibilityBySurface,
   UsageHistoryModulesBySurface,
 } from "../../providers/types";
 import { buildRuntimeCommonCopy, createRuntimeI18n } from "../../shared/i18n";
@@ -39,6 +41,12 @@ import {
   buildQuotaPaceLocalizedCopy,
   formatQuotaPaceDateTime,
 } from "../../shared/quota-pace-localized-copy";
+import { ProviderServiceStatus } from "../../shared/components/ProviderServiceStatus";
+import {
+  createDefaultProviderServiceStatusVisibilityBySurface,
+  getProviderServiceStatusForProvider,
+  isProviderServiceStatusVisible,
+} from "../../shared/provider-service-status";
 
 type ProviderDetailPageProps = {
   localePreference: AppLocalePreference;
@@ -49,6 +57,8 @@ type ProviderDetailPageProps = {
   progressThicknessPx: number;
   progressSurface: DisplaySurface;
   usageHistoryModulesBySurface?: UsageHistoryModulesBySurface;
+  providerServiceStatuses?: readonly ProviderServiceStatusModel[];
+  providerServiceStatusVisibilityBySurface?: ProviderServiceStatusVisibilityBySurface;
   provider: ProviderViewModel;
   quotaPaceForecastEnabled?: boolean;
   quotaPaceNow?: Date;
@@ -77,6 +87,9 @@ export function ProviderDetailPage({
   progressThicknessPx,
   progressSurface,
   usageHistoryModulesBySurface = createDefaultUsageHistoryModulesBySurface(),
+  providerServiceStatuses = [],
+  providerServiceStatusVisibilityBySurface =
+    createDefaultProviderServiceStatusVisibilityBySurface(),
   provider,
   quotaPaceForecastEnabled = false,
   quotaPaceNow = new Date(),
@@ -117,6 +130,17 @@ export function ProviderDetailPage({
       .map((preference) => preference.id);
   const visibleUsageContextLabel =
     buildRuntimeCommonCopy(i18n).visibleUsageContext;
+  const showProviderServiceStatus = isProviderServiceStatusVisible(
+    providerServiceStatusVisibilityBySurface,
+    progressSurface,
+    provider.providerId,
+  );
+  const providerServiceStatus = showProviderServiceStatus
+    ? getProviderServiceStatusForProvider(
+        providerServiceStatuses,
+        provider.providerId,
+      )
+    : null;
   const showSessionPageContract =
     provider.sessionPageContractLabel !== null &&
     (provider.sessionPageContractLabel !== provider.currentSourceContractLabel ||
@@ -247,6 +271,16 @@ export function ProviderDetailPage({
         <p className="section-label">{copy.sections.syncStatus}</p>
         <StatusBadge label={syncStatusBadgeLabel} tone={provider.displayTone} />
       </section>
+
+      {showProviderServiceStatus ? (
+        <section className="status-card" data-provider-service-status-detail="">
+          <ProviderServiceStatus
+            density="detail"
+            locale={i18n.resolvedLocale}
+            status={providerServiceStatus}
+          />
+        </section>
+      ) : null}
 
       <section className="hero-card">
         <p className="section-label">{copy.sections.providerDetail}</p>

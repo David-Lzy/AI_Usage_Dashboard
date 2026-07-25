@@ -193,6 +193,53 @@ export type UsageHistoryModulesBySurface = Record<
   DisplaySurface,
   Partial<Record<ProviderId, ProviderUsageHistoryModulePreference[]>>
 >;
+export type ProviderServiceStatusVendorId = "openai" | "anthropic" | "cursor";
+export type ProviderServiceStatusLevel =
+  | "operational"
+  | "degraded"
+  | "outage"
+  | "maintenance"
+  | "unknown";
+export type ProviderServiceStatusFailureReason =
+  | "permission_missing"
+  | "offline"
+  | "timeout"
+  | "rate_limited"
+  | "http_error"
+  | "invalid_response"
+  | null;
+export type ProviderServiceStatusComponent = {
+  id: string;
+  name: string;
+  level: ProviderServiceStatusLevel;
+  updatedAt: string | null;
+};
+export type ProviderServiceStatusIncident = {
+  id: string;
+  name: string;
+  level: ProviderServiceStatusLevel;
+  status: string;
+  updatedAt: string | null;
+  url: string;
+};
+export type ProviderServiceStatus = {
+  vendorId: ProviderServiceStatusVendorId;
+  brandId: ProviderBrandId;
+  level: ProviderServiceStatusLevel;
+  description: string | null;
+  statusPageUrl: string;
+  checkedAt: string;
+  sourceUpdatedAt: string | null;
+  retryAt: string | null;
+  stale: boolean;
+  failureReason: ProviderServiceStatusFailureReason;
+  components: ProviderServiceStatusComponent[];
+  incidents: ProviderServiceStatusIncident[];
+};
+export type ProviderServiceStatusVisibilityBySurface = Record<
+  DisplaySurface,
+  Partial<Record<ProviderBrandId, boolean>>
+>;
 export type ProgressColorBand = {
   id: string;
   minimumPercent: number;
@@ -466,6 +513,7 @@ export type AppSettings = {
   providerOrderBySurface: ProviderOrderBySurface;
   progressItemsBySurface: ProgressItemsBySurface;
   usageHistoryModulesBySurface: UsageHistoryModulesBySurface;
+  providerServiceStatusVisibilityBySurface: ProviderServiceStatusVisibilityBySurface;
   progressThicknessPx: number;
   progressColorBands: ProgressColorBand[];
   progressColorAppearance: ProgressColorAppearance;
@@ -481,6 +529,7 @@ export type AppState = {
   providers: ProviderSnapshot[];
   providerSettings: ProviderSetting[];
   settings: AppSettings;
+  providerServiceStatuses?: ProviderServiceStatus[];
   customSources?: CustomSourceSetting[];
   customSourceStates?: CustomSourceSyncState[];
 };

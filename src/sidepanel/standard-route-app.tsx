@@ -453,6 +453,13 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
             onUsageHistoryModulesBySurfaceChange={(
               usageHistoryModulesBySurface,
             ) => handleUpdateSettings({ usageHistoryModulesBySurface })}
+            onProviderServiceStatusVisibilityBySurfaceChange={(
+              providerServiceStatusVisibilityBySurface,
+            ) =>
+              handleUpdateSettings({
+                providerServiceStatusVisibilityBySurface,
+              })
+            }
             onCustomSourcesChange={handleUpdateCustomSources}
             onProgressThicknessPxChange={(progressThicknessPx) =>
               handleUpdateSettings({ progressThicknessPx })
@@ -543,6 +550,10 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           usageHistoryModulesBySurface={
             appState.settings.usageHistoryModulesBySurface
           }
+          providerServiceStatuses={appState.providerServiceStatuses}
+          providerServiceStatusVisibilityBySurface={
+            appState.settings.providerServiceStatusVisibilityBySurface
+          }
           provider={selectedProvider}
           quotaPaceForecastEnabled={
             appState.settings.quotaPaceForecastEnabled
@@ -576,6 +587,10 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           progressSurface={providerDisplaySurface}
           usageHistoryModulesBySurface={
             appState.settings.usageHistoryModulesBySurface
+          }
+          providerServiceStatuses={appState.providerServiceStatuses}
+          providerServiceStatusVisibilityBySurface={
+            appState.settings.providerServiceStatusVisibilityBySurface
           }
           summaryItems={summaryItems}
           providers={visibleProviders}

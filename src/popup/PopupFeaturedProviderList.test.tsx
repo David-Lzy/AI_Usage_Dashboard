@@ -15,6 +15,7 @@ const popupThemeCss = readFileSync(
 
 function renderFeaturedList(
   cards = buildPopupViewModel(SAMPLE_APP_STATE).featuredProviderCards,
+  state = SAMPLE_APP_STATE,
 ) {
   return renderToStaticMarkup(
     <PopupFeaturedProviderList
@@ -31,6 +32,10 @@ function renderFeaturedList(
       progressThicknessPx={SAMPLE_APP_STATE.settings.progressThicknessPx}
       getSettingsFocusForProvider={() => null}
       onAction={() => {}}
+      providerServiceStatuses={state.providerServiceStatuses}
+      providerServiceStatusVisibilityBySurface={
+        state.settings.providerServiceStatusVisibilityBySurface
+      }
     />,
   );
 }
@@ -208,6 +213,45 @@ describe("PopupFeaturedProviderList", () => {
 
     expect(html).not.toContain("usage-history-compact");
     expect(html).not.toContain("No history data yet");
+  });
+
+  it("keeps the default-off service status unmounted until popup visibility is enabled", () => {
+    const status = {
+      vendorId: "openai" as const,
+      brandId: "codex" as const,
+      level: "degraded" as const,
+      description: "Elevated errors",
+      statusPageUrl: "https://status.openai.com",
+      checkedAt: "2026-07-25T06:00:00.000Z",
+      sourceUpdatedAt: null,
+      retryAt: null,
+      stale: false,
+      failureReason: null,
+      components: [],
+      incidents: [],
+    };
+    const enabledState = {
+      ...SAMPLE_APP_STATE,
+      providerServiceStatuses: [status],
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        providerServiceStatusVisibilityBySurface: {
+          ...SAMPLE_APP_STATE.settings
+            .providerServiceStatusVisibilityBySurface,
+          popup: {
+            ...SAMPLE_APP_STATE.settings
+              .providerServiceStatusVisibilityBySurface.popup,
+            codex: true,
+          },
+        },
+      },
+    };
+    const cards = buildPopupViewModel(enabledState).featuredProviderCards;
+
+    expect(renderFeaturedList()).not.toContain("data-provider-service-status=");
+    expect(renderFeaturedList(cards, enabledState)).toContain(
+      'data-provider-service-status="openai"',
+    );
   });
 
   it("groups adjacent history modules without provider-card grid gaps", () => {

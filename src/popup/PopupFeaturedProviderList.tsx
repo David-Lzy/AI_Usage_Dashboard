@@ -9,6 +9,8 @@ import type {
   ProviderId,
   ProviderUsageHistory,
   ProviderUsageHistoryModuleId,
+  ProviderServiceStatus as ProviderServiceStatusModel,
+  ProviderServiceStatusVisibilityBySurface,
   ResetTimeDisplayMode,
   UsageHistoryModulesBySurface,
 } from "../providers/types";
@@ -37,6 +39,12 @@ import {
 import { CursorUsageSummary } from "../shared/components/CursorUsageSummary";
 import { buildCursorUsageLocalizedCopy } from "../shared/cursor-usage-localized-copy";
 import { DEFAULT_RESET_TIME_DISPLAY_MODE } from "../shared/reset-time-display";
+import { ProviderServiceStatus } from "../shared/components/ProviderServiceStatus";
+import {
+  createDefaultProviderServiceStatusVisibilityBySurface,
+  getProviderServiceStatusForProvider,
+  isProviderServiceStatusVisible,
+} from "../shared/provider-service-status";
 
 type PopupFeaturedProviderListProps = {
   ariaLabel: string;
@@ -51,6 +59,8 @@ type PopupFeaturedProviderListProps = {
   progressThicknessPx: number;
   resetTimeDisplayMode?: ResetTimeDisplayMode;
   usageHistoryModulesBySurface?: UsageHistoryModulesBySurface;
+  providerServiceStatuses?: readonly ProviderServiceStatusModel[];
+  providerServiceStatusVisibilityBySurface?: ProviderServiceStatusVisibilityBySurface;
   getSettingsFocusForProvider: (
     provider: PopupFeaturedProviderCard["provider"],
   ) => SettingsRouteFocus | null;
@@ -114,6 +124,9 @@ export function PopupFeaturedProviderList({
   progressThicknessPx,
   resetTimeDisplayMode = DEFAULT_RESET_TIME_DISPLAY_MODE,
   usageHistoryModulesBySurface = createDefaultUsageHistoryModulesBySurface(),
+  providerServiceStatuses = [],
+  providerServiceStatusVisibilityBySurface =
+    createDefaultProviderServiceStatusVisibilityBySurface(),
   getSettingsFocusForProvider,
   onAction,
 }: PopupFeaturedProviderListProps) {
@@ -154,10 +167,22 @@ export function PopupFeaturedProviderList({
                 provider.providerId,
               ).filter((preference) => preference.visible)
             : [];
+          const showProviderServiceStatus = isProviderServiceStatusVisible(
+            providerServiceStatusVisibilityBySurface,
+            "popup",
+            provider.providerId,
+          );
+          const providerServiceStatus = showProviderServiceStatus
+            ? getProviderServiceStatusForProvider(
+                providerServiceStatuses,
+                provider.providerId,
+              )
+            : null;
           const hasCachedProviderContent =
             hasProviderProgress ||
             visibleUsageHistoryModules.length > 0 ||
-            provider.cursorUsage !== undefined;
+            provider.cursorUsage !== undefined ||
+            showProviderServiceStatus;
           const cardSurfaceTone =
             hasCachedProviderContent && provider.displayTone === "error"
               ? "neutral"
@@ -320,6 +345,12 @@ export function PopupFeaturedProviderList({
                   providerId={provider.providerId}
                   surface="popup"
                   usage={provider.cursorUsage}
+                />
+              ) : null}
+              {showProviderServiceStatus ? (
+                <ProviderServiceStatus
+                  locale={i18n.resolvedLocale}
+                  status={providerServiceStatus}
                 />
               ) : null}
             </article>
