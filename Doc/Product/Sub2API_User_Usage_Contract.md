@@ -57,6 +57,28 @@ Chrome Sync, configuration backup, logs, fixtures, diagnostics, or exports.
 This route is preferred over dashboard-page capture because it does not depend
 on a foreground tab, page hydration, DOM selectors, or browser lazy loading.
 
+### Settings and deployment isolation
+
+Settings asks for a local deployment label, the exact HTTP or HTTPS origin, and
+an API key. The key input is never prefilled after save. Leaving it blank while
+editing keeps the saved key; entering a replacement key overwrites only that
+deployment's account-scoped secret.
+
+Each deployment receives an opaque local account id and keeps its credential,
+normalized snapshot, last-sync state, and per-surface module preferences
+separate. Only the selected deployment follows the existing automatic refresh
+schedule. Selecting another deployment performs one bounded manual refresh;
+inactive deployments are not refreshed concurrently and values are never
+aggregated across deployments.
+
+**Save and test** requests optional host access for the configured scheme and
+host before running the normal provider refresh. **Disconnect** clears the
+credential and connection metadata, with an explicit choice to retain or remove
+the last nonsecret summary. Removing a non-default deployment clears its
+isolated snapshot, metadata, and secret. A non-loopback HTTP origin requires a
+persistent acknowledgement that the API key will be sent without transport
+encryption.
+
 ## Response Modes
 
 The route returns a direct JSON object rather than the account API's

@@ -60,8 +60,8 @@
 [data-quick-setup-primary-action="grant_access"]:not(:disabled)::after,
 [data-permission-action="request"]:not(:disabled)::after {
   position: absolute;
-  inset: -3px;
-  border: 2px solid
+  inset: 0;
+  box-shadow: 0 0 0 2px
     color-mix(in srgb, var(--md-sys-color-primary) 28%, transparent);
   border-radius: inherit;
   content: "";

@@ -39,6 +39,21 @@ AI Usage Dashboard is designed to avoid persistent collection of raw browser aut
 - The Claude Code Analytics Admin API remains a separate organization source.
   Its optional Admin API key is stored in extension-managed local storage and
   is never reused for the Claude Personal page source.
+- The optional Sub2API connector sends an account-scoped API key only to the
+  exact user-configured deployment origin for `GET /v1/usage`. The key remains
+  in account-isolated extension-local secret storage and is excluded from
+  AppState, Chrome Sync, backups, imports, exports, logs, fixtures, diagnostics,
+  snapshots, and user-facing errors.
+- Sub2API deployments request optional host access for the configured scheme and
+  host. Runtime requests enforce the exact origin and reject embedded URL
+  credentials, paths, queries, fragments, cross-origin redirects, non-JSON
+  responses, and oversized payloads. Non-loopback HTTP requires explicit
+  acknowledgement because it does not provide transport encryption.
+- Sub2API account-dashboard sessions, refresh tokens, cookies, passwords, raw
+  usage rows, prompts, responses, identities, key lists, group names, and
+  endpoint paths are outside the connector contract. Disconnect removes the
+  credential; retaining a previous nonsecret summary requires an explicit user
+  choice and keeps it marked as saved data.
 - It stores settings, optional API credentials, page bindings, cached snapshots,
   locally cached provider favicon images for toolbar icon matching, and
   import/export payloads in the user's Chrome profile.
@@ -84,3 +99,7 @@ AI Usage Dashboard is designed to avoid persistent collection of raw browser aut
 - Do not store, log, fixture, export, synchronize, or place a CodexBar dashboard
   token in AppState, configuration backup, diagnostics, or a URL. Do not use
   CodexBar's unauthenticated loopback routes as a fallback.
+- Do not store, log, fixture, export, synchronize, or display a Sub2API API key,
+  account-dashboard token, refresh token, real deployment response, or private
+  deployment URL. Synthetic fixtures must use reserved example domains and
+  invented aggregate values.

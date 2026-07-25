@@ -37,6 +37,10 @@ dashboard.
   differently.
 - Can display user-configured custom HTTP or HTTPS JSON quota sources as
   separate, clearly labeled custom sources.
+- Can connect explicitly configured Sub2API-compatible gateways through the
+  bounded `GET /v1/usage` API-key contract. Multiple deployments remain
+  isolated, only the selected deployment refreshes automatically, and raw
+  request records stay on the source dashboard.
 - Lets users tune language, theme, popup appearance, progress style,
   remaining-color appearance, provider order, toolbar badge behavior, and
   toolbar icon behavior. Quota reset labels can use localized date-and-time,
@@ -53,6 +57,7 @@ dashboard.
 | Codex | Enterprise analytics or signed-in Codex usage page | Live usage windows where visible; no plan-wide absolute remaining balance is invented. |
 | Cursor | Team Admin API or signed-in Usage/Spending pages | Team/API data or normalized personal billing pools and aggregate history; plan value is kept separate from actual On-Demand charges, and exact remaining personal requests are not invented. |
 | Claude | Signed-in Claude Personal usage page or Claude Code Analytics Admin API | Personal Pro usage windows and usage-credit state where source-visible, or separate organization analytics; exact plan-wide remaining quota is not invented. |
+| Sub2API | User-configured deployment and API key | Key-scoped aggregate balance, spend, requests, tokens, trends, models, and returned limits; account-dashboard sessions and raw request records are not imported. |
 | Gemini Code Assist | Documented quota policy | Policy-only in this release. |
 | JetBrains AI | Retained implementation path | Deferred from the active release promise until org-visible usage evidence is reverified. |
 
@@ -73,6 +78,9 @@ AI Usage Dashboard is intentionally conservative:
   for user-approved custom source HTTP/HTTPS endpoint origins.
 - Custom JSON sources fetch user-configured HTTP or HTTPS endpoints with
   browser credentials omitted; raw response bodies are not stored or rendered.
+- Sub2API API keys stay in account-isolated extension-local secret storage and
+  are sent only to the exact configured deployment origin. Non-loopback HTTP
+  requires an explicit warning acknowledgement; HTTPS is recommended.
 - Codex personal sync reuses a short-lived ChatGPT access token in
   `chrome.storage.session` and sends it only to `chatgpt.com`. It is not added
   to AppState, Chrome Sync, configuration backups, logs, or fixtures. Advanced

@@ -25,9 +25,9 @@ These values are stored in the user's Chrome profile through Chrome extension st
 Provider account ids are generated locally and do not use provider account
 ids, email addresses, or workspace identifiers. Account-specific credentials,
 runtime snapshots, and local aliases are excluded from configuration backup
-and Chrome Sync. The current release does not enable multi-account behavior for
-any built-in provider; every source entry continues to use one `default`
-account until its descriptor has a separately verified contract.
+and Chrome Sync. Sub2API uses this model to isolate user-named deployments;
+other built-in source entries continue to use one `default` account unless
+their descriptor has a separately verified multi-account contract.
 
 Codex personal sync may temporarily cache a short-lived ChatGPT access token in
 `chrome.storage.session`. This session credential is separate from AppState and
@@ -59,6 +59,42 @@ from a custom endpoint is not rendered, and scripts are not executed.
 Configuration export can include custom source settings such as endpoint URL,
 display name, description, enabled state, and refresh interval. Export does not
 include raw response bodies.
+
+## User-Configured Sub2API Deployments
+
+Sub2API is an optional built-in API-gateway connector. A user explicitly
+configures an HTTP or HTTPS deployment origin, a local display label, and an API
+key. A compatible URL is not proof that the deployment is operated by Sub2API,
+this project, or any endorsed service. Users are responsible for verifying the
+deployment operator and its privacy policy.
+
+The API key is stored only in account-isolated, extension-managed local secret
+storage. It is excluded from AppState, Chrome Sync, configuration backups,
+imports, exports, logs, fixtures, diagnostics, normalized snapshots, and
+user-facing errors. The saved key is never displayed or prefilled after save.
+The extension sends it only as a bearer credential to the exact configured
+origin when requesting `GET /v1/usage`; cross-origin redirects are rejected.
+
+Chrome requests optional host access for the configured scheme and host. The
+request client additionally enforces the exact origin, including its port.
+HTTPS is recommended. A non-loopback HTTP deployment requires an explicit
+persistent acknowledgement because the API key is transmitted without
+transport encryption. Loopback HTTP remains available for a local gateway.
+
+Only bounded normalized aggregate values are retained: balance or returned
+limits, spend and reference cost, request and token totals, up to 31 daily
+buckets, bounded model summaries, latency, and returned rate-limit windows.
+Raw responses, request rows, prompts, responses, endpoint paths, group names,
+API-key lists, user identities, cookies, and account-dashboard login sessions
+are not stored or imported. The account-level dashboard routes are not called.
+
+Each configured deployment has an opaque local account id, isolated credential,
+snapshot, last-sync state, and display preferences. Only the selected deployment
+uses the existing automatic refresh schedule; inactive deployments are not
+polled concurrently. Disconnecting always removes the credential and connection
+metadata. The user can explicitly choose whether to retain the last nonsecret
+summary as stale data or remove it as well. Removing a deployment clears its
+isolated local metadata, snapshot, and secret.
 
 ## Experimental Local Companion Bridge
 

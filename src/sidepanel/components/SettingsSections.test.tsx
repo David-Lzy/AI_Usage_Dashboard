@@ -174,6 +174,8 @@ describe("SettingsSections", () => {
     expect(accessFeedbackCss).toContain(
       ':root[data-motion-resolved="reduced"]',
     );
+    expect(accessFeedbackCss).toContain("inset: 0;");
+    expect(accessFeedbackCss).toContain("box-shadow: 0 0 0 2px");
     expect(accessFeedbackCss).toContain("animation: none;");
   });
 
