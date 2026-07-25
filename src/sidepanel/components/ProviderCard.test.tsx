@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
@@ -12,6 +14,11 @@ import type {
 import { SAMPLE_APP_STATE } from "../../shared/constants";
 import { getProviderViewModel } from "../view-models";
 import { ProviderCard } from "./ProviderCard";
+
+const providerCardCss = readFileSync(
+  new URL("../theme/provider-card.css", import.meta.url),
+  "utf8",
+);
 
 function createState(overrides?: Partial<AppState>): AppState {
   return {
@@ -65,6 +72,12 @@ function renderProviderCard(
 }
 
 describe("ProviderCard", () => {
+  it("wraps long diagnostic chips inside narrow provider cards", () => {
+    expect(providerCardCss).toMatch(
+      /\.provider-card__meta \.meta-chip\s*\{[^}]*min-width:\s*0;[^}]*white-space:\s*normal;[^}]*overflow-wrap:\s*anywhere;/s,
+    );
+  });
+
   it("renders API gateway metering without the generic unknown-usage block", () => {
     const metering: ApiGatewayMeteringSnapshot = {
       schemaVersion: 1,

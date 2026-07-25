@@ -354,6 +354,7 @@ async function collectLayoutSnapshot(page, routeId, expectedDir) {
         ".color-choice-dropdown__option",
         ".material-select button",
         ".progress-gradient-scheme-dropdown__option",
+        ".provider-card__meta .meta-chip",
       ].join(",");
       const elements = Array.from(document.querySelectorAll(elementSelector));
 
@@ -553,7 +554,7 @@ async function collectLayoutSnapshot(page, routeId, expectedDir) {
       if (clippedControls.length > 0) {
         issues.push({
           code: "clipped_control_text",
-          message: `${clippedControls.length} controls have scroll overflow.`,
+          message: `${clippedControls.length} guarded controls or labels have scroll overflow.`,
         });
       }
 

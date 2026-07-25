@@ -426,8 +426,11 @@
 
 .provider-card__meta .meta-chip {
   flex: 0 1 auto;
+  min-width: 0;
   max-width: 100%;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: center;
 }
 
 .provider-card__availability {
