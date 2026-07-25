@@ -121,6 +121,7 @@ describe("configuration backup", () => {
         ...SAMPLE_APP_STATE.settings,
         locale: "zh-CN",
         themeMode: "dark",
+        quotaPaceForecastEnabled: true,
       },
       providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) =>
         provider.id === "cursor-personal-page"
@@ -157,6 +158,7 @@ describe("configuration backup", () => {
 
     expect(importedState.settings.locale).toBe("zh-CN");
     expect(importedState.settings.themeMode).toBe("dark");
+    expect(importedState.settings.quotaPaceForecastEnabled).toBe(true);
     expect(cursorSetting?.displayEnabled).toBe(false);
     expect(cursorSetting?.sourcePreference).toBe("session_page");
     expect(cursorSetting?.pageBinding.tabId).toBe(456);

@@ -113,6 +113,14 @@ reduced motion; `Reduced` consistently minimizes animation, transitions, and
 smooth scrolling; `Follow system` tracks the browser's current reduced-motion
 preference.
 
+## Quota Pace Estimate
+
+Advanced appearance settings include a default-off quota pace estimate for
+Provider detail. It compares elapsed time with percentage used only for fresh,
+fixed-duration usage windows. Unknown, stale, expired, or newly started windows
+show no estimate. Pace is derived locally for presentation and is never stored
+as provider source data or used to change alerts, badges, or refresh behavior.
+
 ## Custom JSON Sources
 
 Settings can add client-provided HTTP or HTTPS JSON endpoints for quota data

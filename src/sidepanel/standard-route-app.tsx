@@ -420,6 +420,9 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
             onResetTimeDisplayModeChange={(resetTimeDisplayMode) =>
               handleUpdateSettings({ resetTimeDisplayMode })
             }
+            onQuotaPaceForecastEnabledChange={(quotaPaceForecastEnabled) =>
+              handleUpdateSettings({ quotaPaceForecastEnabled })
+            }
             onPopupProgressStyleChange={(popupProgressStyle) =>
               handleUpdateSettings({ popupProgressStyle })
             }
@@ -541,6 +544,9 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
             appState.settings.usageHistoryModulesBySurface
           }
           provider={selectedProvider}
+          quotaPaceForecastEnabled={
+            appState.settings.quotaPaceForecastEnabled
+          }
           resetTimeDisplayMode={appState.settings.resetTimeDisplayMode}
           onBack={() => navigateToRoute({ name: "dashboard" })}
           themeActionLabel={themeAction.label}

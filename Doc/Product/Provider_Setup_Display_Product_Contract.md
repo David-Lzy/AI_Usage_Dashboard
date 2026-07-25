@@ -232,6 +232,28 @@ Rules:
 - usage facts, raw diagnostic bodies, provider evidence, and archive/export payloads stay source-truth data, not configurable progress bars
 - hidden-provider quota item settings must not affect visible popup, sidebar, or full-page rendering
 
+### Quota Pace Estimate
+
+Quota pace is optional derived presentation data, not provider source truth.
+The global advanced appearance preference is default-off, and the first
+rollout is limited to Provider detail.
+
+- Estimate only fresh percentage windows with a verified fixed duration, a
+  valid future reset timestamp, and enough elapsed time for a meaningful
+  comparison.
+- Current eligible durations are five-hour and weekly windows, including their
+  model-specific variants. Unknown or provider-policy windows are ineligible.
+- A stale, expired, future, malformed, or newly started window must produce no
+  estimate rather than a guessed value.
+- Label every result as an estimate and keep the localized status separate from
+  the provider's own quota name and reset timestamp.
+- Compute pace only while rendering Provider detail. Do not persist it in a
+  provider snapshot, raw evidence, diagnostics, configuration export, or Chrome
+  Sync payload.
+- Enabling pace must not add a request, timer, polling path, background task, or
+  change to provider tone, warning thresholds, toolbar badges, or refresh
+  behavior.
+
 ## Provider-Specific Boundaries
 
 ### Cursor

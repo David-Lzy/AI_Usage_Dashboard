@@ -448,6 +448,7 @@ export type AppSettings = {
   uiFontFamily: UiFontFamily;
   motionMode: MotionMode;
   resetTimeDisplayMode: ResetTimeDisplayMode;
+  quotaPaceForecastEnabled: boolean;
   popupProgressStyle: ProgressDisplayStyle;
   sidebarProgressStyle: ProgressDisplayStyle;
   fullPageProgressStyle: ProgressDisplayStyle;

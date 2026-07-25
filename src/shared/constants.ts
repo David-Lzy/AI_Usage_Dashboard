@@ -36,6 +36,7 @@ import { DEFAULT_SETTINGS_USER_LEVEL } from "./settings-user-level";
 import { DEFAULT_UI_FONT_FAMILY } from "./ui-font-family";
 import { DEFAULT_MOTION_MODE } from "./motion-preferences";
 import { DEFAULT_RESET_TIME_DISPLAY_MODE } from "./reset-time-display";
+import { DEFAULT_QUOTA_PACE_FORECAST_ENABLED } from "./quota-pace";
 import {
   DEFAULT_ACTION_BADGE_SELECTION,
   DEFAULT_ACTION_BADGE_SELECTION_MODE,
@@ -709,6 +710,7 @@ export const SAMPLE_APP_STATE: AppState = {
     uiFontFamily: DEFAULT_UI_FONT_FAMILY,
     motionMode: DEFAULT_MOTION_MODE,
     resetTimeDisplayMode: DEFAULT_RESET_TIME_DISPLAY_MODE,
+    quotaPaceForecastEnabled: DEFAULT_QUOTA_PACE_FORECAST_ENABLED,
     popupProgressStyle: DEFAULT_POPUP_PROGRESS_STYLE,
     sidebarProgressStyle: DEFAULT_SIDEBAR_PROGRESS_STYLE,
     fullPageProgressStyle: DEFAULT_FULL_PAGE_PROGRESS_STYLE,

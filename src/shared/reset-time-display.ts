@@ -198,7 +198,7 @@ export function buildResetTimeDisplayCopy(
   }
 }
 
-function parseResetDate(rawValue: string, now: Date): Date | null {
+export function parseResetDate(rawValue: string, now: Date): Date | null {
   const value = rawValue.trim();
   const localDateTime =
     /^(\d{4})-(\d{2})-(\d{2})\s+(\d{1,2}):(\d{2})(?:\s+(UTC))?$/i.exec(

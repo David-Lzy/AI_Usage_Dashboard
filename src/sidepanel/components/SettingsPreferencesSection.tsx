@@ -88,6 +88,7 @@ type SettingsPreferencesSectionProps = {
   onResetTimeDisplayModeChange?: (
     resetTimeDisplayMode: AppSettings["resetTimeDisplayMode"],
   ) => void;
+  onQuotaPaceForecastEnabledChange?: (enabled: boolean) => void;
   onSyncIntervalChange: (minutes: number) => void;
   onMotionModeChange: (motionMode: AppSettings["motionMode"]) => void;
   onThemeCustomSeedChange: (themeCustomSeedHex: string) => void;
@@ -127,6 +128,7 @@ export function SettingsPreferencesSection({
   onProgressThicknessPxChange,
   onSidebarProgressStyleChange,
   onResetTimeDisplayModeChange = () => undefined,
+  onQuotaPaceForecastEnabledChange = () => undefined,
   onSyncIntervalChange,
   onMotionModeChange,
   onThemeCustomSeedChange,
@@ -447,6 +449,7 @@ export function SettingsPreferencesSection({
         onProgressThicknessPxChange={onProgressThicknessPxChange}
         onSidebarProgressStyleChange={onSidebarProgressStyleChange}
         onResetTimeDisplayModeChange={onResetTimeDisplayModeChange}
+        onQuotaPaceForecastEnabledChange={onQuotaPaceForecastEnabledChange}
         onUiFontFamilyChange={onUiFontFamilyChange}
       />
     </section>

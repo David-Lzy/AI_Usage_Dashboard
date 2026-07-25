@@ -58,6 +58,8 @@ function renderProviderDetail(
   providerId: "codex-personal-page" | "cursor-personal-page" | "gemini-policy",
   options: {
     onOpenSourcePage?: () => void;
+    quotaPaceForecastEnabled?: boolean;
+    quotaPaceNow?: Date;
   } = {},
 ) {
   const provider = getProviderViewModel(state, providerId);
@@ -75,6 +77,8 @@ function renderProviderDetail(
       progressThicknessPx={state.settings.progressThicknessPx}
       progressSurface="sidebar"
       provider={provider}
+      quotaPaceForecastEnabled={options.quotaPaceForecastEnabled}
+      quotaPaceNow={options.quotaPaceNow}
       onBack={() => undefined}
       onOpenSourcePage={options.onOpenSourcePage}
       onRefresh={() => undefined}
@@ -132,5 +136,49 @@ describe("ProviderDetailPage", () => {
     expect(html).toContain('href="https://cursor.com/dashboard/usage"');
     expect(html).toContain('href="https://cursor.com/dashboard/spending"');
     expect(html).not.toContain("request ledger");
+  });
+
+  it("renders fresh fixed-window pace estimates only when opted in", () => {
+    const state = createState({
+      providers: SAMPLE_APP_STATE.providers.map((provider) =>
+        provider.providerId === "codex-personal-page"
+          ? {
+              ...provider,
+              syncedAt: "2026-07-25T11:55:00.000Z",
+              usageWindows: [
+                {
+                  label: "Weekly usage window",
+                  normalizedLabel: "weekly usage window",
+                  kind: "weekly" as const,
+                  modelLabel: null,
+                  quotaUnit: "percent" as const,
+                  used: 75,
+                  remaining: 25,
+                  total: 100,
+                  resetAt: "2026-07-29T00:00:00.000Z",
+                  resetLabel: "Resets Jul 29",
+                },
+              ],
+            }
+          : provider,
+      ),
+    });
+
+    expect(
+      renderProviderDetail(state, "codex-personal-page", {
+        quotaPaceNow: new Date("2026-07-25T12:00:00.000Z"),
+      }),
+    ).not.toContain('data-provider-quota-pace=""');
+
+    const html = renderProviderDetail(state, "codex-personal-page", {
+      quotaPaceForecastEnabled: true,
+      quotaPaceNow: new Date("2026-07-25T12:00:00.000Z"),
+    });
+
+    expect(html).toContain('data-provider-quota-pace=""');
+    expect(html).toContain('data-quota-pace-status="at_risk"');
+    expect(html).toContain("Quota pace");
+    expect(html).toContain("Estimate");
+    expect(html).toContain("May run out around");
   });
 });

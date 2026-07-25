@@ -186,6 +186,9 @@ describe("SettingsPreferencesSection", () => {
     expect(html).toContain("UI font");
     expect(html).toContain("Reset time format");
     expect(html).toContain("Date and time");
+    expect(html).toContain('data-quota-pace-forecast-setting=""');
+    expect(html).toContain("Quota pace estimate");
+    expect(html).toContain('type="checkbox"');
     expect(html).toContain(
       "Uses safe local system font stacks across the popup",
     );
@@ -203,6 +206,26 @@ describe("SettingsPreferencesSection", () => {
       html.indexOf('data-progress-appearance-preferences=""'),
     ).toBeGreaterThan(
       html.indexOf('data-settings-material-select="popup-shadow-style"'),
+    );
+  });
+
+  it("renders the quota pace preference as default-off and preserves opt-in", () => {
+    const defaultHtml = renderPreferencesSection({
+      ...SAMPLE_APP_STATE.settings,
+      themePreset: "custom",
+    });
+    const enabledHtml = renderPreferencesSection({
+      ...SAMPLE_APP_STATE.settings,
+      themePreset: "custom",
+      quotaPaceForecastEnabled: true,
+    });
+
+    expect(defaultHtml).toContain('data-quota-pace-forecast-setting=""');
+    expect(defaultHtml).not.toContain(
+      'data-quota-pace-forecast-setting=""><input type="checkbox" checked=""',
+    );
+    expect(enabledHtml).toContain(
+      'data-quota-pace-forecast-setting=""><input type="checkbox" checked=""',
     );
   });
 

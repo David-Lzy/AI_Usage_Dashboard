@@ -97,6 +97,7 @@ type SettingsPageProps = {
   onResetTimeDisplayModeChange?: (
     resetTimeDisplayMode: AppSettings["resetTimeDisplayMode"],
   ) => void;
+  onQuotaPaceForecastEnabledChange?: (enabled: boolean) => void;
   onPopupProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onSidebarProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onFullPageProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
@@ -194,6 +195,7 @@ export function SettingsPage({
   onThemePresetChange,
   onUiFontFamilyChange,
   onResetTimeDisplayModeChange = () => undefined,
+  onQuotaPaceForecastEnabledChange = () => undefined,
   onPopupProgressStyleChange,
   onSidebarProgressStyleChange,
   onFullPageProgressStyleChange,
@@ -509,6 +511,7 @@ export function SettingsPage({
         onThemePresetChange={onThemePresetChange}
         onUiFontFamilyChange={onUiFontFamilyChange}
         onResetTimeDisplayModeChange={onResetTimeDisplayModeChange}
+        onQuotaPaceForecastEnabledChange={onQuotaPaceForecastEnabledChange}
         onPopupProgressStyleChange={onPopupProgressStyleChange}
         onSidebarProgressStyleChange={onSidebarProgressStyleChange}
         onFullPageProgressStyleChange={onFullPageProgressStyleChange}

@@ -34,6 +34,11 @@ import {
 import { CursorUsageSummary } from "../../shared/components/CursorUsageSummary";
 import { buildCursorUsageLocalizedCopy } from "../../shared/cursor-usage-localized-copy";
 import { DEFAULT_RESET_TIME_DISPLAY_MODE } from "../../shared/reset-time-display";
+import { buildAvailableQuotaPaceForecasts } from "../../shared/quota-pace";
+import {
+  buildQuotaPaceLocalizedCopy,
+  formatQuotaPaceDateTime,
+} from "../../shared/quota-pace-localized-copy";
 
 type ProviderDetailPageProps = {
   localePreference: AppLocalePreference;
@@ -45,6 +50,8 @@ type ProviderDetailPageProps = {
   progressSurface: DisplaySurface;
   usageHistoryModulesBySurface?: UsageHistoryModulesBySurface;
   provider: ProviderViewModel;
+  quotaPaceForecastEnabled?: boolean;
+  quotaPaceNow?: Date;
   resetTimeDisplayMode?: ResetTimeDisplayMode;
   onBack: () => void;
   themeActionLabel?: string;
@@ -71,6 +78,8 @@ export function ProviderDetailPage({
   progressSurface,
   usageHistoryModulesBySurface = createDefaultUsageHistoryModulesBySurface(),
   provider,
+  quotaPaceForecastEnabled = false,
+  quotaPaceNow = new Date(),
   resetTimeDisplayMode = DEFAULT_RESET_TIME_DISPLAY_MODE,
   onBack,
   themeActionLabel,
@@ -90,6 +99,14 @@ export function ProviderDetailPage({
   const copy = buildProviderDetailLocalizedCopy(i18n);
   const usageHistoryCopy = buildUsageHistoryLocalizedCopy(i18n.resolvedLocale);
   const cursorUsageCopy = buildCursorUsageLocalizedCopy(i18n.resolvedLocale);
+  const quotaPaceCopy = buildQuotaPaceLocalizedCopy(i18n.resolvedLocale);
+  const quotaPaceForecasts = quotaPaceForecastEnabled
+    ? buildAvailableQuotaPaceForecasts(
+        provider.usageWindows,
+        provider.syncedAt,
+        quotaPaceNow,
+      )
+    : [];
   const visibleUsageHistoryModuleOrder =
     resolveProviderUsageHistoryModules(
       usageHistoryModulesBySurface,
@@ -469,6 +486,58 @@ export function ProviderDetailPage({
             resetTimeDisplayMode={resetTimeDisplayMode}
             surface={progressSurface}
           />
+        ) : null}
+
+        {quotaPaceForecasts.length > 0 ? (
+          <div
+            className="detail-note detail-note--neutral quota-pace"
+            data-provider-quota-pace=""
+          >
+            <div className="quota-pace__header">
+              <p className="detail-note__label">{quotaPaceCopy.sectionLabel}</p>
+              <span className="meta-chip">{quotaPaceCopy.estimateLabel}</span>
+            </div>
+            <ul className="quota-pace__list">
+              {quotaPaceForecasts.map((forecast, index) => {
+                const resetTime = formatQuotaPaceDateTime(
+                  forecast.resetAt,
+                  i18n.resolvedLocale,
+                );
+                const timingDetail = forecast.projectedExhaustionAt
+                  ? quotaPaceCopy.projectedExhaustion(
+                      formatQuotaPaceDateTime(
+                        forecast.projectedExhaustionAt,
+                        i18n.resolvedLocale,
+                      ),
+                    )
+                  : quotaPaceCopy.lastsThroughReset(resetTime);
+
+                return (
+                  <li
+                    className="quota-pace__item"
+                    data-quota-pace-status={forecast.status}
+                    key={`${forecast.window.kind}:${forecast.window.normalizedLabel}:${forecast.window.modelLabel ?? "window"}:${index}`}
+                  >
+                    <div className="quota-pace__item-header">
+                      <strong className="quota-pace__window-name">
+                        {forecast.window.modelLabel ?? forecast.window.label}
+                      </strong>
+                      <span className="quota-pace__status">
+                        {quotaPaceCopy.status[forecast.status]}
+                      </span>
+                    </div>
+                    <p className="supporting-copy">
+                      {quotaPaceCopy.comparison(
+                        i18n.formatPercentValue(forecast.usedPercent),
+                        i18n.formatPercentValue(forecast.expectedUsedPercent),
+                      )}
+                    </p>
+                    <p className="supporting-copy">{timingDetail}</p>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         ) : null}
 
         {hasUsageContext ? (

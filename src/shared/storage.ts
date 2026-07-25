@@ -78,6 +78,7 @@ import {
   normalizeCustomSourceSettings,
   normalizeCustomSourceSyncStates,
 } from "./custom-sources";
+import { normalizeQuotaPaceForecastEnabled } from "./quota-pace";
 import { buildCustomSourceProgressItemIdsBySource } from "./custom-source-view-models";
 import { normalizeProviderUsageHistory } from "./provider-usage-history";
 import { normalizeUsageHistoryModulesBySurface } from "./usage-history-visibility";
@@ -315,6 +316,9 @@ function normalizeAppState(state: AppState): AppState {
       motionMode: normalizeMotionMode(state.settings?.motionMode),
       resetTimeDisplayMode: normalizeResetTimeDisplayMode(
         state.settings?.resetTimeDisplayMode,
+      ),
+      quotaPaceForecastEnabled: normalizeQuotaPaceForecastEnabled(
+        state.settings?.quotaPaceForecastEnabled,
       ),
       popupProgressStyle: normalizeProgressDisplayStyle(
         state.settings?.popupProgressStyle,

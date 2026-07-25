@@ -509,6 +509,32 @@ describe("storage normalization", () => {
     expect((await readAppState())?.settings.resetTimeDisplayMode).toBe("date");
   });
 
+  it("normalizes and preserves the quota pace opt-in preference", async () => {
+    await writeAppState({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        quotaPaceForecastEnabled: true,
+      },
+    });
+
+    expect((await readAppState())?.settings.quotaPaceForecastEnabled).toBe(
+      true,
+    );
+
+    await writeAppState({
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        quotaPaceForecastEnabled: "enabled",
+      } as unknown as AppState["settings"],
+    });
+
+    expect((await readAppState())?.settings.quotaPaceForecastEnabled).toBe(
+      false,
+    );
+  });
+
   it("preserves stored provider source preferences across normalized writes", async () => {
     await writeAppState({
       ...SAMPLE_APP_STATE,

@@ -17,6 +17,7 @@ import {
   buildResetTimeDisplayCopy,
   RESET_TIME_DISPLAY_MODES,
 } from "../../shared/reset-time-display";
+import { buildQuotaPaceLocalizedCopy } from "../../shared/quota-pace-localized-copy";
 import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import type { SettingsActivePopoverSessionState } from "../../shared/surface-session-state";
 import { AdaptiveControlGrid } from "./AdaptiveControlGrid";
@@ -83,6 +84,7 @@ type SettingsUiMoreSectionProps = {
   onResetTimeDisplayModeChange: (
     resetTimeDisplayMode: ResetTimeDisplayMode,
   ) => void;
+  onQuotaPaceForecastEnabledChange: (enabled: boolean) => void;
   onUiFontFamilyChange: (uiFontFamily: UiFontFamily) => void;
 };
 
@@ -212,6 +214,7 @@ export function SettingsUiMoreSection({
   onProgressThicknessPxChange,
   onSidebarProgressStyleChange,
   onResetTimeDisplayModeChange,
+  onQuotaPaceForecastEnabledChange,
   onUiFontFamilyChange,
 }: SettingsUiMoreSectionProps) {
   const { canUseFloatingPreview, containerRef } =
@@ -221,6 +224,7 @@ export function SettingsUiMoreSection({
   const shouldRenderFloatingPreview =
     toolbarPopupPreviewOpen && canUseFloatingPreview;
   const resetTimeDisplayCopy = buildResetTimeDisplayCopy(i18n.resolvedLocale);
+  const quotaPaceCopy = buildQuotaPaceLocalizedCopy(i18n.resolvedLocale);
   const resetTimeDisplayModeOptions: Array<
     MaterialSelectOption<ResetTimeDisplayMode>
   > = RESET_TIME_DISPLAY_MODES.map((value) => ({
@@ -424,6 +428,23 @@ export function SettingsUiMoreSection({
               onChange={onUiFontFamilyChange}
             />
           </AdaptiveControlGrid>
+
+          <label
+            className="settings-preferences__binary-setting"
+            data-quota-pace-forecast-setting=""
+          >
+            <input
+              checked={settings.quotaPaceForecastEnabled}
+              type="checkbox"
+              onChange={(event) =>
+                onQuotaPaceForecastEnabledChange(event.currentTarget.checked)
+              }
+            />
+            <span className="settings-preferences__binary-setting-copy">
+              <strong>{quotaPaceCopy.settingLabel}</strong>
+              <span>{quotaPaceCopy.settingDetail}</span>
+            </span>
+          </label>
 
           <ProgressAppearancePreferenceControls
             copy={settingsCopy.progressAppearance}
