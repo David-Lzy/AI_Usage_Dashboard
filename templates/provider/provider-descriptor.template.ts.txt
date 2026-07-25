@@ -1,0 +1,30 @@
+import type { ProviderDescriptor } from
+  "../../src/providers/provider-definitions";
+
+// Authoring scaffold only. Do not compile or register placeholder providers.
+// Replace every REVIEW value, then add the real descriptor to
+// src/providers/provider-definitions.ts after the source contract graduates.
+export const PROVIDER_DESCRIPTOR_REVIEW: ProviderDescriptor = {
+  id: "REVIEW_STABLE_SOURCE_ENTRY_ID",
+  brandId: "REVIEW_EXISTING_OR_TYPED_BRAND_ID",
+  label: "REVIEW_PROVIDER_SOURCE_LABEL",
+  shortLabel: "REVIEW_SHORT_LABEL",
+  audience: "deferred",
+  sourceKind: "session_page",
+  connectionMode: "page_session",
+  fixedSourcePreference: "session_page",
+  defaultDisplayEnabled: false,
+  quickSetupDefaultVisible: false,
+  runtime: {
+    syncAdapterOwner: "REVIEW_ADAPTER_OWNER",
+    executionMode: "no_network_deferred",
+    capabilities: {
+      quotaWindows: false,
+      balances: false,
+      aggregateHistory: false,
+      spending: false,
+      serviceStatus: false,
+      multiAccount: false
+    }
+  }
+};

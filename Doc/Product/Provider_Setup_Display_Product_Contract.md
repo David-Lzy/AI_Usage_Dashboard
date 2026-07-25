@@ -104,18 +104,20 @@ contains matching data:
 
 Current capability ownership:
 
-| Source entry | Adapter owner | Quota windows | Balances | Aggregate history | Spending |
-| --- | --- | --- | --- | --- | --- |
-| `cursor-personal-page` | Cursor | Yes | Yes | Yes | Yes |
-| `cursor-team-api` | Cursor | No | No | No | Yes |
-| `claude-code-team-page` | Claude Code | Yes | No | No | Yes |
-| `claude-code-admin-api` | Claude Code | No | No | No | Yes |
-| `codex-personal-page` | Codex | Yes | Yes | Yes | No |
-| `codex-enterprise-api` | Codex | No | No | No | No |
-| `gemini-policy` | Gemini | No | No | No | No |
-| `jetbrains-org-page` | JetBrains | No | No | No | No |
+| Source entry | Adapter owner | Quota windows | Balances | Aggregate history | Spending | Service status | Multi-account |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `cursor-personal-page` | Cursor | Yes | Yes | Yes | Yes | Yes | No |
+| `cursor-team-api` | Cursor | No | No | No | Yes | Yes | No |
+| `claude-code-team-page` | Claude Code | Yes | No | No | Yes | Yes | No |
+| `claude-code-admin-api` | Claude Code | No | No | No | Yes | Yes | No |
+| `codex-personal-page` | Codex | Yes | Yes | Yes | No | Yes | No |
+| `codex-enterprise-api` | Codex | No | No | No | No | Yes | No |
+| `gemini-policy` | Gemini | No | No | No | No | No | No |
+| `jetbrains-org-page` | JetBrains | No | No | No | No | No | No |
 
-`serviceStatus` and `multiAccount` are currently false for every source entry.
+Service status is a brand-level official status contract and remains separate
+from Provider sync health. It is implemented for Cursor, Claude, and Codex
+source entries. `multiAccount` is currently false for every source entry.
 JetBrains remains deferred. Its parser and capture client are retained for
 future contract revalidation, but the registered deferred adapter performs no
 network or page capture and does not expose a live quota capability.

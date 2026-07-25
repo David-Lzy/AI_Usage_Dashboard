@@ -30,6 +30,11 @@ Run the checks that match your change:
 - Firefox-target changes: add `npm run firefox:build`, `npm run firefox:lint`, and `npm run firefox:lint:baseline`
 - Release candidate changes: `npm run release:check`
 
+Provider source changes must also run `npm run provider:quality`. Start with
+the [Provider Authoring Guide](Doc/Product/Provider_Authoring_Guide.md); it
+defines descriptor, source-truth, fixture, host-access, upstream attribution,
+and graduation requirements.
+
 ## UI Control Rhythm
 
 Settings controls share three height tokens: compact controls use 36px, medium
@@ -43,6 +48,9 @@ centered with flex or grid alignment instead of one-off vertical padding.
 - Keep provider source-truth boundaries explicit. If a provider exposes only partial, window-scoped, or policy-only data, do not describe it as exact live quota support.
 - Keep generated evidence under `Doc/testing/` traceable through the existing request/archive workflow.
 - Keep user-facing runtime strings in the localization catalogs.
+- Classify upstream Provider influence in
+  `config/provider-upstream-provenance.json`. Copied or translated/derived code
+  also requires a source header and a matching `THIRD_PARTY_NOTICES.md` entry.
 
 ## License
 

@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "providers": [
+    {
+      "id": "cursor-personal-page",
+      "adapterOwner": "cursor",
+      "adapterTest": "src/providers/cursor/adapter.test.ts",
+      "providerNote": "Doc/provider_notes/Cursor.md",
+      "sourceContract": "src/shared/constants.ts",
+      "i18nPolicy": "Doc/I18n/I18n_Raw_Provider_Source_Truth_Policy.md",
+      "localizedCopyOwner": "src/shared/provider-source-display-localized-copy.ts",
+      "hostAccessContract": "optional_page_origin",
+      "displayEligibility": "shipped"
+    },
+    {
+      "id": "cursor-team-api",
+      "adapterOwner": "cursor",
+      "adapterTest": "src/providers/cursor/adapter.test.ts",
+      "providerNote": "Doc/provider_notes/Cursor.md",
+      "sourceContract": "src/shared/constants.ts",
+      "i18nPolicy": "Doc/I18n/I18n_Raw_Provider_Source_Truth_Policy.md",
+      "localizedCopyOwner": "src/shared/provider-source-display-localized-copy.ts",
+      "hostAccessContract": "optional_api_origin",
+      "displayEligibility": "shipped"
+    },
+    {
+      "id": "claude-code-team-page",
+      "adapterOwner": "claude-code",
+      "adapterTest": "src/providers/claude-code/adapter.test.ts",
+      "providerNote": "Doc/provider_notes/Claude.md",
+      "sourceContract": "src/shared/constants.ts",
+      "i18nPolicy": "Doc/I18n/I18n_Raw_Provider_Source_Truth_Policy.md",
+      "localizedCopyOwner": "src/shared/provider-source-display-localized-copy.ts",
+      "hostAccessContract": "optional_page_origin",
+      "displayEligibility": "shipped"
+    },
+    {
+      "id": "claude-code-admin-api",
+      "adapterOwner": "claude-code",
+      "adapterTest": "src/providers/claude-code/adapter.test.ts",
+      "providerNote": "Doc/provider_notes/Claude.md",
+      "sourceContract": "src/shared/constants.ts",
+      "i18nPolicy": "Doc/I18n/I18n_Raw_Provider_Source_Truth_Policy.md",
+      "localizedCopyOwner": "src/shared/provider-source-display-localized-copy.ts",
+      "hostAccessContract": "optional_api_origin",
+      "displayEligibility": "shipped"
+    },
+    {
+      "id": "codex-personal-page",
+      "adapterOwner": "codex",
+      "adapterTest": "src/providers/codex/adapter.test.ts",
+      "providerNote": "Doc/provider_notes/Codex.md",
+      "sourceContract": "src/shared/constants.ts",
+      "i18nPolicy": "Doc/I18n/I18n_Raw_Provider_Source_Truth_Policy.md",
+      "localizedCopyOwner": "src/shared/provider-source-display-localized-copy.ts",
+      "hostAccessContract": "optional_page_origin",
+      "displayEligibility": "shipped"
+    },
+    {
+      "id": "codex-enterprise-api",
+      "adapterOwner": "codex",
+      "adapterTest": "src/providers/codex/adapter.test.ts",
+      "providerNote": "Doc/provider_notes/Codex.md",
+      "sourceContract": "src/shared/constants.ts",
+      "i18nPolicy": "Doc/I18n/I18n_Raw_Provider_Source_Truth_Policy.md",
+      "localizedCopyOwner": "src/shared/provider-source-display-localized-copy.ts",
+      "hostAccessContract": "optional_api_origin",
+      "displayEligibility": "shipped"
+    },
+    {
+      "id": "gemini-policy",
+      "adapterOwner": "gemini",
+      "adapterTest": "src/providers/gemini/adapter.test.ts",
+      "providerNote": "Doc/provider_notes/Gemini.md",
+      "sourceContract": "src/shared/constants.ts",
+      "i18nPolicy": "Doc/I18n/I18n_Raw_Provider_Source_Truth_Policy.md",
+      "localizedCopyOwner": "src/shared/provider-source-display-localized-copy.ts",
+      "hostAccessContract": "none",
+      "displayEligibility": "shipped"
+    },
+    {
+      "id": "jetbrains-org-page",
+      "adapterOwner": "jetbrains",
+      "adapterTest": "src/providers/jetbrains/adapter.test.ts",
+      "providerNote": "Doc/provider_notes/JetBrains.md",
+      "sourceContract": "src/shared/constants.ts",
+      "i18nPolicy": "Doc/I18n/I18n_Raw_Provider_Source_Truth_Policy.md",
+      "localizedCopyOwner": "src/shared/provider-source-display-localized-copy.ts",
+      "hostAccessContract": "optional_page_origin",
+      "displayEligibility": "deferred"
+    }
+  ]
+}

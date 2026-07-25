@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "adoptions": [
+    {
+      "id": "codexbar-official-status-feed-discovery",
+      "classification": "protocol lead",
+      "repositoryUrl": "https://github.com/steipete/CodexBar",
+      "upstreamFilePath": null,
+      "pinnedCommit": "cc8da27cec92029a6435bfee4a703a719290234e",
+      "copyrightHolder": "CodexBar contributors",
+      "license": "MIT",
+      "localDestination": "Doc/Product/Official_Provider_Service_Status_Feeds.md",
+      "modificationSummary": "Repository-level endpoint candidates were independently reverified against official vendor domains; no upstream source or fixture code was copied.",
+      "maintenanceOwner": "AI Usage Dashboard maintainers",
+      "independentVerification": "Official status endpoints were queried directly and the bounded runtime contract is documented in the local destination.",
+      "noticeId": null
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "fixtureVersion": 1,
+  "sourceEntryId": "REVIEW_STABLE_SOURCE_ENTRY_ID",
+  "capturedAt": "2000-01-01T00:00:00.000Z",
+  "payload": {
+    "status": "sanitized-example",
+    "used": 25,
+    "remaining": 75
+  }
+}
