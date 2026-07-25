@@ -14,6 +14,20 @@
       "maintenanceOwner": "AI Usage Dashboard maintainers",
       "independentVerification": "Official status endpoints were queried directly and the bounded runtime contract is documented in the local destination.",
       "noticeId": null
+    },
+    {
+      "id": "codexbar-provider-platform-concepts",
+      "classification": "concept-only",
+      "repositoryUrl": "https://github.com/steipete/CodexBar",
+      "upstreamFilePath": "docs/provider.md",
+      "pinnedCommit": "cc8da27cec92029a6435bfee4a703a719290234e",
+      "copyrightHolder": "CodexBar contributors",
+      "license": "MIT",
+      "localDestination": "Doc/Product/CodexBar_Upstream_Adoption.md",
+      "modificationSummary": "Provider descriptor and ordered fetch-plan concepts were reviewed against independently implemented browser-extension contracts; no Swift source or fixtures were copied or translated.",
+      "maintenanceOwner": "AI Usage Dashboard maintainers",
+      "independentVerification": "The local descriptor, strategy, privacy, and permission contracts are covered by project-owned tests and the Provider authoring quality gate.",
+      "noticeId": null
     }
   ]
 }

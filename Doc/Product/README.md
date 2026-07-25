@@ -22,3 +22,4 @@ Status note:
 - [Custom JSON Sources](./Custom_JSON_Sources.md)
 - [Experimental Local Companion Bridge](./Local_Companion_Bridge.md)
 - [Official Provider Service Status Feeds](./Official_Provider_Service_Status_Feeds.md)
+- [CodexBar Upstream Adoption](./CodexBar_Upstream_Adoption.md)

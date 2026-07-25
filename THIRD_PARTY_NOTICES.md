@@ -12,7 +12,9 @@ contains copied or translated/derived third-party source code.
 CodexBar was used as a protocol discovery lead for official service-status
 endpoint candidates. The endpoints were independently verified against the
 official vendor domains, and no CodexBar source or fixture code was copied.
-The pinned discovery record is maintained in
+Its Provider descriptor and fetch-plan architecture was also reviewed as a
+concept-only reference; the local browser-extension contracts were implemented
+independently. The pinned records are maintained in
 `config/provider-upstream-provenance.json`.
 
 ## Maintenance Rule
