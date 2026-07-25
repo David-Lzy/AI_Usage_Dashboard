@@ -267,8 +267,79 @@
   padding-block: 16px;
 }
 
+.api-gateway-metering-summary--detail .api-gateway-metering-facts {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+}
+
+.api-gateway-metering-token-breakdown {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.api-gateway-metering-token-breakdown > p {
+  margin: 0;
+  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-label-medium-weight)
+    var(--md-sys-typescale-label-medium-size) /
+    var(--md-sys-typescale-label-medium-line-height)
+    var(--md-sys-typescale-label-medium-font);
+}
+
+.api-gateway-metering-token-breakdown > dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 120px), 1fr));
+  gap: 4px 16px;
+  margin: 0;
+}
+
+.api-gateway-metering-token-breakdown > dl > div,
+.api-gateway-metering-model-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+}
+
+.api-gateway-metering-token-breakdown dt,
+.api-gateway-metering-token-breakdown dd {
+  margin: 0;
+}
+
+.api-gateway-metering-token-breakdown dt,
+.api-gateway-metering-model-list span {
+  min-width: 0;
+  color: var(--md-sys-color-on-surface-variant);
+  overflow-wrap: anywhere;
+}
+
+.api-gateway-metering-token-breakdown dd,
+.api-gateway-metering-model-list strong {
+  color: var(--md-sys-color-on-surface);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.api-gateway-metering-model-list {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 .api-gateway-metering-summary--detail .usage-history-chart--compact {
   height: 148px;
+}
+
+.api-gateway-metering-detail {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.api-gateway-metering-detail__source-action {
+  justify-self: start;
+  margin-block-start: 12px;
 }
 
 @media (max-width: 420px) {

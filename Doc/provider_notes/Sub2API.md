@@ -117,7 +117,25 @@ account-identifier slot in extension storage. The adapter never calls the
 account dashboard endpoints. A failed API-key refresh cannot trigger a page
 reload or account-session recovery attempt.
 
-## 6. Upstream Basis
+## 6. Surface Presentation
+
+Popup, Sidebar, and Dashboard cards use a compact account-local summary. The
+Provider detail page adds only aggregate decision support returned by
+`/v1/usage`: actual and reference cost, estimated savings when units match,
+request and token totals, average latency, a bounded daily trend, leading
+models, token classes, and explicit rate-limit windows.
+
+Unavailable fields are omitted from the detail summary rather than rendered as
+zero. The generic provider quota placeholders are also suppressed when this
+metering model is present. Range, metric, collapse, visibility, and module-order
+preferences are scoped to the opaque local account and surface.
+
+The detail page links back to the configured deployment for raw logs, channel
+status, key administration, CSV, and advanced filters. It does not render raw
+request rows, endpoint paths, group names, key labels, prompts, response
+content, or direct identities.
+
+## 7. Upstream Basis
 
 Contract discovery used the public `Wei-Shaw/sub2api` repository at pinned
 commit `2730c1c`. The upstream project is licensed under LGPL-3.0.
@@ -127,7 +145,7 @@ reimplements a narrow TypeScript client against the observed user endpoint and
 uses synthetic fixtures. Internal endpoints may change between deployments or
 upstream versions and are not described as a public vendor guarantee.
 
-## 7. Verification Assets
+## 8. Verification Assets
 
 - [API-key wallet fixture](../../fixtures/sub2api/api-key-wallet.fixture.json)
 - [API-key quota fixture](../../fixtures/sub2api/api-key-quota.fixture.json)

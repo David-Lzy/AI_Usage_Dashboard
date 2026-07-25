@@ -14,6 +14,7 @@ import type {
 import {
   buildApiGatewayModelBreakdownView,
   createDefaultApiGatewayMeteringDisplayPreferences,
+  deriveApiGatewayReferenceSavings,
   normalizeApiGatewayMeteringDisplayPreferences,
 } from "../api-gateway-metering";
 import type { ApiGatewayMeteringLocalizedCopy } from "../api-gateway-metering-localized-copy";
@@ -59,6 +60,14 @@ function formatNumber(value: number, locale: string): string {
     notation: Math.abs(value) >= 10_000 ? "compact" : "standard",
     maximumFractionDigits: Math.abs(value) < 1 && value !== 0 ? 4 : 2,
   }).format(value);
+}
+
+function formatDuration(milliseconds: number, locale: string): string {
+  const value = milliseconds >= 1_000 ? milliseconds / 1_000 : milliseconds;
+  const unit = milliseconds >= 1_000 ? "s" : "ms";
+  return `${new Intl.NumberFormat(locale, {
+    maximumFractionDigits: 2,
+  }).format(value)} ${unit}`;
 }
 
 function formatMoney(value: ApiGatewayMoney | null, locale: string): string | null {
@@ -416,17 +425,80 @@ export function ApiGatewayMeteringSummary({
   );
   const selectedDays = metering.dailyUsage.slice(-rangeDays);
   const hasSelectedPeriod = selectedDays.length > 0;
-  const selectedMetric = hasSelectedPeriod
+  const selectedMetric: ApiGatewayUsageMetric = hasSelectedPeriod
     ? {
         actualCost: sumMoney(selectedDays.map((day) => day.totals.actualCost)),
+        referenceCost: sumMoney(
+          selectedDays.map((day) => day.totals.referenceCost),
+        ),
         requests: sumNumbers(selectedDays.map((day) => day.totals.requests)),
+        inputTokens: sumNumbers(
+          selectedDays.map((day) => day.totals.inputTokens),
+        ),
+        outputTokens: sumNumbers(
+          selectedDays.map((day) => day.totals.outputTokens),
+        ),
+        cacheCreationTokens: sumNumbers(
+          selectedDays.map((day) => day.totals.cacheCreationTokens),
+        ),
+        cacheReadTokens: sumNumbers(
+          selectedDays.map((day) => day.totals.cacheReadTokens),
+        ),
         totalTokens: sumNumbers(selectedDays.map((day) => day.totals.totalTokens)),
       }
-    : {
-        actualCost: metering.usage?.total?.actualCost ?? null,
-        requests: metering.usage?.total?.requests ?? null,
-        totalTokens: metering.usage?.total?.totalTokens ?? null,
-      };
+    : (metering.usage?.total ?? {
+        actualCost: null,
+        referenceCost: null,
+        requests: null,
+        inputTokens: null,
+        outputTokens: null,
+        cacheCreationTokens: null,
+        cacheReadTokens: null,
+        totalTokens: null,
+      });
+  const estimatedSavings = deriveApiGatewayReferenceSavings(selectedMetric);
+  const detailFacts = [
+    {
+      label: copy.actualSpend,
+      value: formatMoney(selectedMetric.actualCost, locale),
+    },
+    {
+      label: copy.referenceCost,
+      value: formatMoney(selectedMetric.referenceCost, locale),
+    },
+    {
+      label: copy.estimatedSavings,
+      value: formatMoney(estimatedSavings, locale),
+    },
+    {
+      label: copy.requests,
+      value:
+        selectedMetric.requests === null
+          ? null
+          : formatNumber(selectedMetric.requests, locale),
+    },
+    {
+      label: copy.tokens,
+      value:
+        selectedMetric.totalTokens === null
+          ? null
+          : formatNumber(selectedMetric.totalTokens, locale),
+    },
+    {
+      label: copy.averageLatency,
+      value:
+        metering.usage?.averageDurationMs === null ||
+        metering.usage?.averageDurationMs === undefined
+          ? null
+          : formatDuration(metering.usage.averageDurationMs, locale),
+    },
+  ].filter((fact): fact is { label: string; value: string } => fact.value !== null);
+  const tokenBreakdown = [
+    { label: copy.inputTokens, value: selectedMetric.inputTokens },
+    { label: copy.outputTokens, value: selectedMetric.outputTokens },
+    { label: copy.cacheCreationTokens, value: selectedMetric.cacheCreationTokens },
+    { label: copy.cacheReadTokens, value: selectedMetric.cacheReadTokens },
+  ].filter((fact): fact is { label: string; value: number } => fact.value !== null);
   const availableTrendMetrics = useMemo(
     () =>
       (["actual_spend", "tokens", "requests"] as const).filter((metric) =>
@@ -505,19 +577,50 @@ export function ApiGatewayMeteringSummary({
           </div>
         ) : null}
         <dl className="api-gateway-metering-facts">
-          <div>
-            <dt>{copy.actualSpend}</dt>
-            <dd>{formatMoney(selectedMetric.actualCost, locale) ?? copy.unavailable}</dd>
-          </div>
-          <div>
-            <dt>{copy.requests}</dt>
-            <dd>{selectedMetric.requests === null ? copy.unavailable : formatNumber(selectedMetric.requests, locale)}</dd>
-          </div>
-          <div>
-            <dt>{copy.tokens}</dt>
-            <dd>{selectedMetric.totalTokens === null ? copy.unavailable : formatNumber(selectedMetric.totalTokens, locale)}</dd>
-          </div>
+          {(density === "detail"
+            ? detailFacts
+            : [
+                {
+                  label: copy.actualSpend,
+                  value:
+                    formatMoney(selectedMetric.actualCost, locale) ??
+                    copy.unavailable,
+                },
+                {
+                  label: copy.requests,
+                  value:
+                    selectedMetric.requests === null
+                      ? copy.unavailable
+                      : formatNumber(selectedMetric.requests, locale),
+                },
+                {
+                  label: copy.tokens,
+                  value:
+                    selectedMetric.totalTokens === null
+                      ? copy.unavailable
+                      : formatNumber(selectedMetric.totalTokens, locale),
+                },
+              ]
+          ).map((fact) => (
+            <div key={fact.label}>
+              <dt>{fact.label}</dt>
+              <dd>{fact.value}</dd>
+            </div>
+          ))}
         </dl>
+        {density === "detail" && tokenBreakdown.length > 0 ? (
+          <div className="api-gateway-metering-token-breakdown">
+            <p>{copy.tokenBreakdown}</p>
+            <dl>
+              {tokenBreakdown.map((fact) => (
+                <div key={fact.label}>
+                  <dt>{fact.label}</dt>
+                  <dd>{formatNumber(fact.value, locale)}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        ) : null}
         <p className="api-gateway-metering-period-label">
           {hasSelectedPeriod ? (rangeDays === 7 ? copy.sevenDays : copy.thirtyDays) : copy.recorded}
         </p>
@@ -582,6 +685,21 @@ export function ApiGatewayMeteringSummary({
           ))}
         </div>
         <UsageHistoryLegend data={modelLegendData} label={copy.chartLegend} />
+        {density === "detail" ? (
+          <ol className="api-gateway-metering-model-list">
+            {compactModels.map((model) => (
+              <li key={model.id}>
+                <span>{model.label}</span>
+                <strong>
+                  {formatMoney(model.totals.actualCost, locale) ??
+                    (model.totals.totalTokens === null
+                      ? copy.unavailable
+                      : formatNumber(model.totals.totalTokens, locale))}
+                </strong>
+              </li>
+            ))}
+          </ol>
+        ) : null}
       </MeteringModule>
     ) : null,
     limit_windows: metering.rateLimits.length > 0 ? (

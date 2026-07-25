@@ -83,10 +83,12 @@ function snapshot(
 function render(
   metering: ApiGatewayMeteringSnapshot,
   preferences?: ApiGatewayMeteringDisplayPreferences,
+  density: "compact" | "detail" = "compact",
 ) {
   return renderToStaticMarkup(
     <ApiGatewayMeteringSummary
       copy={buildApiGatewayMeteringLocalizedCopy("en")}
+      density={density}
       locale="en"
       metering={metering}
       preferences={preferences}
@@ -193,5 +195,84 @@ describe("ApiGatewayMeteringSummary", () => {
     expect(css).toContain("@media (max-width: 420px)");
     expect(css).toContain("overflow-wrap: anywhere");
     expect(css).not.toContain("backdrop-filter");
+  });
+
+  it("renders detailed cost, token, model, latency, trend, and limit analysis", () => {
+    const html = render(
+      snapshot({
+        rateLimits: [
+          {
+            id: "daily-budget",
+            limit: money(25),
+            used: money(10),
+            remaining: money(15),
+            windowStart: "2026-07-25T00:00:00.000Z",
+            resetAt: "2026-07-26T00:00:00.000Z",
+          },
+        ],
+      }),
+      undefined,
+      "detail",
+    );
+
+    expect(html).toContain("Reference cost");
+    expect(html).toContain("Estimated savings");
+    expect(html).toContain("Average latency");
+    expect(html).toContain("1.84 s");
+    expect(html).toContain("Token breakdown");
+    expect(html).toContain("Input");
+    expect(html).toContain("Output");
+    expect(html).toContain("Cache creation");
+    expect(html).toContain("Cache read");
+    expect(html).toContain("7 days");
+    expect(html).toContain('aria-pressed="true"');
+    expect(html).toContain("usage-history-chart--area");
+    expect(html).toContain('d="M');
+    expect(html).toContain("Model Alpha");
+    expect(html).toContain("daily-budget");
+    expect(html).toContain("Resets");
+  });
+
+  it("omits unavailable detail facts instead of rendering false zero values", () => {
+    const emptyMetric = metric({
+      actualCost: null,
+      referenceCost: null,
+      requests: null,
+      inputTokens: null,
+      outputTokens: null,
+      cacheCreationTokens: null,
+      cacheReadTokens: null,
+      totalTokens: null,
+    });
+    const html = render(
+      snapshot({
+        usage: {
+          today: emptyMetric,
+          total: emptyMetric,
+          averageDurationMs: null,
+          requestsPerMinute: null,
+          tokensPerMinute: null,
+        },
+        dailyUsage: [],
+        modelUsage: [],
+      }),
+      undefined,
+      "detail",
+    );
+
+    expect(html).not.toContain("Reference cost");
+    expect(html).not.toContain("Estimated savings");
+    expect(html).not.toContain("Average latency");
+    expect(html).not.toContain("Token breakdown");
+    expect(html).not.toContain("Usage trend");
+    expect(html).not.toContain("Leading models");
+    expect(html).not.toContain("$0");
+  });
+
+  it("keeps detailed analytics responsive and clipped to their owning surface", () => {
+    expect(css).toContain("api-gateway-metering-summary--detail");
+    expect(css).toContain("repeat(auto-fit, minmax(min(100%, 150px), 1fr))");
+    expect(css).toContain("overflow: hidden");
+    expect(css).toContain("min-width: 0");
   });
 });

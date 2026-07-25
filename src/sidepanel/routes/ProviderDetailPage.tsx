@@ -1,4 +1,5 @@
 import type {
+  ApiGatewayMeteringDisplayPreferences,
   AppLocalePreference,
   DisplaySurface,
   ProgressColorAppearance,
@@ -50,6 +51,9 @@ import {
   isProviderServiceStatusVisible,
 } from "../../shared/provider-service-status";
 import { ProviderAccountSelector } from "../components/ProviderAccountSelector";
+import { ApiGatewayMeteringSummary } from "../../shared/components/ApiGatewayMeteringSummary";
+import { buildApiGatewayMeteringLocalizedCopy } from "../../shared/api-gateway-metering-localized-copy";
+import { getActiveProviderAccountMetadata } from "../../shared/provider-accounts";
 
 type ProviderDetailPageProps = {
   localePreference: AppLocalePreference;
@@ -122,6 +126,15 @@ export function ProviderDetailPage({
   const copy = buildProviderDetailLocalizedCopy(i18n);
   const usageHistoryCopy = buildUsageHistoryLocalizedCopy(i18n.resolvedLocale);
   const cursorUsageCopy = buildCursorUsageLocalizedCopy(i18n.resolvedLocale);
+  const apiGatewayMeteringCopy = buildApiGatewayMeteringLocalizedCopy(
+    i18n.resolvedLocale,
+  );
+  const apiGatewayMeteringDisplayPreferences:
+    | ApiGatewayMeteringDisplayPreferences
+    | undefined = getActiveProviderAccountMetadata(
+    { providerAccounts },
+    provider.providerId,
+  )?.apiGatewayMeteringDisplayPreferences;
   const quotaPaceCopy = buildQuotaPaceLocalizedCopy(i18n.resolvedLocale);
   const quotaPaceForecasts = quotaPaceForecastEnabled
     ? buildAvailableQuotaPaceForecasts(
@@ -167,6 +180,7 @@ export function ProviderDetailPage({
     (provider.usageBalances?.length ?? 0) > 0 ||
     (provider.usageFacts?.length ?? 0) > 0;
   const hasUsageFacts = (provider.usageFacts?.length ?? 0) > 0;
+  const hasApiGatewayMetering = provider.apiGatewayMetering !== undefined;
   const hasProviderProgressItems = hasVisibleProviderProgressItems(
     provider,
     progressSurface,
@@ -319,24 +333,28 @@ export function ProviderDetailPage({
             <p className="detail-field__label">{copy.fieldLabels.status}</p>
             <p className="detail-field__value">{syncStatusBadgeLabel}</p>
           </div>
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.quotaModel}</p>
-            <p className="detail-field__value">
-              {provider.quotaWindow} {provider.quotaUnit}
-            </p>
-          </div>
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.used}</p>
-            <p className="detail-field__value">{normalizedUsageValue}</p>
-          </div>
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.remaining}</p>
-            <p className="detail-field__value">{remainingValue}</p>
-          </div>
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.resetTime}</p>
-            <p className="detail-field__value">{formattedResetAt}</p>
-          </div>
+          {!hasApiGatewayMetering ? (
+            <>
+              <div className="detail-field">
+                <p className="detail-field__label">{copy.fieldLabels.quotaModel}</p>
+                <p className="detail-field__value">
+                  {provider.quotaWindow} {provider.quotaUnit}
+                </p>
+              </div>
+              <div className="detail-field">
+                <p className="detail-field__label">{copy.fieldLabels.used}</p>
+                <p className="detail-field__value">{normalizedUsageValue}</p>
+              </div>
+              <div className="detail-field">
+                <p className="detail-field__label">{copy.fieldLabels.remaining}</p>
+                <p className="detail-field__value">{remainingValue}</p>
+              </div>
+              <div className="detail-field">
+                <p className="detail-field__label">{copy.fieldLabels.resetTime}</p>
+                <p className="detail-field__value">{formattedResetAt}</p>
+              </div>
+            </>
+          ) : null}
           <div className="detail-field">
             <p className="detail-field__label">{copy.fieldLabels.sourcePreference}</p>
             <p className="detail-field__value">{provider.sourcePreferenceLabel}</p>
@@ -722,6 +740,31 @@ export function ProviderDetailPage({
           </div>
         ) : null}
       </section>
+
+      {provider.apiGatewayMetering ? (
+        <section
+          className="status-card api-gateway-metering-detail"
+          data-api-gateway-metering-detail=""
+        >
+          <ApiGatewayMeteringSummary
+            copy={apiGatewayMeteringCopy}
+            density="detail"
+            locale={i18n.resolvedLocale}
+            metering={provider.apiGatewayMetering}
+            preferences={apiGatewayMeteringDisplayPreferences}
+            providerId={provider.providerId}
+            surface="fullPage"
+          />
+          <a
+            className="text-button text-button--inline api-gateway-metering-detail__source-action"
+            href={provider.apiGatewayMetering.origin}
+            rel="noreferrer"
+            target="_blank"
+          >
+            {apiGatewayMeteringCopy.openSourceDashboard}
+          </a>
+        </section>
+      ) : null}
 
       {provider.providerId === "codex-personal-page" ? (
         <section className="status-card" data-provider-usage-history-detail="">

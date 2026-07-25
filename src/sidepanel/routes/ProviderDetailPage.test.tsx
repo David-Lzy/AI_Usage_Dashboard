@@ -1,7 +1,11 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
-import type { AppState, CursorUsageBilling } from "../../providers/types";
+import type {
+  ApiGatewayMeteringSnapshot,
+  AppState,
+  CursorUsageBilling,
+} from "../../providers/types";
 import { SAMPLE_APP_STATE } from "../../shared/constants";
 import { getProviderViewModel } from "../view-models";
 import { ProviderDetailPage } from "./ProviderDetailPage";
@@ -53,9 +57,104 @@ const CURSOR_USAGE: CursorUsageBilling = {
   history: null,
 };
 
+const SUB2API_METERING: ApiGatewayMeteringSnapshot = {
+  schemaVersion: 1,
+  accountId: "account_sub2api",
+  productKind: "metered_api_gateway",
+  displayLabel: "Production gateway",
+  origin: "https://gateway.example.test",
+  transport: "https",
+  scope: "api_key",
+  billingMode: "wallet",
+  capturedAt: "2026-07-25T10:00:00.000Z",
+  stale: false,
+  isValid: true,
+  status: "active",
+  planName: "Wallet",
+  remaining: { amount: 18.75, unit: "USD" },
+  balance: { amount: 18.75, unit: "USD" },
+  quota: null,
+  subscription: null,
+  rateLimits: [
+    {
+      id: "daily-budget",
+      limit: { amount: 25, unit: "USD" },
+      used: { amount: 10, unit: "USD" },
+      remaining: { amount: 15, unit: "USD" },
+      windowStart: "2026-07-25T00:00:00.000Z",
+      resetAt: "2026-07-26T00:00:00.000Z",
+    },
+  ],
+  usage: {
+    today: null,
+    total: {
+      requests: 315,
+      inputTokens: 5_300_000,
+      outputTokens: 180_000,
+      cacheCreationTokens: 0,
+      cacheReadTokens: 47_000_000,
+      totalTokens: 52_480_000,
+      referenceCost: { amount: 72.44, unit: "USD" },
+      actualCost: { amount: 55.67, unit: "USD" },
+    },
+    averageDurationMs: 25_840,
+    requestsPerMinute: 1,
+    tokensPerMinute: 28_300,
+  },
+  dailyUsage: [
+    {
+      date: "2026-07-24",
+      totals: {
+        requests: 120,
+        inputTokens: 2_100_000,
+        outputTokens: 80_000,
+        cacheCreationTokens: 0,
+        cacheReadTokens: 18_000_000,
+        totalTokens: 20_180_000,
+        referenceCost: { amount: 29.2, unit: "USD" },
+        actualCost: { amount: 22.1, unit: "USD" },
+      },
+    },
+    {
+      date: "2026-07-25",
+      totals: {
+        requests: 195,
+        inputTokens: 3_200_000,
+        outputTokens: 100_000,
+        cacheCreationTokens: 0,
+        cacheReadTokens: 29_000_000,
+        totalTokens: 32_300_000,
+        referenceCost: { amount: 43.24, unit: "USD" },
+        actualCost: { amount: 33.57, unit: "USD" },
+      },
+    },
+  ],
+  modelUsage: [
+    {
+      id: "gpt-main",
+      label: "GPT main",
+      totals: {
+        requests: 313,
+        inputTokens: 5_290_000,
+        outputTokens: 170_000,
+        cacheCreationTokens: 0,
+        cacheReadTokens: 47_000_000,
+        totalTokens: 52_460_000,
+        referenceCost: { amount: 72.43, unit: "USD" },
+        actualCost: { amount: 55.66, unit: "USD" },
+      },
+    },
+  ],
+  modelSeriesTruncated: false,
+};
+
 function renderProviderDetail(
   state: AppState,
-  providerId: "codex-personal-page" | "cursor-personal-page" | "gemini-policy",
+  providerId:
+    | "codex-personal-page"
+    | "cursor-personal-page"
+    | "gemini-policy"
+    | "sub2api-api-key",
   options: {
     onOpenSourcePage?: () => void;
     progressSurface?: "sidebar" | "fullPage";
@@ -78,6 +177,7 @@ function renderProviderDetail(
       progressThicknessPx={state.settings.progressThicknessPx}
       progressSurface={options.progressSurface ?? "sidebar"}
       provider={provider}
+      providerAccounts={state.providerAccounts}
       quotaPaceForecastEnabled={options.quotaPaceForecastEnabled}
       quotaPaceNow={options.quotaPaceNow}
       providerServiceStatuses={state.providerServiceStatuses}
@@ -141,6 +241,33 @@ describe("ProviderDetailPage", () => {
     expect(html).toContain('href="https://cursor.com/dashboard/usage"');
     expect(html).toContain('href="https://cursor.com/dashboard/spending"');
     expect(html).not.toContain("request ledger");
+  });
+
+  it("renders truthful API gateway analytics without generic quota placeholders", () => {
+    const state = createState({
+      providers: SAMPLE_APP_STATE.providers.map((provider) =>
+        provider.providerId === "sub2api-api-key"
+          ? { ...provider, apiGatewayMetering: SUB2API_METERING }
+          : provider,
+      ),
+    });
+    const html = renderProviderDetail(state, "sub2api-api-key", {
+      progressSurface: "fullPage",
+    });
+
+    expect(html).toContain('data-api-gateway-metering-detail=""');
+    expect(html).toContain("Reference cost");
+    expect(html).toContain("Estimated savings");
+    expect(html).toContain("Average latency");
+    expect(html).toContain("Token breakdown");
+    expect(html).toContain("GPT main");
+    expect(html).toContain("daily-budget");
+    expect(html).toContain('href="https://gateway.example.test"');
+    expect(html).toContain("Open source dashboard");
+    expect(html).not.toContain("Usage unknown");
+    expect(html).not.toContain("daily credits");
+    expect(html).not.toContain("/v1/responses");
+    expect(html).not.toContain("API key 1");
   });
 
   it("renders fresh fixed-window pace estimates only when opted in", () => {

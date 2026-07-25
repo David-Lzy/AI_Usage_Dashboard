@@ -13,8 +13,17 @@ export type ApiGatewayMeteringLocalizedCopy = {
   noFixedLimit: string;
   unavailable: string;
   actualSpend: string;
+  referenceCost: string;
+  estimatedSavings: string;
   requests: string;
   tokens: string;
+  averageLatency: string;
+  inputTokens: string;
+  outputTokens: string;
+  cacheCreationTokens: string;
+  cacheReadTokens: string;
+  tokenBreakdown: string;
+  openSourceDashboard: string;
   recorded: string;
   sevenDays: string;
   thirtyDays: string;
@@ -43,8 +52,17 @@ const ENGLISH_COPY: ApiGatewayMeteringLocalizedCopy = {
   noFixedLimit: "No fixed limit returned",
   unavailable: "Not available",
   actualSpend: "Actual spend",
+  referenceCost: "Reference cost",
+  estimatedSavings: "Estimated savings",
   requests: "Requests",
   tokens: "Tokens",
+  averageLatency: "Average latency",
+  inputTokens: "Input",
+  outputTokens: "Output",
+  cacheCreationTokens: "Cache creation",
+  cacheReadTokens: "Cache read",
+  tokenBreakdown: "Token breakdown",
+  openSourceDashboard: "Open source dashboard",
   recorded: "Recorded",
   sevenDays: "7 days",
   thirtyDays: "30 days",
@@ -76,8 +94,17 @@ const COPY_OVERRIDES: Partial<
     noFixedLimit: "来源未返回固定限额",
     unavailable: "暂无数据",
     actualSpend: "实际支出",
+    referenceCost: "参考成本",
+    estimatedSavings: "估算节省",
     requests: "请求",
     tokens: "Token",
+    averageLatency: "平均延迟",
+    inputTokens: "输入",
+    outputTokens: "输出",
+    cacheCreationTokens: "缓存创建",
+    cacheReadTokens: "缓存读取",
+    tokenBreakdown: "Token 构成",
+    openSourceDashboard: "打开来源仪表板",
     recorded: "已记录",
     sevenDays: "7 天",
     thirtyDays: "30 天",
@@ -100,7 +127,16 @@ const COPY_OVERRIDES: Partial<
     balance: "可用餘額",
     quotaRemaining: "剩餘額度",
     actualSpend: "實際支出",
+    referenceCost: "參考成本",
+    estimatedSavings: "估算節省",
     requests: "請求",
+    averageLatency: "平均延遲",
+    inputTokens: "輸入",
+    outputTokens: "輸出",
+    cacheCreationTokens: "快取建立",
+    cacheReadTokens: "快取讀取",
+    tokenBreakdown: "Token 組成",
+    openSourceDashboard: "開啟來源儀表板",
     recorded: "已記錄",
     sevenDays: "7 天",
     thirtyDays: "30 天",
