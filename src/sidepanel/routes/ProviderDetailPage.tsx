@@ -6,6 +6,8 @@ import type {
   ProgressDisplayStyle,
   ProgressItemsBySurface,
   ResetTimeDisplayMode,
+  ProviderAccountId,
+  ProviderAccountsByProvider,
   ProviderId,
   ProviderServiceStatus as ProviderServiceStatusModel,
   ProviderServiceStatusVisibilityBySurface,
@@ -47,6 +49,7 @@ import {
   getProviderServiceStatusForProvider,
   isProviderServiceStatusVisible,
 } from "../../shared/provider-service-status";
+import { ProviderAccountSelector } from "../components/ProviderAccountSelector";
 
 type ProviderDetailPageProps = {
   localePreference: AppLocalePreference;
@@ -60,6 +63,7 @@ type ProviderDetailPageProps = {
   providerServiceStatuses?: readonly ProviderServiceStatusModel[];
   providerServiceStatusVisibilityBySurface?: ProviderServiceStatusVisibilityBySurface;
   provider: ProviderViewModel;
+  providerAccounts?: ProviderAccountsByProvider;
   quotaPaceForecastEnabled?: boolean;
   quotaPaceNow?: Date;
   resetTimeDisplayMode?: ResetTimeDisplayMode;
@@ -76,6 +80,10 @@ type ProviderDetailPageProps = {
     sourceStateKind: ProviderViewModel["currentSourceStateKind"],
   ) => void;
   onRefresh: (providerId: ProviderId) => void;
+  onSelectProviderAccount?: (
+    providerId: ProviderId,
+    accountId: ProviderAccountId,
+  ) => void;
 };
 
 export function ProviderDetailPage({
@@ -91,6 +99,7 @@ export function ProviderDetailPage({
   providerServiceStatusVisibilityBySurface =
     createDefaultProviderServiceStatusVisibilityBySurface(),
   provider,
+  providerAccounts,
   quotaPaceForecastEnabled = false,
   quotaPaceNow = new Date(),
   resetTimeDisplayMode = DEFAULT_RESET_TIME_DISPLAY_MODE,
@@ -104,6 +113,7 @@ export function ProviderDetailPage({
   surfaceActionTitle,
   onOpenSourcePage,
   onRefresh,
+  onSelectProviderAccount = () => undefined,
 }: ProviderDetailPageProps) {
   const i18n = createRuntimeI18n(
     localePreference,
@@ -262,6 +272,13 @@ export function ProviderDetailPage({
         onExpandAction={onOpenFullPage}
         onSecondaryAction={onBack}
         onPrimaryAction={() => onRefresh(provider.providerId)}
+      />
+
+      <ProviderAccountSelector
+        accountLabel={i18n.t("provider.account.selector_label")}
+        providerId={provider.providerId}
+        providerAccounts={providerAccounts}
+        onChange={onSelectProviderAccount}
       />
 
       <section

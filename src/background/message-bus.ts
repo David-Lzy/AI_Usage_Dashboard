@@ -39,6 +39,10 @@ import {
 import { codexCredentialBroker } from "../providers/codex/session-credential-broker";
 import { validateCodexManualSessionToken } from "../providers/codex/session-credential";
 import { syncProviderServiceStatuses } from "./provider-service-status-sync";
+import {
+  getActiveProviderAccountId,
+  selectActiveProviderAccount,
+} from "../shared/provider-accounts";
 
 export type {
   AppMessage,
@@ -181,6 +185,38 @@ export async function handleAppMessage(
       return { ok: true, state };
     }
 
+    case "app:set-provider-active-account": {
+      const selectedState = await updateAppState((current) =>
+        reconcileAppStateHealth(
+          selectActiveProviderAccount(
+            current,
+            message.providerId,
+            message.accountId,
+          ),
+        ),
+      );
+      await syncStoredProviderCredentials();
+      const state = await runSyncEngine({
+        trigger: "manual",
+        providerId: message.providerId,
+      });
+      const accountLabel =
+        selectedState.providerAccounts?.[message.providerId]?.accounts.find(
+          (account) => account.id === message.accountId,
+        )?.label ?? "Selected account";
+
+      return {
+        ok: true,
+        state,
+        notice: {
+          tone: "success",
+          title: `${accountLabel} selected`,
+          message:
+            "All display surfaces now use this account's isolated provider snapshot.",
+        },
+      };
+    }
+
     case "app:set-provider-source-preference": {
       const stateWithPreference = await updateAppState((current) =>
         reconcileAppStateHealth({
@@ -263,7 +299,12 @@ export async function handleAppMessage(
     }
 
     case "app:set-provider-admin-api-key": {
-      await setProviderAdminApiKey(message.providerId, message.apiKey);
+      const current = await seedAppStateIfEmpty();
+      await setProviderAdminApiKey(
+        message.providerId,
+        message.apiKey,
+        getActiveProviderAccountId(current, message.providerId),
+      );
       await syncStoredProviderPermissions();
       await syncStoredProviderCredentials();
 
@@ -307,9 +348,11 @@ export async function handleAppMessage(
     }
 
     case "app:set-codex-workspace-config": {
+      const current = await seedAppStateIfEmpty();
       await setCodexWorkspaceConfig(
         message.analyticsApiKey,
         message.workspaceId,
+        getActiveProviderAccountId(current, "codex-enterprise-api"),
       );
       await syncStoredProviderPermissions();
       await syncStoredProviderCredentials();

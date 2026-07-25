@@ -88,6 +88,7 @@ import {
   normalizeProviderServiceStatuses,
   normalizeProviderServiceStatusVisibilityBySurface,
 } from "./provider-service-status";
+import { normalizeProviderAccounts } from "./provider-accounts";
 
 let memoryFallbackState: AppState | null = null;
 
@@ -298,6 +299,10 @@ function normalizeAppState(state: AppState): AppState {
   return {
     providers: [...providers, ...extraProviders],
     providerSettings: [...providerSettings, ...extraProviderSettings],
+    providerAccounts: normalizeProviderAccounts(
+      [...providers, ...extraProviders],
+      state.providerAccounts,
+    ),
     providerServiceStatuses: normalizeProviderServiceStatuses(
       state.providerServiceStatuses,
     ),

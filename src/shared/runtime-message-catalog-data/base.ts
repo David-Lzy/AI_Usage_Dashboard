@@ -20,6 +20,8 @@ export const EN_RUNTIME_MESSAGES = {
     "common.actions.sidebar": "Sidebar",
     "common.actions.open_sidebar": "Open sidebar",
     "common.actions.save": "Save",
+    "provider.account.selector_label": "Provider account",
+    "provider.account.settings_title": "Active provider accounts",
     "common.theme.toggle_to_dark_label": "Dark",
     "common.theme.toggle_to_dark_title": "Switch to dark mode",
     "common.theme.toggle_to_light_label": "Light",

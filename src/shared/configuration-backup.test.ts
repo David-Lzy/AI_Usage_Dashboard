@@ -13,6 +13,20 @@ describe("configuration backup", () => {
   it("exports only portable configuration fields", () => {
     const backup = buildConfigurationBackup({
       ...SAMPLE_APP_STATE,
+      providerAccounts: {
+        "cursor-team-api": {
+          activeAccountId: "account_12345678",
+          accounts: [
+            {
+              id: "account_12345678",
+              label: "Private workspace",
+              createdAt: null,
+              lastSuccessAt: null,
+            },
+          ],
+          inactiveAccounts: {},
+        },
+      },
       customSources: [
         {
           id: "custom:build_quota",
@@ -75,6 +89,8 @@ describe("configuration backup", () => {
     expect(JSON.stringify(backup.payload)).not.toContain("tabId");
     expect(JSON.stringify(backup.payload)).not.toContain("hostOrigins");
     expect(JSON.stringify(backup.payload)).not.toContain("credentialStatus");
+    expect(JSON.stringify(backup.payload)).not.toContain("providerAccounts");
+    expect(JSON.stringify(backup.payload)).not.toContain("Private workspace");
     expect(backup.payload.customSources).toEqual([
       {
         id: "custom:build_quota",

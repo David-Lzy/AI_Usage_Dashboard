@@ -1,6 +1,7 @@
 import type { AppMessage } from "../shared/app-message-types";
 import type {
   AppState,
+  ProviderAccountId,
   ProviderId,
   ProviderSetting,
 } from "../providers/types";
@@ -161,6 +162,17 @@ export function createStandardAppActions({
     );
   }
 
+  function handleSelectProviderAccount(
+    providerId: ProviderId,
+    accountId: ProviderAccountId,
+  ) {
+    void applyMessage({
+      type: "app:set-provider-active-account",
+      providerId,
+      accountId,
+    });
+  }
+
   function handleTogglePermission(providerId: ProviderId) {
     if (!appState) {
       return;
@@ -308,6 +320,7 @@ export function createStandardAppActions({
     handleSavePreferences: settingsActions.handleSavePreferences,
     handleSaveProviderAdminApiKey:
       settingsActions.handleSaveProviderAdminApiKey,
+    handleSelectProviderAccount,
     handleSetSourcePreference: settingsActions.handleSetSourcePreference,
     handleTogglePermission,
     handleToggleProvider,

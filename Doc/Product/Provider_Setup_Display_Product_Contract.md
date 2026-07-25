@@ -122,6 +122,17 @@ JetBrains remains deferred. Its parser and capture client are retained for
 future contract revalidation, but the registered deferred adapter performs no
 network or page capture and does not expose a live quota capability.
 
+The storage and routing foundation for a future verified multi-account source
+is account-separated even though no current descriptor enables it. Existing
+users are assigned one deterministic local `default` account. Additional
+accounts, when a future source contract opts in, use opaque locally generated
+ids; the active account remains the only snapshot projected to popup, sidebar,
+dashboard, and detail surfaces. Inactive snapshots, settings, credentials, and
+last-success metadata remain isolated and are never summed. Automatic sync
+targets only the active account, while inactive account refreshes must be
+explicit and serialized per source entry. Configuration backup and Chrome Sync
+exclude account runtime containers and credentials.
+
 ### Setup State
 
 Setup state describes whether a source entry has enough user action, permission, credentials, or source binding to attempt a truthful sync.

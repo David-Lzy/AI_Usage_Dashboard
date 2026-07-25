@@ -2,6 +2,7 @@ import type {
   ApiKeyProviderId,
   AppSettings,
   AppState,
+  ProviderAccountId,
   ProviderId,
   ProviderPageBinding,
   ProviderSourcePreference,
@@ -17,6 +18,11 @@ export type AppMessage =
       customSources: CustomSourceSetting[];
     }
   | { type: "app:set-provider-enabled"; providerId: ProviderId; enabled: boolean }
+  | {
+      type: "app:set-provider-active-account";
+      providerId: ProviderId;
+      accountId: ProviderAccountId;
+    }
   | {
       type: "app:set-provider-source-preference";
       providerId: ProviderId;

@@ -143,6 +143,7 @@ export function buildConfigurationBackup(
     "providerSettings.hostOrigins",
     "providerSettings.hostsLabel",
     "providerSettings.description",
+    "providerAccounts",
     "customSourceStates",
     "customSources.headers",
     "customSources.apiTokens",

@@ -222,6 +222,11 @@ describe("storage normalization", () => {
     expect(codexProvider?.warningDiagnostic?.category).toBe("page_session");
     expect(codexSetting?.status).toBe("missing");
     expect(state.settings.popupCircularProgressItemsPerRow).toBe(2);
+    expect(state.providerAccounts?.["codex-personal-page"]).toMatchObject({
+      activeAccountId: "default",
+      accounts: [{ id: "default" }],
+      inactiveAccounts: {},
+    });
   });
 
   it("fills missing provider setting fields from the sample schema", async () => {

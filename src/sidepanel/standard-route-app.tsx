@@ -265,6 +265,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
     handleSaveConfigurationToChromeSync,
     handleSavePreferences,
     handleSaveProviderAdminApiKey,
+    handleSelectProviderAccount,
     handleSetSourcePreference,
     handleTogglePermission,
     handleToggleProvider,
@@ -393,6 +394,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
             }
             settings={appState.settings}
             providers={appState.providerSettings}
+            providerAccounts={appState.providerAccounts}
             customSources={appState.customSources}
             customSourceStates={appState.customSourceStates}
             snapshots={appState.providers}
@@ -523,6 +525,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
               })
             }
             onToggleProvider={handleToggleProvider}
+            onSelectProviderAccount={handleSelectProviderAccount}
             onTogglePermission={handleTogglePermission}
             onSetSourcePreference={handleSetSourcePreference}
             onSaveProviderAdminApiKey={handleSaveProviderAdminApiKey}
@@ -555,6 +558,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
             appState.settings.providerServiceStatusVisibilityBySurface
           }
           provider={selectedProvider}
+          providerAccounts={appState.providerAccounts}
           quotaPaceForecastEnabled={
             appState.settings.quotaPaceForecastEnabled
           }
@@ -575,6 +579,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           }
           onOpenSourcePage={handleOpenSessionPage}
           onRefresh={handleRefresh}
+          onSelectProviderAccount={handleSelectProviderAccount}
         />
       ) : (
         <DashboardPage

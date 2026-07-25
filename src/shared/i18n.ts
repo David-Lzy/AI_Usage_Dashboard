@@ -38,6 +38,8 @@ export type RuntimeMessageId =
   | "common.actions.sidebar"
   | "common.actions.open_sidebar"
   | "common.actions.save"
+  | "provider.account.selector_label"
+  | "provider.account.settings_title"
   | "common.theme.toggle_to_dark_label"
   | "common.theme.toggle_to_dark_title"
   | "common.theme.toggle_to_light_label"

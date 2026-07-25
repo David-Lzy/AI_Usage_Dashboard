@@ -15,6 +15,8 @@ import type {
   ProgressDisplayStyle,
   ProgressItemsBySurface,
   ProviderId,
+  ProviderAccountId,
+  ProviderAccountsByProvider,
   ProviderOrderBySurface,
   ProviderSourcePreference,
   ProviderSetting,
@@ -84,6 +86,7 @@ type SettingsPageProps = {
   customSources?: CustomSourceSetting[];
   customSourceStates?: CustomSourceSyncState[];
   snapshots: ProviderSnapshot[];
+  providerAccounts?: ProviderAccountsByProvider;
   toast: SettingsToast | null;
   onDismissToast: () => void;
   onSavePreferences: () => void;
@@ -147,6 +150,10 @@ type SettingsPageProps = {
   ) => void;
   onSaveThemeCustomSeed: (themeCustomSeedHex: string) => void;
   onToggleProvider: (providerId: ProviderId) => void;
+  onSelectProviderAccount?: (
+    providerId: ProviderId,
+    accountId: ProviderAccountId,
+  ) => void;
   onTogglePermission: (providerId: ProviderId) => void;
   onSetSourcePreference: (
     providerId: ProviderId,
@@ -187,6 +194,7 @@ export function SettingsPage({
   customSources = [],
   customSourceStates = [],
   snapshots,
+  providerAccounts,
   toast,
   onDismissToast,
   onSavePreferences,
@@ -228,6 +236,7 @@ export function SettingsPage({
   onToolbarIconCustomImageDataUrlChange,
   onSaveThemeCustomSeed,
   onToggleProvider,
+  onSelectProviderAccount = () => undefined,
   onTogglePermission,
   onSetSourcePreference,
   onSaveProviderAdminApiKey,
@@ -553,6 +562,7 @@ export function SettingsPage({
         providers={providers}
         providerSourceDisplayCopy={providerSourceDisplayCopy}
         snapshots={snapshots}
+        providerAccounts={providerAccounts}
         locale={i18n.resolvedLocale}
         customSources={customSources}
         customSourceStates={customSourceStates}
@@ -571,6 +581,7 @@ export function SettingsPage({
         onProviderProgressDetailsOpenChange={
           settingsSurfaceSession.setProviderProgressDetailsOpen
         }
+        onSelectProviderAccount={onSelectProviderAccount}
       />
 
       <CustomSourceSettingsSection

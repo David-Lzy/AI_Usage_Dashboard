@@ -8,6 +8,8 @@ Depending on which providers and features a user enables, the extension may stor
 
 - extension settings and display preferences
 - provider enablement and source preferences
+- opaque local provider-account aliases and isolated cached snapshots when a
+  future provider explicitly enables multi-account support
 - optional API credentials entered by the user
 - page bindings for supported signed-in provider usage pages
 - cached usage snapshots and sync diagnostics
@@ -19,6 +21,13 @@ Depending on which providers and features a user enables, the extension may stor
 - exported/imported configuration JSON files
 
 These values are stored in the user's Chrome profile through Chrome extension storage. If the user enables Chrome Sync support for extension settings, Chrome may sync eligible settings through the user's signed-in Chrome account according to Chrome's own sync behavior.
+
+Provider account ids are generated locally and do not use provider account
+ids, email addresses, or workspace identifiers. Account-specific credentials,
+runtime snapshots, and local aliases are excluded from configuration backup
+and Chrome Sync. The current release does not enable multi-account behavior for
+any built-in provider; every source entry continues to use one `default`
+account until its descriptor has a separately verified contract.
 
 Codex personal sync may temporarily cache a short-lived ChatGPT access token in
 `chrome.storage.session`. This session credential is separate from AppState and

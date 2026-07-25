@@ -1,5 +1,6 @@
 import type { AppState, CredentialStatus, ProviderSecrets } from "../providers/types";
 import { readProviderSecrets } from "../shared/provider-secrets";
+import { getActiveProviderAccountIds } from "../shared/provider-accounts";
 import { seedAppStateIfEmpty, writeAppState } from "../shared/storage";
 import { readStoreScreenshotRuntimeLock } from "../shared/store-screenshot-runtime-lock";
 
@@ -41,7 +42,7 @@ export async function syncStoredProviderCredentials(): Promise<AppState> {
     return current;
   }
 
-  const secrets = await readProviderSecrets();
+  const secrets = await readProviderSecrets(getActiveProviderAccountIds(current));
 
   return writeAppState(
     reconcileProviderCredentials(current, secrets),

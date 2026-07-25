@@ -11,6 +11,7 @@ import type {
 import { hasCustomSourceHostAccess } from "../shared/custom-source-host-access";
 import { mapWithConcurrency } from "../shared/async-concurrency";
 import { readProviderSecrets } from "../shared/provider-secrets";
+import { getActiveProviderAccountIds } from "../shared/provider-accounts";
 import { seedAppStateIfEmpty, writeAppState } from "../shared/storage";
 import { syncCustomSources } from "./custom-source-sync";
 import { syncProviderServiceStatuses } from "./provider-service-status-sync";
@@ -272,7 +273,7 @@ async function runSyncEngineOnce({
   providerId,
 }: RunSyncEngineParams): Promise<AppState> {
   const current = await seedAppStateIfEmpty();
-  const secrets = await readProviderSecrets();
+  const secrets = await readProviderSecrets(getActiveProviderAccountIds(current));
   const now = new Date();
   const providerSettings = new Map(
     current.providerSettings.map((provider) => [provider.id, provider]),

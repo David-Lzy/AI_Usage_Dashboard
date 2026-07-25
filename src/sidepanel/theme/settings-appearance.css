@@ -166,6 +166,21 @@
   margin-block-start: var(--app-space-4);
 }
 
+.provider-account-settings {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.provider-account-settings__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: var(--space-3);
+}
+
+.provider-account-selector {
+  min-inline-size: 0;
+}
+
 .provider-service-status-preferences {
   display: grid;
   gap: var(--app-space-3);

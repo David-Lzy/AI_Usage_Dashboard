@@ -21,6 +21,8 @@ export type ProviderId =
   | "codex-personal-page"
   | "codex-enterprise-api";
 
+export type ProviderAccountId = string;
+
 export type LegacyProviderId = ProviderBrandId;
 
 export type ApiKeyProviderId =
@@ -529,10 +531,34 @@ export type AppState = {
   providers: ProviderSnapshot[];
   providerSettings: ProviderSetting[];
   settings: AppSettings;
+  providerAccounts?: ProviderAccountsByProvider;
   providerServiceStatuses?: ProviderServiceStatus[];
   customSources?: CustomSourceSetting[];
   customSourceStates?: CustomSourceSyncState[];
 };
+
+export type ProviderAccountMetadata = {
+  id: ProviderAccountId;
+  label: string;
+  createdAt: string | null;
+  lastSuccessAt: string | null;
+};
+
+export type ProviderInactiveAccountState = {
+  snapshot: ProviderSnapshot;
+  setting: ProviderSetting;
+};
+
+export type ProviderAccountCollection = {
+  activeAccountId: ProviderAccountId;
+  accounts: ProviderAccountMetadata[];
+  /** Active data stays in AppState.providers/providerSettings to avoid duplication. */
+  inactiveAccounts: Record<ProviderAccountId, ProviderInactiveAccountState>;
+};
+
+export type ProviderAccountsByProvider = Partial<
+  Record<ProviderId, ProviderAccountCollection>
+>;
 
 export type ProviderSecrets = {
   "cursor-team-api": {

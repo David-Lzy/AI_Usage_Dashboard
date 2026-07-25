@@ -2,6 +2,9 @@ import type {
   AppState,
   AppSettings,
   ProgressItemsBySurface,
+  ProviderAccountId,
+  ProviderAccountsByProvider,
+  ProviderId,
   ProviderOrderBySurface,
   ProviderSetting,
   ProviderSnapshot,
@@ -23,6 +26,9 @@ import { UsageHistoryModulePreferenceControls } from "./UsageHistoryModulePrefer
 import type { ResolvedAppLocale } from "../../shared/i18n";
 import { CursorUsageModulePreferenceControls } from "./CursorUsageModulePreferenceControls";
 import { ProviderServiceStatusPreferenceControls } from "./ProviderServiceStatusPreferenceControls";
+import { ProviderAccountSelector } from "./ProviderAccountSelector";
+import { getProviderAccountOptions } from "../../shared/provider-accounts";
+import { createRuntimeI18n } from "../../shared/i18n";
 
 type SettingsProviderDisplaySectionProps = {
   providers: ProviderSetting[];
@@ -31,6 +37,7 @@ type SettingsProviderDisplaySectionProps = {
   settings: AppSettings;
   settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>;
   snapshots: ProviderSnapshot[];
+  providerAccounts?: ProviderAccountsByProvider;
   locale?: ResolvedAppLocale;
   providerProgressDetailsOpen?: Record<string, boolean>;
   customSources?: readonly CustomSourceSetting[];
@@ -50,6 +57,10 @@ type SettingsProviderDisplaySectionProps = {
   onProviderProgressDetailsOpenChange?: (
     providerProgressDetailsOpen: Record<string, boolean>,
   ) => void;
+  onSelectProviderAccount?: (
+    providerId: ProviderId,
+    accountId: ProviderAccountId,
+  ) => void;
 };
 
 export function SettingsProviderDisplaySection({
@@ -59,6 +70,7 @@ export function SettingsProviderDisplaySection({
   settings,
   settingsCopy,
   snapshots,
+  providerAccounts,
   locale = "en",
   customSources = [],
   customSourceStates = [],
@@ -68,7 +80,12 @@ export function SettingsProviderDisplaySection({
   onUsageHistoryModulesBySurfaceChange = () => undefined,
   onProviderServiceStatusVisibilityBySurfaceChange = () => undefined,
   onProviderProgressDetailsOpenChange,
+  onSelectProviderAccount = () => undefined,
 }: SettingsProviderDisplaySectionProps) {
+  const i18n = createRuntimeI18n(
+    locale,
+    typeof window !== "undefined" ? window : undefined,
+  );
   const displayEligibleProviders = filterDisplayEligibleProviderSettings(
     providers,
     snapshots,
@@ -99,6 +116,9 @@ export function SettingsProviderDisplaySection({
     label: `${source.label} · Custom`,
     progressItems: source.progressItems,
   }));
+  const multiAccountProviders = displayVisibleProviders.filter((provider) =>
+    getProviderAccountOptions({ providerAccounts }, provider.id),
+  );
 
   return (
     <section
@@ -118,6 +138,28 @@ export function SettingsProviderDisplaySection({
       </div>
 
       <div className="settings-provider-display__body">
+        {multiAccountProviders.length > 0 ? (
+          <div
+            className="provider-account-settings"
+            data-provider-account-settings=""
+          >
+            <h3 className="settings-subsection-title">
+              {i18n.t("provider.account.settings_title")}
+            </h3>
+            <div className="provider-account-settings__grid">
+              {multiAccountProviders.map((provider) => (
+                <ProviderAccountSelector
+                  key={provider.id}
+                  accountLabel={`${provider.label} · ${i18n.t("provider.account.selector_label")}`}
+                  providerId={provider.id}
+                  providerAccounts={providerAccounts}
+                  onChange={onSelectProviderAccount}
+                />
+              ))}
+            </div>
+          </div>
+        ) : null}
+
         <ProviderOrderPreferenceControls
           copy={settingsCopy.providerOrder}
           providers={orderSources}

@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { SAMPLE_PROVIDER_SECRETS } from "./constants";
 import { readProviderSecrets, writeProviderSecrets } from "./provider-secrets";
+import { DEFAULT_PROVIDER_ACCOUNT_ID } from "./provider-accounts";
 import type { WebStorageLike } from "./local-storage";
 
 function createThrowingStorage(): WebStorageLike {
@@ -62,5 +63,58 @@ describe("provider secrets storage", () => {
 
     await expect(readProviderSecrets()).resolves.toEqual(SAMPLE_PROVIDER_SECRETS);
     expect(removeItem).toHaveBeenCalledOnce();
+  });
+
+  it("isolates credentials by opaque account id", async () => {
+    const secondAccountId = "account_87654321";
+    await writeProviderSecrets(
+      {
+        ...SAMPLE_PROVIDER_SECRETS,
+        "cursor-team-api": { adminApiKey: "second-account-key" },
+      },
+      { "cursor-team-api": secondAccountId },
+    );
+
+    await expect(
+      readProviderSecrets({ "cursor-team-api": DEFAULT_PROVIDER_ACCOUNT_ID }),
+    ).resolves.toMatchObject({
+      "cursor-team-api": { adminApiKey: null },
+    });
+    await expect(
+      readProviderSecrets({ "cursor-team-api": secondAccountId }),
+    ).resolves.toMatchObject({
+      "cursor-team-api": { adminApiKey: "second-account-key" },
+    });
+  });
+
+  it("migrates legacy flat secrets into the default account", async () => {
+    const storage = new Map<string, string>();
+    storage.set(
+      "ai-usage-dashboard.provider-secrets",
+      JSON.stringify({
+        "cursor-team-api": { adminApiKey: "legacy-key" },
+      }),
+    );
+    vi.stubGlobal("window", {
+      localStorage: {
+        getItem: (key: string) => storage.get(key) ?? null,
+        removeItem: (key: string) => storage.delete(key),
+        setItem: (key: string, value: string) => storage.set(key, value),
+      } satisfies WebStorageLike,
+    });
+
+    await expect(readProviderSecrets()).resolves.toMatchObject({
+      "cursor-team-api": { adminApiKey: "legacy-key" },
+    });
+    expect(
+      JSON.parse(storage.get("ai-usage-dashboard.provider-secrets") ?? "{}"),
+    ).toMatchObject({
+      schemaVersion: 2,
+      accounts: {
+        "cursor-team-api": {
+          default: { adminApiKey: "legacy-key" },
+        },
+      },
+    });
   });
 });
