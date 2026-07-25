@@ -1,0 +1,31 @@
+{
+  "fixtureSchema": "ai-usage-dashboard.provider-status-discovery.v1",
+  "fixtureKind": "sanitized_contract_example",
+  "vendor": "cursor",
+  "sourceUrl": "https://status.cursor.com/api/v2/summary.json",
+  "publicStatusUrl": "https://status.cursor.com/",
+  "capturedAt": "2026-07-25T05:04:34.826Z",
+  "state": {
+    "indicator": "none",
+    "description": "All Systems Operational",
+    "updatedAt": "2026-07-25T05:04:34.826Z"
+  },
+  "components": [
+    {
+      "id": "cursor-ide",
+      "name": "IDE",
+      "status": "operational",
+      "updatedAt": "2026-07-23T16:36:56.353Z"
+    }
+  ],
+  "incidentSample": {
+    "id": "d8whvf5gt6jm",
+    "name": "Requests to Fable caused degraded behaviour",
+    "status": "resolved",
+    "impact": "minor",
+    "startedAt": "2026-07-23T15:56:35.951Z",
+    "updatedAt": "2026-07-23T16:36:56.402Z",
+    "url": "https://status.cursor.com/incidents/d8whvf5gt6jm",
+    "affectedComponents": ["IDE"]
+  }
+}

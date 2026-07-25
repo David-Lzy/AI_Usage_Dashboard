@@ -1,0 +1,31 @@
+{
+  "fixtureSchema": "ai-usage-dashboard.provider-status-discovery.v1",
+  "fixtureKind": "sanitized_contract_example",
+  "vendor": "anthropic",
+  "sourceUrl": "https://status.claude.com/api/v2/summary.json",
+  "publicStatusUrl": "https://status.claude.com/",
+  "capturedAt": "2026-07-25T05:16:09.631Z",
+  "state": {
+    "indicator": "none",
+    "description": "All Systems Operational",
+    "updatedAt": "2026-07-25T05:16:09.631Z"
+  },
+  "components": [
+    {
+      "id": "claude-code",
+      "name": "Claude Code",
+      "status": "operational",
+      "updatedAt": "2026-07-24T09:35:08.489Z"
+    }
+  ],
+  "incidentSample": {
+    "id": "yc7mr2gvl914",
+    "name": "Microsoft Office add-in availability",
+    "status": "resolved",
+    "impact": "none",
+    "startedAt": "2026-07-22T17:56:10.087Z",
+    "updatedAt": "2026-07-24T15:36:54.698Z",
+    "url": "https://status.claude.com/incidents/yc7mr2gvl914",
+    "affectedComponents": []
+  }
+}

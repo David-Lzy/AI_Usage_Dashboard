@@ -1,0 +1,31 @@
+{
+  "fixtureSchema": "ai-usage-dashboard.provider-status-discovery.v1",
+  "fixtureKind": "sanitized_contract_example",
+  "vendor": "openai",
+  "sourceUrl": "https://status.openai.com/api/v2/summary.json",
+  "publicStatusUrl": "https://status.openai.com/",
+  "capturedAt": "2026-07-25T05:19:12.456Z",
+  "state": {
+    "indicator": "none",
+    "description": "All Systems Operational",
+    "updatedAt": "2026-07-09T19:25:56Z"
+  },
+  "components": [
+    {
+      "id": "codex-api",
+      "name": "Codex API",
+      "status": "operational",
+      "updatedAt": "2026-07-09T19:25:56Z"
+    }
+  ],
+  "incidentSample": {
+    "id": "01KY7SX5MYJ2BP51X5MXAPYX71",
+    "name": "Elevated Error Rates",
+    "status": "resolved",
+    "impact": "none",
+    "startedAt": null,
+    "updatedAt": "2026-07-24T19:33:22.018Z",
+    "url": "https://status.openai.com/incidents/01KY7SX5MYJ2BP51X5MXAPYX71",
+    "affectedComponents": ["Codex API"]
+  }
+}

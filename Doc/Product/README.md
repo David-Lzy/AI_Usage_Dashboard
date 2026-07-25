@@ -19,3 +19,4 @@ Status note:
 
 - [Provider Setup And Display Product Contract](./Provider_Setup_Display_Product_Contract.md)
 - [Custom JSON Sources](./Custom_JSON_Sources.md)
+- [Official Provider Service Status Feeds](./Official_Provider_Service_Status_Feeds.md)
