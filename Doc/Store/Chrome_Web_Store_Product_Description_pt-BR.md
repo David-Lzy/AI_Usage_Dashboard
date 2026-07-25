@@ -2,7 +2,7 @@ AI Usage Dashboard é uma pequena cabine para cotas de ferramentas de IA para pr
 
 Abra o popup da barra do Chrome para uma olhada rápida; abra o painel lateral ou o dashboard completo quando precisar de detalhes. Menos caça a abas, mais tempo escrevendo código. (^_^)
 
-Ele funciona com fluxos como Codex, Cursor, Claude Personal, análises organizacionais do Claude Code e Gemini Code Assist, mostrando claramente se cada fonte é exata, parcial, por janela de uso, apenas de política ou indisponível.
+Ele funciona com fluxos como Codex, Cursor, Claude Personal, análises organizacionais do Claude Code, Gemini Code Assist e gateways compatíveis com Sub2API configurados pelo usuário, mostrando claramente se cada fonte é exata, parcial, por janela de uso, apenas de política ou indisponível.
 
 Ele não pede cookies nem headers brutos de autenticação do navegador. Configurações, credenciais API opcionais, vínculos de páginas, snapshots em cache, arquivos de importação/exportação e dados do Chrome Sync ficam no seu perfil do Chrome.
 
@@ -14,6 +14,7 @@ O que ele ajuda você a ver
 • frescor do snapshot e estado de sincronização
 • comportamento do badge e do ícone da barra
 • fontes JSON HTTP/HTTPS personalizadas para seus próprios endpoints de cota
+• saldo, gasto, solicitações, tokens, modelos, tendências e limites agregados retornados por gateways compatíveis com Sub2API configurados
 • faixas tradicionais de progresso ou exibição de cor restante com gradiente editável
 • idioma, tema, aparência do popup, estilo de progresso, ordem de providers e importação/exportação
 
@@ -44,6 +45,7 @@ AI Usage Dashboard foi desenhado de forma conservadora:
 • não pede headers brutos de autenticação do navegador
 • permissões opcionais de host apenas para origens de providers compatíveis
 • fontes JSON personalizadas consultam endpoints HTTP ou HTTPS aprovados pelo usuário, sem credenciais do navegador
+• chaves API do Sub2API são enviadas somente à origem exata do gateway configurado; registros de solicitações individuais não são importados
 • permissão favicon apenas para o recurso opcional de ícone da barra combinado com o provider
 • gradientes gerados de uma imagem local são processados no navegador; os bytes originais não são enviados nem salvos
 • executa apenas scripts empacotados; não carrega código remoto

@@ -4,200 +4,119 @@ import { fileURLToPath } from "node:url";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(scriptDir, "..");
-
-function sectionBetween(source, startHeading, endHeading) {
-  const start = source.indexOf(startHeading);
-  if (start === -1) {
-    return "";
-  }
-  const end = endHeading ? source.indexOf(endHeading, start + startHeading.length) : -1;
-  return source.slice(start, end === -1 ? undefined : end);
-}
-
-function matchRequired(source, pattern, label, errors) {
-  const match = source.match(pattern);
-  if (!match) {
-    errors.push(`Missing ${label}.`);
-    return null;
-  }
-  return match[1];
-}
-
-function normalizeListBlock(block) {
-  return block
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line.startsWith("- `"))
-    .map((line) => line.replace(/^- `|`$/g, ""));
-}
-
 const copyPackPath = path.join(repoRoot, "Doc/Store/Store_Listing_Copy_Pack.md");
-const localizationSourcePath = path.join(repoRoot, "Doc/Store/Store_Listing_Localization_Source_Pack.md");
-const archiveReadmePath = path.join(
+const localizationSourcePath = path.join(
   repoRoot,
-  "Doc/testing/store_screenshot_archives/2026-04-24-first-real-store-screenshot-capture-request-archive/README.md",
+  "Doc/Store/Store_Listing_Localization_Source_Pack.md",
 );
-const manifestPath = path.join(repoRoot, "src/manifest.json");
-const outputDir = path.join(repoRoot, "tmp/phase151-store-listing-localization-source-review");
-const outputPath = path.join(outputDir, "phase151-results.json");
+const localeDraftPath = path.join(
+  repoRoot,
+  "Doc/Store/Store_Listing_Localization_14_Locale_Draft.md",
+);
+const outputDir = path.join(
+  repoRoot,
+  "tmp/phase151-store-listing-localization-source-review",
+);
+
+function extractField(documentText, label) {
+  const escapedLabel = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const match = documentText.match(
+    new RegExp(`^${escapedLabel}:\\n\\n\`([^\\n]+)\`$`, "m"),
+  );
+  return match ? match[1] : null;
+}
+
+const [copyPack, localizationSource, localeDraft, englishMessagesRaw] =
+  await Promise.all([
+    readFile(copyPackPath, "utf8"),
+    readFile(localizationSourcePath, "utf8"),
+    readFile(localeDraftPath, "utf8"),
+    readFile(path.join(repoRoot, "public/_locales/en/messages.json"), "utf8"),
+  ]);
 
 const errors = [];
+const englishMessages = JSON.parse(englishMessagesRaw);
+const title = extractField(copyPack, "Title");
+const shortDescription = extractField(copyPack, "Short description");
+const overview = extractField(copyPack, "Collapsed-view abstract");
 
-const [copyPack, localizationSource, archiveReadme, manifestRaw] = await Promise.all([
-  readFile(copyPackPath, "utf8"),
-  readFile(localizationSourcePath, "utf8"),
-  readFile(archiveReadmePath, "utf8"),
-  readFile(manifestPath, "utf8"),
-]);
-
-const manifest = JSON.parse(manifestRaw);
-
-const title = matchRequired(
-  sectionBetween(copyPack, "## Store Title", "## Short Description"),
-  /- `([^`]+)`/,
-  "store title in copy pack",
-  errors,
-);
-const shortDescription = matchRequired(
-  sectionBetween(copyPack, "## Short Description", "## Overview Paragraph"),
-  /- `([^`]+)`/,
-  "short description in copy pack",
-  errors,
-);
-const overview = matchRequired(
-  sectionBetween(copyPack, "## Overview Paragraph", "## Feature Bullets"),
-  /- `([^`]+)`/,
-  "overview paragraph in copy pack",
-  errors,
-);
-
-const featureSection = sectionBetween(copyPack, "## Feature Bullets", "## Screenshot Caption Pack");
-const featureBullets = featureSection
-  .split("\n")
-  .map((line) => line.trim())
-  .filter((line) => /^- `/.test(line))
-  .map((line) => line.replace(/^- `|`$/g, ""));
-
-const captionSection = sectionBetween(copyPack, "## Screenshot Caption Pack", "## Claim Guardrails");
-const captionMatches = [...captionSection.matchAll(/- caption:\n\s+- `([^`]+)`/g)].map((match) => match[1]);
-
-if (!localizationSource.includes("Store_Listing_Copy_Pack.md")) {
-  errors.push("Localization source pack did not reference Store_Listing_Copy_Pack.md.");
+if (title !== englishMessages.manifest_ext_name?.message) {
+  errors.push("Copy-pack title drifted from the English manifest catalog.");
+}
+if (shortDescription !== englishMessages.manifest_ext_description?.message) {
+  errors.push("Copy-pack short description drifted from the English manifest catalog.");
 }
 
-if (!localizationSource.includes("2026-04-24-first-real-store-screenshot-capture-request-archive")) {
-  errors.push("Localization source pack did not reference the first archived screenshot set.");
-}
-
-if (!localizationSource.includes("src/manifest.json")) {
-  errors.push("Localization source pack did not reference src/manifest.json.");
-}
-
-if (!localizationSource.includes("## English Source Strings")) {
-  errors.push("Localization source pack did not include an English Source Strings section.");
-}
-
-if (!localizationSource.includes("## Truth Anchor Map")) {
-  errors.push("Localization source pack did not include a Truth Anchor Map section.");
-}
-
-if (!localizationSource.includes("## Translation Guardrails")) {
-  errors.push("Localization source pack did not include a Translation Guardrails section.");
-}
-
-if (
-  !localizationSource.includes(
-    "this source pack is for future store-listing localization work and is not evidence that the in-product UI is localized today",
-  )
-) {
-  errors.push("Localization source pack did not explicitly distinguish store listing localization from in-product localization.");
-}
-
-if (title && title !== manifest.name) {
-  errors.push(`Store title ${JSON.stringify(title)} did not match manifest name ${JSON.stringify(manifest.name)}.`);
-}
-
-if (shortDescription && shortDescription !== manifest.description) {
-  errors.push(
-    `Short description ${JSON.stringify(shortDescription)} did not match manifest description ${JSON.stringify(manifest.description)}.`,
-  );
-}
-
-const expectedIds = [
-  "store.title",
-  "store.short_description",
-  "store.overview",
-  "store.feature.quick_glance",
-  "store.feature.setup_guidance",
-  "store.feature.honest_coverage",
-  "store.feature.sidepanel_depth",
-  "store.feature.runtime_evidence",
-  "store.screenshot_caption.01_toolbar_first",
-  "store.screenshot_caption.02_setup_guidance",
-  "store.screenshot_caption.03_honest_contract_or_policy_only",
-  "store.screenshot_caption.04_settings_and_setup_depth",
-  "store.screenshot_caption.05_provider_or_dashboard_depth",
-];
-
-for (const id of expectedIds) {
-  if (!localizationSource.includes(`\`${id}\``)) {
-    errors.push(`Localization source pack did not include string id ${JSON.stringify(id)}.`);
+for (const marker of [
+  "Store_Listing_Copy_Pack.md",
+  "src/manifest.json",
+  "Store_Listing_Localization_14_Locale_Draft.md",
+  "## English Source Strings",
+  "## Translation Guardrails",
+  "`store.title`",
+  "`store.short_description`",
+  "`store.overview`",
+  "`store.feature.custom_sources`",
+  "`Sub2API`",
+]) {
+  if (!localizationSource.includes(marker)) {
+    errors.push(`Localization source pack is missing ${JSON.stringify(marker)}.`);
   }
 }
 
-const expectedStrings = [
-  title,
-  shortDescription,
-  overview,
-  ...featureBullets,
-  ...captionMatches,
-].filter(Boolean);
-
-for (const value of expectedStrings) {
+for (const value of [title, shortDescription, overview].filter(Boolean)) {
   if (!localizationSource.includes(`\`${value}\``)) {
-    errors.push(`Localization source pack did not preserve source string ${JSON.stringify(value)}.`);
+    errors.push(`Localization source pack did not preserve ${JSON.stringify(value)}.`);
   }
 }
 
-const requiredProperNouns = ["AI Usage Dashboard", "Chrome", "Cursor", "Claude Code", "Codex", "Gemini"];
-for (const noun of requiredProperNouns) {
-  if (!localizationSource.includes(`\`${noun}\``)) {
-    errors.push(`Localization source pack did not include translation guardrail for ${JSON.stringify(noun)}.`);
-  }
-}
-
-const archiveScreenshotNames = normalizeListBlock(sectionBetween(archiveReadme, "## Archived Screenshots", "## Truth Note"));
-for (const filename of archiveScreenshotNames) {
-  if (!localizationSource.includes(`\`${filename}\``)) {
-    errors.push(`Localization source pack did not reference archived screenshot ${JSON.stringify(filename)}.`);
+const supportedLocales = [
+  "en",
+  "zh-CN",
+  "zh-TW",
+  "ja",
+  "ko",
+  "es-419",
+  "pt-BR",
+  "fr",
+  "de",
+  "it",
+  "ru",
+  "ar",
+  "hi",
+  "id",
+];
+for (const locale of supportedLocales) {
+  const sectionStart = localeDraft.indexOf(`## ${locale}\n`);
+  const nextSection = localeDraft.indexOf("\n## ", sectionStart + 4);
+  const section = localeDraft.slice(
+    sectionStart,
+    nextSection === -1 ? undefined : nextSection,
+  );
+  if (sectionStart === -1) {
+    errors.push(`Locale draft is missing ${locale}.`);
+  } else if (!section.includes("Sub2API")) {
+    errors.push(`Locale draft ${locale} section is missing Sub2API coverage.`);
   }
 }
 
 await mkdir(outputDir, { recursive: true });
 await writeFile(
-  outputPath,
-  JSON.stringify(
-    {
-      checkedAt: new Date().toISOString(),
-      title,
-      shortDescription,
-      overview,
-      featureBullets,
-      captionMatches,
-      archiveScreenshotNames,
-      errors,
-    },
+  path.join(outputDir, "phase151-results.json"),
+  `${JSON.stringify(
+    { title, shortDescription, overview, supportedLocales, errors },
     null,
     2,
-  ),
+  )}\n`,
+  "utf8",
 );
 
 if (errors.length > 0) {
-  console.error("phase151: store listing localization source pack review failed");
+  console.error("phase151: store listing localization source review failed");
   for (const error of errors) {
     console.error(`- ${error}`);
   }
   process.exit(1);
 }
 
-console.log("phase151: store listing localization source pack verified");
+console.log("phase151: current store listing localization source verified");

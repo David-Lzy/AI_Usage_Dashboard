@@ -1,6 +1,6 @@
 # Store Listing Copy Pack
 
-Date: 2026-07-21
+Date: 2026-07-26
 
 Process rule:
 
@@ -36,9 +36,9 @@ Collapsed-view abstract:
 
 Details:
 
-`It supports Codex, Cursor, Claude Personal, Claude Code organization analytics, Gemini Code Assist, and related coding workflows while clearly labeling whether each source is exact, partial, window-scoped, policy-only, or unavailable. It does not ask you to paste cookies or raw browser auth headers. Settings, optional API credentials, page bindings, cached snapshots, import/export files, and Chrome Sync data stay in your Chrome profile.`
+`It supports Codex, Cursor, Claude Personal, Claude Code organization analytics, Gemini Code Assist, configured Sub2API-compatible gateways, and related coding workflows while clearly labeling whether each source is exact, partial, window-scoped, policy-only, or unavailable. It does not ask you to paste cookies or raw browser auth headers. Settings, optional API credentials, page bindings, cached snapshots, import/export files, and Chrome Sync data stay in your Chrome profile.`
 
-`Open the toolbar popup to check provider health, setup blockers, usage windows, reset timing, source type, snapshot freshness, sync status, toolbar badge behavior, toolbar icon behavior, custom HTTP/HTTPS JSON sources, language, theme, popup appearance, progress style, remaining-color gradients, provider order, and import/export settings. Open the side panel or full-page dashboard when source details matter.`
+`Open the toolbar popup to check provider health, setup blockers, usage windows, reset timing, source type, snapshot freshness, sync status, toolbar badge behavior, toolbar icon behavior, custom HTTP/HTTPS JSON sources, configured Sub2API gateway aggregates, language, theme, popup appearance, progress style, remaining-color gradients, provider order, and import/export settings. Open the side panel or full-page dashboard when source details matter.`
 
 `AI coding assistants are fast and useful, but quota pages and account states can be easy to lose track of. AI Usage Dashboard gives you one calm place to glance at the current state, then lets you open the detail view only when you need it. A tiny dashboard, not another project to manage. ✨`
 
@@ -55,7 +55,7 @@ Feature bullets:
 - `Toolbar popup for quick provider and quota checks`
 - `Side panel and full-page dashboard for deeper review`
 - `Source labels for exact, partial, window-scoped, policy-only, or unavailable data`
-- `Custom HTTP/HTTPS JSON sources for user-provided quota endpoints`
+- `Custom HTTP/HTTPS JSON sources and configured Sub2API-compatible gateway aggregates`
 - `Traditional progress bands or editable remaining-color gradients`
 - `Configurable themes, progress styles, provider order, toolbar badge, and toolbar icon`
 - `Import/export and Chrome Sync support for extension settings`
@@ -77,4 +77,6 @@ Screenshot captions:
 - Do not market the popup as a second full dashboard.
 - Mention `favicon` only for the provider-matched toolbar icon feature.
 - Mention custom JSON sources as user-approved HTTP/HTTPS endpoints with browser credentials omitted.
+- Mention Sub2API only as a user-configured, API-key-scoped compatible gateway;
+  do not imply account-dashboard or raw request-record import.
 - Mention local image gradients only as in-browser processing; do not imply uploaded image analysis.

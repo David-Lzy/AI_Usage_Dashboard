@@ -2,7 +2,7 @@ AI Usage Dashboard is a small cockpit for AI coding quota, setup blockers, and s
 
 Open the Chrome toolbar popup for a quick peek; open the side panel or full-page dashboard when you need details. Less tab-hunting, more coding. (^_^)
 
-It supports Codex, Cursor, Claude Personal, Claude Code organization analytics, Gemini Code Assist, and related coding workflows while clearly labeling whether each source is exact, partial, window-scoped, policy-only, or unavailable.
+It supports Codex, Cursor, Claude Personal, Claude Code organization analytics, Gemini Code Assist, configured Sub2API-compatible gateways, and related coding workflows while clearly labeling whether each source is exact, partial, window-scoped, policy-only, or unavailable.
 
 It does not ask you to paste cookies or raw browser auth headers. Settings, optional API credentials, page bindings, cached snapshots, import/export files, and Chrome Sync data stay in your Chrome profile.
 
@@ -14,6 +14,7 @@ What it helps you see
 • snapshot freshness and sync status
 • toolbar badge and toolbar icon behavior
 • custom HTTP/HTTPS JSON sources for your own quota endpoints
+• key-scoped aggregate balance, spend, requests, tokens, models, trends, and returned limits from configured Sub2API-compatible gateways
 • traditional progress bands or editable gradient remaining-color display
 • language, theme, popup appearance, progress style, provider order, and import/export settings
 
@@ -44,6 +45,7 @@ AI Usage Dashboard is conservative by design:
 • no raw browser auth header pasting
 • optional host permissions only for supported provider origins
 • custom JSON sources fetch user-approved HTTP or HTTPS endpoints with browser credentials omitted
+• Sub2API API keys are sent only to the exact configured gateway origin; raw request records are not imported
 • favicon permission only for the optional provider-matched toolbar icon feature
 • local image-based gradients are processed in your browser; original image bytes are not uploaded or saved
 • packaged extension scripts only; no remote code loading

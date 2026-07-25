@@ -2,7 +2,7 @@ AI Usage Dashboard は、AI コーディングのクォータ、設定ブロッ�
 
 Chrome ツールバーの popup でまずはさっと確認。詳しく見たいときは side panel や full-page dashboard を開けます。タブ探しを減らして、コードを書く時間を少し増やします。(^_^)
 
-Codex、Cursor、Claude Personal、Claude Code の組織向け分析、Gemini Code Assist などのワークフローを対象に、各 source が正確な値、部分的な情報、使用ウィンドウ、policy-only、または利用不可のどれなのかを明示します。
+Codex、Cursor、Claude Personal、Claude Code の組織向け分析、Gemini Code Assist、ユーザー設定の Sub2API 互換ゲートウェイなどのワークフローを対象に、各 source が正確な値、部分的な情報、使用ウィンドウ、policy-only、または利用不可のどれなのかを明示します。
 
 cookie や生のブラウザー auth header の貼り付けは求めません。設定、任意の API 認証情報、ページの関連付け、キャッシュされた snapshot、import/export ファイル、Chrome Sync データは Chrome プロファイルに保存されます。
 
@@ -14,6 +14,7 @@ cookie や生のブラウザー auth header の貼り付けは求めません。
 • snapshot の鮮度と同期状態
 • toolbar badge と toolbar icon の動作
 • 独自のクォータ endpoint 向けのカスタム HTTP/HTTPS JSON source
+• 設定した Sub2API 互換ゲートウェイが返す集計残高、支出、リクエスト、Token、モデル、傾向、制限
 • 従来の進捗バンド、または編集可能な残量カラー gradient 表示
 • 言語、テーマ、popup 外観、進捗スタイル、provider 順序、import/export 設定
 
@@ -44,6 +45,7 @@ AI Usage Dashboard は保守的な設計です：
 • 生のブラウザー auth header の貼り付けは不要
 • 任意の host permission は対応 provider の origin にのみ使用
 • custom JSON source はユーザーが承認した HTTP または HTTPS endpoint だけを、ブラウザー credential なしで取得します
+• Sub2API API key は設定したゲートウェイの正確な origin にだけ送信され、個別のリクエスト記録は取り込みません
 • favicon permission は任意の provider-matched toolbar icon 機能にのみ使用
 • ローカル画像から gradient を生成するとき、画像はブラウザー内で処理され、元の画像 bytes はアップロードも保存もされません
 • packaged script のみを実行し、remote code は読み込みません

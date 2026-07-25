@@ -181,9 +181,9 @@ jobs:
           ### Notes
 
           - Chrome Web Store remains the recommended install path for everyday Chrome users.
-          - Restores both source-visible Claude Personal current-session and all-model weekly windows when Claude marks one duplicate structured limit row inactive around a reset boundary.
-          - Keeps unmatched inactive limits filtered and does not invent missing quota values.
-          - Adds regression coverage for both current-session and weekly inactive-row response shapes.
+          - Adds configured Sub2API-compatible gateway metering for key-scoped aggregate balance, spend, requests, tokens, models, bounded trends, and returned limits.
+          - Keeps deployments isolated, refreshes only the selected deployment automatically, and leaves raw request records on the source dashboard.
+          - Improves localized and narrow-width Provider settings, detail analytics, diagnostics, and compact metering layouts.
           NOTES
 
       - name: Prepare release assets

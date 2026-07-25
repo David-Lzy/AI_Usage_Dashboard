@@ -1,6 +1,6 @@
 # Chrome Web Store Publication Milestone
 
-Date: 2026-07-21
+Date: 2026-07-26
 
 Document class:
 
@@ -14,8 +14,8 @@ Freshness model:
 Status note:
 
 - AI Usage Dashboard has a live Chrome Web Store listing
-- Chrome Web Store API status shows manifest version `0.2.0.7` published at 100%
-- source `0.2.0-rc.8` / manifest `0.2.0.8` is submitted for review at 100%
+- Chrome Web Store API status shows manifest version `0.2.0.8` published at 100%
+- source `0.2.0-rc.9` / manifest `0.2.0.9` is submitted for review at 100%
 - no known critical user-facing bug is blocking normal use at this milestone
 - private upload receipts, package hashes, screenshots-in-progress, and
   submission handoff notes stay in ignored `.local/` material
@@ -24,11 +24,14 @@ Status note:
 
 - Chrome Web Store:
   https://chromewebstore.google.com/detail/ai-usage-dashboard/mjfhaifoapcpbkffacidgjijcpiegjea
-- Public page status checked on 2026-07-21: reachable and listed.
-- Chrome Web Store API status observed on 2026-07-21 showed manifest version
-  `0.2.0.7` published at 100%.
-- Source `0.2.0-rc.8` / manifest `0.2.0.8` was uploaded successfully and is
+- Public page status checked on 2026-07-26: reachable and listed.
+- Chrome Web Store API status observed on 2026-07-26 showed manifest version
+  `0.2.0.8` published at 100%.
+- Source `0.2.0-rc.9` / manifest `0.2.0.9` was uploaded successfully and is
   separately reported as `PENDING_REVIEW` at 100% deployment.
+- The maintained listing-copy sources now include bounded Sub2API-compatible
+  aggregate metering. Applying those text changes to the live Developer
+  Dashboard remains a separate metadata operation.
 
 This means the project has crossed the public-store baseline milestone. Future
 store uploads are resubmissions from an already-published extension, not first
@@ -53,6 +56,8 @@ At this milestone, the project has the following public-facing baseline:
   responses
 - background Cursor billing-cycle summaries plus bounded aggregate history when
   the signed-in Cursor session exposes the verified structured responses
+- configured Sub2API-compatible gateway summaries for key-scoped aggregate
+  balance, spend, requests, tokens, models, trends, and returned limits
 - public store copy and localization drafts under `Doc/Store/`
 - public privacy, security, contribution, i18n, provider-note, and product
   boundary docs
@@ -79,8 +84,9 @@ Chrome extension and provider-surface drift:
 
 ## Next Store Work
 
-- If a later release candidate is submitted, update this file after the public
-  listing metadata propagates.
+- Confirm the `0.2.0.9` review result before describing RC9 as published.
+- Apply the maintained Sub2API listing-copy updates in the Developer Dashboard
+  when the publisher account can complete Google's interactive re-verification.
 - Keep the current public copy in `Doc/Store/` as the maintained text source.
 - Keep personal upload operations and generated screenshot working files under
   `.local/`.

@@ -1,6 +1,6 @@
 # Store Listing Localization Source Pack
 
-Date: 2026-07-21
+Date: 2026-07-26
 
 Process rule:
 
@@ -54,7 +54,7 @@ Purpose:
 - `store.feature.honest_coverage`
   - `Honest provider coverage that labels exact, partial, window-scoped, policy-only, and unavailable sources.`
 - `store.feature.custom_sources`
-  - `User-approved HTTP/HTTPS JSON sources can add clearly labeled custom quota endpoints without treating them as official provider data.`
+  - `User-approved HTTP/HTTPS JSON sources can add clearly labeled custom quota endpoints, and configured Sub2API-compatible gateways can show key-scoped aggregate balance, spend, requests, tokens, models, trends, and returned limits without importing raw request records.`
 - `store.feature.gradient_progress`
   - `Traditional progress bands and editable remaining-color gradients, including local presets and in-browser image-derived gradients.`
 - `store.feature.sidepanel_depth`
@@ -80,10 +80,12 @@ Purpose:
 ## Translation Guardrails
 
 - Keep the product name `AI Usage Dashboard` unchanged unless a store locale explicitly requires a translated title variant.
-- Keep provider names unchanged: `Codex`, `Cursor`, `Claude Personal`, `Claude Code`, `Gemini Code Assist`, and `JetBrains AI`.
+- Keep provider names unchanged: `Codex`, `Cursor`, `Claude Personal`, `Claude Code`, `Gemini Code Assist`, `JetBrains AI`, and `Sub2API`.
 - Do not claim live usage for policy-only or deferred providers.
 - Do not claim exact remaining quota where the product only exposes partial or window-scoped usage.
 - Preserve the distinction between toolbar popup quick glance and side-panel/full-page detail.
 - Mention the `favicon` permission only for the optional provider-matched toolbar icon feature.
 - Mention custom JSON sources as user-approved HTTP/HTTPS endpoints with browser credentials omitted.
+- Mention Sub2API only as a configured compatible gateway with key-scoped
+  aggregate data; do not imply raw request-record or account-dashboard import.
 - Mention local image gradients only as in-browser processing; original image bytes are not uploaded or saved.

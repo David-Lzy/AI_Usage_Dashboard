@@ -6,7 +6,7 @@ Process rule:
 
 Document class: maintained reference
 Freshness model: maintained current reference
-Last updated: 2026-07-21
+Last updated: 2026-07-26
 Status note: auxiliary machine draft for broader localization expansion; the upload-ready warm product descriptions live in `Chrome_Web_Store_Product_Description_*.md`.
 
 Source pack: `Doc/Store/Store_Listing_Localization_Source_Pack.md`
@@ -31,7 +31,7 @@ Feature bullets:
 - Quick glance in one click: see visible providers, live-ready paths, setup blockers, and policy-only coverage without opening a separate dashboard.
 - Clear setup guidance: when a provider needs host access, credentials, a signed-in page, or a reload, the popup points to the next action.
 - Honest provider coverage: source chips distinguish official APIs, logged-in session pages, and documented quota-policy fallbacks.
-- Settings and provider detail live in the side panel, with visibility controls, credentials, permissions, and source contracts kept together.
+- Settings and provider detail keep visibility, credentials, permissions, source contracts, and configured Sub2API-compatible gateway aggregates together without mixing source boundaries.
 - Real extension-mode screenshots are captured from the built Chrome extension, not from a mocked marketing page.
 
 Screenshot captions:
@@ -53,7 +53,7 @@ Feature bullets:
 - 一键快速概览：无需打开单独仪表板，也能看到可见 Provider、可实时同步路径、配置阻塞和仅策略覆盖。
 - 清晰的配置引导：当 Provider 需要 host access、凭据、已登录页面或重新加载时，popup 会指向下一步动作。
 - 如实呈现 Provider 覆盖：source chip 区分官方 API、已登录 session page 和文档化 quota-policy fallback。
-- 设置和 Provider 详情位于侧边栏，将可见性、凭据、权限和 source contract 放在一起管理。
+- 设置和 Provider 详情集中管理可见性、凭据、权限与 source contract，并将配置的 Sub2API 兼容网关聚合数据与其他来源清楚区分。
 - 商店截图来自构建后的 Chrome 扩展真实 extension-mode capture，而不是模拟营销页。
 
 Screenshot captions:
@@ -75,7 +75,7 @@ Feature bullets:
 - 一鍵快速概覽：不必開啟獨立儀表板，也能看到可見 Provider、可即時同步路徑、設定阻礙和僅策略覆蓋。
 - 清楚的設定引導：當 Provider 需要 host access、憑據、已登入頁面或重新載入時，popup 會指向下一步動作。
 - 如實呈現 Provider 覆蓋：source chip 區分官方 API、已登入 session page 和文件化 quota-policy fallback。
-- 設定與 Provider 詳情位於側邊欄，將可見性、憑據、權限和 source contract 集中管理。
+- 設定與 Provider 詳情集中管理可見性、憑據、權限與 source contract，並將設定的 Sub2API 相容閘道彙總資料與其他來源清楚區分。
 - 商店截圖來自建置後 Chrome 擴充功能的真實 extension-mode capture，而不是模擬行銷頁。
 
 Screenshot captions:
@@ -97,7 +97,7 @@ Feature bullets:
 - 1 クリックで概要確認: 別のダッシュボードを開かずに、表示中の Provider、live-ready パス、設定ブロック、policy-only coverage を確認できます。
 - 明確な設定ガイダンス: Provider に host access、認証情報、サインイン済みページ、再読み込みが必要な場合、popup が次の操作を示します。
 - 正直な Provider coverage: source chip は official API、ログイン済み session page、documented quota-policy fallback を区別します。
-- 設定と Provider detail は side panel にあり、表示、認証情報、権限、source contract をまとめて管理できます。
+- 設定と Provider detail では表示、認証情報、権限、source contract を管理し、設定した Sub2API 互換ゲートウェイの集計データを他の source と明確に区別します。
 - ストア用スクリーンショットは、モックのマーケティングページではなく、ビルド済み Chrome 拡張機能の real extension-mode capture です。
 
 Screenshot captions:
@@ -119,7 +119,7 @@ Feature bullets:
 - 한 번의 클릭으로 빠른 확인: 별도 대시보드를 열지 않아도 표시되는 Provider, live-ready 경로, 설정 차단 요소, policy-only coverage 를 볼 수 있습니다.
 - 명확한 설정 안내: Provider 에 host access, 자격 증명, 로그인된 페이지 또는 새로고침이 필요하면 popup 이 다음 작업을 안내합니다.
 - 정직한 Provider coverage: source chip 은 official API, 로그인된 session page, documented quota-policy fallback 을 구분합니다.
-- 설정과 Provider detail 은 side panel 에 있으며 표시 여부, 자격 증명, 권한, source contract 를 함께 관리합니다.
+- Settings 와 Provider detail 에서 표시 여부, 자격 증명, 권한, source contract 를 관리하고 설정된 Sub2API 호환 게이트웨이 집계 데이터를 다른 source 와 명확히 구분합니다.
 - 스토어 스크린샷은 모의 마케팅 페이지가 아니라 빌드된 Chrome 확장 프로그램의 실제 extension-mode capture 입니다.
 
 Screenshot captions:
@@ -141,7 +141,7 @@ Feature bullets:
 - Vista rápida con un clic: ve Provider visibles, rutas live-ready, bloqueos de configuración y cobertura policy-only sin abrir un panel separado.
 - Guía de configuración clara: cuando un Provider necesita host access, credenciales, una página con sesión iniciada o recarga, el popup indica la próxima acción.
 - Cobertura honesta de Provider: los source chips distinguen official APIs, session pages con sesión iniciada y documented quota-policy fallbacks.
-- Settings y Provider detail viven en el side panel, con visibilidad, credenciales, permisos y source contracts en un solo lugar.
+- Settings y Provider detail reúnen visibilidad, credenciales, permisos y source contracts, y distinguen los agregados de gateways compatibles con Sub2API configurados.
 - Las capturas para la tienda vienen de la extensión Chrome construida en extension-mode real, no de una página de marketing simulada.
 
 Screenshot captions:
@@ -163,7 +163,7 @@ Feature bullets:
 - Visão rápida com um clique: veja Provider visíveis, caminhos live-ready, bloqueios de configuração e cobertura policy-only sem abrir outro painel.
 - Orientação clara de configuração: quando um Provider precisa de host access, credenciais, página autenticada ou recarregamento, o popup aponta a próxima ação.
 - Cobertura honesta de Provider: os source chips distinguem official APIs, session pages autenticadas e documented quota-policy fallbacks.
-- Settings e Provider detail ficam no side panel, com visibilidade, credenciais, permissões e source contracts no mesmo lugar.
+- Settings e Provider detail reúnem visibilidade, credenciais, permissões e source contracts, distinguindo os agregados de gateways compatíveis com Sub2API configurados.
 - As capturas da loja vêm da extensão Chrome compilada em extension-mode real, não de uma página de marketing simulada.
 
 Screenshot captions:
@@ -185,7 +185,7 @@ Feature bullets:
 - Aperçu en un clic : voyez les Provider visibles, les chemins live-ready, les blocages de configuration et la couverture policy-only sans ouvrir un tableau de bord séparé.
 - Guidance de configuration claire : lorsqu’un Provider nécessite host access, des identifiants, une page connectée ou un rechargement, le popup indique l’action suivante.
 - Couverture Provider honnête : les source chips distinguent official APIs, session pages connectées et documented quota-policy fallbacks.
-- Settings et Provider detail sont dans le side panel, avec visibilité, identifiants, permissions et source contracts regroupés.
+- Settings et Provider detail regroupent visibilité, identifiants, permissions et source contracts, tout en distinguant les agrégats des passerelles compatibles Sub2API configurées.
 - Les captures de la boutique proviennent de l’extension Chrome construite en véritable extension-mode, et non d’une page marketing simulée.
 
 Screenshot captions:
@@ -207,7 +207,7 @@ Feature bullets:
 - Schneller Überblick mit einem Klick: sichtbare Provider, live-ready Pfade, Einrichtungsblocker und policy-only coverage ohne separates Dashboard.
 - Klare Einrichtungshinweise: Wenn ein Provider host access, Zugangsdaten, eine angemeldete Seite oder Neuladen benötigt, zeigt das popup die nächste Aktion.
 - Ehrliche Provider coverage: source chips unterscheiden official APIs, angemeldete session pages und documented quota-policy fallbacks.
-- Settings und Provider detail liegen im side panel, mit Sichtbarkeit, Zugangsdaten, Berechtigungen und source contracts an einem Ort.
+- Settings und Provider detail bündeln Sichtbarkeit, Zugangsdaten, Berechtigungen und source contracts und trennen Aggregate konfigurierter Sub2API-kompatibler Gateways klar von anderen Quellen.
 - Store-Screenshots stammen aus der gebauten Chrome-Erweiterung im echten extension-mode, nicht aus einer simulierten Marketingseite.
 
 Screenshot captions:
@@ -229,7 +229,7 @@ Feature bullets:
 - Sguardo rapido con un clic: visualizza Provider visibili, percorsi live-ready, blocchi di configurazione e copertura policy-only senza aprire una dashboard separata.
 - Guida di configurazione chiara: quando un Provider richiede host access, credenziali, una pagina autenticata o un reload, il popup indica l’azione successiva.
 - Copertura Provider trasparente: i source chip distinguono official APIs, session pages autenticate e documented quota-policy fallbacks.
-- Settings e Provider detail vivono nel side panel, con visibilità, credenziali, permessi e source contracts nello stesso posto.
+- Settings e Provider detail riuniscono visibilità, credenziali, permessi e source contracts, distinguendo gli aggregati dei gateway compatibili con Sub2API configurati.
 - Gli screenshot dello store provengono dall’estensione Chrome compilata in vero extension-mode, non da una pagina marketing simulata.
 
 Screenshot captions:
@@ -251,7 +251,7 @@ Feature bullets:
 - Быстрый обзор в один клик: видимые Provider, live-ready пути, блокировки настройки и policy-only coverage без открытия отдельной панели.
 - Понятная настройка: если Provider требует host access, учетные данные, страницу с выполненным входом или перезагрузку, popup показывает следующее действие.
 - Честная Provider coverage: source chips различают official APIs, session pages с выполненным входом и documented quota-policy fallbacks.
-- Settings и Provider detail находятся в side panel, где собраны видимость, учетные данные, разрешения и source contracts.
+- Settings и Provider detail объединяют видимость, учетные данные, разрешения и source contracts, отдельно помечая агрегаты настроенных Sub2API-совместимых шлюзов.
 - Скриншоты для магазина сделаны из собранного Chrome-расширения в реальном extension-mode, а не из макета маркетинговой страницы.
 
 Screenshot captions:
@@ -273,7 +273,7 @@ Feature bullets:
 - لمحة سريعة بنقرة واحدة: شاهد Provider المرئية ومسارات live-ready وعوائق الإعداد وتغطية policy-only من دون فتح لوحة منفصلة.
 - إرشاد إعداد واضح: عندما يحتاج Provider إلى host access أو بيانات اعتماد أو صفحة مسجل دخولها أو إعادة تحميل، يعرض popup الإجراء التالي.
 - تغطية Provider صادقة: تميّز source chips بين official APIs وsession pages المسجل دخولها وdocumented quota-policy fallbacks.
-- توجد Settings وProvider detail في side panel، مع الرؤية وبيانات الاعتماد والأذونات وsource contracts في مكان واحد.
+- تجمع Settings وProvider detail الرؤية وبيانات الاعتماد والأذونات وsource contracts، مع تمييز بيانات بوابات Sub2API المتوافقة والمعدّة بوضوح عن المصادر الأخرى.
 - لقطات المتجر مأخوذة من إضافة Chrome المبنية في extension-mode الحقيقي، وليست من صفحة تسويق وهمية.
 
 Screenshot captions:
@@ -295,7 +295,7 @@ Feature bullets:
 - एक क्लिक में quick glance: अलग dashboard खोले बिना visible Provider, live-ready paths, setup blockers और policy-only coverage देखें।
 - स्पष्ट setup guidance: जब किसी Provider को host access, credentials, signed-in page या reload चाहिए, popup अगली action दिखाता है।
 - ईमानदार Provider coverage: source chips official APIs, signed-in session pages और documented quota-policy fallbacks को अलग दिखाते हैं।
-- Settings और Provider detail side panel में रहते हैं, जहाँ visibility, credentials, permissions और source contracts साथ रखे जाते हैं।
+- Settings और Provider detail में visibility, credentials, permissions और source contracts साथ रहते हैं, जबकि configured Sub2API-compatible gateway aggregates को अलग source के रूप में स्पष्ट रखा जाता है।
 - Store screenshots built Chrome extension के वास्तविक extension-mode capture से आते हैं, mocked marketing page से नहीं।
 
 Screenshot captions:
@@ -317,7 +317,7 @@ Feature bullets:
 - Sekilas dalam satu klik: lihat Provider yang terlihat, jalur live-ready, hambatan setup, dan cakupan policy-only tanpa membuka dashboard terpisah.
 - Panduan setup yang jelas: saat Provider memerlukan host access, kredensial, halaman yang sudah masuk, atau reload, popup menunjuk tindakan berikutnya.
 - Provider coverage yang jujur: source chips membedakan official APIs, session pages yang sudah masuk, dan documented quota-policy fallbacks.
-- Settings dan Provider detail berada di side panel, dengan visibility, credentials, permissions, dan source contracts di satu tempat.
+- Settings dan Provider detail menyatukan visibility, credentials, permissions, dan source contracts, sambil membedakan agregat gateway kompatibel Sub2API yang dikonfigurasi dari source lain.
 - Screenshot toko diambil dari ekstensi Chrome hasil build dalam extension-mode nyata, bukan dari halaman marketing tiruan.
 
 Screenshot captions:
