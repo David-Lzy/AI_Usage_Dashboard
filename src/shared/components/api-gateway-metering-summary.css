@@ -358,8 +358,12 @@
   }
 
   .api-gateway-metering-segmented button {
-    flex: 1 1 0;
+    flex: 1 1 auto;
     min-width: 0;
     padding-inline: 5px;
+    overflow-wrap: normal;
+    text-align: center;
+    text-wrap: balance;
+    word-break: normal;
   }
 }

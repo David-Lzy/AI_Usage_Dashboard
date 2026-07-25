@@ -315,8 +315,22 @@ describe("ProviderCard", () => {
     });
 
     expect(html).toContain('data-provider-card-open-source-page="true"');
-    expect(html).toContain(">Source page<");
+    expect(html).toContain(">Open source page<");
     expect(html).toContain('title="Open source page"');
+  });
+
+  it("localizes provider card footer actions", () => {
+    const html = renderProviderCard(createState(), "codex-personal-page", {
+      localePreference: "zh-CN",
+      onOpenSourcePage: () => undefined,
+    });
+
+    expect(html).toContain(">Provider 详情<");
+    expect(html).toContain(">打开来源页面<");
+    expect(html).toContain(">刷新<");
+    expect(html).not.toContain(">Open<");
+    expect(html).not.toContain(">Source page<");
+    expect(html).not.toContain(">Refresh<");
   });
 
   it("renders Cursor personal spend facts as structured usage context", () => {

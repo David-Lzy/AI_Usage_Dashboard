@@ -360,9 +360,10 @@ export function ProviderCard({
         <button
           className="text-button provider-card__action"
           type="button"
+          title={providerDetailCopy.openDetailTabTitle(provider.providerLabel)}
           onClick={() => onOpen(provider.providerId)}
         >
-          Open
+          {providerDetailCopy.sections.providerDetail}
         </button>
         {showSourcePageAction ? (
           <button
@@ -373,7 +374,7 @@ export function ProviderCard({
             }`}
             data-provider-card-open-source-page="true"
             type="button"
-            title="Open source page"
+            title={providerDetailCopy.notes.openSourcePageAction}
             onClick={() =>
               onOpenSourcePage(
                 provider.providerId,
@@ -381,7 +382,7 @@ export function ProviderCard({
               )
             }
           >
-            Source page
+            {providerDetailCopy.notes.openSourcePageAction}
           </button>
         ) : null}
         {!isClaudePersonal || !showSourcePageAction || !showClaudeRecoveryState ? (
@@ -390,7 +391,7 @@ export function ProviderCard({
             type="button"
             onClick={() => onRefresh(provider.providerId)}
           >
-            Refresh
+            {i18n.t("common.actions.refresh")}
           </button>
         ) : null}
       </footer>
