@@ -138,6 +138,7 @@ export function buildConfigurationBackup(
   const settings = cloneSettings(state.settings);
   const excludedFields = [
     "providers",
+    "providers.apiGatewayMetering",
     "providerSettings.status",
     "providerSettings.credentialStatus",
     "providerSettings.pageBinding",

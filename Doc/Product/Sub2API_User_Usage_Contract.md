@@ -113,6 +113,28 @@ series. Unknown model labels remain source labels. Raw request logs, endpoint
 paths, group names, API-key names, prompts, and per-request timing are outside
 the first-release contract.
 
+## Normalized Local Model
+
+The runtime model keeps API-gateway metering as an optional extension to one
+provider snapshot. It does not copy spend into the provider's generic
+`used`, `remaining`, or `quotaWindow` fields. The extension records an opaque
+local account ID, exact deployment origin, transport, capture time, stale
+state, and explicit `api_key` or `account` scope.
+
+Every monetary value is stored as an amount paired with its bounded source
+unit. Unknown units remain source values; they are not silently converted to
+USD. Missing requests, token classes, latency, RPM, TPM, balance, quota, or
+history remain `null` or absent rather than becoming zero. Reference savings
+are derived only for presentation when reference and actual costs use the same
+unit.
+
+Module order and visibility are local to each opaque account and surface.
+Metering snapshots, account-local preferences, and credentials are excluded
+from configuration backup and Chrome Sync. The raw normalized model keeps at
+most 31 daily buckets and 16 model series; compact views may merge additional
+visible series into an explicitly labeled `Other` item without rewriting the
+stored totals.
+
 ## Account-Wide Conditional Capability
 
 The authenticated user application also defines account-wide endpoints:

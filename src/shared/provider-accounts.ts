@@ -9,6 +9,11 @@ import type {
   ProviderSetting,
   ProviderSnapshot,
 } from "../providers/types";
+import {
+  createDefaultApiGatewayMeteringDisplayPreferences,
+  normalizeApiGatewayMeteringDisplayPreferences,
+  normalizeApiGatewayMeteringSnapshot,
+} from "./api-gateway-metering";
 
 export const DEFAULT_PROVIDER_ACCOUNT_ID: ProviderAccountId = "default";
 
@@ -32,6 +37,12 @@ function createDefaultMetadata(
     label: "Default",
     createdAt: null,
     lastSuccessAt: getLastSuccessAt(snapshot),
+    ...(snapshot.apiGatewayMetering
+      ? {
+          apiGatewayMeteringDisplayPreferences:
+            createDefaultApiGatewayMeteringDisplayPreferences(),
+        }
+      : {}),
   };
 }
 
@@ -76,11 +87,36 @@ function normalizeMetadata(
   if (!id) {
     return null;
   }
+  const apiGatewayMeteringDisplayPreferences =
+    value.apiGatewayMeteringDisplayPreferences === undefined
+      ? undefined
+      : normalizeApiGatewayMeteringDisplayPreferences(
+          value.apiGatewayMeteringDisplayPreferences,
+        );
   return {
     id,
     label: normalizeAccountLabel(value.label, `Account ${fallbackIndex + 1}`),
     createdAt: normalizeTimestamp(value.createdAt),
     lastSuccessAt: normalizeTimestamp(value.lastSuccessAt),
+    ...(apiGatewayMeteringDisplayPreferences
+      ? { apiGatewayMeteringDisplayPreferences }
+      : {}),
+  };
+}
+
+function normalizeInactiveSnapshot(
+  snapshot: ProviderSnapshot,
+): ProviderSnapshot {
+  const apiGatewayMetering = normalizeApiGatewayMeteringSnapshot(
+    snapshot.apiGatewayMetering,
+  );
+  const {
+    apiGatewayMetering: _apiGatewayMetering,
+    ...snapshotWithoutGatewayMetering
+  } = snapshot;
+  return {
+    ...snapshotWithoutGatewayMetering,
+    ...(apiGatewayMetering ? { apiGatewayMetering } : {}),
   };
 }
 
@@ -146,7 +182,10 @@ function normalizeCapableCollection(
     }
     const storedState = inactiveSource[account.id];
     if (isMatchingInactiveState(storedState, providerId)) {
-      inactiveAccounts[account.id] = structuredClone(storedState);
+      inactiveAccounts[account.id] = {
+        snapshot: normalizeInactiveSnapshot(storedState.snapshot),
+        setting: structuredClone(storedState.setting),
+      };
     }
   }
 
@@ -266,9 +305,15 @@ export function addInactiveProviderAccount(
     label: normalizeAccountLabel(input.label, "Account"),
     createdAt: normalizeTimestamp(input.createdAt ?? new Date().toISOString()),
     lastSuccessAt: getLastSuccessAt(input.snapshot),
+    ...(input.snapshot.apiGatewayMetering
+      ? {
+          apiGatewayMeteringDisplayPreferences:
+            createDefaultApiGatewayMeteringDisplayPreferences(),
+        }
+      : {}),
   });
   collection.inactiveAccounts[accountId] = {
-    snapshot: structuredClone(input.snapshot),
+    snapshot: normalizeInactiveSnapshot(input.snapshot),
     setting: structuredClone(input.setting),
   };
 

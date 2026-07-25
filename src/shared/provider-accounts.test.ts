@@ -178,4 +178,79 @@ describe("provider accounts", () => {
       ),
     ).toThrow(/source-entry boundary/);
   });
+
+  it("keeps gateway module preferences account-local and removes malformed inactive metering", () => {
+    const initial = createTestState();
+    const baseSnapshot = initial.providers.find(
+      (provider) => provider.providerId === TEST_PROVIDER_ID,
+    )!;
+    const setting = initial.providerSettings.find(
+      (provider) => provider.id === TEST_PROVIDER_ID,
+    )!;
+    const gatewaySnapshot = {
+      ...baseSnapshot,
+      apiGatewayMetering: {
+        schemaVersion: 1 as const,
+        accountId: DEFAULT_PROVIDER_ACCOUNT_ID,
+        productKind: "metered_api_gateway" as const,
+        displayLabel: "Gateway 1",
+        origin: "https://gateway.example.test",
+        transport: "https" as const,
+        scope: "api_key" as const,
+        billingMode: "wallet" as const,
+        capturedAt: "2026-07-25T10:00:00.000Z",
+        stale: false,
+        isValid: true,
+        status: null,
+        planName: null,
+        remaining: null,
+        balance: null,
+        quota: null,
+        subscription: null,
+        rateLimits: [],
+        usage: null,
+        dailyUsage: [],
+        modelUsage: [],
+        modelSeriesTruncated: false,
+      },
+    };
+    const withInactive = addInactiveProviderAccount(
+      { ...initial, providers: initial.providers.map((provider) =>
+        provider.providerId === TEST_PROVIDER_ID ? gatewaySnapshot : provider) },
+      {
+        providerId: TEST_PROVIDER_ID,
+        accountId: TEST_ACCOUNT_ID,
+        label: "Gateway 2",
+        snapshot: {
+          ...gatewaySnapshot,
+          apiGatewayMetering: {
+            ...gatewaySnapshot.apiGatewayMetering,
+            accountId: TEST_ACCOUNT_ID,
+            balance: { amount: -1, unit: "USD" },
+          },
+        },
+        setting,
+      },
+      supportsTestProvider,
+    );
+    const collection = withInactive.providerAccounts?.[TEST_PROVIDER_ID];
+
+    expect(collection?.accounts).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: TEST_ACCOUNT_ID,
+          apiGatewayMeteringDisplayPreferences: expect.objectContaining({
+            popup: expect.arrayContaining([
+              { id: "summary", visible: true },
+              { id: "trend", visible: true },
+            ]),
+          }),
+        }),
+      ]),
+    );
+    expect(
+      collection?.inactiveAccounts[TEST_ACCOUNT_ID]?.snapshot
+        .apiGatewayMetering,
+    ).toBeUndefined();
+  });
 });

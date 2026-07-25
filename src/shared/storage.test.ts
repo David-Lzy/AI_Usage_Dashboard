@@ -483,6 +483,75 @@ describe("storage normalization", () => {
     ).toBeUndefined();
   });
 
+  it("normalizes local API gateway metering without changing existing snapshots", async () => {
+    const providerId = "codex-enterprise-api";
+    const validGatewayMetering = {
+      schemaVersion: 1 as const,
+      accountId: "account_12345678",
+      productKind: "metered_api_gateway" as const,
+      displayLabel: "Gateway 1",
+      origin: "http://gateway.example.test/dashboard",
+      transport: "https" as const,
+      scope: "api_key" as const,
+      billingMode: "wallet" as const,
+      capturedAt: "2026-07-25T10:00:00.000Z",
+      stale: false,
+      isValid: true,
+      status: "active",
+      planName: null,
+      remaining: { amount: 8, unit: "USD" },
+      balance: { amount: 8, unit: "USD" },
+      quota: null,
+      subscription: null,
+      rateLimits: [],
+      usage: null,
+      dailyUsage: [],
+      modelUsage: [],
+      modelSeriesTruncated: false,
+    };
+
+    await writeAppState({
+      ...SAMPLE_APP_STATE,
+      providers: SAMPLE_APP_STATE.providers.map((provider) =>
+        provider.providerId === providerId
+          ? { ...provider, apiGatewayMetering: validGatewayMetering }
+          : provider,
+      ),
+    });
+
+    expect(
+      (await readAppState())?.providers.find(
+        (provider) => provider.providerId === providerId,
+      )?.apiGatewayMetering,
+    ).toMatchObject({
+      origin: "http://gateway.example.test",
+      transport: "http",
+      scope: "api_key",
+      balance: { amount: 8, unit: "USD" },
+    });
+
+    await writeAppState({
+      ...SAMPLE_APP_STATE,
+      providers: SAMPLE_APP_STATE.providers.map((provider) =>
+        provider.providerId === providerId
+          ? {
+              ...provider,
+              apiGatewayMetering: {
+                ...validGatewayMetering,
+                balance: { amount: -1, unit: "USD" },
+              },
+            }
+          : provider,
+      ) as AppState["providers"],
+    });
+
+    expect(
+      (await readAppState())?.providers.find(
+        (provider) => provider.providerId === providerId,
+      )?.apiGatewayMetering,
+    ).toBeUndefined();
+  });
+
   it("normalizes unsupported UI font preferences to the default", async () => {
     await writeAppState({
       ...SAMPLE_APP_STATE,

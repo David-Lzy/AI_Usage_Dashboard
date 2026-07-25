@@ -195,6 +195,19 @@ export type UsageHistoryModulesBySurface = Record<
   DisplaySurface,
   Partial<Record<ProviderId, ProviderUsageHistoryModulePreference[]>>
 >;
+export type ApiGatewayMeteringModuleId =
+  | "summary"
+  | "trend"
+  | "model_breakdown"
+  | "limit_windows";
+export type ApiGatewayMeteringModulePreference = {
+  id: ApiGatewayMeteringModuleId;
+  visible: boolean;
+};
+export type ApiGatewayMeteringDisplayPreferences = Record<
+  DisplaySurface,
+  ApiGatewayMeteringModulePreference[]
+>;
 export type ProviderServiceStatusVendorId = "openai" | "anthropic" | "cursor";
 export type ProviderServiceStatusLevel =
   | "operational"
@@ -325,7 +338,97 @@ export type ProviderSnapshot = {
   usageSummary?: string | null;
   usageHistory?: ProviderUsageHistory;
   cursorUsage?: CursorUsageBilling;
+  apiGatewayMetering?: ApiGatewayMeteringSnapshot;
   tone: ProviderTone;
+};
+
+export type ApiGatewayMeteringScope = "api_key" | "account";
+export type ApiGatewayBillingMode =
+  | "wallet"
+  | "quota"
+  | "subscription"
+  | "unrestricted";
+
+export type ApiGatewayMoney = {
+  amount: number;
+  unit: string;
+};
+
+export type ApiGatewayUsageMetric = {
+  requests: number | null;
+  inputTokens: number | null;
+  outputTokens: number | null;
+  cacheCreationTokens: number | null;
+  cacheReadTokens: number | null;
+  totalTokens: number | null;
+  referenceCost: ApiGatewayMoney | null;
+  actualCost: ApiGatewayMoney | null;
+};
+
+export type ApiGatewayUsageSummary = {
+  today: ApiGatewayUsageMetric | null;
+  total: ApiGatewayUsageMetric | null;
+  averageDurationMs: number | null;
+  requestsPerMinute: number | null;
+  tokensPerMinute: number | null;
+};
+
+export type ApiGatewayAllowance = {
+  limit: ApiGatewayMoney | null;
+  used: ApiGatewayMoney | null;
+  remaining: ApiGatewayMoney | null;
+};
+
+export type ApiGatewaySubscriptionAllowance = {
+  dailyUsage: ApiGatewayMoney | null;
+  weeklyUsage: ApiGatewayMoney | null;
+  monthlyUsage: ApiGatewayMoney | null;
+  dailyLimit: ApiGatewayMoney | null;
+  weeklyLimit: ApiGatewayMoney | null;
+  monthlyLimit: ApiGatewayMoney | null;
+  expiresAt: string | null;
+};
+
+export type ApiGatewayRateLimitWindow = ApiGatewayAllowance & {
+  id: string;
+  windowStart: string | null;
+  resetAt: string | null;
+};
+
+export type ApiGatewayDailyUsage = {
+  date: string;
+  totals: ApiGatewayUsageMetric;
+};
+
+export type ApiGatewayModelUsage = {
+  id: string;
+  label: string;
+  totals: ApiGatewayUsageMetric;
+};
+
+export type ApiGatewayMeteringSnapshot = {
+  schemaVersion: 1;
+  accountId: ProviderAccountId;
+  productKind: "metered_api_gateway";
+  displayLabel: string;
+  origin: string;
+  transport: "http" | "https";
+  scope: ApiGatewayMeteringScope;
+  billingMode: ApiGatewayBillingMode | null;
+  capturedAt: string;
+  stale: boolean;
+  isValid: boolean | null;
+  status: string | null;
+  planName: string | null;
+  remaining: ApiGatewayMoney | null;
+  balance: ApiGatewayMoney | null;
+  quota: ApiGatewayAllowance | null;
+  subscription: ApiGatewaySubscriptionAllowance | null;
+  rateLimits: ApiGatewayRateLimitWindow[];
+  usage: ApiGatewayUsageSummary | null;
+  dailyUsage: ApiGatewayDailyUsage[];
+  modelUsage: ApiGatewayModelUsage[];
+  modelSeriesTruncated: boolean;
 };
 
 export type CursorUsageMetric = {
@@ -542,6 +645,7 @@ export type ProviderAccountMetadata = {
   label: string;
   createdAt: string | null;
   lastSuccessAt: string | null;
+  apiGatewayMeteringDisplayPreferences?: ApiGatewayMeteringDisplayPreferences;
 };
 
 export type ProviderInactiveAccountState = {

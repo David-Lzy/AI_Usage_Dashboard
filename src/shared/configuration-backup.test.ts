@@ -13,6 +13,37 @@ describe("configuration backup", () => {
   it("exports only portable configuration fields", () => {
     const backup = buildConfigurationBackup({
       ...SAMPLE_APP_STATE,
+      providers: SAMPLE_APP_STATE.providers.map((provider, index) =>
+        index === 0
+          ? {
+              ...provider,
+              apiGatewayMetering: {
+                schemaVersion: 1,
+                accountId: "account_12345678",
+                productKind: "metered_api_gateway",
+                displayLabel: "Private gateway",
+                origin: "https://gateway.example.test",
+                transport: "https",
+                scope: "api_key",
+                billingMode: "wallet",
+                capturedAt: "2026-07-25T10:00:00.000Z",
+                stale: false,
+                isValid: true,
+                status: "active",
+                planName: null,
+                remaining: { amount: 8, unit: "USD" },
+                balance: { amount: 8, unit: "USD" },
+                quota: null,
+                subscription: null,
+                rateLimits: [],
+                usage: null,
+                dailyUsage: [],
+                modelUsage: [],
+                modelSeriesTruncated: false,
+              },
+            }
+          : provider,
+      ),
       providerAccounts: {
         "cursor-team-api": {
           activeAccountId: "account_12345678",
@@ -22,6 +53,11 @@ describe("configuration backup", () => {
               label: "Private workspace",
               createdAt: null,
               lastSuccessAt: null,
+              apiGatewayMeteringDisplayPreferences: {
+                popup: [{ id: "summary", visible: false }],
+                sidebar: [{ id: "summary", visible: true }],
+                fullPage: [{ id: "summary", visible: true }],
+              },
             },
           ],
           inactiveAccounts: {},
@@ -102,6 +138,8 @@ describe("configuration backup", () => {
     expect(JSON.stringify(backup.payload)).not.toContain("credentialStatus");
     expect(JSON.stringify(backup.payload)).not.toContain("providerAccounts");
     expect(JSON.stringify(backup.payload)).not.toContain("Private workspace");
+    expect(JSON.stringify(backup.payload)).not.toContain("Private gateway");
+    expect(JSON.stringify(backup.payload)).not.toContain("gateway.example.test");
     expect(backup.payload.customSources).toEqual([
       {
         id: "custom:build_quota",
@@ -120,6 +158,7 @@ describe("configuration backup", () => {
     expect(JSON.stringify(backup.payload)).not.toContain("127.0.0.1:8080");
     expect(backup.excludedFields).toContain("customSourceStates");
     expect(backup.excludedFields).toContain("customSources.headers");
+    expect(backup.excludedFields).toContain("providers.apiGatewayMetering");
   });
 
   it("preserves local managed sources while importing portable custom sources", () => {

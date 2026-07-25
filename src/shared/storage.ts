@@ -83,6 +83,7 @@ import { buildCustomSourceProgressItemIdsBySource } from "./custom-source-view-m
 import { normalizeProviderUsageHistory } from "./provider-usage-history";
 import { normalizeUsageHistoryModulesBySurface } from "./usage-history-visibility";
 import { normalizeCursorUsageBilling } from "./cursor-usage-billing";
+import { normalizeApiGatewayMeteringSnapshot } from "./api-gateway-metering";
 import { normalizeResetTimeDisplayMode } from "./reset-time-display";
 import {
   normalizeProviderServiceStatuses,
@@ -229,9 +230,13 @@ function normalizeAppState(state: AppState): AppState {
     };
     const usageHistory = normalizeProviderUsageHistory(provider.usageHistory);
     const cursorUsage = normalizeCursorUsageBilling(provider.cursorUsage);
+    const apiGatewayMetering = normalizeApiGatewayMeteringSnapshot(
+      provider.apiGatewayMetering,
+    );
     const {
       usageHistory: _usageHistory,
       cursorUsage: _cursorUsage,
+      apiGatewayMetering: _apiGatewayMetering,
       ...providerWithoutUsageExtensions
     } = provider;
 
@@ -239,6 +244,7 @@ function normalizeAppState(state: AppState): AppState {
       ...providerWithoutUsageExtensions,
       ...(usageHistory ? { usageHistory } : {}),
       ...(cursorUsage ? { cursorUsage } : {}),
+      ...(apiGatewayMetering ? { apiGatewayMetering } : {}),
     };
   });
 
