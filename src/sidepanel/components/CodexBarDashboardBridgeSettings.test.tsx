@@ -42,6 +42,7 @@ describe("CodexBarDashboardBridgeSettings", () => {
     expect(html).toContain("Clear token");
     expect(html).toContain("Disconnect");
     expect(html).toContain("CodexBar · Codex");
+    expect(html).toContain('data-i18n-scrollable-value="true"');
     expect(html).toContain('type="password"');
     expect(html).not.toContain("accountEmail");
   });

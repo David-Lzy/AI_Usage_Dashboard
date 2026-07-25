@@ -226,6 +226,7 @@ export function CodexBarDashboardBridgeSettings({
           <span className="form-field__label">{copy.endpoint}</span>
           <input
             className="form-field__control"
+            data-i18n-scrollable-value="true"
             spellCheck={false}
             value={endpointUrl}
             onChange={(event) => setEndpointUrl(event.currentTarget.value)}

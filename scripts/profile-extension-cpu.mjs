@@ -16,6 +16,7 @@ const userDataDir = await mkdtemp(path.join(tmpdir(), "ai-usage-dashboard-cpu-")
 const sampleCount = getNumberArg("--sample-count", 10);
 const intervalMs = getNumberArg("--interval-ms", 3000);
 const headed = process.argv.includes("--headed");
+const noEffects = process.argv.includes("--no-effects");
 const explicitPids = getPidArg();
 const currentExtensionRenderers = process.argv.includes(
   "--current-extension-renderers",
@@ -372,9 +373,13 @@ async function openExtensionPage(context, extensionId, relativeUrl) {
 function addPerfSearch(relativeUrl) {
   const [pathAndSearch, hash = ""] = relativeUrl.split("#", 2);
   const separator = pathAndSearch.includes("?") ? "&" : "?";
-  const nextPathAndSearch = pathAndSearch.includes("perf=1")
+  let nextPathAndSearch = pathAndSearch.includes("perf=1")
     ? pathAndSearch
     : `${pathAndSearch}${separator}perf=1`;
+
+  if (noEffects && !nextPathAndSearch.includes("perfNoEffects=1")) {
+    nextPathAndSearch += `${nextPathAndSearch.includes("?") ? "&" : "?"}perfNoEffects=1`;
+  }
 
   return hash ? `${nextPathAndSearch}#${hash}` : nextPathAndSearch;
 }
@@ -662,6 +667,7 @@ try {
     sampleCount,
     intervalMs,
     headed,
+    noEffects,
     results,
   };
 

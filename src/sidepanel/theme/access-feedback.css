@@ -13,13 +13,11 @@
 @keyframes app-access-cta-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 0
-      color-mix(in srgb, var(--md-sys-color-primary) 0%, transparent);
+    opacity: 0.2;
   }
 
   50% {
-    box-shadow: 0 0 0 6px
-      color-mix(in srgb, var(--md-sys-color-primary) 18%, transparent);
+    opacity: 0.8;
   }
 }
 
@@ -56,8 +54,19 @@
 
 [data-quick-setup-primary-action="grant_access"]:not(:disabled),
 [data-permission-action="request"]:not(:disabled) {
-  animation: app-access-cta-pulse 2600ms var(--app-motion-easing-standard)
-    infinite;
+  position: relative;
+}
+
+[data-quick-setup-primary-action="grant_access"]:not(:disabled)::after,
+[data-permission-action="request"]:not(:disabled)::after {
+  position: absolute;
+  inset: -3px;
+  border: 2px solid
+    color-mix(in srgb, var(--md-sys-color-primary) 28%, transparent);
+  border-radius: inherit;
+  content: "";
+  pointer-events: none;
+  animation: app-access-cta-pulse 2600ms steps(2, jump-none) infinite;
 }
 
 .credential-state {
@@ -182,10 +191,11 @@
 }
 
 :root[data-motion-resolved="reduced"]
-  [data-quick-setup-primary-action="grant_access"]:not(:disabled),
+  [data-quick-setup-primary-action="grant_access"]:not(:disabled)::after,
 :root[data-motion-resolved="reduced"]
-  [data-permission-action="request"]:not(:disabled) {
+  [data-permission-action="request"]:not(:disabled)::after {
   animation: none;
+  display: none;
 }
 
 @media (max-width: 720px) {

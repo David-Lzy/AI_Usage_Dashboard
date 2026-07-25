@@ -28,6 +28,20 @@
       "maintenanceOwner": "AI Usage Dashboard maintainers",
       "independentVerification": "The local descriptor, strategy, privacy, and permission contracts are covered by project-owned tests and the Provider authoring quality gate.",
       "noticeId": null
+    },
+    {
+      "id": "codexbar-dashboard-snapshot-bridge",
+      "classification": "bridge",
+      "repositoryUrl": "https://github.com/steipete/CodexBar",
+      "upstreamFilePath": "docs/dashboard-api.md",
+      "pinnedCommit": "cc8da27cec92029a6435bfee4a703a719290234e",
+      "copyrightHolder": "CodexBar contributors",
+      "license": "MIT",
+      "localDestination": "src/shared/codexbar-dashboard-bridge.ts",
+      "modificationSummary": "The authenticated dashboard snapshot protocol was independently implemented in TypeScript with stricter loopback, size, redaction, source-separation, and optional-permission boundaries; no Swift source or upstream fixture was copied or translated.",
+      "maintenanceOwner": "AI Usage Dashboard maintainers",
+      "independentVerification": "The exact route and bearer contract are exercised against a deterministic loopback HTTP server, parser fixtures are synthetic, and public security documentation records the stricter local trust boundary.",
+      "noticeId": null
     }
   ]
 }

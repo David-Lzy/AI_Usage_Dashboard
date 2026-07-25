@@ -420,6 +420,10 @@ async function collectLayoutSnapshot(page, routeId, expectedDir) {
         .slice(0, 20);
       const clippedControls = Array.from(document.querySelectorAll(controlSelector))
         .filter(visibleElement)
+        .filter(
+          (element) =>
+            element.getAttribute("data-i18n-scrollable-value") !== "true",
+        )
         .map((element) => {
           const rect = element.getBoundingClientRect();
           const text = elementText(element);
