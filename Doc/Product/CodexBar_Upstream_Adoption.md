@@ -69,6 +69,19 @@ extension must not install, launch, discover, or control that software.
 No Provider parser, normalizer, fixture, or Bridge implementation currently
 contains copied or translated CodexBar source code.
 
+## Selected Port Review Outcome
+
+The first bounded implementation review closed on 2026-07-25 without a source
+port. It compared CodexBar's `UsagePace`, Codex rate-window normalization,
+Claude scoped-weekly mapping, Cursor legacy request percentage, and cookie
+normalization with the corresponding local contracts.
+
+The local code already has independently verified Provider semantics, stricter
+snapshot freshness and failure gates, and browser-specific credential
+boundaries. Copying or translating those helpers would create duplicate
+authorities without adding a supported fact. A future port is allowed only when
+an identified local defect or meaningful duplication is demonstrated first.
+
 ## Notice Plan
 
 `config/provider-upstream-provenance.json` is the machine-checked adoption
