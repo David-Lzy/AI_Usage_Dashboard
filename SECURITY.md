@@ -48,6 +48,15 @@ AI Usage Dashboard is designed to avoid persistent collection of raw browser aut
 - User-configured custom JSON sources are fetched as JSON with browser
   credentials omitted. The response is validated and normalized; raw response
   bodies are not stored, HTML is not rendered, and scripts are not executed.
+- The experimental Local Companion Bridge binds only to `127.0.0.1` or `::1`
+  and requires a one-time pairing flow plus a revocable bearer token. Loopback
+  is not treated as authentication. Tokens remain in bridge memory and
+  extension-local secret storage and are excluded from AppState, Chrome Sync,
+  backups, logs, fixtures, snapshots, and diagnostics.
+- The reference bridge reads only JSON files explicitly named when the process
+  starts. It cannot accept arbitrary paths over HTTP, scan user directories,
+  execute commands, inspect browser profiles, or replace a built-in Provider
+  source entry.
 
 ## Sensitive Data Rules
 
@@ -62,3 +71,6 @@ AI Usage Dashboard is designed to avoid persistent collection of raw browser aut
 - When adding store screenshots, use the repository screenshot request/archive workflow so truth boundaries and operator notes stay attached to the image set.
 - Do not commit real custom source endpoint secrets, private endpoint payloads,
   or exported configuration files that reveal private service URLs.
+- Do not log, fixture, export, synchronize, or place Local Companion pairing
+  codes or bearer tokens in URLs. Do not weaken bridge authentication for a
+  third-party loopback service.

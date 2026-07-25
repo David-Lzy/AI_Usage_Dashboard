@@ -240,6 +240,12 @@ provider page body text. If a future version adds authenticated custom source
 headers, this document, `PRIVACY.md`, and `SECURITY.md` must be updated before
 shipping that change.
 
+The repository's experimental
+[Local Companion Bridge](./Local_Companion_Bridge.md) is a separate authenticated
+loopback transport. It reuses this response schema for each source, but keeps
+its bearer token in a dedicated extension-local secret store rather than in a
+custom source setting or exported configuration.
+
 Only configure endpoints you trust. Even though response text is validated and
 not executed, endpoint URLs and normalized display values can appear in local
 extension storage, UI, and exported configuration files.

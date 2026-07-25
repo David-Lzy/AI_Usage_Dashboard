@@ -63,6 +63,8 @@ import { createEmptyPageBinding } from "./page-bindings";
 
 export const APP_STATE_STORAGE_KEY = "ai-usage-dashboard.app-state";
 export const PROVIDER_SECRETS_STORAGE_KEY = "ai-usage-dashboard.provider-secrets";
+export const LOCAL_COMPANION_SECRETS_STORAGE_KEY =
+  "ai-usage-dashboard.local-companion-secrets";
 
 export const PROVIDER_SOURCE_BLUEPRINTS: Record<ProviderId, ProviderSourceBlueprint> = {
   "cursor-personal-page": {

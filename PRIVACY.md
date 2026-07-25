@@ -60,6 +60,26 @@ Configuration export can include custom source settings such as endpoint URL,
 display name, description, enabled state, and refresh interval. Export does not
 include raw response bodies.
 
+## Experimental Local Companion Bridge
+
+The repository includes an optional experimental Node reference process for
+serving explicitly selected `custom-source.v1` JSON files over loopback. The
+extension does not install, start, discover, or update this process. The
+reference process binds only to `127.0.0.1` or `::1`; it does not upload input
+files and does not scan directories, browser profiles, credentials, or local
+tools.
+
+Pairing uses a one-time code and issues a revocable bearer token. The extension
+stores that token only in extension-managed local secret storage. It is not
+written to AppState, Chrome Sync, configuration backup, logs, fixtures,
+normalized source snapshots, or user-facing errors. The token is sent only to
+the explicitly configured loopback bridge. Restarting the reference process
+invalidates its in-memory token.
+
+The current product UI does not expose the bridge as a shipped Provider
+integration. Any future local companion adapter must retain these boundaries
+and update this document before release.
+
 ## Provider Page Access
 
 For built-in provider page sources, the extension requests optional host access

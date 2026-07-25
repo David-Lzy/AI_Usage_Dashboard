@@ -130,6 +130,12 @@ label, and never treated as official provider data. See
 [Doc/Product/Custom_JSON_Sources.md](./Doc/Product/Custom_JSON_Sources.md) for
 the JSON contract and examples.
 
+The repository also includes an experimental, manually started Node
+[Local Companion Bridge](./Doc/Product/Local_Companion_Bridge.md) for serving
+explicitly selected local `custom-source.v1` files over authenticated loopback.
+It is a developer-preview protocol foundation, not an automatically installed
+or currently shipped Provider integration.
+
 ## Install From Source
 
 ```sh
