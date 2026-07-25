@@ -314,3 +314,18 @@ Release consequence:
 
 - `2026-04-23`: the current RC selected the scope-narrowing branch
 - JetBrains remains implemented in the repository, but it is deferred from the active RC support promise until a real org-visible `Users and licensing` session is reverified
+
+## 14. 2026-07-25 Runtime Closeout
+
+Phase 709 made the deferred state executable rather than descriptive only:
+
+- the HTML parser, capture client, fixtures, and contract tests remain in the
+  repository for a future organization-session revalidation
+- the registered JetBrains adapter no longer opens, reloads, or reads a page
+  while the source is deferred
+- a sync returns an explicit deferred snapshot with no live quota values and
+  clears obsolete captured quota fields
+- the runtime capability descriptor no longer claims quota-window support
+
+Re-enabling live capture requires new organization-visible evidence and a
+separate rollout decision; retained parsing code alone is not release support.

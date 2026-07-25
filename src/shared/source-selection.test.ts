@@ -16,7 +16,7 @@ describe("source selection helpers", () => {
 
   it("builds auto and explicit selection reasons without fallback", async () => {
     vi.doMock("./provider-sources", () => ({
-      getSourceAttemptOrder: vi.fn(() => ["official_api", "session_page"]),
+      getProviderSourceKinds: vi.fn(() => ["official_api", "session_page"]),
       getSourceKindLabel: vi.fn((kind: string) =>
         kind === "official_api" ? "Official API" : "Session page",
       ),
@@ -47,7 +47,7 @@ describe("source selection helpers", () => {
 
   it("builds fallback selection reasons for auto and explicit preferences", async () => {
     vi.doMock("./provider-sources", () => ({
-      getSourceAttemptOrder: vi.fn(() => ["official_api", "session_page"]),
+      getProviderSourceKinds: vi.fn(() => ["official_api", "session_page"]),
       getSourceKindLabel: vi.fn((kind: string) =>
         kind === "official_api" ? "Official API" : "Session page",
       ),

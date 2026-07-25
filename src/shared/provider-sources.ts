@@ -155,12 +155,11 @@ export function getProviderSourceBlueprint(providerId: ProviderId) {
   return PROVIDER_SOURCE_BLUEPRINTS[providerId];
 }
 
-function getSelectableSourceKinds(providerId: ProviderId): ProviderSourceKind[] {
+export function getProviderSourceKinds(
+  providerId: ProviderId,
+): ProviderSourceKind[] {
   return getProviderSourceBlueprint(providerId).sources
-    .filter(
-      (source) =>
-        source.rolloutStage === "shipped" && source.kind !== "policy_only",
-    )
+    .filter((source) => source.rolloutStage === "shipped")
     .sort((left, right) => left.priority - right.priority)
     .map((source) => source.kind);
 }
@@ -169,7 +168,7 @@ export function getSourcePreferenceOptions(
   providerId: ProviderId,
 ): ProviderSourcePreference[] {
   const blueprint = getProviderSourceBlueprint(providerId);
-  const selectableKinds = getSelectableSourceKinds(providerId);
+  const selectableKinds = getProviderSourceKinds(providerId);
 
   if (selectableKinds.length < 2) {
     return blueprint.preferredSourceKind === "official_api" ||
@@ -196,38 +195,6 @@ export function normalizeSourcePreference(
   return options.includes(value as ProviderSourcePreference)
     ? (value as ProviderSourcePreference)
     : (options[0] ?? "auto");
-}
-
-export function getSourceAttemptOrder(
-  providerId: ProviderId,
-  preference: ProviderSourcePreference,
-): ProviderSourceKind[] {
-  const blueprint = getProviderSourceBlueprint(providerId);
-  const shippedKinds = getSelectableSourceKinds(providerId);
-
-  if (shippedKinds.length === 0) {
-    return [];
-  }
-
-  if (preference === "auto") {
-    return [
-      blueprint.preferredSourceKind,
-      ...blueprint.fallbackOrder,
-      ...shippedKinds,
-    ].filter(
-      (kind, index, values): kind is ProviderSourceKind =>
-        kind !== "policy_only" &&
-        shippedKinds.includes(kind) &&
-        values.indexOf(kind) === index,
-    );
-  }
-
-  return [preference, ...blueprint.fallbackOrder, ...shippedKinds].filter(
-    (kind, index, values): kind is ProviderSourceKind =>
-      kind !== "policy_only" &&
-      shippedKinds.includes(kind) &&
-      values.indexOf(kind) === index,
-  );
 }
 
 export function inferCurrentSourceKind(

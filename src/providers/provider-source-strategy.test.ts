@@ -2,9 +2,9 @@ import { describe, expect, it, vi } from "vitest";
 
 import { createEmptyPageBinding } from "../shared/page-bindings";
 import {
-  createPersonalSourceStrategyRunner,
-  type PersonalSourceAttempt,
-} from "./personal-source-strategy";
+  createProviderSourceStrategyRunner,
+  type ProviderSourceAttempt,
+} from "./provider-source-strategy";
 import type { ProviderSetting, ProviderSnapshot } from "./types";
 
 const snapshot: ProviderSnapshot = {
@@ -46,20 +46,32 @@ const setting: ProviderSetting = {
 };
 
 function failedAttempt(
-  code: "host_access_missing" | "open_page_required" | "sync_error",
-): PersonalSourceAttempt {
+  code:
+    | "host_access_missing"
+    | "credential_missing"
+    | "open_page_required"
+    | "sync_error",
+  kind: "session_page" | "official_api" = "session_page",
+): ProviderSourceAttempt {
   return {
     ok: false,
-    failure: { kind: "session_page", code, detail: `Failure: ${code}` },
+    failure: { kind, code, detail: `Failure: ${code}` },
     snapshot,
     setting,
   };
 }
 
-describe("personal provider source strategy bridge", () => {
+function strategy(
+  runAttempt: (signal: AbortSignal) => Promise<ProviderSourceAttempt>,
+  kind: "page_capture" | "official_api" = "page_capture",
+) {
+  return [{ id: "provider_source", kind, runAttempt }] as const;
+}
+
+describe("provider source strategy bridge", () => {
   it("returns normalized successful attempts", async () => {
-    const runner = createPersonalSourceStrategyRunner();
-    const attempt: PersonalSourceAttempt = {
+    const runner = createProviderSourceStrategyRunner();
+    const attempt: ProviderSourceAttempt = {
       ok: true,
       kind: "session_page",
       snapshot,
@@ -70,8 +82,7 @@ describe("personal provider source strategy bridge", () => {
       runner.run({
         sourceEntryId: "codex-personal-page",
         trigger: "manual",
-        strategyId: "codex_personal",
-        runAttempt: async () => attempt,
+        strategies: strategy(async () => attempt),
       }),
     ).resolves.toMatchObject({
       status: "success",
@@ -83,15 +94,14 @@ describe("personal provider source strategy bridge", () => {
   it("preserves typed failed attempts across an automatic cooldown", async () => {
     let currentTime = 1_000;
     const runAttempt = vi.fn(async () => failedAttempt("sync_error"));
-    const runner = createPersonalSourceStrategyRunner({
+    const runner = createProviderSourceStrategyRunner({
       now: () => currentTime,
       retryBackoffMs: [100],
     });
     const options = {
       sourceEntryId: "codex-personal-page" as const,
       trigger: "alarm" as const,
-      strategyId: "codex_personal",
-      runAttempt,
+      strategies: strategy(runAttempt),
     };
 
     const first = await runner.run(options);
@@ -114,7 +124,7 @@ describe("personal provider source strategy bridge", () => {
   it("lets manual refresh bypass cooldown without creating another runner", async () => {
     let currentTime = 2_000;
     const runAttempt = vi.fn(async () => failedAttempt("sync_error"));
-    const runner = createPersonalSourceStrategyRunner({
+    const runner = createProviderSourceStrategyRunner({
       now: () => currentTime,
       retryBackoffMs: [100],
     });
@@ -122,15 +132,13 @@ describe("personal provider source strategy bridge", () => {
     await runner.run({
       sourceEntryId: "cursor-personal-page",
       trigger: "alarm",
-      strategyId: "cursor_personal",
-      runAttempt,
+      strategies: strategy(runAttempt),
     });
     currentTime = 2_010;
     const manual = await runner.run({
       sourceEntryId: "cursor-personal-page",
       trigger: "manual",
-      strategyId: "cursor_personal",
-      runAttempt,
+      strategies: strategy(runAttempt),
     });
 
     expect(manual.status).toBe("unavailable");
@@ -139,16 +147,55 @@ describe("personal provider source strategy bridge", () => {
 
   it("treats host access as terminal for the current run without sticky cooldown", async () => {
     const runAttempt = vi.fn(async () => failedAttempt("host_access_missing"));
-    const runner = createPersonalSourceStrategyRunner();
+    const runner = createProviderSourceStrategyRunner();
     const options = {
       sourceEntryId: "claude-code-team-page" as const,
       trigger: "alarm" as const,
-      strategyId: "claude_personal",
-      runAttempt,
+      strategies: strategy(runAttempt),
     };
 
     expect((await runner.run(options)).status).toBe("terminal_failure");
     expect((await runner.run(options)).status).toBe("terminal_failure");
     expect(runAttempt).toHaveBeenCalledTimes(2);
+  });
+
+  it("keeps a missing API credential unavailable without retry cooldown", async () => {
+    const runAttempt = vi.fn(async () =>
+      failedAttempt("credential_missing", "official_api"),
+    );
+    const runner = createProviderSourceStrategyRunner();
+    const options = {
+      sourceEntryId: "codex-enterprise-api" as const,
+      trigger: "alarm" as const,
+      strategies: strategy(runAttempt, "official_api"),
+    };
+
+    expect((await runner.run(options)).status).toBe("unavailable");
+    expect((await runner.run(options)).status).toBe("unavailable");
+    expect(runAttempt).toHaveBeenCalledTimes(2);
+  });
+
+  it("classifies an orchestrator API timeout as an official API failure", async () => {
+    vi.useFakeTimers();
+    const runner = createProviderSourceStrategyRunner();
+    const pending = runner.run({
+      sourceEntryId: "codex-enterprise-api",
+      trigger: "alarm",
+      strategies: [
+        {
+          id: "codex_enterprise_api",
+          kind: "official_api",
+          timeoutMs: 5,
+          runAttempt: () => new Promise(() => {}),
+        },
+      ],
+    });
+
+    await vi.advanceTimersByTimeAsync(5);
+    await expect(pending).resolves.toMatchObject({
+      status: "retryable_failure",
+      failure: { kind: "official_api", code: "sync_error" },
+    });
+    vi.useRealTimers();
   });
 });

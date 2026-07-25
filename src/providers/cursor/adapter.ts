@@ -13,15 +13,11 @@ import {
   formatCalendarDate,
   formatSyncTimestamp,
 } from "../normalize";
-import {
-  getSourceAttemptOrder,
-  normalizeSourcePreference,
-} from "../../shared/provider-sources";
+import { normalizeSourcePreference } from "../../shared/provider-sources";
 import {
   buildNoSourceAvailableReason,
   buildSourceFallbackReason,
   buildSourceSelectionReason,
-  shouldAttemptFallback,
   type SourceAttemptFailure,
 } from "../../shared/source-selection";
 import {
@@ -37,7 +33,10 @@ import { createCursorOfficialClient } from "./official";
 import { createCursorPersonalPageClient } from "./personal-page-client";
 import { hasPageBindingFingerprint } from "../../shared/page-bindings";
 import { hasLivePageSessionApis } from "../page-session";
-import { personalSourceStrategyRunner } from "../personal-source-strategy";
+import {
+  providerSourceStrategyRunner,
+  type ProviderSourceAttempt,
+} from "../provider-source-strategy";
 import type { CursorPersonalUsageSnapshot } from "./personal-page-parser";
 import {
   buildCursorUsageBillingFromContract,
@@ -53,19 +52,7 @@ type CursorAdapterContext = {
   trigger?: SyncTrigger;
 };
 
-type CursorSourceAttemptResult =
-  | {
-      ok: true;
-      kind: ProviderSourceKind;
-      snapshot: ProviderSnapshot;
-      setting?: ProviderSetting;
-    }
-  | {
-      ok: false;
-      failure: SourceAttemptFailure;
-      snapshot: ProviderSnapshot;
-      setting?: ProviderSetting;
-    };
+type CursorSourceAttemptResult = ProviderSourceAttempt;
 
 function buildCursorRefreshLabel(): string {
   return "Cursor Admin API synced just now";
@@ -271,6 +258,7 @@ async function tryCursorOfficialSource({
   setting,
   warningThresholdPercent,
   now,
+  signal,
 }: {
   provider: ProviderSnapshot;
   secrets: ProviderSecrets;
@@ -278,6 +266,7 @@ async function tryCursorOfficialSource({
   setting: ProviderSetting;
   warningThresholdPercent: number;
   now: Date;
+  signal: AbortSignal;
 }): Promise<CursorSourceAttemptResult> {
   if (setting.status === "missing") {
     const warningReason =
@@ -345,6 +334,7 @@ async function tryCursorOfficialSource({
     const client = createCursorOfficialClient({
       source: "live",
       apiKey: secrets["cursor-team-api"].adminApiKey!,
+      signal,
     });
     const [members, spend] = await Promise.all([
       client.getTeamMembers(),
@@ -669,127 +659,84 @@ export async function syncCursorProvider({
     setting.sourcePreference,
   );
 
-  if (provider.providerId === "cursor-personal-page") {
-    const strategyResult = await personalSourceStrategyRunner.run({
-      sourceEntryId: provider.providerId,
-      trigger,
-      strategyId: "cursor_personal_session",
-      runAttempt: () =>
-        tryCursorPersonalSource({
-          provider,
-          syncedAt,
-          setting,
-          trigger,
-        }),
-    });
-    const attempt = strategyResult.attempt;
+  const isPersonalSource = provider.providerId === "cursor-personal-page";
+  const strategyResult = await providerSourceStrategyRunner.run({
+    sourceEntryId: provider.providerId,
+    trigger,
+    strategies: isPersonalSource
+      ? [
+          {
+            id: "cursor_personal_session",
+            kind: "page_capture",
+            runAttempt: () =>
+              tryCursorPersonalSource({
+                provider,
+                syncedAt,
+                setting,
+                trigger,
+              }),
+          },
+        ]
+      : [
+          {
+            id: "cursor_team_api",
+            kind: "official_api",
+            runAttempt: (signal) =>
+              tryCursorOfficialSource({
+                provider,
+                secrets,
+                syncedAt,
+                setting,
+                warningThresholdPercent,
+                now,
+                signal,
+              }),
+          },
+        ],
+  });
+  const attempt = strategyResult.attempt;
 
-    if (attempt?.ok) {
-      return {
-        snapshot: finalizeCursorSnapshot(
-          attempt.snapshot,
-          sourcePreference,
-          attempt.kind,
-          null,
-        ),
-        ...(attempt.setting ? { setting: attempt.setting } : {}),
-      };
-    }
-
-    const failures = strategyResult.failure ? [strategyResult.failure] : [];
-    const failureSnapshot =
-      attempt && !attempt.ok
-        ? attempt.snapshot
-        : {
-            ...provider,
-            syncedAt,
-            syncSource: "page_parse" as const,
-            syncStatus: "warning" as const,
-            tone: "warning" as const,
-            warningReason:
-              strategyResult.failure?.detail ??
-              "Cursor personal source orchestration did not complete.",
-            lastSyncLabel: "Cursor personal sync did not complete",
-            resetLabel: "Retry the bounded Cursor personal source refresh",
-          };
-
+  if (attempt?.ok) {
     return {
-      snapshot: finalizeCursorNoSourceSnapshot(
-        failureSnapshot,
+      snapshot: finalizeCursorSnapshot(
+        attempt.snapshot,
         sourcePreference,
-        failures,
+        attempt.kind,
+        null,
       ),
-      ...(attempt && !attempt.ok && attempt.setting
-        ? { setting: attempt.setting }
-        : {}),
+      ...(attempt.setting ? { setting: attempt.setting } : {}),
     };
   }
 
-  const attemptOrder = getSourceAttemptOrder(provider.providerId, sourcePreference);
-  const failures: SourceAttemptFailure[] = [];
-  let firstFailedSnapshot: ProviderSnapshot | null = null;
-
-  for (const sourceKind of attemptOrder) {
-    const attempt =
-      sourceKind === "official_api"
-        ? await tryCursorOfficialSource({
-            provider,
-            secrets,
-            syncedAt,
-            setting,
-            warningThresholdPercent,
-            now,
-          })
-        : await tryCursorPersonalSource({
-            provider,
-            syncedAt,
-            setting,
-            trigger,
-          });
-
-    if (attempt.ok) {
-      return {
-        snapshot: finalizeCursorSnapshot(
-          attempt.snapshot,
-          sourcePreference,
-          attempt.kind,
-          failures[0] ?? null,
-        ),
-        ...(attempt.setting ? { setting: attempt.setting } : {}),
-      };
-    }
-
-    failures.push(attempt.failure);
-    firstFailedSnapshot ??= attempt.snapshot;
-
-    if (!shouldAttemptFallback(attempt.failure)) {
-      return {
-        snapshot: finalizeCursorNoSourceSnapshot(
-          attempt.snapshot,
-          sourcePreference,
-          failures,
-        ),
-        ...(attempt.setting ? { setting: attempt.setting } : {}),
-      };
-    }
-  }
+  const failures = strategyResult.failure ? [strategyResult.failure] : [];
+  const failureSnapshot =
+    attempt && !attempt.ok
+      ? attempt.snapshot
+      : {
+          ...provider,
+          syncedAt,
+          syncSource: isPersonalSource
+            ? ("page_parse" as const)
+            : ("official" as const),
+          syncStatus: "warning" as const,
+          tone: "warning" as const,
+          warningReason:
+            strategyResult.failure?.detail ??
+            "Cursor source orchestration did not complete.",
+          warningDiagnostic: null,
+          lastSyncLabel: "Cursor source sync did not complete",
+          resetLabel: "Retry the bounded Cursor source refresh",
+        };
 
   return {
     snapshot: finalizeCursorNoSourceSnapshot(
-      firstFailedSnapshot ?? {
-        ...provider,
-        syncedAt,
-        syncSource: "page_parse",
-        syncStatus: "error",
-        tone: "error",
-        warningReason: "Cursor source selection could not resolve a live path.",
-        warningDiagnostic: null,
-        lastSyncLabel: "Cursor source selection failed just now",
-        resetLabel: "Check Cursor source preferences and live prerequisites",
-      },
+      failureSnapshot,
       sourcePreference,
       failures,
     ),
+    ...(attempt && !attempt.ok && attempt.setting
+      ? { setting: attempt.setting }
+      : {}),
   };
 }
 

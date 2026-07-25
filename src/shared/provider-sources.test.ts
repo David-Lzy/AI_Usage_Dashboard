@@ -20,7 +20,7 @@ import {
   buildProviderSourceDisplay,
   doesUrlMatchRouteHint,
   doesUrlMatchRouteHints,
-  getSourceAttemptOrder,
+  getProviderSourceKinds,
   getOpenableRouteHint,
   getSourcePreferenceOptions,
   getSessionPagePlan,
@@ -483,15 +483,13 @@ describe("provider source helpers", () => {
     expect(getSourcePreferenceOptions("gemini-policy")).toEqual(["auto"]);
   });
 
-  it("builds deterministic source attempt order from the selected preference", () => {
-    expect(getSourceAttemptOrder("cursor-personal-page", "auto")).toEqual([
+  it("reports the fixed source kind owned by each source entry", () => {
+    expect(getProviderSourceKinds("cursor-personal-page")).toEqual([
       "session_page",
     ]);
-    expect(getSourceAttemptOrder("cursor-personal-page", "session_page")).toEqual([
-      "session_page",
-    ]);
-    expect(getSourceAttemptOrder("codex-enterprise-api", "official_api")).toEqual([
+    expect(getProviderSourceKinds("codex-enterprise-api")).toEqual([
       "official_api",
     ]);
+    expect(getProviderSourceKinds("gemini-policy")).toEqual(["policy_only"]);
   });
 });

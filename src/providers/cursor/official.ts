@@ -76,6 +76,7 @@ type CursorOfficialClientOptions = {
   apiKey?: string;
   baseUrl?: string;
   fetchImpl?: typeof fetch;
+  signal?: AbortSignal;
   source?: "fixture" | "live";
 };
 
@@ -91,11 +92,12 @@ async function requestCursorJson<T>(
   route: string,
   init: RequestInit,
   options: Required<Pick<CursorOfficialClientOptions, "apiKey" | "baseUrl">> &
-    Pick<CursorOfficialClientOptions, "fetchImpl">,
+    Pick<CursorOfficialClientOptions, "fetchImpl" | "signal">,
 ): Promise<T> {
   const fetchImpl = options.fetchImpl ?? fetch;
   const response = await fetchImpl(`${options.baseUrl}${route}`, {
     ...init,
+    signal: options.signal,
     headers: {
       Authorization: encodeBasicAuth(options.apiKey),
       "Content-Type": "application/json",
@@ -135,6 +137,7 @@ export function createCursorOfficialClient(
           apiKey: options.apiKey,
           baseUrl,
           fetchImpl: options.fetchImpl,
+          signal: options.signal,
         },
       );
     },
@@ -158,6 +161,7 @@ export function createCursorOfficialClient(
           apiKey: options.apiKey,
           baseUrl,
           fetchImpl: options.fetchImpl,
+          signal: options.signal,
         },
       );
     },
@@ -181,6 +185,7 @@ export function createCursorOfficialClient(
           apiKey: options.apiKey,
           baseUrl,
           fetchImpl: options.fetchImpl,
+          signal: options.signal,
         },
       );
     },

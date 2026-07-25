@@ -63,6 +63,7 @@ type ClaudeCodeAnalyticsClientOptions = {
   apiKey?: string;
   baseUrl?: string;
   fetchImpl?: typeof fetch;
+  signal?: AbortSignal;
 };
 
 type GetUsageReportInput = {
@@ -80,7 +81,7 @@ export type ClaudeCodeAnalyticsClient = {
 async function requestClaudeCodeAnalyticsPage(
   input: GetUsageReportInput,
   options: Required<Pick<ClaudeCodeAnalyticsClientOptions, "apiKey" | "baseUrl">> &
-    Pick<ClaudeCodeAnalyticsClientOptions, "fetchImpl">,
+    Pick<ClaudeCodeAnalyticsClientOptions, "fetchImpl" | "signal">,
 ): Promise<ClaudeCodeAnalyticsResponse> {
   const fetchImpl = options.fetchImpl ?? fetch;
   const params = new URLSearchParams({
@@ -102,6 +103,7 @@ async function requestClaudeCodeAnalyticsPage(
         "anthropic-version": "2023-06-01",
         "x-api-key": options.apiKey,
       },
+      signal: options.signal,
     },
   );
 
@@ -142,6 +144,7 @@ export function createClaudeCodeAnalyticsClient(
             apiKey: options.apiKey,
             baseUrl,
             fetchImpl: options.fetchImpl,
+            signal: options.signal,
           },
         );
 

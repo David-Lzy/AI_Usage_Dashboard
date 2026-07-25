@@ -28,6 +28,10 @@ export type ProviderCapabilitySet = Readonly<
 
 export type ProviderRuntimeDescriptor = Readonly<{
   syncAdapterOwner: ProviderBrandId;
+  executionMode:
+    | "shared_strategy"
+    | "no_network_policy"
+    | "no_network_deferred";
   capabilities: ProviderCapabilitySet;
 }>;
 
@@ -62,6 +66,7 @@ export const PROVIDER_DEFINITIONS: readonly ProviderDescriptor[] = [
     quickSetupDefaultVisible: true,
     runtime: {
       syncAdapterOwner: "cursor",
+      executionMode: "shared_strategy",
       capabilities: {
         quotaWindows: true,
         balances: true,
@@ -85,6 +90,7 @@ export const PROVIDER_DEFINITIONS: readonly ProviderDescriptor[] = [
     quickSetupDefaultVisible: false,
     runtime: {
       syncAdapterOwner: "cursor",
+      executionMode: "shared_strategy",
       capabilities: {
         quotaWindows: false,
         balances: false,
@@ -108,6 +114,7 @@ export const PROVIDER_DEFINITIONS: readonly ProviderDescriptor[] = [
     quickSetupDefaultVisible: true,
     runtime: {
       syncAdapterOwner: "claude-code",
+      executionMode: "shared_strategy",
       capabilities: {
         quotaWindows: true,
         balances: false,
@@ -131,6 +138,7 @@ export const PROVIDER_DEFINITIONS: readonly ProviderDescriptor[] = [
     quickSetupDefaultVisible: false,
     runtime: {
       syncAdapterOwner: "claude-code",
+      executionMode: "shared_strategy",
       capabilities: {
         quotaWindows: false,
         balances: false,
@@ -154,6 +162,7 @@ export const PROVIDER_DEFINITIONS: readonly ProviderDescriptor[] = [
     quickSetupDefaultVisible: true,
     runtime: {
       syncAdapterOwner: "codex",
+      executionMode: "shared_strategy",
       capabilities: {
         quotaWindows: true,
         balances: true,
@@ -177,6 +186,7 @@ export const PROVIDER_DEFINITIONS: readonly ProviderDescriptor[] = [
     quickSetupDefaultVisible: false,
     runtime: {
       syncAdapterOwner: "codex",
+      executionMode: "shared_strategy",
       capabilities: {
         quotaWindows: false,
         balances: false,
@@ -200,6 +210,7 @@ export const PROVIDER_DEFINITIONS: readonly ProviderDescriptor[] = [
     quickSetupDefaultVisible: true,
     runtime: {
       syncAdapterOwner: "gemini",
+      executionMode: "no_network_policy",
       capabilities: {
         quotaWindows: false,
         balances: false,
@@ -223,8 +234,9 @@ export const PROVIDER_DEFINITIONS: readonly ProviderDescriptor[] = [
     quickSetupDefaultVisible: false,
     runtime: {
       syncAdapterOwner: "jetbrains",
+      executionMode: "no_network_deferred",
       capabilities: {
-        quotaWindows: true,
+        quotaWindows: false,
         balances: false,
         aggregateHistory: false,
         spending: false,

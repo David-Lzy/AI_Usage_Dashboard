@@ -329,6 +329,7 @@ describe("syncCursorProvider", () => {
     expect(createCursorOfficialClientMock).toHaveBeenCalledWith({
       source: "live",
       apiKey: "cursor-live-key",
+      signal: expect.any(AbortSignal),
     });
     expect(getDailyUsageData).toHaveBeenCalledWith({
       startDate: cycleStart,

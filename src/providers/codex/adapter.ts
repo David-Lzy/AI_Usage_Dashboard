@@ -9,15 +9,11 @@ import type {
   ProviderUsageWindow,
 } from "../types";
 import { formatSyncTimestamp } from "../normalize";
-import {
-  getSourceAttemptOrder,
-  normalizeSourcePreference,
-} from "../../shared/provider-sources";
+import { normalizeSourcePreference } from "../../shared/provider-sources";
 import {
   buildNoSourceAvailableReason,
   buildSourceFallbackReason,
   buildSourceSelectionReason,
-  shouldAttemptFallback,
   type SourceAttemptFailure,
 } from "../../shared/source-selection";
 import {
@@ -41,7 +37,10 @@ import {
   mergeProviderUsageHistoryModules,
 } from "../../shared/provider-usage-history";
 import { hasLivePageSessionApis } from "../page-session";
-import { personalSourceStrategyRunner } from "../personal-source-strategy";
+import {
+  providerSourceStrategyRunner,
+  type ProviderSourceAttempt,
+} from "../provider-source-strategy";
 import type {
   CodexPersonalUsageBalance,
   CodexPersonalUsageWindow,
@@ -56,19 +55,7 @@ type CodexAdapterContext = {
   trigger?: SyncTrigger;
 };
 
-type CodexSourceAttemptResult =
-  | {
-      ok: true;
-      kind: ProviderSourceKind;
-      snapshot: ProviderSnapshot;
-      setting?: ProviderSetting;
-    }
-  | {
-      ok: false;
-      failure: SourceAttemptFailure;
-      snapshot: ProviderSnapshot;
-      setting?: ProviderSetting;
-    };
+type CodexSourceAttemptResult = ProviderSourceAttempt;
 
 function buildCodexRefreshLabel(): string {
   return "Codex Analytics API synced just now";
@@ -462,11 +449,13 @@ async function tryCodexOfficialSource({
   secrets,
   syncedAt,
   setting,
+  signal,
 }: {
   provider: ProviderSnapshot;
   secrets: ProviderSecrets;
   syncedAt: string;
   setting: ProviderSetting;
+  signal: AbortSignal;
 }): Promise<CodexSourceAttemptResult> {
   if (setting.status === "missing") {
     const warningReason =
@@ -543,6 +532,7 @@ async function tryCodexOfficialSource({
       source: "live",
       apiKey: secrets["codex-enterprise-api"].analyticsApiKey!,
       workspaceId: secrets["codex-enterprise-api"].workspaceId!,
+      signal,
     });
     const report = await client.getUsageReport({
       limit: 100,
@@ -952,129 +942,82 @@ export async function syncCodexProvider({
     setting.sourcePreference,
   );
 
-  if (provider.providerId === "codex-personal-page") {
-    const strategyResult = await personalSourceStrategyRunner.run({
-      sourceEntryId: provider.providerId,
-      trigger,
-      strategyId: "codex_personal_session",
-      runAttempt: () =>
-        tryCodexPersonalSource({
-          provider,
-          syncedAt,
-          setting,
-          warningThresholdPercent,
-          trigger,
-        }),
-    });
-    const attempt = strategyResult.attempt;
+  const isPersonalSource = provider.providerId === "codex-personal-page";
+  const strategyResult = await providerSourceStrategyRunner.run({
+    sourceEntryId: provider.providerId,
+    trigger,
+    strategies: isPersonalSource
+      ? [
+          {
+            id: "codex_personal_session",
+            kind: "page_capture",
+            runAttempt: () =>
+              tryCodexPersonalSource({
+                provider,
+                syncedAt,
+                setting,
+                warningThresholdPercent,
+                trigger,
+              }),
+          },
+        ]
+      : [
+          {
+            id: "codex_enterprise_api",
+            kind: "official_api",
+            runAttempt: (signal) =>
+              tryCodexOfficialSource({
+                provider,
+                secrets,
+                syncedAt,
+                setting,
+                signal,
+              }),
+          },
+        ],
+  });
+  const attempt = strategyResult.attempt;
 
-    if (attempt?.ok) {
-      return {
-        snapshot: finalizeCodexSnapshot(
-          attempt.snapshot,
-          sourcePreference,
-          attempt.kind,
-          null,
-        ),
-        ...(attempt.setting ? { setting: attempt.setting } : {}),
-      };
-    }
-
-    const failures = strategyResult.failure ? [strategyResult.failure] : [];
-    const failureSnapshot =
-      attempt && !attempt.ok
-        ? attempt.snapshot
-        : {
-            ...provider,
-            syncedAt,
-            syncSource: "page_parse" as const,
-            syncStatus: "warning" as const,
-            tone: "warning" as const,
-            warningReason:
-              strategyResult.failure?.detail ??
-              "Codex personal source orchestration did not complete.",
-            lastSyncLabel: "Codex personal sync did not complete",
-            resetLabel: "Retry the bounded Codex personal source refresh",
-          };
-
+  if (attempt?.ok) {
     return {
-      snapshot: finalizeCodexNoSourceSnapshot(
-        failureSnapshot,
+      snapshot: finalizeCodexSnapshot(
+        attempt.snapshot,
         sourcePreference,
-        failures,
+        attempt.kind,
+        null,
       ),
-      ...(attempt && !attempt.ok && attempt.setting
-        ? { setting: attempt.setting }
-        : {}),
+      ...(attempt.setting ? { setting: attempt.setting } : {}),
     };
   }
 
-  const attemptOrder = getSourceAttemptOrder(provider.providerId, sourcePreference);
-  const failures: SourceAttemptFailure[] = [];
-  let firstFailedSnapshot: ProviderSnapshot | null = null;
-
-  for (const sourceKind of attemptOrder) {
-    const attempt =
-      sourceKind === "official_api"
-        ? await tryCodexOfficialSource({
-            provider,
-            secrets,
-            syncedAt,
-            setting,
-          })
-        : await tryCodexPersonalSource({
-            provider,
-            syncedAt,
-            setting,
-            warningThresholdPercent,
-            trigger,
-          });
-
-    if (attempt.ok) {
-      return {
-        snapshot: finalizeCodexSnapshot(
-          attempt.snapshot,
-          sourcePreference,
-          attempt.kind,
-          failures[0] ?? null,
-        ),
-        ...(attempt.setting ? { setting: attempt.setting } : {}),
-      };
-    }
-
-    failures.push(attempt.failure);
-    firstFailedSnapshot ??= attempt.snapshot;
-
-    if (!shouldAttemptFallback(attempt.failure)) {
-      return {
-        snapshot: finalizeCodexNoSourceSnapshot(
-          attempt.snapshot,
-          sourcePreference,
-          failures,
-        ),
-        ...(attempt.setting ? { setting: attempt.setting } : {}),
-      };
-    }
-  }
+  const failures = strategyResult.failure ? [strategyResult.failure] : [];
+  const failureSnapshot =
+    attempt && !attempt.ok
+      ? attempt.snapshot
+      : {
+          ...provider,
+          syncedAt,
+          syncSource: isPersonalSource
+            ? ("page_parse" as const)
+            : ("official" as const),
+          syncStatus: "warning" as const,
+          tone: "warning" as const,
+          warningReason:
+            strategyResult.failure?.detail ??
+            "Codex source orchestration did not complete.",
+          warningDiagnostic: null,
+          lastSyncLabel: "Codex source sync did not complete",
+          resetLabel: "Retry the bounded Codex source refresh",
+        };
 
   return {
     snapshot: finalizeCodexNoSourceSnapshot(
-      firstFailedSnapshot ?? {
-        ...provider,
-        syncedAt,
-        syncSource: "page_parse",
-        syncStatus: "error",
-        tone: "error",
-        warningReason: "Codex source selection could not resolve a live path.",
-        warningDiagnostic: null,
-        usageWindows: undefined,
-        usageBalances: undefined,
-        usageSummary: null,
-        lastSyncLabel: "Codex source selection failed just now",
-        resetLabel: "Check Codex source preferences and live prerequisites",
-      },
+      failureSnapshot,
       sourcePreference,
       failures,
     ),
+    ...(attempt && !attempt.ok && attempt.setting
+      ? { setting: attempt.setting }
+      : {}),
   };
 }

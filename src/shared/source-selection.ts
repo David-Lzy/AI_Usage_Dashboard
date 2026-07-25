@@ -4,7 +4,7 @@ import type {
   ProviderSourcePreference,
 } from "../providers/types";
 import {
-  getSourceAttemptOrder,
+  getProviderSourceKinds,
   getSourceKindLabel,
   getSourcePreferenceLabel,
 } from "./provider-sources";
@@ -29,9 +29,9 @@ export function buildSourceSelectionReason(
   hadFallback: boolean,
 ): string {
   const selectedLabel = getSourceKindLabel(selectedKind);
-  const orderedKinds = getSourceAttemptOrder(providerId, preference);
+  const sourceKinds = getProviderSourceKinds(providerId);
 
-  if (orderedKinds.length <= 1) {
+  if (sourceKinds.length <= 1) {
     return `${selectedLabel} is the only shipped source for ${providerId}.`;
   }
 

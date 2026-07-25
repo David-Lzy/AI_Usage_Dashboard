@@ -31,6 +31,7 @@ type CodexAnalyticsClientOptions = {
   workspaceId?: string;
   baseUrl?: string;
   fetchImpl?: typeof fetch;
+  signal?: AbortSignal;
 };
 
 type GetCodexAnalyticsInput = {
@@ -53,7 +54,7 @@ async function requestCodexAnalyticsPage(
   options: Required<
     Pick<CodexAnalyticsClientOptions, "apiKey" | "workspaceId" | "baseUrl">
   > &
-    Pick<CodexAnalyticsClientOptions, "fetchImpl">,
+    Pick<CodexAnalyticsClientOptions, "fetchImpl" | "signal">,
 ): Promise<CodexAnalyticsResponse> {
   const fetchImpl = options.fetchImpl ?? fetch;
   const params = new URLSearchParams();
@@ -73,6 +74,7 @@ async function requestCodexAnalyticsPage(
       headers: {
         Authorization: `Bearer ${options.apiKey}`,
       },
+      signal: options.signal,
     },
   );
 
@@ -132,6 +134,7 @@ export function createCodexAnalyticsClient(
             workspaceId: options.workspaceId,
             baseUrl,
             fetchImpl: options.fetchImpl,
+            signal: options.signal,
           },
         );
 

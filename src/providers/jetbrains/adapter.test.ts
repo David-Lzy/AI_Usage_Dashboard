@@ -1,211 +1,100 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 
-import type { ProviderSetting, ProviderSnapshot } from "../types";
 import { createEmptyPageBinding } from "../../shared/page-bindings";
-
-const { createJetBrainsConsoleClientMock } = vi.hoisted(() => ({
-  createJetBrainsConsoleClientMock: vi.fn(),
-}));
-
-vi.mock("./official", () => ({
-  createJetBrainsConsoleClient: createJetBrainsConsoleClientMock,
-}));
-
+import type { ProviderSetting, ProviderSnapshot } from "../types";
 import { syncJetBrainsProvider } from "./adapter";
 
 const baseProvider: ProviderSnapshot = {
   providerId: "jetbrains-org-page",
   providerLabel: "JetBrains AI",
-  planName: "Unknown",
+  planName: "Previously captured",
   quotaUnit: "credits",
   quotaWindow: "monthly",
-  used: null,
-  remaining: null,
-  total: null,
-  resetAt: "Unknown",
-  resetLabel: "Unknown",
-  syncedAt: "Unknown",
+  used: 72,
+  remaining: 38,
+  total: 110,
+  resetAt: "Renews every 30 days",
+  resetLabel: "Previously captured reset",
+  syncedAt: "Earlier",
   syncSource: "page_parse",
   syncStatus: "ok",
   warningReason: null,
-  lastSyncLabel: "Never synced",
-  sourceSelectionReason: "",
+  lastSyncLabel: "Previously synced",
+  sourceSelectionReason: "Previous source",
   sourceFallbackReason: null,
   tone: "neutral",
 };
 
-const grantedSetting: ProviderSetting = {
+const setting: ProviderSetting = {
   id: "jetbrains-org-page",
   brandId: "jetbrains",
   label: "JetBrains AI",
-  displayEnabled: true,
-  enabled: true,
-  status: "granted",
+  displayEnabled: false,
+  enabled: false,
+  status: "missing",
   credentialStatus: "not_required",
   sourceKind: "session_page",
   connectionMode: "page_session",
-  sourcePreference: "auto",
+  sourcePreference: "session_page",
   pageBinding: createEmptyPageBinding(),
   hostsLabel: "account.jetbrains.com · jetbrains.com",
   hostOrigins: ["https://account.jetbrains.com/*", "https://*.jetbrains.com/*"],
-  description: "Needed for current AI Credits usage pages.",
+  description: "Deferred organization source.",
 };
 
 describe("syncJetBrainsProvider", () => {
-  beforeEach(() => {
-    createJetBrainsConsoleClientMock.mockReset();
-  });
-
-  it("normalizes the live Users and licensing page into a provider snapshot", async () => {
-    const attemptedAt = new Date(2026, 3, 20, 11, 34);
-    createJetBrainsConsoleClientMock.mockReturnValue({
-      getUsersAndLicensingPage: vi.fn(async () => ({
-        status: "ok",
-        pageBinding: createEmptyPageBinding(),
-        page: {
-          html: `
-            <main data-page="users-and-licensing">
-              <h1>Users and licensing</h1>
-              <section aria-label="Users licensed for AI">
-                <p data-field="licensed-users-count">12</p>
-                <span data-field="users-almost-out-of-ai-credits-count">2</span>
-              </section>
-              <section aria-label="Top-up AI Credits available">
-                <p data-field="top-up-ai-credits-available">145</p>
-              </section>
-              <table>
-                <tbody>
-                  <tr data-user-row="1">
-                    <td data-field="name">Alex</td>
-                    <td data-field="email">alex@company.com</td>
-                    <td data-field="licenses-and-quotas">
-                      <ul>
-                        <li data-license-name="AI Pro"><span data-field="used">8</span><span data-field="included">20</span></li>
-                        <li data-license-name="All Products Pack"><span data-field="used">4</span><span data-field="included">20</span></li>
-                      </ul>
-                    </td>
-                    <td data-field="balance-used-percent">54%</td>
-                    <td data-field="top-up-usage">2</td>
-                    <td data-field="top-up-limit">10</td>
-                  </tr>
-                  <tr data-user-row="2">
-                    <td data-field="name">Morgan</td>
-                    <td data-field="email">morgan@company.com</td>
-                    <td data-field="licenses-and-quotas">
-                      <ul>
-                        <li data-license-name="AI Ultimate"><span data-field="used">60</span><span data-field="included">70</span></li>
-                      </ul>
-                    </td>
-                    <td data-field="balance-used-percent">86%</td>
-                    <td data-field="top-up-usage">0</td>
-                    <td data-field="top-up-limit">15</td>
-                  </tr>
-                </tbody>
-              </table>
-            </main>
-          `,
-        },
-      })),
-    });
-
+  it("returns an explicit no-network deferred snapshot", async () => {
     const { snapshot } = await syncJetBrainsProvider({
       provider: baseProvider,
-      setting: grantedSetting,
+      setting,
       warningThresholdPercent: 80,
-      now: attemptedAt,
+      now: new Date(2026, 3, 20, 11, 34),
     });
 
-    expect(snapshot.providerLabel).toBe("JetBrains AI");
-    expect(snapshot.planName).toBe("JetBrains Console (12 licensed)");
-    expect(snapshot.used).toBe(72);
-    expect(snapshot.total).toBe(110);
-    expect(snapshot.remaining).toBe(38);
-    expect(snapshot.resetAt).toBe("Renews every 30 days");
-    expect(snapshot.syncSource).toBe("page_parse");
-    expect(snapshot.syncStatus).toBe("warning");
-    expect(snapshot.tone).toBe("warning");
-    expect(snapshot.warningReason).toBe(
-      "2 users are almost out of monthly AI Credits",
-    );
-    expect(snapshot.lastSyncLabel).toBe("JetBrains Console synced just now");
-    expect(snapshot.syncedAt).toBe("2026-04-20 11:34");
-    expect(createJetBrainsConsoleClientMock).toHaveBeenCalledWith({
-      source: "live",
+    expect(snapshot).toMatchObject({
+      providerId: "jetbrains-org-page",
+      planName: "Deferred organization source",
+      used: null,
+      remaining: null,
+      total: null,
+      syncStatus: "warning",
+      tone: "warning",
+      warningDiagnostic: null,
+      sourceFallbackReason: null,
+      lastSyncLabel: "JetBrains integration remains deferred",
+      syncedAt: "2026-04-20 11:34",
     });
+    expect(snapshot.warningReason).toContain("remains deferred");
+    expect(snapshot.resetLabel).toContain("No live quota");
   });
 
-  it("returns a readable error snapshot when JetBrains access is missing", async () => {
-    const attemptedAt = new Date(2026, 3, 20, 11, 34);
+  it("does not preserve obsolete live quota fields while deferred", async () => {
     const { snapshot } = await syncJetBrainsProvider({
-      provider: baseProvider,
-      setting: {
-        ...grantedSetting,
-        status: "missing",
+      provider: {
+        ...baseProvider,
+        usageWindows: [
+          {
+            label: "Legacy window",
+            normalizedLabel: "Legacy window",
+            kind: "unknown",
+            modelLabel: null,
+            quotaUnit: "percent",
+            used: 65,
+            remaining: 35,
+            total: 100,
+            resetAt: null,
+            resetLabel: null,
+          },
+        ],
+        usageSummary: "Legacy live summary",
       },
+      setting: { ...setting, status: "granted", enabled: true },
       warningThresholdPercent: 80,
-      now: attemptedAt,
+      now: new Date(2026, 3, 20, 11, 34),
     });
 
-    expect(snapshot.syncStatus).toBe("error");
-    expect(snapshot.tone).toBe("error");
-    expect(snapshot.warningReason).toContain(
-      "JetBrains Central Console access is not configured",
-    );
-    expect(snapshot.lastSyncLabel).toBe("JetBrains Console access required");
-  });
-
-  it("surfaces live-capture errors without silently falling back to fixture numbers", async () => {
-    const attemptedAt = new Date(2026, 3, 20, 11, 34);
-    createJetBrainsConsoleClientMock.mockReturnValue({
-      getUsersAndLicensingPage: vi.fn(async () => ({
-        status: "open_page_required",
-        reason:
-          "Open the JetBrains Console Users and licensing page in a browser tab, then refresh again.",
-        pageBinding: createEmptyPageBinding(),
-      })),
-    });
-
-    const { snapshot } = await syncJetBrainsProvider({
-      provider: baseProvider,
-      setting: grantedSetting,
-      warningThresholdPercent: 80,
-      now: attemptedAt,
-    });
-
-    expect(snapshot.syncStatus).toBe("warning");
-    expect(snapshot.tone).toBe("warning");
-    expect(snapshot.warningReason).toContain(
-      "Open the JetBrains Console Users and licensing page",
-    );
-    expect(snapshot.lastSyncLabel).toBe("JetBrains Console page not open");
-  });
-
-  it("surfaces unsupported org-account access as an error instead of pretending the page is merely closed", async () => {
-    const attemptedAt = new Date(2026, 3, 20, 11, 34);
-    createJetBrainsConsoleClientMock.mockReturnValue({
-      getUsersAndLicensingPage: vi.fn(async () => ({
-        status: "access_unavailable",
-        reason:
-          "The current JetBrains account does not expose a usable organization Users and licensing page. Switch to an organization account with AI visibility, then refresh again.",
-        pageBinding: createEmptyPageBinding(),
-      })),
-    });
-
-    const { snapshot } = await syncJetBrainsProvider({
-      provider: baseProvider,
-      setting: grantedSetting,
-      warningThresholdPercent: 80,
-      now: attemptedAt,
-    });
-
-    expect(snapshot.syncStatus).toBe("error");
-    expect(snapshot.tone).toBe("error");
-    expect(snapshot.warningReason).toContain(
-      "does not expose a usable organization Users and licensing page",
-    );
-    expect(snapshot.lastSyncLabel).toBe("JetBrains org access unavailable");
-    expect(snapshot.resetLabel).toBe(
-      "Use a JetBrains organization account with AI visibility",
-    );
+    expect(snapshot.usageWindows).toBeUndefined();
+    expect(snapshot.usageSummary).toBeNull();
+    expect(snapshot.used).toBeNull();
   });
 });

@@ -748,11 +748,23 @@ describe("storage normalization", () => {
   it("keeps known progress item preferences and appends newly discovered items", async () => {
     await writeAppState({
       ...SAMPLE_APP_STATE,
+      providers: SAMPLE_APP_STATE.providers.map((provider) =>
+        provider.providerId === "cursor-team-api"
+          ? {
+              ...provider,
+              quotaUnit: "credits" as const,
+              quotaWindow: "monthly" as const,
+              used: 16,
+              remaining: 4,
+              total: 20,
+            }
+          : provider,
+      ),
       settings: {
         ...SAMPLE_APP_STATE.settings,
         progressItemsBySurface: {
           popup: {
-            "jetbrains-org-page": [
+            "cursor-team-api": [
               { id: "primary", visible: false },
               { id: "unknown", visible: true },
             ],
@@ -765,7 +777,7 @@ describe("storage normalization", () => {
 
     const state = await readAppState();
 
-    expect(state?.settings.progressItemsBySurface.popup["jetbrains-org-page"]).toEqual([
+    expect(state?.settings.progressItemsBySurface.popup["cursor-team-api"]).toEqual([
       { id: "primary", visible: false },
     ]);
   });

@@ -63,6 +63,18 @@ describe("provider descriptors", () => {
     );
   });
 
+  it("makes each runtime execution mode explicit", () => {
+    for (const descriptor of PROVIDER_DESCRIPTORS) {
+      expect(descriptor.runtime.executionMode).toBe(
+        descriptor.audience === "policy"
+          ? "no_network_policy"
+          : descriptor.audience === "deferred"
+            ? "no_network_deferred"
+            : "shared_strategy",
+      );
+    }
+  });
+
   it("does not treat capability support as current snapshot availability", () => {
     const codex = SAMPLE_APP_STATE.providers.find(
       (provider) => provider.providerId === "codex-personal-page",

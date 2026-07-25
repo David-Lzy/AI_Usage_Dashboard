@@ -353,17 +353,29 @@ describe("ProviderCard", () => {
 
   it("honors hidden sidebar progress item preferences", () => {
     const state = createState({
+      providers: SAMPLE_APP_STATE.providers.map((provider) =>
+        provider.providerId === "cursor-team-api"
+          ? {
+              ...provider,
+              quotaUnit: "credits" as const,
+              quotaWindow: "monthly" as const,
+              used: 16,
+              remaining: 4,
+              total: 20,
+            }
+          : provider,
+      ),
       settings: {
         ...SAMPLE_APP_STATE.settings,
         progressItemsBySurface: {
           ...SAMPLE_APP_STATE.settings.progressItemsBySurface,
           sidebar: {
-            "jetbrains-org-page": [{ id: "primary", visible: false }],
+            "cursor-team-api": [{ id: "primary", visible: false }],
           },
         },
       },
     });
-    const html = renderProviderCard(state, "jetbrains-org-page");
+    const html = renderProviderCard(state, "cursor-team-api");
 
     expect(html).not.toContain('role="progressbar"');
     expect(html).toContain("16 / 20 credits");

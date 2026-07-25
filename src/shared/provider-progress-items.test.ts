@@ -63,16 +63,26 @@ function createCodexWindowState(): AppState {
 
 describe("provider progress items", () => {
   it("builds a primary quota item when no usage windows are present", () => {
-    const jetbrains = SAMPLE_APP_STATE.providers.find(
-      (provider) => provider.providerId === "jetbrains-org-page",
+    const provider = SAMPLE_APP_STATE.providers.find(
+      (entry) => entry.providerId === "cursor-team-api",
     );
 
-    expect(jetbrains).toBeDefined();
-    expect(buildProviderProgressItems(jetbrains!)).toEqual([
+    expect(provider).toBeDefined();
+    expect(
+      buildProviderProgressItems({
+        ...provider!,
+        quotaUnit: "credits",
+        quotaWindow: "monthly",
+        used: 16,
+        remaining: 4,
+        total: 20,
+        usageWindows: undefined,
+      }),
+    ).toEqual([
       expect.objectContaining({
         id: "primary",
         kind: "primary_quota",
-        providerId: "jetbrains-org-page",
+        providerId: "cursor-team-api",
         label: "monthly credits",
         used: 16,
         remaining: 4,

@@ -19,6 +19,7 @@ describe("createClaudeCodeAnalyticsClient", () => {
   });
 
   it("requests live analytics pages and follows pagination cursors", async () => {
+    const signal = new AbortController().signal;
     const fetchImpl = vi
       .fn<typeof fetch>()
       .mockResolvedValueOnce({
@@ -41,6 +42,7 @@ describe("createClaudeCodeAnalyticsClient", () => {
       source: "live",
       apiKey: "sk-ant-admin-live",
       fetchImpl,
+      signal,
     });
 
     const report = await client.getUsageReport({
@@ -59,6 +61,7 @@ describe("createClaudeCodeAnalyticsClient", () => {
           "anthropic-version": "2023-06-01",
           "x-api-key": "sk-ant-admin-live",
         },
+        signal,
       },
     );
     expect(fetchImpl).toHaveBeenNthCalledWith(
@@ -69,6 +72,7 @@ describe("createClaudeCodeAnalyticsClient", () => {
           "anthropic-version": "2023-06-01",
           "x-api-key": "sk-ant-admin-live",
         },
+        signal,
       },
     );
   });

@@ -9,15 +9,11 @@ import type {
   SyncTrigger,
 } from "../types";
 import { formatSyncTimestamp } from "../normalize";
-import {
-  getSourceAttemptOrder,
-  normalizeSourcePreference,
-} from "../../shared/provider-sources";
+import { normalizeSourcePreference } from "../../shared/provider-sources";
 import {
   buildNoSourceAvailableReason,
   buildSourceFallbackReason,
   buildSourceSelectionReason,
-  shouldAttemptFallback,
   type SourceAttemptFailure,
 } from "../../shared/source-selection";
 import { hasPageBindingFingerprint } from "../../shared/page-bindings";
@@ -37,7 +33,10 @@ import {
 } from "./official";
 import { createClaudePersonalPageClient } from "./personal-page-client";
 import { hasLivePageSessionApis } from "../page-session";
-import { personalSourceStrategyRunner } from "../personal-source-strategy";
+import {
+  providerSourceStrategyRunner,
+  type ProviderSourceAttempt,
+} from "../provider-source-strategy";
 import type {
   ClaudePersonalUsageFact,
   ClaudePersonalUsageWindow,
@@ -52,19 +51,7 @@ type ClaudeCodeAdapterContext = {
   trigger?: SyncTrigger;
 };
 
-type ClaudeSourceAttemptResult =
-  | {
-      ok: true;
-      kind: ProviderSourceKind;
-      snapshot: ProviderSnapshot;
-      setting?: ProviderSetting;
-    }
-  | {
-      ok: false;
-      failure: SourceAttemptFailure;
-      snapshot: ProviderSnapshot;
-      setting?: ProviderSetting;
-    };
+type ClaudeSourceAttemptResult = ProviderSourceAttempt;
 
 function buildClaudeRefreshLabel(): string {
   return "Claude Code Analytics API synced just now";
@@ -326,12 +313,14 @@ async function tryClaudeOfficialSource({
   syncedAt,
   setting,
   now,
+  signal,
 }: {
   provider: ProviderSnapshot;
   secrets: ProviderSecrets;
   syncedAt: string;
   setting: ProviderSetting;
   now: Date;
+  signal: AbortSignal;
 }): Promise<ClaudeSourceAttemptResult> {
   if (setting.status === "missing") {
     const warningReason = `Host access missing; grant Claude access for ${setting.hostsLabel} before live sync can run.`;
@@ -402,6 +391,7 @@ async function tryClaudeOfficialSource({
     const client = createClaudeCodeAnalyticsClient({
       source: "live",
       apiKey: secrets["claude-code-admin-api"].adminApiKey,
+      signal,
     });
     const startingAt = inferStartingAt(now);
     const report = await client.getUsageReport({
@@ -795,130 +785,83 @@ export async function syncClaudeCodeProvider({
     setting.sourcePreference,
   );
 
-  if (provider.providerId === "claude-code-team-page") {
-    const strategyResult = await personalSourceStrategyRunner.run({
-      sourceEntryId: provider.providerId,
-      trigger,
-      strategyId: "claude_personal_session",
-      runAttempt: () =>
-        tryClaudePersonalSource({
-          provider,
-          syncedAt,
-          setting,
-          warningThresholdPercent,
-          trigger,
-        }),
-    });
-    const attempt = strategyResult.attempt;
+  const isPersonalSource = provider.providerId === "claude-code-team-page";
+  const strategyResult = await providerSourceStrategyRunner.run({
+    sourceEntryId: provider.providerId,
+    trigger,
+    strategies: isPersonalSource
+      ? [
+          {
+            id: "claude_personal_session",
+            kind: "page_capture",
+            runAttempt: () =>
+              tryClaudePersonalSource({
+                provider,
+                syncedAt,
+                setting,
+                warningThresholdPercent,
+                trigger,
+              }),
+          },
+        ]
+      : [
+          {
+            id: "claude_admin_api",
+            kind: "official_api",
+            runAttempt: (signal) =>
+              tryClaudeOfficialSource({
+                provider,
+                secrets,
+                syncedAt,
+                setting,
+                now,
+                signal,
+              }),
+          },
+        ],
+  });
+  const attempt = strategyResult.attempt;
 
-    if (attempt?.ok) {
-      return {
-        snapshot: finalizeClaudeSnapshot(
-          attempt.snapshot,
-          sourcePreference,
-          attempt.kind,
-          null,
-        ),
-        ...(attempt.setting ? { setting: attempt.setting } : {}),
-      };
-    }
-
-    const failures = strategyResult.failure ? [strategyResult.failure] : [];
-    const failureSnapshot =
-      attempt && !attempt.ok
-        ? attempt.snapshot
-        : {
-            ...provider,
-            syncedAt,
-            syncSource: "page_parse" as const,
-            syncStatus: "warning" as const,
-            tone: "warning" as const,
-            warningReason:
-              strategyResult.failure?.detail ??
-              "Claude personal source orchestration did not complete.",
-            lastSyncLabel: "Claude personal sync did not complete",
-            resetLabel: "Retry the bounded Claude personal source refresh",
-          };
-
+  if (attempt?.ok) {
     return {
-      snapshot: finalizeClaudeNoSourceSnapshot(
-        failureSnapshot,
+      snapshot: finalizeClaudeSnapshot(
+        attempt.snapshot,
         sourcePreference,
-        failures,
+        attempt.kind,
+        null,
       ),
-      ...(attempt && !attempt.ok && attempt.setting
-        ? { setting: attempt.setting }
-        : {}),
+      ...(attempt.setting ? { setting: attempt.setting } : {}),
     };
   }
 
-  const attemptOrder = getSourceAttemptOrder(provider.providerId, sourcePreference);
-  const failures: SourceAttemptFailure[] = [];
-  let firstFailedSnapshot: ProviderSnapshot | null = null;
-
-  for (const sourceKind of attemptOrder) {
-    const attempt =
-      sourceKind === "official_api"
-        ? await tryClaudeOfficialSource({
-            provider,
-            secrets,
-            syncedAt,
-            setting,
-            now,
-          })
-        : await tryClaudePersonalSource({
-            provider,
-            syncedAt,
-            setting,
-            warningThresholdPercent,
-            trigger,
-          });
-
-    if (attempt.ok) {
-      return {
-        snapshot: finalizeClaudeSnapshot(
-          attempt.snapshot,
-          sourcePreference,
-          attempt.kind,
-          failures[0] ?? null,
-        ),
-        ...(attempt.setting ? { setting: attempt.setting } : {}),
-      };
-    }
-
-    failures.push(attempt.failure);
-    firstFailedSnapshot ??= attempt.snapshot;
-
-    if (!shouldAttemptFallback(attempt.failure)) {
-      return {
-        snapshot: finalizeClaudeNoSourceSnapshot(
-          attempt.snapshot,
-          sourcePreference,
-          failures,
-        ),
-        ...(attempt.setting ? { setting: attempt.setting } : {}),
-      };
-    }
-  }
+  const failures = strategyResult.failure ? [strategyResult.failure] : [];
+  const failureSnapshot =
+    attempt && !attempt.ok
+      ? attempt.snapshot
+      : {
+          ...provider,
+          syncedAt,
+          syncSource: isPersonalSource
+            ? ("page_parse" as const)
+            : ("official" as const),
+          syncStatus: "warning" as const,
+          tone: "warning" as const,
+          warningReason:
+            strategyResult.failure?.detail ??
+            "Claude source orchestration did not complete.",
+          warningDiagnostic: null,
+          lastSyncLabel: "Claude source sync did not complete",
+          resetLabel: "Retry the bounded Claude source refresh",
+        };
 
   return {
     snapshot: finalizeClaudeNoSourceSnapshot(
-      firstFailedSnapshot ?? {
-        ...provider,
-        syncedAt,
-        syncSource: "page_parse",
-        syncStatus: "error",
-        tone: "error",
-        warningReason: "Claude source selection could not resolve a live path.",
-        warningDiagnostic: null,
-        usageWindows: undefined,
-        usageFacts: undefined,
-        usageSummary: null,
-        lastSyncLabel: "Claude source selection failed just now",
-        resetLabel: "Check Claude source preferences and live prerequisites",
-      },
+      failureSnapshot,
       sourcePreference,
       failures,
     ),
+    ...(attempt && !attempt.ok && attempt.setting
+      ? { setting: attempt.setting }
+      : {}),
   };
 }

@@ -84,6 +84,10 @@ for refresh coalescing, cooldown, timeout, and previous-result preservation.
 Their provider-specific session API, observed-response, and page-hydration
 sequence remains inside the existing bounded personal-page client so that
 credential handling and request budgets are not duplicated by the registry.
+Codex Enterprise, Cursor Team, and Claude Admin entries use the same
+source-entry lifecycle around their existing official API clients. Gemini is
+an explicit no-network policy adapter. JetBrains is an explicit no-network
+deferred adapter until its retained page contract is revalidated.
 
 Capability flags describe code the extension has implemented for that source
 entry. They do not claim that the current account, response, or stored snapshot
@@ -109,12 +113,12 @@ Current capability ownership:
 | `codex-personal-page` | Codex | Yes | Yes | Yes | No |
 | `codex-enterprise-api` | Codex | No | No | No | No |
 | `gemini-policy` | Gemini | No | No | No | No |
-| `jetbrains-org-page` | JetBrains | Yes | No | No | No |
+| `jetbrains-org-page` | JetBrains | No | No | No | No |
 
 `serviceStatus` and `multiAccount` are currently false for every source entry.
-JetBrains remains deferred even though its retained adapter has quota-window
-normalization code; the capability flag does not override rollout stage,
-display eligibility, permissions, or runtime data availability.
+JetBrains remains deferred. Its parser and capture client are retained for
+future contract revalidation, but the registered deferred adapter performs no
+network or page capture and does not expose a live quota capability.
 
 ### Setup State
 
@@ -270,7 +274,7 @@ Gemini remains policy-only unless the product explicitly accepts project-scoped 
 
 ### JetBrains AI
 
-JetBrains remains retained in the repo but deferred from the active support promise until a real organization-visible `Users and licensing` session is reverified. Deferred JetBrains state must not enter Provider Display ordering or quota item controls.
+JetBrains remains retained in the repo but deferred from the active support promise until a real organization-visible `Users and licensing` session is reverified. Its current runtime adapter is explicitly no-network and clears obsolete live quota fields. Deferred JetBrains state must not enter Provider Display ordering or quota item controls.
 
 ## Non-Goals
 

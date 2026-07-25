@@ -18,6 +18,7 @@ describe("createCodexAnalyticsClient", () => {
   });
 
   it("requests live analytics pages and follows cursor pagination", async () => {
+    const signal = new AbortController().signal;
     const fetchImpl = vi
       .fn<typeof fetch>()
       .mockResolvedValueOnce({
@@ -41,6 +42,7 @@ describe("createCodexAnalyticsClient", () => {
       apiKey: "sk-codex-enterprise",
       workspaceId: "ws_123",
       fetchImpl,
+      signal,
     });
 
     const report = await client.getUsageReport({
@@ -56,6 +58,7 @@ describe("createCodexAnalyticsClient", () => {
         headers: {
           Authorization: "Bearer sk-codex-enterprise",
         },
+        signal,
       },
     );
     expect(fetchImpl).toHaveBeenNthCalledWith(
@@ -65,6 +68,7 @@ describe("createCodexAnalyticsClient", () => {
         headers: {
           Authorization: "Bearer sk-codex-enterprise",
         },
+        signal,
       },
     );
   });

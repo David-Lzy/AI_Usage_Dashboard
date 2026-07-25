@@ -512,6 +512,7 @@ describe("syncCodexProvider", () => {
       source: "live",
       apiKey: "sk-codex-enterprise",
       workspaceId: "ws_123",
+      signal: expect.any(AbortSignal),
     });
     expect(snapshot.providerLabel).toBe("Codex");
     expect(snapshot.planName).toBe("Codex Analytics API (Enterprise workspace)");

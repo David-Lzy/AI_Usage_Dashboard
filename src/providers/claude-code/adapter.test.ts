@@ -311,6 +311,7 @@ describe("syncClaudeCodeProvider", () => {
     expect(createClaudeCodeAnalyticsClientMock).toHaveBeenCalledWith({
       source: "live",
       apiKey: "sk-ant-admin-test",
+      signal: expect.any(AbortSignal),
     });
   });
 
