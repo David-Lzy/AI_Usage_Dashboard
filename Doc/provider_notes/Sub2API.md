@@ -19,7 +19,8 @@ Status note:
 
 - the API-key connector is shipped behind explicit deployment setup and remains
   hidden by default until the user configures a deployment
-- account-dashboard enrichment remains gated on a separately verified contract
+- account-dashboard enrichment was reviewed and is intentionally unsupported in
+  the first release because it uses the deployment's renewable login session
 
 ## 1. Decision
 
@@ -53,9 +54,12 @@ Depending on deployment configuration, the response may describe:
 Fields not present in the response remain unavailable. The adapter does not
 invent a reset window, currency, balance, or cost conversion.
 
-Account-dashboard enrichment is a separate, optional future path documented in
-[Sub2API User Usage Contract](../Product/Sub2API_User_Usage_Contract.md). It is
-not part of the API-key connector.
+Account-dashboard enrichment is a separate scope documented in
+[Sub2API User Usage Contract](../Product/Sub2API_User_Usage_Contract.md). The
+pinned frontend stores access and refresh tokens in page `localStorage` and
+rotates them after authentication failures. The extension does not copy or
+persist that renewable login session, so account-level group and endpoint
+breakdowns are intentionally not part of the first release.
 
 ## 3. Authentication And Host Access
 
@@ -107,6 +111,11 @@ store:
 
 The API key is excluded from configuration backup and remains in the active
 browser profile's extension-local secret storage.
+
+There is no Sub2API account-session, refresh-token, password, cookie, or direct
+account-identifier slot in extension storage. The adapter never calls the
+account dashboard endpoints. A failed API-key refresh cannot trigger a page
+reload or account-session recovery attempt.
 
 ## 6. Upstream Basis
 

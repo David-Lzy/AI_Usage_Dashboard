@@ -13,7 +13,8 @@ Freshness model:
 Status note:
 
 - this document records discovery evidence and the shipped API-key contract
-- account-dashboard enrichment remains gated and is not shipped yet
+- account-dashboard enrichment was reviewed and is intentionally unsupported in
+  the first release
 
 ## Identity And Trust Boundary
 
@@ -135,7 +136,7 @@ most 31 daily buckets and 16 model series; compact views may merge additional
 visible series into an explicitly labeled `Other` item without rewriting the
 stored totals.
 
-## Account-Wide Conditional Capability
+## Account-Wide Enrichment Gate Decision
 
 The authenticated user application also defines account-wide endpoints:
 
@@ -152,10 +153,40 @@ platform, model, group, and endpoint dimensions. Therefore they are a separate
 account scope, not an enrichment that can be silently merged into one API
 key's totals.
 
-Account-session support is a conditional future gate. The core connector must
-remain useful with only `/v1/usage`. If account enrichment is later enabled,
-its credential, freshness, labels, failures, and UI modules must stay visibly
-separate from the API-key snapshot.
+The pinned frontend stores `auth_token`, `refresh_token`, `auth_user`, and
+`token_expires_at` in page `localStorage`. Its API client attaches the access
+token to dashboard requests, uses the refresh token after `401`, rotates both
+tokens, and clears or revokes them during session failure or logout. The pinned
+server defaults to a 24-hour access token fallback and a 30-day refresh token,
+with deployment-configurable limits. This is a renewable login session rather
+than a bounded API usage credential.
+
+The extension will not copy that page storage, retain a refresh token, ask for
+a password, or silently attach an account login session. Doing so would give a
+usage dashboard a broader and longer-lived credential than the API-key
+connector needs, complicate logout and account-switch revocation, and create a
+second credential lifecycle for every independently operated deployment.
+
+Consequently account-dashboard enrichment is unsupported in the first release.
+The runtime exposes no account-session secret slot and calls none of these
+account endpoints. Group and endpoint aggregation stay on the configured
+Sub2API dashboard; compact and detail surfaces use only the explicit
+`api_key`-scoped `/v1/usage` result.
+
+A future review may evaluate an explicitly attached, already-open dashboard tab
+that performs the account request inside the page's main world and returns only
+a normalized aggregate. Such a design must never export either token to the
+extension, must bind results to the exact configured origin and an opaque
+account fingerprint, and must immediately detach on logout, account change,
+origin change, tab removal, or permission revocation. This candidate is not a
+shipped fallback and must not make the API-key connector depend on a live page.
+
+Upstream evidence for this decision is pinned to the reviewed commit:
+
+- [frontend bearer attachment and refresh rotation](https://github.com/Wei-Shaw/sub2api/blob/2730c1c43b29be003925b033f3f9e645e726bb8c/frontend/src/api/client.ts#L62-L67)
+- [frontend token storage and logout](https://github.com/Wei-Shaw/sub2api/blob/2730c1c43b29be003925b033f3f9e645e726bb8c/frontend/src/api/auth.ts#L31-L83)
+- [authenticated user usage routes](https://github.com/Wei-Shaw/sub2api/blob/2730c1c43b29be003925b033f3f9e645e726bb8c/backend/internal/server/routes/user.go#L86-L100)
+- [default access and refresh lifetimes](https://github.com/Wei-Shaw/sub2api/blob/2730c1c43b29be003925b033f3f9e645e726bb8c/backend/internal/config/config.go#L2095-L2097)
 
 ## Transport, Permission, And Failure Policy
 

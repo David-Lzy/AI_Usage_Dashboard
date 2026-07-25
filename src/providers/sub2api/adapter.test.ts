@@ -138,6 +138,29 @@ describe("Sub2API provider adapter", () => {
     });
   });
 
+  it("keeps renewable account-session credentials outside the connector", async () => {
+    fetchSub2ApiUsageMock.mockResolvedValue(metering);
+
+    const outcome = await syncSub2ApiProvider(buildContext());
+    const request = fetchSub2ApiUsageMock.mock.calls[0]?.[0] as
+      | Record<string, unknown>
+      | undefined;
+
+    expect(request).toBeDefined();
+    expect(Object.keys(request ?? {}).sort()).toEqual([
+      "accountId",
+      "apiKey",
+      "connection",
+      "now",
+      "signal",
+      "trigger",
+    ]);
+    expect(request).not.toHaveProperty("accessToken");
+    expect(request).not.toHaveProperty("refreshToken");
+    expect(outcome.snapshot.apiGatewayMetering?.scope).toBe("api_key");
+    expect(JSON.stringify(outcome)).not.toContain("local-api-key");
+  });
+
   it("keeps HTTP usable while exposing a transport warning", async () => {
     fetchSub2ApiUsageMock.mockResolvedValue({
       ...metering,
