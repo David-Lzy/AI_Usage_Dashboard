@@ -1,6 +1,7 @@
 import { hasRegisteredProviderCapability } from "../providers/registry";
 import type {
   ApiGatewayConnectionMetadata,
+  ApiGatewayMeteringDisplayPreferences,
   AppState,
   ProviderAccountCollection,
   ProviderAccountId,
@@ -502,6 +503,10 @@ export function updateActiveProviderAccountConnection(
     : null;
   if (normalizedConnection) {
     metadata.apiGatewayConnection = normalizedConnection;
+    metadata.label = normalizeAccountLabel(
+      normalizedConnection.displayLabel,
+      metadata.label,
+    );
   } else {
     delete metadata.apiGatewayConnection;
   }
@@ -520,6 +525,101 @@ export function updateActiveProviderAccountConnection(
     providerAccounts,
     providerSettings: applyActiveProviderAccountConnections(
       providerSettings,
+      providerAccounts,
+    ),
+  };
+}
+
+export function updateProviderAccountMeteringDisplayPreferences(
+  state: AppState,
+  providerId: ProviderId,
+  accountId: ProviderAccountId,
+  preferences: ApiGatewayMeteringDisplayPreferences,
+  capabilityResolver: ProviderMultiAccountCapabilityResolver =
+    defaultCapabilityResolver,
+): AppState {
+  if (!capabilityResolver(providerId)) {
+    throw new Error(`${providerId} does not support account-scoped preferences`);
+  }
+
+  const providerAccounts = normalizeProviderAccounts(
+    state.providers,
+    state.providerAccounts,
+    capabilityResolver,
+  );
+  const metadata = providerAccounts[providerId]?.accounts.find(
+    (account) => account.id === accountId,
+  );
+  if (!metadata) {
+    throw new Error(`Missing provider account: ${providerId}/${accountId}`);
+  }
+
+  metadata.apiGatewayMeteringDisplayPreferences =
+    normalizeApiGatewayMeteringDisplayPreferences(preferences);
+
+  return { ...state, providerAccounts };
+}
+
+export function removeProviderAccount(
+  state: AppState,
+  providerId: ProviderId,
+  accountId: ProviderAccountId,
+  capabilityResolver: ProviderMultiAccountCapabilityResolver =
+    defaultCapabilityResolver,
+): AppState {
+  if (!capabilityResolver(providerId)) {
+    throw new Error(`${providerId} does not support multiple accounts`);
+  }
+  if (accountId === DEFAULT_PROVIDER_ACCOUNT_ID) {
+    throw new Error("The default provider account cannot be removed");
+  }
+
+  let nextState = state;
+  const initialCollection = normalizeProviderAccounts(
+    state.providers,
+    state.providerAccounts,
+    capabilityResolver,
+  )[providerId];
+  if (!initialCollection?.accounts.some((account) => account.id === accountId)) {
+    throw new Error(`Missing provider account: ${providerId}/${accountId}`);
+  }
+
+  if (initialCollection.activeAccountId === accountId) {
+    const fallbackId =
+      initialCollection.accounts.find(
+        (account) => account.id === DEFAULT_PROVIDER_ACCOUNT_ID,
+      )?.id ??
+      initialCollection.accounts.find((account) => account.id !== accountId)?.id;
+    if (!fallbackId) {
+      throw new Error("A provider must retain at least one account");
+    }
+    nextState = selectActiveProviderAccount(
+      nextState,
+      providerId,
+      fallbackId,
+      capabilityResolver,
+    );
+  }
+
+  const providerAccounts = normalizeProviderAccounts(
+    nextState.providers,
+    nextState.providerAccounts,
+    capabilityResolver,
+  );
+  const collection = providerAccounts[providerId];
+  if (!collection) {
+    throw new Error(`Missing provider account collection: ${providerId}`);
+  }
+  collection.accounts = collection.accounts.filter(
+    (account) => account.id !== accountId,
+  );
+  delete collection.inactiveAccounts[accountId];
+
+  return {
+    ...nextState,
+    providerAccounts,
+    providerSettings: applyActiveProviderAccountConnections(
+      nextState.providerSettings,
       providerAccounts,
     ),
   };

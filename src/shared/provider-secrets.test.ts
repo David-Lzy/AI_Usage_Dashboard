@@ -1,7 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { SAMPLE_PROVIDER_SECRETS } from "./constants";
-import { readProviderSecrets, writeProviderSecrets } from "./provider-secrets";
+import {
+  deleteSub2ApiAccountSecret,
+  readProviderSecrets,
+  setSub2ApiKey,
+  writeProviderSecrets,
+} from "./provider-secrets";
 import { DEFAULT_PROVIDER_ACCOUNT_ID } from "./provider-accounts";
 import type { WebStorageLike } from "./local-storage";
 
@@ -84,6 +89,27 @@ describe("provider secrets storage", () => {
       readProviderSecrets({ "cursor-team-api": secondAccountId }),
     ).resolves.toMatchObject({
       "cursor-team-api": { adminApiKey: "second-account-key" },
+    });
+  });
+
+  it("deletes one Sub2API deployment secret without touching another account", async () => {
+    const secondAccountId = "account_sub2api_2";
+    await setSub2ApiKey("default-sub2api-key", DEFAULT_PROVIDER_ACCOUNT_ID);
+    await setSub2ApiKey("second-sub2api-key", secondAccountId);
+
+    await deleteSub2ApiAccountSecret(secondAccountId);
+
+    await expect(
+      readProviderSecrets({
+        "sub2api-api-key": DEFAULT_PROVIDER_ACCOUNT_ID,
+      }),
+    ).resolves.toMatchObject({
+      "sub2api-api-key": { apiKey: "default-sub2api-key" },
+    });
+    await expect(
+      readProviderSecrets({ "sub2api-api-key": secondAccountId }),
+    ).resolves.toMatchObject({
+      "sub2api-api-key": { apiKey: null },
     });
   });
 

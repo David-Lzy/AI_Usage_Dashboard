@@ -1,4 +1,5 @@
 import type {
+  ApiGatewayMeteringDisplayPreferences,
   AppState,
   AppSettings,
   ProgressItemsBySurface,
@@ -27,8 +28,19 @@ import type { ResolvedAppLocale } from "../../shared/i18n";
 import { CursorUsageModulePreferenceControls } from "./CursorUsageModulePreferenceControls";
 import { ProviderServiceStatusPreferenceControls } from "./ProviderServiceStatusPreferenceControls";
 import { ProviderAccountSelector } from "./ProviderAccountSelector";
-import { getProviderAccountOptions } from "../../shared/provider-accounts";
 import { createRuntimeI18n } from "../../shared/i18n";
+import {
+  createDefaultApiGatewayMeteringDisplayPreferences,
+} from "../../shared/api-gateway-metering";
+import {
+  getActiveProviderAccountId,
+  getActiveProviderAccountMetadata,
+  getProviderAccountOptions,
+} from "../../shared/provider-accounts";
+import type { Sub2ApiDeploymentDraft } from "../../shared/sub2api-deployments";
+import { SUB2API_PROVIDER_ID } from "../../shared/sub2api-deployments";
+import { Sub2ApiDeploymentSettings } from "./Sub2ApiDeploymentSettings";
+import { ApiGatewayMeteringModulePreferenceControls } from "./ApiGatewayMeteringModulePreferenceControls";
 
 type SettingsProviderDisplaySectionProps = {
   providers: ProviderSetting[];
@@ -61,6 +73,19 @@ type SettingsProviderDisplaySectionProps = {
     providerId: ProviderId,
     accountId: ProviderAccountId,
   ) => void;
+  onSaveSub2ApiDeployment?: (
+    draft: Sub2ApiDeploymentDraft,
+    testConnection: boolean,
+  ) => void;
+  onDisconnectSub2ApiDeployment?: (
+    accountId: ProviderAccountId,
+    retainCachedSummary: boolean,
+  ) => void;
+  onRemoveSub2ApiDeployment?: (accountId: ProviderAccountId) => void;
+  onSub2ApiMeteringDisplayPreferencesChange?: (
+    accountId: ProviderAccountId,
+    preferences: ApiGatewayMeteringDisplayPreferences,
+  ) => void;
 };
 
 export function SettingsProviderDisplaySection({
@@ -81,6 +106,10 @@ export function SettingsProviderDisplaySection({
   onProviderServiceStatusVisibilityBySurfaceChange = () => undefined,
   onProviderProgressDetailsOpenChange,
   onSelectProviderAccount = () => undefined,
+  onSaveSub2ApiDeployment = () => undefined,
+  onDisconnectSub2ApiDeployment = () => undefined,
+  onRemoveSub2ApiDeployment = () => undefined,
+  onSub2ApiMeteringDisplayPreferencesChange = () => undefined,
 }: SettingsProviderDisplaySectionProps) {
   const i18n = createRuntimeI18n(
     locale,
@@ -116,9 +145,27 @@ export function SettingsProviderDisplaySection({
     label: `${source.label} · Custom`,
     progressItems: source.progressItems,
   }));
-  const multiAccountProviders = displayVisibleProviders.filter((provider) =>
-    getProviderAccountOptions({ providerAccounts }, provider.id),
+  const multiAccountProviders = displayVisibleProviders.filter(
+    (provider) =>
+      provider.id !== SUB2API_PROVIDER_ID &&
+      getProviderAccountOptions({ providerAccounts }, provider.id),
   );
+  const sub2ApiProvider = providers.find(
+    ({ id }) => id === SUB2API_PROVIDER_ID,
+  );
+  const sub2ApiSnapshot =
+    snapshots.find(({ providerId }) => providerId === SUB2API_PROVIDER_ID) ??
+    null;
+  const sub2ApiAccountId = getActiveProviderAccountId(
+    { providerAccounts },
+    SUB2API_PROVIDER_ID,
+  );
+  const sub2ApiDisplayPreferences =
+    getActiveProviderAccountMetadata(
+      { providerAccounts },
+      SUB2API_PROVIDER_ID,
+    )?.apiGatewayMeteringDisplayPreferences ??
+    createDefaultApiGatewayMeteringDisplayPreferences();
 
   return (
     <section
@@ -138,6 +185,33 @@ export function SettingsProviderDisplaySection({
       </div>
 
       <div className="settings-provider-display__body">
+        {sub2ApiProvider ? (
+          <>
+            <Sub2ApiDeploymentSettings
+              locale={locale}
+              providerAccounts={providerAccounts}
+              snapshot={sub2ApiSnapshot}
+              onSelectAccount={(accountId) =>
+                onSelectProviderAccount(SUB2API_PROVIDER_ID, accountId)
+              }
+              onSave={onSaveSub2ApiDeployment}
+              onDisconnect={onDisconnectSub2ApiDeployment}
+              onRemove={onRemoveSub2ApiDeployment}
+            />
+            <ApiGatewayMeteringModulePreferenceControls
+              locale={locale}
+              settingsCopy={settingsCopy}
+              value={sub2ApiDisplayPreferences}
+              onChange={(preferences) =>
+                onSub2ApiMeteringDisplayPreferencesChange(
+                  sub2ApiAccountId,
+                  preferences,
+                )
+              }
+            />
+          </>
+        ) : null}
+
         {multiAccountProviders.length > 0 ? (
           <div
             className="provider-account-settings"

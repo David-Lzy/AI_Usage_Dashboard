@@ -675,3 +675,61 @@ export function normalizeApiGatewayMeteringDisplayPreferences(
     ]),
   ) as ApiGatewayMeteringDisplayPreferences;
 }
+
+export function setApiGatewayMeteringModuleVisibility(
+  value: ApiGatewayMeteringDisplayPreferences,
+  surface: DisplaySurface,
+  moduleId: ApiGatewayMeteringModuleId,
+  visible: boolean,
+): ApiGatewayMeteringDisplayPreferences {
+  const normalized = normalizeApiGatewayMeteringDisplayPreferences(value);
+  return {
+    ...normalized,
+    [surface]: normalized[surface].map((preference) =>
+      preference.id === moduleId ? { ...preference, visible } : preference,
+    ),
+  };
+}
+
+export function reorderApiGatewayMeteringModulePreference(
+  value: ApiGatewayMeteringDisplayPreferences,
+  surface: DisplaySurface,
+  moduleId: ApiGatewayMeteringModuleId,
+  targetModuleId: ApiGatewayMeteringModuleId,
+): ApiGatewayMeteringDisplayPreferences {
+  const normalized = normalizeApiGatewayMeteringDisplayPreferences(value);
+  const current = normalized[surface];
+  const sourceIndex = current.findIndex(({ id }) => id === moduleId);
+  const targetIndex = current.findIndex(({ id }) => id === targetModuleId);
+  if (sourceIndex < 0 || targetIndex < 0 || sourceIndex === targetIndex) {
+    return normalized;
+  }
+  const next = [...current];
+  const [moved] = next.splice(sourceIndex, 1);
+  if (!moved) {
+    return normalized;
+  }
+  next.splice(targetIndex, 0, moved);
+  return { ...normalized, [surface]: next };
+}
+
+export function moveApiGatewayMeteringModulePreference(
+  value: ApiGatewayMeteringDisplayPreferences,
+  surface: DisplaySurface,
+  moduleId: ApiGatewayMeteringModuleId,
+  direction: "up" | "down",
+): ApiGatewayMeteringDisplayPreferences {
+  const normalized = normalizeApiGatewayMeteringDisplayPreferences(value);
+  const current = normalized[surface];
+  const sourceIndex = current.findIndex(({ id }) => id === moduleId);
+  const targetIndex = sourceIndex + (direction === "up" ? -1 : 1);
+  const target = current[targetIndex];
+  return sourceIndex < 0 || !target
+    ? normalized
+    : reorderApiGatewayMeteringModulePreference(
+        normalized,
+        surface,
+        moduleId,
+        target.id,
+      );
+}

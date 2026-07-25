@@ -252,6 +252,53 @@ describe("createStandardAppActions", () => {
     });
   });
 
+  it("saves a Sub2API deployment before requesting its exact host origin", async () => {
+    const contains = vi.fn(async () => false);
+    const request = vi.fn(async () => true);
+    vi.stubGlobal("chrome", {
+      runtime: { id: "extension-id" },
+      permissions: {
+        contains,
+        request,
+        remove: vi.fn(),
+      },
+    });
+    const { actions, applyMessage } = createActionHarness();
+
+    actions.handleSaveSub2ApiDeployment(
+      {
+        accountId: null,
+        displayLabel: "Private gateway",
+        baseUrl: "https://gateway.example.test:8443",
+        apiKey: "local-only-key",
+        insecureTransportAcknowledged: false,
+      },
+      true,
+    );
+
+    await vi.waitFor(() => {
+      expect(applyMessage).toHaveBeenNthCalledWith(1, {
+        type: "app:save-sub2api-deployment",
+        accountId: null,
+        displayLabel: "Private gateway",
+        baseUrl: "https://gateway.example.test:8443",
+        apiKey: "local-only-key",
+        insecureTransportAcknowledged: false,
+      });
+      expect(request).toHaveBeenCalledWith({
+        origins: ["https://gateway.example.test/*"],
+      });
+      expect(applyMessage).toHaveBeenNthCalledWith(
+        2,
+        {
+          type: "app:request-refresh",
+          providerId: "sub2api-api-key",
+        },
+        expect.objectContaining({ title: "Deployment test finished" }),
+      );
+    });
+  });
+
   it("toggles provider visibility using current provider state", () => {
     const { actions, appState, applyMessage } = createActionHarness();
     const codex = appState.providerSettings.find(

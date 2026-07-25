@@ -177,6 +177,187 @@
   gap: var(--space-3);
 }
 
+.sub2api-deployment-settings,
+.api-gateway-module-preferences {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-3);
+  min-width: 0;
+  padding: var(--app-space-4);
+  border: 1px solid var(--app-supporting-surface-border);
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--app-supporting-surface-background);
+}
+
+.sub2api-deployment-settings__header {
+  align-items: flex-start;
+}
+
+.sub2api-deployment-settings__detail {
+  max-inline-size: 72rem;
+  margin: 0;
+}
+
+.sub2api-deployment-settings__trust,
+.sub2api-deployment-settings__insecure {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-1);
+  padding: var(--app-space-3);
+  border: 1px solid var(--app-supporting-surface-strong-border);
+  border-radius: var(--md-sys-shape-corner-medium);
+  background: var(--app-supporting-surface-strong-background);
+  color: var(--md-sys-color-on-surface-variant);
+  overflow-wrap: anywhere;
+}
+
+.sub2api-deployment-settings__insecure {
+  border-color: color-mix(
+    in srgb,
+    var(--md-sys-color-error) 46%,
+    var(--md-sys-color-outline-variant) 54%
+  );
+  background: color-mix(
+    in srgb,
+    var(--md-sys-color-error-container) 64%,
+    var(--md-sys-color-surface) 36%
+  );
+  color: var(--md-sys-color-on-error-container);
+}
+
+.sub2api-deployment-settings__insecure label,
+.sub2api-deployment-settings__retain {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--app-space-2);
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  cursor: pointer;
+}
+
+.sub2api-deployment-settings__insecure input,
+.sub2api-deployment-settings__retain input {
+  flex: 0 0 auto;
+  inline-size: 18px;
+  block-size: 18px;
+  margin: 2px 0 0;
+  accent-color: var(--md-sys-color-primary);
+}
+
+.sub2api-deployment-settings__form {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, 14rem), 1fr)
+  );
+  gap: var(--app-space-3);
+  align-items: start;
+}
+
+.sub2api-deployment-settings__origin,
+.sub2api-deployment-settings__api-key {
+  grid-column: span 2;
+}
+
+.form-field__supporting-text {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.sub2api-deployment-settings__metadata {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, 12rem), 1fr)
+  );
+  gap: var(--app-space-2);
+  margin: 0;
+}
+
+.sub2api-deployment-settings__metadata > div {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  padding: var(--app-space-2) var(--app-space-3);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-medium);
+  background: var(--md-sys-color-surface-container-lowest);
+}
+
+.sub2api-deployment-settings__metadata dt {
+  color: var(--md-sys-color-on-surface-variant);
+  font-family: var(--md-sys-typescale-label-medium-font);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: var(--md-sys-typescale-label-medium-weight);
+}
+
+.sub2api-deployment-settings__metadata dd {
+  min-width: 0;
+  margin: 0;
+  color: var(--md-sys-color-on-surface);
+  overflow-wrap: anywhere;
+}
+
+.sub2api-deployment-settings__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--app-space-2);
+}
+
+.sub2api-deployment-settings__remove {
+  color: var(--md-sys-color-error);
+}
+
+.sub2api-deployment-settings__retain {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.sub2api-deployment-settings__protocol {
+  min-width: 0;
+  padding-block-start: var(--app-space-2);
+  border-block-start: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.sub2api-deployment-settings__protocol summary {
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  color: var(--md-sys-color-primary);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  cursor: pointer;
+}
+
+.sub2api-deployment-settings__protocol p {
+  margin: var(--app-space-2) 0 0;
+  color: var(--md-sys-color-on-surface-variant);
+  overflow-wrap: anywhere;
+}
+
+.api-gateway-module-preferences__surface-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, 22rem), 1fr)
+  );
+  gap: var(--app-space-3);
+}
+
+@media (max-width: 640px) {
+  .sub2api-deployment-settings,
+  .api-gateway-module-preferences {
+    padding: var(--app-space-3);
+  }
+
+  .sub2api-deployment-settings__origin,
+  .sub2api-deployment-settings__api-key {
+    grid-column: auto;
+  }
+
+  .sub2api-deployment-settings__actions > button {
+    flex: 1 1 9rem;
+  }
+}
+
 .provider-account-selector {
   min-inline-size: 0;
 }

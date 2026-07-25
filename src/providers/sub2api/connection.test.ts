@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   getSub2ApiHostOriginPattern,
   getSub2ApiUsageUrl,
+  isSub2ApiNonLoopbackHttpUrl,
   normalizeStoredSub2ApiConnection,
   normalizeSub2ApiConnection,
 } from "./connection";
@@ -24,11 +25,20 @@ describe("Sub2API connection metadata", () => {
     });
   });
 
-  it("requires an explicit acknowledgement for HTTP", () => {
+  it("allows loopback HTTP and requires confirmation for remote HTTP", () => {
     expect(
       normalizeSub2ApiConnection({
         displayLabel: "Local",
         baseUrl: "http://127.0.0.1:8080",
+      }),
+    ).toMatchObject({
+      ok: true,
+      value: { baseUrl: "http://127.0.0.1:8080" },
+    });
+    expect(
+      normalizeSub2ApiConnection({
+        displayLabel: "Remote",
+        baseUrl: "http://gateway.example.test",
       }),
     ).toMatchObject({
       ok: false,
@@ -36,14 +46,16 @@ describe("Sub2API connection metadata", () => {
     });
     expect(
       normalizeSub2ApiConnection({
-        displayLabel: "Local",
-        baseUrl: "http://127.0.0.1:8080",
+        displayLabel: "Remote",
+        baseUrl: "http://gateway.example.test",
         insecureTransportAcknowledged: true,
       }),
     ).toMatchObject({
       ok: true,
-      value: { baseUrl: "http://127.0.0.1:8080" },
+      value: { baseUrl: "http://gateway.example.test" },
     });
+    expect(isSub2ApiNonLoopbackHttpUrl("http://localhost:8080")).toBe(false);
+    expect(isSub2ApiNonLoopbackHttpUrl("http://example.test")).toBe(true);
   });
 
   it("rejects embedded credentials, paths, markup, and unsupported schemes", () => {

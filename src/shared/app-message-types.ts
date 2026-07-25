@@ -1,4 +1,5 @@
 import type {
+  ApiGatewayMeteringDisplayPreferences,
   ApiKeyProviderId,
   AppSettings,
   AppState,
@@ -29,6 +30,28 @@ export type AppMessage =
       type: "app:set-provider-active-account";
       providerId: ProviderId;
       accountId: ProviderAccountId;
+    }
+  | {
+      type: "app:save-sub2api-deployment";
+      accountId: ProviderAccountId | null;
+      displayLabel: string;
+      baseUrl: string;
+      apiKey: string | null;
+      insecureTransportAcknowledged: boolean;
+    }
+  | {
+      type: "app:disconnect-sub2api-deployment";
+      accountId: ProviderAccountId;
+      retainCachedSummary: boolean;
+    }
+  | {
+      type: "app:remove-sub2api-deployment";
+      accountId: ProviderAccountId;
+    }
+  | {
+      type: "app:set-sub2api-metering-display-preferences";
+      accountId: ProviderAccountId;
+      preferences: ApiGatewayMeteringDisplayPreferences;
     }
   | {
       type: "app:set-provider-source-preference";

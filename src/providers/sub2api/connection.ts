@@ -14,6 +14,33 @@ export type Sub2ApiConnectionResult =
 
 const UNSAFE_DISPLAY_TEXT_PATTERN = /[<>\u0000-\u001f\u007f]/;
 
+function isLoopbackHostname(hostname: string): boolean {
+  const normalized = hostname.toLowerCase().replace(/^\[|\]$/g, "");
+  if (normalized === "localhost" || normalized === "::1") {
+    return true;
+  }
+
+  const ipv4Parts = normalized.split(".").map(Number);
+  return (
+    ipv4Parts.length === 4 &&
+    ipv4Parts.every((part) => Number.isInteger(part) && part >= 0 && part <= 255) &&
+    ipv4Parts[0] === 127
+  );
+}
+
+export function isSub2ApiNonLoopbackHttpUrl(value: unknown): boolean {
+  if (typeof value !== "string") {
+    return false;
+  }
+
+  try {
+    const url = new URL(value.trim());
+    return url.protocol === "http:" && !isLoopbackHostname(url.hostname);
+  } catch {
+    return false;
+  }
+}
+
 function normalizeDisplayLabel(value: unknown): string | null {
   if (typeof value !== "string") {
     return null;
@@ -80,7 +107,11 @@ export function normalizeSub2ApiConnection(
   }
   const insecureTransportAcknowledged =
     input.insecureTransportAcknowledged === true;
-  if (parsedUrl.protocol === "http:" && !insecureTransportAcknowledged) {
+  if (
+    parsedUrl.protocol === "http:" &&
+    !isLoopbackHostname(parsedUrl.hostname) &&
+    !insecureTransportAcknowledged
+  ) {
     return {
       ok: false,
       code: "insecure_transport_confirmation_required",

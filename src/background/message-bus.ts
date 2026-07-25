@@ -4,8 +4,10 @@ import type {
   AppMessageResponse,
 } from "../shared/app-message-types";
 import {
+  deleteSub2ApiAccountSecret,
   setCodexWorkspaceConfig,
   setProviderAdminApiKey,
+  setSub2ApiKey,
 } from "../shared/provider-secrets";
 import { clearPageBinding, normalizePageBinding } from "../shared/page-bindings";
 import {
@@ -43,6 +45,14 @@ import {
   getActiveProviderAccountId,
   selectActiveProviderAccount,
 } from "../shared/provider-accounts";
+import { runProviderAccountManualSyncSerial } from "../shared/provider-account-sync";
+import {
+  disconnectSub2ApiDeployment,
+  removeSub2ApiDeployment,
+  saveSub2ApiDeployment,
+  setSub2ApiMeteringDisplayPreferences,
+  SUB2API_PROVIDER_ID,
+} from "../shared/sub2api-deployments";
 import {
   clearCodexBarDashboardToken,
   connectCodexBarDashboard,
@@ -253,35 +263,140 @@ export async function handleAppMessage(
     }
 
     case "app:set-provider-active-account": {
-      const selectedState = await updateAppState((current) =>
-        reconcileAppStateHealth(
-          selectActiveProviderAccount(
-            current,
-            message.providerId,
-            message.accountId,
-          ),
-        ),
+      return runProviderAccountManualSyncSerial(
+        message.providerId,
+        message.accountId,
+        async () => {
+          const selectedState = await updateAppState((current) =>
+            reconcileAppStateHealth(
+              selectActiveProviderAccount(
+                current,
+                message.providerId,
+                message.accountId,
+              ),
+            ),
+          );
+          await syncStoredProviderCredentials();
+          const state = await runSyncEngine({
+            trigger: "manual",
+            providerId: message.providerId,
+          });
+          const accountLabel =
+            selectedState.providerAccounts?.[
+              message.providerId
+            ]?.accounts.find((account) => account.id === message.accountId)
+              ?.label ?? "Selected account";
+
+          return {
+            ok: true as const,
+            state,
+            notice: {
+              tone: "success" as const,
+              title: `${accountLabel} selected`,
+              message:
+                "All display surfaces now use this account's isolated provider snapshot.",
+            },
+          };
+        },
       );
+    }
+
+    case "app:save-sub2api-deployment": {
+      const current = await seedAppStateIfEmpty();
+      const result = saveSub2ApiDeployment(current, message);
+      if (!result.ok) {
+        return { ok: false, error: result.message };
+      }
+      if (message.apiKey !== null) {
+        await setSub2ApiKey(message.apiKey, result.accountId);
+      }
+      await writeAppState(reconcileAppStateHealth(result.state));
+      await syncStoredProviderPermissions();
       await syncStoredProviderCredentials();
-      const state = await runSyncEngine({
-        trigger: "manual",
-        providerId: message.providerId,
-      });
-      const accountLabel =
-        selectedState.providerAccounts?.[message.providerId]?.accounts.find(
-          (account) => account.id === message.accountId,
-        )?.label ?? "Selected account";
+      const state = await seedAppStateIfEmpty();
+      await ensureBackgroundAlarms(state);
 
       return {
         ok: true,
         state,
         notice: {
           tone: "success",
-          title: `${accountLabel} selected`,
+          title: `${message.displayLabel.trim()} saved`,
           message:
-            "All display surfaces now use this account's isolated provider snapshot.",
+            "The deployment metadata and account-scoped credential were saved locally.",
         },
       };
+    }
+
+    case "app:disconnect-sub2api-deployment": {
+      const current = await seedAppStateIfEmpty();
+      await setSub2ApiKey(null, message.accountId);
+      const state = await writeAppState(
+        reconcileAppStateHealth(
+          disconnectSub2ApiDeployment(
+            current,
+            message.accountId,
+            message.retainCachedSummary,
+          ),
+        ),
+      );
+      await syncStoredProviderCredentials();
+      await ensureBackgroundAlarms(state);
+
+      return {
+        ok: true,
+        state,
+        notice: {
+          tone: "success",
+          title: "Deployment disconnected",
+          message: message.retainCachedSummary
+            ? "The API key was cleared. The last nonsecret summary remains marked as saved data."
+            : "The API key and cached nonsecret summary were cleared.",
+        },
+      };
+    }
+
+    case "app:remove-sub2api-deployment": {
+      const current = await seedAppStateIfEmpty();
+      try {
+        const state = await writeAppState(
+          reconcileAppStateHealth(
+            removeSub2ApiDeployment(current, message.accountId),
+          ),
+        );
+        await deleteSub2ApiAccountSecret(message.accountId);
+        await syncStoredProviderCredentials();
+        await ensureBackgroundAlarms(state);
+        return {
+          ok: true,
+          state,
+          notice: {
+            tone: "success",
+            title: "Deployment removed",
+            message:
+              "The deployment metadata, isolated snapshot, and local credential were removed.",
+          },
+        };
+      } catch (error) {
+        return {
+          ok: false,
+          error:
+            error instanceof Error
+              ? error.message
+              : "The deployment could not be removed.",
+        };
+      }
+    }
+
+    case "app:set-sub2api-metering-display-preferences": {
+      const state = await updateAppState((current) =>
+        setSub2ApiMeteringDisplayPreferences(
+          current,
+          message.accountId,
+          message.preferences,
+        ),
+      );
+      return { ok: true, state };
     }
 
     case "app:set-provider-source-preference": {

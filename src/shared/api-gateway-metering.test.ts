@@ -10,8 +10,11 @@ import {
   buildApiGatewayModelBreakdownView,
   createDefaultApiGatewayMeteringDisplayPreferences,
   deriveApiGatewayReferenceSavings,
+  moveApiGatewayMeteringModulePreference,
   normalizeApiGatewayMeteringDisplayPreferences,
   normalizeApiGatewayMeteringSnapshot,
+  reorderApiGatewayMeteringModulePreference,
+  setApiGatewayMeteringModuleVisibility,
 } from "./api-gateway-metering";
 
 function money(amount: number, unit = "USD") {
@@ -272,5 +275,36 @@ describe("API gateway metering display preferences", () => {
     expect(normalized.sidebar).toEqual(
       createDefaultApiGatewayMeteringDisplayPreferences().sidebar,
     );
+  });
+
+  it("updates visibility and ordering without mutating other surfaces", () => {
+    const defaults = createDefaultApiGatewayMeteringDisplayPreferences();
+    const hidden = setApiGatewayMeteringModuleVisibility(
+      defaults,
+      "popup",
+      "trend",
+      false,
+    );
+    const reordered = reorderApiGatewayMeteringModulePreference(
+      hidden,
+      "popup",
+      "limit_windows",
+      "summary",
+    );
+    const moved = moveApiGatewayMeteringModulePreference(
+      reordered,
+      "popup",
+      "trend",
+      "up",
+    );
+
+    expect(moved.popup).toEqual([
+      { id: "limit_windows", visible: true },
+      { id: "trend", visible: false },
+      { id: "summary", visible: true },
+      { id: "model_breakdown", visible: true },
+    ]);
+    expect(moved.sidebar).toEqual(defaults.sidebar);
+    expect(defaults.popup[1]).toEqual({ id: "trend", visible: true });
   });
 });

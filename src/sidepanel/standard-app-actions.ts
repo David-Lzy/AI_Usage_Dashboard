@@ -1,10 +1,15 @@
 import type { AppMessage } from "../shared/app-message-types";
 import type {
+  ApiGatewayMeteringDisplayPreferences,
   AppState,
   ProviderAccountId,
   ProviderId,
   ProviderSetting,
 } from "../providers/types";
+import {
+  getSub2ApiHostOriginPattern,
+  normalizeSub2ApiConnection,
+} from "../providers/sub2api/connection";
 import { getProviderDefinition } from "../providers/provider-definitions";
 import type { RuntimeI18n } from "../shared/i18n";
 import {
@@ -22,6 +27,7 @@ import { createStandardAppSettingsActions } from "./standard-app-settings-action
 import { createStandardAppSessionPageActions } from "./standard-app-session-page-actions";
 import type { AppToast } from "./use-standard-app-runtime";
 import type { CustomSourceSetting } from "../shared/custom-sources";
+import type { Sub2ApiDeploymentDraft } from "../shared/sub2api-deployments";
 
 type ApplyAppMessage = (
   message: AppMessage,
@@ -173,6 +179,99 @@ export function createStandardAppActions({
     });
   }
 
+  function handleSaveSub2ApiDeployment(
+    draft: Sub2ApiDeploymentDraft,
+    testConnection: boolean,
+  ) {
+    void (async () => {
+      const connection = normalizeSub2ApiConnection(draft);
+      if (!connection.ok) {
+        setToast({
+          tone: "error",
+          title: "Deployment validation failed",
+          message: connection.message,
+        });
+        return;
+      }
+
+      const saved = await applyMessage({
+        type: "app:save-sub2api-deployment",
+        ...draft,
+      });
+      if (!saved || !testConnection) {
+        return;
+      }
+
+      const permissionsApi = getExtensionPermissionsApi();
+      const origin = getSub2ApiHostOriginPattern(connection.value);
+      try {
+        const alreadyGranted =
+          (await permissionsApi?.contains?.({ origins: [origin] })) ?? false;
+        const granted = alreadyGranted
+          ? true
+          : (await permissionsApi?.request?.({ origins: [origin] })) ??
+            !hasDirectPermissionControl();
+        if (!granted) {
+          setToast({
+            tone: "error",
+            title: "Deployment access denied",
+            message:
+              "The deployment was saved, but Chrome did not grant access to its origin.",
+          });
+          return;
+        }
+
+        await applyMessage(
+          { type: "app:request-refresh", providerId: "sub2api-api-key" },
+          {
+            tone: "success",
+            title: "Deployment test finished",
+            message:
+              "Check the Sub2API card for authentication, compatibility, scope, or transport diagnostics.",
+          },
+        );
+      } catch (error) {
+        setToast({
+          tone: "error",
+          title: "Deployment test failed",
+          message:
+            error instanceof Error
+              ? error.message
+              : "Chrome rejected the deployment permission request.",
+        });
+      }
+    })();
+  }
+
+  function handleDisconnectSub2ApiDeployment(
+    accountId: ProviderAccountId,
+    retainCachedSummary: boolean,
+  ) {
+    void applyMessage({
+      type: "app:disconnect-sub2api-deployment",
+      accountId,
+      retainCachedSummary,
+    });
+  }
+
+  function handleRemoveSub2ApiDeployment(accountId: ProviderAccountId) {
+    void applyMessage({
+      type: "app:remove-sub2api-deployment",
+      accountId,
+    });
+  }
+
+  function handleSetSub2ApiMeteringDisplayPreferences(
+    accountId: ProviderAccountId,
+    preferences: ApiGatewayMeteringDisplayPreferences,
+  ) {
+    void applyMessage({
+      type: "app:set-sub2api-metering-display-preferences",
+      accountId,
+      preferences,
+    });
+  }
+
   function handleTogglePermission(providerId: ProviderId) {
     if (!appState) {
       return;
@@ -320,10 +419,14 @@ export function createStandardAppActions({
     handleSavePreferences: settingsActions.handleSavePreferences,
     handleSaveProviderAdminApiKey:
       settingsActions.handleSaveProviderAdminApiKey,
+    handleSaveSub2ApiDeployment,
     handleSelectProviderAccount,
+    handleSetSub2ApiMeteringDisplayPreferences,
     handleSetSourcePreference: settingsActions.handleSetSourcePreference,
     handleTogglePermission,
     handleToggleProvider,
+    handleDisconnectSub2ApiDeployment,
+    handleRemoveSub2ApiDeployment,
     handleUpdateCustomSources,
     handleUpdateSettings: settingsActions.handleUpdateSettings,
     sessionPageNavigationAvailable:

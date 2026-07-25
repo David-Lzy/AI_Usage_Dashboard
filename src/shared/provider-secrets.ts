@@ -445,6 +445,14 @@ export async function setSub2ApiKey(
   );
 }
 
+export async function deleteSub2ApiAccountSecret(
+  accountId: ProviderAccountId,
+): Promise<void> {
+  const store = await readSecretStore();
+  delete store.accounts["sub2api-api-key"][accountId];
+  await persistSecretStore(store);
+}
+
 export async function setCodexWorkspaceConfig(
   analyticsApiKey: string | null,
   workspaceId: string | null,

@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef } from "react";
 import type {
   ActionBadgeSelections,
   ActionBadgeSelectionMode,
+  ApiGatewayMeteringDisplayPreferences,
   ApiKeyProviderId,
   AppLocalePreference,
   AppSettings,
@@ -28,6 +29,7 @@ import type {
   UsageHistoryModulesBySurface,
   ProviderServiceStatusVisibilityBySurface,
 } from "../../providers/types";
+import type { Sub2ApiDeploymentDraft } from "../../shared/sub2api-deployments";
 import type {
   CustomSourceSetting,
   CustomSourceSyncState,
@@ -155,6 +157,19 @@ type SettingsPageProps = {
     providerId: ProviderId,
     accountId: ProviderAccountId,
   ) => void;
+  onSaveSub2ApiDeployment?: (
+    draft: Sub2ApiDeploymentDraft,
+    testConnection: boolean,
+  ) => void;
+  onDisconnectSub2ApiDeployment?: (
+    accountId: ProviderAccountId,
+    retainCachedSummary: boolean,
+  ) => void;
+  onRemoveSub2ApiDeployment?: (accountId: ProviderAccountId) => void;
+  onSub2ApiMeteringDisplayPreferencesChange?: (
+    accountId: ProviderAccountId,
+    preferences: ApiGatewayMeteringDisplayPreferences,
+  ) => void;
   onTogglePermission: (providerId: ProviderId) => void;
   onSetSourcePreference: (
     providerId: ProviderId,
@@ -238,6 +253,10 @@ export function SettingsPage({
   onSaveThemeCustomSeed,
   onToggleProvider,
   onSelectProviderAccount = () => undefined,
+  onSaveSub2ApiDeployment = () => undefined,
+  onDisconnectSub2ApiDeployment = () => undefined,
+  onRemoveSub2ApiDeployment = () => undefined,
+  onSub2ApiMeteringDisplayPreferencesChange = () => undefined,
   onTogglePermission,
   onSetSourcePreference,
   onSaveProviderAdminApiKey,
@@ -583,6 +602,12 @@ export function SettingsPage({
           settingsSurfaceSession.setProviderProgressDetailsOpen
         }
         onSelectProviderAccount={onSelectProviderAccount}
+        onSaveSub2ApiDeployment={onSaveSub2ApiDeployment}
+        onDisconnectSub2ApiDeployment={onDisconnectSub2ApiDeployment}
+        onRemoveSub2ApiDeployment={onRemoveSub2ApiDeployment}
+        onSub2ApiMeteringDisplayPreferencesChange={
+          onSub2ApiMeteringDisplayPreferencesChange
+        }
       />
 
       <CustomSourceSettingsSection

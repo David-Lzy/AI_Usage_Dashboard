@@ -80,7 +80,42 @@ Chrome host permissions are requested for the configured scheme and host. Match
 patterns cannot isolate a TCP port, so the request client additionally enforces
 the exact configured origin at runtime.
 
-## 4. Refresh And Failure Policy
+## 4. Settings And Multiple Deployments
+
+Settings exposes a dedicated Sub2API deployment editor. A deployment consists
+of a local display label, one exact HTTP or HTTPS origin, and one API key. The
+API key field is never prefilled after save. Leaving it blank while editing an
+existing deployment keeps the account-scoped saved key.
+
+Multiple deployments use opaque local account IDs. Each deployment keeps its
+own connection metadata, credential, normalized snapshot, last-success state,
+and per-surface module preferences. The selected deployment is the only one
+used by Popup, Sidebar, Dashboard, and the automatic refresh schedule. Selecting
+another deployment performs one bounded manual refresh; inactive deployments
+are not refreshed concurrently and their values are never aggregated.
+
+The deployment editor distinguishes the following operations:
+
+- **Save** stores validated local metadata and an optional replacement key.
+- **Save and test** additionally requests optional access for the exact scheme
+  and host, then runs the shared provider refresh so permission,
+  authentication, compatibility, scope, and transport failures remain
+  separately diagnosable.
+- **Disconnect** removes the saved key and connection metadata. The user can
+  explicitly retain the last nonsecret summary as stale data or clear it.
+- **Remove deployment** deletes a non-default deployment, its isolated
+  snapshot, local metadata, and account-scoped key.
+
+Non-loopback HTTP requires an explicit persistent acknowledgement in the
+editor. Loopback HTTP is accepted for local gateways without that warning.
+Configuring an origin never implies that its operator is affiliated with
+Sub2API or this extension.
+
+Usage summary, trend, leading-model, and returned-limit modules can be hidden
+and reordered independently for Popup, Sidebar, and Full-page surfaces. These
+preferences remain local to the selected deployment.
+
+## 5. Refresh And Failure Policy
 
 The connector uses the shared Provider source-strategy orchestrator:
 
@@ -96,7 +131,7 @@ The connector uses the shared Provider source-strategy orchestrator:
 No independent timer is added. The connector follows the dashboard's existing
 refresh schedule.
 
-## 5. Data And Privacy
+## 6. Data And Privacy
 
 Stored data is limited to normalized aggregate metering. The extension does not
 store:
@@ -117,7 +152,7 @@ account-identifier slot in extension storage. The adapter never calls the
 account dashboard endpoints. A failed API-key refresh cannot trigger a page
 reload or account-session recovery attempt.
 
-## 6. Surface Presentation
+## 7. Surface Presentation
 
 Popup, Sidebar, and Dashboard cards use a compact account-local summary. The
 Provider detail page adds only aggregate decision support returned by
@@ -135,7 +170,7 @@ status, key administration, CSV, and advanced filters. It does not render raw
 request rows, endpoint paths, group names, key labels, prompts, response
 content, or direct identities.
 
-## 7. Upstream Basis
+## 8. Upstream Basis
 
 Contract discovery used the public `Wei-Shaw/sub2api` repository at pinned
 commit `2730c1c`. The upstream project is licensed under LGPL-3.0.
@@ -145,7 +180,7 @@ reimplements a narrow TypeScript client against the observed user endpoint and
 uses synthetic fixtures. Internal endpoints may change between deployments or
 upstream versions and are not described as a public vendor guarantee.
 
-## 8. Verification Assets
+## 9. Verification Assets
 
 - [API-key wallet fixture](../../fixtures/sub2api/api-key-wallet.fixture.json)
 - [API-key quota fixture](../../fixtures/sub2api/api-key-quota.fixture.json)

@@ -265,10 +265,14 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
     handleSaveConfigurationToChromeSync,
     handleSavePreferences,
     handleSaveProviderAdminApiKey,
+    handleSaveSub2ApiDeployment,
     handleSelectProviderAccount,
+    handleSetSub2ApiMeteringDisplayPreferences,
     handleSetSourcePreference,
     handleTogglePermission,
     handleToggleProvider,
+    handleDisconnectSub2ApiDeployment,
+    handleRemoveSub2ApiDeployment,
     handleUpdateCustomSources,
     handleUpdateSettings,
     sessionPageNavigationAvailable,
@@ -526,6 +530,14 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
             }
             onToggleProvider={handleToggleProvider}
             onSelectProviderAccount={handleSelectProviderAccount}
+            onSaveSub2ApiDeployment={handleSaveSub2ApiDeployment}
+            onDisconnectSub2ApiDeployment={
+              handleDisconnectSub2ApiDeployment
+            }
+            onRemoveSub2ApiDeployment={handleRemoveSub2ApiDeployment}
+            onSub2ApiMeteringDisplayPreferencesChange={
+              handleSetSub2ApiMeteringDisplayPreferences
+            }
             onTogglePermission={handleTogglePermission}
             onSetSourcePreference={handleSetSourcePreference}
             onSaveProviderAdminApiKey={handleSaveProviderAdminApiKey}
