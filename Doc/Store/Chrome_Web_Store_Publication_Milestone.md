@@ -16,8 +16,8 @@ Status note:
 - AI Usage Dashboard has a live Chrome Web Store listing
 - Chrome Web Store API status shows manifest version `0.2.0.8` published at 100%
 - source `0.2.0-rc.9` / manifest `0.2.0.9` is submitted for review at 100%
-- source `0.2.0-rc.10` / manifest `0.2.0.10` is the current release candidate;
-  it is not yet recorded here as submitted or published
+- source `0.2.0-rc.10` / manifest `0.2.0.10` is available from GitHub with
+  browser-specific packages and checksums, but is not submitted to the Store
 - no known critical user-facing bug is blocking normal use at this milestone
 - private upload receipts, package hashes, screenshots-in-progress, and
   submission handoff notes stay in ignored `.local/` material
@@ -31,9 +31,9 @@ Status note:
   `0.2.0.8` published at 100%.
 - Source `0.2.0-rc.9` / manifest `0.2.0.9` was uploaded successfully and is
   separately reported as `PENDING_REVIEW` at 100% deployment.
-- Source `0.2.0-rc.10` / manifest `0.2.0.10` is prepared for the tag release
-  workflow. Its store status must be updated only after the workflow or Store
-  API confirms the handoff.
+- The `v0.2.0-rc.10` tag workflow published Chrome and Firefox GitHub Release
+  assets plus checksums. Its optional Chrome Web Store upload step did not run,
+  so manifest `0.2.0.10` is not recorded as submitted or published.
 - The maintained listing-copy sources now include bounded Sub2API-compatible
   aggregate metering. Applying those text changes to the live Developer
   Dashboard remains a separate metadata operation.
@@ -90,8 +90,8 @@ Chrome extension and provider-surface drift:
 ## Next Store Work
 
 - Confirm the `0.2.0.9` review result before describing RC9 as published.
-- Verify the `v0.2.0-rc.10` tag workflow and record whether the optional Chrome
-  Web Store handoff ran before describing RC10 as submitted.
+- Submit manifest `0.2.0.10` only through a verified Chrome Web Store handoff,
+  then update this status from the Store API result.
 - Apply the maintained Sub2API listing-copy updates in the Developer Dashboard
   when the publisher account can complete Google's interactive re-verification.
 - Keep the current public copy in `Doc/Store/` as the maintained text source.
