@@ -124,7 +124,7 @@ export const EN_RUNTIME_MESSAGES = {
     "settings.preferences.popup_provider_browsing_mode_label": "Popup provider browsing",
     "settings.preferences.popup_provider_browsing_mode.collapsible": "Collapsible list",
     "settings.preferences.popup_provider_browsing_mode.single": "Previous and next",
-    "settings.preferences.popup_provider_browsing_mode.switch": "Bottom switch",
+    "settings.preferences.popup_provider_browsing_mode.switch": "Top switch",
     "settings.preferences.popup_provider_browsing_mode.scroll": "Auto glide",
     "settings.preferences.popup_corner_label": "Popup corners",
     "settings.preferences.popup_corner.square": "Square",

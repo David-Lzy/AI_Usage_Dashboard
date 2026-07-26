@@ -46,7 +46,7 @@ export const POPUP_PROVIDER_BROWSING_MODE_OPTIONS: Array<{
   },
   {
     value: "switch",
-    label: "Bottom switch",
+    label: "Top switch",
   },
   {
     value: "scroll",

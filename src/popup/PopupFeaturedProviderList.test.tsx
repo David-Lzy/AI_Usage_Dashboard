@@ -78,7 +78,7 @@ describe("PopupFeaturedProviderList", () => {
     expect(html).not.toContain('data-popup-provider-card-toggle=');
   });
 
-  it("renders one provider with a bottom switch in switch mode", () => {
+  it("renders one provider with a top switch in switch mode", () => {
     const state: AppState = {
       ...SAMPLE_APP_STATE,
       settings: {
@@ -114,6 +114,7 @@ describe("PopupFeaturedProviderList", () => {
 
     expect(html).toContain('data-popup-provider-browsing-mode="scroll"');
     expect(html).toContain('data-popup-provider-auto-glide=""');
+    expect(html).toContain('data-popup-provider-auto-glide-interval-ms="5000"');
     expect(html).toContain("popup-provider-card--auto-glide-next");
     expect(html).not.toContain('data-popup-provider-switcher=""');
     expect(html).not.toContain('data-popup-provider-card-toggle=');
@@ -524,12 +525,14 @@ describe("PopupFeaturedProviderList", () => {
       ".popup-provider-card__header-actions {\n    grid-column: 1;",
     );
     expect(popupThemeCss).toContain(".popup-provider-card__collapse-toggle {");
-    expect(popupThemeCss).toContain("inset-block-start: -9px;");
+    expect(popupThemeCss).toContain("padding-block-start: 5px;");
+    expect(popupThemeCss).toContain("transform: translateY(-25%);");
     expect(popupThemeCss).toContain(".popup-provider-switcher {");
     expect(popupThemeCss).toContain(
       "grid-template-columns: 42px minmax(0, 1fr) 42px;",
     );
     expect(popupThemeCss).toContain(".popup-provider-center-switch {");
+    expect(popupThemeCss).toContain("inset-block-start: 5px;");
     expect(popupThemeCss).toContain("@keyframes popup-provider-auto-glide-next");
     expect(popupThemeCss).toContain(
       ':root[data-motion-resolved="reduced"] .popup-provider-card--auto-glide',

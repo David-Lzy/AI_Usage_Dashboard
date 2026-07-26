@@ -89,7 +89,7 @@ type PopupFeaturedProviderListProps = {
 
 type PopupProviderNavigationDirection = "previous" | "next";
 
-const POPUP_PROVIDER_AUTO_GLIDE_INTERVAL_MS = 8_000;
+const POPUP_PROVIDER_AUTO_GLIDE_INTERVAL_MS = 5_000;
 
 function shouldShowPlanWithProviderProgress(
   provider: PopupFeaturedProviderCard["provider"],
@@ -208,6 +208,16 @@ export function PopupFeaturedProviderList({
   const activeCard = cards[resolvedActiveProviderIndex] ?? cards[0] ?? null;
   const visibleCards =
     usesSingleProviderStage && activeCard ? [activeCard] : cards;
+  const autoGlidePauseReason =
+    providerBrowsingMode !== "scroll"
+      ? undefined
+      : !isDocumentVisible
+        ? "document-hidden"
+        : isAutoGlideFocusPaused
+          ? "focus"
+          : isAutoGlidePointerPaused
+            ? "pointer"
+            : undefined;
   const nextAutoGlideProviderId =
     cards.length > 0
       ? (cards[(resolvedActiveProviderIndex + 1) % cards.length]?.provider
@@ -276,6 +286,12 @@ export function PopupFeaturedProviderList({
         data-popup-provider-auto-glide={
           providerBrowsingMode === "scroll" ? "" : undefined
         }
+        data-popup-provider-auto-glide-interval-ms={
+          providerBrowsingMode === "scroll"
+            ? POPUP_PROVIDER_AUTO_GLIDE_INTERVAL_MS
+            : undefined
+        }
+        data-popup-provider-auto-glide-paused={autoGlidePauseReason}
         role={
           providerBrowsingMode === "scroll" && cards.length > 1
             ? "group"
@@ -315,13 +331,19 @@ export function PopupFeaturedProviderList({
             navigateProvider("next");
           }
         }}
-        onMouseEnter={() => {
-          if (providerBrowsingMode === "scroll") {
+        onPointerMove={() => {
+          if (
+            providerBrowsingMode === "scroll" &&
+            !isAutoGlidePointerPaused
+          ) {
             setIsAutoGlidePointerPaused(true);
           }
         }}
-        onMouseLeave={() => {
-          if (providerBrowsingMode === "scroll") {
+        onPointerLeave={() => {
+          if (
+            providerBrowsingMode === "scroll" &&
+            isAutoGlidePointerPaused
+          ) {
             setIsAutoGlidePointerPaused(false);
           }
         }}

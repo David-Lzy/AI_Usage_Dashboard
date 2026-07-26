@@ -184,7 +184,7 @@ describe("SettingsPreferencesSection", () => {
     expect(html).toContain("Popup provider browsing");
     expect(html).toContain("Collapsible list");
     expect(html).toContain("Previous and next");
-    expect(html).toContain("Bottom switch");
+    expect(html).toContain("Top switch");
     expect(html).toContain("Auto glide");
     expect(html).toContain('data-settings-material-select="ui-font-family"');
     expect(html).toContain(

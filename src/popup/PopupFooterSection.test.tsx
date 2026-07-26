@@ -71,7 +71,7 @@ describe("PopupFooterSection", () => {
   it("keeps the footer collapse surface in CSS", () => {
     expect(popupThemeCss).toContain(".popup-footer--collapsed");
     expect(popupThemeCss).toContain(".popup-footer__collapse-toggle");
-    expect(popupThemeCss).toContain("transform: translate(-50%, -50%);");
+    expect(popupThemeCss).toContain("transform: translateY(-25%);");
     expect(popupThemeCss).toContain(".popup-footer__content[hidden]");
     expect(popupThemeCss).toContain("container: popup-footer / inline-size;");
     expect(popupThemeCss).toContain(
