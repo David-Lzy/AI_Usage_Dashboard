@@ -111,6 +111,21 @@ describe("PopupHeaderSection", () => {
     expect(html).toContain("hidden");
   });
 
+  it("keeps the action surface and compact restore control sticky", () => {
+    expect(popupThemeCss).toContain("position: sticky;");
+    expect(popupThemeCss).toContain(
+      "inset-block-start: var(--app-space-3);",
+    );
+    expect(popupThemeCss).toContain("z-index: 30;");
+    expect(popupThemeCss).toContain("isolation: isolate;");
+    expect(popupThemeCss).toContain(
+      ".popup-header--surface-collapsed {\n  justify-self: center;\n  inline-size: 56px;\n  height: 18px;",
+    );
+    expect(popupThemeCss).toContain(
+      ".popup-header--surface-collapsed .popup-header__collapse-toggle {\n  position: static;",
+    );
+  });
+
   it("uses the refreshing label without title copy", () => {
     const readyHtml = renderPopupHeader({
       isRefreshing: true,
