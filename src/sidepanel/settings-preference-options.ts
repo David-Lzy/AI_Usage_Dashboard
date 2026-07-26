@@ -106,6 +106,9 @@ export function buildSettingsPreferenceOptions({
     single: i18n.t(
       "settings.preferences.popup_provider_browsing_mode.single",
     ),
+    switch: i18n.t(
+      "settings.preferences.popup_provider_browsing_mode.switch",
+    ),
     scroll: i18n.t(
       "settings.preferences.popup_provider_browsing_mode.scroll",
     ),

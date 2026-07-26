@@ -176,6 +176,7 @@ export type PopupSizePreset = "compact" | "balanced" | "wide";
 export type PopupProviderBrowsingMode =
   | "collapsible"
   | "single"
+  | "switch"
   | "scroll";
 export type PopupCornerStyle = "square" | "soft" | "rounded";
 export type PopupShadowStyle = "none" | "soft" | "elevated";

@@ -182,9 +182,10 @@ describe("SettingsPreferencesSection", () => {
       'data-settings-material-select="popup-provider-browsing-mode"',
     );
     expect(html).toContain("Popup provider browsing");
-    expect(html).toContain("Collapsible cards");
-    expect(html).toContain("One card at a time");
-    expect(html).toContain("Continuous scroll");
+    expect(html).toContain("Collapsible list");
+    expect(html).toContain("Previous and next");
+    expect(html).toContain("Bottom switch");
+    expect(html).toContain("Auto glide");
     expect(html).toContain('data-settings-material-select="ui-font-family"');
     expect(html).toContain(
       'data-settings-material-select="reset-time-display-mode"',

@@ -36,7 +36,7 @@ describe("popup appearance preferences", () => {
     ]);
     expect(
       POPUP_PROVIDER_BROWSING_MODE_OPTIONS.map((option) => option.value),
-    ).toEqual(["collapsible", "single", "scroll"]);
+    ).toEqual(["collapsible", "single", "switch", "scroll"]);
     expect(POPUP_CORNER_STYLE_OPTIONS.map((option) => option.value)).toEqual([
       "square",
       "soft",
@@ -62,6 +62,7 @@ describe("popup appearance preferences", () => {
       "collapsible",
     );
     expect(normalizePopupProviderBrowsingMode("single")).toBe("single");
+    expect(normalizePopupProviderBrowsingMode("switch")).toBe("switch");
     expect(normalizePopupProviderBrowsingMode("scroll")).toBe("scroll");
     expect(normalizePopupCornerStyle("square")).toBe("square");
     expect(normalizePopupCornerStyle("soft")).toBe("soft");

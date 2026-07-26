@@ -78,7 +78,28 @@ describe("PopupFeaturedProviderList", () => {
     expect(html).not.toContain('data-popup-provider-card-toggle=');
   });
 
-  it("preserves the continuous list in scroll mode", () => {
+  it("renders one provider with a bottom switch in switch mode", () => {
+    const state: AppState = {
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        popupProviderBrowsingMode: "switch",
+      },
+    };
+    const html = renderFeaturedList(
+      buildPopupViewModel(state).featuredProviderCards,
+      state,
+    );
+
+    expect(html).toContain('data-popup-provider-browsing-mode="switch"');
+    expect(html).toContain('data-popup-provider-center-switch=""');
+    expect(html).toContain('aria-label="Next provider"');
+    expect(html.match(/data-popup-hide-provider=/g)).toHaveLength(1);
+    expect(html).not.toContain('data-popup-provider-switcher=""');
+    expect(html).not.toContain('data-popup-provider-card-toggle=');
+  });
+
+  it("renders one auto-gliding provider without a continuous animation loop", () => {
     const state: AppState = {
       ...SAMPLE_APP_STATE,
       settings: {
@@ -92,11 +113,11 @@ describe("PopupFeaturedProviderList", () => {
     );
 
     expect(html).toContain('data-popup-provider-browsing-mode="scroll"');
+    expect(html).toContain('data-popup-provider-auto-glide=""');
+    expect(html).toContain("popup-provider-card--auto-glide-next");
     expect(html).not.toContain('data-popup-provider-switcher=""');
     expect(html).not.toContain('data-popup-provider-card-toggle=');
-    expect(html.match(/data-popup-hide-provider=/g)?.length ?? 0).toBeGreaterThan(
-      1,
-    );
+    expect(html.match(/data-popup-hide-provider=/g)).toHaveLength(1);
   });
 
   it("renders compact API gateway metering instead of generic diagnostics", () => {
@@ -503,9 +524,15 @@ describe("PopupFeaturedProviderList", () => {
       ".popup-provider-card__header-actions {\n    grid-column: 1;",
     );
     expect(popupThemeCss).toContain(".popup-provider-card__collapse-toggle {");
+    expect(popupThemeCss).toContain("inset-block-start: -9px;");
     expect(popupThemeCss).toContain(".popup-provider-switcher {");
     expect(popupThemeCss).toContain(
-      "grid-template-columns: 34px minmax(0, 1fr) 34px;",
+      "grid-template-columns: 42px minmax(0, 1fr) 42px;",
+    );
+    expect(popupThemeCss).toContain(".popup-provider-center-switch {");
+    expect(popupThemeCss).toContain("@keyframes popup-provider-auto-glide-next");
+    expect(popupThemeCss).toContain(
+      ':root[data-motion-resolved="reduced"] .popup-provider-card--auto-glide',
     );
   });
 });

@@ -142,6 +142,7 @@ export type RuntimeMessageId =
   | "settings.preferences.popup_provider_browsing_mode_label"
   | "settings.preferences.popup_provider_browsing_mode.collapsible"
   | "settings.preferences.popup_provider_browsing_mode.single"
+  | "settings.preferences.popup_provider_browsing_mode.switch"
   | "settings.preferences.popup_provider_browsing_mode.scroll"
   | "settings.preferences.popup_corner_label"
   | "settings.preferences.popup_corner.square"

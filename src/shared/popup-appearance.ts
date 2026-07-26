@@ -42,11 +42,15 @@ export const POPUP_PROVIDER_BROWSING_MODE_OPTIONS: Array<{
   },
   {
     value: "single",
-    label: "One card at a time",
+    label: "Previous and next",
+  },
+  {
+    value: "switch",
+    label: "Bottom switch",
   },
   {
     value: "scroll",
-    label: "Continuous scroll",
+    label: "Auto glide",
   },
 ];
 
@@ -121,7 +125,10 @@ export function normalizePopupProviderBrowsingMode(
   value: unknown,
   fallback: PopupProviderBrowsingMode = DEFAULT_POPUP_PROVIDER_BROWSING_MODE,
 ): PopupProviderBrowsingMode {
-  return value === "collapsible" || value === "single" || value === "scroll"
+  return value === "collapsible" ||
+    value === "single" ||
+    value === "switch" ||
+    value === "scroll"
     ? value
     : fallback;
 }
