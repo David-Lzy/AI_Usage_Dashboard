@@ -6,6 +6,7 @@ import type {
   ProviderSnapshot,
 } from "../../providers/types";
 import { isSub2ApiNonLoopbackHttpUrl } from "../../providers/sub2api/connection";
+import { getTestConnectionLabel } from "../../shared/connection-action-localized-copy";
 import type { ResolvedAppLocale } from "../../shared/i18n";
 import {
   DEFAULT_PROVIDER_ACCOUNT_ID,
@@ -25,6 +26,7 @@ type Sub2ApiDeploymentSettingsProps = {
   snapshot: ProviderSnapshot | null;
   onSelectAccount: (accountId: ProviderAccountId) => void;
   onSave: (draft: Sub2ApiDeploymentDraft, testConnection: boolean) => void;
+  onTest: () => void;
   onDisconnect: (
     accountId: ProviderAccountId,
     retainCachedSummary: boolean,
@@ -55,10 +57,12 @@ export function Sub2ApiDeploymentSettings({
   snapshot,
   onSelectAccount,
   onSave,
+  onTest,
   onDisconnect,
   onRemove,
 }: Sub2ApiDeploymentSettingsProps) {
   const copy = buildSub2ApiSettingsLocalizedCopy(locale);
+  const testConnectionLabel = getTestConnectionLabel(locale);
   const collection = providerAccounts?.[SUB2API_PROVIDER_ID];
   const activeAccountId =
     collection?.activeAccountId ?? DEFAULT_PROVIDER_ACCOUNT_ID;
@@ -111,6 +115,14 @@ export function Sub2ApiDeploymentSettings({
       : scope === "account"
         ? copy.scopeAccount
         : copy.scopeUnknown;
+  const hasUnsavedConnectionChanges =
+    isAdding ||
+    Boolean(apiKey.trim()) ||
+    displayLabel !==
+      (activeConnection?.displayLabel ?? activeMetadata?.label ?? "") ||
+    baseUrl !== (activeConnection?.baseUrl ?? "") ||
+    insecureTransportAcknowledged !==
+      (activeConnection?.insecureTransportAcknowledged ?? false);
 
   function beginAddDeployment() {
     setIsAdding(true);
@@ -132,8 +144,8 @@ export function Sub2ApiDeploymentSettings({
     );
   }
 
-  function submit(testConnection: boolean) {
-    onSave(draft, testConnection);
+  function submit() {
+    onSave(draft, false);
     setApiKey("");
   }
 
@@ -170,27 +182,34 @@ export function Sub2ApiDeploymentSettings({
         )}
       </div>
 
-      <p className="body-copy sub2api-deployment-settings__detail">
-        {copy.detail}
-      </p>
+      <details className="sub2api-deployment-settings__trust">
+        <summary>{copy.trustTitle}</summary>
+        <p>{copy.trustDetail}</p>
+      </details>
 
-      <div className="sub2api-deployment-settings__trust" role="note">
-        <strong>{copy.trustTitle}</strong>
-        <span>{copy.trustDetail}</span>
+      <div className="sub2api-deployment-settings__connection-bar">
+        {!isAdding && collection?.accounts.length ? (
+          <div className="sub2api-deployment-settings__selector">
+            <MaterialSelect
+              fieldIdPrefix="sub2api-active-deployment"
+              label={copy.deployment}
+              value={activeAccountId}
+              options={collection.accounts.map((account) => ({
+                value: account.id,
+                label: account.label,
+              }))}
+              onChange={(accountId) => onSelectAccount(accountId)}
+            />
+          </div>
+        ) : null}
+        <div
+          className="sub2api-deployment-settings__connection-mode"
+          aria-label={`${copy.connectionMode}: ${copy.connectionModeValue}`}
+        >
+          <span>{copy.connectionMode}</span>
+          <strong>{copy.connectionModeValue}</strong>
+        </div>
       </div>
-
-      {!isAdding && collection?.accounts.length ? (
-        <MaterialSelect
-          fieldIdPrefix="sub2api-active-deployment"
-          label={copy.deployment}
-          value={activeAccountId}
-          options={collection.accounts.map((account) => ({
-            value: account.id,
-            label: account.label,
-          }))}
-          onChange={(accountId) => onSelectAccount(accountId)}
-        />
-      ) : null}
 
       <div className="sub2api-deployment-settings__form">
         <label className="form-field">
@@ -218,31 +237,41 @@ export function Sub2ApiDeploymentSettings({
             }}
           />
         </label>
-        <label className="form-field">
-          <span className="form-field__label">{copy.connectionMode}</span>
-          <input
-            className="form-field__control"
-            disabled
-            value={copy.connectionModeValue}
-          />
-        </label>
-        <label className="form-field sub2api-deployment-settings__api-key">
-          <span className="form-field__label">{copy.apiKey}</span>
-          <input
-            className="form-field__control"
-            autoCapitalize="none"
-            autoComplete="new-password"
-            placeholder={copy.apiKeyPlaceholder}
-            type="password"
-            value={apiKey}
-            onChange={(event) => setApiKey(event.currentTarget.value)}
-          />
+        <div className="sub2api-deployment-settings__api-key">
+          <label className="form-field">
+            <span className="form-field__label">{copy.apiKey}</span>
+            <input
+              className="form-field__control"
+              autoCapitalize="none"
+              autoComplete="new-password"
+              data-stored-credential-placeholder={
+                !isAdding && activeConnection ? "" : undefined
+              }
+              placeholder={
+                !isAdding && activeConnection
+                  ? "••••••••••••"
+                  : copy.apiKeyPlaceholder
+              }
+              type="password"
+              value={apiKey}
+              onChange={(event) => setApiKey(event.currentTarget.value)}
+            />
+          </label>
+          <button
+            className="text-button sub2api-deployment-settings__test"
+            data-sub2api-action="test"
+            type="button"
+            disabled={!activeConnection || hasUnsavedConnectionChanges}
+            onClick={onTest}
+          >
+            {testConnectionLabel}
+          </button>
           {!isAdding && activeConnection ? (
             <span className="supporting-copy form-field__supporting-text">
               {copy.apiKeyPreserved}
             </span>
           ) : null}
-        </label>
+        </div>
       </div>
 
       {requiresInsecureAcknowledgement ? (
@@ -283,53 +312,49 @@ export function Sub2ApiDeploymentSettings({
         </div>
       </dl>
 
-      <div className="sub2api-deployment-settings__actions">
-        <button
-          className="icon-button icon-button--primary"
-          type="button"
-          onClick={() => submit(true)}
-        >
-          {copy.saveAndTest}
-        </button>
-        <button
-          className="text-button"
-          type="button"
-          onClick={() => submit(false)}
-        >
-          {copy.save}
-        </button>
+      <div className="sub2api-deployment-settings__footer">
+        <div className="sub2api-deployment-settings__actions">
+          <button
+            className="icon-button icon-button--primary"
+            data-sub2api-action="save"
+            type="button"
+            onClick={submit}
+          >
+            {copy.save}
+          </button>
+          {!isAdding && activeConnection ? (
+            <button
+              className="text-button"
+              type="button"
+              onClick={() => onDisconnect(activeAccountId, retainCachedSummary)}
+            >
+              {copy.disconnect}
+            </button>
+          ) : null}
+          {!isAdding && activeAccountId !== DEFAULT_PROVIDER_ACCOUNT_ID ? (
+            <button
+              className="text-button sub2api-deployment-settings__remove"
+              type="button"
+              onClick={() => onRemove(activeAccountId)}
+            >
+              {copy.remove}
+            </button>
+          ) : null}
+        </div>
+
         {!isAdding && activeConnection ? (
-          <button
-            className="text-button"
-            type="button"
-            onClick={() => onDisconnect(activeAccountId, retainCachedSummary)}
-          >
-            {copy.disconnect}
-          </button>
-        ) : null}
-        {!isAdding && activeAccountId !== DEFAULT_PROVIDER_ACCOUNT_ID ? (
-          <button
-            className="text-button sub2api-deployment-settings__remove"
-            type="button"
-            onClick={() => onRemove(activeAccountId)}
-          >
-            {copy.remove}
-          </button>
+          <label className="sub2api-deployment-settings__retain">
+            <input
+              type="checkbox"
+              checked={retainCachedSummary}
+              onChange={(event) =>
+                setRetainCachedSummary(event.currentTarget.checked)
+              }
+            />
+            <span>{copy.retainCachedSummary}</span>
+          </label>
         ) : null}
       </div>
-
-      {!isAdding && activeConnection ? (
-        <label className="sub2api-deployment-settings__retain">
-          <input
-            type="checkbox"
-            checked={retainCachedSummary}
-            onChange={(event) =>
-              setRetainCachedSummary(event.currentTarget.checked)
-            }
-          />
-          <span>{copy.retainCachedSummary}</span>
-        </label>
-      ) : null}
 
       <details className="sub2api-deployment-settings__protocol">
         <summary>{copy.protocolTitle}</summary>

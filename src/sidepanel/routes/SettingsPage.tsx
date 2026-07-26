@@ -163,6 +163,7 @@ type SettingsPageProps = {
     draft: Sub2ApiDeploymentDraft,
     testConnection: boolean,
   ) => void;
+  onTestSub2ApiDeployment?: () => void;
   onDisconnectSub2ApiDeployment?: (
     accountId: ProviderAccountId,
     retainCachedSummary: boolean,
@@ -182,6 +183,7 @@ type SettingsPageProps = {
     apiKey: string,
   ) => void;
   onClearProviderAdminApiKey: (providerId: ApiKeyProviderId) => void;
+  onTestProviderConnection?: (providerId: ApiKeyProviderId) => void;
   onSaveCodexWorkspaceConfig: (
     analyticsApiKey: string,
     workspaceId: string,
@@ -257,6 +259,7 @@ export function SettingsPage({
   onToggleProvider,
   onSelectProviderAccount = () => undefined,
   onSaveSub2ApiDeployment = () => undefined,
+  onTestSub2ApiDeployment = () => undefined,
   onDisconnectSub2ApiDeployment = () => undefined,
   onRemoveSub2ApiDeployment = () => undefined,
   onSub2ApiMeteringDisplayPreferencesChange = () => undefined,
@@ -264,6 +267,7 @@ export function SettingsPage({
   onSetSourcePreference,
   onSaveProviderAdminApiKey,
   onClearProviderAdminApiKey,
+  onTestProviderConnection = () => undefined,
   onSaveCodexWorkspaceConfig,
   onClearCodexWorkspaceConfig,
   onSaveCodexSessionToken,
@@ -608,6 +612,7 @@ export function SettingsPage({
         }
         onSelectProviderAccount={onSelectProviderAccount}
         onSaveSub2ApiDeployment={onSaveSub2ApiDeployment}
+        onTestSub2ApiDeployment={onTestSub2ApiDeployment}
         onDisconnectSub2ApiDeployment={onDisconnectSub2ApiDeployment}
         onRemoveSub2ApiDeployment={onRemoveSub2ApiDeployment}
         onSub2ApiMeteringDisplayPreferencesChange={
@@ -680,6 +685,7 @@ export function SettingsPage({
                 codexSessionTokenInput={codexSessionTokenInput}
                 carouselIndex={settingsSurfaceSession.carouselIndexById.credentials}
                 labels={settingsCopy.credentials}
+                locale={i18n.resolvedLocale}
                 codexSessionLabels={{
                   title: i18n.t("settings.credentials.codex_session_title"),
                   state: i18n.t("settings.credentials.codex_session_state"),
@@ -696,6 +702,7 @@ export function SettingsPage({
                 onCarouselIndexChange={handleCredentialsCarouselIndexChange}
                 onSaveProviderApiKey={handleSaveProviderApiKey}
                 onClearProviderApiKey={handleClearProviderApiKey}
+                onTestProviderConnection={onTestProviderConnection}
                 onProviderApiKeyInputChange={handleProviderApiKeyInputChange}
                 onSaveCodexConfig={handleSaveCodexConfig}
                 onClearCodexConfig={handleClearCodexConfig}

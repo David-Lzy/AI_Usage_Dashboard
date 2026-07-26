@@ -46,10 +46,21 @@
   gap: var(--app-space-3);
 }
 
+.status-card[data-credential-provider-id] > .dashboard-section__header {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+}
+
 .credential-actions {
   display: flex;
   flex-wrap: wrap;
   gap: var(--app-space-2);
+}
+
+@media (max-width: 420px) {
+  .credential-secret-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 [data-quick-setup-primary-action="grant_access"]:not(:disabled),
@@ -70,6 +81,8 @@
 }
 
 .credential-state {
+  align-self: start;
+  justify-self: end;
   margin: 0;
   padding: 6px 12px;
   border: 1px solid transparent;
@@ -78,6 +91,16 @@
   font-size: var(--md-sys-typescale-label-large-size);
   font-weight: var(--md-sys-typescale-label-large-weight);
   line-height: var(--md-sys-typescale-label-large-line-height);
+}
+
+@media (max-width: 340px) {
+  .status-card[data-credential-provider-id] > .dashboard-section__header {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .credential-state {
+    justify-self: start;
+  }
 }
 
 .credential-state--configured {

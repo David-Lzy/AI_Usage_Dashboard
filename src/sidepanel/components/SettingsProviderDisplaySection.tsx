@@ -77,6 +77,7 @@ type SettingsProviderDisplaySectionProps = {
     draft: Sub2ApiDeploymentDraft,
     testConnection: boolean,
   ) => void;
+  onTestSub2ApiDeployment?: () => void;
   onDisconnectSub2ApiDeployment?: (
     accountId: ProviderAccountId,
     retainCachedSummary: boolean,
@@ -107,6 +108,7 @@ export function SettingsProviderDisplaySection({
   onProviderProgressDetailsOpenChange,
   onSelectProviderAccount = () => undefined,
   onSaveSub2ApiDeployment = () => undefined,
+  onTestSub2ApiDeployment = () => undefined,
   onDisconnectSub2ApiDeployment = () => undefined,
   onRemoveSub2ApiDeployment = () => undefined,
   onSub2ApiMeteringDisplayPreferencesChange = () => undefined,
@@ -195,6 +197,7 @@ export function SettingsProviderDisplaySection({
                 onSelectProviderAccount(SUB2API_PROVIDER_ID, accountId)
               }
               onSave={onSaveSub2ApiDeployment}
+              onTest={onTestSub2ApiDeployment}
               onDisconnect={onDisconnectSub2ApiDeployment}
               onRemove={onRemoveSub2ApiDeployment}
             />

@@ -5,7 +5,11 @@ import type {
   ProviderId,
   ProviderSetting,
 } from "../../providers/types";
-import type { ResolvedTextDirection } from "../../shared/i18n";
+import { getTestConnectionLabel } from "../../shared/connection-action-localized-copy";
+import type {
+  ResolvedAppLocale,
+  ResolvedTextDirection,
+} from "../../shared/i18n";
 import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import {
   ProviderCarousel,
@@ -45,6 +49,7 @@ type SettingsCredentialsSectionProps = {
   eyebrow: string;
   focusedProviderId?: ProviderId | null;
   labels: ReturnType<typeof buildSettingsLocalizedCopy>["credentials"];
+  locale: ResolvedAppLocale;
   sectionId?: string;
   textDirection?: ResolvedTextDirection;
   title: string;
@@ -65,6 +70,7 @@ type SettingsCredentialsSectionProps = {
     providerId: ApiKeyProviderId,
     event: FormEvent<HTMLFormElement>,
   ) => void;
+  onTestProviderConnection: (providerId: ApiKeyProviderId) => void;
 };
 
 export function SettingsCredentialsSection({
@@ -80,6 +86,7 @@ export function SettingsCredentialsSection({
   eyebrow,
   focusedProviderId = null,
   labels,
+  locale,
   sectionId,
   textDirection = "ltr",
   title,
@@ -94,7 +101,9 @@ export function SettingsCredentialsSection({
   onSaveCodexConfig,
   onSaveCodexSessionToken,
   onSaveProviderApiKey,
+  onTestProviderConnection,
 }: SettingsCredentialsSectionProps) {
+  const testConnectionLabel = getTestConnectionLabel(locale);
   const credentialItems: ProviderCarouselItem[] = [
     ...credentialProviders.map((item) => {
       const isConfigured = item.provider.credentialStatus === "configured";
@@ -134,27 +143,39 @@ export function SettingsCredentialsSection({
                   onSaveProviderApiKey(item.provider.id, event)
                 }
               >
-                <label className="form-field">
-                  <span className="form-field__label">{item.inputLabel}</span>
-                  <input
-                    className="form-field__control"
-                    type="password"
-                    autoComplete="off"
-                    spellCheck={false}
-                    value={currentInput}
-                    placeholder={
-                      isConfigured
-                        ? item.placeholderConfigured
-                        : item.placeholderMissing
-                    }
-                    onChange={(event) =>
-                      onProviderApiKeyInputChange(
-                        item.provider.id,
-                        event.target.value,
-                      )
-                    }
-                  />
-                </label>
+                <div className="credential-secret-row">
+                  <label className="form-field">
+                    <span className="form-field__label">{item.inputLabel}</span>
+                    <input
+                      className="form-field__control"
+                      type="password"
+                      autoComplete="off"
+                      data-stored-credential-placeholder={
+                        isConfigured ? "" : undefined
+                      }
+                      spellCheck={false}
+                      value={currentInput}
+                      placeholder={
+                        isConfigured ? "••••••••••••" : item.placeholderMissing
+                      }
+                      onChange={(event) =>
+                        onProviderApiKeyInputChange(
+                          item.provider.id,
+                          event.target.value,
+                        )
+                      }
+                    />
+                  </label>
+                  <button
+                    className="text-button credential-test-action"
+                    data-credential-action="test"
+                    type="button"
+                    disabled={!isConfigured || Boolean(trimmedInput)}
+                    onClick={() => onTestProviderConnection(item.provider.id)}
+                  >
+                    {testConnectionLabel}
+                  </button>
+                </div>
 
                 <div className="credential-actions">
                   <button
@@ -213,26 +234,48 @@ export function SettingsCredentialsSection({
                   <p className="supporting-copy">{labels.codexHelpText}</p>
 
                   <form className="credential-form" onSubmit={onSaveCodexConfig}>
-                    <label className="form-field">
-                      <span className="form-field__label">
-                        {labels.analyticsApiKeyLabel}
-                      </span>
-                      <input
-                        className="form-field__control"
-                        type="password"
-                        autoComplete="off"
-                        spellCheck={false}
-                        value={codexAnalyticsApiKeyInput}
-                        placeholder={
-                          codexProvider.credentialStatus === "configured"
-                            ? labels.codexAnalyticsPlaceholderConfigured
-                            : labels.codexAnalyticsPlaceholderMissing
+                    <div className="credential-secret-row">
+                      <label className="form-field">
+                        <span className="form-field__label">
+                          {labels.analyticsApiKeyLabel}
+                        </span>
+                        <input
+                          className="form-field__control"
+                          type="password"
+                          autoComplete="off"
+                          data-stored-credential-placeholder={
+                            codexProvider.credentialStatus === "configured"
+                              ? ""
+                              : undefined
+                          }
+                          spellCheck={false}
+                          value={codexAnalyticsApiKeyInput}
+                          placeholder={
+                            codexProvider.credentialStatus === "configured"
+                              ? "••••••••••••"
+                              : labels.codexAnalyticsPlaceholderMissing
+                          }
+                          onChange={(event) =>
+                            onCodexAnalyticsApiKeyInputChange(event.target.value)
+                          }
+                        />
+                      </label>
+                      <button
+                        className="text-button credential-test-action"
+                        data-credential-action="test"
+                        type="button"
+                        disabled={
+                          codexProvider.credentialStatus !== "configured" ||
+                          Boolean(codexAnalyticsApiKeyInput.trim()) ||
+                          Boolean(codexWorkspaceIdInput.trim())
                         }
-                        onChange={(event) =>
-                          onCodexAnalyticsApiKeyInputChange(event.target.value)
+                        onClick={() =>
+                          onTestProviderConnection(codexProvider.id)
                         }
-                      />
-                    </label>
+                      >
+                        {testConnectionLabel}
+                      </button>
+                    </div>
 
                     <label className="form-field">
                       <span className="form-field__label">

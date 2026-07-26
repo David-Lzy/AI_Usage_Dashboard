@@ -26,7 +26,10 @@ describe("SettingsCredentialsSection", () => {
 
     const credentialProviders: CredentialProviderSection[] = [
       {
-        provider: cursorProvider!,
+        provider: {
+          ...cursorProvider!,
+          credentialStatus: "configured",
+        },
         title: "Cursor Admin key",
         inputLabel: "Admin API key",
         helpText: "Stored locally.",
@@ -46,7 +49,7 @@ describe("SettingsCredentialsSection", () => {
         credentialProviders={credentialProviders}
         codexProvider={codexProvider!}
         credentialInputs={{
-          "cursor-team-api": "draft-key",
+          "cursor-team-api": "",
           "claude-code-admin-api": "",
           "codex-enterprise-api": "",
         }}
@@ -92,7 +95,9 @@ describe("SettingsCredentialsSection", () => {
           codexWorkspacePlaceholderMissing: "Paste workspace",
           codexWorkspacePlaceholderConfigured: "Workspace configured",
         }}
+        locale="en"
         onSaveProviderApiKey={() => {}}
+        onTestProviderConnection={() => {}}
         onClearProviderApiKey={() => {}}
         onProviderApiKeyInputChange={() => {}}
         onSaveCodexConfig={() => {}}
@@ -114,6 +119,11 @@ describe("SettingsCredentialsSection", () => {
     expect(html).toContain('data-codex-session-token-input=""');
     expect(html).toContain('class="credential-form"');
     expect(html).toContain('type="password"');
+    expect(html).toContain('data-stored-credential-placeholder=""');
+    expect(html).toContain('placeholder="••••••••••••"');
+    expect(html).toContain('class="credential-secret-row"');
+    expect(html).toContain('data-credential-action="test"');
+    expect(html).toContain(">Test<");
     expect(html).toContain(">Save key<");
     expect(html).toContain(">Save config<");
     expect(html).toContain(">Use for this browser session<");

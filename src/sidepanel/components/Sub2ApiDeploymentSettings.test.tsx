@@ -42,6 +42,7 @@ describe("Sub2ApiDeploymentSettings", () => {
         snapshot={getSub2ApiSnapshot()}
         onSelectAccount={() => {}}
         onSave={() => {}}
+        onTest={() => {}}
         onDisconnect={() => {}}
         onRemove={() => {}}
       />,
@@ -52,11 +53,38 @@ describe("Sub2ApiDeploymentSettings", () => {
     expect(html).toContain("Private gateway");
     expect(html).toContain("https://gateway.example.test");
     expect(html).toContain('type="password"');
+    expect(html).toContain('data-stored-credential-placeholder=""');
+    expect(html).toContain('placeholder="••••••••••••"');
     expect(html).toContain("Leave blank to keep the saved key.");
-    expect(html).toContain("Save and test");
+    expect(html).toMatch(
+      /data-sub2api-action="test" type="button">Test<\/button>/,
+    );
+    expect(html).toContain('data-sub2api-action="save"');
+    expect(html).toContain(">Test<");
+    expect(html).toContain(">Save<");
     expect(html).toContain("Keep the last nonsecret summary");
     expect(html).toContain("GET /v1/usage");
+    expect(html).not.toContain('disabled="" value="API key · GET /v1/usage"');
     expect(html).not.toContain("must-not-render");
+  });
+
+  it("disables connection testing until a deployment has been saved", () => {
+    const html = renderToStaticMarkup(
+      <Sub2ApiDeploymentSettings
+        locale="en"
+        providerAccounts={undefined}
+        snapshot={null}
+        onSelectAccount={() => {}}
+        onSave={() => {}}
+        onTest={() => {}}
+        onDisconnect={() => {}}
+        onRemove={() => {}}
+      />,
+    );
+
+    expect(html).toMatch(
+      /data-sub2api-action="test" type="button" disabled="">Test<\/button>/,
+    );
   });
 
   it("keeps a persistent warning for acknowledged non-loopback HTTP", () => {
@@ -80,6 +108,7 @@ describe("Sub2ApiDeploymentSettings", () => {
         snapshot={getSub2ApiSnapshot()}
         onSelectAccount={() => {}}
         onSave={() => {}}
+        onTest={() => {}}
         onDisconnect={() => {}}
         onRemove={() => {}}
       />,
@@ -92,6 +121,13 @@ describe("Sub2ApiDeploymentSettings", () => {
 
   it("defines bounded responsive fields and surface grids", () => {
     expect(settingsAppearanceCss).toContain(".sub2api-deployment-settings__form");
+    expect(settingsAppearanceCss).toContain(
+      ".sub2api-deployment-settings__connection-mode",
+    );
+    expect(settingsAppearanceCss).toContain(".credential-secret-row");
+    expect(settingsAppearanceCss).toContain(
+      "[data-stored-credential-placeholder]::placeholder",
+    );
     expect(settingsAppearanceCss).toContain(
       ".api-gateway-module-preferences__surface-grid",
     );
