@@ -17,7 +17,6 @@ import {
 import type { ResolvedAppLocale } from "../../shared/i18n";
 import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import { buildSub2ApiSettingsLocalizedCopy } from "../../shared/sub2api-settings-localized-copy";
-import { MaterialIcon } from "./MaterialIcon";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 
 const SURFACES: readonly DisplaySurface[] = ["popup", "sidebar", "fullPage"];
@@ -93,7 +92,7 @@ export function ApiGatewayMeteringModulePreferenceControls({
         </div>
       </div>
 
-      <div className="api-gateway-module-preferences__surface-grid">
+      <div className="provider-order-preferences__surfaces api-gateway-module-preferences__surface-grid">
         {SURFACES.map((surface) => {
           const preferences = value[surface];
           const surfaceLabel = settingsCopy.progressItems.surfaceLabels[surface];
@@ -101,11 +100,11 @@ export function ApiGatewayMeteringModulePreferenceControls({
 
           return (
             <section
-              className="provider-progress-surface"
+              className="provider-order-surface api-gateway-module-preferences__surface"
               key={surface}
             >
-              <div className="provider-progress-surface__header">
-                <p className="provider-progress-surface__title">{surfaceLabel}</p>
+              <div className="provider-order-surface__header">
+                <p className="provider-order-surface__title">{surfaceLabel}</p>
                 <span className="meta-chip">
                   {settingsCopy.progressItems.visibleCount(
                     visibleCount,
@@ -113,7 +112,7 @@ export function ApiGatewayMeteringModulePreferenceControls({
                   )}
                 </span>
               </div>
-              <ol className="provider-progress-list">
+              <ol className="provider-order-list api-gateway-module-preferences__list">
                 {preferences.map((preference, index) => {
                   const label = copy.moduleLabels[preference.id];
                   const isFirst = index === 0;
@@ -121,7 +120,7 @@ export function ApiGatewayMeteringModulePreferenceControls({
 
                   return (
                     <li
-                      className="provider-progress-list__item"
+                      className="provider-order-list__item api-gateway-module-preferences__item"
                       data-api-gateway-module-row={preference.id}
                       draggable
                       key={preference.id}
@@ -145,12 +144,12 @@ export function ApiGatewayMeteringModulePreferenceControls({
                       }
                     >
                       <span
-                        className="provider-progress-list__handle"
+                        className="provider-order-list__handle"
                         aria-hidden="true"
                       >
                         ::
                       </span>
-                      <label className="provider-progress-list__visibility">
+                      <label className="api-gateway-module-preferences__visibility">
                         <input
                           type="checkbox"
                           checked={preference.visible}
@@ -172,12 +171,10 @@ export function ApiGatewayMeteringModulePreferenceControls({
                         />
                         <span>{preference.visible ? copy.shown : copy.hidden}</span>
                       </label>
-                      <span className="provider-progress-list__main">
-                        <span className="provider-progress-list__label">{label}</span>
-                      </span>
-                      <span className="provider-progress-list__actions">
+                      <span className="provider-order-list__name">{label}</span>
+                      <span className="provider-order-list__actions">
                         <button
-                          className="text-button provider-progress-list__action provider-progress-list__action--icon"
+                          className="text-button provider-order-list__action"
                           type="button"
                           disabled={isFirst}
                           aria-label={settingsCopy.progressItems.moveUpAction(
@@ -195,10 +192,10 @@ export function ApiGatewayMeteringModulePreferenceControls({
                             )
                           }
                         >
-                          <MaterialIcon name="keyboard-arrow-up" />
+                          {settingsCopy.progressItems.up}
                         </button>
                         <button
-                          className="text-button provider-progress-list__action provider-progress-list__action--icon"
+                          className="text-button provider-order-list__action"
                           type="button"
                           disabled={isLast}
                           aria-label={settingsCopy.progressItems.moveDownAction(
@@ -216,7 +213,7 @@ export function ApiGatewayMeteringModulePreferenceControls({
                             )
                           }
                         >
-                          <MaterialIcon name="keyboard-arrow-down" />
+                          {settingsCopy.progressItems.down}
                         </button>
                       </span>
                     </li>

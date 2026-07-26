@@ -416,12 +416,30 @@
 }
 
 .api-gateway-module-preferences__surface-grid {
-  display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(min(100%, 22rem), 1fr)
-  );
-  gap: var(--app-space-3);
+  align-items: start;
+}
+
+.api-gateway-module-preferences__visibility {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: var(--app-space-2);
+  color: var(--md-sys-color-on-surface-variant);
+  font-family: var(--md-sys-typescale-label-medium-font);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: var(--md-sys-typescale-label-medium-weight);
+  white-space: nowrap;
+}
+
+.api-gateway-module-preferences__visibility input {
+  inline-size: 18px;
+  block-size: 18px;
+  margin: 0;
+  accent-color: var(--md-sys-color-primary);
+}
+
+.api-gateway-module-preferences__item .provider-order-list__action {
+  white-space: nowrap;
 }
 
 @media (max-width: 640px) {
@@ -2024,6 +2042,14 @@
     .provider-progress-list__actions {
     width: 100%;
     justify-content: flex-end;
+  }
+
+  .provider-order-list__item.api-gateway-module-preferences__item {
+    flex-wrap: nowrap;
+  }
+
+  .api-gateway-module-preferences__item .provider-order-list__actions {
+    width: auto;
   }
 
   .progress-appearance-thickness__control {

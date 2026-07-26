@@ -119,7 +119,7 @@ describe("Sub2ApiDeploymentSettings", () => {
     expect(html).toContain("without transport encryption");
   });
 
-  it("defines bounded responsive fields and surface grids", () => {
+  it("defines bounded responsive fields and shared compact ordering controls", () => {
     expect(settingsAppearanceCss).toContain(".sub2api-deployment-settings__form");
     expect(settingsAppearanceCss).toContain(
       ".sub2api-deployment-settings__connection-mode",
@@ -131,7 +131,15 @@ describe("Sub2ApiDeploymentSettings", () => {
     expect(settingsAppearanceCss).toContain(
       ".api-gateway-module-preferences__surface-grid",
     );
-    expect(settingsAppearanceCss).toContain("repeat(\n    auto-fit,");
+    expect(settingsAppearanceCss).toContain(
+      ".api-gateway-module-preferences__visibility",
+    );
+    expect(settingsAppearanceCss).toContain(
+      ".provider-order-preferences__surfaces",
+    );
+    expect(settingsAppearanceCss).toContain(
+      "grid-template-columns: repeat(3, minmax(0, 1fr));",
+    );
     expect(settingsAppearanceCss).toContain("@media (max-width: 640px)");
     expect(settingsAppearanceCss).toContain("grid-column: auto;");
   });

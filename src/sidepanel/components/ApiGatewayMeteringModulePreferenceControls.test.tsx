@@ -31,8 +31,12 @@ describe("ApiGatewayMeteringModulePreferenceControls", () => {
     expect(html).toContain("Leading models");
     expect(html).toContain("Limit windows");
     expect(html).toContain("Move Usage summary down on Popup");
-    expect(html).toContain('data-material-icon="keyboard-arrow-up"');
-    expect(html).toContain('data-material-icon="keyboard-arrow-down"');
+    expect(html).toContain("Up");
+    expect(html).toContain("Down");
+    expect(html).toContain("provider-order-preferences__surfaces");
+    expect(html).toContain("provider-order-surface");
+    expect(html).toContain("provider-order-list__item");
+    expect(html).toContain("api-gateway-module-preferences__visibility");
     expect(html).toContain('draggable="true"');
     expect(html).toContain('tabindex="0"');
   });
