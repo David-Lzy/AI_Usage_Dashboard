@@ -14,8 +14,8 @@ dashboard.
 
 - Shows a compact toolbar popup for quick provider health and quota checks.
   Provider cards can collapse individually, use edge or top switching, or
-  auto-glide vertically with active-pointer/focus pause; collapsible cards are
-  the default.
+  continuously glide through vertical overflow with hover/focus pause and
+  faded edges; collapsible cards are the default.
 - Opens a side panel or full-page dashboard for provider detail, source labels,
   setup guidance, and sync diagnostics.
 - Shows focused first-run access actions when a provider needs optional host

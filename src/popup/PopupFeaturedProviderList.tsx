@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 
 import type {
   PopupCircularProgressItemsPerRow,
@@ -89,7 +89,17 @@ type PopupFeaturedProviderListProps = {
 
 type PopupProviderNavigationDirection = "previous" | "next";
 
-const POPUP_PROVIDER_AUTO_GLIDE_INTERVAL_MS = 5_000;
+type PopupProviderAutoGlideMetrics = {
+  distancePx: number;
+  durationSeconds: number;
+};
+
+const EMPTY_POPUP_PROVIDER_AUTO_GLIDE_METRICS: PopupProviderAutoGlideMetrics = {
+  distancePx: 0,
+  durationSeconds: 0,
+};
+const POPUP_PROVIDER_AUTO_GLIDE_MIN_DURATION_SECONDS = 8;
+const POPUP_PROVIDER_AUTO_GLIDE_SPEED_PX_PER_SECOND = 24;
 
 function shouldShowPlanWithProviderProgress(
   provider: PopupFeaturedProviderCard["provider"],
@@ -167,14 +177,12 @@ export function PopupFeaturedProviderList({
       ]),
     ),
   );
-  const [navigationDirection, setNavigationDirection] =
-    useState<PopupProviderNavigationDirection>("next");
-  const [isAutoGlidePointerPaused, setIsAutoGlidePointerPaused] =
-    useState(false);
-  const [isAutoGlideFocusPaused, setIsAutoGlideFocusPaused] = useState(false);
-  const [isDocumentVisible, setIsDocumentVisible] = useState(
-    () => typeof document === "undefined" || !document.hidden,
-  );
+  const autoGlideViewportRef = useRef<HTMLDivElement>(null);
+  const autoGlideTrackRef = useRef<HTMLDivElement>(null);
+  const [autoGlideMetrics, setAutoGlideMetrics] =
+    useState<PopupProviderAutoGlideMetrics>(
+      EMPTY_POPUP_PROVIDER_AUTO_GLIDE_METRICS,
+    );
 
   const providerIdsKey = cards
     .map((card) => card.provider.providerId)
@@ -183,46 +191,89 @@ export function PopupFeaturedProviderList({
   useEffect(() => {
     if (
       providerBrowsingMode !== "scroll" ||
-      typeof document === "undefined"
+      cards.length < 2 ||
+      typeof window === "undefined"
     ) {
+      setAutoGlideMetrics(EMPTY_POPUP_PROVIDER_AUTO_GLIDE_METRICS);
       return;
     }
 
-    const syncDocumentState = () => {
-      setIsDocumentVisible(!document.hidden);
+    const viewport = autoGlideViewportRef.current;
+    const track = autoGlideTrackRef.current;
+    if (!viewport || !track) {
+      return;
+    }
+
+    let scheduledFrame: number | null = null;
+
+    const measureOverflow = () => {
+      scheduledFrame = null;
+      const distancePx = Math.max(
+        0,
+        Math.ceil(track.scrollHeight - viewport.clientHeight),
+      );
+      const durationSeconds =
+        distancePx > 1
+          ? Math.max(
+              POPUP_PROVIDER_AUTO_GLIDE_MIN_DURATION_SECONDS,
+              distancePx / POPUP_PROVIDER_AUTO_GLIDE_SPEED_PX_PER_SECOND,
+            )
+          : 0;
+
+      setAutoGlideMetrics((current) => {
+        if (
+          current.distancePx === distancePx &&
+          current.durationSeconds === durationSeconds
+        ) {
+          return current;
+        }
+
+        return { distancePx, durationSeconds };
+      });
     };
 
-    document.addEventListener("visibilitychange", syncDocumentState);
-    syncDocumentState();
+    const scheduleMeasurement = () => {
+      if (scheduledFrame !== null) {
+        window.cancelAnimationFrame(scheduledFrame);
+      }
+      scheduledFrame = window.requestAnimationFrame(measureOverflow);
+    };
+
+    const resizeObserver =
+      typeof ResizeObserver === "undefined"
+        ? null
+        : new ResizeObserver(scheduleMeasurement);
+    resizeObserver?.observe(viewport);
+    resizeObserver?.observe(track);
+    window.addEventListener("resize", scheduleMeasurement);
+    scheduleMeasurement();
 
     return () => {
-      document.removeEventListener("visibilitychange", syncDocumentState);
+      resizeObserver?.disconnect();
+      window.removeEventListener("resize", scheduleMeasurement);
+      if (scheduledFrame !== null) {
+        window.cancelAnimationFrame(scheduledFrame);
+      }
     };
-  }, [providerBrowsingMode]);
+  }, [cards.length, providerBrowsingMode, providerIdsKey]);
 
   const resolvedActiveProviderIndex = Math.max(
     0,
     cards.findIndex((card) => card.provider.providerId === activeProviderId),
   );
-  const usesSingleProviderStage = providerBrowsingMode !== "collapsible";
+  const usesSingleProviderStage =
+    providerBrowsingMode === "single" || providerBrowsingMode === "switch";
   const activeCard = cards[resolvedActiveProviderIndex] ?? cards[0] ?? null;
   const visibleCards =
     usesSingleProviderStage && activeCard ? [activeCard] : cards;
-  const autoGlidePauseReason =
-    providerBrowsingMode !== "scroll"
-      ? undefined
-      : !isDocumentVisible
-        ? "document-hidden"
-        : isAutoGlideFocusPaused
-          ? "focus"
-          : isAutoGlidePointerPaused
-            ? "pointer"
-            : undefined;
-  const nextAutoGlideProviderId =
-    cards.length > 0
-      ? (cards[(resolvedActiveProviderIndex + 1) % cards.length]?.provider
-          .providerId ?? null)
-      : null;
+  const hasActiveAutoGlide =
+    providerBrowsingMode === "scroll" && autoGlideMetrics.distancePx > 1;
+  const autoGlideStyle = hasActiveAutoGlide
+    ? ({
+        "--popup-provider-auto-glide-distance": `${autoGlideMetrics.distancePx}px`,
+        "--popup-provider-auto-glide-duration": `${autoGlideMetrics.durationSeconds}s`,
+      } as CSSProperties)
+    : undefined;
   const usageHistoryCopy = buildUsageHistoryLocalizedCopy(i18n.resolvedLocale);
   const cursorUsageCopy = buildCursorUsageLocalizedCopy(i18n.resolvedLocale);
   const apiGatewayMeteringCopy = buildApiGatewayMeteringLocalizedCopy(
@@ -238,37 +289,8 @@ export function PopupFeaturedProviderList({
     const nextIndex =
       (resolvedActiveProviderIndex + offset + cards.length) % cards.length;
 
-    setNavigationDirection(direction);
     setActiveProviderId(cards[nextIndex].provider.providerId);
   };
-
-  useEffect(() => {
-    if (
-      providerBrowsingMode !== "scroll" ||
-      cards.length < 2 ||
-      isAutoGlidePointerPaused ||
-      isAutoGlideFocusPaused ||
-      !isDocumentVisible ||
-      nextAutoGlideProviderId === null
-    ) {
-      return;
-    }
-
-    const timer = window.setTimeout(() => {
-      setNavigationDirection("next");
-      setActiveProviderId(nextAutoGlideProviderId);
-    }, POPUP_PROVIDER_AUTO_GLIDE_INTERVAL_MS);
-
-    return () => window.clearTimeout(timer);
-  }, [
-    cards.length,
-    isAutoGlideFocusPaused,
-    isAutoGlidePointerPaused,
-    isDocumentVisible,
-    nextAutoGlideProviderId,
-    providerBrowsingMode,
-    providerIdsKey,
-  ]);
 
   if (cards.length === 0) {
     return null;
@@ -277,6 +299,9 @@ export function PopupFeaturedProviderList({
   return (
     <section className="popup-quota-section" aria-label={ariaLabel}>
       <div
+        ref={
+          providerBrowsingMode === "scroll" ? autoGlideViewportRef : undefined
+        }
         aria-label={
           providerBrowsingMode === "scroll" && cards.length > 1
             ? ariaLabel
@@ -286,67 +311,21 @@ export function PopupFeaturedProviderList({
         data-popup-provider-auto-glide={
           providerBrowsingMode === "scroll" ? "" : undefined
         }
-        data-popup-provider-auto-glide-interval-ms={
+        data-popup-provider-auto-glide-active={
           providerBrowsingMode === "scroll"
-            ? POPUP_PROVIDER_AUTO_GLIDE_INTERVAL_MS
+            ? hasActiveAutoGlide
+              ? "true"
+              : "false"
             : undefined
         }
-        data-popup-provider-auto-glide-paused={autoGlidePauseReason}
+        data-popup-provider-auto-glide-distance-px={
+          hasActiveAutoGlide ? autoGlideMetrics.distancePx : undefined
+        }
         role={
           providerBrowsingMode === "scroll" && cards.length > 1
             ? "group"
             : undefined
         }
-        tabIndex={
-          providerBrowsingMode === "scroll" && cards.length > 1 ? 0 : undefined
-        }
-        onBlurCapture={(event) => {
-          const nextTarget = event.relatedTarget;
-          if (
-            providerBrowsingMode === "scroll" &&
-            (!(nextTarget instanceof Node) ||
-              !event.currentTarget.contains(nextTarget))
-          ) {
-            setIsAutoGlideFocusPaused(false);
-          }
-        }}
-        onFocusCapture={() => {
-          if (providerBrowsingMode === "scroll") {
-            setIsAutoGlideFocusPaused(true);
-          }
-        }}
-        onKeyDown={(event) => {
-          if (
-            providerBrowsingMode !== "scroll" ||
-            event.target !== event.currentTarget
-          ) {
-            return;
-          }
-
-          if (event.key === "ArrowUp") {
-            event.preventDefault();
-            navigateProvider("previous");
-          } else if (event.key === "ArrowDown") {
-            event.preventDefault();
-            navigateProvider("next");
-          }
-        }}
-        onPointerMove={() => {
-          if (
-            providerBrowsingMode === "scroll" &&
-            !isAutoGlidePointerPaused
-          ) {
-            setIsAutoGlidePointerPaused(true);
-          }
-        }}
-        onPointerLeave={() => {
-          if (
-            providerBrowsingMode === "scroll" &&
-            isAutoGlidePointerPaused
-          ) {
-            setIsAutoGlidePointerPaused(false);
-          }
-        }}
       >
         {providerBrowsingMode === "single" && cards.length > 1 ? (
           <div
@@ -385,8 +364,12 @@ export function PopupFeaturedProviderList({
           </div>
         ) : null}
         <div
+          ref={
+            providerBrowsingMode === "scroll" ? autoGlideTrackRef : undefined
+          }
           className={`popup-provider-list popup-provider-list--${providerBrowsingMode}`}
           data-popup-provider-browsing-mode={providerBrowsingMode}
+          style={autoGlideStyle}
         >
           {visibleCards.map((card) => {
             const { provider } = card;
@@ -473,10 +456,6 @@ export function PopupFeaturedProviderList({
                 }${isCardCollapsed ? " popup-provider-card--collapsed" : ""}${
                   providerBrowsingMode === "collapsible"
                     ? " popup-provider-card--collapsible"
-                    : ""
-                }${
-                  providerBrowsingMode === "scroll"
-                    ? ` popup-provider-card--auto-glide popup-provider-card--auto-glide-${navigationDirection}`
                     : ""
                 }`}
                 data-popup-provider-card-collapsed={

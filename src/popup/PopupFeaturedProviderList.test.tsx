@@ -99,7 +99,7 @@ describe("PopupFeaturedProviderList", () => {
     expect(html).not.toContain('data-popup-provider-card-toggle=');
   });
 
-  it("renders one auto-gliding provider without a continuous animation loop", () => {
+  it("renders every provider in one continuous vertical glide track", () => {
     const state: AppState = {
       ...SAMPLE_APP_STATE,
       settings: {
@@ -107,18 +107,17 @@ describe("PopupFeaturedProviderList", () => {
         popupProviderBrowsingMode: "scroll",
       },
     };
-    const html = renderFeaturedList(
-      buildPopupViewModel(state).featuredProviderCards,
-      state,
-    );
+    const cards = buildPopupViewModel(state).featuredProviderCards;
+    const html = renderFeaturedList(cards, state);
 
     expect(html).toContain('data-popup-provider-browsing-mode="scroll"');
     expect(html).toContain('data-popup-provider-auto-glide=""');
-    expect(html).toContain('data-popup-provider-auto-glide-interval-ms="5000"');
-    expect(html).toContain("popup-provider-card--auto-glide-next");
+    expect(html).toContain('data-popup-provider-auto-glide-active="false"');
+    expect(html).not.toContain("data-popup-provider-auto-glide-interval-ms");
+    expect(html).not.toContain("popup-provider-card--auto-glide");
     expect(html).not.toContain('data-popup-provider-switcher=""');
     expect(html).not.toContain('data-popup-provider-card-toggle=');
-    expect(html.match(/data-popup-hide-provider=/g)).toHaveLength(1);
+    expect(html.match(/data-popup-hide-provider=/g)).toHaveLength(cards.length);
   });
 
   it("renders compact API gateway metering instead of generic diagnostics", () => {
@@ -519,6 +518,9 @@ describe("PopupFeaturedProviderList", () => {
     expect(popupThemeCss).toContain("max-width: none;");
     expect(popupThemeCss).toContain("overflow: visible;");
     expect(popupThemeCss).toContain("white-space: nowrap;");
+    expect(popupThemeCss).toContain("@media (max-width: 390px)");
+    expect(popupThemeCss).toContain('"provider status"');
+    expect(popupThemeCss).toContain('"actions actions"');
     expect(popupThemeCss).not.toContain("max-width: 7rem;");
     expect(popupThemeCss).toContain(".popup-provider-card__history {");
     expect(popupThemeCss).not.toContain(
@@ -533,9 +535,16 @@ describe("PopupFeaturedProviderList", () => {
     );
     expect(popupThemeCss).toContain(".popup-provider-center-switch {");
     expect(popupThemeCss).toContain("inset-block-start: 5px;");
-    expect(popupThemeCss).toContain("@keyframes popup-provider-auto-glide-next");
     expect(popupThemeCss).toContain(
-      ':root[data-motion-resolved="reduced"] .popup-provider-card--auto-glide',
+      "@keyframes popup-provider-continuous-vertical-glide",
+    );
+    expect(popupThemeCss).toContain(
+      'data-popup-provider-auto-glide-active="true"',
+    );
+    expect(popupThemeCss).toContain("mask-image: linear-gradient(");
+    expect(popupThemeCss).toContain("animation-play-state: paused;");
+    expect(popupThemeCss).toContain(
+      ':root[data-motion-resolved="reduced"] .popup-provider-stage--scroll',
     );
   });
 });
