@@ -198,7 +198,7 @@ function getLegacyApiProviderId(value: unknown): ProviderId | null {
   return null;
 }
 
-function normalizeAppState(state: AppState): AppState {
+export function normalizeAppState(state: AppState): AppState {
   const sampleProviders = new Map(
     SAMPLE_APP_STATE.providers.map((provider) => [provider.providerId, provider]),
   );

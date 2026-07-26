@@ -2032,24 +2032,84 @@
 }
 
 @media (max-width: 520px) {
-  .provider-order-list__item,
   .provider-progress-list__item:not(.usage-history-preferences__item) {
     flex-wrap: wrap;
   }
 
-  .provider-order-list__actions,
+  .provider-order-list__item:not(.api-gateway-module-preferences__item) {
+    display: grid;
+    grid-template-areas:
+      "handle name position"
+      "actions actions actions";
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .provider-order-list__item:not(.api-gateway-module-preferences__item)
+    .provider-order-list__handle {
+    grid-area: handle;
+  }
+
+  .provider-order-list__item:not(.api-gateway-module-preferences__item)
+    .provider-order-list__name {
+    grid-area: name;
+  }
+
+  .provider-order-list__item:not(.api-gateway-module-preferences__item)
+    .provider-order-list__position {
+    grid-area: position;
+  }
+
+  .provider-order-list__item:not(.api-gateway-module-preferences__item)
+    .provider-order-list__actions,
   .provider-progress-list__item:not(.usage-history-preferences__item)
     .provider-progress-list__actions {
-    width: 100%;
+    grid-area: actions;
+    width: auto;
+    min-width: 0;
+    max-width: 100%;
+    gap: var(--app-space-1);
     justify-content: flex-end;
   }
 
+  .provider-order-list__item:not(.api-gateway-module-preferences__item)
+    .provider-order-list__action {
+    min-width: 0;
+    padding-inline: var(--app-space-1);
+  }
+
   .provider-order-list__item.api-gateway-module-preferences__item {
-    flex-wrap: nowrap;
+    display: grid;
+    grid-template-areas:
+      "handle visibility name"
+      "actions actions actions";
+    grid-template-columns: auto auto minmax(0, 1fr);
+  }
+
+  .api-gateway-module-preferences__item .provider-order-list__handle {
+    grid-area: handle;
+  }
+
+  .api-gateway-module-preferences__item
+    .api-gateway-module-preferences__visibility {
+    grid-area: visibility;
+  }
+
+  .api-gateway-module-preferences__item .provider-order-list__name {
+    grid-area: name;
   }
 
   .api-gateway-module-preferences__item .provider-order-list__actions {
+    grid-area: actions;
     width: auto;
+    min-width: 0;
+    max-width: 100%;
+    gap: var(--app-space-1);
+    justify-content: flex-end;
+  }
+
+  .api-gateway-module-preferences__item .provider-order-list__action {
+    min-width: 0;
+    padding-inline: var(--app-space-1);
   }
 
   .progress-appearance-thickness__control {

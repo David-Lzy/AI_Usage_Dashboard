@@ -19,13 +19,65 @@ describe("app state storage events", () => {
       },
     };
 
-    expect(readAppStateFromChromeStorageChanges(changes, "local")).toBe(
-      SAMPLE_APP_STATE,
+    expect(readAppStateFromChromeStorageChanges(changes, "local")).toEqual(
+      expect.objectContaining({
+        providers: SAMPLE_APP_STATE.providers,
+        settings: expect.any(Object),
+      }),
     );
     expect(readAppStateFromChromeStorageChanges(changes, "sync")).toBeNull();
     expect(
       readAppStateFromChromeStorageChanges({ unrelated: {} }, "local"),
     ).toBeNull();
+  });
+
+  it("normalizes legacy surface preferences before publishing a storage event", () => {
+    const legacyState = structuredClone(SAMPLE_APP_STATE);
+
+    delete (legacyState.settings as Partial<typeof legacyState.settings>)
+      .providerOrderBySurface;
+    delete (legacyState.settings as Partial<typeof legacyState.settings>)
+      .progressItemsBySurface;
+    delete (legacyState.settings as Partial<typeof legacyState.settings>)
+      .usageHistoryModulesBySurface;
+    delete (legacyState.settings as Partial<typeof legacyState.settings>)
+      .providerServiceStatusVisibilityBySurface;
+
+    const normalized = readAppStateFromChromeStorageChanges(
+      {
+        "ai-usage-dashboard.app-state": {
+          newValue: legacyState,
+        },
+      },
+      "local",
+    );
+
+    expect(normalized?.settings.providerOrderBySurface).toEqual({
+      popup: [],
+      sidebar: [],
+      fullPage: [],
+    });
+    expect(normalized?.settings.progressItemsBySurface).toEqual({
+      popup: {},
+      sidebar: {},
+      fullPage: {},
+    });
+    expect(normalized?.settings.usageHistoryModulesBySurface).toEqual(
+      expect.objectContaining({
+        popup: expect.any(Object),
+        sidebar: expect.any(Object),
+        fullPage: expect.any(Object),
+      }),
+    );
+    expect(
+      normalized?.settings.providerServiceStatusVisibilityBySurface,
+    ).toEqual(
+      expect.objectContaining({
+        popup: expect.any(Object),
+        sidebar: expect.any(Object),
+        fullPage: expect.any(Object),
+      }),
+    );
   });
 
   it("parses the HTTP preview fallback without accepting malformed state", () => {
@@ -34,7 +86,12 @@ describe("app state storage events", () => {
         key: "ai-usage-dashboard.app-state",
         newValue: JSON.stringify(SAMPLE_APP_STATE),
       }),
-    ).toEqual(SAMPLE_APP_STATE);
+    ).toEqual(
+      expect.objectContaining({
+        providers: SAMPLE_APP_STATE.providers,
+        settings: expect.any(Object),
+      }),
+    );
     expect(
       readAppStateFromWindowStorageEvent({
         key: "ai-usage-dashboard.app-state",

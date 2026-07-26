@@ -24,6 +24,10 @@ const runtimeOverrideFiles = [
     relativePath: "src/shared/runtime-message-catalog-data/overrides-completion.ts",
     variableName: "COMPLETION_RUNTIME_MESSAGE_OVERRIDES",
   },
+  {
+    relativePath: "src/shared/runtime-message-catalog-data/overrides-codex-session.ts",
+    variableName: "CODEX_SESSION_RUNTIME_MESSAGE_OVERRIDES",
+  },
 ];
 
 const structuredCopyTargets = [

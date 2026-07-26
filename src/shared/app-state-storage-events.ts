@@ -1,5 +1,6 @@
 import type { AppState } from "../providers/types";
 import { APP_STATE_STORAGE_KEY } from "./constants";
+import { normalizeAppState } from "./storage";
 
 type AppStateStorageChange = {
   newValue?: unknown;
@@ -19,6 +20,18 @@ function isStoredAppState(value: unknown): value is AppState {
   );
 }
 
+function normalizeStoredAppState(value: unknown): AppState | null {
+  if (!isStoredAppState(value)) {
+    return null;
+  }
+
+  try {
+    return normalizeAppState(value);
+  } catch {
+    return null;
+  }
+}
+
 export function readAppStateFromChromeStorageChanges(
   changes: Record<string, AppStateStorageChange>,
   areaName: string,
@@ -28,7 +41,7 @@ export function readAppStateFromChromeStorageChanges(
   }
 
   const value = changes[APP_STATE_STORAGE_KEY]?.newValue;
-  return isStoredAppState(value) ? value : null;
+  return normalizeStoredAppState(value);
 }
 
 export function readAppStateFromWindowStorageEvent(
@@ -40,7 +53,7 @@ export function readAppStateFromWindowStorageEvent(
 
   try {
     const value = JSON.parse(event.newValue) as unknown;
-    return isStoredAppState(value) ? value : null;
+    return normalizeStoredAppState(value);
   } catch {
     return null;
   }
