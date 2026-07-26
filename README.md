@@ -223,16 +223,16 @@ template, including the optional Chrome Web Store API handoff, are documented in
 
 - Chrome Web Store listing: published and reachable.
 - Chrome Web Store API status observed on 2026-07-27: manifest version
-  `0.2.0.9` published at 100%.
+  `0.2.0.9` published at 100%, with manifest version `0.2.0.11` submitted at
+  100% and pending review.
 - Current local package version: `0.2.0-rc.11`.
 - Current local Chrome manifest version: `0.2.0.11`.
-- GitHub Release `v0.2.0-rc.10` provides separate Chrome and Firefox packages
-  plus SHA-256 checksums.
+- GitHub Release [`v0.2.0-rc.11`](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.0-rc.11)
+  provides separate Chrome and Firefox packages plus SHA-256 checksums.
 - The `0.2.0.10` package has not been submitted to the Chrome Web Store and
   must not be described as submitted or published there.
-- The `0.2.0.11` release candidate is prepared locally and must not be
-  described as released or submitted until the tag workflow and Chrome Web
-  Store API confirm those handoffs.
+- The `0.2.0.11` package is submitted to the Chrome Web Store for review, but
+  must not be described as published until the Store API reports that state.
 - Store publication status is tracked in
   [Doc/Store/Chrome_Web_Store_Publication_Milestone.md](./Doc/Store/Chrome_Web_Store_Publication_Milestone.md).
 - Public listing copy lives in [Doc/Store](./Doc/Store/).

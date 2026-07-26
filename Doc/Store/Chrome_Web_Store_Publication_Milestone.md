@@ -17,8 +17,9 @@ Status note:
 - Chrome Web Store API status shows manifest version `0.2.0.9` published at 100%
 - source `0.2.0-rc.10` / manifest `0.2.0.10` is available from GitHub with
   browser-specific packages and checksums, but is not submitted to the Store
-- source `0.2.0-rc.11` / manifest `0.2.0.11` is the current local release
-  candidate and is not yet recorded as released or submitted
+- source `0.2.0-rc.11` / manifest `0.2.0.11` is available from GitHub with
+  browser-specific packages and checksums; the Store API reports it submitted
+  at 100% and `PENDING_REVIEW`
 - no known critical user-facing bug is blocking normal use at this milestone
 - private upload receipts, package hashes, screenshots-in-progress, and
   submission handoff notes stay in ignored `.local/` material
@@ -33,12 +34,16 @@ Status note:
 - The `v0.2.0-rc.10` tag workflow published Chrome and Firefox GitHub Release
   assets plus checksums. Its optional Chrome Web Store upload step did not run,
   so manifest `0.2.0.10` is not recorded as submitted or published.
+- The `v0.2.0-rc.11` tag workflow published Chrome and Firefox GitHub Release
+  assets plus checksums. Its optional Store upload step was skipped because the
+  repository credentials were unavailable, so the verified local official API
+  fallback uploaded manifest `0.2.0.11` and submitted it for review.
 - The maintained listing-copy sources now include bounded Sub2API-compatible
   aggregate metering. Applying those text changes to the live Developer
   Dashboard remains a separate metadata operation.
-- Source `0.2.0-rc.11` / manifest `0.2.0.11` is prepared for the next tag
-  workflow and store handoff. Its status must be updated only after those
-  systems report their results.
+- Chrome Web Store API status observed on 2026-07-27 reports manifest
+  `0.2.0.11` as `PENDING_REVIEW` at 100%; the published listing remains
+  manifest `0.2.0.9` at 100% until review completes.
 
 This means the project has crossed the public-store baseline milestone. Future
 store uploads are resubmissions from an already-published extension, not first
@@ -91,9 +96,8 @@ Chrome extension and provider-surface drift:
 
 ## Next Store Work
 
-- Publish the `v0.2.0-rc.11` GitHub Release from its tag-scoped packages.
-- Submit manifest `0.2.0.11` through the verified Chrome Web Store API handoff,
-  then update this status from the Store API result.
+- Wait for the Chrome Web Store review of manifest `0.2.0.11`; do not describe
+  it as published until the Store API reports that state.
 - Apply the maintained Sub2API listing-copy updates in the Developer Dashboard
   when the publisher account can complete Google's interactive re-verification.
 - Keep the current public copy in `Doc/Store/` as the maintained text source.
