@@ -202,7 +202,8 @@ describe("ApiGatewayMeteringSummary", () => {
       "api-gateway-metering-deployment--single",
     );
     expect(singleHtml).not.toContain("<select");
-    expect(singleHtml.match(/(?:7|30) days/g)).toHaveLength(1);
+    expect(singleHtml).toContain('data-api-gateway-metering-range-days="7"');
+    expect(singleHtml).toContain("Jul 24 – Jul 25");
     expect(multipleHtml).toContain(
       "api-gateway-metering-deployment--select",
     );
@@ -233,8 +234,11 @@ describe("ApiGatewayMeteringSummary", () => {
 
   it("keeps the compact surface responsive without decorative nested cards", () => {
     expect(css).toContain(
-      "grid-template-columns: minmax(0, 1.55fr) repeat(3, minmax(0, 1fr))",
+      "grid-template-columns: repeat(3, minmax(0, 1fr))",
     );
+    expect(css).toContain("grid-column: 1 / -1");
+    expect(css).toContain("api-gateway-metering-facts__primary");
+    expect(css).toContain("api-gateway-metering-facts__supporting");
     expect(css).toContain("grid-template-rows: subgrid");
     expect(css).toContain(
       "border-block-start: 1px solid var(--md-sys-color-outline-variant);",

@@ -31,6 +31,7 @@ import {
 } from "../api-gateway-metering-ui-preferences";
 import type { UsageHistoryChartData } from "../usage-history-chart-data";
 import {
+  formatUsageHistoryDate,
   UsageCompositionSvg,
   UsageHistoryLegend,
   UsageHistorySvg,
@@ -312,6 +313,20 @@ function formatReset(value: string | null, locale: string): string | null {
     : null;
 }
 
+function formatSelectedDateRange(
+  days: ReadonlyArray<ApiGatewayMeteringSnapshot["dailyUsage"][number]>,
+  locale: string,
+): string | null {
+  const first = days[0]?.date;
+  if (!first) {
+    return null;
+  }
+  const last = days.at(-1)?.date ?? first;
+  const firstLabel = formatUsageHistoryDate(first, locale);
+  const lastLabel = formatUsageHistoryDate(last, locale);
+  return first === last ? firstLabel : `${firstLabel} – ${lastLabel}`;
+}
+
 function ModuleToggle({
   copy,
   expanded,
@@ -356,6 +371,7 @@ function MeteringModule({
   copy,
   expanded,
   headerAccessory,
+  headingAccessory,
   moduleId,
   onToggle,
   title,
@@ -364,6 +380,7 @@ function MeteringModule({
   copy: ApiGatewayMeteringLocalizedCopy;
   expanded: boolean;
   headerAccessory?: ReactNode;
+  headingAccessory?: ReactNode;
   moduleId: ApiGatewayMeteringModuleId;
   onToggle: () => void;
   title: string;
@@ -374,7 +391,10 @@ function MeteringModule({
       data-api-gateway-metering-module={moduleId}
     >
       <header className="api-gateway-metering-module__header">
-        <p>{title}</p>
+        <div className="api-gateway-metering-module__heading">
+          <p>{title}</p>
+          {headingAccessory}
+        </div>
         <div className="api-gateway-metering-module__header-actions">
           {headerAccessory}
           <ModuleToggle copy={copy} expanded={expanded} onToggle={onToggle} />
@@ -481,6 +501,12 @@ export function ApiGatewayMeteringSummary({
     [copy, locale, metering],
   );
   const selectedDays = metering.dailyUsage.slice(-rangeDays);
+  const selectedDateRange = formatSelectedDateRange(selectedDays, locale);
+  const currentRangeLabel =
+    rangeDays === 7 ? copy.sevenDays : copy.thirtyDays;
+  const nextRangeLabel =
+    rangeDays === 7 ? copy.thirtyDays : copy.sevenDays;
+  const visibleRangeLabel = selectedDateRange ?? currentRangeLabel;
   const hasSelectedPeriod = selectedDays.length > 0;
   const selectedMetric: ApiGatewayUsageMetric = hasSelectedPeriod
     ? {
@@ -646,44 +672,53 @@ export function ApiGatewayMeteringSummary({
             <span style={{ width: `${primary.percentUsed}%` }} />
           </div>
         ) : null}
-        <dl
-          className={`api-gateway-metering-facts api-gateway-metering-facts--${density}`}
-        >
-          {(density === "detail"
-            ? detailFacts
-            : [
-                {
-                  label: primary.label,
-                  value: primary.value,
-                },
-                {
-                  label: copy.actualSpend,
-                  value:
-                    formatMoney(selectedMetric.actualCost, locale) ??
-                    copy.unavailable,
-                },
-                {
-                  label: copy.requests,
-                  value:
-                    selectedMetric.requests === null
-                      ? copy.unavailable
-                      : formatNumber(selectedMetric.requests, locale),
-                },
-                {
-                  label: copy.tokens,
-                  value:
-                    selectedMetric.totalTokens === null
-                      ? copy.unavailable
-                      : formatNumber(selectedMetric.totalTokens, locale),
-                },
-              ]
-          ).map((fact) => (
-            <div key={fact.label}>
-              <dt>{fact.label}</dt>
-              <dd>{fact.value}</dd>
+        {density === "detail" ? (
+          <dl className="api-gateway-metering-facts api-gateway-metering-facts--detail">
+            {detailFacts.map((fact) => (
+              <div key={fact.label}>
+                <dt>{fact.label}</dt>
+                <dd>{fact.value}</dd>
+              </div>
+            ))}
+          </dl>
+        ) : (
+          <dl className="api-gateway-metering-facts api-gateway-metering-facts--compact">
+            <div className="api-gateway-metering-facts__primary">
+              <dt>{primary.label}</dt>
+              <dd>{primary.value}</dd>
             </div>
-          ))}
-        </dl>
+            {[
+              {
+                label: copy.actualSpend,
+                value:
+                  formatMoney(selectedMetric.actualCost, locale) ??
+                  copy.unavailable,
+              },
+              {
+                label: copy.requests,
+                value:
+                  selectedMetric.requests === null
+                    ? copy.unavailable
+                    : formatNumber(selectedMetric.requests, locale),
+              },
+              {
+                label: copy.tokens,
+                value:
+                  selectedMetric.totalTokens === null
+                    ? copy.unavailable
+                    : formatNumber(selectedMetric.totalTokens, locale),
+              },
+            ].map((fact) => (
+              <div
+                className="api-gateway-metering-facts__supporting"
+                key={fact.label}
+              >
+                <dt>{fact.label}</dt>
+                <dd>{fact.value}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
         {density === "detail" && tokenBreakdown.length > 0 ? (
           <div className="api-gateway-metering-token-breakdown">
             <p>{copy.tokenBreakdown}</p>
@@ -703,13 +738,16 @@ export function ApiGatewayMeteringSummary({
       <MeteringModule
         copy={copy}
         expanded={trendExpanded}
-        headerAccessory={
+        headingAccessory={
           <button
             className="api-gateway-metering-range"
+            data-api-gateway-metering-range-days={rangeDays}
+            aria-label={`${copy.trend}: ${currentRangeLabel}, ${visibleRangeLabel}. ${nextRangeLabel}`}
+            title={`${currentRangeLabel}: ${visibleRangeLabel}`}
             type="button"
             onClick={() => setRange(rangeDays === 7 ? 30 : 7)}
           >
-            {rangeDays === 7 ? copy.sevenDays : copy.thirtyDays}
+            {visibleRangeLabel}
           </button>
         }
         moduleId="trend"
