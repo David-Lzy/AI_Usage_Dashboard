@@ -181,9 +181,9 @@ jobs:
           ### Notes
 
           - Chrome Web Store remains the recommended install path for everyday Chrome users.
-          - Adds collapsible, single-card, and continuous-list popup browsing modes so larger Provider sets remain manageable.
-          - Polishes configured Sub2API summaries, model composition, connection settings, deep links, and per-surface gateway module ordering.
-          - Hardens Settings updates from older stored preferences and verifies Popup, Dashboard, and Settings layouts across all 14 supported locales and narrow-to-wide widths.
+          - Refines collapsible, single-card, and continuous-glide Popup browsing so larger Provider sets remain manageable without oversized gaps.
+          - Replaces timed auto-switching with continuous vertical motion, faded edges, and hover/focus pause while respecting the Animation effects preference.
+          - Keeps Provider headers and overlay controls compact and stabilizes the glide viewport across narrow Popup sizes.
           NOTES
 
       - name: Prepare release assets

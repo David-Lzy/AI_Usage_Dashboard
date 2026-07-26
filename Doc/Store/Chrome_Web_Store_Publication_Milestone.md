@@ -1,6 +1,6 @@
 # Chrome Web Store Publication Milestone
 
-Date: 2026-07-26
+Date: 2026-07-27
 
 Document class:
 
@@ -14,10 +14,11 @@ Freshness model:
 Status note:
 
 - AI Usage Dashboard has a live Chrome Web Store listing
-- Chrome Web Store API status shows manifest version `0.2.0.8` published at 100%
-- source `0.2.0-rc.9` / manifest `0.2.0.9` is submitted for review at 100%
+- Chrome Web Store API status shows manifest version `0.2.0.9` published at 100%
 - source `0.2.0-rc.10` / manifest `0.2.0.10` is available from GitHub with
   browser-specific packages and checksums, but is not submitted to the Store
+- source `0.2.0-rc.11` / manifest `0.2.0.11` is the current local release
+  candidate and is not yet recorded as released or submitted
 - no known critical user-facing bug is blocking normal use at this milestone
 - private upload receipts, package hashes, screenshots-in-progress, and
   submission handoff notes stay in ignored `.local/` material
@@ -27,16 +28,17 @@ Status note:
 - Chrome Web Store:
   https://chromewebstore.google.com/detail/ai-usage-dashboard/mjfhaifoapcpbkffacidgjijcpiegjea
 - Public page status checked on 2026-07-26: reachable and listed.
-- Chrome Web Store API status observed on 2026-07-26 showed manifest version
-  `0.2.0.8` published at 100%.
-- Source `0.2.0-rc.9` / manifest `0.2.0.9` was uploaded successfully and is
-  separately reported as `PENDING_REVIEW` at 100% deployment.
+- Chrome Web Store API status observed on 2026-07-27 showed manifest version
+  `0.2.0.9` published at 100%.
 - The `v0.2.0-rc.10` tag workflow published Chrome and Firefox GitHub Release
   assets plus checksums. Its optional Chrome Web Store upload step did not run,
   so manifest `0.2.0.10` is not recorded as submitted or published.
 - The maintained listing-copy sources now include bounded Sub2API-compatible
   aggregate metering. Applying those text changes to the live Developer
   Dashboard remains a separate metadata operation.
+- Source `0.2.0-rc.11` / manifest `0.2.0.11` is prepared for the next tag
+  workflow and store handoff. Its status must be updated only after those
+  systems report their results.
 
 This means the project has crossed the public-store baseline milestone. Future
 store uploads are resubmissions from an already-published extension, not first
@@ -89,8 +91,8 @@ Chrome extension and provider-surface drift:
 
 ## Next Store Work
 
-- Confirm the `0.2.0.9` review result before describing RC9 as published.
-- Submit manifest `0.2.0.10` only through a verified Chrome Web Store handoff,
+- Publish the `v0.2.0-rc.11` GitHub Release from its tag-scoped packages.
+- Submit manifest `0.2.0.11` through the verified Chrome Web Store API handoff,
   then update this status from the Store API result.
 - Apply the maintained Sub2API listing-copy updates in the Developer Dashboard
   when the publisher account can complete Google's interactive re-verification.
