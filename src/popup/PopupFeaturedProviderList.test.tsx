@@ -544,6 +544,10 @@ describe("PopupFeaturedProviderList", () => {
     expect(popupThemeCss).toContain(
       'data-popup-provider-auto-glide-active="true"',
     );
+    expect(popupThemeCss).toContain(
+      ".popup-provider-stage--scroll {\n  max-block-size: 360px;",
+    );
+    expect(popupThemeCss).not.toContain("calc(100dvh - 156px)");
     expect(popupThemeCss).toContain("mask-image: linear-gradient(");
     expect(popupThemeCss).toContain("animation-play-state: paused;");
     expect(popupThemeCss).toContain(

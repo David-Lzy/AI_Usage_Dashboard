@@ -724,7 +724,7 @@ html[data-app-direction="rtl"] .popup-header__theme-mode-menu {
 }
 
 .popup-provider-stage--scroll {
-  max-block-size: min(360px, calc(100dvh - 156px));
+  max-block-size: 360px;
   overflow: hidden;
   outline: none;
 }
