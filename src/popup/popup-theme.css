@@ -1396,23 +1396,42 @@ html[data-app-direction="rtl"] .popup-header__theme-mode-menu {
 
 @media (max-width: 390px) {
   .popup-provider-card__title-row {
-    grid-template-areas:
-      "provider status"
-      "actions actions";
-    grid-template-columns: minmax(0, 1fr) auto;
-    row-gap: 0;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 2px;
   }
 
   .popup-provider-card__provider-and-deployment {
-    grid-area: provider;
+    gap: var(--app-space-1);
+  }
+
+  .popup-provider-card__provider-and-deployment
+    > .api-gateway-metering-deployment {
+    max-width: min(20vw, 72px);
+  }
+
+  .popup-provider-card__provider {
+    min-height: 28px;
+    font-size: 0.8125rem;
+    line-height: 1.125rem;
   }
 
   .popup-provider-card__header-actions {
-    grid-area: actions;
+    gap: 0;
   }
 
-  .popup-provider-card__status {
-    grid-area: status;
+  .popup-provider-card__header-action {
+    height: 28px;
+    min-height: 28px;
+    padding-inline: 2px;
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
+
+  .popup-provider-card__status .status-chip--compact {
+    width: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    font-size: 0.75rem;
   }
 }
 
