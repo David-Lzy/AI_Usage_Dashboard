@@ -917,6 +917,24 @@ html[data-app-direction="rtl"]
   min-width: 0;
 }
 
+.popup-provider-card__provider-and-deployment {
+  display: flex;
+  align-items: center;
+  gap: var(--app-space-2);
+  min-width: 0;
+}
+
+.popup-provider-card__provider-and-deployment
+  > .popup-provider-card__provider {
+  flex: 0 0 auto;
+}
+
+.popup-provider-card__provider-and-deployment
+  > .api-gateway-metering-deployment {
+  flex: 1 1 72px;
+  max-width: min(24vw, 96px);
+}
+
 .popup-provider-card__header-actions {
   display: inline-flex;
   align-items: center;

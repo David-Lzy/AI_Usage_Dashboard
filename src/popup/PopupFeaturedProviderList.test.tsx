@@ -160,16 +160,30 @@ describe("PopupFeaturedProviderList", () => {
     const card = { ...baseCard, provider };
 
     const html = renderFeaturedList([card], state);
-    expect(html).toContain("Usage summary");
+    const providerNameIndex = html.indexOf("popup-provider-card__provider");
+    const deploymentIndex = html.indexOf(
+      "api-gateway-metering-deployment--single",
+    );
+    const actionsIndex = html.indexOf("popup-provider-card__header-actions");
+
+    expect(html).not.toContain("Usage summary");
     expect(html).toContain("Available balance");
     expect(html).toContain("$18.75");
+    expect(html).toContain("popup-provider-card__provider-and-deployment");
     expect(html).toContain(
       "api-gateway-metering-deployment--single",
     );
     expect(html).toContain(">hze</span>");
+    expect(deploymentIndex).toBeGreaterThan(providerNameIndex);
+    expect(actionsIndex).toBeGreaterThan(deploymentIndex);
+    expect(html).toContain("api-gateway-metering-module__primary-value");
+    expect(html).not.toContain("api-gateway-metering-facts__primary");
     expect(html).not.toContain("popup-provider-card__plan");
     expect(html).not.toContain(card.primaryDetail);
     expect(html).not.toContain(card.secondaryDetail);
+    expect(popupThemeCss).toMatch(
+      /\.popup-provider-card__provider-and-deployment\s*> \.popup-provider-card__provider\s*\{[^}]*flex:\s*0 0 auto;/s,
+    );
   });
 
   it("keeps the featured status chip in the provider title row", () => {

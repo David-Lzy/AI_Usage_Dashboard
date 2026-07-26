@@ -52,6 +52,7 @@ type ApiGatewayMeteringSummaryProps = {
   }>[];
   activeDeploymentId?: ProviderAccountId | null;
   onSelectDeployment?: (accountId: ProviderAccountId) => void;
+  showDeploymentSelector?: boolean;
 };
 
 type PrimaryMetric = {
@@ -405,7 +406,7 @@ function MeteringModule({
   );
 }
 
-function DeploymentSelector({
+export function ApiGatewayDeploymentSelector({
   activeDeploymentId,
   displayLabel,
   onSelectDeployment,
@@ -461,6 +462,7 @@ export function ApiGatewayMeteringSummary({
   deploymentOptions = [],
   activeDeploymentId = null,
   onSelectDeployment,
+  showDeploymentSelector = true,
 }: ApiGatewayMeteringSummaryProps) {
   const [summaryExpanded, setSummaryExpanded] = useExpandedModule(
     providerId,
@@ -621,6 +623,7 @@ export function ApiGatewayMeteringSummary({
   const scopeLabel =
     metering.scope === "api_key" ? copy.apiKeyScope : copy.accountScope;
   const dataStateLabel = metering.stale ? copy.savedData : copy.currentData;
+  const isPopupCompact = surface === "popup" && density === "compact";
 
   const setRange = (nextRange: ApiGatewayTrendRangeDays) => {
     setRangeDays(nextRange);
@@ -637,8 +640,8 @@ export function ApiGatewayMeteringSummary({
         copy={copy}
         expanded={summaryExpanded}
         headerAccessory={
-          density === "compact" ? (
-            <DeploymentSelector
+          density === "compact" && showDeploymentSelector ? (
+            <ApiGatewayDeploymentSelector
               activeDeploymentId={activeDeploymentId}
               displayLabel={metering.displayLabel}
               onSelectDeployment={onSelectDeployment}
@@ -647,9 +650,16 @@ export function ApiGatewayMeteringSummary({
             />
           ) : undefined
         }
+        headingAccessory={
+          isPopupCompact ? (
+            <strong className="api-gateway-metering-module__primary-value">
+              {primary.value}
+            </strong>
+          ) : undefined
+        }
         moduleId="summary"
         onToggle={() => setSummaryExpanded(!summaryExpanded)}
-        title={copy.overview}
+        title={isPopupCompact ? primary.label : copy.overview}
       >
         {density === "detail" ? (
           <div className="api-gateway-metering-primary">
@@ -682,11 +692,19 @@ export function ApiGatewayMeteringSummary({
             ))}
           </dl>
         ) : (
-          <dl className="api-gateway-metering-facts api-gateway-metering-facts--compact">
-            <div className="api-gateway-metering-facts__primary">
-              <dt>{primary.label}</dt>
-              <dd>{primary.value}</dd>
-            </div>
+          <dl
+            className={`api-gateway-metering-facts api-gateway-metering-facts--compact${
+              isPopupCompact
+                ? " api-gateway-metering-facts--supporting-only"
+                : ""
+            }`}
+          >
+            {!isPopupCompact ? (
+              <div className="api-gateway-metering-facts__primary">
+                <dt>{primary.label}</dt>
+                <dd>{primary.value}</dd>
+              </div>
+            ) : null}
             {[
               {
                 label: copy.actualSpend,

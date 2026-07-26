@@ -58,6 +58,17 @@
   overflow-wrap: anywhere;
 }
 
+.api-gateway-metering-module__primary-value {
+  flex: 0 0 auto;
+  color: var(--md-sys-color-on-surface);
+  font: var(--md-sys-typescale-title-medium-weight)
+    var(--md-sys-typescale-title-medium-size) /
+    var(--md-sys-typescale-title-medium-line-height)
+    var(--md-sys-typescale-title-medium-font);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
 .icon-button.api-gateway-metering-module__collapse-toggle {
   width: 56px;
   min-width: 56px;
@@ -262,7 +273,10 @@
 }
 
 .api-gateway-metering-facts--compact
-  > .api-gateway-metering-facts__supporting:nth-child(2) {
+  > .api-gateway-metering-facts__primary
+  + .api-gateway-metering-facts__supporting,
+.api-gateway-metering-facts--compact
+  > .api-gateway-metering-facts__supporting:first-child {
   padding-inline-start: 0;
 }
 
@@ -272,9 +286,43 @@
 }
 
 .api-gateway-metering-facts--compact
-  > .api-gateway-metering-facts__supporting:nth-child(n + 3) {
+  > .api-gateway-metering-facts__supporting
+  + .api-gateway-metering-facts__supporting {
   border-inline-start: 1px solid
     color-mix(in srgb, var(--md-sys-color-outline-variant) 64%, transparent);
+}
+
+.api-gateway-metering-summary--popup.api-gateway-metering-summary--compact {
+  border-block-start: 0;
+}
+
+.api-gateway-metering-summary--popup.api-gateway-metering-summary--compact
+  > .api-gateway-metering-module:first-child {
+  padding-block-start: 0;
+}
+
+.api-gateway-metering-summary--popup.api-gateway-metering-summary--compact
+  [data-api-gateway-metering-module="summary"]
+  .api-gateway-metering-module__heading {
+  align-items: center;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.api-gateway-metering-summary--popup.api-gateway-metering-summary--compact
+  [data-api-gateway-metering-module="summary"]
+  .api-gateway-metering-module__heading
+  > p {
+  flex: 1 1 auto;
+  font-size: var(--md-sys-typescale-label-large-size);
+  line-height: var(--md-sys-typescale-label-large-line-height);
+}
+
+.api-gateway-metering-summary--popup.api-gateway-metering-summary--compact
+  [data-api-gateway-metering-module="summary"]
+  .api-gateway-metering-module__content {
+  padding-block-start: 6px;
 }
 
 @supports (grid-template-rows: subgrid) {

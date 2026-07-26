@@ -112,6 +112,9 @@ describe("ApiGatewayMeteringSummary", () => {
 
     expect(html).toContain("Available balance");
     expect(html).toContain("$18.75");
+    expect(html).toContain("api-gateway-metering-module__primary-value");
+    expect(html).toContain("api-gateway-metering-facts--supporting-only");
+    expect(html).not.toContain("api-gateway-metering-facts__primary");
     expect(html).toContain("Actual spend");
     expect(html).toContain("$1");
     expect(html).toContain("20");
@@ -224,7 +227,7 @@ describe("ApiGatewayMeteringSummary", () => {
     });
 
     expect(html.indexOf("Leading models")).toBeLessThan(
-      html.indexOf("Usage summary"),
+      html.indexOf("Available balance"),
     );
     expect(html).not.toContain("Usage trend");
     expect(html).not.toContain(
@@ -243,6 +246,11 @@ describe("ApiGatewayMeteringSummary", () => {
     expect(css).toContain(
       "border-block-start: 1px solid var(--md-sys-color-outline-variant);",
     );
+    expect(css).toContain(
+      ".api-gateway-metering-summary--popup.api-gateway-metering-summary--compact",
+    );
+    expect(css).toContain("border-block-start: 0;");
+    expect(css).toContain("api-gateway-metering-module__primary-value");
     expect(css).not.toContain(
       "border-block: 1px solid var(--md-sys-color-outline-variant);",
     );

@@ -43,7 +43,10 @@ import {
 } from "./popup-collapse-preferences";
 import { CursorUsageSummary } from "../shared/components/CursorUsageSummary";
 import { buildCursorUsageLocalizedCopy } from "../shared/cursor-usage-localized-copy";
-import { ApiGatewayMeteringSummary } from "../shared/components/ApiGatewayMeteringSummary";
+import {
+  ApiGatewayDeploymentSelector,
+  ApiGatewayMeteringSummary,
+} from "../shared/components/ApiGatewayMeteringSummary";
 import { buildApiGatewayMeteringLocalizedCopy } from "../shared/api-gateway-metering-localized-copy";
 import { getActiveProviderAccountMetadata } from "../shared/provider-accounts";
 import { DEFAULT_RESET_TIME_DISPLAY_MODE } from "../shared/reset-time-display";
@@ -315,27 +318,48 @@ export function PopupFeaturedProviderList({
               <div className="popup-provider-card__header">
                 <div className="popup-provider-card__identity">
                   <div className="popup-provider-card__title-row">
-                    <p className="popup-provider-card__provider">
-                      {sourcePageAction ? (
-                        <a
-                          aria-label={`${sourcePageAction.label}: ${provider.providerLabel}`}
-                          className="popup-provider-card__provider-link"
-                          data-popup-provider-source-link={provider.providerId}
-                          href={provider.openableSessionPageUrl ?? undefined}
-                          title={sourcePageAction.label}
-                          onClick={(event) => {
-                            event.preventDefault();
-                            void onAction(sourcePageAction);
-                          }}
-                        >
-                          <span className="popup-provider-card__provider-link-label">
-                            {provider.providerLabel}
-                          </span>
-                        </a>
-                      ) : (
-                        provider.providerLabel
-                      )}
-                    </p>
+                    <div className="popup-provider-card__provider-and-deployment">
+                      <p className="popup-provider-card__provider">
+                        {sourcePageAction ? (
+                          <a
+                            aria-label={`${sourcePageAction.label}: ${provider.providerLabel}`}
+                            className="popup-provider-card__provider-link"
+                            data-popup-provider-source-link={provider.providerId}
+                            href={provider.openableSessionPageUrl ?? undefined}
+                            title={sourcePageAction.label}
+                            onClick={(event) => {
+                              event.preventDefault();
+                              void onAction(sourcePageAction);
+                            }}
+                          >
+                            <span className="popup-provider-card__provider-link-label">
+                              {provider.providerLabel}
+                            </span>
+                          </a>
+                        ) : (
+                          provider.providerLabel
+                        )}
+                      </p>
+                      {provider.apiGatewayMetering ? (
+                        <ApiGatewayDeploymentSelector
+                          activeDeploymentId={
+                            providerAccountCollection?.activeAccountId ?? null
+                          }
+                          displayLabel={provider.apiGatewayMetering.displayLabel}
+                          onSelectDeployment={
+                            onSelectProviderAccount
+                              ? (accountId) =>
+                                  onSelectProviderAccount(
+                                    provider.providerId,
+                                    accountId,
+                                  )
+                              : undefined
+                          }
+                          options={providerAccountCollection?.accounts ?? []}
+                          summaryLabel={apiGatewayMeteringCopy.overview}
+                        />
+                      ) : null}
+                    </div>
                     <div className="popup-provider-card__header-actions">
                       <button
                         className="text-button text-button--inline popup-provider-card__header-action"
@@ -464,6 +488,7 @@ export function PopupFeaturedProviderList({
                       metering={provider.apiGatewayMetering}
                       preferences={apiGatewayMeteringDisplayPreferences}
                       providerId={provider.providerId}
+                      showDeploymentSelector={false}
                       surface="popup"
                       activeDeploymentId={
                         providerAccountCollection?.activeAccountId ?? null
