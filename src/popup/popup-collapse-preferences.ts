@@ -21,6 +21,8 @@ const POPUP_COLLAPSE_STORAGE_KEYS: Record<
 
 const POPUP_USAGE_HISTORY_COLLAPSE_STORAGE_KEY_PREFIX =
   "ai-usage-dashboard:popup-collapse:usage-history:";
+const POPUP_PROVIDER_CARD_COLLAPSE_STORAGE_KEY_PREFIX =
+  "ai-usage-dashboard:popup-collapse:provider-card:";
 
 type PopupCollapsePreferenceOptions = {
   storage?: WebStorageLike | null;
@@ -92,6 +94,41 @@ export function writePopupUsageHistoryCollapsePreference(
   setSafeStorageItem(
     storage,
     buildPopupUsageHistoryCollapseStorageKey(providerId, moduleId),
+    isCollapsed ? "1" : "0",
+  );
+}
+
+function buildPopupProviderCardCollapseStorageKey(
+  providerId: ProviderId,
+): string {
+  return `${POPUP_PROVIDER_CARD_COLLAPSE_STORAGE_KEY_PREFIX}${encodeURIComponent(
+    providerId,
+  )}`;
+}
+
+export function readPopupProviderCardCollapsePreference(
+  providerId: ProviderId,
+  options?: PopupCollapsePreferenceOptions,
+): boolean {
+  const storage = resolveStorage(options);
+  const rawValue = getSafeStorageItem(
+    storage,
+    buildPopupProviderCardCollapseStorageKey(providerId),
+  );
+
+  return rawValue === "1";
+}
+
+export function writePopupProviderCardCollapsePreference(
+  providerId: ProviderId,
+  isCollapsed: boolean,
+  options?: PopupCollapsePreferenceOptions,
+): void {
+  const storage = resolveStorage(options);
+
+  setSafeStorageItem(
+    storage,
+    buildPopupProviderCardCollapseStorageKey(providerId),
     isCollapsed ? "1" : "0",
   );
 }

@@ -4,6 +4,7 @@ import type {
   AppSettings,
   PopupCircularProgressItemsPerRow,
   PopupCornerStyle,
+  PopupProviderBrowsingMode,
   PopupShadowStyle,
   PopupSizePreset,
   ProgressColorAppearance,
@@ -50,6 +51,9 @@ type SettingsUiMoreSectionProps = {
     MaterialSelectOption<PopupCircularProgressItemsPerRowSelectValue>
   >;
   popupSizePresetOptions: Array<MaterialSelectOption<PopupSizePreset>>;
+  popupProviderBrowsingModeOptions: Array<
+    MaterialSelectOption<PopupProviderBrowsingMode>
+  >;
   popupCornerStyleOptions: Array<MaterialSelectOption<PopupCornerStyle>>;
   popupShadowStyleOptions: Array<MaterialSelectOption<PopupShadowStyle>>;
   uiFontFamilyOptions: Array<MaterialSelectOption<UiFontFamily>>;
@@ -73,6 +77,9 @@ type SettingsUiMoreSectionProps = {
   onPopupProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onPopupShadowStyleChange: (shadowStyle: PopupShadowStyle) => void;
   onPopupSizePresetChange: (sizePreset: PopupSizePreset) => void;
+  onPopupProviderBrowsingModeChange: (
+    browsingMode: PopupProviderBrowsingMode,
+  ) => void;
   onProgressColorAppearanceChange: (
     colorAppearance: ProgressColorAppearance,
   ) => void;
@@ -194,6 +201,7 @@ export function SettingsUiMoreSection({
   progressDisplayStyleOptions,
   popupCircularProgressItemsPerRowOptions,
   popupSizePresetOptions,
+  popupProviderBrowsingModeOptions,
   popupCornerStyleOptions,
   popupShadowStyleOptions,
   uiFontFamilyOptions,
@@ -209,6 +217,7 @@ export function SettingsUiMoreSection({
   onPopupProgressStyleChange,
   onPopupShadowStyleChange,
   onPopupSizePresetChange,
+  onPopupProviderBrowsingModeChange,
   onProgressColorAppearanceChange,
   onProgressColorBandsChange,
   onProgressThicknessPxChange,
@@ -240,6 +249,7 @@ export function SettingsUiMoreSection({
     ...progressDisplayStyleOptions.map((option) => option.label),
     ...popupCircularProgressItemsPerRowOptions.map((option) => option.label),
     ...popupSizePresetOptions.map((option) => option.label),
+    ...popupProviderBrowsingModeOptions.map((option) => option.label),
     ...popupCornerStyleOptions.map((option) => option.label),
     ...popupShadowStyleOptions.map((option) => option.label),
     ...uiFontFamilyOptions.map((option) => option.label),
@@ -366,6 +376,19 @@ export function SettingsUiMoreSection({
               onActivePopoverChange={onActivePopoverChange}
               options={progressDisplayStyleOptions}
               onChange={onFullPageProgressStyleChange}
+            />
+
+            <MaterialSelect
+              label={i18n.t(
+                "settings.preferences.popup_provider_browsing_mode_label",
+              )}
+              value={settings.popupProviderBrowsingMode}
+              fieldIdPrefix="popup-provider-browsing-mode"
+              sessionPopoverId="popup-provider-browsing-mode"
+              activePopover={activePopover}
+              onActivePopoverChange={onActivePopoverChange}
+              options={popupProviderBrowsingModeOptions}
+              onChange={onPopupProviderBrowsingModeChange}
             />
 
             <MaterialSelect

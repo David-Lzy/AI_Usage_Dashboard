@@ -173,6 +173,10 @@ export type ProgressDisplayStyle =
   | "circle-soft"
   | "circle-gauge";
 export type PopupSizePreset = "compact" | "balanced" | "wide";
+export type PopupProviderBrowsingMode =
+  | "collapsible"
+  | "single"
+  | "scroll";
 export type PopupCornerStyle = "square" | "soft" | "rounded";
 export type PopupShadowStyle = "none" | "soft" | "elevated";
 export type PopupCircularProgressItemsPerRow = 1 | 2 | 3 | 4;
@@ -609,6 +613,7 @@ export type AppSettings = {
   popupProgressStyle: ProgressDisplayStyle;
   sidebarProgressStyle: ProgressDisplayStyle;
   fullPageProgressStyle: ProgressDisplayStyle;
+  popupProviderBrowsingMode: PopupProviderBrowsingMode;
   popupSizePreset: PopupSizePreset;
   popupCornerStyle: PopupCornerStyle;
   popupShadowStyle: PopupShadowStyle;

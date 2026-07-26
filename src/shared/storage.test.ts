@@ -24,6 +24,7 @@ function createLegacyState(): AppState {
     sidebarProgressStyle: _sidebarProgressStyle,
     fullPageProgressStyle: _fullPageProgressStyle,
     popupSizePreset: _popupSizePreset,
+    popupProviderBrowsingMode: _popupProviderBrowsingMode,
     popupCornerStyle: _popupCornerStyle,
     popupShadowStyle: _popupShadowStyle,
     popupCircularProgressItemsPerRow: _popupCircularProgressItemsPerRow,
@@ -286,6 +287,7 @@ describe("storage normalization", () => {
     expect(state?.settings.sidebarProgressStyle).toBe("line");
     expect(state?.settings.fullPageProgressStyle).toBe("line");
     expect(state?.settings.popupSizePreset).toBe("balanced");
+    expect(state?.settings.popupProviderBrowsingMode).toBe("collapsible");
     expect(state?.settings.popupCornerStyle).toBe("rounded");
     expect(state?.settings.popupShadowStyle).toBe("soft");
     expect(state?.settings.popupCircularProgressItemsPerRow).toBe(2);
@@ -932,6 +934,7 @@ describe("storage normalization", () => {
       settings: {
         ...SAMPLE_APP_STATE.settings,
         popupSizePreset: "maximized",
+        popupProviderBrowsingMode: "carousel",
         popupCornerStyle: "pill",
         popupShadowStyle: "heavy",
         popupCircularProgressItemsPerRow: 9,
@@ -941,6 +944,7 @@ describe("storage normalization", () => {
     const state = await readAppState();
 
     expect(state?.settings.popupSizePreset).toBe("balanced");
+    expect(state?.settings.popupProviderBrowsingMode).toBe("collapsible");
     expect(state?.settings.popupCornerStyle).toBe("rounded");
     expect(state?.settings.popupShadowStyle).toBe("soft");
     expect(state?.settings.popupCircularProgressItemsPerRow).toBe(2);
@@ -1071,6 +1075,7 @@ describe("storage normalization", () => {
         motionMode: "reduced",
         syncIntervalMinutes: 15,
         popupProgressStyle: "circle-gauge",
+        popupProviderBrowsingMode: "single",
         popupCircularProgressItemsPerRow: 3,
         progressThicknessPx: 7,
         toolbarIconMode: "provider",
@@ -1097,6 +1102,7 @@ describe("storage normalization", () => {
     expect(state?.settings.motionMode).toBe("reduced");
     expect(state?.settings.syncIntervalMinutes).toBe(15);
     expect(state?.settings.popupProgressStyle).toBe("circle-gauge");
+    expect(state?.settings.popupProviderBrowsingMode).toBe("single");
     expect(state?.settings.popupCircularProgressItemsPerRow).toBe(3);
     expect(state?.settings.progressThicknessPx).toBe(7);
     expect(state?.settings.toolbarIconMode).toBe("provider");

@@ -5,6 +5,7 @@ import type {
   PopupCornerStyle,
   PopupCircularProgressItemsPerRow,
   PopupShadowStyle,
+  PopupProviderBrowsingMode,
   PopupSizePreset,
   ProgressDisplayStyle,
   ProviderSetting,
@@ -27,6 +28,7 @@ import {
 import {
   POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW_OPTIONS,
   POPUP_CORNER_STYLE_OPTIONS,
+  POPUP_PROVIDER_BROWSING_MODE_OPTIONS,
   POPUP_SHADOW_STYLE_OPTIONS,
   POPUP_SIZE_PRESET_OPTIONS,
 } from "../shared/popup-appearance";
@@ -94,6 +96,20 @@ export function buildSettingsPreferenceOptions({
     balanced: i18n.t("settings.preferences.popup_size.balanced"),
     wide: i18n.t("settings.preferences.popup_size.wide"),
   };
+  const popupProviderBrowsingModeOptionLabels: Record<
+    PopupProviderBrowsingMode,
+    string
+  > = {
+    collapsible: i18n.t(
+      "settings.preferences.popup_provider_browsing_mode.collapsible",
+    ),
+    single: i18n.t(
+      "settings.preferences.popup_provider_browsing_mode.single",
+    ),
+    scroll: i18n.t(
+      "settings.preferences.popup_provider_browsing_mode.scroll",
+    ),
+  };
   const popupCornerStyleOptionLabels: Record<PopupCornerStyle, string> = {
     square: i18n.t("settings.preferences.popup_corner.square"),
     soft: i18n.t("settings.preferences.popup_corner.soft"),
@@ -156,6 +172,11 @@ export function buildSettingsPreferenceOptions({
     value: option.value,
     label: popupSizePresetOptionLabels[option.value],
   }));
+  const popupProviderBrowsingModeOptions =
+    POPUP_PROVIDER_BROWSING_MODE_OPTIONS.map((option) => ({
+      value: option.value,
+      label: popupProviderBrowsingModeOptionLabels[option.value],
+    }));
   const popupCornerStyleOptions = POPUP_CORNER_STYLE_OPTIONS.map((option) => ({
     value: option.value,
     label: popupCornerStyleOptionLabels[option.value],
@@ -224,6 +245,7 @@ export function buildSettingsPreferenceOptions({
     normalizedActionBadgeSelections,
     popupCornerStyleOptions,
     popupShadowStyleOptions,
+    popupProviderBrowsingModeOptions,
     popupSizePresetOptions,
     popupCircularProgressItemsPerRowOptions,
     progressDisplayStyleOptions,

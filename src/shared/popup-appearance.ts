@@ -2,11 +2,14 @@ import type {
   AppSettings,
   PopupCircularProgressItemsPerRow,
   PopupCornerStyle,
+  PopupProviderBrowsingMode,
   PopupShadowStyle,
   PopupSizePreset,
 } from "../providers/types";
 
 export const DEFAULT_POPUP_SIZE_PRESET: PopupSizePreset = "balanced";
+export const DEFAULT_POPUP_PROVIDER_BROWSING_MODE: PopupProviderBrowsingMode =
+  "collapsible";
 export const DEFAULT_POPUP_CORNER_STYLE: PopupCornerStyle = "rounded";
 export const DEFAULT_POPUP_SHADOW_STYLE: PopupShadowStyle = "soft";
 export const DEFAULT_POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW: PopupCircularProgressItemsPerRow = 2;
@@ -26,6 +29,24 @@ export const POPUP_SIZE_PRESET_OPTIONS: Array<{
   {
     value: "wide",
     label: "Wide",
+  },
+];
+
+export const POPUP_PROVIDER_BROWSING_MODE_OPTIONS: Array<{
+  value: PopupProviderBrowsingMode;
+  label: string;
+}> = [
+  {
+    value: "collapsible",
+    label: "Collapsible cards",
+  },
+  {
+    value: "single",
+    label: "One card at a time",
+  },
+  {
+    value: "scroll",
+    label: "Continuous scroll",
   },
 ];
 
@@ -92,6 +113,15 @@ export function normalizePopupSizePreset(
   fallback: PopupSizePreset = DEFAULT_POPUP_SIZE_PRESET,
 ): PopupSizePreset {
   return value === "compact" || value === "balanced" || value === "wide"
+    ? value
+    : fallback;
+}
+
+export function normalizePopupProviderBrowsingMode(
+  value: unknown,
+  fallback: PopupProviderBrowsingMode = DEFAULT_POPUP_PROVIDER_BROWSING_MODE,
+): PopupProviderBrowsingMode {
+  return value === "collapsible" || value === "single" || value === "scroll"
     ? value
     : fallback;
 }

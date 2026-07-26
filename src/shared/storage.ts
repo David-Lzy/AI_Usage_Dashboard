@@ -35,10 +35,12 @@ import {
 import {
   DEFAULT_POPUP_CORNER_STYLE,
   DEFAULT_POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW,
+  DEFAULT_POPUP_PROVIDER_BROWSING_MODE,
   DEFAULT_POPUP_SHADOW_STYLE,
   DEFAULT_POPUP_SIZE_PRESET,
   normalizePopupCircularProgressItemsPerRow,
   normalizePopupCornerStyle,
+  normalizePopupProviderBrowsingMode,
   normalizePopupShadowStyle,
   normalizePopupSizePreset,
 } from "./popup-appearance";
@@ -359,6 +361,10 @@ function normalizeAppState(state: AppState): AppState {
       fullPageProgressStyle: normalizeProgressDisplayStyle(
         state.settings?.fullPageProgressStyle,
         DEFAULT_FULL_PAGE_PROGRESS_STYLE,
+      ),
+      popupProviderBrowsingMode: normalizePopupProviderBrowsingMode(
+        state.settings?.popupProviderBrowsingMode,
+        DEFAULT_POPUP_PROVIDER_BROWSING_MODE,
       ),
       popupSizePreset: normalizePopupSizePreset(
         state.settings?.popupSizePreset,

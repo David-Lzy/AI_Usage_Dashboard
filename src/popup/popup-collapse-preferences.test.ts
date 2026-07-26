@@ -3,8 +3,10 @@ import { describe, expect, it } from "vitest";
 import type { WebStorageLike } from "../shared/local-storage";
 import {
   readPopupCollapsePreference,
+  readPopupProviderCardCollapsePreference,
   readPopupUsageHistoryCollapsePreference,
   writePopupCollapsePreference,
+  writePopupProviderCardCollapsePreference,
   writePopupUsageHistoryCollapsePreference,
 } from "./popup-collapse-preferences";
 
@@ -132,6 +134,50 @@ describe("popup collapse preferences", () => {
       writePopupUsageHistoryCollapsePreference(
         "codex-personal-page",
         "turns_history",
+        true,
+        { storage },
+      ),
+    ).not.toThrow();
+  });
+
+  it("stores provider card states independently", () => {
+    const storage = createMemoryStorage();
+
+    expect(
+      readPopupProviderCardCollapsePreference("codex-personal-page", {
+        storage,
+      }),
+    ).toBe(false);
+
+    writePopupProviderCardCollapsePreference(
+      "codex-personal-page",
+      true,
+      { storage },
+    );
+
+    expect(
+      readPopupProviderCardCollapsePreference("codex-personal-page", {
+        storage,
+      }),
+    ).toBe(true);
+    expect(
+      readPopupProviderCardCollapsePreference("cursor-personal-page", {
+        storage,
+      }),
+    ).toBe(false);
+  });
+
+  it("silently falls back when provider card storage fails", () => {
+    const storage = createThrowingStorage();
+
+    expect(
+      readPopupProviderCardCollapsePreference("codex-personal-page", {
+        storage,
+      }),
+    ).toBe(false);
+    expect(() =>
+      writePopupProviderCardCollapsePreference(
+        "codex-personal-page",
         true,
         { storage },
       ),

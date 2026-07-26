@@ -9,6 +9,7 @@ import type {
   AppLocalePreference,
   AppSettings,
   PopupCornerStyle,
+  PopupProviderBrowsingMode,
   PopupCircularProgressItemsPerRow,
   PopupShadowStyle,
   PopupSizePreset,
@@ -111,6 +112,9 @@ type SettingsPageProps = {
   onSidebarProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onFullPageProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onPopupSizePresetChange: (sizePreset: PopupSizePreset) => void;
+  onPopupProviderBrowsingModeChange: (
+    browsingMode: PopupProviderBrowsingMode,
+  ) => void;
   onPopupCornerStyleChange: (cornerStyle: PopupCornerStyle) => void;
   onPopupCircularProgressItemsPerRowChange: (
     itemsPerRow: PopupCircularProgressItemsPerRow,
@@ -233,6 +237,7 @@ export function SettingsPage({
   onSidebarProgressStyleChange,
   onFullPageProgressStyleChange,
   onPopupSizePresetChange,
+  onPopupProviderBrowsingModeChange,
   onPopupCornerStyleChange,
   onPopupCircularProgressItemsPerRowChange,
   onPopupShadowStyleChange,
@@ -538,6 +543,7 @@ export function SettingsPage({
         onSidebarProgressStyleChange={onSidebarProgressStyleChange}
         onFullPageProgressStyleChange={onFullPageProgressStyleChange}
         onPopupSizePresetChange={onPopupSizePresetChange}
+        onPopupProviderBrowsingModeChange={onPopupProviderBrowsingModeChange}
         onPopupCornerStyleChange={onPopupCornerStyleChange}
         onPopupCircularProgressItemsPerRowChange={
           onPopupCircularProgressItemsPerRowChange

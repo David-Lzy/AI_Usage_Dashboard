@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import type {
   PopupCircularProgressItemsPerRow,
+  PopupProviderBrowsingMode,
   ProgressColorAppearance,
   ProgressColorBand,
   ProgressDisplayStyle,
@@ -36,6 +37,8 @@ import {
 } from "../shared/usage-history-visibility";
 import {
   readPopupUsageHistoryCollapsePreference,
+  readPopupProviderCardCollapsePreference,
+  writePopupProviderCardCollapsePreference,
   writePopupUsageHistoryCollapsePreference,
 } from "./popup-collapse-preferences";
 import { CursorUsageSummary } from "../shared/components/CursorUsageSummary";
@@ -59,6 +62,7 @@ type PopupFeaturedProviderListProps = {
   progressColorAppearance?: ProgressColorAppearance;
   progressColorBands: readonly ProgressColorBand[];
   popupCircularProgressItemsPerRow: PopupCircularProgressItemsPerRow;
+  providerBrowsingMode: PopupProviderBrowsingMode;
   progressDisplayStyle: ProgressDisplayStyle;
   progressItemsBySurface: ProgressItemsBySurface;
   progressThicknessPx: number;
@@ -129,6 +133,7 @@ export function PopupFeaturedProviderList({
   progressColorAppearance,
   progressColorBands,
   popupCircularProgressItemsPerRow,
+  providerBrowsingMode,
   progressDisplayStyle,
   progressItemsBySurface,
   progressThicknessPx,
@@ -142,9 +147,31 @@ export function PopupFeaturedProviderList({
   getSettingsFocusForProvider,
   onAction,
 }: PopupFeaturedProviderListProps) {
+  const [activeProviderId, setActiveProviderId] = useState<ProviderId | null>(
+    () => cards[0]?.provider.providerId ?? null,
+  );
+  const [collapsedProviderCards, setCollapsedProviderCards] = useState<
+    Partial<Record<ProviderId, boolean>>
+  >(() =>
+    Object.fromEntries(
+      cards.map((card) => [
+        card.provider.providerId,
+        readPopupProviderCardCollapsePreference(card.provider.providerId),
+      ]),
+    ),
+  );
+
   if (cards.length === 0) {
     return null;
   }
+  const resolvedActiveProviderIndex = Math.max(
+    0,
+    cards.findIndex((card) => card.provider.providerId === activeProviderId),
+  );
+  const visibleCards =
+    providerBrowsingMode === "single"
+      ? [cards[resolvedActiveProviderIndex]]
+      : cards;
   const usageHistoryCopy = buildUsageHistoryLocalizedCopy(i18n.resolvedLocale);
   const cursorUsageCopy = buildCursorUsageLocalizedCopy(i18n.resolvedLocale);
   const apiGatewayMeteringCopy = buildApiGatewayMeteringLocalizedCopy(
@@ -153,9 +180,51 @@ export function PopupFeaturedProviderList({
 
   return (
     <section className="popup-quota-section" aria-label={ariaLabel}>
-      <div className="popup-provider-list">
-        {cards.map((card, index) => {
+      {providerBrowsingMode === "single" && cards.length > 1 ? (
+        <div
+          className="popup-provider-switcher"
+          data-popup-provider-switcher=""
+        >
+          <button
+            aria-label={i18n.t("popup.providers.previous")}
+            className="popup-provider-switcher__button popup-provider-switcher__button--previous"
+            type="button"
+            onClick={() => {
+              const previousIndex =
+                (resolvedActiveProviderIndex - 1 + cards.length) % cards.length;
+              setActiveProviderId(cards[previousIndex].provider.providerId);
+            }}
+          >
+            <span className="popup-provider-switcher__icon" aria-hidden="true" />
+          </button>
+          <span className="popup-provider-switcher__position" aria-live="polite">
+            {i18n.formatNumber(resolvedActiveProviderIndex + 1)} /{" "}
+            {i18n.formatNumber(cards.length)}
+          </span>
+          <button
+            aria-label={i18n.t("popup.providers.next")}
+            className="popup-provider-switcher__button popup-provider-switcher__button--next"
+            type="button"
+            onClick={() => {
+              const nextIndex = (resolvedActiveProviderIndex + 1) % cards.length;
+              setActiveProviderId(cards[nextIndex].provider.providerId);
+            }}
+          >
+            <span className="popup-provider-switcher__icon" aria-hidden="true" />
+          </button>
+        </div>
+      ) : null}
+      <div
+        className={`popup-provider-list popup-provider-list--${providerBrowsingMode}`}
+        data-popup-provider-browsing-mode={providerBrowsingMode}
+      >
+        {visibleCards.map((card) => {
           const { provider } = card;
+          const index = cards.indexOf(card);
+          const isCardCollapsed =
+            providerBrowsingMode === "collapsible" &&
+            (collapsedProviderCards[provider.providerId] ??
+              readPopupProviderCardCollapsePreference(provider.providerId));
           const apiGatewayMeteringDisplayPreferences =
             getActiveProviderAccountMetadata(
               { providerAccounts },
@@ -231,7 +300,14 @@ export function PopupFeaturedProviderList({
               key={provider.providerId}
               className={`popup-provider-card popup-provider-card--${cardSurfaceTone}${
                 hasProviderProgress ? " popup-provider-card--quota-first" : ""
+              }${isCardCollapsed ? " popup-provider-card--collapsed" : ""}${
+                providerBrowsingMode === "collapsible"
+                  ? " popup-provider-card--collapsible"
+                  : ""
               }`}
+              data-popup-provider-card-collapsed={
+                isCardCollapsed ? "true" : undefined
+              }
               data-theme-local-surface={
                 index === 0 ? "popup-first-provider-card" : undefined
               }
@@ -315,89 +391,135 @@ export function PopupFeaturedProviderList({
                 </div>
               </div>
 
-              {hasProviderProgress ? (
-                <div
-                  className={`popup-provider-card__progress popup-provider-card__progress--${progressDisplayStyle}`}
-                  data-popup-featured-progress={
-                    index === 0 ? "true" : undefined
-                  }
-                >
-                  {providerProgress}
-                </div>
-              ) : provider.cursorUsage || hasApiGatewayMetering ? null : (
+              {!isCardCollapsed ? (
                 <>
-                  <div
-                    className="popup-provider-card__chips"
-                    data-popup-featured-chips={index === 0 ? "true" : undefined}
-                  >
-                    {card.metaChips.map((chipLabel) => (
-                      <span key={chipLabel} className="meta-chip">
-                        {chipLabel}
-                      </span>
-                    ))}
-                  </div>
-                  <p
-                    className="supporting-copy"
-                    data-popup-featured-primary={index === 0 ? "true" : undefined}
-                  >
-                    {card.primaryDetail}
-                  </p>
-                  <p
-                    className="supporting-copy"
-                    data-popup-featured-secondary={index === 0 ? "true" : undefined}
-                  >
-                    {card.secondaryDetail}
-                  </p>
-                </>
-              )}
+                  {hasProviderProgress ? (
+                    <div
+                      className={`popup-provider-card__progress popup-provider-card__progress--${progressDisplayStyle}`}
+                      data-popup-featured-progress={
+                        index === 0 ? "true" : undefined
+                      }
+                    >
+                      {providerProgress}
+                    </div>
+                  ) : provider.cursorUsage || hasApiGatewayMetering ? null : (
+                    <>
+                      <div
+                        className="popup-provider-card__chips"
+                        data-popup-featured-chips={
+                          index === 0 ? "true" : undefined
+                        }
+                      >
+                        {card.metaChips.map((chipLabel) => (
+                          <span key={chipLabel} className="meta-chip">
+                            {chipLabel}
+                          </span>
+                        ))}
+                      </div>
+                      <p
+                        className="supporting-copy"
+                        data-popup-featured-primary={
+                          index === 0 ? "true" : undefined
+                        }
+                      >
+                        {card.primaryDetail}
+                      </p>
+                      <p
+                        className="supporting-copy"
+                        data-popup-featured-secondary={
+                          index === 0 ? "true" : undefined
+                        }
+                      >
+                        {card.secondaryDetail}
+                      </p>
+                    </>
+                  )}
 
-              {usageHistory && visibleUsageHistoryModules.length > 0 ? (
-                <div className="popup-provider-card__history">
-                  {visibleUsageHistoryModules.map((preference) => (
-                    <PopupUsageHistoryModule
-                      key={preference.id}
-                      copy={usageHistoryCopy}
-                      history={usageHistory}
-                      moduleId={preference.id}
+                  {usageHistory && visibleUsageHistoryModules.length > 0 ? (
+                    <div className="popup-provider-card__history">
+                      {visibleUsageHistoryModules.map((preference) => (
+                        <PopupUsageHistoryModule
+                          key={preference.id}
+                          copy={usageHistoryCopy}
+                          history={usageHistory}
+                          moduleId={preference.id}
+                          providerId={provider.providerId}
+                        />
+                      ))}
+                    </div>
+                  ) : null}
+                  {provider.cursorUsage ? (
+                    <CursorUsageSummary
+                      copy={cursorUsageCopy}
+                      locale={i18n.resolvedLocale}
                       providerId={provider.providerId}
+                      surface="popup"
+                      usage={provider.cursorUsage}
                     />
-                  ))}
-                </div>
+                  ) : null}
+                  {provider.apiGatewayMetering ? (
+                    <ApiGatewayMeteringSummary
+                      copy={apiGatewayMeteringCopy}
+                      locale={i18n.resolvedLocale}
+                      metering={provider.apiGatewayMetering}
+                      preferences={apiGatewayMeteringDisplayPreferences}
+                      providerId={provider.providerId}
+                      surface="popup"
+                      activeDeploymentId={
+                        providerAccountCollection?.activeAccountId ?? null
+                      }
+                      deploymentOptions={providerAccountCollection?.accounts}
+                      onSelectDeployment={
+                        onSelectProviderAccount
+                          ? (accountId) =>
+                              onSelectProviderAccount(
+                                provider.providerId,
+                                accountId,
+                              )
+                          : undefined
+                      }
+                    />
+                  ) : null}
+                  {showProviderServiceStatus ? (
+                    <ProviderServiceStatus
+                      locale={i18n.resolvedLocale}
+                      status={providerServiceStatus}
+                    />
+                  ) : null}
+                </>
               ) : null}
-              {provider.cursorUsage ? (
-                <CursorUsageSummary
-                  copy={cursorUsageCopy}
-                  locale={i18n.resolvedLocale}
-                  providerId={provider.providerId}
-                  surface="popup"
-                  usage={provider.cursorUsage}
-                />
-              ) : null}
-              {provider.apiGatewayMetering ? (
-                <ApiGatewayMeteringSummary
-                  copy={apiGatewayMeteringCopy}
-                  locale={i18n.resolvedLocale}
-                  metering={provider.apiGatewayMetering}
-                  preferences={apiGatewayMeteringDisplayPreferences}
-                  providerId={provider.providerId}
-                  surface="popup"
-                  activeDeploymentId={
-                    providerAccountCollection?.activeAccountId ?? null
-                  }
-                  deploymentOptions={providerAccountCollection?.accounts}
-                  onSelectDeployment={
-                    onSelectProviderAccount
-                      ? (accountId) =>
-                          onSelectProviderAccount(provider.providerId, accountId)
-                      : undefined
-                  }
-                />
-              ) : null}
-              {showProviderServiceStatus ? (
-                <ProviderServiceStatus
-                  locale={i18n.resolvedLocale}
-                  status={providerServiceStatus}
-                />
+              {providerBrowsingMode === "collapsible" ? (
+                <button
+                  aria-expanded={!isCardCollapsed}
+                  aria-label={i18n.t(
+                    isCardCollapsed
+                      ? "popup.providers.expand_card"
+                      : "popup.providers.collapse_card",
+                  )}
+                  className="popup-provider-card__collapse-toggle"
+                  data-popup-provider-card-toggle={provider.providerId}
+                  type="button"
+                  onClick={() => {
+                    const nextCollapsed = !isCardCollapsed;
+                    setCollapsedProviderCards((current) => ({
+                      ...current,
+                      [provider.providerId]: nextCollapsed,
+                    }));
+                    writePopupProviderCardCollapsePreference(
+                      provider.providerId,
+                      nextCollapsed,
+                    );
+                  }}
+                >
+                  <span
+                    aria-hidden="true"
+                    className={`popup-provider-card__collapse-icon${
+                      isCardCollapsed
+                        ? " popup-provider-card__collapse-icon--collapsed"
+                        : ""
+                    }`}
+                  />
+                </button>
               ) : null}
             </article>
           );

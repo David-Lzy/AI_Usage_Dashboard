@@ -448,6 +448,9 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
             onPopupSizePresetChange={(popupSizePreset) =>
               handleUpdateSettings({ popupSizePreset })
             }
+            onPopupProviderBrowsingModeChange={(popupProviderBrowsingMode) =>
+              handleUpdateSettings({ popupProviderBrowsingMode })
+            }
             onPopupCornerStyleChange={(popupCornerStyle) =>
               handleUpdateSettings({ popupCornerStyle })
             }

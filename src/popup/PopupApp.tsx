@@ -610,6 +610,7 @@ export function PopupApp() {
         popupCircularProgressItemsPerRow={
           appState.settings.popupCircularProgressItemsPerRow
         }
+        providerBrowsingMode={appState.settings.popupProviderBrowsingMode}
         progressDisplayStyle={popupProgressStyle}
         progressItemsBySurface={appState.settings.progressItemsBySurface}
         progressThicknessPx={appState.settings.progressThicknessPx}

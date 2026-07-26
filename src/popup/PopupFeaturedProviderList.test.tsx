@@ -29,6 +29,7 @@ function renderFeaturedList(
       popupCircularProgressItemsPerRow={
         SAMPLE_APP_STATE.settings.popupCircularProgressItemsPerRow
       }
+      providerBrowsingMode={state.settings.popupProviderBrowsingMode}
       progressDisplayStyle={SAMPLE_APP_STATE.settings.popupProgressStyle}
       progressItemsBySurface={SAMPLE_APP_STATE.settings.progressItemsBySurface}
       progressThicknessPx={SAMPLE_APP_STATE.settings.progressThicknessPx}
@@ -45,6 +46,59 @@ function renderFeaturedList(
 }
 
 describe("PopupFeaturedProviderList", () => {
+  it("defaults to independently collapsible provider cards", () => {
+    const html = renderFeaturedList();
+
+    expect(html).toContain(
+      'data-popup-provider-browsing-mode="collapsible"',
+    );
+    expect(html).toContain('data-popup-provider-card-toggle=');
+    expect(html).toContain('aria-label="Collapse provider card"');
+    expect(html).not.toContain('data-popup-provider-switcher=""');
+  });
+
+  it("renders one provider and compact cycling controls in single mode", () => {
+    const state: AppState = {
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        popupProviderBrowsingMode: "single",
+      },
+    };
+    const html = renderFeaturedList(
+      buildPopupViewModel(state).featuredProviderCards,
+      state,
+    );
+
+    expect(html).toContain('data-popup-provider-browsing-mode="single"');
+    expect(html).toContain('data-popup-provider-switcher=""');
+    expect(html).toContain('aria-label="Previous provider"');
+    expect(html).toContain('aria-label="Next provider"');
+    expect(html.match(/data-popup-hide-provider=/g)).toHaveLength(1);
+    expect(html).not.toContain('data-popup-provider-card-toggle=');
+  });
+
+  it("preserves the continuous list in scroll mode", () => {
+    const state: AppState = {
+      ...SAMPLE_APP_STATE,
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        popupProviderBrowsingMode: "scroll",
+      },
+    };
+    const html = renderFeaturedList(
+      buildPopupViewModel(state).featuredProviderCards,
+      state,
+    );
+
+    expect(html).toContain('data-popup-provider-browsing-mode="scroll"');
+    expect(html).not.toContain('data-popup-provider-switcher=""');
+    expect(html).not.toContain('data-popup-provider-card-toggle=');
+    expect(html.match(/data-popup-hide-provider=/g)?.length ?? 0).toBeGreaterThan(
+      1,
+    );
+  });
+
   it("renders compact API gateway metering instead of generic diagnostics", () => {
     const metering: ApiGatewayMeteringSnapshot = {
       schemaVersion: 1,
@@ -433,6 +487,11 @@ describe("PopupFeaturedProviderList", () => {
     expect(popupThemeCss).toContain(".popup-provider-card__history {");
     expect(popupThemeCss).not.toContain(
       ".popup-provider-card__header-actions {\n    grid-column: 1;",
+    );
+    expect(popupThemeCss).toContain(".popup-provider-card__collapse-toggle {");
+    expect(popupThemeCss).toContain(".popup-provider-switcher {");
+    expect(popupThemeCss).toContain(
+      "grid-template-columns: 34px minmax(0, 1fr) 34px;",
     );
   });
 });

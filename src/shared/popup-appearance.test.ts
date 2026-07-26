@@ -3,14 +3,17 @@ import { describe, expect, it } from "vitest";
 import {
   DEFAULT_POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW,
   DEFAULT_POPUP_CORNER_STYLE,
+  DEFAULT_POPUP_PROVIDER_BROWSING_MODE,
   DEFAULT_POPUP_SHADOW_STYLE,
   DEFAULT_POPUP_SIZE_PRESET,
   POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW_OPTIONS,
   POPUP_CORNER_STYLE_OPTIONS,
+  POPUP_PROVIDER_BROWSING_MODE_OPTIONS,
   POPUP_SHADOW_STYLE_OPTIONS,
   POPUP_SIZE_PRESET_OPTIONS,
   normalizePopupCircularProgressItemsPerRow,
   normalizePopupCornerStyle,
+  normalizePopupProviderBrowsingMode,
   normalizePopupShadowStyle,
   normalizePopupSizePreset,
   syncPopupAppearanceAttributes,
@@ -19,6 +22,7 @@ import {
 describe("popup appearance preferences", () => {
   it("keeps shipped popup appearance defaults", () => {
     expect(DEFAULT_POPUP_SIZE_PRESET).toBe("balanced");
+    expect(DEFAULT_POPUP_PROVIDER_BROWSING_MODE).toBe("collapsible");
     expect(DEFAULT_POPUP_CORNER_STYLE).toBe("rounded");
     expect(DEFAULT_POPUP_SHADOW_STYLE).toBe("soft");
     expect(DEFAULT_POPUP_CIRCULAR_PROGRESS_ITEMS_PER_ROW).toBe(2);
@@ -30,6 +34,9 @@ describe("popup appearance preferences", () => {
       "balanced",
       "wide",
     ]);
+    expect(
+      POPUP_PROVIDER_BROWSING_MODE_OPTIONS.map((option) => option.value),
+    ).toEqual(["collapsible", "single", "scroll"]);
     expect(POPUP_CORNER_STYLE_OPTIONS.map((option) => option.value)).toEqual([
       "square",
       "soft",
@@ -51,6 +58,11 @@ describe("popup appearance preferences", () => {
     expect(normalizePopupSizePreset("compact")).toBe("compact");
     expect(normalizePopupSizePreset("balanced")).toBe("balanced");
     expect(normalizePopupSizePreset("wide")).toBe("wide");
+    expect(normalizePopupProviderBrowsingMode("collapsible")).toBe(
+      "collapsible",
+    );
+    expect(normalizePopupProviderBrowsingMode("single")).toBe("single");
+    expect(normalizePopupProviderBrowsingMode("scroll")).toBe("scroll");
     expect(normalizePopupCornerStyle("square")).toBe("square");
     expect(normalizePopupCornerStyle("soft")).toBe("soft");
     expect(normalizePopupCornerStyle("rounded")).toBe("rounded");
@@ -65,6 +77,9 @@ describe("popup appearance preferences", () => {
 
   it("falls back for unsupported popup appearance values", () => {
     expect(normalizePopupSizePreset("small")).toBe(DEFAULT_POPUP_SIZE_PRESET);
+    expect(normalizePopupProviderBrowsingMode("carousel")).toBe(
+      DEFAULT_POPUP_PROVIDER_BROWSING_MODE,
+    );
     expect(normalizePopupCornerStyle("pill")).toBe(DEFAULT_POPUP_CORNER_STYLE);
     expect(normalizePopupShadowStyle("heavy")).toBe(DEFAULT_POPUP_SHADOW_STYLE);
     expect(normalizePopupCircularProgressItemsPerRow(5)).toBe(
@@ -77,6 +92,7 @@ describe("popup appearance preferences", () => {
 
   it("uses explicit fallback overrides for unsupported values", () => {
     expect(normalizePopupSizePreset(null, "wide")).toBe("wide");
+    expect(normalizePopupProviderBrowsingMode(null, "scroll")).toBe("scroll");
     expect(normalizePopupCornerStyle(null, "square")).toBe("square");
     expect(normalizePopupShadowStyle(null, "elevated")).toBe("elevated");
     expect(normalizePopupCircularProgressItemsPerRow(null, 2)).toBe(2);

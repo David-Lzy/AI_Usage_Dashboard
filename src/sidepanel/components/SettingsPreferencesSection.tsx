@@ -6,6 +6,7 @@ import type {
   AppSettings,
   PopupCircularProgressItemsPerRow,
   PopupCornerStyle,
+  PopupProviderBrowsingMode,
   PopupShadowStyle,
   PopupSizePreset,
   ProgressColorAppearance,
@@ -77,6 +78,9 @@ type SettingsPreferencesSectionProps = {
   onPopupProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onPopupShadowStyleChange: (shadowStyle: PopupShadowStyle) => void;
   onPopupSizePresetChange: (sizePreset: PopupSizePreset) => void;
+  onPopupProviderBrowsingModeChange: (
+    browsingMode: PopupProviderBrowsingMode,
+  ) => void;
   onProgressColorAppearanceChange: (
     colorAppearance: ProgressColorAppearance,
   ) => void;
@@ -123,6 +127,7 @@ export function SettingsPreferencesSection({
   onPopupProgressStyleChange,
   onPopupShadowStyleChange,
   onPopupSizePresetChange,
+  onPopupProviderBrowsingModeChange,
   onProgressColorAppearanceChange,
   onProgressColorBandsChange,
   onProgressThicknessPxChange,
@@ -147,6 +152,7 @@ export function SettingsPreferencesSection({
     popupCornerStyleOptions,
     popupCircularProgressItemsPerRowOptions,
     popupShadowStyleOptions,
+    popupProviderBrowsingModeOptions,
     popupSizePresetOptions,
     progressDisplayStyleOptions,
     syncIntervalErrorText,
@@ -427,6 +433,7 @@ export function SettingsPreferencesSection({
           popupCircularProgressItemsPerRowOptionsForSelect
         }
         popupSizePresetOptions={popupSizePresetOptions}
+        popupProviderBrowsingModeOptions={popupProviderBrowsingModeOptions}
         popupCornerStyleOptions={popupCornerStyleOptions}
         popupShadowStyleOptions={popupShadowStyleOptions}
         uiFontFamilyOptions={uiFontFamilyOptions}
@@ -444,6 +451,7 @@ export function SettingsPreferencesSection({
         onPopupProgressStyleChange={onPopupProgressStyleChange}
         onPopupShadowStyleChange={onPopupShadowStyleChange}
         onPopupSizePresetChange={onPopupSizePresetChange}
+        onPopupProviderBrowsingModeChange={onPopupProviderBrowsingModeChange}
         onProgressColorAppearanceChange={onProgressColorAppearanceChange}
         onProgressColorBandsChange={onProgressColorBandsChange}
         onProgressThicknessPxChange={onProgressThicknessPxChange}

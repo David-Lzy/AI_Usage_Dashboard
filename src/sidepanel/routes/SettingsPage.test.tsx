@@ -33,6 +33,7 @@ function renderSettingsPage(overrides: Partial<Parameters<typeof SettingsPage>[0
       onSidebarProgressStyleChange={() => {}}
       onFullPageProgressStyleChange={() => {}}
       onPopupSizePresetChange={() => {}}
+      onPopupProviderBrowsingModeChange={() => {}}
       onPopupCornerStyleChange={() => {}}
       onPopupCircularProgressItemsPerRowChange={() => {}}
       onPopupShadowStyleChange={() => {}}

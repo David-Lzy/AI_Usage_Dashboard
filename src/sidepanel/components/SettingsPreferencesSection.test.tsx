@@ -55,6 +55,7 @@ describe("SettingsPreferencesSection", () => {
         onSidebarProgressStyleChange={() => {}}
         onFullPageProgressStyleChange={() => {}}
         onPopupSizePresetChange={() => {}}
+        onPopupProviderBrowsingModeChange={() => {}}
         onPopupCornerStyleChange={() => {}}
         onPopupCircularProgressItemsPerRowChange={() => {}}
         onPopupShadowStyleChange={() => {}}
@@ -177,6 +178,13 @@ describe("SettingsPreferencesSection", () => {
     expect(html).toContain("settings-preferences__more-toggle-icon");
     expect(html).toContain('data-material-icon="keyboard-arrow-up"');
     expect(html).toContain('data-settings-material-select="popup-circular-row-count"');
+    expect(html).toContain(
+      'data-settings-material-select="popup-provider-browsing-mode"',
+    );
+    expect(html).toContain("Popup provider browsing");
+    expect(html).toContain("Collapsible cards");
+    expect(html).toContain("One card at a time");
+    expect(html).toContain("Continuous scroll");
     expect(html).toContain('data-settings-material-select="ui-font-family"');
     expect(html).toContain(
       'data-settings-material-select="reset-time-display-mode"',
