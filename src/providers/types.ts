@@ -32,6 +32,8 @@ export type ApiKeyProviderId =
   | "claude-code-admin-api"
   | "codex-enterprise-api";
 
+export type CredentialProviderId = ApiKeyProviderId | "sub2api-api-key";
+
 export type ProviderTone = "neutral" | "warning" | "error";
 
 export type QuotaUnit = "requests" | "credits" | "sessions" | "percent";

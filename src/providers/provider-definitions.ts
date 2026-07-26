@@ -1,5 +1,6 @@
 import type {
   ApiKeyProviderId,
+  CredentialProviderId,
   LegacyProviderId,
   ProviderBrandId,
   ProviderId,
@@ -284,8 +285,14 @@ export const PROVIDER_IDS = PROVIDER_DEFINITIONS.map(
 
 export const API_KEY_PROVIDER_IDS = PROVIDER_DEFINITIONS.filter(
   (provider): provider is ProviderDescriptor & { id: ApiKeyProviderId } =>
-    provider.connectionMode === "credential",
+    provider.connectionMode === "credential" &&
+    provider.id !== "sub2api-api-key",
 ).map((provider) => provider.id) as ApiKeyProviderId[];
+
+export const CREDENTIAL_PROVIDER_IDS = PROVIDER_DEFINITIONS.filter(
+  (provider): provider is ProviderDescriptor & { id: CredentialProviderId } =>
+    provider.connectionMode === "credential",
+).map((provider) => provider.id) as CredentialProviderId[];
 
 export const LEGACY_PROVIDER_ID_MAP: Record<LegacyProviderId, ProviderId> = {
   cursor: "cursor-personal-page",
@@ -317,6 +324,15 @@ export function isLegacyProviderId(value: unknown): value is LegacyProviderId {
 
 export function isApiKeyProviderId(value: unknown): value is ApiKeyProviderId {
   return typeof value === "string" && API_KEY_PROVIDER_IDS.includes(value as ApiKeyProviderId);
+}
+
+export function isCredentialProviderId(
+  value: unknown,
+): value is CredentialProviderId {
+  return (
+    typeof value === "string" &&
+    CREDENTIAL_PROVIDER_IDS.includes(value as CredentialProviderId)
+  );
 }
 
 export function getProviderDefinition(providerId: ProviderId): ProviderDefinition {

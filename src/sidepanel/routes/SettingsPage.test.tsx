@@ -104,11 +104,11 @@ describe("SettingsPage", () => {
     expect(html).toContain(
       'class="dashboard-section__header quick-setup-section__header"',
     );
-    expect(html).toContain('data-quick-setup-team-api-toggle=""');
-    expect(html).toContain(
-      "text-button--outlined quick-setup-section__team-toggle",
-    );
-    expect(html).toContain("Show team/API providers");
+    expect(html).toContain('data-quick-setup-provider-groups=""');
+    expect(html).toContain('data-quick-setup-provider-group="personal"');
+    expect(html).toContain('data-quick-setup-provider-group="api"');
+    expect(html).toContain("Personal / Web");
+    expect(html).toContain(">API<");
     expect(html).not.toContain("Cursor Team Admin API");
     expect(html).toContain("Cursor personal dashboard usage page");
     expect(html).not.toContain('data-settings-material-select="popup-circular-row-count"');
@@ -202,12 +202,27 @@ describe("SettingsPage", () => {
       },
     });
 
-    expect(html).toContain('data-quick-setup-provider-id="cursor-personal-page"');
+    expect(html).toContain('data-quick-setup-provider-id="cursor-team-api"');
+    expect(html).toContain('data-quick-setup-provider-group="api"');
+    expect(html).toContain('data-quick-setup-credential-link="cursor-team-api"');
     expect(html).not.toContain('id="settings-advanced"');
     expect(html).not.toContain('data-credential-provider-id="cursor-team-api"');
   });
 
-  it("uses the quick setup section as the fallback target for hidden provider deep links", () => {
+  it("routes Sub2API credential links to the visible deployment settings", () => {
+    const html = renderSettingsPage({
+      routeFocus: {
+        kind: "credential-provider",
+        providerId: "sub2api-api-key",
+      },
+    });
+
+    expect(html).toContain('data-credential-provider-id="sub2api-api-key"');
+    expect(html).toContain('data-sub2api-deployment-settings=""');
+    expect(html).not.toContain('id="settings-advanced"');
+  });
+
+  it("uses the matching section as the fallback target for provider deep links", () => {
     const providerTarget = {} as HTMLElement;
     const fallbackSection = {} as HTMLElement;
     const exactDocument = {
@@ -230,6 +245,20 @@ describe("SettingsPage", () => {
       getSettingsRouteFocusElement(
         { kind: "quick-setup-provider", providerId: "cursor-team-api" },
         fallbackDocument,
+      ),
+    ).toBe(fallbackSection);
+
+    const providerDisplayDocument = {
+      querySelector: () => null,
+      getElementById: (sectionId: string) =>
+        sectionId === SETTINGS_SECTION_IDS.providerDisplay
+          ? fallbackSection
+          : null,
+    } as unknown as Document;
+    expect(
+      getSettingsRouteFocusElement(
+        { kind: "credential-provider", providerId: "sub2api-api-key" },
+        providerDisplayDocument,
       ),
     ).toBe(fallbackSection);
   });
@@ -272,6 +301,7 @@ describe("SettingsPage", () => {
       "claude-code-team-page",
       "gemini-policy",
       "codex-personal-page",
+      "jetbrains-org-page",
     ];
     const html = renderSettingsPage({
       providers: hiddenProviders,

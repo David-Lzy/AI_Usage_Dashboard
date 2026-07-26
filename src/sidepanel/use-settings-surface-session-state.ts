@@ -55,6 +55,7 @@ export type SettingsPreferencesSurfaceSessionControls = {
 };
 
 export type SettingsSurfaceSessionControls = {
+  hasRestored: boolean;
   advancedOpen: boolean;
   setAdvancedOpen: Dispatch<SetStateAction<boolean>>;
   preferences: SettingsPreferencesSurfaceSessionControls;
@@ -515,6 +516,7 @@ export function useSettingsSurfaceSessionState({
   }, []);
 
   return {
+    hasRestored,
     advancedOpen: uiState.advancedOpen,
     setAdvancedOpen,
     preferences: {

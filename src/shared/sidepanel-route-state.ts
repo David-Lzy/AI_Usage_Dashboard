@@ -1,12 +1,15 @@
-import type { ApiKeyProviderId, ProviderId } from "../providers/types";
-import { API_KEY_PROVIDER_IDS, PROVIDER_IDS } from "../providers/provider-definitions";
+import type { CredentialProviderId, ProviderId } from "../providers/types";
+import {
+  CREDENTIAL_PROVIDER_IDS,
+  PROVIDER_IDS,
+} from "../providers/provider-definitions";
 import {
   SETTINGS_SECTION_IDS,
   SETTINGS_SECTION_ID_VALUES,
   type SettingsSectionId,
 } from "./settings-section-ids";
 
-export type SettingsCredentialProviderId = ApiKeyProviderId;
+export type SettingsCredentialProviderId = CredentialProviderId;
 
 export type SettingsRouteFocus =
   | { kind: "section"; sectionId: SettingsSectionId }
@@ -20,7 +23,7 @@ export type SidePanelRouteState =
   | { name: "provider-detail"; providerId: ProviderId };
 
 const VALID_PROVIDER_IDS = PROVIDER_IDS;
-const VALID_CREDENTIAL_PROVIDER_IDS = API_KEY_PROVIDER_IDS;
+const VALID_CREDENTIAL_PROVIDER_IDS = CREDENTIAL_PROVIDER_IDS;
 
 function isProviderId(value: string): value is ProviderId {
   return VALID_PROVIDER_IDS.includes(value as ProviderId);
@@ -42,7 +45,9 @@ export function settingsRouteFocusRequiresAdvanced(
   focus: SettingsRouteFocus | undefined,
 ): boolean {
   return (
-    focus?.kind === "credential-provider" || focus?.kind === "source-provider"
+    (focus?.kind === "credential-provider" &&
+      focus.providerId !== "sub2api-api-key") ||
+    focus?.kind === "source-provider"
   );
 }
 

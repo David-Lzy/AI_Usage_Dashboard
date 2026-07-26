@@ -52,6 +52,9 @@ export type SettingsCoreCopyText = {
     hideDisabledProviders: string;
     showTeamApiProviders?: string;
     hideTeamApiProviders?: string;
+    personalProviders?: string;
+    apiProviders?: string;
+    configureConnection?: string;
     firstProvider: {
       eyebrow: string;
       statusLabel: string;
@@ -1596,6 +1599,11 @@ export function buildLocalizedSettingsCoreSections(
         copy.quickSetup.showTeamApiProviders ?? "Show team/API providers",
       hideTeamApiProviders:
         copy.quickSetup.hideTeamApiProviders ?? "Hide team/API providers",
+      personalProviders:
+        copy.quickSetup.personalProviders ?? "Personal / Web",
+      apiProviders: copy.quickSetup.apiProviders ?? "API",
+      configureConnection:
+        copy.quickSetup.configureConnection ?? "Configure API",
       disabledProvidersSummary: (count: number) =>
         copy.quickSetup.disabledProvidersSummary(i18n.formatNumber(count)),
     },

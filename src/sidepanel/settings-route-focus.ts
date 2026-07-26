@@ -15,8 +15,10 @@ export function getSettingsRouteFocusElement(
         ) ?? documentRef.getElementById(SETTINGS_SECTION_IDS.quickSetup)
       );
     case "credential-provider":
-      return documentRef.querySelector<HTMLElement>(
-        `[data-credential-provider-id="${routeFocus.providerId}"]`,
+      return (
+        documentRef.querySelector<HTMLElement>(
+          `[data-credential-provider-id="${routeFocus.providerId}"]`,
+        ) ?? documentRef.getElementById(SETTINGS_SECTION_IDS.providerDisplay)
       );
     case "source-provider":
       return documentRef.querySelector<HTMLElement>(

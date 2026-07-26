@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import type {
   ProviderId,
+  CredentialProviderId,
   ProviderTone,
   ProviderSetting,
   ProviderSnapshot,
@@ -34,6 +35,7 @@ type SettingsQuickSetupSectionProps = {
   userLevel: SettingsUserLevel;
   onAttachActiveSessionPage: (providerId: ProviderId) => void;
   onClearPageBinding: (providerId: ProviderId) => void;
+  onOpenCredentialSettings: (providerId: CredentialProviderId) => void;
   onCarouselIndexChange?: (index: number) => void;
   onOpenSessionPage: (providerId: ProviderId) => void;
   onTogglePermission: (providerId: ProviderId) => void;
@@ -54,24 +56,34 @@ export function SettingsQuickSetupSection({
   userLevel,
   onAttachActiveSessionPage,
   onClearPageBinding,
+  onOpenCredentialSettings,
   onCarouselIndexChange,
   onOpenSessionPage,
   onTogglePermission,
   onToggleProvider,
 }: SettingsQuickSetupSectionProps) {
-  const [showTeamApiProviders, setShowTeamApiProviders] = useState(false);
+  const focusedProviderGroup = focusedProviderId
+    ? getQuickSetupProviderGroup(focusedProviderId)
+    : "personal";
+  const [providerGroup, setProviderGroup] = useState<QuickSetupProviderGroup>(
+    focusedProviderGroup,
+  );
+  useEffect(() => {
+    if (focusedProviderId) {
+      setProviderGroup(getQuickSetupProviderGroup(focusedProviderId));
+    }
+  }, [focusedProviderId]);
   const snapshotMap = new Map(
     snapshots.map((snapshot) => [snapshot.providerId, snapshot]),
   );
-  const quickSetupProviders = providers.filter((provider) => {
-    const definition = getProviderDefinition(provider.id);
-
-    return (
-      definition.quickSetupDefaultVisible ||
-      showTeamApiProviders ||
-      provider.id === focusedProviderId
-    );
-  });
+  const personalProviders = providers.filter(
+    (provider) => getQuickSetupProviderGroup(provider.id) === "personal",
+  );
+  const apiProviders = providers.filter(
+    (provider) => getQuickSetupProviderGroup(provider.id) === "api",
+  );
+  const quickSetupProviders =
+    providerGroup === "api" ? apiProviders : personalProviders;
   const enabledProviders = quickSetupProviders.filter(
     (provider) => provider.displayEnabled,
   );
@@ -315,6 +327,33 @@ export function SettingsQuickSetupSection({
                 {action.label}
               </button>
             ))}
+            {getProviderDefinition(provider.id).connectionMode ===
+            "credential" ? (
+              <button
+                className="text-button text-button--outlined"
+                type="button"
+                data-quick-setup-credential-link={provider.id}
+                onClick={() =>
+                  onOpenCredentialSettings(provider.id as CredentialProviderId)
+                }
+              >
+                {settingsCopy.quickSetup.configureConnection}
+              </button>
+            ) : null}
+          </div>
+        ) : getProviderDefinition(provider.id).connectionMode ===
+          "credential" ? (
+          <div className="credential-actions quick-setup-card__actions">
+            <button
+              className="text-button text-button--outlined"
+              type="button"
+              data-quick-setup-credential-link={provider.id}
+              onClick={() =>
+                onOpenCredentialSettings(provider.id as CredentialProviderId)
+              }
+            >
+              {settingsCopy.quickSetup.configureConnection}
+            </button>
           </div>
         ) : null}
       </article>
@@ -355,20 +394,41 @@ export function SettingsQuickSetupSection({
             </MaterialInfoTooltip>
           </div>
         </div>
-        <button
-          className="text-button text-button--outlined quick-setup-section__team-toggle"
-          type="button"
-          aria-expanded={showTeamApiProviders}
-          data-quick-setup-team-api-toggle=""
-          onClick={() => setShowTeamApiProviders((current) => !current)}
+        <div
+          className="quick-setup-section__provider-groups"
+          role="group"
+          aria-label={settingsCopy.quickSetup.title}
+          data-quick-setup-provider-groups=""
         >
-          {showTeamApiProviders
-            ? settingsCopy.quickSetup.hideTeamApiProviders
-            : settingsCopy.quickSetup.showTeamApiProviders}
-        </button>
+          <button
+            className="quick-setup-section__provider-group"
+            type="button"
+            aria-pressed={providerGroup === "personal"}
+            data-quick-setup-provider-group="personal"
+            onClick={() => setProviderGroup("personal")}
+          >
+            <span>{settingsCopy.quickSetup.personalProviders}</span>
+            <span className="quick-setup-section__provider-group-count">
+              {personalProviders.length}
+            </span>
+          </button>
+          <button
+            className="quick-setup-section__provider-group"
+            type="button"
+            aria-pressed={providerGroup === "api"}
+            data-quick-setup-provider-group="api"
+            onClick={() => setProviderGroup("api")}
+          >
+            <span>{settingsCopy.quickSetup.apiProviders}</span>
+            <span className="quick-setup-section__provider-group-count">
+              {apiProviders.length}
+            </span>
+          </button>
+        </div>
       </div>
 
       <ProviderCarousel
+        key={providerGroup}
         ariaLabel={settingsCopy.quickSetup.title}
         initialIndex={
           focusedQuickSetupIndex > -1
@@ -385,6 +445,16 @@ export function SettingsQuickSetupSection({
       />
     </section>
   );
+}
+
+type QuickSetupProviderGroup = "personal" | "api";
+
+function getQuickSetupProviderGroup(
+  providerId: ProviderId,
+): QuickSetupProviderGroup {
+  return getProviderDefinition(providerId).connectionMode === "credential"
+    ? "api"
+    : "personal";
 }
 
 function getQuickSetupStatusClassName(

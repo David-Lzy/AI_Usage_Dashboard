@@ -5,6 +5,7 @@ import type {
   ActionBadgeSelectionMode,
   ApiGatewayMeteringDisplayPreferences,
   ApiKeyProviderId,
+  CredentialProviderId,
   AppLocalePreference,
   AppSettings,
   PopupCornerStyle,
@@ -75,6 +76,7 @@ type SettingsToast = {
 
 type SettingsPageProps = {
   onBack: () => void;
+  onOpenCredentialSettings?: (providerId: CredentialProviderId) => void;
   routeFocus?: SettingsRouteFocus;
   themeActionLabel?: string;
   themeActionTitle?: string;
@@ -196,6 +198,7 @@ type SettingsPageProps = {
 
 export function SettingsPage({
   onBack,
+  onOpenCredentialSettings = () => undefined,
   routeFocus,
   themeActionLabel,
   themeActionTitle,
@@ -326,6 +329,7 @@ export function SettingsPage({
     if (
       !routeFocus ||
       !routeFocusKey ||
+      !settingsSurfaceSession.hasRestored ||
       typeof document === "undefined" ||
       typeof window === "undefined"
     ) {
@@ -361,7 +365,7 @@ export function SettingsPage({
     return () => {
       window.cancelAnimationFrame(frameId);
     };
-  }, [advancedOpen, routeFocusKey]);
+  }, [advancedOpen, routeFocusKey, settingsSurfaceSession.hasRestored]);
 
   const handleSettingsCarouselIndexChange = useCallback(
     (carouselId: string, index: number) => {
@@ -510,26 +514,6 @@ export function SettingsPage({
         </AdaptiveControlGrid>
       </SettingsOverviewSection>
 
-      <SettingsQuickSetupSection
-        focusedProviderId={quickSetupFocusedProviderId}
-        sectionId={SETTINGS_SECTION_IDS.quickSetup}
-        providers={providers}
-        providerSourceDisplayCopy={providerSourceDisplayCopy}
-        snapshots={snapshots}
-        settingsCopy={settingsCopy}
-        textDirection={i18n.resolvedTextDirection}
-        userLevel={settings.userLevel}
-        carouselIndex={settingsSurfaceSession.carouselIndexById.quickSetup}
-        sessionPageNavigationAvailable={sessionPageNavigationAvailable}
-        activeSessionPageAttachAvailable={activeSessionPageAttachAvailable}
-        onCarouselIndexChange={handleQuickSetupCarouselIndexChange}
-        onToggleProvider={onToggleProvider}
-        onTogglePermission={onTogglePermission}
-        onOpenSessionPage={onOpenSessionPage}
-        onAttachActiveSessionPage={onAttachActiveSessionPage}
-        onClearPageBinding={onClearPageBinding}
-      />
-
       <SettingsPreferencesSection
         sectionId={SETTINGS_SECTION_IDS.appearance}
         settings={settings}
@@ -574,6 +558,27 @@ export function SettingsPage({
           onToolbarIconCustomImageDataUrlChange
         }
         onThemeCustomSeedChange={onSaveThemeCustomSeed}
+      />
+
+      <SettingsQuickSetupSection
+        focusedProviderId={quickSetupFocusedProviderId}
+        sectionId={SETTINGS_SECTION_IDS.quickSetup}
+        providers={providers}
+        providerSourceDisplayCopy={providerSourceDisplayCopy}
+        snapshots={snapshots}
+        settingsCopy={settingsCopy}
+        textDirection={i18n.resolvedTextDirection}
+        userLevel={settings.userLevel}
+        carouselIndex={settingsSurfaceSession.carouselIndexById.quickSetup}
+        sessionPageNavigationAvailable={sessionPageNavigationAvailable}
+        activeSessionPageAttachAvailable={activeSessionPageAttachAvailable}
+        onCarouselIndexChange={handleQuickSetupCarouselIndexChange}
+        onToggleProvider={onToggleProvider}
+        onTogglePermission={onTogglePermission}
+        onOpenSessionPage={onOpenSessionPage}
+        onAttachActiveSessionPage={onAttachActiveSessionPage}
+        onClearPageBinding={onClearPageBinding}
+        onOpenCredentialSettings={onOpenCredentialSettings}
       />
 
       <SettingsProviderDisplaySection

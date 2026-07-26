@@ -113,6 +113,9 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
         hideDisabledProviders: "收起更多 Provider",
         showTeamApiProviders: "显示团队 / API Provider",
         hideTeamApiProviders: "隐藏团队 / API Provider",
+        personalProviders: "个人 / 网页",
+        apiProviders: "API",
+        configureConnection: "配置 API",
         firstProvider: {
           eyebrow: "建议第一步",
           statusLabel: "推荐",
@@ -360,6 +363,9 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
       hideDisabledProviders: "Hide more providers",
       showTeamApiProviders: "Show team/API providers",
       hideTeamApiProviders: "Hide team/API providers",
+      personalProviders: "Personal / Web",
+      apiProviders: "API",
+      configureConnection: "Configure API",
       firstProvider: {
         eyebrow: "Suggested first step",
         statusLabel: "Recommended",

@@ -141,6 +141,7 @@ export function Sub2ApiDeploymentSettings({
     <section
       className="sub2api-deployment-settings"
       data-sub2api-deployment-settings=""
+      data-credential-provider-id={SUB2API_PROVIDER_ID}
     >
       <div className="dashboard-section__header sub2api-deployment-settings__header">
         <div>

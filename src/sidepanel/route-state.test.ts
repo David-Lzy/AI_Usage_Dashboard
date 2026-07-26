@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { buildSidePanelHash, parseSidePanelHash } from "./route-state";
+import {
+  buildSidePanelHash,
+  parseSidePanelHash,
+  settingsRouteFocusRequiresAdvanced,
+} from "./route-state";
 
 describe("sidepanel route state", () => {
   it("builds stable hashes for supported routes", () => {
@@ -64,5 +68,20 @@ describe("sidepanel route state", () => {
     expect(parseSidePanelHash("#debug-capture-codex")).toBeNull();
     expect(parseSidePanelHash("#provider-detail/unknown")).toBeNull();
     expect(parseSidePanelHash("#settings/credentials/gemini")).toBeNull();
+  });
+
+  it("keeps Sub2API credentials in Provider display while other credentials use Advanced", () => {
+    expect(
+      settingsRouteFocusRequiresAdvanced({
+        kind: "credential-provider",
+        providerId: "sub2api-api-key",
+      }),
+    ).toBe(false);
+    expect(
+      settingsRouteFocusRequiresAdvanced({
+        kind: "credential-provider",
+        providerId: "cursor-team-api",
+      }),
+    ).toBe(true);
   });
 });

@@ -373,6 +373,12 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
         >
           <SettingsPage
             onBack={() => navigateToRoute({ name: "dashboard" })}
+            onOpenCredentialSettings={(providerId) =>
+              navigateToRoute({
+                name: "settings",
+                focus: { kind: "credential-provider", providerId },
+              })
+            }
             routeFocus={route.focus}
             onLocalePreferenceChange={(locale) =>
               handleUpdateSettings({ locale })
