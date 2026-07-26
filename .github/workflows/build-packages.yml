@@ -181,9 +181,9 @@ jobs:
           ### Notes
 
           - Chrome Web Store remains the recommended install path for everyday Chrome users.
-          - Adds configured Sub2API-compatible gateway metering for key-scoped aggregate balance, spend, requests, tokens, models, bounded trends, and returned limits.
-          - Keeps deployments isolated, refreshes only the selected deployment automatically, and leaves raw request records on the source dashboard.
-          - Improves localized and narrow-width Provider settings, detail analytics, diagnostics, and compact metering layouts.
+          - Adds collapsible, single-card, and continuous-list popup browsing modes so larger Provider sets remain manageable.
+          - Polishes configured Sub2API summaries, model composition, connection settings, deep links, and per-surface gateway module ordering.
+          - Hardens Settings updates from older stored preferences and verifies Popup, Dashboard, and Settings layouts across all 14 supported locales and narrow-to-wide widths.
           NOTES
 
       - name: Prepare release assets
