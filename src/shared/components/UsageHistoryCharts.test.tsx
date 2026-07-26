@@ -4,7 +4,12 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
 import type { ProviderUsageHistory } from "../../providers/types";
-import { UsageHistoryCompact, UsageHistoryDetail, type UsageHistoryChartCopy } from "./UsageHistoryCharts";
+import {
+  UsageCompositionSvg,
+  UsageHistoryCompact,
+  UsageHistoryDetail,
+  type UsageHistoryChartCopy,
+} from "./UsageHistoryCharts";
 
 const chartsCss = readFileSync(
   new URL("./usage-history-charts.css", import.meta.url),
@@ -139,6 +144,35 @@ describe("UsageHistoryCharts", () => {
     expect(html).not.toContain("<polygon");
   });
 
+  it("renders an aggregate composition as smooth proportional layers without fake dates", () => {
+    const html = renderToStaticMarkup(
+      <UsageCompositionSvg
+        compact
+        data={{
+          dates: ["aggregate"],
+          series: [
+            { id: "primary", label: "Primary", values: [75], total: 75 },
+            { id: "other", label: "Other", values: [25], total: 25 },
+          ],
+          dailyTotals: [100],
+          maximumDailyTotal: 100,
+          total: 100,
+        }}
+        label="Leading models"
+        locale="en"
+      />,
+    );
+
+    expect(html).toContain("usage-composition-chart--compact");
+    expect(html).toContain('data-composition-layer="primary"');
+    expect(html).toContain('data-composition-layer="other"');
+    expect(html).toContain('data-curve="monotone"');
+    expect(html).toContain("Primary: 75%");
+    expect(html).toContain("Other: 25%");
+    expect(html).not.toContain("aggregate – aggregate");
+    expect(html).not.toContain('tabindex="0"');
+  });
+
   it("can start a compact module collapsed for a persisted surface preference", () => {
     const html = renderToStaticMarkup(
       <UsageHistoryCompact
@@ -217,6 +251,8 @@ describe("UsageHistoryCharts", () => {
     expect(chartsCss).toContain("inset-inline-start: 0;");
     expect(chartsCss).toContain("usage-history-chart-frame__metric");
     expect(chartsCss).toContain("height: 70px;");
+    expect(chartsCss).toContain(".usage-composition-chart--compact {");
+    expect(chartsCss).toContain("height: 54px;");
     expect(chartsCss).toContain(".usage-history-chart__bar {");
     expect(chartsCss).toContain("--app-usage-history-bar-opacity");
     expect(chartsCss).toContain("--app-usage-history-area-fill-opacity");

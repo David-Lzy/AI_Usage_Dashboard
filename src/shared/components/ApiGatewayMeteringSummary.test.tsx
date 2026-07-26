@@ -119,6 +119,9 @@ describe("ApiGatewayMeteringSummary", () => {
     expect(html).toContain("Usage trend");
     expect(html).toContain("usage-history-chart--area");
     expect(html).toContain("Leading models");
+    expect(html).toContain("usage-composition-chart--compact");
+    expect(html).toContain('data-composition-layer="model-a"');
+    expect(html).not.toContain("api-gateway-metering-model-bar");
     expect(html).toContain("Model Alpha");
     expect(html).toContain("Other");
     expect(html).not.toContain("1,840");
@@ -223,7 +226,9 @@ describe("ApiGatewayMeteringSummary", () => {
       html.indexOf("Usage summary"),
     );
     expect(html).not.toContain("Usage trend");
-    expect(html).not.toContain("usage-history-chart");
+    expect(html).not.toContain(
+      'class="usage-history-chart usage-history-chart--area',
+    );
   });
 
   it("keeps the compact surface responsive without decorative nested cards", () => {
@@ -231,6 +236,12 @@ describe("ApiGatewayMeteringSummary", () => {
       "grid-template-columns: minmax(0, 1.55fr) repeat(3, minmax(0, 1fr))",
     );
     expect(css).toContain("grid-template-rows: subgrid");
+    expect(css).toContain(
+      "border-block-start: 1px solid var(--md-sys-color-outline-variant);",
+    );
+    expect(css).not.toContain(
+      "border-block: 1px solid var(--md-sys-color-outline-variant);",
+    );
     expect(css).toContain("@media (max-width: 420px)");
     expect(css).toContain("overflow-wrap: anywhere");
     expect(css).not.toContain("backdrop-filter");

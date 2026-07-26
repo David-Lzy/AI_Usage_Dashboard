@@ -64,6 +64,10 @@ const CHART_COLORS = [
   "var(--app-usage-history-series-10)",
 ];
 
+const COMPOSITION_ENVELOPE = [
+  0.16, 0.5, 0.78, 0.94, 1, 0.94, 0.78, 0.5, 0.16,
+];
+
 type UsageHistoryChartPoint = {
   x: number;
   y: number;
@@ -337,6 +341,78 @@ export function UsageHistorySvg({
           <title>{buildPointLabel(data, pointIndex, unit, locale)}</title>
         </rect>
       ))}
+    </svg>
+  );
+}
+
+export function UsageCompositionSvg({
+  compact,
+  data,
+  label,
+  locale,
+}: {
+  compact: boolean;
+  data: UsageHistoryChartData;
+  label: string;
+  locale: string;
+}) {
+  const width = 720;
+  const height = compact ? 68 : 104;
+  const top = compact ? 4 : 8;
+  const bottom = compact ? 4 : 8;
+  const chartHeight = height - top - bottom;
+  const baseline = top + chartHeight;
+  const series = data.series.filter((item) => item.total > 0);
+  const total = series.reduce((sum, item) => sum + item.total, 0);
+  const percentage = new Intl.NumberFormat(locale, {
+    maximumFractionDigits: 2,
+    style: "percent",
+  });
+  const accessibleLabel = `${label}: ${series
+    .map(
+      (item) =>
+        `${item.label}: ${percentage.format(total > 0 ? item.total / total : 0)}`,
+    )
+    .join(", ")}`;
+
+  let lowerShare = 0;
+
+  return (
+    <svg
+      aria-label={accessibleLabel}
+      className={`usage-composition-chart${compact ? " usage-composition-chart--compact" : ""}`}
+      preserveAspectRatio="none"
+      role="img"
+      viewBox={`0 0 ${width} ${height}`}
+    >
+      <title>{accessibleLabel}</title>
+      {series.map((item, index) => {
+        const share = total > 0 ? item.total / total : 0;
+        const upperShare = lowerShare + share;
+        const upperPoints = COMPOSITION_ENVELOPE.map((envelope, pointIndex) => ({
+          x: (pointIndex / (COMPOSITION_ENVELOPE.length - 1)) * width,
+          y: baseline - envelope * chartHeight * upperShare,
+        }));
+        const lowerPoints = COMPOSITION_ENVELOPE.map((envelope, pointIndex) => ({
+          x: (pointIndex / (COMPOSITION_ENVELOPE.length - 1)) * width,
+          y: baseline - envelope * chartHeight * lowerShare,
+        }));
+        lowerShare = upperShare;
+
+        return (
+          <path
+            className="usage-history-chart__area"
+            data-composition-layer={item.id}
+            data-curve="monotone"
+            d={buildStackedAreaPath(upperPoints, lowerPoints)}
+            fill={CHART_COLORS[index % CHART_COLORS.length]}
+            key={item.id}
+            stroke={CHART_COLORS[index % CHART_COLORS.length]}
+            strokeWidth="0.75"
+            vectorEffect="non-scaling-stroke"
+          />
+        );
+      })}
     </svg>
   );
 }

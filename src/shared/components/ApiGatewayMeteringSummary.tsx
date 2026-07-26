@@ -30,7 +30,11 @@ import {
   type ApiGatewayTrendRangeDays,
 } from "../api-gateway-metering-ui-preferences";
 import type { UsageHistoryChartData } from "../usage-history-chart-data";
-import { UsageHistoryLegend, UsageHistorySvg } from "./UsageHistoryCharts";
+import {
+  UsageCompositionSvg,
+  UsageHistoryLegend,
+  UsageHistorySvg,
+} from "./UsageHistoryCharts";
 import "./api-gateway-metering-summary.css";
 
 type ApiGatewayMeteringSummaryProps = {
@@ -54,13 +58,6 @@ type PrimaryMetric = {
   value: string;
   percentUsed: number | null;
 };
-
-const METRIC_COLORS = [
-  "var(--app-usage-history-series-1)",
-  "var(--app-usage-history-series-2)",
-  "var(--app-usage-history-series-3)",
-  "var(--app-usage-history-series-4)",
-];
 
 function formatNumber(value: number, locale: string): string {
   return new Intl.NumberFormat(locale, {
@@ -751,17 +748,12 @@ export function ApiGatewayMeteringSummary({
         onToggle={() => setModelsExpanded(!modelsExpanded)}
         title={copy.models}
       >
-        <div className="api-gateway-metering-model-bar" aria-hidden="true">
-          {compactModels.map((model, index) => (
-            <span
-              key={model.id}
-              style={{
-                background: METRIC_COLORS[index % METRIC_COLORS.length],
-                width: `${modelLegendData.total > 0 ? (metricMagnitude(model.totals) / modelLegendData.total) * 100 : 0}%`,
-              }}
-            />
-          ))}
-        </div>
+        <UsageCompositionSvg
+          compact={density === "compact"}
+          data={modelLegendData}
+          label={copy.models}
+          locale={locale}
+        />
         <UsageHistoryLegend data={modelLegendData} label={copy.chartLegend} />
         {density === "detail" ? (
           <ol className="api-gateway-metering-model-list">

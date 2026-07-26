@@ -1,7 +1,7 @@
 .api-gateway-metering-summary {
   display: grid;
   min-width: 0;
-  border-block: 1px solid var(--md-sys-color-outline-variant);
+  border-block-start: 1px solid var(--md-sys-color-outline-variant);
 }
 
 .api-gateway-metering-module + .api-gateway-metering-module {
@@ -305,18 +305,6 @@
 .api-gateway-metering-segmented button:focus-visible {
   background: var(--app-state-layer-neutral-hover);
   outline: none;
-}
-
-.api-gateway-metering-model-bar {
-  display: flex;
-  height: 6px;
-  overflow: hidden;
-  border-radius: var(--md-sys-shape-corner-full);
-  background: var(--md-sys-color-surface-variant);
-}
-
-.api-gateway-metering-model-bar > span {
-  min-width: 1px;
 }
 
 .api-gateway-metering-limits {
