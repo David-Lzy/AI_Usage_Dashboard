@@ -30,6 +30,14 @@
   gap: 10px;
 }
 
+.api-gateway-metering-module__header-actions {
+  display: flex;
+  align-items: center;
+  flex: 0 1 auto;
+  gap: 6px;
+  min-width: 0;
+}
+
 .api-gateway-metering-module__header > p {
   min-width: 0;
   margin: 0;
@@ -98,13 +106,12 @@
 }
 
 .api-gateway-metering-primary span,
-.api-gateway-metering-period-label,
 .api-gateway-metering-limits small {
   color: var(--md-sys-color-on-surface-variant);
-  font: var(--md-sys-typescale-label-small-weight)
-    var(--md-sys-typescale-label-small-size) /
-    var(--md-sys-typescale-label-small-line-height)
-    var(--md-sys-typescale-label-small-font);
+  font-family: var(--md-sys-typescale-label-medium-font);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: 500;
+  line-height: var(--md-sys-typescale-label-medium-line-height);
 }
 
 .api-gateway-metering-primary strong {
@@ -121,6 +128,71 @@
   border-radius: var(--md-sys-shape-corner-full);
   background: var(--app-state-layer-neutral-hover);
   white-space: nowrap;
+}
+
+.api-gateway-metering-deployment {
+  max-width: min(42vw, 180px);
+  color: var(--md-sys-color-on-surface-variant);
+  font-family: var(--md-sys-typescale-label-medium-font);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: 500;
+  line-height: var(--md-sys-typescale-label-medium-line-height);
+}
+
+.api-gateway-metering-deployment--single {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.api-gateway-metering-deployment--select {
+  position: relative;
+  display: inline-flex;
+  min-width: 0;
+  border: 1px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 58%, transparent);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: transparent;
+}
+
+.api-gateway-metering-deployment--select::after {
+  position: absolute;
+  inset-inline-end: 9px;
+  inset-block-start: 50%;
+  width: 5px;
+  height: 5px;
+  border-inline-end: 1.5px solid currentColor;
+  border-block-end: 1.5px solid currentColor;
+  content: "";
+  pointer-events: none;
+  transform: translateY(-70%) rotate(45deg);
+}
+
+.api-gateway-metering-deployment select {
+  min-width: 0;
+  max-width: 100%;
+  min-height: 26px;
+  padding: 0 26px 0 9px;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  appearance: none;
+}
+
+[dir="rtl"] .api-gateway-metering-deployment select {
+  padding: 0 9px 0 26px;
+}
+
+.api-gateway-metering-deployment--select:hover,
+.api-gateway-metering-deployment--select:focus-within {
+  background: var(--app-state-layer-neutral-hover);
+}
+
+.api-gateway-metering-deployment select:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
 }
 
 .api-gateway-metering-progress {
@@ -140,13 +212,26 @@
 
 .api-gateway-metering-facts {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 6px 12px;
   margin: 0;
 }
 
+.api-gateway-metering-facts--compact {
+  grid-template-columns: minmax(0, 1.55fr) repeat(3, minmax(0, 1fr));
+}
+
 .api-gateway-metering-facts > div {
+  display: grid;
+  align-content: start;
+  gap: 2px;
   min-width: 0;
+}
+
+@supports (grid-template-rows: subgrid) {
+  .api-gateway-metering-facts > div {
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+  }
 }
 
 .api-gateway-metering-facts dt,
@@ -156,10 +241,10 @@
 
 .api-gateway-metering-facts dt {
   color: var(--md-sys-color-on-surface-variant);
-  font: var(--md-sys-typescale-label-small-weight)
-    var(--md-sys-typescale-label-small-size) /
-    var(--md-sys-typescale-label-small-line-height)
-    var(--md-sys-typescale-label-small-font);
+  font-family: var(--md-sys-typescale-label-medium-font);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: 500;
+  line-height: var(--md-sys-typescale-label-medium-line-height);
 }
 
 .api-gateway-metering-facts dd {
@@ -170,10 +255,6 @@
     var(--md-sys-typescale-label-large-font);
   font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
-}
-
-.api-gateway-metering-period-label {
-  margin: -3px 0 0;
 }
 
 .api-gateway-metering-controls {
@@ -196,10 +277,10 @@
   border: 0;
   color: var(--md-sys-color-on-surface-variant);
   background: transparent;
-  font: var(--md-sys-typescale-label-small-weight)
-    var(--md-sys-typescale-label-small-size) /
-    var(--md-sys-typescale-label-small-line-height)
-    var(--md-sys-typescale-label-small-font);
+  font-family: var(--md-sys-typescale-label-medium-font);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: 500;
+  line-height: var(--md-sys-typescale-label-medium-line-height);
   cursor: pointer;
 }
 
@@ -347,13 +428,7 @@
     gap-inline: 8px;
   }
 
-  .api-gateway-metering-controls {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .api-gateway-metering-segmented,
-  .api-gateway-metering-range {
+  .api-gateway-metering-segmented {
     align-self: stretch;
   }
 
@@ -365,5 +440,11 @@
     text-align: center;
     text-wrap: balance;
     word-break: normal;
+  }
+}
+
+@media (max-width: 340px) {
+  .api-gateway-metering-facts--compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

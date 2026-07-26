@@ -8,6 +8,8 @@ import type {
   ProgressItemsBySurface,
   ResetTimeDisplayMode,
   ProviderId,
+  ProviderAccountId,
+  ProviderAccountsByProvider,
   ProviderServiceStatus as ProviderServiceStatusModel,
   ProviderServiceStatusVisibilityBySurface,
   UsageHistoryModulesBySurface,
@@ -55,6 +57,7 @@ type ProviderCardProps = {
   providerServiceStatuses?: readonly ProviderServiceStatusModel[];
   providerServiceStatusVisibilityBySurface?: ProviderServiceStatusVisibilityBySurface;
   provider: ProviderViewModel;
+  providerAccounts?: ProviderAccountsByProvider;
   resetTimeDisplayMode?: ResetTimeDisplayMode;
   onOpen: (providerId: ProviderId) => void;
   onOpenSourcePage?: (
@@ -62,6 +65,10 @@ type ProviderCardProps = {
     sourceStateKind: ProviderViewModel["currentSourceStateKind"],
   ) => void;
   onRefresh: (providerId: ProviderId) => void;
+  onSelectProviderAccount?: (
+    providerId: ProviderId,
+    accountId: ProviderAccountId,
+  ) => void;
 };
 
 export function ProviderCard({
@@ -78,10 +85,12 @@ export function ProviderCard({
   providerServiceStatusVisibilityBySurface =
     createDefaultProviderServiceStatusVisibilityBySurface(),
   provider,
+  providerAccounts = {},
   resetTimeDisplayMode = DEFAULT_RESET_TIME_DISPLAY_MODE,
   onOpen,
   onOpenSourcePage,
   onRefresh,
+  onSelectProviderAccount,
 }: ProviderCardProps) {
   const i18n = createRuntimeI18n(
     localePreference,
@@ -120,6 +129,7 @@ export function ProviderCard({
     buildRuntimeCommonCopy(i18n).visibleUsageContext;
   const hasCursorUsage = provider.cursorUsage !== undefined;
   const hasApiGatewayMetering = provider.apiGatewayMetering !== undefined;
+  const providerAccountCollection = providerAccounts[provider.providerId];
   const showProviderServiceStatus = isProviderServiceStatusVisible(
     providerServiceStatusVisibilityBySurface,
     progressSurface,
@@ -183,7 +193,9 @@ export function ProviderCard({
       <header className="provider-card__header">
         <div className="provider-card__identity">
           <p className="provider-card__provider">{provider.providerLabel}</p>
-          <p className="provider-card__plan">{provider.planName}</p>
+          {!hasApiGatewayMetering ? (
+            <p className="provider-card__plan">{provider.planName}</p>
+          ) : null}
         </div>
         <div className="provider-card__status">
           <StatusBadge
@@ -294,6 +306,16 @@ export function ProviderCard({
             preferences={apiGatewayMeteringDisplayPreferences}
             providerId={provider.providerId}
             surface={progressSurface}
+            activeDeploymentId={
+              providerAccountCollection?.activeAccountId ?? null
+            }
+            deploymentOptions={providerAccountCollection?.accounts}
+            onSelectDeployment={
+              onSelectProviderAccount
+                ? (accountId) =>
+                    onSelectProviderAccount(provider.providerId, accountId)
+                : undefined
+            }
           />
         ) : null}
 

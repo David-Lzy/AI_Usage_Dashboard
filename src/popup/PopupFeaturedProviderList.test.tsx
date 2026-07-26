@@ -39,6 +39,7 @@ function renderFeaturedList(
         state.settings.providerServiceStatusVisibilityBySurface
       }
       providerAccounts={state.providerAccounts}
+      onSelectProviderAccount={() => undefined}
     />,
   );
 }
@@ -73,9 +74,24 @@ describe("PopupFeaturedProviderList", () => {
       ...SAMPLE_APP_STATE,
       providers: SAMPLE_APP_STATE.providers.map((provider) =>
         provider.providerId === "sub2api-api-key"
-          ? { ...provider, apiGatewayMetering: metering }
+          ? { ...provider, apiGatewayMetering: metering, planName: "hze" }
           : provider,
       ),
+      providerAccounts: {
+        ...SAMPLE_APP_STATE.providerAccounts,
+        "sub2api-api-key": {
+          activeAccountId: "account_hze12345",
+          accounts: [
+            {
+              id: "account_hze12345",
+              label: "hze",
+              createdAt: null,
+              lastSuccessAt: null,
+            },
+          ],
+          inactiveAccounts: {},
+        },
+      },
     };
     const [baseCard] = buildPopupViewModel(state).featuredProviderCards;
     const provider = getProviderViewModel(
@@ -93,6 +109,11 @@ describe("PopupFeaturedProviderList", () => {
     expect(html).toContain("Usage summary");
     expect(html).toContain("Available balance");
     expect(html).toContain("$18.75");
+    expect(html).toContain(
+      "api-gateway-metering-deployment--single",
+    );
+    expect(html).toContain(">hze</span>");
+    expect(html).not.toContain("popup-provider-card__plan");
     expect(html).not.toContain(card.primaryDetail);
     expect(html).not.toContain(card.secondaryDetail);
   });

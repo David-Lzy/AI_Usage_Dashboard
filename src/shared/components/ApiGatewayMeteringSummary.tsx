@@ -9,6 +9,7 @@ import type {
   ApiGatewayMoney,
   ApiGatewayUsageMetric,
   DisplaySurface,
+  ProviderAccountId,
   ProviderId,
 } from "../../providers/types";
 import {
@@ -40,6 +41,12 @@ type ApiGatewayMeteringSummaryProps = {
   providerId: ProviderId;
   surface: DisplaySurface;
   density?: "compact" | "detail";
+  deploymentOptions?: readonly Readonly<{
+    id: ProviderAccountId;
+    label: string;
+  }>[];
+  activeDeploymentId?: ProviderAccountId | null;
+  onSelectDeployment?: (accountId: ProviderAccountId) => void;
 };
 
 type PrimaryMetric = {
@@ -351,6 +358,7 @@ function MeteringModule({
   children,
   copy,
   expanded,
+  headerAccessory,
   moduleId,
   onToggle,
   title,
@@ -358,6 +366,7 @@ function MeteringModule({
   children: ReactNode;
   copy: ApiGatewayMeteringLocalizedCopy;
   expanded: boolean;
+  headerAccessory?: ReactNode;
   moduleId: ApiGatewayMeteringModuleId;
   onToggle: () => void;
   title: string;
@@ -369,10 +378,58 @@ function MeteringModule({
     >
       <header className="api-gateway-metering-module__header">
         <p>{title}</p>
-        <ModuleToggle copy={copy} expanded={expanded} onToggle={onToggle} />
+        <div className="api-gateway-metering-module__header-actions">
+          {headerAccessory}
+          <ModuleToggle copy={copy} expanded={expanded} onToggle={onToggle} />
+        </div>
       </header>
       {expanded ? <div className="api-gateway-metering-module__content">{children}</div> : null}
     </section>
+  );
+}
+
+function DeploymentSelector({
+  activeDeploymentId,
+  displayLabel,
+  onSelectDeployment,
+  options,
+  summaryLabel,
+}: {
+  activeDeploymentId: ProviderAccountId | null;
+  displayLabel: string;
+  onSelectDeployment?: (accountId: ProviderAccountId) => void;
+  options: readonly Readonly<{ id: ProviderAccountId; label: string }>[];
+  summaryLabel: string;
+}) {
+  const activeLabel =
+    options.find((option) => option.id === activeDeploymentId)?.label ??
+    displayLabel;
+
+  if (options.length <= 1 || !onSelectDeployment) {
+    return (
+      <span
+        className="api-gateway-metering-deployment api-gateway-metering-deployment--single"
+        title={activeLabel}
+      >
+        {activeLabel}
+      </span>
+    );
+  }
+
+  return (
+    <label className="api-gateway-metering-deployment api-gateway-metering-deployment--select">
+      <select
+        aria-label={`${summaryLabel}: ${activeLabel}`}
+        value={activeDeploymentId ?? options[0]?.id ?? ""}
+        onChange={(event) => onSelectDeployment(event.currentTarget.value)}
+      >
+        {options.map((option) => (
+          <option key={option.id} value={option.id}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </label>
   );
 }
 
@@ -384,6 +441,9 @@ export function ApiGatewayMeteringSummary({
   providerId,
   surface,
   density = "compact",
+  deploymentOptions = [],
+  activeDeploymentId = null,
+  onSelectDeployment,
 }: ApiGatewayMeteringSummaryProps) {
   const [summaryExpanded, setSummaryExpanded] = useExpandedModule(
     providerId,
@@ -553,17 +613,30 @@ export function ApiGatewayMeteringSummary({
       <MeteringModule
         copy={copy}
         expanded={summaryExpanded}
+        headerAccessory={
+          density === "compact" ? (
+            <DeploymentSelector
+              activeDeploymentId={activeDeploymentId}
+              displayLabel={metering.displayLabel}
+              onSelectDeployment={onSelectDeployment}
+              options={deploymentOptions}
+              summaryLabel={copy.overview}
+            />
+          ) : undefined
+        }
         moduleId="summary"
         onToggle={() => setSummaryExpanded(!summaryExpanded)}
         title={copy.overview}
       >
-        <div className="api-gateway-metering-primary">
-          <div>
-            <span>{primary.label}</span>
-            <strong>{primary.value}</strong>
+        {density === "detail" ? (
+          <div className="api-gateway-metering-primary">
+            <div>
+              <span>{primary.label}</span>
+              <strong>{primary.value}</strong>
+            </div>
+            <span className="api-gateway-metering-primary__scope">{scopeLabel} · {dataStateLabel}</span>
           </div>
-          <span className="api-gateway-metering-primary__scope">{scopeLabel} · {dataStateLabel}</span>
-        </div>
+        ) : null}
         {primary.percentUsed !== null ? (
           <div
             aria-label={`${primary.label}: ${formatNumber(primary.percentUsed, locale)}%`}
@@ -576,10 +649,16 @@ export function ApiGatewayMeteringSummary({
             <span style={{ width: `${primary.percentUsed}%` }} />
           </div>
         ) : null}
-        <dl className="api-gateway-metering-facts">
+        <dl
+          className={`api-gateway-metering-facts api-gateway-metering-facts--${density}`}
+        >
           {(density === "detail"
             ? detailFacts
             : [
+                {
+                  label: primary.label,
+                  value: primary.value,
+                },
                 {
                   label: copy.actualSpend,
                   value:
@@ -621,15 +700,21 @@ export function ApiGatewayMeteringSummary({
             </dl>
           </div>
         ) : null}
-        <p className="api-gateway-metering-period-label">
-          {hasSelectedPeriod ? (rangeDays === 7 ? copy.sevenDays : copy.thirtyDays) : copy.recorded}
-        </p>
       </MeteringModule>
     ),
     trend: trend ? (
       <MeteringModule
         copy={copy}
         expanded={trendExpanded}
+        headerAccessory={
+          <button
+            className="api-gateway-metering-range"
+            type="button"
+            onClick={() => setRange(rangeDays === 7 ? 30 : 7)}
+          >
+            {rangeDays === 7 ? copy.sevenDays : copy.thirtyDays}
+          </button>
+        }
         moduleId="trend"
         onToggle={() => setTrendExpanded(!trendExpanded)}
         title={copy.trend}
@@ -647,13 +732,6 @@ export function ApiGatewayMeteringSummary({
               </button>
             ))}
           </div>
-          <button
-            className="api-gateway-metering-range"
-            type="button"
-            onClick={() => setRange(rangeDays === 7 ? 30 : 7)}
-          >
-            {rangeDays === 7 ? copy.sevenDays : copy.thirtyDays}
-          </button>
         </div>
         <UsageHistorySvg
           compact={density === "compact"}

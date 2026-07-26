@@ -8,6 +8,7 @@ import type {
   ProgressItemsBySurface,
   ResetTimeDisplayMode,
   ProviderId,
+  ProviderAccountId,
   ProviderServiceStatus,
   ProviderServiceStatusVisibilityBySurface,
   SummaryItem,
@@ -62,6 +63,10 @@ type DashboardPageProps = {
   onOpenQuickSetup: () => void;
   onRefreshProvider: (providerId: ProviderId) => void;
   onRefreshAll: () => void;
+  onSelectProviderAccount?: (
+    providerId: ProviderId,
+    accountId: ProviderAccountId,
+  ) => void;
 };
 
 export function DashboardPage({
@@ -95,6 +100,7 @@ export function DashboardPage({
   onOpenQuickSetup,
   onRefreshProvider,
   onRefreshAll,
+  onSelectProviderAccount,
 }: DashboardPageProps) {
   const i18n = createRuntimeI18n(
     localePreference,
@@ -209,10 +215,12 @@ export function DashboardPage({
                     providerServiceStatusVisibilityBySurface
                   }
                   provider={sourceCard.provider}
+                  providerAccounts={providerAccounts}
                   resetTimeDisplayMode={resetTimeDisplayMode}
                   onOpen={onOpenProvider}
                   onOpenSourcePage={onOpenSourcePage}
                   onRefresh={onRefreshProvider}
+                  onSelectProviderAccount={onSelectProviderAccount}
                 />
               ) : (
                 <CustomSourceCard

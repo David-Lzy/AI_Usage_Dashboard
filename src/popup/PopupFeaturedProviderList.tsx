@@ -7,6 +7,7 @@ import type {
   ProgressDisplayStyle,
   ProgressItemsBySurface,
   ProviderId,
+  ProviderAccountId,
   ProviderAccountsByProvider,
   ProviderUsageHistory,
   ProviderUsageHistoryModuleId,
@@ -66,6 +67,10 @@ type PopupFeaturedProviderListProps = {
   providerServiceStatuses?: readonly ProviderServiceStatusModel[];
   providerServiceStatusVisibilityBySurface?: ProviderServiceStatusVisibilityBySurface;
   providerAccounts?: ProviderAccountsByProvider;
+  onSelectProviderAccount?: (
+    providerId: ProviderId,
+    accountId: ProviderAccountId,
+  ) => void | Promise<void>;
   getSettingsFocusForProvider: (
     provider: PopupFeaturedProviderCard["provider"],
   ) => SettingsRouteFocus | null;
@@ -133,6 +138,7 @@ export function PopupFeaturedProviderList({
   providerServiceStatusVisibilityBySurface =
     createDefaultProviderServiceStatusVisibilityBySurface(),
   providerAccounts = {},
+  onSelectProviderAccount,
   getSettingsFocusForProvider,
   onAction,
 }: PopupFeaturedProviderListProps) {
@@ -155,6 +161,8 @@ export function PopupFeaturedProviderList({
               { providerAccounts },
               provider.providerId,
             )?.apiGatewayMeteringDisplayPreferences;
+          const providerAccountCollection =
+            providerAccounts[provider.providerId];
           const hasApiGatewayMetering =
             provider.apiGatewayMetering !== undefined;
           const providerProgress = (
@@ -297,8 +305,9 @@ export function PopupFeaturedProviderList({
                       />
                     </div>
                   </div>
-                  {!hasProviderProgress ||
-                  shouldShowPlanWithProviderProgress(provider) ? (
+                  {!hasApiGatewayMetering &&
+                  (!hasProviderProgress ||
+                    shouldShowPlanWithProviderProgress(provider)) ? (
                     <p className="popup-provider-card__plan">
                       {provider.planName}
                     </p>
@@ -372,6 +381,16 @@ export function PopupFeaturedProviderList({
                   preferences={apiGatewayMeteringDisplayPreferences}
                   providerId={provider.providerId}
                   surface="popup"
+                  activeDeploymentId={
+                    providerAccountCollection?.activeAccountId ?? null
+                  }
+                  deploymentOptions={providerAccountCollection?.accounts}
+                  onSelectDeployment={
+                    onSelectProviderAccount
+                      ? (accountId) =>
+                          onSelectProviderAccount(provider.providerId, accountId)
+                      : undefined
+                  }
                 />
               ) : null}
               {showProviderServiceStatus ? (

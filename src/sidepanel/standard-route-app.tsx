@@ -655,6 +655,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           onOpenSourcePage={handleOpenSessionPage}
           onRefreshProvider={handleRefresh}
           onRefreshAll={() => handleRefresh()}
+          onSelectProviderAccount={handleSelectProviderAccount}
         />
       )}
 

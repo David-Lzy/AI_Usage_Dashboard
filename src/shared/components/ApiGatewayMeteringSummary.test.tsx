@@ -84,13 +84,21 @@ function render(
   metering: ApiGatewayMeteringSnapshot,
   preferences?: ApiGatewayMeteringDisplayPreferences,
   density: "compact" | "detail" = "compact",
+  deployment?: {
+    activeDeploymentId?: string | null;
+    deploymentOptions?: readonly { id: string; label: string }[];
+    onSelectDeployment?: (accountId: string) => void;
+  },
 ) {
   return renderToStaticMarkup(
     <ApiGatewayMeteringSummary
+      activeDeploymentId={deployment?.activeDeploymentId}
       copy={buildApiGatewayMeteringLocalizedCopy("en")}
       density={density}
+      deploymentOptions={deployment?.deploymentOptions}
       locale="en"
       metering={metering}
+      onSelectDeployment={deployment?.onSelectDeployment}
       preferences={preferences}
       providerId="sub2api-api-key"
       surface="popup"
@@ -145,30 +153,58 @@ describe("ApiGatewayMeteringSummary", () => {
     expect(unrestrictedHtml).not.toContain('role="progressbar"');
   });
 
-  it("chooses the strongest returned subscription allowance and labels stale account data", () => {
-    const html = render(
-      snapshot({
-        billingMode: "subscription",
-        scope: "account",
-        stale: true,
-        balance: null,
-        remaining: null,
-        subscription: {
-          dailyUsage: money(2),
-          weeklyUsage: money(11),
-          monthlyUsage: money(37),
-          dailyLimit: money(10),
-          weeklyLimit: money(60),
-          monthlyLimit: money(200),
-          expiresAt: "2026-08-25T00:00:00.000Z",
-        },
-      }),
-    );
+  it("chooses the strongest returned subscription allowance and keeps scope metadata in detail only", () => {
+    const metering = snapshot({
+      billingMode: "subscription",
+      scope: "account",
+      stale: true,
+      balance: null,
+      remaining: null,
+      subscription: {
+        dailyUsage: money(2),
+        weeklyUsage: money(11),
+        monthlyUsage: money(37),
+        dailyLimit: money(10),
+        weeklyLimit: money(60),
+        monthlyLimit: money(200),
+        expiresAt: "2026-08-25T00:00:00.000Z",
+      },
+    });
+    const html = render(metering);
+    const detailHtml = render(metering, undefined, "detail");
 
     expect(html).toContain("Monthly allowance remaining");
     expect(html).toContain("$163");
-    expect(html).toContain("Account scope · Saved data");
+    expect(html).not.toContain("Account scope · Saved data");
+    expect(detailHtml).toContain("Account scope · Saved data");
     expect(html).toContain('data-api-gateway-metering-stale="true"');
+  });
+
+  it("places deployment and range controls in compact module headers without duplicate period text", () => {
+    const singleHtml = render(snapshot({ displayLabel: "hze" }), undefined, "compact", {
+      activeDeploymentId: "account_hze12345",
+      deploymentOptions: [{ id: "account_hze12345", label: "hze" }],
+      onSelectDeployment: () => undefined,
+    });
+    const multipleHtml = render(snapshot({ displayLabel: "hze" }), undefined, "compact", {
+      activeDeploymentId: "account_hze12345",
+      deploymentOptions: [
+        { id: "account_hze12345", label: "hze" },
+        { id: "account_backup1234", label: "Backup gateway" },
+      ],
+      onSelectDeployment: () => undefined,
+    });
+
+    expect(singleHtml).toContain(
+      "api-gateway-metering-deployment--single",
+    );
+    expect(singleHtml).not.toContain("<select");
+    expect(singleHtml.match(/(?:7|30) days/g)).toHaveLength(1);
+    expect(multipleHtml).toContain(
+      "api-gateway-metering-deployment--select",
+    );
+    expect(multipleHtml).toContain('<option value="account_backup1234">');
+    expect(multipleHtml).toContain("Backup gateway");
   });
 
   it("unmounts hidden modules and preserves account-local module order", () => {
@@ -191,7 +227,10 @@ describe("ApiGatewayMeteringSummary", () => {
   });
 
   it("keeps the compact surface responsive without decorative nested cards", () => {
-    expect(css).toContain("grid-template-columns: repeat(3, minmax(0, 1fr))");
+    expect(css).toContain(
+      "grid-template-columns: minmax(0, 1.55fr) repeat(3, minmax(0, 1fr))",
+    );
+    expect(css).toContain("grid-template-rows: subgrid");
     expect(css).toContain("@media (max-width: 420px)");
     expect(css).toContain("overflow-wrap: anywhere");
     expect(css).not.toContain("backdrop-filter");

@@ -3,6 +3,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type {
   AppLocalePreference,
   AppState,
+  ProviderAccountId,
   ProviderId,
   ThemeMode,
 } from "../providers/types";
@@ -541,6 +542,24 @@ export function PopupApp() {
     setHideProviderFeedback(null);
   }
 
+  async function handleSelectProviderAccount(
+    providerId: ProviderId,
+    accountId: ProviderAccountId,
+  ) {
+    const response = await sendAppMessage({
+      type: "app:set-provider-active-account",
+      providerId,
+      accountId,
+    });
+
+    if (!response.ok) {
+      setLoadState({ status: "error", message: response.error });
+      return;
+    }
+
+    setLoadState({ status: "ready", appState: response.state });
+  }
+
   return (
     <main
       className={`app-shell popup-shell${
@@ -603,6 +622,7 @@ export function PopupApp() {
           appState.settings.providerServiceStatusVisibilityBySurface
         }
         providerAccounts={appState.providerAccounts}
+        onSelectProviderAccount={handleSelectProviderAccount}
         getSettingsFocusForProvider={getSettingsRouteFocusForPopupProvider}
         onAction={handlePopupAction}
       />
