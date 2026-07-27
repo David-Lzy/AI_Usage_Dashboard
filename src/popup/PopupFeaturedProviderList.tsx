@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useState } from "react";
 
 import type {
   PopupCircularProgressItemsPerRow,
@@ -57,6 +57,7 @@ import {
   getProviderServiceStatusForProvider,
   isProviderServiceStatusVisible,
 } from "../shared/provider-service-status";
+import { usePopupProviderAutoGlide } from "./popup-provider-auto-glide";
 
 type PopupFeaturedProviderListProps = {
   ariaLabel: string;
@@ -89,18 +90,6 @@ type PopupFeaturedProviderListProps = {
 };
 
 type PopupProviderNavigationDirection = "previous" | "next";
-
-type PopupProviderAutoGlideMetrics = {
-  distancePx: number;
-  durationSeconds: number;
-};
-
-const EMPTY_POPUP_PROVIDER_AUTO_GLIDE_METRICS: PopupProviderAutoGlideMetrics = {
-  distancePx: 0,
-  durationSeconds: 0,
-};
-const POPUP_PROVIDER_AUTO_GLIDE_MIN_DURATION_SECONDS = 8;
-const POPUP_PROVIDER_AUTO_GLIDE_SPEED_PX_PER_SECOND = 24;
 
 function shouldShowPlanWithProviderProgress(
   provider: PopupFeaturedProviderCard["provider"],
@@ -178,85 +167,15 @@ export function PopupFeaturedProviderList({
       ]),
     ),
   );
-  const autoGlideViewportRef = useRef<HTMLDivElement>(null);
-  const autoGlideTrackRef = useRef<HTMLDivElement>(null);
-  const [autoGlideMetrics, setAutoGlideMetrics] =
-    useState<PopupProviderAutoGlideMetrics>(
-      EMPTY_POPUP_PROVIDER_AUTO_GLIDE_METRICS,
-    );
-
-  const providerIdsKey = cards
-    .map((card) => card.provider.providerId)
-    .join("\u0000");
-
-  useEffect(() => {
-    if (
-      providerBrowsingMode !== "scroll" ||
-      cards.length < 2 ||
-      typeof window === "undefined"
-    ) {
-      setAutoGlideMetrics(EMPTY_POPUP_PROVIDER_AUTO_GLIDE_METRICS);
-      return;
-    }
-
-    const viewport = autoGlideViewportRef.current;
-    const track = autoGlideTrackRef.current;
-    if (!viewport || !track) {
-      return;
-    }
-
-    let scheduledFrame: number | null = null;
-
-    const measureOverflow = () => {
-      scheduledFrame = null;
-      const distancePx = Math.max(
-        0,
-        Math.ceil(track.scrollHeight - viewport.clientHeight),
-      );
-      const durationSeconds =
-        distancePx > 1
-          ? Math.max(
-              POPUP_PROVIDER_AUTO_GLIDE_MIN_DURATION_SECONDS,
-              distancePx / POPUP_PROVIDER_AUTO_GLIDE_SPEED_PX_PER_SECOND,
-            )
-          : 0;
-
-      setAutoGlideMetrics((current) => {
-        if (
-          current.distancePx === distancePx &&
-          current.durationSeconds === durationSeconds
-        ) {
-          return current;
-        }
-
-        return { distancePx, durationSeconds };
-      });
-    };
-
-    const scheduleMeasurement = () => {
-      if (scheduledFrame !== null) {
-        window.cancelAnimationFrame(scheduledFrame);
-      }
-      scheduledFrame = window.requestAnimationFrame(measureOverflow);
-    };
-
-    const resizeObserver =
-      typeof ResizeObserver === "undefined"
-        ? null
-        : new ResizeObserver(scheduleMeasurement);
-    resizeObserver?.observe(viewport);
-    resizeObserver?.observe(track);
-    window.addEventListener("resize", scheduleMeasurement);
-    scheduleMeasurement();
-
-    return () => {
-      resizeObserver?.disconnect();
-      window.removeEventListener("resize", scheduleMeasurement);
-      if (scheduledFrame !== null) {
-        window.cancelAnimationFrame(scheduledFrame);
-      }
-    };
-  }, [cards.length, providerBrowsingMode, providerIdsKey]);
+  const {
+    isActive: hasActiveAutoGlide,
+    orderedItemIds: autoGlideProviderIds,
+    trackRef: autoGlideTrackRef,
+    viewportRef: autoGlideViewportRef,
+  } = usePopupProviderAutoGlide(
+    cards.map((card) => card.provider.providerId),
+    providerBrowsingMode === "scroll",
+  );
 
   const resolvedActiveProviderIndex = Math.max(
     0,
@@ -265,16 +184,18 @@ export function PopupFeaturedProviderList({
   const usesSingleProviderStage =
     providerBrowsingMode === "single" || providerBrowsingMode === "switch";
   const activeCard = cards[resolvedActiveProviderIndex] ?? cards[0] ?? null;
+  const cardsByProviderId = new Map(
+    cards.map((card) => [card.provider.providerId, card]),
+  );
+  const autoGlideCards = autoGlideProviderIds
+    .map((providerId) => cardsByProviderId.get(providerId))
+    .filter((card): card is PopupFeaturedProviderCard => card !== undefined);
   const visibleCards =
-    usesSingleProviderStage && activeCard ? [activeCard] : cards;
-  const hasActiveAutoGlide =
-    providerBrowsingMode === "scroll" && autoGlideMetrics.distancePx > 1;
-  const autoGlideStyle = hasActiveAutoGlide
-    ? ({
-        "--popup-provider-auto-glide-distance": `${autoGlideMetrics.distancePx}px`,
-        "--popup-provider-auto-glide-duration": `${autoGlideMetrics.durationSeconds}s`,
-      } as CSSProperties)
-    : undefined;
+    usesSingleProviderStage && activeCard
+      ? [activeCard]
+      : providerBrowsingMode === "scroll"
+        ? autoGlideCards
+        : cards;
   const usageHistoryCopy = buildUsageHistoryLocalizedCopy(i18n.resolvedLocale);
   const cursorUsageCopy = buildCursorUsageLocalizedCopy(i18n.resolvedLocale);
   const apiGatewayMeteringCopy = buildApiGatewayMeteringLocalizedCopy(
@@ -319,8 +240,10 @@ export function PopupFeaturedProviderList({
               : "false"
             : undefined
         }
-        data-popup-provider-auto-glide-distance-px={
-          hasActiveAutoGlide ? autoGlideMetrics.distancePx : undefined
+        data-popup-provider-auto-glide-wheel={
+          providerBrowsingMode === "scroll" && hasActiveAutoGlide
+            ? "true"
+            : undefined
         }
         role={
           providerBrowsingMode === "scroll" && cards.length > 1
@@ -370,7 +293,6 @@ export function PopupFeaturedProviderList({
           }
           className={`popup-provider-list popup-provider-list--${providerBrowsingMode}`}
           data-popup-provider-browsing-mode={providerBrowsingMode}
-          style={autoGlideStyle}
         >
           {visibleCards.map((card) => {
             const { provider } = card;

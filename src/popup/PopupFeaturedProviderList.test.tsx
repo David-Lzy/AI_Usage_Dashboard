@@ -114,6 +114,7 @@ describe("PopupFeaturedProviderList", () => {
     expect(html).toContain('data-popup-provider-auto-glide=""');
     expect(html).toContain('data-popup-provider-auto-glide-active="false"');
     expect(html).not.toContain("data-popup-provider-auto-glide-interval-ms");
+    expect(html).not.toContain("data-popup-provider-auto-glide-wheel");
     expect(html).not.toContain("popup-provider-card--auto-glide");
     expect(html).not.toContain('data-popup-provider-switcher=""');
     expect(html).not.toContain('data-popup-provider-card-toggle=');
@@ -540,9 +541,7 @@ describe("PopupFeaturedProviderList", () => {
     );
     expect(popupThemeCss).toContain(".popup-provider-center-switch {");
     expect(popupThemeCss).toContain("inset-block-start: 5px;");
-    expect(popupThemeCss).toContain(
-      "@keyframes popup-provider-continuous-vertical-glide",
-    );
+    expect(popupThemeCss).not.toContain("infinite alternate");
     expect(popupThemeCss).toContain(
       'data-popup-provider-auto-glide-active="true"',
     );
@@ -551,7 +550,9 @@ describe("PopupFeaturedProviderList", () => {
     );
     expect(popupThemeCss).not.toContain("calc(100dvh - 156px)");
     expect(popupThemeCss).toContain("mask-image: linear-gradient(");
-    expect(popupThemeCss).toContain("animation-play-state: paused;");
+    expect(popupThemeCss).toContain("overscroll-behavior-block: contain;");
+    expect(popupThemeCss).toContain("scrollbar-width: none;");
+    expect(popupThemeCss).toContain("will-change: transform;");
     expect(popupThemeCss).toContain(
       ':root[data-motion-resolved="reduced"] .popup-provider-stage--scroll',
     );
