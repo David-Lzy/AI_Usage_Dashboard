@@ -113,8 +113,13 @@ describe("SettingsPage", () => {
     expect(html).not.toContain("Cursor Team Admin API");
     expect(html).toContain("Cursor personal dashboard usage page");
     expect(html).not.toContain('data-settings-material-select="popup-circular-row-count"');
-    expect(html).toContain('data-action-badge-selection-controls=""');
-    expect(html).toContain('data-settings-material-select="toolbar-icon-mode"');
+    expect(html).toContain(
+      'data-settings-material-select="popup-provider-browsing-mode"',
+    );
+    expect(html).not.toContain('data-action-badge-selection-controls=""');
+    expect(html).not.toContain(
+      'data-settings-material-select="toolbar-icon-mode"',
+    );
     expect(html).toContain('data-configuration-backup=""');
     expect(html).toContain('data-settings-provider-display-section=""');
     expect(html).toContain('data-custom-source-settings=""');
@@ -166,7 +171,9 @@ describe("SettingsPage", () => {
 
     expect(html).toContain('data-credential-provider-id="cursor-team-api"');
     expect(html).toContain("Detailed diagnostics");
-    expect(html).toContain('data-action-badge-selection-controls=""');
+    expect(html).toContain(
+      'data-settings-material-select="popup-provider-browsing-mode"',
+    );
   });
 
   it("reveals the targeted advanced section for a credential-focused deep link", () => {

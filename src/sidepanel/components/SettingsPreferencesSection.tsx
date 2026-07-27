@@ -203,6 +203,9 @@ export function SettingsPreferencesSection({
     ...warningThresholdOptions.map((option) => option.label),
     ...themePresetOptions.map((option) => option.label),
     ...motionModeOptions.map((option) => option.label),
+    ...popupProviderBrowsingModeOptions.map((option) => option.label),
+  ];
+  const toolbarPreferenceMeasurementLabels = [
     actionBadgeMeasurementLabel,
     ...actionBadgeRotationIntervalOptions.map((option) => option.label),
     ...toolbarIconModeOptions.map((option) => option.label),
@@ -247,6 +250,111 @@ export function SettingsPreferencesSection({
       setUiMoreOpen(true);
     }
   }, [settings.themePreset]);
+
+  const toolbarPreferenceControls = (
+    <>
+      <ActionBadgeSelectionControls
+        label={i18n.t("settings.preferences.action_badge_label")}
+        options={actionBadgeOptions}
+        selectedValues={normalizedActionBadgeSelections}
+        selectionMode={settings.actionBadgeSelectionMode}
+        selectionModeLabel={i18n.t(
+          "settings.preferences.action_badge_mode_label",
+        )}
+        automaticLabel={i18n.t(
+          "settings.preferences.action_badge_mode_auto",
+        )}
+        manualLabel={i18n.t(
+          "settings.preferences.action_badge_mode_manual",
+        )}
+        labelAccessory={
+          <MaterialInfoTooltip className="settings-preferences__field-note">
+            {`${i18n.t("settings.preferences.action_badge_helper")} ${i18n.t(
+              "settings.preferences.action_badge_mode_helper",
+            )}`}
+          </MaterialInfoTooltip>
+        }
+        onSelectionModeChange={onActionBadgeSelectionModeChange}
+        onSelectionsChange={onActionBadgeSelectionsChange}
+      />
+
+      <EditableNumberCombobox
+        label={i18n.t("settings.preferences.action_badge_rotation_label")}
+        value={settings.actionBadgeRotationIntervalSeconds}
+        minimum={ACTION_BADGE_ROTATION_INTERVAL_MIN_SECONDS}
+        maximum={ACTION_BADGE_ROTATION_INTERVAL_MAX_SECONDS}
+        unitLabel={actionBadgeRotationUnitLabel}
+        errorText={actionBadgeRotationIntervalErrorText}
+        menuButtonLabel={actionBadgeRotationMenuButtonLabel}
+        fieldIdPrefix="action-badge-rotation-interval"
+        options={actionBadgeRotationIntervalOptions}
+        labelAccessory={
+          <MaterialInfoTooltip className="settings-preferences__field-note">
+            {i18n.t("settings.preferences.action_badge_rotation_helper")}
+          </MaterialInfoTooltip>
+        }
+        onChange={onActionBadgeRotationIntervalSecondsChange}
+      />
+
+      <MaterialSelect
+        label={i18n.t("settings.preferences.toolbar_icon_label")}
+        value={settings.toolbarIconMode}
+        fieldIdPrefix="toolbar-icon-mode"
+        sessionPopoverId="toolbar-icon-mode"
+        activePopover={activePopover}
+        onActivePopoverChange={setActivePopover}
+        options={toolbarIconModeOptions}
+        onChange={onToolbarIconModeChange}
+      />
+
+      {settings.toolbarIconMode === "provider" &&
+      selectedToolbarIconProviderId ? (
+        <MaterialSelect
+          label={i18n.t("settings.preferences.toolbar_icon_provider_label")}
+          value={selectedToolbarIconProviderId}
+          fieldIdPrefix="toolbar-icon-provider"
+          sessionPopoverId="toolbar-icon-provider"
+          activePopover={activePopover}
+          onActivePopoverChange={setActivePopover}
+          options={toolbarIconProviderOptions}
+          onChange={onToolbarIconProviderIdChange}
+        />
+      ) : null}
+
+      {settings.toolbarIconMode === "custom" ? (
+        <div
+          className="form-field toolbar-icon-custom-field"
+          data-toolbar-icon-custom-field=""
+        >
+          <span className="form-field__label">
+            {i18n.t("settings.preferences.toolbar_icon_custom_label")}
+          </span>
+          <div className="toolbar-icon-custom-field__row">
+            <input
+              className="form-field__control toolbar-icon-custom-field__file"
+              type="file"
+              accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"
+              onChange={handleToolbarIconCustomImageChange}
+            />
+            <span className="meta-chip toolbar-icon-custom-field__status">
+              {settings.toolbarIconCustomImageDataUrl
+                ? i18n.t("settings.preferences.toolbar_icon_custom_selected")
+                : i18n.t("settings.preferences.toolbar_icon_custom_empty")}
+            </span>
+            {settings.toolbarIconCustomImageDataUrl ? (
+              <button
+                className="text-button toolbar-icon-custom-field__clear"
+                type="button"
+                onClick={() => onToolbarIconCustomImageDataUrlChange(null)}
+              >
+                {i18n.t("settings.preferences.toolbar_icon_custom_clear")}
+              </button>
+            ) : null}
+          </div>
+        </div>
+      ) : null}
+    </>
+  );
 
   return (
     <section className="status-card settings-section-anchor" id={sectionId}>
@@ -304,108 +412,18 @@ export function SettingsPreferencesSection({
           onChange={onMotionModeChange}
         />
 
-        <ActionBadgeSelectionControls
-          label={i18n.t("settings.preferences.action_badge_label")}
-          options={actionBadgeOptions}
-          selectedValues={normalizedActionBadgeSelections}
-          selectionMode={settings.actionBadgeSelectionMode}
-          selectionModeLabel={i18n.t(
-            "settings.preferences.action_badge_mode_label",
-          )}
-          automaticLabel={i18n.t(
-            "settings.preferences.action_badge_mode_auto",
-          )}
-          manualLabel={i18n.t(
-            "settings.preferences.action_badge_mode_manual",
-          )}
-          labelAccessory={
-            <MaterialInfoTooltip className="settings-preferences__field-note">
-              {`${i18n.t("settings.preferences.action_badge_helper")} ${i18n.t(
-                "settings.preferences.action_badge_mode_helper",
-              )}`}
-            </MaterialInfoTooltip>
-          }
-          onSelectionModeChange={onActionBadgeSelectionModeChange}
-          onSelectionsChange={onActionBadgeSelectionsChange}
-        />
-
-        <EditableNumberCombobox
-          label={i18n.t("settings.preferences.action_badge_rotation_label")}
-          value={settings.actionBadgeRotationIntervalSeconds}
-          minimum={ACTION_BADGE_ROTATION_INTERVAL_MIN_SECONDS}
-          maximum={ACTION_BADGE_ROTATION_INTERVAL_MAX_SECONDS}
-          unitLabel={actionBadgeRotationUnitLabel}
-          errorText={actionBadgeRotationIntervalErrorText}
-          menuButtonLabel={actionBadgeRotationMenuButtonLabel}
-          fieldIdPrefix="action-badge-rotation-interval"
-          options={actionBadgeRotationIntervalOptions}
-          labelAccessory={
-            <MaterialInfoTooltip className="settings-preferences__field-note">
-              {i18n.t("settings.preferences.action_badge_rotation_helper")}
-            </MaterialInfoTooltip>
-          }
-          onChange={onActionBadgeRotationIntervalSecondsChange}
-        />
-
         <MaterialSelect
-          label={i18n.t("settings.preferences.toolbar_icon_label")}
-          value={settings.toolbarIconMode}
-          fieldIdPrefix="toolbar-icon-mode"
-          sessionPopoverId="toolbar-icon-mode"
+          label={i18n.t(
+            "settings.preferences.popup_provider_browsing_mode_label",
+          )}
+          value={settings.popupProviderBrowsingMode}
+          fieldIdPrefix="popup-provider-browsing-mode"
+          sessionPopoverId="popup-provider-browsing-mode"
           activePopover={activePopover}
           onActivePopoverChange={setActivePopover}
-          options={toolbarIconModeOptions}
-          onChange={onToolbarIconModeChange}
+          options={popupProviderBrowsingModeOptions}
+          onChange={onPopupProviderBrowsingModeChange}
         />
-
-        {settings.toolbarIconMode === "provider" &&
-        selectedToolbarIconProviderId ? (
-          <MaterialSelect
-            label={i18n.t("settings.preferences.toolbar_icon_provider_label")}
-            value={selectedToolbarIconProviderId}
-            fieldIdPrefix="toolbar-icon-provider"
-            sessionPopoverId="toolbar-icon-provider"
-            activePopover={activePopover}
-            onActivePopoverChange={setActivePopover}
-            options={toolbarIconProviderOptions}
-            onChange={onToolbarIconProviderIdChange}
-          />
-        ) : null}
-
-        {settings.toolbarIconMode === "custom" ? (
-          <div
-            className="form-field toolbar-icon-custom-field"
-            data-toolbar-icon-custom-field=""
-          >
-            <span className="form-field__label">
-              {i18n.t("settings.preferences.toolbar_icon_custom_label")}
-            </span>
-            <div className="toolbar-icon-custom-field__row">
-              <input
-                className="form-field__control toolbar-icon-custom-field__file"
-                type="file"
-                accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"
-                onChange={handleToolbarIconCustomImageChange}
-              />
-              <span className="meta-chip toolbar-icon-custom-field__status">
-                {settings.toolbarIconCustomImageDataUrl
-                  ? i18n.t(
-                      "settings.preferences.toolbar_icon_custom_selected",
-                    )
-                  : i18n.t("settings.preferences.toolbar_icon_custom_empty")}
-              </span>
-              {settings.toolbarIconCustomImageDataUrl ? (
-                <button
-                  className="text-button toolbar-icon-custom-field__clear"
-                  type="button"
-                  onClick={() => onToolbarIconCustomImageDataUrlChange(null)}
-                >
-                  {i18n.t("settings.preferences.toolbar_icon_custom_clear")}
-                </button>
-              ) : null}
-            </div>
-          </div>
-        ) : null}
       </AdaptiveControlGrid>
 
       <ConfigurationBackupControls
@@ -433,10 +451,13 @@ export function SettingsPreferencesSection({
           popupCircularProgressItemsPerRowOptionsForSelect
         }
         popupSizePresetOptions={popupSizePresetOptions}
-        popupProviderBrowsingModeOptions={popupProviderBrowsingModeOptions}
         popupCornerStyleOptions={popupCornerStyleOptions}
         popupShadowStyleOptions={popupShadowStyleOptions}
         uiFontFamilyOptions={uiFontFamilyOptions}
+        toolbarPreferenceControls={toolbarPreferenceControls}
+        toolbarPreferenceMeasurementLabels={
+          toolbarPreferenceMeasurementLabels
+        }
         onToggleUiMore={() => setUiMoreOpen((current) => !current)}
         onToggleToolbarPopupPreview={handleToolbarPopupPreviewToggle}
         onCloseToolbarPopupPreview={() => setToolbarPopupPreviewOpen(false)}
@@ -451,7 +472,6 @@ export function SettingsPreferencesSection({
         onPopupProgressStyleChange={onPopupProgressStyleChange}
         onPopupShadowStyleChange={onPopupShadowStyleChange}
         onPopupSizePresetChange={onPopupSizePresetChange}
-        onPopupProviderBrowsingModeChange={onPopupProviderBrowsingModeChange}
         onProgressColorAppearanceChange={onProgressColorAppearanceChange}
         onProgressColorBandsChange={onProgressColorBandsChange}
         onProgressThicknessPxChange={onProgressThicknessPxChange}

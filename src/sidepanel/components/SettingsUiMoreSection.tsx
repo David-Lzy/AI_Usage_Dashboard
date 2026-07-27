@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import type {
   AppSettings,
   PopupCircularProgressItemsPerRow,
   PopupCornerStyle,
-  PopupProviderBrowsingMode,
   PopupShadowStyle,
   PopupSizePreset,
   ProgressColorAppearance,
@@ -51,12 +50,11 @@ type SettingsUiMoreSectionProps = {
     MaterialSelectOption<PopupCircularProgressItemsPerRowSelectValue>
   >;
   popupSizePresetOptions: Array<MaterialSelectOption<PopupSizePreset>>;
-  popupProviderBrowsingModeOptions: Array<
-    MaterialSelectOption<PopupProviderBrowsingMode>
-  >;
   popupCornerStyleOptions: Array<MaterialSelectOption<PopupCornerStyle>>;
   popupShadowStyleOptions: Array<MaterialSelectOption<PopupShadowStyle>>;
   uiFontFamilyOptions: Array<MaterialSelectOption<UiFontFamily>>;
+  toolbarPreferenceControls: ReactNode;
+  toolbarPreferenceMeasurementLabels: readonly string[];
   onToggleUiMore: () => void;
   onToggleToolbarPopupPreview: () => void;
   onCloseToolbarPopupPreview: () => void;
@@ -77,9 +75,6 @@ type SettingsUiMoreSectionProps = {
   onPopupProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onPopupShadowStyleChange: (shadowStyle: PopupShadowStyle) => void;
   onPopupSizePresetChange: (sizePreset: PopupSizePreset) => void;
-  onPopupProviderBrowsingModeChange: (
-    browsingMode: PopupProviderBrowsingMode,
-  ) => void;
   onProgressColorAppearanceChange: (
     colorAppearance: ProgressColorAppearance,
   ) => void;
@@ -201,10 +196,11 @@ export function SettingsUiMoreSection({
   progressDisplayStyleOptions,
   popupCircularProgressItemsPerRowOptions,
   popupSizePresetOptions,
-  popupProviderBrowsingModeOptions,
   popupCornerStyleOptions,
   popupShadowStyleOptions,
   uiFontFamilyOptions,
+  toolbarPreferenceControls,
+  toolbarPreferenceMeasurementLabels,
   onToggleUiMore,
   onToggleToolbarPopupPreview,
   onCloseToolbarPopupPreview,
@@ -217,7 +213,6 @@ export function SettingsUiMoreSection({
   onPopupProgressStyleChange,
   onPopupShadowStyleChange,
   onPopupSizePresetChange,
-  onPopupProviderBrowsingModeChange,
   onProgressColorAppearanceChange,
   onProgressColorBandsChange,
   onProgressThicknessPxChange,
@@ -249,9 +244,9 @@ export function SettingsUiMoreSection({
     ...progressDisplayStyleOptions.map((option) => option.label),
     ...popupCircularProgressItemsPerRowOptions.map((option) => option.label),
     ...popupSizePresetOptions.map((option) => option.label),
-    ...popupProviderBrowsingModeOptions.map((option) => option.label),
     ...popupCornerStyleOptions.map((option) => option.label),
     ...popupShadowStyleOptions.map((option) => option.label),
+    ...toolbarPreferenceMeasurementLabels,
     ...uiFontFamilyOptions.map((option) => option.label),
     ...resetTimeDisplayModeOptions.map((option) => option.label),
   ];
@@ -379,19 +374,6 @@ export function SettingsUiMoreSection({
             />
 
             <MaterialSelect
-              label={i18n.t(
-                "settings.preferences.popup_provider_browsing_mode_label",
-              )}
-              value={settings.popupProviderBrowsingMode}
-              fieldIdPrefix="popup-provider-browsing-mode"
-              sessionPopoverId="popup-provider-browsing-mode"
-              activePopover={activePopover}
-              onActivePopoverChange={onActivePopoverChange}
-              options={popupProviderBrowsingModeOptions}
-              onChange={onPopupProviderBrowsingModeChange}
-            />
-
-            <MaterialSelect
               label={i18n.t("settings.preferences.popup_size_label")}
               value={settings.popupSizePreset}
               fieldIdPrefix="popup-size-preset"
@@ -423,6 +405,8 @@ export function SettingsUiMoreSection({
               options={popupShadowStyleOptions}
               onChange={onPopupShadowStyleChange}
             />
+
+            {toolbarPreferenceControls}
 
             <MaterialSelect
               label={resetTimeDisplayCopy.settingLabel}

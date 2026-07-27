@@ -94,26 +94,29 @@ describe("SettingsPreferencesSection", () => {
     expect(html).not.toContain('data-settings-material-select="theme-mode"');
     expect(html).toContain('data-color-choice-dropdown="accent-color"');
     expect(html).toContain('data-settings-material-select="motion-mode"');
+    expect(html).toContain(
+      'data-settings-material-select="popup-provider-browsing-mode"',
+    );
     expect(html).toContain("material-info-tooltip__trigger");
-    expect(html).toContain('class="form-field__label-row"');
     expect(html).toContain('role="tooltip"');
     expect(html).not.toContain("settings-preferences__field-with-helper");
     expect(html).not.toContain("settings-preferences__inline-helper");
-    expect(html).toContain('data-action-badge-selection-controls=""');
+    expect(html).not.toContain('data-action-badge-selection-controls=""');
     expect(html).not.toContain('data-action-badge-mode-switch=""');
-    expect(html).toContain(
+    expect(html).not.toContain(
       "Automatic mode shows attention count until provider quota badges are available",
     );
     expect(html).not.toContain('data-action-badge-mode-control=""');
     expect(html).not.toContain('data-action-badge-mode-reset=""');
-    expect(html).toContain("Badge rotation interval");
-    expect(html).toContain('data-settings-material-select="toolbar-icon-mode"');
+    expect(html).not.toContain("Badge rotation interval");
+    expect(html).not.toContain(
+      'data-settings-material-select="toolbar-icon-mode"',
+    );
     expect(html).toContain('data-configuration-backup=""');
     expect(html).toContain("Configuration backup and sync");
     expect(html).toContain("Export JSON");
     expect(html).toContain("Save to Chrome Sync");
     expect(html).toContain("Initialize configuration");
-    expect(html).toContain("Toolbar icon");
     expect(html).toContain(">More UI settings<");
     expect(html).toContain('class="settings-preferences__more-toggle"');
     expect(html).toContain("settings-preferences__more-toggle-icon");
@@ -141,6 +144,7 @@ describe("SettingsPreferencesSection", () => {
   it("renders badge selection mode as a closed dropdown setting", () => {
     const autoHtml = renderPreferencesSection({
       ...SAMPLE_APP_STATE.settings,
+      themePreset: "custom",
       actionBadgeSelectionMode: "auto",
     });
 
@@ -151,6 +155,7 @@ describe("SettingsPreferencesSection", () => {
 
     const manualHtml = renderPreferencesSection({
       ...SAMPLE_APP_STATE.settings,
+      themePreset: "custom",
       actionBadgeSelectionMode: "manual",
     });
 
@@ -186,6 +191,9 @@ describe("SettingsPreferencesSection", () => {
     expect(html).toContain("Previous and next");
     expect(html).toContain("Top switch");
     expect(html).toContain("Auto glide");
+    expect(html).toContain('data-action-badge-selection-controls=""');
+    expect(html).toContain("Badge rotation interval");
+    expect(html).toContain('data-settings-material-select="toolbar-icon-mode"');
     expect(html).toContain('data-settings-material-select="ui-font-family"');
     expect(html).toContain(
       'data-settings-material-select="reset-time-display-mode"',
@@ -216,6 +224,12 @@ describe("SettingsPreferencesSection", () => {
     ).toBeGreaterThan(
       html.indexOf('data-settings-material-select="popup-shadow-style"'),
     );
+    expect(
+      html.indexOf('data-settings-material-select="popup-provider-browsing-mode"'),
+    ).toBeLessThan(html.indexOf("settings-preferences__more--ui"));
+    expect(
+      html.indexOf('data-settings-material-select="toolbar-icon-mode"'),
+    ).toBeGreaterThan(html.indexOf("settings-preferences__more--ui"));
   });
 
   it("renders the quota pace preference as default-off and preserves opt-in", () => {
@@ -241,6 +255,7 @@ describe("SettingsPreferencesSection", () => {
   it("renders provider and custom toolbar icon controls only for matching modes", () => {
     const providerHtml = renderPreferencesSection({
       ...SAMPLE_APP_STATE.settings,
+      themePreset: "custom",
       toolbarIconMode: "provider",
       toolbarIconProviderId: "codex-personal-page",
     });
@@ -253,6 +268,7 @@ describe("SettingsPreferencesSection", () => {
 
     const customHtml = renderPreferencesSection({
       ...SAMPLE_APP_STATE.settings,
+      themePreset: "custom",
       toolbarIconMode: "custom",
       toolbarIconCustomImageDataUrl:
         "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB",
