@@ -134,6 +134,71 @@ const structuredCopyTargets = [
     constants: ["CUSTOM_SOURCE_CARD_COPY"],
     baseLocales: [],
   },
+  {
+    surface: "API gateway metering",
+    relativePath: "src/shared/api-gateway-metering-localized-copy.ts",
+    constants: ["COPY_OVERRIDES"],
+    baseLocales: ["en"],
+  },
+  {
+    surface: "Sub2API settings",
+    relativePath: "src/shared/sub2api-settings-localized-copy.ts",
+    constants: ["COPY_OVERRIDES"],
+    baseLocales: ["en"],
+  },
+  {
+    surface: "usage history",
+    relativePath: "src/shared/usage-history-localized-copy.ts",
+    constants: [
+      "UI_COPY_OVERRIDES",
+      "SURFACE_LABEL_OVERRIDES",
+      "WORK_DESKTOP_LABELS",
+      "COPY_OVERRIDES",
+    ],
+    baseLocales: ["en"],
+  },
+  {
+    surface: "provider service status",
+    relativePath: "src/shared/provider-service-status-localized-copy.ts",
+    constants: ["LOCALIZED_OVERRIDES"],
+    baseLocales: ["en"],
+  },
+  {
+    surface: "quota pace",
+    relativePath: "src/shared/quota-pace-localized-copy.ts",
+    constants: ["QUOTA_PACE_COPY"],
+    baseLocales: [],
+  },
+  {
+    surface: "connection actions",
+    relativePath: "src/shared/connection-action-localized-copy.ts",
+    constants: ["TEST_CONNECTION_LABELS"],
+    baseLocales: [],
+  },
+  {
+    surface: "store workflow",
+    relativePath: "src/shared/store-workflow-localized-copy.ts",
+    constants: ["STORE_WORKFLOW_ERROR_PRESENTATION", "STORE_WORKFLOW_COPY"],
+    baseLocales: [],
+  },
+  {
+    surface: "operator workspace",
+    relativePath: "src/shared/operator-workspace-localized-copy.ts",
+    constants: [
+      "INTERACTION_AUDIT_REVIEW_QUEUE_COPY",
+      "INTERACTION_AUDIT_SURFACE_CARD_COPY",
+      "INTERACTION_AUDIT_WORKSPACE_CONTROLS_COPY",
+      "INTERACTION_AUDIT_REQUEST_SCOPE_COMMANDS_COPY",
+      "INTERACTION_AUDIT_HANDOFF_SUMMARY_COPY",
+      "INTERACTION_AUDIT_FRAME_RESULTS_COPY",
+      "INTERACTION_AUDIT_ROUTE_FEEDBACK_COPY",
+      "INTERACTION_AUDIT_ACCESSIBILITY_COPY",
+      "INTERACTION_AUDIT_SIGNOFF_IMPORT_ERRORS_COPY",
+      "INTERACTION_AUDIT_SURFACE_DEFINITION_DISPLAY_COPY",
+      "OPERATOR_WORKSPACE_COPY",
+    ],
+    baseLocales: [],
+  },
 ];
 
 const protectedRawEvidenceFields = [

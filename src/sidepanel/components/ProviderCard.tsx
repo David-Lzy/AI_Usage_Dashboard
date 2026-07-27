@@ -35,6 +35,7 @@ import {
   buildProviderDetailLocalizedCopy,
   getProviderDetailStatusBadgeLabel,
 } from "../../shared/provider-detail-localized-copy";
+import { buildProviderSourceDisplayLocalizedCopy } from "../../shared/provider-source-display-localized-copy";
 import { ProviderServiceStatus } from "../../shared/components/ProviderServiceStatus";
 import {
   createDefaultProviderServiceStatusVisibilityBySurface,
@@ -102,6 +103,7 @@ export function ProviderCard({
     i18n.resolvedLocale,
   );
   const providerDetailCopy = buildProviderDetailLocalizedCopy(i18n);
+  const providerSourceDisplayCopy = buildProviderSourceDisplayLocalizedCopy(i18n);
   const isClaudePersonal =
     provider.providerId === CLAUDE_PERSONAL_PROVIDER_ID;
   const showSessionPageContract =
@@ -330,7 +332,7 @@ export function ProviderCard({
           <>
             <div
               className="provider-card__meta"
-              aria-label="Provider source context"
+              aria-label={providerDetailCopy.fieldLabels.syncSource}
             >
               <span className="meta-chip">{provider.currentSourceLabel}</span>
               <span className="meta-chip">
@@ -352,7 +354,7 @@ export function ProviderCard({
               ) : null}
               {provider.permissionStatus === "missing" ? (
                 <span className="meta-chip meta-chip--warning">
-                  Host access missing
+                  {providerSourceDisplayCopy.sourceState.hostAccessMissingLabel}
                 </span>
               ) : null}
               {provider.warningReason ? (
@@ -371,7 +373,8 @@ export function ProviderCard({
             ) : null}
             {showSessionPageContract ? (
               <p className="supporting-copy provider-card__availability">
-                Session-page track: {provider.sessionPageContractLabel}
+                {providerDetailCopy.notes.sessionPageTrackPrefix}
+                {provider.sessionPageContractLabel}
               </p>
             ) : null}
           </>
