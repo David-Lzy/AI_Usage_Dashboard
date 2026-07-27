@@ -1,6 +1,9 @@
 import type { AppLocalePreference } from "../providers/types";
 import type { ThemeMode } from "../providers/types";
-import { buildRuntimeMessages } from "./runtime-message-catalogs";
+import {
+  buildRuntimeMessages,
+  getRuntimeMessageFallbackIds,
+} from "./runtime-message-catalogs";
 import {
   SUPPORTED_APP_LOCALES,
   type ResolvedAppLocale,
@@ -257,6 +260,7 @@ export type RuntimeI18n = {
   localePreference: AppLocalePreference;
   resolvedLocale: ResolvedAppLocale;
   resolvedTextDirection: ResolvedTextDirection;
+  fallbackMessageIds: readonly RuntimeMessageId[];
   t: (id: RuntimeMessageId) => string;
   formatNumber: (value: number) => string;
   formatPercentValue: (value: number) => string;
@@ -716,6 +720,7 @@ export function createRuntimeI18n(
     localePreference: normalizedPreference,
     resolvedLocale,
     resolvedTextDirection,
+    fallbackMessageIds: getRuntimeMessageFallbackIds(resolvedLocale),
     t: (id) => RUNTIME_MESSAGES[resolvedLocale][id] ?? RUNTIME_MESSAGES.en[id],
     formatNumber: (value) =>
       new Intl.NumberFormat(APP_LOCALE_METADATA[resolvedLocale].intlLocale).format(
@@ -752,6 +757,7 @@ export function syncRuntimeLocaleAttributes(
     if (target.dataset) {
       target.dataset.appLocale = i18n.resolvedLocale;
       target.dataset.appDirection = i18n.resolvedTextDirection;
+      target.dataset.appLocaleFallbackCount = `${i18n.fallbackMessageIds.length}`;
     }
   }
 }

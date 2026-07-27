@@ -31,6 +31,7 @@ import {
   getProviderDiagnosticPresentation,
 } from "./localized-copy";
 import {
+  getRuntimeMessageFallbackIds,
   getRuntimeMessageOverrideIds,
 } from "./runtime-message-catalogs";
 
@@ -106,13 +107,28 @@ describe("runtime i18n", () => {
     expect(root).toMatchObject({
       lang: "ar",
       dir: "rtl",
-      dataset: { appLocale: "ar", appDirection: "rtl" },
+      dataset: {
+        appLocale: "ar",
+        appDirection: "rtl",
+        appLocaleFallbackCount: "0",
+      },
     });
     expect(body).toMatchObject({
       lang: "ar",
       dir: "rtl",
-      dataset: { appLocale: "ar", appDirection: "rtl" },
+      dataset: {
+        appLocale: "ar",
+        appDirection: "rtl",
+        appLocaleFallbackCount: "0",
+      },
     });
+  });
+
+  it("exposes runtime fallback counts for semantic visual checks", () => {
+    for (const locale of SUPPORTED_APP_LOCALES) {
+      expect(getRuntimeMessageFallbackIds(locale)).toEqual([]);
+      expect(createRuntimeI18n(locale).fallbackMessageIds).toEqual([]);
+    }
   });
 
   it("ships complete runtime catalogs for every supported locale", () => {

@@ -9,6 +9,13 @@ import {
   appendLocaleOverride,
   SUPPORTED_RDP_CAPTURE_LOCALES,
 } from "./lib/rdp-extension-locale-route.mjs";
+import {
+  MAX_VISUAL_CAPTURE_ATTEMPTS,
+  assessRenderReadiness,
+  classifyVisualCapture,
+  groupVisualIssues,
+  shouldRetryVisualCapture,
+} from "./lib/i18n-visual-readiness.mjs";
 
 const projectRoot = process.cwd();
 const distRoot = path.join(projectRoot, "dist", "chrome");
@@ -315,6 +322,197 @@ async function launchBrowser() {
   }
 }
 
+async function collectRenderReadinessSnapshot(
+  page,
+  route,
+  expectedLocale,
+  expectedDir,
+) {
+  return page.evaluate(
+    ({ readySelector, expectedLocale: locale, expectedDir: direction }) => {
+      const root = document.documentElement;
+      const readyRoots = Array.from(document.querySelectorAll(readySelector));
+      const appShell = document.querySelector(".app-shell");
+
+      function hasBox(element) {
+        const style = getComputedStyle(element);
+        const rect = element.getBoundingClientRect();
+
+        return (
+          style.display !== "none" &&
+          style.visibility !== "hidden" &&
+          rect.width > 0 &&
+          rect.height > 0
+        );
+      }
+
+      function effectiveOpacity(element) {
+        let opacity = 1;
+        let current = element;
+
+        while (current instanceof Element) {
+          const value = Number.parseFloat(getComputedStyle(current).opacity);
+
+          if (Number.isFinite(value)) {
+            opacity *= value;
+          }
+
+          current = current.parentElement;
+        }
+
+        return opacity;
+      }
+
+      function describeElement(element) {
+        const className =
+          typeof element.className === "string" ? element.className : "";
+        const id = element.id ? `#${element.id}` : "";
+        const classes = className
+          .split(/\s+/)
+          .filter(Boolean)
+          .slice(0, 3)
+          .map((entry) => `.${entry}`)
+          .join("");
+
+        return `${element.tagName.toLowerCase()}${id}${classes}`;
+      }
+
+      const contentCandidates = (
+        appShell ? Array.from(appShell.children) : readyRoots
+      ).filter((element) => element instanceof HTMLElement && hasBox(element));
+      const paintedContent = contentCandidates.filter(
+        (element) => effectiveOpacity(element) >= 0.9,
+      );
+      const fadedContent = contentCandidates
+        .filter((element) => effectiveOpacity(element) < 0.9)
+        .map(describeElement);
+      const activeFiniteAnimations = document
+        .getAnimations({ subtree: true })
+        .filter((animation) => {
+          if (animation.playState !== "running" && animation.playState !== "pending") {
+            return false;
+          }
+
+          const timing = animation.effect?.getComputedTiming();
+
+          return timing ? Number.isFinite(timing.iterations) : true;
+        });
+      const contentRect = (appShell ?? readyRoots[0] ?? document.body)
+        .getBoundingClientRect();
+      const localeFallbackCount = Number.parseInt(
+        root.dataset.appLocaleFallbackCount ?? "0",
+        10,
+      );
+
+      return {
+        expectedLocale: locale,
+        expectedDirection: direction,
+        documentReadyState: document.readyState,
+        fontsStatus: document.fonts?.status ?? "loaded",
+        datasetLocale: root.dataset.appLocale ?? "",
+        datasetDirection: root.dataset.appDirection ?? "",
+        localeFallbackCount: Number.isFinite(localeFallbackCount)
+          ? localeFallbackCount
+          : 0,
+        readyRootCount: readyRoots.length,
+        visibleReadyRootCount: readyRoots.filter(hasBox).length,
+        paintedContentCount: paintedContent.length,
+        fadedContent,
+        visibleTextLength: paintedContent.reduce(
+          (total, element) => total + (element.textContent?.trim().length ?? 0),
+          0,
+        ),
+        activeFiniteAnimationCount: activeFiniteAnimations.length,
+        activeFiniteAnimations: activeFiniteAnimations.slice(0, 8).map((animation) => ({
+          playState: animation.playState,
+          target:
+            animation.effect instanceof KeyframeEffect &&
+            animation.effect.target instanceof Element
+              ? describeElement(animation.effect.target)
+              : "unknown",
+        })),
+        contentBounds: {
+          width: Math.round(contentRect.width),
+          height: Math.round(contentRect.height),
+        },
+        timedOut: false,
+      };
+    },
+    {
+      readySelector: route.readySelector,
+      expectedLocale,
+      expectedDir,
+    },
+  );
+}
+
+async function waitForRenderReadiness(page, route, expectedLocale, expectedDir) {
+  const timeoutMs = 3_000;
+  const deadline = Date.now() + timeoutMs;
+  let latestSnapshot = null;
+
+  await page.evaluate(async () => {
+    await document.fonts?.ready;
+  });
+
+  while (Date.now() < deadline) {
+    latestSnapshot = await collectRenderReadinessSnapshot(
+      page,
+      route,
+      expectedLocale,
+      expectedDir,
+    );
+    const assessment = assessRenderReadiness(latestSnapshot, {
+      locale: expectedLocale,
+      direction: expectedDir,
+    });
+
+    if (assessment.ready) {
+      await page.evaluate(
+        () =>
+          new Promise((resolve) => {
+            requestAnimationFrame(() => requestAnimationFrame(resolve));
+          }),
+      );
+      const stableSnapshot = await collectRenderReadinessSnapshot(
+        page,
+        route,
+        expectedLocale,
+        expectedDir,
+      );
+      const stableAssessment = assessRenderReadiness(stableSnapshot, {
+        locale: expectedLocale,
+        direction: expectedDir,
+      });
+
+      if (stableAssessment.ready) {
+        await page.evaluate(() => {
+          document.documentElement.dataset.i18nVisualReady = "true";
+        });
+
+        return stableSnapshot;
+      }
+    }
+
+    await page.waitForTimeout(50);
+  }
+
+  await page.evaluate(() => {
+    document.documentElement.dataset.i18nVisualReady = "false";
+  });
+
+  return {
+    ...(latestSnapshot ??
+      (await collectRenderReadinessSnapshot(
+        page,
+        route,
+        expectedLocale,
+        expectedDir,
+      ))),
+    timedOut: true,
+  };
+}
+
 async function collectLayoutSnapshot(page, routeId, expectedDir) {
   return page.evaluate(
     ({ routeId: evaluatedRouteId, expectedDir: evaluatedExpectedDir }) => {
@@ -491,6 +689,35 @@ async function collectLayoutSnapshot(page, routeId, expectedDir) {
               (entry.lineCount !== null && entry.lineCount > 2)),
         )
         .slice(0, 20);
+      const technicalTextIssues = Array.from(
+        document.querySelectorAll("[data-technical-text]"),
+      )
+        .filter(visibleElement)
+        .map((element) => {
+          const style = getComputedStyle(element);
+          const declaredDirection = element.getAttribute("data-technical-text") ?? "";
+          const dir = element.getAttribute("dir") ?? "";
+          const horizontalClip = Math.max(0, element.scrollWidth - element.clientWidth);
+
+          return {
+            selector: describeElement(element),
+            text: elementText(element),
+            tagName: element.tagName.toLowerCase(),
+            declaredDirection,
+            dir,
+            unicodeBidi: style.unicodeBidi,
+            horizontalClip: Math.round(horizontalClip),
+          };
+        })
+        .filter(
+          (entry) =>
+            entry.tagName !== "bdi" ||
+            !["auto", "ltr"].includes(entry.declaredDirection) ||
+            entry.dir !== entry.declaredDirection ||
+            !entry.unicodeBidi.includes("isolate") ||
+            entry.horizontalClip > 1,
+        )
+        .slice(0, 20);
       const layoutContracts = Array.from(
         document.querySelectorAll("[data-i18n-layout-contract]"),
       )
@@ -581,6 +808,10 @@ async function collectLayoutSnapshot(page, routeId, expectedDir) {
       const bodyDir = body?.dir || (body ? getComputedStyle(body).direction : "");
       const datasetLocale = root.dataset.appLocale ?? "";
       const datasetDirection = root.dataset.appDirection ?? "";
+      const localeFallbackCount = Number.parseInt(
+        root.dataset.appLocaleFallbackCount ?? "0",
+        10,
+      );
 
       if (rootOverflow > 1) {
         issues.push({
@@ -606,7 +837,24 @@ async function collectLayoutSnapshot(page, routeId, expectedDir) {
       if (clippedSummaryLabels.length > 0) {
         issues.push({
           code: "clipped_summary_label",
+          cause: clippedSummaryLabels.map((entry) => entry.selector).join(", "),
           message: `${clippedSummaryLabels.length} compact summary labels are clipped, ellipsized, or exceed two lines.`,
+        });
+      }
+
+      if (Number.isFinite(localeFallbackCount) && localeFallbackCount > 0) {
+        issues.push({
+          code: "unexpected_locale_fallback",
+          cause: "html[data-app-locale-fallback-count]",
+          message: `${localeFallbackCount} runtime messages fall back to English for ${datasetLocale}.`,
+        });
+      }
+
+      if (technicalTextIssues.length > 0) {
+        issues.push({
+          code: "technical_text_isolation",
+          cause: technicalTextIssues.map((entry) => entry.selector).join(", "),
+          message: `${technicalTextIssues.length} technical text fragments are not safely isolated or bounded.`,
         });
       }
 
@@ -660,9 +908,11 @@ async function collectLayoutSnapshot(page, routeId, expectedDir) {
         bodyDir,
         datasetLocale,
         datasetDirection,
+        localeFallbackCount,
         offscreenElements,
         clippedControls,
         clippedSummaryLabels,
+        technicalTextIssues,
         layoutContracts,
         issues,
       };
@@ -737,14 +987,45 @@ async function captureMatrixEntry(page, serverBaseUrl, outputDir, route, locale,
   });
   await page.goto(url, { waitUntil: "networkidle" });
   await page.waitForSelector(route.readySelector, { timeout: 20_000 });
-  await page.waitForTimeout(250);
+  const captureAttempts = [];
+  let finalScreenshot = null;
+  let finalCaptureIssues = [];
+  let finalReadiness = null;
+
+  for (let attempt = 1; attempt <= MAX_VISUAL_CAPTURE_ATTEMPTS; attempt += 1) {
+    const readiness = await waitForRenderReadiness(
+      page,
+      route,
+      locale,
+      expectedDir,
+    );
+    const screenshot = await page.screenshot({ fullPage: true });
+    const capture = classifyVisualCapture({
+      readiness,
+      screenshotByteLength: screenshot.length,
+    });
+
+    captureAttempts.push({
+      attempt,
+      screenshotByteLength: screenshot.length,
+      bytesPerContentPixel: capture.bytesPerContentPixel,
+      readiness,
+      issues: capture.issues,
+    });
+    finalScreenshot = screenshot;
+    finalCaptureIssues = capture.issues;
+    finalReadiness = readiness;
+
+    if (!shouldRetryVisualCapture(attempt, capture.issues)) {
+      break;
+    }
+
+    await page.waitForTimeout(350);
+  }
+
+  await writeFile(screenshotPath, finalScreenshot);
 
   const layout = await collectLayoutSnapshot(page, route.id, expectedDir);
-
-  await page.screenshot({
-    path: screenshotPath,
-    fullPage: true,
-  });
 
   const stickyOverlap = await collectStickyOverlapSnapshot(page, route.id);
   const stickyIssues = stickyOverlap
@@ -753,7 +1034,7 @@ async function captureMatrixEntry(page, serverBaseUrl, outputDir, route, locale,
       code: "sticky_header_overlap",
       message: `${entry.selector} top ${entry.anchorTop}px is under top bar bottom ${entry.topBarBottom}px.`,
     }));
-  const issues = [...layout.issues, ...stickyIssues];
+  const issues = [...layout.issues, ...stickyIssues, ...finalCaptureIssues];
 
   return {
     route: route.id,
@@ -763,6 +1044,8 @@ async function captureMatrixEntry(page, serverBaseUrl, outputDir, route, locale,
     url,
     screenshotPath,
     layout,
+    readiness: finalReadiness,
+    captureAttempts,
     stickyOverlap,
     issues,
   };
@@ -834,6 +1117,7 @@ async function run() {
       ...issue,
     })),
   );
+  const issueGroups = groupVisualIssues(issueEntries);
   const report = {
     generatedAt: options.generatedAt,
     output: options.output,
@@ -848,6 +1132,7 @@ async function run() {
       fatalErrors: fatalErrors.length,
     },
     issues: issueEntries,
+    issueGroups,
     fatalErrors,
     results,
   };

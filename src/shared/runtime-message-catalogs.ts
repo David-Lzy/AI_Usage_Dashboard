@@ -53,3 +53,17 @@ export function getRuntimeMessageOverrideIds(
 ): readonly RuntimeMessageId[] {
   return Object.keys(RUNTIME_MESSAGE_OVERRIDES[locale] ?? {}) as RuntimeMessageId[];
 }
+
+export function getRuntimeMessageFallbackIds(
+  locale: ResolvedAppLocale,
+): readonly RuntimeMessageId[] {
+  if (locale === "en") {
+    return [];
+  }
+
+  const overrideIds = new Set(getRuntimeMessageOverrideIds(locale));
+
+  return (Object.keys(EN_RUNTIME_MESSAGES) as RuntimeMessageId[]).filter(
+    (messageId) => !overrideIds.has(messageId),
+  );
+}
