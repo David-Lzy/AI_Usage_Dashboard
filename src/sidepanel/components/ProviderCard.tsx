@@ -172,21 +172,36 @@ export function ProviderCard({
   const usageLabel =
     provider.quotaUnit === "percent"
       ? provider.used !== null && provider.remaining !== null
-        ? `${i18n.formatPercentValue(provider.used)} used · ${i18n.formatPercentValue(provider.remaining)} remaining`
+        ? providerDetailCopy.values.usedAndRemaining(
+            i18n.formatPercentValue(provider.used),
+            i18n.formatPercentValue(provider.remaining),
+          )
         : provider.used !== null
-          ? `${i18n.formatPercentValue(provider.used)} used`
+          ? providerDetailCopy.values.usedOnly(
+              i18n.formatPercentValue(provider.used),
+            )
           : provider.remaining !== null
-            ? `${i18n.formatPercentValue(provider.remaining)} remaining`
-            : "Usage window percent unavailable"
+            ? providerDetailCopy.values.remainingOnly(
+                i18n.formatPercentValue(provider.remaining),
+              )
+            : providerDetailCopy.values.unknownUsageWindowPercentage
       : provider.used !== null && provider.total !== null
         ? `${i18n.formatNumber(provider.used)} / ${i18n.formatNumber(provider.total)} ${provider.quotaUnit}`
         : provider.used !== null
-          ? `${i18n.formatNumber(provider.used)} ${provider.quotaUnit} tracked`
+          ? providerDetailCopy.values.tracked(
+              i18n.formatNumber(provider.used),
+              provider.quotaUnit,
+            )
           : provider.total !== null
-            ? `Unknown / ${i18n.formatNumber(provider.total)} ${provider.quotaUnit}`
+            ? providerDetailCopy.values.unknownOfTotal(
+                i18n.formatNumber(provider.total),
+                provider.quotaUnit,
+              )
             : hasUsageFacts
               ? visibleUsageContextLabel
-              : `Usage unknown · ${provider.quotaUnit}`;
+              : providerDetailCopy.values.unknownQuotaUnit(
+                  provider.quotaUnit,
+                );
 
   return (
     <article

@@ -24,16 +24,6 @@
   border-color: var(--app-surface-error-border);
 }
 
-.hero-card {
-  background:
-    radial-gradient(
-      circle at top right,
-      color-mix(in srgb, var(--md-sys-color-primary-container) 72%, white 28%) 0%,
-      transparent 44%
-    ),
-    var(--app-surface-card-background);
-}
-
 .status-card__header {
   display: flex;
   align-items: flex-start;
@@ -72,11 +62,12 @@
 }
 
 .settings-about {
-  padding: 16px 16px 8px;
+  padding: var(--app-space-4) var(--app-space-4) var(--app-space-2);
   border-top: 1px solid var(--md-sys-color-outline-variant);
-  margin-top: 8px;
-  font-size: 12px;
-  line-height: 1.7;
+  margin-top: var(--app-space-2);
+  font-family: var(--md-sys-typescale-label-medium-font);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  line-height: var(--md-sys-typescale-label-medium-line-height);
   color: var(--md-sys-color-on-surface-variant);
 }
 
@@ -86,9 +77,8 @@
 }
 
 .settings-about__meta {
-  margin-top: 2px;
+  margin-top: var(--app-space-1);
   opacity: 0.6;
-  font-size: 11px;
 }
 
 .settings-about a {

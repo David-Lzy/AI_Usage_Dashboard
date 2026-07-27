@@ -58,7 +58,7 @@ export function TopBar({
           <h1 className="top-app-bar__headline">{title}</h1>
         </div>
 
-        <div className="top-app-bar__actions" aria-label="Toolbar actions">
+        <div className="top-app-bar__actions">
           {onThemeAction ? (
             <button
               className="icon-button"

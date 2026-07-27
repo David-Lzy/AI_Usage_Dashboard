@@ -337,11 +337,18 @@ describe("ProviderCard", () => {
 
     const html = renderProviderCard(state, "codex-personal-page");
 
-    expect(html).toContain("Usage window percent unavailable");
+    expect(html).toContain("Unknown usage-window percentage");
     expect(html).toContain("Inspect the live Codex page");
     expect(html).not.toContain('role="progressbar"');
     expect(html).not.toContain("rolling percent");
     expect(html).not.toContain("&gt;Unknown&lt;");
+
+    const hindiHtml = renderProviderCard(state, "codex-personal-page", {
+      localePreference: "hi",
+    });
+
+    expect(hindiHtml).toContain("उपयोग अवधि का प्रतिशत उपलब्ध नहीं है");
+    expect(hindiHtml).not.toContain("Unknown usage-window percentage");
   });
 
   it("does not render policy-only totals as fabricated progress", () => {
@@ -477,7 +484,7 @@ describe("ProviderCard", () => {
     expect(html).toContain("Claude usage page synced just now");
     expect(html).not.toContain("Shipped personal partial");
     expect(html).not.toContain("Provider source context");
-    expect(html).not.toContain("Usage window percent unavailable");
+    expect(html).not.toContain("Unknown usage-window percentage");
     expect(html).not.toContain("rolling percent");
   });
 

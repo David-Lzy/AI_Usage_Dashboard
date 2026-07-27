@@ -1072,7 +1072,7 @@ export const PROVIDER_DETAIL_EXTENDED_COPY: Record<
       missing: "Missing",
       unknown: "अज्ञात",
       notAvailableFromSource: "इस source से available नहीं",
-      unknownUsageWindowPercentage: "Unknown usage-window percentage",
+      unknownUsageWindowPercentage: "उपयोग अवधि का प्रतिशत उपलब्ध नहीं है",
       usedAndRemaining: (used, remaining) => `${used} उपयोग · ${remaining} शेष`,
       usedOnly: (used) => `${used} उपयोग`,
       remainingOnly: (remaining) => `${remaining} शेष`,

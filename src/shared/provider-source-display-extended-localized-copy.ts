@@ -914,10 +914,10 @@ export const PROVIDER_SOURCE_DISPLAY_EXTENDED_COPY: Record<
         "Der ausgelieferte Vertrag dieses providers benotigt keine optional host permission.",
       requiredLabel: "Erforderlich",
       requiredDetail: (hosts) =>
-        `Live access hangt von Chrome host permission fur ${hosts} ab.`,
+        `Live access hängt von Chrome host permission für ${hosts} ab.`,
     },
     sourceState: {
-      readyLabel: "Bereit fur sync",
+      readyLabel: "Bereit für sync",
       policyOnlyLabel: "Kein live sync",
       hostAccessMissingLabel: "Host access fehlt",
       hostAccessMissingFallbackDetail:

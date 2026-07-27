@@ -19,6 +19,7 @@ import {
 } from "../shared/i18n";
 import { buildPopupLocalizedCopy } from "../shared/popup-localized-copy";
 import { buildProviderSourceDisplayLocalizedCopy } from "../shared/provider-source-display-localized-copy";
+import { getCustomSourceCardCopy } from "../shared/custom-source-card-localized-copy";
 import { startThemeSettingsSync } from "../shared/theme";
 import { SummaryStrip } from "../shared/components/SummaryStrip";
 import { getVisibleCustomSources } from "../shared/custom-source-view-models";
@@ -630,9 +631,7 @@ export function PopupApp() {
 
       <PopupCustomSourceList
         ariaLabel={
-          runtimeI18n.resolvedLocale === "zh-CN"
-            ? "自定义来源"
-            : "Custom sources"
+          getCustomSourceCardCopy(runtimeI18n.resolvedLocale).contextAria
         }
         sources={popupCustomSources}
         i18n={runtimeI18n}
