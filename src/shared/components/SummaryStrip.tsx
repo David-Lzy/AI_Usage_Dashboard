@@ -22,15 +22,25 @@ export function SummaryStrip({
     .join(" ");
 
   return (
-    <section className={classNames} aria-label={ariaLabel}>
+    <section
+      className={classNames}
+      aria-label={ariaLabel}
+      data-i18n-layout-contract={
+        variant === "compact" ? "compact-summary" : undefined
+      }
+    >
       {items.map((item) => (
         <article
           key={item.label}
           className={`summary-pill summary-pill--${item.tone}`}
           data-summary-tone={item.tone}
         >
-          <p className="summary-pill__label">{item.label}</p>
-          <p className="summary-pill__value">{item.value}</p>
+          <p className="summary-pill__label" data-i18n-summary-label>
+            {item.label}
+          </p>
+          <p className="summary-pill__value" data-i18n-summary-value>
+            {item.value}
+          </p>
         </article>
       ))}
     </section>

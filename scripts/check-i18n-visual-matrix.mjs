@@ -446,6 +446,51 @@ async function collectLayoutSnapshot(page, routeId, expectedDir) {
             (entry.horizontalClip > 1 || entry.verticalClip > 2),
         )
         .slice(0, 20);
+      const clippedSummaryLabels = Array.from(
+        document.querySelectorAll("[data-i18n-summary-label]"),
+      )
+        .filter(visibleElement)
+        .map((element) => {
+          const style = getComputedStyle(element);
+          const rect = element.getBoundingClientRect();
+          const range = document.createRange();
+          range.selectNodeContents(element);
+          const textRect = range.getBoundingClientRect();
+          const lineHeight = Number.parseFloat(style.lineHeight);
+          const horizontalClip = Math.max(
+            0,
+            element.scrollWidth - element.clientWidth,
+            textRect.width - rect.width,
+          );
+          const verticalClip = Math.max(
+            0,
+            element.scrollHeight - element.clientHeight,
+            textRect.height - rect.height,
+          );
+
+          return {
+            selector: describeElement(element),
+            text: elementText(element),
+            width: Math.round(rect.width),
+            height: Math.round(rect.height),
+            horizontalClip: Math.round(horizontalClip),
+            verticalClip: Math.round(verticalClip),
+            lineCount:
+              Number.isFinite(lineHeight) && lineHeight > 0
+                ? Math.ceil(textRect.height / lineHeight)
+                : null,
+            textOverflow: style.textOverflow,
+          };
+        })
+        .filter(
+          (entry) =>
+            entry.text.length > 0 &&
+            (entry.textOverflow === "ellipsis" ||
+              entry.horizontalClip > 1 ||
+              entry.verticalClip > 1 ||
+              (entry.lineCount !== null && entry.lineCount > 2)),
+        )
+        .slice(0, 20);
       const layoutContracts = Array.from(
         document.querySelectorAll("[data-i18n-layout-contract]"),
       )
@@ -558,6 +603,13 @@ async function collectLayoutSnapshot(page, routeId, expectedDir) {
         });
       }
 
+      if (clippedSummaryLabels.length > 0) {
+        issues.push({
+          code: "clipped_summary_label",
+          message: `${clippedSummaryLabels.length} compact summary labels are clipped, ellipsized, or exceed two lines.`,
+        });
+      }
+
       const overlappingContracts = layoutContracts.filter(
         (entry) => entry.overlaps.length > 0,
       );
@@ -610,6 +662,7 @@ async function collectLayoutSnapshot(page, routeId, expectedDir) {
         datasetDirection,
         offscreenElements,
         clippedControls,
+        clippedSummaryLabels,
         layoutContracts,
         issues,
       };

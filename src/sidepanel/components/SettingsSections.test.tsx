@@ -93,7 +93,7 @@ describe("SettingsSections", () => {
       "inline-size: min(100%, 280px);",
     );
     expect(settingsNavigationCss).toContain(
-      "grid-template-columns: repeat(auto-fit, minmax(min(100%, 80px), 1fr));",
+      "grid-template-columns: repeat(auto-fit, minmax(min(100%, 88px), 1fr));",
     );
     expect(settingsNavigationCss).toContain(
       ".settings-overview__level-control {",

@@ -60,7 +60,7 @@
 }
 
 .settings-overview__summary.summary-strip--compact {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 80px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 88px), 1fr));
 }
 
 .settings-overview__controls {

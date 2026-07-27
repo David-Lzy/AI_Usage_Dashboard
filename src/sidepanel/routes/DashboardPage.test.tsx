@@ -46,6 +46,8 @@ describe("DashboardPage", () => {
     expect(html).toContain(
       'class="summary-strip summary-strip--compact dashboard-hero-card__summary"',
     );
+    expect(html).toContain('data-i18n-layout-contract="compact-summary"');
+    expect(html).toContain("data-i18n-summary-label");
     expect(html).toContain(">AI coding quota overview<");
     expect(html).toContain(">Visible<");
     expect(html).not.toContain("Material 3");
@@ -62,7 +64,7 @@ describe("DashboardPage", () => {
       ".dashboard-hero-card__summary.summary-strip--compact {",
     );
     expect(layoutPrimitivesCss).toContain(
-      "grid-template-columns: repeat(4, minmax(64px, 1fr));",
+      "grid-template-columns: repeat(auto-fit, minmax(min(100%, 88px), 1fr));",
     );
   });
 
