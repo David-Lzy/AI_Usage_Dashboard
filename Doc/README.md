@@ -18,9 +18,10 @@ Status note:
 ## Start Here
 
 1. [Project README](../README.md)
-2. [Contributing guide](../CONTRIBUTING.md)
-3. [Privacy policy](../PRIVACY.md)
-4. [Security policy](../SECURITY.md)
+2. [Design contract](../DESIGN.md)
+3. [Contributing guide](../CONTRIBUTING.md)
+4. [Privacy policy](../PRIVACY.md)
+5. [Security policy](../SECURITY.md)
 
 The public repository must be understandable from tracked files alone. Local
 ignored material may exist for an individual workspace, but it is not shared

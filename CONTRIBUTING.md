@@ -30,6 +30,10 @@ Run the checks that match your change:
 - Firefox-target changes: add `npm run firefox:build`, `npm run firefox:lint`, and `npm run firefox:lint:baseline`
 - Release candidate changes: `npm run release:check`
 
+UI changes must follow the public [Design Contract](DESIGN.md). Shared visual,
+responsive, localization, chart, or interaction changes should also run the
+visual locale matrix described in [Testing Documentation](Doc/testing/README.md).
+
 Provider source changes must also run `npm run provider:quality`. Start with
 the [Provider Authoring Guide](Doc/Product/Provider_Authoring_Guide.md); it
 defines descriptor, source-truth, fixture, host-access, upstream attribution,
