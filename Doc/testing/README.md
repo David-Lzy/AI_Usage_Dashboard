@@ -20,6 +20,7 @@ Status note:
 Use the smallest command set that proves the change:
 
 ```sh
+npm run design:check
 npm run docs:check
 npm run i18n:check
 npm run i18n:audit
@@ -27,6 +28,11 @@ npm run typecheck
 npm run test
 npm run build
 ```
+
+`npm run design:check` verifies the required sections and implementation links
+in the public [Design Contract](../../DESIGN.md). It also prevents that document
+from becoming a second color-token source. `npm run docs:check` includes this
+gate automatically.
 
 Localization or responsive UI changes that can vary by language length should
 also run the visual locale matrix against `dist/chrome/`:
