@@ -8,6 +8,7 @@ export type SettingsUserLevelVisibility = {
   showDeveloperAppearanceControls: boolean;
   showDeveloperSourceContext: boolean;
   showDebugDiagnostics: boolean;
+  showExperimentalLocalIntegrations: boolean;
   showSourcePreference: boolean;
   showWarningThreshold: boolean;
 };
@@ -16,18 +17,19 @@ export function getSettingsUserLevelVisibility(
   userLevel: SettingsUserLevel,
 ): SettingsUserLevelVisibility {
   const isBasic = userLevel === "basic";
-  const isAdvanced = userLevel === "advanced";
   const isDeveloper = userLevel === "developer";
   const isDebug = userLevel === "debug";
+  const isDeveloperOrDebug = isDeveloper || isDebug;
 
   return {
-    advancedInitiallyOpen: isDeveloper || isDebug,
+    advancedInitiallyOpen: isDeveloperOrDebug,
     showActionBadgeSelection: !isBasic,
     showAdvancedContainer: !isBasic,
     showCredentials: !isBasic,
-    showDeveloperAppearanceControls: isDeveloper || isDebug,
-    showDeveloperSourceContext: isDeveloper || isDebug,
+    showDeveloperAppearanceControls: isDeveloperOrDebug,
+    showDeveloperSourceContext: isDeveloperOrDebug,
     showDebugDiagnostics: isDebug,
+    showExperimentalLocalIntegrations: isDeveloperOrDebug,
     showSourcePreference: !isBasic,
     showWarningThreshold: !isBasic,
   };

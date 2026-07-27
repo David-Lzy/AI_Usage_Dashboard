@@ -682,7 +682,7 @@ describe("settings view models", () => {
     });
     expect(sourceCardModel.sessionTrack?.chips.map((chip) => chip.label)).toEqual([
       "已发布",
-      "已发布 personal partial",
+      "已提供部分个人数据",
       "仅窗口供应商值",
     ]);
     expect(

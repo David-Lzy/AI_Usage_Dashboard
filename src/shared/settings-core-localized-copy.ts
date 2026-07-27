@@ -357,7 +357,7 @@ export const SETTINGS_CORE_COPY: Record<
       sections: {
         overview: "개요",
         quickSetup: "Quick Setup",
-        appearance: "모양 및 sync",
+        appearance: "모양 및 동기화",
         advanced: "고급",
       },
       overview: {
@@ -477,7 +477,7 @@ export const SETTINGS_CORE_COPY: Record<
       sections: {
         overview: "Resumen",
         quickSetup: "Quick Setup",
-        appearance: "Apariencia y sync",
+        appearance: "Apariencia y sincronización",
         advanced: "Avanzado",
       },
       overview: {
@@ -599,7 +599,7 @@ export const SETTINGS_CORE_COPY: Record<
       sections: {
         overview: "Visão geral",
         quickSetup: "Quick Setup",
-        appearance: "Aparência e sync",
+        appearance: "Aparência e sincronização",
         advanced: "Avançado",
       },
       overview: {
@@ -721,7 +721,7 @@ export const SETTINGS_CORE_COPY: Record<
       sections: {
         overview: "Aperçu",
         quickSetup: "Quick Setup",
-        appearance: "Apparence et sync",
+        appearance: "Apparence et synchronisation",
         advanced: "Avancé",
       },
       overview: {
@@ -843,7 +843,7 @@ export const SETTINGS_CORE_COPY: Record<
       sections: {
         overview: "Übersicht",
         quickSetup: "Quick Setup",
-        appearance: "Darstellung und sync",
+        appearance: "Darstellung und Synchronisierung",
         advanced: "Erweitert",
       },
       overview: {
@@ -965,7 +965,7 @@ export const SETTINGS_CORE_COPY: Record<
       sections: {
         overview: "Panoramica",
         quickSetup: "Quick Setup",
-        appearance: "Aspetto e sync",
+        appearance: "Aspetto e sincronizzazione",
         advanced: "Avanzate",
       },
       overview: {
@@ -1087,7 +1087,7 @@ export const SETTINGS_CORE_COPY: Record<
       sections: {
         overview: "Обзор",
         quickSetup: "Quick Setup",
-        appearance: "Внешний вид и sync",
+        appearance: "Внешний вид и синхронизация",
         advanced: "Расширенно",
       },
       overview: {
@@ -1209,7 +1209,7 @@ export const SETTINGS_CORE_COPY: Record<
       sections: {
         overview: "نظرة عامة",
         quickSetup: "Quick Setup",
-        appearance: "المظهر و sync",
+        appearance: "المظهر والمزامنة",
         advanced: "متقدم",
       },
       overview: {
@@ -1330,7 +1330,7 @@ export const SETTINGS_CORE_COPY: Record<
       sections: {
         overview: "Overview",
         quickSetup: "Quick Setup",
-        appearance: "Appearance और sync",
+        appearance: "दिखावट और सिंक्रोनाइज़ेशन",
         advanced: "Advanced",
       },
       overview: {
@@ -1452,7 +1452,7 @@ export const SETTINGS_CORE_COPY: Record<
       sections: {
         overview: "Ringkasan",
         quickSetup: "Quick Setup",
-        appearance: "Tampilan & sync",
+        appearance: "Tampilan dan sinkronisasi",
         advanced: "Advanced",
       },
       overview: {

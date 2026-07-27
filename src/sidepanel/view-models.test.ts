@@ -160,7 +160,7 @@ describe("sidepanel view models", () => {
 
     expect(cursor).not.toBeNull();
     expect(cursor?.currentSourceLabel).toBe("会话页面");
-    expect(cursor?.currentSourceContractLabel).toBe("已发布 personal partial");
+    expect(cursor?.currentSourceContractLabel).toBe("已提供部分个人数据");
     expect(cursor?.currentSourceAvailabilitySummary).toBe(
       "已用：仅窗口 · 剩余：不可用 · 重置：仅窗口",
     );

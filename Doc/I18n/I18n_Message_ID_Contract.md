@@ -271,15 +271,19 @@ response-derived values unchanged.
 ## Cross-Language Visual QA
 
 `npm run i18n:visual-check` runs a local Playwright/Chrome visual matrix against
-the built Chrome extension output in `dist/chrome/`. It serves popup,
-dashboard, and settings routes with locale and direction preview parameters,
-captures screenshots, and writes a JSON summary.
+the built Chrome extension output in `dist/chrome/`. It serves Popup, Sidebar,
+full-page Dashboard, Provider detail, and full-page Settings routes with locale,
+direction, and theme preview parameters, captures screenshots, and writes a
+JSON summary. Settings entries also open the application-language menu and
+validate the floating menu before closing it.
 
 The default matrix covers:
 
 - routes:
   - popup
+  - sidebar
   - dashboard full page
+  - provider detail full page
   - settings full page
 - widths:
   - `360px`
@@ -287,14 +291,17 @@ The default matrix covers:
   - `720px`
   - `1280px`
 - all 14 shipped runtime locales
+- light theme by default; pass `--themes light,dark` for dual-theme coverage
 
 The report flags:
 
 - document horizontal overflow
 - visible elements extending outside the viewport
 - controls whose text scrolls inside the control
+- the open Settings language menu extending beyond the viewport or clipping an option
 - Settings sticky-header/section-anchor overlap
 - runtime direction mismatches such as Arabic rendering outside RTL
+- resolved-theme mismatches
 
 Use `--smoke` for a small `en`, `de`, and `ar` subset, and
 `--fail-on-issues` when a release or layout-hardening change should fail on any
@@ -303,6 +310,7 @@ flagged issue:
 ```sh
 npm run build
 npm run i18n:visual-check -- --smoke
+npm run i18n:visual-check -- --locales en,de,ar,hi --themes light,dark --fail-on-issues
 npm run i18n:visual-check -- --fail-on-issues
 ```
 

@@ -60,6 +60,13 @@ Use the full matrix before release-oriented localization/layout changes:
 npm run i18n:visual-check -- --fail-on-issues
 ```
 
+The maintained matrix covers Popup, Sidebar, full-page Dashboard, Provider
+detail, and full-page Settings. It captures the resolved theme, validates RTL
+direction, and opens the Settings application-language menu so floating-menu
+bounds and option text are checked rather than relying on closed controls only.
+Use `--themes light,dark` when both themes are in scope; the default remains
+`light` to keep routine runs bounded.
+
 Visual matrix screenshots and JSON reports are local QA evidence under ignored
 `.local/visual-checks/i18n/` paths and should not be committed.
 

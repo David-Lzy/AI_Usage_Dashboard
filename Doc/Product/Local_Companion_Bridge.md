@@ -34,6 +34,12 @@ Settings includes an experimental adapter for the versioned CodexBar dashboard
 snapshot. CodexBar is optional third-party local software; this project does
 not install, start, update, discover, or control it.
 
+Because the adapter requires a separately operated loopback service and bearer
+token, its Settings panel is shown only at the Developer and Debug display
+levels. Basic and Advanced users do not see the experimental controls; changing
+the display level does not alter an existing connection or its locally cached
+rows.
+
 Start a current CodexBar release explicitly with a strong token:
 
 ```sh

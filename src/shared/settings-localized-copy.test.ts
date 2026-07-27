@@ -108,6 +108,7 @@ describe("buildSettingsLocalizedCopy", () => {
       expect(copy.layout.overview.title).not.toBe(
         englishCopy.layout.overview.title,
       );
+      expect(copy.layout.sections.appearance).not.toMatch(/\bsync\b/i);
       expect(copy.quickSetup.noActionNeeded).not.toBe(
         englishCopy.quickSetup.noActionNeeded,
       );

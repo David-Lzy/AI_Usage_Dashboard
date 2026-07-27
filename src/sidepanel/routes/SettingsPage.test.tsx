@@ -123,6 +123,7 @@ describe("SettingsPage", () => {
     expect(html).toContain('data-configuration-backup=""');
     expect(html).toContain('data-settings-provider-display-section=""');
     expect(html).toContain('data-custom-source-settings=""');
+    expect(html).not.toContain('data-codexbar-bridge-settings=""');
     expect(html).toContain('data-provider-order-preferences=""');
     expect(html).toContain('data-provider-progress-preferences=""');
     expect(html).not.toContain('data-provider-order-row="jetbrains-org-page"');
@@ -171,9 +172,28 @@ describe("SettingsPage", () => {
 
     expect(html).toContain('data-credential-provider-id="cursor-team-api"');
     expect(html).toContain("Detailed diagnostics");
+    expect(html).toContain('data-codexbar-bridge-settings=""');
     expect(html).toContain(
       'data-settings-material-select="popup-provider-browsing-mode"',
     );
+  });
+
+  it("keeps experimental local integrations hidden below developer level", () => {
+    const advancedHtml = renderSettingsPage({
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        userLevel: "advanced",
+      },
+    });
+    const developerHtml = renderSettingsPage({
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        userLevel: "developer",
+      },
+    });
+
+    expect(advancedHtml).not.toContain('data-codexbar-bridge-settings=""');
+    expect(developerHtml).toContain('data-codexbar-bridge-settings=""');
   });
 
   it("reveals the targeted advanced section for a credential-focused deep link", () => {

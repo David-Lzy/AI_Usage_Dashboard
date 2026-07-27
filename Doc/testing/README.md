@@ -36,6 +36,11 @@ npm run build
 npm run i18n:visual-check -- --smoke
 ```
 
+The visual checker covers Popup, Sidebar, full-page Dashboard, Provider detail,
+and Settings. Settings captures include the open application-language menu.
+Use `--themes light,dark` for changes that affect theme tokens or contrast; the
+default run intentionally uses the light theme to keep routine QA bounded.
+
 Before release-oriented localization or layout changes, run the full matrix and
 fail on detected layout issues:
 

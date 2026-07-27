@@ -633,11 +633,13 @@ export function SettingsPage({
         onChange={onCustomSourcesChange}
       />
 
-      <CodexBarDashboardBridgeSettings
-        customSources={customSources}
-        customSourceStates={customSourceStates}
-        locale={i18n.resolvedLocale}
-      />
+      {userLevelVisibility.showExperimentalLocalIntegrations ? (
+        <CodexBarDashboardBridgeSettings
+          customSources={customSources}
+          customSourceStates={customSourceStates}
+          locale={i18n.resolvedLocale}
+        />
+      ) : null}
 
       {showAdvancedContainer ? (
         <section

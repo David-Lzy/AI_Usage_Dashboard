@@ -49,6 +49,12 @@ describe("buildProviderSourceDisplayLocalizedCopy", () => {
       expect(copy.connectionMode.credential.detail).not.toBe(
         englishCopy.connectionMode.credential.detail,
       );
+      expect(copy.sourceContractLabels.shipped_admin_analytics).not.toBe(
+        englishCopy.sourceContractLabels.shipped_admin_analytics,
+      );
+      expect(copy.sourceContractLabels.shipped_personal_partial).not.toBe(
+        englishCopy.sourceContractLabels.shipped_personal_partial,
+      );
       expect(copy.sourceState.hostAccessMissingLabel).not.toBe(
         englishCopy.sourceState.hostAccessMissingLabel,
       );
@@ -56,6 +62,19 @@ describe("buildProviderSourceDisplayLocalizedCopy", () => {
         englishCopy.availabilitySummary("10%", "90%", "tomorrow"),
       );
     }
+  });
+
+  it("keeps Arabic source contract badges free of embedded Latin fragments", () => {
+    const copy = buildProviderSourceDisplayLocalizedCopy(
+      createRuntimeI18n("ar"),
+    );
+
+    expect(copy.sourceContractLabels.shipped_admin_analytics).not.toMatch(
+      /[A-Za-z]/,
+    );
+    expect(copy.sourceContractLabels.shipped_personal_partial).not.toMatch(
+      /[A-Za-z]/,
+    );
   });
 
   it("preserves the legacy localized-copy export path", () => {

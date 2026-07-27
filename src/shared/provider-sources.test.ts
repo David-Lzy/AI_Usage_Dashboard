@@ -197,7 +197,7 @@ describe("provider source helpers", () => {
     );
 
     expect(display.currentLabel).toBe("官方 API");
-    expect(display.currentContractLabel).toBe("已发布 enterprise analytics");
+    expect(display.currentContractLabel).toBe("已提供企业分析");
     expect(display.fidelityLabel).toBe("分析快照");
     expect(display.accessModelLabel).toBe("已存凭据");
     expect(display.availabilitySummary).toBe(

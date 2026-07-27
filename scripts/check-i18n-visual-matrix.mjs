@@ -23,11 +23,21 @@ const defaultOutputRoot = path.join(projectRoot, ".local", "visual-checks", "i18
 const defaultWidths = Object.freeze([360, 430, 720, 1280]);
 const smokeWidths = Object.freeze([360, 720]);
 const smokeLocales = Object.freeze(["en", "de", "ar"]);
-const allRouteIds = Object.freeze(["popup", "dashboard", "settings"]);
+const supportedThemes = Object.freeze(["light", "dark"]);
+const defaultThemes = Object.freeze(["light"]);
+const allRouteIds = Object.freeze([
+  "popup",
+  "sidebar",
+  "dashboard",
+  "provider-detail",
+  "settings",
+]);
 const viewportHeightByRoute = {
   dashboard: 1200,
   popup: 900,
+  "provider-detail": 1200,
   settings: 1200,
+  sidebar: 1200,
 };
 const routes = {
   dashboard: {
@@ -39,6 +49,18 @@ const routes = {
     id: "popup",
     path: "/src/popup/index.html",
     readySelector: ".popup-shell, .popup-load-state-card",
+  },
+  sidebar: {
+    id: "sidebar",
+    path: "/src/sidepanel/index.html#dashboard",
+    readySelector: ".dashboard-section",
+  },
+  "provider-detail": {
+    id: "provider-detail",
+    path:
+      "/src/sidepanel/index.html?surface=full-page#provider-detail/codex-personal-page",
+    readySelector:
+      "[data-theme-stability-surface='provider-detail-sync-status-card']",
   },
   settings: {
     id: "settings",
@@ -78,6 +100,7 @@ function parseArgs(argv) {
     output: "",
     routes: [],
     smoke: false,
+    themes: [],
     widths: [],
     locales: [],
   };
@@ -126,6 +149,13 @@ function parseArgs(argv) {
       continue;
     }
 
+    if (arg === "--themes") {
+      assert(nextValue, "--themes requires a comma-separated theme list.");
+      options.themes = parseCsv(nextValue);
+      index += 1;
+      continue;
+    }
+
     if (arg === "--widths") {
       assert(nextValue, "--widths requires a comma-separated width list.");
       options.widths = parseCsv(nextValue).map((value) => Number(value));
@@ -149,6 +179,7 @@ function parseArgs(argv) {
         ? smokeWidths
         : defaultWidths;
   const routeIds = options.routes.length > 0 ? options.routes : allRouteIds;
+  const themes = options.themes.length > 0 ? options.themes : defaultThemes;
   const generatedAt = new Date().toISOString();
   const output =
     options.output ||
@@ -168,6 +199,13 @@ function parseArgs(argv) {
     assert(Number.isFinite(width) && width > 0, `Invalid width: ${width}`);
   }
 
+  for (const theme of themes) {
+    assert(
+      supportedThemes.includes(theme),
+      `Unsupported theme '${theme}'. Supported: ${supportedThemes.join(", ")}`,
+    );
+  }
+
   for (const routeId of routeIds) {
     assert(
       Object.hasOwn(routes, routeId),
@@ -181,6 +219,7 @@ function parseArgs(argv) {
     locales,
     output: path.resolve(projectRoot, output),
     routes: routeIds,
+    themes,
     widths,
   };
 }
@@ -193,9 +232,13 @@ Options:
   --smoke                  Run a small en,de,ar x 360,720 matrix.
   --locales en,de,ar       Comma-separated locale list.
   --widths 360,720         Comma-separated viewport widths.
-  --routes popup,settings  Comma-separated routes: popup,dashboard,settings.
+  --routes popup,settings  Comma-separated routes: popup,sidebar,dashboard,provider-detail,settings.
+  --themes light,dark      Comma-separated resolved color themes. Defaults to light.
   --output <dir>           Output directory. Defaults to .local/visual-checks/i18n/<timestamp>.
   --fail-on-issues         Exit non-zero when layout issues are detected.
+
+Settings captures also open the application-language menu and validate its
+floating bounds and option text before closing it again.
 `);
 }
 
@@ -513,9 +556,13 @@ async function waitForRenderReadiness(page, route, expectedLocale, expectedDir) 
   };
 }
 
-async function collectLayoutSnapshot(page, routeId, expectedDir) {
+async function collectLayoutSnapshot(page, routeId, expectedDir, expectedTheme) {
   return page.evaluate(
-    ({ routeId: evaluatedRouteId, expectedDir: evaluatedExpectedDir }) => {
+    ({
+      routeId: evaluatedRouteId,
+      expectedDir: evaluatedExpectedDir,
+      expectedTheme: evaluatedExpectedTheme,
+    }) => {
       const root = document.documentElement;
       const body = document.body;
       const viewportWidth = window.innerWidth;
@@ -808,6 +855,7 @@ async function collectLayoutSnapshot(page, routeId, expectedDir) {
       const bodyDir = body?.dir || (body ? getComputedStyle(body).direction : "");
       const datasetLocale = root.dataset.appLocale ?? "";
       const datasetDirection = root.dataset.appDirection ?? "";
+      const resolvedTheme = root.dataset.themeResolved ?? "";
       const localeFallbackCount = Number.parseInt(
         root.dataset.appLocaleFallbackCount ?? "0",
         10,
@@ -896,6 +944,13 @@ async function collectLayoutSnapshot(page, routeId, expectedDir) {
         });
       }
 
+      if (resolvedTheme !== evaluatedExpectedTheme) {
+        issues.push({
+          code: "theme_resolution_mismatch",
+          message: `Expected resolved theme '${evaluatedExpectedTheme}', got '${resolvedTheme}'.`,
+        });
+      }
+
       return {
         routeId: evaluatedRouteId,
         viewportWidth,
@@ -908,6 +963,7 @@ async function collectLayoutSnapshot(page, routeId, expectedDir) {
         bodyDir,
         datasetLocale,
         datasetDirection,
+        resolvedTheme,
         localeFallbackCount,
         offscreenElements,
         clippedControls,
@@ -917,7 +973,7 @@ async function collectLayoutSnapshot(page, routeId, expectedDir) {
         issues,
       };
     },
-    { routeId, expectedDir },
+    { routeId, expectedDir, expectedTheme },
   );
 }
 
@@ -971,16 +1027,162 @@ async function collectStickyOverlapSnapshot(page, routeId) {
   return snapshots;
 }
 
-async function captureMatrixEntry(page, serverBaseUrl, outputDir, route, locale, width) {
+async function collectSettingsLocaleMenuSnapshot(
+  page,
+  outputDir,
+  routeId,
+  locale,
+  theme,
+  width,
+) {
+  if (routeId !== "settings") {
+    return null;
+  }
+
+  const triggerSelector =
+    '[data-settings-material-select="locale-preference"] button[role="combobox"]';
+  const menuSelector = '.material-select__menu[role="listbox"]';
+
+  await page.locator(triggerSelector).scrollIntoViewIfNeeded();
+  await page.locator(triggerSelector).click();
+  await page.waitForSelector(menuSelector, { state: "visible", timeout: 5_000 });
+  await page.evaluate(
+    () =>
+      new Promise((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(resolve)),
+      ),
+  );
+
+  const screenshotPath = path.join(
+    outputDir,
+    "screenshots",
+    `${routeId}-${slugify(locale)}-${theme}-${width}-locale-menu.png`,
+  );
+  await page.screenshot({ path: screenshotPath, fullPage: false });
+
+  const snapshot = await page.evaluate((selector) => {
+    const menu = document.querySelector(selector);
+
+    if (!(menu instanceof HTMLElement)) {
+      return {
+        screenshotPath: "",
+        menuFound: false,
+        menuBounds: null,
+        clippedOptions: [],
+        issues: [
+          {
+            code: "settings_locale_menu_missing",
+            message: "The application-language menu did not render after activation.",
+          },
+        ],
+      };
+    }
+
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const rect = menu.getBoundingClientRect();
+    const clippedOptions = Array.from(menu.querySelectorAll('[role="option"]'))
+      .filter((option) => option instanceof HTMLElement)
+      .map((option) => {
+        const optionRect = option.getBoundingClientRect();
+        const horizontalClip = Math.max(
+          0,
+          option.scrollWidth - option.clientWidth,
+        );
+        const verticalClip = Math.max(
+          0,
+          option.scrollHeight - option.clientHeight,
+        );
+
+        return {
+          text: option.textContent?.replace(/\s+/g, " ").trim() ?? "",
+          width: Math.round(optionRect.width),
+          height: Math.round(optionRect.height),
+          horizontalClip: Math.round(horizontalClip),
+          verticalClip: Math.round(verticalClip),
+        };
+      })
+      .filter(
+        (option) =>
+          option.text.length > 0 &&
+          (option.horizontalClip > 1 || option.verticalClip > 2),
+      );
+    const leftOverflow = Math.max(0, -rect.left);
+    const rightOverflow = Math.max(0, rect.right - viewportWidth);
+    const topOverflow = Math.max(0, -rect.top);
+    const bottomOverflow = Math.max(0, rect.bottom - viewportHeight);
+    const issues = [];
+
+    if (leftOverflow > 1 || rightOverflow > 1) {
+      issues.push({
+        code: "settings_locale_menu_offscreen",
+        message: `Application-language menu exceeds the horizontal viewport by ${Math.round(leftOverflow + rightOverflow)}px.`,
+      });
+    }
+
+    if (topOverflow > 1 || bottomOverflow > 1) {
+      issues.push({
+        code: "settings_locale_menu_vertical_offscreen",
+        message: `Application-language menu exceeds the vertical viewport by ${Math.round(topOverflow + bottomOverflow)}px.`,
+      });
+    }
+
+    if (clippedOptions.length > 0) {
+      issues.push({
+        code: "settings_locale_menu_option_clipped",
+        message: `${clippedOptions.length} application-language options have clipped text.`,
+      });
+    }
+
+    return {
+      screenshotPath: "",
+      menuFound: true,
+      menuBounds: {
+        left: Math.round(rect.left),
+        right: Math.round(rect.right),
+        top: Math.round(rect.top),
+        bottom: Math.round(rect.bottom),
+        width: Math.round(rect.width),
+        height: Math.round(rect.height),
+      },
+      clippedOptions,
+      issues,
+    };
+  }, menuSelector);
+
+  await page.keyboard.press("Escape");
+  await page.waitForSelector(menuSelector, { state: "hidden", timeout: 5_000 });
+
+  return {
+    ...snapshot,
+    screenshotPath,
+  };
+}
+
+async function captureMatrixEntry(
+  page,
+  serverBaseUrl,
+  outputDir,
+  route,
+  locale,
+  theme,
+  width,
+) {
   const expectedDir = expectedDirection(locale);
   const routePath = appendPreviewOverrides(route.path, locale);
   const url = new URL(routePath, serverBaseUrl).toString();
   const screenshotPath = path.join(
     outputDir,
     "screenshots",
-    `${route.id}-${slugify(locale)}-${width}.png`,
+    `${route.id}-${slugify(locale)}-${theme}-${width}.png`,
+  );
+  const viewportScreenshotPath = path.join(
+    outputDir,
+    "screenshots",
+    `${route.id}-${slugify(locale)}-${theme}-${width}-viewport.png`,
   );
 
+  await page.emulateMedia({ colorScheme: theme });
   await page.setViewportSize({
     width,
     height: viewportHeightByRoute[route.id] ?? 1200,
@@ -1024,8 +1226,17 @@ async function captureMatrixEntry(page, serverBaseUrl, outputDir, route, locale,
   }
 
   await writeFile(screenshotPath, finalScreenshot);
+  await page.evaluate(() => window.scrollTo({ top: 0, left: 0 }));
+  await page.evaluate(
+    () =>
+      new Promise((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(resolve)),
+      ),
+  );
+  const viewportScreenshot = await page.screenshot({ fullPage: false });
+  await writeFile(viewportScreenshotPath, viewportScreenshot);
 
-  const layout = await collectLayoutSnapshot(page, route.id, expectedDir);
+  const layout = await collectLayoutSnapshot(page, route.id, expectedDir, theme);
 
   const stickyOverlap = await collectStickyOverlapSnapshot(page, route.id);
   const stickyIssues = stickyOverlap
@@ -1034,19 +1245,38 @@ async function captureMatrixEntry(page, serverBaseUrl, outputDir, route, locale,
       code: "sticky_header_overlap",
       message: `${entry.selector} top ${entry.anchorTop}px is under top bar bottom ${entry.topBarBottom}px.`,
     }));
-  const issues = [...layout.issues, ...stickyIssues, ...finalCaptureIssues];
+  const settingsLocaleMenu = await collectSettingsLocaleMenuSnapshot(
+    page,
+    outputDir,
+    route.id,
+    locale,
+    theme,
+    width,
+  );
+  const interactionIssues = settingsLocaleMenu?.issues ?? [];
+  const issues = [
+    ...layout.issues,
+    ...stickyIssues,
+    ...interactionIssues,
+    ...finalCaptureIssues,
+  ];
 
   return {
     route: route.id,
     locale,
+    theme,
     expectedDirection: expectedDir,
     width,
     url,
     screenshotPath,
+    viewportScreenshotPath,
     layout,
     readiness: finalReadiness,
     captureAttempts,
     stickyOverlap,
+    interactionChecks: settingsLocaleMenu
+      ? { settingsLocaleMenu }
+      : null,
     issues,
   };
 }
@@ -1068,38 +1298,42 @@ async function run() {
       const route = routes[routeId];
 
       for (const locale of options.locales) {
-        for (const width of options.widths) {
-          try {
-            const result = await captureMatrixEntry(
-              page,
-              server.baseUrl,
-              options.output,
-              route,
-              locale,
-              width,
-            );
-            results.push(result);
-            console.log(
-              [
-                "i18n:visual-check",
-                `${route.id}/${locale}/${width}`,
-                `issues=${result.issues.length}`,
-                `overflow=${result.layout.rootOverflow}`,
-                `dir=${result.layout.datasetDirection || result.layout.htmlDir}`,
-              ].join(" "),
-            );
-          } catch (error) {
-            const fatal = {
-              route: route.id,
-              locale,
-              width,
-              message: error instanceof Error ? error.message : String(error),
-            };
+        for (const theme of options.themes) {
+          for (const width of options.widths) {
+            try {
+              const result = await captureMatrixEntry(
+                page,
+                server.baseUrl,
+                options.output,
+                route,
+                locale,
+                theme,
+                width,
+              );
+              results.push(result);
+              console.log(
+                [
+                  "i18n:visual-check",
+                  `${route.id}/${locale}/${theme}/${width}`,
+                  `issues=${result.issues.length}`,
+                  `overflow=${result.layout.rootOverflow}`,
+                  `dir=${result.layout.datasetDirection || result.layout.htmlDir}`,
+                ].join(" "),
+              );
+            } catch (error) {
+              const fatal = {
+                route: route.id,
+                locale,
+                theme,
+                width,
+                message: error instanceof Error ? error.message : String(error),
+              };
 
-            fatalErrors.push(fatal);
-            console.error(
-              `i18n:visual-check failed ${route.id}/${locale}/${width}: ${fatal.message}`,
-            );
+              fatalErrors.push(fatal);
+              console.error(
+                `i18n:visual-check failed ${route.id}/${locale}/${theme}/${width}: ${fatal.message}`,
+              );
+            }
           }
         }
       }
@@ -1113,6 +1347,7 @@ async function run() {
     result.issues.map((issue) => ({
       route: result.route,
       locale: result.locale,
+      theme: result.theme,
       width: result.width,
       ...issue,
     })),
@@ -1125,6 +1360,7 @@ async function run() {
     mode: options.smoke ? "smoke" : "full",
     locales: options.locales,
     routes: options.routes,
+    themes: options.themes,
     widths: options.widths,
     counts: {
       entries: results.length,
