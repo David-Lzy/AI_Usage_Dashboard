@@ -12,6 +12,7 @@ import type {
   ProviderAccountId,
   ProviderId,
 } from "../../providers/types";
+import { TechnicalText } from "./TechnicalText";
 import {
   buildApiGatewayModelBreakdownView,
   createDefaultApiGatewayMeteringDisplayPreferences,
@@ -429,7 +430,7 @@ export function ApiGatewayDeploymentSelector({
         className="api-gateway-metering-deployment api-gateway-metering-deployment--single"
         title={activeLabel}
       >
-        {activeLabel}
+        <TechnicalText direction="auto">{activeLabel}</TechnicalText>
       </span>
     );
   }
@@ -815,7 +816,7 @@ export function ApiGatewayMeteringSummary({
           <ol className="api-gateway-metering-model-list">
             {compactModels.map((model) => (
               <li key={model.id}>
-                <span>{model.label}</span>
+                <TechnicalText>{model.label}</TechnicalText>
                 <strong>
                   {formatMoney(model.totals.actualCost, locale) ??
                     (model.totals.totalTokens === null

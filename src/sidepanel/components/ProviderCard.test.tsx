@@ -74,6 +74,17 @@ function renderProviderCard(
 }
 
 describe("ProviderCard", () => {
+  it("isolates provider and plan labels without changing the card direction", () => {
+    const html = renderProviderCard(
+      SAMPLE_APP_STATE,
+      SAMPLE_APP_STATE.providers[0].providerId,
+    );
+
+    expect(html).toContain('data-technical-text="ltr"');
+    expect(html).toContain('data-technical-text="auto"');
+    expect(html).not.toContain('dir="ltr" class="provider-card');
+  });
+
   it("wraps long diagnostic chips inside narrow provider cards", () => {
     expect(providerCardCss).toMatch(
       /\.provider-card__meta \.meta-chip\s*\{[^}]*min-width:\s*0;[^}]*white-space:\s*normal;[^}]*overflow-wrap:\s*anywhere;/s,

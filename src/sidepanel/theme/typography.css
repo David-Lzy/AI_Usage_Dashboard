@@ -63,23 +63,6 @@
 }
 
 html[data-app-direction="rtl"] :where(
-  .section-label,
-  .display-headline,
-  .section-title,
-  .body-copy,
-  .supporting-copy,
-  .feature-list,
-  .token-list,
-  .detail-field__label,
-  .detail-field__value,
-  .source-card__value,
-  .summary-pill__label,
-  .summary-pill__value,
-  .summary-strip,
-  .status-card,
-  .meta-chip,
-  button,
-  label,
   input,
   textarea,
   select

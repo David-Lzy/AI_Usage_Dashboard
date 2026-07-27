@@ -37,6 +37,7 @@ import {
 } from "../../shared/provider-detail-localized-copy";
 import { buildProviderSourceDisplayLocalizedCopy } from "../../shared/provider-source-display-localized-copy";
 import { ProviderServiceStatus } from "../../shared/components/ProviderServiceStatus";
+import { TechnicalText } from "../../shared/components/TechnicalText";
 import {
   createDefaultProviderServiceStatusVisibilityBySurface,
   getProviderServiceStatusForProvider,
@@ -194,9 +195,15 @@ export function ProviderCard({
     >
       <header className="provider-card__header">
         <div className="provider-card__identity">
-          <p className="provider-card__provider">{provider.providerLabel}</p>
+          <p className="provider-card__provider">
+            <TechnicalText>{provider.providerLabel}</TechnicalText>
+          </p>
           {!hasApiGatewayMetering ? (
-            <p className="provider-card__plan">{provider.planName}</p>
+            <p className="provider-card__plan">
+              <TechnicalText direction="auto">
+                {provider.planName}
+              </TechnicalText>
+            </p>
           ) : null}
         </div>
         <div className="provider-card__status">
@@ -334,9 +341,15 @@ export function ProviderCard({
               className="provider-card__meta"
               aria-label={providerDetailCopy.fieldLabels.syncSource}
             >
-              <span className="meta-chip">{provider.currentSourceLabel}</span>
               <span className="meta-chip">
-                {provider.currentSourceContractLabel}
+                <TechnicalText direction="auto">
+                  {provider.currentSourceLabel}
+                </TechnicalText>
+              </span>
+              <span className="meta-chip">
+                <TechnicalText direction="auto">
+                  {provider.currentSourceContractLabel}
+                </TechnicalText>
               </span>
               <span className={fidelityChipClassName}>
                 {provider.currentSourceFidelityLabel}
@@ -359,22 +372,30 @@ export function ProviderCard({
               ) : null}
               {provider.warningReason ? (
                 <span className="meta-chip meta-chip--warning">
-                  {provider.warningReason}
+                  <TechnicalText direction="auto">
+                    {provider.warningReason}
+                  </TechnicalText>
                 </span>
               ) : null}
             </div>
-            <p className="supporting-copy provider-card__availability">
-              {provider.currentSourceAvailabilitySummary}
-            </p>
+              <p className="supporting-copy provider-card__availability">
+                <TechnicalText direction="auto">
+                  {provider.currentSourceAvailabilitySummary}
+                </TechnicalText>
+              </p>
             {showUsageSummary ? (
               <p className="supporting-copy provider-card__availability">
-                {provider.usageSummary}
+                <TechnicalText direction="auto">
+                  {provider.usageSummary}
+                </TechnicalText>
               </p>
             ) : null}
             {showSessionPageContract ? (
               <p className="supporting-copy provider-card__availability">
                 {providerDetailCopy.notes.sessionPageTrackPrefix}
-                {provider.sessionPageContractLabel}
+                <TechnicalText direction="auto">
+                  {provider.sessionPageContractLabel}
+                </TechnicalText>
               </p>
             ) : null}
           </>

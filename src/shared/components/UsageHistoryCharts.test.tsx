@@ -98,6 +98,9 @@ describe("UsageHistoryCharts", () => {
       'data-usage-history-module="personal_usage_by_surface"',
     );
     expect(html).toContain("usage-history-compact__heading");
+    expect(html).toContain(
+      '<bdi class="technical-text" data-technical-text="auto" dir="auto">Desktop</bdi>',
+    );
     expect(html).toContain('data-usage-history-range-days="31"');
     expect(html).toContain("1 month");
     expect(html).toContain(

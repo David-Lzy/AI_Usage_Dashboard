@@ -194,7 +194,9 @@ describe("PopupFeaturedProviderList", () => {
     expect(html).toContain(
       "api-gateway-metering-deployment--single",
     );
-    expect(html).toContain(">hze</span>");
+    expect(html).toContain(
+      '<bdi class="technical-text" data-technical-text="auto" dir="auto">hze</bdi>',
+    );
     expect(deploymentIndex).toBeGreaterThan(providerNameIndex);
     expect(actionsIndex).toBeGreaterThan(deploymentIndex);
     expect(html).toContain("api-gateway-metering-module__primary-value");

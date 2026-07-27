@@ -19,6 +19,7 @@ import {
 import { buildSub2ApiSettingsLocalizedCopy } from "../../shared/sub2api-settings-localized-copy";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 import { MaterialSelect } from "./MaterialSelect";
+import { TechnicalText } from "../../shared/components/TechnicalText";
 
 type Sub2ApiDeploymentSettingsProps = {
   locale: ResolvedAppLocale;
@@ -207,7 +208,9 @@ export function Sub2ApiDeploymentSettings({
           aria-label={`${copy.connectionMode}: ${copy.connectionModeValue}`}
         >
           <span>{copy.connectionMode}</span>
-          <strong>{copy.connectionModeValue}</strong>
+          <strong>
+            <TechnicalText>{copy.connectionModeValue}</TechnicalText>
+          </strong>
         </div>
       </div>
 
@@ -217,6 +220,7 @@ export function Sub2ApiDeploymentSettings({
           <input
             className="form-field__control"
             autoComplete="off"
+            dir="auto"
             maxLength={64}
             value={displayLabel}
             onChange={(event) => setDisplayLabel(event.currentTarget.value)}
@@ -228,6 +232,7 @@ export function Sub2ApiDeploymentSettings({
             className="form-field__control"
             autoCapitalize="none"
             autoComplete="url"
+            dir="ltr"
             inputMode="url"
             placeholder="https://gateway.example.com"
             value={baseUrl}
@@ -244,6 +249,7 @@ export function Sub2ApiDeploymentSettings({
               className="form-field__control"
               autoCapitalize="none"
               autoComplete="new-password"
+              dir="ltr"
               data-stored-credential-placeholder={
                 !isAdding && activeConnection ? "" : undefined
               }

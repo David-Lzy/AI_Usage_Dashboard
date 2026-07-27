@@ -17,6 +17,7 @@ import {
   buildUsageHistoryChartData,
   type UsageHistoryChartData,
 } from "../usage-history-chart-data";
+import { TechnicalText } from "./TechnicalText";
 import "./usage-history-charts.css";
 
 export type UsageHistoryChartCopy = {
@@ -478,7 +479,7 @@ export function UsageHistoryLegend({
           style={{ backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }}
           aria-hidden="true"
         />
-        <span>{series.label}</span>
+        <TechnicalText direction="auto">{series.label}</TechnicalText>
       </li>
     ));
 

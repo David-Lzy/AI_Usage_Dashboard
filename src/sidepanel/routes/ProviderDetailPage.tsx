@@ -54,6 +54,7 @@ import { ProviderAccountSelector } from "../components/ProviderAccountSelector";
 import { ApiGatewayMeteringSummary } from "../../shared/components/ApiGatewayMeteringSummary";
 import { buildApiGatewayMeteringLocalizedCopy } from "../../shared/api-gateway-metering-localized-copy";
 import { getActiveProviderAccountMetadata } from "../../shared/provider-accounts";
+import { TechnicalText } from "../../shared/components/TechnicalText";
 
 type ProviderDetailPageProps = {
   localePreference: AppLocalePreference;
@@ -315,7 +316,9 @@ export function ProviderDetailPage({
 
       <section className="hero-card">
         <p className="section-label">{copy.sections.providerDetail}</p>
-        <h2 className="display-headline">{provider.planName}</h2>
+        <h2 className="display-headline">
+          <TechnicalText direction="auto">{provider.planName}</TechnicalText>
+        </h2>
         <p className="body-copy">{copy.heroDetail}</p>
       </section>
 
@@ -327,7 +330,9 @@ export function ProviderDetailPage({
         <div className="detail-grid">
           <div className="detail-field">
             <p className="detail-field__label">{copy.fieldLabels.plan}</p>
-            <p className="detail-field__value">{provider.planName}</p>
+            <p className="detail-field__value">
+              <TechnicalText direction="auto">{provider.planName}</TechnicalText>
+            </p>
           </div>
           <div className="detail-field">
             <p className="detail-field__label">{copy.fieldLabels.status}</p>
@@ -361,19 +366,27 @@ export function ProviderDetailPage({
           </div>
           <div className="detail-field">
             <p className="detail-field__label">{copy.fieldLabels.syncSource}</p>
-            <p className="detail-field__value">{provider.currentSourceLabel}</p>
+            <p className="detail-field__value">
+              <TechnicalText direction="auto">
+                {provider.currentSourceLabel}
+              </TechnicalText>
+            </p>
           </div>
           <div className="detail-field">
             <p className="detail-field__label">{copy.fieldLabels.productContract}</p>
             <p className="detail-field__value">
-              {provider.currentSourceContractLabel}
+              <TechnicalText direction="auto">
+                {provider.currentSourceContractLabel}
+              </TechnicalText>
             </p>
           </div>
           {showSessionPageContract ? (
             <div className="detail-field">
               <p className="detail-field__label">{copy.fieldLabels.sessionPageContract}</p>
               <p className="detail-field__value">
-                {provider.sessionPageContractLabel}
+                <TechnicalText direction="auto">
+                  {provider.sessionPageContractLabel}
+                </TechnicalText>
               </p>
             </div>
           ) : null}
@@ -531,13 +544,17 @@ export function ProviderDetailPage({
           </div>
           <div className="detail-field">
             <p className="detail-field__label">{copy.fieldLabels.hosts}</p>
-            <p className="detail-field__value">{provider.hostsLabel}</p>
+            <p className="detail-field__value">
+              <TechnicalText>{provider.hostsLabel}</TechnicalText>
+            </p>
           </div>
           {provider.fallbackSourceLabels.length > 0 ? (
             <div className="detail-field">
               <p className="detail-field__label">{copy.fieldLabels.fallbackPath}</p>
               <p className="detail-field__value">
-                {provider.fallbackSourceLabels.join(" · ")}
+                <TechnicalText direction="auto">
+                  {provider.fallbackSourceLabels.join(" · ")}
+                </TechnicalText>
               </p>
             </div>
           ) : null}
@@ -686,7 +703,10 @@ export function ProviderDetailPage({
           {showSessionPageContract ? (
             <p className="supporting-copy">
               {copy.notes.sessionPageTrackPrefix}
-              {provider.sessionPageContractLabel}. {provider.sessionPageContractDetail}
+              <TechnicalText direction="auto">
+                {provider.sessionPageContractLabel}
+              </TechnicalText>
+              . {provider.sessionPageContractDetail}
             </p>
           ) : null}
           {showSessionPageGraduationGate &&
@@ -736,7 +756,11 @@ export function ProviderDetailPage({
         {provider.warningReason ? (
           <div className="detail-note detail-note--warning">
             <p className="detail-note__label">{copy.notes.warningReason}</p>
-            <p className="supporting-copy">{provider.warningReason}</p>
+            <p className="supporting-copy">
+              <TechnicalText direction="auto">
+                {provider.warningReason}
+              </TechnicalText>
+            </p>
           </div>
         ) : null}
       </section>

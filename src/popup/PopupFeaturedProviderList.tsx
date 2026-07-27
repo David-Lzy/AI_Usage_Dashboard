@@ -51,6 +51,7 @@ import { buildApiGatewayMeteringLocalizedCopy } from "../shared/api-gateway-mete
 import { getActiveProviderAccountMetadata } from "../shared/provider-accounts";
 import { DEFAULT_RESET_TIME_DISPLAY_MODE } from "../shared/reset-time-display";
 import { ProviderServiceStatus } from "../shared/components/ProviderServiceStatus";
+import { TechnicalText } from "../shared/components/TechnicalText";
 import {
   createDefaultProviderServiceStatusVisibilityBySurface,
   getProviderServiceStatusForProvider,
@@ -483,11 +484,15 @@ export function PopupFeaturedProviderList({
                               }}
                             >
                               <span className="popup-provider-card__provider-link-label">
-                                {provider.providerLabel}
+                                <TechnicalText>
+                                  {provider.providerLabel}
+                                </TechnicalText>
                               </span>
                             </a>
                           ) : (
-                            provider.providerLabel
+                            <TechnicalText>
+                              {provider.providerLabel}
+                            </TechnicalText>
                           )}
                         </p>
                         {provider.apiGatewayMetering ? (
@@ -559,7 +564,9 @@ export function PopupFeaturedProviderList({
                     (!hasProviderProgress ||
                       shouldShowPlanWithProviderProgress(provider)) ? (
                       <p className="popup-provider-card__plan">
-                        {provider.planName}
+                        <TechnicalText direction="auto">
+                          {provider.planName}
+                        </TechnicalText>
                       </p>
                     ) : null}
                   </div>

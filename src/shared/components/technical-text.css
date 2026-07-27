@@ -1,0 +1,5 @@
+.technical-text {
+  max-inline-size: 100%;
+  unicode-bidi: isolate;
+  overflow-wrap: anywhere;
+}
