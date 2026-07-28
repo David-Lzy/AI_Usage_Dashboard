@@ -44,6 +44,7 @@ import { syncProviderServiceStatuses } from "./provider-service-status-sync";
 import {
   getActiveProviderAccountId,
   selectActiveProviderAccount,
+  setProviderDisplayEnabled,
 } from "../shared/provider-accounts";
 import { runProviderAccountManualSyncSerial } from "../shared/provider-account-sync";
 import {
@@ -248,14 +249,13 @@ export async function handleAppMessage(
 
     case "app:set-provider-enabled": {
       const state = await updateAppState((current) =>
-        reconcileAppStateHealth({
-          ...current,
-          providerSettings: current.providerSettings.map((provider) =>
-            provider.id === message.providerId
-              ? { ...provider, displayEnabled: message.enabled }
-              : provider,
+        reconcileAppStateHealth(
+          setProviderDisplayEnabled(
+            current,
+            message.providerId,
+            message.enabled,
           ),
-        }),
+        ),
       );
       await ensureBackgroundAlarms(state);
 

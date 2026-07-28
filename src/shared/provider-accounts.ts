@@ -372,6 +372,9 @@ export function selectActiveProviderAccount(
   }
 
   const previousActiveId = collection.activeAccountId;
+  for (const inactiveRuntime of Object.values(collection.inactiveAccounts)) {
+    inactiveRuntime.setting.displayEnabled = currentSetting.displayEnabled;
+  }
   collection.inactiveAccounts[previousActiveId] = {
     snapshot: structuredClone(currentSnapshot),
     setting: structuredClone(currentSetting),
@@ -395,7 +398,41 @@ export function selectActiveProviderAccount(
     ),
     providerSettings: state.providerSettings.map((setting) =>
       setting.id === providerId
-        ? structuredClone(nextRuntime.setting)
+        ? {
+            ...structuredClone(nextRuntime.setting),
+            displayEnabled: currentSetting.displayEnabled,
+          }
+        : setting,
+    ),
+    providerAccounts,
+  };
+}
+
+export function setProviderDisplayEnabled(
+  state: AppState,
+  providerId: ProviderId,
+  displayEnabled: boolean,
+  capabilityResolver: ProviderMultiAccountCapabilityResolver =
+    defaultCapabilityResolver,
+): AppState {
+  const providerAccounts = normalizeProviderAccounts(
+    state.providers,
+    state.providerAccounts,
+    capabilityResolver,
+  );
+  const collection = providerAccounts[providerId];
+
+  if (collection) {
+    for (const inactiveRuntime of Object.values(collection.inactiveAccounts)) {
+      inactiveRuntime.setting.displayEnabled = displayEnabled;
+    }
+  }
+
+  return {
+    ...state,
+    providerSettings: state.providerSettings.map((setting) =>
+      setting.id === providerId
+        ? { ...setting, displayEnabled }
         : setting,
     ),
     providerAccounts,

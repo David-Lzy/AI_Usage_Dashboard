@@ -10,6 +10,7 @@ import {
   getProviderAccountOptions,
   normalizeProviderAccounts,
   selectActiveProviderAccount,
+  setProviderDisplayEnabled,
   updateActiveProviderAccountConnection,
 } from "./provider-accounts";
 
@@ -109,7 +110,7 @@ describe("provider accounts", () => {
       selected.providerSettings.find(
         (setting) => setting.id === TEST_PROVIDER_ID,
       )?.displayEnabled,
-    ).toBe(false);
+    ).toBe(currentSetting.displayEnabled);
     expect(selected.providerAccounts?.[TEST_PROVIDER_ID]).toMatchObject({
       activeAccountId: TEST_ACCOUNT_ID,
       inactiveAccounts: {
@@ -122,6 +123,65 @@ describe("provider accounts", () => {
       },
     });
     expect(selected.providers).toHaveLength(initial.providers.length);
+
+    const restored = selectActiveProviderAccount(
+      selected,
+      TEST_PROVIDER_ID,
+      DEFAULT_PROVIDER_ACCOUNT_ID,
+      supportsTestProvider,
+    );
+    expect(
+      restored.providerSettings.find(
+        (setting) => setting.id === TEST_PROVIDER_ID,
+      )?.displayEnabled,
+    ).toBe(currentSetting.displayEnabled);
+    expect(
+      restored.providers.find(
+        (provider) => provider.providerId === TEST_PROVIDER_ID,
+      ),
+    ).toMatchObject({
+      used: currentSnapshot.used,
+      remaining: currentSnapshot.remaining,
+    });
+  });
+
+  it("keeps provider visibility synchronized across inactive accounts", () => {
+    const initial = createTestState();
+    const currentSnapshot = initial.providers.find(
+      (provider) => provider.providerId === TEST_PROVIDER_ID,
+    )!;
+    const currentSetting = initial.providerSettings.find(
+      (setting) => setting.id === TEST_PROVIDER_ID,
+    )!;
+    const withInactiveAccount = addInactiveProviderAccount(
+      initial,
+      {
+        providerId: TEST_PROVIDER_ID,
+        accountId: TEST_ACCOUNT_ID,
+        label: "Workspace 2",
+        snapshot: structuredClone(currentSnapshot),
+        setting: { ...structuredClone(currentSetting), displayEnabled: true },
+      },
+      supportsTestProvider,
+    );
+
+    const hidden = setProviderDisplayEnabled(
+      withInactiveAccount,
+      TEST_PROVIDER_ID,
+      false,
+      supportsTestProvider,
+    );
+
+    expect(
+      hidden.providerSettings.find(
+        (setting) => setting.id === TEST_PROVIDER_ID,
+      )?.displayEnabled,
+    ).toBe(false);
+    expect(
+      hidden.providerAccounts?.[TEST_PROVIDER_ID]?.inactiveAccounts[
+        TEST_ACCOUNT_ID
+      ]?.setting.displayEnabled,
+    ).toBe(false);
   });
 
   it("exposes selector options only for capable providers with multiple accounts", () => {
