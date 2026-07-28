@@ -2,6 +2,7 @@ import type {
   ApiGatewayMeteringDisplayPreferences,
   AppState,
   AppSettings,
+  PopupProviderAccountPresentationMode,
   ProgressItemsBySurface,
   ProviderAccountId,
   ProviderAccountsByProvider,
@@ -41,6 +42,7 @@ import type { Sub2ApiDeploymentDraft } from "../../shared/sub2api-deployments";
 import { SUB2API_PROVIDER_ID } from "../../shared/sub2api-deployments";
 import { Sub2ApiDeploymentSettings } from "./Sub2ApiDeploymentSettings";
 import { ApiGatewayMeteringModulePreferenceControls } from "./ApiGatewayMeteringModulePreferenceControls";
+import { resolvePopupProviderAccountPresentationMode } from "../../shared/provider-account-presentation";
 
 type SettingsProviderDisplaySectionProps = {
   providers: ProviderSetting[];
@@ -72,6 +74,10 @@ type SettingsProviderDisplaySectionProps = {
   onSelectProviderAccount?: (
     providerId: ProviderId,
     accountId: ProviderAccountId,
+  ) => void;
+  onPopupProviderAccountPresentationModeChange?: (
+    providerId: ProviderId,
+    mode: PopupProviderAccountPresentationMode,
   ) => void;
   onSaveSub2ApiDeployment?: (
     draft: Sub2ApiDeploymentDraft,
@@ -107,6 +113,7 @@ export function SettingsProviderDisplaySection({
   onProviderServiceStatusVisibilityBySurfaceChange = () => undefined,
   onProviderProgressDetailsOpenChange,
   onSelectProviderAccount = () => undefined,
+  onPopupProviderAccountPresentationModeChange = () => undefined,
   onSaveSub2ApiDeployment = () => undefined,
   onTestSub2ApiDeployment = async () => false,
   onDisconnectSub2ApiDeployment = () => undefined,
@@ -193,8 +200,18 @@ export function SettingsProviderDisplaySection({
               locale={locale}
               providerAccounts={providerAccounts}
               snapshot={sub2ApiSnapshot}
+              popupAccountPresentationMode={resolvePopupProviderAccountPresentationMode(
+                settings.popupProviderAccountPresentationByProvider,
+                SUB2API_PROVIDER_ID,
+              )}
               onSelectAccount={(accountId) =>
                 onSelectProviderAccount(SUB2API_PROVIDER_ID, accountId)
+              }
+              onPopupAccountPresentationModeChange={(mode) =>
+                onPopupProviderAccountPresentationModeChange(
+                  SUB2API_PROVIDER_ID,
+                  mode,
+                )
               }
               onSave={onSaveSub2ApiDeployment}
               onTest={onTestSub2ApiDeployment}

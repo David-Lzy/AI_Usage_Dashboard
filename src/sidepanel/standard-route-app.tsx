@@ -540,6 +540,18 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
             }
             onToggleProvider={handleToggleProvider}
             onSelectProviderAccount={handleSelectProviderAccount}
+            onPopupProviderAccountPresentationModeChange={(
+              providerId,
+              mode,
+            ) =>
+              handleUpdateSettings({
+                popupProviderAccountPresentationByProvider: {
+                  ...appState.settings
+                    .popupProviderAccountPresentationByProvider,
+                  [providerId]: mode,
+                },
+              })
+            }
             onSaveSub2ApiDeployment={handleSaveSub2ApiDeployment}
             onTestSub2ApiDeployment={handleTestSub2ApiDeployment}
             onDisconnectSub2ApiDeployment={

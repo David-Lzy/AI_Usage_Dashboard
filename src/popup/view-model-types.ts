@@ -1,4 +1,6 @@
 import type {
+  PopupProviderAccountPresentationMode,
+  ProviderAccountId,
   ProviderId,
   ProviderTone,
   SummaryItem,
@@ -78,6 +80,10 @@ export type PopupFirstSetupProvider = {
 };
 
 export type PopupFeaturedProviderCard = {
+  cardId?: string;
+  providerAccountId?: ProviderAccountId | null;
+  providerAccountLabel?: string | null;
+  providerAccountPresentationMode?: PopupProviderAccountPresentationMode;
   provider: ProviderViewModel;
   statusLabel: string;
   metaChips: string[];

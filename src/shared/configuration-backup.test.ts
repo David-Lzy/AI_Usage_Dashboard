@@ -101,6 +101,9 @@ describe("configuration backup", () => {
       settings: {
         ...SAMPLE_APP_STATE.settings,
         toolbarIconMode: "custom",
+        popupProviderAccountPresentationByProvider: {
+          "sub2api-api-key": "cards",
+        },
         toolbarIconCustomImageDataUrl:
           "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB",
       },
@@ -125,6 +128,11 @@ describe("configuration backup", () => {
     });
 
     expect(backup.payload.settings.toolbarIconMode).toBe("custom");
+    expect(
+      backup.payload.settings.popupProviderAccountPresentationByProvider,
+    ).toEqual({
+      "sub2api-api-key": "cards",
+    });
     expect(backup.payload.settings.toolbarIconCustomImageDataUrl).toContain(
       "data:image/png",
     );

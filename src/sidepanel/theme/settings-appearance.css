@@ -290,6 +290,11 @@
   min-inline-size: min(100%, 16rem);
 }
 
+.sub2api-deployment-settings__presentation {
+  flex: 1 1 17rem;
+  min-inline-size: min(100%, 14rem);
+}
+
 .sub2api-deployment-settings__connection-mode {
   display: inline-flex;
   align-items: center;

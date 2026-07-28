@@ -21,6 +21,56 @@ function getSub2ApiSnapshot() {
 }
 
 describe("Sub2ApiDeploymentSettings", () => {
+  it("renders the selected popup presentation mode for multiple deployments", () => {
+    const first = saveSub2ApiDeployment(
+      structuredClone(SAMPLE_APP_STATE),
+      {
+        accountId: DEFAULT_PROVIDER_ACCOUNT_ID,
+        displayLabel: "Primary gateway",
+        baseUrl: "https://primary.example.test",
+        apiKey: "primary-secret",
+        insecureTransportAcknowledged: false,
+      },
+    );
+    expect(first.ok).toBe(true);
+    if (!first.ok) return;
+
+    const second = saveSub2ApiDeployment(
+      first.state,
+      {
+        accountId: null,
+        displayLabel: "Backup gateway",
+        baseUrl: "https://backup.example.test",
+        apiKey: "backup-secret",
+        insecureTransportAcknowledged: false,
+      },
+      { createAccountId: () => "account_backup12" },
+    );
+    expect(second.ok).toBe(true);
+    if (!second.ok) return;
+
+    const html = renderToStaticMarkup(
+      <Sub2ApiDeploymentSettings
+        locale="en"
+        popupAccountPresentationMode="cycle"
+        providerAccounts={second.state.providerAccounts}
+        snapshot={getSub2ApiSnapshot()}
+        onSelectAccount={() => {}}
+        onSave={() => {}}
+        onTest={async () => true}
+        onDisconnect={() => {}}
+        onRemove={() => {}}
+        onPopupAccountPresentationModeChange={() => {}}
+      />,
+    );
+
+    expect(html).toContain("Popup deployment layout");
+    expect(html).toContain("Next button");
+    expect(html).toContain(
+      'data-settings-material-select="sub2api-popup-account-presentation"',
+    );
+  });
+
   it("renders isolated deployment CRUD fields without exposing a saved key", () => {
     const connected = saveSub2ApiDeployment(
       structuredClone(SAMPLE_APP_STATE),
@@ -38,6 +88,7 @@ describe("Sub2ApiDeploymentSettings", () => {
     const html = renderToStaticMarkup(
       <Sub2ApiDeploymentSettings
         locale="en"
+        popupAccountPresentationMode="select"
         providerAccounts={connected.state.providerAccounts}
         snapshot={getSub2ApiSnapshot()}
         onSelectAccount={() => {}}
@@ -45,6 +96,7 @@ describe("Sub2ApiDeploymentSettings", () => {
         onTest={async () => true}
         onDisconnect={() => {}}
         onRemove={() => {}}
+        onPopupAccountPresentationModeChange={() => {}}
       />,
     );
 
@@ -72,6 +124,7 @@ describe("Sub2ApiDeploymentSettings", () => {
     const html = renderToStaticMarkup(
       <Sub2ApiDeploymentSettings
         locale="en"
+        popupAccountPresentationMode="select"
         providerAccounts={undefined}
         snapshot={null}
         onSelectAccount={() => {}}
@@ -79,6 +132,7 @@ describe("Sub2ApiDeploymentSettings", () => {
         onTest={async () => true}
         onDisconnect={() => {}}
         onRemove={() => {}}
+        onPopupAccountPresentationModeChange={() => {}}
       />,
     );
 
@@ -104,6 +158,7 @@ describe("Sub2ApiDeploymentSettings", () => {
     const html = renderToStaticMarkup(
       <Sub2ApiDeploymentSettings
         locale="en"
+        popupAccountPresentationMode="select"
         providerAccounts={connected.state.providerAccounts}
         snapshot={getSub2ApiSnapshot()}
         onSelectAccount={() => {}}
@@ -111,6 +166,7 @@ describe("Sub2ApiDeploymentSettings", () => {
         onTest={async () => true}
         onDisconnect={() => {}}
         onRemove={() => {}}
+        onPopupAccountPresentationModeChange={() => {}}
       />,
     );
 

@@ -4,10 +4,7 @@ import {
   setSafeStorageItem,
   type WebStorageLike,
 } from "../shared/local-storage";
-import type {
-  ProviderId,
-  ProviderUsageHistoryModuleId,
-} from "../providers/types";
+import type { ProviderUsageHistoryModuleId } from "../providers/types";
 
 export type PopupCollapsePreferenceTarget = "headerActions" | "footerInfo";
 
@@ -61,30 +58,30 @@ export function writePopupCollapsePreference(
 }
 
 function buildPopupUsageHistoryCollapseStorageKey(
-  providerId: ProviderId,
+  providerCardId: string,
   moduleId: ProviderUsageHistoryModuleId,
 ): string {
   return `${POPUP_USAGE_HISTORY_COLLAPSE_STORAGE_KEY_PREFIX}${encodeURIComponent(
-    providerId,
+    providerCardId,
   )}:${moduleId}`;
 }
 
 export function readPopupUsageHistoryCollapsePreference(
-  providerId: ProviderId,
+  providerCardId: string,
   moduleId: ProviderUsageHistoryModuleId,
   options?: PopupCollapsePreferenceOptions,
 ): boolean {
   const storage = resolveStorage(options);
   const rawValue = getSafeStorageItem(
     storage,
-    buildPopupUsageHistoryCollapseStorageKey(providerId, moduleId),
+    buildPopupUsageHistoryCollapseStorageKey(providerCardId, moduleId),
   );
 
   return rawValue === "1";
 }
 
 export function writePopupUsageHistoryCollapsePreference(
-  providerId: ProviderId,
+  providerCardId: string,
   moduleId: ProviderUsageHistoryModuleId,
   isCollapsed: boolean,
   options?: PopupCollapsePreferenceOptions,
@@ -93,34 +90,34 @@ export function writePopupUsageHistoryCollapsePreference(
 
   setSafeStorageItem(
     storage,
-    buildPopupUsageHistoryCollapseStorageKey(providerId, moduleId),
+    buildPopupUsageHistoryCollapseStorageKey(providerCardId, moduleId),
     isCollapsed ? "1" : "0",
   );
 }
 
 function buildPopupProviderCardCollapseStorageKey(
-  providerId: ProviderId,
+  providerCardId: string,
 ): string {
   return `${POPUP_PROVIDER_CARD_COLLAPSE_STORAGE_KEY_PREFIX}${encodeURIComponent(
-    providerId,
+    providerCardId,
   )}`;
 }
 
 export function readPopupProviderCardCollapsePreference(
-  providerId: ProviderId,
+  providerCardId: string,
   options?: PopupCollapsePreferenceOptions,
 ): boolean {
   const storage = resolveStorage(options);
   const rawValue = getSafeStorageItem(
     storage,
-    buildPopupProviderCardCollapseStorageKey(providerId),
+    buildPopupProviderCardCollapseStorageKey(providerCardId),
   );
 
   return rawValue === "1";
 }
 
 export function writePopupProviderCardCollapsePreference(
-  providerId: ProviderId,
+  providerCardId: string,
   isCollapsed: boolean,
   options?: PopupCollapsePreferenceOptions,
 ): void {
@@ -128,7 +125,7 @@ export function writePopupProviderCardCollapsePreference(
 
   setSafeStorageItem(
     storage,
-    buildPopupProviderCardCollapseStorageKey(providerId),
+    buildPopupProviderCardCollapseStorageKey(providerCardId),
     isCollapsed ? "1" : "0",
   );
 }

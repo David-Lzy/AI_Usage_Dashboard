@@ -91,7 +91,10 @@ are not stored or imported. The account-level dashboard routes are not called.
 Each configured deployment has an opaque local account id, isolated credential,
 snapshot, last-sync state, and display preferences. Only the selected deployment
 uses the existing automatic refresh schedule; inactive deployments are not
-polled concurrently. Disconnecting always removes the credential and connection
+polled concurrently. Popup may show an inactive deployment's last successful
+normalized summary as a separate card, but summaries are never combined and
+interacting with that card selects its deployment first. Disconnecting always
+removes the credential and connection
 metadata. The user can explicitly choose whether to retain the last nonsecret
 summary as stale data or remove it as well. Removing a deployment clears its
 isolated local metadata, snapshot, and secret.

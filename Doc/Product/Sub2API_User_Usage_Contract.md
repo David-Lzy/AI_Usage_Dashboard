@@ -1,6 +1,6 @@
 # Sub2API User Usage Contract
 
-Date: 2026-07-25
+Date: 2026-07-28
 
 Document class:
 
@@ -71,8 +71,18 @@ schedule. Selecting another deployment performs one bounded manual refresh;
 inactive deployments are not refreshed concurrently and values are never
 aggregated across deployments.
 
-**Save and test** requests optional host access for the configured scheme and
-host before running the normal provider refresh. **Disconnect** clears the
+When more than one deployment exists, Settings offers three Popup presentation
+modes: a deployment dropdown, a compact next-deployment button, or one isolated
+card per deployment. The first two modes keep one card and switch the selected
+deployment. Separate-card mode can show the last successful normalized snapshot
+for each deployment, while actions on an inactive card select that deployment
+before continuing. Switching presentation or deployment does not change the
+provider visibility preference, and no mode combines balances or usage totals.
+
+**Test** requests optional host access for the configured scheme and host before
+running the normal provider refresh. Its UI shows a bounded 20-second progress
+countdown followed by an explicit success, failure, or timeout result.
+**Disconnect** clears the
 credential and connection metadata, with an explicit choice to retain or remove
 the last nonsecret summary. Removing a non-default deployment clears its
 isolated snapshot, metadata, and secret. A non-loopback HTTP origin requires a

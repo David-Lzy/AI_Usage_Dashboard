@@ -10,6 +10,7 @@ import type {
   AppSettings,
   PopupCornerStyle,
   PopupProviderBrowsingMode,
+  PopupProviderAccountPresentationMode,
   PopupCircularProgressItemsPerRow,
   PopupShadowStyle,
   PopupSizePreset,
@@ -163,6 +164,10 @@ type SettingsPageProps = {
     providerId: ProviderId,
     accountId: ProviderAccountId,
   ) => void;
+  onPopupProviderAccountPresentationModeChange?: (
+    providerId: ProviderId,
+    mode: PopupProviderAccountPresentationMode,
+  ) => void;
   onSaveSub2ApiDeployment?: (
     draft: Sub2ApiDeploymentDraft,
     testConnection: boolean,
@@ -263,6 +268,7 @@ export function SettingsPage({
   onSaveThemeCustomSeed,
   onToggleProvider,
   onSelectProviderAccount = () => undefined,
+  onPopupProviderAccountPresentationModeChange = () => undefined,
   onSaveSub2ApiDeployment = () => undefined,
   onTestSub2ApiDeployment = async () => false,
   onDisconnectSub2ApiDeployment = () => undefined,
@@ -617,6 +623,9 @@ export function SettingsPage({
           settingsSurfaceSession.setProviderProgressDetailsOpen
         }
         onSelectProviderAccount={onSelectProviderAccount}
+        onPopupProviderAccountPresentationModeChange={
+          onPopupProviderAccountPresentationModeChange
+        }
         onSaveSub2ApiDeployment={onSaveSub2ApiDeployment}
         onTestSub2ApiDeployment={onTestSub2ApiDeployment}
         onDisconnectSub2ApiDeployment={onDisconnectSub2ApiDeployment}

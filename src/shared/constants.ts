@@ -61,6 +61,7 @@ import {
   createUsageThresholdDiagnostic,
 } from "../providers/diagnostics";
 import { createEmptyPageBinding } from "./page-bindings";
+import { normalizePopupProviderAccountPresentationByProvider } from "./provider-account-presentation";
 
 export const APP_STATE_STORAGE_KEY = "ai-usage-dashboard.app-state";
 export const PROVIDER_SECRETS_STORAGE_KEY = "ai-usage-dashboard.provider-secrets";
@@ -785,6 +786,8 @@ export const SAMPLE_APP_STATE: AppState = {
     sidebarProgressStyle: DEFAULT_SIDEBAR_PROGRESS_STYLE,
     fullPageProgressStyle: DEFAULT_FULL_PAGE_PROGRESS_STYLE,
     popupProviderBrowsingMode: DEFAULT_POPUP_PROVIDER_BROWSING_MODE,
+    popupProviderAccountPresentationByProvider:
+      normalizePopupProviderAccountPresentationByProvider(undefined),
     popupSizePreset: DEFAULT_POPUP_SIZE_PRESET,
     popupCornerStyle: DEFAULT_POPUP_CORNER_STYLE,
     popupShadowStyle: DEFAULT_POPUP_SHADOW_STYLE,

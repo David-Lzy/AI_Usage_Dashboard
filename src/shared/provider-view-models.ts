@@ -187,7 +187,7 @@ function getUsageRatio(provider: ProviderSnapshot): number {
   return provider.used / provider.total;
 }
 
-function toProviderViewModel(
+export function buildProviderViewModel(
   provider: ProviderSnapshot,
   setting: ProviderSetting | null,
   sourceDisplayCopy?: ProviderSourceDisplayCopy,
@@ -352,7 +352,7 @@ export function getVisibleProviders(
       );
     })
     .map((provider) =>
-      toProviderViewModel(
+      buildProviderViewModel(
         provider,
         findProviderSetting(state.providerSettings, provider.providerId),
         sourceDisplayCopy,
@@ -381,7 +381,7 @@ export function getPopupProviders(
       );
     })
     .map((provider) =>
-      toProviderViewModel(
+      buildProviderViewModel(
         provider,
         findProviderSetting(state.providerSettings, provider.providerId),
         sourceDisplayCopy,
@@ -407,7 +407,7 @@ export function getProviderViewModel(
     return null;
   }
 
-  return toProviderViewModel(
+  return buildProviderViewModel(
     provider,
     findProviderSetting(state.providerSettings, providerId),
     sourceDisplayCopy,

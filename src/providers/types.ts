@@ -178,6 +178,13 @@ export type PopupProviderBrowsingMode =
   | "single"
   | "switch"
   | "scroll";
+export type PopupProviderAccountPresentationMode =
+  | "select"
+  | "cycle"
+  | "cards";
+export type PopupProviderAccountPresentationByProvider = Partial<
+  Record<ProviderId, PopupProviderAccountPresentationMode>
+>;
 export type PopupCornerStyle = "square" | "soft" | "rounded";
 export type PopupShadowStyle = "none" | "soft" | "elevated";
 export type PopupCircularProgressItemsPerRow = 1 | 2 | 3 | 4;
@@ -615,6 +622,7 @@ export type AppSettings = {
   sidebarProgressStyle: ProgressDisplayStyle;
   fullPageProgressStyle: ProgressDisplayStyle;
   popupProviderBrowsingMode: PopupProviderBrowsingMode;
+  popupProviderAccountPresentationByProvider: PopupProviderAccountPresentationByProvider;
   popupSizePreset: PopupSizePreset;
   popupCornerStyle: PopupCornerStyle;
   popupShadowStyle: PopupShadowStyle;

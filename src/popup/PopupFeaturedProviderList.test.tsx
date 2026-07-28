@@ -9,6 +9,7 @@ import { SAMPLE_APP_STATE } from "../shared/constants";
 import { getProviderViewModel } from "../sidepanel/view-models";
 import { buildPopupViewModel } from "./view-models";
 import { PopupFeaturedProviderList } from "./PopupFeaturedProviderList";
+import { createMultiDeploymentSub2ApiState } from "./test-support";
 
 const popupThemeCss = readFileSync(
   new URL("./popup-theme.css", import.meta.url),
@@ -46,6 +47,53 @@ function renderFeaturedList(
 }
 
 describe("PopupFeaturedProviderList", () => {
+  it("renders a deployment selector without hiding the provider card", () => {
+    const state = createMultiDeploymentSub2ApiState("select");
+    const html = renderFeaturedList(
+      buildPopupViewModel(state).featuredProviderCards,
+      state,
+    );
+
+    expect(html).toContain("api-gateway-metering-deployment--select");
+    expect(html).toContain('value="account_alpha123"');
+    expect(html).toContain('value="account_beta1234"');
+    expect(html.match(/data-popup-hide-provider="sub2api-api-key"/g)).toHaveLength(
+      1,
+    );
+  });
+
+  it("renders a compact next-deployment action in cycle mode", () => {
+    const state = createMultiDeploymentSub2ApiState("cycle");
+    const html = renderFeaturedList(
+      buildPopupViewModel(state).featuredProviderCards,
+      state,
+    );
+
+    expect(html).toContain("api-gateway-metering-deployment--cycle");
+    expect(html).toContain('title="Show next deployment"');
+    expect(html).not.toContain("api-gateway-metering-deployment--select");
+  });
+
+  it("renders each deployment as a separately identified card", () => {
+    const state = createMultiDeploymentSub2ApiState("cards");
+    const html = renderFeaturedList(
+      buildPopupViewModel(state).featuredProviderCards,
+      state,
+    );
+
+    expect(html).toContain(
+      'data-popup-provider-card-toggle="sub2api-api-key:account_alpha123"',
+    );
+    expect(html).toContain(
+      'data-popup-provider-card-toggle="sub2api-api-key:account_beta1234"',
+    );
+    expect(html.match(/data-popup-hide-provider="sub2api-api-key"/g)).toHaveLength(
+      2,
+    );
+    expect(html).toContain("$18");
+    expect(html).toContain("$42");
+  });
+
   it("defaults to independently collapsible provider cards", () => {
     const html = renderFeaturedList();
 

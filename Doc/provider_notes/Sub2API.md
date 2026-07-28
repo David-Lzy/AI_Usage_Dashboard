@@ -1,6 +1,6 @@
 # Sub2API Provider Note
 
-Date: 2026-07-25
+Date: 2026-07-28
 
 Process rule:
 
@@ -90,17 +90,26 @@ existing deployment keeps the account-scoped saved key.
 Multiple deployments use opaque local account IDs. Each deployment keeps its
 own connection metadata, credential, normalized snapshot, last-success state,
 and per-surface module preferences. The selected deployment is the only one
-used by Popup, Sidebar, Dashboard, and the automatic refresh schedule. Selecting
-another deployment performs one bounded manual refresh; inactive deployments
-are not refreshed concurrently and their values are never aggregated.
+used by Sidebar, Dashboard, detail, and the automatic refresh schedule. Popup
+can either select one deployment, cycle to the next deployment, or render one
+card for each deployment's last successful normalized snapshot. Interacting
+with an inactive Popup card selects that deployment before continuing. Inactive
+deployments are not refreshed concurrently, provider visibility is preserved
+when selection changes, and values are never aggregated across deployments.
+
+The deployment editor exposes the Popup presentation preference only when more
+than one deployment exists. The choices are dropdown selection, a compact next
+button, and separate cards. The saved preference is provider-scoped and portable
+with the rest of the nonsecret application settings.
 
 The deployment editor distinguishes the following operations:
 
 - **Save** stores validated local metadata and an optional replacement key.
-- **Save and test** additionally requests optional access for the exact scheme
-  and host, then runs the shared provider refresh so permission,
+- **Test** requests optional access for the exact scheme and host, then runs the
+  shared provider refresh with a bounded 20-second countdown so permission,
   authentication, compatibility, scope, and transport failures remain
-  separately diagnosable.
+  separately diagnosable. The editor reports success, failure, or timeout
+  without exposing the saved key.
 - **Disconnect** removes the saved key and connection metadata. The user can
   explicitly retain the last nonsecret summary as stale data or clear it.
 - **Remove deployment** deletes a non-default deployment, its isolated

@@ -58,6 +58,7 @@ import {
   isProviderServiceStatusVisible,
 } from "../shared/provider-service-status";
 import { usePopupProviderAutoGlide } from "./popup-provider-auto-glide";
+import { getProviderAccountPresentationLocalizedCopy } from "../shared/provider-account-presentation-localized-copy";
 
 type PopupFeaturedProviderListProps = {
   ariaLabel: string;
@@ -91,6 +92,10 @@ type PopupFeaturedProviderListProps = {
 
 type PopupProviderNavigationDirection = "previous" | "next";
 
+function getPopupProviderCardId(card: PopupFeaturedProviderCard): string {
+  return card.cardId ?? card.provider.providerId;
+}
+
 function shouldShowPlanWithProviderProgress(
   provider: PopupFeaturedProviderCard["provider"],
 ): boolean {
@@ -109,7 +114,7 @@ function PopupUsageHistoryModule({
   copy: UsageHistoryChartCopy;
   history: ProviderUsageHistory;
   moduleId: ProviderUsageHistoryModuleId;
-  providerId: ProviderId;
+  providerId: string;
 }) {
   const [defaultExpanded] = useState(
     () => !readPopupUsageHistoryCollapsePreference(providerId, moduleId),
@@ -154,41 +159,45 @@ export function PopupFeaturedProviderList({
   getSettingsFocusForProvider,
   onAction,
 }: PopupFeaturedProviderListProps) {
-  const [activeProviderId, setActiveProviderId] = useState<ProviderId | null>(
-    () => cards[0]?.provider.providerId ?? null,
+  const [activeProviderCardId, setActiveProviderCardId] = useState<
+    string | null
+  >(
+    () => (cards[0] ? getPopupProviderCardId(cards[0]) : null),
   );
   const [collapsedProviderCards, setCollapsedProviderCards] = useState<
-    Partial<Record<ProviderId, boolean>>
+    Partial<Record<string, boolean>>
   >(() =>
     Object.fromEntries(
       cards.map((card) => [
-        card.provider.providerId,
-        readPopupProviderCardCollapsePreference(card.provider.providerId),
+        getPopupProviderCardId(card),
+        readPopupProviderCardCollapsePreference(getPopupProviderCardId(card)),
       ]),
     ),
   );
   const {
     isActive: hasActiveAutoGlide,
-    orderedItemIds: autoGlideProviderIds,
+    orderedItemIds: autoGlideProviderCardIds,
     trackRef: autoGlideTrackRef,
     viewportRef: autoGlideViewportRef,
   } = usePopupProviderAutoGlide(
-    cards.map((card) => card.provider.providerId),
+    cards.map(getPopupProviderCardId),
     providerBrowsingMode === "scroll",
   );
 
   const resolvedActiveProviderIndex = Math.max(
     0,
-    cards.findIndex((card) => card.provider.providerId === activeProviderId),
+    cards.findIndex(
+      (card) => getPopupProviderCardId(card) === activeProviderCardId,
+    ),
   );
   const usesSingleProviderStage =
     providerBrowsingMode === "single" || providerBrowsingMode === "switch";
   const activeCard = cards[resolvedActiveProviderIndex] ?? cards[0] ?? null;
-  const cardsByProviderId = new Map(
-    cards.map((card) => [card.provider.providerId, card]),
+  const cardsById = new Map(
+    cards.map((card) => [getPopupProviderCardId(card), card]),
   );
-  const autoGlideCards = autoGlideProviderIds
-    .map((providerId) => cardsByProviderId.get(providerId))
+  const autoGlideCards = autoGlideProviderCardIds
+    .map((cardId) => cardsById.get(cardId))
     .filter((card): card is PopupFeaturedProviderCard => card !== undefined);
   const visibleCards =
     usesSingleProviderStage && activeCard
@@ -201,6 +210,8 @@ export function PopupFeaturedProviderList({
   const apiGatewayMeteringCopy = buildApiGatewayMeteringLocalizedCopy(
     i18n.resolvedLocale,
   );
+  const accountPresentationCopy =
+    getProviderAccountPresentationLocalizedCopy(i18n.resolvedLocale);
 
   const navigateProvider = (direction: PopupProviderNavigationDirection) => {
     if (cards.length === 0) {
@@ -211,7 +222,7 @@ export function PopupFeaturedProviderList({
     const nextIndex =
       (resolvedActiveProviderIndex + offset + cards.length) % cards.length;
 
-    setActiveProviderId(cards[nextIndex].provider.providerId);
+    setActiveProviderCardId(getPopupProviderCardId(cards[nextIndex]));
   };
 
   if (cards.length === 0) {
@@ -296,18 +307,66 @@ export function PopupFeaturedProviderList({
         >
           {visibleCards.map((card) => {
             const { provider } = card;
+            const cardId = getPopupProviderCardId(card);
             const index = cards.indexOf(card);
             const isCardCollapsed =
               providerBrowsingMode === "collapsible" &&
-              (collapsedProviderCards[provider.providerId] ??
-                readPopupProviderCardCollapsePreference(provider.providerId));
-            const apiGatewayMeteringDisplayPreferences =
+              (collapsedProviderCards[cardId] ??
+                readPopupProviderCardCollapsePreference(cardId));
+            const providerAccountCollection =
+              providerAccounts[provider.providerId];
+            const providerAccountId =
+              card.providerAccountId ??
+              providerAccountCollection?.activeAccountId ??
+              null;
+            const providerAccountMetadata =
+              providerAccountCollection?.accounts.find(
+                ({ id }) => id === providerAccountId,
+              ) ??
               getActiveProviderAccountMetadata(
                 { providerAccounts },
                 provider.providerId,
-              )?.apiGatewayMeteringDisplayPreferences;
-            const providerAccountCollection =
-              providerAccounts[provider.providerId];
+              );
+            const apiGatewayMeteringDisplayPreferences =
+              providerAccountMetadata?.apiGatewayMeteringDisplayPreferences;
+            const accountPresentationMode =
+              card.providerAccountPresentationMode ?? "select";
+            const providerAccountOptions =
+              providerAccountCollection?.accounts ?? [];
+            const hasMultipleProviderAccounts =
+              providerAccountOptions.length > 1;
+            const selectCardAccount = async () => {
+              if (
+                providerAccountId &&
+                providerAccountCollection?.activeAccountId !==
+                  providerAccountId &&
+                onSelectProviderAccount
+              ) {
+                await onSelectProviderAccount(
+                  provider.providerId,
+                  providerAccountId,
+                );
+              }
+            };
+            const selectNextProviderAccount = () => {
+              if (!onSelectProviderAccount || !providerAccountId) {
+                return;
+              }
+              const activeIndex = providerAccountOptions.findIndex(
+                ({ id }) => id === providerAccountId,
+              );
+              const nextAccount =
+                providerAccountOptions[
+                  (Math.max(0, activeIndex) + 1) %
+                    providerAccountOptions.length
+                ];
+              if (nextAccount) {
+                void onSelectProviderAccount(
+                  provider.providerId,
+                  nextAccount.id,
+                );
+              }
+            };
             const hasApiGatewayMetering =
               provider.apiGatewayMetering !== undefined;
             const providerProgress = (
@@ -373,7 +432,7 @@ export function PopupFeaturedProviderList({
 
             return (
               <article
-                key={provider.providerId}
+                key={cardId}
                 className={`popup-provider-card popup-provider-card--${cardSurfaceTone}${
                   hasProviderProgress ? " popup-provider-card--quota-first" : ""
                 }${isCardCollapsed ? " popup-provider-card--collapsed" : ""}${
@@ -402,7 +461,9 @@ export function PopupFeaturedProviderList({
                               title={sourcePageAction.label}
                               onClick={(event) => {
                                 event.preventDefault();
-                                void onAction(sourcePageAction);
+                                void selectCardAccount().then(() =>
+                                  onAction(sourcePageAction),
+                                );
                               }}
                             >
                               <span className="popup-provider-card__provider-link-label">
@@ -418,23 +479,47 @@ export function PopupFeaturedProviderList({
                           )}
                         </p>
                         {provider.apiGatewayMetering ? (
-                          <ApiGatewayDeploymentSelector
-                            activeDeploymentId={
-                              providerAccountCollection?.activeAccountId ?? null
-                            }
-                            displayLabel={provider.apiGatewayMetering.displayLabel}
-                            onSelectDeployment={
-                              onSelectProviderAccount
-                                ? (accountId) =>
-                                    onSelectProviderAccount(
-                                      provider.providerId,
-                                      accountId,
-                                    )
-                                : undefined
-                            }
-                            options={providerAccountCollection?.accounts ?? []}
-                            summaryLabel={apiGatewayMeteringCopy.overview}
-                          />
+                          accountPresentationMode === "cycle" &&
+                          hasMultipleProviderAccounts ? (
+                            <button
+                              aria-label={`${accountPresentationCopy.nextDeployment}: ${providerAccountMetadata?.label ?? provider.apiGatewayMetering.displayLabel}`}
+                              className="api-gateway-metering-deployment api-gateway-metering-deployment--cycle"
+                              title={accountPresentationCopy.nextDeployment}
+                              type="button"
+                              onClick={selectNextProviderAccount}
+                            >
+                              <TechnicalText direction="auto">
+                                {providerAccountMetadata?.label ??
+                                  provider.apiGatewayMetering.displayLabel}
+                              </TechnicalText>
+                              <span aria-hidden="true" />
+                            </button>
+                          ) : (
+                            <ApiGatewayDeploymentSelector
+                              activeDeploymentId={providerAccountId}
+                              displayLabel={
+                                card.providerAccountLabel ??
+                                provider.apiGatewayMetering.displayLabel
+                              }
+                              onSelectDeployment={
+                                accountPresentationMode === "select" &&
+                                onSelectProviderAccount
+                                  ? (accountId) =>
+                                      onSelectProviderAccount(
+                                        provider.providerId,
+                                        accountId,
+                                      )
+                                  : undefined
+                              }
+                              options={
+                                accountPresentationMode === "cards" &&
+                                providerAccountMetadata
+                                  ? [providerAccountMetadata]
+                                  : providerAccountOptions
+                              }
+                              summaryLabel={apiGatewayMeteringCopy.overview}
+                            />
+                          )
                         ) : null}
                       </div>
                       <div className="popup-provider-card__header-actions">
@@ -448,12 +533,14 @@ export function PopupFeaturedProviderList({
                           }
                           type="button"
                           onClick={() => {
-                            void onAction(card.action, {
-                              settingsFocus:
-                                card.action.kind === "settings"
-                                  ? getSettingsFocusForProvider(provider)
-                                  : null,
-                            });
+                            void selectCardAccount().then(() =>
+                              onAction(card.action, {
+                                settingsFocus:
+                                  card.action.kind === "settings"
+                                    ? getSettingsFocusForProvider(provider)
+                                    : null,
+                              }),
+                            );
                           }}
                         >
                           {card.action.label}
@@ -546,7 +633,7 @@ export function PopupFeaturedProviderList({
                             copy={usageHistoryCopy}
                             history={usageHistory}
                             moduleId={preference.id}
-                            providerId={provider.providerId}
+                            providerId={cardId}
                           />
                         ))}
                       </div>
@@ -569,19 +656,14 @@ export function PopupFeaturedProviderList({
                         providerId={provider.providerId}
                         showDeploymentSelector={false}
                         surface="popup"
-                        activeDeploymentId={
-                          providerAccountCollection?.activeAccountId ?? null
+                        activeDeploymentId={providerAccountId}
+                        deploymentOptions={
+                          accountPresentationMode === "cards" &&
+                          providerAccountMetadata
+                            ? [providerAccountMetadata]
+                            : providerAccountOptions
                         }
-                        deploymentOptions={providerAccountCollection?.accounts}
-                        onSelectDeployment={
-                          onSelectProviderAccount
-                            ? (accountId) =>
-                                onSelectProviderAccount(
-                                  provider.providerId,
-                                  accountId,
-                                )
-                            : undefined
-                        }
+                        onSelectDeployment={undefined}
                       />
                     ) : null}
                     {showProviderServiceStatus ? (
@@ -601,16 +683,16 @@ export function PopupFeaturedProviderList({
                         : "popup.providers.collapse_card",
                     )}
                     className="popup-provider-card__collapse-toggle"
-                    data-popup-provider-card-toggle={provider.providerId}
+                    data-popup-provider-card-toggle={cardId}
                     type="button"
                     onClick={() => {
                       const nextCollapsed = !isCardCollapsed;
                       setCollapsedProviderCards((current) => ({
                         ...current,
-                        [provider.providerId]: nextCollapsed,
+                        [cardId]: nextCollapsed,
                       }));
                       writePopupProviderCardCollapsePreference(
-                        provider.providerId,
+                        cardId,
                         nextCollapsed,
                       );
                     }}

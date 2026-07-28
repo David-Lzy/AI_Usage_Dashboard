@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import type {
+  PopupProviderAccountPresentationMode,
   ProviderAccountId,
   ProviderAccountsByProvider,
   ProviderSnapshot,
@@ -8,6 +9,7 @@ import type {
 import { isSub2ApiNonLoopbackHttpUrl } from "../../providers/sub2api/connection";
 import { getTestConnectionLabel } from "../../shared/connection-action-localized-copy";
 import type { ResolvedAppLocale } from "../../shared/i18n";
+import { getProviderAccountPresentationLocalizedCopy } from "../../shared/provider-account-presentation-localized-copy";
 import {
   DEFAULT_PROVIDER_ACCOUNT_ID,
   getActiveProviderAccountMetadata,
@@ -28,7 +30,11 @@ type Sub2ApiDeploymentSettingsProps = {
   locale: ResolvedAppLocale;
   providerAccounts?: ProviderAccountsByProvider;
   snapshot: ProviderSnapshot | null;
+  popupAccountPresentationMode: PopupProviderAccountPresentationMode;
   onSelectAccount: (accountId: ProviderAccountId) => void;
+  onPopupAccountPresentationModeChange: (
+    mode: PopupProviderAccountPresentationMode,
+  ) => void;
   onSave: (draft: Sub2ApiDeploymentDraft, testConnection: boolean) => void;
   onTest: () => Promise<boolean>;
   onDisconnect: (
@@ -69,13 +75,17 @@ export function Sub2ApiDeploymentSettings({
   locale,
   providerAccounts,
   snapshot,
+  popupAccountPresentationMode,
   onSelectAccount,
+  onPopupAccountPresentationModeChange,
   onSave,
   onTest,
   onDisconnect,
   onRemove,
 }: Sub2ApiDeploymentSettingsProps) {
   const copy = buildSub2ApiSettingsLocalizedCopy(locale);
+  const accountPresentationCopy =
+    getProviderAccountPresentationLocalizedCopy(locale);
   const connectionTestCopy = getSub2ApiConnectionTestLocalizedCopy(locale);
   const testConnectionLabel = getTestConnectionLabel(locale);
   const collection = providerAccounts?.[SUB2API_PROVIDER_ID];
@@ -321,6 +331,36 @@ export function Sub2ApiDeploymentSettings({
               }))}
               disabled={connectionTestStatus === "testing"}
               onChange={(accountId) => onSelectAccount(accountId)}
+            />
+          </div>
+        ) : null}
+        {!isAdding && (collection?.accounts.length ?? 0) > 1 ? (
+          <div className="sub2api-deployment-settings__presentation">
+            <MaterialSelect
+              fieldIdPrefix="sub2api-popup-account-presentation"
+              label={accountPresentationCopy.label}
+              labelAccessory={
+                <MaterialInfoTooltip>
+                  {accountPresentationCopy.detail}
+                </MaterialInfoTooltip>
+              }
+              value={popupAccountPresentationMode}
+              options={[
+                {
+                  value: "select",
+                  label: accountPresentationCopy.select,
+                },
+                {
+                  value: "cycle",
+                  label: accountPresentationCopy.cycle,
+                },
+                {
+                  value: "cards",
+                  label: accountPresentationCopy.cards,
+                },
+              ]}
+              disabled={connectionTestStatus === "testing"}
+              onChange={onPopupAccountPresentationModeChange}
             />
           </div>
         ) : null}

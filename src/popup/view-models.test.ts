@@ -8,6 +8,7 @@ import type { AppState } from "../providers/types";
 import { SAMPLE_APP_STATE } from "../shared/constants";
 import { SUPPORTED_APP_LOCALES, createRuntimeI18n } from "../shared/i18n";
 import { buildPopupViewModel, localizePopupViewModel } from "./view-models";
+import { createMultiDeploymentSub2ApiState } from "./test-support";
 
 function createState(overrides?: Partial<AppState>): AppState {
   return {
@@ -45,6 +46,50 @@ function createMissingAccessPopupState(providerId = "cursor-personal-page"): App
 }
 
 describe("popup view models", () => {
+  it.each(["select", "cycle"] as const)(
+    "keeps one stable Sub2API card in %s mode",
+    (mode) => {
+      const model = buildPopupViewModel(
+        createMultiDeploymentSub2ApiState(mode),
+      );
+      const cards = model.featuredProviderCards.filter(
+        ({ provider }) => provider.providerId === "sub2api-api-key",
+      );
+
+      expect(cards).toHaveLength(1);
+      expect(cards[0]).toMatchObject({
+        cardId: "sub2api-api-key",
+        providerAccountId: "account_alpha123",
+        providerAccountLabel: "Alpha",
+        providerAccountPresentationMode: mode,
+      });
+    },
+  );
+
+  it("builds one isolated Sub2API card per deployment in cards mode", () => {
+    const model = buildPopupViewModel(
+      createMultiDeploymentSub2ApiState("cards"),
+    );
+    const cards = model.featuredProviderCards.filter(
+      ({ provider }) => provider.providerId === "sub2api-api-key",
+    );
+
+    expect(cards).toHaveLength(2);
+    expect(cards.map(({ cardId }) => cardId)).toEqual([
+      "sub2api-api-key:account_alpha123",
+      "sub2api-api-key:account_beta1234",
+    ]);
+    expect(
+      cards.map((card) => ({
+        label: card.providerAccountLabel,
+        remaining: card.provider.apiGatewayMetering?.remaining?.amount,
+      })),
+    ).toEqual([
+      { label: "Alpha", remaining: 18 },
+      { label: "Beta", remaining: 42 },
+    ]);
+  });
+
   it("keeps every visible provider in popup order even when one needs attention", () => {
     const model = buildPopupViewModel(SAMPLE_APP_STATE);
 

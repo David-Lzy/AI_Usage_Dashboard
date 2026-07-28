@@ -94,6 +94,7 @@ import {
   applyActiveProviderAccountConnections,
   normalizeProviderAccounts,
 } from "./provider-accounts";
+import { normalizePopupProviderAccountPresentationByProvider } from "./provider-account-presentation";
 
 let memoryFallbackState: AppState | null = null;
 
@@ -374,6 +375,10 @@ export function normalizeAppState(state: AppState): AppState {
         state.settings?.popupProviderBrowsingMode,
         DEFAULT_POPUP_PROVIDER_BROWSING_MODE,
       ),
+      popupProviderAccountPresentationByProvider:
+        normalizePopupProviderAccountPresentationByProvider(
+          state.settings?.popupProviderAccountPresentationByProvider,
+        ),
       popupSizePreset: normalizePopupSizePreset(
         state.settings?.popupSizePreset,
         DEFAULT_POPUP_SIZE_PRESET,

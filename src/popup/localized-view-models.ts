@@ -79,8 +79,12 @@ export function localizePopupViewModel(
       copy,
       firstSetupProvider,
     ),
-    featuredProviderCards: model.featuredProviders.map((provider) =>
-      buildLocalizedFeaturedProviderCard(provider, i18n, copy),
-    ),
+    featuredProviderCards: model.featuredProviderCards.map((card) => ({
+      ...buildLocalizedFeaturedProviderCard(card.provider, i18n, copy),
+      cardId: card.cardId,
+      providerAccountId: card.providerAccountId,
+      providerAccountLabel: card.providerAccountLabel,
+      providerAccountPresentationMode: card.providerAccountPresentationMode,
+    })),
   };
 }

@@ -25,6 +25,8 @@ function createLegacyState(): AppState {
     fullPageProgressStyle: _fullPageProgressStyle,
     popupSizePreset: _popupSizePreset,
     popupProviderBrowsingMode: _popupProviderBrowsingMode,
+    popupProviderAccountPresentationByProvider:
+      _popupProviderAccountPresentationByProvider,
     popupCornerStyle: _popupCornerStyle,
     popupShadowStyle: _popupShadowStyle,
     popupCircularProgressItemsPerRow: _popupCircularProgressItemsPerRow,
@@ -976,6 +978,11 @@ describe("storage normalization", () => {
         ...SAMPLE_APP_STATE.settings,
         popupSizePreset: "maximized",
         popupProviderBrowsingMode: "carousel",
+        popupProviderAccountPresentationByProvider: {
+          "sub2api-api-key": "cards",
+          "codex-personal-page": "invalid",
+          missing: "cycle",
+        },
         popupCornerStyle: "pill",
         popupShadowStyle: "heavy",
         popupCircularProgressItemsPerRow: 9,
@@ -986,6 +993,11 @@ describe("storage normalization", () => {
 
     expect(state?.settings.popupSizePreset).toBe("balanced");
     expect(state?.settings.popupProviderBrowsingMode).toBe("collapsible");
+    expect(
+      state?.settings.popupProviderAccountPresentationByProvider,
+    ).toEqual({
+      "sub2api-api-key": "cards",
+    });
     expect(state?.settings.popupCornerStyle).toBe("rounded");
     expect(state?.settings.popupShadowStyle).toBe("soft");
     expect(state?.settings.popupCircularProgressItemsPerRow).toBe(2);
@@ -1117,6 +1129,9 @@ describe("storage normalization", () => {
         syncIntervalMinutes: 15,
         popupProgressStyle: "circle-gauge",
         popupProviderBrowsingMode: "single",
+        popupProviderAccountPresentationByProvider: {
+          "sub2api-api-key": "cycle",
+        },
         popupCircularProgressItemsPerRow: 3,
         progressThicknessPx: 7,
         toolbarIconMode: "provider",
@@ -1144,6 +1159,11 @@ describe("storage normalization", () => {
     expect(state?.settings.syncIntervalMinutes).toBe(15);
     expect(state?.settings.popupProgressStyle).toBe("circle-gauge");
     expect(state?.settings.popupProviderBrowsingMode).toBe("single");
+    expect(
+      state?.settings.popupProviderAccountPresentationByProvider,
+    ).toEqual({
+      "sub2api-api-key": "cycle",
+    });
     expect(state?.settings.popupCircularProgressItemsPerRow).toBe(3);
     expect(state?.settings.progressThicknessPx).toBe(7);
     expect(state?.settings.toolbarIconMode).toBe("provider");

@@ -182,6 +182,46 @@
   background: transparent;
 }
 
+.api-gateway-metering-deployment--cycle {
+  display: inline-grid;
+  grid-template-columns: minmax(0, 1fr) 12px;
+  align-items: center;
+  gap: 6px;
+  min-height: 26px;
+  padding: 0 9px;
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--md-sys-color-outline-variant) 58%,
+      transparent
+    );
+  border-radius: var(--md-sys-shape-corner-full);
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.api-gateway-metering-deployment--cycle .technical-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.api-gateway-metering-deployment--cycle > span:last-child {
+  width: 6px;
+  height: 6px;
+  border-inline-end: 1.5px solid currentColor;
+  border-block-end: 1.5px solid currentColor;
+  transform: rotate(-45deg);
+}
+
+[dir="rtl"]
+  .api-gateway-metering-deployment--cycle
+  > span:last-child {
+  transform: rotate(135deg);
+}
+
 .api-gateway-metering-deployment--select::after {
   position: absolute;
   inset-inline-end: 9px;
@@ -214,7 +254,9 @@
 }
 
 .api-gateway-metering-deployment--select:hover,
-.api-gateway-metering-deployment--select:focus-within {
+.api-gateway-metering-deployment--select:focus-within,
+.api-gateway-metering-deployment--cycle:hover,
+.api-gateway-metering-deployment--cycle:focus-visible {
   background: var(--app-state-layer-neutral-hover);
 }
 
