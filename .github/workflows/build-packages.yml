@@ -181,9 +181,9 @@ jobs:
           ### Notes
 
           - Chrome Web Store remains the recommended install path for everyday Chrome users.
-          - Refines collapsible, single-card, and continuous-glide Popup browsing so larger Provider sets remain manageable without oversized gaps.
-          - Replaces timed auto-switching with continuous vertical motion, faded edges, and hover/focus pause while respecting the Animation effects preference.
-          - Keeps Provider headers and overlay controls compact and stabilizes the glide viewport across narrow Popup sizes.
+          - Adds a maintained Material UI design contract and automated checks for layout, accessibility, responsive behavior, and visual consistency.
+          - Expands multilingual visual QA, mixed-direction technical-text handling, and compact long-label resilience across core extension surfaces.
+          - Applies independently verified UI review fixes while preserving conservative Provider source and privacy boundaries.
           NOTES
 
       - name: Prepare release assets
