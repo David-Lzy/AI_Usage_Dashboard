@@ -66,6 +66,25 @@ describe("Sub2API deployment state", () => {
       label: "Second gateway",
       createdAt: "2026-07-25T12:00:00.000Z",
     });
+    expect(
+      result.state.providers.find(
+        (provider) => provider.providerId === "sub2api-api-key",
+      ),
+    ).toMatchObject({
+      used: null,
+      remaining: null,
+      total: null,
+      usageWindows: [],
+      usageBalances: [],
+      usageFacts: [],
+      usageSummary: null,
+      lastSyncLabel: "Not synced yet",
+    });
+    expect(
+      result.state.providers.find(
+        (provider) => provider.providerId === "sub2api-api-key",
+      ),
+    ).not.toHaveProperty("apiGatewayMetering");
     expect(JSON.stringify(result.state)).not.toContain("second-secret");
   });
 

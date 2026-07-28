@@ -9,7 +9,7 @@ import {
   normalizeSub2ApiConnection,
   type Sub2ApiConnectionIssueCode,
 } from "../providers/sub2api/connection";
-import { SAMPLE_APP_STATE } from "./constants";
+import { DEFAULT_APP_STATE } from "./constants";
 import {
   addInactiveProviderAccount,
   createOpaqueProviderAccountId,
@@ -47,10 +47,10 @@ function getBaselineRuntime(): {
   snapshot: ProviderSnapshot;
   setting: ProviderSetting;
 } {
-  const snapshot = SAMPLE_APP_STATE.providers.find(
+  const snapshot = DEFAULT_APP_STATE.providers.find(
     (provider) => provider.providerId === SUB2API_PROVIDER_ID,
   );
-  const setting = SAMPLE_APP_STATE.providerSettings.find(
+  const setting = DEFAULT_APP_STATE.providerSettings.find(
     (provider) => provider.id === SUB2API_PROVIDER_ID,
   );
   if (!snapshot || !setting) {

@@ -19,9 +19,20 @@ describe("app state storage events", () => {
       },
     };
 
-    expect(readAppStateFromChromeStorageChanges(changes, "local")).toEqual(
+    const state = readAppStateFromChromeStorageChanges(changes, "local");
+    const sampleCodex = SAMPLE_APP_STATE.providers.find(
+      (provider) => provider.providerId === "codex-personal-page",
+    );
+
+    expect(state).toEqual(
       expect.objectContaining({
-        providers: SAMPLE_APP_STATE.providers,
+        providers: expect.arrayContaining([
+          expect.objectContaining({
+            providerId: "codex-personal-page",
+            remaining: sampleCodex?.remaining,
+            usageWindows: sampleCodex?.usageWindows,
+          }),
+        ]),
         settings: expect.any(Object),
       }),
     );
@@ -81,14 +92,23 @@ describe("app state storage events", () => {
   });
 
   it("parses the HTTP preview fallback without accepting malformed state", () => {
-    expect(
-      readAppStateFromWindowStorageEvent({
-        key: "ai-usage-dashboard.app-state",
-        newValue: JSON.stringify(SAMPLE_APP_STATE),
-      }),
-    ).toEqual(
+    const state = readAppStateFromWindowStorageEvent({
+      key: "ai-usage-dashboard.app-state",
+      newValue: JSON.stringify(SAMPLE_APP_STATE),
+    });
+    const sampleCodex = SAMPLE_APP_STATE.providers.find(
+      (provider) => provider.providerId === "codex-personal-page",
+    );
+
+    expect(state).toEqual(
       expect.objectContaining({
-        providers: SAMPLE_APP_STATE.providers,
+        providers: expect.arrayContaining([
+          expect.objectContaining({
+            providerId: "codex-personal-page",
+            remaining: sampleCodex?.remaining,
+            usageWindows: sampleCodex?.usageWindows,
+          }),
+        ]),
         settings: expect.any(Object),
       }),
     );

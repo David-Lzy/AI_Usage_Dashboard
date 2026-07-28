@@ -191,6 +191,9 @@ Display eligibility plus dashboard display visibility determines whether a provi
 - Popup and Settings first-run surfaces should show a focused host-access action
   when browser host permission is the blocker, and should not render stale
   quota progress as if the source were readable.
+- Missing first-run, legacy, imported, or newly added provider records must be
+  completed from the empty production baseline. Development and store-screenshot
+  sample values must never seed a real provider snapshot or toolbar badge.
 - Missing API credentials should point users to the matching API credential card instead of pretending the source is connected.
 
 ### Provider Display

@@ -231,7 +231,48 @@ describe("storage normalization", () => {
     });
   });
 
-  it("fills missing provider setting fields from the sample schema", async () => {
+  it("fills a missing provider from the empty production baseline", async () => {
+    const partialState = structuredClone(SAMPLE_APP_STATE);
+    partialState.providers = partialState.providers.filter(
+      (provider) => provider.providerId !== "codex-personal-page",
+    );
+    partialState.providerSettings = partialState.providerSettings.filter(
+      (provider) => provider.id !== "codex-personal-page",
+    );
+
+    const state = await writeAppState(partialState);
+    const codexProvider = state.providers.find(
+      (provider) => provider.providerId === "codex-personal-page",
+    );
+    const codexSetting = state.providerSettings.find(
+      (provider) => provider.id === "codex-personal-page",
+    );
+    const codexBadgeCandidates = buildActionBadgeQuotaCandidates(state).filter(
+      (candidate) => candidate.providerId === "codex-personal-page",
+    );
+
+    expect(codexProvider).toMatchObject({
+      used: null,
+      remaining: null,
+      total: null,
+      usageWindows: [],
+      usageBalances: [],
+      usageFacts: [],
+      usageSummary: null,
+      lastSyncLabel: "Not synced yet",
+    });
+    expect(codexProvider).not.toHaveProperty("usageHistory");
+    expect(codexSetting).toMatchObject({
+      status: "missing",
+      pageBinding: {
+        status: "unbound",
+        tabId: null,
+      },
+    });
+    expect(codexBadgeCandidates).toEqual([]);
+  });
+
+  it("fills missing provider setting fields from the production schema", async () => {
     await writeAppState(createLegacyState());
 
     const state = await readAppState();

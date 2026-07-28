@@ -14,7 +14,6 @@ import {
 import {
   APP_STATE_STORAGE_KEY,
   DEFAULT_APP_STATE,
-  SAMPLE_APP_STATE,
 } from "./constants";
 import { normalizePageBinding } from "./page-bindings";
 import { normalizeSourcePreference } from "./provider-sources";
@@ -125,7 +124,7 @@ type StoredProviderSetting = Partial<ProviderSetting> & {
 };
 
 function readStoredDisplayEnabled(
-  sampleProviderSetting: ProviderSetting,
+  baselineProviderSetting: ProviderSetting,
   storedProviderSetting?: StoredProviderSetting,
 ): boolean {
   if (typeof storedProviderSetting?.displayEnabled === "boolean") {
@@ -136,40 +135,43 @@ function readStoredDisplayEnabled(
     return storedProviderSetting.enabled;
   }
 
-  return sampleProviderSetting.displayEnabled;
+  return baselineProviderSetting.displayEnabled;
 }
 
 function normalizeProviderSetting(
-  sampleProviderSetting: ProviderSetting,
+  baselineProviderSetting: ProviderSetting,
   storedProviderSetting?: StoredProviderSetting,
 ): ProviderSetting {
   return {
-    id: sampleProviderSetting.id,
-    brandId: sampleProviderSetting.brandId,
-    label: sampleProviderSetting.label,
-    displayEnabled: readStoredDisplayEnabled(sampleProviderSetting, storedProviderSetting),
+    id: baselineProviderSetting.id,
+    brandId: baselineProviderSetting.brandId,
+    label: baselineProviderSetting.label,
+    displayEnabled: readStoredDisplayEnabled(
+      baselineProviderSetting,
+      storedProviderSetting,
+    ),
     status: normalizePermissionStatus(
       storedProviderSetting?.status,
-      sampleProviderSetting.status,
+      baselineProviderSetting.status,
     ),
     credentialStatus: normalizeCredentialStatus(
       storedProviderSetting?.credentialStatus,
-      sampleProviderSetting.credentialStatus,
+      baselineProviderSetting.credentialStatus,
     ),
     pageBinding: normalizePageBinding(
       storedProviderSetting?.pageBinding,
-      sampleProviderSetting.pageBinding.mode,
+      baselineProviderSetting.pageBinding.mode,
     ),
     sourcePreference: normalizeSourcePreference(
-      sampleProviderSetting.id,
+      baselineProviderSetting.id,
       storedProviderSetting?.sourcePreference ??
-        sampleProviderSetting.sourcePreference,
+        baselineProviderSetting.sourcePreference,
     ),
-    sourceKind: sampleProviderSetting.sourceKind,
-    connectionMode: sampleProviderSetting.connectionMode,
-    hostsLabel: sampleProviderSetting.hostsLabel,
-    hostOrigins: sampleProviderSetting.hostOrigins,
-    description: sampleProviderSetting.description,
+    sourceKind: baselineProviderSetting.sourceKind,
+    connectionMode: baselineProviderSetting.connectionMode,
+    hostsLabel: baselineProviderSetting.hostsLabel,
+    hostOrigins: baselineProviderSetting.hostOrigins,
+    description: baselineProviderSetting.description,
   };
 }
 
@@ -178,7 +180,7 @@ function normalizeStoredProviderKey(value: unknown): ProviderId | null {
     return null;
   }
 
-  if (SAMPLE_APP_STATE.providerSettings.some((provider) => provider.id === value)) {
+  if (DEFAULT_APP_STATE.providerSettings.some((provider) => provider.id === value)) {
     return value as ProviderId;
   }
 
@@ -199,11 +201,11 @@ function getLegacyApiProviderId(value: unknown): ProviderId | null {
 }
 
 export function normalizeAppState(state: AppState): AppState {
-  const sampleProviders = new Map(
-    SAMPLE_APP_STATE.providers.map((provider) => [provider.providerId, provider]),
+  const baselineProviders = new Map(
+    DEFAULT_APP_STATE.providers.map((provider) => [provider.providerId, provider]),
   );
-  const sampleProviderSettings = new Map(
-    SAMPLE_APP_STATE.providerSettings.map((provider) => [provider.id, provider]),
+  const baselineProviderSettings = new Map(
+    DEFAULT_APP_STATE.providerSettings.map((provider) => [provider.id, provider]),
   );
   const storedProviders = new Map(
     state.providers.flatMap((provider) => {
@@ -225,14 +227,17 @@ export function normalizeAppState(state: AppState): AppState {
     }),
   );
 
-  const providers = SAMPLE_APP_STATE.providers.map((sampleProvider) => {
-    const storedProvider = storedProviders.get(sampleProvider.providerId);
+  const providers = DEFAULT_APP_STATE.providers.map((baselineProvider) => {
+    const storedProvider = storedProviders.get(baselineProvider.providerId);
     const provider = {
-      ...sampleProvider,
+      ...baselineProvider,
       ...storedProvider,
-      providerId: sampleProvider.providerId,
-      providerLabel: sampleProvider.providerLabel,
+      providerId: baselineProvider.providerId,
+      providerLabel: baselineProvider.providerLabel,
     };
+    if (storedProvider && !("warningDiagnostic" in storedProvider)) {
+      provider.warningDiagnostic = null;
+    }
     const usageHistory = normalizeProviderUsageHistory(provider.usageHistory);
     const cursorUsage = normalizeCursorUsageBilling(provider.cursorUsage);
     const apiGatewayMetering = normalizeApiGatewayMeteringSnapshot(
@@ -253,16 +258,19 @@ export function normalizeAppState(state: AppState): AppState {
     };
   });
 
-  const providerSettings = SAMPLE_APP_STATE.providerSettings.map(
-    (sampleProviderSetting) => {
+  const providerSettings = DEFAULT_APP_STATE.providerSettings.map(
+    (baselineProviderSetting) => {
       const storedProviderSetting = storedProviderSettings.get(
-        sampleProviderSetting.id,
+        baselineProviderSetting.id,
       );
 
-      return normalizeProviderSetting(sampleProviderSetting, storedProviderSetting);
+      return normalizeProviderSetting(
+        baselineProviderSetting,
+        storedProviderSetting,
+      );
     },
   );
-  const knownProviderIds = SAMPLE_APP_STATE.providerSettings.map(
+  const knownProviderIds = DEFAULT_APP_STATE.providerSettings.map(
     (provider) => provider.id,
   );
   const knownProgressItemIdsByProvider =
@@ -270,12 +278,12 @@ export function normalizeAppState(state: AppState): AppState {
   const extraProviders = state.providers.filter(
     (provider) =>
       isProviderId(provider.providerId) &&
-      !sampleProviders.has(provider.providerId),
+      !baselineProviders.has(provider.providerId),
   );
   const extraProviderSettings = state.providerSettings
     .filter(
       (provider) =>
-        isProviderId(provider.id) && !sampleProviderSettings.has(provider.id),
+        isProviderId(provider.id) && !baselineProviderSettings.has(provider.id),
     )
     .map((provider) =>
       normalizeProviderSetting({
@@ -327,7 +335,7 @@ export function normalizeAppState(state: AppState): AppState {
     customSources,
     customSourceStates,
     settings: {
-      ...SAMPLE_APP_STATE.settings,
+      ...DEFAULT_APP_STATE.settings,
       ...state.settings,
       syncIntervalMinutes: normalizeSyncIntervalMinutes(
         state.settings?.syncIntervalMinutes,
