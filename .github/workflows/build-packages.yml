@@ -181,9 +181,9 @@ jobs:
           ### Notes
 
           - Chrome Web Store remains the recommended install path for everyday Chrome users.
-          - Adds a maintained Material UI design contract and automated checks for layout, accessibility, responsive behavior, and visual consistency.
-          - Expands multilingual visual QA, mixed-direction technical-text handling, and compact long-label resilience across core extension surfaces.
-          - Applies independently verified UI review fixes while preserving conservative Provider source and privacy boundaries.
+          - Prevents bundled sample quota values from appearing in a new user profile and preserves Provider visibility while switching configured accounts.
+          - Adds clearer Sub2API connection-test feedback and configurable multi-deployment presentation without exposing stored credentials.
+          - Polishes the compact Material deployment selector and keeps its menu inside narrow popup viewports.
           NOTES
 
       - name: Prepare release assets
