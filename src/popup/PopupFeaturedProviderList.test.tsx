@@ -55,8 +55,10 @@ describe("PopupFeaturedProviderList", () => {
     );
 
     expect(html).toContain("api-gateway-metering-deployment--select");
-    expect(html).toContain('value="account_alpha123"');
-    expect(html).toContain('value="account_beta1234"');
+    expect(html).toContain('role="combobox"');
+    expect(html).toContain('aria-haspopup="listbox"');
+    expect(html).toContain('aria-label="Usage summary: Alpha"');
+    expect(html).not.toContain("<select");
     expect(html.match(/data-popup-hide-provider="sub2api-api-key"/g)).toHaveLength(
       1,
     );

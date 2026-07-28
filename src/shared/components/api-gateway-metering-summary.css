@@ -177,9 +177,24 @@
   position: relative;
   display: inline-flex;
   min-width: 0;
+}
+
+.api-gateway-metering-deployment__button {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 14px;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  min-width: 0;
+  min-height: 26px;
+  padding: 0 8px 0 9px;
   border: 1px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 58%, transparent);
   border-radius: var(--md-sys-shape-corner-full);
+  color: inherit;
   background: transparent;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
 }
 
 .api-gateway-metering-deployment--cycle {
@@ -222,47 +237,116 @@
   transform: rotate(135deg);
 }
 
-.api-gateway-metering-deployment--select::after {
-  position: absolute;
-  inset-inline-end: 9px;
-  inset-block-start: 50%;
-  width: 5px;
-  height: 5px;
+.api-gateway-metering-deployment__value {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.api-gateway-metering-deployment__menu-icon {
+  justify-self: center;
+  width: 6px;
+  height: 6px;
   border-inline-end: 1.5px solid currentColor;
   border-block-end: 1.5px solid currentColor;
-  content: "";
-  pointer-events: none;
-  transform: translateY(-70%) rotate(45deg);
+  color: var(--md-sys-color-on-surface-variant);
+  transform: translateY(-1px) rotate(45deg);
 }
 
-.api-gateway-metering-deployment select {
-  min-width: 0;
-  max-width: 100%;
-  min-height: 26px;
-  padding: 0 26px 0 9px;
-  border: 0;
-  color: inherit;
-  background: transparent;
-  font: inherit;
-  text-overflow: ellipsis;
-  cursor: pointer;
-  appearance: none;
+.api-gateway-metering-deployment__button[data-open="true"]
+  .api-gateway-metering-deployment__menu-icon {
+  color: var(--md-sys-color-primary);
+  transform: translateY(2px) rotate(225deg);
 }
 
-[dir="rtl"] .api-gateway-metering-deployment select {
-  padding: 0 9px 0 26px;
-}
-
-.api-gateway-metering-deployment--select:hover,
-.api-gateway-metering-deployment--select:focus-within,
+.api-gateway-metering-deployment__button:hover,
+.api-gateway-metering-deployment__button:active,
+.api-gateway-metering-deployment__button[data-open="true"],
 .api-gateway-metering-deployment--cycle:hover,
 .api-gateway-metering-deployment--cycle:focus-visible {
   background: var(--app-state-layer-neutral-hover);
 }
 
-.api-gateway-metering-deployment select:focus-visible {
+.api-gateway-metering-deployment__button:focus-visible,
+.api-gateway-metering-deployment__button[data-open="true"] {
+  border-color: var(--md-sys-color-primary);
   outline: 2px solid var(--md-sys-color-primary);
   outline-offset: 2px;
+}
+
+.api-gateway-metering-deployment__menu {
+  position: fixed;
+  z-index: 1000;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  padding: 4px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-medium);
+  color: var(--md-sys-color-on-surface);
+  background: var(--md-sys-color-surface-container);
+  box-shadow: var(--app-elevation-2);
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  font-weight: var(--md-sys-typescale-body-medium-weight);
+  line-height: var(--md-sys-typescale-body-medium-line-height);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.api-gateway-metering-deployment__option {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 10px;
+  border-radius: var(--md-sys-shape-corner-small);
+  cursor: pointer;
+}
+
+.api-gateway-metering-deployment__option > .technical-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.api-gateway-metering-deployment__option[data-active="true"] {
+  color: var(--md-sys-color-primary);
+  background: var(--app-state-layer-primary-hover);
+}
+
+.api-gateway-metering-deployment__option[data-selected="true"] {
+  color: var(--md-sys-color-on-secondary-container);
+  background: var(--md-sys-color-secondary-container);
+}
+
+.api-gateway-metering-deployment__option-check {
+  position: relative;
+  display: block;
+  width: 16px;
+  aspect-ratio: 1;
+  color: currentColor;
+  opacity: 0;
+}
+
+.api-gateway-metering-deployment__option[data-selected="true"]
+  .api-gateway-metering-deployment__option-check {
+  opacity: 1;
+}
+
+.api-gateway-metering-deployment__option[data-selected="true"]
+  .api-gateway-metering-deployment__option-check::before {
+  position: absolute;
+  inset-block-start: 1px;
+  inset-inline-start: 4px;
+  width: 6px;
+  height: 10px;
+  border-inline-end: 2px solid currentColor;
+  border-block-end: 2px solid currentColor;
+  content: "";
+  transform: rotate(45deg);
 }
 
 .api-gateway-metering-progress {

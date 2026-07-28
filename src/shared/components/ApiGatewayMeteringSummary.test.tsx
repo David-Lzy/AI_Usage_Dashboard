@@ -210,8 +210,16 @@ describe("ApiGatewayMeteringSummary", () => {
     expect(multipleHtml).toContain(
       "api-gateway-metering-deployment--select",
     );
-    expect(multipleHtml).toContain('<option value="account_backup1234">');
-    expect(multipleHtml).toContain("Backup gateway");
+    expect(multipleHtml).toContain('role="combobox"');
+    expect(multipleHtml).toContain('aria-haspopup="listbox"');
+    expect(multipleHtml).toContain('aria-label="Usage summary: hze"');
+    expect(multipleHtml).not.toContain("<select");
+    expect(css).toContain(".api-gateway-metering-deployment__menu {");
+    expect(css).toContain("background: var(--md-sys-color-surface-container);");
+    expect(css).toContain("box-shadow: var(--app-elevation-2);");
+    expect(css).toContain(
+      '.api-gateway-metering-deployment__option[data-selected="true"]',
+    );
   });
 
   it("unmounts hidden modules and preserves account-local module order", () => {
