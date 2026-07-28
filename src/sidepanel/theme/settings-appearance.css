@@ -323,6 +323,53 @@
   grid-column: 1 / -1;
 }
 
+.sub2api-deployment-settings__test-feedback {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-1);
+  min-width: 0;
+  color: var(--md-sys-color-on-surface-variant);
+  font-family: var(--md-sys-typescale-label-medium-font);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: var(--md-sys-typescale-label-medium-weight);
+}
+
+.sub2api-deployment-settings__test-feedback--success {
+  color: var(--md-sys-color-primary);
+}
+
+.sub2api-deployment-settings__test-feedback--failure,
+.sub2api-deployment-settings__test-feedback--timeout {
+  color: var(--md-sys-color-error);
+}
+
+.sub2api-deployment-settings__test-feedback-copy {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.sub2api-deployment-settings__test-progress {
+  block-size: 4px;
+  overflow: hidden;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--md-sys-color-surface-container-highest);
+}
+
+.sub2api-deployment-settings__test-progress > span {
+  display: block;
+  block-size: 100%;
+  border-radius: inherit;
+  background: currentColor;
+  transition: inline-size 180ms linear;
+}
+
+:root[data-motion-resolved="reduced"]
+  .sub2api-deployment-settings__test-progress
+  > span {
+  transition: none;
+}
+
 .sub2api-deployment-settings__test,
 .credential-test-action {
   min-height: var(--app-control-height-large);
@@ -464,6 +511,10 @@
   }
 
   .sub2api-deployment-settings__api-key .form-field__supporting-text {
+    grid-column: auto;
+  }
+
+  .sub2api-deployment-settings__test-feedback {
     grid-column: auto;
   }
 

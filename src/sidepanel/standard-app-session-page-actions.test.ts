@@ -8,11 +8,11 @@ import { createStandardAppSessionPageActions } from "./standard-app-session-page
 function createActionHarness(
   overrides: Partial<Parameters<typeof createStandardAppSessionPageActions>[0]> = {},
 ) {
+  const appState = structuredClone(SAMPLE_APP_STATE);
   const applyMessage = vi.fn(
-    async (_message: AppMessage, _successToast?: AppToast) => true,
+    async (_message: AppMessage, _successToast?: AppToast) => appState,
   );
   const setToast = vi.fn();
-  const appState = structuredClone(SAMPLE_APP_STATE);
   const actions = createStandardAppSessionPageActions({
     appState,
     applyMessage,

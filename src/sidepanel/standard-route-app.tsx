@@ -43,7 +43,6 @@ import {
   getVisibleProviders,
 } from "./view-models";
 import { getVisibleCustomSources } from "../shared/custom-source-view-models";
-import { SUB2API_PROVIDER_ID } from "../shared/sub2api-deployments";
 import { SETTINGS_SECTION_IDS } from "./settings-section-ids";
 
 const SettingsPage = lazy(() =>
@@ -267,6 +266,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
     handleSavePreferences,
     handleSaveProviderAdminApiKey,
     handleSaveSub2ApiDeployment,
+    handleTestSub2ApiDeployment,
     handleSelectProviderAccount,
     handleSetSub2ApiMeteringDisplayPreferences,
     handleSetSourcePreference,
@@ -541,9 +541,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
             onToggleProvider={handleToggleProvider}
             onSelectProviderAccount={handleSelectProviderAccount}
             onSaveSub2ApiDeployment={handleSaveSub2ApiDeployment}
-            onTestSub2ApiDeployment={() =>
-              handleRefresh(SUB2API_PROVIDER_ID)
-            }
+            onTestSub2ApiDeployment={handleTestSub2ApiDeployment}
             onDisconnectSub2ApiDeployment={
               handleDisconnectSub2ApiDeployment
             }

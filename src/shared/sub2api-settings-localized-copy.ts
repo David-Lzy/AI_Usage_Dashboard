@@ -43,6 +43,13 @@ export type Sub2ApiSettingsLocalizedCopy = {
   >;
 };
 
+export type Sub2ApiConnectionTestLocalizedCopy = {
+  testing: string;
+  success: string;
+  failure: string;
+  timeout: string;
+};
+
 const ENGLISH_COPY: Sub2ApiSettingsLocalizedCopy = {
   eyebrow: "API gateway deployments",
   title: "Sub2API connections",
@@ -750,8 +757,104 @@ const COPY_OVERRIDES: Record<
   },
 };
 
+const CONNECTION_TEST_COPY: Record<
+  ResolvedAppLocale,
+  Sub2ApiConnectionTestLocalizedCopy
+> = {
+  en: {
+    testing: "Testing connection",
+    success: "Connection verified",
+    failure: "Connection test failed",
+    timeout: "Connection test timed out",
+  },
+  "zh-CN": {
+    testing: "正在测试连接",
+    success: "连接验证成功",
+    failure: "连接测试失败",
+    timeout: "连接测试超时",
+  },
+  "zh-TW": {
+    testing: "正在測試連線",
+    success: "連線驗證成功",
+    failure: "連線測試失敗",
+    timeout: "連線測試逾時",
+  },
+  ja: {
+    testing: "接続をテスト中",
+    success: "接続を確認しました",
+    failure: "接続テストに失敗しました",
+    timeout: "接続テストがタイムアウトしました",
+  },
+  ko: {
+    testing: "연결 테스트 중",
+    success: "연결이 확인되었습니다",
+    failure: "연결 테스트 실패",
+    timeout: "연결 테스트 시간 초과",
+  },
+  "es-419": {
+    testing: "Probando conexión",
+    success: "Conexión verificada",
+    failure: "Falló la prueba de conexión",
+    timeout: "La prueba de conexión agotó el tiempo",
+  },
+  "pt-BR": {
+    testing: "Testando conexão",
+    success: "Conexão verificada",
+    failure: "Falha no teste de conexão",
+    timeout: "O teste de conexão expirou",
+  },
+  fr: {
+    testing: "Test de la connexion",
+    success: "Connexion vérifiée",
+    failure: "Échec du test de connexion",
+    timeout: "Délai du test de connexion dépassé",
+  },
+  de: {
+    testing: "Verbindung wird getestet",
+    success: "Verbindung bestätigt",
+    failure: "Verbindungstest fehlgeschlagen",
+    timeout: "Zeitüberschreitung beim Verbindungstest",
+  },
+  it: {
+    testing: "Verifica della connessione",
+    success: "Connessione verificata",
+    failure: "Test di connessione non riuscito",
+    timeout: "Test di connessione scaduto",
+  },
+  ru: {
+    testing: "Проверка подключения",
+    success: "Подключение подтверждено",
+    failure: "Проверка подключения не удалась",
+    timeout: "Время проверки подключения истекло",
+  },
+  ar: {
+    testing: "جارٍ اختبار الاتصال",
+    success: "تم التحقق من الاتصال",
+    failure: "فشل اختبار الاتصال",
+    timeout: "انتهت مهلة اختبار الاتصال",
+  },
+  hi: {
+    testing: "कनेक्शन की जाँच हो रही है",
+    success: "कनेक्शन सत्यापित हुआ",
+    failure: "कनेक्शन जाँच विफल हुई",
+    timeout: "कनेक्शन जाँच का समय समाप्त हुआ",
+  },
+  id: {
+    testing: "Menguji koneksi",
+    success: "Koneksi terverifikasi",
+    failure: "Pengujian koneksi gagal",
+    timeout: "Pengujian koneksi kehabisan waktu",
+  },
+};
+
 export function buildSub2ApiSettingsLocalizedCopy(
   locale: ResolvedAppLocale,
 ): Sub2ApiSettingsLocalizedCopy {
   return locale === "en" ? ENGLISH_COPY : COPY_OVERRIDES[locale];
+}
+
+export function getSub2ApiConnectionTestLocalizedCopy(
+  locale: ResolvedAppLocale,
+): Sub2ApiConnectionTestLocalizedCopy {
+  return CONNECTION_TEST_COPY[locale];
 }

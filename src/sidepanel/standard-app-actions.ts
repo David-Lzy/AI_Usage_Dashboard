@@ -27,12 +27,15 @@ import { createStandardAppSettingsActions } from "./standard-app-settings-action
 import { createStandardAppSessionPageActions } from "./standard-app-session-page-actions";
 import type { AppToast } from "./use-standard-app-runtime";
 import type { CustomSourceSetting } from "../shared/custom-sources";
-import type { Sub2ApiDeploymentDraft } from "../shared/sub2api-deployments";
+import {
+  SUB2API_PROVIDER_ID,
+  type Sub2ApiDeploymentDraft,
+} from "../shared/sub2api-deployments";
 
 type ApplyAppMessage = (
   message: AppMessage,
   successToast?: AppToast,
-) => Promise<boolean>;
+) => Promise<AppState | null>;
 
 type StandardAppActionsOptions = {
   appState: AppState | null;
@@ -60,64 +63,75 @@ export function createStandardAppActions({
   runtimeI18n,
   setToast,
 }: StandardAppActionsOptions) {
-  function handleRefresh(providerId?: ProviderId) {
+  async function handleRefresh(
+    providerId?: ProviderId,
+    showSuccessToast = true,
+  ): Promise<AppState | null> {
     if (!appState) {
-      return;
+      return null;
     }
 
-    void (async () => {
-      const hostAccessCandidate = findHostAccessRefreshCandidate(
-        appState,
-        providerId,
-      );
-      let refreshProviderId = providerId;
+    const hostAccessCandidate = findHostAccessRefreshCandidate(
+      appState,
+      providerId,
+    );
+    let refreshProviderId = providerId;
 
-      if (hostAccessCandidate && hasDirectPermissionControl()) {
-        try {
-          const granted =
-            await requestHostAccessForProvider(hostAccessCandidate);
+    if (hostAccessCandidate && hasDirectPermissionControl()) {
+      try {
+        const granted = await requestHostAccessForProvider(hostAccessCandidate);
 
-          if (!granted) {
-            setToast({
-              tone: "error",
-              title: `${getProviderDefinition(hostAccessCandidate.id).shortLabel} access denied`,
-              message:
-                "The permission request was dismissed or denied, so refresh cannot read the provider page yet.",
-            });
-            return;
-          }
-
-          // Make the permission grant useful immediately. A global refresh can
-          // still run on the next scheduled/manual cycle, while this bounded
-          // request opens and captures the newly authorized provider first.
-          refreshProviderId = hostAccessCandidate.id;
-        } catch (error) {
+        if (!granted) {
           setToast({
             tone: "error",
-            title: `${hostAccessCandidate.label} access failed`,
+            title: `${getProviderDefinition(hostAccessCandidate.id).shortLabel} access denied`,
             message:
-              error instanceof Error
-                ? error.message
-                : "The browser rejected the host access request.",
+              "The permission request was dismissed or denied, so refresh cannot read the provider page yet.",
           });
-          return;
+          return null;
         }
-      }
 
-      const providerLabel = refreshProviderId
-        ? getProviderLabel(appState.providerSettings, refreshProviderId)
-        : "All providers";
-
-      await applyMessage(
-        { type: "app:request-refresh", providerId: refreshProviderId },
-        {
-          tone: "success",
-          title: `${providerLabel} refreshed`,
+        // Make the permission grant useful immediately. A global refresh can
+        // still run on the next scheduled/manual cycle, while this bounded
+        // request opens and captures the newly authorized provider first.
+        refreshProviderId = hostAccessCandidate.id;
+      } catch (error) {
+        setToast({
+          tone: "error",
+          title: `${hostAccessCandidate.label} access failed`,
           message:
-            "The provider state was refreshed through the shared sync flow.",
-        },
-      );
-    })();
+            error instanceof Error
+              ? error.message
+              : "The browser rejected the host access request.",
+        });
+        return null;
+      }
+    }
+
+    const providerLabel = refreshProviderId
+      ? getProviderLabel(appState.providerSettings, refreshProviderId)
+      : "All providers";
+
+    return applyMessage(
+      { type: "app:request-refresh", providerId: refreshProviderId },
+      showSuccessToast
+        ? {
+            tone: "success",
+            title: `${providerLabel} refreshed`,
+            message:
+              "The provider state was refreshed through the shared sync flow.",
+          }
+        : undefined,
+    );
+  }
+
+  async function handleTestSub2ApiDeployment(): Promise<boolean> {
+    const refreshedState = await handleRefresh(SUB2API_PROVIDER_ID, false);
+    const snapshot = refreshedState?.providers.find(
+      ({ providerId }) => providerId === SUB2API_PROVIDER_ID,
+    );
+
+    return snapshot?.syncStatus === "ok";
   }
 
   function handleOpenCurrentRouteInFullPage() {
@@ -420,6 +434,7 @@ export function createStandardAppActions({
     handleSaveProviderAdminApiKey:
       settingsActions.handleSaveProviderAdminApiKey,
     handleSaveSub2ApiDeployment,
+    handleTestSub2ApiDeployment,
     handleSelectProviderAccount,
     handleSetSub2ApiMeteringDisplayPreferences,
     handleSetSourcePreference: settingsActions.handleSetSourcePreference,

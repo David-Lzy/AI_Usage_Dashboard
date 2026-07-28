@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
 
 import { SUPPORTED_APP_LOCALES } from "./i18n";
-import { buildSub2ApiSettingsLocalizedCopy } from "./sub2api-settings-localized-copy";
+import {
+  buildSub2ApiSettingsLocalizedCopy,
+  getSub2ApiConnectionTestLocalizedCopy,
+} from "./sub2api-settings-localized-copy";
 
 describe("Sub2API settings localized copy", () => {
   it("provides complete copy for every supported locale", () => {
@@ -15,6 +18,15 @@ describe("Sub2API settings localized copy", () => {
         } else {
           expect(String(value).trim(), `${locale}.${key} is empty`).not.toBe("");
         }
+      }
+    }
+  });
+
+  it("provides complete connection-test feedback for every supported locale", () => {
+    for (const locale of SUPPORTED_APP_LOCALES) {
+      const copy = getSub2ApiConnectionTestLocalizedCopy(locale);
+      for (const [key, value] of Object.entries(copy)) {
+        expect(value.trim(), `${locale}.${key} is empty`).not.toBe("");
       }
     }
   });

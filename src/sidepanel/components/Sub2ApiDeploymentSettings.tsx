@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import type {
   ProviderAccountId,
@@ -16,7 +16,10 @@ import {
   SUB2API_PROVIDER_ID,
   type Sub2ApiDeploymentDraft,
 } from "../../shared/sub2api-deployments";
-import { buildSub2ApiSettingsLocalizedCopy } from "../../shared/sub2api-settings-localized-copy";
+import {
+  buildSub2ApiSettingsLocalizedCopy,
+  getSub2ApiConnectionTestLocalizedCopy,
+} from "../../shared/sub2api-settings-localized-copy";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 import { MaterialSelect } from "./MaterialSelect";
 import { TechnicalText } from "../../shared/components/TechnicalText";
@@ -27,13 +30,23 @@ type Sub2ApiDeploymentSettingsProps = {
   snapshot: ProviderSnapshot | null;
   onSelectAccount: (accountId: ProviderAccountId) => void;
   onSave: (draft: Sub2ApiDeploymentDraft, testConnection: boolean) => void;
-  onTest: () => void;
+  onTest: () => Promise<boolean>;
   onDisconnect: (
     accountId: ProviderAccountId,
     retainCachedSummary: boolean,
   ) => void;
   onRemove: (accountId: ProviderAccountId) => void;
 };
+
+type ConnectionTestStatus =
+  | "idle"
+  | "testing"
+  | "success"
+  | "failure"
+  | "timeout";
+
+const CONNECTION_TEST_TIMEOUT_MS = 20_000;
+const CONNECTION_TEST_TICK_MS = 250;
 
 function formatLastSuccess(
   value: string | null | undefined,
@@ -63,6 +76,7 @@ export function Sub2ApiDeploymentSettings({
   onRemove,
 }: Sub2ApiDeploymentSettingsProps) {
   const copy = buildSub2ApiSettingsLocalizedCopy(locale);
+  const connectionTestCopy = getSub2ApiConnectionTestLocalizedCopy(locale);
   const testConnectionLabel = getTestConnectionLabel(locale);
   const collection = providerAccounts?.[SUB2API_PROVIDER_ID];
   const activeAccountId =
@@ -81,6 +95,29 @@ export function Sub2ApiDeploymentSettings({
   const [insecureTransportAcknowledged, setInsecureTransportAcknowledged] =
     useState(activeConnection?.insecureTransportAcknowledged ?? false);
   const [retainCachedSummary, setRetainCachedSummary] = useState(true);
+  const [connectionTestStatus, setConnectionTestStatus] =
+    useState<ConnectionTestStatus>("idle");
+  const [connectionTestRemainingMs, setConnectionTestRemainingMs] = useState(
+    CONNECTION_TEST_TIMEOUT_MS,
+  );
+  const connectionTestRunIdRef = useRef(0);
+  const connectionTestIntervalRef = useRef<ReturnType<
+    typeof globalThis.setInterval
+  > | null>(null);
+  const connectionTestTimeoutRef = useRef<ReturnType<
+    typeof globalThis.setTimeout
+  > | null>(null);
+
+  function clearConnectionTestTimers() {
+    if (connectionTestIntervalRef.current !== null) {
+      globalThis.clearInterval(connectionTestIntervalRef.current);
+      connectionTestIntervalRef.current = null;
+    }
+    if (connectionTestTimeoutRef.current !== null) {
+      globalThis.clearTimeout(connectionTestTimeoutRef.current);
+      connectionTestTimeoutRef.current = null;
+    }
+  }
 
   useEffect(() => {
     setIsAdding(false);
@@ -98,6 +135,28 @@ export function Sub2ApiDeploymentSettings({
     activeConnection?.displayLabel,
     activeConnection?.insecureTransportAcknowledged,
     activeMetadata?.label,
+  ]);
+
+  useEffect(
+    () => () => {
+      connectionTestRunIdRef.current += 1;
+      clearConnectionTestTimers();
+    },
+    [],
+  );
+
+  useEffect(() => {
+    connectionTestRunIdRef.current += 1;
+    clearConnectionTestTimers();
+    setConnectionTestStatus("idle");
+    setConnectionTestRemainingMs(CONNECTION_TEST_TIMEOUT_MS);
+  }, [
+    activeAccountId,
+    apiKey,
+    baseUrl,
+    displayLabel,
+    insecureTransportAcknowledged,
+    isAdding,
   ]);
 
   const requiresInsecureAcknowledgement =
@@ -150,6 +209,67 @@ export function Sub2ApiDeploymentSettings({
     setApiKey("");
   }
 
+  async function testConnection() {
+    if (connectionTestStatus === "testing") {
+      return;
+    }
+
+    clearConnectionTestTimers();
+    const runId = connectionTestRunIdRef.current + 1;
+    connectionTestRunIdRef.current = runId;
+    const startedAt = Date.now();
+    setConnectionTestStatus("testing");
+    setConnectionTestRemainingMs(CONNECTION_TEST_TIMEOUT_MS);
+
+    connectionTestIntervalRef.current = globalThis.setInterval(() => {
+      const remainingMs = Math.max(
+        0,
+        CONNECTION_TEST_TIMEOUT_MS - (Date.now() - startedAt),
+      );
+      setConnectionTestRemainingMs(remainingMs);
+    }, CONNECTION_TEST_TICK_MS);
+
+    const timeout = new Promise<ConnectionTestStatus>((resolve) => {
+      connectionTestTimeoutRef.current = globalThis.setTimeout(
+        () => resolve("timeout"),
+        CONNECTION_TEST_TIMEOUT_MS,
+      );
+    });
+    const result = onTest()
+      .then<ConnectionTestStatus>((ok) => (ok ? "success" : "failure"))
+      .catch((): ConnectionTestStatus => "failure");
+    const outcome = await Promise.race([result, timeout]);
+
+    clearConnectionTestTimers();
+    if (connectionTestRunIdRef.current !== runId) {
+      return;
+    }
+    setConnectionTestRemainingMs(0);
+    setConnectionTestStatus(outcome);
+  }
+
+  const connectionTestProgress =
+    connectionTestStatus === "testing"
+      ? Math.round(
+          ((CONNECTION_TEST_TIMEOUT_MS - connectionTestRemainingMs) /
+            CONNECTION_TEST_TIMEOUT_MS) *
+            100,
+        )
+      : 100;
+  const connectionTestStatusText =
+    connectionTestStatus === "testing"
+      ? `${connectionTestCopy.testing} · ${new Intl.NumberFormat(locale, {
+          style: "unit",
+          unit: "second",
+          unitDisplay: "short",
+          maximumFractionDigits: 0,
+        }).format(Math.max(1, Math.ceil(connectionTestRemainingMs / 1_000)))}`
+      : connectionTestStatus === "success"
+        ? connectionTestCopy.success
+        : connectionTestStatus === "failure"
+          ? connectionTestCopy.failure
+          : connectionTestCopy.timeout;
+
   return (
     <section
       className="sub2api-deployment-settings"
@@ -199,6 +319,7 @@ export function Sub2ApiDeploymentSettings({
                 value: account.id,
                 label: account.label,
               }))}
+              disabled={connectionTestStatus === "testing"}
               onChange={(accountId) => onSelectAccount(accountId)}
             />
           </div>
@@ -267,8 +388,12 @@ export function Sub2ApiDeploymentSettings({
             className="text-button sub2api-deployment-settings__test"
             data-sub2api-action="test"
             type="button"
-            disabled={!activeConnection || hasUnsavedConnectionChanges}
-            onClick={onTest}
+            disabled={
+              !activeConnection ||
+              hasUnsavedConnectionChanges ||
+              connectionTestStatus === "testing"
+            }
+            onClick={() => void testConnection()}
           >
             {testConnectionLabel}
           </button>
@@ -276,6 +401,27 @@ export function Sub2ApiDeploymentSettings({
             <span className="supporting-copy form-field__supporting-text">
               {copy.apiKeyPreserved}
             </span>
+          ) : null}
+          {connectionTestStatus !== "idle" ? (
+            <div
+              className={`sub2api-deployment-settings__test-feedback sub2api-deployment-settings__test-feedback--${connectionTestStatus}`}
+              data-sub2api-test-status={connectionTestStatus}
+              aria-live="polite"
+            >
+              <div className="sub2api-deployment-settings__test-feedback-copy">
+                {connectionTestStatusText}
+              </div>
+              <div
+                className="sub2api-deployment-settings__test-progress"
+                role="progressbar"
+                aria-label={connectionTestStatusText}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={connectionTestProgress}
+              >
+                <span style={{ inlineSize: `${connectionTestProgress}%` }} />
+              </div>
+            </div>
           ) : null}
         </div>
       </div>
@@ -324,6 +470,7 @@ export function Sub2ApiDeploymentSettings({
             className="icon-button icon-button--primary"
             data-sub2api-action="save"
             type="button"
+            disabled={connectionTestStatus === "testing"}
             onClick={submit}
           >
             {copy.save}

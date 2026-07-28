@@ -9,11 +9,11 @@ import { createStandardAppActions } from "./standard-app-actions";
 function createActionHarness(
   overrides: Partial<Parameters<typeof createStandardAppActions>[0]> = {},
 ) {
+  const appState = structuredClone(SAMPLE_APP_STATE);
   const applyMessage = vi.fn(
-    async (_message: AppMessage, _successToast?: AppToast) => true,
+    async (_message: AppMessage, _successToast?: AppToast) => appState,
   );
   const setToast = vi.fn();
-  const appState = structuredClone(SAMPLE_APP_STATE);
   const actions = createStandardAppActions({
     appState,
     applyMessage,
@@ -63,6 +63,28 @@ describe("createStandardAppActions", () => {
         }),
       );
     });
+  });
+
+  it("reports the refreshed Sub2API deployment health without a generic success toast", async () => {
+    const appState = structuredClone(SAMPLE_APP_STATE);
+    const snapshot = appState.providers.find(
+      ({ providerId }) => providerId === "sub2api-api-key",
+    );
+    if (!snapshot) {
+      throw new Error("Missing Sub2API sample snapshot.");
+    }
+    snapshot.syncStatus = "ok";
+    const applyMessage = vi.fn(async () => appState);
+    const { actions } = createActionHarness({ appState, applyMessage });
+
+    await expect(actions.handleTestSub2ApiDeployment()).resolves.toBe(true);
+    expect(applyMessage).toHaveBeenCalledWith(
+      { type: "app:request-refresh", providerId: "sub2api-api-key" },
+      undefined,
+    );
+
+    snapshot.syncStatus = "warning";
+    await expect(actions.handleTestSub2ApiDeployment()).resolves.toBe(false);
   });
 
   it("requests missing host access before refreshing one provider", async () => {

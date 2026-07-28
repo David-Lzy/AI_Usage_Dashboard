@@ -10,11 +10,11 @@ import { createStandardAppSettingsActions } from "./standard-app-settings-action
 function createSettingsActionHarness(
   overrides: Partial<Parameters<typeof createStandardAppSettingsActions>[0]> = {},
 ) {
+  const appState = structuredClone(SAMPLE_APP_STATE);
   const applyMessage = vi.fn(
-    async (_message: AppMessage, _successToast?: AppToast) => true,
+    async (_message: AppMessage, _successToast?: AppToast) => appState,
   );
   const setToast = vi.fn();
-  const appState = structuredClone(SAMPLE_APP_STATE);
   const actions = createStandardAppSettingsActions({
     appState,
     applyMessage,

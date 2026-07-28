@@ -169,7 +169,7 @@ export function useStandardAppRuntime(
   async function applyMessage(
     message: AppMessage,
     successToast?: AppToast,
-  ): Promise<boolean> {
+  ): Promise<AppState | null> {
     const response = await sendAppMessage(message);
 
     if (!response.ok) {
@@ -178,7 +178,7 @@ export function useStandardAppRuntime(
         title: "State update failed",
         message: response.error,
       });
-      return false;
+      return null;
     }
 
     setAppState(response.state);
@@ -186,14 +186,14 @@ export function useStandardAppRuntime(
 
     if (response.notice) {
       setToast(response.notice);
-      return true;
+      return response.state;
     }
 
     if (successToast) {
       setToast(successToast);
     }
 
-    return true;
+    return response.state;
   }
 
   function handleRetryInitialization() {

@@ -29,9 +29,7 @@ function setRuntimeState({
     toast: null,
     isLoading,
     loadError: null,
-    applyMessage: vi.fn(
-      async (_message: AppMessage) => appState !== null,
-    ),
+    applyMessage: vi.fn(async (_message: AppMessage) => appState),
     handleRetryInitialization: vi.fn(),
     setToast: vi.fn(),
   });

@@ -30,7 +30,7 @@ import type { AppToast } from "./use-standard-app-runtime";
 type ApplyAppMessage = (
   message: AppMessage,
   successToast?: AppToast,
-) => Promise<boolean>;
+) => Promise<AppState | null>;
 
 type StandardAppSessionPageActionsOptions = {
   appState: AppState | null;

@@ -42,7 +42,7 @@ describe("Sub2ApiDeploymentSettings", () => {
         snapshot={getSub2ApiSnapshot()}
         onSelectAccount={() => {}}
         onSave={() => {}}
-        onTest={() => {}}
+        onTest={async () => true}
         onDisconnect={() => {}}
         onRemove={() => {}}
       />,
@@ -76,7 +76,7 @@ describe("Sub2ApiDeploymentSettings", () => {
         snapshot={null}
         onSelectAccount={() => {}}
         onSave={() => {}}
-        onTest={() => {}}
+        onTest={async () => true}
         onDisconnect={() => {}}
         onRemove={() => {}}
       />,
@@ -108,7 +108,7 @@ describe("Sub2ApiDeploymentSettings", () => {
         snapshot={getSub2ApiSnapshot()}
         onSelectAccount={() => {}}
         onSave={() => {}}
-        onTest={() => {}}
+        onTest={async () => true}
         onDisconnect={() => {}}
         onRemove={() => {}}
       />,
@@ -127,6 +127,12 @@ describe("Sub2ApiDeploymentSettings", () => {
     expect(settingsAppearanceCss).toContain(".credential-secret-row");
     expect(settingsAppearanceCss).toContain(
       "[data-stored-credential-placeholder]::placeholder",
+    );
+    expect(settingsAppearanceCss).toContain(
+      ".sub2api-deployment-settings__test-progress",
+    );
+    expect(settingsAppearanceCss).toContain(
+      ':root[data-motion-resolved="reduced"]',
     );
     expect(settingsAppearanceCss).toContain(
       ".api-gateway-module-preferences__surface-grid",
