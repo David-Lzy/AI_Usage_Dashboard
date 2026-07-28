@@ -164,16 +164,16 @@ In short, each version tag produces a GitHub Release with Chrome and Firefox pac
 ## Current Release State
 
 - Chrome Web Store listing: published and reachable.
-- Chrome Web Store API status observed on 2026-07-28: manifest version
-  `0.2.0.11` published at 100%.
+- Chrome Web Store API status observed on 2026-07-29: manifest version
+  `0.2.0.12` published at 100%.
 - Current local package version: `0.2.0-rc.13`.
 - Current local Chrome manifest version: `0.2.0.13`.
 - GitHub Release [`v0.2.0-rc.13`](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.0-rc.13)
   provides separately named Chrome and Firefox packages plus
   `SHA256SUMS.txt`.
-- Chrome Web Store API status observed on 2026-07-28: manifest `0.2.0.12`
+- Chrome Web Store API status observed on 2026-07-29: manifest `0.2.0.13`
   uploaded successfully and submitted at 100% with state `PENDING_REVIEW`.
-  The public listing remains on `0.2.0.11` until review completes.
+  The public listing remains on `0.2.0.12` until review completes.
 - Publication status is tracked in the
   [Chrome Web Store milestone](./Doc/Store/Chrome_Web_Store_Publication_Milestone.md).
 

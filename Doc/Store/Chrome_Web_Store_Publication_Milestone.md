@@ -1,6 +1,6 @@
 # Chrome Web Store Publication Milestone
 
-Date: 2026-07-28
+Date: 2026-07-29
 
 Document class:
 
@@ -14,12 +14,14 @@ Freshness model:
 Status note:
 
 - AI Usage Dashboard has a live Chrome Web Store listing
-- Chrome Web Store API status shows manifest version `0.2.0.11` published at 100%
+- Chrome Web Store API status shows manifest version `0.2.0.12` published at 100%
 - source `0.2.0-rc.10` / manifest `0.2.0.10` is available from GitHub with
   browser-specific packages and checksums, but is not submitted to the Store
 - source `0.2.0-rc.11` / manifest `0.2.0.11` is available from GitHub and
   published by the Chrome Web Store at 100%
-- source `0.2.0-rc.12` / manifest `0.2.0.12` is available from GitHub with
+- source `0.2.0-rc.12` / manifest `0.2.0.12` is available from GitHub and
+  published by the Chrome Web Store at 100%
+- source `0.2.0-rc.13` / manifest `0.2.0.13` is available from GitHub with
   browser-specific packages and checksums; the Store API reports it submitted
   at 100% and `PENDING_REVIEW`
 - no known critical user-facing bug is blocking normal use at this milestone
@@ -31,8 +33,8 @@ Status note:
 - Chrome Web Store:
   https://chromewebstore.google.com/detail/ai-usage-dashboard/mjfhaifoapcpbkffacidgjijcpiegjea
 - Public page status checked on 2026-07-26: reachable and listed.
-- Chrome Web Store API status observed on 2026-07-28 showed manifest version
-  `0.2.0.11` published at 100%.
+- Chrome Web Store API status observed on 2026-07-29 showed manifest version
+  `0.2.0.12` published at 100%.
 - The `v0.2.0-rc.10` tag workflow published Chrome and Firefox GitHub Release
   assets plus checksums. Its optional Chrome Web Store upload step did not run,
   so manifest `0.2.0.10` is not recorded as submitted or published.
@@ -45,14 +47,21 @@ Status note:
   automated UI guards, stronger multilingual visual checks, and verified
   external-review fixes without changing Provider source claims. The verified
   local official API fallback uploaded manifest `0.2.0.12` and submitted it for
-  review.
+  review; the Store API now reports that revision as published.
+- The `v0.2.0-rc.13` release prevents sample quota values from entering new
+  profiles, preserves provider visibility across account switches, and adds
+  connection-test feedback plus configurable multi-deployment presentation for
+  Sub2API. Its tag workflow produced the browser packages but skipped the
+  optional Store upload because repository credentials were unavailable. The
+  verified local official API fallback then uploaded manifest `0.2.0.13` and
+  submitted it for review.
 - The maintained listing-copy sources now include bounded Sub2API-compatible
   aggregate metering. Applying those text changes to the live Developer
   Dashboard remains a separate metadata operation.
-- Chrome Web Store API status observed on 2026-07-28 reports manifest
-  `0.2.0.11` as `PUBLISHED` at 100%.
-- The same status check reports manifest `0.2.0.12` as `PENDING_REVIEW` at
-  100%; the published listing remains manifest `0.2.0.11` until review
+- Chrome Web Store API status observed on 2026-07-29 reports manifest
+  `0.2.0.12` as `PUBLISHED` at 100%.
+- The same status check reports manifest `0.2.0.13` as `PENDING_REVIEW` at
+  100%; the published listing remains manifest `0.2.0.12` until review
   completes.
 
 This means the project has crossed the public-store baseline milestone. Future
@@ -106,7 +115,7 @@ Chrome extension and provider-surface drift:
 
 ## Next Store Work
 
-- Wait for the Chrome Web Store review of manifest `0.2.0.12`; do not describe
+- Wait for the Chrome Web Store review of manifest `0.2.0.13`; do not describe
   it as published until the Store API reports that state.
 - Apply the maintained Sub2API listing-copy updates in the Developer Dashboard
   when the publisher account can complete Google's interactive re-verification.
