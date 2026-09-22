@@ -16,6 +16,7 @@ import {
   setSafeStorageItem,
 } from "./local-storage";
 import { DEFAULT_PROVIDER_ACCOUNT_ID } from "./provider-accounts";
+import { invalidateProviderSyncIdentity } from "./provider-sync-identity";
 
 const PROVIDER_SECRETS_SCHEMA_VERSION = 2 as const;
 
@@ -383,6 +384,14 @@ export async function writeProviderSecrets(
   });
   const store = await readSecretStore();
 
+  const changedProviders = (Object.keys(normalizedSecrets) as ProviderSecretProviderId[])
+    .filter((providerId) => JSON.stringify(
+      store.accounts[providerId][getSelectedAccountId(accountIds, providerId)],
+    ) !== JSON.stringify(normalizedSecrets[providerId]));
+  for (const providerId of changedProviders) {
+    invalidateProviderSyncIdentity(providerId);
+  }
+
   store.accounts["cursor-team-api"][
     getSelectedAccountId(accountIds, "cursor-team-api")
   ] = normalizedSecrets["cursor-team-api"];
@@ -397,6 +406,10 @@ export async function writeProviderSecrets(
   ] = normalizedSecrets["sub2api-api-key"];
 
   await persistSecretStore(store);
+  // Also reject a refresh that acquired the previous secret during the write.
+  for (const providerId of changedProviders) {
+    invalidateProviderSyncIdentity(providerId);
+  }
   return normalizedSecrets;
 }
 
@@ -448,9 +461,11 @@ export async function setSub2ApiKey(
 export async function deleteSub2ApiAccountSecret(
   accountId: ProviderAccountId,
 ): Promise<void> {
+  invalidateProviderSyncIdentity("sub2api-api-key");
   const store = await readSecretStore();
   delete store.accounts["sub2api-api-key"][accountId];
   await persistSecretStore(store);
+  invalidateProviderSyncIdentity("sub2api-api-key");
 }
 
 export async function setCodexWorkspaceConfig(

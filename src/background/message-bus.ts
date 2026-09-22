@@ -48,6 +48,10 @@ import {
 } from "../shared/provider-accounts";
 import { runProviderAccountManualSyncSerial } from "../shared/provider-account-sync";
 import {
+  invalidateAllProviderSyncIdentities,
+  invalidateProviderSyncIdentity,
+} from "../shared/provider-sync-identity";
+import {
   disconnectSub2ApiDeployment,
   removeSub2ApiDeployment,
   saveSub2ApiDeployment,
@@ -97,6 +101,29 @@ export async function handleAppMessage(
   }
 
   const isStoreScreenshotRuntimeLocked = await readStoreScreenshotRuntimeLock();
+
+  switch (message.type) {
+    case "app:set-provider-active-account":
+    case "app:set-provider-enabled":
+    case "app:set-provider-source-preference":
+    case "app:set-provider-page-binding":
+    case "app:clear-provider-page-binding":
+    case "app:toggle-provider-permission":
+      invalidateProviderSyncIdentity(message.providerId);
+      break;
+    case "app:save-sub2api-deployment":
+    case "app:disconnect-sub2api-deployment":
+    case "app:remove-sub2api-deployment":
+      invalidateProviderSyncIdentity(SUB2API_PROVIDER_ID);
+      break;
+    case "app:set-codex-session-token":
+      invalidateProviderSyncIdentity("codex-personal-page");
+      break;
+    case "app:import-configuration-backup":
+    case "app:restore-configuration-from-sync":
+      invalidateAllProviderSyncIdentities();
+      break;
+  }
 
   async function ensureBackgroundAlarms(state: AppState): Promise<void> {
     await ensurePeriodicSyncAlarm(state.settings);

@@ -62,10 +62,8 @@ describe("sync engine run coalescing", () => {
     const firstRun = runSyncEngine({ trigger: "bootstrap" });
     const secondRun = runSyncEngine({ trigger: "bootstrap" });
 
-    expect(secondRun).toBe(firstRun);
-
     releaseSync();
-    await firstRun;
+    await Promise.all([firstRun, secondRun]);
 
     const displayEnabledCount = SAMPLE_APP_STATE.providerSettings.filter(
       (setting) => setting.displayEnabled,
@@ -74,20 +72,20 @@ describe("sync engine run coalescing", () => {
     expect(sync).toHaveBeenCalledTimes(displayEnabledCount);
   });
 
-  it("uses one coalescing key for concurrent provider-specific runs", () => {
+  it("keeps manual recovery separate from automatic engine requests", () => {
     expect(
       getSyncEngineCoalescingKey({
         trigger: "manual",
         providerId: SAMPLE_APP_STATE.providerSettings[0].id,
       }),
-    ).toBe(`provider:${SAMPLE_APP_STATE.providerSettings[0].id}`);
+    ).toBe(`provider:${SAMPLE_APP_STATE.providerSettings[0].id}:manual`);
 
     expect(
       getSyncEngineCoalescingKey({
         trigger: "alarm",
         providerId: SAMPLE_APP_STATE.providerSettings[0].id,
       }),
-    ).toBe(`provider:${SAMPLE_APP_STATE.providerSettings[0].id}`);
+    ).toBe(`provider:${SAMPLE_APP_STATE.providerSettings[0].id}:automatic`);
   });
 
   it("coalesces concurrent provider-specific sync runs", async () => {
@@ -113,10 +111,8 @@ describe("sync engine run coalescing", () => {
     const firstRun = runSyncEngine({ trigger: "manual", providerId });
     const secondRun = runSyncEngine({ trigger: "alarm", providerId });
 
-    expect(secondRun).toBe(firstRun);
-
     releaseSync();
-    await firstRun;
+    await Promise.all([firstRun, secondRun]);
 
     expect(sync).toHaveBeenCalledTimes(1);
   });
@@ -127,7 +123,7 @@ describe("sync engine run coalescing", () => {
     );
   });
 
-  it("does not run one provider adapter concurrently across an alarm and a provider refresh", async () => {
+  it.each(["all", "provider"])("serializes a %s alarm and manual provider recovery", async (scope) => {
     let releaseAlarmSync = () => {};
     const alarmSyncGate = new Promise<void>((resolve) => {
       releaseAlarmSync = resolve;
@@ -155,7 +151,10 @@ describe("sync engine run coalescing", () => {
 
     vi.mocked(getProviderSyncAdapter).mockReturnValue({ sync });
 
-    const alarmRun = runSyncEngine({ trigger: "alarm" });
+    const alarmRun = runSyncEngine({
+      trigger: "alarm",
+      providerId: scope === "provider" ? providerId : undefined,
+    });
     await vi.waitFor(() => {
       expect(callsByProvider.get(providerId)).toBe(1);
     });

@@ -19,6 +19,11 @@ import {
   getActiveProviderAccountMetadata,
 } from "../shared/provider-accounts";
 import { seedAppStateIfEmpty, writeAppState } from "../shared/storage";
+import {
+  captureProviderSyncIdentity,
+  isProviderSyncIdentityCurrent,
+  type ProviderSyncIdentity,
+} from "../shared/provider-sync-identity";
 import { syncCustomSources } from "./custom-source-sync";
 import { syncCodexBarDashboardSources } from "./codexbar-dashboard-sync";
 import { syncProviderServiceStatuses } from "./provider-service-status-sync";
@@ -34,6 +39,7 @@ type SyncEngineOutcome = {
   setting: ProviderSetting | null;
   snapshot: ProviderSnapshot;
   startedSetting: ProviderSetting | null;
+  identity: ProviderSyncIdentity | null;
 };
 
 type ProviderAdapterSyncResult = {
@@ -44,6 +50,7 @@ type ProviderAdapterSyncResult = {
 type ActiveProviderAdapterRun = {
   promise: Promise<ProviderAdapterSyncResult>;
   trigger: SyncTrigger;
+  identity: ProviderSyncIdentity;
 };
 
 function parseTimestamp(rawValue: string): Date | null {
@@ -195,9 +202,10 @@ const activeProviderAdapterRuns = new Map<
 function trackProviderAdapterRun(
   providerId: ProviderId,
   trigger: SyncTrigger,
+  identity: ProviderSyncIdentity,
   promise: Promise<ProviderAdapterSyncResult>,
 ): Promise<ProviderAdapterSyncResult> {
-  const trackedRun = { promise, trigger };
+  const trackedRun = { promise, trigger, identity };
   activeProviderAdapterRuns.set(providerId, trackedRun);
 
   const cleanup = () => {
@@ -214,42 +222,57 @@ function trackProviderAdapterRun(
 function runProviderAdapterCoalesced({
   providerId,
   trigger,
+  identity,
   run,
 }: {
   providerId: ProviderId;
   trigger: SyncTrigger;
+  identity: ProviderSyncIdentity;
   run: () => Promise<ProviderAdapterSyncResult>;
 }): Promise<ProviderAdapterSyncResult> {
   const activeRun = activeProviderAdapterRuns.get(providerId);
 
   if (!activeRun) {
-    return trackProviderAdapterRun(providerId, trigger, run());
+    return trackProviderAdapterRun(providerId, trigger, identity, run());
   }
 
-  if (trigger === "manual" && activeRun.trigger !== "manual") {
+  if (
+    activeRun.identity.generation !== identity.generation ||
+    (trigger === "manual" && activeRun.trigger !== "manual")
+  ) {
     const queuedManualRun = activeRun.promise.then(run, run);
 
-    return trackProviderAdapterRun(providerId, trigger, queuedManualRun);
+    return trackProviderAdapterRun(providerId, trigger, identity, queuedManualRun);
   }
 
   return activeRun.promise;
 }
 
-export function getSyncEngineCoalescingKey({
-  trigger,
-  providerId,
-}: RunSyncEngineParams): string | null {
-  return providerId
-    ? `provider:${providerId}`
+export function getSyncEngineCoalescingKey(
+  { trigger, providerId }: RunSyncEngineParams,
+  requestIdentities?: ReadonlyMap<ProviderId, ProviderSyncIdentity>,
+): string {
+  const scope = providerId
+    ? `provider:${providerId}:${trigger === "manual" ? "manual" : "automatic"}`
     : `all-providers:${trigger}`;
+  return requestIdentities
+    ? `${scope}:${JSON.stringify(
+        [...requestIdentities].map(([id, identity]) => [
+          id, identity.accountId, identity.generation,
+        ]),
+      )}`
+    : scope;
 }
 
-export function runSyncEngine(params: RunSyncEngineParams): Promise<AppState> {
-  const coalescingKey = getSyncEngineCoalescingKey(params);
-
-  if (!coalescingKey) {
-    return runSyncEngineOnce(params);
+export async function runSyncEngine(params: RunSyncEngineParams): Promise<AppState> {
+  const current = await seedAppStateIfEmpty();
+  const requestIdentities = new Map<ProviderId, ProviderSyncIdentity>();
+  for (const setting of current.providerSettings) {
+    if (params.providerId ? setting.id === params.providerId : setting.displayEnabled) {
+      requestIdentities.set(setting.id, captureProviderSyncIdentity(current, setting.id));
+    }
   }
+  const coalescingKey = getSyncEngineCoalescingKey(params, requestIdentities);
 
   const activeRun = activeSyncEngineRuns.get(coalescingKey);
 
@@ -257,7 +280,7 @@ export function runSyncEngine(params: RunSyncEngineParams): Promise<AppState> {
     return activeRun;
   }
 
-  const nextRun = runSyncEngineOnce(params);
+  const nextRun = runSyncEngineOnce(params, current, requestIdentities);
   activeSyncEngineRuns.set(coalescingKey, nextRun);
 
   void nextRun.then(
@@ -276,11 +299,11 @@ export function runSyncEngine(params: RunSyncEngineParams): Promise<AppState> {
   return nextRun;
 }
 
-async function runSyncEngineOnce({
-  trigger,
-  providerId,
-}: RunSyncEngineParams): Promise<AppState> {
-  const current = await seedAppStateIfEmpty();
+async function runSyncEngineOnce(
+  { trigger, providerId }: RunSyncEngineParams,
+  current: AppState,
+  requestIdentities: ReadonlyMap<ProviderId, ProviderSyncIdentity>,
+): Promise<AppState> {
   const activeAccountIds = getActiveProviderAccountIds(current);
   const secrets = await readProviderSecrets(activeAccountIds);
   const now = new Date();
@@ -304,6 +327,7 @@ async function runSyncEngineOnce({
           snapshot: provider,
           setting: null,
           startedSetting: null,
+          identity: null,
         };
       }
 
@@ -319,13 +343,16 @@ async function runSyncEngineOnce({
           snapshot: provider,
           setting,
           startedSetting: setting,
+          identity: null,
         };
       }
 
       const adapter = getProviderSyncAdapter(provider.providerId);
+      const identity = requestIdentities.get(provider.providerId)!;
       const outcome = await runProviderAdapterCoalesced({
         providerId: provider.providerId,
         trigger,
+        identity,
         run: () =>
           adapter.sync(provider, {
             accountId,
@@ -348,6 +375,7 @@ async function runSyncEngineOnce({
         snapshot: outcome.snapshot,
         setting: outcome.setting ?? setting,
         startedSetting: setting,
+        identity,
       };
     },
   );
@@ -358,7 +386,7 @@ async function runSyncEngineOnce({
   const syncedOutcomes = new Map<ProviderId, SyncEngineOutcome>();
 
   for (const outcome of outcomes) {
-    if (!outcome.didSync || !outcome.startedSetting) {
+    if (!outcome.didSync || !outcome.startedSetting || !outcome.identity) {
       continue;
     }
 
@@ -366,6 +394,7 @@ async function runSyncEngineOnce({
 
     if (
       !latestSetting ||
+      !isProviderSyncIdentityCurrent(latest, outcome.providerId, outcome.identity) ||
       getActiveProviderAccountId(latest, outcome.providerId) !==
         outcome.accountId ||
       hasSyncRelevantProviderSettingDrift(outcome.startedSetting, latestSetting)

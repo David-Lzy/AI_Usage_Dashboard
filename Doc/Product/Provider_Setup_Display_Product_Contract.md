@@ -112,26 +112,35 @@ Current capability ownership:
 | `claude-code-admin-api` | Claude Code | No | No | No | Yes | Yes | No |
 | `codex-personal-page` | Codex | Yes | Yes | Yes | No | Yes | No |
 | `codex-enterprise-api` | Codex | No | No | No | No | Yes | No |
+| `sub2api-api-key` | Sub2API | Yes | Yes | Yes | Yes | No | Yes |
 | `gemini-policy` | Gemini | No | No | No | No | No | No |
 | `jetbrains-org-page` | JetBrains | No | No | No | No | No | No |
 
 Service status is a brand-level official status contract and remains separate
 from Provider sync health. It is implemented for Cursor, Claude, and Codex
-source entries. `multiAccount` is currently false for every source entry.
+source entries. Sub2API supports multiple isolated deployment/key pairs;
+the other source entries do not expose multi-account setup.
 JetBrains remains deferred. Its parser and capture client are retained for
 future contract revalidation, but the registered deferred adapter performs no
 network or page capture and does not expose a live quota capability.
 
-The storage and routing foundation for a future verified multi-account source
-is account-separated even though no current descriptor enables it. Existing
-users are assigned one deterministic local `default` account. Additional
-accounts, when a future source contract opts in, use opaque locally generated
-ids; the active account remains the only snapshot projected to popup, sidebar,
-dashboard, and detail surfaces. Inactive snapshots, settings, credentials, and
+The storage and routing foundation is account-separated. Existing users are
+assigned one deterministic local `default` account. Additional Sub2API
+deployments use opaque locally generated ids. The active account supplies the
+primary snapshot; the separate-card presentation can also show individually
+cached deployment snapshots. Inactive snapshots, settings, credentials, and
 last-success metadata remain isolated and are never summed. Automatic sync
 targets only the active account, while inactive account refreshes must be
 explicit and serialized per source entry. Configuration backup and Chrome Sync
 exclude account runtime containers and credentials.
+
+Concurrent refreshes share an adapter result only for the same account and
+connection generation. Different account requests remain serialized per source
+entry. Switching accounts or changing a connection or credential invalidates
+older results, including an A-to-B-to-A switch; a previous account's response
+must not be attributed to the currently selected account. These generations
+contain no credentials, are local to the background worker, and expire with
+its in-flight requests.
 
 ### Setup State
 
