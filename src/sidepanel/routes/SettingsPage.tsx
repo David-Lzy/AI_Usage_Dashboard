@@ -739,6 +739,7 @@ export function SettingsPage({
                 title={i18n.t("settings.sources.title")}
                 detail={i18n.t("settings.sources.detail")}
                 providers={providers}
+                providerAccounts={providerAccounts}
                 snapshots={snapshots}
                 i18n={i18n}
                 settingsCopy={settingsCopy}

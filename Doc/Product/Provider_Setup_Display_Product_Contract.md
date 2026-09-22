@@ -168,6 +168,19 @@ responses and hydration retries. Each history module's detail caption describes
 that module, not a newer sibling. Cached or unknown-age data is not made current
 by a failed refresh or by another module's successful request.
 
+### Support Diagnostics (Unreleased Work Branch)
+
+Debug Settings exposes a sanitized report preview and explicit JSON download in
+the existing source diagnostics section. It covers configured built-in provider
+accounts, including saved inactive-account status, using anonymous ordinal
+labels. It does not include deleted accounts or custom-source payloads.
+
+The report is a versioned allowlist, not a storage dump: version, provider/source
+types, permission/status enums, known diagnostic codes and capture timestamps.
+Raw error text, credentials, URLs, identities and usage values are excluded.
+Preview captures one immutable report; subsequent sync does not change the file
+being reviewed. Download is local and user-initiated, with no upload service.
+
 ### Setup State
 
 Setup state describes whether a source entry has enough user action, permission, credentials, or source binding to attempt a truthful sync.

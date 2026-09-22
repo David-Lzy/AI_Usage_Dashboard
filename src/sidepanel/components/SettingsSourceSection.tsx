@@ -1,4 +1,5 @@
 import type {
+  ProviderAccountsByProvider,
   ProviderId,
   ProviderSetting,
   ProviderSnapshot,
@@ -13,6 +14,7 @@ import {
   type ProviderCarouselItem,
 } from "./ProviderCarousel";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
+import { DiagnosticsExportControl } from "./DiagnosticsExportControl";
 import { SettingsSourceCard } from "./SettingsSourceCard";
 
 type SettingsSourceSectionProps = {
@@ -23,6 +25,7 @@ type SettingsSourceSectionProps = {
   focusedProviderId?: ProviderId | null;
   i18n: RuntimeI18n;
   providers: ProviderSetting[];
+  providerAccounts?: ProviderAccountsByProvider;
   sectionId?: string;
   sessionPageNavigationAvailable: boolean;
   settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>;
@@ -51,6 +54,7 @@ export function SettingsSourceSection({
   focusedProviderId = null,
   i18n,
   providers,
+  providerAccounts,
   sectionId,
   sessionPageNavigationAvailable,
   settingsCopy,
@@ -128,6 +132,18 @@ export function SettingsSourceSection({
         textDirection={i18n.resolvedTextDirection}
         onActiveItemChange={(_item, index) => onCarouselIndexChange?.(index)}
       />
+
+      {/* Support export is intentionally available only at the Debug level. */}
+      {userLevelVisibility.showDebugDiagnostics ? (
+        <DiagnosticsExportControl
+          state={{
+            providers: snapshots,
+            providerSettings: providers,
+            providerAccounts,
+          }}
+          i18n={i18n}
+        />
+      ) : null}
     </section>
   );
 }

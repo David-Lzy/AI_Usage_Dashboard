@@ -97,6 +97,12 @@ node scripts/check-production-state-browser.mjs --extension=/absolute/path/to/is
 Chromium. Results and screenshots use a unique run directory below
 `tmp/output/playwright/production-state/`; no existing browser profile is used.
 
+`node scripts/check-diagnostics-export.mjs` verifies the sanitized diagnostic
+preview, keyboard focus and JSON download at 320px dark and 1280px light across
+all 14 locales. It uses synthetic secret sentinels in a source-only browser;
+the downloaded JSON must match the preview and exclude those sentinels. Reports
+and screenshots are retained under `tmp/output/playwright/diagnostics-export/`.
+
 Localization or responsive UI changes that can vary by language length should
 also run the visual locale matrix against `dist/chrome/`:
 

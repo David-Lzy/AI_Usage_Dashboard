@@ -1,0 +1,104 @@
+.diagnostics-export-control {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-3);
+  padding-block: var(--app-space-3);
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.diagnostics-export-control__header,
+.diagnostics-export-control__dialog-header,
+.diagnostics-export-control__actions {
+  display: flex;
+  gap: var(--app-space-3);
+}
+
+.diagnostics-export-control__header,
+.diagnostics-export-control__dialog-header {
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.diagnostics-export-control__header > div,
+.diagnostics-export-control__dialog-header > div,
+.diagnostics-export-control__dialog {
+  min-width: 0;
+}
+
+.diagnostics-export-control__title,
+.diagnostics-export-control__dialog-title,
+.diagnostics-export-control__error {
+  margin: 0;
+}
+
+.diagnostics-export-control__title,
+.diagnostics-export-control__dialog-title {
+  color: var(--md-sys-color-on-surface);
+  font-family: var(--md-sys-typescale-title-small-font);
+  font-size: var(--md-sys-typescale-title-small-size, 14px);
+  font-weight: var(--md-sys-typescale-title-small-weight, 600);
+  line-height: var(--md-sys-typescale-title-small-line-height, 1.5);
+}
+
+.diagnostics-export-control__error {
+  color: var(--md-sys-color-on-surface-variant);
+  font-family: var(--md-sys-typescale-body-small-font);
+  font-size: var(--md-sys-typescale-body-small-size);
+  font-weight: var(--md-sys-typescale-body-small-weight);
+  line-height: var(--md-sys-typescale-body-small-line-height);
+}
+
+.diagnostics-export-control__error {
+  color: var(--md-sys-color-error);
+  overflow-wrap: anywhere;
+}
+
+.diagnostics-export-control__actions {
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.diagnostics-export-control__button {
+  gap: var(--app-space-1);
+}
+
+.diagnostics-export-control__button-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  fill: currentColor;
+}
+
+.diagnostics-export-control__dialog {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-3);
+}
+
+.diagnostics-export-control__json {
+  max-height: min(45vh, 28rem);
+  margin: 0;
+  padding: var(--app-space-3);
+  overflow: auto;
+  border-radius: var(--md-sys-shape-corner-small);
+  background: var(--md-sys-color-surface-container-low);
+  color: var(--md-sys-color-on-surface);
+  direction: ltr;
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: start;
+  unicode-bidi: plaintext;
+  white-space: pre;
+}
+
+@media (max-width: 440px) {
+  .diagnostics-export-control__header,
+  .diagnostics-export-control__dialog-header {
+    flex-direction: column;
+  }
+
+  .diagnostics-export-control__actions > .text-button {
+    flex: 1 1 auto;
+  }
+}

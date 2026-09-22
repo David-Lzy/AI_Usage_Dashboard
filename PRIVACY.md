@@ -44,6 +44,24 @@ unavailable, including on a browser implementation that does not expose it,
 the credential remains only in service-worker memory. It is cleared with the
 browser session or extension lifecycle.
 
+## Sanitized Support Export (Unreleased Work Branch)
+
+At the Debug display level, the source diagnostics section can preview and
+download a local JSON support report. The preview and downloaded file are the
+same frozen report. Nothing is uploaded automatically.
+
+The versioned allowlist includes the app version, built-in provider type,
+anonymous account numbers, typed source/status/permission fields, known
+diagnostic codes and successful/attempted capture timestamps. Account numbers
+are temporary labels within each provider, not the stored account IDs. Only
+currently configured accounts are included; deleted-account cache entries are
+excluded. Missing or unproven capture times remain null.
+
+The report excludes account names and identities, credentials, URLs and query
+parameters, page titles, paths, raw responses, free-text errors, usage values,
+history, custom-source payloads and arbitrary extension storage. The existing
+configuration backup is a separate operation with a different documented scope.
+
 ## Local Image Gradient Import
 
 If a user imports an image to generate a progress-color gradient, the image is decoded and sampled locally in the browser. The extension uses the image only to compute a small list of gradient stops. It does not upload the image, and it does not store the original image bytes, data URL, filename, EXIF metadata, or raw pixel data.
