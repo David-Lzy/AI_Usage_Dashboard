@@ -1,6 +1,6 @@
 # GitHub Release Push And Notes Guide
 
-Date: 2026-05-26
+Date: 2026-09-23
 
 Document class:
 
@@ -17,6 +17,13 @@ Status note:
 - private upload receipts, local package hashes, browser profile notes, and operator handoff details stay out of the public repository
 
 ## Release Flow
+
+Pull requests targeting `main` run validation and package artifacts with a
+read-only token. They also run the documentation, design, Provider, localization,
+type and test gates. They never run release/store jobs, use store credentials or
+persist checkout credentials. No `pull_request_target` contributor-code path is
+used. Fork runs may need approval under the repository's GitHub settings.
+The work-branch workflow change is not a published extension feature.
 
 Pushes to `main` are for continuous validation. They run tests, build Chrome
 and Firefox packages, and upload temporary workflow artifacts. These artifacts
@@ -78,6 +85,9 @@ Optional GitHub Actions repository variable values:
 
 Manual workflow runs expose a `submit_chrome_web_store` checkbox. Use it only
 when the current package version is ready for Chrome Web Store review.
+It defaults to false, including when manually running on a version tag.
+Manual dispatch does not mutate GitHub Releases; only main/version-tag push
+events enter that job. A main push can refresh existing notes but not packages.
 
 Chrome Web Store API submission does not bypass review. The `publish` call
 submits the uploaded package for review; public availability still follows the

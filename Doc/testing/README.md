@@ -34,6 +34,13 @@ in the public [Design Contract](../../DESIGN.md). It also prevents that document
 from becoming a second color-token source. `npm run docs:check` includes this
 gate automatically.
 
+PRs targeting `main` run the same validation job as main/tag builds, including
+`docs:check` and `provider:quality`. Its token is read-only and checkout does not
+persist credentials. Release and store jobs have explicit event guards that
+exclude PRs. `npm run release:workflow:check` parses the workflow YAML and uses
+GitHub's expression evaluator to test fork/ordinary PR, main/tag push and manual
+dispatch fixtures. These local guards do not stand in for a remote Actions run.
+
 The background state-merge browser regression uses a fresh headless Chrome
 profile, synthetic data and a plain Vite server without CRX build output. It
 holds a custom-source response while editing the actual Settings threshold,

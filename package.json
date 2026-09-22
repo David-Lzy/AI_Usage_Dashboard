@@ -303,6 +303,7 @@
     "webextension-polyfill": "^0.12.0"
   },
   "devDependencies": {
+    "@actions/expressions": "^0.3.61",
     "@crxjs/vite-plugin": "^2.2.0",
     "@types/chrome": "^0.1.29",
     "@types/node": "^24.10.1",
@@ -310,6 +311,7 @@
     "@types/react-dom": "^19.2.2",
     "@types/webextension-polyfill": "^0.12.5",
     "@vitejs/plugin-react": "^5.1.0",
+    "js-yaml": "^4.3.0",
     "playwright": "^1.59.1",
     "typescript": "^5.9.3",
     "vite": "^7.1.12",

@@ -3,6 +3,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
+import { validateReleaseWorkflow } from "./lib/release-workflow-quality.mjs";
 
 const projectRoot = process.cwd();
 
@@ -36,6 +37,10 @@ const [workflow, releaseGuide, readme, packageJsonText] = await Promise.all([
 ]);
 
 const packageJson = JSON.parse(packageJsonText);
+const workflowErrors = validateReleaseWorkflow(workflow);
+if (workflowErrors.length > 0) {
+  throw new Error(`Release workflow contract failed:\n${workflowErrors.join("\n")}`);
+}
 
 assertIncludes(
   packageJson.scripts?.["release:check"] ?? "",

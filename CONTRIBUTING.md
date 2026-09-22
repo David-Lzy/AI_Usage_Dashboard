@@ -39,6 +39,14 @@ the [Provider Authoring Guide](Doc/Product/Provider_Authoring_Guide.md); it
 defines descriptor, source-truth, fixture, host-access, upstream attribution,
 and graduation requirements.
 
+Pull requests targeting `main` run read-only validation: documentation and
+design checks, Provider contracts, localization, types, tests and both browser
+packages. PRs cannot run publishing jobs or access store credentials. Local
+checks are not evidence that a remote Actions run has passed; record the actual
+PR check result before merge. Fork contributions may require maintainer approval
+to start Actions. See the [release workflow guide](Doc/Store/GitHub_Release_Push_And_Notes.md)
+for the separate tag and explicit store-submission paths.
+
 ## UI Control Rhythm
 
 Settings controls share three height tokens: compact controls use 36px, medium
