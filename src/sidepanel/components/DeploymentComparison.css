@@ -8,42 +8,19 @@
   border-block-start: 1px solid var(--md-sys-color-outline-variant);
 }
 
-.deployment-comparison__header,
-.deployment-comparison__dates {
+.deployment-comparison__header {
   display: flex;
   align-items: end;
   justify-content: space-between;
   gap: var(--app-space-4);
   min-width: 0;
 }
+.deployment-comparison__header > .usage-period-controls { flex: 1 1 36rem; }
 
 .deployment-comparison__header > div:first-child,
-.deployment-comparison__dates label,
 .deployment-comparison th,
 .deployment-comparison td {
   min-width: 0;
-}
-
-.deployment-comparison__dates {
-  flex: 0 1 auto;
-  flex-wrap: wrap;
-}
-
-.deployment-comparison__dates label {
-  display: grid;
-  gap: var(--app-space-1);
-  color: var(--md-sys-color-on-surface-variant);
-  font: var(--md-sys-typescale-label-medium-weight) var(--md-sys-typescale-label-medium-size) / var(--md-sys-typescale-label-medium-line-height) var(--md-sys-typescale-label-medium-font);
-}
-
-.deployment-comparison__dates input {
-  min-height: var(--app-control-height-medium);
-  padding-inline: var(--app-space-2);
-  border: 1px solid var(--md-sys-color-outline);
-  border-radius: var(--md-sys-shape-corner-small);
-  background: var(--app-surface-card-background);
-  color: var(--md-sys-color-on-surface);
-  font: inherit;
 }
 
 .deployment-comparison__alert,
@@ -150,5 +127,5 @@
 
 @media (max-width: 680px) {
   .deployment-comparison__header { align-items: stretch; flex-direction: column; }
-  .deployment-comparison__dates { justify-content: flex-start; }
+  .deployment-comparison__header > .usage-period-controls { flex: 0 1 auto; }
 }

@@ -122,6 +122,12 @@ The harness verifies no provider fetch, permission request or active-account
 change. Unit tests cover formula prefixes, null/zero, forbidden-field sentinels
 and independent module capture times.
 
+Add `--periods` to this check for week/month/7-day/30-day presets and observed
+summary values, including percentage-as-latest-observation. Period evidence is
+stored under `tmp/output/playwright/usage-periods/`. Pure tests cover Monday,
+leap/month/year/DST boundaries, explicit UTC range reference for unknown source
+timezone, mixed currency/unit/series, missing values, duplicates and overflow.
+
 `node scripts/check-quota-notifications.mjs` exercises the real notification
 Settings component, message client, controller and persistence transitions across
 14 locales at 320px dark / 1280px light. Only browser permission/OS transport is

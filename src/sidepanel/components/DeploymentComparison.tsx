@@ -1,4 +1,4 @@
-import { useId, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 import type { AppState } from "../../providers/types";
 import {
@@ -14,6 +14,7 @@ import {
   type GatewayAggregateMetric,
   type UsageDateRange,
 } from "../../shared/usage-aggregates";
+import { UsagePeriodControls } from "./UsagePeriodControls";
 import "./DeploymentComparison.css";
 
 type DeploymentComparisonProps = {
@@ -107,9 +108,6 @@ export function DeploymentComparison({
   const [failedAccountIds, setFailedAccountIds] = useState<ReadonlySet<string>>(
     () => new Set(),
   );
-  const startInputId = useId();
-  const endInputId = useId();
-  const invalidRangeId = useId();
   const comparison = useMemo(
     () => buildGatewayComparison(state, range),
     [range, state],
@@ -124,6 +122,9 @@ export function DeploymentComparison({
   const commonReasons = comparison.metricReasons.requests.filter((reason) =>
     DISPLAY_METRICS.every((metric) => comparison.metricReasons[metric].includes(reason)),
   );
+  const referenceTimezone = comparison.rows.length > 0 && comparison.rows.every((row) => row.timezone && row.timezone === comparison.rows[0]?.timezone)
+    ? comparison.rows[0]?.timezone
+    : null;
 
   async function refreshAccount(accountId: string) {
     if (pendingAccountIdsRef.current.has(accountId)) {
@@ -159,33 +160,8 @@ export function DeploymentComparison({
           <p className="section-label">{copy.eyebrow}</p>
           <h2 className="section-title">{copy.title}</h2>
         </div>
-        <div className="deployment-comparison__dates">
-          <label htmlFor={startInputId}>
-            <span>{copy.startDate}</span>
-            <input
-              id={startInputId}
-              aria-describedby={!comparison.rangeValid ? invalidRangeId : undefined}
-              aria-invalid={!comparison.rangeValid}
-              type="date"
-              value={range.start}
-              onChange={(event) => setRange((current) => ({ ...current, start: event.target.value }))}
-            />
-          </label>
-          <label htmlFor={endInputId}>
-            <span>{copy.endDate}</span>
-            <input
-              id={endInputId}
-              aria-describedby={!comparison.rangeValid ? invalidRangeId : undefined}
-              aria-invalid={!comparison.rangeValid}
-              type="date"
-              value={range.end}
-              onChange={(event) => setRange((current) => ({ ...current, end: event.target.value }))}
-            />
-          </label>
-        </div>
+        <UsagePeriodControls i18n={i18n} range={range} referenceTimezone={referenceTimezone} surface="comparison" onChange={setRange} />
       </header>
-
-      {!comparison.rangeValid ? <p className="deployment-comparison__alert" id={invalidRangeId} role="alert" aria-live="polite">{copy.invalidRange}</p> : null}
 
       {commonReasons.length > 0 ? (
         <p className="deployment-comparison__comparison-status" data-gateway-comparison-status="">

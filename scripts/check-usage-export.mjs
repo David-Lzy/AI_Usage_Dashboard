@@ -6,7 +6,8 @@ import { chromium } from "playwright";
 import { startSourceQaServer } from "./lib/source-qa-server.mjs";
 import { SUPPORTED_RDP_CAPTURE_LOCALES } from "./lib/rdp-extension-locale-route.mjs";
 
-const root = path.resolve("tmp/output/playwright/usage-export");
+const periods = process.argv.includes("--periods");
+const root = path.resolve(`tmp/output/playwright/${periods ? "usage-periods" : "usage-export"}`);
 await mkdir(root, { recursive: true });
 const output = await mkdtemp(path.join(root, "run-"));
 const server = await startSourceQaServer();
@@ -31,6 +32,7 @@ try {
         const { addInactiveProviderAccount } = await import("/src/shared/provider-accounts.ts");
         const { parseSub2ApiUsageResponse } = await import("/src/providers/sub2api/client.ts");
         const { buildUsageExport, getUsageExportRange } = await import("/src/shared/usage-export.ts");
+        const { buildUsagePeriodSummary, getUsagePeriodRange } = await import("/src/shared/usage-periods.ts");
         const id = "sub2api-api-key", other = "account_export-browser";
         const capture = new Date().toISOString();
         const dates = Array.from({ length: 9 }, (_, index) => new Date(Date.now() - (10 - index) * 86400000).toISOString().slice(0, 10));
@@ -52,6 +54,8 @@ try {
         document.documentElement.dataset.themeResolved = theme;
         const holder = document.createElement("main"); holder.style.cssText = "margin:12px;min-width:0"; document.body.append(holder);
         window.__exportQa = { state, other, id, attempts: 0, permissions: 0, expected: (accountId = "default", providerId = id, family = "gateway_daily") => buildUsageExport(state, { providerId, accountId, family, range: getUsageExportRange(state, providerId, accountId, family) }).csv };
+        window.__exportQa.periodRange = (preset) => getUsagePeriodRange(preset);
+        window.__exportQa.summary = (range) => buildUsagePeriodSummary(buildUsageExport(state, { providerId: id, accountId: "default", family: "gateway_daily", range }));
         const originalFetch = window.fetch.bind(window);
         window.fetch = (input, init) => {
           const url = new URL(String(input), location.href);
@@ -71,6 +75,29 @@ try {
       const previewButton = control.locator('[data-usage-export-action="preview"]');
       const downloadButton = control.locator('[data-usage-export-action="download"]');
       const preview = control.locator("[data-usage-export-preview]");
+      if (periods) {
+        const originalRange = await control.locator('input[type="date"]').evaluateAll((inputs) => inputs.map((input) => input.value));
+        const selector = control.locator("[data-usage-period-preset]").getByRole("combobox");
+        for (const preset of ["this_week", "this_month", "last_7_days", "last_30_days"]) {
+          await selector.click();
+          await page.locator(`[role="option"][id$="-option-${preset}"]`).click();
+          const expected = await page.evaluate((preset) => window.__exportQa.periodRange(preset), preset);
+          assert.equal(await control.locator('input[type="date"]').first().inputValue(), expected.start);
+          assert.equal(await control.locator('input[type="date"]').last().inputValue(), expected.end);
+          const summary = await page.evaluate((range) => window.__exportQa.summary(range), expected);
+          for (const item of summary) {
+            const row = control.locator(`[data-usage-period-summary-item="${item.metric}"]`);
+            assert.equal(await row.getAttribute("data-summary-value"), item.value === null ? "" : String(item.value));
+            assert.equal(await row.getAttribute("data-summary-kind"), "observed_total");
+          }
+          if (!summary.length) assert(await previewButton.isDisabled());
+        }
+        await control.locator('input[type="date"]').first().fill(originalRange[0]);
+        await control.locator('input[type="date"]').last().fill(originalRange[1]);
+        await selector.click();
+        assert.equal(await page.locator('[role="option"][id$="-option-custom"]').getAttribute("aria-selected"), "true");
+        await page.keyboard.press("Escape");
+      }
       await previewButton.focus(); await page.keyboard.press("Enter");
       await preview.waitFor();
       assert.equal(await preview.locator("tbody tr").count(), 50);
@@ -102,8 +129,17 @@ try {
       await page.waitForFunction(() => !document.querySelector('[data-usage-export-preview]'));
       assert.equal(await rangeStart.inputValue(), selectedStart);
       await rangeStart.fill(originalStart);
+      if (periods) {
+        await control.locator("[data-usage-period-preset]").getByRole("combobox").click();
+        await page.locator('[role="option"][id$="-option-last_7_days"]').click();
+      }
       const account = control.locator('[data-usage-export-field="account"]').getByRole("combobox");
       await account.click(); await page.getByRole("option").nth(1).click();
+      if (periods) {
+        await control.locator("[data-usage-period-preset]").getByRole("combobox").click();
+        assert.equal(await page.locator('[role="option"][id$="-option-custom"]').getAttribute("aria-selected"), "true");
+        await page.keyboard.press("Escape");
+      }
       assert(await preview.count() === 0 || !await preview.isVisible());
       assert.equal(await page.evaluate(() => window.__exportQa.state.providerAccounts[window.__exportQa.id].activeAccountId), "default");
       await previewButton.click();
@@ -147,8 +183,15 @@ try {
       assert.equal(percent, await page.evaluate(() => window.__exportQa.expected("default", "codex-personal-page", "personal_usage_by_surface")));
       const percentRows = Papa.parse(percent, { header: true, skipEmptyLines: true }).data;
       assert.equal(percentRows.length, 9); assert(percentRows.every((row) => row.unit === "percent" && row.value === "25"));
+      if (periods) {
+        const latest = control.locator('[data-usage-period-summary-item="usage_percent"]');
+        assert.equal(await latest.getAttribute("data-summary-value"), "25");
+        assert.equal(await latest.getAttribute("data-summary-kind"), "latest_observation");
+        assert.equal(await latest.getAttribute("data-summary-date"), percentRows.at(-1).date);
+        await control.screenshot({ path: path.join(output, `${locale}-${width}-percent.png`) });
+      }
       assert.equal(await page.evaluate(() => window.__exportQa.attempts + window.__exportQa.permissions), 0);
-      results.push({ locale, width, theme, layout, gatewayRows: parsed.data.length, percentRows: percentRows.length });
+      results.push({ locale, width, theme, layout, gatewayRows: parsed.data.length, percentRows: percentRows.length, periods });
       console.log(`usage export ${locale}/${width}/${theme}: passed`);
     } catch (error) {
       await page.screenshot({ path: path.join(output, `${locale}-${width}-failure.png`), fullPage: true });

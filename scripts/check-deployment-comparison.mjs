@@ -34,6 +34,7 @@ try {
         const { setSub2ApiKey } = await import("/src/shared/provider-secrets.ts");
         const { writeAppState, readAppState } = await import("/src/shared/storage.ts");
         const { handleAppMessage } = await import("/src/background/message-bus.ts");
+        const { getUsagePeriodRange } = await import("/src/shared/usage-periods.ts");
         const id = "sub2api-api-key", other = "account_comparison-qa";
         const now = Date.now();
         const dates = [2, 1].map((days) => new Date(now - days * 86400000).toISOString().slice(0, 10));
@@ -59,6 +60,7 @@ try {
         window.browser = { runtime: { id: "deployment-comparison-qa" }, permissions: { contains: async () => true } };
         const originalFetch = window.fetch.bind(window);
         window.__comparisonQa = { other, attempts: [], fail: false, release: null, snapshot: state, read: readAppState };
+        window.__comparisonQa.periodRange = (preset) => getUsagePeriodRange(preset);
         window.fetch = async (input, init) => {
           const url = new URL(String(input));
           if (!url.hostname.endsWith(".example.test")) return originalFetch(input, init);
@@ -105,20 +107,33 @@ try {
       assert.equal(await page.evaluate(() => window.__comparisonQa.snapshot.providerAccounts["sub2api-api-key"].inactiveAccounts["account_comparison-qa"].snapshot.apiGatewayMetering.dailyUsage[0].totals.requests), 30);
       const dates = control.locator('input[type="date"]');
       const originalStart = await dates.first().inputValue();
+      const originalEnd = await dates.last().inputValue();
       await dates.first().fill("2099-12-31");
       await control.getByRole("alert").waitFor();
       await dates.first().fill(originalStart);
+      const periodSelector = control.locator("[data-usage-period-preset]").getByRole("combobox");
+      for (const preset of ["this_week", "this_month", "last_7_days", "last_30_days"]) {
+        await periodSelector.click();
+        await page.locator(`[role="option"][id$="-option-${preset}"]`).click();
+        const expected = await page.evaluate((preset) => window.__comparisonQa.periodRange(preset), preset);
+        assert.equal(await dates.first().inputValue(), expected.start);
+        assert.equal(await dates.last().inputValue(), expected.end);
+      }
+      await dates.first().fill(originalStart); await dates.last().fill(originalEnd);
+      assert.equal(await page.evaluate(() => window.__comparisonQa.attempts.length), 2);
       const region = control.getByRole("region");
       await region.focus();
       assert(await region.evaluate((element) => element === document.activeElement));
       const layout = await control.evaluate((element) => {
         const region = element.querySelector('[role="region"]');
         return { width: element.clientWidth, scroll: element.scrollWidth, viewportScroll: document.documentElement.scrollWidth,
+          controlsHeight: element.querySelector('.usage-period-controls').getBoundingClientRect().height,
           tableWidth: region.scrollWidth, tableViewport: region.clientWidth,
           dateClipping: [...element.querySelectorAll('input[type="date"]')].some((input) => input.getBoundingClientRect().right > innerWidth || input.getBoundingClientRect().left < 0), direction: document.documentElement.dir };
       });
       assert(layout.scroll <= layout.width + 2 && !layout.dateClipping, JSON.stringify(layout));
       assert(layout.viewportScroll <= width + 2, JSON.stringify(layout));
+      if (width <= 680) assert(layout.controlsHeight < 430, `Unexpected narrow-screen vertical spacer: ${JSON.stringify(layout)}`);
       assert.equal(layout.direction, locale === "ar" ? "rtl" : "ltr");
       await region.evaluate((element) => { element.scrollLeft = 0; });
       const screenshot = await control.screenshot({ path: path.join(output, `${locale}-${width}.png`) });

@@ -440,6 +440,29 @@ CSV schema v1 has stable English columns:
 `schema_version,provider,account,account_label,family,date,series,metric,value,unit,currency,range_start,range_end,coverage_start,coverage_end,observed_days,selected_days,source_timezone,requested_timezone,captured_at,freshness`.
 Only these fields are serialized; see [privacy boundaries](../../PRIVACY.md).
 
+## Period Summaries (Unreleased Work Branch)
+
+Provider aggregate usage and deployment comparison share this week, this month,
+last 7 days, last 30 days and custom date-range controls. Weeks begin Monday;
+presets include the current reference date. They select source date labels,
+not hourly events. Known bucket timezone supplies the reference; otherwise the
+control explicitly uses UTC for range selection while source timezone remains
+unknown. Requested API timezone is never promoted to proven bucket timezone.
+Day arithmetic is calendar-based across DST, leap days, month and year changes.
+
+Observed totals use the same account/family/range-filtered rows as CSV. Counts
+and costs can be added only within the same metric, series, unit and currency.
+Actual cost and reference cost stay separate. Percentages show the latest dated
+observation, never a sum, mean or quota balance. Missing values remain unknown;
+coverage counts known observations rather than filling missing dates with zero.
+Ambiguous duplicate date/series labels and numeric overflow are not summed.
+These are retained observations, not a promise of complete final billing for an
+open period. Stale captures, source timezone and partial coverage remain visible.
+
+No extra fetch, longer retention, automatic account switching, source-date
+re-bucketing or forecast is added. Undated billing and local CLI estimates do
+not become provider-reported period spend through this feature.
+
 ## Non-Goals
 
 - Do not rename or remove provider source-truth evidence fields.

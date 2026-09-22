@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import type { AppState, ProviderId } from "../../providers/types";
 import { MaterialActionIcon } from "../../shared/components/MaterialActionIcon";
@@ -17,6 +17,8 @@ import {
 } from "../../shared/usage-aggregates";
 import { downloadTextFile } from "../download-text-file";
 import { MaterialSelect } from "./MaterialSelect";
+import { UsagePeriodControls } from "./UsagePeriodControls";
+import { UsagePeriodSummary } from "./UsagePeriodSummary";
 import "./UsageExport.css";
 
 type UsageExportProps = {
@@ -75,9 +77,6 @@ export function UsageExport({ state, providerId, i18n }: UsageExportProps) {
   );
   const [preview, setPreview] = useState<PreviewSnapshot | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const startDateId = useId();
-  const endDateId = useId();
-  const invalidRangeId = useId();
   const accountOptions = accounts.map((account) => ({
     value: account.metadata.id,
     label: account.metadata.label,
@@ -199,19 +198,13 @@ export function UsageExport({ state, providerId, i18n }: UsageExportProps) {
               onChange={selectFamily}
             />
           </div>
-          <label className="usage-export__date" htmlFor={startDateId}>
-            <span>{copy.startDate}</span>
-            <input id={startDateId} type="date" value={range.start} aria-describedby={!hasValidRange ? invalidRangeId : undefined} aria-invalid={!hasValidRange} onChange={(event) => setRange((current) => ({ ...current, start: event.target.value }))} />
-          </label>
-          <label className="usage-export__date" htmlFor={endDateId}>
-            <span>{copy.endDate}</span>
-            <input id={endDateId} type="date" value={range.end} aria-describedby={!hasValidRange ? invalidRangeId : undefined} aria-invalid={!hasValidRange} onChange={(event) => setRange((current) => ({ ...current, end: event.target.value }))} />
-          </label>
+          <div className="usage-export__period">
+            <UsagePeriodControls i18n={i18n} range={range} referenceTimezone={currentResult?.sourceTimezone} surface="export" onChange={setRange} />
+          </div>
         </> : null}
       </div>
       {!hasFamilies ? <p className="usage-export__status">{copy.noFamilies}</p> : null}
       {hasFamilies && hasValidRange && currentResult?.status === "empty" ? <p className="usage-export__status" role="status">{copy.noData}</p> : null}
-      {hasFamilies && !hasValidRange ? <p id={invalidRangeId} className="usage-export__error" role="alert">{copy.invalidRange}</p> : null}
       {hasFamilies ? <div className="usage-export__actions">
         <button className="text-button text-button--outlined usage-export__button" type="button" data-usage-export-action="preview" disabled={!canPreview} onClick={handlePreview}>
           <MaterialActionIcon className="usage-export__button-icon" name="keyboard-arrow-down" />
@@ -219,6 +212,7 @@ export function UsageExport({ state, providerId, i18n }: UsageExportProps) {
         </button>
       </div> : null}
       {error ? <p className="usage-export__error" role="alert">{error}</p> : null}
+      {currentResult?.status === "ready" ? <UsagePeriodSummary i18n={i18n} result={currentResult} /> : null}
       {preview ? <UsageExportPreview copy={copy} i18n={i18n} preview={preview} providerLabel={state.providers.find((provider) => provider.providerId === providerId)?.providerLabel ?? copy.unavailable} onDownload={handleDownload} /> : null}
     </section>
   );

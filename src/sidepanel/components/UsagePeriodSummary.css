@@ -1,0 +1,15 @@
+.usage-period-summary { display: grid; gap: var(--app-space-2); min-inline-size: 0; }
+.usage-period-summary__title, .usage-period-summary__empty { margin: 0; }
+.usage-period-summary__title { color: var(--md-sys-color-on-surface); font: var(--md-sys-typescale-title-small-weight) var(--md-sys-typescale-title-small-size) / var(--md-sys-typescale-title-small-line-height) var(--md-sys-typescale-title-small-font); }
+.usage-period-summary__empty { color: var(--md-sys-color-on-surface-variant); }
+.usage-period-summary__metadata { display: flex; flex-wrap: wrap; gap: var(--app-space-2) var(--app-space-3); margin: 0; color: var(--md-sys-color-on-surface-variant); font: var(--md-sys-typescale-label-small-weight) var(--md-sys-typescale-label-small-size) / var(--md-sys-typescale-label-small-line-height) var(--md-sys-typescale-label-small-font); }
+.usage-period-summary__metadata > div { display: flex; gap: var(--app-space-1); min-inline-size: 0; }
+.usage-period-summary__metadata dt, .usage-period-summary__metadata dd { margin: 0; overflow-wrap: anywhere; }
+.usage-period-summary__table-region { position: relative; inline-size: 100%; min-inline-size: 0; overflow: auto; outline: none; }
+.usage-period-summary__table-region:focus-visible { box-shadow: var(--app-focus-ring-shadow); }
+.usage-period-summary table { inline-size: 100%; min-inline-size: 34rem; border-collapse: collapse; color: var(--md-sys-color-on-surface); font-variant-numeric: tabular-nums; }
+.usage-period-summary th, .usage-period-summary td { padding: var(--app-space-2) var(--app-space-3); border-block-end: 1px solid var(--md-sys-color-outline-variant); text-align: start; vertical-align: top; overflow-wrap: anywhere; }
+.usage-period-summary thead th, .usage-period-summary small { color: var(--md-sys-color-on-surface-variant); font: var(--md-sys-typescale-label-small-weight) var(--md-sys-typescale-label-small-size) / var(--md-sys-typescale-label-small-line-height) var(--md-sys-typescale-label-small-font); }
+.usage-period-summary tbody th > span, .usage-period-summary td small { display: block; }
+.usage-period-summary tbody th > small { display: block; margin-block-start: var(--app-space-1); }
+.usage-period-summary td small { display: block; margin-block-start: var(--app-space-1); }
