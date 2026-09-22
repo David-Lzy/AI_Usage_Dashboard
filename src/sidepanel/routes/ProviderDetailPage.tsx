@@ -57,6 +57,7 @@ import { buildApiGatewayMeteringLocalizedCopy } from "../../shared/api-gateway-m
 import { getActiveProviderAccountMetadata } from "../../shared/provider-accounts";
 import { TechnicalText } from "../../shared/components/TechnicalText";
 import { DeploymentComparison } from "../components/DeploymentComparison";
+import { UsageExport } from "../components/UsageExport";
 
 type ProviderDetailPageProps = {
   localePreference: AppLocalePreference;
@@ -809,6 +810,14 @@ export function ProviderDetailPage({
           i18n={i18n}
           state={aggregateState}
           onRefreshAccount={onRefreshAccount}
+        />
+      ) : null}
+
+      {progressSurface === "fullPage" && aggregateState ? (
+        <UsageExport
+          i18n={i18n}
+          providerId={provider.providerId}
+          state={aggregateState}
         />
       ) : null}
 

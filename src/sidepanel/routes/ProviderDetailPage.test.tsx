@@ -295,6 +295,26 @@ describe("ProviderDetailPage", () => {
     ).not.toContain('data-deployment-comparison=""');
   });
 
+  it("renders aggregate usage export only on the full-page provider detail route", () => {
+    const state = createState({
+      providers: SAMPLE_APP_STATE.providers.map((provider) =>
+        provider.providerId === "sub2api-api-key"
+          ? { ...provider, apiGatewayMetering: SUB2API_METERING }
+          : provider,
+      ),
+    });
+
+    expect(
+      renderProviderDetail(state, "sub2api-api-key", {
+        progressSurface: "fullPage",
+        aggregateState: true,
+      }),
+    ).toContain('data-usage-export=""');
+    expect(
+      renderProviderDetail(state, "sub2api-api-key", { aggregateState: true }),
+    ).not.toContain('data-usage-export=""');
+  });
+
   it("renders fresh fixed-window pace estimates only when opted in", () => {
     const state = createState({
       providers: SAMPLE_APP_STATE.providers.map((provider) =>

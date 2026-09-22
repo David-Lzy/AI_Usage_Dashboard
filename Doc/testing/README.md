@@ -112,6 +112,16 @@ and keyboard/table scrolling are exercised. Evidence is under
 `tmp/output/playwright/deployment-comparison/`; `--smoke` limits to en/de/ar.
 No real provider credentials or user browser profile are used.
 
+`node scripts/check-usage-export.mjs` drives aggregate CSV account/family/date
+selection, the 50-row preview, actual browser downloads, deleted accounts,
+invalid ranges and download failure. It compares downloaded bytes with the
+allowlisted data contract and parses them with Papa Parse. All 14 locales run
+at 320px dark / 1280px light; `--smoke` selects en/de/ar. Synthetic CSV examples
+and screenshots are retained under `tmp/output/playwright/usage-export/`.
+The harness verifies no provider fetch, permission request or active-account
+change. Unit tests cover formula prefixes, null/zero, forbidden-field sentinels
+and independent module capture times.
+
 `node scripts/check-quota-notifications.mjs` exercises the real notification
 Settings component, message client, controller and persistence transitions across
 14 locales at 320px dark / 1280px light. Only browser permission/OS transport is

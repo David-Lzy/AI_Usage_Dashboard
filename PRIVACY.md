@@ -62,6 +62,27 @@ parameters, page titles, paths, raw responses, free-text errors, usage values,
 history, custom-source payloads and arbitrary extension storage. The existing
 configuration backup is a separate operation with a different documented scope.
 
+## Usage CSV Export (Unreleased Work Branch)
+
+Full-page Provider details can preview and download selected, already stored
+daily aggregates. The selection is one saved account, one data family and an
+inclusive date range. It does not fetch additional data, switch the active
+account, request permissions or upload anything. Configuration backup and the
+sanitized diagnostic report remain separate operations.
+
+CSV includes the built-in provider type, a sequential account alias, the local
+account label, source series labels, dates, normalized metrics, units/currency,
+coverage, capture time and freshness. Account labels and model/surface labels
+are visible in the preview and exported file; this is not an anonymous report.
+It excludes opaque account/series IDs, credentials, connection URLs, raw
+responses/errors, session/project identity and undated balances/quota totals.
+Only selected retained dates are included. Unknown timezone/capture, missing
+values and stale cached data remain explicit, never fabricated zero values.
+
+The file uses UTF-8 with BOM, stable English column names and CRLF records.
+Text cells with spreadsheet formula prefixes are protected; CSV escaping is
+handled by Papa Parse. No spreadsheet file is opened or executed automatically.
+
 ## Quota Notifications (Unreleased Work Branch)
 
 Notifications are off by default. Enabling them explicitly requests the optional

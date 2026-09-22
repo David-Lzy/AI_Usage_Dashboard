@@ -298,6 +298,7 @@
     "qa:production-state:browser": "./scripts/with-preferred-node.sh node ./scripts/check-production-state-browser.mjs"
   },
   "dependencies": {
+    "papaparse": "^5.7.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "webextension-polyfill": "^0.12.0"
@@ -307,6 +308,7 @@
     "@crxjs/vite-plugin": "^2.2.0",
     "@types/chrome": "^0.1.29",
     "@types/node": "^24.10.1",
+    "@types/papaparse": "^5.5.2",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "@types/webextension-polyfill": "^0.12.5",

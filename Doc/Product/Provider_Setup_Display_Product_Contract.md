@@ -1,6 +1,6 @@
 # Provider Setup And Display Product Contract
 
-Date: 2026-05-16
+Date: 2026-09-23
 
 Document class:
 
@@ -415,6 +415,30 @@ Gemini remains policy-only unless the product explicitly accepts project-scoped 
 ### JetBrains AI
 
 JetBrains remains retained in the repo but deferred from the active support promise until a real organization-visible `Users and licensing` session is reverified. Its current runtime adapter is explicitly no-network and clears obsolete live quota fields. Deferred JetBrains state must not enter Provider Display ordering or quota item controls.
+
+## Aggregate CSV (Unreleased Work Branch)
+
+The full-page Provider detail adds local account/family/date selection and an
+explicit preview followed by CSV download. These controls never change the
+active Provider account or fetch additional history. The preview shows at most
+50 rows and the total selected row count; scope/data changes invalidate it.
+Deleted accounts, unsupported families, invalid ranges and empty selections
+cannot download an old preview. A download failure keeps the preview available.
+Download rechecks freshness; crossing the stale-age boundary requires a new
+preview, so a long-open page cannot export an obsolete "fresh" classification.
+
+The v1 allowlist is daily gateway counts and actual/reference costs, turns by
+model or surface (one dimension per export), and personal usage percentages by
+surface. Percentages are observations, not period totals. Undated billing,
+current quota/balance, gateway today/total/model and Custom Source snapshots
+are outside this contract. Missing days/metrics are not zero-filled, currencies
+are not converted, source dates are not re-bucketed and unknown bucket timezone
+is distinct from the timezone requested from an API. Freshness uses each
+history module's successful capture, not a new failed refresh attempt.
+
+CSV schema v1 has stable English columns:
+`schema_version,provider,account,account_label,family,date,series,metric,value,unit,currency,range_start,range_end,coverage_start,coverage_end,observed_days,selected_days,source_timezone,requested_timezone,captured_at,freshness`.
+Only these fields are serialized; see [privacy boundaries](../../PRIVACY.md).
 
 ## Non-Goals
 
