@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import walletFixture from "../../../fixtures/sub2api/api-key-wallet.fixture.json";
-import { SAMPLE_APP_STATE, SAMPLE_PROVIDER_SECRETS } from "../../shared/constants";
+import { SAMPLE_APP_STATE, SAMPLE_PROVIDER_SECRETS } from "../../shared/demo-state";
 import type {
   ProviderAccountMetadata,
   ProviderSetting,

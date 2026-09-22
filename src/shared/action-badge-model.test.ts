@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import type { AppState, ProviderId } from "../providers/types";
 import { buildActionBadgeModel } from "./action-badge-model";
 import { buildActionBadgeQuotaCandidates } from "./action-badge-preferences";
-import { SAMPLE_APP_STATE } from "./constants";
+import { SAMPLE_APP_STATE } from "./demo-state";
 
 function withVisibleProviders(providerIds: readonly ProviderId[]): AppState {
   return {

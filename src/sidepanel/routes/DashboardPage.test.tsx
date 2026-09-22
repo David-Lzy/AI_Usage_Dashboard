@@ -4,7 +4,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
 import { createDefaultProgressItemsBySurface } from "../../shared/display-preferences";
-import { SAMPLE_APP_STATE } from "../../shared/constants";
+import { SAMPLE_APP_STATE } from "../../shared/demo-state";
 import type { CustomSourceViewModel } from "../../shared/custom-source-view-models";
 import { DashboardPage } from "./DashboardPage";
 

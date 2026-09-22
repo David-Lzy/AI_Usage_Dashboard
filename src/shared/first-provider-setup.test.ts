@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { SAMPLE_APP_STATE } from "./constants";
+import { SAMPLE_APP_STATE } from "./demo-state";
 import { getRecommendedFirstSetupProvider } from "./first-provider-setup";
 
 describe("getRecommendedFirstSetupProvider", () => {

@@ -1,7 +1,7 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { STORE_SCREENSHOT_SEED_LOCK_STORAGE_KEY } from "./store-screenshot-seed";
+import { STORE_SCREENSHOT_SEED_LOCK_STORAGE_KEY } from "./store-screenshot-lock";
 import {
   getStandardAppBootstrapPlan,
   getStandardAppBootstrapMessage,

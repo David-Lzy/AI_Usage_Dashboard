@@ -6,7 +6,8 @@ import {
   normalizeSub2ApiConnection,
 } from "../providers/sub2api/connection";
 import type { ProviderId, ProviderSourcePlan } from "../providers/types";
-import { PROVIDER_SOURCE_BLUEPRINTS, SAMPLE_APP_STATE } from "./constants";
+import { PROVIDER_SOURCE_BLUEPRINTS } from "./constants";
+import { SAMPLE_APP_STATE } from "./demo-state";
 
 type HostPattern = {
   raw: string;

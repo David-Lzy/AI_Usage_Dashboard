@@ -6,7 +6,7 @@ import type {
   AppState,
   CursorUsageBilling,
 } from "../../providers/types";
-import { SAMPLE_APP_STATE } from "../../shared/constants";
+import { SAMPLE_APP_STATE } from "../../shared/demo-state";
 import { getProviderViewModel } from "../view-models";
 import { ProviderDetailPage } from "./ProviderDetailPage";
 

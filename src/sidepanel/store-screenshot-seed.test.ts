@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { WebStorageLike } from "../shared/local-storage";
-import { SAMPLE_APP_STATE } from "../shared/constants";
+import { SAMPLE_APP_STATE } from "../shared/demo-state";
 import {
   STORE_SCREENSHOT_SEED_BACKUP_STORAGE_KEY,
   clearStoreScreenshotSeedBackup,

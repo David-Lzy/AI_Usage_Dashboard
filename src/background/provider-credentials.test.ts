@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { ProviderSecrets } from "../providers/types";
-import { SAMPLE_APP_STATE, SAMPLE_PROVIDER_SECRETS } from "../shared/constants";
+import { SAMPLE_APP_STATE, SAMPLE_PROVIDER_SECRETS } from "../shared/demo-state";
 import { readProviderSecrets } from "../shared/provider-secrets";
 import { updateAppState, writeAppState } from "../shared/storage";
 import { syncStoredProviderCredentials } from "./provider-credentials";

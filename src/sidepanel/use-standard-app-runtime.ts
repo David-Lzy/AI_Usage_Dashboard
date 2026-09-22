@@ -10,7 +10,7 @@ import {
   normalizeThemeSettings,
   startThemeSettingsSync,
 } from "../shared/theme";
-import { isStoreScreenshotSeedLockEnabled } from "./store-screenshot-seed";
+import { isStoreScreenshotSeedLockEnabled } from "./store-screenshot-lock";
 
 export type AppToast = {
   tone: "success" | "error";

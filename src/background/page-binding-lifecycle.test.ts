@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { AppState, ProviderId, ProviderSetting } from "../providers/types";
 import { createPageBindingFromTab } from "../shared/page-bindings";
-import { SAMPLE_APP_STATE } from "../shared/constants";
+import { SAMPLE_APP_STATE } from "../shared/demo-state";
 import { seedAppStateIfEmpty, updateAppState } from "../shared/storage";
 import {
   reconcileProviderBindingsForReplacedTab,

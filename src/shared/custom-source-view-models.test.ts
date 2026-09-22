@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { AppState } from "../providers/types";
-import { SAMPLE_APP_STATE } from "./constants";
+import { SAMPLE_APP_STATE } from "./demo-state";
 import type {
   CustomSourceSetting,
   CustomSourceSnapshot,

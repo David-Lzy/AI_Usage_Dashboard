@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { SAMPLE_APP_STATE } from "./constants";
+import { SAMPLE_APP_STATE } from "./demo-state";
 import { normalizeSnapshotFreshness, normalizeSnapshotTimestamp, withSnapshotFreshness } from "./snapshot-freshness";
 
 const NOW = new Date("2026-09-22T12:00:00Z");

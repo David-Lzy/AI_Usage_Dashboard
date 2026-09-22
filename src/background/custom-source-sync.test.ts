@@ -8,7 +8,7 @@ import {
   type CustomSourceSnapshot,
   type CustomSourceSyncState,
 } from "../shared/custom-sources";
-import { SAMPLE_APP_STATE } from "../shared/constants";
+import { SAMPLE_APP_STATE } from "../shared/demo-state";
 import {
   CUSTOM_SOURCE_HOST_ACCESS_MISSING_MESSAGE,
   CUSTOM_SOURCE_SYNC_CONCURRENCY_LIMIT,

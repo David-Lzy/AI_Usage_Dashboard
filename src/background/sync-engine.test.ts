@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { createUsageThresholdDiagnostic } from "../providers/diagnostics";
 import type { AppState, ProviderSetting, ProviderSnapshot } from "../providers/types";
-import { SAMPLE_APP_STATE } from "../shared/constants";
+import { SAMPLE_APP_STATE } from "../shared/demo-state";
 import {
   hasSyncRelevantProviderSettingDrift,
   reconcileAppStateHealth,

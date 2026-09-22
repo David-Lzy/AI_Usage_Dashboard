@@ -68,6 +68,19 @@ Evidence lives in `tmp/output/playwright/shared-ui/keyboard/`. The visual matrix
 also accepts `--source` for checks without touching a loaded extension build.
 Source-mode checks do not replace final extension-mode validation.
 
+The production-state regression requires an explicitly selected isolated build
+and creates a new offline browser profile. It checks blank provider data, no
+sample quota badge, no granted optional host origins, and that the demo route
+loads only when explicitly opened:
+
+```sh
+node scripts/check-production-state-browser.mjs --extension=/absolute/path/to/isolated/chrome
+```
+
+`PLAYWRIGHT_CHROMIUM_EXECUTABLE` can select an already installed compatible
+Chromium. Results and screenshots use a unique run directory below
+`tmp/output/playwright/production-state/`; no existing browser profile is used.
+
 Localization or responsive UI changes that can vary by language length should
 also run the visual locale matrix against `dist/chrome/`:
 

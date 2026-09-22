@@ -4,7 +4,7 @@ import {
   createHostAccessDiagnostic,
   createSourceSelectionDiagnostic,
 } from "../providers/diagnostics";
-import { SAMPLE_APP_STATE } from "../shared/constants";
+import { SAMPLE_APP_STATE } from "../shared/demo-state";
 import {
   getSafeLocalStorage,
   getSafeStorageItem,
@@ -20,8 +20,7 @@ export type StoreScreenshotSeedPreset =
   | "provider-or-dashboard-depth"
   | "unlock";
 
-export const STORE_SCREENSHOT_SEED_LOCK_STORAGE_KEY =
-  "ai-usage-dashboard.store-screenshot-seed-lock";
+export { STORE_SCREENSHOT_SEED_LOCK_STORAGE_KEY, isStoreScreenshotSeedLockEnabled, setStoreScreenshotSeedLockEnabled } from "./store-screenshot-lock";
 export const STORE_SCREENSHOT_SEED_BACKUP_STORAGE_KEY =
   "ai-usage-dashboard.store-screenshot-seed-backup";
 
@@ -290,36 +289,6 @@ export function getStoreScreenshotSeedPresetDefinition(
     default:
       throw new Error(`Unsupported store screenshot seed preset: ${String(preset)}`);
   }
-}
-
-export function isStoreScreenshotSeedLockEnabled(): boolean {
-  const localStorage = getSafeLocalStorage();
-
-  if (!localStorage) {
-    return false;
-  }
-
-  return getSafeStorageItem(localStorage, STORE_SCREENSHOT_SEED_LOCK_STORAGE_KEY) ===
-    "true";
-}
-
-export function setStoreScreenshotSeedLockEnabled(enabled: boolean) {
-  const localStorage = getSafeLocalStorage();
-
-  if (!localStorage) {
-    return;
-  }
-
-  if (enabled) {
-    setSafeStorageItem(
-      localStorage,
-      STORE_SCREENSHOT_SEED_LOCK_STORAGE_KEY,
-      "true",
-    );
-    return;
-  }
-
-  removeSafeStorageItem(localStorage, STORE_SCREENSHOT_SEED_LOCK_STORAGE_KEY);
 }
 
 export function readStoreScreenshotSeedBackup(): StoreScreenshotSeedBackupEnvelope {

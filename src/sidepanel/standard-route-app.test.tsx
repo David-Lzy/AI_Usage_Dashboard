@@ -2,7 +2,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { AppMessage } from "../shared/app-message-types";
-import { SAMPLE_APP_STATE } from "../shared/constants";
+import { SAMPLE_APP_STATE } from "../shared/demo-state";
 import { createRuntimeI18n } from "../shared/i18n";
 import {
   buildStandardRouteThemeAction,

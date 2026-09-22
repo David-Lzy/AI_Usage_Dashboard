@@ -1,7 +1,7 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
-import { SAMPLE_APP_STATE } from "../../shared/constants";
+import { SAMPLE_APP_STATE } from "../../shared/demo-state";
 import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
 import {
   SettingsPage,

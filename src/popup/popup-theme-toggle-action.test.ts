@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 import type { AppState, ThemeMode } from "../providers/types";
-import { SAMPLE_APP_STATE } from "../shared/constants";
+import { SAMPLE_APP_STATE } from "../shared/demo-state";
 import { runPopupThemeToggleAction } from "./popup-theme-toggle-action";
 
 function createStateWithThemeMode(themeMode: ThemeMode): AppState {

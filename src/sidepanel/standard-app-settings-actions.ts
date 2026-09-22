@@ -11,7 +11,7 @@ import {
   buildConfigurationBackup,
   buildConfigurationBackupFilename,
 } from "../shared/configuration-backup";
-import { SAMPLE_APP_STATE } from "../shared/constants";
+import { createDefaultAppState } from "../shared/production-state";
 import { getSettingsConfigurationBackupCopy } from "../shared/settings-configuration-backup-localized-copy";
 import { downloadTextFile } from "./download-text-file";
 import type { AppToast } from "./use-standard-app-runtime";
@@ -227,8 +227,9 @@ export function createStandardAppSettingsActions({
     }
 
     const currentSignature = getPortableConfigurationSignature(appState);
+    const initialState = createDefaultAppState();
     const initialSignature =
-      getPortableConfigurationSignature(SAMPLE_APP_STATE);
+      getPortableConfigurationSignature(initialState);
 
     if (
       currentSignature !== initialSignature &&
@@ -238,7 +239,7 @@ export function createStandardAppSettingsActions({
       return;
     }
 
-    const initialBackup = buildConfigurationBackup(SAMPLE_APP_STATE, {
+    const initialBackup = buildConfigurationBackup(initialState, {
       includeCustomToolbarIconImage: true,
     });
 

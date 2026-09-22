@@ -229,6 +229,12 @@ Display eligibility plus dashboard display visibility determines whether a provi
 - Missing first-run, legacy, imported, or newly added provider records must be
   completed from the empty production baseline. Development and store-screenshot
   sample values must never seed a real provider snapshot or toolbar badge.
+- On the unreleased improvements branch, `production-state.ts` builds each
+  empty snapshot from explicit production metadata, not by clearing a demo.
+  Fresh install, missing-storage fallback and configuration reset share that
+  source. Demo snapshots live in `demo-state.ts` for tests and the explicitly
+  opened screenshot route; normal startup does not load that route. This is
+  preventive hardening, not a new confirmed data-leak incident or cache wipe.
 - Missing API credentials should point users to the matching API credential card instead of pretending the source is connected.
 
 ### Provider Display

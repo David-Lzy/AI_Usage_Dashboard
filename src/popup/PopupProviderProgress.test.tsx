@@ -6,7 +6,7 @@ import type {
   ProgressDisplayStyle,
   ProgressItemsBySurface,
 } from "../providers/types";
-import { SAMPLE_APP_STATE } from "../shared/constants";
+import { SAMPLE_APP_STATE } from "../shared/demo-state";
 import { createDefaultProgressItemsBySurface } from "../shared/display-preferences";
 import type { RuntimeI18n } from "../shared/i18n";
 import type { ProviderViewModel } from "../shared/provider-view-models";

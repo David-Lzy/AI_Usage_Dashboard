@@ -7,8 +7,8 @@ import type {
 } from "../providers/types";
 import {
   PROVIDER_SECRETS_STORAGE_KEY,
-  SAMPLE_PROVIDER_SECRETS,
 } from "./constants";
+import { createEmptyProviderSecrets } from "./production-state";
 import {
   getSafeLocalStorage,
   getSafeStorageItem,
@@ -313,7 +313,7 @@ async function readSecretStore(): Promise<StoredProviderSecretsV2> {
     const stored = await chrome.storage.local.get(PROVIDER_SECRETS_STORAGE_KEY);
     const rawSecrets = stored[PROVIDER_SECRETS_STORAGE_KEY] as unknown;
     if (rawSecrets === undefined) {
-      return createStoreFromLegacySecrets(SAMPLE_PROVIDER_SECRETS);
+      return createStoreFromLegacySecrets(createEmptyProviderSecrets());
     }
     const normalized = normalizeStoredProviderSecrets(rawSecrets);
     if (normalized.migrated) {
@@ -335,7 +335,7 @@ async function readSecretStore(): Promise<StoredProviderSecretsV2> {
 
   return (
     readMemoryFallbackStore() ??
-    createStoreFromLegacySecrets(SAMPLE_PROVIDER_SECRETS)
+    createStoreFromLegacySecrets(createEmptyProviderSecrets())
   );
 }
 

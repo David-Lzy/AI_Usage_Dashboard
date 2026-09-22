@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { SAMPLE_APP_STATE } from "./constants";
+import { SAMPLE_APP_STATE } from "./demo-state";
 import { getAppStateReplacementGeneration } from "./provider-sync-identity";
 import { clearAppState, readAppState, seedAppStateIfEmpty, updateAppState, writeAppState } from "./storage";
 

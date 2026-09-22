@@ -15,7 +15,11 @@ import {
   startThemeSettingsSync,
   type ThemeSettings,
 } from "../shared/theme";
-import { StoreScreenshotSeedPage } from "./routes/StoreScreenshotSeedPage";
+const StoreScreenshotSeedPage = lazy(() =>
+  import("./routes/StoreScreenshotSeedPage").then((module) => ({
+    default: module.StoreScreenshotSeedPage,
+  })),
+);
 
 const CodexFixtureCapturePage = lazy(() =>
   import("./routes/CodexFixtureCapturePage").then((module) => ({

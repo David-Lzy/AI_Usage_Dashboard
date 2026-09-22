@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { AppMessage } from "../shared/app-message-types";
 import { buildConfigurationBackup } from "../shared/configuration-backup";
-import { SAMPLE_APP_STATE } from "../shared/constants";
+import { SAMPLE_APP_STATE } from "../shared/demo-state";
 import { createRuntimeI18n } from "../shared/i18n";
 import type { AppToast } from "./use-standard-app-runtime";
 import { createStandardAppSettingsActions } from "./standard-app-settings-actions";

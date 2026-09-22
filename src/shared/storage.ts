@@ -14,6 +14,7 @@ import {
 import {
   APP_STATE_STORAGE_KEY,
   DEFAULT_APP_STATE,
+  createDefaultAppState,
 } from "./constants";
 import { normalizePageBinding } from "./page-bindings";
 import { normalizeSourcePreference } from "./provider-sources";
@@ -558,7 +559,7 @@ export function clearAppState(): Promise<void> {
 
 export function seedAppStateIfEmpty(): Promise<AppState> {
   return serializeStateWrite(async () =>
-    (await readAppState()) ?? persistAppState(cloneAppState(DEFAULT_APP_STATE)),
+    (await readAppState()) ?? persistAppState(createDefaultAppState()),
   );
 }
 
@@ -566,7 +567,7 @@ export function updateAppState(
   updater: (state: AppState) => AppState,
 ): Promise<AppState> {
   return serializeStateWrite(async () => {
-    const current = (await readAppState()) ?? cloneAppState(DEFAULT_APP_STATE);
+    const current = (await readAppState()) ?? createDefaultAppState();
     const next = updater(cloneAppState(current));
     return persistAppState(next);
   });

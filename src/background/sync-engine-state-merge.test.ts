@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { AppState, ProviderSnapshot } from "../providers/types";
 import { getProviderSyncAdapter } from "../providers/registry";
-import { SAMPLE_APP_STATE } from "../shared/constants";
+import { SAMPLE_APP_STATE } from "../shared/demo-state";
 import { clearAppState, readAppState, updateAppState, writeAppState } from "../shared/storage";
 import { syncCustomSources } from "./custom-source-sync";
 import { syncCodexBarDashboardSources } from "./codexbar-dashboard-sync";

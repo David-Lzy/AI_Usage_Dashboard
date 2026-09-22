@@ -5,7 +5,7 @@ import type {
   ProviderAccountId,
   ProviderSnapshot,
 } from "../providers/types";
-import { SAMPLE_APP_STATE } from "../shared/constants";
+import { SAMPLE_APP_STATE } from "../shared/demo-state";
 
 const SUB2API_PROVIDER_ID = "sub2api-api-key" as const;
 

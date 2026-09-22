@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { AppState, ProviderDiagnostic } from "../providers/types";
-import { SAMPLE_APP_STATE } from "../shared/constants";
+import { SAMPLE_APP_STATE } from "../shared/demo-state";
 import { createRuntimeI18n } from "../shared/i18n";
 import { buildProviderSourceDisplayLocalizedCopy } from "../shared/localized-copy";
 import {

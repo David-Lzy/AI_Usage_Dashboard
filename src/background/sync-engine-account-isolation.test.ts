@@ -9,7 +9,7 @@ import type {
   ProviderSyncOutcome,
 } from "../providers/types";
 import { getProviderSyncAdapter } from "../providers/registry";
-import { SAMPLE_APP_STATE, SAMPLE_PROVIDER_SECRETS } from "../shared/constants";
+import { SAMPLE_APP_STATE, SAMPLE_PROVIDER_SECRETS } from "../shared/demo-state";
 import {
   addInactiveProviderAccount,
   selectActiveProviderAccount,

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { SAMPLE_APP_STATE, SAMPLE_PROVIDER_SECRETS } from "../shared/constants";
+import { SAMPLE_APP_STATE, SAMPLE_PROVIDER_SECRETS } from "../shared/demo-state";
 import { setSub2ApiKey } from "../shared/provider-secrets";
 import { clearAppState, readAppState, updateAppState, writeAppState } from "../shared/storage";
 import { handleAppMessage } from "./message-bus";

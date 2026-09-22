@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { AppState } from "../providers/types";
 import { buildActionBadgeQuotaCandidates } from "./action-badge-preferences";
-import { SAMPLE_APP_STATE } from "./constants";
+import { SAMPLE_APP_STATE } from "./demo-state";
 import { updateActiveProviderAccountConnection } from "./provider-accounts";
 import {
   clearAppState,

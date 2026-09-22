@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { AppMessage } from "../shared/app-message-types";
-import { SAMPLE_APP_STATE } from "../shared/constants";
+import { SAMPLE_APP_STATE } from "../shared/demo-state";
 import type { AppToast } from "./use-standard-app-runtime";
 import { createStandardAppSessionPageActions } from "./standard-app-session-page-actions";
 

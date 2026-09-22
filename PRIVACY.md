@@ -29,6 +29,13 @@ and Chrome Sync. Sub2API uses this model to isolate user-named deployments;
 other built-in source entries continue to use one `default` account unless
 their descriptor has a separately verified multi-account contract.
 
+The unreleased improvements branch constructs production defaults independently
+of synthetic demonstration snapshots. First install and missing-storage fallback
+do not seed example usage, capture times, billing or history. Configuration
+reset uses production settings defaults; genuine cached usage and existing
+account secrets continue through the normal migration/backup rules. Deliberate
+developer screenshot presets remain separate, explicitly invoked tools.
+
 Codex personal sync may temporarily cache a short-lived ChatGPT access token in
 `chrome.storage.session`. This session credential is separate from AppState and
 is not included in Chrome Sync, configuration backups, import/export files,

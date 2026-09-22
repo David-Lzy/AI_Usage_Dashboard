@@ -7,7 +7,7 @@ import {
   createUsageThresholdDiagnostic,
 } from "../providers/diagnostics";
 import type { ProviderDiagnostic } from "../providers/types";
-import { SAMPLE_APP_STATE } from "../shared/constants";
+import { SAMPLE_APP_STATE } from "../shared/demo-state";
 import { createRuntimeI18n } from "../shared/i18n";
 import {
   buildProviderSourceDisplayLocalizedCopy,

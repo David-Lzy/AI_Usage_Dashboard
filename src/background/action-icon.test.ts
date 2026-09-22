@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { AppState } from "../providers/types";
-import { SAMPLE_APP_STATE } from "../shared/constants";
+import { SAMPLE_APP_STATE } from "../shared/demo-state";
 import { buildActionBadgeQuotaCandidates } from "../shared/action-badge-preferences";
 import {
   buildProviderFaviconUrl,

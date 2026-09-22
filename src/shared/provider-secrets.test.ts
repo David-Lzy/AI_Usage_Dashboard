@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { PROVIDER_SECRETS_STORAGE_KEY, SAMPLE_PROVIDER_SECRETS } from "./constants";
+import { PROVIDER_SECRETS_STORAGE_KEY } from "./constants";
+import { SAMPLE_PROVIDER_SECRETS } from "./demo-state";
 import {
   deleteSub2ApiAccountSecret,
   readProviderSecrets,
