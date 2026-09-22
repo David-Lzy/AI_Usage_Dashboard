@@ -2,9 +2,12 @@ import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 
+import { resolveBuildPaths } from "./lib/build-paths.mjs";
+
 const projectRoot = process.cwd();
-const chromeDistDir = path.join(projectRoot, "dist", "chrome");
-const firefoxDistDir = path.join(projectRoot, "dist", "firefox");
+const { chromeDir: chromeDistDir, firefoxDir: firefoxDistDir } = resolveBuildPaths({
+  projectRoot,
+});
 const firefoxManifestPath = path.join(firefoxDistDir, "manifest.json");
 
 async function readJson(filePath) {

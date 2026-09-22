@@ -57,11 +57,20 @@ describe("shared UsageProgress", () => {
       '<span class="usage-progress__label-name">Weekly limit</span>',
     );
     expect(html).toContain(
-      '<span class="usage-progress__label-reset">Resets Jul 20, 5:17 AM</span>',
+      '<span class="usage-progress__label-reset" title="Resets Jul 20, 5:17 AM" dir="auto" style="max-inline-size:calc(100% - 0px);white-space:nowrap">Resets Jul 20, 5:17 AM</span>',
     );
     expect(html).toContain(
       'aria-label="Weekly limit. Resets Jul 20, 5:17 AM"',
     );
+  });
+
+  it.each(["circle", "circle-soft", "circle-gauge"] as const)("fits long reset captions in %s without removing the accessible label", (displayStyle) => {
+    const labelSecondary = "A long localized reset timestamp retained without truncation";
+    const html = renderToStaticMarkup(<UsageProgress used={10} total={100} tone="neutral"
+      label="Weekly limit" labelSecondary={labelSecondary} displayStyle={displayStyle} />);
+    expect(html).toContain(`class="usage-progress__label-reset" title="${labelSecondary}"`);
+    expect(html).toContain("max-inline-size:calc(100% - 0px);white-space:nowrap");
+    expect(html).toContain(`aria-label="Weekly limit. ${labelSecondary}"`);
   });
 
   it("uses localized percent formatting for circular progress", () => {

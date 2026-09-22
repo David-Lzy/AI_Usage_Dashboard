@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from "react";
 
-/** Keep localized words inside the ring without resizing the quota layout. */
+/** Fit ring values and captions to their slot without resizing the quota layout. */
 export function ProgressRingValue({ value, className, inset }: {
   value: string;
   className: string;

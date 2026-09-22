@@ -4,7 +4,10 @@ import { spawnSync } from "node:child_process";
 import path from "node:path";
 import process from "node:process";
 
+import { resolveBuildPaths } from "./lib/build-paths.mjs";
+
 const projectRoot = process.cwd();
+const { firefoxDir } = resolveBuildPaths({ projectRoot });
 const webExtBin = path.join(
   projectRoot,
   "node_modules",
@@ -29,7 +32,7 @@ function warningMatchesBaseline(warning) {
 
 const result = spawnSync(
   webExtBin,
-  ["lint", "--source-dir", "dist/firefox", "--output=json"],
+  ["lint", "--source-dir", firefoxDir, "--output=json"],
   {
     cwd: projectRoot,
     encoding: "utf8",

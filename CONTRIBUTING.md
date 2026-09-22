@@ -9,6 +9,14 @@ AI Usage Dashboard is a Chrome extension for tracking AI coding tool usage, setu
 3. Run `npm run build` to produce `dist/chrome/`.
 4. Load `dist/chrome/` as an unpacked extension from `chrome://extensions`.
 
+For QA while that build is loaded, use a fresh absolute output root outside the
+checkout: `export AI_USAGE_BUILD_ROOT="$(mktemp -d /tmp/ai-usage-qa-XXXXXX)"`.
+Builds then use its `chrome/`, `firefox/` and `release/` children without updating
+the checkout's legacy build aliases. Keep the same environment for packaging and
+Firefox lint. Never use a directory containing important existing outputs; builds
+replace their target contents. Do not override Vite `--outDir` independently.
+Unset the variable before deliberately rebuilding your normal development copy.
+
 Firefox compatibility work is kept on the same mainline but remains
 experimental. Use `npm run firefox:build` and `npm run firefox:lint` to verify
 the generated `dist/firefox/` package without changing the Chrome build output.

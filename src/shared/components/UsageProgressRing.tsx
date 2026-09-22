@@ -218,7 +218,7 @@ export function UsageProgressRing({
       <p className="usage-progress__ring-label">
         <span className="usage-progress__label-name">{label}</span>
         {labelSecondary ? (
-          <span className="usage-progress__label-reset">{labelSecondary}</span>
+          <ProgressRingValue className="usage-progress__label-reset" value={labelSecondary} inset={0} />
         ) : null}
       </p>
       {detail ? <p className="supporting-copy usage-progress__detail">{detail}</p> : null}

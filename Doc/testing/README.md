@@ -155,3 +155,44 @@ npm run perf:extension:profile -- --pid=<chrome-task-manager-process-id>
 
 Do not commit screenshots, local browser profile paths, account data, cookies,
 raw auth headers, or personal provider evidence.
+
+## Performance Baseline
+
+Use isolated outputs and the existing explicit synthetic screenshot preset:
+
+```sh
+export AI_USAGE_BUILD_ROOT="$(mktemp -d /tmp/ai-usage-perf-XXXXXX)"
+npm run build
+npm run release:package
+npm run perf:popup:baseline -- --extension="$AI_USAGE_BUILD_ROOT/chrome" --archive="$AI_USAGE_BUILD_ROOT/release/ai-usage-dashboard-$(node -p 'require("./package.json").version').zip"
+```
+
+The default baseline measures ten first opens in separate profiles and ten warm
+opens per scenario: English, German and Arabic; 320px compact and 392px balanced;
+one and three cards. Readiness is navigation-to-cards, fonts and two paint frames,
+not browser process startup or a flushed OS cache. Idle, glide, hover-paused and
+reduced-motion CPU each get three 30-second windows. The harness verifies actual
+motion/paused states and samples only its own extension renderers. Missing PIDs
+fail measurement rather than becoming zero. CPU excludes browser/GPU processes.
+
+Results, profile ownership, fixture hash, environment, screenshots, median/p95,
+spread, largest chunks and archive bytes go into a unique directory below
+`tmp/output/playwright/popup-performance/`. Profiles are retained for diagnosis.
+`--smoke` is a harness check, not a valid baseline. Use
+`--startup-only` or `--cpu-only` to repeat one subset without replacing earlier
+evidence. Combine only compatible fixture/build hashes and record both reports.
+`--locale=en`, `--locale=de`, or `--locale=ar` narrows a rerun. The report includes
+host load and the build-content hash. Set
+`PLAYWRIGHT_CHROMIUM_EXECUTABLE` to an existing extension-capable Chromium binary
+when the Playwright-managed browser is unavailable; no browser is installed by
+these commands. A single host run is not a user-facing speed claim or a CI budget.
+
+The older `perf:extension:profile` remains available for broader surface or explicit
+PID investigations, accepts `--extension`/`--output`, and now uses unique output
+directories with retained profiles. Its default Chrome build follows
+`AI_USAGE_BUILD_ROOT` when set. Do not use its all-current-renderers mode for
+isolated baseline comparisons. Re-run identical fixtures on a quiet host before
+attributing differences to code, and report run-to-run spread alongside medians.
+Its old surface scenarios are exploratory and unseeded, not substitutes for
+the controlled popup baseline. CPU sampling requires Linux `/proc` and verifies
+both PID and process start time across every window.

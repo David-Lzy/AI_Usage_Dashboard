@@ -3,7 +3,10 @@ import path from "node:path";
 import process from "node:process";
 import { spawn } from "node:child_process";
 
+import { resolveBuildPaths } from "./lib/build-paths.mjs";
+
 const projectRoot = process.cwd();
+const { firefoxDir } = resolveBuildPaths({ projectRoot });
 const homeDir = process.env.HOME ?? "";
 const playwrightCacheDir = path.join(homeDir, ".cache", "ms-playwright");
 const webExtBin = path.join(projectRoot, "node_modules", "web-ext", "bin", "web-ext.js");
@@ -97,7 +100,7 @@ async function main() {
       webExtBin,
       "run",
       "--source-dir",
-      "dist/firefox",
+      firefoxDir,
       "--firefox",
       firefoxPath,
       ...process.argv.slice(2),

@@ -1,18 +1,17 @@
-import { execFile } from "node:child_process";
-import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
-import { tmpdir } from "node:os";
+import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
-import { promisify } from "node:util";
 
 import { chromium } from "playwright";
 
-const execFileAsync = promisify(execFile);
+import { findBrowserRootPid, getExtensionRendererRows, isExtensionRenderer, listProcesses, resolveClockTicksPerSecond, sampleRendererCpu } from "./lib/extension-cpu-sampling.mjs";
 
 const projectRoot = process.cwd();
-const extensionPath = path.join(projectRoot, "dist", "chrome");
-const artifactDir = path.join(projectRoot, "tmp", "extension-cpu-profile");
-const userDataDir = await mkdtemp(path.join(tmpdir(), "ai-usage-dashboard-cpu-"));
+const extensionPath = path.resolve(getStringArg("--extension") ?? path.join(process.env.AI_USAGE_BUILD_ROOT ?? path.join(projectRoot, "dist"), "chrome"));
+const artifactRoot = path.resolve(getStringArg("--output") ?? path.join(projectRoot, "tmp/output/extension-cpu-profile"));
+await mkdir(artifactRoot, { recursive: true });
+const artifactDir = await mkdtemp(path.join(artifactRoot, "run-"));
+const userDataDir = path.join(artifactDir, "profile");
 const sampleCount = getNumberArg("--sample-count", 10);
 const intervalMs = getNumberArg("--interval-ms", 3000);
 const headed = process.argv.includes("--headed");
@@ -22,6 +21,10 @@ const currentExtensionRenderers = process.argv.includes(
   "--current-extension-renderers",
 );
 const clockTicksPerSecond = await resolveClockTicksPerSecond();
+
+function getStringArg(name) {
+  return process.argv.find((arg) => arg.startsWith(`${name}=`))?.slice(name.length + 1);
+}
 
 function getNumberArg(name, fallback) {
   const entry = process.argv.find((arg) => arg.startsWith(`${name}=`));
@@ -58,110 +61,7 @@ function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function resolveClockTicksPerSecond() {
-  try {
-    const { stdout } = await execFileAsync("getconf", ["CLK_TCK"]);
-    const value = Number.parseInt(stdout.trim(), 10);
-
-    return Number.isFinite(value) && value > 0 ? value : 100;
-  } catch {
-    return 100;
-  }
-}
-
-async function listProcesses() {
-  const { stdout } = await execFileAsync("ps", ["-eo", "pid=,ppid=,args="], {
-    maxBuffer: 1024 * 1024 * 8,
-  });
-
-  return stdout
-    .split("\n")
-    .map((line) => line.match(/^\s*(\d+)\s+(\d+)\s+(.*)$/))
-    .filter((match) => match !== null)
-    .map((match) => ({
-      pid: Number.parseInt(match[1], 10),
-      ppid: Number.parseInt(match[2], 10),
-      args: match[3],
-    }));
-}
-
-async function findChromeRootPid() {
-  const startedAt = Date.now();
-
-  while (Date.now() - startedAt < 10000) {
-    const rows = await listProcesses();
-    const root = rows.find(
-      (row) =>
-        row.args.includes(userDataDir) &&
-        !row.args.includes("--type=") &&
-        /chrome|chromium/i.test(row.args),
-    );
-
-    if (root) {
-      return root.pid;
-    }
-
-    await delay(250);
-  }
-
-  throw new Error("Could not resolve launched Chrome root process.");
-}
-
-function collectDescendants(rows, rootPid) {
-  const childrenByParent = new Map();
-
-  for (const row of rows) {
-    const children = childrenByParent.get(row.ppid) ?? [];
-    children.push(row);
-    childrenByParent.set(row.ppid, children);
-  }
-
-  const descendants = [];
-  const pending = [...(childrenByParent.get(rootPid) ?? [])];
-
-  while (pending.length > 0) {
-    const row = pending.shift();
-
-    if (!row) {
-      continue;
-    }
-
-    descendants.push(row);
-    pending.push(...(childrenByParent.get(row.pid) ?? []));
-  }
-
-  return descendants;
-}
-
-function isExtensionRenderer(row) {
-  return (
-    row.args.includes("--type=renderer") &&
-    row.args.includes("--extension-process")
-  );
-}
-
-async function readCpuTicks(pid) {
-  try {
-    const stat = await readFile(`/proc/${pid}/stat`, "utf8");
-    const tail = stat.slice(stat.lastIndexOf(")") + 2).trim().split(/\s+/);
-    const userTicks = Number.parseInt(tail[11], 10);
-    const systemTicks = Number.parseInt(tail[12], 10);
-
-    if (!Number.isFinite(userTicks) || !Number.isFinite(systemTicks)) {
-      return null;
-    }
-
-    return userTicks + systemTicks;
-  } catch {
-    return null;
-  }
-}
-
-async function getExtensionRendererRows(rootPid) {
-  const rows = await listProcesses();
-
-  return collectDescendants(rows, rootPid).filter(isExtensionRenderer);
-}
+async function findChromeRootPid() { return findBrowserRootPid(userDataDir); }
 
 async function getCurrentExtensionRendererRows() {
   const rows = await listProcesses();
@@ -181,64 +81,9 @@ async function collectCpuSample(rootPid) {
 }
 
 async function collectCpuSampleFromRows(resolveRows) {
-  const beforeRows = await resolveRows();
-  const beforeTicks = new Map();
-  const startedAt = process.hrtime.bigint();
-
-  await Promise.all(
-    beforeRows.map(async (row) => {
-      const ticks = await readCpuTicks(row.pid);
-
-      if (ticks !== null) {
-        beforeTicks.set(row.pid, ticks);
-      }
-    }),
-  );
-
-  await delay(intervalMs);
-
-  const afterRows = await resolveRows();
-  const afterTicks = new Map();
-
-  await Promise.all(
-    afterRows.map(async (row) => {
-      const ticks = await readCpuTicks(row.pid);
-
-      if (ticks !== null) {
-        afterTicks.set(row.pid, ticks);
-      }
-    }),
-  );
-
-  const elapsedSeconds =
-    Number(process.hrtime.bigint() - startedAt) / 1_000_000_000;
-  let totalCpuPercent = 0;
-  const rowsByPid = new Map(afterRows.map((row) => [row.pid, row]));
-  const pidSummaries = [];
-
-  for (const [pid, after] of afterTicks) {
-    const before = beforeTicks.get(pid);
-
-    if (before === undefined) {
-      continue;
-    }
-
-    const cpuPercent =
-      ((after - before) / clockTicksPerSecond / elapsedSeconds) * 100;
-
-    totalCpuPercent += cpuPercent;
-    pidSummaries.push({
-      pid,
-      cpuPercent: round(cpuPercent),
-      args: summarizeArgs(rowsByPid.get(pid)?.args ?? ""),
-    });
-  }
-
-  return {
-    cpuPercent: round(totalCpuPercent),
-    extensionRendererCount: afterRows.length,
-    pids: pidSummaries,
-  };
+  const sample = await sampleRendererCpu(resolveRows, { intervalMs, clockTicksPerSecond });
+  assert(sample.coverageComplete, "Renderer CPU sample unavailable or process set changed; do not treat as zero");
+  return sample;
 }
 
 async function runLiveProfile({ id, resolveRows }) {
@@ -262,6 +107,7 @@ async function runLiveProfile({ id, resolveRows }) {
   const output = {
     generatedAt: new Date().toISOString(),
     mode: id,
+    attribution: "Unowned exploratory process selection, not verified target-extension CPU. --current-extension-renderers includes other profiles and extensions; --pid includes exactly the supplied processes.",
     sampleCount,
     intervalMs,
     avgCpuPercent: round(
@@ -282,34 +128,6 @@ async function runLiveProfile({ id, resolveRows }) {
 
 function round(value) {
   return Math.round(value * 10) / 10;
-}
-
-function summarizeArgs(args) {
-  const clientIdMatch = args.match(/--renderer-client-id=(\d+)/);
-  const launchTicksMatch = args.match(/--launch-time-ticks=(\d+)/);
-
-  return [
-    clientIdMatch ? `renderer-client-id=${clientIdMatch[1]}` : "renderer",
-    launchTicksMatch ? `launch-time-ticks=${launchTicksMatch[1]}` : null,
-  ]
-    .filter(Boolean)
-    .join(" ");
-}
-
-async function waitForServiceWorker(context, timeoutMs = 30000) {
-  const startedAt = Date.now();
-
-  while (Date.now() - startedAt < timeoutMs) {
-    const [serviceWorker] = context.serviceWorkers();
-
-    if (serviceWorker) {
-      return serviceWorker;
-    }
-
-    await delay(500);
-  }
-
-  throw new Error("Timed out waiting for extension service worker to start.");
 }
 
 async function readExtensionIdFromPreferences() {
@@ -436,6 +254,7 @@ async function maybeClickButtonByText(page, pattern) {
 
 async function launchExtensionContext() {
   const launchCandidates = [
+    ...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE ? [{ executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE, headless: !headed }] : []),
     { channel: "chromium", headless: !headed },
     { channel: "chrome", headless: !headed },
     { executablePath: "/usr/bin/google-chrome", headless: !headed },
@@ -610,7 +429,6 @@ if (explicitPids.length > 0) {
     id: `live-pid-${explicitPids.join("-")}`,
     resolveRows: () => getRowsByPid(explicitPids),
   });
-  await rm(userDataDir, { recursive: true, force: true }).catch(() => {});
   process.exit(0);
 }
 
@@ -619,7 +437,6 @@ if (currentExtensionRenderers) {
     id: "current-extension-renderers",
     resolveRows: getCurrentExtensionRendererRows,
   });
-  await rm(userDataDir, { recursive: true, force: true }).catch(() => {});
   process.exit(0);
 }
 
@@ -660,8 +477,13 @@ try {
     }
   }
 
+  if (results.some((result) => result.status !== "ok")) process.exitCode = 1;
+
   const output = {
     generatedAt: new Date().toISOString(),
+    extensionPath,
+    userDataDir,
+    measurementClass: "Exploratory unseeded surface observations; scenario names describe requested setup, not verified reproducible UI state. Use perf:popup:baseline for controlled popup comparisons.",
     extensionId,
     rootPid,
     sampleCount,
@@ -678,5 +500,4 @@ try {
   console.log(`Wrote ${path.join(artifactDir, "last-run.json")}`);
 } finally {
   await context?.close().catch(() => {});
-  await rm(userDataDir, { recursive: true, force: true }).catch(() => {});
 }

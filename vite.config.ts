@@ -9,8 +9,13 @@ import { defineConfig } from "vite";
 import manifest from "./src/manifest.json";
 import pkg from "./package.json";
 import { ensureLegacyChromeDistAliases } from "./scripts/lib/chrome-dist-aliases";
+import {
+  assertConfiguredChromeBuildOutDir,
+  resolveBuildPaths,
+  shouldMaintainLegacyChromeDistAliases,
+} from "./scripts/lib/build-paths.mjs";
 
-const chromeDistRelativeDir = "dist/chrome";
+const buildPaths = resolveBuildPaths();
 
 function getGitCommit(): string {
   try {
@@ -25,7 +30,7 @@ function normalizeRollupId(id: string | null | undefined) {
 }
 
 async function rewriteBuiltAssetReferences(
-  projectRoot: string,
+  chromeDistDir: string,
   previousAssetRelativePath: string,
   stableAssetRelativePath: string,
 ) {
@@ -38,7 +43,7 @@ async function rewriteBuiltAssetReferences(
 
   const previousAssetFilename = path.posix.basename(previousAssetPath);
   const stableAssetFilename = path.posix.basename(stableAssetPath);
-  const assetsAbsoluteDir = path.join(projectRoot, chromeDistRelativeDir, "assets");
+  const assetsAbsoluteDir = path.join(chromeDistDir, "assets");
   const entries = await readdir(assetsAbsoluteDir, { withFileTypes: true });
 
   await Promise.all(
@@ -60,11 +65,11 @@ async function rewriteBuiltAssetReferences(
 }
 
 async function rewriteHtmlEntryToStableFile(
-  projectRoot: string,
+  chromeDistDir: string,
   htmlRelativePath: string,
   stableAssetRelativePath: string,
 ) {
-  const htmlAbsolutePath = path.join(projectRoot, htmlRelativePath);
+  const htmlAbsolutePath = path.join(chromeDistDir, htmlRelativePath);
   const html = await readFile(htmlAbsolutePath, "utf8");
   const match = html.match(/<script type="module" crossorigin src="([^"]+)"><\/script>/);
 
@@ -75,20 +80,18 @@ async function rewriteHtmlEntryToStableFile(
   const currentAssetPath = match[1];
   const currentAssetRelativePath = currentAssetPath.replace(/^\//, "");
   const currentAssetAbsolutePath = path.join(
-    projectRoot,
-    chromeDistRelativeDir,
+    chromeDistDir,
     currentAssetRelativePath,
   );
   const stableAssetAbsolutePath = path.join(
-    projectRoot,
-    chromeDistRelativeDir,
+    chromeDistDir,
     stableAssetRelativePath,
   );
 
   if (currentAssetRelativePath !== stableAssetRelativePath) {
     await rename(currentAssetAbsolutePath, stableAssetAbsolutePath);
     await rewriteBuiltAssetReferences(
-      projectRoot,
+      chromeDistDir,
       currentAssetRelativePath,
       stableAssetRelativePath,
     );
@@ -101,25 +104,24 @@ async function rewriteHtmlEntryToStableFile(
 function stableExtensionBuildOutputPlugin() {
   return {
     name: "stable-extension-build-output",
+    apply: "build" as const,
+    configResolved(config: { root: string; build: { outDir: string } }) {
+      assertConfiguredChromeBuildOutDir(buildPaths, config.root, config.build.outDir);
+    },
     async closeBundle() {
-      const projectRoot = process.cwd();
-
       await rewriteHtmlEntryToStableFile(
-        projectRoot,
-        path.join(chromeDistRelativeDir, "src/popup/index.html"),
+        buildPaths.chromeDir,
+        path.join("src/popup/index.html"),
         "assets/popup.js",
       );
       await rewriteHtmlEntryToStableFile(
-        projectRoot,
-        path.join(chromeDistRelativeDir, "src/sidepanel/index.html"),
+        buildPaths.chromeDir,
+        path.join("src/sidepanel/index.html"),
         "assets/sidepanel.js",
       );
 
-      const loaderRelativePath = path.join(
-        chromeDistRelativeDir,
-        "service-worker-loader.js",
-      );
-      const loaderAbsolutePath = path.join(projectRoot, loaderRelativePath);
+      const loaderRelativePath = "service-worker-loader.js";
+      const loaderAbsolutePath = path.join(buildPaths.chromeDir, loaderRelativePath);
       const loader = await readFile(loaderAbsolutePath, "utf8");
       const workerMatch = loader.match(/['"]\.\/assets\/([^'"]+)['"]/);
 
@@ -130,13 +132,11 @@ function stableExtensionBuildOutputPlugin() {
       const currentWorkerRelativePath = `assets/${workerMatch[1]}`;
       const stableWorkerRelativePath = "assets/service-worker.js";
       const currentWorkerAbsolutePath = path.join(
-        projectRoot,
-        chromeDistRelativeDir,
+        buildPaths.chromeDir,
         currentWorkerRelativePath,
       );
       const stableWorkerAbsolutePath = path.join(
-        projectRoot,
-        chromeDistRelativeDir,
+        buildPaths.chromeDir,
         stableWorkerRelativePath,
       );
 
@@ -149,7 +149,9 @@ function stableExtensionBuildOutputPlugin() {
         `./${stableWorkerRelativePath}`,
       );
       await writeFile(loaderAbsolutePath, rewrittenLoader);
-      await ensureLegacyChromeDistAliases(projectRoot);
+      if (shouldMaintainLegacyChromeDistAliases(buildPaths)) {
+        await ensureLegacyChromeDistAliases(buildPaths.projectRoot);
+      }
     },
   };
 }
@@ -163,7 +165,7 @@ export default defineConfig({
   },
   plugins: [react(), crx({ manifest }), stableExtensionBuildOutputPlugin()],
   build: {
-    outDir: chromeDistRelativeDir,
+    outDir: buildPaths.chromeDir,
     emptyOutDir: true,
     rollupOptions: {
       output: {

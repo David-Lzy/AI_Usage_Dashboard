@@ -289,6 +289,11 @@ Rules:
 - usage facts, raw diagnostic bodies, provider evidence, and archive/export payloads stay source-truth data, not configurable progress bars
 - hidden-provider quota item settings must not affect visible popup, sidebar, or full-page rendering
 
+Unreleased work-branch UI hardening: circular quota reset captions retain their
+full localized text on one line and fit within their own column. Long RTL dates
+must not widen a compact Popup or overlap the neighboring quota. The full text
+remains in the progress accessibility label and the caption's hover title.
+
 ### Quota Pace Estimate
 
 Quota pace is optional derived presentation data, not provider source truth.

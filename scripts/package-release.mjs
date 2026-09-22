@@ -4,10 +4,11 @@ import process from "node:process";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 
+import { resolveBuildPaths } from "./lib/build-paths.mjs";
+
 const execFileAsync = promisify(execFile);
 const projectRoot = process.cwd();
-const distDir = path.join(projectRoot, "dist", "chrome");
-const releaseDir = path.join(projectRoot, "release");
+const { chromeDir: distDir, releaseDir } = resolveBuildPaths({ projectRoot });
 const packageJsonPath = path.join(projectRoot, "package.json");
 const manifestPath = path.join(projectRoot, "src", "manifest.json");
 const builtManifestPath = path.join(distDir, "manifest.json");
@@ -72,13 +73,13 @@ async function main() {
 
   if (builtManifestVersionName !== packageVersion) {
     throw new Error(
-      `dist/chrome/manifest.json version_name (${builtManifestVersionName}) must match package.json version (${packageVersion}). Run \`npm run build\` before packaging.`,
+      `${builtManifestPath} version_name (${builtManifestVersionName}) must match package.json version (${packageVersion}). Run \`npm run build\` before packaging.`,
     );
   }
 
   if (builtManifest.version !== expectedManifestVersion) {
     throw new Error(
-      `dist/chrome/manifest.json version (${builtManifest.version}) must match the numeric Chrome version derived from package.json (${expectedManifestVersion}). Run \`npm run build\` before packaging.`,
+      `${builtManifestPath} version (${builtManifest.version}) must match the numeric Chrome version derived from package.json (${expectedManifestVersion}). Run \`npm run build\` before packaging.`,
     );
   }
 

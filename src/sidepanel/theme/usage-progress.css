@@ -140,6 +140,9 @@
 }
 
 .usage-progress__ring-label {
+  min-inline-size: 0;
+  inline-size: 100%;
+  max-inline-size: 100%;
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
