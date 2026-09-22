@@ -4,6 +4,8 @@ export type ExtensionPermissionsRequest = {
 };
 
 export type ExtensionPermissionsApi = {
+  onAdded?: { addListener: (listener: () => void) => void; removeListener: (listener: () => void) => void };
+  onRemoved?: { addListener: (listener: () => void) => void; removeListener: (listener: () => void) => void };
   addHostAccessRequest?: (request: {
     documentId?: string;
     pattern?: string;
@@ -48,6 +50,12 @@ export type ExtensionScriptingApi = {
 export type ExtensionRuntimeApi = {
   id?: string;
   getURL?: (path: string) => string;
+  sendMessage?: (message: unknown) => Promise<unknown>;
+};
+
+export type ExtensionNotificationsApi = {
+  create?: (id: string, options: { type: "basic"; iconUrl: string; title: string; message: string }) => Promise<string>;
+  getPermissionLevel?: () => Promise<"granted" | "denied">;
 };
 
 export type ExtensionApiNamespace = {
@@ -55,6 +63,7 @@ export type ExtensionApiNamespace = {
   permissions?: ExtensionPermissionsApi;
   tabs?: ExtensionTabsApi;
   scripting?: ExtensionScriptingApi;
+  notifications?: ExtensionNotificationsApi;
 };
 
 function getGlobalExtensionNamespace(

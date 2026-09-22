@@ -66,6 +66,7 @@ import { SettingsProviderDisplaySection } from "../components/SettingsProviderDi
 import { CustomSourceSettingsSection } from "../components/CustomSourceSettingsSection";
 import { CodexBarDashboardBridgeSettings } from "../components/CodexBarDashboardBridgeSettings";
 import { MaterialInfoTooltip } from "../components/MaterialInfoTooltip";
+import { QuotaNotificationSettings } from "../components/QuotaNotificationSettings";
 import { BUILD_INFO } from "../../shared/build-info";
 import { useSettingsPage } from "../use-settings-page";
 import type { MaterialActionIconName } from "../../shared/components/MaterialActionIcon";
@@ -574,6 +575,16 @@ export function SettingsPage({
           onToolbarIconCustomImageDataUrlChange
         }
         onThemeCustomSeedChange={onSaveThemeCustomSeed}
+      />
+
+      <QuotaNotificationSettings
+        state={{
+          providers: snapshots,
+          providerSettings: providers,
+          providerAccounts,
+        }}
+        i18n={i18n}
+        warningThresholdPercent={settings.warningThresholdPercent}
       />
 
       <SettingsQuickSetupSection

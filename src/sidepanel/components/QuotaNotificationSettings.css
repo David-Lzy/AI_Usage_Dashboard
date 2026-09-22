@@ -1,0 +1,115 @@
+.quota-notification-settings {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-4);
+  padding-inline: var(--app-space-1);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.quota-notification-settings__body,
+.quota-notification-settings__controls,
+.quota-notification-settings__scopes,
+.quota-notification-settings__account,
+.quota-notification-settings__windows {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-3);
+  min-width: 0;
+}
+
+.quota-notification-settings__controls {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.quota-notification-settings__switch {
+  padding-block: var(--app-space-3);
+  padding-inline: 0;
+  border-inline: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.quota-notification-settings__number-control {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  max-inline-size: 18rem;
+  align-items: center;
+  gap: var(--app-space-2);
+}
+
+.quota-notification-settings__unit {
+  color: var(--md-sys-color-on-surface-variant);
+  padding-inline: var(--app-space-1);
+}
+
+.quota-notification-settings__check-row {
+  display: flex;
+  align-items: center;
+  gap: var(--app-space-3);
+  min-width: 0;
+  color: var(--md-sys-color-on-surface);
+  cursor: pointer;
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  font-weight: var(--md-sys-typescale-body-medium-weight);
+  line-height: var(--md-sys-typescale-body-medium-line-height);
+}
+
+.quota-notification-settings__check-row input {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  margin: 0;
+  accent-color: var(--md-sys-color-primary);
+}
+
+.quota-notification-settings__check-row span,
+.quota-notification-settings__scope-label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.quota-notification-settings__account {
+  padding-block-start: var(--app-space-3);
+  border-block-start: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.quota-notification-settings__windows {
+  gap: var(--app-space-2);
+  padding-inline-start: calc(18px + var(--app-space-3));
+}
+
+.quota-notification-settings__scope-label {
+  margin: 0;
+  color: var(--md-sys-color-on-surface-variant);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  line-height: var(--md-sys-typescale-label-large-line-height);
+}
+
+.quota-notification-settings__window {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.quota-notification-settings__test {
+  justify-self: start;
+}
+
+.quota-notification-settings__status {
+  margin: 0;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.quota-notification-settings [disabled] {
+  cursor: not-allowed;
+}
+
+@media (max-width: 360px) {
+  .quota-notification-settings__windows {
+    padding-inline-start: 0;
+  }
+}

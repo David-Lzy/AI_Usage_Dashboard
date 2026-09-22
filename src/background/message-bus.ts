@@ -65,6 +65,7 @@ import {
   getCodexBarDashboardGeneration,
 } from "./codexbar-dashboard-sync";
 import { mergeBackgroundSyncState } from "./background-state-merge";
+import { quotaNotificationController } from "./quota-notification-runtime";
 
 export type {
   AppMessage,
@@ -710,6 +711,8 @@ export async function handleAppMessage(
         return { ok: false, error: parsedBackup.error };
       }
 
+      await quotaNotificationController.reset();
+
       const importedState = await updateAppState((currentState) => {
         invalidateAllProviderSyncIdentities();
         return reconcileAppStateHealth(
@@ -782,6 +785,8 @@ export async function handleAppMessage(
             "No AI Usage Dashboard configuration backup was found in Chrome Sync.",
         };
       }
+
+      await quotaNotificationController.reset();
 
       const restoredState = await updateAppState((currentState) => {
         invalidateAllProviderSyncIdentities();

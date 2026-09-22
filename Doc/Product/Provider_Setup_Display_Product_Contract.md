@@ -181,6 +181,34 @@ Raw error text, credentials, URLs, identities and usage values are excluded.
 Preview captures one immutable report; subsequent sync does not change the file
 being reviewed. Download is local and user-initiated, with no upload service.
 
+### Quota Notifications (Unreleased Work Branch)
+
+Settings offers optional notifications at every display level. The feature is
+off by default; only the explicit enable action requests notification permission.
+The initial threshold is the existing warning threshold, measured as percent used.
+Account/window switches and an indefinite pause control delivery; the test action
+does not simulate a quota event. Permissions denied or unavailable never enable
+the feature silently. Preferences and the bounded ledger stay local-only.
+
+Only known percentage windows with a proven successful capture at most 30 minutes
+old are eligible. First observation and preference edits establish a baseline;
+already-low, failed, reused, future, unknown or expired data does not create an
+alert. A low alert follows a threshold crossing and is suppressed for the rest
+of that observed window. A reset requires the old reset time to have elapsed, a
+later reset time and lower usage confirmed by two independent successful captures.
+A single zero or rebound is not a reset. A new zero in used or remaining quota
+needs a confirming capture before changing the notification baseline or alerting.
+Absolute balances and policy-only sources
+are unsupported. Missing quota is never zero.
+
+Inactive accounts are not polled for this feature. Existing manual/automatic
+captures feed it without changing account selection. Removed accounts are pruned
+and rechecked before delivery. Paused, disabled or permission-revoked scopes do
+not accumulate a notification backlog. Configuration import, restore and reset
+disable local notification preferences. Delivery is at-most-once: durable event
+state precedes the OS request, so an OS rejection, a superseding capture or a
+crash may suppress an alert instead of replaying it. OS display is not guaranteed.
+
 ### Setup State
 
 Setup state describes whether a source entry has enough user action, permission, credentials, or source binding to attempt a truthful sync.

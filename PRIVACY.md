@@ -62,6 +62,26 @@ parameters, page titles, paths, raw responses, free-text errors, usage values,
 history, custom-source payloads and arbitrary extension storage. The existing
 configuration backup is a separate operation with a different documented scope.
 
+## Quota Notifications (Unreleased Work Branch)
+
+Notifications are off by default. Enabling them explicitly requests the optional
+browser `notifications` permission. The extension keeps preferences and a bounded
+event ledger in local extension storage only, outside Chrome Sync, configuration
+backups and diagnostic exports. Config import, restore or reset turns this local
+feature off; it does not automatically revoke the browser permission.
+
+Notifications use known, recently captured percentage windows. They do not fetch
+additional accounts or contact a notification server. OS messages contain a
+built-in provider name and a percentage or reset message, not account labels,
+credentials, URLs, model identities or raw errors. The browser and operating
+system control whether accepted notifications are displayed, retained or silenced.
+
+Users can pause delivery, set the used-quota threshold, disable accounts/windows,
+send a test, or turn the feature off. Events are persisted before attempted OS
+delivery to prevent repeated alerts after a service-worker restart. An OS failure
+or crash between persistence and delivery can therefore miss an alert; it is not
+automatically retried or uploaded.
+
 ## Local Image Gradient Import
 
 If a user imports an image to generate a progress-color gradient, the image is decoded and sampled locally in the browser. The extension uses the image only to compute a small list of gradient stops. It does not upload the image, and it does not store the original image bytes, data URL, filename, EXIF metadata, or raw pixel data.

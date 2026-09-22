@@ -68,6 +68,7 @@ try {
   assert.equal(fresh.badge, String(setupCount), "Fresh install badge must count setup blockers, not sample quota");
   assert(fresh.title.includes("need attention"), "Badge title must identify the setup count");
   assert.deepEqual(fresh.permissions.origins ?? [], []);
+  assert.equal((fresh.permissions.permissions ?? []).includes("notifications"), false, "Fresh install must not grant optional notifications");
   await settle(popup);
   await popup.screenshot({ path: path.join(output, "fresh-popup.png"), fullPage: true });
 

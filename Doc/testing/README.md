@@ -103,6 +103,15 @@ all 14 locales. It uses synthetic secret sentinels in a source-only browser;
 the downloaded JSON must match the preview and exclude those sentinels. Reports
 and screenshots are retained under `tmp/output/playwright/diagnostics-export/`.
 
+`node scripts/check-quota-notifications.mjs` exercises the real notification
+Settings component, message client, controller and persistence transitions across
+14 locales at 320px dark / 1280px light. Only browser permission/OS transport is
+mocked: explicit user activation, denial, enablement, threshold edits, scoped
+switches, pause, test, threshold delivery and restart deduplication are checked.
+Evidence is retained under `tmp/output/playwright/quota-notifications/`. Unit
+tests separately cover OS API rejection and Firefox's permission-probe fallback;
+these checks do not claim a visible notification in the user's desktop session.
+
 Localization or responsive UI changes that can vary by language length should
 also run the visual locale matrix against `dist/chrome/`:
 

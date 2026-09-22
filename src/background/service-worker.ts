@@ -25,6 +25,19 @@ import { seedAppStateIfEmpty } from "../shared/storage";
 import { readStoreScreenshotRuntimeLock } from "../shared/store-screenshot-runtime-lock";
 import { BUILD_INFO } from "../shared/build-info";
 import { configureChromeSidePanelActionBehavior } from "../shared/extension-side-panel-controls";
+import { subscribeToAppStateStorageChanges } from "../shared/app-state-storage-events";
+import { APP_STATE_STORAGE_KEY } from "../shared/constants";
+import type { QuotaNotificationMessage } from "../shared/quota-notification-client";
+import { quotaNotificationController } from "./quota-notification-runtime";
+
+subscribeToAppStateStorageChanges(() => {
+  void quotaNotificationController.evaluate().catch(() => undefined);
+});
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === "local" && changes[APP_STATE_STORAGE_KEY] && !changes[APP_STATE_STORAGE_KEY].newValue) {
+    void quotaNotificationController.reset().catch(() => undefined);
+  }
+});
 
 async function syncActionToolbarFromState(state: AppState) {
   const timestampMs = Date.now();
@@ -84,6 +97,7 @@ chrome.permissions.onAdded.addListener(() => {
 
 chrome.permissions.onRemoved.addListener(() => {
   void syncProviderPermissionState().catch(() => undefined);
+  void quotaNotificationController.evaluate().catch(() => undefined);
 });
 
 chrome.alarms.onAlarm.addListener((alarm) => {
@@ -174,6 +188,12 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
 });
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  if (typeof message?.type === "string" && message.type.startsWith("quota-notifications:")) {
+    if (_sender.id !== chrome.runtime.id) { sendResponse({ ok: false }); return false; }
+    void quotaNotificationController.handle(message as QuotaNotificationMessage)
+      .then(sendResponse, () => sendResponse({ ok: false }));
+    return true;
+  }
   if (message?.type === "baseline:ping") {
     sendResponse({
       ok: true,
