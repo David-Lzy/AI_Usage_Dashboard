@@ -1,0 +1,955 @@
+.progress-appearance-preferences {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-4);
+  padding: var(--app-space-4);
+  border: 1px solid var(--app-supporting-surface-border);
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--app-supporting-surface-background);
+}
+
+.toolbar-icon-custom-field__row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--app-space-2);
+  min-width: 0;
+}
+
+.toolbar-icon-custom-field__file {
+  flex: 1 1 16rem;
+  min-inline-size: min(100%, 14rem);
+}
+
+.toolbar-icon-custom-field__file::file-selector-button {
+  min-height: 32px;
+  margin-inline-end: var(--app-space-2);
+  padding: 0 var(--app-space-3);
+  border: 1px solid var(--md-sys-color-primary);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: transparent;
+  color: var(--md-sys-color-primary);
+  font: inherit;
+  font-weight: 700;
+}
+
+.toolbar-icon-custom-field__file::file-selector-button:hover {
+  background: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
+}
+
+.toolbar-icon-custom-field__status {
+  flex: 0 0 auto;
+}
+
+.progress-appearance-preferences__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--app-space-4);
+}
+
+.progress-appearance-bands__header {
+  display: grid;
+  grid-template-columns:
+    max-content max-content minmax(14rem, 1fr) max-content
+    max-content;
+  grid-template-areas: "title summary scheme actions mode";
+  align-items: center;
+  gap: var(--app-space-3);
+}
+
+.progress-appearance-preferences__header > :first-child,
+.progress-appearance-bands__title {
+  min-width: 0;
+}
+
+.progress-appearance-bands__title {
+  grid-area: title;
+}
+
+.progress-appearance-preferences__title {
+  margin-bottom: 0;
+}
+
+.progress-appearance-preferences__body,
+.progress-appearance-bands,
+.progress-appearance-band-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-3);
+}
+
+.progress-appearance-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-3);
+  min-width: 0;
+  padding: var(--app-space-3);
+  border: 1px solid var(--app-supporting-surface-strong-border);
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--md-sys-color-surface-container-lowest);
+}
+
+.progress-appearance-card__title {
+  margin: 0;
+  color: var(--md-sys-color-on-surface);
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  line-height: var(--md-sys-typescale-label-large-line-height);
+}
+
+.progress-appearance-thickness__control {
+  display: grid;
+  grid-template-columns: minmax(112px, 132px) minmax(160px, 1fr) auto;
+  align-items: center;
+  gap: var(--app-space-3);
+}
+
+.progress-appearance-thickness__number {
+  inline-size: 100%;
+  min-inline-size: 7.5rem;
+  min-height: 44px;
+}
+
+.progress-appearance-thickness__range {
+  width: 100%;
+  accent-color: var(--md-sys-color-primary);
+}
+
+.progress-appearance-bands__error {
+  margin: 0;
+}
+
+.progress-appearance-bands__header-actions,
+.progress-appearance-band__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--app-space-2);
+}
+
+.progress-appearance-bands__header-actions {
+  grid-area: actions;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.progress-gradient-editor__summary {
+  grid-area: summary;
+  min-width: 0;
+}
+
+.progress-gradient-editor__scheme {
+  grid-area: scheme;
+  min-width: 0;
+}
+
+.progress-gradient-editor__scheme .progress-gradient-scheme-dropdown {
+  min-inline-size: 0;
+  max-inline-size: none;
+}
+
+.progress-appearance-mode-switch {
+  grid-area: mode;
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 32px;
+  padding: 2px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--md-sys-color-surface-container-low);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.progress-appearance-mode-switch__button {
+  min-width: 72px;
+  min-height: 28px;
+  padding: 0 var(--app-space-3);
+  border: 0;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-family: var(--md-sys-typescale-label-large-font);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  line-height: var(--md-sys-typescale-label-large-line-height);
+  transition:
+    background-color var(--app-motion-duration-fast)
+      var(--app-motion-easing-standard),
+    box-shadow var(--app-motion-duration-fast) var(--app-motion-easing-standard),
+    color var(--app-motion-duration-fast) var(--app-motion-easing-standard);
+}
+
+.progress-appearance-mode-switch__button:hover {
+  background: var(--app-state-layer-neutral-hover);
+}
+
+.progress-appearance-mode-switch__button:focus-visible {
+  box-shadow: var(--app-focus-ring-shadow);
+  outline: 0;
+}
+
+.progress-appearance-mode-switch__button[data-selected="true"] {
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+.progress-appearance-band-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.progress-appearance-band {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: end;
+  gap: var(--app-space-3);
+  min-width: 0;
+  padding: var(--app-space-3);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-medium);
+  background: var(--md-sys-color-surface-container-low);
+}
+
+.progress-appearance-band__fields {
+  --progress-appearance-band-field-min: 10.5rem;
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, var(--progress-appearance-band-field-min)), 1fr)
+  );
+  align-items: center;
+  gap: var(--app-space-2);
+  justify-content: stretch;
+  min-width: 0;
+}
+
+.progress-appearance-band__fields > .form-field,
+.progress-appearance-band__fields > .color-choice-dropdown {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+}
+
+.progress-appearance-band__fields > .form-field .form-field__label,
+.progress-appearance-band__fields
+  > .color-choice-dropdown
+  > .form-field__label {
+  white-space: nowrap;
+}
+
+.progress-appearance-band__fields > .form-field .form-field__control {
+  inline-size: 100%;
+  min-inline-size: 0;
+  width: 100%;
+  min-height: 44px;
+  padding-inline: var(--app-space-3);
+}
+
+.progress-appearance-band__fields
+  > .color-choice-dropdown
+  .color-choice-dropdown__button {
+  inline-size: 100%;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  min-height: 44px;
+  grid-template-columns: auto minmax(0, 1fr) 36px;
+}
+
+.progress-appearance-band__range {
+  align-self: end;
+  justify-self: end;
+  margin-block-end: 7px;
+  white-space: nowrap;
+}
+
+.progress-appearance-band__actions {
+  align-self: end;
+  margin-block-end: 7px;
+}
+
+.progress-appearance-band__action {
+  min-height: 32px;
+  padding: 0 var(--app-space-2);
+}
+
+.progress-appearance-bands__error {
+  color: var(--md-sys-color-error);
+}
+
+.progress-appearance-band__range[data-invalid="true"] {
+  max-inline-size: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.progress-gradient-editor {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-3);
+  min-width: 0;
+}
+
+.progress-gradient-scheme-dropdown {
+  position: relative;
+}
+
+.progress-gradient-editor__scheme .progress-gradient-scheme-dropdown {
+  inline-size: 100%;
+}
+
+.progress-gradient-scheme-dropdown--inline {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: center;
+  column-gap: var(--app-space-2);
+  row-gap: 0;
+}
+
+.progress-gradient-scheme-dropdown--inline > .form-field__label {
+  white-space: nowrap;
+}
+
+.progress-gradient-scheme-dropdown--inline
+  .progress-gradient-scheme-dropdown__button {
+  grid-template-columns: minmax(92px, 1fr) max-content 34px;
+  min-height: 40px;
+  padding-inline-start: var(--app-space-2);
+  border-radius: var(--md-sys-shape-corner-medium);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  line-height: var(--md-sys-typescale-body-medium-line-height);
+}
+
+.progress-gradient-scheme-dropdown--inline
+  .progress-gradient-scheme-dropdown__value-preview {
+  height: 10px;
+}
+
+.progress-gradient-scheme-dropdown__button {
+  display: grid;
+  grid-template-columns: minmax(64px, 0.7fr) minmax(0, 1fr) 40px;
+  align-items: center;
+  gap: var(--app-space-2);
+  width: 100%;
+  min-height: var(--app-control-height-large);
+  padding-block: 0;
+  padding-inline-start: var(--app-space-3);
+  padding-inline-end: 0;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--md-sys-color-surface-container-lowest);
+  color: var(--md-sys-color-on-surface);
+  cursor: pointer;
+  font-family: var(--md-sys-typescale-body-large-font);
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: var(--md-sys-typescale-body-large-weight);
+  line-height: var(--md-sys-typescale-body-large-line-height);
+  text-align: start;
+}
+
+.progress-gradient-scheme-dropdown__button:hover {
+  background: var(--app-state-layer-neutral-hover);
+  border-color: color-mix(
+    in srgb,
+    var(--md-sys-color-primary) 22%,
+    var(--md-sys-color-outline-variant) 78%
+  );
+}
+
+.progress-gradient-scheme-dropdown__button:focus-visible,
+.progress-gradient-scheme-dropdown__button[data-open="true"] {
+  background: var(--md-sys-color-surface-container-lowest);
+  border-color: var(--md-sys-color-primary);
+  box-shadow: inset 0 0 0 1px var(--md-sys-color-primary);
+  outline: 0;
+}
+
+.progress-gradient-scheme-dropdown__value-preview,
+.progress-gradient-scheme-dropdown__option-preview,
+.progress-gradient-scheme-dropdown__measure-preview {
+  display: block;
+  width: 100%;
+  height: 12px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--progress-gradient-track);
+}
+
+.progress-gradient-scheme-dropdown__value {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.progress-gradient-scheme-dropdown__menu-icon {
+  justify-self: center;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  color: var(--md-sys-color-on-surface-variant);
+  transform: rotate(45deg);
+  transition:
+    color var(--app-motion-duration-fast) var(--app-motion-easing-standard),
+    transform var(--app-motion-duration-fast) var(--app-motion-easing-standard);
+}
+
+.progress-gradient-scheme-dropdown__button:hover
+  .progress-gradient-scheme-dropdown__menu-icon,
+.progress-gradient-scheme-dropdown__button:focus-visible
+  .progress-gradient-scheme-dropdown__menu-icon,
+.progress-gradient-scheme-dropdown__button[data-open="true"]
+  .progress-gradient-scheme-dropdown__menu-icon {
+  color: var(--md-sys-color-primary);
+}
+
+.progress-gradient-scheme-dropdown__button[data-open="true"]
+  .progress-gradient-scheme-dropdown__menu-icon {
+  transform: rotate(225deg);
+}
+
+.progress-gradient-scheme-dropdown__help {
+  margin: var(--app-space-1) 0 0;
+}
+
+.progress-gradient-scheme-dropdown__menu {
+  position: fixed;
+  z-index: 90;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-3);
+  max-inline-size: calc(100vw - 32px);
+  max-block-size: min(520px, calc(100vh - 24px));
+  padding: var(--app-space-3);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--md-sys-color-surface-container);
+  box-shadow: var(--app-elevation-2);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.progress-gradient-scheme-dropdown__menu-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  align-items: center;
+  gap: var(--app-space-2);
+  min-width: 0;
+}
+
+.progress-gradient-scheme-dropdown__menu-label {
+  margin: 0;
+  color: var(--md-sys-color-on-surface-variant);
+  font-family: var(--md-sys-typescale-label-medium-font);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: var(--md-sys-typescale-label-medium-line-height);
+  text-transform: uppercase;
+}
+
+.progress-gradient-scheme-dropdown__image-import {
+  position: relative;
+  overflow: hidden;
+  min-height: 40px;
+}
+
+.progress-gradient-scheme-dropdown__image-import input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.progress-gradient-scheme-dropdown__image-import:has(input:disabled) {
+  opacity: 0.68;
+  pointer-events: none;
+}
+
+.progress-gradient-scheme-dropdown__grid {
+  display: grid;
+  grid-template-columns: repeat(
+    var(--adaptive-dropdown-menu-column-count, 1),
+    minmax(0, 1fr)
+  );
+  gap: var(--app-space-2);
+  justify-content: start;
+}
+
+.progress-gradient-scheme-dropdown__option {
+  display: grid;
+  grid-template-columns: minmax(88px, 1fr) max-content;
+  align-items: center;
+  gap: var(--app-space-2);
+  min-height: 40px;
+  padding: 0 var(--app-space-2);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-medium);
+  background: var(--md-sys-color-surface-container-lowest);
+  color: var(--md-sys-color-on-surface);
+  cursor: pointer;
+  text-align: start;
+}
+
+.progress-gradient-scheme-dropdown__option,
+.progress-gradient-scheme-dropdown__measure-choice {
+  font-family: var(--md-sys-typescale-body-medium-font);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  font-weight: var(--md-sys-typescale-body-medium-weight);
+  line-height: var(--md-sys-typescale-body-medium-line-height);
+}
+
+.progress-gradient-scheme-dropdown__measure-choice {
+  display: inline-grid;
+  grid-template-columns: 112px max-content;
+  align-items: center;
+  gap: var(--app-space-2);
+  inline-size: max-content;
+  min-inline-size: 132px;
+  min-height: 40px;
+  padding: 0 var(--app-space-2);
+  border-color: transparent;
+  cursor: default;
+  white-space: nowrap;
+}
+
+.progress-gradient-scheme-dropdown__option-preview {
+  width: 100%;
+  height: 10px;
+}
+
+.progress-gradient-scheme-dropdown__measure-preview {
+  inline-size: 112px;
+  height: 10px;
+}
+
+.progress-gradient-scheme-dropdown__option:hover {
+  background: var(--app-state-layer-neutral-hover);
+  border-color: color-mix(
+    in srgb,
+    var(--md-sys-color-primary) 24%,
+    var(--md-sys-color-outline-variant) 76%
+  );
+}
+
+.progress-gradient-scheme-dropdown__option:focus-visible {
+  box-shadow: var(--app-focus-ring-shadow);
+  outline: 0;
+}
+
+.progress-gradient-scheme-dropdown__option-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 650;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.progress-gradient-scheme-dropdown__error {
+  margin: 0;
+  color: var(--md-sys-color-error);
+}
+
+.progress-gradient-editor__track {
+  position: relative;
+  --progress-gradient-track-padding-inline: var(--app-space-3);
+  padding-inline: var(--progress-gradient-track-padding-inline);
+}
+
+.progress-gradient-editor__rail {
+  position: relative;
+  min-height: 64px;
+  padding-block: 24px 18px;
+  cursor: copy;
+}
+
+.progress-gradient-editor__rail::before {
+  position: absolute;
+  inset: 24px 0 auto;
+  height: 18px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--progress-gradient-track);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, white 35%, transparent);
+  content: "";
+}
+
+.progress-gradient-editor__ticks {
+  position: absolute;
+  inset: 21px 0 auto;
+  height: 24px;
+  pointer-events: none;
+}
+
+.progress-gradient-editor__tick {
+  position: absolute;
+  top: 0;
+  width: 1px;
+  height: 24px;
+  background: color-mix(in srgb, white 70%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, black 14%, transparent);
+  transform: translateX(-50%);
+}
+
+.progress-gradient-editor__stop {
+  position: absolute;
+  z-index: 1;
+  top: 16px;
+  width: 34px;
+  height: 42px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  transform: translateX(-50%);
+}
+
+.progress-gradient-editor__stop::before {
+  position: absolute;
+  inset: 4px 7px 13px;
+  border: 2px solid var(--md-sys-color-surface-container-lowest);
+  border-radius: 8px;
+  background: var(--progress-gradient-stop-color);
+  box-shadow:
+    0 0 0 1px var(--md-sys-color-outline),
+    var(--app-elevation-1);
+  content: "";
+}
+
+.progress-gradient-editor__stop::after {
+  position: absolute;
+  top: 27px;
+  left: 12px;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid var(--md-sys-color-surface-container-lowest);
+  border-bottom: 2px solid var(--md-sys-color-surface-container-lowest);
+  border-radius: 0 0 3px;
+  background: var(--progress-gradient-stop-color);
+  box-shadow: 1px 1px 0 var(--md-sys-color-outline);
+  content: "";
+  transform: rotate(45deg);
+}
+
+.progress-gradient-editor__stop[data-draggable="true"] {
+  cursor: grab;
+}
+
+.progress-gradient-editor__stop[data-draggable="true"]:active {
+  cursor: grabbing;
+}
+
+.progress-gradient-editor__stop[data-selected="true"]::before {
+  box-shadow:
+    0 0 0 3px var(--md-sys-color-primary),
+    var(--app-elevation-2);
+}
+
+.progress-gradient-editor__stop:focus-visible {
+  outline: 0;
+}
+
+.progress-gradient-editor__stop:focus-visible::before {
+  box-shadow:
+    var(--app-focus-ring-shadow),
+    0 0 0 3px var(--md-sys-color-primary),
+    var(--app-elevation-2);
+}
+
+.progress-gradient-editor__stop[data-endpoint="true"]::before {
+  border-radius: 8px;
+}
+
+.progress-gradient-editor__selected {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.6fr) minmax(13rem, 1fr) auto;
+  align-items: end;
+  gap: var(--app-space-2);
+  min-width: 0;
+}
+
+.progress-gradient-editor__selected > .form-field,
+.progress-gradient-editor__selected > .color-choice-dropdown {
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+}
+
+.progress-gradient-editor__selected .form-field__control,
+.progress-gradient-editor__selected .color-choice-dropdown__button {
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-height: 44px;
+}
+
+.progress-gradient-editor__delete {
+  min-height: 44px;
+}
+
+.progress-gradient-editor__help {
+  margin: 0;
+}
+
+@media (max-width: 920px) {
+  .provider-order-preferences__header,
+  .provider-order-preferences__surfaces,
+  .provider-progress-preferences__header,
+  .provider-progress-surfaces,
+  .progress-appearance-preferences__header {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .provider-order-preferences__header,
+  .provider-progress-preferences__header,
+  .progress-appearance-preferences__header {
+    display: grid;
+  }
+
+  .progress-appearance-band {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .progress-appearance-band__fields {
+    grid-column: 1 / -1;
+  }
+
+  .progress-appearance-band__range {
+    grid-column: 1;
+    justify-self: start;
+  }
+
+  .progress-appearance-band__actions {
+    grid-column: 2;
+    justify-self: end;
+  }
+
+  .progress-appearance-band__range,
+  .progress-appearance-band__actions {
+    margin-block-end: 0;
+  }
+}
+
+@media (max-width: 860px) {
+  .progress-appearance-bands__header {
+    grid-template-columns: max-content max-content minmax(0, 1fr) max-content;
+    grid-template-areas:
+      "title summary actions mode"
+      ". scheme scheme scheme";
+  }
+}
+
+@media (max-width: 640px) {
+  .progress-appearance-bands__header {
+    grid-template-columns: minmax(0, 1fr) max-content;
+    grid-template-areas:
+      "title mode"
+      "summary actions"
+      "scheme scheme";
+    align-items: center;
+  }
+
+  .progress-appearance-bands__header-actions {
+    align-self: center;
+    justify-self: end;
+  }
+}
+
+@media (max-width: 720px) {
+  .progress-appearance-mode-switch__button {
+    min-width: 60px;
+    padding-inline: var(--app-space-2);
+  }
+
+  .progress-appearance-band__fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .progress-gradient-editor__selected {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .progress-gradient-editor__delete {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
+  .progress-appearance-band__fields > .color-choice-dropdown {
+    grid-column: 1 / -1;
+  }
+
+  .progress-appearance-band__fields
+    > .color-choice-dropdown
+    .color-choice-dropdown__button {
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .progress-gradient-scheme-dropdown--inline
+    .progress-gradient-scheme-dropdown__button {
+    grid-template-columns: minmax(72px, 1fr) 32px;
+  }
+
+  .progress-gradient-scheme-dropdown--inline
+    .progress-gradient-scheme-dropdown__value {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .provider-progress-list__item:not(.usage-history-preferences__item) {
+    flex-wrap: wrap;
+  }
+
+  .provider-order-list__item:not(.api-gateway-module-preferences__item) {
+    display: grid;
+    grid-template-areas:
+      "handle name position"
+      "actions actions actions";
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .provider-order-list__item:not(.api-gateway-module-preferences__item)
+    .provider-order-list__handle {
+    grid-area: handle;
+  }
+
+  .provider-order-list__item:not(.api-gateway-module-preferences__item)
+    .provider-order-list__name {
+    grid-area: name;
+  }
+
+  .provider-order-list__item:not(.api-gateway-module-preferences__item)
+    .provider-order-list__position {
+    grid-area: position;
+  }
+
+  .provider-order-list__item:not(.api-gateway-module-preferences__item)
+    .provider-order-list__actions,
+  .provider-progress-list__item:not(.usage-history-preferences__item)
+    .provider-progress-list__actions {
+    grid-area: actions;
+    width: auto;
+    min-width: 0;
+    max-width: 100%;
+    gap: var(--app-space-1);
+    justify-content: flex-end;
+  }
+
+  .provider-order-list__item:not(.api-gateway-module-preferences__item)
+    .provider-order-list__action {
+    min-width: 0;
+    padding-inline: var(--app-space-1);
+  }
+
+  .provider-order-list__item.api-gateway-module-preferences__item {
+    display: grid;
+    grid-template-areas:
+      "handle visibility name"
+      "actions actions actions";
+    grid-template-columns: auto auto minmax(0, 1fr);
+  }
+
+  .api-gateway-module-preferences__item .provider-order-list__handle {
+    grid-area: handle;
+  }
+
+  .api-gateway-module-preferences__item
+    .api-gateway-module-preferences__visibility {
+    grid-area: visibility;
+  }
+
+  .api-gateway-module-preferences__item .provider-order-list__name {
+    grid-area: name;
+  }
+
+  .api-gateway-module-preferences__item .provider-order-list__actions {
+    grid-area: actions;
+    width: auto;
+    min-width: 0;
+    max-width: 100%;
+    gap: var(--app-space-1);
+    justify-content: flex-end;
+  }
+
+  .api-gateway-module-preferences__item .provider-order-list__action {
+    min-width: 0;
+    padding-inline: var(--app-space-1);
+  }
+
+  .progress-appearance-thickness__control {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .progress-appearance-mode-switch__button {
+    min-width: 52px;
+  }
+
+  .progress-appearance-bands__header {
+    grid-template-areas:
+      "title mode"
+      "summary summary"
+      "scheme scheme"
+      "actions actions";
+  }
+
+  .progress-appearance-bands__header-actions {
+    justify-self: start;
+  }
+
+  .progress-gradient-editor__selected {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .progress-appearance-band {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .progress-appearance-band__fields {
+    grid-column: 1 / -1;
+  }
+
+  .progress-appearance-band__range {
+    grid-column: 1;
+  }
+
+  .progress-appearance-band__actions {
+    grid-column: 2;
+    margin-block-end: 0;
+  }
+
+  .progress-appearance-band__actions {
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 420px) {
+  .progress-appearance-band__fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .progress-appearance-band__fields > .form-field,
+  .progress-appearance-band__fields > .color-choice-dropdown {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .progress-appearance-band__fields > .form-field .form-field__control {
+    inline-size: 100%;
+    width: 100%;
+  }
+
+  .progress-appearance-band {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .progress-appearance-band__range,
+  .progress-appearance-band__actions {
+    grid-column: 1;
+    justify-self: start;
+  }
+}

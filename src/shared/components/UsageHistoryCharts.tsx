@@ -1,3 +1,4 @@
+import { formatUsageHistoryDate } from "../usage-history-date-format";
 import {
   useEffect,
   useId,
@@ -144,19 +145,7 @@ function buildStackedAreaPath(
   return `${buildMonotoneCurveCommands(upperPoints, "M")} ${buildMonotoneCurveCommands([...lowerPoints].reverse(), "L")} Z`;
 }
 
-export function formatUsageHistoryDate(value: string, locale: string): string {
-  const date = new Date(`${value}T00:00:00.000Z`);
-
-  if (!Number.isFinite(date.getTime())) {
-    return value;
-  }
-
-  return new Intl.DateTimeFormat(locale, {
-    day: "numeric",
-    month: "short",
-    timeZone: "UTC",
-  }).format(date);
-}
+export { formatUsageHistoryDate } from "../usage-history-date-format";
 
 export function formatUsageHistoryValue(
   value: number,

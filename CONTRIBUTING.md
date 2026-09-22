@@ -73,6 +73,21 @@ as part of command cleanup.
 
 ## UI Control Rhythm
 
+Gateway view calculations live in
+[`api-gateway-metering-presentation.ts`](src/shared/api-gateway-metering-presentation.ts),
+separate from the
+[`deployment selector`](src/shared/components/ApiGatewayDeploymentSelector.tsx)
+and metering-module composition. Keep pure calculations free of React and DOM
+imports. Existing component entrypoints retain compatibility exports; consumers
+can use the focused module when they need only a selector or formatter.
+
+Progress appearance drafts and geometry live in
+[`progress-appearance-editor-helpers.ts`](src/sidepanel/components/progress-appearance-editor-helpers.ts).
+The parent preference control coordinates color-band and gradient-stop editors;
+keep draft/selection lifetime compatible when switching modes. Appearance CSS
+is an ordered import entrypoint for Settings, progress controls and previews.
+Preserve cascade order when moving rules between these files.
+
 Settings controls share three height tokens: compact controls use 36px, medium
 controls use 44px, and large select/input/dropdown controls use 56px. Prefer the
 shared tokens in `src/sidepanel/theme/tokens.css` and keep button/select content

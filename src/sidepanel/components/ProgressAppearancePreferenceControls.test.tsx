@@ -16,10 +16,14 @@ import {
   shouldSkipGradientStopCreation,
 } from "./ProgressAppearancePreferenceControls";
 
-const settingsAppearanceCss = readFileSync(
-  new URL("../theme/settings-appearance.css", import.meta.url),
-  "utf8",
-);
+const settingsAppearanceCss = [
+  "settings-appearance-settings.css",
+  "settings-appearance-progress.css",
+]
+  .map((fileName) =>
+    readFileSync(new URL(`../theme/${fileName}`, import.meta.url), "utf8"),
+  )
+  .join("\n");
 
 describe("ProgressAppearancePreferenceControls", () => {
   it("renders localized thickness and color-band controls", () => {
@@ -166,6 +170,12 @@ describe("ProgressAppearancePreferenceControls", () => {
       "grid-template-columns: minmax(112px, 132px) minmax(160px, 1fr) auto;",
     );
     expect(settingsAppearanceCss).toContain("min-inline-size: 7.5rem;");
+  });
+
+  it("allows long invalid-range messages to wrap inside the compact chip", () => {
+    expect(settingsAppearanceCss).toContain('.progress-appearance-band__range[data-invalid="true"]');
+    expect(settingsAppearanceCss).toContain("max-inline-size: 100%;");
+    expect(settingsAppearanceCss).toContain("overflow-wrap: anywhere;");
   });
 
   it("suppresses new gradient stops close to existing stops", () => {

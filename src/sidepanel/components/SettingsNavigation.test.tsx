@@ -14,7 +14,7 @@ const settingsNavigationCss = readFileSync(
   "utf8",
 );
 const settingsAppearanceCss = readFileSync(
-  new URL("../theme/settings-appearance.css", import.meta.url),
+  new URL("../theme/settings-appearance-settings.css", import.meta.url),
   "utf8",
 );
 

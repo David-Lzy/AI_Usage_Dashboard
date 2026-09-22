@@ -76,6 +76,14 @@ Evidence lives in `tmp/output/playwright/shared-ui/keyboard/`. The visual matrix
 also accepts `--source` for checks without touching a loaded extension build.
 Source-mode checks do not replace final extension-mode validation.
 
+`node scripts/check-ui-module-boundaries.mjs` exercises deployment selection,
+keyboard focus, metering collapse/ranges, and progress-editor number/gradient
+controls at 320px dark and 1280px light in English, German and Arabic. It uses
+synthetic inputs and unique output directories. A refactor can pass
+`--compare=/absolute/path/to/previous/run` to require pixel-identical captures
+of the traditional editor, gradient editor and deployment menu. This focused
+check supplements the full locale and Popup-mode matrix.
+
 The production-state regression requires an explicitly selected isolated build
 and creates a new offline browser profile. It checks blank provider data, no
 sample quota badge, no granted optional host origins, and that the demo route

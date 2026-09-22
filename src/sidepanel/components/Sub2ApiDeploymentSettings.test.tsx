@@ -8,7 +8,7 @@ import { saveSub2ApiDeployment } from "../../shared/sub2api-deployments";
 import { Sub2ApiDeploymentSettings } from "./Sub2ApiDeploymentSettings";
 
 const settingsAppearanceCss = readFileSync(
-  new URL("../theme/settings-appearance.css", import.meta.url),
+  new URL("../theme/settings-appearance-settings.css", import.meta.url),
   "utf8",
 );
 
