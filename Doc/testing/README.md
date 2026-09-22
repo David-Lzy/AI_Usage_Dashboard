@@ -17,6 +17,14 @@ Status note:
 
 ## Public Verification
 
+`qa:surface:browser` and `qa:surface:extension` are the maintained surface entrypoints
+(556/565 aliases are retained). Focused commands are `qa:shared-ui:browser`,
+`qa:sync-state:browser`, and `qa:production-state:browser`; the last requires an
+explicit isolated `--extension` path. `workflow:audit` performs only static
+inventory. Historical numbered commands need prerequisite review, not mass
+execution. The aggregate `qa:surface:check` builds `dist/chrome`; do not run it
+over an extension currently loaded in your browser.
+
 Use the smallest command set that proves the change:
 
 ```sh

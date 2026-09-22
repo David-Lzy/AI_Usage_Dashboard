@@ -47,6 +47,22 @@ PR check result before merge. Fork contributions may require maintainer approval
 to start Actions. See the [release workflow guide](Doc/Store/GitHub_Release_Push_And_Notes.md)
 for the separate tag and explicit store-submission paths.
 
+## Workflow Commands
+
+Use `npm run workflow:list` for maintained command groups and
+`npm run workflow:audit -- --json` for a read-only inventory of script targets,
+npm callers, static path references and write expressions. The audit never runs
+commands or deletes files. Missing references may be outputs or historical
+inputs; review them before changing anything.
+
+Current surface QA uses `qa:surface:browser` and `qa:surface:extension`; the old
+556/565 aliases remain compatible. Historical phase commands are not the normal
+quality gate and may require old documentation or fixtures. Seven release review
+aliases pinned to 0.1.0 RC4-RC10 were retired; their scripts and evidence remain.
+Use Git history when reproducing historical releases, not current QA commands.
+Do not delete browser-loaded builds, profiles, credentials or release evidence
+as part of command cleanup.
+
 ## UI Control Rhythm
 
 Settings controls share three height tokens: compact controls use 36px, medium

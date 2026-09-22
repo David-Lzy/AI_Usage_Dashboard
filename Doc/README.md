@@ -35,6 +35,11 @@ project truth.
 - [Chrome Web Store copy](./Store/) - public listing copy and localization source material.
 - [Testing overview](./testing/) - public verification command overview.
 
+`npm run workflow:list` groups current commands; `npm run workflow:audit` inspects
+their targets and npm references without executing or cleaning anything. See the
+[contributing guide](../CONTRIBUTING.md#workflow-commands) for historical command
+and compatibility-alias boundaries.
+
 ## Private And Historical Material
 
 The following material is intentionally not public-facing:

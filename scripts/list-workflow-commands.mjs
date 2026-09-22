@@ -3,6 +3,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
+import { compatibilityQaNames } from "./lib/workflow-command-inventory.mjs";
 
 const packageJson = JSON.parse(
   await readFile(path.join(process.cwd(), "package.json"), "utf8"),
@@ -12,6 +13,10 @@ const scripts = packageJson.scripts ?? {};
 const showAll = process.argv.includes("--all");
 
 const groups = [
+  {
+    title: "Workflow Inventory (read-only)",
+    match: (name) => name.startsWith("workflow:"),
+  },
   {
     title: "Core",
     match: (name) => ["dev", "build", "preview:dist", "typecheck", "test"].includes(name),
@@ -30,7 +35,7 @@ const groups = [
   },
   {
     title: "QA",
-    match: (name) => name.startsWith("qa:") || /^phase(?:556|565):/.test(name),
+    match: (name) => name.startsWith("qa:") || compatibilityQaNames.has(name),
   },
   {
     title: "Store",
@@ -45,7 +50,7 @@ const groups = [
     match: (name) => name.startsWith("theme-recovery:"),
   },
   {
-    title: "Historical Phase Review",
+    title: "Historical Phase Review (inspect prerequisites before running)",
     match: (name) => /^phase\d+:(?:check|review)$/.test(name),
     collapse: true,
   },
