@@ -5,7 +5,7 @@ import type {
   ProviderSetting,
   SummaryItem,
 } from "../../providers/types";
-import type { ResolvedTextDirection } from "../../shared/i18n";
+import type { ResolvedTextDirection, RuntimeI18n } from "../../shared/i18n";
 import {
   PermissionPrompt,
   type PermissionPromptLabels,
@@ -33,6 +33,7 @@ type SettingsVisibilitySectionProps = {
   disabledDetail: string;
   enabledDetail: string;
   eyebrow: string;
+  i18n?: RuntimeI18n;
   providers: ProviderSetting[];
   sectionId?: string;
   textDirection?: ResolvedTextDirection;
@@ -42,6 +43,7 @@ type SettingsVisibilitySectionProps = {
 type SettingsPermissionsSectionProps = {
   detail: string;
   eyebrow: string;
+  i18n?: RuntimeI18n;
   labels: PermissionPromptLabels;
   providers: ProviderSetting[];
   sectionId?: string;
@@ -89,6 +91,7 @@ export function SettingsVisibilitySection({
   disabledDetail,
   enabledDetail,
   eyebrow,
+  i18n,
   providers,
   sectionId,
   textDirection = "ltr",
@@ -98,7 +101,8 @@ export function SettingsVisibilitySection({
     <section className="status-card settings-section-anchor" id={sectionId}>
       <p className="section-label">{eyebrow}</p>
       <ProviderCarousel
-        ariaLabel={`${eyebrow} providers`}
+        ariaLabel={eyebrow}
+        i18n={i18n}
         textDirection={textDirection}
         items={providers.map((provider) => ({
           id: provider.id,
@@ -133,6 +137,7 @@ export function SettingsVisibilitySection({
 export function SettingsPermissionsSection({
   detail,
   eyebrow,
+  i18n,
   labels,
   providers,
   sectionId,
@@ -153,7 +158,8 @@ export function SettingsPermissionsSection({
       </div>
 
       <ProviderCarousel
-        ariaLabel={`${title} providers`}
+        ariaLabel={title}
+        i18n={i18n}
         textDirection={textDirection}
         items={providers.map((provider) => ({
           id: provider.id,

@@ -130,7 +130,7 @@ describe("UsageProgress", () => {
     expect(html).toContain("--usage-progress-ring-fill:#8A4B00");
     expect(html).not.toContain("stroke-dasharray=");
     expect(html).not.toContain("<svg");
-    expect(html).toContain('class="usage-progress-ring__value">35%</span>');
+    expect(html).toMatch(/class="usage-progress-ring__value"[^>]*>35%<\/span>/);
     expect(html).not.toContain(">35% remaining<");
     expect(html).not.toContain("usage-progress__track");
   });

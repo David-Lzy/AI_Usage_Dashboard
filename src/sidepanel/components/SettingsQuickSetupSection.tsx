@@ -9,7 +9,7 @@ import type {
   SettingsUserLevel,
 } from "../../providers/types";
 import { getProviderDefinition } from "../../providers/provider-definitions";
-import type { ResolvedTextDirection } from "../../shared/i18n";
+import type { ResolvedTextDirection, RuntimeI18n } from "../../shared/i18n";
 import { getRecommendedFirstSetupProvider } from "../../shared/first-provider-setup";
 import { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import type { ProviderSourceDisplayCopy } from "../../shared/provider-sources";
@@ -24,6 +24,7 @@ import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 type SettingsQuickSetupSectionProps = {
   activeSessionPageAttachAvailable: boolean;
   focusedProviderId?: ProviderId | null;
+  i18n: RuntimeI18n;
   providers: ProviderSetting[];
   providerSourceDisplayCopy: ProviderSourceDisplayCopy;
   carouselIndex?: number;
@@ -45,6 +46,7 @@ type SettingsQuickSetupSectionProps = {
 export function SettingsQuickSetupSection({
   activeSessionPageAttachAvailable,
   focusedProviderId = null,
+  i18n,
   providers,
   providerSourceDisplayCopy,
   carouselIndex,
@@ -440,6 +442,7 @@ export function SettingsQuickSetupSection({
               : 0
         }
         items={quickSetupItems}
+        i18n={i18n}
         textDirection={textDirection}
         onActiveItemChange={(_item, index) => onCarouselIndexChange?.(index)}
       />

@@ -9,10 +9,11 @@ import {
 import { createPortal } from "react-dom";
 
 import type { AppSettings } from "../../providers/types";
-import { buildRuntimeCommonCopy, type RuntimeI18n } from "../../shared/i18n";
+import type { RuntimeI18n } from "../../shared/i18n";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 import { UsageProgress } from "./UsageProgress";
 import { buildQuotaResetLabelParts } from "../../shared/reset-time-display";
+import { buildUsageProgressLocalizedCopy } from "../../shared/usage-progress-localized-copy";
 
 export const POPUP_APPEARANCE_PREVIEW_DEFAULT_REMAINING_PERCENT = 51;
 
@@ -133,11 +134,14 @@ function ToolbarPopupPreviewSurface({
     settings.resetTimeDisplayMode,
     i18n,
   );
-  const remainingLabel = buildRuntimeCommonCopy(i18n).remaining;
+  const progressCopy = buildUsageProgressLocalizedCopy(i18n.resolvedLocale);
+  const formattedRemainingPercent = i18n.formatPercentValue(
+    previewRemainingPercent,
+  );
   const sampleRemainingLabel =
     settings.popupProgressStyle === "line"
-      ? `${previewRemainingPercent}% ${remainingLabel}`
-      : `${previewRemainingPercent}%`;
+      ? progressCopy.remainingValue(formattedRemainingPercent)
+      : formattedRemainingPercent;
   const usedPercent = 100 - previewRemainingPercent;
 
   return (
@@ -167,7 +171,8 @@ function ToolbarPopupPreviewSurface({
             progressThicknessPx={settings.progressThicknessPx}
             valueKind="remaining"
             valueLabel={sampleRemainingLabel}
-            valueText={`${sampleQuotaLabel.name}: ${previewRemainingPercent}% ${remainingLabel}`}
+            valueText={`${sampleQuotaLabel.name}: ${progressCopy.remainingValue(formattedRemainingPercent)}`}
+            i18n={i18n}
           />
         </div>
       </div>

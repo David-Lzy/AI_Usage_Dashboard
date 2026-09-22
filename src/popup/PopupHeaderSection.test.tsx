@@ -55,6 +55,7 @@ describe("PopupHeaderSection", () => {
     expect(html).toContain('data-popup-toggle-theme-mode="true"');
     expect(html).toContain('aria-haspopup="menu"');
     expect(html).toContain('role="menuitemradio"');
+    expect(html.match(/tabindex="-1"/g)).toHaveLength(4);
     expect(html).toContain('data-popup-refresh="true"');
     expect(html).toContain('data-popup-open-dashboard-tab="true"');
     expect(html).toContain('data-popup-open-dashboard-sidebar="true"');

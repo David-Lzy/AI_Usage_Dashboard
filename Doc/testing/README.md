@@ -48,6 +48,19 @@ Chrome must already be installed (`PLAYWRIGHT_CHANNEL` can select another
 installed Playwright channel). Evidence is written to
 `tmp/output/playwright/sync-state-merge/`.
 
+The shared UI keyboard regression runs in the same isolated source mode. It
+checks menu entry, arrow/Home/End navigation, selection, Escape focus return,
+Tab/Shift+Tab dismissal and viewport bounds across all 14 locales, RTL, light
+and dark themes, and 320/430px widths:
+
+```sh
+./scripts/with-preferred-node.sh node scripts/check-shared-ui-browser.mjs
+```
+
+Evidence lives in `tmp/output/playwright/shared-ui/keyboard/`. The visual matrix
+also accepts `--source` for checks without touching a loaded extension build.
+Source-mode checks do not replace final extension-mode validation.
+
 Localization or responsive UI changes that can vary by language length should
 also run the visual locale matrix against `dist/chrome/`:
 

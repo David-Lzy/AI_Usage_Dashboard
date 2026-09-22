@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 
 import type { ApiKeyProviderId, ProviderSetting } from "../../providers/types";
 import { SAMPLE_APP_STATE } from "../../shared/constants";
+import { createRuntimeI18n } from "../../shared/i18n";
 import {
   SettingsCredentialsSection,
   type CredentialProviderSection,
@@ -10,6 +11,7 @@ import {
 
 describe("SettingsCredentialsSection", () => {
   it("renders credential cards with stable credential hooks", () => {
+    const i18n = createRuntimeI18n("en", undefined);
     const cursorProvider = SAMPLE_APP_STATE.providerSettings.find(
       (
         provider,
@@ -46,6 +48,7 @@ describe("SettingsCredentialsSection", () => {
         title="Provider credentials"
         detail="Add optional provider credentials."
         focusedProviderId="codex-enterprise-api"
+        i18n={i18n}
         credentialProviders={credentialProviders}
         codexProvider={codexProvider!}
         credentialInputs={{

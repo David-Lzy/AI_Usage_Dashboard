@@ -67,6 +67,19 @@ bounds and option text are checked rather than relying on closed controls only.
 Use `--themes light,dark` when both themes are in scope; the default remains
 `light` to keep routine runs bounded.
 
+On the unreleased work branch, `--source` runs the same matrix from an isolated
+plain Vite server without replacing a browser-loaded extension directory:
+
+```sh
+npm run i18n:visual-check -- --source --themes light,dark --fail-on-issues
+```
+
+Shared progress fallbacks, toast dismissal and carousel accessibility labels
+must follow the selected application language, including indeterminate and
+value-only states. Caller-provided localized progress values remain authoritative.
+Provider facts and user-defined labels remain unchanged. Locale checks must
+cover these conditional states, not only the normal data-filled rendering.
+
 Visual matrix screenshots and JSON reports are local QA evidence under ignored
 `.local/visual-checks/i18n/` paths and should not be committed.
 

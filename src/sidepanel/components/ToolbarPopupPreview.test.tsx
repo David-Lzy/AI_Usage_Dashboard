@@ -68,7 +68,7 @@ describe("ToolbarPopupPreview", () => {
     );
     expect(html).toContain("重置");
     expect(html).toContain(
-      'aria-valuetext="每周限额: 74% 剩余"',
+      'aria-valuetext="每周限额: 剩余74%"',
     );
     expect(html).not.toContain("快速概览");
   });

@@ -3,6 +3,8 @@ import { readFileSync } from "node:fs";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 
+import { SUPPORTED_APP_LOCALES, createRuntimeI18n } from "../../shared/i18n";
+import { buildNavigationLocalizedCopy } from "../../shared/navigation-localized-copy";
 import {
   PROVIDER_CAROUSEL_INTERACTIVE_SELECTOR,
   ProviderCarousel,
@@ -60,7 +62,7 @@ describe("ProviderCarousel", () => {
     expect(html).toContain('data-material-icon="keyboard-arrow-left"');
     expect(html).toContain('data-material-icon="keyboard-arrow-right"');
     expect(html).toContain('tabindex="0"');
-    expect(html).toContain("2 / 3 · Claude Code");
+    expect(html).toContain("Provider 2 of 3: Claude Code");
     expect(html).toContain('data-provider-carousel-slide="cursor-personal-page"');
     expect(html).toContain(
       'data-provider-carousel-slide-position="previous"',
@@ -86,6 +88,30 @@ describe("ProviderCarousel", () => {
     expect(html).not.toContain("Previous provider");
     expect(html).not.toContain("Next provider");
   });
+
+  it.each(SUPPORTED_APP_LOCALES)(
+    "localizes carousel controls, slide labels, and locale-formatted counts for %s",
+    (locale) => {
+      const i18n = createRuntimeI18n(locale, undefined);
+      const copy = buildNavigationLocalizedCopy(i18n).carousel;
+      const html = renderToStaticMarkup(
+        <ProviderCarousel
+          ariaLabel="Quick setup providers"
+          i18n={i18n}
+          items={sampleItems}
+          initialIndex={1}
+        />,
+      );
+
+      expect(html).toContain(`aria-roledescription="${copy.roleDescription}"`);
+      expect(html).toContain(`aria-label="${copy.previousProvider}"`);
+      expect(html).toContain(`aria-label="${copy.nextProvider}"`);
+      expect(html).toContain(copy.status(2, 3, "Claude Code"));
+      expect(html).toContain(copy.slideLabel(2, 3, "Claude Code"));
+      expect(html).toContain(`aria-label="${copy.slides}"`);
+      expect(html).toContain(copy.showSlide("Codex"));
+    },
+  );
 
   it("wraps button movement while clamping invalid initial indexes", () => {
     expect(clampProviderCarouselIndex(8, 3)).toBe(2);

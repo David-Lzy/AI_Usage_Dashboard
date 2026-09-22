@@ -23,6 +23,7 @@ import {
   buildQuotaResetLabelParts,
   DEFAULT_RESET_TIME_DISPLAY_MODE,
 } from "../reset-time-display";
+import { buildUsageProgressLocalizedCopy } from "../usage-progress-localized-copy";
 import { UsageProgress } from "./UsageProgress";
 
 type ProviderProgressItemListProps = {
@@ -57,13 +58,13 @@ function formatProgressValueLabel(
   i18n: RuntimeI18n,
   displayStyle: ProgressDisplayStyle,
 ): string | undefined {
-  const commonCopy = buildRuntimeCommonCopy(i18n);
+  const copy = buildUsageProgressLocalizedCopy(i18n.resolvedLocale);
 
   if (item.remaining !== null) {
     const value = formatQuotaValue(item.remaining, item.quotaUnit, i18n);
     return displayStyle === "circle" && item.quotaUnit === "percent"
       ? value
-      : `${value} ${commonCopy.remaining}`;
+      : copy.remainingValue(value);
   }
 
   if (item.used !== null) {
@@ -87,7 +88,7 @@ function formatValueOnlyText(
   item: ProviderProgressItem,
   i18n: RuntimeI18n,
 ): string {
-  const commonCopy = buildRuntimeCommonCopy(i18n);
+  const copy = buildUsageProgressLocalizedCopy(i18n.resolvedLocale);
 
   if (item.remaining !== null) {
     const remainingValue = formatQuotaValue(
@@ -95,18 +96,18 @@ function formatValueOnlyText(
       item.quotaUnit,
       i18n,
     );
-    return `${remainingValue} ${commonCopy.remaining}`;
+    return copy.remainingValue(remainingValue);
   }
 
   if (item.used !== null) {
-    return `${formatQuotaValue(item.used, item.quotaUnit, i18n)} tracked`;
+    return copy.trackedValue(formatQuotaValue(item.used, item.quotaUnit, i18n));
   }
 
   if (item.total !== null) {
-    return `${formatQuotaValue(item.total, item.quotaUnit, i18n)} total`;
+    return copy.totalValue(formatQuotaValue(item.total, item.quotaUnit, i18n));
   }
 
-  return "Unavailable";
+  return copy.unavailable;
 }
 
 function getProgressItemValueKind(
@@ -209,6 +210,7 @@ export function ProviderProgressItemList({
                   displayStyle,
                 )}
                 valueText={formatProgressValueText(item, i18n, label)}
+                i18n={i18n}
               />
             ) : (
               <div

@@ -1,9 +1,15 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
+import { createRuntimeI18n } from "../i18n";
 import { UsageProgress } from "./UsageProgress";
 
 describe("shared UsageProgress", () => {
+  it.each([Number.NaN, Number.POSITIVE_INFINITY])("treats non-finite quota values as unknown (%s)", (used) => {
+    const html = renderToStaticMarkup(<UsageProgress used={used} total={100} tone="neutral" label="Quota" />);
+    expect(html).toContain("Unknown");
+    expect(html).not.toContain("aria-valuenow=");
+  });
   it("resolves gradient progress color appearance for progress surfaces", () => {
     const html = renderToStaticMarkup(
       <UsageProgress
@@ -56,5 +62,45 @@ describe("shared UsageProgress", () => {
     expect(html).toContain(
       'aria-label="Weekly limit. Resets Jul 20, 5:17 AM"',
     );
+  });
+
+  it("uses localized percent formatting for circular progress", () => {
+    const i18n = createRuntimeI18n("de");
+    const expectedPercent = i18n.formatPercentValue(35);
+    const html = renderToStaticMarkup(
+      <UsageProgress
+        used={65}
+        remaining={35}
+        total={100}
+        tone="neutral"
+        label="Weekly limit"
+        displayStyle="circle"
+        valueKind="remaining"
+        i18n={i18n}
+      />,
+    );
+
+    expect(html).toContain(`>${expectedPercent}<`);
+    expect(html).toContain(`aria-valuetext="${i18n.formatPercentValue(35)} verbleibend"`);
+  });
+
+  it("keeps caller-provided indeterminate values", () => {
+    const html = renderToStaticMarkup(
+      <UsageProgress
+        used={null}
+        total={100}
+        tone="warning"
+        label="Weekly limit"
+        valueLabel="Awaiting provider data"
+        valueText="Weekly limit: awaiting provider data"
+        i18n={createRuntimeI18n("ja")}
+      />,
+    );
+
+    expect(html).toContain(">Awaiting provider data<");
+    expect(html).toContain(
+      'aria-valuetext="Weekly limit: awaiting provider data"',
+    );
+    expect(html).not.toContain("使用率を取得できません");
   });
 });

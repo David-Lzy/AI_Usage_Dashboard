@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 
 import type { ProgressDisplayStyle } from "../../providers/types";
+import { ProgressRingValue } from "./ProgressRingValue";
 
 type UsageProgressRingProps = {
   detail?: string | null;
@@ -211,7 +212,8 @@ export function UsageProgressRing({
             />
           </svg>
         ) : null}
-        <span className="usage-progress-ring__value">{valueLabel}</span>
+        <ProgressRingValue className="usage-progress-ring__value" value={valueLabel}
+          inset={progressThicknessPx + 10} />
       </div>
       <p className="usage-progress__ring-label">
         <span className="usage-progress__label-name">{label}</span>

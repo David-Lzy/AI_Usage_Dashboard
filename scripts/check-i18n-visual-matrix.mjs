@@ -4,6 +4,7 @@ import path from "node:path";
 import process from "node:process";
 
 import { chromium } from "playwright";
+import { startSourceQaServer } from "./lib/source-qa-server.mjs";
 
 import {
   appendLocaleOverride,
@@ -100,6 +101,7 @@ function parseArgs(argv) {
     output: "",
     routes: [],
     smoke: false,
+    source: false,
     themes: [],
     widths: [],
     locales: [],
@@ -107,6 +109,11 @@ function parseArgs(argv) {
 
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
+
+    if (arg === "--source") {
+      options.source = true;
+      continue;
+    }
 
     if (arg === "--smoke") {
       options.smoke = true;
@@ -229,6 +236,7 @@ function printHelp() {
 Usage: npm run i18n:visual-check -- [options]
 
 Options:
+  --source                 Test source through isolated Vite without touching dist.
   --smoke                  Run a small en,de,ar x 360,720 matrix.
   --locales en,de,ar       Comma-separated locale list.
   --widths 360,720         Comma-separated viewport widths.
@@ -1284,10 +1292,10 @@ async function captureMatrixEntry(
 async function run() {
   const options = parseArgs(process.argv.slice(2));
 
-  await assertDistReady();
+  if (!options.source) await assertDistReady();
   await mkdir(path.join(options.output, "screenshots"), { recursive: true });
 
-  const server = await startStaticServer(distRoot);
+  const server = options.source ? await startSourceQaServer(projectRoot) : await startStaticServer(distRoot);
   const browser = await launchBrowser();
   const page = await browser.newPage();
   const results = [];
@@ -1356,7 +1364,8 @@ async function run() {
   const report = {
     generatedAt: options.generatedAt,
     output: options.output,
-    distRoot,
+    distRoot: options.source ? null : distRoot,
+    sourceMode: options.source,
     mode: options.smoke ? "smoke" : "full",
     locales: options.locales,
     routes: options.routes,

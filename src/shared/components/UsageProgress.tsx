@@ -5,6 +5,7 @@ import type {
   ProgressColorBand,
   ProgressDisplayStyle,
 } from "../../providers/types";
+import { createRuntimeI18n, type RuntimeI18n } from "../i18n";
 import {
   DEFAULT_PROGRESS_COLOR_BANDS,
   DEFAULT_PROGRESS_THICKNESS_PX,
@@ -12,7 +13,9 @@ import {
   resolveProgressColorForAppearance,
 } from "../progress-appearance";
 import { isCircularProgressDisplayStyle } from "../progress-display";
+import { buildUsageProgressLocalizedCopy } from "../usage-progress-localized-copy";
 import { UsageProgressRing } from "./UsageProgressRing";
+import { ProgressRingValue } from "./ProgressRingValue";
 
 type UsageProgressProps = {
   used: number | null;
@@ -29,6 +32,7 @@ type UsageProgressProps = {
   valueLabel?: string;
   valueText?: string;
   detail?: string | null;
+  i18n?: RuntimeI18n;
 };
 
 export function UsageProgress({
@@ -46,6 +50,10 @@ export function UsageProgress({
   valueLabel,
   valueText,
   detail,
+  i18n = createRuntimeI18n(
+    "system",
+    typeof window !== "undefined" ? window : undefined,
+  ),
 }: UsageProgressProps) {
   const trackedValue =
     valueKind === "remaining"
@@ -53,12 +61,12 @@ export function UsageProgress({
         (used !== null && total !== null ? Math.max(total - used, 0) : null))
       : used;
   const percent =
-    trackedValue !== null && total !== null && total > 0
+    trackedValue !== null && Number.isFinite(trackedValue) && total !== null && Number.isFinite(total) && total > 0
       ? Math.min(100, Math.max(0, (trackedValue / total) * 100))
       : null;
   const roundedPercent = percent === null ? null : Math.round(percent);
   const remainingPercent =
-    remaining !== null && remaining !== undefined && total !== null && total > 0
+    remaining !== null && remaining !== undefined && Number.isFinite(remaining) && total !== null && Number.isFinite(total) && total > 0
       ? Math.min(100, Math.max(0, (remaining / total) * 100))
       : null;
   const resolvedThicknessPx = normalizeProgressThicknessPx(progressThicknessPx);
@@ -68,18 +76,22 @@ export function UsageProgress({
     progressColorBands,
   );
   const isIndeterminate = roundedPercent === null;
+  const copy = buildUsageProgressLocalizedCopy(i18n.resolvedLocale);
+  const formattedPercent = i18n.formatPercentValue(roundedPercent ?? 0);
   const progressValueLabel = isIndeterminate
-    ? "Unknown"
+    ? (valueLabel ?? copy.unknown)
     : isCircularProgressDisplayStyle(displayStyle)
-      ? `${roundedPercent}%`
+      ? formattedPercent
       : (valueLabel ??
         (valueKind === "remaining"
-          ? `${roundedPercent}% remaining`
-          : `${roundedPercent}%`));
+          ? copy.remainingValue(formattedPercent)
+          : copy.usedValue(formattedPercent)));
   const progressValueText = isIndeterminate
-    ? "Usage percentage unavailable"
+    ? (valueText ?? copy.percentageUnavailable)
     : (valueText ??
-      `${roundedPercent}% ${valueKind === "remaining" ? "remaining" : "used"}`);
+      (valueKind === "remaining"
+        ? copy.remainingValue(formattedPercent)
+        : copy.usedValue(formattedPercent)));
   const accessibleLabel = labelSecondary
     ? `${label}. ${labelSecondary}`
     : label;
@@ -116,9 +128,7 @@ export function UsageProgress({
           className={`usage-progress__ring usage-progress__ring--${tone}${isIndeterminate ? " usage-progress__ring--indeterminate" : ""}`}
           style={progressStyle}
         >
-          <span className="usage-progress__ring-value">
-            {progressValueLabel}
-          </span>
+          <ProgressRingValue className="usage-progress__ring-value" value={progressValueLabel} inset={resolvedThicknessPx + 3} />
         </div>
         <p className="usage-progress__ring-label">
           <span className="usage-progress__label-name">{label}</span>

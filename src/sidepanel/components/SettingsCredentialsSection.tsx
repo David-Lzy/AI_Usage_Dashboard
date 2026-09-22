@@ -9,6 +9,7 @@ import { getTestConnectionLabel } from "../../shared/connection-action-localized
 import type {
   ResolvedAppLocale,
   ResolvedTextDirection,
+  RuntimeI18n,
 } from "../../shared/i18n";
 import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import {
@@ -48,6 +49,7 @@ type SettingsCredentialsSectionProps = {
   detail: string;
   eyebrow: string;
   focusedProviderId?: ProviderId | null;
+  i18n: RuntimeI18n;
   labels: ReturnType<typeof buildSettingsLocalizedCopy>["credentials"];
   locale: ResolvedAppLocale;
   sectionId?: string;
@@ -85,6 +87,7 @@ export function SettingsCredentialsSection({
   detail,
   eyebrow,
   focusedProviderId = null,
+  i18n,
   labels,
   locale,
   sectionId,
@@ -406,6 +409,7 @@ export function SettingsCredentialsSection({
             : (carouselIndex ?? 0)
         }
         items={credentialItems}
+        i18n={i18n}
         textDirection={textDirection}
         onActiveItemChange={(_item, index) => onCarouselIndexChange?.(index)}
       />

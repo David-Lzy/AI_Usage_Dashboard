@@ -146,6 +146,15 @@ explicit runtime translation coverage are both enforced for managed runtime ids.
 keeping user-defined labels, endpoint URLs, fetched summaries, and raw
 response-derived values unchanged.
 
+Unreleased work-branch shared controls use dedicated typed builders in
+`usage-progress-localized-copy.ts` and `navigation-localized-copy.ts` for all
+14 locales. Unknown/value-only quota copy, progress accessibility text, toast
+dismissal, and carousel navigation/position labels use the application's
+resolved locale. Numeric counts and percentages use `RuntimeI18n` formatters.
+These builders do not translate Provider facts or user-defined labels.
+Indeterminate progress honors caller-supplied localized values; ring text fits
+its stable inner bounds instead of enlarging the control or clipping a word.
+
 ## Locale Preference Contract
 
 - runtime locale preference now persists in `AppSettings.locale`

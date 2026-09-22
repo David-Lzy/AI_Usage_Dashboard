@@ -578,6 +578,7 @@ export function SettingsPage({
 
       <SettingsQuickSetupSection
         focusedProviderId={quickSetupFocusedProviderId}
+        i18n={i18n}
         sectionId={SETTINGS_SECTION_IDS.quickSetup}
         providers={providers}
         providerSourceDisplayCopy={providerSourceDisplayCopy}
@@ -690,6 +691,7 @@ export function SettingsPage({
             <div className="source-card__details-body settings-advanced__body">
               <SettingsCredentialsSection
                 focusedProviderId={credentialFocusedProviderId}
+                i18n={i18n}
                 sectionId="settings-advanced-credentials"
                 eyebrow={i18n.t("settings.credentials.eyebrow")}
                 title={i18n.t("settings.credentials.title")}
@@ -761,6 +763,7 @@ export function SettingsPage({
 
       {toast ? (
         <Toast
+          i18n={i18n}
           tone={toast.tone}
           title={toast.title}
           message={toast.message}

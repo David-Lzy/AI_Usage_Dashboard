@@ -11,6 +11,7 @@ import { isCircularProgressDisplayStyle } from "../../shared/progress-display";
 import type { RuntimeI18n } from "../../shared/i18n";
 import { buildRuntimeCommonCopy } from "../../shared/i18n";
 import type { ProviderViewModel } from "../view-models";
+import { buildUsageProgressLocalizedCopy } from "../../shared/usage-progress-localized-copy";
 import { UsageProgress } from "./UsageProgress";
 
 type UsageWindowProgressListProps = {
@@ -54,8 +55,9 @@ function formatRemainingValue(
     return i18n.formatPercentValue(window.remaining);
   }
 
-  const remainingLabel = buildRuntimeCommonCopy(i18n).remaining;
-  return `${i18n.formatPercentValue(window.remaining)} ${remainingLabel}`;
+  return buildUsageProgressLocalizedCopy(i18n.resolvedLocale).remainingValue(
+    i18n.formatPercentValue(window.remaining),
+  );
 }
 
 function formatRemainingText(
@@ -66,8 +68,10 @@ function formatRemainingText(
     return undefined;
   }
 
-  const remainingLabel = buildRuntimeCommonCopy(i18n).remaining;
-  return `${window.normalizedLabel}: ${i18n.formatPercentValue(window.remaining)} ${remainingLabel}`;
+  const copy = buildUsageProgressLocalizedCopy(i18n.resolvedLocale);
+  return `${window.normalizedLabel}: ${copy.remainingValue(
+    i18n.formatPercentValue(window.remaining),
+  )}`;
 }
 
 function formatWindowResetDetail(
@@ -135,6 +139,7 @@ export function UsageWindowProgressList({
             valueLabel={formatRemainingValue(usageWindow, i18n, displayStyle)}
             valueText={formatRemainingText(usageWindow, i18n)}
             detail={formatWindowResetDetail(usageWindow, i18n)}
+            i18n={i18n}
           />
         </div>
       ))}

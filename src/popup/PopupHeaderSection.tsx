@@ -104,6 +104,9 @@ export function PopupHeaderSection({
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
   const themeMenuId = useId();
   const themeMenuRef = useRef<HTMLDivElement>(null);
+  const themeButtonRef = useRef<HTMLButtonElement>(null);
+  const collapseButtonRef = useRef<HTMLButtonElement>(null);
+  const initialMenuFocus = useRef(0);
   const refreshTitle = buildRefreshTitle({
     isRefreshing,
     refreshCountdownSeconds,
@@ -124,6 +127,18 @@ export function PopupHeaderSection({
   );
   const isSurfaceCollapsed = areActionsCollapsed && !hideProviderFeedback;
 
+  function closeThemeMenu(restoreFocus = false) {
+    setIsThemeMenuOpen(false);
+    if (restoreFocus) themeButtonRef.current?.focus();
+  }
+
+  useEffect(() => {
+    if (areActionsCollapsed) {
+      if (themeMenuRef.current?.contains(document.activeElement)) collapseButtonRef.current?.focus();
+      setIsThemeMenuOpen(false);
+    }
+  }, [areActionsCollapsed]);
+
   useEffect(() => {
     if (!isThemeMenuOpen) {
       return undefined;
@@ -138,17 +153,12 @@ export function PopupHeaderSection({
       }
     }
 
-    function closeOnEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setIsThemeMenuOpen(false);
-      }
-    }
+    const options = themeMenuRef.current?.querySelectorAll<HTMLButtonElement>('[role="menuitemradio"]');
+    options?.[initialMenuFocus.current]?.focus();
 
     document.addEventListener("pointerdown", closeWhenFocusLeaves);
-    document.addEventListener("keydown", closeOnEscape);
     return () => {
       document.removeEventListener("pointerdown", closeWhenFocusLeaves);
-      document.removeEventListener("keydown", closeOnEscape);
     };
   }, [isThemeMenuOpen]);
 
@@ -159,6 +169,7 @@ export function PopupHeaderSection({
       }${isSurfaceCollapsed ? " popup-header--surface-collapsed" : ""}`}
     >
       <button
+        ref={collapseButtonRef}
         className="icon-button popup-header__collapse-toggle"
         type="button"
         aria-controls="popup-header-actions"
@@ -203,8 +214,13 @@ export function PopupHeaderSection({
               : refreshCountdownLabel}
           </span>
         </button>
-        <div className="popup-header__theme-menu" ref={themeMenuRef}>
+        <div className="popup-header__theme-menu" ref={themeMenuRef}
+          onBlur={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget)) closeThemeMenu();
+          }}
+        >
           <button
+            ref={themeButtonRef}
             className="icon-button popup-header__icon-action"
             data-popup-toggle-theme-mode="true"
             data-theme-local-surface="popup-toggle-theme-mode"
@@ -215,9 +231,18 @@ export function PopupHeaderSection({
             aria-haspopup="menu"
             aria-label={themeButtonTitle}
             title={themeButtonTitle}
-            disabled={isThemeTogglePending}
+            aria-disabled={isThemeTogglePending}
             onClick={() => {
+              if (isThemeTogglePending) return;
+              initialMenuFocus.current = 0;
               setIsThemeMenuOpen((current) => !current);
+            }}
+            onKeyDown={(event) => {
+              if (!isThemeTogglePending && (event.key === "ArrowDown" || event.key === "ArrowUp")) {
+                event.preventDefault();
+                initialMenuFocus.current = event.key === "ArrowUp" ? THEME_MODE_OPTIONS.length - 1 : 0;
+                setIsThemeMenuOpen(true);
+              }
             }}
           >
             <PopupMaterialIcon name={getThemeModeIcon(currentThemeMode)} />
@@ -230,6 +255,26 @@ export function PopupHeaderSection({
               "settings.preferences.theme_mode_label",
             )}
             hidden={!isThemeMenuOpen}
+            onKeyDown={(event) => {
+              if (event.key === "Escape") {
+                event.preventDefault();
+                event.stopPropagation();
+                closeThemeMenu(true);
+              } else if (event.key === "Tab") {
+                // Continue the browser's normal tab order from the menu trigger.
+                closeThemeMenu(true);
+              } else {
+                const options = Array.from(event.currentTarget.querySelectorAll<HTMLButtonElement>('[role="menuitemradio"]'));
+                const current = options.indexOf(document.activeElement as HTMLButtonElement);
+                const next = event.key === "ArrowDown" ? (current + 1) % options.length
+                  : event.key === "ArrowUp" ? (current - 1 + options.length) % options.length
+                    : event.key === "Home" ? 0 : event.key === "End" ? options.length - 1 : -1;
+                if (next >= 0) {
+                  event.preventDefault();
+                  options[next]?.focus();
+                }
+              }
+            }}
           >
             {THEME_MODE_OPTIONS.map((themeMode) => {
               const isSelected = themeMode === currentThemeMode;
@@ -245,10 +290,12 @@ export function PopupHeaderSection({
                   }`}
                   type="button"
                   role="menuitemradio"
+                  tabIndex={-1}
                   aria-checked={isSelected}
-                  disabled={isThemeTogglePending}
+                  aria-disabled={isThemeTogglePending}
                   onClick={() => {
-                    setIsThemeMenuOpen(false);
+                    if (isThemeTogglePending) return;
+                    closeThemeMenu(true);
                     if (!isSelected) {
                       void onSetThemeMode(themeMode);
                     }

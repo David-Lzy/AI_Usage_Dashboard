@@ -311,6 +311,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
 
         {toast ? (
           <Toast
+            i18n={runtimeI18n}
             tone={toast.tone}
             title={toast.title}
             message={toast.message}
@@ -685,6 +686,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
 
       {route.name !== "settings" && toast ? (
         <Toast
+          i18n={runtimeI18n}
           tone={toast.tone}
           title={toast.title}
           message={toast.message}

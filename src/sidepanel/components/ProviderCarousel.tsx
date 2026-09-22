@@ -1,7 +1,9 @@
 import type { KeyboardEvent, PointerEvent, ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 
-import type { ResolvedTextDirection } from "../../shared/i18n";
+import type { ResolvedTextDirection, RuntimeI18n } from "../../shared/i18n";
+import { buildNavigationLocalizedCopy } from "../../shared/navigation-localized-copy";
+import { createDefaultOperatorRuntimeI18n } from "../operator-runtime-i18n";
 import { MaterialIcon } from "./MaterialIcon";
 
 export type ProviderCarouselItem = {
@@ -15,6 +17,7 @@ type ProviderCarouselSlidePosition = "active" | "previous" | "next" | "hidden";
 
 type ProviderCarouselProps = {
   ariaLabel: string;
+  i18n?: RuntimeI18n;
   items: ProviderCarouselItem[];
   emptyState?: ReactNode;
   initialIndex?: number;
@@ -153,11 +156,13 @@ export function isProviderCarouselInteractiveTarget(
 export function ProviderCarousel({
   ariaLabel,
   emptyState = null,
+  i18n = createDefaultOperatorRuntimeI18n(),
   initialIndex = 0,
   items,
-  textDirection = "ltr",
+  textDirection = i18n.resolvedTextDirection,
   onActiveItemChange,
 }: ProviderCarouselProps) {
+  const copy = buildNavigationLocalizedCopy(i18n).carousel;
   const itemCount = items.length;
   const clampedInitialIndex = clampProviderCarouselIndex(initialIndex, itemCount);
   const [activeIndex, setActiveIndex] = useState(() =>
@@ -251,7 +256,7 @@ export function ProviderCarousel({
         className="provider-carousel provider-carousel--empty"
         role="region"
         aria-label={ariaLabel}
-        aria-roledescription="carousel"
+        aria-roledescription={copy.roleDescription}
         data-provider-carousel=""
         data-provider-carousel-count="0"
       >
@@ -265,7 +270,7 @@ export function ProviderCarousel({
       className="provider-carousel"
       role="region"
       aria-label={ariaLabel}
-      aria-roledescription="carousel"
+      aria-roledescription={copy.roleDescription}
       data-provider-carousel=""
       data-provider-carousel-count={itemCount}
       data-provider-carousel-direction={textDirection}
@@ -277,7 +282,7 @@ export function ProviderCarousel({
             <button
               className="provider-carousel__button"
               type="button"
-              aria-label="Previous provider"
+              aria-label={copy.previousProvider}
               data-provider-carousel-action="previous"
               onClick={() => moveCarousel("previous")}
             >
@@ -286,7 +291,7 @@ export function ProviderCarousel({
             <button
               className="provider-carousel__button"
               type="button"
-              aria-label="Next provider"
+              aria-label={copy.nextProvider}
               data-provider-carousel-action="next"
               onClick={() => moveCarousel("next")}
             >
@@ -295,7 +300,7 @@ export function ProviderCarousel({
           </div>
         ) : null}
         <p className="provider-carousel__status" aria-live="polite" dir="auto">
-          {`${activeIndex + 1} / ${itemCount} · ${activeItem?.label ?? ""}`}
+          {copy.status(activeIndex + 1, itemCount, activeItem?.label ?? "")}
         </p>
       </div>
 
@@ -322,8 +327,8 @@ export function ProviderCarousel({
                 className="provider-carousel__slide"
                 role="group"
                 aria-hidden={isActive ? undefined : true}
-                aria-label={`${index + 1} of ${itemCount}: ${item.label}`}
-                aria-roledescription="slide"
+                aria-label={copy.slideLabel(index + 1, itemCount, item.label)}
+                aria-roledescription={copy.slideRoleDescription}
                 inert={isActive ? undefined : true}
                 data-provider-carousel-slide={item.id}
                 data-provider-carousel-slide-active={
@@ -339,13 +344,13 @@ export function ProviderCarousel({
       </div>
 
       {hasMultipleItems ? (
-        <div className="provider-carousel__dots" aria-label="Provider slides">
+        <div className="provider-carousel__dots" aria-label={copy.slides}>
           {items.map((item, index) => (
             <button
               key={item.id}
               className="provider-carousel__dot"
               type="button"
-              aria-label={`Show ${item.label}`}
+              aria-label={copy.showSlide(item.label)}
               aria-current={index === activeIndex ? "true" : undefined}
               data-provider-carousel-dot={item.id}
               onClick={() => setActiveIndex(index)}

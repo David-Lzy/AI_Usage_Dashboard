@@ -124,6 +124,7 @@ export function SettingsSourceSection({
           focusedSourceIndex > -1 ? focusedSourceIndex : (carouselIndex ?? 0)
         }
         items={sourceItems}
+        i18n={i18n}
         textDirection={i18n.resolvedTextDirection}
         onActiveItemChange={(_item, index) => onCarouselIndexChange?.(index)}
       />

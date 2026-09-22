@@ -4,6 +4,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
 import { SAMPLE_APP_STATE } from "../../shared/constants";
+import { createRuntimeI18n } from "../../shared/i18n";
 import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
 import {
   SettingsOverviewSection,
@@ -123,6 +124,7 @@ describe("SettingsSections", () => {
         providers={SAMPLE_APP_STATE.providerSettings.slice(0, 2)}
         enabledDetail="Shown on dashboard."
         disabledDetail="Hidden from dashboard."
+        i18n={createRuntimeI18n("en", undefined)}
         onToggleProvider={() => {}}
       />,
     );
@@ -151,6 +153,7 @@ describe("SettingsSections", () => {
           removeAccess: "Remove access",
           requestAccess: "Request access",
         }}
+        i18n={createRuntimeI18n("en", undefined)}
         onTogglePermission={() => {}}
       />,
     );
