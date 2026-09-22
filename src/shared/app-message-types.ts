@@ -9,8 +9,10 @@ import type {
   ProviderSourcePreference,
 } from "../providers/types";
 import type { CustomSourceSetting } from "./custom-sources";
+import type { LocalCompanionAction, LocalCompanionSettingsView } from "./local-companion-settings";
 
 export type AppMessage =
+  | ({ type: "app:local-companion" } & LocalCompanionAction)
   | { type: "app:init" }
   | { type: "app:read-state" }
   | { type: "app:update-settings"; settings: Partial<AppSettings> }
@@ -86,6 +88,7 @@ export type AppMessageResponse =
   | {
       ok: true;
       state: AppState;
+      localCompanion?: LocalCompanionSettingsView;
       notice?: {
         tone: "success" | "error";
         title: string;

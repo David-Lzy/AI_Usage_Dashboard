@@ -181,6 +181,16 @@ normalized source snapshots, or user-facing errors. The token is sent only to
 the explicitly configured loopback bridge. Restarting the reference process
 invalidates its in-memory token.
 
+Unreleased work-branch additions provide Developer/Debug-only generic pairing
+and conversion of an explicitly selected ccusage daily JSON export. The
+converter retains token totals, estimated USD cost when known, source date
+coverage and export-file modification time. It excludes project paths, account
+identities, model names, raw rows and unrelated response fields. It neither
+runs ccusage nor scans for its files. Generic tokens use a protocol-specific
+local key, separate from CodexBar and excluded from all exports. Source refresh
+is manual and selected-source only; service restart expires pairing. Disconnect
+removes the local token and managed snapshots even if the service is offline.
+
 Settings exposes an experimental, opt-in adapter for the versioned CodexBar
 dashboard snapshot. CodexBar is separately installed third-party local
 software; the extension does not install, start, discover, update, or control

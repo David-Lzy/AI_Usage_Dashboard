@@ -1,6 +1,13 @@
 import { randomBytes, timingSafeEqual } from "node:crypto";
-import { readFile, stat } from "node:fs/promises";
+import { constants } from "node:fs";
+import { lstat, open } from "node:fs/promises";
 import { createServer } from "node:http";
+import path from "node:path";
+
+import {
+  CCUSAGE_DAILY_MAX_INPUT_BYTES,
+  convertCcusageDailyExport,
+} from "./ccusage-daily-converter.mjs";
 
 export const LOCAL_COMPANION_BRIDGE_SCHEMA_V1 =
   "ai-usage-dashboard.local-bridge.v1";
@@ -17,6 +24,8 @@ const SOURCE_ID_PATTERN = /^custom:[a-z0-9][a-z0-9_-]{0,63}$/u;
 const SAFE_TEXT_PATTERN = /^[^<>\u0000-\u001F\u007F]+$/u;
 const ALLOWED_ORIGIN_PATTERN = /^(?:chrome|moz)-extension:\/\/[a-z0-9-]+$/iu;
 const PAIRING_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+const CUSTOM_SOURCE_FORMAT = "custom-source.v1";
+const CCUSAGE_DAILY_FORMAT = "ccusage-daily.v1";
 
 function isRecord(value) {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -152,7 +161,7 @@ function normalizeSourceDefinitions(sources) {
     );
   }
   const seen = new Set();
-  return sources.map((source) => {
+  return Object.freeze(sources.map((source) => {
     const sourceId = normalizeSourceId(source?.sourceId);
     if (!sourceId || seen.has(sourceId)) {
       throw new Error("Source ids must be unique custom:<id> values.");
@@ -160,16 +169,21 @@ function normalizeSourceDefinitions(sources) {
     if (typeof source.filePath !== "string" || source.filePath.length === 0) {
       throw new Error(`Source ${sourceId} requires one explicit file path.`);
     }
+    const format = source.format ?? CUSTOM_SOURCE_FORMAT;
+    if (format !== CUSTOM_SOURCE_FORMAT && format !== CCUSAGE_DAILY_FORMAT) {
+      throw new Error(`Source ${sourceId} has an unsupported format.`);
+    }
     seen.add(sourceId);
-    return {
+    return Object.freeze({
       sourceId,
-      label: normalizeLabel(
-        source.label,
-        sourceId.slice("custom:".length),
-      ),
-      filePath: source.filePath,
-    };
-  });
+      label:
+        format === CCUSAGE_DAILY_FORMAT
+          ? `ccusage ${sourceId.slice("custom:".length)}`
+          : normalizeLabel(source.label, sourceId.slice("custom:".length)),
+      filePath: path.resolve(source.filePath),
+      format,
+    });
+  }));
 }
 
 function createFixedWindowRateLimiter(limit, now) {
@@ -246,23 +260,98 @@ function readRequestBody(request, { maxBytes, timeoutMs }) {
   });
 }
 
+function unchangedFileMetadata(before, after) {
+  return (
+    before.dev === after.dev &&
+    before.ino === after.ino &&
+    before.size === after.size &&
+    before.mtimeMs === after.mtimeMs &&
+    before.ctimeMs === after.ctimeMs
+  );
+}
+
+async function readBoundedRegularFile(filePath, maxBytes) {
+  try {
+    const pathMetadata = await lstat(filePath);
+    if (!pathMetadata.isFile()) {
+      return { ok: false, statusCode: 422, message: "Configured source is not a file." };
+    }
+  } catch {
+    return { ok: false, statusCode: 503, message: "Configured source is unavailable." };
+  }
+  let handle;
+  try {
+    handle = await open(
+      filePath,
+      constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK,
+    );
+  } catch {
+    return { ok: false, statusCode: 503, message: "Configured source is unavailable." };
+  }
+  try {
+    const before = await handle.stat();
+    if (!before.isFile()) {
+      return { ok: false, statusCode: 422, message: "Configured source is not a file." };
+    }
+    if (before.size > maxBytes) {
+      return { ok: false, statusCode: 413, message: "Configured source file is too large." };
+    }
+
+    const chunks = [];
+    let bytes = 0;
+    while (bytes <= maxBytes) {
+      const buffer = Buffer.allocUnsafe(Math.min(64 * 1024, maxBytes + 1 - bytes));
+      const { bytesRead } = await handle.read(buffer, 0, buffer.length, null);
+      if (bytesRead === 0) {
+        break;
+      }
+      chunks.push(buffer.subarray(0, bytesRead));
+      bytes += bytesRead;
+    }
+    if (bytes > maxBytes) {
+      return { ok: false, statusCode: 413, message: "Configured source file is too large." };
+    }
+    const after = await handle.stat();
+    if (!unchangedFileMetadata(before, after)) {
+      return { ok: false, statusCode: 503, message: "Configured source changed while reading." };
+    }
+    return { ok: true, text: Buffer.concat(chunks, bytes).toString("utf8"), mtime: after.mtime };
+  } catch {
+    return { ok: false, statusCode: 503, message: "Configured source is unavailable." };
+  } finally {
+    await handle.close();
+  }
+}
+
 async function readValidatedSource(source) {
-  const metadata = await stat(source.filePath);
-  if (!metadata.isFile()) {
-    return { ok: false, statusCode: 422, message: "Configured source is not a file." };
-  }
-  if (metadata.size > LOCAL_COMPANION_BRIDGE_MAX_SOURCE_BYTES) {
-    return { ok: false, statusCode: 413, message: "Configured source file is too large." };
-  }
-  const text = await readFile(source.filePath, "utf8");
-  if (Buffer.byteLength(text) > LOCAL_COMPANION_BRIDGE_MAX_SOURCE_BYTES) {
-    return { ok: false, statusCode: 413, message: "Configured source file is too large." };
+  const read = await readBoundedRegularFile(
+    source.filePath,
+    source.format === CCUSAGE_DAILY_FORMAT
+      ? CCUSAGE_DAILY_MAX_INPUT_BYTES
+      : LOCAL_COMPANION_BRIDGE_MAX_SOURCE_BYTES,
+  );
+  if (!read.ok) {
+    return read;
   }
   let parsed;
   try {
-    parsed = JSON.parse(text);
+    parsed = JSON.parse(read.text);
   } catch {
     return { ok: false, statusCode: 422, message: "Configured source is not valid JSON." };
+  }
+  if (source.format === CCUSAGE_DAILY_FORMAT) {
+    try {
+      return {
+        ok: true,
+        value: convertCcusageDailyExport(parsed, {
+          sourceId: source.sourceId,
+          label: source.label,
+          mtime: read.mtime,
+        }),
+      };
+    } catch {
+      return { ok: false, statusCode: 422, message: "Configured ccusage export is invalid." };
+    }
   }
   const validated = validateCustomSourcePayloadV1(parsed, source.sourceId);
   return validated.ok
@@ -333,7 +422,9 @@ export function createLocalCompanionBridge(options) {
       return;
     }
 
-    const requestUrl = new URL(request.url ?? "/", "http://127.0.0.1");
+    let requestUrl;
+    try { requestUrl = new URL(request.url ?? "/", "http://127.0.0.1"); }
+    catch { sendJson(response, 400, { error: "invalid_request" }, origin.headers); return; }
     if (
       request.method === "POST" &&
       requestUrl.pathname === "/v1/pair"
@@ -412,9 +503,9 @@ export function createLocalCompanionBridge(options) {
       request.method === "GET" &&
       requestUrl.pathname.startsWith("/v1/sources/")
     ) {
-      const sourceId = decodeURIComponent(
-        requestUrl.pathname.slice("/v1/sources/".length),
-      );
+      let sourceId;
+      try { sourceId = decodeURIComponent(requestUrl.pathname.slice("/v1/sources/".length)); }
+      catch { sendJson(response, 400, { error: "invalid_source_id" }, origin.headers); return; }
       const source = sourcesById.get(sourceId);
       if (!source) {
         sendJson(response, 404, { error: "source_not_found" }, origin.headers);
@@ -425,7 +516,16 @@ export function createLocalCompanionBridge(options) {
         sendJson(
           response,
           result.ok ? 200 : result.statusCode,
-          result.ok ? result.value : { error: result.message },
+          result.ok
+            ? result.value
+            : {
+                error:
+                  result.statusCode === 413
+                    ? "source_too_large"
+                    : result.statusCode === 503
+                      ? "source_unavailable"
+                      : "source_invalid",
+              },
           origin.headers,
         );
       } catch {

@@ -709,6 +709,12 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           onOpenSourcePage={handleOpenSessionPage}
           onRefreshProvider={handleRefresh}
           onRefreshAll={() => handleRefresh()}
+          onRefreshCustomSource={(sourceId) => {
+            const source = appState.customSources?.find((entry) => entry.id === sourceId);
+            if (source?.managedBy === "local-companion") {
+              void applyMessage({ type: "app:local-companion", action: "refresh-source", sourceId });
+            } else handleRefresh();
+          }}
           onSelectProviderAccount={handleSelectProviderAccount}
         />
       )}

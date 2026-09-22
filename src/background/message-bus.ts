@@ -14,7 +14,7 @@ import {
   seedAppStateIfEmpty,
   updateAppState,
 } from "../shared/storage";
-import { normalizeCustomSourceSettings } from "../shared/custom-sources";
+import { isManagedCustomSource, normalizeCustomSourceSettings } from "../shared/custom-sources";
 import { readStoreScreenshotRuntimeLock } from "../shared/store-screenshot-runtime-lock";
 import {
   ensureActionBadgeRotationAlarm,
@@ -67,6 +67,9 @@ import {
 import { mergeBackgroundSyncState } from "./background-state-merge";
 import { quotaNotificationController } from "./quota-notification-runtime";
 import { refreshSub2ApiAccount } from "./provider-account-refresh";
+import { localCompanionController } from "./local-companion-controller";
+import { buildLocalCompanionLocalizedCopy } from "../shared/local-companion-localized-copy";
+import { createRuntimeI18n } from "../shared/i18n";
 
 export type {
   AppMessage,
@@ -153,6 +156,16 @@ export async function handleAppMessage(
       return { ok: true, state };
     }
 
+    case "app:local-companion": {
+      if (isStoreScreenshotRuntimeLocked) return { ok: true, state: await seedAppStateIfEmpty() };
+      const result = await localCompanionController.handle(message);
+      if (result.localCompanion.failure) {
+        const copy = buildLocalCompanionLocalizedCopy(createRuntimeI18n(result.state.settings.locale).resolvedLocale);
+        return { ok: true, ...result, notice: { tone: "error", title: copy.title, message: copy.failures[result.localCompanion.failure] } };
+      }
+      return { ok: true, ...result };
+    }
+
     case "app:update-settings": {
       let state = await updateAppState((current) => {
         const nextState = {
@@ -198,17 +211,20 @@ export async function handleAppMessage(
     }
 
     case "app:update-custom-sources": {
-      const customSources = normalizeCustomSourceSettings(message.customSources);
-      const customSourceIds = new Set(customSources.map((source) => source.id));
-      const state = await updateAppState((current) =>
-        reconcileAppStateHealth({
+      const proposed = normalizeCustomSourceSettings(message.customSources).filter((source) => !isManagedCustomSource(source));
+      const state = await updateAppState((current) => {
+        const managed = (current.customSources ?? []).filter(isManagedCustomSource);
+        const managedIds = new Set(managed.map((source) => source.id));
+        const customSources = [...managed, ...proposed.filter((source) => !managedIds.has(source.id))];
+        const customSourceIds = new Set(customSources.map((source) => source.id));
+        return reconcileAppStateHealth({
           ...current,
           customSources,
           customSourceStates: (current.customSourceStates ?? []).filter(
             (entry) => customSourceIds.has(entry.sourceId),
           ),
-        }),
-      );
+        });
+      });
       await ensureBackgroundAlarms(state);
 
       return {

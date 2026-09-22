@@ -7,6 +7,7 @@ import {
   type CustomSourceSnapshot,
   type CustomSourceValidationIssue,
 } from "./custom-sources";
+import { normalizeSnapshotTimestamp } from "./snapshot-freshness";
 
 export const LOCAL_COMPANION_BRIDGE_SCHEMA_V1 =
   "ai-usage-dashboard.local-bridge.v1" as const;
@@ -174,6 +175,7 @@ async function readBoundedResponseText(
     Number.isFinite(contentLength) &&
     contentLength > LOCAL_COMPANION_BRIDGE_MAX_RESPONSE_CHARS
   ) {
+    await response.body?.cancel();
     return {
       ok: false,
       code: "response_too_large",
@@ -181,7 +183,26 @@ async function readBoundedResponseText(
     };
   }
 
-  const text = await response.text();
+  const reader = response.body?.getReader();
+  if (!reader) return { ok: true, value: "" };
+  const decoder = new TextDecoder();
+  let text = "";
+  let bytes = 0;
+  try {
+    while (true) {
+      const chunk = await reader.read();
+      if (chunk.done) break;
+      bytes += chunk.value.byteLength;
+      if (bytes > LOCAL_COMPANION_BRIDGE_MAX_RESPONSE_CHARS) {
+        await reader.cancel();
+        return { ok: false, code: "response_too_large", message: "The local companion response exceeded the size limit." };
+      }
+      text += decoder.decode(chunk.value, { stream: true });
+    }
+    text += decoder.decode();
+  } finally {
+    reader.releaseLock();
+  }
   return text.length <= LOCAL_COMPANION_BRIDGE_MAX_RESPONSE_CHARS
     ? { ok: true, value: text }
     : {
@@ -215,6 +236,7 @@ async function requestLocalCompanion(
         ...init,
         cache: "no-store",
         credentials: "omit",
+        redirect: "error",
         signal: controller.signal,
       },
     );
@@ -479,12 +501,17 @@ export async function fetchLocalCompanionBridgeSource(
     return response;
   }
 
+  const raw = parseJsonObject(response.value);
+  if (!raw.ok) return raw;
+  if (raw.value.id !== undefined && (typeof raw.value.id !== "string" || toCustomSourceId(raw.value.id) !== sourceId)) {
+    return { ok: false, code: "invalid_response", message: "The local companion source id does not match its mapping." };
+  }
   const parsed = parseCustomSourceResponseJson(response.value, {
     sourceId,
-    fetchedAt: options.now?.toISOString(),
+    fetchedAt: "",
   });
   return parsed.ok
-    ? { ok: true, value: parsed.value }
+    ? { ok: true, value: { ...parsed.value, syncedAt: normalizeSnapshotTimestamp(raw.value.syncedAt) ?? "", lastSyncLabel: "" } }
     : {
         ok: false,
         code: "invalid_response",

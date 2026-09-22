@@ -19,7 +19,7 @@ const CONTROL_CHARACTER_PATTERN = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F
 
 export type CustomSourceId = `${typeof CUSTOM_SOURCE_ID_PREFIX}${string}`;
 export type DashboardSourceId = ProviderId | CustomSourceId;
-export type CustomSourceManager = "codexbar-dashboard";
+export type CustomSourceManager = "codexbar-dashboard" | "local-companion";
 
 export type CustomSourceStatus = SyncStatus;
 export type CustomSourceTone = ProviderTone;
@@ -655,7 +655,7 @@ export function normalizeCustomSourceSettings(
         ),
         createdAt,
         updatedAt,
-        ...(entry.managedBy === "codexbar-dashboard"
+        ...(entry.managedBy === "codexbar-dashboard" || entry.managedBy === "local-companion"
           ? { managedBy: entry.managedBy }
           : {}),
       },
@@ -666,6 +666,10 @@ export function normalizeCustomSourceSettings(
 export function isManagedCustomSource(
   source: Pick<CustomSourceSetting, "managedBy">,
 ): boolean {
+  return source.managedBy === "codexbar-dashboard" || source.managedBy === "local-companion";
+}
+
+export function isCodexBarManagedCustomSource(source: Pick<CustomSourceSetting, "managedBy">): boolean {
   return source.managedBy === "codexbar-dashboard";
 }
 

@@ -18,7 +18,7 @@ import { createRuntimeI18n } from "../../shared/i18n";
 import type {
   MaterialActionIconName,
 } from "../../shared/components/MaterialActionIcon";
-import type { DashboardSourceId } from "../../shared/custom-sources";
+import type { CustomSourceId, DashboardSourceId } from "../../shared/custom-sources";
 import type { CustomSourceViewModel } from "../../shared/custom-source-view-models";
 import { CustomSourceCard } from "../components/CustomSourceCard";
 import { ProviderCard } from "../components/ProviderCard";
@@ -63,6 +63,7 @@ type DashboardPageProps = {
   onOpenQuickSetup: () => void;
   onRefreshProvider: (providerId: ProviderId) => void;
   onRefreshAll: () => void;
+  onRefreshCustomSource?: (sourceId: CustomSourceId) => void;
   onSelectProviderAccount?: (
     providerId: ProviderId,
     accountId: ProviderAccountId,
@@ -100,6 +101,7 @@ export function DashboardPage({
   onOpenQuickSetup,
   onRefreshProvider,
   onRefreshAll,
+  onRefreshCustomSource,
   onSelectProviderAccount,
 }: DashboardPageProps) {
   const i18n = createRuntimeI18n(
@@ -234,7 +236,7 @@ export function DashboardPage({
                   progressSurface={progressSurface}
                   source={sourceCard.source}
                   onOpenSettings={onOpenCustomSourcesSettings ?? onOpenSettings}
-                  onRefresh={onRefreshAll}
+                  onRefresh={() => onRefreshCustomSource ? onRefreshCustomSource(sourceCard.source.sourceId) : onRefreshAll()}
                 />
               ),
             )}

@@ -1,6 +1,6 @@
 # Experimental Local Companion Bridge
 
-Date: 2026-07-25
+Date: 2026-09-23
 
 Document class:
 
@@ -15,14 +15,17 @@ Status note:
 - reference CLI plus an experimental Settings connection for the authenticated
   CodexBar dashboard snapshot
 - local companion rows remain Custom Sources and are not built-in Providers
+- generic pairing and ccusage conversion described below are work-branch
+  changes, not part of the published `0.2.0-rc.13` store package
 
 ## Status
 
 The repository includes an experimental Node reference bridge for development
 and protocol testing. The extension does not install, start, download, or
 update this process, and the generic reference CLI is not presented as a
-built-in Provider connection. Settings separately exposes the bounded CodexBar
-dashboard adapter described below.
+built-in Provider connection. Developer/Debug Settings on the work branch
+exposes generic pairing and selected-source refresh in addition to the bounded
+CodexBar dashboard adapter described below.
 
 The bridge proves a narrow local-source boundary before any future desktop
 companion or CodexBar adapter is exposed to users. It is not a way for the
@@ -85,12 +88,66 @@ extension's local secret store. Restarting the process invalidates the token.
 Supported options:
 
 - `--source <id>=<json-file>`: explicit input file; repeat up to 32 times
+- `--ccusage <id>=<json-file>`: explicit ccusage daily export; shares the same
+  32-source limit and may be combined with `--source`
 - `--host 127.0.0.1`: IPv4 loopback, the default
 - `--host ::1`: IPv6 loopback
 - `--port <1-65535>`: fixed local port, default `47831`
 
 There is deliberately no directory scan, command, executable, browser-profile,
 cookie, Keychain, or environment-discovery option.
+
+## ccusage Daily Export (Unreleased)
+
+For a daily JSON export you have already produced, start the reference bridge
+yourself with the exact file path:
+
+```sh
+npm run bridge:local -- --ccusage daily=/absolute/path/ccusage-daily.json
+```
+
+This does not run ccusage. No installation, CLI execution, directory scan,
+raw-session import, software update or background-service startup occurs.
+The converter supports a top-level `daily` array and `totals` object. Each row
+has exactly one calendar `date` or `period` (`YYYY-MM-DD`), the five documented
+token counters, and an optional `totalCost`. Dates must be unique; counters must
+be finite non-negative safe integers with a consistent component sum. Inputs
+are limited to 1 MiB and 366 daily rows. Project-grouped, session, block and
+other JSON layouts are rejected, not scraped heuristically.
+
+Only token totals, estimated USD cost, date coverage and export-file modification
+time survive conversion. Totals are computed from daily rows, not copied from
+the input totals object. Model names, project paths, account identities, raw
+rows and unrelated fields are discarded. Omitted costs or upstream unpriced
+markers make cost unavailable, never a fabricated zero. A genuinely reported
+zero with no missing-pricing indication remains zero. Empty daily arrays show
+no observations, not zero usage. These are CLI estimates, not provider billing
+or remaining subscription quota. Source calendar dates are retained without
+inferring a timezone or re-bucketing them.
+
+The supported input contract follows the upstream [JSON output
+reference](https://ccusage.com/guide/json-output) and [daily report
+reference](https://ccusage.com/guide/daily-reports), reviewed on 2026-09-23.
+Export-file modification time is provenance, not proof of a live upstream
+account refresh; touching an old file cannot improve the underlying report.
+Users must regenerate their explicit export themselves to update its contents.
+
+In Developer or Debug Settings, pair the printed loopback URL and one-time
+code. Pairing checks health and loads the index but does not poll every source.
+Select a source and refresh it explicitly. A saved row uses the separate
+`custom:companion-` namespace and cannot overwrite CodexBar or ordinary custom
+rows. Its dashboard refresh action targets that saved source only. The source
+capture time remains the file timestamp; failed refreshes never renew it.
+Captures older than one hour, more than one minute in the future, or unknown
+are shown as stale.
+
+Refresh index updates health and removes saved rows no longer advertised by
+the bridge. Remove saved source deletes the extension's cached row, not the
+input file or bridge mapping; refreshing it explicitly can import it again.
+Disconnect clears the local pairing and managed rows even when the bridge is
+offline, then attempts revocation. Restarting the service expires the previous
+token; pair again with its new code. A failed refresh preserves any existing
+snapshot as stale. No automatic idle-source polling is added.
 
 ## Versioned Protocol
 
@@ -154,6 +211,8 @@ The reference implementation:
 - limits pairing attempts, authenticated requests, body size, response size,
   source count, and request duration
 - validates every source file before returning it
+- reads bounded regular files through a descriptor; refuses directories and
+  final-path symlinks and rejects files changed during the read
 - maps a fixed source id to a file selected when the process starts; HTTP
   callers cannot provide a path
 - keeps bearer state in memory and supports immediate revocation
@@ -169,6 +228,12 @@ extension-managed local secret storage. It is not part of AppState, Chrome
 Sync, configuration backup, logs, fixtures, source snapshots, or user-facing
 errors. Normalized custom-source snapshots follow the same storage and display
 rules as existing Custom JSON Sources.
+
+Generic pairing has a protocol-specific local storage key so a CodexBar token
+on the same loopback origin cannot be overwritten. Pairing codes are cleared
+from the form after an attempt. UI responses expose only whitelisted connection
+metadata and fixed status codes. HTTP redirects and query credentials are
+rejected; streamed responses are bounded even without `Content-Length`.
 
 The reference bridge does not upload files. It reads only paths explicitly
 provided on its command line and returns validated data over loopback. Users

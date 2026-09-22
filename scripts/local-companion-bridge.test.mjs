@@ -27,10 +27,33 @@ describe("local companion bridge CLI arguments", () => {
     });
   });
 
+  it("accepts explicit ccusage daily exports alongside custom-source files", () => {
+    expect(
+      parseLocalCompanionBridgeArgs([
+        "--source",
+        "build=fixtures/build.json",
+        "--ccusage",
+        "usage=fixtures/ccusage.json",
+      ]),
+    ).toMatchObject({
+      sources: [
+        { sourceId: "build", format: "custom-source.v1" },
+        {
+          sourceId: "usage",
+          filePath: path.resolve("fixtures/ccusage.json"),
+          format: "ccusage-daily.v1",
+        },
+      ],
+    });
+  });
+
   it("rejects missing files, malformed mappings, and unknown options", () => {
     expect(() => parseLocalCompanionBridgeArgs([])).toThrow(/--source/u);
     expect(() =>
       parseLocalCompanionBridgeArgs(["--source", "build"]),
+    ).toThrow(/<id>=<json-file>/u);
+    expect(() =>
+      parseLocalCompanionBridgeArgs(["--ccusage", "usage"]),
     ).toThrow(/<id>=<json-file>/u);
     expect(() => parseLocalCompanionBridgeArgs(["--scan", "/home"])).toThrow(
       /Unknown option/u,

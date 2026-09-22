@@ -8,10 +8,11 @@ import { createLocalCompanionBridge } from "./lib/local-companion-bridge-server.
 const HELP = `Experimental AI Usage Dashboard local companion bridge
 
 Usage:
-  npm run bridge:local -- --source <id>=<json-file> [options]
+  npm run bridge:local -- (--source <id>=<json-file> | --ccusage <id>=<json-file>) [options]
 
 Options:
   --source <id>=<path>  Explicit custom-source.v1 JSON file (repeatable)
+  --ccusage <id>=<path> Explicit ccusage daily --json export (repeatable)
   --host <loopback>     127.0.0.1 (default) or ::1
   --port <number>       Listening port (default: 47831)
   --help                Show this help
@@ -46,16 +47,18 @@ export function parseLocalCompanionBridgeArgs(argv) {
       index += 1;
       continue;
     }
-    if (argument === "--source") {
+    if (argument === "--source" || argument === "--ccusage") {
       const separator = value.indexOf("=");
       if (separator <= 0 || separator === value.length - 1) {
-        throw new Error("--source must use the <id>=<json-file> form.");
+        throw new Error(`${argument} must use the <id>=<json-file> form.`);
       }
       const sourceId = value.slice(0, separator);
       result.sources.push({
         sourceId,
         label: sourceId.replace(/^custom:/u, ""),
         filePath: path.resolve(value.slice(separator + 1)),
+        format:
+          argument === "--ccusage" ? "ccusage-daily.v1" : "custom-source.v1",
       });
       index += 1;
       continue;
@@ -63,7 +66,7 @@ export function parseLocalCompanionBridgeArgs(argv) {
     throw new Error(`Unknown option: ${argument}`);
   }
   if (!result.help && result.sources.length === 0) {
-    throw new Error("At least one --source <id>=<json-file> is required.");
+    throw new Error("At least one --source or --ccusage <id>=<json-file> is required.");
   }
   return result;
 }

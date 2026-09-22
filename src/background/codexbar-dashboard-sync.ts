@@ -12,7 +12,7 @@ import {
   writeCodexBarDashboardConnection,
 } from "../shared/codexbar-dashboard-connection";
 import {
-  isManagedCustomSource,
+  isCodexBarManagedCustomSource as isManagedCustomSource,
   type CustomSourceSetting,
   type CustomSourceSyncState,
 } from "../shared/custom-sources";

@@ -16,7 +16,7 @@
     "dev": "./scripts/with-preferred-node.sh vite",
     "build": "./scripts/with-preferred-node.sh vite build",
     "bridge:local": "./scripts/with-preferred-node.sh node ./scripts/local-companion-bridge.mjs",
-    "bridge:local:test": "./scripts/with-preferred-node.sh vitest run src/shared/local-companion-bridge.test.ts src/shared/local-companion-secrets.test.ts scripts/local-companion-bridge.test.mjs scripts/lib/local-companion-bridge-server.test.mjs",
+    "bridge:local:test": "./scripts/with-preferred-node.sh vitest run src/shared/local-companion-bridge.test.ts src/shared/local-companion-secrets.test.ts src/shared/local-companion-pairing.test.ts src/shared/local-companion-localized-copy.test.ts src/background/local-companion-controller.test.ts src/sidepanel/components/LocalCompanionBridgeSettings.test.tsx scripts/local-companion-bridge.test.mjs scripts/lib/local-companion-bridge-server.test.mjs scripts/lib/ccusage-daily-converter.test.mjs",
     "firefox:build": "npm run build && ./scripts/with-preferred-node.sh node ./scripts/build-firefox-package.mjs",
     "firefox:lint": "npm run firefox:build && ./scripts/with-preferred-node.sh node ./scripts/firefox-web-ext.mjs lint",
     "firefox:lint:baseline": "npm run firefox:build && ./scripts/with-preferred-node.sh node ./scripts/check-firefox-lint-baseline.mjs",

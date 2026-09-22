@@ -65,6 +65,7 @@ import { SettingsPreferencesSection } from "../components/SettingsPreferencesSec
 import { SettingsProviderDisplaySection } from "../components/SettingsProviderDisplaySection";
 import { CustomSourceSettingsSection } from "../components/CustomSourceSettingsSection";
 import { CodexBarDashboardBridgeSettings } from "../components/CodexBarDashboardBridgeSettings";
+import { LocalCompanionBridgeSettings } from "../components/LocalCompanionBridgeSettings";
 import { MaterialInfoTooltip } from "../components/MaterialInfoTooltip";
 import { QuotaNotificationSettings } from "../components/QuotaNotificationSettings";
 import { BUILD_INFO } from "../../shared/build-info";
@@ -655,11 +656,18 @@ export function SettingsPage({
       />
 
       {userLevelVisibility.showExperimentalLocalIntegrations ? (
-        <CodexBarDashboardBridgeSettings
-          customSources={customSources}
-          customSourceStates={customSourceStates}
-          locale={i18n.resolvedLocale}
-        />
+        <>
+          <CodexBarDashboardBridgeSettings
+            customSources={customSources}
+            customSourceStates={customSourceStates}
+            locale={i18n.resolvedLocale}
+          />
+          <LocalCompanionBridgeSettings
+            customSources={customSources}
+            customSourceStates={customSourceStates}
+            locale={i18n.resolvedLocale}
+          />
+        </>
       ) : null}
 
       {showAdvancedContainer ? (

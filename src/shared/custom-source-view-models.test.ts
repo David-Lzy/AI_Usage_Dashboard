@@ -116,6 +116,15 @@ function createState(
 }
 
 describe("custom source view models", () => {
+  it("re-evaluates local companion capture age without refreshing or changing stored snapshots", () => {
+    const state = createState({ customSources: [{ ...CUSTOM_SOURCE, managedBy: "local-companion" }] }, { stale: false, lastSuccessAt: new Date(Date.now() - 7_200_000).toISOString() });
+    expect(getVisibleCustomSources(state)[0]).toMatchObject({ stale: true, statusLabel: "Stale", refreshIntervalMinutes: null });
+    expect(state.customSourceStates![0]!.stale).toBe(false);
+    state.customSourceStates![0]!.lastSuccessAt = null;
+    expect(getVisibleCustomSources(state)[0]!.stale).toBe(true);
+    state.customSourceStates![0]!.lastSuccessAt = new Date().toISOString();
+    expect(getVisibleCustomSources(state)[0]!.stale).toBe(false);
+  });
   it("builds visible custom source cards from settings and sync state", () => {
     const sources = getVisibleCustomSources(createState());
 

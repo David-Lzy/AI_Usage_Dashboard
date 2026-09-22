@@ -1,5 +1,5 @@
 import type { AppState } from "../providers/types";
-import { isManagedCustomSource } from "../shared/custom-sources";
+import { isCodexBarManagedCustomSource as isManagedCustomSource } from "../shared/custom-sources";
 
 function same(value: unknown, other: unknown): boolean {
   return JSON.stringify(value) === JSON.stringify(other);

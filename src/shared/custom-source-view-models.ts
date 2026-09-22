@@ -6,6 +6,7 @@ import type {
   SyncStatus,
 } from "../providers/types";
 import { resolveProgressItemPreferences } from "./display-preferences";
+import { isLocalCompanionCaptureStale } from "./local-companion-settings";
 import type {
   CustomSourceId,
   CustomSourceMetric,
@@ -47,7 +48,7 @@ export type CustomSourceViewModel = {
   label: string;
   description: string | null;
   endpointUrl: string;
-  refreshIntervalMinutes: number;
+  refreshIntervalMinutes: number | null;
   displayEnabled: boolean;
   syncStatus: SyncStatus;
   displayTone: ProviderTone;
@@ -295,6 +296,9 @@ function buildCustomSourceViewModel(
   setting: CustomSourceSetting,
   syncState: CustomSourceSyncState | null,
 ): CustomSourceViewModel {
+  if (setting.managedBy === "local-companion" && syncState) {
+    syncState = { ...syncState, stale: syncState.stale || isLocalCompanionCaptureStale(syncState.lastSuccessAt) };
+  }
   const snapshot = syncState?.snapshot ?? null;
   const syncStatus = syncState?.status ?? snapshot?.syncStatus ?? "warning";
   const displayTone = snapshot?.tone ?? statusToTone(syncStatus);
@@ -305,7 +309,7 @@ function buildCustomSourceViewModel(
     label: snapshot?.label ?? setting.label,
     description: snapshot?.description ?? setting.description,
     endpointUrl: setting.endpointUrl,
-    refreshIntervalMinutes: setting.refreshIntervalMinutes,
+    refreshIntervalMinutes: setting.managedBy === "local-companion" ? null : setting.refreshIntervalMinutes,
     displayEnabled: setting.displayEnabled,
     syncStatus,
     displayTone,

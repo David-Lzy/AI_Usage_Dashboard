@@ -4,6 +4,7 @@ export type MaterialActionIconName =
   | "brightness-auto"
   | "clear-day"
   | "dark-mode"
+  | "delete-outline"
   | "devices"
   | "dock-left"
   | "keyboard-arrow-down"
@@ -15,6 +16,8 @@ export type MaterialActionIconName =
   | "tab";
 
 const PATH_BY_NAME: Record<MaterialActionIconName, string> = {
+  "delete-outline":
+    "M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9zm7.5-5l-1-1h-5l-1 1H5v2h14V4z",
   "brightness-auto":
     "M312-320h64l32-92h146l32 92h62L512-680h-64L312-320Zm114-144 52-150h4l52 150H426Zm54 436L346-160H160v-186L28-480l132-134v-186h186l134-132 134 132h186v186l132 134-132 134v186H614L480-28Zm0-112 100-100h140v-140l100-100-100-100v-140H580L480-820 380-720H240v140L140-480l100 100v140h140l100 100Zm0-340Z",
   "clear-day":

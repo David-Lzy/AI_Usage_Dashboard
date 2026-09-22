@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import {
   LOCAL_COMPANION_BRIDGE_SCHEMA_V1,
+  LOCAL_COMPANION_BRIDGE_MAX_RESPONSE_CHARS,
   fetchLocalCompanionBridgeHealth,
   fetchLocalCompanionBridgeSource,
   fetchLocalCompanionBridgeSourceIndex,
@@ -21,6 +22,32 @@ function jsonResponse(value: unknown, status = 200): Response {
 }
 
 describe("local companion bridge client", () => {
+  it("bounds streamed bytes without a content length and cancels oversized bodies", async () => {
+    let cancelled = false;
+    const stream = new ReadableStream<Uint8Array>({
+      start(controller) { controller.enqueue(new Uint8Array(LOCAL_COMPANION_BRIDGE_MAX_RESPONSE_CHARS + 1)); },
+      cancel() { cancelled = true; },
+    });
+    const result = await fetchLocalCompanionBridgeHealth(baseUrl, token, { fetchImpl: async () => new Response(stream) });
+    expect(result).toMatchObject({ ok: false, code: "response_too_large" });
+    expect(cancelled).toBe(true);
+  });
+
+  it("does not follow redirects or place authentication in URL or cookies", async () => {
+    const fetchImpl = vi.fn(async (_url: RequestInfo | URL, init?: RequestInit) => {
+      expect(init).toMatchObject({ redirect: "error", credentials: "omit", cache: "no-store" });
+      throw new TypeError("redirect blocked");
+    });
+    expect(await fetchLocalCompanionBridgeHealth(baseUrl, token, { fetchImpl })).toMatchObject({ ok: false, code: "unavailable" });
+    expect(String(fetchImpl.mock.calls[0]![0])).not.toContain(token);
+  });
+
+  it("does not invent capture times or accept a different source identity", async () => {
+    const body = { schema: "ai-usage-dashboard.custom-source.v1", id: "different", label: "Sample", status: "ok", quota: { unit: "tokens", used: 0 } };
+    expect(await fetchLocalCompanionBridgeSource(baseUrl, token, "custom:test", { fetchImpl: async () => jsonResponse(body) })).toMatchObject({ ok: false, code: "invalid_response" });
+    expect(await fetchLocalCompanionBridgeSource(baseUrl, token, "custom:test", { fetchImpl: async () => jsonResponse({ ...body, id: "test", syncedAt: "2026-09-22" }) })).toMatchObject({ ok: true, value: { syncedAt: "", lastSyncLabel: "" } });
+  });
+
   it("accepts only an explicit loopback HTTP port", () => {
     expect(normalizeLocalCompanionBridgeBaseUrl(baseUrl)).toEqual({
       ok: true,

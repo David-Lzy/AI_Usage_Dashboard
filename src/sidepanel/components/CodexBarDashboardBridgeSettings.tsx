@@ -8,7 +8,7 @@ import {
 import { readCodexBarDashboardConnection } from "../../shared/codexbar-dashboard-connection";
 import { requestCustomSourceHostAccess } from "../../shared/custom-source-host-access";
 import {
-  isManagedCustomSource,
+  isCodexBarManagedCustomSource as isManagedCustomSource,
   type CustomSourceSetting,
   type CustomSourceSyncState,
 } from "../../shared/custom-sources";

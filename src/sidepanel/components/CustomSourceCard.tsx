@@ -136,9 +136,9 @@ export function CustomSourceCard({
         <div className="provider-card__meta" aria-label={copy.contextAria}>
           <span className="meta-chip">{copy.custom}</span>
           <span className="meta-chip">{source.lastSyncLabel}</span>
-          <span className="meta-chip">
+          {source.refreshIntervalMinutes !== null ? <span className="meta-chip">
             {copy.syncEvery} {source.refreshIntervalMinutes} {copy.minutes}
-          </span>
+          </span> : null}
           {source.stale ? (
             <span className="meta-chip meta-chip--warning">{copy.stale}</span>
           ) : null}

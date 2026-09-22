@@ -128,6 +128,20 @@ stored under `tmp/output/playwright/usage-periods/`. Pure tests cover Monday,
 leap/month/year/DST boundaries, explicit UTC range reference for unknown source
 timezone, mixed currency/unit/series, missing values, duplicates and overflow.
 
+`node scripts/check-local-companion-browser.mjs --extension=<isolated-build>`
+uses a disposable copy/profile and a real temporary authenticated loopback
+bridge with an explicit synthetic ccusage file. All 14 locales run at 320px
+dark / 1280px light, with taller narrow screenshots to leave the sticky Settings
+navigation and target section visible. The fixture manifest pre-grants only the synthetic loopback
+host; production optional permissions are unchanged. An explicit permission
+denial is also exercised. Tests cover pairing, file-time freshness, selected
+refresh, service restart/re-pair, removal, keyboard focus, disconnect and actual
+dashboard token/cost display. `--locales=en,de,ar` selects a smaller smoke set.
+Evidence remains in `tmp/output/playwright/local-companion/`. No ccusage command,
+real user file, persistent service or user browser profile is used. Run
+`npm run bridge:local:test` for converter, protocol, storage, lifecycle and UI
+contract tests, including hostile/oversized input and secret sentinels.
+
 `node scripts/check-quota-notifications.mjs` exercises the real notification
 Settings component, message client, controller and persistence transitions across
 14 locales at 320px dark / 1280px light. Only browser permission/OS transport is

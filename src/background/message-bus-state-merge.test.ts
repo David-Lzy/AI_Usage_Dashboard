@@ -26,6 +26,15 @@ describe("message state ownership", () => {
     vi.mocked(setSub2ApiKey).mockResolvedValue(SAMPLE_PROVIDER_SECRETS);
   });
 
+  it("preserves authenticated managed sources when a stale ordinary-source editor saves", async () => {
+    const managed = { id: "custom:companion-test" as const, label: "Local", description: null, endpointUrl: "http://127.0.0.1:47831/v1/sources/custom%3Atest", displayEnabled: true, refreshIntervalMinutes: 15, createdAt: "2026-09-22T00:00:00Z", updatedAt: "2026-09-22T00:00:00Z", managedBy: "local-companion" as const };
+    await updateAppState((state) => ({ ...state, customSources: [managed] }));
+    await handleAppMessage({ type: "app:update-custom-sources", customSources: [] });
+    expect((await readAppState())!.customSources).toEqual([managed]);
+    await handleAppMessage({ type: "app:update-custom-sources", customSources: [{ ...managed, managedBy: undefined, endpointUrl: "https://wrong.example" }] });
+    expect((await readAppState())!.customSources).toEqual([managed]);
+  });
+
   it("preserves settings changed while a deployment credential is saved", async () => {
     const started = gate();
     const pending = gate();
