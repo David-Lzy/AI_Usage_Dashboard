@@ -172,8 +172,9 @@ The default build writes the Chrome extension to `dist/chrome/`. Firefox local
 beta output is written to `dist/firefox/`; use `npm run firefox:build`,
 `npm run firefox:lint:baseline`, and `npm run firefox:package` for that path.
 
-Pushes to `main` run GitHub Actions checks and upload temporary Chrome and
-Firefox artifacts. Version tags create a GitHub Release with separately named
+Pull requests targeting `main` run read-only quality checks and build temporary
+Chrome and Firefox artifacts, without publishing. Pushes to `main` also run
+these checks. Version tags create a GitHub Release with separately named
 browser packages and SHA-256 checksums. Store API credentials, when configured,
 allow a tag workflow to upload the Chrome package and submit it for review.
 See [GitHub release and notes rules](./Doc/Store/GitHub_Release_Push_And_Notes.md).
@@ -183,17 +184,16 @@ In short, each version tag produces a GitHub Release with Chrome and Firefox pac
 
 ## Current Release State
 
-- Chrome Web Store listing: published and reachable.
-- Chrome Web Store API status observed on 2026-07-29: manifest version
-  `0.2.0.12` published at 100%.
-- Current local package version: `0.2.0-rc.13`.
-- Current local Chrome manifest version: `0.2.0.13`.
+- The [Chrome Web Store listing](https://chromewebstore.google.com/detail/ai-usage-dashboard/mjfhaifoapcpbkffacidgjijcpiegjea)
+  displays `0.2.0-rc.13`, verified on 2026-09-22 UTC. The listing's update date
+  is July 28, 2026.
+- Source package version: `0.2.0-rc.13`; Chrome manifest version: `0.2.0.13`.
 - GitHub Release [`v0.2.0-rc.13`](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.0-rc.13)
   provides separately named Chrome and Firefox packages plus
   `SHA256SUMS.txt`.
-- Chrome Web Store API status observed on 2026-07-29: manifest `0.2.0.13`
-  uploaded successfully and submitted at 100% with state `PENDING_REVIEW`.
-  The public listing remains on `0.2.0.12` until review completes.
+- The [improvements branch](https://github.com/David-Lzy/AI_Usage_Dashboard/tree/codex/usage-dashboard-improvements-20260922)
+  contains unreleased work. Its source version has not been bumped; the matching
+  version string does not mean those changes are already in the Store package.
 - Publication status is tracked in the
   [Chrome Web Store milestone](./Doc/Store/Chrome_Web_Store_Publication_Milestone.md).
 

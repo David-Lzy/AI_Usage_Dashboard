@@ -1,6 +1,6 @@
 # Chrome Web Store Publication Milestone
 
-Date: 2026-07-29
+Date: 2026-09-23
 
 Document class:
 
@@ -14,17 +14,11 @@ Freshness model:
 Status note:
 
 - AI Usage Dashboard has a live Chrome Web Store listing
-- Chrome Web Store API status shows manifest version `0.2.0.12` published at 100%
-- source `0.2.0-rc.10` / manifest `0.2.0.10` is available from GitHub with
-  browser-specific packages and checksums, but is not submitted to the Store
-- source `0.2.0-rc.11` / manifest `0.2.0.11` is available from GitHub and
-  published by the Chrome Web Store at 100%
-- source `0.2.0-rc.12` / manifest `0.2.0.12` is available from GitHub and
-  published by the Chrome Web Store at 100%
+- the public listing displays `0.2.0-rc.13`, checked on 2026-09-22 UTC
 - source `0.2.0-rc.13` / manifest `0.2.0.13` is available from GitHub with
-  browser-specific packages and checksums; the Store API reports it submitted
-  at 100% and `PENDING_REVIEW`
-- no known critical user-facing bug is blocking normal use at this milestone
+  browser-specific packages and checksums
+- the improvements work branch is unreleased and retains the same source
+  version until a separately authorized release; it is not the Store package
 - private upload receipts, package hashes, screenshots-in-progress, and
   submission handoff notes stay in ignored `.local/` material
 
@@ -32,7 +26,17 @@ Status note:
 
 - Chrome Web Store:
   https://chromewebstore.google.com/detail/ai-usage-dashboard/mjfhaifoapcpbkffacidgjijcpiegjea
-- Public page status checked on 2026-07-26: reachable and listed.
+- Public page checked on 2026-09-22 UTC: reachable, displaying `0.2.0-rc.13`,
+  updated July 28, 2026, with 14 languages. This is a public-page observation,
+  not a fresh authenticated API or rollout-percentage report.
+- [GitHub Release v0.2.0-rc.13](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.0-rc.13)
+  was also rechecked on 2026-09-22 UTC. It is marked prerelease and contains
+  the named Chrome/Firefox zips and `SHA256SUMS.txt`.
+
+## Historical Submission Observations
+
+These dated observations explain the handoff history, not the current listing:
+
 - Chrome Web Store API status observed on 2026-07-29 showed manifest version
   `0.2.0.12` published at 100%.
 - The `v0.2.0-rc.10` tag workflow published Chrome and Firefox GitHub Release
@@ -42,12 +46,12 @@ Status note:
   assets plus checksums. Its optional Store upload step was skipped because the
   repository credentials were unavailable, so the verified local official API
   fallback uploaded manifest `0.2.0.11` and submitted it for review. The Store
-  API now reports that revision as published.
+  API later reported that revision as published.
 - The `v0.2.0-rc.12` release adds the maintained Material design contract,
   automated UI guards, stronger multilingual visual checks, and verified
   external-review fixes without changing Provider source claims. The verified
   local official API fallback uploaded manifest `0.2.0.12` and submitted it for
-  review; the Store API now reports that revision as published.
+  review; the Store API later reported that revision as published.
 - The `v0.2.0-rc.13` release prevents sample quota values from entering new
   profiles, preserves provider visibility across account switches, and adds
   connection-test feedback plus configurable multi-deployment presentation for
@@ -60,15 +64,16 @@ Status note:
   Dashboard remains a separate metadata operation.
 - Chrome Web Store API status observed on 2026-07-29 reports manifest
   `0.2.0.12` as `PUBLISHED` at 100%.
-- The same status check reports manifest `0.2.0.13` as `PENDING_REVIEW` at
-  100%; the published listing remains manifest `0.2.0.12` until review
-  completes.
+- The same historical status check reported manifest `0.2.0.13` as
+  `PENDING_REVIEW` at 100%. That pending observation has been superseded by
+  the public listing check above; it must not be presented as current status.
 
 This means the project has crossed the public-store baseline milestone. Future
 store uploads are resubmissions from an already-published extension, not first
-submissions. Public listing metadata can lag the Chrome Web Store API state;
-submitted candidates must not be described as published until the API reports
-the submitted revision as published.
+submissions. Public listing metadata can lag the Chrome Web Store API state.
+A successful upload or submission alone does not prove publication. Cite the
+observed public version or authenticated published state, and keep the date
+and evidence type explicit.
 
 ## Stable Baseline
 
@@ -95,8 +100,10 @@ At this milestone, the project has the following public-facing baseline:
 
 ## Quality Gate State
 
-No large blocking bug is known at this milestone. The remaining risk is normal
-Chrome extension and provider-surface drift:
+Store availability is not a guarantee that every provider or environment is
+working. The unreleased work branch hardens account-isolated sync, concurrent
+state writes, capture freshness, shared controls and production initialization.
+Those changes are not claimed as shipped in rc.13. Ongoing risks include:
 
 - provider dashboards, API fields, usage wording, and quota policy can change
 - Chrome Web Store metadata can lag after upload or resubmission
@@ -115,8 +122,9 @@ Chrome extension and provider-surface drift:
 
 ## Next Store Work
 
-- Wait for the Chrome Web Store review of manifest `0.2.0.13`; do not describe
-  it as published until the Store API reports that state.
+- Keep development-branch behavior separate from the currently available
+  Store version. A new tag, GitHub Release or Store submission requires a
+  separately authorized release; none is implied by updating this document.
 - Apply the maintained Sub2API listing-copy updates in the Developer Dashboard
   when the publisher account can complete Google's interactive re-verification.
 - Keep the current public copy in `Doc/Store/` as the maintained text source.

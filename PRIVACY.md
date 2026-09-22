@@ -9,7 +9,7 @@ Depending on which providers and features a user enables, the extension may stor
 - extension settings and display preferences
 - provider enablement and source preferences
 - opaque local provider-account aliases and isolated cached snapshots when a
-  future provider explicitly enables multi-account support
+  provider explicitly supports multiple accounts, currently Sub2API deployments
 - optional API credentials entered by the user
 - page bindings for supported signed-in provider usage pages
 - cached usage snapshots and sync diagnostics
