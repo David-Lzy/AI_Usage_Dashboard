@@ -103,6 +103,15 @@ all 14 locales. It uses synthetic secret sentinels in a source-only browser;
 the downloaded JSON must match the preview and exclude those sentinels. Reports
 and screenshots are retained under `tmp/output/playwright/diagnostics-export/`.
 
+`node scripts/check-deployment-comparison.mjs` checks the full-page comparison
+component in 14 locales at 320px dark and 1280px light. It drives the real
+message handler, account refresh queue, adapter and local storage with synthetic
+permissions and HTTP responses: a held inactive refresh leaves active state
+unchanged, a subsequent failure retains the previous summary, and invalid dates
+and keyboard/table scrolling are exercised. Evidence is under
+`tmp/output/playwright/deployment-comparison/`; `--smoke` limits to en/de/ar.
+No real provider credentials or user browser profile are used.
+
 `node scripts/check-quota-notifications.mjs` exercises the real notification
 Settings component, message client, controller and persistence transitions across
 14 locales at 320px dark / 1280px light. Only browser permission/OS transport is

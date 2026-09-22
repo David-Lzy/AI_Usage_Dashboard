@@ -7,6 +7,7 @@ import type {
   ProgressDisplayStyle,
   ProgressItemsBySurface,
   ResetTimeDisplayMode,
+  AppState,
   ProviderAccountId,
   ProviderAccountsByProvider,
   ProviderId,
@@ -55,6 +56,7 @@ import { ApiGatewayMeteringSummary } from "../../shared/components/ApiGatewayMet
 import { buildApiGatewayMeteringLocalizedCopy } from "../../shared/api-gateway-metering-localized-copy";
 import { getActiveProviderAccountMetadata } from "../../shared/provider-accounts";
 import { TechnicalText } from "../../shared/components/TechnicalText";
+import { DeploymentComparison } from "../components/DeploymentComparison";
 
 type ProviderDetailPageProps = {
   localePreference: AppLocalePreference;
@@ -69,6 +71,10 @@ type ProviderDetailPageProps = {
   providerServiceStatusVisibilityBySurface?: ProviderServiceStatusVisibilityBySurface;
   provider: ProviderViewModel;
   providerAccounts?: ProviderAccountsByProvider;
+  aggregateState?: Pick<
+    AppState,
+    "providers" | "providerSettings" | "providerAccounts"
+  >;
   quotaPaceForecastEnabled?: boolean;
   quotaPaceNow?: Date;
   resetTimeDisplayMode?: ResetTimeDisplayMode;
@@ -85,6 +91,7 @@ type ProviderDetailPageProps = {
     sourceStateKind: ProviderViewModel["currentSourceStateKind"],
   ) => void;
   onRefresh: (providerId: ProviderId) => void;
+  onRefreshAccount?: (accountId: string) => Promise<void>;
   onSelectProviderAccount?: (
     providerId: ProviderId,
     accountId: ProviderAccountId,
@@ -105,6 +112,7 @@ export function ProviderDetailPage({
     createDefaultProviderServiceStatusVisibilityBySurface(),
   provider,
   providerAccounts,
+  aggregateState,
   quotaPaceForecastEnabled = false,
   quotaPaceNow = new Date(),
   resetTimeDisplayMode = DEFAULT_RESET_TIME_DISPLAY_MODE,
@@ -118,6 +126,7 @@ export function ProviderDetailPage({
   surfaceActionTitle,
   onOpenSourcePage,
   onRefresh,
+  onRefreshAccount,
   onSelectProviderAccount = () => undefined,
 }: ProviderDetailPageProps) {
   const i18n = createRuntimeI18n(
@@ -790,6 +799,17 @@ export function ProviderDetailPage({
             {apiGatewayMeteringCopy.openSourceDashboard}
           </a>
         </section>
+      ) : null}
+
+      {progressSurface === "fullPage" &&
+      provider.providerId === "sub2api-api-key" &&
+      aggregateState &&
+      onRefreshAccount ? (
+        <DeploymentComparison
+          i18n={i18n}
+          state={aggregateState}
+          onRefreshAccount={onRefreshAccount}
+        />
       ) : null}
 
       {provider.providerId === "codex-personal-page" ? (

@@ -15,6 +15,7 @@ import type {
   ApiGatewayUsageSummary,
   DisplaySurface,
 } from "../providers/types";
+import { normalizeSnapshotTimestamp } from "./snapshot-freshness";
 
 export const MAX_API_GATEWAY_DAILY_BUCKETS = 31;
 export const MAX_API_GATEWAY_MODEL_SERIES = 16;
@@ -42,6 +43,9 @@ const MODULE_IDS: readonly ApiGatewayMeteringModuleId[] = [
 
 type UnknownRecord = Record<string, unknown>;
 type Normalized<T> = { valid: true; value: T } | { valid: false };
+type ApiGatewayDailyUsageContext = NonNullable<
+  ApiGatewayMeteringSnapshot["dailyUsageContext"]
+>;
 
 function isRecord(value: unknown): value is UnknownRecord {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -99,6 +103,57 @@ function normalizeTimestamp(value: unknown): Normalized<string | null> {
 function normalizeRequiredTimestamp(value: unknown): string | null {
   const result = normalizeTimestamp(value);
   return result.valid ? result.value : null;
+}
+
+function normalizeTimezone(value: unknown): Normalized<string | null> {
+  if (value === null || value === undefined) {
+    return { valid: true, value: null };
+  }
+  if (typeof value !== "string" || !value.trim() || value.length > 128) {
+    return { valid: false };
+  }
+  try {
+    return {
+      valid: true,
+      value: new Intl.DateTimeFormat("en-US", { timeZone: value }).resolvedOptions()
+        .timeZone,
+    };
+  } catch {
+    return { valid: false };
+  }
+}
+
+function normalizeDailyUsageContext(
+  value: unknown,
+): Normalized<ApiGatewayDailyUsageContext | undefined> {
+  if (value === undefined) {
+    return { valid: true, value: undefined };
+  }
+  if (!isRecord(value)) {
+    return {
+      valid: true,
+      value: { capturedAt: null, requestedTimezone: null, bucketTimezone: null },
+    };
+  }
+  const capture = normalizeSnapshotTimestamp(value.capturedAt);
+  const capturedAt = value.capturedAt == null || capture
+    ? { valid: true as const, value: capture } : { valid: false as const };
+  const requestedTimezone = normalizeTimezone(value.requestedTimezone);
+  const bucketTimezone = normalizeTimezone(value.bucketTimezone);
+  if (!capturedAt.valid || !requestedTimezone.valid || !bucketTimezone.valid) {
+    return {
+      valid: true,
+      value: { capturedAt: null, requestedTimezone: null, bucketTimezone: null },
+    };
+  }
+  return {
+    valid: true,
+    value: {
+      capturedAt: capturedAt.value,
+      requestedTimezone: requestedTimezone.value,
+      bucketTimezone: bucketTimezone.value,
+    },
+  };
 }
 
 function normalizeDateKey(value: unknown): string | null {
@@ -480,6 +535,7 @@ export function normalizeApiGatewayMeteringSnapshot(
   const rateLimits = normalizeRateLimits(value.rateLimits);
   const usage = normalizeUsageSummary(value.usage);
   const dailyUsage = normalizeDailyUsage(value.dailyUsage);
+  const dailyUsageContext = normalizeDailyUsageContext(value.dailyUsageContext);
   const modelUsage = normalizeModelUsage(value.modelUsage);
   const isValid =
     value.isValid === null || value.isValid === undefined
@@ -508,6 +564,7 @@ export function normalizeApiGatewayMeteringSnapshot(
     !rateLimits.valid ||
     !usage.valid ||
     !dailyUsage.valid ||
+    !dailyUsageContext.valid ||
     !modelUsage.valid
   ) {
     return undefined;
@@ -537,6 +594,9 @@ export function normalizeApiGatewayMeteringSnapshot(
     rateLimits: rateLimits.value,
     usage: usage.value,
     dailyUsage: dailyUsage.value,
+    ...(dailyUsageContext.value === undefined
+      ? {}
+      : { dailyUsageContext: dailyUsageContext.value }),
     modelUsage: modelUsage.value.items,
     modelSeriesTruncated:
       modelUsage.value.truncated || value.modelSeriesTruncated === true,

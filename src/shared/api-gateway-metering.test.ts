@@ -178,6 +178,47 @@ describe("API gateway metering normalization", () => {
     });
   });
 
+  it("preserves missing legacy daily provenance and fails malformed provenance closed", () => {
+    const legacy = normalizeApiGatewayMeteringSnapshot(snapshot());
+    const malformed = normalizeApiGatewayMeteringSnapshot(
+      snapshot({
+        dailyUsageContext: {
+          capturedAt: "not-a-timestamp",
+          requestedTimezone: "Not/AZone",
+          bucketTimezone: "also-not-a-zone",
+        },
+      }),
+    );
+
+    expect(legacy).not.toHaveProperty("dailyUsageContext");
+    expect(malformed?.dailyUsageContext).toEqual({
+      capturedAt: null,
+      requestedTimezone: null,
+      bucketTimezone: null,
+    });
+    expect(normalizeApiGatewayMeteringSnapshot(snapshot({ dailyUsageContext: {
+      capturedAt: "2026-07-24", requestedTimezone: "UTC", bucketTimezone: "UTC",
+    } }))?.dailyUsageContext).toEqual({ capturedAt: null, requestedTimezone: null, bucketTimezone: null });
+  });
+
+  it("normalizes valid IANA daily provenance without fabricating a root timestamp", () => {
+    const normalized = normalizeApiGatewayMeteringSnapshot(
+      snapshot({
+        dailyUsageContext: {
+          capturedAt: "2026-07-24T09:00:00.000Z",
+          requestedTimezone: "Australia/Adelaide",
+          bucketTimezone: null,
+        },
+      }),
+    );
+
+    expect(normalized?.dailyUsageContext).toEqual({
+      capturedAt: "2026-07-24T09:00:00.000Z",
+      requestedTimezone: "Australia/Adelaide",
+      bucketTimezone: null,
+    });
+  });
+
   it("rejects duplicate dates and invalid numeric fields", () => {
     const duplicateDay = { date: "2026-07-25", totals: metric() };
     expect(

@@ -11,6 +11,7 @@ export type ProviderSyncIdentity = Readonly<{
 }>;
 
 const identities = new Map<ProviderId, ProviderSyncIdentity>();
+const connectionGenerations = new Map<ProviderId, number>();
 let replacementGeneration = 0;
 
 export function getAppStateReplacementGeneration(): number {
@@ -34,7 +35,12 @@ function connectionSignature(state: AppState, providerId: ProviderId): string {
 }
 
 /** In-memory generations expire with the worker, just like its in-flight runs. */
-export function invalidateProviderSyncIdentity(providerId: ProviderId): void {
+export function getProviderConnectionGeneration(providerId: ProviderId): number {
+  return connectionGenerations.get(providerId) ?? 0;
+}
+
+export function invalidateProviderSyncIdentity(providerId: ProviderId, connectionChanged = true): void {
+  if (connectionChanged) connectionGenerations.set(providerId, getProviderConnectionGeneration(providerId) + 1);
   const previous = identities.get(providerId);
   if (previous) {
     identities.set(providerId, {

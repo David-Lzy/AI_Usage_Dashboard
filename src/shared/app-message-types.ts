@@ -76,7 +76,7 @@ export type AppMessage =
     }
   | { type: "app:set-codex-session-token"; accessToken: string | null }
   | { type: "app:toggle-provider-permission"; providerId: ProviderId }
-  | { type: "app:request-refresh"; providerId?: ProviderId }
+  | { type: "app:request-refresh"; providerId?: ProviderId; accountId?: ProviderAccountId }
   | { type: "app:import-configuration-backup"; rawJson: string }
   | { type: "app:save-configuration-to-sync" }
   | { type: "app:restore-configuration-from-sync" }

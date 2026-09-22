@@ -62,8 +62,14 @@ type CacheEntry = Readonly<{
   storedAt: number;
 }>;
 
+type RequestedHistoryScope = Readonly<{
+  timezone: string;
+  days: number;
+}>;
+
 const resultCache = new Map<string, CacheEntry>();
 const historyCache = new Map<string, CacheEntry>();
+const modelHistoryCache = new Map<string, CacheEntry>();
 const inflightRequests = new Map<string, Promise<ApiGatewayMeteringSnapshot>>();
 
 type UnknownRecord = Record<string, unknown>;
@@ -109,6 +115,44 @@ function optionalTimestamp(value: unknown): string | null {
   }
   const date = new Date(text);
   return Number.isNaN(date.getTime()) ? null : date.toISOString();
+}
+
+function normalizeRequestedTimezone(value: unknown): string | null {
+  if (typeof value !== "string" || !value.trim() || value.length > 128) {
+    return null;
+  }
+  try {
+    return new Intl.DateTimeFormat("en-US", { timeZone: value }).resolvedOptions()
+      .timeZone;
+  } catch {
+    return null;
+  }
+}
+
+function getRequestedHistoryScope(
+  options: FetchSub2ApiUsageOptions,
+): RequestedHistoryScope {
+  const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone ?? "UTC";
+  const timezone = normalizeRequestedTimezone(options.timezone ?? browserTimezone);
+  if (!timezone) {
+    throw new Sub2ApiClientError(
+      "invalid_response",
+      "A valid IANA timezone is required for daily usage.",
+    );
+  }
+  if (
+    options.days !== undefined &&
+    (typeof options.days !== "number" || !Number.isFinite(options.days))
+  ) {
+    throw new Sub2ApiClientError(
+      "invalid_response",
+      "The daily usage range must be a finite number of days.",
+    );
+  }
+  return {
+    timezone,
+    days: Math.min(31, Math.max(1, Math.floor(options.days ?? 31))),
+  };
 }
 
 function money(value: unknown, unit: string | null): ApiGatewayMoney | null {
@@ -232,6 +276,7 @@ export function parseSub2ApiUsageResponse(
     accountId: ProviderAccountId;
     connection: ApiGatewayConnectionMetadata;
     capturedAt: string;
+    requestedTimezone?: string | null;
     previousHistory?: ApiGatewayMeteringSnapshot | null;
   }>,
 ): ApiGatewayMeteringSnapshot {
@@ -415,6 +460,18 @@ export function parseSub2ApiUsageResponse(
         }
       : null,
     dailyUsage: dailyUsage ?? previousHistory?.dailyUsage ?? [],
+    ...(dailyUsage !== null
+      ? {
+          dailyUsageContext: {
+            capturedAt: context.capturedAt,
+            requestedTimezone: context.requestedTimezone ?? null,
+            // The pinned upstream daily query groups with SQL TO_CHAR, not the request zone.
+            bucketTimezone: null,
+          },
+        }
+      : previousHistory?.dailyUsageContext
+        ? { dailyUsageContext: previousHistory.dailyUsageContext }
+        : {}),
     modelUsage: modelUsage ?? previousHistory?.modelUsage ?? [],
     modelSeriesTruncated:
       (modelUsage?.length ?? previousHistory?.modelUsage.length ?? 0) > 16 ||
@@ -498,23 +555,42 @@ async function createCacheKey(
   accountId: ProviderAccountId,
   connection: ApiGatewayConnectionMetadata,
   apiKey: string,
+  scope: RequestedHistoryScope,
 ): Promise<string> {
-  return [accountId, connection.baseUrl, await digestSecret(apiKey)].join(
-    CACHE_KEY_SEPARATOR,
-  );
+  return [
+    accountId,
+    connection.baseUrl,
+    await digestSecret(apiKey),
+    scope.timezone,
+    String(scope.days),
+  ].join(CACHE_KEY_SEPARATOR);
+}
+
+function getFreshHistory(cache: Map<string, CacheEntry>, cacheKey: string, now: number): ApiGatewayMeteringSnapshot | null {
+  const history = cache.get(cacheKey);
+  if (
+    history &&
+    now >= history.storedAt &&
+    now - history.storedAt <= HISTORY_CACHE_TTL_MS
+  ) {
+    return history.value;
+  }
+  if (history) {
+    cache.delete(cacheKey);
+  }
+  return null;
 }
 
 async function performFetch(
   options: FetchSub2ApiUsageOptions,
   cacheKey: string,
+  scope: RequestedHistoryScope,
 ): Promise<ApiGatewayMeteringSnapshot> {
   const now = options.now ?? Date.now;
   const fetchImpl = options.fetchImpl ?? fetch;
-  const timezone =
-    options.timezone ?? Intl.DateTimeFormat().resolvedOptions().timeZone ?? "UTC";
   const requestUrl = getSub2ApiUsageUrl(options.connection, {
-    days: options.days ?? 31,
-    timezone,
+    days: scope.days,
+    timezone: scope.timezone,
   });
   let response: Response;
   try {
@@ -605,20 +681,30 @@ async function performFetch(
       "The usage endpoint returned malformed JSON.",
     );
   }
-  const history = historyCache.get(cacheKey);
+  const capturedAt = now();
+  const dailyHistory = getFreshHistory(historyCache, cacheKey, capturedAt);
+  const modelHistory = getFreshHistory(modelHistoryCache, cacheKey, capturedAt);
+  const previous = dailyHistory ?? modelHistory;
   const value = parseSub2ApiUsageResponse(payload, {
     accountId: options.accountId,
     connection: options.connection,
-    capturedAt: new Date(now()).toISOString(),
-    previousHistory:
-      history && now() - history.storedAt <= HISTORY_CACHE_TTL_MS
-        ? history.value
-        : null,
+    capturedAt: new Date(capturedAt).toISOString(),
+    requestedTimezone: scope.timezone,
+    previousHistory: previous ? {
+      ...previous,
+      dailyUsage: dailyHistory?.dailyUsage ?? [],
+      dailyUsageContext: dailyHistory?.dailyUsageContext,
+      modelUsage: modelHistory?.modelUsage ?? [],
+      modelSeriesTruncated: modelHistory?.modelSeriesTruncated ?? false,
+    } : null,
   });
-  const entry = { value, storedAt: now() };
+  const entry = { value, storedAt: capturedAt };
   resultCache.set(cacheKey, entry);
-  if (value.dailyUsage.length > 0 || value.modelUsage.length > 0) {
+  if (isRecord(payload) && firstValue(payload, "daily_usage", "dailyUsage") !== undefined) {
     historyCache.set(cacheKey, entry);
+  }
+  if (isRecord(payload) && firstValue(payload, "model_stats", "modelStats") !== undefined) {
+    modelHistoryCache.set(cacheKey, entry);
   }
   return value;
 }
@@ -633,16 +719,19 @@ export async function fetchSub2ApiUsage(
       "A Sub2API API key is required.",
     );
   }
+  const scope = getRequestedHistoryScope(options);
   const cacheKey = await createCacheKey(
     options.accountId,
     options.connection,
     apiKey,
+    scope,
   );
   const now = options.now ?? Date.now;
   const cached = resultCache.get(cacheKey);
   if (
     options.trigger !== "manual" &&
     cached &&
+    now() >= cached.storedAt &&
     now() - cached.storedAt <= RESULT_CACHE_TTL_MS
   ) {
     return cached.value;
@@ -651,7 +740,7 @@ export async function fetchSub2ApiUsage(
   if (active) {
     return active;
   }
-  const request = performFetch({ ...options, apiKey }, cacheKey);
+  const request = performFetch({ ...options, apiKey }, cacheKey, scope);
   inflightRequests.set(cacheKey, request);
   const clearInflight = () => {
     if (inflightRequests.get(cacheKey) === request) {
@@ -665,5 +754,6 @@ export async function fetchSub2ApiUsage(
 export function resetSub2ApiClientCachesForTests(): void {
   resultCache.clear();
   historyCache.clear();
+  modelHistoryCache.clear();
   inflightRequests.clear();
 }

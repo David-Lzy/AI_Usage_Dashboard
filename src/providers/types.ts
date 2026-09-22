@@ -446,6 +446,12 @@ export type ApiGatewayMeteringSnapshot = {
   rateLimits: ApiGatewayRateLimitWindow[];
   usage: ApiGatewayUsageSummary | null;
   dailyUsage: ApiGatewayDailyUsage[];
+  /** Provenance for dated dailyUsage only; absent on legacy snapshots. */
+  dailyUsageContext?: {
+    capturedAt: string | null;
+    requestedTimezone: string | null;
+    bucketTimezone: string | null;
+  };
   modelUsage: ApiGatewayModelUsage[];
   modelSeriesTruncated: boolean;
 };

@@ -44,6 +44,7 @@ import {
 } from "./view-models";
 import { getVisibleCustomSources } from "../shared/custom-source-view-models";
 import { SETTINGS_SECTION_IDS } from "./settings-section-ids";
+import { getProviderAccountRuntime } from "../shared/provider-accounts";
 
 const SettingsPage = lazy(() =>
   import("./routes/SettingsPage").then((module) => ({
@@ -596,6 +597,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           }
           provider={selectedProvider}
           providerAccounts={appState.providerAccounts}
+          aggregateState={appState}
           quotaPaceForecastEnabled={
             appState.settings.quotaPaceForecastEnabled
           }
@@ -616,6 +618,33 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
           }
           onOpenSourcePage={handleOpenSessionPage}
           onRefresh={handleRefresh}
+          onRefreshAccount={async (accountId) => {
+            const refreshedState = await applyMessage({
+              type: "app:request-refresh",
+              providerId: "sub2api-api-key",
+              accountId,
+            });
+            const runtime = refreshedState
+              ? getProviderAccountRuntime(
+                  refreshedState,
+                  "sub2api-api-key",
+                  accountId,
+                )
+              : null;
+            const metering = runtime?.snapshot.apiGatewayMetering;
+
+            if (
+              !runtime ||
+              !metering ||
+              metering.stale ||
+              metering.isValid === false ||
+              runtime.setting.status !== "granted" ||
+              runtime.setting.credentialStatus !== "configured" ||
+              runtime.snapshot.syncStatus === "error"
+            ) {
+              throw new Error("Deployment refresh did not produce a current snapshot.");
+            }
+          }}
           onSelectProviderAccount={handleSelectProviderAccount}
         />
       ) : (

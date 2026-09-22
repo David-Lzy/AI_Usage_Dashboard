@@ -1,6 +1,6 @@
 # Sub2API User Usage Contract
 
-Date: 2026-07-28
+Date: 2026-09-23
 
 Document class:
 
@@ -15,6 +15,8 @@ Status note:
 - this document records discovery evidence and the shipped API-key contract
 - account-dashboard enrichment was reviewed and is intentionally unsupported in
   the first release
+- the full-page comparison section below describes the unreleased improvement
+  branch, not an additional Chrome Web Store release
 
 ## Identity And Trust Boundary
 
@@ -48,6 +50,13 @@ Optional query inputs supported by the pinned implementation are:
 - `days`, accepted upstream from 1 through 90;
 - `start_date` and `end_date`, using `YYYY-MM-DD`;
 - `timezone`, used when constructing daily buckets.
+
+The timezone parameter limits the queried interval; it does **not** establish
+the timezone of returned day labels. The pinned repository groups timestamps
+with database `TO_CHAR` without receiving the requested timezone. Preserve
+those day labels and keep bucket timezone unknown unless a source explicitly
+establishes it. See the [daily service call](https://github.com/Wei-Shaw/sub2api/blob/2730c1c43b29be003925b033f3f9e645e726bb8c/backend/internal/service/usage_service.go#L373)
+and [repository grouping](https://github.com/Wei-Shaw/sub2api/blob/2730c1c43b29be003925b033f3f9e645e726bb8c/backend/internal/repository/usage_log_repo_trend.go#L256).
 
 The extension should request and retain no more than 31 daily buckets for its
 first release. The API key is a credential for that deployment and key scope.
@@ -88,6 +97,33 @@ the last nonsecret summary. Removing a non-default deployment clears its
 isolated snapshot, metadata, and secret. A non-loopback HTTP origin requires a
 persistent acknowledgement that the API key will be sent without transport
 encryption.
+
+### Saved Deployment Comparison (Unreleased Work Branch)
+
+The full-page Sub2API detail includes saved deployments side by side, selected
+source dates, requests, Tokens, actual/reference costs, observed-day coverage
+and per-row capture freshness. Popup presentation and current account selection
+remain unchanged. A row's refresh explicitly addresses that account, shares
+the existing Provider network queue and two-source concurrency limit, and never
+selects the account as an intermediate step. Inactive accounts are not polled.
+Connection/key changes, configuration replacement or deleted accounts discard
+obsolete results. Other settings and account preferences survive the merge.
+
+Only matching complete closed-day intervals, known equal bucket timezones,
+metric units/currencies and fresh valid captures can be called comparable.
+The current Sub2API protocol does not prove bucket timezone, so its values
+remain inspectable with an explicit unknown-time-basis reason, without rankings,
+cross-deployment totals or currency conversion. Missing dates/metrics are not
+zero: observed values are partial subtotals, with coverage displayed.
+
+Daily history now retains its own capture time and requested timezone, separate
+from the snapshot refresh time and unknown bucket timezone. Legacy history with
+no provenance stays unknown until a real capture. Omitted daily/model modules
+retain their original independent in-memory cache age and expire after 15
+minutes; successful unrelated modules do not extend it. Request caches include
+timezone and day count as well as account, origin and credential digest.
+Comparison freshness is unknown without a proven capture, stale after one
+hour or a failed/invalid capture, and never renewed by a failed refresh.
 
 ## Response Modes
 

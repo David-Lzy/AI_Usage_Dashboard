@@ -89,6 +89,11 @@ describe("Sub2API usage client", () => {
       usage: { today: { requests: 12, totalTokens: 7300 } },
     });
     expect(wallet.dailyUsage).toHaveLength(2);
+    expect(wallet.dailyUsageContext).toEqual({
+      capturedAt: "2026-07-25T03:00:00.000Z",
+      requestedTimezone: null,
+      bucketTimezone: null,
+    });
     expect(wallet.modelUsage.map((entry) => entry.label)).toEqual([
       "synthetic-model-primary",
       "synthetic-model-secondary",
@@ -119,6 +124,40 @@ describe("Sub2API usage client", () => {
 
     expect(parsed.billingMode).toBe("wallet");
     expect(parsed.balance).toBeNull();
+  });
+
+  it("keeps legacy retained daily data provenance-unknown and ignores response timezone fields", () => {
+    const first = parseSub2ApiUsageResponse(
+      {
+        ...(fixtureResponse(walletFixture) as Record<string, unknown>),
+        bucket_timezone: "America/New_York",
+      },
+      {
+        accountId: "default",
+        connection: HTTPS_CONNECTION,
+        capturedAt: "2026-07-25T03:00:00.000Z",
+        requestedTimezone: "UTC",
+      },
+    );
+    const legacyHistory = { ...first, dailyUsageContext: undefined };
+    const retained = parseSub2ApiUsageResponse(
+      { mode: "unrestricted", isValid: true, unit: "USD" },
+      {
+        accountId: "default",
+        connection: HTTPS_CONNECTION,
+        capturedAt: "2026-07-25T04:00:00.000Z",
+        requestedTimezone: "UTC",
+        previousHistory: legacyHistory,
+      },
+    );
+
+    expect(first.dailyUsageContext).toEqual({
+      capturedAt: "2026-07-25T03:00:00.000Z",
+      requestedTimezone: "UTC",
+      bucketTimezone: null,
+    });
+    expect(retained.dailyUsage).toEqual(first.dailyUsage);
+    expect(retained).not.toHaveProperty("dailyUsageContext");
   });
 
   it("sends one bounded bearer request for concurrent surfaces", async () => {
@@ -256,7 +295,7 @@ describe("Sub2API usage client", () => {
     }
   });
 
-  it("retains recent history when a partial response omits history fields", async () => {
+  it("retains recent daily history with its original provenance when a partial response omits it", async () => {
     let payload: unknown = fixtureResponse(walletFixture);
     let now = 10_000;
     const fetchImpl = vi.fn(async () =>
@@ -272,6 +311,7 @@ describe("Sub2API usage client", () => {
       trigger: "manual" as const,
       fetchImpl,
       now: () => now,
+      timezone: "Australia/Adelaide",
     };
 
     const first = await fetchSub2ApiUsage(options);
@@ -281,7 +321,148 @@ describe("Sub2API usage client", () => {
 
     expect(first.dailyUsage).toHaveLength(2);
     expect(second.dailyUsage).toEqual(first.dailyUsage);
+    expect(second.dailyUsageContext).toEqual(first.dailyUsageContext);
+    expect(second.capturedAt).not.toBe(first.capturedAt);
     expect(second.modelUsage).toEqual(first.modelUsage);
+  });
+
+  it("does not renew omitted daily history and never revives it after the module TTL", async () => {
+    let payload: unknown = fixtureResponse(walletFixture);
+    let now = 10_000;
+    const fetchImpl = vi.fn(async () =>
+      new Response(JSON.stringify(payload), {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      }),
+    );
+    const options = {
+      accountId: "default",
+      connection: HTTPS_CONNECTION,
+      apiKey: "daily-ttl-key",
+      trigger: "manual" as const,
+      fetchImpl,
+      now: () => now,
+      timezone: "UTC",
+    };
+
+    const first = await fetchSub2ApiUsage(options);
+    payload = { mode: "unrestricted", isValid: true, unit: "USD" };
+    now += 5 * 60_000;
+    const retained = await fetchSub2ApiUsage(options);
+    now += 10 * 60_000 + 1;
+    const expired = await fetchSub2ApiUsage(options);
+
+    expect(retained.dailyUsageContext).toEqual(first.dailyUsageContext);
+    expect(expired.dailyUsage).toEqual([]);
+    expect(expired).not.toHaveProperty("dailyUsageContext");
+  });
+
+  it("does not let failed daily responses extend retained history age", async () => {
+    let payload: unknown = fixtureResponse(walletFixture);
+    let now = 10_000;
+    const fetchImpl = vi.fn(async () =>
+      new Response(JSON.stringify(payload), {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      }),
+    );
+    const options = {
+      accountId: "default",
+      connection: HTTPS_CONNECTION,
+      apiKey: "failed-daily-key",
+      trigger: "manual" as const,
+      fetchImpl,
+      now: () => now,
+      timezone: "UTC",
+    };
+
+    await fetchSub2ApiUsage(options);
+    payload = { mode: "unrestricted", daily_usage: "invalid" };
+    now += 5 * 60_000;
+    await expect(fetchSub2ApiUsage(options)).rejects.toMatchObject({
+      code: "invalid_response",
+    });
+    payload = { mode: "unrestricted", isValid: true, unit: "USD" };
+    now += 10 * 60_000 + 1;
+    const expired = await fetchSub2ApiUsage(options);
+
+    expect(expired.dailyUsage).toEqual([]);
+    expect(expired).not.toHaveProperty("dailyUsageContext");
+  });
+
+  it("retains model-only responses independently without renewing old daily or model data", async () => {
+    const fixture = fixtureResponse(walletFixture) as Record<string, unknown>;
+    let payload: unknown = fixture;
+    let now = 10_000;
+    const options = { accountId: "default", connection: HTTPS_CONNECTION, apiKey: "separate-module-cache", trigger: "manual" as const,
+      timezone: "UTC", now: () => now, fetchImpl: vi.fn(async () => new Response(JSON.stringify(payload), { headers: { "content-type": "application/json" } })) };
+    const first = await fetchSub2ApiUsage(options);
+    now += 10 * 60_000;
+    payload = { mode: "unrestricted", unit: "USD", model_stats: fixture.model_stats };
+    const modelOnly = await fetchSub2ApiUsage(options);
+    expect(modelOnly.dailyUsageContext).toEqual(first.dailyUsageContext);
+    now += 6 * 60_000;
+    payload = { mode: "unrestricted", unit: "USD" };
+    const expiredDaily = await fetchSub2ApiUsage(options);
+    expect(expiredDaily.dailyUsage).toEqual([]);
+    expect(expiredDaily.modelUsage).toEqual(first.modelUsage);
+    now += 10 * 60_000;
+    const expiredBoth = await fetchSub2ApiUsage(options);
+    expect(expiredBoth.dailyUsage).toEqual([]);
+    expect(expiredBoth.modelUsage).toEqual([]);
+
+    resetSub2ApiClientCachesForTests();
+    payload = { mode: "unrestricted", unit: "USD", model_stats: fixture.model_stats };
+    const freshModelOnly = await fetchSub2ApiUsage(options);
+    payload = { mode: "unrestricted", unit: "USD" };
+    now += 1000;
+    expect((await fetchSub2ApiUsage(options)).modelUsage).toEqual(freshModelOnly.modelUsage);
+  });
+
+  it("isolates daily cache and request coalescing by timezone and bounded days", async () => {
+    let requestCount = 0;
+    const fetchImpl = vi.fn(async () => {
+      requestCount += 1;
+      return new Response(JSON.stringify(fixtureResponse(walletFixture)), {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      });
+    });
+    const base = {
+      accountId: "default",
+      connection: HTTPS_CONNECTION,
+      apiKey: "scope-key",
+      trigger: "manual" as const,
+      fetchImpl,
+      now: () => 10_000,
+    };
+
+    const [adelaide, utc] = await Promise.all([
+      fetchSub2ApiUsage({ ...base, timezone: "Australia/Adelaide", days: 31 }),
+      fetchSub2ApiUsage({ ...base, timezone: "UTC", days: 1 }),
+    ]);
+
+    expect(requestCount).toBe(2);
+    expect(adelaide.dailyUsageContext?.requestedTimezone).toBe(
+      "Australia/Adelaide",
+    );
+    expect(utc.dailyUsageContext?.requestedTimezone).toBe("UTC");
+  });
+
+  it("rejects invalid request timezones before sending usage requests", async () => {
+    const fetchImpl = vi.fn();
+
+    await expect(
+      fetchSub2ApiUsage({
+        accountId: "default",
+        connection: HTTPS_CONNECTION,
+        apiKey: "invalid-timezone-key",
+        trigger: "manual",
+        timezone: "Not/AZone",
+        fetchImpl,
+      }),
+    ).rejects.toMatchObject({ code: "invalid_response" });
+    expect(fetchImpl).not.toHaveBeenCalled();
   });
 
   it("rejects malformed contract values with a typed error", () => {

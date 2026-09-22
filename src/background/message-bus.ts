@@ -66,6 +66,7 @@ import {
 } from "./codexbar-dashboard-sync";
 import { mergeBackgroundSyncState } from "./background-state-merge";
 import { quotaNotificationController } from "./quota-notification-runtime";
+import { refreshSub2ApiAccount } from "./provider-account-refresh";
 
 export type {
   AppMessage,
@@ -108,6 +109,8 @@ export async function handleAppMessage(
   switch (message.type) {
     case "app:set-provider-active-account":
     case "app:set-provider-enabled":
+      invalidateProviderSyncIdentity(message.providerId, false);
+      break;
     case "app:set-provider-source-preference":
     case "app:set-provider-page-binding":
     case "app:clear-provider-page-binding":
@@ -694,6 +697,18 @@ export async function handleAppMessage(
     }
 
     case "app:request-refresh": {
+      if (message.accountId !== undefined) {
+        if (message.providerId !== SUB2API_PROVIDER_ID || typeof message.accountId !== "string") {
+          return { ok: false, error: "Account refresh requires a saved Sub2API deployment." };
+        }
+        if (isStoreScreenshotRuntimeLocked) return { ok: true, state: await seedAppStateIfEmpty() };
+        try {
+          const state = await refreshSub2ApiAccount(message.accountId);
+          return { ok: true, state };
+        } catch {
+          return { ok: false, error: "The deployment could not be refreshed. Review its connection and try again." };
+        }
+      }
       await syncStoredProviderPermissions();
       await syncStoredProviderCredentials();
       const state = await runSyncEngine({

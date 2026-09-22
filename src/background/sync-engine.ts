@@ -196,6 +196,21 @@ const activeProviderAdapterRuns = new Map<
   ProviderId,
   ActiveProviderAdapterRun
 >();
+let explicitAccountRunGeneration = 0;
+let activeAdapterCount = 0;
+const adapterWaiters: (() => void)[] = [];
+
+async function withProviderSyncSlot(run: () => Promise<ProviderAdapterSyncResult>): Promise<ProviderAdapterSyncResult> {
+  if (activeAdapterCount >= PROVIDER_SYNC_CONCURRENCY_LIMIT) {
+    await new Promise<void>((resolve) => adapterWaiters.push(resolve));
+  } else activeAdapterCount += 1;
+  try { return await run(); }
+  finally {
+    const next = adapterWaiters.shift();
+    if (next) next();
+    else activeAdapterCount -= 1;
+  }
+}
 
 function trackProviderAdapterRun(
   providerId: ProviderId,
@@ -231,19 +246,32 @@ function runProviderAdapterCoalesced({
   const activeRun = activeProviderAdapterRuns.get(providerId);
 
   if (!activeRun) {
-    return trackProviderAdapterRun(providerId, trigger, identity, run());
+    return trackProviderAdapterRun(providerId, trigger, identity, withProviderSyncSlot(run));
   }
 
   if (
     activeRun.identity.generation !== identity.generation ||
     (trigger === "manual" && activeRun.trigger !== "manual")
   ) {
-    const queuedManualRun = activeRun.promise.then(run, run);
+    const queuedManualRun = activeRun.promise.then(() => withProviderSyncSlot(run), () => withProviderSyncSlot(run));
 
     return trackProviderAdapterRun(providerId, trigger, identity, queuedManualRun);
   }
 
   return activeRun.promise;
+}
+
+/** Explicit account refresh shares the provider queue but never aliases an active-account request. */
+export function runExplicitAccountAdapter(
+  providerId: ProviderId,
+  accountId: ProviderAccountId,
+  run: () => Promise<ProviderAdapterSyncResult>,
+): Promise<ProviderAdapterSyncResult> {
+  return runProviderAdapterCoalesced({
+    providerId, trigger: "manual",
+    identity: { accountId, generation: --explicitAccountRunGeneration, signature: "explicit-account" },
+    run,
+  });
 }
 
 export function getSyncEngineCoalescingKey(

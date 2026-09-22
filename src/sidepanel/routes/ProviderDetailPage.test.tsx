@@ -160,6 +160,7 @@ function renderProviderDetail(
     progressSurface?: "sidebar" | "fullPage";
     quotaPaceForecastEnabled?: boolean;
     quotaPaceNow?: Date;
+    aggregateState?: boolean;
   } = {},
 ) {
   const provider = getProviderViewModel(state, providerId);
@@ -178,6 +179,7 @@ function renderProviderDetail(
       progressSurface={options.progressSurface ?? "sidebar"}
       provider={provider}
       providerAccounts={state.providerAccounts}
+      aggregateState={options.aggregateState ? state : undefined}
       quotaPaceForecastEnabled={options.quotaPaceForecastEnabled}
       quotaPaceNow={options.quotaPaceNow}
       providerServiceStatuses={state.providerServiceStatuses}
@@ -187,6 +189,7 @@ function renderProviderDetail(
       onBack={() => undefined}
       onOpenSourcePage={options.onOpenSourcePage}
       onRefresh={() => undefined}
+      onRefreshAccount={options.aggregateState ? async () => undefined : undefined}
     />,
   );
 }
@@ -268,6 +271,28 @@ describe("ProviderDetailPage", () => {
     expect(html).not.toContain("daily credits");
     expect(html).not.toContain("/v1/responses");
     expect(html).not.toContain("API key 1");
+  });
+
+  it("renders deployment comparison only on the Sub2API full-page detail route", () => {
+    const state = createState({
+      providers: SAMPLE_APP_STATE.providers.map((provider) =>
+        provider.providerId === "sub2api-api-key"
+          ? { ...provider, apiGatewayMetering: SUB2API_METERING }
+          : provider,
+      ),
+    });
+
+    expect(
+      renderProviderDetail(state, "sub2api-api-key", {
+        progressSurface: "fullPage",
+        aggregateState: true,
+      }),
+    ).toContain('data-deployment-comparison=""');
+    expect(
+      renderProviderDetail(state, "sub2api-api-key", {
+        aggregateState: true,
+      }),
+    ).not.toContain('data-deployment-comparison=""');
   });
 
   it("renders fresh fixed-window pace estimates only when opted in", () => {

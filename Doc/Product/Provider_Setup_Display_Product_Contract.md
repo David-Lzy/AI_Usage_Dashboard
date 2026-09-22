@@ -181,6 +181,21 @@ Raw error text, credentials, URLs, identities and usage values are excluded.
 Preview captures one immutable report; subsequent sync does not change the file
 being reviewed. Download is local and user-initiated, with no upload service.
 
+### Deployment Comparison (Unreleased Work Branch)
+
+Full-page Sub2API detail can inspect saved deployments for an inclusive range
+of source day labels and refresh an individual deployment without changing
+the active account. It shows requests, total Tokens, actual/reference costs,
+observed-day coverage and independent daily capture freshness. Popup and sidebar
+account controls are unchanged; no inactive-account background polling is added.
+Missing data is not zero and partial subtotals do not imply full coverage.
+
+Comparison eligibility requires equal known bucket timezones, complete closed
+dates, scope, units/currencies and fresh captures. The current Sub2API daily
+protocol does not establish bucket timezone, even when a query timezone was
+requested: such saved values are explicitly non-comparable, not silently
+converted or ranked. See the [Sub2API contract](Sub2API_User_Usage_Contract.md).
+
 ### Quota Notifications (Unreleased Work Branch)
 
 Settings offers optional notifications at every display level. The feature is

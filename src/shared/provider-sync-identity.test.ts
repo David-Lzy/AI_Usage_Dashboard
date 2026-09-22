@@ -6,6 +6,7 @@ import {
   invalidateAllProviderSyncIdentities,
   invalidateProviderSyncIdentity,
   isProviderSyncIdentityCurrent,
+  getProviderConnectionGeneration,
 } from "./provider-sync-identity";
 
 const providerId = "sub2api-api-key";
@@ -39,6 +40,17 @@ describe("provider sync identity", () => {
     state.providers.find((provider) => provider.providerId === providerId)!
       .syncedAt = "2026-09-22T12:00:00Z";
     expect(isProviderSyncIdentityCurrent(state, providerId, first)).toBe(true);
+  });
+
+  it("separates selection invalidation from account connection revocation", () => {
+    const state = structuredClone(DEFAULT_APP_STATE);
+    const identity = captureProviderSyncIdentity(state, providerId);
+    const connection = getProviderConnectionGeneration(providerId);
+    invalidateProviderSyncIdentity(providerId, false);
+    expect(isProviderSyncIdentityCurrent(state, providerId, identity)).toBe(false);
+    expect(getProviderConnectionGeneration(providerId)).toBe(connection);
+    invalidateProviderSyncIdentity(providerId);
+    expect(getProviderConnectionGeneration(providerId)).toBe(connection + 1);
   });
 
   it("invalidates in-flight results when a credential changes without storing it in the identity", async () => {

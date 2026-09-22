@@ -24,6 +24,26 @@ import {
 
 export const DEFAULT_PROVIDER_ACCOUNT_ID: ProviderAccountId = "default";
 
+export type ProviderAccountRuntimeState = Pick<AppState, "providers" | "providerSettings" | "providerAccounts">;
+
+/** Read one living account without selecting it or normalizing away its cache. */
+export function getProviderAccountRuntime(
+  state: ProviderAccountRuntimeState,
+  providerId: ProviderId,
+  accountId: ProviderAccountId,
+): { metadata: ProviderAccountMetadata; snapshot: ProviderSnapshot; setting: ProviderSetting; active: boolean } | null {
+  const collection = state.providerAccounts?.[providerId];
+  const active = (collection?.activeAccountId ?? DEFAULT_PROVIDER_ACCOUNT_ID) === accountId;
+  const cached = collection && Object.hasOwn(collection.inactiveAccounts, accountId)
+    ? collection.inactiveAccounts[accountId] : undefined;
+  const snapshot = active ? state.providers.find((entry) => entry.providerId === providerId) : cached?.snapshot;
+  const setting = active ? state.providerSettings.find((entry) => entry.id === providerId) : cached?.setting;
+  const metadata = collection?.accounts.find((entry) => entry.id === accountId)
+    ?? (!collection && active && snapshot ? createDefaultMetadata(snapshot) : null);
+  if (!metadata || snapshot?.providerId !== providerId || setting?.id !== providerId) return null;
+  return { metadata, snapshot, setting, active };
+}
+
 export type ProviderMultiAccountCapabilityResolver = (
   providerId: ProviderId,
 ) => boolean;
