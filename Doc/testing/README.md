@@ -34,6 +34,20 @@ in the public [Design Contract](../../DESIGN.md). It also prevents that document
 from becoming a second color-token source. `npm run docs:check` includes this
 gate automatically.
 
+The background state-merge browser regression uses a fresh headless Chrome
+profile, synthetic data and a plain Vite server without CRX build output. It
+holds a custom-source response while editing the actual Settings threshold,
+then checks that both the edit and the response are saved. It does not open a
+user profile or overwrite `dist/chrome/`:
+
+```sh
+./scripts/with-preferred-node.sh node scripts/check-sync-state-browser.mjs
+```
+
+Chrome must already be installed (`PLAYWRIGHT_CHANNEL` can select another
+installed Playwright channel). Evidence is written to
+`tmp/output/playwright/sync-state-merge/`.
+
 Localization or responsive UI changes that can vary by language length should
 also run the visual locale matrix against `dist/chrome/`:
 

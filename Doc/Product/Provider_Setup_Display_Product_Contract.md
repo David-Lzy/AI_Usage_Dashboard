@@ -142,6 +142,16 @@ must not be attributed to the currently selected account. These generations
 contain no credentials, are local to the background worker, and expire with
 its in-flight requests.
 
+Background state writes are serialized read-modify-write transactions; network
+requests never hold the write queue. Each Provider result is committed as soon
+as it completes, after rechecking its account and connection. Ancillary custom
+sources and service-status fetches merge only their owned fields against the
+latest configuration. They cannot revert later appearance edits, restore a
+removed source, or replay older data over a newer refresh. Full configuration
+replacement invalidates outstanding results. Credential writes have a separate
+serialized local store, so simultaneous account edits do not overwrite each
+other's keys.
+
 ### Setup State
 
 Setup state describes whether a source entry has enough user action, permission, credentials, or source binding to attempt a truthful sync.

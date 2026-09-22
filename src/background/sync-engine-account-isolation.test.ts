@@ -16,7 +16,7 @@ import {
   updateActiveProviderAccountConnection,
 } from "../shared/provider-accounts";
 import { readProviderSecrets } from "../shared/provider-secrets";
-import { seedAppStateIfEmpty, writeAppState } from "../shared/storage";
+import { seedAppStateIfEmpty, updateAppState } from "../shared/storage";
 import { syncCustomSources } from "./custom-source-sync";
 import { syncCodexBarDashboardSources } from "./codexbar-dashboard-sync";
 import { syncProviderServiceStatuses } from "./provider-service-status-sync";
@@ -32,7 +32,7 @@ vi.mock("../shared/provider-secrets", () => ({
 
 vi.mock("../shared/storage", () => ({
   seedAppStateIfEmpty: vi.fn(),
-  writeAppState: vi.fn(),
+  updateAppState: vi.fn(),
 }));
 
 vi.mock("./custom-source-sync", () => ({
@@ -41,6 +41,7 @@ vi.mock("./custom-source-sync", () => ({
 
 vi.mock("./codexbar-dashboard-sync", () => ({
   syncCodexBarDashboardSources: vi.fn(),
+  getCodexBarDashboardGeneration: () => 0,
 }));
 
 vi.mock("./provider-service-status-sync", () => ({
@@ -175,8 +176,8 @@ describe("sync engine account isolation", () => {
 
     vi.mocked(readProviderSecrets).mockResolvedValue(SAMPLE_PROVIDER_SECRETS);
     vi.mocked(seedAppStateIfEmpty).mockImplementation(async () => cloneState(stored));
-    vi.mocked(writeAppState).mockImplementation(async (state) => {
-      const persisted = cloneState(state);
+    vi.mocked(updateAppState).mockImplementation(async (updater) => {
+      const persisted = cloneState(updater(cloneState(stored)));
       writes.push(persisted);
       stored = cloneState(persisted);
       return persisted;
@@ -215,7 +216,10 @@ describe("sync engine account isolation", () => {
     await allRun;
 
     expect(adapterCalls.map((call) => call.accountId)).toEqual([ACCOUNT_A, ACCOUNT_B]);
-    expect(writes.map(persistedProjection)).toEqual([
+    const transitions = writes.map(persistedProjection).filter((entry, index, entries) =>
+      index === 0 || JSON.stringify(entry) !== JSON.stringify(entries[index - 1]),
+    );
+    expect(transitions).toEqual([
       {
         activeAccountId: ACCOUNT_B,
         activeRemaining: 23,

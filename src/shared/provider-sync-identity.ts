@@ -11,6 +11,11 @@ export type ProviderSyncIdentity = Readonly<{
 }>;
 
 const identities = new Map<ProviderId, ProviderSyncIdentity>();
+let replacementGeneration = 0;
+
+export function getAppStateReplacementGeneration(): number {
+  return replacementGeneration;
+}
 
 function connectionSignature(state: AppState, providerId: ProviderId): string {
   const setting = state.providerSettings.find((entry) => entry.id === providerId);
@@ -41,6 +46,7 @@ export function invalidateProviderSyncIdentity(providerId: ProviderId): void {
 }
 
 export function invalidateAllProviderSyncIdentities(): void {
+  replacementGeneration += 1;
   for (const providerId of identities.keys()) {
     invalidateProviderSyncIdentity(providerId);
   }

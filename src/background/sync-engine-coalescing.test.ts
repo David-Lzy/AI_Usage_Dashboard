@@ -4,7 +4,7 @@ import { SAMPLE_APP_STATE, SAMPLE_PROVIDER_SECRETS } from "../shared/constants";
 import type { AppState, ProviderSnapshot } from "../providers/types";
 import { getProviderSyncAdapter } from "../providers/registry";
 import { readProviderSecrets } from "../shared/provider-secrets";
-import { seedAppStateIfEmpty, writeAppState } from "../shared/storage";
+import { seedAppStateIfEmpty, updateAppState } from "../shared/storage";
 import { syncCustomSources } from "./custom-source-sync";
 import {
   getSyncEngineCoalescingKey,
@@ -22,7 +22,7 @@ vi.mock("../shared/provider-secrets", () => ({
 
 vi.mock("../shared/storage", () => ({
   seedAppStateIfEmpty: vi.fn(),
-  writeAppState: vi.fn(),
+  updateAppState: vi.fn(),
 }));
 
 vi.mock("./custom-source-sync", () => ({
@@ -42,7 +42,9 @@ describe("sync engine run coalescing", () => {
     vi.clearAllMocks();
     vi.mocked(readProviderSecrets).mockResolvedValue(SAMPLE_PROVIDER_SECRETS);
     vi.mocked(seedAppStateIfEmpty).mockImplementation(async () => cloneState());
-    vi.mocked(writeAppState).mockImplementation(async (state) => state);
+    vi.mocked(updateAppState).mockImplementation(async (updater) =>
+      updater(await seedAppStateIfEmpty()),
+    );
     vi.mocked(syncCustomSources).mockImplementation(async (state) => state);
   });
 

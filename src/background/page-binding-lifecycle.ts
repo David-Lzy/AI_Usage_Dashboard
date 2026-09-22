@@ -4,7 +4,12 @@ import {
   doesUrlMatchRouteHints,
   getSessionPagePlan,
 } from "../shared/provider-sources";
-import { seedAppStateIfEmpty, writeAppState } from "../shared/storage";
+import { seedAppStateIfEmpty, updateAppState } from "../shared/storage";
+import {
+  captureProviderSyncIdentity,
+  isProviderSyncIdentityCurrent,
+  type ProviderSyncIdentity,
+} from "../shared/provider-sync-identity";
 
 type PageBindingLifecycleResult = {
   state: AppState;
@@ -15,6 +20,12 @@ type ReplacementTab = {
   tabId: number;
   url?: string | null;
   title?: string | null;
+};
+
+type PageBindingUpdate = {
+  providerId: ProviderId;
+  identity: ProviderSyncIdentity;
+  pageBinding: ProviderSetting["pageBinding"];
 };
 
 function isBoundToTab(provider: ProviderSetting, tabId: number): boolean {
@@ -155,6 +166,68 @@ export function reconcilePageBindingsForTabUrlChange(
   };
 }
 
+function capturePageBindingUpdates(
+  state: AppState,
+  result: PageBindingLifecycleResult,
+): PageBindingUpdate[] {
+  return result.changedProviderIds.flatMap((providerId) => {
+    const provider = result.state.providerSettings.find(
+      (setting) => setting.id === providerId,
+    );
+
+    return provider
+      ? [{
+          providerId,
+          identity: captureProviderSyncIdentity(state, providerId),
+          pageBinding: provider.pageBinding,
+        }]
+      : [];
+  });
+}
+
+function arePageBindingsEqual(
+  first: ProviderSetting["pageBinding"],
+  second: ProviderSetting["pageBinding"],
+): boolean {
+  return (
+    first.mode === second.mode &&
+    first.status === second.status &&
+    first.tabId === second.tabId &&
+    first.matchedUrl === second.matchedUrl &&
+    first.matchedTitle === second.matchedTitle &&
+    first.updatedAt === second.updatedAt
+  );
+}
+
+async function commitPageBindingUpdates(
+  updates: readonly PageBindingUpdate[],
+): Promise<AppState | null> {
+  let applied = false;
+  const state = await updateAppState((latest) => {
+    const updatesByProviderId = new Map(
+      updates.map((update) => [update.providerId, update]),
+    );
+    const providerSettings = latest.providerSettings.map((provider) => {
+      const update = updatesByProviderId.get(provider.id);
+
+      if (
+        !update ||
+        arePageBindingsEqual(provider.pageBinding, update.pageBinding) ||
+        !isProviderSyncIdentityCurrent(latest, provider.id, update.identity)
+      ) {
+        return provider;
+      }
+
+      applied = true;
+      return { ...provider, pageBinding: update.pageBinding };
+    });
+
+    return applied ? { ...latest, providerSettings } : latest;
+  });
+
+  return applied ? state : null;
+}
+
 export async function markProviderBindingsStaleForRemovedTab(
   tabId: number,
 ): Promise<AppState | null> {
@@ -165,7 +238,7 @@ export async function markProviderBindingsStaleForRemovedTab(
     return null;
   }
 
-  return writeAppState(result.state);
+  return commitPageBindingUpdates(capturePageBindingUpdates(current, result));
 }
 
 export async function reconcileProviderBindingsForReplacedTab(
@@ -185,7 +258,7 @@ export async function reconcileProviderBindingsForReplacedTab(
     return null;
   }
 
-  return writeAppState(result.state);
+  return commitPageBindingUpdates(capturePageBindingUpdates(current, result));
 }
 
 export async function markProviderBindingsStaleForTabUrlChange(
@@ -199,5 +272,5 @@ export async function markProviderBindingsStaleForTabUrlChange(
     return null;
   }
 
-  return writeAppState(result.state);
+  return commitPageBindingUpdates(capturePageBindingUpdates(current, result));
 }

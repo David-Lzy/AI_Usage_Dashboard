@@ -13,7 +13,6 @@ import { clearPageBinding, normalizePageBinding } from "../shared/page-bindings"
 import {
   seedAppStateIfEmpty,
   updateAppState,
-  writeAppState,
 } from "../shared/storage";
 import { normalizeCustomSourceSettings } from "../shared/custom-sources";
 import { readStoreScreenshotRuntimeLock } from "../shared/store-screenshot-runtime-lock";
@@ -50,6 +49,7 @@ import { runProviderAccountManualSyncSerial } from "../shared/provider-account-s
 import {
   invalidateAllProviderSyncIdentities,
   invalidateProviderSyncIdentity,
+  getAppStateReplacementGeneration,
 } from "../shared/provider-sync-identity";
 import {
   disconnectSub2ApiDeployment,
@@ -62,7 +62,9 @@ import {
   clearCodexBarDashboardToken,
   connectCodexBarDashboard,
   disconnectCodexBarDashboard,
+  getCodexBarDashboardGeneration,
 } from "./codexbar-dashboard-sync";
+import { mergeBackgroundSyncState } from "./background-state-merge";
 
 export type {
   AppMessage,
@@ -162,8 +164,13 @@ export async function handleAppMessage(
           : nextState;
       });
       if (message.settings.providerServiceStatusVisibilityBySurface) {
-        state = await writeAppState(
-          await syncProviderServiceStatuses(state),
+        const before = state;
+        const generation = getAppStateReplacementGeneration();
+        const completed = await syncProviderServiceStatuses(before);
+        state = await updateAppState((latest) =>
+          generation === getAppStateReplacementGeneration()
+            ? mergeBackgroundSyncState(before, completed, latest, { allowManagedSources: false })
+            : latest,
         );
       }
       await ensureBackgroundAlarms(state);
@@ -214,13 +221,18 @@ export async function handleAppMessage(
 
     case "app:connect-codexbar-dashboard": {
       const current = await seedAppStateIfEmpty();
-      const result = await connectCodexBarDashboard(
+      const replacement = getAppStateReplacementGeneration();
+      const pending = connectCodexBarDashboard(
         current,
         message.endpointUrl,
         message.token,
       );
-      const state = await writeAppState(
-        reconcileAppStateHealth(result.state),
+      const generation = getCodexBarDashboardGeneration();
+      const result = await pending;
+      const state = await updateAppState((latest) =>
+        replacement === getAppStateReplacementGeneration() && generation === getCodexBarDashboardGeneration()
+          ? mergeBackgroundSyncState(current, result.state, latest)
+          : latest,
       );
       await ensureBackgroundAlarms(state);
       return {
@@ -241,10 +253,15 @@ export async function handleAppMessage(
     }
 
     case "app:disconnect-codexbar-dashboard": {
-      const state = await writeAppState(
-        reconcileAppStateHealth(
-          await disconnectCodexBarDashboard(await seedAppStateIfEmpty()),
-        ),
+      const current = await seedAppStateIfEmpty();
+      const replacement = getAppStateReplacementGeneration();
+      const pending = disconnectCodexBarDashboard(current);
+      const generation = getCodexBarDashboardGeneration();
+      const completed = await pending;
+      const state = await updateAppState((latest) =>
+        replacement === getAppStateReplacementGeneration() && generation === getCodexBarDashboardGeneration()
+          ? mergeBackgroundSyncState(current, completed, latest, { removeManagedSources: true })
+          : latest,
       );
       return {
         ok: true,
@@ -258,10 +275,15 @@ export async function handleAppMessage(
     }
 
     case "app:clear-codexbar-dashboard-token": {
-      const state = await writeAppState(
-        reconcileAppStateHealth(
-          await clearCodexBarDashboardToken(await seedAppStateIfEmpty()),
-        ),
+      const current = await seedAppStateIfEmpty();
+      const replacement = getAppStateReplacementGeneration();
+      const pending = clearCodexBarDashboardToken(current);
+      const generation = getCodexBarDashboardGeneration();
+      const completed = await pending;
+      const state = await updateAppState((latest) =>
+        replacement === getAppStateReplacementGeneration() && generation === getCodexBarDashboardGeneration()
+          ? mergeBackgroundSyncState(current, completed, latest)
+          : latest,
       );
       return {
         ok: true,
@@ -329,90 +351,110 @@ export async function handleAppMessage(
     }
 
     case "app:save-sub2api-deployment": {
-      const current = await seedAppStateIfEmpty();
-      const result = saveSub2ApiDeployment(current, message);
-      if (!result.ok) {
-        return { ok: false, error: result.message };
-      }
-      if (message.apiKey !== null) {
-        await setSub2ApiKey(message.apiKey, result.accountId);
-      }
-      await writeAppState(reconcileAppStateHealth(result.state));
-      await syncStoredProviderPermissions();
-      await syncStoredProviderCredentials();
-      const state = await seedAppStateIfEmpty();
-      await ensureBackgroundAlarms(state);
+      return runProviderAccountManualSyncSerial(SUB2API_PROVIDER_ID, message.accountId ?? "default", async () => {
+        const current = await seedAppStateIfEmpty();
+        const replacement = getAppStateReplacementGeneration();
+        const result = saveSub2ApiDeployment(current, message);
+        if (!result.ok) {
+          return { ok: false, error: result.message };
+        }
+        if (message.apiKey !== null) {
+          await setSub2ApiKey(message.apiKey, result.accountId);
+        }
+        try {
+          await updateAppState((latest) => {
+            if (replacement !== getAppStateReplacementGeneration()) {
+              throw new Error("Configuration changed while saving. Review the deployment and try again.");
+            }
+            const updated = saveSub2ApiDeployment(latest, message, {
+              createAccountId: () => result.accountId,
+            });
+            if (!updated.ok) throw new Error(updated.message);
+            return reconcileAppStateHealth(updated.state);
+          });
+        } catch (error) {
+          if (message.accountId === null) await deleteSub2ApiAccountSecret(result.accountId);
+          return { ok: false as const, error: error instanceof Error ? error.message : "Deployment could not be saved." };
+        }
+        await syncStoredProviderPermissions();
+        await syncStoredProviderCredentials();
+        const state = await seedAppStateIfEmpty();
+        await ensureBackgroundAlarms(state);
 
-      return {
-        ok: true,
-        state,
-        notice: {
-          tone: "success",
-          title: `${message.displayLabel.trim()} saved`,
-          message:
-            "The deployment metadata and account-scoped credential were saved locally.",
-        },
-      };
+        return {
+          ok: true as const,
+          state,
+          notice: {
+            tone: "success" as const,
+            title: `${message.displayLabel.trim()} saved`,
+            message:
+              "The deployment metadata and account-scoped credential were saved locally.",
+          },
+        };
+      });
     }
 
     case "app:disconnect-sub2api-deployment": {
-      const current = await seedAppStateIfEmpty();
-      await setSub2ApiKey(null, message.accountId);
-      const state = await writeAppState(
-        reconcileAppStateHealth(
-          disconnectSub2ApiDeployment(
-            current,
-            message.accountId,
-            message.retainCachedSummary,
-          ),
-        ),
-      );
-      await syncStoredProviderCredentials();
-      await ensureBackgroundAlarms(state);
+      return runProviderAccountManualSyncSerial(SUB2API_PROVIDER_ID, message.accountId, async () => {
+        const replacement = getAppStateReplacementGeneration();
+        await setSub2ApiKey(null, message.accountId);
+        const state = await updateAppState((latest) => replacement === getAppStateReplacementGeneration() ?
+          reconcileAppStateHealth(
+            disconnectSub2ApiDeployment(
+              latest,
+              message.accountId,
+              message.retainCachedSummary,
+            ),
+          ) : latest,
+        );
+        await syncStoredProviderCredentials();
+        await ensureBackgroundAlarms(state);
 
-      return {
-        ok: true,
-        state,
-        notice: {
-          tone: "success",
-          title: "Deployment disconnected",
-          message: message.retainCachedSummary
-            ? "The API key was cleared. The last nonsecret summary remains marked as saved data."
-            : "The API key and cached nonsecret summary were cleared.",
-        },
-      };
+        return {
+          ok: true as const,
+          state,
+          notice: {
+            tone: "success" as const,
+            title: "Deployment disconnected",
+            message: message.retainCachedSummary
+              ? "The API key was cleared. The last nonsecret summary remains marked as saved data."
+              : "The API key and cached nonsecret summary were cleared.",
+          },
+        };
+      });
     }
 
     case "app:remove-sub2api-deployment": {
-      const current = await seedAppStateIfEmpty();
-      try {
-        const state = await writeAppState(
-          reconcileAppStateHealth(
-            removeSub2ApiDeployment(current, message.accountId),
-          ),
-        );
-        await deleteSub2ApiAccountSecret(message.accountId);
-        await syncStoredProviderCredentials();
-        await ensureBackgroundAlarms(state);
-        return {
-          ok: true,
-          state,
-          notice: {
-            tone: "success",
-            title: "Deployment removed",
-            message:
-              "The deployment metadata, isolated snapshot, and local credential were removed.",
-          },
-        };
-      } catch (error) {
-        return {
-          ok: false,
-          error:
-            error instanceof Error
-              ? error.message
-              : "The deployment could not be removed.",
-        };
-      }
+      return runProviderAccountManualSyncSerial(SUB2API_PROVIDER_ID, message.accountId, async () => {
+        try {
+          const state = await updateAppState((latest) =>
+            reconcileAppStateHealth(
+              removeSub2ApiDeployment(latest, message.accountId),
+            ),
+          );
+          await deleteSub2ApiAccountSecret(message.accountId);
+          await syncStoredProviderCredentials();
+          await ensureBackgroundAlarms(state);
+          return {
+            ok: true as const,
+            state,
+            notice: {
+              tone: "success" as const,
+              title: "Deployment removed",
+              message:
+                "The deployment metadata, isolated snapshot, and local credential were removed.",
+            },
+          };
+        } catch (error) {
+          return {
+            ok: false as const,
+            error:
+              error instanceof Error
+                ? error.message
+                : "The deployment could not be removed.",
+          };
+        }
+      });
     }
 
     case "app:set-sub2api-metering-display-preferences": {
@@ -668,12 +710,12 @@ export async function handleAppMessage(
         return { ok: false, error: parsedBackup.error };
       }
 
-      const currentState = await seedAppStateIfEmpty();
-      const importedState = await writeAppState(
-        reconcileAppStateHealth(
+      const importedState = await updateAppState((currentState) => {
+        invalidateAllProviderSyncIdentities();
+        return reconcileAppStateHealth(
           applyConfigurationBackupToState(currentState, parsedBackup.backup),
-        ),
-      );
+        );
+      });
       await ensureBackgroundAlarms(importedState);
 
       return {
@@ -741,12 +783,12 @@ export async function handleAppMessage(
         };
       }
 
-      const currentState = await seedAppStateIfEmpty();
-      const restoredState = await writeAppState(
-        reconcileAppStateHealth(
+      const restoredState = await updateAppState((currentState) => {
+        invalidateAllProviderSyncIdentities();
+        return reconcileAppStateHealth(
           applyConfigurationBackupToState(currentState, backup),
-        ),
-      );
+        );
+      });
       await ensureBackgroundAlarms(restoredState);
 
       return {

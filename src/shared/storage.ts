@@ -95,6 +95,7 @@ import {
   normalizeProviderAccounts,
 } from "./provider-accounts";
 import { normalizePopupProviderAccountPresentationByProvider } from "./provider-account-presentation";
+import { invalidateAllProviderSyncIdentities } from "./provider-sync-identity";
 
 let memoryFallbackState: AppState | null = null;
 
@@ -493,7 +494,15 @@ export async function readAppState(): Promise<AppState | null> {
   return memoryFallbackState ? normalizeAppState(cloneAppState(memoryFallbackState)) : null;
 }
 
-export async function writeAppState(state: AppState): Promise<AppState> {
+let stateWriteTail: Promise<unknown> = Promise.resolve();
+
+function serializeStateWrite<T>(operation: () => Promise<T>): Promise<T> {
+  const result = stateWriteTail.then(operation, operation);
+  stateWriteTail = result.then(() => undefined, () => undefined);
+  return result;
+}
+
+async function persistAppState(state: AppState): Promise<AppState> {
   const clonedState = normalizeAppState(cloneAppState(state));
 
   if (hasChromeStorage()) {
@@ -513,7 +522,17 @@ export async function writeAppState(state: AppState): Promise<AppState> {
   return clonedState;
 }
 
-export async function clearAppState(): Promise<void> {
+export function writeAppState(state: AppState): Promise<AppState> {
+  const next = cloneAppState(state);
+  return serializeStateWrite(async () => {
+    invalidateAllProviderSyncIdentities();
+    const saved = await persistAppState(next);
+    invalidateAllProviderSyncIdentities();
+    return saved;
+  });
+}
+
+async function removeAppState(): Promise<void> {
   if (hasChromeStorage()) {
     await chrome.storage.local.remove(APP_STATE_STORAGE_KEY);
     return;
@@ -528,20 +547,26 @@ export async function clearAppState(): Promise<void> {
   memoryFallbackState = null;
 }
 
-export async function seedAppStateIfEmpty(): Promise<AppState> {
-  const existing = await readAppState();
-
-  if (existing) {
-    return existing;
-  }
-
-  return writeAppState(cloneAppState(DEFAULT_APP_STATE));
+export function clearAppState(): Promise<void> {
+  return serializeStateWrite(async () => {
+    invalidateAllProviderSyncIdentities();
+    await removeAppState();
+    invalidateAllProviderSyncIdentities();
+  });
 }
 
-export async function updateAppState(
+export function seedAppStateIfEmpty(): Promise<AppState> {
+  return serializeStateWrite(async () =>
+    (await readAppState()) ?? persistAppState(cloneAppState(DEFAULT_APP_STATE)),
+  );
+}
+
+export function updateAppState(
   updater: (state: AppState) => AppState,
 ): Promise<AppState> {
-  const current = await seedAppStateIfEmpty();
-  const next = updater(cloneAppState(current));
-  return writeAppState(next);
+  return serializeStateWrite(async () => {
+    const current = (await readAppState()) ?? cloneAppState(DEFAULT_APP_STATE);
+    const next = updater(cloneAppState(current));
+    return persistAppState(next);
+  });
 }

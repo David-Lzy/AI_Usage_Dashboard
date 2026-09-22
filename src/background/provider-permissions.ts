@@ -4,9 +4,14 @@ import type {
   ProviderId,
   ProviderSetting,
 } from "../providers/types";
-import { seedAppStateIfEmpty, writeAppState } from "../shared/storage";
+import { seedAppStateIfEmpty, updateAppState } from "../shared/storage";
 import { readStoreScreenshotRuntimeLock } from "../shared/store-screenshot-runtime-lock";
 import { getExtensionPermissionsApi } from "../shared/extension-api";
+import {
+  captureProviderSyncIdentity,
+  isProviderSyncIdentityCurrent,
+  type ProviderSyncIdentity,
+} from "../shared/provider-sync-identity";
 
 export type PermissionNotice = {
   tone: "success" | "error";
@@ -60,17 +65,37 @@ async function hasGrantedOrigins(origins: string[]): Promise<boolean> {
   });
 }
 
-function updateProviderPermission(
+type PermissionCheck = {
+  providerId: ProviderId;
+  identity: ProviderSyncIdentity;
+  status: PermissionStatus;
+};
+
+function applyPermissionChecks(
   state: AppState,
-  providerId: ProviderId,
-  status: PermissionStatus,
+  checks: readonly PermissionCheck[],
 ): AppState {
-  return {
-    ...state,
-    providerSettings: state.providerSettings.map((provider) =>
-      provider.id === providerId ? { ...provider, status } : provider,
-    ),
-  };
+  const checksByProviderId = new Map(
+    checks.map((check) => [check.providerId, check]),
+  );
+  let changed = false;
+
+  const providerSettings = state.providerSettings.map((provider) => {
+    const check = checksByProviderId.get(provider.id);
+
+    if (
+      !check ||
+      provider.status === check.status ||
+      !isProviderSyncIdentityCurrent(state, provider.id, check.identity)
+    ) {
+      return provider;
+    }
+
+    changed = true;
+    return { ...provider, status: check.status };
+  });
+
+  return changed ? { ...state, providerSettings } : state;
 }
 
 export async function reconcileProviderPermissions(
@@ -80,11 +105,14 @@ export async function reconcileProviderPermissions(
     return state;
   }
 
-  const nextSettings: ProviderSetting[] = await Promise.all(
-    state.providerSettings.map(async (provider): Promise<ProviderSetting> => {
+  const checks = await Promise.all(
+    state.providerSettings.map(async (provider): Promise<PermissionCheck> => {
+      const identity = captureProviderSyncIdentity(state, provider.id);
+
       if (!canRequestHostAccess(provider)) {
         return {
-          ...provider,
+          providerId: provider.id,
+          identity,
           status: "granted",
         };
       }
@@ -92,18 +120,14 @@ export async function reconcileProviderPermissions(
       const hasAccess = await hasGrantedOrigins(provider.hostOrigins);
 
       return {
-        ...provider,
+        providerId: provider.id,
+        identity,
         status: hasAccess ? "granted" : "missing",
       };
     }),
   );
 
-  const nextState: AppState = {
-    ...state,
-    providerSettings: nextSettings,
-  };
-
-  return writeAppState(nextState);
+  return updateAppState((latest) => applyPermissionChecks(latest, checks));
 }
 
 export async function syncStoredProviderPermissions(): Promise<AppState> {
@@ -136,8 +160,9 @@ export async function toggleProviderPermission(
   }
 
   if (!canRequestHostAccess(target)) {
-    const state = await writeAppState(
-      updateProviderPermission(current, providerId, "granted"),
+    const identity = captureProviderSyncIdentity(current, providerId);
+    const state = await updateAppState((latest) =>
+      applyPermissionChecks(latest, [{ providerId, identity, status: "granted" }]),
     );
 
     return {
@@ -151,12 +176,13 @@ export async function toggleProviderPermission(
   }
 
   const permissionsApi = getLivePermissionsApi();
+  const identity = captureProviderSyncIdentity(current, providerId);
 
   if (!permissionsApi) {
     const nextStatus: PermissionStatus =
       target.status === "granted" ? "missing" : "granted";
-    const state = await writeAppState(
-      updateProviderPermission(current, providerId, nextStatus),
+    const state = await updateAppState((latest) =>
+      applyPermissionChecks(latest, [{ providerId, identity, status: nextStatus }]),
     );
 
     return {
@@ -178,8 +204,8 @@ export async function toggleProviderPermission(
       origins: target.hostOrigins,
     });
     const nextStatus: PermissionStatus = removed ? "missing" : "granted";
-    const state = await writeAppState(
-      updateProviderPermission(current, providerId, nextStatus),
+    const state = await updateAppState((latest) =>
+      applyPermissionChecks(latest, [{ providerId, identity, status: nextStatus }]),
     );
 
     return {
@@ -202,8 +228,8 @@ export async function toggleProviderPermission(
     origins: target.hostOrigins,
   });
   const nextStatus: PermissionStatus = granted ? "granted" : "missing";
-  const state = await writeAppState(
-    updateProviderPermission(current, providerId, nextStatus),
+  const state = await updateAppState((latest) =>
+    applyPermissionChecks(latest, [{ providerId, identity, status: nextStatus }]),
   );
 
   return {

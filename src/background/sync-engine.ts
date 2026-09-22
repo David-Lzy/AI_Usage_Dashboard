@@ -18,15 +18,20 @@ import {
   getActiveProviderAccountIds,
   getActiveProviderAccountMetadata,
 } from "../shared/provider-accounts";
-import { seedAppStateIfEmpty, writeAppState } from "../shared/storage";
+import { seedAppStateIfEmpty, updateAppState } from "../shared/storage";
 import {
   captureProviderSyncIdentity,
+  getAppStateReplacementGeneration,
   isProviderSyncIdentityCurrent,
   type ProviderSyncIdentity,
 } from "../shared/provider-sync-identity";
 import { syncCustomSources } from "./custom-source-sync";
-import { syncCodexBarDashboardSources } from "./codexbar-dashboard-sync";
+import {
+  getCodexBarDashboardGeneration,
+  syncCodexBarDashboardSources,
+} from "./codexbar-dashboard-sync";
 import { syncProviderServiceStatuses } from "./provider-service-status-sync";
+import { mergeBackgroundSyncState } from "./background-state-merge";
 
 const STALE_MULTIPLIER = 2;
 const MIN_STALE_MINUTES = 60;
@@ -272,7 +277,8 @@ export async function runSyncEngine(params: RunSyncEngineParams): Promise<AppSta
       requestIdentities.set(setting.id, captureProviderSyncIdentity(current, setting.id));
     }
   }
-  const coalescingKey = getSyncEngineCoalescingKey(params, requestIdentities);
+  const replacementGeneration = getAppStateReplacementGeneration();
+  const coalescingKey = `${getSyncEngineCoalescingKey(params, requestIdentities)}:${replacementGeneration}:${getCodexBarDashboardGeneration()}`;
 
   const activeRun = activeSyncEngineRuns.get(coalescingKey);
 
@@ -280,7 +286,7 @@ export async function runSyncEngine(params: RunSyncEngineParams): Promise<AppSta
     return activeRun;
   }
 
-  const nextRun = runSyncEngineOnce(params, current, requestIdentities);
+  const nextRun = runSyncEngineOnce(params, current, requestIdentities, replacementGeneration);
   activeSyncEngineRuns.set(coalescingKey, nextRun);
 
   void nextRun.then(
@@ -303,6 +309,7 @@ async function runSyncEngineOnce(
   { trigger, providerId }: RunSyncEngineParams,
   current: AppState,
   requestIdentities: ReadonlyMap<ProviderId, ProviderSyncIdentity>,
+  replacementGeneration: number,
 ): Promise<AppState> {
   const activeAccountIds = getActiveProviderAccountIds(current);
   const secrets = await readProviderSecrets(activeAccountIds);
@@ -311,7 +318,7 @@ async function runSyncEngineOnce(
     current.providerSettings.map((provider) => [provider.id, provider]),
   );
 
-  const outcomes = await mapWithConcurrency(
+  await mapWithConcurrency(
     current.providers,
     PROVIDER_SYNC_CONCURRENCY_LIMIT,
     async (provider) => {
@@ -368,7 +375,7 @@ async function runSyncEngineOnce(
           }),
       });
 
-      return {
+      const completed: SyncEngineOutcome = {
         accountId,
         didSync: true,
         providerId: provider.providerId,
@@ -377,91 +384,65 @@ async function runSyncEngineOnce(
         startedSetting: setting,
         identity,
       };
+      // Commit each provider promptly; a slow sibling must not replay an older result.
+      await updateAppState((latest) => mergeProviderSyncOutcome(latest, completed, now));
+      return completed;
     },
   );
-  const latest = await seedAppStateIfEmpty();
-  const latestProviderSettings = new Map<ProviderId, ProviderSetting>(
-    latest.providerSettings.map((provider) => [provider.id, provider]),
-  );
-  const syncedOutcomes = new Map<ProviderId, SyncEngineOutcome>();
-
-  for (const outcome of outcomes) {
-    if (!outcome.didSync || !outcome.startedSetting || !outcome.identity) {
-      continue;
-    }
-
-    const latestSetting = latestProviderSettings.get(outcome.providerId);
-
-    if (
-      !latestSetting ||
-      !isProviderSyncIdentityCurrent(latest, outcome.providerId, outcome.identity) ||
-      getActiveProviderAccountId(latest, outcome.providerId) !==
-        outcome.accountId ||
-      hasSyncRelevantProviderSettingDrift(outcome.startedSetting, latestSetting)
-    ) {
-      continue;
-    }
-
-    syncedOutcomes.set(outcome.providerId, outcome);
+  const before = await seedAppStateIfEmpty();
+  if (providerId || replacementGeneration !== getAppStateReplacementGeneration()) {
+    return before;
   }
-
-  const nextProviderSettings = new Map<ProviderId, ProviderSetting>(
-    latest.providerSettings.map((provider) => [provider.id, provider]),
-  );
-
-  for (const outcome of syncedOutcomes.values()) {
-    if (!outcome.setting) {
-      continue;
-    }
-
-    const latestSetting = nextProviderSettings.get(outcome.providerId);
-
-    if (!latestSetting) {
-      nextProviderSettings.set(outcome.setting.id, outcome.setting);
-      continue;
-    }
-
-    nextProviderSettings.set(outcome.providerId, {
-      ...latestSetting,
-      status: outcome.setting.status,
-      credentialStatus: outcome.setting.credentialStatus,
-      hostsLabel: outcome.setting.hostsLabel,
-      hostOrigins: outcome.setting.hostOrigins,
-      pageBinding: outcome.setting.pageBinding,
-    });
-  }
-
-  const nextProviders = latest.providers.map(
-    (provider) => syncedOutcomes.get(provider.providerId)?.snapshot ?? provider,
-  );
-
-  const nextState = reconcileAppStateHealth(
-    {
-      ...latest,
-      providers: nextProviders,
-      providerSettings: latest.providerSettings.map(
-        (provider) => nextProviderSettings.get(provider.id) ?? provider,
-      ),
-    },
-    now,
-  );
-  const nextStateWithCodexBar = providerId
-    ? nextState
-    : await syncCodexBarDashboardSources(nextState, {
+  const bridgeGeneration = getCodexBarDashboardGeneration();
+  const nextStateWithCodexBar = await syncCodexBarDashboardSources(before, {
         trigger,
         hasHostAccess: hasCustomSourceHostAccess,
         now,
       });
-  const nextStateWithCustomSources = providerId
-    ? nextStateWithCodexBar
-    : await syncCustomSources(nextStateWithCodexBar, {
+  const nextStateWithCustomSources = await syncCustomSources(nextStateWithCodexBar, {
         trigger,
         hasHostAccess: hasCustomSourceHostAccess,
         now,
       });
-  const nextStateWithServiceStatuses = providerId
-    ? nextStateWithCustomSources
-    : await syncProviderServiceStatuses(nextStateWithCustomSources, { now });
+  const completed = await syncProviderServiceStatuses(nextStateWithCustomSources, { now });
 
-  return writeAppState(nextStateWithServiceStatuses);
+  return updateAppState((latest) =>
+    replacementGeneration === getAppStateReplacementGeneration()
+      ? mergeBackgroundSyncState(before, completed, latest, {
+          allowManagedSources: bridgeGeneration === getCodexBarDashboardGeneration(),
+        })
+      : latest,
+  );
+}
+
+function mergeProviderSyncOutcome(
+  latest: AppState,
+  outcome: SyncEngineOutcome,
+  now: Date,
+): AppState {
+  const setting = latest.providerSettings.find((entry) => entry.id === outcome.providerId);
+  if (
+    !setting || !outcome.startedSetting || !outcome.setting || !outcome.identity ||
+    !isProviderSyncIdentityCurrent(latest, outcome.providerId, outcome.identity) ||
+    getActiveProviderAccountId(latest, outcome.providerId) !== outcome.accountId ||
+    hasSyncRelevantProviderSettingDrift(outcome.startedSetting, setting)
+  ) return latest;
+
+  const resultSetting = outcome.setting;
+  return {
+    ...latest,
+    providers: latest.providers.map((provider) => provider.providerId === outcome.providerId
+      ? markProviderStale(outcome.snapshot, latest.settings.syncIntervalMinutes, now)
+      : provider),
+    providerSettings: latest.providerSettings.map((entry) => entry.id === outcome.providerId
+      ? {
+          ...entry,
+          status: resultSetting.status,
+          credentialStatus: resultSetting.credentialStatus,
+          hostsLabel: resultSetting.hostsLabel,
+          hostOrigins: resultSetting.hostOrigins,
+          pageBinding: resultSetting.pageBinding,
+        }
+      : entry),
+  };
 }

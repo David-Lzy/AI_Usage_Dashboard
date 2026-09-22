@@ -1,8 +1,13 @@
 import type { AppState, CredentialStatus, ProviderSecrets } from "../providers/types";
 import { readProviderSecrets } from "../shared/provider-secrets";
 import { getActiveProviderAccountIds } from "../shared/provider-accounts";
-import { seedAppStateIfEmpty, writeAppState } from "../shared/storage";
+import { seedAppStateIfEmpty, updateAppState } from "../shared/storage";
 import { readStoreScreenshotRuntimeLock } from "../shared/store-screenshot-runtime-lock";
+import {
+  captureProviderSyncIdentity,
+  isProviderSyncIdentityCurrent,
+  type ProviderSyncIdentity,
+} from "../shared/provider-sync-identity";
 
 function getProviderCredentialStatus(
   providerId: AppState["providerSettings"][number]["id"],
@@ -39,6 +44,38 @@ export function reconcileProviderCredentials(
   };
 }
 
+type CredentialCheck = {
+  providerId: AppState["providerSettings"][number]["id"];
+  identity: ProviderSyncIdentity;
+  status: CredentialStatus;
+};
+
+function applyCredentialChecks(
+  state: AppState,
+  checks: readonly CredentialCheck[],
+): AppState {
+  const checksByProviderId = new Map(
+    checks.map((check) => [check.providerId, check]),
+  );
+  let changed = false;
+  const providerSettings = state.providerSettings.map((provider) => {
+    const check = checksByProviderId.get(provider.id);
+
+    if (
+      !check ||
+      provider.credentialStatus === check.status ||
+      !isProviderSyncIdentityCurrent(state, provider.id, check.identity)
+    ) {
+      return provider;
+    }
+
+    changed = true;
+    return { ...provider, credentialStatus: check.status };
+  });
+
+  return changed ? { ...state, providerSettings } : state;
+}
+
 export async function syncStoredProviderCredentials(): Promise<AppState> {
   const current = await seedAppStateIfEmpty();
 
@@ -46,9 +83,20 @@ export async function syncStoredProviderCredentials(): Promise<AppState> {
     return current;
   }
 
-  const secrets = await readProviderSecrets(getActiveProviderAccountIds(current));
+  const activeAccountIds = getActiveProviderAccountIds(current);
+  const checks = current.providerSettings.map((provider) => ({
+    providerId: provider.id,
+    identity: captureProviderSyncIdentity(current, provider.id),
+  }));
+  const secrets = await readProviderSecrets(activeAccountIds);
 
-  return writeAppState(
-    reconcileProviderCredentials(current, secrets),
+  return updateAppState((latest) =>
+    applyCredentialChecks(
+      latest,
+      checks.map((check) => ({
+        ...check,
+        status: getProviderCredentialStatus(check.providerId, secrets),
+      })),
+    ),
   );
 }

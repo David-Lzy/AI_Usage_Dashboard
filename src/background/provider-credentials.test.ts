@@ -1,23 +1,62 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { SAMPLE_APP_STATE } from "../shared/constants";
-import {
-  setCodexWorkspaceConfig,
-  setProviderAdminApiKey,
-} from "../shared/provider-secrets";
-import { writeAppState } from "../shared/storage";
+import type { ProviderSecrets } from "../providers/types";
+import { SAMPLE_APP_STATE, SAMPLE_PROVIDER_SECRETS } from "../shared/constants";
+import { readProviderSecrets } from "../shared/provider-secrets";
+import { updateAppState, writeAppState } from "../shared/storage";
 import { syncStoredProviderCredentials } from "./provider-credentials";
 
+vi.mock("../shared/provider-secrets", () => ({
+  readProviderSecrets: vi.fn(),
+}));
+
+vi.mock("../shared/storage", () => ({
+  seedAppStateIfEmpty: vi.fn(),
+  updateAppState: vi.fn(),
+  writeAppState: vi.fn(),
+}));
+
+type Deferred<T> = {
+  promise: Promise<T>;
+  resolve: (value: T) => void;
+};
+
+function createDeferred<T>(): Deferred<T> {
+  let resolve = (_value: T) => {};
+  const promise = new Promise<T>((resolvePromise) => {
+    resolve = resolvePromise;
+  });
+
+  return { promise, resolve };
+}
+
 describe("provider credentials", () => {
+  let secrets: ProviderSecrets;
+  let stored: typeof SAMPLE_APP_STATE;
+
   beforeEach(async () => {
-    await writeAppState(SAMPLE_APP_STATE);
-    await setProviderAdminApiKey("cursor-team-api", null);
-    await setProviderAdminApiKey("claude-code-admin-api", null);
-    await setCodexWorkspaceConfig(null, null);
+    vi.clearAllMocks();
+    secrets = structuredClone(SAMPLE_PROVIDER_SECRETS);
+    vi.mocked(readProviderSecrets).mockImplementation(async () =>
+      structuredClone(secrets),
+    );
+    stored = structuredClone(SAMPLE_APP_STATE);
+    vi.mocked(writeAppState).mockImplementation(async (state) => {
+      stored = structuredClone(state);
+      return structuredClone(stored);
+    });
+    vi.mocked(updateAppState).mockImplementation(async (updater) => {
+      stored = updater(structuredClone(stored));
+      return structuredClone(stored);
+    });
+    const { seedAppStateIfEmpty } = await import("../shared/storage");
+    vi.mocked(seedAppStateIfEmpty).mockImplementation(async () =>
+      structuredClone(stored),
+    );
   });
 
   it("marks Cursor configured when a team admin key is stored", async () => {
-    await setProviderAdminApiKey("cursor-team-api", "  cursor-live-key  ");
+    secrets["cursor-team-api"].adminApiKey = "cursor-test-key";
 
     const state = await syncStoredProviderCredentials();
 
@@ -49,7 +88,7 @@ describe("provider credentials", () => {
   });
 
   it("marks Claude Code configured when an Admin API key is stored", async () => {
-    await setProviderAdminApiKey("claude-code-admin-api", " sk-ant-admin-live ");
+    secrets["claude-code-admin-api"].adminApiKey = "claude-test-key";
 
     const state = await syncStoredProviderCredentials();
 
@@ -60,7 +99,10 @@ describe("provider credentials", () => {
   });
 
   it("marks Codex configured only when both analytics key and workspace ID are stored", async () => {
-    await setCodexWorkspaceConfig(" sk-codex-live ", " ws_123 ");
+    secrets["codex-enterprise-api"] = {
+      analyticsApiKey: "codex-test-key",
+      workspaceId: "workspace-test",
+    };
 
     const state = await syncStoredProviderCredentials();
 
@@ -68,5 +110,52 @@ describe("provider credentials", () => {
       state.providerSettings.find((provider) => provider.id === "codex-enterprise-api")
         ?.credentialStatus,
     ).toBe("configured");
+  });
+
+  it("preserves newer settings and skips credentials read for a newly selected account", async () => {
+    const credentialRead = createDeferred<ProviderSecrets>();
+    vi.mocked(readProviderSecrets).mockReturnValueOnce(credentialRead.promise);
+
+    const sync = syncStoredProviderCredentials();
+    await vi.waitFor(() => {
+      expect(readProviderSecrets).toHaveBeenCalledOnce();
+    });
+
+    await writeAppState({
+      ...structuredClone(SAMPLE_APP_STATE),
+      providerAccounts: {
+        "cursor-team-api": {
+          activeAccountId: "account_credentials-new-0001",
+          accounts: [{
+            id: "account_credentials-new-0001",
+            label: "New account",
+            createdAt: "2026-09-23T00:00:00.000Z",
+            lastSuccessAt: null,
+          }],
+          inactiveAccounts: {},
+        },
+      },
+      providerSettings: SAMPLE_APP_STATE.providerSettings.map((provider) =>
+        provider.id === "cursor-team-api"
+          ? { ...provider, credentialStatus: "missing" }
+          : provider,
+      ),
+      settings: {
+        ...SAMPLE_APP_STATE.settings,
+        warningThresholdPercent: 77,
+      },
+    });
+    credentialRead.resolve({
+      ...structuredClone(SAMPLE_PROVIDER_SECRETS),
+      "cursor-team-api": { adminApiKey: "cursor-test-key" },
+    });
+
+    const state = await sync;
+
+    expect(state.settings.warningThresholdPercent).toBe(77);
+    expect(
+      state.providerSettings.find((provider) => provider.id === "cursor-team-api")
+        ?.credentialStatus,
+    ).toBe("missing");
   });
 });

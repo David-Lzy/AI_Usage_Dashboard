@@ -51,6 +51,18 @@ type ActiveProviderAccountIds = Partial<
 >;
 
 let memoryFallbackStore: StoredProviderSecretsV2 | null = null;
+let secretWriteTransaction: Promise<void> = Promise.resolve();
+
+function enqueueSecretWrite<T>(transaction: () => Promise<T>): Promise<T> {
+  const result = secretWriteTransaction.then(transaction);
+
+  // A failed write must reject its caller without preventing later writes.
+  secretWriteTransaction = result.then(
+    () => undefined,
+    () => undefined,
+  );
+  return result;
+}
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -365,14 +377,14 @@ function selectProviderSecrets(
 export async function readProviderSecrets(
   accountIds: ActiveProviderAccountIds = {},
 ): Promise<ProviderSecrets> {
-  return selectProviderSecrets(await readSecretStore(), accountIds);
+  // Reading can migrate a legacy store, so it shares the persistence queue.
+  return enqueueSecretWrite(async () =>
+    selectProviderSecrets(await readSecretStore(), accountIds),
+  );
 }
 
-export async function writeProviderSecrets(
-  secrets: ProviderSecrets,
-  accountIds: ActiveProviderAccountIds = {},
-): Promise<ProviderSecrets> {
-  const normalizedSecrets = cloneProviderSecrets({
+function normalizeProviderSecrets(secrets: ProviderSecrets): ProviderSecrets {
+  return cloneProviderSecrets({
     "cursor-team-api": normalizeCursorSecret(secrets["cursor-team-api"]),
     "claude-code-admin-api": normalizeClaudeSecret(
       secrets["claude-code-admin-api"],
@@ -382,6 +394,13 @@ export async function writeProviderSecrets(
     ),
     "sub2api-api-key": normalizeSub2ApiSecret(secrets["sub2api-api-key"]),
   });
+}
+
+async function writeProviderSecretsNow(
+  secrets: ProviderSecrets,
+  accountIds: ActiveProviderAccountIds,
+): Promise<ProviderSecrets> {
+  const normalizedSecrets = normalizeProviderSecrets(secrets);
   const store = await readSecretStore();
 
   const changedProviders = (Object.keys(normalizedSecrets) as ProviderSecretProviderId[])
@@ -413,13 +432,25 @@ export async function writeProviderSecrets(
   return normalizedSecrets;
 }
 
+export function writeProviderSecrets(
+  secrets: ProviderSecrets,
+  accountIds: ActiveProviderAccountIds = {},
+): Promise<ProviderSecrets> {
+  const normalizedSecrets = normalizeProviderSecrets(secrets);
+  return enqueueSecretWrite(() =>
+    writeProviderSecretsNow(normalizedSecrets, accountIds),
+  );
+}
+
 export async function updateProviderSecrets(
   updater: (secrets: ProviderSecrets) => ProviderSecrets,
   accountIds: ActiveProviderAccountIds = {},
 ): Promise<ProviderSecrets> {
-  const current = await readProviderSecrets(accountIds);
-  const next = updater(cloneProviderSecrets(current));
-  return writeProviderSecrets(next, accountIds);
+  return enqueueSecretWrite(async () => {
+    const current = selectProviderSecrets(await readSecretStore(), accountIds);
+    const next = updater(cloneProviderSecrets(current));
+    return writeProviderSecretsNow(next, accountIds);
+  });
 }
 
 export async function setProviderAdminApiKey(
@@ -458,14 +489,21 @@ export async function setSub2ApiKey(
   );
 }
 
-export async function deleteSub2ApiAccountSecret(
+export function deleteSub2ApiAccountSecret(
   accountId: ProviderAccountId,
 ): Promise<void> {
-  invalidateProviderSyncIdentity("sub2api-api-key");
-  const store = await readSecretStore();
-  delete store.accounts["sub2api-api-key"][accountId];
-  await persistSecretStore(store);
-  invalidateProviderSyncIdentity("sub2api-api-key");
+  return enqueueSecretWrite(async () => {
+    const store = await readSecretStore();
+    if (!(accountId in store.accounts["sub2api-api-key"])) {
+      return;
+    }
+
+    invalidateProviderSyncIdentity("sub2api-api-key");
+    delete store.accounts["sub2api-api-key"][accountId];
+    await persistSecretStore(store);
+    // Also reject a refresh that acquired the previous secret during the write.
+    invalidateProviderSyncIdentity("sub2api-api-key");
+  });
 }
 
 export async function setCodexWorkspaceConfig(

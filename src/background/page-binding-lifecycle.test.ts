@@ -1,13 +1,20 @@
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { AppState, ProviderId, ProviderSetting } from "../providers/types";
 import { createPageBindingFromTab } from "../shared/page-bindings";
 import { SAMPLE_APP_STATE } from "../shared/constants";
+import { seedAppStateIfEmpty, updateAppState } from "../shared/storage";
 import {
+  reconcileProviderBindingsForReplacedTab,
   reconcilePageBindingsForRemovedTab,
   reconcilePageBindingsForReplacedTab,
   reconcilePageBindingsForTabUrlChange,
 } from "./page-binding-lifecycle";
+
+vi.mock("../shared/storage", () => ({
+  seedAppStateIfEmpty: vi.fn(),
+  updateAppState: vi.fn(),
+}));
 
 function buildStateWithBinding(
   providerId: ProviderId,
@@ -49,6 +56,20 @@ function findProviderSetting(
 }
 
 describe("page binding lifecycle", () => {
+  let stored: AppState;
+
+  beforeEach(() => {
+    stored = structuredClone(SAMPLE_APP_STATE);
+    vi.clearAllMocks();
+    vi.mocked(seedAppStateIfEmpty).mockImplementation(async () =>
+      structuredClone(stored),
+    );
+    vi.mocked(updateAppState).mockImplementation(async (updater) => {
+      stored = updater(structuredClone(stored));
+      return structuredClone(stored);
+    });
+  });
+
   it("marks a bound provider page stale when the bound tab closes", () => {
     const state = buildStateWithBinding(
       "cursor-personal-page",
@@ -165,5 +186,41 @@ describe("page binding lifecycle", () => {
     expect(result.changedProviderIds).toEqual(["codex-personal-page"]);
     expect(codex.pageBinding.status).toBe("stale");
     expect(codex.pageBinding.mode).toBe("bound");
+  });
+
+  it("does not restore a binding that was reconfigured before the replacement commit", async () => {
+    stored = buildStateWithBinding(
+      "cursor-personal-page",
+      42,
+      "https://cursor.com/dashboard/usage",
+    );
+    vi.mocked(updateAppState).mockImplementationOnce(async (updater) => {
+      stored = buildStateWithBinding(
+        "cursor-personal-page",
+        99,
+        "https://cursor.com/dashboard/usage?new-binding=true",
+      );
+      stored.settings.warningThresholdPercent = 77;
+      stored = updater(structuredClone(stored));
+      return structuredClone(stored);
+    });
+
+    const state = await reconcileProviderBindingsForReplacedTab(
+      42,
+      {
+        tabId: 43,
+        url: "https://cursor.com/dashboard/usage?period=current",
+        title: "Cursor Usage",
+      },
+      "2026-04-29T14:20:00.000Z",
+    );
+
+    expect(state).toBeNull();
+    expect(stored.settings.warningThresholdPercent).toBe(77);
+    expect(findProviderSetting(stored, "cursor-personal-page").pageBinding).toMatchObject({
+      status: "bound",
+      tabId: 99,
+      matchedUrl: "https://cursor.com/dashboard/usage?new-binding=true",
+    });
   });
 });

@@ -42,8 +42,58 @@ export type CodexBarDashboardConnectResult =
 
 const inFlightRequests = new Map<
   string,
-  Promise<CodexBarDashboardBridgeResult>
+  Map<number, Promise<CodexBarDashboardBridgeResult>>
 >();
+
+let codexBarDashboardGeneration = 0;
+let persistenceTail: Promise<void> = Promise.resolve();
+let activeMutationGeneration: number | null = null;
+
+type PersistenceResult = "committed" | "stale";
+
+export function getCodexBarDashboardGeneration(): number {
+  return codexBarDashboardGeneration;
+}
+
+function beginCodexBarDashboardMutation(): number {
+  codexBarDashboardGeneration += 1;
+  activeMutationGeneration = codexBarDashboardGeneration;
+  return activeMutationGeneration;
+}
+
+function isCurrentGeneration(generation: number): boolean {
+  return generation === codexBarDashboardGeneration;
+}
+
+function isMutationInProgress(): boolean {
+  return activeMutationGeneration === codexBarDashboardGeneration;
+}
+
+function finishCodexBarDashboardMutation(generation: number): void {
+  if (activeMutationGeneration === generation) {
+    activeMutationGeneration = null;
+  }
+}
+
+function enqueuePersistence<T>(
+  generation: number,
+  transaction: () => Promise<T>,
+): Promise<T | PersistenceResult> {
+  const queued: Promise<T | PersistenceResult> = persistenceTail.then<
+    T | PersistenceResult
+  >(
+    () =>
+      isCurrentGeneration(generation)
+        ? transaction()
+        : ("stale" as const),
+  );
+  // A failed storage operation must not prevent the action queued after it.
+  persistenceTail = queued.then(
+    () => undefined,
+    () => undefined,
+  );
+  return queued;
+}
 
 function tokenStorageKey(endpointUrl: string): string {
   return new URL(endpointUrl).origin;
@@ -110,20 +160,30 @@ function shouldRefresh(
 
 async function fetchCoalesced(
   endpointUrl: string,
+  generation: number,
   token: string,
   options: FetchOptions,
 ): Promise<CodexBarDashboardBridgeResult> {
-  const existing = inFlightRequests.get(endpointUrl);
+  const requestsForEndpoint = inFlightRequests.get(endpointUrl);
+  const existing = requestsForEndpoint?.get(generation);
   if (existing) {
     return existing;
   }
   const request = fetchCodexBarDashboardSnapshot(endpointUrl, token, options);
-  inFlightRequests.set(endpointUrl, request);
+  const nextRequests = requestsForEndpoint ?? new Map();
+  nextRequests.set(generation, request);
+  if (!requestsForEndpoint) {
+    inFlightRequests.set(endpointUrl, nextRequests);
+  }
   try {
     return await request;
   } finally {
-    if (inFlightRequests.get(endpointUrl) === request) {
-      inFlightRequests.delete(endpointUrl);
+    const currentRequests = inFlightRequests.get(endpointUrl);
+    if (currentRequests?.get(generation) === request) {
+      currentRequests.delete(generation);
+      if (currentRequests.size === 0) {
+        inFlightRequests.delete(endpointUrl);
+      }
     }
   }
 }
@@ -227,13 +287,51 @@ function missingPermissionFailure(): CodexBarDashboardBridgeFailure {
   };
 }
 
+function supersededMutationFailure(): CodexBarDashboardBridgeFailure {
+  return {
+    ok: false,
+    code: "unavailable",
+    message: "A newer CodexBar dashboard change superseded this connection attempt.",
+  };
+}
+
+async function restoreToken(
+  origin: string,
+  previousToken: string | null,
+): Promise<void> {
+  if (previousToken) {
+    await writeLocalCompanionToken(origin, previousToken);
+    return;
+  }
+  await clearLocalCompanionToken(origin);
+}
+
+async function restoreConnection(
+  previousConnection: Awaited<ReturnType<typeof readCodexBarDashboardConnection>>,
+): Promise<void> {
+  if (previousConnection) {
+    await writeCodexBarDashboardConnection(previousConnection.endpointUrl);
+    return;
+  }
+  await clearCodexBarDashboardConnection();
+}
+
 export async function syncCodexBarDashboardSources(
   state: AppState,
   options: SyncOptions,
 ): Promise<AppState> {
+  const generation = getCodexBarDashboardGeneration();
+  if (isMutationInProgress()) {
+    return state;
+  }
   const connection = await readCodexBarDashboardConnection();
   const now = options.now ?? new Date();
-  if (!connection || !shouldRefresh(state, options.trigger, now)) {
+  if (
+    !isCurrentGeneration(generation) ||
+    isMutationInProgress() ||
+    !connection ||
+    !shouldRefresh(state, options.trigger, now)
+  ) {
     return state;
   }
 
@@ -246,20 +344,29 @@ export async function syncCodexBarDashboardSources(
   const hasAccess = options.hasHostAccess
     ? await options.hasHostAccess(connection.endpointUrl).catch(() => false)
     : true;
+  if (!isCurrentGeneration(generation) || isMutationInProgress()) {
+    return state;
+  }
   if (!hasAccess) {
     return mergeFailedSnapshot(state, missingPermissionFailure(), now);
   }
   const token = await readLocalCompanionToken(
     tokenStorageKey(connection.endpointUrl),
   );
+  if (!isCurrentGeneration(generation) || isMutationInProgress()) {
+    return state;
+  }
   if (!token) {
     return mergeFailedSnapshot(state, missingTokenFailure(), now);
   }
-  const result = await fetchCoalesced(connection.endpointUrl, token, {
+  const result = await fetchCoalesced(connection.endpointUrl, generation, token, {
     fetchImpl: options.fetchImpl,
     now,
     timeoutMs: options.timeoutMs,
   });
+  if (!isCurrentGeneration(generation) || isMutationInProgress()) {
+    return state;
+  }
   return result.ok
     ? mergeSuccessfulSnapshot(state, connection.endpointUrl, result.value, now)
     : mergeFailedSnapshot(state, result, now);
@@ -271,77 +378,194 @@ export async function connectCodexBarDashboard(
   token: string | null,
   options: FetchOptions = {},
 ): Promise<CodexBarDashboardConnectResult> {
-  const endpoint = normalizeCodexBarDashboardEndpoint(endpointUrl);
-  const now = options.now ?? new Date();
-  if (!endpoint.ok) {
-    return { ok: false, state, failure: endpoint };
-  }
-  const tokenKey = tokenStorageKey(endpoint.value);
-  const previousConnection = await readCodexBarDashboardConnection();
-  const candidateToken = token?.trim() || (await readLocalCompanionToken(tokenKey));
-  if (!candidateToken) {
-    const failure = missingTokenFailure();
-    return { ok: false, state: mergeFailedSnapshot(state, failure, now), failure };
-  }
+  const generation = beginCodexBarDashboardMutation();
+  try {
+    const endpoint = normalizeCodexBarDashboardEndpoint(endpointUrl);
+    const now = options.now ?? new Date();
+    if (!endpoint.ok) {
+      return { ok: false, state, failure: endpoint };
+    }
+    const tokenKey = tokenStorageKey(endpoint.value);
+    const candidateToken = token?.trim() || (await readLocalCompanionToken(tokenKey));
+    if (!isCurrentGeneration(generation)) {
+      const failure = supersededMutationFailure();
+      return { ok: false, state, failure };
+    }
+    if (!candidateToken) {
+      const failure = missingTokenFailure();
+      return { ok: false, state: mergeFailedSnapshot(state, failure, now), failure };
+    }
 
-  const result = await fetchCoalesced(endpoint.value, candidateToken, {
-    ...options,
-    now,
-  });
-  if (!result.ok) {
+    const result = await fetchCoalesced(endpoint.value, generation, candidateToken, {
+      ...options,
+      now,
+    });
+    if (!isCurrentGeneration(generation)) {
+      const failure = supersededMutationFailure();
+      return { ok: false, state, failure };
+    }
+    if (!result.ok) {
+      return {
+        ok: false,
+        state: mergeFailedSnapshot(state, result, now),
+        failure: result,
+      };
+    }
+    const persisted = await enqueuePersistence(generation, async () => {
+      const previousConnection = await readCodexBarDashboardConnection();
+      if (!isCurrentGeneration(generation)) {
+        return "stale" as const;
+      }
+      const previousToken = await readLocalCompanionToken(tokenKey);
+      if (!isCurrentGeneration(generation)) {
+        return "stale" as const;
+      }
+      let wroteToken = false;
+      if (token && !(await writeLocalCompanionToken(tokenKey, candidateToken))) {
+        return "token_failure" as const;
+      }
+      if (token) {
+        wroteToken = true;
+      }
+      if (!isCurrentGeneration(generation)) {
+        if (wroteToken) {
+          await restoreToken(tokenKey, previousToken);
+        }
+        return "stale" as const;
+      }
+      const previousOrigin = previousConnection
+        ? tokenStorageKey(previousConnection.endpointUrl)
+        : null;
+      const previousConnectionToken =
+        previousOrigin && previousOrigin !== tokenKey
+          ? await readLocalCompanionToken(previousOrigin)
+          : null;
+      if (!isCurrentGeneration(generation)) {
+        if (wroteToken) {
+          await restoreToken(tokenKey, previousToken);
+        }
+        return "stale" as const;
+      }
+      if (previousOrigin && previousOrigin !== tokenKey) {
+        await clearLocalCompanionToken(previousOrigin);
+        if (!isCurrentGeneration(generation)) {
+          await restoreToken(previousOrigin, previousConnectionToken);
+          if (wroteToken) {
+            await restoreToken(tokenKey, previousToken);
+          }
+          return "stale" as const;
+        }
+      }
+      const connected = await writeCodexBarDashboardConnection(endpoint.value);
+      if (!connected) {
+        if (previousOrigin && previousOrigin !== tokenKey) {
+          await restoreToken(previousOrigin, previousConnectionToken);
+        }
+        if (wroteToken) {
+          await restoreToken(tokenKey, previousToken);
+        }
+        return "token_failure" as const;
+      }
+      if (!isCurrentGeneration(generation)) {
+        await restoreConnection(previousConnection);
+        if (previousOrigin && previousOrigin !== tokenKey) {
+          await restoreToken(previousOrigin, previousConnectionToken);
+        }
+        if (wroteToken) {
+          await restoreToken(tokenKey, previousToken);
+        }
+        return "stale" as const;
+      }
+      return "committed" as const;
+    });
+    if (persisted === "stale" || !isCurrentGeneration(generation)) {
+      const failure = supersededMutationFailure();
+      return { ok: false, state, failure };
+    }
+    if (persisted === "token_failure") {
+      const failure = missingTokenFailure();
+      return { ok: false, state, failure };
+    }
     return {
-      ok: false,
-      state: mergeFailedSnapshot(state, result, now),
-      failure: result,
+      ok: true,
+      state: mergeSuccessfulSnapshot(state, endpoint.value, result.value, now),
+      snapshot: result.value,
     };
-  }
-  if (token && !(await writeLocalCompanionToken(tokenKey, token))) {
-    const failure = missingTokenFailure();
+  } catch {
+    const failure: CodexBarDashboardBridgeFailure = {
+      ok: false,
+      code: "unavailable",
+      message: "CodexBar dashboard settings could not be saved locally.",
+    };
     return { ok: false, state, failure };
+  } finally {
+    finishCodexBarDashboardMutation(generation);
   }
-  if (
-    previousConnection &&
-    tokenStorageKey(previousConnection.endpointUrl) !== tokenKey
-  ) {
-    await clearLocalCompanionToken(
-      tokenStorageKey(previousConnection.endpointUrl),
-    );
-  }
-  await writeCodexBarDashboardConnection(endpoint.value);
-  return {
-    ok: true,
-    state: mergeSuccessfulSnapshot(state, endpoint.value, result.value, now),
-    snapshot: result.value,
-  };
 }
 
 export async function disconnectCodexBarDashboard(state: AppState): Promise<AppState> {
-  const connection = await readCodexBarDashboardConnection();
-  if (connection) {
-    await clearLocalCompanionToken(tokenStorageKey(connection.endpointUrl));
+  const generation = beginCodexBarDashboardMutation();
+  try {
+    const disconnected = await enqueuePersistence(generation, async () => {
+      const connection = await readCodexBarDashboardConnection();
+      if (!isCurrentGeneration(generation)) {
+        return "stale" as const;
+      }
+      if (connection) {
+        await clearLocalCompanionToken(tokenStorageKey(connection.endpointUrl));
+        if (!isCurrentGeneration(generation)) {
+          return "stale" as const;
+        }
+      }
+      await clearCodexBarDashboardConnection();
+      return "committed" as const;
+    });
+    if (disconnected !== "committed" || !isCurrentGeneration(generation)) {
+      return state;
+    }
+    const managedIds = new Set(managedSettings(state).map((source) => source.id));
+    return {
+      ...state,
+      customSources: (state.customSources ?? []).filter(
+        (source) => !isManagedCustomSource(source),
+      ),
+      customSourceStates: (state.customSourceStates ?? []).filter(
+        (entry) => !managedIds.has(entry.sourceId),
+      ),
+    };
+  } finally {
+    finishCodexBarDashboardMutation(generation);
   }
-  await clearCodexBarDashboardConnection();
-  const managedIds = new Set(managedSettings(state).map((source) => source.id));
-  return {
-    ...state,
-    customSources: (state.customSources ?? []).filter(
-      (source) => !isManagedCustomSource(source),
-    ),
-    customSourceStates: (state.customSourceStates ?? []).filter(
-      (entry) => !managedIds.has(entry.sourceId),
-    ),
-  };
 }
 
 export async function clearCodexBarDashboardToken(state: AppState): Promise<AppState> {
-  const connection = await readCodexBarDashboardConnection();
-  if (!connection) {
-    return state;
+  const generation = beginCodexBarDashboardMutation();
+  try {
+    const cleared = await enqueuePersistence(generation, async () => {
+      const connection = await readCodexBarDashboardConnection();
+      if (!isCurrentGeneration(generation)) {
+        return "stale" as const;
+      }
+      if (!connection) {
+        return "missing" as const;
+      }
+      await clearLocalCompanionToken(tokenStorageKey(connection.endpointUrl));
+      return isCurrentGeneration(generation)
+        ? ("committed" as const)
+        : ("stale" as const);
+    });
+    if (cleared !== "committed" || !isCurrentGeneration(generation)) {
+      return state;
+    }
+    return mergeFailedSnapshot(state, missingTokenFailure(), new Date());
+  } finally {
+    finishCodexBarDashboardMutation(generation);
   }
-  await clearLocalCompanionToken(tokenStorageKey(connection.endpointUrl));
-  return mergeFailedSnapshot(state, missingTokenFailure(), new Date());
 }
 
 export function resetCodexBarDashboardInFlightForTests(): void {
   inFlightRequests.clear();
+  codexBarDashboardGeneration = 0;
+  persistenceTail = Promise.resolve();
+  activeMutationGeneration = null;
 }
