@@ -74,10 +74,58 @@ describe("provider usage history normalization", () => {
     ).toBeUndefined();
   });
 
+  it("preserves explicit module capture times and keeps explicit unknown times unknown", () => {
+    const history = normalizeProviderUsageHistory({
+      capturedAt: "2026-07-15T00:00:00.000Z",
+      personalUsageBySurface: {
+        capturedAt: "2026-07-14T12:00:00+09:30",
+        points: [
+          {
+            date: "2026-07-14",
+            values: [{ id: "desktop", label: "Desktop", value: 40 }],
+          },
+        ],
+      },
+      turns: {
+        capturedAt: null,
+        total: 12,
+        byModel: [
+          {
+            date: "2026-07-15",
+            values: [{ id: "gpt", label: "GPT", value: 12 }],
+          },
+        ],
+        bySurface: [],
+      },
+    });
+
+    expect(history?.personalUsageBySurface?.capturedAt).toBe(
+      "2026-07-14T02:30:00.000Z",
+    );
+    expect(history?.turns?.capturedAt).toBeNull();
+
+    const legacyHistory = normalizeProviderUsageHistory({
+      capturedAt: "2026-07-15T00:00:00.000Z",
+      personalUsageBySurface: {
+        points: [
+          {
+            date: "2026-07-15",
+            values: [{ id: "desktop", label: "Desktop", value: 40 }],
+          },
+        ],
+      },
+    });
+
+    expect(legacyHistory?.personalUsageBySurface?.capturedAt).toBe(
+      "2026-07-15T00:00:00.000Z",
+    );
+  });
+
   it("preserves the last valid module when a refresh captures only one endpoint", () => {
     const previous = normalizeProviderUsageHistory({
       capturedAt: "2026-07-14T00:00:00.000Z",
       personalUsageBySurface: {
+        capturedAt: "2026-07-14T00:00:00.000Z",
         points: [
           {
             date: "2026-07-14",
@@ -91,6 +139,7 @@ describe("provider usage history normalization", () => {
       capturedAt: "2026-07-15T00:00:00.000Z",
       personalUsageBySurface: null,
       turns: {
+        capturedAt: "2026-07-15T00:00:00.000Z",
         total: 12,
         byModel: [
           {
@@ -109,9 +158,11 @@ describe("provider usage history normalization", () => {
       rangeStart: "2026-07-14",
       rangeEnd: "2026-07-15",
       personalUsageBySurface: {
+        capturedAt: "2026-07-14T00:00:00.000Z",
         points: [{ date: "2026-07-14" }],
       },
       turns: {
+        capturedAt: "2026-07-15T00:00:00.000Z",
         total: 12,
         byModel: [{ date: "2026-07-15" }],
       },

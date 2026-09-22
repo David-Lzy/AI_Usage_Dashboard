@@ -43,6 +43,8 @@ describe("Codex usage history parser", () => {
       { id: "vscode", label: "Extension", value: 35 },
       { id: "exec", label: "Exec", value: 13 },
     ]);
+    expect(history?.personalUsageBySurface?.capturedAt).toBe(source.capturedAt);
+    expect(history?.turns?.capturedAt).toBe(source.capturedAt);
   });
 
   it("keeps a missing delayed endpoint as a null module instead of fake empty data", () => {
@@ -57,5 +59,25 @@ describe("Codex usage history parser", () => {
 
     expect(history?.personalUsageBySurface).toBeNull();
     expect(history?.turns?.byModel).not.toHaveLength(0);
+  });
+
+  it("uses supplied module capture times, including explicit unknown values", () => {
+    const source = fixture as CodexUsageHistoryContractFixture;
+    const history = parseCodexUsageHistory(
+      {
+        dailyTokenUsageBreakdown: source.dailyTokenUsageBreakdown,
+        dailyWorkspaceUsageCounts: source.dailyWorkspaceUsageCounts,
+      },
+      source.capturedAt,
+      {
+        personalUsageBySurface: "2026-06-16T12:00:00+09:30",
+        turns: null,
+      },
+    );
+
+    expect(history?.personalUsageBySurface?.capturedAt).toBe(
+      "2026-06-16T02:30:00.000Z",
+    );
+    expect(history?.turns?.capturedAt).toBeNull();
   });
 });

@@ -13,6 +13,7 @@ import {
   captureCodexPersonalLiveFixture,
   type CodexPersonalLiveFixture,
   type CodexPersonalRouteCapture,
+  type CodexUsageHistoryCaptureTimes,
 } from "./personal-page-capture";
 import type { CodexObservedUsageHistoryContract } from "./usage-history-contract";
 import {
@@ -125,6 +126,69 @@ function mergeUsageHistoryContract(
   };
 }
 
+function resolveUsageHistoryCaptureTime(
+  route: CodexPersonalRouteCapture | undefined,
+  fixtureCapturedAt: string,
+  module: keyof CodexUsageHistoryCaptureTimes,
+): string | null | undefined {
+  const isObserved =
+    module === "personalUsageBySurface"
+      ? Boolean(route?.usageHistoryContract?.dailyTokenUsageBreakdown)
+      : Boolean(route?.usageHistoryContract?.dailyWorkspaceUsageCounts);
+
+  if (!isObserved) {
+    return undefined;
+  }
+
+  if (
+    route?.usageHistoryCaptureTimes &&
+    Object.prototype.hasOwnProperty.call(route.usageHistoryCaptureTimes, module)
+  ) {
+    return route.usageHistoryCaptureTimes[module] ?? null;
+  }
+
+  return fixtureCapturedAt;
+}
+
+function mergeUsageHistoryCaptureTimes(
+  currentRoute: CodexPersonalRouteCapture,
+  currentCapturedAt: string,
+  previousRoute: CodexPersonalRouteCapture | undefined,
+  previousCapturedAt: string,
+): CodexUsageHistoryCaptureTimes | undefined {
+  const currentPersonalUsageBySurface = resolveUsageHistoryCaptureTime(
+    currentRoute,
+    currentCapturedAt,
+    "personalUsageBySurface",
+  );
+  const currentTurns = resolveUsageHistoryCaptureTime(
+    currentRoute,
+    currentCapturedAt,
+    "turns",
+  );
+  const personalUsageBySurface =
+    currentPersonalUsageBySurface !== undefined
+      ? currentPersonalUsageBySurface
+      : resolveUsageHistoryCaptureTime(
+          previousRoute,
+          previousCapturedAt,
+          "personalUsageBySurface",
+        );
+  const turns =
+    currentTurns !== undefined
+      ? currentTurns
+      : resolveUsageHistoryCaptureTime(previousRoute, previousCapturedAt, "turns");
+
+  return personalUsageBySurface !== undefined || turns !== undefined
+    ? {
+        ...(personalUsageBySurface !== undefined
+          ? { personalUsageBySurface }
+          : {}),
+        ...(turns !== undefined ? { turns } : {}),
+      }
+    : undefined;
+}
+
 function retainObservedUsageHistory(
   current: CodexPersonalLiveFixture,
   previous: CodexPersonalLiveFixture,
@@ -135,13 +199,23 @@ function retainObservedUsageHistory(
 
   return {
     ...current,
-    routes: current.routes.map((route) => ({
-      ...route,
-      usageHistoryContract: mergeUsageHistoryContract(
-        route.usageHistoryContract,
-        previousRoutes.get(route.routeKey)?.usageHistoryContract,
-      ),
-    })),
+    routes: current.routes.map((route) => {
+      const previousRoute = previousRoutes.get(route.routeKey);
+
+      return {
+        ...route,
+        usageHistoryContract: mergeUsageHistoryContract(
+          route.usageHistoryContract,
+          previousRoute?.usageHistoryContract,
+        ),
+        usageHistoryCaptureTimes: mergeUsageHistoryCaptureTimes(
+          route,
+          current.capturedAt,
+          previousRoute,
+          previous.capturedAt,
+        ),
+      };
+    }),
   };
 }
 

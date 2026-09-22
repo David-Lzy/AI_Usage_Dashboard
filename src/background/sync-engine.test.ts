@@ -30,6 +30,7 @@ function buildStateWithProvider(
         tone: "neutral",
         warningReason: null,
         syncedAt: STALE_SYNCED_AT,
+        lastSuccessAt: STALE_SYNCED_AT,
         lastSyncLabel: "Synced 4h ago",
         ...overrides,
       },
@@ -83,7 +84,7 @@ describe("sync engine health reconciliation", () => {
 
     expect(snapshot.syncStatus).toBe("error");
     expect(snapshot.tone).toBe("error");
-    expect(snapshot.lastSyncLabel).toBe("Last failed sync 4h ago");
+    expect(snapshot.lastSyncLabel).toBe("Cached snapshot stale by 4h");
     expect(snapshot.warningReason).toBe(
       "Automatic sync is overdue; cached state may be stale.",
     );

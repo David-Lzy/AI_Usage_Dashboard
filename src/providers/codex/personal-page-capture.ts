@@ -3,9 +3,12 @@ import {
   type PageSessionCapturedPage,
   type PageSessionBinding,
   type PageSessionClient,
+  type PageSessionObservedNetworkEntry,
   type PageSessionResult,
 } from "../page-session";
 import {
+  CODEX_DAILY_TOKEN_USAGE_PATH,
+  CODEX_DAILY_WORKSPACE_USAGE_PATH,
   CODEX_USAGE_HISTORY_PATHS,
   extractCodexObservedUsageHistoryContract,
   type CodexObservedUsageHistoryContract,
@@ -41,6 +44,11 @@ export type CodexPersonalPageSummary = {
   };
 };
 
+export type CodexUsageHistoryCaptureTimes = {
+  personalUsageBySurface?: string | null;
+  turns?: string | null;
+};
+
 export type CodexPersonalRouteCapture = {
   routeKey: CodexPersonalRouteKey;
   pageLabel: string;
@@ -51,6 +59,7 @@ export type CodexPersonalRouteCapture = {
   matchedTitle: string | null;
   summary: CodexPersonalPageSummary | null;
   usageHistoryContract?: CodexObservedUsageHistoryContract | null;
+  usageHistoryCaptureTimes?: CodexUsageHistoryCaptureTimes;
 };
 
 export type CodexPersonalLiveFixture = {
@@ -205,6 +214,52 @@ function chooseRecommendedSurface(
   return "network_observer";
 }
 
+function extractUsageHistoryCaptureTimes(
+  entries: readonly PageSessionObservedNetworkEntry[] | undefined,
+  contract: CodexObservedUsageHistoryContract | null,
+): CodexUsageHistoryCaptureTimes | undefined {
+  if (!contract) {
+    return undefined;
+  }
+
+  const resolveCapturedAt = (
+    path: string,
+    module: keyof CodexObservedUsageHistoryContract,
+  ): string | null => {
+    for (const entry of entries ?? []) {
+      if (!entry.url.includes(path)) {
+        continue;
+      }
+
+      const entryContract = extractCodexObservedUsageHistoryContract([entry]);
+      if (entryContract?.[module]) {
+        return entry.capturedAt;
+      }
+    }
+
+    return null;
+  };
+
+  return {
+    ...(contract.dailyTokenUsageBreakdown
+      ? {
+          personalUsageBySurface: resolveCapturedAt(
+            CODEX_DAILY_TOKEN_USAGE_PATH,
+            "dailyTokenUsageBreakdown",
+          ),
+        }
+      : {}),
+    ...(contract.dailyWorkspaceUsageCounts
+      ? {
+          turns: resolveCapturedAt(
+            CODEX_DAILY_WORKSPACE_USAGE_PATH,
+            "dailyWorkspaceUsageCounts",
+          ),
+        }
+      : {}),
+  };
+}
+
 export function summarizeCodexPersonalPage(
   page: PageSessionCapturedPage,
 ): CodexPersonalPageSummary {
@@ -308,6 +363,10 @@ async function captureRoute(
     };
   }
 
+  const usageHistoryContract = extractCodexObservedUsageHistoryContract(
+    result.page.observedNetwork?.entries,
+  );
+
   return {
     routeKey: route.routeKey,
     pageLabel: route.pageLabel,
@@ -317,8 +376,10 @@ async function captureRoute(
     matchedUrl: result.page.url,
     matchedTitle: result.page.title,
     summary: summarizeCodexPersonalPage(result.page),
-    usageHistoryContract: extractCodexObservedUsageHistoryContract(
+    usageHistoryContract,
+    usageHistoryCaptureTimes: extractUsageHistoryCaptureTimes(
       result.page.observedNetwork?.entries,
+      usageHistoryContract,
     ),
   };
 }

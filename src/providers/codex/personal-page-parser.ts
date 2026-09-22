@@ -36,6 +36,7 @@ export type CodexPersonalUsageBalance = {
 };
 
 export type CodexPersonalUsageSnapshot = {
+  capturedAt?: string | null;
   providerId: "codex-personal-page";
   providerLabel: "Codex";
   measurementKind: "window_percent";
@@ -582,6 +583,7 @@ export function parseCodexPersonalLiveFixture(
     return {
       status: "ok",
       snapshot: {
+        capturedAt: fixture.capturedAt,
         providerId: "codex-personal-page",
         providerLabel: "Codex",
         measurementKind: "window_percent",
@@ -594,6 +596,7 @@ export function parseCodexPersonalLiveFixture(
         usageHistory: parseCodexUsageHistory(
           matchedRoute.usageHistoryContract,
           fixture.capturedAt,
+          matchedRoute.usageHistoryCaptureTimes,
         ),
         note:
           "Personal Codex session-page data currently exposes exact remaining percentages, reset timestamps, and optional flex credit balance cards for visible usage context, not one absolute workspace-wide remaining limit.",

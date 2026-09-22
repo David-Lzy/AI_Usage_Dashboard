@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ProviderSecrets, ProviderSetting, ProviderSnapshot } from "../types";
 import { createEmptyPageBinding } from "../../shared/page-bindings";
 import type { CodexPersonalParseResult } from "./personal-page-parser";
+import { buildQuotaPaceForecast } from "../../shared/quota-pace";
 
 const { createCodexAnalyticsClientMock, createCodexPersonalPageClientMock } =
   vi.hoisted(() => ({
@@ -101,6 +102,41 @@ describe("syncCodexProvider", () => {
   beforeEach(() => {
     createCodexAnalyticsClientMock.mockReset();
     createCodexPersonalPageClientMock.mockReset();
+  });
+
+  it("keeps failed refreshes of old quotas unavailable to pace predictions", async () => {
+    const now = new Date("2026-09-22T12:00:00Z");
+    const previous: ProviderSnapshot = {
+      ...baseProvider,
+      lastSuccessAt: "2026-09-22T10:00:00.000Z",
+      usageWindows: [{ label: "Weekly", normalizedLabel: "weekly", kind: "weekly", modelLabel: null,
+        quotaUnit: "percent", used: 50, remaining: 50, total: 100,
+        resetAt: "2026-09-26T00:00:00Z", resetLabel: "Weekly reset" }],
+    };
+    const { snapshot } = await syncCodexProvider({ provider: previous, secrets: emptySecrets,
+      setting: { ...grantedSetting, status: "missing" }, warningThresholdPercent: 80, now });
+    expect(snapshot).toMatchObject({ lastAttemptAt: now.toISOString(), lastSuccessAt: previous.lastSuccessAt });
+    expect(snapshot.usageWindows).toEqual(previous.usageWindows);
+    expect(buildQuotaPaceForecast(snapshot.usageWindows![0], snapshot.lastSuccessAt, now)).toEqual({
+      status: "unavailable", reason: "stale_snapshot",
+    });
+  });
+
+  it("uses source capture time for a newly acquired quota warning", async () => {
+    const now = new Date("2026-09-22T12:00:00Z");
+    const window = { label: "Weekly", normalizedLabel: "weekly", kind: "weekly" as const, modelLabel: null,
+      usedPercent: 95, remainingPercent: 5, totalPercent: 100,
+      resetAt: "2026-09-26T00:00:00Z", resetText: "Weekly reset" };
+    createCodexPersonalPageClientMock.mockReturnValue({ getUsageSnapshot: async () => buildCodexPersonalPageResponse({
+      status: "ok", snapshot: { capturedAt: "2026-09-22T11:55:00Z", providerId: "codex-personal-page",
+        providerLabel: "Codex", measurementKind: "window_percent", routeKey: "cloud_analytics",
+        sourceUrl: "https://chatgpt.com/codex/cloud/settings/analytics", sourceHeading: "Usage",
+        primaryWindow: window, windows: [window], balances: [], note: "Synthetic capture" },
+    }) });
+    const { snapshot } = await syncCodexProvider({ provider: baseProvider, secrets: emptySecrets,
+      setting: grantedSetting, warningThresholdPercent: 80, now });
+    expect(snapshot).toMatchObject({ syncStatus: "warning", lastAttemptAt: now.toISOString(),
+      lastSuccessAt: "2026-09-22T11:55:00.000Z" });
   });
 
   it("uses the personal usage-page path when analytics config is absent", async () => {

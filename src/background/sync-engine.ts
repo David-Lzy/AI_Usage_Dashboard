@@ -32,6 +32,7 @@ import {
 } from "./codexbar-dashboard-sync";
 import { syncProviderServiceStatuses } from "./provider-service-status-sync";
 import { mergeBackgroundSyncState } from "./background-state-merge";
+import { normalizeSnapshotTimestamp } from "../shared/snapshot-freshness";
 
 const STALE_MULTIPLIER = 2;
 const MIN_STALE_MINUTES = 60;
@@ -57,15 +58,6 @@ type ActiveProviderAdapterRun = {
   trigger: SyncTrigger;
   identity: ProviderSyncIdentity;
 };
-
-function parseTimestamp(rawValue: string): Date | null {
-  const normalizedValue = rawValue.includes("T")
-    ? rawValue
-    : rawValue.replace(" ", "T");
-  const parsedValue = new Date(normalizedValue);
-
-  return Number.isNaN(parsedValue.getTime()) ? null : parsedValue;
-}
 
 function formatAge(minutes: number): string {
   if (minutes < 60) {
@@ -111,7 +103,8 @@ function markProviderStale(
   syncIntervalMinutes: number,
   now: Date,
 ): ProviderSnapshot {
-  const parsedTimestamp = parseTimestamp(provider.syncedAt);
+  const captureTime = normalizeSnapshotTimestamp(provider.lastSuccessAt);
+  const parsedTimestamp = captureTime ? new Date(captureTime) : null;
 
   if (!parsedTimestamp) {
     return provider;
@@ -146,7 +139,7 @@ function markProviderStale(
 
     return {
       ...provider,
-      lastSyncLabel: `Last failed sync ${formatAge(ageMinutes)} ago`,
+      lastSyncLabel: `Cached snapshot stale by ${formatAge(ageMinutes)}`,
       warningReason,
       ...(warningDiagnostic !== undefined ? { warningDiagnostic } : {}),
       tone: "error",

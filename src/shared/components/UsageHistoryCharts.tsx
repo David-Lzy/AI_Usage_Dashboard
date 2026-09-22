@@ -730,6 +730,10 @@ export function UsageHistoryDetail({
     useState<UsageHistoryRangeDays>(31);
   const [turnsDays, setTurnsDays] = useState<UsageHistoryRangeDays>(31);
   const [grouping, setGrouping] = useState<"model" | "surface">("model");
+  const personalCapturedAt = history.personalUsageBySurface?.capturedAt === undefined
+    ? history.capturedAt : history.personalUsageBySurface.capturedAt;
+  const turnsCapturedAt = history.turns?.capturedAt === undefined
+    ? history.capturedAt : history.turns.capturedAt;
   const personalPoints = useMemo(
     () =>
       localizeSurfacePoints(
@@ -769,11 +773,6 @@ export function UsageHistoryDetail({
 
   return (
     <section className="usage-history-detail" aria-label={`${copy.personalUsage}, ${copy.turns}`}>
-      <header className="usage-history-detail__toolbar">
-        <p className="supporting-copy">
-          {copy.capturedAt}: {formatCapturedAt(history.capturedAt)}
-        </p>
-      </header>
       {moduleOrder.map((moduleId) =>
         moduleId === "personal_usage_by_surface" ? (
           <section key={moduleId} className="usage-history-detail__module">
@@ -788,6 +787,11 @@ export function UsageHistoryDetail({
                 />
               ) : null}
             </header>
+            {personalData.dates.length > 0 && personalCapturedAt ? (
+              <p className="supporting-copy">
+                {copy.capturedAt}: <time dateTime={personalCapturedAt}>{formatCapturedAt(personalCapturedAt)}</time>
+              </p>
+            ) : null}
             {personalData.dates.length ? (
               <>
                 <UsageHistorySvg
@@ -833,6 +837,11 @@ export function UsageHistoryDetail({
                 />
               </div>
             </header>
+            {turnsData.dates.length > 0 && turnsCapturedAt ? (
+              <p className="supporting-copy">
+                {copy.capturedAt}: <time dateTime={turnsCapturedAt}>{formatCapturedAt(turnsCapturedAt)}</time>
+              </p>
+            ) : null}
             {turnsData.dates.length ? (
               <>
                 <UsageHistoryChartFrame

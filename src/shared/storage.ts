@@ -85,6 +85,7 @@ import { normalizeProviderUsageHistory } from "./provider-usage-history";
 import { normalizeUsageHistoryModulesBySurface } from "./usage-history-visibility";
 import { normalizeCursorUsageBilling } from "./cursor-usage-billing";
 import { normalizeApiGatewayMeteringSnapshot } from "./api-gateway-metering";
+import { normalizeSnapshotFreshness } from "./snapshot-freshness";
 import { normalizeResetTimeDisplayMode } from "./reset-time-display";
 import {
   normalizeProviderServiceStatuses,
@@ -252,12 +253,12 @@ export function normalizeAppState(state: AppState): AppState {
       ...providerWithoutUsageExtensions
     } = provider;
 
-    return {
+    return normalizeSnapshotFreshness({
       ...providerWithoutUsageExtensions,
       ...(usageHistory ? { usageHistory } : {}),
       ...(cursorUsage ? { cursorUsage } : {}),
       ...(apiGatewayMetering ? { apiGatewayMetering } : {}),
-    };
+    });
   });
 
   const providerSettings = DEFAULT_APP_STATE.providerSettings.map(

@@ -59,12 +59,14 @@ function isolateRecoveryTargets(state: AppState) {
     ...provider,
     syncSource: "page_parse",
     syncedAt: "2026-04-23 13:20",
+    lastSuccessAt: "2026-04-23T13:20:00.000Z",
     lastSyncLabel: "Synced 1m ago",
   }));
   updateProvider(state, "codex-personal-page", (provider) => ({
     ...provider,
     syncSource: "page_parse",
     syncedAt: "2026-04-23 13:20",
+    lastSuccessAt: "2026-04-23T13:20:00.000Z",
     lastSyncLabel: "Synced 1m ago",
   }));
 }

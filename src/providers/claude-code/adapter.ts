@@ -37,6 +37,7 @@ import {
   providerSourceStrategyRunner,
   type ProviderSourceAttempt,
 } from "../provider-source-strategy";
+import { withSnapshotFreshness } from "../../shared/snapshot-freshness";
 import type {
   ClaudePersonalUsageFact,
   ClaudePersonalUsageWindow,
@@ -583,7 +584,7 @@ async function tryClaudePersonalSource({
         trigger,
       }),
     });
-    const { result, pageBinding } = await client.getUsageSnapshot(
+    const { result, pageBinding, capturedAt } = await client.getUsageSnapshot(
       setting.pageBinding,
     );
     const nextSetting: ProviderSetting = {
@@ -727,6 +728,7 @@ async function tryClaudePersonalSource({
           result.snapshot.windows,
           result.snapshot.facts,
         ),
+        lastSuccessAt: capturedAt ?? null,
         lastSyncLabel: buildClaudePersonalRefreshLabel(personalSource),
       },
       setting: nextSetting,
@@ -823,12 +825,21 @@ export async function syncClaudeCodeProvider({
   const attempt = strategyResult.attempt;
 
   if (attempt?.ok) {
+    const snapshot = finalizeClaudeSnapshot(
+      attempt.snapshot,
+      sourcePreference,
+      attempt.kind,
+      null,
+    );
+
     return {
-      snapshot: finalizeClaudeSnapshot(
-        attempt.snapshot,
-        sourcePreference,
-        attempt.kind,
-        null,
+      snapshot: withSnapshotFreshness(
+        provider,
+        snapshot,
+        now,
+        attempt.kind === "official_api"
+          ? now.toISOString()
+          : attempt.snapshot.lastSuccessAt,
       ),
       ...(attempt.setting ? { setting: attempt.setting } : {}),
     };
@@ -854,11 +865,17 @@ export async function syncClaudeCodeProvider({
           resetLabel: "Retry the bounded Claude source refresh",
         };
 
+  const snapshot = finalizeClaudeNoSourceSnapshot(
+    failureSnapshot,
+    sourcePreference,
+    failures,
+  );
+
   return {
-    snapshot: finalizeClaudeNoSourceSnapshot(
-      failureSnapshot,
-      sourcePreference,
-      failures,
+    snapshot: withSnapshotFreshness(
+      provider,
+      snapshot,
+      now,
     ),
     ...(attempt && !attempt.ok && attempt.setting
       ? { setting: attempt.setting }

@@ -150,11 +150,15 @@ describe("syncClaudeCodeProvider", () => {
             note: "Visible page context only.",
           },
         },
+        capturedAt: null,
         pageBinding: createEmptyPageBinding(),
       })),
     });
     const { snapshot } = await syncClaudeCodeProvider({
-      provider: baseProvider,
+      provider: {
+        ...baseProvider,
+        lastSuccessAt: "2026-04-19T04:48:00.000Z",
+      },
       secrets: emptySecrets,
       setting: grantedSetting,
       warningThresholdPercent: 80,
@@ -168,6 +172,8 @@ describe("syncClaudeCodeProvider", () => {
       "Claude Pro (Weekly usage window)",
     );
     expect(snapshot.remaining).toBe(42);
+    expect(snapshot.lastAttemptAt).toBe(attemptedAt.toISOString());
+    expect(snapshot.lastSuccessAt).toBeNull();
     expect(snapshot.sourceSelectionReason).toBe(
       "Session page is the only shipped source for claude-code-team-page.",
     );
@@ -310,6 +316,8 @@ describe("syncClaudeCodeProvider", () => {
     );
     expect(snapshot.lastSyncLabel).toBe("Claude Code Analytics API synced just now");
     expect(snapshot.syncedAt).toBe("2026-04-20 12:34");
+    expect(snapshot.lastAttemptAt).toBe(attemptedAt.toISOString());
+    expect(snapshot.lastSuccessAt).toBe(attemptedAt.toISOString());
     expect(createClaudeCodeAnalyticsClientMock).toHaveBeenCalledWith({
       source: "live",
       apiKey: "sk-ant-admin-test",
@@ -326,7 +334,10 @@ describe("syncClaudeCodeProvider", () => {
     });
 
     const { snapshot } = await syncClaudeCodeProvider({
-      provider: adminProvider,
+      provider: {
+        ...adminProvider,
+        lastSuccessAt: "2026-04-19T04:48:00.000Z",
+      },
       secrets: {
         ...emptySecrets,
         "claude-code-admin-api": {
@@ -357,6 +368,8 @@ describe("syncClaudeCodeProvider", () => {
       },
     });
     expect(snapshot.lastSyncLabel).toBe("Claude analytics sync failed just now");
+    expect(snapshot.lastAttemptAt).toBe(attemptedAt.toISOString());
+    expect(snapshot.lastSuccessAt).toBe("2026-04-19T04:48:00.000Z");
   });
 
   it("returns a readable host-access message when Claude access is missing", async () => {
@@ -377,5 +390,7 @@ describe("syncClaudeCodeProvider", () => {
     expect(snapshot.warningReason).toContain("Host access missing");
     expect(snapshot.warningReason).toContain("api.anthropic.com");
     expect(snapshot.lastSyncLabel).toBe("Claude Admin API access required");
+    expect(snapshot.lastAttemptAt).toBe(attemptedAt.toISOString());
+    expect(snapshot.lastSuccessAt).toBeNull();
   });
 });

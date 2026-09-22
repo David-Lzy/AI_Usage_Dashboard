@@ -69,6 +69,20 @@ describe("provider accounts", () => {
     ).toBe("account_12345678-1234-1234-1234-123456789abc");
   });
 
+  it("does not promote legacy inactive attempt times to successful captures", () => {
+    const initial = createTestState();
+    const snapshot = initial.providers.find((provider) => provider.providerId === TEST_PROVIDER_ID)!;
+    const setting = initial.providerSettings.find((entry) => entry.id === TEST_PROVIDER_ID)!;
+    const state = addInactiveProviderAccount(initial, {
+      providerId: TEST_PROVIDER_ID, accountId: TEST_ACCOUNT_ID, label: "Other",
+      snapshot: { ...snapshot, syncedAt: "2026-09-22T12:00:00Z", syncStatus: "ok", lastSuccessAt: undefined },
+      setting,
+    }, supportsTestProvider);
+    const collection = normalizeProviderAccounts(state.providers, state.providerAccounts, supportsTestProvider)[TEST_PROVIDER_ID]!;
+    expect(collection.inactiveAccounts[TEST_ACCOUNT_ID].snapshot.lastSuccessAt).toBeNull();
+    expect(collection.accounts.find((account) => account.id === TEST_ACCOUNT_ID)?.lastSuccessAt).toBeNull();
+  });
+
   it("switches the active projection without combining account quotas", () => {
     const initial = createTestState();
     const currentSnapshot = initial.providers.find(

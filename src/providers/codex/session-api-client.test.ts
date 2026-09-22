@@ -108,6 +108,97 @@ function responseForUrl(url: string): Response {
 }
 
 describe("createCodexSessionApiClient", () => {
+  it("does not attribute old-account sibling responses to a renewed account", async () => {
+    const changedAccount = { ...credentialTwo, accountId: "account-two" };
+    const getCredential = vi.fn()
+      .mockResolvedValueOnce({ ok: true, credential: credentialOne })
+      .mockResolvedValue({ ok: true, credential: changedAccount });
+    const client = createCodexSessionApiClient({
+      credentialBroker: createBroker(getCredential),
+      now: () => Date.parse("2026-09-22T12:00:00Z"),
+      fetchImpl: async (url, init) => {
+        if (url.endsWith(CODEX_SESSION_USAGE_PATH)
+            && (init?.headers as Record<string, string>)["ChatGPT-Account-Id"] === "account-one") {
+          return jsonResponse({}, { status: 401 });
+        }
+        return responseForUrl(url);
+      },
+    });
+    const result = await client.getUsageSnapshot("manual");
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.result.snapshot.usageHistory).toBeUndefined();
+    expect(result.result.snapshot.capturedAt).toBe("2026-09-22T12:00:00.000Z");
+    expect(JSON.stringify(result)).not.toContain("account-one");
+    expect(JSON.stringify(result)).not.toContain("session-token");
+  });
+
+  it("keeps two-hour-old quota capture time when only history refresh succeeds", async () => {
+    let currentTime = Date.parse("2026-09-22T10:00:00Z");
+    let failQuota = false;
+    const client = createCodexSessionApiClient({
+      credentialBroker: createBroker(), now: () => currentTime,
+      fetchImpl: async (url) => failQuota && url.endsWith(CODEX_SESSION_USAGE_PATH)
+        ? jsonResponse({}, { status: 503 })
+        : responseForUrl(url),
+    });
+    await client.getUsageSnapshot("manual");
+    currentTime += 2 * 60 * 60_000;
+    failQuota = true;
+    const result = await client.getUsageSnapshot("manual");
+    expect(result).toMatchObject({ ok: true, result: { snapshot: {
+      capturedAt: "2026-09-22T10:00:00.000Z",
+      usageHistory: {
+        personalUsageBySurface: { capturedAt: "2026-09-22T12:00:00.000Z" },
+        turns: { capturedAt: "2026-09-22T12:00:00.000Z" },
+      },
+    } } });
+  });
+
+  it("does not refresh cached history timestamps when quota alone succeeds", async () => {
+    let currentTime = Date.parse("2026-09-22T10:00:00Z");
+    let failHistory = false;
+    const client = createCodexSessionApiClient({
+      credentialBroker: createBroker(), now: () => currentTime,
+      fetchImpl: async (url) => failHistory && !url.endsWith(CODEX_SESSION_USAGE_PATH)
+        ? jsonResponse({}, { status: 503 })
+        : responseForUrl(url),
+    });
+    await client.getUsageSnapshot("manual");
+    currentTime += 2 * 60 * 60_000;
+    failHistory = true;
+    const result = await client.getUsageSnapshot("manual");
+    expect(result).toMatchObject({ ok: true, result: { snapshot: {
+      capturedAt: "2026-09-22T12:00:00.000Z",
+      usageHistory: {
+        capturedAt: "2026-09-22T10:00:00.000Z",
+        personalUsageBySurface: { capturedAt: "2026-09-22T10:00:00.000Z" },
+        turns: { capturedAt: "2026-09-22T10:00:00.000Z" },
+      },
+    } } });
+  });
+
+  it("keeps timestamps separate when one history endpoint fails", async () => {
+    let currentTime = Date.parse("2026-09-22T10:00:00Z");
+    let failTurns = false;
+    const client = createCodexSessionApiClient({
+      credentialBroker: createBroker(), now: () => currentTime,
+      fetchImpl: async (url) => failTurns && url.endsWith(CODEX_DAILY_WORKSPACE_USAGE_PATH)
+        ? jsonResponse({}, { status: 503 })
+        : responseForUrl(url),
+    });
+    await client.getUsageSnapshot("manual");
+    currentTime += 2 * 60 * 60_000;
+    failTurns = true;
+    const result = await client.getUsageSnapshot("manual");
+    expect(result).toMatchObject({ ok: true, result: { snapshot: {
+      usageHistory: {
+        personalUsageBySurface: { capturedAt: "2026-09-22T12:00:00.000Z" },
+        turns: { capturedAt: "2026-09-22T10:00:00.000Z" },
+      },
+    } } });
+  });
+
   it("coalesces concurrent surface refreshes into one quota and history request set", async () => {
     const fetchImpl = vi.fn(async (url: string) => responseForUrl(url));
     const client = createCodexSessionApiClient({

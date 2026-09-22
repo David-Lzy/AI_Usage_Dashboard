@@ -97,9 +97,28 @@ function buildTurnsBySurfacePoints(
   }));
 }
 
+function resolveModuleCapturedAt(
+  captureTimes:
+    | {
+        personalUsageBySurface?: string | null;
+        turns?: string | null;
+      }
+    | undefined,
+  module: "personalUsageBySurface" | "turns",
+  capturedAt: string,
+): string | null {
+  return captureTimes && Object.prototype.hasOwnProperty.call(captureTimes, module)
+    ? captureTimes[module] ?? null
+    : capturedAt;
+}
+
 export function parseCodexUsageHistory(
   contract: CodexObservedUsageHistoryContract | null | undefined,
   capturedAt: string,
+  captureTimes?: {
+    personalUsageBySurface?: string | null;
+    turns?: string | null;
+  },
 ): ProviderUsageHistory | undefined {
   if (!contract) {
     return undefined;
@@ -121,10 +140,24 @@ export function parseCodexUsageHistory(
   return normalizeProviderUsageHistory({
     capturedAt,
     personalUsageBySurface:
-      personalPoints.length > 0 ? { points: personalPoints } : null,
+      personalPoints.length > 0
+        ? {
+            capturedAt: resolveModuleCapturedAt(
+              captureTimes,
+              "personalUsageBySurface",
+              capturedAt,
+            ),
+            points: personalPoints,
+          }
+        : null,
     turns:
       byModel.length > 0 || bySurface.length > 0
-        ? { total, byModel, bySurface }
+        ? {
+            capturedAt: resolveModuleCapturedAt(captureTimes, "turns", capturedAt),
+            total,
+            byModel,
+            bySurface,
+          }
         : null,
   });
 }

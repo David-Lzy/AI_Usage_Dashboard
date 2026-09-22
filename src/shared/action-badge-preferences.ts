@@ -151,7 +151,7 @@ function buildProviderRemainingCandidate(
     quotaUnit: provider.quotaUnit,
     total: provider.total,
     resetLabel: provider.resetLabel || provider.resetAt || null,
-    syncedAt: provider.syncedAt,
+    syncedAt: provider.lastSuccessAt ?? "",
     usageSummary: provider.usageSummary ?? null,
     warningReason: provider.warningReason,
   };
@@ -186,7 +186,7 @@ function buildUsageWindowCandidate(
     quotaUnit: usageWindow.quotaUnit,
     total: usageWindow.total,
     resetLabel: usageWindow.resetLabel ?? usageWindow.resetAt ?? null,
-    syncedAt: provider.syncedAt,
+    syncedAt: provider.lastSuccessAt ?? "",
     usageSummary: provider.usageSummary ?? null,
     warningReason: provider.warningReason,
   };
@@ -220,7 +220,7 @@ function buildUsageBalanceCandidate(
     quotaUnit: usageBalance.quotaUnit,
     total: usageBalance.total,
     resetLabel: usageBalance.detail,
-    syncedAt: provider.syncedAt,
+    syncedAt: provider.lastSuccessAt ?? "",
     usageSummary: provider.usageSummary ?? null,
     warningReason: provider.warningReason,
   };

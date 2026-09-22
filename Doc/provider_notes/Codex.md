@@ -602,6 +602,14 @@ This section supersedes the older page-first timing assumptions above. Page
 hydration remains a compatibility fallback, but it is no longer the primary
 current-quota transport when local session authentication succeeds.
 
+Unreleased work-branch freshness correction: current quota and each history
+module now retain the time of their own successful response. Cached quota
+fallback, a failed page refresh, or a fresh history response cannot advance the
+quota capture time. Partial history refreshes and page hydration retries retain
+the original time of a reused module. The legacy `syncedAt` display value is not
+used as capture provenance; older stored quotas without an explicit success
+time have unknown freshness and do not produce a pace forecast.
+
 ## 25. 2026-07-17 Background Session Discovery
 
 The credential-discovery step no longer requires a live ChatGPT renderer in the

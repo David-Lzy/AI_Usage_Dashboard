@@ -42,6 +42,7 @@ import {
   buildCursorUsageBillingFromContract,
   mergeCursorUsageBilling,
 } from "../../shared/cursor-usage-billing";
+import { withSnapshotFreshness } from "../../shared/snapshot-freshness";
 
 type CursorAdapterContext = {
   provider: ProviderSnapshot;
@@ -604,6 +605,7 @@ async function tryCursorPersonalSource({
         usageFacts,
         usageSummary,
         ...(cursorUsage ? { cursorUsage } : {}),
+        lastSuccessAt: snapshot.capturedAt ?? null,
         lastSyncLabel: buildCursorPersonalRefreshLabel(captureSource),
       },
       setting: nextSetting,
@@ -697,12 +699,21 @@ export async function syncCursorProvider({
   const attempt = strategyResult.attempt;
 
   if (attempt?.ok) {
+    const snapshot = finalizeCursorSnapshot(
+      attempt.snapshot,
+      sourcePreference,
+      attempt.kind,
+      null,
+    );
+
     return {
-      snapshot: finalizeCursorSnapshot(
-        attempt.snapshot,
-        sourcePreference,
-        attempt.kind,
-        null,
+      snapshot: withSnapshotFreshness(
+        provider,
+        snapshot,
+        now,
+        attempt.kind === "official_api"
+          ? now.toISOString()
+          : attempt.snapshot.lastSuccessAt,
       ),
       ...(attempt.setting ? { setting: attempt.setting } : {}),
     };
@@ -728,11 +739,17 @@ export async function syncCursorProvider({
           resetLabel: "Retry the bounded Cursor source refresh",
         };
 
+  const snapshot = finalizeCursorNoSourceSnapshot(
+    failureSnapshot,
+    sourcePreference,
+    failures,
+  );
+
   return {
-    snapshot: finalizeCursorNoSourceSnapshot(
-      failureSnapshot,
-      sourcePreference,
-      failures,
+    snapshot: withSnapshotFreshness(
+      provider,
+      snapshot,
+      now,
     ),
     ...(attempt && !attempt.ok && attempt.setting
       ? { setting: attempt.setting }

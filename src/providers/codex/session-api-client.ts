@@ -94,7 +94,7 @@ type RequestFailure = {
   retryAt: number | null;
 };
 
-type RequestSuccess<T> = { ok: true; value: T };
+type RequestSuccess<T> = { ok: true; value: T; capturedAt: number; credentialKey: string };
 type RequestResult<T> = RequestSuccess<T> | RequestFailure;
 
 function createModuleState<T>(): ModuleState<T> {
@@ -246,7 +246,9 @@ function buildBalances(
 function buildParseResult(
   contract: CodexSessionUsageContract,
   history: CodexObservedUsageHistoryContract | null,
-  capturedAt: number,
+  quotaCapturedAt: number,
+  historyCapturedAt: number | null,
+  moduleCaptureTimes: { personalUsageBySurface: string | null; turns: string | null },
 ): Extract<CodexPersonalParseResult, { status: "ok" }> | null {
   const windows = buildWindows(contract);
   const primaryWindow =
@@ -259,6 +261,7 @@ function buildParseResult(
   return {
     status: "ok",
     snapshot: {
+      capturedAt: new Date(quotaCapturedAt).toISOString(),
       providerId: "codex-personal-page",
       providerLabel: "Codex",
       measurementKind: "window_percent",
@@ -270,7 +273,8 @@ function buildParseResult(
       balances: buildBalances(contract),
       usageHistory: parseCodexUsageHistory(
         history,
-        new Date(capturedAt).toISOString(),
+        new Date(historyCapturedAt ?? quotaCapturedAt).toISOString(),
+        moduleCaptureTimes,
       ),
       note:
         "Codex usage was read from the current local ChatGPT session. The access token remains in session-only extension storage.",
@@ -327,6 +331,11 @@ export function createCodexSessionApiClient(
     options.requestTimeoutMs ?? CODEX_SESSION_REQUEST_TIMEOUT_MS;
   const quotaState = createModuleState<CodexSessionUsageContract>();
   const historyState = createModuleState<CodexObservedUsageHistoryContract>();
+  let historyModuleTimes: {
+    credentialKey: string;
+    personalUsageBySurface: string | null;
+    turns: string | null;
+  } | null = null;
   let activeRefresh: Promise<CodexSessionApiUsageResult> | null = null;
   let lastSuccessfulCredentialKey: string | undefined;
 
@@ -427,7 +436,7 @@ export function createCodexSessionApiClient(
 
       const value = parser(body);
       return value
-        ? { ok: true, value }
+        ? { ok: true, value, capturedAt: now(), credentialKey: getCredentialKey(credential) }
         : { ok: false, code: "protocol_drift", retryAt: null };
     } catch (error) {
       return {
@@ -533,17 +542,22 @@ export function createCodexSessionApiClient(
             CODEX_DAILY_WORKSPACE_USAGE_PATH,
             parseCodexDailyWorkspaceUsageResponse,
           );
-    const [quotaRequest, tokenHistoryRequest, workspaceHistoryRequest] =
+    const [quotaResponse, tokenHistoryResponse, workspaceHistoryResponse] =
       await Promise.all([
         quotaPromise,
         tokenHistoryPromise,
         workspaceHistoryPromise,
       ]);
-    const capturedAt = now();
-
+    // A renewal can change accounts while sibling endpoints are still in flight.
+    function matchingResponse<T>(response: RequestResult<T> | null): RequestResult<T> | null {
+      return response?.ok && response.credentialKey !== credentialKey ? null : response;
+    }
+    const quotaRequest = matchingResponse(quotaResponse);
+    const tokenHistoryRequest = matchingResponse(tokenHistoryResponse);
+    const workspaceHistoryRequest = matchingResponse(workspaceHistoryResponse);
     if (quotaRequest?.ok) {
       quotaState.cache = {
-        capturedAt,
+        capturedAt: quotaRequest.capturedAt,
         credentialKey,
         value: quotaRequest.value,
       };
@@ -566,8 +580,23 @@ export function createCodexSessionApiClient(
     );
 
     if (hasFreshHistory) {
+      const previousTimes = historyModuleTimes?.credentialKey === credentialKey
+        ? historyModuleTimes
+        : null;
+      historyModuleTimes = {
+        credentialKey,
+        personalUsageBySurface: tokenHistoryRequest?.ok
+          ? new Date(tokenHistoryRequest.capturedAt).toISOString()
+          : previousTimes?.personalUsageBySurface ?? null,
+        turns: workspaceHistoryRequest?.ok
+          ? new Date(workspaceHistoryRequest.capturedAt).toISOString()
+          : previousTimes?.turns ?? null,
+      };
       historyState.cache = {
-        capturedAt,
+        capturedAt: Math.max(
+          tokenHistoryRequest?.ok ? tokenHistoryRequest.capturedAt : 0,
+          workspaceHistoryRequest?.ok ? workspaceHistoryRequest.capturedAt : 0,
+        ),
         credentialKey,
         value: mergeHistory(
           currentHistory,
@@ -615,7 +644,11 @@ export function createCodexSessionApiClient(
     const result = buildParseResult(
       quotaCache.value,
       historyCache?.value ?? null,
-      Math.max(quotaCache.capturedAt, historyCache?.capturedAt ?? 0),
+      quotaCache.capturedAt,
+      historyCache?.capturedAt ?? null,
+      historyModuleTimes?.credentialKey === credentialKey
+        ? historyModuleTimes
+        : { personalUsageBySurface: null, turns: null },
     );
 
     if (!result) {

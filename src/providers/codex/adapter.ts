@@ -9,6 +9,7 @@ import type {
   ProviderUsageWindow,
 } from "../types";
 import { formatSyncTimestamp } from "../normalize";
+import { withSnapshotFreshness } from "../../shared/snapshot-freshness";
 import { normalizeSourcePreference } from "../../shared/provider-sources";
 import {
   buildNoSourceAvailableReason,
@@ -869,6 +870,7 @@ async function tryCodexPersonalSource({
         warningReason,
         warningDiagnostic: usageThresholdDiagnostic,
         usageWindows: buildCodexUsageWindows(result.snapshot.windows),
+        lastSuccessAt: result.snapshot.capturedAt ?? null,
         usageBalances: buildCodexUsageBalances(result.snapshot.balances),
         usageHistory: mergeProviderUsageHistoryModules(
           result.snapshot.usageHistory,
@@ -980,11 +982,11 @@ export async function syncCodexProvider({
 
   if (attempt?.ok) {
     return {
-      snapshot: finalizeCodexSnapshot(
-        attempt.snapshot,
-        sourcePreference,
-        attempt.kind,
-        null,
+      snapshot: withSnapshotFreshness(
+        provider,
+        finalizeCodexSnapshot(attempt.snapshot, sourcePreference, attempt.kind, null),
+        now,
+        attempt.kind === "official_api" ? now.toISOString() : attempt.snapshot.lastSuccessAt ?? null,
       ),
       ...(attempt.setting ? { setting: attempt.setting } : {}),
     };
@@ -1011,10 +1013,10 @@ export async function syncCodexProvider({
         };
 
   return {
-    snapshot: finalizeCodexNoSourceSnapshot(
-      failureSnapshot,
-      sourcePreference,
-      failures,
+    snapshot: withSnapshotFreshness(
+      provider,
+      finalizeCodexNoSourceSnapshot(failureSnapshot, sourcePreference, failures),
+      now,
     ),
     ...(attempt && !attempt.ok && attempt.setting
       ? { setting: attempt.setting }

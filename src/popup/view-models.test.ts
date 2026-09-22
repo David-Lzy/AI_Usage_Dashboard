@@ -265,9 +265,8 @@ describe("popup view models", () => {
     expect(model.snapshotStatus).toMatchObject({
       label: "Mixed state",
       tone: "warning",
-      headline: "Usage page snapshot 24m ago",
-      detail:
-        "Newest visible snapshot: Codex Personal (Usage page snapshot 24m ago). Oldest visible snapshot: Claude Personal (Usage page needed).",
+      headline: "Unknown",
+      detail: "Last sync: Unknown",
     });
     expect(model.showSnapshotStatus).toBe(true);
   });
@@ -301,6 +300,7 @@ describe("popup view models", () => {
       providers: SAMPLE_APP_STATE.providers.map((provider) => ({
         ...provider,
         syncedAt: "2026-04-20 10:42",
+        lastSuccessAt: "2026-04-20T10:42:00.000Z",
         lastSyncLabel: "Synced just now",
         syncStatus: "ok",
         tone: "neutral",
@@ -315,7 +315,7 @@ describe("popup view models", () => {
     expect(model.snapshotStatus).toEqual({
       label: "Aligned",
       tone: "neutral",
-      headline: "Synced just now",
+      headline: "2026-04-20T10:42:00.000Z",
       detail: "All 2 visible providers share the same cached snapshot window.",
     });
     expect(model.showSnapshotStatus).toBe(true);
@@ -1266,10 +1266,10 @@ describe("popup view models", () => {
     });
     expect(model.showSnapshotStatus).toBe(true);
     expect(model.snapshotStatus).toEqual({
-      label: "Aligned",
-      tone: "neutral",
-      headline: "Synced just now",
-      detail: "The visible provider shares the same cached snapshot window.",
+      label: "Mixed state",
+      tone: "warning",
+      headline: "Unknown",
+      detail: "Last sync: Unknown",
     });
     expect(model.setupCoverage).toEqual({
       label: "Setup coverage",
@@ -1578,8 +1578,8 @@ describe("popup view models", () => {
     const i18n = createRuntimeI18n("zh-CN");
     const model = localizePopupViewModel(buildPopupViewModel(SAMPLE_APP_STATE), i18n);
 
-    expect(model.snapshotStatus.headline).toBe("Usage page snapshot 24m ago");
-    expect(model.snapshotStatus.detail).toContain("Usage page needed");
+    expect(model.snapshotStatus.headline).toBe("未知");
+    expect(model.snapshotStatus.detail).toBe("最后同步: 未知");
     expect(model.featuredProviderCards[0]?.metaChips[1]).toBe("Usage page needed");
   });
 });

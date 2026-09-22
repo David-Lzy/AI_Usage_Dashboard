@@ -131,6 +131,8 @@ describe("Sub2API provider adapter", () => {
       total: null,
       syncStatus: "ok",
       apiGatewayMetering: { scope: "api_key", billingMode: "wallet" },
+      lastAttemptAt: "2026-07-25T03:05:00.000Z",
+      lastSuccessAt: "2026-07-25T03:00:00.000Z",
     });
     expect(outcome.setting).toMatchObject({
       status: "granted",
@@ -176,6 +178,8 @@ describe("Sub2API provider adapter", () => {
         code: "adapter.unexpected_error",
         params: expect.objectContaining({ failureCode: "insecure_transport" }),
       },
+      lastAttemptAt: "2026-07-25T03:05:00.000Z",
+      lastSuccessAt: "2026-07-25T03:00:00.000Z",
     });
   });
 
@@ -185,12 +189,20 @@ describe("Sub2API provider adapter", () => {
     );
 
     const outcome = await syncSub2ApiProvider(
-      buildContext({ provider: { ...provider, apiGatewayMetering: metering } }),
+      buildContext({
+        provider: {
+          ...provider,
+          apiGatewayMetering: metering,
+          lastSuccessAt: "2026-07-25T03:00:00.000Z",
+        },
+      }),
     );
 
     expect(outcome.snapshot).toMatchObject({
       syncStatus: "error",
       apiGatewayMetering: { stale: true, balance: metering.balance },
+      lastAttemptAt: "2026-07-25T03:05:00.000Z",
+      lastSuccessAt: "2026-07-25T03:00:00.000Z",
     });
     expect(outcome.setting?.credentialStatus).toBe("missing");
     expect(JSON.stringify(outcome)).not.toContain("local-api-key");
@@ -209,6 +221,56 @@ describe("Sub2API provider adapter", () => {
       syncStatus: "error",
       apiGatewayMetering: { stale: true },
       warningReason: expect.stringContaining("rate-limited"),
+    });
+  });
+
+  it("normalizes an unknown legacy success timestamp to null on warning outcomes", async () => {
+    const outcome = await syncSub2ApiProvider(
+      buildContext({
+        accountMetadata: null,
+        provider: { ...provider, lastSuccessAt: undefined },
+      }),
+    );
+
+    expect(outcome.snapshot).toMatchObject({
+      lastAttemptAt: "2026-07-25T03:05:00.000Z",
+      lastSuccessAt: null,
+    });
+  });
+
+  it("does not treat an invalid API-key payload as a successful capture", async () => {
+    fetchSub2ApiUsageMock.mockResolvedValue({ ...metering, isValid: false });
+
+    const outcome = await syncSub2ApiProvider(
+      buildContext({
+        provider: {
+          ...provider,
+          lastSuccessAt: "2026-07-25T02:00:00.000Z",
+        },
+      }),
+    );
+
+    expect(outcome.snapshot).toMatchObject({
+      syncStatus: "warning",
+      lastAttemptAt: "2026-07-25T03:05:00.000Z",
+      lastSuccessAt: "2026-07-25T02:00:00.000Z",
+    });
+  });
+
+  it("keeps the capture time when a cached metering result is returned again", async () => {
+    fetchSub2ApiUsageMock.mockResolvedValue(metering);
+
+    const first = await syncSub2ApiProvider(buildContext());
+    const second = await syncSub2ApiProvider(
+      buildContext({
+        provider: first.snapshot,
+        now: new Date("2026-07-25T03:07:00.000Z"),
+      }),
+    );
+
+    expect(second.snapshot).toMatchObject({
+      lastAttemptAt: "2026-07-25T03:07:00.000Z",
+      lastSuccessAt: "2026-07-25T03:00:00.000Z",
     });
   });
 });

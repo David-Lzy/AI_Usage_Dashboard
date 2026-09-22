@@ -340,6 +340,8 @@ export type ProviderSnapshot = {
   resetAt: string;
   resetLabel: string;
   syncedAt: string;
+  lastAttemptAt?: string | null;
+  lastSuccessAt?: string | null;
   syncSource: SyncSource;
   syncStatus: SyncStatus;
   warningReason: string | null;
@@ -532,10 +534,12 @@ export type ProviderUsageHistory = {
   rangeEnd: string;
   granularity: "day";
   personalUsageBySurface: {
+    capturedAt?: string | null;
     unit: "percent";
     points: ProviderUsageHistoryPoint[];
   } | null;
   turns: {
+    capturedAt?: string | null;
     total: number | null;
     byModel: ProviderUsageHistoryPoint[];
     bySurface: ProviderUsageHistoryPoint[];

@@ -216,6 +216,19 @@ describe("UsageHistoryCharts", () => {
     );
   });
 
+  it("shows independent module capture times without inventing an unknown time", () => {
+    const older = "2026-07-12T00:00:00.000Z";
+    const splitHistory: ProviderUsageHistory = {
+      ...history,
+      personalUsageBySurface: { ...history.personalUsageBySurface!, capturedAt: older },
+      turns: { ...history.turns!, capturedAt: null },
+    };
+    const html = renderToStaticMarkup(<UsageHistoryDetail history={splitHistory} copy={copy} />);
+    expect(html).toContain(`dateTime="${older}"`);
+    expect(html).not.toContain(history.capturedAt);
+    expect(html.match(/<time /g)).toHaveLength(1);
+  });
+
   it("uses theme-aware chart colors and keeps the disclosure at inline end", () => {
     expect(chartsCss).toContain("--app-usage-history-series-1");
     expect(chartsCss).toContain(':root[data-theme-resolved="dark"]');

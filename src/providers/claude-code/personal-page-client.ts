@@ -30,6 +30,7 @@ export type ClaudePersonalPageClientOptions = {
 export type ClaudePersonalPageUsageResult = {
   result: ClaudePersonalParseResult;
   pageBinding: ProviderPageBinding;
+  capturedAt?: string | null;
 };
 
 export type ClaudePersonalPageClient = {
@@ -205,6 +206,7 @@ export function createClaudePersonalPageClient(
 
       return {
         result,
+        capturedAt: fixture.capturedAt,
         pageBinding: routeForBinding
           ? buildBindingFromRouteCapture(
               routeForBinding,

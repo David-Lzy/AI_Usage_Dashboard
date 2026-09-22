@@ -48,6 +48,8 @@ export async function syncGeminiProvider({
       resetLabel:
         "Documented quota only; check Google Cloud Quotas for live project usage",
       syncedAt,
+      lastAttemptAt: now.toISOString(),
+      lastSuccessAt: null,
       syncSource: "official",
       syncStatus: "warning",
       tone: "warning",

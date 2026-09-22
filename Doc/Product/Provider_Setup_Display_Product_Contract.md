@@ -152,6 +152,22 @@ replacement invalidates outstanding results. Credential writes have a separate
 serialized local store, so simultaneous account edits do not overwrite each
 other's keys.
 
+### Capture Freshness (Unreleased Work Branch)
+
+Provider snapshots store nullable ISO `lastAttemptAt` and `lastSuccessAt`
+separately. `syncedAt` remains a legacy compatibility label, not evidence of
+successful acquisition. Failed refreshes update the attempt time only; reused
+responses retain their original capture time. A successfully read quota can
+still have warning status when it crosses the user's threshold.
+
+Legacy snapshots without a proven successful capture time remain unknown until
+new data is acquired. Pace estimates and freshness labels use the successful
+capture time, never the most recent attempt. Codex quotas, personal-usage
+history, and turns history retain independent capture times, including partial
+responses and hydration retries. Each history module's detail caption describes
+that module, not a newer sibling. Cached or unknown-age data is not made current
+by a failed refresh or by another module's successful request.
+
 ### Setup State
 
 Setup state describes whether a source entry has enough user action, permission, credentials, or source binding to attempt a truthful sync.

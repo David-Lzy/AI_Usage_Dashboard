@@ -78,11 +78,12 @@ describe("createClaudePersonalPageClient", () => {
       hydrationRetryDelayMs: 0,
     });
 
-    const { result, pageBinding } = await client.getUsageSnapshot(
+    const { result, pageBinding, capturedAt } = await client.getUsageSnapshot(
       createEmptyPageBinding(),
     );
 
     expect(result.status).toBe("ok");
+    expect(capturedAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
     expect(usageCaptureCount).toBe(2);
     expect(pageBinding).toMatchObject({
       status: "bound",

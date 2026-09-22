@@ -3,6 +3,7 @@
 
 import type { ProviderUsageWindow } from "../providers/types";
 import { parseResetDate } from "./reset-time-display";
+import { normalizeSnapshotTimestamp } from "./snapshot-freshness";
 
 export const DEFAULT_QUOTA_PACE_FORECAST_ENABLED = false;
 
@@ -72,7 +73,7 @@ function resolveUsedPercent(window: ProviderUsageWindow): number | null {
 
 export function buildQuotaPaceForecast(
   window: ProviderUsageWindow,
-  syncedAt: string,
+  capturedAt: string | null | undefined,
   now = new Date(),
 ): QuotaPaceForecast {
   const durationMs = WINDOW_DURATION_MS[window.kind];
@@ -124,7 +125,8 @@ export function buildQuotaPaceForecast(
     return unavailable("insufficient_elapsed");
   }
 
-  const syncedDate = parseResetDate(syncedAt, now);
+  const normalizedCapture = normalizeSnapshotTimestamp(capturedAt);
+  const syncedDate = normalizedCapture ? new Date(normalizedCapture) : null;
 
   if (!syncedDate) {
     return unavailable("invalid_snapshot_time");
@@ -169,11 +171,11 @@ export function buildQuotaPaceForecast(
 
 export function buildAvailableQuotaPaceForecasts(
   windows: readonly ProviderUsageWindow[] | undefined,
-  syncedAt: string,
+  capturedAt: string | null | undefined,
   now = new Date(),
 ): Array<Extract<QuotaPaceForecast, { reason: null }>> {
   return (windows ?? [])
-    .map((window) => buildQuotaPaceForecast(window, syncedAt, now))
+    .map((window) => buildQuotaPaceForecast(window, capturedAt, now))
     .filter(
       (forecast): forecast is Extract<QuotaPaceForecast, { reason: null }> =>
         forecast.status !== "unavailable",

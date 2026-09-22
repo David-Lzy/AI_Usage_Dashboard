@@ -1,4 +1,5 @@
 import { hasRegisteredProviderCapability } from "../providers/registry";
+import { normalizeSnapshotFreshness, normalizeSnapshotTimestamp } from "./snapshot-freshness";
 import type {
   ApiGatewayConnectionMetadata,
   ApiGatewayMeteringDisplayPreferences,
@@ -32,7 +33,7 @@ const defaultCapabilityResolver: ProviderMultiAccountCapabilityResolver = (
 ) => hasRegisteredProviderCapability(providerId, "multiAccount");
 
 function getLastSuccessAt(snapshot: ProviderSnapshot): string | null {
-  return snapshot.syncStatus === "ok" ? snapshot.syncedAt : null;
+  return normalizeSnapshotTimestamp(snapshot.lastSuccessAt);
 }
 
 function createDefaultMetadata(
@@ -124,10 +125,10 @@ function normalizeInactiveSnapshot(
     apiGatewayMetering: _apiGatewayMetering,
     ...snapshotWithoutGatewayMetering
   } = snapshot;
-  return {
+  return normalizeSnapshotFreshness({
     ...snapshotWithoutGatewayMetering,
     ...(apiGatewayMetering ? { apiGatewayMetering } : {}),
-  };
+  });
 }
 
 function isMatchingInactiveState(
@@ -196,6 +197,7 @@ function normalizeCapableCollection(
         snapshot: normalizeInactiveSnapshot(storedState.snapshot),
         setting: structuredClone(storedState.setting),
       };
+      account.lastSuccessAt = getLastSuccessAt(inactiveAccounts[account.id].snapshot);
     }
   }
 

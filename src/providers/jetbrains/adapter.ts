@@ -34,6 +34,8 @@ export async function syncJetBrainsProvider({
       resetAt: "Unavailable while deferred",
       resetLabel: "No live quota is claimed by this deferred source",
       syncedAt: formatSyncTimestamp(now),
+      lastAttemptAt: now.toISOString(),
+      lastSuccessAt: null,
       syncSource: "page_parse",
       syncStatus: "warning",
       tone: "warning",

@@ -234,6 +234,8 @@ describe("syncCursorProvider", () => {
       "Visible Cursor usage: Visible plans: Pro · Pro+ · Ultra · On-demand usage is off. · CSV export available",
     );
     expect(snapshot.lastSyncLabel).toBe("Cursor personal fixture loaded");
+    expect(snapshot.lastAttemptAt).toBe(attemptedAt.toISOString());
+    expect(snapshot.lastSuccessAt).toBe("2026-04-20T04:48:00.000Z");
     expect(snapshot.sourceSelectionReason).toBe(
       "Session page is the only shipped source for cursor-personal-page.",
     );
@@ -530,7 +532,10 @@ describe("syncCursorProvider", () => {
     });
 
     const { snapshot } = await syncCursorProvider({
-      provider: baseProvider,
+      provider: {
+        ...baseProvider,
+        lastSuccessAt: "2026-04-19T04:48:00.000Z",
+      },
       secrets: emptySecrets,
       setting: {
         ...grantedSetting,
@@ -559,6 +564,8 @@ describe("syncCursorProvider", () => {
       "Reload the Cursor dashboard usage page and refresh again",
     );
     expect(snapshot.lastSyncLabel).toBe("Cursor usage page unavailable");
+    expect(snapshot.lastAttemptAt).toBe(attemptedAt.toISOString());
+    expect(snapshot.lastSuccessAt).toBe("2026-04-19T04:48:00.000Z");
     expect(snapshot.sourceFallbackReason).toBeNull();
   });
 

@@ -2,7 +2,13 @@ import type { ProviderTone } from "../providers/types";
 import type { RuntimeI18n } from "../shared/i18n";
 import { buildPopupLocalizedCopy } from "../shared/popup-localized-copy";
 import type { ProviderViewModel } from "../shared/provider-view-models";
+import { normalizeSnapshotTimestamp } from "../shared/snapshot-freshness";
+import { buildProviderDetailLocalizedCopy } from "../shared/provider-detail-localized-copy";
 import type { PopupSnapshotStatus } from "./view-model-types";
+
+function captureTime(provider: ProviderViewModel): string {
+  return normalizeSnapshotTimestamp(provider.lastSuccessAt) ?? "";
+}
 
 function getNewestVisibleProvider(
   visibleProviders: ProviderViewModel[],
@@ -12,7 +18,7 @@ function getNewestVisibleProvider(
   }
 
   return visibleProviders.reduce((newest, provider) =>
-    provider.syncedAt.localeCompare(newest.syncedAt) > 0 ? provider : newest,
+    captureTime(provider).localeCompare(captureTime(newest)) > 0 ? provider : newest,
   );
 }
 
@@ -24,7 +30,7 @@ function getOldestVisibleProvider(
   }
 
   return visibleProviders.reduce((oldest, provider) =>
-    provider.syncedAt.localeCompare(oldest.syncedAt) < 0 ? provider : oldest,
+    captureTime(provider).localeCompare(captureTime(oldest)) < 0 ? provider : oldest,
   );
 }
 
@@ -60,7 +66,7 @@ export function buildSnapshotStatus(
       provider.displaySyncStatus === "warning" ||
       provider.permissionStatus === "missing",
   );
-  const isAligned = newestProvider.syncedAt === oldestProvider.syncedAt;
+  const isAligned = Boolean(captureTime(oldestProvider)) && captureTime(newestProvider) === captureTime(oldestProvider);
 
   const label = hasError
     ? "Sync issue"
@@ -76,12 +82,12 @@ export function buildSnapshotStatus(
   return {
     label,
     tone,
-    headline: newestProvider.lastSyncLabel,
-    detail: isAligned
+    headline: captureTime(newestProvider) || "Unknown",
+    detail: !captureTime(newestProvider) ? "Last sync: Unknown" : isAligned
       ? visibleProviders.length === 1
         ? "The visible provider shares the same cached snapshot window."
         : `All ${visibleProviders.length} visible providers share the same cached snapshot window.`
-      : `Newest visible snapshot: ${newestProvider.providerLabel} (${newestProvider.lastSyncLabel}). Oldest visible snapshot: ${oldestProvider.providerLabel} (${oldestProvider.lastSyncLabel}).`,
+      : `Newest visible snapshot: ${newestProvider.providerLabel} (${captureTime(newestProvider) || "Unknown"}). Oldest visible snapshot: ${oldestProvider.providerLabel} (${captureTime(oldestProvider) || "Unknown"}).`,
   };
 }
 
@@ -119,7 +125,7 @@ export function buildLocalizedSnapshotStatus(
       provider.displaySyncStatus === "warning" ||
       provider.permissionStatus === "missing",
   );
-  const isAligned = newestProvider.syncedAt === oldestProvider.syncedAt;
+  const isAligned = Boolean(captureTime(oldestProvider)) && captureTime(newestProvider) === captureTime(oldestProvider);
   const label = hasError
     ? copy.snapshotStatus.syncIssueLabel
     : hasWarnings || !isAligned
@@ -130,18 +136,16 @@ export function buildLocalizedSnapshotStatus(
     : hasWarnings || !isAligned
       ? "warning"
       : "neutral";
-  const newestLastSyncLabel = i18n.localizeRelativeRuntimeLabel(
-    newestProvider.lastSyncLabel,
-  );
-  const oldestLastSyncLabel = i18n.localizeRelativeRuntimeLabel(
-    oldestProvider.lastSyncLabel,
-  );
+  const detailCopy = buildProviderDetailLocalizedCopy(i18n);
+  const unknown = detailCopy.values.unknown;
+  const newestLastSyncLabel = i18n.formatTemporalValue(captureTime(newestProvider)) ?? unknown;
+  const oldestLastSyncLabel = i18n.formatTemporalValue(captureTime(oldestProvider)) ?? unknown;
 
   return {
     label,
     tone,
     headline: newestLastSyncLabel,
-    detail: isAligned
+    detail: !captureTime(newestProvider) ? `${detailCopy.fieldLabels.lastSync}: ${unknown}` : isAligned
       ? visibleProviders.length === 1
         ? copy.snapshotStatus.alignedSingleDetail
         : copy.snapshotStatus.alignedManyDetail(visibleProviders.length)

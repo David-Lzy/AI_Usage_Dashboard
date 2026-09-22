@@ -124,6 +124,19 @@ function normalizeCapturedAt(value: unknown): string | null {
   return Number.isNaN(timestamp.getTime()) ? null : timestamp.toISOString();
 }
 
+function hasOwnProperty(value: UnknownRecord, key: string): boolean {
+  return Object.prototype.hasOwnProperty.call(value, key);
+}
+
+function normalizeModuleCapturedAt(
+  source: UnknownRecord,
+  historyCapturedAt: string,
+): string | null {
+  return hasOwnProperty(source, "capturedAt")
+    ? normalizeCapturedAt(source.capturedAt)
+    : historyCapturedAt;
+}
+
 export function normalizeProviderUsageHistory(
   value: unknown,
 ): ProviderUsageHistory | undefined {
@@ -149,6 +162,12 @@ export function normalizeProviderUsageHistory(
   const bySurface = turnsSource
     ? normalizeHistoryPoints(turnsSource.bySurface, "turns")
     : [];
+  const personalCapturedAt = personalSource
+    ? normalizeModuleCapturedAt(personalSource, capturedAt)
+    : null;
+  const turnsCapturedAt = turnsSource
+    ? normalizeModuleCapturedAt(turnsSource, capturedAt)
+    : null;
   const allDates = [...personalPoints, ...byModel, ...bySurface]
     .map((point) => point.date)
     .sort();
@@ -164,11 +183,16 @@ export function normalizeProviderUsageHistory(
     granularity: "day",
     personalUsageBySurface:
       personalPoints.length > 0
-        ? { unit: "percent", points: personalPoints }
+        ? {
+            capturedAt: personalCapturedAt,
+            unit: "percent",
+            points: personalPoints,
+          }
         : null,
     turns:
       byModel.length > 0 || bySurface.length > 0
         ? {
+            capturedAt: turnsCapturedAt,
             total: normalizeValue(turnsSource?.total, "turns"),
             byModel,
             bySurface,
@@ -191,8 +215,12 @@ export function mergeProviderUsageHistoryModules(
     return normalizedCurrent;
   }
 
+  // The root represents the newest history capture; module timestamps are authoritative.
   return normalizeProviderUsageHistory({
-    capturedAt: normalizedCurrent.capturedAt,
+    capturedAt:
+      normalizedCurrent.capturedAt > normalizedPrevious.capturedAt
+        ? normalizedCurrent.capturedAt
+        : normalizedPrevious.capturedAt,
     personalUsageBySurface:
       normalizedCurrent.personalUsageBySurface ??
       normalizedPrevious.personalUsageBySurface,

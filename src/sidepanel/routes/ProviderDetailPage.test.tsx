@@ -277,6 +277,7 @@ describe("ProviderDetailPage", () => {
           ? {
               ...provider,
               syncedAt: "2026-07-25T11:55:00.000Z",
+              lastSuccessAt: "2026-07-25T11:55:00.000Z",
               usageWindows: [
                 {
                   label: "Weekly usage window",
@@ -312,6 +313,17 @@ describe("ProviderDetailPage", () => {
     expect(html).toContain("Quota pace");
     expect(html).toContain("Estimate");
     expect(html).toContain("May run out around");
+
+    for (const lastSuccessAt of [null, "2026-07-25T10:00:00.000Z"]) {
+      const stale = structuredClone(state);
+      const provider = stale.providers.find((entry) => entry.providerId === "codex-personal-page")!;
+      provider.lastSuccessAt = lastSuccessAt;
+      provider.syncedAt = "2026-07-25T12:00:00.000Z";
+      expect(renderProviderDetail(stale, "codex-personal-page", {
+        quotaPaceForecastEnabled: true,
+        quotaPaceNow: new Date("2026-07-25T12:00:00.000Z"),
+      })).not.toContain('data-provider-quota-pace=""');
+    }
   });
 
   it("renders detailed official status only when full-page visibility is enabled", () => {

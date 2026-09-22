@@ -19,6 +19,7 @@ import {
   type FailedProviderSourceAttempt,
   type ProviderSourceAttempt,
 } from "../provider-source-strategy";
+import { withSnapshotFreshness } from "../../shared/snapshot-freshness";
 import {
   fetchSub2ApiUsage,
   Sub2ApiClientError,
@@ -118,6 +119,14 @@ function getClientFailureMessage(code: Sub2ApiClientErrorCode): string {
     case "invalid_response":
       return "The Sub2API usage response did not match the supported contract.";
   }
+}
+
+function getSuccessfulCaptureAt(attempt: ProviderSourceAttempt): string | undefined {
+  if (!attempt.ok) {
+    return undefined;
+  }
+  const metering = attempt.snapshot.apiGatewayMetering;
+  return metering && metering.isValid !== false ? metering.capturedAt : undefined;
 }
 
 async function trySub2ApiSource(
@@ -324,18 +333,27 @@ export async function syncSub2ApiProvider(
   });
   if (result.attempt) {
     return {
-      snapshot: result.attempt.snapshot,
+      snapshot: withSnapshotFreshness(
+        context.provider,
+        result.attempt.snapshot,
+        context.now,
+        getSuccessfulCaptureAt(result.attempt),
+      ),
       ...(result.attempt.setting ? { setting: result.attempt.setting } : {}),
     };
   }
   const warningReason =
     result.failure?.detail ?? "Sub2API synchronization is temporarily unavailable.";
   return {
-    snapshot: buildFailureSnapshot(
+    snapshot: withSnapshotFreshness(
       context.provider,
+      buildFailureSnapshot(
+        context.provider,
+        context.now,
+        warningReason,
+        result.status,
+      ),
       context.now,
-      warningReason,
-      result.status,
     ),
   };
 }

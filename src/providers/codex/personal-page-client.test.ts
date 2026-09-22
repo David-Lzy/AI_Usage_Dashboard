@@ -106,7 +106,34 @@ describe("createCodexPersonalPageClient", () => {
             <p>剩余</p>
           </body>
         </html>
-      `);
+      `, {
+        matchUrlSubstrings: [
+          CODEX_DAILY_TOKEN_USAGE_PATH,
+          CODEX_DAILY_WORKSPACE_USAGE_PATH,
+        ],
+        maxEntries: 4,
+        entries: [
+          {
+            url: `https://chatgpt.com${CODEX_DAILY_WORKSPACE_USAGE_PATH}`,
+            method: "GET",
+            status: 200,
+            ok: true,
+            contentType: "application/json",
+            bodyText: JSON.stringify({
+              data: [
+                {
+                  date: "2026-07-14",
+                  totals: { turns: 19 },
+                  clients: [],
+                  models: [],
+                },
+              ],
+            }),
+            capturedAt: "2026-07-14T00:00:00.000Z",
+            transport: "fetch",
+          },
+        ],
+      });
     });
     const client = createCodexPersonalPageClient({
       source: "live",
@@ -124,8 +151,18 @@ describe("createCodexPersonalPageClient", () => {
     expect(result.status === "ok" ? result.snapshot.usageHistory : undefined)
       .toMatchObject({
         rangeStart: "2026-07-13",
-        rangeEnd: "2026-07-13",
+        rangeEnd: "2026-07-14",
       });
+    expect(
+      result.status === "ok"
+        ? result.snapshot.usageHistory?.personalUsageBySurface?.capturedAt
+        : undefined,
+    ).toBe("2026-07-13T00:00:00.000Z");
+    expect(
+      result.status === "ok"
+        ? result.snapshot.usageHistory?.turns?.capturedAt
+        : undefined,
+    ).toBe("2026-07-14T00:00:00.000Z");
     expect(analyticsCaptureCount).toBe(2);
     expect(analyticsDefinitions[0].reloadBeforeCapture).toBeDefined();
     expect(analyticsDefinitions[1].reloadBeforeCapture).toBeUndefined();

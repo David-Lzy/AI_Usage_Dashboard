@@ -140,7 +140,7 @@ export function ProviderDetailPage({
   const quotaPaceForecasts = quotaPaceForecastEnabled
     ? buildAvailableQuotaPaceForecasts(
         provider.usageWindows,
-        provider.syncedAt,
+        provider.lastSuccessAt,
         quotaPaceNow,
       )
     : [];
@@ -230,7 +230,9 @@ export function ProviderDetailPage({
           ? copy.values.notAvailableFromSource
           : copy.values.unknown;
   const formattedResetAt = i18n.formatTemporalValue(provider.resetAt) ?? provider.resetAt;
-  const formattedSyncedAt = i18n.formatTemporalValue(provider.syncedAt) ?? provider.syncedAt;
+  const formattedSyncedAt = provider.lastSuccessAt
+    ? i18n.formatTemporalValue(provider.lastSuccessAt) ?? provider.lastSuccessAt
+    : copy.values.unknown;
   const fidelityNoteToneClassName =
     provider.currentSourceFidelityTone === "error"
       ? "detail-note--error"

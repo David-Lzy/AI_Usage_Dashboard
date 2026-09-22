@@ -223,6 +223,8 @@ describe("storage normalization", () => {
     expect(codexProvider?.total).toBeNull();
     expect(codexProvider?.usageWindows).toEqual([]);
     expect(codexProvider?.lastSyncLabel).toBe("Not synced yet");
+    expect(codexProvider?.lastAttemptAt).toBeNull();
+    expect(codexProvider?.lastSuccessAt).toBeNull();
     expect(codexProvider?.warningDiagnostic?.category).toBe("page_session");
     expect(codexSetting?.status).toBe("missing");
     expect(state.settings.popupCircularProgressItemsPerRow).toBe(2);
@@ -272,6 +274,20 @@ describe("storage normalization", () => {
       },
     });
     expect(codexBadgeCandidates).toEqual([]);
+  });
+
+  it("keeps legacy success time unknown even when old sync status says ok", async () => {
+    const legacy = structuredClone(SAMPLE_APP_STATE);
+    const provider = legacy.providers.find((entry) => entry.providerId === "codex-personal-page")!;
+    provider.syncedAt = "2026-09-22T12:00:00Z";
+    provider.syncStatus = "ok";
+    delete provider.lastAttemptAt;
+    delete provider.lastSuccessAt;
+    const stored = await writeAppState(legacy);
+    expect(stored.providers.find((entry) => entry.providerId === provider.providerId)).toMatchObject({
+      lastAttemptAt: null, lastSuccessAt: null,
+    });
+    expect(stored.providerAccounts?.[provider.providerId]?.accounts[0].lastSuccessAt).toBeNull();
   });
 
   it("fills missing provider setting fields from the production schema", async () => {

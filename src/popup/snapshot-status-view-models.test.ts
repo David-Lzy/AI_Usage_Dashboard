@@ -12,6 +12,7 @@ function createProvider(
     permissionStatus: "granted",
     providerLabel: "Codex",
     syncedAt: "2026-05-13T03:00:00.000Z",
+    lastSuccessAt: "2026-05-13T03:00:00.000Z",
     ...overrides,
   } as ProviderViewModel;
 }
@@ -31,7 +32,7 @@ describe("buildSnapshotStatus", () => {
     expect(buildSnapshotStatus([createProvider()])).toEqual({
       label: "Aligned",
       tone: "neutral",
-      headline: "just now",
+      headline: "2026-05-13T03:00:00.000Z",
       detail: "The visible provider shares the same cached snapshot window.",
     });
   });
@@ -45,7 +46,7 @@ describe("buildSnapshotStatus", () => {
     ).toEqual({
       label: "Aligned",
       tone: "neutral",
-      headline: "just now",
+      headline: "2026-05-13T03:00:00.000Z",
       detail: "All 2 visible providers share the same cached snapshot window.",
     });
   });
@@ -56,6 +57,7 @@ describe("buildSnapshotStatus", () => {
         createProvider({
           providerLabel: "Cursor",
           syncedAt: "2026-05-13T02:00:00.000Z",
+          lastSuccessAt: "2026-05-13T02:00:00.000Z",
           lastSyncLabel: "1 hour ago",
         }),
         createProvider({
@@ -67,9 +69,9 @@ describe("buildSnapshotStatus", () => {
     ).toEqual({
       label: "Mixed state",
       tone: "warning",
-      headline: "just now",
+      headline: "2026-05-13T03:00:00.000Z",
       detail:
-        "Newest visible snapshot: Codex (just now). Oldest visible snapshot: Cursor (1 hour ago).",
+        "Newest visible snapshot: Codex (2026-05-13T03:00:00.000Z). Oldest visible snapshot: Cursor (2026-05-13T02:00:00.000Z).",
     });
   });
 
@@ -96,6 +98,12 @@ describe("buildSnapshotStatus", () => {
     ).toMatchObject({
       label: "Sync issue",
       tone: "error",
+    });
+  });
+
+  it("does not call recent attempts aligned when capture time is unknown", () => {
+    expect(buildSnapshotStatus([createProvider({ lastSuccessAt: null })])).toEqual({
+      label: "Mixed state", tone: "warning", headline: "Unknown", detail: "Last sync: Unknown",
     });
   });
 });
